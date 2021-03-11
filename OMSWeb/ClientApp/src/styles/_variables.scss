@@ -1,0 +1,24 @@
+$color-primary: #673ab7;
+
+$color-inactive: rgba(#000, 0.5);
+$color-active: $color-primary;
+// $color-active: orange;
+
+@mixin activeButton {
+  color: $color-active;
+}
+
+@mixin inactiveButton {
+  color: $color-inactive;
+}
+
+@mixin hoverButton {
+  color: #000;
+}
+
+@mixin tooltip {
+  font-size: 0.9rem;
+  font-weight: normal;
+  color: #333;
+  background-color: #ccc;
+}

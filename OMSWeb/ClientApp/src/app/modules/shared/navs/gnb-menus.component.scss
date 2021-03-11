@@ -1,0 +1,42 @@
+@import "variables";
+
+:host {
+  display: flex;
+  align-items: center;
+}
+
+.nav-item {
+  @include inactiveButton;
+
+  &.active {
+    @include activeButton;
+    font-weight: bold;
+  }
+
+  &:hover {
+    @include hoverButton;
+  }
+}
+
+.sub-navs {
+  margin-left: 10px;
+
+  .nav-item {
+    margin-right: 5px;
+    font-size: 1.1rem;
+    font-family: Mulish;
+    // padding-bottom: 10px;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+
+  .nav-item.active {
+    border-bottom: 2px solid;
+  }
+}
+
+::ng-deep.mat-tooltip.gnb-tooltip {
+  @include tooltip;
+}

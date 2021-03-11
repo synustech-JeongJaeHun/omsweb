@@ -1,0 +1,27 @@
+.gnb-container {
+  display: grid;
+  column-gap: 20px;
+  grid-template-columns: 80px 2fr 2fr auto auto;
+  box-shadow: 0px 4px 12px rgba(#000000, 0.3);
+  height: 50px;
+  font-family: Mulish;
+  font-weight: normal;
+  font-size: 1.1rem;
+}
+
+.logo {
+  font-weight: 900;
+  font-size: 1.3rem;
+}
+
+.states {
+  justify-self: center;
+}
+
+.indicators {
+  justify-self: end;
+}
+
+.actions {
+  justify-self: end;
+}

@@ -1,0 +1,18 @@
+@import 'variables';
+
+:host {
+  display: flex;
+  align-items: center;
+}
+
+.active {
+  @include activeButton;
+}
+
+.inactive {
+  @include inactiveButton;
+}
+
+.status-item {
+  margin: 0 10px;
+}

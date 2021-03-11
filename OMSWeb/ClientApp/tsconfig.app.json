@@ -1,0 +1,15 @@
+/* To learn more about this file see: https://angular.io/config/tsconfig. */
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "./out-tsc/app",
+    "types": ["jquery"],
+    "paths": {
+      "@oms": ["src/app"],
+      "@oms/models/*": ["src/app/models/*"],
+      "@oms/services/*": ["src/app/services/*"],
+    }
+  },
+  "files": ["src/main.ts", "src/polyfills.ts"],
+  "include": ["src/**/*.d.ts"]
+}
