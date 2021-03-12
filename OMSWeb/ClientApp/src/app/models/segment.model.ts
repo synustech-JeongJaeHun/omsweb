@@ -128,6 +128,16 @@ export class Segment implements ISegment {
       coord_to: LayoutUtil.create_coordinate(coordTo, adjustment),
     };
   }
+  static createSegment(
+
+  ) {}
+  postCreation() {
+    const { candidates, speed } = this;
+    this.set_candidates(candidates);
+    this.set_length(this.calculate_length());
+    this.set_speed(speed);
+    this.set_travel_time();
+  }
   create_segpart(
     type: any,
     radius: any,
@@ -860,6 +870,4 @@ export class Segment implements ISegment {
       point2,
     };
   }
-
-  // @TODO methods 구현
 }

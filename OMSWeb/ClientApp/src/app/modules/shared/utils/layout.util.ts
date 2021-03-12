@@ -525,20 +525,21 @@ export namespace LayoutUtil {
     invertY: number
   ): ICoordinateInfo => {
     let { x, y } = coord;
-    let hasError = x < 0 || y < 0;
-    if (_.isNil(x) || _.isNil(y)) {
-      x = x || 0;
-      y = y || 0;
-      hasError = true;
-    }
+    return create_coord_objects(x, y, invertY);
+    // let hasError = x < 0 || y < 0;
+    // if (_.isNil(x) || _.isNil(y)) {
+    //   x = x || 0;
+    //   y = y || 0;
+    //   hasError = true;
+    // }
 
-    const inverted_coord = _.isNil(invertY) ? { x, y } : { x, y: invertY - y };
+    // const inverted_coord = _.isNil(invertY) ? { x, y } : { x, y: invertY - y };
 
-    return {
-      coord: { x, y },
-      inverted_coord: inverted_coord,
-      hasError,
-    };
+    // return {
+    //   coord: { x, y },
+    //   inverted_coord: inverted_coord,
+    //   is_error: hasError,
+    // };
   };
   export const create_segpart_info = (source: ISegmentPart) => {
     /* Segpart chart ---------------------------
@@ -2579,5 +2580,166 @@ export namespace LayoutUtil {
     }
 
     return segment_id_list;
+  }
+  export function find_object_by_coord(area_start, area_end, objects) {
+    // Find objects
+    let found_objects = [];
+
+    if (objects.length > 0) {
+      //find selection area's standart coord
+      let standard_coord = find_rect_standrad_coord(area_start, area_end);
+
+      // Find points that located inside of selection
+      for (let i = 0; i < objects.length; i++) {
+        let object = objects[i];
+
+        // Check area
+        if (
+          object.inverted_coord.x >= standard_coord.start.x &&
+          object.inverted_coord.x <= standard_coord.end.x &&
+          object.inverted_coord.y >= standard_coord.start.y &&
+          object.inverted_coord.y <= standard_coord.end.y
+        ) {
+          found_objects.push(object);
+        }
+      }
+    }
+
+    return found_objects;
+  }
+
+  export function find_rect_standrad_coord(start, end) {
+    let coord_start: any = {};
+    let coord_end: any = {};
+
+    if (start.x > end.x || start.y > end.y) {
+      let min_x, min_y;
+      let max_x, max_y;
+
+      // Swap x coord
+      if (start.x > end.x) {
+        min_x = end.x;
+        max_x = start.x;
+      } else {
+        min_x = start.x;
+        max_x = end.x;
+      }
+
+      // Swap y coord
+      if (start.y > end.y) {
+        min_y = end.y;
+        max_y = start.y;
+      } else {
+        min_y = start.y;
+        max_y = end.y;
+      }
+
+      coord_start.x = min_x;
+      coord_start.y = min_y;
+
+      coord_end.x = max_x;
+      coord_end.y = max_y;
+    } else {
+      coord_start = { ...start };
+      coord_end = { ...end };
+    }
+
+    return { start: coord_start, end: coord_end };
+  }
+
+  export function find_segment_by_coord(area_start, area_end, segments) {
+    /****************************************************
+     * How to find segment with coordinates
+     *
+     * Selection area start
+     *        (Xs, Ys).-----------------------
+     *                |  point_from          |
+     *   Selection -> |  . (X1, Y1)          |
+     *   area         |    \                 |
+     *                |      \ Segment       |
+     *                |        \             |
+     *                |          . (X2, Y2)  |
+     *                |            point_to  |
+     *                -----------------------.
+     *                    Selection area end (Xe, Ye)
+     * Rule : point_from must be in the selection area (start~end)
+     *        and point_to must be in the selection area (start~end)
+     *****************************************************/
+    let found_segments = [];
+
+    if (segments.length > 0) {
+      //find selection area's standart coord
+      let standard_coord = find_rect_standrad_coord(area_start, area_end);
+
+      for (let i = 0; i < segments.length; i++) {
+        let segment = segments[i];
+        let point_from_coord = segment.point_from.inverted_coord;
+        let point_to_coord = segment.point_to.inverted_coord;
+
+        // Check area
+        if (
+          point_from_coord.x >= standard_coord.start.x &&
+          point_from_coord.x <= standard_coord.end.x &&
+          point_from_coord.y >= standard_coord.start.y &&
+          point_from_coord.y <= standard_coord.end.y &&
+          point_to_coord.x >= standard_coord.start.x &&
+          point_to_coord.x <= standard_coord.end.x &&
+          point_to_coord.y >= standard_coord.start.y &&
+          point_to_coord.y <= standard_coord.end.y
+        ) {
+          found_segments.push(segment);
+        }
+      }
+    }
+
+    return found_segments;
+  }
+
+  export function remove_unconnected_segment(layout_objects) {
+    let adjusted_selected_opbjects = [];
+
+    for (let i = 0; i < layout_objects.length; i++) {
+      let object = layout_objects[i];
+
+      // Check connection
+      if (object.constructor.name.toUpperCase() === 'SEGMENT') {
+        let is_start_connected;
+        let is_end_connected;
+
+        is_start_connected = layout_objects.find(
+          (data) =>
+            data.constructor.name.toUpperCase() === 'POINT' &&
+            data.id === object.point_from.id
+        );
+
+        is_end_connected = layout_objects.find(
+          (data) =>
+            data.constructor.name.toUpperCase() === 'POINT' &&
+            data.id === object.point_to.id
+        );
+
+        if (is_start_connected && is_end_connected) {
+          adjusted_selected_opbjects.push(object);
+        }
+      } else {
+        adjusted_selected_opbjects.push(object);
+      }
+    }
+    return adjusted_selected_opbjects;
+  }
+  export function check_duplicated_coord(layout_objects, coord) {
+    let is_duplicated = false;
+
+    // Check if the point coord is duplicated
+    for (let i = 0; i < layout_objects.length; i++) {
+      let object = layout_objects[i];
+
+      if (object.coord.x === coord.x && object.coord.y === coord.y) {
+        is_duplicated = true;
+        break;
+      }
+    }
+
+    return is_duplicated;
   }
 }

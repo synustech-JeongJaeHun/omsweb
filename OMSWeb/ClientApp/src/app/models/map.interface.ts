@@ -22,7 +22,7 @@ export interface IViewerData {
 export interface ICoordinateInfo {
   coord: ICoordinate;
   inverted_coord?: ICoordinate;
-  hasError?: boolean;
+  is_error?: boolean;
 }
 export interface ISegmentSummary {
   type: string;

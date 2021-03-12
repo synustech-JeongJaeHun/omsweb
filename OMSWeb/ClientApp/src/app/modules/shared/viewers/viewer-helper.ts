@@ -25,6 +25,7 @@ import { Vehicle } from '../../../models/vehicle.model';
 import { Station } from '../../../models/station.model';
 import { Buffer } from '../../../models/buffer.model';
 import { MTL } from '../../../models/mtl.model';
+import { Point } from '../../../models/point.model';
 
 export class ViewController {
   private svg: any; // d3.Selection<d3.ContainerElement, unknown, HTMLElement, any>;
@@ -711,8 +712,8 @@ export class ViewController {
             if (parseInt(object.id) === parseInt(group.objects[j])) {
               objects[i].group = group.group_id;
               group.objects.splice(j, 1);
-              break; // @TODO check : 성능을 높이기 위해서 break 했는데, group.objects에 동일한 아이디가 여러개 있는 데이터가 가능하다면 사용하면 안된다.
-              // @TODO optional : some, find, filter 등을 사용하는 방법도 고려(성능 우선)
+              break; // @NOTE check : 성능을 높이기 위해서 break 했는데, group.objects에 동일한 아이디가 여러개 있는 데이터가 가능하다면 사용하면 안된다.
+              // @NOTE optional : some, find, filter 등을 사용하는 방법도 고려(성능 우선)
             }
           }
         }
@@ -743,22 +744,42 @@ export class ViewController {
           const current_coords = this.find_point_coords(cur_id);
           const next_coords = this.find_point_coords(next_id);
           // cur_point
-          current_coords &&
-            (currentPoint = {
+          if (current_coords) {
+            currentPoint = {
               point: cur_id,
               coord: current_coords.coord,
               inverted_coord: current_coords.inverted_coord,
-            });
+            };
+          } else {
+            currentPoint = null;
+          }
+          // current_coords &&
+          //   (currentPoint = {
+          //     point: cur_id,
+          //     coord: current_coords.coord,
+          //     inverted_coord: current_coords.inverted_coord,
+          //   });
 
           // next_point
-          next_id &&
-            next_coords &&
-            current_coords &&
-            (nextPoint = {
-              point: next_id,
-              coord: next_coords.coord,
-              inverted_coord: next_coords.inverted_coord,
-            });
+          if (next_id && next_coords) {
+            if (next_coords && current_coords) {
+              nextPoint = {
+                point: next_id,
+                coord: next_coords.coord,
+                inverted_coord: next_coords.inverted_coord,
+              };
+            } else {
+              nextPoint = null;
+            }
+          }
+          // next_id &&
+          //   next_coords &&
+          //   current_coords &&
+          //   (nextPoint = {
+          //     point: next_id,
+          //     coord: next_coords.coord,
+          //     inverted_coord: next_coords.inverted_coord,
+          //   });
 
           // command_point
           if (!_.isNil(comm_id) && comm_id.length > 0) {
@@ -829,100 +850,7 @@ export class ViewController {
       }
       return models;
     }, []);
-    // for (let i = 0; i < rows.length; i++) {
-    //   if (rows[i]) {
-    //     try {
-    //       let cur_id = rows[i].cur_point;
-    //       let next_id = rows[i].next_point;
-    //       let current_coords = this.find_point_coords(cur_id);
-    //       let next_coords = this.find_point_coords(next_id);
-    //       let comm_id = rows[i].command_point;
-    //       let current_point, next_point, command_point;
 
-    //       if (current_coords) {
-    //         current_point = {
-    //           point: cur_id,
-    //           coord: current_coords.coord,
-    //           inverted_coord: current_coords.inverted_coord,
-    //         };
-    //       } else {
-    //         current_point = null;
-    //       }
-
-    //       // next_point
-    //       if (next_id && next_coords) {
-    //         if (next_coords && current_coords) {
-    //           next_point = {
-    //             point: next_id,
-    //             coord: next_coords.coord,
-    //             inverted_coord: next_coords.inverted_coord,
-    //           };
-    //         } else {
-    //           next_point = null;
-    //         }
-    //       }
-
-    //       // command_point
-    //       if (comm_id != null && comm_id.length > 0) {
-    //         let object_id: string;
-    //         let base_point_id: number;
-
-    //         if (comm_id[0].toUpperCase() === 'S') {
-    //           object_id = comm_id.substring(1, comm_id.length);
-
-    //           // Find target object
-    //           let base_object = this.find_layout_object(
-    //             'STATION',
-    //             parseInt(object_id)
-    //           );
-    //           base_point_id =
-    //             base_object !== null ? base_object.point_id : null;
-    //         } else if (comm_id[0].toUpperCase() === 'B') {
-    //           object_id = comm_id.substring(1, comm_id.length);
-
-    //           // Find target object
-    //           let base_object = this.find_layout_object(
-    //             'BUFFER',
-    //             parseInt(object_id)
-    //           );
-    //           base_point_id =
-    //             base_object !== null ? base_object.point_id : null;
-    //         } else {
-    //           base_point_id = parseInt(comm_id);
-    //         }
-
-    //         if (base_point_id !== null) {
-    //           const command_coords = this.find_point_coords(base_point_id);
-
-    //           if (next_coords && current_coords && command_coords) {
-    //             command_point = {
-    //               point: base_point_id,
-    //               coord: command_coords.coord,
-    //               inverted_coord: command_coords.inverted_coord,
-    //             };
-    //           } else {
-    //             command_point = null;
-    //           }
-    //         }
-    //       }
-
-    //       const { priority, last_contact } = rows;
-    //       const vehicle = new Vehicle(rows);
-    //       vehicle.check_stale(
-    //         this.vehicle_stale,
-    //         rows[i].history_change_time
-    //           ? new Date(rows[i].history_change_time).getTime()
-    //           : this.playback_last_event_time
-    //           ? this.playback_last_event_time
-    //           : null
-    //       );
-    //       this.store_stale_list(vehicle);
-    //       converted_vehicles.push(vehicle);
-    //     } catch (error) {
-    //       console.warn(`convert failed for vehicle_id ${rows[i].id}: `, error);
-    //     }
-    //   }
-    // }
     return converted_vehicles;
   }
   store_stale_list(vehicle: any) {
@@ -947,10 +875,11 @@ export class ViewController {
   }
 
   private initialize() {
-    this.svg = d3
-      .select(`#${this.track_id}`)
-      .attr('width', '100%')
-      .attr('height', '100%');
+    // @NOTE initSvg()에서 수행
+    // this.svg = d3
+    //   .select(`#${this.track_id}`)
+    //   .attr('width', '100%')
+    //   .attr('height', '100%');
 
     this.drag = d3
       .drag()
@@ -3502,6 +3431,9 @@ export class ViewController {
     this.d3_track = d3.select(`#${this.track_container_id}`);
   }
   create_track(data: Dto.ITrackData) {
+    // @TODO prefix 설정 : 현재는 고정값 'public.largemap'
+    this.state_prefix = 'public.largemap';
+
     if (!data) data = {};
     if (!data.map_type) data.map_type = MapTypes.DB;
 
@@ -3527,7 +3459,7 @@ export class ViewController {
     this.initVariables();
     this.initStates();
 
-    this.initSvg(data.size);
+    this.initSvg(this.track_id, data.size);
     this.convertObjects(data);
     if (data.vehicle_path) {
       this.expected_paths = this.convertExpectedPath(
@@ -3682,13 +3614,23 @@ export class ViewController {
     // @TODO initStates 구현 (v1 : get_ui_states)
   }
 
-  private initSvg(mapSize: IMapSize) {
-    this.setGeometry(mapSize);
+  private initSvg(target_id: string, mapSize: IMapSize) {
+    target_id && (this.track_id = target_id);
+
+    // get the size of the DOM element into which this is going
+    // @NOTE : jquery 사용하여 size 설정
+    let $elem = this.$track_container.find(`#${target_id}`).parent().get(0);
+    let screen_size = {
+      width: $elem.clientWidth,
+      height: $elem.clientHeight,
+    };
+
+    this.setGeometry(mapSize, screen_size);
 
     // init svg groups
-    // @TODO svg 요소들을 초기화 하는 메소드인데 필요한지 검토후 구현 여부 결정
-    // init_svg_groups();
+    this.init_svg_groups();
 
+    /** set_param + set_initial_zoom */
     this.setInitialZoom(MapTypes.MAIN);
 
     let length: ICoordinate, lower_limit: ICoordinate, upper_limit: ICoordinate;
@@ -3738,6 +3680,13 @@ export class ViewController {
       .ticks(this.num_ticks)
       .tickSize(length.x)
       .tickPadding(-20);
+
+    // Initialize svg: view-box element
+    // @NOTE svg 초기화
+    this.svg = this.d3_track.select(`#${target_id}`);
+    this.svg
+      .attr('width', this.geometry.screen_size.width)
+      .attr('height', this.geometry.screen_size.height);
 
     this.svg.call(this.d3_main);
 
@@ -3812,12 +3761,781 @@ export class ViewController {
 
     this.d3_main.zoomIdentity = d3.zoomIdentity;
 
+    this.init_hover_tag(target_id);
     this.initEvents();
+  }
+  init_hover_tag(target_id: any) {
+    let hover_tag_dom = '<label id="hover_tag"></label>';
+    this.$track_container.find(`#${target_id}`).parent().append(hover_tag_dom);
+  }
+  init_svg_groups() {
+    if (this.geometric_container != undefined) {
+      this.geometric_container.remove();
+      this.geometric_container = undefined;
+    }
+
+    if (this.center_group != undefined) {
+      this.center_group.remove();
+      this.center_svg_x.remove();
+      this.center_svg_y.remove();
+      this.center_svg_text.remove();
+      this.center_group = undefined;
+      this.center_svg_x = undefined;
+      this.center_svg_y = undefined;
+      this.center_svg_text = undefined;
+    }
+
+    if (this.canvas_group != undefined) {
+      this.canvas_group.remove();
+      this.canvas_group = undefined;
+    }
+
+    if (this.grid_x != undefined) {
+      this.grid_x.remove();
+    }
+
+    if (this.grid_y != undefined) {
+      this.grid_y.remove();
+    }
+
+    if (this.scale_svg != undefined) {
+      this.scale_svg.remove();
+    }
+
+    if (this.center_group != undefined) {
+      this.center_group.remove();
+    }
+
+    if (this.overlap_display_svg != undefined) {
+      this.overlap_display_svg.remove();
+      this.overlap_display_svg = undefined;
+    }
+    if (this.overlap_display_panel_svg != undefined) {
+      this.overlap_display_panel_svg.remove();
+      this.overlap_display_panel_svg = undefined;
+    }
+
+    if (this.overlap_module_panel_svg != undefined) {
+      this.overlap_module_panel_svg.remove();
+      this.overlap_module_panel_svg = undefined;
+    }
+
+    if (this.overlap_module_svg != undefined) {
+      this.overlap_module_svg.remove();
+      this.overlap_module_svg = undefined;
+    }
+
+    if (this.directions_svg != undefined) {
+      this.directions_svg.remove();
+      this.directions_svg = undefined;
+    }
+
+    if (this.segments_svg != undefined) {
+      this.segments_svg.remove();
+      this.segments_svg = undefined;
+    }
+
+    if (this.semantic_container != undefined) {
+      this.semantic_container.remove();
+      this.semantic_container = undefined;
+    }
+
+    if (this.points_svg != undefined) {
+      this.points_svg.remove();
+      this.points_svg = undefined;
+      // this.points_txt = undefined
+    }
+
+    if (this.stations_svg != undefined) {
+      this.stations_svg.remove();
+      this.stations_svg = undefined;
+      this.stations_path = undefined;
+      // this.stations_details = undefined
+    }
+
+    if (this.buffers_svg != undefined) {
+      this.buffers_svg.remove();
+      this.buffers_svg = undefined;
+      this.buffers_path = undefined;
+      // this.buffers_details = undefined
+    }
+
+    if (this.mtls_svg != undefined) {
+      this.mtls_svg.remove();
+      this.mtls_svg = undefined;
+      this.mtls_path = undefined;
+      // this.mtls_details = undefined
+    }
+
+    if (this.clusters_svg != undefined) {
+      this.clusters_svg.remove();
+      this.clusters_svg = undefined;
+    }
+
+    if (this.vehicle_svg != undefined) {
+      this.vehicle_svg.remove();
+      this.vehicle_svg = undefined;
+    }
+
+    if (this.selection_svg != undefined) {
+      this.remove_selection_tool();
+    }
+
+    if (this.segment_draw_svg != undefined) {
+      this.segment_draw_svg.remove();
+      this.segment_draw_svg = undefined;
+    }
   }
   // d3 events
 
   private initEvents() {
-    // @TODO 구현 : init_event()
+    // Refactor mouse event decision logic, 190329
+    this.svg.on('click', () => {
+      const doc = document as any;
+
+      // Remove any HTML text selection when clicked on #layout_canvas
+      if (window.getSelection) {
+        window.getSelection().removeAllRanges();
+      } else if (doc.selection) {
+        doc.selection.empty();
+      }
+
+      // Get current mouse coord in respec to the this.svg rect not the full top layer this.svg
+      let coord_array = d3.mouse(this.svg.node());
+
+      if (
+        this.mode !== 'EDITOR' ||
+        (this.mode === 'EDITOR' && this.tool_type === 'POINTER')
+      ) {
+        if (d3.event.target.id === this.track_id) {
+          this.init_selection(true);
+        }
+      } else if (this.mode === 'EDITOR') {
+        // Get inverted coord
+        let snap = this.modifier_key === this.KEY_NO_S2G ? false : true;
+        let coord = this.calc_inverted_coord_with_screen(coord_array, snap);
+
+        if (
+          this.check_coord_in_viewport(coord.x, coord.y) ||
+          d3.event.target.classList.contains('point_mask')
+        ) {
+          if (this.tool_type == 'POINT') {
+            // POINT mode
+            // Create point
+            // Normally we go from data to pixels, but here we're doing pixels to data
+            let point;
+
+            // Get original coord
+            let original_coord = this.calc_original_coord_from_inverted(
+              coord,
+              this.geometry.invert_factor_y
+            );
+
+            // Coornidate duplication check before create
+            if (
+              !LayoutUtil.check_duplicated_coord(
+                this.layout_data.points,
+                original_coord
+              )
+            ) {
+              // Make point object
+              point = new Point(
+                {
+                  id: LayoutUtil.create_new_id(this.layout_data.points),
+                  logical_id: null,
+                  physical_id: null,
+                },
+                LayoutUtil.create_coordinate(
+                  { x: original_coord.x, y: original_coord.y },
+                  this.geometry.invert_factor_y
+                ),
+                true,
+                'N'
+              );
+
+              this.add_layout_object(point, null, true);
+
+              // logger.log('create object : POINT')
+
+              this.init_selection(true);
+              // switch button status to cursor mode
+              this.change_default_button(true);
+
+              this.selected_objects.push(point);
+
+              // Check if popup is open already
+              // @TODO popup.side_panel
+              // if (popup.side_panel) {
+              //     // update popup
+              //     display_side_panel_popup('POINT', point)
+              // }
+              // highilight new created object
+              this.unhighlight(null, null, null);
+              this.highlight(
+                'POINT',
+                point.id,
+                main_css.point,
+                'LAYOUT',
+                'SELECT'
+              );
+            }
+          } else if (this.tool_type === 'SEGMENT') {
+            // SEGMENT mode
+            // Create segment
+            // Initiate segment start point
+
+            // Check already started event
+            if (!this.drag_coord.start) {
+              // First click
+
+              // Check if the user selected existing point
+              if (d3.event.target.classList.contains('point_mask')) {
+                // clicked on a point
+
+                let point_id = parseInt(
+                  d3.event.target.parentElement.id.match(/[0-9]/g).join('')
+                );
+                let point_coord = this.find_layout_object('POINT', point_id)
+                  .inverted_coord;
+                this.drag_coord.start = point_coord;
+              } else {
+                // Was not clicked on a point
+
+                // Use snap to grid coordinate for creating new point
+                this.drag_coord.start = coord;
+
+                let original_coord = this.calc_original_coord_from_inverted(
+                  this.drag_coord.start,
+                  this.geometry.invert_factor_y
+                );
+
+                // Create point
+                let point = new Point(
+                  {
+                    id: LayoutUtil.create_new_id(this.layout_data.points),
+                    logical_id: null,
+                    physical_id: null,
+                  },
+                  LayoutUtil.create_coordinate(
+                    { x: original_coord.x, y: original_coord.y },
+                    this.geometry.invert_factor_y
+                  ),
+                  true,
+                  'N'
+                );
+
+                // add object
+                this.add_layout_object(point, null, false);
+
+                // add history to buffer
+                this.manage_history_buffer(point, null);
+
+                this.selected_objects.push(point);
+              }
+
+              // log_event.log('Segment create start')
+
+              // Add SEGMENT Line DOM
+              if (this.segment_draw_svg === undefined) {
+                this.update_dom(
+                  'SEGMENT_DRAW',
+                  this.drag_coord.start,
+                  null,
+                  null,
+                  'LAYOUT',
+                  false
+                );
+              }
+            } else {
+              // Second click
+
+              if (!d3.event.target.classList.contains('point_mask')) {
+                let original_coord = this.calc_original_coord_from_inverted(
+                  coord,
+                  this.geometry.invert_factor_y
+                );
+
+                // Create point
+                let point = new Point(
+                  {
+                    id: LayoutUtil.create_new_id(this.layout_data.points),
+                    logical_id: null,
+                    physical_id: null,
+                  },
+                  LayoutUtil.create_coordinate(
+                    { x: original_coord.x, y: original_coord.y },
+                    this.geometry.invert_factor_y
+                  ),
+                  true,
+                  'N'
+                );
+
+                // add object
+                this.add_layout_object(point, null, false);
+
+                // add history to buffer
+                this.manage_history_buffer(point, null);
+
+                this.selected_objects.push(point);
+              }
+
+              // Check if the segment has both start and end point
+              if (this.selected_objects.length === 2) {
+                // Check if the second point is same as the first point
+                let start_point = this.selected_objects[0];
+                let end_point = this.selected_objects[1];
+
+                if (
+                  start_point.id !== end_point.id ||
+                  start_point.constructor !== end_point.constructor
+                ) {
+                  this.drag_coord.end = coord;
+
+                  // Create segment
+                  let segment_id = LayoutUtil.create_new_id(
+                    this.layout_data.segments
+                  );
+                  let candidates = LayoutUtil.find_segment_candidate(
+                    segment_id,
+                    start_point,
+                    end_point,
+                    this.layout_data.segments
+                  );
+                  let speed = LayoutUtil.get_segment_speed(
+                    candidates[0].type,
+                    this.SEGMENT_SPEEDS
+                  );
+
+                  const {
+                    type,
+                    location,
+                    direction,
+                    is_validate,
+                  } = candidates[0];
+                  const segment = new Segment(
+                    {
+                      id: segment_id,
+                      physical_id: null,
+                      logical_id: null,
+                      type,
+                      location,
+                      direction,
+                      candidates,
+                      speed,
+                      length: null,
+                      travel_time: null,
+                      is_validate,
+                    },
+                    'N', // updateState
+                    start_point, // fromPoint
+                    end_point // toPoint
+                  );
+                  segment.postCreation();
+                  segment.create_segparts(this.geometry.invert_factor_y);
+                  segment.set_path();
+
+                  // logger.log(`segment #${segment.id} created : ${segment.segment_parts.map(d=>`${d.type}${d.location ? d.location:''} ${d.direction} `).toString()}`)
+
+                  this.add_layout_object(segment, null, false);
+
+                  // add history to buffer
+                  this.manage_history_buffer(segment, 'ADD');
+
+                  // Backup end poit to auto create next segment
+                  let last_point = this.selected_objects[1];
+
+                  this.init_selection(true);
+
+                  // switch button status to cursor mode
+                  this.change_default_button(false);
+
+                  if (this.is_sticky_mode) {
+                    // Restore last point
+                    this.selected_objects.push(last_point);
+                    this.update_dom(
+                      'SEGMENT_DRAW',
+                      last_point.inverted_coord,
+                      null,
+                      null,
+                      'LAYOUT',
+                      false
+                    );
+                    this.drag_coord.start = {
+                      ...last_point.inverted_coord,
+                    };
+                  } else {
+                    // set selected object to last created segment
+                    this.selected_objects.push(segment);
+                  }
+
+                  // Find connected segments
+                  let connected_segments_from = LayoutUtil.find_connected_segment(
+                    segment.point_from,
+                    this.layout_data.segments,
+                    null
+                  );
+                  // Delete candidates
+                  for (let i = 0; i < connected_segments_from.length; i++) {
+                    let connected_segment = connected_segments_from[i];
+                    if (connected_segment.id !== segment.id) {
+                      connected_segment.candidates = [];
+                    }
+                  }
+                  let connected_segments_to = LayoutUtil.find_connected_segment(
+                    segment.point_to,
+                    this.layout_data.segments,
+                    null
+                  );
+                  // Delete candidates
+                  for (let i = 0; i < connected_segments_to.length; i++) {
+                    let connected_segment = connected_segments_to[i];
+                    if (connected_segment.id !== segment.id) {
+                      connected_segment.candidates = [];
+                    }
+                  }
+
+                  // Check if popup is open already
+                  // @TODO popup.side_panel
+                  // if (popup.side_panel) {
+                  //     // update popup
+                  //     display_side_panel_popup('SEGMENT', segment)
+                  // }
+                  // highilight new created object
+                  this.unhighlight(null, null, null);
+                  this.highlight_segment(
+                    segment,
+                    main_css.general,
+                    'SELECT',
+                    'SMOOTH'
+                  );
+                }
+              }
+
+              this.hide_hover_tag();
+            }
+          } else if (this.tool_type === 'SELECT') {
+            // SELECT mode
+            // Create select area
+            // Check already started event
+            // logger.log('this.drag_coord.start: '+ this.drag_coord.start)
+            if (!this.drag_coord.start) {
+              // First click
+
+              // if the modifier for extending selection is not
+              // pressed, then start a new selection
+              if (this.modifier_key !== this.KEY_EXTSEL) {
+                this.init_selection(true);
+              }
+              // logger.log(`modifier=${this.modifier_key} objects=${this.selected_objects.length}`)
+
+              // Reset side panel if not editing clusters
+              // @TODO popup.side_panel
+              // if (popup.side_panel) {
+              //     display_side_panel_popup(null, null)
+              // }
+
+              this.drag_coord.start = coord;
+
+              // Add selection DOM
+              if (this.selection_svg === undefined) {
+                this.update_dom(
+                  'SELECT',
+                  this.drag_coord.start,
+                  null,
+                  null,
+                  'LAYOUT',
+                  false
+                );
+              } else {
+                // remove duplicated point
+                this.selected_objects.splice(1, 1);
+              }
+
+              // log_event.log('Select start')
+            } else {
+              // Second click
+              // let te0, te1
+              // te0 = performance.now()
+
+              if (this.drag_coord.start === 'SHIFT_CLICK') {
+                this.drag_coord.start = coord;
+              }
+
+              this.drag_coord.end = coord;
+
+              let extend_selection =
+                this.modifier_key === this.KEY_EXTSEL ? true : false;
+
+              // Unhighlight all objects
+              if (extend_selection) {
+                this.unhighlight(null, null, null, 'SELECT', 'INSTANT');
+              }
+
+              // Find objects
+              if (this.drag_coord.start !== this.drag_coord.end) {
+                let selected_points = [];
+                let selected_stations = [];
+                let selected_buffers = [];
+                let selected_mtls = [];
+
+                if (this.editing !== 'CLUSTER') {
+                  selected_points = LayoutUtil.find_object_by_coord(
+                    this.drag_coord.start,
+                    this.drag_coord.end,
+                    this.layout_data.points
+                  );
+                  selected_stations = LayoutUtil.find_object_by_coord(
+                    this.drag_coord.start,
+                    this.drag_coord.end,
+                    this.layout_data.stations
+                  );
+                  selected_buffers = LayoutUtil.find_object_by_coord(
+                    this.drag_coord.start,
+                    this.drag_coord.end,
+                    this.layout_data.buffers
+                  );
+                  selected_mtls = LayoutUtil.find_object_by_coord(
+                    this.drag_coord.start,
+                    this.drag_coord.end,
+                    this.layout_data.mtls
+                  );
+                }
+
+                let selected_segments = LayoutUtil.find_segment_by_coord(
+                  this.drag_coord.start,
+                  this.drag_coord.end,
+                  this.layout_data.segments
+                );
+
+                // Add found objects to selected object
+                this.set_selected_objects(
+                  selected_points.concat(
+                    selected_stations,
+                    selected_buffers,
+                    selected_mtls,
+                    selected_segments
+                  ),
+                  extend_selection,
+                  false
+                );
+
+                // Remove unconnected segment
+                if (extend_selection && this.editing !== 'CLUSTER') {
+                  this.selected_objects = LayoutUtil.remove_unconnected_segment(
+                    this.selected_objects
+                  );
+                }
+
+                // log_event.log(`Select finish, point : ${selected_points.length}ea, segment : ${selected_segments.length}ea, station : ${selected_stations.length}ea, buffer : ${selected_buffers.length}ea`)
+              } else if (
+                this.drag_coord.start === this.drag_coord.end &&
+                extend_selection
+              ) {
+                let $element = $(event.target).parents('[g_type=main]');
+                let group_type = $element[0].classList;
+
+                let selected_object = null;
+                if (group_type.contains('segment')) {
+                  selected_object = this.find_segment_at_coord(
+                    this.drag_coord.start
+                  );
+                } else {
+                  if (this.editing !== 'CLUSTER') {
+                    selected_object = this.find_layout_object(
+                      group_type.value.toUpperCase(),
+                      $element[0].id.match(/[0-9.-]/g).join('')
+                    );
+                  }
+                }
+
+                if (selected_object)
+                  this.set_selected_objects(
+                    selected_object,
+                    extend_selection,
+                    false
+                  );
+
+                // log_event.log('Selected Objects: ', this.selected_objects)
+              }
+
+              this.highlight_objects(
+                this.selected_objects,
+                'LAYOUT',
+                'SELECT',
+                'SMOOTH'
+              );
+
+              // te1 = performance.now()
+              // log_performance.log('Select object time : ' + (te1 - te0) + ' ms')
+
+              this.drag_coord = {};
+
+              this.init_selection(false);
+
+              // switch button status to cursor mode
+              // change_default_button(false)
+              // }
+
+              // If multiple objects are selected, update the popup to show null
+              // @TODO popup.side_panel
+              // if (this.selected_objects.length > 1 && popup.side_panel) {
+              //     this.display_side_panel_popup(this.tool_type, null)
+              // }
+            }
+          }
+        }
+      }
+    });
+
+    $(window).on('keydown keyup', (event) => {
+      if (event.type === 'keydown') {
+        // @TODO event.keyCode 대체
+        this.modifier_key = event.keyCode;
+        if (event.keyCode === this.KEY_OVERLAP) {
+          // open overlap display
+          if (
+            !this.$track_container
+              .find('#btn_overlap_display')
+              .hasClass('active')
+          ) {
+            // check if already toggled on
+            this.$track_container
+              .find('#btn_overlap_display')
+              .addClass('active');
+            if (this.overlap_display_objects.length < 2) {
+              // Show the overlap for currently hovering object
+              this.check_overlap_and_display(
+                this.currently_hovering_object.constructor.name.toUpperCase(),
+                this.currently_hovering_object.id,
+                this.overlap_display_objects,
+                'OVERLAP'
+              );
+            }
+          }
+        }
+      }
+      if (event.type === 'keyup') {
+        this.modifier_key = null;
+        if (event.keyCode === this.KEY_OVERLAP) {
+          // close overlap display
+          this.$track_container
+            .find('#btn_overlap_display')
+            .removeClass('active');
+          this.hide_overlap_display('OVERLAP', this.overlap_display_objects);
+        }
+        if (event.keyCode === this.KEY_NO_S2G) {
+          // no snap-to-grid, no need for coordinate hover tag
+          this.hide_hover_tag();
+        }
+      }
+    });
+
+    // Mouse drag event
+    this.svg.on('mousemove', () => {
+      if (this.mode == 'EDITOR') {
+        let snap_to_grid = this.modifier_key === this.KEY_NO_S2G ? false : true;
+        // @TODO d3.mouse(this)
+        let coord = this.calc_inverted_coord_with_screen(
+          d3.mouse(this.svg.node()),
+          snap_to_grid
+        );
+        this.drag_coord.current = coord;
+
+        // Only update drawing tool if coord in viewport
+        if (snap_to_grid && !this.check_coord_in_viewport(coord.x, coord.y)) {
+          return;
+        }
+
+        // Update tool dom
+        let show_coord = false;
+        if (this.tool_type === 'POINT') {
+          show_coord = true;
+        } else if (this.tool_type === 'SEGMENT') {
+          show_coord = true;
+          if (this.drag_coord.start && !this.drag_coord.end) {
+            // update if the coord is in viewport
+            this.update_tool_dom(
+              'SEGMENT_DRAW',
+              this.segment_draw_svg,
+              this.drag_coord
+            );
+          }
+        } else if (this.tool_type === 'SELECT') {
+          show_coord = true;
+          if (this.drag_coord.start && !this.drag_coord.end) {
+            let width = this.drag_coord.current.x - this.drag_coord.start.x;
+            let height = this.drag_coord.current.y - this.drag_coord.start.y;
+
+            let size: any = {};
+            size.width = width;
+            size.height = height;
+
+            this.update_tool_dom('SELECT', this.selection_svg, {
+              size,
+            });
+          }
+        }
+
+        if (!snap_to_grid && show_coord) {
+          let mouse_coord = {
+            x: d3.mouse(this.svg.node())[0],
+            y: d3.mouse(this.svg.node())[1],
+          };
+          let current_coord = this.calc_original_coord_with_screen(
+            d3.mouse(this.svg.node()),
+            this.geometry.invert_factor_y
+          );
+          let custom_text = `${parseInt(current_coord.x)}, ${parseInt(
+            current_coord.y
+          )}`;
+          this.show_hover_tag(null, null, custom_text, mouse_coord);
+        } else {
+          this.hide_hover_tag();
+        }
+      }
+    });
+  }
+  manage_history_buffer(layout_objects: any, transfer_type: any) {
+    if (layout_objects) {
+      let input_objects;
+      let result;
+
+      // Convert object to array
+      if (!Array.isArray(layout_objects)) {
+        input_objects = [layout_objects];
+      }
+
+      result = this.history_buffer.concat(input_objects);
+      this.history_buffer = result;
+
+      // log_event.log(`group event added to history buffer : buffer size - ${this.history_buffer.length}`)
+    }
+
+    if (transfer_type) {
+      // log_event.log(`history buffer transferred to history stack : type - ${transfer_type} size - ${this.history_buffer.length}`)
+
+      // transfer buffer to stack
+      this.manage_history('PUSH', transfer_type, this.history_buffer);
+
+      this.history_buffer = [];
+    }
+  }
+  calc_inverted_coord_with_screen(
+    screen_coord: [number, number],
+    is_apply_snap: boolean
+  ) {
+    let current_zoom = this.getZoom(MapTypes.MAIN);
+    let coord: any = {};
+
+    (coord.x = (screen_coord[0] - current_zoom.x) / current_zoom.k),
+      (coord.y = (screen_coord[1] - current_zoom.y) / current_zoom.k);
+
+    // Apply snap
+    if (is_apply_snap) {
+      coord = LayoutUtil.calc_snap_coord(coord, this.snap_to_grid_distance);
+    }
+
+    return coord;
   }
   private zoomed(): any {
     let x = d3.event.transform.x;
@@ -4533,7 +5251,7 @@ export class ViewController {
           .transition()
           .duration(200)
           .attr('stroke-width', 0)
-          .on('end', function(e) {
+          .on('end', function (e) {
             that.$track_container.find(this).remove();
           });
       }
@@ -4644,7 +5362,6 @@ export class ViewController {
         fab_y: +this.selection_svg.attr('fab_y'),
       };
 
-      console.warn('selection_svg_adaptive_rendering : event >>', event);
       if (event.type === 'mousemove') {
         //Rendering from mouse move event
         this.selection_svg
@@ -4900,13 +5617,16 @@ export class ViewController {
         .data(data, function (d) {
           return d.id;
         });
-
       // Update ***************************************************//
       if (!is_zoom_only) {
+        console.info('this.vehicle_svg > ', this.vehicle_svg)
         this.vehicle_svg.each((d) => {
           let is_update_all = true;
           let update: any = {};
 
+          if (d.id == 60 || d.id == 43) {
+            console.info('## debug ## d3 >', { id: d.id, updated });
+          }
           // If update does not exist, update everything
           if (updated && typeof updated === 'object') {
             update = updated[d.id];
@@ -4916,7 +5636,7 @@ export class ViewController {
             else is_update_all = false; // only update the existing update properties
           }
 
-          let d3_this = d3.select(`#id_${d.id}`);
+          let d3_this = d3.select(`#id_${d.id}.vehicle`);
 
           // Update: if any
           if (
@@ -5093,6 +5813,8 @@ export class ViewController {
       // Remove unnecessary vehicle svgs
       this.vehicle_svg.exit().remove();
 
+      const that = this;
+
       this.vehicle_svg
         .enter()
         .append('g')
@@ -5129,7 +5851,11 @@ export class ViewController {
           }
         })
         .each((d) => {
-          let d3_this = d3.select(`#id_${d.id}`);
+          // @NOTE #id_{d.id} 만으로 쿼리하면 다른 class가 선택될 수 있으므로 class까지 지정해야한다.
+          let d3_this = d3.select(`#id_${d.id}.vehicle`);
+          if (d.id == 60 || d.id == 43) {
+            console.info('## debug ## d3 >', { id: d.id, d3_this, d3_this2: d3.select(d) });
+          }
           this.append_dom_subpart(
             object_type,
             d3_this,
@@ -6993,7 +7719,6 @@ export class ViewController {
     // Rotate scale in the opposite direction of the main rotation ot keep in it's place with rotation about the center of the screen
     let scale = this.d3_track.select('.scale') as any;
 
-    console.warn('### check >>', scale.nodes()[0].transform);
     // ATTENTION : mobile device does not support scale.nodes()[0].transform.baseVal
     // @TODO transform 속성이 없음. 확인 필요
     // if (scale.nodes()[0].transform.baseVal[0]) {
@@ -7158,8 +7883,8 @@ export class ViewController {
           this.vehicle_scale.scale
         })`
       );
-    this.vehicle_svg.each((d) =>{
-      let d3_this = d3.select(`#id_${d.id}`);
+    this.vehicle_svg.each((d) => {
+      let d3_this = d3.select(`#id_${d.id}.vehicle`);
       let offset_x = (vehicle_css.radius * 4) / 3;
       if (d3_this.select('.push').nodes().length > 0) {
         offset_x = vehicle_css.radius * 3;
@@ -7203,7 +7928,7 @@ export class ViewController {
         .attr('display', 'block')
         .attr('transform', `scale(${this.vehicle_scale.scale})`);
       this.vehicle_svg.selectAll('.hotlot').each((d) => {
-        let d3_this = d3.select(`#id_${d.id}`);
+        let d3_this = d3.select(`#id_${d.id}.vehicle`);
         d3_this
           .attr('x', () => {
             return (
@@ -7211,7 +7936,7 @@ export class ViewController {
               d.order_id.toString().length * 6
             );
           })
-          .attr('y',  ()=> {
+          .attr('y', () => {
             return (
               (vehicle_css.radius * 2 - vehicle_css.radius / 2) *
                 this.vehicle_scale.scale -
@@ -7797,7 +8522,7 @@ export class ViewController {
             ])})rotate(${-this.map_rotation})`;
           })
           .each((d) => {
-            let d3_this = d3.select(`#id_${d.id}`);
+            let d3_this = d3.select(`#id_${d.id}.point`);
             if (zoom_level >= this.option.selective_lvl_display.point_label) {
               if (d3_this.select('text').node() === null) {
                 this.append_dom_subpart(
@@ -7840,7 +8565,7 @@ export class ViewController {
             ])})rotate(${-this.map_rotation})`;
           })
           .each((d) => {
-            let d3_this = d3.select(`#id_${d.id}`);
+            let d3_this = d3.select(`#id_${d.id}.point`);
             this.append_dom_subpart(
               object_type,
               d3_this,
@@ -7891,7 +8616,7 @@ export class ViewController {
             ])})`;
           })
           .each((d) => {
-            let d3_this = d3.select(`#id_${d.id}`).select('.dir_triangle');
+            let d3_this = d3.select(`#id_${d.id}.point`).select('.dir_triangle');
             if (d3_this) {
               d3_this.attr(
                 'transform',
@@ -7929,7 +8654,7 @@ export class ViewController {
           .each((d) => {
             this.append_dom_subpart(
               object_type,
-              d3.select(`#id_${d.id}`),
+              d3.select(`#id_${d.id}.direction`),
               d,
               dom_css,
               zoom_level,
@@ -7945,7 +8670,7 @@ export class ViewController {
       );
       if (group_type === 'LAYOUT') {
         this.directions_svg.selectAll('.dir_triangle').each((d) => {
-          d3.select(`#id_${d.id}`).attr(
+          d3.select(`#id_${d.id}.direction`).attr(
             'transform',
             `rotate(${Math.trunc(CommonUtil.degrees(d.dir_angle))},0,0)scale(${
               this.direction_arrow_scale.scale
@@ -8012,7 +8737,7 @@ export class ViewController {
             .selectAll('path.station_path, path.station_mask')
             .remove();
           this.stations_svg.each((d) => {
-            let d3_this = d3.select(`#id_${d.id}`);
+            let d3_this = d3.select(`#id_${d.id}.station`);
             if (d3_this.select('rect.station_path').node() === null) {
               d3_this
                 .append('rect')
@@ -8045,7 +8770,7 @@ export class ViewController {
           }
 
           this.stations_svg.each((d) => {
-            let d3_this = d3.select(`#id_${d.id}`);
+            let d3_this = d3.select(`#id_${d.id}.station`);
             if (
               d3_this.select('.station_path, .station_mask').node() === null
             ) {
@@ -8113,7 +8838,7 @@ export class ViewController {
         }
 
         this.stations_svg.each((d) => {
-          d3.select(`#id_${d.id}`)
+          d3.select(`#id_${d.id}.station`)
             .selectAll('.station_path, .station_mask, text, .select, .hover')
             .attr(
               'transform',
@@ -8125,7 +8850,7 @@ export class ViewController {
 
         if (this.show_groups) {
           this.stations_svg.each((d) => {
-            let d3_this = d3.select(`#id_${d.id}`);
+            let d3_this = d3.select(`#id_${d.id}.station`);
             let group_svg = d3_this.select('.group_svg');
             if (d.group) {
               let size = main_css.group.track_group_size[zoom_level];
@@ -8188,7 +8913,7 @@ export class ViewController {
             ])})`;
           })
           .each((d) => {
-            let d3_this = d3.select(`#id_${d.id}`);
+            let d3_this = d3.select(`#id_${d.id}.station`);
             this.append_dom_subpart(
               object_type,
               d3_this,
@@ -8229,7 +8954,7 @@ export class ViewController {
             '.station_path, .station_mask, .group_svg, .hover, .select'
           )
           .each((d) => {
-            d3.select(`#id_${d.id}`).attr(
+            d3.select(`#id_${d.id}.station`).attr(
               'transform',
               `translate(${d.direction_offset.x * group_offset_multiplier}, ${
                 d.direction_offset.y * group_offset_multiplier
@@ -8295,7 +9020,7 @@ export class ViewController {
           this.buffers_svg.selectAll('path').remove();
           this.buffers_svg.each((d) => {
             // let d3_this = d3.select(this);
-            let d3_this = d3.select(`#id_${d.id}`);
+            let d3_this = d3.select(`#id_${d.id}.buffer`);
             if (d3_this.select('circle.buffer_path').node() === null) {
               d3_this
                 .append('circle')
@@ -8329,7 +9054,7 @@ export class ViewController {
           }
 
           this.buffers_svg.each((d) => {
-            let d3_this = d3.select(`#id_${d.id}`);
+            let d3_this = d3.select(`#id_${d.id}.buffer`);
             if (d3_this.select('.buffer_path, .buffer_mask').node() === null) {
               d3_this
                 .append('path')
@@ -8397,7 +9122,7 @@ export class ViewController {
 
         this.buffers_svg.each((d) => {
           // d3.select(this)
-          d3.select(`#id_${d.id}`)
+          d3.select(`#id_${d.id}.buffer`)
             .selectAll('.buffer_path, .buffer_mask, text, .select, .hover')
             .attr(
               'transform',
@@ -8410,7 +9135,7 @@ export class ViewController {
         if (this.show_groups) {
           this.buffers_svg.each((d) => {
             // let d3_this = d3.select(this);
-            let d3_this = d3.select(`#id_${d.id}`);
+            let d3_this = d3.select(`#id_${d.id}.buffer`);
             let group_svg = d3_this.select('.group_svg');
             if (d.group) {
               let size = main_css.group.track_group_size[zoom_level];
@@ -8474,7 +9199,7 @@ export class ViewController {
           })
           .each((d) => {
             // let d3_this = d3.select(this);
-            let d3_this = d3.select(`#id_${d.id}`);
+            let d3_this = d3.select(`#id_${d.id}.buffer`);
             this.append_dom_subpart(
               object_type,
               d3_this,
@@ -8517,7 +9242,7 @@ export class ViewController {
           .selectAll('.buffer_path, .buffer_mask, .group_svg, .hover, .select')
           .each((d) => {
             // d3.select(this).attr(
-            d3.select(`#id_${d.id}`).attr(
+            d3.select(`#id_${d.id}.buffer`).attr(
               'transform',
               `translate(${d.direction_offset.x * group_offset_multiplier}, ${
                 d.direction_offset.y * group_offset_multiplier
@@ -8593,7 +9318,7 @@ export class ViewController {
         if (zoom_level >= this.option.selective_lvl_display.mtl_det) {
           this.mtls_svg.each((d) => {
             // let d3_this = d3.select(this);
-            let d3_this = d3.select(`#id_${d.id}`);
+            let d3_this = d3.select(`#id_${d.id}.mtl`);
             let label = d3_this.select('.label');
             if (label.node()) {
               // exists already
@@ -8618,7 +9343,7 @@ export class ViewController {
         if (this.show_groups) {
           this.mtls_svg.each((d) => {
             // let d3_this = d3.select(this);
-            let d3_this = d3.select(`#id_${d.id}`);
+            let d3_this = d3.select(`#id_${d.id}.mtl`);
             let group_svg = d3_this.select('.group_svg');
             if (d.group) {
               let size = main_css.group.track_group_size[zoom_level];
@@ -8681,7 +9406,7 @@ export class ViewController {
           })
           .each((d) => {
             // let d3_this = d3.select(this);
-            let d3_this = d3.select(`#id_${d.id}`);
+            let d3_this = d3.select(`#id_${d.id}.mtl`);
             this.append_dom_subpart(
               object_type,
               d3_this,
@@ -8734,7 +9459,7 @@ export class ViewController {
         })
         .each((d) => {
           // let d3_this = d3.select(this);
-          let d3_this = d3.select(`#id_${d.id}`);
+          let d3_this = d3.select(`#id_${d.id}.cluster`);
 
           // Update path and color of the visible path element
           d3_this
@@ -8771,7 +9496,7 @@ export class ViewController {
         .each((d) => {
           this.append_dom_subpart(
             object_type,
-            d3.select(`#id_${d.id}`),
+            d3.select(`#id_${d.id}.cluster`),
             d,
             main_css.cluster,
             zoom_level,
@@ -11477,7 +12202,7 @@ export class ViewController {
     this.$track_container.find('#btn_tracking').removeClass('active');
   }
   start_tracking() {
-    this.$track_container.find('#btn_tracking').addClass('active')
+    this.$track_container.find('#btn_tracking').addClass('active');
     this.vehicle_tracking.status = true;
   }
 
@@ -11487,7 +12212,6 @@ export class ViewController {
 
     const transform: d3.ZoomTransform = d3.event.transform;
 
-    console.warn('@@ mini_zoomed >>', { event, transform, d3Event: d3.event });
     this.mini_zoomed_handler(transform);
   }
   // @NOTE event 에는 두개 param만 전달되는데 원본 소스에는 인자가 3개
@@ -11900,7 +12624,10 @@ export class ViewController {
         that.tool_type !== 'SELECT' ||
         (that.tool_type === 'SELECT' && !that.drag_coord.start)
       ) {
-        let event_coord = { x: d3.mouse(this)[0], y: d3.mouse(this)[1] };
+        let event_coord = {
+          x: d3.mouse(this)[0],
+          y: d3.mouse(this)[1],
+        };
         let segment = that.find_segment_at_coord(event_coord);
         if (segment) {
           that.layout_object_click(d3.event, {
@@ -12378,10 +13105,10 @@ export class ViewController {
   }
 
   // init svg
-  private setGeometry(mapSize: IMapSize) {
+  private setGeometry(mapSize: IMapSize, screen_size: any) {
     // @NOTE 원본 소스에서는 parent의 clientHeight, clientWidth 값을 사용함
-    // const { width, height } = screen;
-    const { width, height } = this.svg.node().getBoundingClientRect();
+    // const { width, height } = this.svg.node().getBoundingClientRect();
+    const { width, height } = screen_size;
 
     this.geometry = {
       screen_size: { width, height },
@@ -12406,11 +13133,6 @@ export class ViewController {
     const zoomRatio = Math.min(widthRatio, heightRatio);
 
     // set_initial_zoom()
-    console.info('## setInitialZoom ## mapType >>', {
-      mapType,
-      zoomRatio,
-      zoom: this.zoom,
-    });
     let currentZoom = this.getZoom(mapType);
     if (!currentZoom) {
       currentZoom = {

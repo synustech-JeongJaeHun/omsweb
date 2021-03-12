@@ -35,8 +35,6 @@ export class MapViewerComponent implements OnInit {
   }
 
   private drawMap() {
-
-    console.info('# jquery test >>', $('#track-canvas'));
     const viewer = new ViewController(
       ViewModes.public,
       'track-canvas',

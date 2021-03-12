@@ -302,7 +302,7 @@ export class MapParser {
             (p) => p.id === end_point
           );
           const segment = new Segment(segmentRow, 'E', fromPoint, toPoint);
-          this.postSegmentCreation(
+          this.initializeSegmentCreation(
             segment,
             this.parseSegmentPartsFromDB(groups, adjustment),
             adjustment
@@ -318,16 +318,12 @@ export class MapParser {
 
     return segments;
   }
-  private postSegmentCreation(
+  private initializeSegmentCreation(
     segment: Segment,
     parts: ISegmentPart[],
     adjustment: number
   ) {
-    const { candidates, speed } = segment;
-    segment.set_candidates(candidates);
-    segment.set_length(segment.calculate_length());
-    segment.set_speed(speed);
-    segment.set_travel_time();
+    segment.postCreation();
     segment.segment_parts = parts;
 
     // Calculate main direction
@@ -379,7 +375,7 @@ export class MapParser {
         toPoint
         // adjustment
       );
-      this.postSegmentCreation(
+      this.initializeSegmentCreation(
         segment,
         row.segparts.map((p) => Segment.createSegmentPart(p, adjustment)),
         adjustment
