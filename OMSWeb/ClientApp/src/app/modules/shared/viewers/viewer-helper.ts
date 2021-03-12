@@ -134,7 +134,7 @@ export class ViewController {
   private scale_offset_x = 50;
   private scale_offset_y = 50;
   private hover_tag_offset_x = 20;
-  private hover_tag_offset_y = 20;
+  private hover_tag_offset_y = 40;
 
   private SEGMENT_SPEEDS = {
     straight: this.speed_straight,
@@ -3178,6 +3178,18 @@ export class ViewController {
       }
 
       // @TODO i18n 처리
+      if (object_type) label_text += `${(object_type)}\n`;
+      if (id) label_text += `${('ID')}: ${id}\n`;
+      if (logical_id) label_text += `${('Logical ID')}: ${logical_id}\n`;
+      if (physical_id)
+        label_text += `${('Physical ID')}: ${physical_id}\n`;
+      if (length) label_text += `${('length')}: ${length}\n`;
+      if (point) label_text += `${('Point')}: ${point}\n`;
+      if (max_cap) label_text += `${('Maximum vehicles')}: ${max_cap}\n`;
+      if (order_logical_id)
+        label_text += `${('Order ID')}: ${order_logical_id}\n`;
+
+
       // if (object_type) label_text += `${$.i18n(object_type)}\n`;
       // if (id) label_text += `${$.i18n('ID')}: ${id}\n`;
       // if (logical_id) label_text += `${$.i18n('Logical ID')}: ${logical_id}\n`;
@@ -5619,14 +5631,10 @@ export class ViewController {
         });
       // Update ***************************************************//
       if (!is_zoom_only) {
-        console.info('this.vehicle_svg > ', this.vehicle_svg)
         this.vehicle_svg.each((d) => {
           let is_update_all = true;
           let update: any = {};
 
-          if (d.id == 60 || d.id == 43) {
-            console.info('## debug ## d3 >', { id: d.id, updated });
-          }
           // If update does not exist, update everything
           if (updated && typeof updated === 'object') {
             update = updated[d.id];
@@ -5853,9 +5861,6 @@ export class ViewController {
         .each((d) => {
           // @NOTE #id_{d.id} 만으로 쿼리하면 다른 class가 선택될 수 있으므로 class까지 지정해야한다.
           let d3_this = d3.select(`#id_${d.id}.vehicle`);
-          if (d.id == 60 || d.id == 43) {
-            console.info('## debug ## d3 >', { id: d.id, d3_this, d3_this2: d3.select(d) });
-          }
           this.append_dom_subpart(
             object_type,
             d3_this,
@@ -7542,7 +7547,6 @@ export class ViewController {
     // and the screen size
 
     // Set the new parameters to get proper transform proportions
-    console.info('## svg_resize ## >> into setInitialZoom');
     this.setInitialZoom(MapTypes.MAIN);
 
     // Initiate D3
@@ -8616,7 +8620,9 @@ export class ViewController {
             ])})`;
           })
           .each((d) => {
-            let d3_this = d3.select(`#id_${d.id}.point`).select('.dir_triangle');
+            let d3_this = d3
+              .select(`#id_${d.id}.point`)
+              .select('.dir_triangle');
             if (d3_this) {
               d3_this.attr(
                 'transform',
@@ -10675,7 +10681,7 @@ export class ViewController {
     });
 
     dom_object.on('contextmenu', () => {
-      d3.event.preventDefault();
+      // d3.event.preventDefault();   // @TODO 임시로 context menu 허용
       this.layout_object_click(d3.event, {
         type: object_type,
         id: layout_object.id,
@@ -10690,7 +10696,14 @@ export class ViewController {
       // Set hovering object
       this.currently_hovering_object = layout_object;
 
-      if (this.overlap_state(this)) {
+      // console.info('## mouseenter event >>', {
+      //   dom_object,
+      //   layout_object,
+      //   object_type,
+      //   event: d3.event,
+      // });
+
+      if (this.overlap_state(d3.event.target)) {
         this.check_overlap_and_display(
           object_type,
           layout_object.id,
@@ -10712,6 +10725,12 @@ export class ViewController {
     });
     dom_object.on('mouseout', () => {
       // Mouse is leaving the element
+      // console.info('## mouseout event >>', {
+      //   layout_object,
+      //   object_type,
+      //   objects: this.overlap_display_objects,
+      //   event: d3.event,
+      // });
 
       if (this.overlap_display_objects.length < 2) {
         // If there are no overlapping elements on mouse out
@@ -10742,7 +10761,8 @@ export class ViewController {
   }
   overlap_state(node: any) {
     if (
-      this.$track_container.find('#btn_overlap_display').hasClass('active') &&
+      // @TODO overlap display 설정을 button element 상태로 판단하는것을 추후에 수정
+      // this.$track_container.find('#btn_overlap_display').hasClass('active') &&
       this.overlap_display_objects.length === 0 &&
       !node.parentNode.classList.contains('panel_overlap')
     ) {

@@ -5,7 +5,7 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './monitor-status.component.html',
   styles: [
     `
-      :host {
+      /* :host {
         display: grid;
         grid-template-columns: 56px 1fr;
         column-gap: 20px;
@@ -14,7 +14,7 @@ import { Component, OnInit } from '@angular/core';
       }
       .snb {
         align-self: start;
-      }
+      } */
     `,
   ],
 })

@@ -77,7 +77,7 @@ export class MapParser {
     rows = this.inject_group_data('mtl', rows);
     return rows.reduce((models, row) => {
       try {
-        const point = this.layout_data.points.find((p) => p.id === row.id);
+        const point = this.layout_data.points.find((p) => p.id === row.point_id);
         if (!point) throw 'not found mtl coordinates';
         const mtl = new MTL(row, true, 'E', point);
         models.push(mtl);
@@ -93,13 +93,13 @@ export class MapParser {
     const segments = this.layout_data.segments;
     return rows.reduce((models, row) => {
       try {
-        const point = this.layout_data.points.find((p) => p.id === row.id);
+        const point = this.layout_data.points.find((p) => p.id === row.point_id);
         if (!point) throw 'not found buffer coordinates';
         const buffer = new Buffer(row, true, 'E', point);
         buffer.set_direction_attr(segments);
         models.push(buffer);
       } catch (error) {
-        // console.warn(`parsing failed for buffer ${row.id}`);
+        console.warn(`parsing failed for buffer ${row.id}`, error);
       }
       return models;
     }, []);
@@ -112,7 +112,7 @@ export class MapParser {
     const segments = this.layout_data.segments;
     return rows.reduce((models, row) => {
       try {
-        const point = this.layout_data.points.find((p) => p.id === row.id);
+        const point = this.layout_data.points.find((p) => p.id === row.point_id);
         if (!point) throw 'not found station coordinates';
         const station = new Station(row, true, 'E', point);
         station.set_direction_attr(segments);
