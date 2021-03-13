@@ -4,6 +4,7 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -12,8 +13,10 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using OMSWeb.Handlers;
 using OMSWeb.Models;
 using OMSWeb.Models.Entities;
+using OMSWeb.Repositories;
 
 namespace OMSWeb
 {
@@ -47,7 +50,7 @@ namespace OMSWeb
       services.Configure<AppSettings>(appSettingsSection);
       var appSettings = appSettingsSection.Get<AppSettings>();
 
-      // configure jwt authentication
+      #region configure jwt authentication
       var jwtKey = Encoding.ASCII.GetBytes(appSettings.JwtSecret);
       services.AddAuthentication(x =>
         {
@@ -67,11 +70,29 @@ namespace OMSWeb
             ClockSkew = TimeSpan.Zero,
           };
         });
+      #endregion
 
       services.AddHttpContextAccessor();
       services.AddMemoryCache();
 
+      #region DI
+      services.AddScoped<IUserRepository, UserRepository>();
+      services.AddScoped<IAlarmRepository, AlarmRepository>();
+      services.AddScoped<ICycleRepository, CycleRepository>();
+      services.AddScoped<IHistoryRepository, HistoryRepository>();
+      services.AddScoped<IMessageRepository, MessageRepository>();
+      services.AddScoped<IMetricsRepository, MetricsRepository>();
+      services.AddScoped<IOrderRepository, OrderRepository>();
+      services.AddScoped<IPlaybackRepository, PlaybackRepository>();
+      services.AddScoped<IStatusRepository, StatusRepository>();
+      services.AddScoped<ISystemsRepository, SystemsRepository>();
+      services.AddScoped<ITrackRepository, TrackRepository>();
+      services.AddScoped<IUserRepository, UserRepository>();
+      services.AddScoped<IVehicleRepository, VehicleRepository>();
       // services.AddTransient<ProblemDetailsFactory, OmsProblemDetailsFactory>();  // @TODO problem handler 작성 후 사용
+      #endregion
+
+			services.AddTransient<ProblemDetailsFactory, OmsProblemDetailsFactory>();
 
       // In production, the Angular files will be served from this directory
       services.AddSpaStaticFiles(configuration =>
@@ -83,13 +104,15 @@ namespace OMSWeb
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
+      app.UseOmsExceptionHandler();
+      
       if (env.IsDevelopment())
       {
-        app.UseDeveloperExceptionPage();
+        // app.UseDeveloperExceptionPage();
       }
       else
       {
-        app.UseExceptionHandler("/Error");
+        // app.UseExceptionHandler("/Error");
       }
 
       app.UseStaticFiles();

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using OMSWeb.Repositories;
 
 namespace OMSWeb.Controllers
 {
@@ -11,9 +12,15 @@ namespace OMSWeb.Controllers
     [ApiController]
     public class StatusController : ControllerBase
     {
-      [HttpGet("track")]
+      private readonly IStatusRepository _statusRepo;
+    public StatusController(IStatusRepository statusRepo)
+    {
+      this._statusRepo = statusRepo;
+    }
+
+    [HttpGet("track")]
       public IActionResult GetTrack() {
-        return Content("");
+        return Content(this._statusRepo.Test());
       }
     }
 }

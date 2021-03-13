@@ -5,8 +5,10 @@ using System.Threading.Tasks;
 
 namespace OMSWeb
 {
-    public enum ErrorCodes: uint
-    {
-        ServerError = 999,
-    }
+  public enum ErrorCodes : uint
+  {
+
+    BadRequestModel = 10,
+    ServerError = 999,
+  }
 }
