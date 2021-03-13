@@ -7,6 +7,7 @@ import * as $ from 'jquery';
 import { ViewModes } from '../../../models/enums';
 import { StatusService } from '../../../services/status.service';
 import { ViewController } from './viewer-helper';
+import { TrackIdService } from '../../../services/track-id.service';
 
 @Component({
   selector: 'oms-map-viewer',
@@ -24,7 +25,7 @@ import { ViewController } from './viewer-helper';
 export class MapViewerComponent implements OnInit {
   omsData: any;
 
-  constructor(private statusSvc: StatusService) {}
+  constructor(private statusSvc: StatusService, private trackIdSvc: TrackIdService) {}
 
   ngOnInit(): void {
     this.statusSvc.getTrack().subscribe((res) => {
@@ -38,11 +39,12 @@ export class MapViewerComponent implements OnInit {
     const viewer = new ViewController(
       ViewModes.public,
       'track-canvas',
-      'minimap'
+      'minimap',
     );
 
     viewer.setup();
     viewer.create_track(this.omsData);
     viewer.update_vehicles(this.omsData.vehicles, 'INSERT', null, false);
+    this.trackIdSvc.extract_id_from_track(viewer.layoutData);
   }
 }

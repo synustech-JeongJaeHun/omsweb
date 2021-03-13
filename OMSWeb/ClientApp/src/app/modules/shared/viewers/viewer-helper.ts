@@ -26,8 +26,9 @@ import { Station } from '../../../models/station.model';
 import { Buffer } from '../../../models/buffer.model';
 import { MTL } from '../../../models/mtl.model';
 import { Point } from '../../../models/point.model';
-
+import { TrackIdService } from '@oms/services/track-id.service';
 export class ViewController {
+  //#region properties
   private svg: any; // d3.Selection<d3.ContainerElement, unknown, HTMLElement, any>;
   private d3_track: d3.Selection<d3.BaseType, unknown, HTMLElement, any>;
   private parser: MapParser;
@@ -266,16 +267,317 @@ export class ViewController {
   private drag: d3.DragBehavior<Element, unknown, unknown>;
 
   playback_last_event_time: any;
+  //#endregion
+
+  get layoutData(): IViewerData {
+    return this.layout_data;
+  }
 
   constructor(
     private mode: ViewModes = ViewModes.minimal,
     private track_id: string,
-    private minimap_svg_id: string
+    private minimap_svg_id: string,
   ) {
     this.DEFAULTS = this.get_defaults();
     this.parser = new MapParser(this.layout_data);
     this.$track_container = $(`#${this.track_container_id}`);
     this.initialize();
+  }
+  private initialize() {
+    // @NOTE initSvg()에서 수행
+    // this.svg = d3
+    //   .select(`#${this.track_id}`)
+    //   .attr('width', '100%')
+    //   .attr('height', '100%');
+
+    this.drag = d3
+      .drag()
+      .on('drag', () => {
+        // move objects move()
+        if (this.tool_type === 'MOVE' && this.selected_objects.length > 0) {
+          let current_zoom = this.getZoom(MapTypes.MAIN);
+          let actual_delta: any = {};
+
+          this.selection_filter(['STATION', 'BUFFER', 'MTL', 'SEGMENT'], null);
+
+          if (
+            this.get_selected_objects('SEGMENT').length > 0 &&
+            this.get_dom('SEGMENT').select('#temp_segment').node() === null
+          ) {
+            // Copy the selected segments and add clone to dom for move op
+            this.add_temporary_segment_move_dom();
+
+            // Remove selected segment from current segment svg element
+            this.update_segment_svg(
+              this.get_layout_objects('SEGMENT'),
+              main_css.general,
+              this.selected_objects
+            );
+          }
+
+          // Store current mouse coord
+          this.drag_move.mouse_current = d3.mouse(this.svg.node());
+
+          actual_delta.x = Math.trunc(
+            (this.drag_move.mouse_current[0] - this.drag_move.mouse_start[0]) /
+              current_zoom.k
+          );
+          actual_delta.y = Math.trunc(
+            (this.drag_move.mouse_current[1] - this.drag_move.mouse_start[1]) /
+              current_zoom.k
+          );
+
+          // Move screen coords
+          let segments_to_move = [];
+          for (let i = 0; i < this.selected_objects.length; i++) {
+            if (
+              this.selected_objects[i].constructor.name.toUpperCase() ===
+              'SEGMENT'
+            ) {
+              segments_to_move.push(this.selected_objects[i]);
+              this.move_dom(
+                'SEGMENT_DIRECTION',
+                [this.selected_objects[i]],
+                actual_delta
+              );
+            } else {
+              this.move_dom(
+                this.selected_objects[i].constructor.name.toUpperCase(),
+                [this.selected_objects[i]],
+                actual_delta
+              );
+            }
+          }
+
+          if (segments_to_move.length > 0) {
+            this.move_dom('SEGMENT', segments_to_move, actual_delta);
+          }
+
+          if (
+            this.selection_box_svg &&
+            this.selection_box_svg.initial_bounding_box
+          ) {
+            let current_bounding_box = {
+              min: {
+                x:
+                  this.selection_box_svg.initial_bounding_box.min.x +
+                  actual_delta.x,
+                y:
+                  this.selection_box_svg.initial_bounding_box.min.y +
+                  actual_delta.y,
+              },
+              max: {
+                x:
+                  this.selection_box_svg.initial_bounding_box.max.x +
+                  actual_delta.x,
+                y:
+                  this.selection_box_svg.initial_bounding_box.max.y +
+                  actual_delta.y,
+              },
+            };
+            this.update_selection_box(current_bounding_box);
+          }
+
+          if (this.modifier_key === this.KEY_NO_S2G) {
+            let mouse_coord = {
+              x: this.drag_move.mouse_current[0],
+              y: this.drag_move.mouse_current[1],
+            };
+
+            let current_coord = this.calc_original_coord_with_screen(
+              this.drag_move.mouse_current,
+              this.geometry.invert_factor_y
+            );
+
+            let custom_text = `${parseInt(current_coord.x)}, ${parseInt(
+              current_coord.y
+            )}`;
+            this.show_hover_tag(null, null, custom_text, mouse_coord);
+          } else {
+            this.hide_hover_tag();
+          }
+        }
+      })
+      .on('start', () => {
+        // Start move by pressing on mouse key
+        if (this.tool_type === 'MOVE' && this.selected_objects.length > 0) {
+          // Store initial coord
+          this.drag_move.mouse_start = d3.mouse(this.svg.node());
+        }
+      })
+      .on('end', () => {
+        // End move by letting go of mouse key
+        if (this.tool_type === 'MOVE' && this.selected_objects.length > 0) {
+          let original_delta: any = {};
+
+          // Store final coord
+          this.drag_move.mouse_end = d3.mouse(this.svg.node());
+
+          // Only update if the start and end coordinated are different
+          if (
+            this.drag_move.mouse_end[0] !== this.drag_move.mouse_start[0] ||
+            this.drag_move.mouse_end[1] !== this.drag_move.mouse_start[1]
+          ) {
+            // Get original coord that applied snap
+            let original_coord_start = this.calc_original_coord_with_screen(
+              this.drag_move.mouse_start,
+              this.geometry.invert_factor_y,
+              false
+            );
+            let original_coord_end = this.calc_original_coord_with_screen(
+              this.drag_move.mouse_end,
+              this.geometry.invert_factor_y,
+              false
+            );
+
+            original_delta.x = original_coord_end.x - original_coord_start.x;
+            original_delta.y = original_coord_end.y - original_coord_start.y;
+
+            let bounding_box = LayoutUtil.find_max_and_min_of_objects(
+              this.selected_objects,
+              'ORIGINAL'
+            );
+
+            let offset;
+            if (this.modifier_key === this.KEY_NO_S2G) {
+              offset = {
+                x: Math.round(original_delta.x),
+                y: Math.round(original_delta.y),
+              };
+            } else {
+              offset = this.find_snap(
+                bounding_box.min,
+                bounding_box.max,
+                original_delta
+              );
+            }
+
+            let updated_objects = this.make_move_update_list(offset);
+
+            // Apply Update
+            if (updated_objects.length > 0) {
+              this.update_layout_object(updated_objects, true, false);
+            }
+
+            // Adjust fab size if fab size changed
+            if (this.mode === 'EDITOR') {
+              this.adjust_fab_size(
+                LayoutUtil.find_max_and_min_of_objects(
+                  this.layout_data.points.concat(
+                    this.layout_data.segments as any[]
+                  ),
+                  'INVERTED'
+                )
+              );
+            }
+
+            // Replace selected objects with updated one
+            for (let i = updated_objects.length - 1; i > -1; i--) {
+              let updated_object = updated_objects[i];
+              let is_found = false;
+              this.selected_objects.forEach((cur_selected_object) => {
+                if (
+                  updated_object.id === cur_selected_object.id &&
+                  updated_object.constructor.name ===
+                    cur_selected_object.constructor.name
+                ) {
+                  is_found = true;
+                }
+              });
+              if (!is_found) {
+                updated_objects.splice(i, 1);
+              }
+            }
+
+            this.selected_objects = updated_objects;
+
+            if (
+              this.selection_box_svg &&
+              this.selection_box_svg.initial_bounding_box
+            ) {
+              let bounding_box = LayoutUtil.find_max_and_min_of_objects(
+                this.selected_objects,
+                'INVERTED'
+              );
+              this.selection_box_svg.initial_bounding_box = bounding_box;
+              this.update_selection_box(bounding_box);
+            }
+
+            // set drag to empty object since move is over
+            this.drag_move = {};
+          } else {
+            // Remove selected segment from current segment svg element
+            this.update_segment_svg(
+              this.get_layout_objects('SEGMENT'),
+              main_css.general,
+              []
+            );
+          }
+
+          // Remove temporary segment move dom
+          if (this.d3_track.select('#temp_segment').node() !== null) {
+            let dom = this.get_dom('SEGMENT', null, 'LAYOUT');
+            dom.select('#temp_segment').remove();
+            dom.selectAll('.hover, .select').attr('transform', '');
+          }
+        }
+      });
+  }
+  setup(
+    can_manage_orders?,
+    can_manage_vehicles?,
+    can_modify_display_settings?
+  ) {
+    if (can_manage_orders) this.is_permitted.manage_orders = true;
+    if (can_manage_vehicles) this.is_permitted.manage_vehicles = true;
+    if (can_modify_display_settings)
+      this.is_permitted.modify_display_settings = true;
+
+    this.d3_track = d3.select(`#${this.track_container_id}`);
+  }
+  create_track(data: Dto.ITrackData) {
+    // @TODO prefix 설정 : 현재는 고정값 'public.largemap'
+    this.state_prefix = 'public.largemap';
+
+    if (!data) data = {};
+    if (!data.map_type) data.map_type = MapTypes.DB;
+
+    if (
+      !data.size ||
+      !('min_x' in data) ||
+      !('max_x' in data) ||
+      !('min_y' in data) ||
+      !('max_y' in data)
+    ) {
+      if (data.points && data.points.length > 0) {
+        data.size = this.calculate_size_from_extents(data);
+      } else {
+        data.size = this.get_default_size(data.width, data.height);
+      }
+    }
+
+    // must have a minimum segment length when editing a map
+    if (!data.minimum_segment_length) {
+      data.minimum_segment_length = this.DEFAULTS.minimum_segment_length;
+    }
+
+    this.initVariables();
+    this.initStates();
+
+    this.initSvg(this.track_id, data.size);
+    this.convertObjects(data);
+    if (data.vehicle_path) {
+      this.expected_paths = this.convertExpectedPath(
+        data.vehicle_path,
+        this.layout_data.segments
+      );
+    }
+    this.drawMap('layout');
+
+    this.initMinimap();
+    this.convertMinimapObjects();
+    this.drawMap('minimap');
+    this.centerZoom('INSTANT');
   }
   update_vehicles(raw_data, operation, vehicle_id, is_skip_rendering) {
     let is_dom_update = false;
@@ -362,6 +664,61 @@ export class ViewController {
     this.reorder_svg();
 
     return update;
+  }
+  private convertObjects(data: Dto.ITrackData) {
+    this.layout_data = this.parser.parse(data, this.geometry);
+  }
+  private drawMap(track_type: 'layout' | 'minimap') {
+    if (track_type == 'layout') {
+      // Draw all the layout components
+      // Initialize track_size
+      this.calc_and_set_track_size();
+
+      // Initialize all svg containers for hierarchy
+      // initialize grid svg
+      this.grid_draw();
+
+      // initialize scale svg
+      this.scale_draw();
+
+      // Draw non adaptive rendering
+      let current_zoom = this.getZoom(MapTypes.MAIN);
+
+      if (this.layout_data.segments.length > 0) {
+        // Define segment direction
+        main_css.segment.direction_path = this.layout_data.segments[0].get_arrow_path(
+          main_css.segment.direction_width,
+          main_css.segment.direction_length
+        );
+        this.update_segment_svg(
+          this.layout_data.segments,
+          main_css.segment,
+          null,
+          true
+        );
+      }
+
+      // Display adaptive rendering through zoom
+      this.set_transform(
+        current_zoom.x,
+        current_zoom.y,
+        current_zoom.k,
+        true,
+        'INSTANT'
+      );
+
+      // Gets rid of calculation error grid diagonal lines
+      this.grid_x.selectAll('.tick line').attr('x2', 0);
+      this.grid_y.selectAll('.tick line').attr('y2', 0);
+
+      // Attach Window resize handler
+      this.init_resize_event();
+    }
+
+    if (track_type === 'minimap') {
+      // Initialize minimap
+      this.minimap_draw();
+    }
   }
   reorder_svg() {
     this.d3_track.select('.scale_group').raise();
@@ -874,246 +1231,6 @@ export class ViewController {
     return stale_added;
   }
 
-  private initialize() {
-    // @NOTE initSvg()에서 수행
-    // this.svg = d3
-    //   .select(`#${this.track_id}`)
-    //   .attr('width', '100%')
-    //   .attr('height', '100%');
-
-    this.drag = d3
-      .drag()
-      .on('drag', () => {
-        // move objects move()
-        if (this.tool_type === 'MOVE' && this.selected_objects.length > 0) {
-          let current_zoom = this.getZoom(MapTypes.MAIN);
-          let actual_delta: any = {};
-
-          this.selection_filter(['STATION', 'BUFFER', 'MTL', 'SEGMENT'], null);
-
-          if (
-            this.get_selected_objects('SEGMENT').length > 0 &&
-            this.get_dom('SEGMENT').select('#temp_segment').node() === null
-          ) {
-            // Copy the selected segments and add clone to dom for move op
-            this.add_temporary_segment_move_dom();
-
-            // Remove selected segment from current segment svg element
-            this.update_segment_svg(
-              this.get_layout_objects('SEGMENT'),
-              main_css.general,
-              this.selected_objects
-            );
-          }
-
-          // Store current mouse coord
-          this.drag_move.mouse_current = d3.mouse(this.svg.node());
-
-          actual_delta.x = Math.trunc(
-            (this.drag_move.mouse_current[0] - this.drag_move.mouse_start[0]) /
-              current_zoom.k
-          );
-          actual_delta.y = Math.trunc(
-            (this.drag_move.mouse_current[1] - this.drag_move.mouse_start[1]) /
-              current_zoom.k
-          );
-
-          // Move screen coords
-          let segments_to_move = [];
-          for (let i = 0; i < this.selected_objects.length; i++) {
-            if (
-              this.selected_objects[i].constructor.name.toUpperCase() ===
-              'SEGMENT'
-            ) {
-              segments_to_move.push(this.selected_objects[i]);
-              this.move_dom(
-                'SEGMENT_DIRECTION',
-                [this.selected_objects[i]],
-                actual_delta
-              );
-            } else {
-              this.move_dom(
-                this.selected_objects[i].constructor.name.toUpperCase(),
-                [this.selected_objects[i]],
-                actual_delta
-              );
-            }
-          }
-
-          if (segments_to_move.length > 0) {
-            this.move_dom('SEGMENT', segments_to_move, actual_delta);
-          }
-
-          if (
-            this.selection_box_svg &&
-            this.selection_box_svg.initial_bounding_box
-          ) {
-            let current_bounding_box = {
-              min: {
-                x:
-                  this.selection_box_svg.initial_bounding_box.min.x +
-                  actual_delta.x,
-                y:
-                  this.selection_box_svg.initial_bounding_box.min.y +
-                  actual_delta.y,
-              },
-              max: {
-                x:
-                  this.selection_box_svg.initial_bounding_box.max.x +
-                  actual_delta.x,
-                y:
-                  this.selection_box_svg.initial_bounding_box.max.y +
-                  actual_delta.y,
-              },
-            };
-            this.update_selection_box(current_bounding_box);
-          }
-
-          if (this.modifier_key === this.KEY_NO_S2G) {
-            let mouse_coord = {
-              x: this.drag_move.mouse_current[0],
-              y: this.drag_move.mouse_current[1],
-            };
-
-            let current_coord = this.calc_original_coord_with_screen(
-              this.drag_move.mouse_current,
-              this.geometry.invert_factor_y
-            );
-
-            let custom_text = `${parseInt(current_coord.x)}, ${parseInt(
-              current_coord.y
-            )}`;
-            this.show_hover_tag(null, null, custom_text, mouse_coord);
-          } else {
-            this.hide_hover_tag();
-          }
-        }
-      })
-      .on('start', () => {
-        // Start move by pressing on mouse key
-        if (this.tool_type === 'MOVE' && this.selected_objects.length > 0) {
-          // Store initial coord
-          this.drag_move.mouse_start = d3.mouse(this.svg.node());
-        }
-      })
-      .on('end', () => {
-        // End move by letting go of mouse key
-        if (this.tool_type === 'MOVE' && this.selected_objects.length > 0) {
-          let original_delta: any = {};
-
-          // Store final coord
-          this.drag_move.mouse_end = d3.mouse(this.svg.node());
-
-          // Only update if the start and end coordinated are different
-          if (
-            this.drag_move.mouse_end[0] !== this.drag_move.mouse_start[0] ||
-            this.drag_move.mouse_end[1] !== this.drag_move.mouse_start[1]
-          ) {
-            // Get original coord that applied snap
-            let original_coord_start = this.calc_original_coord_with_screen(
-              this.drag_move.mouse_start,
-              this.geometry.invert_factor_y,
-              false
-            );
-            let original_coord_end = this.calc_original_coord_with_screen(
-              this.drag_move.mouse_end,
-              this.geometry.invert_factor_y,
-              false
-            );
-
-            original_delta.x = original_coord_end.x - original_coord_start.x;
-            original_delta.y = original_coord_end.y - original_coord_start.y;
-
-            let bounding_box = LayoutUtil.find_max_and_min_of_objects(
-              this.selected_objects,
-              'ORIGINAL'
-            );
-
-            let offset;
-            if (this.modifier_key === this.KEY_NO_S2G) {
-              offset = {
-                x: Math.round(original_delta.x),
-                y: Math.round(original_delta.y),
-              };
-            } else {
-              offset = this.find_snap(
-                bounding_box.min,
-                bounding_box.max,
-                original_delta
-              );
-            }
-
-            let updated_objects = this.make_move_update_list(offset);
-
-            // Apply Update
-            if (updated_objects.length > 0) {
-              this.update_layout_object(updated_objects, true, false);
-            }
-
-            // Adjust fab size if fab size changed
-            if (this.mode === 'EDITOR') {
-              this.adjust_fab_size(
-                LayoutUtil.find_max_and_min_of_objects(
-                  this.layout_data.points.concat(
-                    this.layout_data.segments as any[]
-                  ),
-                  'INVERTED'
-                )
-              );
-            }
-
-            // Replace selected objects with updated one
-            for (let i = updated_objects.length - 1; i > -1; i--) {
-              let updated_object = updated_objects[i];
-              let is_found = false;
-              this.selected_objects.forEach((cur_selected_object) => {
-                if (
-                  updated_object.id === cur_selected_object.id &&
-                  updated_object.constructor.name ===
-                    cur_selected_object.constructor.name
-                ) {
-                  is_found = true;
-                }
-              });
-              if (!is_found) {
-                updated_objects.splice(i, 1);
-              }
-            }
-
-            this.selected_objects = updated_objects;
-
-            if (
-              this.selection_box_svg &&
-              this.selection_box_svg.initial_bounding_box
-            ) {
-              let bounding_box = LayoutUtil.find_max_and_min_of_objects(
-                this.selected_objects,
-                'INVERTED'
-              );
-              this.selection_box_svg.initial_bounding_box = bounding_box;
-              this.update_selection_box(bounding_box);
-            }
-
-            // set drag to empty object since move is over
-            this.drag_move = {};
-          } else {
-            // Remove selected segment from current segment svg element
-            this.update_segment_svg(
-              this.get_layout_objects('SEGMENT'),
-              main_css.general,
-              []
-            );
-          }
-
-          // Remove temporary segment move dom
-          if (this.d3_track.select('#temp_segment').node() !== null) {
-            let dom = this.get_dom('SEGMENT', null, 'LAYOUT');
-            dom.select('#temp_segment').remove();
-            dom.selectAll('.hover, .select').attr('transform', '');
-          }
-        }
-      });
-  }
   make_move_update_list(original_delta: any) {
     // Update coord of objects by offset
     let updated_objects = [];
@@ -3430,62 +3547,6 @@ export class ViewController {
     }
   }
 
-  setup(
-    can_manage_orders?,
-    can_manage_vehicles?,
-    can_modify_display_settings?
-  ) {
-    if (can_manage_orders) this.is_permitted.manage_orders = true;
-    if (can_manage_vehicles) this.is_permitted.manage_vehicles = true;
-    if (can_modify_display_settings)
-      this.is_permitted.modify_display_settings = true;
-
-    this.d3_track = d3.select(`#${this.track_container_id}`);
-  }
-  create_track(data: Dto.ITrackData) {
-    // @TODO prefix 설정 : 현재는 고정값 'public.largemap'
-    this.state_prefix = 'public.largemap';
-
-    if (!data) data = {};
-    if (!data.map_type) data.map_type = MapTypes.DB;
-
-    if (
-      !data.size ||
-      !('min_x' in data) ||
-      !('max_x' in data) ||
-      !('min_y' in data) ||
-      !('max_y' in data)
-    ) {
-      if (data.points && data.points.length > 0) {
-        data.size = this.calculate_size_from_extents(data);
-      } else {
-        data.size = this.get_default_size(data.width, data.height);
-      }
-    }
-
-    // must have a minimum segment length when editing a map
-    if (!data.minimum_segment_length) {
-      data.minimum_segment_length = this.DEFAULTS.minimum_segment_length;
-    }
-
-    this.initVariables();
-    this.initStates();
-
-    this.initSvg(this.track_id, data.size);
-    this.convertObjects(data);
-    if (data.vehicle_path) {
-      this.expected_paths = this.convertExpectedPath(
-        data.vehicle_path,
-        this.layout_data.segments
-      );
-    }
-    this.drawMap('layout');
-
-    this.initMinimap();
-    this.convertMinimapObjects();
-    this.drawMap('minimap');
-    this.centerZoom('INSTANT');
-  }
   get_defaults() {
     // start with known sane values for all of the options we use
     let defaults = {
@@ -7299,61 +7360,6 @@ export class ViewController {
     return y.copy().domain(domain);
   }
 
-  private convertObjects(data: Dto.ITrackData) {
-    this.layout_data = this.parser.parse(data, this.geometry);
-  }
-  private drawMap(track_type: 'layout' | 'minimap') {
-    if (track_type == 'layout') {
-      // Draw all the layout components
-      // Initialize track_size
-      this.calc_and_set_track_size();
-
-      // Initialize all svg containers for hierarchy
-      // initialize grid svg
-      this.grid_draw();
-
-      // initialize scale svg
-      this.scale_draw();
-
-      // Draw non adaptive rendering
-      let current_zoom = this.getZoom(MapTypes.MAIN);
-
-      if (this.layout_data.segments.length > 0) {
-        // Define segment direction
-        main_css.segment.direction_path = this.layout_data.segments[0].get_arrow_path(
-          main_css.segment.direction_width,
-          main_css.segment.direction_length
-        );
-        this.update_segment_svg(
-          this.layout_data.segments,
-          main_css.segment,
-          null,
-          true
-        );
-      }
-
-      // Display adaptive rendering through zoom
-      this.set_transform(
-        current_zoom.x,
-        current_zoom.y,
-        current_zoom.k,
-        true,
-        'INSTANT'
-      );
-
-      // Gets rid of calculation error grid diagonal lines
-      this.grid_x.selectAll('.tick line').attr('x2', 0);
-      this.grid_y.selectAll('.tick line').attr('y2', 0);
-
-      // Attach Window resize handler
-      this.init_resize_event();
-    }
-
-    if (track_type === 'minimap') {
-      // Initialize minimap
-      this.minimap_draw();
-    }
-  }
   minimap_draw() {
     const zoom = this.getZoom(MapTypes.MINIMAP);
     if (!zoom) return;
