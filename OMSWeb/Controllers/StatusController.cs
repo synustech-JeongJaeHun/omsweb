@@ -11,6 +11,7 @@ namespace OMSWeb.Controllers
     [ApiController]
     public class StatusController : ControllerBase
     {
+      [HttpGet("track")]
       public IActionResult GetTrack() {
         return Content("");
       }
