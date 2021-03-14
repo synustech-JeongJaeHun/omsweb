@@ -1,6 +1,5 @@
 import { Component, NgZone, OnInit } from '@angular/core';
 import * as _ from 'lodash';
-import * as $ from 'jquery';
 // import * as d3 from 'd3';
 // import { Selection } from 'd3-selection';
 
@@ -8,6 +7,7 @@ import { ViewModes } from '../../../models/enums';
 import { StatusService } from '../../../services/status.service';
 import { ViewController } from './viewer-helper';
 import { TrackIdService } from '../../../services/track-id.service';
+import { Dto } from '../../../models/dto/track.model';
 
 @Component({
   selector: 'oms-map-viewer',
@@ -23,7 +23,7 @@ import { TrackIdService } from '../../../services/track-id.service';
   ],
 })
 export class MapViewerComponent implements OnInit {
-  omsData: any;
+  omsData: Dto.ITrackData;
 
   constructor(private statusSvc: StatusService, private trackIdSvc: TrackIdService) {}
 
