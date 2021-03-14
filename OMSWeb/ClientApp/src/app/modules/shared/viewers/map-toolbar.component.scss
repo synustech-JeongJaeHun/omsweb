@@ -10,9 +10,9 @@
 }
 
 .tool-item {
-  width: 40px;
+  width: 36px;
   height: 34px;
-  min-width: 40px;
+  min-width: 36px;
   padding: 0;
   // margin-bottom: 5px;
   border-radius: 0;
@@ -20,6 +20,9 @@
   // &:last-child {
   //   margin-bottom: 0;
   // }
+  .mat-icon {
+    font-size: 20px;
+  }
 }
 .mat-list {
   padding: 8px 0px;
