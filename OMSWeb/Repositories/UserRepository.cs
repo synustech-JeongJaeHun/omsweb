@@ -1,5 +1,11 @@
+using Microsoft.Extensions.Configuration;
+
 namespace OMSWeb.Repositories
 {
-  public interface IUserRepository { }
-  public class UserRepository : IUserRepository { }
+  public class UserRepository : DataAccess
+  {
+    public UserRepository(IConfiguration configuration) : base(configuration)
+    {
+    }
+  }
 }

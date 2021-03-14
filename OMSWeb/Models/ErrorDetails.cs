@@ -31,7 +31,8 @@ namespace OMSWeb.Models
     {
       return JsonConvert.SerializeObject(this, new JsonSerializerSettings()
       {
-        ContractResolver = new CamelCasePropertyNamesContractResolver()
+        // ContractResolver = new CamelCasePropertyNamesContractResolver()
+        ContractResolver = new DefaultContractResolver { NamingStrategy = new SnakeCaseNamingStrategy() }
       });
     }
   }

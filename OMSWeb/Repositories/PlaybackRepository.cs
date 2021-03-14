@@ -1,5 +1,11 @@
+using Microsoft.Extensions.Configuration;
+
 namespace OMSWeb.Repositories
 {
-  public interface IPlaybackRepository { }
-  public class PlaybackRepository : IPlaybackRepository { }
+  public class PlaybackRepository : DataAccess
+  {
+    public PlaybackRepository(IConfiguration configuration) : base(configuration)
+    {
+    }
+  }
 }

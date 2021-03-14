@@ -1,5 +1,11 @@
+using Microsoft.Extensions.Configuration;
+
 namespace OMSWeb.Repositories
 {
-  public interface IMessageRepository { }
-  public class MessageRepository : IMessageRepository { }
+  public class MessageRepository : DataAccess
+  {
+    public MessageRepository(IConfiguration configuration) : base(configuration)
+    {
+    }
+  }
 }

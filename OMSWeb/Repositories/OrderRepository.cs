@@ -1,5 +1,11 @@
+using Microsoft.Extensions.Configuration;
+
 namespace OMSWeb.Repositories
 {
-  public interface IOrderRepository { }
-  public class OrderRepository : IOrderRepository { }
+  public class OrderRepository : DataAccess
+  {
+    public OrderRepository(IConfiguration configuration) : base(configuration)
+    {
+    }
+  }
 }

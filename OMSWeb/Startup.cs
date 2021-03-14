@@ -17,6 +17,7 @@ using OMSWeb.Handlers;
 using OMSWeb.Models;
 using OMSWeb.Models.Entities;
 using OMSWeb.Repositories;
+using OMSWeb.Services;
 
 namespace OMSWeb
 {
@@ -42,7 +43,8 @@ namespace OMSWeb
       {
         options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
         options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
-        options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+        // options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+        options.SerializerSettings.ContractResolver = new DefaultContractResolver { NamingStrategy = new SnakeCaseNamingStrategy() };
       });
 
       // load appSettings
@@ -76,23 +78,28 @@ namespace OMSWeb
       services.AddMemoryCache();
 
       #region DI
-      services.AddScoped<IUserRepository, UserRepository>();
-      services.AddScoped<IAlarmRepository, AlarmRepository>();
-      services.AddScoped<ICycleRepository, CycleRepository>();
-      services.AddScoped<IHistoryRepository, HistoryRepository>();
-      services.AddScoped<IMessageRepository, MessageRepository>();
-      services.AddScoped<IMetricsRepository, MetricsRepository>();
-      services.AddScoped<IOrderRepository, OrderRepository>();
-      services.AddScoped<IPlaybackRepository, PlaybackRepository>();
-      services.AddScoped<IStatusRepository, StatusRepository>();
-      services.AddScoped<ISystemsRepository, SystemsRepository>();
-      services.AddScoped<ITrackRepository, TrackRepository>();
-      services.AddScoped<IUserRepository, UserRepository>();
-      services.AddScoped<IVehicleRepository, VehicleRepository>();
+      services.AddScoped<UserRepository>();
+      services.AddScoped<TrackRepository>();
+      services.AddScoped<AlarmRepository>();
+      services.AddScoped<CycleRepository>();
+      services.AddScoped<HistoryRepository>();
+      services.AddScoped<MessageRepository>();
+      services.AddScoped<MetricsRepository>();
+      services.AddScoped<OrderRepository>();
+      services.AddScoped<PlaybackRepository>();
+      services.AddScoped<StatusRepository>();
+      services.AddScoped<SystemsRepository>();
+      services.AddScoped<TrackRepository>();
+      services.AddScoped<UserRepository>();
+      services.AddScoped<VehicleRepository>();
+
+      services.AddScoped<TrackService>();
+
+      services.AddSingleton<CacheService>();
       // services.AddTransient<ProblemDetailsFactory, OmsProblemDetailsFactory>();  // @TODO problem handler 작성 후 사용
       #endregion
 
-			services.AddTransient<ProblemDetailsFactory, OmsProblemDetailsFactory>();
+      services.AddTransient<ProblemDetailsFactory, OmsProblemDetailsFactory>();
 
       // In production, the Angular files will be served from this directory
       services.AddSpaStaticFiles(configuration =>
@@ -105,7 +112,7 @@ namespace OMSWeb
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
       app.UseOmsExceptionHandler();
-      
+
       if (env.IsDevelopment())
       {
         // app.UseDeveloperExceptionPage();

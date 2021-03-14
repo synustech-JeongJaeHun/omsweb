@@ -3,11 +3,7 @@ using Npgsql;
 
 namespace OMSWeb.Repositories
 {
-  public interface IStatusRepository { 
-    string Test();
-  }
-
-  public class StatusRepository : DataAccess, IStatusRepository
+  public class StatusRepository : DataAccess
   {
     public StatusRepository(IConfiguration configuration) : base(configuration)
     {

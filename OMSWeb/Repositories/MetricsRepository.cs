@@ -1,5 +1,11 @@
+using Microsoft.Extensions.Configuration;
+
 namespace OMSWeb.Repositories
 {
-  public interface IMetricsRepository { }
-  public class MetricsRepository : IMetricsRepository { }
+  public class MetricsRepository : DataAccess
+  {
+    public MetricsRepository(IConfiguration configuration) : base(configuration)
+    {
+    }
+  }
 }

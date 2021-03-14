@@ -1,5 +1,11 @@
+using Microsoft.Extensions.Configuration;
+
 namespace OMSWeb.Repositories
 {
-  public interface IAlertRepository { }
-  public class AlertRepository : IAlertRepository { }
+  public class AlertRepository : DataAccess
+  {
+    public AlertRepository(IConfiguration configuration) : base(configuration)
+    {
+    }
+  }
 }

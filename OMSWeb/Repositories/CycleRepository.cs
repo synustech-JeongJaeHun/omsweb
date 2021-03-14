@@ -1,5 +1,11 @@
+using Microsoft.Extensions.Configuration;
+
 namespace OMSWeb.Repositories
 {
-  public interface ICycleRepository { }
-  public class CycleRepository : ICycleRepository { }
+  public class CycleRepository : DataAccess
+  {
+    public CycleRepository(IConfiguration configuration) : base(configuration)
+    {
+    }
+  }
 }

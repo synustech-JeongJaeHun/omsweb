@@ -1,5 +1,11 @@
+using Microsoft.Extensions.Configuration;
+
 namespace OMSWeb.Repositories
 {
-  public interface IHistoryRepository { }
-  public class HistoryRepository : IHistoryRepository { }
+  public class HistoryRepository : DataAccess
+  {
+    public HistoryRepository(IConfiguration configuration) : base(configuration)
+    {
+    }
+  }
 }

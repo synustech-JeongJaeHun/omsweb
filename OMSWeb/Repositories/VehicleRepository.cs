@@ -1,5 +1,11 @@
+using Microsoft.Extensions.Configuration;
+
 namespace OMSWeb.Repositories
 {
-  public interface IVehicleRepository { }
-  public class VehicleRepository : IVehicleRepository { }
+  public class VehicleRepository : DataAccess
+  {
+    public VehicleRepository(IConfiguration configuration) : base(configuration)
+    {
+    }
+  }
 }

@@ -1,5 +1,11 @@
+using Microsoft.Extensions.Configuration;
+
 namespace OMSWeb.Repositories
 {
-  public interface ISystemsRepository { }
-  public class SystemsRepository : ISystemsRepository { }
+  public class SystemsRepository : DataAccess
+  {
+    public SystemsRepository(IConfiguration configuration) : base(configuration)
+    {
+    }
+  }
 }
