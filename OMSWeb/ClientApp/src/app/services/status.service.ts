@@ -14,6 +14,7 @@ export class StatusService {
   getTrack(): Observable<Dto.ITrackData> {
     return this.http.get<Dto.ITrackData>(`${this.baseUrl}/track`);
     // @TODO assets/json/status-track.json 파일 삭제
+    // console.error('# form json file - for test #');
     // return this.http.get('/assets/json/status-track.json');
   }
 }

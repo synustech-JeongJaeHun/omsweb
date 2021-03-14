@@ -5,16 +5,14 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './monitor-status.component.html',
   styles: [
     `
-      /* :host {
-        display: grid;
+      :host {
+        position: relative;
+        z-index: 3;
+        /* display: grid;
         grid-template-columns: 56px 1fr;
         column-gap: 20px;
-        position: relative;
-        height: 100%;
+        height: 100%; */
       }
-      .snb {
-        align-self: start;
-      } */
     `,
   ],
 })

@@ -3,26 +3,30 @@
 :host {
   // display: flex;
   // flex-direction: column;
-  padding: 10px;
+  padding: 0;
   background-color: #f5f5f5;
   border-top-right-radius: 8px;
   border-bottom-right-radius: 8px;
 }
 
 .tool-item {
-  width: 36px;
-  height: 36px;
-  min-width: 36px;
+  width: 40px;
+  height: 34px;
+  min-width: 40px;
   padding: 0;
-  margin-bottom: 5px;
+  // margin-bottom: 5px;
+  border-radius: 0;
 
   // &:last-child {
   //   margin-bottom: 0;
   // }
 }
-
+.mat-list {
+  padding: 8px 0px;
+}
 mat-divider {
   margin-bottom: 5px;
+  margin-top: 5px;
 }
 
 ::ng-deep.mat-tooltip.snb-tooltip {

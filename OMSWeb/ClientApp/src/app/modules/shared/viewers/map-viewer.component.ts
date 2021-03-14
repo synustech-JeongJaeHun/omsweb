@@ -19,13 +19,23 @@ import { Dto } from '../../../models/dto/track.model';
         flex-direction: column;
         height: 100%;
       }
+      #map-toolbar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        align-self: start;
+        z-index: 5;
+      }
     `,
   ],
 })
 export class MapViewerComponent implements OnInit {
   omsData: Dto.ITrackData;
 
-  constructor(private statusSvc: StatusService, private trackIdSvc: TrackIdService) {}
+  constructor(
+    private statusSvc: StatusService,
+    private trackIdSvc: TrackIdService
+  ) {}
 
   ngOnInit(): void {
     this.statusSvc.getTrack().subscribe((res) => {
@@ -39,7 +49,7 @@ export class MapViewerComponent implements OnInit {
     const viewer = new ViewController(
       ViewModes.public,
       'track-canvas',
-      'minimap',
+      'minimap'
     );
 
     viewer.setup();
