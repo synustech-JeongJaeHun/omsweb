@@ -5,7 +5,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SharedModule } from '../shared/shared.module';
-import { GnbComponent } from '../shared/navs/gnb.component';
 
 @NgModule({
   declarations: [AppComponent],

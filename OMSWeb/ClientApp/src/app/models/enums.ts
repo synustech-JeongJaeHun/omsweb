@@ -24,3 +24,32 @@ export enum MapTypes {
   FILE = 'FILE',
   DB = 'DB',
 }
+
+export type MapToolbarStatusKeys =
+  | 'minimap'
+  | 'controlTable'
+  | 'vehicleLines'
+  | 'expectedPaths'
+  | 'vehicleLines'
+  | 'pointLabels'
+  | 'segmentDirections'
+  | 'stations'
+  | 'buffers'
+  | 'groups'
+  | 'clusters'
+  | 'overlaps';
+
+// export enum MapToolbarStatusKeys {
+//   minimap,
+//   controlTable,
+
+//   vehicleLines,
+//   expectedPaths,
+//   pointLabels,
+//   segmentDirections,
+//   stations,
+//   buffers,
+//   groups,
+//   clusters,
+//   overlaps,
+// }

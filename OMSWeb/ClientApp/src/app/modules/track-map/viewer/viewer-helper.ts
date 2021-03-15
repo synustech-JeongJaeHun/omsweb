@@ -2,9 +2,10 @@ import * as d3 from 'd3';
 import * as _ from 'lodash';
 import * as $ from 'jquery';
 
-import { LayoutUtil } from '../utils/layout.util';
-import { ColorPalette } from '../utils/color-palette';
-import { CommonUtil } from '../utils/common.util';
+import { LayoutUtil } from '@oms/shared/utils/layout.util';
+import { ColorPalette } from '@oms/shared/utils/color-palette';
+import { CommonUtil } from '@oms/shared/utils/common.util';
+import { getCss, main_css, setCssValue } from '@oms/shared/utils/css-loader';
 import { setting } from '../../../../settings';
 
 import { Dto } from '@oms/models/dto/track.model';
@@ -15,9 +16,8 @@ import {
   IZoom,
   IZoomInfos,
 } from '../../../models/drawing.model';
-import { MapTypes, ViewModes } from '../../../models/enums';
+import { MapToolbarStatusKeys, MapTypes, ViewModes } from '../../../models/enums';
 import { rgb } from 'd3';
-import { getCss, main_css, setCssValue } from '../utils/css-loader';
 import { MapParser } from './map-parser';
 import { IViewerData } from '../../../models/map.interface';
 import { Segment } from '../../../models/segment.model';
@@ -27,6 +27,8 @@ import { Buffer } from '../../../models/buffer.model';
 import { MTL } from '../../../models/mtl.model';
 import { Point } from '../../../models/point.model';
 import { TrackIdService } from '@oms/services/track-id.service';
+import { MapStatesService } from '../map-states.service';
+import { Subscription } from 'rxjs';
 export class ViewController {
   //#region properties
   private svg: any; // d3.Selection<d3.ContainerElement, unknown, HTMLElement, any>;
@@ -269,6 +271,9 @@ export class ViewController {
   playback_last_event_time: any;
   //#endregion
 
+  //#region subscriptions
+  private minimapState$: Subscription;
+  //#endregion
   get layoutData(): IViewerData {
     return this.layout_data;
   }
@@ -277,6 +282,7 @@ export class ViewController {
     private mode: ViewModes = ViewModes.minimal,
     private track_id: string,
     private minimap_svg_id: string,
+    private statesSvc: MapStatesService
   ) {
     this.DEFAULTS = this.get_defaults();
     this.parser = new MapParser(this.layout_data);
@@ -290,6 +296,7 @@ export class ViewController {
     //   .attr('width', '100%')
     //   .attr('height', '100%');
 
+    //#region  drag
     this.drag = d3
       .drag()
       .on('drag', () => {
@@ -522,6 +529,18 @@ export class ViewController {
           }
         }
       });
+    //#endregion
+
+    //#region subscriptions
+    this.minimapState$ = this.statesSvc.toolbarStates$.minimap.subscribe(
+      (state) => {
+        console.info(
+          '### minimap state changed detected on viewer helper >>>',
+          state
+        );
+      }
+    );
+    //#endregion
   }
   setup(
     can_manage_orders?,
@@ -534,6 +553,9 @@ export class ViewController {
       this.is_permitted.modify_display_settings = true;
 
     this.d3_track = d3.select(`#${this.track_container_id}`);
+  }
+  destroy() {
+    this.minimapState$ && this.minimapState$.unsubscribe();
   }
   create_track(data: Dto.ITrackData) {
     // @TODO prefix 설정 : 현재는 고정값 'public.largemap'
@@ -665,6 +687,21 @@ export class ViewController {
 
     return update;
   }
+
+  //#region toolbar actions
+  changeVisibility(objectType: MapToolbarStatusKeys, visibility: boolean) {
+    const transform = this.getZoom(MapTypes.MAIN);
+    const zoomLevel = this.calculate_zoom_level();
+    switch (objectType) {
+      case 'stations':
+        this.show_stations = visibility;
+        this.station_adaptive_rendering(zoomLevel, transform, main_css.station, this.get_viewbox(), true);
+        break;
+      default:
+        break;
+    }
+  }
+  //#endregion
   private convertObjects(data: Dto.ITrackData) {
     this.layout_data = this.parser.parse(data, this.geometry);
   }
@@ -3295,17 +3332,15 @@ export class ViewController {
       }
 
       // @TODO i18n 처리
-      if (object_type) label_text += `${(object_type)}\n`;
-      if (id) label_text += `${('ID')}: ${id}\n`;
-      if (logical_id) label_text += `${('Logical ID')}: ${logical_id}\n`;
-      if (physical_id)
-        label_text += `${('Physical ID')}: ${physical_id}\n`;
-      if (length) label_text += `${('length')}: ${length}\n`;
-      if (point) label_text += `${('Point')}: ${point}\n`;
-      if (max_cap) label_text += `${('Maximum vehicles')}: ${max_cap}\n`;
+      if (object_type) label_text += `${object_type}\n`;
+      if (id) label_text += `${'ID'}: ${id}\n`;
+      if (logical_id) label_text += `${'Logical ID'}: ${logical_id}\n`;
+      if (physical_id) label_text += `${'Physical ID'}: ${physical_id}\n`;
+      if (length) label_text += `${'length'}: ${length}\n`;
+      if (point) label_text += `${'Point'}: ${point}\n`;
+      if (max_cap) label_text += `${'Maximum vehicles'}: ${max_cap}\n`;
       if (order_logical_id)
-        label_text += `${('Order ID')}: ${order_logical_id}\n`;
-
+        label_text += `${'Order ID'}: ${order_logical_id}\n`;
 
       // if (object_type) label_text += `${$.i18n(object_type)}\n`;
       // if (id) label_text += `${$.i18n('ID')}: ${id}\n`;
@@ -7974,7 +8009,7 @@ export class ViewController {
     zoom_level: any,
     current_transform: IZoom,
     css_setting: any,
-    view_box: {},
+    view_box: any,
     need_update: boolean,
     segments: any[]
   ) {

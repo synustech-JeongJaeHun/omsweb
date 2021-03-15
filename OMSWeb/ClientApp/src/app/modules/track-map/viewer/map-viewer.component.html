@@ -1,0 +1,16 @@
+<div id="track-container" class="track-container">
+  <svg id="track-canvas"></svg>
+  <div [hidden]="!showMinimap" id="minimap-container">
+    <svg id="minimap"></svg>
+  </div>
+  <div id="loading-bar" *ngIf="loadingState">
+    Loading ...
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  </div>
+</div>
+
+<oms-map-toolbar
+  id="map-toolbar"
+  class="snb toolbar mat-elevation-z3"
+  [buttonState]="preference.visibilities"
+></oms-map-toolbar>

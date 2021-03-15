@@ -1,4 +1,4 @@
-<mat-list>
+<mat-list mdePopoverTarget #popoverTarget="mdePopoverTarget">
   <button
     matListItem
     mat-button
@@ -36,9 +36,14 @@
     matListItem
     mat-button
     class="tool-item"
-    matTooltipClass="snb-tooltip"
-    matTooltipPosition="right"
-    matTooltip="Show Objects"
+    #visibilityTrigger="mdePopoverTrigger"
+    [mdePopoverTriggerFor]="visibilityPopover"
+    mdePopoverTriggerOn="hover"
+    mdePopoverPositionX="before"
+    mdePopoverPositionY="below"
+    [mdePopoverOffsetX]="40"
+    [mdePopoverOffsetY]="-35"
+    [mdePopoverOverlapTrigger]="false"
   >
     <mat-icon>flip_to_front</mat-icon>
   </button>
@@ -46,6 +51,8 @@
     matListItem
     mat-button
     class="tool-item"
+    [class.active]="buttonState.minimap"
+    (click)="onClickTool('minimap')"
     matTooltipClass="snb-tooltip"
     matTooltipPosition="right"
     matTooltip="Show Mini map"
@@ -120,3 +127,86 @@
     <mat-icon fontSet="material-icons-outlined">stop_circle</mat-icon>
   </button>
 </mat-list>
+
+<mde-popover
+  #visibilityPopover="mdePopover"
+  [mdePopoverOverlapTrigger]="false"
+  mdePopoverArrowWidth="0"
+  [mdePopoverCloseOnClick]="false"
+>
+  <mat-list class="popover-list mat-elevation-z4">
+    <div class="popover-title mat-elevation-z2">Show / Hide Objects</div>
+    <button
+      matListItem
+      mat-button
+      [class.active]="buttonState.vehicleLines"
+      (click)="onClickTool('vehicleLines')"
+    >
+      Vehicle Lines
+    </button>
+    <button
+      matListItem
+      mat-button
+      [class.active]="buttonState.expectedPaths"
+      (click)="onClickTool('expectedPaths')"
+    >
+      Expected Paths
+    </button>
+    <button
+      matListItem
+      mat-button
+      [class.active]="buttonState.pointLabels"
+      (click)="onClickTool('pointLabels')"
+    >
+      Point Labels
+    </button>
+    <button
+      matListItem
+      mat-button
+      [class.active]="buttonState.segmentDirections"
+      (click)="onClickTool('segmentDirections')"
+    >
+      Segment Directions
+    </button>
+    <button
+      matListItem
+      mat-button
+      [class.active]="buttonState.stations"
+      (click)="onClickTool('stations')"
+    >
+      Stations
+    </button>
+    <button
+      matListItem
+      mat-button
+      [class.active]="buttonState.buffers"
+      (click)="onClickTool('buffers')"
+    >
+      Buffers
+    </button>
+    <button
+      matListItem
+      mat-button
+      [class.active]="buttonState.groups"
+      (click)="onClickTool('groups')"
+    >
+      Groups
+    </button>
+    <button
+      matListItem
+      mat-button
+      [class.active]="buttonState.clusters"
+      (click)="onClickTool('clusters')"
+    >
+      Clusters
+    </button>
+    <button
+      matListItem
+      mat-button
+      [class.active]="buttonState.overlaps"
+      (click)="onClickTool('overlaps')"
+    >
+      Overlapping Objects
+    </button>
+  </mat-list>
+</mde-popover>

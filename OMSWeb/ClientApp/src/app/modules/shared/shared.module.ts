@@ -6,6 +6,7 @@ import {
   HttpClientModule,
   HTTP_INTERCEPTORS,
 } from '@angular/common/http';
+import { MdePopoverModule } from '@material-extended/mde';
 
 import { GnbComponent } from './navs/gnb.component';
 import { SharedMaterialModule } from './shared-material.module';
@@ -13,8 +14,6 @@ import { GnbMenusComponent } from './navs/gnb-menus.component';
 import { GnbStatesComponent } from './navs/gnb-states.component';
 import { GnbActionsComponent } from './navs/gnb-actions.component';
 import { GnbIndicatorsComponent } from './navs/gnb-indicators.component';
-import { MapViewerComponent } from './viewers/map-viewer.component';
-import { MapToolbarComponent } from './viewers/map-toolbar.component';
 
 @NgModule({
   declarations: [
@@ -23,18 +22,16 @@ import { MapToolbarComponent } from './viewers/map-toolbar.component';
     GnbStatesComponent,
     GnbActionsComponent,
     GnbIndicatorsComponent,
-    MapViewerComponent,
-    MapToolbarComponent,
   ],
-  imports: [CommonModule, SharedMaterialModule, RouterModule, HttpClientModule],
+  imports: [CommonModule, SharedMaterialModule, RouterModule, HttpClientModule, MdePopoverModule],
   exports: [
     GnbComponent,
     GnbMenusComponent,
     GnbStatesComponent,
     GnbActionsComponent,
     GnbIndicatorsComponent,
-    MapViewerComponent,
-    MapToolbarComponent,
+    SharedMaterialModule,
+    MdePopoverModule,
   ],
 })
 export class SharedModule {}

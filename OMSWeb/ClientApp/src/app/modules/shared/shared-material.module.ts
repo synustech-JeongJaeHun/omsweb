@@ -13,6 +13,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatDividerModule } from '@angular/material/divider';
 import {MatListModule} from '@angular/material/list';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
+import {OverlayModule} from '@angular/cdk/overlay';
 
 @NgModule({
   exports: [
@@ -29,6 +31,8 @@ import {MatTooltipModule} from '@angular/material/tooltip';
     MatDividerModule,
     MatListModule,
     MatTooltipModule,
+    MatProgressBarModule,
+    OverlayModule,
   ],
 })
 export class SharedMaterialModule {}

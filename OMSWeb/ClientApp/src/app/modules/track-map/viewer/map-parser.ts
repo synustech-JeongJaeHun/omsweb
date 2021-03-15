@@ -8,11 +8,11 @@ import { Point } from '../../../models/point.model';
 import { Segment } from '../../../models/segment.model';
 import { Station } from '../../../models/station.model';
 import { Buffer } from '../../../models/buffer.model';
-import { LayoutUtil } from '../utils/layout.util';
+import { LayoutUtil } from '../../shared/utils/layout.util';
 import { MTL } from '../../../models/mtl.model';
 import { Cluster } from '../../../models/cluster.model';
-import { ColorPalette } from '../utils/color-palette';
-import { main_css } from '../utils/css-loader';
+import { ColorPalette } from '../../shared/utils/color-palette';
+import { main_css } from '../../shared/utils/css-loader';
 
 export class MapParser {
   constructor(private layout_data: IViewerData) {}

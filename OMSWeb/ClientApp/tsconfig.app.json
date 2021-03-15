@@ -8,6 +8,7 @@
       "@oms": ["src/app"],
       "@oms/models/*": ["src/app/models/*"],
       "@oms/services/*": ["src/app/services/*"],
+      "@oms/shared/*": ["src/app/modules/shared/*"],
     }
   },
   "files": ["src/main.ts", "src/polyfills.ts"],

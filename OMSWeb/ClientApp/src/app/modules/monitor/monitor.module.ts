@@ -6,6 +6,7 @@ import { MonitorStatusComponent } from './status/monitor-status.component';
 import { MonitorMetricsComponent } from './metrics/monitor-metrics.component';
 import { MonitorComponent } from './monitor.component';
 import { SharedModule } from '../shared/shared.module';
+import { TrackMapModule } from '../track-map/track-map.module';
 
 @NgModule({
   declarations: [
@@ -13,6 +14,6 @@ import { SharedModule } from '../shared/shared.module';
     MonitorMetricsComponent,
     MonitorComponent,
   ],
-  imports: [CommonModule, MonitorRoutingModule, SharedModule],
+  imports: [CommonModule, MonitorRoutingModule, SharedModule, TrackMapModule],
 })
 export class MonitorModule {}

@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import {
+  defaultMapVisibilityOptions,
+  IMapPreferences,
+} from '../../../models/drawing.model';
 
 @Component({
   selector: 'oms-monitor-status',
@@ -17,7 +21,15 @@ import { Component, OnInit } from '@angular/core';
   ],
 })
 export class MonitorStatusComponent implements OnInit {
+  mapPreference: IMapPreferences;
+
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+
+    // @TODO loading preference
+    this.mapPreference = {
+      visibilities: defaultMapVisibilityOptions,
+    };
+  }
 }

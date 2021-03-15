@@ -1,3 +1,5 @@
+import { MapToolbarStatusKeys } from './enums';
+
 export interface ISize {
   width?: number;
   height?: number;
@@ -44,6 +46,26 @@ export interface IZoomInfos {
   y?: number;
   k?: number;
 
-  invertY?:number;
+  invertY?: number;
   invertX?: number;
+}
+
+export type MapVisibilityOptionsType = {
+  [key in MapToolbarStatusKeys]: boolean;
+};
+export const defaultMapVisibilityOptions: MapVisibilityOptionsType = {
+  minimap: true,
+  controlTable: false,
+  expectedPaths: false,
+  vehicleLines: false,
+  pointLabels: false,
+  segmentDirections: true,
+  stations: true,
+  buffers: false,
+  groups: true,
+  clusters: true,
+  overlaps: false,
+};
+export interface IMapPreferences {
+  visibilities: MapVisibilityOptionsType;
 }
