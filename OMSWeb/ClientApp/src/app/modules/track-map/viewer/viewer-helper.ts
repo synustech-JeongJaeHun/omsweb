@@ -14,6 +14,7 @@ import {
   IMapGeometry,
   IMapPreferences,
   IMapSize,
+  IMapToolbarCommandEvent,
   IMapToolbarToggleEvent,
   IZoom,
   IZoomInfos,
@@ -682,9 +683,39 @@ export class ViewController {
 
     return update;
   }
+  centerZoom(transition_type: string) {
+    let viewport = this.geometry.screen_size,
+      size = this.geometry.track_size;
+
+    let ratio = {
+      w: viewport.width / size.width,
+      h: viewport.height / size.height,
+    };
+
+    let k = ratio.w < ratio.h ? ratio.w : ratio.h; // Smaller ratio is closer to sides
+    k *= 0.9;
+    let translate_x = ((viewport.width / k - size.width) / 2) * k;
+    let translate_y = ((viewport.height / k - size.height) / 2) * k;
+
+    // Auto adjust min values if the map has negative coordinates
+    if (size.min_x < 0) {
+      // If min x value is negative
+      translate_x = -size.min_x * k + translate_x;
+    } else {
+      translate_x = -size.min_x * k + translate_x;
+    }
+    if (size.min_y < 0) {
+      // If min y value is negative
+      translate_y = size.min_y * k + translate_y;
+    } else {
+      // translate_y = size.min_y * k + translate_y
+    }
+
+    this.set_transform(translate_x, translate_y, k, true, transition_type);
+  }
 
   //#region toolbar actions
-  changeVisibility(event: IMapToolbarToggleEvent) {
+  onChangeVisibility(event: IMapToolbarToggleEvent) {
     const { type: objectType, value: visibility } = event;
     const transform = this.getZoom(MapTypes.MAIN);
     const zoomLevel = this.calculate_zoom_level();
@@ -740,7 +771,7 @@ export class ViewController {
         }
         break;
       case 'segmentDirections':
-        const {segments} = this.layout_data;
+        const { segments } = this.layout_data;
         if (segments && segments.length > 0) {
           this.directions_adaptive_rendering(
             zoomLevel,
@@ -752,7 +783,7 @@ export class ViewController {
         }
         break;
       case 'stations':
-        const {stations} = this.layout_data;
+        const { stations } = this.layout_data;
         if (stations && stations.length > 0) {
           this.station_adaptive_rendering(
             zoomLevel,
@@ -779,6 +810,15 @@ export class ViewController {
         }
         break;
       case 'vehicles':
+        break;
+      default:
+        break;
+    }
+  }
+  onCommandAction(event: IMapToolbarCommandEvent) {
+    switch (event.type) {
+      case 'centerZoom':
+        this.centerZoom('SMOOTH');
         break;
       default:
         break;
@@ -13366,36 +13406,6 @@ export class ViewController {
     }
 
     this.minimap_data.path = combined_path;
-  }
-  private centerZoom(transition_type: string) {
-    let viewport = this.geometry.screen_size,
-      size = this.geometry.track_size;
-
-    let ratio = {
-      w: viewport.width / size.width,
-      h: viewport.height / size.height,
-    };
-
-    let k = ratio.w < ratio.h ? ratio.w : ratio.h; // Smaller ratio is closer to sides
-    k *= 0.9;
-    let translate_x = ((viewport.width / k - size.width) / 2) * k;
-    let translate_y = ((viewport.height / k - size.height) / 2) * k;
-
-    // Auto adjust min values if the map has negative coordinates
-    if (size.min_x < 0) {
-      // If min x value is negative
-      translate_x = -size.min_x * k + translate_x;
-    } else {
-      translate_x = -size.min_x * k + translate_x;
-    }
-    if (size.min_y < 0) {
-      // If min y value is negative
-      translate_y = size.min_y * k + translate_y;
-    } else {
-      // translate_y = size.min_y * k + translate_y
-    }
-
-    this.set_transform(translate_x, translate_y, k, true, transition_type);
   }
 
   // init svg

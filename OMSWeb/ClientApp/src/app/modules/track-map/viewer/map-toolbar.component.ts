@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { defaultMapVisibilityOptions, MapVisibilityOptionsType } from '../../../models/drawing.model';
-import { MapToolbarStatusKeys } from '../../../models/enums';
+import { MapToolbarCommandKeys, MapToolbarStatusKeys } from '../../../models/enums';
 
 import { MapStatesService } from '../map-states.service';
 
@@ -19,9 +19,13 @@ export class MapToolbarComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  onClickTool(action: MapToolbarStatusKeys) {
+  onToggleTool(action: MapToolbarStatusKeys) {
     const value = !this.buttonState[action];
     this.buttonState[action] = value;
     this.stateSvc.changeToolbarState(action, value);
+  }
+
+  onCommandTool(action: MapToolbarCommandKeys) {
+    this.stateSvc.commandToolbar(action);
   }
 }

@@ -41,6 +41,16 @@ export type MapToolbarStatusKeys =
   | 'clusters'
   | 'overlaps';
 
+export type MapToolbarCommandKeys =
+  | 'centerZoom'
+  | 'search'
+  | 'trackVehicle'
+  | 'manualOrder'
+  | 'getVehicleStatus'
+  | 'setAutoVehicles'
+  | 'resetVehicles'
+  | 'stopVehicles';
+
 // export enum MapToolbarStatusKeys {
 //   minimap,
 //   controlTable,

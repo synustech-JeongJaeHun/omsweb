@@ -1,4 +1,4 @@
-import { MapToolbarStatusKeys } from './enums';
+import { MapToolbarCommandKeys, MapToolbarStatusKeys } from './enums';
 
 export interface ISize {
   width?: number;
@@ -75,4 +75,8 @@ export interface IMapPreferences {
 export interface IMapToolbarToggleEvent {
   type: MapToolbarStatusKeys;
   value: boolean;
+}
+export interface IMapToolbarCommandEvent {
+  type: MapToolbarCommandKeys;
+  value?: any;
 }

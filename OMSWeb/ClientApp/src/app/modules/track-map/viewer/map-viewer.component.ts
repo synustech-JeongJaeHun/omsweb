@@ -56,6 +56,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   private viewer: ViewController;
   //#region subscriptions
   private toolbarToggleEvent$: Subscription;
+  private toolbarCommandEvent$: Subscription;
   //#endregion
 
   get showMinimap(): boolean {
@@ -70,6 +71,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.toolbarToggleEvent$ && this.toolbarToggleEvent$.unsubscribe();
+    this.toolbarCommandEvent$ && this.toolbarCommandEvent$.unsubscribe();
     this.viewer && this.viewer.destroy();
   }
 
@@ -87,8 +89,13 @@ export class MapViewerComponent implements OnInit, OnDestroy {
         if (event.type === 'minimap') {
           this._minimapVisible = event.value;
         } else {
-          this.viewer.changeVisibility(event);
+          this.viewer.onChangeVisibility(event);
         }
+      }
+    );
+    this.toolbarCommandEvent$ = this.statesSvc.toolbarCommandStates$.subscribe(
+      (event) => {
+        this.viewer.onCommandAction(event);
       }
     );
   }
