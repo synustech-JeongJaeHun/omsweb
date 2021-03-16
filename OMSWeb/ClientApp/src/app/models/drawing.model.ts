@@ -63,9 +63,16 @@ export const defaultMapVisibilityOptions: MapVisibilityOptionsType = {
   stations: true,
   buffers: false,
   groups: true,
+  mtls: true,
+  vehicles: true,
   clusters: true,
   overlaps: false,
 };
 export interface IMapPreferences {
   visibilities: MapVisibilityOptionsType;
+}
+
+export interface IMapToolbarToggleEvent {
+  type: MapToolbarStatusKeys;
+  value: boolean;
 }

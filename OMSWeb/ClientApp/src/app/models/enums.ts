@@ -36,6 +36,8 @@ export type MapToolbarStatusKeys =
   | 'stations'
   | 'buffers'
   | 'groups'
+  | 'mtls'
+  | 'vehicles'
   | 'clusters'
   | 'overlaps';
 

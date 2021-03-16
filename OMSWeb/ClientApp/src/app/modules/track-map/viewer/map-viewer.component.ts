@@ -3,7 +3,7 @@ import * as _ from 'lodash';
 // import * as d3 from 'd3';
 // import { Selection } from 'd3-selection';
 
-import { ViewModes } from '../../../models/enums';
+import { MapToolbarStatusKeys, ViewModes } from '../../../models/enums';
 import { StatusService } from '../../../services/status.service';
 import { ViewController } from './viewer-helper';
 import { TrackIdService } from '../../../services/track-id.service';
@@ -55,8 +55,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   private _minimapVisible = false;
   private viewer: ViewController;
   //#region subscriptions
-  private minimapStateSub$: Subscription;
-  private stationShowSub$: Subscription;
+  private toolbarToggleEvent$: Subscription;
   //#endregion
 
   get showMinimap(): boolean {
@@ -70,7 +69,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnDestroy(): void {
-    this.minimapStateSub$ && this.minimapStateSub$.unsubscribe();
+    this.toolbarToggleEvent$ && this.toolbarToggleEvent$.unsubscribe();
     this.viewer && this.viewer.destroy();
   }
 
@@ -79,18 +78,17 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     this.statusSvc.getTrack().subscribe((res) => {
       console.info('## track info >>', res);
       this.omsData = res;
+      this._minimapVisible = this.preference.visibilities.minimap;
       this.drawMap();
       this.loadingState = false;
     });
-    this.minimapStateSub$ = this.statesSvc.toolbarStates$.minimap.subscribe(
-      (state) => {
-        this._minimapVisible = state;
-        console.info('## minimap state changed >>', state);
-      }
-    );
-    this.stationShowSub$ = this.statesSvc.toolbarStates$.stations.subscribe(
-      (state) => {
-        this.viewer.changeVisibility('stations', state);
+    this.toolbarToggleEvent$ = this.statesSvc.toolbarStates$.subscribe(
+      (event) => {
+        if (event.type === 'minimap') {
+          this._minimapVisible = event.value;
+        } else {
+          this.viewer.changeVisibility(event);
+        }
       }
     );
   }
@@ -103,7 +101,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
       this.statesSvc
     );
 
-    this.viewer.setup();
+    this.viewer.setup(this.preference);
     this.viewer.create_track(this.omsData);
     this.viewer.update_vehicles(this.omsData.vehicles, 'INSERT', null, false);
     this.trackIdSvc.extract_id_from_track(this.viewer.layoutData);

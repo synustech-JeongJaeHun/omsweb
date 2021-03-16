@@ -12,11 +12,17 @@ import { Dto } from '@oms/models/dto/track.model';
 import {
   ICoordinate,
   IMapGeometry,
+  IMapPreferences,
   IMapSize,
+  IMapToolbarToggleEvent,
   IZoom,
   IZoomInfos,
 } from '../../../models/drawing.model';
-import { MapToolbarStatusKeys, MapTypes, ViewModes } from '../../../models/enums';
+import {
+  MapToolbarStatusKeys,
+  MapTypes,
+  ViewModes,
+} from '../../../models/enums';
 import { rgb } from 'd3';
 import { MapParser } from './map-parser';
 import { IViewerData } from '../../../models/map.interface';
@@ -35,6 +41,7 @@ export class ViewController {
   private d3_track: d3.Selection<d3.BaseType, unknown, HTMLElement, any>;
   private parser: MapParser;
   private $track_container = null;
+  private preferences: IMapPreferences;
 
   // modifier key codes
   private KEY_SHIFT = 16;
@@ -96,18 +103,19 @@ export class ViewController {
   private DEFAULTS: any;
   private is_permitted: any = {};
   private disallowed_toolbar_buttons = [];
-  private show_point_labels = false;
-  private show_direction_arrows = true;
-  private show_stations = true;
-  private show_buffers = true;
-  private show_mtls = true;
-  private show_groups = true;
-  private show_clusters = true;
-  private show_vehicles = true;
-  private show_vehicle_lines = false;
-  private show_expected_path = false;
-  private show_minimap = false;
-  private show_tables = false;
+  //
+  // private show_point_labels = false;
+  // private show_direction_arrows = true;
+  // private show_stations = true;
+  // private show_buffers = true;
+  // private show_mtls = true;
+  // private show_groups = true;
+  // private show_clusters = true;
+  // private show_vehicles = true;
+  // private show_vehicle_lines = false;
+  // private show_expected_path = false;
+  // private show_minimap = false;
+  // private show_tables = false;
   private direction_arrow_scale = {
     min: this.DIRECTION_ARROW_SCALE_MIN,
     max: this.DIRECTION_ARROW_SCALE_MAX,
@@ -271,9 +279,6 @@ export class ViewController {
   playback_last_event_time: any;
   //#endregion
 
-  //#region subscriptions
-  private minimapState$: Subscription;
-  //#endregion
   get layoutData(): IViewerData {
     return this.layout_data;
   }
@@ -530,37 +535,30 @@ export class ViewController {
         }
       });
     //#endregion
-
-    //#region subscriptions
-    this.minimapState$ = this.statesSvc.toolbarStates$.minimap.subscribe(
-      (state) => {
-        console.info(
-          '### minimap state changed detected on viewer helper >>>',
-          state
-        );
-      }
-    );
-    //#endregion
   }
   setup(
+    preferences: IMapPreferences,
     can_manage_orders?,
     can_manage_vehicles?,
     can_modify_display_settings?
   ) {
+    // @TODO prefix 설정 : 현재는 고정값 'public.largemap', 설정값을 외부에서 넘겨 받기로 하면 필요 없을 수 있음
+    this.state_prefix = 'public.largemap';
+
     if (can_manage_orders) this.is_permitted.manage_orders = true;
     if (can_manage_vehicles) this.is_permitted.manage_vehicles = true;
     if (can_modify_display_settings)
       this.is_permitted.modify_display_settings = true;
 
-    this.d3_track = d3.select(`#${this.track_container_id}`);
-  }
-  destroy() {
-    this.minimapState$ && this.minimapState$.unsubscribe();
-  }
-  create_track(data: Dto.ITrackData) {
-    // @TODO prefix 설정 : 현재는 고정값 'public.largemap'
-    this.state_prefix = 'public.largemap';
+    this.preferences = preferences;
 
+    this.d3_track = d3.select(`#${this.track_container_id}`);
+
+    this.initVariables();
+    this.initStates();
+  }
+  destroy() {}
+  create_track(data: Dto.ITrackData) {
     if (!data) data = {};
     if (!data.map_type) data.map_type = MapTypes.DB;
 
@@ -582,9 +580,6 @@ export class ViewController {
     if (!data.minimum_segment_length) {
       data.minimum_segment_length = this.DEFAULTS.minimum_segment_length;
     }
-
-    this.initVariables();
-    this.initStates();
 
     this.initSvg(this.track_id, data.size);
     this.convertObjects(data);
@@ -689,22 +684,348 @@ export class ViewController {
   }
 
   //#region toolbar actions
-  changeVisibility(objectType: MapToolbarStatusKeys, visibility: boolean) {
+  changeVisibility(event: IMapToolbarToggleEvent) {
+    const { type: objectType, value: visibility } = event;
     const transform = this.getZoom(MapTypes.MAIN);
     const zoomLevel = this.calculate_zoom_level();
+    if (objectType in this.preferences.visibilities) {
+      this.preferences.visibilities[objectType] = visibility;
+    }
     switch (objectType) {
+      case 'buffers':
+        const { buffers } = this.layout_data;
+        if (buffers && buffers.length) {
+          this.buffer_adaptive_rendering(
+            zoomLevel,
+            transform,
+            main_css.buffer,
+            this.get_viewbox(),
+            true
+          );
+        }
+        break;
+      case 'clusters':
+        const { clusters } = this.layout_data;
+        if (clusters && clusters.length) {
+          this.cluster_adaptive_rendering(
+            zoomLevel,
+            transform,
+            main_css.cluster,
+            this.get_viewbox(),
+            true
+          );
+        }
+        break;
+      case 'expectedPaths':
+        this.update_expected_path_dom(
+          this.get_combined_path(this.get_expected_path_segments())
+        );
+        break;
+      case 'groups':
+        this.display_group(visibility, true);
+        break;
+      case 'mtls':
+        break;
+      case 'overlaps':
+        break;
+      case 'pointLabels':
+        const { points } = this.layout_data;
+        if (points && points.length) {
+          this.point_adaptive_rendering(
+            zoomLevel,
+            transform,
+            main_css.point,
+            this.get_viewbox()
+          );
+        }
+        break;
+      case 'segmentDirections':
+        const {segments} = this.layout_data;
+        if (segments && segments.length > 0) {
+          this.directions_adaptive_rendering(
+            zoomLevel,
+            transform,
+            main_css.segment,
+            this.get_viewbox(),
+            true
+          );
+        }
+        break;
       case 'stations':
-        this.show_stations = visibility;
-        this.station_adaptive_rendering(zoomLevel, transform, main_css.station, this.get_viewbox(), true);
+        const {stations} = this.layout_data;
+        if (stations && stations.length > 0) {
+          this.station_adaptive_rendering(
+            zoomLevel,
+            transform,
+            main_css.station,
+            this.get_viewbox(),
+            true
+          );
+        }
+        break;
+      case 'vehicleLines':
+        const { vehicles } = this;
+        if (vehicles && vehicles.length) {
+          this.vehicle_svg.each((d) => {
+            let d3_this = d3.select(`#id_${d.id}.vehicle`);
+            let selected_vehicle = this.get_selected_objects('VEHICLE')[0];
+            let is_show_vehicle_line =
+              (selected_vehicle && selected_vehicle.id === d.id) ||
+              this.get_show_vehicle_lines()
+                ? true
+                : false;
+            this.render_vehicle_line(d3_this, d, is_show_vehicle_line);
+          });
+        }
+        break;
+      case 'vehicles':
         break;
       default:
         break;
     }
   }
   //#endregion
+
+  get_defaults() {
+    // start with known sane values for all of the options we use
+    let defaults = {
+      show_tables: false,
+      show_minimap: false,
+      show_point_labels: false,
+      show_direction_arrows: true,
+      show_segments: true,
+      show_stations: true,
+      show_buffers: true,
+      show_mtls: true,
+      show_groups: true,
+      show_clusters: true,
+      show_vehicles: true,
+      show_vehicle_lines: false,
+      show_expected_path: false,
+      vehicle_scale: 8,
+      location_scale: 30,
+      direction_arrow_scale: 5,
+      map_rotation: 0,
+      snap_to_grid_distance: 500, // mm
+      minimum_segment_length: 500, // mm
+      minimap_size_limit: 150,
+      num_ticks: 20,
+      vehicle_stale: 600, // sec
+      speed_straight: 3600, // m/s
+      speed_curve: 800, // m/s
+      scale_offset_x: 50,
+      scale_offset_y: 50,
+      hover_tag_offset_x: 20,
+      hover_tag_offset_y: 20,
+      canvas_width: 100000,
+      canvas_height: 100000,
+    };
+    // override with anything specified in the site defaults file
+    if (setting && setting.map) {
+      for (let label in defaults) {
+        if (label in setting.map) {
+          defaults[label] = setting.map[label];
+        }
+      }
+    }
+    return defaults;
+  }
+
+  private initVariables() {
+    this.map_has_changes = false;
+    this.vehicles = [];
+    this.expected_paths = [];
+    this.layout_data = {};
+    this.minimap_data = {};
+    this.geometry = {};
+    this.zoom_step = {};
+    this.d3_main = null;
+    this.d3_minimap = null;
+    this.d3_detail_panel = {};
+    this.d3_floating_module = {};
+    this.zoom = {};
+    this.selected_objects = [];
+    this.currently_hovering_object = {};
+    this.search_candidate_objects = [];
+    this.copied_objects = [];
+    this.vehicle_tracking = {
+      status: false,
+      id: '',
+    };
+
+    this.tool_type = null;
+    this.editing = null;
+    this.is_sticky_mode = false;
+    this.modifier_key = null;
+    this.drag_move = {};
+    this.drag_coord = {};
+    this.history_stack = [];
+    this.history_buffer = [];
+
+    this.overlap_display_objects = [];
+    this.overlap_module_objects = [];
+    this.unassigned_module_objects = [];
+  }
+
+  private initStates() {
+    // @TODO initStates 구현 (v1 : get_ui_states)
+  }
+
+  private initSvg(target_id: string, mapSize: IMapSize) {
+    target_id && (this.track_id = target_id);
+
+    // get the size of the DOM element into which this is going
+    // @NOTE : jquery 사용하여 size 설정
+    let $elem = this.$track_container.find(`#${target_id}`).parent().get(0);
+    let screen_size = {
+      width: $elem.clientWidth,
+      height: $elem.clientHeight,
+    };
+
+    this.setGeometry(mapSize, screen_size);
+
+    // init svg groups
+    this.init_svg_groups();
+
+    /** set_param + set_initial_zoom */
+    this.setInitialZoom(MapTypes.MAIN);
+
+    let length: ICoordinate, lower_limit: ICoordinate, upper_limit: ICoordinate;
+
+    const { width, height } = this.geometry.screen_size;
+
+    if (this.mode === ViewModes.editor) {
+      length = { x: width, y: height };
+      lower_limit = { x: 0, y: 0 };
+      upper_limit = { x: width, y: height };
+    } else {
+      const _len = Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2));
+      length = { x: _len, y: _len };
+
+      lower_limit = {
+        x: (width - length.x) / 2,
+        y: (height - length.y) / 2,
+      };
+      upper_limit = {
+        x: width - lower_limit.x,
+        y: height - lower_limit.y,
+      };
+    }
+    // init d3
+    this.d3_main = d3
+      .zoom()
+      .scaleExtent([0, this.zoom.max])
+      .on('zoom', this.zoomed.bind(this));
+    // .on('zoom', this.zoomed);
+
+    this.d3_x = d3
+      .scaleLinear()
+      .domain([lower_limit.x, upper_limit.x])
+      .range([lower_limit.x, upper_limit.x]);
+    this.d3_y = d3
+      .scaleLinear()
+      .domain([lower_limit.y, upper_limit.y])
+      .range([lower_limit.y, upper_limit.y]);
+
+    this.d3_axis_x = d3
+      .axisBottom(this.d3_x)
+      .ticks((upper_limit.x / upper_limit.y) * this.num_ticks)
+      .tickSize(length.y)
+      .tickPadding(8 - height);
+    this.d3_axis_y = d3
+      .axisRight(this.d3_y)
+      .ticks(this.num_ticks)
+      .tickSize(length.x)
+      .tickPadding(-20);
+
+    // Initialize svg: view-box element
+    // @NOTE svg 초기화
+    this.svg = this.d3_track.select(`#${target_id}`);
+    this.svg
+      .attr('width', this.geometry.screen_size.width)
+      .attr('height', this.geometry.screen_size.height);
+
+    this.svg.call(this.d3_main);
+
+    if (!this.geometric_container) {
+      this.geometric_container = this.svg
+        .append('g')
+        .attr('id', 'geometric_zoom');
+      this.geometric_container.append('g').attr('class', 'grid_group');
+      this.geometric_container
+        .append('g')
+        .attr('class', 'cluster_group')
+        .attr('group_type', 'cluster');
+      this.geometric_container
+        .append('g')
+        .attr('class', 'segment_group')
+        .attr('group_type', 'segment');
+
+      if (this.mode === ViewModes.editor) {
+        this.geometric_container.append('g').attr('class', 'selected_group');
+        this.geometric_container.append('g').attr('class', 'selection_group');
+        this.geometric_container
+          .append('g')
+          .attr('class', 'segment_draw_group');
+      }
+    }
+
+    if (this.mode === ViewModes.editor) {
+      // @TODO draw_editor_attributes()
+      // draw_editor_attributes()
+      // css_root.css('--grid-text-color', main_css.grid.text_color_show)
+      // css_root.css('--grid-domain-display', 'display')
+      setCssValue('--grid-text-color', main_css.grid.text_color_show);
+      setCssValue('--grid-domain-display', 'display');
+    } else {
+      // css_root.css('--grid-text-color', main_css.grid.text_color_hide);
+      // css_root.css('--grid-domain-display', 'none');
+      // @TODO 아래 코드 검증 (update root style variable)
+      setCssValue('--grid-text-color', main_css.grid.text_color_hide);
+      setCssValue('--grid-domain-display', 'none');
+    }
+
+    if (!this.semantic_container) {
+      this.semantic_container = this.svg
+        .append('g')
+        .attr('id', 'semantic_zoom');
+      this.semantic_container
+        .append('g')
+        .attr('class', 'direction_group')
+        .attr('group_type', 'direction');
+      this.semantic_container
+        .append('g')
+        .attr('class', 'point_group')
+        .attr('group_type', 'point');
+      this.semantic_container
+        .append('g')
+        .attr('class', 'station_group')
+        .attr('group_type', 'station');
+      this.semantic_container
+        .append('g')
+        .attr('class', 'buffer_group')
+        .attr('group_type', 'buffer');
+      this.semantic_container
+        .append('g')
+        .attr('class', 'mtl_group')
+        .attr('group_type', 'mtl');
+      this.semantic_container
+        .append('g')
+        .attr('class', 'vehicle_group')
+        .attr('group_type', 'vehicle');
+      this.semantic_container.append('g').attr('class', 'scale_group');
+    }
+
+    this.d3_main.zoomIdentity = d3.zoomIdentity;
+
+    this.init_hover_tag(target_id);
+    this.initEvents();
+  }
+
   private convertObjects(data: Dto.ITrackData) {
     this.layout_data = this.parser.parse(data, this.geometry);
   }
+
   private drawMap(track_type: 'layout' | 'minimap') {
     if (track_type == 'layout') {
       // Draw all the layout components
@@ -757,6 +1078,7 @@ export class ViewController {
       this.minimap_draw();
     }
   }
+
   reorder_svg() {
     this.d3_track.select('.scale_group').raise();
   }
@@ -2739,7 +3061,8 @@ export class ViewController {
 
     let points = this.append_showing_objects('POINT', view_box); //append showing points
     if (
-      this.show_point_labels &&
+      // this.show_point_labels &&
+      this.preferences.visibilities.pointLabels &&
       is_point_update &&
       points &&
       points.length > 0
@@ -2769,7 +3092,8 @@ export class ViewController {
 
     let stations = this.append_showing_objects('STATION', view_box); //append showing stations
     if (
-      this.show_stations &&
+      // this.show_stations &&
+      this.preferences.visibilities.stations &&
       is_station_update &&
       stations &&
       stations.length > 0
@@ -2786,7 +3110,8 @@ export class ViewController {
 
     let buffers = this.append_showing_objects('BUFFER', view_box); //append showing buffers
     if (
-      this.show_buffers &&
+      // this.show_buffers &&
+      this.preferences.visibilities.buffers &&
       is_buffer_update &&
       buffers &&
       buffers.length > 0
@@ -2802,13 +3127,20 @@ export class ViewController {
     }
 
     let mtls = this.append_showing_objects('MTL', view_box); //append showing mtls
-    if (this.show_mtls && is_mtl_update && mtls && mtls.length > 0) {
+    // if (this.show_mtls && is_mtl_update && mtls && mtls.length > 0) {
+    if (
+      this.preferences.visibilities.mtls &&
+      is_mtl_update &&
+      mtls &&
+      mtls.length > 0
+    ) {
       this.update_dom('MTL', mtls, main_css.mtl, zoom_level, 'LAYOUT', false);
     }
 
     let clusters = this.append_showing_polygons('CLUSTER', view_box); //append showing clusters
     if (
-      this.show_clusters &&
+      // this.show_clusters &&
+      this.preferences.visibilities.clusters &&
       is_cluster_update &&
       clusters &&
       clusters.length > 0
@@ -2825,7 +3157,8 @@ export class ViewController {
 
     let vehicles = this.append_showing_vehicles(view_box);
     if (
-      this.show_vehicles &&
+      // this.show_vehicles &&
+      this.preferences.visibilities.vehicles &&
       is_vehicle_update &&
       this.mode !== 'MINIMAL' &&
       this.mode !== 'EDITOR' &&
@@ -3582,50 +3915,6 @@ export class ViewController {
     }
   }
 
-  get_defaults() {
-    // start with known sane values for all of the options we use
-    let defaults = {
-      show_tables: false,
-      show_minimap: false,
-      show_point_labels: false,
-      show_direction_arrows: true,
-      show_segments: true,
-      show_stations: true,
-      show_buffers: true,
-      show_mtls: true,
-      show_groups: true,
-      show_clusters: true,
-      show_vehicles: true,
-      show_vehicle_lines: false,
-      show_expected_path: false,
-      vehicle_scale: 8,
-      location_scale: 30,
-      direction_arrow_scale: 5,
-      map_rotation: 0,
-      snap_to_grid_distance: 500, // mm
-      minimum_segment_length: 500, // mm
-      minimap_size_limit: 150,
-      num_ticks: 20,
-      vehicle_stale: 600, // sec
-      speed_straight: 3600, // m/s
-      speed_curve: 800, // m/s
-      scale_offset_x: 50,
-      scale_offset_y: 50,
-      hover_tag_offset_x: 20,
-      hover_tag_offset_y: 20,
-      canvas_width: 100000,
-      canvas_height: 100000,
-    };
-    // override with anything specified in the site defaults file
-    if (setting && setting.map) {
-      for (let label in defaults) {
-        if (label in setting.map) {
-          defaults[label] = setting.map[label];
-        }
-      }
-    }
-    return defaults;
-  }
   get_default_size(width: any, height: any): IMapSize {
     return {
       min_x: 0,
@@ -3682,196 +3971,6 @@ export class ViewController {
     return paths;
   }
 
-  private initVariables() {
-    this.map_has_changes = false;
-    this.vehicles = [];
-    this.expected_paths = [];
-    this.layout_data = {};
-    this.minimap_data = {};
-    this.geometry = {};
-    this.zoom_step = {};
-    this.d3_main = null;
-    this.d3_minimap = null;
-    this.d3_detail_panel = {};
-    this.d3_floating_module = {};
-    this.zoom = {};
-    this.selected_objects = [];
-    this.currently_hovering_object = {};
-    this.search_candidate_objects = [];
-    this.copied_objects = [];
-    this.vehicle_tracking = {
-      status: false,
-      id: '',
-    };
-
-    this.tool_type = null;
-    this.editing = null;
-    this.is_sticky_mode = false;
-    this.modifier_key = null;
-    this.drag_move = {};
-    this.drag_coord = {};
-    this.history_stack = [];
-    this.history_buffer = [];
-
-    this.overlap_display_objects = [];
-    this.overlap_module_objects = [];
-    this.unassigned_module_objects = [];
-  }
-
-  private initStates() {
-    // @TODO initStates 구현 (v1 : get_ui_states)
-  }
-
-  private initSvg(target_id: string, mapSize: IMapSize) {
-    target_id && (this.track_id = target_id);
-
-    // get the size of the DOM element into which this is going
-    // @NOTE : jquery 사용하여 size 설정
-    let $elem = this.$track_container.find(`#${target_id}`).parent().get(0);
-    let screen_size = {
-      width: $elem.clientWidth,
-      height: $elem.clientHeight,
-    };
-
-    this.setGeometry(mapSize, screen_size);
-
-    // init svg groups
-    this.init_svg_groups();
-
-    /** set_param + set_initial_zoom */
-    this.setInitialZoom(MapTypes.MAIN);
-
-    let length: ICoordinate, lower_limit: ICoordinate, upper_limit: ICoordinate;
-
-    const { width, height } = this.geometry.screen_size;
-
-    if (this.mode === ViewModes.editor) {
-      length = { x: width, y: height };
-      lower_limit = { x: 0, y: 0 };
-      upper_limit = { x: width, y: height };
-    } else {
-      const _len = Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2));
-      length = { x: _len, y: _len };
-
-      lower_limit = {
-        x: (width - length.x) / 2,
-        y: (height - length.y) / 2,
-      };
-      upper_limit = {
-        x: width - lower_limit.x,
-        y: height - lower_limit.y,
-      };
-    }
-    // init d3
-    this.d3_main = d3
-      .zoom()
-      .scaleExtent([0, this.zoom.max])
-      .on('zoom', this.zoomed.bind(this));
-    // .on('zoom', this.zoomed);
-
-    this.d3_x = d3
-      .scaleLinear()
-      .domain([lower_limit.x, upper_limit.x])
-      .range([lower_limit.x, upper_limit.x]);
-    this.d3_y = d3
-      .scaleLinear()
-      .domain([lower_limit.y, upper_limit.y])
-      .range([lower_limit.y, upper_limit.y]);
-
-    this.d3_axis_x = d3
-      .axisBottom(this.d3_x)
-      .ticks((upper_limit.x / upper_limit.y) * this.num_ticks)
-      .tickSize(length.y)
-      .tickPadding(8 - height);
-    this.d3_axis_y = d3
-      .axisRight(this.d3_y)
-      .ticks(this.num_ticks)
-      .tickSize(length.x)
-      .tickPadding(-20);
-
-    // Initialize svg: view-box element
-    // @NOTE svg 초기화
-    this.svg = this.d3_track.select(`#${target_id}`);
-    this.svg
-      .attr('width', this.geometry.screen_size.width)
-      .attr('height', this.geometry.screen_size.height);
-
-    this.svg.call(this.d3_main);
-
-    if (!this.geometric_container) {
-      this.geometric_container = this.svg
-        .append('g')
-        .attr('id', 'geometric_zoom');
-      this.geometric_container.append('g').attr('class', 'grid_group');
-      this.geometric_container
-        .append('g')
-        .attr('class', 'cluster_group')
-        .attr('group_type', 'cluster');
-      this.geometric_container
-        .append('g')
-        .attr('class', 'segment_group')
-        .attr('group_type', 'segment');
-
-      if (this.mode === ViewModes.editor) {
-        this.geometric_container.append('g').attr('class', 'selected_group');
-        this.geometric_container.append('g').attr('class', 'selection_group');
-        this.geometric_container
-          .append('g')
-          .attr('class', 'segment_draw_group');
-      }
-    }
-
-    if (this.mode === ViewModes.editor) {
-      // @TODO draw_editor_attributes()
-      // draw_editor_attributes()
-      // css_root.css('--grid-text-color', main_css.grid.text_color_show)
-      // css_root.css('--grid-domain-display', 'display')
-      setCssValue('--grid-text-color', main_css.grid.text_color_show);
-      setCssValue('--grid-domain-display', 'display');
-    } else {
-      // css_root.css('--grid-text-color', main_css.grid.text_color_hide);
-      // css_root.css('--grid-domain-display', 'none');
-      // @TODO 아래 코드 검증 (update root style variable)
-      setCssValue('--grid-text-color', main_css.grid.text_color_hide);
-      setCssValue('--grid-domain-display', 'none');
-    }
-
-    if (!this.semantic_container) {
-      this.semantic_container = this.svg
-        .append('g')
-        .attr('id', 'semantic_zoom');
-      this.semantic_container
-        .append('g')
-        .attr('class', 'direction_group')
-        .attr('group_type', 'direction');
-      this.semantic_container
-        .append('g')
-        .attr('class', 'point_group')
-        .attr('group_type', 'point');
-      this.semantic_container
-        .append('g')
-        .attr('class', 'station_group')
-        .attr('group_type', 'station');
-      this.semantic_container
-        .append('g')
-        .attr('class', 'buffer_group')
-        .attr('group_type', 'buffer');
-      this.semantic_container
-        .append('g')
-        .attr('class', 'mtl_group')
-        .attr('group_type', 'mtl');
-      this.semantic_container
-        .append('g')
-        .attr('class', 'vehicle_group')
-        .attr('group_type', 'vehicle');
-      this.semantic_container.append('g').attr('class', 'scale_group');
-    }
-
-    this.d3_main.zoomIdentity = d3.zoomIdentity;
-
-    this.init_hover_tag(target_id);
-    this.initEvents();
-  }
   init_hover_tag(target_id: any) {
     let hover_tag_dom = '<label id="hover_tag"></label>';
     this.$track_container.find(`#${target_id}`).parent().append(hover_tag_dom);
@@ -5687,7 +5786,8 @@ export class ViewController {
     }
 
     // populate group color object if groups are on
-    if (this.show_groups) {
+    // if (this.show_groups) {
+    if (this.preferences.visibilities.groups) {
       group_colors = {}; // {group_id : color}
       for (let group of this.layout_data.groups) {
         group_colors[group.id] = ColorPalette.get_color(group.color);
@@ -5744,8 +5844,10 @@ export class ViewController {
 
           // Update: if any
           if (
-            (is_update_all && this.show_groups) ||
-            (this.show_groups && update.group)
+            // (is_update_all && this.show_groups) ||
+            // (this.show_groups && update.group)
+            (is_update_all && this.preferences.visibilities.groups) ||
+            (this.preferences.visibilities.groups && update.group)
           ) {
             this.update_vehicle_group_svg(
               d3_this,
@@ -6885,7 +6987,8 @@ export class ViewController {
     }
   }
   append_showing_vehicles(view_box: any) {
-    if (!this.show_vehicles) {
+    // if (!this.show_vehicles) {
+    if (!this.preferences.visibilities.vehicles) {
       return [];
     }
 
@@ -6939,7 +7042,8 @@ export class ViewController {
     // see if there are any clusters in the current viewport
     let cluster_display = this.append_showing_polygons('CLUSTER', view_box);
 
-    if (cluster_display.length > 0 && this.show_clusters) {
+    // if (cluster_display.length > 0 && this.show_clusters) {
+    if (cluster_display.length > 0 && this.preferences.visibilities.clusters) {
       let update_svg = false;
 
       if (!need_update && this.clusters_svg) {
@@ -6983,7 +7087,8 @@ export class ViewController {
       selective_level = this.option.selective_lvl_display,
       mtl_display = [];
 
-    if (zoom_level >= 1 && this.show_mtls) {
+    // if (zoom_level >= 1 && this.show_mtls) {
+    if (zoom_level >= 1 && this.preferences.visibilities.mtls) {
       // find mtl
       mtl_display = this.append_showing_objects('MTL', view_box);
 
@@ -7077,7 +7182,8 @@ export class ViewController {
       selective_level = this.option.selective_lvl_display,
       buffer_display = [];
 
-    if (zoom_level >= 1 && this.show_buffers) {
+    // if (zoom_level >= 1 && this.show_buffers) {
+    if (zoom_level >= 1 && this.preferences.visibilities.buffers) {
       // find buffer
       buffer_display = this.append_showing_objects('BUFFER', view_box);
 
@@ -7277,7 +7383,8 @@ export class ViewController {
       selective_level = this.option.selective_lvl_display,
       station_display = [];
 
-    if (zoom_level >= 1 && this.show_stations) {
+    // if (zoom_level >= 1 && this.show_stations) {
+    if (zoom_level >= 1 && this.preferences.visibilities.stations) {
       // find station
       station_display = this.append_showing_objects('STATION', view_box);
 
@@ -8011,13 +8118,17 @@ export class ViewController {
     css_setting: any,
     view_box: any,
     need_update: boolean,
-    segments: any[]
+    segments?: any[]
   ) {
     let update_svg = false,
       selective_level = this.option.selective_lvl_display,
       direction_display = [];
 
-    if (zoom_level >= selective_level.direction || this.show_direction_arrows) {
+    // if (zoom_level >= selective_level.direction || this.show_direction_arrows) {
+    if (
+      zoom_level >= selective_level.direction ||
+      this.preferences.visibilities.segmentDirections
+    ) {
       // find segments
       if (!segments || segments.length === 0) {
         direction_display = this.append_showing_polygons('SEGMENT', view_box);
@@ -8027,7 +8138,8 @@ export class ViewController {
 
       if (
         zoom_level < selective_level.direction &&
-        this.show_direction_arrows
+        // this.show_direction_arrows
+        this.preferences.visibilities.segmentDirections
       ) {
         // Set zoom level to direction arrow display zoom level
         zoom_level = selective_level.direction;
@@ -8314,7 +8426,8 @@ export class ViewController {
       point_display = [];
 
     // Check point label display condition
-    if (this.show_point_labels) {
+    // if (this.show_point_labels) {
+    if (this.preferences.visibilities.pointLabels) {
       zoom_level = selective_level.point_label;
     }
 
@@ -8493,7 +8606,8 @@ export class ViewController {
     }
 
     // populate group color object if groups are on
-    if (this.show_groups) {
+    // if (this.show_groups) {
+    if (this.preferences.visibilities.groups) {
       group_colors = {}; // {group_id : color}
       for (let group of this.layout_data.groups) {
         group_colors[group.id] = ColorPalette.get_color(group.color);
@@ -8895,7 +9009,8 @@ export class ViewController {
             );
         });
 
-        if (this.show_groups) {
+        // if (this.show_groups) {
+        if (this.preferences.visibilities.groups) {
           this.stations_svg.each((d) => {
             let d3_this = d3.select(`#id_${d.id}.station`);
             let group_svg = d3_this.select('.group_svg');
@@ -9179,7 +9294,8 @@ export class ViewController {
             );
         });
 
-        if (this.show_groups) {
+        // if (this.show_groups) {
+        if (this.preferences.visibilities.groups) {
           this.buffers_svg.each((d) => {
             // let d3_this = d3.select(this);
             let d3_this = d3.select(`#id_${d.id}.buffer`);
@@ -9387,7 +9503,8 @@ export class ViewController {
           });
         }
 
-        if (this.show_groups) {
+        // if (this.show_groups) {
+        if (this.preferences.visibilities.groups) {
           this.mtls_svg.each((d) => {
             // let d3_this = d3.select(this);
             let d3_this = d3.select(`#id_${d.id}.mtl`);
@@ -11920,8 +12037,124 @@ export class ViewController {
     // );
   }
   get_show_vehicle_lines(): boolean {
-    return this.show_vehicle_lines;
+    // return this.show_vehicle_lines;
+    return this.preferences.visibilities.vehicleLines;
   }
+  set_show_vehicle_lines(state, is_save_state) {
+    this.preferences.visibilities.vehicleLines = state;
+
+    if (is_save_state) {
+      this.save_state(
+        'show_vehicle_lines',
+        this.preferences.visibilities.vehicleLines
+      );
+    }
+  }
+
+  display_group(is_display, is_save_state) {
+    this.set_show_groups(is_display, is_save_state);
+
+    const {
+      groups: showGroups,
+      stations: showStations,
+      buffers: showBuffers,
+      mtls: showMtls,
+      vehicles: showVehicles,
+    } = this.preferences.visibilities;
+
+    if (showGroups) {
+      if (showStations)
+        this.update_dom(
+          'STATION',
+          this.layout_data.stations,
+          main_css.station,
+          null,
+          'LAYOUT',
+          true
+        );
+
+      if (showBuffers)
+        this.update_dom(
+          'BUFFER',
+          this.layout_data.buffers,
+          main_css.buffer,
+          null,
+          'LAYOUT',
+          true
+        );
+
+      if (showMtls)
+        this.update_dom(
+          'MTL',
+          this.layout_data.mtls,
+          main_css.mtl,
+          null,
+          'LAYOUT',
+          true
+        );
+
+      if (showVehicles)
+        this.update_vehicle_dom(
+          this.vehicles,
+          main_css.vehicle,
+          null,
+          'LAYOUT',
+          false
+        );
+
+      this.$track_container.find('#btn_show_location_group').addClass('active');
+    } else {
+      this.$track_container.find('.group_svg').remove();
+      this.$track_container
+        .find('#btn_show_location_group')
+        .removeClass('active');
+    }
+  }
+  set_show_groups(state: boolean, is_save_state: any) {
+    this.preferences.visibilities.groups = state;
+    if (is_save_state) {
+      this.save_state('show_groups', state);
+    }
+  }
+
+  get_expected_path_segments(): any {
+    let expected_path_segment_objects = [];
+    for (let expected_path of this.expected_paths) {
+      expected_path_segment_objects = expected_path_segment_objects.concat(
+        expected_path.path_segments
+      );
+    }
+
+    return expected_path_segment_objects;
+  }
+
+  update_expected_path_dom(path: string) {
+    if (this.preferences.visibilities.expectedPaths && path) {
+      if (this.$track_container.find('#expected_path').length === 0) {
+        this.expected_path_svg = this.get_dom('SEGMENT', null, 'LAYOUT')
+          .append('path')
+          .attr('id', 'expected_path')
+          .attr('class', 'expected_path')
+          .attr('d', path)
+          .attr(
+            'stroke',
+            path
+              ? main_css.general.expected_path_color
+              : main_css.general.ghost_path_color
+          )
+          .attr('stroke-width', `${main_css.general.expected_path_weight}px`)
+          .lower();
+      } else {
+        this.expected_path_svg.attr('d', path);
+      }
+    } else {
+      if (this.expected_path_svg) {
+        this.expected_path_svg.remove();
+        this.expected_path_svg = null;
+      }
+    }
+  }
+
   get_selected_objects(object_type?: string) {
     if (object_type) {
       let result = [];
@@ -12221,7 +12454,7 @@ export class ViewController {
       this.save_state('map_rotation', this.map_rotation);
     }
   }
-  save_state(name: string, value: number) {
+  save_state(name: string, value: any) {
     // @TODO save state
     // if (state_prefix) {
     //   this.set_state(`${state_prefix}.${name}`, value);
