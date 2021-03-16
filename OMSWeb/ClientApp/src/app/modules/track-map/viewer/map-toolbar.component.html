@@ -42,8 +42,8 @@
     mdePopoverPositionX="before"
     mdePopoverPositionY="below"
     [mdePopoverOffsetX]="40"
-    [mdePopoverOffsetY]="-35"
-    [mdePopoverOverlapTrigger]="false"
+    [mdePopoverOffsetY]="0"
+    [mdePopoverOverlapTrigger]="true"
   >
     <mat-icon>flip_to_front</mat-icon>
   </button>
@@ -133,6 +133,8 @@
   [mdePopoverOverlapTrigger]="false"
   mdePopoverArrowWidth="0"
   [mdePopoverCloseOnClick]="false"
+  [mdeFocusTrapEnabled]="false"
+  [mdePopoverLeaveDelay]="300"
 >
   <mat-list class="popover-list mat-elevation-z4">
     <div class="popover-title mat-elevation-z2">Show / Hide Objects</div>
