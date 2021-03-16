@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { defaultMapVisibilityOptions, MapVisibilityOptionsType } from '../../../models/drawing.model';
 import { MapToolbarCommandKeys, MapToolbarStatusKeys } from '../../../models/enums';
 
@@ -13,11 +13,18 @@ export class MapToolbarComponent implements OnInit {
   @Input()
   buttonState: MapVisibilityOptionsType = defaultMapVisibilityOptions;
 
+  @Output()
+  search = new EventEmitter();
+
   visibilityOpen = false;
 
   constructor(private stateSvc: MapStatesService) {}
 
   ngOnInit(): void {}
+
+  onSearch() {
+    this.search.emit();
+  }
 
   onToggleTool(action: MapToolbarStatusKeys) {
     const value = !this.buttonState[action];

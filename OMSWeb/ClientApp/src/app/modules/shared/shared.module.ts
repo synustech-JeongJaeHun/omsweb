@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MdePopoverModule } from '@material-extended/mde';
 
 import { GnbComponent } from './navs/gnb.component';
@@ -11,7 +12,12 @@ import { GnbStatesComponent } from './navs/gnb-states.component';
 import { GnbActionsComponent } from './navs/gnb-actions.component';
 import { GnbIndicatorsComponent } from './navs/gnb-indicators.component';
 import { SharedDevextremeModule } from './shared-devextreme.module';
+import { DialogBaseComponent } from './dialogs/dialog-base.component';
 
+const inOutModules = [
+  FormsModule,
+  // ReactiveFormsModule,
+];
 @NgModule({
   declarations: [
     GnbComponent,
@@ -19,16 +25,19 @@ import { SharedDevextremeModule } from './shared-devextreme.module';
     GnbStatesComponent,
     GnbActionsComponent,
     GnbIndicatorsComponent,
+    DialogBaseComponent,
   ],
   imports: [
     CommonModule,
-    SharedMaterialModule,
     RouterModule,
     HttpClientModule,
+    ...inOutModules,
+    SharedMaterialModule,
     SharedDevextremeModule,
     MdePopoverModule,
   ],
   exports: [
+    ...inOutModules,
     GnbComponent,
     GnbMenusComponent,
     GnbStatesComponent,
@@ -37,6 +46,7 @@ import { SharedDevextremeModule } from './shared-devextreme.module';
     SharedMaterialModule,
     SharedDevextremeModule,
     MdePopoverModule,
+    DialogBaseComponent,
   ],
 })
 export class SharedModule {}

@@ -9,8 +9,9 @@
   @include inactiveButton;
 
   &.active {
-    @include activeButton;
     font-weight: bold;
+    background-color: inherit;
+    color: var(--theme-color-active);
   }
 
   &:hover {

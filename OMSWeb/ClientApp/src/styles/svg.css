@@ -1701,7 +1701,7 @@ textarea.status-message {
 /* Minimap */
 
 svg {
-  z-index: 3;
+  /* z-index: 3; */
   shape-rendering: optimizeSpeed;
   text-rendering: optimizeSpeed;
   color-rendering: optimizeSpeed;

@@ -1,5 +1,6 @@
 import { Component, Input, NgZone, OnDestroy, OnInit } from '@angular/core';
 import * as _ from 'lodash';
+import { MatDialog } from '@angular/material/dialog';
 // import * as d3 from 'd3';
 // import { Selection } from 'd3-selection';
 
@@ -11,6 +12,7 @@ import { Dto } from '../../../models/dto/track.model';
 import { MapStatesService } from '../map-states.service';
 import { Subscription } from 'rxjs';
 import { IMapPreferences } from '../../../models/drawing.model';
+import { SearchDialogComponent } from '../dialogs/search-dialog.component';
 
 @Component({
   selector: 'oms-map-viewer',
@@ -66,7 +68,8 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   constructor(
     private statusSvc: StatusService,
     private trackIdSvc: TrackIdService,
-    private statesSvc: MapStatesService
+    private statesSvc: MapStatesService,
+    private dialog: MatDialog
   ) {}
 
   ngOnDestroy(): void {
@@ -98,6 +101,16 @@ export class MapViewerComponent implements OnInit, OnDestroy {
         this.viewer.onCommandAction(event);
       }
     );
+  }
+
+  onSearch() {
+    console.info('### search ### ');
+    this.dialog.open(SearchDialogComponent, {
+      width: '300px',
+      hasBackdrop: false,
+      disableClose: true,
+      position: { left: '40px', top: '108px' },
+    });
   }
 
   private drawMap() {

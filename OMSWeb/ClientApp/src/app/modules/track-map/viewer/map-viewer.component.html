@@ -5,7 +5,10 @@
   </div>
   <div id="loading-bar" *ngIf="loadingState">
     Loading ...
-    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    <mat-progress-bar
+      mode="indeterminate"
+      aria-label="Loading"
+    ></mat-progress-bar>
   </div>
 </div>
 
@@ -13,4 +16,5 @@
   id="map-toolbar"
   class="snb toolbar mat-elevation-z3"
   [buttonState]="preference.visibilities"
+  (search)="onSearch()"
 ></oms-map-toolbar>

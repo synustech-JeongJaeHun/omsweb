@@ -1,0 +1,28 @@
+<oms-dialog-base title="Search">
+  <ng-container class="dialog-layout">
+    <div mat-dialog-content>
+      <dx-select-box
+        class="form-item"
+        placeholder="Select Type"
+        [dataSource]="objectTypes"
+        valueExpr="key"
+        displayExpr="value"
+        [searchEnabled]="true"
+        (selectedItemChange)="onSelectType($event)"
+      ></dx-select-box>
+      <dx-select-box
+        class="form-item"
+        placeholder="Select ID"
+        [dataSource]="targets"
+        [disabled]="!canSelectTarget"
+        valueExpr="key"
+        displayExpr="value"
+        [searchEnabled]="true"
+        (selectedItemChange)="onSelectType($event)"
+      ></dx-select-box>
+    </div>
+    <div mat-dialog-actions>
+      <button mat-raised-button color="primary">Search</button>
+    </div>
+  </ng-container>
+</oms-dialog-base>

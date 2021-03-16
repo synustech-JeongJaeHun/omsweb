@@ -1,4 +1,4 @@
-@import '~@angular/cdk/overlay-prebuilt.css';
+@import "~@angular/cdk/overlay-prebuilt.css";
 @import "variables";
 
 :root {
@@ -286,7 +286,6 @@
   --group-opacity: 0.5;
 }
 
-
 html,
 body {
   height: 100%;
@@ -300,3 +299,29 @@ body {
 // .material-icons-two-tone {
 //   filter: invert(0.5) sepia(1) saturate(10) hue-rotate(180deg);
 // }
+
+.drag-handle {
+  cursor: move;
+}
+
+// material
+
+.mat-dialog-container {
+  padding: 16px !important;
+}
+.mat-dialog-content {
+  margin: 0 -16px !important;
+  padding: 0 -16px !important;
+}
+.mat-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: -16px !important;
+}
+[mat-dialog-title] {
+  margin: -16px -16px 16px -16px !important;
+  padding: 10px 24px;
+  background: #369;
+  color: #fff;
+  cursor: move;
+}
