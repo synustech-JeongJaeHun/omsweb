@@ -1,0 +1,17 @@
+<div id="status-control-container" (mouseup)="resizeViewerStop($event)" (mouseleave)="resizeViewerStop($event)">
+  <div id="resize-handle" (mousedown)="resizeViewerStart()" (dblclick)="viewerHide()"></div>
+  <mat-tab-group [(selectedIndex)]="currentTab" animationDuration="100">
+    <mat-tab label="Orders">
+      <oms-order-control-table
+        [tableHeight]="tableHeight"
+        *ngIf="currentTab == 0"
+      ></oms-order-control-table>
+    </mat-tab>
+    <mat-tab label="Vehicles">
+      <oms-vehicle-control-table
+        [tableHeight]="tableHeight"
+        *ngIf="currentTab == 1"
+      ></oms-vehicle-control-table>
+    </mat-tab>
+  </mat-tab-group>
+</div>

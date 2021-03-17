@@ -17,6 +17,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatDialogModule } from '@angular/material/dialog';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { MatTabsModule } from '@angular/material/tabs';
 
 @NgModule({
   exports: [
@@ -35,6 +36,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     MatTooltipModule,
     MatProgressBarModule,
     MatDialogModule,
+    MatTabsModule,
     OverlayModule,
     DragDropModule,
   ],

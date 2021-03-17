@@ -10,12 +10,33 @@ import {
   styles: [
     `
       :host {
+        display: block;
         position: relative;
         z-index: 3;
+        width: 100%;
+        height: 100%;
         /* display: grid;
         grid-template-columns: 56px 1fr;
         column-gap: 20px;
         height: 100%; */
+      }
+
+      #status-control {
+        overflow-x: hidden;
+        overflow-y: hidden;
+        position: absolute;
+        /* border-radius: 5px; */
+        box-shadow: 3px 3px 15px #7f7f7f;
+        display: inline-block;
+        flex-direction: column;
+        /* background: #77919d; */
+        bottom: 0px;
+        left: 0px;
+        /* overflow: auto; */
+        z-index: 10;
+        width: 100%;
+        /* height: 300px; */
+        /* opacity: 0.9; */
       }
     `,
   ],
@@ -23,10 +44,14 @@ import {
 export class MonitorStatusComponent implements OnInit {
   mapPreference: IMapPreferences;
 
+  // showControlTable = false;
+  get showControlTable(): boolean {
+    return this.mapPreference.visibilities.controlTable;
+  }
+
   constructor() {}
 
   ngOnInit(): void {
-
     // @TODO loading preference
     this.mapPreference = {
       visibilities: defaultMapVisibilityOptions,

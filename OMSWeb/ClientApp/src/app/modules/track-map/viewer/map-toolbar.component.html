@@ -78,9 +78,11 @@
     matListItem
     mat-button
     class="tool-item"
+    [class.active]="buttonState.controlTable"
     matTooltipClass="snb-tooltip"
     matTooltipPosition="right"
     matTooltip="Show Control Table"
+    (click)="onToggleTool('controlTable')"
   >
     <mat-icon>window</mat-icon>
   </button>

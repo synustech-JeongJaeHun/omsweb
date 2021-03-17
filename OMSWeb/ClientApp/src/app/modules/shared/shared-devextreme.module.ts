@@ -3,8 +3,21 @@ import { DxTemplateModule } from 'devextreme-angular/core';
 import { DxPopoverModule } from 'devextreme-angular/ui/popover';
 import { DxSelectBoxModule } from 'devextreme-angular/ui/select-box';
 import { DxAutocompleteModule } from 'devextreme-angular/ui/autocomplete';
+import { DxTabPanelModule } from 'devextreme-angular/ui/tab-panel';
+import { DxTabsModule  } from 'devextreme-angular/ui/tabs';
+import { DxDataGridModule } from 'devextreme-angular/ui/data-grid';
+import { DxButtonModule } from 'devextreme-angular/ui/button';
 
 @NgModule({
-  exports: [DxPopoverModule, DxTemplateModule, DxSelectBoxModule, DxAutocompleteModule],
+  exports: [
+    DxPopoverModule,
+    DxTemplateModule,
+    DxSelectBoxModule,
+    DxAutocompleteModule,
+    DxTabPanelModule,
+    DxTabsModule,
+    DxDataGridModule,
+    DxButtonModule,
+  ],
 })
 export class SharedDevextremeModule {}
