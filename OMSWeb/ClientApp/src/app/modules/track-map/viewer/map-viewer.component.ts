@@ -13,6 +13,7 @@ import { MapStatesService } from '../map-states.service';
 import { Subscription } from 'rxjs';
 import { IMapPreferences } from '../../../models/drawing.model';
 import { SearchDialogComponent } from '../dialogs/search-dialog.component';
+import { MapDataService } from '../map-data.service';
 
 @Component({
   selector: 'oms-map-viewer',
@@ -66,6 +67,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   }
 
   constructor(
+    private dataSvc: MapDataService,
     private statusSvc: StatusService,
     private trackIdSvc: TrackIdService,
     private statesSvc: MapStatesService,
@@ -104,12 +106,16 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   }
 
   onSearch() {
-    console.info('### search ### ');
-    this.dialog.open(SearchDialogComponent, {
+    const dlg = this.dialog.open(SearchDialogComponent, {
       width: '300px',
       hasBackdrop: false,
       disableClose: true,
       position: { left: '40px', top: '108px' },
+    });
+
+    dlg.afterClosed().subscribe((payload: any) => {
+      if (!payload || !payload.type || !payload.value) return;
+      this.viewer.onCommandAction({ type: 'search', value: payload });
     });
   }
 
@@ -118,6 +124,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
       ViewModes.public,
       'track-canvas',
       'minimap',
+      this.dataSvc,
       this.statesSvc
     );
 

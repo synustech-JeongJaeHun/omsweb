@@ -35,6 +35,8 @@ export class Vehicle {
   location_pickup?: string;
   priority?: string;
 
+  index?: number;
+
   constructor(
     row: Dto.IVehicle,
     currentPoint: any,

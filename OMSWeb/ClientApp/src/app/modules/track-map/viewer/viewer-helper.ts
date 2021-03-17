@@ -33,9 +33,8 @@ import { Station } from '../../../models/station.model';
 import { Buffer } from '../../../models/buffer.model';
 import { MTL } from '../../../models/mtl.model';
 import { Point } from '../../../models/point.model';
-import { TrackIdService } from '@oms/services/track-id.service';
 import { MapStatesService } from '../map-states.service';
-import { Subscription } from 'rxjs';
+import { MapDataService } from '../map-data.service';
 export class ViewController {
   //#region properties
   private svg: any; // d3.Selection<d3.ContainerElement, unknown, HTMLElement, any>;
@@ -167,10 +166,10 @@ export class ViewController {
   private map_has_changes = false;
 
   // Layout related data
-  private vehicles = [];
-  private layout_data: IViewerData = {};
+  // private vehicles = [];
+  // private layout_data: IViewerData = {};
   private minimap_data: any = {};
-  private stale_vehicles = []; // array of id
+  // private stale_vehicles = []; // array of id  @TODO move to data service
 
   // Size
   private geometry: IMapGeometry = {};
@@ -188,7 +187,7 @@ export class ViewController {
   // Tracker Variable =============================//
   private vehicle_tracking = {
     status: false,
-    id: '',
+    id: 0,
   };
 
   // Interaction
@@ -284,10 +283,23 @@ export class ViewController {
     return this.layout_data;
   }
 
+  get searchDataSource(): IViewerData {
+    return { ...this.layout_data, vehicles: this.vehicles };
+  }
+
+  private get vehicles(): Vehicle[] {
+    return this.layout_data.vehicles;
+  }
+
+  private get layout_data(): IViewerData {
+    return this.dataSvc.data;
+  }
+
   constructor(
     private mode: ViewModes = ViewModes.minimal,
     private track_id: string,
     private minimap_svg_id: string,
+    private dataSvc: MapDataService,
     private statesSvc: MapStatesService
   ) {
     this.DEFAULTS = this.get_defaults();
@@ -583,13 +595,7 @@ export class ViewController {
     }
 
     this.initSvg(this.track_id, data.size);
-    this.convertObjects(data);
-    if (data.vehicle_path) {
-      this.expected_paths = this.convertExpectedPath(
-        data.vehicle_path,
-        this.layout_data.segments
-      );
-    }
+    this.dataSvc.setData(data, this.geometry);
     this.drawMap('layout');
 
     this.initMinimap();
@@ -598,61 +604,75 @@ export class ViewController {
     this.centerZoom('INSTANT');
   }
   update_vehicles(raw_data, operation, vehicle_id, is_skip_rendering) {
-    let is_dom_update = false;
+    // let is_dom_update = false;
     let target_index;
-    let update: any = {};
-    let updated_vehicles = [];
+    // let update: any = {};
+    // let updated_vehicles = [];
 
     // get target index
     if (operation == 'DELETE' || operation == 'UPDATE') {
       target_index = this.vehicles.findIndex((d) => d.id == vehicle_id);
     }
 
-    // apply update
-    if (operation == 'DELETE') {
-      if (target_index > -1) {
-        this.vehicles.splice(target_index, 1);
-        is_dom_update = true;
-      }
-    } else {
-      // convert raw data to object
-      updated_vehicles = this.convert_vehicle_object(raw_data);
+    const {
+      update,
+      isDomUpdated,
+      updatedVehicles,
+    } = this.dataSvc.applyVehicleData(
+      raw_data,
+      operation,
+      vehicle_id,
+      this.vehicle_stale,
+      this.playback_last_event_time
+    );
+    // @TODO moved to data service
 
-      if (operation == 'INSERT') {
-        for (let i = 0; i < updated_vehicles.length; i++) {
-          this.vehicles.push(updated_vehicles[i]);
-        }
+    // // apply update
+    // if (operation == 'DELETE') {
+    //   if (target_index > -1) {
+    //     this.layout_data.vehicles.splice(target_index, 1);
+    //     is_dom_update = true;
+    //   }
+    // } else {
+    //   // convert raw data to object
+    //   updated_vehicles = this.convert_vehicle_object(raw_data);
 
-        is_dom_update = true;
-      } else if (operation == 'UPDATE') {
-        if (target_index > -1) {
-          updated_vehicles = this.set_last_point(
-            this.vehicles,
-            updated_vehicles
-          );
+    //   if (operation == 'INSERT') {
+    //     this.layout_data.vehicles = updated_vehicles;
+    //     // for (let i = 0; i < updated_vehicles.length; i++) {
+    //     //   this.layout_data.vehicles.push(updated_vehicles[i]);
+    //     // }
 
-          let old_vehicle = this.vehicles[target_index];
-          let updated_props = {};
-          for (let prop in updated_vehicles[0]) {
-            if (
-              JSON.stringify(old_vehicle[prop]) !=
-              JSON.stringify(updated_vehicles[0][prop])
-            ) {
-              updated_props[prop] = true;
-            }
-          }
+    //     is_dom_update = true;
+    //   } else if (operation == 'UPDATE') {
+    //     if (target_index > -1) {
+    //       updated_vehicles = this.set_last_point(
+    //         this.layout_data.vehicles,
+    //         updated_vehicles
+    //       );
 
-          // Put the update properties in to updat object with vehicle id at the key
-          update[parseInt(updated_vehicles[0].id)] = updated_props;
+    //       let old_vehicle = this.vehicles[target_index];
+    //       let updated_props = {};
+    //       for (let prop in updated_vehicles[0]) {
+    //         if (
+    //           JSON.stringify(old_vehicle[prop]) !=
+    //           JSON.stringify(updated_vehicles[0][prop])
+    //         ) {
+    //           updated_props[prop] = true;
+    //         }
+    //       }
 
-          this.vehicles[target_index] = updated_vehicles[0];
-          is_dom_update = true;
-        }
-      }
-    }
+    //       // Put the update properties in to updat object with vehicle id at the key
+    //       update[parseInt(updated_vehicles[0].id)] = updated_props;
+
+    //       this.layout_data.vehicles[target_index] = updated_vehicles[0];
+    //       is_dom_update = true;
+    //     }
+    //   }
+    // }
 
     // update dom
-    if (is_dom_update && !is_skip_rendering) {
+    if (isDomUpdated && !is_skip_rendering) {
       let view_box = this.get_viewbox();
       let vehicles_display = this.append_showing_vehicles(view_box);
 
@@ -675,7 +695,7 @@ export class ViewController {
           this.selected_objects[0] = this.vehicles[target_index];
         }
       }
-      this.update_changed_vehicles(updated_vehicles);
+      this.update_changed_vehicles(updatedVehicles);
     }
 
     // Reorder so that the scale is above all elements.
@@ -820,6 +840,10 @@ export class ViewController {
       case 'centerZoom':
         this.centerZoom('SMOOTH');
         break;
+      case 'search':
+        const { type, value } = event.value;
+        this.search(type, value);
+        break;
       default:
         break;
     }
@@ -873,9 +897,9 @@ export class ViewController {
 
   private initVariables() {
     this.map_has_changes = false;
-    this.vehicles = [];
+    // this.vehicles = [];
     this.expected_paths = [];
-    this.layout_data = {};
+    // this.layout_data = {};
     this.minimap_data = {};
     this.geometry = {};
     this.zoom_step = {};
@@ -890,7 +914,7 @@ export class ViewController {
     this.copied_objects = [];
     this.vehicle_tracking = {
       status: false,
-      id: '',
+      id: 0,
     };
 
     this.tool_type = null;
@@ -1062,10 +1086,6 @@ export class ViewController {
     this.initEvents();
   }
 
-  private convertObjects(data: Dto.ITrackData) {
-    this.layout_data = this.parser.parse(data, this.geometry);
-  }
-
   private drawMap(track_type: 'layout' | 'minimap') {
     if (track_type == 'layout') {
       // Draw all the layout components
@@ -1117,6 +1137,72 @@ export class ViewController {
       // Initialize minimap
       this.minimap_draw();
     }
+  }
+
+  private search(type: string, id: string) {
+    type = type.toUpperCase();
+    const objId = parseInt(id);
+    const target = this.find_layout_object(type, objId);
+    if (!target) return;
+
+    this.init_selection(true);
+    this.zoom_to_objects(target);
+    this.set_selected_objects([target], false, true);
+    this.highlight(type, objId, main_css[type.toLowerCase()], null, 'SELECT');
+  }
+  private zoom_to_objects(objects: any, padding_percentage?: number) {
+    // Calculate the initial zoom location for tracking
+    let coord,
+      zoom_k = null;
+
+    let bounding_box = LayoutUtil.find_max_and_min_of_objects(
+      objects,
+      'INVERTED'
+    );
+    let parameters = this.calculate_zoom_to_fit_parameters(
+      bounding_box,
+      padding_percentage
+    );
+    coord = parameters.coord;
+    zoom_k = parameters.zoom_k;
+
+    // Call zoom_to from Layout Module with 'track' type to track vehicle
+    this.zoom_to(coord, null, zoom_k);
+  }
+  calculate_zoom_to_fit_parameters(
+    bounding_box: { max: { x: any; y: any }; min: { x: any; y: any } },
+    padding_percentage: number
+  ) {
+    // Calculate the dimensional values
+    let coord,
+      from = bounding_box.min,
+      to = bounding_box.max;
+
+    let larger_x = from.x > to.x ? from.x : to.x,
+      small_x = from.x < to.x ? from.x : to.x,
+      larger_y = from.y > to.y ? from.y : to.y,
+      small_y = from.y < to.y ? from.y : to.y,
+      bounding_box_dimensions = {
+        width: Math.abs(from.x - to.x),
+        height: Math.abs(from.y - to.y),
+      },
+      screen = {
+        width: this.geometry.screen_size.width,
+        height: this.geometry.screen_size.height,
+      },
+      width_ratio = screen.width / bounding_box_dimensions.width,
+      height_ratio = screen.height / bounding_box_dimensions.height,
+      scale = width_ratio < height_ratio ? width_ratio : height_ratio,
+      zoom_limit = this.getZoom(MapTypes.MIN_MAX).max;
+
+    // Set values for transform
+    coord = [(larger_x + small_x) / 2, (larger_y + small_y) / 2];
+    let zoom_k = padding_percentage ? scale * padding_percentage : scale * 0.9;
+    zoom_k = zoom_limit > zoom_k ? zoom_k : zoom_limit;
+    return {
+      coord,
+      zoom_k,
+    };
   }
 
   reorder_svg() {
@@ -1425,210 +1511,35 @@ export class ViewController {
       }
     }
   }
-  set_last_point(old_vehicles: any[], new_vehicles: any[]): any[] {
-    new_vehicles.forEach((new_target_vehicle) => {
-      let old_target_vehicle = old_vehicles.find((vehicle) => {
-        return vehicle.id === new_target_vehicle.id;
-      });
+  // moved to data service
+  // private inject_group_data(type: string, objects: any[]): any[] {
+  //   let grouped_objects = [];
+  //   this.layout_data.groups.forEach((group) => {
+  //     grouped_objects.push({
+  //       group_id: group.id,
+  //       objects: group.objects[type] ? [...group.objects[type]] : [],
+  //     });
+  //     return;
+  //   });
 
-      if (
-        (new_target_vehicle.cur_point &&
-          old_target_vehicle.cur_point &&
-          new_target_vehicle.cur_point.point !==
-            old_target_vehicle.cur_point.point) ||
-        old_target_vehicle.cur_point == null ||
-        old_target_vehicle.cur_point == undefined
-      ) {
-        new_target_vehicle.last_point = old_target_vehicle.cur_point;
+  //   if (objects) {
+  //     for (let i = objects.length - 1; i > -1; i--) {
+  //       let object = objects[i];
+  //       for (let group of grouped_objects) {
+  //         for (let j = group.objects.length - 1; j > -1; j--) {
+  //           if (parseInt(object.id) === parseInt(group.objects[j])) {
+  //             objects[i].group = group.group_id;
+  //             group.objects.splice(j, 1);
+  //             break; // @NOTE check : 성능을 높이기 위해서 break 했는데, group.objects에 동일한 아이디가 여러개 있는 데이터가 가능하다면 사용하면 안된다.
+  //             // @NOTE optional : some, find, filter 등을 사용하는 방법도 고려(성능 우선)
+  //           }
+  //         }
+  //       }
+  //     }
+  //   }
 
-        // Mark as moved
-        new_target_vehicle.is_moved = true;
-      } else {
-        new_target_vehicle.last_point = old_target_vehicle.last_point;
-      }
-    });
-
-    return new_vehicles;
-  }
-  private inject_group_data(type: string, objects: any[]): any[] {
-    let grouped_objects = [];
-    this.layout_data.groups.forEach((group) => {
-      grouped_objects.push({
-        group_id: group.id,
-        objects: group.objects[type] ? [...group.objects[type]] : [],
-      });
-      return;
-    });
-
-    if (objects) {
-      for (let i = objects.length - 1; i > -1; i--) {
-        let object = objects[i];
-        for (let group of grouped_objects) {
-          for (let j = group.objects.length - 1; j > -1; j--) {
-            if (parseInt(object.id) === parseInt(group.objects[j])) {
-              objects[i].group = group.group_id;
-              group.objects.splice(j, 1);
-              break; // @NOTE check : 성능을 높이기 위해서 break 했는데, group.objects에 동일한 아이디가 여러개 있는 데이터가 가능하다면 사용하면 안된다.
-              // @NOTE optional : some, find, filter 등을 사용하는 방법도 고려(성능 우선)
-            }
-          }
-        }
-      }
-    }
-
-    return objects;
-  }
-
-  private convert_vehicle_object(rows: Dto.IVehicle | Dto.IVehicle[]): any[] {
-    if (!Array.isArray(rows)) {
-      rows = [rows];
-    }
-
-    let converted_vehicles = [];
-    if (!rows) return [];
-    rows = this.inject_group_data('vehicle', rows);
-
-    converted_vehicles = rows.reduce((models: Vehicle[], row: Dto.IVehicle) => {
-      if (row) {
-        try {
-          const {
-            cur_point: cur_id,
-            next_point: next_id,
-            command_point: comm_id,
-          } = row;
-          let currentPoint: any, nextPoint: any, commandPoint: any;
-          const current_coords = this.find_point_coords(cur_id);
-          const next_coords = this.find_point_coords(next_id);
-          // cur_point
-          if (current_coords) {
-            currentPoint = {
-              point: cur_id,
-              coord: current_coords.coord,
-              inverted_coord: current_coords.inverted_coord,
-            };
-          } else {
-            currentPoint = null;
-          }
-          // current_coords &&
-          //   (currentPoint = {
-          //     point: cur_id,
-          //     coord: current_coords.coord,
-          //     inverted_coord: current_coords.inverted_coord,
-          //   });
-
-          // next_point
-          if (next_id && next_coords) {
-            if (next_coords && current_coords) {
-              nextPoint = {
-                point: next_id,
-                coord: next_coords.coord,
-                inverted_coord: next_coords.inverted_coord,
-              };
-            } else {
-              nextPoint = null;
-            }
-          }
-          // next_id &&
-          //   next_coords &&
-          //   current_coords &&
-          //   (nextPoint = {
-          //     point: next_id,
-          //     coord: next_coords.coord,
-          //     inverted_coord: next_coords.inverted_coord,
-          //   });
-
-          // command_point
-          if (!_.isNil(comm_id) && comm_id.length > 0) {
-            let object_id: string;
-            let base_point_id: number;
-
-            if (comm_id[0].toUpperCase() === 'S') {
-              object_id = comm_id.substring(1, comm_id.length);
-
-              // Find target object
-              let base_object = this.find_layout_object(
-                'STATION',
-                parseInt(object_id)
-              );
-              base_point_id = base_object ? base_object.point_id : null;
-            } else if (comm_id[0].toUpperCase() === 'B') {
-              object_id = comm_id.substring(1, comm_id.length);
-
-              // Find target object
-              let base_object = this.find_layout_object(
-                'BUFFER',
-                parseInt(object_id)
-              );
-              base_point_id = base_object ? base_object.point_id : null;
-            } else {
-              base_point_id = parseInt(comm_id);
-            }
-
-            if (base_point_id !== null) {
-              const command_coords = this.find_point_coords(base_point_id);
-
-              if (next_coords && current_coords && command_coords) {
-                commandPoint = {
-                  point: base_point_id,
-                  coord: command_coords.coord,
-                  inverted_coord: command_coords.inverted_coord,
-                };
-              } else {
-                commandPoint = null;
-              }
-            }
-          }
-
-          const { priority, last_contact } = row;
-          const lastContact = last_contact ? Date.parse(last_contact) : null;
-          const hotLot = Number(priority).valueOf() === 99;
-          const vehicle = new Vehicle(
-            row,
-            currentPoint,
-            nextPoint,
-            commandPoint,
-            lastContact,
-            hotLot
-          );
-          vehicle.check_stale(
-            this.vehicle_stale,
-            row.history_change_time
-              ? new Date(row.history_change_time).getTime()
-              : this.playback_last_event_time
-              ? this.playback_last_event_time
-              : null
-          );
-          this.store_stale_list(vehicle);
-          models.push(vehicle);
-        } catch (error) {
-          console.warn(`convert failed for vehicle_id ${row.id}: `, error);
-        }
-      }
-      return models;
-    }, []);
-
-    return converted_vehicles;
-  }
-  store_stale_list(vehicle: any) {
-    var stale_added = false;
-    let stale_index = this.stale_vehicles.indexOf(vehicle.id);
-
-    // check if the list has to be updated
-    if (vehicle.is_stale) {
-      if (stale_index == -1) {
-        // add
-        this.stale_vehicles.push(vehicle.id);
-        stale_added = true;
-      }
-    } else {
-      if (stale_index != -1) {
-        // remove
-        this.stale_vehicles.splice(stale_index, 1);
-      }
-    }
-
-    return stale_added;
-  }
+  //   return objects;
+  // }
 
   make_move_update_list(original_delta: any) {
     // Update coord of objects by offset
@@ -3992,24 +3903,25 @@ export class ViewController {
       height: Math.abs(max_y - min_y),
     };
   }
-  private convertExpectedPath(
-    vehicle_paths: any[],
-    segments: Segment[]
-  ): any[] {
-    let paths = [];
+  // @TODO move to data service
+  // private convertExpectedPath(
+  //   vehicle_paths: any[],
+  //   segments: Segment[]
+  // ): any[] {
+  //   let paths = [];
 
-    for (let expected_path of vehicle_paths) {
-      let path: any = {};
-      path.point_list = expected_path.path.split(',');
-      path.path_segments = LayoutUtil.find_segment_within_points(
-        path.point_list,
-        segments
-      );
-      path.id = expected_path.id;
-      paths.push(path);
-    }
-    return paths;
-  }
+  //   for (let expected_path of vehicle_paths) {
+  //     let path: any = {};
+  //     path.point_list = expected_path.path.split(',');
+  //     path.path_segments = LayoutUtil.find_segment_within_points(
+  //       path.point_list,
+  //       segments
+  //     );
+  //     path.id = expected_path.id;
+  //     paths.push(path);
+  //   }
+  //   return paths;
+  // }
 
   init_hover_tag(target_id: any) {
     let hover_tag_dom = '<label id="hover_tag"></label>';
@@ -5408,53 +5320,15 @@ export class ViewController {
     track?: any,
     vehicle_data?: any
   ) {
-    let layout_object = null;
-
-    if (!track) {
-      track = this.layout_data;
-    }
-    if (!vehicle_data) {
-      vehicle_data = this.vehicles;
-    }
-
-    if (object_id !== null) {
-      let target_objects = this.get_layout_objects(object_type);
-
-      if (target_objects) {
-        const target = target_objects.find((o) => o && o.id == object_id);
-        target && (layout_object = target);
-        // for (let i = 0; i < target_objects.length; i++) {
-        //   console.warn('### target_objects >>', target_objects[i]);
-        //   if (target_objects[i].id == object_id) {
-        //     layout_object = target_objects[i];
-        //     break;
-        //   }
-        // }
-      }
-    }
-
-    return layout_object;
+    return this.dataSvc.find_layout_object(
+      object_type,
+      object_id,
+      track,
+      vehicle_data
+    );
   }
   get_layout_objects(object_type: any) {
-    if (object_type === 'POINT') {
-      return this.layout_data.points;
-    } else if (object_type === 'SEGMENT') {
-      return this.layout_data.segments;
-    } else if (object_type === 'DISABLED_SEGMENT') {
-      return this.layout_data.segments_disabled;
-    } else if (object_type === 'STATION') {
-      return this.layout_data.stations;
-    } else if (object_type === 'BUFFER') {
-      return this.layout_data.buffers;
-    } else if (object_type === 'MTL') {
-      return this.layout_data.mtls;
-    } else if (object_type === 'CLUSTER') {
-      return this.layout_data.clusters;
-    } else if (object_type === 'GROUP') {
-      return this.layout_data.groups;
-    } else if (object_type === 'VEHICLE') {
-      return this.vehicles;
-    } else return [];
+    return this.dataSvc.get_layout_objects(object_type);
   }
 
   unhighlight(
@@ -11492,28 +11366,30 @@ export class ViewController {
     }
   }
   find_point_coords(point_id: any) {
-    if (point_id == null || point_id == undefined) {
-      return null;
-    }
+    return this.dataSvc.find_point_coords(point_id);
+    // @moved to data service
+    // if (point_id == null || point_id == undefined) {
+    //   return null;
+    // }
 
-    let coord = {};
-    let inverted_coord = {};
-    let is_match = false;
+    // let coord = {};
+    // let inverted_coord = {};
+    // let is_match = false;
 
-    for (let i = 0; i < this.layout_data.points.length; i++) {
-      let point = this.layout_data.points[i];
-      if (point.id === point_id) {
-        coord = point.coord;
-        inverted_coord = point.inverted_coord;
-        is_match = true;
-        break;
-      }
-    }
+    // for (let i = 0; i < this.layout_data.points.length; i++) {
+    //   let point = this.layout_data.points[i];
+    //   if (point.id === point_id) {
+    //     coord = point.coord;
+    //     inverted_coord = point.inverted_coord;
+    //     is_match = true;
+    //     break;
+    //   }
+    // }
 
-    if (is_match) {
-      return { coord, inverted_coord };
-    }
-    return null;
+    // if (is_match) {
+    //   return { coord, inverted_coord };
+    // }
+    // return null;
   }
   init_selection(is_clear_sel_objects: boolean) {
     this.drag_coord = {};
@@ -12532,7 +12408,7 @@ export class ViewController {
   }
   stop_tracking() {
     this.vehicle_tracking.status = false;
-    this.vehicle_tracking.id = '';
+    this.vehicle_tracking.id = 0;
     this.$track_container.find('#btn_tracking').removeClass('active');
   }
   start_tracking() {

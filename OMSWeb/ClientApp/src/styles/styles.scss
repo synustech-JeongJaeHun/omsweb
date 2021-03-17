@@ -3,6 +3,7 @@
 
 :root {
   --theme-color: #328cc1;
+  --theme-primary-color: #673ab7;
   --theme-color-light: #dddddd;
   --theme-color-dark: darkslategray;
   --theme-color-active: #0095ff;
@@ -321,7 +322,7 @@ body {
 [mat-dialog-title] {
   margin: -16px -16px 16px -16px !important;
   padding: 10px 24px;
-  background: #369;
+  background: var(--theme-primary-color);
   color: #fff;
   cursor: move;
 }
