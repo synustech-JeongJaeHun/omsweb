@@ -13,6 +13,8 @@ export class OrderControlTableComponent implements OnInit {
 
   dataSetResult: IPaginatedResult<IOrderStatusRow>;
   loaded = false;
+  selectedRows;
+
 
   constructor(private statusSvc: StatusService) {}
 

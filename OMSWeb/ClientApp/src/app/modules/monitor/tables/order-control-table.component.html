@@ -1,3 +1,26 @@
-<dx-data-grid *ngIf="loaded" [dataSource]="dataSetResult.items" [height]="tableHeight">
+<dx-data-grid
+  [dataSource]="dataSetResult?.items"
+  [height]="tableHeight"
+  [repaintChangesOnly]="true"
+  [columnAutoWidth]="true"
+  [showBorders]="true"
+  [highlightChanges]="false"
+  [showColumnLines]="true"
+  [showRowLines]="true"
+  [(selectedRowKeys)]="selectedRows"
+>
   <dxo-scrolling mode="virtual"></dxo-scrolling>
+  <dxo-paging [pageSize]="10"></dxo-paging>
+  <dxo-header-filter [visible]="true"></dxo-header-filter>
+  <dxo-pager
+    [showPageSizeSelector]="true"
+    [allowedPageSizes]="[10, 20, 30, 40, 50]"
+    [showInfo]="true"
+    visible="true"
+  ></dxo-pager>
+  <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
+  <dxo-search-panel
+    [placeholder]="'Search'"
+    [visible]="false"
+  ></dxo-search-panel>
 </dx-data-grid>
