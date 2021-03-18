@@ -296,6 +296,9 @@ body {
   font-family: Mulish, Roboto, "Helvetica Neue", sans-serif;
   font-size: 16px;
 }
+* {
+  font-family: Mulish, Roboto, "Helvetica Neue", sans-serif;
+}
 
 // .material-icons-two-tone {
 //   filter: invert(0.5) sepia(1) saturate(10) hue-rotate(180deg);
@@ -325,4 +328,8 @@ body {
   background: var(--theme-primary-color);
   color: #fff;
   cursor: move;
+}
+
+[mat-flat-button].dense {
+  line-height: 24px;
 }
