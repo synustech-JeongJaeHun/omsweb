@@ -16,10 +16,10 @@ export class StatusService {
   constructor(private http: HttpClient) {}
 
   getTrack(): Observable<Dto.ITrackData> {
-    // return this.http.get<Dto.ITrackData>(`${this.baseUrl}/track`);
+    return this.http.get<Dto.ITrackData>(`${this.baseUrl}/track`);
     // @TODO assets/json/status-track.json 파일 삭제
-    console.error('# form status-track.json file - for test #');
-    return this.http.get('/assets/json/status-track.json');
+    // console.error('# form status-track.json file - for test #');
+    // return this.http.get('/assets/json/status-track.json');
   }
 
   orderStatus(): Observable<IPaginatedResult<IOrderStatusRow>> {
