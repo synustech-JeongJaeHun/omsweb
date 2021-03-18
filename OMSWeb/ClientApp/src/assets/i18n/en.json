@@ -1,6 +1,8 @@
 {
-  "common": {
+  "names": {
     "id": "ID",
+    "physical_id": "Physical ID",
+    "logical_id": "Logical ID",
     "state": "Status",
     "vehicle_id": "Vehicle",
     "location_pickup": "From",
@@ -10,7 +12,26 @@
     "priority": "Priority",
     "carrier_label": "Carrier",
     "time_created": "Created",
-    "time_assigned": "Assigned"
+    "time_assigned": "Assigned",
+    "mode": "Mode",
+    "order_origin": "Call",
+    "cur_point": "Current",
+    "command_point": "Next",
+    "order_id": "Order",
+    "moving_state": "Moving Status",
+    "cargo_state": "Cargo Status",
+    "distance_total": "Total Distance",
+    "can_be_pushed": "Push",
+
+    "search": "Search",
+    "hostOrderEnable": "Host Order Enable",
+    "pushEnable": "Push Enable",
+    "railIn": "Rail In",
+    "railOut": "Rail Out",
+    "delete": "Delete",
+    "estop": "EStop",
+    "reset": "Reset",
+    "auto": "Auto"
   },
   "enums": {},
   "errors": {},

@@ -1,1 +1,138 @@
-<p>vehicle-control-table works!</p>
+<div class="grid-actions">
+  <button mat-flat-button color="warn" class="dense">
+    {{ "names.estop" | translate }}
+  </button>
+  <button mat-flat-button color="primary" class="dense">
+    {{ "names.reset" | translate }}
+  </button>
+  <button mat-flat-button color="primary" class="dense">
+    {{ "names.auto" | translate }}
+  </button>
+  <button mat-stroked-button color="primary" class="dense">
+    {{ "names.hostOrderEnable" | translate }}
+  </button>
+  <button mat-stroked-button color="primary" class="dense">
+    {{ "names.pushEnable" | translate }}
+  </button>
+  <button mat-stroked-button color="primary" class="dense">
+    {{ "names.railIn" | translate }}
+  </button>
+  <button mat-stroked-button color="primary" class="dense">
+    {{ "names.railOut" | translate }}
+  </button>
+</div>
+
+<dx-data-grid
+  [dataSource]="dataSetResult?.items"
+  [height]="tableHeight"
+  [repaintChangesOnly]="true"
+  [columnAutoWidth]="true"
+  [showBorders]="false"
+  [highlightChanges]="false"
+  [showColumnLines]="true"
+  [showRowLines]="true"
+  [(selectedRowKeys)]="selectedRows"
+>
+  <dxo-scrolling mode="virtual"></dxo-scrolling>
+  <dxo-paging [pageSize]="10"></dxo-paging>
+  <dxo-header-filter [visible]="true"></dxo-header-filter>
+  <dxo-pager
+    [showPageSizeSelector]="true"
+    [allowedPageSizes]="[50, 100, 200]"
+    [showInfo]="true"
+    visible="true"
+  ></dxo-pager>
+  <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
+  <dxo-search-panel
+    [placeholder]="'names.search' | translate"
+    [visible]="true"
+  ></dxo-search-panel>
+
+  <dxi-column
+    [allowFiltering]="false"
+    [width]="80"
+    dataType="string"
+    dataField="id"
+    [caption]="'names.id' | translate"
+  ></dxi-column>
+  <dxi-column
+    [width]="120"
+    dataType="string"
+    dataField="physical_id"
+    [caption]="'names.physical_id' | translate"
+  ></dxi-column>
+  <dxi-column
+    [width]="80"
+    dataType="string"
+    dataField="mode"
+    [caption]="'names.mode' | translate"
+  ></dxi-column>
+  <dxi-column
+    [allowFiltering]="false"
+    [width]="80"
+    dataType="boolean"
+    dataField="can_be_pushed"
+    [caption]="'names.can_be_pushed' | translate"
+  ></dxi-column>
+  <dxi-column
+    [allowFiltering]="false"
+    [width]="80"
+    dataType="string"
+    dataField="order_origin"
+    [caption]="'names.order_origin' | translate"
+  ></dxi-column>
+  <dxi-column
+    [width]="60"
+    dataType="string"
+    dataField="cur_point"
+    [caption]="'names.cur_point' | translate"
+  ></dxi-column>
+  <dxi-column
+    [width]="60"
+    dataType="string"
+    dataField="command_point"
+    [allowSorting]="false"
+    [caption]="'names.command_point' | translate"
+  ></dxi-column>
+  <dxi-column
+    [width]="70"
+    dataType="string"
+    dataField="order_id"
+    [allowSorting]="false"
+    [caption]="'names.order_id' | translate"
+  ></dxi-column>
+  <dxi-column
+    [width]="70"
+    dataType="string"
+    dataField="location_pickup"
+    [caption]="'names.location_pickup' | translate"
+  ></dxi-column>
+  <dxi-column
+    [width]="70"
+    dataType="string"
+    dataField="location_dropoff"
+    [caption]="'names.location_dropoff' | translate"
+  ></dxi-column>
+  <dxi-column
+    [width]="100"
+    dataType="string"
+    dataField="moving_state"
+    [allowSorting]="false"
+    [caption]="'names.moving_state' | translate"
+  ></dxi-column>
+  <dxi-column
+    [width]="100"
+    dataType="string"
+    dataField="cargo_state"
+    [allowSorting]="false"
+    [caption]="'names.cargo_state' | translate"
+  ></dxi-column>
+  <dxi-column
+    [allowFiltering]="false"
+    [width]="120"
+    dataType="number"
+    dataField="distance_total"
+    [allowSorting]="false"
+    [caption]="'names.distance_total' | translate"
+  ></dxi-column>
+</dx-data-grid>

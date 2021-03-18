@@ -1,5 +1,5 @@
 <div class="grid-actions">
-  <button mat-flat-button color="primary" class="dense">Delete</button>
+  <button mat-flat-button color="primary" class="dense">{{'names.delete'|translate}}</button>
 </div>
 
 <dx-data-grid
@@ -7,7 +7,7 @@
   [height]="tableHeight"
   [repaintChangesOnly]="true"
   [columnAutoWidth]="true"
-  [showBorders]="true"
+  [showBorders]="false"
   [highlightChanges]="false"
   [showColumnLines]="true"
   [showRowLines]="true"
@@ -24,15 +24,16 @@
   ></dxo-pager>
   <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
   <dxo-search-panel
-    [placeholder]="'Search'"
+    [placeholder]="'names.search'|translate"
     [visible]="true"
   ></dxo-search-panel>
 
   <dxi-column
+    [allowFiltering]="false"
     [width]="80"
     dataType="string"
     dataField="id"
-    [caption]="'common.id' | translate"
+    [caption]="'names.id' | translate"
   ></dxi-column>
   <!-- <dxi-column
     [width]="100"
@@ -45,67 +46,69 @@
     [width]="100"
     dataType="string"
     dataField="state"
-    [caption]="'common.state' | translate"
+    [caption]="'names.state' | translate"
     ></dxi-column>
     <!-- [customizeText]="transformOrderStatus" -->
   <dxi-column
     [width]="80"
     dataType="string"
     dataField="vehicle_id"
-    [caption]="'common.vehicle_id' | translate"
+    [caption]="'names.vehicle_id' | translate"
   ></dxi-column>
   <dxi-column
     [allowFiltering]="false"
     [width]="120"
     dataType="string"
     dataField="location_pickup"
-    [caption]="'common.location_pickup' | translate"
+    [caption]="'names.location_pickup' | translate"
   ></dxi-column>
   <dxi-column
     [allowFiltering]="false"
     [width]="120"
     dataType="string"
     dataField="location_pickup"
-    [caption]="'common.location_pickup_name' | translate"
+    [caption]="'names.location_pickup_name' | translate"
   ></dxi-column>
   <dxi-column
     [allowFiltering]="false"
     [width]="120"
     dataType="string"
     dataField="location_dropoff"
-    [caption]="'common.location_dropoff' | translate"
+    [caption]="'names.location_dropoff' | translate"
   ></dxi-column>
   <dxi-column
     [allowFiltering]="false"
     [width]="120"
     dataType="string"
     dataField="location_dropoff"
-    [caption]="'common.location_dropoff_name' | translate"
+    [caption]="'names.location_dropoff_name' | translate"
   ></dxi-column>
   <dxi-column
     [width]="80"
     dataType="string"
     dataField="priority"
-    [caption]="'common.priority' | translate"
+    [caption]="'names.priority' | translate"
   ></dxi-column>
   <dxi-column
     dataType="string"
     dataField="carrier_label"
     [allowSorting]="false"
-    [caption]="'common.carrier_label' | translate"
+    [caption]="'names.carrier_label' | translate"
   ></dxi-column>
   <dxi-column
+    [allowFiltering]="false"
     [width]="120"
     dataType="datetime"
     dataField="time_created"
     [allowSorting]="false"
-    [caption]="'common.time_created' | translate"
+    [caption]="'names.time_created' | translate"
   ></dxi-column>
   <dxi-column
+    [allowFiltering]="false"
     [width]="120"
     dataType="datetime"
     dataField="time_assigned"
     [allowSorting]="false"
-    [caption]="'common.time_assigned' | translate"
+    [caption]="'names.time_assigned' | translate"
   ></dxi-column>
 </dx-data-grid>

@@ -6,6 +6,7 @@ import { map } from 'rxjs/operators';
 import { Dto } from '@oms/models/dto/track.model';
 import { IPaginatedResult } from '../models/base.model';
 import { IOrderStatusRow } from '../models/order-status.model';
+import { IVehicleStatusRow } from '../models/vehicle-status.model';
 
 @Injectable({
   providedIn: 'root',
@@ -15,15 +16,16 @@ export class StatusService {
   constructor(private http: HttpClient) {}
 
   getTrack(): Observable<Dto.ITrackData> {
-    return this.http.get<Dto.ITrackData>(`${this.baseUrl}/track`);
+    // return this.http.get<Dto.ITrackData>(`${this.baseUrl}/track`);
     // @TODO assets/json/status-track.json 파일 삭제
-    // console.error('# form status-track.json file - for test #');
-    // return this.http.get('/assets/json/status-track.json');
+    console.error('# form status-track.json file - for test #');
+    return this.http.get('/assets/json/status-track.json');
   }
 
   orderStatus(): Observable<IPaginatedResult<IOrderStatusRow>> {
     console.error('# form order-status.json file - for test #');
     return this.http.get<any>('/assets/json/order-status.json').pipe(
+      // @TODO api 작업후에는 삭제
       map((res) => {
         return {
           total: parseInt(res.recordsTotal),
@@ -34,8 +36,17 @@ export class StatusService {
     );
   }
 
-  vehicleStatus(): Observable<any> {
+  vehicleStatus(): Observable<IPaginatedResult<IVehicleStatusRow>> {
     console.error('# form vehicle-status.json file - for test #');
-    return this.http.get('/assets/json/vehicle-status.json');
+    return this.http.get<any>('/assets/json/vehicle-status.json').pipe(
+      // @TODO api 작업후에는 삭제
+      map((res) => {
+        return {
+          total: parseInt(res.recordsTotal),
+          filtered: parseInt(res.recordsFiltered),
+          items: res.data,
+        };
+      })
+    );
   }
 }

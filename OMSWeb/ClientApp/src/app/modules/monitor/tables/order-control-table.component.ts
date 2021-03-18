@@ -15,13 +15,10 @@ export class OrderControlTableComponent implements OnInit {
   loaded = false;
   selectedRows;
 
-
   constructor(private statusSvc: StatusService) {}
 
   ngOnInit(): void {
-    console.warn('order control init');
     this.statusSvc.orderStatus().subscribe((res) => {
-      console.info('### get order status >>', res);
       this.dataSetResult = res;
       this.loaded = true;
     });

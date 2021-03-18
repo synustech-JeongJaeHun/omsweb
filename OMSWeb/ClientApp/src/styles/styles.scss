@@ -330,6 +330,9 @@ body {
   cursor: move;
 }
 
-[mat-flat-button].dense {
+[mat-button].dense,
+[mat-flat-button].dense,
+[mat-raised-button].dense,
+[mat-stroked-button].dense {
   line-height: 24px;
 }
