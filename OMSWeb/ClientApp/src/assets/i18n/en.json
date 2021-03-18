@@ -1,0 +1,18 @@
+{
+  "common": {
+    "id": "ID",
+    "state": "Status",
+    "vehicle_id": "Vehicle",
+    "location_pickup": "From",
+    "location_pickup_name": "From Name",
+    "location_dropoff": "To",
+    "location_dropoff_name": "To Name",
+    "priority": "Priority",
+    "carrier_label": "Carrier",
+    "time_created": "Created",
+    "time_assigned": "Assigned"
+  },
+  "enums": {},
+  "errors": {},
+  "messages": {}
+}

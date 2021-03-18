@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'oms-root',
@@ -6,5 +7,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'ClientApp';
+  constructor($t: TranslateService) {
+    $t.setDefaultLang('en');
+    // $t.use($t.getBrowserCultureLang());
+    $t.use('en');
+  }
 }
