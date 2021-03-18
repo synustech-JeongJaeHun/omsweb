@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MapStatesService } from '../../track-map/map-states.service';
 
 @Component({
   selector: 'oms-status-control',
@@ -19,7 +20,7 @@ export class StatusControlComponent implements OnInit {
   ];
   currentTab: number = 0;
 
-  constructor() {}
+  constructor(private mapStateSvc: MapStatesService) {}
 
   ngOnInit(): void {
     this.resizeHandler = this.onMouseMove.bind(this);
@@ -56,6 +57,9 @@ export class StatusControlComponent implements OnInit {
   }
 
   viewerHide() {
+    this.mapStateSvc.changeToolbarState('controlTable', false);
+  }
+  shrinkViewer() {
     const height = document.getElementById("status-control-container").style.height;
     if (height === "40px") {
       document.getElementById("status-control-container").style.height = "365px";
