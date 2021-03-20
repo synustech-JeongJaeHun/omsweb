@@ -308,6 +308,10 @@ body {
   cursor: move;
 }
 
+.pre-line {
+  white-space: pre-line;
+}
+
 // material
 
 .mat-dialog-container {
@@ -330,9 +334,27 @@ body {
   cursor: move;
 }
 
-[mat-button].dense,
-[mat-flat-button].dense,
-[mat-raised-button].dense,
-[mat-stroked-button].dense {
-  line-height: 24px;
+[mat-button],
+[mat-flat-button],
+[mat-raised-button],
+[mat-stroked-button] {
+  .mat-button-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    mat-icon {
+      margin-right: 4px;
+    }
+  }
+  &.dense {
+    line-height: 23px;
+    font-size: 12px;
+
+    mat-icon {
+      font-size: 18px;
+      height: 18px;
+      width: 18px;
+    }
+  }
 }

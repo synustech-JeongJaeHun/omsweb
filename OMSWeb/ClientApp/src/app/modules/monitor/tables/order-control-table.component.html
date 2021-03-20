@@ -15,7 +15,7 @@
 >
   <dxo-scrolling mode="virtual"></dxo-scrolling>
   <dxo-paging [pageSize]="10"></dxo-paging>
-  <dxo-header-filter [visible]="true"></dxo-header-filter>
+  <dxo-header-filter [visible]="false"></dxo-header-filter>
   <dxo-pager
     [showPageSizeSelector]="true"
     [allowedPageSizes]="[50, 100, 200]"
@@ -35,39 +35,26 @@
     dataField="id"
     [caption]="'names.id' | translate"
   ></dxi-column>
-  <!-- <dxi-column
-    [width]="100"
-    dataType="string"
-    dataField="OrderType"
-    [caption]="'_TYPE' | translate"
-    ></dxi-column> -->
-    <!-- [customizeText]="transformOrderType" -->
   <dxi-column
     [width]="100"
     dataType="string"
     dataField="state"
     [caption]="'names.state' | translate"
     ></dxi-column>
-    <!-- [customizeText]="transformOrderStatus" -->
-  <dxi-column
+    <dxi-column
     [width]="80"
     dataType="string"
     dataField="vehicle_id"
     [caption]="'names.vehicle_id' | translate"
-  ></dxi-column>
-  <dxi-column
+    [customizeText]="transformVehicleId"
+    ></dxi-column>
+    <dxi-column
     [allowFiltering]="false"
     [width]="120"
     dataType="string"
     dataField="location_pickup"
     [caption]="'names.location_pickup' | translate"
-  ></dxi-column>
-  <dxi-column
-    [allowFiltering]="false"
-    [width]="120"
-    dataType="string"
-    dataField="location_pickup"
-    [caption]="'names.location_pickup_name' | translate"
+    [customizeText]="transformLocationId"
   ></dxi-column>
   <dxi-column
     [allowFiltering]="false"
@@ -75,13 +62,7 @@
     dataType="string"
     dataField="location_dropoff"
     [caption]="'names.location_dropoff' | translate"
-  ></dxi-column>
-  <dxi-column
-    [allowFiltering]="false"
-    [width]="120"
-    dataType="string"
-    dataField="location_dropoff"
-    [caption]="'names.location_dropoff_name' | translate"
+    [customizeText]="transformLocationId"
   ></dxi-column>
   <dxi-column
     [width]="80"

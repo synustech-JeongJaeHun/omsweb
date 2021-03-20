@@ -15,3 +15,23 @@ export interface IPaginatedRequest {
   query: any;
   order: any;
 }
+
+export interface IDialogMessage<T> {
+  body: string;
+  title?: string;
+  payload?: T;
+  style?:
+    | 'info'
+    | 'warn'
+    | 'danger'
+    | 'success'
+    | 'primary'
+    | 'secondary'
+    | 'light'
+    | 'dark';
+}
+
+export interface IConfirmMessage<T> extends IDialogMessage<T> {
+  confirmText?: string;
+  declineText?: string;
+}

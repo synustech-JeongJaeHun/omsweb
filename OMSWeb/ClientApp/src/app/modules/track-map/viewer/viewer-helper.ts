@@ -10835,6 +10835,7 @@ export class ViewController {
     if (
       // @TODO overlap display 설정을 button element 상태로 판단하는것을 추후에 수정
       // this.$track_container.find('#btn_overlap_display').hasClass('active') &&
+      this.preferences.visibilities.overlaps &&
       this.overlap_display_objects.length === 0 &&
       !node.parentNode.classList.contains('panel_overlap')
     ) {

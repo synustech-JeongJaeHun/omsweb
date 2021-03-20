@@ -6,9 +6,7 @@
     "state": "Status",
     "vehicle_id": "Vehicle",
     "location_pickup": "From",
-    "location_pickup_name": "From Name",
     "location_dropoff": "To",
-    "location_dropoff_name": "To Name",
     "priority": "Priority",
     "carrier_label": "Carrier",
     "time_created": "Created",
@@ -31,9 +29,22 @@
     "delete": "Delete",
     "estop": "EStop",
     "reset": "Reset",
-    "auto": "Auto"
+    "auto": "Auto",
+
+    "resetAll": "Reset All",
+    "autoAll": "Auto All",
+    "ioList": "IO List",
+    "vehicleStatus": "Vehicle Status",
+
+    "confirm": "Confirm",
+    "cancel": "Cancel"
   },
   "enums": {},
   "errors": {},
-  "messages": {}
+  "messages": {
+    "confirmTitle": "Confirm",
+    "confirmResetAllVehicles": "Do you want to reset all vehicles?",
+    "confirmEstopAll": "Do you want to stop all vehicles?",
+    "confirmSetAutoAll": "Do you want set auto to all vehicles?"
+  }
 }

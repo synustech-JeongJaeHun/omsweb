@@ -134,6 +134,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     this.viewer.setup(this.preference);
     this.viewer.create_track(this.omsData);
     this.viewer.update_vehicles(this.omsData.vehicles, 'INSERT', null, false);
-    this.trackIdSvc.extract_id_from_track(this.viewer.layoutData);
+    this.trackIdSvc.extract_id_from_track(this.dataSvc.data);
   }
 }

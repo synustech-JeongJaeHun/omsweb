@@ -49,7 +49,7 @@ export type MapToolbarCommandKeys =
   | 'getVehicleStatus'
   | 'setAutoVehicles'
   | 'resetVehicles'
-  | 'stopVehicles';
+  | 'eStopVehicles';
 
 // export enum MapToolbarStatusKeys {
 //   minimap,

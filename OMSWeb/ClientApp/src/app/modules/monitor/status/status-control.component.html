@@ -1,5 +1,39 @@
-<div id="status-control-container" (mouseup)="resizeViewerStop($event)" (mouseleave)="resizeViewerStop($event)">
-  <div id="resize-handle" (mousedown)="resizeViewerStart()" (dblclick)="viewerHide()"></div>
+<div
+  id="status-control-container"
+  (mouseup)="resizeViewerStop($event)"
+  (mouseleave)="resizeViewerStop($event)"
+>
+  <div
+    id="resize-handle"
+    (mousedown)="resizeViewerStart()"
+    (dblclick)="viewerHide()"
+  ></div>
+  <button
+    mat-flat-button
+    id="close-button"
+    class="dense"
+    (click)="viewerHide()"
+  >
+    <mat-icon>close</mat-icon>
+  </button>
+  <div id="status-toolbar">
+    <button mat-stroked-button class="dense" (click)="onVehicleReset()">
+      <mat-icon>settings_backup_restore</mat-icon>
+      <span>{{ "names.resetAll" | translate }}</span>
+    </button>
+    <button mat-stroked-button class="dense" (click)="onSetAuto()">
+      <mat-icon>brightness_auto</mat-icon>
+      <span>{{ "names.autoAll" | translate }}</span>
+    </button>
+    <button mat-stroked-button class="dense">
+      <mat-icon>device_hub</mat-icon>
+      <span>{{ "names.ioList" | translate }}</span>
+    </button>
+    <button mat-stroked-button class="dense" (click)="onPing()">
+      <mat-icon>security_update_warning</mat-icon>
+      <span>{{ "names.vehicleStatus" | translate }}</span>
+    </button>
+  </div>
   <mat-tab-group [(selectedIndex)]="currentTab" animationDuration="100">
     <mat-tab label="Orders">
       <oms-order-control-table

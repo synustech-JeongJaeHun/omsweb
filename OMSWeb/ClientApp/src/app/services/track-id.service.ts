@@ -113,6 +113,30 @@ export class TrackIdService {
     if (track.buffers) {
       this.buffers = this.convert_array_to_object(track.buffers, 'b');
     }
+    if (track.vehicles) {
+      this.vehicles = this.convert_array_to_object(track.buffers, '');
+    }
+  }
+
+  guessLocationId(data: string): string {
+    const objectType = this.guessObjectType(data);
+    if (!data || !objectType) return '';
+    return this.get_alternative_id(objectType, 'logical_id', data) || data;
+  }
+
+  private guessObjectType(combinedId: string): string {
+    if (!combinedId) return;
+
+    switch (combinedId.substr(0, 1)) {
+      case 'b':
+        return 'buffer';
+      case 'p':
+        return 'point';
+      case 's':
+        return 'station';
+      default:
+        return 'vehicle';
+    }
   }
 
   private convert_array_to_object(array, prefix) {

@@ -14,6 +14,7 @@ import { GnbActionsComponent } from './navs/gnb-actions.component';
 import { GnbIndicatorsComponent } from './navs/gnb-indicators.component';
 import { SharedDevextremeModule } from './shared-devextreme.module';
 import { DialogBaseComponent } from './dialogs/dialog-base.component';
+import { ConfirmDialogComponent } from './dialogs/confirm-dialog.component';
 
 const inOutModules = [
   FormsModule,
@@ -27,6 +28,7 @@ const inOutModules = [
     GnbActionsComponent,
     GnbIndicatorsComponent,
     DialogBaseComponent,
+    ConfirmDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -36,6 +38,7 @@ const inOutModules = [
     SharedMaterialModule,
     SharedDevextremeModule,
     MdePopoverModule,
+    TranslateModule,
   ],
   exports: [
     ...inOutModules,
@@ -49,6 +52,7 @@ const inOutModules = [
     MdePopoverModule,
     DialogBaseComponent,
     TranslateModule,
+    ConfirmDialogComponent,
   ],
 })
 export class SharedModule {}

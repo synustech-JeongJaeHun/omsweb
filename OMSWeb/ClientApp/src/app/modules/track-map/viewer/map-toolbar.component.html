@@ -96,6 +96,7 @@
     matTooltipClass="snb-tooltip"
     matTooltipPosition="right"
     matTooltip="Get All Vehicle Status"
+    (click)="onPing()"
   >
     <mat-icon>motion_photos_on</mat-icon>
   </button>
@@ -107,8 +108,9 @@
     matTooltipClass="snb-tooltip"
     matTooltipPosition="right"
     matTooltip="Set Auto All Vehicle"
+    (click)="onSetAuto()"
   >
-    <mat-icon fontSet="material-icons-outlined">hdr_auto</mat-icon>
+    <mat-icon>brightness_auto</mat-icon>
   </button>
   <button
     matListItem
@@ -117,6 +119,7 @@
     matTooltipClass="snb-tooltip"
     matTooltipPosition="right"
     matTooltip="Reset All Vehicle"
+    (click)="onVehicleReset()"
   >
     <mat-icon>settings_backup_restore</mat-icon>
   </button>
@@ -127,6 +130,7 @@
     matTooltipClass="snb-tooltip"
     matTooltipPosition="right"
     matTooltip="Stop All Vehicle"
+    (click)="onEStop()"
   >
     <mat-icon fontSet="material-icons-outlined">stop_circle</mat-icon>
   </button>
