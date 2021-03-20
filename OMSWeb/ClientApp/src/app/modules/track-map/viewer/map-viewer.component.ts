@@ -4,16 +4,16 @@ import { MatDialog } from '@angular/material/dialog';
 // import * as d3 from 'd3';
 // import { Selection } from 'd3-selection';
 
-import { MapToolbarStatusKeys, ViewModes } from '../../../models/enums';
+import { ToggleOptionKeyType, ViewModes } from '../../../models/enums';
 import { StatusService } from '../../../services/status.service';
 import { ViewController } from './viewer-helper';
 import { TrackIdService } from '../../../services/track-id.service';
 import { Dto } from '../../../models/dto/track.model';
 import { MapStatesService } from '../map-states.service';
 import { Subscription } from 'rxjs';
-import { IMapPreferences } from '../../../models/drawing.model';
 import { SearchDialogComponent } from '../dialogs/search-dialog.component';
 import { MapDataService } from '../map-data.service';
+import { IPreferences } from '../../../models/settings.model';
 
 @Component({
   selector: 'oms-map-viewer',
@@ -52,7 +52,7 @@ import { MapDataService } from '../map-data.service';
 })
 export class MapViewerComponent implements OnInit, OnDestroy {
   @Input()
-  preference: IMapPreferences;
+  preference: IPreferences;
   omsData: Dto.ITrackData;
   loadingState = false;
 
@@ -86,7 +86,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     this.statusSvc.getTrack().subscribe((res) => {
       console.info('## track info >>', res);
       this.omsData = res;
-      this._minimapVisible = this.preference.visibilities.minimap;
+      this._minimapVisible = this.preference.toggles.minimap;
       // @todo test
       // console.warn('테스트 : 맵 랜더링 중지')
       this.drawMap();

@@ -5,10 +5,11 @@
     "outDir": "./out-tsc/app",
     "types": ["jquery"],
     "paths": {
-      "@oms": ["src/app"],
+      "@oms/root/*": ["src/app/*"],
       "@oms/models/*": ["src/app/models/*"],
       "@oms/services/*": ["src/app/services/*"],
       "@oms/shared/*": ["src/app/modules/shared/*"],
+      "@oms/utils/*": ["src/app/modules/shared/utils/*"],
     }
   },
   "files": ["src/main.ts", "src/polyfills.ts"],

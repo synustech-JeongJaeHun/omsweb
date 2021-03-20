@@ -25,7 +25,7 @@ export enum MapTypes {
   DB = 'DB',
 }
 
-export type MapToolbarStatusKeys =
+export type ToggleOptionKeyType =
   | 'minimap'
   | 'controlTable'
   | 'vehicleLines'
@@ -41,7 +41,7 @@ export type MapToolbarStatusKeys =
   | 'clusters'
   | 'overlaps';
 
-export type MapToolbarCommandKeys =
+export type CommandKeyType =
   | 'centerZoom'
   | 'search'
   | 'trackVehicle'

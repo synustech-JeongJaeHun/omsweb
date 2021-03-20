@@ -12,7 +12,6 @@ import { Dto } from '@oms/models/dto/track.model';
 import {
   ICoordinate,
   IMapGeometry,
-  IMapPreferences,
   IMapSize,
   IMapToolbarCommandEvent,
   IMapToolbarToggleEvent,
@@ -20,7 +19,7 @@ import {
   IZoomInfos,
 } from '../../../models/drawing.model';
 import {
-  MapToolbarStatusKeys,
+  ToggleOptionKeyType,
   MapTypes,
   ViewModes,
 } from '../../../models/enums';
@@ -35,13 +34,14 @@ import { MTL } from '../../../models/mtl.model';
 import { Point } from '../../../models/point.model';
 import { MapStatesService } from '../map-states.service';
 import { MapDataService } from '../map-data.service';
+import { IPreferences } from '../../../models/settings.model';
 export class ViewController {
   //#region properties
   private svg: any; // d3.Selection<d3.ContainerElement, unknown, HTMLElement, any>;
   private d3_track: d3.Selection<d3.BaseType, unknown, HTMLElement, any>;
   private parser: MapParser;
   private $track_container = null;
-  private preferences: IMapPreferences;
+  private preferences: IPreferences;
 
   // modifier key codes
   private KEY_SHIFT = 16;
@@ -550,7 +550,7 @@ export class ViewController {
     //#endregion
   }
   setup(
-    preferences: IMapPreferences,
+    preferences: IPreferences,
     can_manage_orders?,
     can_manage_vehicles?,
     can_modify_display_settings?
@@ -739,8 +739,8 @@ export class ViewController {
     const { type: objectType, value: visibility } = event;
     const transform = this.getZoom(MapTypes.MAIN);
     const zoomLevel = this.calculate_zoom_level();
-    if (objectType in this.preferences.visibilities) {
-      this.preferences.visibilities[objectType] = visibility;
+    if (objectType in this.preferences.toggles) {
+      this.preferences.toggles[objectType] = visibility;
     }
     switch (objectType) {
       case 'buffers':
@@ -3013,7 +3013,7 @@ export class ViewController {
     let points = this.append_showing_objects('POINT', view_box); //append showing points
     if (
       // this.show_point_labels &&
-      this.preferences.visibilities.pointLabels &&
+      this.preferences.toggles.pointLabels &&
       is_point_update &&
       points &&
       points.length > 0
@@ -3044,7 +3044,7 @@ export class ViewController {
     let stations = this.append_showing_objects('STATION', view_box); //append showing stations
     if (
       // this.show_stations &&
-      this.preferences.visibilities.stations &&
+      this.preferences.toggles.stations &&
       is_station_update &&
       stations &&
       stations.length > 0
@@ -3062,7 +3062,7 @@ export class ViewController {
     let buffers = this.append_showing_objects('BUFFER', view_box); //append showing buffers
     if (
       // this.show_buffers &&
-      this.preferences.visibilities.buffers &&
+      this.preferences.toggles.buffers &&
       is_buffer_update &&
       buffers &&
       buffers.length > 0
@@ -3080,7 +3080,7 @@ export class ViewController {
     let mtls = this.append_showing_objects('MTL', view_box); //append showing mtls
     // if (this.show_mtls && is_mtl_update && mtls && mtls.length > 0) {
     if (
-      this.preferences.visibilities.mtls &&
+      this.preferences.toggles.mtls &&
       is_mtl_update &&
       mtls &&
       mtls.length > 0
@@ -3091,7 +3091,7 @@ export class ViewController {
     let clusters = this.append_showing_polygons('CLUSTER', view_box); //append showing clusters
     if (
       // this.show_clusters &&
-      this.preferences.visibilities.clusters &&
+      this.preferences.toggles.clusters &&
       is_cluster_update &&
       clusters &&
       clusters.length > 0
@@ -3109,7 +3109,7 @@ export class ViewController {
     let vehicles = this.append_showing_vehicles(view_box);
     if (
       // this.show_vehicles &&
-      this.preferences.visibilities.vehicles &&
+      this.preferences.toggles.vehicles &&
       is_vehicle_update &&
       this.mode !== 'MINIMAL' &&
       this.mode !== 'EDITOR' &&
@@ -5701,7 +5701,7 @@ export class ViewController {
 
     // populate group color object if groups are on
     // if (this.show_groups) {
-    if (this.preferences.visibilities.groups) {
+    if (this.preferences.toggles.groups) {
       group_colors = {}; // {group_id : color}
       for (let group of this.layout_data.groups) {
         group_colors[group.id] = ColorPalette.get_color(group.color);
@@ -5760,8 +5760,8 @@ export class ViewController {
           if (
             // (is_update_all && this.show_groups) ||
             // (this.show_groups && update.group)
-            (is_update_all && this.preferences.visibilities.groups) ||
-            (this.preferences.visibilities.groups && update.group)
+            (is_update_all && this.preferences.toggles.groups) ||
+            (this.preferences.toggles.groups && update.group)
           ) {
             this.update_vehicle_group_svg(
               d3_this,
@@ -6902,7 +6902,7 @@ export class ViewController {
   }
   append_showing_vehicles(view_box: any) {
     // if (!this.show_vehicles) {
-    if (!this.preferences.visibilities.vehicles) {
+    if (!this.preferences.toggles.vehicles) {
       return [];
     }
 
@@ -6957,7 +6957,7 @@ export class ViewController {
     let cluster_display = this.append_showing_polygons('CLUSTER', view_box);
 
     // if (cluster_display.length > 0 && this.show_clusters) {
-    if (cluster_display.length > 0 && this.preferences.visibilities.clusters) {
+    if (cluster_display.length > 0 && this.preferences.toggles.clusters) {
       let update_svg = false;
 
       if (!need_update && this.clusters_svg) {
@@ -7002,7 +7002,7 @@ export class ViewController {
       mtl_display = [];
 
     // if (zoom_level >= 1 && this.show_mtls) {
-    if (zoom_level >= 1 && this.preferences.visibilities.mtls) {
+    if (zoom_level >= 1 && this.preferences.toggles.mtls) {
       // find mtl
       mtl_display = this.append_showing_objects('MTL', view_box);
 
@@ -7097,7 +7097,7 @@ export class ViewController {
       buffer_display = [];
 
     // if (zoom_level >= 1 && this.show_buffers) {
-    if (zoom_level >= 1 && this.preferences.visibilities.buffers) {
+    if (zoom_level >= 1 && this.preferences.toggles.buffers) {
       // find buffer
       buffer_display = this.append_showing_objects('BUFFER', view_box);
 
@@ -7298,7 +7298,7 @@ export class ViewController {
       station_display = [];
 
     // if (zoom_level >= 1 && this.show_stations) {
-    if (zoom_level >= 1 && this.preferences.visibilities.stations) {
+    if (zoom_level >= 1 && this.preferences.toggles.stations) {
       // find station
       station_display = this.append_showing_objects('STATION', view_box);
 
@@ -8041,7 +8041,7 @@ export class ViewController {
     // if (zoom_level >= selective_level.direction || this.show_direction_arrows) {
     if (
       zoom_level >= selective_level.direction ||
-      this.preferences.visibilities.segmentDirections
+      this.preferences.toggles.segmentDirections
     ) {
       // find segments
       if (!segments || segments.length === 0) {
@@ -8053,7 +8053,7 @@ export class ViewController {
       if (
         zoom_level < selective_level.direction &&
         // this.show_direction_arrows
-        this.preferences.visibilities.segmentDirections
+        this.preferences.toggles.segmentDirections
       ) {
         // Set zoom level to direction arrow display zoom level
         zoom_level = selective_level.direction;
@@ -8341,7 +8341,7 @@ export class ViewController {
 
     // Check point label display condition
     // if (this.show_point_labels) {
-    if (this.preferences.visibilities.pointLabels) {
+    if (this.preferences.toggles.pointLabels) {
       zoom_level = selective_level.point_label;
     }
 
@@ -8521,7 +8521,7 @@ export class ViewController {
 
     // populate group color object if groups are on
     // if (this.show_groups) {
-    if (this.preferences.visibilities.groups) {
+    if (this.preferences.toggles.groups) {
       group_colors = {}; // {group_id : color}
       for (let group of this.layout_data.groups) {
         group_colors[group.id] = ColorPalette.get_color(group.color);
@@ -8924,7 +8924,7 @@ export class ViewController {
         });
 
         // if (this.show_groups) {
-        if (this.preferences.visibilities.groups) {
+        if (this.preferences.toggles.groups) {
           this.stations_svg.each((d) => {
             let d3_this = d3.select(`#id_${d.id}.station`);
             let group_svg = d3_this.select('.group_svg');
@@ -9209,7 +9209,7 @@ export class ViewController {
         });
 
         // if (this.show_groups) {
-        if (this.preferences.visibilities.groups) {
+        if (this.preferences.toggles.groups) {
           this.buffers_svg.each((d) => {
             // let d3_this = d3.select(this);
             let d3_this = d3.select(`#id_${d.id}.buffer`);
@@ -9418,7 +9418,7 @@ export class ViewController {
         }
 
         // if (this.show_groups) {
-        if (this.preferences.visibilities.groups) {
+        if (this.preferences.toggles.groups) {
           this.mtls_svg.each((d) => {
             // let d3_this = d3.select(this);
             let d3_this = d3.select(`#id_${d.id}.mtl`);
@@ -10835,7 +10835,7 @@ export class ViewController {
     if (
       // @TODO overlap display 설정을 button element 상태로 판단하는것을 추후에 수정
       // this.$track_container.find('#btn_overlap_display').hasClass('active') &&
-      this.preferences.visibilities.overlaps &&
+      this.preferences.toggles.overlaps &&
       this.overlap_display_objects.length === 0 &&
       !node.parentNode.classList.contains('panel_overlap')
     ) {
@@ -11955,15 +11955,15 @@ export class ViewController {
   }
   get_show_vehicle_lines(): boolean {
     // return this.show_vehicle_lines;
-    return this.preferences.visibilities.vehicleLines;
+    return this.preferences.toggles.vehicleLines;
   }
   set_show_vehicle_lines(state, is_save_state) {
-    this.preferences.visibilities.vehicleLines = state;
+    this.preferences.toggles.vehicleLines = state;
 
     if (is_save_state) {
       this.save_state(
         'show_vehicle_lines',
-        this.preferences.visibilities.vehicleLines
+        this.preferences.toggles.vehicleLines
       );
     }
   }
@@ -11977,7 +11977,7 @@ export class ViewController {
       buffers: showBuffers,
       mtls: showMtls,
       vehicles: showVehicles,
-    } = this.preferences.visibilities;
+    } = this.preferences.toggles;
 
     if (showGroups) {
       if (showStations)
@@ -12028,7 +12028,7 @@ export class ViewController {
     }
   }
   set_show_groups(state: boolean, is_save_state: any) {
-    this.preferences.visibilities.groups = state;
+    this.preferences.toggles.groups = state;
     if (is_save_state) {
       this.save_state('show_groups', state);
     }
@@ -12046,7 +12046,7 @@ export class ViewController {
   }
 
   update_expected_path_dom(path: string) {
-    if (this.preferences.visibilities.expectedPaths && path) {
+    if (this.preferences.toggles.expectedPaths && path) {
       if (this.$track_container.find('#expected_path').length === 0) {
         this.expected_path_svg = this.get_dom('SEGMENT', null, 'LAYOUT')
           .append('path')

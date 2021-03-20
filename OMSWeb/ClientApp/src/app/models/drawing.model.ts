@@ -1,4 +1,4 @@
-import { MapToolbarCommandKeys, MapToolbarStatusKeys } from './enums';
+import { CommandKeyType, ToggleOptionKeyType } from './enums';
 
 export interface ISize {
   width?: number;
@@ -50,33 +50,11 @@ export interface IZoomInfos {
   invertX?: number;
 }
 
-export type MapVisibilityOptionsType = {
-  [key in MapToolbarStatusKeys]: boolean;
-};
-export const defaultMapVisibilityOptions: MapVisibilityOptionsType = {
-  minimap: true,
-  controlTable: false,
-  expectedPaths: false,
-  vehicleLines: false,
-  pointLabels: false,
-  segmentDirections: true,
-  stations: true,
-  buffers: false,
-  groups: true,
-  mtls: true,
-  vehicles: true,
-  clusters: true,
-  overlaps: false,
-};
-export interface IMapPreferences {
-  visibilities: MapVisibilityOptionsType;
-}
-
 export interface IMapToolbarToggleEvent {
-  type: MapToolbarStatusKeys;
+  type: ToggleOptionKeyType;
   value: boolean;
 }
 export interface IMapToolbarCommandEvent {
-  type: MapToolbarCommandKeys;
+  type: CommandKeyType;
   value?: any;
 }

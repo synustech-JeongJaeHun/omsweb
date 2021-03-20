@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  defaultMapVisibilityOptions,
-  IMapPreferences,
-} from '../../../models/drawing.model';
+
+import { SettingsService } from '@oms/services/settings.service';
+import { IPreferences } from '../../../models/settings.model';
 
 @Component({
   selector: 'oms-monitor-status',
@@ -42,19 +41,20 @@ import {
   ],
 })
 export class MonitorStatusComponent implements OnInit {
-  mapPreference: IMapPreferences;
+  mapPreference: IPreferences;
 
   // showControlTable = false;
   get showControlTable(): boolean {
-    return this.mapPreference.visibilities.controlTable;
+    return this.mapPreference.toggles.controlTable;
   }
 
-  constructor() {}
+  constructor(private settingSvc: SettingsService) {}
 
   ngOnInit(): void {
+    this.mapPreference = this.settingSvc.globalPreferences;
     // @TODO loading preference
-    this.mapPreference = {
-      visibilities: defaultMapVisibilityOptions,
-    };
+    // this.mapPreference = {
+    //   toggles: defaultToggleOptions,
+    // };
   }
 }

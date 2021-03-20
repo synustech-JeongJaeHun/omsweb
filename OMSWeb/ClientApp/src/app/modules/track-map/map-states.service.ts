@@ -5,9 +5,10 @@ import {
   IMapToolbarToggleEvent,
 } from '../../models/drawing.model';
 import {
-  MapToolbarCommandKeys,
-  MapToolbarStatusKeys,
+  CommandKeyType,
+  ToggleOptionKeyType,
 } from '../../models/enums';
+import { SettingsService } from '../../services/settings.service';
 
 @Injectable({
   providedIn: 'root',
@@ -15,14 +16,16 @@ import {
 export class MapStatesService {
   toolbarStates$ = new Subject<IMapToolbarToggleEvent>();
   toolbarCommandStates$ = new Subject<IMapToolbarCommandEvent>();
-  constructor() {}
+  constructor(private settingSvc: SettingsService) {}
 
-  changeToolbarState(type: MapToolbarStatusKeys, value: any) {
-    // if (!Object.keys(this.changeToolbarState).includes(action)) return;
+  changeToolbarState(type: ToggleOptionKeyType, value: boolean) {
+    const pref = this.settingSvc.globalPreferences;
+    pref.toggles[type] = value;
+    pref.save();
     this.toolbarStates$.next({ type, value });
   }
 
-  commandToolbar(type: MapToolbarCommandKeys, value?: any) {
+  commandToolbar(type: CommandKeyType, value?: any) {
     this.toolbarCommandStates$.next({ type, value });
   }
 }

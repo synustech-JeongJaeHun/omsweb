@@ -1,11 +1,11 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
-  defaultMapVisibilityOptions,
-  MapVisibilityOptionsType,
-} from '../../../models/drawing.model';
+  defaultToggleOptions,
+  ToggleOptionsType,
+} from '@oms/models/settings.model';
 import {
-  MapToolbarCommandKeys,
-  MapToolbarStatusKeys,
+  CommandKeyType,
+  ToggleOptionKeyType,
 } from '../../../models/enums';
 
 import { MapStatesService } from '../map-states.service';
@@ -20,7 +20,7 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class MapToolbarComponent implements OnInit {
   @Input()
-  buttonState: MapVisibilityOptionsType = defaultMapVisibilityOptions;
+  buttonState: ToggleOptionsType = defaultToggleOptions;
 
   @Output()
   search = new EventEmitter();
@@ -40,13 +40,13 @@ export class MapToolbarComponent implements OnInit {
     this.search.emit();
   }
 
-  onToggleTool(action: MapToolbarStatusKeys) {
+  onToggleTool(action: ToggleOptionKeyType) {
     const value = !this.buttonState[action];
     this.buttonState[action] = value;
     this.stateSvc.changeToolbarState(action, value);
   }
 
-  onCommandTool(action: MapToolbarCommandKeys) {
+  onCommandTool(action: CommandKeyType) {
     this.stateSvc.commandToolbar(action);
   }
 

@@ -1,11 +1,11 @@
 export namespace StorageUtil {
-  export const setLocal = (key: string, value: any) => {
+  export const setLocal = (key: string, value: string) => {
     if (!key) {
       return;
     }
     localStorage.setItem(key, value);
   };
-  export const getLocal = (key: string): any => {
+  export const getLocal = (key: string): string => {
     if (!key) {
       return null;
     }
@@ -19,13 +19,13 @@ export namespace StorageUtil {
   };
   export const clearLocal = () => localStorage.clear();
 
-  export const setSession = (key: string, value: any) => {
+  export const setSession = (key: string, value: string) => {
     if (!key) {
       return;
     }
     sessionStorage.setItem(key, value);
   };
-  export const getSession = (key: string): any => {
+  export const getSession = (key: string): string => {
     if (!key) {
       return null;
     }
