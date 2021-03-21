@@ -11,8 +11,6 @@ import { TrackIdService } from '../../../services/track-id.service';
 import { Dto } from '../../../models/dto/track.model';
 import { MapStatesService } from '../map-states.service';
 import { Subscription } from 'rxjs';
-import { SearchDialogComponent } from '../dialogs/search-dialog.component';
-import { TrackVehicleDialogComponent } from '../dialogs/track-vehicle-dialog.component';
 import { MapDataService } from '../map-data.service';
 import { IPreferences } from '../../../models/settings.model';
 
@@ -32,7 +30,7 @@ import { IPreferences } from '../../../models/settings.model';
         left: 0;
         align-self: start;
         z-index: 5;
-        width: 36px;
+        width: 32px;
       }
       #loading-bar {
         position: absolute;
@@ -89,8 +87,8 @@ export class MapViewerComponent implements OnInit, OnDestroy {
       this.omsData = res;
       this._minimapVisible = this.preference.toggles.minimap;
       // @todo test
-      // console.warn('테스트 : 맵 랜더링 중지');
-      this.drawMap();
+      console.warn('테스트 : 맵 랜더링 중지');
+      // this.drawMap();
       this.loadingState = false;
     });
     this.toolbarToggleEvent$ = this.statesSvc.toolbarStates$.subscribe(

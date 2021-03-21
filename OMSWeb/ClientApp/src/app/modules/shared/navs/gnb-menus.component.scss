@@ -24,17 +24,13 @@
 
   .nav-item {
     margin-right: 5px;
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-family: Mulish;
     // padding-bottom: 10px;
 
     &:last-child {
       margin-right: 0;
     }
-  }
-
-  .nav-item.active {
-    border-bottom: 2px solid;
   }
 }
 

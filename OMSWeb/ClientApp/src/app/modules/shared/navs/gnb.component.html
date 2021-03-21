@@ -1,7 +1,13 @@
 <mat-toolbar class="gnb-container">
-  <span class="logo">OMS</span>
-  <oms-gnb-menus class="menus"></oms-gnb-menus>
-  <oms-gnb-states class="states"></oms-gnb-states>
-  <oms-gnb-indicators class="indicators"></oms-gnb-indicators>
-  <oms-gnb-actions class="actions"></oms-gnb-actions>
+  <div class="gnb-left">
+    <span class="logo">OMS</span>
+    <oms-gnb-menus class="menus"></oms-gnb-menus>
+  </div>
+  <div class="gnb-center">
+    <oms-gnb-states class="states"></oms-gnb-states>
+  </div>
+  <div class="gnb-right">
+    <oms-gnb-indicators class="indicators"></oms-gnb-indicators>
+    <oms-gnb-actions class="actions"></oms-gnb-actions>
+  </div>
 </mat-toolbar>

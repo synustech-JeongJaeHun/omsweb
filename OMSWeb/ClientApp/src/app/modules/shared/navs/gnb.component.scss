@@ -1,17 +1,37 @@
 .gnb-container {
   display: grid;
   column-gap: 20px;
-  grid-template-columns: 80px 2fr 2fr auto auto;
-  box-shadow: 0px 4px 12px rgba(#000000, 0.3);
-  height: 50px;
+  grid-template-columns: 1fr 350px 1fr;
+  border-bottom: 1px solid var(--theme-border-color);
+  // box-shadow: 0px 4px 12px rgba(#000000, 0.3);
+  height: var(--header-height);
   font-family: Mulish;
   font-weight: normal;
   font-size: 1.1rem;
+  color: var(--theme-text-color);
+}
+.gnb-left,
+.gnb-center,
+.gnb-right {
+  display: flex;
+  align-items: center;
+}
+
+.gnb-left {
+  justify-content: flex-start;
+}
+.gnb-center {
+  justify-content: center;
+}
+.gnb-right {
+  justify-content: flex-end;
 }
 
 .logo {
   font-weight: 900;
   font-size: 1.3rem;
+  margin-right: 30px;
+  color: #000;
 }
 
 .states {
@@ -20,8 +40,11 @@
 
 .indicators {
   justify-self: end;
+  margin-right: 40px;
 }
 
 .actions {
+  display: flex;
+  align-items: center;
   justify-self: end;
 }

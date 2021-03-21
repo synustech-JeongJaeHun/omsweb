@@ -14,7 +14,7 @@
   position: absolute;
   right: 0;
   top: 0;
-  background-color: var(--theme-color);
+  background-color: var(--dialog-border-color);
   color: white;
   z-index: 5;
   width: 24px;
@@ -33,7 +33,7 @@
   top: 0; left: 0;
   width: 100%;
   height: 6px;
-  background-color: var(--theme-color);
+  background-color: var(--dialog-border-color);
   cursor: n-resize;
 }
 

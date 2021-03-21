@@ -1,7 +1,8 @@
 $color-primary: #673ab7;
 
 $color-inactive: rgba(#000, 0.5);
-$color-active: $color-primary;
+// $color-active: $color-primary;
+$color-active: var(--theme-color-active);
 // $color-active: orange;
 
 @mixin activeButton {
@@ -18,8 +19,9 @@ $color-active: $color-primary;
 }
 
 @mixin tooltip {
-  font-size: 0.9rem;
+  font-family: Mulish, Roboto, "Helvetica Neue", sans-serif;
+  font-size: 12px;
   font-weight: normal;
-  color: #333;
-  background-color: #ccc;
+  color: #666;
+  background-color: #eee;
 }

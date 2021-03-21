@@ -1,4 +1,12 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import {
   defaultToggleOptions,
   ToggleOptionsType,
@@ -22,6 +30,10 @@ export class MapToolbarComponent implements OnInit {
   @Input()
   buttonState: ToggleOptionsType = defaultToggleOptions;
 
+  @ViewChild('btnSearch', { read: ElementRef }) btnSearch: ElementRef;
+  @ViewChild('btnTrack', { read: ElementRef }) btnTrack: ElementRef;
+  @ViewChild('btnCommand', { read: ElementRef }) btnCommand: ElementRef;
+
   visibilityOpen = false;
 
   constructor(
@@ -34,13 +46,14 @@ export class MapToolbarComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  onSearch(event: MouseEvent) {
+  onSearch() {
+    const rect: DOMRect = this.btnSearch.nativeElement.getBoundingClientRect();
     const dlg = this.dialog.open(SearchDialogComponent, {
       width: '300px',
       hasBackdrop: false,
       disableClose: true,
       closeOnNavigation: true,
-      position: { left: '40px', top: '108px' },
+      position: { left: '36px', top: `${rect.top}px` },
     });
 
     dlg.afterClosed().subscribe((payload: any) => {
@@ -49,14 +62,15 @@ export class MapToolbarComponent implements OnInit {
     });
   }
 
-  onTrackVehicle(event: MouseEvent) {
+  onTrackVehicle() {
+    const rect: DOMRect = this.btnTrack.nativeElement.getBoundingClientRect();
     const dlg = this.dialog.open(TrackVehicleDialogComponent, {
       width: '350px',
       autoFocus: false,
       hasBackdrop: false,
       disableClose: true,
       closeOnNavigation: true,
-      position: { left: '40px', top: '140px' },
+      position: { left: '36px', top: `${rect.top}px` },
     });
 
     dlg.afterClosed().subscribe((payload: any) => {

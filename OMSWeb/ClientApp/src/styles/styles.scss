@@ -9,6 +9,8 @@
   --theme-color-active: #0095ff;
   --theme-color-inactive: #b5bfcd;
   --theme-border-color: #d4d4d4;
+  --theme-text-color: #999;
+  --header-height: 40px;
   --highlight-hover-color: #96d4ff;
   --highlight-select-color: #4e9ff3;
   --highlight-weight-thin: 5;
@@ -328,6 +330,7 @@ body {
   padding: 4px 0 0 0 !important;
 }
 [mat-dialog-title] {
+  font-family: Mulish, Roboto, "Helvetica Neue", sans-serif;
   margin: -8px -8px 8px -8px !important;
   padding: 4px 16px;
   background: var(--theme-primary-color);
@@ -343,9 +346,13 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    line-height: 30px;
 
     mat-icon {
       margin-right: 4px;
+    }
+    .mat-icon:last-child {
+      margin-right: 0px;
     }
   }
   &.dense {

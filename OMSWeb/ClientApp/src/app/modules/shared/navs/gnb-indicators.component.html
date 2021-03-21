@@ -1,6 +1,17 @@
-<button mat-icon-button class="warn">
-  <mat-icon matBadge="12" matBadgeColor="accent">warning</mat-icon>
+<button mat-icon-button class="warn" [class.has-issue]="hasWarn">
+  <mat-icon
+    [matBadge]="warnCount"
+    matBadgeColor="warn"
+    [matBadgeHidden]="!hasWarn"
+    >{{ hasWarn ? "warning" : "warning_amber" }}</mat-icon
+  >
 </button>
-<button mat-icon-button class="alarm">
-  <mat-icon matBadge="3" matBadgeColor="warn">notifications</mat-icon>
+<button mat-icon-button class="alarm" [class.has-issue]="hasAlarm">
+  <mat-icon
+    [fontSet]="hasAlarm ? '' : 'material-icons-outlined'"
+    [matBadge]="alarmCount"
+    matBadgeColor="warn"
+    [matBadgeHidden]="!hasAlarm"
+    >notifications</mat-icon
+  >
 </button>
