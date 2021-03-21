@@ -12,6 +12,7 @@ import { Dto } from '../../../models/dto/track.model';
 import { MapStatesService } from '../map-states.service';
 import { Subscription } from 'rxjs';
 import { SearchDialogComponent } from '../dialogs/search-dialog.component';
+import { TrackVehicleDialogComponent } from '../dialogs/track-vehicle-dialog.component';
 import { MapDataService } from '../map-data.service';
 import { IPreferences } from '../../../models/settings.model';
 
@@ -88,7 +89,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
       this.omsData = res;
       this._minimapVisible = this.preference.toggles.minimap;
       // @todo test
-      // console.warn('테스트 : 맵 랜더링 중지')
+      // console.warn('테스트 : 맵 랜더링 중지');
       this.drawMap();
       this.loadingState = false;
     });
@@ -106,20 +107,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
         this.viewer.onCommandAction(event);
       }
     );
-  }
-
-  onSearch() {
-    const dlg = this.dialog.open(SearchDialogComponent, {
-      width: '300px',
-      hasBackdrop: false,
-      disableClose: true,
-      position: { left: '40px', top: '108px' },
-    });
-
-    dlg.afterClosed().subscribe((payload: any) => {
-      if (!payload || !payload.type || !payload.value) return;
-      this.viewer.onCommandAction({ type: 'search', value: payload });
-    });
   }
 
   private drawMap() {

@@ -1,0 +1,48 @@
+<oms-dialog-base [title]="'names.trackVehicle' | translate">
+  <ng-container class="dialog-layout">
+    <div mat-dialog-content>
+      <dx-data-grid
+        [dataSource]="vehicles"
+        keyExpr="id"
+        [height]="300"
+        [(selectedRowKeys)]="selectedVehicle"
+        (onRowDblClick)="onDblClickRow($event)"
+      >
+        <dxo-selection mode="single" showCheckBoxesMode="none"></dxo-selection>
+        <dxo-scrolling mode="virtual"></dxo-scrolling>
+        <dxi-column
+          [allowFiltering]="false"
+          [width]="60"
+          dataType="string"
+          dataField="id"
+          [caption]="'names.id' | translate"
+        ></dxi-column>
+        <dxi-column
+          [allowFiltering]="false"
+          dataType="string"
+          dataField="physical_id"
+          [caption]="'names.physical_id' | translate"
+        ></dxi-column>
+        <dxi-column
+          [allowFiltering]="false"
+          dataType="string"
+          dataField="logical_id"
+          [caption]="'names.logical_id' | translate"
+        ></dxi-column>
+      </dx-data-grid>
+    </div>
+    <div mat-dialog-actions>
+      <button
+        mat-raised-button
+        [disabled]="!canTracking"
+        color="primary"
+        (click)="onTrack()"
+      >
+        {{ "names.track" | translate }}
+      </button>
+      <button mat-raised-button mat-dialog-close>
+        {{ "names.cancel" | translate }}
+      </button>
+    </div>
+  </ng-container>
+</oms-dialog-base>

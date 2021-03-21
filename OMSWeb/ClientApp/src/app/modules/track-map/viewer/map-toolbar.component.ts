@@ -3,15 +3,15 @@ import {
   defaultToggleOptions,
   ToggleOptionsType,
 } from '@oms/models/settings.model';
-import {
-  CommandKeyType,
-  ToggleOptionKeyType,
-} from '../../../models/enums';
+import { CommandKeyType, ToggleOptionKeyType } from '../../../models/enums';
 
 import { MapStatesService } from '../map-states.service';
 import { MessagesService } from '@oms/services/messages.service';
 import { DialogService } from '@oms/services/dialog.service';
 import { TranslateService } from '@ngx-translate/core';
+import { SearchDialogComponent } from '../dialogs/search-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+import { TrackVehicleDialogComponent } from '../dialogs/track-vehicle-dialog.component';
 
 @Component({
   selector: 'oms-map-toolbar',
@@ -22,22 +22,47 @@ export class MapToolbarComponent implements OnInit {
   @Input()
   buttonState: ToggleOptionsType = defaultToggleOptions;
 
-  @Output()
-  search = new EventEmitter();
-
   visibilityOpen = false;
 
   constructor(
     private stateSvc: MapStatesService,
     private messageSvc: MessagesService,
     private dialogSvc: DialogService,
+    private dialog: MatDialog,
     private $t: TranslateService
   ) {}
 
   ngOnInit(): void {}
 
-  onSearch() {
-    this.search.emit();
+  onSearch(event: MouseEvent) {
+    const dlg = this.dialog.open(SearchDialogComponent, {
+      width: '300px',
+      hasBackdrop: false,
+      disableClose: true,
+      closeOnNavigation: true,
+      position: { left: '40px', top: '108px' },
+    });
+
+    dlg.afterClosed().subscribe((payload: any) => {
+      if (!payload || !payload.type || !payload.value) return;
+      this.stateSvc.commandToolbar('search', payload);
+    });
+  }
+
+  onTrackVehicle(event: MouseEvent) {
+    const dlg = this.dialog.open(TrackVehicleDialogComponent, {
+      width: '350px',
+      autoFocus: false,
+      hasBackdrop: false,
+      disableClose: true,
+      closeOnNavigation: true,
+      position: { left: '40px', top: '140px' },
+    });
+
+    dlg.afterClosed().subscribe((payload: any) => {
+      if (!payload) return;
+      this.stateSvc.commandToolbar('trackVehicle', payload);
+    });
   }
 
   onToggleTool(action: ToggleOptionKeyType) {

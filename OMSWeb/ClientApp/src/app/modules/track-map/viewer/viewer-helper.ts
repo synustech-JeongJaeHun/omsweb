@@ -844,6 +844,10 @@ export class ViewController {
         const { type, value } = event.value;
         this.search(type, value);
         break;
+      case 'trackVehicle':
+        const id = event.value;
+        this.trackVehicle(id);
+        break;
       default:
         break;
     }
@@ -1149,6 +1153,30 @@ export class ViewController {
     this.zoom_to_objects(target);
     this.set_selected_objects([target], false, true);
     this.highlight(type, objId, main_css[type.toLowerCase()], null, 'SELECT');
+  }
+  private trackVehicle(vehicleId: number) {
+    console.info('### start tracking... >>', vehicleId);
+    const vehicle = this.vehicles.find((x) => x.id === vehicleId);
+    if (!vehicle) return;
+
+    this.unhighlight(null, null);
+    this.set_selected_objects(vehicle, false, true);
+
+    // @TODO side panel 관련 동작 구현
+    // if ($('#side_panel').length > 0) {
+    //   dlg_track.display_side_panel_popup('VEHICLE', vehicle);
+    // }
+    this.highlight('VEHICLE', vehicle.id, main_css.vehicle, null, 'SELECT');
+    let coord = [
+      vehicle.cur_point.inverted_coord.x,
+      vehicle.cur_point.inverted_coord.y,
+    ];
+    this.zoom_to(coord, 'track', null);
+    this.set_track_vehicle(vehicle.id);
+    this.start_tracking();
+  }
+  set_track_vehicle(id: number) {
+    this.vehicle_tracking.id = id;
   }
   private zoom_to_objects(objects: any, padding_percentage?: number) {
     // Calculate the initial zoom location for tracking
@@ -5334,7 +5362,7 @@ export class ViewController {
   unhighlight(
     object_type,
     object_id,
-    group_type,
+    group_type?,
     highlight_type?,
     operation_type?
   ) {

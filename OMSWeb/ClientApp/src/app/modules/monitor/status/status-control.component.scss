@@ -49,30 +49,3 @@
     margin-right: 8px;
   }
 }
-
-::ng-deep .dx-datagrid {
-  font-size: 10px;
-}
-
-::ng-deep .dx-datagrid .dx-row>td {
-  padding: 3px;
-}
-
-::ng-deep .dx-datagrid-text-content {
-  font-size: 10px;
-  font-weight: bold;
-}
-
-::ng-deep .table-control-body .dx-checkbox {
-  padding-top: 2px;
-  display: inline-block;
-}
-
-::ng-deep .dx-command-select {
-  width: 40px !important;
-  min-width: 40px !important;
-}
-
-::ng-deep .dx-datagrid-header-panel .dx-toolbar {
-  margin: 3px 0 3px 0;
-}

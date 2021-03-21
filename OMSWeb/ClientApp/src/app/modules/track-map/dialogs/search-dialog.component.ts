@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import DataSource from 'devextreme/data/data_source';
 
 import { IKeyValuePair } from '@oms/models/base.model';
 import { MapDataService } from '../map-data.service';
@@ -11,7 +10,7 @@ import { MatDialogRef } from '@angular/material/dialog';
   styles: [
     `
       .form-item {
-        margin-bottom: 8px;
+        margin-bottom: 4px;
       }
     `,
   ],

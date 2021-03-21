@@ -20,17 +20,18 @@
     matTooltipClass="snb-tooltip"
     matTooltipPosition="right"
     matTooltip="Search"
-    (click)="onSearch()"
+    (click)="onSearch($event)"
   >
     <mat-icon>search</mat-icon>
   </button>
   <button
     matListItem
     mat-button
-    class="tool-item active"
+    class="tool-item"
     matTooltipClass="snb-tooltip"
     matTooltipPosition="right"
     matTooltip="Track Vehicle"
+    (click)="onTrackVehicle($event)"
   >
     <mat-icon>location_on</mat-icon>
   </button>

@@ -37,7 +37,10 @@
     "vehicleStatus": "Vehicle Status",
 
     "confirm": "Confirm",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+
+    "trackVehicle": "Track Vehicle",
+    "track": "Track"
   },
   "enums": {},
   "errors": {},
@@ -45,6 +48,8 @@
     "confirmTitle": "Confirm",
     "confirmResetAllVehicles": "Do you want to reset all vehicles?",
     "confirmEstopAll": "Do you want to stop all vehicles?",
-    "confirmSetAutoAll": "Do you want set auto to all vehicles?"
+    "confirmSetAutoAll": "Do you want set auto to all vehicles?",
+    "selectObjectType": "Select Type",
+    "searchId": "Search ID"
   }
 }

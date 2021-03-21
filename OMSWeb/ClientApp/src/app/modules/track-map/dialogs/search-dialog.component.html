@@ -1,10 +1,10 @@
-<oms-dialog-base title="Search">
+<oms-dialog-base [title]="'names.search' | translate">
   <ng-container class="dialog-layout">
     <div mat-dialog-content>
       <dx-select-box
         #type
         class="form-item"
-        placeholder="Select Type"
+        [placeholder]="'messages.selectObjectType' | translate"
         [dataSource]="objectTypes"
         valueExpr="key"
         displayExpr="value"
@@ -14,7 +14,7 @@
       <dx-autocomplete
         #value
         class="form-item"
-        placeholder="Select ID"
+        [placeholder]="'messages.searchId' | translate"
         [dataSource]="targets"
         [showClearButton]="true"
       ></dx-autocomplete>
@@ -28,7 +28,13 @@
       ></dx-select-box> -->
     </div>
     <div mat-dialog-actions>
-      <button mat-raised-button color="primary" (click)="onSearch(type.value, value.value)">Search</button>
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="onSearch(type.value, value.value)"
+      >
+        {{ "names.search" | translate }}
+      </button>
     </div>
   </ng-container>
 </oms-dialog-base>

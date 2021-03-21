@@ -5,8 +5,9 @@ import { SharedModule } from '../shared/shared.module';
 import { MapToolbarComponent } from './viewer/map-toolbar.component';
 import { MapViewerComponent } from './viewer/map-viewer.component';
 import { SearchDialogComponent } from './dialogs/search-dialog.component';
+import { TrackVehicleDialogComponent } from './dialogs/track-vehicle-dialog.component';
 @NgModule({
-  declarations: [MapViewerComponent, MapToolbarComponent, SearchDialogComponent],
+  declarations: [MapViewerComponent, MapToolbarComponent, SearchDialogComponent, TrackVehicleDialogComponent],
   imports: [CommonModule, SharedModule],
   exports: [MapViewerComponent, MapToolbarComponent],
 })

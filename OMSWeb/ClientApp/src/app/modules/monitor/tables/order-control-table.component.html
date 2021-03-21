@@ -1,9 +1,12 @@
 <div class="grid-actions">
-  <button mat-flat-button color="primary" class="dense">{{'names.delete'|translate}}</button>
+  <button mat-flat-button color="primary" class="dense">
+    {{ "names.delete" | translate }}
+  </button>
 </div>
 
 <dx-data-grid
   [dataSource]="dataSetResult?.items"
+  keyExpr="id"
   [height]="tableHeight"
   [repaintChangesOnly]="true"
   [columnAutoWidth]="true"
@@ -11,8 +14,10 @@
   [highlightChanges]="false"
   [showColumnLines]="true"
   [showRowLines]="true"
+  [hoverStateEnabled]="true"
   [(selectedRowKeys)]="selectedRows"
 >
+  <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
   <dxo-scrolling mode="virtual"></dxo-scrolling>
   <dxo-paging [pageSize]="10"></dxo-paging>
   <dxo-header-filter [visible]="false"></dxo-header-filter>
@@ -22,9 +27,8 @@
     [showInfo]="true"
     visible="true"
   ></dxo-pager>
-  <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
   <dxo-search-panel
-    [placeholder]="'names.search'|translate"
+    [placeholder]="'names.search' | translate"
     [visible]="true"
   ></dxo-search-panel>
 
@@ -40,15 +44,15 @@
     dataType="string"
     dataField="state"
     [caption]="'names.state' | translate"
-    ></dxi-column>
-    <dxi-column
+  ></dxi-column>
+  <dxi-column
     [width]="80"
     dataType="string"
     dataField="vehicle_id"
     [caption]="'names.vehicle_id' | translate"
     [customizeText]="transformVehicleId"
-    ></dxi-column>
-    <dxi-column
+  ></dxi-column>
+  <dxi-column
     [allowFiltering]="false"
     [width]="120"
     dataType="string"

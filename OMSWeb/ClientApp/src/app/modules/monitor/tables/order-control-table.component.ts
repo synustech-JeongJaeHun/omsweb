@@ -14,7 +14,7 @@ export class OrderControlTableComponent implements OnInit {
 
   dataSetResult: IPaginatedResult<IOrderStatusRow>;
   loaded = false;
-  selectedRows;
+  selectedRows: number[] = [];
 
   transformVehicleId = ({ value = '' }): string => {
     const text = this.idSvc.get_alternative_id('vehicle', 'logical_id', value) || value;
