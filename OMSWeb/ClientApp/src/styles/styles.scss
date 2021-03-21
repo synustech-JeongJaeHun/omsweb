@@ -367,6 +367,17 @@ body {
   }
 }
 
+.mat-tab-label {
+  height: 36px !important;
+  min-width: 70px !important;
+  padding: 0 8px !important;
+  font-weight: bold;
+
+  &.mat-tab-label-active {
+    background-color: white;
+  }
+}
+
 // devextreme
 .dx-widget {
   font-size: 12px;

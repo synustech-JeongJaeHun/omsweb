@@ -5,7 +5,7 @@
     class="tool-item"
     matTooltipClass="snb-tooltip"
     matTooltipPosition="right"
-    matTooltip="Center Zoom"
+    [matTooltip]="'names.centerZoom' | translate"
     (click)="onCommandTool('centerZoom')"
   >
     <mat-icon>center_focus_strong</mat-icon>
@@ -20,7 +20,7 @@
     class="tool-item"
     matTooltipClass="snb-tooltip"
     matTooltipPosition="right"
-    matTooltip="Search"
+    [matTooltip]="'names.search' | translate"
     (click)="onSearch()"
   >
     <mat-icon>search</mat-icon>
@@ -32,7 +32,7 @@
     class="tool-item"
     matTooltipClass="snb-tooltip"
     matTooltipPosition="right"
-    matTooltip="Track Vehicle"
+    [matTooltip]="'names.trackVehicle' | translate"
     (click)="onTrackVehicle()"
   >
     <mat-icon>location_on</mat-icon>
@@ -60,7 +60,7 @@
     (click)="onToggleTool('minimap')"
     matTooltipClass="snb-tooltip"
     matTooltipPosition="right"
-    matTooltip="Show Mini map"
+    [matTooltip]="'names.showMinimap' | translate"
   >
     <mat-icon>map</mat-icon>
   </button>
@@ -74,7 +74,8 @@
     class="tool-item"
     matTooltipClass="snb-tooltip"
     matTooltipPosition="right"
-    matTooltip="Manual Order (Command)"
+    [matTooltip]="'names.manualOrder' | translate"
+    (click)="onManualCommand()"
   >
     <mat-icon>post_add</mat-icon>
   </button>
@@ -85,7 +86,7 @@
     [class.active]="buttonState.controlTable"
     matTooltipClass="snb-tooltip"
     matTooltipPosition="right"
-    matTooltip="Show Control Table"
+    [matTooltip]="'names.showControlTable' | translate"
     (click)="onToggleTool('controlTable')"
   >
     <mat-icon>window</mat-icon>
@@ -99,7 +100,7 @@
     class="tool-item"
     matTooltipClass="snb-tooltip"
     matTooltipPosition="right"
-    matTooltip="Get All Vehicle Status"
+    [matTooltip]="'names.getStatusAllVehicle' | translate"
     (click)="onPing()"
   >
     <mat-icon>motion_photos_on</mat-icon>
@@ -111,7 +112,7 @@
     class="tool-item"
     matTooltipClass="snb-tooltip"
     matTooltipPosition="right"
-    matTooltip="Set Auto All Vehicle"
+    [matTooltip]="'names.setAutoAllVehicle' | translate"
     (click)="onSetAuto()"
   >
     <mat-icon>brightness_auto</mat-icon>
@@ -122,6 +123,7 @@
     class="tool-item"
     matTooltipClass="snb-tooltip"
     matTooltipPosition="right"
+    [matTooltip]="'names.resetAllVehicle' | translate"
     matTooltip="Reset All Vehicle"
     (click)="onVehicleReset()"
   >
@@ -133,7 +135,7 @@
     class="tool-item"
     matTooltipClass="snb-tooltip"
     matTooltipPosition="right"
-    matTooltip="Stop All Vehicle"
+    [matTooltip]="'names.estopAllVehicle' | translate"
     (click)="onEStop()"
   >
     <mat-icon fontSet="material-icons-outlined">stop_circle</mat-icon>
@@ -149,14 +151,16 @@
   [mdePopoverLeaveDelay]="300"
 >
   <mat-list class="popover-list mat-elevation-z2">
-    <div class="popover-title mat-elevation-z2">Show / Hide Objects</div>
+    <div class="popover-title mat-elevation-z2">
+      {{ "names.showObjects" | translate }}
+    </div>
     <button
       matListItem
       mat-button
       [class.active]="buttonState.vehicleLines"
       (click)="onToggleTool('vehicleLines')"
     >
-      Vehicle Lines
+      {{ "names.showVehicleLines" | translate }}
     </button>
     <button
       matListItem
@@ -164,7 +168,7 @@
       [class.active]="buttonState.expectedPaths"
       (click)="onToggleTool('expectedPaths')"
     >
-      Expected Paths
+      {{ "names.showExpectedPaths" | translate }}
     </button>
     <button
       matListItem
@@ -172,7 +176,7 @@
       [class.active]="buttonState.pointLabels"
       (click)="onToggleTool('pointLabels')"
     >
-      Point Labels
+      {{ "names.showPointLabels" | translate }}
     </button>
     <button
       matListItem
@@ -180,7 +184,7 @@
       [class.active]="buttonState.segmentDirections"
       (click)="onToggleTool('segmentDirections')"
     >
-      Segment Directions
+      {{ "names.showSegmentDirections" | translate }}
     </button>
     <button
       matListItem
@@ -188,7 +192,7 @@
       [class.active]="buttonState.stations"
       (click)="onToggleTool('stations')"
     >
-      Stations
+      {{ "names.showStations" | translate }}
     </button>
     <button
       matListItem
@@ -196,7 +200,7 @@
       [class.active]="buttonState.buffers"
       (click)="onToggleTool('buffers')"
     >
-      Buffers
+      {{ "names.showBuffers" | translate }}
     </button>
     <button
       matListItem
@@ -204,7 +208,7 @@
       [class.active]="buttonState.groups"
       (click)="onToggleTool('groups')"
     >
-      Groups
+      {{ "names.showGroups" | translate }}
     </button>
     <button
       matListItem
@@ -212,7 +216,7 @@
       [class.active]="buttonState.clusters"
       (click)="onToggleTool('clusters')"
     >
-      Clusters
+      {{ "names.showClusters" | translate }}
     </button>
     <button
       matListItem
@@ -220,7 +224,7 @@
       [class.active]="buttonState.overlaps"
       (click)="onToggleTool('overlaps')"
     >
-      Overlapping Objects
+      {{ "names.showOverlaps" | translate }}
     </button>
   </mat-list>
 </mde-popover>

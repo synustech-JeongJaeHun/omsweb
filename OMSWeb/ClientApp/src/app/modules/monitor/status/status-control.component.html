@@ -34,7 +34,7 @@
       <span>{{ "names.vehicleStatus" | translate }}</span>
     </button>
   </div>
-  <mat-tab-group [(selectedIndex)]="currentTab" animationDuration="100">
+  <mat-tab-group class="tab-group" [(selectedIndex)]="currentTab" animationDuration="0ms">
     <mat-tab label="Orders">
       <oms-order-control-table
         [tableHeight]="tableHeight"

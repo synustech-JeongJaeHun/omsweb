@@ -30,7 +30,8 @@
 
 #resize-handle {
   position: absolute;
-  top: 0; left: 0;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 6px;
   background-color: var(--dialog-border-color);
@@ -39,13 +40,19 @@
 
 #status-toolbar {
   position: absolute;
-  left: 340px;
+  left: 310px;
   right: 40px;
-  padding: 10px;
+  padding: 1px;
   text-align: center;
   z-index: 3;
 
   button {
     margin-right: 8px;
+  }
+}
+
+.tab-group {
+  ::ng-deep.mat-tab-label {
+    min-width: 150px !important;
   }
 }

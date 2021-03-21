@@ -18,8 +18,9 @@ import { MessagesService } from '@oms/services/messages.service';
 import { DialogService } from '@oms/services/dialog.service';
 import { TranslateService } from '@ngx-translate/core';
 import { SearchDialogComponent } from '../dialogs/search-dialog.component';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MatDialogState } from '@angular/material/dialog';
 import { TrackVehicleDialogComponent } from '../dialogs/track-vehicle-dialog.component';
+import { CommandDialogComponent } from '../dialogs/command-dialog.component';
 
 @Component({
   selector: 'oms-map-toolbar',
@@ -36,6 +37,10 @@ export class MapToolbarComponent implements OnInit {
 
   visibilityOpen = false;
 
+  private _searchDlg: MatDialogRef<SearchDialogComponent, any>;
+  private _trackDlg: MatDialogRef<TrackVehicleDialogComponent, any>;
+  private _cmdDlg: MatDialogRef<CommandDialogComponent, any>
+
   constructor(
     private stateSvc: MapStatesService,
     private messageSvc: MessagesService,
@@ -47,8 +52,12 @@ export class MapToolbarComponent implements OnInit {
   ngOnInit(): void {}
 
   onSearch() {
+    if (this._searchDlg && this._searchDlg.getState() === MatDialogState.OPEN) {
+      this._searchDlg.close();
+      return;
+    }
     const rect: DOMRect = this.btnSearch.nativeElement.getBoundingClientRect();
-    const dlg = this.dialog.open(SearchDialogComponent, {
+    this._searchDlg = this.dialog.open(SearchDialogComponent, {
       width: '300px',
       hasBackdrop: false,
       disableClose: true,
@@ -56,15 +65,20 @@ export class MapToolbarComponent implements OnInit {
       position: { left: '36px', top: `${rect.top}px` },
     });
 
-    dlg.afterClosed().subscribe((payload: any) => {
+    this._searchDlg.afterClosed().subscribe((payload: any) => {
       if (!payload || !payload.type || !payload.value) return;
       this.stateSvc.commandToolbar('search', payload);
     });
   }
 
   onTrackVehicle() {
+    if (this._trackDlg && this._trackDlg.getState() === MatDialogState.OPEN) {
+      this._trackDlg.close();
+      return;
+    }
+
     const rect: DOMRect = this.btnTrack.nativeElement.getBoundingClientRect();
-    const dlg = this.dialog.open(TrackVehicleDialogComponent, {
+    this._trackDlg = this.dialog.open(TrackVehicleDialogComponent, {
       width: '350px',
       autoFocus: false,
       hasBackdrop: false,
@@ -73,9 +87,31 @@ export class MapToolbarComponent implements OnInit {
       position: { left: '36px', top: `${rect.top}px` },
     });
 
-    dlg.afterClosed().subscribe((payload: any) => {
+    this._trackDlg.afterClosed().subscribe((payload: any) => {
       if (!payload) return;
       this.stateSvc.commandToolbar('trackVehicle', payload);
+    });
+  }
+
+  onManualCommand() {
+    if (this._cmdDlg && this._cmdDlg.getState() === MatDialogState.OPEN) {
+      this._cmdDlg.close();
+      return;
+    }
+
+    const rect: DOMRect = this.btnCommand.nativeElement.getBoundingClientRect();
+    this._cmdDlg = this.dialog.open(CommandDialogComponent, {
+      width: '350px',
+      autoFocus: false,
+      hasBackdrop: false,
+      disableClose: true,
+      closeOnNavigation: true,
+      position: { left: '36px', top: `${rect.top}px` },
+    });
+
+    this._cmdDlg.afterClosed().subscribe((payload: any) => {
+      if (!payload) return;
+      this.stateSvc.commandToolbar('manualOrder', payload);
     });
   }
 

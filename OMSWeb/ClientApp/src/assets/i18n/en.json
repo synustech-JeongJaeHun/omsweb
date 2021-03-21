@@ -21,7 +21,27 @@
     "distance_total": "Total Distance",
     "can_be_pushed": "Push",
 
+    "centerZoom": "Center Zoom",
     "search": "Search",
+    "trackVehicle": "Track Vehicle",
+    "showObjects": "Show / Hide Objects",
+    "showMinimap": "Show / Hide Minimap",
+    "manualOrder": "Manual Order(Command)",
+    "showControlTable": "Show / Hide Control Table",
+    "getStatusAllVehicle": "Get All Vehicle Status",
+    "setAutoAllVehicle": "Set Auto All Vehicle",
+    "resetAllVehicle": "Reset All Vehicle",
+    "estopAllVehicle": "EStop All Vehicle",
+    "showVehicleLines": "Vehicle Lines",
+    "showExpectedPaths": "Expected Paths",
+    "showPointLabels": "Point Labels",
+    "showSegmentDirections": "Segment Directions",
+    "showStations": "Stations",
+    "showBuffers": "Buffers",
+    "showGroups": "Groups",
+    "showClusters": "Clusters",
+    "showOverlaps": "Overlapping Objects",
+
     "hostOrderEnable": "Host Order Enable",
     "pushEnable": "Push Enable",
     "railIn": "Rail In",
@@ -38,9 +58,19 @@
 
     "confirm": "Confirm",
     "cancel": "Cancel",
+    "track": "Track",
+    "apply": "Apply",
 
-    "trackVehicle": "Track Vehicle",
-    "track": "Track"
+    "manualTransfer": "Manual Transfer",
+    "command-move": "Move",
+    "command-fromTo": "FromTo",
+    "command-from": "From",
+    "command-to": "To",
+    "selectVehicle": "Select Vehicle",
+    "selectedPoint": "Selected Point",
+    "selectedSource": "Selected Source",
+    "selectedDest": "Selected Dest",
+    "carrierId": "Carrier Id"
   },
   "enums": {},
   "errors": {},
@@ -48,7 +78,7 @@
     "confirmTitle": "Confirm",
     "confirmResetAllVehicles": "Do you want to reset all vehicles?",
     "confirmEstopAll": "Do you want to stop all vehicles?",
-    "confirmSetAutoAll": "Do you want set auto to all vehicles?",
+    "confirmSetAutoAll": "Do you want to set auto all vehicles?",
     "selectObjectType": "Select Type",
     "searchId": "Search ID"
   }
