@@ -1,0 +1,122 @@
+<div id="transfer-history-page">
+  <div id="transfer-filter-area">
+    <dx-select-box
+      [items]="creatorList"
+      [placeholder]="'names.vehicle_id' | translate"
+      [showClearButton]="true"
+      #creator
+    ></dx-select-box>
+    <dx-select-box
+      [items]="searchTypeList"
+      displayExpr="key"
+      valueExpr="value"
+      [placeholder]="'names.physical_id' | translate"
+      [showClearButton]="true"
+      #searchtype
+    >
+    </dx-select-box>
+    <dx-select-box
+      [items]="VehicleListAll"
+      [placeholder]="'names.logical_id' | translate"
+      [dataSource]="VehicleListAll"
+      displayExpr="OnlineName"
+      valueExpr="Id"
+      [searchEnabled]="true"
+      [showClearButton]="true"
+      #vehicle
+    ></dx-select-box>
+    <dx-date-box
+      [placeholder]="'_START_DATE' | translate"
+      type="datetime"
+      [value]="start"
+      [min]="start"
+      [max]="end"
+      [acceptCustomValue]="false"
+      [showClearButton]="true"
+      #startdate
+    ></dx-date-box>
+    <dx-date-box
+      [placeholder]="'_END_DATE' | translate"
+      type="datetime"
+      [value]="now"
+      [min]="start"
+      [max]="end"
+      [acceptCustomValue]="false"
+      [showClearButton]="true"
+      #enddate
+    ></dx-date-box>
+    <dx-button
+      [text]="'names.search' | translate"
+      type="default"
+      (onClick)="search()"
+    >
+    </dx-button>
+  </div>
+  <div id="transfer-result-area">
+    <dx-data-grid
+      [dataSource]="dataSetResult?.items"
+      [columnAutoWidth]="true"
+      [width]="screenWidth"
+      [columnAutoWidth]="true"
+      [height]="800"
+      [showBorders]="true"
+      #transferDataGrid
+    >
+      <dxo-export [enabled]="true" [fileName]="fileName"></dxo-export>
+      <dxo-paging [pageSize]="50"></dxo-paging>
+      <dxo-pager
+        [showPageSizeSelector]="true"
+        [allowedPageSizes]="[10, 20, 30, 40, 50]"
+        [showInfo]="true"
+        visible="true"
+      ></dxo-pager>
+      <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+      <dxi-column
+        [width]="80"
+        dataType="string"
+        dataField="id"
+        [caption]="'names.id' | translate"
+      ></dxi-column>
+      <dxi-column
+        [width]="120"
+        dataType="string"
+        dataField="physical_id"
+        [caption]="'names.physical_id' | translate"
+      ></dxi-column>
+      <dxi-column
+        [width]="120"
+        dataType="string"
+        dataField="logical_id"
+        [caption]="'names.logical_id' | translate"
+      ></dxi-column>
+      <dxi-column
+        [allowFiltering]="false"
+        [width]="120"
+        dataType="number"
+        dataField="distance_total"
+        [caption]="'names.distance_total' | translate"
+      ></dxi-column>
+      <dxi-column
+        [allowFiltering]="false"
+        [width]="120"
+        dataType="number"
+        dataField="runtime_total"
+        [caption]="'names.runtime_total' | translate"
+      ></dxi-column>
+      <dxi-column
+        [allowFiltering]="false"
+        [width]="120"
+        dataType="string"
+        dataField="type"
+        [caption]="'names.type' | translate"
+      ></dxi-column>
+      <dxi-column
+        [allowFiltering]="false"
+        [width]="120"
+        dataType="string"
+        dataField="map_db"
+        [caption]="'names.map_db' | translate"
+      ></dxi-column>
+    </dx-data-grid>
+  </div>
+</div>

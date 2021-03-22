@@ -1,11 +1,16 @@
-export interface IVehicleStatusRow {
+export interface IVehicleInfoRow {
   id: number;
   logical_id: string;
   physical_id?: string;
-
-  cur_point: number;
   moving_state: string;
+  distance_total: number;
+  runtime_total: number;
+  type: string;
   map_db: string;
+}
+
+export interface IVehicleStatusRow extends IVehicleInfoRow {
+  cur_point: number;
   cargo_state: string;
   mode: string;
   order_origin: string;
@@ -13,9 +18,6 @@ export interface IVehicleStatusRow {
   is_sensor_stopped: boolean;
   is_blocked: boolean;
   error_list: string;
-  distance_total: number;
-  runtime_total: number;
-  type: string;
 
   order_id: number;
   command_point: string;

@@ -16,6 +16,7 @@ import { SharedDevextremeModule } from './shared-devextreme.module';
 import { DialogBaseComponent } from './dialogs/dialog-base.component';
 import { ConfirmDialogComponent } from './dialogs/confirm-dialog.component';
 import { AlarmDialogComponent } from './dialogs/alarm-dialog.component';
+import { EnumStringPipe } from './pipes/enum-string.pipe';
 
 const inOutModules = [
   FormsModule,
@@ -31,6 +32,7 @@ const inOutModules = [
     DialogBaseComponent,
     ConfirmDialogComponent,
     AlarmDialogComponent,
+    EnumStringPipe,
   ],
   imports: [
     CommonModule,
@@ -56,6 +58,7 @@ const inOutModules = [
     TranslateModule,
     ConfirmDialogComponent,
     AlarmDialogComponent,
+    EnumStringPipe,
   ],
 })
 export class SharedModule {}

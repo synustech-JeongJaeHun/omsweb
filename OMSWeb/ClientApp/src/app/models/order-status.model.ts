@@ -1,34 +1,33 @@
-export type OrderStatesType =
-  | 'FAILED'
-  | 'ABORTED'
-  | 'COMPLETED'
-  | 'UNLOADED'
-  | 'UNLOADING'
-  | 'LOADED'
-  | 'LOADING'
-  | 'ARRIVED'
-  | 'ASSIGNED'
-  | 'UNASSIGNED';
+import { OrderStatesType } from './enums';
 
-export interface IOrderStatusRow {
-  id: number;
-  checked?: boolean;
-  assignment_details: string;
-  assignment_type: string;
-  carrier_label: string;
+export interface IOrderInfoRow {
   origin: string;
   logical_id: string;
+  state: OrderStatesType;
   location_pickup: string;
   location_dropoff: string;
   location_move: string;
-  state: OrderStatesType;
+  assignment_details: string;
+  assignment_type: string;
+  carrier_label: string;
   vehicle_id: number;
   priority: number;
   time_created: Date;
-  time_assigned : Date;
+  time_assigned: Date;
   time_completed: Date;
   time_aborted: Date;
   time_failed: Date;
+
+  distance_pickup: number;
+  distance_dropoff: number;
+  distance_move: number;
+
+  row_num: number;
+}
+
+export interface IOrderStatusRow extends IOrderInfoRow {
+  id: number;
+  checked?: boolean;
   duration_total: number;
   duration_dropoff: number;
   duration_unassigned: number;
@@ -36,10 +35,4 @@ export interface IOrderStatusRow {
   duration_load: number;
   duration_unload: number;
   duration_move: number;
-
-  distance_pickup: number;
-  distance_dropoff: number;
-  distance_move: number;
-
-  row_num: number;
 }

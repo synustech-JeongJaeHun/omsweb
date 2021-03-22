@@ -8,6 +8,7 @@ import { DxTabsModule  } from 'devextreme-angular/ui/tabs';
 import { DxDataGridModule } from 'devextreme-angular/ui/data-grid';
 import { DxButtonModule } from 'devextreme-angular/ui/button';
 import { DxTextBoxModule } from 'devextreme-angular/ui/text-box';
+import { DxDateBoxModule } from 'devextreme-angular/ui/date-box';
 
 @NgModule({
   exports: [
@@ -19,7 +20,8 @@ import { DxTextBoxModule } from 'devextreme-angular/ui/text-box';
     DxTabsModule,
     DxDataGridModule,
     DxButtonModule,
-    DxTextBoxModule
+    DxTextBoxModule,
+    DxDateBoxModule
   ],
 })
 export class SharedDevextremeModule {}

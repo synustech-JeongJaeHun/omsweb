@@ -13,7 +13,7 @@
     "physical_id": "Physical ID",
     "logical_id": "Logical ID",
     "state": "Status",
-    "vehicle_id": "Vehicle",
+    "vehicle_id": "Vehicle ID",
     "location_pickup": "From",
     "location_dropoff": "To",
     "priority": "Priority",
@@ -29,6 +29,9 @@
     "cargo_state": "Cargo Status",
     "distance_total": "Total Distance",
     "can_be_pushed": "Push",
+    "runtime_total": "Total Runtime",
+    "type": "Type",
+    "map_db": "Map",
 
     "centerZoom": "Center Zoom",
     "search": "Search",

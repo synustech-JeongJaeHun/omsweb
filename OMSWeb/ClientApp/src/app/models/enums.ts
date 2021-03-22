@@ -71,3 +71,16 @@ export enum AlertSeverities {
   warning,
   critical,
 }
+
+export type OrderStatesType =
+  | 'FAILED'
+  | 'ABORTED'
+  | 'COMPLETED'
+  | 'UNLOADED'
+  | 'UNLOADING'
+  | 'LOADED'
+  | 'LOADING'
+  | 'ARRIVED'
+  | 'ASSIGNED'
+  | 'UNASSIGNED';
+

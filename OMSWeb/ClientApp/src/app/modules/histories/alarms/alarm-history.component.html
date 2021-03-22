@@ -1,0 +1,140 @@
+<div id="alarm-history-page">
+  <div id="alarm-filter-area">
+    <dx-select-box
+      [items]="VehicleListAll"
+      [placeholder]="'_VEHICLE' | translate"
+      [dataSource]="VehicleListAll"
+      displayExpr="OnlineName"
+      valueExpr="Id"
+      [searchEnabled]="true"
+      [showClearButton]="true"
+      #vehicle
+    ></dx-select-box>
+    <dx-select-box
+      [items]="AlarmcodeListAll"
+      [placeholder]="'_ALARMCODE' | translate"
+      [dataSource]="AlarmcodeListAll"
+      displayExpr="_id"
+      valueExpr="_id"
+      [searchEnabled]="true"
+      [showClearButton]="true"
+      #alarmcode
+    ></dx-select-box>
+    <dx-date-box
+      [placeholder]="'_START_DATE' | translate"
+      type="datetime"
+      [value]="start"
+      [min]="start"
+      [max]="end"
+      [showClearButton]="true"
+      #startdate
+    >
+    </dx-date-box>
+    <dx-date-box
+      [placeholder]="'_END_DATE' | translate"
+      type="datetime"
+      [value]="now"
+      [min]="start"
+      [max]="end"
+      [showClearButton]="true"
+      #enddate
+    >
+    </dx-date-box>
+    <dx-button
+      [text]="'_SEARCH' | translate"
+      type="default"
+      (onClick)="
+        search(vehicle.value, alarmcode.value, startdate.value, enddate.value)
+      "
+    ></dx-button>
+  </div>
+  <div id="alarm-result-area">
+    <dx-data-grid
+      [dataSource]="dataSetResult?.items"
+      [columnAutoWidth]="true"
+      [width]="screenWidth"
+      [height]="800"
+      [showBorders]="true"
+    >
+      <dxo-export [enabled]="true" [fileName]="fileName"></dxo-export>
+      <!-- <dxo-paging [enabled]="false"></dxo-paging>
+            <dxo-scrolling columnRenderingMode="virtual" mode="infinite"></dxo-scrolling> -->
+      <dxo-paging [pageSize]="50"></dxo-paging>
+      <dxo-pager
+        [showPageSizeSelector]="true"
+        [allowedPageSizes]="[10, 20, 30, 40, 50]"
+        [showInfo]="true"
+        visible="true"
+      ></dxo-pager>
+      <dxi-column
+        dataField="VehicleId"
+        [caption]="'_VEHICLE_ID' | translate"
+        dataType="number"
+        alignment="center"
+      >
+      </dxi-column>
+      <dxi-column
+        dataField="ErrorCode"
+        cellTemplate="alarmNameTemplate"
+        [caption]="'_ALARMNAME' | translate"
+        dataType="string"
+        alignment="center"
+      >
+      </dxi-column>
+      <dxi-column
+        dataField="ErrorCategory"
+        [caption]="'_ALARMCATEGORY' | translate"
+        datType="number"
+        alignment="center"
+      >
+      </dxi-column>
+      <dxi-column
+        dataField="ErrorCode"
+        [caption]="'_ALARMCODE' | translate"
+        datType="number"
+        alignment="center"
+      >
+      </dxi-column>
+      <dxi-column
+        dataField="ErrorText"
+        [caption]="'_ALARMTEXT' | translate"
+        datType="string"
+        alignment="center"
+      >
+      </dxi-column>
+      <dxi-column
+        dataField="Cleared"
+        [caption]="'_CLEARED' | translate"
+        datType="boolean"
+        cellTemplate="booleanTemplate"
+        alignment="center"
+      >
+      </dxi-column>
+      <dxi-column
+        dataField="SetTime"
+        [caption]="'_SET_TIME' | translate"
+        datType="Date"
+        cellTemplate="dateTimeTemplate"
+        alignment="center"
+      >
+      </dxi-column>
+      <dxi-column
+        dataField="ClearTime"
+        [caption]="'_CLEAR_TIME' | translate"
+        datType="Date"
+        cellTemplate="dateTimeTemplate"
+        alignment="center"
+      >
+      </dxi-column>
+      <div *dxTemplate="let data of 'booleanTemplate'">
+        {{ data.text }}
+      </div>
+      <div *dxTemplate="let data of 'alarmNameTemplate'">
+        {{ data.text }}
+      </div>
+      <div *dxTemplate="let data of 'dateTimeTemplate'">
+        {{ data.displayValue | date: "yyyy/MM/dd hh:mm:ss" }}
+      </div>
+    </dx-data-grid>
+  </div>
+</div>

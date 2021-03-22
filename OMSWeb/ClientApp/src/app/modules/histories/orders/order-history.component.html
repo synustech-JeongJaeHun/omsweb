@@ -1,0 +1,256 @@
+<div id="transfer-history-page">
+  <div id="transfer-filter-area">
+    <dx-select-box
+      [items]="creatorList"
+      [placeholder]="'_CREATOR' | translate"
+      [showClearButton]="true"
+      #creator
+    ></dx-select-box>
+    <dx-select-box
+      [items]="searchTypeList"
+      displayExpr="key"
+      valueExpr="value"
+      [placeholder]="'_SEARCH_TYPE' | translate"
+      [showClearButton]="true"
+      #searchtype
+    >
+    </dx-select-box>
+    <dx-select-box
+      [items]="VehicleListAll"
+      [placeholder]="'_VEHICLE' | translate"
+      [dataSource]="VehicleListAll"
+      displayExpr="OnlineName"
+      valueExpr="Id"
+      [searchEnabled]="true"
+      [showClearButton]="true"
+      #vehicle
+    ></dx-select-box>
+    <dx-select-box
+      [items]="StationBufferListAll"
+      [placeholder]="'_SOURCE' | translate"
+      [dataSource]="StationBufferListAll"
+      displayExpr="OnlineName"
+      valueExpr="OnlineName"
+      [searchEnabled]="true"
+      [showClearButton]="true"
+      #source
+    ></dx-select-box>
+    <dx-select-box
+      [items]="StationBufferListAll"
+      [placeholder]="'_DEST' | translate"
+      [dataSource]="StationBufferListAll"
+      displayExpr="OnlineName"
+      valueExpr="OnlineName"
+      [searchEnabled]="true"
+      [showClearButton]="true"
+      #dest
+    ></dx-select-box>
+    <dx-text-box
+      [placeholder]="'_CARRIERID' | translate"
+      #carrier
+    ></dx-text-box>
+    <dx-date-box
+      [placeholder]="'_START_DATE' | translate"
+      type="datetime"
+      [value]="start"
+      [min]="start"
+      [max]="end"
+      [acceptCustomValue]="false"
+      [showClearButton]="true"
+      #startdate
+    ></dx-date-box>
+    <dx-date-box
+      [placeholder]="'_END_DATE' | translate"
+      type="datetime"
+      [value]="now"
+      [min]="start"
+      [max]="end"
+      [acceptCustomValue]="false"
+      [showClearButton]="true"
+      #enddate
+    ></dx-date-box>
+    <dx-button
+      [text]="'_SEARCH' | translate"
+      type="default"
+      (onClick)="
+        search(
+          creator.value,
+          searchtype.value,
+          vehicle.value,
+          source.value,
+          dest.value,
+          carrier.value,
+          startdate.value,
+          enddate.value
+        )
+      "
+    >
+    </dx-button>
+  </div>
+  <div id="transfer-result-area">
+    <dx-data-grid
+      [dataSource]="dataSetResult?.items"
+      [columnAutoWidth]="true"
+      [width]="screenWidth"
+      [columnAutoWidth]="true"
+      [height]="800"
+      [showBorders]="true"
+      #transferDataGrid
+    >
+      <dxo-export [enabled]="true" [fileName]="fileName"></dxo-export>
+      <dxo-paging [pageSize]="50"></dxo-paging>
+      <dxo-pager
+        [showPageSizeSelector]="true"
+        [allowedPageSizes]="[10, 20, 30, 40, 50]"
+        [showInfo]="true"
+        visible="true"
+      ></dxo-pager>
+      <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+      <dxi-column
+        [width]="80"
+        dataField="vehicle_id"
+        [caption]="'_VEHICLE_ID' | translate"
+        dataType="number"
+        alignment="center"
+      >
+      </dxi-column>
+      <dxi-column
+        dataField="_id"
+        [caption]="'_COMMAND' | translate"
+        dataType="string"
+        alignment="center"
+      >
+      </dxi-column>
+      <dxi-column
+        dataField="carrier_label"
+        [caption]="'_CARRIERID' | translate"
+        dataType="string"
+        alignment="center"
+      >
+      </dxi-column>
+      <dxi-column
+        dataField="OrderType"
+        [caption]="'_ORDER_TYPE' | translate"
+        dataType="number"
+        alignment="center"
+        cellTemplate="orderTypeTemplate"
+      >
+      </dxi-column>
+      <dxi-column
+        dataField="location_pickup"
+        [caption]="'_SOURCE' | translate"
+        dataType="string"
+        alignment="center"
+      >
+      </dxi-column>
+      <dxi-column
+        [width]="80"
+        dataField="location_pickup"
+        [caption]="'_SOURCE_NODE' | translate"
+        alignment="center"
+        datType="number"
+      >
+      </dxi-column>
+      <dxi-column
+        dataField="location_dropoff"
+        [caption]="'_DEST' | translate"
+        dataType="string"
+        alignment="center"
+      >
+      </dxi-column>
+      <dxi-column
+        [width]="80"
+        dataField="location_dropoff"
+        [caption]="'_DEST_NODE' | translate"
+        alignment="center"
+        dataType="number"
+      >
+      </dxi-column>
+      <dxi-column
+        dataField="origin"
+        [caption]="'_CREATOR' | translate"
+        dataType="number"
+        alignment="center"
+        cellTemplate="creatorTemplate"
+      >
+      </dxi-column>
+      <dxi-column
+        dataField="time_created"
+        [caption]="'_CREATED' | translate"
+        dataType="Date"
+        cellTemplate="dateTimeTemplate"
+        alignment="center"
+      >
+      </dxi-column>
+      <dxi-column
+        dataField="time_assigned"
+        [caption]="'_ASSIGNED' | translate"
+        dataType="string"
+        cellTemplate="dateTimeTemplate"
+        alignment="center"
+      >
+      </dxi-column>
+      <dxi-column
+        dataField="SourceArrived"
+        [caption]="'_SOURCE_ARRIVED' | translate"
+        dataType="string"
+        cellTemplate="dateTimeTemplate"
+        alignment="center"
+      >
+      </dxi-column>
+      <dxi-column
+        dataField="time_load_completed"
+        [caption]="'_LOAD_COMPLETED' | translate"
+        dataType="string"
+        cellTemplate="dateTimeTemplate"
+        alignment="center"
+      >
+      </dxi-column>
+      <dxi-column
+        dataField="DestArrived"
+        [caption]="'_DEST_ARRIVED' | translate"
+        dataType="string"
+        cellTemplate="dateTimeTemplate"
+        alignment="center"
+      >
+      </dxi-column>
+      <dxi-column
+        dataField="time_unload_completed"
+        [caption]="'_UNLOAD_COMPLETED' | translate"
+        dataType="string"
+        cellTemplate="dateTimeTemplate"
+        alignment="center"
+      >
+      </dxi-column>
+      <dxi-column
+        dataField="time_aborted"
+        [caption]="'_CANCEL_COMPLETED' | translate"
+        dataType="string"
+        cellTemplate="dateTimeTemplate"
+        alignment="center"
+      >
+      </dxi-column>
+
+      <div *dxTemplate="let data of 'creatorTemplate'">
+        {{ data.displayValue | translate }}
+      </div>
+      <div *dxTemplate="let data of 'orderTypeTemplate'">
+        {{ data.displayValue | translate }}
+      </div>
+      <div *dxTemplate="let data of 'orderStatusTemplate'">
+        {{ data.displayValue | translate }}
+      </div>
+      <div *dxTemplate="let data of 'dateTimeTemplate'">
+        {{ data.displayValue | date: "yyyy/MM/dd hh:mm:ss" }}
+
+        <!-- <div *ngIf="!data.displayValue.startsWith('0001'); else elseBlock">
+          {{ data.displayValue | date: "yyyy/MM/dd hh:mm:ss" }}
+        </div>
+        <ng-template #elseBlock>-</ng-template> -->
+      </div>
+      <div *dxTemplate="let data of 'booleanTemplate'">
+        {{ data.text }}
+      </div>
+    </dx-data-grid>
+  </div>
+</div>
