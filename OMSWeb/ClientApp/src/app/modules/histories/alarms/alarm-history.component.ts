@@ -63,16 +63,7 @@ export class AlarmHistoryComponent implements OnInit {
     this.getFileName();
   }
 
-  search(
-    creator,
-    searchtype,
-    vehicle,
-    source,
-    dest,
-    carrier,
-    startdate,
-    enddate
-  ) {
+  search() {
     this.svc.alarms().subscribe((res) => {
       this.dataSetResult = res;
     });
