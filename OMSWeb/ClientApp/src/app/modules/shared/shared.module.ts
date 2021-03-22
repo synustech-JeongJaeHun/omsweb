@@ -15,6 +15,7 @@ import { GnbIndicatorsComponent } from './navs/gnb-indicators.component';
 import { SharedDevextremeModule } from './shared-devextreme.module';
 import { DialogBaseComponent } from './dialogs/dialog-base.component';
 import { ConfirmDialogComponent } from './dialogs/confirm-dialog.component';
+import { AlarmDialogComponent } from './dialogs/alarm-dialog.component';
 
 const inOutModules = [
   FormsModule,
@@ -29,6 +30,7 @@ const inOutModules = [
     GnbIndicatorsComponent,
     DialogBaseComponent,
     ConfirmDialogComponent,
+    AlarmDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -53,6 +55,7 @@ const inOutModules = [
     DialogBaseComponent,
     TranslateModule,
     ConfirmDialogComponent,
+    AlarmDialogComponent,
   ],
 })
 export class SharedModule {}

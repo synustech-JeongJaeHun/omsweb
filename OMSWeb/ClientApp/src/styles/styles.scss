@@ -315,9 +315,13 @@ body {
 }
 
 // material
-
 .mat-dialog-container {
   padding: 8px !important;
+}
+.alarms-dialog {
+  .mat-dialog-container {
+    border: 2px solid red;
+  }
 }
 .mat-dialog-content {
   margin: 0 -8px !important;
@@ -387,7 +391,7 @@ body {
   font-size: 10px;
 }
 
-.dx-datagrid .dx-row>td {
+.dx-datagrid .dx-row > td {
   padding: 3px;
 }
 

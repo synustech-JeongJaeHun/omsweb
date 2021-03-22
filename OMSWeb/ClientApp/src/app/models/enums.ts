@@ -65,3 +65,9 @@ export type CommandKeyType =
 //   clusters,
 //   overlaps,
 // }
+
+export enum AlertSeverities {
+  normal = 0,
+  warning,
+  critical,
+}

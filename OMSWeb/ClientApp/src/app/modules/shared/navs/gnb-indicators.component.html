@@ -1,17 +1,107 @@
-<button mat-icon-button class="warn" [class.has-issue]="hasWarn">
+<button
+  mat-icon-button
+  class="warn"
+  [class.has-issue]="hasWarn"
+  [class.is-critical]="isCriticalWarn"
+  (click)="toggleWarnsView()"
+  [mdePopoverTriggerFor]="warnPopover"
+  mdePopoverTriggerOn="none"
+>
   <mat-icon
-    [matBadge]="warnCount"
+    [matBadge]="warnValue"
     matBadgeColor="warn"
     [matBadgeHidden]="!hasWarn"
     >{{ hasWarn ? "warning" : "warning_amber" }}</mat-icon
   >
 </button>
-<button mat-icon-button class="alarm" [class.has-issue]="hasAlarm">
+<button
+  #btnAlarm
+  mat-icon-button
+  class="alarm"
+  [class.has-issue]="hasAlarm"
+  [class.is-critical]="isCriticalAlarm"
+  (click)="toggleAlarmsView()"
+>
   <mat-icon
     [fontSet]="hasAlarm ? '' : 'material-icons-outlined'"
-    [matBadge]="alarmCount"
+    [matBadge]="alarmValue"
     matBadgeColor="warn"
+    matBadgeSize="medium"
     [matBadgeHidden]="!hasAlarm"
     >notifications</mat-icon
   >
 </button>
+
+<mde-popover
+  #warnPopover="mdePopover"
+  [mdePopoverOverlapTrigger]="false"
+  [mdePopoverCloseOnClick]="false"
+  [mdeFocusTrapEnabled]="false"
+  [mdePopoverOffsetY]="-8"
+  mdePopoverArrowColor="red"
+>
+  <!-- mdePopoverArrowWidth="0" -->
+  <div class="notification-viewer">
+    <div class="alert-list">
+      <dx-data-grid
+        [dataSource]="warnList"
+        keyExpr="id"
+        [height]="300"
+        [width]="700"
+      >
+        <dxo-scrolling mode="virtual"></dxo-scrolling>
+        <dxi-column
+          [allowFiltering]="false"
+          [width]="110"
+          dataType="datetime"
+          dataField="time"
+          [caption]="'names.time' | translate"
+          cellTemplate="dateCell"
+        >
+          <div *dxTemplate="let data of 'dateCell'">
+            {{ data.value | date: "yyyy/MM/dd HH:mm:ss" }}
+          </div>
+        </dxi-column>
+        <dxi-column
+          [allowFiltering]="false"
+          [width]="80"
+          dataType="string"
+          dataField="level"
+          [caption]="'names.severity' | translate"
+        ></dxi-column>
+        <dxi-column
+          [allowFiltering]="false"
+          [width]="120"
+          dataType="string"
+          dataField="tag"
+          [caption]="'names.tag' | translate"
+        ></dxi-column>
+        <dxi-column
+          [allowFiltering]="false"
+          dataType="string"
+          dataField="message"
+          [caption]="'names.message' | translate"
+        ></dxi-column>
+        <dxi-column
+          [allowFiltering]="false"
+          [width]="110"
+          dataType="datetime"
+          dataField="ack_time"
+          [caption]="'names.ackTime' | translate"
+          cellTemplate="dateCell"
+        >
+          <div *dxTemplate="let data of 'dateCell'">
+            {{ data.value | date: "yyyy/MM/dd HH:mm:ss" }}
+          </div>
+        </dxi-column>
+        <dxi-column
+          [allowFiltering]="false"
+          [width]="80"
+          dataType="string"
+          dataField="ack_by"
+          [caption]="'names.ackBy' | translate"
+        ></dxi-column>
+      </dx-data-grid>
+    </div>
+  </div>
+</mde-popover>

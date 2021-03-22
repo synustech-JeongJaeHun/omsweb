@@ -1,5 +1,14 @@
 {
   "names": {
+    "vehicle": "Vehicle",
+    "cluster": "Cluster",
+    "point": "Point",
+    "segment": "Station",
+    "mtl": "MTL",
+    "station": "Station",
+    "buffer": "Buffer",
+    "group": "Group",
+
     "id": "ID",
     "physical_id": "Physical ID",
     "logical_id": "Logical ID",
@@ -60,6 +69,18 @@
     "cancel": "Cancel",
     "track": "Track",
     "apply": "Apply",
+
+    "time": "Time",
+    "severity": "Severity",
+    "tag": "Tag",
+    "message": "Message",
+    "ackTime": "Cleared At",
+    "ackBy": "Cleared By",
+    "code": "Code",
+    "alarmCode": "Alarm Code",
+    "desc": "Description",
+
+    "alarms": "Alarms",
 
     "manualTransfer": "Manual Transfer",
     "command-move": "Move",
