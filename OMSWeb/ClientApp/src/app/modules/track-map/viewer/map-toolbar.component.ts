@@ -18,9 +18,14 @@ import { MessagesService } from '@oms/services/messages.service';
 import { DialogService } from '@oms/services/dialog.service';
 import { TranslateService } from '@ngx-translate/core';
 import { SearchDialogComponent } from '../dialogs/search-dialog.component';
-import { MatDialog, MatDialogRef, MatDialogState } from '@angular/material/dialog';
+import {
+  MatDialog,
+  MatDialogRef,
+  MatDialogState,
+} from '@angular/material/dialog';
 import { TrackVehicleDialogComponent } from '../dialogs/track-vehicle-dialog.component';
 import { CommandDialogComponent } from '../dialogs/command-dialog.component';
+import { ShowObjectDialogComponent } from '../dialogs/show-object-dialog.component';
 
 @Component({
   selector: 'oms-map-toolbar',
@@ -34,12 +39,14 @@ export class MapToolbarComponent implements OnInit {
   @ViewChild('btnSearch', { read: ElementRef }) btnSearch: ElementRef;
   @ViewChild('btnTrack', { read: ElementRef }) btnTrack: ElementRef;
   @ViewChild('btnCommand', { read: ElementRef }) btnCommand: ElementRef;
+  @ViewChild('btnShowObj', { read: ElementRef }) btnShowObj: ElementRef;
 
   visibilityOpen = false;
 
   private _searchDlg: MatDialogRef<SearchDialogComponent, any>;
   private _trackDlg: MatDialogRef<TrackVehicleDialogComponent, any>;
-  private _cmdDlg: MatDialogRef<CommandDialogComponent, any>
+  private _cmdDlg: MatDialogRef<CommandDialogComponent, any>;
+  private _showObjDlg: MatDialogRef<ShowObjectDialogComponent, any>;
 
   constructor(
     private stateSvc: MapStatesService,
@@ -112,6 +119,26 @@ export class MapToolbarComponent implements OnInit {
     this._cmdDlg.afterClosed().subscribe((payload: any) => {
       if (!payload) return;
       this.stateSvc.commandToolbar('manualOrder', payload);
+    });
+  }
+
+  onTuneVisibility() {
+    if (
+      this._showObjDlg &&
+      this._showObjDlg.getState() === MatDialogState.OPEN
+    ) {
+      this._showObjDlg.close();
+      return;
+    }
+
+    const rect = this.btnShowObj.nativeElement.getBoundingClientRect();
+    this._showObjDlg = this.dialog.open(ShowObjectDialogComponent, {
+      width: '250px',
+      autoFocus: false,
+      hasBackdrop: false,
+      disableClose: true,
+      closeOnNavigation: true,
+      position: { left: '36px', top: `${rect.top}px` },
     });
   }
 
