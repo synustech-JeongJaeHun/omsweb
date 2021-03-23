@@ -87,13 +87,14 @@ export class GnbIndicatorsComponent implements OnInit {
   }
 
   private countFormat(count: number): string {
-    if (count > 1000000) {
-      return `${Math.floor(count / 1000000)}M`;
-    }
-    if (count > 1000) {
-      return `${Math.floor(count / 1000)}K`;
-    }
     return count.toString();
+    // if (count > 1000000) {
+    //   return `${Math.floor(count / 1000000)}M`;
+    // }
+    // if (count > 1000) {
+    //   return `${Math.floor(count / 1000)}K`;
+    // }
+    // return count.toString();
   }
 
   private loadWarnList() {

@@ -1,6 +1,7 @@
 button {
   position: relative;
   color: var(--theme-text-color);
+  margin-right: 20px;
 }
 button.has-issue {
   color: #666;
@@ -13,10 +14,12 @@ mat-icon ::ng-deep.mat-badge-content {
   line-height: 16px;
   font-weight: normal;
   border-radius: 3px;
-  left: 12px;
+  left: 10px;
   right: initial !important;
   top: -8px !important;
-  max-width: 32px;
+  width: initial;
+  min-width: 20px;
+  max-width: 40px;
   height: 14px;
   padding: 2px 2px;
 }
