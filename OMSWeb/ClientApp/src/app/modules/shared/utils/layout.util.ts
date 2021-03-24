@@ -533,12 +533,12 @@ export namespace LayoutUtil {
     //   hasError = true;
     // }
 
-    // const inverted_coord = _.isNil(invertY) ? { x, y } : { x, y: invertY - y };
+    // const invertedCoord = _.isNil(invertY) ? { x, y } : { x, y: invertY - y };
 
     // return {
     //   coord: { x, y },
-    //   inverted_coord: inverted_coord,
-    //   is_error: hasError,
+    //   invertedCoord: invertedCoord,
+    //   isError: hasError,
     // };
   };
   export const create_segpart_info = (source: ISegmentPart) => {
@@ -564,8 +564,8 @@ export namespace LayoutUtil {
       type,
       direction,
       location,
-      coord_from: { coord: coord_from },
-      coord_to: { coord: coord_to },
+      coordFrom: { coord: coordFrom },
+      coordTo: { coord: coordTo },
     } = source;
     const dir_value = direction === 'C' ? 1 : -1;
 
@@ -577,16 +577,16 @@ export namespace LayoutUtil {
       let from, to;
 
       // Calculate width and height
-      width = Math.abs(coord_to.x - coord_from.x);
-      height = Math.abs(coord_to.y - coord_from.y);
+      width = Math.abs(coordTo.x - coordFrom.x);
+      height = Math.abs(coordTo.y - coordFrom.y);
 
       // Set straight part's portion
       straight_portion = 0.3;
 
       // Pre calculate segpart point that connected with start point
       from = {};
-      from.x = coord_from.x;
-      from.y = coord_from.y;
+      from.x = coordFrom.x;
+      from.y = coordFrom.y;
 
       part1.from = from;
 
@@ -617,11 +617,11 @@ export namespace LayoutUtil {
 
         from = part1.to;
         if (direction === 'C') {
-          to.x = coord_to.x;
-          to.y = coord_to.y - height * straight_portion;
+          to.x = coordTo.x;
+          to.y = coordTo.y - height * straight_portion;
         } else {
-          to.x = coord_to.x + width * straight_portion;
-          to.y = coord_to.y;
+          to.x = coordTo.x + width * straight_portion;
+          to.y = coordTo.y;
         }
 
         part2.from = from;
@@ -634,8 +634,8 @@ export namespace LayoutUtil {
         from = {};
         from = part2.to;
         to = {};
-        to.x = coord_to.x;
-        to.y = coord_to.y;
+        to.x = coordTo.x;
+        to.y = coordTo.y;
 
         // set value
         part3.from = from;
@@ -674,11 +674,11 @@ export namespace LayoutUtil {
 
         from = part1.to;
         if (direction === 'C') {
-          to.x = coord_to.x - width * straight_portion;
-          to.y = coord_to.y;
+          to.x = coordTo.x - width * straight_portion;
+          to.y = coordTo.y;
         } else {
-          to.x = coord_to.x;
-          to.y = coord_to.y - height * straight_portion;
+          to.x = coordTo.x;
+          to.y = coordTo.y - height * straight_portion;
         }
 
         part2.from = from;
@@ -691,8 +691,8 @@ export namespace LayoutUtil {
         from = {};
         from = part2.to;
         to = {};
-        to.x = coord_to.x;
-        to.y = coord_to.y;
+        to.x = coordTo.x;
+        to.y = coordTo.y;
 
         // set value
         part3.from = from;
@@ -731,11 +731,11 @@ export namespace LayoutUtil {
 
         from = part1.to;
         if (direction === 'C') {
-          to.x = coord_to.x;
-          to.y = coord_to.y + height * straight_portion;
+          to.x = coordTo.x;
+          to.y = coordTo.y + height * straight_portion;
         } else {
-          to.x = coord_to.x - width * straight_portion;
-          to.y = coord_to.y;
+          to.x = coordTo.x - width * straight_portion;
+          to.y = coordTo.y;
         }
 
         part2.from = from;
@@ -748,8 +748,8 @@ export namespace LayoutUtil {
         from = {};
         from = part2.to;
         to = {};
-        to.x = coord_to.x;
-        to.y = coord_to.y;
+        to.x = coordTo.x;
+        to.y = coordTo.y;
 
         // set value
         part3.from = from;
@@ -788,11 +788,11 @@ export namespace LayoutUtil {
 
         from = part1.to;
         if (direction === 'C') {
-          to.x = coord_to.x + width * straight_portion;
-          to.y = coord_to.y;
+          to.x = coordTo.x + width * straight_portion;
+          to.y = coordTo.y;
         } else {
-          to.x = coord_to.x;
-          to.y = coord_to.y + height * straight_portion;
+          to.x = coordTo.x;
+          to.y = coordTo.y + height * straight_portion;
         }
 
         part2.from = from;
@@ -805,8 +805,8 @@ export namespace LayoutUtil {
         from = {};
         from = part2.to;
         to = {};
-        to.x = coord_to.x;
-        to.y = coord_to.y;
+        to.x = coordTo.x;
+        to.y = coordTo.y;
 
         // set value
         part3.from = from;
@@ -833,16 +833,16 @@ export namespace LayoutUtil {
       let from, to;
 
       // Calculate width and height
-      width = Math.abs(coord_to.x - coord_from.x);
-      height = Math.abs(coord_to.y - coord_from.y);
+      width = Math.abs(coordTo.x - coordFrom.x);
+      height = Math.abs(coordTo.y - coordFrom.y);
 
       // Set straight part's portion
       straight_portion = 0.2;
 
       // Pre calculate segpart point that connected with start point
       from = {};
-      from.x = coord_from.x;
-      from.y = coord_from.y;
+      from.x = coordFrom.x;
+      from.y = coordFrom.y;
 
       part1.from = from;
 
@@ -868,11 +868,11 @@ export namespace LayoutUtil {
 
         from = part1.to;
         to.x =
-          coord_from.x + width * (0.5 - straight_portion * 0.5) * dir_value;
+          coordFrom.x + width * (0.5 - straight_portion * 0.5) * dir_value;
         to.y =
-          coord_from.y > coord_to.y
-            ? coord_to.y - width * 0.5
-            : coord_from.y - width * 0.5;
+          coordFrom.y > coordTo.y
+            ? coordTo.y - width * 0.5
+            : coordFrom.y - width * 0.5;
 
         part2.from = from;
         part2.to = to;
@@ -886,11 +886,11 @@ export namespace LayoutUtil {
 
         from = part2.to;
         to.x =
-          coord_from.x + width * (0.5 + straight_portion * 0.5) * dir_value;
+          coordFrom.x + width * (0.5 + straight_portion * 0.5) * dir_value;
         to.y =
-          coord_from.y > coord_to.y
-            ? coord_to.y - width * 0.5
-            : coord_from.y - width * 0.5;
+          coordFrom.y > coordTo.y
+            ? coordTo.y - width * 0.5
+            : coordFrom.y - width * 0.5;
 
         part3.from = from;
         part3.to = to;
@@ -907,8 +907,8 @@ export namespace LayoutUtil {
         to = {};
 
         from = part3.to;
-        to.x = coord_to.x;
-        to.y = coord_to.y - width * straight_portion;
+        to.x = coordTo.x;
+        to.y = coordTo.y - width * straight_portion;
 
         part4.from = from;
         part4.to = to;
@@ -920,8 +920,8 @@ export namespace LayoutUtil {
         from = {};
         from = part4.to;
         to = {};
-        to.x = coord_to.x;
-        to.y = coord_to.y;
+        to.x = coordTo.x;
+        to.y = coordTo.y;
 
         // set value
         part5.from = from;
@@ -955,11 +955,11 @@ export namespace LayoutUtil {
 
         from = part1.to;
         to.x =
-          coord_from.x > coord_to.x
-            ? coord_from.x + height * 0.5
-            : coord_to.x + height * 0.5;
+          coordFrom.x > coordTo.x
+            ? coordFrom.x + height * 0.5
+            : coordTo.x + height * 0.5;
         to.y =
-          coord_from.y + height * (0.5 - straight_portion * 0.5) * dir_value;
+          coordFrom.y + height * (0.5 - straight_portion * 0.5) * dir_value;
 
         part2.from = from;
         part2.to = to;
@@ -973,11 +973,11 @@ export namespace LayoutUtil {
 
         from = part2.to;
         to.x =
-          coord_from.x > coord_to.x
-            ? coord_from.x + height * 0.5
-            : coord_to.x + height * 0.5;
+          coordFrom.x > coordTo.x
+            ? coordFrom.x + height * 0.5
+            : coordTo.x + height * 0.5;
         to.y =
-          coord_from.y + height * (0.5 + straight_portion * 0.5) * dir_value;
+          coordFrom.y + height * (0.5 + straight_portion * 0.5) * dir_value;
 
         part3.from = from;
         part3.to = to;
@@ -994,8 +994,8 @@ export namespace LayoutUtil {
         to = {};
 
         from = part3.to;
-        to.x = coord_to.x + height * straight_portion;
-        to.y = coord_to.y;
+        to.x = coordTo.x + height * straight_portion;
+        to.y = coordTo.y;
 
         part4.from = from;
         part4.to = to;
@@ -1007,8 +1007,8 @@ export namespace LayoutUtil {
         from = {};
         from = part4.to;
         to = {};
-        to.x = coord_to.x;
-        to.y = coord_to.y;
+        to.x = coordTo.x;
+        to.y = coordTo.y;
 
         // set value
         part5.from = from;
@@ -1042,11 +1042,11 @@ export namespace LayoutUtil {
 
         from = part1.to;
         to.x =
-          coord_from.x - width * (0.5 - straight_portion * 0.5) * dir_value;
+          coordFrom.x - width * (0.5 - straight_portion * 0.5) * dir_value;
         to.y =
-          coord_from.y > coord_to.y
-            ? coord_from.y + width * 0.5
-            : coord_to.y + width * 0.5;
+          coordFrom.y > coordTo.y
+            ? coordFrom.y + width * 0.5
+            : coordTo.y + width * 0.5;
 
         part2.from = from;
         part2.to = to;
@@ -1060,11 +1060,11 @@ export namespace LayoutUtil {
 
         from = part2.to;
         to.x =
-          coord_from.x - width * (0.5 + straight_portion * 0.5) * dir_value;
+          coordFrom.x - width * (0.5 + straight_portion * 0.5) * dir_value;
         to.y =
-          coord_from.y > coord_to.y
-            ? coord_from.y + width * 0.5
-            : coord_to.y + width * 0.5;
+          coordFrom.y > coordTo.y
+            ? coordFrom.y + width * 0.5
+            : coordTo.y + width * 0.5;
 
         part3.from = from;
         part3.to = to;
@@ -1081,8 +1081,8 @@ export namespace LayoutUtil {
         to = {};
 
         from = part3.to;
-        to.x = coord_to.x;
-        to.y = coord_to.y + width * straight_portion;
+        to.x = coordTo.x;
+        to.y = coordTo.y + width * straight_portion;
 
         part4.from = from;
         part4.to = to;
@@ -1094,8 +1094,8 @@ export namespace LayoutUtil {
         from = {};
         from = part4.to;
         to = {};
-        to.x = coord_to.x;
-        to.y = coord_to.y;
+        to.x = coordTo.x;
+        to.y = coordTo.y;
 
         // set value
         part5.from = from;
@@ -1129,11 +1129,11 @@ export namespace LayoutUtil {
 
         from = part1.to;
         to.x =
-          coord_from.x > coord_to.x
-            ? coord_to.x - height * 0.5
-            : coord_from.x - height * 0.5;
+          coordFrom.x > coordTo.x
+            ? coordTo.x - height * 0.5
+            : coordFrom.x - height * 0.5;
         to.y =
-          coord_from.y - height * (0.5 - straight_portion * 0.5) * dir_value;
+          coordFrom.y - height * (0.5 - straight_portion * 0.5) * dir_value;
 
         part2.from = from;
         part2.to = to;
@@ -1147,11 +1147,11 @@ export namespace LayoutUtil {
 
         from = part2.to;
         to.x =
-          coord_from.x > coord_to.x
-            ? coord_to.x - height * 0.5
-            : coord_from.x - height * 0.5;
+          coordFrom.x > coordTo.x
+            ? coordTo.x - height * 0.5
+            : coordFrom.x - height * 0.5;
         to.y =
-          coord_from.y - height * (0.5 + straight_portion * 0.5) * dir_value;
+          coordFrom.y - height * (0.5 + straight_portion * 0.5) * dir_value;
 
         part3.from = from;
         part3.to = to;
@@ -1168,8 +1168,8 @@ export namespace LayoutUtil {
         to = {};
 
         from = part3.to;
-        to.x = coord_to.x - height * straight_portion;
-        to.y = coord_to.y;
+        to.x = coordTo.x - height * straight_portion;
+        to.y = coordTo.y;
 
         part4.from = from;
         part4.to = to;
@@ -1181,8 +1181,8 @@ export namespace LayoutUtil {
         from = {};
         from = part4.to;
         to = {};
-        to.x = coord_to.x;
-        to.y = coord_to.y;
+        to.x = coordTo.x;
+        to.y = coordTo.y;
 
         // set value
         part5.from = from;
@@ -1211,16 +1211,16 @@ export namespace LayoutUtil {
       let from, to;
 
       // Calculate width and height
-      width = Math.abs(coord_to.x - coord_from.x);
-      height = Math.abs(coord_to.y - coord_from.y);
+      width = Math.abs(coordTo.x - coordFrom.x);
+      height = Math.abs(coordTo.y - coordFrom.y);
 
       // Set straight part's portion
       straight_portion = 0.3;
 
       // Pre calculate segpart point that connected with start point
       from = {};
-      from.x = coord_from.x;
-      from.y = coord_from.y;
+      from.x = coordFrom.x;
+      from.y = coordFrom.y;
 
       part1.from = from;
 
@@ -1247,11 +1247,11 @@ export namespace LayoutUtil {
 
         from = part1.to;
         if (direction === 'H') {
-          to.x = coord_from.x + width * 0.5;
-          to.y = coord_from.y - height * (0.5 - straight_portion * 0.5);
+          to.x = coordFrom.x + width * 0.5;
+          to.y = coordFrom.y - height * (0.5 - straight_portion * 0.5);
         } else {
-          to.x = coord_from.x + width * (0.5 - straight_portion * 0.5);
-          to.y = coord_from.y - height * 0.5;
+          to.x = coordFrom.x + width * (0.5 - straight_portion * 0.5);
+          to.y = coordFrom.y - height * 0.5;
         }
 
         part2.from = from;
@@ -1266,11 +1266,11 @@ export namespace LayoutUtil {
 
         from = part2.to;
         if (direction === 'H') {
-          to.x = coord_from.x + width * 0.5;
-          to.y = coord_from.y - height * (0.5 + straight_portion * 0.5);
+          to.x = coordFrom.x + width * 0.5;
+          to.y = coordFrom.y - height * (0.5 + straight_portion * 0.5);
         } else {
-          to.x = coord_from.x + width * (0.5 + straight_portion * 0.5);
-          to.y = coord_from.y - height * 0.5;
+          to.x = coordFrom.x + width * (0.5 + straight_portion * 0.5);
+          to.y = coordFrom.y - height * 0.5;
         }
 
         part3.from = from;
@@ -1285,11 +1285,11 @@ export namespace LayoutUtil {
 
         from = part3.to;
         if (direction === 'H') {
-          to.x = coord_to.x - width * straight_portion;
-          to.y = coord_to.y;
+          to.x = coordTo.x - width * straight_portion;
+          to.y = coordTo.y;
         } else {
-          to.x = coord_to.x;
-          to.y = coord_to.y + height * straight_portion;
+          to.x = coordTo.x;
+          to.y = coordTo.y + height * straight_portion;
         }
 
         part4.from = from;
@@ -1302,8 +1302,8 @@ export namespace LayoutUtil {
         from = {};
         from = part4.to;
         to = {};
-        to.x = coord_to.x;
-        to.y = coord_to.y;
+        to.x = coordTo.x;
+        to.y = coordTo.y;
 
         // set value
         part5.from = from;
@@ -1338,11 +1338,11 @@ export namespace LayoutUtil {
 
         from = part1.to;
         if (direction === 'H') {
-          to.x = coord_from.x - width * 0.5;
-          to.y = coord_from.y - height * (0.5 - straight_portion * 0.5);
+          to.x = coordFrom.x - width * 0.5;
+          to.y = coordFrom.y - height * (0.5 - straight_portion * 0.5);
         } else {
-          to.x = coord_from.x - width * (0.5 - straight_portion * 0.5);
-          to.y = coord_from.y - height * 0.5;
+          to.x = coordFrom.x - width * (0.5 - straight_portion * 0.5);
+          to.y = coordFrom.y - height * 0.5;
         }
 
         part2.from = from;
@@ -1357,11 +1357,11 @@ export namespace LayoutUtil {
 
         from = part2.to;
         if (direction === 'H') {
-          to.x = coord_from.x - width * 0.5;
-          to.y = coord_from.y - height * (0.5 + straight_portion * 0.5);
+          to.x = coordFrom.x - width * 0.5;
+          to.y = coordFrom.y - height * (0.5 + straight_portion * 0.5);
         } else {
-          to.x = coord_from.x - width * (0.5 + straight_portion * 0.5);
-          to.y = coord_from.y - height * 0.5;
+          to.x = coordFrom.x - width * (0.5 + straight_portion * 0.5);
+          to.y = coordFrom.y - height * 0.5;
         }
 
         part3.from = from;
@@ -1380,11 +1380,11 @@ export namespace LayoutUtil {
 
         from = part3.to;
         if (direction === 'H') {
-          to.x = coord_to.x + width * straight_portion;
-          to.y = coord_to.y;
+          to.x = coordTo.x + width * straight_portion;
+          to.y = coordTo.y;
         } else {
-          to.x = coord_to.x;
-          to.y = coord_to.y + height * straight_portion;
+          to.x = coordTo.x;
+          to.y = coordTo.y + height * straight_portion;
         }
 
         part4.from = from;
@@ -1397,8 +1397,8 @@ export namespace LayoutUtil {
         from = {};
         from = part4.to;
         to = {};
-        to.x = coord_to.x;
-        to.y = coord_to.y;
+        to.x = coordTo.x;
+        to.y = coordTo.y;
 
         // set value
         part5.from = from;
@@ -1437,11 +1437,11 @@ export namespace LayoutUtil {
 
         from = part1.to;
         if (direction === 'H') {
-          to.x = coord_from.x - width * 0.5;
-          to.y = coord_from.y + height * (0.5 - straight_portion * 0.5);
+          to.x = coordFrom.x - width * 0.5;
+          to.y = coordFrom.y + height * (0.5 - straight_portion * 0.5);
         } else {
-          to.x = coord_from.x - width * (0.5 - straight_portion * 0.5);
-          to.y = coord_from.y + height * 0.5;
+          to.x = coordFrom.x - width * (0.5 - straight_portion * 0.5);
+          to.y = coordFrom.y + height * 0.5;
         }
 
         part2.from = from;
@@ -1456,11 +1456,11 @@ export namespace LayoutUtil {
 
         from = part2.to;
         if (direction === 'H') {
-          to.x = coord_from.x - width * 0.5;
-          to.y = coord_from.y + height * (0.5 + straight_portion * 0.5);
+          to.x = coordFrom.x - width * 0.5;
+          to.y = coordFrom.y + height * (0.5 + straight_portion * 0.5);
         } else {
-          to.x = coord_from.x - width * (0.5 + straight_portion * 0.5);
-          to.y = coord_from.y + height * 0.5;
+          to.x = coordFrom.x - width * (0.5 + straight_portion * 0.5);
+          to.y = coordFrom.y + height * 0.5;
         }
 
         part3.from = from;
@@ -1479,11 +1479,11 @@ export namespace LayoutUtil {
 
         from = part3.to;
         if (direction === 'H') {
-          to.x = coord_to.x + width * straight_portion;
-          to.y = coord_to.y;
+          to.x = coordTo.x + width * straight_portion;
+          to.y = coordTo.y;
         } else {
-          to.x = coord_to.x;
-          to.y = coord_to.y - height * straight_portion;
+          to.x = coordTo.x;
+          to.y = coordTo.y - height * straight_portion;
         }
 
         part4.from = from;
@@ -1496,8 +1496,8 @@ export namespace LayoutUtil {
         from = {};
         from = part4.to;
         to = {};
-        to.x = coord_to.x;
-        to.y = coord_to.y;
+        to.x = coordTo.x;
+        to.y = coordTo.y;
 
         // set value
         part5.from = from;
@@ -1536,11 +1536,11 @@ export namespace LayoutUtil {
 
         from = part1.to;
         if (direction === 'H') {
-          to.x = coord_from.x + width * 0.5;
-          to.y = coord_from.y + height * (0.5 - straight_portion * 0.5);
+          to.x = coordFrom.x + width * 0.5;
+          to.y = coordFrom.y + height * (0.5 - straight_portion * 0.5);
         } else {
-          to.x = coord_from.x + width * (0.5 - straight_portion * 0.5);
-          to.y = coord_from.y + height * 0.5;
+          to.x = coordFrom.x + width * (0.5 - straight_portion * 0.5);
+          to.y = coordFrom.y + height * 0.5;
         }
 
         part2.from = from;
@@ -1555,11 +1555,11 @@ export namespace LayoutUtil {
 
         from = part2.to;
         if (direction === 'H') {
-          to.x = coord_from.x + width * 0.5;
-          to.y = coord_from.y + height * (0.5 + straight_portion * 0.5);
+          to.x = coordFrom.x + width * 0.5;
+          to.y = coordFrom.y + height * (0.5 + straight_portion * 0.5);
         } else {
-          to.x = coord_from.x + width * (0.5 + straight_portion * 0.5);
-          to.y = coord_from.y + height * 0.5;
+          to.x = coordFrom.x + width * (0.5 + straight_portion * 0.5);
+          to.y = coordFrom.y + height * 0.5;
         }
 
         part3.from = from;
@@ -1578,11 +1578,11 @@ export namespace LayoutUtil {
 
         from = part3.to;
         if (direction === 'H') {
-          to.x = coord_to.x - width * straight_portion;
-          to.y = coord_to.y;
+          to.x = coordTo.x - width * straight_portion;
+          to.y = coordTo.y;
         } else {
-          to.x = coord_to.x;
-          to.y = coord_to.y - height * straight_portion;
+          to.x = coordTo.x;
+          to.y = coordTo.y - height * straight_portion;
         }
 
         part4.from = from;
@@ -1595,8 +1595,8 @@ export namespace LayoutUtil {
         from = {};
         from = part4.to;
         to = {};
-        to.x = coord_to.x;
-        to.y = coord_to.y;
+        to.x = coordTo.x;
+        to.y = coordTo.y;
 
         // set value
         part5.from = from;
@@ -1667,9 +1667,9 @@ export namespace LayoutUtil {
   };
 
   export const find_segment_candidate = (
-    segment_id: number,
-    start_point: any,
-    end_point: any,
+    segmentId: number,
+    startPoint: any,
+    endPoint: any,
     segments: any[]
   ) => {
     let candidates = [];
@@ -1680,12 +1680,12 @@ export namespace LayoutUtil {
     let con_end_edge_segparts = [];
 
     // Detect direction between start and end point
-    start_end_dir = detect_direction(start_point.coord, end_point.coord);
+    start_end_dir = detect_direction(startPoint.coord, endPoint.coord);
 
     // Find start point's connected segments then get its last segpart
     let connected_segments = find_connected_segments(
-      start_point.id,
-      end_point.id,
+      startPoint.id,
+      endPoint.id,
       segments
     ) as {
       start: any[];
@@ -1693,10 +1693,10 @@ export namespace LayoutUtil {
     };
 
     for (let i = 0; i < connected_segments.start.length; i++) {
-      if (connected_segments.start[i].id !== segment_id) {
+      if (connected_segments.start[i].id !== segmentId) {
         let matched_segpart = find_segpart(
-          start_point.coord,
-          connected_segments.start[i].segment_parts
+          startPoint.coord,
+          connected_segments.start[i].segmentParts
         );
         if (matched_segpart) {
           con_start_edge_segparts.push(matched_segpart);
@@ -1705,10 +1705,10 @@ export namespace LayoutUtil {
     }
 
     for (let i = 0; i < connected_segments.end.length; i++) {
-      if (connected_segments.end[i].id !== segment_id) {
+      if (connected_segments.end[i].id !== segmentId) {
         let matched_segpart = find_segpart(
-          end_point.coord,
-          connected_segments.end[i].segment_parts
+          endPoint.coord,
+          connected_segments.end[i].segmentParts
         );
         if (matched_segpart) {
           con_end_edge_segparts.push(matched_segpart);
@@ -1788,7 +1788,7 @@ export namespace LayoutUtil {
       add_candidate(candidates, 'D', null, start_end_dir, false);
 
       console.warn(
-        `can't find candidate, use non-regular segment for ${segment_id}`
+        `can't find candidate, use non-regular segment for ${segmentId}`
       );
     }
 
@@ -1810,8 +1810,8 @@ export namespace LayoutUtil {
 
       if (
         start_point_id &&
-        (segment.point_to.id === start_point_id ||
-          segment.point_from.id === start_point_id)
+        (segment.pointTo.id === start_point_id ||
+          segment.pointFrom.id === start_point_id)
       ) {
         if (need_copied_object) {
           // Return as copy() object
@@ -1821,8 +1821,8 @@ export namespace LayoutUtil {
         }
       } else if (
         end_point_id &&
-        (segment.point_to.id === end_point_id ||
-          segment.point_from.id === end_point_id)
+        (segment.pointTo.id === end_point_id ||
+          segment.pointFrom.id === end_point_id)
       ) {
         if (need_copied_object) {
           // Return as copy() object
@@ -1848,10 +1848,10 @@ export namespace LayoutUtil {
 
       // if any segpart's coord is matched with target coord
       if (
-        (segpart.coord_from.coord.x === target_coord.x &&
-          segpart.coord_from.coord.y === target_coord.y) ||
-        (segpart.coord_to.coord.x === target_coord.x &&
-          segpart.coord_to.coord.y === target_coord.y)
+        (segpart.coordFrom.coord.x === target_coord.x &&
+          segpart.coordFrom.coord.y === target_coord.y) ||
+        (segpart.coordTo.coord.x === target_coord.x &&
+          segpart.coordTo.coord.y === target_coord.y)
       ) {
         result = segpart;
         break;
@@ -1877,7 +1877,7 @@ export namespace LayoutUtil {
     if (
       candidates.some(
         (candidate) =>
-          candidate.is_validate &&
+          candidate.isValidate &&
           candidate.type === type &&
           candidate.location === location &&
           candidate.direction === direction
@@ -1943,7 +1943,7 @@ export namespace LayoutUtil {
     }
 
     if (coord_type === 'INVERTED') {
-      coord_type = 'inverted_coord';
+      coord_type = 'invertedCoord';
     } else {
       coord_type = 'coord';
     }
@@ -1961,7 +1961,7 @@ export namespace LayoutUtil {
       };
     }
 
-    let min_x, min_y, max_x, max_y;
+    let minX, minY, maxX, maxY;
 
     for (let object of objects) {
       if (object.constructor.name.toUpperCase() !== 'CLUSTER') {
@@ -1969,17 +1969,17 @@ export namespace LayoutUtil {
         // Valid first candidate for min max values
         if (object.constructor.name.toUpperCase() === 'SEGMENT') {
           // if (object instanceof Segment) {
-          let cur_from = object.point_from[coord_type];
-          let cur_to = object.point_to[coord_type];
-          min_x = cur_from.x < cur_to.x ? cur_from.x : cur_to.x;
-          max_x = cur_from.x > cur_to.x ? cur_from.x : cur_to.x;
-          min_y = cur_from.y < cur_to.y ? cur_from.y : cur_to.y;
-          max_y = cur_from.y > cur_to.y ? cur_from.y : cur_to.y;
+          let cur_from = object.pointFrom[coord_type];
+          let cur_to = object.pointTo[coord_type];
+          minX = cur_from.x < cur_to.x ? cur_from.x : cur_to.x;
+          maxX = cur_from.x > cur_to.x ? cur_from.x : cur_to.x;
+          minY = cur_from.y < cur_to.y ? cur_from.y : cur_to.y;
+          maxY = cur_from.y > cur_to.y ? cur_from.y : cur_to.y;
         } else {
-          (min_x = object[coord_type].x),
-            (min_y = object[coord_type].y),
-            (max_x = object[coord_type].x),
-            (max_y = object[coord_type].y);
+          (minX = object[coord_type].x),
+            (minY = object[coord_type].y),
+            (maxX = object[coord_type].x),
+            (maxY = object[coord_type].y);
         }
         break;
       }
@@ -1993,73 +1993,73 @@ export namespace LayoutUtil {
       } else {
         if (obj.constructor.name.toUpperCase() === 'SEGMENT') {
           // if (obj instanceof Segment) {
-          max_x =
-            obj.point_to[coord_type].x > max_x
-              ? obj.point_to[coord_type].x
-              : max_x;
-          max_y =
-            obj.point_to[coord_type].y > max_y
-              ? obj.point_to[coord_type].y
-              : max_y;
-          min_y =
-            obj.point_to[coord_type].y < min_y
-              ? obj.point_to[coord_type].y
-              : min_y;
-          min_x =
-            obj.point_to[coord_type].x < min_x
-              ? obj.point_to[coord_type].x
-              : min_x;
+          maxX =
+            obj.pointTo[coord_type].x > maxX
+              ? obj.pointTo[coord_type].x
+              : maxX;
+          maxY =
+            obj.pointTo[coord_type].y > maxY
+              ? obj.pointTo[coord_type].y
+              : maxY;
+          minY =
+            obj.pointTo[coord_type].y < minY
+              ? obj.pointTo[coord_type].y
+              : minY;
+          minX =
+            obj.pointTo[coord_type].x < minX
+              ? obj.pointTo[coord_type].x
+              : minX;
 
-          max_x = obj.dir_coord.x > max_x ? obj.dir_coord.x : max_x;
-          max_y = obj.dir_coord.y > max_y ? obj.dir_coord.y : max_y;
-          min_y = obj.dir_coord.y < min_y ? obj.dir_coord.y : min_y;
-          min_x = obj.dir_coord.x < min_x ? obj.dir_coord.x : min_x;
+          maxX = obj.dirCoord.x > maxX ? obj.dirCoord.x : maxX;
+          maxY = obj.dirCoord.y > maxY ? obj.dirCoord.y : maxY;
+          minY = obj.dirCoord.y < minY ? obj.dirCoord.y : minY;
+          minX = obj.dirCoord.x < minX ? obj.dirCoord.x : minX;
 
-          max_x =
-            obj.point_from[coord_type].x > max_x
-              ? obj.point_from[coord_type].x
-              : max_x;
-          max_y =
-            obj.point_from[coord_type].y > max_y
-              ? obj.point_from[coord_type].y
-              : max_y;
-          min_y =
-            obj.point_from[coord_type].y < min_y
-              ? obj.point_from[coord_type].y
-              : min_y;
-          min_x =
-            obj.point_from[coord_type].x < min_x
-              ? obj.point_from[coord_type].x
-              : min_x;
+          maxX =
+            obj.pointFrom[coord_type].x > maxX
+              ? obj.pointFrom[coord_type].x
+              : maxX;
+          maxY =
+            obj.pointFrom[coord_type].y > maxY
+              ? obj.pointFrom[coord_type].y
+              : maxY;
+          minY =
+            obj.pointFrom[coord_type].y < minY
+              ? obj.pointFrom[coord_type].y
+              : minY;
+          minX =
+            obj.pointFrom[coord_type].x < minX
+              ? obj.pointFrom[coord_type].x
+              : minX;
         } else {
-          max_x = obj[coord_type].x > max_x ? obj[coord_type].x : max_x;
-          max_y = obj[coord_type].y > max_y ? obj[coord_type].y : max_y;
-          min_y = obj[coord_type].y < min_y ? obj[coord_type].y : min_y;
-          min_x = obj[coord_type].x < min_x ? obj[coord_type].x : min_x;
+          maxX = obj[coord_type].x > maxX ? obj[coord_type].x : maxX;
+          maxY = obj[coord_type].y > maxY ? obj[coord_type].y : maxY;
+          minY = obj[coord_type].y < minY ? obj[coord_type].y : minY;
+          minX = obj[coord_type].x < minX ? obj[coord_type].x : minX;
         }
       }
     }
     return {
       max: {
-        x: max_x,
-        y: max_y,
+        x: maxX,
+        y: maxY,
       },
       min: {
-        x: min_x,
-        y: min_y,
+        x: minX,
+        y: minY,
       },
     };
   }
 
   export function find_location_object_direction_at_point(
-    point_id: number,
+    pointId: number,
     all_segments: any[]
   ) {
     let direction;
 
     // Get all the segments the location is on
     const found_segment = find_connected_segments(
-      point_id,
+      pointId,
       null,
       all_segments,
       'ARRAY',
@@ -2078,7 +2078,7 @@ export namespace LayoutUtil {
 
     if (target_segment) {
       //Find whether target segment is leading to the point or going away from the point
-      if (target_segment.point_from.id === point_id) {
+      if (target_segment.pointFrom.id === pointId) {
         start_or_end = 'START';
       } else {
         start_or_end = 'END';
@@ -2086,14 +2086,14 @@ export namespace LayoutUtil {
 
       // All segment must start with a staright seg part by definition
       if (start_or_end === 'START') {
-        direction = target_segment.segment_parts[0].direction;
+        direction = target_segment.segmentParts[0].direction;
       } else {
         direction =
-          target_segment.segment_parts[target_segment.segment_parts.length - 1]
+          target_segment.segmentParts[target_segment.segmentParts.length - 1]
             .direction;
       }
     } else {
-      console.warn(`Target segment was not found for station id: ${point_id}`);
+      console.warn(`Target segment was not found for station id: ${pointId}`);
 
       // Set direction to the orientation of the viewport
       direction = 'B';
@@ -2111,7 +2111,7 @@ export namespace LayoutUtil {
 
   export function get_location_object_direction_offset(
     object_direction,
-    segment_direction,
+    segmentDirection,
     object_type
   ) {
     let offset_object = {
@@ -2123,19 +2123,19 @@ export namespace LayoutUtil {
     let offset_length = main_css[object_type.toLowerCase()].width + padding;
     let alternation_multiplier;
 
-    if (segment_direction === 'T') {
+    if (segmentDirection === 'T') {
       alternation_multiplier =
         object_direction === 'L' ? -1 : object_direction === 'R' ? 1 : 0;
       offset_object.x = offset_length * alternation_multiplier;
-    } else if (segment_direction === 'B') {
+    } else if (segmentDirection === 'B') {
       alternation_multiplier =
         object_direction === 'L' ? 1 : object_direction === 'R' ? -1 : 0;
       offset_object.x = offset_length * alternation_multiplier;
-    } else if (segment_direction === 'R') {
+    } else if (segmentDirection === 'R') {
       alternation_multiplier =
         object_direction === 'L' ? -1 : object_direction === 'R' ? 1 : 0; // has to go negative in order to move up on the screen
       offset_object.y = offset_length * alternation_multiplier;
-    } else if (segment_direction === 'L') {
+    } else if (segmentDirection === 'L') {
       alternation_multiplier =
         object_direction === 'L' ? 1 : object_direction === 'R' ? -1 : 0; // has to go positive in order to move down on the screen
       offset_object.y = offset_length * alternation_multiplier;
@@ -2161,18 +2161,18 @@ export namespace LayoutUtil {
   }
 
   export function find_all_contigous_segments_from_points(
-    point_id_list,
-    segments_list
+    pointIdList,
+    segmentsList
   ) {
     let found_segments = [];
-    for (let i = 0; i < point_id_list.length; i++) {
-      let point_from = parseInt(point_id_list[i]);
-      for (let j = 0; j < segments_list.length; j++) {
-        let current_segment = segments_list[j];
-        if (current_segment.point_from.id === point_from) {
-          let point_to = current_segment.point_to.id;
-          for (let k = 0; k < point_id_list.length; k++) {
-            if (parseInt(point_id_list[k]) === point_to) {
+    for (let i = 0; i < pointIdList.length; i++) {
+      let pointFrom = parseInt(pointIdList[i]);
+      for (let j = 0; j < segmentsList.length; j++) {
+        let current_segment = segmentsList[j];
+        if (current_segment.pointFrom.id === pointFrom) {
+          let pointTo = current_segment.pointTo.id;
+          for (let k = 0; k < pointIdList.length; k++) {
+            if (parseInt(pointIdList[k]) === pointTo) {
               found_segments.push(current_segment);
             }
           }
@@ -2188,14 +2188,14 @@ export namespace LayoutUtil {
 
     if (find_direction === 'FROM') {
       matched = segments.filter(
-        (segment) => segment.point_from.id === point.id
+        (segment) => segment.pointFrom.id === point.id
       );
     } else if (find_direction === 'TO') {
-      matched = segments.filter((segment) => segment.point_to.id === point.id);
+      matched = segments.filter((segment) => segment.pointTo.id === point.id);
     } else {
       matched = segments.filter(
         (segment) =>
-          segment.point_from.id === point.id || segment.point_to.id === point.id
+          segment.pointFrom.id === point.id || segment.pointTo.id === point.id
       );
     }
 
@@ -2210,41 +2210,41 @@ export namespace LayoutUtil {
     return connected_segments;
   }
 
-  export function create_coord_objects(x, y, invert_factor_y) {
+  export function create_coord_objects(x, y, invertFactorY) {
     // Make station object
     let coord: any = {};
-    let is_error = false;
+    let isError = false;
 
     // Remove error case
     if (x === undefined || x === null || y === undefined || y === null) {
       x = x === undefined || x === null ? 0 : x;
       y = y === undefined || y === null ? 0 : y;
 
-      is_error = true;
+      isError = true;
     }
 
     if (x < 0 || y < 0) {
-      is_error = true;
+      isError = true;
     }
 
     // Create coords
     coord.x = x;
     coord.y = y;
 
-    let inverted_coord: any = {};
+    let invertedCoord: any = {};
 
-    if (invert_factor_y != null) {
-      inverted_coord.x = x;
-      inverted_coord.y = invert_factor_y - y;
+    if (invertFactorY != null) {
+      invertedCoord.x = x;
+      invertedCoord.y = invertFactorY - y;
     } else {
-      inverted_coord.x = x;
-      inverted_coord.y = y;
+      invertedCoord.x = x;
+      invertedCoord.y = y;
     }
 
     return {
       coord,
-      inverted_coord,
-      is_error,
+      invertedCoord,
+      isError,
     };
   }
 
@@ -2265,7 +2265,7 @@ export namespace LayoutUtil {
     for (let i = 0; i < stations.length; i++) {
       let station = stations[i];
 
-      if (point.id === station.point_id) {
+      if (point.id === station.pointId) {
         connected_stations.push(station);
       }
     }
@@ -2289,7 +2289,7 @@ export namespace LayoutUtil {
     let found_clusters = [];
     found_clusters = clusters.filter((cluster) => {
       if (
-        cluster.point_id_list.find((point) => {
+        cluster.pointIdList.find((point) => {
           return target_point.id === point;
         })
       ) {
@@ -2302,9 +2302,9 @@ export namespace LayoutUtil {
   export function find_connected_cluster_using_segment(segment, clusters) {
     let found_clusters = [];
     for (let i = 0; i < clusters.length; i++) {
-      let points = clusters[i].point_id_list;
-      let has_from = points.indexOf(segment.point_from.id);
-      let has_to = points.indexOf(segment.point_to.id);
+      let points = clusters[i].pointIdList;
+      let has_from = points.indexOf(segment.pointFrom.id);
+      let has_to = points.indexOf(segment.pointTo.id);
       if (has_from > -1 && has_to > -1) {
         found_clusters.push(clusters[i]);
       }
@@ -2317,14 +2317,14 @@ export namespace LayoutUtil {
     type,
     location,
     direction,
-    is_validate
+    isValidate
   ) {
     // Create candidate
     let candidate: any = {};
     candidate.type = type;
     candidate.location = location;
     candidate.direction = direction;
-    candidate.is_validate = is_validate;
+    candidate.isValidate = isValidate;
 
     // Check for redundancy
     if (!check_redundant_candidate(candidates, candidate)) {
@@ -2372,10 +2372,10 @@ export namespace LayoutUtil {
       if (
         start_point_id !== null &&
         start_point_id !== undefined &&
-        segment.point_from.id === start_point_id &&
+        segment.pointFrom.id === start_point_id &&
         end_point_id !== null &&
         end_point_id !== undefined &&
-        segment.point_to.id === end_point_id
+        segment.pointTo.id === end_point_id
       ) {
         if (!is_find_multiple_segments) {
           result = segment;
@@ -2470,7 +2470,7 @@ export namespace LayoutUtil {
     for (let i = 0; i < layout_objects.length; i++) {
       let object = layout_objects[i];
 
-      if (object.point_id === base_id) {
+      if (object.pointId === base_id) {
         is_duplicated = true;
         if (object.direction !== undefined) {
           direction += object.direction;
@@ -2486,31 +2486,31 @@ export namespace LayoutUtil {
   }
 
   export function create_new_id(existing_objects) {
-    let new_id = 0;
+    let newId = 0;
 
     for (let i = 0; i < existing_objects.length; i++) {
-      if (existing_objects[i].id > new_id) {
-        new_id = existing_objects[i].id;
+      if (existing_objects[i].id > newId) {
+        newId = existing_objects[i].id;
       }
     }
 
-    return new_id + 1;
+    return newId + 1;
   }
 
   export function create_new_segpart_id(segments) {
-    let new_id = 0;
+    let newId = 0;
 
     for (let i = 0; i < segments.length; i++) {
       let segment = segments[i];
 
       // Find matched id within segpart
-      for (let j = 0; j < segment.segment_parts.length; j++) {
-        if (segment.segment_parts[j].id > new_id) {
-          new_id = segment.segment_parts[j].id;
+      for (let j = 0; j < segment.segmentParts.length; j++) {
+        if (segment.segmentParts[j].id > newId) {
+          newId = segment.segmentParts[j].id;
         }
       }
     }
-    return new_id + 1;
+    return newId + 1;
   }
 
   export function calculate_distance(from, to) {
@@ -2525,15 +2525,15 @@ export namespace LayoutUtil {
     return distance;
   }
   export function reset_connected_candidates(original_segment, segments) {
-    let start_point;
-    let end_point;
+    let startPoint;
+    let endPoint;
     let connected_segments;
 
-    start_point = original_segment.point_from;
-    end_point = original_segment.point_to;
+    startPoint = original_segment.pointFrom;
+    endPoint = original_segment.pointTo;
 
     // Find connected segments : start point
-    connected_segments = find_connected_segment(start_point, segments);
+    connected_segments = find_connected_segment(startPoint, segments);
 
     for (let i = 0; i < connected_segments.length; i++) {
       let segment = connected_segments[i];
@@ -2544,7 +2544,7 @@ export namespace LayoutUtil {
     }
 
     // Find connected segments : end point
-    connected_segments = find_connected_segment(end_point, segments);
+    connected_segments = find_connected_segment(endPoint, segments);
 
     for (let i = 0; i < connected_segments.length; i++) {
       let segment = connected_segments[i];
@@ -2554,24 +2554,24 @@ export namespace LayoutUtil {
       }
     }
   }
-  export function find_segment_within_points(point_id_list, segments) {
-    let segment_id_list = [];
+  export function find_segment_within_points(pointIdList, segments) {
+    let segmentIdList = [];
 
-    for (let i = 0; i < point_id_list.length - 1; i++) {
+    for (let i = 0; i < pointIdList.length - 1; i++) {
       // Set from and to point id
-      let from_id = point_id_list[i],
-        to_id = point_id_list[i + 1];
+      let from_id = pointIdList[i],
+        to_id = pointIdList[i + 1];
 
       for (let j = 0; j < segments.length; j++) {
         if (
-          segments[j].point_from.id == from_id &&
-          segments[j].point_to.id == to_id
+          segments[j].pointFrom.id == from_id &&
+          segments[j].pointTo.id == to_id
         ) {
-          segment_id_list.push({
+          segmentIdList.push({
             id: segments[j].id,
             path: segments[j].path,
-            point_from: segments[j].point_from,
-            point_to: segments[j].point_to,
+            pointFrom: segments[j].pointFrom,
+            pointTo: segments[j].pointTo,
             type: segments[j].type,
           });
           break;
@@ -2579,7 +2579,7 @@ export namespace LayoutUtil {
       }
     }
 
-    return segment_id_list;
+    return segmentIdList;
   }
   export function find_object_by_coord(area_start, area_end, objects) {
     // Find objects
@@ -2595,10 +2595,10 @@ export namespace LayoutUtil {
 
         // Check area
         if (
-          object.inverted_coord.x >= standard_coord.start.x &&
-          object.inverted_coord.x <= standard_coord.end.x &&
-          object.inverted_coord.y >= standard_coord.start.y &&
-          object.inverted_coord.y <= standard_coord.end.y
+          object.invertedCoord.x >= standard_coord.start.x &&
+          object.invertedCoord.x <= standard_coord.end.x &&
+          object.invertedCoord.y >= standard_coord.start.y &&
+          object.invertedCoord.y <= standard_coord.end.y
         ) {
           found_objects.push(object);
         }
@@ -2613,32 +2613,32 @@ export namespace LayoutUtil {
     let coord_end: any = {};
 
     if (start.x > end.x || start.y > end.y) {
-      let min_x, min_y;
-      let max_x, max_y;
+      let minX, minY;
+      let maxX, maxY;
 
       // Swap x coord
       if (start.x > end.x) {
-        min_x = end.x;
-        max_x = start.x;
+        minX = end.x;
+        maxX = start.x;
       } else {
-        min_x = start.x;
-        max_x = end.x;
+        minX = start.x;
+        maxX = end.x;
       }
 
       // Swap y coord
       if (start.y > end.y) {
-        min_y = end.y;
-        max_y = start.y;
+        minY = end.y;
+        maxY = start.y;
       } else {
-        min_y = start.y;
-        max_y = end.y;
+        minY = start.y;
+        maxY = end.y;
       }
 
-      coord_start.x = min_x;
-      coord_start.y = min_y;
+      coord_start.x = minX;
+      coord_start.y = minY;
 
-      coord_end.x = max_x;
-      coord_end.y = max_y;
+      coord_end.x = maxX;
+      coord_end.y = maxY;
     } else {
       coord_start = { ...start };
       coord_end = { ...end };
@@ -2653,17 +2653,17 @@ export namespace LayoutUtil {
      *
      * Selection area start
      *        (Xs, Ys).-----------------------
-     *                |  point_from          |
+     *                |  pointFrom          |
      *   Selection -> |  . (X1, Y1)          |
      *   area         |    \                 |
      *                |      \ Segment       |
      *                |        \             |
      *                |          . (X2, Y2)  |
-     *                |            point_to  |
+     *                |            pointTo  |
      *                -----------------------.
      *                    Selection area end (Xe, Ye)
-     * Rule : point_from must be in the selection area (start~end)
-     *        and point_to must be in the selection area (start~end)
+     * Rule : pointFrom must be in the selection area (start~end)
+     *        and pointTo must be in the selection area (start~end)
      *****************************************************/
     let found_segments = [];
 
@@ -2673,8 +2673,8 @@ export namespace LayoutUtil {
 
       for (let i = 0; i < segments.length; i++) {
         let segment = segments[i];
-        let point_from_coord = segment.point_from.inverted_coord;
-        let point_to_coord = segment.point_to.inverted_coord;
+        let point_from_coord = segment.pointFrom.invertedCoord;
+        let point_to_coord = segment.pointTo.invertedCoord;
 
         // Check area
         if (
@@ -2709,13 +2709,13 @@ export namespace LayoutUtil {
         is_start_connected = layout_objects.find(
           (data) =>
             data.constructor.name.toUpperCase() === 'POINT' &&
-            data.id === object.point_from.id
+            data.id === object.pointFrom.id
         );
 
         is_end_connected = layout_objects.find(
           (data) =>
             data.constructor.name.toUpperCase() === 'POINT' &&
-            data.id === object.point_to.id
+            data.id === object.pointTo.id
         );
 
         if (is_start_connected && is_end_connected) {

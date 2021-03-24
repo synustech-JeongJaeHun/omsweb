@@ -1,30 +1,30 @@
 export interface IVehicleInfoRow {
   id: number;
-  logical_id: string;
-  physical_id?: string;
-  moving_state: string;
-  distance_total: number;
-  runtime_total: number;
+  logicalId: string;
+  physicalId?: string;
+  movingState: string;
+  distanceTotal: number;
+  runtimeTotal: number;
   type: string;
-  map_db: string;
+  mapDb: string;
 }
 
 export interface IVehicleStatusRow extends IVehicleInfoRow {
-  cur_point: number;
-  cargo_state: string;
+  curPoint: number;
+  cargoState: string;
   mode: string;
-  order_origin: string;
-  can_be_pushed: boolean;
-  is_sensor_stopped: boolean;
-  is_blocked: boolean;
-  error_list: string;
+  orderOrigin: string;
+  canBePushed: boolean;
+  isSensorStopped: boolean;
+  isBlocked: boolean;
+  errorList: string;
 
-  order_id: number;
-  command_point: string;
+  orderId: number;
+  commandPoint: string;
 
-  location_pickup: string;
-  location_dropoff: string;
-  location_move: string;
+  locationPickup: string;
+  locationDropoff: string;
+  locationMove: string;
 
-  row_num: number;
+  rowNum: number;
 }

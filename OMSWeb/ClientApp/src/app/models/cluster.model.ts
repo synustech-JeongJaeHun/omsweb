@@ -4,71 +4,71 @@ import { Dto } from './dto/track.model';
 export class Cluster {
   id: number;
   color: string;
-  logical_id: string;
-  max_vehicles: number;
-  point_id_list: string[];
-  segment_id_list?: string[];
+  logicalId: string;
+  maxVehicles: number;
+  pointIdList: string[];
+  segmentIdList?: string[];
   path?: any;
-  inverted_coord_from?: any;
-  inverted_coord_to?: any;
-  min_x?: number;
-  min_y?: number;
-  max_x?: number;
-  max_y?: number;
+  invertedCoordFrom?: any;
+  invertedCoordTo?: any;
+  minX?: number;
+  minY?: number;
+  maxX?: number;
+  maxY?: number;
 
   constructor(row: Dto.ICluster, points: string[]) {
-    const { id, color, logical_id, max_vehicles } = row;
+    const { id, color, logicalId, maxVehicles } = row;
     this.id = id;
     this.color = color;
-    this.logical_id = logical_id;
-    this.max_vehicles = max_vehicles;
-    this.point_id_list = points;
+    this.logicalId = logicalId;
+    this.maxVehicles = maxVehicles;
+    this.pointIdList = points;
   }
 
-  set_path(segments_list, border_offset) {
+  set_path(segmentsList, borderOffset) {
     // If cluster does not have any point information
     if (
-      !Array.isArray(segments_list) ||
-      segments_list.length === 0 ||
-      segments_list == null ||
-      segments_list == undefined
+      !Array.isArray(segmentsList) ||
+      segmentsList.length === 0 ||
+      segmentsList == null ||
+      segmentsList == undefined
     ) {
       this.path = '';
-      this.inverted_coord_from = { x: 0, y: 0 };
-      this.inverted_coord_to = { x: 0, y: 0 };
-      this.min_x = 0;
-      this.max_x = 0;
-      this.min_y = 0;
-      this.max_y = 0;
+      this.invertedCoordFrom = { x: 0, y: 0 };
+      this.invertedCoordTo = { x: 0, y: 0 };
+      this.minX = 0;
+      this.maxX = 0;
+      this.minY = 0;
+      this.maxY = 0;
       return;
     }
 
     this.path = '';
 
-    if (segments_list.length > 0) {
-      this.segment_id_list = [];
-      this.inverted_coord_from = segments_list[0].point_from;
-      this.inverted_coord_to = segments_list[segments_list.length - 1].point_to;
+    if (segmentsList.length > 0) {
+      this.segmentIdList = [];
+      this.invertedCoordFrom = segmentsList[0].pointFrom;
+      this.invertedCoordTo = segmentsList[segmentsList.length - 1].pointTo;
       let path = '';
       let path_container = [];
       let path_string = '';
-      for (let i = 0; i < segments_list.length; i++) {
+      for (let i = 0; i < segmentsList.length; i++) {
         // Add the list of segment ids to the cluster object
-        this.segment_id_list.push(segments_list[i].id);
+        this.segmentIdList.push(segmentsList[i].id);
 
         // Make a combined path string from the segments list
-        path += segments_list[i].path + ' ';
-        path_string += segments_list[i].path + ' ';
+        path += segmentsList[i].path + ' ';
+        path_string += segmentsList[i].path + ' ';
         if (
-          i < segments_list.length - 1 &&
-          segments_list[i].point_to.id !== segments_list[i + 1].point_from.id
+          i < segmentsList.length - 1 &&
+          segmentsList[i].pointTo.id !== segmentsList[i + 1].pointFrom.id
         ) {
           path_container.push(path_string);
           path_string = '';
         }
       }
 
-      this.set_min_max(path, this, border_offset);
+      this.set_min_max(path, this, borderOffset);
 
       path_container.push(path_string);
       for (let i = 0; i < path_container.length; i++) {
@@ -98,11 +98,11 @@ export class Cluster {
               { x: coords.x2, y: coords.y2 },
               { x: coords.xf, y: coords.yf }
             );
-            part.boundary_coord = this.find_curve_boundary_coords(
+            part.boundaryCoord = this.find_curve_boundary_coords(
               start_dir,
               end_dir,
               coords,
-              border_offset
+              borderOffset
             );
             part.type = 'CURVE';
             seg_parts.push(part);
@@ -129,84 +129,84 @@ export class Cluster {
 
               // Set boundary coordinates
               if (part.dir === 'R') {
-                part.boundary_coord = this.make_boundary_coordinates(
+                part.boundaryCoord = this.make_boundary_coordinates(
                   from,
                   to,
                   0,
                   1,
                   0,
                   -1,
-                  border_offset
+                  borderOffset
                 );
               } else if (part.dir === 'L') {
-                part.boundary_coord = this.make_boundary_coordinates(
+                part.boundaryCoord = this.make_boundary_coordinates(
                   from,
                   to,
                   0,
                   -1,
                   0,
                   1,
-                  border_offset
+                  borderOffset
                 );
               } else if (part.dir === 'T') {
-                part.boundary_coord = this.make_boundary_coordinates(
+                part.boundaryCoord = this.make_boundary_coordinates(
                   from,
                   to,
                   1,
                   0,
                   -1,
                   0,
-                  border_offset
+                  borderOffset
                 );
               } else if (part.dir === 'B') {
-                part.boundary_coord = this.make_boundary_coordinates(
+                part.boundaryCoord = this.make_boundary_coordinates(
                   from,
                   to,
                   -1,
                   0,
                   1,
                   0,
-                  border_offset
+                  borderOffset
                 );
               } else if (part.dir === 'TR') {
-                part.boundary_coord = this.make_boundary_coordinates(
+                part.boundaryCoord = this.make_boundary_coordinates(
                   from,
                   to,
                   0.75,
                   0.75,
                   -0.75,
                   -0.75,
-                  border_offset
+                  borderOffset
                 );
               } else if (part.dir === 'TL') {
-                part.boundary_coord = this.make_boundary_coordinates(
+                part.boundaryCoord = this.make_boundary_coordinates(
                   from,
                   to,
                   0.75,
                   -0.75,
                   -0.75,
                   0.75,
-                  border_offset
+                  borderOffset
                 );
               } else if (part.dir === 'BL') {
-                part.boundary_coord = this.make_boundary_coordinates(
+                part.boundaryCoord = this.make_boundary_coordinates(
                   from,
                   to,
                   -0.75,
                   -0.75,
                   0.75,
                   0.75,
-                  border_offset
+                  borderOffset
                 );
               } else if (part.dir === 'BR') {
-                part.boundary_coord = this.make_boundary_coordinates(
+                part.boundaryCoord = this.make_boundary_coordinates(
                   from,
                   to,
                   -0.75,
                   0.75,
                   0.75,
                   -0.75,
-                  border_offset
+                  borderOffset
                 );
               }
               seg_parts.push(part);
@@ -217,7 +217,7 @@ export class Cluster {
         // Right border
         for (let j = 0; j < seg_parts.length; j++) {
           let part = seg_parts[j];
-          let coord = part.boundary_coord.right_side;
+          let coord = part.boundaryCoord.right_side;
 
           if (j === 0) {
             this.path += `M${coord.x} ${coord.y} `;
@@ -230,7 +230,7 @@ export class Cluster {
           }
 
           if (j === seg_parts.length - 1) {
-            let last_coord = part.boundary_coord.left_side;
+            let last_coord = part.boundaryCoord.left_side;
             // this.path += `L${last_coord.xf} ${last_coord.yf} `
 
             let bezier_1, center_coord, bezier_2;
@@ -285,7 +285,7 @@ export class Cluster {
         // Left border
         for (let j = seg_parts.length - 1; j > -1; j--) {
           let part = seg_parts[j];
-          let coord = part.boundary_coord.left_side;
+          let coord = part.boundaryCoord.left_side;
 
           if (part.type === 'CURVE') {
             this.path += `L${coord.xf} ${coord.yf} C${coord.x2} ${coord.y2} ${coord.x1} ${coord.y1} ${coord.x} ${coord.y} `;
@@ -294,7 +294,7 @@ export class Cluster {
           }
 
           if (j === 0) {
-            let last_coord = part.boundary_coord.right_side;
+            let last_coord = part.boundaryCoord.right_side;
             // this.path += `L${last_coord.x} ${last_coord.y} `
 
             let bezier_1, center_coord, bezier_2;
@@ -353,20 +353,20 @@ export class Cluster {
     let copied_cluster = new Cluster(
       {
         id: this.id,
-        logical_id: this.logical_id,
-        max_vehicles: this.max_vehicles,
+        logicalId: this.logicalId,
+        maxVehicles: this.maxVehicles,
         color: this.color,
       },
-      this.point_id_list
+      this.pointIdList
     );
-    copied_cluster.segment_id_list = this.segment_id_list;
-    copied_cluster.min_x = this.min_x;
-    copied_cluster.max_x = this.max_x;
-    copied_cluster.min_y = this.min_y;
-    copied_cluster.max_y = this.max_y;
+    copied_cluster.segmentIdList = this.segmentIdList;
+    copied_cluster.minX = this.minX;
+    copied_cluster.maxX = this.maxX;
+    copied_cluster.minY = this.minY;
+    copied_cluster.maxY = this.maxY;
     copied_cluster.path = this.path;
-    copied_cluster.inverted_coord_from = { ...this.inverted_coord_from };
-    copied_cluster.inverted_coord_to = { ...this.inverted_coord_to };
+    copied_cluster.invertedCoordFrom = { ...this.invertedCoordFrom };
+    copied_cluster.invertedCoordTo = { ...this.invertedCoordTo };
 
     return copied_cluster;
   }
@@ -389,28 +389,28 @@ export class Cluster {
     lsy: number,
     lex: number,
     ley: number,
-    border_offset: number
+    borderOffset: number
   ) {
     return {
       right_side: {
-        x: coords.x + rsx * border_offset,
-        y: coords.y + rsy * border_offset,
-        x1: coords.x1 + rx1 * border_offset,
-        y1: coords.y1 + ry1 * border_offset,
-        x2: coords.x2 + rx2 * border_offset,
-        y2: coords.y2 + ry2 * border_offset,
-        xf: coords.xf + rex * border_offset,
-        yf: coords.yf + rey * border_offset,
+        x: coords.x + rsx * borderOffset,
+        y: coords.y + rsy * borderOffset,
+        x1: coords.x1 + rx1 * borderOffset,
+        y1: coords.y1 + ry1 * borderOffset,
+        x2: coords.x2 + rx2 * borderOffset,
+        y2: coords.y2 + ry2 * borderOffset,
+        xf: coords.xf + rex * borderOffset,
+        yf: coords.yf + rey * borderOffset,
       },
       left_side: {
-        x: coords.x + lsx * border_offset,
-        y: coords.y + lsy * border_offset,
-        x1: coords.x1 + lx1 * border_offset,
-        y1: coords.y1 + ly1 * border_offset,
-        x2: coords.x2 + lx2 * border_offset,
-        y2: coords.y2 + ly2 * border_offset,
-        xf: coords.xf + lex * border_offset,
-        yf: coords.yf + ley * border_offset,
+        x: coords.x + lsx * borderOffset,
+        y: coords.y + lsy * borderOffset,
+        x1: coords.x1 + lx1 * borderOffset,
+        y1: coords.y1 + ly1 * borderOffset,
+        x2: coords.x2 + lx2 * borderOffset,
+        y2: coords.y2 + ly2 * borderOffset,
+        xf: coords.xf + lex * borderOffset,
+        yf: coords.yf + ley * borderOffset,
       },
     };
   }
@@ -419,7 +419,7 @@ export class Cluster {
     start_dir: string,
     end_dir: string,
     coords: any,
-    border_offset: any
+    borderOffset: any
   ) {
     let boundary_coords;
     if (start_dir === 'T' && end_dir === 'R') {
@@ -441,7 +441,7 @@ export class Cluster {
         0,
         0,
         -1,
-        border_offset
+        borderOffset
       );
     } else if (start_dir === 'R' && end_dir === 'B') {
       boundary_coords = this.curve_offset(
@@ -462,7 +462,7 @@ export class Cluster {
         -1,
         1,
         0,
-        border_offset
+        borderOffset
       );
     } else if (start_dir === 'B' && end_dir === 'L') {
       boundary_coords = this.curve_offset(
@@ -483,7 +483,7 @@ export class Cluster {
         0,
         0,
         1,
-        border_offset
+        borderOffset
       );
     } else if (start_dir === 'L' && end_dir === 'T') {
       boundary_coords = this.curve_offset(
@@ -504,7 +504,7 @@ export class Cluster {
         1,
         -1,
         0,
-        border_offset
+        borderOffset
       );
     } else if (start_dir === 'R' && end_dir === 'T') {
       boundary_coords = this.curve_offset(
@@ -525,7 +525,7 @@ export class Cluster {
         -1,
         -1,
         0,
-        border_offset
+        borderOffset
       );
     } else if (start_dir === 'B' && end_dir === 'R') {
       boundary_coords = this.curve_offset(
@@ -546,7 +546,7 @@ export class Cluster {
         0,
         0,
         -1,
-        border_offset
+        borderOffset
       );
     } else if (start_dir === 'L' && end_dir === 'B') {
       boundary_coords = this.curve_offset(
@@ -567,7 +567,7 @@ export class Cluster {
         1,
         1,
         0,
-        border_offset
+        borderOffset
       );
     } else if (start_dir === 'T' && end_dir === 'L') {
       boundary_coords = this.curve_offset(
@@ -588,7 +588,7 @@ export class Cluster {
         0,
         0,
         1,
-        border_offset
+        borderOffset
       );
     }
 
@@ -602,20 +602,20 @@ export class Cluster {
     ry: number,
     lx: number,
     ly: number,
-    border_offset: number
+    borderOffset: number
   ) {
     return {
       right_side: {
-        x: from.x + rx * border_offset,
-        y: from.y + ry * border_offset,
-        xf: to.x + rx * border_offset,
-        yf: to.y + ry * border_offset,
+        x: from.x + rx * borderOffset,
+        y: from.y + ry * borderOffset,
+        xf: to.x + rx * borderOffset,
+        yf: to.y + ry * borderOffset,
       },
       left_side: {
-        x: from.x + lx * border_offset,
-        y: from.y + ly * border_offset,
-        xf: to.x + lx * border_offset,
-        yf: to.y + ly * border_offset,
+        x: from.x + lx * borderOffset,
+        y: from.y + ly * borderOffset,
+        xf: to.x + lx * borderOffset,
+        yf: to.y + ly * borderOffset,
       },
     };
   }
@@ -623,18 +623,18 @@ export class Cluster {
   private set_min_max(
     cluster_path_string: string,
     cluster_object: any,
-    border_offset: any
+    borderOffset: any
   ) {
     let cluster_path_list = cluster_path_string.split(' ');
 
-    cluster_object.min_x = parseInt(
+    cluster_object.minX = parseInt(
       cluster_path_list[0].match(/[0-9.-]/g).join('')
     );
-    cluster_object.max_x = 0;
-    cluster_object.min_y = parseInt(
+    cluster_object.maxX = 0;
+    cluster_object.minY = parseInt(
       cluster_path_list[0].match(/[0-9.-]/g).join('')
     );
-    cluster_object.max_y = 0;
+    cluster_object.maxY = 0;
 
     for (let i = 0; i < cluster_path_list.length; i++) {
       // Find edge coordinates of cluster
@@ -643,21 +643,21 @@ export class Cluster {
           y = parseInt(cluster_path_list[i + 1].match(/[0-9.-]/g).join(''));
 
         // Maximum corners
-        if (cluster_object.max_x < x) cluster_object.max_x = x;
-        if (cluster_object.max_y < y) cluster_object.max_y = y;
+        if (cluster_object.maxX < x) cluster_object.maxX = x;
+        if (cluster_object.maxY < y) cluster_object.maxY = y;
 
         // Minimum corners
-        if (cluster_object.min_x > x) cluster_object.min_x = x;
-        if (cluster_object.min_y > y) cluster_object.min_y = y;
+        if (cluster_object.minX > x) cluster_object.minX = x;
+        if (cluster_object.minY > y) cluster_object.minY = y;
 
         i++;
       }
     }
 
-    cluster_object.min_x -= parseInt(border_offset);
-    cluster_object.max_x += parseInt(border_offset);
-    cluster_object.min_y -= parseInt(border_offset);
-    cluster_object.max_y += parseInt(border_offset);
+    cluster_object.minX -= parseInt(borderOffset);
+    cluster_object.maxX += parseInt(borderOffset);
+    cluster_object.minY -= parseInt(borderOffset);
+    cluster_object.maxY += parseInt(borderOffset);
   }
 
   private get_end_curves(

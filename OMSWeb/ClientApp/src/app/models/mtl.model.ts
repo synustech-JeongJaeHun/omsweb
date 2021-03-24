@@ -6,125 +6,125 @@ import { Point } from './point.model';
 
 export class MTL {
   id: number;
-  logical_id: string;
-  physical_id: string;
-  point_id?: any;
+  logicalId: string;
+  physicalId: string;
+  pointId?: any;
 
   coord: ICoordinate;
-  inverted_coord: ICoordinate;
+  invertedCoord: ICoordinate;
 
-  in_use?: boolean;
+  inUse?: boolean;
   position?: any;
   mode?: any;
-  error_list?: any;
+  errorList?: any;
 
-  is_validate?: boolean;
-  update_state?: string;
+  isValidate?: boolean;
+  updateState?: string;
   group?: number;
 
   constructor(
     row: Dto.IMTL,
-    is_validate: boolean,
-    update_state: string,
+    isValidate: boolean,
+    updateState: string,
     point: IPoint
   ) {
     const {
       id,
-      logical_id,
-      physical_id,
-      point_id,
+      logicalId,
+      physicalId,
+      pointId,
       group,
       position,
-      in_use,
+      inUse,
       mode,
-      error_list,
+      errorList,
     } = row;
     this.id = id;
-    this.logical_id = logical_id;
-    this.physical_id = physical_id;
-    this.point_id = point_id;
+    this.logicalId = logicalId;
+    this.physicalId = physicalId;
+    this.pointId = pointId;
     this.group = group;
 
-    this.is_validate = is_validate;
-    this.update_state = update_state;
+    this.isValidate = isValidate;
+    this.updateState = updateState;
 
     this.coord = point.coord;
-    this.inverted_coord = point.inverted_coord;
+    this.invertedCoord = point.invertedCoord;
 
     this.position = position;
-    this.in_use = in_use;
+    this.inUse = inUse;
     this.mode = mode;
-    this.error_list = error_list;
+    this.errorList = errorList;
   }
 
-  copy(new_id) {
+  copy(newId) {
     let {
       id,
-      physical_id,
-      logical_id,
-      point_id,
+      physicalId,
+      logicalId,
+      pointId,
       coord,
-      inverted_coord,
-      in_use,
+      invertedCoord,
+      inUse,
       position,
       mode,
-      error_list,
+      errorList,
       group,
-      is_validate,
-      update_state,
+      isValidate,
+      updateState,
     } = this;
 
     // Replace ID
-    if (new_id === null || new_id === undefined) {
+    if (newId === null || newId === undefined) {
       id = this.id;
     } else {
-      id = new_id;
+      id = newId;
     }
 
-    physical_id = this.physical_id;
-    logical_id = this.logical_id;
-    point_id = this.point_id;
-    in_use = this.in_use;
+    physicalId = this.physicalId;
+    logicalId = this.logicalId;
+    pointId = this.pointId;
+    inUse = this.inUse;
     position = this.position;
     mode = this.mode;
-    error_list = this.error_list;
+    errorList = this.errorList;
 
-    is_validate = this.is_validate;
-    update_state = this.update_state;
+    isValidate = this.isValidate;
+    updateState = this.updateState;
 
     // Object
     coord = { ...this.coord };
-    inverted_coord = { ...this.inverted_coord };
+    invertedCoord = { ...this.invertedCoord };
     group = this.group;
 
     let copied_mtl = new MTL(
       {
         id,
-        physical_id,
-        logical_id,
-        point_id,
-        in_use,
+        physicalId,
+        logicalId,
+        pointId,
+        inUse,
         position,
         mode,
-        error_list,
+        errorList,
         group,
       },
-      is_validate,
-      update_state,
-      { coord, inverted_coord }
+      isValidate,
+      updateState,
+      { coord, invertedCoord }
     );
 
     return copied_mtl;
   }
 
-  apply_offset(offset, snap_dist, invert_factor_y) {
+  apply_offset(offset, snapDist, invertFactorY) {
     this.coord.x += offset.x;
     this.coord.y += offset.y;
 
     // Snap original coord
-    this.coord = LayoutUtil.calc_snap_coord(this.coord, snap_dist);
+    this.coord = LayoutUtil.calc_snap_coord(this.coord, snapDist);
 
-    this.inverted_coord.x = this.coord.x;
-    this.inverted_coord.y = invert_factor_y - this.coord.y;
+    this.invertedCoord.x = this.coord.x;
+    this.invertedCoord.y = invertFactorY - this.coord.y;
   }
 }

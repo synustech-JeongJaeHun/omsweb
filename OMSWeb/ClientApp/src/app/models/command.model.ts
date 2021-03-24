@@ -4,31 +4,31 @@ export interface ICommandMessage {
 }
 
 export interface IVehicleCommandMessage extends ICommandMessage {
-  vehicle_id?: string;
-  order_origin?: string;
-  can_be_pushed?: string;
+  vehicleId?: string;
+  orderOrigin?: string;
+  canBePushed?: string;
   destination?: string;
   mode?: string;
-  accept_manual_commands?: string;
+  acceptManualCommands?: string;
 }
 
 export interface ITrackCommandMessage extends ICommandMessage {
-  vehicle_id?: string;
-  segment_id?: string;
+  vehicleId?: string;
+  segmentId?: string;
   source?: string;
   reason?: string;
-  group_id?: string;
+  groupId?: string;
   objects?: string;
   color?: string;
-  logical_id?: string;
+  logicalId?: string;
 }
 
 export interface IOrderCommandMessage extends ICommandMessage {
-  vehicle_id?: string;
-  order_id?: string;
-  location_pickup?: string;
-  location_dropoff?: string;
-  location_move?: string;
-  carrier_label?: string;
+  vehicleId?: string;
+  orderId?: string;
+  locationPickup?: string;
+  locationDropoff?: string;
+  locationMove?: string;
+  carrierLabel?: string;
   priority?: string;
 }

@@ -30,19 +30,19 @@ export interface IAlert {
   level: number;
   tag?: string;
   message: string;
-  ack_time?: Date;
-  ack_by?: string;
+  ackTime?: Date;
+  ackBy?: string;
 }
 
 export interface IVehicleAlarm {
   id: number;
   time: Date;
   age: number;
-  vehicle_id: number;
-  error_code: number;
-  time_resolved?: Date;
+  vehicleId: number;
+  errorCode: number;
+  timeResolved?: Date;
 
   level?: number;
-  descriptioN?: string;
+  description?: string;
   action?: string;
 }

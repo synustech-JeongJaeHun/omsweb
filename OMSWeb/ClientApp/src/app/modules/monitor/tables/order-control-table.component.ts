@@ -21,7 +21,7 @@ export class OrderControlTableComponent implements OnInit {
 
   transformVehicleId = ({ value = '' }): string => {
     const text =
-      this.idSvc.get_alternative_id('vehicle', 'logical_id', value) || value;
+      this.idSvc.get_alternative_id('vehicle', 'logicalId', value) || value;
     return text.toString();
   };
 

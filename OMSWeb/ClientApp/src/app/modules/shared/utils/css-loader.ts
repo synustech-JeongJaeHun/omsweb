@@ -119,7 +119,7 @@ export const main_css = {
     text_offset: parseInt(getCss('--cluster-text-offset')),
     stroke_color: getCss('--cluster-stroke-color'),
     fill_color: getCss('--cluster-fill-color'),
-    border_offset: Math.trunc(parseInt(getCss('--cluster-size')) * 0.5),
+    borderOffset: Math.trunc(parseInt(getCss('--cluster-size')) * 0.5),
   },
   vehicle: {
     line_weight: parseInt(getCss('--vehicle-line-weight')),

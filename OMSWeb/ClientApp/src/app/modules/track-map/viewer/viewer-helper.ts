@@ -136,7 +136,7 @@ export class ViewController {
   };
   private map_rotation = 0;
   private snap_to_grid_distance = 500;
-  private minimum_segment_length = 500;
+  private minimumSegmentLength = 500;
   private minimap_size_limit = 150;
   private num_ticks = 20;
   private vehicle_stale = 600;
@@ -411,7 +411,7 @@ export class ViewController {
 
             let current_coord = this.calc_original_coord_with_screen(
               this.drag_move.mouse_current,
-              this.geometry.invert_factor_y
+              this.geometry.invertFactorY
             );
 
             let custom_text = `${parseInt(current_coord.x)}, ${parseInt(
@@ -446,12 +446,12 @@ export class ViewController {
             // Get original coord that applied snap
             let original_coord_start = this.calc_original_coord_with_screen(
               this.drag_move.mouse_start,
-              this.geometry.invert_factor_y,
+              this.geometry.invertFactorY,
               false
             );
             let original_coord_end = this.calc_original_coord_with_screen(
               this.drag_move.mouse_end,
-              this.geometry.invert_factor_y,
+              this.geometry.invertFactorY,
               false
             );
 
@@ -573,14 +573,14 @@ export class ViewController {
   destroy() {}
   create_track(data: Dto.ITrackData) {
     if (!data) data = {};
-    if (!data.map_type) data.map_type = MapTypes.DB;
+    if (!data.mapType) data.mapType = MapTypes.DB;
 
     if (
       !data.size ||
-      !('min_x' in data) ||
-      !('max_x' in data) ||
-      !('min_y' in data) ||
-      !('max_y' in data)
+      !('minX' in data) ||
+      !('maxX' in data) ||
+      !('minY' in data) ||
+      !('maxY' in data)
     ) {
       if (data.points && data.points.length > 0) {
         data.size = this.calculate_size_from_extents(data);
@@ -590,8 +590,8 @@ export class ViewController {
     }
 
     // must have a minimum segment length when editing a map
-    if (!data.minimum_segment_length) {
-      data.minimum_segment_length = this.DEFAULTS.minimum_segment_length;
+    if (!data.minimumSegmentLength) {
+      data.minimumSegmentLength = this.DEFAULTS.minimumSegmentLength;
     }
 
     this.initSvg(this.track_id, data.size);
@@ -603,7 +603,7 @@ export class ViewController {
     this.drawMap('minimap');
     this.centerZoom('INSTANT');
   }
-  update_vehicles(raw_data, operation, vehicle_id, is_skip_rendering) {
+  update_vehicles(raw_data, operation, vehicleId, is_skip_rendering) {
     // let is_dom_update = false;
     let target_index;
     // let update: any = {};
@@ -611,7 +611,7 @@ export class ViewController {
 
     // get target index
     if (operation == 'DELETE' || operation == 'UPDATE') {
-      target_index = this.vehicles.findIndex((d) => d.id == vehicle_id);
+      target_index = this.vehicles.findIndex((d) => d.id == vehicleId);
     }
 
     const {
@@ -621,7 +621,7 @@ export class ViewController {
     } = this.dataSvc.applyVehicleData(
       raw_data,
       operation,
-      vehicle_id,
+      vehicleId,
       this.vehicle_stale,
       this.playback_last_event_time
     );
@@ -704,8 +704,8 @@ export class ViewController {
     return update;
   }
   centerZoom(transition_type: string) {
-    let viewport = this.geometry.screen_size,
-      size = this.geometry.track_size;
+    let viewport = this.geometry.screenSize,
+      size = this.geometry.trackSize;
 
     let ratio = {
       w: viewport.width / size.width,
@@ -718,17 +718,17 @@ export class ViewController {
     let translate_y = ((viewport.height / k - size.height) / 2) * k;
 
     // Auto adjust min values if the map has negative coordinates
-    if (size.min_x < 0) {
+    if (size.minX < 0) {
       // If min x value is negative
-      translate_x = -size.min_x * k + translate_x;
+      translate_x = -size.minX * k + translate_x;
     } else {
-      translate_x = -size.min_x * k + translate_x;
+      translate_x = -size.minX * k + translate_x;
     }
-    if (size.min_y < 0) {
+    if (size.minY < 0) {
       // If min y value is negative
-      translate_y = size.min_y * k + translate_y;
+      translate_y = size.minY * k + translate_y;
     } else {
-      // translate_y = size.min_y * k + translate_y
+      // translate_y = size.minY * k + translate_y
     }
 
     this.set_transform(translate_x, translate_y, k, true, transition_type);
@@ -875,7 +875,7 @@ export class ViewController {
       direction_arrow_scale: 5,
       map_rotation: 0,
       snap_to_grid_distance: 500, // mm
-      minimum_segment_length: 500, // mm
+      minimumSegmentLength: 500, // mm
       minimap_size_limit: 150,
       num_ticks: 20,
       vehicle_stale: 600, // sec
@@ -945,12 +945,12 @@ export class ViewController {
     // get the size of the DOM element into which this is going
     // @NOTE : jquery 사용하여 size 설정
     let $elem = this.$track_container.find(`#${target_id}`).parent().get(0);
-    let screen_size = {
+    let screenSize = {
       width: $elem.clientWidth,
       height: $elem.clientHeight,
     };
 
-    this.setGeometry(mapSize, screen_size);
+    this.setGeometry(mapSize, screenSize);
 
     // init svg groups
     this.init_svg_groups();
@@ -960,7 +960,7 @@ export class ViewController {
 
     let length: ICoordinate, lower_limit: ICoordinate, upper_limit: ICoordinate;
 
-    const { width, height } = this.geometry.screen_size;
+    const { width, height } = this.geometry.screenSize;
 
     if (this.mode === ViewModes.editor) {
       length = { x: width, y: height };
@@ -1010,8 +1010,8 @@ export class ViewController {
     // @NOTE svg 초기화
     this.svg = this.d3_track.select(`#${target_id}`);
     this.svg
-      .attr('width', this.geometry.screen_size.width)
-      .attr('height', this.geometry.screen_size.height);
+      .attr('width', this.geometry.screenSize.width)
+      .attr('height', this.geometry.screenSize.height);
 
     this.svg.call(this.d3_main);
 
@@ -1093,7 +1093,7 @@ export class ViewController {
   private drawMap(track_type: 'layout' | 'minimap') {
     if (track_type == 'layout') {
       // Draw all the layout components
-      // Initialize track_size
+      // Initialize trackSize
       this.calc_and_set_track_size();
 
       // Initialize all svg containers for hierarchy
@@ -1168,8 +1168,8 @@ export class ViewController {
     // }
     this.highlight('VEHICLE', vehicle.id, main_css.vehicle, null, 'SELECT');
     let coord = [
-      vehicle.cur_point.inverted_coord.x,
-      vehicle.cur_point.inverted_coord.y,
+      vehicle.curPoint.invertedCoord.x,
+      vehicle.curPoint.invertedCoord.y,
     ];
     this.zoom_to(coord, 'track', null);
     this.set_track_vehicle(vehicle.id);
@@ -1215,8 +1215,8 @@ export class ViewController {
         height: Math.abs(from.y - to.y),
       },
       screen = {
-        width: this.geometry.screen_size.width,
-        height: this.geometry.screen_size.height,
+        width: this.geometry.screenSize.width,
+        height: this.geometry.screenSize.height,
       },
       width_ratio = screen.width / bounding_box_dimensions.width,
       height_ratio = screen.height / bounding_box_dimensions.height,
@@ -1285,23 +1285,23 @@ export class ViewController {
         // is enabled
         let selected_obj = this.selected_objects[0];
         if (
-          (updated_vehicle.is_moved &&
+          (updated_vehicle.isMoved &&
             selected_obj &&
-            updated_vehicle.cur_point &&
-            (updated_vehicle.cur_point.point ===
-              (selected_obj.cur_point
-                ? selected_obj.cur_point.point
-                : selected_obj.point_id
-                ? selected_obj.point_id
+            updated_vehicle.curPoint &&
+            (updated_vehicle.curPoint.point ===
+              (selected_obj.curPoint
+                ? selected_obj.curPoint.point
+                : selected_obj.pointId
+                ? selected_obj.pointId
                 : selected_obj.id) ||
               (updated_vehicle.last_point &&
                 updated_vehicle.last_point.point ===
-                  (selected_obj.cur_point
-                    ? selected_obj.cur_point.point
-                    : selected_obj.point_id
-                    ? selected_obj.point_id
+                  (selected_obj.curPoint
+                    ? selected_obj.curPoint.point
+                    : selected_obj.pointId
+                    ? selected_obj.pointId
                     : selected_obj.id)))) ||
-          updated_vehicle.cur_point == null ||
+          updated_vehicle.curPoint == null ||
           updated_vehicle.last_point == undefined
         ) {
           this.update_overlap_display_objects(
@@ -1388,15 +1388,15 @@ export class ViewController {
 
           // Check to make sure the vehicle left the point
           if (
-            (vehicle.cur_point &&
+            (vehicle.curPoint &&
               (vehicle.last_point === undefined ||
                 vehicle.last_point == null ||
-                (vehicle.cur_point &&
-                  overlap_list[i].cur_point &&
-                  overlap_list[i].cur_point.point ===
+                (vehicle.curPoint &&
+                  overlap_list[i].curPoint &&
+                  overlap_list[i].curPoint.point ===
                     vehicle.last_point.point))) ||
             (vehicle.last_point &&
-              (vehicle.cur_point === undefined || vehicle.cur_point == null))
+              (vehicle.curPoint === undefined || vehicle.curPoint == null))
           ) {
             // Remove object from overlap_list
             overlap_list.splice(i, 1);
@@ -1447,8 +1447,8 @@ export class ViewController {
         point_of_interest = null;
       } else {
         if (type_at_point === 'VEHICLE') {
-          if (point_of_interest.cur_point) {
-            point_of_interest = point_of_interest.cur_point.point;
+          if (point_of_interest.curPoint) {
+            point_of_interest = point_of_interest.curPoint.point;
           } else {
             point_of_interest = null;
           }
@@ -1459,11 +1459,11 @@ export class ViewController {
           type_at_point === 'BUFFER' ||
           type_at_point === 'MTL'
         ) {
-          point_of_interest = point_of_interest.point_id;
+          point_of_interest = point_of_interest.pointId;
         }
       }
 
-      if (vehicle.cur_point && vehicle.cur_point.point === point_of_interest) {
+      if (vehicle.curPoint && vehicle.curPoint.point === point_of_interest) {
         // Exist
 
         // Add overlapping vehicles
@@ -1486,13 +1486,13 @@ export class ViewController {
           }
 
           // logger.log(
-          //   `vehicle ${vehicle.id} entered point ${vehicle.cur_point.point}`
+          //   `vehicle ${vehicle.id} entered point ${vehicle.curPoint.point}`
           // );
         }
       } else if (
-        (vehicle.cur_point == null ||
-          vehicle.cur_point == undefined ||
-          vehicle.cur_point === 0) &&
+        (vehicle.curPoint == null ||
+          vehicle.curPoint == undefined ||
+          vehicle.curPoint === 0) &&
         (point_of_interest == null || point_of_interest == undefined) &&
         overlap_type === 'UNASSIGNED_MODULE'
       ) {
@@ -1544,7 +1544,7 @@ export class ViewController {
   //   let grouped_objects = [];
   //   this.layout_data.groups.forEach((group) => {
   //     grouped_objects.push({
-  //       group_id: group.id,
+  //       groupId: group.id,
   //       objects: group.objects[type] ? [...group.objects[type]] : [],
   //     });
   //     return;
@@ -1556,7 +1556,7 @@ export class ViewController {
   //       for (let group of grouped_objects) {
   //         for (let j = group.objects.length - 1; j > -1; j--) {
   //           if (parseInt(object.id) === parseInt(group.objects[j])) {
-  //             objects[i].group = group.group_id;
+  //             objects[i].group = group.groupId;
   //             group.objects.splice(j, 1);
   //             break; // @NOTE check : 성능을 높이기 위해서 break 했는데, group.objects에 동일한 아이디가 여러개 있는 데이터가 가능하다면 사용하면 안된다.
   //             // @NOTE optional : some, find, filter 등을 사용하는 방법도 고려(성능 우선)
@@ -1580,7 +1580,7 @@ export class ViewController {
       let object_type = object.constructor.name.toUpperCase();
 
       // Apply offset, REMEMBER : multiply -1 because delta is based on inverted coord
-      object.apply_offset(original_delta, 0, this.geometry.invert_factor_y);
+      object.apply_offset(original_delta, 0, this.geometry.invertFactorY);
 
       if (object_type === 'POINT') {
         updated_points.push({
@@ -1602,10 +1602,10 @@ export class ViewController {
         this.selected_objects.forEach((check_object) => {
           let check_object_type = check_object.constructor.name.toUpperCase();
           if (check_object_type === 'POINT') {
-            if (check_object.id === object.point_from.id) {
+            if (check_object.id === object.pointFrom.id) {
               has_point_from = true;
             }
-            if (check_object.id === object.point_to.id) {
+            if (check_object.id === object.pointTo.id) {
               has_point_to = true;
             }
           }
@@ -1644,7 +1644,7 @@ export class ViewController {
         copied_seg.apply_offset(
           original_delta,
           this.snap_to_grid_distance,
-          this.geometry.invert_factor_y
+          this.geometry.invertFactorY
         );
 
         // set the original objects to the copy objects for proper reference
@@ -1742,9 +1742,9 @@ export class ViewController {
           let coords = LayoutUtil.create_coord_objects(
             updated_point.coord.x,
             updated_point.coord.y,
-            this.geometry.invert_factor_y
+            this.geometry.invertFactorY
           );
-          updated_point.inverted_coord = coords.inverted_coord;
+          updated_point.invertedCoord = coords.invertedCoord;
 
           // Add point to update list
           points_update_list.push(updated_point);
@@ -1779,8 +1779,8 @@ export class ViewController {
             let segment = connected_segments[i].copy();
 
             let all_connected_segments = LayoutUtil.find_connected_segments(
-              segment.point_from.id,
-              segment.point_to.id,
+              segment.pointFrom.id,
+              segment.pointTo.id,
               this.layout_data.segments,
               'ARRAY',
               true
@@ -1797,18 +1797,18 @@ export class ViewController {
             }
 
             // Find matched ends of the segment and update it with the latest one
-            if (segment.point_from.id === updated_point.id) {
-              segment.point_from = updated_point;
+            if (segment.pointFrom.id === updated_point.id) {
+              segment.pointFrom = updated_point;
             }
-            if (segment.point_to.id === updated_point.id) {
-              segment.point_to = updated_point;
+            if (segment.pointTo.id === updated_point.id) {
+              segment.pointTo = updated_point;
             }
 
             let found_segs = [];
             all_connected_segments.forEach((seg) => {
               let segs = LayoutUtil.find_connected_segments(
-                seg.point_from.id,
-                seg.point_to.id,
+                seg.pointFrom.id,
+                seg.pointTo.id,
                 this.layout_data.segments,
                 'ARRAY',
                 true
@@ -1856,7 +1856,7 @@ export class ViewController {
             // Recalculate path
             segment.set_candidates(null);
             segment.recalculate_path(
-              this.geometry.invert_factor_y,
+              this.geometry.invertFactorY,
               all_connected_segments,
               this.get_layout_objects('SEGMENT')
             );
@@ -1879,8 +1879,8 @@ export class ViewController {
             station.coord = {
               ...updated_point.coord,
             };
-            station.inverted_coord = {
-              ...updated_point.inverted_coord,
+            station.invertedCoord = {
+              ...updated_point.invertedCoord,
             };
 
             // Add station to update list
@@ -1899,8 +1899,8 @@ export class ViewController {
             buffer.coord = {
               ...updated_point.coord,
             };
-            buffer.inverted_coord = {
-              ...updated_point.inverted_coord,
+            buffer.invertedCoord = {
+              ...updated_point.invertedCoord,
             };
 
             // Add buffer to update list
@@ -1919,8 +1919,8 @@ export class ViewController {
             mtl.coord = {
               ...updated_point.coord,
             };
-            mtl.inverted_coord = {
-              ...updated_point.inverted_coord,
+            mtl.invertedCoord = {
+              ...updated_point.invertedCoord,
             };
 
             // Add mtl to update list
@@ -2043,11 +2043,11 @@ export class ViewController {
         object_type === 'BUFFER' ||
         object_type === 'MTL'
       ) {
-        base_point_id = current_object.point_id;
+        base_point_id = current_object.pointId;
       } else if (object_type === 'VEHICLE') {
-        let cur_point = current_object.cur_point;
-        if (cur_point) {
-          base_point_id = current_object.cur_point.point;
+        let curPoint = current_object.curPoint;
+        if (curPoint) {
+          base_point_id = current_object.curPoint.point;
         } else {
           // logger.log('UNASSIGNED_MODULE VEHICLE, exiting overlap check.');
           return;
@@ -2453,17 +2453,17 @@ export class ViewController {
       this.semantic_container.append('g').attr('class', 'overlap_group');
     }
 
-    // Get the coordinate for the panel: If the first object in the overlap_display_objects array is a vehicle, use vehicle cur_point coordinate else, use station/buffer coordinates
+    // Get the coordinate for the panel: If the first object in the overlap_display_objects array is a vehicle, use vehicle curPoint coordinate else, use station/buffer coordinates
     let x =
         this.overlap_display_objects[0].constructor.name.toUpperCase() ===
         'VEHICLE'
-          ? this.overlap_display_objects[0].cur_point.inverted_coord.x
-          : this.overlap_display_objects[0].inverted_coord.x,
+          ? this.overlap_display_objects[0].curPoint.invertedCoord.x
+          : this.overlap_display_objects[0].invertedCoord.x,
       y =
         this.overlap_display_objects[0].constructor.name.toUpperCase() ===
         'VEHICLE'
-          ? this.overlap_display_objects[0].cur_point.inverted_coord.y
-          : this.overlap_display_objects[0].inverted_coord.y;
+          ? this.overlap_display_objects[0].curPoint.invertedCoord.y
+          : this.overlap_display_objects[0].invertedCoord.y;
 
     // Closing event for overlap panel
     this.overlap_display_svg = this.get_svg_class('OVERLAP_DISPLAY').on(
@@ -2740,7 +2740,7 @@ export class ViewController {
     }
   }
   populate_overlap_data_for_vehicles(
-    point_id: any,
+    pointId: any,
     adding_overlap_list: any[],
     overlap_type: string
   ) {
@@ -2751,8 +2751,8 @@ export class ViewController {
         adding_overlap_list
       );
       if (
-        this.vehicles[i].cur_point &&
-        this.vehicles[i].cur_point.point === point_id &&
+        this.vehicles[i].curPoint &&
+        this.vehicles[i].curPoint.point === pointId &&
         !exist_in_overlap
       ) {
         this.add_to_overlap_objects(
@@ -2797,7 +2797,7 @@ export class ViewController {
     return is_exist;
   }
   populate_overlap_data(
-    point_id: any,
+    pointId: any,
     adding_overlap_list: any[],
     overlap_type: string
   ) {
@@ -2815,7 +2815,7 @@ export class ViewController {
         );
         if (
           layout_objects[i] &&
-          layout_objects[i].id === point_id &&
+          layout_objects[i].id === pointId &&
           !exist_in_overlap
         ) {
           this.add_to_overlap_objects(
@@ -2837,7 +2837,7 @@ export class ViewController {
       );
       if (
         layout_objects[i] &&
-        layout_objects[i].point_id === point_id &&
+        layout_objects[i].pointId === pointId &&
         !exist_in_overlap
       ) {
         this.add_to_overlap_objects(
@@ -2859,7 +2859,7 @@ export class ViewController {
       );
       if (
         layout_objects[i] &&
-        layout_objects[i].point_id === point_id &&
+        layout_objects[i].pointId === pointId &&
         !exist_in_overlap
       ) {
         this.add_to_overlap_objects(
@@ -2881,7 +2881,7 @@ export class ViewController {
       );
       if (
         layout_objects[i] &&
-        layout_objects[i].point_id === point_id &&
+        layout_objects[i].pointId === pointId &&
         !exist_in_overlap
       ) {
         this.add_to_overlap_objects(
@@ -2919,8 +2919,8 @@ export class ViewController {
             // Add candidates
             let candidates = LayoutUtil.find_segment_candidate(
               layout_object.id,
-              layout_object.point_from,
-              layout_object.point_to,
+              layout_object.pointFrom,
+              layout_object.pointTo,
               this.layout_data.segments
             );
             layout_object.candidates = candidates;
@@ -3454,19 +3454,19 @@ export class ViewController {
     if (updated_object_type === 'POINT') {
       target_points.push(updated_object.id);
     } else if (updated_object_type === 'SEGMENT') {
-      target_points.push(updated_object.point_from.id);
-      target_points.push(updated_object.point_to.id);
+      target_points.push(updated_object.pointFrom.id);
+      target_points.push(updated_object.pointTo.id);
     }
 
-    for (let point_id of target_points) {
+    for (let pointId of target_points) {
       for (let station of this.layout_data.stations) {
-        if (station.point_id === point_id) {
+        if (station.pointId === pointId) {
           station.set_direction_attr(this.get_layout_objects('SEGMENT'));
           updated_stations++;
         }
       }
       for (let buffer of this.layout_data.buffers) {
-        if (buffer.point_id === point_id) {
+        if (buffer.pointId === pointId) {
           buffer.set_direction_attr(this.get_layout_objects('SEGMENT'));
           updated_buffers++;
         }
@@ -3491,10 +3491,10 @@ export class ViewController {
     // Update cluster
     connected_clusters.forEach((cluster) => {
       let cluster_segments = LayoutUtil.find_all_contigous_segments_from_points(
-        cluster.point_id_list,
+        cluster.pointIdList,
         this.layout_data.segments
       );
-      cluster.set_path(cluster_segments, main_css.cluster.border_offset);
+      cluster.set_path(cluster_segments, main_css.cluster.borderOffset);
     });
   }
   find_snap(
@@ -3598,42 +3598,42 @@ export class ViewController {
       let layout_object = this.find_layout_object(object_type, object_id);
 
       // initialize variables
-      let id, logical_id, physical_id, length, point, max_cap, order_logical_id;
+      let id, logicalId, physicalId, length, point, max_cap, orderLogicalId;
 
       // populate variables by availability
       if (object_type === 'CLUSTER') {
         id = layout_object.id ? layout_object.id : null;
-        logical_id = layout_object.logical_id ? layout_object.logical_id : null;
-        max_cap = layout_object.max_vehicles
-          ? layout_object.max_vehicles
+        logicalId = layout_object.logicalId ? layout_object.logicalId : null;
+        max_cap = layout_object.maxVehicles
+          ? layout_object.maxVehicles
           : null;
       } else {
         id = layout_object.id ? layout_object.id : null;
-        logical_id = layout_object.logical_id ? layout_object.logical_id : null;
-        physical_id = layout_object.physical_id
-          ? layout_object.physical_id
+        logicalId = layout_object.logicalId ? layout_object.logicalId : null;
+        physicalId = layout_object.physicalId
+          ? layout_object.physicalId
           : null;
 
         // Set attributes distinctly by variables
         if (object_type === 'SEGMENT') {
           length = layout_object.length ? layout_object.length : null;
           point =
-            layout_object.point_from.id && layout_object.point_to.id
-              ? `${layout_object.point_from.id} . ${layout_object.point_to.id}`
+            layout_object.pointFrom.id && layout_object.pointTo.id
+              ? `${layout_object.pointFrom.id} . ${layout_object.pointTo.id}`
               : null;
         } else if (object_type === 'POINT') {
           point = layout_object.id ? layout_object.id : null;
         } else if (object_type === 'VEHICLE') {
-          point = layout_object.cur_point
-            ? layout_object.cur_point.point
+          point = layout_object.curPoint
+            ? layout_object.curPoint.point
             : null;
-          order_logical_id = layout_object.order_logical_id
-            ? layout_object.order_logical_id
-            : layout_object.order_id
-            ? layout_object.order_id
+          orderLogicalId = layout_object.orderLogicalId
+            ? layout_object.orderLogicalId
+            : layout_object.orderId
+            ? layout_object.orderId
             : null;
         } else {
-          point = layout_object.point_id ? layout_object.point_id : null;
+          point = layout_object.pointId ? layout_object.pointId : null;
         }
       }
 
@@ -3646,24 +3646,24 @@ export class ViewController {
       // @TODO i18n 처리
       if (object_type) label_text += `${object_type}\n`;
       if (id) label_text += `${'ID'}: ${id}\n`;
-      if (logical_id) label_text += `${'Logical ID'}: ${logical_id}\n`;
-      if (physical_id) label_text += `${'Physical ID'}: ${physical_id}\n`;
+      if (logicalId) label_text += `${'Logical ID'}: ${logicalId}\n`;
+      if (physicalId) label_text += `${'Physical ID'}: ${physicalId}\n`;
       if (length) label_text += `${'length'}: ${length}\n`;
       if (point) label_text += `${'Point'}: ${point}\n`;
       if (max_cap) label_text += `${'Maximum vehicles'}: ${max_cap}\n`;
-      if (order_logical_id)
-        label_text += `${'Order ID'}: ${order_logical_id}\n`;
+      if (orderLogicalId)
+        label_text += `${'Order ID'}: ${orderLogicalId}\n`;
 
       // if (object_type) label_text += `${$.i18n(object_type)}\n`;
       // if (id) label_text += `${$.i18n('ID')}: ${id}\n`;
-      // if (logical_id) label_text += `${$.i18n('Logical ID')}: ${logical_id}\n`;
-      // if (physical_id)
-      //   label_text += `${$.i18n('Physical ID')}: ${physical_id}\n`;
+      // if (logicalId) label_text += `${$.i18n('Logical ID')}: ${logicalId}\n`;
+      // if (physicalId)
+      //   label_text += `${$.i18n('Physical ID')}: ${physicalId}\n`;
       // if (length) label_text += `${$.i18n('length')}: ${length}\n`;
       // if (point) label_text += `${$.i18n('Point')}: ${point}\n`;
       // if (max_cap) label_text += `${$.i18n('Maximum vehicles')}: ${max_cap}\n`;
-      // if (order_logical_id)
-      //   label_text += `${$.i18n('Order ID')}: ${order_logical_id}\n`;
+      // if (orderLogicalId)
+      //   label_text += `${$.i18n('Order ID')}: ${orderLogicalId}\n`;
     }
 
     // Move text
@@ -3685,7 +3685,7 @@ export class ViewController {
   }
   calc_original_coord_with_screen(
     screen_coord: any,
-    invert_factor_y: any,
+    invertFactorY: any,
     is_apply_snap?: boolean
   ) {
     let current_zoom = this.getZoom(MapTypes.MAIN);
@@ -3694,7 +3694,7 @@ export class ViewController {
     (coord.x = (screen_coord[0] - current_zoom.x) / current_zoom.k),
       (coord.y = (screen_coord[1] - current_zoom.y) / current_zoom.k);
 
-    coord.y = invert_factor_y - coord.y;
+    coord.y = invertFactorY - coord.y;
 
     // Apply snap
     if (is_apply_snap) {
@@ -3747,12 +3747,12 @@ export class ViewController {
       dom.attr(
         'transform',
         `translate(${current_zoom.apply([
-          layout_object[0].inverted_coord.x + coord_delta.x,
-          layout_object[0].inverted_coord.y + coord_delta.y,
+          layout_object[0].invertedCoord.x + coord_delta.x,
+          layout_object[0].invertedCoord.y + coord_delta.y,
         ])})`
       );
-      dom.attr('x', layout_object[0].inverted_coord.x + coord_delta.x);
-      dom.attr('y', layout_object[0].inverted_coord.y + coord_delta.y);
+      dom.attr('x', layout_object[0].invertedCoord.x + coord_delta.x);
+      dom.attr('y', layout_object[0].invertedCoord.y + coord_delta.y);
     } else if (object_type === 'SEGMENT') {
       let temp_move_seg = dom.select('#temp_segment');
       temp_move_seg.attr(
@@ -3764,20 +3764,20 @@ export class ViewController {
         .attr('transform', `translate(${coord_delta.x}, ${coord_delta.y})`);
     } else if (object_type === 'SEGMENT_DIRECTION') {
       dom
-        .attr('x', layout_object[0].dir_coord.x + coord_delta.x)
-        .attr('y', layout_object[0].dir_coord.y + coord_delta.y)
+        .attr('x', layout_object[0].dirCoord.x + coord_delta.x)
+        .attr('y', layout_object[0].dirCoord.y + coord_delta.y)
         .attr(
           'transform',
           `translate(${current_zoom.apply([
-            layout_object[0].dir_coord.x + coord_delta.x,
-            layout_object[0].dir_coord.y + coord_delta.y,
+            layout_object[0].dirCoord.x + coord_delta.x,
+            layout_object[0].dirCoord.y + coord_delta.y,
           ])})`
         );
       dom
         .select('.dir_triangle')
         .attr(
           'transform',
-          `rotate(${CommonUtil.degrees(layout_object[0].dir_angle)},0,0)`
+          `rotate(${CommonUtil.degrees(layout_object[0].dirAngle)},0,0)`
         );
     }
   }
@@ -3853,10 +3853,10 @@ export class ViewController {
           for (let j = 0; j < objects_list.length; j++) {
             let search_object = objects_list[j];
             if (search_object.constructor.name.toUpperCase() === 'POINT') {
-              let point_id = search_object.id;
-              if (target_object.point_from.id === point_id) {
+              let pointId = search_object.id;
+              if (target_object.pointFrom.id === pointId) {
                 has_point_from = true;
-              } else if (target_object.point_to.id === point_id) {
+              } else if (target_object.pointTo.id === pointId) {
                 has_point_to = true;
               }
               if (has_point_from === true && has_point_to === true) {
@@ -3875,8 +3875,8 @@ export class ViewController {
 
             // Only check target object with point objects
             if (search_object.constructor.name.toUpperCase() === 'POINT') {
-              let point_id = search_object.id;
-              if (target_object.point_id === point_id) {
+              let pointId = search_object.id;
+              if (target_object.pointId === pointId) {
                 is_valid = true;
                 break;
               }
@@ -3896,39 +3896,39 @@ export class ViewController {
 
   get_default_size(width: any, height: any): IMapSize {
     return {
-      min_x: 0,
-      min_y: 0,
-      max_x: width ? width : this.DEFAULTS.canvas_width,
-      max_y: height ? height : this.DEFAULTS.canvas_height,
+      minX: 0,
+      minY: 0,
+      maxX: width ? width : this.DEFAULTS.canvas_width,
+      maxY: height ? height : this.DEFAULTS.canvas_height,
       width: width ? width : this.DEFAULTS.canvas_width,
       height: height ? height : this.DEFAULTS.canvas_height,
     };
   }
   calculate_size_from_extents(data: Dto.ITrackData): IMapSize {
-    let min_x = 0;
-    let min_y = 0;
-    let max_x = 0;
-    let max_y = 0;
+    let minX = 0;
+    let minY = 0;
+    let maxX = 0;
+    let maxY = 0;
 
     // find the extends of map data using the coordinates of points
     if (data.points && data.points.length > 0) {
-      min_x = data.points[0].x;
-      min_y = data.points[0].y;
+      minX = data.points[0].x;
+      minY = data.points[0].y;
       for (let i = 0; i < data.points.length; i++) {
-        if (data.points[i].x < min_x) min_x = data.points[i].x;
-        if (data.points[i].y < min_y) min_y = data.points[i].y;
-        if (data.points[i].x > max_x) max_x = data.points[i].x;
-        if (data.points[i].y > max_y) max_y = data.points[i].y;
+        if (data.points[i].x < minX) minX = data.points[i].x;
+        if (data.points[i].y < minY) minY = data.points[i].y;
+        if (data.points[i].x > maxX) maxX = data.points[i].x;
+        if (data.points[i].y > maxY) maxY = data.points[i].y;
       }
     }
 
     return {
-      min_x: min_x,
-      min_y: min_y,
-      max_x: max_x,
-      max_y: max_y,
-      width: Math.abs(max_x - min_x),
-      height: Math.abs(max_y - min_y),
+      minX: minX,
+      minY: minY,
+      maxX: maxX,
+      maxY: maxY,
+      width: Math.abs(maxX - minX),
+      height: Math.abs(maxY - minY),
     };
   }
   // @TODO move to data service
@@ -4115,7 +4115,7 @@ export class ViewController {
             // Get original coord
             let original_coord = this.calc_original_coord_from_inverted(
               coord,
-              this.geometry.invert_factor_y
+              this.geometry.invertFactorY
             );
 
             // Coornidate duplication check before create
@@ -4129,12 +4129,12 @@ export class ViewController {
               point = new Point(
                 {
                   id: LayoutUtil.create_new_id(this.layout_data.points),
-                  logical_id: null,
-                  physical_id: null,
+                  logicalId: null,
+                  physicalId: null,
                 },
                 LayoutUtil.create_coordinate(
                   { x: original_coord.x, y: original_coord.y },
-                  this.geometry.invert_factor_y
+                  this.geometry.invertFactorY
                 ),
                 true,
                 'N'
@@ -4179,11 +4179,11 @@ export class ViewController {
               if (d3.event.target.classList.contains('point_mask')) {
                 // clicked on a point
 
-                let point_id = parseInt(
+                let pointId = parseInt(
                   d3.event.target.parentElement.id.match(/[0-9]/g).join('')
                 );
-                let point_coord = this.find_layout_object('POINT', point_id)
-                  .inverted_coord;
+                let point_coord = this.find_layout_object('POINT', pointId)
+                  .invertedCoord;
                 this.drag_coord.start = point_coord;
               } else {
                 // Was not clicked on a point
@@ -4193,19 +4193,19 @@ export class ViewController {
 
                 let original_coord = this.calc_original_coord_from_inverted(
                   this.drag_coord.start,
-                  this.geometry.invert_factor_y
+                  this.geometry.invertFactorY
                 );
 
                 // Create point
                 let point = new Point(
                   {
                     id: LayoutUtil.create_new_id(this.layout_data.points),
-                    logical_id: null,
-                    physical_id: null,
+                    logicalId: null,
+                    physicalId: null,
                   },
                   LayoutUtil.create_coordinate(
                     { x: original_coord.x, y: original_coord.y },
-                    this.geometry.invert_factor_y
+                    this.geometry.invertFactorY
                   ),
                   true,
                   'N'
@@ -4239,19 +4239,19 @@ export class ViewController {
               if (!d3.event.target.classList.contains('point_mask')) {
                 let original_coord = this.calc_original_coord_from_inverted(
                   coord,
-                  this.geometry.invert_factor_y
+                  this.geometry.invertFactorY
                 );
 
                 // Create point
                 let point = new Point(
                   {
                     id: LayoutUtil.create_new_id(this.layout_data.points),
-                    logical_id: null,
-                    physical_id: null,
+                    logicalId: null,
+                    physicalId: null,
                   },
                   LayoutUtil.create_coordinate(
                     { x: original_coord.x, y: original_coord.y },
-                    this.geometry.invert_factor_y
+                    this.geometry.invertFactorY
                   ),
                   true,
                   'N'
@@ -4269,23 +4269,23 @@ export class ViewController {
               // Check if the segment has both start and end point
               if (this.selected_objects.length === 2) {
                 // Check if the second point is same as the first point
-                let start_point = this.selected_objects[0];
-                let end_point = this.selected_objects[1];
+                let startPoint = this.selected_objects[0];
+                let endPoint = this.selected_objects[1];
 
                 if (
-                  start_point.id !== end_point.id ||
-                  start_point.constructor !== end_point.constructor
+                  startPoint.id !== endPoint.id ||
+                  startPoint.constructor !== endPoint.constructor
                 ) {
                   this.drag_coord.end = coord;
 
                   // Create segment
-                  let segment_id = LayoutUtil.create_new_id(
+                  let segmentId = LayoutUtil.create_new_id(
                     this.layout_data.segments
                   );
                   let candidates = LayoutUtil.find_segment_candidate(
-                    segment_id,
-                    start_point,
-                    end_point,
+                    segmentId,
+                    startPoint,
+                    endPoint,
                     this.layout_data.segments
                   );
                   let speed = LayoutUtil.get_segment_speed(
@@ -4297,31 +4297,31 @@ export class ViewController {
                     type,
                     location,
                     direction,
-                    is_validate,
+                    isValidate,
                   } = candidates[0];
                   const segment = new Segment(
                     {
-                      id: segment_id,
-                      physical_id: null,
-                      logical_id: null,
+                      id: segmentId,
+                      physicalId: null,
+                      logicalId: null,
                       type,
                       location,
                       direction,
                       candidates,
                       speed,
                       length: null,
-                      travel_time: null,
-                      is_validate,
+                      travelTime: null,
+                      isValidate,
                     },
                     'N', // updateState
-                    start_point, // fromPoint
-                    end_point // toPoint
+                    startPoint, // fromPoint
+                    endPoint // toPoint
                   );
                   segment.postCreation();
-                  segment.create_segparts(this.geometry.invert_factor_y);
+                  segment.create_segparts(this.geometry.invertFactorY);
                   segment.set_path();
 
-                  // logger.log(`segment #${segment.id} created : ${segment.segment_parts.map(d=>`${d.type}${d.location ? d.location:''} ${d.direction} `).toString()}`)
+                  // logger.log(`segment #${segment.id} created : ${segment.segmentParts.map(d=>`${d.type}${d.location ? d.location:''} ${d.direction} `).toString()}`)
 
                   this.add_layout_object(segment, null, false);
 
@@ -4341,14 +4341,14 @@ export class ViewController {
                     this.selected_objects.push(last_point);
                     this.update_dom(
                       'SEGMENT_DRAW',
-                      last_point.inverted_coord,
+                      last_point.invertedCoord,
                       null,
                       null,
                       'LAYOUT',
                       false
                     );
                     this.drag_coord.start = {
-                      ...last_point.inverted_coord,
+                      ...last_point.invertedCoord,
                     };
                   } else {
                     // set selected object to last created segment
@@ -4357,7 +4357,7 @@ export class ViewController {
 
                   // Find connected segments
                   let connected_segments_from = LayoutUtil.find_connected_segment(
-                    segment.point_from,
+                    segment.pointFrom,
                     this.layout_data.segments,
                     null
                   );
@@ -4369,7 +4369,7 @@ export class ViewController {
                     }
                   }
                   let connected_segments_to = LayoutUtil.find_connected_segment(
-                    segment.point_to,
+                    segment.pointTo,
                     this.layout_data.segments,
                     null
                   );
@@ -4670,7 +4670,7 @@ export class ViewController {
           };
           let current_coord = this.calc_original_coord_with_screen(
             d3.mouse(this.svg.node()),
-            this.geometry.invert_factor_y
+            this.geometry.invertFactorY
           );
           let custom_text = `${parseInt(current_coord.x)}, ${parseInt(
             current_coord.y
@@ -4858,7 +4858,7 @@ export class ViewController {
     ) {
       this.vehicle_adaptive_rendering(main_css.vehicle, view_box);
     }
-    if (this.geometry.minimap_size !== undefined && this.minimap_svg) {
+    if (this.geometry.minimapSize !== undefined && this.minimap_svg) {
       this.mini_zoomed_handler({
         x: current_transform.x,
         y: current_transform.y,
@@ -4983,14 +4983,14 @@ export class ViewController {
       let zoom_level = this.calculate_zoom_level();
 
       let offset_transform;
-      if (layout_object.direction_offset) {
+      if (layout_object.directionOffset) {
         if (detail_highlight) {
           offset_transform = '';
         } else {
           let offset_multiplier = (1 / 3) * (zoom_level > 1 ? zoom_level : 0);
           let offset = {
-            x: layout_object.direction_offset.x * offset_multiplier,
-            y: layout_object.direction_offset.y * offset_multiplier,
+            x: layout_object.directionOffset.x * offset_multiplier,
+            y: layout_object.directionOffset.y * offset_multiplier,
           };
           offset_transform = `translate(${offset.x}, ${offset.y})rotate(${-this
             .map_rotation})scale(${this.location_scale.scale})`;
@@ -5730,7 +5730,7 @@ export class ViewController {
     // populate group color object if groups are on
     // if (this.show_groups) {
     if (this.preferences.toggles.groups) {
-      group_colors = {}; // {group_id : color}
+      group_colors = {}; // {groupId : color}
       for (let group of this.layout_data.groups) {
         group_colors[group.id] = ColorPalette.get_color(group.color);
       }
@@ -5798,35 +5798,35 @@ export class ViewController {
               group_colors
             );
           }
-          if (is_update_all || update.id || update.logical_id) {
+          if (is_update_all || update.id || update.logicalId) {
             this.update_vehicle_label_svg(
               d3_this,
               d.id,
-              d.logical_id,
+              d.logicalId,
               dom_css,
               this.vehicle_scale
             );
           }
-          if (is_update_all || update.order_id) {
+          if (is_update_all || update.orderId) {
             this.update_vehicle_order_label_svg(
               d3_this,
-              d.order_id,
+              d.orderId,
               d.hotlot,
               dom_css,
               this.vehicle_scale
             );
           }
-          if (is_update_all || update.is_stale) {
-            this.update_vehicle_stale_svg(d3_this, d.is_stale, dom_css);
+          if (is_update_all || update.isStale) {
+            this.update_vehicle_stale_svg(d3_this, d.isStale, dom_css);
           }
-          if (is_update_all || update.cargo_state) {
-            this.update_vehicle_foup_svg(d3_this, d.cargo_state);
+          if (is_update_all || update.cargoState) {
+            this.update_vehicle_foup_svg(d3_this, d.cargoState);
           }
           if (is_update_all || update.hotlot) {
             this.update_vehicle_hotlot_svg(
               d3_this,
               d.hotlot,
-              d.order_id,
+              d.orderId,
               dom_css,
               this.vehicle_scale
             );
@@ -5839,16 +5839,16 @@ export class ViewController {
               dom_css
             );
           }
-          if (is_update_all || update.error_list) {
-            this.update_vehicle_error_svg(d3_this, d.error_list, dom_css);
+          if (is_update_all || update.errorList) {
+            this.update_vehicle_error_svg(d3_this, d.errorList, dom_css);
           }
-          if (is_update_all || update.is_blocked) {
-            this.update_vehicle_blocked_svg(d3_this, d.is_blocked, dom_css);
+          if (is_update_all || update.isBlocked) {
+            this.update_vehicle_blocked_svg(d3_this, d.isBlocked, dom_css);
           }
-          if (is_update_all || update.cargo_transfer_result) {
+          if (is_update_all || update.cargoTransferResult) {
             this.update_vehicle_fail_svg(
               d3_this,
-              d.cargo_transfer_result,
+              d.cargoTransferResult,
               dom_css
             );
           }
@@ -5874,22 +5874,22 @@ export class ViewController {
             this.get_show_vehicle_lines()
               ? true
               : false;
-          if (is_update_all || update.command_point || update.cargo_state) {
+          if (is_update_all || update.commandPoint || update.cargoState) {
             let cur_x =
-              d.cur_point && d.cur_point.inverted_coord.x
-                ? d.cur_point.inverted_coord.x
+              d.curPoint && d.curPoint.invertedCoord.x
+                ? d.curPoint.invertedCoord.x
                 : 0;
             let cur_y =
-              d.cur_point && d.cur_point.inverted_coord.y
-                ? d.cur_point.inverted_coord.y
+              d.curPoint && d.curPoint.invertedCoord.y
+                ? d.curPoint.invertedCoord.y
                 : 0;
             let command_x =
-              d.command_point && d.command_point.inverted_coord.x
-                ? d.command_point.inverted_coord.x
+              d.commandPoint && d.commandPoint.invertedCoord.x
+                ? d.commandPoint.invertedCoord.x
                 : cur_x;
             let command_y =
-              d.command_point && d.command_point.inverted_coord.y
-                ? d.command_point.inverted_coord.y
+              d.commandPoint && d.commandPoint.invertedCoord.y
+                ? d.commandPoint.invertedCoord.y
                 : cur_y;
             this.update_vehicle_command_svg(
               d3_this,
@@ -5898,25 +5898,25 @@ export class ViewController {
               command_x,
               command_y,
               is_show_vehicle_line,
-              d.cargo_state
+              d.cargoState
             );
           }
-          if (is_update_all || update.next_point) {
+          if (is_update_all || update.nextPoint) {
             let cur_x =
-              d.cur_point && d.cur_point.inverted_coord.x
-                ? d.cur_point.inverted_coord.x
+              d.curPoint && d.curPoint.invertedCoord.x
+                ? d.curPoint.invertedCoord.x
                 : 0;
             let cur_y =
-              d.cur_point && d.cur_point.inverted_coord.y
-                ? d.cur_point.inverted_coord.y
+              d.curPoint && d.curPoint.invertedCoord.y
+                ? d.curPoint.invertedCoord.y
                 : 0;
             let next_x =
-              d.next_point && d.next_point.inverted_coord.x
-                ? d.next_point.inverted_coord.x
+              d.nextPoint && d.nextPoint.invertedCoord.x
+                ? d.nextPoint.invertedCoord.x
                 : cur_x;
             let next_y =
-              d.next_point && d.next_point.inverted_coord.y
-                ? d.next_point.inverted_coord.y
+              d.nextPoint && d.nextPoint.invertedCoord.y
+                ? d.nextPoint.invertedCoord.y
                 : cur_y;
             this.update_vehicle_next_svg(
               d3_this,
@@ -5927,7 +5927,7 @@ export class ViewController {
               is_show_vehicle_line
             );
           }
-          if (is_update_all || update.cur_point) {
+          if (is_update_all || update.curPoint) {
             this.move_vehicle_svg(
               d3_this,
               d,
@@ -5939,8 +5939,8 @@ export class ViewController {
       } else {
         this.vehicle_svg.attr('transform', (d) => {
           if (this.vehicles[d.index]) {
-            let x = this.vehicles[d.index].cur_point.inverted_coord.x;
-            let y = this.vehicles[d.index].cur_point.inverted_coord.y;
+            let x = this.vehicles[d.index].curPoint.invertedCoord.x;
+            let y = this.vehicles[d.index].curPoint.invertedCoord.y;
             let trans_array = this.getZoom(MapTypes.MAIN).apply([x, y]);
             return (
               'translate(' +
@@ -5972,24 +5972,24 @@ export class ViewController {
         })
         .attr('g_type', 'main')
         .attr('x', function (d) {
-          if (d.cur_point) {
-            return d.cur_point.inverted_coord.x;
+          if (d.curPoint) {
+            return d.curPoint.invertedCoord.x;
           } else {
             return null;
           }
         })
         .attr('y', function (d) {
-          if (d.cur_point) {
-            return d.cur_point.inverted_coord.y;
+          if (d.curPoint) {
+            return d.curPoint.invertedCoord.y;
           } else {
             return null;
           }
         })
         .attr('transform', function (d) {
-          if (d.cur_point) {
+          if (d.curPoint) {
             let trans_array = current_zoom.apply([
-              d.cur_point.inverted_coord.x,
-              d.cur_point.inverted_coord.y,
+              d.curPoint.invertedCoord.x,
+              d.curPoint.invertedCoord.y,
             ]);
             trans_array[0] = parseInt(trans_array[0]);
             trans_array[1] = parseInt(trans_array[1]);
@@ -6033,13 +6033,13 @@ export class ViewController {
     MIN_ANIMATE_DISTANCE: number,
     current_zoom: any
   ) {
-    if (vehicle_data.is_moved) {
+    if (vehicle_data.isMoved) {
       let last_point = vehicle_data.last_point
         ? vehicle_data.last_point.point
         : null;
       let matched_segment = LayoutUtil.find_segment(
         last_point,
-        vehicle_data.cur_point.point,
+        vehicle_data.curPoint.point,
         this.layout_data.segments,
         false
       );
@@ -6049,15 +6049,15 @@ export class ViewController {
       ) {
         //Get the vehicle elements to move along selected path
         this.vehicle_transition(
-          matched_segment.bezier_points,
+          matched_segment.bezierPoints,
           d3_this,
           vehicle_data
         );
       } else {
         d3_this.attr('transform', function () {
           let trans_array = current_zoom.apply([
-            vehicle_data.cur_point.inverted_coord.x,
-            vehicle_data.cur_point.inverted_coord.y,
+            vehicle_data.curPoint.invertedCoord.x,
+            vehicle_data.curPoint.invertedCoord.y,
           ]);
           trans_array[0] = parseInt(trans_array[0]);
           trans_array[1] = parseInt(trans_array[1]);
@@ -6080,16 +6080,16 @@ export class ViewController {
     vehicle_data: any,
     is_show: boolean
   ) {
-    let fallback = vehicle_data.cur_point.inverted_coord;
+    let fallback = vehicle_data.curPoint.invertedCoord;
 
-    let current_pt = vehicle_data.cur_point.inverted_coord;
+    let current_pt = vehicle_data.curPoint.invertedCoord;
     let next_pt =
-      vehicle_data.next_point && vehicle_data.next_point.inverted_coord
-        ? vehicle_data.next_point.inverted_coord
+      vehicle_data.nextPoint && vehicle_data.nextPoint.invertedCoord
+        ? vehicle_data.nextPoint.invertedCoord
         : fallback;
     let command_pt =
-      vehicle_data.command_point && vehicle_data.command_point.inverted_coord
-        ? vehicle_data.command_point.inverted_coord
+      vehicle_data.commandPoint && vehicle_data.commandPoint.invertedCoord
+        ? vehicle_data.commandPoint.invertedCoord
         : fallback;
     this.update_vehicle_command_svg(
       vehicle_element,
@@ -6098,7 +6098,7 @@ export class ViewController {
       command_pt.x,
       command_pt.y,
       is_show,
-      vehicle_data.cargo_state
+      vehicle_data.cargoState
     );
     this.update_vehicle_next_svg(
       vehicle_element,
@@ -6110,13 +6110,13 @@ export class ViewController {
     );
   }
   vehicle_transition(
-    bezier_points: any,
+    bezierPoints: any,
     vehicle_element: d3.Selection<d3.BaseType, unknown, HTMLElement, any>,
     vehicle_data: any
   ) {
     // Call the transition on the selected vehicle to animate
     // Retreive the coordinate at the end of chosen path
-    let bezier_path = this.bezier(bezier_points);
+    let bezier_path = this.bezier(bezierPoints);
 
     vehicle_element
       .transition()
@@ -6159,9 +6159,9 @@ export class ViewController {
       // Apply Coordinate change
       d3_veh.attr('x', current_point[0]).attr('y', current_point[1]);
 
-      this.vehicles[veh_data.index].cur_point.inverted_coord.x =
+      this.vehicles[veh_data.index].curPoint.invertedCoord.x =
         current_point[0];
-      this.vehicles[veh_data.index].cur_point.inverted_coord.y =
+      this.vehicles[veh_data.index].curPoint.invertedCoord.y =
         current_point[1];
 
       // zoom.current_mainto the location of vehicle if tracking is on
@@ -6190,8 +6190,8 @@ export class ViewController {
       destination_pt = [x, y];
     } else {
       destination_pt = [
-        vehicle.cur_point.inverted_coord.x,
-        vehicle.cur_point.inverted_coord.y,
+        vehicle.curPoint.invertedCoord.x,
+        vehicle.curPoint.invertedCoord.y,
       ];
     }
 
@@ -6199,8 +6199,8 @@ export class ViewController {
     let current_zoom = this.getZoom(MapTypes.MAIN).k,
       // Translation value centering the screen on the vehicle destination coord
       translate = [
-        this.geometry.screen_size.width / 2 - current_zoom * destination_pt[0],
-        this.geometry.screen_size.height / 2 - current_zoom * destination_pt[1],
+        this.geometry.screenSize.width / 2 - current_zoom * destination_pt[0],
+        this.geometry.screenSize.height / 2 - current_zoom * destination_pt[1],
       ];
 
     // Translate
@@ -6270,12 +6270,12 @@ export class ViewController {
     x2: any,
     y2: any,
     is_show: boolean,
-    cargo_state: any
+    cargoState: any
   ) {
     // Update lines
     let command_line = d3_this.select('.command');
     let command_stroke_css =
-      cargo_state === 'E'
+      cargoState === 'E'
         ? main_css.vehicle.order_pickup_color
         : main_css.vehicle.order_dropoff_color;
 
@@ -6407,11 +6407,11 @@ export class ViewController {
   }
   update_vehicle_fail_svg(
     d3_this: d3.Selection<d3.BaseType, unknown, HTMLElement, any>,
-    cargo_transfer_result: any,
+    cargoTransferResult: any,
     dom_css: any
   ) {
     // Unload/load fail
-    if (cargo_transfer_result) {
+    if (cargoTransferResult) {
       let fail_svg = d3_this.select('.fail');
       if (fail_svg.nodes().length === 0) {
         // if the element does not exist
@@ -6430,10 +6430,10 @@ export class ViewController {
   }
   update_vehicle_blocked_svg(
     d3_this: d3.Selection<d3.BaseType, unknown, HTMLElement, any>,
-    is_blocked: any,
+    isBlocked: any,
     dom_css: any
   ) {
-    if (is_blocked) {
+    if (isBlocked) {
       if (d3_this.select('.corner').nodes().length === 0) {
         d3_this
           .append('circle')
@@ -6453,10 +6453,10 @@ export class ViewController {
   }
   update_vehicle_error_svg(
     d3_this: d3.Selection<d3.BaseType, unknown, HTMLElement, any>,
-    error_list: any,
+    errorList: any,
     dom_css: any
   ) {
-    if (error_list != 0) {
+    if (errorList != 0) {
       if (d3_this.select('.error').nodes().length === 0) {
         d3_this
           .append('path')
@@ -6694,7 +6694,7 @@ export class ViewController {
   update_vehicle_hotlot_svg(
     d3_this: d3.Selection<d3.BaseType, unknown, HTMLElement, any>,
     hotlot: any,
-    order_id: any,
+    orderId: any,
     dom_css: any,
     vehicle_scale: { min: number; max: number; scale: number; value: number }
   ) {
@@ -6714,7 +6714,7 @@ export class ViewController {
           .attr('x', function (d: any) {
             return (
               -((dom_css.text_offset * 3) / 4) * vehicle_scale.scale -
-              d.order_id.toString().length * 6
+              d.orderId.toString().length * 6
             );
           })
           .attr('y', function (d) {
@@ -6725,7 +6725,7 @@ export class ViewController {
           })
           .attr('display', 'block')
           .attr('width', () => {
-            return `${order_id.toString().length * 6}px`;
+            return `${orderId.toString().length * 6}px`;
           })
           .attr('height', 13)
           .attr('rx', 5)
@@ -6750,21 +6750,21 @@ export class ViewController {
   }
   update_vehicle_foup_svg(
     d3_this: d3.Selection<d3.BaseType, unknown, HTMLElement, any>,
-    cargo_state: any
+    cargoState: any
   ) {
-    if (cargo_state == 'F' || cargo_state == 'L' || cargo_state == 'U') {
+    if (cargoState == 'F' || cargoState == 'L' || cargoState == 'U') {
       let current_vehicle_foup = d3_this.select('.foup');
       if (current_vehicle_foup.nodes().length === 0) {
         // if the element does not exist
         d3_this
           .append('circle')
           .attr('class', function () {
-            if (cargo_state == 'F') {
+            if (cargoState == 'F') {
               return 'foup loaded';
-            } else if (cargo_state == 'L') {
+            } else if (cargoState == 'L') {
               return 'foup loading';
             } else {
-              // when cargo_state == 'U'
+              // when cargoState == 'U'
               return 'foup unloading';
             }
           })
@@ -6774,15 +6774,15 @@ export class ViewController {
       } else {
         // if element already exists
         let current_cargo_state = current_vehicle_foup.attr('class');
-        if (cargo_state == 'F' && current_cargo_state != 'foup loaded') {
+        if (cargoState == 'F' && current_cargo_state != 'foup loaded') {
           current_vehicle_foup.attr('class', 'foup loaded');
         } else if (
-          cargo_state == 'L' &&
+          cargoState == 'L' &&
           current_cargo_state != 'foup loading'
         ) {
           current_vehicle_foup.attr('class', 'foup loading');
         } else if (
-          cargo_state == 'U' &&
+          cargoState == 'U' &&
           current_cargo_state != 'foup unloading'
         ) {
           current_vehicle_foup.attr('class', 'foup unloading');
@@ -6794,10 +6794,10 @@ export class ViewController {
   }
   update_vehicle_stale_svg(
     d3_this: d3.Selection<d3.BaseType, unknown, HTMLElement, any>,
-    is_stale: any,
+    isStale: any,
     dom_css: any
   ) {
-    if (is_stale) {
+    if (isStale) {
       let stale_svg = d3_this.select('.stale');
       if (stale_svg.nodes().length === 0) {
         // if the element does not exist
@@ -6830,7 +6830,7 @@ export class ViewController {
   }
   update_vehicle_order_label_svg(
     d3_this: d3.Selection<d3.BaseType, unknown, HTMLElement, any>,
-    order_id: any,
+    orderId: any,
     hotlot: any,
     dom_css: any,
     vehicle_scale: { min: number; max: number; scale: number; value: number }
@@ -6848,8 +6848,8 @@ export class ViewController {
         .attr('x', (-dom_css.text_offset * 3) / 4)
         .attr('y', dom_css.radius * 2 - dom_css.radius / 2)
         .html(function () {
-          if (order_id) {
-            return `${order_id}`;
+          if (orderId) {
+            return `${orderId}`;
           } else {
             return '';
           }
@@ -6857,19 +6857,19 @@ export class ViewController {
         .attr('text-anchor', 'end')
         .attr('display', 'block')
         .attr('transform', `rotate(${-this.map_rotation})`);
-    } else if (current_order_label.text() != order_id) {
-      current_order_label.text(order_id);
+    } else if (current_order_label.text() != orderId) {
+      current_order_label.text(orderId);
     }
   }
   update_vehicle_label_svg(
     d3_this: d3.Selection<d3.BaseType, unknown, HTMLElement, any>,
     id: any,
-    logical_id: any,
+    logicalId: any,
     dom_css: any,
     vehicle_scale: { min: number; max: number; scale: number; value: number }
   ) {
     let current_vehicle_label = d3_this.select('.label');
-    let label = logical_id ? logical_id : id;
+    let label = logicalId ? logicalId : id;
     if (
       current_vehicle_label.nodes().length === 0 &&
       vehicle_scale.scale >= 0.6
@@ -6895,12 +6895,12 @@ export class ViewController {
   }
   update_vehicle_group_svg(
     d3_this: d3.Selection<d3.BaseType, unknown, HTMLElement, any>,
-    group_id: any,
+    groupId: any,
     dom_css: any,
     group_colors: any
   ) {
     let group_svg = d3_this.select('.group_svg');
-    if (group_id) {
+    if (groupId) {
       let group_size = dom_css.vehicle_group_size;
       if (group_svg.nodes().length === 0) {
         group_svg = d3_this
@@ -6913,7 +6913,7 @@ export class ViewController {
           .attr('width', group_size * 4)
           .attr('height', group_size * 4)
           .attr('fill', 'none')
-          .attr('stroke', group_colors[group_id])
+          .attr('stroke', group_colors[groupId])
           .attr('stroke-width', '3px')
           .style('opacity', dom_css.opacity)
           .attr(
@@ -6921,8 +6921,8 @@ export class ViewController {
             `rotate(${-this.map_rotation})scale(${this.vehicle_scale.scale})`
           )
           .lower();
-      } else if (group_svg.attr('stroke') != group_colors[group_id]) {
-        group_svg.attr('stroke', group_colors[group_id]);
+      } else if (group_svg.attr('stroke') != group_colors[groupId]) {
+        group_svg.attr('stroke', group_colors[groupId]);
       }
     } else {
       group_svg.remove();
@@ -6944,9 +6944,9 @@ export class ViewController {
     for (let i = 0; i < this.vehicles.length; i++) {
       let object = this.vehicles[i];
       let is_display = false;
-      if (object.cur_point) {
-        let pos_x = object.cur_point.inverted_coord.x,
-          pos_y = object.cur_point.inverted_coord.y;
+      if (object.curPoint) {
+        let pos_x = object.curPoint.invertedCoord.x,
+          pos_y = object.curPoint.invertedCoord.y;
 
         // add if within the viewbox coordinates
         if (rotated_view_box) {
@@ -7211,20 +7211,20 @@ export class ViewController {
     this.canvas_group.attr(
       'transform',
       `translate(${transform.x},${
-        transform.y + this.geometry.invert_factor_y * transform.k
+        transform.y + this.geometry.invertFactorY * transform.k
       })scale(${transform.k})`
     );
     this.center_svg_x.attr(
       'transform',
       `translate(0, ${
-        transform.y + this.geometry.invert_factor_y * transform.k
+        transform.y + this.geometry.invertFactorY * transform.k
       })`
     );
     this.center_svg_y.attr('transform', `translate(${transform.x}, 0)`);
     this.center_svg_text.attr(
       'transform',
       `translate(${transform.x},${
-        transform.y + this.geometry.invert_factor_y * transform.k
+        transform.y + this.geometry.invertFactorY * transform.k
       })`
     );
   }
@@ -7423,7 +7423,7 @@ export class ViewController {
 
     // Translate the ticks by the fab size
     current_transform.y =
-      current_transform.y + this.geometry.invert_factor_y * current_transform.k;
+      current_transform.y + this.geometry.invertFactorY * current_transform.k;
 
     // Apply adjusted grid transform
     this.grid_x.call(
@@ -7457,13 +7457,13 @@ export class ViewController {
       this.minimap_path_svg = this.minimap_svg.append('path');
     }
 
-    // if(geometry.track_size.min_x < 0){ // If min x value is negative
-    //     translate_x = -geometry.track_size.min_x * current_transform_scale
+    // if(geometry.trackSize.minX < 0){ // If min x value is negative
+    //     translate_x = -geometry.trackSize.minX * current_transform_scale
     // } else{
-    //     translate_x = -geometry.track_size.min_x * current_transform_scale
+    //     translate_x = -geometry.trackSize.minX * current_transform_scale
     // }
-    // if(geometry.track_size.min_y < 0){ // If min y value is negative
-    //     translate_y = geometry.track_size.min_y * current_transform_scale
+    // if(geometry.trackSize.minY < 0){ // If min y value is negative
+    //     translate_y = geometry.trackSize.minY * current_transform_scale
     // }
 
     this.minimap_path_svg
@@ -7477,28 +7477,28 @@ export class ViewController {
 
     this.init_minimap_event_listeners();
 
-    // Set the proper fab_size since db fab size only accounts for points
-    this.adjust_fab_size(this.geometry.track_size);
+    // Set the proper fabSize since db fab size only accounts for points
+    this.adjust_fab_size(this.geometry.trackSize);
   }
   adjust_fab_size(boundaries: IMapSize) {
     try {
-      let boundary_coord: any = {};
+      let boundaryCoord: any = {};
       let is_extend = false;
 
       if (
-        boundaries.min_x !== undefined &&
-        boundaries.min_y !== undefined &&
-        boundaries.max_x !== undefined &&
-        boundaries.max_y !== undefined
+        boundaries.minX !== undefined &&
+        boundaries.minY !== undefined &&
+        boundaries.maxX !== undefined &&
+        boundaries.maxY !== undefined
       ) {
         boundaries = {
           min: {
-            x: boundaries.min_x,
-            y: boundaries.min_y,
+            x: boundaries.minX,
+            y: boundaries.minY,
           },
           max: {
-            x: boundaries.max_x,
-            y: boundaries.max_y,
+            x: boundaries.maxX,
+            y: boundaries.maxY,
           },
         };
 
@@ -7507,54 +7507,54 @@ export class ViewController {
       }
 
       // sawp the y values in the objects before inverting with original coord
-      boundary_coord.max = this.calc_original_coord_from_inverted(
+      boundaryCoord.max = this.calc_original_coord_from_inverted(
         boundaries.max,
-        this.geometry.invert_factor_y
+        this.geometry.invertFactorY
       );
-      boundary_coord.min = this.calc_original_coord_from_inverted(
+      boundaryCoord.min = this.calc_original_coord_from_inverted(
         boundaries.min,
-        this.geometry.invert_factor_y
+        this.geometry.invertFactorY
       );
-      let swap = boundary_coord.max.y;
-      boundary_coord.max.y = boundary_coord.min.y;
-      boundary_coord.min.y = swap;
+      let swap = boundaryCoord.max.y;
+      boundaryCoord.max.y = boundaryCoord.min.y;
+      boundaryCoord.min.y = swap;
 
-      if (boundary_coord.min.x <= this.CANVAS_MIN_X) {
+      if (boundaryCoord.min.x <= this.CANVAS_MIN_X) {
         // extend LEFT
         is_extend = true;
-        // Calculate x translation amount depending on fab_size growth
-        this.geometry.fab_size.min_x = boundary_coord.min.x; // returns negative value
+        // Calculate x translation amount depending on fabSize growth
+        this.geometry.fabSize.minX = boundaryCoord.min.x; // returns negative value
       } else {
-        if (boundary_coord.min.x >= this.CANVAS_MIN_X) is_extend = true;
-        this.geometry.fab_size.min_x = this.CANVAS_MIN_X; // returns negative value
+        if (boundaryCoord.min.x >= this.CANVAS_MIN_X) is_extend = true;
+        this.geometry.fabSize.minX = this.CANVAS_MIN_X; // returns negative value
       }
 
-      if (boundary_coord.max.x >= this.CANVAS_MAX_X) {
+      if (boundaryCoord.max.x >= this.CANVAS_MAX_X) {
         // extend RIGHT
         is_extend = true;
-        this.geometry.fab_size.max_x = boundary_coord.max.x;
+        this.geometry.fabSize.maxX = boundaryCoord.max.x;
       } else {
-        if (boundary_coord.max.x <= this.CANVAS_MAX_X) is_extend = true;
-        this.geometry.fab_size.max_x = this.CANVAS_MAX_X; // returns negative value
+        if (boundaryCoord.max.x <= this.CANVAS_MAX_X) is_extend = true;
+        this.geometry.fabSize.maxX = this.CANVAS_MAX_X; // returns negative value
       }
 
-      if (boundary_coord.min.y <= this.CANVAS_MIN_Y) {
+      if (boundaryCoord.min.y <= this.CANVAS_MIN_Y) {
         // extend DOWN
         is_extend = true;
-        this.geometry.fab_size.min_y = boundary_coord.min.y; // returns negative value
+        this.geometry.fabSize.minY = boundaryCoord.min.y; // returns negative value
       } else {
-        if (boundary_coord.min.y >= this.CANVAS_MIN_Y) is_extend = true;
-        this.geometry.fab_size.min_y = this.CANVAS_MIN_Y; // returns negative value
+        if (boundaryCoord.min.y >= this.CANVAS_MIN_Y) is_extend = true;
+        this.geometry.fabSize.minY = this.CANVAS_MIN_Y; // returns negative value
       }
 
-      if (boundary_coord.max.y >= this.CANVAS_MAX_Y) {
+      if (boundaryCoord.max.y >= this.CANVAS_MAX_Y) {
         // extend UP
         is_extend = true;
-        // Calculate y translation amount depending on fab_size growth
-        this.geometry.fab_size.max_y = boundary_coord.max.y;
+        // Calculate y translation amount depending on fabSize growth
+        this.geometry.fabSize.maxY = boundaryCoord.max.y;
       } else {
-        if (boundary_coord.max.y <= this.CANVAS_MAX_Y) is_extend = true;
-        this.geometry.fab_size.max_y = this.CANVAS_MAX_Y; // returns negative value
+        if (boundaryCoord.max.y <= this.CANVAS_MAX_Y) is_extend = true;
+        this.geometry.fabSize.maxY = this.CANVAS_MAX_Y; // returns negative value
       }
 
       if (is_extend) {
@@ -7562,24 +7562,24 @@ export class ViewController {
         this.calc_and_set_track_size();
 
         // Calculate fab dimensions
-        this.geometry.fab_size.width =
-          this.geometry.fab_size.max_x - this.geometry.fab_size.min_x;
-        this.geometry.fab_size.height =
-          this.geometry.fab_size.max_y - this.geometry.fab_size.min_y;
+        this.geometry.fabSize.width =
+          this.geometry.fabSize.maxX - this.geometry.fabSize.minX;
+        this.geometry.fabSize.height =
+          this.geometry.fabSize.maxY - this.geometry.fabSize.minY;
 
         // let save_size = {
-        //     min_x: this.geometry.fab_size.min_x,
-        //     min_y: this.geometry.fab_size.min_y,
-        //     max_x: this.geometry.fab_size.max_x,
-        //     max_y: this.geometry.fab_size.max_y
+        //     minX: this.geometry.fabSize.minX,
+        //     minY: this.geometry.fabSize.minY,
+        //     maxX: this.geometry.fabSize.maxX,
+        //     maxY: this.geometry.fabSize.maxY
         // }
 
         // update minimap
         if (
-          this.geometry.track_size.width > 0 &&
-          this.geometry.track_size.height > 0
+          this.geometry.trackSize.width > 0 &&
+          this.geometry.trackSize.height > 0
         ) {
-          this.update_minimap_with_new_dimensions(this.geometry.track_size);
+          this.update_minimap_with_new_dimensions(this.geometry.trackSize);
         }
         this.svg_resize();
       }
@@ -7596,7 +7596,7 @@ export class ViewController {
     let { k, x, y } = this.getZoom(MapTypes.MAIN);
 
     // Calculate last position center coord
-    const { width: lastW, height: lastH } = this.geometry.screen_size;
+    const { width: lastW, height: lastH } = this.geometry.screenSize;
 
     let zoom_ratio = k / d3.zoomIdentity.k;
 
@@ -7614,8 +7614,8 @@ export class ViewController {
     } = this.svg.node().getBoundingClientRect();
 
     // Set new screen size
-    this.geometry.screen_size.width = changeW;
-    this.geometry.screen_size.height = changeH;
+    this.geometry.screenSize.width = changeW;
+    this.geometry.screenSize.height = changeH;
 
     // Calculate the difference between the sizes then divide by 2 to get the center differences
     let screen_size_dif = {
@@ -7628,7 +7628,7 @@ export class ViewController {
       width: miniW,
       height: miniH,
     } = this.minimap_svg.node().getBoundingClientRect();
-    this.geometry.minimap_size = {
+    this.geometry.minimapSize = {
       width: miniW,
       height: miniH,
     };
@@ -7647,8 +7647,8 @@ export class ViewController {
 
     // Initialize svg: view-box element
     this.svg
-      .attr('width', this.geometry.screen_size.width)
-      .attr('height', this.geometry.screen_size.height);
+      .attr('width', this.geometry.screenSize.width)
+      .attr('height', this.geometry.screenSize.height);
     this.svg.call(this.d3_main);
 
     let length: any = {},
@@ -7656,31 +7656,31 @@ export class ViewController {
       upper_limit: any = {};
 
     if (this.mode === ViewModes.editor) {
-      length.x = this.geometry.screen_size.width;
-      length.y = this.geometry.screen_size.height;
+      length.x = this.geometry.screenSize.width;
+      length.y = this.geometry.screenSize.height;
       lower_limit = {
         x: 0,
         y: 0,
       };
       upper_limit = {
-        x: this.geometry.screen_size.width,
-        y: this.geometry.screen_size.height,
+        x: this.geometry.screenSize.width,
+        y: this.geometry.screenSize.height,
       };
     } else {
       length.x = Math.sqrt(
-        Math.pow(this.geometry.screen_size.width, 2) +
-          Math.pow(this.geometry.screen_size.height, 2)
+        Math.pow(this.geometry.screenSize.width, 2) +
+          Math.pow(this.geometry.screenSize.height, 2)
       );
       length.y = length.x;
-      let lower_width = (this.geometry.screen_size.width - length.x) / 2;
-      let lower_height = (this.geometry.screen_size.height - length.y) / 2;
+      let lower_width = (this.geometry.screenSize.width - length.x) / 2;
+      let lower_height = (this.geometry.screenSize.height - length.y) / 2;
       lower_limit = {
         x: lower_width,
         y: lower_height,
       };
       upper_limit = {
-        x: this.geometry.screen_size.width - lower_width,
-        y: this.geometry.screen_size.height - lower_height,
+        x: this.geometry.screenSize.width - lower_width,
+        y: this.geometry.screenSize.height - lower_height,
       };
     }
 
@@ -7699,7 +7699,7 @@ export class ViewController {
       .axisBottom(this.d3_x)
       .ticks((upper_limit.x / upper_limit.y) * this.num_ticks)
       .tickSize(length.y)
-      .tickPadding(8 - this.geometry.screen_size.height);
+      .tickPadding(8 - this.geometry.screenSize.height);
 
     this.d3_axis_y = d3
       .axisRight(this.d3_y)
@@ -7734,8 +7734,8 @@ export class ViewController {
 
       // Set container svg for minimap segment svg elements
       this.minimap_rect
-        .attr('width', this.geometry.minimap_size.width / zoom_ratio)
-        .attr('height', this.geometry.minimap_size.height / zoom_ratio);
+        .attr('width', this.geometry.minimapSize.width / zoom_ratio)
+        .attr('height', this.geometry.minimapSize.height / zoom_ratio);
     }
 
     // Set zoom identity equal to new paramerized values and pan for the new offsets differences
@@ -7745,8 +7745,8 @@ export class ViewController {
     // Reposition the scale group
     this.scale_svg_group.attr(
       'transform',
-      `translate(${this.geometry.screen_size.width - this.scale_offset_x}, ${
-        this.geometry.screen_size.height - this.scale_offset_y
+      `translate(${this.geometry.screenSize.width - this.scale_offset_x}, ${
+        this.geometry.screenSize.height - this.scale_offset_y
       })`
     );
 
@@ -7758,8 +7758,8 @@ export class ViewController {
 
     // Adjust center line size to new screen size
     if (this.mode === 'EDITOR') {
-      this.center_svg_x.attr('x2', this.geometry.screen_size.width);
-      this.center_svg_y.attr('y2', this.geometry.screen_size.height);
+      this.center_svg_x.attr('x2', this.geometry.screenSize.width);
+      this.center_svg_y.attr('y2', this.geometry.screenSize.height);
     }
 
     // adjust this.geometry of toolbar, minimap, etc
@@ -7818,8 +7818,8 @@ export class ViewController {
     // if (scale.nodes()[0].transform.baseVal[0]) {
     //   let scale_x = scale.nodes()[0].transform.baseVal[0].matrix.e,
     //     scale_y = scale.nodes()[0].transform.baseVal[0].matrix.f,
-    //     diff_x = scale_x / 2 - (this.geometry.screen_size.width - scale_x) / 2,
-    //     diff_y = scale_y / 2 - (this.geometry.screen_size.height - scale_y) / 2;
+    //     diff_x = scale_x / 2 - (this.geometry.screenSize.width - scale_x) / 2,
+    //     diff_y = scale_y / 2 - (this.geometry.screenSize.height - scale_y) / 2;
 
     //   scale.attr(
     //     'transform',
@@ -7918,7 +7918,7 @@ export class ViewController {
       // Apply rotation to visibly vehicles
       this.update_vehicle_scale_n_rotation_rendering();
     }
-    if (this.geometry.minimap_size !== undefined && this.minimap_svg) {
+    if (this.geometry.minimapSize !== undefined && this.minimap_svg) {
       this.mini_zoomed_handler({
         x: parseInt(current_transform.x),
         y: parseInt(current_transform.y),
@@ -8027,7 +8027,7 @@ export class ViewController {
           .attr('x', () => {
             return (
               -((vehicle_css.text_offset * 3) / 4) * this.vehicle_scale.scale -
-              d.order_id.toString().length * 6
+              d.orderId.toString().length * 6
             );
           })
           .attr('y', () => {
@@ -8218,25 +8218,25 @@ export class ViewController {
     ) {
       let object = this.layout_data[`${type.toLowerCase()}s`][i];
 
-      let min_x = object.min_x,
-        min_y = object.min_y,
-        max_x = object.max_x,
-        max_y = object.max_y;
+      let minX = object.minX,
+        minY = object.minY,
+        maxX = object.maxX,
+        maxY = object.maxY;
 
       if (type === 'CLUSTER') {
-        min_x = object.min_x;
-        min_y = object.min_y;
-        max_x = object.max_x;
-        max_y = object.max_y;
+        minX = object.minX;
+        minY = object.minY;
+        maxX = object.maxX;
+        maxY = object.maxY;
       } else if (type === 'SEGMENT') {
         let extremities = LayoutUtil.find_max_and_min_of_objects(
           object,
           'INVERTED'
         );
-        min_x = extremities.min.x;
-        min_y = extremities.min.y;
-        max_x = extremities.max.x;
-        max_y = extremities.max.y;
+        minX = extremities.min.x;
+        minY = extremities.min.y;
+        maxX = extremities.max.x;
+        maxY = extremities.max.y;
       }
 
       if (rotated_view_box) {
@@ -8271,42 +8271,42 @@ export class ViewController {
           },
         };
         if (
-          (min_x > rotated_view_bounds.min.x &&
-            min_x < rotated_view_bounds.max.x &&
-            min_y > rotated_view_bounds.min.y &&
-            min_y < rotated_view_bounds.max.y) || // Left top corner
-          (max_x > rotated_view_bounds.min.x &&
-            max_x < rotated_view_bounds.max.x &&
-            max_y > rotated_view_bounds.min.y &&
-            max_y < rotated_view_bounds.max.y) || // Right bottom corner
-          (min_x > rotated_view_bounds.min.x &&
-            min_x < rotated_view_bounds.max.x &&
-            max_y > rotated_view_bounds.min.y &&
-            max_y < rotated_view_bounds.max.y) || // Left bottom corner
-          (max_x > rotated_view_bounds.min.x &&
-            max_x < rotated_view_bounds.max.x &&
-            min_y > rotated_view_bounds.min.y &&
-            min_y < rotated_view_bounds.max.y) || // Right top corner
-          (((min_y > rotated_view_bounds.min.y &&
-            max_y < rotated_view_bounds.max.y) ||
-            (min_y > rotated_view_bounds.min.y &&
-              min_y < rotated_view_bounds.max.y) ||
-            (max_y > rotated_view_bounds.min.y &&
-              max_y < rotated_view_bounds.max.y)) &&
-            min_x < rotated_view_bounds.min.x &&
-            max_x > rotated_view_bounds.max.x) || // side corners are out, but parts of middle is in view
-          (((min_x > rotated_view_bounds.min.x &&
-            max_x < rotated_view_bounds.max.x) ||
-            (min_x > rotated_view_bounds.min.x &&
-              min_x < rotated_view_bounds.max.x) ||
-            (max_x > rotated_view_bounds.min.x &&
-              max_x < rotated_view_bounds.max.x)) &&
-            min_y < rotated_view_bounds.min.y &&
-            max_y > rotated_view_bounds.max.y) || // top/bottom corners are out, but parts of middle is in view
-          (min_x < rotated_view_bounds.min.x &&
-            max_x > rotated_view_bounds.max.x &&
-            min_y < rotated_view_bounds.min.y &&
-            max_y > rotated_view_bounds.max.y)
+          (minX > rotated_view_bounds.min.x &&
+            minX < rotated_view_bounds.max.x &&
+            minY > rotated_view_bounds.min.y &&
+            minY < rotated_view_bounds.max.y) || // Left top corner
+          (maxX > rotated_view_bounds.min.x &&
+            maxX < rotated_view_bounds.max.x &&
+            maxY > rotated_view_bounds.min.y &&
+            maxY < rotated_view_bounds.max.y) || // Right bottom corner
+          (minX > rotated_view_bounds.min.x &&
+            minX < rotated_view_bounds.max.x &&
+            maxY > rotated_view_bounds.min.y &&
+            maxY < rotated_view_bounds.max.y) || // Left bottom corner
+          (maxX > rotated_view_bounds.min.x &&
+            maxX < rotated_view_bounds.max.x &&
+            minY > rotated_view_bounds.min.y &&
+            minY < rotated_view_bounds.max.y) || // Right top corner
+          (((minY > rotated_view_bounds.min.y &&
+            maxY < rotated_view_bounds.max.y) ||
+            (minY > rotated_view_bounds.min.y &&
+              minY < rotated_view_bounds.max.y) ||
+            (maxY > rotated_view_bounds.min.y &&
+              maxY < rotated_view_bounds.max.y)) &&
+            minX < rotated_view_bounds.min.x &&
+            maxX > rotated_view_bounds.max.x) || // side corners are out, but parts of middle is in view
+          (((minX > rotated_view_bounds.min.x &&
+            maxX < rotated_view_bounds.max.x) ||
+            (minX > rotated_view_bounds.min.x &&
+              minX < rotated_view_bounds.max.x) ||
+            (maxX > rotated_view_bounds.min.x &&
+              maxX < rotated_view_bounds.max.x)) &&
+            minY < rotated_view_bounds.min.y &&
+            maxY > rotated_view_bounds.max.y) || // top/bottom corners are out, but parts of middle is in view
+          (minX < rotated_view_bounds.min.x &&
+            maxX > rotated_view_bounds.max.x &&
+            minY < rotated_view_bounds.min.y &&
+            maxY > rotated_view_bounds.max.y)
         ) {
           // When object is bigger than the screen
 
@@ -8314,36 +8314,36 @@ export class ViewController {
         }
       } else {
         if (
-          (min_x > view_box.x_from &&
-            min_x < view_box.x_to &&
-            min_y > view_box.y_from &&
-            min_y < view_box.y_to) || // Left top corner
-          (max_x > view_box.x_from &&
-            max_x < view_box.x_to &&
-            max_y > view_box.y_from &&
-            max_y < view_box.y_to) || // Right bottom corner
-          (min_x > view_box.x_from &&
-            min_x < view_box.x_to &&
-            max_y > view_box.y_from &&
-            max_y < view_box.y_to) || // Left bottom corner
-          (max_x > view_box.x_from &&
-            max_x < view_box.x_to &&
-            min_y > view_box.y_from &&
-            min_y < view_box.y_to) || // Right top corner
-          (((min_y > view_box.y_from && max_y < view_box.y_to) ||
-            (min_y > view_box.y_from && min_y < view_box.y_to) ||
-            (max_y > view_box.y_from && max_y < view_box.y_to)) &&
-            min_x < view_box.x_from &&
-            max_x > view_box.x_to) || // side corners are out, but parts of middle is in view
-          (((min_x > view_box.x_from && max_x < view_box.x_to) ||
-            (min_x > view_box.x_from && min_x < view_box.x_to) ||
-            (max_x > view_box.x_from && max_x < view_box.x_to)) &&
-            min_y < view_box.y_from &&
-            max_y > view_box.y_to) || // top/bottom corners are out, but parts of middle is in view
-          (min_x < view_box.x_from &&
-            max_x > view_box.x_to &&
-            min_y < view_box.y_from &&
-            max_y > view_box.y_to)
+          (minX > view_box.x_from &&
+            minX < view_box.x_to &&
+            minY > view_box.y_from &&
+            minY < view_box.y_to) || // Left top corner
+          (maxX > view_box.x_from &&
+            maxX < view_box.x_to &&
+            maxY > view_box.y_from &&
+            maxY < view_box.y_to) || // Right bottom corner
+          (minX > view_box.x_from &&
+            minX < view_box.x_to &&
+            maxY > view_box.y_from &&
+            maxY < view_box.y_to) || // Left bottom corner
+          (maxX > view_box.x_from &&
+            maxX < view_box.x_to &&
+            minY > view_box.y_from &&
+            minY < view_box.y_to) || // Right top corner
+          (((minY > view_box.y_from && maxY < view_box.y_to) ||
+            (minY > view_box.y_from && minY < view_box.y_to) ||
+            (maxY > view_box.y_from && maxY < view_box.y_to)) &&
+            minX < view_box.x_from &&
+            maxX > view_box.x_to) || // side corners are out, but parts of middle is in view
+          (((minX > view_box.x_from && maxX < view_box.x_to) ||
+            (minX > view_box.x_from && minX < view_box.x_to) ||
+            (maxX > view_box.x_from && maxX < view_box.x_to)) &&
+            minY < view_box.y_from &&
+            maxY > view_box.y_to) || // top/bottom corners are out, but parts of middle is in view
+          (minX < view_box.x_from &&
+            maxX > view_box.x_to &&
+            minY < view_box.y_from &&
+            maxY > view_box.y_to)
         ) {
           // When object is bigger than the screen
 
@@ -8465,24 +8465,24 @@ export class ViewController {
       let is_rotate = false;
       let is_scale = false;
       if (d.constructor.name.toUpperCase() === 'SEGMENT') {
-        trans_array = transform.apply([d.dir_coord.x, d.dir_coord.y]);
+        trans_array = transform.apply([d.dirCoord.x, d.dirCoord.y]);
         is_translate = true;
       } else if (
         d.constructor.name.toUpperCase() === 'STATION' ||
         d.constructor.name.toUpperCase() === 'BUFFER'
       ) {
         is_translate = true;
-        trans_array = transform.apply([d.inverted_coord.x, d.inverted_coord.y]);
+        trans_array = transform.apply([d.invertedCoord.x, d.invertedCoord.y]);
       } else if (d.constructor.name.toUpperCase() === 'CLUSTER') {
         trans_array = transform.apply([
-          d.inverted_coord_from.x,
-          d.inverted_coord_from.y,
+          d.invertedCoordFrom.x,
+          d.invertedCoordFrom.y,
         ]);
         is_scale = true;
       } else {
         is_translate = true;
         is_rotate = true;
-        trans_array = transform.apply([d.inverted_coord.x, d.inverted_coord.y]);
+        trans_array = transform.apply([d.invertedCoord.x, d.invertedCoord.y]);
       }
 
       trans_array[0] = parseInt(trans_array[0]);
@@ -8550,7 +8550,7 @@ export class ViewController {
     // populate group color object if groups are on
     // if (this.show_groups) {
     if (this.preferences.toggles.groups) {
-      group_colors = {}; // {group_id : color}
+      group_colors = {}; // {groupId : color}
       for (let group of this.layout_data.groups) {
         group_colors[group.id] = ColorPalette.get_color(group.color);
       }
@@ -8566,8 +8566,8 @@ export class ViewController {
             .append('g')
             .attr('class', `point_${overlap_class_string}`)
             .attr('id', `id_${data.id}`)
-            .attr('x', data.inverted_coord.x)
-            .attr('y', data.inverted_coord.y);
+            .attr('x', data.invertedCoord.x)
+            .attr('y', data.invertedCoord.y);
           if (zoom_level === 2) {
             this.append_dom_subpart(
               'POINT',
@@ -8611,15 +8611,15 @@ export class ViewController {
         this.points_svg
           .attr('level', `level${zoom_level}`)
           .attr('x', function (d) {
-            return d.inverted_coord.x;
+            return d.invertedCoord.x;
           })
           .attr('y', function (d) {
-            return d.inverted_coord.y;
+            return d.invertedCoord.y;
           })
           .attr('transform', (d) => {
             return `translate(${current_zoom.apply([
-              d.inverted_coord.x,
-              d.inverted_coord.y,
+              d.invertedCoord.x,
+              d.invertedCoord.y,
             ])})rotate(${-this.map_rotation})`;
           })
           .each((d) => {
@@ -8639,7 +8639,7 @@ export class ViewController {
             }
           });
         this.points_svg.selectAll('.label').text(function (d) {
-          let id = d.logical_id ? d.logical_id : d.id;
+          let id = d.logicalId ? d.logicalId : d.id;
           return `${id}`;
         });
 
@@ -8654,15 +8654,15 @@ export class ViewController {
           })
           .attr('g_type', 'main')
           .attr('x', function (d) {
-            return d.inverted_coord.x;
+            return d.invertedCoord.x;
           })
           .attr('y', function (d) {
-            return d.inverted_coord.y;
+            return d.invertedCoord.y;
           })
           .attr('transform', (d) => {
             return `translate(${current_zoom.apply([
-              d.inverted_coord.x,
-              d.inverted_coord.y,
+              d.invertedCoord.x,
+              d.invertedCoord.y,
             ])})rotate(${-this.map_rotation})`;
           })
           .each((d) => {
@@ -8705,15 +8705,15 @@ export class ViewController {
       if (zoom_level > 1) {
         this.directions_svg
           .attr('x', function (d) {
-            return d.dir_coord.x;
+            return d.dirCoord.x;
           })
           .attr('y', function (d) {
-            return d.dir_coord.y;
+            return d.dirCoord.y;
           })
           .attr('transform', function (d) {
             return `translate(${current_zoom.apply([
-              d.dir_coord.x,
-              d.dir_coord.y,
+              d.dirCoord.x,
+              d.dirCoord.y,
             ])})`;
           })
           .each((d) => {
@@ -8724,7 +8724,7 @@ export class ViewController {
               d3_this.attr(
                 'transform',
                 `rotate(${Math.trunc(
-                  CommonUtil.degrees(d.dir_angle)
+                  CommonUtil.degrees(d.dirAngle)
                 )},0,0)scale(${this.direction_arrow_scale.scale})`
               );
             }
@@ -8743,15 +8743,15 @@ export class ViewController {
           })
           .attr('g_type', 'main')
           .attr('x', function (d) {
-            return d.dir_coord.x;
+            return d.dirCoord.x;
           })
           .attr('y', function (d) {
-            return d.dir_coord.y;
+            return d.dirCoord.y;
           })
           .attr('transform', function (d) {
             return `translate(${current_zoom.apply([
-              d.dir_coord.x,
-              d.dir_coord.y,
+              d.dirCoord.x,
+              d.dirCoord.y,
             ])})`;
           })
           .each((d) => {
@@ -8775,7 +8775,7 @@ export class ViewController {
         this.directions_svg.selectAll('.dir_triangle').each((d) => {
           d3.select(`#id_${d.id}.direction`).attr(
             'transform',
-            `rotate(${Math.trunc(CommonUtil.degrees(d.dir_angle))},0,0)scale(${
+            `rotate(${Math.trunc(CommonUtil.degrees(d.dirAngle))},0,0)scale(${
               this.direction_arrow_scale.scale
             })`
           );
@@ -8884,8 +8884,8 @@ export class ViewController {
                 .attr('d', main_css.station[`icon_level${zoom_level}`])
                 .attr(
                   'transform',
-                  `translate(${d.direction_offset.x * offset_multiplier}, ${
-                    d.direction_offset.y * offset_multiplier
+                  `translate(${d.directionOffset.x * offset_multiplier}, ${
+                    d.directionOffset.y * offset_multiplier
                   })`
                 );
 
@@ -8895,8 +8895,8 @@ export class ViewController {
                 .attr('d', main_css.station[`icon_level${zoom_level}`])
                 .attr(
                   'transform',
-                  `translate(${d.direction_offset.x * offset_multiplier}, ${
-                    d.direction_offset.y * offset_multiplier
+                  `translate(${d.directionOffset.x * offset_multiplier}, ${
+                    d.directionOffset.y * offset_multiplier
                   })`
                 );
               this.attach_event_handler(
@@ -8925,8 +8925,8 @@ export class ViewController {
 
           this.stations_svg.attr('transform', function (d) {
             return `translate(${current_zoom.apply([
-              d.inverted_coord.x,
-              d.inverted_coord.y,
+              d.invertedCoord.x,
+              d.invertedCoord.y,
             ])})`;
           });
 
@@ -8935,7 +8935,7 @@ export class ViewController {
             .attr('d', main_css.station[`icon_level${zoom_level}`])
             .attr('level', `level${zoom_level}`);
           this.stations_svg.selectAll('.label').text(function (d) {
-            let id = d.logical_id ? d.logical_id : d.id;
+            let id = d.logicalId ? d.logicalId : d.id;
             return id;
           });
         }
@@ -8945,8 +8945,8 @@ export class ViewController {
             .selectAll('.station_path, .station_mask, text, .select, .hover')
             .attr(
               'transform',
-              `translate(${d.direction_offset.x * offset_multiplier}, ${
-                d.direction_offset.y * offset_multiplier
+              `translate(${d.directionOffset.x * offset_multiplier}, ${
+                d.directionOffset.y * offset_multiplier
               })rotate(${-this.map_rotation})`
             );
         });
@@ -9005,15 +9005,15 @@ export class ViewController {
           })
           .attr('g_type', 'main')
           .attr('x', function (d) {
-            return d.inverted_coord.x;
+            return d.invertedCoord.x;
           })
           .attr('y', function (d) {
-            return d.inverted_coord.y;
+            return d.invertedCoord.y;
           })
           .attr('transform', function (d) {
             return `translate(${current_zoom.apply([
-              d.inverted_coord.x,
-              d.inverted_coord.y,
+              d.invertedCoord.x,
+              d.invertedCoord.y,
             ])})`;
           })
           .each((d) => {
@@ -9060,8 +9060,8 @@ export class ViewController {
           .each((d) => {
             d3.select(`#id_${d.id}.station`).attr(
               'transform',
-              `translate(${d.direction_offset.x * group_offset_multiplier}, ${
-                d.direction_offset.y * group_offset_multiplier
+              `translate(${d.directionOffset.x * group_offset_multiplier}, ${
+                d.directionOffset.y * group_offset_multiplier
               })rotate(${-this.map_rotation})scale(${
                 this.location_scale.scale
               })`
@@ -9167,8 +9167,8 @@ export class ViewController {
                 .attr('d', main_css.buffer[`icon_level${zoom_level}`])
                 .attr(
                   'transform',
-                  `translate(${d.direction_offset.x * offset_multiplier}, ${
-                    d.direction_offset.y * offset_multiplier
+                  `translate(${d.directionOffset.x * offset_multiplier}, ${
+                    d.directionOffset.y * offset_multiplier
                   })`
                 );
 
@@ -9178,8 +9178,8 @@ export class ViewController {
                 .attr('d', main_css.buffer[`icon_level${zoom_level}`])
                 .attr(
                   'transform',
-                  `translate(${d.direction_offset.x * offset_multiplier}, ${
-                    d.direction_offset.y * offset_multiplier
+                  `translate(${d.directionOffset.x * offset_multiplier}, ${
+                    d.directionOffset.y * offset_multiplier
                   })`
                 );
 
@@ -9209,8 +9209,8 @@ export class ViewController {
 
           this.buffers_svg.attr('transform', function (d) {
             return `translate(${current_zoom.apply([
-              d.inverted_coord.x,
-              d.inverted_coord.y,
+              d.invertedCoord.x,
+              d.invertedCoord.y,
             ])})`;
           });
 
@@ -9219,7 +9219,7 @@ export class ViewController {
             .attr('d', main_css.buffer[`icon_level${zoom_level}`])
             .attr('level', `level${zoom_level}`);
           this.buffers_svg.selectAll('.label').text(function (d) {
-            let id = d.logical_id ? d.logical_id : d.id;
+            let id = d.logicalId ? d.logicalId : d.id;
             return id;
           });
         }
@@ -9230,8 +9230,8 @@ export class ViewController {
             .selectAll('.buffer_path, .buffer_mask, text, .select, .hover')
             .attr(
               'transform',
-              `translate(${d.direction_offset.x * offset_multiplier}, ${
-                d.direction_offset.y * offset_multiplier
+              `translate(${d.directionOffset.x * offset_multiplier}, ${
+                d.directionOffset.y * offset_multiplier
               })rotate(${-this.map_rotation})`
             );
         });
@@ -9291,15 +9291,15 @@ export class ViewController {
           })
           .attr('g_type', 'main')
           .attr('x', function (d) {
-            return d.inverted_coord.x;
+            return d.invertedCoord.x;
           })
           .attr('y', function (d) {
-            return d.inverted_coord.y;
+            return d.invertedCoord.y;
           })
           .attr('transform', function (d) {
             return `translate(${current_zoom.apply([
-              d.inverted_coord.x,
-              d.inverted_coord.y,
+              d.invertedCoord.x,
+              d.invertedCoord.y,
             ])})`;
           })
           .each((d) => {
@@ -9349,8 +9349,8 @@ export class ViewController {
             // d3.select(this).attr(
             d3.select(`#id_${d.id}.buffer`).attr(
               'transform',
-              `translate(${d.direction_offset.x * group_offset_multiplier}, ${
-                d.direction_offset.y * group_offset_multiplier
+              `translate(${d.directionOffset.x * group_offset_multiplier}, ${
+                d.directionOffset.y * group_offset_multiplier
               })rotate(${-this.map_rotation})scale(${
                 this.location_scale.scale
               })`
@@ -9367,8 +9367,8 @@ export class ViewController {
             .append('g')
             .attr('class', `mtl_${overlap_class_string}`)
             .attr('id', `id_${data.id}`)
-            .attr('x', data.inverted_coord.x)
-            .attr('y', data.inverted_coord.y)
+            .attr('x', data.invertedCoord.x)
+            .attr('y', data.invertedCoord.y)
             .attr('transform', `translate(0, 0)`);
 
           //Add to DOM
@@ -9415,8 +9415,8 @@ export class ViewController {
 
         this.mtls_svg.attr('transform', (d) => {
           return `translate(${current_zoom.apply([
-            d.inverted_coord.x,
-            d.inverted_coord.y,
+            d.invertedCoord.x,
+            d.invertedCoord.y,
           ])})rotate(${-this.map_rotation})`;
         });
 
@@ -9428,7 +9428,7 @@ export class ViewController {
             if (label.node()) {
               // exists already
               label.text(function () {
-                return d.logical_id ? d.logical_id : d.id;
+                return d.logicalId ? d.logicalId : d.id;
               });
             } else {
               d3_this
@@ -9439,7 +9439,7 @@ export class ViewController {
                 .attr('y', dom_css.width / 2)
                 .attr('text-anchor', 'start')
                 .text(function () {
-                  return d.logical_id ? d.logical_id : d.id;
+                  return d.logicalId ? d.logicalId : d.id;
                 });
             }
           });
@@ -9499,15 +9499,15 @@ export class ViewController {
           })
           .attr('g_type', 'main')
           .attr('x', function (d) {
-            return d.inverted_coord.x;
+            return d.invertedCoord.x;
           })
           .attr('y', function (d) {
-            return d.inverted_coord.y;
+            return d.invertedCoord.y;
           })
           .attr('transform', (d) => {
             return `translate(${current_zoom.apply([
-              d.inverted_coord.x,
-              d.inverted_coord.y,
+              d.invertedCoord.x,
+              d.invertedCoord.y,
             ])})rotate(${-this.map_rotation})`;
           })
           .each((d) => {
@@ -9588,16 +9588,16 @@ export class ViewController {
         })
         .attr('g_type', 'main')
         .attr('from_x', function (d) {
-          return d.inverted_coord_from.x;
+          return d.invertedCoordFrom.x;
         })
         .attr('from_y', function (d) {
-          return d.inverted_coord_from.y;
+          return d.invertedCoordFrom.y;
         })
         .attr('to_x', function (d) {
-          return d.inverted_coord_to.x;
+          return d.invertedCoordTo.x;
         })
         .attr('to_y', function (d) {
-          return d.inverted_coord_to.y;
+          return d.invertedCoordTo.y;
         })
         .each((d) => {
           this.append_dom_subpart(
@@ -9691,8 +9691,8 @@ export class ViewController {
         .append('text')
         .attr('class', 'label')
         .attr('id', function () {
-          let id = layout_object.logical_id
-            ? layout_object.logical_id
+          let id = layout_object.logicalId
+            ? layout_object.logicalId
             : layout_object.id;
           return `id_${id}`;
         })
@@ -9712,8 +9712,8 @@ export class ViewController {
           }
         })
         .text(function () {
-          let id = layout_object.logical_id
-            ? layout_object.logical_id
+          let id = layout_object.logicalId
+            ? layout_object.logicalId
             : layout_object.id;
           if (overlap_adjustment) {
             return `Point ${id}`;
@@ -9726,10 +9726,10 @@ export class ViewController {
       // Segment Path Element
       dom_object_group
         .append('path')
-        // .attr('class', layout_object.disabled_by !== null ? 'segment_path disabled' : (layout_object.is_validate ? 'segment_path' : 'segment_path non_validate'))
+        // .attr('class', layout_object.disabled_by !== null ? 'segment_path disabled' : (layout_object.isValidate ? 'segment_path' : 'segment_path non_validate'))
         .attr('class', function (layout_object) {
-          if (!layout_object.disable_state) {
-            if (!layout_object.is_validate) {
+          if (!layout_object.disableState) {
+            if (!layout_object.isValidate) {
               return 'segment_path non_validate';
             } else {
               return 'segment_path';
@@ -9766,7 +9766,7 @@ export class ViewController {
           main_css.segment.direction_length
         );
       }
-      if (layout_object.dir_angle != undefined) {
+      if (layout_object.dirAngle != undefined) {
         dom_object_group
           .append('path')
           .attr('class', 'dir_triangle')
@@ -9774,7 +9774,7 @@ export class ViewController {
           .attr('d', main_css.segment.direction_path)
           .attr('transform', function () {
             return `rotate(${Math.trunc(
-              CommonUtil.degrees(layout_object.dir_angle)
+              CommonUtil.degrees(layout_object.dirAngle)
             )},0,0)`;
           })
           .lower();
@@ -9808,9 +9808,9 @@ export class ViewController {
                 .attr(
                   'transform',
                   `translate(${
-                    layout_object.direction_offset.x * offset_multiplier
+                    layout_object.directionOffset.x * offset_multiplier
                   }, ${
-                    layout_object.direction_offset.y * offset_multiplier
+                    layout_object.directionOffset.y * offset_multiplier
                   })rotate(${-this.map_rotation})`
                 );
             }
@@ -9857,9 +9857,9 @@ export class ViewController {
               .attr(
                 'transform',
                 `translate(${
-                  layout_object.direction_offset.x * offset_multiplier
+                  layout_object.directionOffset.x * offset_multiplier
                 }, ${
-                  layout_object.direction_offset.y * offset_multiplier
+                  layout_object.directionOffset.y * offset_multiplier
                 })rotate(${-this.map_rotation})`
               );
 
@@ -9871,9 +9871,9 @@ export class ViewController {
               .attr(
                 'transform',
                 `translate(${
-                  layout_object.direction_offset.x * offset_multiplier
+                  layout_object.directionOffset.x * offset_multiplier
                 }, ${
-                  layout_object.direction_offset.y * offset_multiplier
+                  layout_object.directionOffset.y * offset_multiplier
                 })rotate(${-this.map_rotation})`
               );
           }
@@ -9903,8 +9903,8 @@ export class ViewController {
             }
           })
           .text(function () {
-            let id = layout_object.logical_id
-              ? layout_object.logical_id
+            let id = layout_object.logicalId
+              ? layout_object.logicalId
               : layout_object.id;
             if (overlap_adjustment) {
               return `Station ${id}`;
@@ -9917,9 +9917,9 @@ export class ViewController {
           label_svg.attr(
             'transform',
             `translate(${
-              layout_object.direction_offset.x * offset_multiplier
+              layout_object.directionOffset.x * offset_multiplier
             }, ${
-              layout_object.direction_offset.y * offset_multiplier
+              layout_object.directionOffset.y * offset_multiplier
             })rotate(${-this.map_rotation})`
           );
         }
@@ -9952,9 +9952,9 @@ export class ViewController {
                 .attr(
                   'transform',
                   `translate(${
-                    layout_object.direction_offset.x * offset_multiplier
+                    layout_object.directionOffset.x * offset_multiplier
                   }, ${
-                    layout_object.direction_offset.y * offset_multiplier
+                    layout_object.directionOffset.y * offset_multiplier
                   })rotate(${-this.map_rotation})`
                 );
             }
@@ -10000,9 +10000,9 @@ export class ViewController {
               .attr(
                 'transform',
                 `translate(${
-                  layout_object.direction_offset.x * offset_multiplier
+                  layout_object.directionOffset.x * offset_multiplier
                 }, ${
-                  layout_object.direction_offset.y * offset_multiplier
+                  layout_object.directionOffset.y * offset_multiplier
                 })rotate(${-this.map_rotation})`
               );
             dom_object_group
@@ -10013,9 +10013,9 @@ export class ViewController {
               .attr(
                 'transform',
                 `translate(${
-                  layout_object.direction_offset.x * offset_multiplier
+                  layout_object.directionOffset.x * offset_multiplier
                 }, ${
-                  layout_object.direction_offset.y * offset_multiplier
+                  layout_object.directionOffset.y * offset_multiplier
                 })rotate(${-this.map_rotation})`
               );
           }
@@ -10045,8 +10045,8 @@ export class ViewController {
             }
           })
           .text(function () {
-            let id = layout_object.logical_id
-              ? layout_object.logical_id
+            let id = layout_object.logicalId
+              ? layout_object.logicalId
               : layout_object.id;
             if (overlap_adjustment) {
               return `Buffer ${id}`;
@@ -10060,9 +10060,9 @@ export class ViewController {
           label_svg.attr(
             'transform',
             `translate(${
-              layout_object.direction_offset.x * offset_multiplier
+              layout_object.directionOffset.x * offset_multiplier
             }, ${
-              layout_object.direction_offset.y * offset_multiplier
+              layout_object.directionOffset.y * offset_multiplier
             })rotate(${-this.map_rotation})`
           );
         }
@@ -10144,8 +10144,8 @@ export class ViewController {
           })
           .attr('text-anchor', 'start')
           .text(function () {
-            let id = layout_object.logical_id
-              ? layout_object.logical_id
+            let id = layout_object.logicalId
+              ? layout_object.logicalId
               : layout_object.id;
             if (overlap_adjustment) {
               return `MTL ${id}`;
@@ -10291,7 +10291,7 @@ export class ViewController {
           });
       }
 
-      if (layout_object.is_stale) {
+      if (layout_object.isStale) {
         dom_object_group
           .append('g')
           .attr('class', 'stale')
@@ -10319,7 +10319,7 @@ export class ViewController {
       }
 
       // Unload/load fail
-      if (layout_object.cargo_transfer_result) {
+      if (layout_object.cargoTransferResult) {
         dom_object_group
           .append('g')
           .attr('class', 'fail')
@@ -10429,8 +10429,8 @@ export class ViewController {
           return y;
         })
         .html(function () {
-          let id = layout_object.logical_id
-            ? layout_object.logical_id
+          let id = layout_object.logicalId
+            ? layout_object.logicalId
             : layout_object.id;
           if (overlap_adjustment) {
             return `Vehicle ${id}`;
@@ -10468,9 +10468,9 @@ export class ViewController {
             return (
               -((dom_css.text_offset * 3) / 4) *
                 (overlap_adjustment ? this.vehicle_scale.scale : 1) -
-              layout_object.order_id.toString().length * 6
+              layout_object.orderId.toString().length * 6
             );
-            // return -(layout_object.order_id.toString().length * 6 + parseInt(dom_css.text_offset) - 5)
+            // return -(layout_object.orderId.toString().length * 6 + parseInt(dom_css.text_offset) - 5)
           })
           .attr('y', () => {
             return (
@@ -10480,7 +10480,7 @@ export class ViewController {
             );
           })
           .attr('width', () => {
-            return `${layout_object.order_id.toString().length * 6}px`;
+            return `${layout_object.orderId.toString().length * 6}px`;
           })
           .attr('height', 13)
           .attr('rx', 5)
@@ -10533,14 +10533,14 @@ export class ViewController {
         })
         .html(function () {
           if (overlap_adjustment) {
-            if (layout_object.order_id) {
-              return `Order: ${layout_object.order_id}`;
+            if (layout_object.orderId) {
+              return `Order: ${layout_object.orderId}`;
             } else {
               return 'Order: None';
             }
           } else {
-            if (layout_object.order_id) {
-              return `${layout_object.order_id}`;
+            if (layout_object.orderId) {
+              return `${layout_object.orderId}`;
             } else {
               return '';
             }
@@ -10559,16 +10559,16 @@ export class ViewController {
         });
 
       if (
-        layout_object.cargo_state === 'F' ||
-        layout_object.cargo_state === 'U' ||
-        layout_object.cargo_state === 'L'
+        layout_object.cargoState === 'F' ||
+        layout_object.cargoState === 'U' ||
+        layout_object.cargoState === 'L'
       ) {
         dom_object_group
           .append('circle')
           .attr('class', function () {
-            if (layout_object.cargo_state === 'F') {
+            if (layout_object.cargoState === 'F') {
               return 'foup loaded';
-            } else if (layout_object.cargo_state === 'L') {
+            } else if (layout_object.cargoState === 'L') {
               return 'foup loading';
             } else {
               return 'foup unloading';
@@ -10584,7 +10584,7 @@ export class ViewController {
         dom_object_group.select('.foup').remove();
       }
 
-      if (layout_object.is_blocked === true) {
+      if (layout_object.isBlocked === true) {
         dom_object_group
           .append('circle')
           .attr('class', 'corner')
@@ -10603,7 +10603,7 @@ export class ViewController {
         dom_object_group.select('.corner').remove();
       }
 
-      if (layout_object.error_list != 0) {
+      if (layout_object.errorList != 0) {
         dom_object_group
           .append('path')
           .attr('class', 'error')
@@ -10667,34 +10667,34 @@ export class ViewController {
             return dom_css.next_color;
           })
           .attr('stroke-width', dom_css.next_weight)
-          .attr('next_point', function () {
-            if (!layout_object.cur_point || !layout_object.next_point) {
+          .attr('nextPoint', function () {
+            if (!layout_object.curPoint || !layout_object.nextPoint) {
               return null;
             } else {
-              return layout_object.next_point.point;
+              return layout_object.nextPoint.point;
             }
           })
           .attr('x1', 0)
           .attr('y1', 0)
           .attr('x2', function () {
-            if (!layout_object.cur_point || !layout_object.next_point) {
+            if (!layout_object.curPoint || !layout_object.nextPoint) {
               // If undefined, set the end point equal to start point for 0 length
               return 0;
             } else {
               return (
-                layout_object.next_point.inverted_coord.x -
-                layout_object.cur_point.inverted_coord.x
+                layout_object.nextPoint.invertedCoord.x -
+                layout_object.curPoint.invertedCoord.x
               );
             }
           })
           .attr('y2', function () {
-            if (!layout_object.cur_point || !layout_object.next_point) {
+            if (!layout_object.curPoint || !layout_object.nextPoint) {
               // If undefined, set the end point equal to start point for 0 length
               return 0;
             } else {
               return (
-                layout_object.next_point.inverted_coord.y -
-                layout_object.cur_point.inverted_coord.y
+                layout_object.nextPoint.invertedCoord.y -
+                layout_object.curPoint.invertedCoord.y
               );
             }
           })
@@ -10706,41 +10706,41 @@ export class ViewController {
           .append('line')
           .attr('class', 'command')
           .attr('stroke', function () {
-            if (layout_object.cargo_state === 'E') {
+            if (layout_object.cargoState === 'E') {
               return dom_css.order_pickup_color;
             } else {
               return dom_css.order_dropoff_color;
             }
           })
           .attr('stroke-width', dom_css.order_weight)
-          .attr('command_point', function () {
-            if (!layout_object.cur_point || !layout_object.command_point) {
+          .attr('commandPoint', function () {
+            if (!layout_object.curPoint || !layout_object.commandPoint) {
               return null;
             } else {
-              return layout_object.command_point.point;
+              return layout_object.commandPoint.point;
             }
           })
           .attr('x1', 0)
           .attr('y1', 0)
           .attr('x2', function () {
-            if (!layout_object.cur_point || !layout_object.command_point) {
+            if (!layout_object.curPoint || !layout_object.commandPoint) {
               // If undefined, set the end point equal to start point for 0 length
               return 0;
             } else {
               return (
-                layout_object.command_point.inverted_coord.x -
-                layout_object.cur_point.inverted_coord.x
+                layout_object.commandPoint.invertedCoord.x -
+                layout_object.curPoint.invertedCoord.x
               );
             }
           })
           .attr('y2', function () {
-            if (!layout_object.cur_point || !layout_object.command_point) {
+            if (!layout_object.curPoint || !layout_object.commandPoint) {
               // If undefined, set the end point equal to start point for 0 length
               return 0;
             } else {
               return (
-                layout_object.command_point.inverted_coord.y -
-                layout_object.cur_point.inverted_coord.y
+                layout_object.commandPoint.invertedCoord.y -
+                layout_object.curPoint.invertedCoord.y
               );
             }
           })
@@ -11137,11 +11137,11 @@ export class ViewController {
           const station = new Station(
             {
               id: LayoutUtil.create_new_id(this.layout_data.stations),
-              physical_id: null,
-              logical_id: null,
-              point_id: object_id,
+              physicalId: null,
+              logicalId: null,
+              pointId: object_id,
               direction: null,
-              carrier_type: null,
+              carrierType: null,
               group: null,
             },
             true,
@@ -11170,9 +11170,9 @@ export class ViewController {
           const buffer = new Buffer(
             {
               id: LayoutUtil.create_new_id(this.layout_data.buffers),
-              physical_id: null,
-              logical_id: null,
-              point_id: object_id,
+              physicalId: null,
+              logicalId: null,
+              pointId: object_id,
               direction: null,
               group: null,
             },
@@ -11202,13 +11202,13 @@ export class ViewController {
           const mtl = new MTL(
             {
               id: LayoutUtil.create_new_id(this.layout_data.mtls),
-              physical_id: null,
-              logical_id: null,
-              point_id: object_id,
-              in_use: null,
+              physicalId: null,
+              logicalId: null,
+              pointId: object_id,
+              inUse: null,
               position: null,
               mode: null,
-              error_list: null,
+              errorList: null,
               group: null,
             },
             true,
@@ -11243,10 +11243,10 @@ export class ViewController {
         target_segment.direction.length === 1)
     ) {
       let distance = LayoutUtil.calculate_distance(
-        target_segment.point_from.coord,
-        target_segment.point_to.coord
+        target_segment.pointFrom.coord,
+        target_segment.pointTo.coord
       );
-      let min_interval = this.minimum_segment_length;
+      let min_interval = this.minimumSegmentLength;
 
       // Check minimum distance
       if (distance > min_interval) {
@@ -11310,7 +11310,7 @@ export class ViewController {
             y: offset.y,
           },
           0,
-          this.geometry.invert_factor_y
+          this.geometry.invertFactorY
         );
       }
 
@@ -11394,29 +11394,29 @@ export class ViewController {
       );
     }
   }
-  find_point_coords(point_id: any) {
-    return this.dataSvc.find_point_coords(point_id);
+  find_point_coords(pointId: any) {
+    return this.dataSvc.find_point_coords(pointId);
     // @moved to data service
-    // if (point_id == null || point_id == undefined) {
+    // if (pointId == null || pointId == undefined) {
     //   return null;
     // }
 
     // let coord = {};
-    // let inverted_coord = {};
+    // let invertedCoord = {};
     // let is_match = false;
 
     // for (let i = 0; i < this.layout_data.points.length; i++) {
     //   let point = this.layout_data.points[i];
-    //   if (point.id === point_id) {
+    //   if (point.id === pointId) {
     //     coord = point.coord;
-    //     inverted_coord = point.inverted_coord;
+    //     invertedCoord = point.invertedCoord;
     //     is_match = true;
     //     break;
     //   }
     // }
 
     // if (is_match) {
-    //   return { coord, inverted_coord };
+    //   return { coord, invertedCoord };
     // }
     // return null;
   }
@@ -11682,9 +11682,9 @@ export class ViewController {
         if (connected_clusters) {
           connected_clusters.forEach((cluster) => {
             let index = 0;
-            cluster.point_id_list.forEach((point_id) => {
-              if (point_id === point.id) {
-                cluster.point_id_list.splice(index, 1);
+            cluster.pointIdList.forEach((pointId) => {
+              if (pointId === point.id) {
+                cluster.pointIdList.splice(index, 1);
                 cluster_update_list.push({
                   id: cluster.id,
                   status: 'UPDATE',
@@ -11863,10 +11863,10 @@ export class ViewController {
           // Update object
 
           let cluster_segments = LayoutUtil.find_all_contigous_segments_from_points(
-            update_obj.point_id_list,
+            update_obj.pointIdList,
             this.layout_data.segments
           );
-          update_obj.set_path(cluster_segments, main_css.cluster.border_offset);
+          update_obj.set_path(cluster_segments, main_css.cluster.borderOffset);
           update_objects.push(update_obj);
         }
       } else if (update_list[i].status === 'DELETE') {
@@ -11951,17 +11951,17 @@ export class ViewController {
     }
   }
   disable_segment(
-    segment_id: any,
+    segmentId: any,
     action: string,
     source: string,
     reason: any
   ) {
-    let segment_obj = this.find_layout_object('SEGMENT', segment_id);
+    let segment_obj = this.find_layout_object('SEGMENT', segmentId);
 
     // @TODO Send message (message.js)
     // Message.send_track_command(
     //   {
-    //     segment_id: segment_obj.id,
+    //     segmentId: segment_obj.id,
     //     action: action,
     //     source,
     //     reason,
@@ -12146,13 +12146,13 @@ export class ViewController {
       if (type === 'SEGMENT') {
         pos = [
           [
-            object.point_from.inverted_coord.x,
-            object.point_from.inverted_coord.y,
+            object.pointFrom.invertedCoord.x,
+            object.pointFrom.invertedCoord.y,
           ],
-          [object.point_to.inverted_coord.x, object.point_to.inverted_coord.y],
+          [object.pointTo.invertedCoord.x, object.pointTo.invertedCoord.y],
         ];
       } else {
-        pos = [[object.inverted_coord.x, object.inverted_coord.y]];
+        pos = [[object.invertedCoord.x, object.invertedCoord.y]];
       }
 
       let is_in_area;
@@ -12214,7 +12214,7 @@ export class ViewController {
   }
   calculate_zoom_level() {
     let distance =
-      this.geometry.screen_size.height /
+      this.geometry.screenSize.height /
       this.getZoom(MapTypes.MAIN).k /
       this.num_ticks;
     let zoom_level;
@@ -12262,10 +12262,10 @@ export class ViewController {
 
     temp_viewbox.x_from = -x / k;
     temp_viewbox.x_to =
-      temp_viewbox.x_from + this.geometry.screen_size.width / k;
+      temp_viewbox.x_from + this.geometry.screenSize.width / k;
     temp_viewbox.y_from = -y / k;
     temp_viewbox.y_to =
-      temp_viewbox.y_from + this.geometry.screen_size.height / k;
+      temp_viewbox.y_from + this.geometry.screenSize.height / k;
 
     if (this.map_rotation > 0) {
       this.calculate_rotated_viewbox(temp_viewbox);
@@ -12290,8 +12290,8 @@ export class ViewController {
     const { x, y, k } = this.getZoom(MapTypes.MAIN);
 
     let center = {
-      x: -x / k + this.geometry.screen_size.width / 2 / k,
-      y: -y / k + this.geometry.screen_size.height / 2 / k,
+      x: -x / k + this.geometry.screenSize.width / 2 / k,
+      y: -y / k + this.geometry.screenSize.height / 2 / k,
     };
 
     if (this.map_rotation > 0) {
@@ -12317,9 +12317,9 @@ export class ViewController {
     this.rotated_viewbox = rotated_box;
   }
   set_minimap_position() {
-    if (!this.geometry || !this.geometry.screen_size) return;
+    if (!this.geometry || !this.geometry.screenSize) return;
     let toolbar = this.$track_container.find('#toolbar');
-    let available = this.geometry.screen_size.height - toolbar.outerHeight();
+    let available = this.geometry.screenSize.height - toolbar.outerHeight();
     let mmc = this.$track_container.find(`#${this.minimap_parent_id}`);
     let margin = 3; // FIXME: get this from css
     let bottom = margin;
@@ -12337,8 +12337,8 @@ export class ViewController {
   }
   update_minimap_with_rotated_dimensions(rotate_value: number) {
     let dimensions: any = {};
-    let width = this.geometry.minimap_size.width;
-    let height = this.geometry.minimap_size.height;
+    let width = this.geometry.minimapSize.width;
+    let height = this.geometry.minimapSize.height;
     let left_top_corner = this.rotate(
       0,
       0,
@@ -12366,16 +12366,16 @@ export class ViewController {
     }
 
     // Set the rotated size of the minimap
-    this.geometry.minimap_size.rotated_width = dimensions.width;
-    this.geometry.minimap_size.rotated_height = dimensions.height;
+    this.geometry.minimapSize.rotatedWidth = dimensions.width;
+    this.geometry.minimapSize.rotatedHeight = dimensions.height;
 
     let diff_x = (dimensions.width - width) / 2;
     let diff_y = (dimensions.height - height) / 2;
 
     this.$track_container
       .find(`#${this.minimap_parent_id}`)
-      .css('height', this.geometry.minimap_size.rotated_height - diff_y)
-      .css('width', this.geometry.minimap_size.rotated_width - diff_x)
+      .css('height', this.geometry.minimapSize.rotatedHeight - diff_y)
+      .css('width', this.geometry.minimapSize.rotatedWidth - diff_x)
       .css(
         'padding',
         `${main_css.general.minimap_padding + diff_y}px ${
@@ -12423,8 +12423,8 @@ export class ViewController {
     }
     // Scale factored translation value for destination coord
     translate = [
-      this.geometry.screen_size.width / 2 - current_zoom * destination_pt[0],
-      this.geometry.screen_size.height / 2 - current_zoom * destination_pt[1],
+      this.geometry.screenSize.width / 2 - current_zoom * destination_pt[0],
+      this.geometry.screenSize.height / 2 - current_zoom * destination_pt[1],
     ];
 
     this.set_transform(
@@ -12459,17 +12459,17 @@ export class ViewController {
     if (!transform) return;
     let { x, y, k } = transform;
     if (
-      this.geometry.track_size.width > 0 &&
-      this.geometry.track_size.width > 0
+      this.geometry.trackSize.width > 0 &&
+      this.geometry.trackSize.width > 0
     ) {
       try {
         let view: any = {};
         view = {
-          w: this.geometry.track_size.width,
-          h: this.geometry.track_size.height,
+          w: this.geometry.trackSize.width,
+          h: this.geometry.trackSize.height,
         };
-        let ratio_w = view.w / this.geometry.minimap_size.width,
-          ratio_h = view.h / this.geometry.minimap_size.height;
+        let ratio_w = view.w / this.geometry.minimapSize.width,
+          ratio_h = view.h / this.geometry.minimapSize.height;
         //If zoom called from main map
         if (x !== undefined && y !== undefined && k !== undefined) {
           //Translation Algorithm
@@ -12485,15 +12485,15 @@ export class ViewController {
           let side = view.w > view.h ? 'width' : 'height';
           let other_side = view.w > view.h ? 'height' : 'width';
           frame[side] = Math.abs(
-            this.geometry.minimap_size[side] *
-              (this.geometry.screen_size[side] /
+            this.geometry.minimapSize[side] *
+              (this.geometry.screenSize[side] /
                 k /
-                this.geometry.track_size[side])
+                this.geometry.trackSize[side])
           );
           frame[other_side] = Math.abs(
             frame[side] *
-              (this.geometry.screen_size[other_side] /
-                this.geometry.screen_size[side])
+              (this.geometry.screenSize[other_side] /
+                this.geometry.screenSize[side])
           );
           // Move position indicator box
           this.transform_rect(mini_x, mini_y, frame.width, frame.height);
@@ -12537,8 +12537,8 @@ export class ViewController {
           if (mouse_pos) {
             if (this.map_rotation > 0) {
               let rotated_trans = this.rotate(
-                this.geometry.minimap_size.width / 2,
-                this.geometry.minimap_size.height / 2,
+                this.geometry.minimapSize.width / 2,
+                this.geometry.minimapSize.height / 2,
                 mouse_pos.x,
                 mouse_pos.y,
                 this.map_rotation
@@ -12602,7 +12602,7 @@ export class ViewController {
       );
     }
   }
-  update_minimap_with_new_dimensions(track_size: IMapSize) {
+  update_minimap_with_new_dimensions(trackSize: IMapSize) {
     let ratio_w;
     let ratio_h;
     let scale;
@@ -12610,13 +12610,13 @@ export class ViewController {
     let translate_x = 0,
       translate_y = 0;
 
-    // Set translate for offset from fab_size to fitting layout into minimap with origin at (0,0) and offset applied to keep in sync with layout
-    translate_x = -track_size.min_x;
-    translate_y = -track_size.min_y;
+    // Set translate for offset from fabSize to fitting layout into minimap with origin at (0,0) and offset applied to keep in sync with layout
+    translate_x = -trackSize.minX;
+    translate_y = -trackSize.minY;
 
     // Find scale
-    ratio_w = this.minimap_size_limit / track_size.width;
-    ratio_h = this.minimap_size_limit / track_size.height;
+    ratio_w = this.minimap_size_limit / trackSize.width;
+    ratio_h = this.minimap_size_limit / trackSize.height;
 
     scale = ratio_w < ratio_h ? ratio_w : ratio_h;
 
@@ -12627,9 +12627,9 @@ export class ViewController {
     // Scale the size of the minimap container
     if (scale === ratio_w) {
       dimensions.width = this.minimap_size_limit;
-      dimensions.height = track_size.height * scale;
+      dimensions.height = trackSize.height * scale;
     } else {
-      dimensions.width = track_size.width * scale;
+      dimensions.width = trackSize.width * scale;
       dimensions.height = this.minimap_size_limit;
     }
 
@@ -12655,12 +12655,12 @@ export class ViewController {
     }
   }
   calc_original_coord_from_inverted(
-    inverted_coord: any,
-    invert_factor_y: number
+    invertedCoord: any,
+    invertFactorY: number
   ): any {
     let coord: any = {};
-    coord.x = inverted_coord.x;
-    coord.y = invert_factor_y - inverted_coord.y;
+    coord.x = invertedCoord.x;
+    coord.y = invertFactorY - invertedCoord.y;
 
     return coord;
   }
@@ -12683,11 +12683,11 @@ export class ViewController {
   }
   set_toolbar_geometry() {
     // @TODO set_toolbar_geometry 로직 확인 / 변경
-    // if (!this.geometry || !this.geometry.screen_size) return;
+    // if (!this.geometry || !this.geometry.screenSize) return;
     // let toolbar = this.$track_container.find('#toolbar');
     // toolbar.css('width', '30px');
     // let needed = toolbar.outerHeight();
-    // let available = this.geometry.screen_size.height;
+    // let available = this.geometry.screenSize.height;
     // let tabs = $('#tabs');
     // if (tabs && tabs.is(':visible') && !isNaN(tabs.outerHeight()))
     //   available -= tabs.outerHeight();
@@ -12942,7 +12942,7 @@ export class ViewController {
     do {
       let boundary = this.get_segment_candidate_boundary(
         coord,
-        this.minimum_segment_length * multiplier
+        this.minimumSegmentLength * multiplier
       );
       let candidates = this.find_segment_candidate_using_boundary(
         boundary,
@@ -12973,14 +12973,14 @@ export class ViewController {
     if (candidate_segments.length > 0) {
       closest_segment = candidate_segments[0];
       shortest_distance_to_segment_from_coord = LayoutUtil.calculate_distance(
-        candidate_segments[0].point_from.inverted_coord,
+        candidate_segments[0].pointFrom.invertedCoord,
         coord_of_interest
       );
 
       try {
         for (let segment of candidate_segments) {
           let new_shortest_distance_found = false;
-          let bezier_path = this.bezier(segment.bezier_points);
+          let bezier_path = this.bezier(segment.bezierPoints);
 
           for (let i = 0; i < BEZIER_PARSE_ACCURACY; i++) {
             let current_point = bezier_path(i / BEZIER_PARSE_ACCURACY);
@@ -13022,19 +13022,19 @@ export class ViewController {
   ) {
     let candidates = [];
     for (let segment of segments) {
-      for (let seg_part of segment.segment_parts) {
-        let coord_from = seg_part.coord_from.inverted_coord;
-        let coord_to = seg_part.coord_to.inverted_coord;
+      for (let seg_part of segment.segmentParts) {
+        let coordFrom = seg_part.coordFrom.invertedCoord;
+        let coordTo = seg_part.coordTo.invertedCoord;
 
         if (
-          (boundary.min.x < coord_from.x &&
-            coord_from.x < boundary.max.x &&
-            boundary.min.y < coord_from.y &&
-            coord_from.y < boundary.max.y) ||
-          (boundary.min.x < coord_to.x &&
-            coord_to.x < boundary.max.x &&
-            boundary.min.y < coord_to.y &&
-            coord_to.y < boundary.max.y)
+          (boundary.min.x < coordFrom.x &&
+            coordFrom.x < boundary.max.x &&
+            boundary.min.y < coordFrom.y &&
+            coordFrom.y < boundary.max.y) ||
+          (boundary.min.x < coordTo.x &&
+            coordTo.x < boundary.max.x &&
+            boundary.min.y < coordTo.y &&
+            coordTo.y < boundary.max.y)
         ) {
           candidates.push(segment);
           break;
@@ -13084,11 +13084,11 @@ export class ViewController {
           combined_path += segments[i].path;
 
           // If segment is disabled, add to disabled segment path
-          if (segments[i].disable_state) {
+          if (segments[i].disableState) {
             combined_disabled_path += segments[i].path;
           }
 
-          if (segments[i].is_validate === false) {
+          if (segments[i].isValidate === false) {
             combined_invalid_path += segments[i].path;
           }
         }
@@ -13116,8 +13116,8 @@ export class ViewController {
       .attr('y', 0)
       .attr(
         'transform',
-        `translate(${this.geometry.screen_size.width - offset}, ${
-          this.geometry.screen_size.height - 10
+        `translate(${this.geometry.screenSize.width - offset}, ${
+          this.geometry.screenSize.height - 10
         })`
       );
 
@@ -13221,30 +13221,30 @@ export class ViewController {
         point_n_segs,
         'INVERTED'
       );
-      this.geometry.track_size.min_x = track_min_max.min.x;
-      this.geometry.track_size.max_x = track_min_max.max.x;
-      this.geometry.track_size.min_y = track_min_max.min.y;
-      this.geometry.track_size.max_y = track_min_max.max.y;
+      this.geometry.trackSize.minX = track_min_max.min.x;
+      this.geometry.trackSize.maxX = track_min_max.max.x;
+      this.geometry.trackSize.minY = track_min_max.min.y;
+      this.geometry.trackSize.maxY = track_min_max.max.y;
 
-      this.geometry.track_size.width =
+      this.geometry.trackSize.width =
         track_min_max.max.x - track_min_max.min.x;
-      this.geometry.track_size.height =
+      this.geometry.trackSize.height =
         track_min_max.max.y - track_min_max.min.y;
     } else {
-      this.geometry.track_size = { ...this.geometry.fab_size };
+      this.geometry.trackSize = { ...this.geometry.fabSize };
     }
   }
   private initMinimap() {
-    let ratio_w = this.minimap_size_limit / this.geometry.fab_size.width;
-    let ratio_h = this.minimap_size_limit / this.geometry.fab_size.height;
+    let ratio_w = this.minimap_size_limit / this.geometry.fabSize.width;
+    let ratio_h = this.minimap_size_limit / this.geometry.fabSize.height;
     let dimensions: any = {};
 
     let scale = ratio_w < ratio_h ? ratio_w : ratio_h;
     if (scale === ratio_w) {
       dimensions.width = this.minimap_size_limit;
-      dimensions.height = this.geometry.fab_size.height * scale;
+      dimensions.height = this.geometry.fabSize.height * scale;
     } else {
-      dimensions.width = this.geometry.fab_size.width * scale;
+      dimensions.width = this.geometry.fabSize.width * scale;
       dimensions.height = this.minimap_size_limit;
     }
 
@@ -13263,7 +13263,7 @@ export class ViewController {
       .css('height', dimensions.height);
 
     // Store minimap screen size
-    this.geometry.minimap_size = { width, height };
+    this.geometry.minimapSize = { width, height };
 
     // Set initial zoom.current_mainand offset
     this.setInitialZoom(MapTypes.MINIMAP);
@@ -13279,8 +13279,8 @@ export class ViewController {
     this.minimap_svg.call(this.d3_minimap); // @ minimap d3 관련해서 문제가 있으면 아래와 비교
     // this.minimap_svg = d3_track
     //   .select(`#${minimap_svg_id}`)
-    //   .attr('width', this.geometry.minimap_size.width)
-    //   .attr('height', this.geometry.minimap_size.height)
+    //   .attr('width', this.geometry.minimapSize.width)
+    //   .attr('height', this.geometry.minimapSize.height)
     //   .call(this.d3_minimap);
 
     // Initialize focus of zoom.current_mainarea(blue rect)
@@ -13297,8 +13297,8 @@ export class ViewController {
       .attr('y', 0)
       .attr('rx', '2px')
       .attr('ry', '2px')
-      .attr('width', this.geometry.minimap_size.width)
-      .attr('height', this.geometry.minimap_size.height);
+      .attr('width', this.geometry.minimapSize.width)
+      .attr('height', this.geometry.minimapSize.height);
   }
   private convertMinimapObjects() {
     // Combine the path of the individual segments to one
@@ -13314,17 +13314,17 @@ export class ViewController {
   }
 
   // init svg
-  private setGeometry(mapSize: IMapSize, screen_size: any) {
+  private setGeometry(mapSize: IMapSize, screenSize: any) {
     // @NOTE 원본 소스에서는 parent의 clientHeight, clientWidth 값을 사용함
     // const { width, height } = this.svg.node().getBoundingClientRect();
-    const { width, height } = screen_size;
+    const { width, height } = screenSize;
 
     this.geometry = {
-      screen_size: { width, height },
-      track_size: { ...mapSize },
-      fab_size: { ...mapSize },
-      initial_fab_size: { ...mapSize },
-      invert_factor_y: Math.max(mapSize.max_y, mapSize.height),
+      screenSize: { width, height },
+      trackSize: { ...mapSize },
+      fabSize: { ...mapSize },
+      initialFabSize: { ...mapSize },
+      invertFactorY: Math.max(mapSize.maxY, mapSize.height),
     };
 
     console.warn('>> setGeometry >>', this.geometry, mapSize);
@@ -13334,10 +13334,10 @@ export class ViewController {
     // set_param()
     const { width, height } =
       mapType == MapTypes.MINIMAP
-        ? this.geometry.minimap_size
-        : this.geometry.screen_size;
-    const widthRatio = width / this.geometry.fab_size.width;
-    const heightRatio = height / this.geometry.fab_size.height;
+        ? this.geometry.minimapSize
+        : this.geometry.screenSize;
+    const widthRatio = width / this.geometry.fabSize.width;
+    const heightRatio = height / this.geometry.fabSize.height;
 
     const zoomRatio = Math.min(widthRatio, heightRatio);
 
@@ -13361,7 +13361,7 @@ export class ViewController {
         max_zoom,
         zoom_levels: { lvl1, lvl2, lvl3 },
       } = this.option;
-      const { width } = this.geometry.screen_size;
+      const { width } = this.geometry.screenSize;
       this.setZoom(MapTypes.MIN_MAX, {
         x: zoomRatio,
         y: max_zoom,

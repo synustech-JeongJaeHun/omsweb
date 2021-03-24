@@ -7,106 +7,106 @@ import { Segment } from './segment.model';
 
 export class Buffer {
   id: number;
-  logical_id: string;
-  physical_id: string;
-  point_id?: any;
+  logicalId: string;
+  physicalId: string;
+  pointId?: any;
 
   coord: ICoordinate;
-  inverted_coord: ICoordinate;
+  invertedCoord: ICoordinate;
   direction: string;
 
-  is_validate?: boolean;
-  update_state?: string;
+  isValidate?: boolean;
+  updateState?: string;
   group?: number;
 
-  segment_direction?: any;
-  direction_offset?: any;
+  segmentDirection?: any;
+  directionOffset?: any;
 
   constructor(
     row: Dto.IBuffer,
-    is_validate: boolean,
-    update_state: string,
+    isValidate: boolean,
+    updateState: string,
     point: IPoint
   ) {
-    const { id, logical_id, physical_id, point_id, group, direction } = row;
+    const { id, logicalId, physicalId, pointId, group, direction } = row;
     this.id = id;
-    this.logical_id = logical_id;
-    this.physical_id = physical_id;
-    this.point_id = point_id;
+    this.logicalId = logicalId;
+    this.physicalId = physicalId;
+    this.pointId = pointId;
     this.direction = direction || 'U';
     this.group = group;
 
-    this.is_validate = is_validate;
-    this.update_state = update_state;
+    this.isValidate = isValidate;
+    this.updateState = updateState;
 
     this.coord = point.coord;
-    this.inverted_coord = point.inverted_coord;
+    this.invertedCoord = point.invertedCoord;
   }
 
   set_direction_attr(segments: Segment[]) {
-    this.segment_direction = LayoutUtil.find_location_object_direction_at_point(
-      this.point_id,
+    this.segmentDirection = LayoutUtil.find_location_object_direction_at_point(
+      this.pointId,
       segments
     ); // returns inverted 'T' and 'B' due to map inversion
-    this.direction_offset = LayoutUtil.get_location_object_direction_offset(
+    this.directionOffset = LayoutUtil.get_location_object_direction_offset(
       this.direction,
-      this.segment_direction,
+      this.segmentDirection,
       this.constructor.name
     );
   }
 
-  copy(new_id) {
+  copy(newId) {
     let id,
-      physical_id,
-      logical_id,
-      point_id,
+      physicalId,
+      logicalId,
+      pointId,
       coord,
-      inverted_coord,
+      invertedCoord,
       direction,
       group;
-    let is_validate, update_state;
+    let isValidate, updateState;
 
     // Replace ID
-    if (new_id === null || new_id === undefined) {
+    if (newId === null || newId === undefined) {
       id = this.id;
     } else {
-      id = new_id;
+      id = newId;
     }
 
-    physical_id = this.physical_id;
-    logical_id = this.logical_id;
-    point_id = this.point_id;
+    physicalId = this.physicalId;
+    logicalId = this.logicalId;
+    pointId = this.pointId;
     direction = this.direction;
 
-    is_validate = this.is_validate;
-    update_state = this.update_state;
+    isValidate = this.isValidate;
+    updateState = this.updateState;
     group = this.group;
 
     // Object
     coord = { ...this.coord };
-    inverted_coord = { ...this.inverted_coord };
+    invertedCoord = { ...this.invertedCoord };
 
-    let copied_buffer = new Buffer(
-      { id, physical_id, logical_id, point_id, direction, group },
-      is_validate,
-      update_state,
-      { coord, inverted_coord }
+    let copiedBuffer = new Buffer(
+      { id, physicalId, logicalId, pointId, direction, group },
+      isValidate,
+      updateState,
+      { coord, invertedCoord }
     );
 
-    copied_buffer.segment_direction = this.segment_direction;
-    copied_buffer.direction_offset = this.direction_offset;
+    copiedBuffer.segmentDirection = this.segmentDirection;
+    copiedBuffer.directionOffset = this.directionOffset;
 
-    return copied_buffer;
+    return copiedBuffer;
   }
 
-  apply_offset(offset, snap_dist, invert_factor_y) {
+  apply_offset(offset, snapDist, invertFactorY) {
     this.coord.x += offset.x;
     this.coord.y += offset.y;
 
     // Snap original coord
-    this.coord = LayoutUtil.calc_snap_coord(this.coord, snap_dist);
+    this.coord = LayoutUtil.calc_snap_coord(this.coord, snapDist);
 
-    this.inverted_coord.x = this.coord.x;
-    this.inverted_coord.y = invert_factor_y - this.coord.y;
+    this.invertedCoord.x = this.coord.x;
+    this.invertedCoord.y = invertFactorY - this.coord.y;
   }
 }

@@ -3,7 +3,7 @@ import { Dto } from './dto/track.model';
 
 export class Group {
   id: number;
-  logical_id: string;
+  logicalId: string;
   color: string;
   objects: {
     station: number[];
@@ -13,7 +13,7 @@ export class Group {
   };
 
   constructor(row: Dto.IGroup) {
-    const { id, color, logical_id, objects = [] } = row;
+    const { id, color, logicalId, objects = [] } = row;
     this.objects = {
       station: [],
       buffer: [],
@@ -27,7 +27,7 @@ export class Group {
     });
     this.id = id;
     this.color = color;
-    this.logical_id = logical_id;
+    this.logicalId = logicalId;
   }
 
   private getPropName(rawName: string): string {
@@ -95,14 +95,14 @@ export class Group {
 
   copy() {
     let id = this.id;
-    let logical_id = this.logical_id;
+    let logicalId = this.logicalId;
     let color = this.color;
     let objects: any = {};
     for (let type in this.objects) {
       objects[type] = [...this.objects[type]];
     }
 
-    let copied_group = new Group({ id, logical_id, color, objects });
+    let copied_group = new Group({ id, logicalId, color, objects });
 
     return copied_group;
   }

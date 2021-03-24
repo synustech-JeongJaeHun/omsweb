@@ -2,7 +2,7 @@
   <div id="transfer-filter-area">
     <dx-select-box
       [items]="creatorList"
-      [placeholder]="'names.vehicle_id' | translate"
+      [placeholder]="'names.vehicleId' | translate"
       [showClearButton]="true"
       #creator
     ></dx-select-box>
@@ -10,14 +10,14 @@
       [items]="searchTypeList"
       displayExpr="key"
       valueExpr="value"
-      [placeholder]="'names.physical_id' | translate"
+      [placeholder]="'names.physicalId' | translate"
       [showClearButton]="true"
       #searchtype
     >
     </dx-select-box>
     <dx-select-box
       [items]="VehicleListAll"
-      [placeholder]="'names.logical_id' | translate"
+      [placeholder]="'names.logicalId' | translate"
       [dataSource]="VehicleListAll"
       displayExpr="OnlineName"
       valueExpr="Id"
@@ -80,28 +80,28 @@
       <dxi-column
         [width]="120"
         dataType="string"
-        dataField="physical_id"
-        [caption]="'names.physical_id' | translate"
+        dataField="physicalId"
+        [caption]="'names.physicalId' | translate"
       ></dxi-column>
       <dxi-column
         [width]="120"
         dataType="string"
-        dataField="logical_id"
-        [caption]="'names.logical_id' | translate"
+        dataField="logicalId"
+        [caption]="'names.logicalId' | translate"
       ></dxi-column>
       <dxi-column
         [allowFiltering]="false"
         [width]="120"
         dataType="number"
-        dataField="distance_total"
-        [caption]="'names.distance_total' | translate"
+        dataField="distanceTotal"
+        [caption]="'names.distanceTotal' | translate"
       ></dxi-column>
       <dxi-column
         [allowFiltering]="false"
         [width]="120"
         dataType="number"
-        dataField="runtime_total"
-        [caption]="'names.runtime_total' | translate"
+        dataField="runtimeTotal"
+        [caption]="'names.runtimeTotal' | translate"
       ></dxi-column>
       <dxi-column
         [allowFiltering]="false"
@@ -114,8 +114,8 @@
         [allowFiltering]="false"
         [width]="120"
         dataType="string"
-        dataField="map_db"
-        [caption]="'names.map_db' | translate"
+        dataField="mapDb"
+        [caption]="'names.mapDb' | translate"
       ></dxi-column>
     </dx-data-grid>
   </div>

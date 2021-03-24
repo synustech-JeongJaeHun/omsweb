@@ -2,37 +2,37 @@ import { Dto } from './dto/track.model';
 
 export class Vehicle {
   id: number;
-  logical_id: string;
-  physical_id?: string;
+  logicalId: string;
+  physicalId?: string;
 
-  cur_point: any;
-  next_point: any;
-  command_point: any;
+  curPoint: any;
+  nextPoint: any;
+  commandPoint: any;
 
-  cargo_state: string;
-  moving_state: string;
+  cargoState: string;
+  movingState: string;
   hotlot: boolean;
   mode: string;
   push: boolean;
   call: string[];
-  error_list: string;
-  is_blocked: boolean;
-  order_id: number;
-  order_logical_id: string;
-  last_contact: number;
-  is_stale: boolean;
-  is_moved: boolean;
+  errorList: string;
+  isBlocked: boolean;
+  orderId: number;
+  orderLogicalId: string;
+  lastContact: number;
+  isStale: boolean;
+  isMoved: boolean;
   type: string;
   group?: number;
-  cargo_transfer_result: string;
-  map_db: string;
+  cargoTransferResult: string;
+  mapDb: string;
 
-  order_origin?: string;
-  can_be_pushed?: boolean;
-  is_sensor_stopped?: boolean;
-  location_dropoff?: string;
-  location_move?: string;
-  location_pickup?: string;
+  orderOrigin?: string;
+  canBePushed?: boolean;
+  isSensorStopped?: boolean;
+  locationDropoff?: string;
+  locationMove?: string;
+  locationPickup?: string;
   priority?: string;
 
   index?: number;
@@ -47,103 +47,103 @@ export class Vehicle {
   ) {
     const {
       id,
-      logical_id,
-      physical_id,
-      cargo_state,
-      moving_state,
+      logicalId,
+      physicalId,
+      cargoState,
+      movingState,
       mode,
-      error_list,
-      is_blocked,
-      order_id,
-      order_logical_id,
+      errorList,
+      isBlocked,
+      orderId,
+      orderLogicalId,
       type,
       group,
-      cargo_transfer_result,
-      map_db,
-      can_be_pushed, // push
-      order_origin, // call
+      cargoTransferResult,
+      mapDb,
+      canBePushed, // push
+      orderOrigin, // call
     } = row;
 
     this.id = id;
-    this.logical_id = logical_id;
-    this.physical_id = physical_id;
-    this.cargo_state = cargo_state;
-    this.moving_state = moving_state;
+    this.logicalId = logicalId;
+    this.physicalId = physicalId;
+    this.cargoState = cargoState;
+    this.movingState = movingState;
 
     this.mode = mode;
-    this.error_list = error_list;
-    this.is_blocked = is_blocked;
-    this.order_id = order_id;
-    this.order_logical_id = order_logical_id;
+    this.errorList = errorList;
+    this.isBlocked = isBlocked;
+    this.orderId = orderId;
+    this.orderLogicalId = orderLogicalId;
     this.type = type || 'STANDARD';
     this.group = group;
-    this.cargo_transfer_result = cargo_transfer_result;
-    this.map_db = map_db;
+    this.cargoTransferResult = cargoTransferResult;
+    this.mapDb = mapDb;
 
-    this.is_moved = false;
-    this.is_stale = false;
+    this.isMoved = false;
+    this.isStale = false;
 
-    this.call = Array.isArray(order_origin)
-      ? order_origin
-      : order_origin.split(',').map((x) => x.trim());
-    this.push = can_be_pushed;
+    this.call = Array.isArray(orderOrigin)
+      ? orderOrigin
+      : orderOrigin.split(',').map((x) => x.trim());
+    this.push = canBePushed;
 
-    this.cur_point = currentPoint;
-    this.next_point = nextPoint;
-    this.command_point = commandPoint;
+    this.curPoint = currentPoint;
+    this.nextPoint = nextPoint;
+    this.commandPoint = commandPoint;
 
-    this.last_contact = lastContact;
+    this.lastContact = lastContact;
     this.hotlot = hotLot;
   }
 
   copy() {
-    let cur_point: any;
-    if (this.cur_point != undefined) {
-      cur_point = {};
-      cur_point = { ...this.cur_point };
-      cur_point.coord = { ...this.cur_point.coord };
-      cur_point.inverted_coord = { ...this.cur_point.inverted_coord };
+    let curPoint: any;
+    if (this.curPoint != undefined) {
+      curPoint = {};
+      curPoint = { ...this.curPoint };
+      curPoint.coord = { ...this.curPoint.coord };
+      curPoint.invertedCoord = { ...this.curPoint.invertedCoord };
     }
 
-    let next_point;
-    if (this.next_point != undefined) {
-      next_point = {};
-      next_point = { ...this.next_point };
-      next_point.coord = { ...this.next_point.coord };
-      next_point.inverted_coord = { ...this.next_point.inverted_coord };
+    let nextPoint;
+    if (this.nextPoint != undefined) {
+      nextPoint = {};
+      nextPoint = { ...this.nextPoint };
+      nextPoint.coord = { ...this.nextPoint.coord };
+      nextPoint.invertedCoord = { ...this.nextPoint.invertedCoord };
     }
 
-    let command_point;
-    if (this.command_point != undefined) {
-      command_point = {};
-      command_point = { ...this.command_point };
-      command_point.coord = { ...this.command_point.coord };
-      command_point.inverted_coord = { ...this.command_point.inverted_coord };
+    let commandPoint;
+    if (this.commandPoint != undefined) {
+      commandPoint = {};
+      commandPoint = { ...this.commandPoint };
+      commandPoint.coord = { ...this.commandPoint.coord };
+      commandPoint.invertedCoord = { ...this.commandPoint.invertedCoord };
     }
 
     let copied_vehicle = new Vehicle(
       {
         id: this.id,
-        physical_id: this.physical_id,
-        logical_id: this.logical_id,
-        cargo_state: this.cargo_state,
-        moving_state: this.moving_state,
+        physicalId: this.physicalId,
+        logicalId: this.logicalId,
+        cargoState: this.cargoState,
+        movingState: this.movingState,
         mode: this.mode,
-        can_be_pushed: this.push,
-        order_origin: this.call,
-        error_list: this.error_list,
-        is_blocked: this.is_blocked,
-        order_id: this.order_id,
-        order_logical_id: this.order_logical_id,
+        canBePushed: this.push,
+        orderOrigin: this.call,
+        errorList: this.errorList,
+        isBlocked: this.isBlocked,
+        orderId: this.orderId,
+        orderLogicalId: this.orderLogicalId,
         type: this.type,
         group: this.group,
-        cargo_transfer_result: this.cargo_transfer_result,
-        map_db: this.map_db,
+        cargoTransferResult: this.cargoTransferResult,
+        mapDb: this.mapDb,
       },
-      cur_point,
-      next_point,
-      command_point,
-      this.last_contact,
+      curPoint,
+      nextPoint,
+      commandPoint,
+      this.lastContact,
       this.hotlot
     );
 
@@ -162,10 +162,10 @@ export class Vehicle {
       now = new Date().getTime();
     }
 
-    if (now - this.last_contact > stale_interval) {
-      this.is_stale = true;
+    if (now - this.lastContact > stale_interval) {
+      this.isStale = true;
     } else {
-      this.is_stale = false;
+      this.isStale = false;
     }
   }
 }

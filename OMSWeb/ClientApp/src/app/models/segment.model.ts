@@ -4,35 +4,35 @@ import { Dto } from './dto/track.model';
 import { Point } from './point.model';
 import { IPoint, ISegment, ISegmentPart, ISegmentSummary } from './map.interface';
 import { LayoutUtil } from '../modules/shared/utils/layout.util';
-import { default_segment_geometries } from './map-constants';
+import { defaultSegmentGeometries } from './map-constants';
 // import { MapParser } from '../modules/shared/viewers/map-parser';
 
 export class Segment implements ISegment {
   id: number;
-  logical_id: string;
-  physical_id: string;
-  point_from: IPoint;
-  point_to: IPoint;
+  logicalId: string;
+  physicalId: string;
+  pointFrom: IPoint;
+  pointTo: IPoint;
   type: string;
   location: string;
   direction: string;
 
-  segment_parts: ISegmentPart[] = [];
+  segmentParts: ISegmentPart[] = [];
   path = '';
-  dir_coord: any;
-  dir_angle: any;
-  bezier_points = [];
+  dirCoord: any;
+  dirAngle: any;
+  bezierPoints = [];
 
   length: number;
   speed?: number;
-  travel_time?: number;
+  travelTime?: number;
 
-  disable_state?: any;
+  disableState?: any;
 
   candidates? = [];
-  is_validate?: boolean;
-  validate_text?: string;
-  update_state?: string;
+  isValidate?: boolean;
+  validateText?: string;
+  updateState?: string;
 
   constructor(
     row: Dto.ISegment,
@@ -43,35 +43,35 @@ export class Segment implements ISegment {
     const {
       id,
       type,
-      logical_id,
-      physical_id,
+      logicalId,
+      physicalId,
       location,
       direction,
       length,
       speed,
-      travel_time,
-      is_validate,
+      travelTime,
+      isValidate,
       candidates,
     } = row;
     this.id = id;
-    this.physical_id = physical_id;
-    this.logical_id = logical_id;
-    this.point_from = {
+    this.physicalId = physicalId;
+    this.logicalId = logicalId;
+    this.pointFrom = {
       id: fromPoint.id,
       coord: fromPoint.coord,
-      inverted_coord: fromPoint.inverted_coord,
+      invertedCoord: fromPoint.invertedCoord,
     };
-    this.point_to = {
+    this.pointTo = {
       id: toPoint.id,
       coord: toPoint.coord,
-      inverted_coord: toPoint.inverted_coord,
+      invertedCoord: toPoint.invertedCoord,
     };
     this.type = type;
     this.location = location;
     this.direction = direction;
-    this.travel_time = travel_time;
-    this.is_validate = is_validate;
-    this.update_state = updateState;
+    this.travelTime = travelTime;
+    this.isValidate = isValidate;
+    this.updateState = updateState;
 
     this.candidates = candidates;
 
@@ -124,8 +124,8 @@ export class Segment implements ISegment {
       location: convertLocation(location),
       direction: convertDirection(direction),
       radius: null,
-      coord_from: LayoutUtil.create_coordinate(coordFrom, adjustment),
-      coord_to: LayoutUtil.create_coordinate(coordTo, adjustment),
+      coordFrom: LayoutUtil.create_coordinate(coordFrom, adjustment),
+      coordTo: LayoutUtil.create_coordinate(coordTo, adjustment),
     };
   }
   static createSegment(
@@ -159,18 +159,18 @@ export class Segment implements ISegment {
 
     if (this.type === 'D') {
       let direction = LayoutUtil.detect_direction(
-        this.point_from.coord,
-        this.point_to.coord
+        this.pointFrom.coord,
+        this.pointTo.coord
       );
       let segpart = this.create_segpart(
         this.type,
         null,
         null,
         direction,
-        this.point_from.coord.x,
-        this.point_from.coord.y,
-        this.point_to.coord.x,
-        this.point_to.coord.y,
+        this.pointFrom.coord.x,
+        this.pointFrom.coord.y,
+        this.pointTo.coord.x,
+        this.pointTo.coord.y,
         coord_adjustment
       );
       segparts.push(segpart);
@@ -183,8 +183,8 @@ export class Segment implements ISegment {
         type: this.type,
         direction: this.direction,
         location: this.location,
-        coord_from: this.point_from,
-        coord_to: this.point_to,
+        coordFrom: this.pointFrom,
+        coordTo: this.pointTo,
       });
 
       for (let i = 0; i < segparts_info.length; i++) {
@@ -204,7 +204,7 @@ export class Segment implements ISegment {
     }
 
     if (segparts.length > 0) {
-      this.segment_parts = segparts;
+      this.segmentParts = segparts;
       this.set_bezier_points();
     }
   }
@@ -229,8 +229,8 @@ export class Segment implements ISegment {
       // Straight segment
       // Get path
       this.path = this.get_path(
-        this.point_from.inverted_coord,
-        this.point_to.inverted_coord,
+        this.pointFrom.invertedCoord,
+        this.pointTo.invertedCoord,
         this.direction,
         this.type,
         this.location
@@ -238,19 +238,19 @@ export class Segment implements ISegment {
 
       // Get arrow
       let arrow = this.get_direction_arrow(
-        this.point_from.inverted_coord,
-        this.point_to.inverted_coord,
+        this.pointFrom.invertedCoord,
+        this.pointTo.invertedCoord,
         this.direction,
         this.type,
         this.location
       );
-      this.dir_coord = arrow.dir_coord;
-      this.dir_angle = arrow.dir_angle;
+      this.dirCoord = arrow.dirCoord;
+      this.dirAngle = arrow.dirAngle;
     } else {
       // Curve segment
       // Get path for each segparts
-      for (let i = 0; i < this.segment_parts.length; i++) {
-        let part = { ...this.segment_parts[i] };
+      for (let i = 0; i < this.segmentParts.length; i++) {
+        let part = { ...this.segmentParts[i] };
 
         // invert segpart geometry to draw
         let inverted_geometry = LayoutUtil.invert_geometry(
@@ -259,8 +259,8 @@ export class Segment implements ISegment {
         );
 
         part.path = this.get_path(
-          part.coord_from.inverted_coord,
-          part.coord_to.inverted_coord,
+          part.coordFrom.invertedCoord,
+          part.coordTo.invertedCoord,
           inverted_geometry.direction,
           part.type,
           inverted_geometry.location
@@ -273,24 +273,24 @@ export class Segment implements ISegment {
         this.path += part.path;
 
         // Add direction arrow for middle segpart
-        if (i === Math.trunc(this.segment_parts.length * 0.5)) {
+        if (i === Math.trunc(this.segmentParts.length * 0.5)) {
           // Get arrow
           let arrow = this.get_direction_arrow(
-            part.coord_from.inverted_coord,
-            part.coord_to.inverted_coord,
+            part.coordFrom.invertedCoord,
+            part.coordTo.invertedCoord,
             inverted_geometry.direction,
             part.type,
             inverted_geometry.location
           );
-          this.dir_coord = arrow.dir_coord;
-          this.dir_angle = arrow.dir_angle;
+          this.dirCoord = arrow.dirCoord;
+          this.dirAngle = arrow.dirAngle;
         }
       }
     }
   }
   calculate_length(): number {
-    const { x: fromX, y: fromY } = this.point_from.coord;
-    const { x: toX, y: toY } = this.point_to.coord;
+    const { x: fromX, y: fromY } = this.pointFrom.coord;
+    const { x: toX, y: toY } = this.pointTo.coord;
     let width = Math.abs(toX - fromX);
     let height = Math.abs(toY - fromY);
 
@@ -298,22 +298,22 @@ export class Segment implements ISegment {
       return Math.trunc(Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)));
     }
 
-    const dimension = default_segment_geometries[this.type];
+    const dimension = defaultSegmentGeometries[this.type];
     if (
       (this.type === 'U' && (this.location === 'T' || this.location === 'B')) ||
       (this.type === 'S' && this.direction === 'N')
     ) {
-      width = width / dimension.long_side;
-      height = height / dimension.short_side;
+      width = width / dimension.longSide;
+      height = height / dimension.shortSide;
     } else if (
       (this.type === 'U' && (this.location === 'L' || this.location === 'R')) ||
       (this.type === 'S' && this.direction === 'V')
     ) {
-      width = width / dimension.short_side;
-      height = height / dimension.long_side;
+      width = width / dimension.shortSide;
+      height = height / dimension.longSide;
     } else {
-      width = width / dimension.short_side;
-      height = height / dimension.long_side;
+      width = width / dimension.shortSide;
+      height = height / dimension.longSide;
     }
 
     return Math.trunc(width + height + dimension.length / 2);
@@ -321,9 +321,9 @@ export class Segment implements ISegment {
   set_travel_time() {
     if (this.speed) {
       if (this.length !== 0 && this.speed !== 0) {
-        this.travel_time = this.length / this.speed;
+        this.travelTime = this.length / this.speed;
       } else {
-        this.travel_time = 0;
+        this.travelTime = 0;
       }
     }
   }
@@ -338,18 +338,18 @@ export class Segment implements ISegment {
 
     if (this.type === 'D') {
       const directionName = LayoutUtil.detect_direction(
-        this.point_from.coord,
-        this.point_to.coord
+        this.pointFrom.coord,
+        this.pointTo.coord
       );
       const part = Segment.createSegmentPart(
         {
           type: this.type,
           location: null,
           direction: directionName,
-          x1: this.point_from.coord.x,
-          y1: this.point_from.coord.y,
-          x2: this.point_to.coord.x,
-          y2: this.point_to.coord.y,
+          x1: this.pointFrom.coord.x,
+          y1: this.pointFrom.coord.y,
+          x2: this.pointTo.coord.x,
+          y2: this.pointTo.coord.y,
         },
         adjustment
       );
@@ -361,8 +361,8 @@ export class Segment implements ISegment {
         type: this.type,
         direction: this.direction,
         location: this.location,
-        coord_from: { coord: this.point_from.coord },
-        coord_to: { coord: this.point_to.coord },
+        coordFrom: { coord: this.pointFrom.coord },
+        coordTo: { coord: this.pointTo.coord },
       });
       parts = infos.map((x) => {
         const { type, location, direction, from, to } = x;
@@ -382,19 +382,19 @@ export class Segment implements ISegment {
     }
 
     if (parts.length > 0) {
-      this.segment_parts = parts;
+      this.segmentParts = parts;
       this.set_bezier_points();
     }
   }
   set_bezier_points() {
-    let bezier_points = [];
-    for (let i = 0; i < this.segment_parts.length; i++) {
-      const part = this.segment_parts[i];
-      const start_point = [
-        part.coord_from.inverted_coord.x,
-        part.coord_from.inverted_coord.y,
+    let bezierPoints = [];
+    for (let i = 0; i < this.segmentParts.length; i++) {
+      const part = this.segmentParts[i];
+      const startPoint = [
+        part.coordFrom.invertedCoord.x,
+        part.coordFrom.invertedCoord.y,
       ];
-      bezier_points.push(start_point);
+      bezierPoints.push(startPoint);
 
       if (part.type === 'E') {
         // Find the segement curve segpart's anchor bezier points
@@ -410,24 +410,24 @@ export class Segment implements ISegment {
         matrix = matrix.map((item) => item * 1.3);
         let bezier_point = this.calc_bezier_point(
           matrix,
-          part.coord_from.inverted_coord,
-          part.coord_to.inverted_coord
+          part.coordFrom.invertedCoord,
+          part.coordTo.invertedCoord
         );
 
         // Add the curved seg part anchor bezier points
-        bezier_points.push([bezier_point.point1.x, bezier_point.point1.y]);
-        bezier_points.push([bezier_point.point2.x, bezier_point.point2.y]);
+        bezierPoints.push([bezier_point.point1.x, bezier_point.point1.y]);
+        bezierPoints.push([bezier_point.point2.x, bezier_point.point2.y]);
       }
 
-      if (i === this.segment_parts.length - 1) {
-        let end_point = [
-          part.coord_to.inverted_coord.x,
-          part.coord_to.inverted_coord.y,
+      if (i === this.segmentParts.length - 1) {
+        let endPoint = [
+          part.coordTo.invertedCoord.x,
+          part.coordTo.invertedCoord.y,
         ];
-        bezier_points.push(end_point);
+        bezierPoints.push(endPoint);
       }
     }
-    this.bezier_points = bezier_points;
+    this.bezierPoints = bezierPoints;
   }
 
   get_offset_path(offset) {
@@ -438,11 +438,11 @@ export class Segment implements ISegment {
       let new_coord_from: any = {};
       let new_coord_to: any = {};
 
-      new_coord_from.x = this.point_from.inverted_coord.x + offset.x;
-      new_coord_from.y = this.point_from.inverted_coord.y + offset.y;
+      new_coord_from.x = this.pointFrom.invertedCoord.x + offset.x;
+      new_coord_from.y = this.pointFrom.invertedCoord.y + offset.y;
 
-      new_coord_to.x = this.point_to.inverted_coord.x + offset.x;
-      new_coord_to.y = this.point_to.inverted_coord.y + offset.y;
+      new_coord_to.x = this.pointTo.invertedCoord.x + offset.x;
+      new_coord_to.y = this.pointTo.invertedCoord.y + offset.y;
 
       // Get path
       new_path = this.get_path(
@@ -454,17 +454,17 @@ export class Segment implements ISegment {
       );
     } else {
       // Get path for each segparts
-      for (let i = 0; i < this.segment_parts.length; i++) {
-        let segpart = this.segment_parts[i];
+      for (let i = 0; i < this.segmentParts.length; i++) {
+        let segpart = this.segmentParts[i];
 
         let new_coord_from: any = {};
         let new_coord_to: any = {};
 
-        new_coord_from.x = segpart.coord_from.inverted_coord.x + offset.x;
-        new_coord_from.y = segpart.coord_from.inverted_coord.y + offset.y;
+        new_coord_from.x = segpart.coordFrom.invertedCoord.x + offset.x;
+        new_coord_from.y = segpart.coordFrom.invertedCoord.y + offset.y;
 
-        new_coord_to.x = segpart.coord_to.inverted_coord.x + offset.x;
-        new_coord_to.y = segpart.coord_to.inverted_coord.y + offset.y;
+        new_coord_to.x = segpart.coordTo.invertedCoord.x + offset.x;
+        new_coord_to.y = segpart.coordTo.invertedCoord.y + offset.y;
 
         // invert segpart geometry to draw
         let inverted_geometry = LayoutUtil.invert_geometry(
@@ -490,11 +490,11 @@ export class Segment implements ISegment {
     return new_path;
   }
   add_segpart(segpart) {
-    this.segment_parts.push(segpart);
+    this.segmentParts.push(segpart);
   }
 
   remove_segpart() {
-    this.segment_parts = [];
+    this.segmentParts = [];
     // this.type = 'D'
   }
 
@@ -510,51 +510,51 @@ export class Segment implements ISegment {
     return this.candidates;
   }
 
-  apply_offset(offset, snap_dist, invert_factor_y) {
-    this.point_from.coord.x += offset.x;
-    this.point_from.coord.y += offset.y;
+  apply_offset(offset, snapDist, invertFactorY) {
+    this.pointFrom.coord.x += offset.x;
+    this.pointFrom.coord.y += offset.y;
 
     // Snap original from coord
-    this.point_from.coord = LayoutUtil.calc_snap_coord(
-      this.point_from.coord,
-      snap_dist
+    this.pointFrom.coord = LayoutUtil.calc_snap_coord(
+      this.pointFrom.coord,
+      snapDist
     );
 
-    this.point_from.inverted_coord.x = this.point_from.coord.x;
-    this.point_from.inverted_coord.y =
-      invert_factor_y - this.point_from.coord.y;
+    this.pointFrom.invertedCoord.x = this.pointFrom.coord.x;
+    this.pointFrom.invertedCoord.y =
+      invertFactorY - this.pointFrom.coord.y;
 
-    this.point_to.coord.x += offset.x;
-    this.point_to.coord.y += offset.y;
+    this.pointTo.coord.x += offset.x;
+    this.pointTo.coord.y += offset.y;
 
     // Snap original from coord
-    this.point_to.coord = LayoutUtil.calc_snap_coord(
-      this.point_to.coord,
-      snap_dist
+    this.pointTo.coord = LayoutUtil.calc_snap_coord(
+      this.pointTo.coord,
+      snapDist
     );
 
-    this.point_to.inverted_coord.x = this.point_to.coord.x;
-    this.point_to.inverted_coord.y = invert_factor_y - this.point_to.coord.y;
+    this.pointTo.invertedCoord.x = this.pointTo.coord.x;
+    this.pointTo.invertedCoord.y = invertFactorY - this.pointTo.coord.y;
 
-    this.dir_coord.x += offset.x;
-    this.dir_coord.y += offset.y;
+    this.dirCoord.x += offset.x;
+    this.dirCoord.y += offset.y;
 
     // Re-create segpart
-    this.create_segparts(invert_factor_y);
+    this.create_segparts(invertFactorY);
 
     // Reset path
     this.set_path();
   }
 
-  recalculate_path(invert_factor_y, connected_segments, all_segments) {
+  recalculate_path(invertFactorY, connected_segments, all_segments) {
     // Re calculate segment candidate
     if (this.candidates.length === 0) {
       let candidates;
       let segments = connected_segments ? connected_segments : all_segments;
       candidates = LayoutUtil.find_segment_candidate(
         this.id,
-        this.point_from,
-        this.point_to,
+        this.pointFrom,
+        this.pointTo,
         segments
       );
 
@@ -564,26 +564,26 @@ export class Segment implements ISegment {
     }
 
     // Check null coord
-    if (this.point_from === null) {
+    if (this.pointFrom === null) {
       const coord = {
         x: 0,
         y: 0,
       };
 
-      this.point_from.coord = coord;
-      this.point_from.inverted_coord = coord;
+      this.pointFrom.coord = coord;
+      this.pointFrom.invertedCoord = coord;
     }
-    if (this.point_to === null) {
+    if (this.pointTo === null) {
       const coord = {
         x: 0,
         y: 0,
       };
 
-      this.point_to.coord = coord;
-      this.point_to.inverted_coord = coord;
+      this.pointTo.coord = coord;
+      this.pointTo.invertedCoord = coord;
     }
 
-    this.create_segparts(invert_factor_y);
+    this.create_segparts(invertFactorY);
 
     // Create path
     this.set_path();
@@ -604,77 +604,77 @@ export class Segment implements ISegment {
 
   set_disable(disable_info) {
     if (disable_info) {
-      this.disable_state = {};
-      this.disable_state.id = disable_info.id;
-      this.disable_state.segment_id = disable_info.segment_id;
-      this.disable_state.user = disable_info.user;
-      this.disable_state.vehicle = disable_info.vehicle;
-      this.disable_state.segment = disable_info.segment;
+      this.disableState = {};
+      this.disableState.id = disable_info.id;
+      this.disableState.segmentId = disable_info.segmentId;
+      this.disableState.user = disable_info.user;
+      this.disableState.vehicle = disable_info.vehicle;
+      this.disableState.segment = disable_info.segment;
     } else {
-      this.disable_state = null;
+      this.disableState = null;
     }
   }
 
   check_disable_segment_disable_control() {
     return (
-      this.disable_state &&
-      (this.disable_state.segment.length > 0 ||
-        this.disable_state.vehicle.length > 0)
+      this.disableState &&
+      (this.disableState.segment.length > 0 ||
+        this.disableState.vehicle.length > 0)
     );
   }
 
-  copy(new_id) {
+  copy(newId) {
     // let id,
-    //   physical_id,
-    //   logical_id,
+    //   physicalId,
+    //   logicalId,
     //   type,
     //   location,
     //   direction,
     //   path,
-    //   bezier_points;
-    // let speed, length, travel_time;
+    //   bezierPoints;
+    // let speed, length, travelTime;
 
-    // let disable_state;
-    // let is_validate, update_state;
+    // let disableState;
+    // let isValidate, updateState;
 
-    // let point_from, point_to;
-    // let dir_coord, dir_angle;
+    // let pointFrom, pointTo;
+    // let dirCoord, dirAngle;
     // let candidates;
 
     let {
       id,
       type,
-      logical_id,
-      physical_id,
+      logicalId,
+      physicalId,
       location,
       direction,
       length,
       speed,
-      travel_time,
-      is_validate,
+      travelTime,
+      isValidate,
       candidates,
-      bezier_points,
+      bezierPoints,
       path,
-      update_state,
-      point_from,
-      point_to,
-      dir_angle,
-      dir_coord,
+      updateState,
+      pointFrom,
+      pointTo,
+      dirAngle,
+      dirCoord,
     } = this;
 
     // Replace ID
-    !_.isNil(new_id) && (id = new_id);
+    !_.isNil(newId) && (id = newId);
 
-    const disable_state = this.disable_state ? { ...this.disable_state } : null;
+    const disableState = this.disableState ? { ...this.disableState } : null;
 
-    if (this.disable_state) {
-      disable_state.user = this.disable_state.user.map((d) => {
+    if (this.disableState) {
+      disableState.user = this.disableState.user.map((d) => {
         return { ...d };
       });
-      disable_state.vehicle = this.disable_state.vehicle.map((d) => {
+      disableState.vehicle = this.disableState.vehicle.map((d) => {
         return { ...d };
       });
-      disable_state.segment = this.disable_state.segment.map((d) => {
+      disableState.segment = this.disableState.segment.map((d) => {
         return { ...d };
       });
     }
@@ -683,40 +683,40 @@ export class Segment implements ISegment {
     const copied_segment = new Segment(
       {
         id,
-        physical_id,
-        logical_id,
+        physicalId,
+        logicalId,
         type,
         speed,
         length,
         location,
         direction,
-        travel_time,
+        travelTime,
       },
-      update_state,
-      point_from,
-      point_to
+      updateState,
+      pointFrom,
+      pointTo
     );
-    const parts = this.segment_parts.reduce((list, item) => {
+    const parts = this.segmentParts.reduce((list, item) => {
       const part: ISegmentPart = {
-        coord_from: {
-          coord: { ...item.coord_from.coord },
-          inverted_coord: { ...item.coord_from.inverted_coord },
+        coordFrom: {
+          coord: { ...item.coordFrom.coord },
+          invertedCoord: { ...item.coordFrom.invertedCoord },
         },
-        coord_to: {
-          coord: { ...item.coord_to.coord },
-          inverted_coord: { ...item.coord_to.inverted_coord },
+        coordTo: {
+          coord: { ...item.coordTo.coord },
+          invertedCoord: { ...item.coordTo.invertedCoord },
         },
       };
       list.push(part);
       return list;
     }, []);
-    copied_segment.segment_parts = parts;
+    copied_segment.segmentParts = parts;
 
     // Add path
     copied_segment.path = path;
 
     // Add path
-    copied_segment.bezier_points = bezier_points;
+    copied_segment.bezierPoints = bezierPoints;
 
     // add candidates
     candidates = [];
@@ -727,29 +727,29 @@ export class Segment implements ISegment {
     }
 
     // Add disabled info
-    copied_segment.disable_state = disable_state;
+    copied_segment.disableState = disableState;
 
     copied_segment.set_candidates(candidates);
 
-    copied_segment.dir_angle = dir_angle;
-    copied_segment.dir_coord = dir_coord;
+    copied_segment.dirAngle = dirAngle;
+    copied_segment.dirCoord = dirCoord;
 
-    copied_segment.validate_text = this.validate_text;
+    copied_segment.validateText = this.validateText;
 
     return copied_segment;
   }
 
   reassign_segpart_id(start_id) {
-    for (let i = 0; i < this.segment_parts.length; i++) {
-      let segpart = this.segment_parts[i];
+    for (let i = 0; i < this.segmentParts.length; i++) {
+      let segpart = this.segmentParts[i];
 
       segpart.id = start_id++;
     }
   }
 
   private get_direction_arrow(
-    point_from: ICoordinate,
-    point_to: ICoordinate,
+    pointFrom: ICoordinate,
+    pointTo: ICoordinate,
     direction: string,
     type: string,
     location: string
@@ -757,32 +757,32 @@ export class Segment implements ISegment {
     let arrow: any = {};
 
     if (type == 'D') {
-      arrow.dir_coord = {
-        x: Math.trunc((point_from.x + point_to.x) * 0.5),
-        y: Math.trunc((point_from.y + point_to.y) * 0.5),
+      arrow.dirCoord = {
+        x: Math.trunc((pointFrom.x + pointTo.x) * 0.5),
+        y: Math.trunc((pointFrom.y + pointTo.y) * 0.5),
       };
 
-      arrow.dir_angle = Math.atan2(
-        point_to.y - point_from.y,
-        point_to.x - point_from.x
+      arrow.dirAngle = Math.atan2(
+        pointTo.y - pointFrom.y,
+        pointTo.x - pointFrom.x
       );
     } else {
       let matrix = LayoutUtil.get_bezier_matrix(direction, type, location);
-      let bezier_point = this.calc_bezier_point(matrix, point_from, point_to);
+      let bezier_point = this.calc_bezier_point(matrix, pointFrom, pointTo);
 
-      arrow.dir_coord = this.getBezier_inner_coord(
+      arrow.dirCoord = this.getBezier_inner_coord(
         0.5,
-        point_from,
+        pointFrom,
         bezier_point.point1,
         bezier_point.point2,
-        point_to
+        pointTo
       );
-      arrow.dir_angle = this.getBezier_angle(
+      arrow.dirAngle = this.getBezier_angle(
         0.5,
-        point_from,
+        pointFrom,
         bezier_point.point1,
         bezier_point.point2,
-        point_to
+        pointTo
       );
     }
 
@@ -828,8 +828,8 @@ export class Segment implements ISegment {
     return { x, y };
   }
   private get_path(
-    point_from: ICoordinate,
-    point_to: ICoordinate,
+    pointFrom: ICoordinate,
+    pointTo: ICoordinate,
     direction: string,
     type: string,
     location: string
@@ -838,32 +838,32 @@ export class Segment implements ISegment {
 
     if (type == 'D') {
       // Straight segment
-      path = `M${point_from.x} ${point_from.y} L${point_to.x} ${point_to.y}`;
+      path = `M${pointFrom.x} ${pointFrom.y} L${pointTo.x} ${pointTo.y}`;
     } else {
       // Curve segment
       let matrix = LayoutUtil.get_bezier_matrix(direction, type, location);
-      let bezier_point = this.calc_bezier_point(matrix, point_from, point_to);
-      path = `M${point_from.x} ${point_from.y} C${bezier_point.point1.x} ${bezier_point.point1.y} ${bezier_point.point2.x} ${bezier_point.point2.y} ${point_to.x} ${point_to.y}`;
+      let bezier_point = this.calc_bezier_point(matrix, pointFrom, pointTo);
+      path = `M${pointFrom.x} ${pointFrom.y} C${bezier_point.point1.x} ${bezier_point.point1.y} ${bezier_point.point2.x} ${bezier_point.point2.y} ${pointTo.x} ${pointTo.y}`;
     }
 
     return path;
   }
 
-  private calc_bezier_point(matrix, coord_from, coord_to) {
+  private calc_bezier_point(matrix, coordFrom, coordTo) {
     let dist_x, dist_y;
 
     // Calculate main_css.distance for X coord & Y coord
-    dist_x = Math.abs(coord_to.x - coord_from.x);
-    dist_y = Math.abs(coord_to.y - coord_from.y);
+    dist_x = Math.abs(coordTo.x - coordFrom.x);
+    dist_y = Math.abs(coordTo.y - coordFrom.y);
 
     let point1: ICoordinate = {};
     let point2: ICoordinate = {};
 
-    point1.x = coord_from.x + dist_x * matrix[0];
-    point1.y = coord_from.y + dist_y * matrix[1];
+    point1.x = coordFrom.x + dist_x * matrix[0];
+    point1.y = coordFrom.y + dist_y * matrix[1];
 
-    point2.x = coord_to.x + dist_x * matrix[2];
-    point2.y = coord_to.y + dist_y * matrix[3];
+    point2.x = coordTo.x + dist_x * matrix[2];
+    point2.y = coordTo.y + dist_y * matrix[3];
 
     return {
       point1,

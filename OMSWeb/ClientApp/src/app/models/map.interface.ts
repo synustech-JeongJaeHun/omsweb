@@ -12,7 +12,7 @@ export interface IViewerData {
   groups?: Group[];
   points?: Point[];
   segments?: Segment[];
-  segments_disabled?: any[];
+  segmentsDisabled?: any[];
   stations?: Station[];
   buffers?: Buffer[];
   mtls?: MTL[];
@@ -21,8 +21,8 @@ export interface IViewerData {
 }
 export interface ICoordinateInfo {
   coord: ICoordinate;
-  inverted_coord?: ICoordinate;
-  is_error?: boolean;
+  invertedCoord?: ICoordinate;
+  isError?: boolean;
 }
 export interface ISegmentSummary {
   type: string;
@@ -35,40 +35,40 @@ export interface ISegmentPart {
   type?: string;
   direction?: string;
   location?: string;
-  coord_from: ICoordinateInfo;
-  coord_to: ICoordinateInfo;
+  coordFrom: ICoordinateInfo;
+  coordTo: ICoordinateInfo;
   path?: string;
 }
 export interface ISegment {
   id: number;
-  logical_id: string;
-  physical_id: string;
-  point_from: IPoint;
-  point_to: IPoint;
+  logicalId: string;
+  physicalId: string;
+  pointFrom: IPoint;
+  pointTo: IPoint;
   type: string;
   location: string;
   direction: string;
 
-  segment_parts: ISegmentPart[];
+  segmentParts: ISegmentPart[];
   path: string;
-  dir_coord: any;
-  dir_angle: any;
-  bezier_points: any[];
+  dirCoord: any;
+  dirAngle: any;
+  bezierPoints: any[];
 
   length: number;
   speed?: number;
-  travel_time?: number;
+  travelTime?: number;
 
-  disable_state?: any;
+  disableState?: any;
 
   candidates?: any[];
-  is_validate?: boolean;
-  validate_text?: string;
-  update_state?: string;
+  isValidate?: boolean;
+  validateText?: string;
+  updateState?: string;
 }
 
 export interface IPoint {
   id?: number;
   coord: ICoordinate;
-  inverted_coord: ICoordinate;
+  invertedCoord: ICoordinate;
 }

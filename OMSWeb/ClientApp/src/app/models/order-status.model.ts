@@ -2,37 +2,37 @@ import { OrderStatesType } from './enums';
 
 export interface IOrderInfoRow {
   origin: string;
-  logical_id: string;
+  logicalId: string;
   state: OrderStatesType;
-  location_pickup: string;
-  location_dropoff: string;
-  location_move: string;
-  assignment_details: string;
-  assignment_type: string;
-  carrier_label: string;
-  vehicle_id: number;
+  locationPickup: string;
+  locationDropoff: string;
+  locationMove: string;
+  assignmentDetails: string;
+  assignmentType: string;
+  carrierLabel: string;
+  vehicleId: number;
   priority: number;
-  time_created: Date;
-  time_assigned: Date;
-  time_completed: Date;
-  time_aborted: Date;
-  time_failed: Date;
+  timeCreated: Date;
+  timeAssigned: Date;
+  timeCompleted: Date;
+  timeAborted: Date;
+  timeFailed: Date;
 
-  distance_pickup: number;
-  distance_dropoff: number;
-  distance_move: number;
+  distancePickup: number;
+  distanceDropoff: number;
+  distanceMove: number;
 
-  row_num: number;
+  rowNum: number;
 }
 
 export interface IOrderStatusRow extends IOrderInfoRow {
   id: number;
   checked?: boolean;
-  duration_total: number;
-  duration_dropoff: number;
-  duration_unassigned: number;
-  duration_pickup: number;
-  duration_load: number;
-  duration_unload: number;
-  duration_move: number;
+  durationTotal: number;
+  durationDropoff: number;
+  durationUnassigned: number;
+  durationPickup: number;
+  durationLoad: number;
+  durationUnload: number;
+  durationMove: number;
 }

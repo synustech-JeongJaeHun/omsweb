@@ -18,34 +18,34 @@ export class MapParser {
   constructor(private layout_data: IViewerData) {}
 
   parse(data: Dto.ITrackData, geometry: IMapGeometry): IViewerData {
-    this.layout_data.groups = this.parseGroups(data.map_type, data.groups);
+    this.layout_data.groups = this.parseGroups(data.mapType, data.groups);
     this.layout_data.points = this.parsePoints(
-      data.map_type,
+      data.mapType,
       data.points,
-      geometry.invert_factor_y
+      geometry.invertFactorY
     );
     this.layout_data.segments = this.parseSegments(
-      data.map_type,
+      data.mapType,
       data.segments,
-      geometry.invert_factor_y
+      geometry.invertFactorY
     );
-    this.layout_data.segments_disabled = this.parseDisabledSegments(
-      data.segment_disabled
+    this.layout_data.segmentsDisabled = this.parseDisabledSegments(
+      data.segmentDisabled
     );
     this.layout_data.stations = this.parseStations(
-      data.map_type,
+      data.mapType,
       data.stations
     );
-    this.layout_data.buffers = this.parseBuffers(data.map_type, data.buffers);
-    this.layout_data.mtls = this.parseMtls(data.map_type, data.mtls);
+    this.layout_data.buffers = this.parseBuffers(data.mapType, data.buffers);
+    this.layout_data.mtls = this.parseMtls(data.mapType, data.mtls);
     this.layout_data.clusters = this.parseClusters(
-      data.map_type,
+      data.mapType,
       data.clusters
     );
 
     return this.layout_data;
   }
-  private parseClusters(map_type: MapTypes, rows: Dto.ICluster[]): Cluster[] {
+  private parseClusters(mapType: MapTypes, rows: Dto.ICluster[]): Cluster[] {
     if (!rows) return [];
     return rows.reduce((models, row) => {
       try {
@@ -60,10 +60,10 @@ export class MapParser {
         const cluster = new Cluster(row, pointIds);
 
         const segments = LayoutUtil.find_all_contigous_segments_from_points(
-          cluster.point_id_list,
+          cluster.pointIdList,
           this.layout_data.segments
         );
-        cluster.set_path(segments, main_css.cluster.border_offset);
+        cluster.set_path(segments, main_css.cluster.borderOffset);
 
         models.push(cluster);
       } catch (error) {
@@ -72,12 +72,12 @@ export class MapParser {
       return models;
     }, []);
   }
-  private parseMtls(map_type: MapTypes, rows: Dto.IMTL[]): MTL[] {
+  private parseMtls(mapType: MapTypes, rows: Dto.IMTL[]): MTL[] {
     if (!rows) return [];
     rows = this.inject_group_data('mtl', rows);
     return rows.reduce((models, row) => {
       try {
-        const point = this.layout_data.points.find((p) => p.id === row.point_id);
+        const point = this.layout_data.points.find((p) => p.id === row.pointId);
         if (!point) throw 'not found mtl coordinates';
         const mtl = new MTL(row, true, 'E', point);
         models.push(mtl);
@@ -87,13 +87,13 @@ export class MapParser {
       return models;
     }, []);
   }
-  private parseBuffers(map_type: MapTypes, rows: Dto.IBuffer[]): Buffer[] {
+  private parseBuffers(mapType: MapTypes, rows: Dto.IBuffer[]): Buffer[] {
     if (!rows) return [];
     rows = this.inject_group_data('buffer', rows);
     const segments = this.layout_data.segments;
     return rows.reduce((models, row) => {
       try {
-        const point = this.layout_data.points.find((p) => p.id === row.point_id);
+        const point = this.layout_data.points.find((p) => p.id === row.pointId);
         if (!point) throw 'not found buffer coordinates';
         const buffer = new Buffer(row, true, 'E', point);
         buffer.set_direction_attr(segments);
@@ -105,14 +105,14 @@ export class MapParser {
     }, []);
   }
 
-  private parseStations(map_type: MapTypes, rows: Dto.IStation[]): Station[] {
+  private parseStations(mapType: MapTypes, rows: Dto.IStation[]): Station[] {
     if (!rows) return [];
     // Inject groups data into stations data
     rows = this.inject_group_data('station', rows);
     const segments = this.layout_data.segments;
     return rows.reduce((models, row) => {
       try {
-        const point = this.layout_data.points.find((p) => p.id === row.point_id);
+        const point = this.layout_data.points.find((p) => p.id === row.pointId);
         if (!point) throw 'not found station coordinates';
         const station = new Station(row, true, 'E', point);
         station.set_direction_attr(segments);
@@ -127,7 +127,7 @@ export class MapParser {
     let grouped_objects = [];
     this.layout_data.groups.forEach((group) => {
       grouped_objects.push({
-        group_id: group.id,
+        groupId: group.id,
         objects: group.objects[type] ? [...group.objects[type]] : [],
       });
       return;
@@ -139,7 +139,7 @@ export class MapParser {
         for (let group of grouped_objects) {
           for (let j = group.objects.length - 1; j > -1; j--) {
             if (parseInt(object.id) === parseInt(group.objects[j])) {
-              objects[i].group = group.group_id;
+              objects[i].group = group.groupId;
               group.objects.splice(j, 1);
               break; // @NOTE check : 성능을 높이기 위해서 break 했는데, group.objects에 동일한 아이디가 여러개 있는 데이터가 가능하다면 사용하면 안된다.
               // @NOTE optional : some, find, filter 등을 사용하는 방법도 고려(성능 우선)
@@ -201,13 +201,13 @@ export class MapParser {
     simple_segments = segments.map((segment) => {
       return {
         id: segment.id,
-        point_from: {
-          id: segment.point_from.id,
+        pointFrom: {
+          id: segment.pointFrom.id,
         },
-        point_to: {
-          id: segment.point_to.id,
+        pointTo: {
+          id: segment.pointTo.id,
         },
-        segment_parts: segment.segment_parts,
+        segmentParts: segment.segmentParts,
       };
     });
 
@@ -217,8 +217,8 @@ export class MapParser {
       // Calculate candidates and add it
       let candidates = LayoutUtil.find_segment_candidate(
         segment.id,
-        segment.point_from,
-        segment.point_to,
+        segment.pointFrom,
+        segment.pointTo,
         simple_segments
       );
       segment.candidates = candidates;
@@ -229,18 +229,18 @@ export class MapParser {
         segment.location,
         segment.direction,
         segment.candidates,
-        segment.segment_parts
+        segment.segmentParts
       );
 
       if (validation.is_candidate_validate && validation.is_part_validate) {
-        segment.is_validate = true;
+        segment.isValidate = true;
       } else {
-        segment.is_validate = false;
+        segment.isValidate = false;
 
         // Adjust segpart for faulty part
         if (!validation.is_part_validate) {
-          const from = segment.point_from.coord;
-          const to = segment.point_to.coord;
+          const from = segment.pointFrom.coord;
+          const to = segment.pointTo.coord;
 
           const seg_part = Segment.createSegmentPart(
             {
@@ -254,19 +254,19 @@ export class MapParser {
             },
             adjustment
           );
-          segment.segment_parts = [seg_part];
+          segment.segmentParts = [seg_part];
 
           // calculate path
           segment.set_path();
-          segment.validate_text = validation.part_validate_msg;
-          console.warn(`segment ${segment.id} ${segment.validate_text}`, {
+          segment.validateText = validation.part_validate_msg;
+          console.warn(`segment ${segment.id} ${segment.validateText}`, {
             candidates,
             validation,
           });
         } else {
-          segment.validate_text = validation.candidate_validate_msg;
+          segment.validateText = validation.candidate_validate_msg;
           // @TODO 로그가 많아서 주석처리함 - 나중에 확인
-          // console.warn(`segment ${segment.id} ${segment.validate_text}`);
+          // console.warn(`segment ${segment.id} ${segment.validateText}`);
         }
       }
     }
@@ -282,9 +282,9 @@ export class MapParser {
       .map((groups) => {
         const {
           id,
-          start_point,
-          end_point,
-          is_validate,
+          startPoint,
+          endPoint,
+          isValidate,
         } = groups[0];
         try {
           const segmentRow: Dto.ISegment = {
@@ -293,13 +293,13 @@ export class MapParser {
             location: null,
             direction: null,
             candidates: null,
-            is_validate: is_validate,
+            isValidate: isValidate,
           };
           const fromPoint = this.layout_data.points.find(
-            (p) => p.id === start_point
+            (p) => p.id === startPoint
           );
           const toPoint = this.layout_data.points.find(
-            (p) => p.id === end_point
+            (p) => p.id === endPoint
           );
           const segment = new Segment(segmentRow, 'E', fromPoint, toPoint);
           this.initializeSegmentCreation(
@@ -324,18 +324,18 @@ export class MapParser {
     adjustment: number
   ) {
     segment.postCreation();
-    segment.segment_parts = parts;
+    segment.segmentParts = parts;
 
     // Calculate main direction
     let direction = LayoutUtil.detect_direction(
-      segment.point_from.coord,
-      segment.point_to.coord
+      segment.pointFrom.coord,
+      segment.pointTo.coord
     );
 
     // Find segment summary and add
     let segment_summary = LayoutUtil.find_segment_summary(
       direction,
-      segment.segment_parts
+      segment.segmentParts
     );
     if (segment_summary !== null) {
       segment.add_summary(segment_summary);
@@ -354,19 +354,19 @@ export class MapParser {
     adjustment: number
   ): Segment[] {
     return rows.map((row) => {
-      const { start_point, end_point } = row;
+      const { startPoint, endPoint } = row;
       const segmentRow: Dto.ISegment = {
         ...row,
         type: null,
         location: null,
         direction: null,
         candidates: null,
-        is_validate: null,
+        isValidate: null,
       };
       const fromPoint = this.layout_data.points.find(
-        (p) => p.id === start_point
+        (p) => p.id === startPoint
       );
-      const toPoint = this.layout_data.points.find((p) => p.id === end_point);
+      const toPoint = this.layout_data.points.find((p) => p.id === endPoint);
       const segment = new Segment(
         segmentRow,
         // parts,
@@ -434,7 +434,7 @@ export class MapParser {
 
           disabled_segment = {
             id: rows[i].id,
-            segment_id: rows[i].segment_id,
+            segmentId: rows[i].segmentId,
             vehicle: null,
             segment: null,
             user: null,

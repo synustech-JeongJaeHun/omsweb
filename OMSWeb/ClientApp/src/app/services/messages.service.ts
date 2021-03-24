@@ -17,21 +17,21 @@ export class MessagesService {
   sendPing(): Observable<void> {
     return this.sendVehicleCommand({
       type: 'VEHICLE',
-      vehicle_id: '*',
+      vehicleId: '*',
       action: 'status',
     });
   }
   sendVehicleReset(): Observable<void> {
     return this.sendVehicleCommand({
       type: 'VEHICLE',
-      vehicle_id: '*',
+      vehicleId: '*',
       action: 'reset',
     });
   }
   sendEStop(): Observable<void> {
     return this.sendVehicleCommand({
       type: 'VEHICLE',
-      vehicle_id: '*',
+      vehicleId: '*',
       action: 'stop',
     });
   }
@@ -39,7 +39,7 @@ export class MessagesService {
     console.warn('@ action value 확인 (auto ?)');
     return this.sendVehicleCommand({
       type: 'VEHICLE',
-      vehicle_id: '*',
+      vehicleId: '*',
       action: 'auto', // @TODO auto action 값 확인
     });
   }

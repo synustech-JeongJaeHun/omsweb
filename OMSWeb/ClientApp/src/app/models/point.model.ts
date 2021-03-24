@@ -5,13 +5,13 @@ import {IPoint} from './map.interface';
 
 export class Point implements IPoint {
   id?: number;
-  logical_id?: string;
-  physical_id?: string;
+  logicalId?: string;
+  physicalId?: string;
   coord: ICoordinate;
-  inverted_coord: ICoordinate;
-  is_validate?: boolean;
-  validate_text?: string;
-  update_state?: string;
+  invertedCoord: ICoordinate;
+  isValidate?: boolean;
+  validateText?: string;
+  updateState?: string;
 
   constructor(
     row: Dto.IPoint,
@@ -20,66 +20,66 @@ export class Point implements IPoint {
     updateState: string
   ) {
     this.id = row.id;
-    this.logical_id = row.logical_id;
-    this.physical_id = row.physical_id;
+    this.logicalId = row.logicalId;
+    this.physicalId = row.physicalId;
     this.coord = coordInfo.coord;
-    this.inverted_coord = coordInfo.inverted_coord;
-    this.is_validate = isValid;
-    this.update_state = updateState;
+    this.invertedCoord = coordInfo.invertedCoord;
+    this.isValidate = isValid;
+    this.updateState = updateState;
   }
 
-  apply_offset(offset, snap_dist, invert_factor_y) {
+  apply_offset(offset, snapDist, invertFactorY) {
     this.coord.x += offset.x;
     this.coord.y += offset.y;
 
     // Snap original coord
-    // this.coord = Util.layout.calc_snap_coord(this.coord, snap_dist)
+    // this.coord = Util.layout.calc_snap_coord(this.coord, snapDist)
 
-    this.inverted_coord.x = this.coord.x;
-    this.inverted_coord.y = invert_factor_y - this.coord.y;
+    this.invertedCoord.x = this.coord.x;
+    this.invertedCoord.y = invertFactorY - this.coord.y;
   }
 
-  copy(new_id) {
+  copy(newId) {
     let id,
-      physical_id,
-      logical_id,
+      physicalId,
+      logicalId,
       coord,
-      inverted_coord,
-      is_validate,
-      update_state,
-      validate_text;
+      invertedCoord,
+      isValidate,
+      updateState,
+      validateText;
 
     // Replace ID
-    if (new_id === null || new_id === undefined) {
+    if (newId === null || newId === undefined) {
       id = this.id;
     } else {
-      id = new_id;
+      id = newId;
     }
 
-    physical_id = this.physical_id;
-    logical_id = this.logical_id;
+    physicalId = this.physicalId;
+    logicalId = this.logicalId;
 
-    is_validate = this.is_validate;
-    update_state = this.update_state;
+    isValidate = this.isValidate;
+    updateState = this.updateState;
 
     // Object
     coord = { ...this.coord };
-    inverted_coord = { ...this.inverted_coord };
+    invertedCoord = { ...this.invertedCoord };
 
     let copied_point = new Point(
       {
         id,
-        physical_id,
-        logical_id,
+        physicalId,
+        logicalId,
       },
       {
         coord,
-        inverted_coord,
+        invertedCoord,
       },
-      is_validate,
-      update_state
+      isValidate,
+      updateState
     );
-    copied_point.validate_text = this.validate_text;
+    copied_point.validateText = this.validateText;
 
     return copied_point;
   }

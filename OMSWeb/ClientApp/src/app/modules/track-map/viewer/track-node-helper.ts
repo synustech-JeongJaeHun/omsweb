@@ -90,8 +90,8 @@ export class TrackNodeHelper {
 
   update_vehicle_ids(data) {
     if (data && this.vehicles[data.id]) {
-      this.vehicles[data.id].logical_id = data.logical_id;
-      this.vehicles[data.id].physical_id = data.physical_id;
+      this.vehicles[data.id].logicalId = data.logicalId;
+      this.vehicles[data.id].physicalId = data.physicalId;
     }
   }
 
@@ -114,8 +114,8 @@ export class TrackNodeHelper {
     for (let i = 0; i < array.length; i++) {
       result[prefix + array[i].id] = {
         id: prefix + array[i].id,
-        logical_id: array[i].logical_id,
-        physical_id: array[i].physical_id,
+        logicalId: array[i].logicalId,
+        physicalId: array[i].physicalId,
       };
     }
 
@@ -154,20 +154,20 @@ export class TrackNodeHelper {
     if (matched_objects) {
       target_objects = Object.values<any>(matched_objects);
 
-      // get the list of id, logical_id and physical id
+      // get the list of id, logicalId and physical id
       for (let i = 0; i < target_objects.length; i++) {
         let id = String(target_objects[i].id);
-        let logical_id = target_objects[i].logical_id;
-        let physical_id = target_objects[i].physical_id;
+        let logicalId = target_objects[i].logicalId;
+        let physicalId = target_objects[i].physicalId;
 
         if (id.length > 0) {
           ids.push(id);
         }
-        if (logical_id && logical_id.length > 0) {
-          logical_ids.push(logical_id);
+        if (logicalId && logicalId.length > 0) {
+          logical_ids.push(logicalId);
         }
-        if (physical_id && physical_id.length > 0) {
-          physical_ids.push(physical_id);
+        if (physicalId && physicalId.length > 0) {
+          physical_ids.push(physicalId);
         }
       }
 
@@ -202,7 +202,7 @@ export class TrackNodeHelper {
       if (!search_category || search_category.includes('POINT'))
         matched_object = Object.values<any>(this.points).find(
           (d) =>
-            d.logical_id == alternative_id || d.physical_id == alternative_id
+            d.logicalId == alternative_id || d.physicalId == alternative_id
         );
 
       if (
@@ -211,7 +211,7 @@ export class TrackNodeHelper {
       ) {
         matched_object = Object.values<any>(this.vehicles).find(
           (d) =>
-            d.logical_id == alternative_id || d.physical_id == alternative_id
+            d.logicalId == alternative_id || d.physicalId == alternative_id
         );
       }
       if (
@@ -220,7 +220,7 @@ export class TrackNodeHelper {
       ) {
         matched_object = Object.values<any>(this.stations).find(
           (d) =>
-            d.logical_id == alternative_id || d.physical_id == alternative_id
+            d.logicalId == alternative_id || d.physicalId == alternative_id
         );
       }
       if (
@@ -229,7 +229,7 @@ export class TrackNodeHelper {
       ) {
         matched_object = Object.values<any>(this.buffers).find(
           (d) =>
-            d.logical_id == alternative_id || d.physical_id == alternative_id
+            d.logicalId == alternative_id || d.physicalId == alternative_id
         );
       }
 

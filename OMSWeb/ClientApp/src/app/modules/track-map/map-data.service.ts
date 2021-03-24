@@ -24,9 +24,9 @@ export class MapDataService {
     this.parser = new MapParser(this.data);
     this.data = this.parser.parse(data, geometry);
 
-    if (data.vehicle_path) {
+    if (data.vehiclePath) {
       this.expectedPaths = this.convertExpectedPath(
-        data.vehicle_path,
+        data.vehiclePath,
         this.data.segments
       );
     }
@@ -131,7 +131,7 @@ export class MapDataService {
     let grouped_objects = [];
     this.data.groups.forEach((group) => {
       grouped_objects.push({
-        group_id: group.id,
+        groupId: group.id,
         objects: group.objects[type] ? [...group.objects[type]] : [],
       });
       return;
@@ -143,7 +143,7 @@ export class MapDataService {
         for (let group of grouped_objects) {
           for (let j = group.objects.length - 1; j > -1; j--) {
             if (parseInt(object.id) === parseInt(group.objects[j])) {
-              objects[i].group = group.group_id;
+              objects[i].group = group.groupId;
               group.objects.splice(j, 1);
               break; // @NOTE check : 성능을 높이기 위해서 break 했는데, group.objects에 동일한 아이디가 여러개 있는 데이터가 가능하다면 사용하면 안된다.
               // @NOTE optional : some, find, filter 등을 사용하는 방법도 고려(성능 우선)
@@ -156,27 +156,27 @@ export class MapDataService {
     return objects;
   }
 
-  find_point_coords(point_id: any) {
-    if (point_id == null || point_id == undefined) {
+  find_point_coords(pointId: any) {
+    if (pointId == null || pointId == undefined) {
       return null;
     }
 
     let coord = {};
-    let inverted_coord = {};
+    let invertedCoord = {};
     let is_match = false;
 
     for (let i = 0; i < this.data.points.length; i++) {
       let point = this.data.points[i];
-      if (point.id === point_id) {
+      if (point.id === pointId) {
         coord = point.coord;
-        inverted_coord = point.inverted_coord;
+        invertedCoord = point.invertedCoord;
         is_match = true;
         break;
       }
     }
 
     if (is_match) {
-      return { coord, inverted_coord };
+      return { coord, invertedCoord };
     }
     return null;
   }
@@ -198,19 +198,19 @@ export class MapDataService {
       if (row) {
         try {
           const {
-            cur_point: cur_id,
-            next_point: next_id,
-            command_point: comm_id,
+            curPoint: cur_id,
+            nextPoint: next_id,
+            commandPoint: comm_id,
           } = row;
           let currentPoint: any, nextPoint: any, commandPoint: any;
           const current_coords = this.find_point_coords(cur_id);
           const next_coords = this.find_point_coords(next_id);
-          // cur_point
+          // curPoint
           if (current_coords) {
             currentPoint = {
               point: cur_id,
               coord: current_coords.coord,
-              inverted_coord: current_coords.inverted_coord,
+              invertedCoord: current_coords.invertedCoord,
             };
           } else {
             currentPoint = null;
@@ -219,16 +219,16 @@ export class MapDataService {
           //   (currentPoint = {
           //     point: cur_id,
           //     coord: current_coords.coord,
-          //     inverted_coord: current_coords.inverted_coord,
+          //     invertedCoord: current_coords.invertedCoord,
           //   });
 
-          // next_point
+          // nextPoint
           if (next_id && next_coords) {
             if (next_coords && current_coords) {
               nextPoint = {
                 point: next_id,
                 coord: next_coords.coord,
-                inverted_coord: next_coords.inverted_coord,
+                invertedCoord: next_coords.invertedCoord,
               };
             } else {
               nextPoint = null;
@@ -240,10 +240,10 @@ export class MapDataService {
           //   (nextPoint = {
           //     point: next_id,
           //     coord: next_coords.coord,
-          //     inverted_coord: next_coords.inverted_coord,
+          //     invertedCoord: next_coords.invertedCoord,
           //   });
 
-          // command_point
+          // commandPoint
           if (!_.isNil(comm_id) && comm_id.length > 0) {
             let object_id: string;
             let base_point_id: number;
@@ -256,7 +256,7 @@ export class MapDataService {
                 'STATION',
                 parseInt(object_id)
               );
-              base_point_id = base_object ? base_object.point_id : null;
+              base_point_id = base_object ? base_object.pointId : null;
             } else if (comm_id[0].toUpperCase() === 'B') {
               object_id = comm_id.substring(1, comm_id.length);
 
@@ -265,7 +265,7 @@ export class MapDataService {
                 'BUFFER',
                 parseInt(object_id)
               );
-              base_point_id = base_object ? base_object.point_id : null;
+              base_point_id = base_object ? base_object.pointId : null;
             } else {
               base_point_id = parseInt(comm_id);
             }
@@ -277,7 +277,7 @@ export class MapDataService {
                 commandPoint = {
                   point: base_point_id,
                   coord: command_coords.coord,
-                  inverted_coord: command_coords.inverted_coord,
+                  invertedCoord: command_coords.invertedCoord,
                 };
               } else {
                 commandPoint = null;
@@ -285,21 +285,21 @@ export class MapDataService {
             }
           }
 
-          const { priority, last_contact } = row;
-          const lastContact = last_contact ? Date.parse(last_contact) : null;
+          const { priority, lastContact } = row;
+          const _lastContact = lastContact ? Date.parse(lastContact) : null;
           const hotLot = Number(priority).valueOf() === 99;
           const vehicle = new Vehicle(
             row,
             currentPoint,
             nextPoint,
             commandPoint,
-            lastContact,
+            _lastContact,
             hotLot
           );
           vehicle.check_stale(
             vehicle_stale,
-            row.history_change_time
-              ? new Date(row.history_change_time).getTime()
+            row.historyChangeTime
+              ? new Date(row.historyChangeTime).getTime()
               : playback_last_event_time
               ? playback_last_event_time
               : null
@@ -307,7 +307,7 @@ export class MapDataService {
           this.store_stale_list(vehicle);
           models.push(vehicle);
         } catch (error) {
-          console.warn(`convert failed for vehicle_id ${row.id}: `, error);
+          console.warn(`convert failed for vehicleId ${row.id}: `, error);
         }
       }
       return models;
@@ -355,7 +355,7 @@ export class MapDataService {
     } else if (object_type === 'SEGMENT') {
       return this.data.segments;
     } else if (object_type === 'DISABLED_SEGMENT') {
-      return this.data.segments_disabled;
+      return this.data.segmentsDisabled;
     } else if (object_type === 'STATION') {
       return this.data.stations;
     } else if (object_type === 'BUFFER') {
@@ -376,7 +376,7 @@ export class MapDataService {
     let stale_index = this.stale_vehicles.indexOf(vehicle.id);
 
     // check if the list has to be updated
-    if (vehicle.is_stale) {
+    if (vehicle.isStale) {
       if (stale_index == -1) {
         // add
         this.stale_vehicles.push(vehicle.id);
@@ -399,17 +399,17 @@ export class MapDataService {
       });
 
       if (
-        (new_target_vehicle.cur_point &&
-          old_target_vehicle.cur_point &&
-          new_target_vehicle.cur_point.point !==
-            old_target_vehicle.cur_point.point) ||
-        old_target_vehicle.cur_point == null ||
-        old_target_vehicle.cur_point == undefined
+        (new_target_vehicle.curPoint &&
+          old_target_vehicle.curPoint &&
+          new_target_vehicle.curPoint.point !==
+            old_target_vehicle.curPoint.point) ||
+        old_target_vehicle.curPoint == null ||
+        old_target_vehicle.curPoint == undefined
       ) {
-        new_target_vehicle.last_point = old_target_vehicle.cur_point;
+        new_target_vehicle.last_point = old_target_vehicle.curPoint;
 
         // Mark as moved
-        new_target_vehicle.is_moved = true;
+        new_target_vehicle.isMoved = true;
       } else {
         new_target_vehicle.last_point = old_target_vehicle.last_point;
       }

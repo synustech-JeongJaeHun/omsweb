@@ -2972,7 +2972,7 @@ path.cluster_mask {
   width: 65px;
 }
 
-#cluster-dialog input[column_type="logical_id"] {
+#cluster-dialog input[column_type="logicalId"] {
   border: none;
   width: 200px;
 }

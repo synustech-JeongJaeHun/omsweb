@@ -5,39 +5,39 @@ export namespace Dto {
   export interface IBuffer {
     id: number;
     direction: string;
-    logical_id: string;
-    physical_id: string;
-    point_id: number;
+    logicalId: string;
+    physicalId: string;
+    pointId: number;
     group?: number;
   }
   export interface ICluster {
     id: number;
     color?: string;
-    logical_id: string;
-    max_vehicles: number;
+    logicalId: string;
+    maxVehicles: number;
     points?: string;
   }
   export interface IGroup {
     id: number;
-    logical_id: string;
+    logicalId: string;
     color: string;
     objects: any[];
   }
   export interface IMTL {
     id: number;
-    logical_id: string;
-    physical_id: string;
-    point_id: number;
+    logicalId: string;
+    physicalId: string;
+    pointId: number;
     group?: number;
-    in_use?: boolean;
+    inUse?: boolean;
     position?: any;
     mode?: any;
-    error_list?: any;
+    errorList?: any;
   }
   export interface IPoint extends ICoordinate {
     id: number;
-    logical_id: string;
-    physical_id: string;
+    logicalId: string;
+    physicalId: string;
   }
   export interface ISegPart {
     type?: string;
@@ -58,55 +58,55 @@ export namespace Dto {
     // x2?: number;
     // y2?: number;
 
-    start_point?: number;
-    end_point?: number;
+    startPoint?: number;
+    endPoint?: number;
     length: number;
-    logical_id: string;
-    physical_id: string;
-    segpart_id?: number;
+    logicalId: string;
+    physicalId: string;
+    segpartId?: number;
     segparts?: ISegPart[];
     speed: number;
 
     candidates?: any[];
-    travel_time: any;
-    is_validate?: boolean;
+    travelTime: any;
+    isValidate?: boolean;
   }
   export interface IStation {
     id: number;
-    logical_id: string;
-    physical_id: string;
+    logicalId: string;
+    physicalId: string;
     direction: string;
-    carrier_type: string;
-    point_id: number;
+    carrierType: string;
+    pointId: number;
     group?: number;
   }
   export interface IVehicle {
     id: number;
-    can_be_pushed: boolean;
-    cargo_state: string;
-    cargo_transfer_result: string;
-    cur_point?: number;
-    next_point?: number;
-    command_point?: any;
-    error_list: string;
-    is_blocked: boolean;
-    is_sensor_stopped?: boolean;
-    last_contact?: string;
-    location_dropoff?: string;
-    location_move?: string;
-    location_pickup?: string;
-    logical_id: string;
-    map_db: string;
+    canBePushed: boolean;
+    cargoState: string;
+    cargoTransferResult: string;
+    curPoint?: number;
+    nextPoint?: number;
+    commandPoint?: any;
+    errorList: string;
+    isBlocked: boolean;
+    isSensorStopped?: boolean;
+    lastContact?: string;
+    locationDropoff?: string;
+    locationMove?: string;
+    locationPickup?: string;
+    logicalId: string;
+    mapDb: string;
     mode: string;
-    moving_state: string;
-    order_id: number;
-    order_logical_id: string;
-    order_origin: string | string[];
-    physical_id: string;
+    movingState: string;
+    orderId: number;
+    orderLogicalId: string;
+    orderOrigin: string | string[];
+    physicalId: string;
     priority?: any;
     type: string;
     group?: number;
-    history_change_time?:any;
+    historyChangeTime?:any;
   }
 
   export interface ITrackData {
@@ -120,13 +120,13 @@ export namespace Dto {
     stations?: IStation[];
     vehicles?: IVehicle[];
 
-    vehicle_path?: any[];
-    segment_disabled?: any[];
+    vehiclePath?: any[];
+    segmentDisabled?: any[];
 
-    map_type?: MapTypes;
+    mapType?: MapTypes;
     width?: number;
     height?: number;
-    minimum_segment_length?: number;
+    minimumSegmentLength?: number;
 
   }
 }

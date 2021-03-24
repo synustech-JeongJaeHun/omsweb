@@ -24,7 +24,7 @@ namespace OMSWeb.Controllers
       this._trackSvc = trackSvc;
     }
 
-    [SnakeCase]
+    // [SnakeCase]
     [HttpGet("track")]
     public ActionResult<MapData> GetTrack()
     {
