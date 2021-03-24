@@ -8,9 +8,6 @@ namespace OMSWeb.Models
   {
     public int Id { get; set; }
     public string Origin { get; set; }
-
-    [Column("logical_id")]
-    public string LogicalId { get; set; }
     public string VehicleId { get; set; }
     public string LocationPickup { get; set; }
     public string state { get; set; }
