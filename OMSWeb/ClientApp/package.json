@@ -28,6 +28,7 @@
     "d3": "^5.16.0",
     "devextreme": "20.2.5",
     "devextreme-angular": "20.2.5",
+    "devextreme-aspnet-data-nojquery": "^2.8.2",
     "jquery": "^3.6.0",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",

@@ -5,7 +5,8 @@
 </div>
 
 <dx-data-grid
-  [dataSource]="dataSetResult?.items"
+  [dataSource]="dataSource"
+  [remoteOperations]="true"
   keyExpr="id"
   [height]="tableHeight"
   [repaintChangesOnly]="true"
@@ -48,8 +49,8 @@
   <dxi-column
     [width]="80"
     dataType="string"
-    dataField="vehicle_id"
-    [caption]="'names.vehicle_id' | translate"
+    dataField="vehicleId"
+    [caption]="'names.vehicleId' | translate"
     [customizeText]="transformVehicleId"
   ></dxi-column>
   <dxi-column
@@ -76,9 +77,9 @@
   ></dxi-column>
   <dxi-column
     dataType="string"
-    dataField="carrier_label"
+    dataField="carrierLabel"
     [allowSorting]="false"
-    [caption]="'names.carrier_label' | translate"
+    [caption]="'names.carrierLabel' | translate"
   ></dxi-column>
   <dxi-column
     [allowFiltering]="false"
