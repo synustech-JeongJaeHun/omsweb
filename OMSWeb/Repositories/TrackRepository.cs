@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Dapper;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Npgsql;
@@ -14,6 +15,16 @@ namespace OMSWeb.Repositories
   {
     public TrackRepository(IConfiguration configuration) : base(configuration)
     {
+    }
+
+    // @TODO test method 삭제
+    public IList<Cluster> Test() {
+      IList<Cluster> list;
+      using (var conn = ConnectTrack()) {
+        var sql = "select * from clusters";
+        list = conn.Query<Cluster>(sql).ToList();
+      }
+      return list;
     }
 
     public MapData GetMapData()

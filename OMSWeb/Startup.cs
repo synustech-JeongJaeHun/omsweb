@@ -43,8 +43,8 @@ namespace OMSWeb
       {
         options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
         options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
-        // options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-        options.SerializerSettings.ContractResolver = new DefaultContractResolver { NamingStrategy = new SnakeCaseNamingStrategy() };
+        options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+        // options.SerializerSettings.ContractResolver = new DefaultContractResolver { NamingStrategy = new SnakeCaseNamingStrategy() };
       });
 
       // load appSettings
@@ -94,6 +94,7 @@ namespace OMSWeb
       services.AddScoped<VehicleRepository>();
 
       services.AddScoped<TrackService>();
+      services.AddScoped<OrderService>();
 
       services.AddSingleton<CacheService>();
       // services.AddTransient<ProblemDetailsFactory, OmsProblemDetailsFactory>();  // @TODO problem handler 작성 후 사용

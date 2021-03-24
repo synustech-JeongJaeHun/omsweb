@@ -1,3 +1,4 @@
+using System.Data;
 using Microsoft.Extensions.Configuration;
 using Npgsql;
 
@@ -7,6 +8,7 @@ namespace OMSWeb.Repositories {
     protected string connectionStringTrack;
 
     public DataAccess(IConfiguration configuration) {
+      Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
       this.connectionStringUi = configuration.GetConnectionString("OMS-UI");  
       this.connectionStringTrack = configuration.GetConnectionString("OMS-Track");  
     }

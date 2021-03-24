@@ -8,6 +8,9 @@ using Newtonsoft.Json;
 using OMSWeb.Models.Tracks;
 using OMSWeb.Repositories;
 using OMSWeb.Services;
+using DevExtreme.AspNet.Data;
+using DevExtreme.AspNet.Mvc;
+using OMSWeb.Filters;
 
 namespace OMSWeb.Controllers
 {
@@ -21,6 +24,7 @@ namespace OMSWeb.Controllers
       this._trackSvc = trackSvc;
     }
 
+    [SnakeCase]
     [HttpGet("track")]
     public ActionResult<MapData> GetTrack()
     {
