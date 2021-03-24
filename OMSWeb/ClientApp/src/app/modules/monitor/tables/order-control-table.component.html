@@ -7,7 +7,6 @@
 <dx-data-grid
   [dataSource]="dataSource"
   [remoteOperations]="true"
-  keyExpr="id"
   [height]="tableHeight"
   [repaintChangesOnly]="true"
   [columnAutoWidth]="true"
@@ -17,10 +16,11 @@
   [showRowLines]="true"
   [hoverStateEnabled]="true"
   [(selectedRowKeys)]="selectedRows"
+  [headerFilter]="false"
 >
   <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
   <dxo-scrolling mode="virtual"></dxo-scrolling>
-  <dxo-paging [pageSize]="10"></dxo-paging>
+  <dxo-paging [pageSize]="50"></dxo-paging>
   <dxo-header-filter [visible]="false"></dxo-header-filter>
   <dxo-pager
     [showPageSizeSelector]="true"
@@ -34,10 +34,10 @@
   ></dxo-search-panel>
 
   <dxi-column
-    [allowFiltering]="false"
     [width]="80"
     dataType="string"
     dataField="id"
+    sortOrder="desc"
     [caption]="'names.id' | translate"
   ></dxi-column>
   <dxi-column
@@ -54,7 +54,6 @@
     [customizeText]="transformVehicleId"
   ></dxi-column>
   <dxi-column
-    [allowFiltering]="false"
     [width]="120"
     dataType="string"
     dataField="locationPickup"
@@ -62,7 +61,6 @@
     [customizeText]="transformLocationId"
   ></dxi-column>
   <dxi-column
-    [allowFiltering]="false"
     [width]="120"
     dataType="string"
     dataField="locationDropoff"
@@ -82,19 +80,15 @@
     [caption]="'names.carrierLabel' | translate"
   ></dxi-column>
   <dxi-column
-    [allowFiltering]="false"
     [width]="120"
     dataType="datetime"
     dataField="timeCreated"
-    [allowSorting]="false"
     [caption]="'names.timeCreated' | translate"
   ></dxi-column>
   <dxi-column
-    [allowFiltering]="false"
     [width]="120"
     dataType="datetime"
     dataField="timeAssigned"
-    [allowSorting]="false"
     [caption]="'names.timeAssigned' | translate"
   ></dxi-column>
 </dx-data-grid>
