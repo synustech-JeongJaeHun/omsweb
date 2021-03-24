@@ -94,6 +94,7 @@ namespace OMSWeb
       services.AddScoped<VehicleRepository>();
 
       services.AddScoped<TrackService>();
+      services.AddScoped<StatusService>();
       services.AddScoped<OrderService>();
 
       services.AddSingleton<CacheService>();

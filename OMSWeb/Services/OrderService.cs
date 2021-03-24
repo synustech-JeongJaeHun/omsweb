@@ -13,8 +13,5 @@ namespace OMSWeb.Services
       _repo = repo;
     }
 
-    public IQueryable<OrderState> QueryStates() {
-      return _repo.QueryStates();
-    }
   }
 }

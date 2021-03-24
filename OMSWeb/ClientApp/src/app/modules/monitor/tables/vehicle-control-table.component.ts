@@ -1,4 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
+import CustomStore from 'devextreme/data/custom_store';
+import * as AspNetData from 'devextreme-aspnet-data-nojquery';
+
 import { IPaginatedResult } from '../../../models/base.model';
 import { IVehicleStatusRow } from '../../../models/vehicle-status.model';
 import { StatusService } from '../../../services/status.service';
@@ -11,16 +14,21 @@ import { StatusService } from '../../../services/status.service';
 export class VehicleControlTableComponent implements OnInit {
   @Input() tableHeight: number;
 
-  dataSetResult: IPaginatedResult<IVehicleStatusRow>;
-  loaded = false;
+  dataSource: any;
   selectedRows: IVehicleStatusRow[] = [];
 
-  constructor(private statusSvc: StatusService) {}
+  constructor(private statusSvc: StatusService) {
+    this.dataSource = this.getStatesStore();
+  }
 
   ngOnInit(): void {
-    this.statusSvc.vehicleStatus().subscribe((res) => {
-      this.dataSetResult = res;
-      this.loaded = true;
+  }
+
+  private getStatesStore() : CustomStore {
+    const storeUrl = '/api/status';
+    return AspNetData.createStore({
+      key: 'id',
+      loadUrl: `${storeUrl}/vehicles`,
     });
   }
 }

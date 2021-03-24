@@ -14,9 +14,7 @@ import CustomStore from 'devextreme/data/custom_store';
 export class OrderControlTableComponent implements OnInit {
   @Input() tableHeight: number;
 
-  dataSetResult: IPaginatedResult<IOrderStatusRow>;
   dataSource: any;
-  loaded = false;
   selectedRows: number[] = [];
 
   transformVehicleId = ({ value = '' }): string => {
@@ -34,17 +32,13 @@ export class OrderControlTableComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // this.statusSvc.orderStatus().subscribe((res) => {
-    //   this.dataSetResult = res;
-    //   this.loaded = true;
-    // });
   }
 
   private getStatesStore() : CustomStore {
-    const storeUrl = '/api/orders';
+    const storeUrl = '/api/status';
     return AspNetData.createStore({
       key: 'id',
-      loadUrl: `${storeUrl}/states`,
+      loadUrl: `${storeUrl}/orders`,
     });
   }
 }

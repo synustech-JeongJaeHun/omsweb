@@ -19,9 +19,12 @@ namespace OMSWeb.Controllers
   public class StatusController : ControllerBase
   {
     private readonly TrackService _trackSvc;
-    public StatusController(TrackService trackSvc)
+    private readonly StatusService _statusSvc;
+
+    public StatusController(TrackService trackSvc, StatusService statusSvc)
     {
       this._trackSvc = trackSvc;
+      this._statusSvc = statusSvc;
     }
 
     // [SnakeCase]
@@ -29,6 +32,18 @@ namespace OMSWeb.Controllers
     public ActionResult<MapData> GetTrack()
     {
       return this._trackSvc.GetMapData();
+    }
+
+    [HttpGet("orders")]
+    public object GetOrderStatus(DataSourceLoadOptions loadOptions)
+    {
+      return DataSourceLoader.Load(_statusSvc.QueryOrderStates(), loadOptions);
+    }
+
+    [HttpGet("vehicles")]
+    public object GetVehicleStatus(DataSourceLoadOptions loadOptions)
+    {
+      return DataSourceLoader.Load(_statusSvc.QueryVehicleStates(), loadOptions);
     }
   }
 }

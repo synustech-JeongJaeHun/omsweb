@@ -21,12 +21,5 @@ namespace OMSWeb.Controllers
       _orderSvc = orderSvc;
     }
 
-    [HttpGet("states")]
-    public object GetStatus(DataSourceLoadOptions loadOptions)
-    {
-      return DataSourceLoader.Load(_orderSvc.QueryStates(), loadOptions);
-      // return this._trackSvc.Test();
-    }
-
   }
 }
