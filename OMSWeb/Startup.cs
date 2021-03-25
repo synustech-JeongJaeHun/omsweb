@@ -14,6 +14,7 @@ using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using OMSWeb.Handlers;
+using OMSWeb.Hubs;
 using OMSWeb.Models;
 using OMSWeb.Models.Entities;
 using OMSWeb.Repositories;
@@ -97,9 +98,16 @@ namespace OMSWeb
       services.AddScoped<StatusService>();
       services.AddScoped<OrderService>();
 
+      services.AddSingleton<PushService>();
       services.AddSingleton<CacheService>();
       // services.AddTransient<ProblemDetailsFactory, OmsProblemDetailsFactory>();  // @TODO problem handler 작성 후 사용
       #endregion
+
+      #region SignalR
+      services.AddSignalR();
+      #endregion
+
+      services.AddHostedService<DataWatcherService>();
 
       services.AddTransient<ProblemDetailsFactory, OmsProblemDetailsFactory>();
 
@@ -139,6 +147,7 @@ namespace OMSWeb
 
       app.UseEndpoints(endpoints =>
       {
+        endpoints.MapHub<OMSHub>("/hubs/oms");
         endpoints.MapControllerRoute(
                   name: "default",
                   pattern: "{controller}/{action=Index}/{id?}");

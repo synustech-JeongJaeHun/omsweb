@@ -186,12 +186,12 @@ export class MapDataService {
     vehicle_stale: number,
     playback_last_event_time: number
   ): Vehicle[] {
+    if (!rows) return [];
     if (!Array.isArray(rows)) {
       rows = [rows];
     }
 
     let converted_vehicles = [];
-    if (!rows) return [];
     rows = this.inject_group_data('vehicle', rows);
 
     converted_vehicles = rows.reduce((models: Vehicle[], row: Dto.IVehicle) => {

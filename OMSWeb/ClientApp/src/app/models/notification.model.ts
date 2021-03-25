@@ -46,3 +46,12 @@ export interface IVehicleAlarm {
   description?: string;
   action?: string;
 }
+
+export interface IDataChangeEvent {
+  table: string;
+  operation: string;
+  id?: number;
+  level?: number;
+  vehicleId?: number;
+  data?: any;
+}

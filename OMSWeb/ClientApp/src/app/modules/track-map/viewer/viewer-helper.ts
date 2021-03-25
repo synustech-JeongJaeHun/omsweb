@@ -604,10 +604,7 @@ export class ViewController {
     this.centerZoom('INSTANT');
   }
   update_vehicles(raw_data, operation, vehicleId, is_skip_rendering) {
-    // let is_dom_update = false;
     let target_index;
-    // let update: any = {};
-    // let updated_vehicles = [];
 
     // get target index
     if (operation == 'DELETE' || operation == 'UPDATE') {
@@ -625,51 +622,6 @@ export class ViewController {
       this.vehicle_stale,
       this.playback_last_event_time
     );
-    // @TODO moved to data service
-
-    // // apply update
-    // if (operation == 'DELETE') {
-    //   if (target_index > -1) {
-    //     this.layout_data.vehicles.splice(target_index, 1);
-    //     is_dom_update = true;
-    //   }
-    // } else {
-    //   // convert raw data to object
-    //   updated_vehicles = this.convert_vehicle_object(raw_data);
-
-    //   if (operation == 'INSERT') {
-    //     this.layout_data.vehicles = updated_vehicles;
-    //     // for (let i = 0; i < updated_vehicles.length; i++) {
-    //     //   this.layout_data.vehicles.push(updated_vehicles[i]);
-    //     // }
-
-    //     is_dom_update = true;
-    //   } else if (operation == 'UPDATE') {
-    //     if (target_index > -1) {
-    //       updated_vehicles = this.set_last_point(
-    //         this.layout_data.vehicles,
-    //         updated_vehicles
-    //       );
-
-    //       let old_vehicle = this.vehicles[target_index];
-    //       let updated_props = {};
-    //       for (let prop in updated_vehicles[0]) {
-    //         if (
-    //           JSON.stringify(old_vehicle[prop]) !=
-    //           JSON.stringify(updated_vehicles[0][prop])
-    //         ) {
-    //           updated_props[prop] = true;
-    //         }
-    //       }
-
-    //       // Put the update properties in to updat object with vehicle id at the key
-    //       update[parseInt(updated_vehicles[0].id)] = updated_props;
-
-    //       this.layout_data.vehicles[target_index] = updated_vehicles[0];
-    //       is_dom_update = true;
-    //     }
-    //   }
-    // }
 
     // update dom
     if (isDomUpdated && !is_skip_rendering) {

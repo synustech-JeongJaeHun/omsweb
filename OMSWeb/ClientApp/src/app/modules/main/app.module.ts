@@ -9,6 +9,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SharedModule } from '../shared/shared.module';
 
+import { HubService } from '@oms/services/hub.service';
+
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
@@ -30,7 +32,7 @@ export function HttpLoaderFactory(http: HttpClient) {
       },
     }),
   ],
-  providers: [],
+  providers: [HubService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

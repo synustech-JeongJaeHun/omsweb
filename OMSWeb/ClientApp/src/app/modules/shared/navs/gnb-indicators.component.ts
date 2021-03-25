@@ -1,4 +1,10 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import {
   MatDialog,
   MatDialogRef,
@@ -7,14 +13,16 @@ import {
 import { MdePopoverTrigger } from '@material-extended/mde';
 
 import { NotificationsService } from '@oms/services/notifications.service';
+import { Subscription } from 'rxjs';
 import { IAlert } from '../../../models/notification.model';
+import { HubService } from '../../../services/hub.service';
 import { AlarmDialogComponent } from '../dialogs/alarm-dialog.component';
 @Component({
   selector: 'oms-gnb-indicators',
   templateUrl: './gnb-indicators.component.html',
   styleUrls: ['./gnb-indicators.component.scss'],
 })
-export class GnbIndicatorsComponent implements OnInit {
+export class GnbIndicatorsComponent implements OnInit, OnDestroy {
   @ViewChild(MdePopoverTrigger) btnWarn: MdePopoverTrigger;
   @ViewChild('btnAlarm', { read: ElementRef }) btnAlarm: ElementRef;
 
@@ -25,6 +33,10 @@ export class GnbIndicatorsComponent implements OnInit {
   target: any;
 
   warnList: IAlert[] = [];
+
+  //#region Subscription
+  // private summary$: Subscription;
+  //#endregion
 
   private _alarmDlg: MatDialogRef<AlarmDialogComponent, any>;
 
@@ -45,10 +57,17 @@ export class GnbIndicatorsComponent implements OnInit {
 
   constructor(
     private notifySvc: NotificationsService,
+    private hubSvc: HubService,
     private dialog: MatDialog
   ) {}
+  ngOnDestroy(): void {
+    // this.summary$ && this.summary$.unsubscribe();
+  }
 
   ngOnInit(): void {
+    // this.summary$ = this.hubSvc.alarmSummaryChanged.subscribe((info) => {
+    //   console.warn('## alarm summary changed >>', info);
+    // });
     this.notifySvc.alarmCount().subscribe((alarm) => {
       this.alarmCount = alarm.total;
       this.isCriticalAlarm = alarm.critical > 0;

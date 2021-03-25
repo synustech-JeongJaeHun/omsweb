@@ -7,106 +7,107 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Npgsql;
 using OMSWeb.Models.Tracks;
+using OMSWeb.Services;
 using Buffer = OMSWeb.Models.Tracks.Buffer;
 
 namespace OMSWeb.Repositories
 {
   public class TrackRepository : DataAccess
   {
-    public TrackRepository(IConfiguration configuration) : base(configuration)
+    private const int CACHE_LIFE = 30;
+    private readonly CacheService _cache;
+
+    public TrackRepository(IConfiguration configuration, CacheService cache) : base(configuration)
     {
-    }
-
-    // @TODO test method 삭제
-    public IList<Cluster> Test() {
-      IList<Cluster> list;
-      using (var conn = ConnectTrack()) {
-        var sql = "select * from clusters";
-        list = conn.Query<Cluster>(sql).ToList();
-      }
-      return list;
-    }
-
-    public MapData GetMapData()
-    {
-      MapData entity = new MapData
-      {
-        Size = this.GetDimension(),
-      };
-
-      return entity;
+      this._cache = cache;
     }
 
     public MapDimension GetDimension()
     {
-      MapDimension entity = null;
-      string sql = @"
+      var key = CacheKeys.MapSize;
+      MapDimension entity = _cache.GetValue<MapDimension>(key);
+      if (entity == null)
+      {
+        string sql = @"
 SELECT min(x) AS min_x, min(y) AS min_y, max(x) AS max_x, max(y) AS max_y, 
   max(x) - min(x) AS width, max(y) - min(y) AS height 
 FROM points
 --*user_id_condition*--WHERE user_id =$1";
-      using (var conn = ConnectTrack())
-      {
-        using (var cmd = new NpgsqlCommand(sql, conn))
+        using (var conn = ConnectTrack())
         {
-          conn.Open();
-          using (var dr = cmd.ExecuteReader())
+          using (var cmd = new NpgsqlCommand(sql, conn))
           {
-            if (dr.Read())
+            conn.Open();
+            using (var dr = cmd.ExecuteReader())
             {
-              entity = new MapDimension
+              if (dr.Read())
               {
-                MinX = Convert.ToInt32(dr["min_x"]),
-                MinY = Convert.ToInt32(dr["min_y"]),
-                MaxX = Convert.ToInt32(dr["max_x"]),
-                MaxY = Convert.ToInt32(dr["max_y"]),
-                Width = Convert.ToInt32(dr["width"]),
-                Height = Convert.ToInt32(dr["height"]),
-              };
+                entity = new MapDimension
+                {
+                  MinX = Convert.ToInt32(dr["min_x"]),
+                  MinY = Convert.ToInt32(dr["min_y"]),
+                  MaxX = Convert.ToInt32(dr["max_x"]),
+                  MaxY = Convert.ToInt32(dr["max_y"]),
+                  Width = Convert.ToInt32(dr["width"]),
+                  Height = Convert.ToInt32(dr["height"]),
+                };
+              }
             }
           }
         }
+        _cache.SetValue<MapDimension>(key, entity, DateTimeOffset.Now.AddMinutes(CACHE_LIFE));
       }
       return entity;
     }
 
-    public IList<Point> LoadPoints()
+    public Point[] LoadPoints()
     {
-      var models = new List<Point>();
-      string sql = @"
+      var key = CacheKeys.Points;
+      var data = _cache.GetValue<Point[]>(key);
+      if (data == null)
+      {
+        var models = new List<Point>();
+        string sql = @"
 SELECT id AS id, x AS x, y AS y, physical_id AS physical_id, logical_id AS logical_id  
 FROM points
 --*user_id_condition*--WHERE user_id = $1
 ORDER BY id";
-      using (var conn = ConnectTrack())
-      {
-        using (var cmd = new NpgsqlCommand(sql, conn))
+        using (var conn = ConnectTrack())
         {
-          conn.Open();
-          using (var dr = cmd.ExecuteReader())
+          using (var cmd = new NpgsqlCommand(sql, conn))
           {
-            while (dr.Read())
+            conn.Open();
+            using (var dr = cmd.ExecuteReader())
             {
-              models.Add(new Point
+              while (dr.Read())
               {
-                Id = Convert.ToInt32(dr["id"]),
-                X = Convert.ToInt32(dr["x"]),
-                Y = Convert.ToInt32(dr["y"]),
-                PhysicalId = dr["physical_id"].ToString(),
-                LogicalId = dr["logical_id"].ToString(),
+                models.Add(new Point
+                {
+                  Id = Convert.ToInt32(dr["id"]),
+                  X = Convert.ToInt32(dr["x"]),
+                  Y = Convert.ToInt32(dr["y"]),
+                  PhysicalId = dr["physical_id"].ToString(),
+                  LogicalId = dr["logical_id"].ToString(),
+                }
+               );
               }
-             );
             }
           }
         }
+        data = models.ToArray();
+        _cache.SetValue<Point[]>(key, data, DateTimeOffset.Now.AddMinutes(CACHE_LIFE));
       }
-      return models;
+      return data;
     }
 
-    public IList<SegmentWithPart> LoadSegments()
+    public SegmentWithPart[] LoadSegments()
     {
-      var models = new List<SegmentWithPart>();
-      string sql = @"
+      var key = CacheKeys.Segments;
+      var data = _cache.GetValue<SegmentWithPart[]>(key);
+      if (data == null)
+      {
+        var models = new List<SegmentWithPart>();
+        string sql = @"
 SELECT SP.segment_id AS id, SG.physical_id AS physical_id, SG.logical_id AS logical_id, SG.start_point, SG.end_point, 
   SP.id AS segpart_id, 
   type,
@@ -119,170 +120,205 @@ INNER JOIN segments AS SG
 --*user_id_condition*--WHERE SP.user_id = $1
 ORDER BY SP.segment_id, SP.id
 ";
-      using (var conn = ConnectTrack())
-      {
-        using (var cmd = new NpgsqlCommand(sql, conn))
+        using (var conn = ConnectTrack())
         {
-          conn.Open();
-          using (var dr = cmd.ExecuteReader())
+          using (var cmd = new NpgsqlCommand(sql, conn))
           {
-            while (dr.Read())
+            conn.Open();
+            using (var dr = cmd.ExecuteReader())
             {
-              models.Add(new SegmentWithPart
+              while (dr.Read())
               {
-                Id = dr["id"].TryInteger(),
-                PhysicalId = dr["physical_id"].ToString(),
-                LogicalId = dr["logical_id"].ToString(),
-                StartPoint = dr["start_point"].TryInteger(),
-                EndPoint = dr["end_point"].TryInteger(),
-                Speed = dr["speed"].TryFloat(),
-                Length = dr["length"].TryFloat(),
-                Type = dr["type"].ToString(),
-                Direction = dr["direction"].ToString(),
-                Location = dr["location"].ToString(),
-                SegpartId = dr["segpart_id"].TryInteger(),
+                models.Add(new SegmentWithPart
+                {
+                  Id = dr["id"].TryInteger(),
+                  PhysicalId = dr["physical_id"].ToString(),
+                  LogicalId = dr["logical_id"].ToString(),
+                  StartPoint = dr["start_point"].TryInteger(),
+                  EndPoint = dr["end_point"].TryInteger(),
+                  Speed = dr["speed"].TryFloat(),
+                  Length = dr["length"].TryFloat(),
+                  Type = dr["type"].ToString(),
+                  Direction = dr["direction"].ToString(),
+                  Location = dr["location"].ToString(),
+                  SegpartId = dr["segpart_id"].TryInteger(),
+                }
+               );
               }
-             );
             }
           }
         }
+        data = models.ToArray();
+        _cache.SetValue<SegmentWithPart[]>(key, data, DateTimeOffset.Now.AddMinutes(CACHE_LIFE));
       }
-      return models;
+      return data;
     }
-    public IList<DisabledSegment> LoadDisabledSegments()
+    public DisabledSegment[] LoadDisabledSegments()
     {
-      var models = new List<DisabledSegment>();
-      string sql = @"
+      var key = CacheKeys.SegmentDisabled;
+      var data = _cache.GetValue<DisabledSegment[]>(key);
+      if (data == null)
+      {
+        var models = new List<DisabledSegment>();
+        string sql = @"
 SELECT id, segment_id, disabled_by AS disabled_by, reason AS disabled_reason
 FROM segment_blocking
 --*user_id_condition*--WHERE user_id =$1
 ORDER BY segment_id
 ";
-      using (var conn = ConnectTrack())
-      {
-        using (var cmd = new NpgsqlCommand(sql, conn))
+        using (var conn = ConnectTrack())
         {
-          conn.Open();
-          using (var dr = cmd.ExecuteReader())
+          using (var cmd = new NpgsqlCommand(sql, conn))
           {
-            while (dr.Read())
+            conn.Open();
+            using (var dr = cmd.ExecuteReader())
             {
-              models.Add(new DisabledSegment
+              while (dr.Read())
               {
-                Id = Convert.ToInt32(dr["id"]),
-                DisabledBy = dr["disabled_by"].ToString(),
-                Reason = dr["reason"].ToString(),
-                SegmentId = Convert.ToInt32(dr["segment_id"]),
+                models.Add(new DisabledSegment
+                {
+                  Id = Convert.ToInt32(dr["id"]),
+                  DisabledBy = dr["disabled_by"].ToString(),
+                  Reason = dr["reason"].ToString(),
+                  SegmentId = Convert.ToInt32(dr["segment_id"]),
+                }
+               );
               }
-             );
             }
           }
         }
+        data = models.ToArray();
+        _cache.SetValue<DisabledSegment[]>(key, data, DateTimeOffset.Now.AddMinutes(CACHE_LIFE));
       }
-      return models;
+      return data;
     }
-    public IList<Station> LoadStations()
+    public Station[] LoadStations()
     {
-      var models = new List<Station>();
-      string sql = @"
+      var key = CacheKeys.Stations;
+      var data = _cache.GetValue<Station[]>(key);
+      if (data == null)
+      {
+        var models = new List<Station>();
+        string sql = @"
 SELECT id AS id, physical_id AS physical_id, logical_id AS logical_id, point AS point_id,
   direction AS direction, carrier_type AS carrier_type
 FROM stations
 --*user_id_condition*--WHERE user_id =$1
 ";
-      using (var conn = ConnectTrack())
-      {
-        using (var cmd = new NpgsqlCommand(sql, conn))
+        using (var conn = ConnectTrack())
         {
-          conn.Open();
-          using (var dr = cmd.ExecuteReader())
+          using (var cmd = new NpgsqlCommand(sql, conn))
           {
-            while (dr.Read())
+            conn.Open();
+            using (var dr = cmd.ExecuteReader())
             {
-              models.Add(new Station
+              while (dr.Read())
               {
-                Id = Convert.ToInt32(dr["id"]),
-                PhysicalId = dr["physical_id"].ToString(),
-                LogicalId = dr["logical_id"].ToString(),
-                PointId = dr["point_id"].TryIntegerOrNull(),
-                Direction = dr["direction"].ToString(),
-                CarrierType = dr["carrier_type"].TryIntegerOrNull(),
+                models.Add(new Station
+                {
+                  Id = Convert.ToInt32(dr["id"]),
+                  PhysicalId = dr["physical_id"].ToString(),
+                  LogicalId = dr["logical_id"].ToString(),
+                  PointId = dr["point_id"].TryIntegerOrNull(),
+                  Direction = dr["direction"].ToString(),
+                  CarrierType = dr["carrier_type"].TryIntegerOrNull(),
+                }
+               );
               }
-             );
             }
           }
         }
+        data = models.ToArray();
+        _cache.SetValue<Station[]>(key, data, DateTimeOffset.Now.AddMinutes(CACHE_LIFE));
       }
-      return models;
+      return data;
     }
-    public IList<Buffer> LoadBuffers()
+    public Buffer[] LoadBuffers()
     {
-      var models = new List<Buffer>();
-      string sql = @"
+      var key = CacheKeys.Buffers;
+      var data = _cache.GetValue<Buffer[]>(key);
+      if (data == null)
+      {
+        var models = new List<Buffer>();
+        string sql = @"
 SELECT id, physical_id, logical_id AS logical_id, point AS point_id,
   direction AS direction
 FROM buffers
 --*user_id_condition*--WHERE user_id =$1
 ";
-      using (var conn = ConnectTrack())
-      {
-        using (var cmd = new NpgsqlCommand(sql, conn))
+        using (var conn = ConnectTrack())
         {
-          conn.Open();
-          using (var dr = cmd.ExecuteReader())
+          using (var cmd = new NpgsqlCommand(sql, conn))
           {
-            while (dr.Read())
+            conn.Open();
+            using (var dr = cmd.ExecuteReader())
             {
-              models.Add(new Buffer
+              while (dr.Read())
               {
-                Id = Convert.ToInt32(dr["id"]),
-                PhysicalId = dr["physical_id"].ToString(),
-                LogicalId = dr["logical_id"].ToString(),
-                PointId = dr["point_id"].TryIntegerOrNull(),
-                Direction = dr["direction"].ToString(),
+                models.Add(new Buffer
+                {
+                  Id = Convert.ToInt32(dr["id"]),
+                  PhysicalId = dr["physical_id"].ToString(),
+                  LogicalId = dr["logical_id"].ToString(),
+                  PointId = dr["point_id"].TryIntegerOrNull(),
+                  Direction = dr["direction"].ToString(),
+                }
+               );
               }
-             );
             }
           }
         }
+        data = models.ToArray();
+        _cache.SetValue<Buffer[]>(key, data, DateTimeOffset.Now.AddMinutes(CACHE_LIFE));
       }
-      return models;
+      return data;
     }
-    public IList<Mtl> LoadMtls()
+    public Mtl[] LoadMtls()
     {
-      var models = new List<Mtl>();
-      string sql = @"
+      var key = CacheKeys.Mtls;
+      var data = _cache.GetValue<Mtl[]>(key);
+      if (data == null)
+      {
+        var models = new List<Mtl>();
+        string sql = @"
 SELECT id, physical_id, logical_id AS logical_id, point AS point_id
 FROM mtls
 --*user_id_condition*--WHERE user_id =$1
 ";
-      using (var conn = ConnectTrack())
-      {
-        using (var cmd = new NpgsqlCommand(sql, conn))
+        using (var conn = ConnectTrack())
         {
-          conn.Open();
-          using (var dr = cmd.ExecuteReader())
+          using (var cmd = new NpgsqlCommand(sql, conn))
           {
-            while (dr.Read())
+            conn.Open();
+            using (var dr = cmd.ExecuteReader())
             {
-              models.Add(new Mtl
+              while (dr.Read())
               {
-                Id = Convert.ToInt32(dr["id"]),
-                PhysicalId = dr["physical_id"].ToString(),
-                LogicalId = dr["logical_id"].ToString(),
-                PointId = dr["point_id"].TryIntegerOrNull(),
+                models.Add(new Mtl
+                {
+                  Id = Convert.ToInt32(dr["id"]),
+                  PhysicalId = dr["physical_id"].ToString(),
+                  LogicalId = dr["logical_id"].ToString(),
+                  PointId = dr["point_id"].TryIntegerOrNull(),
+                }
+               );
               }
-             );
             }
           }
         }
+        data = models.ToArray();
+        _cache.SetValue<Mtl[]>(key, data, DateTimeOffset.Now.AddMinutes(CACHE_LIFE));
       }
-      return models;
+      return data;
     }
-    public IList<Cluster> LoadClusters()
+    public Cluster[] LoadClusters()
     {
-      var models = new List<Cluster>();
-      string sql = @"
+      var key = CacheKeys.Clusters;
+      var data = _cache.GetValue<Cluster[]>(key);
+      if (data == null)
+      {
+        var models = new List<Cluster>();
+        string sql = @"
 SELECT id, logical_id, max_vehicles, string_agg(point_id::TEXT, ', ' ORDER BY point_id) AS points, color
 FROM (
     SELECT CT.id, CT.logical_id, CT.max_vehicles, CP.point_id AS point_id, CT.color
@@ -293,63 +329,77 @@ FROM (
 ) AS NEW_DATA
 GROUP BY id, logical_id, max_vehicles, color
 ";
-      using (var conn = ConnectTrack())
-      {
-        using (var cmd = new NpgsqlCommand(sql, conn))
+        using (var conn = ConnectTrack())
         {
-          conn.Open();
-          using (var dr = cmd.ExecuteReader())
+          using (var cmd = new NpgsqlCommand(sql, conn))
           {
-            while (dr.Read())
+            conn.Open();
+            using (var dr = cmd.ExecuteReader())
             {
-              models.Add(new Cluster
+              while (dr.Read())
               {
-                Id = Convert.ToInt32(dr["id"]),
-                LogicalId = dr["logical_id"].ToString(),
-                MaxVehicles = dr["max_vehicles"].TryInteger(),
-                Color = dr["color"].ToString(),
-                Points = dr["points"].ToString(),
+                models.Add(new Cluster
+                {
+                  Id = Convert.ToInt32(dr["id"]),
+                  LogicalId = dr["logical_id"].ToString(),
+                  MaxVehicles = dr["max_vehicles"].TryInteger(),
+                  Color = dr["color"].ToString(),
+                  Points = dr["points"].ToString(),
+                }
+               );
               }
-             );
             }
           }
         }
+        data = models.ToArray();
+        _cache.SetValue<Cluster[]>(key, data, DateTimeOffset.Now.AddMinutes(CACHE_LIFE));
       }
-      return models;
+      return data;
     }
-    public IList<VehiclePath> LoadVehiclePaths()
+    public VehiclePath[] LoadVehiclePaths()
     {
-      var models = new List<VehiclePath>();
-      string sql = @"
+      var key = CacheKeys.VehiclePaths;
+      var data = _cache.GetValue<VehiclePath[]>(key);
+      if (data == null)
+      {
+        var models = new List<VehiclePath>();
+        string sql = @"
 SELECT vehicle_id AS id, expected_path AS path, calculate_path AS is_calculate_path
 FROM vehicle_paths
 ";
-      using (var conn = ConnectTrack())
-      {
-        using (var cmd = new NpgsqlCommand(sql, conn))
+        using (var conn = ConnectTrack())
         {
-          conn.Open();
-          using (var dr = cmd.ExecuteReader())
+          using (var cmd = new NpgsqlCommand(sql, conn))
           {
-            while (dr.Read())
+            conn.Open();
+            using (var dr = cmd.ExecuteReader())
             {
-              models.Add(new VehiclePath
+              while (dr.Read())
               {
-                Id = Convert.ToInt32(dr["id"]),
-                Path = dr["path"].ToString(),
-                IsCalculatePath = dr["is_calculate_path"].TryBooleanOrNull(),
+                models.Add(new VehiclePath
+                {
+                  Id = Convert.ToInt32(dr["id"]),
+                  Path = dr["path"].ToString(),
+                  IsCalculatePath = dr["is_calculate_path"].TryBooleanOrNull(),
+                }
+               );
               }
-             );
             }
           }
         }
+        data = models.ToArray();
+        _cache.SetValue<VehiclePath[]>(key, data, DateTimeOffset.Now.AddMinutes(CACHE_LIFE));
       }
-      return models;
+      return data;
     }
-    public IList<VehiclePosition> LoadVehiclePositions()
+    public VehiclePosition[] LoadVehiclePositions()
     {
-      var models = new List<VehiclePosition>();
-      string sql = @"
+      var key = CacheKeys.Vehicles;
+      var data = _cache.GetValue<VehiclePosition[]>(key);
+      if (data == null)
+      {
+        var models = new List<VehiclePosition>();
+        string sql = @"
 SELECT 
     VH.id, VH.physical_id, VH.logical_id, VH.last_point AS cur_point, VH.next_point, VH.last_contact,
     VH.mode, VH.can_be_pushed, VH.order_origin, VH.moving_state, VH.cargo_state, VH.is_sensor_stopped, VH.is_blocked, VH.error_list, VH.type, VH.cargo_transfer_result, VH.map_db,
@@ -376,85 +426,93 @@ ON VH.order_id = OD.id AND OD.time_completed IS NULL AND OD.time_aborted IS NULL
 --*user_id_condition*--WHERE VH.user_id = $1
 ORDER BY VH.id
 ";
-      using (var conn = ConnectTrack())
-      {
-        using (var cmd = new NpgsqlCommand(sql, conn))
+        using (var conn = ConnectTrack())
         {
-          conn.Open();
-          using (var dr = cmd.ExecuteReader())
+          using (var cmd = new NpgsqlCommand(sql, conn))
           {
-            while (dr.Read())
+            conn.Open();
+            using (var dr = cmd.ExecuteReader())
             {
-              models.Add(new VehiclePosition
+              while (dr.Read())
               {
-                Id = Convert.ToInt32(dr["id"]),
-                PhysicalId = dr["physical_id"].ToString(),
-                LogicalId = dr["logical_id"].ToString(),
-                CurPoint = dr["cur_point"].TryIntegerOrNull(),
-                NextPoint = dr["next_point"].TryIntegerOrNull(),
-                CommandPoint = dr["command_point"].ToString(),
-                LastContact = dr["last_contact"].TryDateTimeOrNull(),
-                Mode = dr["mode"].ToString(),
-                CanBePushed = dr["can_be_pushed"].TryBoolean(),
-                OrderOrigin = dr["order_origin"].ToString(),
-                MovingState = dr["moving_state"].ToString(),
-                CargoState = dr["cargo_state"].ToString(),
-                IsSensorStopped = dr["is_sensor_stopped"].TryBoolean(),
-                IsBlocked = dr["is_blocked"].TryBoolean(),
-                ErrorList = dr["error_list"].ToString(),
-                Type = dr["type"].ToString(),
-                CargoTransferResult = dr["cargo_transfer_result"].ToString(),
-                MapDb = dr["map_db"].ToString(),
-                OrderId = dr["order_id"].TryIntegerOrNull(),
-                OrderLogicalId = dr["order_logical_id"].ToString(),
-                LocationPickup = dr["location_pickup"].ToString(),
-                LocationDropoff = dr["location_dropoff"].ToString(),
-                LocationMove = dr["location_move"].ToString(),
-                Priority = dr["priority"].TryIntegerOrNull(),
+                models.Add(new VehiclePosition
+                {
+                  Id = Convert.ToInt32(dr["id"]),
+                  PhysicalId = dr["physical_id"].ToString(),
+                  LogicalId = dr["logical_id"].ToString(),
+                  CurPoint = dr["cur_point"].TryIntegerOrNull(),
+                  NextPoint = dr["next_point"].TryIntegerOrNull(),
+                  CommandPoint = dr["command_point"].ToString(),
+                  LastContact = dr["last_contact"].TryDateTimeOrNull(),
+                  Mode = dr["mode"].ToString(),
+                  CanBePushed = dr["can_be_pushed"].TryBoolean(),
+                  OrderOrigin = dr["order_origin"].ToString(),
+                  MovingState = dr["moving_state"].ToString(),
+                  CargoState = dr["cargo_state"].ToString(),
+                  IsSensorStopped = dr["is_sensor_stopped"].TryBoolean(),
+                  IsBlocked = dr["is_blocked"].TryBoolean(),
+                  ErrorList = dr["error_list"].ToString(),
+                  Type = dr["type"].ToString(),
+                  CargoTransferResult = dr["cargo_transfer_result"].ToString(),
+                  MapDb = dr["map_db"].ToString(),
+                  OrderId = dr["order_id"].TryIntegerOrNull(),
+                  OrderLogicalId = dr["order_logical_id"].ToString(),
+                  LocationPickup = dr["location_pickup"].ToString(),
+                  LocationDropoff = dr["location_dropoff"].ToString(),
+                  LocationMove = dr["location_move"].ToString(),
+                  Priority = dr["priority"].TryIntegerOrNull(),
+                }
+               );
               }
-             );
             }
           }
         }
+        data = models.ToArray();
+        _cache.SetValue<VehiclePosition[]>(key, data, DateTimeOffset.Now.AddMinutes(CACHE_LIFE));
       }
-      return models;
+      return data;
     }
-    public IList<LocationGroup> LoadGroups()
+    public LocationGroup[] LoadGroups()
     {
-      var models = new List<LocationGroup>();
-      string sql = @"
+      var key = CacheKeys.Groups;
+      var data = _cache.GetValue<LocationGroup[]>(key);
+      if (data == null)
+      {
+        var models = new List<LocationGroup>();
+        string sql = @"
 SELECT location_groups.id, logical_id, color, ARRAY_AGG('{""type"":""'||reference_table||'"", ""id"":'||reference_id||'}') AS objects
 FROM location_groups
 LEFT JOIN grouped_objects ON location_groups.id = grouped_objects.group_id
 GROUP BY location_groups.id, logical_id, color
 ORDER BY location_groups.id ASC
 ";
-      using (var conn = ConnectTrack())
-      {
-        using (var cmd = new NpgsqlCommand(sql, conn))
+        using (var conn = ConnectTrack())
         {
-          conn.Open();
-          using (var dr = cmd.ExecuteReader())
+          using (var cmd = new NpgsqlCommand(sql, conn))
           {
-            while (dr.Read())
+            conn.Open();
+            using (var dr = cmd.ExecuteReader())
             {
-              var json = dr["objects"].TryString();
-              var items = JsonConvert.DeserializeObject<LocationGroupObjectItem[]>(json);
-              models.Add(new LocationGroup
+              while (dr.Read())
               {
-                Id = Convert.ToInt32(dr["id"]),
-                LogicalId = dr["logical_id"].ToString(),
-                Color = dr["color"].ToString(),
-                Objects = items,
+                var json = dr["objects"].TryString();
+                var items = JsonConvert.DeserializeObject<LocationGroupObjectItem[]>(json);
+                models.Add(new LocationGroup
+                {
+                  Id = Convert.ToInt32(dr["id"]),
+                  LogicalId = dr["logical_id"].ToString(),
+                  Color = dr["color"].ToString(),
+                  Objects = items,
+                }
+               );
               }
-             );
             }
           }
         }
+        data = models.ToArray();
+        _cache.SetValue<LocationGroup[]>(key, data, DateTimeOffset.Now.AddMinutes(CACHE_LIFE));
       }
-      return models;
+      return data;
     }
-
-
   }
 }

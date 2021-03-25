@@ -8,7 +8,18 @@ namespace OMSWeb.Services
 {
   public enum CacheKeys : uint
   {
-    MapData,
+    None,
+    MapSize,
+    Points,
+    Segments,
+    SegmentDisabled,
+    Stations,
+    Buffers,
+    Mtls,
+    Clusters,
+    VehiclePaths,
+    Vehicles,
+    Groups,
   }
 
   public class CacheService
