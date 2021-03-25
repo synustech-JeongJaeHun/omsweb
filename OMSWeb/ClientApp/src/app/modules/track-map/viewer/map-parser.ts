@@ -426,10 +426,10 @@ export class MapParser {
         // save disable info to the list
         if (!disabled_segment) {
           // Get disable info
-          let prefix = rows[i].disabled_by.substring(0, 4);
-          let source = rows[i].disabled_by.substring(
+          let prefix = rows[i].disabledBy.substring(0, 4);
+          let source = rows[i].disabledBy.substring(
             4,
-            rows[i].disabled_by.length
+            rows[i].disabledBy.length
           );
 
           disabled_segment = {
@@ -444,19 +444,19 @@ export class MapParser {
           if (prefix === 'vid-') {
             // vehicle
             disable_info.source_id = parseInt(source);
-            disable_info.reason = rows[i].disabled_reason;
+            disable_info.reason = rows[i].disabledReason;
 
             disabled_segment.vehicle = disable_info;
           } else if (prefix === 'sid-') {
             // segment
             disable_info.source_id = parseInt(source);
-            disable_info.reason = rows[i].disabled_reason;
+            disable_info.reason = rows[i].disabledReason;
 
             disabled_segment.segment = disable_info;
           } else if (prefix === 'uid-') {
             // user
             disable_info.source_id = source;
-            disable_info.reason = rows[i].disabled_reason;
+            disable_info.reason = rows[i].disabledReason;
 
             disabled_segment.user = disable_info;
           }

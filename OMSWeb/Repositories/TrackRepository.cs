@@ -179,7 +179,7 @@ ORDER BY segment_id
                 {
                   Id = Convert.ToInt32(dr["id"]),
                   DisabledBy = dr["disabled_by"].ToString(),
-                  Reason = dr["reason"].ToString(),
+                  DisabledReason = dr["disabled_reason"].ToString(),
                   SegmentId = Convert.ToInt32(dr["segment_id"]),
                 }
                );

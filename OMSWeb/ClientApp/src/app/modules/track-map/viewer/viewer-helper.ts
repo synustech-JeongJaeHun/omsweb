@@ -603,6 +603,23 @@ export class ViewController {
     this.drawMap('minimap');
     this.centerZoom('INSTANT');
   }
+  update_popup(updated_objects) {
+    // @TODO popup 관련 객체 처리
+    console.warn('# 구현 필요 : update popup  #', updated_objects);
+    // if (typeof popup != 'undefined' && popup.side_panel && popup.side_panel.data && updated_objects) {
+    // if(!Array.isArray(updated_objects)) {
+    //     updated_objects = [updated_objects]
+    // }
+
+    // let updated_object = updated_objects.find(object => object.id === popup.side_panel.data.id)
+
+    // if (updated_object && updated_object.constructor === popup.side_panel.data.constructor && updated_object.id === popup.side_panel.data.id) {
+    //     // display_side_panel_popup(popup.side_panel.type, updated_object)
+    //     popup.side_panel.update_data(updated_object)
+    // }
+    // }
+  }
+
   update_vehicles(raw_data, operation, vehicleId, is_skip_rendering) {
     let target_index;
 
@@ -3556,15 +3573,11 @@ export class ViewController {
       if (object_type === 'CLUSTER') {
         id = layout_object.id ? layout_object.id : null;
         logicalId = layout_object.logicalId ? layout_object.logicalId : null;
-        max_cap = layout_object.maxVehicles
-          ? layout_object.maxVehicles
-          : null;
+        max_cap = layout_object.maxVehicles ? layout_object.maxVehicles : null;
       } else {
         id = layout_object.id ? layout_object.id : null;
         logicalId = layout_object.logicalId ? layout_object.logicalId : null;
-        physicalId = layout_object.physicalId
-          ? layout_object.physicalId
-          : null;
+        physicalId = layout_object.physicalId ? layout_object.physicalId : null;
 
         // Set attributes distinctly by variables
         if (object_type === 'SEGMENT') {
@@ -3576,9 +3589,7 @@ export class ViewController {
         } else if (object_type === 'POINT') {
           point = layout_object.id ? layout_object.id : null;
         } else if (object_type === 'VEHICLE') {
-          point = layout_object.curPoint
-            ? layout_object.curPoint.point
-            : null;
+          point = layout_object.curPoint ? layout_object.curPoint.point : null;
           orderLogicalId = layout_object.orderLogicalId
             ? layout_object.orderLogicalId
             : layout_object.orderId
@@ -3603,8 +3614,7 @@ export class ViewController {
       if (length) label_text += `${'length'}: ${length}\n`;
       if (point) label_text += `${'Point'}: ${point}\n`;
       if (max_cap) label_text += `${'Maximum vehicles'}: ${max_cap}\n`;
-      if (orderLogicalId)
-        label_text += `${'Order ID'}: ${orderLogicalId}\n`;
+      if (orderLogicalId) label_text += `${'Order ID'}: ${orderLogicalId}\n`;
 
       // if (object_type) label_text += `${$.i18n(object_type)}\n`;
       // if (id) label_text += `${$.i18n('ID')}: ${id}\n`;
@@ -6111,10 +6121,8 @@ export class ViewController {
       // Apply Coordinate change
       d3_veh.attr('x', current_point[0]).attr('y', current_point[1]);
 
-      this.vehicles[veh_data.index].curPoint.invertedCoord.x =
-        current_point[0];
-      this.vehicles[veh_data.index].curPoint.invertedCoord.y =
-        current_point[1];
+      this.vehicles[veh_data.index].curPoint.invertedCoord.x = current_point[0];
+      this.vehicles[veh_data.index].curPoint.invertedCoord.y = current_point[1];
 
       // zoom.current_mainto the location of vehicle if tracking is on
       if (
@@ -6728,10 +6736,7 @@ export class ViewController {
         let current_cargo_state = current_vehicle_foup.attr('class');
         if (cargoState == 'F' && current_cargo_state != 'foup loaded') {
           current_vehicle_foup.attr('class', 'foup loaded');
-        } else if (
-          cargoState == 'L' &&
-          current_cargo_state != 'foup loading'
-        ) {
+        } else if (cargoState == 'L' && current_cargo_state != 'foup loading') {
           current_vehicle_foup.attr('class', 'foup loading');
         } else if (
           cargoState == 'U' &&
@@ -7168,9 +7173,7 @@ export class ViewController {
     );
     this.center_svg_x.attr(
       'transform',
-      `translate(0, ${
-        transform.y + this.geometry.invertFactorY * transform.k
-      })`
+      `translate(0, ${transform.y + this.geometry.invertFactorY * transform.k})`
     );
     this.center_svg_y.attr('transform', `translate(${transform.x}, 0)`);
     this.center_svg_text.attr(
@@ -9678,7 +9681,7 @@ export class ViewController {
       // Segment Path Element
       dom_object_group
         .append('path')
-        // .attr('class', layout_object.disabled_by !== null ? 'segment_path disabled' : (layout_object.isValidate ? 'segment_path' : 'segment_path non_validate'))
+        // .attr('class', layout_object.disabledBy !== null ? 'segment_path disabled' : (layout_object.isValidate ? 'segment_path' : 'segment_path non_validate'))
         .attr('class', function (layout_object) {
           if (!layout_object.disableState) {
             if (!layout_object.isValidate) {
@@ -11902,12 +11905,7 @@ export class ViewController {
       }
     }
   }
-  disable_segment(
-    segmentId: any,
-    action: string,
-    source: string,
-    reason: any
-  ) {
+  disable_segment(segmentId: any, action: string, source: string, reason: any) {
     let segment_obj = this.find_layout_object('SEGMENT', segmentId);
 
     // @TODO Send message (message.js)
@@ -12097,10 +12095,7 @@ export class ViewController {
       if (!object) continue;
       if (type === 'SEGMENT') {
         pos = [
-          [
-            object.pointFrom.invertedCoord.x,
-            object.pointFrom.invertedCoord.y,
-          ],
+          [object.pointFrom.invertedCoord.x, object.pointFrom.invertedCoord.y],
           [object.pointTo.invertedCoord.x, object.pointTo.invertedCoord.y],
         ];
       } else {
@@ -13178,8 +13173,7 @@ export class ViewController {
       this.geometry.trackSize.minY = track_min_max.min.y;
       this.geometry.trackSize.maxY = track_min_max.max.y;
 
-      this.geometry.trackSize.width =
-        track_min_max.max.x - track_min_max.min.x;
+      this.geometry.trackSize.width = track_min_max.max.x - track_min_max.min.x;
       this.geometry.trackSize.height =
         track_min_max.max.y - track_min_max.min.y;
     } else {

@@ -39,7 +39,6 @@ export class HubService {
 
   private connect() {
     if (this.isConnected) return;
-    console.log('## start connect to hub ...');
     this.hub
       .start()
       .then(() => {
@@ -53,7 +52,6 @@ export class HubService {
     this.hub.onclose((err) => {
       this.isConnected = false;
       this.connectionChanged$.emit(false);
-      console.info('## hub disconnected ##');
       err && console.error(err);
     });
 

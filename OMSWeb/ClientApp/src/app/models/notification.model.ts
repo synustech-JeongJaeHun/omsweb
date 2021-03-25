@@ -1,3 +1,5 @@
+import { Dto } from "./dto/track.model";
+
 export interface INotificationCount {
   level1: number;
   level2: number;
@@ -53,5 +55,5 @@ export interface IDataChangeEvent {
   id?: number;
   level?: number;
   vehicleId?: number;
-  data?: any;
+  data?: Dto.IVehicle;
 }

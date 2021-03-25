@@ -5,6 +5,6 @@ namespace OMSWeb.Models.Tracks
     public int Id { get; set; }
     public int SegmentId { get; set; }
     public string DisabledBy { get; set; }
-    public string Reason { get; set; }
+    public string DisabledReason { get; set; }
   }
 }

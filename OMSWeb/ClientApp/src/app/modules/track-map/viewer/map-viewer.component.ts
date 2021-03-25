@@ -13,6 +13,8 @@ import { MapStatesService } from '../map-states.service';
 import { Subscription } from 'rxjs';
 import { MapDataService } from '../map-data.service';
 import { IPreferences } from '../../../models/settings.model';
+import { HubService } from '../../../services/hub.service';
+import { IDataChangeEvent } from '../../../models/notification.model';
 
 @Component({
   selector: 'oms-map-viewer',
@@ -60,6 +62,11 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   //#region subscriptions
   private toolbarToggleEvent$: Subscription;
   private toolbarCommandEvent$: Subscription;
+
+  private vehicleChanged$: Subscription;
+  private segmentChanged$: Subscription;
+  private segmentDisabledChanged$: Subscription;
+  private clusterChanged$: Subscription;
   //#endregion
 
   get showMinimap(): boolean {
@@ -71,12 +78,18 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     private statusSvc: StatusService,
     private trackIdSvc: TrackIdService,
     private statesSvc: MapStatesService,
+    private hubSvc: HubService,
     private dialog: MatDialog
   ) {}
 
   ngOnDestroy(): void {
     this.toolbarToggleEvent$ && this.toolbarToggleEvent$.unsubscribe();
     this.toolbarCommandEvent$ && this.toolbarCommandEvent$.unsubscribe();
+
+    this.vehicleChanged$ && this.vehicleChanged$.unsubscribe();
+    this.segmentChanged$ && this.segmentChanged$.unsubscribe();
+    this.segmentDisabledChanged$ && this.segmentDisabledChanged$.unsubscribe();
+    this.clusterChanged$ && this.clusterChanged$.unsubscribe();
     this.viewer && this.viewer.destroy();
   }
 
@@ -105,6 +118,18 @@ export class MapViewerComponent implements OnInit, OnDestroy {
         this.viewer.onCommandAction(event);
       }
     );
+    this.vehicleChanged$ = this.hubSvc.vehicleChanged$.subscribe((e) =>
+      this.applyVehicleChange(e)
+    );
+    this.segmentChanged$ = this.hubSvc.segmentChanged$.subscribe(
+      (payload: IDataChangeEvent) => {}
+    );
+    this.segmentDisabledChanged$ = this.hubSvc.segmentDisabledChanged$.subscribe(
+      (payload: IDataChangeEvent) => {}
+    );
+    this.clusterChanged$ = this.hubSvc.clusterChanged$.subscribe(
+      (payload: IDataChangeEvent) => {}
+    );
   }
 
   private drawMap() {
@@ -120,5 +145,18 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     this.viewer.create_track(this.omsData);
     this.viewer.update_vehicles(this.omsData.vehicles, 'INSERT', null, false);
     this.trackIdSvc.extract_id_from_track(this.dataSvc.data);
+  }
+
+  private applyVehicleChange({ data, operation, id }: IDataChangeEvent) {
+    if (
+      !this.viewer ||
+      !this.dataSvc.data.points ||
+      !this.dataSvc.data.points.length
+    )
+      return; // @TODO viewer가 아직 생성되지 않은 경우에는 지연 처리할 방법 구현
+    this.viewer.update_vehicles(data, operation, id, false);
+    this.viewer.update_popup(
+      this.dataSvc.data.vehicles.find((v) => v.id === id)
+    );
   }
 }
