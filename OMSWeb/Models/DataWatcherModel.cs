@@ -7,7 +7,7 @@ namespace OMSWeb.Models
   public class DataChangeEventTarget {
 
     public string[] EmitNames { get; set; }
-    public CacheKeys? CacheKey { get; set; }
+    public CacheKeys CacheKey { get; set; }
     public bool IsSingleUpdate { get; set; }
 
     public DataChangeEventTarget(CacheKeys key, string[] emitNames, bool isSingleUpdate = false)

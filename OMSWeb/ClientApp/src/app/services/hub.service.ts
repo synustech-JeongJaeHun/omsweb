@@ -61,6 +61,8 @@ export class HubService {
     });
     this.hub.on('segmentChanged', (d) => {
       console.info('## hub message : segmentChanged >>', d);
+      // @TODO segmentChanged 이벤트에는 data 항목에 값이 없을거 같은데 처리하는 로직이 있으므로 확인 필요.
+      console.warn('@@ segmentChanged data 확인 >>');
       this.segmentChanged$.emit(d);
     });
     this.hub.on('segmentDisabledChanged', (d) => {
