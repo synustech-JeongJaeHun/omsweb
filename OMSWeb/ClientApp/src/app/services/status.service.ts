@@ -2,6 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
+import * as AspNetData from 'devextreme-aspnet-data-nojquery';
+import DataSource from 'devextreme/data/data_source';
 
 import { Dto } from '@oms/models/dto/track.model';
 import { IPaginatedResult } from '../models/base.model';
@@ -24,6 +26,23 @@ export class StatusService {
 
   getVehicles(): Observable<Dto.IVehicleTrackData> {
     return this.http.get(`${this.baseUrl}/tracks/vehicles`);
+  }
+
+  orderStatusDataSource(): DataSource {
+    return new DataSource({
+      store: AspNetData.createStore({
+        key: 'id',
+        loadUrl: `${this.baseUrl}/orders`,
+      }),
+    });
+  }
+  vehicleStatusDataSource(): DataSource {
+    return new DataSource({
+      store: AspNetData.createStore({
+        key: 'id',
+        loadUrl: `${this.baseUrl}/vehicles`,
+      }),
+    });
   }
 
   // orderStatus(): Observable<IPaginatedResult<IOrderStatusRow>> {

@@ -6,7 +6,10 @@ button {
 button.has-issue {
   color: #666;
 }
-button.is-critical {
+button.warn.is-critical {
+  color: var(--notification-color);
+}
+button.alarm.is-critical {
   color: var(--notification-critical-color);
 }
 mat-icon ::ng-deep.mat-badge-content {

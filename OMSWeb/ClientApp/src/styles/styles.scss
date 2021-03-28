@@ -325,8 +325,22 @@ header {
 }
 .alarms-dialog {
   .mat-dialog-container {
-    border: 2px solid red;
+    border: 2px solid var(--notification-critical-color);
   }
+  [mat-dialog-title] {
+    background-color: var(--notification-critical-color);
+  }
+}
+.alerts-dialog {
+  .mat-dialog-container {
+    border: 2px solid var(--notification-color);
+  }
+  [mat-dialog-title] {
+    background-color: var(--notification-color);
+  }
+}
+button.warn .mat-badge-warn .mat-badge-content {
+  background-color: var(--notification-color);
 }
 .mat-dialog-content {
   margin: 0 -8px !important;

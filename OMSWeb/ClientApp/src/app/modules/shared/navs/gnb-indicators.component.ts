@@ -17,6 +17,7 @@ import { Subscription } from 'rxjs';
 import { IAlert } from '../../../models/notification.model';
 import { HubService } from '../../../services/hub.service';
 import { AlarmDialogComponent } from '../dialogs/alarm-dialog.component';
+import { AlertDialogComponent } from '../dialogs/alert-dialog.component';
 @Component({
   selector: 'oms-gnb-indicators',
   templateUrl: './gnb-indicators.component.html',
@@ -39,6 +40,7 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
   //#endregion
 
   private _alarmDlg: MatDialogRef<AlarmDialogComponent, any>;
+  private _alertDlg: MatDialogRef<AlertDialogComponent, any>;
 
   get warnValue(): string {
     return this.countFormat(this.warnCount);
@@ -76,12 +78,23 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
     this.notifySvc.alertCount().subscribe((warn) => {
       this.warnCount = warn.total;
       this.isCriticalWarn = warn.critical > 0;
-      this.warnCount && this.loadWarnList();
     });
   }
 
   toggleWarnsView() {
-    this.btnWarn.togglePopover();
+    // this.btnWarn.togglePopover();
+    if (this._alertDlg && this._alertDlg.getState() === MatDialogState.OPEN) {
+      this._alertDlg.close();
+      return;
+    }
+
+    this._alertDlg = this.dialog.open(AlertDialogComponent, {
+      autoFocus: false,
+      hasBackdrop: false,
+      disableClose: true,
+      closeOnNavigation: true,
+      panelClass: 'alerts-dialog',
+    });
   }
   toggleAlarmsView() {
     if (this._alarmDlg && this._alarmDlg.getState() === MatDialogState.OPEN) {
@@ -90,7 +103,6 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
     }
 
     const rect: DOMRect = this.btnAlarm.nativeElement.getBoundingClientRect();
-    console.info('## alarm rect >>', rect);
     this._alarmDlg = this.dialog.open(AlarmDialogComponent, {
       // width: '700px',
       autoFocus: false,
@@ -114,11 +126,5 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
     //   return `${Math.floor(count / 1000)}K`;
     // }
     // return count.toString();
-  }
-
-  private loadWarnList() {
-    this.notifySvc.alerts().subscribe((res) => {
-      this.warnList = res;
-    });
   }
 }

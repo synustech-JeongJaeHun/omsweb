@@ -17,6 +17,7 @@ import { DialogBaseComponent } from './dialogs/dialog-base.component';
 import { ConfirmDialogComponent } from './dialogs/confirm-dialog.component';
 import { AlarmDialogComponent } from './dialogs/alarm-dialog.component';
 import { EnumStringPipe } from './pipes/enum-string.pipe';
+import { AlertDialogComponent } from './dialogs/alert-dialog.component';
 
 const inOutModules = [
   FormsModule,
@@ -33,6 +34,7 @@ const inOutModules = [
     ConfirmDialogComponent,
     AlarmDialogComponent,
     EnumStringPipe,
+    AlertDialogComponent,
   ],
   imports: [
     CommonModule,

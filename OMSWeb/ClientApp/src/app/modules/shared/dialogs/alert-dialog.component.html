@@ -1,0 +1,70 @@
+<oms-dialog-base [title]="'names.alerts' | translate">
+  <ng-container class="dialog-layout">
+    <div class="alert-list">
+      <dx-data-grid
+        [dataSource]="warnList"
+        keyExpr="id"
+        [height]="300"
+        [width]="700"
+      >
+        <dxo-scrolling mode="virtual"></dxo-scrolling>
+        <dxi-column
+          [allowFiltering]="false"
+          [width]="110"
+          dataType="datetime"
+          dataField="time"
+          [caption]="'names.time' | translate"
+          cellTemplate="dateCell"
+        >
+          <div *dxTemplate="let data of 'dateCell'">
+            {{ data.value | date: "yyyy/MM/dd HH:mm:ss" }}
+          </div>
+        </dxi-column>
+        <dxi-column
+          [allowFiltering]="false"
+          [width]="80"
+          dataType="string"
+          dataField="level"
+          [caption]="'names.severity' | translate"
+        ></dxi-column>
+        <dxi-column
+          [allowFiltering]="false"
+          [width]="120"
+          dataType="string"
+          dataField="tag"
+          [caption]="'names.tag' | translate"
+        ></dxi-column>
+        <dxi-column
+          [allowFiltering]="false"
+          dataType="string"
+          dataField="message"
+          [caption]="'names.message' | translate"
+        ></dxi-column>
+        <dxi-column
+          [allowFiltering]="false"
+          [width]="110"
+          dataType="datetime"
+          dataField="ackTime"
+          [caption]="'names.ackTime' | translate"
+          cellTemplate="dateCell"
+        >
+          <div *dxTemplate="let data of 'dateCell'">
+            {{ data.value | date: "yyyy/MM/dd HH:mm:ss" }}
+          </div>
+        </dxi-column>
+        <dxi-column
+          [allowFiltering]="false"
+          [width]="80"
+          dataType="string"
+          dataField="ackBy"
+          [caption]="'names.ackBy' | translate"
+        ></dxi-column>
+      </dx-data-grid>
+    </div>
+    <div mat-dialog-actions>
+      <button mat-raised-button mat-dialog-close>
+        {{ "names.close" | translate }}
+      </button>
+    </div>
+  </ng-container>
+</oms-dialog-base>

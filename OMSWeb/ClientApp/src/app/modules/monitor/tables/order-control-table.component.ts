@@ -1,14 +1,11 @@
-import { Component, Input, NgZone, OnDestroy, OnInit } from '@angular/core';
-import { IPaginatedResult } from '../../../models/base.model';
-import { IOrderStatusRow } from '../../../models/order-status.model';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+import DataSource from 'devextreme/data/data_source';
+
 import { StatusService } from '../../../services/status.service';
 import { TrackIdService } from '../../../services/track-id.service';
-import * as AspNetData from 'devextreme-aspnet-data-nojquery';
-import CustomStore from 'devextreme/data/custom_store';
 import { HubService } from '../../../services/hub.service';
-import { Subscription } from 'rxjs';
 import { IDataChangeEvent } from '../../../models/notification.model';
-import DataSource from 'devextreme/data/data_source';
 
 @Component({
   selector: 'oms-order-control-table',
@@ -41,7 +38,7 @@ export class OrderControlTableComponent implements OnInit, OnDestroy {
     private idSvc: TrackIdService,
     private hubSvc: HubService
   ) {
-    this.dataSource = this.getStatesStore();
+    this.dataSource = this.statusSvc.orderStatusDataSource();
   }
   ngOnDestroy(): void {
     this.tableChanged$ && this.tableChanged$.unsubscribe();
@@ -70,19 +67,5 @@ export class OrderControlTableComponent implements OnInit, OnDestroy {
       needReload = true;
     }
     needReload && this.dataSource.reload();
-  }
-
-  private getStatesStore(): DataSource {
-    const storeUrl = '/api/status';
-    // return AspNetData.createStore({
-    //   key: 'id',
-    //   loadUrl: `${storeUrl}/orders`,
-    // })
-    return new DataSource({
-      store: AspNetData.createStore({
-        key: 'id',
-        loadUrl: `${storeUrl}/orders`,
-      }),
-    });
   }
 }

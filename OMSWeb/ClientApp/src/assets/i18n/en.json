@@ -70,6 +70,7 @@
 
     "confirm": "Confirm",
     "cancel": "Cancel",
+    "close": "Close",
     "track": "Track",
     "apply": "Apply",
 
@@ -84,6 +85,7 @@
     "desc": "Description",
 
     "alarms": "Alarms",
+    "alerts": "Alerts",
 
     "manualTransfer": "Manual Transfer",
     "command-move": "Move",

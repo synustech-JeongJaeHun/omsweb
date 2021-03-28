@@ -1,11 +1,8 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import CustomStore from 'devextreme/data/custom_store';
-import * as AspNetData from 'devextreme-aspnet-data-nojquery';
+import DataSource from 'devextreme/data/data_source';
 
-import { IPaginatedResult } from '../../../models/base.model';
 import { IVehicleStatusRow } from '../../../models/vehicle-status.model';
 import { StatusService } from '../../../services/status.service';
-import DataSource from 'devextreme/data/data_source';
 import { Subscription } from 'rxjs';
 import { HubService } from '../../../services/hub.service';
 import { IDataChangeEvent } from '../../../models/notification.model';
@@ -26,7 +23,7 @@ export class VehicleControlTableComponent implements OnInit, OnDestroy {
   //#endregion
 
   constructor(private statusSvc: StatusService, private hubSvc: HubService) {
-    this.dataSource = this.getStatesStore();
+    this.dataSource = this.statusSvc.vehicleStatusDataSource();
   }
   ngOnDestroy(): void {
     this.tableChanged$ && this.tableChanged$.unsubscribe();
@@ -52,15 +49,5 @@ export class VehicleControlTableComponent implements OnInit, OnDestroy {
       needReload = true;
     }
     needReload && this.dataSource.reload();
-  }
-
-  private getStatesStore(): DataSource {
-    const storeUrl = '/api/status';
-    return new DataSource({
-      store: AspNetData.createStore({
-        key: 'id',
-        loadUrl: `${storeUrl}/vehicles`,
-      }),
-    });
   }
 }
