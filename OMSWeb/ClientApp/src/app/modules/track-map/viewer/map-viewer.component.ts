@@ -100,8 +100,8 @@ export class MapViewerComponent implements OnInit, OnDestroy {
       this.omsData = res;
       this._minimapVisible = this.preference.toggles.minimap;
 
-      console.warn('테스트 : 맵 랜더링 중지'); // @TODO test
-      // this.drawMap();
+      // console.warn('테스트 : 맵 랜더링 중지'); // @TODO test
+      this.drawMap();
       this.loadingState = false;
     });
     this.toolbarToggleEvent$ = this.statesSvc.toolbarStates$.subscribe(
