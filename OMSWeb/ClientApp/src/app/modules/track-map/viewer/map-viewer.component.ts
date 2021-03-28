@@ -118,17 +118,23 @@ export class MapViewerComponent implements OnInit, OnDestroy {
         this.viewer.onCommandAction(event);
       }
     );
-    this.vehicleChanged$ = this.hubSvc.vehicleChanged$.subscribe((e) =>
-      this.applyVehicleChange(e)
+    this.vehicleChanged$ = this.hubSvc.vehicleChanged$.subscribe(
+      (e: IDataChangeEvent) => this.applyVehicleChange(e)
     );
     this.segmentChanged$ = this.hubSvc.segmentChanged$.subscribe(
-      (payload: IDataChangeEvent) => {}
+      (e: IDataChangeEvent) => {
+        this.applySegmentChange(e);
+      }
     );
     this.segmentDisabledChanged$ = this.hubSvc.segmentDisabledChanged$.subscribe(
-      (payload: IDataChangeEvent) => {}
+      (e: IDataChangeEvent) => {
+        this.applySegmentDisabledChange(e);
+      }
     );
     this.clusterChanged$ = this.hubSvc.clusterChanged$.subscribe(
-      (payload: IDataChangeEvent) => {}
+      (e: IDataChangeEvent) => {
+        this.applyClusterChange(e);
+      }
     );
   }
 
@@ -158,5 +164,29 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     this.viewer.update_popup(
       this.dataSvc.data.vehicles.find((v) => v.id === id)
     );
+  }
+  private applySegmentChange({ data }: IDataChangeEvent) {
+    if (!this.viewer) return;
+    const updated = this.dataSvc.getChangedSegments(data);
+    this.viewer.update_segments(updated, false, false);
+  }
+  private applySegmentDisabledChange({
+    data,
+    operation,
+    id,
+  }: IDataChangeEvent) {
+    if (!this.viewer) return;
+    this.viewer.update_disable_segment(data, operation, id);
+    const selected = this.viewer.get_selected_objects('SEGMENT')[0];
+    if (selected) {
+      this.viewer.update_popup(
+        this.viewer.find_layout_object('SEGMENT', selected.id)
+      );
+    }
+  }
+  private applyClusterChange({ data }: IDataChangeEvent) {
+    if (!this.viewer) return;
+    const updated = this.dataSvc.getChangedClusters(data);
+    this.viewer.update_clusters(updated, false, false);
   }
 }

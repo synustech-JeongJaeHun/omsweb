@@ -10,13 +10,10 @@ namespace OMSWeb.Services
   public class TrackService
   {
     private readonly TrackRepository _trackRepo;
-    private readonly CacheService _cache;
-    private const int CACHE_LIFE = 30;
 
-    public TrackService(TrackRepository trackRepo, CacheService cache)
+    public TrackService(TrackRepository trackRepo)
     {
       this._trackRepo = trackRepo;
-      this._cache = cache;
     }
 
     public MapData GetMapData()
@@ -38,15 +35,32 @@ namespace OMSWeb.Services
       return map;
     }
 
-    private T GetMapItem<T>(CacheKeys key, Func<T> loader)
-    {
-      var data = _cache.GetValue<T>(key);
-      if (data == null)
+    public dynamic[] GetMapItem(CacheKeys key) {
+      switch (key)
       {
-        data = loader();
-        _cache.SetValue<T>(key, data, DateTimeOffset.Now.AddMinutes(CACHE_LIFE));
+          case CacheKeys.Points:
+            return this._trackRepo.LoadPoints();
+          case CacheKeys.Segments:
+            return this._trackRepo.LoadSegments();
+          case CacheKeys.SegmentDisabled:
+            return this._trackRepo.LoadDisabledSegments();
+          case CacheKeys.Stations:
+            return this._trackRepo.LoadStations();
+          case CacheKeys.Buffers:
+            return this._trackRepo.LoadBuffers();
+          case CacheKeys.Mtls:
+            return this._trackRepo.LoadMtls();
+          case CacheKeys.Clusters:
+            return this._trackRepo.LoadClusters();
+          case CacheKeys.VehiclePaths:
+            return this._trackRepo.LoadVehiclePaths();
+          case CacheKeys.Vehicles:
+            return this._trackRepo.LoadVehiclePositions();
+          case CacheKeys.Groups:
+            return this._trackRepo.LoadGroups();
+          default:
+            return null;
       }
-      return data;
     }
   }
 }

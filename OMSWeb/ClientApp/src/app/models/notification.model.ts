@@ -55,5 +55,5 @@ export interface IDataChangeEvent {
   id?: number;
   level?: number;
   vehicleId?: number;
-  data?: Dto.IVehicle;
+  data?: any;
 }

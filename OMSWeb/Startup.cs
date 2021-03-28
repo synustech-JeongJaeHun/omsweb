@@ -80,7 +80,6 @@ namespace OMSWeb
 
       #region DI
       services.AddScoped<UserRepository>();
-      services.AddScoped<TrackRepository>();
       services.AddScoped<AlarmRepository>();
       services.AddScoped<CycleRepository>();
       services.AddScoped<HistoryRepository>();
@@ -94,10 +93,11 @@ namespace OMSWeb
       services.AddScoped<UserRepository>();
       services.AddScoped<VehicleRepository>();
 
-      services.AddScoped<TrackService>();
       services.AddScoped<StatusService>();
       services.AddScoped<OrderService>();
 
+      services.AddSingleton<TrackRepository>();
+      services.AddSingleton<TrackService>();
       services.AddSingleton<PushService>();
       services.AddSingleton<CacheService>();
       // services.AddTransient<ProblemDetailsFactory, OmsProblemDetailsFactory>();  // @TODO problem handler 작성 후 사용

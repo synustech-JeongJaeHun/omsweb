@@ -45,7 +45,7 @@ export class MapParser {
 
     return this.layout_data;
   }
-  private parseClusters(mapType: MapTypes, rows: Dto.ICluster[]): Cluster[] {
+  parseClusters(mapType: MapTypes, rows: Dto.ICluster[]): Cluster[] {
     if (!rows) return [];
     return rows.reduce((models, row) => {
       try {
@@ -185,7 +185,7 @@ export class MapParser {
       return models;
     }, []);
   }
-  private parseSegments(
+  parseSegments(
     mapType: MapTypes,
     rows: Dto.ISegment[] = [],
     adjustment: number
@@ -406,7 +406,7 @@ export class MapParser {
     });
   }
 
-  private parseDisabledSegments(rows: any[]): any[] {
+  parseDisabledSegments(rows: any[]): any[] {
     let disabled_segments = [];
 
     // Apply disabled state

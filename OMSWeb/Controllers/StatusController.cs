@@ -28,10 +28,22 @@ namespace OMSWeb.Controllers
     }
 
     // [SnakeCase]
-    [HttpGet("track")]
-    public ActionResult<MapData> GetTrack()
+    [HttpGet("tracks")]
+    public ActionResult<MapData> GetMapTrack()
     {
       return this._trackSvc.GetMapData();
+    }
+    [HttpGet("tracks/vehicles")]
+    public ActionResult<VehicleResponse> GetVehicles()
+    {
+      var vehicles = this._trackSvc.GetMapItem(CacheKeys.Vehicles) as VehiclePosition[];
+      var paths = this._trackSvc.GetMapItem(CacheKeys.VehiclePaths) as VehiclePath[];
+      
+      return new VehicleResponse
+      {
+        Vehicles = vehicles,
+        VehiclePaths = paths,
+      };
     }
 
     [HttpGet("orders")]

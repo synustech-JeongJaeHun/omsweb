@@ -26,4 +26,10 @@ namespace OMSWeb.Models.Tracks
     public int Width { get; set; }
     public int Height { get; set; }
   }
+
+  public class VehicleResponse
+  {
+    public VehiclePosition[] Vehicles { get; set; }
+    public VehiclePath[] VehiclePaths { get; set; }
+  }
 }

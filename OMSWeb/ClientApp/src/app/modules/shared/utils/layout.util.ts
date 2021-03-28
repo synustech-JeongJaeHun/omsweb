@@ -867,8 +867,7 @@ export namespace LayoutUtil {
         to = {};
 
         from = part1.to;
-        to.x =
-          coordFrom.x + width * (0.5 - straight_portion * 0.5) * dir_value;
+        to.x = coordFrom.x + width * (0.5 - straight_portion * 0.5) * dir_value;
         to.y =
           coordFrom.y > coordTo.y
             ? coordTo.y - width * 0.5
@@ -885,8 +884,7 @@ export namespace LayoutUtil {
         to = {};
 
         from = part2.to;
-        to.x =
-          coordFrom.x + width * (0.5 + straight_portion * 0.5) * dir_value;
+        to.x = coordFrom.x + width * (0.5 + straight_portion * 0.5) * dir_value;
         to.y =
           coordFrom.y > coordTo.y
             ? coordTo.y - width * 0.5
@@ -1041,8 +1039,7 @@ export namespace LayoutUtil {
         to = {};
 
         from = part1.to;
-        to.x =
-          coordFrom.x - width * (0.5 - straight_portion * 0.5) * dir_value;
+        to.x = coordFrom.x - width * (0.5 - straight_portion * 0.5) * dir_value;
         to.y =
           coordFrom.y > coordTo.y
             ? coordFrom.y + width * 0.5
@@ -1059,8 +1056,7 @@ export namespace LayoutUtil {
         to = {};
 
         from = part2.to;
-        to.x =
-          coordFrom.x - width * (0.5 + straight_portion * 0.5) * dir_value;
+        to.x = coordFrom.x - width * (0.5 + straight_portion * 0.5) * dir_value;
         to.y =
           coordFrom.y > coordTo.y
             ? coordFrom.y + width * 0.5
@@ -1994,21 +1990,13 @@ export namespace LayoutUtil {
         if (obj.constructor.name.toUpperCase() === 'SEGMENT') {
           // if (obj instanceof Segment) {
           maxX =
-            obj.pointTo[coord_type].x > maxX
-              ? obj.pointTo[coord_type].x
-              : maxX;
+            obj.pointTo[coord_type].x > maxX ? obj.pointTo[coord_type].x : maxX;
           maxY =
-            obj.pointTo[coord_type].y > maxY
-              ? obj.pointTo[coord_type].y
-              : maxY;
+            obj.pointTo[coord_type].y > maxY ? obj.pointTo[coord_type].y : maxY;
           minY =
-            obj.pointTo[coord_type].y < minY
-              ? obj.pointTo[coord_type].y
-              : minY;
+            obj.pointTo[coord_type].y < minY ? obj.pointTo[coord_type].y : minY;
           minX =
-            obj.pointTo[coord_type].x < minX
-              ? obj.pointTo[coord_type].x
-              : minX;
+            obj.pointTo[coord_type].x < minX ? obj.pointTo[coord_type].x : minX;
 
           maxX = obj.dirCoord.x > maxX ? obj.dirCoord.x : maxX;
           maxY = obj.dirCoord.y > maxY ? obj.dirCoord.y : maxY;
@@ -2187,9 +2175,7 @@ export namespace LayoutUtil {
     let matched;
 
     if (find_direction === 'FROM') {
-      matched = segments.filter(
-        (segment) => segment.pointFrom.id === point.id
-      );
+      matched = segments.filter((segment) => segment.pointFrom.id === point.id);
     } else if (find_direction === 'TO') {
       matched = segments.filter((segment) => segment.pointTo.id === point.id);
     } else {
@@ -2741,5 +2727,115 @@ export namespace LayoutUtil {
     }
 
     return is_duplicated;
+  }
+
+  export function remove_duplicate(original_array) {
+    let refined_array = [];
+
+    for (let i = 0; i < original_array.length; i++) {
+      let current_data = original_array[i];
+
+      if (
+        refined_array.find((data) => data.id === current_data.id) === undefined
+      ) {
+        refined_array.push(current_data);
+      }
+    }
+
+    return refined_array;
+  }
+
+  export function get_changes(old_array, new_array, exceptions) {
+    let changes = [];
+    let old_modified = [];
+    let new_modified = [];
+
+    if (old_array && new_array) {
+      for (let i = 0; i < old_array.length; i++) {
+        let item = {
+          ...old_array[i],
+        };
+
+        for (let j = 0; j < exceptions.length; j++) {
+          delete item[exceptions[j]];
+        }
+
+        old_modified.push(item);
+      }
+
+      for (let i = 0; i < new_array.length; i++) {
+        let item = {
+          ...new_array[i],
+        };
+
+        for (let j = 0; j < exceptions.length; j++) {
+          delete item[exceptions[j]];
+        }
+
+        new_modified.push(item);
+      }
+
+      new_modified = remove_duplicate(new_modified);
+      new_array = remove_duplicate(new_array);
+
+      let match = new_array.map((e) => {
+        return [e.id, null];
+      });
+
+      // Find DELETE, UPDATE, NONE
+      for (let i = 0; i < old_modified.length; i++) {
+        let delete_flag = true;
+        for (let j = 0; j < new_modified.length; j++) {
+          // Found matching id
+          if (old_modified[i].id === new_modified[j].id) {
+            delete_flag = false;
+
+            // If values are different, "UPDATE"
+            if (
+              JSON.stringify(old_modified[i]) !==
+              JSON.stringify(new_modified[j])
+            ) {
+              match[j][1] = 'UPDATE';
+              changes.push({
+                id: old_modified[i].id,
+                status: 'UPDATE',
+                object: new_array[j],
+              });
+            } else {
+              // Values are same, "NONE"
+
+              match[j][1] = 'NONE';
+              changes.push({
+                id: old_modified[i].id,
+                status: 'NONE',
+                object: null,
+              });
+            }
+            break;
+          }
+        }
+        if (delete_flag) {
+          changes.push({
+            id: old_modified[i].id,
+            status: 'DELETE',
+            object: null,
+          });
+        }
+      }
+
+      // Find "ADD"
+      for (let i = 0; i < match.length; i++) {
+        // If operation field empty
+        if (match[i][1] === null) {
+          // No ops ("operations") value was given, "ADD"
+          changes.push({
+            id: new_modified[i].id,
+            status: 'ADD',
+            object: new_array[i],
+          });
+        }
+      }
+    }
+    return changes;
   }
 }

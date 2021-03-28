@@ -24,10 +24,6 @@ namespace OMSWeb.Services
       this._pushSvc = pushSvc;
     }
 
-    // public DataWatcherService(IConfiguration configuration) : base(configuration)
-    // {
-    // }
-
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
       this.trackConn.Open();
@@ -39,7 +35,7 @@ namespace OMSWeb.Services
         cmd.CommandText = "LISTEN monitor_track";
         cmd.ExecuteNonQuery();
       }
-      this.trackConn.Notification += this.NotificationReceived;
+      this.trackConn.Notification += this.NotificationReceivedAsync;
 
       Console.WriteLine("### Data Watcher started");
       while (!stoppingToken.IsCancellationRequested)
@@ -59,9 +55,9 @@ namespace OMSWeb.Services
       base.Dispose();
     }
 
-    private void NotificationReceived(object sender, NpgsqlNotificationEventArgs e)
+    private async void NotificationReceivedAsync(object sender, NpgsqlNotificationEventArgs e)
     {
-      this._pushSvc.EmitWatcherEvent(e.Payload);
+      await this._pushSvc.PushWatcherEventAsync(e.Payload);
     }
   }
 }

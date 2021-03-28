@@ -4,20 +4,20 @@ using OMSWeb.Services;
 
 namespace OMSWeb.Models
 {
-  public class DataChangeEventTarget {
-
-    public string[] EmitNames { get; set; }
+  public class DataChangeEventTarget
+  {
+    public string[] PushNames { get; set; }
     public CacheKeys CacheKey { get; set; }
     public bool IsSingleUpdate { get; set; }
 
-    public DataChangeEventTarget(CacheKeys key, string[] emitNames, bool isSingleUpdate = false)
+    public DataChangeEventTarget(CacheKeys key, string[] pushNames, bool isSingleUpdate = false)
     {
       this.CacheKey = key;
-      this.EmitNames = emitNames;
+      this.PushNames = pushNames;
       this.IsSingleUpdate = isSingleUpdate;
     }
   }
-  public class DataWatcherEvent
+  public class DataWatcherPayload
   {
     public string Table { get; set; }
     public string Operation { get; set; }
@@ -26,5 +26,4 @@ namespace OMSWeb.Models
     public VehiclePosition Data { get; set; }
     public int? VehicleId { get; set; }
   }
-
 }

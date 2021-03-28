@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import { IMapGeometry } from '../../models/drawing.model';
 import { Dto } from '../../models/dto/track.model';
+import { MapTypes } from '../../models/enums';
 import { IViewerData } from '../../models/map.interface';
 import { Segment } from '../../models/segment.model';
 import { Vehicle } from '../../models/vehicle.model';
@@ -15,12 +16,14 @@ export class MapDataService {
   data: IViewerData = {};
   expectedPaths: any[] = [];
   stale_vehicles = [];
+  geometry: IMapGeometry;
 
   private parser: MapParser;
 
   constructor() {}
 
   setData(data: Dto.ITrackData, geometry: IMapGeometry) {
+    this.geometry = geometry;
     this.parser = new MapParser(this.data);
     this.data = this.parser.parse(data, geometry);
 
@@ -32,6 +35,88 @@ export class MapDataService {
     }
   }
 
+  getChangedSegments(rows: Dto.ISegment[]): any[] {
+    const oldData = this.data.segments;
+    const newData = this.parser.parseSegments(
+      MapTypes.DB,
+      rows,
+      this.geometry.invertFactorY
+    );
+    return LayoutUtil.get_changes(oldData, newData, []);
+  }
+  getChangedClusters(rows: Dto.ICluster[]): any[] {
+    const oldData = this.data.clusters;
+    const newData = this.parser.parseClusters(MapTypes.DB, rows);
+    return LayoutUtil.get_changes(oldData, newData, []);
+  }
+
+  applyDisableSegmentData(rows: any[], operation: string, disabled_segment_id: number): any[] {
+    // get target index
+    let disable_index = this.data.segmentsDisabled.findIndex(
+      (d) => d.id == disabled_segment_id
+    );
+    let segment: Segment;
+    let updated_segments: number[] = [];
+
+    if (operation === 'DELETE') {
+      if (disable_index > -1) {
+        let deleted_disabled_segment = this.data.segmentsDisabled.splice(
+          disable_index,
+          1
+        )[0];
+        segment = this.data.segments.find(
+          (d) => d.id == deleted_disabled_segment.segment_id
+        );
+      }
+    } else {
+      // let disabled_segment = convert_disabled_segment(data)[0];
+      let disabled_segment = this.parser.parseDisabledSegments(rows)[0];
+      if (disabled_segment)
+        segment = this.data.segments.find(
+          (d) => d.id == disabled_segment.segment_id
+        );
+
+      if (operation === 'INSERT') {
+        if (disable_index === -1)
+          this.data.segmentsDisabled.push(disabled_segment);
+      } else if (operation === 'UPDATE') {
+        let removed_disabled_segment = this.data.segmentsDisabled.splice(
+          disable_index,
+          1,
+          disabled_segment
+        )[0];
+
+        // If the segment_id was changed in the disabled data, remove disabled from the previously diabled segment
+        if (
+          removed_disabled_segment.segment_id != disabled_segment.segment_id
+        ) {
+          let segment_to_remove_disabled_from = this.data.segments.find(
+            (d) => d.id == removed_disabled_segment.segment_id
+          );
+          let cumulative_disable_state_for_segment = this.find_disables_with_segment_id(
+            segment_to_remove_disabled_from.id
+          );
+          segment_to_remove_disabled_from.set_disable(
+            cumulative_disable_state_for_segment
+          );
+          updated_segments.push(segment_to_remove_disabled_from.id);
+        }
+      }
+    }
+
+    if (segment) {
+      updated_segments.push(segment.id);
+      let cumulative_disable_state_for_segment = this.find_disables_with_segment_id(
+        segment.id
+      );
+
+      // set disable to the new segment
+      segment.set_disable(cumulative_disable_state_for_segment);
+    }
+
+    return this.data.segmentsDisabled;
+  }
+
   applyVehicleData(
     raw_data: Dto.IVehicle[],
     operation: string,
@@ -39,9 +124,9 @@ export class MapDataService {
     vehicle_stale: number,
     playback_last_event_time: number
   ): {
-    isDomUpdated: boolean,
-    updatedVehicles: Vehicle[],
-    update: any
+    isDomUpdated: boolean;
+    updatedVehicles: Vehicle[];
+    update: any;
   } {
     let is_dom_update = false;
     let target_index;
@@ -104,8 +189,8 @@ export class MapDataService {
     return {
       isDomUpdated: is_dom_update,
       update,
-      updatedVehicles: updated_vehicles
-    }
+      updatedVehicles: updated_vehicles,
+    };
   }
 
   private convertExpectedPath(
@@ -369,6 +454,43 @@ export class MapDataService {
     } else if (object_type === 'VEHICLE') {
       return this.data.vehicles;
     } else return [];
+  }
+  find_disables_with_segment_id(segment_id: number) {
+    let cumulative_disable_state_for_segment = null;
+
+    let related_disabled_segments = this.get_layout_objects(
+      'DISABLED_SEGMENT'
+    ).filter((d) => {
+      return d.segment_id == segment_id;
+    });
+
+    if (related_disabled_segments.length > 0) {
+      cumulative_disable_state_for_segment = {
+        id: related_disabled_segments[0].id,
+        segment_id: related_disabled_segments[0].segment_id,
+        user: [],
+        vehicle: [],
+        segment: [],
+      };
+
+      for (let disabled_segment of related_disabled_segments) {
+        if (disabled_segment.user) {
+          cumulative_disable_state_for_segment.user.push(disabled_segment.user);
+        }
+        if (disabled_segment.vehicle) {
+          cumulative_disable_state_for_segment.vehicle.push(
+            disabled_segment.vehicle
+          );
+        }
+        if (disabled_segment.segment) {
+          cumulative_disable_state_for_segment.segment.push(
+            disabled_segment.segment
+          );
+        }
+      }
+    }
+
+    return cumulative_disable_state_for_segment;
   }
 
   private store_stale_list(vehicle: any) {

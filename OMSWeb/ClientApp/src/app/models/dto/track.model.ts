@@ -106,7 +106,7 @@ export namespace Dto {
     priority?: any;
     type: string;
     group?: number;
-    historyChangeTime?:any;
+    historyChangeTime?: any;
   }
 
   export interface ITrackData {
@@ -127,6 +127,10 @@ export namespace Dto {
     width?: number;
     height?: number;
     minimumSegmentLength?: number;
+  }
 
+  export interface IVehicleTrackData {
+    vehicles?: IVehicle[];
+    vehiclePath?: any[];
   }
 }

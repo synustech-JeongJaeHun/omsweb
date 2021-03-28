@@ -18,11 +18,7 @@ import {
   IZoom,
   IZoomInfos,
 } from '../../../models/drawing.model';
-import {
-  ToggleOptionKeyType,
-  MapTypes,
-  ViewModes,
-} from '../../../models/enums';
+import { MapTypes, ViewModes } from '../../../models/enums';
 import { rgb } from 'd3';
 import { MapParser } from './map-parser';
 import { IViewerData } from '../../../models/map.interface';
@@ -39,7 +35,6 @@ export class ViewController {
   //#region properties
   private svg: any; // d3.Selection<d3.ContainerElement, unknown, HTMLElement, any>;
   private d3_track: d3.Selection<d3.BaseType, unknown, HTMLElement, any>;
-  private parser: MapParser;
   private $track_container = null;
   private preferences: IPreferences;
 
@@ -303,7 +298,6 @@ export class ViewController {
     private statesSvc: MapStatesService
   ) {
     this.DEFAULTS = this.get_defaults();
-    this.parser = new MapParser(this.layout_data);
     this.$track_container = $(`#${this.track_container_id}`);
     this.initialize();
   }
@@ -605,7 +599,7 @@ export class ViewController {
   }
   update_popup(updated_objects) {
     // @TODO popup 관련 객체 처리
-    console.warn('# 구현 필요 : update popup  #', updated_objects);
+    // console.warn('# 구현 필요 : update popup  #', updated_objects);
     // if (typeof popup != 'undefined' && popup.side_panel && popup.side_panel.data && updated_objects) {
     // if(!Array.isArray(updated_objects)) {
     //     updated_objects = [updated_objects]
@@ -671,6 +665,123 @@ export class ViewController {
     this.reorder_svg();
 
     return update;
+  }
+  update_segments(update_list, is_apply_history, is_apply_revert) {
+    // List array : [{id, status, object}]
+    // Find updated point
+    let update_objects = [];
+    for (let i = 0; i < update_list.length; i++) {
+      if (update_list[i].status === 'UPDATE') {
+        let update_segment = update_list[i].object;
+
+        update_segment.create_segparts(this.geometry.invertFactorY);
+
+        // Recalculate path
+        update_segment.recalculate_path(
+          this.geometry.invertFactorY,
+          null,
+          this.get_layout_objects('SEGMENT')
+        );
+
+        // Update object
+        update_objects.push(update_segment);
+
+        // Find connected segments
+        let connected_segments_from = LayoutUtil.find_connected_segment(
+          update_segment.point_from,
+          this.layout_data.segments,
+          null
+        );
+        // Delete candidates
+        for (let i = 0; i < connected_segments_from.length; i++) {
+          let connected_segment = connected_segments_from[i];
+          if (connected_segment.id !== update_segment.id) {
+            connected_segment.candidates = [];
+          }
+        }
+        let connected_segments_to = LayoutUtil.find_connected_segment(
+          update_segment.point_to,
+          this.layout_data.segments,
+          null
+        );
+        // Delete candidates
+        for (let i = 0; i < connected_segments_to.length; i++) {
+          let connected_segment = connected_segments_to[i];
+          if (connected_segment.id !== update_segment.id) {
+            connected_segment.candidates = [];
+          }
+        }
+      }
+    }
+
+    this.update_layout_object(
+      update_objects,
+      is_apply_history,
+      is_apply_revert
+    );
+
+    if (this.mode === 'EDITOR') {
+      // Adjust fab size if fab size changed
+      this.adjust_fab_size(
+        LayoutUtil.find_max_and_min_of_objects(
+          this.layout_data.points.concat(this.layout_data.segments as any[]),
+          'INVERTED'
+        )
+      );
+    }
+    // update_minimap()
+  }
+  update_disable_segment(
+    data: any[],
+    operation: string,
+    disabled_segment_id: number,
+    is_skip_rendering = false
+  ) {
+    this.dataSvc.applyDisableSegmentData(data, operation, disabled_segment_id);
+
+    // update dom
+    if (
+      !is_skip_rendering &&
+      this.layout_data.segments &&
+      this.layout_data.segments.length > 0
+    ) {
+      this.update_segment_svg(
+        this.layout_data.segments,
+        main_css.segment,
+        null
+      );
+    }
+
+    this.update_selected_object_data(null);
+  }
+
+  private update_selected_object_data(update_object) {
+    let update_successful = false;
+    if (update_object === null) {
+      if (this.selected_objects.length > 0 && this.selected_objects[0]) {
+        update_object = this.find_layout_object(
+          this.selected_objects[0].constructor.name.toUpperCase(),
+          this.selected_objects[0].id
+        );
+      }
+    }
+
+    if (update_object) {
+      this.selected_objects = this.selected_objects.map((obj) => {
+        if (
+          obj.id === update_object.id &&
+          obj.constructor.name === update_object.constructor.name
+        ) {
+          obj = update_object;
+          update_successful = true;
+        }
+        return obj;
+      });
+    }
+
+    // if (!update_successful) {
+    //     logger.log('No matching selected object to update')
+    // }
   }
   centerZoom(transition_type: string) {
     let viewport = this.geometry.screenSize,

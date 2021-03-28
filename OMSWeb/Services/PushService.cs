@@ -2,28 +2,43 @@ using System;
 using Microsoft.AspNetCore.SignalR;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Linq;
 
 using OMSWeb.Hubs;
 using OMSWeb.Models;
 using System.Collections.Generic;
 using Newtonsoft.Json.Serialization;
+using System.Threading.Tasks;
 
 namespace OMSWeb.Services
 {
+
+  class NotificationSendingState
+  {
+    public DateTime Time { get; set; } = DateTime.MinValue;
+    public bool IsReserved { get; set; } = false;
+  }
   public class PushService
   {
+    private const int tableSendingInterval = 500; // @TODO 초기값 : 500
+
     private IHubContext<OMSHub> _hub;
     private IDictionary<string, DataChangeEventTarget> tableEventMap;
     private IDictionary<CacheKeys, string[]> cacheEventMap;
+    private IDictionary<string, NotificationSendingState> sendingMap;
     private CacheService _cache;
+    private TrackService _trackSvc;
 
-    public PushService(IHubContext<OMSHub> hub, CacheService cacheSvc)
+    // private lastSentTable;
+
+    public PushService(IHubContext<OMSHub> hub, CacheService cacheSvc, TrackService trackSvc)
     {
       this._hub = hub;
       this._cache = cacheSvc;
+      this._trackSvc = trackSvc;
 
       this.tableEventMap = new Dictionary<string, DataChangeEventTarget> {
-        {"point", new DataChangeEventTarget(CacheKeys.Points, new[]{"pointChanged"})},
+        {"points", new DataChangeEventTarget(CacheKeys.Points, new[]{"pointChanged"})},
         {"segments", new DataChangeEventTarget(CacheKeys.Segments, new[]{"segmentChanged"})},
         {"segment_blocking", new DataChangeEventTarget(CacheKeys.SegmentDisabled, new[]{"segmentDisabledChanged"}, true)},
         {"stations", new DataChangeEventTarget(CacheKeys.Stations, new[]{"stationChanged"})},
@@ -54,9 +69,11 @@ namespace OMSWeb.Services
         {CacheKeys.Clusters, new[]{"clusterChanged"}},
         {CacheKeys.Groups, new[]{"groupChanged"}},
       };
+
+      this.sendingMap = new Dictionary<string, NotificationSendingState>();
     }
 
-    public void EmitWatcherEvent(string jsonPayload)
+    public async Task PushWatcherEventAsync(string jsonPayload)
     {
       // Console.WriteLine($">> Watcher received data >>, {jsonPayload}");
       // DataWatcherEvent payload = JsonSerializer.Deserialize<DataWatcherEvent>(jsonPayload, new JsonSerializerOptions
@@ -64,7 +81,7 @@ namespace OMSWeb.Services
       //   PropertyNameCaseInsensitive = false,
       //   PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
       // });
-      var payload = Newtonsoft.Json.JsonConvert.DeserializeObject<DataWatcherEvent>(jsonPayload, new Newtonsoft.Json.JsonSerializerSettings()
+      var payload = Newtonsoft.Json.JsonConvert.DeserializeObject<DataWatcherPayload>(jsonPayload, new Newtonsoft.Json.JsonSerializerSettings()
       {
         NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore,
         ContractResolver = new DefaultContractResolver
@@ -72,36 +89,112 @@ namespace OMSWeb.Services
           NamingStrategy = new SnakeCaseNamingStrategy(),
         }
       });
+      // Console.WriteLine($">> Watcher received json object >>, Table = {payload.Table}, Operation = {payload.Operation}, Id = {payload.Id}, VehicleId = {payload.VehicleId}\n");
       if (string.IsNullOrEmpty(payload.Table)) return;
 
       this.tableEventMap.TryGetValue(payload.Table.ToLower(), out var targetInfo);
       if (targetInfo != null && targetInfo.CacheKey != CacheKeys.None) // table event가 정의된 경우
       {
-        this.cacheEventMap.TryGetValue(targetInfo.CacheKey, out var cacheEvents);
 
-        if (payload.Id > 0)
+        if (payload.Id > 0) // cache update 후 cache 데이터를 사용하여 push
         {
           // update cache
-          this.UpdateCacheItem(targetInfo, payload);
+          await this.UpdateCacheItemAsync(targetInfo, payload);
+        }
+        else // 변경 event만 push
+        {
+          foreach (var name in targetInfo.PushNames)
+          {
+            // this._hub.Clients.All.SendAsync(name, payload);
+            await this.SendDBNotificationAsync(name, payload, null);
+          }
         }
 
-        foreach (var name in targetInfo.EmitNames)
-        {
-          // send
-          this._hub.Clients.All.SendAsync(name, payload);
-        }
       }
       else  // 정의되지 않은 table event 이거나 cache를 사용하지 않은 데이터인 경우
       {
-
+        foreach (var name in targetInfo.PushNames)
+        {
+          await this.SendDBNotificationAsync(name, payload, null);
+        }
       }
-      // this._hub.Clients.All.SendAsync("dataChanged", payload);
     }
 
-    private void UpdateCacheItem(DataChangeEventTarget targetInfo, DataWatcherEvent payload)
+    private async Task UpdateCacheItemAsync(DataChangeEventTarget targetInfo, DataWatcherPayload payload)
     {
       // update cache
       this._cache.RemoveValue(targetInfo.CacheKey);
+
+      this.cacheEventMap.TryGetValue(targetInfo.CacheKey, out var cacheEvents);
+      foreach (var e in cacheEvents)
+      {
+        var isTable = e.Contains("table", StringComparison.OrdinalIgnoreCase);
+        object body = null;
+        if (!isTable)
+        {
+          var list = this._trackSvc.GetMapItem(targetInfo.CacheKey);
+          if (targetInfo.IsSingleUpdate)
+            body = list.Where(x => x.Id == payload.Id).FirstOrDefault();
+          else
+            body = list;
+        }
+        await this.SendDBNotificationAsync(e, payload, body);
+      }
+
+      foreach (var name in targetInfo.PushNames.Where(n => !cacheEvents.Contains(n)))
+      {
+        await this.SendDBNotificationAsync(name, payload, null);
+      }
+
+    }
+
+    private async Task SendDBNotificationAsync(string pushName, DataWatcherPayload payload, object body)
+    {
+      var meta = new
+      {
+        Operation = payload.Operation,
+        Id = payload.Id,
+        Level = payload.Level,
+        VehicleId = payload.VehicleId,
+      };
+      if (!pushName.Contains("table", StringComparison.OrdinalIgnoreCase))
+      {
+        // Console.WriteLine($"## PUSH ## {pushName}: {payload.Id}");
+        await this._hub.Clients.All.SendAsync(pushName, meta, body);
+        return;
+      }
+
+      if (!this.sendingMap.TryGetValue(pushName, out var buffer))
+      {
+        buffer = new NotificationSendingState();
+        this.sendingMap.Add(pushName, buffer);
+      }
+      // Console.WriteLine($"## [{DateTime.Now}] start >> {pushName}: {payload.Id} reserved: {buffer.IsReserved}");
+      if (!buffer.IsReserved)
+      {
+        var now = DateTime.Now;
+        var timeDiff = (now - buffer.Time).Milliseconds;
+        if ((now - buffer.Time).TotalMilliseconds > tableSendingInterval)
+        {
+          await this._hub.Clients.All.SendAsync(pushName, meta, body);
+          // Console.WriteLine($"## [{DateTime.Now}] direct send >> {pushName}: {payload.Id}");
+          buffer.Time = now;
+          buffer.IsReserved = false;
+        }
+        else
+        {
+          buffer.IsReserved = true;
+          // Console.WriteLine($"## [{DateTime.Now}] -> delay {tableSendingInterval} >> {pushName}: {payload.Id}");
+          await Task.Delay(tableSendingInterval).ContinueWith(async t =>
+          {
+            await this._hub.Clients.All.SendAsync(pushName, meta, body);
+            // Console.WriteLine($"## [{DateTime.Now}] --->> delayed send >> {pushName}: {payload.Id}");
+            buffer.IsReserved = false;
+            buffer.Time = DateTime.Now;
+          });
+        }
+      }
+      // Console.WriteLine($"## [{DateTime.Now}] end >> {pushName}: {payload.Id}");
     }
   }
 }

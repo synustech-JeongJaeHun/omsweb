@@ -31,10 +31,22 @@ export class HubService {
   private hub: signalR.HubConnection;
 
   constructor() {
-    this.hub = new signalR.HubConnectionBuilder().withUrl('/hubs/oms').build();
-    this.registerEvents();
+    this.hub = new signalR.HubConnectionBuilder()
+      .withUrl('/hubs/oms')
+      .withAutomaticReconnect()
+      .build();
+    this.attachEvents();
+    this.start();
+  }
+  public start() {
     this.connect();
-    setInterval(() => this.connect(), 5000);
+    // setInterval(() => this.connect(), 5000);
+  }
+  public stop() {
+    // this.detachEvents();
+    this.hub.stop().then(() => {
+      console.info('## hub stopped ##');
+    });
   }
 
   private connect() {
@@ -48,74 +60,96 @@ export class HubService {
       .catch((err) => console.error(err));
   }
 
-  private registerEvents() {
+  private detachEvents() {
+    this.hub.off('close');
+
+    this.hub.off('pointChanged');
+    this.hub.off('segmentChanged');
+    this.hub.off('segmentDisabledChanged');
+    this.hub.off('stationChanged');
+    this.hub.off('bufferChanged');
+    this.hub.off('mtlChanged');
+    this.hub.off('vehicleChanged');
+    this.hub.off('vehicleTableChanged');
+    this.hub.off('orderTableChanged');
+    this.hub.off('vehiclePath');
+    this.hub.off('clusterChanged');
+    this.hub.off('groupChanged');
+    this.hub.off('alarm');
+    this.hub.off('alert');
+    this.hub.off('serverStatus');
+  }
+
+  private attachEvents() {
+
     this.hub.onclose((err) => {
       this.isConnected = false;
       this.connectionChanged$.emit(false);
       err && console.error(err);
     });
 
-    this.hub.on('pointChanged', (d) => {
-      console.info('## hub message : pointChanged >>', d);
-      this.pointChanged$.emit(d);
+    this.hub.on('pointChanged', (meta, body) => {
+      console.info('## hub message : pointChanged >>', { meta, body });
+      this.pointChanged$.emit({ ...meta, data: body });
     });
-    this.hub.on('segmentChanged', (d) => {
-      console.info('## hub message : segmentChanged >>', d);
-      // @TODO segmentChanged 이벤트에는 data 항목에 값이 없을거 같은데 처리하는 로직이 있으므로 확인 필요.
-      console.warn('@@ segmentChanged data 확인 >>');
-      this.segmentChanged$.emit(d);
+    this.hub.on('segmentChanged', (meta, body) => {
+      // console.info('## hub message : segmentChanged >>', { meta, body });
+      this.segmentChanged$.emit({ ...meta, data: body });
     });
-    this.hub.on('segmentDisabledChanged', (d) => {
-      console.info('## hub message : segmentDisabledChanged >>', d);
-      this.segmentDisabledChanged$.emit(d);
+    this.hub.on('segmentDisabledChanged', (meta, body) => {
+      // console.info('## hub message : segmentDisabledChanged >>', {
+      //   meta,
+      //   body,
+      // });
+      this.segmentDisabledChanged$.emit({ ...meta, data: body });
     });
-    this.hub.on('stationChanged', (d) => {
-      console.info('## hub message : stationChanged >>', d);
-      this.stationChanged$.emit(d);
+    this.hub.on('stationChanged', (meta, body) => {
+      console.info('## hub message : stationChanged >>', { meta, body });
+      this.stationChanged$.emit({ ...meta, data: body });
     });
-    this.hub.on('bufferChanged', (d) => {
-      console.info('## hub message : bufferChanged >>', d);
-      this.bufferChanged$.emit(d);
+    this.hub.on('bufferChanged', (meta, body) => {
+      console.info('## hub message : bufferChanged >>', { meta, body });
+      this.bufferChanged$.emit({ ...meta, data: body });
     });
-    this.hub.on('mtlChanged', (d) => {
-      console.info('## hub message : mtlChanged >>', d);
-      this.mtlChanged$.emit(d);
+    this.hub.on('mtlChanged', (meta, body) => {
+      console.info('## hub message : mtlChanged >>', { meta, body });
+      this.mtlChanged$.emit({ ...meta, data: body });
     });
-    this.hub.on('vehicleChanged', (d) => {
-      console.info('## hub message : vehicleChanged >>', d);
-      this.vehicleChanged$.emit(d);
+    this.hub.on('vehicleChanged', (meta, body) => {
+      // console.info('## hub message : vehicleChanged >>', { meta, body });
+      this.vehicleChanged$.emit({ ...meta, data: body });
     });
-    this.hub.on('vehicleTableChanged', (d) => {
-      console.info('## hub message : vehicleTableChanged >>', d);
-      this.vehicleTableChanged$.emit(d);
+    this.hub.on('vehicleTableChanged', (meta, body) => {
+      // console.info('## hub message : vehicleTableChanged >>', { meta, body });
+      this.vehicleTableChanged$.emit({ ...meta, data: body });
     });
-    this.hub.on('orderTableChanged', (d) => {
-      console.info('## hub message : orderTableChanged >>', d);
-      this.orderTableChanged$.emit(d);
+    this.hub.on('orderTableChanged', (meta, body) => {
+      // console.info('## hub message : orderTableChanged >>', { meta, body });
+      this.orderTableChanged$.emit({ ...meta, data: body });
     });
-    this.hub.on('vehiclePath', (d) => {
-      console.info('## hub message : vehiclePath >>', d);
-      this.vehiclePathChanged$.emit(d);
+    this.hub.on('vehiclePath', (meta, body) => {
+      console.info('## hub message : vehiclePath >>', { meta, body });
+      this.vehiclePathChanged$.emit({ ...meta, data: body });
     });
-    this.hub.on('clusterChanged', (d) => {
-      console.info('## hub message : clusterChanged >>', d);
-      this.clusterChanged$.emit(d);
+    this.hub.on('clusterChanged', (meta, body) => {
+      // console.info('## hub message : clusterChanged >>', { meta, body });
+      this.clusterChanged$.emit({ ...meta, data: body });
     });
-    this.hub.on('groupChanged', (d) => {
-      console.info('## hub message : groupChanged >>', d);
-      this.groupChanged$.emit(d);
+    this.hub.on('groupChanged', (meta, body) => {
+      console.info('## hub message : groupChanged >>', { meta, body });
+      this.groupChanged$.emit({ ...meta, data: body });
     });
-    this.hub.on('alarm', (d) => {
-      console.info('## hub message : alarm >>', d);
-      this.alarmChanged$.emit(d);
+    this.hub.on('alarm', (meta, body) => {
+      console.info('## hub message : alarm >>', { meta, body });
+      this.alarmChanged$.emit({ ...meta, data: body });
     });
-    this.hub.on('alert', (d) => {
-      console.info('## hub message : alert >>', d);
-      this.alertChanged$.emit(d);
+    this.hub.on('alert', (meta, body) => {
+      console.info('## hub message : alert >>', { meta, body });
+      this.alertChanged$.emit({ ...meta, data: body });
     });
-    this.hub.on('serverStatus', (d) => {
-      console.info('## hub message : serverStatus >>', d);
-      this.serverStatusChanged$.emit(d);
+    this.hub.on('serverStatus', (meta, body) => {
+      console.info('## hub message : serverStatus >>', { meta, body });
+      this.serverStatusChanged$.emit({ ...meta, data: body });
     });
   }
 }
