@@ -460,3 +460,15 @@ button.warn .mat-badge-warn .mat-badge-content {
 .dx-datagrid-header-panel .dx-toolbar {
   margin: 3px 0 3px 0;
 }
+
+.dx-pager {
+  padding-top: 2px;
+  padding-bottom: 2px;
+
+  .dx-page-sizes .dx-page-size {
+    padding: 4px;
+  }
+  .dx-pages .dx-page {
+    padding: 4px;
+  }
+}

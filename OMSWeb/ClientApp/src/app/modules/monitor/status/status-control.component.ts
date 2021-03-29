@@ -77,7 +77,7 @@ export class StatusControlComponent implements OnInit {
     document.getElementById('status-control-container').style.height =
       resizedH + 'px';
 
-    this.tableHeightNum = resizedH - 65; /* header:40px, tab-panel:25px */
+    this.tableHeightNum = resizedH - 37; /* header:40px, tab-panel:25px */
   }
 
   resizeViewerStart() {
