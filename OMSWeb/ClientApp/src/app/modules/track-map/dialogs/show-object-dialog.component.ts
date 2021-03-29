@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSliderChange } from '@angular/material/slider';
 import { ToggleOptionKeyType } from '../../../models/enums';
 import { ToggleOptionsType } from '../../../models/settings.model';
 import { MapStatesService } from '../map-states.service';
@@ -10,6 +11,12 @@ import { MapStatesService } from '../map-states.service';
   styleUrls: ['./show-object-dialog.component.scss'],
 })
 export class ShowObjectDialogComponent implements OnInit {
+  slideValues = {
+    vehicleScale: 3,
+    mapRotation: 0,
+    segmentWidth: 3,
+  };
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public buttonState: ToggleOptionsType,
     private stateSvc: MapStatesService
@@ -20,6 +27,10 @@ export class ShowObjectDialogComponent implements OnInit {
   onChangedToggle(action: ToggleOptionKeyType) {
     const value = this.buttonState[action];
     this.stateSvc.changeToolbarState(action, value);
+  }
+  onSlideChange(name: string) {
+    const value = this.slideValues[name];
+    console.info('### changed value >>', value);
   }
 
   rotationValueLabel(value: number) {

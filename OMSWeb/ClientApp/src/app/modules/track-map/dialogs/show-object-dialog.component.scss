@@ -24,16 +24,29 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
 }
+.slider-form {
+  display: grid;
+  grid-template-columns: auto 50px;
+  align-items: center;
+
+  .slider-value {
+    text-align: right;
+  }
+}
 mat-slider {
   width: 100%;
 
-  ::ng-deep.mat-slider-wrapper {
-    top: 30px;
-  }
-
-
-  ::ng-deep.mat-slider-thumb-label {
-    width: 32px;
+  &.mat-slider-horizontal {
     height: 32px;
   }
+
+  ::ng-deep.mat-slider-wrapper {
+    top: 15px;
+  }
+
+
+  // ::ng-deep.mat-slider-thumb-label {
+  //   width: 32px;
+  //   height: 32px;
+  // }
 }

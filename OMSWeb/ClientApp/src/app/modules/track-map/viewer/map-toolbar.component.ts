@@ -65,7 +65,7 @@ export class MapToolbarComponent implements OnInit {
     }
     const rect: DOMRect = this.btnSearch.nativeElement.getBoundingClientRect();
     this._searchDlg = this.dialog.open(SearchDialogComponent, {
-      width: '300px',
+      width: '350px',
       hasBackdrop: false,
       disableClose: true,
       closeOnNavigation: true,
@@ -133,7 +133,7 @@ export class MapToolbarComponent implements OnInit {
 
     const rect = this.btnShowObj.nativeElement.getBoundingClientRect();
     this._showObjDlg = this.dialog.open(ShowObjectDialogComponent, {
-      width: '400px',
+      width: '350px',
       autoFocus: false,
       hasBackdrop: false,
       disableClose: false,

@@ -42,25 +42,13 @@
     matListItem
     mat-button
     class="tool-item"
+    matTooltipClass="snb-tooltip"
+    matTooltipPosition="right"
+    [matTooltip]="'names.showObjects' | translate"
     (click)="onTuneVisibility()"
   >
     <mat-icon>visibility</mat-icon>
   </button>
-  <!-- <button
-    matListItem
-    mat-button
-    class="tool-item"
-    #visibilityTrigger="mdePopoverTrigger"
-    [mdePopoverTriggerFor]="visibilityPopover"
-    mdePopoverTriggerOn="hover"
-    mdePopoverPositionX="before"
-    mdePopoverPositionY="below"
-    [mdePopoverOffsetX]="36"
-    [mdePopoverOffsetY]="0"
-    [mdePopoverOverlapTrigger]="true"
-  >
-    <mat-icon>visibility</mat-icon>
-  </button> -->
   <button
     matListItem
     mat-button

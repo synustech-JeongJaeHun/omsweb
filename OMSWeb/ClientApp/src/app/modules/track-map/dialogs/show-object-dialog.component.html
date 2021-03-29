@@ -2,34 +2,46 @@
   <ng-container class="dialog-layout">
     <fieldset class="option-form">
       <legend class="form-title">{{ "names.vehicleScale" | translate }}</legend>
-      <mat-slider
-        thumbLabel
-        [displayWith]="scaleValueLabel"
-        color="primary"
-        min="3"
-        max="20"
-      ></mat-slider>
+      <div class="slider-form">
+        <mat-slider
+          #frmVehicleScale
+          color="primary"
+          min="3"
+          max="20"
+          [(ngModel)]="slideValues.vehicleScale"
+          (change)="onSlideChange('vehicleScale')"
+        ></mat-slider>
+        <div class="slider-value">{{ frmVehicleScale.value }}px</div>
+      </div>
     </fieldset>
     <fieldset class="option-form">
       <legend class="form-title">{{ "names.mapRotation" | translate }}</legend>
-      <mat-slider
-        thumbLabel
-        [displayWith]="rotationValueLabel"
-        color="primary"
-        [step]="45"
-        min="0"
-        max="315"
-      ></mat-slider>
+      <div class="slider-form">
+        <mat-slider
+          #frmMapRotation
+          color="primary"
+          [step]="45"
+          min="0"
+          max="315"
+          [(ngModel)]="slideValues.mapRotation"
+          (change)="onSlideChange('mapRotation')"
+        ></mat-slider>
+        <div class="slider-value">{{ frmMapRotation.value }}&deg;</div>
+      </div>
     </fieldset>
     <fieldset class="option-form">
       <legend class="form-title">{{ "names.segmentWidth" | translate }}</legend>
-      <mat-slider
-        thumbLabel
-        [displayWith]="scaleValueLabel"
-        color="primary"
-        min="3"
-        max="20"
-      ></mat-slider>
+      <div class="slider-form">
+        <mat-slider
+          #frmSegmentWidth
+          color="primary"
+          min="3"
+          max="20"
+          [(ngModel)]="slideValues.segmentWidth"
+          (change)="onSlideChange('segmentWidth')"
+        ></mat-slider>
+        <div class="slider-value">{{ frmSegmentWidth.value }}px</div>
+      </div>
     </fieldset>
     <fieldset class="option-form">
       <legend class="form-title">
@@ -49,16 +61,16 @@
           >{{ "names.showExpectedPaths" | translate }}</mat-slide-toggle
         >
         <mat-slide-toggle
-          [(ngModel)]="buttonState.pointLabels"
-          (change)="onChangedToggle('pointLabels')"
-          color="primary"
-          >{{ "names.showPointLabels" | translate }}</mat-slide-toggle
-        >
-        <mat-slide-toggle
           [(ngModel)]="buttonState.segmentDirections"
           (change)="onChangedToggle('segmentDirections')"
           color="primary"
           >{{ "names.showSegmentDirections" | translate }}</mat-slide-toggle
+        >
+        <mat-slide-toggle
+          [(ngModel)]="buttonState.pointLabels"
+          (change)="onChangedToggle('pointLabels')"
+          color="primary"
+          >{{ "names.showPointLabels" | translate }}</mat-slide-toggle
         >
         <mat-slide-toggle
           [(ngModel)]="buttonState.stations"
