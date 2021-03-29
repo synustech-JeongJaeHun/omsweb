@@ -133,10 +133,10 @@ export class MapToolbarComponent implements OnInit {
 
     const rect = this.btnShowObj.nativeElement.getBoundingClientRect();
     this._showObjDlg = this.dialog.open(ShowObjectDialogComponent, {
-      width: '300px',
+      width: '400px',
       autoFocus: false,
       hasBackdrop: false,
-      disableClose: true,
+      disableClose: false,
       closeOnNavigation: true,
       position: { left: '36px', top: `${rect.top}px` },
       data: this.buttonState

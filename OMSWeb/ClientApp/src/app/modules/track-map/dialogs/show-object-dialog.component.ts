@@ -21,4 +21,11 @@ export class ShowObjectDialogComponent implements OnInit {
     const value = this.buttonState[action];
     this.stateSvc.changeToolbarState(action, value);
   }
+
+  rotationValueLabel(value: number) {
+    return `${value}°`;
+  }
+  scaleValueLabel(value: number) {
+    return `${value}px`;
+  }
 }

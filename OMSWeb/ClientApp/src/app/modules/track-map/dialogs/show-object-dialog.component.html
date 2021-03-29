@@ -1,12 +1,40 @@
 <oms-dialog-base [title]="'names.showObjects' | translate">
   <ng-container class="dialog-layout">
-    <!-- <div class="option-form">
-      <label></label>
-    </div>
-    <div class="option-form"></div>
-    <div class="option-form"></div> -->
-    <div class="option-form">
-      <!-- <label class="form-title">{{ "names.visibleOptions" | translate }}</label> -->
+    <fieldset class="option-form">
+      <legend class="form-title">{{ "names.vehicleScale" | translate }}</legend>
+      <mat-slider
+        thumbLabel
+        [displayWith]="scaleValueLabel"
+        color="primary"
+        min="3"
+        max="20"
+      ></mat-slider>
+    </fieldset>
+    <fieldset class="option-form">
+      <legend class="form-title">{{ "names.mapRotation" | translate }}</legend>
+      <mat-slider
+        thumbLabel
+        [displayWith]="rotationValueLabel"
+        color="primary"
+        [step]="45"
+        min="0"
+        max="315"
+      ></mat-slider>
+    </fieldset>
+    <fieldset class="option-form">
+      <legend class="form-title">{{ "names.segmentWidth" | translate }}</legend>
+      <mat-slider
+        thumbLabel
+        [displayWith]="scaleValueLabel"
+        color="primary"
+        min="3"
+        max="20"
+      ></mat-slider>
+    </fieldset>
+    <fieldset class="option-form">
+      <legend class="form-title">
+        {{ "names.visibleOptions" | translate }}
+      </legend>
       <div class="option-list">
         <mat-slide-toggle
           [(ngModel)]="buttonState.vehicleLines"
@@ -63,6 +91,6 @@
           >{{ "names.showOverlaps" | translate }}</mat-slide-toggle
         >
       </div>
-    </div>
+    </fieldset>
   </ng-container>
 </oms-dialog-base>

@@ -45,6 +45,9 @@
     "resetAllVehicle": "Reset All Vehicle",
     "estopAllVehicle": "EStop All Vehicle",
 
+    "vehicleScale":"Vehicle Scale",
+    "mapRotation":"Map Rotation",
+    "segmentWidth":"Segment Width",
     "visibleOptions": "Visible Options",
     "showVehicleLines": "Vehicle Lines",
     "showExpectedPaths": "Expected Paths",

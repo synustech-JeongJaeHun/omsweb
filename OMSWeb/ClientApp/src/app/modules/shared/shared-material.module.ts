@@ -19,6 +19,7 @@ import { OverlayModule } from '@angular/cdk/overlay';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import {MatSliderModule} from '@angular/material/slider';
 
 @NgModule({
   exports: [
@@ -39,6 +40,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     MatDialogModule,
     MatTabsModule,
     MatSlideToggleModule,
+    MatSliderModule,
     OverlayModule,
     DragDropModule,
   ],

@@ -6,3 +6,34 @@
     font-family: var(--theme-font);
   }
 }
+
+.option-form {
+  // position: relative;
+  border: 1px solid var(--theme-border-color);
+  border-radius: 4px;
+  padding: 8px;
+
+  .form-title {
+    // position: absolute;
+    // top: -16px;
+    // left: 4px;
+    font-weight: bold;
+  }
+}
+.option-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+mat-slider {
+  width: 100%;
+
+  ::ng-deep.mat-slider-wrapper {
+    top: 30px;
+  }
+
+
+  ::ng-deep.mat-slider-thumb-label {
+    width: 32px;
+    height: 32px;
+  }
+}
