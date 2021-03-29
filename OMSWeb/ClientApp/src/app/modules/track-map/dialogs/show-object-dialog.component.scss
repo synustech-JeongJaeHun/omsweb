@@ -1,0 +1,8 @@
+.mat-slide-toggle {
+  margin: 4px;
+  font-size: 12px;
+
+  ::ng-deep.mat-slide-toggle-content {
+    font-family: var(--theme-font);
+  }
+}

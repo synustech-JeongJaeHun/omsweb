@@ -44,6 +44,8 @@
     "setAutoAllVehicle": "Set Auto All Vehicle",
     "resetAllVehicle": "Reset All Vehicle",
     "estopAllVehicle": "EStop All Vehicle",
+
+    "visibleOptions": "Visible Options",
     "showVehicleLines": "Vehicle Lines",
     "showExpectedPaths": "Expected Paths",
     "showPointLabels": "Point Labels",

@@ -1,3 +1,68 @@
-<oms-dialog-base [title]="'names.showObjects'|translate">
-
+<oms-dialog-base [title]="'names.showObjects' | translate">
+  <ng-container class="dialog-layout">
+    <!-- <div class="option-form">
+      <label></label>
+    </div>
+    <div class="option-form"></div>
+    <div class="option-form"></div> -->
+    <div class="option-form">
+      <!-- <label class="form-title">{{ "names.visibleOptions" | translate }}</label> -->
+      <div class="option-list">
+        <mat-slide-toggle
+          [(ngModel)]="buttonState.vehicleLines"
+          (change)="onChangedToggle('vehicleLines')"
+          color="primary"
+          >{{ "names.showVehicleLines" | translate }}</mat-slide-toggle
+        >
+        <mat-slide-toggle
+          [(ngModel)]="buttonState.expectedPaths"
+          (change)="onChangedToggle('expectedPaths')"
+          color="primary"
+          >{{ "names.showExpectedPaths" | translate }}</mat-slide-toggle
+        >
+        <mat-slide-toggle
+          [(ngModel)]="buttonState.pointLabels"
+          (change)="onChangedToggle('pointLabels')"
+          color="primary"
+          >{{ "names.showPointLabels" | translate }}</mat-slide-toggle
+        >
+        <mat-slide-toggle
+          [(ngModel)]="buttonState.segmentDirections"
+          (change)="onChangedToggle('segmentDirections')"
+          color="primary"
+          >{{ "names.showSegmentDirections" | translate }}</mat-slide-toggle
+        >
+        <mat-slide-toggle
+          [(ngModel)]="buttonState.stations"
+          (change)="onChangedToggle('stations')"
+          color="primary"
+          >{{ "names.showStations" | translate }}</mat-slide-toggle
+        >
+        <mat-slide-toggle
+          [(ngModel)]="buttonState.buffers"
+          (change)="onChangedToggle('buffers')"
+          color="primary"
+          >{{ "names.showBuffers" | translate }}</mat-slide-toggle
+        >
+        <mat-slide-toggle
+          [(ngModel)]="buttonState.groups"
+          (change)="onChangedToggle('groups')"
+          color="primary"
+          >{{ "names.showGroups" | translate }}</mat-slide-toggle
+        >
+        <mat-slide-toggle
+          [(ngModel)]="buttonState.clusters"
+          (change)="onChangedToggle('clusters')"
+          color="primary"
+          >{{ "names.showClusters" | translate }}</mat-slide-toggle
+        >
+        <mat-slide-toggle
+          [(ngModel)]="buttonState.overlaps"
+          (change)="onChangedToggle('overlaps')"
+          color="primary"
+          >{{ "names.showOverlaps" | translate }}</mat-slide-toggle
+        >
+      </div>
+    </div>
+  </ng-container>
 </oms-dialog-base>
