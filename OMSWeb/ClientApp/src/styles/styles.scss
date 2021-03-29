@@ -26,7 +26,7 @@
   --button-border-color: #d4d4d4;
   --button-background-color: white;
   --button-highlight-color: #96d4ff;
-  --button-active-color: #ffd740;
+  --button-active-color: #33333311;
   --dialog-border-color: #b5bfcd;
   --mask-weight: 10;
   --transparency: 0.8;
@@ -307,6 +307,14 @@ body {
 header {
   width: 100vw;
 }
+button.active {
+  background-color: var(--button-active-color);
+}
+
+button:focus {
+  outline: 0;
+}
+
 
 // .material-icons-two-tone {
 //   filter: invert(0.5) sepia(1) saturate(10) hue-rotate(180deg);
