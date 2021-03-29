@@ -3,7 +3,7 @@
 
 :root {
   --theme-color: #328cc1;
-  --theme-primary-color: #3f51b5;
+  --theme-primary-color: #4974c1;
   --theme-color-light: #dddddd;
   --theme-color-dark: darkslategray;
   --theme-color-active: #0095ff;
@@ -364,10 +364,13 @@ button.warn .mat-badge-warn .mat-badge-content {
   padding: 4px 0 0 0 !important;
 }
 
+
 [mat-button],
 [mat-flat-button],
 [mat-raised-button],
 [mat-stroked-button] {
+  font-weight: bold;
+
   .mat-button-wrapper {
     display: flex;
     align-items: center;
@@ -401,6 +404,28 @@ button.warn .mat-badge-warn .mat-badge-content {
 
   &.mat-tab-label-active {
     background-color: white;
+  }
+}
+
+// [mat-flat-button],
+// [mat-raised-button] {
+//   &.mat-primary {
+//     background-color: #4974c1;
+//   }
+//   &.mat-warn {
+//     background-color: #d6746d;
+//   }
+// }
+
+[mat-button],
+[mat-stroked-button] {
+  &.accent {
+    &.mat-primary {
+      background-color: #dae7ff;
+    }
+    &.mat-warn {
+      background-color: #ffdddb;
+    }
   }
 }
 
