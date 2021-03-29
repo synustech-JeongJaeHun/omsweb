@@ -1,23 +1,27 @@
 button {
   position: relative;
-  color: var(--theme-text-color);
+  color: rgba(#666, 0.3);
   margin-right: 20px;
+
+  mat-icon {
+    font-size: 20px;
+  }
 }
 button.has-issue {
-  color: #666;
+  color: rgba(#666, 0.5);
 }
 button.warn.is-critical {
-  color: var(--notification-color);
+  color: rgba(rgb(255, 180, 0), 0.6);
 }
 button.alarm.is-critical {
-  color: var(--notification-critical-color);
+  color: rgba(rgb(255, 80, 0), 0.6);
 }
 mat-icon ::ng-deep.mat-badge-content {
   font-size: 11px;
   line-height: 16px;
   font-weight: normal;
   border-radius: 3px;
-  left: 10px;
+  left: 16px;
   right: initial !important;
   top: -8px !important;
   width: initial;
