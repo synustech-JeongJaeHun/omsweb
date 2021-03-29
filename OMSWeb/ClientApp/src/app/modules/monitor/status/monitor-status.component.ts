@@ -25,7 +25,7 @@ import { IPreferences } from '../../../models/settings.model';
         overflow-y: hidden;
         position: absolute;
         /* border-radius: 5px; */
-        box-shadow: 3px 3px 12px #7f7f7f;
+        box-shadow: 0px 0px 5px #aaa;
         display: inline-block;
         flex-direction: column;
         /* background: #77919d; */
