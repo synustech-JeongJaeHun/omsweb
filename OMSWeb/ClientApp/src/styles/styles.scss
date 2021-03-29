@@ -324,6 +324,16 @@ header {
 .mat-dialog-container {
   padding: 8px !important;
 }
+[mat-dialog-title] {
+  font-family: Mulish, Roboto, "Helvetica Neue", sans-serif;
+  font-size: 14px;
+  line-height: 22px;
+  margin: -8px -8px 8px -8px !important;
+  padding: 3px 16px;
+  background: var(--theme-primary-color);
+  color: #fff;
+  cursor: move;
+}
 .alarms-dialog {
   .mat-dialog-container {
     border: 2px solid var(--notification-critical-color);
@@ -352,14 +362,6 @@ button.warn .mat-badge-warn .mat-badge-content {
   justify-content: flex-end;
   margin-bottom: -8px !important;
   padding: 4px 0 0 0 !important;
-}
-[mat-dialog-title] {
-  font-family: Mulish, Roboto, "Helvetica Neue", sans-serif;
-  margin: -8px -8px 8px -8px !important;
-  padding: 4px 16px;
-  background: var(--theme-primary-color);
-  color: #fff;
-  cursor: move;
 }
 
 [mat-button],
