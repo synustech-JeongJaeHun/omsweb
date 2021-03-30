@@ -1,12 +1,18 @@
 import { ToggleOptionKeyType } from './enums';
 import { StorageUtil } from '@oms/utils/storage.util';
+import { main_css } from '../modules/shared/utils/css-loader';
 
 export type ToggleOptionsType = {
   [key in ToggleOptionKeyType]: boolean;
 };
 
+export interface IMapConfig {
+  vehicleScale?: number;
+}
+
 export interface IPreferences {
   toggles: ToggleOptionsType;
+  map: IMapConfig;
 }
 
 export const defaultToggleOptions: ToggleOptionsType = {
@@ -24,24 +30,30 @@ export const defaultToggleOptions: ToggleOptionsType = {
   clusters: true,
   overlaps: false,
 };
+export const defaultMapConfig: IMapConfig = {
+  vehicleScale: main_css.vehicle.radius,
+};
 
 export class ClientPreferences implements IPreferences {
   toggles: ToggleOptionsType;
+  map: IMapConfig;
 
   constructor(private storeKey: string, private base?: IPreferences) {
     this.load();
   }
 
-  load() {
+  private load() {
     const value = StorageUtil.getLocal(this.storeKey) || '{}';
-    const { toggles = {} } = JSON.parse(value);
-    const { toggles: baseToggle = {} } = this.base || {};
+    const { toggles = {}, map = {} } = JSON.parse(value);
+    const { toggles: baseToggle = {}, map: baseMap = {} } = this.base || {};
     this.toggles = { ...defaultToggleOptions, ...baseToggle, ...toggles };
+    this.map = { ...defaultMapConfig, ...baseMap, ...map };
   }
 
   save() {
     const pref: IPreferences = {
       toggles: { ...this.toggles },
+      map: { ...this.map },
     };
     StorageUtil.setLocal(this.storeKey, JSON.stringify(pref));
   }

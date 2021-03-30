@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSliderChange } from '@angular/material/slider';
-import { ToggleOptionKeyType } from '../../../models/enums';
+import { MapConfigType, ToggleOptionKeyType } from '../../../models/enums';
 import { ToggleOptionsType } from '../../../models/settings.model';
 import { MapStatesService } from '../map-states.service';
 
@@ -22,15 +22,18 @@ export class ShowObjectDialogComponent implements OnInit {
     private stateSvc: MapStatesService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    const pref = this.stateSvc.preferences;
+    this.slideValues.vehicleScale = pref.map.vehicleScale;
+  }
 
   onChangedToggle(action: ToggleOptionKeyType) {
     const value = this.buttonState[action];
     this.stateSvc.changeToolbarState(action, value);
   }
-  onSlideChange(name: string) {
-    const value = this.slideValues[name];
-    console.info('### changed value >>', value);
+  onSlideChange(type: MapConfigType) {
+    const value = this.slideValues[type];
+    this.stateSvc.changeConfig({ type, value });
   }
 
   rotationValueLabel(value: number) {

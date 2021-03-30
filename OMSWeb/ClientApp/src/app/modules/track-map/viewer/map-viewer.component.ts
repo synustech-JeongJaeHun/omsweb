@@ -62,6 +62,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   //#region subscriptions
   private toolbarToggleEvent$: Subscription;
   private toolbarCommandEvent$: Subscription;
+  private mapConfigChangeEvent$: Subscription;
 
   private vehicleChanged$: Subscription;
   private segmentChanged$: Subscription;
@@ -85,6 +86,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.toolbarToggleEvent$ && this.toolbarToggleEvent$.unsubscribe();
     this.toolbarCommandEvent$ && this.toolbarCommandEvent$.unsubscribe();
+    this.mapConfigChangeEvent$ && this.mapConfigChangeEvent$.unsubscribe();
 
     this.vehicleChanged$ && this.vehicleChanged$.unsubscribe();
     this.segmentChanged$ && this.segmentChanged$.unsubscribe();
@@ -118,6 +120,10 @@ export class MapViewerComponent implements OnInit, OnDestroy {
         this.viewer.onCommandAction(event);
       }
     );
+    this.mapConfigChangeEvent$ = this.statesSvc.configStates$.subscribe((event) => {
+      this.viewer.onChangeConfig(event);
+    })
+
     this.vehicleChanged$ = this.hubSvc.vehicleChanged$.subscribe(
       (e: IDataChangeEvent) => this.applyVehicleChange(e)
     );

@@ -51,6 +51,8 @@ export type CommandKeyType =
   | 'resetVehicles'
   | 'eStopVehicles';
 
+export type MapConfigType = 'vehicleScale' | 'mapRotation' | 'segmentWidth';
+
 // export enum MapToolbarStatusKeys {
 //   minimap,
 //   controlTable,
@@ -83,4 +85,3 @@ export type OrderStatesType =
   | 'ARRIVED'
   | 'ASSIGNED'
   | 'UNASSIGNED';
-

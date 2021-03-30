@@ -11,7 +11,9 @@ import { setting } from '../../../../settings';
 import { Dto } from '@oms/models/dto/track.model';
 import {
   ICoordinate,
+  IMapConfigChangeEvent,
   IMapGeometry,
+  IMapNodeScale,
   IMapSize,
   IMapToolbarCommandEvent,
   IMapToolbarToggleEvent,
@@ -31,6 +33,7 @@ import { Point } from '../../../models/point.model';
 import { MapStatesService } from '../map-states.service';
 import { MapDataService } from '../map-data.service';
 import { IPreferences } from '../../../models/settings.model';
+import {} from '@oms/models/drawing.model';
 export class ViewController {
   //#region properties
   private svg: any; // d3.Selection<d3.ContainerElement, unknown, HTMLElement, any>;
@@ -123,9 +126,13 @@ export class ViewController {
     scale: 1,
     value: 30,
   };
-  private vehicle_scale = {
-    min: this.VEHICLE_SCALE_MIN,
-    max: this.VEHICLE_SCALE_MAX,
+  // private vehicle_scale = {
+  //   min: this.VEHICLE_SCALE_MIN,
+  //   max: this.VEHICLE_SCALE_MAX,
+  //   scale: 1,
+  //   value: 8,
+  // };
+  private vehicle_scale: IMapNodeScale = {
     scale: 1,
     value: 8,
   };
@@ -604,9 +611,7 @@ export class ViewController {
     // if(!Array.isArray(updated_objects)) {
     //     updated_objects = [updated_objects]
     // }
-
     // let updated_object = updated_objects.find(object => object.id === popup.side_panel.data.id)
-
     // if (updated_object && updated_object.constructor === popup.side_panel.data.constructor && updated_object.id === popup.side_panel.data.id) {
     //     // display_side_panel_popup(popup.side_panel.type, updated_object)
     //     popup.side_panel.update_data(updated_object)
@@ -814,7 +819,7 @@ export class ViewController {
     this.set_transform(translate_x, translate_y, k, true, transition_type);
   }
 
-  //#region toolbar actions
+  //#region subscription event handlers
   onChangeVisibility(event: IMapToolbarToggleEvent) {
     const { type: objectType, value: visibility } = event;
     const transform = this.getZoom(MapTypes.MAIN);
@@ -932,6 +937,15 @@ export class ViewController {
         break;
     }
   }
+  onChangeConfig(event: IMapConfigChangeEvent) {
+    switch (event.type) {
+      case 'vehicleScale':
+        this.update_vehicle_scale(event.value);
+        break;
+      default:
+        break;
+    }
+  }
   //#endregion
 
   get_defaults() {
@@ -1017,6 +1031,9 @@ export class ViewController {
 
   private initStates() {
     // @TODO initStates 구현 (v1 : get_ui_states)
+    const { map = {} } = this.statesSvc.preferences || {};
+    this.vehicle_scale.value = Number(map.vehicleScale).valueOf();
+    this.set_vehicle_scale(this.vehicle_scale.value);
   }
 
   private initSvg(target_id: string, mapSize: IMapSize) {
@@ -6388,7 +6405,7 @@ export class ViewController {
     d3_this: d3.Selection<d3.BaseType, unknown, HTMLElement, any>,
     call: any,
     dom_css: any,
-    vehicle_scale: { min: number; max: number; scale: number; value: number }
+    vehicle_scale: IMapNodeScale
   ) {
     // Prevent call
     if (call.length === 0) {
@@ -6431,7 +6448,7 @@ export class ViewController {
     d3_this: d3.Selection<d3.BaseType, unknown, HTMLElement, any>,
     push: any,
     dom_css: any,
-    vehicle_scale: { min: number; max: number; scale: number; value: number }
+    vehicle_scale: IMapNodeScale
   ) {
     let call_svg = d3_this.select('.call');
     let x_offset = (dom_css.radius * 4) / 3;
@@ -6767,7 +6784,7 @@ export class ViewController {
     hotlot: any,
     orderId: any,
     dom_css: any,
-    vehicle_scale: { min: number; max: number; scale: number; value: number }
+    vehicle_scale: IMapNodeScale
   ) {
     let current_order_label = d3_this.select('.label_order');
     if (hotlot) {
@@ -6901,7 +6918,7 @@ export class ViewController {
     orderId: any,
     hotlot: any,
     dom_css: any,
-    vehicle_scale: { min: number; max: number; scale: number; value: number }
+    vehicle_scale: IMapNodeScale
   ) {
     let current_order_label = d3_this.select('.label_order');
     if (
@@ -6934,7 +6951,7 @@ export class ViewController {
     id: any,
     logicalId: any,
     dom_css: any,
-    vehicle_scale: { min: number; max: number; scale: number; value: number }
+    vehicle_scale: { scale: number; value: number }
   ) {
     let current_vehicle_label = d3_this.select('.label');
     let label = logicalId ? logicalId : id;
@@ -7991,6 +8008,30 @@ export class ViewController {
         k: parseInt(current_transform.k),
       });
     }
+  }
+  update_vehicle_scale(updated_radius: number, is_save_state: boolean = false) {
+    this.set_vehicle_scale(updated_radius, is_save_state);
+
+    this.update_vehicle_scale_n_rotation_rendering();
+
+    // Calculate viewing area
+    let view_box = this.get_viewbox();
+
+    // Update vehicle
+    this.vehicle_adaptive_rendering(main_css.vehicle, view_box);
+  }
+  set_vehicle_scale(updated_radius: number, is_save_state: boolean = false) {
+    // Calcualte scale value
+    let original_radius = main_css.vehicle.radius;
+    let updated_scale_value = updated_radius / original_radius;
+
+    // Set scale value
+    this.vehicle_scale.scale = updated_scale_value;
+    this.vehicle_scale.value = updated_radius;
+
+    // if (is_save_state) {
+    //   this.save_state('vehicleScale', this.vehicle_scale.value);
+    // }
   }
   update_vehicle_scale_n_rotation_rendering() {
     let vehicle_css = main_css.vehicle;
@@ -12462,6 +12503,10 @@ export class ViewController {
     // if (state_prefix) {
     //   this.set_state(`${state_prefix}.${name}`, value);
     // }
+
+    const pref = this.statesSvc.preferences;
+    pref.map[name] = value;
+    pref.save();
   }
   zoom_to(destination_pt: number[], zoom_type: string, zoom_k: number) {
     // Calculate the proper transform value for given destination_pt

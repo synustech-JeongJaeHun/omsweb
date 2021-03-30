@@ -1,4 +1,4 @@
-import { CommandKeyType, ToggleOptionKeyType } from './enums';
+import { CommandKeyType, MapConfigType, ToggleOptionKeyType } from './enums';
 
 export interface ISize {
   width?: number;
@@ -57,4 +57,14 @@ export interface IMapToolbarToggleEvent {
 export interface IMapToolbarCommandEvent {
   type: CommandKeyType;
   value?: any;
+}
+
+export interface IMapConfigChangeEvent {
+  type: MapConfigType;
+  value?: any;
+}
+
+export interface IMapNodeScale {
+  scale: number;
+  value: number;
 }
