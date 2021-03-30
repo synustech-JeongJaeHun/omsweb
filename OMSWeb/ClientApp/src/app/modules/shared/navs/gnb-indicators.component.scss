@@ -6,6 +6,10 @@ button {
   mat-icon {
     font-size: 20px;
   }
+
+  &.alarm mat-icon {
+    font-size: 22px;
+  }
 }
 button.has-issue {
   color: rgba(#666, 0.5);

@@ -90,7 +90,7 @@
     "desc": "Description",
 
     "alarms": "Alarms",
-    "alerts": "Alerts",
+    "alerts": "Warnings",
 
     "manualTransfer": "Manual Transfer",
     "command-move": "Move",
