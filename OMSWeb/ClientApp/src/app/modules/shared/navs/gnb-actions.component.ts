@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog, MatDialogRef, MatDialogState } from '@angular/material/dialog';
+import { LegendDialogComponent } from '../dialogs/legend-dialog.component';
 
 @Component({
   selector: 'oms-gnb-actions',
@@ -6,7 +8,25 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./gnb-actions.component.scss'],
 })
 export class GnbActionsComponent implements OnInit {
-  constructor() {}
+  private _legendDlg: MatDialogRef<LegendDialogComponent, any>;
 
-  ngOnInit(): void {}
+  constructor(private dialog: MatDialog) {}
+
+  ngOnInit(): void {
+    this.onLegend();
+  }
+
+  onLegend() {
+    if (this._legendDlg && this._legendDlg.getState() === MatDialogState.OPEN) {
+      this._legendDlg.close();
+      return;
+    }
+
+    this._legendDlg = this.dialog.open(LegendDialogComponent, {
+      width: '650px',
+      hasBackdrop: false,
+      disableClose: true,
+      closeOnNavigation: true,
+    });
+  }
 }
