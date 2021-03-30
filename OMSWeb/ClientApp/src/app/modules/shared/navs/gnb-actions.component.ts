@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog, MatDialogRef, MatDialogState } from '@angular/material/dialog';
+import {
+  MatDialog,
+  MatDialogRef,
+  MatDialogState,
+} from '@angular/material/dialog';
 import { LegendDialogComponent } from '../dialogs/legend-dialog.component';
 
 @Component({
@@ -12,9 +16,7 @@ export class GnbActionsComponent implements OnInit {
 
   constructor(private dialog: MatDialog) {}
 
-  ngOnInit(): void {
-    this.onLegend();
-  }
+  ngOnInit(): void {}
 
   onLegend() {
     if (this._legendDlg && this._legendDlg.getState() === MatDialogState.OPEN) {

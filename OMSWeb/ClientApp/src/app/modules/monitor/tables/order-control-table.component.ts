@@ -52,8 +52,7 @@ export class OrderControlTableComponent implements OnInit, OnDestroy {
     );
   }
 
-  onDelete() {
-  }
+  onDelete() {}
 
   private onTableChanged(payload: IDataChangeEvent) {
     let needReload = false;
@@ -61,7 +60,7 @@ export class OrderControlTableComponent implements OnInit, OnDestroy {
       if (['INSERT', 'DELETE'].includes(payload.operation)) {
         needReload = true;
       } else {
-        needReload = this.dataSource.items().every(x => x.id !== payload.id);
+        needReload = this.dataSource.items().every((x) => x.id !== payload.id);
       }
     } else {
       needReload = true;
