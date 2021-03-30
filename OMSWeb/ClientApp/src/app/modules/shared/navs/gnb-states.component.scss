@@ -17,4 +17,8 @@
 
 .status-item {
   margin: 0 10px;
+
+  &.tcs-mode {
+    margin: 0;
+  }
 }
