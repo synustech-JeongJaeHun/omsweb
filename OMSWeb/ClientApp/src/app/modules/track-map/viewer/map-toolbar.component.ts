@@ -11,7 +11,7 @@ import {
   defaultToggleOptions,
   ToggleOptionsType,
 } from '@oms/models/settings.model';
-import { CommandKeyType, ToggleOptionKeyType } from '../../../models/enums';
+import { CommandKeyType, ToggleOptionKeyType, UserPermissions } from '../../../models/enums';
 
 import { MapStatesService } from '../map-states.service';
 import { MessagesService } from '@oms/services/messages.service';
@@ -26,6 +26,8 @@ import {
 import { TrackVehicleDialogComponent } from '../dialogs/track-vehicle-dialog.component';
 import { CommandDialogComponent } from '../dialogs/command-dialog.component';
 import { ShowObjectDialogComponent } from '../dialogs/show-object-dialog.component';
+import { AuthService } from '../../../services/auth.service';
+import { AccountUtil } from '../../shared/utils/account.util';
 
 @Component({
   selector: 'oms-map-toolbar',
@@ -43,12 +45,20 @@ export class MapToolbarComponent implements OnInit {
 
   visibilityOpen = false;
 
+  get canControl():boolean {
+    return (
+      this.auth.isAuthenticated &&
+      AccountUtil.hasPermission(UserPermissions.controlActions, this.auth.CurrentUser)
+    );
+  }
+
   private _searchDlg: MatDialogRef<SearchDialogComponent, any>;
   private _trackDlg: MatDialogRef<TrackVehicleDialogComponent, any>;
   private _cmdDlg: MatDialogRef<CommandDialogComponent, any>;
   private _showObjDlg: MatDialogRef<ShowObjectDialogComponent, any>;
 
   constructor(
+    private auth: AuthService,
     private stateSvc: MapStatesService,
     private messageSvc: MessagesService,
     private dialogSvc: DialogService,

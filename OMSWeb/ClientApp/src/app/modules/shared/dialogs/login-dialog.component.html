@@ -1,0 +1,26 @@
+<oms-dialog-base [title]="'names.login' | translate">
+  <ng-container class="dialog-layout">
+    <form [formGroup]="form" novalidate class="login-form" (ngSubmit)="onLogin()">
+      <div mat-dialog-content>
+        <mat-form-field appearance="fill">
+          <mat-label>{{ "names.email" | translate }}</mat-label>
+          <input matInput formControlName="email" />
+          <mat-icon matSuffix>person</mat-icon>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>{{ "names.password" | translate }}</mat-label>
+          <input type="password" matInput formControlName="password" />
+          <mat-icon matSuffix>lock</mat-icon>
+        </mat-form-field>
+      </div>
+      <div mat-dialog-actions>
+        <button type="button" mat-button color="primary">
+          {{ "names.signup" | translate }}
+        </button>
+        <button type="submit" mat-raised-button color="primary">
+          {{ "names.login" | translate }}
+        </button>
+      </div>
+    </form>
+  </ng-container>
+</oms-dialog-base>

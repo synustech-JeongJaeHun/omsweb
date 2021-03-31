@@ -85,3 +85,10 @@ export type OrderStatesType =
   | 'ARRIVED'
   | 'ASSIGNED'
   | 'UNASSIGNED';
+
+
+export enum UserPermissions {
+  none = 0,
+  gnb = 1 << 0,
+  controlActions = 1 << 1,
+}

@@ -1,7 +1,7 @@
 {
   "names": {
     "monitor": "Monitor",
-    "playback":"Playback",
+    "playback": "Playback",
     "history": "History",
     "logs": "Logs",
     "settings": "Settings",
@@ -35,11 +35,11 @@
     "loading": "Loading",
     "full": "Full",
     "unloading": "Unloading",
-    "empty":"Empty",
+    "empty": "Empty",
     "loadFailed": "Load Failed",
     "unloadFailed": "Unload Failed",
     "hotlot": "Hotlot",
-    "next":"Next",
+    "next": "Next",
     "pickUp": "Pick Up",
     "dropOff": "Drop Off",
     "disabled": "Disabled",
@@ -81,9 +81,9 @@
     "resetAllVehicle": "Reset All Vehicle",
     "estopAllVehicle": "EStop All Vehicle",
 
-    "vehicleScale":"Vehicle Scale",
-    "mapRotation":"Map Rotation",
-    "segmentWidth":"Segment Width",
+    "vehicleScale": "Vehicle Scale",
+    "mapRotation": "Map Rotation",
+    "segmentWidth": "Segment Width",
     "visibleOptions": "Visible Options",
     "showVehicleLines": "Vehicle Lines",
     "showExpectedPaths": "Expected Paths",
@@ -137,7 +137,11 @@
     "selectedPoint": "Selected Point",
     "selectedSource": "Selected Source",
     "selectedDest": "Selected Dest",
-    "carrierId": "Carrier Id"
+    "carrierId": "Carrier Id",
+
+    "email": "Email",
+    "password": "Password",
+    "signup": "Sign Up"
   },
   "enums": {},
   "errors": {},

@@ -102,41 +102,42 @@
   >
     <mat-icon>motion_photos_on</mat-icon>
   </button>
-
-  <button
-    matListItem
-    mat-button
-    class="tool-item"
-    matTooltipClass="snb-tooltip"
-    matTooltipPosition="right"
-    [matTooltip]="'names.setAutoAllVehicle' | translate"
-    (click)="onSetAuto()"
-  >
-    <mat-icon>brightness_auto</mat-icon>
-  </button>
-  <button
-    matListItem
-    mat-button
-    class="tool-item"
-    matTooltipClass="snb-tooltip"
-    matTooltipPosition="right"
-    [matTooltip]="'names.resetAllVehicle' | translate"
-    matTooltip="Reset All Vehicle"
-    (click)="onVehicleReset()"
-  >
-    <mat-icon>settings_backup_restore</mat-icon>
-  </button>
-  <button
-    matListItem
-    mat-button
-    class="tool-item"
-    matTooltipClass="snb-tooltip"
-    matTooltipPosition="right"
-    [matTooltip]="'names.estopAllVehicle' | translate"
-    (click)="onEStop()"
-  >
-    <mat-icon fontSet="material-icons-outlined">stop_circle</mat-icon>
-  </button>
+  <ng-container *ngIf="canControl">
+    <button
+      matListItem
+      mat-button
+      class="tool-item"
+      matTooltipClass="snb-tooltip"
+      matTooltipPosition="right"
+      [matTooltip]="'names.setAutoAllVehicle' | translate"
+      (click)="onSetAuto()"
+    >
+      <mat-icon>brightness_auto</mat-icon>
+    </button>
+    <button
+      matListItem
+      mat-button
+      class="tool-item"
+      matTooltipClass="snb-tooltip"
+      matTooltipPosition="right"
+      [matTooltip]="'names.resetAllVehicle' | translate"
+      matTooltip="Reset All Vehicle"
+      (click)="onVehicleReset()"
+    >
+      <mat-icon>settings_backup_restore</mat-icon>
+    </button>
+    <button
+      matListItem
+      mat-button
+      class="tool-item"
+      matTooltipClass="snb-tooltip"
+      matTooltipPosition="right"
+      [matTooltip]="'names.estopAllVehicle' | translate"
+      (click)="onEStop()"
+    >
+      <mat-icon fontSet="material-icons-outlined">stop_circle</mat-icon>
+    </button>
+  </ng-container>
 </mat-list>
 
 <mde-popover

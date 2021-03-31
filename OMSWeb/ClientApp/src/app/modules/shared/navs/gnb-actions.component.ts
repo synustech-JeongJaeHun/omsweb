@@ -5,6 +5,7 @@ import {
   MatDialogState,
 } from '@angular/material/dialog';
 import { LegendDialogComponent } from '../dialogs/legend-dialog.component';
+import { LoginDialogComponent } from '../dialogs/login-dialog.component';
 
 @Component({
   selector: 'oms-gnb-actions',
@@ -29,6 +30,14 @@ export class GnbActionsComponent implements OnInit {
       hasBackdrop: false,
       disableClose: true,
       closeOnNavigation: true,
+    });
+  }
+
+  onLogin() {
+    this.dialog.open(LoginDialogComponent, {
+      width: '350px',
+      hasBackdrop: true,
+      disableClose: true,
     });
   }
 }

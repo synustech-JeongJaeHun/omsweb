@@ -35,3 +35,14 @@ export interface IConfirmMessage<T> extends IDialogMessage<T> {
   confirmText?: string;
   declineText?: string;
 }
+
+export interface ITokenResult {
+  token: string;
+}
+
+export interface ITokenPayload<T> {
+  sub: T;
+  iat?: number;
+  exp?: number;
+}
+

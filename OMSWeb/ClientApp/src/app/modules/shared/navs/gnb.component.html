@@ -1,7 +1,7 @@
 <mat-toolbar class="gnb-container">
   <div class="gnb-left">
     <span class="logo">OMS</span>
-    <oms-gnb-menus class="menus"></oms-gnb-menus>
+    <oms-gnb-menus class="menus" *ngIf="showGnb"></oms-gnb-menus>
   </div>
   <div class="gnb-center">
     <oms-gnb-states class="states"></oms-gnb-states>

@@ -6,6 +6,9 @@ import { StatusService } from '../../../services/status.service';
 import { TrackIdService } from '../../../services/track-id.service';
 import { HubService } from '../../../services/hub.service';
 import { IDataChangeEvent } from '../../../models/notification.model';
+import { UserPermissions } from '../../../models/enums';
+import { AuthService } from '../../../services/auth.service';
+import { AccountUtil } from '../../shared/utils/account.util';
 
 @Component({
   selector: 'oms-order-control-table',
@@ -23,6 +26,13 @@ export class OrderControlTableComponent implements OnInit, OnDestroy {
   private tableChanged$: Subscription;
   //#endregion
 
+  get canControl():boolean {
+    return (
+      this.auth.isAuthenticated &&
+      AccountUtil.hasPermission(UserPermissions.controlActions, this.auth.CurrentUser)
+    );
+  }
+
   transformVehicleId = ({ value = '' }): string => {
     const text =
       this.idSvc.get_alternative_id('vehicle', 'logicalId', value) || value;
@@ -34,6 +44,7 @@ export class OrderControlTableComponent implements OnInit, OnDestroy {
   };
 
   constructor(
+    private auth: AuthService,
     private statusSvc: StatusService,
     private idSvc: TrackIdService,
     private hubSvc: HubService

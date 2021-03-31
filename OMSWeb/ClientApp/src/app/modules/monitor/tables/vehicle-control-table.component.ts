@@ -6,6 +6,9 @@ import { StatusService } from '../../../services/status.service';
 import { Subscription } from 'rxjs';
 import { HubService } from '../../../services/hub.service';
 import { IDataChangeEvent } from '../../../models/notification.model';
+import { UserPermissions } from '../../../models/enums';
+import { AuthService } from '../../../services/auth.service';
+import { AccountUtil } from '../../shared/utils/account.util';
 
 @Component({
   selector: 'oms-vehicle-control-table',
@@ -22,7 +25,21 @@ export class VehicleControlTableComponent implements OnInit, OnDestroy {
   private tableChanged$: Subscription;
   //#endregion
 
-  constructor(private statusSvc: StatusService, private hubSvc: HubService) {
+  get canControl(): boolean {
+    return (
+      this.auth.isAuthenticated &&
+      AccountUtil.hasPermission(
+        UserPermissions.controlActions,
+        this.auth.CurrentUser
+      )
+    );
+  }
+
+  constructor(
+    private auth: AuthService,
+    private statusSvc: StatusService,
+    private hubSvc: HubService
+  ) {
     this.dataSource = this.statusSvc.vehicleStatusDataSource();
   }
   ngOnDestroy(): void {
@@ -43,7 +60,7 @@ export class VehicleControlTableComponent implements OnInit, OnDestroy {
       if (['INSERT', 'DELETE'].includes(payload.operation)) {
         needReload = true;
       } else {
-        needReload = this.dataSource.items().every(x => x.id !== payload.id);
+        needReload = this.dataSource.items().every((x) => x.id !== payload.id);
       }
     } else {
       needReload = true;

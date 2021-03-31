@@ -16,7 +16,7 @@
   >
     <mat-icon>expand_more</mat-icon>
   </button>
-  <div id="status-toolbar">
+  <div id="status-toolbar" *ngIf="canControl">
     <button mat-stroked-button class="dense" (click)="onVehicleReset()">
       <mat-icon>settings_backup_restore</mat-icon>
       <span>{{ "names.resetAll" | translate }}</span>

@@ -19,10 +19,11 @@ import { AlarmDialogComponent } from './dialogs/alarm-dialog.component';
 import { EnumStringPipe } from './pipes/enum-string.pipe';
 import { AlertDialogComponent } from './dialogs/alert-dialog.component';
 import { LegendDialogComponent } from './dialogs/legend-dialog.component';
+import { LoginDialogComponent } from './dialogs/login-dialog.component';
 
 const inOutModules = [
   FormsModule,
-  // ReactiveFormsModule,
+  ReactiveFormsModule,
 ];
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ const inOutModules = [
     EnumStringPipe,
     AlertDialogComponent,
     LegendDialogComponent,
+    LoginDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -63,6 +65,7 @@ const inOutModules = [
     ConfirmDialogComponent,
     AlarmDialogComponent,
     EnumStringPipe,
+    LoginDialogComponent,
   ],
 })
 export class SharedModule {}

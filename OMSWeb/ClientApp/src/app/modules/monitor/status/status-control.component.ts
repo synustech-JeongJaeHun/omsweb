@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { UserPermissions } from '../../../models/enums';
+import { AuthService } from '../../../services/auth.service';
 import { DialogService } from '../../../services/dialog.service';
 import { MessagesService } from '../../../services/messages.service';
+import { AccountUtil } from '../../shared/utils/account.util';
 import { MapStatesService } from '../../track-map/map-states.service';
 
 @Component({
@@ -16,6 +19,15 @@ export class StatusControlComponent implements OnInit {
   get tableHeight(): string {
     return this.tableHeightNum.toString();
   }
+  get canControl(): boolean {
+    return (
+      this.auth.isAuthenticated &&
+      AccountUtil.hasPermission(
+        UserPermissions.controlActions,
+        this.auth.CurrentUser
+      )
+    );
+  }
 
   tabNames = [
     { id: 1, title: 'Orders' },
@@ -24,6 +36,7 @@ export class StatusControlComponent implements OnInit {
   currentTab: number = 0;
 
   constructor(
+    private auth: AuthService,
     private mapStateSvc: MapStatesService,
     private messageSvc: MessagesService,
     private dialogSvc: DialogService,
