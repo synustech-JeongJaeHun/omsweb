@@ -35,32 +35,41 @@ namespace OMSWeb.Services
       return map;
     }
 
-    public dynamic[] GetMapItem(CacheKeys key) {
+    public dynamic[] GetMapItem(CacheKeys key)
+    {
       switch (key)
       {
-          case CacheKeys.Points:
-            return this._trackRepo.LoadPoints();
-          case CacheKeys.Segments:
-            return this._trackRepo.LoadSegments();
-          case CacheKeys.SegmentDisabled:
-            return this._trackRepo.LoadDisabledSegments();
-          case CacheKeys.Stations:
-            return this._trackRepo.LoadStations();
-          case CacheKeys.Buffers:
-            return this._trackRepo.LoadBuffers();
-          case CacheKeys.Mtls:
-            return this._trackRepo.LoadMtls();
-          case CacheKeys.Clusters:
-            return this._trackRepo.LoadClusters();
-          case CacheKeys.VehiclePaths:
-            return this._trackRepo.LoadVehiclePaths();
-          case CacheKeys.Vehicles:
-            return this._trackRepo.LoadVehiclePositions();
-          case CacheKeys.Groups:
-            return this._trackRepo.LoadGroups();
-          default:
-            return null;
+        case CacheKeys.Points:
+          return this._trackRepo.LoadPoints().ToArray() as dynamic[];
+        case CacheKeys.Segments:
+          return this._trackRepo.LoadSegments().ToArray() as dynamic[];
+        case CacheKeys.SegmentDisabled:
+          return this._trackRepo.LoadDisabledSegments().ToArray() as dynamic[];
+        case CacheKeys.Stations:
+          return this._trackRepo.LoadStations().ToArray() as dynamic[];
+        case CacheKeys.Buffers:
+          return this._trackRepo.LoadBuffers().ToArray() as dynamic[];
+        case CacheKeys.Mtls:
+          return this._trackRepo.LoadMtls().ToArray() as dynamic[];
+        case CacheKeys.Clusters:
+          return this._trackRepo.LoadClusters().ToArray() as dynamic[];
+        case CacheKeys.VehiclePaths:
+          return this._trackRepo.LoadVehiclePaths().ToArray() as dynamic[];
+        case CacheKeys.Vehicles:
+          return this._trackRepo.LoadVehiclePositions().ToArray() as dynamic[];
+        case CacheKeys.Groups:
+          return this._trackRepo.LoadGroups().ToArray() as dynamic[];
+        default:
+          return null;
       }
+    }
+
+    public List<VehiclePosition> GetVehicles() {
+      return this._trackRepo.LoadVehiclePositions();
+    }
+
+    public List<VehiclePath> GetVehiclePaths() {
+      return this._trackRepo.LoadVehiclePaths();
     }
   }
 }

@@ -65,7 +65,15 @@ namespace OMSWeb.Services
 
     private async void NotificationReceivedAsync(object sender, NpgsqlNotificationEventArgs e)
     {
-      await this._pushSvc.PushWatcherEventAsync(e.Payload);
+      try
+      {
+        await this._pushSvc.PushWatcherEventAsync(e.Payload);
+
+      }
+      catch (System.Exception ex)
+      {
+        Console.WriteLine($"[Notification Error] {ex}");
+      }
     }
   }
 }

@@ -238,7 +238,6 @@ export class MapDataService {
               objects[i].group = group.groupId;
               group.objects.splice(j, 1);
               break; // @NOTE check : 성능을 높이기 위해서 break 했는데, group.objects에 동일한 아이디가 여러개 있는 데이터가 가능하다면 사용하면 안된다.
-              // @NOTE optional : some, find, filter 등을 사용하는 방법도 고려(성능 우선)
             }
           }
         }
@@ -274,7 +273,7 @@ export class MapDataService {
   }
 
   private convert_vehicle_object(
-    rows: Dto.IVehicle | Dto.IVehicle[],
+    rows: Dto.IVehicle[],
     vehicle_stale: number,
     playback_last_event_time: number
   ): Vehicle[] {

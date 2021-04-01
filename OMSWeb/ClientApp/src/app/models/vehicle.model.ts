@@ -61,7 +61,7 @@ export class Vehicle {
       cargoTransferResult,
       mapDb,
       canBePushed, // push
-      orderOrigin, // call
+      orderOrigin = [], // call
     } = row;
 
     this.id = id;
@@ -83,9 +83,11 @@ export class Vehicle {
     this.isMoved = false;
     this.isStale = false;
 
-    this.call = Array.isArray(orderOrigin)
-      ? orderOrigin
-      : orderOrigin.split(',').map((x) => x.trim());
+    this.call = orderOrigin
+      ? Array.isArray(orderOrigin)
+        ? orderOrigin
+        : orderOrigin.split(',').map((x) => x.trim())
+      : [];
     this.push = canBePushed;
 
     this.curPoint = currentPoint;

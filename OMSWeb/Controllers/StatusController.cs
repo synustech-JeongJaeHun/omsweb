@@ -38,8 +38,8 @@ namespace OMSWeb.Controllers
     [HttpGet("tracks/vehicles")]
     public ActionResult<VehicleResponse> GetVehicles()
     {
-      var vehicles = this._trackSvc.GetMapItem(CacheKeys.Vehicles) as VehiclePosition[];
-      var paths = this._trackSvc.GetMapItem(CacheKeys.VehiclePaths) as VehiclePath[];
+      var vehicles = this._trackSvc.GetVehicles();
+      var paths = this._trackSvc.GetVehiclePaths();
 
       return new VehicleResponse
       {

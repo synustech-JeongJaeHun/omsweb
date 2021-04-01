@@ -1,19 +1,20 @@
+using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace OMSWeb.Models.Tracks
 {
   public class MapData
   {
-    public Point[] Points { get; set; }
-    public SegmentWithPart[] Segments { get; set; }
-    public DisabledSegment[] SegmentDisabled { get; set; }
-    public Cluster[] Clusters { get; set; }
-    public Station[] Stations { get; set; }
-    public Buffer[] Buffers { get; set; }
-    public Mtl[] Mtls { get; set; }
-    public VehiclePosition[] Vehicles { get; set; }
-    public VehiclePath[] VehiclePaths { get; set; }
-    public LocationGroup[] Groups { get; set; }
+    public IList<Point> Points { get; set; }
+    public IList<SegmentWithPart> Segments { get; set; }
+    public IList<DisabledSegment> SegmentDisabled { get; set; }
+    public IList<Cluster> Clusters { get; set; }
+    public IList<Station> Stations { get; set; }
+    public IList<Buffer> Buffers { get; set; }
+    public IList<Mtl> Mtls { get; set; }
+    public IList<VehiclePosition> Vehicles { get; set; }
+    public IList<VehiclePath> VehiclePaths { get; set; }
+    public IList<LocationGroup> Groups { get; set; }
     public MapDimension Size { get; set; }
   }
 
@@ -29,7 +30,7 @@ namespace OMSWeb.Models.Tracks
 
   public class VehicleResponse
   {
-    public VehiclePosition[] Vehicles { get; set; }
-    public VehiclePath[] VehiclePaths { get; set; }
+    public IList<VehiclePosition> Vehicles { get; set; }
+    public IList<VehiclePath> VehiclePaths { get; set; }
   }
 }

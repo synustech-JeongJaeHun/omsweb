@@ -162,7 +162,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   }
 
   private applyVehicleChange({ data, operation, id }: IDataChangeEvent) {
-    // console.warn('### update vehicle push >>', { data, operation, id });
+    // console.log('### update vehicle push >>', { data, operation, id });
     if (
       !this.viewer ||
       !this.dataSvc.data.points ||
@@ -175,10 +175,11 @@ export class MapViewerComponent implements OnInit, OnDestroy {
       });
       return; // @TODO viewer가 아직 생성되지 않은 경우에는 지연 처리할 방법 구현
     }
-    this.viewer.update_vehicles(data, operation, id, false);
-    this.viewer.update_popup(
-      this.dataSvc.data.vehicles.find((v) => v.id === id)
-    );
+    this.viewer.update_vehicles([data], operation, id, false);
+    // @TODO update_popup 구현
+    // this.viewer.update_popup(
+    //   this.dataSvc.data.vehicles.find((v) => v.id === id)
+    // );
   }
   private applySegmentChange({ data }: IDataChangeEvent) {
     if (!this.viewer) return;

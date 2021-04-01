@@ -9,6 +9,7 @@ using OMSWeb.Models;
 using System.Collections.Generic;
 using Newtonsoft.Json.Serialization;
 using System.Threading.Tasks;
+using OMSWeb.Models.Tracks;
 
 namespace OMSWeb.Services
 {
@@ -99,7 +100,7 @@ namespace OMSWeb.Services
         if (payload.Id > 0) // cache update 후 cache 데이터를 사용하여 push
         {
           // update cache
-          await this.UpdateCacheItemAsync(targetInfo, payload);
+          await this.UpdateWithCacheAsync(targetInfo, payload);
         }
         else // 변경 event만 push
         {
@@ -120,10 +121,9 @@ namespace OMSWeb.Services
       }
     }
 
-    private async Task UpdateCacheItemAsync(DataChangeEventTarget targetInfo, DataWatcherPayload payload)
+    private async Task UpdateWithCacheAsync(DataChangeEventTarget targetInfo, DataWatcherPayload payload)
     {
-      // update cache
-      this._cache.RemoveValue(targetInfo.CacheKey);
+      await this.UpdateCacheAsync(targetInfo, payload);
 
       this.cacheEventMap.TryGetValue(targetInfo.CacheKey, out var cacheEvents);
       foreach (var e in cacheEvents)
@@ -145,7 +145,57 @@ namespace OMSWeb.Services
       {
         await this.SendDBNotificationAsync(name, payload, null);
       }
+    }
 
+    private Task UpdateCacheAsync(DataChangeEventTarget targetInfo, DataWatcherPayload payload)
+    {
+      var needUpdate = false;
+
+      // update cache
+      if (payload.Data == null)
+      {
+        this._cache.RemoveValue(targetInfo.CacheKey);
+        needUpdate = true;
+      }
+      else
+      {  // @NOTE vehicle인 경우에만 Data가 있다.
+        List<VehiclePosition> vehicles = this._trackSvc.GetVehicles();
+        if (vehicles != null && vehicles.Count > 0)
+        {
+          var matchIdx = vehicles.FindIndex(x => x.Id == payload.Id);
+          if (payload.Operation == "DELETE")
+          {
+            vehicles.RemoveAt(matchIdx);
+            needUpdate = true;
+          }
+          else
+          {
+            if (payload.Operation == "INSERT" && matchIdx == -1)
+            {
+              vehicles.Add(payload.Data);
+              needUpdate = true;
+            }
+            else if (payload.Operation == "UPDATE" && matchIdx != -1)
+            {
+              vehicles[matchIdx] = payload.Data;
+              needUpdate = true;
+            }
+          }
+        }
+        else
+        {
+          vehicles = new List<VehiclePosition> {
+            payload.Data
+          };
+          needUpdate = true;
+        }
+        if (needUpdate)
+        {
+          this._cache.SetValue<List<VehiclePosition>>(CacheKeys.Vehicles, vehicles, DateTimeOffset.Now.AddMinutes(30));
+        }
+      }
+
+      return Task.CompletedTask;
     }
 
     private async Task SendDBNotificationAsync(string pushName, DataWatcherPayload payload, object body)
@@ -159,8 +209,8 @@ namespace OMSWeb.Services
       };
       if (!pushName.Contains("table", StringComparison.OrdinalIgnoreCase))
       {
-        if (pushName == "vehicleChanged")
-          Console.WriteLine($"## PUSH ## {pushName}: {payload.Id}\n");
+        // if (pushName == "vehicleChanged")
+        //   Console.WriteLine($"## PUSH ## {pushName}: {payload.Id}\n");
         await this._hub.Clients.All.SendAsync(pushName, meta, body);
         return;
       }

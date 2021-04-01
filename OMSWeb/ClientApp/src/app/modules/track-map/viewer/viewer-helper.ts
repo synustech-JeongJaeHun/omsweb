@@ -619,7 +619,7 @@ export class ViewController {
     // }
   }
 
-  update_vehicles(raw_data, operation, vehicleId, is_skip_rendering) {
+  update_vehicles(raw_data: Dto.IVehicle[], operation, vehicleId, is_skip_rendering) {
     let target_index;
 
     // get target index
@@ -639,10 +639,11 @@ export class ViewController {
       this.playback_last_event_time
     );
 
-    // console.warn('## update vehicle 1 >>', {
+    // console.log('## update vehicle 1 >>', {
     //   vehicleId,
-    //   update,
+    //   // update,
     //   isDomUpdated,
+    //   is_skip_rendering,
     //   updatedVehicles,
     // });
 

@@ -14,7 +14,7 @@ namespace OMSWeb.Repositories
 {
   public class TrackRepository : DataAccess
   {
-    private const int CACHE_LIFE = 30;
+    public const int CACHE_LIFE = 30;
     private readonly CacheService _cache;
 
     public TrackRepository(IConfiguration configuration, CacheService cache) : base(configuration)
@@ -60,10 +60,10 @@ FROM points
       return entity;
     }
 
-    public Point[] LoadPoints()
+    public List<Point> LoadPoints()
     {
       var key = CacheKeys.Points;
-      var data = _cache.GetValue<Point[]>(key);
+      var data = _cache.GetValue<List<Point>>(key);
       if (data == null)
       {
         var models = new List<Point>();
@@ -94,16 +94,16 @@ ORDER BY id";
             }
           }
         }
-        data = models.ToArray();
-        _cache.SetValue<Point[]>(key, data, DateTimeOffset.Now.AddMinutes(CACHE_LIFE));
+        data = models.ToList();
+        _cache.SetValue<List<Point>>(key, data, DateTimeOffset.Now.AddMinutes(CACHE_LIFE));
       }
       return data;
     }
 
-    public SegmentWithPart[] LoadSegments()
+    public List<SegmentWithPart> LoadSegments()
     {
       var key = CacheKeys.Segments;
-      var data = _cache.GetValue<SegmentWithPart[]>(key);
+      var data = _cache.GetValue<List<SegmentWithPart>>(key);
       if (data == null)
       {
         var models = new List<SegmentWithPart>();
@@ -148,15 +148,15 @@ ORDER BY SP.segment_id, SP.id
             }
           }
         }
-        data = models.ToArray();
-        _cache.SetValue<SegmentWithPart[]>(key, data, DateTimeOffset.Now.AddMinutes(CACHE_LIFE));
+        data = models.ToList();
+        _cache.SetValue<List<SegmentWithPart>>(key, data, DateTimeOffset.Now.AddMinutes(CACHE_LIFE));
       }
       return data;
     }
-    public DisabledSegment[] LoadDisabledSegments()
+    public List<DisabledSegment> LoadDisabledSegments()
     {
       var key = CacheKeys.SegmentDisabled;
-      var data = _cache.GetValue<DisabledSegment[]>(key);
+      var data = _cache.GetValue<List<DisabledSegment>>(key);
       if (data == null)
       {
         var models = new List<DisabledSegment>();
@@ -187,15 +187,15 @@ ORDER BY segment_id
             }
           }
         }
-        data = models.ToArray();
-        _cache.SetValue<DisabledSegment[]>(key, data, DateTimeOffset.Now.AddMinutes(CACHE_LIFE));
+        data = models.ToList();
+        _cache.SetValue<List<DisabledSegment>>(key, data, DateTimeOffset.Now.AddMinutes(CACHE_LIFE));
       }
       return data;
     }
-    public Station[] LoadStations()
+    public List<Station> LoadStations()
     {
       var key = CacheKeys.Stations;
-      var data = _cache.GetValue<Station[]>(key);
+      var data = _cache.GetValue<List<Station>>(key);
       if (data == null)
       {
         var models = new List<Station>();
@@ -228,15 +228,15 @@ FROM stations
             }
           }
         }
-        data = models.ToArray();
-        _cache.SetValue<Station[]>(key, data, DateTimeOffset.Now.AddMinutes(CACHE_LIFE));
+        data = models.ToList();
+        _cache.SetValue<List<Station>>(key, data, DateTimeOffset.Now.AddMinutes(CACHE_LIFE));
       }
       return data;
     }
-    public Buffer[] LoadBuffers()
+    public List<Buffer> LoadBuffers()
     {
       var key = CacheKeys.Buffers;
-      var data = _cache.GetValue<Buffer[]>(key);
+      var data = _cache.GetValue<List<Buffer>>(key);
       if (data == null)
       {
         var models = new List<Buffer>();
@@ -268,15 +268,15 @@ FROM buffers
             }
           }
         }
-        data = models.ToArray();
-        _cache.SetValue<Buffer[]>(key, data, DateTimeOffset.Now.AddMinutes(CACHE_LIFE));
+        data = models.ToList();
+        _cache.SetValue<List<Buffer>>(key, data, DateTimeOffset.Now.AddMinutes(CACHE_LIFE));
       }
       return data;
     }
-    public Mtl[] LoadMtls()
+    public List<Mtl> LoadMtls()
     {
       var key = CacheKeys.Mtls;
-      var data = _cache.GetValue<Mtl[]>(key);
+      var data = _cache.GetValue<List<Mtl>>(key);
       if (data == null)
       {
         var models = new List<Mtl>();
@@ -306,15 +306,15 @@ FROM mtls
             }
           }
         }
-        data = models.ToArray();
-        _cache.SetValue<Mtl[]>(key, data, DateTimeOffset.Now.AddMinutes(CACHE_LIFE));
+        data = models.ToList();
+        _cache.SetValue<List<Mtl>>(key, data, DateTimeOffset.Now.AddMinutes(CACHE_LIFE));
       }
       return data;
     }
-    public Cluster[] LoadClusters()
+    public List<Cluster> LoadClusters()
     {
       var key = CacheKeys.Clusters;
-      var data = _cache.GetValue<Cluster[]>(key);
+      var data = _cache.GetValue<List<Cluster>>(key);
       if (data == null)
       {
         var models = new List<Cluster>();
@@ -351,15 +351,15 @@ GROUP BY id, logical_id, max_vehicles, color
             }
           }
         }
-        data = models.ToArray();
-        _cache.SetValue<Cluster[]>(key, data, DateTimeOffset.Now.AddMinutes(CACHE_LIFE));
+        data = models.ToList();
+        _cache.SetValue<List<Cluster>>(key, data, DateTimeOffset.Now.AddMinutes(CACHE_LIFE));
       }
       return data;
     }
-    public VehiclePath[] LoadVehiclePaths()
+    public List<VehiclePath> LoadVehiclePaths()
     {
       var key = CacheKeys.VehiclePaths;
-      var data = _cache.GetValue<VehiclePath[]>(key);
+      var data = _cache.GetValue<List<VehiclePath>>(key);
       if (data == null)
       {
         var models = new List<VehiclePath>();
@@ -387,15 +387,15 @@ FROM vehicle_paths
             }
           }
         }
-        data = models.ToArray();
-        _cache.SetValue<VehiclePath[]>(key, data, DateTimeOffset.Now.AddMinutes(CACHE_LIFE));
+        data = models.ToList();
+        _cache.SetValue<List<VehiclePath>>(key, data, DateTimeOffset.Now.AddMinutes(CACHE_LIFE));
       }
       return data;
     }
-    public VehiclePosition[] LoadVehiclePositions()
+    public List<VehiclePosition> LoadVehiclePositions()
     {
       var key = CacheKeys.Vehicles;
-      var data = _cache.GetValue<VehiclePosition[]>(key);
+      var data = _cache.GetValue<List<VehiclePosition>>(key);
       if (data == null)
       {
         var models = new List<VehiclePosition>();
@@ -467,15 +467,15 @@ ORDER BY VH.id
             }
           }
         }
-        data = models.ToArray();
-        _cache.SetValue<VehiclePosition[]>(key, data, DateTimeOffset.Now.AddMinutes(CACHE_LIFE));
+        data = models.ToList();
+        _cache.SetValue<List<VehiclePosition>>(key, data, DateTimeOffset.Now.AddMinutes(CACHE_LIFE));
       }
       return data;
     }
-    public LocationGroup[] LoadGroups()
+    public List<LocationGroup> LoadGroups()
     {
       var key = CacheKeys.Groups;
-      var data = _cache.GetValue<LocationGroup[]>(key);
+      var data = _cache.GetValue<List<LocationGroup>>(key);
       if (data == null)
       {
         var models = new List<LocationGroup>();
@@ -509,8 +509,8 @@ ORDER BY location_groups.id ASC
             }
           }
         }
-        data = models.ToArray();
-        _cache.SetValue<LocationGroup[]>(key, data, DateTimeOffset.Now.AddMinutes(CACHE_LIFE));
+        data = models.ToList();
+        _cache.SetValue<List<LocationGroup>>(key, data, DateTimeOffset.Now.AddMinutes(CACHE_LIFE));
       }
       return data;
     }
