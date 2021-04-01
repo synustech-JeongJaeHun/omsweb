@@ -59,7 +59,7 @@ export class MapDataService {
     let disable_index = !this.data?.segmentsDisabled
       ? -1
       : this.data.segmentsDisabled.findIndex(
-          (d) => d.id == disabled_segment_id
+          (d) => d && d.id == disabled_segment_id
         );
     let segment: Segment;
     let updated_segments: number[] = [];
