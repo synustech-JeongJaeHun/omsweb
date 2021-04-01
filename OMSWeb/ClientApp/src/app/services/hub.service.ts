@@ -116,7 +116,7 @@ export class HubService {
       this.mtlChanged$.emit({ ...meta, data: body });
     });
     this.hub.on('vehicleChanged', (meta, body) => {
-      // console.info('## hub message : vehicleChanged >>', { meta, body });
+      // console.info('## hub message : vehicleChanged >>', meta.id, { meta, body });
       this.vehicleChanged$.emit({ ...meta, data: body });
     });
     this.hub.on('vehicleTableChanged', (meta, body) => {

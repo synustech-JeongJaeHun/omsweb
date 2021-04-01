@@ -40,7 +40,15 @@ namespace OMSWeb.Services
       Console.WriteLine("### Data Watcher started");
       while (!stoppingToken.IsCancellationRequested)
       {
-        await trackConn.WaitAsync();
+        try
+        {
+          await trackConn.WaitAsync();
+        }
+        catch (System.Exception e)
+        {
+          Console.WriteLine($"@@@ Error : {e}");
+          // throw;
+        }
       }
     }
 

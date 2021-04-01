@@ -20,11 +20,13 @@ namespace OMSWeb.Controllers
   {
     private readonly TrackService _trackSvc;
     private readonly StatusService _statusSvc;
+    private readonly CacheService _cache;
 
-    public StatusController(TrackService trackSvc, StatusService statusSvc)
+    public StatusController(TrackService trackSvc, StatusService statusSvc, CacheService cache)
     {
       this._trackSvc = trackSvc;
       this._statusSvc = statusSvc;
+      this._cache = cache;
     }
 
     // [SnakeCase]
@@ -38,12 +40,29 @@ namespace OMSWeb.Controllers
     {
       var vehicles = this._trackSvc.GetMapItem(CacheKeys.Vehicles) as VehiclePosition[];
       var paths = this._trackSvc.GetMapItem(CacheKeys.VehiclePaths) as VehiclePath[];
-      
+
       return new VehicleResponse
       {
         Vehicles = vehicles,
         VehiclePaths = paths,
       };
+    }
+    [HttpGet("tracks/clear")]
+    public ActionResult<string> ClearCache()
+    {
+      this._cache.RemoveValue(CacheKeys.Buffers);
+      this._cache.RemoveValue(CacheKeys.Clusters);
+      this._cache.RemoveValue(CacheKeys.Groups);
+      this._cache.RemoveValue(CacheKeys.MapSize);
+      this._cache.RemoveValue(CacheKeys.Mtls);
+      this._cache.RemoveValue(CacheKeys.Points);
+      this._cache.RemoveValue(CacheKeys.SegmentDisabled);
+      this._cache.RemoveValue(CacheKeys.Segments);
+      this._cache.RemoveValue(CacheKeys.Stations);
+      this._cache.RemoveValue(CacheKeys.VehiclePaths);
+      this._cache.RemoveValue(CacheKeys.Vehicles);
+
+      return "OK";
     }
 
     [HttpGet("orders")]

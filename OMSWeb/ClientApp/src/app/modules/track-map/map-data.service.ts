@@ -50,11 +50,17 @@ export class MapDataService {
     return LayoutUtil.get_changes(oldData, newData, []);
   }
 
-  applyDisableSegmentData(rows: any[], operation: string, disabled_segment_id: number): any[] {
+  applyDisableSegmentData(
+    rows: any[],
+    operation: string,
+    disabled_segment_id: number
+  ): any[] {
     // get target index
-    let disable_index = this.data.segmentsDisabled.findIndex(
-      (d) => d.id == disabled_segment_id
-    );
+    let disable_index = !this.data?.segmentsDisabled
+      ? -1
+      : this.data.segmentsDisabled.findIndex(
+          (d) => d.id == disabled_segment_id
+        );
     let segment: Segment;
     let updated_segments: number[] = [];
 
@@ -153,10 +159,11 @@ export class MapDataService {
       );
 
       if (operation == 'INSERT') {
-        this.data.vehicles = updated_vehicles;
-        // for (let i = 0; i < updated_vehicles.length; i++) {
-        //   this.data.vehicles.push(updated_vehicles[i]);
-        // }
+        if (this.data.vehicles) {
+          this.data.vehicles.push(...updated_vehicles);
+        } else {
+          this.data.vehicles = updated_vehicles;
+        }
 
         is_dom_update = true;
       } else if (operation == 'UPDATE') {

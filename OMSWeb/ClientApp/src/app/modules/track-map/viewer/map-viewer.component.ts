@@ -102,7 +102,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
       this.omsData = res;
       this._minimapVisible = this.preference.toggles.minimap;
 
-      // console.warn('테스트 : 맵 랜더링 중지'); // @TODO test
+      // console.warn('테스트 : 맵 랜더링 bypass'); // @TODO test
       this.drawMap();
       this.loadingState = false;
     });
@@ -120,9 +120,11 @@ export class MapViewerComponent implements OnInit, OnDestroy {
         this.viewer.onCommandAction(event);
       }
     );
-    this.mapConfigChangeEvent$ = this.statesSvc.configStates$.subscribe((event) => {
-      this.viewer.onChangeConfig(event);
-    })
+    this.mapConfigChangeEvent$ = this.statesSvc.configStates$.subscribe(
+      (event) => {
+        this.viewer.onChangeConfig(event);
+      }
+    );
 
     this.vehicleChanged$ = this.hubSvc.vehicleChanged$.subscribe(
       (e: IDataChangeEvent) => this.applyVehicleChange(e)
@@ -160,12 +162,19 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   }
 
   private applyVehicleChange({ data, operation, id }: IDataChangeEvent) {
+    // console.warn('### update vehicle push >>', { data, operation, id });
     if (
       !this.viewer ||
       !this.dataSvc.data.points ||
       !this.dataSvc.data.points.length
-    )
+    ) {
+      console.warn('### update vehicle - no object >>', {
+        id,
+        points: this.dataSvc.data.points,
+        viewer: this.viewer,
+      });
       return; // @TODO viewer가 아직 생성되지 않은 경우에는 지연 처리할 방법 구현
+    }
     this.viewer.update_vehicles(data, operation, id, false);
     this.viewer.update_popup(
       this.dataSvc.data.vehicles.find((v) => v.id === id)

@@ -89,7 +89,7 @@ namespace OMSWeb.Services
           NamingStrategy = new SnakeCaseNamingStrategy(),
         }
       });
-      // Console.WriteLine($">> Watcher received json object >>, Table = {payload.Table}, Operation = {payload.Operation}, Id = {payload.Id}, VehicleId = {payload.VehicleId}\n");
+      // Console.WriteLine($">> Watcher received json object >>, Table = {payload.Table}, Operation = {payload.Operation}, Id = {payload.Id}, VehicleId = {payload.VehicleId}");
       if (string.IsNullOrEmpty(payload.Table)) return;
 
       this.tableEventMap.TryGetValue(payload.Table.ToLower(), out var targetInfo);
@@ -159,7 +159,8 @@ namespace OMSWeb.Services
       };
       if (!pushName.Contains("table", StringComparison.OrdinalIgnoreCase))
       {
-        // Console.WriteLine($"## PUSH ## {pushName}: {payload.Id}");
+        if (pushName == "vehicleChanged")
+          Console.WriteLine($"## PUSH ## {pushName}: {payload.Id}\n");
         await this._hub.Clients.All.SendAsync(pushName, meta, body);
         return;
       }
