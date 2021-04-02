@@ -281,10 +281,6 @@ export class ViewController {
   playback_last_event_time: any;
   //#endregion
 
-  get layoutData(): IViewerData {
-    return this.layout_data;
-  }
-
   get searchDataSource(): IViewerData {
     return { ...this.layout_data, vehicles: this.vehicles };
   }

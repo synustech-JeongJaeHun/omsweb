@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using OMSWeb.Models.Tracks;
 using OMSWeb.Services;
 
@@ -24,6 +25,8 @@ namespace OMSWeb.Models
     public int Id { get; set; }
     public int? Level { get; set; }
     public VehiclePosition Data { get; set; }
+    // public JObject Data { get; set; }
     public int? VehicleId { get; set; }
+    // public VehiclePosition Vehicle { get; set; }
   }
 }

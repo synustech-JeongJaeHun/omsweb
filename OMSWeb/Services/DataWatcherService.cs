@@ -65,10 +65,15 @@ namespace OMSWeb.Services
 
     private async void NotificationReceivedAsync(object sender, NpgsqlNotificationEventArgs e)
     {
+      // var payload = e.Payload;
+      // if (payload.Contains("vehicles"))
+      // {
+      //   Console.WriteLine($"# DB Notify >> {e.Payload}");
+      // }
+      // return;
       try
       {
         await this._pushSvc.PushWatcherEventAsync(e.Payload);
-
       }
       catch (System.Exception ex)
       {

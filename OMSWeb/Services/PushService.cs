@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json.Serialization;
 using System.Threading.Tasks;
 using OMSWeb.Models.Tracks;
+using Newtonsoft.Json.Linq;
 
 namespace OMSWeb.Services
 {
@@ -31,6 +32,7 @@ namespace OMSWeb.Services
     private TrackService _trackSvc;
 
     // private lastSentTable;
+    private Newtonsoft.Json.JsonSerializerSettings jsonSerializerSettings;
 
     public PushService(IHubContext<OMSHub> hub, CacheService cacheSvc, TrackService trackSvc)
     {
@@ -72,24 +74,24 @@ namespace OMSWeb.Services
       };
 
       this.sendingMap = new Dictionary<string, NotificationSendingState>();
-    }
-
-    public async Task PushWatcherEventAsync(string jsonPayload)
-    {
-      // Console.WriteLine($">> Watcher received data >>, {jsonPayload}");
-      // DataWatcherEvent payload = JsonSerializer.Deserialize<DataWatcherEvent>(jsonPayload, new JsonSerializerOptions
-      // {
-      //   PropertyNameCaseInsensitive = false,
-      //   PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-      // });
-      var payload = Newtonsoft.Json.JsonConvert.DeserializeObject<DataWatcherPayload>(jsonPayload, new Newtonsoft.Json.JsonSerializerSettings()
+      this.jsonSerializerSettings = new Newtonsoft.Json.JsonSerializerSettings()
       {
         NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore,
         ContractResolver = new DefaultContractResolver
         {
           NamingStrategy = new SnakeCaseNamingStrategy(),
         }
-      });
+      };
+    }
+
+    public async Task PushWatcherEventAsync(string jsonPayload)
+    {
+      // Console.WriteLine($">> Watcher received data >>, {jsonPayload}");
+      var payload = Newtonsoft.Json.JsonConvert.DeserializeObject<DataWatcherPayload>(jsonPayload, this.jsonSerializerSettings);
+
+      if (payload.Table == "vehicles")
+        Console.WriteLine($">> Watcher VH >> {payload.Id}: {payload.Data.NextPoint}");
+
       // Console.WriteLine($">> Watcher received json object >>, Table = {payload.Table}, Operation = {payload.Operation}, Id = {payload.Id}, VehicleId = {payload.VehicleId}");
       if (string.IsNullOrEmpty(payload.Table)) return;
 
@@ -123,6 +125,7 @@ namespace OMSWeb.Services
 
     private async Task UpdateWithCacheAsync(DataChangeEventTarget targetInfo, DataWatcherPayload payload)
     {
+      // this._cache.RemoveValue(targetInfo.CacheKey); // @NOTE 성능비교 : 무조건 해당 cache를 삭제한다.
       await this.UpdateCacheAsync(targetInfo, payload);
 
       this.cacheEventMap.TryGetValue(targetInfo.CacheKey, out var cacheEvents);
@@ -210,7 +213,7 @@ namespace OMSWeb.Services
       if (!pushName.Contains("table", StringComparison.OrdinalIgnoreCase))
       {
         // if (pushName == "vehicleChanged")
-        //   Console.WriteLine($"## PUSH ## {pushName}: {payload.Id}\n");
+        //   Console.WriteLine($"## PUSH ## {pushName}: {payload.Id}");
         await this._hub.Clients.All.SendAsync(pushName, meta, body);
         return;
       }

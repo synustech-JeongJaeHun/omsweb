@@ -10,11 +10,12 @@ import { ViewController } from './viewer-helper';
 import { TrackIdService } from '../../../services/track-id.service';
 import { Dto } from '../../../models/dto/track.model';
 import { MapStatesService } from '../map-states.service';
-import { Subscription } from 'rxjs';
+import { from, of, Subscription } from 'rxjs';
 import { MapDataService } from '../map-data.service';
 import { IPreferences } from '../../../models/settings.model';
 import { HubService } from '../../../services/hub.service';
 import { IDataChangeEvent } from '../../../models/notification.model';
+import { flatMap, map, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'oms-map-viewer',
@@ -126,6 +127,9 @@ export class MapViewerComponent implements OnInit, OnDestroy {
       }
     );
 
+    // this.vehicleChanged$ = this.hubSvc.vehicleChanged$
+    //   .pipe(switchMap((e) => of(e)))
+    //   .subscribe((e: IDataChangeEvent) => this.applyVehicleChange(e));
     this.vehicleChanged$ = this.hubSvc.vehicleChanged$.subscribe(
       (e: IDataChangeEvent) => this.applyVehicleChange(e)
     );
@@ -161,14 +165,16 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     this.trackIdSvc.extract_id_from_track(this.dataSvc.data);
   }
 
-  private applyVehicleChange({ data, operation, id }: IDataChangeEvent) {
+  private applyVehicleChange(event: IDataChangeEvent) {
+    if (!event) return;
+    const { data, operation, id } = event;
     // console.log('### update vehicle push >>', { data, operation, id });
     if (
       !this.viewer ||
       !this.dataSvc.data.points ||
       !this.dataSvc.data.points.length
     ) {
-      console.warn('### update vehicle - no object >>', {
+      console.log('### update vehicle - no object >>', {
         id,
         points: this.dataSvc.data.points,
         viewer: this.viewer,
