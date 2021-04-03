@@ -2,5 +2,19 @@
   <div class="rect">AI</div>
 </button>
 <button mat-button class="locale"><mat-icon>language</mat-icon> English</button>
-<button mat-button class="legend" (click)="onLegend()"><mat-icon>info</mat-icon> Legend</button>
-<button mat-button class="signin" (click)="onLogin()"><mat-icon>person</mat-icon> Login</button>
+<button mat-button class="legend" (click)="onLegend()">
+  <mat-icon>info</mat-icon> Legend
+</button>
+
+<ng-container [ngSwitch]="isAuthenticated">
+  <ng-container *ngSwitchCase="true">
+    <button mat-button class="signin" (click)="onLogout()">
+      <mat-icon>person</mat-icon> {{ user?.name }}
+    </button>
+  </ng-container>
+  <ng-container *ngSwitchDefault>
+    <button mat-button class="signin" (click)="onLogin()">
+      <mat-icon>person</mat-icon> Login
+    </button>
+  </ng-container>
+</ng-container>

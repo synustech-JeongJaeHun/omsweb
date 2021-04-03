@@ -4,6 +4,7 @@ import {
   MatDialogRef,
   MatDialogState,
 } from '@angular/material/dialog';
+import { AuthService } from '../../../services/auth.service';
 import { LegendDialogComponent } from '../dialogs/legend-dialog.component';
 import { LoginDialogComponent } from '../dialogs/login-dialog.component';
 
@@ -15,7 +16,14 @@ import { LoginDialogComponent } from '../dialogs/login-dialog.component';
 export class GnbActionsComponent implements OnInit {
   private _legendDlg: MatDialogRef<LegendDialogComponent, any>;
 
-  constructor(private dialog: MatDialog) {}
+  get isAuthenticated() {
+    return this.auth.isAuthenticated;
+  }
+  get user() {
+    return this.auth.CurrentUser;
+  }
+
+  constructor(private auth: AuthService, private dialog: MatDialog) {}
 
   ngOnInit(): void {}
 
@@ -40,4 +48,5 @@ export class GnbActionsComponent implements OnInit {
       disableClose: true,
     });
   }
+  onLogout() {}
 }

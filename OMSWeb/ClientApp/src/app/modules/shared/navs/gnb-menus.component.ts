@@ -37,10 +37,6 @@ export class GnbMenusComponent implements OnInit, OnDestroy {
       '/logs',
       '/settings',
     ];
-    console.info(
-      '#### parent route >>',
-      this.router.isActive('/monitor', false)
-    );
     this.parentRoute = routeNames.find((r) => this.router.isActive(r, false));
   }
 }
