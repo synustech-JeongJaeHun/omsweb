@@ -143,7 +143,23 @@
     "password": "Password",
     "signup": "Sign Up"
   },
-  "enums": {},
+  "enums": {
+    "hostSessionStatus": {
+      "0": "OFFLINE",
+      "1": "ONLINE"
+    },
+    "hostMode": {
+      "0": "OFFLINE",
+      "1": "PM",
+      "2": "ONLINE-REMOTE",
+      "3": "ONLINE-LOCAL"
+    },
+    "tscMode": {
+      "0": "Paused",
+      "1": "Pausing",
+      "2": "Auto"
+    }
+  },
   "errors": {},
   "messages": {
     "confirmTitle": "Confirm",

@@ -3,12 +3,13 @@ import DataSource from 'devextreme/data/data_source';
 
 import { IVehicleStatusRow } from '../../../models/vehicle-status.model';
 import { StatusService } from '../../../services/status.service';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { HubService } from '../../../services/hub.service';
 import { IDataChangeEvent } from '../../../models/notification.model';
 import { UserPermissions } from '../../../models/enums';
 import { AuthService } from '../../../services/auth.service';
 import { AccountUtil } from '../../shared/utils/account.util';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'oms-vehicle-control-table',
@@ -22,7 +23,7 @@ export class VehicleControlTableComponent implements OnInit, OnDestroy {
   selectedRows: IVehicleStatusRow[] = [];
 
   //#region Subscriptions
-  private tableChanged$: Subscription;
+  private destroy$: Subject<void> = new Subject<void>();
   //#endregion
 
   get canControl(): boolean {
@@ -43,15 +44,16 @@ export class VehicleControlTableComponent implements OnInit, OnDestroy {
     this.dataSource = this.statusSvc.vehicleStatusDataSource();
   }
   ngOnDestroy(): void {
-    this.tableChanged$ && this.tableChanged$.unsubscribe();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   ngOnInit(): void {
-    this.tableChanged$ = this.hubSvc.orderTableChanged$.subscribe(
-      (e: IDataChangeEvent) => {
+    this.hubSvc.orderTableChanged$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((e: IDataChangeEvent) => {
         e && this.onTableChanged(e);
-      }
-    );
+      });
   }
 
   private onTableChanged(payload: IDataChangeEvent) {

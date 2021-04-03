@@ -92,3 +92,21 @@ export enum UserPermissions {
   gnb = 1 << 0,
   controlActions = 1 << 1,
 }
+
+export enum HostSessionStatusEnums {
+  offline = 0,
+  online
+}
+
+export enum HostModeEnums {
+  offline = 0,
+  pm,
+  onlineRemote,
+  onlineLocal,
+}
+
+export enum TscModeEnums {
+  paused = 0,
+  pausing,
+  auto,
+}

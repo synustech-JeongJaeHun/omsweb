@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import DataSource from 'devextreme/data/data_source';
 
 import { StatusService } from '../../../services/status.service';
@@ -9,6 +9,7 @@ import { IDataChangeEvent } from '../../../models/notification.model';
 import { UserPermissions } from '../../../models/enums';
 import { AuthService } from '../../../services/auth.service';
 import { AccountUtil } from '../../shared/utils/account.util';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'oms-order-control-table',
@@ -23,13 +24,16 @@ export class OrderControlTableComponent implements OnInit, OnDestroy {
   selectedRows: number[] = [];
 
   //#region Subscriptions
-  private tableChanged$: Subscription;
+  private destroy$: Subject<void> = new Subject<void>();
   //#endregion
 
-  get canControl():boolean {
+  get canControl(): boolean {
     return (
       this.auth.isAuthenticated &&
-      AccountUtil.hasPermission(UserPermissions.controlActions, this.auth.CurrentUser)
+      AccountUtil.hasPermission(
+        UserPermissions.controlActions,
+        this.auth.CurrentUser
+      )
     );
   }
 
@@ -52,15 +56,16 @@ export class OrderControlTableComponent implements OnInit, OnDestroy {
     this.dataSource = this.statusSvc.orderStatusDataSource();
   }
   ngOnDestroy(): void {
-    this.tableChanged$ && this.tableChanged$.unsubscribe();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   ngOnInit(): void {
-    this.tableChanged$ = this.hubSvc.orderTableChanged$.subscribe(
-      (e: IDataChangeEvent) => {
+    this.hubSvc.orderTableChanged$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((e: IDataChangeEvent) => {
         e && this.onTableChanged(e);
-      }
-    );
+      });
   }
 
   onDelete() {}
