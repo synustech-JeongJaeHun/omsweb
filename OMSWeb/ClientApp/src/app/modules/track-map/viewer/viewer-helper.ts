@@ -635,14 +635,6 @@ export class ViewController {
       this.playback_last_event_time
     );
 
-    // console.log('## update vehicle 1 >>', {
-    //   vehicleId,
-    //   // update,
-    //   isDomUpdated,
-    //   is_skip_rendering,
-    //   updatedVehicles,
-    // });
-
     // update dom
     if (isDomUpdated && !is_skip_rendering) {
       let view_box = this.get_viewbox();

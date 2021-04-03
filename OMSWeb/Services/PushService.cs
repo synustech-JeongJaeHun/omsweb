@@ -89,8 +89,8 @@ namespace OMSWeb.Services
       // Console.WriteLine($">> Watcher received data >>, {jsonPayload}");
       var payload = Newtonsoft.Json.JsonConvert.DeserializeObject<DataWatcherPayload>(jsonPayload, this.jsonSerializerSettings);
 
-      if (payload.Table == "vehicles")
-        Console.WriteLine($">> Watcher VH >> {payload.Id}: {payload.Data.NextPoint}");
+      // if (payload.Table == "vehicles")
+      //   Console.WriteLine($">> Watcher VH >> {payload.Id}: {payload.Data.NextPoint}");
 
       // Console.WriteLine($">> Watcher received json object >>, Table = {payload.Table}, Operation = {payload.Operation}, Id = {payload.Id}, VehicleId = {payload.VehicleId}");
       if (string.IsNullOrEmpty(payload.Table)) return;
@@ -213,7 +213,7 @@ namespace OMSWeb.Services
       if (!pushName.Contains("table", StringComparison.OrdinalIgnoreCase))
       {
         // if (pushName == "vehicleChanged")
-        //   Console.WriteLine($"## PUSH ## {pushName}: {payload.Id}");
+          // Console.WriteLine($"## PUSH ## {pushName}: {payload.Id}, {body}");
         await this._hub.Clients.All.SendAsync(pushName, meta, body);
         return;
       }

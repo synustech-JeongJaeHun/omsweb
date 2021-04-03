@@ -33,8 +33,31 @@ export class HubService {
   constructor() {
     this.hub = new signalR.HubConnectionBuilder()
       .withUrl('/hubs/oms')
-      .withAutomaticReconnect()
+      .withAutomaticReconnect([0, 0, 0, 500, 1000, 2000, 5000, 10000, 30000])
+      .configureLogging(signalR.LogLevel.Debug)
       .build();
+
+    this.hub.onclose((err) => {
+      console.assert(!err, err);
+      this.isConnected = false;
+      this.connectionChanged$.emit(false);
+      console.log('# Hub connection closed.');
+    });
+
+
+    this.hub.onreconnecting(err => {
+      console.assert(!err, err);
+      this.isConnected = false;
+      this.connectionChanged$.emit(false);
+      console.log('# Hub re-connecting...');
+    });
+
+    this.hub.onreconnected(() => {
+      this.isConnected = true;
+      this.connectionChanged$.emit(true);
+      console.info('## Hub re-connected. ##');
+  })
+
     this.attachEvents();
     this.start();
   }
@@ -45,7 +68,7 @@ export class HubService {
   public stop() {
     // this.detachEvents();
     this.hub.stop().then(() => {
-      console.info('## hub stopped ##');
+      console.info('## Hub stopped. ##');
     });
   }
 
@@ -55,14 +78,13 @@ export class HubService {
       .start()
       .then(() => {
         this.isConnected = true;
-        console.info('## hub connected ##');
+        this.connectionChanged$.emit(true);
+        console.info('## Hub connected. ##');
       })
       .catch((err) => console.error(err));
   }
 
   private detachEvents() {
-    this.hub.off('close');
-
     this.hub.off('pointChanged');
     this.hub.off('segmentChanged');
     this.hub.off('segmentDisabledChanged');
@@ -81,12 +103,6 @@ export class HubService {
   }
 
   private attachEvents() {
-
-    this.hub.onclose((err) => {
-      this.isConnected = false;
-      this.connectionChanged$.emit(false);
-      err && console.error(err);
-    });
 
     this.hub.on('pointChanged', (meta, body) => {
       console.info('## hub message : pointChanged >>', { meta, body });
