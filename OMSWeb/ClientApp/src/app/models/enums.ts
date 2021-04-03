@@ -106,7 +106,7 @@ export enum HostModeEnums {
 }
 
 export enum TscModeEnums {
-  paused = 0,
+  auto = 0,
   pausing,
-  auto,
+  paused,
 }

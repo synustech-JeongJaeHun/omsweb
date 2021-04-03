@@ -11,6 +11,7 @@ using OMSWeb.Services;
 using DevExtreme.AspNet.Data;
 using DevExtreme.AspNet.Mvc;
 using OMSWeb.Filters;
+using OMSWeb.Models;
 
 namespace OMSWeb.Controllers
 {
@@ -76,5 +77,6 @@ namespace OMSWeb.Controllers
     {
       return DataSourceLoader.Load(_statusSvc.QueryVehicleStates(), loadOptions);
     }
+
   }
 }

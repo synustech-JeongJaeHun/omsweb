@@ -96,6 +96,7 @@ namespace OMSWeb
       services.AddScoped<StatusService>();
       services.AddScoped<OrderService>();
 
+      services.AddSingleton<SystemsService>();
       services.AddSingleton<TrackRepository>();
       services.AddSingleton<TrackService>();
       services.AddSingleton<PushService>();

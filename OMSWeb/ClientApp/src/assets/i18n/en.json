@@ -155,9 +155,9 @@
       "3": "ONLINE-LOCAL"
     },
     "tscMode": {
-      "0": "Paused",
+      "0": "Auto",
       "1": "Pausing",
-      "2": "Auto"
+      "2": "Paused"
     }
   },
   "errors": {},
