@@ -32,7 +32,7 @@ export class OrderControlTableComponent implements OnInit, OnDestroy {
       this.auth.isAuthenticated &&
       AccountUtil.hasPermission(
         UserPermissions.controlActions,
-        this.auth.CurrentUser
+        this.auth.currentUser
       )
     );
   }

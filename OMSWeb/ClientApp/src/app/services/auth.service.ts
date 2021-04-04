@@ -15,17 +15,21 @@ export class AuthService {
   private baseUrl = '/api/auth';
   private _token: string;
   private _currentUser: ISessionUser;
+  private _expiresAt: number;
 
-  get CurrentUser(): ISessionUser {
+  get currentUser(): ISessionUser {
+    !this._currentUser && this.readSession();
     return this._currentUser;
   }
 
-  get Token(): string {
+  get token(): string {
+    !this._token && this.readSession();
     return this._token;
   }
 
   get isAuthenticated(): boolean {
-    return !!this.Token;
+    return !!this.token;
+    // return !!this.token && this._expiresAt > Date.now().valueOf(); // @TODO check expired
   }
 
   certUpdated$: Subject<ISimpleUser> = new Subject();
@@ -42,7 +46,7 @@ export class AuthService {
 
     this.writeSession(email);
 
-    return of(this.CurrentUser);
+    return of(this.currentUser);
 
     // return this.http.post<ITokenResult>(this.baseUrl, form);
   }
@@ -51,6 +55,24 @@ export class AuthService {
     this.clearSession();
     this.router.navigate(['/']);
     return of();
+  }
+
+  private setExpiresAt(checkCurrentTime = false) {
+    // @TODO 구현
+    // const { exp, iat } = this.jwtHelper.decodeToken(this._token);
+    // this._expiresAt =
+    //   checkCurrentTime && iat * 1000 - Date.now().valueOf() > 1000 * 60 * 10
+    //     ? 1 // client device 시간이 틀려서 반복적으로 renewToken이 호출되는 경우를 피하기 위함
+    //     : exp * 1000;
+  }
+
+  private readSession(checkExpired = false) {
+    this._token = StorageUtil.getSession('jwt');
+    if (this._token) {
+      const userValue = StorageUtil.getSession('user');
+      userValue && (this._currentUser = JSON.parse(userValue));
+      (checkExpired || !this._expiresAt) && this.setExpiresAt();
+    }
   }
 
   private writeSession(token: string) {

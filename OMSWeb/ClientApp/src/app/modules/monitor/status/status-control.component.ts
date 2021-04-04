@@ -24,7 +24,7 @@ export class StatusControlComponent implements OnInit {
       this.auth.isAuthenticated &&
       AccountUtil.hasPermission(
         UserPermissions.controlActions,
-        this.auth.CurrentUser
+        this.auth.currentUser
       )
     );
   }

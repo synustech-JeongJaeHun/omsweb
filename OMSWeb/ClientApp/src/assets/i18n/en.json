@@ -141,7 +141,14 @@
 
     "email": "Email",
     "password": "Password",
-    "signup": "Sign Up"
+    "signup": "Sign Up",
+
+    "period": "Period",
+    "snapshots": "Snapshots",
+    "event": "Event",
+    "events": "Events",
+    "speed": "Speed",
+    "timeToNextEvents": "Time to next events"
   },
   "enums": {
     "hostSessionStatus": {

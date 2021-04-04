@@ -12,7 +12,7 @@ export class GnbComponent implements OnInit {
   get showGnb(): boolean {
     return (
       this.auth.isAuthenticated &&
-      AccountUtil.hasPermission(UserPermissions.gnb, this.auth.CurrentUser)
+      AccountUtil.hasPermission(UserPermissions.gnb, this.auth.currentUser)
     );
   }
 

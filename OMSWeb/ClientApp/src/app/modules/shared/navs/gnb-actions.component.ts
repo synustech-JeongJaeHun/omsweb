@@ -20,7 +20,7 @@ export class GnbActionsComponent implements OnInit {
     return this.auth.isAuthenticated;
   }
   get user() {
-    return this.auth.CurrentUser;
+    return this.auth.currentUser;
   }
 
   constructor(private auth: AuthService, private dialog: MatDialog) {}

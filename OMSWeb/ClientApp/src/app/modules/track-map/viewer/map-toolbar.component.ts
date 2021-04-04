@@ -48,7 +48,7 @@ export class MapToolbarComponent implements OnInit {
   get canControl():boolean {
     return (
       this.auth.isAuthenticated &&
-      AccountUtil.hasPermission(UserPermissions.controlActions, this.auth.CurrentUser)
+      AccountUtil.hasPermission(UserPermissions.controlActions, this.auth.currentUser)
     );
   }
 

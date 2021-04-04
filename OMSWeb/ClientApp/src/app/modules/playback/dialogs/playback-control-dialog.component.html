@@ -1,0 +1,82 @@
+<oms-dialog-base [title]="'names.playback' | translate">
+  <ng-container class="dialog-layout">
+    <div mat-dialog-content class="control-container">
+      <div class="form-period">
+        <!-- <div class="control-title">{{ "names.period" | translate }}</div> -->
+        <dx-date-box
+          [value]="options.startAt"
+          type="datetime"
+          class="timePicker"
+          id="fromTime"
+          displayFormat="yyyy-MM-dd HH:mm"
+        >
+        </dx-date-box>
+        <div class="date-divider">~</div>
+        <dx-date-box
+          [value]="options.endAt"
+          type="datetime"
+          class="timePicker"
+          id="toTime"
+          displayFormat="yyyy-MM-dd HH:mm"
+        >
+        </dx-date-box>
+      </div>
+      <div class="control-slider">
+        <div class="slider-name">{{ "names.snapshots" | translate }}</div>
+        <mat-slider min="1" max="100" color="primary"></mat-slider>
+        <div class="slider-value">{{ options.snapshot }}</div>
+      </div>
+      <div class="control-slider">
+        <div class="slider-name">{{ "names.events" | translate }}</div>
+        <mat-slider min="1" max="100" color="primary"></mat-slider>
+        <div class="slider-value">{{ options.event }}</div>
+      </div>
+      <div class="control-play">
+        <button mat-icon-button id="prev">
+          <mat-icon>skip_previous</mat-icon>
+        </button>
+        <button mat-icon-button id="play">
+          <mat-icon>play_arrow</mat-icon>
+        </button>
+        <button mat-icon-button id="ff">
+          <mat-icon>fast_forward</mat-icon>
+        </button>
+        <button mat-icon-button id="next">
+          <mat-icon>skip_next</mat-icon>
+        </button>
+      </div>
+      <mat-form-field appearance="fill" class="form-speed">
+        <mat-label>{{ "names.speed" | translate }}</mat-label>
+        <mat-select [(ngModel)]="options.speed">
+          <mat-option *ngFor="let speed of speedValues" [value]="speed"
+            >{{ speed }}x</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="form-step">
+        <mat-label>{{ "names.events" | translate }}</mat-label>
+        <input
+          matInput
+          type="number"
+          min="1"
+          max="100"
+          [(ngModel)]="options.eventsStep"
+        />
+      </mat-form-field>
+
+      <mat-form-field class="form-time readonly">
+        <mat-label>{{ "names.time" | translate }}</mat-label>
+        <input matInput type="text" readonly [(ngModel)]="states.playTime" />
+      </mat-form-field>
+      <mat-form-field class="form-event readonly">
+        <mat-label>{{ "names.event" | translate }}</mat-label>
+        <input matInput type="number" readonly [(ngModel)]="states.event" />
+      </mat-form-field>
+      <mat-form-field class="form-next readonly">
+        <mat-label>{{ "names.timeToNextEvents" | translate }}</mat-label>
+        <input matInput type="number" readonly [(ngModel)]="states.nextEvent" />
+      </mat-form-field>
+    </div>
+  </ng-container>
+</oms-dialog-base>
