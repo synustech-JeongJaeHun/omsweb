@@ -14,7 +14,7 @@ export class ShowObjectDialogComponent implements OnInit {
   slideValues = {
     vehicleScale: 3,
     mapRotation: 0,
-    segmentWidth: 3,
+    segmentWidth: 2,
   };
 
   constructor(
@@ -23,8 +23,14 @@ export class ShowObjectDialogComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const pref = this.stateSvc.preferences;
-    this.slideValues.vehicleScale = pref.map.vehicleScale;
+    const {
+      map: { mapRotation, vehicleScale, segmentWidth },
+    } = this.stateSvc.preferences;
+    this.slideValues = {
+      vehicleScale,
+      mapRotation,
+      segmentWidth,
+    };
   }
 
   onChangedToggle(action: ToggleOptionKeyType) {

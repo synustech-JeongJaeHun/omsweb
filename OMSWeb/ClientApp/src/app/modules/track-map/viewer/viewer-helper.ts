@@ -136,6 +136,7 @@ export class ViewController {
     scale: 1,
     value: 8,
   };
+  private segmentWidth = 2;
   private map_rotation = 0;
   private snap_to_grid_distance = 500;
   private minimumSegmentLength = 500;
@@ -353,8 +354,7 @@ export class ViewController {
           let segments_to_move = [];
           for (let i = 0; i < this.selected_objects.length; i++) {
             if (
-              this.selected_objects[i].objectType.toUpperCase() ===
-              'SEGMENT'
+              this.selected_objects[i].objectType.toUpperCase() === 'SEGMENT'
             ) {
               segments_to_move.push(this.selected_objects[i]);
               this.move_dom(
@@ -500,8 +500,7 @@ export class ViewController {
               this.selected_objects.forEach((cur_selected_object) => {
                 if (
                   updated_object.id === cur_selected_object.id &&
-                  updated_object.objectType ===
-                    cur_selected_object.objectType
+                  updated_object.objectType === cur_selected_object.objectType
                 ) {
                   is_found = true;
                 }
@@ -615,7 +614,12 @@ export class ViewController {
     // }
   }
 
-  update_vehicles(raw_data: Dto.IVehicle[], operation, vehicleId, is_skip_rendering) {
+  update_vehicles(
+    raw_data: Dto.IVehicle[],
+    operation,
+    vehicleId,
+    is_skip_rendering
+  ) {
     let target_index;
 
     // get target index
@@ -652,8 +656,7 @@ export class ViewController {
       // Update the selected object data if the selected is this updated vehicle
       if (this.selected_objects.length === 1) {
         if (
-          this.selected_objects[0].objectType.toUpperCase() ===
-            'VEHICLE' &&
+          this.selected_objects[0].objectType.toUpperCase() === 'VEHICLE' &&
           this.selected_objects[0].id == this.vehicles[target_index].id
         ) {
           this.selected_objects[0] = this.vehicles[target_index];
@@ -938,6 +941,12 @@ export class ViewController {
       case 'vehicleScale':
         this.update_vehicle_scale(event.value);
         break;
+      case 'mapRotation':
+        this.update_map_rotate(event.value);
+        break;
+      case 'segmentWidth':
+        this.updateSegmentWidth(event.value);
+        break;
       default:
         break;
     }
@@ -1023,12 +1032,16 @@ export class ViewController {
     this.overlap_display_objects = [];
     this.overlap_module_objects = [];
     this.unassigned_module_objects = [];
+
+    this.segmentWidth = main_css.segment.line_weight;
   }
 
   private initStates() {
     // @TODO initStates 구현 (v1 : get_ui_states)
     const { map = {} } = this.statesSvc.preferences || {};
     this.vehicle_scale.value = Number(map.vehicleScale).valueOf();
+    this.map_rotation = map.mapRotation;
+    map.segmentWidth && (this.segmentWidth = map.segmentWidth);
     this.set_vehicle_scale(this.vehicle_scale.value);
   }
 
@@ -1410,8 +1423,7 @@ export class ViewController {
         // if clicked on an overlap elligible object
         if (
           this.selected_objects.length > 0 &&
-          this.selected_objects[0].objectType.toUpperCase() ===
-            'VEHICLE' &&
+          this.selected_objects[0].objectType.toUpperCase() === 'VEHICLE' &&
           updated_vehicle.id === this.selected_objects[0].id
         ) {
           this.selected_objects[0] = updated_vehicle;
@@ -1796,8 +1808,7 @@ export class ViewController {
           (updated_object, index, original_updated_objects_arr) => {
             if (
               updated_by_point_object.id === updated_object.id &&
-              updated_by_point_object.objectType ===
-                updated_object.objectType
+              updated_by_point_object.objectType === updated_object.objectType
             ) {
               is_found = true;
               // original_updated_objects_arr[index] = updated_by_point_object
@@ -1858,8 +1869,7 @@ export class ViewController {
               do_not_update_with_points_list.forEach((remove_object) => {
                 if (
                   con_seg.id === remove_object.id &&
-                  con_seg.objectType.toUpperCase() ===
-                    remove_object.object_type
+                  con_seg.objectType.toUpperCase() === remove_object.object_type
                 ) {
                   connected_segments.splice(j, 1);
                 }
@@ -2548,13 +2558,11 @@ export class ViewController {
 
     // Get the coordinate for the panel: If the first object in the overlap_display_objects array is a vehicle, use vehicle curPoint coordinate else, use station/buffer coordinates
     let x =
-        this.overlap_display_objects[0].objectType.toUpperCase() ===
-        'VEHICLE'
+        this.overlap_display_objects[0].objectType.toUpperCase() === 'VEHICLE'
           ? this.overlap_display_objects[0].curPoint.invertedCoord.x
           : this.overlap_display_objects[0].invertedCoord.x,
       y =
-        this.overlap_display_objects[0].objectType.toUpperCase() ===
-        'VEHICLE'
+        this.overlap_display_objects[0].objectType.toUpperCase() === 'VEHICLE'
           ? this.overlap_display_objects[0].curPoint.invertedCoord.y
           : this.overlap_display_objects[0].invertedCoord.y;
 
@@ -2627,17 +2635,11 @@ export class ViewController {
         let object_css;
         if (selected_object.objectType.toUpperCase() === 'POINT') {
           object_css = main_css.point;
-        } else if (
-          selected_object.objectType.toUpperCase() === 'STATION'
-        ) {
+        } else if (selected_object.objectType.toUpperCase() === 'STATION') {
           object_css = main_css.station;
-        } else if (
-          selected_object.objectType.toUpperCase() === 'BUFFER'
-        ) {
+        } else if (selected_object.objectType.toUpperCase() === 'BUFFER') {
           object_css = main_css.buffer;
-        } else if (
-          selected_object.objectType.toUpperCase() === 'VEHICLE'
-        ) {
+        } else if (selected_object.objectType.toUpperCase() === 'VEHICLE') {
           object_css = main_css.vehicle;
         }
 
@@ -2863,11 +2865,7 @@ export class ViewController {
   ) {
     // Unhighlight the arriving layout element
     if (overlap_type === 'OVERLAP') {
-      this.unhighlight(
-        object.objectType.toUpperCase(),
-        object.id,
-        'LAYOUT'
-      );
+      this.unhighlight(object.objectType.toUpperCase(), object.id, 'LAYOUT');
     }
     adding_overlap_list.push(object);
   }
@@ -7703,13 +7701,17 @@ export class ViewController {
     };
 
     // Set minimap size on data
-    const {
-      width: miniW,
-      height: miniH,
-    } = this.minimap_svg.node().getBoundingClientRect();
+    // const {
+    //   width: miniW,
+    //   height: miniH,
+    // } = this.minimap_svg.node().getBoundingClientRect();
+    // this.geometry.minimapSize = {
+    //   width: miniW,
+    //   height: miniH,
+    // };
     this.geometry.minimapSize = {
-      width: miniW,
-      height: miniH,
+      width: this.$track_container.find(`#minimap`).width(),
+      height: this.$track_container.find(`#minimap`).height(),
     };
 
     // Adjust the coordinate data according to the padding value given
@@ -7999,11 +8001,14 @@ export class ViewController {
     }
     if (this.geometry.minimapSize !== undefined && this.minimap_svg) {
       this.mini_zoomed_handler({
-        x: parseInt(current_transform.x),
-        y: parseInt(current_transform.y),
-        k: parseInt(current_transform.k),
+        x: (current_transform.x),
+        y: (current_transform.y),
+        k: (current_transform.k),
       });
     }
+  }
+  updateSegmentWidth(width: number) {
+    this.segments_svg.selectAll('path').style('stroke-width', width);
   }
   update_vehicle_scale(updated_radius: number, is_save_state: boolean = false) {
     this.set_vehicle_scale(updated_radius, is_save_state);
@@ -8263,7 +8268,7 @@ export class ViewController {
     css_setting: any,
     view_box: {},
     need_update: boolean,
-    segments: any[]
+    segments?: any[]
   ) {
     let update_svg = false,
       segments_display = [];
@@ -8458,7 +8463,7 @@ export class ViewController {
     return objects_to_display;
   }
   get_rotated_viewbox(): any {
-    throw new Error('Method not implemented.');
+    return this.rotated_viewbox;
   }
   point_adaptive_rendering(
     zoom_level: any,
@@ -12895,7 +12900,7 @@ export class ViewController {
     }
     path
       .attr('d', segment_path_data.path)
-      .attr('stroke-width', `${dom_css.line_weight}px`);
+      .attr('stroke-width', `${this.segmentWidth}px`);
 
     let mask = this.segments_svg.select('.segment_mask');
     if (mask.nodes().length === 0) {
@@ -12923,7 +12928,7 @@ export class ViewController {
     }
     disbled_path
       .attr('d', segment_path_data.disabled_path)
-      .attr('stroke-width', `${dom_css.line_weight}px`);
+      .attr('stroke-width', `${this.segmentWidth}px`);
 
     // Invalid path ============================= //
     let invalid_path = this.segments_svg.select('.segment_path.non_validate');
@@ -12934,7 +12939,7 @@ export class ViewController {
     }
     invalid_path
       .attr('d', segment_path_data.invalid_path)
-      .attr('stroke-width', `${dom_css.line_weight}px`);
+      .attr('stroke-width', `${this.segmentWidth}px`);
 
     // this.segments_svg = this.get_svg_class('SEGMENT').selectAll('g.segment')
 
@@ -13346,22 +13351,18 @@ export class ViewController {
       dimensions.height = this.minimap_size_limit;
     }
 
-    // init minimap (v3)
-    this.minimap_svg = this.d3_track
-      .select(`#${this.minimap_svg_id}`)
-      .attr('width', '100%')
-      .attr('height', '100%');
-
-    const { width, height } = this.minimap_svg.node().getBoundingClientRect();
+    const { width, height } = dimensions;
+    // const { width, height } = this.minimap_svg.node().getBoundingClientRect();
 
     // Minimap area
     this.$track_container
       .find(`#${this.minimap_parent_id}`)
-      .css('width', dimensions.width)
-      .css('height', dimensions.height);
+      .css('width', width)
+      .css('height', height);
 
     // Store minimap screen size
     this.geometry.minimapSize = { width, height };
+    console.log('### minimap size >>', dimensions);
 
     // Set initial zoom.current_mainand offset
     this.setInitialZoom(MapTypes.MINIMAP);
@@ -13373,13 +13374,12 @@ export class ViewController {
       .on('zoom', this.mini_zoomed.bind(this));
 
     // Initialize the SVG element for minimap view-box
-
-    this.minimap_svg.call(this.d3_minimap); // @ minimap d3 관련해서 문제가 있으면 아래와 비교
-    // this.minimap_svg = d3_track
-    //   .select(`#${minimap_svg_id}`)
-    //   .attr('width', this.geometry.minimapSize.width)
-    //   .attr('height', this.geometry.minimapSize.height)
-    //   .call(this.d3_minimap);
+    // init minimap (v3)
+    this.minimap_svg = this.d3_track
+      .select(`#${this.minimap_svg_id}`)
+      .attr('width', width)
+      .attr('height', height)
+      .call(this.d3_minimap);
 
     // Initialize focus of zoom.current_mainarea(blue rect)
     if (this.minimap_rect) {
@@ -13424,8 +13424,6 @@ export class ViewController {
       initialFabSize: { ...mapSize },
       invertFactorY: Math.max(mapSize.maxY, mapSize.height),
     };
-
-    console.warn('>> setGeometry >>', this.geometry, mapSize);
   }
   /** set_param + set_initial_zoom */
   private setInitialZoom(mapType: MapTypes) {

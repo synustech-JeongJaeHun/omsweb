@@ -6,13 +6,15 @@ export type ToggleOptionsType = {
   [key in ToggleOptionKeyType]: boolean;
 };
 
-export interface IMapConfig {
-  vehicleScale?: number;
+export class MapConfig {
+  vehicleScale?: number = main_css.vehicle.radius;
+  mapRotation?: number = 0;
+  segmentWidth?: number = 2;
 }
 
 export interface IPreferences {
   toggles: ToggleOptionsType;
-  map: IMapConfig;
+  map: MapConfig;
   uiStates?: UiStates;
 }
 
@@ -35,13 +37,10 @@ export const defaultToggleOptions: ToggleOptionsType = {
   clusters: true,
   overlaps: false,
 };
-export const defaultMapConfig: IMapConfig = {
-  vehicleScale: main_css.vehicle.radius,
-};
 
 export class ClientPreferences implements IPreferences {
   toggles: ToggleOptionsType;
-  map: IMapConfig;
+  map: MapConfig;
   uiStates?: UiStates;
 
   constructor(private storeKey: string, private base?: IPreferences) {
@@ -53,7 +52,7 @@ export class ClientPreferences implements IPreferences {
     const { toggles = {}, map = {}, uiStates = {} } = JSON.parse(value);
     const { toggles: baseToggle = {}, map: baseMap = {} } = this.base || {};
     this.toggles = { ...defaultToggleOptions, ...baseToggle, ...toggles };
-    this.map = { ...defaultMapConfig, ...baseMap, ...map };
+    this.map = { ...new MapConfig(), ...baseMap, ...map };
     this.uiStates = { ...new UiStates(), ...uiStates };
   }
 
