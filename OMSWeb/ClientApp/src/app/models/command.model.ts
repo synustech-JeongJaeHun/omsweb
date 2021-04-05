@@ -6,7 +6,7 @@ export interface ICommandMessage {
 export interface IVehicleCommandMessage extends ICommandMessage {
   vehicleId?: string;
   orderOrigin?: string;
-  canBePushed?: string;
+  canBePushed?: boolean;
   destination?: string;
   mode?: string;
   acceptManualCommands?: string;
@@ -14,21 +14,21 @@ export interface IVehicleCommandMessage extends ICommandMessage {
 
 export interface ITrackCommandMessage extends ICommandMessage {
   vehicleId?: string;
-  segmentId?: string;
+  segmentId?: number;
   source?: string;
   reason?: string;
-  groupId?: string;
+  groupId?: number;
   objects?: string;
   color?: string;
   logicalId?: string;
 }
 
 export interface IOrderCommandMessage extends ICommandMessage {
-  vehicleId?: string;
-  orderId?: string;
+  vehicleId?: number;
+  orderId?: number;
   locationPickup?: string;
   locationDropoff?: string;
   locationMove?: string;
   carrierLabel?: string;
-  priority?: string;
+  priority?: number;
 }

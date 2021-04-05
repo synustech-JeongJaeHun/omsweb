@@ -52,7 +52,8 @@
             "allowedCommonJsDependencies": [
               "lodash",
               "jquery",
-              "devextreme-angular"
+              "devextreme-angular",
+              "devextreme"
             ],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",

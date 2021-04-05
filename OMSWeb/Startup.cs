@@ -81,6 +81,7 @@ namespace OMSWeb
       #region DI
       services.AddScoped<UserRepository>();
       services.AddScoped<AlarmRepository>();
+      services.AddScoped<AlertRepository>();
       services.AddScoped<CycleRepository>();
       services.AddScoped<HistoryRepository>();
       services.AddScoped<MessageRepository>();
@@ -95,6 +96,8 @@ namespace OMSWeb
 
       services.AddScoped<StatusService>();
       services.AddScoped<OrderService>();
+      services.AddScoped<NotificationsService>();
+      services.AddScoped<MessageService>();
 
       services.AddSingleton<SystemsService>();
       services.AddSingleton<TrackRepository>();

@@ -19,28 +19,14 @@ export class NotificationsService {
   constructor(private http: HttpClient) {}
 
   alertCount(): Observable<NotificationCount> {
-    // @TODO api 작업 후 삭제
-    console.error('# form alert-count.json file - for test #');
     return this.http
-      .get<INotificationCount>('/assets/json/alert-count.json')
-      .pipe(
-        map((res) => {
-          return new NotificationCount(res);
-        })
-      );
-    // return this.http.get<INotificationCount>(`${this.baseUrl}/alert-count`)
+      .get<INotificationCount>(`${this.baseUrl}/alert-count`)
+      .pipe(map((res) => new NotificationCount(res)));
   }
   alarmCount(): Observable<NotificationCount> {
-    // @TODO api 작업 후 삭제
-    console.error('# form alarm-count.json file - for test #');
     return this.http
-      .get<INotificationCount>('/assets/json/alarm-count.json')
-      .pipe(
-        map((res) => {
-          return new NotificationCount(res);
-        })
-      );
-    // return this.http.get<INotificationCount>(`${this.baseUrl}/alarm-count`)
+      .get<INotificationCount>(`${this.baseUrl}/alarm-count`)
+      .pipe(map((res) => new NotificationCount(res)));
   }
 
   alerts(
@@ -50,8 +36,7 @@ export class NotificationsService {
   ): Observable<IAlert[]> {
     // @TODO api 작업 후 삭제
     console.error('# form get-alerts.json file - for test #');
-    return this.http
-      .get<IAlert[]>('/assets/json/get-alerts.json');
+    return this.http.get<IAlert[]>('/assets/json/get-alerts.json');
     // return this.http.get<IAlert[]>(
     //   `${this.baseUrl}/alerts/${status}/${level}/${keyword}`
     // );
@@ -59,8 +44,7 @@ export class NotificationsService {
   alarms(): Observable<IVehicleAlarm[]> {
     // @TODO api 작업 후 삭제
     console.error('# form get-alarms.json file - for test #');
-    return this.http
-      .get<IVehicleAlarm[]>('/assets/json/get-alarms.json');
+    return this.http.get<IVehicleAlarm[]>('/assets/json/get-alarms.json');
     // return this.http.get<IVehicleAlarm[]>(
     //   `${this.baseUrl}/alarms/${status}/${level}/${keyword}`
     // );

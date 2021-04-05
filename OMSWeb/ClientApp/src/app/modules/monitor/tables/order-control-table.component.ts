@@ -1,5 +1,5 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { Subject, Subscription } from 'rxjs';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { forkJoin, Subject, Subscription } from 'rxjs';
 import DataSource from 'devextreme/data/data_source';
 
 import { StatusService } from '../../../services/status.service';
@@ -10,6 +10,8 @@ import { UserPermissions } from '../../../models/enums';
 import { AuthService } from '../../../services/auth.service';
 import { AccountUtil } from '../../shared/utils/account.util';
 import { takeUntil } from 'rxjs/operators';
+import { MessagesService } from '../../../services/messages.service';
+import { DxDataGridComponent } from 'devextreme-angular';
 
 @Component({
   selector: 'oms-order-control-table',
@@ -18,6 +20,7 @@ import { takeUntil } from 'rxjs/operators';
 })
 export class OrderControlTableComponent implements OnInit, OnDestroy {
   @Input() tableHeight: number;
+  @ViewChild(DxDataGridComponent, {static: false}) dataGrid: DxDataGridComponent;
 
   dataSource: DataSource;
   // dataSource: any;
@@ -37,6 +40,10 @@ export class OrderControlTableComponent implements OnInit, OnDestroy {
     );
   }
 
+  get canDelete(): boolean {
+    return this.selectedRows.length > 0;
+  }
+
   transformVehicleId = ({ value = '' }): string => {
     const text =
       this.idSvc.get_alternative_id('vehicle', 'logicalId', value) || value;
@@ -50,6 +57,7 @@ export class OrderControlTableComponent implements OnInit, OnDestroy {
   constructor(
     private auth: AuthService,
     private statusSvc: StatusService,
+    private messageSvc: MessagesService,
     private idSvc: TrackIdService,
     private hubSvc: HubService
   ) {
@@ -68,7 +76,16 @@ export class OrderControlTableComponent implements OnInit, OnDestroy {
       });
   }
 
-  onDelete() {}
+  onDelete() {
+    if (!this.canDelete) return;
+    console.log('## selected rows >>', this.selectedRows);
+    const items = this.dataGrid.instance.getSelectedRowsData();
+    console.info('## selected items >>', items);
+    return;
+    const jobs = this.selectedRows.map(x => this.messageSvc.sendDeleteOrder(x));
+    forkJoin(jobs).subscribe();
+    // this.messageSvc.sendDeleteOrder()
+  }
 
   private onTableChanged(payload: IDataChangeEvent) {
     let needReload = false;
