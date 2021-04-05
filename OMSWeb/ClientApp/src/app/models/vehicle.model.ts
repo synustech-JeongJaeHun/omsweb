@@ -1,6 +1,7 @@
 import { Dto } from './dto/track.model';
 
 export class Vehicle {
+  objectType = 'Vehicle';
   id: number;
   logicalId: string;
   physicalId?: string;

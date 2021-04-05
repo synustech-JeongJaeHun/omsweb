@@ -8,6 +8,7 @@ import { defaultSegmentGeometries } from './map-constants';
 // import { MapParser } from '../modules/shared/viewers/map-parser';
 
 export class Segment implements ISegment {
+  objectType = 'Segment';
   id: number;
   logicalId: string;
   physicalId: string;

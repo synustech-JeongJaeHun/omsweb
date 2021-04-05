@@ -1960,10 +1960,10 @@ export namespace LayoutUtil {
     let minX, minY, maxX, maxY;
 
     for (let object of objects) {
-      if (object.constructor.name.toUpperCase() !== 'CLUSTER') {
+      if (object.objectType.toUpperCase() !== 'CLUSTER') {
         // if (object instanceof Cluster) {
         // Valid first candidate for min max values
-        if (object.constructor.name.toUpperCase() === 'SEGMENT') {
+        if (object.objectType.toUpperCase() === 'SEGMENT') {
           // if (object instanceof Segment) {
           let cur_from = object.pointFrom[coord_type];
           let cur_to = object.pointTo[coord_type];
@@ -1983,11 +1983,11 @@ export namespace LayoutUtil {
 
     for (let object in objects) {
       let obj = objects[object];
-      if (obj.constructor.name.toUpperCase() === 'CLUSTER') {
+      if (obj.objectType.toUpperCase() === 'CLUSTER') {
         // if (obj instanceof Cluster) {
         continue;
       } else {
-        if (obj.constructor.name.toUpperCase() === 'SEGMENT') {
+        if (obj.objectType.toUpperCase() === 'SEGMENT') {
           // if (obj instanceof Segment) {
           maxX =
             obj.pointTo[coord_type].x > maxX ? obj.pointTo[coord_type].x : maxX;
@@ -2688,19 +2688,19 @@ export namespace LayoutUtil {
       let object = layout_objects[i];
 
       // Check connection
-      if (object.constructor.name.toUpperCase() === 'SEGMENT') {
+      if (object.objectType.toUpperCase() === 'SEGMENT') {
         let is_start_connected;
         let is_end_connected;
 
         is_start_connected = layout_objects.find(
           (data) =>
-            data.constructor.name.toUpperCase() === 'POINT' &&
+            data.objectType.toUpperCase() === 'POINT' &&
             data.id === object.pointFrom.id
         );
 
         is_end_connected = layout_objects.find(
           (data) =>
-            data.constructor.name.toUpperCase() === 'POINT' &&
+            data.objectType.toUpperCase() === 'POINT' &&
             data.id === object.pointTo.id
         );
 

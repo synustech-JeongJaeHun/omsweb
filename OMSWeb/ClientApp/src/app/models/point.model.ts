@@ -4,6 +4,7 @@ import { Dto } from './dto/track.model';
 import {IPoint} from './map.interface';
 
 export class Point implements IPoint {
+  objectType = 'Point';
   id?: number;
   logicalId?: string;
   physicalId?: string;

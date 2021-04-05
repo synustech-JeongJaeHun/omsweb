@@ -353,7 +353,7 @@ export class ViewController {
           let segments_to_move = [];
           for (let i = 0; i < this.selected_objects.length; i++) {
             if (
-              this.selected_objects[i].constructor.name.toUpperCase() ===
+              this.selected_objects[i].objectType.toUpperCase() ===
               'SEGMENT'
             ) {
               segments_to_move.push(this.selected_objects[i]);
@@ -364,7 +364,7 @@ export class ViewController {
               );
             } else {
               this.move_dom(
-                this.selected_objects[i].constructor.name.toUpperCase(),
+                this.selected_objects[i].objectType.toUpperCase(),
                 [this.selected_objects[i]],
                 actual_delta
               );
@@ -500,8 +500,8 @@ export class ViewController {
               this.selected_objects.forEach((cur_selected_object) => {
                 if (
                   updated_object.id === cur_selected_object.id &&
-                  updated_object.constructor.name ===
-                    cur_selected_object.constructor.name
+                  updated_object.objectType ===
+                    cur_selected_object.objectType
                 ) {
                   is_found = true;
                 }
@@ -652,7 +652,7 @@ export class ViewController {
       // Update the selected object data if the selected is this updated vehicle
       if (this.selected_objects.length === 1) {
         if (
-          this.selected_objects[0].constructor.name.toUpperCase() ===
+          this.selected_objects[0].objectType.toUpperCase() ===
             'VEHICLE' &&
           this.selected_objects[0].id == this.vehicles[target_index].id
         ) {
@@ -761,7 +761,7 @@ export class ViewController {
     if (update_object === null) {
       if (this.selected_objects.length > 0 && this.selected_objects[0]) {
         update_object = this.find_layout_object(
-          this.selected_objects[0].constructor.name.toUpperCase(),
+          this.selected_objects[0].objectType.toUpperCase(),
           this.selected_objects[0].id
         );
       }
@@ -771,7 +771,7 @@ export class ViewController {
       this.selected_objects = this.selected_objects.map((obj) => {
         if (
           obj.id === update_object.id &&
-          obj.constructor.name === update_object.constructor.name
+          obj.objectType === update_object.objectType
         ) {
           obj = update_object;
           update_successful = true;
@@ -1343,7 +1343,7 @@ export class ViewController {
       } else if (this.overlap_display_objects.length === 1) {
         // if hovering over an overlap elligible object
         this.check_overlap_and_display(
-          this.overlap_display_objects[0].constructor.name.toUpperCase(),
+          this.overlap_display_objects[0].objectType.toUpperCase(),
           this.overlap_display_objects[0].id,
           this.overlap_display_objects,
           'OVERLAP'
@@ -1410,13 +1410,13 @@ export class ViewController {
         // if clicked on an overlap elligible object
         if (
           this.selected_objects.length > 0 &&
-          this.selected_objects[0].constructor.name.toUpperCase() ===
+          this.selected_objects[0].objectType.toUpperCase() ===
             'VEHICLE' &&
           updated_vehicle.id === this.selected_objects[0].id
         ) {
           this.selected_objects[0] = updated_vehicle;
           this.check_overlap_and_display(
-            this.selected_objects[0].constructor.name.toUpperCase(),
+            this.selected_objects[0].objectType.toUpperCase(),
             this.selected_objects[0].id,
             this.overlap_module_objects,
             'OVERLAP_MODULE'
@@ -1432,14 +1432,14 @@ export class ViewController {
   ) {
     let is_operation_for_selected_vehicle =
         this.selected_objects.length > 0 &&
-        this.selected_objects[0].constructor.name.toUpperCase() === 'VEHICLE' &&
+        this.selected_objects[0].objectType.toUpperCase() === 'VEHICLE' &&
         this.selected_objects[0].id === vehicle.id &&
         overlap_type === 'OVERLAP_MODULE'
           ? true
           : false,
       point_of_interest = overlap_list[0] ? overlap_list[0] : undefined,
       type_at_point = point_of_interest
-        ? point_of_interest.constructor.name.toUpperCase()
+        ? point_of_interest.objectType.toUpperCase()
         : undefined;
 
     // Remove exiting overlap ===========================================//
@@ -1448,7 +1448,7 @@ export class ViewController {
     if (is_operation_for_selected_vehicle) {
       for (let i = overlap_list.length - 1; i > -1; i--) {
         if (
-          overlap_list[i].constructor.name.toUpperCase() === 'VEHICLE' &&
+          overlap_list[i].objectType.toUpperCase() === 'VEHICLE' &&
           overlap_list[i].id === vehicle.id
         ) {
           overlap_list[i] = vehicle;
@@ -1462,7 +1462,7 @@ export class ViewController {
         } else {
           this.update_overlap_module_panel(
             'DELETE',
-            overlap_list[i].constructor.name.toUpperCase(),
+            overlap_list[i].objectType.toUpperCase(),
             overlap_list[i],
             overlap_type
           );
@@ -1474,7 +1474,7 @@ export class ViewController {
       for (let i = 0; i < overlap_list.length; i++) {
         // Check current vehicle exists
         if (
-          overlap_list[i].constructor.name.toUpperCase() === 'VEHICLE' &&
+          overlap_list[i].objectType.toUpperCase() === 'VEHICLE' &&
           overlap_list[i].id === vehicle.id
         ) {
           // is same object
@@ -1529,7 +1529,7 @@ export class ViewController {
     // Check if overlapping with other vehicles
     if (is_operation_for_selected_vehicle) {
       this.check_overlap_and_display(
-        vehicle.constructor.name.toUpperCase(),
+        vehicle.objectType.toUpperCase(),
         vehicle.id,
         this.overlap_module_objects,
         'OVERLAP_MODULE'
@@ -1670,7 +1670,7 @@ export class ViewController {
 
     for (let i = 0; i < this.selected_objects.length; i++) {
       let object = this.selected_objects[i].copy();
-      let object_type = object.constructor.name.toUpperCase();
+      let object_type = object.objectType.toUpperCase();
 
       // Apply offset, REMEMBER : multiply -1 because delta is based on inverted coord
       object.apply_offset(original_delta, 0, this.geometry.invertFactorY);
@@ -1693,7 +1693,7 @@ export class ViewController {
 
         // Search for points
         this.selected_objects.forEach((check_object) => {
-          let check_object_type = check_object.constructor.name.toUpperCase();
+          let check_object_type = check_object.objectType.toUpperCase();
           if (check_object_type === 'POINT') {
             if (check_object.id === object.pointFrom.id) {
               has_point_from = true;
@@ -1751,7 +1751,7 @@ export class ViewController {
           // Found
           if (
             con_seg.id === cur_object.id &&
-            con_seg.constructor.name === cur_object.constructor.name
+            con_seg.objectType === cur_object.objectType
           ) {
             is_found = true;
           }
@@ -1769,7 +1769,7 @@ export class ViewController {
           if (
             no_update_object.id === segment_to_check.id &&
             no_update_object.object_type ===
-              segment_to_check.constructor.name.toUpperCase()
+              segment_to_check.objectType.toUpperCase()
           ) {
             is_found = true;
           }
@@ -1777,7 +1777,7 @@ export class ViewController {
         if (!is_found) {
           do_not_update_with_points.push({
             id: segment_to_check.id,
-            object_type: segment_to_check.constructor.name.toUpperCase(),
+            object_type: segment_to_check.objectType.toUpperCase(),
           });
         }
       });
@@ -1796,8 +1796,8 @@ export class ViewController {
           (updated_object, index, original_updated_objects_arr) => {
             if (
               updated_by_point_object.id === updated_object.id &&
-              updated_by_point_object.constructor.name ===
-                updated_object.constructor.name
+              updated_by_point_object.objectType ===
+                updated_object.objectType
             ) {
               is_found = true;
               // original_updated_objects_arr[index] = updated_by_point_object
@@ -1858,7 +1858,7 @@ export class ViewController {
               do_not_update_with_points_list.forEach((remove_object) => {
                 if (
                   con_seg.id === remove_object.id &&
-                  con_seg.constructor.name.toUpperCase() ===
+                  con_seg.objectType.toUpperCase() ===
                     remove_object.object_type
                 ) {
                   connected_segments.splice(j, 1);
@@ -2074,8 +2074,8 @@ export class ViewController {
     //     ) {
     //       let updated_selected_item = updated_objects.find((updated_object) => {
     //         return (
-    //           updated_object.constructor.name.toUpperCase() ===
-    //             this.selected_objects[0].constructor.name.toUpperCase() &&
+    //           updated_object.objectType.toUpperCase() ===
+    //             this.selected_objects[0].objectType.toUpperCase() &&
     //           updated_object.id === this.selected_objects[0].id
     //         );
     //       });
@@ -2104,7 +2104,7 @@ export class ViewController {
       }
       if (object) {
         this.check_overlap_and_display(
-          object.constructor.name.toUpperCase(),
+          object.objectType.toUpperCase(),
           object.id,
           this.overlap_module_objects,
           'OVERLAP_MODULE'
@@ -2204,7 +2204,7 @@ export class ViewController {
       for (let i = 0; i < overlap_list.length; i++) {
         this.update_overlap_module_panel(
           'ADD',
-          overlap_list[i].constructor.name.toUpperCase(),
+          overlap_list[i].objectType.toUpperCase(),
           overlap_list[i],
           type
         );
@@ -2281,10 +2281,10 @@ export class ViewController {
     if (
       object &&
       this.selected_objects.length > 0 &&
-      this.selected_objects[0].constructor.name === object.constructor.name &&
+      this.selected_objects[0].objectType === object.objectType &&
       this.selected_objects[0].id === object.id
     ) {
-      let type = object.constructor.name.toUpperCase();
+      let type = object.objectType.toUpperCase();
 
       // If adding an elligible object is a previously selected object, highlight
       if (operation === 'ADD') {
@@ -2292,7 +2292,7 @@ export class ViewController {
         this.highlight(
           type,
           object.id,
-          main_css[object.constructor.name.toLowerCase()],
+          main_css[object.objectType.toLowerCase()],
           overlap_type,
           'SELECT'
         );
@@ -2548,12 +2548,12 @@ export class ViewController {
 
     // Get the coordinate for the panel: If the first object in the overlap_display_objects array is a vehicle, use vehicle curPoint coordinate else, use station/buffer coordinates
     let x =
-        this.overlap_display_objects[0].constructor.name.toUpperCase() ===
+        this.overlap_display_objects[0].objectType.toUpperCase() ===
         'VEHICLE'
           ? this.overlap_display_objects[0].curPoint.invertedCoord.x
           : this.overlap_display_objects[0].invertedCoord.x,
       y =
-        this.overlap_display_objects[0].constructor.name.toUpperCase() ===
+        this.overlap_display_objects[0].objectType.toUpperCase() ===
         'VEHICLE'
           ? this.overlap_display_objects[0].curPoint.invertedCoord.y
           : this.overlap_display_objects[0].invertedCoord.y;
@@ -2589,7 +2589,7 @@ export class ViewController {
     for (let i = 0; i < this.overlap_display_objects.length; i++) {
       this.update_overlap_display_panel(
         'ADD',
-        this.overlap_display_objects[i].constructor.name.toUpperCase(),
+        this.overlap_display_objects[i].objectType.toUpperCase(),
         this.overlap_display_objects[i]
       );
     }
@@ -2625,25 +2625,25 @@ export class ViewController {
 
         // Find the css for the selected object
         let object_css;
-        if (selected_object.constructor.name.toUpperCase() === 'POINT') {
+        if (selected_object.objectType.toUpperCase() === 'POINT') {
           object_css = main_css.point;
         } else if (
-          selected_object.constructor.name.toUpperCase() === 'STATION'
+          selected_object.objectType.toUpperCase() === 'STATION'
         ) {
           object_css = main_css.station;
         } else if (
-          selected_object.constructor.name.toUpperCase() === 'BUFFER'
+          selected_object.objectType.toUpperCase() === 'BUFFER'
         ) {
           object_css = main_css.buffer;
         } else if (
-          selected_object.constructor.name.toUpperCase() === 'VEHICLE'
+          selected_object.objectType.toUpperCase() === 'VEHICLE'
         ) {
           object_css = main_css.vehicle;
         }
 
         // highlight non-overlap object before close
         this.highlight(
-          selected_object.constructor.name.toUpperCase(),
+          selected_object.objectType.toUpperCase(),
           selected_object.id,
           object_css,
           'LAYOUT',
@@ -2704,7 +2704,7 @@ export class ViewController {
 
     // Find if stations of buffers are a part of the overlap
     let has_station_or_buffer = this.overlap_display_objects.find((object) => {
-      let type = object.constructor.name.toUpperCase();
+      let type = object.objectType.toUpperCase();
       return type === 'STATION' || type === 'BUFFER' || type === 'MTL';
     });
 
@@ -2762,10 +2762,10 @@ export class ViewController {
     // Highlight or unhighlight depending on vehicle arrival and departure from the point
     if (
       this.selected_objects.length > 0 &&
-      this.selected_objects[0].constructor.name === object.constructor.name &&
+      this.selected_objects[0].objectType === object.objectType &&
       this.selected_objects[0].id === object.id
     ) {
-      let type = object.constructor.name.toUpperCase();
+      let type = object.objectType.toUpperCase();
 
       // If adding overlap_object is a previously selected object, highlight
       if (operation === 'ADD') {
@@ -2774,7 +2774,7 @@ export class ViewController {
         this.highlight(
           type,
           object.id,
-          main_css[object.constructor.name.toLowerCase()],
+          main_css[object.objectType.toLowerCase()],
           'OVERLAP',
           'SELECT'
         );
@@ -2784,7 +2784,7 @@ export class ViewController {
         this.highlight(
           type,
           object.id,
-          main_css[object.constructor.name.toLowerCase()],
+          main_css[object.objectType.toLowerCase()],
           'LAYOUT',
           'SELECT'
         );
@@ -2864,7 +2864,7 @@ export class ViewController {
     // Unhighlight the arriving layout element
     if (overlap_type === 'OVERLAP') {
       this.unhighlight(
-        object.constructor.name.toUpperCase(),
+        object.objectType.toUpperCase(),
         object.id,
         'LAYOUT'
       );
@@ -3261,7 +3261,7 @@ export class ViewController {
 
     for (let i = 0; i < updated_objects.length; i++) {
       let updated_object = updated_objects[i];
-      let object_type = updated_object.constructor.name.toUpperCase();
+      let object_type = updated_object.objectType.toUpperCase();
 
       // let original_object
       let original_object_idx;
@@ -3290,7 +3290,7 @@ export class ViewController {
         // Store original object to array for history
         original_objects.push(original_object);
 
-        let object_type = original_object.constructor.name.toUpperCase();
+        let object_type = original_object.objectType.toUpperCase();
 
         if (object_type === 'POINT' || object_type === 'SEGMENT') {
           this.update_related_clusters(original_object);
@@ -3334,7 +3334,7 @@ export class ViewController {
           return type === object_type;
         });
         if (!is_type_exists) {
-          update_category.push(original_object.constructor.name.toUpperCase());
+          update_category.push(original_object.objectType.toUpperCase());
         }
       }
 
@@ -3342,8 +3342,8 @@ export class ViewController {
       let selected_object_idx = this.selected_objects.findIndex((object) => {
         if (
           object.id === updated_object.id &&
-          object.constructor.name.toUpperCase() ===
-            updated_object.constructor.name.toUpperCase()
+          object.objectType.toUpperCase() ===
+            updated_object.objectType.toUpperCase()
         )
           return true;
         else return false;
@@ -3354,7 +3354,7 @@ export class ViewController {
           selected_object_idx,
           1,
           this.find_layout_object(
-            updated_object.constructor.name.toUpperCase(),
+            updated_object.objectType.toUpperCase(),
             updated_object.id
           )
         );
@@ -3539,7 +3539,7 @@ export class ViewController {
     }
   }
   update_related_location_objects(updated_object: any) {
-    let updated_object_type = updated_object.constructor.name.toUpperCase();
+    let updated_object_type = updated_object.objectType.toUpperCase();
     let target_points = [];
     let updated_stations = 0;
     let updated_buffers = 0;
@@ -3568,7 +3568,7 @@ export class ViewController {
   }
   update_related_clusters(original_object: any) {
     let connected_clusters = [];
-    let object_type = original_object.constructor.name.toUpperCase();
+    let object_type = original_object.objectType.toUpperCase();
     if (object_type === 'POINT') {
       connected_clusters = LayoutUtil.find_connected_cluster(
         original_object,
@@ -3666,7 +3666,7 @@ export class ViewController {
       let in_overlap_object = this.overlap_display_objects.findIndex(
         (object) => {
           return (
-            object.constructor.name.toUpperCase() === object_type &&
+            object.objectType.toUpperCase() === object_type &&
             object.id === object_id
           );
         }
@@ -3674,7 +3674,7 @@ export class ViewController {
 
       let overlap_module = this.overlap_module_objects.findIndex((object) => {
         return (
-          object.constructor.name.toUpperCase() === object_type &&
+          object.objectType.toUpperCase() === object_type &&
           object.id === object_id
         );
       });
@@ -3892,7 +3892,7 @@ export class ViewController {
     if (remove_opt && remove_opt.length > 0) {
       for (let i = objects_list.length - 1; i > -1; i--) {
         let object = objects_list[i];
-        let object_type = object.constructor.name.toUpperCase();
+        let object_type = object.objectType.toUpperCase();
         let is_remove = remove_opt.find((type) => {
           return type === object_type;
         });
@@ -3925,7 +3925,7 @@ export class ViewController {
       // Validate
       for (let i = objects_list.length - 1; i > -1; i--) {
         let target_object = objects_list[i];
-        let object_type = target_object.constructor.name.toUpperCase();
+        let object_type = target_object.objectType.toUpperCase();
 
         // If the target object we are trying to validate is a point, skip it
         if (object_type === 'POINT') {
@@ -3938,7 +3938,7 @@ export class ViewController {
           let has_point_from, has_point_to;
           for (let j = 0; j < objects_list.length; j++) {
             let search_object = objects_list[j];
-            if (search_object.constructor.name.toUpperCase() === 'POINT') {
+            if (search_object.objectType.toUpperCase() === 'POINT') {
               let pointId = search_object.id;
               if (target_object.pointFrom.id === pointId) {
                 has_point_from = true;
@@ -3960,7 +3960,7 @@ export class ViewController {
             let search_object = objects_list[j];
 
             // Only check target object with point objects
-            if (search_object.constructor.name.toUpperCase() === 'POINT') {
+            if (search_object.objectType.toUpperCase() === 'POINT') {
               let pointId = search_object.id;
               if (target_object.pointId === pointId) {
                 is_valid = true;
@@ -4678,7 +4678,7 @@ export class ViewController {
             if (this.overlap_display_objects.length < 2) {
               // Show the overlap for currently hovering object
               this.check_overlap_and_display(
-                this.currently_hovering_object.constructor.name.toUpperCase(),
+                this.currently_hovering_object.objectType.toUpperCase(),
                 this.currently_hovering_object.id,
                 this.overlap_display_objects,
                 'OVERLAP'
@@ -5008,7 +5008,7 @@ export class ViewController {
     // Highlight objects
     for (let i = 0; i < layout_objects.length; i++) {
       let object = layout_objects[i];
-      let object_type = object.constructor.name.toUpperCase();
+      let object_type = object.objectType.toUpperCase();
       if (object_type === 'SEGMENT') {
         segments_to_highlight.push(layout_objects[i]);
       } else {
@@ -6099,10 +6099,10 @@ export class ViewController {
           if (
             this.selected_objects[0] &&
             d.id === this.selected_objects[0].id &&
-            d.constructor.name === this.selected_objects[0].constructor.name
+            d.objectType === this.selected_objects[0].objectType
           ) {
             this.highlight(
-              d.constructor.name.toUpperCase(),
+              d.objectType.toUpperCase(),
               d.id,
               dom_css,
               'LAYOUT',
@@ -8567,16 +8567,16 @@ export class ViewController {
       let is_translate = false;
       let is_rotate = false;
       let is_scale = false;
-      if (d.constructor.name.toUpperCase() === 'SEGMENT') {
+      if (d.objectType.toUpperCase() === 'SEGMENT') {
         trans_array = transform.apply([d.dirCoord.x, d.dirCoord.y]);
         is_translate = true;
       } else if (
-        d.constructor.name.toUpperCase() === 'STATION' ||
-        d.constructor.name.toUpperCase() === 'BUFFER'
+        d.objectType.toUpperCase() === 'STATION' ||
+        d.objectType.toUpperCase() === 'BUFFER'
       ) {
         is_translate = true;
         trans_array = transform.apply([d.invertedCoord.x, d.invertedCoord.y]);
-      } else if (d.constructor.name.toUpperCase() === 'CLUSTER') {
+      } else if (d.objectType.toUpperCase() === 'CLUSTER') {
         trans_array = transform.apply([
           d.invertedCoordFrom.x,
           d.invertedCoordFrom.y,
@@ -11013,7 +11013,7 @@ export class ViewController {
       if (
         this.selected_objects[0] &&
         this.selected_objects[0].id === object_id &&
-        this.selected_objects[0].constructor.name.toUpperCase() === object_type
+        this.selected_objects[0].objectType.toUpperCase() === object_type
       ) {
         return;
       }
@@ -11069,7 +11069,7 @@ export class ViewController {
               this.selected_objects = [];
               // replace selected object to created
               this.selected_objects.push(created_object);
-              object_type = created_object.constructor.name.toUpperCase();
+              object_type = created_object.objectType.toUpperCase();
               layout_object = created_object;
               need_popup = true;
             }
@@ -11403,7 +11403,7 @@ export class ViewController {
     // Add new objects
     for (let i = 0; i < new_objects.length; i++) {
       let object = new_objects[i];
-      let object_type = object.constructor.name.toUpperCase();
+      let object_type = object.objectType.toUpperCase();
 
       // Apply offset if needed
       if (offset !== null && offset !== undefined) {
@@ -11677,7 +11677,7 @@ export class ViewController {
       // delete from memory model
       for (let i = 0; i < delete_objects.length; i++) {
         let delete_object = delete_objects[i];
-        let object_type = delete_object.constructor.name.toUpperCase();
+        let object_type = delete_object.objectType.toUpperCase();
         let target_objects;
         let delete_idx;
 
@@ -11700,7 +11700,7 @@ export class ViewController {
           }
 
           this.update_related_location_objects(delete_object);
-          if (delete_object.constructor.name.toUpperCase() === 'GROUP') {
+          if (delete_object.objectType.toUpperCase() === 'GROUP') {
             this.update_related_grouped_objects(
               delete_object,
               original_object,
@@ -12203,7 +12203,7 @@ export class ViewController {
       let result = [];
       for (let i = 0; i < this.selected_objects.length; i++) {
         let object = this.selected_objects[i];
-        if (object.constructor.name.toUpperCase() === object_type) {
+        if (object.objectType.toUpperCase() === object_type) {
           result.push(object);
         }
       }
@@ -13171,7 +13171,7 @@ export class ViewController {
     if (segments && segments.length > 0) {
       for (let i = 0; i < segments.length; i++) {
         let is_exclusion = segment_exclusions.findIndex((exclusion) => {
-          if (exclusion.constructor.name.toUpperCase() === 'SEGMENT') {
+          if (exclusion.objectType.toUpperCase() === 'SEGMENT') {
             return exclusion.id === segments[i].id;
           }
         });

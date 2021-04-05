@@ -2,6 +2,7 @@ import * as _ from 'lodash';
 import { Dto } from './dto/track.model';
 
 export class Group {
+  objectType = 'Group';
   id: number;
   logicalId: string;
   color: string;

@@ -2,6 +2,7 @@ import { LayoutUtil } from '../modules/shared/utils/layout.util';
 import { Dto } from './dto/track.model';
 
 export class Cluster {
+  objectType = 'Cluster';
   id: number;
   color: string;
   logicalId: string;
