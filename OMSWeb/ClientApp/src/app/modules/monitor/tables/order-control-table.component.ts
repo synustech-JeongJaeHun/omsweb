@@ -20,7 +20,8 @@ import { DxDataGridComponent } from 'devextreme-angular';
 })
 export class OrderControlTableComponent implements OnInit, OnDestroy {
   @Input() tableHeight: number;
-  @ViewChild(DxDataGridComponent, {static: false}) dataGrid: DxDataGridComponent;
+  @ViewChild(DxDataGridComponent, { static: false })
+  dataGrid: DxDataGridComponent;
 
   dataSource: DataSource;
   // dataSource: any;
@@ -30,7 +31,7 @@ export class OrderControlTableComponent implements OnInit, OnDestroy {
   private destroy$: Subject<void> = new Subject<void>();
   //#endregion
 
-  get canControl(): boolean {
+  get hasControlAccess(): boolean {
     return (
       this.auth.isAuthenticated &&
       AccountUtil.hasPermission(
@@ -79,9 +80,8 @@ export class OrderControlTableComponent implements OnInit, OnDestroy {
   onDelete() {
     if (!this.canDelete) return;
     const items = this.dataGrid.instance.getSelectedRowsData();
-    const jobs = items.map(x => this.messageSvc.sendDeleteOrder(x));
+    const jobs = items.map((x) => this.messageSvc.sendDeleteOrder(x));
     forkJoin(jobs).subscribe();
-    // this.messageSvc.sendDeleteOrder()
   }
 
   private onTableChanged(payload: IDataChangeEvent) {

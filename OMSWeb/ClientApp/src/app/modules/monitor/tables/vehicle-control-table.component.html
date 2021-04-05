@@ -1,23 +1,65 @@
-<div class="grid-actions" *ngIf="canControl">
-  <button mat-stroked-button color="warn" class="dense accent">
+<div class="grid-actions" *ngIf="hasControlAccess">
+  <button
+    mat-stroked-button
+    color="warn"
+    class="dense accent"
+    [disabled]="!canControl"
+    (click)="onEStop()"
+  >
     {{ "names.estop" | translate }}
   </button>
-  <button mat-stroked-button color="primary" class="dense accent">
+  <button
+    mat-stroked-button
+    color="primary"
+    class="dense accent"
+    [disabled]="!canControl"
+    (click)="onReset()"
+  >
     {{ "names.reset" | translate }}
   </button>
-  <button mat-stroked-button color="primary" class="dense accent">
+  <button
+    mat-stroked-button
+    color="primary"
+    class="dense accent"
+    [disabled]="!canControl"
+    (click)="onSetAuto()"
+  >
     {{ "names.auto" | translate }}
   </button>
-  <button mat-stroked-button color="primary" class="dense">
+  <button
+    mat-stroked-button
+    color="primary"
+    class="dense"
+    [disabled]="!canControl"
+    (click)="onChangeHostOrderActivity()"
+  >
     {{ "names.hostOrderEnable" | translate }}
   </button>
-  <button mat-stroked-button color="primary" class="dense">
+  <button
+    mat-stroked-button
+    color="primary"
+    class="dense"
+    [disabled]="!canControl"
+    (click)="onChangePushActivity()"
+  >
     {{ "names.pushEnable" | translate }}
   </button>
-  <button mat-stroked-button color="primary" class="dense">
+  <button
+    mat-stroked-button
+    color="primary"
+    class="dense"
+    [disabled]="!canControl"
+    (click)="onRailIn()"
+  >
     {{ "names.railIn" | translate }}
   </button>
-  <button mat-stroked-button color="primary" class="dense">
+  <button
+    mat-stroked-button
+    color="primary"
+    class="dense"
+    [disabled]="!canControl"
+    (click)="onRailOut()"
+  >
     {{ "names.railOut" | translate }}
   </button>
 </div>

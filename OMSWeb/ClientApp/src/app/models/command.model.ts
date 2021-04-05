@@ -1,15 +1,16 @@
 export interface ICommandMessage {
-  type: string;
+  type?: string;
   action: string;
 }
 
 export interface IVehicleCommandMessage extends ICommandMessage {
-  vehicleId?: string;
+  vehicleIds?: number[];
   orderOrigin?: string;
   canBePushed?: boolean;
+  acceptManualCommands?: string;
+
   destination?: string;
   mode?: string;
-  acceptManualCommands?: string;
 }
 
 export interface ITrackCommandMessage extends ICommandMessage {

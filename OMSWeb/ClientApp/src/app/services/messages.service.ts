@@ -8,6 +8,7 @@ import {
   IVehicleCommandMessage,
 } from '../models/command.model';
 import { IOrderStatusRow } from '../models/order-status.model';
+import { IVehicleStatusRow } from '../models/vehicle-status.model';
 
 @Injectable({
   providedIn: 'root',
@@ -16,35 +17,6 @@ export class MessagesService {
   private baseUrl = '/api/messages';
   constructor(private http: HttpClient) {}
 
-  sendPing(): Observable<void> {
-    return this.sendVehicleCommand({
-      type: 'VEHICLE',
-      vehicleId: '*',
-      action: 'status',
-    });
-  }
-  sendVehicleReset(): Observable<void> {
-    return this.sendVehicleCommand({
-      type: 'VEHICLE',
-      vehicleId: '*',
-      action: 'reset',
-    });
-  }
-  sendEStop(): Observable<void> {
-    return this.sendVehicleCommand({
-      type: 'VEHICLE',
-      vehicleId: '*',
-      action: 'stop',
-    });
-  }
-  sendSetAuto(): Observable<void> {
-    console.warn('@ action value 확인 (auto ?)');
-    return this.sendVehicleCommand({
-      type: 'VEHICLE',
-      vehicleId: '*',
-      action: 'auto', // @TODO auto action 값 확인
-    });
-  }
   sendDeleteOrder(order: IOrderStatusRow): Observable<void> {
     const {
       vehicleId,
@@ -69,7 +41,13 @@ export class MessagesService {
     });
   }
 
-  sendVehicleCommand(command: IVehicleCommandMessage): Observable<void> {
+  sendVehicleCommand(
+    command: IVehicleCommandMessage,
+    targets: IVehicleStatusRow[] = []
+  ): Observable<void> {
+    command.type = 'VEHICLE';
+    command.vehicleIds = targets.map(x => x.id);
+
     return this.sendCommand<IVehicleCommandMessage>(command);
   }
 
@@ -78,8 +56,6 @@ export class MessagesService {
   }
 
   private sendCommand<T extends ICommandMessage>(command: T): Observable<void> {
-    // console.warn('@@ dummy response >>', this.baseUrl, command);
-    // return EMPTY; // @TODO remove : test code
     return this.http.post<void>(`${this.baseUrl}/command`, command);
   }
 }

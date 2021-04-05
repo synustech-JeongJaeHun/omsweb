@@ -11,7 +11,11 @@ import {
   defaultToggleOptions,
   ToggleOptionsType,
 } from '@oms/models/settings.model';
-import { CommandKeyType, ToggleOptionKeyType, UserPermissions } from '../../../models/enums';
+import {
+  CommandKeyType,
+  ToggleOptionKeyType,
+  UserPermissions,
+} from '../../../models/enums';
 
 import { MapStatesService } from '../map-states.service';
 import { MessagesService } from '@oms/services/messages.service';
@@ -45,10 +49,13 @@ export class MapToolbarComponent implements OnInit {
 
   visibilityOpen = false;
 
-  get canControl():boolean {
+  get canControl(): boolean {
     return (
       this.auth.isAuthenticated &&
-      AccountUtil.hasPermission(UserPermissions.controlActions, this.auth.currentUser)
+      AccountUtil.hasPermission(
+        UserPermissions.controlActions,
+        this.auth.currentUser
+      )
     );
   }
 
@@ -149,7 +156,7 @@ export class MapToolbarComponent implements OnInit {
       disableClose: false,
       closeOnNavigation: true,
       position: { left: '36px', top: `${rect.top}px` },
-      data: this.buttonState
+      data: this.buttonState,
     });
   }
 
@@ -164,14 +171,14 @@ export class MapToolbarComponent implements OnInit {
   }
 
   onPing() {
-    this.messageSvc.sendPing().subscribe();
+    this.messageSvc.sendVehicleCommand({ action: 'status' }).subscribe();
   }
   onVehicleReset() {
     this.dialogSvc
       .confirm({ body: this.$t.instant('messages.confirmResetAllVehicles') })
       .subscribe((confirm) => {
         if (confirm) {
-          this.messageSvc.sendVehicleReset().subscribe();
+          this.messageSvc.sendVehicleCommand({ action: 'reset' }).subscribe();
         }
       });
   }
@@ -180,7 +187,9 @@ export class MapToolbarComponent implements OnInit {
       .confirm({ body: this.$t.instant('messages.confirmSetAutoAll') })
       .subscribe((confirm) => {
         if (confirm) {
-          this.messageSvc.sendSetAuto().subscribe();
+          this.messageSvc
+            .sendVehicleCommand({ action: 'initialize' })
+            .subscribe();
         }
       });
   }
@@ -189,7 +198,7 @@ export class MapToolbarComponent implements OnInit {
       .confirm({ body: this.$t.instant('messages.confirmEstopAll') })
       .subscribe((confirm) => {
         if (confirm) {
-          this.messageSvc.sendEStop().subscribe();
+          this.messageSvc.sendVehicleCommand({ action: 'stop' }).subscribe();
         }
       });
   }

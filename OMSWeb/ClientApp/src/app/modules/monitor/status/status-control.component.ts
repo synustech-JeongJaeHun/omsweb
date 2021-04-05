@@ -51,14 +51,14 @@ export class StatusControlComponent implements OnInit {
   }
 
   onPing() {
-    this.messageSvc.sendPing().subscribe();
+    this.messageSvc.sendVehicleCommand({ action: 'status' }).subscribe();
   }
   onVehicleReset() {
     this.dialogSvc
       .confirm({ body: this.$t.instant('messages.confirmResetAllVehicles') })
       .subscribe((confirm) => {
         if (confirm) {
-          this.messageSvc.sendVehicleReset().subscribe();
+          this.messageSvc.sendVehicleCommand({ action: 'reset' }).subscribe();
         }
       });
   }
@@ -67,7 +67,9 @@ export class StatusControlComponent implements OnInit {
       .confirm({ body: this.$t.instant('messages.confirmSetAutoAll') })
       .subscribe((confirm) => {
         if (confirm) {
-          this.messageSvc.sendSetAuto().subscribe();
+          this.messageSvc
+            .sendVehicleCommand({ action: 'initialize' })
+            .subscribe();
         }
       });
   }
@@ -76,7 +78,7 @@ export class StatusControlComponent implements OnInit {
       .confirm({ body: this.$t.instant('messages.confirmEstopAll') })
       .subscribe((confirm) => {
         if (confirm) {
-          this.messageSvc.sendEStop().subscribe();
+          this.messageSvc.sendVehicleCommand({ action: 'stop' }).subscribe();
         }
       });
   }
