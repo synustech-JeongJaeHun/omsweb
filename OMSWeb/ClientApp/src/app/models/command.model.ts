@@ -26,6 +26,7 @@ export interface ITrackCommandMessage extends ICommandMessage {
 export interface IOrderCommandMessage extends ICommandMessage {
   vehicleId?: number;
   orderId?: number;
+  orderOrigin?: string;
   locationPickup?: string;
   locationDropoff?: string;
   locationMove?: string;

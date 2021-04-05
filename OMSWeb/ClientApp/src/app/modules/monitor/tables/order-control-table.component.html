@@ -1,5 +1,11 @@
 <div class="grid-actions" *ngIf="canControl">
-  <button mat-stroked-button color="primary" class="dense accent" (click)="onDelete()">
+  <button
+    mat-stroked-button
+    color="primary"
+    class="dense accent"
+    [disabled]="!canDelete"
+    (click)="onDelete()"
+  >
     {{ "names.delete" | translate }}
   </button>
 </div>

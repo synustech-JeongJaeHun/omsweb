@@ -4,6 +4,7 @@ import { UserPermissions } from '../../../models/enums';
 import { AuthService } from '../../../services/auth.service';
 import { DialogService } from '../../../services/dialog.service';
 import { MessagesService } from '../../../services/messages.service';
+import { SettingsService } from '../../../services/settings.service';
 import { AccountUtil } from '../../shared/utils/account.util';
 import { MapStatesService } from '../../track-map/map-states.service';
 
@@ -39,12 +40,14 @@ export class StatusControlComponent implements OnInit {
     private auth: AuthService,
     private mapStateSvc: MapStatesService,
     private messageSvc: MessagesService,
+    private settingSvc: SettingsService,
     private dialogSvc: DialogService,
     private $t: TranslateService
   ) {}
 
   ngOnInit(): void {
     this.resizeHandler = this.onMouseMove.bind(this);
+    this.currentTab = this.settingSvc.globalPreferences.uiStates.controlTab;
   }
 
   onPing() {
@@ -91,6 +94,11 @@ export class StatusControlComponent implements OnInit {
       resizedH + 'px';
 
     this.tableHeightNum = resizedH - 37; /* header:40px, tab-panel:25px */
+  }
+  onChangeTab(selectedIndex: number) {
+    const pref = this.settingSvc.globalPreferences;
+    pref.uiStates.controlTab = selectedIndex;
+    this.settingSvc.globalPreferences.save();
   }
 
   resizeViewerStart() {

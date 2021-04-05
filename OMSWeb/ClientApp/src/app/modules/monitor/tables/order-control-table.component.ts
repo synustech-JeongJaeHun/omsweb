@@ -78,11 +78,8 @@ export class OrderControlTableComponent implements OnInit, OnDestroy {
 
   onDelete() {
     if (!this.canDelete) return;
-    console.log('## selected rows >>', this.selectedRows);
     const items = this.dataGrid.instance.getSelectedRowsData();
-    console.info('## selected items >>', items);
-    return;
-    const jobs = this.selectedRows.map(x => this.messageSvc.sendDeleteOrder(x));
+    const jobs = items.map(x => this.messageSvc.sendDeleteOrder(x));
     forkJoin(jobs).subscribe();
     // this.messageSvc.sendDeleteOrder()
   }

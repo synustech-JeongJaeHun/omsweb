@@ -13,6 +13,11 @@ export interface IMapConfig {
 export interface IPreferences {
   toggles: ToggleOptionsType;
   map: IMapConfig;
+  uiStates?: UiStates;
+}
+
+export class UiStates {
+  controlTab?: number = 0;
 }
 
 export const defaultToggleOptions: ToggleOptionsType = {
@@ -37,6 +42,7 @@ export const defaultMapConfig: IMapConfig = {
 export class ClientPreferences implements IPreferences {
   toggles: ToggleOptionsType;
   map: IMapConfig;
+  uiStates?: UiStates;
 
   constructor(private storeKey: string, private base?: IPreferences) {
     this.load();
@@ -44,16 +50,18 @@ export class ClientPreferences implements IPreferences {
 
   private load() {
     const value = StorageUtil.getLocal(this.storeKey) || '{}';
-    const { toggles = {}, map = {} } = JSON.parse(value);
+    const { toggles = {}, map = {}, uiStates = {} } = JSON.parse(value);
     const { toggles: baseToggle = {}, map: baseMap = {} } = this.base || {};
     this.toggles = { ...defaultToggleOptions, ...baseToggle, ...toggles };
     this.map = { ...defaultMapConfig, ...baseMap, ...map };
+    this.uiStates = { ...new UiStates(), ...uiStates };
   }
 
   save() {
     const pref: IPreferences = {
       toggles: { ...this.toggles },
       map: { ...this.map },
+      uiStates: { ...this.uiStates },
     };
     StorageUtil.setLocal(this.storeKey, JSON.stringify(pref));
   }

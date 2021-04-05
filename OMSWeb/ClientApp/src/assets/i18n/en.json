@@ -23,6 +23,9 @@
     "orderPriority": "Order Priority",
     "directions": "Directions",
 
+    "orders": "Orders",
+    "vehicles": "Vehicles",
+
     "normal": "Normal",
     "cleaning": "Cleaning",
     "manual": "Manual",

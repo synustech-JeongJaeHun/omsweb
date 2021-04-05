@@ -34,14 +34,19 @@
       <span>{{ "names.vehicleStatus" | translate }}</span>
     </button>
   </div>
-  <mat-tab-group class="tab-group" [(selectedIndex)]="currentTab" animationDuration="0ms">
-    <mat-tab label="Orders">
+  <mat-tab-group
+    class="tab-group"
+    [(selectedIndex)]="currentTab"
+    (selectedIndexChange)="onChangeTab($event)"
+    animationDuration="0ms"
+  >
+    <mat-tab [label]="'names.orders' | translate">
       <oms-order-control-table
         [tableHeight]="tableHeight"
         *ngIf="currentTab == 0"
       ></oms-order-control-table>
     </mat-tab>
-    <mat-tab label="Vehicles">
+    <mat-tab [label]="'names.vehicles'| translate">
       <oms-vehicle-control-table
         [tableHeight]="tableHeight"
         *ngIf="currentTab == 1"
