@@ -6,6 +6,7 @@ import { Point } from './point.model';
 import { Segment } from './segment.model';
 
 export class Buffer {
+  objectType = 'Buffer';
   id: number;
   logicalId: string;
   physicalId: string;
@@ -51,7 +52,7 @@ export class Buffer {
     this.directionOffset = LayoutUtil.get_location_object_direction_offset(
       this.direction,
       this.segmentDirection,
-      this.constructor.name
+      this.objectType
     );
   }
 

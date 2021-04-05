@@ -5,6 +5,7 @@ import { IPoint } from './map.interface';
 import { Point } from './point.model';
 
 export class MTL {
+  objectType = 'MTL';
   id: number;
   logicalId: string;
   physicalId: string;
