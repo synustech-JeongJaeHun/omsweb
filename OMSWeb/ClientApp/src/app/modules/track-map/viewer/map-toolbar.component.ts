@@ -3,6 +3,7 @@ import {
   ElementRef,
   EventEmitter,
   Input,
+  OnDestroy,
   OnInit,
   Output,
   ViewChild,
@@ -38,7 +39,7 @@ import { AccountUtil } from '../../shared/utils/account.util';
   templateUrl: './map-toolbar.component.html',
   styleUrls: ['map-toolbar.component.scss'],
 })
-export class MapToolbarComponent implements OnInit {
+export class MapToolbarComponent implements OnInit, OnDestroy {
   @Input()
   buttonState: ToggleOptionsType = defaultToggleOptions;
 
@@ -72,6 +73,23 @@ export class MapToolbarComponent implements OnInit {
     private dialog: MatDialog,
     private $t: TranslateService
   ) {}
+  ngOnDestroy(): void {
+    this._searchDlg &&
+      this._searchDlg.getState() === MatDialogState.OPEN &&
+      this._searchDlg.close();
+
+    this._trackDlg &&
+      this._trackDlg.getState() === MatDialogState.OPEN &&
+      this._trackDlg.close();
+
+    this._cmdDlg &&
+      this._cmdDlg.getState() === MatDialogState.OPEN &&
+      this._cmdDlg.close();
+
+    this._showObjDlg &&
+      this._showObjDlg.getState() === MatDialogState.OPEN &&
+      this._showObjDlg.close();
+  }
 
   ngOnInit(): void {}
 
