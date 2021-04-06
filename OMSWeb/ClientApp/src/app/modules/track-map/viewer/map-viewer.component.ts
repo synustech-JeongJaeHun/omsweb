@@ -49,6 +49,10 @@ import { flatMap, map, switchMap, takeUntil } from 'rxjs/operators';
       .mat-progress-bar {
         margin-top: 10px;
       }
+
+      .side_panel {
+        min-width: 290px;
+      }
     `,
   ],
 })
@@ -59,11 +63,15 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   loadingState = false;
 
   private _minimapVisible = false;
+  private _detailsVisible = false;
   private viewer: ViewController;
   private destroy$: Subject<void> = new Subject<void>();
 
   get showMinimap(): boolean {
     return this._minimapVisible;
+  }
+  get showDetails(): boolean {
+    return this._detailsVisible;
   }
 
   constructor(
@@ -87,6 +95,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
       console.info('## track info >>', res);
       this.omsData = res;
       this._minimapVisible = this.preference.toggles.minimap;
+      this._detailsVisible = this.preference.toggles.itemDetails;
 
       // console.warn('테스트 : 맵 랜더링 bypass'); // @TODO test
       this.drawMap();
@@ -97,6 +106,8 @@ export class MapViewerComponent implements OnInit, OnDestroy {
       .subscribe((event) => {
         if (event.type === 'minimap') {
           this._minimapVisible = event.value;
+        } else if (event.type === 'itemDetails') {
+          this._detailsVisible = event.value;
         } else {
           this.viewer?.onChangeVisibility(event);
         }

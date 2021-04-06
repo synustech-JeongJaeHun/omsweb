@@ -8,8 +8,9 @@ import { SearchDialogComponent } from './dialogs/search-dialog.component';
 import { TrackVehicleDialogComponent } from './dialogs/track-vehicle-dialog.component';
 import { CommandDialogComponent } from './dialogs/command-dialog.component';
 import { ShowObjectDialogComponent } from './dialogs/show-object-dialog.component';
+import { MapSidePanelComponent } from './viewer/map-side-panel.component';
 @NgModule({
-  declarations: [MapViewerComponent, MapToolbarComponent, SearchDialogComponent, TrackVehicleDialogComponent, CommandDialogComponent, ShowObjectDialogComponent],
+  declarations: [MapViewerComponent, MapToolbarComponent, SearchDialogComponent, TrackVehicleDialogComponent, CommandDialogComponent, ShowObjectDialogComponent, MapSidePanelComponent],
   imports: [CommonModule, SharedModule],
   exports: [MapViewerComponent, MapToolbarComponent],
 })

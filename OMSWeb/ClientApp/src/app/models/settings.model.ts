@@ -36,6 +36,7 @@ export const defaultToggleOptions: ToggleOptionsType = {
   vehicles: true,
   clusters: true,
   overlaps: false,
+  itemDetails: false,
 };
 
 export class ClientPreferences implements IPreferences {

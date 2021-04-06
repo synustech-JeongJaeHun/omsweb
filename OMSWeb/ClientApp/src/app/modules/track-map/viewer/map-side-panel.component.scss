@@ -1,0 +1,33 @@
+.panel-header {
+  font-size: 15px;
+  font-weight: bold;
+  padding: 8px;
+  color: rgba(#000, 0.7);
+  background-color: rgba(#000, 0.1);
+}
+
+// mat-accordion {
+//   display: block;
+//   padding: 2px;
+// }
+
+mat-expansion-panel {
+  ::ng-deep.mat-expansion-panel-body {
+    padding: 10px;
+  }
+}
+
+.mat-expansion-panel-header {
+  padding: 0 10px;
+  height: 32px;
+  background-color: rgba(#000, 0.05);
+  font-weight: bold;
+
+  &.mat-expanded {
+    height: 36px;
+  }
+  .mat-panel-title {
+    font-weight: bold;
+  }
+}
+

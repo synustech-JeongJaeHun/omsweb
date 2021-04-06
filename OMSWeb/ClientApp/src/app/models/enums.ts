@@ -26,6 +26,7 @@ export enum MapTypes {
 }
 
 export type ToggleOptionKeyType =
+  | 'itemDetails'
   | 'minimap'
   | 'controlTable'
   | 'vehicleLines'
@@ -86,7 +87,6 @@ export type OrderStatesType =
   | 'ASSIGNED'
   | 'UNASSIGNED';
 
-
 export enum UserPermissions {
   none = 0,
   gnb = 1 << 0,
@@ -95,7 +95,7 @@ export enum UserPermissions {
 
 export enum HostSessionStatusEnums {
   offline = 0,
-  online
+  online,
 }
 
 export enum HostModeEnums {

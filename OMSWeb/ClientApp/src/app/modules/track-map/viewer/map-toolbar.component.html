@@ -89,6 +89,18 @@
     <mat-icon>window</mat-icon>
   </button>
 
+  <button
+    matListItem
+    mat-button
+    class="tool-item"
+    [class.active]="buttonState.itemDetails"
+    matTooltipClass="snb-tooltip"
+    matTooltipPosition="right"
+    [matTooltip]="'names.itemDetails' | translate"
+    (click)="onToggleTool('itemDetails')"
+  >
+    <mat-icon fontSet="material-icons-outlined">info</mat-icon>
+  </button>
   <mat-divider></mat-divider>
 
   <button
