@@ -18,4 +18,103 @@
   [buttonState]="preference.toggles"
 ></oms-map-toolbar>
 
-<oms-map-side-panel *ngIf="showDetails" class="side_panel active"></oms-map-side-panel>
+<oms-map-side-panel
+  *ngIf="showDetails"
+  class="side_panel active"
+></oms-map-side-panel>
+
+<div id="contextMenu" [hidden]="!showContextMenu" class="context-menu">
+  <div [ngSwitch]="'test'">
+    <ng-container *ngSwitchCase="'test'">
+      <ng-container *ngTemplateOutlet="segmentContext"></ng-container>
+    </ng-container>
+    <div *ngSwitchDefault>output2</div>
+  </div>
+</div>
+
+<ng-template #segmentContext>
+  <div class="context-samples">
+    <mat-card class="context-card">
+      <mat-card-header>
+        <mat-card-title> Vehicle #2345 </mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="context-form">
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="context-card">
+      <mat-card-header>
+        <mat-card-title> ZCU #2345 </mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="context-form">
+        <mat-form-field>
+          <mat-label>{{ "names.hardware" | translate }}</mat-label>
+          <input matInput type="test" value="hardware" />
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>{{ "names.software" | translate }}</mat-label>
+          <input matInput type="test" value="software" />
+        </mat-form-field>
+
+        <mat-slide-toggle color="primary">{{
+          "names.use" | translate
+        }}</mat-slide-toggle>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="context-card">
+      <mat-card-header>
+        <mat-card-title> Buffer #2345 </mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="context-form">
+        <button mat-stroked-button class="dense accent" color="primary">
+          {{ "names.setSource" | translate }}
+        </button>
+        <button mat-stroked-button class="dense accent" color="primary">
+          {{ "names.setDest" | translate }}
+        </button>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="context-card">
+      <mat-card-header>
+        <mat-card-title> Station #2345 </mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="context-form">
+        <button mat-stroked-button class="dense accent" color="primary">
+          {{ "names.setSource" | translate }}
+        </button>
+        <button mat-stroked-button class="dense accent" color="primary">
+          {{ "names.setDest" | translate }}
+        </button>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="context-card">
+      <mat-card-header>
+        <mat-card-title> Segment #2345 </mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="context-form">
+        <mat-form-field>
+          <mat-label>{{ "names.speed" | translate }}</mat-label>
+          <input
+            matInput
+            type="number"
+            value="100"
+            step="10"
+            min="10"
+            max="100"
+          />
+          <span matSuffix>%</span>
+        </mat-form-field>
+
+        <mat-slide-toggle color="primary">{{
+          "names.use" | translate
+        }}</mat-slide-toggle>
+        <mat-slide-toggle color="primary">{{
+          "names.home" | translate
+        }}</mat-slide-toggle>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</ng-template>

@@ -16,49 +16,17 @@ import { IPreferences } from '../../../models/settings.model';
 import { HubService } from '../../../services/hub.service';
 import { IDataChangeEvent } from '../../../models/notification.model';
 import { flatMap, map, switchMap, takeUntil } from 'rxjs/operators';
+import { IMapMouseEvent } from '../../../models/map.interface';
+import d3 = require('d3');
 
 @Component({
   selector: 'oms-map-viewer',
   templateUrl: './map-viewer.component.html',
-  styles: [
-    `
-      .track-container {
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-      }
-      #map-toolbar {
-        position: absolute;
-        top: 0;
-        left: 0;
-        align-self: start;
-        z-index: 5;
-        width: 32px;
-      }
-      #loading-bar {
-        position: absolute;
-        top: 40%;
-        left: 25%;
-        width: 50%;
-        text-align: center;
-        background-color: white;
-        padding: 20px;
-        z-index: 5;
-      }
-
-      .mat-progress-bar {
-        margin-top: 10px;
-      }
-
-      .side_panel {
-        min-width: 290px;
-      }
-    `,
-  ],
+  styleUrls: ['./map-viewer.component.scss'],
 })
 export class MapViewerComponent implements OnInit, OnDestroy {
-  @Input()
-  preference: IPreferences;
+  @Input() preference: IPreferences;
+
   omsData: Dto.ITrackData;
   loadingState = false;
 
@@ -66,12 +34,18 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   private _detailsVisible = false;
   private viewer: ViewController;
   private destroy$: Subject<void> = new Subject<void>();
+  private _currentContextEvent: IMapMouseEvent;
+  private _contextData: any;
 
   get showMinimap(): boolean {
     return this._minimapVisible;
   }
   get showDetails(): boolean {
     return this._detailsVisible;
+  }
+  get showContextMenu(): boolean {
+    return true;
+    // return !!this._currentContextEvent;
   }
 
   constructor(
@@ -86,6 +60,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+    this.dataSvc.clear();
     this.viewer && this.viewer.destroy();
   }
 
@@ -97,8 +72,8 @@ export class MapViewerComponent implements OnInit, OnDestroy {
       this._minimapVisible = this.preference.toggles.minimap;
       this._detailsVisible = this.preference.toggles.itemDetails;
 
-      // console.warn('테스트 : 맵 랜더링 bypass'); // @TODO test
-      this.drawMap();
+      // this.drawMap();
+
       this.loadingState = false;
     });
     this.statesSvc.toolbarStates$
@@ -159,6 +134,30 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     this.viewer.create_track(this.omsData);
     this.viewer.update_vehicles(this.omsData.vehicles, 'INSERT', null, false);
     this.trackIdSvc.extract_id_from_track(this.dataSvc.data);
+
+    this.viewer.onMouseEvent$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((event) => this.onMapMouseEvent(event));
+  }
+
+  private onMapMouseEvent(event: IMapMouseEvent) {
+    const { type, targetId, targetType } = event;
+    if (type === 'contextmenu') {
+      this._contextData = this.dataSvc.find_layout_object(targetType, targetId);
+      const leftThreshold = window.innerWidth / 2;
+      const { pageX: x, pageY: y } = d3.event;
+
+      const container = d3.select('#contextMenu').style('top', `${y - 40}px`);
+
+      if (leftThreshold > x) {
+        container.style('left', `${x}px`).style('right', 'inherit');
+      } else {
+        container
+          .style('right', `${window.innerWidth - x}px`)
+          .style('left', 'inherit');
+      }
+      this._currentContextEvent = event;
+    }
   }
 
   private applyVehicleChange(event: IDataChangeEvent) {

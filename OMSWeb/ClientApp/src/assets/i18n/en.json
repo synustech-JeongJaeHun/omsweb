@@ -152,7 +152,18 @@
     "event": "Event",
     "events": "Events",
     "speed": "Speed",
-    "timeToNextEvents": "Time to next events"
+    "timeToNextEvents": "Time to next events",
+
+    "use": "Use",
+    "home": "Home",
+    "hardware": "Hardware",
+    "software": "Software",
+    "setSource": "Set Source",
+    "setDest": "Set Dest",
+    "command": "Command",
+    "location": "Location",
+    "isHome": "Is Home",
+    "order": "Order"
   },
   "enums": {
     "hostSessionStatus": {

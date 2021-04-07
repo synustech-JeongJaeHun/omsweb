@@ -11,6 +11,7 @@
   --theme-border-color: #d4d4d4;
   --theme-text-color: #999;
   --theme-font: Mulish, Roboto, "Helvetica Neue", sans-serif;
+  --panel-background-color: #f5f5f5;
   --header-height: 40px;
   --highlight-hover-color: #96d4ff;
   --highlight-select-color: #4e9ff3;
@@ -288,6 +289,10 @@
   --track-size-level3: 35;
   --vehicle-size: 8;
   --group-opacity: 0.5;
+
+  /* Context menu */
+  --context-menu-width: 200;
+
 }
 
 html,

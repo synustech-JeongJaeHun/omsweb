@@ -23,7 +23,11 @@ import {
 import { MapTypes, ViewModes } from '../../../models/enums';
 import { rgb } from 'd3';
 import { MapParser } from './map-parser';
-import { IViewerData } from '../../../models/map.interface';
+import {
+  IMapMouseEvent,
+  IViewerData,
+  MapEventType,
+} from '../../../models/map.interface';
 import { Segment } from '../../../models/segment.model';
 import { Vehicle } from '../../../models/vehicle.model';
 import { Station } from '../../../models/station.model';
@@ -34,7 +38,12 @@ import { MapStatesService } from '../map-states.service';
 import { MapDataService } from '../map-data.service';
 import { IPreferences } from '../../../models/settings.model';
 import {} from '@oms/models/drawing.model';
+import { EventEmitter } from '@angular/core';
 export class ViewController {
+  //#region events
+  onMouseEvent$ = new EventEmitter<IMapMouseEvent>();
+  //#endregion
+
   //#region properties
   private svg: any; // d3.Selection<d3.ContainerElement, unknown, HTMLElement, any>;
   private d3_track: d3.Selection<d3.BaseType, unknown, HTMLElement, any>;
@@ -101,19 +110,6 @@ export class ViewController {
   private DEFAULTS: any;
   private is_permitted: any = {};
   private disallowed_toolbar_buttons = [];
-  //
-  // private show_point_labels = false;
-  // private show_direction_arrows = true;
-  // private show_stations = true;
-  // private show_buffers = true;
-  // private show_mtls = true;
-  // private show_groups = true;
-  // private show_clusters = true;
-  // private show_vehicles = true;
-  // private show_vehicle_lines = false;
-  // private show_expected_path = false;
-  // private show_minimap = false;
-  // private show_tables = false;
   private direction_arrow_scale = {
     min: this.DIRECTION_ARROW_SCALE_MIN,
     max: this.DIRECTION_ARROW_SCALE_MAX,
@@ -126,12 +122,6 @@ export class ViewController {
     scale: 1,
     value: 30,
   };
-  // private vehicle_scale = {
-  //   min: this.VEHICLE_SCALE_MIN,
-  //   max: this.VEHICLE_SCALE_MAX,
-  //   scale: 1,
-  //   value: 8,
-  // };
   private vehicle_scale: IMapNodeScale = {
     scale: 1,
     value: 8,
@@ -566,7 +556,11 @@ export class ViewController {
     this.initVariables();
     this.initStates();
   }
-  destroy() {}
+  destroy() {
+    // this.init_svg_groups();
+    d3.selectAll(`#${this.track_container_id} > *`).remove();
+    this.d3_track = undefined;
+  }
   create_track(data: Dto.ITrackData) {
     if (!data) data = {};
     if (!data.mapType) data.mapType = MapTypes.DB;
@@ -951,6 +945,7 @@ export class ViewController {
         break;
     }
   }
+  // on(event: MapEventType, callback: Function) {}
   //#endregion
 
   get_defaults() {
@@ -5280,16 +5275,16 @@ export class ViewController {
           (object_type === 'VEHICLE' && layout_object.type === 'CLEANING')
         ) {
           // if vehicle, highlight with thicker weight
-          stroke_width = main_css.general.highlight_weight_thick;
+          stroke_width = main_css.general.highlight_weight_thick + 'px';
         } else if (zoom_level === 3 && object_type === 'MTL') {
           // MTL only on level 3
-          stroke_width = main_css.general.highlight_weight_mid;
+          stroke_width = main_css.general.highlight_weight_mid + 'px';
         } else if (object_type === 'CLUSTER') {
           // MTL only on level 3
-          stroke_width = main_css.general.highlight_weight_mid;
+          stroke_width = main_css.general.highlight_weight_mid + 'px';
         } else {
           // All other doms should be highlighed thinner thatn vehicle.
-          stroke_width = main_css.general.highlight_weight_thin;
+          stroke_width = main_css.general.highlight_weight_thin + 'px';
         }
 
         // Highlight animation
@@ -8001,9 +7996,9 @@ export class ViewController {
     }
     if (this.geometry.minimapSize !== undefined && this.minimap_svg) {
       this.mini_zoomed_handler({
-        x: (current_transform.x),
-        y: (current_transform.y),
-        k: (current_transform.k),
+        x: current_transform.x,
+        y: current_transform.y,
+        k: current_transform.k,
       });
     }
   }
@@ -10880,36 +10875,18 @@ export class ViewController {
         this.tool_type !== 'SELECT' ||
         (this.tool_type === 'SELECT' && !this.drag_coord.start)
       ) {
-        this.layout_object_click(d3.event, {
-          type: object_type,
-          id: layout_object.id,
-          group_type: group_type,
-        });
+        this.onPrimaryMouseClick(object_type, layout_object.id, group_type);
       }
     });
 
     dom_object.on('contextmenu', () => {
-      // d3.event.preventDefault();   // @TODO 임시로 context menu 허용
-      this.layout_object_click(d3.event, {
-        type: object_type,
-        id: layout_object.id,
-        group_type: group_type,
-      });
-
-      return false;
+      return this.onSecondaryMouseClick(object_type, layout_object.id);
     });
 
     dom_object.on('mouseenter', () => {
       // Mouse is over the element
       // Set hovering object
       this.currently_hovering_object = layout_object;
-
-      // console.info('## mouseenter event >>', {
-      //   dom_object,
-      //   layout_object,
-      //   object_type,
-      //   event: d3.event,
-      // });
 
       if (this.overlap_state(d3.event.target)) {
         this.check_overlap_and_display(
@@ -10933,12 +10910,6 @@ export class ViewController {
     });
     dom_object.on('mouseout', () => {
       // Mouse is leaving the element
-      // console.info('## mouseout event >>', {
-      //   layout_object,
-      //   object_type,
-      //   objects: this.overlap_display_objects,
-      //   event: d3.event,
-      // });
 
       if (this.overlap_display_objects.length < 2) {
         // If there are no overlapping elements on mouse out
@@ -10980,31 +10951,41 @@ export class ViewController {
       return false;
     }
   }
+  /** @deprecated */
   layout_object_click(
     click_event: any,
     object_data: { type: string; id: any; group_type: string }
+  ) {}
+  /** @deprecated  use onPrimaryMouseClick() */
+  left_click(object_type: string, object_id: any, group_type: string) {}
+  /** @deprecated use onSecondaryMouseClick() */
+  right_click(
+    object_type: string,
+    object_id: any,
+    position: { x: any; y: any }
   ) {
-    // Set current mouse event
-    let position = { x: click_event.x, y: click_event.y };
-
-    switch (click_event.which) {
-      case 3: // Right mouse click
-        this.right_click(object_data.type, object_data.id, position);
-        break;
-      case 2: // Middle mouse click
-      // logger.log('middle mouse button clicked!');
-      default:
-        // Left mouse click
-        this.left_click(
-          object_data.type,
-          object_data.id,
-          object_data.group_type
-        );
-        break;
-    }
+    // if (this.mode == 'VIEWER')
+    //   this.open_context_menu(object_type, object_id, position);
   }
-  left_click(object_type: string, object_id: any, group_type: string) {
-    this.dom_clicked(object_type, object_id, group_type);
+  onPrimaryMouseClick(targetType: string, targetId: number, groupType: string) {
+    this.dom_clicked(targetType, targetId, groupType);
+    this.onMouseEvent$.emit({
+      type: 'click',
+      targetId,
+      targetType,
+      groupType,
+      mapMode: this.mode,
+    });
+  }
+  onSecondaryMouseClick(targetType: string, targetId: number) {
+    d3.event.preventDefault();
+    this.onMouseEvent$.emit({
+      type: 'contextmenu',
+      targetId,
+      targetType,
+      mapMode: this.mode,
+    });
+    return false;
   }
   dom_clicked(object_type: string, object_id: any, group_type: string) {
     // log_event.log(`mode=${mode} type=${tool_type} modifier=${modifier_key}`);
@@ -12008,14 +11989,6 @@ export class ViewController {
       this.add_layout_object(add_objects, null, false);
     }
   }
-  right_click(
-    object_type: string,
-    object_id: any,
-    position: { x: any; y: any }
-  ) {
-    if (this.mode == 'VIEWER')
-      this.open_context_menu(object_type, object_id, position);
-  }
   open_context_menu(
     object_type: string,
     object_id: any,
@@ -12961,6 +12934,7 @@ export class ViewController {
   }
   attach_segment_event_handler(d3_mask_element_selection: any) {
     let mouse_move_counter = 0;
+    console.log('### attach_segment_event_handler >>', d3_mask_element_selection);
     const that = this;
     d3_mask_element_selection.on('click', function () {
       if (
@@ -12973,28 +12947,19 @@ export class ViewController {
         };
         let segment = that.find_segment_at_coord(event_coord);
         if (segment) {
-          that.layout_object_click(d3.event, {
-            type: 'SEGMENT',
-            id: segment.id,
-            group_type: 'LAYOUT',
-          });
+          that.onPrimaryMouseClick('SEGMENT', segment.id, 'LAYOUT');
         }
       }
     });
     d3_mask_element_selection.on('contextmenu', function () {
-      d3.event.preventDefault();
-      let event_coord = {
+      // d3.event.preventDefault();
+      const event_coord = {
         x: d3.mouse(this)[0],
         y: d3.mouse(this)[1],
       };
-      let segment = that.find_segment_at_coord(event_coord);
-      if (segment) {
-        that.layout_object_click(d3.event, {
-          type: 'SEGMENT',
-          id: segment.id,
-          group_type: 'LAYOUT',
-        });
-      }
+
+      const segment = that.find_segment_at_coord(event_coord);
+      segment && that.onSecondaryMouseClick('SEGMENT', segment.id);
       return false;
     });
     d3_mask_element_selection.on('mouseenter, mousemove', function () {

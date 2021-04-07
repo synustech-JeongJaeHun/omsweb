@@ -35,6 +35,12 @@ export class MapDataService {
     }
   }
 
+  clear() {
+    this.data = {};
+    this.expectedPaths = [];
+    this.stale_vehicles = [];
+  }
+
   getChangedSegments(rows: Dto.ISegment[]): any[] {
     const oldData = this.data.segments;
     const newData = this.parser.parseSegments(
