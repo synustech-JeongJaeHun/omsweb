@@ -55,7 +55,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     return this._detailsVisible;
   }
   get showContextMenu(): boolean {
-    return !!this.contextData;
+    return !this.contextData;
   }
   get showTooltip(): boolean {
     return !!this.tooltipData;
@@ -86,10 +86,14 @@ export class MapViewerComponent implements OnInit, OnDestroy {
       this._minimapVisible = this.preference.toggles.minimap;
       this._detailsVisible = this.preference.toggles.itemDetails;
 
-      this.drawMap();
+      // this.drawMap();
 
       this.loadingState = false;
     });
+    this.attachEvents();
+  }
+
+  private attachEvents() {
     this.statesSvc.toolbarStates$
       .pipe(takeUntil(this.destroy$))
       .subscribe((event) => {

@@ -38,13 +38,13 @@
   color: red;
 
   .dx-overlay-content {
-    border: 3px solid var(--dialog-border-color);
+    border: 1px solid var(--dialog-border-color);
     background-color: var(--panel-background-color);
     box-shadow: var(--overlay-shadow);
   }
 
   &.dx-tooltip-wrapper.dx-popover-wrapper .dx-popover-arrow::after {
-    border: 3px solid var(--dialog-border-color);
+    border: 1px solid var(--dialog-border-color);
   }
   &.dx-tooltip-wrapper .dx-overlay-content .dx-popup-content {
     padding: 0;
@@ -79,6 +79,14 @@
   top: 100px;
   left: 100px;
   // width: calc(var(--context-menu-width) * 1px);
+
+  .mat-button {
+    .mat-menu-trigger {
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
+  }
 
   mat-card {
     box-shadow: var(--overlay-shadow);
