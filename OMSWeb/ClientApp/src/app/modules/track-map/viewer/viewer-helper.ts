@@ -552,6 +552,9 @@ export class ViewController {
     this.preferences = preferences;
 
     this.d3_track = d3.select(`#${this.track_container_id}`);
+    this.d3_track.on('click', () => {
+      this.onMouseEvent$.emit({ type: 'backdrop' });
+    });
 
     this.initVariables();
     this.initStates();
@@ -3635,6 +3638,13 @@ export class ViewController {
 
     return snap_offset;
   }
+  hasShownLayoutObjects(objectType: string, objectId: number): boolean {
+    return this.overlap_display_objects
+      .concat(this.overlap_module_objects)
+      .some(
+        (x) => x.objectType.toUpperCase() === objectType && x.id === objectId
+      );
+  }
   hide_hover_tag() {
     // hide the object and delete all of its text
     let hover_tag = this.$track_container.find('#hover_tag');
@@ -3655,105 +3665,9 @@ export class ViewController {
 
     if (mouse_coord) {
       label_text = custom_text;
-    } else {
-      let in_overlap_object = this.overlap_display_objects.findIndex(
-        (object) => {
-          return (
-            object.objectType.toUpperCase() === object_type &&
-            object.id === object_id
-          );
-        }
-      );
-
-      let overlap_module = this.overlap_module_objects.findIndex((object) => {
-        return (
-          object.objectType.toUpperCase() === object_type &&
-          object.id === object_id
-        );
-      });
-
-      // if tag is already visible then bail out
-      if (
-        (in_overlap_object > -1 && this.overlap_display_objects.length > 1) ||
-        (overlap_module > -1 && this.overlap_module_objects.length > 1)
-      ) {
-        return;
-      }
-
-      // Get object's latest data
-      let layout_object = this.find_layout_object(object_type, object_id);
-
-      // initialize variables
-      let id, logicalId, physicalId, length, point, max_cap, orderLogicalId;
-
-      // populate variables by availability
-      if (object_type === 'CLUSTER') {
-        id = layout_object.id ? layout_object.id : null;
-        logicalId = layout_object.logicalId ? layout_object.logicalId : null;
-        max_cap = layout_object.maxVehicles ? layout_object.maxVehicles : null;
-      } else {
-        id = layout_object.id ? layout_object.id : null;
-        logicalId = layout_object.logicalId ? layout_object.logicalId : null;
-        physicalId = layout_object.physicalId ? layout_object.physicalId : null;
-
-        // Set attributes distinctly by variables
-        if (object_type === 'SEGMENT') {
-          length = layout_object.length ? layout_object.length : null;
-          point =
-            layout_object.pointFrom.id && layout_object.pointTo.id
-              ? `${layout_object.pointFrom.id} . ${layout_object.pointTo.id}`
-              : null;
-        } else if (object_type === 'POINT') {
-          point = layout_object.id ? layout_object.id : null;
-        } else if (object_type === 'VEHICLE') {
-          point = layout_object.curPoint ? layout_object.curPoint.point : null;
-          orderLogicalId = layout_object.orderLogicalId
-            ? layout_object.orderLogicalId
-            : layout_object.orderId
-            ? layout_object.orderId
-            : null;
-        } else {
-          point = layout_object.pointId ? layout_object.pointId : null;
-        }
-      }
-
-      if (object_type !== 'MTL') {
-        object_type =
-          object_type.charAt(0) +
-          object_type.slice(1, object_type.length).toLowerCase();
-      }
-
-      // @TODO i18n 처리
-      if (object_type) label_text += `${object_type}\n`;
-      if (id) label_text += `${'ID'}: ${id}\n`;
-      if (logicalId) label_text += `${'Logical ID'}: ${logicalId}\n`;
-      if (physicalId) label_text += `${'Physical ID'}: ${physicalId}\n`;
-      if (length) label_text += `${'length'}: ${length}\n`;
-      if (point) label_text += `${'Point'}: ${point}\n`;
-      if (max_cap) label_text += `${'Maximum vehicles'}: ${max_cap}\n`;
-      if (orderLogicalId) label_text += `${'Order ID'}: ${orderLogicalId}\n`;
-
-      // if (object_type) label_text += `${$.i18n(object_type)}\n`;
-      // if (id) label_text += `${$.i18n('ID')}: ${id}\n`;
-      // if (logicalId) label_text += `${$.i18n('Logical ID')}: ${logicalId}\n`;
-      // if (physicalId)
-      //   label_text += `${$.i18n('Physical ID')}: ${physicalId}\n`;
-      // if (length) label_text += `${$.i18n('length')}: ${length}\n`;
-      // if (point) label_text += `${$.i18n('Point')}: ${point}\n`;
-      // if (max_cap) label_text += `${$.i18n('Maximum vehicles')}: ${max_cap}\n`;
-      // if (orderLogicalId)
-      //   label_text += `${$.i18n('Order ID')}: ${orderLogicalId}\n`;
-    }
-
-    // Move text
-    if (mouse_coord) {
       hover_tag
         .css('left', mouse_coord.x + this.hover_tag_offset_x)
         .css('top', mouse_coord.y - this.hover_tag_offset_y);
-    } else {
-      hover_tag
-        .css('left', d3.event.x + this.hover_tag_offset_x)
-        .css('top', d3.event.y - this.hover_tag_offset_y);
     }
     // Display text
 
@@ -10904,9 +10818,10 @@ export class ViewController {
         group_type,
         'HOVER'
       );
-      if (this.mode != 'EDITOR') {
-        this.show_hover_tag(object_type, layout_object.id, null, null);
-      }
+      this.onMouseEnter(object_type, layout_object.id);
+      // if (this.mode != 'EDITOR') {
+      //   this.show_hover_tag(object_type, layout_object.id, null, null);
+      // }
     });
     dom_object.on('mouseout', () => {
       // Mouse is leaving the element
@@ -10916,7 +10831,8 @@ export class ViewController {
         this.overlap_display_objects = [];
       }
 
-      this.hide_hover_tag();
+      // this.hide_hover_tag();
+      this.onMouseOut();
 
       // unhilight objects
       if (this.selected_objects.length === 0) {
@@ -10987,6 +10903,21 @@ export class ViewController {
     });
     return false;
   }
+  onMouseEnter(targetType: string, targetId: number) {
+    this.onMouseEvent$.emit({
+      type: 'mouseenter',
+      targetId,
+      targetType,
+      mapMode: this.mode,
+    });
+  }
+  onMouseOut() {
+    this.onMouseEvent$.emit({
+      type: 'mouseout',
+      mapMode: this.mode,
+    });
+  }
+
   dom_clicked(object_type: string, object_id: any, group_type: string) {
     // log_event.log(`mode=${mode} type=${tool_type} modifier=${modifier_key}`);
 
@@ -12934,7 +12865,10 @@ export class ViewController {
   }
   attach_segment_event_handler(d3_mask_element_selection: any) {
     let mouse_move_counter = 0;
-    console.log('### attach_segment_event_handler >>', d3_mask_element_selection);
+    console.log(
+      '### attach_segment_event_handler >>',
+      d3_mask_element_selection
+    );
     const that = this;
     d3_mask_element_selection.on('click', function () {
       if (
@@ -12979,15 +12913,17 @@ export class ViewController {
           // Set hovering object
           that.currently_hovering_object = segment;
           that.highlight_segment(segment, main_css.general, 'HOVER', 'INSTANT');
-          if (that.mode != 'EDITOR') {
-            that.show_hover_tag('SEGMENT', segment.id, null, null);
-          }
+          // if (that.mode != 'EDITOR') {
+          //   that.show_hover_tag('SEGMENT', segment.id, null, null);
+          // }
+          that.onMouseEnter('SEGMENT', segment.id);
         }
       }
     });
     d3_mask_element_selection.on('mouseout', () => {
       // Mouse is leaving the element
-      this.hide_hover_tag();
+      // this.hide_hover_tag();
+      this.onMouseOut();
       // unhilight objects
       if (this.selected_objects.length === 0) {
         // if there is no selected object then unhilight all

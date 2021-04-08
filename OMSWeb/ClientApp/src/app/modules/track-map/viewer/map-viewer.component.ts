@@ -1,4 +1,11 @@
-import { Component, Input, NgZone, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  HostListener,
+  Input,
+  NgZone,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import * as _ from 'lodash';
 import { MatDialog } from '@angular/material/dialog';
 // import * as d3 from 'd3';
@@ -29,13 +36,17 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 
   omsData: Dto.ITrackData;
   loadingState = false;
+  currentContextEvent: IMapMouseEvent;
+  contextData: any;
+  currentTooltipEvent: IMapMouseEvent;
+  tooltipData: any;
 
   private _minimapVisible = false;
   private _detailsVisible = false;
   private viewer: ViewController;
   private destroy$: Subject<void> = new Subject<void>();
-  private _currentContextEvent: IMapMouseEvent;
-  private _contextData: any;
+  private _popupOffsetX = 10;
+  private _popupOffsetY = 40;
 
   get showMinimap(): boolean {
     return this._minimapVisible;
@@ -44,8 +55,10 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     return this._detailsVisible;
   }
   get showContextMenu(): boolean {
-    return true;
-    // return !!this._currentContextEvent;
+    return !!this.contextData;
+  }
+  get showTooltip(): boolean {
+    return !!this.tooltipData;
   }
 
   constructor(
@@ -61,6 +74,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
     this.dataSvc.clear();
+    this.currentContextEvent = undefined;
     this.viewer && this.viewer.destroy();
   }
 
@@ -72,7 +86,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
       this._minimapVisible = this.preference.toggles.minimap;
       this._detailsVisible = this.preference.toggles.itemDetails;
 
-      // this.drawMap();
+      this.drawMap();
 
       this.loadingState = false;
     });
@@ -141,23 +155,88 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   }
 
   private onMapMouseEvent(event: IMapMouseEvent) {
-    const { type, targetId, targetType } = event;
-    if (type === 'contextmenu') {
-      this._contextData = this.dataSvc.find_layout_object(targetType, targetId);
-      const leftThreshold = window.innerWidth / 2;
-      const { pageX: x, pageY: y } = d3.event;
+    const { type } = event;
 
-      const container = d3.select('#contextMenu').style('top', `${y - 40}px`);
-
-      if (leftThreshold > x) {
-        container.style('left', `${x}px`).style('right', 'inherit');
-      } else {
-        container
-          .style('right', `${window.innerWidth - x}px`)
-          .style('left', 'inherit');
-      }
-      this._currentContextEvent = event;
+    switch (type) {
+      case 'contextmenu':
+        this.openContextMenu(event);
+        break;
+      case 'mouseenter':
+        this.openTooltip(event);
+        break;
+      case 'mouseout':
+        this.closeTooltip();
+        break;
+      case 'backdrop':
+        this.closeContextMenu();
+        break;
+      default:
+        break;
     }
+  }
+
+  private openContextMenu(event: IMapMouseEvent) {
+    const { targetId, targetType } = event;
+    this.contextData = this.dataSvc.find_layout_object(targetType, targetId);
+    const leftThreshold = window.innerWidth - 200;
+    const { pageX: x, pageY: y } = d3.event;
+
+    const container = d3
+      .select('#contextMenu')
+      .style('top', `${y - this._popupOffsetY}px`);
+
+    if (leftThreshold > x) {
+      container.style('left', `${x}px`).style('right', 'inherit');
+    } else {
+      container
+        .style('right', `${window.innerWidth - x}px`)
+        .style('left', 'inherit');
+    }
+    this.currentContextEvent = event;
+  }
+  private closeContextMenu() {
+    this.contextData = undefined;
+    this.currentContextEvent = undefined;
+  }
+  private openTooltip(event: IMapMouseEvent) {
+    const { targetId, targetType } = event;
+    if (this.viewer.hasShownLayoutObjects(targetType, targetId)) return;
+    this.tooltipData = this.dataSvc.find_layout_object(targetType, targetId);
+    if (targetType === 'SEGMENT') {
+      const { pointFrom, pointTo } = this.tooltipData;
+      this.tooltipData.point =
+        pointFrom && pointTo ? `${pointFrom.id} . ${pointTo.id}` : null;
+    } else if (targetType === 'VEHICLE') {
+      const { orderLogicalId, orderId } = this.tooltipData;
+      this.tooltipData.orderLogicalId = orderLogicalId
+        ? orderLogicalId
+        : orderId
+        ? orderId
+        : null;
+    }
+
+    this.currentTooltipEvent = event;
+
+    const leftThreshold = window.innerWidth - 200;
+    const { pageX: x, pageY: y } = d3.event;
+
+    const container = d3
+      .select('#tooltipView')
+      .style('top', `${y - this._popupOffsetY}px`);
+
+    if (leftThreshold > x) {
+      container
+        .style('left', `${x + this._popupOffsetX}px`)
+        .style('right', 'inherit');
+    } else {
+      container
+        .style('right', `${window.innerWidth - x - this._popupOffsetX}px`)
+        .style('left', 'inherit');
+    }
+  }
+  private closeTooltip() {
+    this.tooltipData = undefined;
+    this.currentTooltipEvent = undefined;
   }
 
   private applyVehicleChange(event: IDataChangeEvent) {
@@ -169,11 +248,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
       !this.dataSvc.data.points ||
       !this.dataSvc.data.points.length
     ) {
-      console.log('### update vehicle - no object >>', {
-        id,
-        points: this.dataSvc.data.points,
-        viewer: this.viewer,
-      });
       return; // @TODO viewer가 아직 생성되지 않은 경우에는 지연 처리할 방법 구현
     }
     this.viewer.update_vehicles([data], operation, id, false);

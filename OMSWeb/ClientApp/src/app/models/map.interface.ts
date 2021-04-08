@@ -73,11 +73,12 @@ export interface IPoint {
   invertedCoord: ICoordinate;
 }
 
-export type MapEventType = 'click' | 'contextmenu' | 'mouseenter' | 'mouseout';
+export type MapEventType = 'click' | 'contextmenu' | 'mouseenter' | 'mouseout' | 'backdrop';
 export interface IMapMouseEvent {
   type: MapEventType;
   targetId?: number;
   targetType?: string;
   mapMode?: string;
   groupType?: string; //'OVERLAP' | 'OVERLAP_MODULE' | 'UNASSIGNED_MODULE' | 'LAYOUT';
+  position?: ICoordinate;
 }

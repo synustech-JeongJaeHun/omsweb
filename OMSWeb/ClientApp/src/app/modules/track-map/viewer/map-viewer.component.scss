@@ -30,6 +30,50 @@
   min-width: 290px;
 }
 
+#tooltipView {
+  position: absolute;
+}
+
+::ng-deep.tooltip-box {
+  color: red;
+
+  .dx-overlay-content {
+    border: 3px solid var(--dialog-border-color);
+    background-color: var(--panel-background-color);
+    box-shadow: var(--overlay-shadow);
+  }
+
+  &.dx-tooltip-wrapper.dx-popover-wrapper .dx-popover-arrow::after {
+    border: 3px solid var(--dialog-border-color);
+  }
+  &.dx-tooltip-wrapper .dx-overlay-content .dx-popup-content {
+    padding: 0;
+  }
+}
+
+.tooltip-title {
+  font-size: 14px;
+  font-weight: bold;
+  background-color: var(--dialog-border-color);
+  padding: 4px;
+}
+
+.tooltip-content {
+  padding: 8px;
+  display: grid;
+  // width: 200px;
+  grid-template-columns: auto auto;
+  column-gap: 10px;
+
+  .name {
+    font-weight: bold;
+    justify-self: end;
+  }
+  .value {
+    justify-self: start;
+  }
+}
+
 .context-menu {
   position: absolute;
   top: 100px;
@@ -37,8 +81,7 @@
   // width: calc(var(--context-menu-width) * 1px);
 
   mat-card {
-    box-shadow: 0 0.7px 1.1px rgba(0, 0, 0, 0.042),
-      0 2.2px 3.8px rgba(0, 0, 0, 0.06), 0 10px 17px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--overlay-shadow);
     background-color: var(--panel-background-color);
     padding: 0;
 
@@ -94,7 +137,6 @@
     }
   }
 }
-
 
 /// @TODO test code style
 .context-samples {

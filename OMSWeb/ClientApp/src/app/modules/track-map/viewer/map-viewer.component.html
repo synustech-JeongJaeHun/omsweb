@@ -28,7 +28,7 @@
     <ng-container *ngSwitchCase="'test'">
       <ng-container *ngTemplateOutlet="segmentContext"></ng-container>
     </ng-container>
-    <div *ngSwitchDefault>output2</div>
+    <div *ngSwitchDefault></div>
   </div>
 </div>
 
@@ -38,8 +38,7 @@
       <mat-card-header>
         <mat-card-title> Vehicle #2345 </mat-card-title>
       </mat-card-header>
-      <mat-card-content class="context-form">
-      </mat-card-content>
+      <mat-card-content class="context-form"> </mat-card-content>
     </mat-card>
 
     <mat-card class="context-card">
@@ -117,4 +116,144 @@
       </mat-card-content>
     </mat-card>
   </div>
+</ng-template>
+
+<div id="tooltipView" class="tooltip-view"></div>
+
+<ng-container [ngSwitch]="currentTooltipEvent?.targetType">
+  <ng-container *ngSwitchCase="'STATION'">
+    <ng-container *ngTemplateOutlet="stationTooltip"></ng-container>
+  </ng-container>
+  <ng-container *ngSwitchCase="'VEHICLE'">
+    <ng-container *ngTemplateOutlet="vehicleTooltip"></ng-container>
+  </ng-container>
+  <ng-container *ngSwitchCase="'CLUSTER'">
+    <ng-container *ngTemplateOutlet="clusterTooltip"></ng-container>
+  </ng-container>
+  <ng-container *ngSwitchCase="'SEGMENT'">
+    <ng-container *ngTemplateOutlet="segmentTooltip"></ng-container>
+  </ng-container>
+  <ng-container *ngSwitchCase="'BUFFER'">
+    <ng-container *ngTemplateOutlet="bufferTooltip"></ng-container>
+  </ng-container>
+  <ng-container *ngSwitchCase="'POINT'">
+    <ng-container *ngTemplateOutlet="pointTooltip"></ng-container>
+  </ng-container>
+  <ng-container *ngSwitchDefault> </ng-container>
+</ng-container>
+
+<ng-template #stationTooltip>
+  <dx-tooltip
+    class="tooltip-box"
+    [visible]="showTooltip"
+    target="#tooltipView"
+    position="right"
+  >
+    <div class="tooltip-title">Station</div>
+    <div class="tooltip-content">
+      <div class="name">ID</div>
+      <div class="value">{{ tooltipData?.id }}</div>
+      <div class="name">Logical ID</div>
+      <div class="value">{{ tooltipData?.logicalId }}</div>
+      <div class="name">Physical ID</div>
+      <div class="value">{{ tooltipData?.physicalId }}</div>
+      <div class="name">Point</div>
+      <div class="value">{{ tooltipData?.pointId }}</div>
+    </div>
+  </dx-tooltip>
+</ng-template>
+
+<ng-template #vehicleTooltip>
+  <dx-tooltip
+    class="tooltip-box"
+    [visible]="showTooltip"
+    target="#tooltipView"
+    position="right"
+  >
+    <div class="tooltip-title">Vehicle</div>
+    <div class="tooltip-content">
+      <div class="name">ID</div>
+      <div class="value">{{ tooltipData?.id }}</div>
+      <div class="name">Physical ID</div>
+      <div class="value">{{ tooltipData?.physicalId }}</div>
+      <div class="name">Point</div>
+      <div class="value">{{ tooltipData?.curPoint?.point }}</div>
+    </div>
+  </dx-tooltip>
+</ng-template>
+
+<ng-template #clusterTooltip>
+  <dx-tooltip
+    class="tooltip-box"
+    [visible]="showTooltip"
+    target="#tooltipView"
+    position="right"
+  >
+    <div class="tooltip-title">Cluster</div>
+    <div class="tooltip-content">
+      <div class="name">ID</div>
+      <div class="value">{{ tooltipData?.id }}</div>
+      <div class="name">Logical ID</div>
+      <div class="value">{{ tooltipData?.logicalId }}</div>
+      <div class="name">Max Vehicles</div>
+      <div class="value">{{ tooltipData?.maxVehicles }}</div>
+    </div>
+  </dx-tooltip>
+</ng-template>
+
+<ng-template #segmentTooltip>
+  <dx-tooltip
+    class="tooltip-box"
+    [visible]="showTooltip"
+    target="#tooltipView"
+    position="right"
+  >
+    <div class="tooltip-title">Segment</div>
+    <div class="tooltip-content">
+      <div class="name">ID</div>
+      <div class="value">{{ tooltipData?.id }}</div>
+      <div class="name">Length</div>
+      <div class="value">{{ tooltipData?.length }}</div>
+      <div class="name">Point</div>
+      <div class="value">{{ tooltipData?.point }}</div>
+    </div>
+  </dx-tooltip>
+</ng-template>
+
+<ng-template #bufferTooltip>
+  <dx-tooltip
+    class="tooltip-box"
+    [visible]="showTooltip"
+    target="#tooltipView"
+    position="right"
+  >
+    <div class="tooltip-title">Buffer</div>
+    <div class="tooltip-content">
+      <div class="name">ID</div>
+      <div class="value">{{ tooltipData?.id }}</div>
+      <div class="name">Logical ID</div>
+      <div class="value">{{ tooltipData?.logicalId }}</div>
+      <div class="name">Physical ID</div>
+      <div class="value">{{ tooltipData?.physicalId }}</div>
+      <div class="name">Point</div>
+      <div class="value">{{ tooltipData?.pointId }}</div>
+    </div>
+  </dx-tooltip>
+</ng-template>
+
+<ng-template #pointTooltip>
+  <dx-tooltip
+    class="tooltip-box"
+    [visible]="showTooltip"
+    target="#tooltipView"
+    position="right"
+  >
+    <div class="tooltip-title">Point</div>
+    <div class="tooltip-content">
+      <div class="name">ID</div>
+      <div class="value">{{ tooltipData?.id }}</div>
+      <div class="name">Physical ID</div>
+      <div class="value">{{ tooltipData?.physicalId }}</div>
+    </div>
+  </dx-tooltip>
 </ng-template>

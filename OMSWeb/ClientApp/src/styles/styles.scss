@@ -292,7 +292,8 @@
 
   /* Context menu */
   --context-menu-width: 200;
-
+  --overlay-shadow: 0 0.7px 1.1px rgba(0, 0, 0, 0.042),
+    0 2.2px 3.8px rgba(0, 0, 0, 0.06), 0 10px 17px rgba(0, 0, 0, 0.1);
 }
 
 html,
@@ -319,7 +320,6 @@ button.active {
 button:focus {
   outline: 0;
 }
-
 
 // .material-icons-two-tone {
 //   filter: invert(0.5) sepia(1) saturate(10) hue-rotate(180deg);
@@ -376,7 +376,6 @@ button.warn .mat-badge-warn .mat-badge-content {
   margin-bottom: -8px !important;
   padding: 4px 0 0 0 !important;
 }
-
 
 [mat-button],
 [mat-flat-button],
