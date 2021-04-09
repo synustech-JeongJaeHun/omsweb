@@ -47,6 +47,20 @@ export class HistoriesService {
     });
   }
 
+  alarmsDataSource(startTime: Date, endTime: Date): DataSource {
+    return new DataSource({
+      store: AspNetData.createStore({
+        key: 'id',
+        loadUrl: `${this.baseUrl}/alarms`,
+      }),
+      filter: [
+        ['time', '>=', startTime],
+        'and',
+        ['time', '<=', endTime],
+      ],
+    });
+  }
+
   orders(): Observable<IPaginatedResult<IOrderHistoryRow>> {
     console.error('# form history-order.json file - for test #');
     return this.http.get<any>('/assets/json/history-order.json').pipe(

@@ -86,6 +86,10 @@
     "distanceMove": "Distance Move",
     "assignmentType": "Assignment Type",
     "assignmentDetails": "Assignment Details",
+    "age": "Elapsed(min)",
+    "level": "Severity",
+    "errorCode": "Error Code",
+    "timeResolved": "Resolved",
 
     "centerZoom": "Center Zoom",
     "search": "Search",

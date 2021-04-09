@@ -1,8 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { DxDataGridComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
-import { IPaginatedResult } from '../../../models/base.model';
-import { IVehicleHistoryRow } from '../../../models/history.model';
 import { HistoriesService } from '../../../services/histories.service';
 import { TrackIdService } from '../../../services/track-id.service';
 import { DateUtil } from '../../shared/utils/date.util';

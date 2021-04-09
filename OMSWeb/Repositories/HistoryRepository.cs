@@ -71,5 +71,24 @@ namespace OMSWeb.Repositories
       }
       return result;
     }
+
+    public IQueryable<AlarmHistory> QueryAlarms()
+    {
+      var sql = @"
+    SELECT VA.id, VA.time, 
+    CASE WHEN VA.time_resolved IS NULL THEN  extract('epoch' from now()-VA.time) ELSE  extract('epoch' from VA.time_resolved-VA.time) END AS age,
+    VE.level, VA.vehicle_id, VA.error_code, VE.description, VE.action, VA.time_resolved
+    FROM vehicle_alarms AS VA
+    LEFT OUTER JOIN vehicle_errors VE
+    ON VA.error_code = VE.id
+    ORDER BY VA.id desc
+      ";
+      IQueryable<AlarmHistory> result;
+      using (var conn = ConnectTrack())
+      {
+        result = conn.Query<AlarmHistory>(sql).AsQueryable();
+      }
+      return result;
+    }
   }
 }

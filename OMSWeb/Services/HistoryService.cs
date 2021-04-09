@@ -18,5 +18,8 @@ namespace OMSWeb.Services {
     public IQueryable<VehicleHistory> QueryVehicles() {
       return this._repo.QueryVehicles();
     }
+    public IQueryable<AlarmHistory> QueryAlarms() {
+      return this._repo.QueryAlarms();
+    }
   }
 }
