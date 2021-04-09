@@ -27,8 +27,15 @@ import { DxDataGridComponent } from 'devextreme-angular';
       #filter-area {
         padding: 4px 10px;
         display: grid;
-        grid-template-columns: 210px 210px 120px;
+        grid-template-columns: 210px 10px 210px 120px;
+        justify-items: center;
+        align-items: center;
         gap: 4px;
+      }
+
+      #filter-area button {
+        justify-self: normal;
+        align-self: normal;
       }
 
       #grid-container {
