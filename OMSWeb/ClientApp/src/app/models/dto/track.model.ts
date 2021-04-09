@@ -1,5 +1,5 @@
 import { ICoordinate, IMapSize } from '../drawing.model';
-import { MapTypes, ObjectDirections, SteerDirections } from '../enums';
+import { MapTypes } from '../enums';
 
 export namespace Dto {
   export interface IBuffer {
@@ -132,5 +132,11 @@ export namespace Dto {
   export interface IVehicleTrackData {
     vehicles?: IVehicle[];
     vehiclePath?: any[];
+  }
+
+  export interface INodeInfo {
+    id: number;
+    logicalId?: string;
+    physicalId?: string;
   }
 }

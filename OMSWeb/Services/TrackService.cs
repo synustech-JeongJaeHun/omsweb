@@ -64,12 +64,59 @@ namespace OMSWeb.Services
       }
     }
 
-    public List<VehiclePosition> GetVehicles() {
+    public List<VehiclePosition> GetVehicles()
+    {
       return this._trackRepo.LoadVehiclePositions();
     }
 
-    public List<VehiclePath> GetVehiclePaths() {
+    public List<VehiclePath> GetVehiclePaths()
+    {
       return this._trackRepo.LoadVehiclePaths();
+    }
+
+    public List<NodeInfo> GetIdList(string type)
+    {
+      dynamic[] targetList;
+      switch (type)
+      {
+        case "VEHICLE":
+          targetList = this.GetMapItem(CacheKeys.Vehicles);
+          break;
+        case "POINT":
+          targetList = this.GetMapItem(CacheKeys.Points);
+          break;
+        case "STATION":
+          targetList = this.GetMapItem(CacheKeys.Stations);
+          break;
+        case "BUFFER":
+          targetList = this.GetMapItem(CacheKeys.Buffers);
+          break;
+        default:
+          targetList = new dynamic[] { };
+          break;
+      }
+      return targetList.Select(x => new NodeInfo
+      {
+        Id = x.Id,
+        LogicalId = x.LogicalId,
+        PhysicalId = x.PhysicalId,
+      }).ToList();
     }
   }
 }
+
+
+/**
+
+    if(type === 'VEHICLE') {
+        target_table = 'vehicles'
+    } else if(type === 'POINT') {
+        target_table = 'points'
+    } else if(type === 'STATION') {
+        target_table = 'stations'
+    } else if(type === 'BUFFER') {
+        target_table = 'buffers'
+    }
+
+
+*/

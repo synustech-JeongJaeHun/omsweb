@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { EMPTY, forkJoin, Observable } from 'rxjs';
+
 import { IViewerData } from '../models/map.interface';
+import { Dto } from '../models/dto/track.model';
+import { map, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -17,83 +21,26 @@ export class TrackIdService {
 
   constructor(private http: HttpClient) {}
 
-  private get_ids = (type) => {
-    return new Promise((resolve, reject) => {
-      // let t0 = performance.now();
-      // @TODO get track ids api 구현
-      console.warn('@ get_json_data API 구현 필요 @');
-      // Util.network.get_json_data(
-      //   `${urls.track_id_list_url}/${type}`,
-      //   (error, data) => {
-      //     let elapsed = performance.now() - t0;
-      //     this.log_perf.log(`load ${type}: ${elapsed}`);
-      //     if (error) {
-      //       reject(error);
-      //     } else {
-      //       resolve(data);
-      //     }
-      //   }
-      // );
-    });
-  };
 
-  load_ids(callback) {
-    // logger.log('loading ids');
-    this.get_ids('vehicle')
-      .then((data) => {
-        this.vehicles = this.convert_array_to_object(data, null);
-        return this.get_ids('point');
-      })
-      .then((data) => {
-        this.points = this.convert_array_to_object(data, 'p');
-        return this.get_ids('station');
-      })
-      .then((data) => {
-        this.stations = this.convert_array_to_object(data, 's');
-        return this.get_ids('buffer');
-      })
-      .then((data) => {
-        this.buffers = this.convert_array_to_object(data, 'b');
-        callback(null);
-      })
-      .catch((error) => {
-        this.logger.warn(error);
-        callback(error);
-      });
+  private queryIds(type: string): Observable<Dto.INodeInfo[]> {
+    return this.http.get<Dto.INodeInfo[]>(`${this.baseUrl}/id-list/${type}`);
   }
 
-  load_track_ids(callback) {
-    // this.logger.log('loading track ids');
-    this.get_ids('point')
-      .then((data) => {
-        this.points = this.convert_array_to_object(data, 'p');
-        return this.get_ids('station');
+  loadIds() {
+    const jobs = [
+      this.queryIds('vehicle'),
+      this.queryIds('point'),
+      this.queryIds('station'),
+      this.queryIds('buffer'),
+    ];
+    return forkJoin(jobs).pipe(
+      tap(([vehicles, points, stations, buffers]) => {
+        this.vehicles = this.convert_array_to_object(vehicles, null);
+        this.points = this.convert_array_to_object(points, 'p');
+        this.stations = this.convert_array_to_object(stations, 's');
+        this.buffers = this.convert_array_to_object(buffers, 'b');
       })
-      .then((data) => {
-        this.stations = this.convert_array_to_object(data, 's');
-        return this.get_ids('buffer');
-      })
-      .then((data) => {
-        this.buffers = this.convert_array_to_object(data, 'b');
-        callback(null);
-      })
-      .catch((error) => {
-        this.logger.warn(error);
-        callback(error);
-      });
-  }
-
-  load_vehicle_ids(callback) {
-    // this.logger.log('loading vehicle ids');
-    this.get_ids('vehicle')
-      .then((data) => {
-        this.vehicles = this.convert_array_to_object(data, null);
-        callback(null);
-      })
-      .catch((error) => {
-        this.logger.warn(error);
-        callback(error);
-      });
+    );
   }
 
   update_vehicle_ids(data) {
@@ -235,8 +182,7 @@ export class TrackIdService {
       //find matched object
       if (!search_category || search_category.includes('POINT'))
         matched_object = Object.values<any>(this.points).find(
-          (d) =>
-            d.logicalId == alternative_id || d.physicalId == alternative_id
+          (d) => d.logicalId == alternative_id || d.physicalId == alternative_id
         );
 
       if (
@@ -244,8 +190,7 @@ export class TrackIdService {
         (!search_category || search_category.includes('VEHICLE'))
       ) {
         matched_object = Object.values<any>(this.vehicles).find(
-          (d) =>
-            d.logicalId == alternative_id || d.physicalId == alternative_id
+          (d) => d.logicalId == alternative_id || d.physicalId == alternative_id
         );
       }
       if (
@@ -253,8 +198,7 @@ export class TrackIdService {
         (!search_category || search_category.includes('STATION'))
       ) {
         matched_object = Object.values<any>(this.stations).find(
-          (d) =>
-            d.logicalId == alternative_id || d.physicalId == alternative_id
+          (d) => d.logicalId == alternative_id || d.physicalId == alternative_id
         );
       }
       if (
@@ -262,8 +206,7 @@ export class TrackIdService {
         (!search_category || search_category.includes('BUFFER'))
       ) {
         matched_object = Object.values<any>(this.buffers).find(
-          (d) =>
-            d.logicalId == alternative_id || d.physicalId == alternative_id
+          (d) => d.logicalId == alternative_id || d.physicalId == alternative_id
         );
       }
 

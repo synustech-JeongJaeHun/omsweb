@@ -78,5 +78,11 @@ namespace OMSWeb.Controllers
       return DataSourceLoader.Load(_statusSvc.QueryVehicleStates(), loadOptions);
     }
 
+    [HttpGet("id-list/{type}")]
+    public IEnumerable<NodeInfo> GetIdList(string type)
+    {
+      return this._trackSvc.GetIdList(type.ToUpper());
+    }
+
   }
 }

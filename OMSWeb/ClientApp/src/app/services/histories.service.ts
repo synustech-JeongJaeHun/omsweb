@@ -1,10 +1,16 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import DataSource from 'devextreme/data/data_source';
+import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { IPaginatedResult } from '../models/base.model';
-import { IAlarmHistoryRow, IOrderHistoryRow, IVehicleHistoryRow } from '../models/history.model';
+import {
+  IAlarmHistoryRow,
+  IOrderHistoryRow,
+  IVehicleHistoryRow,
+} from '../models/history.model';
 
 @Injectable({
   providedIn: 'root',
@@ -12,6 +18,20 @@ import { IAlarmHistoryRow, IOrderHistoryRow, IVehicleHistoryRow } from '../model
 export class HistoriesService {
   private baseUrl = '/api/histories';
   constructor(private http: HttpClient) {}
+
+  ordersDataSource(startTime: Date, endTime: Date): DataSource {
+    return new DataSource({
+      store: AspNetData.createStore({
+        key: 'id',
+        loadUrl: `${this.baseUrl}/orders`,
+      }),
+      filter: [
+        ['timeCreated', '>=', startTime],
+        'and',
+        ['timeCreated', '<=', endTime],
+      ],
+    });
+  }
 
   orders(): Observable<IPaginatedResult<IOrderHistoryRow>> {
     console.error('# form history-order.json file - for test #');

@@ -19,7 +19,6 @@ namespace OMSWeb.Repositories
       {
         var sql = @"
     SELECT
-    null AS checked,
     id, 
     origin,
     logical_id, location_pickup, location_dropoff, location_move,

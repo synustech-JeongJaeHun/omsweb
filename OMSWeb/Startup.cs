@@ -16,7 +16,6 @@ using Newtonsoft.Json.Serialization;
 using OMSWeb.Handlers;
 using OMSWeb.Hubs;
 using OMSWeb.Models;
-using OMSWeb.Models.Entities;
 using OMSWeb.Repositories;
 using OMSWeb.Services;
 
@@ -34,9 +33,6 @@ namespace OMSWeb
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
-      services.AddDbContext<OmsUiDbContext>(options => options.UseNpgsql("OMS-UI"));
-      services.AddDbContext<OmsTrackDbContext>(options => options.UseNpgsql("OMS-Track"));
-
       // services.AddControllersWithViews();
 
       // json options
@@ -98,6 +94,7 @@ namespace OMSWeb
       services.AddScoped<OrderService>();
       services.AddScoped<NotificationsService>();
       services.AddScoped<MessageService>();
+      services.AddScoped<HistoryService>();
 
       services.AddSingleton<SystemsService>();
       services.AddSingleton<TrackRepository>();

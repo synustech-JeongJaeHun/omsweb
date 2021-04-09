@@ -33,4 +33,11 @@ namespace OMSWeb.Models.Tracks
     public IList<VehiclePosition> Vehicles { get; set; }
     public IList<VehiclePath> VehiclePaths { get; set; }
   }
+
+  public class NodeInfo
+  {
+    public int Id { get; set; }
+    public string LogicalId { get; set; }
+    public string PhysicalId { get; set; }
+  }
 }

@@ -1,6 +1,7 @@
 import { OrderStatesType } from './enums';
 
 export interface IOrderInfoRow {
+  id: number;
   origin: string;
   logicalId: string;
   state: OrderStatesType;
@@ -21,13 +22,9 @@ export interface IOrderInfoRow {
   distancePickup: number;
   distanceDropoff: number;
   distanceMove: number;
-
-  rowNum: number;
 }
 
 export interface IOrderStatusRow extends IOrderInfoRow {
-  id: number;
-  checked?: boolean;
   durationTotal: number;
   durationDropoff: number;
   durationUnassigned: number;

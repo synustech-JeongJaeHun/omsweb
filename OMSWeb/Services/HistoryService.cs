@@ -1,0 +1,19 @@
+using System.Linq;
+using OMSWeb.Models.Entities;
+using OMSWeb.Repositories;
+
+namespace OMSWeb.Services {
+  public class HistoryService
+  {
+    private readonly HistoryRepository _repo;
+
+    public HistoryService(HistoryRepository historyRepo)
+    {
+      this._repo = historyRepo;
+    }
+
+    public IQueryable<OrderEntity> QueryOrders() {
+      return this._repo.QueryOrders();
+    }
+  }
+}
