@@ -15,17 +15,8 @@ namespace OMSWeb.Models
     public int? DurationMove { get; set; }
   }
 
-  public class VehicleState
+  public class VehicleState : VehicleEntity
   {
-    public int Id { get; set; }
-    public string PhysicalId { get; set; }
-    public string LogicalId { get; set; }
-    public string MovingState { get; set; }
-    public int DistanceTotal { get; set; }
-    public int RuntimeTotal { get; set; }
-    public string Type { get; set; }
-    public string MapDb { get; set; }
-
     public int? CurPoint { get; set; }
     public string CargoState { get; set; }
     public string Mode { get; set; }

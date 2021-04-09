@@ -25,5 +25,11 @@ namespace OMSWeb.Controllers
     {
       return DataSourceLoader.Load(_historySvc.QueryOrders(), loadOptions);
     }
+
+    [HttpGet("vehicles")]
+    public object GetVehicles(DataSourceLoadOptions loadOptions)
+    {
+      return DataSourceLoader.Load(_historySvc.QueryVehicles(), loadOptions);
+    }
   }
 }

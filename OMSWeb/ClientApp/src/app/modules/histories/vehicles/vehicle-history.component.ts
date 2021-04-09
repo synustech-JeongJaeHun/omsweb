@@ -1,52 +1,67 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { DxDataGridComponent } from 'devextreme-angular';
+import DataSource from 'devextreme/data/data_source';
 import { IPaginatedResult } from '../../../models/base.model';
 import { IVehicleHistoryRow } from '../../../models/history.model';
 import { HistoriesService } from '../../../services/histories.service';
+import { TrackIdService } from '../../../services/track-id.service';
+import { DateUtil } from '../../shared/utils/date.util';
 
 @Component({
   selector: 'oms-vehicle-history',
   templateUrl: './vehicle-history.component.html',
   styles: [
     `
-      #transfer-history-page {
+      #history-page {
         background-color: var(--dialog-border-color);
         display: grid;
-        grid-template-rows: auto auto;
+        grid-template-rows: 40px auto;
         left: 0;
         right: 0;
         bottom: 0;
         top: 44px;
+        gap: 4px;
+        height: 100%;
       }
 
-      #transfer-filter-area {
-        margin: 10px;
+      #filter-area {
+        padding: 4px 10px;
         display: grid;
-        grid-template-columns: 150px 150px 150px 150px 150px 150px 210px 210px 120px;
-        gap: 5px;
+        grid-template-columns: 210px 10px 210px 120px;
+        justify-items: center;
+        align-items: center;
+        gap: 4px;
       }
 
-      #transfer-result-area {
-        padding: 10px;
+      #filter-area button {
+        justify-self: normal;
+        align-self: normal;
       }
 
-      #transfer-filter-area .dx-datebox {
-        max-width: 150%;
+      #grid-container {
+        padding: 0 10px;
+      }
+
+      #filter-area .dx-datebox {
       }
     `,
   ],
 })
-export class VehicleHistoryComponent implements OnInit {
-  screenWidth = 0;
+export class VehicleHistoryComponent implements OnInit, OnDestroy {
+  @ViewChild(DxDataGridComponent, { static: false })
+  dataGrid: DxDataGridComponent;
+
+  dateTimeFormat = DateUtil.DateTimeFormat;
+  gridWidth = 0;
+  gridHeight = 0;
   creatorList = [];
   searchTypeList = [];
-  VehicleListAll = [];
-  StationBufferListAll = [];
 
   now: Date = new Date();
   start: Date = new Date(
     this.now.getFullYear(),
-    this.now.getMonth() - 1,
-    this.now.getDate()
+    this.now.getMonth(),
+    this.now.getDate() - 7
   );
   end: Date = new Date(
     this.now.getFullYear(),
@@ -57,31 +72,56 @@ export class VehicleHistoryComponent implements OnInit {
   );
   fileName: string;
 
-  dataSetResult: IPaginatedResult<IVehicleHistoryRow>;
+  dataSource: DataSource;
 
-  constructor(private svc: HistoriesService) {}
+  transformVehicleId = ({ value = '' }): string => {
+    const text =
+      this.idSvc.get_alternative_id('vehicle', 'logicalId', value) || value;
+    return text.toString();
+  };
 
-  ngOnInit(): void {
-    this.getScreenWidth();
-    this.getFileName();
-  }
+  transformLocationId = ({ value = '' }): string => {
+    return this.idSvc.guessLocationId(value);
+  };
 
-  search() {
-    this.svc.vehicles().subscribe((res) => {
-      this.dataSetResult = res;
+  constructor(private svc: HistoriesService, private idSvc: TrackIdService) {
+    window.onresize = this.getGridSize.bind(this);
+    this.idSvc.loadIds().subscribe(() => {
+      this.dataSource = this.svc.vehiclesDataSource(this.start, this.end);
     });
   }
 
-  private getScreenWidth(): void {
-    this.screenWidth = window.screen.width - 20;
+  ngOnDestroy(): void {
+    window.onresize = null;
+  }
+
+  ngOnInit(): void {
+    this.getGridSize();
+    this.getFileName();
+  }
+
+  search(startTime: Date, endTime: Date) {
+    this.applyFilter(startTime, endTime);
+    this.dataSource.reload();
+  }
+  private applyFilter(startTime: Date, endTime: Date) {
+    this.dataGrid.instance.filter([
+      ['historyChangeTime', '>=', startTime],
+      'and',
+      ['historyChangeTime', '<=', endTime],
+    ]);
+  }
+
+  private getGridSize(): void {
+    const container = document.body;
+    // const container = document.getElementById('grid-container');
+    const { offsetHeight, offsetWidth } = container;
+    this.gridWidth = offsetWidth - 20;
+    this.gridHeight = offsetHeight - 94;
   }
   private getFileName() {
     var offset = new Date().getTimezoneOffset() * 60000;
     var today = new Date(Date.now() - offset);
-    this.fileName = today.toISOString() + "-vehicle_history";
-  }
-
-  onExporting(e) {
-    console.info('exporting >>', e);
+    this.fileName = today.toISOString() + '-vehicle_history';
   }
 }

@@ -1,6 +1,6 @@
-<div id="transfer-history-page">
-  <div id="transfer-filter-area">
-    <dx-select-box
+<div id="history-page">
+  <div id="filter-area">
+    <!-- <dx-select-box
       [items]="creatorList"
       [placeholder]="'names.vehicleId' | translate"
       [showClearButton]="true"
@@ -24,7 +24,7 @@
       [searchEnabled]="true"
       [showClearButton]="true"
       #vehicle
-    ></dx-select-box>
+    ></dx-select-box> -->
     <dx-date-box
       [placeholder]="'_START_DATE' | translate"
       type="datetime"
@@ -33,8 +33,10 @@
       [max]="end"
       [acceptCustomValue]="false"
       [showClearButton]="true"
-      #startdate
+      [displayFormat]="dateTimeFormat"
+      #startDate
     ></dx-date-box>
+    <div>~</div>
     <dx-date-box
       [placeholder]="'_END_DATE' | translate"
       type="datetime"
@@ -43,34 +45,41 @@
       [max]="end"
       [acceptCustomValue]="false"
       [showClearButton]="true"
-      #enddate
+      [displayFormat]="dateTimeFormat"
+      #endDate
     ></dx-date-box>
-    <dx-button
-      [text]="'names.search' | translate"
-      type="default"
-      (onClick)="search()"
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="search(startDate.value, endDate.value)"
     >
-    </dx-button>
+      Search
+    </button>
   </div>
-  <div id="transfer-result-area">
+  <div id="grid-container">
     <dx-data-grid
-      [dataSource]="dataSetResult?.items"
+      [dataSource]="dataSource"
       [columnAutoWidth]="true"
-      [width]="screenWidth"
-      [columnAutoWidth]="true"
-      [height]="800"
+      [remoteOperations]="true"
+      [height]="gridHeight"
+      [width]="gridWidth"
       [showBorders]="true"
-      #transferDataGrid
+      [hoverStateEnabled]="true"
     >
       <dxo-export [enabled]="true" [fileName]="fileName"></dxo-export>
       <dxo-paging [pageSize]="50"></dxo-paging>
       <dxo-pager
         [showPageSizeSelector]="true"
-        [allowedPageSizes]="[10, 20, 30, 40, 50]"
+        [allowedPageSizes]="[50, 100, 200]"
         [showInfo]="true"
         visible="true"
       ></dxo-pager>
-      <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+      <dxo-scrolling
+        mode="virtual"
+        rowRenderingMode="virtual"
+        showScrollbar="always"
+      ></dxo-scrolling>
+
       <dxi-column
         [width]="80"
         dataType="string"

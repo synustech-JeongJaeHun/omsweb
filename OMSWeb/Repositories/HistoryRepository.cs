@@ -38,8 +38,36 @@ namespace OMSWeb.Repositories
     ON OD.history_source_id = LAST_OD.order_id AND OD.history_change_time = LAST_OD.last_updated
       ";
       IQueryable<OrderEntity> result;
-      using(var conn = ConnectTrack()) {
+      using (var conn = ConnectTrack())
+      {
         result = conn.Query<OrderEntity>(sql).AsQueryable();
+      }
+      return result;
+    }
+
+    public IQueryable<VehicleHistory> QueryVehicles()
+    {
+      var sql = @"
+    SELECT
+    VH.history_change_time, VH.id, VH.history_source_id,
+    VH.physical_id, VH.logical_id, 
+    VH.moving_state, 
+    VH.distance_total, VH.runtime_total, 
+    VH.type, VH.map_db
+    FROM vehicle_history AS VH
+    INNER JOIN (
+        SELECT history_source_id, max(id) AS max_id
+        FROM vehicle_history
+        --*where_condition*
+        GROUP BY history_source_id
+    ) AS LVH
+    ON VH.id = LVH.max_id    
+    ORDER BY VH.id        
+      ";
+      IQueryable<VehicleHistory> result;
+      using (var conn = ConnectTrack())
+      {
+        result = conn.Query<VehicleHistory>(sql).AsQueryable();
       }
       return result;
     }
