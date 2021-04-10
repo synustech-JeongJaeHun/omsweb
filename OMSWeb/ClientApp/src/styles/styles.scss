@@ -441,6 +441,16 @@ button.warn .mat-badge-warn .mat-badge-content {
   }
 }
 
+snack-bar-container.error {
+  &.server {
+    background-color: var(--notification-critical-color);
+    color: white;
+  }
+  &.client {
+    color: var(--notification-color);
+  }
+}
+
 // devextreme
 .dx-widget {
   font-size: 12px;

@@ -1,9 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { ErrorHandler, NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
-import {TranslateHttpLoader} from '@ngx-translate/http-loader';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -11,6 +11,9 @@ import { SharedModule } from '../shared/shared.module';
 
 import { HubService } from '@oms/services/hub.service';
 import { AuthService } from '../../services/auth.service';
+import { CustomErrorHandler } from '../../handlers/custom-error-handler';
+import { CustomHttpInterceptor } from '../../handlers/custom-http.interceptor';
+import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -33,7 +36,27 @@ export function HttpLoaderFactory(http: HttpClient) {
       },
     }),
   ],
-  providers: [HubService, AuthService],
+  providers: [
+    HubService,
+    AuthService,
+    {
+      provide: ErrorHandler,
+      useClass: CustomErrorHandler,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: CustomHttpInterceptor,
+      multi: true,
+    },
+    {
+      provide: MAT_SNACK_BAR_DEFAULT_OPTIONS,
+      useValue: {
+        duration: 3000,
+        horizontalPosition: 'right',
+        verticalPosition: 'bottom',
+      },
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
