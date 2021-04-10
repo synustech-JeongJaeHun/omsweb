@@ -40,9 +40,8 @@ export interface ITokenResult {
   token: string;
 }
 
-export interface ITokenPayload<T> {
-  sub: T;
-  iat?: number;
+export interface ITokenStamp {
+  nbf?: number;
   exp?: number;
+  iat?: number;
 }
-

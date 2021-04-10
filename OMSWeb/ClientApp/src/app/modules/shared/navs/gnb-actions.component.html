@@ -8,9 +8,13 @@
 
 <ng-container [ngSwitch]="isAuthenticated">
   <ng-container *ngSwitchCase="true">
-    <button mat-button class="signin" (click)="onLogout()">
-      <mat-icon>person</mat-icon> {{ user?.name }}
+    <button mat-button class="signin" [matMenuTriggerFor]="accountMenu">
+      <mat-icon>person</mat-icon> {{ user?.firstName }} {{ user?.lastName }}
     </button>
+    <mat-menu #accountMenu="matMenu" xPosition="before">
+      <button mat-menu-item><mat-icon>account_circle</mat-icon> Account</button>
+      <button mat-menu-item (click)="onLogout()"><mat-icon>logout</mat-icon> Logout</button>
+    </mat-menu>
   </ng-container>
   <ng-container *ngSwitchDefault>
     <button mat-button class="signin" (click)="onLogin()">

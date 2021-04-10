@@ -95,6 +95,7 @@ namespace OMSWeb
       services.AddScoped<NotificationsService>();
       services.AddScoped<MessageService>();
       services.AddScoped<HistoryService>();
+      services.AddScoped<UserService>();
 
       services.AddSingleton<SystemsService>();
       services.AddSingleton<TrackRepository>();

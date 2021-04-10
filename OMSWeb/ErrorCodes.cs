@@ -7,7 +7,8 @@ namespace OMSWeb
 {
   public enum ErrorCodes : uint
   {
-
+    AuthenticationFailed = 1,
+    UserNotExists,
     BadRequestModel = 10,
     ServerError = 999,
   }

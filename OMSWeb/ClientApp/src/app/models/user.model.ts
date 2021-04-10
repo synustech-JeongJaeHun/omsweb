@@ -1,3 +1,5 @@
+import { ITokenStamp } from "./base.model";
+
 export interface ILoginForm {
   email: string;
   password: string;
@@ -5,12 +7,15 @@ export interface ILoginForm {
 }
 
 export interface ISimpleUser {
-  id: number;
+  id: string;
   email: string;
-  name: string;
-  roles?: string[];
+  firstName: string;
+  lastName: string;
 }
 
 export interface ISessionUser extends ISimpleUser {
-  permissions?: number;
+  roles?: number[]
+  permissions?: number[];
 }
+
+export interface IUserToken extends ISessionUser, ITokenStamp {}

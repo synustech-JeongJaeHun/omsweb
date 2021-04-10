@@ -2,11 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 
-import { ILoginForm, ISessionUser, ISimpleUser } from '../models/user.model';
+import { ILoginForm, ISessionUser, ISimpleUser, IUserToken } from '../models/user.model';
 import { Observable, of, Subject, throwError } from 'rxjs';
 
 import { ITokenResult } from '../models/base.model';
 import { StorageUtil } from '../modules/shared/utils/storage.util';
+import { JwtHelperService } from '@auth0/angular-jwt';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -16,6 +18,7 @@ export class AuthService {
   private _token: string;
   private _currentUser: ISessionUser;
   private _expiresAt: number;
+  private jwtHelper: JwtHelperService;
 
   get currentUser(): ISessionUser {
     !this._currentUser && this.readSession();
@@ -28,27 +31,23 @@ export class AuthService {
   }
 
   get isAuthenticated(): boolean {
-    return !!this.token;
-    // return !!this.token && this._expiresAt > Date.now().valueOf(); // @TODO check expired
+    return !!this.token && this._expiresAt > Date.now().valueOf();
   }
 
   certUpdated$: Subject<ISimpleUser> = new Subject();
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router) {
+    this.jwtHelper = new JwtHelperService();
+  }
 
   authenticate(form: ILoginForm): Observable<ISessionUser> {
-    // @TODO auth api 연동
-    /** <test code> */
-    const { email, password } = form;
-    if (email !== password) return throwError('invalid user');
-
-    if (!['admin', 'user'].includes(email)) return throwError('invalid user');
-
-    this.writeSession(email);
-
-    return of(this.currentUser);
-
-    // return this.http.post<ITokenResult>(this.baseUrl, form);
+    return this.http.post<ITokenResult>(`${this.baseUrl}`, form).pipe(
+      map((res) => {
+        const { token } = res;
+        this.writeSession(token);
+        return this._currentUser;
+      })
+    );
   }
 
   logout(): Observable<void> {
@@ -57,13 +56,15 @@ export class AuthService {
     return of();
   }
 
-  private setExpiresAt(checkCurrentTime = false) {
-    // @TODO 구현
-    // const { exp, iat } = this.jwtHelper.decodeToken(this._token);
-    // this._expiresAt =
-    //   checkCurrentTime && iat * 1000 - Date.now().valueOf() > 1000 * 60 * 10
-    //     ? 1 // client device 시간이 틀려서 반복적으로 renewToken이 호출되는 경우를 피하기 위함
-    //     : exp * 1000;
+  private parseToken(checkCurrentTime = false) {
+    const { exp, iat, nbf, ...user } = this.jwtHelper.decodeToken(
+      this._token
+    ) as IUserToken;
+    this._expiresAt =
+      checkCurrentTime && iat * 1000 - Date.now().valueOf() > 1000 * 60 * 10
+        ? 1
+        : exp * 1000;
+    return user;
   }
 
   private readSession(checkExpired = false) {
@@ -71,21 +72,13 @@ export class AuthService {
     if (this._token) {
       const userValue = StorageUtil.getSession('user');
       userValue && (this._currentUser = JSON.parse(userValue));
-      (checkExpired || !this._expiresAt) && this.setExpiresAt();
+      (checkExpired || !this._expiresAt) && this.parseToken();
     }
   }
 
   private writeSession(token: string) {
-    // @TODO login process 구현
-    /** <test_code>  */
     this._token = token;
-    this._currentUser = {
-      id: 1,
-      email: token,
-      name: token,
-      permissions: token === 'admin' ? 4095 : 1,
-      roles: [token],
-    };
+    this._currentUser = this.parseToken(true);
     StorageUtil.setSession('jwt', token);
     StorageUtil.setSession('user', JSON.stringify(this._currentUser));
     this.certUpdated$.next(this._currentUser);

@@ -6,7 +6,7 @@ export namespace AccountUtil {
     user: ISessionUser
   ): boolean => {
     if (!user) return false;
-    const { permissions = 0 } = user;
-    return (user.permissions & needPermission) > 0;
+    const { permissions = [] } = user;
+    return (permissions.includes(needPermission));
   };
 }
