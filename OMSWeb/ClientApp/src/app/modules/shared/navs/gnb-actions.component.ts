@@ -48,5 +48,7 @@ export class GnbActionsComponent implements OnInit {
       disableClose: true,
     });
   }
-  onLogout() {}
+  onLogout() {
+    this.auth.logout();
+  }
 }
