@@ -321,9 +321,82 @@ button:focus {
   outline: 0;
 }
 
-// .material-icons-two-tone {
-//   filter: invert(0.5) sepia(1) saturate(10) hue-rotate(180deg);
-// }
+.side_panel_header {
+  cursor: pointer;
+  position: sticky;
+  top: 0;
+  width: 100%;
+  padding: 8px 0px 2px 10px;
+  background-color: var(--side-panel-header-background);
+  border: none;
+  border-top: 1px solid var(--side-panel-header-border);
+  border-bottom: 1px solid var(--side-panel-header-border);
+  font-weight: bold;
+  font-size: 14px;
+  text-align: left;
+  transition: background-color 0.2s;
+}
+
+.side_panel_header:after {
+  content: "\02795";
+  font-size: 13px;
+  color: #777;
+  float: right;
+  margin-left: 5px;
+  margin-right: 10px;
+  margin-top: -3px;
+}
+
+.side_panel_header.active:after {
+  content: "\2796";
+}
+
+.side_panel_header.active {
+  background-color: var(--side-panel-header-background);
+  border: none;
+  border-top: 1px solid var(--side-panel-header-border);
+  border-bottom: 1px solid var(--side-panel-header-border);
+}
+
+.side_panel {
+  display: block;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  height: 32px;
+  // background-color: var(--toolbar-background-color);
+  background-color: #fff;
+  border-left: 1px solid var(--theme-border-color);
+  overflow: hidden;
+  z-index: 9;
+  transition: height 0.15s;
+}
+
+.side_panel.active {
+  height: calc(100% - 2px);
+}
+
+.side_panel_detail_table {
+  border-collapse: collapse;
+}
+
+.side_panel_detail_table .unit {
+  font-weight: normal;
+}
+
+.side_panel_detail_table .column {
+  text-align: right;
+}
+
+.side_panel th,
+.side_panel td {
+  padding: 0px 2px 0px 2px;
+}
+
+.side_panel .popup_svg {
+  width: 100%;
+}
+
 
 .drag-handle {
   cursor: move;
@@ -441,6 +514,14 @@ button.warn .mat-badge-warn .mat-badge-content {
   }
 }
 
+.mat-slide-toggle {
+  margin: 2px;
+  font-size: 12px;
+
+  .mat-slide-toggle-content {
+    font-family: var(--theme-font);
+  }
+}
 snack-bar-container.error {
   &.server {
     background-color: var(--notification-critical-color);

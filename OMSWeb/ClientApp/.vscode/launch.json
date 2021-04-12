@@ -1,0 +1,10 @@
+{
+  "configurations": [
+    {
+      "type": "pwa-chrome",
+      "name": "http://localhost:5003/monitor/status",
+      "request": "launch",
+      "url": "http://localhost:5003/monitor/status"
+    }
+  ]
+}

@@ -1,30 +1,23 @@
-import {
-  Component,
-  HostListener,
-  Input,
-  NgZone,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import * as _ from 'lodash';
 import { MatDialog } from '@angular/material/dialog';
-// import * as d3 from 'd3';
-// import { Selection } from 'd3-selection';
+import { Router } from '@angular/router';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import d3 = require('d3');
 
-import { ToggleOptionKeyType, ViewModes } from '../../../models/enums';
+import { ViewModes } from '../../../models/enums';
 import { StatusService } from '../../../services/status.service';
 import { ViewController } from './viewer-helper';
 import { TrackIdService } from '../../../services/track-id.service';
 import { Dto } from '../../../models/dto/track.model';
 import { MapStatesService } from '../map-states.service';
-import { from, of, Subject, Subscription } from 'rxjs';
 import { MapDataService } from '../map-data.service';
 import { IPreferences } from '../../../models/settings.model';
 import { HubService } from '../../../services/hub.service';
 import { IDataChangeEvent } from '../../../models/notification.model';
-import { flatMap, map, switchMap, takeUntil } from 'rxjs/operators';
 import { IMapMouseEvent } from '../../../models/map.interface';
-import d3 = require('d3');
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'oms-map-viewer',
@@ -40,6 +33,8 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   contextData: any;
   currentTooltipEvent: IMapMouseEvent;
   tooltipData: any;
+  selectEvent: IMapMouseEvent;
+  selectedObject: any;
 
   private _minimapVisible = false;
   private _detailsVisible = false;
@@ -51,8 +46,8 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   get showMinimap(): boolean {
     return this._minimapVisible;
   }
-  get showDetails(): boolean {
-    return this._detailsVisible;
+  get activeDetails(): boolean {
+    return this._detailsVisible && this.auth.isAuthenticated;
   }
   get showContextMenu(): boolean {
     return !!this.contextData;
@@ -62,11 +57,13 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   }
 
   constructor(
+    private auth: AuthService,
     private dataSvc: MapDataService,
     private statusSvc: StatusService,
     private trackIdSvc: TrackIdService,
     private statesSvc: MapStatesService,
     private hubSvc: HubService,
+    private router: Router,
     private dialog: MatDialog
   ) {}
 
@@ -94,6 +91,12 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   }
 
   private attachEvents() {
+    this.auth.certUpdated$.pipe(takeUntil(this.destroy$)).subscribe((cert) => {
+      console.log('### cert changed ###', cert);
+      this.router.navigateByUrl('/', { skipLocationChange: false }).then(() => {
+        this.router.navigate([cert ? '/monitor/status' : '/monitor/public']);
+      });
+    });
     this.statesSvc.toolbarStates$
       .pipe(takeUntil(this.destroy$))
       .subscribe((event) => {
@@ -141,7 +144,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 
   private drawMap() {
     this.viewer = new ViewController(
-      ViewModes.public,
+      this.auth.isAuthenticated ? ViewModes.viewer : ViewModes.public,
       'track-canvas',
       'minimap',
       this.dataSvc,
@@ -173,6 +176,9 @@ export class MapViewerComponent implements OnInit, OnDestroy {
         break;
       case 'backdrop':
         this.closeContextMenu();
+        break;
+      case 'details':
+        this.showDetails(event);
         break;
       default:
         break;
@@ -241,6 +247,12 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   private closeTooltip() {
     this.tooltipData = undefined;
     this.currentTooltipEvent = undefined;
+  }
+  private showDetails(event: IMapMouseEvent) {
+    if (!this.activeDetails) return;
+    this.selectEvent = event;
+    const { targetId, targetType } = event;
+    this.selectedObject = this.dataSvc.find_layout_object(targetType, targetId);
   }
 
   private applyVehicleChange(event: IDataChangeEvent) {

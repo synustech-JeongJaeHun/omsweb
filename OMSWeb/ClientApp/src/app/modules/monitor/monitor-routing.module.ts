@@ -9,9 +9,10 @@ const routes: Routes = [
     path: '',
     component: MonitorComponent,
     children: [
+      { path: 'public', component: MonitorStatusComponent },
       { path: 'status', component: MonitorStatusComponent },
       { path: 'metrics', component: MonitorMetricsComponent },
-      { path: '', redirectTo: '/monitor/status', pathMatch: 'full' },
+      { path: '', redirectTo: '/monitor/public', pathMatch: 'full' },
     ],
   },
 ];

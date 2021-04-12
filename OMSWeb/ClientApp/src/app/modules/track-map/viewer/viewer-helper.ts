@@ -2999,22 +2999,23 @@ export class ViewController {
       if (layout_object !== null && layout_object !== undefined) {
         // Prepare segment candidate if not exists
         let option = null; // FIXME: just set null, no 'option' needed
-        if (this.mode === 'EDITOR') {
-          // Check if there is no candidates for seg
-          if (
-            object_type === 'SEGMENT' &&
-            layout_object.candidates.length === 0
-          ) {
-            // Add candidates
-            let candidates = LayoutUtil.find_segment_candidate(
-              layout_object.id,
-              layout_object.pointFrom,
-              layout_object.pointTo,
-              this.layout_data.segments
-            );
-            layout_object.candidates = candidates;
-          }
-        }
+        // @NOTE EDITOR mode
+        // if (this.mode === 'EDITOR') {
+        //   // Check if there is no candidates for seg
+        //   if (
+        //     object_type === 'SEGMENT' &&
+        //     layout_object.candidates.length === 0
+        //   ) {
+        //     // Add candidates
+        //     let candidates = LayoutUtil.find_segment_candidate(
+        //       layout_object.id,
+        //       layout_object.pointFrom,
+        //       layout_object.pointTo,
+        //       this.layout_data.segments
+        //     );
+        //     layout_object.candidates = candidates;
+        //   }
+        // }
 
         // display popup
         // @TODO Popup
@@ -3041,6 +3042,14 @@ export class ViewController {
           this.overlap_module_objects,
           'OVERLAP_MODULE'
         );
+
+        this.onMouseEvent$.emit({
+          type: 'details',
+          targetId: layout_object.id,
+          targetType: object_type,
+          mapMode: this.mode,
+        });
+
         // @TODO popup
         // popup.side_panel.init_accordian(
         //   false,
@@ -3086,8 +3095,7 @@ export class ViewController {
     this.overlap_module_panel_svg = undefined;
     this.overlap_module_svg = undefined;
     this.overlap_module_objects = [];
-    this.$track_container.find('#side_panel').remove();
-    this.$track_container.find('#btn_side_panel').removeClass('active');
+    // this.$track_container.find('#side_panel').remove();
   }
   update_layout_object_dom_elements(update_category: any[]) {
     let is_point_update = false;
@@ -10884,14 +10892,12 @@ export class ViewController {
     //   this.open_context_menu(object_type, object_id, position);
   }
   onPrimaryMouseClick(targetType: string, targetId: number, groupType: string) {
-    this.dom_clicked(targetType, targetId, groupType);
-    this.onMouseEvent$.emit({
-      type: 'click',
-      targetId,
-      targetType,
-      groupType,
-      mapMode: this.mode,
-    });
+    if (this.tool_type === 'SELECT') {
+      // this.editor_dom_clicked(targetType, targetId, groupType); // @NOTE for editor
+    }
+    else {
+      this.dom_clicked(targetType, targetId, groupType);
+    }
   }
   onSecondaryMouseClick(targetType: string, targetId: number) {
     d3.event.preventDefault();
@@ -10919,13 +10925,6 @@ export class ViewController {
   }
 
   dom_clicked(object_type: string, object_id: any, group_type: string) {
-    // log_event.log(`mode=${mode} type=${tool_type} modifier=${modifier_key}`);
-
-    if (this.tool_type === 'SELECT') {
-      if (this.modifier_key === this.KEY_EXTSEL) {
-        this.drag_coord.start = 'SHIFT_CLICK';
-      }
-    } else {
       // Exit function if clicked on an already selected object
       if (
         this.selected_objects[0] &&
@@ -10938,104 +10937,174 @@ export class ViewController {
       // Get clicked object
       let layout_object = this.find_layout_object(object_type, object_id);
 
-      // Check current edit type
-      if (this.tool_type === 'SEGMENT') {
-        // Save point as base point
-        if (object_type === 'POINT') {
-          this.selected_objects.push(layout_object);
-        }
-      } else {
-        let need_popup = false;
+      let need_popup = false;
 
-        this.init_selection(true);
+      this.init_selection(true);
 
-        // add current object to selected object
-        if (!this.is_sticky_mode) {
-          this.selected_objects.push(layout_object);
-        }
-
-        // Check mode
-        if (this.mode === 'VIEWER' || this.mode === 'PLAYBACK') {
-          // view this.mode
-          // @TODO check popup
-          // if (typeof popup !== 'undefined' && popup.side_panel) {
-          //   need_popup = true;
-          // }
-        } else if (this.mode === 'EDITOR') {
-          // edit this.mode
-          // Check edit object type
-          if (
-            this.tool_type === 'POINTER' ||
-            this.tool_type === null ||
-            this.tool_type === 'SELECT'
-          ) {
-            need_popup = true;
-          } else if (this.tool_type === 'DELETE') {
-            // non delete type
-            // Delete object
-            this.delete_layout_object(layout_object, true);
-          } else if (this.tool_type !== 'MOVE') {
-            // create object
-            //Ready for create object
-            let created_object = this.create_object(
-              object_type,
-              layout_object.id
-            );
-
-            if (created_object) {
-              this.selected_objects = [];
-              // replace selected object to created
-              this.selected_objects.push(created_object);
-              object_type = created_object.objectType.toUpperCase();
-              layout_object = created_object;
-              need_popup = true;
-            }
-          } else if (this.tool_type === 'MOVE') {
-            need_popup = true;
-          }
-
-          // Check stick this.mode
-          if (!this.is_sticky_mode) {
-            // switch button status to cursor this.mode
-            this.change_default_button(false);
-            need_popup = true;
-          }
-        }
-
-        if (object_type === 'VEHICLE') {
-          if (!this.get_show_vehicle_lines()) {
-            this.get_svg_class('VEHICLE').selectAll('.next, .command').remove();
-          }
-          this.render_vehicle_line(
-            this.get_dom('VEHICLE', object_id, 'LAYOUT'),
-            this.find_layout_object('VEHICLE', object_id),
-            true
-          );
-        }
-
-        // Display popup
-        // @TODO pupup 관련
-        // if (need_popup && popup.side_panel) {
-        //   if (this.selected_objects.length > 1) {
-        //     // Multiple object are selected
-        //     object_type = 'SELECT';
-        //     layout_object = null;
-        //   }
-        //   this.display_side_panel_popup(object_type, layout_object);
-        // }
-
-        // highlight object
-        if (layout_object !== null && layout_object !== undefined) {
-          this.highlight_objects(
-            this.selected_objects,
-            group_type,
-            'SELECT',
-            'SMOOTH'
-          );
-        }
+      // add current object to selected object
+      if (!this.is_sticky_mode) {
+        this.selected_objects.push(layout_object);
       }
-    }
-  }
+
+      // Check mode
+      if (this.mode === 'VIEWER' || this.mode === 'PLAYBACK') {
+        // view this.mode
+        // @TODO check popup
+        // if (typeof popup !== 'undefined' && popup.side_panel) {
+          need_popup = true;
+        // }
+      }
+
+      if (object_type === 'VEHICLE') {
+        if (!this.get_show_vehicle_lines()) {
+          this.get_svg_class('VEHICLE').selectAll('.next, .command').remove();
+        }
+        this.render_vehicle_line(
+          this.get_dom('VEHICLE', object_id, 'LAYOUT'),
+          this.find_layout_object('VEHICLE', object_id),
+          true
+        );
+      }
+
+      // Display popup
+      // @TODO pupup 관련
+      if (need_popup) {
+        if (this.selected_objects.length > 1) {
+          // Multiple object are selected
+          object_type = 'SELECT';
+          layout_object = null;
+        }
+        this.display_side_panel_popup(object_type, layout_object);
+      }
+
+      // highlight object
+      if (layout_object !== null && layout_object !== undefined) {
+        this.highlight_objects(
+          this.selected_objects,
+          group_type,
+          'SELECT',
+          'SMOOTH'
+        );
+      }
+}
+  // editor_dom_clicked(object_type: string, object_id: any, group_type: string) {
+  //   // log_event.log(`mode=${mode} type=${tool_type} modifier=${modifier_key}`);
+
+  //   if (this.tool_type === 'SELECT') {
+  //     if (this.modifier_key === this.KEY_EXTSEL) {
+  //       this.drag_coord.start = 'SHIFT_CLICK';
+  //     }
+  //   } else {
+  //     // Exit function if clicked on an already selected object
+  //     if (
+  //       this.selected_objects[0] &&
+  //       this.selected_objects[0].id === object_id &&
+  //       this.selected_objects[0].objectType.toUpperCase() === object_type
+  //     ) {
+  //       return;
+  //     }
+
+  //     // Get clicked object
+  //     let layout_object = this.find_layout_object(object_type, object_id);
+
+  //     // Check current edit type
+  //     if (this.tool_type === 'SEGMENT') {
+  //       // Save point as base point
+  //       if (object_type === 'POINT') {
+  //         this.selected_objects.push(layout_object);
+  //       }
+  //     } else {
+  //       let need_popup = false;
+
+  //       this.init_selection(true);
+
+  //       // add current object to selected object
+  //       if (!this.is_sticky_mode) {
+  //         this.selected_objects.push(layout_object);
+  //       }
+
+  //       // Check mode
+  //       if (this.mode === 'VIEWER' || this.mode === 'PLAYBACK') {
+  //         // view this.mode
+  //         // @TODO check popup
+  //         // if (typeof popup !== 'undefined' && popup.side_panel) {
+  //         //   need_popup = true;
+  //         // }
+  //       } else if (this.mode === 'EDITOR') {
+  //         // edit this.mode
+  //         // Check edit object type
+  //         if (
+  //           this.tool_type === 'POINTER' ||
+  //           this.tool_type === null ||
+  //           this.tool_type === 'SELECT'
+  //         ) {
+  //           need_popup = true;
+  //         } else if (this.tool_type === 'DELETE') {
+  //           // non delete type
+  //           // Delete object
+  //           this.delete_layout_object(layout_object, true);
+  //         } else if (this.tool_type !== 'MOVE') {
+  //           // create object
+  //           //Ready for create object
+  //           let created_object = this.create_object(
+  //             object_type,
+  //             layout_object.id
+  //           );
+
+  //           if (created_object) {
+  //             this.selected_objects = [];
+  //             // replace selected object to created
+  //             this.selected_objects.push(created_object);
+  //             object_type = created_object.objectType.toUpperCase();
+  //             layout_object = created_object;
+  //             need_popup = true;
+  //           }
+  //         } else if (this.tool_type === 'MOVE') {
+  //           need_popup = true;
+  //         }
+
+  //         // Check stick this.mode
+  //         if (!this.is_sticky_mode) {
+  //           // switch button status to cursor this.mode
+  //           this.change_default_button(false);
+  //           need_popup = true;
+  //         }
+  //       }
+
+  //       if (object_type === 'VEHICLE') {
+  //         if (!this.get_show_vehicle_lines()) {
+  //           this.get_svg_class('VEHICLE').selectAll('.next, .command').remove();
+  //         }
+  //         this.render_vehicle_line(
+  //           this.get_dom('VEHICLE', object_id, 'LAYOUT'),
+  //           this.find_layout_object('VEHICLE', object_id),
+  //           true
+  //         );
+  //       }
+
+  //       // Display popup
+  //       // @TODO pupup 관련
+  //       // if (need_popup && popup.side_panel) {
+  //       //   if (this.selected_objects.length > 1) {
+  //       //     // Multiple object are selected
+  //       //     object_type = 'SELECT';
+  //       //     layout_object = null;
+  //       //   }
+  //       //   this.display_side_panel_popup(object_type, layout_object);
+  //       // }
+
+  //       // highlight object
+  //       if (layout_object !== null && layout_object !== undefined) {
+  //         this.highlight_objects(
+  //           this.selected_objects,
+  //           group_type,
+  //           'SELECT',
+  //           'SMOOTH'
+  //         );
+  //       }
+  //     }
+  //   }
+  // }
   change_default_button(is_init_selection: boolean) {
     // Change editing button to default(pointer) mode
 

@@ -10,6 +10,14 @@
       aria-label="Loading"
     ></mat-progress-bar>
   </div>
+
+  <div id="side_panel">
+    <oms-map-side-panel
+      *ngIf="activeDetails"
+      class="side_panel active"
+      [selectedObject]="selectedObject"
+    ></oms-map-side-panel>
+  </div>
 </div>
 
 <oms-map-toolbar
@@ -17,11 +25,6 @@
   class="snb toolbar"
   [buttonState]="preference.toggles"
 ></oms-map-toolbar>
-
-<oms-map-side-panel
-  *ngIf="showDetails"
-  class="side_panel active"
-></oms-map-side-panel>
 
 <div id="contextMenu" [hidden]="!showContextMenu" class="context-menu">
   <div [ngSwitch]="'test'">

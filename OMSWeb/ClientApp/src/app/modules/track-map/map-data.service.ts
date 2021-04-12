@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
+import { Observable, of } from 'rxjs';
 import { IMapGeometry } from '../../models/drawing.model';
 import { Dto } from '../../models/dto/track.model';
 import { MapTypes } from '../../models/enums';
@@ -54,6 +55,22 @@ export class MapDataService {
     const oldData = this.data.clusters;
     const newData = this.parser.parseClusters(MapTypes.DB, rows);
     return LayoutUtil.get_changes(oldData, newData, []);
+  }
+  searchDestObjects(scopes: string[], value: string): Observable<any[]> {
+    const result = [];
+    if (scopes.includes('stations')) {
+      const item = this.data.stations.find((x) => x.id.toString() === value);
+      item && result.push(item);
+    }
+    if (scopes.includes('points')) {
+      const item = this.data.points.find((x) => x.id.toString() === value);
+      item && result.push(item);
+    }
+    if (scopes.includes('buffers')) {
+      const item = this.data.buffers.find((x) => x.id.toString() === value);
+      item && result.push(item);
+    }
+    return of(result);
   }
 
   applyDisableSegmentData(

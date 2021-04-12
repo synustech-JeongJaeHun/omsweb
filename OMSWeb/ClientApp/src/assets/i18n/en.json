@@ -90,6 +90,16 @@
     "level": "Severity",
     "errorCode": "Error Code",
     "timeResolved": "Resolved",
+    "errorList": "Error Code",
+    "cargoTransferResult": "Cargo Transfer Result",
+    "lastContact": "Last Contact",
+    "calculatePath": "Calculate Path",
+    "go": "Go",
+    "goHint": "Point, Station, or Buffer ID",
+    "load": "Load",
+    "loadHint": "Station, or Buffer ID",
+    "unload": "Unload",
+    "unloadHint": "Station, or Buffer ID",
 
     "centerZoom": "Center Zoom",
     "search": "Search",
@@ -208,6 +218,7 @@
     "confirmEstopAll": "Do you want to stop all vehicles?",
     "confirmSetAutoAll": "Do you want to set auto all vehicles?",
     "selectObjectType": "Select Type",
-    "searchId": "Search ID"
+    "searchId": "Search ID",
+    "noObjectSelected": "Nothing is selected."
   }
 }

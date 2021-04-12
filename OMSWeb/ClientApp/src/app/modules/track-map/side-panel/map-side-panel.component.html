@@ -1,0 +1,116 @@
+<div class="panel-header">
+  {{ "names.itemDetails" | translate }}
+</div>
+<div [ngSwitch]="!data">
+  <div *ngSwitchCase="false">
+    <mat-accordion multi>
+      <ng-container class="desc" [ngSwitch]="data?.objectType">
+        <ng-container *ngSwitchCase="'Vehicle'">
+          <ng-container *ngTemplateOutlet="vehicleInfo"></ng-container>
+        </ng-container>
+        <ng-container *ngSwitchDefault></ng-container>
+      </ng-container>
+    </mat-accordion>
+  </div>
+  <div *ngSwitchDefault>{{ "messages.noObjectSelected" | translate }}</div>
+</div>
+
+<ng-template #vehicleInfo>
+  <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel-header>
+      <mat-panel-title> {{ data?.objectType }} #{{ data.id }}</mat-panel-title>
+    </mat-expansion-panel-header>
+    <div class="desc">
+      <div class="info-table">
+        <!-- <div class="name">{{ "names.id" | translate }}</div> -->
+        <!-- <mat-form-field class="info-item span-full readonly">
+      <mat-label>{{ "names.id" | translate }}</mat-label>
+      <input matInput type="text" readonly [value]="data.id" />
+    </mat-form-field> -->
+        <mat-form-field class="info-item readonly">
+          <mat-label>{{ "names.physicalId" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.physicalId" />
+        </mat-form-field>
+        <mat-form-field class="info-item readonly" floatLabel="always">
+          <mat-label>{{ "names.logicalId" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.logicalId" />
+        </mat-form-field>
+        <mat-form-field class="info-item readonly" floatLabel="always">
+          <mat-label>{{ "names.curPoint" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.curPoint?.point" />
+        </mat-form-field>
+        <mat-form-field class="info-item readonly" floatLabel="always">
+          <mat-label>{{ "names.commandPoint" | translate }}</mat-label>
+          <input
+            matInput
+            type="text"
+            readonly
+            [value]="data.commandPoint?.point"
+          />
+        </mat-form-field>
+        <mat-form-field class="info-item readonly" floatLabel="always">
+          <mat-label>{{ "names.cargoState" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.cargoState" />
+        </mat-form-field>
+        <mat-form-field class="info-item readonly" floatLabel="always">
+          <mat-label>{{ "names.orderId" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.orderId || ''" />
+        </mat-form-field>
+        <mat-form-field class="info-item readonly" floatLabel="always">
+          <mat-label>{{ "names.movingState" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.movingState" />
+        </mat-form-field>
+        <mat-form-field class="info-item readonly" floatLabel="always">
+          <mat-label>{{ "names.mode" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.mode" />
+        </mat-form-field>
+        <mat-form-field class="info-item readonly" floatLabel="always">
+          <mat-label>{{ "names.errorList" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.errorList" />
+        </mat-form-field>
+        <mat-form-field class="info-item readonly" floatLabel="always">
+          <mat-label>{{ "names.cargoTransferResult" | translate }}</mat-label>
+          <input
+            matInput
+            type="text"
+            readonly
+            [value]="data.cargoTransferResult"
+          />
+        </mat-form-field>
+        <mat-form-field class="info-item readonly" floatLabel="always">
+          <mat-label>{{ "names.lastContact" | translate }}</mat-label>
+          <input
+            matInput
+            type="text"
+            readonly
+            [value]="data.lastContact | date: 'yyyy-MM-dd HH:mm:ss'"
+          />
+        </mat-form-field>
+        <mat-form-field class="info-item readonly" floatLabel="always">
+          <mat-label>{{ "names.mapDb" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.mapDb" />
+        </mat-form-field>
+        <mat-slide-toggle
+          color="primary"
+          [(ngModel)]="isCalculatedPath"
+          (toggleChange)="onChangeVehicleCalculatePath()"
+          >{{ "names.calculatePath" | translate }}</mat-slide-toggle
+        >
+      </div>
+    </div>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel-header>
+      <mat-panel-title>Command Interface</mat-panel-title>
+    </mat-expansion-panel-header>
+    <div class="desc">
+      <div class="move-command-table">
+        <oms-dest-command scope="go"></oms-dest-command>
+        <div></div>
+        <oms-dest-command scope="load"></oms-dest-command>
+        <oms-dest-command scope="unload"></oms-dest-command>
+      </div>
+    </div>
+  </mat-expansion-panel>
+</ng-template>
