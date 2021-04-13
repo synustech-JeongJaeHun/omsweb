@@ -125,8 +125,8 @@ namespace OMSWeb.Services
 
     private async Task UpdateWithCacheAsync(DataChangeEventTarget targetInfo, DataWatcherPayload payload)
     {
-      // this._cache.RemoveValue(targetInfo.CacheKey); // @NOTE 성능비교 : 무조건 해당 cache를 삭제한다.
-      await this.UpdateCacheAsync(targetInfo, payload);
+      this._cache.RemoveValue(targetInfo.CacheKey); // @NOTE 성능비교 : 무조건 해당 cache를 삭제한다.
+      // await this.UpdateCacheAsync(targetInfo, payload);
 
       this.cacheEventMap.TryGetValue(targetInfo.CacheKey, out var cacheEvents);
       foreach (var e in cacheEvents)

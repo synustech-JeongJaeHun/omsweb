@@ -127,11 +127,11 @@ namespace OMSWeb
 
       if (env.IsDevelopment())
       {
-        // app.UseDeveloperExceptionPage();
+        app.UseDeveloperExceptionPage();
       }
       else
       {
-        // app.UseExceptionHandler("/Error");
+        app.UseExceptionHandler("/Error");
       }
 
       app.UseStaticFiles();
