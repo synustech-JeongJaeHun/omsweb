@@ -514,6 +514,13 @@ button.warn .mat-badge-warn .mat-badge-content {
   }
 }
 
+mat-radio-button {
+  font-size: 12px;
+}
+.mat-radio-button ~ .mat-radio-button {
+  margin-left: 16px;
+}
+
 .mat-slide-toggle {
   margin: 2px;
   font-size: 12px;

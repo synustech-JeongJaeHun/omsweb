@@ -44,6 +44,17 @@ mat-expansion-panel {
   }
 }
 
+.disable-table {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 5px;
+
+  mat-form-field {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
 mat-form-field {
   font-size: 12px;
   max-width: 180px;
@@ -61,4 +72,15 @@ mat-form-field {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 5px;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+
+  label {
+    transform-origin: top left;
+    transform: scale(0.75);
+    color: rgba(0,0,0,.54);
+  }
 }
