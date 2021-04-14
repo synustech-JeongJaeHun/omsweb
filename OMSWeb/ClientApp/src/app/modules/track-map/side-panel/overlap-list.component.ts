@@ -23,6 +23,13 @@ import { MapStatesService } from '../map-states.service';
 
       #overlapList ::ng-deep.overlap-item {
         height: 40px;
+        cursor: pointer;
+        padding: 8px 8px;
+      }
+      #overlapList ::ng-deep.overlap-item.current {
+        font-weight: bold;
+        background-color: var(--button-active-color);
+        border-radius: 5px;
       }
     `,
   ],
@@ -54,8 +61,7 @@ export class OverlapListComponent implements OnInit, OnChanges {
   constructor(
     private dataSvc: MapDataService,
     private stateSvc: MapStatesService
-  ) {
-  }
+  ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     const { data } = changes;
@@ -108,9 +114,13 @@ export class OverlapListComponent implements OnInit, OnChanges {
       overlaps.forEach((x) => {
         // update_overlap_module_panel('ADD', x.objectType, x, 'OVERLAP_MODULE')
         const className = x.objectType.toLowerCase();
+        const currentClass =
+          x.objectType === this.data.objectType && x.id === this.data.id
+            ? 'current'
+            : '';
         const svg = this.listContainer
           .append('svg')
-          .attr('class', `overlap-item ${className}`);
+          .attr('class', `overlap-item ${className} ${currentClass}`);
         const { objectType } = x;
         if (objectType === 'Vehicle') {
           // update_vehicle_dom(x, main_css.vehicle, 3, 'OVERLAP_MODULE',false)
@@ -142,6 +152,14 @@ export class OverlapListComponent implements OnInit, OnChanges {
         svg
           .select(`.${unitClassName}`)
           .attr('transform', `translate(${padding}, ${padding})`);
+
+        svg.on('click', () => {
+          this.stateSvc.actionState$.emit({
+            type: 'selectUnit',
+            targetId: x.id,
+            targetType: x.objectType.toUpperCase(),
+          })
+        });
       });
     }
   }

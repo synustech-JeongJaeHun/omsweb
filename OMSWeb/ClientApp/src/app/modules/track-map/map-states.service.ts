@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import {
   IMapConfigChangeEvent,
@@ -9,6 +9,7 @@ import {
   CommandKeyType,
   ToggleOptionKeyType,
 } from '../../models/enums';
+import { IMapMouseEvent } from '../../models/map.interface';
 import { ClientPreferences } from '../../models/settings.model';
 import { SettingsService } from '../../services/settings.service';
 
@@ -19,6 +20,7 @@ export class MapStatesService {
   toolbarStates$ = new Subject<IMapToolbarToggleEvent>();
   toolbarCommandStates$ = new Subject<IMapToolbarCommandEvent>();
   configStates$ = new Subject<IMapConfigChangeEvent>();
+  actionState$ = new EventEmitter<IMapMouseEvent>();
 
   get preferences(): ClientPreferences {
     return this.settingSvc.globalPreferences;

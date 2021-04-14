@@ -40,10 +40,6 @@ import { IPreferences } from '../../../models/settings.model';
 import {} from '@oms/models/drawing.model';
 import { EventEmitter } from '@angular/core';
 export class ViewController {
-  //#region events
-  onMouseEvent$ = new EventEmitter<IMapMouseEvent>();
-  //#endregion
-
   //#region properties
   private svg: any; // d3.Selection<d3.ContainerElement, unknown, HTMLElement, any>;
   private d3_track: d3.Selection<d3.BaseType, unknown, HTMLElement, any>;
@@ -553,7 +549,7 @@ export class ViewController {
 
     this.d3_track = d3.select(`#${this.track_container_id}`);
     this.d3_track.on('click', () => {
-      this.onMouseEvent$.emit({ type: 'backdrop' });
+      this.statesSvc.actionState$.emit({type: 'backdrop'});
     });
 
     this.initVariables();
@@ -3043,8 +3039,8 @@ export class ViewController {
           'OVERLAP_MODULE'
         );
 
-        this.onMouseEvent$.emit({
-          type: 'details',
+        this.statesSvc.actionState$.emit({
+          type: 'selectUnit',
           targetId: layout_object.id,
           targetType: object_type,
           mapMode: this.mode,
@@ -10901,7 +10897,7 @@ export class ViewController {
   }
   onSecondaryMouseClick(targetType: string, targetId: number) {
     d3.event.preventDefault();
-    this.onMouseEvent$.emit({
+    this.statesSvc.actionState$.emit({
       type: 'contextmenu',
       targetId,
       targetType,
@@ -10910,7 +10906,7 @@ export class ViewController {
     return false;
   }
   onMouseEnter(targetType: string, targetId: number) {
-    this.onMouseEvent$.emit({
+    this.statesSvc.actionState$.emit({
       type: 'mouseenter',
       targetId,
       targetType,
@@ -10918,7 +10914,7 @@ export class ViewController {
     });
   }
   onMouseOut() {
-    this.onMouseEvent$.emit({
+    this.statesSvc.actionState$.emit({
       type: 'mouseout',
       mapMode: this.mode,
     });

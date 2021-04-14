@@ -81,7 +81,7 @@ export type MapEventType =
   | 'mouseenter'
   | 'mouseout'
   | 'backdrop'
-  | 'details';
+  | 'selectUnit';
 export interface IMapMouseEvent {
   type: MapEventType;
   targetId?: number;

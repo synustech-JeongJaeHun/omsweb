@@ -18,6 +18,7 @@ import { HubService } from '../../../services/hub.service';
 import { IDataChangeEvent } from '../../../models/notification.model';
 import { IMapMouseEvent } from '../../../models/map.interface';
 import { AuthService } from '../../../services/auth.service';
+import { main_css } from '../../shared/utils/css-loader';
 
 @Component({
   selector: 'oms-map-viewer',
@@ -156,7 +157,10 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     this.viewer.update_vehicles(this.omsData.vehicles, 'INSERT', null, false);
     this.trackIdSvc.extract_id_from_track(this.dataSvc.data);
 
-    this.viewer.onMouseEvent$
+    // this.viewer.onMouseEvent$
+    //   .pipe(takeUntil(this.destroy$))
+    //   .subscribe((event) => this.onMapMouseEvent(event));
+    this.statesSvc.actionState$
       .pipe(takeUntil(this.destroy$))
       .subscribe((event) => this.onMapMouseEvent(event));
   }
@@ -177,7 +181,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
       case 'backdrop':
         this.closeContextMenu();
         break;
-      case 'details':
+      case 'selectUnit':
         this.showDetails(event);
         break;
       default:
@@ -253,6 +257,8 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     this.selectEvent = event;
     const { targetId, targetType } = event;
     this.selectedObject = this.dataSvc.find_layout_object(targetType, targetId);
+    this.viewer.init_selection(true);
+    this.viewer.highlight(targetType, targetId, main_css[targetType.toLowerCase()], 'LAYOUT', 'SELECT');
   }
 
   private applyVehicleChange(event: IDataChangeEvent) {
