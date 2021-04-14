@@ -16,15 +16,14 @@ export class MapSidePanelComponent implements OnInit, OnChanges {
   @Input('selectedObject') data: any;
 
   isCalculatedPath = false;
+  hasOverlap = true;
 
   constructor(private dataSvc: MapDataService) {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   ngOnChanges(changes: SimpleChanges): void {
     const { data } = changes;
-    console.info('## changes >>', this.data);
     if (data.currentValue) {
       this.bindObject();
     }
@@ -33,7 +32,7 @@ export class MapSidePanelComponent implements OnInit, OnChanges {
   private bindObject() {
     switch (this.data.objectType) {
       case 'Vehicle':
-        this._bindVehicle();
+        this.bindVehicle();
         break;
       default:
         break;
@@ -42,7 +41,7 @@ export class MapSidePanelComponent implements OnInit, OnChanges {
 
   onChangeVehicleCalculatePath() {}
 
-  private _bindVehicle() {
+  private bindVehicle() {
     this.isCalculatedPath = this.dataSvc.expectedPaths.some(
       (x) => x.id === this.data.id
     );

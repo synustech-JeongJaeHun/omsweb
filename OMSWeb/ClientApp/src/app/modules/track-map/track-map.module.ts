@@ -10,8 +10,9 @@ import { CommandDialogComponent } from './dialogs/command-dialog.component';
 import { ShowObjectDialogComponent } from './dialogs/show-object-dialog.component';
 import { MapSidePanelComponent } from './side-panel/map-side-panel.component';
 import { DestCommandComponent } from './side-panel/dest-command.component';
+import { OverlapListComponent } from './side-panel/overlap-list.component';
 @NgModule({
-  declarations: [MapViewerComponent, MapToolbarComponent, SearchDialogComponent, TrackVehicleDialogComponent, CommandDialogComponent, ShowObjectDialogComponent, MapSidePanelComponent, DestCommandComponent],
+  declarations: [MapViewerComponent, MapToolbarComponent, SearchDialogComponent, TrackVehicleDialogComponent, CommandDialogComponent, ShowObjectDialogComponent, MapSidePanelComponent, DestCommandComponent, OverlapListComponent],
   imports: [CommonModule, SharedModule],
   exports: [MapViewerComponent, MapToolbarComponent],
 })

@@ -4,11 +4,22 @@
 <div [ngSwitch]="!data">
   <div *ngSwitchCase="false">
     <mat-accordion multi>
-      <ng-container class="desc" [ngSwitch]="data?.objectType">
+      <ng-container [ngSwitch]="data?.objectType">
         <ng-container *ngSwitchCase="'Vehicle'">
           <ng-container *ngTemplateOutlet="vehicleInfo"></ng-container>
         </ng-container>
         <ng-container *ngSwitchDefault></ng-container>
+      </ng-container>
+
+      <ng-container *ngIf="hasOverlap">
+        <mat-expansion-panel [expanded]="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title>{{
+              "names.sideOverlapModule" | translate
+            }}</mat-panel-title>
+          </mat-expansion-panel-header>
+          <oms-overlap-list [selectedObject]="data"></oms-overlap-list>
+        </mat-expansion-panel>
       </ng-container>
     </mat-accordion>
   </div>

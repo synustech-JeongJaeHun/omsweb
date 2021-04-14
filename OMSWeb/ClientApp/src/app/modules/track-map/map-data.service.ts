@@ -568,4 +568,124 @@ export class MapDataService {
 
     return new_vehicles;
   }
+
+  //#region overlaps
+  populateOverlapData(pointId: number, overlapType: string): any[] {
+    const overlaps = [];
+    let layout_objects: any[];
+
+    if (overlapType === 'OVERLAP_MODULE') {
+      layout_objects = this.get_layout_objects('POINT');
+
+      // Check for points
+      for (let i = 0; i < layout_objects.length; i++) {
+        let exist_in_overlap = this.check_exist_overlap_list(
+          layout_objects[i],
+          overlaps
+        );
+        if (
+          layout_objects[i] &&
+          layout_objects[i].id === pointId &&
+          !exist_in_overlap
+        ) {
+          overlaps.push(layout_objects[i]);
+        }
+      }
+    }
+
+    layout_objects = this.get_layout_objects('STATION');
+
+    // Check for station
+    for (let i = 0; i < layout_objects.length; i++) {
+      let exist_in_overlap = this.check_exist_overlap_list(
+        layout_objects[i],
+        overlaps
+      );
+      if (
+        layout_objects[i] &&
+        layout_objects[i].pointId === pointId &&
+        !exist_in_overlap
+      ) {
+        overlaps.push(layout_objects[i]);
+      }
+    }
+
+    layout_objects = this.get_layout_objects('BUFFER') || [];
+
+    // Check for buffer
+    for (let i = 0; i < layout_objects.length; i++) {
+      // Find matches
+      let exist_in_overlap = this.check_exist_overlap_list(
+        layout_objects[i],
+        overlaps
+      );
+      if (
+        layout_objects[i] &&
+        layout_objects[i].pointId === pointId &&
+        !exist_in_overlap
+      ) {
+        overlaps.push(layout_objects[i]);
+      }
+    }
+
+    layout_objects = this.get_layout_objects('MTL') || [];
+
+    // Check for mtl
+    for (let i = 0; i < layout_objects.length; i++) {
+      // Find matches
+      let exist_in_overlap = this.check_exist_overlap_list(
+        layout_objects[i],
+        overlaps
+      );
+      if (
+        layout_objects[i] &&
+        layout_objects[i].pointId === pointId &&
+        !exist_in_overlap
+      ) {
+        overlaps.push(layout_objects[i]);
+      }
+    }
+    return overlaps;
+  }
+  populateOverlapDataForVehicles(pointId: any, overlap_type: string): any[] {
+    const overlaps: any[] = [];
+    for (let i = 0; i < this.data.vehicles.length; i++) {
+      let exist_in_overlap = this.check_exist_overlap_list(
+        this.data.vehicles[i],
+        overlaps
+      );
+      if (
+        this.data.vehicles[i].curPoint &&
+        this.data.vehicles[i].curPoint.point === pointId &&
+        !exist_in_overlap
+      ) {
+        overlaps.push(this.data.vehicles[i]);
+      }
+    }
+
+    return overlaps;
+  }
+  private check_exist_overlap_list(
+    target_object: any,
+    adding_overlap_list: any[]
+  ) {
+    let is_exist = false;
+
+    if (!target_object) return is_exist;
+
+    for (let i = 0; i < adding_overlap_list.length; i++) {
+      if (
+        adding_overlap_list[i] &&
+        target_object.constructor === adding_overlap_list[i].constructor &&
+        target_object.id === adding_overlap_list[i].id
+      ) {
+        is_exist = true;
+
+        break;
+      }
+    }
+    return is_exist;
+  }
+
+  //#endregion
 }

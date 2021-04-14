@@ -100,6 +100,7 @@
     "loadHint": "Station, or Buffer ID",
     "unload": "Unload",
     "unloadHint": "Station, or Buffer ID",
+    "sideOverlapModule": "Co-Located Objects",
 
     "centerZoom": "Center Zoom",
     "search": "Search",
