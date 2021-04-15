@@ -212,8 +212,8 @@ namespace OMSWeb.Services
       };
       if (!pushName.Contains("table", StringComparison.OrdinalIgnoreCase))
       {
-        // if (pushName == "vehicleChanged")
-          // Console.WriteLine($"## PUSH ## {pushName}: {payload.Id}, {body}");
+        if (pushName == "vehicleChanged")
+          Console.WriteLine($"## PUSH ## {pushName}: {payload.Id}, {body}");
         await this._hub.Clients.All.SendAsync(pushName, meta, body);
         return;
       }
