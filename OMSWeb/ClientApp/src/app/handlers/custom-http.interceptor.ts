@@ -19,6 +19,12 @@ export class CustomHttpInterceptor implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
     const token = this.auth.token;
+    request = request.clone({
+      setHeaders: {
+        'Cache-Control': 'no-cache',
+        Pragma: 'no-cache',
+      },
+    });
     if (token) {
       request = request.clone({
         setHeaders: {
