@@ -6,6 +6,10 @@ export type ToggleOptionsType = {
   [key in ToggleOptionKeyType]: boolean;
 };
 
+export class ServiceConfig {
+  allowPublicMonitor = false;
+}
+
 export class MapConfig {
   vehicleScale?: number = main_css.vehicle.radius;
   mapRotation?: number = 0;
@@ -46,6 +50,10 @@ export class ClientPreferences implements IPreferences {
 
   constructor(private storeKey: string, private base?: IPreferences) {
     this.load();
+  }
+
+  getServiceConfig() {
+
   }
 
   private load() {

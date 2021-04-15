@@ -15,13 +15,14 @@ import { CustomErrorHandler } from '../../handlers/custom-error-handler';
 import { CustomHttpInterceptor } from '../../handlers/custom-http.interceptor';
 import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
+import { StartupComponent } from './startup.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, StartupComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

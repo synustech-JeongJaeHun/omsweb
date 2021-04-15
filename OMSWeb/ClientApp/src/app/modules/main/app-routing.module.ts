@@ -1,8 +1,17 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { MonitorModule } from '../monitor/monitor.module';
+import { StartupComponent } from './startup.component';
 
 const routes: Routes = [
+  {
+    path: '',
+    component: StartupComponent,
+  },
+  // {
+  //   path: 'startup',
+  //   component: StartupComponent,
+  // },
   {
     path: 'monitor',
     loadChildren: () =>
@@ -27,11 +36,11 @@ const routes: Routes = [
     loadChildren: () =>
       import('../settings/settings.module').then((m) => m.SettingsModule),
   },
-  {
-    path: '',
-    redirectTo: 'monitor',
-    pathMatch: 'full',
-  },
+  // {
+  //   path: '',
+  //   redirectTo: 'monitor',
+  //   pathMatch: 'full',
+  // },
 ];
 
 @NgModule({

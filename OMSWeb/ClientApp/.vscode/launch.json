@@ -2,9 +2,9 @@
   "configurations": [
     {
       "type": "pwa-chrome",
-      "name": "http://localhost:5003/monitor/status",
+      "name": "http://localhost:5003/",
       "request": "launch",
-      "url": "http://localhost:5003/monitor/status"
+      "url": "http://localhost:5003/"
     }
   ]
 }

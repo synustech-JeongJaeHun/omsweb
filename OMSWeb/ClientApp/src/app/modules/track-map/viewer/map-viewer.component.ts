@@ -93,9 +93,8 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 
   private attachEvents() {
     this.auth.certUpdated$.pipe(takeUntil(this.destroy$)).subscribe((cert) => {
-      console.log('### cert changed ###', cert);
       this.router.navigateByUrl('/', { skipLocationChange: false }).then(() => {
-        this.router.navigate([cert ? '/monitor/status' : '/monitor/public']);
+        this.router.navigate([cert ? '/monitor/status' : '/']);
       });
     });
     this.statesSvc.toolbarStates$
