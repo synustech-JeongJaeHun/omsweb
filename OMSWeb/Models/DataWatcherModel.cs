@@ -20,6 +20,7 @@ namespace OMSWeb.Models
   }
   public class DataWatcherPayload
   {
+    public long? Timestamp { get; set; }
     public string Table { get; set; }
     public string Operation { get; set; }
     public int Id { get; set; }

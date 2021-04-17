@@ -84,10 +84,14 @@ namespace OMSWeb.Services
       };
     }
 
-    public async Task PushWatcherEventAsync(string jsonPayload)
+    public async Task PushWatcherEventAsync(long ts, string jsonPayload)
     {
+      // this.PrintLog(ts, $"01 data received);
       // Console.WriteLine($">> Watcher received data >>, {jsonPayload}");
       var payload = Newtonsoft.Json.JsonConvert.DeserializeObject<DataWatcherPayload>(jsonPayload, this.jsonSerializerSettings);
+      payload.Timestamp = ts;
+
+      this.PrintLog(ts, $"02 \tjson => {payload.Table}: {payload.Id}");
 
       // if (payload.Table == "vehicles")
       //   Console.WriteLine($">> Watcher VH >> {payload.Id}: {payload.Data.NextPoint}");
@@ -123,10 +127,25 @@ namespace OMSWeb.Services
       }
     }
 
+    private void PrintLog(long ts, string message, DataWatcherPayload payload = null)
+    {
+      if ((ts / (10 ^ 7)) % 100 == 0)
+      {
+        var span = new TimeSpan(DateTime.Now.Ticks - ts);
+        var milliseconds = span.TotalMilliseconds;
+        if (milliseconds > 500)
+          Console.ForegroundColor = ConsoleColor.Red;
+        else if (milliseconds > 100)
+          Console.ForegroundColor = ConsoleColor.Magenta;
+        Console.WriteLine($"[PUSH] ~ {milliseconds,8:N2}\t{message}");
+        Console.ResetColor();
+      }
+    }
+
     private async Task UpdateWithCacheAsync(DataChangeEventTarget targetInfo, DataWatcherPayload payload)
     {
-      this._cache.RemoveValue(targetInfo.CacheKey); // @NOTE 성능비교 : 무조건 해당 cache를 삭제한다.
-      // await this.UpdateCacheAsync(targetInfo, payload);
+      // this._cache.RemoveValue(targetInfo.CacheKey); // @NOTE 성능비교 : 무조건 해당 cache를 삭제한다.
+      await this.UpdateCacheAsync(targetInfo, payload);
 
       this.cacheEventMap.TryGetValue(targetInfo.CacheKey, out var cacheEvents);
       foreach (var e in cacheEvents)
@@ -162,7 +181,7 @@ namespace OMSWeb.Services
       }
       else
       {  // @NOTE vehicle인 경우에만 Data가 있다.
-        List<VehiclePosition> vehicles = this._trackSvc.GetVehicles();
+        List<VehiclePosition> vehicles = this._trackSvc.GetVehicles().ToList();
         if (vehicles != null && vehicles.Count > 0)
         {
           var matchIdx = vehicles.FindIndex(x => x.Id == payload.Id);
@@ -194,7 +213,10 @@ namespace OMSWeb.Services
         }
         if (needUpdate)
         {
-          this._cache.SetValue<List<VehiclePosition>>(CacheKeys.Vehicles, vehicles, DateTimeOffset.Now.AddMinutes(30));
+          lock (vehicles)
+          {
+            this._cache.SetValue<List<VehiclePosition>>(CacheKeys.Vehicles, vehicles, DateTimeOffset.Now.AddMinutes(30));
+          }
         }
       }
 
@@ -212,9 +234,10 @@ namespace OMSWeb.Services
       };
       if (!pushName.Contains("table", StringComparison.OrdinalIgnoreCase))
       {
-        if (pushName == "vehicleChanged")
-          Console.WriteLine($"## PUSH ## {pushName}: {payload.Id}, {body}");
+        // if (pushName == "vehicleChanged" && payload.Id % 10 == 1)
+        //   Console.WriteLine($"## PUSH ## {pushName}: {payload.Id}, {body}");
         await this._hub.Clients.All.SendAsync(pushName, meta, body);
+        this.PrintLog(payload.Timestamp.Value, $"03 \tsend => {pushName}: {payload.Id}");
         return;
       }
 
@@ -231,6 +254,7 @@ namespace OMSWeb.Services
         if ((now - buffer.Time).TotalMilliseconds > tableSendingInterval)
         {
           await this._hub.Clients.All.SendAsync(pushName, meta, body);
+          this.PrintLog(payload.Timestamp.Value, $"03 \tsend => {pushName}: {payload.Id}");
           // Console.WriteLine($"## [{DateTime.Now}] direct send >> {pushName}: {payload.Id}");
           buffer.Time = now;
           buffer.IsReserved = false;
@@ -242,6 +266,7 @@ namespace OMSWeb.Services
           await Task.Delay(tableSendingInterval).ContinueWith(async t =>
           {
             await this._hub.Clients.All.SendAsync(pushName, meta, body);
+            this.PrintLog(payload.Timestamp.Value + TimeSpan.FromMilliseconds(tableSendingInterval).Ticks, $"03.1\tdelay send => {pushName}: {payload.Id}");
             // Console.WriteLine($"## [{DateTime.Now}] --->> delayed send >> {pushName}: {payload.Id}");
             buffer.IsReserved = false;
             buffer.Time = DateTime.Now;

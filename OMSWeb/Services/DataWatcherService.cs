@@ -27,15 +27,13 @@ namespace OMSWeb.Services
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
       this.trackConn.Open();
-      // var cmd = trackConn.CreateCommand();
-      // cmd.CommandText = "LISTEN monitor_track";
-      // cmd.ExecuteNonQuery();
+      this.trackConn.Notification += this.NotificationReceivedAsync;
+
       using (var cmd = trackConn.CreateCommand())
       {
         cmd.CommandText = "LISTEN monitor_track";
         cmd.ExecuteNonQuery();
       }
-      this.trackConn.Notification += this.NotificationReceivedAsync;
 
       Console.WriteLine("### Data Watcher started");
       while (!stoppingToken.IsCancellationRequested)
@@ -65,6 +63,14 @@ namespace OMSWeb.Services
 
     private async void NotificationReceivedAsync(object sender, NpgsqlNotificationEventArgs e)
     {
+      var now = DateTime.Now;
+      var ts = now.Ticks;
+      // if ((ts / (10 ^ 7)) % 10 == 0)
+      // {
+      //   Console.ForegroundColor = ConsoleColor.DarkGray;
+      //   Console.WriteLine($"[PUSH] {0,8:N2} ~\t00 event => {now}");
+      //   Console.ResetColor();
+      // }
       // var payload = e.Payload;
       // if (payload.Contains("vehicles"))
       // {
@@ -73,7 +79,7 @@ namespace OMSWeb.Services
       // return;
       try
       {
-        await this._pushSvc.PushWatcherEventAsync(e.Payload);
+        await this._pushSvc.PushWatcherEventAsync(ts, e.Payload);
       }
       catch (System.Exception ex)
       {
