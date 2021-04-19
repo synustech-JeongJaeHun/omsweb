@@ -39,18 +39,21 @@ export interface ISegmentPart {
   coordTo: ICoordinateInfo;
   path?: string;
 }
-export interface ISegment {
+
+export interface ISegmentPath {
   id: number;
-  logicalId: string;
-  physicalId: string;
+  path: string;
   pointFrom: IPoint;
   pointTo: IPoint;
   type: string;
+}
+export interface ISegment extends ISegmentPath {
+  logicalId: string;
+  physicalId: string;
   location: string;
   direction: string;
 
   segmentParts: ISegmentPart[];
-  path: string;
   dirCoord: any;
   dirAngle: any;
   bezierPoints: any[];

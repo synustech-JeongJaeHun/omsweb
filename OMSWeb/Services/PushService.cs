@@ -223,7 +223,7 @@ namespace OMSWeb.Services
       return Task.CompletedTask;
     }
 
-    private async Task SendDBNotificationAsync(string pushName, DataWatcherPayload payload, object body)
+    private Task SendDBNotificationAsync(string pushName, DataWatcherPayload payload, object body)
     {
       var meta = new
       {
@@ -234,11 +234,9 @@ namespace OMSWeb.Services
       };
       if (!pushName.Contains("table", StringComparison.OrdinalIgnoreCase))
       {
-        // if (pushName == "vehicleChanged" && payload.Id % 10 == 1)
-        //   Console.WriteLine($"## PUSH ## {pushName}: {payload.Id}, {body}");
-        await this._hub.Clients.All.SendAsync(pushName, meta, body);
         this.PrintLog(payload.Timestamp.Value, $"03 \tsend => {pushName}: {payload.Id}");
-        return;
+        this._hub.Clients.All.SendAsync(pushName, meta, body);
+        return Task.CompletedTask;
       }
 
       if (!this.sendingMap.TryGetValue(pushName, out var buffer))
@@ -246,34 +244,30 @@ namespace OMSWeb.Services
         buffer = new NotificationSendingState();
         this.sendingMap.Add(pushName, buffer);
       }
-      // Console.WriteLine($"## [{DateTime.Now}] start >> {pushName}: {payload.Id} reserved: {buffer.IsReserved}");
       if (!buffer.IsReserved)
       {
         var now = DateTime.Now;
         var timeDiff = (now - buffer.Time).Milliseconds;
         if ((now - buffer.Time).TotalMilliseconds > tableSendingInterval)
         {
-          await this._hub.Clients.All.SendAsync(pushName, meta, body);
           this.PrintLog(payload.Timestamp.Value, $"03 \tsend => {pushName}: {payload.Id}");
-          // Console.WriteLine($"## [{DateTime.Now}] direct send >> {pushName}: {payload.Id}");
+          this._hub.Clients.All.SendAsync(pushName, meta, body);
           buffer.Time = now;
           buffer.IsReserved = false;
         }
         else
         {
           buffer.IsReserved = true;
-          // Console.WriteLine($"## [{DateTime.Now}] -> delay {tableSendingInterval} >> {pushName}: {payload.Id}");
-          await Task.Delay(tableSendingInterval).ContinueWith(async t =>
+          Task.Delay(tableSendingInterval).ContinueWith(t =>
           {
-            await this._hub.Clients.All.SendAsync(pushName, meta, body);
             this.PrintLog(payload.Timestamp.Value + TimeSpan.FromMilliseconds(tableSendingInterval).Ticks, $"03.1\tdelay send => {pushName}: {payload.Id}");
-            // Console.WriteLine($"## [{DateTime.Now}] --->> delayed send >> {pushName}: {payload.Id}");
+            this._hub.Clients.All.SendAsync(pushName, meta, body);
             buffer.IsReserved = false;
             buffer.Time = DateTime.Now;
           });
         }
       }
-      // Console.WriteLine($"## [{DateTime.Now}] end >> {pushName}: {payload.Id}");
+      return Task.CompletedTask;
     }
   }
 }

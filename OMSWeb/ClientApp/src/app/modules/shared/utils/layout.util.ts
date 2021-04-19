@@ -6,6 +6,7 @@ import {
   ISegmentSummary,
   ICoordinateInfo,
   ISegment,
+  ISegmentPath,
 } from '../../../models/map.interface';
 import { main_css } from './css-loader';
 
@@ -2541,7 +2542,7 @@ export namespace LayoutUtil {
     }
   }
   export function find_segment_within_points(pointIdList, segments) {
-    let segmentIdList = [];
+    let segmentIdList: ISegmentPath[] = [];
 
     for (let i = 0; i < pointIdList.length - 1; i++) {
       // Set from and to point id
@@ -2729,7 +2730,7 @@ export namespace LayoutUtil {
     return is_duplicated;
   }
 
-  export function remove_duplicate(original_array) {
+  export function remove_duplicate(original_array: any[]): any[] {
     let refined_array = [];
 
     for (let i = 0; i < original_array.length; i++) {
@@ -2745,7 +2746,11 @@ export namespace LayoutUtil {
     return refined_array;
   }
 
-  export function get_changes(old_array, new_array, exceptions) {
+  export function get_changes(
+    old_array: any[],
+    new_array: any[],
+    exceptions: any[]
+  ): any[] {
     let changes = [];
     let old_modified = [];
     let new_modified = [];

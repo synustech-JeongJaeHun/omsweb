@@ -89,6 +89,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
       this.loadingState = false;
     });
     this.attachEvents();
+    this.auth.isAuthenticated && this.attachStatusEvents();
   }
 
   private attachEvents() {
@@ -140,6 +141,28 @@ export class MapViewerComponent implements OnInit, OnDestroy {
       .subscribe((e: IDataChangeEvent) => {
         this.applyClusterChange(e);
       });
+  }
+
+  private attachStatusEvents() {
+    this.hubSvc.vehiclePathChanged$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((e: IDataChangeEvent) => this.applyVehiclePathChange(e));
+
+    this.hubSvc.stationChanged$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((e) => this.applyStationChange(e));
+
+    this.hubSvc.bufferChanged$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((e) => this.applyBufferChange(e));
+
+    this.hubSvc.mtlChanged$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((e) => this.applyMtlChange(e));
+
+    this.hubSvc.groupChanged$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((e) => this.applyGroupChange(e));
   }
 
   private drawMap() {
@@ -257,7 +280,32 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     const { targetId, targetType } = event;
     this.selectedObject = this.dataSvc.find_layout_object(targetType, targetId);
     this.viewer.init_selection(true);
-    this.viewer.highlight(targetType, targetId, main_css[targetType.toLowerCase()], 'LAYOUT', 'SELECT');
+    this.viewer.highlight(
+      targetType,
+      targetId,
+      main_css[targetType.toLowerCase()],
+      'LAYOUT',
+      'SELECT'
+    );
+  }
+
+  private updateSelectedObject(
+    objectType: string,
+    objects: any[] = [],
+    updateFiltering = true
+  ) {
+    if (
+      objects.length === 0 ||
+      !this.selectedObject ||
+      objectType !== this.selectedObject.objectType.toUpperCase()
+    )
+      return;
+    updateFiltering &&
+      (objects = objects
+        .filter((x) => x.status === 'UPDATE')
+        .map((x) => x.object));
+    const updatedObject = objects.find((x) => x.id === this.selectedObject.id);
+    updatedObject && (this.selectedObject = updatedObject);
   }
 
   private applyVehicleChange(event: IDataChangeEvent) {
@@ -272,14 +320,18 @@ export class MapViewerComponent implements OnInit, OnDestroy {
       return; // @TODO viewer가 아직 생성되지 않은 경우에는 지연 처리할 방법 구현
     }
     this.viewer.update_vehicles([data], operation, id, false);
-    this.viewer.update_popup(
-      this.dataSvc.data.vehicles.find((v) => v.id === id)
+    this.updateSelectedObject(
+      'VEHICLE',
+      [this.dataSvc.data.vehicles.find((v) => v.id === id)],
+      false
     );
+    this.trackIdSvc.update_vehicle_ids(data);
   }
   private applySegmentChange({ data }: IDataChangeEvent) {
     if (!this.viewer) return;
     const updated = this.dataSvc.getChangedSegments(data);
     this.viewer.update_segments(updated, false, false);
+    this.updateSelectedObject('SEGMENT', updated, true);
   }
   private applySegmentDisabledChange({
     data,
@@ -290,8 +342,10 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     this.viewer.update_disable_segment(data, operation, id);
     const selected = this.viewer.get_selected_objects('SEGMENT')[0];
     if (selected) {
-      this.viewer.update_popup(
-        this.viewer.find_layout_object('SEGMENT', selected.id)
+      this.updateSelectedObject(
+        'SEGMENT',
+        [this.dataSvc.find_layout_object('SEGMENT', selected.id)],
+        false
       );
     }
   }
@@ -299,5 +353,35 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     if (!this.viewer) return;
     const updated = this.dataSvc.getChangedClusters(data);
     this.viewer.update_clusters(updated, false, false);
+  }
+  private applyGroupChange({ data }: IDataChangeEvent): void {
+    if (!this.viewer) return;
+    const updated = this.dataSvc.getChangedGroups(data);
+    this.viewer.update_groups(updated, false, false);
+  }
+  private applyMtlChange({ data }: IDataChangeEvent): void {
+    if (!this.viewer) return;
+    const updated = this.dataSvc.getChangedMtls(data);
+    this.viewer.update_mtls(updated, false, false);
+    this.updateSelectedObject('MTL', updated, true);
+  }
+  private applyBufferChange({ data }: IDataChangeEvent): void {
+    if (!this.viewer) return;
+    const updated = this.dataSvc.getChangedBuffers(data);
+    this.viewer.update_buffers(updated, false, false);
+    this.updateSelectedObject('BUFFER', updated, true);
+  }
+  private applyStationChange({ data }: IDataChangeEvent): void {
+    if (!this.viewer) return;
+    const updated = this.dataSvc.getChangedStations(data);
+    this.viewer.update_stations(updated, false, false);
+    this.updateSelectedObject('STATION', updated, true);
+  }
+  private applyVehiclePathChange({ data }: IDataChangeEvent): void {
+    if (!this.viewer) return;
+    const updated = this.dataSvc.getChangedExpectedPaths(data);
+    this.dataSvc.updateExpectedPath(updated);
+
+    this.viewer.applyUpdatedExpectedPath();
   }
 }

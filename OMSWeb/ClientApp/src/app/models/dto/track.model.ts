@@ -19,9 +19,9 @@ export namespace Dto {
   }
   export interface IGroup {
     id: number;
-    logicalId: string;
-    color: string;
-    objects: any[];
+    logicalId?: string;
+    color?: string;
+    objects?: any[];
   }
   export interface IMTL {
     id: number;

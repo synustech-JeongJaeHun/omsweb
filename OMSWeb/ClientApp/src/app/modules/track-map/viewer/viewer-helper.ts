@@ -39,6 +39,8 @@ import { MapDataService } from '../map-data.service';
 import { IPreferences } from '../../../models/settings.model';
 import {} from '@oms/models/drawing.model';
 import { EventEmitter } from '@angular/core';
+import { Group } from '../../../models/group.model';
+import { ExpectedPath } from '../../../models/expected-path.model';
 export class ViewController {
   //#region properties
   private svg: any; // d3.Selection<d3.ContainerElement, unknown, HTMLElement, any>;
@@ -251,7 +253,7 @@ export class ViewController {
   private unassigned_module_scroll_bar;
 
   // Expected Path Variables ======================//
-  private expected_paths = [];
+  // private expected_paths = [];
 
   // Overlap Display Variables ======================//
   private overlap_display_objects = [];
@@ -278,6 +280,10 @@ export class ViewController {
 
   private get layout_data(): IViewerData {
     return this.dataSvc.data;
+  }
+
+  private get expected_paths(): ExpectedPath[] {
+    return this.dataSvc.expectedPaths;
   }
 
   constructor(
@@ -549,7 +555,7 @@ export class ViewController {
 
     this.d3_track = d3.select(`#${this.track_container_id}`);
     this.d3_track.on('click', () => {
-      this.statesSvc.actionState$.emit({type: 'backdrop'});
+      this.statesSvc.actionState$.emit({ type: 'backdrop' });
     });
 
     this.initVariables();
@@ -592,21 +598,148 @@ export class ViewController {
     this.drawMap('minimap');
     this.centerZoom('INSTANT');
   }
-  update_popup(updated_objects) {
-    // @TODO popup 관련 객체 처리
-    // console.warn('# 구현 필요 : update popup  #', updated_objects);
-    // if (typeof popup != 'undefined' && popup.side_panel && popup.side_panel.data && updated_objects) {
-    // if(!Array.isArray(updated_objects)) {
-    //     updated_objects = [updated_objects]
-    // }
-    // let updated_object = updated_objects.find(object => object.id === popup.side_panel.data.id)
-    // if (updated_object && updated_object.constructor === popup.side_panel.data.constructor && updated_object.id === popup.side_panel.data.id) {
-    //     // display_side_panel_popup(popup.side_panel.type, updated_object)
-    //     popup.side_panel.update_data(updated_object)
-    // }
-    // }
-  }
 
+  update_groups(update_list, is_apply_history, is_apply_revert) {
+    let update_objects = [];
+    let delete_objects = [];
+    let add_objects = [];
+    // Find updated group
+    for (let i = 0; i < update_list.length; i++) {
+      if (update_list[i].status === 'UPDATE') {
+        let update_obj = update_list[i].object;
+
+        // Update group
+        if (update_obj !== null) {
+          // Update object
+          update_objects.push(update_obj);
+        }
+      } else if (update_list[i].status === 'DELETE') {
+        let update_id = update_list[i].id;
+
+        // Update group
+        if (update_id !== null) {
+          let group = new Group({ id: update_id });
+          // Update object
+          delete_objects.push(group);
+        }
+      } else if (update_list[i].status === 'ADD') {
+        let update_obj = update_list[i].object;
+
+        // Update group
+        if (update_obj !== null) {
+          // Update object
+          add_objects.push(update_obj);
+        }
+      }
+    }
+    if (update_objects.length > 0)
+      this.update_layout_object(
+        update_objects,
+        is_apply_history,
+        is_apply_revert
+      );
+    if (delete_objects.length > 0)
+      this.delete_layout_object(delete_objects, false);
+    if (add_objects.length > 0)
+      this.add_layout_object(add_objects, null, false);
+
+    // Update any groups that may be affected by the change
+    for (let i = 0; i < update_list.length; i++) {
+      if (update_list[i].object) {
+        this.update_affected_groups_in_track(update_list[i].object, null);
+      }
+    }
+  }
+  private update_affected_groups_in_track(updated_group, groups) {
+    let effected_groups = [];
+
+    if (!groups) {
+      groups = this.layout_data.groups;
+    }
+
+    // remove ids from other groups that no longer belong here due to updated_group object ids
+    for (let type in updated_group.objects) {
+      for (let group of groups) {
+        if (group.id !== updated_group.id) {
+          for (let i = group.objects[type].length - 1; i > -1; i--) {
+            let object_id = group.objects[type][i];
+
+            // Check if the object id exist in this other group
+            if (updated_group.objects[type].indexOf(object_id) > -1) {
+              group.objects[type].splice(i, 1);
+              effected_groups.push(group);
+            }
+          }
+        }
+      }
+    }
+
+    return { effected_groups: effected_groups, groups: groups };
+  }
+  update_mtls(update_list, is_apply_history, is_apply_revert) {
+    let update_objects = [];
+    // Find updated mtl
+    for (let i = 0; i < update_list.length; i++) {
+      if (update_list[i].status === 'UPDATE') {
+        let mtl = update_list[i].object;
+
+        // Update mtl
+        if (mtl !== null) {
+          // Update object
+          update_objects.push(mtl);
+        }
+      }
+    }
+    this.update_layout_object(
+      update_objects,
+      is_apply_history,
+      is_apply_revert
+    );
+  }
+  update_buffers(update_list, is_apply_history, is_apply_revert) {
+    let update_objects = [];
+    // Find updated buffer
+    for (let i = 0; i < update_list.length; i++) {
+      if (update_list[i].status === 'UPDATE') {
+        let buffer = update_list[i].object;
+
+        buffer.set_direction_attr(this.get_layout_objects('SEGMENT'));
+
+        // Update buffer
+        if (buffer !== null) {
+          // Update object
+          update_objects.push(buffer);
+        }
+      }
+    }
+    this.update_layout_object(
+      update_objects,
+      is_apply_history,
+      is_apply_revert
+    );
+  }
+  update_stations(update_list, is_apply_history, is_apply_revert) {
+    let update_objects = [];
+    // Find updated station
+    for (let i = 0; i < update_list.length; i++) {
+      if (update_list[i].status === 'UPDATE') {
+        let station = update_list[i].object;
+
+        station.set_direction_attr(this.get_layout_objects('SEGMENT'));
+
+        // Update station
+        if (station !== null) {
+          // Update object
+          update_objects.push(station);
+        }
+      }
+    }
+    this.update_layout_object(
+      update_objects,
+      is_apply_history,
+      is_apply_revert
+    );
+  }
   update_vehicles(
     raw_data: Dto.IVehicle[],
     operation,
@@ -995,7 +1128,7 @@ export class ViewController {
   private initVariables() {
     this.map_has_changes = false;
     // this.vehicles = [];
-    this.expected_paths = [];
+    // this.expected_paths = [];
     // this.layout_data = {};
     this.minimap_data = {};
     this.geometry = {};
@@ -3928,25 +4061,6 @@ export class ViewController {
       height: Math.abs(maxY - minY),
     };
   }
-  // @TODO move to data service
-  // private convertExpectedPath(
-  //   vehicle_paths: any[],
-  //   segments: Segment[]
-  // ): any[] {
-  //   let paths = [];
-
-  //   for (let expected_path of vehicle_paths) {
-  //     let path: any = {};
-  //     path.point_list = expected_path.path.split(',');
-  //     path.path_segments = LayoutUtil.find_segment_within_points(
-  //       path.point_list,
-  //       segments
-  //     );
-  //     path.id = expected_path.id;
-  //     paths.push(path);
-  //   }
-  //   return paths;
-  // }
 
   init_hover_tag(target_id: any) {
     let hover_tag_dom = '<label id="hover_tag"></label>';
@@ -10890,8 +11004,7 @@ export class ViewController {
   onPrimaryMouseClick(targetType: string, targetId: number, groupType: string) {
     if (this.tool_type === 'SELECT') {
       // this.editor_dom_clicked(targetType, targetId, groupType); // @NOTE for editor
-    }
-    else {
+    } else {
       this.dom_clicked(targetType, targetId, groupType);
     }
   }
@@ -10921,68 +11034,68 @@ export class ViewController {
   }
 
   dom_clicked(object_type: string, object_id: any, group_type: string) {
-      // Exit function if clicked on an already selected object
-      if (
-        this.selected_objects[0] &&
-        this.selected_objects[0].id === object_id &&
-        this.selected_objects[0].objectType.toUpperCase() === object_type
-      ) {
-        return;
+    // Exit function if clicked on an already selected object
+    if (
+      this.selected_objects[0] &&
+      this.selected_objects[0].id === object_id &&
+      this.selected_objects[0].objectType.toUpperCase() === object_type
+    ) {
+      return;
+    }
+
+    // Get clicked object
+    let layout_object = this.find_layout_object(object_type, object_id);
+
+    let need_popup = false;
+
+    this.init_selection(true);
+
+    // add current object to selected object
+    if (!this.is_sticky_mode) {
+      this.selected_objects.push(layout_object);
+    }
+
+    // Check mode
+    if (this.mode === 'VIEWER' || this.mode === 'PLAYBACK') {
+      // view this.mode
+      // @TODO check popup
+      // if (typeof popup !== 'undefined' && popup.side_panel) {
+      need_popup = true;
+      // }
+    }
+
+    if (object_type === 'VEHICLE') {
+      if (!this.get_show_vehicle_lines()) {
+        this.get_svg_class('VEHICLE').selectAll('.next, .command').remove();
       }
+      this.render_vehicle_line(
+        this.get_dom('VEHICLE', object_id, 'LAYOUT'),
+        this.find_layout_object('VEHICLE', object_id),
+        true
+      );
+    }
 
-      // Get clicked object
-      let layout_object = this.find_layout_object(object_type, object_id);
-
-      let need_popup = false;
-
-      this.init_selection(true);
-
-      // add current object to selected object
-      if (!this.is_sticky_mode) {
-        this.selected_objects.push(layout_object);
+    // Display popup
+    // @TODO pupup 관련
+    if (need_popup) {
+      if (this.selected_objects.length > 1) {
+        // Multiple object are selected
+        object_type = 'SELECT';
+        layout_object = null;
       }
+      this.display_side_panel_popup(object_type, layout_object);
+    }
 
-      // Check mode
-      if (this.mode === 'VIEWER' || this.mode === 'PLAYBACK') {
-        // view this.mode
-        // @TODO check popup
-        // if (typeof popup !== 'undefined' && popup.side_panel) {
-          need_popup = true;
-        // }
-      }
-
-      if (object_type === 'VEHICLE') {
-        if (!this.get_show_vehicle_lines()) {
-          this.get_svg_class('VEHICLE').selectAll('.next, .command').remove();
-        }
-        this.render_vehicle_line(
-          this.get_dom('VEHICLE', object_id, 'LAYOUT'),
-          this.find_layout_object('VEHICLE', object_id),
-          true
-        );
-      }
-
-      // Display popup
-      // @TODO pupup 관련
-      if (need_popup) {
-        if (this.selected_objects.length > 1) {
-          // Multiple object are selected
-          object_type = 'SELECT';
-          layout_object = null;
-        }
-        this.display_side_panel_popup(object_type, layout_object);
-      }
-
-      // highlight object
-      if (layout_object !== null && layout_object !== undefined) {
-        this.highlight_objects(
-          this.selected_objects,
-          group_type,
-          'SELECT',
-          'SMOOTH'
-        );
-      }
-}
+    // highlight object
+    if (layout_object !== null && layout_object !== undefined) {
+      this.highlight_objects(
+        this.selected_objects,
+        group_type,
+        'SELECT',
+        'SMOOTH'
+      );
+    }
+  }
   // editor_dom_clicked(object_type: string, object_id: any, group_type: string) {
   //   // log_event.log(`mode=${mode} type=${tool_type} modifier=${modifier_key}`);
 
@@ -12138,11 +12251,20 @@ export class ViewController {
     let expected_path_segment_objects = [];
     for (let expected_path of this.expected_paths) {
       expected_path_segment_objects = expected_path_segment_objects.concat(
-        expected_path.path_segments
+        expected_path.pathSegments
       );
     }
 
     return expected_path_segment_objects;
+  }
+  applyUpdatedExpectedPath() {
+    let path = '';
+
+    if (this.expected_paths.length > 0) {
+      path = this.get_combined_path(this.get_expected_path_segments());
+    }
+
+    this.update_expected_path_dom(path);
   }
 
   update_expected_path_dom(path: string) {

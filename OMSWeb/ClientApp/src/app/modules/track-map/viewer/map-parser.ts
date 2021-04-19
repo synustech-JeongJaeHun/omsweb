@@ -72,7 +72,7 @@ export class MapParser {
       return models;
     }, []);
   }
-  private parseMtls(mapType: MapTypes, rows: Dto.IMTL[]): MTL[] {
+  parseMtls(mapType: MapTypes, rows: Dto.IMTL[]): MTL[] {
     if (!rows) return [];
     rows = this.inject_group_data('mtl', rows);
     return rows.reduce((models, row) => {
@@ -87,7 +87,7 @@ export class MapParser {
       return models;
     }, []);
   }
-  private parseBuffers(mapType: MapTypes, rows: Dto.IBuffer[]): Buffer[] {
+  parseBuffers(mapType: MapTypes, rows: Dto.IBuffer[]): Buffer[] {
     if (!rows) return [];
     rows = this.inject_group_data('buffer', rows);
     const segments = this.layout_data.segments;
@@ -105,7 +105,7 @@ export class MapParser {
     }, []);
   }
 
-  private parseStations(mapType: MapTypes, rows: Dto.IStation[]): Station[] {
+  parseStations(mapType: MapTypes, rows: Dto.IStation[]): Station[] {
     if (!rows) return [];
     // Inject groups data into stations data
     rows = this.inject_group_data('station', rows);
@@ -152,7 +152,7 @@ export class MapParser {
     return objects;
   }
 
-  private parseGroups(mapType: MapTypes, rows: Dto.IGroup[] = []): Group[] {
+  parseGroups(mapType: MapTypes, rows: Dto.IGroup[] = []): Group[] {
     return rows.reduce((models, row) => {
       try {
         const { objects } = row;

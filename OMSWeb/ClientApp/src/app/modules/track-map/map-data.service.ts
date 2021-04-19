@@ -7,6 +7,7 @@ import { MapTypes } from '../../models/enums';
 import { IViewerData } from '../../models/map.interface';
 import { Segment } from '../../models/segment.model';
 import { Vehicle } from '../../models/vehicle.model';
+import { ExpectedPath } from '../../models/expected-path.model';
 import { LayoutUtil } from '../shared/utils/layout.util';
 import { MapParser } from './viewer/map-parser';
 
@@ -15,7 +16,7 @@ import { MapParser } from './viewer/map-parser';
 })
 export class MapDataService {
   data: IViewerData = {};
-  expectedPaths: any[] = [];
+  expectedPaths: ExpectedPath[] = [];
   stale_vehicles = [];
   geometry: IMapGeometry;
 
@@ -55,6 +56,53 @@ export class MapDataService {
     const oldData = this.data.clusters;
     const newData = this.parser.parseClusters(MapTypes.DB, rows);
     return LayoutUtil.get_changes(oldData, newData, []);
+  }
+  getChangedGroups(rows: Dto.IGroup[]): any[] {
+    const oldData = this.data.groups;
+    const newData = this.parser.parseGroups(MapTypes.DB, rows);
+    return LayoutUtil.get_changes(oldData, newData, []);
+  }
+  getChangedMtls(rows: Dto.IMTL[]): any[] {
+    const oldData = this.data.mtls;
+    const newData = this.parser.parseMtls(MapTypes.DB, rows);
+    return LayoutUtil.get_changes(oldData, newData, []);
+  }
+  getChangedBuffers(rows: Dto.IBuffer[]): any[] {
+    const oldData = this.data.buffers;
+    const newData = this.parser.parseBuffers(MapTypes.DB, rows);
+    return LayoutUtil.get_changes(oldData, newData, []);
+  }
+  getChangedStations(rows: Dto.IStation[]): any[] {
+    const oldData = this.data.stations;
+    const newData = this.parser.parseStations(MapTypes.DB, rows);
+    return LayoutUtil.get_changes(oldData, newData, []);
+  }
+  getChangedExpectedPaths(rows: any[]) {
+    const segments = this.data.segments;
+    if (!segments || segments.length === 0) return [];
+
+    const oldData = this.expectedPaths;
+    const newData = this.convertExpectedPath(rows, segments);
+    return LayoutUtil.get_changes(oldData, newData, []);
+  }
+  updateExpectedPath(updatedData: any[]) {
+    for (let update of updatedData) {
+      if (update.status === 'UPDATE') {
+        let matched_idx = this.expectedPaths.findIndex((path) => {
+          return path.id === update.object.id;
+        });
+
+        this.expectedPaths[matched_idx] = update.object;
+      } else if (update.status === 'DELETE') {
+        let matched_idx = this.expectedPaths.findIndex((path) => {
+          return path.id === update.id;
+        });
+
+        this.expectedPaths.splice(matched_idx, 1);
+      } else if (update.status === 'ADD') {
+        this.expectedPaths.push(update.object);
+      }
+    }
   }
   searchDestObjects(scopes: string[], value: string): Observable<any[]> {
     const result = [];
@@ -226,18 +274,17 @@ export class MapDataService {
   private convertExpectedPath(
     vehicle_paths: any[],
     segments: Segment[]
-  ): any[] {
-    let paths = [];
+  ): ExpectedPath[] {
+    let paths: ExpectedPath[] = [];
 
     for (let expected_path of vehicle_paths) {
-      let path: any = {};
-      path.point_list = expected_path.path.split(',');
-      path.path_segments = LayoutUtil.find_segment_within_points(
-        path.point_list,
+      const { id, path } = expected_path;
+      const pointList = path.split(',');
+      const pathSegments = LayoutUtil.find_segment_within_points(
+        pointList,
         segments
       );
-      path.id = expected_path.id;
-      paths.push(path);
+      paths.push(new ExpectedPath(id, pointList, pathSegments));
     }
     return paths;
   }
