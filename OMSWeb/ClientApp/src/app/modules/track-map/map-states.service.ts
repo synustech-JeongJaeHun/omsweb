@@ -17,9 +17,9 @@ import { SettingsService } from '../../services/settings.service';
   providedIn: 'root',
 })
 export class MapStatesService {
-  toolbarStates$ = new Subject<IMapToolbarToggleEvent>();
-  toolbarCommandStates$ = new Subject<IMapToolbarCommandEvent>();
-  configStates$ = new Subject<IMapConfigChangeEvent>();
+  toolbarToggleEvent$ = new Subject<IMapToolbarToggleEvent>();
+  toolbarCommandEvent$ = new Subject<IMapToolbarCommandEvent>();
+  configChangeEvent$ = new Subject<IMapConfigChangeEvent>();
   actionState$ = new EventEmitter<IMapMouseEvent>();
 
   get preferences(): ClientPreferences {
@@ -32,17 +32,17 @@ export class MapStatesService {
     const pref = this.preferences;
     pref.toggles[type] = value;
     pref.save();
-    this.toolbarStates$.next({ type, value });
+    this.toolbarToggleEvent$.next({ type, value });
   }
 
   commandToolbar(type: CommandKeyType, value?: any) {
-    this.toolbarCommandStates$.next({ type, value });
+    this.toolbarCommandEvent$.next({ type, value });
   }
 
   changeConfig(event: IMapConfigChangeEvent) {
     const pref = this.preferences;
     pref.map[event.type] = event.value;
     pref.save();
-    this.configStates$.next(event);
+    this.configChangeEvent$.next(event);
   }
 }

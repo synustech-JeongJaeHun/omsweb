@@ -397,7 +397,6 @@ button:focus {
   width: 100%;
 }
 
-
 .drag-handle {
   cursor: move;
 }
@@ -511,6 +510,32 @@ button.warn .mat-badge-warn .mat-badge-content {
     &.mat-warn {
       background-color: #ffdddb;
     }
+  }
+}
+
+mat-button-toggle-group {
+  font-size: 11px;
+
+  .mat-button-toggle-appearance-standard .mat-button-toggle-label-content {
+    line-height: 24px;
+  }
+
+  .mat-button-toggle-checked {
+    font-weight: bold;
+    background-color: #dae7ff;
+    color: var(--theme-primary-color) !important;
+  }
+}
+
+.mat-menu-panel {
+  min-width: 80px;
+
+  .mat-menu-content:not(:empty) {
+    padding: 0;
+  }
+  .mat-menu-item {
+    line-height: 24px;
+    height: 32px;
   }
 }
 

@@ -147,6 +147,8 @@
     "estop": "EStop",
     "reset": "Reset",
     "auto": "Auto",
+    "zcuGo": "ZCU Go",
+    "option": "Option",
 
     "resetAll": "Reset All",
     "autoAll": "Auto All",

@@ -27,117 +27,172 @@
 ></oms-map-toolbar>
 
 <div id="contextMenu" [hidden]="!showContextMenu" class="context-menu">
-  <div [ngSwitch]="'test'">
-    <ng-container *ngSwitchCase="'test'">
+  <div [ngSwitch]="currentContextEvent?.targetType">
+    <ng-container *ngSwitchCase="'SEGMENT'">
       <ng-container *ngTemplateOutlet="segmentContext"></ng-container>
+    </ng-container>
+    <ng-container *ngSwitchCase="'VEHICLE'">
+      <ng-container *ngTemplateOutlet="vehicleContext"></ng-container>
+    </ng-container>
+    <ng-container *ngSwitchCase="'BUFFER'">
+      <ng-container *ngTemplateOutlet="bufferContext"></ng-container>
+    </ng-container>
+    <ng-container *ngSwitchCase="'STATION'">
+      <ng-container *ngTemplateOutlet="stationContext"></ng-container>
+    </ng-container>
+    <ng-container *ngSwitchCase="'ZCU'">
+      <ng-container *ngTemplateOutlet="zcuContext"></ng-container>
     </ng-container>
     <div *ngSwitchDefault></div>
   </div>
 </div>
 
-<ng-template #segmentContext>
-  <div class="context-samples">
-    <mat-card class="context-card">
-      <mat-card-header>
-        <mat-card-title> Vehicle #2345 </mat-card-title>
-      </mat-card-header>
-      <mat-card-content class="context-form">
-        <button mat-button (click)="commandMenuTrigger.openMenu()">
+<ng-template #bufferContext>
+  <mat-card class="context-card">
+    <mat-card-header>
+      <mat-card-title>
+        {{ contextData.objectType }} #{{ contextData.id }}
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="context-form">
+      <button mat-stroked-button class="dense accent" color="primary">
+        {{ "names.setSource" | translate }}
+      </button>
+      <button mat-stroked-button class="dense accent" color="primary">
+        {{ "names.setDest" | translate }}
+      </button>
+    </mat-card-content>
+  </mat-card>
+</ng-template>
+
+<ng-template #vehicleContext>
+  <mat-card class="context-card">
+    <mat-card-header>
+      <mat-card-title>
+        {{ contextData.objectType }} #{{ contextData.id }}
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="context-form">
+      <button
+        mat-button
+        class="menu-trigger"
+        (click)="commandMenuTrigger.openMenu()"
+      >
+        {{ "names.command" | translate }}
+        <mat-icon>arrow_right</mat-icon>
+        <div
+          #commandMenuTrigger="matMenuTrigger"
+          [matMenuTriggerFor]="vehicleCommandMenu"
+        ></div>
+      </button>
+      <button
+        mat-button
+        class="menu-trigger"
+        (click)="optionMenuTrigger.openMenu()"
+      >
+        {{ "names.option" | translate }}
+        <mat-icon>arrow_right</mat-icon>
+        <div
+          #optionMenuTrigger="matMenuTrigger"
+          [matMenuTriggerFor]="vehicleOptionMenu"
+        ></div>
+      </button>
+      <!-- <mat-menu #vehicleActions="matMenu">
+        <button mat-menu-item [matMenuTriggerFor]="vehicleCommandMenu">
           Command
-          <div
-            #commandMenuTrigger="matMenuTrigger"
-            [matMenuTriggerFor]="vehicleCommandMenu"
-          ></div>
         </button>
-        <mat-menu #vehicleActions="matMenu">
-          <button mat-menu-item [matMenuTriggerFor]="vehicleCommandMenu">
-            Command
-          </button>
-        </mat-menu>
+      </mat-menu> -->
+    </mat-card-content>
+    <mat-menu #vehicleCommandMenu="matMenu">
+      <button mat-menu-item>{{ "names.auto" | translate }}</button>
+      <button mat-menu-item>{{ "names.reset" | translate }}</button>
+      <button mat-menu-item>{{ "names.estop" | translate }}</button>
+      <button mat-menu-item>{{ "names.zcuGo" | translate }}</button>
+    </mat-menu>
+    <mat-menu #vehicleOptionMenu="matMenu">
+      <button mat-menu-item>{{ "names.pushEnable" | translate }}</button>
+      <button mat-menu-item>{{ "names.hostOrderEnable" | translate }}</button>
+      <button mat-menu-item>{{ "names.railOut" | translate }}</button>
+    </mat-menu>
+  </mat-card>
+</ng-template>
 
-        <mat-menu #vehicleCommandMenu="matMenu">
-          <button mat-menu-item>Auto</button>
-          <button mat-menu-item>Reset</button>
-          <button mat-menu-item>EStop</button>
-        </mat-menu>
-      </mat-card-content>
-    </mat-card>
+<ng-template #stationContext>
+  <mat-card class="context-card">
+    <mat-card-header>
+      <mat-card-title>
+        {{ contextData.objectType }} #{{ contextData.id }}
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="context-form">
+      <button mat-stroked-button class="dense accent" color="primary">
+        {{ "names.setSource" | translate }}
+      </button>
+      <button mat-stroked-button class="dense accent" color="primary">
+        {{ "names.setDest" | translate }}
+      </button>
+    </mat-card-content>
+  </mat-card>
+</ng-template>
 
-    <mat-card class="context-card">
-      <mat-card-header>
-        <mat-card-title> ZCU #2345 </mat-card-title>
-      </mat-card-header>
-      <mat-card-content class="context-form">
-        <mat-form-field>
-          <mat-label>{{ "names.hardware" | translate }}</mat-label>
-          <input matInput type="test" value="hardware" />
-        </mat-form-field>
-        <mat-form-field>
-          <mat-label>{{ "names.software" | translate }}</mat-label>
-          <input matInput type="test" value="software" />
-        </mat-form-field>
+<ng-template #zcuContext>
+  <mat-card class="context-card">
+    <mat-card-header>
+      <mat-card-title>
+        {{ contextData.objectType }} #{{ contextData.id }}
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="context-form">
+      <mat-button-toggle-group
+        class="form-row-start"
+        name="type"
+        aria-label="Type"
+      >
+        <mat-button-toggle value="hw">HW</mat-button-toggle>
+        <mat-button-toggle value="sw">SW</mat-button-toggle>
+      </mat-button-toggle-group>
 
-        <mat-slide-toggle color="primary">{{
-          "names.use" | translate
-        }}</mat-slide-toggle>
-      </mat-card-content>
-    </mat-card>
+      <mat-slide-toggle color="primary">{{
+        "names.use" | translate
+      }}</mat-slide-toggle>
+    </mat-card-content>
+  </mat-card>
+</ng-template>
 
-    <mat-card class="context-card">
-      <mat-card-header>
-        <mat-card-title> Buffer #2345 </mat-card-title>
-      </mat-card-header>
-      <mat-card-content class="context-form">
-        <button mat-stroked-button class="dense accent" color="primary">
-          {{ "names.setSource" | translate }}
-        </button>
-        <button mat-stroked-button class="dense accent" color="primary">
-          {{ "names.setDest" | translate }}
-        </button>
-      </mat-card-content>
-    </mat-card>
+<ng-template #segmentContext>
+  <mat-card class="context-card">
+    <mat-card-header>
+      <mat-card-title>
+        {{ contextData.objectType }} #{{ contextData.id }}
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="context-form">
+      <mat-form-field>
+        <mat-label>{{ "names.speed" | translate }}</mat-label>
+        <input
+          #segmentSpeed
+          matInput
+          type="number"
+          [value]="contextData.speed"
+          (change)="onChangeSegmentProperty('speed', segmentSpeed.value)"
+          step="10"
+          min="10"
+        />
+        <!-- <span matSuffix>%</span> -->
+      </mat-form-field>
 
-    <mat-card class="context-card">
-      <mat-card-header>
-        <mat-card-title> Station #2345 </mat-card-title>
-      </mat-card-header>
-      <mat-card-content class="context-form">
-        <button mat-stroked-button class="dense accent" color="primary">
-          {{ "names.setSource" | translate }}
-        </button>
-        <button mat-stroked-button class="dense accent" color="primary">
-          {{ "names.setDest" | translate }}
-        </button>
-      </mat-card-content>
-    </mat-card>
-
-    <mat-card class="context-card">
-      <mat-card-header>
-        <mat-card-title> Segment #2345 </mat-card-title>
-      </mat-card-header>
-      <mat-card-content class="context-form">
-        <mat-form-field>
-          <mat-label>{{ "names.speed" | translate }}</mat-label>
-          <input
-            matInput
-            type="number"
-            value="100"
-            step="10"
-            min="10"
-            max="100"
-          />
-          <span matSuffix>%</span>
-        </mat-form-field>
-
-        <mat-slide-toggle color="primary">{{
-          "names.use" | translate
-        }}</mat-slide-toggle>
-        <mat-slide-toggle color="primary">{{
-          "names.home" | translate
-        }}</mat-slide-toggle>
-      </mat-card-content>
-    </mat-card>
-  </div>
+      <mat-slide-toggle
+        color="primary"
+        (change)="onChangeSegmentProperty('use', $event.checked)"
+        >{{ "names.use" | translate }}</mat-slide-toggle
+      >
+      <mat-slide-toggle
+        color="primary"
+        (change)="onChangeSegmentProperty('home', $event.checked)"
+        >{{ "names.home" | translate }}</mat-slide-toggle
+      >
+    </mat-card-content>
+  </mat-card>
 </ng-template>
 
 <div id="tooltipView" class="tooltip-view"></div>

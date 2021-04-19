@@ -23,8 +23,8 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatSelectModule } from '@angular/material/select';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatMenuModule } from '@angular/material/menu';
-import {MatAutocompleteModule} from '@angular/material/autocomplete';
-
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 @NgModule({
   exports: [
     MatButtonModule,
@@ -49,6 +49,7 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
     MatExpansionModule,
     MatMenuModule,
     MatAutocompleteModule,
+    MatButtonToggleModule,
     OverlayModule,
     DragDropModule,
   ],

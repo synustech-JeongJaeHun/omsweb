@@ -19,7 +19,6 @@ import { IDataChangeEvent } from '../../../models/notification.model';
 import { IMapMouseEvent } from '../../../models/map.interface';
 import { AuthService } from '../../../services/auth.service';
 import { main_css } from '../../shared/utils/css-loader';
-
 @Component({
   selector: 'oms-map-viewer',
   templateUrl: './map-viewer.component.html',
@@ -92,13 +91,19 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     this.auth.isAuthenticated && this.attachStatusEvents();
   }
 
+  onChangeSegmentProperty(name: string, value: any) {
+    console.log('## changed segment property >>', { name, value });
+    // @TODO: change segment prop api 연동
+    console.warn('TODO: change segment prop api 연동');
+  }
+
   private attachEvents() {
     this.auth.certUpdated$.pipe(takeUntil(this.destroy$)).subscribe((cert) => {
       this.router.navigateByUrl('/', { skipLocationChange: false }).then(() => {
         this.router.navigate([cert ? '/monitor/status' : '/']);
       });
     });
-    this.statesSvc.toolbarStates$
+    this.statesSvc.toolbarToggleEvent$
       .pipe(takeUntil(this.destroy$))
       .subscribe((event) => {
         if (event.type === 'minimap') {
@@ -109,12 +114,12 @@ export class MapViewerComponent implements OnInit, OnDestroy {
           this.viewer?.onChangeVisibility(event);
         }
       });
-    this.statesSvc.toolbarCommandStates$
+    this.statesSvc.toolbarCommandEvent$
       .pipe(takeUntil(this.destroy$))
       .subscribe((event) => {
         this.viewer.onCommandAction(event);
       });
-    this.statesSvc.configStates$
+    this.statesSvc.configChangeEvent$
       .pipe(takeUntil(this.destroy$))
       .subscribe((event) => {
         this.viewer.onChangeConfig(event);
@@ -179,9 +184,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     this.viewer.update_vehicles(this.omsData.vehicles, 'INSERT', null, false);
     this.trackIdSvc.extract_id_from_track(this.dataSvc.data);
 
-    // this.viewer.onMouseEvent$
-    //   .pipe(takeUntil(this.destroy$))
-    //   .subscribe((event) => this.onMapMouseEvent(event));
     this.statesSvc.actionState$
       .pipe(takeUntil(this.destroy$))
       .subscribe((event) => this.onMapMouseEvent(event));
@@ -214,6 +216,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   private openContextMenu(event: IMapMouseEvent) {
     const { targetId, targetType } = event;
     this.contextData = this.dataSvc.find_layout_object(targetType, targetId);
+    console.info('@@ contextData >>', this.contextData);
     const leftThreshold = window.innerWidth - 200;
     const { pageX: x, pageY: y } = d3.event;
 
@@ -222,10 +225,12 @@ export class MapViewerComponent implements OnInit, OnDestroy {
       .style('top', `${y - this._popupOffsetY}px`);
 
     if (leftThreshold > x) {
-      container.style('left', `${x}px`).style('right', 'inherit');
+      container
+        .style('left', `${x + this._popupOffsetX}px`)
+        .style('right', 'inherit');
     } else {
       container
-        .style('right', `${window.innerWidth - x}px`)
+        .style('right', `${window.innerWidth - x + this._popupOffsetX}px`)
         .style('left', 'inherit');
     }
     this.currentContextEvent = event;
@@ -266,7 +271,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
         .style('right', 'inherit');
     } else {
       container
-        .style('right', `${window.innerWidth - x - this._popupOffsetX}px`)
+        .style('right', `${window.innerWidth - x + this._popupOffsetX}px`)
         .style('left', 'inherit');
     }
   }
