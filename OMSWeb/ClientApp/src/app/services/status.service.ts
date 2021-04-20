@@ -19,9 +19,6 @@ export class StatusService {
 
   getTrack(): Observable<Dto.ITrackData> {
     return this.http.get<Dto.ITrackData>(`${this.baseUrl}/tracks`);
-    // @TODO assets/json/status-track.json 파일 삭제
-    // console.error('# form status-track.json file - for test #');
-    // return this.http.get('/assets/json/status-track.json');
   }
 
   getVehicles(): Observable<Dto.IVehicleTrackData> {
@@ -44,32 +41,4 @@ export class StatusService {
       }),
     });
   }
-
-  // orderStatus(): Observable<IPaginatedResult<IOrderStatusRow>> {
-  //   console.error('# form order-status.json file - for test #');
-  //   return this.http.get<any>('/assets/json/order-status.json').pipe(
-  //     // @TODO api 작업후에는 삭제
-  //     map((res) => {
-  //       return {
-  //         total: parseInt(res.recordsTotal),
-  //         filtered: parseInt(res.recordsFiltered),
-  //         items: res.data,
-  //       };
-  //     })
-  //   );
-  // }
-
-  // vehicleStatus(): Observable<IPaginatedResult<IVehicleStatusRow>> {
-  //   console.error('# form vehicle-status.json file - for test #');
-  //   return this.http.get<any>('/assets/json/vehicle-status.json').pipe(
-  //     // @TODO api 작업후에는 삭제
-  //     map((res) => {
-  //       return {
-  //         total: parseInt(res.recordsTotal),
-  //         filtered: parseInt(res.recordsFiltered),
-  //         items: res.data,
-  //       };
-  //     })
-  //   );
-  // }
 }
