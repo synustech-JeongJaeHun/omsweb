@@ -104,15 +104,29 @@
       </mat-menu> -->
     </mat-card-content>
     <mat-menu #vehicleCommandMenu="matMenu">
-      <button mat-menu-item>{{ "names.auto" | translate }}</button>
-      <button mat-menu-item>{{ "names.reset" | translate }}</button>
-      <button mat-menu-item>{{ "names.estop" | translate }}</button>
-      <button mat-menu-item>{{ "names.zcuGo" | translate }}</button>
+      <button mat-menu-item (click)="onVehicleCommand('initialize')">
+        {{ "names.auto" | translate }}
+      </button>
+      <button mat-menu-item (click)="onVehicleCommand('reset')">
+        {{ "names.reset" | translate }}
+      </button>
+      <button mat-menu-item (click)="onVehicleCommand('stop')">
+        {{ "names.estop" | translate }}
+      </button>
+      <button mat-menu-item (click)="onVehicleCommand('zcu')">
+        {{ "names.zcuGo" | translate }}
+      </button>
     </mat-menu>
     <mat-menu #vehicleOptionMenu="matMenu">
-      <button mat-menu-item>{{ "names.pushEnable" | translate }}</button>
-      <button mat-menu-item>{{ "names.hostOrderEnable" | translate }}</button>
-      <button mat-menu-item>{{ "names.railOut" | translate }}</button>
+      <button mat-menu-item (click)="onVehicleCommand('push:enable')">
+        {{ "names.pushEnable" | translate }}
+      </button>
+      <button mat-menu-item (click)="onVehicleCommand('hostOrder:enable')">
+        {{ "names.hostOrderEnable" | translate }}
+      </button>
+      <button mat-menu-item (click)="onVehicleCommand('rail_out')">
+        {{ "names.railOut" | translate }}
+      </button>
     </mat-menu>
   </mat-card>
 </ng-template>

@@ -19,6 +19,8 @@ import { IDataChangeEvent } from '../../../models/notification.model';
 import { IMapMouseEvent } from '../../../models/map.interface';
 import { AuthService } from '../../../services/auth.service';
 import { main_css } from '../../shared/utils/css-loader';
+import { MessagesService } from '../../../services/messages.service';
+import { IVehicleCommandMessage } from '../../../models/command.model';
 @Component({
   selector: 'oms-map-viewer',
   templateUrl: './map-viewer.component.html',
@@ -63,6 +65,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     private trackIdSvc: TrackIdService,
     private statesSvc: MapStatesService,
     private hubSvc: HubService,
+    private messageSvc: MessagesService,
     private router: Router,
     private dialog: MatDialog
   ) {}
@@ -95,6 +98,24 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     console.log('## changed segment property >>', { name, value });
     // @TODO: change segment prop api 연동
     console.warn('TODO: change segment prop api 연동');
+  }
+  onVehicleCommand(name: string) {
+    let commandMessage: IVehicleCommandMessage;
+    switch (name) {
+      case 'push:enable':
+        commandMessage = { action: 'set_behavior', canBePushed: true };
+        break;
+      case 'hostOrder:enable':
+        console.warn('TODO host order enable message 정의 필요');
+        commandMessage = {action: 'set_behavior'};  // @TODO 메세지 정의 필요
+        break;
+      default:
+        commandMessage = { action: name };
+        break;
+    }
+    this.messageSvc
+      .sendVehicleCommand(commandMessage, [this.contextData])
+      .subscribe();
   }
 
   private attachEvents() {
