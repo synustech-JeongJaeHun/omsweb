@@ -7,6 +7,7 @@ import {
 import { AuthService } from '../../../services/auth.service';
 import { LegendDialogComponent } from '../dialogs/legend-dialog.component';
 import { LoginDialogComponent } from '../dialogs/login-dialog.component';
+import { ProfileDialogComponent } from '../dialogs/profile-dialog.component';
 
 @Component({
   selector: 'oms-gnb-actions',
@@ -50,5 +51,12 @@ export class GnbActionsComponent implements OnInit {
   }
   onLogout() {
     this.auth.logout();
+  }
+  onProfile() {
+    this.dialog.open(ProfileDialogComponent, {
+      width: '350px',
+      hasBackdrop: true,
+      disableClose: true,
+    });
   }
 }

@@ -12,8 +12,12 @@
       <mat-icon>person</mat-icon> {{ user?.firstName }} {{ user?.lastName }}
     </button>
     <mat-menu #accountMenu="matMenu" xPosition="before">
-      <button mat-menu-item><mat-icon>account_circle</mat-icon> Account</button>
-      <button mat-menu-item (click)="onLogout()"><mat-icon>logout</mat-icon> Logout</button>
+      <button mat-menu-item (click)="onProfile()">
+        <mat-icon>account_circle</mat-icon> {{ "names.profile" | translate }}
+      </button>
+      <button mat-menu-item (click)="onLogout()">
+        <mat-icon>logout</mat-icon> {{ "names.logout" | translate }}
+      </button>
     </mat-menu>
   </ng-container>
   <ng-container *ngSwitchDefault>

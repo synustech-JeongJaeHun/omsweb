@@ -7,6 +7,8 @@
     "settings": "Settings",
     "legend": "Legend",
     "login": "Login",
+    "profile": "Profile",
+    "logout": "Logout",
 
     "vehicle": "Vehicle",
     "cluster": "Cluster",
@@ -185,9 +187,14 @@
     "selectDest": "Select Dest",
     "carrier": "Carrier",
 
-    "email": "Email",
+    "email": "User ID",
     "password": "Password",
+    "newPassword": "New Password",
+    "passwordConfirm": "Confirm Password",
     "signup": "Sign Up",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "save": "Save",
 
     "period": "Period",
     "snapshots": "Snapshots",
@@ -233,6 +240,8 @@
     "selectObjectType": "Select Type",
     "searchId": "Search ID",
     "noObjectSelected": "Nothing is selected.",
-    "required": "{{field}} is required."
+    "required": "{{field}} is required.",
+    "minLength": "Minimum length is {{minLength}}.",
+    "passwordMissMatch": "Password is miss match."
   }
 }

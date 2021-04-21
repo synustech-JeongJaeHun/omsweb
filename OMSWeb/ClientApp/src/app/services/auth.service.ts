@@ -2,13 +2,19 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 
-import { ILoginForm, ISessionUser, ISimpleUser, IUserToken } from '../models/user.model';
+import {
+  ILoginForm,
+  IProfileForm,
+  ISessionUser,
+  ISimpleUser,
+  IUserToken,
+} from '../models/user.model';
 import { Observable, of, Subject, throwError } from 'rxjs';
 
 import { ITokenResult } from '../models/base.model';
 import { StorageUtil } from '../modules/shared/utils/storage.util';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -54,6 +60,20 @@ export class AuthService {
     this.clearSession();
     this.router.navigate(['/']);
     return of();
+  }
+
+  updateProfile(form: IProfileForm): Observable<void> {
+    return this.http
+      .patch<void>(`/api/users/profile`, form)
+      .pipe(
+        tap(() => {
+          this._currentUser.firstName = form.firstName;
+          this._currentUser.lastName = form.lastName;
+          this._currentUser.email = form.email;
+
+          this.certUpdated$.next(this._currentUser);
+        })
+      );
   }
 
   private parseToken(checkCurrentTime = false) {

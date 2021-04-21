@@ -21,6 +21,7 @@ import { AlertDialogComponent } from './dialogs/alert-dialog.component';
 import { LegendDialogComponent } from './dialogs/legend-dialog.component';
 import { LoginDialogComponent } from './dialogs/login-dialog.component';
 import { UnitSelectorComponent } from './forms/unit-selector.component';
+import { ProfileDialogComponent } from './dialogs/profile-dialog.component';
 
 const inOutModules = [
   FormsModule,
@@ -41,6 +42,7 @@ const inOutModules = [
     LegendDialogComponent,
     LoginDialogComponent,
     UnitSelectorComponent,
+    ProfileDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -69,6 +71,7 @@ const inOutModules = [
     EnumStringPipe,
     LoginDialogComponent,
     UnitSelectorComponent,
+    ProfileDialogComponent,
   ],
 })
 export class SharedModule {}

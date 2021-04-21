@@ -5,7 +5,6 @@ export interface ILoginForm {
   password: string;
   remember?: boolean;
 }
-
 export interface ISimpleUser {
   id: string;
   email: string;
@@ -19,3 +18,10 @@ export interface ISessionUser extends ISimpleUser {
 }
 
 export interface IUserToken extends ISessionUser, ITokenStamp {}
+
+export interface IProfileForm {
+  email: string;
+  firstName: string;
+  lastName: string;
+  password?: string;
+}

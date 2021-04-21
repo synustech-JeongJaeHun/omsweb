@@ -9,9 +9,20 @@ namespace OMSWeb.Models
 
   public class LoginFormDto
   {
-		[Required]
+    [Required]
     public string Email { get; set; }
-		[Required]
+    [Required]
+    public string Password { get; set; }
+  }
+
+  public class ProfileFormDto
+  {
+    [Required]
+    public string Email { get; set; }
+    [Required]
+    public string FirstName { get; set; }
+    [Required]
+    public string LastName { get; set; }
     public string Password { get; set; }
   }
 }
