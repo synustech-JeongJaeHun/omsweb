@@ -4,7 +4,7 @@ import { Observable, of } from 'rxjs';
 import { IMapGeometry } from '../../models/drawing.model';
 import { Dto } from '../../models/dto/track.model';
 import { MapTypes } from '../../models/enums';
-import { IViewerData } from '../../models/map.interface';
+import { ILookupUnit, IViewerData } from '../../models/map.interface';
 import { Segment } from '../../models/segment.model';
 import { Vehicle } from '../../models/vehicle.model';
 import { ExpectedPath } from '../../models/expected-path.model';
@@ -104,19 +104,26 @@ export class MapDataService {
       }
     }
   }
-  searchDestObjects(scopes: string[], value: string): Observable<any[]> {
-    const result = [];
+  lookupUnits(
+    scopes: string[],
+    value: string
+  ): Observable<ILookupUnit[]> {
+    const result: ILookupUnit[] = [];
     if (scopes.includes('stations')) {
       const item = this.data.stations.find((x) => x.id.toString() === value);
-      item && result.push(item);
+      item && result.push(this.toTransferLocation(item));
     }
     if (scopes.includes('points')) {
       const item = this.data.points.find((x) => x.id.toString() === value);
-      item && result.push(item);
+      item && result.push(this.toTransferLocation(item));
     }
     if (scopes.includes('buffers')) {
       const item = this.data.buffers.find((x) => x.id.toString() === value);
-      item && result.push(item);
+      item && result.push(this.toTransferLocation(item));
+    }
+    if (scopes.includes('vehicles')) {
+      const item = this.data.vehicles.find((x) => x.id.toString() === value);
+      item && result.push(this.toTransferLocation(item));
     }
     return of(result);
   }
@@ -269,6 +276,11 @@ export class MapDataService {
       update,
       updatedVehicles: updated_vehicles,
     };
+  }
+
+  private toTransferLocation(item: any): ILookupUnit {
+    const { id, objectType } = item;
+    return { id, objectType };
   }
 
   private convertExpectedPath(

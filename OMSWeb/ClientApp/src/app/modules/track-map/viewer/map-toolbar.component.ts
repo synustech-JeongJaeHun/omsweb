@@ -153,7 +153,11 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
 
     this._cmdDlg.afterClosed().subscribe((payload: any) => {
       if (!payload) return;
-      this.stateSvc.commandToolbar('manualOrder', payload);
+
+      this.messageSvc.sendOrderCommand(payload).subscribe(() => {
+        this.stateSvc.resetTransferCommandState();
+      });
+      // this.stateSvc.commandToolbar('manualOrder', payload);
     });
   }
 

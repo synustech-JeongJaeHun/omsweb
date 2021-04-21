@@ -55,9 +55,9 @@ export class DestCommandComponent implements OnInit {
       debounceTime(300),
       distinctUntilChanged(),
       switchMap((value) =>
-        this.dataSvc.searchDestObjects(this._searchScopes, value)
+        this.dataSvc.lookupUnits(this._searchScopes, value)
       ),
-      mergeMap((list) => of(list))
+      // mergeMap((list) => of(list))
     );
   }
 

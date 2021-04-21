@@ -4,60 +4,67 @@
       <mat-tab-group
         class="tab-group"
         [(selectedIndex)]="currentTab"
+        (selectedIndexChange)="onTabChanged()"
         animationDuration="0ms"
       >
-        <mat-tab [label]="'names.command-move' | translate"></mat-tab>
-        <mat-tab [label]="'names.command-fromTo' | translate"></mat-tab>
-        <mat-tab [label]="'names.command-from' | translate"></mat-tab>
-        <mat-tab [label]="'names.command-to' | translate"></mat-tab>
+        <mat-tab
+          *ngFor="let tab of tabs"
+          [label]="'names.command-' + tab | translate"
+        ></mat-tab>
       </mat-tab-group>
       <div class="form">
         <div class="form-row">
-          <dx-select-box
-            [disabled]="
-              isAuto === true && (currentTab === 1 || currentTab === 2)
-            "
+          <oms-unit-selector
+            [findScopes]="['vehicles']"
+            [disabled]="commandState.vehicleDisabled"
+            [(selectedUnit)]="commandState.vehicle"
             [placeholder]="'names.selectVehicle' | translate"
-            [dataSource]="vehicleList"
-            [searchEnabled]="true"
-            [(value)]="selectedVehicle"
+          ></oms-unit-selector>
+        </div>
+        <div class="form-row">
+          <oms-unit-selector
+            [findScopes]="['points']"
+            [disabled]="commandState.pointDisabled"
+            [(selectedUnit)]="commandState.point"
+            [placeholder]="'names.selectPoint' | translate"
+          ></oms-unit-selector>
+        </div>
+        <div class="form-row">
+          <oms-unit-selector
+            [disabled]="commandState.sourceDisabled"
+            [(selectedUnit)]="commandState.source"
+            [placeholder]="'names.selectSource' | translate"
+          ></oms-unit-selector>
+        </div>
+        <div class="form-row">
+          <oms-unit-selector
+            [disabled]="commandState.destDisabled"
+            [(selectedUnit)]="commandState.dest"
+            [placeholder]="'names.selectDest' | translate"
+          ></oms-unit-selector>
+        </div>
+        <div class="form-row">
+          <mat-form-field class="dense" appearance="outline">
+            <input
+              matInput
+              name="carrier"
+              [disabled]="commandState.carrierDisabled"
+              [(ngModel)]="commandState.carrier"
+              [placeholder]="'names.carrier' | translate"
+            />
+          </mat-form-field>
+
+          <!-- <dx-text-box
+            [disabled]="commandState.carrierDisabled"
+            [placeholder]="'names.carrier' | translate"
+            [(value)]="commandState.carrier"
           >
-          </dx-select-box>
+          </dx-text-box> -->
         </div>
         <div class="form-row">
-          <dx-select-box
-            [disabled]="currentTab !== 0"
-            [placeholder]="'names.selectedPoint' | translate"
-            [dataSource]="pointList"
-            [(value)]="selectedPointId"
-            [searchEnabled]="true"
-          ></dx-select-box>
-        </div>
-        <div class="form-row">
-          <dx-select-box
-            [disabled]="currentTab === 3 || currentTab === 0"
-            [(value)]="selectedFrom"
-            [placeholder]="'names.selectedSource' | translate"
-            [dataSource]="portList"
-            [searchEnabled]="true"
-          ></dx-select-box>
-        </div>
-        <div class="form-row">
-          <dx-select-box
-            [disabled]="currentTab === 2 || currentTab === 0"
-            [(value)]="selectedTo"
-            [placeholder]="'names.selectedDest' | translate"
-            [dataSource]="portList"
-            [searchEnabled]="true"
-          ></dx-select-box>
-        </div>
-        <div class="form-row">
-          <dx-text-box
-            [disabled]="currentTab === 0"
-            [placeholder]="'names.carrierId' | translate"
-            [(value)]="carrierId"
-          >
-          </dx-text-box>
+          <mat-slide-toggle [(ngModel)]="commandState.auto" color="primary">{{
+            "names.auto" | translate
+          }}</mat-slide-toggle>
         </div>
       </div>
     </div>

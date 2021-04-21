@@ -564,6 +564,29 @@ snack-bar-container.error {
   }
 }
 
+.mat-form-field.dense {
+  font-size: 12px;
+  width: 100%;
+
+  .mat-form-field-wrapper {
+    padding-bottom: 0;
+  }
+
+  &.mat-form-field-appearance-outline {
+    .mat-form-field-infix {
+      padding: 5px 0 10px 0;
+    }
+  }
+  &.mat-form-field-disabled {
+    input::placeholder {
+      color: rgba(0, 0, 0, 0.2);
+    }
+    .mat-form-field-outline {
+      color: rgba(0, 0, 0, 0.05);
+    }
+  }
+}
+
 // devextreme
 .dx-widget {
   font-size: 12px;

@@ -57,6 +57,12 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   get showTooltip(): boolean {
     return !!this.tooltipData;
   }
+  get canSetSource(): boolean {
+    return !this.statesSvc.transferCommandState.sourceDisabled;
+  }
+  get canSetDest(): boolean {
+    return !this.statesSvc.transferCommandState.destDisabled;
+  }
 
   constructor(
     private auth: AuthService,
@@ -107,7 +113,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
         break;
       case 'hostOrder:enable':
         console.warn('TODO host order enable message 정의 필요');
-        commandMessage = {action: 'set_behavior'};  // @TODO 메세지 정의 필요
+        commandMessage = { action: 'set_behavior' }; // @TODO 메세지 정의 필요
         break;
       default:
         commandMessage = { action: name };
@@ -116,6 +122,20 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     this.messageSvc
       .sendVehicleCommand(commandMessage, [this.contextData])
       .subscribe();
+  }
+  onSetSource() {
+    const { id, objectType } = this.contextData;
+    this.statesSvc.transferCommandState.source = {
+      id,
+      objectType,
+    };
+  }
+  onSetDest() {
+    const { id, objectType } = this.contextData;
+    this.statesSvc.transferCommandState.dest = {
+      id,
+      objectType,
+    };
   }
 
   private attachEvents() {

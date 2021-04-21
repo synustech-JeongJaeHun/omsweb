@@ -94,3 +94,40 @@ export interface IMapMouseEvent {
   groupType?: string; //'OVERLAP' | 'OVERLAP_MODULE' | 'UNASSIGNED_MODULE' | 'LAYOUT';
   position?: ICoordinate;
 }
+
+export type TransferCommandCategoryType = 'move' | 'fromTo' | 'from' | 'to';
+
+export class TransferCommandState {
+  active: boolean = false;
+  category: TransferCommandCategoryType = 'move';
+  auto: boolean = false;
+  vehicle?: ILookupUnit;
+  point?: ILookupUnit;
+  source?: ILookupUnit;
+  dest?: ILookupUnit;
+  carrier?: string;
+
+  get vehicleDisabled(): boolean {
+    return (
+      !this.active || (this.auto && ['fromTo', 'from'].includes(this.category))
+    );
+  }
+  get pointDisabled(): boolean {
+    return !this.active || this.category !== 'move';
+  }
+  get sourceDisabled(): boolean {
+    return !this.active || ['to', 'move'].includes(this.category);
+  }
+  get destDisabled(): boolean {
+    return !this.active || ['from', 'move'].includes(this.category);
+  }
+  get carrierDisabled(): boolean {
+    return !this.active || !this.pointDisabled;
+  }
+}
+
+export interface ILookupUnit {
+  id: number;
+  objectType: string;
+  name?: string;
+}

@@ -101,8 +101,8 @@
     "unload": "Unload",
     "unloadHint": "Station, or Buffer ID",
     "sideOverlapModule": "Co-Located Objects",
-    "coord-x":"Coordinate:X",
-    "coord-y":"Coordinate:Y",
+    "coord-x": "Coordinate:X",
+    "coord-y": "Coordinate:Y",
     "pointFrom": "Start Point",
     "pointTo": "End Point",
     "travelTime": "Travel Time",
@@ -180,10 +180,10 @@
     "command-from": "From",
     "command-to": "To",
     "selectVehicle": "Select Vehicle",
-    "selectedPoint": "Selected Point",
-    "selectedSource": "Selected Source",
-    "selectedDest": "Selected Dest",
-    "carrierId": "Carrier Id",
+    "selectPoint": "Select Point",
+    "selectSource": "Select Source",
+    "selectDest": "Select Dest",
+    "carrier": "Carrier",
 
     "email": "Email",
     "password": "Password",
@@ -232,6 +232,7 @@
     "confirmSetAutoAll": "Do you want to set auto all vehicles?",
     "selectObjectType": "Select Type",
     "searchId": "Search ID",
-    "noObjectSelected": "Nothing is selected."
+    "noObjectSelected": "Nothing is selected.",
+    "required": "{{field}} is required."
   }
 }
