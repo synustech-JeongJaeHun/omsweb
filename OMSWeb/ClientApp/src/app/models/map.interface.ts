@@ -127,7 +127,10 @@ export class TransferCommandState {
 }
 
 export interface ILookupUnit {
-  id: number;
-  objectType: string;
-  name?: string;
+  id?: number;
+  objectType?: string;
+  logicalId?: string;
+  physicalId?: string;
 }
+
+export type TrackIdMapType = { [key: string]: ILookupUnit };

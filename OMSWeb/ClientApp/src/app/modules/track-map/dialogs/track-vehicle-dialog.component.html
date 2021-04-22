@@ -2,7 +2,7 @@
   <ng-container class="dialog-layout">
     <div mat-dialog-content>
       <dx-data-grid
-        [dataSource]="vehicles"
+        [dataSource]="dataSource | async"
         keyExpr="id"
         [height]="300"
         [(selectedRowKeys)]="selectedVehicle"

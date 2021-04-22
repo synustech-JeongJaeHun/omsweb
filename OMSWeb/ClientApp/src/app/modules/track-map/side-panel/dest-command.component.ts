@@ -1,14 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Observable, of, Subject } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import {
   debounceTime,
   distinctUntilChanged,
-  mergeMap,
   switchMap,
 } from 'rxjs/operators';
 import { VehicleDestinationType } from '../../../models/map.interface';
-import { MapDataService } from '../map-data.service';
+import { TrackIdService } from '../../../services/track-id.service';
 
 @Component({
   selector: 'oms-dest-command',
@@ -43,7 +42,7 @@ export class DestCommandComponent implements OnInit {
 
   private _searchScopes: string[] = [];
 
-  constructor(private dataSvc: MapDataService) {}
+  constructor(private idSvc: TrackIdService) {}
 
   ngOnInit(): void {
     this._searchScopes =
@@ -55,9 +54,8 @@ export class DestCommandComponent implements OnInit {
       debounceTime(300),
       distinctUntilChanged(),
       switchMap((value) =>
-        this.dataSvc.lookupUnits(this._searchScopes, value)
+        this.idSvc.lookupUnits(this._searchScopes, value)
       ),
-      // mergeMap((list) => of(list))
     );
   }
 

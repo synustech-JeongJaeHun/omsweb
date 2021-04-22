@@ -1,8 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { EMPTY, forkJoin, Observable } from 'rxjs';
+import { EMPTY, forkJoin, Observable, of } from 'rxjs';
 
-import { IViewerData } from '../models/map.interface';
+import {
+  ILookupUnit,
+  IViewerData,
+  TrackIdMapType,
+} from '../models/map.interface';
 import { Dto } from '../models/dto/track.model';
 import { map, tap } from 'rxjs/operators';
 
@@ -14,10 +18,10 @@ export class TrackIdService {
 
   private logger = console;
   private log_perf = console;
-  private vehicles: any = {};
-  private points: any = {};
-  private stations: any = {};
-  private buffers: any = {};
+  private vehicles: TrackIdMapType = {};
+  private points: TrackIdMapType = {};
+  private stations: TrackIdMapType = {};
+  private buffers: TrackIdMapType = {};
 
   constructor(private http: HttpClient) {}
 
@@ -34,7 +38,7 @@ export class TrackIdService {
     ];
     return forkJoin(jobs).pipe(
       tap(([vehicles, points, stations, buffers]) => {
-        this.vehicles = this.convert_array_to_object(vehicles, null);
+        this.vehicles = this.convert_array_to_object(vehicles, '');
         this.points = this.convert_array_to_object(points, 'p');
         this.stations = this.convert_array_to_object(stations, 's');
         this.buffers = this.convert_array_to_object(buffers, 'b');
@@ -60,7 +64,7 @@ export class TrackIdService {
       this.buffers = this.convert_array_to_object(track.buffers, 'b');
     }
     if (track.vehicles) {
-      this.vehicles = this.convert_array_to_object(track.buffers, '');
+      this.vehicles = this.convert_array_to_object(track.vehicles, '');
     }
   }
 
@@ -70,40 +74,69 @@ export class TrackIdService {
     return this.get_alternative_id(objectType, 'logicalId', data) || data;
   }
 
+  lookupUnits(scopes: string[], id: string): Observable<ILookupUnit[]> {
+    const result: ILookupUnit[] = [];
+    if (scopes.includes('stations')) {
+      const item = this.stations['s' + id];
+      item && result.push(this.toLookupUnit(item, 'Station'));
+    }
+    if (scopes.includes('points')) {
+      const item = this.points['p' + id];
+      item && result.push(this.toLookupUnit(item, 'Point'));
+    }
+    if (scopes.includes('buffers')) {
+      const item = this.buffers['b' + id];
+      item && result.push(this.toLookupUnit(item, 'Buffer'));
+    }
+    if (scopes.includes('vehicles')) {
+      const item = this.vehicles['' + id];
+      item && result.push(this.toLookupUnit(item, 'Vehicle'));
+    }
+    return of(result);
+  }
+
+  private toLookupUnit(item: ILookupUnit, objectType: string): ILookupUnit {
+    const { id, physicalId, logicalId } = item;
+    return { id, objectType, logicalId, physicalId };
+  }
+
   private guessObjectType(combinedId: string): string {
     if (!combinedId) return;
+    return this.getObjectTypeByPrefix(combinedId.substr(0, 1)).toLowerCase();
+  }
 
-    switch (combinedId.substr(0, 1)) {
+  private getObjectTypeByPrefix(prefix: string): string {
+    switch (prefix) {
       case 'b':
-        return 'buffer';
+        return 'Buffer';
       case 'p':
-        return 'point';
+        return 'Point';
       case 's':
-        return 'station';
+        return 'Station';
       default:
-        return 'vehicle';
+        return 'Vehicle';
     }
   }
 
-  private convert_array_to_object(array, prefix) {
-    // let t0 = performance.now();
-    let result: any = {};
+  private convert_array_to_object(
+    array: ILookupUnit[],
+    prefix: string
+  ): TrackIdMapType {
+    let result: TrackIdMapType = {};
 
     for (let i = 0; i < array.length; i++) {
-      result[prefix + array[i].id] = {
-        id: prefix + array[i].id,
-        logicalId: array[i].logicalId,
-        physicalId: array[i].physicalId,
+      const { id, logicalId, physicalId } = array[i];
+      result[prefix + id] = {
+        id,
+        logicalId,
+        physicalId,
       };
     }
-
-    // let elapsed = performance.now() - t0;
-    // this.log_perf.log(`extract ${prefix} : ${elapsed}`);
 
     return result;
   }
 
-  private find_matched_target_object(object_type) {
+  find_matched_target_object(object_type): TrackIdMapType {
     let objects;
 
     object_type = object_type.toLowerCase();
@@ -121,7 +154,7 @@ export class TrackIdService {
     return objects;
   }
 
-  get_autocomplete_list(object_type) {
+  get_autocomplete_list(object_type: string) {
     let result = [];
     let target_objects;
     let ids = [];

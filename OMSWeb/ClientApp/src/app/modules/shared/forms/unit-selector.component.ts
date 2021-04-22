@@ -8,11 +8,10 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { data } from 'jquery';
 import { Observable, of } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { ILookupUnit } from '../../../models/map.interface';
-import { MapDataService } from '../../track-map/map-data.service';
+import { TrackIdService } from '../../../services/track-id.service';
 
 @Component({
   selector: 'oms-unit-selector',
@@ -40,7 +39,7 @@ export class UnitSelectorComponent implements OnInit, OnChanges {
   inputControl = new FormControl();
   targetOptions$: Observable<ILookupUnit[]>;
 
-  constructor(private dataSvc: MapDataService) {}
+  constructor(private idSvc: TrackIdService) {}
   ngOnChanges(changes: SimpleChanges): void {
     const { disabled, selectedUnit } = changes;
     if (disabled) {
@@ -58,8 +57,7 @@ export class UnitSelectorComponent implements OnInit, OnChanges {
     this.targetOptions$ = this.inputControl.valueChanges.pipe(
       debounceTime(300),
       distinctUntilChanged(),
-      switchMap((value) => this.dataSvc.lookupUnits(this.findScopes, value))
-      // mergeMap((list) => of(list))
+      switchMap((value) => this.idSvc.lookupUnits(this.findScopes, value))
     );
   }
   displayFn(item: ILookupUnit): string | undefined {

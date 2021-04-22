@@ -104,29 +104,6 @@ export class MapDataService {
       }
     }
   }
-  lookupUnits(
-    scopes: string[],
-    value: string
-  ): Observable<ILookupUnit[]> {
-    const result: ILookupUnit[] = [];
-    if (scopes.includes('stations')) {
-      const item = this.data.stations.find((x) => x.id.toString() === value);
-      item && result.push(this.toTransferLocation(item));
-    }
-    if (scopes.includes('points')) {
-      const item = this.data.points.find((x) => x.id.toString() === value);
-      item && result.push(this.toTransferLocation(item));
-    }
-    if (scopes.includes('buffers')) {
-      const item = this.data.buffers.find((x) => x.id.toString() === value);
-      item && result.push(this.toTransferLocation(item));
-    }
-    if (scopes.includes('vehicles')) {
-      const item = this.data.vehicles.find((x) => x.id.toString() === value);
-      item && result.push(this.toTransferLocation(item));
-    }
-    return of(result);
-  }
 
   applyDisableSegmentData(
     rows: any[],
@@ -276,11 +253,6 @@ export class MapDataService {
       update,
       updatedVehicles: updated_vehicles,
     };
-  }
-
-  private toTransferLocation(item: any): ILookupUnit {
-    const { id, objectType } = item;
-    return { id, objectType };
   }
 
   private convertExpectedPath(

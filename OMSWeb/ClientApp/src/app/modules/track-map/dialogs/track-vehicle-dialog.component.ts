@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
+import { Observable, of } from 'rxjs';
+import { ILookupUnit } from '../../../models/map.interface';
 import { Vehicle } from '../../../models/vehicle.model';
+import { TrackIdService } from '../../../services/track-id.service';
 import { MapDataService } from '../map-data.service';
 
 @Component({
@@ -9,6 +12,7 @@ import { MapDataService } from '../map-data.service';
   styleUrls: ['./track-vehicle-dialog.component.scss'],
 })
 export class TrackVehicleDialogComponent implements OnInit {
+  dataSource: Observable<ILookupUnit[]>;
   vehicles: Vehicle[] = [];
   selectedVehicle: number[] = [];
 
@@ -18,9 +22,13 @@ export class TrackVehicleDialogComponent implements OnInit {
 
   constructor(
     private mapData: MapDataService,
+    private idSvc: TrackIdService,
     private dialog: MatDialogRef<TrackVehicleDialogComponent>
   ) {
-    this.vehicles = this.mapData.data.vehicles;
+    // this.vehicles = this.mapData.data.vehicles;
+    // this.dataSource = of(Object.assign([], this.mapData.data.vehicles));
+
+    this.dataSource = of(Object.values(this.idSvc.find_matched_target_object('vehicle')));
   }
 
   ngOnInit(): void {}
