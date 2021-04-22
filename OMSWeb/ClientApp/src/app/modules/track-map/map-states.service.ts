@@ -9,6 +9,7 @@ import { CommandKeyType, ToggleOptionKeyType } from '../../models/enums';
 import {
   IMapMouseEvent,
   TransferCommandState,
+  VehicleTrackingState,
 } from '../../models/map.interface';
 import { ClientPreferences } from '../../models/settings.model';
 import { SettingsService } from '../../services/settings.service';
@@ -24,6 +25,7 @@ export class MapStatesService {
   // transferCommandState$ = new Subject<TransferCommandState>();
 
   private _transferCommandState: TransferCommandState;
+  private _vehicleTrackingState: VehicleTrackingState;
 
   get preferences(): ClientPreferences {
     return this.settingSvc.globalPreferences;
@@ -31,13 +33,20 @@ export class MapStatesService {
   get transferCommandState(): TransferCommandState {
     return this._transferCommandState;
   }
+  get vehicleTrackingState(): VehicleTrackingState {
+    return this._vehicleTrackingState;
+  }
 
   constructor(private settingSvc: SettingsService) {
     this.resetTransferCommandState();
+    this.resetVehicleTrackingState();
   }
 
   resetTransferCommandState() {
     this._transferCommandState = new TransferCommandState();
+  }
+  resetVehicleTrackingState() {
+    this._vehicleTrackingState = new VehicleTrackingState();
   }
 
   changeToolbarState(type: ToggleOptionKeyType, value: boolean) {

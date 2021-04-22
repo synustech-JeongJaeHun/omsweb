@@ -30,6 +30,7 @@
     matListItem
     mat-button
     class="tool-item"
+    [class.active]="isTracking"
     matTooltipClass="snb-tooltip"
     matTooltipPosition="right"
     [matTooltip]="'names.trackVehicle' | translate"

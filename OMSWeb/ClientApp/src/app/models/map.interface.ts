@@ -134,3 +134,8 @@ export interface ILookupUnit {
 }
 
 export type TrackIdMapType = { [key: string]: ILookupUnit };
+
+export class VehicleTrackingState {
+  status: boolean = false;
+  id?: number;
+}

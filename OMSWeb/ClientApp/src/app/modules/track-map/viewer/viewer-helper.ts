@@ -27,6 +27,7 @@ import {
   IMapMouseEvent,
   IViewerData,
   MapEventType,
+  VehicleTrackingState,
 } from '../../../models/map.interface';
 import { Segment } from '../../../models/segment.model';
 import { Vehicle } from '../../../models/vehicle.model';
@@ -175,12 +176,6 @@ export class ViewController {
   private viewbox: any = {};
   private rotated_viewbox = [];
 
-  // Tracker Variable =============================//
-  private vehicle_tracking = {
-    status: false,
-    id: 0,
-  };
-
   // Interaction
   private selected_objects = [];
   private currently_hovering_object: any = {};
@@ -284,6 +279,10 @@ export class ViewController {
 
   private get expected_paths(): ExpectedPath[] {
     return this.dataSvc.expectedPaths;
+  }
+
+  private get vehicle_tracking(): VehicleTrackingState {
+    return this.statesSvc.vehicleTrackingState;
   }
 
   constructor(
@@ -1056,7 +1055,12 @@ export class ViewController {
         break;
       case 'trackVehicle':
         const id = event.value;
-        this.trackVehicle(id);
+        if (!id) {
+          this.stop_tracking();
+          this.centerZoom('SMOOTH');
+        } else {
+          this.trackVehicle(id);
+        }
         break;
       default:
         break;
@@ -1142,10 +1146,6 @@ export class ViewController {
     this.currently_hovering_object = {};
     this.search_candidate_objects = [];
     this.copied_objects = [];
-    this.vehicle_tracking = {
-      status: false,
-      id: 0,
-    };
 
     this.tool_type = null;
     this.editing = null;
@@ -1161,6 +1161,7 @@ export class ViewController {
     this.unassigned_module_objects = [];
 
     this.segmentWidth = main_css.segment.line_weight;
+    this.statesSvc.resetVehicleTrackingState();
   }
 
   private initStates() {
@@ -1388,7 +1389,6 @@ export class ViewController {
     this.highlight(type, objId, main_css[type.toLowerCase()], null, 'SELECT');
   }
   private trackVehicle(vehicleId: number) {
-    console.info('### start tracking... >>', vehicleId);
     const vehicle = this.vehicles.find((x) => x.id === vehicleId);
     if (!vehicle) return;
 
@@ -12633,10 +12633,8 @@ export class ViewController {
   stop_tracking() {
     this.vehicle_tracking.status = false;
     this.vehicle_tracking.id = 0;
-    this.$track_container.find('#btn_tracking').removeClass('active');
   }
   start_tracking() {
-    this.$track_container.find('#btn_tracking').addClass('active');
     this.vehicle_tracking.status = true;
   }
 

@@ -59,6 +59,9 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
       )
     );
   }
+  get isTracking(): boolean {
+    return this.stateSvc.vehicleTrackingState.status;
+  }
 
   private _searchDlg: MatDialogRef<SearchDialogComponent, any>;
   private _trackDlg: MatDialogRef<TrackVehicleDialogComponent, any>;
@@ -114,6 +117,10 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
   }
 
   onTrackVehicle() {
+    if (this.isTracking) {
+      this.stateSvc.commandToolbar('trackVehicle', null);
+      return;
+    }
     if (this._trackDlg && this._trackDlg.getState() === MatDialogState.OPEN) {
       this._trackDlg.close();
       return;
