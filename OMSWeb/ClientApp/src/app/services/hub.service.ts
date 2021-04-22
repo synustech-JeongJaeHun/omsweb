@@ -9,8 +9,8 @@ import { IDataChangeEvent } from '../models/notification.model';
 })
 export class HubService {
   //#region event subjects
+  // pointChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter();
   connectionChanged$: EventEmitter<boolean> = new EventEmitter<boolean>();
-  pointChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter();
   segmentChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter();
   segmentDisabledChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter();
   stationChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter();
@@ -85,7 +85,7 @@ export class HubService {
   }
 
   private detachEvents() {
-    this.hub.off('pointChanged');
+    // this.hub.off('pointChanged');
     this.hub.off('segmentChanged');
     this.hub.off('segmentDisabledChanged');
     this.hub.off('stationChanged');
@@ -104,10 +104,10 @@ export class HubService {
 
   private attachEvents() {
 
-    this.hub.on('pointChanged', (meta, body) => {
-      console.info('## hub message : pointChanged >>', { meta, body });
-      this.pointChanged$.emit({ ...meta, data: body });
-    });
+    // this.hub.on('pointChanged', (meta, body) => {
+    //   console.info('## hub message : pointChanged >>', { meta, body });
+    //   this.pointChanged$.emit({ ...meta, data: body });
+    // });
     this.hub.on('segmentChanged', (meta, body) => {
       // console.info('## hub message : segmentChanged >>', { meta, body });
       this.segmentChanged$.emit({ ...meta, data: body });

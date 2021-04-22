@@ -1,7 +1,12 @@
 <div class="panel-header">
   {{ "names.itemDetails" | translate }}
+  <div class="pointer close-icon" (click)="closePanel()" title="Close">
+    <button mat-icon-button aria-label="Close" class="close" tabindex="-1">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
 </div>
-<div [ngSwitch]="!data">
+<div class="panel-body" [ngSwitch]="!data">
   <div *ngSwitchCase="false">
     <mat-accordion multi>
       <ng-container [ngSwitch]="data?.objectType">
@@ -35,7 +40,7 @@
       </ng-container>
     </mat-accordion>
   </div>
-  <div *ngSwitchDefault>{{ "messages.noObjectSelected" | translate }}</div>
+  <div class="not-selected" *ngSwitchDefault>{{ "messages.noObjectSelected" | translate }}</div>
 </div>
 
 <ng-template #vehicleInfo>
@@ -196,7 +201,11 @@
         </mat-form-field>
         <div class="info-item form-field span-full">
           <label>{{ "names.direction" | translate }}</label>
-          <mat-radio-group [disabled]="true" color="primary" [value]="data.direction">
+          <mat-radio-group
+            [disabled]="true"
+            color="primary"
+            [value]="data.direction"
+          >
             <mat-radio-button value="L">Left</mat-radio-button>
             <mat-radio-button value="R">Right</mat-radio-button>
             <mat-radio-button value="U">Under</mat-radio-button>
@@ -237,7 +246,11 @@
         </mat-form-field>
         <div class="info-item form-field span-full">
           <label>{{ "names.direction" | translate }}</label>
-          <mat-radio-group [disabled]="true" color="primary" [value]="data.direction">
+          <mat-radio-group
+            [disabled]="true"
+            color="primary"
+            [value]="data.direction"
+          >
             <mat-radio-button value="L">Left</mat-radio-button>
             <mat-radio-button value="R">Right</mat-radio-button>
             <mat-radio-button value="U">Under</mat-radio-button>

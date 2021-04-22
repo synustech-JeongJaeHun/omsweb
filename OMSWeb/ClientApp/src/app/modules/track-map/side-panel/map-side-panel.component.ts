@@ -6,6 +6,7 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { MapDataService } from '../map-data.service';
+import { MapStatesService } from '../map-states.service';
 
 @Component({
   selector: 'oms-map-side-panel',
@@ -32,7 +33,7 @@ export class MapSidePanelComponent implements OnInit, OnChanges {
     return this.segmentDisabledInfo.reasons.join('\n');
   }
 
-  constructor(private dataSvc: MapDataService) {}
+  constructor(private dataSvc: MapDataService, private statesSvc: MapStatesService) {}
 
   ngOnInit(): void {}
 
@@ -61,6 +62,10 @@ export class MapSidePanelComponent implements OnInit, OnChanges {
   changeSegmentDisabled() {
     // @TODO 이벤트 구현 changeSegmentDisabled()
     console.warn('TODO : 이벤트 구현');
+  }
+
+  closePanel() {
+    this.statesSvc.changeToolbarState('itemDetails', false);
   }
 
   private bindVehicle() {

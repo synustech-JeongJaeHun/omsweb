@@ -5,6 +5,36 @@
   color: rgba(#000, 0.7);
   background-color: var(--panel-background-color);
   // background-color: rgba(#000, 0.1);
+
+  .close-icon {
+    position: absolute;
+    right: 4px;
+    top: 4px;
+  }
+  .close-icon .mat-icon {
+    font-size: 18px;
+    height: 18px;
+    width: 18px;
+    line-height: 18px;
+  }
+  .mat-icon-button.close {
+    width: 24px;
+    height: 24px;
+    line-height: 18px;
+  }
+}
+
+.panel-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+
+  .not-selected {
+    margin-top: 16px;
+    color:rgba(0, 0, 0, 0.7);
+    font-size: 12px;
+  }
 }
 
 // mat-accordion {
@@ -81,6 +111,6 @@ mat-form-field {
   label {
     transform-origin: top left;
     transform: scale(0.75);
-    color: rgba(0,0,0,.54);
+    color: rgba(0, 0, 0, 0.54);
   }
 }

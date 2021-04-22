@@ -41,7 +41,7 @@ namespace OMSWeb.Services
       this._trackSvc = trackSvc;
 
       this.tableEventMap = new Dictionary<string, DataChangeEventTarget> {
-        {"points", new DataChangeEventTarget(CacheKeys.Points, new[]{"pointChanged"})},
+        // {"points", new DataChangeEventTarget(CacheKeys.Points, new[]{"pointChanged"})},
         {"segments", new DataChangeEventTarget(CacheKeys.Segments, new[]{"segmentChanged"})},
         {"segment_blocking", new DataChangeEventTarget(CacheKeys.SegmentDisabled, new[]{"segmentDisabledChanged"}, true)},
         {"stations", new DataChangeEventTarget(CacheKeys.Stations, new[]{"stationChanged"})},
@@ -61,7 +61,7 @@ namespace OMSWeb.Services
       };
 
       this.cacheEventMap = new Dictionary<CacheKeys, string[]> {
-        {CacheKeys.Points, new[]{"pointChanged"}},
+        // {CacheKeys.Points, new[]{"pointChanged"}},
         {CacheKeys.Segments, new[]{"segmentChanged"}},
         {CacheKeys.SegmentDisabled, new[]{"segmentDisabledChanged"}},
         {CacheKeys.Stations, new[]{"stationChanged"}},
@@ -118,7 +118,7 @@ namespace OMSWeb.Services
         }
 
       }
-      else  // 정의되지 않은 table event 이거나 cache를 사용하지 않은 데이터인 경우
+      else if (targetInfo != null)  // 정의되지 않은 table event 이거나 cache를 사용하지 않은 데이터인 경우
       {
         foreach (var name in targetInfo.PushNames)
         {

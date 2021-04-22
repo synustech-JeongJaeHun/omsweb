@@ -13,8 +13,9 @@ import {
 import { MdePopoverTrigger } from '@material-extended/mde';
 
 import { NotificationsService } from '@oms/services/notifications.service';
-import { Subscription } from 'rxjs';
-import { IAlert } from '../../../models/notification.model';
+import { Subject, Subscription } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { IAlert, IDataChangeEvent } from '../../../models/notification.model';
 import { HubService } from '../../../services/hub.service';
 import { AlarmDialogComponent } from '../dialogs/alarm-dialog.component';
 import { AlertDialogComponent } from '../dialogs/alert-dialog.component';
@@ -35,12 +36,9 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
 
   warnList: IAlert[] = [];
 
-  //#region Subscription
-  // private summary$: Subscription;
-  //#endregion
-
   private _alarmDlg: MatDialogRef<AlarmDialogComponent, any>;
   private _alertDlg: MatDialogRef<AlertDialogComponent, any>;
+  private destroy$: Subject<void> = new Subject<void>();
 
   get warnValue(): string {
     return this.countFormat(this.warnCount);
@@ -63,22 +61,20 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
     private dialog: MatDialog
   ) {}
   ngOnDestroy(): void {
-    // this.summary$ && this.summary$.unsubscribe();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   ngOnInit(): void {
-    // this.summary$ = this.hubSvc.alarmSummaryChanged.subscribe((info) => {
-    //   console.warn('## alarm summary changed >>', info);
-    // });
-    this.notifySvc.alarmCount().subscribe((alarm) => {
-      this.alarmCount = alarm.total;
-      this.isCriticalAlarm = alarm.critical > 0;
-    });
+    this.hubSvc.alarmChanged$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((e) => this.onAlarmChanged(e));
+    this.hubSvc.alertChanged$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((e) => this.onAlertChanged(e));
 
-    this.notifySvc.alertCount().subscribe((warn) => {
-      this.warnCount = warn.total;
-      this.isCriticalWarn = warn.critical > 0;
-    });
+    this.updateAlarmCount();
+    this.updateAlertCount();
   }
 
   toggleWarnsView() {
@@ -126,5 +122,25 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
     //   return `${Math.floor(count / 1000)}K`;
     // }
     // return count.toString();
+  }
+
+  private updateAlertCount() {
+    this.notifySvc.alertCount().subscribe((warn) => {
+      this.warnCount = warn.total;
+      this.isCriticalWarn = warn.critical > 0;
+    });
+  }
+  private updateAlarmCount() {
+    this.notifySvc.alarmCount().subscribe((alarm) => {
+      this.alarmCount = alarm.total;
+      this.isCriticalAlarm = alarm.critical > 0;
+    });
+  }
+
+  private onAlertChanged(event: IDataChangeEvent) {
+    this.updateAlertCount();
+  }
+  private onAlarmChanged(event: IDataChangeEvent) {
+    this.updateAlarmCount();
   }
 }
