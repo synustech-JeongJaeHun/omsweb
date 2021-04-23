@@ -46,6 +46,10 @@ namespace OMSWeb.Controllers
         {
           current.TscMode = nextStatus.TscMode.Value;
         }
+
+        if (nextStatus.AiMode.HasValue) {
+          current.AiMode = nextStatus.AiMode.Value;
+        }
       }
       return current;
     }

@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import {
   HostModeEnums,
   HostSessionStatusEnums,
@@ -7,6 +9,7 @@ import {
 } from '../../../models/enums';
 import { ISystemStates } from '../../../models/system.model';
 import { AuthService } from '../../../services/auth.service';
+import { DialogService } from '../../../services/dialog.service';
 import { SystemsService } from '../../../services/systems.service';
 
 @Component({
@@ -14,8 +17,9 @@ import { SystemsService } from '../../../services/systems.service';
   templateUrl: './gnb-states.component.html',
   styleUrls: ['./gnb-states.component.scss'],
 })
-export class GnbStatesComponent implements OnInit {
+export class GnbStatesComponent implements OnInit, OnDestroy {
   private systemStates: ISystemStates;
+  private destroy$ = new Subject<void>();
 
   get hostModeText(): string {
     return this.t$.instant(`enums.hostMode.${this.systemStates?.hostMode}`);
@@ -51,26 +55,49 @@ export class GnbStatesComponent implements OnInit {
   constructor(
     private auth: AuthService,
     private systemSvc: SystemsService,
+    private dialogSvc: DialogService,
     private t$: TranslateService
   ) {}
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
   ngOnInit(): void {
-    this.systemSvc.states().subscribe((states) => (this.systemStates = states));
+    this.systemSvc.currentState$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((states) => (this.systemStates = states));
   }
 
   changeHostMode() {
-    const value = ++this.systemStates.hostMode % 4;
-    this.systemSvc
-      .changeStates({ hostMode: value })
-      .subscribe((states) => (this.systemStates = states));
+    this.dialogSvc.confirm(this.getConfirmMessage('Host')).subscribe((ok) => {
+      if (ok) {
+        const value = ++this.systemStates.hostMode % 4;
+        this.systemSvc
+          .changeStates({ hostMode: value })
+          .subscribe((states) => (this.systemStates = states));
+      }
+    });
   }
   changeTscMode() {
-    const value = ++this.systemStates.tscMode % 3;
-    this.systemSvc
-      .changeStates({ tscMode: value })
-      .subscribe((states) => (this.systemStates = states));
+    this.dialogSvc.confirm(this.getConfirmMessage('TSC')).subscribe((ok) => {
+      if (ok) {
+        const value = ++this.systemStates.tscMode % 3;
+        this.systemSvc
+          .changeStates({ tscMode: value })
+          .subscribe((states) => (this.systemStates = states));
+      }
+    });
   }
   changeHostStatus() {
     this.systemStates.sessionStatus = ++this.systemStates.sessionStatus % 2;
+  }
+
+  private getConfirmMessage(displayName: string) {
+    const transParam = { name: displayName };
+    return {
+      title: this.t$.instant('names.changeConfirm', transParam),
+      body: this.t$.instant('messages.changeConfirm', transParam),
+    };
   }
 }

@@ -4,4 +4,5 @@ export interface ISystemStates {
   sessionStatus?: HostSessionStatusEnums;
   hostMode?: HostModeEnums;
   tscMode?: TscModeEnums;
+  aiMode?: boolean;
 }

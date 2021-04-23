@@ -1,4 +1,9 @@
-<button mat-button class="ai active">
+<button
+  mat-button
+  class="ai"
+  [class.active]="activeAi"
+  (click)="onChangeAI()"
+>
   <div class="rect">AI</div>
 </button>
 <button mat-button class="locale"><mat-icon>language</mat-icon> English</button>

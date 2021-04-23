@@ -212,7 +212,8 @@
     "command": "Command",
     "location": "Location",
     "isHome": "Is Home",
-    "order": "Order"
+    "order": "Order",
+    "changeConfirm": "{{name}} Confirm"
   },
   "enums": {
     "hostSessionStatus": {
@@ -242,6 +243,7 @@
     "noObjectSelected": "Nothing is selected.",
     "required": "{{field}} is required.",
     "minLength": "Minimum length is {{minLength}}.",
-    "passwordMissMatch": "Password is miss match."
+    "passwordMissMatch": "Password is miss match.",
+    "changeConfirm": "Are you sure {{name}} change?​"
   }
 }

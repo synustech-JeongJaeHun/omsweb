@@ -13,6 +13,7 @@ namespace OMSWeb.Services
         HostMode = HostModeEnums.Offline,
         SessionStatus = HostSessionStatusEnums.Offline,
         TscMode = TscModeEnums.Auto,
+        AiMode = true,
       };
     }
   }
