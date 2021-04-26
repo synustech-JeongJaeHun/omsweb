@@ -25,6 +25,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatSidenavModule } from '@angular/material/sidenav';
 @NgModule({
   exports: [
     MatButtonModule,
@@ -50,6 +51,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
     MatMenuModule,
     MatAutocompleteModule,
     MatButtonToggleModule,
+    MatSidenavModule,
     OverlayModule,
     DragDropModule,
   ],

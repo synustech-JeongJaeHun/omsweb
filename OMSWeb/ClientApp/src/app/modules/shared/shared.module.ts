@@ -22,6 +22,7 @@ import { LegendDialogComponent } from './dialogs/legend-dialog.component';
 import { LoginDialogComponent } from './dialogs/login-dialog.component';
 import { UnitSelectorComponent } from './forms/unit-selector.component';
 import { ProfileDialogComponent } from './dialogs/profile-dialog.component';
+import { UserFormComponent } from './forms/user-form.component';
 
 const inOutModules = [
   FormsModule,
@@ -43,6 +44,7 @@ const inOutModules = [
     LoginDialogComponent,
     UnitSelectorComponent,
     ProfileDialogComponent,
+    UserFormComponent,
   ],
   imports: [
     CommonModule,
@@ -72,6 +74,7 @@ const inOutModules = [
     LoginDialogComponent,
     UnitSelectorComponent,
     ProfileDialogComponent,
+    UserFormComponent,
   ],
 })
 export class SharedModule {}

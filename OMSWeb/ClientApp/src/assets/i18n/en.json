@@ -13,11 +13,12 @@
     "vehicle": "Vehicle",
     "cluster": "Cluster",
     "point": "Point",
-    "segment": "Station",
+    "segment": "Segment",
     "mtl": "MTL",
     "station": "Station",
     "buffer": "Buffer",
     "group": "Group",
+    "zcu": "ZCU",
 
     "vehicleType": "Vehicle Type",
     "vehicleMode": "Vehicle Mode",
@@ -213,7 +214,16 @@
     "location": "Location",
     "isHome": "Is Home",
     "order": "Order",
-    "changeConfirm": "{{name}} Confirm"
+    "changeConfirm": "{{name}} Confirm",
+    "userManagement": "User Management",
+    "alarmList": "Alarm List",
+    "node": "Node",
+    "blockZone": "BlockZone",
+    "rolesSetting": "Roles Setting",
+    "roles": "Roles",
+    "role": "Role",
+    "permissions": "Permissions",
+    "addUser": "Add User"
   },
   "enums": {
     "hostSessionStatus": {
@@ -230,6 +240,9 @@
       "0": "Auto",
       "1": "Pausing",
       "2": "Paused"
+    },
+    "permissions": {
+      "view_monitor_status": "View Monitor Status"
     }
   },
   "errors": {},

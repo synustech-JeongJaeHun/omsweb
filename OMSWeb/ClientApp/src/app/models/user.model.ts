@@ -24,4 +24,14 @@ export interface IProfileForm {
   firstName: string;
   lastName: string;
   password?: string;
+  roles?: number[];
+}
+
+export interface IRole extends IPermission {
+  permissions?: number[];
+}
+
+export interface IPermission{
+  id: number;
+  name: string;
 }

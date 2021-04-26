@@ -1,0 +1,49 @@
+<oms-dialog-base [title]="'names.rolesSetting' | translate">
+  <ng-container class="dialog-layout">
+    <div mat-dialog-content class="role-panel">
+      <h5 class="title-roles">{{ "names.roles" | translate }}</h5>
+      <h5 class="title-permissions">{{ "names.permissions" | translate }}</h5>
+
+      <mat-nav-list class="dense role-list">
+        <a
+          mat-list-item
+          *ngFor="let item of roles"
+          [class.active]="selectedRole?.id === item.id"
+          (click)="onSelectRole(item)"
+        >
+          {{ item.name }}
+        </a>
+      </mat-nav-list>
+      <mat-selection-list class="dense permission-list">
+        <mat-list-option
+          checkboxPosition="before"
+          color="primary"
+          [selected]="hasPermission(item)"
+          *ngFor="let item of permissions"
+        >
+          {{ "enums.permissions." + item.name | translate }}
+        </mat-list-option>
+      </mat-selection-list>
+
+      <div class="full-span-col"></div>
+    </div>
+    <div class="mat-dialog-actions">
+      <div class="secondary-actions">
+        <button mat-stroked-button class="dense">
+          <mat-icon>add</mat-icon>
+        </button>
+        <button mat-stroked-button class="dense">
+          <mat-icon>remove</mat-icon>
+        </button>
+      </div>
+      <div class="primary-actions">
+        <button mat-raised-button class="dense" color="primary">
+          {{ "names.save" | translate }}
+        </button>
+        <button mat-raised-button class="dense" mat-dialog-close>
+          {{ "names.cancel" | translate }}
+        </button>
+      </div>
+    </div>
+  </ng-container>
+</oms-dialog-base>

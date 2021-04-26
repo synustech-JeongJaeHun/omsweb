@@ -52,7 +52,7 @@
     matTooltipPosition="below"
     matTooltip="Settings"
     routerLinkActive="active"
-    routerLink="/settings"
+    [routerLink]="['settings', {outlets: {sub: ['users']}}]"
   >
     <mat-icon>settings</mat-icon>
   </button>

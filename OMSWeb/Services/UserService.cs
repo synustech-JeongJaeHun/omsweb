@@ -28,6 +28,19 @@ namespace OMSWeb.Services
       return this._repo.GetUserByEmail(email);
     }
 
+    public IQueryable<UserEntity> QueryUsers() {
+      return this._repo.QueryUsers();
+    }
+    public IQueryable<PermissionEntity> QueryPermissions() {
+      return this._repo.QueryPermissions();
+    }
+    public IQueryable<RoleEntity> QueryRoles() {
+      return this._repo.QueryRoles();
+    }
+    public IQueryable<RoleEntity> QueryRolesWithPermissions() {
+      return this._repo.QueryRolesWithPermissions();
+    }
+
     public TokenResponse Authenticate(string email, string password)
     {
       var user = this.GetUserByEmail(email);

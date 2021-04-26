@@ -19,10 +19,72 @@ namespace OMSWeb.Repositories
   ARRAY(SELECT DISTINCT permission_id FROM role_permissions INNER JOIN user_roles ON role_permissions.role_id = user_roles.role_id AND user_roles.user_id=id ORDER BY permission_id ASC) as permissions
   FROM users WHERE email = '{email}'";
       UserEntity user;
-      using (var conn = ConnectUi()) {
+      using (var conn = ConnectUi())
+      {
         user = conn.Query<UserEntity>(sql).SingleOrDefault();
       }
       return user;
+    }
+
+    public IQueryable<UserEntity> QueryUsers()
+    {
+      var sql = @"
+    SELECT users.id, first_name, last_name, email, '****' as password, 
+    array_agg(DISTINCT role_id) AS permissions, 
+    array_agg(DISTINCT permission_id) AS roles
+    FROM (
+        SELECT user_id, users.role_id as role_id, permission_id
+        FROM role_permissions
+        JOIN permissions ON role_permissions.permission_id = permissions.id
+        RIGHT JOIN user_roles AS users ON role_permissions.role_id = users.role_id
+    ) AS permissions
+    RIGHT JOIN users ON permissions.user_id = users.id
+    LEFT JOIN roles ON permissions.role_id = roles.id
+    --*user_condition*
+    GROUP BY users.id, first_name, last_name, email, password
+      ";
+      IQueryable<UserEntity> result;
+      using (var conn = ConnectUi())
+      {
+        result = conn.Query<UserEntity>(sql).AsQueryable();
+      }
+      return result;
+    }
+
+    public IQueryable<RoleEntity> QueryRoles()
+    {
+      var sql = "select id, name from roles";
+      IQueryable<RoleEntity> result;
+      using (var conn = ConnectUi())
+      {
+        result = conn.Query<RoleEntity>(sql).AsQueryable();
+      }
+      return result;
+    }
+    public IQueryable<RoleEntity> QueryRolesWithPermissions()
+    {
+      var sql = @"
+      select id, name,
+      array_agg(DISTINCT permission_id) as permissions
+      from roles INNER JOIN role_permissions ON role_permissions.role_id = roles.id 
+      GROUP BY id, name
+      ";
+      IQueryable<RoleEntity> result;
+      using (var conn = ConnectUi())
+      {
+        result = conn.Query<RoleEntity>(sql).AsQueryable();
+      }
+      return result;
+    }
+    public IQueryable<PermissionEntity> QueryPermissions()
+    {
+      var sql = "select id, name from permissions";
+      IQueryable<PermissionEntity> result;
+      using (var conn = ConnectUi())
+      {
+        result = conn.Query<PermissionEntity>(sql).AsQueryable();
+      }
+      return result;
     }
   }
 }

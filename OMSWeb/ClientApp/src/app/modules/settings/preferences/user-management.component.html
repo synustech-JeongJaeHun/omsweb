@@ -1,0 +1,63 @@
+<div class="setting-header">
+  <h3 class="setting-title">{{ "names.userManagement" | translate }}</h3>
+  <div class="setting-actions">
+    <!-- <dx-button icon="save"></dx-button>
+    <dx-button icon="undo"></dx-button> -->
+    <button mat-raised-button class="dense" color="primary">Save</button>
+    <button mat-raised-button class="dense">Revert</button>
+  </div>
+</div>
+
+<div class="sub-links">
+  <button mat-flat-button (click)="onRoleSetting()">
+    {{ "names.rolesSetting" | translate }}...
+  </button>
+
+  <div class="sub-actions">
+    <button mat-stroked-button class="dense" (click)="onAddUser()">
+      <mat-icon>add</mat-icon>
+    </button>
+    <button mat-stroked-button [disabled]="!canRemove" class="dense" (click)="onRemoveUsers()">
+      <mat-icon>remove</mat-icon>
+    </button>
+  </div>
+</div>
+<dx-data-grid
+  id="grid"
+  [dataSource]="dataSource"
+  [repaintChangesOnly]="true"
+  [showBorders]="true"
+  [sorting]="false"
+  [(selectedRowKeys)]="selectedIds"
+>
+  <dxo-scrolling mode="virtual"></dxo-scrolling>
+  <dxo-editing
+    mode="cell"
+    refreshMode="reshape"
+    [allowUpdating]="true"
+    [allowDeleting]="false"
+    [allowAdding]="false"
+  >
+  </dxo-editing>
+  <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
+
+  <dxi-column dataField="email" caption="{{ 'names.email' | translate }}" [allowEditing]="false">
+  </dxi-column>
+  <dxi-column dataField="firstName" dataType="string"></dxi-column>
+  <dxi-column dataField="lastName"></dxi-column>
+  <dxi-column dataField="password" [editorOptions]="{mode: 'password'}">
+  </dxi-column>
+  <!-- <dxi-column dataField="id" caption="Password" cellTemplate="passwordCell" [allowEditing]="false">
+  </dxi-column> -->
+  <dxi-column dataField="roles" caption="Roles" dataType="number">
+    <dxo-lookup
+      [dataSource]="roles$ | async"
+      valueExpr="id"
+      displayExpr="name"
+    ></dxo-lookup>
+  </dxi-column>
+
+  <!-- <div *dxTemplate="let item of 'passwordCell'">
+    <a class="dense pointer" (click)="onChangePassword(item.data)">Change</a>
+  </div> -->
+</dx-data-grid>
