@@ -6,11 +6,10 @@
 
 .settings-content {
   display: flex;
+  flex-direction: column;
   height: 100%;
   padding: 0 8px;
-  align-items: center;
   position: relative;
-  // justify-content: center;
 
   ::ng-deep {
     .dx-datagrid {
@@ -29,7 +28,33 @@
       min-height: unset;
       font-size: 12px;
     }
+    .setting-header {
+      display: flex;
+      justify-content: space-between;
+      padding-left: 8px;
+      border-bottom: 1px solid var(--theme-border-color);
+
+      .setting-actions {
+        justify-self: flex-end;
+
+        button {
+          margin-left: 4px;
+        }
+
+        dx-button {
+          margin-left: 8px;
+          width: 32px;
+          height: 32px;
+
+          &.dx-button-has-icon ::ng-deep.dx-button-content {
+            padding: 6px;
+          }
+        }
+      }
+    }
   }
+
+
 }
 
 .settings-sidenav {

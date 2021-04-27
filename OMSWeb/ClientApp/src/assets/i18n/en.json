@@ -223,7 +223,14 @@
     "roles": "Roles",
     "role": "Role",
     "permissions": "Permissions",
-    "addUser": "Add User"
+    "addUser": "Add User",
+    "groupSetting": "Group Setting",
+    "clusterSetting": "Cluster Setting",
+    "segmentSetting": "Segment Setting",
+    "nodeSetting": "Node Setting",
+    "zcuSetting": "ZCU Setting",
+    "stationSetting": "Station Setting",
+    "bufferSetting": "Buffer Setting"
   },
   "enums": {
     "hostSessionStatus": {
