@@ -18,6 +18,7 @@ import { RoleManagementComponent } from './preferences/role-management.component
 import { SegmentSettingComponent } from './tracks/segment-setting.component';
 import { RoleSettingDialogComponent } from './dialogs/role-setting-dialog.component';
 import { UserFormDialogComponent } from './dialogs/user-form-dialog.component';
+import { UnitPickerComponent } from './tracks/unit-picker.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { UserFormDialogComponent } from './dialogs/user-form-dialog.component';
     SegmentSettingComponent,
     RoleSettingDialogComponent,
     UserFormDialogComponent,
+    UnitPickerComponent,
   ],
   imports: [CommonModule, SharedModule, SettingsRoutingModule],
 })

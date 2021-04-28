@@ -17,8 +17,6 @@ export class UsersService {
       store: AspNetData.createStore({
         key: 'id',
         loadUrl: `${this.baseUrl}`,
-        updateUrl: `${this.baseUrl}/update`,
-        deleteUrl: `${this.baseUrl}/remove`,
       }),
     })
   }

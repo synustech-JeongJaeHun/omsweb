@@ -5,3 +5,51 @@
     <button mat-raised-button class="dense">Revert</button>
   </div>
 </div>
+
+<dx-data-grid
+  [dataSource]="dataSource"
+  [height]="450"
+  [showBorders]="true"
+  (onRowUpdated)="onUpdateRow($event)"
+>
+  <dxo-paging [pageSize]="23"></dxo-paging>
+  <dxo-editing
+    mode="cell"
+    [allowUpdating]="true"
+    [useIcons]="true"
+  ></dxo-editing>
+  <dxi-column
+    dataField="id"
+    [allowEditing]="false"
+    [width]="60"
+    alignment="center"
+  >
+  </dxi-column>
+  <dxi-column
+    dataField="onlineName"
+    [caption]="'names.onlineName' | translate"
+    [allowEditing]="false"
+    alignment="center"
+  ></dxi-column>
+  <dxi-column dataField="unuse" [caption]="'names.unuse' | translate">
+  </dxi-column>
+  <dxi-column
+    dataField="secondaryStation"
+    [caption]="'names.secondary' | translate"
+    alignment="center"
+  >
+    <dxo-lookup
+      [dataSource]="dataSource"
+      displayExpr="onlineName"
+      valueExpr="onlineName"
+    >
+    </dxo-lookup>
+  </dxi-column>
+  <dxi-column dataField="maxRetrySec" [caption]="'MaxRetry(Sec)'"> </dxi-column>
+  <dxi-column dataField="retryIntervalSec" [caption]="'RetryInterval(Sec)'">
+  </dxi-column>
+  <dxo-search-panel
+    [placeholder]="'names.search' | translate"
+    [visible]="true"
+  ></dxo-search-panel>
+</dx-data-grid>

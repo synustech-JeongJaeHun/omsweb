@@ -66,4 +66,8 @@ export class UserManagementComponent implements OnInit, OnDestroy {
   onRemoveUsers() {
     console.log('## remove user >>', this.selectedIds);
   }
+  onUpdate(e) {
+    console.log('### on update row >>', e);
+    return true;
+  }
 }

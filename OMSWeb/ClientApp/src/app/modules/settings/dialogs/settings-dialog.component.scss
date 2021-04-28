@@ -52,9 +52,46 @@
         }
       }
     }
+    .dx-datagrid-rowsview .dx-row > .dx-master-detail-cell {
+      padding: 8px;
+    }
+
+    .row-detail {
+      padding-left: 12px;
+
+      .detail-title {
+        padding: 4px;
+        font-size: 13px;
+        font-weight: bold;
+        border-bottom: 1px solid var(--dialog-border-color);
+      }
+
+      .detail-info {
+        padding: 8px;
+
+        .name {
+          font-weight: bold;
+          justify-self: flex-end;
+        }
+      }
+    }
+
+    .sub-bar {
+      display: flex;
+      padding: 8px;
+      align-items: center;
+
+      mat-label {
+        font-size: 13px;
+        font-weight: bold;
+        margin-right: 8px;
+      }
+
+      .index-selector {
+        width: 150px;
+      }
+    }
   }
-
-
 }
 
 .settings-sidenav {

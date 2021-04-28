@@ -1,0 +1,25 @@
+:host {
+  display: flex;
+  flex-direction: column;
+}
+
+.assign-grid {
+  display: grid;
+  grid-template-columns: 1fr 120px;
+  column-gap: 32px;
+  justify-items: flex-start;
+  align-self: flex-start;
+}
+
+mat-label {
+  font-size: 13px;
+  font-weight: bold;
+  margin-right: 8px;
+}
+
+.max-vehicle mat-form-field.dense {
+  ::ng-deep.mat-form-field-infix {
+    width: initial;
+  }
+}
+

@@ -29,6 +29,7 @@
   [showBorders]="true"
   [sorting]="false"
   [(selectedRowKeys)]="selectedIds"
+  (onRowUpdating)="onUpdate($event)"
 >
   <dxo-scrolling mode="virtual"></dxo-scrolling>
   <dxo-editing

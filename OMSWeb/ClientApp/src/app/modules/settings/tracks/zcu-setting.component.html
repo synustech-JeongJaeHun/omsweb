@@ -5,3 +5,88 @@
     <button mat-raised-button class="dense">Revert</button>
   </div>
 </div>
+
+<dx-data-grid
+  id="zcu-datagrid"
+  [dataSource]="dataSource"
+  [columnAutoWidth]="false"
+  [height]="450"
+  [showBorders]="true"
+  [allowColumnResizing]="true"
+  (onRowUpdated)="onUpdateRow($event)"
+  keyExpr="id"
+  [masterDetail]="{ enabled: true, template: 'detailTemplate' }"
+>
+  <dxo-paging [pageSize]="20"></dxo-paging>
+  <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+  <dxo-editing
+    mode="cell"
+    [allowUpdating]="true"
+    [useIcons]="true"
+  ></dxo-editing>
+  <dxi-column
+    dataField="id"
+    dataType="number"
+    [allowEditing]="false"
+    alignment="center"
+  ></dxi-column>
+  <dxi-column
+    dataField="type"
+    [caption]="'names.type' | translate"
+    cellTemplate="zcuTypeTemplate"
+    [allowEditing]="false"
+    alignment="center"
+  ></dxi-column>
+  <dxi-column
+    dataField="completeNodes"
+    [caption]="'names.completeNodes' | translate"
+    [allowEditing]="false"
+  ></dxi-column>
+  <dxi-column
+    dataField="usingType"
+    [caption]="'names.usingType' | translate"
+    [width]="120"
+    alignment="center"
+  >
+    <dxo-lookup
+      [dataSource]="usingTypes"
+      valueExpr="type"
+      displayExpr="text"
+    ></dxo-lookup>
+  </dxi-column>
+  <dxo-search-panel
+    [placeholder]="'names.search' | translate"
+    [visible]="true"
+  ></dxo-search-panel>
+
+  <div *dxTemplate="let data of 'zcuTypeTemplate'">Standard</div>
+
+  <div *dxTemplate="let row of 'detailTemplate'">
+    <div class="row-detail">
+      <div class="detail-title">
+        ZCU {{ row.data.id }} {{ "names.inputZones" | translate }}
+      </div>
+
+      <div class="detail-info">
+        <dx-data-grid
+          [dataSource]="getInputZones(row.data)"
+          [showBorders]="true"
+        >
+          <dxi-column
+            dataField="priority"
+            [caption]="'names.priority' | translate"
+            [allowEditing]="false"
+            [width]="100"
+            alignment="center"
+          ></dxi-column>
+          <dxi-column
+            dataField="zone"
+            [caption]="'names.zone' | translate"
+            [allowEditing]="false"
+            alignment="center"
+            ></dxi-column>
+        </dx-data-grid>
+      </div>
+    </div>
+  </div>
+</dx-data-grid>

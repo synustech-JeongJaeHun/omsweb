@@ -36,11 +36,11 @@ const routes: Routes = [
     path: 'tracks/station',
     component: StationSettingComponent,
   },
-  {
-    outlet: 'sub',
-    path: 'tracks/buffer',
-    component: BufferSettingComponent,
-  },
+  // {
+  //   outlet: 'sub',
+  //   path: 'tracks/buffer',
+  //   component: BufferSettingComponent,
+  // },
   // {
   //   outlet: 'sub',
   //   path: 'tracks/blockzone',

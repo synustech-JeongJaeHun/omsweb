@@ -9,6 +9,13 @@ export enum SteerDirections {
   right = 'R',
   none = '',
 }
+export enum NodeDirectionNames {
+  None,
+  Right,
+  Left,
+  Up,
+  Down,
+}
 
 export enum ViewModes {
   minimal = 'MINIMAL',

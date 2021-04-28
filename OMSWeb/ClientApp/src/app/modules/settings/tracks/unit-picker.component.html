@@ -1,0 +1,52 @@
+<h5>{{ title }}</h5>
+
+<div class="assign-container">
+  <div class="unassigned-list">
+    <dx-data-grid
+      [dataSource]="assignedDataSource | async"
+      [showBorders]="true"
+      [(selectedRowKeys)]="selectedAssignedIds"
+    >
+      <dxo-scrolling mode="virtual"></dxo-scrolling>
+      <dxo-selection
+        mode="multiple"
+        showCheckBoxesMode="always"
+      ></dxo-selection>
+      <dxi-column
+        dataField="id"
+        [width]="58"
+        alignment="center"
+        [caption]="unitName"
+      >
+      </dxi-column>
+    </dx-data-grid>
+  </div>
+  <div class="actions">
+    <button mat-icon-button>
+      <mat-icon>arrow_left</mat-icon>
+    </button>
+    <button mat-icon-button>
+      <mat-icon>arrow_right</mat-icon>
+    </button>
+  </div>
+  <div class="assigned-list">
+    <dx-data-grid
+      [dataSource]="unassignedDataSource | async"
+      [showBorders]="true"
+      [(selectedRowKeys)]="selectedUnassignedIds"
+    >
+      <dxo-scrolling mode="virtual"></dxo-scrolling>
+      <dxo-selection
+        mode="multiple"
+        showCheckBoxesMode="always"
+      ></dxo-selection>
+      <dxi-column
+        dataField="id"
+        [width]="58"
+        alignment="center"
+        [caption]="unitName"
+      >
+      </dxi-column>
+    </dx-data-grid>
+  </div>
+</div>

@@ -1,0 +1,15 @@
+.assign-container {
+  display: grid;
+  grid-template-columns: 1fr 40px 1fr;
+
+  .actions {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+}
+
+dx-data-grid {
+  width: 120px;
+  height: 200px;
+}
