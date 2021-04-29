@@ -288,6 +288,7 @@
     "required": "{{field}} is required.",
     "minLength": "Minimum length is {{minLength}}.",
     "passwordMissMatch": "Password is miss match.",
-    "changeConfirm": "Are you sure {{name}} change?​"
+    "changeConfirm": "Are you sure {{name}} change?​",
+    "duplicatedRoleName": "Role name is used already."
   }
 }

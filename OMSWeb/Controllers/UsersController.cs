@@ -29,7 +29,14 @@ namespace OMSWeb.Controllers
     }
 
     [HttpGet("")]
-    public object QueryUsers(DataSourceLoadOptions loadOptions)
+    public IEnumerable<UserEntity> QueryAllUsers()
+    {
+      return _userSvc.QueryUsers();
+    }
+
+    [Obsolete]
+    [HttpGet("data-source")]
+    public object QueryUsersDataSource(DataSourceLoadOptions loadOptions)
     {
       return DataSourceLoader.Load(_userSvc.QueryUsers(), loadOptions);
     }
@@ -51,5 +58,41 @@ namespace OMSWeb.Controllers
     {
       return _userSvc.QueryPermissions().ToList();
     }
-  }
+
+    [HttpPost("batch/save")]
+    public IActionResult SaveAccounts([FromBody] AccountFormDto[] accounts)
+    {
+      Console.WriteLine($"# Save Accounts (batch) : {accounts.Length}");
+      var updateAccounts = accounts.Where(u => !u.IsNew.HasValue || !u.IsNew.Value).ToList();
+      var addAccounts = accounts.Where(u => u.IsNew.HasValue && u.IsNew.Value).ToList();
+      Console.WriteLine($"# --> updated : {updateAccounts.Count()}, added: {addAccounts.Count()}");
+
+      return Ok();
+    }
+
+    [HttpPost("batch/remove")]
+    public IActionResult DeleteAccounts([FromBody] string[] ids)
+    {
+      Console.WriteLine($"# Remove Accounts (batch) : {ids}");
+      return Ok();
+    }
+
+    [HttpPost("roles")]
+    public IActionResult SaveRoles([FromBody] RoleFormDto[] roles)
+    {
+      Console.WriteLine($"# Save Roles : {roles.Length}");
+      var changed = roles.Where(x => x.Id > 0).ToList();
+      var added = roles.Where(x => x.Id == 0).ToList();
+      Console.WriteLine($"# --> updated : {changed.Count()}, added: {added.Count()}");
+
+      return Ok();
+    }
+ 
+    [HttpPost("roles/remove")]
+    public IActionResult DeleteRoles([FromBody] int[] ids)
+    {
+      Console.WriteLine($"# Remove Roles : {ids}");
+      return Ok();
+    }
+ }
 }

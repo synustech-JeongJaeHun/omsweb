@@ -25,4 +25,20 @@ namespace OMSWeb.Models
     public string LastName { get; set; }
     public string Password { get; set; }
   }
+
+  public class AccountFormDto : ProfileFormDto
+  {
+    [Required]
+    public string Id { get; set; }
+    public bool? IsNew { get; set; }
+  }
+
+  public class RoleFormDto {
+    [Required]
+    public int Id { get; set; }
+    [Required]
+    public string Name { get; set; }
+    [Required]
+    public int[] Permissions { get; set; }
+  }
 }

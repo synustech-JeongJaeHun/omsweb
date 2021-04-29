@@ -3,8 +3,8 @@
   <div class="setting-actions">
     <!-- <dx-button icon="save"></dx-button>
     <dx-button icon="undo"></dx-button> -->
-    <button mat-raised-button class="dense" color="primary">Save</button>
-    <button mat-raised-button class="dense">Revert</button>
+    <button mat-raised-button class="dense" color="primary" (click)="onSave(grid)">Save</button>
+    <button mat-raised-button class="dense" (click)="onRevert(grid)">Revert</button>
   </div>
 </div>
 
@@ -14,7 +14,7 @@
   </button>
 
   <div class="sub-actions">
-    <button mat-stroked-button class="dense" (click)="onAddUser()">
+    <button mat-stroked-button class="dense" (click)="onAddUser(grid)">
       <mat-icon>add</mat-icon>
     </button>
     <button mat-stroked-button [disabled]="!canRemove" class="dense" (click)="onRemoveUsers()">
@@ -23,13 +23,16 @@
   </div>
 </div>
 <dx-data-grid
-  id="grid"
-  [dataSource]="dataSource"
+  #grid
+  [dataSource]="dataSource$ | async"
+  [keyExpr]="'id'"
   [repaintChangesOnly]="true"
   [showBorders]="true"
   [sorting]="false"
+  [height]="500"
   [(selectedRowKeys)]="selectedIds"
-  (onRowUpdating)="onUpdate($event)"
+  (onRowUpdated)="onUpdate($event)"
+  (onSelectionChanged)="onSelectionChanged($event)"
 >
   <dxo-scrolling mode="virtual"></dxo-scrolling>
   <dxo-editing
@@ -46,10 +49,10 @@
   </dxi-column>
   <dxi-column dataField="firstName" dataType="string"></dxi-column>
   <dxi-column dataField="lastName"></dxi-column>
-  <dxi-column dataField="password" [editorOptions]="{mode: 'password'}">
-  </dxi-column>
-  <!-- <dxi-column dataField="id" caption="Password" cellTemplate="passwordCell" [allowEditing]="false">
+  <!-- <dxi-column dataField="password" [editorOptions]="{mode: 'password'}">
   </dxi-column> -->
+  <dxi-column dataField="password" cellTemplate="passwordCell" [editorOptions]="{mode: 'password'}">
+  </dxi-column>
   <dxi-column dataField="roles" caption="Roles" dataType="number">
     <dxo-lookup
       [dataSource]="roles$ | async"
@@ -58,7 +61,8 @@
     ></dxo-lookup>
   </dxi-column>
 
-  <!-- <div *dxTemplate="let item of 'passwordCell'">
-    <a class="dense pointer" (click)="onChangePassword(item.data)">Change</a>
-  </div> -->
+  <div *dxTemplate="let item of 'passwordCell'">
+    ****
+    <!-- <a class="dense pointer" (click)="onChangePassword(item.data)">Change</a> -->
+  </div>
 </dx-data-grid>

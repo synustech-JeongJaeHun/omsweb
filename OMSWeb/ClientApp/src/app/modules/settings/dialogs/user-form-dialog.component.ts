@@ -20,7 +20,7 @@ export class UserFormDialogComponent implements OnInit {
   ngOnInit(): void {}
 
   onSubmit(form: IProfileForm) {
-    console.warn('## user form submit >>', form);
+    this.dialog.close(form);
   }
 
   onCancel() {

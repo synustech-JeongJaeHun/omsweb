@@ -1,10 +1,18 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import CustomStore from 'devextreme/data/custom_store';
 import DataSource from 'devextreme/data/data_source';
+import { NIL, v4 as uuid4 } from 'uuid';
 
 import { UsersService } from '@oms/services/users.service';
-import { IRole } from '../../../models/user.model';
-import { Observable } from 'rxjs';
+import { IRole, ISimpleUser, IUserForm } from '../../../models/user.model';
+import {
+  BehaviorSubject,
+  combineLatest,
+  concat,
+  forkJoin,
+  Observable,
+  Subject,
+} from 'rxjs';
 import {
   MatDialog,
   MatDialogRef,
@@ -12,6 +20,8 @@ import {
 } from '@angular/material/dialog';
 import { RoleSettingDialogComponent } from '../dialogs/role-setting-dialog.component';
 import { UserFormDialogComponent } from '../dialogs/user-form-dialog.component';
+import { filter, map, tap } from 'rxjs/operators';
+import _ = require('lodash');
 
 @Component({
   selector: 'oms-user-management',
@@ -21,8 +31,12 @@ import { UserFormDialogComponent } from '../dialogs/user-form-dialog.component';
 export class UserManagementComponent implements OnInit, OnDestroy {
   private _roleDlg: MatDialogRef<RoleSettingDialogComponent>;
   private _userDlg: MatDialogRef<UserFormDialogComponent>;
+  private _changedItems: IUserForm[] = [];
+  private _removeIds: string[] = [];
 
-  dataSource: DataSource;
+  dataSource$: Observable<ISimpleUser[]>;
+  removeIds$ = new BehaviorSubject<string[]>([]);
+
   roles$: Observable<IRole[]>;
   selectedIds: string[] = [];
 
@@ -31,7 +45,11 @@ export class UserManagementComponent implements OnInit, OnDestroy {
   }
 
   constructor(private userSvc: UsersService, private dialog: MatDialog) {
-    this.dataSource = this.userSvc.usersDataSource();
+    this.dataSource$ = combineLatest([
+      this.userSvc.users(),
+      this.removeIds$,
+    ]).pipe(map(([users, ids]) => users.filter((u) => !ids.includes(u.id))));
+
     this.roles$ = this.userSvc.roles();
   }
   ngOnDestroy(): void {
@@ -55,19 +73,71 @@ export class UserManagementComponent implements OnInit, OnDestroy {
     });
   }
 
-  onAddUser() {
+  onAddUser(grid) {
     this._userDlg = this.dialog.open(UserFormDialogComponent, {
       width: '350px',
       hasBackdrop: true,
       disableClose: true,
       closeOnNavigation: true,
     });
+    this._userDlg.afterClosed().subscribe((res) => {
+      if (res) {
+        res.id = uuid4();
+        res.isNew = true;
+
+        this._changedItems.push(res);
+        grid.instance
+          .getDataSource()
+          .store()
+          .push([{ type: 'insert', data: res }]);
+      }
+    });
   }
   onRemoveUsers() {
-    console.log('## remove user >>', this.selectedIds);
+    this.removeIds$.next(this.selectedIds);
+    const canceled = this._changedItems
+      .filter((u) => u.isNew && this.selectedIds.includes(u.id))
+      .map((u) => u.id);
+    if (canceled && canceled.length > 0) {
+      this._removeIds = _.difference(this.selectedIds, canceled);
+      this._changedItems = this._changedItems.filter(
+        (u) => !canceled.includes(u.id)
+      );
+    }
+    this.selectedIds = [];
   }
   onUpdate(e) {
-    console.log('### on update row >>', e);
-    return true;
+    // console.log('### on update row >>', e);
+    const { data, key } = e;
+    if (this._changedItems.some((c) => c.id === key)) {
+      let user = this._changedItems.find((u) => u.id === key);
+      user = data;
+    } else {
+      this._changedItems.push(data);
+    }
+  }
+  onSelectionChanged(e) {
+    this.selectedIds = this.selectedIds.filter((x) => x !== NIL);
+  }
+  onSave(grid) {
+    console.log('### save : remove ids >>>', this._removeIds);
+    console.log('### save : change items >>>', this._changedItems);
+    const jobs: Observable<void>[] = [];
+    this._removeIds.length &&
+      jobs.push(this.userSvc.deleteAccounts(this._removeIds));
+    this._changedItems.length &&
+      jobs.push(this.userSvc.saveAccounts(this._changedItems));
+
+    jobs.length &&
+      forkJoin(jobs).subscribe(() => {
+        this._removeIds = [];
+        this._changedItems = [];
+        grid.instance.refresh();
+      });
+  }
+  onRevert(grid) {
+    this.selectedIds = [];
+    this._changedItems = [];
+    this.removeIds$.next([]);
   }
 }

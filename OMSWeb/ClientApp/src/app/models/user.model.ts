@@ -10,10 +10,10 @@ export interface ISimpleUser {
   email: string;
   firstName: string;
   lastName: string;
+  roles?: number[]
 }
 
 export interface ISessionUser extends ISimpleUser {
-  roles?: number[]
   permissions?: number[];
 }
 
@@ -25,6 +25,11 @@ export interface IProfileForm {
   lastName: string;
   password?: string;
   roles?: number[];
+}
+
+export interface IUserForm extends IProfileForm {
+  id: string;
+  isNew?: boolean;
 }
 
 export interface IRole extends IPermission {

@@ -30,8 +30,8 @@ namespace OMSWeb.Repositories
     {
       var sql = @"
     SELECT users.id, first_name, last_name, email, '****' as password, 
-    array_agg(DISTINCT role_id) AS permissions, 
-    array_agg(DISTINCT permission_id) AS roles
+    array_agg(DISTINCT role_id) AS roles, 
+    array_agg(DISTINCT permission_id) AS permissions
     FROM (
         SELECT user_id, users.role_id as role_id, permission_id
         FROM role_permissions
