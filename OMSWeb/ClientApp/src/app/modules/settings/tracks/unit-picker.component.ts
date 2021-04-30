@@ -1,4 +1,13 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
+import _ = require('lodash');
 import { Observable, of } from 'rxjs';
 
 @Component({
@@ -6,27 +15,47 @@ import { Observable, of } from 'rxjs';
   templateUrl: './unit-picker.component.html',
   styleUrls: ['./unit-picker.component.scss'],
 })
-export class UnitPickerComponent implements OnInit {
+export class UnitPickerComponent implements OnInit, OnChanges {
   @Input() title: string;
   @Input() unitName: string;
+  @Input() gridHeight: number = 200;
+  @Input() pool: number[] = [];
+  @Input() picked: number[] = [];
+  @Output() selectionChanged = new EventEmitter<number[]>();
 
-  assignedDataSource: Observable<any[]>;
-  unassignedDataSource: Observable<any[]>;
   selectedAssignedIds: number[] = [];
   selectedUnassignedIds: number[] = [];
+  unassigned: number[] = [];
 
-  constructor() {
-    this.assignedDataSource = of([{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }]);
-    this.unassignedDataSource = of([
-      { id: 10 },
-      { id: 20 },
-      { id: 30 },
-      { id: 40 },
-      { id: 50 },
-      { id: 60 },
-      { id: 70 },
-    ]);
+  constructor() {}
+
+  ngOnChanges(changes: SimpleChanges): void {
+    const { picked, pool } = changes;
+    if (picked?.currentValue || pool?.currentValue) {
+      this.getUnassigned(pool?.currentValue, picked?.currentValue);
+    }
   }
 
   ngOnInit(): void {}
+
+  onAssign() {
+    if (this.selectedUnassignedIds.length) {
+      this.picked = [...this.picked, ...this.selectedUnassignedIds];
+      this.getUnassigned(this.pool, this.picked);
+      this.selectionChanged.emit(this.picked);
+    }
+  }
+  onUnassign() {
+    if (this.selectedAssignedIds.length) {
+      this.picked = this.picked.filter(
+        (x) => !this.selectedAssignedIds.includes(x)
+      );
+      this.getUnassigned(this.pool, this.picked);
+      this.selectionChanged.emit(this.picked);
+    }
+  }
+
+  private getUnassigned(pool: number[] = [], picked: number[] = []) {
+    this.unassigned = _.difference(pool, picked);
+  }
 }

@@ -3,9 +3,10 @@
 <div class="assign-container">
   <div class="unassigned-list">
     <dx-data-grid
-      [dataSource]="assignedDataSource | async"
+      [dataSource]="unassigned"
       [showBorders]="true"
-      [(selectedRowKeys)]="selectedAssignedIds"
+      [(selectedRowKeys)]="selectedUnassignedIds"
+      [height]="gridHeight"
     >
       <dxo-scrolling mode="virtual"></dxo-scrolling>
       <dxo-selection
@@ -13,27 +14,31 @@
         showCheckBoxesMode="always"
       ></dxo-selection>
       <dxi-column
-        dataField="id"
         [width]="58"
         alignment="center"
         [caption]="unitName"
+        cellTemplate="idTemplate"
       >
       </dxi-column>
+      <div *dxTemplate="let data of 'idTemplate'">
+        {{ data.data }}
+      </div>
     </dx-data-grid>
   </div>
   <div class="actions">
-    <button mat-icon-button>
+    <button mat-icon-button (click)="onUnassign()">
       <mat-icon>arrow_left</mat-icon>
     </button>
-    <button mat-icon-button>
+    <button mat-icon-button (click)="onAssign()">
       <mat-icon>arrow_right</mat-icon>
     </button>
   </div>
   <div class="assigned-list">
     <dx-data-grid
-      [dataSource]="unassignedDataSource | async"
+      [dataSource]="picked"
       [showBorders]="true"
-      [(selectedRowKeys)]="selectedUnassignedIds"
+      [(selectedRowKeys)]="selectedAssignedIds"
+      [height]="gridHeight"
     >
       <dxo-scrolling mode="virtual"></dxo-scrolling>
       <dxo-selection
@@ -41,12 +46,15 @@
         showCheckBoxesMode="always"
       ></dxo-selection>
       <dxi-column
-        dataField="id"
         [width]="58"
         alignment="center"
         [caption]="unitName"
+        cellTemplate="idTemplate"
       >
       </dxi-column>
+      <div *dxTemplate="let data of 'idTemplate'">
+        {{ data.data }}
+      </div>
     </dx-data-grid>
   </div>
 </div>

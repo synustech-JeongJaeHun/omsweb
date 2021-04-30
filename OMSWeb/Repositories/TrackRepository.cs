@@ -495,9 +495,10 @@ ORDER BY location_groups.id ASC
             {
               while (dr.Read())
               {
-                var json = dr["objects"].TryString();
-                var items = JsonConvert.DeserializeObject<LocationGroupObjectItem[]>(json);
-                Console.WriteLine($"### json >> {items}");
+                var json = dr["objects"] as string[];
+                // var items = JsonConvert.DeserializeObject<LocationGroupObjectItem[]>(json);
+                var items = json.Select(j => JsonConvert.DeserializeObject<LocationGroupObjectItem>(j.ToString())).ToArray();
+                Console.WriteLine($"### group object json >> {json}");
                 models.Add(new LocationGroup
                 {
                   Id = Convert.ToInt32(dr["id"]),

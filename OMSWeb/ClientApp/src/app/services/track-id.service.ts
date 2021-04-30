@@ -18,10 +18,10 @@ export class TrackIdService {
 
   private logger = console;
   private log_perf = console;
-  private vehicles: TrackIdMapType = {};
-  private points: TrackIdMapType = {};
-  private stations: TrackIdMapType = {};
-  private buffers: TrackIdMapType = {};
+   vehicles: TrackIdMapType = {};
+   points: TrackIdMapType = {};
+   stations: TrackIdMapType = {};
+   buffers: TrackIdMapType = {};
 
   constructor(private http: HttpClient) {}
 

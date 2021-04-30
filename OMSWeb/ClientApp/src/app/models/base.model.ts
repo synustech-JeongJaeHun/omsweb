@@ -45,3 +45,7 @@ export interface ITokenStamp {
   exp?: number;
   iat?: number;
 }
+
+export interface IIdObject {
+  id: number;
+}

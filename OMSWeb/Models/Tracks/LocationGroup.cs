@@ -6,6 +6,7 @@ namespace OMSWeb.Models.Tracks
     public string LogicalId { get; set; }
     public string Color { get; set; }
 
+    // public object Objects { get; set; }
     public LocationGroupObjectItem[] Objects { get; set; }
 
   }

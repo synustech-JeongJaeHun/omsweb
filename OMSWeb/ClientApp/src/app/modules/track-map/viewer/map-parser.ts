@@ -32,16 +32,10 @@ export class MapParser {
     this.layout_data.segmentsDisabled = this.parseDisabledSegments(
       data.segmentDisabled
     );
-    this.layout_data.stations = this.parseStations(
-      data.mapType,
-      data.stations
-    );
+    this.layout_data.stations = this.parseStations(data.mapType, data.stations);
     this.layout_data.buffers = this.parseBuffers(data.mapType, data.buffers);
     this.layout_data.mtls = this.parseMtls(data.mapType, data.mtls);
-    this.layout_data.clusters = this.parseClusters(
-      data.mapType,
-      data.clusters
-    );
+    this.layout_data.clusters = this.parseClusters(data.mapType, data.clusters);
 
     return this.layout_data;
   }
@@ -157,7 +151,7 @@ export class MapParser {
       try {
         const { objects } = row;
         if (mapType === MapTypes.FILE) {
-          row.objects = objects.map((o: string) => JSON.parse(o));
+          row.objects = objects.map((o) => JSON.parse(o));
         }
         models.push(new Group(row));
       } catch (error) {
@@ -280,12 +274,7 @@ export class MapParser {
     const segments = _.chain(rows)
       .groupBy('id')
       .map((groups) => {
-        const {
-          id,
-          startPoint,
-          endPoint,
-          isValidate,
-        } = groups[0];
+        const { id, startPoint, endPoint, isValidate } = groups[0];
         try {
           const segmentRow: Dto.ISegment = {
             ...groups[0],

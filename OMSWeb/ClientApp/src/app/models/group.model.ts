@@ -11,6 +11,7 @@ export class Group {
     buffer: number[];
     mtl: number[];
     vehicle: number[];
+    point: number[];
   };
 
   constructor(row: Dto.IGroup) {
@@ -20,6 +21,7 @@ export class Group {
       buffer: [],
       mtl: [],
       vehicle: [],
+      point: [],
     };
     objects.forEach((o) => {
       const { id: objectId, type: objectType } = o;
@@ -41,6 +43,8 @@ export class Group {
         return 'mtl';
       case 'vehicles':
         return 'vehicle';
+      case 'points':
+        return 'point';
       default:
         break;
     }
@@ -52,6 +56,9 @@ export class Group {
     }
     if (this.objects.buffer === undefined) {
       this.objects.buffer = [];
+    }
+    if (this.objects.point === undefined) {
+      this.objects.point = [];
     }
     if (this.objects.mtl === undefined) {
       this.objects.mtl = [];
@@ -83,6 +90,12 @@ export class Group {
       this.objects.vehicle = [];
     }
     return this.objects.vehicle;
+  }
+  get_points() {
+    if (this.objects.point === undefined) {
+      this.objects.point = [];
+    }
+    return this.objects.point;
   }
   messagefy() {
     let message_arr = [];

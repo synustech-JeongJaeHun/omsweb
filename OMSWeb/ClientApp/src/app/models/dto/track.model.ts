@@ -23,6 +23,11 @@ export namespace Dto {
     color?: string;
     objects?: any[];
   }
+
+  export interface IGroupedObject {
+    id: number;
+    type: string;
+  }
   export interface IMTL {
     id: number;
     logicalId: string;
