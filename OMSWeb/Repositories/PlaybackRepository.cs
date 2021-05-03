@@ -122,10 +122,10 @@ namespace OMSWeb.Repositories
       ";
       using (var conn = ConnectTrack())
       {
+        conn.Open();
         var trans = conn.BeginTransaction();
         using (var cmd = new NpgsqlCommand(sql, conn))
         {
-          conn.Open();
           try
           {
             cmd.ExecuteNonQuery();
@@ -142,18 +142,19 @@ namespace OMSWeb.Repositories
     public void CleanDynamicTables(string userId)
     {
       var sql = $@"
-      DELETE FROM playback_segment_blocking WHERE user_id='${userId}';
-      DELETE FROM playback_vehicles WHERE user_id='${userId}';
-      DELETE FROM playback_orders WHERE user_id='${userId}';
+      DELETE FROM playback_segment_blocking WHERE user_id=@userId;
+      DELETE FROM playback_vehicles WHERE user_id=@userId;
+      DELETE FROM playback_orders WHERE user_id=@userId;
       ";
       using (var conn = ConnectTrack())
       {
+        conn.Open();
         var trans = conn.BeginTransaction();
         using (var cmd = new NpgsqlCommand(sql, conn))
         {
-          conn.Open();
           try
           {
+            cmd.Parameters.AddWithValue("userId", userId);
             cmd.ExecuteNonQuery();
             trans.Commit();
           }
@@ -170,55 +171,57 @@ namespace OMSWeb.Repositories
     {
       var sql = $@"
         INSERT INTO playback_points
-        SELECT *, '{userId}'
-        FROM json_populate_recordset(null::points, extract_table('TRACK_SNAPSHOT', 'points', '{trackSnapshotTime}'));
+        SELECT *, @userId
+        FROM json_populate_recordset(null::points, extract_table('TRACK_SNAPSHOT', 'points', @trackSnapshotTime));
 
         INSERT INTO playback_segments
-        SELECT *, '{userId}'
-        FROM json_populate_recordset(null::segments, extract_table('TRACK_SNAPSHOT', 'segments', '{trackSnapshotTime}'));
+        SELECT *, @userId
+        FROM json_populate_recordset(null::segments, extract_table('TRACK_SNAPSHOT', 'segments', @trackSnapshotTime));
 
         INSERT INTO playback_segment_parts
-        SELECT *, '{userId}'
-        FROM json_populate_recordset(null::segment_parts, extract_table('TRACK_SNAPSHOT', 'segment_parts', '{trackSnapshotTime}'));
+        SELECT *, @userId
+        FROM json_populate_recordset(null::segment_parts, extract_table('TRACK_SNAPSHOT', 'segment_parts', @trackSnapshotTime));
 
         INSERT INTO playback_clusters
-        SELECT *, '{userId}'
-        FROM json_populate_recordset(null::clusters, extract_table('TRACK_SNAPSHOT', 'clusters', '{trackSnapshotTime}'));
+        SELECT *, @userId
+        FROM json_populate_recordset(null::clusters, extract_table('TRACK_SNAPSHOT', 'clusters', @trackSnapshotTime));
 
         INSERT INTO playback_cluster_points
-        SELECT *, '{userId}'
-        FROM json_populate_recordset(null::cluster_points, extract_table('TRACK_SNAPSHOT', 'cluster_points', '{trackSnapshotTime}'));
+        SELECT *, @userId
+        FROM json_populate_recordset(null::cluster_points, extract_table('TRACK_SNAPSHOT', 'cluster_points', @trackSnapshotTime));
 
         INSERT INTO playback_stations
-        SELECT *, '{userId}'
-        FROM json_populate_recordset(null::stations, extract_table('TRACK_SNAPSHOT', 'stations', '{trackSnapshotTime}'));
+        SELECT *, @userId
+        FROM json_populate_recordset(null::stations, extract_table('TRACK_SNAPSHOT', 'stations', @trackSnapshotTime));
 
         INSERT INTO playback_buffers
-        SELECT *, '{userId}'
-        FROM json_populate_recordset(null::buffers, extract_table('TRACK_SNAPSHOT', 'buffers', '{trackSnapshotTime}'));
+        SELECT *, @userId
+        FROM json_populate_recordset(null::buffers, extract_table('TRACK_SNAPSHOT', 'buffers', @trackSnapshotTime));
 
         INSERT INTO playback_mtls
-        SELECT *, '{userId}'
-        FROM json_populate_recordset(null::mtls, extract_table('TRACK_SNAPSHOT', 'mtls', '{trackSnapshotTime}'));
+        SELECT *, @userId
+        FROM json_populate_recordset(null::mtls, extract_table('TRACK_SNAPSHOT', 'mtls', @trackSnapshotTime));
 
         INSERT INTO playback_vehicles
-        SELECT *, '{userId}'
-        FROM json_populate_recordset(null::vehicles, extract_table('SNAPSHOT', 'vehicles', '{snapshotTime}'));
+        SELECT *, @userId
+        FROM json_populate_recordset(null::vehicles, extract_table('SNAPSHOT', 'vehicles', @snapshotTime));
 
         INSERT INTO playback_orders
-        SELECT *, '{userId}'
-        FROM json_populate_recordset(null::orders, extract_table('SNAPSHOT', 'orders', '{snapshotTime}'));
+        SELECT *, @userId
+        FROM json_populate_recordset(null::orders, extract_table('SNAPSHOT', 'orders', @snapshotTime));
 
         INSERT INTO playback_segment_blocking
-        SELECT *, '{userId}'
-        FROM json_populate_recordset(null::segment_blocking, extract_table('SNAPSHOT', 'segment_blocking', '{snapshotTime}'));
+        SELECT *, @userId
+        FROM json_populate_recordset(null::segment_blocking, extract_table('SNAPSHOT', 'segment_blocking', @snapshotTime));
       ";
       using (var conn = ConnectTrack())
       {
-        conn.Open();
         using (var cmd = new NpgsqlCommand(sql, conn))
         {
           conn.Open();
+          cmd.Parameters.AddWithValue("userId", userId);
+          cmd.Parameters.AddWithValue("trackSnapshotTime", trackSnapshotTime);
+          cmd.Parameters.AddWithValue("snapshotTime", snapshotTime);
           cmd.ExecuteNonQuery();
         }
       }
@@ -230,7 +233,10 @@ namespace OMSWeb.Repositories
       MapDimension result;
       using (var conn = ConnectTrack())
       {
-        result = conn.QuerySingle<MapDimension>(sql);
+        result = conn.QueryFirstOrDefault<MapDimension>(sql, new
+        {
+          userId = userId
+        });
       }
       return result;
     }
@@ -241,7 +247,10 @@ namespace OMSWeb.Repositories
       List<Point> result;
       using (var conn = ConnectTrack())
       {
-        result = conn.Query<Point>(sql).AsList();
+        result = conn.Query<Point>(sql, new
+        {
+          userId = userId
+        }).AsList();
       }
       return result;
     }
@@ -252,7 +261,10 @@ namespace OMSWeb.Repositories
       List<SegmentWithPart> result;
       using (var conn = ConnectTrack())
       {
-        result = conn.Query<SegmentWithPart>(sql).AsList();
+        result = conn.Query<SegmentWithPart>(sql, new
+        {
+          userId = userId
+        }).AsList();
       }
       return result;
     }
@@ -263,7 +275,10 @@ namespace OMSWeb.Repositories
       List<DisabledSegment> result;
       using (var conn = ConnectTrack())
       {
-        result = conn.Query<DisabledSegment>(sql).AsList();
+        result = conn.Query<DisabledSegment>(sql, new
+        {
+          userId = userId
+        }).AsList();
       }
       return result;
     }
@@ -274,7 +289,10 @@ namespace OMSWeb.Repositories
       List<Station> result;
       using (var conn = ConnectTrack())
       {
-        result = conn.Query<Station>(sql).AsList();
+        result = conn.Query<Station>(sql, new
+        {
+          userId = userId
+        }).AsList();
       }
       return result;
     }
@@ -285,7 +303,10 @@ namespace OMSWeb.Repositories
       List<Buffer> result;
       using (var conn = ConnectTrack())
       {
-        result = conn.Query<Buffer>(sql).AsList();
+        result = conn.Query<Buffer>(sql, new
+        {
+          userId = userId
+        }).AsList();
       }
       return result;
     }
@@ -296,7 +317,10 @@ namespace OMSWeb.Repositories
       List<Mtl> result;
       using (var conn = ConnectTrack())
       {
-        result = conn.Query<Mtl>(sql).AsList();
+        result = conn.Query<Mtl>(sql, new
+        {
+          userId = userId
+        }).AsList();
       }
       return result;
     }
@@ -307,7 +331,10 @@ namespace OMSWeb.Repositories
       List<Cluster> result;
       using (var conn = ConnectTrack())
       {
-        result = conn.Query<Cluster>(sql).AsList();
+        result = conn.Query<Cluster>(sql, new
+        {
+          userId = userId
+        }).AsList();
       }
       return result;
     }
@@ -318,7 +345,10 @@ namespace OMSWeb.Repositories
       List<VehiclePosition> result;
       using (var conn = ConnectTrack())
       {
-        result = conn.Query<VehiclePosition>(sql).AsList();
+        result = conn.Query<VehiclePosition>(sql, new
+        {
+          userId = userId
+        }).AsList();
       }
       return result;
     }
@@ -361,7 +391,10 @@ namespace OMSWeb.Repositories
       List<OrderState> result;
       using (var conn = ConnectTrack())
       {
-        result = conn.Query<OrderState>(sql).AsList();
+        result = conn.Query<OrderState>(sql, new
+        {
+          userId = userId
+        }).AsList();
       }
       return result;
     }

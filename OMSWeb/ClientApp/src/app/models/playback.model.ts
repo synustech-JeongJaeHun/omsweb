@@ -16,3 +16,8 @@ export interface IPlaybackState {
   nextEvent?: number;
   error?: string;
 }
+
+export interface ITimeline {
+  start?: Date;
+  end?: Date;
+}

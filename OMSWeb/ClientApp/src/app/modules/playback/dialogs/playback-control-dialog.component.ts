@@ -3,9 +3,10 @@ import { Component, OnInit } from '@angular/core';
 import {
   IPlaybackOptions,
   IPlaybackState,
+  ITimeline,
   playbackSpeedValues,
 } from '@oms/models/playback.model';
-import { tap } from 'rxjs/operators';
+import { mergeMap, tap } from 'rxjs/operators';
 import { PlaybackService } from '../../../services/playback.service';
 
 @Component({
@@ -20,6 +21,9 @@ export class PlaybackControlDialogComponent implements OnInit {
   states: IPlaybackState;
 
   speedValues = playbackSpeedValues;
+
+  private oneDay = 1000 * 60 * 60 * 24;
+  private timeLine: ITimeline = {};
 
   constructor(private playbackSvc: PlaybackService) {}
 
@@ -42,11 +46,24 @@ export class PlaybackControlDialogComponent implements OnInit {
       .firstSnapshotTime()
       .pipe(
         tap((time) => {
+          console.log('## snapshot time >>', time);
           this.firstTime = time;
+        }),
+        mergeMap((time) => {
+          this.timeLine.start = new Date(time);
+          const startTime = this.timeLine.start.getTime();
+          this.timeLine.end =
+            now.getTime() - startTime < this.oneDay
+              ? now
+              : new Date(startTime + this.oneDay);
+          return this.playbackSvc.loadSnapshotOfDay(
+            this.timeLine.start,
+            this.timeLine.end
+          );
         })
       )
-      .subscribe((time) => {
-        console.log('## snapshot time >>', time);
+      .subscribe((data) => {
+        console.log('## playback data >>', data);
       });
   }
 }

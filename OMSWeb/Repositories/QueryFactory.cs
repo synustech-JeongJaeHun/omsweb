@@ -7,15 +7,19 @@ namespace OMSWeb.Repositories
   {
     private static IDictionary<string, string> sqlMap = new Dictionary<string, string> {
       {"size", @"
-        SELECT min(x) AS min_x, min(y) AS min_y, max(x) AS max_x, max(y) AS max_y, 
-        max(x) - min(x) AS width, max(y) - min(y) AS height 
+        SELECT min(x) AS min_x,
+          min(y) AS min_y,
+					MAX(x) AS max_x,
+          max(y) AS max_y, 
+	        (max(x) - min(x)) AS width,
+          (max(y) - min(y)) AS height 
         FROM points
-        --*user_id_condition*--WHERE user_id ={userId}
+        --*user_id_condition*--WHERE user_id =@userId
       "},
       {"point", @"
         SELECT id AS id, x AS x, y AS y, physical_id AS physical_id, logical_id AS logical_id  
         FROM points
-        --*user_id_condition*--WHERE user_id = {userId}
+        --*user_id_condition*--WHERE user_id = @userId
         ORDER BY id
       "},
       {"segment", @"
@@ -28,13 +32,13 @@ namespace OMSWeb.Repositories
         FROM segment_parts AS SP
         INNER JOIN segments AS SG
           ON SP.segment_id = SG.id
-        --*user_id_condition*--WHERE SP.user_id = {userId}
+        --*user_id_condition*--WHERE SP.user_id = @userId
         ORDER BY SP.segment_id, SP.id
       "},
       {"segmentDisable", @"
         SELECT id, segment_id, disabled_by AS disabled_by, reason AS disabled_reason
         FROM segment_blocking
-        --*user_id_condition*--WHERE user_id ={userId}
+        --*user_id_condition*--WHERE user_id =@userId
         ORDER BY segment_id
       "},
       {"cluster", @"
@@ -44,7 +48,7 @@ namespace OMSWeb.Repositories
             FROM clusters AS CT
             INNER JOIN cluster_points AS CP
               ON CT.id = CP.cluster_id
-              --*user_id_condition*--WHERE CT.user_id = {userId}
+              --*user_id_condition*--WHERE CT.user_id = @userId
         ) AS NEW_DATA
         GROUP BY id, logical_id, max_vehicles, color
       "},
@@ -52,18 +56,18 @@ namespace OMSWeb.Repositories
         SELECT id AS id, physical_id AS physical_id, logical_id AS logical_id, point AS point_id,
           direction AS direction, carrier_type AS carrier_type
         FROM stations
-        --*user_id_condition*--WHERE user_id ={userId}
+        --*user_id_condition*--WHERE user_id =@userId
       "},
       {"buffer", @"
         SELECT id, physical_id, logical_id AS logical_id, point AS point_id,
           direction AS direction
         FROM buffers
-        --*user_id_condition*--WHERE user_id ={userId}
+        --*user_id_condition*--WHERE user_id =@userId
       "},
       {"mtl", @"
         SELECT id, physical_id, logical_id AS logical_id, point AS point_id
         FROM mtls
-        --*user_id_condition*--WHERE user_id ={userId}
+        --*user_id_condition*--WHERE user_id =@userId
       "},
       {"vehiclePosition", @"
         SELECT 
@@ -89,7 +93,7 @@ namespace OMSWeb.Repositories
         LEFT OUTER JOIN orders AS OD
         ON VH.order_id = OD.id AND OD.time_completed IS NULL AND OD.time_aborted IS NULL
         --*user_id_condition*--AND VH.user_id = OD.user_id    
-        --*user_id_condition*--WHERE VH.user_id = {userId}
+        --*user_id_condition*--WHERE VH.user_id = @userId
         ORDER BY VH.id
       "},
       {"orderStatus", @"
@@ -140,7 +144,7 @@ namespace OMSWeb.Repositories
         assignment_type, assignment_details
         FROM orders
         WHERE time_completed IS NULL AND time_aborted IS NULL AND time_failed IS NULL
-        --*user_id_condition*-- AND user_id = {userId}
+        --*user_id_condition*-- AND user_id = @userId
       "}
     };
     public static string GetSql(string name)
@@ -185,7 +189,7 @@ namespace OMSWeb.Repositories
       sql = sql.Replace("from orders", "from playback_orders", StringComparison.OrdinalIgnoreCase);
       sql = sql.Replace("join orders", "join playback_orders", StringComparison.OrdinalIgnoreCase);
 
-      sql = sql.Replace("--*user_id_condition*--", "", StringComparison.OrdinalIgnoreCase).Replace("{userId}", userId);
+      sql = sql.Replace("--*user_id_condition*--", "", StringComparison.OrdinalIgnoreCase);
 
       return sql;
     }
