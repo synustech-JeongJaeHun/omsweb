@@ -28,11 +28,7 @@ namespace OMSWeb.Repositories
       MapDimension entity = _cache.GetValue<MapDimension>(key);
       if (entity == null)
       {
-        string sql = @"
-SELECT min(x) AS min_x, min(y) AS min_y, max(x) AS max_x, max(y) AS max_y, 
-  max(x) - min(x) AS width, max(y) - min(y) AS height 
-FROM points
---*user_id_condition*--WHERE user_id =$1";
+        string sql = QueryFactory.GetSql("size");
         using (var conn = ConnectTrack())
         {
           using (var cmd = new NpgsqlCommand(sql, conn))
@@ -67,11 +63,7 @@ FROM points
       if (data == null)
       {
         var models = new List<Point>();
-        string sql = @"
-SELECT id AS id, x AS x, y AS y, physical_id AS physical_id, logical_id AS logical_id  
-FROM points
---*user_id_condition*--WHERE user_id = $1
-ORDER BY id";
+        string sql = QueryFactory.GetSql("point");
         using (var conn = ConnectTrack())
         {
           using (var cmd = new NpgsqlCommand(sql, conn))
@@ -107,19 +99,7 @@ ORDER BY id";
       if (data == null)
       {
         var models = new List<SegmentWithPart>();
-        string sql = @"
-SELECT SP.segment_id AS id, SG.physical_id AS physical_id, SG.logical_id AS logical_id, SG.start_point, SG.end_point, 
-  SP.id AS segpart_id, 
-  type,
-  location,
-  direction,
-  SG.speed, SG.length
-FROM segment_parts AS SP
-INNER JOIN segments AS SG
-  ON SP.segment_id = SG.id
---*user_id_condition*--WHERE SP.user_id = $1
-ORDER BY SP.segment_id, SP.id
-";
+        string sql = QueryFactory.GetSql("segment");
         using (var conn = ConnectTrack())
         {
           using (var cmd = new NpgsqlCommand(sql, conn))
@@ -160,12 +140,7 @@ ORDER BY SP.segment_id, SP.id
       if (data == null)
       {
         var models = new List<DisabledSegment>();
-        string sql = @"
-SELECT id, segment_id, disabled_by AS disabled_by, reason AS disabled_reason
-FROM segment_blocking
---*user_id_condition*--WHERE user_id =$1
-ORDER BY segment_id
-";
+        string sql = QueryFactory.GetSql("segmentDisable");
         using (var conn = ConnectTrack())
         {
           using (var cmd = new NpgsqlCommand(sql, conn))
@@ -199,12 +174,7 @@ ORDER BY segment_id
       if (data == null)
       {
         var models = new List<Station>();
-        string sql = @"
-SELECT id AS id, physical_id AS physical_id, logical_id AS logical_id, point AS point_id,
-  direction AS direction, carrier_type AS carrier_type
-FROM stations
---*user_id_condition*--WHERE user_id =$1
-";
+        string sql = QueryFactory.GetSql("station");
         using (var conn = ConnectTrack())
         {
           using (var cmd = new NpgsqlCommand(sql, conn))
@@ -240,12 +210,7 @@ FROM stations
       if (data == null)
       {
         var models = new List<Buffer>();
-        string sql = @"
-SELECT id, physical_id, logical_id AS logical_id, point AS point_id,
-  direction AS direction
-FROM buffers
---*user_id_condition*--WHERE user_id =$1
-";
+        string sql = QueryFactory.GetSql("buffer");
         using (var conn = ConnectTrack())
         {
           using (var cmd = new NpgsqlCommand(sql, conn))
@@ -280,11 +245,7 @@ FROM buffers
       if (data == null)
       {
         var models = new List<Mtl>();
-        string sql = @"
-SELECT id, physical_id, logical_id AS logical_id, point AS point_id
-FROM mtls
---*user_id_condition*--WHERE user_id =$1
-";
+        string sql = QueryFactory.GetSql("mtl");
         using (var conn = ConnectTrack())
         {
           using (var cmd = new NpgsqlCommand(sql, conn))
@@ -318,17 +279,7 @@ FROM mtls
       if (data == null)
       {
         var models = new List<Cluster>();
-        string sql = @"
-SELECT id, logical_id, max_vehicles, string_agg(point_id::TEXT, ', ' ORDER BY point_id) AS points, color
-FROM (
-    SELECT CT.id, CT.logical_id, CT.max_vehicles, CP.point_id AS point_id, CT.color
-    FROM clusters AS CT
-    INNER JOIN cluster_points AS CP
-      ON CT.id = CP.cluster_id
-      --*user_id_condition*--WHERE CT.user_id = $1
-) AS NEW_DATA
-GROUP BY id, logical_id, max_vehicles, color
-";
+        string sql = QueryFactory.GetSql("cluster");
         using (var conn = ConnectTrack())
         {
           using (var cmd = new NpgsqlCommand(sql, conn))
@@ -399,33 +350,7 @@ FROM vehicle_paths
       if (data == null)
       {
         var models = new List<VehiclePosition>();
-        string sql = @"
-SELECT 
-    VH.id, VH.physical_id, VH.logical_id, VH.last_point AS cur_point, VH.next_point, VH.last_contact,
-    VH.mode, VH.can_be_pushed, VH.order_origin, VH.moving_state, VH.cargo_state, VH.is_sensor_stopped, VH.is_blocked, VH.error_list, VH.type, VH.cargo_transfer_result, VH.map_db,
-    OD.id AS order_id, OD.logical_id AS order_logical_id, OD.location_pickup, OD.location_dropoff, OD.location_move, OD.priority,
-    CASE 
-    WHEN OD.location_pickup IS NOT NULL AND OD.location_dropoff IS NOT NULL   -- FROM-TO order
-    THEN
-    CASE 
-        WHEN OD.time_vehicle_arrived IS NULL
-        THEN OD.location_pickup		                                      -- display FROM
-        ELSE OD.location_dropoff		                                      -- display To
-    END
-    WHEN OD.location_pickup IS NOT NULL AND OD.location_dropoff IS NULL       -- FROM order
-    THEN OD.location_pickup		                                      -- display FROM
-    WHEN OD.location_pickup IS NULL AND OD.location_dropoff IS NOT NULL       -- TO order
-    THEN OD.location_dropoff		                                      -- display TO
-    WHEN OD.location_move IS NOT NULL                                         -- MOVE order
-    THEN OD.location_move		                                      -- display MOVETO
-    END AS command_point
-FROM vehicles AS VH
-LEFT OUTER JOIN orders AS OD
-ON VH.order_id = OD.id AND OD.time_completed IS NULL AND OD.time_aborted IS NULL
---*user_id_condition*--AND VH.user_id = OD.user_id    
---*user_id_condition*--WHERE VH.user_id = $1
-ORDER BY VH.id
-";
+        string sql = QueryFactory.GetSql("vehiclePosition");
         using (var conn = ConnectTrack())
         {
           using (var cmd = new NpgsqlCommand(sql, conn))

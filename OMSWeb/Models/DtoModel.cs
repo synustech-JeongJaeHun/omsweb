@@ -7,6 +7,11 @@ namespace OMSWeb.Models
     public string Token { get; set; }
   }
 
+  public class SimpleResponse<T>
+  {
+    public T Data { get; set; }
+  }
+
   public class LoginFormDto
   {
     [Required]
@@ -33,7 +38,8 @@ namespace OMSWeb.Models
     public bool? IsNew { get; set; }
   }
 
-  public class RoleFormDto {
+  public class RoleFormDto
+  {
     [Required]
     public int Id { get; set; }
     [Required]

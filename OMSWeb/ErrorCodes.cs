@@ -10,6 +10,8 @@ namespace OMSWeb
     AuthenticationFailed = 1,
     UserNotExists,
     BadRequestModel = 10,
+    TrackSnapshotNotExists = 20,
+    DaySnapshotNotExists,
     ServerError = 999,
   }
 }

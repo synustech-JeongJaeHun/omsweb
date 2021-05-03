@@ -96,12 +96,14 @@ namespace OMSWeb
       services.AddScoped<MessageService>();
       services.AddScoped<HistoryService>();
       services.AddScoped<UserService>();
+      services.AddScoped<PlaybackService>();
 
       services.AddSingleton<SystemsService>();
       services.AddSingleton<TrackRepository>();
       services.AddSingleton<TrackService>();
       services.AddSingleton<PushService>();
       services.AddSingleton<CacheService>();
+
       // services.AddTransient<ProblemDetailsFactory, OmsProblemDetailsFactory>();  // @TODO problem handler 작성 후 사용
       #endregion
 

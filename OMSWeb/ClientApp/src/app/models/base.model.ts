@@ -40,6 +40,10 @@ export interface ITokenResult {
   token: string;
 }
 
+export interface ISimpleResponse<T> {
+  data: T;
+}
+
 export interface ITokenStamp {
   nbf?: number;
   exp?: number;

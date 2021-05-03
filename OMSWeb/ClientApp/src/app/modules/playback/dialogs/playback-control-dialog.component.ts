@@ -5,6 +5,8 @@ import {
   IPlaybackState,
   playbackSpeedValues,
 } from '@oms/models/playback.model';
+import { tap } from 'rxjs/operators';
+import { PlaybackService } from '../../../services/playback.service';
 
 @Component({
   selector: 'oms-playback-control-dialog',
@@ -12,12 +14,14 @@ import {
   styleUrls: ['./playback-control-dialog.component.scss'],
 })
 export class PlaybackControlDialogComponent implements OnInit {
+  firstTime: Date;
+  now: Date = new Date();
   options: IPlaybackOptions;
   states: IPlaybackState;
 
   speedValues = playbackSpeedValues;
 
-  constructor() {}
+  constructor(private playbackSvc: PlaybackService) {}
 
   ngOnInit(): void {
     const now: Date = new Date();
@@ -32,7 +36,17 @@ export class PlaybackControlDialogComponent implements OnInit {
       playing: false,
       event: 0,
       nextEvent: 0,
-      playTime: '00:00:00'
+      playTime: '00:00:00',
     };
+    this.playbackSvc
+      .firstSnapshotTime()
+      .pipe(
+        tap((time) => {
+          this.firstTime = time;
+        })
+      )
+      .subscribe((time) => {
+        console.log('## snapshot time >>', time);
+      });
   }
 }

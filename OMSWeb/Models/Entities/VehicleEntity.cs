@@ -2,7 +2,7 @@ using System;
 
 namespace OMSWeb.Models.Entities
 {
-  public class VehicleEntity
+  public class VehicleEntity: IIntId
   {
     public int Id { get; set; }
     public string PhysicalId { get; set; }
@@ -14,7 +14,7 @@ namespace OMSWeb.Models.Entities
     public string MapDb { get; set; }
   }
 
-  public class VehicleHistory : VehicleEntity
+  public class VehicleHistoryEntity : VehicleEntity
   {
     public int HistorySourceId { get; set; }
     public DateTime HistoryChangeTime { get; set; }

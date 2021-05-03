@@ -21,7 +21,7 @@ namespace OMSWeb.Controllers
     }
 
     [HttpGet("groups")]
-    public ActionResult<List<LocationGroup>> GetGroups()
+    public IEnumerable<LocationGroup> GetGroups()
     {
       return this._repo.LoadGroups();
     }
@@ -30,6 +30,11 @@ namespace OMSWeb.Controllers
     public ActionResult UpdateGroup([FromRoute] int id) {
       Console.WriteLine($"# Update Group : {id}");
       return Ok();
+    }
+
+    [HttpGet("clusters")]
+    public IEnumerable<Cluster> GetClusters() {
+      return this._repo.LoadClusters();
     }
   }
 }

@@ -15,7 +15,7 @@ namespace OMSWeb.Services {
     public IQueryable<OrderEntity> QueryOrders() {
       return this._repo.QueryOrders();
     }
-    public IQueryable<VehicleHistory> QueryVehicles() {
+    public IQueryable<VehicleHistoryEntity> QueryVehicles() {
       return this._repo.QueryVehicles();
     }
     public IQueryable<AlarmHistory> QueryAlarms() {

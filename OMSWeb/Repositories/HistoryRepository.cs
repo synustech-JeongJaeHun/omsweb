@@ -45,7 +45,7 @@ namespace OMSWeb.Repositories
       return result;
     }
 
-    public IQueryable<VehicleHistory> QueryVehicles()
+    public IQueryable<VehicleHistoryEntity> QueryVehicles()
     {
       var sql = @"
     SELECT
@@ -64,10 +64,10 @@ namespace OMSWeb.Repositories
     ON VH.id = LVH.max_id    
     ORDER BY VH.id        
       ";
-      IQueryable<VehicleHistory> result;
+      IQueryable<VehicleHistoryEntity> result;
       using (var conn = ConnectTrack())
       {
-        result = conn.Query<VehicleHistory>(sql).AsQueryable();
+        result = conn.Query<VehicleHistoryEntity>(sql).AsQueryable();
       }
       return result;
     }

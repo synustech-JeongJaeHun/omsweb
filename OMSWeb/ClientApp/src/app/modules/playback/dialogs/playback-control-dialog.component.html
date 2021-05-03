@@ -9,6 +9,8 @@
           class="timePicker"
           id="fromTime"
           displayFormat="yyyy-MM-dd HH:mm"
+          [min]="firstTime"
+          [max]="now"
         >
         </dx-date-box>
         <div class="date-divider">~</div>
@@ -18,6 +20,8 @@
           class="timePicker"
           id="toTime"
           displayFormat="yyyy-MM-dd HH:mm"
+          [min]="firstTime"
+          [max]="now"
         >
         </dx-date-box>
       </div>

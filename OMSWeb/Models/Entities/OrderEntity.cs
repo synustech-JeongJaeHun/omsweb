@@ -2,7 +2,7 @@ using System;
 
 namespace OMSWeb.Models.Entities
 {
-  public class OrderEntity
+  public class OrderEntity : IIntId
   {
     public int Id { get; set; }
     public string LogicalId { get; set; }
@@ -25,4 +25,5 @@ namespace OMSWeb.Models.Entities
     public float? DistanceDropoff { get; set; }
     public float? DistanceMove { get; set; }
   }
+  public class OrderHistoryEntity: OrderEntity {}
 }

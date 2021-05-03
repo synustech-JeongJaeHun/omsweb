@@ -6,15 +6,17 @@ import {
 } from '@angular/material/dialog';
 import { PlaybackControlDialogComponent } from './dialogs/playback-control-dialog.component';
 
+import { PlaybackService } from '@oms/services/playback.service';
+
 @Component({
   selector: 'oms-playback',
-  template: ``,
+  templateUrl: './playback.component.html',
   styleUrls: ['playback.component.scss'],
 })
 export class PlaybackComponent implements OnInit, OnDestroy {
   private _controlDlg: MatDialogRef<PlaybackControlDialogComponent>;
 
-  constructor(private dialog: MatDialog) {}
+  constructor(private dialog: MatDialog, private playbackSvc: PlaybackService) {}
 
   ngOnDestroy(): void {
     this._controlDlg &&

@@ -4,6 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using OMSWeb.Models;
@@ -16,11 +17,20 @@ namespace OMSWeb.Services
   {
     private readonly UserRepository _repo;
     private readonly AppSettings _appSettings;
+    private readonly HttpContext _context;
 
-    public UserService(UserRepository userRepository, IOptions<AppSettings> appSettings)
+    public string UserId
+    {
+      get { return _context?.User?.Identity?.Name; }
+    }
+
+    public UserService(UserRepository userRepository, IOptions<AppSettings> appSettings,
+      IHttpContextAccessor contextAccessor
+    )
     {
       this._repo = userRepository;
       this._appSettings = appSettings.Value;
+      this._context = contextAccessor.HttpContext;
     }
 
     public UserEntity GetUserByEmail(string email)
@@ -28,16 +38,20 @@ namespace OMSWeb.Services
       return this._repo.GetUserByEmail(email);
     }
 
-    public IQueryable<UserEntity> QueryUsers() {
+    public IQueryable<UserEntity> QueryUsers()
+    {
       return this._repo.QueryUsers();
     }
-    public IQueryable<PermissionEntity> QueryPermissions() {
+    public IQueryable<PermissionEntity> QueryPermissions()
+    {
       return this._repo.QueryPermissions();
     }
-    public IQueryable<RoleEntity> QueryRoles() {
+    public IQueryable<RoleEntity> QueryRoles()
+    {
       return this._repo.QueryRoles();
     }
-    public IQueryable<RoleEntity> QueryRolesWithPermissions() {
+    public IQueryable<RoleEntity> QueryRolesWithPermissions()
+    {
       return this._repo.QueryRolesWithPermissions();
     }
 
@@ -57,8 +71,9 @@ namespace OMSWeb.Services
       var jwtHandler = new JwtSecurityTokenHandler();
       var key = Encoding.ASCII.GetBytes(secret);
 
-      var claims = new [] {
-        new Claim("id", user.Id.ToString(), ClaimValueTypes.UInteger32),
+      var claims = new[] {
+        new Claim(ClaimTypes.Name, user.Id.ToString()),
+        new Claim("id", user.Id.ToString()),
         new Claim("email", user.Email),
         new Claim("firstName", user.FirstName),
         new Claim("lastName", user.LastName ?? ""),

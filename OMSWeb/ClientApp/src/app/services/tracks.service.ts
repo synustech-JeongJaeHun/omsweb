@@ -19,4 +19,8 @@ export class TracksService {
   updateGroup(id: number, group: Dto.IGroup): Observable<void> {
     return this.http.put<void>(`${this.baseUrl}/groups/${id}`, group);
   }
+
+  loadClusters(): Observable<Dto.ICluster[]> {
+    return this.http.get<Dto.ICluster[]>(`${this.baseUrl}/clusters`);
+  }
 }

@@ -276,7 +276,10 @@
       "view_monitor_status": "View Monitor Status"
     }
   },
-  "errors": {},
+  "errors": {
+    "TrackSnapshotNotExists": "track snapshot does not exist for selected day",
+    "DaySnapshotNotExists": "event snapshot does not exist for the selected day"
+  },
   "messages": {
     "confirmTitle": "Confirm",
     "confirmResetAllVehicles": "Do you want to reset all vehicles?",
