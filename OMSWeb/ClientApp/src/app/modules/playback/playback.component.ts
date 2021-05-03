@@ -7,6 +7,12 @@ import {
 import { PlaybackControlDialogComponent } from './dialogs/playback-control-dialog.component';
 
 import { PlaybackService } from '@oms/services/playback.service';
+import { IPreferences } from '../../models/settings.model';
+import { SettingsService } from '../../services/settings.service';
+import { ViewModes } from '../../models/enums';
+import { IPlaybackData } from '../../models/playback.model';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'oms-playback',
@@ -14,17 +20,45 @@ import { PlaybackService } from '@oms/services/playback.service';
   styleUrls: ['playback.component.scss'],
 })
 export class PlaybackComponent implements OnInit, OnDestroy {
-  private _controlDlg: MatDialogRef<PlaybackControlDialogComponent>;
+  loadingState = true;
+  ready = false;
+  mapPreference: IPreferences;
+  viewMode: ViewModes;
+  playbackData: IPlaybackData;
 
-  constructor(private dialog: MatDialog, private playbackSvc: PlaybackService) {}
+  private _controlDlg: MatDialogRef<PlaybackControlDialogComponent>;
+  private destroy$ = new Subject<void>();
+
+  constructor(
+    private dialog: MatDialog,
+    private playbackSvc: PlaybackService,
+    private settingSvc: SettingsService
+  ) {
+    this.viewMode = ViewModes.playback;
+
+    this.playbackSvc.playbackData$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((data) => {
+        this.playbackData = data;
+        this.loadingState = false;
+        this.ready = true;
+      });
+  }
 
   ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
     this._controlDlg &&
       this._controlDlg.getState() === MatDialogState.OPEN &&
       this._controlDlg.close();
   }
 
   ngOnInit(): void {
+    this.mapPreference = this.settingSvc.globalPreferences;
+    this.openController();
+  }
+
+  private openController() {
     this._controlDlg = this.dialog.open(PlaybackControlDialogComponent, {
       width: '560px',
       hasBackdrop: false,

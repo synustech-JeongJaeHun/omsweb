@@ -5,6 +5,7 @@ import { PlaybackRoutingModule } from './playback-routing.module';
 import { PlaybackComponent } from './playback.component';
 import { PlaybackControlDialogComponent } from './dialogs/playback-control-dialog.component';
 import { SharedModule } from '../shared/shared.module';
+import { TrackMapModule } from '../track-map/track-map.module';
 
 
 @NgModule({
@@ -13,6 +14,7 @@ import { SharedModule } from '../shared/shared.module';
     CommonModule,
     SharedModule,
     PlaybackRoutingModule,
+    TrackMapModule,
   ]
 })
 export class PlaybackModule { }

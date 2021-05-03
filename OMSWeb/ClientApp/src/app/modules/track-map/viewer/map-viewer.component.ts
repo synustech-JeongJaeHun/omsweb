@@ -1,4 +1,11 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import * as _ from 'lodash';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
@@ -28,9 +35,11 @@ import { IVehicleCommandMessage } from '../../../models/command.model';
 })
 export class MapViewerComponent implements OnInit, OnDestroy {
   @Input() preference: IPreferences;
+  @Input() viewMode: ViewModes;
+  @Input() trackData: Dto.ITrackData;
+  @Output() ready = new EventEmitter<boolean>();
 
-  omsData: Dto.ITrackData;
-  loadingState = false;
+  // loadingState = false;
   currentContextEvent: IMapMouseEvent;
   contextData: any;
   currentTooltipEvent: IMapMouseEvent;
@@ -67,7 +76,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   constructor(
     private auth: AuthService,
     private dataSvc: MapDataService,
-    private statusSvc: StatusService,
     private trackIdSvc: TrackIdService,
     private statesSvc: MapStatesService,
     private hubSvc: HubService,
@@ -85,19 +93,12 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.loadingState = true;
-    this.statusSvc.getTrack().subscribe((res) => {
-      console.info('## track info >>', res);
-      this.omsData = res;
-      this._minimapVisible = this.preference.toggles.minimap;
-      this._detailsVisible = this.preference.toggles.itemDetails;
+    if (!this.trackData) return;
 
-      this.drawMap();
-
-      this.loadingState = false;
-    });
+    this.drawMap();
     this.attachEvents();
-    this.auth.isAuthenticated && this.attachStatusEvents();
+    [ViewModes.public, ViewModes.viewer].includes(this.viewMode) &&
+      this.attachHubEvents();
   }
 
   onChangeSegmentProperty(name: string, value: any) {
@@ -165,10 +166,9 @@ export class MapViewerComponent implements OnInit, OnDestroy {
       .subscribe((event) => {
         this.viewer.onChangeConfig(event);
       });
+  }
 
-    // this.vehicleChanged$ = this.hubSvc.vehicleChanged$
-    //   .pipe(switchMap((e) => of(e)))
-    //   .subscribe((e: IDataChangeEvent) => this.applyVehicleChange(e));
+  private attachHubEvents() {
     this.hubSvc.vehicleChanged$
       .pipe(takeUntil(this.destroy$))
       .subscribe((e: IDataChangeEvent) => this.applyVehicleChange(e));
@@ -187,33 +187,33 @@ export class MapViewerComponent implements OnInit, OnDestroy {
       .subscribe((e: IDataChangeEvent) => {
         this.applyClusterChange(e);
       });
-  }
 
-  private attachStatusEvents() {
-    this.hubSvc.vehiclePathChanged$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((e: IDataChangeEvent) => this.applyVehiclePathChange(e));
+    if (this.auth.isAuthenticated) {
+      this.hubSvc.vehiclePathChanged$
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((e: IDataChangeEvent) => this.applyVehiclePathChange(e));
 
-    this.hubSvc.stationChanged$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((e) => this.applyStationChange(e));
+      this.hubSvc.stationChanged$
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((e) => this.applyStationChange(e));
 
-    this.hubSvc.bufferChanged$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((e) => this.applyBufferChange(e));
+      this.hubSvc.bufferChanged$
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((e) => this.applyBufferChange(e));
 
-    this.hubSvc.mtlChanged$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((e) => this.applyMtlChange(e));
+      this.hubSvc.mtlChanged$
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((e) => this.applyMtlChange(e));
 
-    this.hubSvc.groupChanged$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((e) => this.applyGroupChange(e));
+      this.hubSvc.groupChanged$
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((e) => this.applyGroupChange(e));
+    }
   }
 
   private drawMap() {
     this.viewer = new ViewController(
-      this.auth.isAuthenticated ? ViewModes.viewer : ViewModes.public,
+      this.viewMode,
       'track-canvas',
       'minimap',
       this.dataSvc,
@@ -221,13 +221,18 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     );
 
     this.viewer.setup(this.preference);
-    this.viewer.create_track(this.omsData);
-    this.viewer.update_vehicles(this.omsData.vehicles, 'INSERT', null, false);
+    this.viewer.create_track(this.trackData);
+    this.viewer.update_vehicles(this.trackData.vehicles, 'INSERT', null, false);
     this.trackIdSvc.extract_id_from_track(this.dataSvc.data);
 
     this.statesSvc.actionState$
       .pipe(takeUntil(this.destroy$))
       .subscribe((event) => this.onMapMouseEvent(event));
+
+    this._minimapVisible = this.preference.toggles.minimap;
+    this._detailsVisible = this.preference.toggles.itemDetails;
+
+    this.ready.emit(true);
   }
 
   private onMapMouseEvent(event: IMapMouseEvent) {

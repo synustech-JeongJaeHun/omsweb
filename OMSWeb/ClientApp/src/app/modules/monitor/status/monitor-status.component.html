@@ -1,5 +1,16 @@
+<div id="loading-bar" *ngIf="loadingState">
+  Loading ...
+  <mat-progress-bar
+    mode="indeterminate"
+    aria-label="Loading"
+  ></mat-progress-bar>
+</div>
+
 <oms-map-viewer
+  *ngIf="ready"
   [preference]="mapPreference"
+  [viewMode]="viewMode"
+  [trackData]="trackData"
   class="map-viewer"
 ></oms-map-viewer>
 

@@ -4,54 +4,67 @@
       <div class="form-period">
         <!-- <div class="control-title">{{ "names.period" | translate }}</div> -->
         <dx-date-box
-          [value]="options.startAt"
+          [(value)]="options.startAt"
           type="datetime"
           class="timePicker"
           id="fromTime"
           displayFormat="yyyy-MM-dd HH:mm"
           [min]="firstTime"
-          [max]="now"
+          [(max)]="options.endAt"
         >
         </dx-date-box>
         <div class="date-divider">~</div>
         <dx-date-box
-          [value]="options.endAt"
+          [(value)]="options.endAt"
           type="datetime"
           class="timePicker"
           id="toTime"
           displayFormat="yyyy-MM-dd HH:mm"
-          [min]="firstTime"
-          [max]="now"
+          [(min)]="firstTime"
+          [max]="options.maxTime"
         >
         </dx-date-box>
       </div>
       <div class="control-slider">
         <div class="slider-name">{{ "names.snapshots" | translate }}</div>
-        <mat-slider min="1" max="100" color="primary"></mat-slider>
-        <div class="slider-value">{{ options.snapshot }}</div>
+        <mat-slider
+          #snapshotSlider
+          min="0"
+          [max]="options.snapshotMax"
+          [disabled]="!ready"
+          [(ngModel)]="states.snapshot"
+          color="primary"
+        ></mat-slider>
+        <div class="slider-value">{{ snapshotSlider.value }}</div>
       </div>
       <div class="control-slider">
         <div class="slider-name">{{ "names.events" | translate }}</div>
-        <mat-slider min="1" max="100" color="primary"></mat-slider>
-        <div class="slider-value">{{ options.event }}</div>
+        <mat-slider
+          #eventSlider
+          min="1"
+          max="100"
+          color="primary"
+          [disabled]="!ready"
+        ></mat-slider>
+        <div class="slider-value">{{ eventSlider.value }}</div>
       </div>
       <div class="control-play">
-        <button mat-icon-button id="prev">
+        <button mat-icon-button id="prev" [disabled]="!ready">
           <mat-icon>skip_previous</mat-icon>
         </button>
-        <button mat-icon-button id="play">
+        <button mat-icon-button id="play" [disabled]="!ready">
           <mat-icon>play_arrow</mat-icon>
         </button>
-        <button mat-icon-button id="ff">
+        <button mat-icon-button id="ff" [disabled]="!ready">
           <mat-icon>fast_forward</mat-icon>
         </button>
-        <button mat-icon-button id="next">
+        <button mat-icon-button id="next" [disabled]="!ready">
           <mat-icon>skip_next</mat-icon>
         </button>
       </div>
       <mat-form-field appearance="fill" class="form-speed">
         <mat-label>{{ "names.speed" | translate }}</mat-label>
-        <mat-select [(ngModel)]="options.speed">
+        <mat-select [(ngModel)]="options.speed" [disabled]="!ready">
           <mat-option *ngFor="let speed of speedValues" [value]="speed"
             >{{ speed }}x</mat-option
           >
@@ -61,6 +74,7 @@
       <mat-form-field appearance="fill" class="form-step">
         <mat-label>{{ "names.events" | translate }}</mat-label>
         <input
+          [disabled]="!ready"
           matInput
           type="number"
           min="1"
@@ -69,17 +83,17 @@
         />
       </mat-form-field>
 
-      <mat-form-field class="form-time readonly">
+      <mat-form-field class="form-time readonly full-width">
         <mat-label>{{ "names.time" | translate }}</mat-label>
-        <input matInput type="text" readonly [(ngModel)]="states.playTime" />
+        <input matInput type="text" readonly [value]="(currentSnapshot| date:'yyyy-MM-dd HH:mm:ss') || ''" />
       </mat-form-field>
       <mat-form-field class="form-event readonly">
         <mat-label>{{ "names.event" | translate }}</mat-label>
-        <input matInput type="number" readonly [(ngModel)]="states.event" />
+        <input matInput type="number" readonly [value]="states.event" />
       </mat-form-field>
       <mat-form-field class="form-next readonly">
         <mat-label>{{ "names.timeToNextEvents" | translate }}</mat-label>
-        <input matInput type="number" readonly [(ngModel)]="states.nextEvent" />
+        <input matInput type="number" readonly [value]="states.nextEvent" />
       </mat-form-field>
     </div>
   </ng-container>

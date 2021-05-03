@@ -590,6 +590,9 @@ snack-bar-container.error {
   }
 }
 
+.mat-form-field.full-width {
+  max-width: 100% !important;
+}
 .mat-form-field.dense {
   font-size: 12px;
   width: 100%;

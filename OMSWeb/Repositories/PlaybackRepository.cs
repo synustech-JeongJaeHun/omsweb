@@ -69,11 +69,13 @@ namespace OMSWeb.Repositories
 
     public IList<TimelineEntity> GetTimeline(string type, TimelineQueryOptions options)
     {
-      var sql = this.BuildTimelineQuery("event_list", options);
+      string sql;
+      object param;
+      (sql, param) = this.BuildTimelineQuery("event_list", options);
       IList<TimelineEntity> result;
       using (var conn = ConnectTrack())
       {
-        result = conn.Query<TimelineEntity>(sql).AsList();
+        result = conn.Query<TimelineEntity>(sql, param).AsList();
       }
       return result;
     }
@@ -83,27 +85,33 @@ namespace OMSWeb.Repositories
       var sql = $@"
       SELECT min(event_id), max(event_id), table_name
     FROM timeline
-    WHERE event_time BETWEEN '{range.Start.Value}' AND '{range.End.Value}'
+    WHERE event_time BETWEEN @start AND @end
     GROUP BY table_name
       ";
       IQueryable<EventBoundary> result;
       using (var conn = ConnectTrack())
       {
-        result = conn.Query<EventBoundary>(sql).AsQueryable();
+        result = conn.Query<EventBoundary>(sql, new {
+          start = range.Start.Value,
+          end = range.End.Value,
+        }).AsQueryable();
       }
       return result;
     }
 
-    public IQueryable<T> GetEvents<T>(EventBoundary boundary)
+    public IList<T> GetEvents<T>(EventBoundary boundary)
     {
       var sql = $@"
       SELECT * 
       FROM {boundary.TableName} 
       WHERE id >= '{boundary.Min}' AND id <= '{boundary.Max}'";
-      IQueryable<T> result;
+      IList<T> result;
       using (var conn = ConnectTrack())
       {
-        result = conn.Query<T>(sql).AsQueryable();
+        result = conn.Query<T>(sql, new {
+          min = boundary.Min,
+          max = boundary.Max,
+        }).AsList();
       }
       return result;
     }
@@ -399,7 +407,7 @@ namespace OMSWeb.Repositories
       return result;
     }
 
-    private string BuildTimelineQuery(string type, TimelineQueryOptions options)
+    private (string sql, object param) BuildTimelineQuery(string type, TimelineQueryOptions options)
     {
       var sql = $@"
       SELECT id, event_time, event_id, table_name 
@@ -408,6 +416,7 @@ namespace OMSWeb.Repositories
       ORDER BY id
       --*limit_condition*
       ";
+      object param = null;
 
       if (type == "start") { }
       else if (type == "fastforward" || type == "play") { }
@@ -416,15 +425,20 @@ namespace OMSWeb.Repositories
         if (options.End.HasValue)
         {
           sql = sql.Replace("--*where_condition*",
-          $"WHERE event_time >= '${options.Start.Value}'::timestamptz AND event_time <= '{options.End.Value}'::timestamptz ");
+          $"WHERE event_time >= @start::timestamptz AND event_time <= @end::timestamptz ");
         }
         else
         {
           sql = sql.Replace("--*where_condition*",
-          $"WHERE event_time >= '${options.Start.Value}'::timestamptz AND event_time <= '{options.End.Value}'::timestamptz + '1 day'::interval ");
+          $"WHERE event_time >= @start::timestamptz AND event_time <= @end::timestamptz + '1 day'::interval ");
         }
+        param = new
+        {
+          start = options.Start.Value,
+          end = options.End.Value,
+        };
       }
-      return sql;
+      return (sql, param);
     }
   }
 }

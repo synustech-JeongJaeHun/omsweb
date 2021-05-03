@@ -97,6 +97,9 @@ namespace OMSWeb.Repositories
         ORDER BY VH.id
       "},
       {"orderStatus", @"
+      SELECT --*order_condition*
+      *
+      FROM (
         SELECT
         id, 
         origin,
@@ -145,6 +148,7 @@ namespace OMSWeb.Repositories
         FROM orders
         WHERE time_completed IS NULL AND time_aborted IS NULL AND time_failed IS NULL
         --*user_id_condition*-- AND user_id = @userId
+      ) AS WRAPPED_TABLE
       "}
     };
     public static string GetSql(string name)

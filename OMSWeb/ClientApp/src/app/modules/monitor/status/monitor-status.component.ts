@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 
 import { SettingsService } from '@oms/services/settings.service';
+import { Dto } from '../../../models/dto/track.model';
+import { ViewModes } from '../../../models/enums';
 import { IPreferences } from '../../../models/settings.model';
+import { AuthService } from '../../../services/auth.service';
+import { StatusService } from '../../../services/status.service';
 
 @Component({
   selector: 'oms-monitor-status',
@@ -37,21 +41,54 @@ import { IPreferences } from '../../../models/settings.model';
         /* height: 300px; */
         /* opacity: 0.9; */
       }
+      #loading-bar {
+        position: absolute;
+        top: 40%;
+        left: 25%;
+        width: 50%;
+        text-align: center;
+        background-color: white;
+        padding: 20px;
+        z-index: 5;
+      }
+
+      .mat-progress-bar {
+        margin-top: 10px;
+      }
     `,
   ],
 })
 export class MonitorStatusComponent implements OnInit {
+  loadingState = true;
+  ready = false;
   mapPreference: IPreferences;
+  viewMode: ViewModes;
+  trackData: Dto.ITrackData;
 
   // showControlTable = false;
   get showControlTable(): boolean {
     return this.mapPreference.toggles.controlTable;
   }
 
-  constructor(private settingSvc: SettingsService) {}
+  constructor(
+    private settingSvc: SettingsService,
+    private auth: AuthService,
+    private statusSvc: StatusService
+  ) {
+    this.viewMode = this.auth.isAuthenticated
+      ? ViewModes.viewer
+      : ViewModes.public;
+  }
 
   ngOnInit(): void {
     this.mapPreference = this.settingSvc.globalPreferences;
+    this.statusSvc.getTrack().subscribe((res) => {
+      console.info('## track info >>', res);
+      this.trackData = res;
+      this.ready = true;
+      this.loadingState = false;
+    });
+
     // @TODO loading preference
     // this.mapPreference = {
     //   toggles: defaultToggleOptions,

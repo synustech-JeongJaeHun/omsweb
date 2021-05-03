@@ -3,13 +3,6 @@
   <div [hidden]="!showMinimap" id="minimap-container">
     <svg id="minimap"></svg>
   </div>
-  <div id="loading-bar" *ngIf="loadingState">
-    Loading ...
-    <mat-progress-bar
-      mode="indeterminate"
-      aria-label="Loading"
-    ></mat-progress-bar>
-  </div>
 
   <div id="side_panel">
     <oms-map-side-panel

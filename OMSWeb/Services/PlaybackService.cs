@@ -85,28 +85,28 @@ namespace OMSWeb.Services
       return map;
     }
 
-    private IDictionary<string, IDictionary<int, dynamic>> GetEventTables(IQueryable<EventBoundary> boundaries)
+    private IDictionary<string, IDictionary<int, object>> GetEventTables(IQueryable<EventBoundary> boundaries)
     {
-      var table = new Dictionary<string, IDictionary<int, dynamic>>();
+      var table = new Dictionary<string, IDictionary<int, object>>();
       foreach (var boundary in boundaries)
       {
-        dynamic events;
+        // IList<dynamic> events;
         switch (boundary.TableName)
         {
           case "order_history":
-            events = this._repo.GetEvents<OrderHistoryEntity>(boundary);
-            if (events != null && events.Count() > 0)
-              table.Add(boundary.TableName, this.ConvertRowMap<OrderHistoryEntity>(events));
+            var orderEvents = this._repo.GetEvents<OrderHistoryEntity>(boundary);
+            if (orderEvents != null && orderEvents.Count() > 0)
+              table.Add(boundary.TableName, this.ConvertRowMap<OrderHistoryEntity>(orderEvents));
             break;
           case "vehicle_history":
-            events = this._repo.GetEvents<VehicleHistoryEntity>(boundary);
-            if (events != null && events.Count() > 0)
-              table.Add(boundary.TableName, this.ConvertRowMap<VehicleHistoryEntity>(events));
+            var vehicleEvents = this._repo.GetEvents<VehicleHistoryEntity>(boundary);
+            if (vehicleEvents != null && vehicleEvents.Count() > 0)
+              table.Add(boundary.TableName, this.ConvertRowMap<VehicleHistoryEntity>(vehicleEvents));
             break;
           case "segment_blocking_history":
-            events = this._repo.GetEvents<SegmentBlockingHistoryEntity>(boundary);
-            if (events != null && events.Count() > 0)
-              table.Add(boundary.TableName, this.ConvertRowMap<SegmentBlockingHistoryEntity>(events));
+            var sbEvents = this._repo.GetEvents<SegmentBlockingHistoryEntity>(boundary);
+            if (sbEvents != null && sbEvents.Count() > 0)
+              table.Add(boundary.TableName, this.ConvertRowMap<SegmentBlockingHistoryEntity>(sbEvents));
             break;
           default:
             break;
@@ -116,9 +116,9 @@ namespace OMSWeb.Services
       return table;
     }
 
-    private IDictionary<int, T> ConvertRowMap<T>(IQueryable<T> rows) where T : IIntId
+    private IDictionary<int, dynamic> ConvertRowMap<T>(IList<T> rows) where T : IIntId
     {
-      var map = new Dictionary<int, T>();
+      var map = new Dictionary<int, dynamic>();
       foreach (var row in rows)
       {
         map.Add(row.Id, row);
