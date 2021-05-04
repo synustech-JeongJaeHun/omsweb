@@ -11,6 +11,7 @@
           displayFormat="yyyy-MM-dd HH:mm"
           [min]="firstTime"
           [(max)]="options.endAt"
+          [disabled]="!ready"
         >
         </dx-date-box>
         <div class="date-divider">~</div>
@@ -22,6 +23,7 @@
           displayFormat="yyyy-MM-dd HH:mm"
           [(min)]="firstTime"
           [max]="options.maxTime"
+          [disabled]="!ready"
         >
         </dx-date-box>
       </div>
@@ -35,18 +37,19 @@
           [(ngModel)]="states.snapshot"
           color="primary"
         ></mat-slider>
-        <div class="slider-value">{{ snapshotSlider.value }}</div>
+        <div class="slider-value">{{ (getCurrentSnapshot(snapshotSlider.value)| date:'HH:mm:ss') || '' }}</div>
       </div>
       <div class="control-slider">
         <div class="slider-name">{{ "names.events" | translate }}</div>
         <mat-slider
           #eventSlider
-          min="1"
-          max="100"
+          min="0"
+          [max]="options.eventMax"
+          [(ngModel)]="states.event"
           color="primary"
           [disabled]="!ready"
         ></mat-slider>
-        <div class="slider-value">{{ eventSlider.value }}</div>
+        <div class="slider-value">{{ getCurrentEvent(eventSlider.value) }}</div>
       </div>
       <div class="control-play">
         <button mat-icon-button id="prev" [disabled]="!ready">
@@ -78,8 +81,8 @@
           matInput
           type="number"
           min="1"
-          max="100"
-          [(ngModel)]="options.eventsStep"
+          [max]="options.eventMax + 1"
+          [(ngModel)]="options.nextEvent"
         />
       </mat-form-field>
 
@@ -89,7 +92,7 @@
       </mat-form-field>
       <mat-form-field class="form-event readonly">
         <mat-label>{{ "names.event" | translate }}</mat-label>
-        <input matInput type="number" readonly [value]="states.event" />
+        <input matInput readonly [value]="currentEvent" />
       </mat-form-field>
       <mat-form-field class="form-next readonly">
         <mat-label>{{ "names.timeToNextEvents" | translate }}</mat-label>

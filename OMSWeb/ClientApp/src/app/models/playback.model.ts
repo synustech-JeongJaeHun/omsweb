@@ -6,9 +6,9 @@ export interface IPlaybackOptions {
   endAt?: Date;
   maxTime?: Date;
   speed?: number;
-  eventsStep?: number;
   snapshotMax?: number;
-  event?: number;
+  eventMax?: number;
+  nextEvent?: number;
 }
 
 export const playbackSpeedValues = [0.1, 0.5, 1, 2, 5, 10];

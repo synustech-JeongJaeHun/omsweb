@@ -26,10 +26,13 @@ export class PlaybackControlDialogComponent implements OnInit {
 
   private oneDay = 1000 * 60 * 60 * 24;
   private timeLine: ITimelineQueryOptions = {};
-  private data : IPlaybackData;
+  private data: IPlaybackData;
 
   get currentSnapshot(): Date {
-    return this.data?.dynamicSnapshotList[this.states.snapshot];
+    return this.getCurrentSnapshot(this.states.snapshot);
+  }
+  get currentEvent(): string {
+    return this.getCurrentEvent(this.states.event);
   }
 
   constructor(private playbackSvc: PlaybackService) {}
@@ -38,8 +41,7 @@ export class PlaybackControlDialogComponent implements OnInit {
     const now: Date = new Date();
     this.options = {
       speed: 1,
-      eventsStep: 5,
-      event: 0,
+      nextEvent: 1,
     };
 
     this.states = {
@@ -71,18 +73,35 @@ export class PlaybackControlDialogComponent implements OnInit {
             this.timeLine.start,
             this.timeLine.end
           );
-        }),
+        })
       )
       .subscribe((data) => {
         console.log('## playback data >>', data);
         this.data = data;
-        const {dynamicSnapshotList} = data;
-        this.options.snapshotMax = dynamicSnapshotList.length - 1;
+        this.initSnapshotSlider(data);
+        this.initEventSlider(data);
         this.ready = true;
       });
   }
 
+  getCurrentSnapshot(index: number): Date {
+    return this.data?.dynamicSnapshotList[index];
+  }
+  getCurrentEvent(index: number): string {
+    const id = this.data?.timeline[index]?.id;
+    return id ? `#${id}` : '';
+  }
+
   private initDatePicker() {
     this.options.startAt = this.firstTime;
+  }
+
+  private initSnapshotSlider(data: IPlaybackData) {
+    const { dynamicSnapshotList } = data;
+    this.options.snapshotMax = dynamicSnapshotList.length - 1;
+  }
+  private initEventSlider(data: IPlaybackData) {
+    const { timeline } = data;
+    this.options.eventMax = timeline.length - 1;
   }
 }
