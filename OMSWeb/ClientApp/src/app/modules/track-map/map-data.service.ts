@@ -1,15 +1,19 @@
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
-import { Observable, of } from 'rxjs';
+import { Observable, of, Subject } from 'rxjs';
 import { IMapGeometry } from '../../models/drawing.model';
 import { Dto } from '../../models/dto/track.model';
 import { MapTypes } from '../../models/enums';
-import { ILookupUnit, IViewerData } from '../../models/map.interface';
+import { ILookupUnit, ISegment, IViewerData } from '../../models/map.interface';
 import { Segment } from '../../models/segment.model';
 import { Vehicle } from '../../models/vehicle.model';
 import { ExpectedPath } from '../../models/expected-path.model';
 import { LayoutUtil } from '../shared/utils/layout.util';
 import { MapParser } from './viewer/map-parser';
+import {
+  IPlaybackTrackChangeEvent,
+  ISnapshotData,
+} from '../../models/playback.model';
 
 @Injectable({
   providedIn: 'root',
@@ -20,11 +24,19 @@ export class MapDataService {
   stale_vehicles = [];
   geometry: IMapGeometry;
 
+  snapshotUpdated$ = new Subject<void>();
+  playbackTrackUpdated$ = new Subject<IPlaybackTrackChangeEvent>();
+  afterPlaybackTrackUpdated$ = new Subject<void>();
+  trackDataUpdated$ = new Subject<Dto.ITrackData>();
+
+  updatedVehicleList: { [id: number]: any };
+
   private parser: MapParser;
+  private vehicleStale = 600;
 
   constructor() {}
 
-  setData(data: Dto.ITrackData, geometry: IMapGeometry) {
+  parseData(data: Dto.ITrackData, geometry: IMapGeometry) {
     this.geometry = geometry;
     this.parser = new MapParser(this.data);
     this.data = this.parser.parse(data, geometry);
@@ -105,6 +117,95 @@ export class MapDataService {
     }
   }
 
+  applySnapshot(data: ISnapshotData, eventVersion: number) {
+    if (data.segments) {
+      this.setSegmentsRawData(data.segments);
+      if (data.segmentDisabled) {
+        this.setDisabledSegmentsData(data.segmentDisabled);
+        this.applyDisableToSegment();
+      }
+    }
+
+    this.setVehiclesRawData(data.vehicles, eventVersion);
+    this.snapshotUpdated$.next();
+
+    // @TODO
+    /**
+     *
+      TableSet.load_table_data(tables.order_playback, [...timeline.orders])
+      TableSet.load_table_data(tables.vehicle_playback, result && result.vehicles ? [...result.vehicles] : [])
+
+      // Map order_deltas to vehicle_deltas
+      timeline.event_tables['vehicle_history'] = map_vehicle_deltas_into_vehicle_history_events(get_events('vehicle_history'), get_events('order_history'), timeline.orders)
+      timeline.event_tables['order_history'] = map_order_history_delta_to_order_status_format(get_events('order_history'))
+
+     */
+  }
+
+  /**
+   * update_vehicle_update_list
+   * @param vehicle_change
+   * @param veh_id
+   */
+  updateVehicleChangedProps(
+    vehicle_change: any,
+    veh_id: number
+  ) {
+    const current_list = this.updatedVehicleList;
+    // If there were any changes to reflect. Proceed with this logic
+    if (vehicle_change[veh_id]) {
+      if (current_list[veh_id]) {
+        Object.keys(vehicle_change[veh_id]).forEach((key) => {
+          if (!current_list[veh_id][key]) {
+            // Check to see if the update props for the current vehicle is in the list
+            current_list[veh_id][key] = true;
+          }
+        });
+      } else {
+        // Add to list if doesn't exist
+        current_list[veh_id] = vehicle_change[veh_id];
+      }
+    }
+  }
+
+  private setSegmentsRawData(rows: Dto.ISegment[]) {
+    this.data.segments = this.parser.parseSegments(
+      MapTypes.DB,
+      rows,
+      this.geometry.invertFactorY
+    );
+  }
+  private setVehiclesRawData(rows: Dto.IVehicle[], eventVersion: number) {
+    this.data.vehicles = this.convert_vehicle_object(rows, eventVersion);
+  }
+  private setDisabledSegmentsData(rows: any[]) {
+    this.data.segmentsDisabled = this.parser.parseDisabledSegments(rows);
+  }
+
+  private applyDisableToSegment() {
+    const segments = this.data.segments;
+    const disabled_segments = this.data.segmentsDisabled;
+
+    for (let i = 0; i < segments.length; i++) {
+      let segment = segments[i];
+
+      if (disabled_segments && disabled_segments.length > 0) {
+        let cumulative_disable_state_for_segment = this.find_disables_with_segment_id(
+          segment.id
+        );
+
+        if (cumulative_disable_state_for_segment) {
+          segment.set_disable(cumulative_disable_state_for_segment);
+
+          // let updated_segment = {
+          //   status: 'UPDATE',
+          //   object: segment,
+          // };
+        }
+      }
+    }
+  }
+
   applyDisableSegmentData(
     rows: any[],
     operation: string,
@@ -181,9 +282,9 @@ export class MapDataService {
   applyVehicleData(
     raw_data: Dto.IVehicle[],
     operation: string,
-    vehicleId: number,
-    vehicle_stale: number,
-    playback_last_event_time: number
+    vehicleId: number
+    // vehicle_stale: number,
+    // playback_last_event_time: number
   ): {
     isDomUpdated: boolean;
     updatedVehicles: Vehicle[];
@@ -208,9 +309,8 @@ export class MapDataService {
     } else {
       // convert raw data to object
       updated_vehicles = this.convert_vehicle_object(
-        raw_data,
-        vehicle_stale,
-        playback_last_event_time
+        raw_data
+        // playback_last_event_time
       );
 
       if (operation == 'INSERT') {
@@ -239,7 +339,7 @@ export class MapDataService {
             }
           }
 
-          // Put the update properties in to updat object with vehicle id at the key
+          // Put the update properties in to update object with vehicle id at the key
           update[parseInt(updated_vehicles[0].id)] = updated_props;
 
           this.data.vehicles[target_index] = updated_vehicles[0];
@@ -328,8 +428,7 @@ export class MapDataService {
 
   private convert_vehicle_object(
     rows: Dto.IVehicle[],
-    vehicle_stale: number,
-    playback_last_event_time: number
+    eventVersion?: number // playback_last_event_time
   ): Vehicle[] {
     if (!rows) return [];
     if (!Array.isArray(rows)) {
@@ -442,11 +541,11 @@ export class MapDataService {
             hotLot
           );
           vehicle.check_stale(
-            vehicle_stale,
+            this.vehicleStale,
             row.historyChangeTime
               ? new Date(row.historyChangeTime).getTime()
-              : playback_last_event_time
-              ? playback_last_event_time
+              : eventVersion
+              ? eventVersion
               : null
           );
           this.store_stale_list(vehicle);

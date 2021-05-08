@@ -12,7 +12,7 @@ import { SettingsService } from '../../services/settings.service';
 import { ViewModes } from '../../models/enums';
 import { IPlaybackData } from '../../models/playback.model';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'oms-playback',
@@ -37,8 +37,9 @@ export class PlaybackComponent implements OnInit, OnDestroy {
     this.viewMode = ViewModes.playback;
 
     this.playbackSvc.playbackData$
-      .pipe(takeUntil(this.destroy$))
+      .pipe(take(1))
       .subscribe((data) => {
+        console.log('@@@ playback data res 1 @@@');
         this.playbackData = data;
         this.loadingState = false;
         this.ready = true;

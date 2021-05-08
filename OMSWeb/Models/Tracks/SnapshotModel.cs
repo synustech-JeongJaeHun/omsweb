@@ -31,7 +31,7 @@ namespace OMSWeb.Models.Tracks
   {
     public IList<OrderState> Orders { get; set; }
     public IList<DateTime> DynamicSnapshotList { get; set; }
-    public DateTime TrackSnapshot { get; set; }
+    public DateTime? TrackSnapshot { get; set; }
     public IList<TimelineEntity> Timeline { get; set; }
     public IDictionary<string, IDictionary<int, dynamic>> EventTables { get; set; }
   }

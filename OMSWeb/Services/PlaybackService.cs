@@ -12,25 +12,36 @@ namespace OMSWeb.Services
   public class PlaybackService
   {
     private readonly PlaybackRepository _repo;
+    private readonly int MaxEventCount = 500;
+
+    // @NOTE LAB - DB에서 읽어오는 snapshot list의 간격을 조정하기위한 설정값
+    private readonly int SnapshotSkipCount = 16 * 20 * 1;
 
     public PlaybackService(PlaybackRepository playbackRepository)
     {
       this._repo = playbackRepository;
     }
 
-    public DateTime GetFirstSnapshotTime()
+    public DateTime? GetFirstSnapshotTime()
     {
       return this._repo.GetFirstSnapshotTime();
     }
 
-    public PlaybackData GetSnapshotData(string userId, string start, string end)
+    public PlaybackData GetSnapshotDataByTime(string userId, DateTime start, DateTime end)
     {
       // get_snapshot_time_info
       var lastTrackTime = this._repo.GetLastTrackSnapshotTime(start);
       if (lastTrackTime == null) throw new OmsException(ErrorCodes.TrackSnapshotNotExists);
 
-      var times = this._repo.GetSnapshotTimes(start, end);
-      if (times == null || times.Count == 0) throw new OmsException(ErrorCodes.DaySnapshotNotExists);
+      // @NOTE LAB : 조회 구간내에서 처음 이벤트가 발생한 시각
+      var firstEventTime = this._repo.GetFirstEventTime(start, end);
+      if (!firstEventTime.HasValue) throw new OmsException(ErrorCodes.EventNotExists);
+
+      Console.WriteLine($"first event time >> {firstEventTime:o}");
+
+      var times = this._repo.GetSnapshotTimes(firstEventTime.Value, end);
+      if (times.Count == 0) throw new OmsException(ErrorCodes.DaySnapshotNotExists);
+      times = this.DiluteSnapshots(times);  // @NOTE LAB - snapshot 간격 조정
 
       var timeInfo = new SnapshotTimeInfo
       {
@@ -61,27 +72,71 @@ namespace OMSWeb.Services
       return result;
     }
 
-    private PlaybackData GetPlaybackData(string userId, DateTime trackSnapshotTime, DateTime dynamicSnapshotTime, IQueryable<EventBoundary> boundaries)
+    public PlaybackData GetSnapshotDataByTrack(string userId, DateTime track, DateTime snapshot)
+    {
+      var options = new TimelineQueryOptions
+      {
+        Start = snapshot,
+        End = _repo.GetNextSnapshotTime(snapshot, SnapshotSkipCount)
+      };
+
+      Console.WriteLine($"## Snapshot timeRange >> start: {options.Start.Value:o}, end {options.End.Value:o}");
+
+      // timeline
+      var timelines = this._repo.GetTimeline("event_list", options);
+      var boundaries = this._repo.GetEventBoundaries(options);
+
+      // get_event_list
+      var eventTables = this.GetEventTables(boundaries);
+
+      // retrieve_and_get_track
+      var result = this.GetPlaybackData(userId, track, options.Start.Value, boundaries, true);
+
+      result.Timeline = timelines;
+      result.EventTables = eventTables;
+      result.TrackSnapshot = null;
+
+      return result;
+    }
+
+    /// @NOTE LAB - snapshot 간격 조정
+    private IList<DateTime> DiluteSnapshots(IList<DateTime> times)
+    {
+      var count = times.Count;
+      var result = new List<DateTime>();
+      for (int i = 0; i < count; i += SnapshotSkipCount)
+      {
+        result.Add(times[i]);
+      }
+      return result;
+    }
+
+    private PlaybackData GetPlaybackData(string userId, DateTime trackSnapshotTime, DateTime dynamicSnapshotTime, IQueryable<EventBoundary> boundaries, bool excludeStatic = false)
     {
       this._repo.CleanStaticTables();
       this._repo.CleanDynamicTables(userId);
-      this._repo.RetrieveSnapshots(userId, trackSnapshotTime, dynamicSnapshotTime);
-      return this.GetTrack(userId, boundaries);
+      this._repo.RetrieveSnapshots(userId, trackSnapshotTime, dynamicSnapshotTime, excludeStatic);
+      return this.GetTrack(userId, boundaries, excludeStatic);
     }
 
-    private PlaybackData GetTrack(string userId, IQueryable<EventBoundary> boundaries) {
-      var map = new PlaybackData {
-        Size = this._repo.GetDimension(userId),
-        Points = this._repo.GetPoints(userId),
+    private PlaybackData GetTrack(string userId, IQueryable<EventBoundary> boundaries, bool excludeStatic)
+    {
+      var map = new PlaybackData
+      {
         Segments = this._repo.GetSegments(userId),
         SegmentDisabled = this._repo.GetDisabledSegments(userId),
-        Stations = this._repo.GetStations(userId),
-        Buffers = this._repo.GetBuffers(userId),
-        Mtls = this._repo.GetMtls(userId),
-        Clusters = this._repo.GetClusters(userId),
         Vehicles = this._repo.GetVehiclePositions(userId),
         Orders = this._repo.GetOrderStates(userId, boundaries),
       };
+      if (!excludeStatic)
+      {
+        map.Size = this._repo.GetDimension(userId);
+        map.Points = this._repo.GetPoints(userId);
+        map.Stations = this._repo.GetStations(userId);
+        map.Buffers = this._repo.GetBuffers(userId);
+        map.Clusters = this._repo.GetClusters(userId);
+        map.Mtls = this._repo.GetMtls(userId);
+      }
       return map;
     }
 

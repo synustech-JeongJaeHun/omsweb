@@ -28,6 +28,8 @@ import { AuthService } from '../../../services/auth.service';
 import { main_css } from '../../shared/utils/css-loader';
 import { MessagesService } from '../../../services/messages.service';
 import { IVehicleCommandMessage } from '../../../models/command.model';
+import { PlaybackService } from '../../../services/playback.service';
+import { IPlaybackTrackChangeEvent } from '../../../models/playback.model';
 @Component({
   selector: 'oms-map-viewer',
   templateUrl: './map-viewer.component.html',
@@ -38,6 +40,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   @Input() viewMode: ViewModes;
   @Input() trackData: Dto.ITrackData;
   @Output() ready = new EventEmitter<boolean>();
+  @Output() trackRendered = new EventEmitter<void>();
 
   // loadingState = false;
   currentContextEvent: IMapMouseEvent;
@@ -80,9 +83,14 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     private statesSvc: MapStatesService,
     private hubSvc: HubService,
     private messageSvc: MessagesService,
-    private router: Router,
-    private dialog: MatDialog
-  ) {}
+    private router: Router
+  ) {
+    this.auth.certUpdated$.pipe(takeUntil(this.destroy$)).subscribe((cert) => {
+      this.router.navigateByUrl('/', { skipLocationChange: false }).then(() => {
+        this.router.navigate([cert ? '/monitor/status' : '/']);
+      });
+    });
+  }
 
   ngOnDestroy(): void {
     this.destroy$.next();
@@ -90,15 +98,14 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     this.dataSvc.clear();
     this.currentContextEvent = undefined;
     this.viewer && this.viewer.destroy();
+    this.viewer = null;
   }
 
   ngOnInit(): void {
-    if (!this.trackData) return;
+    // if (!this.trackData) return;
 
-    this.drawMap();
-    this.attachEvents();
-    [ViewModes.public, ViewModes.viewer].includes(this.viewMode) &&
-      this.attachHubEvents();
+    this.initMap();
+    this.trackData && this.drawMap(this.trackData);
   }
 
   onChangeSegmentProperty(name: string, value: any) {
@@ -140,11 +147,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   }
 
   private attachEvents() {
-    this.auth.certUpdated$.pipe(takeUntil(this.destroy$)).subscribe((cert) => {
-      this.router.navigateByUrl('/', { skipLocationChange: false }).then(() => {
-        this.router.navigate([cert ? '/monitor/status' : '/']);
-      });
-    });
     this.statesSvc.toolbarToggleEvent$
       .pipe(takeUntil(this.destroy$))
       .subscribe((event) => {
@@ -166,6 +168,15 @@ export class MapViewerComponent implements OnInit, OnDestroy {
       .subscribe((event) => {
         this.viewer.onChangeConfig(event);
       });
+
+    this.statesSvc.actionState$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((event) => this.onMapMouseEvent(event));
+
+    [ViewModes.public, ViewModes.viewer].includes(this.viewMode) &&
+      this.attachHubEvents();
+
+    this.viewMode === ViewModes.playback && this.attachPlaybackEvents();
   }
 
   private attachHubEvents() {
@@ -211,7 +222,19 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     }
   }
 
-  private drawMap() {
+  private attachPlaybackEvents() {
+    this.dataSvc.snapshotUpdated$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => this.applySnapshotUpdated());
+    this.dataSvc.playbackTrackUpdated$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((data) => this.applyPlaybackTrackUpdated(data));
+    this.dataSvc.afterPlaybackTrackUpdated$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => this.applyAfterPlaybackTrackUpdated());
+  }
+
+  private initMap() {
     this.viewer = new ViewController(
       this.viewMode,
       'track-canvas',
@@ -220,19 +243,31 @@ export class MapViewerComponent implements OnInit, OnDestroy {
       this.statesSvc
     );
 
-    this.viewer.setup(this.preference);
-    this.viewer.create_track(this.trackData);
-    this.viewer.update_vehicles(this.trackData.vehicles, 'INSERT', null, false);
-    this.trackIdSvc.extract_id_from_track(this.dataSvc.data);
+    console.log('### init map >>', this.viewer);
 
-    this.statesSvc.actionState$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((event) => this.onMapMouseEvent(event));
+    this.viewer.setup(this.preference);
 
     this._minimapVisible = this.preference.toggles.minimap;
     this._detailsVisible = this.preference.toggles.itemDetails;
 
+    this.dataSvc.trackDataUpdated$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((data) => {
+        this.drawMap(data);
+        console.warn('#### data svc vehicles >>>', this.dataSvc.data.vehicles)
+      });
     this.ready.emit(true);
+  }
+
+  private drawMap(track: Dto.ITrackData) {
+    console.log('### drawMap with data >>', track);
+    this.viewer.create_track(track);
+    this.viewer.update_vehicles(track.vehicles, 'INSERT', null, false);
+    this.trackIdSvc.extract_id_from_track(this.dataSvc.data);
+
+    this.attachEvents();
+
+    this.trackRendered.emit();
   }
 
   private onMapMouseEvent(event: IMapMouseEvent) {
@@ -434,5 +469,63 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     this.dataSvc.updateExpectedPath(updated);
 
     this.viewer.applyUpdatedExpectedPath();
+  }
+  private applySnapshotUpdated() {
+    console.warn('## applySnapshotUpdated ##');
+    this.viewer.applyAfterSnapshotUpdated();
+  }
+  private applyPlaybackTrackUpdated(event: IPlaybackTrackChangeEvent) {
+    // console.warn('## applyPlaybackTrackUpdated >>', event);
+    const {
+      table,
+      skipRender,
+      data,
+      id,
+      operation,
+      useVehicleChangedProps,
+    } = event;
+    if (table === 'segment_blocking_history') {
+      this.viewer.update_disable_segment(data, operation, id, skipRender);
+      if (!skipRender) {
+        this.updateSelectedObject(
+          'VEHICLE',
+          [this.dataSvc.data.vehicles.find((v) => v.id === id)],
+          false
+        );
+      }
+    } else if (table === 'order_history') {
+      // @TODO update table
+    } else if (table === 'vehicle_history') {
+      const updated = this.viewer.update_vehicles(
+        [data],
+        operation,
+        id,
+        skipRender
+      );
+      if (useVehicleChangedProps) {
+        this.dataSvc.updateVehicleChangedProps(updated, id);
+      }
+      if (!skipRender) {
+        const selected = this.viewer.get_selected_objects('SEGMENT')[0];
+        selected &&
+          this.updateSelectedObject(
+            'SEGMENT',
+            [this.dataSvc.find_layout_object('SEGMENT', selected.id)],
+            false
+          );
+      }
+      this.trackIdSvc.update_vehicle_ids(data);
+      // @TODO update table
+    }
+  }
+  private applyAfterPlaybackTrackUpdated() {
+    this.viewer.applyAfterSnapshotUpdated(this.dataSvc.updatedVehicleList);
+    this.viewer.update_segment_svg(
+      this.dataSvc.get_layout_objects('SEGMENT'),
+      main_css.segment,
+      null,
+      false
+    );
+    // this.dataSvc.updatedVehicleList = {};
   }
 }

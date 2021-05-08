@@ -10,9 +10,9 @@
   *ngIf="ready"
   [preference]="mapPreference"
   [viewMode]="viewMode"
-  [trackData]="trackData"
   class="map-viewer"
-></oms-map-viewer>
+  [trackData]="trackData"
+  ></oms-map-viewer>
 
 <div id="status-control" *ngIf="showControlTable">
   <oms-status-control></oms-status-control>

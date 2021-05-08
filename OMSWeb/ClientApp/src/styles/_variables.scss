@@ -22,6 +22,7 @@ $color-active: var(--theme-color-active);
   font-family: Mulish, Roboto, "Helvetica Neue", sans-serif;
   font-size: 12px;
   font-weight: normal;
-  color: #666;
+  color: #666 !important;
   background-color: #eee;
+  border: #ccc 1px solid;
 }

@@ -12,6 +12,7 @@ namespace OMSWeb
     BadRequestModel = 10,
     TrackSnapshotNotExists = 20,
     DaySnapshotNotExists,
+    EventNotExists,
     ServerError = 999,
   }
 }

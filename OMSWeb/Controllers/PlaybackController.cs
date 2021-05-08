@@ -11,7 +11,7 @@ using OMSWeb.Services;
 
 namespace OMSWeb.Controllers
 {
-	[Authorize]
+  [Authorize]
   [Route("api/[controller]")]
   [ApiController]
   public class PlaybackController : ControllerBase
@@ -26,20 +26,27 @@ namespace OMSWeb.Controllers
     }
 
     [HttpGet("snapshots/first")]
-    public ActionResult<SimpleResponse<DateTime>> GetFirstSnapshot()
+    public ActionResult<SimpleResponse<DateTime?>> GetFirstSnapshot()
     {
       var time = this._svc.GetFirstSnapshotTime();
-      return new SimpleResponse<DateTime>
+      return new SimpleResponse<DateTime?>
       {
         Data = time
       };
     }
 
     [HttpGet("snapshots/times/{start}/{end}")]
-    public ActionResult<PlaybackData> GetSnapshotOfDay([FromRoute] string start, [FromRoute] string end) {
-      Console.WriteLine($"## Get Snapshot times >> {start} ~ {end}");
+    public ActionResult<PlaybackData> GetSnapshotOfTime([FromRoute] string start, [FromRoute] string end)
+    {
+      Console.WriteLine($"## Get Snapshot time >> {start} ~ {end}");
+      return _svc.GetSnapshotDataByTime(_userSvc.UserId, DateTime.Parse(start), DateTime.Parse(end));
+    }
 
-      return _svc.GetSnapshotData(_userSvc.UserId, start, end);
+    [HttpGet("snapshots/{track}/{snapshot}")]
+    public ActionResult<PlaybackData> GetSnapshotOfTrack([FromRoute] string track, [FromRoute] string snapshot)
+    {
+      Console.WriteLine($"## Get Snapshot track >> {track} ~ {snapshot}");
+      return _svc.GetSnapshotDataByTrack(_userSvc.UserId, DateTime.Parse(track), DateTime.Parse(snapshot));
     }
   }
 }

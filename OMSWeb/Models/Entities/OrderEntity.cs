@@ -25,5 +25,10 @@ namespace OMSWeb.Models.Entities
     public float? DistanceDropoff { get; set; }
     public float? DistanceMove { get; set; }
   }
-  public class OrderHistoryEntity: OrderEntity {}
+  public class OrderHistoryEntity : OrderEntity
+  {
+    public int HistorySourceId { get; set; }
+    public DateTime HistoryChangeTime { get; set; }
+    public string HistoryChangeType { get; set; }
+  }
 }
