@@ -17,16 +17,6 @@ namespace OMSWeb.Models
 
   public class VehicleState : VehicleEntity
   {
-    public int? CurPoint { get; set; }
-    public string CargoState { get; set; }
-    public string Mode { get; set; }
-    public string OrderOrigin { get; set; }
-    public bool CanBePushed { get; set; }
-    public bool IsSensorStopped { get; set; }
-    public bool IsBlocked { get; set; }
-    public string ErrorList { get; set; }
-    public int? OrderId { get; set; }
-    public string CommandPoint { get; set; }
     public string LocationPickup { get; set; }
     public string LocationDropoff { get; set; }
     public string LocationMove { get; set; }

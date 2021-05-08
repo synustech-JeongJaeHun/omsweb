@@ -463,6 +463,9 @@ button.warn .mat-badge-warn .mat-badge-content {
   margin-bottom: -8px !important;
   padding: 4px 0 0 0 !important;
 }
+.mat-tooltip {
+  @include tooltip;
+}
 
 [mat-button],
 [mat-flat-button],

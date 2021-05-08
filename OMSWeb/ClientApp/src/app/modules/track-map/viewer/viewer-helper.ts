@@ -131,7 +131,7 @@ export class ViewController {
   private minimumSegmentLength = 500;
   private minimap_size_limit = 150;
   private num_ticks = 20;
-  private vehicle_stale = 600;
+  // private vehicle_stale = 600;
   private speed_straight = 3600;
   private speed_curve = 800;
   private scale_offset_x = 50;
@@ -262,7 +262,7 @@ export class ViewController {
 
   private drag: d3.DragBehavior<Element, unknown, unknown>;
 
-  playback_last_event_time: any;
+  // playback_last_event_time: any;
   //#endregion
 
   get searchDataSource(): IViewerData {
@@ -293,7 +293,6 @@ export class ViewController {
     private statesSvc: MapStatesService
   ) {
     this.DEFAULTS = this.get_defaults();
-    this.$track_container = $(`#${this.track_container_id}`);
     this.initialize();
   }
   private initialize() {
@@ -542,6 +541,8 @@ export class ViewController {
     can_manage_vehicles?,
     can_modify_display_settings?
   ) {
+
+    console.log('@@@@ setup viewer...');
     // @TODO prefix 설정 : 현재는 고정값 'public.largemap', 설정값을 외부에서 넘겨 받기로 하면 필요 없을 수 있음
     this.state_prefix = 'public.largemap';
 
@@ -552,16 +553,16 @@ export class ViewController {
 
     this.preferences = preferences;
 
+    this.$track_container = $(`#${this.track_container_id}`);
+
     this.d3_track = d3.select(`#${this.track_container_id}`);
     this.d3_track.on('click', () => {
       this.statesSvc.actionState$.emit({ type: 'backdrop' });
     });
-
-    this.initVariables();
-    this.initStates();
   }
   destroy() {
-    // this.init_svg_groups();
+    console.log('@@@ viewer destroy...');
+    this.init_svg_groups();
     d3.selectAll(`#${this.track_container_id} > *`).remove();
     this.d3_track = undefined;
   }
@@ -588,8 +589,11 @@ export class ViewController {
       data.minimumSegmentLength = this.DEFAULTS.minimumSegmentLength;
     }
 
+    this.initVariables();
+    this.initStates();
+
     this.initSvg(this.track_id, data.size);
-    this.dataSvc.setData(data, this.geometry);
+    this.dataSvc.parseData(data, this.geometry);
     this.drawMap('layout');
 
     this.initMinimap();
@@ -741,9 +745,9 @@ export class ViewController {
   }
   update_vehicles(
     raw_data: Dto.IVehicle[],
-    operation,
-    vehicleId,
-    is_skip_rendering
+    operation: string,
+    vehicleId: number,
+    is_skip_rendering: boolean
   ) {
     let target_index;
 
@@ -760,8 +764,8 @@ export class ViewController {
       raw_data,
       operation,
       vehicleId,
-      this.vehicle_stale,
-      this.playback_last_event_time
+      // this.vehicle_stale,
+      // this.playback_last_event_time
     );
 
     // update dom
@@ -1084,6 +1088,13 @@ export class ViewController {
   // on(event: MapEventType, callback: Function) {}
   //#endregion
 
+  //#region playback
+  applyAfterSnapshotUpdated(updatedPropList?: any) {
+    this.vehicle_adaptive_rendering(main_css.vehicle, this.get_viewbox(), true, updatedPropList);
+    const zoom = this.getZoom(MapTypes.MAIN);
+    this.set_transform(zoom.x, zoom.y, zoom.k, true, 'INSTANT');
+  }
+  //#endregion
   get_defaults() {
     // start with known sane values for all of the options we use
     let defaults = {
@@ -1162,6 +1173,7 @@ export class ViewController {
 
     this.segmentWidth = main_css.segment.line_weight;
     this.statesSvc.resetVehicleTrackingState();
+    this.dataSvc.data.vehicles = [];
   }
 
   private initStates() {
@@ -1178,6 +1190,12 @@ export class ViewController {
 
     // get the size of the DOM element into which this is going
     // @NOTE : jquery 사용하여 size 설정
+    // const container = document.getElementById('track-container');
+    // const screenSize = {
+    //   width: container.clientWidth,
+    //   height: container.clientHeight,
+    // };
+
     let $elem = this.$track_container.find(`#${target_id}`).parent().get(0);
     let screenSize = {
       width: $elem.clientWidth,
@@ -12862,6 +12880,13 @@ export class ViewController {
     this.minimap_svg.on('click', this.mini_zoomed.bind(this));
 
     // Remove double click zoom in function on minimap
+    // document.getElementById(this.minimap_svg_id).addEventListener(
+    //   'dblclick',
+    //   function (event) {
+    //     event.stopPropagation();
+    //   },
+    //   true
+    // );
     this.$track_container.find(`#${this.minimap_svg_id}`)[0].addEventListener(
       'dblclick',
       function (event) {

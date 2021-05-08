@@ -17,7 +17,7 @@ namespace OMSWeb.Repositories
     {
     }
 
-    public DateTime GetFirstSnapshotTime()
+    public DateTime? GetFirstSnapshotTime()
     {
       var sql = @"
       SELECT TIMESTAMP AS time
@@ -25,46 +25,126 @@ namespace OMSWeb.Repositories
       ORDER BY TIMESTAMP
       LIMIT 1
       ";
-      DateTime result;
+      DateTime? result;
       using (var conn = ConnectTrack())
       {
-        result = conn.QuerySingleOrDefault<DateTime>(sql);
+        try
+        {
+          result = conn.QueryFirst<DateTime>(sql);
+        }
+        catch (System.Exception)
+        {
+          Console.WriteLine("[GetFirstSnapshotTime] => null");
+          result = null;
+        }
       }
       return result;
     }
 
-    public DateTime GetLastTrackSnapshotTime(string start)
+    public DateTime? GetFirstEventTime(DateTime start, DateTime end)
+    {
+      var sql = $@"
+      SELECT event_time AS time
+      FROM timeline
+      WHERE event_time > @start
+        AND event_time < @end
+      ORDER BY event_time
+      LIMIT 1
+      ";
+      DateTime? result;
+      using (var conn = ConnectTrack())
+      {
+        try
+        {
+          result = conn.QueryFirst<DateTime>(sql, new
+          {
+            start = start,
+            end = end,
+          });
+        }
+        catch (System.Exception)
+        {
+          Console.WriteLine("[GetFirstEventTime] => null");
+          result = null;
+        }
+      }
+      return result;
+    }
+
+    public DateTime GetLastTrackSnapshotTime(DateTime start)
     {
       var sql = $@"
       SELECT TIMESTAMP AS time
       FROM track_snapshots
-      WHERE timestamp at time zone 'utc' < '{start}' at time zone 'utc' + '1 day'::interval
+      WHERE timestamp  < @start  + '1 day'::interval
       ORDER BY TIMESTAMP
       LIMIT 1
       ";
       DateTime result;
       using (var conn = ConnectTrack())
       {
-        result = conn.QuerySingle<DateTime>(sql);
+        result = conn.QuerySingle<DateTime>(sql, new
+        {
+          start = start
+        });
       }
       return result;
     }
 
-    public IList<DateTime> GetSnapshotTimes(string start, string end)
+    public IList<DateTime> GetSnapshotTimes(DateTime start, DateTime end)
     {
       var sql = $@"
       SELECT TIMESTAMP AS time
       FROM snapshots
-      WHERE timestamp at time zone 'utc' >= '{start}' at time zone 'utc' 
-        AND timestamp at time zone 'utc' < '{end}' at time zone 'utc'
+      WHERE timestamp >= @start 
+        AND timestamp < @end 
       ORDER BY TIMESTAMP
       ";
       IList<DateTime> result;
       using (var conn = ConnectTrack())
       {
-        result = conn.Query<DateTime>(sql).AsList();
+        result = conn.Query<DateTime>(sql, new
+        {
+          start = start,
+          end = end,
+        }).AsList();
       }
       return result;
+    }
+
+    public DateTime GetNextSnapshotTime(DateTime currentSnapshot, int skipCount = 0)
+    {
+      var sqlSnapshot = $@"
+        SELECT TIMESTAMP AS time
+        FROM snapshots
+        WHERE timestamp  > @currentSnapshot
+        ORDER BY TIMESTAMP
+        LIMIT {skipCount}
+        ";
+      var sqlTimeline = $@"
+        SELECT event_time as time
+        FROM timeline
+        WHERE event_time  > @currentSnapshot 
+        ORDER BY id DESC
+        LIMIT {skipCount}
+        ";
+
+      var param = new
+      {
+        currentSnapshot = currentSnapshot
+      };
+
+      IQueryable<DateTime> result;
+      using (var conn = ConnectTrack())
+      {
+        result = conn.Query<DateTime>(sqlSnapshot, param).AsQueryable();
+        if (result.Count() == 0)
+        {
+          Console.WriteLine("next snapshot is not exists -> searching fallback timelines");
+          result = conn.Query<DateTime>(sqlTimeline, param).AsQueryable();
+        }
+      }
+      return result.Last();
     }
 
     public IList<TimelineEntity> GetTimeline(string type, TimelineQueryOptions options)
@@ -91,7 +171,8 @@ namespace OMSWeb.Repositories
       IQueryable<EventBoundary> result;
       using (var conn = ConnectTrack())
       {
-        result = conn.Query<EventBoundary>(sql, new {
+        result = conn.Query<EventBoundary>(sql, new
+        {
           start = range.Start.Value,
           end = range.End.Value,
         }).AsQueryable();
@@ -101,14 +182,16 @@ namespace OMSWeb.Repositories
 
     public IList<T> GetEvents<T>(EventBoundary boundary)
     {
+      var extraColumns = boundary.TableName == "vehicle_history" ? ",last_point AS cur_point" : "";
       var sql = $@"
-      SELECT * 
+      SELECT * {extraColumns}
       FROM {boundary.TableName} 
       WHERE id >= '{boundary.Min}' AND id <= '{boundary.Max}'";
       IList<T> result;
       using (var conn = ConnectTrack())
       {
-        result = conn.Query<T>(sql, new {
+        result = conn.Query<T>(sql, new
+        {
           min = boundary.Min,
           max = boundary.Max,
         }).AsList();
@@ -175,13 +258,9 @@ namespace OMSWeb.Repositories
       }
     }
 
-    public void RetrieveSnapshots(string userId, DateTime trackSnapshotTime, DateTime snapshotTime)
+    public void RetrieveSnapshots(string userId, DateTime trackSnapshotTime, DateTime snapshotTime, bool excludeStatic)
     {
       var sql = $@"
-        INSERT INTO playback_points
-        SELECT *, @userId
-        FROM json_populate_recordset(null::points, extract_table('TRACK_SNAPSHOT', 'points', @trackSnapshotTime));
-
         INSERT INTO playback_segments
         SELECT *, @userId
         FROM json_populate_recordset(null::segments, extract_table('TRACK_SNAPSHOT', 'segments', @trackSnapshotTime));
@@ -189,6 +268,25 @@ namespace OMSWeb.Repositories
         INSERT INTO playback_segment_parts
         SELECT *, @userId
         FROM json_populate_recordset(null::segment_parts, extract_table('TRACK_SNAPSHOT', 'segment_parts', @trackSnapshotTime));
+
+        INSERT INTO playback_vehicles
+        SELECT *, @userId
+        FROM json_populate_recordset(null::vehicles, extract_table('SNAPSHOT', 'vehicles', @snapshotTime));
+
+        INSERT INTO playback_orders
+        SELECT *, @userId
+        FROM json_populate_recordset(null::orders, extract_table('SNAPSHOT', 'orders', @snapshotTime));
+
+        INSERT INTO playback_segment_blocking
+        SELECT *, @userId
+        FROM json_populate_recordset(null::segment_blocking, extract_table('SNAPSHOT', 'segment_blocking', @snapshotTime));
+      ";
+      if (!excludeStatic)
+      {
+        sql += $@"
+        INSERT INTO playback_points
+        SELECT *, @userId
+        FROM json_populate_recordset(null::points, extract_table('TRACK_SNAPSHOT', 'points', @trackSnapshotTime));
 
         INSERT INTO playback_clusters
         SELECT *, @userId
@@ -209,19 +307,8 @@ namespace OMSWeb.Repositories
         INSERT INTO playback_mtls
         SELECT *, @userId
         FROM json_populate_recordset(null::mtls, extract_table('TRACK_SNAPSHOT', 'mtls', @trackSnapshotTime));
-
-        INSERT INTO playback_vehicles
-        SELECT *, @userId
-        FROM json_populate_recordset(null::vehicles, extract_table('SNAPSHOT', 'vehicles', @snapshotTime));
-
-        INSERT INTO playback_orders
-        SELECT *, @userId
-        FROM json_populate_recordset(null::orders, extract_table('SNAPSHOT', 'orders', @snapshotTime));
-
-        INSERT INTO playback_segment_blocking
-        SELECT *, @userId
-        FROM json_populate_recordset(null::segment_blocking, extract_table('SNAPSHOT', 'segment_blocking', @snapshotTime));
-      ";
+        ";
+      }
       using (var conn = ConnectTrack())
       {
         using (var cmd = new NpgsqlCommand(sql, conn))
@@ -367,7 +454,7 @@ namespace OMSWeb.Repositories
       if (boundaries != null && boundaries.Count() > 0)
       {
         string orderSql = "", vehicleSql = "";
-        var found = boundaries.Where(x => x.TableName == "order_history").Single();
+        var found = boundaries.Where(x => x.TableName == "order_history").SingleOrDefault();
         if (found != null)
         {
           orderSql = $@"
@@ -376,7 +463,7 @@ namespace OMSWeb.Repositories
                 WHERE id >= {found.Max} AND id <= {found.Max}";
         }
 
-        found = boundaries.Where(x => x.TableName == "vehicle_history").Single();
+        found = boundaries.Where(x => x.TableName == "vehicle_history").SingleOrDefault();
         if (found != null)
         {
           vehicleSql = $@"

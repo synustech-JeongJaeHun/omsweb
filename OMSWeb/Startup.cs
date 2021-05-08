@@ -40,6 +40,7 @@ namespace OMSWeb
       {
         options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
         options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+        options.SerializerSettings.DateFormatHandling = DateFormatHandling.MicrosoftDateFormat;
         options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
         // options.SerializerSettings.ContractResolver = new DefaultContractResolver { NamingStrategy = new SnakeCaseNamingStrategy() };
       });

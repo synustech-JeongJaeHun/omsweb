@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 
 import { SettingsService } from '@oms/services/settings.service';
 import { Dto } from '../../../models/dto/track.model';
@@ -6,6 +6,7 @@ import { ViewModes } from '../../../models/enums';
 import { IPreferences } from '../../../models/settings.model';
 import { AuthService } from '../../../services/auth.service';
 import { StatusService } from '../../../services/status.service';
+import { MapDataService } from '../../track-map/map-data.service';
 
 @Component({
   selector: 'oms-monitor-status',
@@ -58,7 +59,7 @@ import { StatusService } from '../../../services/status.service';
     `,
   ],
 })
-export class MonitorStatusComponent implements OnInit {
+export class MonitorStatusComponent implements OnInit, AfterViewInit {
   loadingState = true;
   ready = false;
   mapPreference: IPreferences;
@@ -73,25 +74,31 @@ export class MonitorStatusComponent implements OnInit {
   constructor(
     private settingSvc: SettingsService,
     private auth: AuthService,
-    private statusSvc: StatusService
+    private statusSvc: StatusService,
+    private dataSvc: MapDataService
   ) {
     this.viewMode = this.auth.isAuthenticated
       ? ViewModes.viewer
       : ViewModes.public;
   }
+  ngAfterViewInit(): void {
+    this.statusSvc.getTrack().subscribe((res) => {
+      console.info('## track info >>', res);
+      // this.dataSvc.trackDataUpdated$.next(res);
+      this.trackData = res;
+      this.loadingState = false;
+      this.ready = true;
+    });
+  }
 
   ngOnInit(): void {
     this.mapPreference = this.settingSvc.globalPreferences;
-    this.statusSvc.getTrack().subscribe((res) => {
-      console.info('## track info >>', res);
-      this.trackData = res;
-      this.ready = true;
-      this.loadingState = false;
-    });
 
     // @TODO loading preference
     // this.mapPreference = {
     //   toggles: defaultToggleOptions,
     // };
   }
+
+  onReady(ready: boolean) {}
 }

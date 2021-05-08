@@ -114,19 +114,22 @@ export namespace Dto {
     historyChangeTime?: any;
   }
 
-  export interface ITrackData {
+  export interface IFixedTrackData {
     buffers?: IBuffer[];
     clusters?: ICluster[];
     groups?: IGroup[];
     mtls?: IMTL[];
     points?: IPoint[];
-    segments?: ISegment[];
     size?: IMapSize;
     stations?: IStation[];
-    vehicles?: IVehicle[];
-
-    vehiclePath?: any[];
+  }
+  export interface IVariableTrackData {
+    segments?: ISegment[];
     segmentDisabled?: any[];
+    vehicles?: IVehicle[];
+  }
+  export interface ITrackData extends IFixedTrackData, IVariableTrackData {
+    vehiclePath?: any[];
 
     mapType?: MapTypes;
     width?: number;
