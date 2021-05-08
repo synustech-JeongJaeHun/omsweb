@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, Subject, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, throwError } from 'rxjs';
 
 import { ISimpleResponse } from '@oms/models/base.model';
 import { map, mergeMap, tap } from 'rxjs/operators';
@@ -15,13 +15,21 @@ export class PlaybackService {
   playbackData$ = new Subject<IPlaybackData>();
   snapshotUpdated$ = new Subject<ISnapshotData>();
 
+  ordersChanged$ = new BehaviorSubject<any[]>([]);
+  vehiclesChanged$ = new BehaviorSubject<any[]>([]);
+
+  private _orders = [];
+  private _vehicles = [];
+
   // instance properties
   // eventVersion: number;
 
   constructor(private http: HttpClient) {}
 
   firstSnapshotTime(): Observable<Date> {
-    // this.eventVersion = 0;
+    this.ordersChanged$.next([]);
+    this.vehiclesChanged$.next([]);
+
     return this.http
       .get<ISimpleResponse<Date>>(`${this.baseUrl}/snapshots/first`)
       .pipe(
@@ -41,6 +49,8 @@ export class PlaybackService {
     }/snapshots/times/${start.toISOString()}/${end.toISOString()}`;
     return this.http.get<IPlaybackData>(url).pipe(
       tap((data) => {
+        this.changeOrders([...data.orders], false);
+        this.changeVehicles([...data.vehicles], false);
         this.playbackData$.next(data);
       })
     );
@@ -48,7 +58,53 @@ export class PlaybackService {
 
   snapshot(track: Date, snapshot: Date): Observable<ISnapshotData> {
     const url = `${this.baseUrl}/snapshots/${track}/${snapshot}`;
-    return this.http.get<ISnapshotData>(url);
-    // .pipe(tap((res) => this.snapshotUpdated$.next(res)));
+    return this.http.get<ISnapshotData>(url).pipe(
+      tap((data) => {
+        this.changeOrders([...data.orders], false);
+        this.changeVehicles([...data.vehicles], false);
+      })
+    );
+  }
+
+  updateOrderTable(
+    operation: string,
+    delta: any,
+    id: number,
+    skipRender: boolean
+  ) {
+    if (operation === 'INSERT') {
+      this._orders.push(delta);
+    } else if (operation === 'DELETE' || operation === 'UPDATE') {
+      this._orders = this._orders.filter((x) => x.id !== id);
+      if (operation === 'UPDATE') {
+        this._orders.push(delta);
+      }
+    }
+    this.changeOrders(this._orders, skipRender);
+  }
+  updateVehicleTable(
+    operation: string,
+    delta: any,
+    id: number,
+    skipRender: boolean
+  ) {
+    if (operation === 'INSERT') {
+      this._vehicles.push(delta);
+    } else if (operation === 'DELETE' || operation === 'UPDATE') {
+      this._vehicles = this._vehicles.filter((x) => x.id !== id);
+      if (operation === 'UPDATE') {
+        this._vehicles.push(delta);
+      }
+    }
+    this.changeVehicles(this._vehicles, skipRender);
+  }
+
+  private changeOrders(data: any[], skipRender: boolean) {
+    this._orders = data;
+    !skipRender && this.ordersChanged$.next(this._orders);
+  }
+  private changeVehicles(data: any[], skipRender: boolean) {
+    this._vehicles = data;
+    !skipRender && this.vehiclesChanged$.next(this._vehicles);
   }
 }

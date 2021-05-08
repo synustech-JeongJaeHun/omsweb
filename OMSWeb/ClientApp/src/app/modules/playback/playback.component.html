@@ -12,3 +12,7 @@
   [trackData]="playbackData"
   class="map-viewer"
 ></oms-map-viewer>
+
+<div id="map-status" *ngIf="showControlTable">
+  <oms-playback-status-panel></oms-playback-status-panel>
+</div>

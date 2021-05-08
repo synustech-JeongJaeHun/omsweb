@@ -191,7 +191,6 @@ export class PlaybackControlDialogComponent implements OnInit, OnDestroy {
         this.updateTrack(currentIndex, reversed, true, true);
       }
       this.dataSvc.afterPlaybackTrackUpdated$.next();
-      // @TODO update table
 
       this.states.event += step * vector;
       this.ready = true;
@@ -251,7 +250,6 @@ export class PlaybackControlDialogComponent implements OnInit, OnDestroy {
       .firstSnapshotTime()
       .pipe(
         mergeMap((time) => {
-          console.log('## snapshot time >>', time);
           this.firstTime = time;
           this.initDatePicker();
 
@@ -270,7 +268,6 @@ export class PlaybackControlDialogComponent implements OnInit, OnDestroy {
       });
   }
   private queryPlaybackData() {
-    console.log('### query by time >>', this.options);
     return this.playbackSvc
       .playbackDataSet(this.options.startAt, this.options.endAt)
       .pipe(
@@ -284,15 +281,12 @@ export class PlaybackControlDialogComponent implements OnInit, OnDestroy {
       );
   }
   private loadSnapshot(snapshotIndex: number) {
-    console.log('## load snapshot >>', snapshotIndex);
     const dynamicSnapshot = this.data.dynamicSnapshotList[snapshotIndex];
     return this.playbackSvc
       .snapshot(this.data.trackSnapshot, dynamicSnapshot)
       .pipe(
         tap((data) => {
           if (!data) return;
-
-          console.info('### dynamicSnapshot >>', dynamicSnapshot);
 
           const eventVersion = new Date(dynamicSnapshot).getTime();
           // this.playbackSvc.eventVersion = eventVersion; // @NOTE playback_last_event_time
@@ -362,6 +356,11 @@ export class PlaybackControlDialogComponent implements OnInit, OnDestroy {
           ? 'INSERT'
           : 'UPDATE';
     }
+
+    if (table === 'order_history')
+      this.playbackSvc.updateOrderTable(operation, delta, id, skipRender);
+    if (table === 'vehicle_history')
+      this.playbackSvc.updateVehicleTable(operation, delta, id, skipRender);
 
     this.dataSvc.playbackTrackUpdated$.next({
       table,

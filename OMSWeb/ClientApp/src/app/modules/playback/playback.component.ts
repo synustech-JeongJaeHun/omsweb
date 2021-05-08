@@ -26,6 +26,10 @@ export class PlaybackComponent implements OnInit, OnDestroy {
   viewMode: ViewModes;
   playbackData: IPlaybackData;
 
+  get showControlTable(): boolean {
+    return this.mapPreference.toggles.controlTable;
+  }
+
   private _controlDlg: MatDialogRef<PlaybackControlDialogComponent>;
   private destroy$ = new Subject<void>();
 
