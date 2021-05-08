@@ -98,19 +98,12 @@ export class PlaybackControlDialogComponent implements OnInit, OnDestroy {
     !this.states.playing ? this.play() : this.stop();
   }
   onTimeRangeChanged(event: any) {
-    console.log(
-      '## time changed >>',
-      event,
-      this.options.startAt,
-      this.options.endAt
-    );
     if (event.event) {
       this.ready = false;
       this.timerStop$.next();
       this.queryPlaybackData()
         .pipe(
           finalize(() => {
-            console.log('finalize....');
             this.options = { ...this.options, nextEvent: undefined };
             this.states = {
               ...this.states,
@@ -272,7 +265,7 @@ export class PlaybackControlDialogComponent implements OnInit, OnDestroy {
       .playbackDataSet(this.options.startAt, this.options.endAt)
       .pipe(
         tap((data) => {
-          console.log('## playback data >>', data);
+          // console.log('## playback data >>', data);
           this.data = data;
           this.dataSvc.trackDataUpdated$.next(data);
           this.bindSnapshots(data);

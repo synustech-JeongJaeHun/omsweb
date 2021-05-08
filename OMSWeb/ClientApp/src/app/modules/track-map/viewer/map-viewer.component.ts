@@ -243,8 +243,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
       this.statesSvc
     );
 
-    console.log('### init map >>', this.viewer);
-
     this.viewer.setup(this.preference);
 
     this._minimapVisible = this.preference.toggles.minimap;
@@ -254,13 +252,11 @@ export class MapViewerComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe((data) => {
         this.drawMap(data);
-        console.warn('#### data svc vehicles >>>', this.dataSvc.data.vehicles)
       });
     this.ready.emit(true);
   }
 
   private drawMap(track: Dto.ITrackData) {
-    console.log('### drawMap with data >>', track);
     this.viewer.create_track(track);
     this.viewer.update_vehicles(track.vehicles, 'INSERT', null, false);
     this.trackIdSvc.extract_id_from_track(this.dataSvc.data);
@@ -297,7 +293,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   private openContextMenu(event: IMapMouseEvent) {
     const { targetId, targetType } = event;
     this.contextData = this.dataSvc.find_layout_object(targetType, targetId);
-    console.info('@@ contextData >>', this.contextData);
     const leftThreshold = window.innerWidth - 200;
     const { pageX: x, pageY: y } = d3.event;
 
@@ -471,11 +466,9 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     this.viewer.applyUpdatedExpectedPath();
   }
   private applySnapshotUpdated() {
-    console.warn('## applySnapshotUpdated ##');
     this.viewer.applyAfterSnapshotUpdated();
   }
   private applyPlaybackTrackUpdated(event: IPlaybackTrackChangeEvent) {
-    // console.warn('## applyPlaybackTrackUpdated >>', event);
     const {
       table,
       skipRender,
