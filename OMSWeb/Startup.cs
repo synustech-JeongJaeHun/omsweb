@@ -79,17 +79,13 @@ namespace OMSWeb
       services.AddScoped<UserRepository>();
       services.AddScoped<AlarmRepository>();
       services.AddScoped<AlertRepository>();
-      services.AddScoped<CycleRepository>();
       services.AddScoped<HistoryRepository>();
       services.AddScoped<MessageRepository>();
-      services.AddScoped<MetricsRepository>();
       services.AddScoped<OrderRepository>();
       services.AddScoped<PlaybackRepository>();
       services.AddScoped<StatusRepository>();
-      services.AddScoped<SystemsRepository>();
       services.AddScoped<TrackRepository>();
       services.AddScoped<UserRepository>();
-      services.AddScoped<VehicleRepository>();
 
       services.AddScoped<StatusService>();
       services.AddScoped<OrderService>();
