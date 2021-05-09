@@ -15,14 +15,14 @@ namespace OMSWeb.Models
   public class LoginFormDto
   {
     [Required]
-    public string Email { get; set; }
+    public string UserId { get; set; }
     [Required]
     public string Password { get; set; }
   }
 
   public class ProfileFormDto
   {
-    [Required]
+    [EmailAddress]
     public string Email { get; set; }
     [Required]
     public string FirstName { get; set; }

@@ -8,6 +8,15 @@
     >
       <div mat-dialog-content>
         <mat-form-field appearance="outline">
+          <mat-label>{{ "names.userId" | translate }}</mat-label>
+          <input matInput formControlName="userId" readonly />
+          <mat-error *ngIf="f.userId.errors">
+            <mat-error *ngIf="f.userId.errors.required">{{
+              "messages.required" | translate: { field: "User ID" }
+            }}</mat-error>
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
           <mat-label>{{ "names.firstName" | translate }}</mat-label>
           <input matInput formControlName="firstName" />
           <mat-error *ngIf="f.firstName.errors">
@@ -29,8 +38,8 @@
           <mat-label>{{ "names.email" | translate }}</mat-label>
           <input matInput formControlName="email" />
           <mat-error *ngIf="f.email.errors">
-            <mat-error *ngIf="f.email.errors.required">{{
-              "messages.required" | translate: { field: "User ID" }
+            <mat-error *ngIf="f.email.errors.email">{{
+              "messages.invalidEmail" | translate
             }}</mat-error>
           </mat-error>
         </mat-form-field>

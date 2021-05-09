@@ -188,7 +188,8 @@
     "selectDest": "Select Dest",
     "carrier": "Carrier",
 
-    "email": "User ID",
+    "userId": "User ID",
+    "email": "Email",
     "password": "Password",
     "newPassword": "New Password",
     "passwordConfirm": "Confirm Password",
@@ -292,6 +293,7 @@
     "minLength": "Minimum length is {{minLength}}.",
     "passwordMissMatch": "Password is miss match.",
     "changeConfirm": "Are you sure {{name}} change?​",
-    "duplicatedRoleName": "Role name is used already."
+    "duplicatedRoleName": "Role name is used already.",
+    "invalidEmail": "Invalid email address."
   }
 }

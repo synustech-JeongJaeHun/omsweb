@@ -33,11 +33,6 @@ namespace OMSWeb.Services
       this._context = contextAccessor.HttpContext;
     }
 
-    public UserEntity GetUserByEmail(string email)
-    {
-      return this._repo.GetUserByEmail(email);
-    }
-
     public IQueryable<UserEntity> QueryUsers()
     {
       return this._repo.QueryUsers();
@@ -55,9 +50,9 @@ namespace OMSWeb.Services
       return this._repo.QueryRolesWithPermissions();
     }
 
-    public TokenResponse Authenticate(string email, string password)
+    public TokenResponse Authenticate(string userId, string password)
     {
-      var user = this.GetUserByEmail(email);
+      var user = this._repo.GetUserByUserId(userId);
       if (user == null) throw new OmsException(ErrorCodes.AuthenticationFailed);
       var verified = BCrypt.Net.BCrypt.Verify(password, user.Password);
       if (!verified) throw new OmsException(ErrorCodes.AuthenticationFailed);
@@ -74,6 +69,7 @@ namespace OMSWeb.Services
       var claims = new[] {
         new Claim(ClaimTypes.Name, user.Id.ToString()),
         new Claim("id", user.Id.ToString()),
+        new Claim("userId", user.UserId),
         new Claim("email", user.Email),
         new Claim("firstName", user.FirstName),
         new Claim("lastName", user.LastName ?? ""),

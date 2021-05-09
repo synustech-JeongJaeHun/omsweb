@@ -45,10 +45,12 @@
   </dxo-editing>
   <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
 
-  <dxi-column dataField="email" caption="{{ 'names.email' | translate }}" [allowEditing]="false">
+  <dxi-column dataField="userId" caption="{{ 'names.userId' | translate }}" [allowEditing]="false">
   </dxi-column>
   <dxi-column dataField="firstName" dataType="string"></dxi-column>
   <dxi-column dataField="lastName"></dxi-column>
+  <dxi-column dataField="email" caption="{{ 'names.email' | translate }}">
+  </dxi-column>
   <!-- <dxi-column dataField="password" [editorOptions]="{mode: 'password'}">
   </dxi-column> -->
   <dxi-column dataField="password" cellTemplate="passwordCell" [editorOptions]="{mode: 'password'}">

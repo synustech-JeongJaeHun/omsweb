@@ -32,7 +32,7 @@ export class LoginDialogComponent implements OnInit {
 
   private initForm() {
     this.form = new FormGroup({
-      email: new FormControl('', [Validators.required]),
+      userId: new FormControl('', [Validators.required]),
       password: new FormControl('', [
         Validators.required,
         Validators.minLength(4),

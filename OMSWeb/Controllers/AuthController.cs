@@ -24,7 +24,7 @@ namespace OMSWeb.Controllers
     public ActionResult<TokenResponse> Login(LoginFormDto form)
     {
       if (!ModelState.IsValid) throw new OmsException(ErrorCodes.BadRequestModel);
-      return _userSvc.Authenticate(form.Email, form.Password);
+      return _userSvc.Authenticate(form.UserId, form.Password);
     }
   }
 }

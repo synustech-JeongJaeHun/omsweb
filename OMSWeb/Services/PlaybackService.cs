@@ -12,7 +12,6 @@ namespace OMSWeb.Services
   public class PlaybackService
   {
     private readonly PlaybackRepository _repo;
-    private readonly int MaxEventCount = 500;
 
     // @NOTE LAB - DB에서 읽어오는 snapshot list의 간격을 조정하기위한 설정값
     private readonly int SnapshotSkipCount = 16 * 20 * 1;

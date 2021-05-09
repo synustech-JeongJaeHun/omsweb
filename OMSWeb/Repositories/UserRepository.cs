@@ -11,10 +11,27 @@ namespace OMSWeb.Repositories
     {
     }
 
+    public UserEntity GetUserByUserId(string userId)
+    {
+      var sql = $@"
+      SELECT id, user_id, first_name, last_name, email, password,
+  ARRAY(SELECT DISTINCT role_id FROM user_roles WHERE user_id=id ORDER BY role_id ASC) AS roles,
+  ARRAY(SELECT DISTINCT permission_id FROM role_permissions INNER JOIN user_roles ON role_permissions.role_id = user_roles.role_id AND user_roles.user_id=id ORDER BY permission_id ASC) as permissions
+  FROM users WHERE user_id = @userId";
+      UserEntity user;
+      using (var conn = ConnectUi())
+      {
+        user = conn.Query<UserEntity>(sql, new {
+          userId = userId
+        }).SingleOrDefault();
+      }
+      return user;
+    }
+
     public UserEntity GetUserByEmail(string email)
     {
       var sql = $@"
-      SELECT id, first_name, last_name, email, password,
+      SELECT id, user_id, first_name, last_name, email, password,
   ARRAY(SELECT DISTINCT role_id FROM user_roles WHERE user_id=id ORDER BY role_id ASC) AS roles,
   ARRAY(SELECT DISTINCT permission_id FROM role_permissions INNER JOIN user_roles ON role_permissions.role_id = user_roles.role_id AND user_roles.user_id=id ORDER BY permission_id ASC) as permissions
   FROM users WHERE email = '{email}'";
@@ -29,11 +46,11 @@ namespace OMSWeb.Repositories
     public IQueryable<UserEntity> QueryUsers()
     {
       var sql = @"
-    SELECT users.id, first_name, last_name, email, '****' as password, 
-    array_agg(DISTINCT role_id) AS roles, 
-    array_agg(DISTINCT permission_id) AS permissions
+    SELECT users.id, users.user_id, first_name, last_name, email, '****' as password, 
+    array_remove(array_agg(DISTINCT role_id),NULL) AS roles, 
+    array_remove(array_agg(DISTINCT permission_id),NULL) AS permissions
     FROM (
-        SELECT user_id, users.role_id as role_id, permission_id
+        SELECT users.user_id, users.role_id as role_id, permission_id
         FROM role_permissions
         JOIN permissions ON role_permissions.permission_id = permissions.id
         RIGHT JOIN user_roles AS users ON role_permissions.role_id = users.role_id
@@ -41,7 +58,7 @@ namespace OMSWeb.Repositories
     RIGHT JOIN users ON permissions.user_id = users.id
     LEFT JOIN roles ON permissions.role_id = roles.id
     --*user_condition*
-    GROUP BY users.id, first_name, last_name, email, password
+    GROUP BY users.id, users.user_id, first_name, last_name, email, password
       ";
       IQueryable<UserEntity> result;
       using (var conn = ConnectUi())

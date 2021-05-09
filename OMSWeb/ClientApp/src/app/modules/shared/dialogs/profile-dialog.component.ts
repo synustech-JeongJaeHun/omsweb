@@ -57,9 +57,10 @@ export class ProfileDialogComponent implements OnInit {
   private initForm() {
     this.form = new FormGroup(
       {
+        userId: new FormControl(this._user.userId, [Validators.required]),
         firstName: new FormControl(this._user.firstName, [Validators.required]),
         lastName: new FormControl(this._user.lastName, [Validators.required]),
-        email: new FormControl(this._user.email, [Validators.required]),
+        email: new FormControl(this._user.email, [Validators.email]),
         password: new FormControl('', [
           // Validators.required,
           Validators.minLength(4),

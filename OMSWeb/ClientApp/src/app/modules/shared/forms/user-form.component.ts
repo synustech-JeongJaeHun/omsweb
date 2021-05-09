@@ -65,13 +65,16 @@ export class UserFormComponent implements OnInit {
 
     this.form = new FormGroup(
       {
+        userId: new FormControl(this._formModel.userId, [
+          Validators.required,
+        ]),
         firstName: new FormControl(this._formModel.firstName, [
           Validators.required,
         ]),
         lastName: new FormControl(this._formModel.lastName, [
           Validators.required,
         ]),
-        email: new FormControl(this._formModel.email, [Validators.required]),
+        email: new FormControl(this._formModel.email, [Validators.email]),
         password: new FormControl('', [
           // Validators.required,
           Validators.minLength(4),
