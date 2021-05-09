@@ -3,8 +3,8 @@
   <div class="setting-actions">
     <!-- <dx-button icon="save"></dx-button>
     <dx-button icon="undo"></dx-button> -->
-    <button mat-raised-button class="dense" color="primary" (click)="onSave(grid)">Save</button>
-    <button mat-raised-button class="dense" (click)="onRevert(grid)">Revert</button>
+    <button mat-raised-button class="dense" [disabled]="!isUpdated" color="primary" (click)="onSave(grid)">Save</button>
+    <button mat-raised-button class="dense" [disabled]="!isUpdated" (click)="onRevert(grid)">Revert</button>
   </div>
 </div>
 

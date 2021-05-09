@@ -27,4 +27,16 @@ export class TracksService {
   updateCluster(id: number, cluster: Dto.ICluster): Observable<void> {
     return this.http.put<void>(`${this.baseUrl}/clusters/${id}`, cluster);
   }
+
+  loadSegments(): Observable<Dto.ISegment[]> {
+    return this.http.get<Dto.ISegment[]>(`${this.baseUrl}/segments`);
+  }
+
+  loadPoints(): Observable<Dto.IPoint[]> {
+    return this.http.get<Dto.IPoint[]>(`${this.baseUrl}/points`);
+  }
+
+  loadStations(): Observable<Dto.IStation[]> {
+    return this.http.get<Dto.IStation[]>(`${this.baseUrl}/stations`);
+  }
 }

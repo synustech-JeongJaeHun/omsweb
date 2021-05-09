@@ -45,5 +45,21 @@ namespace OMSWeb.Controllers
     {
       return Ok();
     }
+
+    [HttpGet("segments")]
+    public IEnumerable<SegmentWithPart> GetSegments()
+    {
+      return this._svc.GetSegments();
+    }
+
+    [HttpGet("points")]
+    public IEnumerable<Point> GetPoints() {
+      return this._svc.GetPoints();
+    }
+
+    [HttpGet("stations")]
+    public IEnumerable<Station> GetStations() {
+      return this._svc.GetStations();
+    }
   }
 }

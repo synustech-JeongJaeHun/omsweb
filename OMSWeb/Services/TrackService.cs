@@ -110,5 +110,17 @@ namespace OMSWeb.Services
     public IList<Cluster> GetClusters() {
       return this._trackRepo.LoadClusters();
     }
+
+    public IList<SegmentWithPart> GetSegments() {
+      return this._trackRepo.LoadSegments();
+    }
+
+    public IList<Point> GetPoints() {
+      return this._trackRepo.LoadPoints();
+    }
+
+    public IList<Station> GetStations() {
+      return this._trackRepo.LoadStations();
+    }
   }
 }

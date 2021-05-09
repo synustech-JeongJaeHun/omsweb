@@ -44,6 +44,10 @@ export class UserManagementComponent implements OnInit, OnDestroy {
     return this.selectedIds.length > 0;
   }
 
+  get isUpdated(): boolean {
+    return this._removeIds.length > 0 || this._changedItems.length > 0;
+  }
+
   constructor(private userSvc: UsersService, private dialog: MatDialog) {
     this.dataSource$ = combineLatest([
       this.userSvc.users(),

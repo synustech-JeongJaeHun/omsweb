@@ -7,7 +7,7 @@
 </div>
 
 <dx-data-grid
-  [dataSource]="dataSource"
+  [dataSource]="dataSource$ | async"
   [height]="450"
   [showBorders]="true"
   (onRowUpdated)="onUpdateRow($event)"
@@ -39,7 +39,7 @@
     alignment="center"
   >
     <dxo-lookup
-      [dataSource]="dataSource"
+      [dataSource]="dataSource$ | async"
       displayExpr="onlineName"
       valueExpr="onlineName"
     >
