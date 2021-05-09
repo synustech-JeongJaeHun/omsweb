@@ -26,7 +26,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this._dlg = this.dialog.open(SettingsDialogComponent, {
-      width: '900px',
+      width: '800px',
       hasBackdrop: false,
       disableClose: true,
       closeOnNavigation: true,
