@@ -14,7 +14,6 @@ import { TrackIdService } from '../../../services/track-id.service';
 export class GroupSettingComponent implements OnInit {
   ready = false;
   selectedItem: Dto.IGroup;
-  groupIds: number[] = [];
 
   assignedPoints: number[] = [];
   assignedStations: number[] = [];
@@ -25,9 +24,13 @@ export class GroupSettingComponent implements OnInit {
   stations: number[] = [];
   vehicles: number[] = [];
   buffers: number[] = [];
+  groups: Dto.IGroup[] = [];
 
   private _changed: Dto.IGroup[] = [];
-  private _groups: Dto.IGroup[] = [];
+
+  get noData(): boolean {
+    return this.ready && this.groups.length === 0;
+  }
 
   constructor(private trackSvc: TracksService, private idSvc: TrackIdService) {
     this.init();
@@ -49,7 +52,9 @@ export class GroupSettingComponent implements OnInit {
 
   onSave() {
     if (!this._changed.length) return;
-    forkJoin(this._changed.map(x => this.trackSvc.updateGroup(x.id, x))).subscribe(() => {
+    forkJoin(
+      this._changed.map((x) => this.trackSvc.updateGroup(x.id, x))
+    ).subscribe(() => {
       this.onRevert();
     });
   }
@@ -64,9 +69,8 @@ export class GroupSettingComponent implements OnInit {
 
   private init() {
     forkJoin([this.loadGroups(), this.loadIds()]).subscribe(() => {
-      if (this._groups.length) {
-        this.selectedItem = this._groups[0];
-        this.groupIds = this._groups.map((x) => x.id);
+      if (this.groups.length) {
+        this.selectedItem = this.groups[0];
         this.bindData();
       }
       this.ready = true;
@@ -106,7 +110,7 @@ export class GroupSettingComponent implements OnInit {
   private loadGroups() {
     return this.trackSvc.loadGroups().pipe(
       tap((groups) => {
-        this._groups = groups;
+        this.groups = groups;
       })
     );
   }

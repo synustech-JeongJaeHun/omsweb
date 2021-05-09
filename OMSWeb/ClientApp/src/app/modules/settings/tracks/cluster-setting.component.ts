@@ -12,13 +12,16 @@ import { TracksService } from '../../../services/tracks.service';
 })
 export class ClusterSettingComponent implements OnInit {
   selectedItem: Dto.ICluster;
-  clusterIds: number[] = [];
+  clusters: Dto.ICluster[] = [];
 
   points: number[] = [];
   assignedPoints: number[] = [];
 
   private _changed: Dto.ICluster[] = [];
-  private _clusters: Dto.ICluster[] = [];
+
+  get canSave(): boolean {
+    return this.clusters.length > 0 && this._changed.length > 0;
+  }
 
   constructor(private trackSvc: TracksService, private idSvc: TrackIdService) {
     this.init();
@@ -26,14 +29,42 @@ export class ClusterSettingComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  onAssignChanged(picked: number[]) {
+    this.selectedItem.points = picked.join(',');
+    this.changeItem(this.selectedItem);
+  }
+  onMaxVehiclesChanged(value: number) {
+    this.selectedItem.maxVehicles = value;
+    this.changeItem(this.selectedItem);
+  }
+
+  onSave() {
+    if (!this._changed.length) return;
+    console.log('## changed >>', this._changed);
+    forkJoin(
+      this._changed.map((x) => this.trackSvc.updateCluster(x.id, x))
+    ).subscribe(() => {
+      this.onRevert();
+    });
+  }
+  onRevert() {
+    this._changed = [];
+    this.init();
+  }
+
   private init() {
     forkJoin([this.loadClusters(), this.loadIds()]).subscribe(() => {
-      if (this._clusters.length) {
-        this.selectedItem = this._clusters[0];
-        this.clusterIds = this._clusters.map((x) => x.id);
+      if (this.clusters.length) {
+        this.selectedItem = this.clusters[0];
         this.bindData();
       }
     });
+  }
+
+  private changeItem(item: Dto.ICluster) {
+    if (this._changed.every((x) => x.id !== item.id)) {
+      this._changed.push(item);
+    }
   }
 
   private bindData() {
@@ -48,8 +79,7 @@ export class ClusterSettingComponent implements OnInit {
   private loadClusters() {
     return this.trackSvc.loadClusters().pipe(
       tap((clusters) => {
-        this._clusters = clusters;
-        console.log('## clusters >>', clusters);
+        this.clusters = clusters;
       })
     );
   }

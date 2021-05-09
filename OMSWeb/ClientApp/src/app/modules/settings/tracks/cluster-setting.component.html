@@ -1,17 +1,32 @@
 <div class="setting-header">
   <h3 class="setting-title">{{ "names.clusterSetting" | translate }}</h3>
   <div class="setting-actions">
-    <button mat-raised-button class="dense" color="primary">Save</button>
-    <button mat-raised-button class="dense">Revert</button>
+    <button
+      mat-raised-button
+      class="dense"
+      color="primary"
+      [disabled]="!canSave"
+      (click)="onSave()"
+    >
+      Save
+    </button>
+    <button
+      mat-raised-button
+      class="dense"
+      [disabled]="!canSave"
+      (click)="onRevert()"
+    >
+      Revert
+    </button>
   </div>
 </div>
 
 <div class="sub-bar">
   <mat-label>{{ "names.selectedCluster" | translate }}</mat-label>
   <mat-form-field class="index-selector dense" appearance="outline">
-    <mat-select [value]="selectedItem?.id">
-      <mat-option *ngFor="let item of clusterIds" [value]="item">{{
-        item
+    <mat-select [(value)]="selectedItem">
+      <mat-option *ngFor="let item of clusters" [value]="item">{{
+        item.id
       }}</mat-option>
     </mat-select>
   </mat-form-field>
@@ -24,11 +39,19 @@
     [gridHeight]="440"
     [pool]="points"
     [picked]="assignedPoints"
+    (selectionChanged)="onAssignChanged($event)"
   ></oms-unit-picker>
   <div class="max-vehicle">
     <h5>{{ "names.maxVehicles" | translate }}</h5>
     <mat-form-field class="dense" appearance="outline">
-      <input matInput type="number" value="6" />
+      <input
+        #maxVehiclesInput
+        matInput
+        type="number"
+        [value]="selectedItem?.maxVehicles"
+        min="0"
+        (change)="onMaxVehiclesChanged(maxVehiclesInput.value)"
+      />
     </mat-form-field>
   </div>
 </div>

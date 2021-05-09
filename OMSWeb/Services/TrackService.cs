@@ -102,21 +102,13 @@ namespace OMSWeb.Services
         PhysicalId = x.PhysicalId,
       }).ToList();
     }
-  }
-}
-
-
-/**
-
-    if(type === 'VEHICLE') {
-        target_table = 'vehicles'
-    } else if(type === 'POINT') {
-        target_table = 'points'
-    } else if(type === 'STATION') {
-        target_table = 'stations'
-    } else if(type === 'BUFFER') {
-        target_table = 'buffers'
+    
+    public IList<LocationGroup> GetGroups() {
+      return this._trackRepo.LoadGroups();
     }
 
-
-*/
+    public IList<Cluster> GetClusters() {
+      return this._trackRepo.LoadClusters();
+    }
+  }
+}

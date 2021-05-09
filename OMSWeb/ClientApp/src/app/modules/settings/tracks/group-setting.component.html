@@ -1,51 +1,68 @@
 <div class="setting-header">
   <h3 class="setting-title">{{ "names.groupSetting" | translate }}</h3>
   <div class="setting-actions">
-    <button mat-raised-button class="dense" color="primary" (click)="onSave()">
+    <button
+      mat-raised-button
+      class="dense"
+      [disabled]="noData"
+      color="primary"
+      (click)="onSave()"
+    >
       Save
     </button>
-    <button mat-raised-button class="dense" (click)="onRevert()">Revert</button>
+    <button
+      mat-raised-button
+      class="dense"
+      [disabled]="noData"
+      (click)="onRevert()"
+    >
+      Revert
+    </button>
   </div>
 </div>
 
-<div class="sub-bar">
-  <mat-label>{{ "names.selectedGroup" | translate }}</mat-label>
-  <mat-form-field class="index-selector dense" appearance="outline">
-    <mat-select [value]="selectedItem?.id">
-      <mat-option *ngFor="let item of groupIds" [value]="item">{{
-        item
-      }}</mat-option>
-    </mat-select>
-  </mat-form-field>
-</div>
+<div id="no-data" *ngIf="noData">No Data</div>
 
-<div class="assign-grid">
-  <oms-unit-picker
-    [title]="'names.homePointList' | translate"
-    [unitName]="'names.point' | translate"
-    [pool]="points"
-    [picked]="assignedPoints"
-    (selectionChanged)="onChange('points', $event)"
-  ></oms-unit-picker>
-  <oms-unit-picker
-    [title]="'names.stationList' | translate"
-    [unitName]="'names.station' | translate"
-    [pool]="stations"
-    [picked]="assignedStations"
-    (selectionChanged)="onChange('stations', $event)"
-  ></oms-unit-picker>
-  <oms-unit-picker
-    [title]="'names.vehicleList' | translate"
-    [unitName]="'names.vehicle' | translate"
-    [pool]="vehicles"
-    [picked]="assignedVehicles"
-    (selectionChanged)="onChange('vehicles', $event)"
-  ></oms-unit-picker>
-  <oms-unit-picker
-    [title]="'names.bufferList' | translate"
-    [unitName]="'names.buffer' | translate"
-    [pool]="buffers"
-    [picked]="assignedBuffers"
-    (selectionChanged)="onChange('buffers', $event)"
-  ></oms-unit-picker>
-</div>
+<ng-container *ngIf="!noData && ready">
+  <div class="sub-bar">
+    <mat-label>{{ "names.selectedGroup" | translate }}</mat-label>
+    <mat-form-field class="index-selector dense" appearance="outline">
+      <mat-select [(value)]="selectedItem">
+        <mat-option *ngFor="let item of groups" [value]="item">{{
+          item
+        }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="assign-grid">
+    <oms-unit-picker
+      [title]="'names.homePointList' | translate"
+      [unitName]="'names.point' | translate"
+      [pool]="points"
+      [picked]="assignedPoints"
+      (selectionChanged)="onChange('points', $event)"
+    ></oms-unit-picker>
+    <oms-unit-picker
+      [title]="'names.stationList' | translate"
+      [unitName]="'names.station' | translate"
+      [pool]="stations"
+      [picked]="assignedStations"
+      (selectionChanged)="onChange('stations', $event)"
+    ></oms-unit-picker>
+    <oms-unit-picker
+      [title]="'names.vehicleList' | translate"
+      [unitName]="'names.vehicle' | translate"
+      [pool]="vehicles"
+      [picked]="assignedVehicles"
+      (selectionChanged)="onChange('vehicles', $event)"
+    ></oms-unit-picker>
+    <oms-unit-picker
+      [title]="'names.bufferList' | translate"
+      [unitName]="'names.buffer' | translate"
+      [pool]="buffers"
+      [picked]="assignedBuffers"
+      (selectionChanged)="onChange('buffers', $event)"
+    ></oms-unit-picker>
+  </div>
+</ng-container>
