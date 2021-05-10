@@ -117,7 +117,7 @@
           (valueChange)="onChangeEventTo()"
         >
           <mat-option *ngFor="let item of eventList; let i = index" [value]="i"
-            >#{{ item.eventId }} ({{ item.tableName }})</mat-option
+            >#{{ item.eventId }} / {{ item.eventTime | date: 'MM-dd HH:mm:ss' }} / {{ item.tableName }}</mat-option
           >
         </mat-select>
         <!-- <input
