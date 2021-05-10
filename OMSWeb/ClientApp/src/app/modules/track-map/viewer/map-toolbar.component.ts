@@ -199,36 +199,36 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
     this.stateSvc.commandToolbar(action);
   }
 
-  onPing() {
-    this.messageSvc.sendVehicleCommand({ action: 'status' }).subscribe();
-  }
-  onVehicleReset() {
-    this.dialogSvc
-      .confirm({ body: this.$t.instant('messages.confirmResetAllVehicles') })
-      .subscribe((confirm) => {
-        if (confirm) {
-          this.messageSvc.sendVehicleCommand({ action: 'reset' }).subscribe();
-        }
-      });
-  }
-  onSetAuto() {
-    this.dialogSvc
-      .confirm({ body: this.$t.instant('messages.confirmSetAutoAll') })
-      .subscribe((confirm) => {
-        if (confirm) {
-          this.messageSvc
-            .sendVehicleCommand({ action: 'initialize' })
-            .subscribe();
-        }
-      });
-  }
-  onEStop() {
-    this.dialogSvc
-      .confirm({ body: this.$t.instant('messages.confirmEstopAll') })
-      .subscribe((confirm) => {
-        if (confirm) {
-          this.messageSvc.sendVehicleCommand({ action: 'stop' }).subscribe();
-        }
-      });
-  }
+  // onPing() {
+  //   this.messageSvc.sendVehicleCommand({ action: 'status' }).subscribe();
+  // }
+  // onVehicleReset() {
+  //   this.dialogSvc
+  //     .confirm({ body: this.$t.instant('messages.confirmResetAllVehicles') })
+  //     .subscribe((confirm) => {
+  //       if (confirm) {
+  //         this.messageSvc.sendVehicleCommand({ action: 'reset' }).subscribe();
+  //       }
+  //     });
+  // }
+  // onSetAuto() {
+  //   this.dialogSvc
+  //     .confirm({ body: this.$t.instant('messages.confirmSetAutoAll') })
+  //     .subscribe((confirm) => {
+  //       if (confirm) {
+  //         this.messageSvc
+  //           .sendVehicleCommand({ action: 'initialize' })
+  //           .subscribe();
+  //       }
+  //     });
+  // }
+  // onEStop() {
+  //   this.dialogSvc
+  //     .confirm({ body: this.$t.instant('messages.confirmEstopAll') })
+  //     .subscribe((confirm) => {
+  //       if (confirm) {
+  //         this.messageSvc.sendVehicleCommand({ action: 'stop' }).subscribe();
+  //       }
+  //     });
+  // }
 }
