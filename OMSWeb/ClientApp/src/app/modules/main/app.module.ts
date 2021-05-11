@@ -16,6 +16,7 @@ import { CustomHttpInterceptor } from '../../handlers/custom-http.interceptor';
 import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { StartupComponent } from './startup.component';
+import { SettingsModule } from '../settings/settings.module';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -28,6 +29,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     AppRoutingModule,
     BrowserAnimationsModule,
     SharedModule,
+    SettingsModule,
     TranslateModule.forRoot({
       useDefaultLang: true,
       defaultLanguage: 'en',
