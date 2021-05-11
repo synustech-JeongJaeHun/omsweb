@@ -4,6 +4,7 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
@@ -112,6 +113,11 @@ namespace OMSWeb
 
       services.AddTransient<ProblemDetailsFactory, OmsProblemDetailsFactory>();
 
+      services.AddMvcCore(o =>
+      {
+        o.Filters.Add(new ResponseCacheAttribute { NoStore = true, Location = ResponseCacheLocation.None });
+      });
+
       // In production, the Angular files will be served from this directory
       services.AddSpaStaticFiles(configuration =>
       {
@@ -133,7 +139,15 @@ namespace OMSWeb
         app.UseExceptionHandler("/Error");
       }
 
-      app.UseStaticFiles();
+      app.UseStaticFiles(new StaticFileOptions()
+      {
+        OnPrepareResponse = context =>
+        {
+          context.Context.Response.Headers.Add("Cache-Control", "no-cache, no-store");
+          context.Context.Response.Headers.Add("Expires", "-1");
+        }
+      });
+
       if (!env.IsDevelopment())
       {
         app.UseSpaStaticFiles();
