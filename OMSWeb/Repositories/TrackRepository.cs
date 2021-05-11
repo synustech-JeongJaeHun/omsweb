@@ -98,37 +98,13 @@ namespace OMSWeb.Repositories
       var data = _cache.GetValue<List<SegmentWithPart>>(key);
       if (data == null)
       {
-        var models = new List<SegmentWithPart>();
+        // var models = new List<SegmentWithPart>();
         string sql = QueryFactory.GetSql("segment");
         using (var conn = ConnectTrack())
         {
-          using (var cmd = new NpgsqlCommand(sql, conn))
-          {
-            conn.Open();
-            using (var dr = cmd.ExecuteReader())
-            {
-              while (dr.Read())
-              {
-                models.Add(new SegmentWithPart
-                {
-                  Id = dr["id"].TryInteger(),
-                  PhysicalId = dr["physical_id"].ToString(),
-                  LogicalId = dr["logical_id"].ToString(),
-                  StartPoint = dr["start_point"].TryInteger(),
-                  EndPoint = dr["end_point"].TryInteger(),
-                  Speed = dr["speed"].TryFloat(),
-                  Length = dr["length"].TryFloat(),
-                  Type = dr["type"].ToString(),
-                  Direction = dr["direction"].ToString(),
-                  Location = dr["location"].ToString(),
-                  SegpartId = dr["segpart_id"].TryInteger(),
-                }
-               );
-              }
-            }
-          }
+          data = conn.Query<SegmentWithPart>(sql).AsList();
         }
-        data = models.ToList();
+        // data = models;
         _cache.SetValue<List<SegmentWithPart>>(key, data, DateTimeOffset.Now.AddMinutes(CACHE_LIFE));
       }
       return data;
@@ -139,30 +115,31 @@ namespace OMSWeb.Repositories
       var data = _cache.GetValue<List<DisabledSegment>>(key);
       if (data == null)
       {
-        var models = new List<DisabledSegment>();
+        // var models = new List<DisabledSegment>();
         string sql = QueryFactory.GetSql("segmentDisable");
         using (var conn = ConnectTrack())
         {
-          using (var cmd = new NpgsqlCommand(sql, conn))
-          {
-            conn.Open();
-            using (var dr = cmd.ExecuteReader())
-            {
-              while (dr.Read())
-              {
-                models.Add(new DisabledSegment
-                {
-                  Id = Convert.ToInt32(dr["id"]),
-                  DisabledBy = dr["disabled_by"].ToString(),
-                  DisabledReason = dr["disabled_reason"].ToString(),
-                  SegmentId = Convert.ToInt32(dr["segment_id"]),
-                }
-               );
-              }
-            }
-          }
+          // using (var cmd = new NpgsqlCommand(sql, conn))
+          // {
+          //   conn.Open();
+          //   using (var dr = cmd.ExecuteReader())
+          //   {
+          //     while (dr.Read())
+          //     {
+          //       models.Add(new DisabledSegment
+          //       {
+          //         Id = Convert.ToInt32(dr["id"]),
+          //         DisabledBy = dr["disabled_by"].ToString(),
+          //         DisabledReason = dr["disabled_reason"].ToString(),
+          //         SegmentId = Convert.ToInt32(dr["segment_id"]),
+          //       }
+          //      );
+          //     }
+          //   }
+          // }
+          data = conn.Query<DisabledSegment>(sql).AsList();
         }
-        data = models.ToList();
+        // data = models.ToList();
         _cache.SetValue<List<DisabledSegment>>(key, data, DateTimeOffset.Now.AddMinutes(CACHE_LIFE));
       }
       return data;

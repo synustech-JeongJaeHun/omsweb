@@ -1876,7 +1876,7 @@ export namespace LayoutUtil {
         (candidate) =>
           candidate.isValidate &&
           candidate.type === type &&
-          candidate.location === location &&
+          candidate.location == location &&
           candidate.direction === direction
       )
     ) {
