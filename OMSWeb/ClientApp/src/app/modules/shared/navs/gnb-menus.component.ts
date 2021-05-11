@@ -1,8 +1,10 @@
 import { Location } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { SettingsDialogComponent } from '../../settings/dialogs/settings-dialog.component';
 
 @Component({
   selector: 'oms-gnb-menus',
@@ -13,8 +15,13 @@ export class GnbMenusComponent implements OnInit, OnDestroy {
   parentRoute: string;
 
   private routing$: Subscription;
+  private _dlg: MatDialogRef<SettingsDialogComponent>;
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private dialog: MatDialog,
+    private location: Location
+  ) {}
   ngOnDestroy(): void {
     this.routing$ && this.routing$.unsubscribe();
   }
@@ -25,8 +32,22 @@ export class GnbMenusComponent implements OnInit, OnDestroy {
       .pipe(filter((e) => e instanceof NavigationEnd))
       .subscribe((val) => {
         this.detectParentRoute();
+        this.navigationChanged();
         // this.parentRoute = routeNames.find(r => this.router.isActive(r, false));
       });
+  }
+
+  onOpenSettings() {
+    this._dlg = this.dialog.open(SettingsDialogComponent, {
+      width: '800px',
+      hasBackdrop: false,
+      disableClose: true,
+      closeOnNavigation: true,
+    });
+  }
+
+  private navigationChanged() {
+    this._dlg && this._dlg.close();
   }
 
   private detectParentRoute() {

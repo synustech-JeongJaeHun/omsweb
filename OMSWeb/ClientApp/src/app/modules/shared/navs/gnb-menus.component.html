@@ -51,9 +51,10 @@
     matTooltipClass="gnb-tooltip"
     matTooltipPosition="below"
     matTooltip="Settings"
-    routerLinkActive="active"
-    [routerLink]="['settings', {outlets: {sub: ['users']}}]"
-  >
+    (click)="onOpenSettings()"
+    >
+    <!-- routerLinkActive="active"
+    [routerLink]="['settings', {outlets: {sub: ['users']}}]" -->
     <mat-icon>settings</mat-icon>
   </button>
 </div>

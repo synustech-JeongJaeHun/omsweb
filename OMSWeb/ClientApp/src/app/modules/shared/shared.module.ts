@@ -23,6 +23,7 @@ import { LoginDialogComponent } from './dialogs/login-dialog.component';
 import { UnitSelectorComponent } from './forms/unit-selector.component';
 import { ProfileDialogComponent } from './dialogs/profile-dialog.component';
 import { UserFormComponent } from './forms/user-form.component';
+import { SettingsModule } from '../settings/settings.module';
 
 const inOutModules = [
   FormsModule,

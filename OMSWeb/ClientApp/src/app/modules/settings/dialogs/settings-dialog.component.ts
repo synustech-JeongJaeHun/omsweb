@@ -6,10 +6,19 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./settings-dialog.component.scss']
 })
 export class SettingsDialogComponent implements OnInit {
+  currentMenu: string = 'users';
 
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  isActiveMenu(menu: string) {
+    return this.currentMenu === menu;
+  }
+
+  onChangeMenu(menu: string) {
+    this.currentMenu = menu;
   }
 
 }
