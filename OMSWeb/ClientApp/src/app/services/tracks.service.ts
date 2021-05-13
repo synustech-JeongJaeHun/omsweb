@@ -35,6 +35,9 @@ export class TracksService {
   loadPoints(): Observable<Dto.IPoint[]> {
     return this.http.get<Dto.IPoint[]>(`${this.baseUrl}/points`);
   }
+  updatePoint(id: number, point: any) {
+    return this.http.patch<void>(`${this.baseUrl}/points/${id}`, point);
+  }
 
   loadStations(): Observable<Dto.IStation[]> {
     return this.http.get<Dto.IStation[]>(`${this.baseUrl}/stations`);

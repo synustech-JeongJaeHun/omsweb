@@ -7,14 +7,12 @@ import {
   Output,
 } from '@angular/core';
 import * as _ from 'lodash';
-import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import d3 = require('d3');
 
 import { ViewModes } from '../../../models/enums';
-import { StatusService } from '../../../services/status.service';
 import { ViewController } from './viewer-helper';
 import { TrackIdService } from '../../../services/track-id.service';
 import { Dto } from '../../../models/dto/track.model';
@@ -28,8 +26,9 @@ import { AuthService } from '../../../services/auth.service';
 import { main_css } from '../../shared/utils/css-loader';
 import { MessagesService } from '../../../services/messages.service';
 import { IVehicleCommandMessage } from '../../../models/command.model';
-import { PlaybackService } from '../../../services/playback.service';
 import { IPlaybackTrackChangeEvent } from '../../../models/playback.model';
+import { Group } from '../../../models/group.model';
+import { TracksService } from '../../../services/tracks.service';
 @Component({
   selector: 'oms-map-viewer',
   templateUrl: './map-viewer.component.html',
@@ -49,6 +48,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   tooltipData: any;
   selectEvent: IMapMouseEvent;
   selectedObject: any;
+  groupIds: number[] = [];
 
   private _minimapVisible = false;
   private _detailsVisible = false;
@@ -80,6 +80,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     private auth: AuthService,
     private dataSvc: MapDataService,
     private trackIdSvc: TrackIdService,
+    private trackSvc: TracksService,
     private statesSvc: MapStatesService,
     private hubSvc: HubService,
     private messageSvc: MessagesService,
@@ -108,10 +109,23 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     this.trackData && this.drawMap(this.trackData);
   }
 
+  onChangePointProperty(name: string, value: any) {
+    console.log('## changed point property >>', { name, value });
+    // @TODO: change point prop api 연동
+    console.warn('TODO: change point prop api 연동');
+  }
   onChangeSegmentProperty(name: string, value: any) {
     console.log('## changed segment property >>', { name, value });
     // @TODO: change segment prop api 연동
     console.warn('TODO: change segment prop api 연동');
+  }
+  onApplyPointChange(isHome: boolean, selectedGroup: number) {
+    console.log('### apply point change >>', { isHome, selectedGroup });
+
+    this.trackSvc.updatePoint(this.contextData.id, {
+      isHome,
+      group: selectedGroup,
+    }).subscribe();
   }
   onVehicleCommand(name: string) {
     let commandMessage: IVehicleCommandMessage;
@@ -260,6 +274,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     this.viewer.create_track(track);
     this.viewer.update_vehicles(track.vehicles, 'INSERT', null, false);
     this.trackIdSvc.extract_id_from_track(this.dataSvc.data);
+    this.groupIds = this.dataSvc.data.groups.map((g) => g.id);
 
     this.attachEvents();
 
@@ -271,6 +286,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 
     switch (type) {
       case 'contextmenu':
+        this.closeContextMenu();
         this.openContextMenu(event);
         break;
       case 'mouseenter':
@@ -291,8 +307,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   }
 
   private openContextMenu(event: IMapMouseEvent) {
-    const { targetId, targetType } = event;
-    this.contextData = this.dataSvc.find_layout_object(targetType, targetId);
     const leftThreshold = window.innerWidth - 200;
     const { pageX: x, pageY: y } = d3.event;
 
@@ -309,7 +323,12 @@ export class MapViewerComponent implements OnInit, OnDestroy {
         .style('right', `${window.innerWidth - x + this._popupOffsetX}px`)
         .style('left', 'inherit');
     }
-    this.currentContextEvent = event;
+    setTimeout(() => {
+      const { targetId, targetType } = event;
+      this.contextData = this.dataSvc.find_layout_object(targetType, targetId);
+      console.log('### context data >>', this.contextData);
+      this.currentContextEvent = event;
+    }, 0);
   }
   private closeContextMenu() {
     this.contextData = undefined;
@@ -469,14 +488,8 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     this.viewer.applyAfterSnapshotUpdated();
   }
   private applyPlaybackTrackUpdated(event: IPlaybackTrackChangeEvent) {
-    const {
-      table,
-      skipRender,
-      data,
-      id,
-      operation,
-      useVehicleChangedProps,
-    } = event;
+    const { table, skipRender, data, id, operation, useVehicleChangedProps } =
+      event;
     if (table === 'segment_blocking_history') {
       this.viewer.update_disable_segment(data, operation, id, skipRender);
       if (!skipRender) {

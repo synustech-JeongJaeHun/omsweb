@@ -29,7 +29,7 @@
     <mat-form-field class="index-selector dense" appearance="outline">
       <mat-select [(value)]="selectedItem">
         <mat-option *ngFor="let item of groups" [value]="item">{{
-          item
+          item.id
         }}</mat-option>
       </mat-select>
     </mat-form-field>

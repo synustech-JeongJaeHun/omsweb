@@ -13,6 +13,8 @@ export class Point implements IPoint {
   isValidate?: boolean;
   validateText?: string;
   updateState?: string;
+  group?: number;
+  isHome?: boolean;
 
   constructor(
     row: Dto.IPoint,
@@ -27,6 +29,7 @@ export class Point implements IPoint {
     this.invertedCoord = coordInfo.invertedCoord;
     this.isValidate = isValid;
     this.updateState = updateState;
+    this.group = row.group;
   }
 
   apply_offset(offset, snapDist, invertFactorY) {

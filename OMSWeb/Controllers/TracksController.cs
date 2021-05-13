@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using OMSWeb.Models;
 using OMSWeb.Models.Tracks;
 using OMSWeb.Repositories;
 using OMSWeb.Services;
@@ -55,6 +56,10 @@ namespace OMSWeb.Controllers
     [HttpGet("points")]
     public IEnumerable<Point> GetPoints() {
       return this._svc.GetPoints();
+    }
+    [HttpPatch("points/{id}")]
+    public ActionResult UpdatePoint([FromRoute] int id, [FromBody] PointUpdateDto point) {
+      return Ok();
     }
 
     [HttpGet("stations")]

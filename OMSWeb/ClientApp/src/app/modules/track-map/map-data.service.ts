@@ -47,6 +47,8 @@ export class MapDataService {
         this.data.segments
       );
     }
+
+    console.log('### parsed track data >>>', this.data);
   }
 
   clear() {

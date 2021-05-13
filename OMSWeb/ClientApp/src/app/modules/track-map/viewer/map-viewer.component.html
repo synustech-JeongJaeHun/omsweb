@@ -36,6 +36,9 @@
     <ng-container *ngSwitchCase="'ZCU'">
       <ng-container *ngTemplateOutlet="zcuContext"></ng-container>
     </ng-container>
+    <ng-container *ngSwitchCase="'POINT'">
+      <ng-container *ngTemplateOutlet="pointContext"></ng-container>
+    </ng-container>
     <div *ngSwitchDefault></div>
   </div>
 </div>
@@ -190,6 +193,48 @@
   </mat-card>
 </ng-template>
 
+<ng-template #pointContext>
+  <mat-card class="context-card">
+    <mat-card-header>
+      <mat-card-title>
+        {{ contextData.objectType }} #{{ contextData.id }}
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="context-form">
+      <mat-slide-toggle
+        #pointHomeSlide
+        [checked]="contextData.isHome"
+        color="primary"
+        >{{ "names.home" | translate }}</mat-slide-toggle
+      >
+      <!-- (change)="onChangePointProperty('home', $event.checked)" -->
+
+      <div [hidden]="!pointHomeSlide.checked">
+        <mat-form-field class="index-selector dense" appearance="outline">
+          <mat-label>{{ "names.group" | translate }}</mat-label>
+          <mat-select
+            #pointerGroupSelector
+            [value]="contextData.group"
+          >
+            <mat-option *ngFor="let item of groupIds" [value]="item">{{
+              item
+            }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <button
+        mat-stroked-button
+        class="dense accent"
+        color="primary"
+        (click)="onApplyPointChange(pointHomeSlide.checked, pointerGroupSelector.value)"
+      >
+        {{ "names.apply" | translate }}
+      </button>
+    </mat-card-content>
+  </mat-card>
+</ng-template>
+
 <ng-template #segmentContext>
   <mat-card class="context-card">
     <mat-card-header>
@@ -198,7 +243,7 @@
       </mat-card-title>
     </mat-card-header>
     <mat-card-content class="context-form">
-      <mat-form-field>
+      <!-- <mat-form-field>
         <mat-label>{{ "names.speed" | translate }}</mat-label>
         <input
           #segmentSpeed
@@ -209,19 +254,18 @@
           step="10"
           min="10"
         />
-        <!-- <span matSuffix>%</span> -->
-      </mat-form-field>
+      </mat-form-field> -->
 
       <mat-slide-toggle
         color="primary"
-        (change)="onChangeSegmentProperty('use', $event.checked)"
-        >{{ "names.use" | translate }}</mat-slide-toggle
+        (change)="onChangeSegmentProperty('unuse', $event.checked)"
+        >{{ "names.unuse" | translate }}</mat-slide-toggle
       >
-      <mat-slide-toggle
+      <!-- <mat-slide-toggle
         color="primary"
         (change)="onChangeSegmentProperty('home', $event.checked)"
         >{{ "names.home" | translate }}</mat-slide-toggle
-      >
+      > -->
     </mat-card-content>
   </mat-card>
 </ng-template>

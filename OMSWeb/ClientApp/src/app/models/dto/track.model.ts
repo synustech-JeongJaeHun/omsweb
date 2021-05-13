@@ -43,6 +43,8 @@ export namespace Dto {
     id: number;
     logicalId: string;
     physicalId: string;
+    group?: number;
+    isHome?: boolean;
   }
   export interface ISegPart {
     type?: string;

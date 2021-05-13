@@ -83,7 +83,6 @@ export class MonitorStatusComponent implements OnInit, AfterViewInit {
   }
   ngAfterViewInit(): void {
     this.statusSvc.getTrack().subscribe((res) => {
-      console.info('## track info >>', res);
       // this.dataSvc.trackDataUpdated$.next(res);
       this.trackData = res;
       this.loadingState = false;

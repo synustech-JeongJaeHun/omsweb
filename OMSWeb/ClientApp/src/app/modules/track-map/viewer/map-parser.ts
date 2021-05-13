@@ -117,24 +117,23 @@ export class MapParser {
       return models;
     }, []);
   }
-  private inject_group_data(type: string, objects: any[]): any[] {
-    let grouped_objects = [];
+  private inject_group_data(type: string, rows: any[]): any[] {
+    let groupMembers = [];
     this.layout_data.groups.forEach((group) => {
-      grouped_objects.push({
+      groupMembers.push({
         groupId: group.id,
-        objects: group.objects[type] ? [...group.objects[type]] : [],
+        childIds: group.objects[type] ? [...group.objects[type]] : [],
       });
-      return;
     });
 
-    if (objects) {
-      for (let i = objects.length - 1; i > -1; i--) {
-        let object = objects[i];
-        for (let group of grouped_objects) {
-          for (let j = group.objects.length - 1; j > -1; j--) {
-            if (parseInt(object.id) === parseInt(group.objects[j])) {
-              objects[i].group = group.groupId;
-              group.objects.splice(j, 1);
+    if (rows) {
+      for (let i = rows.length - 1; i > -1; i--) {
+        let row = rows[i];
+        for (let group of groupMembers) {
+          for (let j = group.childIds.length - 1; j > -1; j--) {
+            if (parseInt(row.id) === parseInt(group.childIds[j])) {
+              row.group = group.groupId;
+              group.childIds.splice(j, 1);
               break; // @NOTE check : 성능을 높이기 위해서 break 했는데, group.objects에 동일한 아이디가 여러개 있는 데이터가 가능하다면 사용하면 안된다.
               // @NOTE optional : some, find, filter 등을 사용하는 방법도 고려(성능 우선)
             }
@@ -143,7 +142,7 @@ export class MapParser {
       }
     }
 
-    return objects;
+    return rows;
   }
 
   parseGroups(mapType: MapTypes, rows: Dto.IGroup[] = []): Group[] {
@@ -165,6 +164,7 @@ export class MapParser {
     rows: Dto.IPoint[] = [],
     coordAdjustment: number
   ): Point[] {
+    rows = this.inject_group_data('point', rows);
     return rows.reduce((models, p) => {
       try {
         const { x, y, id } = p;

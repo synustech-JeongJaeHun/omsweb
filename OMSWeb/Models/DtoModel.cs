@@ -47,4 +47,9 @@ namespace OMSWeb.Models
     [Required]
     public int[] Permissions { get; set; }
   }
+
+  public class PointUpdateDto {
+    public int? Group { get; set; }
+    public bool? IsHome { get; set; }
+  }
 }
