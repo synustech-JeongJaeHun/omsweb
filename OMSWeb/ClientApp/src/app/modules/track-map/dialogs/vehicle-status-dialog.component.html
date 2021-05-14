@@ -1,0 +1,12 @@
+<oms-dialog-base [title]="'names.vehicleStatus' | translate">
+  <ng-container class="dialog-layout">
+    <div mat-dialog-content class="content-layout">
+      <oms-unit-selector
+        class="full-span-col"
+        [findScopes]="['vehicles']"
+        [(selectedUnit)]="selectedVehicle"
+        [placeholder]="'names.selectVehicle' | translate"
+      ></oms-unit-selector>
+    </div>
+  </ng-container>
+</oms-dialog-base>

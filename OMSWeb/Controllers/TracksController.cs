@@ -54,17 +54,38 @@ namespace OMSWeb.Controllers
     }
 
     [HttpGet("points")]
-    public IEnumerable<Point> GetPoints() {
+    public IEnumerable<Point> GetPoints()
+    {
       return this._svc.GetPoints();
     }
     [HttpPatch("points/{id}")]
-    public ActionResult UpdatePoint([FromRoute] int id, [FromBody] PointUpdateDto point) {
+    public ActionResult UpdatePoint([FromRoute] int id, [FromBody] PointUpdateDto point)
+    {
       return Ok();
     }
 
     [HttpGet("stations")]
-    public IEnumerable<Station> GetStations() {
+    public IEnumerable<Station> GetStations()
+    {
       return this._svc.GetStations();
+    }
+
+    [HttpPost("buffers/{id}/carrier/{carrierId}")]
+    public ActionResult InstallBufferCarrier([FromRoute] int id, [FromRoute] int carrierId)
+    {
+      return Ok();
+    }
+
+    [HttpDelete("buffers/{id}/carrier")]
+    public ActionResult RemoveBufferCarrier([FromRoute] int id)
+    {
+      return Ok();
+    }
+
+    [HttpPatch("buffers/{id}")]
+    public ActionResult UpdateBuffer([FromRoute] int id, [FromBody] BufferUpdateDto form)
+    {
+      return Ok();
     }
   }
 }

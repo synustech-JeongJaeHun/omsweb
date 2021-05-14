@@ -148,28 +148,18 @@ namespace OMSWeb
         }
       });
 
-      // if (!env.IsDevelopment())
-      // {
-      //   app.UseSpaStaticFiles(new StaticFileOptions
-      //   {
-      //     OnPrepareResponse = context =>
-      //     {
-      //       context.Context.Response.Headers.Add("Cache-Control", "no-cache, no-store, must-revalidate");
-      //       context.Context.Response.Headers.Add("Expires", "0");
-      //       context.Context.Response.Headers.Add("Pragma", "no-cache");
-      //     }
-      //   });
-      // }
-
-      app.UseSpaStaticFiles(new StaticFileOptions
+      if (!env.IsDevelopment())
       {
-        OnPrepareResponse = context =>
+        app.UseSpaStaticFiles(new StaticFileOptions
         {
-          context.Context.Response.Headers.Add("Cache-Control", "no-cache, no-store, must-revalidate");
-          context.Context.Response.Headers.Add("Expires", "0");
-          context.Context.Response.Headers.Add("Pragma", "no-cache");
-        }
-      });
+          OnPrepareResponse = context =>
+          {
+            context.Context.Response.Headers.Add("Cache-Control", "no-cache, no-store, must-revalidate");
+            context.Context.Response.Headers.Add("Expires", "0");
+            context.Context.Response.Headers.Add("Pragma", "no-cache");
+          }
+        });
+      }
 
       app.UseRouting();
 

@@ -72,7 +72,6 @@ export class UnitSelectorComponent implements OnInit, OnChanges {
   onClear() {
     this.selectedUnit = undefined;
     this.selectedUnitChange.emit(undefined);
-    this.targetOptions$ = of([]);
     this.inputControl.reset();
     !this.disabled && this.inputControl.enable();
   }

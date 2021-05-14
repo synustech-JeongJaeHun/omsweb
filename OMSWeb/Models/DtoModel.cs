@@ -52,4 +52,8 @@ namespace OMSWeb.Models
     public int? Group { get; set; }
     public bool? IsHome { get; set; }
   }
+
+  public class BufferUpdateDto {
+    public string Note { get; set; }
+  }
 }

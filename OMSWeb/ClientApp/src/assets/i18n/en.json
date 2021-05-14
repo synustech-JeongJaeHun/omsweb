@@ -157,6 +157,7 @@
     "autoAll": "Auto All",
     "ioList": "IO List",
     "vehicleStatus": "Vehicle Status",
+    "bufferStatus": "Buffer Status",
 
     "confirm": "Confirm",
     "cancel": "Cancel",
@@ -182,6 +183,7 @@
     "command-fromTo": "FromTo",
     "command-from": "From",
     "command-to": "To",
+    "selectBuffer": "Select Buffer",
     "selectVehicle": "Select Vehicle",
     "selectPoint": "Select Point",
     "selectSource": "Select Source",
@@ -255,7 +257,12 @@
     "inputZones": "Input Zones",
     "zone": "Zone",
     "onlineName": "Online Name",
-    "secondary": "Secondary"
+    "secondary": "Secondary",
+    "contain": "Contain",
+    "updated": "Updated",
+    "carrierId": "Carrier ID",
+    "clean": "Clean",
+    "note": "Note"
   },
   "enums": {
     "hostSessionStatus": {

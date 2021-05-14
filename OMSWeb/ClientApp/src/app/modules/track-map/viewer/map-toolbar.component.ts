@@ -23,6 +23,8 @@ import { MessagesService } from '@oms/services/messages.service';
 import { DialogService } from '@oms/services/dialog.service';
 import { TranslateService } from '@ngx-translate/core';
 import { SearchDialogComponent } from '../dialogs/search-dialog.component';
+import { BufferStatusDialogComponent } from '../dialogs/buffer-status-dialog.component';
+import { VehicleStatusDialogComponent } from '../dialogs/vehicle-status-dialog.component';
 import {
   MatDialog,
   MatDialogRef,
@@ -67,6 +69,8 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
   private _trackDlg: MatDialogRef<TrackVehicleDialogComponent, any>;
   private _cmdDlg: MatDialogRef<CommandDialogComponent, any>;
   private _showObjDlg: MatDialogRef<ShowObjectDialogComponent, any>;
+  private _vhStatusDlg: MatDialogRef<VehicleStatusDialogComponent, any>;
+  private _bfStatusDlg: MatDialogRef<BufferStatusDialogComponent, any>;
 
   constructor(
     private auth: AuthService,
@@ -92,6 +96,14 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
     this._showObjDlg &&
       this._showObjDlg.getState() === MatDialogState.OPEN &&
       this._showObjDlg.close();
+
+    this._vhStatusDlg &&
+      this._vhStatusDlg.getState() === MatDialogState.OPEN &&
+      this._vhStatusDlg.close();
+
+    this._bfStatusDlg &&
+      this._bfStatusDlg.getState() === MatDialogState.OPEN &&
+      this._bfStatusDlg.close();
   }
 
   ngOnInit(): void {}
@@ -197,6 +209,42 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
 
   onCommandTool(action: CommandKeyType) {
     this.stateSvc.commandToolbar(action);
+  }
+
+  onOpenVehicleStatus() {
+    if (
+      this._vhStatusDlg &&
+      this._vhStatusDlg.getState() === MatDialogState.OPEN
+    ) {
+      this._vhStatusDlg.close();
+      return;
+    }
+
+    this._vhStatusDlg = this.dialog.open(VehicleStatusDialogComponent, {
+      width: '750px',
+      autoFocus: false,
+      hasBackdrop: false,
+      disableClose: false,
+      closeOnNavigation: true,
+    });
+  }
+
+  onOpenBufferStatus() {
+    if (
+      this._bfStatusDlg &&
+      this._bfStatusDlg.getState() === MatDialogState.OPEN
+    ) {
+      this._bfStatusDlg.close();
+      return;
+    }
+
+    this._bfStatusDlg = this.dialog.open(BufferStatusDialogComponent, {
+      width: '300px',
+      autoFocus: false,
+      hasBackdrop: false,
+      disableClose: false,
+      closeOnNavigation: true,
+    });
   }
 
   // onPing() {

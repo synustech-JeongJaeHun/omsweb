@@ -42,4 +42,21 @@ export class TracksService {
   loadStations(): Observable<Dto.IStation[]> {
     return this.http.get<Dto.IStation[]>(`${this.baseUrl}/stations`);
   }
+
+  installBufferCarrier(bufferId: number, carrierId: number): Observable<void> {
+    return this.http.post<void>(
+      `${this.baseUrl}/buffers/${bufferId}/carrier/${carrierId}`,
+      {}
+    );
+  }
+
+  removeBufferCarrier(bufferId: number): Observable<void> {
+    return this.http.delete<void>(
+      `${this.baseUrl}/buffers/${bufferId}/carrier`
+    );
+  }
+
+  updateBuffer(bufferId: number, form: any): Observable<void> {
+    return this.http.patch<void>(`${this.baseUrl}/buffers/${bufferId}`, form);
+  }
 }

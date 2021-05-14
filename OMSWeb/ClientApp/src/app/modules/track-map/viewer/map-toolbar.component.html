@@ -103,6 +103,32 @@
   >
     <mat-icon fontSet="material-icons-outlined">info</mat-icon>
   </button>
+  <mat-divider></mat-divider>
+  <button
+    #btnShowObj
+    matListItem
+    mat-button
+    class="tool-item"
+    matTooltipClass="snb-tooltip"
+    matTooltipPosition="right"
+    [matTooltip]="'names.buffer' | translate"
+    (click)="onOpenBufferStatus()"
+  >
+    <mat-icon>sensor_window</mat-icon>
+  </button>
+
+  <button
+    #btnShowObj
+    matListItem
+    mat-button
+    class="tool-item"
+    matTooltipClass="snb-tooltip"
+    matTooltipPosition="right"
+    [matTooltip]="'names.vehicleStatus' | translate"
+    (click)="onOpenVehicleStatus()"
+  >
+    <mat-icon>security_update_warning</mat-icon>
+  </button>
 
   <!-- <mat-divider></mat-divider>
 
