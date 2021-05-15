@@ -1,14 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { map } from 'rxjs/operators';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 import DataSource from 'devextreme/data/data_source';
 
 import { Dto } from '@oms/models/dto/track.model';
-import { IPaginatedResult } from '../models/base.model';
-import { IOrderStatusRow } from '../models/order-status.model';
-import { IVehicleStatusRow } from '../models/vehicle-status.model';
+import { IVehicleDIOStates, IVehicleSignal } from '../models/vehicle-status.model';
 
 @Injectable({
   providedIn: 'root',
@@ -40,5 +37,15 @@ export class StatusService {
         loadUrl: `${this.baseUrl}/vehicles`,
       }),
     });
+  }
+
+  getVehicleSignal(id: number): Observable<IVehicleSignal> {
+    console.warn('# from vehicle-signal.json file - for dev #');
+    return this.http.get<IVehicleSignal>('/assets/json/vehicle-signal.json');
+  }
+
+  vehicleDIOStates(id: number): Observable<IVehicleDIOStates> {
+    console.warn('# from vehicle-io-status.json file - for dev #');
+    return this.http.get<IVehicleDIOStates>('/assets/json/vehicle-io-status.json');
   }
 }

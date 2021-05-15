@@ -1,0 +1,9 @@
+{
+  "removed": false,
+  "contain": true,
+  "connected": false,
+  "sensorStopped": false,
+  "isMain": true,
+  "hostOrderEnable": false,
+  "pushEnable": false
+}

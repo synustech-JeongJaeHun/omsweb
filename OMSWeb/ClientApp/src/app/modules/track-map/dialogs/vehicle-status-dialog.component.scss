@@ -1,4 +1,90 @@
 .content-layout {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: 41px 40px 370px 40px;
+  column-gap: 4px;
+  row-gap: 1px;
+}
+
+h4 {
+  border-bottom: 2px solid var(--details-background-color);
+  text-align: center;
+}
+
+.details {
+  overflow: auto;
+}
+
+fieldset {
+  border: 1px solid var(--theme-border-color);
+  border-radius: 4px;
+  padding: 4px;
+  min-height: 30px;
+
+  legend {
+    font-size: 14px;
+    font-weight: bold;
+  }
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  font-size: 12px;
+  row-gap: 4px;
+  column-gap: 4px;
+
+  label.name {
+    font-weight: bold;
+    background-color: var(--details-background-color);
+    text-align: right;
+    padding: 4px 8px;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+  }
+  .value {
+    padding: 4px 8px;
+    border-bottom: 1px solid var(--details-background-color);
+  }
+}
+.status-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  font-size: 12px;
+  row-gap: 4px;
+
+  .status-item {
+    background-color: var(--theme-color-inactive);
+    padding: 4px 16px;
+    border-radius: 8px;
+    font-weight: bold;
+
+    &.active {
+      background-color: var(--theme-accent-color);
+    }
+  }
+}
+
+.status-panel {
+  grid-row: 3 /5;
+}
+
+// .di-panel {
+// }
+
+// .do-panel {
+// }
+
+.io-panel {
+  grid-column: 2 /4;
+  justify-self: center;
+  align-self: center;
+
+  mat-slide-toggle {
+    margin-left: 20px;
+
+    &:first-child {
+      margin-left: 0;
+    }
+  }
 }

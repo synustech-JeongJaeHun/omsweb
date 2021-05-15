@@ -4,9 +4,117 @@
       <oms-unit-selector
         class="full-span-col"
         [findScopes]="['vehicles']"
-        [(selectedUnit)]="selectedVehicle"
+        [selectedUnit]="selectedUnit"
+        (selectedUnitChange)="onUnitChange($event)"
         [placeholder]="'names.selectVehicle' | translate"
       ></oms-unit-selector>
+      <h4>Status</h4>
+      <h4>DI</h4>
+      <h4>DO</h4>
+      <div class="details status-panel">
+        <fieldset>
+          <legend>{{ "names.vehicleStatus" | translate }}</legend>
+          <div class="detail-grid">
+            <label class="name">{{ "names.id" | translate }}</label>
+            <div class="value">{{ currentVehicle.id }}</div>
+            <label class="name">{{ "names.mode" | translate }}</label>
+            <div class="value">{{ currentVehicle.mode }}</div>
+            <label class="name">{{ "names.transferState" | translate }}</label>
+            <div class="value">{{ currentVehicle.transferState }}</div>
+            <label class="name">{{ "names.driveState" | translate }}</label>
+            <div class="value">{{ currentVehicle.driveState }}</div>
+            <label class="name">{{ "names.before" | translate }}</label>
+            <div class="value">{{ currentVehicle.before }}</div>
+            <label class="name">{{ "names.current" | translate }}</label>
+            <div class="value">{{ currentVehicle.current }}</div>
+            <label class="name">{{ "names.barcode" | translate }}</label>
+            <div class="value">{{ currentVehicle.barcode }}</div>
+            <label class="name">{{ "names.target" | translate }}</label>
+            <div class="value">{{ currentVehicle.target }}</div>
+            <label class="name">{{ "names.carrierId" | translate }}</label>
+            <div class="value">{{ currentVehicle.carrierId }}</div>
+            <label class="name">{{ "names.bufferId" | translate }}</label>
+            <div class="value">{{ currentVehicle.bufferId }}</div>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>{{ "names.vehicleSignal" | translate }}</legend>
+          <div class="status-grid">
+            <div
+              class="status-item"
+              [class.active]="signalStatus && !signalStatus.removed"
+            >
+              {{ "names.railIn" | translate }}
+            </div>
+            <div class="status-item" [class.active]="signalStatus?.contain">
+              {{ "names.carrier" | translate }}
+            </div>
+            <div class="status-item" [class.active]="signalStatus?.connected">
+              {{ "names.connected" | translate }}
+            </div>
+            <div
+              class="status-item"
+              [class.active]="signalStatus?.sensorStopped"
+            >
+              {{ "names.sensorStopped" | translate }}
+            </div>
+            <div class="status-item" [class.active]="signalStatus?.isMain">
+              {{ "names.maintenance" | translate }}
+            </div>
+            <div
+              class="status-item"
+              [class.active]="signalStatus?.hostOrderEnable"
+            >
+              {{ "names.hostOrderEnable" | translate }}
+            </div>
+            <div class="status-item" [class.active]="signalStatus?.pushEnable">
+              {{ "names.pushEnable" | translate }}
+            </div>
+          </div>
+        </fieldset>
+      </div>
+      <div class="details di-panel">
+        <ng-container *ngFor="let category of ioCategories">
+          <fieldset *ngIf="isSelectedCategory(category)">
+            <legend>{{ category }}</legend>
+            <div class="status-grid">
+              <div
+                class="status-item"
+                [class.active]="item.value"
+                *ngFor="let item of diMap[category]"
+              >
+                {{ item.name }}
+              </div>
+            </div>
+          </fieldset>
+        </ng-container>
+      </div>
+      <div class="details do-panel">
+        <ng-container *ngFor="let category of ioCategories">
+          <fieldset *ngIf="isSelectedCategory(category)">
+            <legend>{{ category }}</legend>
+            <div class="status-grid">
+              <div
+                class="status-item"
+                [class.active]="item.value"
+                *ngFor="let item of doMap[category]"
+              >
+                {{ item.name }}
+              </div>
+            </div>
+          </fieldset>
+        </ng-container>
+      </div>
+      <div class="io-panel">
+        <mat-slide-toggle
+          #toggleCategory
+          color="primary"
+          [checked]="isSelectedCategory(category)"
+          *ngFor="let category of ioCategories"
+          (toggleChange)="onToggleCategory(category, toggleCategory.checked)"
+          >{{ category }}</mat-slide-toggle
+        >
+      </div>
     </div>
   </ng-container>
 </oms-dialog-base>

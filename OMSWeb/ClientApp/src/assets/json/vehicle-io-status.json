@@ -1,0 +1,817 @@
+{
+  "vehicleDI": [
+    {
+      "id": 0,
+      "category": "ZCU",
+      "name": "ZCU_IN_LinkComplete",
+      "value": false
+    },
+    {
+      "id": 1,
+      "category": "ZCU",
+      "name": "ZCU_IN_Status_BType",
+      "value": true
+    },
+    {
+      "id": 2,
+      "category": "ZCU",
+      "name": "ZCU_IN_OK",
+      "value": false
+    },
+    {
+      "id": 3,
+      "category": "ZCU",
+      "name": "ZCU_IN_3",
+      "value": false
+    },
+    {
+      "id": 4,
+      "category": "Transfer",
+      "name": "UBG_Detect_1",
+      "value": true
+    },
+    {
+      "id": 5,
+      "category": "Transfer",
+      "name": "UBG_Detect_2",
+      "value": false
+    },
+    {
+      "id": 6,
+      "category": "Transfer",
+      "name": "UBG_Detect_3",
+      "value": false
+    },
+    {
+      "id": 7,
+      "category": "Transfer",
+      "name": "UBG_Alarm",
+      "value": false
+    },
+    {
+      "id": 8,
+      "category": "Transfer",
+      "name": "PBS_Detect_1",
+      "value": false
+    },
+    {
+      "id": 9,
+      "category": "Transfer",
+      "name": "PBS_Detect_2",
+      "value": false
+    },
+    {
+      "id": 10,
+      "category": "Transfer",
+      "name": "PBS_Detect_3",
+      "value": false
+    },
+    {
+      "id": 11,
+      "category": "Transfer",
+      "name": "PBS_Alarm",
+      "value": false
+    },
+    {
+      "id": 12,
+      "category": "Disable",
+      "name": "DIN_12"
+    },
+    {
+      "id": 13,
+      "category": "Disable",
+      "name": "DIN_13"
+    },
+    {
+      "id": 14,
+      "category": "Disable",
+      "name": "DIN_14"
+    },
+    {
+      "id": 15,
+      "category": "PIO",
+      "name": "HAND_PIO_9_PIO_GO",
+      "value": false
+    },
+    {
+      "id": 16,
+      "category": "PIO",
+      "name": "HAND_PIO_1_Grip",
+      "value": false
+    },
+    {
+      "id": 17,
+      "category": "PIO",
+      "name": "HAND_PIO_2_Ungrip",
+      "value": false
+    },
+    {
+      "id": 18,
+      "category": "PIO",
+      "name": "HAND_PIO_3_Left_Flange_Sensor",
+      "value": false
+    },
+    {
+      "id": 19,
+      "category": "PIO",
+      "name": "HAND_PIO_4_Right_Flange_Sensor",
+      "value": false
+    },
+    {
+      "id": 20,
+      "category": "PIO",
+      "name": "HAND_PIO_5_Carrier_Lower_Detect_Left",
+      "value": false
+    },
+    {
+      "id": 21,
+      "category": "PIO",
+      "name": "HAND_PIO_5_Carrier_Lower_Detect_Right",
+      "value": false
+    },
+    {
+      "id": 22,
+      "category": "PIO",
+      "name": "HAND_PIO_7_GRIP_FALSE_DETECT_SENSOR",
+      "value": false
+    },
+    {
+      "id": 23,
+      "category": "PIO",
+      "name": "HAND_PIO_8",
+      "value": false
+    },
+    {
+      "id": 24,
+      "category": "Transfer",
+      "name": "Steer_Front_Left",
+      "value": false
+    },
+    {
+      "id": 25,
+      "category": "Transfer",
+      "name": "Steer_Front_Right",
+      "value": false
+    },
+    {
+      "id": 26,
+      "category": "Transfer",
+      "name": "Steer_Rear_Left",
+      "value": false
+    },
+    {
+      "id": 27,
+      "category": "Transfer",
+      "name": "Steer_Rear_Right",
+      "value": false
+    },
+    {
+      "id": 28,
+      "category": "Transfer",
+      "name": "AntiDrop_Front_Lock",
+      "value": false
+    },
+    {
+      "id": 29,
+      "category": "Transfer",
+      "name": "AntiDrop_Front_Unlock",
+      "value": false
+    },
+    {
+      "id": 30,
+      "category": "Transfer",
+      "name": "AntiDrop_Rear_Lock",
+      "value": false
+    },
+    {
+      "id": 31,
+      "category": "Transfer",
+      "name": "AntiDrop_Rear_Unlock",
+      "value": false
+    },
+    {
+      "id": 32,
+      "category": "Disable",
+      "name": "DIN_32"
+    },
+    {
+      "id": 33,
+      "category": "Disable",
+      "name": "DIN_33"
+    },
+    {
+      "id": 34,
+      "category": "Transfer",
+      "name": "Trans_DecTag_Sensor",
+      "value": false
+    },
+    {
+      "id": 35,
+      "category": "Transfer",
+      "name": "Trans_Stoptag_Sensor",
+      "value": false
+    },
+    {
+      "id": 36,
+      "category": "OTHER",
+      "name": "EMO_SW",
+      "value": false
+    },
+    {
+      "id": 37,
+      "category": "Disable",
+      "name": "STB_L_Sensor"
+    },
+    {
+      "id": 38,
+      "category": "Disable",
+      "name": "DIN_38"
+    },
+    {
+      "id": 39,
+      "category": "Disable",
+      "name": "DIN_39"
+    },
+    {
+      "id": 40,
+      "category": "Transfer",
+      "name": "HOIST_UP",
+      "value": false
+    },
+    {
+      "id": 41,
+      "category": "Transfer",
+      "name": "HOIST_SWING",
+      "value": false
+    },
+    {
+      "id": 42,
+      "category": "Disable",
+      "name": "DIN_42"
+    },
+    {
+      "id": 43,
+      "category": "Transfer",
+      "name": "SLIDER_LIMIT_1",
+      "value": false
+    },
+    {
+      "id": 44,
+      "category": "Transfer",
+      "name": "SLIDER_LIMIT_HOME",
+      "value": false
+    },
+    {
+      "id": 45,
+      "category": "Transfer",
+      "name": "SLIDER_LIMIT_2",
+      "value": false
+    },
+    {
+      "id": 46,
+      "category": "Disable",
+      "name": "DIN_46"
+    },
+    {
+      "id": 47,
+      "category": "Disable",
+      "name": "DIN_47"
+    },
+    {
+      "id": 48,
+      "category": "Disable",
+      "name": "DIN_48"
+    },
+    {
+      "id": 49,
+      "category": "Disable",
+      "name": "DIN_49"
+    },
+    {
+      "id": 50,
+      "category": "Disable",
+      "name": "DIN_50"
+    },
+    {
+      "id": 51,
+      "category": "Disable",
+      "name": "DIN_51"
+    },
+    {
+      "id": 52,
+      "category": "Disable",
+      "name": "DIN_52"
+    },
+    {
+      "id": 53,
+      "category": "Disable",
+      "name": "DIN_53"
+    },
+    {
+      "id": 54,
+      "category": "Disable",
+      "name": "DIN_54"
+    },
+    {
+      "id": 55,
+      "category": "Disable",
+      "name": "DIN_55"
+    },
+    {
+      "id": 56,
+      "category": "Disable",
+      "name": "DIN_56"
+    },
+    {
+      "id": 57,
+      "category": "Disable",
+      "name": "DIN_57"
+    },
+    {
+      "id": 58,
+      "category": "Disable",
+      "name": "DIN_58"
+    },
+    {
+      "id": 59,
+      "category": "Disable",
+      "name": "DIN_59"
+    },
+    {
+      "id": 60,
+      "category": "Disable",
+      "name": "DIN_60"
+    },
+    {
+      "id": 61,
+      "category": "Disable",
+      "name": "DIN_61"
+    },
+    {
+      "id": 62,
+      "category": "Disable",
+      "name": "DIN_62"
+    },
+    {
+      "id": 63,
+      "category": "Disable",
+      "name": "DIN_63"
+    },
+    {
+      "id": 64,
+      "category": "PIO",
+      "name": "EQ_PIO_1_L_REQ",
+      "value": false
+    },
+    {
+      "id": 65,
+      "category": "PIO",
+      "name": "EQ_PIO_2_U_REQ",
+      "value": false
+    },
+    {
+      "id": 66,
+      "category": "PIO",
+      "name": "EQ_PIO_3__",
+      "value": false
+    },
+    {
+      "id": 67,
+      "category": "PIO",
+      "name": "EQ_PIO_4_READY",
+      "value": false
+    },
+    {
+      "id": 68,
+      "category": "PIO",
+      "name": "EQ_PIO_5__",
+      "value": false
+    },
+    {
+      "id": 69,
+      "category": "PIO",
+      "name": "EQ_PIO_6_HO_AVBL",
+      "value": false
+    },
+    {
+      "id": 70,
+      "category": "PIO",
+      "name": "EQ_PIO_7_ES",
+      "value": false
+    },
+    {
+      "id": 71,
+      "category": "PIO",
+      "name": "EQ_PIO_9_PIO_GO",
+      "value": false
+    }
+  ],
+  "vehicleDO": [
+    {
+      "id": 0,
+      "category": "ZCU",
+      "name": "ZCU_OUT_0",
+      "value": false
+    },
+    {
+      "id": 1,
+      "category": "ZCU",
+      "name": "ZCU_OUT_1",
+      "value": false
+    },
+    {
+      "id": 2,
+      "category": "ZCU",
+      "name": "ZCU_OUT_2",
+      "value": false
+    },
+    {
+      "id": 3,
+      "category": "ZCU",
+      "name": "ZCU_OUT_3",
+      "value": false
+    },
+    {
+      "id": 4,
+      "category": "Transfer",
+      "name": "UBG_Area_1",
+      "value": false
+    },
+    {
+      "id": 5,
+      "category": "Transfer",
+      "name": "UBG_Area_2",
+      "value": false
+    },
+    {
+      "id": 6,
+      "category": "Transfer",
+      "name": "UBG_Area_3",
+      "value": false
+    },
+    {
+      "id": 7,
+      "category": "Transfer",
+      "name": "UBG_Area_4",
+      "value": false
+    },
+    {
+      "id": 8,
+      "category": "Transfer",
+      "name": "PBS_Area_1",
+      "value": false
+    },
+    {
+      "id": 9,
+      "category": "Transfer",
+      "name": "PBS_Area_2",
+      "value": false
+    },
+    {
+      "id": 10,
+      "category": "Transfer",
+      "name": "PBS_Area_3",
+      "value": false
+    },
+    {
+      "id": 11,
+      "category": "Transfer",
+      "name": "PBS_Area_4",
+      "value": false
+    },
+    {
+      "id": 12,
+      "category": "PIO",
+      "name": "MOD_LED_LAMP__1_RED",
+      "value": false
+    },
+    {
+      "id": 13,
+      "category": "PIO",
+      "name": "MOD_LED_LAMP__2_GREEN",
+      "value": false
+    },
+    {
+      "id": 14,
+      "category": "PIO",
+      "name": "MOD_LED_LAMP__3_BLUE",
+      "value": false
+    },
+    {
+      "id": 15,
+      "category": "PIO",
+      "name": "HAND_PIO_9_Selelct",
+      "value": false
+    },
+    {
+      "id": 16,
+      "category": "PIO",
+      "name": "HAND_PIO_1_Grip",
+      "value": false
+    },
+    {
+      "id": 17,
+      "category": "PIO",
+      "name": "HAND_PIO_2_Ungrip",
+      "value": false
+    },
+    {
+      "id": 18,
+      "category": "PIO",
+      "name": "HAND_PIO_3",
+      "value": false
+    },
+    {
+      "id": 19,
+      "category": "PIO",
+      "name": "HAND_PIO_4",
+      "value": false
+    },
+    {
+      "id": 20,
+      "category": "PIO",
+      "name": "HAND_PIO_5",
+      "value": false
+    },
+    {
+      "id": 21,
+      "category": "PIO",
+      "name": "HAND_PIO_6",
+      "value": false
+    },
+    {
+      "id": 22,
+      "category": "PIO",
+      "name": "HAND_PIO_7",
+      "value": false
+    },
+    {
+      "id": 23,
+      "category": "PIO",
+      "name": "HAND_PIO_8",
+      "value": false
+    },
+    {
+      "id": 24,
+      "category": "Disable",
+      "name": "DOUT_24"
+    },
+    {
+      "id": 25,
+      "category": "Disable",
+      "name": "DOUT_25"
+    },
+    {
+      "id": 26,
+      "category": "Disable",
+      "name": "DOUT_26"
+    },
+    {
+      "id": 27,
+      "category": "Disable",
+      "name": "DOUT_27"
+    },
+    {
+      "id": 28,
+      "category": "Disable",
+      "name": "DOUT_28"
+    },
+    {
+      "id": 29,
+      "category": "Disable",
+      "name": "DOUT_29"
+    },
+    {
+      "id": 30,
+      "category": "Disable",
+      "name": "DOUT_30"
+    },
+    {
+      "id": 31,
+      "category": "Disable",
+      "name": "DOUT_31"
+    },
+    {
+      "id": 32,
+      "category": "OTHER",
+      "name": "Release_Brake_Driver",
+      "value": false
+    },
+    {
+      "id": 33,
+      "category": "OTHER",
+      "name": "Release_Brake_Hoist",
+      "value": false
+    },
+    {
+      "id": 34,
+      "category": "OTHER",
+      "name": "STATUS_LED_LAMP__1_RED",
+      "value": false
+    },
+    {
+      "id": 35,
+      "category": "OTHER",
+      "name": "STATUS_LED_LAMP__2_GREEN",
+      "value": false
+    },
+    {
+      "id": 36,
+      "category": "OTHER",
+      "name": "STATUS_LED_LAMP__3_BLUE",
+      "value": false
+    },
+    {
+      "id": 37,
+      "category": "OTHER",
+      "name": "BUZZER__1_GO",
+      "value": false
+    },
+    {
+      "id": 38,
+      "category": "OTHER",
+      "name": "BUZZER__2_TR",
+      "value": false
+    },
+    {
+      "id": 39,
+      "category": "OTHER",
+      "name": "BUZZER__3_ERR",
+      "value": false
+    },
+    {
+      "id": 40,
+      "category": "OTHER",
+      "name": "BUZZER__4",
+      "value": false
+    },
+    {
+      "id": 41,
+      "category": "OTHER",
+      "name": "MAIN_MC",
+      "value": false
+    },
+    {
+      "id": 42,
+      "category": "OTHER",
+      "name": "SOFT_START_BRY01",
+      "value": false
+    },
+    {
+      "id": 43,
+      "category": "OTHER",
+      "name": "STATUS_LEFT",
+      "value": false
+    },
+    {
+      "id": 44,
+      "category": "OTHER",
+      "name": "STATUS_RIGHT",
+      "value": false
+    },
+    {
+      "id": 45,
+      "category": "Disable",
+      "name": "DOUT_45"
+    },
+    {
+      "id": 46,
+      "category": "Disable",
+      "name": "DOUT_46"
+    },
+    {
+      "id": 47,
+      "category": "Disable",
+      "name": "DOUT_47"
+    },
+    {
+      "id": 48,
+      "category": "Disable",
+      "name": "DOUT_48"
+    },
+    {
+      "id": 49,
+      "category": "Disable",
+      "name": "DOUT_49"
+    },
+    {
+      "id": 50,
+      "category": "Disable",
+      "name": "DOUT_50"
+    },
+    {
+      "id": 51,
+      "category": "Disable",
+      "name": "DOUT_51"
+    },
+    {
+      "id": 52,
+      "category": "Disable",
+      "name": "DOUT_52"
+    },
+    {
+      "id": 53,
+      "category": "Disable",
+      "name": "DOUT_53"
+    },
+    {
+      "id": 54,
+      "category": "Disable",
+      "name": "DOUT_54"
+    },
+    {
+      "id": 55,
+      "category": "Disable",
+      "name": "DOUT_55"
+    },
+    {
+      "id": 56,
+      "category": "Disable",
+      "name": "DOUT_56"
+    },
+    {
+      "id": 57,
+      "category": "Disable",
+      "name": "DOUT_57"
+    },
+    {
+      "id": 58,
+      "category": "Disable",
+      "name": "DOUT_58"
+    },
+    {
+      "id": 59,
+      "category": "Disable",
+      "name": "DOUT_59"
+    },
+    {
+      "id": 60,
+      "category": "Disable",
+      "name": "DOUT_60"
+    },
+    {
+      "id": 61,
+      "category": "Disable",
+      "name": "DOUT_61"
+    },
+    {
+      "id": 62,
+      "category": "Disable",
+      "name": "DOUT_62"
+    },
+    {
+      "id": 63,
+      "category": "Disable",
+      "name": "DOUT_63"
+    },
+    {
+      "id": 64,
+      "category": "PIO",
+      "name": "EQ_PIO_1_VALID",
+      "value": false
+    },
+    {
+      "id": 65,
+      "category": "PIO",
+      "name": "EQ_PIO_2_CS",
+      "value": false
+    },
+    {
+      "id": 66,
+      "category": "PIO",
+      "name": "EQ_PIO_3__",
+      "value": false
+    },
+    {
+      "id": 67,
+      "category": "PIO",
+      "name": "EQ_PIO_4__",
+      "value": false
+    },
+    {
+      "id": 68,
+      "category": "PIO",
+      "name": "EQ_PIO_5_TR_REQ",
+      "value": false
+    },
+    {
+      "id": 69,
+      "category": "PIO",
+      "name": "EQ_PIO_6_BUSY",
+      "value": false
+    },
+    {
+      "id": 70,
+      "category": "PIO",
+      "name": "EQ_PIO_7_COMPT",
+      "value": false
+    },
+    {
+      "id": 71,
+      "category": "PIO",
+      "name": "EQ_PIO_9_PIO_SELECT",
+      "value": false
+    }
+  ],
+  "categories": ["Disable", "Transfer", "OBS", "ZCU", "PIO", "OTHER"]
+}

@@ -542,7 +542,6 @@ export class ViewController {
     can_modify_display_settings?
   ) {
 
-    console.log('@@@@ setup viewer...');
     // @TODO prefix 설정 : 현재는 고정값 'public.largemap', 설정값을 외부에서 넘겨 받기로 하면 필요 없을 수 있음
     this.state_prefix = 'public.largemap';
 
@@ -13075,10 +13074,6 @@ export class ViewController {
   }
   attach_segment_event_handler(d3_mask_element_selection: any) {
     let mouse_move_counter = 0;
-    console.log(
-      '### attach_segment_event_handler >>',
-      d3_mask_element_selection
-    );
     const that = this;
     d3_mask_element_selection.on('click', function () {
       if (
@@ -13473,7 +13468,6 @@ export class ViewController {
 
     // Store minimap screen size
     this.geometry.minimapSize = { width, height };
-    console.log('### minimap size >>', dimensions);
 
     // Set initial zoom.current_mainand offset
     this.setInitialZoom(MapTypes.MINIMAP);

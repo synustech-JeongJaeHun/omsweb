@@ -262,7 +262,21 @@
     "updated": "Updated",
     "carrierId": "Carrier ID",
     "clean": "Clean",
-    "note": "Note"
+    "note": "Note",
+    "transfer": "Transfer",
+    "obs": "OBS",
+    "pio": "PIO",
+    "other": "Other",
+    "vehicleSignal": "Vehicle Signal",
+    "transferState": "Transfer State",
+    "driveState": "Drive State",
+    "before": "Before",
+    "current": "Current",
+    "target": "Target",
+    "bufferId": "Buffer ID",
+    "connected": "Connected",
+    "sensorStopped": "Sensor Stop",
+    "maintenance": "Maintenance"
   },
   "enums": {
     "hostSessionStatus": {

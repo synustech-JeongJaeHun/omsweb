@@ -28,3 +28,26 @@ export interface IVehicleStatusRow extends IVehicleInfoRow {
 
   rowNum: number;
 }
+
+export interface IVehicleSignal {
+  removed: boolean;
+  contain: boolean;
+  connected: boolean;
+  sensorStopped: boolean;
+  isMain: boolean;
+  hostOrderEnable: boolean;
+  pushEnable: boolean;
+}
+
+export interface IVehicleDIO {
+  id: number;
+  category: string;
+  name: string;
+  value: boolean;
+}
+
+export interface IVehicleDIOStates {
+  vehicleDI: IVehicleDIO[];
+  vehicleDO: IVehicleDIO[];
+  categories: string[];
+}
