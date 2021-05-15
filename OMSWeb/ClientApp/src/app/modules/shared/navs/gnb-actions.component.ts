@@ -7,9 +7,11 @@ import {
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { IRole } from '../../../models/user.model';
 import { AuthService } from '../../../services/auth.service';
 import { DialogService } from '../../../services/dialog.service';
 import { SystemsService } from '../../../services/systems.service';
+import { UsersService } from '../../../services/users.service';
 import { LegendDialogComponent } from '../dialogs/legend-dialog.component';
 import { LoginDialogComponent } from '../dialogs/login-dialog.component';
 import { ProfileDialogComponent } from '../dialogs/profile-dialog.component';
@@ -22,6 +24,7 @@ import { ProfileDialogComponent } from '../dialogs/profile-dialog.component';
 export class GnbActionsComponent implements OnInit, OnDestroy {
   private _legendDlg: MatDialogRef<LegendDialogComponent, any>;
   private _activeAi: boolean;
+  private _roles: IRole[] = [];
   private destroy$ = new Subject<void>();
 
   get isAuthenticated() {
@@ -33,14 +36,21 @@ export class GnbActionsComponent implements OnInit, OnDestroy {
   get activeAi(): boolean {
     return this._activeAi;
   }
+  get roleName(): string {
+    if (this.user.roles.length === 0) return '#';
+    const role = this._roles.find((r) => r.id == this.user.roles[0]);
+    return role ? ` (${role.name})` : '@';
+  }
 
   constructor(
     private auth: AuthService,
     private dialog: MatDialog,
     private dialogSvc: DialogService,
     private t$: TranslateService,
-    private systemSvc: SystemsService
+    private systemSvc: SystemsService,
+    private userSvc: UsersService
   ) {}
+
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
@@ -52,6 +62,7 @@ export class GnbActionsComponent implements OnInit, OnDestroy {
       .subscribe((res) => {
         this._activeAi = res.aiMode;
       });
+    this.userSvc.roles().subscribe((data) => (this._roles = data));
   }
 
   onLegend() {

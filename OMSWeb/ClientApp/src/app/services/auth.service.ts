@@ -63,23 +63,22 @@ export class AuthService {
   }
 
   updateProfile(form: IProfileForm): Observable<void> {
-    return this.http
-      .patch<void>(`/api/users/profile`, form)
-      .pipe(
-        tap(() => {
-          this._currentUser.firstName = form.firstName;
-          this._currentUser.lastName = form.lastName;
-          this._currentUser.email = form.email;
+    return this.http.patch<void>(`/api/users/profile`, form).pipe(
+      tap(() => {
+        this._currentUser.firstName = form.firstName;
+        this._currentUser.lastName = form.lastName;
+        this._currentUser.email = form.email;
 
-          this.certUpdated$.next(this._currentUser);
-        })
-      );
+        this.certUpdated$.next(this._currentUser);
+      })
+    );
   }
 
   private parseToken(checkCurrentTime = false) {
-    const { exp, iat, nbf, ...user } = this.jwtHelper.decodeToken(
-      this._token
-    ) as IUserToken;
+    const { exp, iat, nbf, ...user } = this.jwtHelper.decodeToken(this._token);
+    user.roles = user.roles
+      ? user.roles.split(',').map((r) => parseInt(r))
+      : [];
     this._expiresAt =
       checkCurrentTime && iat * 1000 - Date.now().valueOf() > 1000 * 60 * 10
         ? 1

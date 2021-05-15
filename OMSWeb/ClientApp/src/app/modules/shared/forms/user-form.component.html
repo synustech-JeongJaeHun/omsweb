@@ -65,7 +65,7 @@
     </mat-form-field>
     <mat-form-field appearance="outline" *ngIf="enableRole">
       <mat-label>{{ "names.role" | translate }}</mat-label>
-      <mat-select formControlName="roles" multiple>
+      <mat-select formControlName="roles">
         <mat-option *ngFor="let item of roles$ | async" [value]="item.id">{{
           item.name
         }}</mat-option>
