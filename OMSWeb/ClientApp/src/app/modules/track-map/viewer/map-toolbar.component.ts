@@ -106,9 +106,7 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
       this._bfStatusDlg.close();
   }
 
-  ngOnInit(): void {
-    this.onOpenVehicleStatus();
-  }
+  ngOnInit(): void {}
 
   onSearch() {
     if (this._searchDlg && this._searchDlg.getState() === MatDialogState.OPEN) {
