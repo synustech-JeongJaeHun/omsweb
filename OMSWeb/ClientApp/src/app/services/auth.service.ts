@@ -74,16 +74,27 @@ export class AuthService {
     );
   }
 
-  private parseToken(checkCurrentTime = false) {
+  private parseToken(checkCurrentTime = false): ISessionUser {
     const { exp, iat, nbf, ...user } = this.jwtHelper.decodeToken(this._token);
-    user.roles = user.roles
-      ? user.roles.split(',').map((r) => parseInt(r))
+    const roles: number[] = user.roles
+      ? user.roles.split(',').map((r: string) => Number(r).valueOf())
+      : [];
+    const permissions: number[] = user.permissions
+      ? user.permissions.split(',').map((p: string) => Number(p).valueOf())
       : [];
     this._expiresAt =
       checkCurrentTime && iat * 1000 - Date.now().valueOf() > 1000 * 60 * 10
         ? 1
         : exp * 1000;
-    return user;
+    return {
+      id: user.id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      permissions,
+      roles,
+      userId: user.userId,
+      email: user.email,
+    };
   }
 
   private readSession(checkExpired = false) {
