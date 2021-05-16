@@ -15,6 +15,7 @@ import { ITokenResult } from '../models/base.model';
 import { StorageUtil } from '../modules/shared/utils/storage.util';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { map, tap } from 'rxjs/operators';
+import { SettingsService } from './settings.service';
 
 @Injectable({
   providedIn: 'root',
@@ -25,6 +26,7 @@ export class AuthService {
   private _currentUser: ISessionUser;
   private _expiresAt: number;
   private jwtHelper: JwtHelperService;
+  private tokenRenewalTimeout: any;
 
   get currentUser(): ISessionUser {
     !this._currentUser && this.readSession();
@@ -42,8 +44,13 @@ export class AuthService {
 
   certUpdated$: Subject<ISimpleUser> = new Subject();
 
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private settingSvc: SettingsService
+  ) {
     this.jwtHelper = new JwtHelperService();
+    this.scheduleRenewal();
   }
 
   authenticate(form: ILoginForm): Observable<ISessionUser> {
@@ -58,6 +65,7 @@ export class AuthService {
 
   logout(): Observable<void> {
     this.clearSession();
+    clearTimeout(this.tokenRenewalTimeout);
     this.router.navigate(['/']);
     return of();
   }
@@ -106,12 +114,13 @@ export class AuthService {
     }
   }
 
-  private writeSession(token: string) {
+  private writeSession(token: string, notify = true) {
     this._token = token;
     this._currentUser = this.parseToken(true);
     StorageUtil.setSession('jwt', token);
     StorageUtil.setSession('user', JSON.stringify(this._currentUser));
-    this.certUpdated$.next(this._currentUser);
+    notify && this.certUpdated$.next(this._currentUser);
+    this.scheduleRenewal();
   }
 
   private clearSession() {
@@ -119,5 +128,33 @@ export class AuthService {
     this._currentUser = undefined;
     this.certUpdated$.next(undefined);
     StorageUtil.clearSession();
+  }
+
+  public renewToken(): Observable<string> {
+    const url = `${this.baseUrl}/renew`;
+    return this.http.get<ITokenResult>(url).pipe(
+      map(res => {
+        this.writeSession(res.token, false);
+        return res.token;
+      })
+    );
+  }
+
+  private scheduleRenewal() {
+    this.readSession(true);
+    const delay = this._expiresAt - Date.now().valueOf() - 10 * 1000;
+
+    if (delay > 0) {
+      this.tokenRenewalTimeout && clearTimeout(this.tokenRenewalTimeout);
+      this.tokenRenewalTimeout = setTimeout(() => {
+        this.renewToken().subscribe(
+          () => {},
+          err => {
+            this.logout().subscribe();
+            throw err;
+          }
+        );
+      }, delay);
+    }
   }
 }

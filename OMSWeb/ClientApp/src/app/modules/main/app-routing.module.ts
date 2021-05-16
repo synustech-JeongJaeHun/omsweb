@@ -8,10 +8,6 @@ const routes: Routes = [
     path: '',
     component: StartupComponent,
   },
-  // {
-  //   path: 'startup',
-  //   component: StartupComponent,
-  // },
   {
     path: 'monitor',
     loadChildren: () =>

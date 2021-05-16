@@ -57,9 +57,28 @@ namespace OMSWeb.Services
       var verified = BCrypt.Net.BCrypt.Verify(password, user.Password);
       if (!verified) throw new OmsException(ErrorCodes.AuthenticationFailed);
 
-      if (this.IsAdministrators(user))
+      return new TokenResponse
       {
-        user.Permissions = this.GetAdministratorPermissions();
+        Token = GenerateUserToken(user)
+      };
+    }
+
+    public TokenResponse RenewToken()
+    {
+      var user = this._repo.GetUserById(this.UserId);
+      if (user == null) throw new OmsException(ErrorCodes.AuthenticationFailed);
+
+      return new TokenResponse
+      {
+        Token = GenerateUserToken(user)
+      };
+    }
+
+    private string GenerateUserToken(UserEntity userEntity)
+    {
+      if (this.IsAdministrators(userEntity))
+      {
+        userEntity.Permissions = this.GetAdministratorPermissions();
       }
 
       var secret = this._appSettings.JwtSecret;
@@ -67,14 +86,14 @@ namespace OMSWeb.Services
       var key = Encoding.ASCII.GetBytes(secret);
 
       var claims = new[] {
-        new Claim(ClaimTypes.Name, user.Id.ToString()),
-        new Claim("id", user.Id.ToString()),
-        new Claim("userId", user.UserId),
-        new Claim("email", user.Email),
-        new Claim("firstName", user.FirstName),
-        new Claim("lastName", user.LastName ?? ""),
-        new Claim("roles", String.Join<int>(",", user.Roles)),
-        new Claim("permissions", String.Join<int>(",", user.Permissions)),
+        new Claim(ClaimTypes.Name, userEntity.Id.ToString()),
+        new Claim("id", userEntity.Id.ToString()),
+        new Claim("userId", userEntity.UserId),
+        new Claim("email", userEntity.Email),
+        new Claim("firstName", userEntity.FirstName),
+        new Claim("lastName", userEntity.LastName ?? ""),
+        new Claim("roles", String.Join<int>(",", userEntity.Roles)),
+        new Claim("permissions", String.Join<int>(",", userEntity.Permissions)),
       };
       var tokenDescriptor = new SecurityTokenDescriptor
       {
@@ -84,10 +103,7 @@ namespace OMSWeb.Services
       };
       var token = jwtHandler.CreateToken(tokenDescriptor);
 
-      return new TokenResponse
-      {
-        Token = jwtHandler.WriteToken(token),
-      };
+      return jwtHandler.WriteToken(token);
     }
 
     private bool IsAdministrators(UserEntity user)

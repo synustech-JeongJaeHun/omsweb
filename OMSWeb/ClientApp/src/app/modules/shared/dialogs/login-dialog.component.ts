@@ -25,7 +25,6 @@ export class LoginDialogComponent implements OnInit {
     if (this.form.invalid) return;
     const model = this.form.value;
     this.authSvc.authenticate(model).subscribe((res) => {
-      console.info('### auth result >>', res);
       this.dialog.close(res);
     });
   }

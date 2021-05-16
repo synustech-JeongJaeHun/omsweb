@@ -560,7 +560,6 @@ export class ViewController {
     });
   }
   destroy() {
-    console.log('@@@ viewer destroy...');
     this.init_svg_groups();
     d3.selectAll(`#${this.track_container_id} > *`).remove();
     this.d3_track = undefined;

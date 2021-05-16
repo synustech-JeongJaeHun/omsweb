@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OMSWeb.Models;
@@ -25,6 +26,12 @@ namespace OMSWeb.Controllers
     {
       if (!ModelState.IsValid) throw new OmsException(ErrorCodes.BadRequestModel);
       return _userSvc.Authenticate(form.UserId, form.Password);
+    }
+
+    [Authorize]
+    [HttpGet("renew")]
+    public ActionResult<TokenResponse> Renew() {
+      return _userSvc.RenewToken();
     }
   }
 }

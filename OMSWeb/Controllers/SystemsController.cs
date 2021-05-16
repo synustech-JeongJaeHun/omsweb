@@ -47,12 +47,18 @@ namespace OMSWeb.Controllers
           current.TscMode = nextStatus.TscMode.Value;
         }
 
-        if (nextStatus.AiMode.HasValue) {
+        if (nextStatus.AiMode.HasValue)
+        {
           current.AiMode = nextStatus.AiMode.Value;
         }
       }
       return current;
     }
 
+    [HttpGet("settings/client")]
+    public ActionResult<ClientSettings> GetClientSettings()
+    {
+      return this._systemSvc.GetClientSettings();
+    }
   }
 }

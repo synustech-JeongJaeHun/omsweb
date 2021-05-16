@@ -8,6 +8,7 @@ export type ToggleOptionsType = {
 
 export class ServiceConfig {
   allowPublicMonitor = false;
+  showToolbarText = false;
 }
 
 export class MapConfig {
@@ -52,9 +53,7 @@ export class ClientPreferences implements IPreferences {
     this.load();
   }
 
-  getServiceConfig() {
-
-  }
+  getServiceConfig() {}
 
   private load() {
     const value = StorageUtil.getLocal(this.storeKey) || '{}';

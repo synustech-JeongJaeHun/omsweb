@@ -26,15 +26,11 @@ export class SettingsService {
   }
 
   private loadConfig(): Observable<ServiceConfig> {
-    // @TODO get service config api 연동
-    console.warn('# TODO - get service config api 연동');
-    return this.http
-      .get<ServiceConfig>(`/assets/json/service-config.json`)
-      .pipe(
-        tap((x) => {
-          this._serviceConfig = x;
-        })
-      );
+    return this.http.get<ServiceConfig>(`/api/systems/settings/client`).pipe(
+      tap((x) => {
+        this._serviceConfig = x;
+      })
+    );
     // return this.http.get<ServiceConfig>(`/api/systems/config`);
   }
 
