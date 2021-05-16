@@ -10,6 +10,9 @@ import { DxButtonModule } from 'devextreme-angular/ui/button';
 import { DxTextBoxModule } from 'devextreme-angular/ui/text-box';
 import { DxDateBoxModule } from 'devextreme-angular/ui/date-box';
 import { DxTooltipModule } from 'devextreme-angular/ui/tooltip';
+import { DxFileManagerModule } from 'devextreme-angular/ui/file-manager';
+import { DxoPermissionsModule } from 'devextreme-angular/ui/nested';
+import { DxSortableModule } from 'devextreme-angular/ui/sortable';
 
 @NgModule({
   exports: [
@@ -24,6 +27,9 @@ import { DxTooltipModule } from 'devextreme-angular/ui/tooltip';
     DxTextBoxModule,
     DxDateBoxModule,
     DxTooltipModule,
+    DxFileManagerModule,
+    DxoPermissionsModule,
+    DxSortableModule,
   ],
 })
 export class SharedDevextremeModule {}
