@@ -1,4 +1,10 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { IPaginatedResult } from '../../../models/base.model';
 import { IOrderHistoryRow } from '../../../models/history.model';
 import { HistoriesService } from '@oms/services/histories.service';
@@ -61,7 +67,7 @@ export class OrderHistoryComponent implements OnInit, OnDestroy {
   start: Date = new Date(
     this.now.getFullYear(),
     this.now.getMonth(),
-    this.now.getDate()-7
+    this.now.getDate() - 7
   );
   end: Date = new Date(
     this.now.getFullYear(),
