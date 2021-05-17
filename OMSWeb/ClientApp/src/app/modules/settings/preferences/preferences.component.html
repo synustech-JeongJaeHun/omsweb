@@ -1,0 +1,13 @@
+<div class="setting-header">
+  <h3 class="setting-title">{{ "names.preference" | translate }}</h3>
+  <div class="setting-actions"></div>
+</div>
+
+<div class="item-container">
+  <mat-slide-toggle
+    [(ngModel)]="preference.toggles.showToolName"
+    color="primary"
+    (change)="onChangedToggle('showToolName')"
+    >{{ "names.showToolName" | translate }}</mat-slide-toggle
+  >
+</div>

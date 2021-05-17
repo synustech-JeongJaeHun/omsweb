@@ -1,6 +1,10 @@
 import { Location } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import {
+  MatDialog,
+  MatDialogRef,
+  MatDialogState,
+} from '@angular/material/dialog';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -38,6 +42,8 @@ export class GnbMenusComponent implements OnInit, OnDestroy {
   }
 
   onOpenSettings() {
+    if (this._dlg && this._dlg.getState() === MatDialogState.OPEN) return;
+
     this._dlg = this.dialog.open(SettingsDialogComponent, {
       width: '800px',
       hasBackdrop: false,

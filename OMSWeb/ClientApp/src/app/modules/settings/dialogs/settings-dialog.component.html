@@ -10,6 +10,13 @@
             class="nav-link"
             >{{ "names.userManagement" | translate }}</a
           >
+          <a
+            mat-list-item
+            [class.active]="isActiveMenu('preference')"
+            (click)="onChangeMenu('preference')"
+            class="nav-link"
+            >{{ "names.preference" | translate }}</a
+          >
 
           <mat-divider class="nav-divider"></mat-divider>
 
@@ -90,6 +97,9 @@
         <ng-container [ngSwitch]="currentMenu">
           <ng-container *ngSwitchCase="'users'">
             <oms-user-management></oms-user-management>
+          </ng-container>
+          <ng-container *ngSwitchCase="'preference'">
+            <oms-preferences></oms-preferences>
           </ng-container>
           <ng-container *ngSwitchCase="'group'">
             <oms-group-setting></oms-group-setting>

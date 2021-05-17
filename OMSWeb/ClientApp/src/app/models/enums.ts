@@ -47,6 +47,7 @@ export type ToggleOptionKeyType =
   | 'mtls'
   | 'vehicles'
   | 'clusters'
+  | 'showToolName'
   | 'overlaps';
 
 export type CommandKeyType =

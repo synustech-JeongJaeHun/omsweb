@@ -29,6 +29,7 @@ import { IVehicleCommandMessage } from '../../../models/command.model';
 import { IPlaybackTrackChangeEvent } from '../../../models/playback.model';
 import { Group } from '../../../models/group.model';
 import { TracksService } from '../../../services/tracks.service';
+import { SettingsService } from '../../../services/settings.service';
 @Component({
   selector: 'oms-map-viewer',
   templateUrl: './map-viewer.component.html',
@@ -75,6 +76,9 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   get canSetDest(): boolean {
     return !this.statesSvc.transferCommandState.destDisabled;
   }
+  get showToolbarText(): boolean {
+    return this.settingSvc.globalPreferences.toggles.showToolName;
+  }
 
   constructor(
     private auth: AuthService,
@@ -84,6 +88,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     private statesSvc: MapStatesService,
     private hubSvc: HubService,
     private messageSvc: MessagesService,
+    private settingSvc: SettingsService,
     private router: Router
   ) {
     this.auth.certUpdated$.pipe(takeUntil(this.destroy$)).subscribe((cert) => {

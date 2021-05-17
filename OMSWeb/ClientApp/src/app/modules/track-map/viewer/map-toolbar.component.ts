@@ -35,6 +35,7 @@ import { CommandDialogComponent } from '../dialogs/command-dialog.component';
 import { ShowObjectDialogComponent } from '../dialogs/show-object-dialog.component';
 import { AuthService } from '../../../services/auth.service';
 import { AccountUtil } from '../../shared/utils/account.util';
+import { SettingsService } from '../../../services/settings.service';
 
 @Component({
   selector: 'oms-map-toolbar',
@@ -64,6 +65,12 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
   get isTracking(): boolean {
     return this.stateSvc.vehicleTrackingState.status;
   }
+  get showToolName(): boolean {
+    return this.settingSvc.globalPreferences.toggles.showToolName;
+  }
+  get tooltipOffset(): string {
+    return this.showToolName ? '164px' : '36px';
+  }
 
   private _searchDlg: MatDialogRef<SearchDialogComponent, any>;
   private _trackDlg: MatDialogRef<TrackVehicleDialogComponent, any>;
@@ -76,10 +83,14 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
     private auth: AuthService,
     private stateSvc: MapStatesService,
     private messageSvc: MessagesService,
+    private settingSvc: SettingsService,
     private dialogSvc: DialogService,
     private dialog: MatDialog,
     private $t: TranslateService
   ) {}
+
+  ngOnInit(): void {}
+
   ngOnDestroy(): void {
     this._searchDlg &&
       this._searchDlg.getState() === MatDialogState.OPEN &&
@@ -106,8 +117,6 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
       this._bfStatusDlg.close();
   }
 
-  ngOnInit(): void {}
-
   onSearch() {
     if (this._searchDlg && this._searchDlg.getState() === MatDialogState.OPEN) {
       this._searchDlg.close();
@@ -119,7 +128,7 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
       hasBackdrop: false,
       disableClose: true,
       closeOnNavigation: true,
-      position: { left: '36px', top: `${rect.top}px` },
+      position: { left: this.tooltipOffset, top: `${rect.top}px` },
     });
 
     this._searchDlg.afterClosed().subscribe((payload: any) => {
@@ -145,7 +154,7 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
       hasBackdrop: false,
       disableClose: true,
       closeOnNavigation: true,
-      position: { left: '36px', top: `${rect.top}px` },
+      position: { left: this.tooltipOffset, top: `${rect.top}px` },
     });
 
     this._trackDlg.afterClosed().subscribe((payload: any) => {
@@ -167,7 +176,7 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
       hasBackdrop: false,
       disableClose: true,
       closeOnNavigation: true,
-      position: { left: '36px', top: `${rect.top}px` },
+      position: { left: this.tooltipOffset, top: `${rect.top}px` },
     });
 
     this._cmdDlg.afterClosed().subscribe((payload: any) => {
@@ -196,7 +205,7 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
       hasBackdrop: false,
       disableClose: false,
       closeOnNavigation: true,
-      position: { left: '36px', top: `${rect.top}px` },
+      position: { left: this.tooltipOffset, top: `${rect.top}px` },
       data: this.buttonState,
     });
   }

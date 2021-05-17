@@ -118,11 +118,11 @@
     "centerZoom": "Center Zoom",
     "search": "Search",
     "trackVehicle": "Track Vehicle",
-    "showObjects": "Show / Hide Objects",
-    "showMinimap": "Show / Hide Minimap",
+    "showObjects": "Toggle Objects",
+    "showMinimap": "Toggle Minimap",
     "manualOrder": "Manual Transfer",
     "itemDetails": "Item Details",
-    "showControlTable": "Show / Hide Control Table",
+    "showControlTable": "Toogle Control Table",
     "getStatusAllVehicle": "Get All Vehicle Status",
     "setAutoAllVehicle": "Set Auto All Vehicle",
     "resetAllVehicle": "Reset All Vehicle",
@@ -276,7 +276,9 @@
     "bufferId": "Buffer ID",
     "connected": "Connected",
     "sensorStopped": "Sensor Stop",
-    "maintenance": "Maintenance"
+    "maintenance": "Maintenance",
+    "preference": "Preference",
+    "showToolName": "Show left toolbar text"
   },
   "enums": {
     "hostSessionStatus": {

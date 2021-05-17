@@ -8,7 +8,6 @@ export type ToggleOptionsType = {
 
 export class ServiceConfig {
   allowPublicMonitor = false;
-  showToolbarText = false;
 }
 
 export class MapConfig {
@@ -42,6 +41,7 @@ export const defaultToggleOptions: ToggleOptionsType = {
   clusters: true,
   overlaps: false,
   itemDetails: false,
+  showToolName: false,
 };
 
 export class ClientPreferences implements IPreferences {

@@ -10,6 +10,10 @@
   align-self: start;
   z-index: 5;
   width: 32px;
+
+  &.show-name {
+    width: var(--toolbar-named-width);
+  }
 }
 
 .side_panel {
