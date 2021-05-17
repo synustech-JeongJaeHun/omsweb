@@ -1,5 +1,5 @@
 :host {
-  background-color: rgba(rgb(214, 64, 109), 0.1);
+  background-color: var(--playback-background-color);
   display: block;
   height: 100%;
 }

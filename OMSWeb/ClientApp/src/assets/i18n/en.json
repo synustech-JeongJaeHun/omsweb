@@ -278,7 +278,8 @@
     "sensorStopped": "Sensor Stop",
     "maintenance": "Maintenance",
     "preference": "Preference",
-    "showToolName": "Show left toolbar text"
+    "showToolName": "Show left toolbar text",
+    "playbackBgColor": "Playback Background"
   },
   "enums": {
     "hostSessionStatus": {

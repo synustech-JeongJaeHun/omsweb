@@ -16,10 +16,16 @@ export class MapConfig {
   segmentWidth?: number = 2;
 }
 
+export class ThemeConfig {
+  // playbackBackground?: any;
+  [key: string]: any;
+}
+
 export interface IPreferences {
   toggles: ToggleOptionsType;
   map: MapConfig;
   uiStates?: UiStates;
+  theme?: ThemeConfig;
 }
 
 export class UiStates {
@@ -48,6 +54,7 @@ export class ClientPreferences implements IPreferences {
   toggles: ToggleOptionsType;
   map: MapConfig;
   uiStates?: UiStates;
+  theme?: ThemeConfig;
 
   constructor(private storeKey: string, private base?: IPreferences) {
     this.load();
@@ -57,11 +64,17 @@ export class ClientPreferences implements IPreferences {
 
   private load() {
     const value = StorageUtil.getLocal(this.storeKey) || '{}';
-    const { toggles = {}, map = {}, uiStates = {} } = JSON.parse(value);
+    const {
+      toggles = {},
+      map = {},
+      uiStates = {},
+      theme = {},
+    } = JSON.parse(value);
     const { toggles: baseToggle = {}, map: baseMap = {} } = this.base || {};
     this.toggles = { ...defaultToggleOptions, ...baseToggle, ...toggles };
     this.map = { ...new MapConfig(), ...baseMap, ...map };
     this.uiStates = { ...new UiStates(), ...uiStates };
+    this.theme = { ...new ThemeConfig(), ...theme };
   }
 
   save() {
@@ -69,6 +82,7 @@ export class ClientPreferences implements IPreferences {
       toggles: { ...this.toggles },
       map: { ...this.map },
       uiStates: { ...this.uiStates },
+      theme: { ...this.theme },
     };
     StorageUtil.setLocal(this.storeKey, JSON.stringify(pref));
   }

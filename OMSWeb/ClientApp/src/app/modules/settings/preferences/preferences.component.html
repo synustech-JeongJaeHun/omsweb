@@ -10,4 +10,19 @@
     (change)="onChangedToggle('showToolName')"
     >{{ "names.showToolName" | translate }}</mat-slide-toggle
   >
+  <div class="form-grid">
+    <label class="name">{{ "names.playbackBgColor" | translate }}</label>
+    <div class="value">
+      <dx-color-box
+        #colorPicker
+        [height]="33"
+        [value]="getThemeValue('--playback-background-color')"
+        applyValueMode="instantly"
+        [editAlphaChannel]="true"
+        (onValueChanged)="
+          onChangedTheme('--playback-background-color', colorPicker.value)
+        "
+      ></dx-color-box>
+    </div>
+  </div>
 </div>

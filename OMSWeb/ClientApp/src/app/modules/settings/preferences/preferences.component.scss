@@ -2,3 +2,25 @@
   display: flex;
   flex-direction: column;
 }
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 140px 1fr);
+  font-size: 12px;
+  row-gap: 4px;
+  column-gap: 4px;
+  align-items: center;
+
+  label.name {
+    font-weight: bold;
+    // background-color: var(--details-background-color);
+    text-align: right;
+    padding: 4px 8px;
+    // border-top-left-radius: 8px;
+    // border-bottom-left-radius: 8px;
+  }
+  .value {
+    padding: 4px 8px;
+    // border-bottom: 1px solid var(--details-background-color);
+  }
+}

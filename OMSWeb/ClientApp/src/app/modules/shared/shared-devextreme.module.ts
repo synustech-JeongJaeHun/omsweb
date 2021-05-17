@@ -13,6 +13,7 @@ import { DxTooltipModule } from 'devextreme-angular/ui/tooltip';
 import { DxFileManagerModule } from 'devextreme-angular/ui/file-manager';
 import { DxoPermissionsModule } from 'devextreme-angular/ui/nested';
 import { DxSortableModule } from 'devextreme-angular/ui/sortable';
+import { DxColorBoxModule } from 'devextreme-angular/ui/color-box';
 
 @NgModule({
   exports: [
@@ -30,6 +31,7 @@ import { DxSortableModule } from 'devextreme-angular/ui/sortable';
     DxFileManagerModule,
     DxoPermissionsModule,
     DxSortableModule,
+    DxColorBoxModule,
   ],
 })
 export class SharedDevextremeModule {}
