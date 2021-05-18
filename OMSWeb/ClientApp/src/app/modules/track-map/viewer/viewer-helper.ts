@@ -8064,6 +8064,8 @@ export class ViewController {
     this.vehicle_scale.scale = updated_scale_value;
     this.vehicle_scale.value = updated_radius;
 
+    setCssValue('--vehicle-scale', updated_scale_value);
+
     // if (is_save_state) {
     //   this.save_state('vehicleScale', this.vehicle_scale.value);
     // }

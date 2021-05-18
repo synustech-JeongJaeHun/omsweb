@@ -202,9 +202,9 @@ export class MapViewerComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
         this.viewer.adjust_floaters();
-      })
+      });
 
-      [(ViewModes.public, ViewModes.viewer)].includes(this.viewMode) &&
+    [ViewModes.public, ViewModes.viewer].includes(this.viewMode) &&
       this.attachHubEvents();
 
     this.viewMode === ViewModes.playback && this.attachPlaybackEvents();
