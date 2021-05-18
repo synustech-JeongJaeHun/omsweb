@@ -3,6 +3,11 @@
   flex-direction: column;
   height: 100%;
 }
+
+#track-canvas {
+  position: absolute;
+}
+
 #map-toolbar {
   position: absolute;
   top: 0;

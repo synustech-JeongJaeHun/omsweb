@@ -541,7 +541,6 @@ export class ViewController {
     can_manage_vehicles?,
     can_modify_display_settings?
   ) {
-
     // @TODO prefix 설정 : 현재는 고정값 'public.largemap', 설정값을 외부에서 넘겨 받기로 하면 필요 없을 수 있음
     this.state_prefix = 'public.largemap';
 
@@ -754,17 +753,14 @@ export class ViewController {
       target_index = this.vehicles.findIndex((d) => d.id == vehicleId);
     }
 
-    const {
-      update,
-      isDomUpdated,
-      updatedVehicles,
-    } = this.dataSvc.applyVehicleData(
-      raw_data,
-      operation,
-      vehicleId,
-      // this.vehicle_stale,
-      // this.playback_last_event_time
-    );
+    const { update, isDomUpdated, updatedVehicles } =
+      this.dataSvc.applyVehicleData(
+        raw_data,
+        operation,
+        vehicleId
+        // this.vehicle_stale,
+        // this.playback_last_event_time
+      );
 
     // update dom
     if (isDomUpdated && !is_skip_rendering) {
@@ -1088,7 +1084,12 @@ export class ViewController {
 
   //#region playback
   applyAfterSnapshotUpdated(updatedPropList?: any) {
-    this.vehicle_adaptive_rendering(main_css.vehicle, this.get_viewbox(), true, updatedPropList);
+    this.vehicle_adaptive_rendering(
+      main_css.vehicle,
+      this.get_viewbox(),
+      true,
+      updatedPropList
+    );
     const zoom = this.getZoom(MapTypes.MAIN);
     this.set_transform(zoom.x, zoom.y, zoom.k, true, 'INSTANT');
   }
@@ -1358,10 +1359,11 @@ export class ViewController {
 
       if (this.layout_data.segments.length > 0) {
         // Define segment direction
-        main_css.segment.direction_path = this.layout_data.segments[0].get_arrow_path(
-          main_css.segment.direction_width,
-          main_css.segment.direction_length
-        );
+        main_css.segment.direction_path =
+          this.layout_data.segments[0].get_arrow_path(
+            main_css.segment.direction_width,
+            main_css.segment.direction_length
+          );
         this.update_segment_svg(
           this.layout_data.segments,
           main_css.segment,
@@ -1879,10 +1881,11 @@ export class ViewController {
       /* find all the segments that are connected to the points in case
             they were not selected but are between points that are selected
             and are selected on both from/to points of the segment*/
-      let contiguous_segments = LayoutUtil.find_all_contigous_segments_from_points(
-        check_contiguous_points_list,
-        this.layout_data.segments
-      );
+      let contiguous_segments =
+        LayoutUtil.find_all_contigous_segments_from_points(
+          check_contiguous_points_list,
+          this.layout_data.segments
+        );
 
       // Apply the delta coordinate difference to the contiguous segments
       contiguous_segments.forEach((contig_seg, index, original_arr) => {
@@ -4309,8 +4312,10 @@ export class ViewController {
                 let pointId = parseInt(
                   d3.event.target.parentElement.id.match(/[0-9]/g).join('')
                 );
-                let point_coord = this.find_layout_object('POINT', pointId)
-                  .invertedCoord;
+                let point_coord = this.find_layout_object(
+                  'POINT',
+                  pointId
+                ).invertedCoord;
                 this.drag_coord.start = point_coord;
               } else {
                 // Was not clicked on a point
@@ -4420,12 +4425,8 @@ export class ViewController {
                     this.SEGMENT_SPEEDS
                   );
 
-                  const {
-                    type,
-                    location,
-                    direction,
-                    isValidate,
-                  } = candidates[0];
+                  const { type, location, direction, isValidate } =
+                    candidates[0];
                   const segment = new Segment(
                     {
                       id: segmentId,
@@ -4483,11 +4484,12 @@ export class ViewController {
                   }
 
                   // Find connected segments
-                  let connected_segments_from = LayoutUtil.find_connected_segment(
-                    segment.pointFrom,
-                    this.layout_data.segments,
-                    null
-                  );
+                  let connected_segments_from =
+                    LayoutUtil.find_connected_segment(
+                      segment.pointFrom,
+                      this.layout_data.segments,
+                      null
+                    );
                   // Delete candidates
                   for (let i = 0; i < connected_segments_from.length; i++) {
                     let connected_segment = connected_segments_from[i];
@@ -7728,10 +7730,8 @@ export class ViewController {
       y: y / k,
     };
 
-    const {
-      width: changeW,
-      height: changeH,
-    } = this.svg.node().getBoundingClientRect();
+    let $elem = this.$track_container.find(`#${this.track_id}`).parent().get(0);
+    const { clientWidth: changeW, clientHeight: changeH } = $elem;
 
     // Set new screen size
     this.geometry.screenSize.width = changeW;
@@ -7744,14 +7744,6 @@ export class ViewController {
     };
 
     // Set minimap size on data
-    // const {
-    //   width: miniW,
-    //   height: miniH,
-    // } = this.minimap_svg.node().getBoundingClientRect();
-    // this.geometry.minimapSize = {
-    //   width: miniW,
-    //   height: miniH,
-    // };
     this.geometry.minimapSize = {
       width: this.$track_container.find(`#minimap`).width(),
       height: this.$track_container.find(`#minimap`).height(),
@@ -7938,19 +7930,18 @@ export class ViewController {
     let scale = this.d3_track.select('.scale') as any;
 
     // ATTENTION : mobile device does not support scale.nodes()[0].transform.baseVal
-    // @TODO transform 속성이 없음. 확인 필요
-    // if (scale.nodes()[0].transform.baseVal[0]) {
-    //   let scale_x = scale.nodes()[0].transform.baseVal[0].matrix.e,
-    //     scale_y = scale.nodes()[0].transform.baseVal[0].matrix.f,
-    //     diff_x = scale_x / 2 - (this.geometry.screenSize.width - scale_x) / 2,
-    //     diff_y = scale_y / 2 - (this.geometry.screenSize.height - scale_y) / 2;
+    if (scale.nodes()[0].transform.baseVal[0]) {
+      let scale_x = scale.nodes()[0].transform.baseVal[0].matrix.e,
+        scale_y = scale.nodes()[0].transform.baseVal[0].matrix.f,
+        diff_x = scale_x / 2 - (this.geometry.screenSize.width - scale_x) / 2,
+        diff_y = scale_y / 2 - (this.geometry.screenSize.height - scale_y) / 2;
 
-    //   scale.attr(
-    //     'transform',
-    //     `translate(${scale_x}, ${scale_y})rotate(${-this
-    //       .map_rotation}, ${-diff_x}, ${-diff_y})`
-    //   );
-    // }
+      scale.attr(
+        'transform',
+        `translate(${scale_x}, ${scale_y})rotate(${-this
+          .map_rotation}, ${-diff_x}, ${-diff_y})`
+      );
+    }
 
     let current_transform = this.getZoom(MapTypes.MAIN);
 
@@ -8919,9 +8910,8 @@ export class ViewController {
       }
 
       // d3 select svg elements for manipulation
-      this.directions_svg = this.get_svg_class('SEGMENT_DIRECTION').selectAll(
-        'g.direction'
-      );
+      this.directions_svg =
+        this.get_svg_class('SEGMENT_DIRECTION').selectAll('g.direction');
       if (group_type === 'LAYOUT') {
         this.directions_svg.selectAll('.dir_triangle').each((d) => {
           d3.select(`#id_${d.id}.direction`).attr(
@@ -9912,10 +9902,11 @@ export class ViewController {
         this.layout_data.segments.length > 0 &&
         main_css.segment.direction_path === undefined
       ) {
-        main_css.segment.direction_path = this.layout_data.segments[0].get_arrow_path(
-          main_css.segment.direction_width,
-          main_css.segment.direction_length
-        );
+        main_css.segment.direction_path =
+          this.layout_data.segments[0].get_arrow_path(
+            main_css.segment.direction_width,
+            main_css.segment.direction_length
+          );
       }
       if (layout_object.dirAngle != undefined) {
         dom_object_group
@@ -11921,10 +11912,11 @@ export class ViewController {
           );
 
           // Delete cluster
-          let connected_clusters = LayoutUtil.find_connected_cluster_using_segment(
-            segment,
-            this.layout_data.clusters
-          );
+          let connected_clusters =
+            LayoutUtil.find_connected_cluster_using_segment(
+              segment,
+              this.layout_data.clusters
+            );
           connected_clusters.forEach((cluster) => {
             cluster_update_list.push({
               id: cluster.id,
@@ -12076,10 +12068,11 @@ export class ViewController {
         if (update_obj !== null) {
           // Update object
 
-          let cluster_segments = LayoutUtil.find_all_contigous_segments_from_points(
-            update_obj.pointIdList,
-            this.layout_data.segments
-          );
+          let cluster_segments =
+            LayoutUtil.find_all_contigous_segments_from_points(
+              update_obj.pointIdList,
+              this.layout_data.segments
+            );
           update_obj.set_path(cluster_segments, main_css.cluster.borderOffset);
           update_objects.push(update_obj);
         }
@@ -12915,15 +12908,23 @@ export class ViewController {
     this.remove_resize_event();
     // @NOTE check - parent 없음
     // if (track_container_parent_id === DEFAULT_TRACK_CONTAINER_PARENT_ID) {
-    window.addEventListener('resize', this.resize_event_handler, false);
+    window.addEventListener(
+      'resize',
+      this.resize_event_handler.bind(this),
+      false
+    );
     // }
   }
   remove_resize_event() {
-    window.removeEventListener('resize', this.resize_event_handler, false);
+    window.removeEventListener(
+      'resize',
+      this.resize_event_handler.bind(this),
+      false
+    );
   }
   resize_event_handler() {
     clearTimeout(this.resize_time_out_id);
-    this.resize_time_out_id = setTimeout(this.resize_layout, 100);
+    this.resize_time_out_id = setTimeout(this.resize_layout.bind(this), 100);
   }
   resize_layout(): any {
     // if (this.$track_container.find(`#${track_id}`).length > 0) {
