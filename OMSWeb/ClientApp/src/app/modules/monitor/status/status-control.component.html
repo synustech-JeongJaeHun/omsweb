@@ -10,6 +10,15 @@
   ></div>
   <button
     mat-flat-button
+    id="resize-button"
+    class="dense"
+    (mousedown)="resizeViewerStart()"
+    (dblclick)="viewerHide()"
+  >
+    <mat-icon>height</mat-icon>
+  </button>
+  <button
+    mat-flat-button
     id="close-button"
     class="dense"
     (click)="viewerHide()"
@@ -46,7 +55,7 @@
         *ngIf="currentTab == 0"
       ></oms-order-control-table>
     </mat-tab>
-    <mat-tab [label]="'names.vehicles'| translate">
+    <mat-tab [label]="'names.vehicles' | translate">
       <oms-vehicle-control-table
         [tableHeight]="tableHeight"
         *ngIf="currentTab == 1"

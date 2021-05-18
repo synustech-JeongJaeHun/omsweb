@@ -3,6 +3,8 @@
   flex-direction: column;
 }
 #status-control-container {
+  // overflow-x: hidden;
+  // overflow-y: hidden;
   position: relative;
   // margin-top: 4px;
   padding: 8px;
@@ -23,6 +25,24 @@
   min-width: 24px;
   border-radius: 0;
   border-bottom-left-radius: 4px;
+
+  mat-icon {
+    margin-right: 0;
+  }
+}
+#resize-button {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--dialog-border-color);
+  color: white;
+  z-index: 5;
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  border-radius: 4px;
+  cursor: n-resize;
 
   mat-icon {
     margin-right: 0;

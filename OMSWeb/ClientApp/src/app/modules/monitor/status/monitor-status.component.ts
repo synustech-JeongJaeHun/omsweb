@@ -26,8 +26,6 @@ import { MapDataService } from '../../track-map/map-data.service';
       }
 
       #status-control {
-        overflow-x: hidden;
-        overflow-y: hidden;
         position: absolute;
         /* border-radius: 5px; */
         box-shadow: 0px 0px 5px #aaa;
