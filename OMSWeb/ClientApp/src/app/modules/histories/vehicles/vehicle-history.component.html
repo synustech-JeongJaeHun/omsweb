@@ -53,7 +53,7 @@
       color="primary"
       (click)="search(startDate.value, endDate.value)"
     >
-      Search
+      {{ "names.search" | translate }}
     </button>
   </div>
   <div id="grid-container">
@@ -79,6 +79,11 @@
         rowRenderingMode="standard"
         showScrollbar="always"
       ></dxo-scrolling>
+      <dxo-search-panel
+        [placeholder]="'names.search' | translate"
+        [visible]="true"
+      ></dxo-search-panel>
+      <dxo-header-filter [visible]="true"></dxo-header-filter>
 
       <dxi-column
         [width]="80"
@@ -99,28 +104,28 @@
         [caption]="'names.logicalId' | translate"
       ></dxi-column>
       <dxi-column
-        [allowFiltering]="false"
+        [allowFiltering]="true"
         [width]="120"
         dataType="number"
         dataField="distanceTotal"
         [caption]="'names.distanceTotal' | translate"
       ></dxi-column>
       <dxi-column
-        [allowFiltering]="false"
+        [allowFiltering]="true"
         [width]="120"
         dataType="number"
         dataField="runtimeTotal"
         [caption]="'names.runtimeTotal' | translate"
       ></dxi-column>
       <dxi-column
-        [allowFiltering]="false"
+        [allowFiltering]="true"
         [width]="120"
         dataType="string"
         dataField="type"
         [caption]="'names.type' | translate"
       ></dxi-column>
       <dxi-column
-        [allowFiltering]="false"
+        [allowFiltering]="true"
         [width]="120"
         dataType="string"
         dataField="mapDb"

@@ -72,7 +72,13 @@
       [displayFormat]="dateTimeFormat"
       #endDate
     ></dx-date-box>
-    <button mat-raised-button color="primary" (click)="search(startDate.value, endDate.value)">Search</button>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="search(startDate.value, endDate.value)"
+    >
+      {{ "names.search" | translate }}
+    </button>
     <!-- <dx-button
       [text]="'_SEARCH' | translate"
       type="default"
@@ -100,7 +106,7 @@
       [width]="gridWidth"
       [showBorders]="true"
       [hoverStateEnabled]="true"
-      >
+    >
       <dxo-export [enabled]="true" [fileName]="fileName"></dxo-export>
       <dxo-paging [pageSize]="50"></dxo-paging>
       <dxo-pager
@@ -114,6 +120,11 @@
         rowRenderingMode="standard"
         showScrollbar="always"
       ></dxo-scrolling>
+      <dxo-search-panel
+        [placeholder]="'names.search' | translate"
+        [visible]="true"
+      ></dxo-search-panel>
+      <dxo-header-filter [visible]="true"></dxo-header-filter>
 
       <dxi-column
         [width]="80"
