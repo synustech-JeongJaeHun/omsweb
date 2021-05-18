@@ -116,6 +116,8 @@ export class StatusControlComponent implements OnInit {
     if (event.type === 'mouseup') {
       window.removeEventListener('mousemove', this.resizeHandler);
     }
+
+    this.mapStateSvc.statusTableResizeEvent$.next();
   }
 
   viewerHide() {

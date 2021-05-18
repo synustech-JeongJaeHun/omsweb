@@ -11,14 +11,14 @@
       [selectedObject]="selectedObject"
     ></oms-map-side-panel>
   </div>
+  <oms-map-toolbar
+    id="map-toolbar"
+    class="snb toolbar"
+    [class.show-name]="showToolbarText"
+    [buttonState]="preference.toggles"
+  ></oms-map-toolbar>
 </div>
 
-<oms-map-toolbar
-  id="map-toolbar"
-  class="snb toolbar"
-  [class.show-name]="showToolbarText"
-  [buttonState]="preference.toggles"
-></oms-map-toolbar>
 
 <div id="contextMenu" [hidden]="!showContextMenu" class="context-menu">
   <div [ngSwitch]="currentContextEvent?.targetType">

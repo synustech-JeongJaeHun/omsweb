@@ -12518,12 +12518,12 @@ export class ViewController {
   }
   set_minimap_position() {
     if (!this.geometry || !this.geometry.screenSize) return;
-    let toolbar = this.$track_container.find('#toolbar');
+    let toolbar = this.$track_container.find('#map-toolbar');
     let available = this.geometry.screenSize.height - toolbar.outerHeight();
     let mmc = this.$track_container.find(`#${this.minimap_parent_id}`);
     let margin = 3; // FIXME: get this from css
     let bottom = margin;
-    var tabs = $('#tabs');
+    var tabs = $('#status-control');
     if (tabs && tabs.is(':visible') && !isNaN(tabs.outerHeight())) {
       bottom += tabs.outerHeight();
       available -= tabs.outerHeight();
@@ -12892,17 +12892,17 @@ export class ViewController {
   }
   set_toolbar_geometry() {
     // @TODO set_toolbar_geometry 로직 확인 / 변경
-    // if (!this.geometry || !this.geometry.screenSize) return;
-    // let toolbar = this.$track_container.find('#toolbar');
-    // toolbar.css('width', '30px');
-    // let needed = toolbar.outerHeight();
-    // let available = this.geometry.screenSize.height;
-    // let tabs = $('#tabs');
-    // if (tabs && tabs.is(':visible') && !isNaN(tabs.outerHeight()))
-    //   available -= tabs.outerHeight();
-    // let toolbar_width = 30;
-    // if (needed > available) toolbar_width = 60;
-    // toolbar.css('width', toolbar_width + 'px');
+    if (!this.geometry || !this.geometry.screenSize) return;
+    let toolbar = this.$track_container.find('#map-toolbar');
+    toolbar.css('width', '30px');
+    let needed = toolbar.outerHeight();
+    let available = this.geometry.screenSize.height;
+    let tabs = $('#status-control');
+    if (tabs && tabs.is(':visible') && !isNaN(tabs.outerHeight()))
+      available -= tabs.outerHeight();
+    let toolbar_width = 30;
+    if (needed > available) toolbar_width = 60;
+    toolbar.css('width', toolbar_width + 'px');
   }
   init_resize_event() {
     this.remove_resize_event();

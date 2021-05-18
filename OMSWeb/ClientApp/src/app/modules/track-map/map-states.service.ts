@@ -21,6 +21,7 @@ export class MapStatesService {
   toolbarToggleEvent$ = new Subject<IMapToolbarToggleEvent>();
   toolbarCommandEvent$ = new Subject<IMapToolbarCommandEvent>();
   configChangeEvent$ = new Subject<IMapConfigChangeEvent>();
+  statusTableResizeEvent$ = new Subject<void>();
   actionState$ = new EventEmitter<IMapMouseEvent>();
   // transferCommandState$ = new Subject<TransferCommandState>();
 

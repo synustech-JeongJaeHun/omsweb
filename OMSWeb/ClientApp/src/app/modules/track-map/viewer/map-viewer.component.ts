@@ -127,10 +127,12 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   onApplyPointChange(isHome: boolean, selectedGroup: number) {
     console.log('### apply point change >>', { isHome, selectedGroup });
 
-    this.trackSvc.updatePoint(this.contextData.id, {
-      isHome,
-      group: selectedGroup,
-    }).subscribe();
+    this.trackSvc
+      .updatePoint(this.contextData.id, {
+        isHome,
+        group: selectedGroup,
+      })
+      .subscribe();
   }
   onVehicleCommand(name: string) {
     let commandMessage: IVehicleCommandMessage;
@@ -173,6 +175,10 @@ export class MapViewerComponent implements OnInit, OnDestroy {
           this._minimapVisible = event.value;
         } else if (event.type === 'itemDetails') {
           this._detailsVisible = event.value;
+        } else if (event.type === 'controlTable') {
+          setTimeout(() => {
+            this.viewer.adjust_floaters();
+          }, 100);
         } else {
           this.viewer?.onChangeVisibility(event);
         }
@@ -192,7 +198,13 @@ export class MapViewerComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe((event) => this.onMapMouseEvent(event));
 
-    [ViewModes.public, ViewModes.viewer].includes(this.viewMode) &&
+    this.statesSvc.statusTableResizeEvent$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.viewer.adjust_floaters();
+      })
+
+      [(ViewModes.public, ViewModes.viewer)].includes(this.viewMode) &&
       this.attachHubEvents();
 
     this.viewMode === ViewModes.playback && this.attachPlaybackEvents();
