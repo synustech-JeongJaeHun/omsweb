@@ -1,6 +1,9 @@
 <mat-toolbar class="gnb-container">
   <div class="gnb-left">
-    <span class="logo">OMS</span>
+    <div class="logo">
+      <h1>OMS</h1>
+      <div class="version">{{ version }}</div>
+    </div>
     <oms-gnb-menus class="menus" *ngIf="showGnb"></oms-gnb-menus>
   </div>
   <div class="gnb-center">

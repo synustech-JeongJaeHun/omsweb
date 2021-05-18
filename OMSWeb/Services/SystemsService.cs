@@ -24,6 +24,7 @@ namespace OMSWeb.Services
     public ClientSettings GetClientSettings()
     {
       var client = this._appSettings.Client;
+      client.Version = this._appSettings.Version;
       return this._appSettings.Client;
     }
   }

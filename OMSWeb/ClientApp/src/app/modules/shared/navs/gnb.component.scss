@@ -28,10 +28,19 @@
 }
 
 .logo {
-  font-weight: 900;
-  font-size: 1.3rem;
+  display: flex;
   margin-right: 30px;
-  color: #000;
+  align-items: baseline;
+
+  h1 {
+    color: #000;
+    font-weight: 900;
+    font-size: 1.3rem;
+    margin-right: 8px;
+  }
+  .version {
+    font-size: 12px;
+  }
 }
 
 .states {

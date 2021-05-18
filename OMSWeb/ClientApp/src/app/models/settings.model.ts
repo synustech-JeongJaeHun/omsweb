@@ -8,6 +8,7 @@ export type ToggleOptionsType = {
 
 export class ServiceConfig {
   allowPublicMonitor = false;
+  version: string;
 }
 
 export class MapConfig {
