@@ -2843,4 +2843,10 @@ export namespace LayoutUtil {
     }
     return changes;
   }
+
+  export function getVehicleFontSize(vehicleSize: number) {
+    const originSize = main_css.vehicle.font_size;
+    const step = Math.ceil(vehicleSize / 5) - 2;
+    return originSize + step;
+  }
 }

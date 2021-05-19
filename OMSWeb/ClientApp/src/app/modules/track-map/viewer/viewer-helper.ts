@@ -6829,7 +6829,8 @@ export class ViewController {
     if (hotlot) {
       if (
         d3_this.select('.hotlot').nodes().length === 0 &&
-        vehicle_scale.scale >= 0.6
+        vehicle_scale.scale >= 0
+        // vehicle_scale.scale >= 0.6
       ) {
         // add if it doesn't exist
         d3_this
@@ -6962,12 +6963,16 @@ export class ViewController {
     let current_order_label = d3_this.select('.label_order');
     if (
       current_order_label.nodes().length === 0 &&
-      vehicle_scale.scale >= 0.6
+      vehicle_scale.scale >= 0
+      // vehicle_scale.scale >= 0.6
     ) {
       d3_this
         .append('text')
         .attr('class', 'label_order')
-        .attr('font-size', `${dom_css.font_size}px`)
+        .attr(
+          'font-size',
+          `${LayoutUtil.getVehicleFontSize(this.vehicle_scale.value)}px`
+        )
         .attr('fill', hotlot ? dom_css.label_hotlot_color : dom_css.label_color)
         .attr('x', (-dom_css.text_offset * 3) / 4)
         .attr('y', dom_css.radius * 2 - dom_css.radius / 2)
@@ -7004,7 +7009,7 @@ export class ViewController {
         .attr('id', function () {
           return `id_${id}`;
         })
-        .attr('font-size', `${dom_css.font_size}px`)
+        .attr('font-size', `${LayoutUtil.getVehicleFontSize(this.vehicle_scale.value)}px`)
         .attr('x', (-dom_css.text_offset * 3) / 4)
         .attr('y', -dom_css.radius / 2)
         .html(function () {
@@ -8140,6 +8145,12 @@ export class ViewController {
     });
     if (this.vehicle_scale.scale >= 0.6) {
       this.vehicle_svg
+        .selectAll('.label, .label_order')
+        .attr(
+          'font-size',
+          `${LayoutUtil.getVehicleFontSize(this.vehicle_scale.value)}px`
+        );
+      this.vehicle_svg
         .selectAll('.label')
         .attr(
           'x',
@@ -8186,9 +8197,21 @@ export class ViewController {
       });
     } else {
       this.vehicle_svg
+        .selectAll('.hotlot')
+        .attr('display', 'none');
+      this.vehicle_svg
+        .selectAll('.label, .label_order')
+        .attr(
+          'font-size',
+          `${LayoutUtil.getVehicleFontSize(this.vehicle_scale.value)}px`
+        );
+      this.vehicle_svg
         .selectAll('.label, .label_order, .hotlot')
-        .attr('display', 'none')
         .attr('transform', `rotate(${-this.map_rotation})`);
+      // this.vehicle_svg
+      //   .selectAll('.label, .label_order, .hotlot')
+      //   .attr('display', 'none')
+      //   .attr('transform', `rotate(${-this.map_rotation})`);
       this.vehicle_svg
         .selectAll('.foup')
         .attr('display', 'none')
@@ -10541,13 +10564,13 @@ export class ViewController {
         .attr('id', function () {
           return `id_${layout_object.id}`;
         })
-        .attr('font-size', `${dom_css.font_size}px`)
-        .attr('display', () => {
-          if (this.vehicle_scale.scale >= 0.6) {
-            return 'block';
-          }
-          return 'none';
-        })
+        .attr('font-size', `${LayoutUtil.getVehicleFontSize(this.vehicle_scale.value)}px`)
+        // .attr('display', () => {
+        //   if (this.vehicle_scale.scale >= 0.6) {
+        //     return 'block';
+        //   }
+        //   return 'none';
+        // })
         .attr('x', () => {
           let x = (-dom_css.text_offset * 3) / 4;
           if (overlap_adjustment) {
@@ -10639,14 +10662,17 @@ export class ViewController {
       dom_object_group
         .append('text')
         .attr('class', 'label_order')
-        .attr('display', () => {
-          if (this.vehicle_scale.scale >= 0.6 || overlap_adjustment) {
-            return 'block';
-          } else {
-            return 'none';
-          }
-        })
-        .attr('font-size', `${dom_css.font_size}px`)
+        // .attr('display', () => {
+        //   if (this.vehicle_scale.scale >= 0.6 || overlap_adjustment) {
+        //     return 'block';
+        //   } else {
+        //     return 'none';
+        //   }
+        // })
+        .attr(
+          'font-size',
+          `${LayoutUtil.getVehicleFontSize(this.vehicle_scale.value)}px`
+        )
         .attr(
           'fill',
           layout_object.hotlot
