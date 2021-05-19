@@ -7009,7 +7009,10 @@ export class ViewController {
         .attr('id', function () {
           return `id_${id}`;
         })
-        .attr('font-size', `${LayoutUtil.getVehicleFontSize(this.vehicle_scale.value)}px`)
+        .attr(
+          'font-size',
+          `${LayoutUtil.getVehicleFontSize(this.vehicle_scale.value)}px`
+        )
         .attr('x', (-dom_css.text_offset * 3) / 4)
         .attr('y', -dom_css.radius / 2)
         .html(function () {
@@ -8196,9 +8199,7 @@ export class ViewController {
           .attr('transform', `rotate(${-this.map_rotation})`);
       });
     } else {
-      this.vehicle_svg
-        .selectAll('.hotlot')
-        .attr('display', 'none');
+      this.vehicle_svg.selectAll('.hotlot').attr('display', 'none');
       this.vehicle_svg
         .selectAll('.label, .label_order')
         .attr(
@@ -10564,7 +10565,10 @@ export class ViewController {
         .attr('id', function () {
           return `id_${layout_object.id}`;
         })
-        .attr('font-size', `${LayoutUtil.getVehicleFontSize(this.vehicle_scale.value)}px`)
+        .attr(
+          'font-size',
+          `${LayoutUtil.getVehicleFontSize(this.vehicle_scale.value)}px`
+        )
         // .attr('display', () => {
         //   if (this.vehicle_scale.scale >= 0.6) {
         //     return 'block';
@@ -12268,13 +12272,8 @@ export class ViewController {
           'LAYOUT',
           false
         );
-
-      this.$track_container.find('#btn_show_location_group').addClass('active');
     } else {
       this.$track_container.find('.group_svg').remove();
-      this.$track_container
-        .find('#btn_show_location_group')
-        .removeClass('active');
     }
   }
   set_show_groups(state: boolean, is_save_state: any) {
@@ -12921,16 +12920,10 @@ export class ViewController {
   set_toolbar_geometry() {
     // @TODO set_toolbar_geometry 로직 확인 / 변경
     if (!this.geometry || !this.geometry.screenSize) return;
-    let toolbar = this.$track_container.find('#map-toolbar');
-    toolbar.css('width', '30px');
-    let needed = toolbar.outerHeight();
     let available = this.geometry.screenSize.height;
     let tabs = $('#status-control');
     if (tabs && tabs.is(':visible') && !isNaN(tabs.outerHeight()))
       available -= tabs.outerHeight();
-    let toolbar_width = 30;
-    if (needed > available) toolbar_width = 60;
-    toolbar.css('width', toolbar_width + 'px');
   }
   init_resize_event() {
     this.remove_resize_event();
