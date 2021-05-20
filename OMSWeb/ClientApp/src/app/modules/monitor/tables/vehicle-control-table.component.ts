@@ -104,12 +104,14 @@ export class VehicleControlTableComponent implements OnInit, OnDestroy {
   }
 
   private onTableChanged(payload: IDataChangeEvent) {
+    console.log('@@ vehicle table updated >', payload);
     let needReload = false;
     if (payload && payload.id && payload.operation) {
       if (['INSERT', 'DELETE'].includes(payload.operation)) {
         needReload = true;
       } else {
         needReload = this.dataSource.items().every((x) => x.id !== payload.id);
+        // needReload = true;
       }
     } else {
       needReload = true;

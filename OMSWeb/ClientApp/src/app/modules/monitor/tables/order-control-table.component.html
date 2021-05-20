@@ -14,17 +14,19 @@
   [dataSource]="dataSource"
   [remoteOperations]="true"
   [height]="tableHeight"
-  [repaintChangesOnly]="true"
-  [columnAutoWidth]="true"
+  [repaintChangesOnly]="false"
+  [columnAutoWidth]="false"
   [showBorders]="false"
-  [highlightChanges]="false"
+  [highlightChanges]="true"
   [showColumnLines]="true"
   [showRowLines]="true"
   [hoverStateEnabled]="true"
   [(selectedRowKeys)]="selectedRows"
   [headerFilter]="false"
+  [renderAsync]="true"
 >
   <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
+  <dxo-scrolling mode="virtual" rowRenderingMode="standard"></dxo-scrolling>
   <dxo-paging [pageSize]="50"></dxo-paging>
   <dxo-pager
     [showPageSizeSelector]="true"
@@ -42,7 +44,6 @@
     [width]="80"
     dataType="string"
     dataField="id"
-    sortOrder="desc"
     [caption]="'names.id' | translate"
   ></dxi-column>
   <dxi-column
@@ -89,11 +90,13 @@
     dataType="datetime"
     dataField="timeCreated"
     [caption]="'names.timeCreated' | translate"
+    sortOrder="desc"
   ></dxi-column>
   <dxi-column
     [width]="120"
     dataType="datetime"
     dataField="timeAssigned"
     [caption]="'names.timeAssigned' | translate"
+    sortOrder="desc"
   ></dxi-column>
 </dx-data-grid>

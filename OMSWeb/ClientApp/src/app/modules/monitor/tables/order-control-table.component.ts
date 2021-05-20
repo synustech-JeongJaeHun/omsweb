@@ -86,11 +86,13 @@ export class OrderControlTableComponent implements OnInit, OnDestroy {
 
   private onTableChanged(payload: IDataChangeEvent) {
     let needReload = false;
+    console.log('@@ order table updated >>>', payload);
     if (payload && payload.id && payload.operation) {
       if (['INSERT', 'DELETE'].includes(payload.operation)) {
         needReload = true;
       } else {
         needReload = this.dataSource.items().every((x) => x.id !== payload.id);
+        // needReload = true;
       }
     } else {
       needReload = true;

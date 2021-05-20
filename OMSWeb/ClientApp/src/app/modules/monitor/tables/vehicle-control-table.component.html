@@ -68,8 +68,8 @@
   [dataSource]="dataSource"
   [remoteOperations]="true"
   [height]="tableHeight"
-  [repaintChangesOnly]="true"
-  [columnAutoWidth]="true"
+  [repaintChangesOnly]="false"
+  [columnAutoWidth]="false"
   [showBorders]="false"
   [highlightChanges]="false"
   [showColumnLines]="true"
@@ -77,7 +77,7 @@
   [headerFilter]="false"
   [(selectedRowKeys)]="selectedRows"
 >
-  <dxo-scrolling mode="standard"></dxo-scrolling>
+  <dxo-scrolling mode="virtual" rowRenderingMode="standard"></dxo-scrolling>
   <dxo-paging [pageSize]="50"></dxo-paging>
   <dxo-pager
     [showPageSizeSelector]="true"
