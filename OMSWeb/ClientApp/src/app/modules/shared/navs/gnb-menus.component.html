@@ -90,24 +90,31 @@
     <ng-container *ngSwitchCase="'/histories'">
       <a
         mat-button
-        class="nav-item"
+        class="nav-item tight"
         routerLinkActive="active"
         routerLink="/histories/orders"
         >Orders</a
       >
       <a
         mat-button
-        class="nav-item"
+        class="nav-item tight"
         routerLinkActive="active"
         routerLink="/histories/vehicles"
         >Vehicles</a
       >
       <a
         mat-button
-        class="nav-item"
+        class="nav-item tight"
         routerLinkActive="active"
         routerLink="/histories/alarms"
         >Alarms</a
+      >
+      <a
+        mat-button
+        class="nav-item tight"
+        routerLinkActive="active"
+        routerLink="/histories/warnings"
+        >Warnings</a
       >
     </ng-container>
     <ng-container *ngSwitchCase="'/logs'">

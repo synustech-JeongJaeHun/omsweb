@@ -60,4 +60,19 @@ export class HistoriesService {
       ],
     });
   }
+
+  alertsDataSource(startTime: Date, endTime: Date): DataSource {
+    return new DataSource({
+      store: AspNetData.createStore({
+        key: 'id',
+        loadUrl: `/assets/json/get-alerts.json`,
+        // loadUrl: `${this.baseUrl}/alerts`,
+      }),
+      filter: [
+        ['time', '>=', startTime],
+        'and',
+        ['time', '<=', endTime],
+      ],
+    });
+  }
 }

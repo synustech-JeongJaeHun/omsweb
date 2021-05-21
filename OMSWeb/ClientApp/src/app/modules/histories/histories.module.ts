@@ -7,10 +7,11 @@ import { OrderHistoryComponent } from './orders/order-history.component';
 import { VehicleHistoryComponent } from './vehicles/vehicle-history.component';
 import { AlarmHistoryComponent } from './alarms/alarm-history.component';
 import { SharedModule } from '../shared/shared.module';
+import { WarningHistoryComponent } from './warnings/warning-history.component';
 
 
 @NgModule({
-  declarations: [HistoriesComponent, OrderHistoryComponent, VehicleHistoryComponent, AlarmHistoryComponent],
+  declarations: [HistoriesComponent, OrderHistoryComponent, VehicleHistoryComponent, AlarmHistoryComponent, WarningHistoryComponent],
   imports: [
     CommonModule,
     HistoriesRoutingModule,
