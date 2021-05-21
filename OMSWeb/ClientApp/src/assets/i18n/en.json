@@ -125,8 +125,9 @@
     "showControlTable": "Toogle Control Table",
     "getStatusAllVehicle": "Get All Vehicle Status",
     "setAutoAllVehicle": "Set Auto All Vehicle",
-    "resetAllVehicle": "Reset All Vehicle",
-    "estopAllVehicle": "EStop All Vehicle",
+    "resetAllVehicle": "Reset All Vehicles",
+    "estopAllVehicle": "EStop All Vehicles",
+    "autoAllVehicle": "Auto All Vehicles",
 
     "vehicleScale": "Vehicle Scale",
     "mapRotation": "Map Rotation",
@@ -153,8 +154,6 @@
     "zcuGo": "ZCU Go",
     "option": "Option",
 
-    "resetAll": "Reset All",
-    "autoAll": "Auto All",
     "ioList": "IO List",
     "vehicleStatus": "Vehicle Status",
     "bufferStatus": "Buffer Status",

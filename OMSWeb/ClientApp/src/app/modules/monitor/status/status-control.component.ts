@@ -50,9 +50,6 @@ export class StatusControlComponent implements OnInit {
     this.currentTab = this.settingSvc.globalPreferences.uiStates.controlTab;
   }
 
-  onPing() {
-    this.messageSvc.sendVehicleCommand({ action: 'status' }).subscribe();
-  }
   onVehicleReset() {
     this.dialogSvc
       .confirm({ body: this.$t.instant('messages.confirmResetAllVehicles') })
