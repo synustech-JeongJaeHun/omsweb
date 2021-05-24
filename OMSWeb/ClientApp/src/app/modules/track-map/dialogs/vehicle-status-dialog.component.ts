@@ -6,6 +6,7 @@ import {
   IVehicleDIOStates,
   IVehicleSignal,
 } from '../../../models/vehicle-status.model';
+import { Vehicle } from '../../../models/vehicle.model';
 import { StatusService } from '../../../services/status.service';
 import { MapDataService } from '../map-data.service';
 
@@ -15,12 +16,13 @@ import { MapDataService } from '../map-data.service';
   styleUrls: ['./vehicle-status-dialog.component.scss'],
 })
 export class VehicleStatusDialogComponent implements OnInit {
-  selectedUnit: ILookupUnit;
+  selectedUnit: Vehicle;
   currentVehicle: any;
   signalStatus: IVehicleSignal;
   diMap: { [key: string]: IVehicleDIO[] } = {};
   doMap: { [key: string]: IVehicleDIO[] } = {};
   ioCategories: string[] = ['Transfer', 'OBS', 'ZCU', 'PIO', 'OTHER'];
+  vehicles: Vehicle[];
 
   private showOptions: { [key: string]: boolean } = {};
 
@@ -31,17 +33,22 @@ export class VehicleStatusDialogComponent implements OnInit {
 
   ngOnInit(): void {
     // this.currentVehicle = {};
+    this.vehicles = this.dataSvc.data.vehicles;
     this.initShowOptions();
     this.getFirstUnit();
   }
 
-  onUnitChange(data: ILookupUnit) {
+  onUnitChange(data: Vehicle) {
     if (data) {
       const { id } = data;
-      this.currentVehicle = this.dataSvc.data.vehicles.find((x) => x.id === id);
+      this.currentVehicle = data;
+      // this.currentVehicle = this.dataSvc.data.vehicles.find((x) => x.id === id);
       this.getSignal(id);
       this.getIoStates(id);
     }
+  }
+  onVehicleSelect({ value }) {
+    this.onUnitChange(value);
   }
 
   isSelectedCategory(name: string): boolean {
@@ -57,10 +64,11 @@ export class VehicleStatusDialogComponent implements OnInit {
     if (vehicles.length > 0) {
       this.currentVehicle = vehicles[0];
       const { id, objectType } = this.currentVehicle;
-      this.selectedUnit = {
-        id,
-        objectType,
-      };
+      this.selectedUnit = this.currentVehicle;
+      // this.selectedUnit = {
+      //   id,
+      //   objectType,
+      // };
       this.getSignal(id);
       this.getIoStates(id);
     }
