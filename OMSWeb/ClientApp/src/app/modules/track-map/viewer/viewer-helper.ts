@@ -12678,14 +12678,14 @@ export class ViewController {
     // @NOTE 아래 mini_zoomed 메소드의 기본 동작을 여기서 정의해서 사용
     // if (d3.event.type !== 'zoom' || !d3.event.transform) return;
 
-    const transform: d3.ZoomTransform = d3.event.transform;
+    // const transform: d3.ZoomTransform = d3.event.transform;
 
-    this.mini_zoomed_handler(transform);
+    this.mini_zoomed_handler({});
   }
   // @NOTE event 에는 두개 param만 전달되는데 원본 소스에는 인자가 3개
   // mini_zoomed(event: d3.BaseEvent, mini_zoomed: any): any {
   mini_zoomed_handler(transform: IZoom): any {
-    if (!transform) return;
+    // if (!transform) return;
     let { x, y, k } = transform;
     if (
       this.geometry.trackSize.width > 0 &&
