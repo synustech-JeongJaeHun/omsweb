@@ -49,6 +49,7 @@ export const defaultToggleOptions: ToggleOptionsType = {
   overlaps: false,
   itemDetails: false,
   showToolName: false,
+  showOmsVersion: true
 };
 
 export class ClientPreferences implements IPreferences {

@@ -25,13 +25,13 @@ export class PreferencesComponent implements OnInit {
   }
 
   onChangedTheme(name: string, value: any) {
-    setCssValue(name, value);
-    this.preference.theme[name] = value;
-    this.preference.save();
+    // setCssValue(name, value);
+    // this.preference.theme[name] = value;
+    // this.preference.save();
   }
 
   getThemeValue(name: string) {
-    return this.preference.theme[name] || getCss(name);
+    // return this.preference.theme[name] || getCss(name);
   }
 
   private loadTheme() {}

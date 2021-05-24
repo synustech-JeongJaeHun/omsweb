@@ -2,7 +2,7 @@
   <div class="gnb-left">
     <div class="logo">
       <h1>OMS</h1>
-      <div class="version">{{ version }}</div>
+      <div *ngIf="showVersion" class="version">{{ version }}</div>
     </div>
     <oms-gnb-menus class="menus" *ngIf="showGnb"></oms-gnb-menus>
   </div>

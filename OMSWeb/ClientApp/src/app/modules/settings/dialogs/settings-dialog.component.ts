@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./settings-dialog.component.scss']
 })
 export class SettingsDialogComponent implements OnInit {
-  currentMenu: string = 'users';
+  currentMenu: string = 'preference';
 
   constructor() { }
 

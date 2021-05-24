@@ -43,7 +43,6 @@ export class PlaybackComponent implements OnInit, OnDestroy {
     this.playbackSvc.playbackData$
       .pipe(take(1))
       .subscribe((data) => {
-        console.log('@@@ playback data res 1 @@@');
         this.playbackData = data;
         this.loadingState = false;
         this.ready = true;

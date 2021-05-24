@@ -48,6 +48,7 @@ export type ToggleOptionKeyType =
   | 'vehicles'
   | 'clusters'
   | 'showToolName'
+  | 'showOmsVersion'
   | 'overlaps';
 
 export type CommandKeyType =

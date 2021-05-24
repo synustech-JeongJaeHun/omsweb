@@ -1,0 +1,11 @@
+<label class="name">{{ name }}</label>
+<div class="value">
+  <dx-color-box
+    #colorPicker
+    [height]="33"
+    [value]="getThemeValue()"
+    applyValueMode="instantly"
+    [editAlphaChannel]="true"
+    (onValueChanged)="onChanged(colorPicker.value)"
+  ></dx-color-box>
+</div>

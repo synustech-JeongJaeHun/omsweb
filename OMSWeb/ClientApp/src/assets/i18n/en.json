@@ -278,7 +278,13 @@
     "maintenance": "Maintenance",
     "preference": "Preference",
     "showToolName": "Show left toolbar text",
-    "playbackBgColor": "Playback Background"
+    "homeBgColor": "Home Background",
+    "playbackBgColor": "Playback Background",
+    "vehiclePath": "Vehicle Expected Path",
+    "theme": "Theme",
+    "showOmsVersion": "Show OMS version",
+    "segmentNormal": "Segment - normal",
+    "segmentDisabled": "Segment - disabled"
   },
   "enums": {
     "hostSessionStatus": {

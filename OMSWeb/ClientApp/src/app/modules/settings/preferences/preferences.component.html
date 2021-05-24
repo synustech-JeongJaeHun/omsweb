@@ -3,26 +3,69 @@
   <div class="setting-actions"></div>
 </div>
 
-<div class="item-container">
-  <mat-slide-toggle
-    [(ngModel)]="preference.toggles.showToolName"
-    color="primary"
-    (change)="onChangedToggle('showToolName')"
-    >{{ "names.showToolName" | translate }}</mat-slide-toggle
-  >
-  <div class="form-grid">
-    <label class="name">{{ "names.playbackBgColor" | translate }}</label>
-    <div class="value">
-      <dx-color-box
-        #colorPicker
-        [height]="33"
-        [value]="getThemeValue('--playback-background-color')"
-        applyValueMode="instantly"
-        [editAlphaChannel]="true"
-        (onValueChanged)="
-          onChangedTheme('--playback-background-color', colorPicker.value)
-        "
-      ></dx-color-box>
+<div class="setting-container">
+  <fieldset>
+    <legend>{{ "names.settings" | translate }}</legend>
+    <div class="form-grid">
+      <mat-slide-toggle
+        [(ngModel)]="preference.toggles.showToolName"
+        color="primary"
+        (change)="onChangedToggle('showToolName')"
+        >{{ "names.showToolName" | translate }}</mat-slide-toggle
+      >
+      <mat-slide-toggle
+        [(ngModel)]="preference.toggles.showOmsVersion"
+        color="primary"
+        (change)="onChangedToggle('showOmsVersion')"
+        >{{ "names.showOmsVersion" | translate }}</mat-slide-toggle
+      >
     </div>
-  </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>{{ "names.theme" | translate }}</legend>
+
+    <div class="form-grid">
+      <oms-color-picker
+        class="form-item home"
+        configName="--monitor-background-color"
+        [name]="'names.homeBgColor' | translate"
+      ></oms-color-picker>
+      <oms-color-picker
+        class="form-item playback"
+        configName="--playback-background-color"
+        [name]="'names.playbackBgColor' | translate"
+      ></oms-color-picker>
+      <oms-color-picker
+        class="form-item station"
+        configName="--station-color"
+        [name]="'names.station' | translate"
+      ></oms-color-picker>
+      <oms-color-picker
+        class="form-item buffer"
+        configName="--buffer-color"
+        [name]="'names.buffer' | translate"
+      ></oms-color-picker>
+      <oms-color-picker
+        class="form-item point"
+        configName="--point-color"
+        [name]="'names.point' | translate"
+      ></oms-color-picker>
+      <oms-color-picker
+        class="form-item point"
+        configName="--expected-path-color"
+        [name]="'names.vehiclePath' | translate"
+      ></oms-color-picker>
+      <oms-color-picker
+        class="form-item segment"
+        configName="--segment-color"
+        [name]="'names.segmentNormal' | translate"
+      ></oms-color-picker>
+      <oms-color-picker
+        class="form-item segment-disabled"
+        configName="--segment-color-disabled"
+        [name]="'names.segmentDisabled' | translate"
+      ></oms-color-picker>
+    </div>
+  </fieldset>
 </div>

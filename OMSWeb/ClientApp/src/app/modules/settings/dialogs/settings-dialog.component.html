@@ -5,17 +5,17 @@
         <mat-nav-list>
           <a
             mat-list-item
-            [class.active]="isActiveMenu('users')"
-            (click)="onChangeMenu('users')"
-            class="nav-link"
-            >{{ "names.userManagement" | translate }}</a
-          >
-          <a
-            mat-list-item
             [class.active]="isActiveMenu('preference')"
             (click)="onChangeMenu('preference')"
             class="nav-link"
             >{{ "names.preference" | translate }}</a
+          >
+          <a
+            mat-list-item
+            [class.active]="isActiveMenu('users')"
+            (click)="onChangeMenu('users')"
+            class="nav-link"
+            >{{ "names.userManagement" | translate }}</a
           >
 
           <mat-divider class="nav-divider"></mat-divider>

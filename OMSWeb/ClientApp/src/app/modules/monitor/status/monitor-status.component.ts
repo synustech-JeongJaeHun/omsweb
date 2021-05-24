@@ -14,6 +14,7 @@ import { MapDataService } from '../../track-map/map-data.service';
   styles: [
     `
       :host {
+        background-color: var(--monitor-background-color);
         display: block;
         position: relative;
         z-index: 3;

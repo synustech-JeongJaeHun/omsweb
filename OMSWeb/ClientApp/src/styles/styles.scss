@@ -43,6 +43,7 @@
   --notification-color: rgb(255, 180, 0);
   --notification-critical-color: rgb(255, 80, 0);
   --invalid-color: rgb(255, 100, 100);
+  --monitor-background-color: #fff;
 
   /* Cluster color palette */
   --num-palette-colors: 24;
@@ -333,6 +334,19 @@ h5 {
 
 button:focus {
   outline: 0;
+}
+
+fieldset {
+  border: 1px solid var(--theme-border-color);
+  border-radius: 4px;
+  padding: 4px;
+  min-height: 30px;
+
+  legend {
+    font-size: 14px;
+    font-weight: bold;
+    margin-left: 8px;
+  }
 }
 
 .side_panel_header {
