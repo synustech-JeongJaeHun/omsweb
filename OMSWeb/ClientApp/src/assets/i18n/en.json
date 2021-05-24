@@ -284,7 +284,8 @@
     "theme": "Theme",
     "showOmsVersion": "Show OMS version",
     "segmentNormal": "Segment - normal",
-    "segmentDisabled": "Segment - disabled"
+    "segmentDisabled": "Segment - disabled",
+    "revert": "Read"
   },
   "enums": {
     "hostSessionStatus": {

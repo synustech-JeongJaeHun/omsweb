@@ -8,7 +8,7 @@
       [disabled]="!canSave"
       (click)="onSave()"
     >
-      Save
+      {{ "names.save" | translate }}
     </button>
     <button
       mat-raised-button
@@ -16,7 +16,7 @@
       [disabled]="!canSave"
       (click)="onRevert()"
     >
-      Revert
+      {{ "names.revert" | translate }}
     </button>
   </div>
 </div>

@@ -3,8 +3,23 @@
   <div class="setting-actions">
     <!-- <dx-button icon="save"></dx-button>
     <dx-button icon="undo"></dx-button> -->
-    <button mat-raised-button class="dense" [disabled]="!isUpdated" color="primary" (click)="onSave(grid)">Save</button>
-    <button mat-raised-button class="dense" [disabled]="!isUpdated" (click)="onRevert(grid)">Revert</button>
+    <button
+      mat-raised-button
+      class="dense"
+      [disabled]="!isUpdated"
+      color="primary"
+      (click)="onSave(grid)"
+    >
+      {{ "names.save" | translate }}
+    </button>
+    <button
+      mat-raised-button
+      class="dense"
+      [disabled]="!isUpdated"
+      (click)="onRevert(grid)"
+    >
+      {{ "names.revert" | translate }}
+    </button>
   </div>
 </div>
 
@@ -17,7 +32,12 @@
     <button mat-stroked-button class="dense" (click)="onAddUser(grid)">
       <mat-icon>add</mat-icon>
     </button>
-    <button mat-stroked-button [disabled]="!canRemove" class="dense" (click)="onRemoveUsers()">
+    <button
+      mat-stroked-button
+      [disabled]="!canRemove"
+      class="dense"
+      (click)="onRemoveUsers()"
+    >
       <mat-icon>remove</mat-icon>
     </button>
   </div>
@@ -45,7 +65,11 @@
   </dxo-editing>
   <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
 
-  <dxi-column dataField="userId" caption="{{ 'names.userId' | translate }}" [allowEditing]="false">
+  <dxi-column
+    dataField="userId"
+    caption="{{ 'names.userId' | translate }}"
+    [allowEditing]="false"
+  >
   </dxi-column>
   <dxi-column dataField="firstName" dataType="string"></dxi-column>
   <dxi-column dataField="lastName"></dxi-column>
@@ -53,7 +77,11 @@
   </dxi-column>
   <!-- <dxi-column dataField="password" [editorOptions]="{mode: 'password'}">
   </dxi-column> -->
-  <dxi-column dataField="password" cellTemplate="passwordCell" [editorOptions]="{mode: 'password'}">
+  <dxi-column
+    dataField="password"
+    cellTemplate="passwordCell"
+    [editorOptions]="{ mode: 'password' }"
+  >
   </dxi-column>
   <dxi-column dataField="roles" caption="Roles" dataType="number">
     <dxo-lookup

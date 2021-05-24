@@ -42,7 +42,10 @@ export class GnbMenusComponent implements OnInit, OnDestroy {
   }
 
   onOpenSettings() {
-    if (this._dlg && this._dlg.getState() === MatDialogState.OPEN) return;
+    if (this._dlg && this._dlg.getState() === MatDialogState.OPEN) {
+      this._dlg.close();
+      return;
+    }
 
     this._dlg = this.dialog.open(SettingsDialogComponent, {
       width: '800px',

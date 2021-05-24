@@ -1,8 +1,12 @@
 <div class="setting-header">
   <h3 class="setting-title">{{ "names.nodeSetting" | translate }}</h3>
   <div class="setting-actions">
-    <button mat-raised-button class="dense" color="primary">Save</button>
-    <button mat-raised-button class="dense">Revert</button>
+    <button mat-raised-button class="dense" color="primary">
+      {{ "names.save" | translate }}
+    </button>
+    <button mat-raised-button class="dense">
+      {{ "names.revert" | translate }}
+    </button>
   </div>
 </div>
 
@@ -21,11 +25,7 @@
     [allowUpdating]="true"
     [useIcons]="true"
   ></dxo-editing>
-  <dxi-column
-    dataField="id"
-    [allowEditing]="false"
-    [width]="60"
-  ></dxi-column>
+  <dxi-column dataField="id" [allowEditing]="false" [width]="60"></dxi-column>
   <dxi-column
     dataField="bcr"
     [caption]="'names.barcode' | translate"

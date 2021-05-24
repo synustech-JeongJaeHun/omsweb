@@ -1,8 +1,12 @@
 <div class="setting-header">
   <h3 class="setting-title">{{ "names.segmentSetting" | translate }}</h3>
   <div class="setting-actions">
-    <button mat-raised-button class="dense" color="primary">Save</button>
-    <button mat-raised-button class="dense">Revert</button>
+    <button mat-raised-button class="dense" color="primary">
+      {{ "names.save" | translate }}
+    </button>
+    <button mat-raised-button class="dense">
+      {{ "names.revert" | translate }}
+    </button>
   </div>
 </div>
 
@@ -21,7 +25,7 @@
 <dx-data-grid
   id="segment-datagrid"
   [dataSource]="dataSource$ | async"
-  [height]="530"
+  [height]="520"
   [showBorders]="true"
   [allowColumnResizing]="false"
   (onRowUpdated)="onUpdateRow($event)"
