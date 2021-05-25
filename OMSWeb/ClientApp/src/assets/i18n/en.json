@@ -288,7 +288,8 @@
     "segmentDisabled": "Segment - disabled",
     "revert": "Read",
     "selectResetItem": "Select items to reset",
-    "resetToDefault": "Reset to default"
+    "resetToDefault": "Reset to default",
+    "segmentDirection": "Segment Direction"
   },
   "enums": {
     "hostSessionStatus": {

@@ -25,6 +25,7 @@ export class PreferencesComponent implements OnInit {
     { name: 'vehiclePath', style: '--expected-path-color' },
     { name: 'segmentNormal', style: '--segment-color' },
     { name: 'segmentDisabled', style: '--segment-color-disabled' },
+    { name: 'segmentDirection', style: '--segment-direction-color' },
   ];
 
   resetThemeTargets: string[] = [];
