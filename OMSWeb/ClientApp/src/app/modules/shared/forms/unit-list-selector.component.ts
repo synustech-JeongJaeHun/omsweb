@@ -29,16 +29,16 @@ export class UnitListSelectorComponent implements OnInit, OnChanges {
         : this.inputControl.enable();
     }
 
-    if (selectedUnit) {
-      selectedUnit.currentValue && this.inputControl.setValue(selectedUnit.currentValue);
-    }
+    // if (selectedUnit) {
+    //   selectedUnit.currentValue && this.inputControl.setValue(selectedUnit.currentValue);
+    // }
   }
 
   ngOnInit(): void {
     this.targetOptions$ = this.inputControl.valueChanges.pipe(
       debounceTime(300),
       distinctUntilChanged(),
-      switchMap((value) => this.idSvc.lookupUnits(this.findScopes, value))
+      switchMap((value) => this.idSvc.lookupUnits(this.findScopes, value, false))
     );
   }
   displayFn(item: ILookupUnit): string | undefined {

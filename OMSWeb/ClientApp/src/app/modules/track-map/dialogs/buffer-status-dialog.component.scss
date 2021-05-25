@@ -1,3 +1,14 @@
+.content-layout {
+  display: grid;
+  grid-template-columns: 140px auto;
+  column-gap: 8px;
+}
+
+.find-container {
+  background-color: var(--panel-background-color);
+  padding: 4px;
+}
+
 .unit-details {
   display: grid;
   grid-template-columns: 100px 1fr;

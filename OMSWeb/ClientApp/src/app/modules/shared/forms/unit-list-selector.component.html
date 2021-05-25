@@ -4,29 +4,11 @@
     matInput
     [formControl]="inputControl"
     [placeholder]="placeholder"
-    [matAutocomplete]="auto"
   />
-  <button
-    mat-button
-    *ngIf="selectedUnit"
-    matSuffix
-    mat-icon-button
-    aria-label="Clear"
-    [disabled]="disabled"
-    (click)="onClear(inputValue)"
-  >
-    <mat-icon>close</mat-icon>
-  </button>
-
-  <mat-autocomplete
-    #auto="matAutocomplete"
-    [autoActiveFirstOption]="false"
-    [displayWith]="displayFn"
-    (optionSelected)="onSelected($event.option.value)"
-  >
-    <mat-option *ngFor="let item of targetOptions$ | async" [value]="item">
-      <span>{{ item.id }}</span>
-      <span class="option-type">{{ item.objectType }}</span>
-    </mat-option>
-  </mat-autocomplete>
 </mat-form-field>
+
+<mat-action-list>
+  <button mat-list-item *ngFor="let item of targetOptions$ | async" (click)="onSelected(item)">
+    #{{ item.id }}
+  </button>
+</mat-action-list>

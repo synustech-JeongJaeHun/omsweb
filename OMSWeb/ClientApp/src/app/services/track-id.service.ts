@@ -18,10 +18,10 @@ export class TrackIdService {
 
   private logger = console;
   private log_perf = console;
-   vehicles: TrackIdMapType = {};
-   points: TrackIdMapType = {};
-   stations: TrackIdMapType = {};
-   buffers: TrackIdMapType = {};
+  vehicles: TrackIdMapType = {};
+  points: TrackIdMapType = {};
+  stations: TrackIdMapType = {};
+  buffers: TrackIdMapType = {};
 
   constructor(private http: HttpClient) {}
 
@@ -74,23 +74,50 @@ export class TrackIdService {
     return this.get_alternative_id(objectType, 'logicalId', data) || data;
   }
 
-  lookupUnits(scopes: string[], id: string): Observable<ILookupUnit[]> {
+  lookupUnits(
+    scopes: string[],
+    id: string,
+    exactly = true
+  ): Observable<ILookupUnit[]> {
     const result: ILookupUnit[] = [];
+    if (!id) return of(result);
     if (scopes.includes('stations')) {
-      const item = this.stations['s' + id];
-      item && result.push(this.toLookupUnit(item, 'Station'));
+      if (exactly) {
+        const item = this.stations['s' + id];
+        item && result.push(this.toLookupUnit(item, 'Station'));
+      } else {
+        const items = Object.values(this.stations).filter((x) =>
+          x.id.toString().includes(id)
+        );
+        items &&
+          items.length > 0 &&
+          result.push(...items.map((x) => this.toLookupUnit(x, 'Station')));
+      }
     }
     if (scopes.includes('points')) {
-      const item = this.points['p' + id];
-      item && result.push(this.toLookupUnit(item, 'Point'));
+      if (exactly) {
+        const item = this.points['p' + id];
+        item && result.push(this.toLookupUnit(item, 'Point'));
+      }
     }
     if (scopes.includes('buffers')) {
-      const item = this.buffers['b' + id];
-      item && result.push(this.toLookupUnit(item, 'Buffer'));
+      if (exactly) {
+        const item = this.buffers['b' + id];
+        item && result.push(this.toLookupUnit(item, 'Buffer'));
+      } else {
+        const items = Object.values(this.buffers).filter((x) =>
+          x.id.toString().includes(id)
+        );
+        items &&
+          items.length > 0 &&
+          result.push(...items.map((x) => this.toLookupUnit(x, 'Buffer')));
+      }
     }
     if (scopes.includes('vehicles')) {
-      const item = this.vehicles['' + id];
-      item && result.push(this.toLookupUnit(item, 'Vehicle'));
+      if (exactly) {
+        const item = this.vehicles['' + id];
+        item && result.push(this.toLookupUnit(item, 'Vehicle'));
+      }
     }
     return of(result);
   }

@@ -1,13 +1,15 @@
 <oms-dialog-base [title]="'names.buffer' | translate">
   <ng-container class="dialog-layout">
     <div mat-dialog-content class="content-layout">
-      <oms-unit-selector
-        class="full-span-col"
-        [findScopes]="['buffers']"
-        [selectedUnit]="selectedUnit"
-        (selectedUnitChange)="onBufferChange($event)"
-        [placeholder]="'names.selectBuffer' | translate"
-      ></oms-unit-selector>
+      <div class="find-container">
+        <oms-unit-list-selector
+          class="full-span-col"
+          [findScopes]="['buffers']"
+          [selectedUnit]="selectedUnit"
+          (selectedUnitChange)="onBufferChange($event)"
+          [placeholder]="'names.searchBuffer' | translate"
+        ></oms-unit-list-selector>
+      </div>
       <div class="info-container">
         <h3>Buffer #{{ currentBuffer.id }}</h3>
         <div class="unit-details">

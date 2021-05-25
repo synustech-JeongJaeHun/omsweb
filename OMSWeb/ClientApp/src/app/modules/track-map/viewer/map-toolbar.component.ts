@@ -248,7 +248,7 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
     }
 
     this._bfStatusDlg = this.dialog.open(BufferStatusDialogComponent, {
-      width: '300px',
+      width: '450px',
       autoFocus: false,
       hasBackdrop: false,
       disableClose: false,

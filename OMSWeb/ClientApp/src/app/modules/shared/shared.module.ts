@@ -25,6 +25,7 @@ import { ProfileDialogComponent } from './dialogs/profile-dialog.component';
 import { UserFormComponent } from './forms/user-form.component';
 import { SettingsModule } from '../settings/settings.module';
 import { ColorPickerComponent } from './forms/color-picker.component';
+import { UnitListSelectorComponent } from './forms/unit-list-selector.component';
 
 const inOutModules = [
   FormsModule,
@@ -48,6 +49,7 @@ const inOutModules = [
     ProfileDialogComponent,
     UserFormComponent,
     ColorPickerComponent,
+    UnitListSelectorComponent,
   ],
   imports: [
     CommonModule,
@@ -79,6 +81,7 @@ const inOutModules = [
     ProfileDialogComponent,
     UserFormComponent,
     ColorPickerComponent,
+    UnitListSelectorComponent,
   ],
 })
 export class SharedModule {}
