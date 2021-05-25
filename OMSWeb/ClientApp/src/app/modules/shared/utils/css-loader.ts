@@ -6,6 +6,9 @@ export const getCss = (name:string) => {
 export const setCssValue = (name: string, value: any) => {
   document.documentElement.style.setProperty(name, value);
 }
+export const removeCssValue = (name: string) => {
+  document.documentElement.style.removeProperty(name);
+}
 
 // @NOTE css1_root.css => getCss
 export const main_css = {

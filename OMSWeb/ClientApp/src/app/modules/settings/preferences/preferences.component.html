@@ -27,45 +27,37 @@
 
     <div class="form-grid">
       <oms-color-picker
+        *ngFor="let item of themeItems"
         class="form-item home"
-        configName="--monitor-background-color"
-        [name]="'names.homeBgColor' | translate"
+        [configName]="item.style"
+        [name]="'names.' + item.name | translate"
       ></oms-color-picker>
-      <oms-color-picker
-        class="form-item playback"
-        configName="--playback-background-color"
-        [name]="'names.playbackBgColor' | translate"
-      ></oms-color-picker>
-      <oms-color-picker
-        class="form-item station"
-        configName="--station-color"
-        [name]="'names.station' | translate"
-      ></oms-color-picker>
-      <oms-color-picker
-        class="form-item buffer"
-        configName="--buffer-color"
-        [name]="'names.buffer' | translate"
-      ></oms-color-picker>
-      <oms-color-picker
-        class="form-item point"
-        configName="--point-color"
-        [name]="'names.point' | translate"
-      ></oms-color-picker>
-      <oms-color-picker
-        class="form-item point"
-        configName="--expected-path-color"
-        [name]="'names.vehiclePath' | translate"
-      ></oms-color-picker>
-      <oms-color-picker
-        class="form-item segment"
-        configName="--segment-color"
-        [name]="'names.segmentNormal' | translate"
-      ></oms-color-picker>
-      <oms-color-picker
-        class="form-item segment-disabled"
-        configName="--segment-color-disabled"
-        [name]="'names.segmentDisabled' | translate"
-      ></oms-color-picker>
+    </div>
+
+    <div class="actions">
+      <mat-form-field class="dense theme-selector" appearance="outline">
+        <mat-select
+          #themeItemSelector
+          [value]="resetThemeTargets"
+          [placeholder]="'names.selectResetItem' | translate"
+          (selectionChange)="onSelectResetTheme($event)"
+          multiple
+        >
+          <mat-option *ngFor="let item of themeItems" [value]="item.style">{{
+            "names." + item.name | translate
+          }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button
+        mat-raised-button
+        class="dense"
+        [disabled]="!canResetTheme"
+        color="primary"
+        (click)="onResetTheme()"
+      >
+        {{ "names.resetToDefault" | translate }}
+      </button>
     </div>
   </fieldset>
 </div>

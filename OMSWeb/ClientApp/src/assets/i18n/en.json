@@ -285,7 +285,9 @@
     "showOmsVersion": "Show OMS version",
     "segmentNormal": "Segment - normal",
     "segmentDisabled": "Segment - disabled",
-    "revert": "Read"
+    "revert": "Read",
+    "selectResetItem": "Select items to reset",
+    "resetToDefault": "Reset to default"
   },
   "enums": {
     "hostSessionStatus": {

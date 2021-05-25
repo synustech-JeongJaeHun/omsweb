@@ -18,3 +18,13 @@ fieldset {
     grid-column-start: 1;
   }
 }
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.theme-selector {
+  width: 240px;
+  margin-right: 8px;
+}
