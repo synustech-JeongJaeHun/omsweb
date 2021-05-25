@@ -21,6 +21,7 @@ export class UnitPickerComponent implements OnInit, OnChanges {
   @Input() gridHeight: number = 200;
   @Input() pool: number[] = [];
   @Input() picked: number[] = [];
+  @Input() disabled = false;
   @Output() selectionChanged = new EventEmitter<number[]>();
 
   selectedAssignedIds: number[] = [];

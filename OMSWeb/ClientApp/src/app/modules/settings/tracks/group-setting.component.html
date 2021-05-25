@@ -21,13 +21,11 @@
   </div>
 </div>
 
-<div id="no-data" *ngIf="noData">No Data</div>
-
-<ng-container *ngIf="!noData && ready">
+<ng-container *ngIf="ready">
   <div class="sub-bar">
     <mat-label>{{ "names.selectedGroup" | translate }}</mat-label>
     <mat-form-field class="index-selector dense" appearance="outline">
-      <mat-select [(value)]="selectedItem">
+      <mat-select [disabled]="noData" [(value)]="selectedItem">
         <mat-option *ngFor="let item of groups" [value]="item">{{
           item.id
         }}</mat-option>
@@ -40,6 +38,7 @@
       [title]="'names.homePointList' | translate"
       [unitName]="'names.point' | translate"
       [pool]="points"
+      [disabled]="noData"
       [picked]="assignedPoints"
       (selectionChanged)="onChange('points', $event)"
     ></oms-unit-picker>
@@ -47,6 +46,7 @@
       [title]="'names.stationList' | translate"
       [unitName]="'names.station' | translate"
       [pool]="stations"
+      [disabled]="noData"
       [picked]="assignedStations"
       (selectionChanged)="onChange('stations', $event)"
     ></oms-unit-picker>
@@ -54,6 +54,7 @@
       [title]="'names.vehicleList' | translate"
       [unitName]="'names.vehicle' | translate"
       [pool]="vehicles"
+      [disabled]="noData"
       [picked]="assignedVehicles"
       (selectionChanged)="onChange('vehicles', $event)"
     ></oms-unit-picker>
@@ -61,6 +62,7 @@
       [title]="'names.bufferList' | translate"
       [unitName]="'names.buffer' | translate"
       [pool]="buffers"
+      [disabled]="noData"
       [picked]="assignedBuffers"
       (selectionChanged)="onChange('buffers', $event)"
     ></oms-unit-picker>

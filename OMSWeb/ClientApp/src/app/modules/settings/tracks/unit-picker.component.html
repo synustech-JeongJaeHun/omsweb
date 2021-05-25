@@ -4,6 +4,7 @@
   <div class="unassigned-list">
     <dx-data-grid
       [dataSource]="unassigned"
+      [disabled]="disabled"
       [showBorders]="true"
       [(selectedRowKeys)]="selectedUnassignedIds"
       [height]="gridHeight"
@@ -26,16 +27,17 @@
     </dx-data-grid>
   </div>
   <div class="actions">
-    <button mat-icon-button (click)="onUnassign()">
+    <button mat-icon-button (click)="onUnassign()" [disabled]="disabled">
       <mat-icon>arrow_left</mat-icon>
     </button>
-    <button mat-icon-button (click)="onAssign()">
+    <button mat-icon-button (click)="onAssign()" [disabled]="disabled">
       <mat-icon>arrow_right</mat-icon>
     </button>
   </div>
   <div class="assigned-list">
     <dx-data-grid
       [dataSource]="picked"
+      [disabled]="disabled"
       [showBorders]="true"
       [(selectedRowKeys)]="selectedAssignedIds"
       [height]="gridHeight"
