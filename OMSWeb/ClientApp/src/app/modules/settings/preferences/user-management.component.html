@@ -24,11 +24,11 @@
 </div>
 
 <div class="sub-links">
-  <button mat-flat-button (click)="onRoleSetting()">
-    {{ "names.rolesSetting" | translate }}...
-  </button>
-
   <div class="sub-actions">
+    <a mat-flat-button class="action-link" (click)="onRoleSetting()">
+      {{ "names.rolesSetting" | translate }}...
+    </a>
+
     <button mat-stroked-button class="dense" (click)="onAddUser(grid)">
       <mat-icon>add</mat-icon>
     </button>

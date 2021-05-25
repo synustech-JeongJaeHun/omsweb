@@ -4,11 +4,13 @@
   // left: 0;
   z-index: 1;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
 
   .sub-actions {
     justify-self: flex-end;
+    display: flex;
+    align-items: center;
 
     button {
       margin-left: 4px;
@@ -16,5 +18,11 @@
       min-width: 40px;
       height: 24px;
     }
+  }
+
+  a.action-link {
+    color: var(--theme-primary-color);
+    text-decoration: underline;
+    margin-right: 20px;
   }
 }
