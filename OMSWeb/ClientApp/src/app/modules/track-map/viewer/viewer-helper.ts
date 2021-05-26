@@ -122,7 +122,6 @@ export class ViewController {
     value: 8,
   };
   private segmentWidth = 2;
-  private segmentWidthFallback = 3;
   private map_rotation = 0;
   private snap_to_grid_distance = 500;
   private minimumSegmentLength = 500;
@@ -938,6 +937,13 @@ export class ViewController {
     this.set_transform(translate_x, translate_y, k, true, transition_type);
   }
 
+  private getSegmentWidth(value: number): number {
+    const level = this.calculate_zoom_level() + 1;
+    const width = Math.ceil((value * Math.pow(level, 3)) / 16);
+    // console.warn('### zoomLevel >>', value, level, width);
+    return width;
+  }
+
   //#region subscription event handlers
   onChangeVisibility(event: IMapToolbarToggleEvent) {
     const { type: objectType, value: visibility } = event;
@@ -969,11 +975,6 @@ export class ViewController {
             this.get_viewbox(),
             true
           );
-          if (visibility) {
-            this.updateSegmentWidth(this.segmentWidthFallback);
-          } else {
-            this.updateSegmentWidth(this.segmentWidth);
-          }
         }
         break;
       case 'expectedPaths':
@@ -4913,9 +4914,7 @@ export class ViewController {
         ])})rotate(${-this.map_rotation})`
       );
     }
-    if (
-      this.layout_data.segments?.length > 0
-    ) {
+    if (this.layout_data.segments?.length > 0) {
       let segments = this.append_showing_polygons('SEGMENT', view_box);
       this.segments_adaptive_rendering(
         current_transform,
@@ -8051,7 +8050,9 @@ export class ViewController {
     }
   }
   updateSegmentWidth(width: number) {
-    this.segments_svg.selectAll('path').style('stroke-width', width);
+    this.segmentWidth = width;
+    const scaledWidth = this.getSegmentWidth(width);
+    this.segments_svg.selectAll('path').style('stroke-width', scaledWidth);
   }
   update_direction_arrow_scale(updated_width) {
     this.set_direction_scale(updated_width);
@@ -8899,7 +8900,7 @@ export class ViewController {
         .data(data, function (d) {
           return d.id;
         });
-        // Update
+      // Update
       if (zoom_level > 1) {
         this.directions_svg
           .attr('x', function (d) {
@@ -13048,6 +13049,8 @@ export class ViewController {
       excluded_segments
     );
 
+    const scaledSegmentWidth = this.getSegmentWidth(this.segmentWidth);
+
     // Update segments ============================= //
     this.segments_svg = this.get_svg_class('SEGMENT').select('.segment');
     if (this.segments_svg.nodes().length === 0) {
@@ -13064,7 +13067,8 @@ export class ViewController {
     }
     path
       .attr('d', segment_path_data.path)
-      .attr('stroke-width', `${this.preferences.toggles.clusters ? this.segmentWidthFallback : this.segmentWidth}px`);
+      .style('stroke-width', scaledSegmentWidth)
+      // .attr('stroke-width', `${scaledSegmentWidth}px`);
 
     let mask = this.segments_svg.select('.segment_mask');
     if (mask.nodes().length === 0) {
@@ -13092,7 +13096,7 @@ export class ViewController {
     }
     disbled_path
       .attr('d', segment_path_data.disabled_path)
-      .attr('stroke-width', `${this.preferences.toggles.clusters ? this.segmentWidthFallback : this.segmentWidth}px`);
+      .attr('stroke-width', `${scaledSegmentWidth}px`);
 
     // Invalid path ============================= //
     let invalid_path = this.segments_svg.select('.segment_path.non_validate');
@@ -13103,7 +13107,7 @@ export class ViewController {
     }
     invalid_path
       .attr('d', segment_path_data.invalid_path)
-      .attr('stroke-width', `${this.preferences.toggles.clusters ? this.segmentWidthFallback : this.segmentWidth}px`);
+      .attr('stroke-width', `${scaledSegmentWidth}px`);
 
     // this.segments_svg = this.get_svg_class('SEGMENT').selectAll('g.segment')
 
