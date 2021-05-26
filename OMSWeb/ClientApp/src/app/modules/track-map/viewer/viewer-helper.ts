@@ -122,6 +122,7 @@ export class ViewController {
     value: 8,
   };
   private segmentWidth = 2;
+  private segmentWidthFallback = 3;
   private map_rotation = 0;
   private snap_to_grid_distance = 500;
   private minimumSegmentLength = 500;
@@ -968,6 +969,11 @@ export class ViewController {
             this.get_viewbox(),
             true
           );
+          if (visibility) {
+            this.updateSegmentWidth(this.segmentWidthFallback);
+          } else {
+            this.updateSegmentWidth(this.segmentWidth);
+          }
         }
         break;
       case 'expectedPaths':
@@ -13058,7 +13064,7 @@ export class ViewController {
     }
     path
       .attr('d', segment_path_data.path)
-      .attr('stroke-width', `${this.segmentWidth}px`);
+      .attr('stroke-width', `${this.preferences.toggles.clusters ? this.segmentWidthFallback : this.segmentWidth}px`);
 
     let mask = this.segments_svg.select('.segment_mask');
     if (mask.nodes().length === 0) {
@@ -13086,7 +13092,7 @@ export class ViewController {
     }
     disbled_path
       .attr('d', segment_path_data.disabled_path)
-      .attr('stroke-width', `${this.segmentWidth}px`);
+      .attr('stroke-width', `${this.preferences.toggles.clusters ? this.segmentWidthFallback : this.segmentWidth}px`);
 
     // Invalid path ============================= //
     let invalid_path = this.segments_svg.select('.segment_path.non_validate');
@@ -13097,7 +13103,7 @@ export class ViewController {
     }
     invalid_path
       .attr('d', segment_path_data.invalid_path)
-      .attr('stroke-width', `${this.segmentWidth}px`);
+      .attr('stroke-width', `${this.preferences.toggles.clusters ? this.segmentWidthFallback : this.segmentWidth}px`);
 
     // this.segments_svg = this.get_svg_class('SEGMENT').selectAll('g.segment')
 
