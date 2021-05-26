@@ -15,6 +15,7 @@ export class ShowObjectDialogComponent implements OnInit {
     vehicleScale: 3,
     mapRotation: 0,
     segmentWidth: 2,
+    segmentDirectionSize: 2,
   };
 
   constructor(
@@ -24,12 +25,13 @@ export class ShowObjectDialogComponent implements OnInit {
 
   ngOnInit(): void {
     const {
-      map: { mapRotation, vehicleScale, segmentWidth },
+      map: { mapRotation, vehicleScale, segmentWidth, segmentDirectionSize },
     } = this.stateSvc.preferences;
     this.slideValues = {
       vehicleScale,
       mapRotation,
       segmentWidth,
+      segmentDirectionSize,
     };
   }
 

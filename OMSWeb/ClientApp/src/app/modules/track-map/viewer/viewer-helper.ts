@@ -59,8 +59,6 @@ export class ViewController {
   private KEY_EXTSEL = this.KEY_SHIFT; // extend selection
 
   // constant bounds for various parameters
-  private DIRECTION_ARROW_SCALE_MIN = 2;
-  private DIRECTION_ARROW_SCALE_MAX = 13;
   private LOCATION_SCALE_MIN = 10;
   private LOCATION_SCALE_MAX = 75;
   private VEHICLE_SCALE_MIN = 3;
@@ -110,8 +108,6 @@ export class ViewController {
   private is_permitted: any = {};
   private disallowed_toolbar_buttons = [];
   private direction_arrow_scale = {
-    min: this.DIRECTION_ARROW_SCALE_MIN,
-    max: this.DIRECTION_ARROW_SCALE_MAX,
     scale: 1,
     value: 5,
   };
@@ -1075,6 +1071,9 @@ export class ViewController {
       case 'segmentWidth':
         this.updateSegmentWidth(event.value);
         break;
+      case 'segmentDirectionSize':
+        this.update_direction_arrow_scale(event.value);
+        break;
       default:
         break;
     }
@@ -1179,9 +1178,14 @@ export class ViewController {
     // @TODO initStates 구현 (v1 : get_ui_states)
     const { map = {} } = this.statesSvc.preferences || {};
     this.vehicle_scale.value = Number(map.vehicleScale).valueOf();
+    map.segmentDirectionSize &&
+      (this.direction_arrow_scale.value = Number(
+        map.segmentDirectionSize
+      ).valueOf());
     this.map_rotation = map.mapRotation;
     map.segmentWidth && (this.segmentWidth = map.segmentWidth);
     this.set_vehicle_scale(this.vehicle_scale.value);
+    this.set_direction_scale(this.direction_arrow_scale.value);
   }
 
   private initSvg(target_id: string, mapSize: IMapSize) {
@@ -1230,6 +1234,7 @@ export class ViewController {
         y: height - lower_limit.y,
       };
     }
+
     // init d3
     this.d3_main = d3
       .zoom()
@@ -4903,8 +4908,7 @@ export class ViewController {
       );
     }
     if (
-      this.layout_data.segments !== undefined &&
-      this.layout_data.segments.length > 0
+      this.layout_data.segments?.length > 0
     ) {
       let segments = this.append_showing_polygons('SEGMENT', view_box);
       this.segments_adaptive_rendering(
@@ -7587,15 +7591,6 @@ export class ViewController {
       this.minimap_path_svg = this.minimap_svg.append('path');
     }
 
-    // if(geometry.trackSize.minX < 0){ // If min x value is negative
-    //     translate_x = -geometry.trackSize.minX * current_transform_scale
-    // } else{
-    //     translate_x = -geometry.trackSize.minX * current_transform_scale
-    // }
-    // if(geometry.trackSize.minY < 0){ // If min y value is negative
-    //     translate_y = geometry.trackSize.minY * current_transform_scale
-    // }
-
     this.minimap_path_svg
       .attr('id', 'minimap_path')
       .attr('d', () => {
@@ -8052,6 +8047,36 @@ export class ViewController {
   updateSegmentWidth(width: number) {
     this.segments_svg.selectAll('path').style('stroke-width', width);
   }
+  update_direction_arrow_scale(updated_width) {
+    this.set_direction_scale(updated_width);
+
+    // Get latest zoom value
+    let current_transform = this.getZoom(MapTypes.MAIN);
+
+    let zoom_level = this.calculate_zoom_level();
+
+    // Calculate viewing area
+    let view_box = this.get_viewbox();
+
+    // Update direction arrows
+    this.directions_adaptive_rendering(
+      zoom_level,
+      current_transform,
+      main_css.segment,
+      view_box,
+      true
+    );
+  }
+
+  set_direction_scale(updated_width: number) {
+    // Calcualte scale value
+    let original_width = main_css.segment.direction_width;
+    let updated_scale_value = updated_width / original_width;
+
+    // Set scale value
+    this.direction_arrow_scale.scale = updated_scale_value;
+    this.direction_arrow_scale.value = updated_width;
+  }
   update_vehicle_scale(updated_radius: number, is_save_state: boolean = false) {
     this.set_vehicle_scale(updated_radius, is_save_state);
 
@@ -8234,7 +8259,6 @@ export class ViewController {
       selective_level = this.option.selective_lvl_display,
       direction_display = [];
 
-    // if (zoom_level >= selective_level.direction || this.show_direction_arrows) {
     if (
       zoom_level >= selective_level.direction ||
       this.preferences.toggles.segmentDirections
@@ -8869,7 +8893,7 @@ export class ViewController {
         .data(data, function (d) {
           return d.id;
         });
-      // Update
+        // Update
       if (zoom_level > 1) {
         this.directions_svg
           .attr('x', function (d) {
@@ -8886,7 +8910,7 @@ export class ViewController {
           })
           .each((d) => {
             let d3_this = d3
-              .select(`#id_${d.id}.point`)
+              .select(`#id_${d.id}.direction`)
               .select('.dir_triangle');
             if (d3_this) {
               d3_this.attr(
@@ -8940,7 +8964,7 @@ export class ViewController {
         this.get_svg_class('SEGMENT_DIRECTION').selectAll('g.direction');
       if (group_type === 'LAYOUT') {
         this.directions_svg.selectAll('.dir_triangle').each((d) => {
-          d3.select(`#id_${d.id}.direction`).attr(
+          d3.select(`#dir_triangle_${d.id}.dir_triangle`).attr(
             'transform',
             `rotate(${Math.trunc(CommonUtil.degrees(d.dirAngle))},0,0)scale(${
               this.direction_arrow_scale.scale
@@ -13569,7 +13593,7 @@ export class ViewController {
       currentZoom = {
         x: 0,
         y: 0,
-        k: 1,
+        k: zoomRatio,
       };
       this.setZoom(mapType, currentZoom);
     } else {

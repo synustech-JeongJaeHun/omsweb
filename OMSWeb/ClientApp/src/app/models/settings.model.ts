@@ -15,6 +15,7 @@ export class MapConfig {
   vehicleScale?: number = main_css.vehicle.radius;
   mapRotation?: number = 0;
   segmentWidth?: number = 2;
+  segmentDirectionSize? = 5;
 }
 
 export class ThemeConfig {
