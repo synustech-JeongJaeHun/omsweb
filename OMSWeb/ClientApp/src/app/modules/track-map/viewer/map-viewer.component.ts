@@ -99,6 +99,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.saveUiStates();
     this.destroy$.next();
     this.destroy$.complete();
     this.dataSvc.clear();
@@ -294,6 +295,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     this.groupIds = this.dataSvc.data.groups.map((g) => g.id);
 
     this.attachEvents();
+    this.applyUiStates();
 
     this.trackRendered.emit();
   }
@@ -346,6 +348,15 @@ export class MapViewerComponent implements OnInit, OnDestroy {
       console.log('### context data >>', this.contextData);
       this.currentContextEvent = event;
     }, 0);
+  }
+  private applyUiStates() {
+    this.viewer.setUiStates(this.settingSvc.globalPreferences.uiStates);
+  }
+  private saveUiStates() {
+    const states = this.viewer.getUiStates();
+    const pref = this.settingSvc.globalPreferences;
+    pref.uiStates = {...pref.uiStates, ...states};
+    this.settingSvc.globalPreferences.save();
   }
   private closeContextMenu() {
     this.contextData = undefined;

@@ -37,7 +37,7 @@ import { MTL } from '../../../models/mtl.model';
 import { Point } from '../../../models/point.model';
 import { MapStatesService } from '../map-states.service';
 import { MapDataService } from '../map-data.service';
-import { IPreferences } from '../../../models/settings.model';
+import { IPreferences, UiStates } from '../../../models/settings.model';
 import {} from '@oms/models/drawing.model';
 import { EventEmitter } from '@angular/core';
 import { Group } from '../../../models/group.model';
@@ -1100,6 +1100,20 @@ export class ViewController {
     this.set_transform(zoom.x, zoom.y, zoom.k, true, 'INSTANT');
   }
   //#endregion
+
+  getUiStates(): UiStates {
+    const { x, y, k } = this.getZoom(MapTypes.MAIN);
+    return {
+      zoom: { x, y, k },
+    };
+  }
+  setUiStates({zoom}: UiStates) {
+    if (!zoom) return;
+    const {x, y, k} = zoom;
+    this.set_transform(x, y, k, true, 'INSTANT');
+    this.adjust_floaters();
+  }
+
   get_defaults() {
     // start with known sane values for all of the options we use
     let defaults = {
@@ -13067,8 +13081,8 @@ export class ViewController {
     }
     path
       .attr('d', segment_path_data.path)
-      .style('stroke-width', scaledSegmentWidth)
-      // .attr('stroke-width', `${scaledSegmentWidth}px`);
+      .style('stroke-width', scaledSegmentWidth);
+    // .attr('stroke-width', `${scaledSegmentWidth}px`);
 
     let mask = this.segments_svg.select('.segment_mask');
     if (mask.nodes().length === 0) {

@@ -1,6 +1,7 @@
 import { ToggleOptionKeyType } from './enums';
 import { StorageUtil } from '@oms/utils/storage.util';
 import { main_css } from '../modules/shared/utils/css-loader';
+import { IZoom } from './drawing.model';
 
 export type ToggleOptionsType = {
   [key in ToggleOptionKeyType]: boolean;
@@ -32,6 +33,7 @@ export interface IPreferences {
 
 export class UiStates {
   controlTab?: number = 0;
+  zoom?: IZoom;
 }
 
 export const defaultToggleOptions: ToggleOptionsType = {
