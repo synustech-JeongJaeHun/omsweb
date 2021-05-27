@@ -4,6 +4,9 @@
   [class.has-issue]="hasWarn"
   [class.is-critical]="isCriticalWarn"
   (click)="toggleWarnsView()"
+  matTooltipClass="gnb-tooltip"
+  matTooltipPosition="below"
+  matTooltip="Warnings"
 >
   <mat-icon
     [matBadge]="warnValue"
@@ -19,6 +22,9 @@
   [class.has-issue]="hasAlarm"
   [class.is-critical]="isCriticalAlarm"
   (click)="toggleAlarmsView()"
+  matTooltipClass="gnb-tooltip"
+  matTooltipPosition="below"
+  matTooltip="Alarms"
 >
   <mat-icon
     [fontSet]="hasAlarm ? '' : 'material-icons-outlined'"

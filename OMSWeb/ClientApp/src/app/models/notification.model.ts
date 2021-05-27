@@ -1,4 +1,4 @@
-import { Dto } from "./dto/track.model";
+import { Dto } from './dto/track.model';
 
 export interface INotificationCount {
   level1: number;
@@ -57,3 +57,14 @@ export interface IDataChangeEvent {
   vehicleId?: number;
   data?: any;
 }
+
+export const alertSeverities = [
+  {
+    name: 'Warning',
+    value: 0,
+  },
+  {
+    name: 'Critical',
+    value: 1,
+  },
+];

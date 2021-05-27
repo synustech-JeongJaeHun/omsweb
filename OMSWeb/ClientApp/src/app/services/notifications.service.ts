@@ -1,7 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { EMPTY, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { IKeyValuePair } from '../models/base.model';
+import { AlertSeverities } from '../models/enums';
 
 import {
   IAlert,
@@ -48,5 +50,10 @@ export class NotificationsService {
     // return this.http.get<IVehicleAlarm[]>(
     //   `${this.baseUrl}/alarms/${status}/${level}/${keyword}`
     // );
+  }
+
+  clearAlerts(ids: number[]): Observable<void> {
+    console.error('@@ TODO : clear alert api 구현 필요');
+    return EMPTY;
   }
 }

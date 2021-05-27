@@ -289,7 +289,12 @@
     "revert": "Read",
     "selectResetItem": "Select items to reset",
     "resetToDefault": "Reset to default",
-    "segmentDirection": "Segment Direction"
+    "segmentDirection": "Segment Direction",
+    "all": "All",
+    "clear": "Clear",
+    "clearAll": "All Clear",
+    "cleared": "Cleared",
+    "notCleared": "Not Cleared"
   },
   "enums": {
     "hostSessionStatus": {
