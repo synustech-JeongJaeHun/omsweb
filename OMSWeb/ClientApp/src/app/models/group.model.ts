@@ -12,6 +12,7 @@ export class Group {
     mtl: number[];
     vehicle: number[];
     point: number[];
+    home: number[];
   };
 
   constructor(row: Dto.IGroup) {
@@ -22,32 +23,15 @@ export class Group {
       mtl: [],
       vehicle: [],
       point: [],
+      home: [],
     };
     objects.forEach((o) => {
       const { id: objectId, type: objectType } = o;
-      const propName = this.getPropName(objectType);
-      this.objects[propName].push(objectId);
+      this.objects[objectType] && this.objects[objectType].push(objectId);
     });
     this.id = id;
     this.color = color;
     this.logicalId = logicalId;
-  }
-
-  private getPropName(rawName: string): string {
-    switch (rawName) {
-      case 'stations':
-        return 'station';
-      case 'buffers':
-        return 'buffer';
-      case 'mtls':
-        return 'mtl';
-      case 'vehicles':
-        return 'vehicle';
-      case 'points':
-        return 'point';
-      default:
-        break;
-    }
   }
 
   get_track_objects() {

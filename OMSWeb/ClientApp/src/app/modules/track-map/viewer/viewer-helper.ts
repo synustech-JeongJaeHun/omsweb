@@ -9549,22 +9549,24 @@ export class ViewController {
       // d3 select svg elements for manipulation
       this.buffers_svg = this.get_svg_class(object_type).selectAll('g.buffer');
       this.buffers_path = this.buffers_svg.selectAll('.buffer_path');
-      // buffers_mask = this.buffers_svg.selectAll('.buffer_mask')
       // @NOTE 선언되지 않은 변수
       // buffers_details = this.buffers_svg.selectAll(
       //   '.label, .port_foup, .port_foup_label'
       // );
       if (group_type === 'LAYOUT') {
+        const rotation = this.map_rotation;
+        const locationScale = this.location_scale.scale;
+
         this.buffers_svg
           .selectAll('.buffer_path, .buffer_mask, .group_svg, .hover, .select')
-          .each((d) => {
+          .each(function(d: any) {
             // d3.select(this).attr(
-            d3.select(`#id_${d.id}.buffer`).attr(
+            d3.select(this).attr(
               'transform',
               `translate(${d.directionOffset.x * group_offset_multiplier}, ${
                 d.directionOffset.y * group_offset_multiplier
-              })rotate(${-this.map_rotation})scale(${
-                this.location_scale.scale
+              })rotate(${-rotation})scale(${
+                locationScale
               })`
             );
           });
