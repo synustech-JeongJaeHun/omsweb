@@ -62,6 +62,7 @@ namespace OMSWeb.Controllers
       this._cache.RemoveValue(CacheKeys.Stations);
       this._cache.RemoveValue(CacheKeys.VehiclePaths);
       this._cache.RemoveValue(CacheKeys.Vehicles);
+      this._cache.RemoveValue(CacheKeys.Zcus);
 
       return "OK";
     }

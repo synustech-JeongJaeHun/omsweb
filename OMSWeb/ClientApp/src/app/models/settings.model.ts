@@ -46,6 +46,7 @@ export const defaultToggleOptions: ToggleOptionsType = {
   stations: true,
   buffers: false,
   groups: true,
+  zcus: true,
   mtls: true,
   vehicles: true,
   clusters: true,

@@ -31,6 +31,7 @@ namespace OMSWeb.Services
         VehiclePaths = this._trackRepo.LoadVehiclePaths(),
         Vehicles = this._trackRepo.LoadVehiclePositions(),
         Groups = this._trackRepo.LoadGroups(),
+        Zcus = this._trackRepo.LoadZcus(),
       };
       return map;
     }
@@ -59,6 +60,8 @@ namespace OMSWeb.Services
           return this._trackRepo.LoadVehiclePositions().ToArray() as dynamic[];
         case CacheKeys.Groups:
           return this._trackRepo.LoadGroups().ToArray() as dynamic[];
+        case CacheKeys.Zcus:
+          return this._trackRepo.LoadZcus().ToArray() as dynamic[];
         default:
           return null;
       }

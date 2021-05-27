@@ -116,6 +116,18 @@ export const main_css = {
     icon_level2: convert_path_to_str(getCss('--mtl-icon-level2')),
     icon_level3: convert_path_to_str(getCss('--mtl-icon-level3')),
   },
+  zcu: {
+    radius: parseInt(getCss('--zcu-radius')),
+    width: parseInt(getCss('--zcu-width')),
+    line_weight: parseInt(getCss('--zcu-line-weight')),
+    color_zcu: getCss('--zcu-color'),
+    label_color: getCss('--zcu-label-color'),
+    font_size: parseInt(getCss('--element-font-size')),
+    text_offset: parseInt(getCss('--zcu-text-offset')),
+    icon_level1: convert_path_to_str(getCss('--zcu-icon-level1')),
+    icon_level2: convert_path_to_str(getCss('--zcu-icon-level2')),
+    icon_level3: convert_path_to_str(getCss('--zcu-icon-level3')),
+  },
   cluster: {
     line_weight: parseInt(getCss('--cluster-line-weight')),
     font_size: parseInt(getCss('--element-font-size')),

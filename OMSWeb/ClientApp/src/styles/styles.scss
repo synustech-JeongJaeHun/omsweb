@@ -214,6 +214,17 @@
   --mtl-icon-level2: "m-10 10 l5 -10 l-5 -10 l20 0 l-5 10 l5 10";
   --mtl-icon-level3: "m-13.5 13.5 l4.5 -4.5 l-4.5 -4.5 l4.5 -4.5 l-4.5 -4.5 l4.5 -4.5 l-4.5 -4.5 l27 0 l-4.5 4.5 l4.5 4.5 l-4.5 4.5 l4.5 4.5 l-4.5 4.5 l4.5 4.5 m-22.5 -22.5 l18 0";
 
+  /* ZCU Variables */
+  --zcu-radius: 26;
+  --zcu-width: 30;
+  --zcu-line-weight: 3;
+  --zcu-color: rgb(100, 100, 100);
+  --zcu-label-color: rgb(0, 0, 0);
+  --zcu-text-offset: 19;
+  --zcu-icon-level1: "M-10,0 L0,-10 L10,0 L0,10 L-10,0 z";
+  --zcu-icon-level2: "M-16,0 L0,-16 L16,0 L0,16 L-16,0 z";
+  --zcu-icon-level3: "M-24,0 L0,-24 L24,0 L0,24 L-24,0 z";
+
   /* Cluster Variables */
   --cluster-line-weight: 6;
   --cluster-text-offset: 10;

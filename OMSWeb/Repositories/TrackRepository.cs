@@ -249,6 +249,22 @@ namespace OMSWeb.Repositories
       }
       return data;
     }
+
+    public List<Zcu> LoadZcus()
+    {
+      var key = CacheKeys.Zcus;
+      var data = _cache.GetValue<List<Zcu>>(key);
+      if (data == null)
+      {
+        string sql = @"select id, x, y, using_type, zcu_type from zcus";
+        using (var conn = ConnectTrack())
+        {
+          data = conn.Query<Zcu>(sql).AsList();
+        }
+        _cache.SetValue<List<Zcu>>(key, data, DateTimeOffset.Now.AddMinutes(CACHE_LIFE));
+      }
+      return data;
+    }
     public List<Cluster> LoadClusters()
     {
       var key = CacheKeys.Clusters;

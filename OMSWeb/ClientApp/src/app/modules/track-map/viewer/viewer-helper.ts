@@ -101,6 +101,9 @@ export class ViewController {
       mtl_min: 1,
       mtl_sim: 2,
       mtl_det: 3,
+      zcu_min: 1,
+      zcu_sim: 2,
+      zcu_det: 3,
       vehicle: 1,
     },
   };
@@ -223,6 +226,8 @@ export class ViewController {
   private mtls_path;
   private vehicle_svg;
   private expected_path_svg;
+  private zcus_svg;
+  private zcus_path;
 
   // Editing
   private selection_svg;
@@ -307,7 +312,10 @@ export class ViewController {
           let current_zoom = this.getZoom(MapTypes.MAIN);
           let actual_delta: any = {};
 
-          this.selection_filter(['STATION', 'BUFFER', 'MTL', 'SEGMENT'], null);
+          this.selection_filter(
+            ['STATION', 'BUFFER', 'MTL', 'ZCU', 'SEGMENT'],
+            null
+          );
 
           if (
             this.get_selected_objects('SEGMENT').length > 0 &&
@@ -1107,9 +1115,9 @@ export class ViewController {
       zoom: { x, y, k },
     };
   }
-  setUiStates({zoom}: UiStates) {
+  setUiStates({ zoom }: UiStates) {
     if (!zoom) return;
-    const {x, y, k} = zoom;
+    const { x, y, k } = zoom;
     this.set_transform(x, y, k, true, 'INSTANT');
     this.adjust_floaters();
   }
@@ -1354,6 +1362,10 @@ export class ViewController {
         .append('g')
         .attr('class', 'mtl_group')
         .attr('group_type', 'mtl');
+      this.semantic_container
+        .append('g')
+        .attr('class', 'zcu_group')
+        .attr('group_type', 'zcu');
       this.semantic_container
         .append('g')
         .attr('class', 'vehicle_group')
@@ -1733,7 +1745,8 @@ export class ViewController {
         } else if (
           type_at_point === 'STATION' ||
           type_at_point === 'BUFFER' ||
-          type_at_point === 'MTL'
+          type_at_point === 'MTL' ||
+          type_at_point === 'ZCU'
         ) {
           point_of_interest = point_of_interest.pointId;
         }
@@ -2316,7 +2329,8 @@ export class ViewController {
       } else if (
         object_type === 'STATION' ||
         object_type === 'BUFFER' ||
-        object_type === 'MTL'
+        object_type === 'MTL' ||
+        object_type === 'ZCU'
       ) {
         base_point_id = current_object.pointId;
       } else if (object_type === 'VEHICLE') {
@@ -2879,7 +2893,12 @@ export class ViewController {
     // Find if stations of buffers are a part of the overlap
     let has_station_or_buffer = this.overlap_display_objects.find((object) => {
       let type = object.objectType.toUpperCase();
-      return type === 'STATION' || type === 'BUFFER' || type === 'MTL';
+      return (
+        type === 'STATION' ||
+        type === 'BUFFER' ||
+        type === 'MTL' ||
+        type === 'ZCU'
+      );
     });
 
     // Sizing rect element of the panel to fit stations and buffers
@@ -2928,6 +2947,8 @@ export class ViewController {
         this.update_dom('BUFFER', object, main_css.buffer, 3, 'OVERLAP', false);
       } else if (type === 'MTL') {
         this.update_dom('MTL', object, main_css.mtl, 3, 'OVERLAP', false);
+      } else if (type === 'ZCU') {
+        this.update_dom('ZCU', object, main_css.zcu, 3, 'OVERLAP', false);
       }
     } else if (operation === 'DELETE') {
       this.overlap_display_panel_svg.select(`#id_${object.id}`).remove();
@@ -3154,6 +3175,28 @@ export class ViewController {
         );
       }
     }
+
+    layout_objects = this.get_layout_objects('ZCU') || [];
+
+    // Check for zcu
+    for (let i = 0; i < layout_objects.length; i++) {
+      // Find matches
+      let exist_in_overlap = this.check_exist_overlap_list(
+        layout_objects[i],
+        adding_overlap_list
+      );
+      if (
+        layout_objects[i] &&
+        layout_objects[i].pointId === pointId &&
+        !exist_in_overlap
+      ) {
+        this.add_to_overlap_objects(
+          layout_objects[i],
+          adding_overlap_list,
+          overlap_type
+        );
+      }
+    }
   }
   display_side_panel_popup(object_type: string, layout_object: any) {
     if (this.mode !== 'MINIMAL') {
@@ -3277,6 +3320,7 @@ export class ViewController {
     let is_station_update = false;
     let is_buffer_update = false;
     let is_mtl_update = false;
+    let is_zcu_update = false;
     let is_cluster_update = false;
     let is_vehicle_update = false;
 
@@ -3291,6 +3335,8 @@ export class ViewController {
         is_buffer_update = true;
       } else if (update_category[i] === 'MTL') {
         is_mtl_update = true;
+      } else if (update_category[i] === 'ZCU') {
+        is_zcu_update = true;
       } else if (update_category[i] === 'CLUSTER') {
         is_cluster_update = true;
       } else if (update_category[i] === 'GROUP') {
@@ -3385,6 +3431,16 @@ export class ViewController {
       mtls.length > 0
     ) {
       this.update_dom('MTL', mtls, main_css.mtl, zoom_level, 'LAYOUT', false);
+    }
+
+    let zcus = this.append_showing_objects('ZCU', view_box); //append showing zcus
+    if (
+      this.preferences.toggles.zcus &&
+      is_zcu_update &&
+      zcus &&
+      zcus.length > 0
+    ) {
+      this.update_dom('ZCU', zcus, main_css.zcu, zoom_level, 'LAYOUT', false);
     }
 
     let clusters = this.append_showing_polygons('CLUSTER', view_box); //append showing clusters
@@ -3917,7 +3973,8 @@ export class ViewController {
       object_type === 'POINT' ||
       object_type === 'STATION' ||
       object_type === 'BUFFER' ||
-      object_type === 'MTL'
+      object_type === 'MTL' ||
+      object_type === 'ZCU'
     ) {
       dom.attr(
         'transform',
@@ -3998,6 +4055,7 @@ export class ViewController {
       let check_station = false;
       let check_buffer = false;
       let check_mtl = false;
+      let check_zcu = false;
 
       validation_opt.forEach((type) => {
         if (type === 'SEGMENT') {
@@ -4008,6 +4066,8 @@ export class ViewController {
           check_buffer = true;
         } else if (type === 'MTL') {
           check_mtl = true;
+        } else if (type === 'ZCU') {
+          check_zcu = true;
         }
       });
 
@@ -4043,7 +4103,8 @@ export class ViewController {
         } else if (
           (object_type === 'STATION' && check_station) ||
           (object_type === 'BUFFER' && check_buffer) ||
-          (object_type === 'MTL' && check_mtl)
+          (object_type === 'MTL' && check_mtl) ||
+          (object_type === 'ZCU' && check_zcu)
         ) {
           for (let j = 0; j < objects_list.length; j++) {
             let search_object = objects_list[j];
@@ -4208,6 +4269,12 @@ export class ViewController {
       this.mtls_svg = undefined;
       this.mtls_path = undefined;
       // this.mtls_details = undefined
+    }
+
+    if (this.zcus_svg) {
+      this.zcus_svg.remove();
+      this.zcus_svg = undefined;
+      this.zcus_path = undefined;
     }
 
     if (this.clusters_svg != undefined) {
@@ -4990,6 +5057,14 @@ export class ViewController {
         view_box
       );
     }
+    if (this.layout_data.zcus?.length) {
+      this.zcu_adaptive_rendering(
+        zoom_level,
+        current_transform,
+        main_css.zcu,
+        view_box
+      );
+    }
     if (
       this.layout_data.clusters !== undefined &&
       this.layout_data.clusters.length > 0
@@ -5264,6 +5339,41 @@ export class ViewController {
               .attr('transform', offset_transform)
               .lower();
           }
+        } else if (object_type === 'ZCU') {
+          if (detail_highlight) zoom_level = selective_level.zcu_det;
+          if (zoom_level >= selective_level.zcu_sim) {
+            if (zoom_level >= selective_level.zcu_det) {
+              // LVL 3
+              target_dom
+                .append('path')
+                .attr('class', css_class)
+                .attr('fill', 'none')
+                .attr('d', object_css.icon_level3)
+                .attr('stroke', highlight_color)
+                .attr('stroke-width', stroke_width)
+                .lower();
+            } else {
+              // LVL 2
+              target_dom
+                .append('path')
+                .attr('class', css_class)
+                .attr('d', object_css.icon_level2)
+                .attr('fill', 'none')
+                .attr('stroke', highlight_color)
+                .attr('stroke-width', stroke_width)
+                .lower();
+            }
+          } else {
+            // LVL 1
+            target_dom
+              .append('path')
+              .attr('class', css_class)
+              .attr('d', object_css.icon_level1)
+              .attr('fill', 'none')
+              .attr('stroke', highlight_color)
+              .attr('stroke-width', stroke_width)
+              .lower();
+          }
         } else if (object_type === 'MTL') {
           if (detail_highlight) zoom_level = selective_level.mtl_det;
           if (zoom_level >= selective_level.mtl_sim) {
@@ -5352,6 +5462,9 @@ export class ViewController {
         } else if (zoom_level === 3 && object_type === 'MTL') {
           // MTL only on level 3
           stroke_width = main_css.general.highlight_weight_mid + 'px';
+        } else if (zoom_level === 3 && object_type === 'ZCU') {
+          // ZCU only on level 3
+          stroke_width = main_css.general.highlight_weight_mid + 'px';
         } else if (object_type === 'CLUSTER') {
           // MTL only on level 3
           stroke_width = main_css.general.highlight_weight_mid + 'px';
@@ -5389,7 +5502,8 @@ export class ViewController {
         if (
           object_type === 'STATION' ||
           object_type === 'BUFFER' ||
-          object_type === 'MTL'
+          object_type === 'MTL' ||
+          object_type === 'ZCU'
         ) {
           let object_type_lowercase = object_type.toLowerCase();
           if (detail_highlight)
@@ -5443,6 +5557,23 @@ export class ViewController {
               .selectAll(`.${css_class}`)
               .attr('transform', offset_transform);
           } else if (object_type === 'MTL') {
+            let highlight_weight =
+              zoom_level > selective_level[`${object_type_lowercase}_sim`]
+                ? main_css.general.highlight_weight_mid
+                : main_css.general.highlight_weight_thin;
+
+            let highlighed_el = target_dom.select(`.${css_class}`);
+            if (
+              highlighed_el.node() &&
+              highlighed_el.attr('d') !== path_definition
+            ) {
+              target_dom
+                .select(`.${css_class}`)
+                .attr('d', path_definition)
+                .attr('stroke-width', highlight_weight)
+                .lower();
+            }
+          } else if (object_type === 'ZCU') {
             let highlight_weight =
               zoom_level > selective_level[`${object_type_lowercase}_sim`]
                 ? main_css.general.highlight_weight_mid
@@ -7171,6 +7302,100 @@ export class ViewController {
       this.clusters_svg.attr('transform', this.transform(current_transform));
     } else {
       this.update_dom('CLUSTER', [], css_setting, zoom_level, 'LAYOUT', true);
+    }
+  }
+  zcu_adaptive_rendering(
+    zoom_level: any,
+    current_transform: IZoom,
+    css_setting: any,
+    view_box: any,
+    need_update?: boolean
+  ) {
+    let update_svg = false,
+      selective_level = this.option.selective_lvl_display,
+      zcu_display = [];
+
+    // if (zoom_level >= 1 && this.show_mtls) {
+    if (zoom_level >= 1 && this.preferences.toggles.zcus) {
+      // find mtl
+      zcu_display = this.append_showing_objects('ZCU', view_box);
+
+      // If there are elements to show
+      if (zcu_display.length > 0) {
+        if (!need_update && this.mtls_svg) {
+          // If there are already mtls in view
+          let changed = this.check_data_difference(
+            zcu_display,
+            this.zcus_svg.nodes()
+          );
+
+          // Check if updated_listed is different from already existing
+          if (changed) {
+            update_svg = true;
+          }
+
+          // Display According to zoom.current_main levels
+          if (zoom_level >= selective_level.zcu_sim) {
+            // LVL 2 check //
+            if (zoom_level >= selective_level.zcu_det) {
+              // LVL 3 //
+              if (
+                this.zcus_path.node() &&
+                this.zcus_path.attr('level') !== 'level3'
+              ) {
+                update_svg = true;
+              }
+            } else {
+              // LVL 2 =======================================//
+              if (
+                this.zcus_path.node() &&
+                this.zcus_path.attr('level') !== 'level2'
+              ) {
+                update_svg = true;
+              }
+            }
+          } else {
+            // LVL 1 ===========================================//
+            if (
+              this.zcus_path.node() &&
+              this.zcus_path.attr('level') !== 'level1'
+            ) {
+              update_svg = true;
+            }
+          }
+        } else {
+          // If there are none already existing
+          update_svg = true;
+        }
+
+        // Update dom
+        if (update_svg || need_update) {
+          this.update_dom(
+            'ZCU',
+            zcu_display,
+            css_setting,
+            zoom_level,
+            'LAYOUT',
+            false
+          );
+        }
+
+        // Apply transform values to all mtl svg elements
+        this.zcus_svg.attr('transform', this.transform(current_transform));
+      } else {
+        this.update_dom(
+          'ZCU',
+          zcu_display,
+          css_setting,
+          zoom_level,
+          'LAYOUT',
+          false
+        );
+      }
+    } else {
+      if (this.zcus_svg && this.zcus_svg.nodes().length > 0) {
+        this.update_dom('ZCU', [], css_setting, zoom_level, 'LAYOUT', false);
+      }
     }
   }
   mtl_adaptive_rendering(
@@ -9559,17 +9784,220 @@ export class ViewController {
 
         this.buffers_svg
           .selectAll('.buffer_path, .buffer_mask, .group_svg, .hover, .select')
-          .each(function(d: any) {
+          .each(function (d: any) {
             // d3.select(this).attr(
             d3.select(this).attr(
               'transform',
               `translate(${d.directionOffset.x * group_offset_multiplier}, ${
                 d.directionOffset.y * group_offset_multiplier
-              })rotate(${-rotation})scale(${
-                locationScale
-              })`
+              })rotate(${-rotation})scale(${locationScale})`
             );
           });
+      }
+    } else if (object_type === 'ZCU') {
+      if (show_overlap) {
+        // Add single object
+        if (overlap_objects_list.length > 0) {
+          overlap_element = overlap_element
+            .append('g')
+            .attr('class', `zcu_${overlap_class_string}`)
+            .attr('id', `id_${data.id}`)
+            .attr('x', data.invertedCoord.x)
+            .attr('y', data.invertedCoord.y)
+            .attr('transform', `translate(0, 0)`);
+
+          //Add to DOM
+          this.append_dom_subpart(
+            object_type,
+            overlap_element,
+            data,
+            dom_css,
+            zoom_level,
+            group_type,
+            group_colors
+          );
+          overlap_element
+            .select('.zcu_path')
+            .attr('d', dom_css.icon_level3)
+            .attr('level', 'level3');
+          overlap_element
+            .select('.zcu_mask')
+            .attr('d', dom_css.icon_level3)
+            .attr('level', 'level3');
+          this.append_dom_subpart(
+            'MTL_DETAIL',
+            overlap_element,
+            data,
+            dom_css,
+            zoom_level,
+            group_type,
+            group_colors
+          );
+        }
+      } else {
+        // load bulk objetcs
+        this.zcus_svg = this.get_svg_class(object_type)
+          .selectAll('.zcu')
+          .data(data, function (d) {
+            return d.id;
+          });
+
+        // Update existing elements if any
+        this.zcus_svg
+          .selectAll('.zcu_path, .zcu_mask')
+          .attr('d', main_css.zcu[`icon_level${zoom_level}`])
+          .attr('level', `level${zoom_level}`);
+
+        this.zcus_svg
+          .selectAll('.zcu_path')
+          .attr('fill', 'none')
+          .attr('stroke', dom_css.color_zcu)
+          .attr('stroke-width', dom_css.line_weight);
+
+        this.zcus_svg.attr('transform', (d) => {
+          return `translate(${current_zoom.apply([
+            d.invertedCoord.x,
+            d.invertedCoord.y,
+          ])})rotate(${-this.map_rotation})`;
+        });
+
+        if (zoom_level >= this.option.selective_lvl_display.zcu_det) {
+          this.zcus_svg.each((d) => {
+            // let d3_this = d3.select(this);
+            let d3_this = d3.select(`#id_${d.id}.zcu`);
+            let label = d3_this.select('.label');
+            if (label.node()) {
+              // exists already
+              label.text(function () {
+                return d.logicalId ? d.logicalId : d.id;
+              });
+            } else {
+              d3_this
+                .append('text')
+                .attr('class', 'label')
+                .attr('font-size', `${dom_css.font_size}px`)
+                .attr('x', dom_css.text_offset)
+                .attr('y', dom_css.width / 2)
+                .attr('text-anchor', 'start')
+                .text(function () {
+                  return d.logicalId ? d.logicalId : d.id;
+                });
+            }
+          });
+        }
+
+        // if (this.show_groups) {
+        if (this.preferences.toggles.groups) {
+          this.zcus_svg.each((d) => {
+            // let d3_this = d3.select(this);
+            let d3_this = d3.select(`#id_${d.id}.zcu`);
+            let group_svg = d3_this.select('.group_svg');
+            if (d.group) {
+              let size = main_css.group.track_group_size[zoom_level];
+              if (group_svg.nodes().length === 0) {
+                d3_this
+                  .append('rect')
+                  .attr('class', 'group_svg')
+                  .attr('zoom_level', `level_${zoom_level}`)
+                  .attr('x', -size / 2)
+                  .attr('y', -size / 2)
+                  .attr('rx', size / 4)
+                  .attr('ry', size / 4)
+                  .attr('width', size)
+                  .attr('height', size)
+                  .attr('fill', group_colors[d.group])
+                  .style('opacity', main_css.group.opacity)
+                  .lower();
+              } else if (
+                group_svg.nodes().length > 0 &&
+                (group_svg.attr('zoom_level') !== `level_${zoom_level}` ||
+                  group_svg.attr('fill') != group_colors[d.group])
+              ) {
+                group_svg
+                  .attr('zoom_level', `level_${zoom_level}`)
+                  .attr('x', -size / 2)
+                  .attr('y', -size / 2)
+                  .attr('rx', size / 4)
+                  .attr('ry', size / 4)
+                  .attr('width', size)
+                  .attr('height', size)
+                  .attr('fill', group_colors[d.group])
+                  .style('opacity', main_css.group.opacity);
+              }
+            } else {
+              group_svg.remove();
+            }
+          });
+        }
+
+        this.zcus_svg.exit().remove();
+        this.zcus_svg
+          .enter()
+          .append('g')
+          .attr('class', 'zcu')
+          .attr('id', function (d) {
+            return `id_${d.id}`;
+          })
+          .attr('g_type', 'main')
+          .attr('x', function (d) {
+            return d.invertedCoord.x;
+          })
+          .attr('y', function (d) {
+            return d.invertedCoord.y;
+          })
+          .attr('transform', (d) => {
+            return `translate(${current_zoom.apply([
+              d.invertedCoord.x,
+              d.invertedCoord.y,
+            ])})rotate(${-this.map_rotation})`;
+          })
+          .each((d) => {
+            // let d3_this = d3.select(this);
+            let d3_this = d3.select(`#id_${d.id}.zcu`);
+            this.append_dom_subpart(
+              object_type,
+              d3_this,
+              d,
+              main_css.zcu,
+              zoom_level,
+              group_type,
+              group_colors
+            );
+            if (zoom_level >= this.option.selective_lvl_display.zcu_det) {
+              this.append_dom_subpart(
+                'ZCU_DETAIL',
+                d3_this,
+                d,
+                main_css.zcu,
+                zoom_level,
+                group_type,
+                group_colors
+              );
+            }
+          });
+
+        // Add detail ===============================================//
+        if (zoom_level < this.option.selective_lvl_display.zcu_det) {
+          this.zcus_svg
+            .selectAll('.label, .port_foup, .port_foup_label')
+            .remove();
+        }
+      }
+      // d3 select svg elements for manipulation
+      this.zcus_svg = this.get_svg_class(object_type).selectAll('g.zcu');
+      this.zcus_path = this.zcus_svg.selectAll('.zcu_path');
+
+      // zcus_mask = this.zcus_svg.selectAll('.zcu_mask')
+      // @NOTE 선언되지 않은 변수
+      // zcus_details = this.zcus_svg.selectAll('.zcu text.label');
+
+      if (group_type === 'LAYOUT') {
+        this.zcus_svg
+          .selectAll('.zcu_path, .zcu_mask, .group_svg, .hover, .select')
+          .attr(
+            'transform',
+            `rotate(${-this.map_rotation})scale(${this.location_scale.scale})`
+          );
       }
     } else if (object_type === 'MTL') {
       // event_mask = '.mtl_mask'
@@ -9759,6 +10187,7 @@ export class ViewController {
       // d3 select svg elements for manipulation
       this.mtls_svg = this.get_svg_class(object_type).selectAll('g.mtl');
       this.mtls_path = this.mtls_svg.selectAll('.mtl_path');
+
       // mtls_mask = this.mtls_svg.selectAll('.mtl_mask')
       // @NOTE 선언되지 않은 변수
       // mtls_details = this.mtls_svg.selectAll('.mtl text.label');
@@ -10281,6 +10710,96 @@ export class ViewController {
             })rotate(${-this.map_rotation})`
           );
         }
+      }
+    } else if (object_type === 'ZCU') {
+      if (dom_object_group.select('path').node() === null) {
+        // Group svg
+        if (group_colors) {
+          if (layout_object.group) {
+            let group_svg = dom_object_group.select('.group_svg');
+            let size = main_css.group.track_group_size[zoom_level];
+            if (group_svg.nodes().length === 0) {
+              dom_object_group
+                .append('rect')
+                .attr('class', 'group_svg')
+                .attr('zoom_level', `level_${zoom_level}`)
+                .attr('x', -size / 2)
+                .attr('y', -size / 2)
+                .attr('rx', size / 4)
+                .attr('ry', size / 4)
+                .attr('width', size)
+                .attr('height', size)
+                .attr('fill', group_colors[layout_object.group])
+                .style('opacity', main_css.group.opacity)
+                .lower();
+            }
+          }
+        }
+
+        // Main Element
+        dom_object_group
+          .append('path')
+          .attr('d', main_css.zcu[`icon_level${zoom_level}`])
+          .attr('class', 'zcu_path')
+          .attr('fill', 'none')
+          .attr('stroke', dom_css.color_zcu)
+          .attr('stroke-width', dom_css.line_weight)
+          .attr('level', `level${zoom_level}`);
+
+        if (overlap_adjustment) {
+          dom_object_group
+            .append('rect')
+            .attr('class', 'zcu_mask')
+            .attr('fill', 'transparent')
+            .attr('x', 0)
+            .attr('y', 0)
+            .attr('width', 20)
+            .attr('height', 20);
+        } else {
+          dom_object_group
+            .append('path')
+            .attr('class', 'zcu_mask')
+            .attr('d', main_css.zcu[`icon_level${zoom_level}`])
+            .attr('level', `level${zoom_level}`)
+            .attr('stroke', 'transparent')
+            .attr('stroke-width', main_css.general.mask_weight / 2)
+            .attr('fill', 'none');
+        }
+
+        event_mask = '.zcu_mask';
+      }
+    } else if (object_type === 'ZCU_DETAIL') {
+      if (dom_object_group.select('text').node() === null) {
+        //Label
+        dom_object_group
+          .append('text')
+          .attr('class', 'label')
+          .attr('font-size', `${dom_css.font_size}px`)
+          .attr('x', function () {
+            if (overlap_adjustment) {
+              return dom_css.text_offset * 2;
+            } else {
+              return dom_css.text_offset;
+            }
+          })
+          .attr('y', function () {
+            if (overlap_adjustment) {
+              return 0;
+            } else {
+              return dom_css.width / 2;
+            }
+          })
+          .attr('text-anchor', 'start')
+          .text(function () {
+            let id = layout_object.logicalId
+              ? layout_object.logicalId
+              : layout_object.id;
+            if (overlap_adjustment) {
+              return `ZCU ${id}`;
+            } else {
+              return id;
+            }
+          });
       }
     } else if (object_type === 'MTL') {
       if (dom_object_group.select('path').node() === null) {
@@ -11633,6 +12152,15 @@ export class ViewController {
         this.layout_data.mtls.push(object);
 
         added_object_type.mtl = true;
+      } else if (object_type === 'ZCU') {
+        if (this.layout_data.zcus === undefined) {
+          this.layout_data.zcus = [];
+        }
+
+        // Add mtl
+        this.layout_data.zcus.push(object);
+
+        added_object_type.zcu = true;
       } else if (object_type === 'CLUSTER') {
         if (this.layout_data.clusters === undefined) {
           this.layout_data.clusters = [];
@@ -12062,6 +12590,16 @@ export class ViewController {
           false
         );
       }
+      if (this.zcus_svg && this.zcus_svg.nodes().length > 0) {
+        this.update_dom(
+          'ZCU',
+          this.layout_data.zcus,
+          main_css.zcu,
+          zoom_level,
+          'LAYOUT',
+          false
+        );
+      }
       if (this.clusters_svg && this.clusters_svg.nodes().length > 0) {
         this.update_dom(
           'CLUSTER',
@@ -12277,6 +12815,7 @@ export class ViewController {
       stations: showStations,
       buffers: showBuffers,
       mtls: showMtls,
+      zcus: showZcus,
       vehicles: showVehicles,
     } = this.preferences.toggles;
 
@@ -12306,6 +12845,15 @@ export class ViewController {
           'MTL',
           this.layout_data.mtls,
           main_css.mtl,
+          null,
+          'LAYOUT',
+          true
+        );
+      if (showZcus)
+        this.update_dom(
+          'ZCU',
+          this.layout_data.mtls,
+          main_css.zcu,
           null,
           'LAYOUT',
           true
@@ -12425,6 +12973,8 @@ export class ViewController {
           [object.pointFrom.invertedCoord.x, object.pointFrom.invertedCoord.y],
           [object.pointTo.invertedCoord.x, object.pointTo.invertedCoord.y],
         ];
+        // } else if (type === 'ZCU') {
+        //   pos = [[object.x, object.y]];
       } else {
         pos = [[object.invertedCoord.x, object.invertedCoord.y]];
       }
@@ -13467,6 +14017,8 @@ export class ViewController {
       return this.semantic_container.select('.buffer_group');
     } else if (class_type === 'MTL') {
       return this.semantic_container.select('.mtl_group');
+    } else if (class_type === 'ZCU') {
+      return this.semantic_container.select('.zcu_group');
     } else if (class_type === 'VEHICLE') {
       return this.semantic_container.select('.vehicle_group');
     } else if (class_type === 'GRID') {

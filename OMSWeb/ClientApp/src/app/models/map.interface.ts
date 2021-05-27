@@ -7,6 +7,7 @@ import { Station } from './station.model';
 import { MTL } from './mtl.model';
 import { Cluster } from './cluster.model';
 import { Buffer } from './buffer.model';
+import { Zcu } from './zcu.model';
 
 export interface IViewerData {
   groups?: Group[];
@@ -18,6 +19,7 @@ export interface IViewerData {
   mtls?: MTL[];
   clusters?: Cluster[];
   vehicles?: Vehicle[];
+  zcus?: Zcu[];
 }
 export interface ICoordinateInfo {
   coord: ICoordinate;

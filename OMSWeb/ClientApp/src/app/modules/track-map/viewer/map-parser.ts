@@ -13,6 +13,7 @@ import { MTL } from '../../../models/mtl.model';
 import { Cluster } from '../../../models/cluster.model';
 import { ColorPalette } from '../../shared/utils/color-palette';
 import { main_css } from '../../shared/utils/css-loader';
+import { Zcu } from '../../../models/zcu.model';
 
 export class MapParser {
   constructor(private layout_data: IViewerData) {}
@@ -36,6 +37,11 @@ export class MapParser {
     this.layout_data.buffers = this.parseBuffers(data.mapType, data.buffers);
     this.layout_data.mtls = this.parseMtls(data.mapType, data.mtls);
     this.layout_data.clusters = this.parseClusters(data.mapType, data.clusters);
+    this.layout_data.zcus = this.parseZcus(
+      data.mapType,
+      data.zcus,
+      geometry.invertFactorY
+    );
 
     return this.layout_data;
   }
@@ -65,6 +71,21 @@ export class MapParser {
       }
       return models;
     }, []);
+  }
+  parseZcus(
+    mapType: MapTypes,
+    rows: Dto.IZcu[],
+    coordAdjustment: number
+  ): Zcu[] {
+    if (!rows) return [];
+    return rows.map((r) => {
+      const { x, y } = r;
+      const { coord, invertedCoord } = LayoutUtil.create_coordinate(
+        { x, y },
+        coordAdjustment
+      );
+      return new Zcu(r, { coord, invertedCoord });
+    });
   }
   parseMtls(mapType: MapTypes, rows: Dto.IMTL[]): MTL[] {
     if (!rows) return [];

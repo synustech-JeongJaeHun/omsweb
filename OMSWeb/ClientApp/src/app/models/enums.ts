@@ -45,6 +45,7 @@ export type ToggleOptionKeyType =
   | 'buffers'
   | 'groups'
   | 'mtls'
+  | 'zcus'
   | 'vehicles'
   | 'clusters'
   | 'showToolName'

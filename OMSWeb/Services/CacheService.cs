@@ -16,6 +16,7 @@ namespace OMSWeb.Services
     Stations,
     Buffers,
     Mtls,
+    Zcus,
     Clusters,
     VehiclePaths,
     Vehicles,

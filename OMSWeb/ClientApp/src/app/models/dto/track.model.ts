@@ -39,6 +39,13 @@ export namespace Dto {
     mode?: any;
     errorList?: any;
   }
+  export interface IZcu {
+    id: number;
+    x: number;
+    y: number;
+    usingType: number;
+    zcuType: number;
+  }
   export interface IPoint extends ICoordinate {
     id: number;
     logicalId: string;
@@ -124,6 +131,7 @@ export namespace Dto {
     points?: IPoint[];
     size?: IMapSize;
     stations?: IStation[];
+    zcus?: IZcu[];
   }
   export interface IVariableTrackData {
     segments?: ISegment[];
