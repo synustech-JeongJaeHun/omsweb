@@ -35,13 +35,12 @@
         <mat-slider
           #frmSegmentWidth
           color="primary"
-          min="2"
-          max="20"
-          [disabled]="buttonState.clusters"
+          min="1"
+          max="5"
           [(ngModel)]="slideValues.segmentWidth"
           (change)="onSlideChange('segmentWidth')"
         ></mat-slider>
-        <div class="slider-value">{{ frmSegmentWidth.value }}px</div>
+        <div class="slider-value">{{ frmSegmentWidth.value }}</div>
       </div>
     </fieldset>
     <fieldset class="option-form">
