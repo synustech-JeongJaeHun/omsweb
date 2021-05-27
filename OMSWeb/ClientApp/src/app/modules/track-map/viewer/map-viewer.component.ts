@@ -30,6 +30,7 @@ import { IPlaybackTrackChangeEvent } from '../../../models/playback.model';
 import { Group } from '../../../models/group.model';
 import { TracksService } from '../../../services/tracks.service';
 import { SettingsService } from '../../../services/settings.service';
+import { StatusService } from '../../../services/status.service';
 @Component({
   selector: 'oms-map-viewer',
   templateUrl: './map-viewer.component.html',
@@ -86,6 +87,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     private trackIdSvc: TrackIdService,
     private trackSvc: TracksService,
     private statesSvc: MapStatesService,
+    private statusSvc: StatusService,
     private hubSvc: HubService,
     private messageSvc: MessagesService,
     private settingSvc: SettingsService,
@@ -212,6 +214,11 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   }
 
   private attachHubEvents() {
+    this.hubSvc.connectionChanged$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((conn) => {
+        conn && this.refreshVehicles();
+      });
     this.hubSvc.vehicleChanged$
       .pipe(takeUntil(this.destroy$))
       .subscribe((e: IDataChangeEvent) => this.applyVehicleChange(e));
@@ -252,6 +259,20 @@ export class MapViewerComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.destroy$))
         .subscribe((e) => this.applyGroupChange(e));
     }
+  }
+
+  private refreshVehicles() {
+    this.statusSvc.getVehicles().subscribe((res) => {
+      if (!res || !res.vehicles) return;
+      if (!this.dataSvc.data.vehicles?.length) {
+        this.viewer.update_vehicles(res.vehicles, 'INSERT', null, false);
+        this.trackIdSvc.extract_id_from_track(this.dataSvc.data);
+      } else {
+        res.vehicles.forEach((v) => {
+          this.viewer.update_vehicles([v], 'UPDATE', v.id, false);
+        });
+      }
+    });
   }
 
   private attachPlaybackEvents() {
@@ -355,7 +376,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   private saveUiStates() {
     const states = this.viewer.getUiStates();
     const pref = this.settingSvc.globalPreferences;
-    pref.uiStates = {...pref.uiStates, ...states};
+    pref.uiStates = { ...pref.uiStates, ...states };
     this.settingSvc.globalPreferences.save();
   }
   private closeContextMenu() {

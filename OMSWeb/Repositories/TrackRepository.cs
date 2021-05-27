@@ -320,11 +320,11 @@ FROM vehicle_paths
       }
       return data;
     }
-    public List<VehiclePosition> LoadVehiclePositions()
+    public List<VehiclePosition> LoadVehiclePositions(bool reloadIfEmpty = false)
     {
       var key = CacheKeys.Vehicles;
       var data = _cache.GetValue<List<VehiclePosition>>(key);
-      if (data == null)
+      if (data == null || (reloadIfEmpty && data.Count == 0))
       {
         var models = new List<VehiclePosition>();
         string sql = QueryFactory.GetSql("vehiclePosition");

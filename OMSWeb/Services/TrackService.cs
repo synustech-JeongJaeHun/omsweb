@@ -64,9 +64,9 @@ namespace OMSWeb.Services
       }
     }
 
-    public List<VehiclePosition> GetVehicles()
+    public List<VehiclePosition> GetVehicles(bool reloadIfEmpty = false)
     {
-      return this._trackRepo.LoadVehiclePositions();
+      return this._trackRepo.LoadVehiclePositions(reloadIfEmpty);
     }
 
     public List<VehiclePath> GetVehiclePaths()

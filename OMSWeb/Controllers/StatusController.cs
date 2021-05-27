@@ -39,7 +39,7 @@ namespace OMSWeb.Controllers
     [HttpGet("tracks/vehicles")]
     public ActionResult<VehicleResponse> GetVehicles()
     {
-      var vehicles = this._trackSvc.GetVehicles();
+      var vehicles = this._trackSvc.GetVehicles(true);
       var paths = this._trackSvc.GetVehiclePaths();
 
       return new VehicleResponse
