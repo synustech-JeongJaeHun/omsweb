@@ -48,12 +48,19 @@ namespace OMSWeb.Models
     public int[] Permissions { get; set; }
   }
 
-  public class PointUpdateDto {
+  public class PointUpdateDto
+  {
     public int? Group { get; set; }
     public bool? IsHome { get; set; }
   }
 
-  public class BufferUpdateDto {
+  public class BufferUpdateDto
+  {
     public string Note { get; set; }
+  }
+
+  public class ZcuUpdateDto
+  {
+    public int ZcuType { get; set; }
   }
 }

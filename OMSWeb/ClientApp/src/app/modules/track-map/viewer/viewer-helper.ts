@@ -5351,6 +5351,7 @@ export class ViewController {
                 .attr('d', object_css.icon_level3)
                 .attr('stroke', highlight_color)
                 .attr('stroke-width', stroke_width)
+                .attr('transform', offset_transform)
                 .lower();
             } else {
               // LVL 2
@@ -5361,6 +5362,7 @@ export class ViewController {
                 .attr('fill', 'none')
                 .attr('stroke', highlight_color)
                 .attr('stroke-width', stroke_width)
+                .attr('transform', offset_transform)
                 .lower();
             }
           } else {
@@ -5372,6 +5374,7 @@ export class ViewController {
               .attr('fill', 'none')
               .attr('stroke', highlight_color)
               .attr('stroke-width', stroke_width)
+              .attr('transform', offset_transform)
               .lower();
           }
         } else if (object_type === 'MTL') {
@@ -9854,6 +9857,7 @@ export class ViewController {
           .attr('stroke', dom_css.color_zcu)
           .attr('stroke-width', dom_css.line_weight);
 
+
         this.zcus_svg.attr('transform', (d) => {
           return `translate(${current_zoom.apply([
             d.invertedCoord.x,
@@ -9883,6 +9887,8 @@ export class ViewController {
                   return d.logicalId ? d.logicalId : d.id;
                 });
             }
+
+            this.attach_event_handler(object_type, d3_this.select('.zcu_mask'),d, dom_css, group_type);
           });
         }
 

@@ -325,6 +325,8 @@
     "confirmResetAllVehicles": "Do you want to reset all vehicles?",
     "confirmEstopAll": "Do you want to stop all vehicles?",
     "confirmSetAutoAll": "Do you want to set auto all vehicles?",
+    "confirmZcuChange": "Are you sure ZCU change?",
+    "confirmBufferChange": "Are you sure Buffer change?",
     "selectObjectType": "Select Type",
     "searchId": "Search ID",
     "noObjectSelected": "Nothing is selected.",

@@ -31,6 +31,8 @@ import { Group } from '../../../models/group.model';
 import { TracksService } from '../../../services/tracks.service';
 import { SettingsService } from '../../../services/settings.service';
 import { StatusService } from '../../../services/status.service';
+import { DialogService } from '../../../services/dialog.service';
+import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'oms-map-viewer',
   templateUrl: './map-viewer.component.html',
@@ -91,7 +93,9 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     private hubSvc: HubService,
     private messageSvc: MessagesService,
     private settingSvc: SettingsService,
-    private router: Router
+    private dialogSvc: DialogService,
+    private router: Router,
+    private $t: TranslateService
   ) {
     this.auth.certUpdated$.pipe(takeUntil(this.destroy$)).subscribe((cert) => {
       this.router.navigateByUrl('/', { skipLocationChange: false }).then(() => {
@@ -128,14 +132,42 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     console.warn('TODO: change segment prop api 연동');
   }
   onApplyPointChange(isHome: boolean, selectedGroup: number) {
-    console.log('### apply point change >>', { isHome, selectedGroup });
-
     this.trackSvc
       .updatePoint(this.contextData.id, {
         isHome,
         group: selectedGroup,
       })
       .subscribe();
+  }
+  onApplyZcuChange(value: number) {
+    this.dialogSvc
+      .confirm({ body: this.$t.instant('messages.confirmZcuChange') })
+      .subscribe((confirm) => {
+        confirm &&
+          this.trackSvc
+            .updateZcu(this.contextData.id, {
+              zcuType: value,
+            })
+            .subscribe();
+      });
+  }
+  onRemoveCarrier() {
+    this.dialogSvc
+      .confirm({ body: this.$t.instant('messages.confirmBufferChange') })
+      .subscribe((confirm) => {
+        confirm &&
+          this.trackSvc.removeBufferCarrier(this.contextData.id).subscribe();
+      });
+  }
+  onInstallCarrier(carrierId: number) {
+    this.dialogSvc
+      .confirm({ body: this.$t.instant('messages.confirmBufferChange') })
+      .subscribe((confirm) => {
+        confirm &&
+          this.trackSvc
+            .installBufferCarrier(this.contextData.id, carrierId)
+            .subscribe();
+      });
   }
   onVehicleCommand(name: string) {
     let commandMessage: IVehicleCommandMessage;

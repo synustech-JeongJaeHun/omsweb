@@ -608,6 +608,8 @@ export class MapDataService {
       return this.data.buffers;
     } else if (object_type === 'MTL') {
       return this.data.mtls;
+    } else if (object_type === 'ZCU') {
+      return this.data.zcus;
     } else if (object_type === 'CLUSTER') {
       return this.data.clusters;
     } else if (object_type === 'GROUP') {

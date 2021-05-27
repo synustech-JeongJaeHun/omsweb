@@ -59,4 +59,7 @@ export class TracksService {
   updateBuffer(bufferId: number, form: any): Observable<void> {
     return this.http.patch<void>(`${this.baseUrl}/buffers/${bufferId}`, form);
   }
+  updateZcu(id: number, form: any): Observable<void> {
+    return this.http.patch<void>(`${this.baseUrl}/zcus/${id}`, form);
+  }
 }

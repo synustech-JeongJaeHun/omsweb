@@ -129,6 +129,20 @@
       }
     }
 
+    .carrier-form {
+      display: grid;
+      gap: 4px;
+      margin-top: 8px;
+      grid-template-columns: repeat(2, 64px);
+
+      mat-form-field {
+        width: 100%;
+        height: 38px;
+      }
+
+
+    }
+
     .mat-button {
       font-size: 12px;
       line-height: 24px;

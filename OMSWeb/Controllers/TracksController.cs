@@ -87,5 +87,11 @@ namespace OMSWeb.Controllers
     {
       return Ok();
     }
+
+    [HttpPatch("zcus/{id}")]
+    public ActionResult UpdateZcu([FromRoute] int id, [FromBody] ZcuUpdateDto form)
+    {
+      return Ok();
+    }
   }
 }

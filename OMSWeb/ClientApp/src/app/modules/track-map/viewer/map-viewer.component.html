@@ -19,7 +19,6 @@
   ></oms-map-toolbar>
 </div>
 
-
 <div id="contextMenu" [hidden]="!showContextMenu" class="context-menu">
   <div [ngSwitch]="currentContextEvent?.targetType">
     <ng-container *ngSwitchCase="'SEGMENT'">
@@ -70,6 +69,32 @@
       >
         {{ "names.setDest" | translate }}
       </button>
+      <div class="carrier-form">
+        <mat-form-field class="dense full-span-col" appearance="outline">
+          <input
+            #carrierIdInput
+            matInput
+            [placeholder]="'names.carrierId' | translate"
+          />
+        </mat-form-field>
+        <button
+          mat-stroked-button
+          color="primary"
+          class="dense accent"
+          (click)="onRemoveCarrier()"
+        >
+          Remove
+        </button>
+        <button
+          mat-stroked-button
+          [disabled]="!carrierIdInput.value"
+          color="primary"
+          class="dense accent"
+          (click)="onInstallCarrier(carrierIdInput.value)"
+        >
+          Install
+        </button>
+      </div>
     </mat-card-content>
   </mat-card>
 </ng-template>
@@ -179,17 +204,24 @@
     </mat-card-header>
     <mat-card-content class="context-form">
       <mat-button-toggle-group
+        #zcuTypeSelect="matButtonToggleGroup"
         class="form-row-start"
         name="type"
         aria-label="Type"
+        [value]="contextData.zcuType"
       >
-        <mat-button-toggle value="hw">HW</mat-button-toggle>
-        <mat-button-toggle value="sw">SW</mat-button-toggle>
+        <mat-button-toggle [value]="1">HW</mat-button-toggle>
+        <mat-button-toggle [value]="2">SW</mat-button-toggle>
       </mat-button-toggle-group>
 
-      <mat-slide-toggle color="primary">{{
-        "names.use" | translate
-      }}</mat-slide-toggle>
+      <button
+        mat-stroked-button
+        class="dense accent"
+        color="primary"
+        (click)="onApplyZcuChange(zcuTypeSelect.value)"
+      >
+        {{ "names.apply" | translate }}
+      </button>
     </mat-card-content>
   </mat-card>
 </ng-template>
@@ -213,10 +245,7 @@
       <div [hidden]="!pointHomeSlide.checked">
         <mat-form-field class="index-selector dense" appearance="outline">
           <mat-label>{{ "names.group" | translate }}</mat-label>
-          <mat-select
-            #pointerGroupSelector
-            [value]="contextData.group"
-          >
+          <mat-select #pointerGroupSelector [value]="contextData.group">
             <mat-option *ngFor="let item of groupIds" [value]="item">{{
               item
             }}</mat-option>
@@ -228,7 +257,9 @@
         mat-stroked-button
         class="dense accent"
         color="primary"
-        (click)="onApplyPointChange(pointHomeSlide.checked, pointerGroupSelector.value)"
+        (click)="
+          onApplyPointChange(pointHomeSlide.checked, pointerGroupSelector.value)
+        "
       >
         {{ "names.apply" | translate }}
       </button>
