@@ -50,6 +50,10 @@ export class StatusControlComponent implements OnInit {
     this.currentTab = this.settingSvc.globalPreferences.uiStates.controlTab;
   }
 
+  hasPermissions(permissions: number[]): boolean {
+    return this.auth.hasPermissions(permissions);
+  }
+
   onVehicleReset() {
     this.dialogSvc
       .confirm({ body: this.$t.instant('messages.confirmResetAllVehicles') })

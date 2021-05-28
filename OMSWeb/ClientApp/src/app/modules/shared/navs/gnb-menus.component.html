@@ -18,6 +18,7 @@
     matTooltip="Playback"
     routerLinkActive="active"
     routerLink="/playback"
+    [disabled]="!hasPermission(5)"
   >
     <mat-icon>play_circle_outline</mat-icon>
   </button>
@@ -29,6 +30,7 @@
     matTooltip="History"
     routerLinkActive="active"
     routerLink="/histories"
+    [disabled]="!hasPermission(4)"
   >
     <mat-icon>history</mat-icon>
   </button>
@@ -41,6 +43,7 @@
     matTooltip="Logs"
     routerLinkActive="active"
     routerLink="/logs"
+    [disabled]="!hasPermission(6)"
   >
     <mat-icon>receipt_long</mat-icon>
     <!-- <mat-icon>library_books</mat-icon> -->
@@ -52,6 +55,7 @@
     matTooltipPosition="below"
     matTooltip="Settings"
     (click)="onOpenSettings()"
+    [disabled]="!hasPermission(7)"
     >
     <!-- routerLinkActive="active"
     [routerLink]="['settings', {outlets: {sub: ['users']}}]" -->
@@ -63,6 +67,7 @@
   <ng-container [ngSwitch]="parentRoute">
     <ng-container *ngSwitchCase="'/monitor'">
       <a
+        *ngIf="isAuthenticated"
         mat-button
         class="nav-item"
         routerLinkActive="active"

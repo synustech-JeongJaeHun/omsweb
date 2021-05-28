@@ -16,9 +16,11 @@ import { NotificationsService } from '@oms/services/notifications.service';
 import { Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { IAlert, IDataChangeEvent } from '../../../models/notification.model';
+import { AuthService } from '../../../services/auth.service';
 import { HubService } from '../../../services/hub.service';
 import { AlarmDialogComponent } from '../dialogs/alarm-dialog.component';
 import { AlertDialogComponent } from '../dialogs/alert-dialog.component';
+import { AccountUtil } from '../utils/account.util';
 @Component({
   selector: 'oms-gnb-indicators',
   templateUrl: './gnb-indicators.component.html',
@@ -58,7 +60,8 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
   constructor(
     private notifySvc: NotificationsService,
     private hubSvc: HubService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private auth: AuthService
   ) {}
   ngOnDestroy(): void {
     this.destroy$.next();
@@ -78,6 +81,7 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
   }
 
   toggleWarnsView() {
+    if (!AccountUtil.hasPermission(9, this.auth.currentUser)) return;
     // this.btnWarn.togglePopover();
     if (this._alertDlg && this._alertDlg.getState() === MatDialogState.OPEN) {
       this._alertDlg.close();
@@ -93,6 +97,7 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
     });
   }
   toggleAlarmsView(enforce = false) {
+    if (!AccountUtil.hasPermission(8, this.auth.currentUser)) return;
     if (this._alarmDlg && this._alarmDlg.getState() === MatDialogState.OPEN) {
       this._alarmDlg.close();
       if (!enforce) return;

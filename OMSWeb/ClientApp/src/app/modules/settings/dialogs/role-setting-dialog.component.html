@@ -45,7 +45,7 @@
           *ngFor="let item of permissions"
           [value]="item.id"
         >
-          {{ "enums.permissions." + item.name | translate }}
+          {{ "enums.permissions." + item.id | translate }}
         </mat-list-option>
       </mat-selection-list>
 

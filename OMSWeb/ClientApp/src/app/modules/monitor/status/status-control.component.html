@@ -26,11 +26,11 @@
     <mat-icon>expand_more</mat-icon>
   </button>
   <div id="status-toolbar" *ngIf="canControl">
-    <button mat-stroked-button class="dense" (click)="onVehicleReset()">
+    <button *ngIf="hasPermission(16)" mat-stroked-button class="dense" (click)="onVehicleReset()">
       <mat-icon>settings_backup_restore</mat-icon>
       <span>{{ "names.resetAllVehicle" | translate }}</span>
     </button>
-    <button mat-stroked-button class="dense" (click)="onSetAuto()">
+    <button *ngIf="hasPermission(18)" mat-stroked-button class="dense" (click)="onSetAuto()">
       <mat-icon>brightness_auto</mat-icon>
       <span>{{ "names.autoAllVehicle" | translate }}</span>
     </button>

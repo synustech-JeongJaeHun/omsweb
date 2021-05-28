@@ -8,7 +8,9 @@ import {
 import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { AuthService } from '../../../services/auth.service';
 import { SettingsDialogComponent } from '../../settings/dialogs/settings-dialog.component';
+import { AccountUtil } from '../utils/account.util';
 
 @Component({
   selector: 'oms-gnb-menus',
@@ -21,9 +23,14 @@ export class GnbMenusComponent implements OnInit, OnDestroy {
   private routing$: Subscription;
   private _dlg: MatDialogRef<SettingsDialogComponent>;
 
+  get isAuthenticated(): boolean {
+    return this.auth.isAuthenticated;
+  }
+
   constructor(
     private router: Router,
     private dialog: MatDialog,
+    private auth: AuthService,
     private location: Location
   ) {}
   ngOnDestroy(): void {
@@ -53,6 +60,10 @@ export class GnbMenusComponent implements OnInit, OnDestroy {
       disableClose: true,
       closeOnNavigation: true,
     });
+  }
+
+  hasPermission(permission: number): boolean {
+    return AccountUtil.hasPermission(permission, this.auth.currentUser);
   }
 
   private navigationChanged() {

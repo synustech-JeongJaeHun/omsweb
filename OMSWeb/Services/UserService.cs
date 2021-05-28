@@ -39,7 +39,11 @@ namespace OMSWeb.Services
     }
     public IQueryable<PermissionEntity> QueryPermissions()
     {
-      return this._repo.QueryPermissions();
+      // return this._repo.QueryPermissions();
+      return Enum.GetValues(typeof(UserPermissions))
+        .Cast<UserPermissions>()
+        .Select(p => new PermissionEntity{Id = (int)p, Name = p.ToString()})
+        .AsQueryable();
     }
     public IQueryable<RoleEntity> QueryRoles()
     {

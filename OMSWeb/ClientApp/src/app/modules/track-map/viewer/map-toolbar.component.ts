@@ -54,13 +54,7 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
   visibilityOpen = false;
 
   get canControl(): boolean {
-    return (
-      this.auth.isAuthenticated &&
-      AccountUtil.hasPermission(
-        UserPermissions.controlActions,
-        this.auth.currentUser
-      )
-    );
+    return this.auth.isAuthenticated;
   }
   get isTracking(): boolean {
     return this.stateSvc.vehicleTrackingState.status;
@@ -115,6 +109,10 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
     this._bfStatusDlg &&
       this._bfStatusDlg.getState() === MatDialogState.OPEN &&
       this._bfStatusDlg.close();
+  }
+
+  hasPermission(permission: number): boolean {
+    return AccountUtil.hasPermission(permission, this.auth.currentUser);
   }
 
   onSearch() {

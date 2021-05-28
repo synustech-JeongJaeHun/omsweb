@@ -34,10 +34,7 @@ export class OrderControlTableComponent implements OnInit, OnDestroy {
   get hasControlAccess(): boolean {
     return (
       this.auth.isAuthenticated &&
-      AccountUtil.hasPermission(
-        UserPermissions.controlActions,
-        this.auth.currentUser
-      )
+      AccountUtil.hasPermission(11, this.auth.currentUser)
     );
   }
 

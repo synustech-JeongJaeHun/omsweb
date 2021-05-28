@@ -128,7 +128,7 @@
     </div>
   </mat-expansion-panel>
 
-  <mat-expansion-panel [expanded]="true">
+  <mat-expansion-panel [expanded]="true" *ngIf="hasPermission(10)">
     <mat-expansion-panel-header>
       <mat-panel-title>Command Interface</mat-panel-title>
     </mat-expansion-panel-header>
@@ -310,6 +310,7 @@
         <mat-slide-toggle
           [(ngModel)]="segmentDisabledInfo.disabled"
           (change)="changeSegmentDisabled()"
+          [disabled]="!hasPermission(29)"
           color="primary"
           >{{ "names.disabled" | translate }}</mat-slide-toggle
         >

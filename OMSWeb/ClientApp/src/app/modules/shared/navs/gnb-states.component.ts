@@ -11,6 +11,7 @@ import { ISystemStates } from '../../../models/system.model';
 import { AuthService } from '../../../services/auth.service';
 import { DialogService } from '../../../services/dialog.service';
 import { SystemsService } from '../../../services/systems.service';
+import { AccountUtil } from '../utils/account.util';
 
 @Component({
   selector: 'oms-gnb-states',
@@ -70,6 +71,7 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
   }
 
   changeHostMode() {
+    if (!AccountUtil.hasPermission(1, this.auth.currentUser)) return;
     this.dialogSvc.confirm(this.getConfirmMessage('Host')).subscribe((ok) => {
       if (ok) {
         const value = ++this.systemStates.hostMode % 4;
@@ -80,6 +82,7 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
     });
   }
   changeTscMode() {
+    if (!AccountUtil.hasPermission(2, this.auth.currentUser)) return;
     this.dialogSvc.confirm(this.getConfirmMessage('TSC')).subscribe((ok) => {
       if (ok) {
         const value = ++this.systemStates.tscMode % 3;

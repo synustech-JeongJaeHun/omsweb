@@ -1,5 +1,6 @@
 <div class="grid-actions" *ngIf="hasControlAccess">
   <button
+    *ngIf="hasPermission(14)"
     mat-stroked-button
     color="warn"
     class="dense accent"
@@ -9,6 +10,7 @@
     {{ "names.estop" | translate }}
   </button>
   <button
+    *ngIf="hasPermission(15)"
     mat-stroked-button
     color="primary"
     class="dense accent"
@@ -18,6 +20,7 @@
     {{ "names.reset" | translate }}
   </button>
   <button
+    *ngIf="hasPermission(17)"
     mat-stroked-button
     color="primary"
     class="dense accent"
@@ -27,6 +30,7 @@
     {{ "names.auto" | translate }}
   </button>
   <button
+    *ngIf="hasPermission(19)"
     mat-stroked-button
     color="primary"
     class="dense"
@@ -36,6 +40,7 @@
     {{ "names.hostOrderEnable" | translate }}
   </button>
   <button
+    *ngIf="hasPermission(20)"
     mat-stroked-button
     color="primary"
     class="dense"
@@ -45,6 +50,7 @@
     {{ "names.pushEnable" | translate }}
   </button>
   <button
+    *ngIf="hasPermission(21)"
     mat-stroked-button
     color="primary"
     class="dense"
@@ -54,6 +60,7 @@
     {{ "names.railIn" | translate }}
   </button>
   <button
+    *ngIf="hasPermission(22)"
     mat-stroked-button
     color="primary"
     class="dense"

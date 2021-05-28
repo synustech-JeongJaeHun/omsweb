@@ -16,6 +16,7 @@ import { StorageUtil } from '../modules/shared/utils/storage.util';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { map, tap } from 'rxjs/operators';
 import { SettingsService } from './settings.service';
+import { AccountUtil } from '../modules/shared/utils/account.util';
 
 @Injectable({
   providedIn: 'root',
@@ -80,6 +81,10 @@ export class AuthService {
         this.certUpdated$.next(this._currentUser);
       })
     );
+  }
+
+  hasPermissions(permissions: number[]): boolean {
+    return AccountUtil.hasPermissions(permissions, this.currentUser);
   }
 
   private parseToken(checkCurrentTime = false): ISessionUser {

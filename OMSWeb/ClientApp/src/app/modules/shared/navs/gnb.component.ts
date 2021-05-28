@@ -12,13 +12,6 @@ import { SettingsService } from '../../../services/settings.service';
 export class GnbComponent implements OnInit {
   version: string;
 
-  get showGnb(): boolean {
-    return (
-      this.auth.isAuthenticated &&
-      AccountUtil.hasPermission(UserPermissions.gnb, this.auth.currentUser)
-    );
-  }
-
   get showVersion(): boolean {
     return this.settingSvc.globalPreferences.toggles.showOmsVersion;
   }

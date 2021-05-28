@@ -5,6 +5,8 @@ import {
   OnInit,
   SimpleChanges,
 } from '@angular/core';
+import { AuthService } from '../../../services/auth.service';
+import { AccountUtil } from '../../shared/utils/account.util';
 import { MapDataService } from '../map-data.service';
 import { MapStatesService } from '../map-states.service';
 
@@ -33,7 +35,11 @@ export class MapSidePanelComponent implements OnInit, OnChanges {
     return this.segmentDisabledInfo.reasons.join('\n');
   }
 
-  constructor(private dataSvc: MapDataService, private statesSvc: MapStatesService) {}
+  constructor(
+    private dataSvc: MapDataService,
+    private statesSvc: MapStatesService,
+    private auth: AuthService
+  ) {}
 
   ngOnInit(): void {}
 
@@ -42,6 +48,10 @@ export class MapSidePanelComponent implements OnInit, OnChanges {
     if (data.currentValue) {
       this.bindObject();
     }
+  }
+
+  hasPermission(permission: number): boolean {
+    return AccountUtil.hasPermission(permission, this.auth.currentUser);
   }
 
   private bindObject() {

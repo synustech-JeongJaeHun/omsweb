@@ -121,6 +121,10 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     this.trackData && this.drawMap(this.trackData);
   }
 
+  hasPermissions(permissions: number[]): boolean {
+    return this.auth.hasPermissions(permissions);
+  }
+
   onChangePointProperty(name: string, value: any) {
     console.log('## changed point property >>', { name, value });
     // @TODO: change point prop api 연동

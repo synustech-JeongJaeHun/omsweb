@@ -1,17 +1,17 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'oms-settings-dialog',
   templateUrl: './settings-dialog.component.html',
-  styleUrls: ['./settings-dialog.component.scss']
+  styleUrls: ['./settings-dialog.component.scss'],
 })
 export class SettingsDialogComponent implements OnInit {
   currentMenu: string = 'preference';
 
-  constructor() { }
+  constructor(public auth: AuthService) {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   isActiveMenu(menu: string) {
     return this.currentMenu === menu;
@@ -20,5 +20,4 @@ export class SettingsDialogComponent implements OnInit {
   onChangeMenu(menu: string) {
     this.currentMenu = menu;
   }
-
 }

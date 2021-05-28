@@ -1,4 +1,8 @@
-<mat-list [class.show-name]="showToolName" mdePopoverTarget #popoverTarget="mdePopoverTarget">
+<mat-list
+  [class.show-name]="showToolName"
+  mdePopoverTarget
+  #popoverTarget="mdePopoverTarget"
+>
   <button
     matListItem
     mat-button
@@ -86,6 +90,7 @@
   <mat-divider></mat-divider>
 
   <button
+    *ngIf="hasPermission(10)"
     #btnCommand
     matListItem
     mat-button
@@ -119,7 +124,7 @@
   </button>
 
   <button
-    *ngIf="canControl"
+    *ngIf="hasPermission(28)"
     matListItem
     mat-button
     class="tool-item"
@@ -137,6 +142,7 @@
   </button>
   <mat-divider></mat-divider>
   <button
+    *ngIf="hasPermission(26)"
     #btnShowObj
     matListItem
     mat-button
@@ -154,6 +160,7 @@
   </button>
 
   <button
+    *ngIf="hasPermission(27)"
     #btnShowObj
     matListItem
     mat-button

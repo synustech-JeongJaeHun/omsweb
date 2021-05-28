@@ -4,6 +4,7 @@
       <mat-drawer #drawer class="settings-sidenav" mode="side" opened>
         <mat-nav-list>
           <a
+            *ngIf="auth.hasPermissions([31])"
             mat-list-item
             [class.active]="isActiveMenu('preference')"
             (click)="onChangeMenu('preference')"
@@ -11,6 +12,7 @@
             >{{ "names.preference" | translate }}</a
           >
           <a
+            *ngIf="auth.hasPermissions([30])"
             mat-list-item
             [class.active]="isActiveMenu('users')"
             (click)="onChangeMenu('users')"
@@ -21,6 +23,7 @@
           <mat-divider class="nav-divider"></mat-divider>
 
           <a
+            *ngIf="auth.hasPermissions([32])"
             mat-list-item
             [class.active]="isActiveMenu('group')"
             (click)="onChangeMenu('group')"
@@ -28,6 +31,7 @@
             >{{ "names.group" | translate }}</a
           >
           <a
+            *ngIf="auth.hasPermissions([33])"
             mat-list-item
             [class.active]="isActiveMenu('cluster')"
             (click)="onChangeMenu('cluster')"
@@ -35,6 +39,7 @@
             >{{ "names.cluster" | translate }}</a
           >
           <a
+            *ngIf="auth.hasPermissions([34])"
             mat-list-item
             [class.active]="isActiveMenu('alarm')"
             (click)="onChangeMenu('alarm')"
@@ -42,6 +47,7 @@
             >{{ "names.alarmList" | translate }}</a
           >
           <a
+            *ngIf="auth.hasPermissions([35])"
             mat-list-item
             [class.active]="isActiveMenu('segment')"
             (click)="onChangeMenu('segment')"
@@ -49,6 +55,7 @@
             >{{ "names.segment" | translate }}</a
           >
           <a
+            *ngIf="auth.hasPermissions([36])"
             mat-list-item
             [class.active]="isActiveMenu('point')"
             (click)="onChangeMenu('point')"
@@ -56,6 +63,7 @@
             >{{ "names.node" | translate }}</a
           >
           <a
+            *ngIf="auth.hasPermissions([37])"
             mat-list-item
             [class.active]="isActiveMenu('zcu')"
             (click)="onChangeMenu('zcu')"
@@ -63,6 +71,7 @@
             >{{ "names.zcu" | translate }}</a
           >
           <a
+            *ngIf="auth.hasPermissions([38])"
             mat-list-item
             [class.active]="isActiveMenu('station')"
             (click)="onChangeMenu('station')"

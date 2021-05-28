@@ -9,4 +9,10 @@ export namespace AccountUtil {
     const { permissions = [] } = user;
     return (permissions.includes(needPermission));
   };
+
+  export const hasPermissions = (needPermissions: number[], user: ISessionUser): boolean => {
+    if (!user) return false;
+    const { permissions = [] } = user;
+    return (needPermissions.some(p => permissions.includes(p)));
+  }
 }

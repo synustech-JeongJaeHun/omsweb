@@ -31,13 +31,7 @@ export class VehicleControlTableComponent implements OnInit, OnDestroy {
   //#endregion
 
   get hasControlAccess(): boolean {
-    return (
-      this.auth.isAuthenticated &&
-      AccountUtil.hasPermission(
-        UserPermissions.controlActions,
-        this.auth.currentUser
-      )
-    );
+    return this.auth.isAuthenticated;
   }
 
   get canControl(): boolean {
@@ -69,6 +63,10 @@ export class VehicleControlTableComponent implements OnInit, OnDestroy {
       });
   }
 
+  hasPermission(permission: number): boolean {
+    return AccountUtil.hasPermission(permission, this.auth.currentUser);
+  }
+
   onEStop() {
     if (!this.canControl) return;
     this.messageSvc
@@ -93,7 +91,10 @@ export class VehicleControlTableComponent implements OnInit, OnDestroy {
   onChangePushActivity() {
     if (!this.canControl) return;
     this.messageSvc
-      .sendVehicleCommand({ action: 'set_behavior', canBePushed: true }, this.selectedItems)
+      .sendVehicleCommand(
+        { action: 'set_behavior', canBePushed: true },
+        this.selectedItems
+      )
       .subscribe();
   }
   onRailIn() {

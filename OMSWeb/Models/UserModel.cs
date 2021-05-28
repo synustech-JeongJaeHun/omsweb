@@ -8,4 +8,6 @@ namespace OMSWeb.Models {
     public int[] Roles { get; set; }
     public int[] Permissions { get; set; }
   } 
+
+  
 }

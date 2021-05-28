@@ -15,6 +15,7 @@ import { UsersService } from '../../../services/users.service';
 import { LegendDialogComponent } from '../dialogs/legend-dialog.component';
 import { LoginDialogComponent } from '../dialogs/login-dialog.component';
 import { ProfileDialogComponent } from '../dialogs/profile-dialog.component';
+import { AccountUtil } from '../utils/account.util';
 
 @Component({
   selector: 'oms-gnb-actions',
@@ -97,6 +98,7 @@ export class GnbActionsComponent implements OnInit, OnDestroy {
     });
   }
   onChangeAI() {
+    if (!AccountUtil.hasPermission(3, this.auth.currentUser)) return;
     const transParam = { name: 'AI Mode' };
     this.dialogSvc
       .confirm({
