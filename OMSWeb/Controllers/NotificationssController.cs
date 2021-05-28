@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DevExtreme.AspNet.Data;
+using DevExtreme.AspNet.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OMSWeb.Models;
@@ -29,6 +31,11 @@ namespace OMSWeb.Controllers
     [HttpGet("alarm-count")]
     public ActionResult<NotificationCountModel> AlarmCount() {
       return this._notificationSvc.GetAlarmCount();
+    }
+
+    [HttpGet("alarms")]
+    public object GetAlarms(DataSourceLoadOptions loadOptions) {
+     return DataSourceLoader.Load(_notificationSvc.GetAlarms(), loadOptions); 
     }
   }
 }

@@ -92,10 +92,10 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
       panelClass: 'alerts-dialog',
     });
   }
-  toggleAlarmsView() {
+  toggleAlarmsView(enforce = false) {
     if (this._alarmDlg && this._alarmDlg.getState() === MatDialogState.OPEN) {
       this._alarmDlg.close();
-      return;
+      if (!enforce) return;
     }
 
     const rect: DOMRect = this.btnAlarm.nativeElement.getBoundingClientRect();
@@ -142,5 +142,6 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
   }
   private onAlarmChanged(event: IDataChangeEvent) {
     this.updateAlarmCount();
+    this.toggleAlarmsView(true);
   }
 }

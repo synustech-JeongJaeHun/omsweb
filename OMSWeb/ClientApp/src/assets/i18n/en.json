@@ -294,7 +294,11 @@
     "clear": "Clear",
     "clearAll": "All Clear",
     "cleared": "Cleared",
-    "notCleared": "Not Cleared"
+    "notCleared": "Not Cleared",
+    "elapsedMin": "Elapsed(min)",
+    "solution": "Solution",
+    "modifySolution": "Modify Solution",
+    "resetVehicle": "Reset Vehicle"
   },
   "enums": {
     "hostSessionStatus": {
@@ -335,6 +339,7 @@
     "passwordMissMatch": "Password is miss match.",
     "changeConfirm": "Are you sure {{name}} change?​",
     "duplicatedRoleName": "Role name is used already.",
-    "invalidEmail": "Invalid email address."
+    "invalidEmail": "Invalid email address.",
+    "alarmNoteHint": "Input operator's extra message at here..."
   }
 }

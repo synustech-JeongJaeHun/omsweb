@@ -2,6 +2,7 @@ using Microsoft.Extensions.Configuration;
 using System.Linq;
 using Dapper;
 using OMSWeb.Models;
+using OMSWeb.Models.Entities;
 
 namespace OMSWeb.Repositories
 {
@@ -30,6 +31,24 @@ FROM (
     WHERE VA.time_resolved IS NULL
 ) AS COUNT_TABLE";
         result = conn.Query<NotificationCountModel>(sql).FirstOrDefault();
+      }
+      return result;
+    }
+
+    public IQueryable<AlarmHistory> GetAlarms() {
+      IQueryable<AlarmHistory> result;
+      using (var conn = ConnectTrack()) {
+        var sql = @"
+    SELECT VA.id, VA.time, 
+    extract('epoch' from now()-VA.time) AS age, 
+    VE.level, VA.vehicle_id, VA.error_code, VE.description, VE.action, VA.time_resolved
+    FROM vehicle_alarms AS VA
+    LEFT OUTER JOIN vehicle_errors VE
+        ON VA.error_code = VE.id
+    WHERE VA.time_resolved is NULL
+    ORDER BY VA.id desc
+        ";
+        result = conn.Query<AlarmHistory>(sql).AsQueryable();
       }
       return result;
     }

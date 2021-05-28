@@ -1,4 +1,6 @@
+using System.Linq;
 using OMSWeb.Models;
+using OMSWeb.Models.Entities;
 using OMSWeb.Repositories;
 
 namespace OMSWeb.Services
@@ -20,6 +22,10 @@ namespace OMSWeb.Services
 
     public NotificationCountModel GetAlertCount() {
       return this._alertRepo.GetCount();
+    }
+
+    public IQueryable<AlarmHistory> GetAlarms() {
+      return this._alarmRepo.GetAlarms();
     }
   }
 }

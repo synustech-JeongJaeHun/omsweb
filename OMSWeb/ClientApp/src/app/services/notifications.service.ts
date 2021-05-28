@@ -1,9 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import DataSource from 'devextreme/data/data_source';
 import { EMPTY, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { IKeyValuePair } from '../models/base.model';
 import { AlertSeverities } from '../models/enums';
+import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 
 import {
   IAlert,
@@ -43,13 +45,23 @@ export class NotificationsService {
     //   `${this.baseUrl}/alerts/${status}/${level}/${keyword}`
     // );
   }
-  alarms(): Observable<IVehicleAlarm[]> {
-    // @TODO api 작업 후 삭제
-    console.error('# form get-alarms.json file - for test #');
-    return this.http.get<IVehicleAlarm[]>('/assets/json/get-alarms.json');
-    // return this.http.get<IVehicleAlarm[]>(
-    //   `${this.baseUrl}/alarms/${status}/${level}/${keyword}`
-    // );
+  // alarms(): Observable<IVehicleAlarm[]> {
+  //   // @TODO api 작업 후 삭제
+  //   // console.error('# form get-alarms.json file - for test #');
+  //   // return this.http.get<IVehicleAlarm[]>('/assets/json/get-alarms.json');
+  //   return this.http.get<IVehicleAlarm[]>(
+  //     `${this.baseUrl}/alarms/${status}/${level}/${keyword}`
+  //   );
+  // }
+
+  alarmsDataSource(): DataSource {
+    return new DataSource({
+      store: AspNetData.createStore({
+        key: 'id',
+        loadUrl: `${this.baseUrl}/alarms`,
+      }),
+    });
+
   }
 
   clearAlerts(ids: number[]): Observable<void> {

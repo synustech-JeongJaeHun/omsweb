@@ -3,53 +3,91 @@
     <ng-container class="dialog-layout">
       <div class="alert-list" cdkDragHandle>
         <dx-data-grid
-          [dataSource]="alarmList"
-          keyExpr="id"
+          [dataSource]="dataSource"
           [height]="300"
           [width]="700"
+          (onRowClick)="onClickRow($event)"
+          [(selectedRowKeys)]="selectedIds"
         >
+          <dxo-selection mode="single"></dxo-selection>
           <dxo-scrolling mode="virtual"></dxo-scrolling>
-          <dxi-column
-            [allowFiltering]="false"
-            [width]="110"
-            dataType="string"
-            dataField="vehicle"
-            [caption]="'names.vehicle' | translate"
-          ></dxi-column>
-          <dxi-column
-            [allowFiltering]="false"
-            [width]="80"
-            dataType="string"
-            dataField="level"
-            [caption]="'names.code' | translate"
-          ></dxi-column>
-          <dxi-column
-            [allowFiltering]="false"
-            [width]="120"
-            dataType="string"
-            dataField="tag"
-            [caption]="'names.alarmCode' | translate"
-          ></dxi-column>
+          <dxo-header-filter [visible]="true"></dxo-header-filter>
           <dxi-column
             [allowFiltering]="false"
             [width]="110"
             dataType="datetime"
             dataField="time"
             [caption]="'names.time' | translate"
-            cellTemplate="dateCell"
+            format="yyyy/MM/dd HH:mm:ss"
           >
-            <div *dxTemplate="let data of 'dateCell'">
-              {{ data.value | date: "yyyy/MM/dd HH:mm:ss" }}
-            </div>
           </dxi-column>
           <dxi-column
             [allowFiltering]="false"
+            [width]="120"
+            dataType="number"
+            dataField="age"
+            [caption]="'names.elapsedMin' | translate"
+            cellTemplate="minuteCell"
+          >
+            <div *dxTemplate="let d of 'minuteCell'">
+              {{ (d.value / 60).toFixed(1) }}
+            </div>
+          </dxi-column>
+          <dxi-column
+            [allowFiltering]="true"
+            [width]="110"
             dataType="string"
-            dataField="message"
+            dataField="vehicleId"
+            [caption]="'names.vehicle' | translate"
+          ></dxi-column>
+          <dxi-column
+            [allowFiltering]="true"
+            [width]="80"
+            dataType="string"
+            dataField="severity"
+            [caption]="'names.severity' | translate"
+          >
+            <dxo-lookup
+              [dataSource]="severityLookup"
+              displayExpr="name"
+              valueExpr="value"
+            ></dxo-lookup>
+          </dxi-column>
+          <dxi-column
+            [allowFiltering]="true"
+            [width]="80"
+            dataType="string"
+            dataField="errorCode"
+            [caption]="'names.code' | translate"
+          ></dxi-column>
+          <dxi-column
+            [allowFiltering]="false"
+            dataType="string"
+            dataField="description"
             [caption]="'names.desc' | translate"
           ></dxi-column>
         </dx-data-grid>
       </div>
+
+      <fieldset id="solutionContainer" *ngIf="currentItem">
+        <legend>Vehicle #{{currentItem.vehicleId}} ({{currentItem.time | date: 'yyyy-MM-dd HH:mm:ss'}})</legend>
+
+        <div class="grid-form">
+          <mat-form-field class="dense" appearance="outline">
+            <mat-label>{{'names.solution' | translate}}</mat-label>
+            <textarea matInput>{{currentItem.action}}</textarea>
+          </mat-form-field>
+          <mat-form-field class="dense" appearance="outline">
+            <mat-label>{{'names.note' | translate}}</mat-label>
+            <textarea matInput [placeholder]="'messages.alarmNoteHint'|translate"></textarea>
+          </mat-form-field>
+          <button mat-raised-button color="primary">{{'names.modifySolution'| translate}}</button>
+          <div class="primary-actions">
+            <button mat-raised-button color="primary">{{'names.resetVehicle'| translate}}</button>
+            <button mat-raised-button>{{'names.clear'| translate}}</button>
+          </div>
+        </div>
+      </fieldset>
     </ng-container>
   </oms-dialog-base>
   <!-- <div mat-dialog-content cdkDragHandle>

@@ -8,7 +8,7 @@ namespace OMSWeb.Models.Entities
     public DateTime Time { get; set; }
     public int ErrorCode { get; set; }
     public int VehicleId { get; set; }
-    public DateTime TimeResolved { get; set; }
+    public DateTime? TimeResolved { get; set; }
   }
 
   public class AlarmHistory : AlarmEntity
