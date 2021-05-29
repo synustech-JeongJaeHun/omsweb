@@ -226,7 +226,7 @@
 </ng-template>
 
 <ng-template #zcuContext>
-  <mat-card class="context-card" *ngIf="!hasPermissions([24])">
+  <mat-card class="context-card" *ngIf="hasPermissions([24])">
     <mat-card-header>
       <mat-card-title>
         {{ contextData.objectType }} #{{ contextData.id }}

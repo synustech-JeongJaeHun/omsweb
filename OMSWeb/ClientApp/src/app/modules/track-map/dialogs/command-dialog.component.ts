@@ -17,7 +17,7 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
   currentTab = 0;
   isAuto = false;
 
-  tabs: TransferCommandCategoryType[] = ['move', 'fromTo', 'from', 'to'];
+  tabs: TransferCommandCategoryType[] = ['fromTo', 'from', 'to', 'move'];
 
   get canApply(): boolean {
     return true;

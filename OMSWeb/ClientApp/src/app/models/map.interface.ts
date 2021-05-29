@@ -102,7 +102,7 @@ export type TransferCommandCategoryType = 'move' | 'fromTo' | 'from' | 'to';
 export class TransferCommandState {
   active: boolean = false;
   category: TransferCommandCategoryType = 'move';
-  auto: boolean = false;
+  auto: boolean = true;
   vehicle?: ILookupUnit;
   point?: ILookupUnit;
   source?: ILookupUnit;
