@@ -13,15 +13,21 @@ export class KpiStatusComponent implements OnInit {
 
   expanded = false;
 
+  private enabled = false;
+
   get toolNameShown(): boolean {
     return this.settingSvc.globalPreferences.toggles.showToolName;
   }
 
-  get enabled(): boolean {
-    return this.settingSvc.globalPreferences.toggles.showKpi;
+  get activated(): boolean {
+    return this.enabled && this.settingSvc.globalPreferences.toggles.showKpi;
   }
 
-  constructor(private settingSvc: SettingsService) {}
+  constructor(private settingSvc: SettingsService) {
+    this.settingSvc.serviceConfig.subscribe(cfg => {
+      this.enabled = cfg.kpiEnabled;
+    })
+  }
 
   ngOnInit(): void {}
 
