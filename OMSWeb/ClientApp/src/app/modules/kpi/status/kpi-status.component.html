@@ -26,54 +26,55 @@
       <div class="title">{{ "names.memory" | translate }}</div>
     </div>
   </div>
-  <div class="area details" *ngIf="expanded">
-    <table class="table-details">
-      <tr>
-        <th class="name">{{ "names.item" | translate }}</th>
-        <th class="value">{{ "names.desc" | translate }} (localhost/largemap...v3)</th>
-      </tr>
-      <tr>
-        <td class="name">{{ "names.range" | translate }}</td>
-        <td class="value">
-          2021-05-28 09:05:24 (1) ~ 2021-05-28 09:15:24 (10,367)
-        </td>
-      </tr>
-      <tr>
-        <td class="name">{{ "names.utilization" | translate }}</td>
-        <td class="value">60.9%</td>
-      </tr>
-      <tr>
-        <td class="name">
-          {{ "names.deliveryTime" | translate }} (created ~ completed)​
-        </td>
-        <td class="value">87.10s, order count: 10,191</td>
-      </tr>
-      <tr>
-        <td class="name">
-          {{ "names.waitTime" | translate }} (created ~ loaded)​
-        </td>
-        <td class="value">87.10s, order count: 10,191</td>
-      </tr>
-      <tr>
-        <td class="name">
-          {{ "names.transferTime" | translate }} (created ~ completed)​
-        </td>
-        <td class="value">87.10s, order count: 10,191</td>
-      </tr>
-      <tr>
-        <td class="name">
-          {{ "names.assignTime" | translate }}(created ~ assigned)​
-        </td>
-        <td class="value">87.10s, order count: 10,191</td>
-      </tr>
-      <tr>
-        <td class="name">{{ "names.orderChange" | translate }}</td>
-        <td class="value">65.51% (6,792 / 10,368)</td>
-      </tr>
-      <tr>
-        <td class="name">{{ "names.numOfOrderReq" | translate }}</td>
-        <td class="value">per second: 2,0011, estimate per day: 172,894</td>
-      </tr>
-    </table>
-  </div>
+</div>
+
+<div class="details" *ngIf="expanded">
+  <table class="table-details">
+    <tr>
+      <th class="name">{{ "names.item" | translate }}</th>
+      <th class="value">{{ "names.desc" | translate }} (localhost/largemap...v3)</th>
+    </tr>
+    <tr>
+      <td class="name">{{ "names.range" | translate }}</td>
+      <td class="value">
+        2021-05-28 09:05:24 (1) ~ 2021-05-28 09:15:24 (10,367)
+      </td>
+    </tr>
+    <tr>
+      <td class="name">{{ "names.utilization" | translate }}</td>
+      <td class="value">60.9%</td>
+    </tr>
+    <tr>
+      <td class="name">
+        {{ "names.deliveryTime" | translate }} (created ~ completed)​
+      </td>
+      <td class="value">87.10s, order count: 10,191</td>
+    </tr>
+    <tr>
+      <td class="name">
+        {{ "names.waitTime" | translate }} (created ~ loaded)​
+      </td>
+      <td class="value">87.10s, order count: 10,191</td>
+    </tr>
+    <tr>
+      <td class="name">
+        {{ "names.transferTime" | translate }} (created ~ completed)​
+      </td>
+      <td class="value">87.10s, order count: 10,191</td>
+    </tr>
+    <tr>
+      <td class="name">
+        {{ "names.assignTime" | translate }}(created ~ assigned)​
+      </td>
+      <td class="value">87.10s, order count: 10,191</td>
+    </tr>
+    <tr>
+      <td class="name">{{ "names.orderChange" | translate }}</td>
+      <td class="value">65.51% (6,792 / 10,368)</td>
+    </tr>
+    <tr>
+      <td class="name">{{ "names.numOfOrderReq" | translate }}</td>
+      <td class="value">per second: 2,0011, estimate per day: 172,894</td>
+    </tr>
+  </table>
 </div>

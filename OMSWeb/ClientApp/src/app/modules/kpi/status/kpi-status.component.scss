@@ -6,6 +6,7 @@
   gap: 4px;
   margin: 4px;
   margin-left: 5px;
+  background-color: #fff;
 
   .area {
     border: 1px solid var(--dialog-border-color);
@@ -25,6 +26,7 @@
           margin-top: 1px;
           background-color: var(--dialog-border-color);
           color: white;
+          z-index: 3;
           width: 24px;
           height: 16px;
           min-width: 24px;
@@ -35,20 +37,6 @@
           }
         }
       }
-    }
-
-    &.details {
-      height: inherit;
-      display: block;
-      padding: 8px;
-    }
-  }
-
-  .table-details {
-    width: 100%;
-
-    .name {
-      width: 210px;
     }
   }
 
@@ -83,5 +71,23 @@
     }
     &.memory {
     }
+  }
+}
+
+.details {
+  position: absolute;
+  top: 123px;
+  left: 5px;
+  z-index: 2;
+  display: block;
+  background-color: #fff;
+  width: 700px;
+}
+
+.table-details {
+  width: 100%;
+
+  .name {
+    width: 210px;
   }
 }
