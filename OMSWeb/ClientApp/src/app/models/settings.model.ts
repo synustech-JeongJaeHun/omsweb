@@ -10,6 +10,7 @@ export type ToggleOptionsType = {
 export class ServiceConfig {
   allowPublicMonitor = false;
   version: string;
+  kpiEnabled: boolean;
 }
 
 export class MapConfig {
@@ -53,7 +54,8 @@ export const defaultToggleOptions: ToggleOptionsType = {
   overlaps: false,
   itemDetails: false,
   showToolName: false,
-  showOmsVersion: true
+  showOmsVersion: true,
+  showKpi: true,
 };
 
 export class ClientPreferences implements IPreferences {

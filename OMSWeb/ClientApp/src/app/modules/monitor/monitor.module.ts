@@ -10,6 +10,7 @@ import { TrackMapModule } from '../track-map/track-map.module';
 import { StatusControlComponent } from './status/status-control.component';
 import { OrderControlTableComponent } from './tables/order-control-table.component';
 import { VehicleControlTableComponent } from './tables/vehicle-control-table.component';
+import { KpiModule } from '../kpi/kpi.module';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,6 @@ import { VehicleControlTableComponent } from './tables/vehicle-control-table.com
     OrderControlTableComponent,
     VehicleControlTableComponent,
   ],
-  imports: [CommonModule, MonitorRoutingModule, SharedModule, TrackMapModule],
+  imports: [CommonModule, MonitorRoutingModule, SharedModule, TrackMapModule, KpiModule],
 })
 export class MonitorModule {}

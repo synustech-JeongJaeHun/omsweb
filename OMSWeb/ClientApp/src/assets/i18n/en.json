@@ -298,7 +298,21 @@
     "elapsedMin": "Elapsed(min)",
     "solution": "Solution",
     "modifySolution": "Modify Solution",
-    "resetVehicle": "Reset Vehicle"
+    "resetVehicle": "Reset Vehicle",
+    "showKpi": "Show KPI",
+    "summary": "Summary",
+    "systemInfo": "System Info",
+    "utilization": "Utilization",
+    "deliveryTime": "Delivery Time",
+    "waitTime": "Wait Time",
+    "transferTime": "Wait Time",
+    "assignTime": "Wait Time",
+    "orderChange": "Order Change",
+    "numOfOrderReq": "Number of order requests",
+    "cpu": "CPU",
+    "memory": "Memory",
+    "item": "Item",
+    "range": "Range"
   },
   "enums": {
     "hostSessionStatus": {

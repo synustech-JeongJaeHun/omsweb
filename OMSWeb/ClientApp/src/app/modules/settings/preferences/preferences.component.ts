@@ -29,6 +29,7 @@ export class PreferencesComponent implements OnInit {
   ];
 
   resetThemeTargets: string[] = [];
+  canUseKpi = false;
 
   get canResetTheme(): boolean {
     return this.resetThemeTargets.length > 0;
@@ -36,6 +37,9 @@ export class PreferencesComponent implements OnInit {
 
   constructor(private settingSvc: SettingsService) {
     this.preference = this.settingSvc.globalPreferences;
+    this.settingSvc.serviceConfig.subscribe((cfg) => {
+      this.canUseKpi = cfg.kpiEnabled;
+    });
   }
 
   ngOnInit(): void {

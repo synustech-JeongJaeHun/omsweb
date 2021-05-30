@@ -5,6 +5,7 @@ namespace OMSWeb.Models
     public string JwtSecret { get; set; }
     public uint JwtLifeMinutes { get; set; }
     public string Version { get; set; }
+    public bool KpiEnabled { get; set; }
 
     public ClientSettings Client { get; set; }
 

@@ -1,0 +1,87 @@
+#kpi-container {
+  position: relative;
+  display: grid;
+  grid-template-columns: 700px 400px;
+  grid-template-rows: 1fr auto;
+  gap: 4px;
+  margin: 4px;
+  margin-left: 5px;
+
+  .area {
+    border: 1px solid var(--dialog-border-color);
+    height: 100px;
+    display: grid;
+    column-gap: 4px;
+    padding: 4px;
+    grid-template-rows: 18px 1fr;
+
+    &.summary {
+      grid-template-rows: 18px 1fr 0px;
+
+      .actions {
+        justify-self: center;
+
+        #expand-button {
+          margin-top: 1px;
+          background-color: var(--dialog-border-color);
+          color: white;
+          width: 24px;
+          height: 16px;
+          min-width: 24px;
+          border-radius: 4px;
+
+          mat-icon {
+            margin-right: 0;
+          }
+        }
+      }
+    }
+
+    &.details {
+      height: inherit;
+      display: block;
+      padding: 8px;
+    }
+  }
+
+  .table-details {
+    width: 100%;
+
+    .name {
+      width: 210px;
+    }
+  }
+
+  .category-name {
+    font-size: 14px;
+    grid-column: span 2;
+    margin: 0;
+  }
+
+  .summary {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .system-info {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .gauge {
+    background-color: #ddd;
+
+    .title {
+      font-size: 12px;
+      font-weight: bold;
+    }
+    &.util {
+    }
+    &.delivery {
+    }
+    &.vehicle {
+      grid-column: span 2;
+    }
+    &.cpu {
+    }
+    &.memory {
+    }
+  }
+}

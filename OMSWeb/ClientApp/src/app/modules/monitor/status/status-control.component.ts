@@ -21,13 +21,7 @@ export class StatusControlComponent implements OnInit {
     return this.tableHeightNum.toString();
   }
   get canControl(): boolean {
-    return (
-      this.auth.isAuthenticated &&
-      AccountUtil.hasPermission(
-        UserPermissions.controlActions,
-        this.auth.currentUser
-      )
-    );
+    return this.auth.isAuthenticated;
   }
 
   tabNames = [
@@ -51,7 +45,7 @@ export class StatusControlComponent implements OnInit {
   }
 
   hasPermissions(permissions: number[]): boolean {
-    return this.auth.hasPermissions(permissions);
+    return this.auth && this.auth.hasPermissions(permissions);
   }
 
   onVehicleReset() {

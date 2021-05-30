@@ -50,6 +50,7 @@ export type ToggleOptionKeyType =
   | 'clusters'
   | 'showToolName'
   | 'showOmsVersion'
+  | 'showKpi'
   | 'overlaps';
 
 export type CommandKeyType =

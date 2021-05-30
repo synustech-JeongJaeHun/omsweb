@@ -25,6 +25,7 @@ namespace OMSWeb.Services
     {
       var client = this._appSettings.Client;
       client.Version = this._appSettings.Version;
+      client.KpiEnabled = this._appSettings.KpiEnabled;
       return this._appSettings.Client;
     }
   }

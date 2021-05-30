@@ -19,6 +19,13 @@
         (change)="onChangedToggle('showOmsVersion')"
         >{{ "names.showOmsVersion" | translate }}</mat-slide-toggle
       >
+      <mat-slide-toggle
+        *ngIf="canUseKpi"
+        [(ngModel)]="preference.toggles.showKpi"
+        color="primary"
+        (change)="onChangedToggle('showKpi')"
+        >{{ "names.showKpi" | translate }}</mat-slide-toggle
+      >
     </div>
   </fieldset>
 

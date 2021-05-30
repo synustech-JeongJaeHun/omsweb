@@ -314,6 +314,10 @@
 
   /* Playback */
   --playback-background-color: rgba(214, 64, 109, 0.1);
+
+  /* KPI Status */
+  --kpi-status-position-x: 0px;
+  --kpi-status-position-y: 32px;
 }
 
 html,
@@ -357,6 +361,16 @@ fieldset {
     font-size: 14px;
     font-weight: bold;
     margin-left: 8px;
+  }
+}
+
+oms-kpi-status {
+  position: absolute;
+  top: var(--kpi-status-position-x);
+  left: var(--kpi-status-position-y);
+
+  &.has-name-margin {
+    left: var(--toolbar-named-width);
   }
 }
 
@@ -451,6 +465,32 @@ fieldset {
 }
 .pointer {
   cursor: pointer;
+}
+
+table.table-details {
+  border-collapse: collapse;
+  border: 1px solid var(--dialog-border-color);
+
+  th, td {
+    padding: 4px;
+    border: 1px solid var(--dialog-border-color);
+  }
+  th {
+    font-size: 12px;
+    text-align: left;
+    background-color: var(--details-background-color);
+  }
+
+  th.name, td.name {
+    text-align: right;
+  }
+  td.name {
+    background-color: var(--toolbar-background-color);
+    font-weight: bold;
+  }
+  td {
+    font-size: 11px;
+  }
 }
 
 // material
