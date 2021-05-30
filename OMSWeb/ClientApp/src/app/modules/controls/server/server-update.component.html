@@ -1,0 +1,55 @@
+<fieldset>
+  <legend>{{ "names.processes" | translate }}</legend>
+
+  <table id="process-list">
+    <tr>
+      <th rowspan="2">{{ "names.processName" | translate }}</th>
+      <th rowspan="2">{{ "names.version" | translate }}</th>
+      <th colspan="2">{{ "names.status" | translate }}</th>
+      <th rowspan="2">{{ "names.control" | translate }}</th>
+    </tr>
+    <tr>
+      <th>{{ "names.run" | translate }}</th>
+      <th>{{ "names.stop" | translate }}</th>
+    </tr>
+    <tr *ngFor="let item of dataSource">
+      <td>{{ item.name }}</td>
+      <td>v.{{ item.version }}</td>
+      <td>
+        {{item.isRunning ? 'Y': ''}}
+      </td>
+      <td>
+        {{item.isRunning ? '': 'Y'}}
+      </td>
+      <td>
+        <button
+          mat-raised-button
+          class="dense"
+          color="primary"
+          [disabled]="item.isRunning"
+          (click)="onCommand('start', item)"
+        >
+          {{ "names.start" | translate }}
+        </button>
+        <button
+          mat-raised-button
+          class="dense"
+          color="primary"
+          [disabled]="!item.isRunning"
+          (click)="onCommand('stop', item)"
+        >
+          {{ "names.stop" | translate }}
+        </button>
+        <button
+          mat-raised-button
+          class="dense"
+          color="primary"
+          [disabled]="!item.isRunning"
+          (click)="onCommand('restart', item)"
+        >
+          {{ "names.restart" | translate }}
+        </button>
+      </td>
+    </tr>
+  </table>
+</fieldset>

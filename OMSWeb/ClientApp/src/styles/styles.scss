@@ -467,7 +467,7 @@ oms-kpi-status {
   cursor: pointer;
 }
 
-table.table-details {
+table {
   border-collapse: collapse;
   border: 1px solid var(--dialog-border-color);
 
@@ -481,15 +481,19 @@ table.table-details {
     background-color: var(--details-background-color);
   }
 
+  td {
+    font-size: 11px;
+  }
+}
+
+table.table-details {
+
   th.name, td.name {
     text-align: right;
   }
   td.name {
     background-color: var(--toolbar-background-color);
     font-weight: bold;
-  }
-  td {
-    font-size: 11px;
   }
 }
 

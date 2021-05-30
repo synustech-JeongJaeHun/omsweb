@@ -61,5 +61,6 @@ namespace OMSWeb
     SettingPoint = 36,
     SettingZcu = 37,
     SettingStation = 38,
+    ViewControl = 39,
   }
 }

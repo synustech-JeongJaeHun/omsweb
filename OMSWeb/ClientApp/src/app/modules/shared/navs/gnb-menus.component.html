@@ -15,6 +15,18 @@
     class="nav-item"
     matTooltipClass="gnb-tooltip"
     matTooltipPosition="below"
+    matTooltip="Control"
+    routerLinkActive="active"
+    routerLink="/controls"
+    [disabled]="!hasPermission(39)"
+  >
+    <mat-icon fontSet="material-icons-outlined">layers</mat-icon>
+  </button>
+  <button
+    mat-icon-button
+    class="nav-item"
+    matTooltipClass="gnb-tooltip"
+    matTooltipPosition="below"
     matTooltip="Playback"
     routerLinkActive="active"
     routerLink="/playback"
@@ -83,6 +95,22 @@
       > -->
     </ng-container>
 
+    <ng-container *ngSwitchCase="'/controls'">
+      <a
+        mat-button
+        class="nav-item"
+        routerLinkActive="active"
+        routerLink="/controls/vehicles"
+        >Vehicles</a
+      >
+      <a
+        mat-button
+        class="nav-item"
+        routerLinkActive="active"
+        routerLink="/controls/server"
+        >Server</a
+      >
+    </ng-container>
     <ng-container *ngSwitchCase="'/playback'">
       <a
         mat-button

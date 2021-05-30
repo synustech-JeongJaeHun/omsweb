@@ -1,0 +1,12 @@
+:host {
+  display: grid;
+  grid-template-rows: 32px 1fr;
+  gap: 4px;
+  padding: 8px;
+}
+
+.actions-container {
+  button {
+    margin-right: 4px;
+  }
+}

@@ -25,8 +25,6 @@ export interface IVehicleStatusRow extends IVehicleInfoRow {
   locationPickup: string;
   locationDropoff: string;
   locationMove: string;
-
-  rowNum: number;
 }
 
 export interface IVehicleSignal {

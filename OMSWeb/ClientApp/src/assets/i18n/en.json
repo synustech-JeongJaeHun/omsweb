@@ -84,6 +84,7 @@
     "runtimeTotal": "Total Runtime",
     "type": "Type",
     "mapDb": "Map",
+    "mapVersion": "Map Version",
     "distancePickup": "Distance Pickup",
     "distanceDropoff": "Distance Deliver",
     "distanceMove": "Distance Move",
@@ -312,7 +313,18 @@
     "cpu": "CPU",
     "memory": "Memory",
     "item": "Item",
-    "range": "Range"
+    "range": "Range",
+    "control": "Control",
+    "refreshMapInfo": "Refresh map info",
+    "requestMapUpdate": "Request map update",
+    "processes": "Processes",
+    "processName": "Process Name",
+    "version": "Version",
+    "status": "Status",
+    "run": "Run",
+    "stop": "Stop",
+    "start": "Start",
+    "restart": "Restart"
   },
   "enums": {
     "hostSessionStatus": {
@@ -334,6 +346,7 @@
       "1": "Host Mode",
       "2": "TSC Mode",
       "3": "AI Mode",
+      "39": "View Control",
       "4": "View History",
       "5": "View Playback",
       "6": "View Log",
@@ -391,6 +404,7 @@
     "changeConfirm": "Are you sure {{name}} change?​",
     "duplicatedRoleName": "Role name is used already.",
     "invalidEmail": "Invalid email address.",
-    "alarmNoteHint": "Input operator's extra message at here..."
+    "alarmNoteHint": "Input operator's extra message at here...",
+    "confirmCommand": "Are you sure send this command?"
   }
 }

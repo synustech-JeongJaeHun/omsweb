@@ -14,6 +14,11 @@ const routes: Routes = [
       import('../monitor/monitor.module').then((m) => m.MonitorModule),
   },
   {
+    path: 'controls',
+    loadChildren: () =>
+      import('../controls/controls.module').then((m) => m.ControlsModule),
+  },
+  {
     path: 'playback',
     loadChildren: () =>
       import('../playback/playback.module').then((m) => m.PlaybackModule),

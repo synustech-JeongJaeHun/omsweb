@@ -73,6 +73,7 @@ export class GnbMenusComponent implements OnInit, OnDestroy {
   private detectParentRoute() {
     const routeNames = [
       '/monitor',
+      '/controls',
       '/playback',
       '/histories',
       '/logs',

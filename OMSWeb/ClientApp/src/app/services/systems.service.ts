@@ -1,10 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-
-import { ISystemStates } from '@oms/models/system.model';
+import DataSource from 'devextreme/data/data_source';
+import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 import { Observable, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
+import { IServiceProcessStates, ISystemStates } from '@oms/models/system.model';
 @Injectable({
   providedIn: 'root',
 })
@@ -29,5 +30,18 @@ export class SystemsService {
 
   changeStates(nextStates: ISystemStates): Observable<ISystemStates> {
     return this.http.patch<ISystemStates>(`${this.baseUrl}/states`, nextStates);
+  }
+
+  vehicles(): DataSource {
+    return new DataSource({
+      store: AspNetData.createStore({
+        key: 'id',
+        loadUrl: `/assets/json/vehicles.json`,
+      }),
+    });
+  }
+
+  processes(): Observable<IServiceProcessStates[]> {
+    return this.http.get<IServiceProcessStates[]>('/assets/json/processes.json');
   }
 }

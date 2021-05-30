@@ -6,3 +6,10 @@ export interface ISystemStates {
   tscMode?: TscModeEnums;
   aiMode?: boolean;
 }
+
+
+export interface IServiceProcessStates {
+  name: string;
+  version: string;
+  isRunning: boolean;
+}
