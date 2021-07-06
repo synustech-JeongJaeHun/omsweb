@@ -16,6 +16,7 @@ import { LegendDialogComponent } from '../dialogs/legend-dialog.component';
 import { LoginDialogComponent } from '../dialogs/login-dialog.component';
 import { ProfileDialogComponent } from '../dialogs/profile-dialog.component';
 import { AccountUtil } from '../utils/account.util';
+import { MessagesService } from '../../../services/messages.service';
 
 @Component({
   selector: 'oms-gnb-actions',
@@ -49,7 +50,8 @@ export class GnbActionsComponent implements OnInit, OnDestroy {
     private dialogSvc: DialogService,
     private t$: TranslateService,
     private systemSvc: SystemsService,
-    private userSvc: UsersService
+    private userSvc: UsersService,
+    private messageSvc: MessagesService
   ) {}
 
   ngOnDestroy(): void {
@@ -107,6 +109,8 @@ export class GnbActionsComponent implements OnInit, OnDestroy {
       })
       .subscribe((ok) => {
         if (ok) {
+          this.messageSvc.sendAIModeCommand({ action: 'ai_mode', mode: 'on' }).subscribe();
+
           this.systemSvc
             .changeStates({ aiMode: !this._activeAi })
             .subscribe((states) => (this._activeAi = states.aiMode));

@@ -1,13 +1,11 @@
 using System;
 using System.Text;
-using System.Text.Json;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -19,20 +17,43 @@ using OMSWeb.Hubs;
 using OMSWeb.Models;
 using OMSWeb.Repositories;
 using OMSWeb.Services;
+using OMSWeb.MqttSettings;
+using OMSWeb.Extensions;
 
 namespace OMSWeb
 {
-  public class Startup
+    public class Startup
   {
     public Startup(IConfiguration configuration)
     {
-      Configuration = configuration;
+       Configuration = configuration;
+       MapConfiguration();
     }
 
     public IConfiguration Configuration { get; }
 
-    // This method gets called by the runtime. Use this method to add services to the container.
-    public void ConfigureServices(IServiceCollection services)
+    private void MapConfiguration()
+    {
+        MapBrokerHostSettings();
+        MapClientSettings();
+    }
+
+    private void MapBrokerHostSettings()
+    {
+        BrokerHostSettings brokerHostSettings = new BrokerHostSettings();
+        Configuration.GetSection(nameof(BrokerHostSettings)).Bind(brokerHostSettings);
+        MqttAppSettingsProvider.BrokerHostSettings = brokerHostSettings;
+    }
+
+    private void MapClientSettings()
+    {
+        MqttClientSettings clientSettings = new MqttClientSettings();
+        Configuration.GetSection(nameof(ClientSettings)).Bind(clientSettings);
+        MqttAppSettingsProvider.ClientSettings = clientSettings;
+    }
+
+        // This method gets called by the runtime. Use this method to add services to the container.
+        public void ConfigureServices(IServiceCollection services)
     {
       // services.AddControllersWithViews();
 
@@ -103,6 +124,11 @@ namespace OMSWeb
       services.AddSingleton<CacheService>();
 
       // services.AddTransient<ProblemDetailsFactory, OmsProblemDetailsFactory>();  // @TODO problem handler 작성 후 사용
+      #endregion
+
+      #region mqtt
+      services.AddMqttClientHostedService();
+      services.AddSingleton<ExtarnalService>();
       #endregion
 
       #region SignalR

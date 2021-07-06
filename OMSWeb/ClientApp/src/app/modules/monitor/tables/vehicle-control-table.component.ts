@@ -87,21 +87,28 @@ export class VehicleControlTableComponent implements OnInit, OnDestroy {
   }
   onChangeHostOrderActivity() {
     if (!this.canControl) return;
+    this.messageSvc
+      .sendVehicleCommand({ action: 'set_behavior', orderOrigin: 'OMS,MCS' }, this.selectedItems)
+      .subscribe();
   }
   onChangePushActivity() {
     if (!this.canControl) return;
+
     this.messageSvc
-      .sendVehicleCommand(
-        { action: 'set_behavior', canBePushed: true },
-        this.selectedItems
-      )
+      .sendVehicleCommand({ action: 'set_behavior', canBePushed: true }, this.selectedItems)
       .subscribe();
   }
   onRailIn() {
     if (!this.canControl) return;
+    this.messageSvc
+      .sendVehicleCommand({ action: 'rail_in' }, this.selectedItems)
+      .subscribe();
   }
   onRailOut() {
     if (!this.canControl) return;
+    this.messageSvc
+      .sendVehicleCommand({ action: 'remove' }, this.selectedItems)
+      .subscribe();
   }
 
   private onTableChanged(payload: IDataChangeEvent) {

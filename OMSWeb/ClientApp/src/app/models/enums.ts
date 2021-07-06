@@ -111,13 +111,17 @@ export enum HostSessionStatusEnums {
 
 export enum HostModeEnums {
   offline = 0,
-  pm,
-  onlineRemote,
   onlineLocal,
+  onlineRemote,
 }
 
 export enum TscModeEnums {
-  auto = 0,
+  paused = 0,
   pausing,
-  paused,
+  auto,
+}
+
+export enum PmModeEnums {
+  offline = 0,
+  online,
 }

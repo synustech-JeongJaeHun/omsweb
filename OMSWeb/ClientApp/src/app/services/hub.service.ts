@@ -25,6 +25,7 @@ export class HubService {
   alarmChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter();
   alertChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter();
   serverStatusChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter();
+  modeStateChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter();
   //#endregion
 
   public isConnected = false;
@@ -100,6 +101,7 @@ export class HubService {
     this.hub.off('alarm');
     this.hub.off('alert');
     this.hub.off('serverStatus');
+    this.hub.off('modeState');
   }
 
   private attachEvents() {
@@ -166,6 +168,10 @@ export class HubService {
     this.hub.on('serverStatus', (meta, body) => {
       console.info('## hub message : serverStatus >>', { meta, body });
       this.serverStatusChanged$.emit({ ...meta, data: body });
+    });
+    this.hub.on('modeState', (meta, body) => {
+      console.info('## hub message : modeState >>', { meta, body });
+      this.modeStateChanged$.emit({ ...meta, data: body });
     });
   }
 }

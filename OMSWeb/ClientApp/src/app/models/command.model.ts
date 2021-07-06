@@ -3,7 +3,24 @@ export interface ICommandMessage {
   action: string;
 }
 
+export interface IControlStateCommandMessage extends ICommandMessage {
+  state?: string;
+}
+
+export interface ITscStateCommandMessage extends ICommandMessage {
+  state?: string;
+}
+
+export interface IAiModeCommandMessage extends ICommandMessage {
+  mode?: string;
+}
+
+export interface IAllCommandMessage extends ICommandMessage {
+  vehicleId?: string;
+}
+
 export interface IVehicleCommandMessage extends ICommandMessage {
+  vehicleId?: string;
   vehicleIds?: number[];
   orderOrigin?: string;
   canBePushed?: boolean;

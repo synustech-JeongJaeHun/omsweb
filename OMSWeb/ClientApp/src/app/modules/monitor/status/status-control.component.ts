@@ -53,7 +53,9 @@ export class StatusControlComponent implements OnInit {
       .confirm({ body: this.$t.instant('messages.confirmResetAllVehicles') })
       .subscribe((confirm) => {
         if (confirm) {
-          this.messageSvc.sendVehicleCommand({ action: 'reset' }).subscribe();
+          this.messageSvc
+            .sendVehicleAllCommand({ action: 'reset', vehicleId: '*' })
+            .subscribe();
         }
       });
   }
@@ -63,7 +65,7 @@ export class StatusControlComponent implements OnInit {
       .subscribe((confirm) => {
         if (confirm) {
           this.messageSvc
-            .sendVehicleCommand({ action: 'initialize' })
+            .sendVehicleAllCommand({ action: 'initialize', vehicleId: '*' })
             .subscribe();
         }
       });
@@ -73,7 +75,9 @@ export class StatusControlComponent implements OnInit {
       .confirm({ body: this.$t.instant('messages.confirmEstopAll') })
       .subscribe((confirm) => {
         if (confirm) {
-          this.messageSvc.sendVehicleCommand({ action: 'stop' }).subscribe();
+          this.messageSvc
+            .sendVehicleAllCommand({ action: 'stop', vehicleId: '*' })
+            .subscribe();
         }
       });
   }

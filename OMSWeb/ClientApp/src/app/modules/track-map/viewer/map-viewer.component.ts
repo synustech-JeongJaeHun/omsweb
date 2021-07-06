@@ -176,12 +176,26 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   onVehicleCommand(name: string) {
     let commandMessage: IVehicleCommandMessage;
     switch (name) {
+      case 'initialize':
+        commandMessage = { action: 'initialize' };
+        break;
+      case 'reset':
+        commandMessage = { action: 'reset' };
+        break;
+      case 'stop':
+        commandMessage = { action: 'stop' };
+        break;
+      case 'zcu_go':
+        commandMessage = { action: 'zcu_go' };
+        break;
       case 'push:enable':
         commandMessage = { action: 'set_behavior', canBePushed: true };
         break;
       case 'hostOrder:enable':
-        console.warn('TODO host order enable message 정의 필요');
-        commandMessage = { action: 'set_behavior' }; // @TODO 메세지 정의 필요
+        commandMessage = { action: 'set_behavior', orderOrigin: 'OMS,MCS' }; 
+        break;
+      case 'rail_out':
+        commandMessage = { action: 'remove' };
         break;
       default:
         commandMessage = { action: name };

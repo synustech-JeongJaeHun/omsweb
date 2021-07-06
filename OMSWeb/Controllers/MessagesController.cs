@@ -14,7 +14,7 @@ namespace OMSWeb.Controllers
   public class MessagesController : ControllerBase
   {
     private readonly MessageService _msgSvc;
-
+        
     public MessagesController(MessageService messageService)
     {
       this._msgSvc = messageService;
@@ -26,5 +26,6 @@ namespace OMSWeb.Controllers
       await this._msgSvc.SendMessage(command);
       return;
     }
+        
   }
 }

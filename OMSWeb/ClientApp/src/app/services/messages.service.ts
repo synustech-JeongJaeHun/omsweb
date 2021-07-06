@@ -6,6 +6,10 @@ import {
   ICommandMessage,
   IOrderCommandMessage,
   IVehicleCommandMessage,
+  IAllCommandMessage,
+  IAiModeCommandMessage,
+  ITscStateCommandMessage,
+  IControlStateCommandMessage,
 } from '../models/command.model';
 import { IOrderStatusRow } from '../models/order-status.model';
 import { IVehicleStatusRow } from '../models/vehicle-status.model';
@@ -39,6 +43,23 @@ export class MessagesService {
       priority,
       carrierLabel,
     });
+  }
+
+  sendControlStateCommand(command: IControlStateCommandMessage): Observable<void> {
+    return this.sendCommand<IControlStateCommandMessage>(command);
+  }
+
+  sendTscStateCommand(command: ITscStateCommandMessage): Observable<void> {
+    return this.sendCommand<ITscStateCommandMessage>(command);
+  }
+
+  sendAIModeCommand(command: IAiModeCommandMessage): Observable<void> {
+    return this.sendCommand<IAiModeCommandMessage>(command);
+  }
+
+  sendVehicleAllCommand(command: IAllCommandMessage): Observable<void> {
+    command.type = 'VEHICLE_ALL';
+    return this.sendCommand<IAllCommandMessage>(command);
   }
 
   sendVehicleCommand(
