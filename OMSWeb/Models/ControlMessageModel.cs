@@ -7,6 +7,9 @@ namespace OMSWeb.Models
 
     public int[] VehicleIds { get; set; }
     public string VehicleId { get; set; }
+    public int[] ZcuIds { get; set; }
+    public string ZcuId { get; set; }
+    public string ZcuUsingType { get; set; }
     public int? OrderId { get; set; }
     public int? SegmentId { get; set; }
     public string OrderOrigin { get; set; }

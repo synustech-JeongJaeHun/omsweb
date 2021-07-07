@@ -97,11 +97,11 @@ export interface IMapMouseEvent {
   position?: ICoordinate;
 }
 
-export type TransferCommandCategoryType = 'move' | 'fromTo' | 'from' | 'to';
+export type TransferCommandCategoryType = 'fromTo' | 'from' | 'to' | 'move';
 
 export class TransferCommandState {
   active: boolean = false;
-  category: TransferCommandCategoryType = 'move';
+  category: TransferCommandCategoryType = 'fromTo';
   auto: boolean = true;
   vehicle?: ILookupUnit;
   point?: ILookupUnit;

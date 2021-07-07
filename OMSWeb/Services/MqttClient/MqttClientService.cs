@@ -115,6 +115,7 @@ namespace OMSWeb.Services
 
         public async Task SendMessage(string topic, string payload)
         {
+            Console.WriteLine("topic={0}, payload={1}", topic, payload);
             await mqttClient.PublishAsync(topic, payload, MqttQualityOfServiceLevel.AtMostOnce);
         }
     }
