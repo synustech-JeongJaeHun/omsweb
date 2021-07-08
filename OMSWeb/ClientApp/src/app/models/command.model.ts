@@ -45,6 +45,9 @@ export interface IOrderCommandMessage extends ICommandMessage {
   vehicleId?: number;
   orderId?: number;
   orderOrigin?: string;
+  locationPickupType?: string;
+  locationDropoffType?: string;
+  locationMoveType?: string;
   locationPickup?: string;
   locationDropoff?: string;
   locationMove?: string;

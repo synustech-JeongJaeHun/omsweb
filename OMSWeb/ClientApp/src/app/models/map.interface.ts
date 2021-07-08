@@ -109,6 +109,9 @@ export class TransferCommandState {
   dest?: ILookupUnit;
   carrier?: string;
 
+  get autoDisabled(): boolean {
+    return !this.active || this.category !== 'move';
+  }
   get vehicleDisabled(): boolean {
     return (
       !this.active || (this.auto && ['fromTo', 'from'].includes(this.category))

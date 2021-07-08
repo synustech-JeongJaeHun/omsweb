@@ -6,6 +6,7 @@ using DevExtreme.AspNet.Data;
 using DevExtreme.AspNet.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using OMSWeb.Models;
 using OMSWeb.Repositories;
 using OMSWeb.Services;
 
@@ -18,8 +19,7 @@ namespace OMSWeb.Controllers
     private readonly OrderService _orderSvc;
     public OrdersController(OrderService orderSvc)
     {
-      _orderSvc = orderSvc;
+      this._orderSvc = orderSvc;
     }
-
   }
 }

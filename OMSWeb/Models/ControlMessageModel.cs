@@ -13,6 +13,9 @@ namespace OMSWeb.Models
     public int? OrderId { get; set; }
     public int? SegmentId { get; set; }
     public string OrderOrigin { get; set; }
+    public string LocationPickupType { get; set; }
+    public string LocationDropoffType { get; set; }
+    public string LocationMoveType { get; set; }
     public string LocationPickup { get; set; }
     public string LocationDropoff { get; set; }
     public string LocationMove { get; set; }

@@ -140,7 +140,14 @@ namespace OMSWeb.Services.MqttClient
         public object GetVehicleId(CommandMessageDto command)
         {
             if (command.VehicleId != null && command.VehicleIds == null)
+            {
+                int numericValue;
+                bool isNumber = int.TryParse(command.VehicleId, out numericValue);
+                if (isNumber)
+                    return numericValue;
+
                 return command.VehicleId;
+            }
 
             return command.VehicleIds;
         }
@@ -152,73 +159,160 @@ namespace OMSWeb.Services.MqttClient
             return command.ZcuIds;
         }
 
+        public string GetLocationPickup(CommandMessageDto command)
+        {
+            if (command.LocationPickupType == "Station")
+                return "s" + command.LocationPickup;
+            if (command.LocationPickupType == "Buffer")
+                return "b" + command.LocationPickup;
+            if (command.LocationPickupType == "Point")
+                return "p" + command.LocationPickup;
+            return null;
+        }
+
+        public string GetLocationDropoff(CommandMessageDto command)
+        {
+            if (command.LocationDropoffType == "Station")
+                return "s" + command.LocationDropoff;
+            if (command.LocationDropoffType == "Buffer")
+                return "b" + command.LocationDropoff;
+            if (command.LocationDropoffType == "Point")
+                return "p" + command.LocationDropoff;
+            return null;
+        }
+
+        public string GetLocationMove(CommandMessageDto command)
+        {
+            if (command.LocationMoveType == "Station")
+                return "s" + command.LocationMove;
+            if (command.LocationMoveType == "Buffer")
+                return "b" + command.LocationMove;
+            if (command.LocationMoveType == "Point")
+                return "p" + command.LocationMove;
+            return null;
+        }
+
+        public string NowUTCString()
+        {
+            string dateFormat = "yyyy-MM-ddT HH:mm:ss.ffffff";
+
+            // now utc date time
+            DateTime dT = new DateTime();
+            dT = DateTime.UtcNow;
+            return dT.ToString(dateFormat);
+        }
+
+        public string GenerateLogicalID(string base_id)
+        {
+            if (base_id == null || "".Equals(base_id))
+            {
+                return string.Format("OMS_{0}", NowUTCString());
+            }
+            return base_id.Replace('-', '_');
+        }
+
         public List<string> GetPayload(CommandMessageDto command)
         {
             if (command == null) return null;
             if (command.Action == null) return null;
 
             Dictionary<string, object> data = new Dictionary<string, object>();
-            data["request"] = GetRequest(command.Action);
-            data["action"] = command.Action;
-
-            if (command.Action == ACTION_CONTROL_STATE || command.Action == ACTION_TSC_STATE)
+            if (command.Action != null)
             {
-                if (command.State != null) data["state"] = command.State;
+                data["request"] = GetRequest(command.Action);
+                data["action"]  = command.Action;
+            }
+
+            if (command.Action == ACTION_CONTROL_STATE || 
+                command.Action == ACTION_TSC_STATE)
+            {
+                if (command.State != null) 
+                    data["state"] = command.State;
             }
             else if (command.Action == ACTION_AI_MODE)
             {
-                if (command.State != null) data["mode"] = command.Mode;
+                if (command.State != null) 
+                    data["mode"] = command.Mode;
             }
-            else if (command.Action == ACTION_PAUSE || command.Action == ACTION_RESUME)
+            else if (command.Action == ACTION_PAUSE || 
+                     command.Action == ACTION_RESUME)
             {
 
             }
-            else if (command.Action == ACTION_RESET      || command.Action == ACTION_STOP    || command.Action == ACTION_INITIALIZE  ||
-                     command.Action == ACTION_STATUS     || command.Action == ACTION_RAIL_IN || command.Action == ACTION_REMOVE      ||
+            else if (command.Action == ACTION_RESET      || command.Action == ACTION_STOP         || 
+                     command.Action == ACTION_INITIALIZE || command.Action == ACTION_STATUS       || 
+                     command.Action == ACTION_RAIL_IN    || command.Action == ACTION_REMOVE       ||
                      command.Action == ACTION_UPDATE_MAP || command.Action == ACTION_GET_MAP_INFO)
             {
                 data["vehicle_id"] = GetVehicleId(command);
             }
             else if (command.Action == ACTION_SET_BEHAVIOR)
             {
-                data["vehicle_id"] = GetVehicleId(command);
-                
-                if (command.OrderOrigin != null)  data["order_origin"] = command.OrderOrigin;
-                if (command.CanBePushed != null)  data["can_be_pushed"] = command.CanBePushed;
+                if (command.VehicleId != null || command.VehicleIds != null)
+                    data["vehicle_id"] = GetVehicleId(command);
+
+                if (command.OrderOrigin != null)  
+                    data["order_origin"]  = command.OrderOrigin;
+
+                if (command.CanBePushed != null)  
+                    data["can_be_pushed"] = command.CanBePushed;
             }
-            else if (command.Action == ACTION_CALCULATE_PATH || command.Action == ACTION_CLEAR_PATH)
+            else if (command.Action == ACTION_CALCULATE_PATH || 
+                     command.Action == ACTION_CLEAR_PATH)
             {
-                data["vehicle_id"] = GetVehicleId(command);
+                if (command.VehicleId != null || command.VehicleIds != null)
+                    data["vehicle_id"] = GetVehicleId(command);
             }
-            else if (command.Action == ACTION_DISABLE_SEGMENT || command.Action == ACTION_ENABLE_SEGMENT)
+            else if (command.Action == ACTION_DISABLE_SEGMENT || 
+                     command.Action == ACTION_ENABLE_SEGMENT)
             {
-                if (command.SegmentId != null) data["segment_id"] = command.SegmentId;
+                if (command.SegmentId != null) 
+                    data["segment_id"] = command.SegmentId;
             }
             else if (command.Action == ACTION_ZCU_GO)
             {
-                data["vehicle_id"] = GetVehicleId(command);
+                if (command.VehicleId != null || command.VehicleIds != null) 
+                    data["vehicle_id"] = GetVehicleId(command);
             }
             else if (command.Action == ACTION_ZCU_USING_TYPE)
             {
-                data["zcu_id"] = GetZcuId(command);
-                if (command.ZcuUsingType != null) data["zcu_using_type"] = command.ZcuUsingType;
+                if (command.ZcuId != null || command.ZcuIds != null) 
+                    data["zcu_id"] = GetZcuId(command);
+
+                if (command.ZcuUsingType != null) 
+                    data["zcu_using_type"] = command.ZcuUsingType;
             }
-            else if (command.Action == ACTION_INSTALL_CARRIER || command.Action == ACTION_REMOVE_CARRIER)
+            else if (command.Action == ACTION_INSTALL_CARRIER || 
+                     command.Action == ACTION_REMOVE_CARRIER)
             {
-                if (command.CarrierLabel != null) data["carrier_id"] = command.CarrierLabel;
+                if (command.CarrierLabel != null) 
+                    data["carrier_id"] = command.CarrierLabel;
             }
             else if (command.Action == ACTION_N)
             {
-                data["vehicle_id"] = GetVehicleId(command);
-                if (command.LocationPickup != null) data["location_pickup"] = command.LocationPickup;
-                if (command.LocationDropoff != null) data["location_dropoff"] = command.LocationDropoff;
-                if (command.LocationMove != null) data["location_move"] = command.LocationMove;
+                data["logical_id"] = GenerateLogicalID("");
+
+                if (command.VehicleId != null || command.VehicleIds != null) 
+                    data["vehicle_id"] = GetVehicleId(command);
+
+                if (command.LocationPickup != null)  
+                    data["location_pickup"]  = GetLocationPickup(command);
+
+                if (command.LocationDropoff != null) 
+                    data["location_dropoff"] = GetLocationDropoff(command);
+
+                if (command.LocationMove    != null) 
+                    data["location_move"]    = GetLocationMove(command);
+
                 data["origin"] = ORIGIN_OMS;    // oms
             }
-            else if (command.Action == ACTION_A || command.Action == ACTION_C)
+            else if (command.Action == ACTION_A || 
+                     command.Action == ACTION_C)
             {
-                data["order_id"] = command.OrderId;
-                data["origin"] = ORIGIN_OMS;    // oms
+                if (command.OrderId != null) 
+                    data["order_id"] = command.OrderId;
+
+                data["origin"]   = ORIGIN_OMS;    // oms
             }
 
             // build JSON list
