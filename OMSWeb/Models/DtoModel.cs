@@ -48,6 +48,12 @@ namespace OMSWeb.Models
     public int[] Permissions { get; set; }
   }
 
+    public class SegmentUpdateDto
+  {
+        public int segment_id { get; set; }
+        public bool? isDisabled { get; set; }
+    }
+
   public class PointUpdateDto
   {
     public int? Group { get; set; }

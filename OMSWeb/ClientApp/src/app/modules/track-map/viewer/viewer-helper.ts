@@ -13689,6 +13689,7 @@ export class ViewController {
         this.get_combined_path(this.get_layout_objects('SEGMENT'))
       );
     }
+
   }
   update_minimap(path: string) {
     if (this.minimap_path_svg) {

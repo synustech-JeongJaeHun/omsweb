@@ -128,12 +128,20 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   onChangePointProperty(name: string, value: any) {
     console.log('## changed point property >>', { name, value });
     // @TODO: change point prop api 연동
-    console.warn('TODO: change point prop api 연동');
   }
   onChangeSegmentProperty(name: string, value: any) {
     console.log('## changed segment property >>', { name, value });
-    // @TODO: change segment prop api 연동
-    console.warn('TODO: change segment prop api 연동');
+    let isDisable: boolean = value;
+    if (isDisable) {
+      this.messageSvc
+        .sendDisableSegmentCommand({ action: 'disable-segment' }, this.contextData.id)
+        .subscribe();
+    }
+    else {
+      this.messageSvc
+        .sendDisableSegmentCommand({ action: 'enable-segment' }, this.contextData.id)
+        .subscribe();
+    }
   }
   onApplyPointChange(isHome: boolean, selectedGroup: number) {
     this.trackSvc

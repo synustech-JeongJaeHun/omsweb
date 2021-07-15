@@ -4,6 +4,7 @@ import { EMPTY, Observable, of } from 'rxjs';
 
 import {
   ICommandMessage,
+  ITrackCommandMessage,
   IOrderCommandMessage,
   IVehicleCommandMessage,
   IAllCommandMessage,
@@ -74,6 +75,16 @@ export class MessagesService {
 
   sendOrderCommand(command: IOrderCommandMessage): Observable<void> {
     return this.sendCommand<IOrderCommandMessage>(command);
+  }
+
+  sendDisableSegmentCommand(
+    command: ITrackCommandMessage,
+    targets: number
+  ): Observable<void> {
+    command.segmentId = targets;
+    command.source = "uid-admin";
+
+    return this.sendCommand<ITrackCommandMessage>(command);
   }
 
   private sendCommand<T extends ICommandMessage>(command: T): Observable<void> {

@@ -54,3 +54,4 @@ export interface IOrderCommandMessage extends ICommandMessage {
   carrierLabel?: string;
   priority?: number;
 }
+

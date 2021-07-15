@@ -266,8 +266,12 @@ namespace OMSWeb.Services.MqttClient
             else if (command.Action == ACTION_DISABLE_SEGMENT || 
                      command.Action == ACTION_ENABLE_SEGMENT)
             {
-                if (command.SegmentId != null) 
+                if (command.SegmentId != null)
+                {
                     data["segment_id"] = command.SegmentId;
+                    data["source"] = "uid-admin";
+                    data["reason"] = "";
+                }
             }
             else if (command.Action == ACTION_ZCU_GO)
             {
