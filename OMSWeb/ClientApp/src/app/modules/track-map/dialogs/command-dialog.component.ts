@@ -44,10 +44,6 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 
   onTabChanged() {
     this.statesSvc.transferCommandState.category = this.tabs[this.currentTab];
-    if (this.currentTab == 3) {
-      this.isAuto = false;
-      console.log("onTabChanged --> " + this.currentTab);
-    }
   }
 
   onApply() {

@@ -31,6 +31,7 @@
         </div>
         <div class="form-row">
           <oms-unit-selector
+            [findScopes]="['stations', 'buffers']"
             [disabled]="commandState.sourceDisabled"
             [(selectedUnit)]="commandState.source"
             [placeholder]="'names.selectSource' | translate"
@@ -38,6 +39,7 @@
         </div>
         <div class="form-row">
           <oms-unit-selector
+            [findScopes]="['stations', 'buffers']"
             [disabled]="commandState.destDisabled"
             [(selectedUnit)]="commandState.dest"
             [placeholder]="'names.selectDest' | translate"
