@@ -96,6 +96,7 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
       panelClass: 'alerts-dialog',
     });
   }
+
   toggleAlarmsView(enforce = false) {
     if (!AccountUtil.hasPermission(8, this.auth.currentUser)) return;
     if (this._alarmDlg && this._alarmDlg.getState() === MatDialogState.OPEN) {
@@ -129,6 +130,27 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
     // return count.toString();
   }
 
+  showAlarmsView() {
+    if (!AccountUtil.hasPermission(8, this.auth.currentUser)) return;
+    if (this._alarmDlg && this._alarmDlg.getState() === MatDialogState.OPEN) {
+      return;
+    }
+
+    const rect: DOMRect = this.btnAlarm.nativeElement.getBoundingClientRect();
+    this._alarmDlg = this.dialog.open(AlarmDialogComponent, {
+      // width: '700px',
+      autoFocus: false,
+      hasBackdrop: false,
+      disableClose: true,
+      closeOnNavigation: true,
+      panelClass: 'alarms-dialog',
+      position: {
+        top: `${rect.top + rect.height}px`,
+        left: `${rect.left - 600}px`,
+      },
+    });
+  }
+
   private updateAlertCount() {
     this.notifySvc.alertCount().subscribe((warn) => {
       this.warnCount = warn.total;
@@ -141,12 +163,20 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
       this.isCriticalAlarm = alarm.critical > 0;
     });
   }
+  updateAlarmView(show = true) {
+    if (!AccountUtil.hasPermission(8, this.auth.currentUser)) return;
+    if (show) this.showAlarmsView();
+
+    this._alarmDlg.componentInstance.dataSource = this.notifySvc.alarmsDataSource();
+  }
+
 
   private onAlertChanged(event: IDataChangeEvent) {
     this.updateAlertCount();
   }
   private onAlarmChanged(event: IDataChangeEvent) {
     this.updateAlarmCount();
-    this.toggleAlarmsView(true);
+    this.updateAlarmView(true);
+    //this.toggleAlarmsView(true);
   }
 }
