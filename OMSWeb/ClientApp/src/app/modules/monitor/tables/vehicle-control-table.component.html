@@ -113,6 +113,14 @@
     dataField="physicalId"
     [caption]="'names.physicalId' | translate"
   ></dxi-column>
+  <!-- Logical ID 추가 -->
+  <dxi-column
+    [width]="120"
+    dataType="string"
+    dataField="logicalId"
+    [caption]="'names.logicalId' | translate"
+  ></dxi-column>
+  <!-- Logical ID 추가 -->
   <dxi-column
     [width]="80"
     dataType="string"
@@ -165,6 +173,26 @@
     dataField="locationDropoff"
     [caption]="'names.locationDropoff' | translate"
   ></dxi-column>
+  <!-- LocationMove 추가 -->
+  <dxi-column
+    [allowFiltering]="false"
+    [width]="70"
+    dataType="string"
+    dataField="locationMove"
+    [allowSorting]="false"
+    [caption]="'names.locationMove' | translate"
+  ></dxi-column>
+  <!-- LocationMove 추가 -->
+  <!-- Total Runtime 추가 -->
+  <dxi-column
+    [allowFiltering]="false"
+    [width]="100"
+    dataType="int"
+    dataField="runtimeTotal"
+    [allowSorting]="false"
+    [caption]="'names.runtimeTotal' | translate"
+  ></dxi-column>
+  <!-- Total Runtime 추가 -->
   <dxi-column
     [width]="100"
     dataType="string"
@@ -179,6 +207,36 @@
     [allowSorting]="false"
     [caption]="'names.cargoState' | translate"
   ></dxi-column>
+  <!-- Error 추가 -->
+  <dxi-column
+    [allowFiltering]="false"
+    [width]="100"
+    dataType="string"
+    dataField="errorList"
+    [allowSorting]="false"
+    [caption]="'names.error' | translate"
+  ></dxi-column>
+  <!-- Error  추가 -->
+  <!-- Sensor Stop 추가 -->
+  <dxi-column
+    [allowFiltering]="false"
+    [width]="80"
+    dataType="boolean"
+    dataField="isSensorStopped"
+    [allowSorting]="false"
+    [caption]="'names.sensorStopped' | translate"
+  ></dxi-column>
+  <!-- Sensor Stop  추가 -->
+  <!-- Blocked 추가 -->
+  <dxi-column
+    [allowFiltering]="false"
+    [width]="80"
+    dataType="boolean"
+    dataField="isBlocked"
+    [allowSorting]="false"
+    [caption]="'names.blocked' | translate"
+  ></dxi-column>
+  <!-- Blocked 추가 -->
   <dxi-column
     [allowFiltering]="false"
     [width]="120"
@@ -187,4 +245,14 @@
     [allowSorting]="false"
     [caption]="'names.distanceTotal' | translate"
   ></dxi-column>
+  <!-- MapDB 추가 -->
+  <dxi-column
+    [allowFiltering]="false"
+    [width]="100"
+    dataType="string"
+    dataField="mapDb"
+    [allowSorting]="false"
+    [caption]="'names.mapDb' | translate"
+  ></dxi-column>
+  <!-- MapDB 추가 -->
 </dx-data-grid>
