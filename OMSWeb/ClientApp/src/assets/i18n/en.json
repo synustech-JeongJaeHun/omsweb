@@ -324,7 +324,15 @@
     "run": "Run",
     "stop": "Stop",
     "start": "Start",
-    "restart": "Restart"
+    "restart": "Restart",
+    "durationTotal": "Duration Total",
+    "durationUnassigned": "Duration Unassigned",
+    "durationPickup": "Duration Pickup",
+    "durationLoad": "Duration Load",
+    "durationDropoff": "Duration Deliver",
+    "durationUnload": "Duration Unload",
+    "durationMove": "Duration Move",
+    "lastReassignType": "Last Reassign Type"
   },
   "enums": {
     "hostSessionStatus": {

@@ -41,38 +41,56 @@
   <dxo-load-panel [enabled]="false"></dxo-load-panel>
 
   <dxi-column
-    [width]="80"
+    [width]="50"
     dataType="string"
     dataField="id"
     [caption]="'names.id' | translate"
   ></dxi-column>
+  <!-- Logical ID 추가 -->
   <dxi-column
     [width]="100"
+    dataType="string"
+    dataField="logicalId"
+    [caption]="'names.logicalId' | translate"
+  ></dxi-column>
+  <!-- Logical ID 추가 -->
+  <dxi-column
+    [width]="70"
     dataType="string"
     dataField="state"
     [caption]="'names.state' | translate"
   ></dxi-column>
   <dxi-column
-    [width]="80"
+    [width]="70"
     dataType="string"
     dataField="vehicleId"
     [caption]="'names.vehicleId' | translate"
     [customizeText]="transformVehicleId"
   ></dxi-column>
   <dxi-column
-    [width]="120"
+    [width]="70"
     dataType="string"
     dataField="locationPickup"
     [caption]="'names.locationPickup' | translate"
     [customizeText]="transformLocationId"
   ></dxi-column>
   <dxi-column
-    [width]="120"
+    [width]="80"
     dataType="string"
     dataField="locationDropoff"
     [caption]="'names.locationDropoff' | translate"
     [customizeText]="transformLocationId"
   ></dxi-column>
+  <!-- LocationMove 추가 -->
+  <dxi-column
+    [allowFiltering]="false"
+    [width]="70"
+    dataType="string"
+    dataField="locationMove"
+    [allowSorting]="false"
+    [caption]="'names.locationMove' | translate"
+  ></dxi-column>
+  <!-- LocationMove 추가 -->
   <dxi-column
     [width]="80"
     dataType="string"
@@ -80,23 +98,144 @@
     [caption]="'names.priority' | translate"
   ></dxi-column>
   <dxi-column
+    [width]="80"
     dataType="string"
     dataField="carrierLabel"
     [allowSorting]="false"
     [caption]="'names.carrierLabel' | translate"
   ></dxi-column>
   <dxi-column
-    [width]="120"
+    [width]="110"
     dataType="datetime"
     dataField="timeCreated"
     [caption]="'names.timeCreated' | translate"
     sortOrder="desc"
   ></dxi-column>
   <dxi-column
-    [width]="120"
+    [width]="110"
     dataType="datetime"
     dataField="timeAssigned"
     [caption]="'names.timeAssigned' | translate"
     sortOrder="desc"
   ></dxi-column>
+  <!-- Origin 추가 -->
+  <dxi-column
+    [allowFiltering]="false"
+    [width]="70"
+    dataType="string"
+    dataField="origin"
+    [allowSorting]="false"
+    [caption]="'names.origin' | translate"
+  ></dxi-column>
+  <!-- Origin 추가 -->
+  <!-- DurationTotal 추가 -->
+  <dxi-column
+    [allowFiltering]="false"
+    [width]="80"
+    dataType="int"
+    dataField="durationTotal"
+    [allowSorting]="false"
+    [caption]="'names.durationTotal' | translate"
+  ></dxi-column>  
+  <!-- DurationTotal 추가 -->
+  <!-- DurationUnassigned 추가 -->
+  <dxi-column
+    [allowFiltering]="false"
+    [width]="80"
+    dataType="int"
+    dataField="durationUnassigned"
+    [allowSorting]="false"
+    [caption]="'names.durationUnassigned' | translate"
+  ></dxi-column>  
+  <!-- DurationUnassigned 추가 -->
+  <!-- DurationPickup 추가 -->
+  <dxi-column
+    [allowFiltering]="false"
+    [width]="80"
+    dataType="int"
+    dataField="durationPickup"
+    [allowSorting]="false"
+    [caption]="'names.durationPickup' | translate"
+  ></dxi-column>  
+  <!-- DurationPickup 추가 -->
+  <!-- DurationLoad 추가 -->
+  <dxi-column
+    [allowFiltering]="false"
+    [width]="80"
+    dataType="int"
+    dataField="durationLoad"
+    [allowSorting]="false"
+    [caption]="'names.durationLoad' | translate"
+  ></dxi-column>  
+  <!-- DurationLoad 추가 -->
+  <!-- DurationDropoff 추가 -->
+  <dxi-column
+    [allowFiltering]="false"
+    [width]="80"
+    dataType="int"
+    dataField="durationDropoff"
+    [allowSorting]="false"
+    [caption]="'names.durationDropoff' | translate"
+  ></dxi-column>  
+  <!-- DurationDropoff 추가 -->
+  <!-- DurationUnload 추가 -->
+  <dxi-column
+    [allowFiltering]="false"
+    [width]="80"
+    dataType="int"
+    dataField="durationUnload"
+    [allowSorting]="false"
+    [caption]="'names.durationUnload' | translate"
+  ></dxi-column>  
+  <!-- DurationUnload 추가 -->
+  <!-- DurationMove 추가 -->
+  <dxi-column
+    [allowFiltering]="false"
+    [width]="80"
+    dataType="int"
+    dataField="durationMove"
+    [allowSorting]="false"
+    [caption]="'names.durationMove' | translate"
+  ></dxi-column>  
+  <!-- DurationMove 추가 -->
+  <!-- DistancePickup 추가 -->
+  <dxi-column
+    [allowFiltering]="false"
+    [width]="80"
+    dataType="float"
+    dataField="distancePickup"
+    [allowSorting]="false"
+    [caption]="'names.distancePickup' | translate"
+  ></dxi-column>  
+  <!-- DistancePickup 추가 -->
+  <!-- DistanceDropoff 추가 -->
+  <dxi-column
+    [allowFiltering]="false"
+    [width]="80"
+    dataType="float"
+    dataField="distanceDropoff"
+    [allowSorting]="false"
+    [caption]="'names.distanceDropoff' | translate"
+  ></dxi-column>  
+  <!-- DistanceDropoff 추가 -->
+  <!-- DistanceMove 추가 -->
+  <dxi-column
+    [allowFiltering]="false"
+    [width]="80"
+    dataType="float"
+    dataField="distanceMove"
+    [allowSorting]="false"
+    [caption]="'names.distanceMove' | translate"
+  ></dxi-column>  
+  <!-- DistanceMove 추가 -->  
+  <!-- AssignmentType 추가 -->
+  <dxi-column
+    [allowFiltering]="false"
+    [width]="80"
+    dataType="string"
+    dataField="assignmentType"
+    [allowSorting]="false"
+    [caption]="'names.lastReassignType' | translate"
+  ></dxi-column>
+  <!-- AssignmentType 추가 -->
 </dx-data-grid>

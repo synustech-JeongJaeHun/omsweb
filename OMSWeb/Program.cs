@@ -18,6 +18,7 @@ namespace OMSWeb
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                //.ConfigureWebHost(x => x.UseUrls("http://0.0.0.0:5001"))
                 .ConfigureWebHost(x => x.UseUrls("http://0.0.0.0:5000"))
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
