@@ -70,7 +70,7 @@ export class MapSidePanelComponent implements OnInit, OnChanges {
 
   onChangeVehicleCalculatePath() {}
   changeSegmentDisabled() {
-    // @TODO 이벤트 구현 changeSegmentDisabled()
+    // @TODO 이벤트 구현 changeSegmentDisabled()    
     console.warn('TODO : 이벤트 구현');
   }
 

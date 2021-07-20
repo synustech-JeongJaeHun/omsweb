@@ -1731,7 +1731,7 @@ path.segment_path {
   fill: none;
   stroke: var(--segment-color-disabled);
   vector-effect: non-scaling-stroke;
-  stroke-width: 3px;
+  /*stroke-width: 3px;*/ /* dslee */
 }
 
 .segment_path.non_validate {
