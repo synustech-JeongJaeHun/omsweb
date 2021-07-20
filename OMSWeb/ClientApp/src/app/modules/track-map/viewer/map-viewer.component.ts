@@ -136,7 +136,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     console.log('## changed point property >>', { name, value });
     // @TODO: change point prop api 연동
   }
-  onChangeSegmentProperty(name: string, value: any, checked: boolean) {
+  onChangeSegmentProperty(name: string, value: any) {
     console.log('## changed segment property >>', { name, value });
     let isDisable: boolean = value;
     this.contextData.disableState = isDisable; //버튼이벤트값 반영 - dslee
