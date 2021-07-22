@@ -83,6 +83,7 @@ export namespace Dto {
 
     candidates?: any[];
     travelTime: any;
+    segmentsDisabled?: any[];
     isValidate?: boolean;
   }
   export interface IStation {
