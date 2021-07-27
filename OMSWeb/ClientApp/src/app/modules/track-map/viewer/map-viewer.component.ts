@@ -33,7 +33,6 @@ import { SettingsService } from '../../../services/settings.service';
 import { StatusService } from '../../../services/status.service';
 import { DialogService } from '../../../services/dialog.service';
 import { TranslateService } from '@ngx-translate/core';
-import { translate } from '@angular/localize/src/translate';
 @Component({
   selector: 'oms-map-viewer',
   templateUrl: './map-viewer.component.html',
@@ -115,12 +114,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     this.viewer = null;
   }
 
-  //체크박스 값 확인 - dslee
-  getCheckState(segNum: number): boolean
-  {
-    return true;
-  }
-
   ngOnInit(): void {
     // if (!this.trackData) return;
 
@@ -139,7 +132,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   onChangeSegmentProperty(name: string, value: any) {
     console.log('## changed segment property >>', { name, value });
     let isDisable: boolean = value;
-    this.contextData.disableState = isDisable; //버튼이벤트값 반영 - dslee
     if (isDisable) {
       this.messageSvc
         .sendDisableSegmentCommand({ action: 'disable-segment' }, this.contextData.id)

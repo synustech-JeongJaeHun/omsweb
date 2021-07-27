@@ -78,8 +78,6 @@ export class Segment implements ISegment {
 
     this.length = length;
     this.speed = speed;
-
-    this.disableState = false; //segment defaultvalue - dslee
   }
   static createSegmentPart(
     row: Dto.ISegPart | Dto.ISegPart,
@@ -614,7 +612,6 @@ export class Segment implements ISegment {
       this.disableState.vehicle = disable_info.vehicle;
       this.disableState.segment = disable_info.segment;
     } else {
-      this.disableState = true;
     }
   }
 

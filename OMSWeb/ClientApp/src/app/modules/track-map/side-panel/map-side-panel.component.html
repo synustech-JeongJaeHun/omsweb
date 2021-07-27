@@ -308,8 +308,8 @@
 
       <div class="disable-table">
         <mat-slide-toggle
-          [(ngModel)]="data.disableState" 
-          (change)="changeSegmentDisabled($event.checked)"
+          [(ngModel)]="segmentDisabledInfo.disableState" 
+          (change)="changeSegmentDisabled()"
           [disabled]="!hasPermission(29)"
           color="primary"
           >{{ "names.disabled" | translate }}</mat-slide-toggle

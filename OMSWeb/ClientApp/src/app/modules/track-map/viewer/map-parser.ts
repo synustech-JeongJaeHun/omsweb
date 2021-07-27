@@ -472,8 +472,6 @@ export class MapParser {
           }
 
           disabled_segments.push(disabled_segment);
-
-          this.layout_data.segments[disabled_segment.segmentId - 1].disableState = true; //segment disable - dslee
         }
       }
     }
