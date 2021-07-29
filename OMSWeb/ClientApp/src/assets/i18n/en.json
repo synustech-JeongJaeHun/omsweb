@@ -28,6 +28,8 @@
 
     "orders": "Orders",
     "vehicles": "Vehicles",
+    "stations": "Stations",
+    "buffers": "Buffers",
 
     "normal": "Normal",
     "cleaning": "Cleaning",
@@ -332,7 +334,12 @@
     "durationDropoff": "Duration Deliver",
     "durationUnload": "Duration Unload",
     "durationMove": "Duration Move",
-    "lastReassignType": "Last Reassign Type"
+    "lastReassignType": "Last Reassign Type",
+    "zcuType": "ZCU Type",
+    "invertedCoord-x": "Inverted Coordinate:X",
+    "invertedCoord-y": "Inverted Coordinate:Y",
+    "nextPoint": "Next Point",
+    "offset": "Offset"
   },
   "enums": {
     "hostSessionStatus": {

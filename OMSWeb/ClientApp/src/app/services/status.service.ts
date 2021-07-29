@@ -38,6 +38,22 @@ export class StatusService {
       }),
     });
   }
+  stationStatusDataSource(): DataSource {
+    return new DataSource({
+      store: AspNetData.createStore({
+        key: 'id',
+        loadUrl: `${this.baseUrl}/stations`,
+      }),
+    });
+  }
+  bufferStatusDataSource(): DataSource {
+    return new DataSource({
+      store: AspNetData.createStore({
+        key: 'id',
+        loadUrl: `${this.baseUrl}/buffers`,
+      }),
+    });
+  }
 
   getVehicleSignal(id: number): Observable<IVehicleSignal> {
     console.warn('# from vehicle-signal.json file - for dev #');

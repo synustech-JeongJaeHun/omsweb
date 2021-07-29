@@ -79,6 +79,18 @@ namespace OMSWeb.Controllers
       return DataSourceLoader.Load(_statusSvc.QueryVehicleStates(), loadOptions);
     }
 
+    [HttpGet("stations")]
+    public object GetStationStatus(DataSourceLoadOptions loadOptions)
+    {
+      return DataSourceLoader.Load(_statusSvc.QueryStationStates(), loadOptions);
+    }
+
+    [HttpGet("buffers")]
+    public object GetBufferStatus(DataSourceLoadOptions loadOptions)
+    {
+      return DataSourceLoader.Load(_statusSvc.QueryBufferStates(), loadOptions);
+    }
+
     [HttpGet("id-list/{type}")]
     public IEnumerable<NodeInfo> GetIdList(string type)
     {

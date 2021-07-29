@@ -27,6 +27,8 @@ export class StatusControlComponent implements OnInit {
   tabNames = [
     { id: 1, title: 'Orders' },
     { id: 2, title: 'Vehicles' },
+    { id: 3, title: 'Stations' },
+    { id: 4, title: 'Buffers' },
   ];
   currentTab: number = 0;
 

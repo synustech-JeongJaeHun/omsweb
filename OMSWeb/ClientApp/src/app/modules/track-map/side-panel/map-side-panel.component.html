@@ -25,15 +25,22 @@
         <ng-container *ngSwitchCase="'Buffer'">
           <ng-container *ngTemplateOutlet="bufferInfo"></ng-container>
         </ng-container>
+        <!-- ZCU Item Detail -->
+        <ng-container *ngSwitchCase="'ZCU'">
+          <ng-container *ngTemplateOutlet="zcuInfo"></ng-container>
+        </ng-container>
+        <!-- ZCU Item Detail -->
         <ng-container *ngSwitchDefault></ng-container>
       </ng-container>
 
       <ng-container *ngIf="hasOverlap">
         <mat-expansion-panel [expanded]="true">
           <mat-expansion-panel-header>
-            <mat-panel-title>{{
+            <mat-panel-title>
+              {{
               "names.sideOverlapModule" | translate
-            }}</mat-panel-title>
+              }}
+            </mat-panel-title>
           </mat-expansion-panel-header>
           <oms-overlap-list [selectedObject]="data"></oms-overlap-list>
         </mat-expansion-panel>
@@ -336,3 +343,66 @@
     </div>
   </mat-expansion-panel>
 </ng-template>
+
+<!-- ZCU Item Detail -->
+<ng-template #zcuInfo>
+  <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel-header>
+      <mat-panel-title> {{ data?.objectType }} #{{ data.id }}</mat-panel-title>
+    </mat-expansion-panel-header>
+    <div class="desc">
+      <div class="info-table">
+        <mat-form-field class="info-item readonly" floatLabel="always">
+          <mat-label>{{ "names.id" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.id" />
+        </mat-form-field>
+        <mat-form-field class="info-item readonly" floatLabel="always">
+          <mat-label>{{ "names.completeNodes" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.completeNodes" />
+        </mat-form-field>
+        <mat-form-field class="info-item readonly">
+          <mat-label>{{ "names.coord-x" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.coord.x" />
+        </mat-form-field>
+        <mat-form-field class="info-item readonly">
+          <mat-label>{{ "names.coord-y" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.coord.y" />
+        </mat-form-field>
+        <mat-form-field class="info-item readonly">
+          <mat-label>{{ "names.invertedCoord-x" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.invertedCoord.x" />
+        </mat-form-field>
+        <mat-form-field class="info-item readonly">
+          <mat-label>{{ "names.invertedCoord-y" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.invertedCoord.y" />
+        </mat-form-field>
+
+        <mat-form-field class="info-item readonly">
+          <mat-label>{{ "names.type" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="((data.zcuType == 0) ? 'Standard' : ((data.zcuType == 1) ? 'NType' : ''))" />
+          <!--
+          <input matInput type="text" readonly [value]="data.zcuType" />
+          -->
+          <!--
+  <mat-select [(value)]="data.zcuType" [value]="data.zcuType">
+    <mat-option value="0">Standard</mat-option>
+  </mat-select>
+  -->
+        </mat-form-field>
+        <mat-form-field class="info-item readonly">
+          <mat-label>{{ "names.usingType" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="((data.usingType == 0) ? 'Not Use' : ((data.usingType == 1) ? 'Use HW' : ((data.usingType == 2) ? 'Use SW' : '')))" />
+          <!--<input matInput type="text" readonly [value]="data.usingType" />-->
+          <!--
+  <mat-select [(value)]="data.usingType" [value]="data.usingType">
+    <mat-option value="0">Not Use</mat-option>
+    <mat-option value="1">Use HW</mat-option>
+    <mat-option value="2">Use SW</mat-option>
+  </mat-select>
+  -->
+        </mat-form-field>
+      </div>
+    </div>
+  </mat-expansion-panel>
+</ng-template>
+<!-- ZCU Item Detail -->

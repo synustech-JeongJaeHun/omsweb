@@ -21,4 +21,12 @@ namespace OMSWeb.Models
     public string LocationDropoff { get; set; }
     public string LocationMove { get; set; }
   }
+
+  public class StationState : StationEntity
+  {
+  }
+
+  public class BufferState : BufferEntity
+  {
+  }
 }

@@ -53,5 +53,19 @@
         *ngIf="currentTab == 1"
       ></oms-vehicle-control-table>
     </mat-tab>
+    <!-- Stations / Buffers 추가 -->
+    <mat-tab [label]="'names.stations' | translate" *ngIf="canControl">
+      <oms-station-control-table
+        [tableHeight]="tableHeight"
+        *ngIf="currentTab == 2"
+      ></oms-station-control-table>
+    </mat-tab>
+    <mat-tab [label]="'names.buffers' | translate" *ngIf="canControl">
+      <oms-buffer-control-table
+        [tableHeight]="tableHeight"
+        *ngIf="currentTab == 3"
+      ></oms-buffer-control-table>
+    </mat-tab>
+    <!-- Stations / Buffers 추가 -->
   </mat-tab-group>
 </div>

@@ -1,0 +1,76 @@
+<div class="grid-actions" *ngIf="hasControlAccess">
+
+
+</div>
+<dx-data-grid
+  [dataSource]="dataSource"
+  [remoteOperations]="true"
+  [height]="tableHeight"
+  [repaintChangesOnly]="false"
+  [columnAutoWidth]="false"
+  [showBorders]="false"
+  [highlightChanges]="true"
+  [showColumnLines]="true"
+  [showRowLines]="true"
+  [headerFilter]="false"
+  [(selectedRowKeys)]="selectedRows"
+  [renderAsync]="true"
+>
+  <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
+  <dxo-scrolling mode="virtual" rowRenderingMode="standard"></dxo-scrolling>
+  <dxo-paging [pageSize]="50"></dxo-paging>
+  <dxo-pager
+    [showPageSizeSelector]="true"
+    [allowedPageSizes]="[50, 100, 200]"
+    [showInfo]="true"
+    visible="true"
+  ></dxo-pager>
+  <dxo-search-panel
+    [placeholder]="'names.search' | translate"
+    [visible]="true"
+  ></dxo-search-panel>
+  <dxo-load-panel [enabled]="false"></dxo-load-panel>
+
+  <dxi-column
+    [width]="50"
+    dataType="int"
+    dataField="id"
+    [caption]="'names.id' | translate"
+  ></dxi-column>
+  <dxi-column
+    [width]="120"
+    dataType="string"
+    dataField="physicalId"
+    [caption]="'names.physicalId' | translate"
+  ></dxi-column>
+  <dxi-column
+    [width]="120"
+    dataType="string"
+    dataField="logicalId"
+    [caption]="'names.logicalId' | translate"
+  ></dxi-column>
+  <dxi-column
+    [width]="100"
+    dataType="int"
+    dataField="point"
+    [caption]="'names.point' | translate"
+  ></dxi-column>
+  <dxi-column
+    [width]="100"
+    dataType="string"
+    dataField="direction"
+    [caption]="'names.direction' | translate"
+  ></dxi-column>
+  <dxi-column
+    [width]="100"
+    dataType="int"
+    dataField="nextPoint"
+    [caption]="'names.nextPoint' | translate"
+  ></dxi-column>
+  <dxi-column
+    [width]="100"
+    dataType="int"
+    dataField="offset"
+    [caption]="'names.offset' | translate"
+  ></dxi-column>
+</dx-data-grid>

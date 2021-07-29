@@ -10,6 +10,8 @@ import { TrackMapModule } from '../track-map/track-map.module';
 import { StatusControlComponent } from './status/status-control.component';
 import { OrderControlTableComponent } from './tables/order-control-table.component';
 import { VehicleControlTableComponent } from './tables/vehicle-control-table.component';
+import { StationControlTableComponent } from './tables/station-control-table.component';
+import { BufferControlTableComponent } from './tables/buffer-control-table.component';
 import { KpiModule } from '../kpi/kpi.module';
 
 @NgModule({
@@ -20,6 +22,8 @@ import { KpiModule } from '../kpi/kpi.module';
     StatusControlComponent,
     OrderControlTableComponent,
     VehicleControlTableComponent,
+    StationControlTableComponent,
+    BufferControlTableComponent,
   ],
   imports: [CommonModule, MonitorRoutingModule, SharedModule, TrackMapModule, KpiModule],
 })

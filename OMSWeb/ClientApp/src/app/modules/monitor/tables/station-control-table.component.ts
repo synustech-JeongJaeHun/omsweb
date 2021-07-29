@@ -1,0 +1,87 @@
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import DataSource from 'devextreme/data/data_source';
+
+import { StatusService } from '../../../services/status.service';
+import { forkJoin, Subject, Subscription } from 'rxjs';
+import { HubService } from '../../../services/hub.service';
+import { IDataChangeEvent } from '../../../models/notification.model';
+import { UserPermissions } from '../../../models/enums';
+import { AuthService } from '../../../services/auth.service';
+import { AccountUtil } from '../../shared/utils/account.util';
+import { takeUntil } from 'rxjs/operators';
+import { MessagesService } from '../../../services/messages.service';
+import { DxDataGridComponent } from 'devextreme-angular';
+
+@Component({
+  selector: 'oms-station-control-table',
+  templateUrl: './station-control-table.component.html',
+  styleUrls: ['./station-control-table.component.scss'],
+})
+export class StationControlTableComponent implements OnInit, OnDestroy {
+  @Input() tableHeight: number;
+  @ViewChild(DxDataGridComponent, { static: false })
+  dataGrid: DxDataGridComponent;
+
+  dataSource: DataSource;
+  selectedRows: number[] = [];
+
+  //#region Subscriptions
+  private destroy$: Subject<void> = new Subject<void>();
+  //#endregion
+
+  get hasControlAccess(): boolean {
+    return (
+      this.auth.isAuthenticated &&
+      AccountUtil.hasPermission(11, this.auth.currentUser)
+    );
+  }
+
+  get canDelete(): boolean {
+    return this.selectedRows.length > 0;
+  }
+
+  constructor(
+    private auth: AuthService,
+    private statusSvc: StatusService,
+    private messageSvc: MessagesService,
+    private hubSvc: HubService
+  ) {
+    this.dataSource = this.statusSvc.stationStatusDataSource();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  ngOnInit(): void {
+    this.hubSvc.orderTableChanged$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((e: IDataChangeEvent) => {
+        e && this.onTableChanged(e);
+      });
+  }
+
+  onDelete() {
+    if (!this.canDelete) return;
+    const items = this.dataGrid.instance.getSelectedRowsData();
+    const jobs = items.map((x) => this.messageSvc.sendDeleteOrder(x));
+    forkJoin(jobs).subscribe();
+  }
+
+  private onTableChanged(payload: IDataChangeEvent) {
+    let needReload = false;
+    console.log('@@ station table updated >>>', payload);
+    if (payload && payload.id && payload.operation) {
+      if (['INSERT', 'DELETE'].includes(payload.operation)) {
+        needReload = true;
+      } else {
+        needReload = this.dataSource.items().every((x) => x.id !== payload.id);
+        // needReload = true;
+      }
+    } else {
+      needReload = true;
+    }
+    needReload && this.dataSource.reload();
+  }
+}

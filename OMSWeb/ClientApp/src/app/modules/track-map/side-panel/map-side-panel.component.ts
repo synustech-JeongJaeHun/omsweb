@@ -63,6 +63,9 @@ export class MapSidePanelComponent implements OnInit, OnChanges {
       case 'Segment':
         this.bindSegment();
         break;
+      case 'ZCU':
+        this.hasOverlap = false;
+        break;
       default:
         break;
     }

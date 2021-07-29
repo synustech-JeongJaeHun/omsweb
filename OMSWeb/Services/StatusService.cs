@@ -18,6 +18,13 @@ namespace OMSWeb.Services {
     public IQueryable<VehicleState> QueryVehicleStates() {
       return _repo.QueryVehicleStates();
     }
-
+    public IQueryable<StationState> QueryStationStates()
+    {
+      return _repo.QueryStationStates();
+    }
+    public IQueryable<BufferState> QueryBufferStates()
+    {
+      return _repo.QueryBufferStates();
+    }
   }
 }

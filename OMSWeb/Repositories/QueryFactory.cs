@@ -149,6 +149,16 @@ namespace OMSWeb.Repositories
         WHERE time_completed IS NULL AND time_aborted IS NULL AND time_failed IS NULL
         --*user_id_condition*-- AND user_id = @userId
       ) AS WRAPPED_TABLE
+      "},
+      {"stationStatus", @"
+        SELECT id, physical_id, logical_id, point, direction, carrier_type, next_point, ""offset""
+        FROM stations
+        --*user_id_condition*-- AND user_id = @userId
+      "},
+      {"bufferStatus", @"
+        SELECT id, physical_id, logical_id, point, direction, next_point, ""offset""
+        FROM buffers
+        --*user_id_condition*--WHERE user_id =@userId
       "}
     };
     public static string GetSql(string name)

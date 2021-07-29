@@ -55,13 +55,35 @@ namespace OMSWeb.Repositories
     CASE
     WHEN LENGTH(VH.error_list) = 0 THEN '0' ELSE VH.error_list
     END AS error_list,
-    VH.distance_total, VH.runtime_total, VH.type
+    VH.distance_total, VH.runtime_total, VH.type, VH.rail_in
     FROM vehicles AS VH
         LEFT OUTER JOIN orders AS OD
     ON VH.order_id = OD.id AND OD.time_completed IS NULL AND OD.time_aborted IS NULL
     ORDER BY VH.id
         ";
         result = conn.Query<VehicleState>(sql).AsQueryable();
+      }
+      return result;
+    }
+
+    public IQueryable<StationState> QueryStationStates()
+    {
+      IQueryable<StationState> result;
+      using (var conn = ConnectTrack())
+      {
+        var sql = QueryFactory.GetSql("stationStatus");
+        result = conn.Query<StationState>(sql).AsQueryable();
+      }
+      return result;
+    }
+
+    public IQueryable<BufferState> QueryBufferStates()
+    {
+      IQueryable<BufferState> result;
+      using (var conn = ConnectTrack())
+      {
+        var sql = QueryFactory.GetSql("bufferStatus");
+        result = conn.Query<BufferState>(sql).AsQueryable();
       }
       return result;
     }

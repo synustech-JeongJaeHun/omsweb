@@ -101,21 +101,21 @@
 
   <dxi-column
     [allowFiltering]="false"
-    [width]="80"
+    [width]="60"
     dataType="string"
     dataField="id"
     sortOrder="desc"
     [caption]="'names.id' | translate"
   ></dxi-column>
   <dxi-column
-    [width]="120"
+    [width]="80"
     dataType="string"
     dataField="physicalId"
     [caption]="'names.physicalId' | translate"
   ></dxi-column>
   <!-- Logical ID 추가 -->
   <dxi-column
-    [width]="120"
+    [width]="90"
     dataType="string"
     dataField="logicalId"
     [caption]="'names.logicalId' | translate"
@@ -129,14 +129,23 @@
   ></dxi-column>
   <dxi-column
     [allowFiltering]="false"
-    [width]="80"
+    [width]="60"
     dataType="boolean"
     dataField="canBePushed"
     [caption]="'names.canBePushed' | translate"
   ></dxi-column>
+  <!-- Rail_In 필드 추가 --->
   <dxi-column
     [allowFiltering]="false"
-    [width]="80"
+    [width]="60"
+    dataType="boolean"
+    dataField="railIn"
+    [caption]="'names.railIn' | translate"
+  ></dxi-column>
+  <!-- Rail_In 필드 추가 --->
+  <dxi-column
+    [allowFiltering]="false"
+    [width]="60"
     dataType="string"
     dataField="orderOrigin"
     [caption]="'names.orderOrigin' | translate"
@@ -155,20 +164,20 @@
     [caption]="'names.commandPoint' | translate"
   ></dxi-column>
   <dxi-column
-    [width]="70"
+    [width]="60"
     dataType="string"
     dataField="orderId"
     [allowSorting]="false"
     [caption]="'names.orderId' | translate"
   ></dxi-column>
   <dxi-column
-    [width]="70"
+    [width]="60"
     dataType="string"
     dataField="locationPickup"
     [caption]="'names.locationPickup' | translate"
   ></dxi-column>
   <dxi-column
-    [width]="70"
+    [width]="60"
     dataType="string"
     dataField="locationDropoff"
     [caption]="'names.locationDropoff' | translate"
@@ -176,7 +185,7 @@
   <!-- LocationMove 추가 -->
   <dxi-column
     [allowFiltering]="false"
-    [width]="70"
+    [width]="60"
     dataType="string"
     dataField="locationMove"
     [allowSorting]="false"
@@ -186,7 +195,7 @@
   <!-- Total Runtime 추가 -->
   <dxi-column
     [allowFiltering]="false"
-    [width]="100"
+    [width]="80"
     dataType="int"
     dataField="runtimeTotal"
     [allowSorting]="false"
@@ -194,14 +203,14 @@
   ></dxi-column>
   <!-- Total Runtime 추가 -->
   <dxi-column
-    [width]="100"
+    [width]="80"
     dataType="string"
     dataField="movingState"
     [allowSorting]="false"
     [caption]="'names.movingState' | translate"
   ></dxi-column>
   <dxi-column
-    [width]="100"
+    [width]="80"
     dataType="string"
     dataField="cargoState"
     [allowSorting]="false"
@@ -210,7 +219,7 @@
   <!-- Error 추가 -->
   <dxi-column
     [allowFiltering]="false"
-    [width]="100"
+    [width]="70"
     dataType="string"
     dataField="errorList"
     [allowSorting]="false"
@@ -239,7 +248,7 @@
   <!-- Blocked 추가 -->
   <dxi-column
     [allowFiltering]="false"
-    [width]="120"
+    [width]="80"
     dataType="number"
     dataField="distanceTotal"
     [allowSorting]="false"
@@ -248,7 +257,7 @@
   <!-- MapDB 추가 -->
   <dxi-column
     [allowFiltering]="false"
-    [width]="100"
+    [width]="90"
     dataType="string"
     dataField="mapDb"
     [allowSorting]="false"
