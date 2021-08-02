@@ -98,9 +98,10 @@
     [visible]="true"
   ></dxo-search-panel>
   <dxo-load-panel [enabled]="false"></dxo-load-panel>
+  <dxo-filter-row [visible]="true"></dxo-filter-row>
 
   <dxi-column
-    [allowFiltering]="false"
+    [allowFiltering]="true"
     [width]="60"
     dataType="string"
     dataField="id"
@@ -184,21 +185,21 @@
   ></dxi-column>
   <!-- LocationMove 추가 -->
   <dxi-column
-    [allowFiltering]="false"
+    [allowFiltering]="true"
     [width]="60"
     dataType="string"
     dataField="locationMove"
-    [allowSorting]="false"
+    [allowSorting]="true"
     [caption]="'names.locationMove' | translate"
   ></dxi-column>
   <!-- LocationMove 추가 -->
   <!-- Total Runtime 추가 -->
   <dxi-column
-    [allowFiltering]="false"
+    [allowFiltering]="true"
     [width]="80"
-    dataType="int"
+    dataType="string"
     dataField="runtimeTotal"
-    [allowSorting]="false"
+    [allowSorting]="true"
     [caption]="'names.runtimeTotal' | translate"
   ></dxi-column>
   <!-- Total Runtime 추가 -->
@@ -218,11 +219,11 @@
   ></dxi-column>
   <!-- Error 추가 -->
   <dxi-column
-    [allowFiltering]="false"
+    [allowFiltering]="true"
     [width]="70"
     dataType="string"
     dataField="errorList"
-    [allowSorting]="false"
+    [allowSorting]="true"
     [caption]="'names.error' | translate"
   ></dxi-column>
   <!-- Error  추가 -->
@@ -247,20 +248,20 @@
   ></dxi-column>
   <!-- Blocked 추가 -->
   <dxi-column
-    [allowFiltering]="false"
+    [allowFiltering]="true"
     [width]="80"
     dataType="number"
     dataField="distanceTotal"
-    [allowSorting]="false"
+    [allowSorting]="true"
     [caption]="'names.distanceTotal' | translate"
   ></dxi-column>
   <!-- MapDB 추가 -->
   <dxi-column
-    [allowFiltering]="false"
+    [allowFiltering]="true"
     [width]="90"
     dataType="string"
     dataField="mapDb"
-    [allowSorting]="false"
+    [allowSorting]="true"
     [caption]="'names.mapDb' | translate"
   ></dxi-column>
   <!-- MapDB 추가 -->

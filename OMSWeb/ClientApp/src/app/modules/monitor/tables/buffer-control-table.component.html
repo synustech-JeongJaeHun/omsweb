@@ -30,10 +30,11 @@
     [visible]="true"
   ></dxo-search-panel>
   <dxo-load-panel [enabled]="false"></dxo-load-panel>
+  <dxo-filter-row [visible]="true"></dxo-filter-row>
 
   <dxi-column
     [width]="50"
-    dataType="int"
+    dataType="string"
     dataField="id"
     [caption]="'names.id' | translate"
   ></dxi-column>
@@ -51,7 +52,7 @@
   ></dxi-column>
   <dxi-column
     [width]="100"
-    dataType="int"
+    dataType="string"
     dataField="point"
     [caption]="'names.point' | translate"
   ></dxi-column>
@@ -63,13 +64,13 @@
   ></dxi-column>
   <dxi-column
     [width]="100"
-    dataType="int"
+    dataType="string"
     dataField="nextPoint"
     [caption]="'names.nextPoint' | translate"
   ></dxi-column>
   <dxi-column
     [width]="100"
-    dataType="int"
+    dataType="string"
     dataField="offset"
     [caption]="'names.offset' | translate"
   ></dxi-column>
