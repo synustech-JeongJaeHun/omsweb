@@ -75,16 +75,16 @@
         <div class="grid-form">
           <mat-form-field class="dense" appearance="outline">
             <mat-label>{{'names.solution' | translate}}</mat-label>
-            <textarea matInput>{{currentItem.action}}</textarea>
+            <textarea matInput readonly>{{currentItem.action}}</textarea>
           </mat-form-field>
           <mat-form-field class="dense" appearance="outline">
             <mat-label>{{'names.note' | translate}}</mat-label>
-            <textarea matInput [placeholder]="'messages.alarmNoteHint'|translate"></textarea>
+            <textarea matInput [placeholder]="'messages.alarmNoteHint'|translate" id="alaram_note" [(ngModel)]="alaram_note"></textarea>
           </mat-form-field>
-          <button mat-raised-button color="primary">{{'names.modifySolution'| translate}}</button>
+          <button mat-raised-button color="primary" (click)="onModifySolution()">{{'names.modifySolution'| translate}}</button>
           <div class="primary-actions">
-            <button mat-raised-button color="primary">{{'names.resetVehicle'| translate}}</button>
-            <button mat-raised-button>{{'names.clear'| translate}}</button>
+            <button mat-raised-button color="primary" (click)="onReset()">{{'names.resetVehicle'| translate}}</button>
+            <button mat-raised-button (click)="onClear()">{{'names.clear'| translate}}</button>
           </div>
         </div>
       </fieldset>

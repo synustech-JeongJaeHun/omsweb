@@ -3,6 +3,8 @@ using OMSWeb.Models;
 using OMSWeb.Models.Entities;
 using OMSWeb.Repositories;
 
+using System.Threading.Tasks;
+
 namespace OMSWeb.Services
 {
   public class NotificationsService
@@ -26,6 +28,11 @@ namespace OMSWeb.Services
 
     public IQueryable<AlarmHistory> GetAlarms() {
       return this._alarmRepo.GetAlarms();
+    }
+
+    public int AddAnnotation(AnnotationDto annotation)
+    {
+      return this._alarmRepo.AddAnnotation(annotation);
     }
   }
 }

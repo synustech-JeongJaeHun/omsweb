@@ -48,11 +48,11 @@ namespace OMSWeb.Models
     public int[] Permissions { get; set; }
   }
 
-    public class SegmentUpdateDto
+  public class SegmentUpdateDto
   {
-        public int segment_id { get; set; }
-        public bool? isDisabled { get; set; }
-    }
+    public int segment_id { get; set; }
+    public bool? isDisabled { get; set; }
+  }
 
   public class PointUpdateDto
   {
@@ -68,5 +68,14 @@ namespace OMSWeb.Models
   public class ZcuUpdateDto
   {
     public int ZcuType { get; set; }
+  }
+
+  public class AnnotationDto
+  {
+    public int ReferenceID { get; set; }
+    public string ReferenceTable { get; set; }
+    public string ModifiedBy { get; set; }
+    public string Annotation { get; set; }
+    public int VehicleAlaramID { get; set; }
   }
 }

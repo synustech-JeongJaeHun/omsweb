@@ -19,6 +19,11 @@ export interface IAllCommandMessage extends ICommandMessage {
   vehicleId?: string;
 }
 
+export interface IVehicleManagerCommandMessage extends ICommandMessage {
+  vehicleId?: number;
+  error_code?: number;
+}
+
 export interface IVehicleCommandMessage extends ICommandMessage {
   vehicleId?: string;
   vehicleIds?: number[];

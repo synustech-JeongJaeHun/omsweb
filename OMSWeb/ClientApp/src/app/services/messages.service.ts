@@ -7,6 +7,7 @@ import {
   ITrackCommandMessage,
   IOrderCommandMessage,
   IVehicleCommandMessage,
+  IVehicleManagerCommandMessage,
   IAllCommandMessage,
   IAiModeCommandMessage,
   ITscStateCommandMessage,
@@ -71,6 +72,29 @@ export class MessagesService {
     command.vehicleIds = targets.map(x => x.id);
 
     return this.sendCommand<IVehicleCommandMessage>(command);
+  }
+
+  sendVehicleIDsCommand(
+    command: IVehicleCommandMessage,
+    targets: number[] = []
+  ): Observable<void> {
+    command.type = 'VEHICLE';
+    command.vehicleIds = targets;
+
+    return this.sendCommand<IVehicleCommandMessage>(command);
+  }
+
+  sendVehicleMangerCommand(
+    command: IVehicleManagerCommandMessage,
+    targets: number,
+    error_code: number
+  ): Observable<void> {
+    command.type = 'VEHICLE_MANAGER';
+    command.action = command.action;
+    command.vehicleId = targets;
+    command.error_code = error_code;
+
+    return this.sendCommand<IVehicleManagerCommandMessage>(command);
   }
 
   sendOrderCommand(command: IOrderCommandMessage): Observable<void> {

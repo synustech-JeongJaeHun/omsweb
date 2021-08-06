@@ -1,10 +1,12 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import DataSource from 'devextreme/data/data_source';
 import { EMPTY, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { IKeyValuePair } from '../models/base.model';
 import { AlertSeverities } from '../models/enums';
+import { IIdObject } from '../models/base.model';
+import { IAnnotation } from '../models/annotation.model';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 
 import {
@@ -68,4 +70,44 @@ export class NotificationsService {
     console.error('@@ TODO : clear alert api 구현 필요');
     return EMPTY;
   }
+
+  clearAlarm(id: number): Observable<void> {
+    return this.http
+      .put<void>(`${this.baseUrl}/clearalarm`, id);
+  }
+
+  addAnnotation(form: IAnnotation): Observable<void> {
+    return this.http.post<void>(`${this.baseUrl}/addannotation`, form);
+
+    //alert(`${this.baseUrl}/addannotation2`);
+    //alert(form.referenceId + ' - ' + form.referenceTable + ' - ' + form.modifiedBy + ' - ' + form.annotation);
+
+    //const httpOptions = {
+    //  headers: new HttpHeaders({
+    //    'Content-Type': 'application/x-www-form-urlencoded'
+    //  })
+    //};
+
+    //return this.http
+    //  .post<IIdObject>(`${this.baseUrl}/addannotation`, form, httpOptions);
+
+
+    //return this.http
+    //  .post<IIdObject>(`${this.baseUrl}/addannotation`, form, httpOptions).subscribe(
+    //    res => console.log(res),
+    //    error => console.error(error)
+    //  );
+  }
+
+  //addAnnotation3(form: IAnnotation): Observable<void> {
+  //  const httpOptions = {
+  //    headers: new HttpHeaders({
+  //      'Content-Type': 'application/x-www-form-urlencoded'
+  //    })
+  //  };
+
+  //  //return this.http.post<void>(`${this.baseUrl}/addannotation3`, form, httpOptions).pipe(      
+  //  //);
+  //  return this.http.post<void>(`${this.baseUrl}/addannotation4`, 1, httpOptions).pipe(
+  //}
 }

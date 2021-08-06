@@ -1,8 +1,11 @@
 using Microsoft.Extensions.Configuration;
+using System;
 using System.Linq;
 using Dapper;
 using OMSWeb.Models;
 using OMSWeb.Models.Entities;
+
+using Npgsql;
 
 namespace OMSWeb.Repositories
 {
@@ -49,6 +52,62 @@ FROM (
     ORDER BY VA.id desc
         ";
         result = conn.Query<AlarmHistory>(sql).AsQueryable();
+      }
+      return result;
+    }
+    
+    public int AddAnnotation(AnnotationDto annotation)
+    {
+      int result = -1;
+
+      /*
+      var sql = @"      
+      INSERT INTO annotations (reference_id, reference_table, modified_time, modified_by, annotation)
+      VALUES (@reference_id, @reference_table, CURRENT_TIMESTAMP, @modified_by, @annotation)
+      ON CONFLICT (reference_id) 
+      DO 
+        UPDATE SET reference_table = @reference_table, modified_time = CURRENT_TIMESTAMP, modified_by = @modified_by, annotation = @annotation
+
+      UPDATE vehicle_alarms
+      SET time_resolved = CURRENT_TIMESTAMP
+      WHERE id = @id;
+      ";
+      */
+      var sql = @"      
+      INSERT INTO annotations (reference_id, reference_table, modified_time, modified_by, annotation)
+      VALUES (@reference_id, @reference_table, CURRENT_TIMESTAMP, @modified_by, @annotation)
+      ON CONFLICT (reference_id) 
+      DO 
+        UPDATE SET reference_table = @reference_table, modified_time = CURRENT_TIMESTAMP, modified_by = @modified_by, annotation = @annotation;
+
+      UPDATE vehicle_alarms
+      SET time_resolved = CURRENT_TIMESTAMP
+      WHERE id = @id;
+      ";
+
+      using (var conn = ConnectTrack())
+      {
+        using (var cmd = new NpgsqlCommand(sql, conn))
+        {
+          conn.Open();
+          var trans = conn.BeginTransaction();
+
+          try
+          {            
+            cmd.Parameters.AddWithValue("reference_id", annotation.ReferenceID);
+            cmd.Parameters.AddWithValue("reference_table", annotation.ReferenceTable);
+            cmd.Parameters.AddWithValue("modified_by", annotation.ModifiedBy);
+            cmd.Parameters.AddWithValue("annotation", annotation.Annotation);
+            cmd.Parameters.AddWithValue("id", annotation.VehicleAlaramID);
+            result = cmd.ExecuteNonQuery();
+            trans.Commit();
+          }
+          catch (Exception ex)
+          {
+            trans.Rollback();
+            throw ex;
+          }
+        }
       }
       return result;
     }

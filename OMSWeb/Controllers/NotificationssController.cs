@@ -37,5 +37,12 @@ namespace OMSWeb.Controllers
     public object GetAlarms(DataSourceLoadOptions loadOptions) {
      return DataSourceLoader.Load(_notificationSvc.GetAlarms(), loadOptions); 
     }
+
+    [HttpPost("addannotation")]
+    public int AddAnnotation(AnnotationDto annotationForm)
+    //public object AddAnnotation(AnnotationDto annotationForm)
+    {
+      return this._notificationSvc.AddAnnotation(annotationForm);
+    }
   }
 }
