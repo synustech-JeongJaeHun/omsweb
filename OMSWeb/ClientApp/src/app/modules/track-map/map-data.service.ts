@@ -181,6 +181,7 @@ export class MapDataService {
     this.data.vehicles = this.convert_vehicle_object(rows, eventVersion);
   }
   private setDisabledSegmentsData(rows: any[]) {
+    alert('setDisabledSegmentsData');
     this.data.segmentsDisabled = this.parser.parseDisabledSegments(rows);
   }
 
@@ -229,16 +230,20 @@ export class MapDataService {
           1
         )[0];
         segment = this.data.segments.find(
-          (d) => d.id == deleted_disabled_segment.segment_id
+          //(d) => d.id == deleted_disabled_segment.segment_id
+          (d) => d.id == deleted_disabled_segment.segmentId
         );
+        this.data.segments[deleted_disabled_segment.segmentId - 1].disableState = false;
       }
     } else {
       // let disabled_segment = convert_disabled_segment(data)[0];
       let disabled_segment = this.parser.parseDisabledSegments(rows)[0];
       if (disabled_segment)
         segment = this.data.segments.find(
-          (d) => d.id == disabled_segment.segment_id
+          //(d) => d.id == disabled_segment.segment_id
+          (d) => d.id == disabled_segment.segmentId
         );
+      this.data.segments[disabled_segment.segmentId - 1].disableState = true;
 
       if (operation === 'INSERT') {
         if (disable_index === -1)
@@ -273,7 +278,9 @@ export class MapDataService {
       let cumulative_disable_state_for_segment = this.find_disables_with_segment_id(segment.id);
 
       // set disable to the new segment
-      segment.set_disable(cumulative_disable_state_for_segment);
+      if (cumulative_disable_state_for_segment) {
+        segment.set_disable(cumulative_disable_state_for_segment);
+      }
     }
 
     return this.data.segmentsDisabled;

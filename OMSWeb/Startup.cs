@@ -108,7 +108,9 @@ namespace OMSWeb
       services.AddScoped<StatusRepository>();
       services.AddScoped<TrackRepository>();
       services.AddScoped<UserRepository>();
+      services.AddScoped<ModuleStatusRepository>();
 
+      services.AddScoped<ModuleStatusService>();
       services.AddScoped<StatusService>();
       services.AddScoped<OrderService>();
       services.AddScoped<NotificationsService>();

@@ -5,7 +5,7 @@ import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 import { Observable, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
-import { IServiceProcessStates, ISystemStates } from '@oms/models/system.model';
+import { IModuleStatus, IServiceProcessStates, ISystemStates } from '@oms/models/system.model';
 @Injectable({
   providedIn: 'root',
 })
@@ -43,5 +43,9 @@ export class SystemsService {
 
   processes(): Observable<IServiceProcessStates[]> {
     return this.http.get<IServiceProcessStates[]>('/assets/json/processes.json');
+  }
+
+  moduleStatus(): Observable<IModuleStatus[]> {
+    return this.http.get<IModuleStatus[]>(`${this.baseUrl}/module-status`);
   }
 }

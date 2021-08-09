@@ -9,6 +9,7 @@ import { AuthService } from '../../../services/auth.service';
 import { AccountUtil } from '../../shared/utils/account.util';
 import { MapDataService } from '../map-data.service';
 import { MapStatesService } from '../map-states.service';
+import { MessagesService } from '../../../services/messages.service';
 
 @Component({
   selector: 'oms-map-side-panel',
@@ -38,6 +39,7 @@ export class MapSidePanelComponent implements OnInit, OnChanges {
   constructor(
     private dataSvc: MapDataService,
     private statesSvc: MapStatesService,
+    private messageSvc: MessagesService,
     private auth: AuthService
   ) {}
 
@@ -73,8 +75,16 @@ export class MapSidePanelComponent implements OnInit, OnChanges {
 
   onChangeVehicleCalculatePath() {}
   changeSegmentDisabled() {
-    // @TODO 이벤트 구현 changeSegmentDisabled()
-    console.warn('TODO : 이벤트 구현');
+    // disabled 상태값 변경
+    this.segmentDisabledInfo.disabled = !this.segmentDisabledInfo.disabled;
+    //alert("Segment disabled : " + this.segmentDisabledInfo.disabled)
+
+    if (this.segmentDisabledInfo.disabled) {
+      this.messageSvc.sendDisableSegmentCommand({ type: 'TRACK', action: 'disable-segment' }, this.data.id).subscribe();
+    } else {
+      this.messageSvc.sendDisableSegmentCommand({ type: 'TRACK', action: 'enable-segment' }, this.data.id).subscribe();
+    }
+    //alert("Segment disabled : " + this.segmentDisabledInfo.disabled)
   }
 
   closePanel() {

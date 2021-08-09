@@ -15,8 +15,20 @@ fieldset {
     text-align: center;
   }
 
+  th {
+    height: 40px;
+  }
+
+  td {
+    height: 30px;
+  }
+
   button {
     margin: 0 4px;
     min-width: 100px;
   }
+}
+
+[hidden] {
+  display: none !important;
 }

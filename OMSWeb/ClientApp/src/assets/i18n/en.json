@@ -339,7 +339,11 @@
     "invertedCoord-x": "Inverted Coordinate:X",
     "invertedCoord-y": "Inverted Coordinate:Y",
     "nextPoint": "Next Point",
-    "offset": "Offset"
+    "offset": "Offset",
+    "serverModule": "Server Module",
+    "moduleNmae": "Module Nmae",
+    "releaseTime": "Release Time",
+    "pid": "Process ID"
   },
   "enums": {
     "hostSessionStatus": {

@@ -134,14 +134,16 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     let isDisable: boolean = value;
     if (isDisable) {
       this.messageSvc
-        .sendDisableSegmentCommand({ action: 'disable-segment' }, this.contextData.id)
+        .sendDisableSegmentCommand({ type: 'TRACK', action: 'disable-segment' }, this.contextData.id)
         .subscribe();
     }
     else {
       this.messageSvc
-        .sendDisableSegmentCommand({ action: 'enable-segment' }, this.contextData.id)
+        .sendDisableSegmentCommand({ type: 'TRACK', action: 'enable-segment' }, this.contextData.id)
         .subscribe();
     }
+        
+    //this.trackData.segmentDisabled[this.contextData.id] = isDisable;
   }
   onApplyPointChange(isHome: boolean, selectedGroup: number) {
     this.trackSvc

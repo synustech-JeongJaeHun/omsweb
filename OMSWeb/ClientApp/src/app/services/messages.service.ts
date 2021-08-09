@@ -97,6 +97,16 @@ export class MessagesService {
     return this.sendCommand<IVehicleManagerCommandMessage>(command);
   }
 
+  sendServerModuleControlCommand(
+    command: IControlStateCommandMessage
+  ): Observable<void> {
+    command.type = command.type;
+    command.action = command.action;
+    command.state = command.state;
+
+    return this.sendCommand<IControlStateCommandMessage>(command);
+  }
+
   sendOrderCommand(command: IOrderCommandMessage): Observable<void> {
     return this.sendCommand<IOrderCommandMessage>(command);
   }
@@ -105,6 +115,7 @@ export class MessagesService {
     command: ITrackCommandMessage,
     targets: number
   ): Observable<void> {
+    command.type = command.type;
     command.segmentId = targets;
     command.source = "uid-admin";
 

@@ -13639,8 +13639,8 @@ export class ViewController {
     }
     path
       .attr('d', segment_path_data.path)
-      .style('stroke-width', scaledSegmentWidth);
-    // .attr('stroke-width', `${scaledSegmentWidth}px`);
+    // .style('stroke-width', scaledSegmentWidth);
+     .attr('stroke-width', `${scaledSegmentWidth}px`);
 
     let mask = this.segments_svg.select('.segment_mask');
     if (mask.nodes().length === 0) {

@@ -19,7 +19,7 @@ import { DxDataGridComponent } from 'devextreme-angular';
   styles: [
     `
       #history-page {
-        background-color: var(--dialog-border-color);
+        background-color: var(--panel-background-color);
         display: grid;
         grid-template-rows: 40px auto;
         left: 0;

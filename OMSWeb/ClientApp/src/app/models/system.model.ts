@@ -13,3 +13,12 @@ export interface IServiceProcessStates {
   version: string;
   isRunning: boolean;
 }
+
+export interface IModuleStatus {
+  id: number;
+  name: string;
+  version: string;
+  releaseTime: Date;
+  pid: number;
+  startTime: Date;
+}
