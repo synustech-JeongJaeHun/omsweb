@@ -60,19 +60,7 @@ FROM (
     {
       int result = -1;
 
-      /*
-      var sql = @"      
-      INSERT INTO annotations (reference_id, reference_table, modified_time, modified_by, annotation)
-      VALUES (@reference_id, @reference_table, CURRENT_TIMESTAMP, @modified_by, @annotation)
-      ON CONFLICT (reference_id) 
-      DO 
-        UPDATE SET reference_table = @reference_table, modified_time = CURRENT_TIMESTAMP, modified_by = @modified_by, annotation = @annotation
-
-      UPDATE vehicle_alarms
-      SET time_resolved = CURRENT_TIMESTAMP
-      WHERE id = @id;
-      ";
-      */
+      /* UPSERT this is executed when the reference_id field has unique constraint.
       var sql = @"      
       INSERT INTO annotations (reference_id, reference_table, modified_time, modified_by, annotation)
       VALUES (@reference_id, @reference_table, CURRENT_TIMESTAMP, @modified_by, @annotation)
@@ -84,7 +72,71 @@ FROM (
       SET time_resolved = CURRENT_TIMESTAMP
       WHERE id = @id;
       ";
+      */
 
+      var sqlSelect = @"
+      SELECT COUNT(*) as count FROM annotations WHERE reference_id = @reference_id;
+      ";
+
+      var sqlUpdate = @"
+      UPDATE annotations 
+      SET reference_table = @reference_table, 
+        modified_time = CURRENT_TIMESTAMP, 
+        modified_by = @modified_by, 
+        annotation = @annotation
+      WHERE reference_id = @reference_id;
+
+      UPDATE vehicle_alarms
+      SET time_resolved = CURRENT_TIMESTAMP
+      WHERE id = @id;
+      ";
+
+      var sqlInsert = @"
+      INSERT INTO annotations (reference_id, reference_table, modified_time, modified_by, annotation)
+      VALUES (@reference_id, @reference_table, CURRENT_TIMESTAMP, @modified_by, @annotation);
+
+      UPDATE vehicle_alarms
+      SET time_resolved = CURRENT_TIMESTAMP
+      WHERE id = @id;
+      ";
+
+      var sql = "";
+
+      using (var conn = ConnectTrack())
+      {
+        conn.Open();
+        var trans = conn.BeginTransaction();
+
+        int resultCount = conn.QuerySingle<int>(sqlSelect, new
+        {
+          reference_id = annotation.ReferenceID
+        });
+
+        if (resultCount > 0)
+          sql = sqlUpdate;
+        else
+          sql = sqlInsert;
+
+        using (var cmd = new NpgsqlCommand(sql, conn))
+        {
+          try
+          {
+            cmd.Parameters.AddWithValue("reference_id", annotation.ReferenceID);
+            cmd.Parameters.AddWithValue("reference_table", annotation.ReferenceTable);
+            cmd.Parameters.AddWithValue("modified_by", annotation.ModifiedBy);
+            cmd.Parameters.AddWithValue("annotation", annotation.Annotation);
+            cmd.Parameters.AddWithValue("id", annotation.VehicleAlaramID);
+            result = cmd.ExecuteNonQuery();
+            trans.Commit();
+          }
+          catch (Exception ex)
+          {
+            trans.Rollback();
+            throw ex;
+          }
+        }        
+      }
+      /*
       using (var conn = ConnectTrack())
       {
         using (var cmd = new NpgsqlCommand(sql, conn))
@@ -109,6 +161,7 @@ FROM (
           }
         }
       }
+      */
       return result;
     }
   }

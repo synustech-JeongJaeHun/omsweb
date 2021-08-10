@@ -8294,7 +8294,8 @@ export class ViewController {
   updateSegmentWidth(width: number) {
     this.segmentWidth = width;
     const scaledWidth = this.getSegmentWidth(width);
-    this.segments_svg.selectAll('path').style('stroke-width', scaledWidth);
+    //this.segments_svg.selectAll('path').style('stroke-width', scaledWidth);             -- 기존 Scaled Segement Width
+    this.segments_svg.selectAll('path').style('stroke-width', `${this.segmentWidth}px`);  // 변경 Sgement Width px
   }
   update_direction_arrow_scale(updated_width) {
     this.set_direction_scale(updated_width);
@@ -13639,8 +13640,9 @@ export class ViewController {
     }
     path
       .attr('d', segment_path_data.path)
-    // .style('stroke-width', scaledSegmentWidth);
-     .attr('stroke-width', `${scaledSegmentWidth}px`);
+    // .style('stroke-width', scaledSegmentWidth);           Scaled Sgement Width
+    // .attr('stroke-width', `${scaledSegmentWidth}px`);     Scaled Segment Width px
+      .attr('stroke-width', `${this.segmentWidth}px`);    // Segment Width px
 
     let mask = this.segments_svg.select('.segment_mask');
     if (mask.nodes().length === 0) {
@@ -13668,7 +13670,8 @@ export class ViewController {
     }
     disbled_path
       .attr('d', segment_path_data.disabled_path)
-      .attr('stroke-width', `${scaledSegmentWidth}px`);
+      //.attr('stroke-width', `${scaledSegmentWidth}px`);    Scaled Segment Width px
+      .attr('stroke-width', `${this.segmentWidth}px`);    // Segment Width px
 
     // Invalid path ============================= //
     let invalid_path = this.segments_svg.select('.segment_path.non_validate');
@@ -13679,7 +13682,8 @@ export class ViewController {
     }
     invalid_path
       .attr('d', segment_path_data.invalid_path)
-      .attr('stroke-width', `${scaledSegmentWidth}px`);
+      //.attr('stroke-width', `${scaledSegmentWidth}px`);    Scaled Segment Width px
+      .attr('stroke-width', `${this.segmentWidth}px`);    // Segment Width px
 
     // this.segments_svg = this.get_svg_class('SEGMENT').selectAll('g.segment')
 
