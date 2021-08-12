@@ -15,7 +15,8 @@ export class Buffer {
   coord: ICoordinate;
   invertedCoord: ICoordinate;
   direction: string;
-
+  offset?: number;
+  
   isValidate?: boolean;
   updateState?: string;
   group?: number;
@@ -29,12 +30,13 @@ export class Buffer {
     updateState: string,
     point: IPoint
   ) {
-    const { id, logicalId, physicalId, pointId, group, direction } = row;
+    const { id, logicalId, physicalId, pointId, group, direction, offset } = row;
     this.id = id;
     this.logicalId = logicalId;
     this.physicalId = physicalId;
     this.pointId = pointId;
     this.direction = direction || 'U';
+    this.offset = offset;
     this.group = group;
 
     this.isValidate = isValidate;
@@ -64,6 +66,7 @@ export class Buffer {
       coord,
       invertedCoord,
       direction,
+      offset,
       group;
     let isValidate, updateState;
 
@@ -78,6 +81,7 @@ export class Buffer {
     logicalId = this.logicalId;
     pointId = this.pointId;
     direction = this.direction;
+    offset = this.offset;
 
     isValidate = this.isValidate;
     updateState = this.updateState;

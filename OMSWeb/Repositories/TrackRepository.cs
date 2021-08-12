@@ -171,6 +171,7 @@ namespace OMSWeb.Repositories
                                     PointId = dr["point_id"].TryIntegerOrNull(),
                                     Direction = dr["direction"].ToString(),
                                     CarrierType = dr["carrier_type"].TryIntegerOrNull(),
+                                    Offset = dr["offset"].TryIntegerOrNull(),
                                 }
                                );
                             }
@@ -206,6 +207,7 @@ namespace OMSWeb.Repositories
                                     LogicalId = dr["logical_id"].ToString(),
                                     PointId = dr["point_id"].TryIntegerOrNull(),
                                     Direction = dr["direction"].ToString(),
+                                    Offset = dr["offset"].TryIntegerOrNull(),
                                 }
                                );
                             }

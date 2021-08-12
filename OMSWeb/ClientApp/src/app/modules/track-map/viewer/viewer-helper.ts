@@ -8913,8 +8913,25 @@ export class ViewController {
         d.objectType.toUpperCase() === 'STATION' ||
         d.objectType.toUpperCase() === 'BUFFER'
       ) {
+        /*
+        if (d.objectType.toUpperCase() === 'BUFFER')
+          alert('create buffer svg [(id : ' + d.id + ') (direction : ' + d.direction + ') - (offset : ' + d.offset + ')]');
+        else if (d.objectType.toUpperCase() === 'STATION')
+          alert('create station svg [(id : ' + d.id + ') (direction : ' + d.direction + ') - (offset : ' + d.offset + ')]');
+        */
         is_translate = true;
-        trans_array = transform.apply([d.invertedCoord.x, d.invertedCoord.y]);
+        //trans_array = transform.apply([d.invertedCoord.x, d.invertedCoord.y]);            - before code
+        if (d.direction == 'L') {
+          trans_array = transform.apply([d.invertedCoord.x - d.offset, d.invertedCoord.y]);
+        } else if (d.direction == 'R') {
+          trans_array = transform.apply([d.invertedCoord.x + d.offset, d.invertedCoord.y]);
+        } else if (d.direction == 'T') {
+          trans_array = transform.apply([d.invertedCoord.x, d.invertedCoord.y - d.offset]);
+        } else if (d.direction == 'B') {
+          trans_array = transform.apply([d.invertedCoord.x, d.invertedCoord.y + d.offset]);
+        } else {
+          trans_array = transform.apply([d.invertedCoord.x, d.invertedCoord.y]);
+        }
       } else if (d.objectType.toUpperCase() === 'CLUSTER') {
         trans_array = transform.apply([
           d.invertedCoordFrom.x,

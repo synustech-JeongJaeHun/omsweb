@@ -15,6 +15,7 @@ export class Station {
   invertedCoord: ICoordinate;
   direction: string;
   carrierType: string;
+  offset?: number;
 
   isValidate?: boolean;
   updateState?: string;
@@ -36,7 +37,8 @@ export class Station {
       pointId,
       direction,
       carrierType,
-      group,
+      offset,
+      group,      
     } = row;
     this.id = id;
     this.logicalId = logicalId;
@@ -44,7 +46,8 @@ export class Station {
     this.pointId = pointId;
     this.direction = direction || 'U';
     this.carrierType = carrierType;
-    this.group = group;
+    this.offset = offset;
+    this.group = group;    
 
     this.coord = point.coord;
     this.invertedCoord = point.invertedCoord;
@@ -74,7 +77,8 @@ export class Station {
       invertedCoord,
       direction,
       carrierType,
-      group,
+      offset,
+      group,      
       isValidate,
       updateState,
     } = this;
@@ -91,11 +95,12 @@ export class Station {
     pointId = this.pointId;
     direction = this.direction;
     carrierType = this.carrierType;
+    offset = this.offset;
 
     isValidate = this.isValidate;
     updateState = this.updateState;
     group = this.group;
-
+    
     // Object
     coord = { ...this.coord };
     invertedCoord = { ...this.invertedCoord };

@@ -54,13 +54,13 @@ namespace OMSWeb.Repositories
       "},
       {"station", @"
         SELECT id AS id, physical_id AS physical_id, logical_id AS logical_id, point AS point_id,
-          direction AS direction, carrier_type AS carrier_type
+          direction AS direction, carrier_type AS carrier_type, ""offset"" AS offset
         FROM stations
         --*user_id_condition*--WHERE user_id =@userId
       "},
       {"buffer", @"
         SELECT id, physical_id, logical_id AS logical_id, point AS point_id,
-          direction AS direction
+          direction AS direction, ""offset"" AS offset
         FROM buffers
         --*user_id_condition*--WHERE user_id =@userId
       "},
