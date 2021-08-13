@@ -16,6 +16,8 @@ export class Station {
   direction: string;
   carrierType: string;
   offset?: number;
+  offsetX?: number;
+  offsetY?: number;
 
   isValidate?: boolean;
   updateState?: string;
@@ -38,6 +40,8 @@ export class Station {
       direction,
       carrierType,
       offset,
+      offsetX,
+      offsetY,
       group,      
     } = row;
     this.id = id;
@@ -47,6 +51,8 @@ export class Station {
     this.direction = direction || 'U';
     this.carrierType = carrierType;
     this.offset = offset;
+    this.offsetX = offsetX;
+    this.offsetY = offsetY;
     this.group = group;    
 
     this.coord = point.coord;
@@ -78,6 +84,8 @@ export class Station {
       direction,
       carrierType,
       offset,
+      offsetX,
+      offsetY,
       group,      
       isValidate,
       updateState,
@@ -96,6 +104,8 @@ export class Station {
     direction = this.direction;
     carrierType = this.carrierType;
     offset = this.offset;
+    offsetX = this.offsetX;
+    offsetY = this.offsetY;
 
     isValidate = this.isValidate;
     updateState = this.updateState;

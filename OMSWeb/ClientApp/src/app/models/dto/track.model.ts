@@ -10,6 +10,8 @@ export namespace Dto {
     pointId: number;
     group?: number;
     offset?: number;
+    offsetX?: number;
+    offsetY?: number;
   }
   export interface ICluster {
     id: number;
@@ -95,6 +97,8 @@ export namespace Dto {
     pointId: number;
     group?: number;
     offset?: number;
+    offsetX?: number;
+    offsetY?: number;
   }
   export interface IVehicle {
     id: number;

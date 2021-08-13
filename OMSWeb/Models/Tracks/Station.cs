@@ -10,4 +10,10 @@ namespace OMSWeb.Models.Tracks
     public int? CarrierType { get; set; }
     public int? Offset { get; set; }
   }
+
+  public class StationPosition : Station
+  {
+    public int OffsetX { get; set; }
+    public int OffsetY { get; set; }
+  }
 }

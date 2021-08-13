@@ -9,4 +9,10 @@ namespace OMSWeb.Models.Tracks
     public string Direction { get; set; }
     public int? Offset { get; set; }
   }
+
+  public class BufferPosition : Buffer
+  {
+    public int OffsetX { get; set; }
+    public int OffsetY { get; set; }
+  }
 }
