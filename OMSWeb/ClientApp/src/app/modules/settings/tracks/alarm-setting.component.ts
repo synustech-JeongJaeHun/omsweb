@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable, of } from 'rxjs';
+import DataSource  from 'devextreme/data/data_source';
+import { NotificationsService } from '../../../services/notifications.service';
 
 @Component({
   selector: 'oms-alarm-setting',
@@ -7,10 +9,14 @@ import { Observable, of } from 'rxjs';
   styleUrls: ['./alarm-setting.component.scss'],
 })
 export class AlarmSettingComponent implements OnInit {
-  dataSource: Observable<any[]>;
-  constructor() {
-    this.dataSource = of([]);
+  dataSource: DataSource;
+
+  constructor(
+    private notifySvc: NotificationsService
+  ) {
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.dataSource = this.notifySvc.vehicleErrorsDataSource();
+  }
 }

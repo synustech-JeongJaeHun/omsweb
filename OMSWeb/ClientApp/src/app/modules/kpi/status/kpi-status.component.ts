@@ -1,5 +1,6 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
 import { SettingsService } from '../../../services/settings.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'oms-kpi-status',
@@ -23,7 +24,10 @@ export class KpiStatusComponent implements OnInit {
     return this.enabled && this.settingSvc.globalPreferences.toggles.showKpi;
   }
 
-  constructor(private settingSvc: SettingsService) {
+  constructor(
+    private settingSvc: SettingsService,
+    private router: Router
+  ) {
     this.settingSvc.serviceConfig.subscribe(cfg => {
       this.enabled = cfg.kpiEnabled;
     })
@@ -33,5 +37,15 @@ export class KpiStatusComponent implements OnInit {
 
   onToggleExpand() {
     this.expanded = !this.expanded;
+  }
+
+  onClick(target: string) {
+    if (target == "kpi") {
+      this.router.navigate(["/reports/kpi"]);
+    } else if (target == "systeminfo") {
+      this.router.navigate(["/reports/systeminfo"]);
+    } else {
+      this.router.navigate(["/reports/report"]);
+    }
   }
 }

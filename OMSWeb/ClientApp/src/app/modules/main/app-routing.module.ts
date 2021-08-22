@@ -24,6 +24,11 @@ const routes: Routes = [
       import('../playback/playback.module').then((m) => m.PlaybackModule),
   },
   {
+    path: 'reports',
+    loadChildren: () =>
+      import('../reports/reports.module').then((m) => m.ReportsModule),
+  },
+  {
     path: 'histories',
     loadChildren: () =>
       import('../histories/histories.module').then((m) => m.HistoriesModule),

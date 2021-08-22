@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import DataSource from 'devextreme/data/data_source';
+import { Observable } from 'rxjs';
+import { SettingsService } from '../../../services/settings.service';
 
 @Component({
   selector: 'oms-buffer-setting',
@@ -6,10 +9,14 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./buffer-setting.component.scss']
 })
 export class BufferSettingComponent implements OnInit {
+  dataSource: DataSource;
 
-  constructor() { }
+  constructor(private settingSvc: SettingsService) {
+    this.dataSource = this.settingSvc.settingsBuffersDataSource();
+  }
 
   ngOnInit(): void {
   }
 
+  onUpdateRow(event) { }
 }

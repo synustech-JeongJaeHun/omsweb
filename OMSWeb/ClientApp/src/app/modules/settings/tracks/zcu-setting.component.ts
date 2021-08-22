@@ -1,5 +1,7 @@
+import DataSource from 'devextreme/data/data_source'
 import { Component, OnInit } from '@angular/core';
 import { Observable, of } from 'rxjs';
+import { SettingsService } from '../../../services/settings.service';
 
 @Component({
   selector: 'oms-zcu-setting',
@@ -7,8 +9,10 @@ import { Observable, of } from 'rxjs';
   styleUrls: ['./zcu-setting.component.scss'],
 })
 export class ZcuSettingComponent implements OnInit {
-  dataSource: any[] = [];
-  usingTypes = [
+  dataSource: DataSource;
+  zcuInputZoneDataSource: DataSource;
+
+  zcuUsingTypes = [
     { type: 0, text: 'Not Use' },
     { type: 1, text: 'Use HW' },
     { type: 2, text: 'Use SW' },
@@ -19,7 +23,11 @@ export class ZcuSettingComponent implements OnInit {
     { priority: 42, zone: [93,91,90,100] },
   ];
 
-  constructor() {
+  constructor(
+    private settingSvc: SettingsService
+  ) {
+
+    /*
     this.dataSource = ([
       {
         id: 1,
@@ -40,13 +48,18 @@ export class ZcuSettingComponent implements OnInit {
         usingType: 2,
       },
     ]);
+    */
+    this.dataSource = this.settingSvc.settingsZcusDataSource();
   }
 
   ngOnInit(): void {}
 
   onUpdateRow(event) {}
 
-  getInputZones(value) {
-    return this.zcuInfos;
+  getZcuInputZones(value) {
+    this.zcuInputZoneDataSource = this.settingSvc.settingsZcuInputZonesDataSource(value);
+    //alert(this.zcuInputZoneDataSource);
+    return this.zcuInputZoneDataSource;
+    //return this.zcuInfos;
   }
 }

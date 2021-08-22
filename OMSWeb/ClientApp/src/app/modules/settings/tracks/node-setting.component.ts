@@ -1,7 +1,8 @@
+import DataSource from 'devextreme/data/data_source';
 import { Component, OnInit } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { NodeDirectionNames } from '../../../models/enums';
-import { TracksService } from '../../../services/tracks.service';
+import { SettingsService } from '../../../services/settings.service';
 
 @Component({
   selector: 'oms-node-setting',
@@ -9,27 +10,16 @@ import { TracksService } from '../../../services/tracks.service';
   styleUrls: ['./node-setting.component.scss'],
 })
 export class NodeSettingComponent implements OnInit {
-  dataSource$: Observable<any[]>;
+  dataSource: DataSource;
 
-  constructor(private trackSvc: TracksService) {
-    // this.dataSource$ = of([
-    //   {
-    //     id: 1,
-    //     bcr: '12345',
-    //     dir: 2,
-    //     vertex: true,
-    //   },
-    //   {
-    //     id: 3,
-    //     bcr: '22345',
-    //     dir: 3,
-    //     vertex: false,
-    //   },
-    // ])
-    this.dataSource$ = this.trackSvc.loadPoints();
+  constructor(
+    private settingsSvc: SettingsService
+  ) {
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.dataSource = this.settingsSvc.settingsPointsDataSource();
+  }
 
   onUpdateRow(event) {}
 

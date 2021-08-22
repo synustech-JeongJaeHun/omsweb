@@ -11,47 +11,61 @@
 </div>
 
 <dx-data-grid
-  [dataSource]="dataSource$ | async"
+  id="station-datagrid"
+  [dataSource]="dataSource"
   [height]="450"
   [showBorders]="true"
-  (onRowUpdated)="onUpdateRow($event)"
->
+  [allowColumnResizing]="true"
+  keyExpr="id"
+  (onRowUpdated)="onUpdateRow($event)">
+
   <dxo-paging [pageSize]="23"></dxo-paging>
   <dxo-editing
     mode="cell"
     [allowUpdating]="true"
-    [useIcons]="true"
-  ></dxo-editing>
+    [useIcons]="true">
+  </dxo-editing>
+
   <dxi-column
+    dataType="number"
     dataField="id"
     [allowEditing]="false"
     [width]="60"
-    alignment="center"
-  >
+    alignment="center">
   </dxi-column>
   <dxi-column
-    dataField="onlineName"
+    dataType="sting"
+    dataField="logicalId"
     [caption]="'names.onlineName' | translate"
     [allowEditing]="false"
-    alignment="center"
-  ></dxi-column>
-  <dxi-column dataField="unuse" [caption]="'names.unuse' | translate">
+    alignment="center">
+  </dxi-column>
+  <dxi-column
+    dataType="boolean"
+    dataField="unUse"
+    [caption]="'names.unuse' | translate">
   </dxi-column>
   <dxi-column
     dataField="secondaryStation"
     [caption]="'names.secondary' | translate"
-    alignment="center"
-  >
+    alignment="center">
+    <!--
     <dxo-lookup
-      [dataSource]="dataSource$ | async"
+      [dataSource]="dataSource"
       displayExpr="onlineName"
-      valueExpr="onlineName"
-    >
+      valueExpr="onlineName">
     </dxo-lookup>
+    -->
   </dxi-column>
-  <dxi-column dataField="maxRetrySec" [caption]="'MaxRetry(Sec)'"> </dxi-column>
-  <dxi-column dataField="retryIntervalSec" [caption]="'RetryInterval(Sec)'">
+  <dxi-column
+    dataField="maxRetrySec"
+    [caption]="'MaxRetry(Sec)'">
   </dxi-column>
+  <dxi-column
+    dataField="retryIntervalSec"
+    [caption]="'RetryInterval(Sec)'">
+  </dxi-column>
+
   <dxo-search-panel
     [placeholder]="'names.search' | translate"
     [visible]="true"

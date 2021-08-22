@@ -78,6 +78,7 @@ export class GnbMenusComponent implements OnInit, OnDestroy {
       '/histories',
       '/logs',
       '/settings',
+      '/reports',
     ];
     this.parentRoute = routeNames.find((r) => this.router.isActive(r, false));
   }

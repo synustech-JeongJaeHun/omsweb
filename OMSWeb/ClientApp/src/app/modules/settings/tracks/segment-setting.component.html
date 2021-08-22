@@ -24,7 +24,7 @@
 
 <dx-data-grid
   id="segment-datagrid"
-  [dataSource]="dataSource$ | async"
+  [dataSource]="dataSource"
   [height]="520"
   [showBorders]="true"
   [allowColumnResizing]="false"
@@ -36,83 +36,79 @@
   <dxo-editing
     mode="cell"
     [allowUpdating]="true"
-    [useIcons]="true"
-  ></dxo-editing>
+    [useIcons]="true">
+  </dxo-editing>
+
   <dxi-column
-    dataField="id"
     dataType="number"
+    dataField="id"
     [allowEditing]="false"
-    [width]="50"
-  ></dxi-column>
+    [width]="50">
+  </dxi-column>
   <dxi-column
+    dataType="number"
     dataField="speed"
     [caption]="'names.speed' | translate"
-    dataType="number"
-    [allowEditing]="false"
-  ></dxi-column>
+    [allowEditing]="false">
+  </dxi-column>
   <dxi-column
+    dataType="number"
     dataField="speedRatio"
     [caption]="'names.speedRatio' | translate"
-    dataType="number"
     [customizeText]="customSpeedRatio"
-    [width]="90"
-  >
+    [width]="90">
     <dxi-validation-rule
       type="range"
       min="1"
       max="100"
-      [message]="'_RATIO_MESSAGE'"
-    >
+      [message]="'_RATIO_MESSAGE'">
     </dxi-validation-rule>
   </dxi-column>
   <dxi-column
+    dataType="number"
     dataField="length"
     [caption]="'names.length' | translate"
-    dataType="number"
-    [width]="60"
-  ></dxi-column>
-  <dxi-column
-    dataField="obsLow"
-    [caption]="'names.obsLow' | translate"
-    dataType="number"
-  >
+    [width]="60">
   </dxi-column>
   <dxi-column
-    dataField="obsHigh"
-    [caption]="'names.obsHigh' | translate"
-    dataType="number"
-  >
+    dataType="string"
+    dataField="obLow"
+    [caption]="'names.obsLow' | translate">
   </dxi-column>
   <dxi-column
-    dataField="obsDistance"
-    [caption]="'names.obsDistance' | translate"
-    dataType="number"
-  >
+    dataType="string"
+    dataField="obHigh"
+    [caption]="'names.obsHigh' | translate">
   </dxi-column>
   <dxi-column
-    dataField="unuse"
-    [caption]="'names.unuse' | translate"
+    dataType="string"
+    dataField="obDistance"
+    [caption]="'names.obsDistance' | translate">
+  </dxi-column>
+  <dxi-column
     dataType="boolean"
-  >
+    dataField="unUse"
+    [caption]="'names.unuse' | translate">
     <!-- <dxo-lookup
       [dataSource]="unuseBool"
       valueExpr="type"
       displayExpr="string"
     ></dxo-lookup> -->
   </dxi-column>
+
   <dxo-search-panel
     [placeholder]="'names.search' | translate"
-    [visible]="true"
-  ></dxo-search-panel>
+    [visible]="true">
+  </dxo-search-panel>
 
   <div *dxTemplate="let row of 'segInfoTemplate'">
     <div class="row-detail">
       <div class="detail-title">Segment #{{ row.data.id }}</div>
       <div class="detail-info">
         <div class="name">{{ "names.startPoint" | translate }}</div>
-        <div class="value">5</div>
+        <div class="value">{{ row.data.startPoint }}</div>
         <div class="name">{{ "names.endPoint" | translate }}</div>
-        <div class="value">7</div>
+        <div class="value">{{ row.data.endPoint }}</div>
       </div>
     </div>
   </div>

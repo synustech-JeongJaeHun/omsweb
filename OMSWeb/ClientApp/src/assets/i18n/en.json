@@ -343,7 +343,10 @@
     "serverModule": "Server Module",
     "moduleNmae": "Module Nmae",
     "releaseTime": "Release Time",
-    "pid": "Process ID"
+    "pid": "Process ID",
+    "alarmName": "Alarm Name",
+    "resolution": "Resolution",
+    "action": "Action"
   },
   "enums": {
     "hostSessionStatus": {

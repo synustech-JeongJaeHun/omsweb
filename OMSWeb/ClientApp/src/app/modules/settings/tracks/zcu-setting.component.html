@@ -19,49 +19,50 @@
   [allowColumnResizing]="true"
   (onRowUpdated)="onUpdateRow($event)"
   keyExpr="id"
-  [masterDetail]="{ enabled: true, template: 'detailTemplate' }"
->
+  [masterDetail]="{ enabled: true, template: 'detailTemplate' }">
+
   <dxo-paging [pageSize]="20"></dxo-paging>
   <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
   <dxo-editing
     mode="cell"
     [allowUpdating]="true"
-    [useIcons]="true"
-  ></dxo-editing>
+    [useIcons]="true">
+  </dxo-editing>
+
   <dxi-column
-    dataField="id"
     dataType="number"
+    dataField="id"
     [allowEditing]="false"
-    alignment="center"
-  ></dxi-column>
+    alignment="center">
+  </dxi-column>
   <dxi-column
-    dataField="type"
+    dataField="zcuType"
     [caption]="'names.type' | translate"
     cellTemplate="zcuTypeTemplate"
     [allowEditing]="false"
-    alignment="center"
-  ></dxi-column>
+    alignment="center">
+  </dxi-column>
   <dxi-column
     dataField="completeNodes"
     [caption]="'names.completeNodes' | translate"
-    [allowEditing]="false"
-  ></dxi-column>
+    [allowEditing]="false">
+  </dxi-column>
   <dxi-column
     dataField="usingType"
     [caption]="'names.usingType' | translate"
     [width]="120"
-    alignment="center"
-  >
+    alignment="center">
     <dxo-lookup
-      [dataSource]="usingTypes"
+      [dataSource]="zcuUsingTypes"
       valueExpr="type"
-      displayExpr="text"
-    ></dxo-lookup>
+      displayExpr="text">
+    </dxo-lookup>
   </dxi-column>
+
   <dxo-search-panel
     [placeholder]="'names.search' | translate"
-    [visible]="true"
-  ></dxo-search-panel>
+    [visible]="true">
+  </dxo-search-panel>
 
   <div *dxTemplate="let data of 'zcuTypeTemplate'">Standard</div>
 
@@ -73,22 +74,23 @@
 
       <div class="detail-info">
         <dx-data-grid
-          [dataSource]="getInputZones(row.data)"
-          [showBorders]="true"
-        >
+          [dataSource]="getZcuInputZones(row.data.id)"
+          [showBorders]="true">
+
           <dxi-column
-            dataField="priority"
+            dataField="priorityPoint"
             [caption]="'names.priority' | translate"
             [allowEditing]="false"
             [width]="100"
-            alignment="center"
-          ></dxi-column>
+            alignment="center">
+          </dxi-column>
           <dxi-column
-            dataField="zone"
+            dataField="zonePoints"
             [caption]="'names.zone' | translate"
             [allowEditing]="false"
-            alignment="center"
-          ></dxi-column>
+            alignment="center">
+          </dxi-column>
+
         </dx-data-grid>
       </div>
     </div>

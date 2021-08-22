@@ -1,80 +1,20 @@
-<div id="kpi-container" *ngIf="activated">
-  <div class="area summary">
-    <h3 class="category-name">{{ "names.summary" | translate }}</h3>
-    <h3 class="category-name">{{ "names.vehicle" | translate }}</h3>
+<div id="kpi-container">
+  <div class="area summary">    
     <div class="gauge util">
-      <div class="title">{{ "names.utilization" | translate }}</div>
+      <div class="title" (click)="onClick('kpi')">{{ "names.utilization" | translate }}</div>
+      <div class="data" (click)="onClick('kpi')"> 67.78%</div>
     </div>
     <div class="gauge delivery">
-      <div class="title">{{ "names.deliveryTime" | translate }}</div>
+      <div class="title" (click)="onClick('kpi')">{{ "names.deliveryTime" | translate }}</div>
+      <div class="data" (click)="onClick('kpi')"> 87.10 sec</div>
     </div>
-    <div class="gauge vehicle">
-      <div class="title">{{ "names.vehicle" | translate }}</div>
-    </div>
-    <div class="actions full-span-col">
-      <button mat-flat-button id="expand-button" class="dense" (click)="onToggleExpand()">
-        <mat-icon>{{ expanded ? 'expand_less' : 'expand_more'}}</mat-icon>
-      </button>
-    </div>
-  </div>
-  <div class="area system-info">
-    <h3 class="category-name">{{ "names.systemInfo" | translate }}</h3>
     <div class="gauge cpu">
-      <div class="title">{{ "names.cpu" | translate }}</div>
+      <div class="title" (click)="onClick('systeminfo')">{{ "names.cpu" | translate }}</div>
+      <div class="data" (click)="onClick('systeminfo')"> 18% 3.84GHz</div>
     </div>
     <div class="gauge memory">
-      <div class="title">{{ "names.memory" | translate }}</div>
+      <div class="title" (click)="onClick('systeminfo')">{{ "names.memory" | translate }}</div>
+      <div class="data" (click)="onClick('systeminfo')"> 7.9/15.8GB (50%)</div>
     </div>
   </div>
-</div>
-
-<div class="details" *ngIf="expanded">
-  <table class="table-details">
-    <tr>
-      <th class="name">{{ "names.item" | translate }}</th>
-      <th class="value">{{ "names.desc" | translate }} (localhost/largemap...v3)</th>
-    </tr>
-    <tr>
-      <td class="name">{{ "names.range" | translate }}</td>
-      <td class="value">
-        2021-05-28 09:05:24 (1) ~ 2021-05-28 09:15:24 (10,367)
-      </td>
-    </tr>
-    <tr>
-      <td class="name">{{ "names.utilization" | translate }}</td>
-      <td class="value">60.9%</td>
-    </tr>
-    <tr>
-      <td class="name">
-        {{ "names.deliveryTime" | translate }} (created ~ completed)​
-      </td>
-      <td class="value">87.10s, order count: 10,191</td>
-    </tr>
-    <tr>
-      <td class="name">
-        {{ "names.waitTime" | translate }} (created ~ loaded)​
-      </td>
-      <td class="value">87.10s, order count: 10,191</td>
-    </tr>
-    <tr>
-      <td class="name">
-        {{ "names.transferTime" | translate }} (created ~ completed)​
-      </td>
-      <td class="value">87.10s, order count: 10,191</td>
-    </tr>
-    <tr>
-      <td class="name">
-        {{ "names.assignTime" | translate }}(created ~ assigned)​
-      </td>
-      <td class="value">87.10s, order count: 10,191</td>
-    </tr>
-    <tr>
-      <td class="name">{{ "names.orderChange" | translate }}</td>
-      <td class="value">65.51% (6,792 / 10,368)</td>
-    </tr>
-    <tr>
-      <td class="name">{{ "names.numOfOrderReq" | translate }}</td>
-      <td class="value">per second: 2,0011, estimate per day: 172,894</td>
-    </tr>
-  </table>
 </div>

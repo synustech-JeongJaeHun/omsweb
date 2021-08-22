@@ -18,4 +18,13 @@ namespace OMSWeb.Models.Entities
     public string Description { get; set; }
     public string Action { get; set; }
   }
+
+  public class VehicleError
+  {
+    public int Id { get; set; }
+    public int Level { get; set; }
+    public string Description { get; set; }
+    public string Cause { get; set; }
+    public string Action { get; set; }
+  }
 }

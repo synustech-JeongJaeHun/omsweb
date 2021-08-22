@@ -11,44 +11,49 @@
 </div>
 
 <dx-data-grid
-  id="gridContainer"
+  id="point-datagrid"
   #grid
-  [dataSource]="dataSource$ | async"
+  [dataSource]="dataSource"
   [height]="450"
   [showBorders]="true"
   [allowColumnResizing]="true"
-  (onRowUpdated)="onUpdateRow($event)"
->
+  (onRowUpdated)="onUpdateRow($event)">
+
   <dxo-paging [pageSize]="23"></dxo-paging>
   <dxo-editing
     mode="cell"
     [allowUpdating]="true"
-    [useIcons]="true"
-  ></dxo-editing>
-  <dxi-column dataField="id" [allowEditing]="false" [width]="60"></dxi-column>
+    [useIcons]="true">
+  </dxo-editing>
+
   <dxi-column
-    dataField="bcr"
-    [caption]="'names.barcode' | translate"
+    dataType="number"
+    dataField="id"
     [allowEditing]="false"
-  >
+    [width]="60">
+  </dxi-column>
+  <dxi-column
+    dataType="string"
+    dataField="physicalId"
+    [caption]="'names.barcode' | translate"
+    [allowEditing]="false">
   </dxi-column>
   <dxi-column
     dataField="dir"
     [customizeText]="transformNodeDirection"
     [caption]="'names.direction' | translate"
     [allowEditing]="false"
-    alignment="center"
-  >
+    alignment="center">
   </dxi-column>
   <dxi-column
     dataField="vertex"
     [width]="80"
     [allowEditing]="false"
-    dataType="boolean"
-  >
+    dataType="boolean">
   </dxi-column>
+
   <dxo-search-panel
     [placeholder]="'names.search' | translate"
-    [visible]="true"
-  ></dxo-search-panel>
+    [visible]="true">
+  </dxo-search-panel>
 </dx-data-grid>

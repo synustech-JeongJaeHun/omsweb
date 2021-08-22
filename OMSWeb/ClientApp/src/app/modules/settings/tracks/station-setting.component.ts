@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import DataSource from 'devextreme/data/data_source';
 import { Observable } from 'rxjs';
 import { Dto } from '../../../models/dto/track.model';
-import { TracksService } from '../../../services/tracks.service';
+import { SettingsService } from '../../../services/settings.service';
 
 @Component({
   selector: 'oms-station-setting',
@@ -9,9 +10,10 @@ import { TracksService } from '../../../services/tracks.service';
   styleUrls: ['./station-setting.component.scss'],
 })
 export class StationSettingComponent implements OnInit {
-  dataSource$: Observable<Dto.IStation[]>;
+  dataSource: DataSource;
+  //dataSource$: Observable<Dto.IStation[]>;
 
-  constructor(private trackSvc: TracksService) {
+  constructor(private settingSvc: SettingsService) {
     // this.dataSource = [
     //   {
     //     id: 1,
@@ -35,7 +37,9 @@ export class StationSettingComponent implements OnInit {
     //     unuse: false,
     //   },
     // ];
-    this.dataSource$ = this.trackSvc.loadStations();
+
+    //this.dataSource$ = this.trackSvc.loadStations();
+    this.dataSource = this.settingSvc.settingsStationsDataSource();
   }
 
   ngOnInit(): void {}

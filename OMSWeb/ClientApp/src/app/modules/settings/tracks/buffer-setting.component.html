@@ -9,3 +9,45 @@
     </button>
   </div>
 </div>
+
+<dx-data-grid
+  id="buffer-datagrid"
+  [dataSource]="dataSource"
+  [height]="450"
+  [showBorders]="true"
+  [allowColumnResizing]="true"
+  keyExpr="id"
+  (onRowUpdated)="onUpdateRow($event)">
+
+  <dxo-paging [pageSize]="23"></dxo-paging>
+  <dxo-editing
+    mode="cell"
+    [allowUpdating]="true"
+    [useIcons]="true">
+  </dxo-editing>
+
+  <dxi-column
+    dataType="number"
+    dataField="id"
+    [allowEditing]="false"
+    [width]="60"
+    alignment="center">
+  </dxi-column>
+  <dxi-column
+    dataType="sting"
+    dataField="logicalId"
+    [caption]="'names.onlineName' | translate"
+    [allowEditing]="false"
+    alignment="center">
+  </dxi-column>
+  <dxi-column
+    dataType="boolean"
+    dataField="unUse"
+    [caption]="'names.unuse' | translate">
+  </dxi-column>
+
+  <dxo-search-panel
+    [placeholder]="'names.search' | translate"
+    [visible]="true"
+  ></dxo-search-panel>
+</dx-data-grid>

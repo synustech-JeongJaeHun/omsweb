@@ -8,17 +8,15 @@
             mat-list-item
             [class.active]="isActiveMenu('preference')"
             (click)="onChangeMenu('preference')"
-            class="nav-link"
-            >{{ "names.preference" | translate }}</a
-          >
+            class="nav-link">{{ "names.preference" | translate }}
+          </a>
           <a
             *ngIf="auth.hasPermissions([30])"
             mat-list-item
             [class.active]="isActiveMenu('users')"
             (click)="onChangeMenu('users')"
-            class="nav-link"
-            >{{ "names.userManagement" | translate }}</a
-          >
+            class="nav-link">{{ "names.userManagement" | translate }}
+          </a>
 
           <mat-divider class="nav-divider"></mat-divider>
 
@@ -27,57 +25,59 @@
             mat-list-item
             [class.active]="isActiveMenu('group')"
             (click)="onChangeMenu('group')"
-            class="nav-link"
-            >{{ "names.group" | translate }}</a
-          >
+            class="nav-link">{{ "names.group" | translate }}
+          </a>
           <a
             *ngIf="auth.hasPermissions([33])"
             mat-list-item
             [class.active]="isActiveMenu('cluster')"
             (click)="onChangeMenu('cluster')"
-            class="nav-link"
-            >{{ "names.cluster" | translate }}</a
-          >
+            class="nav-link">{{ "names.cluster" | translate }}
+          </a>
           <a
             *ngIf="auth.hasPermissions([34])"
             mat-list-item
             [class.active]="isActiveMenu('alarm')"
             (click)="onChangeMenu('alarm')"
-            class="nav-link"
-            >{{ "names.alarmList" | translate }}</a
-          >
+            class="nav-link">{{ "names.alarmList" | translate }}
+          </a>
           <a
             *ngIf="auth.hasPermissions([35])"
             mat-list-item
             [class.active]="isActiveMenu('segment')"
             (click)="onChangeMenu('segment')"
-            class="nav-link"
-            >{{ "names.segment" | translate }}</a
-          >
+            class="nav-link">{{ "names.segment" | translate }}
+          </a>
+          <!--
           <a
             *ngIf="auth.hasPermissions([36])"
             mat-list-item
             [class.active]="isActiveMenu('point')"
             (click)="onChangeMenu('point')"
-            class="nav-link"
-            >{{ "names.node" | translate }}</a
-          >
-          <a
-            *ngIf="auth.hasPermissions([37])"
-            mat-list-item
-            [class.active]="isActiveMenu('zcu')"
-            (click)="onChangeMenu('zcu')"
-            class="nav-link"
-            >{{ "names.zcu" | translate }}</a
-          >
+            class="nav-link">{{ "names.node" | translate }}
+          </a>
+          -->
           <a
             *ngIf="auth.hasPermissions([38])"
             mat-list-item
             [class.active]="isActiveMenu('station')"
             (click)="onChangeMenu('station')"
-            class="nav-link"
-            >{{ "names.station" | translate }}</a
-          >
+            class="nav-link">{{ "names.station" | translate }}
+          </a>
+          <a
+            *ngIf="auth.hasPermissions([39])"
+            mat-list-item
+            [class.active]="isActiveMenu('buffer')"
+            (click)="onChangeMenu('buffer')"
+            class="nav-link">{{ "names.buffer" | translate }}
+          </a>
+          <a
+            *ngIf="auth.hasPermissions([37])"
+            mat-list-item
+            [class.active]="isActiveMenu('zcu')"
+            (click)="onChangeMenu('zcu')"
+            class="nav-link">{{ "names.zcu" | translate }}
+          </a>
           <!-- <a
             mat-list-item
             routerLinkActive="active"
@@ -130,6 +130,9 @@
           </ng-container>
           <ng-container *ngSwitchCase="'zcu'">
             <oms-zcu-setting></oms-zcu-setting>
+          </ng-container>
+          <ng-container *ngSwitchCase="'buffer'">
+            <oms-buffer-setting></oms-buffer-setting>
           </ng-container>
           <div *ngSwitchDefault></div>
         </ng-container>

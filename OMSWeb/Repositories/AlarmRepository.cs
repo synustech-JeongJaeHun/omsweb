@@ -164,5 +164,19 @@ FROM (
       */
       return result;
     }
+
+    public IQueryable<VehicleError> GetVehicleErrors() {
+      IQueryable<VehicleError> result;
+      using (var conn = ConnectTrack())
+      {
+        var sql = @"
+        SELECT id, level, description, cause, action 
+        FROM vehicle_errors;
+        ";
+
+        result = conn.Query<VehicleError>(sql).AsQueryable();
+      }
+      return result;
+    }
   }
 }

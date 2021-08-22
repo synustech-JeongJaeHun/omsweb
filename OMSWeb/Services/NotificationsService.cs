@@ -34,5 +34,9 @@ namespace OMSWeb.Services
     {
       return this._alarmRepo.AddAnnotation(annotation);
     }
+
+    public IQueryable<VehicleError> GetVehicleErrors() {
+      return this._alarmRepo.GetVehicleErrors();
+    }
   }
 }

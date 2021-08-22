@@ -78,36 +78,14 @@ export class NotificationsService {
 
   addAnnotation(form: IAnnotation): Observable<void> {
     return this.http.post<void>(`${this.baseUrl}/addannotation`, form);
-
-    //alert(`${this.baseUrl}/addannotation2`);
-    //alert(form.referenceId + ' - ' + form.referenceTable + ' - ' + form.modifiedBy + ' - ' + form.annotation);
-
-    //const httpOptions = {
-    //  headers: new HttpHeaders({
-    //    'Content-Type': 'application/x-www-form-urlencoded'
-    //  })
-    //};
-
-    //return this.http
-    //  .post<IIdObject>(`${this.baseUrl}/addannotation`, form, httpOptions);
-
-
-    //return this.http
-    //  .post<IIdObject>(`${this.baseUrl}/addannotation`, form, httpOptions).subscribe(
-    //    res => console.log(res),
-    //    error => console.error(error)
-    //  );
   }
 
-  //addAnnotation3(form: IAnnotation): Observable<void> {
-  //  const httpOptions = {
-  //    headers: new HttpHeaders({
-  //      'Content-Type': 'application/x-www-form-urlencoded'
-  //    })
-  //  };
-
-  //  //return this.http.post<void>(`${this.baseUrl}/addannotation3`, form, httpOptions).pipe(      
-  //  //);
-  //  return this.http.post<void>(`${this.baseUrl}/addannotation4`, 1, httpOptions).pipe(
-  //}
+  vehicleErrorsDataSource(): DataSource {
+    return new DataSource({
+      store: AspNetData.createStore({
+        key: 'id',
+        loadUrl: `${this.baseUrl}/vehicle-errors`,
+      }),
+    });
+  }
 }

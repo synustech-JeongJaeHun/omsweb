@@ -7,6 +7,7 @@ using DevExtreme.AspNet.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OMSWeb.Models;
+using OMSWeb.Models.Entities;
 using OMSWeb.Services;
 
 namespace OMSWeb.Controllers
@@ -43,6 +44,11 @@ namespace OMSWeb.Controllers
     //public object AddAnnotation(AnnotationDto annotationForm)
     {
       return this._notificationSvc.AddAnnotation(annotationForm);
+    }
+
+    [HttpGet("vehicle-errors")]
+    public object GetVehicleErrors(DataSourceLoadOptions loadOptions) {
+      return DataSourceLoader.Load(_notificationSvc.GetVehicleErrors(), loadOptions);
     }
   }
 }
