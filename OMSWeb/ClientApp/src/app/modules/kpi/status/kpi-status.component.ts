@@ -1,6 +1,8 @@
 import { Component, HostBinding, OnInit } from '@angular/core';
 import { SettingsService } from '../../../services/settings.service';
 import { Router } from '@angular/router';
+import { AuthService } from '../../../services/auth.service';
+import { AccountUtil } from '../../shared/utils/account.util';
 
 @Component({
   selector: 'oms-kpi-status',
@@ -25,6 +27,7 @@ export class KpiStatusComponent implements OnInit {
   }
 
   constructor(
+    private auth: AuthService,
     private settingSvc: SettingsService,
     private router: Router
   ) {
@@ -33,13 +36,15 @@ export class KpiStatusComponent implements OnInit {
     })
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   onToggleExpand() {
     this.expanded = !this.expanded;
   }
 
   onClick(target: string) {
+    //need to add permission 42
+    //if (this.hasPermission(42) == true) {
     if (target == "kpi") {
       this.router.navigate(["/reports/kpi"]);
     } else if (target == "systeminfo") {
@@ -47,5 +52,10 @@ export class KpiStatusComponent implements OnInit {
     } else {
       this.router.navigate(["/reports/report"]);
     }
+    //}
+  }
+
+  hasPermission(permission: number): boolean {
+    return AccountUtil.hasPermission(permission, this.auth.currentUser);
   }
 }
