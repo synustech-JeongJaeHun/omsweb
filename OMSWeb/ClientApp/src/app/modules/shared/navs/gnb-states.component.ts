@@ -12,6 +12,7 @@ import { AuthService } from '../../../services/auth.service';
 import { DialogService } from '../../../services/dialog.service';
 import { SystemsService } from '../../../services/systems.service';
 import { AccountUtil } from '../utils/account.util';
+import { MessagesService } from '../../../services/messages.service';
 
 @Component({
   selector: 'oms-gnb-states',
@@ -57,7 +58,8 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
     private auth: AuthService,
     private systemSvc: SystemsService,
     private dialogSvc: DialogService,
-    private t$: TranslateService
+    private t$: TranslateService,
+    private messageSvc: MessagesService
   ) {}
   ngOnDestroy(): void {
     this.destroy$.next();
@@ -74,10 +76,13 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
     if (!AccountUtil.hasPermission(1, this.auth.currentUser)) return;
     this.dialogSvc.confirm(this.getConfirmMessage('Host')).subscribe((ok) => {
       if (ok) {
+        this.messageSvc.sendControlStateCommand({ action: 'control_state', state: 'change' }).subscribe();
+        /*
         const value = ++this.systemStates.hostMode % 4;
         this.systemSvc
           .changeStates({ hostMode: value })
           .subscribe((states) => (this.systemStates = states));
+          */
       }
     });
   }
@@ -85,10 +90,13 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
     if (!AccountUtil.hasPermission(2, this.auth.currentUser)) return;
     this.dialogSvc.confirm(this.getConfirmMessage('TSC')).subscribe((ok) => {
       if (ok) {
+        this.messageSvc.sendTscStateCommand({ action: 'tsc_state', state: 'change' }).subscribe();
+        /*
         const value = ++this.systemStates.tscMode % 3;
         this.systemSvc
           .changeStates({ tscMode: value })
           .subscribe((states) => (this.systemStates = states));
+          */
       }
     });
   }
