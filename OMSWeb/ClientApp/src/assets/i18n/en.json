@@ -346,7 +346,8 @@
     "pid": "Process ID",
     "alarmName": "Alarm Name",
     "resolution": "Resolution",
-    "action": "Action"
+    "action": "Action",
+    "mem": "MEM"
   },
   "enums": {
     "hostSessionStatus": {

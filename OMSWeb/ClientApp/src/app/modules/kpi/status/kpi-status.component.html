@@ -1,20 +1,20 @@
-<div id="kpi-container">
-  <div class="area summary">    
+<div id="kpi-container" *ngIf="activated">
+  <div class="area summary">
     <div class="gauge util">
       <div class="title" (click)="onClick('kpi')">{{ "names.utilization" | translate }}</div>
-      <div class="data" (click)="onClick('kpi')"> 67.78%</div>
+      <div class="data" (click)="onClick('kpi')" data-tooltip="Utilization 67.7%"> 67.7%</div>
     </div>
     <div class="gauge delivery">
       <div class="title" (click)="onClick('kpi')">{{ "names.deliveryTime" | translate }}</div>
-      <div class="data" (click)="onClick('kpi')"> 87.10 sec</div>
+      <div class="data" (click)="onClick('kpi')" data-tooltip="Delivery Time 87.1 sec"> 87.1 sec</div>
     </div>
     <div class="gauge cpu">
-      <div class="title" (click)="onClick('systeminfo')">{{ "names.cpu" | translate }}</div>
-      <div class="data" (click)="onClick('systeminfo')"> 18% 3.84GHz</div>
+      <div class="title" (click)="onClick('kpi')">{{ "names.cpu" | translate }}  (3.8GHz)</div>
+      <div class="data" (click)="onClick('kpi')" data-tooltip="CPU 18% (3.8GHz)"> 18%</div>
     </div>
     <div class="gauge memory">
-      <div class="title" (click)="onClick('systeminfo')">{{ "names.memory" | translate }}</div>
-      <div class="data" (click)="onClick('systeminfo')"> 7.9/15.8GB (50%)</div>
+      <div class="title" (click)="onClick('kpi')">{{ "names.mem" | translate }}  (7.9/15.8GB)</div>
+      <div class="data" (click)="onClick('kpi')" data-tooltip="MEM 50% (7.9/15.8GB)"> 50%</div>
     </div>
   </div>
 </div>

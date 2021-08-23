@@ -35,7 +35,8 @@
           matTooltip="Reports"
           routerLinkActive="active"
           routerLink="/reports"
-          [disabled]="!hasPermission(4)">
+          [disabled]="!hasPermission(39)">
+          <!--[disabled]="!hasPermission(41)"> need to add permission 41-->
     <mat-icon>bar_chart</mat-icon>
   </button>
   <button mat-icon-button
@@ -160,21 +161,23 @@
       <a mat-button
          class="nav-item tight"
          routerLinkActive="active"
-         routerLink="/reports/report">
-        Report
-      </a>
-      <a mat-button
-         class="nav-item tight"
-         routerLinkActive="active"
          routerLink="/reports/kpi">
         KPI
       </a>
       <a mat-button
          class="nav-item tight"
          routerLinkActive="active"
+         routerLink="/reports/report">
+        Report
+      </a>
+      <!--
+      <a mat-button
+         class="nav-item tight"
+         routerLinkActive="active"
          routerLink="/reports/systeminfo">
         System Info
       </a>
+      -->
     </ng-container>
 
     <div *ngSwitchDefault></div>
