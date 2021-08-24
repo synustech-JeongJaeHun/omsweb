@@ -110,10 +110,6 @@ export class GnbActionsComponent implements OnInit, OnDestroy {
       .subscribe((ok) => {
         if (ok) {
           this.messageSvc.sendAIModeCommand({ action: 'ai_mode', mode: 'change' }).subscribe();
-
-          this.systemSvc
-            .changeStates({ aiMode: !this._activeAi })
-            .subscribe((states) => (this._activeAi = states.aiMode));
         }
       });
   }

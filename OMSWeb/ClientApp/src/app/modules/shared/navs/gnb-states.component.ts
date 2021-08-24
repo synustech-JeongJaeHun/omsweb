@@ -9,10 +9,12 @@ import {
 } from '../../../models/enums';
 import { ISystemStates } from '../../../models/system.model';
 import { AuthService } from '../../../services/auth.service';
+import { HubService } from '../../../services/hub.service';
 import { DialogService } from '../../../services/dialog.service';
 import { SystemsService } from '../../../services/systems.service';
 import { AccountUtil } from '../utils/account.util';
 import { MessagesService } from '../../../services/messages.service';
+import { IDataChangeEvent } from '../../../models/notification.model';
 
 @Component({
   selector: 'oms-gnb-states',
@@ -30,21 +32,19 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
     return this.t$.instant(`enums.tscMode.${this.systemStates?.tscMode}`);
   }
   get hostStatusIcon(): string {
-    return this.systemStates?.sessionStatus === HostSessionStatusEnums.offline
+    return this.systemStates?.sessionStatus === HostSessionStatusEnums.DISCONNECTED
       ? 'cloud_off'
       : 'cloud_queue';
   }
 
   get isActiveStatus(): boolean {
-    return this.systemStates?.sessionStatus === HostSessionStatusEnums.online;
+    return this.systemStates?.sessionStatus === HostSessionStatusEnums.CONNECTED;
   }
   get isActiveHostMode(): boolean {
-    return [HostModeEnums.onlineLocal, HostModeEnums.onlineRemote].includes(
-      this.systemStates?.hostMode
-    );
+    return this.systemStates?.hostMode == HostModeEnums.HOST;
   }
   get isActiveTscMode(): boolean {
-    return this.systemStates?.tscMode !== TscModeEnums.paused;
+    return this.systemStates?.tscMode === TscModeEnums.AUTO;
   }
 
   get canControl(): boolean {
@@ -55,6 +55,7 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
   }
 
   constructor(
+    private hubSvc: HubService,
     private auth: AuthService,
     private systemSvc: SystemsService,
     private dialogSvc: DialogService,
@@ -67,6 +68,10 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.hubSvc.modeStateChanged$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((e) => this.onModeStateChanged(e));
+
     this.systemSvc.currentState$
       .pipe(takeUntil(this.destroy$))
       .subscribe((states) => (this.systemStates = states));
@@ -77,12 +82,6 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
     this.dialogSvc.confirm(this.getConfirmMessage('Host')).subscribe((ok) => {
       if (ok) {
         this.messageSvc.sendControlStateCommand({ action: 'control_state', state: 'change' }).subscribe();
-        /*
-        const value = ++this.systemStates.hostMode % 4;
-        this.systemSvc
-          .changeStates({ hostMode: value })
-          .subscribe((states) => (this.systemStates = states));
-          */
       }
     });
   }
@@ -91,17 +90,8 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
     this.dialogSvc.confirm(this.getConfirmMessage('TSC')).subscribe((ok) => {
       if (ok) {
         this.messageSvc.sendTscStateCommand({ action: 'tsc_state', state: 'change' }).subscribe();
-        /*
-        const value = ++this.systemStates.tscMode % 3;
-        this.systemSvc
-          .changeStates({ tscMode: value })
-          .subscribe((states) => (this.systemStates = states));
-          */
       }
     });
-  }
-  changeHostStatus() {
-    this.systemStates.sessionStatus = ++this.systemStates.sessionStatus % 2;
   }
 
   private getConfirmMessage(displayName: string) {
@@ -110,5 +100,17 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
       title: this.t$.instant('names.changeConfirm', transParam),
       body: this.t$.instant('messages.changeConfirm', transParam),
     };
+  }
+
+  private updateState() {
+    this.systemSvc.currentState$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((states) => (this.systemStates = states));
+  }
+
+  private onModeStateChanged(event: IDataChangeEvent) {
+    setTimeout(() => {
+      this.updateState();
+    }, 500);
   }
 }

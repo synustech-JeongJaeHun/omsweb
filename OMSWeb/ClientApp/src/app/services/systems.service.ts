@@ -14,7 +14,6 @@ export class SystemsService {
   private _states: ISystemStates;
 
   get currentState$(): Observable<ISystemStates> {
-    if (this._states) return of(this._states);
     return this.states();
   }
 
@@ -26,10 +25,6 @@ export class SystemsService {
         this._states = res;
       })
     );
-  }
-
-  changeStates(nextStates: ISystemStates): Observable<ISystemStates> {
-    return this.http.patch<ISystemStates>(`${this.baseUrl}/states`, nextStates);
   }
 
   vehicles(): DataSource {

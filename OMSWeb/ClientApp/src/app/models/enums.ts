@@ -105,20 +105,20 @@ export enum UserPermissions {
 }
 
 export enum HostSessionStatusEnums {
-  offline = 0,
-  online,
+  DISCONNECTED = 0,
+  CONNECTED,
 }
 
 export enum HostModeEnums {
-  offline = 0,
-  onlineLocal,
-  onlineRemote,
+  LOCAL = 0,
+  HOST
 }
 
 export enum TscModeEnums {
-  paused = 0,
-  pausing,
-  auto,
+  INIT = 1,
+  PAUSED,
+  AUTO,
+  PAUSING
 }
 
 export enum PmModeEnums {

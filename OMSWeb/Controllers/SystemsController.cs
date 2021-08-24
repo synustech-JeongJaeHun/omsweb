@@ -28,36 +28,7 @@ namespace OMSWeb.Controllers
     [HttpGet("states")]
     public ActionResult<SystemStatusModel> GetStates()
     {
-      return this._systemSvc.HostStates;
-    }
-
-    [HttpPatch("states")]
-    public ActionResult<SystemStatusModel> ChangeStates(SystemStatusModel nextStatus)
-    {
-      var current = this._systemSvc.HostStates;
-      if (nextStatus != null)
-      {
-        // if (nextStatus.SessionStatus.HasValue)
-        // {
-        //   current.SessionStatus = nextStatus.SessionStatus.Value;
-        // }
-
-        if (nextStatus.HostMode.HasValue)
-        {
-          current.HostMode = nextStatus.HostMode.Value;
-        }
-
-        if (nextStatus.TscMode.HasValue)
-        {
-          current.TscMode = nextStatus.TscMode.Value;
-        }
-
-        if (nextStatus.AiMode.HasValue)
-        {
-          current.AiMode = nextStatus.AiMode.Value;
-        }
-      }
-      return current;
+      return this._systemSvc.GetHostStatus();
     }
 
     [HttpGet("settings/client")]

@@ -47,8 +47,7 @@ namespace OMSWeb.Services
         {"stations", new DataChangeEventTarget(CacheKeys.Stations, new[]{"stationChanged"})},
         {"buffers", new DataChangeEventTarget(CacheKeys.Buffers, new[]{"bufferChanged"})},
         {"mtls", new DataChangeEventTarget(CacheKeys.Mtls, new[]{"mtlChanged"})},
-        {"vehicles", new DataChangeEventTarget(CacheKeys.Vehicles,
-          new[]{"vehicleChanged", "vehicleTableChanged"}, true)},
+        {"vehicles", new DataChangeEventTarget(CacheKeys.Vehicles, new[]{"vehicleChanged", "vehicleTableChanged"}, true)},
         {"vehicle_paths", new DataChangeEventTarget(CacheKeys.VehiclePaths, new[]{"vehiclePath"})},
         {"clusters", new DataChangeEventTarget(CacheKeys.Clusters, new[]{"clusterChanged"})},
         {"cluster_points", new DataChangeEventTarget(CacheKeys.Clusters, new[]{"clusterChanged"})},
@@ -58,6 +57,7 @@ namespace OMSWeb.Services
         {"vehicle_alarms", new DataChangeEventTarget(CacheKeys.None, new[]{"alarm"})},
         {"alerts", new DataChangeEventTarget(CacheKeys.None, new[]{"alert"})},
         {"server_status", new DataChangeEventTarget(CacheKeys.None, new[]{"serverStatus"})},
+        {"mode_state", new DataChangeEventTarget(CacheKeys.None, new[]{"modeState"})},
       };
 
       this.cacheEventMap = new Dictionary<CacheKeys, string[]> {
