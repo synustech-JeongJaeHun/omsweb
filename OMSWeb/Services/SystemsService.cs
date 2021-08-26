@@ -29,8 +29,8 @@ namespace OMSWeb.Services
             {
                 this.HostStates = new SystemStatusModel
                 {
-                    HostMode = (HostModeEnums?)modeStateEntity.control_state,
                     SessionStatus = (HostSessionStatusEnums?)modeStateEntity.comm_state,
+                    HostMode = (HostModeEnums?)modeStateEntity.control_state,
                     TscMode = (TscModeEnums?)modeStateEntity.tsc_state,
                     AiMode = (modeStateEntity.ai_mode > 0) ? true : false,
                 };
@@ -39,9 +39,9 @@ namespace OMSWeb.Services
             {
                 this.HostStates = new SystemStatusModel
                 {
-                    HostMode = HostModeEnums.Offline,
                     SessionStatus = HostSessionStatusEnums.Offline,
-                    TscMode = TscModeEnums.Auto,
+                    HostMode = HostModeEnums.LOCAL,
+                    TscMode = TscModeEnums.PAUSED,
                     AiMode = true,
                 };
             }

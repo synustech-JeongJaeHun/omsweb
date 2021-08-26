@@ -11,7 +11,6 @@ namespace OMSWeb.Models.Entities
     public int comm_state { get; set; }
     public int control_state { get; set; }
     public int tsc_state { get; set; }
-    public int ReleaseTime { get; set; }
     public int pm_state { get; set; }
     public int ai_mode { get; set; }
   }

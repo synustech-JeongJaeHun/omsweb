@@ -351,19 +351,18 @@
   },
   "enums": {
     "hostSessionStatus": {
-      "0": "OFFLINE",
-      "1": "ONLINE"
+      "0": "Disconnected",
+      "1": "Connected"
     },
     "hostMode": {
-      "0": "OFFLINE",
-      "1": "PM",
-      "2": "ONLINE-REMOTE",
-      "3": "ONLINE-LOCAL"
+      "0": "Local",
+      "1": "Host"
     },
     "tscMode": {
-      "0": "Auto",
-      "1": "Pausing",
-      "2": "Paused"
+      "1": "Paused",
+      "2": "Paused",
+      "3": "Auto",
+      "4": "Pausing"
     },
     "permissions": {
       "1": "Host Mode",

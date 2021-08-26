@@ -8,17 +8,16 @@ namespace OMSWeb
 
   public enum HostModeEnums
   {
-    Offline = 0,
-    PM,
-    OnlineRemote,
-    OnlineLocal,
+    LOCAL = 0,
+    HOST,
   }
 
   public enum TscModeEnums
   {
-    Auto = 0,
-    Pausing,
-    Paused,
+    INIT = 1,
+    PAUSED,
+    AUTO,
+    PAUSING,
   }
 
   public enum UserPermissions
