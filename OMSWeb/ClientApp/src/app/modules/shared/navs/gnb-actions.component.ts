@@ -17,6 +17,8 @@ import { LoginDialogComponent } from '../dialogs/login-dialog.component';
 import { ProfileDialogComponent } from '../dialogs/profile-dialog.component';
 import { AccountUtil } from '../utils/account.util';
 import { MessagesService } from '../../../services/messages.service';
+import { IDataChangeEvent } from '../../../models/notification.model';
+import { HubService } from '../../../services/hub.service';
 
 @Component({
   selector: 'oms-gnb-actions',
@@ -45,6 +47,7 @@ export class GnbActionsComponent implements OnInit, OnDestroy {
   }
 
   constructor(
+    private hubSvc: HubService,
     private auth: AuthService,
     private dialog: MatDialog,
     private dialogSvc: DialogService,
@@ -60,11 +63,14 @@ export class GnbActionsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.hubSvc.modeStateChanged$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((e) => this.onModeStateChanged(e));
+
     this.systemSvc.currentState$
       .pipe(takeUntil(this.destroy$))
-      .subscribe((res) => {
-        this._activeAi = res.aiMode;
-      });
+      .subscribe((states) => { this._activeAi = states.aiMode; });
+
     this.userSvc.roles().subscribe((data) => (this._roles = data));
   }
 
@@ -112,5 +118,17 @@ export class GnbActionsComponent implements OnInit, OnDestroy {
           this.messageSvc.sendAIModeCommand({ action: 'ai_mode', mode: 'change' }).subscribe();
         }
       });
+  }
+
+  private updateState() {
+    this.systemSvc.currentState$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((states) => (this._activeAi = states.aiMode));
+  }
+
+  private onModeStateChanged(event: IDataChangeEvent) {
+    setTimeout(() => {
+      this.updateState();
+    }, 80);
   }
 }
