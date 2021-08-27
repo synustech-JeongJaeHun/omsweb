@@ -1985,6 +1985,16 @@ path.cluster_mask {
   animation: unloading 1s infinite;
 }
 
+.loading-legend {
+  fill: var(--vehicle-foup-color);
+  animation: loading-legend 1s infinite;
+}
+
+.unloading-legend {
+  fill: var(--vehicle-foup-color);
+  animation: unloading-legend 1s infinite;
+}
+
 .overlap_display_panel {
   fill: var(--overlap-fill-color);
   stroke: var(--overlap-border-color);
@@ -2024,19 +2034,50 @@ path.cluster_mask {
 
 @keyframes unloading {
   0% {
-    transform: scale(1);
+    transform: scale(var(--vehicle-scale));
     opacity: 1;
   }
 
   10% {
     transform: scale(var(--vehicle-scale));
-    /* transform: scale(1); */
     opacity: 1;
   }
 
   100% {
-    transform: scale(var(--vehicle-scale));
-    /* transform: scale(0); */
+    transform: scale(0); 
+    opacity: 1;
+  }
+}
+
+@keyframes loading-legend {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+
+  90% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+@keyframes unloading-legend {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  10% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(0);
     opacity: 1;
   }
 }
