@@ -9,9 +9,8 @@ export namespace Dto {
     physicalId: string;
     pointId: number;
     group?: number;
+    nextpoint?: number;
     offset?: number;
-    offsetX?: number;
-    offsetY?: number;
   }
   export interface ICluster {
     id: number;
@@ -96,9 +95,8 @@ export namespace Dto {
     carrierType: string;
     pointId: number;
     group?: number;
+    nextpoint?: number;
     offset?: number;
-    offsetX?: number;
-    offsetY?: number;
   }
   export interface IVehicle {
     id: number;

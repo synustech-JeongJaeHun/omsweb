@@ -65,11 +65,9 @@ namespace OMSWeb.Controllers
         }
 
         [HttpGet("stations")]
-        //public IEnumerable<Station> GetStations()
-        public IEnumerable<StationPosition> GetStationPositions()
+        public IEnumerable<Station> GetStations()
         {
-            //return this._svc.GetStations();
-            return this._svc.GetStationPositions();
+            return this._svc.GetStations();
         }
 
         [HttpPost("buffers/{id}/carrier/{carrierId}")]

@@ -131,10 +131,8 @@ namespace OMSWeb.Services
       {
         map.Size = this._repo.GetDimension(userId);
         map.Points = this._repo.GetPoints(userId);
-        //map.Stations = this._repo.GetStations(userId);
-        map.Stations = GetStationPositions(this._repo.GetStations(userId));
-        //map.Buffers = this._repo.GetBuffers(userId);
-        map.Buffers = GetBufferPositions(this._repo.GetBuffers(userId));
+        map.Stations = this._repo.GetStations(userId);
+        map.Buffers = this._repo.GetBuffers(userId);
         map.Clusters = this._repo.GetClusters(userId);
         map.Mtls = this._repo.GetMtls(userId);
       }
@@ -180,55 +178,6 @@ namespace OMSWeb.Services
         map.Add(row.Id, row);
       }
       return map;
-    }
-
-    private List<StationPosition> GetStationPositions(List<Station> stations)
-    {
-      List<StationPosition> result = new List<StationPosition>();
-
-      foreach (Station station in stations)
-      {
-        StationPosition stationPosition = new StationPosition()
-        {
-          Id = station.Id,
-          PhysicalId = station.PhysicalId,
-          LogicalId = station.LogicalId,
-          PointId = station.PointId,
-          Direction = station.Direction,
-          CarrierType = station.CarrierType,
-          Offset = station.Offset,
-          // TODO : Station의 OffsetX, OffsetY의 값을 Next Point Direction에 따라 계산 필요함.
-          OffsetX = 0,
-          OffsetY = 0
-        };
-
-        result.Add(stationPosition);
-      }
-      return result;
-    }
-
-    private List<BufferPosition> GetBufferPositions(List<OMSWeb.Models.Tracks.Buffer> buffers)
-    {
-      List<BufferPosition> result = new List<BufferPosition>();
-
-      foreach (OMSWeb.Models.Tracks.Buffer buffer in buffers)
-      {
-        BufferPosition bufferPosition = new BufferPosition()
-        {
-          Id = buffer.Id,
-          PhysicalId = buffer.PhysicalId,
-          LogicalId = buffer.LogicalId,
-          PointId = buffer.PointId,
-          Direction = buffer.Direction,
-          Offset = buffer.Offset,
-          // TODO : Buffer의 OffsetX, OffsetY의 값을 Next Point Direction에 따라 계산 필요함.
-          OffsetX = 0,
-          OffsetY = 0
-        };
-
-        result.Add(bufferPosition);
-      }
-      return result;
     }
   }
 }

@@ -25,10 +25,8 @@ namespace OMSWeb.Services
                 Points = this._trackRepo.LoadPoints(),
                 Segments = this._trackRepo.LoadSegments(),
                 SegmentDisabled = this._trackRepo.LoadDisabledSegments(),
-                //Stations = this._trackRepo.LoadStations(),
-                Stations = this._trackRepo.LoadStationPositions(),
-                //Buffers = this._trackRepo.LoadBuffers(),
-                Buffers = this._trackRepo.LoadBufferPositions(),
+                Stations = this._trackRepo.LoadStations(),
+                Buffers = this._trackRepo.LoadBuffers(),
                 Mtls = this._trackRepo.LoadMtls(),
                 Clusters = this._trackRepo.LoadClusters(),
                 VehiclePaths = this._trackRepo.LoadVehiclePaths(),
@@ -50,11 +48,9 @@ namespace OMSWeb.Services
                 case CacheKeys.SegmentDisabled:
                     return this._trackRepo.LoadDisabledSegments().ToArray() as dynamic[];
                 case CacheKeys.Stations:
-                    //return this._trackRepo.LoadStations().ToArray() as dynamic[];
-                    return this._trackRepo.LoadStationPositions().ToArray() as dynamic[];
+                    return this._trackRepo.LoadStations().ToArray() as dynamic[];
                 case CacheKeys.Buffers:
-                    //return this._trackRepo.LoadBuffers().ToArray() as dynamic[];
-                    return this._trackRepo.LoadBufferPositions().ToArray() as dynamic[];
+                    return this._trackRepo.LoadBuffers().ToArray() as dynamic[];
                 case CacheKeys.Mtls:
                     return this._trackRepo.LoadMtls().ToArray() as dynamic[];
                 case CacheKeys.Clusters:
@@ -131,10 +127,9 @@ namespace OMSWeb.Services
             return this._trackRepo.LoadPoints();
         }
 
-        //public IList<Station> GetStations()
-        public IList<StationPosition> GetStationPositions()
+        public IList<Station> GetStations()
         {
-            return this._trackRepo.LoadStationPositions();
+            return this._trackRepo.LoadStations();
         }
     }
 }

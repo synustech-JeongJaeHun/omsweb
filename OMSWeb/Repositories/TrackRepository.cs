@@ -146,12 +146,10 @@ namespace OMSWeb.Repositories
             return data;
         }
 
-        //public List<Station> LoadStations()
-        public List<StationPosition> LoadStationPositions()
+        public List<Station> LoadStations()
         {
             var key = CacheKeys.Stations;
-            //var data = _cache.GetValue<List<Station>>(key);
-            var data = _cache.GetValue<List<StationPosition>>(key);
+            var data = _cache.GetValue<List<Station>>(key);
             if (data == null)
             {
                 var models = new List<Station>();
@@ -173,6 +171,7 @@ namespace OMSWeb.Repositories
                                     PointId = dr["point_id"].TryIntegerOrNull(),
                                     Direction = dr["direction"].ToString(),
                                     CarrierType = dr["carrier_type"].TryIntegerOrNull(),
+                                    NextPoint = dr["next_point"].TryIntegerOrNull(),
                                     Offset = dr["offset"].TryIntegerOrNull(),
                                 }
                                );
@@ -181,48 +180,17 @@ namespace OMSWeb.Repositories
                     }
                 }
                 
-                //data = models.ToList();
-                //_cache.SetValue<List<Station>>(key, data, DateTimeOffset.Now.AddMinutes(CACHE_LIFE));
-                data = GetStationPositions(models.ToList());
-                _cache.SetValue<List<StationPosition>>(key, data, DateTimeOffset.Now.AddMinutes(CACHE_LIFE));
+                data = models.ToList();
+                _cache.SetValue<List<Station>>(key, data, DateTimeOffset.Now.AddMinutes(CACHE_LIFE));
             }
             return data;
         }
             
-        private List<StationPosition> GetStationPositions(List<Station> stations)
-        {
-            List<StationPosition> result = new List<StationPosition>();
-            
-            foreach(Station station in stations)
-            {
-                StationPosition stationPosition = new StationPosition()
-                {
-                    Id = station.Id,
-                    PhysicalId = station.PhysicalId,
-                    LogicalId = station.LogicalId,
-                    PointId = station.PointId,
-                    Direction = station.Direction,
-                    CarrierType = station.CarrierType,
-                    Offset = station.Offset,
-                    // TODO : Station의 OffsetX, OffsetY의 값을 Next Point Direction에 따라 계산 필요함.
-                    OffsetX = 0,
-                    OffsetY = 0    
-                    //OffsetX = (int)(station.Offset / 2),
-                    //OffsetY = (int)(station.Offset / 2)
-                };
-
-                result.Add(stationPosition);
-            }
-            return result;
-        }
-        
-
-        //public List<Buffer> LoadBuffers()
-        public List<BufferPosition> LoadBufferPositions()
+  
+        public List<Buffer> LoadBuffers()
         {
             var key = CacheKeys.Buffers;
-            //var data = _cache.GetValue<List<Buffer>>(key);
-            var data = _cache.GetValue<List<BufferPosition>>(key);
+            var data = _cache.GetValue<List<Buffer>>(key);
             if (data == null)
             {
                 var models = new List<Buffer>();
@@ -243,6 +211,7 @@ namespace OMSWeb.Repositories
                                     LogicalId = dr["logical_id"].ToString(),
                                     PointId = dr["point_id"].TryIntegerOrNull(),
                                     Direction = dr["direction"].ToString(),
+                                    NextPoint = dr["next_point"].TryIntegerOrNull(),
                                     Offset = dr["offset"].TryIntegerOrNull(),
                                 }
                                );
@@ -251,40 +220,12 @@ namespace OMSWeb.Repositories
                     }
                 }
 
-                //data = models.ToList();
-                //_cache.SetValue<List<Buffer>>(key, data, DateTimeOffset.Now.AddMinutes(CACHE_LIFE));
-                data = GetBufferPositions(models.ToList());
-                _cache.SetValue<List<BufferPosition>>(key, data, DateTimeOffset.Now.AddMinutes(CACHE_LIFE));
+                data = models.ToList();
+                _cache.SetValue<List<Buffer>>(key, data, DateTimeOffset.Now.AddMinutes(CACHE_LIFE));
             }
             return data;
         }
     
-        private List<BufferPosition> GetBufferPositions(List<Buffer> buffers)
-        {
-            List<BufferPosition> result = new List<BufferPosition>();
-            
-            foreach(Buffer buffer in buffers)
-            {
-                BufferPosition bufferPosition = new BufferPosition()
-                {
-                    Id = buffer.Id,
-                    PhysicalId = buffer.PhysicalId,
-                    LogicalId = buffer.LogicalId,
-                    PointId = buffer.PointId,
-                    Direction = buffer.Direction,
-                    Offset = buffer.Offset,
-                    // TODO : Buffer의 OffsetX, OffsetY의 값을 Next Point Direction에 따라 계산 필요함.
-                    OffsetX = 0,
-                    OffsetY = 0                
-                    //OffsetX = (int)(buffer.Offset / 2),
-                    //OffsetY = (int)(buffer.Offset / 2)
-                };
-
-                result.Add(bufferPosition);
-            }
-            return result;
-        }
-
         public List<Mtl> LoadMtls()
         {
             var key = CacheKeys.Mtls;

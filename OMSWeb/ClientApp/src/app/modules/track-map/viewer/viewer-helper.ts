@@ -8909,21 +8909,20 @@ export class ViewController {
       if (d.objectType.toUpperCase() === 'SEGMENT') {
         trans_array = transform.apply([d.dirCoord.x, d.dirCoord.y]);
         is_translate = true;
-      } else if (
+      }
+      else if (
         d.objectType.toUpperCase() === 'STATION' ||
         d.objectType.toUpperCase() === 'BUFFER'
       ) {
-
-        /*
-        if (d.objectType.toUpperCase() === 'BUFFER')
-          alert('create buffer svg [(id : ' + d.id + ') (offsetX : ' + d.offsetX + ') - (offsetY : ' + d.offsetY + ')]');
-        else if (d.objectType.toUpperCase() === 'STATION')
-          alert('create station svg [(id : ' + d.id + ') (offsetX : ' + d.offsetX + ') - (offsetY : ' + d.offsetY + ')]');
-        */
         is_translate = true;
-        //trans_array = transform.apply([d.invertedCoord.x, d.invertedCoord.y]);            - before code
-        trans_array = transform.apply([d.invertedCoord.x + d.offsetX, d.invertedCoord.y + d.offsetY]);
-      } else if (d.objectType.toUpperCase() === 'CLUSTER') {
+        //trans_array = transform.apply([d.invertedCoord.x, d.invertedCoord.y]);
+        if      (d.segmentDirection === 'T') trans_array = transform.apply([d.invertedCoord.x, d.invertedCoord.y - d.offset]);
+        else if (d.segmentDirection === 'B') trans_array = transform.apply([d.invertedCoord.x, d.invertedCoord.y + d.offset]);
+        else if (d.segmentDirection === 'L') trans_array = transform.apply([d.invertedCoord.x - d.offset, d.invertedCoord.y]);
+        else if (d.segmentDirection === 'R') trans_array = transform.apply([d.invertedCoord.x + d.offset, d.invertedCoord.y]);
+        else trans_array = transform.apply([d.invertedCoord.x, d.invertedCoord.y]);
+      }
+      else if (d.objectType.toUpperCase() === 'CLUSTER') {
         trans_array = transform.apply([
           d.invertedCoordFrom.x,
           d.invertedCoordFrom.y,
