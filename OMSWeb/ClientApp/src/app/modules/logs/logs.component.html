@@ -1,35 +1,34 @@
 <dx-file-manager
   id="fileManager"
-  [fileSystemProvider]="logProvider"
+  [fileSystemProvider]="fileItems"
   (onSelectedFileOpened)="openLog($event)"
-  height="300"
->
-  <dxo-permissions download="true"> </dxo-permissions>
+  height="600">
+  <dxo-permissions download="true"></dxo-permissions>
 </dx-file-manager>
-
+<!--
 <dx-sortable
   filter=".dx-tab"
   itemOrientation="horizontal"
   dragDirection="horizontal"
-  [data]="logList"
->
+  [data]="fileItems">
+
   <dx-tab-panel
     id="tabpanelStyle"
-    [dataSource]="logList"
+    [dataSource]="fileItems"
     itemTitleTemplate="tabTitle"
     [deferRendering]="false"
     [showNavButtons]="true"
     [repaintChangesOnly]="true"
     [(selectedIndex)]="tabIndex"
-    (onSelectionChanged)="onTabChanged()"
-  >
+    (onSelectionChanged)="onTabChanged()">
     <div id="tabback" *dxTemplate="let content of 'tabTitle'">
       <span style="text-align: center">{{ content.name }}</span>
       <dx-button
         icon="dx-icon dx-icon-close"
         [visible]="logList.length > 1"
-        (onClick)="clickTabClose(content)"
-      ></dx-button>
+        (onClick)="clickTabClose(content)">
+      </dx-button>
     </div>
   </dx-tab-panel>
 </dx-sortable>
+-->

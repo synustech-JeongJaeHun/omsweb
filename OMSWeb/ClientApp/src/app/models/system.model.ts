@@ -22,3 +22,11 @@ export interface IModuleStatus {
   pid: number;
   startTime: Date;
 }
+
+export interface IFileItem {
+  name: string;
+  isDirectory: boolean;
+  dateModified: Date;
+  size?: number;
+  items?: IFileItem[];  
+}

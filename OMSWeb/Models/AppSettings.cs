@@ -6,6 +6,7 @@ namespace OMSWeb.Models
     public uint JwtLifeMinutes { get; set; }
     public string Version { get; set; }
     public bool KpiEnabled { get; set; }
+    public string LogBaseDir { get; set; }
 
     public ClientSettings Client { get; set; }
 

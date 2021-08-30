@@ -3,6 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import RemoteFileSystemProvider from 'devextreme/file_management/remote_provider';
 
 import { ILogInfo } from '@oms/models/log.model';
+import { SystemsService } from '../../services/systems.service';
+import { IFileItem } from '../../models/system.model';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'oms-logs',
@@ -10,18 +13,22 @@ import { ILogInfo } from '@oms/models/log.model';
   styleUrls: ['./logs.component.scss'],
 })
 export class LogsComponent implements OnInit {
-  logProvider: RemoteFileSystemProvider;
+  fileItems: IFileItem[];
   tabIndex: number = 0;
   selectedItems: any[] = [];
   logList: ILogInfo[] = [];
 
-  constructor() {
-    this.logProvider = new RemoteFileSystemProvider({
-      endpointUrl: 'assets/json/log-provider.json',
-    });
+  constructor(
+    private systemSvc: SystemsService
+  ) {
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+
+    this.systemSvc.fileItems().subscribe((res) => {
+      this.fileItems = res;
+    });
+  }
 
   onTabChanged() {
     this.selectedItems = [];

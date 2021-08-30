@@ -2,7 +2,9 @@ using Microsoft.Extensions.Options;
 using OMSWeb.Models;
 using OMSWeb.Models.Entities;
 using OMSWeb.Repositories;
+using System.Collections.Generic;
 using System.Linq;
+using System.IO;
 
 namespace OMSWeb.Services
 {
@@ -55,6 +57,14 @@ namespace OMSWeb.Services
             client.Version = this._appSettings.Version;
             client.KpiEnabled = this._appSettings.KpiEnabled;
             return this._appSettings.Client;
+        }
+
+        public List<LogModel> GetLogs()
+        {
+            //LogModel logModel = new LogModel(Directory.CreateDirectory(@"C:\inetpub\logs"));
+            LogModel logModel = new LogModel(Directory.CreateDirectory(this._appSettings.LogBaseDir));
+            List<LogModel> result = new List<LogModel>() { logModel };
+            return result;
         }
     }
 }

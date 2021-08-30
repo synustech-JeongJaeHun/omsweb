@@ -42,5 +42,11 @@ namespace OMSWeb.Controllers
     {
       return this._moduleStatusSvc.GetModuleStatus();
     }
+
+    [HttpGet("logs")]
+    public object GetLogs()
+    {
+      return this._systemSvc.GetLogs();
+    }
   }
 }
