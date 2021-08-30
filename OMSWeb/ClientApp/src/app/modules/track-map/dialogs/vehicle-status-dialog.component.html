@@ -8,13 +8,22 @@
         (selectedUnitChange)="onUnitChange($event)"
         [placeholder]="'names.selectVehicle' | translate"
       ></oms-unit-selector> -->
-      <mat-form-field class="full-span-col dense" appearance="outline">
-        <mat-select [value]="selectedUnit" (selectionChange)="onVehicleSelect($event)">
-          <mat-option *ngFor="let item of vehicles" [value]="item"
-            >#{{ item.id }} {{ item.logicalId }}</mat-option
-          >
-        </mat-select>
-      </mat-form-field>
+
+      <div class="full-col">
+        <mat-form-field class="dense2" appearance="outline">
+          <mat-select [value]="selectedUnit" (selectionChange)="onVehicleSelect($event)">
+            <mat-option *ngFor="let item of vehicles" [value]="item">#{{ item.id }} {{ item.logicalId }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <button id="btnToggleVehicleStatusNPIOTrend"
+                mat-raised-button
+                class="dense"
+                color="primary"
+                [disabled]="false"
+                (click)="onToggleVehicleStatusNPIOTrend($event.target)">
+          PIO Trend
+        </button>
+      </div>
       <h4>Status</h4>
       <h4>DI</h4>
       <h4>DO</h4>
@@ -47,10 +56,8 @@
         <fieldset>
           <legend>{{ "names.vehicleSignal" | translate }}</legend>
           <div class="status-grid">
-            <div
-              class="status-item"
-              [class.active]="signalStatus && !signalStatus.removed"
-            >
+            <div class="status-item"
+                 [class.active]="signalStatus && !signalStatus.removed">
               {{ "names.railIn" | translate }}
             </div>
             <div class="status-item" [class.active]="signalStatus?.contain">
@@ -59,19 +66,15 @@
             <div class="status-item" [class.active]="signalStatus?.connected">
               {{ "names.connected" | translate }}
             </div>
-            <div
-              class="status-item"
-              [class.active]="signalStatus?.sensorStopped"
-            >
+            <div class="status-item"
+                 [class.active]="signalStatus?.sensorStopped">
               {{ "names.sensorStopped" | translate }}
             </div>
             <div class="status-item" [class.active]="signalStatus?.isMain">
               {{ "names.maintenance" | translate }}
             </div>
-            <div
-              class="status-item"
-              [class.active]="signalStatus?.hostOrderEnable"
-            >
+            <div class="status-item"
+                 [class.active]="signalStatus?.hostOrderEnable">
               {{ "names.hostOrderEnable" | translate }}
             </div>
             <div class="status-item" [class.active]="signalStatus?.pushEnable">
@@ -85,11 +88,9 @@
           <fieldset *ngIf="isSelectedCategory(category)">
             <legend>{{ category }}</legend>
             <div class="status-grid">
-              <div
-                class="status-item"
-                [class.active]="item.value"
-                *ngFor="let item of diMap[category]"
-              >
+              <div class="status-item"
+                   [class.active]="item.value"
+                   *ngFor="let item of diMap[category]">
                 {{ item.name }}
               </div>
             </div>
@@ -101,11 +102,9 @@
           <fieldset *ngIf="isSelectedCategory(category)">
             <legend>{{ category }}</legend>
             <div class="status-grid">
-              <div
-                class="status-item"
-                [class.active]="item.value"
-                *ngFor="let item of doMap[category]"
-              >
+              <div class="status-item"
+                   [class.active]="item.value"
+                   *ngFor="let item of doMap[category]">
                 {{ item.name }}
               </div>
             </div>
@@ -113,14 +112,666 @@
         </ng-container>
       </div>
       <div class="io-panel">
-        <mat-slide-toggle
-          #toggleCategory
-          color="primary"
-          [checked]="isSelectedCategory(category)"
-          *ngFor="let category of ioCategories"
-          (toggleChange)="onToggleCategory(category, toggleCategory.checked)"
-          >{{ category }}</mat-slide-toggle
-        >
+        <mat-slide-toggle #toggleCategory
+                          color="primary"
+                          [checked]="isSelectedCategory(category)"
+                          *ngFor="let category of ioCategories"
+                          (toggleChange)="onToggleCategory(category, toggleCategory.checked)">{{ category }}</mat-slide-toggle>
+      </div>
+
+      <div class="pioTrend" *ngIf="visiblePIOTrend">
+        <!--
+        <dx-chart
+          id="chartPIOTrend"
+          class="chartPIO"
+          title="PIO Trend"
+          [dataSource]="chartDataSource">
+          <dxi-series valueField="bronze" name="Bronze Medals" color="#cd7f32"></dxi-series>
+          <dxi-series valueField="silver" name="Silver Medals" color="#c0c0c0"></dxi-series>
+          <dxi-series valueField="gold" name="Gold Medals" color="#ffd700"></dxi-series>
+          <dxo-common-series-settings
+            type="stepline"
+            argumentField="year">
+            <dxo-stepline>
+              <dxo-point [visible]="false"></dxo-point>
+            </dxo-stepline>
+          </dxo-common-series-settings>
+          <dxo-export [enabled]="true"></dxo-export>
+          <dxo-argument-axis>
+            <dxo-label>
+              <dxo-format type="decimal"></dxo-format>
+            </dxo-label>
+          </dxo-argument-axis>
+          <dxo-legend
+            verticalAlignment="bottom"
+            horizontalAlignment="center">
+          </dxo-legend>
+        </dx-chart>
+        -->
+        <!--
+        <div class="long-title"><h3>PIO Trend</h3></div>
+        -->
+        <div id="pioTrendChart">
+          <table class="pioTrendTable">
+            <tr>
+              <th>VALID</th>
+              <th>
+                <div>ON</div>
+                <div>OFF</div>
+              </th>
+              <td>
+                <dx-sparkline class="sparkline"
+                              [dataSource]="pioTrendData"
+                              argumentField="period"
+                              valueField="valid"
+                              type="stepline"
+                              lineColor="#181818"
+                              [showMinMax]="true">
+                  <dxo-tooltip format="currency"></dxo-tooltip>
+                </dx-sparkline>
+              </td>
+            </tr>
+            <tr>
+              <th>CS_0</th>
+              <th>
+                <div>ON</div>
+                <div>OFF</div>
+              </th>
+              <td>
+                <dx-sparkline class="sparkline"
+                              [dataSource]="pioTrendData"
+                              argumentField="period"
+                              valueField="cs_0"
+                              type="stepline"
+                              lineColor="#181818"
+                              firstLastColor="#e55253"
+                              [pointSize]="6"
+                              pointSymbol="none"
+                              pointColor="#ebdd8f">
+                  <dxo-tooltip format="currency"></dxo-tooltip>
+                </dx-sparkline>
+              </td>
+            </tr>
+            <tr>
+              <th>CS_1</th>
+              <th>
+                <div>ON</div>
+                <div>OFF</div>
+              </th>
+              <td>
+                <dx-sparkline class="sparkline"
+                              [dataSource]="pioTrendData"
+                              argumentField="period"
+                              valueField="cs_1"
+                              type="stepline"
+                              lineColor="#181818"
+                              firstLastColor="#e55253"
+                              [pointSize]="6"
+                              pointSymbol="none"
+                              pointColor="#ebdd8f">
+                  <dxo-tooltip format="currency"></dxo-tooltip>
+                </dx-sparkline>
+              </td>
+            </tr>
+            <tr>
+              <th>TR_REQ</th>
+              <th>
+                <div>ON</div>
+                <div>OFF</div>
+              </th>
+              <td>
+                <dx-sparkline class="sparkline"
+                              [dataSource]="pioTrendData"
+                              argumentField="period"
+                              valueField="tr_req"
+                              type="stepline"
+                              lineColor="#181818"
+                              firstLastColor="#e55253"
+                              [pointSize]="6"
+                              pointSymbol="none"
+                              pointColor="#ebdd8f">
+                  <dxo-tooltip format="currency"></dxo-tooltip>
+                </dx-sparkline>
+              </td>
+            </tr>
+            <tr>
+              <th>BUSY</th>
+              <th>
+                <div>ON</div>
+                <div>OFF</div>
+              </th>
+              <td>
+                <dx-sparkline class="sparkline"
+                              [dataSource]="pioTrendData"
+                              argumentField="period"
+                              valueField="busy"
+                              type="stepline"
+                              lineColor="#181818"
+                              firstLastColor="#e55253"
+                              [pointSize]="6"
+                              pointSymbol="none"
+                              pointColor="#ebdd8f">
+                  <dxo-tooltip format="currency"></dxo-tooltip>
+                </dx-sparkline>
+              </td>
+            </tr>
+            <tr>
+              <th>COMPT</th>
+              <th>
+                <div>ON</div>
+                <div>OFF</div>
+              </th>
+              <td>
+                <dx-sparkline class="sparkline"
+                              [dataSource]="pioTrendData"
+                              argumentField="period"
+                              valueField="compt"
+                              type="stepline"
+                              lineColor="#181818"
+                              firstLastColor="#e55253"
+                              [pointSize]="6"
+                              pointSymbol="none"
+                              pointColor="#ebdd8f">
+                  <dxo-tooltip format="currency"></dxo-tooltip>
+                </dx-sparkline>
+              </td>
+            </tr>
+            <tr>
+              <th>CONT</th>
+              <th>
+                <div>ON</div>
+                <div>OFF</div>
+              </th>
+              <td>
+                <dx-sparkline class="sparkline"
+                              [dataSource]="pioTrendData"
+                              argumentField="period"
+                              valueField="cont"
+                              type="stepline"
+                              lineColor="#181818"
+                              firstLastColor="#e55253"
+                              [pointSize]="6"
+                              pointSymbol="none"
+                              pointColor="#ebdd8f">
+                  <dxo-tooltip format="currency"></dxo-tooltip>
+                </dx-sparkline>
+              </td>
+            </tr>
+            <tr>
+              <th>L_REQ</th>
+              <th>
+                <div>ON</div>
+                <div>OFF</div>
+              </th>
+              <td>
+                <dx-sparkline class="sparkline"
+                              [dataSource]="pioTrendData"
+                              argumentField="period"
+                              valueField="l_req"
+                              type="stepline"
+                              lineColor="#181818"
+                              firstLastColor="#e55253"
+                              [pointSize]="6"
+                              pointSymbol="none"
+                              pointColor="#ebdd8f">
+                  <dxo-tooltip format="currency"></dxo-tooltip>
+                </dx-sparkline>
+              </td>
+            </tr>
+            <tr>
+              <th>U_REQ</th>
+              <th>
+                <div>ON</div>
+                <div>OFF</div>
+              </th>
+              <td>
+                <dx-sparkline class="sparkline"
+                              [dataSource]="pioTrendData"
+                              argumentField="period"
+                              valueField="u_req"
+                              type="stepline"
+                              lineColor="#181818"
+                              firstLastColor="#e55253"
+                              [pointSize]="6"
+                              pointSymbol="none"
+                              pointColor="#ebdd8f">
+                  <dxo-tooltip format="currency"></dxo-tooltip>
+                </dx-sparkline>
+              </td>
+            </tr>
+            <tr>
+              <th>READY</th>
+              <th>
+                <div>ON</div>
+                <div>OFF</div>
+              </th>
+              <td>
+                <dx-sparkline class="sparkline"
+                              [dataSource]="pioTrendData"
+                              argumentField="period"
+                              valueField="ready"
+                              type="stepline"
+                              lineColor="#181818"
+                              firstLastColor="#e55253"
+                              [pointSize]="6"
+                              pointSymbol="none"
+                              pointColor="#ebdd8f">
+                  <dxo-tooltip format="currency"></dxo-tooltip>
+                </dx-sparkline>
+              </td>
+            </tr>
+            <tr>
+              <th>HD_AVBL</th>
+              <th>
+                <div>ON</div>
+                <div>OFF</div>
+              </th>
+              <td>
+                <dx-sparkline class="sparkline"
+                              [dataSource]="pioTrendData"
+                              argumentField="period"
+                              valueField="hd_avbl"
+                              type="stepline"
+                              lineColor="#181818"
+                              firstLastColor="#e55253"
+                              [pointSize]="6"
+                              pointSymbol="none"
+                              pointColor="#ebdd8f">
+                  <dxo-tooltip format="currency"></dxo-tooltip>
+                </dx-sparkline>
+              </td>
+            </tr>
+            <tr>
+              <th>ES</th>
+              <th>
+                <div>ON</div>
+                <div>OFF</div>
+              </th>
+              <td>
+                <dx-sparkline class="sparkline"
+                              [dataSource]="pioTrendData"
+                              argumentField="period"
+                              valueField="es"
+                              type="stepline"
+                              lineColor="#181818"
+                              firstLastColor="#e55253"
+                              [pointSize]="6"
+                              pointSymbol="none"
+                              pointColor="#ebdd8f">
+                  <dxo-tooltip format="currency"></dxo-tooltip>
+                </dx-sparkline>
+              </td>
+            </tr>
+            <tr>
+              <th>Carrier detection</th>
+              <th>
+                <div>ON</div>
+                <div>OFF</div>
+              </th>
+              <td>
+                <dx-sparkline class="sparkline"
+                              [dataSource]="pioTrendData"
+                              argumentField="period"
+                              valueField="carrier_detection"
+                              type="stepline"
+                              lineColor="#181818"
+                              firstLastColor="#e55253"
+                              [pointSize]="6"
+                              pointSymbol="none"
+                              pointColor="#ebdd8f">
+                  <dxo-tooltip format="currency"></dxo-tooltip>
+                </dx-sparkline>
+              </td>
+            </tr>
+            <tr>
+              <th>Load handler detection</th>
+              <th>
+                <div>ON</div>
+                <div>OFF</div>
+              </th>
+              <td>
+                <dx-sparkline class="sparkline"
+                              [dataSource]="pioTrendData"
+                              argumentField="period"
+                              valueField="load_handler_detection"
+                              type="stepline"
+                              lineColor="#181818"
+                              firstLastColor="#e55253"
+                              [pointSize]="6"
+                              pointSymbol="none"
+                              pointColor="#ebdd8f">
+                  <dxo-tooltip format="currency"></dxo-tooltip>
+                </dx-sparkline>
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <table class="table-details">
+          <tr>
+            <th class="name"></th>
+            <th class="title"></th>
+            <th class="title"></th>
+            <th class="value" colspan="8">OUTPUT (OHT -> STK or Port)</th>
+            <th class="value" colspan="8">INPUT (STK or Port -> OHT)</th>
+          </tr>
+          <tr>
+            <th class="name"></th>
+            <th class="title"></th>
+            <th class="title"></th>
+            <th class="value">15</th>
+            <th class="value">14</th>
+            <th class="value">13</th>
+            <th class="value">12</th>
+            <th class="value">11</th>
+            <th class="value">10</th>
+            <th class="value">9</th>
+            <th class="value">8</th>
+            <th class="value">7</th>
+            <th class="value">6</th>
+            <th class="value">5</th>
+            <th class="value">4</th>
+            <th class="value">3</th>
+            <th class="value">2</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+          </tr>
+          <tr>
+            <th class="name"></th>
+            <th class="title">ms</th>
+            <th class="title">hex</th>
+            <th class="value">-</th>
+            <th class="value">COMP</th>
+            <th class="value">BUSY</th>
+            <th class="value">TR_REQ</th>
+            <th class="value">-</th>
+            <th class="value">CS_1</th>
+            <th class="value">CS_0</th>
+            <th class="value">VALID</th>
+            <th class="value">-</th>
+            <th class="value">ES</th>
+            <th class="value">HQ_AVBL</th>
+            <th class="value">-</th>
+            <th class="value">READY</th>
+            <th class="value">-</th>
+            <th class="value">U_REQ</th>
+            <th class="value">L_REQ</th>
+          </tr>
+
+          <tr>
+            <th class="name">Before Arrival</th>
+            <th class="title">0</th>
+            <th class="title"></th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+          </tr>
+          <tr>
+            <th class="name">OHT Arrival</th>
+            <th class="title">0</th>
+            <th class="title"></th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+          </tr>
+          <tr>
+            <th class="name"></th>
+            <th class="title">50</th>
+            <th class="title">0x0360</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+          </tr>
+          <tr>
+            <th class="name"></th>
+            <th class="title">1050</th>
+            <th class="title">0x0361</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+          </tr>
+          <tr>
+            <th class="name"></th>
+            <th class="title">1100</th>
+            <th class="title">0x1361</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+          </tr>
+          <tr>
+            <th class="name"></th>
+            <th class="title">2100</th>
+            <th class="title">0x1369</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+          </tr>
+          <tr>
+            <th class="name">Transfer Start</th>
+            <th class="title">2150</th>
+            <th class="title">0x3369</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+          </tr>
+          <tr>
+            <th class="name">Carrier Dectection On</th>
+            <th class="title">12150</th>
+            <th class="title">0x3368</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+          </tr>
+          <tr>
+            <th class="name">Transfer Complete</th>
+            <th class="title"></th>
+            <th class="title"></th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+          </tr>
+          <tr>
+            <th class="name"></th>
+            <th class="title"></th>
+            <th class="title"></th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+          </tr>
+          <tr>
+            <th class="name"></th>
+            <th class="title">12200</th>
+            <th class="title">0x4368</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+          </tr>
+          <tr>
+            <th class="name"></th>
+            <th class="title">13200</th>
+            <th class="title">0x4360</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+          </tr>
+          <tr>
+            <th class="name">OHT Start</th>
+            <th class="title">13250</th>
+            <th class="title">0x0060</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+          </tr>
+        </table>
       </div>
     </div>
   </ng-container>

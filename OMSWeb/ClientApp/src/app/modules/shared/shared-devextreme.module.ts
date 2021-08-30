@@ -14,6 +14,8 @@ import { DxFileManagerModule } from 'devextreme-angular/ui/file-manager';
 import { DxoPermissionsModule } from 'devextreme-angular/ui/nested';
 import { DxSortableModule } from 'devextreme-angular/ui/sortable';
 import { DxColorBoxModule } from 'devextreme-angular/ui/color-box';
+import { DxChartModule } from 'devextreme-angular';
+import { DxSparklineModule } from 'devextreme-angular';
 
 @NgModule({
   exports: [
@@ -32,6 +34,8 @@ import { DxColorBoxModule } from 'devextreme-angular/ui/color-box';
     DxoPermissionsModule,
     DxSortableModule,
     DxColorBoxModule,
+    DxChartModule,
+    DxSparklineModule
   ],
 })
 export class SharedDevextremeModule {}

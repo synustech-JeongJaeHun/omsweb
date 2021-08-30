@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, enableProdMode, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ILookupUnit } from '../../../models/map.interface';
 import {
@@ -9,6 +9,10 @@ import {
 import { Vehicle } from '../../../models/vehicle.model';
 import { StatusService } from '../../../services/status.service';
 import { MapDataService } from '../map-data.service';
+
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
+}
 
 @Component({
   selector: 'oms-vehicle-status-dialog',
@@ -24,12 +28,124 @@ export class VehicleStatusDialogComponent implements OnInit {
   ioCategories: string[] = ['Transfer', 'OBS', 'ZCU', 'PIO', 'OTHER'];
   vehicles: Vehicle[];
 
+  pioTrendData: any[] = [];
+
+  visiblePIOTrend = false;
+ 
   private showOptions: { [key: string]: boolean } = {};
 
   constructor(
     private dataSvc: MapDataService,
     private statusSvc: StatusService
-  ) {}
+  ) {
+
+    let pioTrendData: any[] = [
+      {
+        period: 1,
+        valid: 0,
+        cs_0: 0,
+        cs_1: 0,
+        tr_req: 0,
+        busy: 0,
+        compt: 1,
+        cont: 0,
+        l_req: 1,
+        u_req: 0,
+        ready: 0,
+        hd_avbl: 0,
+        es: 1,
+        carrier_detection: 1,
+        load_handler_detection: 0
+      },
+      {
+        period: 2,
+        valid: 0,
+        cs_0: 1,
+        cs_1: 0,
+        tr_req: 0,
+        busy: 0,
+        compt: 1,
+        cont: 1,
+        l_req: 1,
+        u_req: 1,
+        ready: 1,
+        hd_avbl: 1,
+        es: 0,
+        carrier_detection: 0,
+        load_handler_detection: 1
+      },
+      {
+        period: 3,
+        valid: 1,
+        cs_0: 1,
+        cs_1: 0,
+        tr_req: 0,
+        busy: 0,
+        compt: 0,
+        cont: 1,
+        l_req: 0,
+        u_req: 1,
+        ready: 1,
+        hd_avbl: 1,
+        es: 0,
+        carrier_detection: 0,
+        load_handler_detection: 1
+      },
+      {
+        period: 4,
+        valid: 1,
+        cs_0: 1,
+        cs_1: 0,
+        tr_req: 1,
+        busy: 0,
+        compt: 0,
+        cont: 1,
+        l_req: 1,
+        u_req: 0,
+        ready: 0,
+        hd_avbl: 0,
+        es: 1,
+        carrier_detection: 1,
+        load_handler_detection: 0,
+      },
+      {
+        period: 5,
+        valid: 1,
+        cs_0: 1,
+        cs_1: 0,
+        tr_req: 1,
+        busy: 1,
+        compt: 1,
+        cont: 0,
+        l_req: 1,
+        u_req: 0,
+        ready: 0,
+        hd_avbl: 0,
+        es: 1,
+        carrier_detection: 1,
+        load_handler_detection: 0,
+      },
+      {
+        period: 6,
+        valid: 1,
+        cs_0: 1,
+        cs_1: 0,
+        tr_req: 1,
+        busy: 1,
+        compt: 0,
+        cont: 1,
+        l_req: 0,
+        u_req: 1,
+        ready: 1,
+        hd_avbl: 1,
+        es: 0,
+        carrier_detection: 0,
+        load_handler_detection: 1
+      }
+    ];
+
+    this.pioTrendData = pioTrendData;    
+  }
 
   ngOnInit(): void {
     // this.currentVehicle = {};
@@ -90,5 +206,15 @@ export class VehicleStatusDialogComponent implements OnInit {
 
   private initShowOptions() {
     this.ioCategories.forEach((x) => (this.showOptions[x] = true));
+  }
+
+  onToggleVehicleStatusNPIOTrend(element) {
+    this.visiblePIOTrend = !this.visiblePIOTrend;
+
+    if (this.visiblePIOTrend) {
+      element.textContent = '<  Vehicle Status';
+    } else {
+      element.textContent = 'PIO Trend';
+    }
   }
 }

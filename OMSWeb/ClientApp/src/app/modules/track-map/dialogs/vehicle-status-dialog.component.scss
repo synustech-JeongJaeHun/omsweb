@@ -6,6 +6,33 @@
   row-gap: 1px;
 }
 
+.full-col {
+  grid-column: 1/-1;
+}
+
+.half-span-col {
+  grid-column: 2/4;
+}
+
+mat-form-field.dense2 {
+  font-size: 12px;
+  width: 75%;
+  margin: 4px;
+}
+
+button.dense {
+  font-size: 12px;
+  align-content: center;
+  text-align: center;
+  align-items: center;
+  width: 20%;
+  height: 35px;
+  margin: 4px;
+  vertical-align: top;
+  margin-top: 10px;
+  margin-left: 10px;
+}
+
 h4 {
   border-bottom: 2px solid var(--details-background-color);
   text-align: center;
@@ -42,11 +69,13 @@ fieldset {
     border-top-left-radius: 8px;
     border-bottom-left-radius: 8px;
   }
+
   .value {
     padding: 4px 8px;
     border-bottom: 1px solid var(--details-background-color);
   }
 }
+
 .status-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -68,10 +97,8 @@ fieldset {
 .status-panel {
   grid-row: 3 /5;
 }
-
 // .di-panel {
 // }
-
 // .do-panel {
 // }
 
@@ -86,5 +113,102 @@ fieldset {
     &:first-child {
       margin-left: 0;
     }
+  }
+}
+
+
+.pioTrend {
+  position: absolute;
+  top: 90px;
+  left: 0px;
+  z-index: 2;
+  display: block;
+  background-color: #fff;
+  width: 740px;
+  height: 84%;
+}
+
+#pioTrendChart {
+  vertical-align: central;
+  padding: 0px 0px 0px 20px;
+  //height: 460px;
+  height: 500px;
+}
+
+.pioTrendTable {
+  //width: 320px;
+  width: 95%;
+  height: 100%;
+  border: 0px solid #c2c2c2;
+  border-collapse: collapse;
+  padding: 0px 30px 0px 20px;
+}
+
+.pioTrendTable tr {
+  height: 20px;
+}
+
+.pioTrendTable th {
+  //font-weight: 400;
+  font-size: 10px;
+  width: 80px;
+  height: 10px;
+  padding: 1px 1px 1px 1px;
+  border: 0px solid #c2c2c2;
+  background: #fff;
+}
+
+.pioTrendTable th:nth-child(2) {
+  font-size: 10px;
+  width: 20px;
+  height: 10px;
+  padding: 1px 1px 1px 1px;
+  border: 0px solid #c2c2c2;
+}
+
+
+.pioTrendTable td {
+  //font-weight: 400;
+  font-size: 10px;
+  width: 280px;
+  height: 10px;
+  padding: 1px 1px 1px 1px;
+  border: 0px solid #c2c2c2;
+}
+
+.pioTrendTable .sparkline {
+  //width: 400px;
+  width: 590px;
+  height: 30px;
+}
+
+.long-title h3 {
+  font-weight: 200;
+  font-size: 15px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.table-details {
+  width: 90%;
+  margin-top: 30px;
+
+  .name {
+    //width: 80px;
+    width: 8%;
+    background: #fff;
+    text-align: center;
+  }
+
+  .title {
+    width: 6%;
+    background: #fff;
+    text-align: center;
+  }
+
+  .value {
+    width: 5%;
+    background: #fff;
+    text-align: center;
   }
 }
