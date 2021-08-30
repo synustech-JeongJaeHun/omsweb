@@ -59,7 +59,13 @@ export class WarningHistoryComponent implements OnInit {
   start: Date = new Date(
     this.now.getFullYear(),
     this.now.getMonth(),
-    this.now.getDate() - 7
+    this.now.getDate(),
+    this.now.getHours() - 6
+  );
+  base: Date = new Date(
+    this.now.getFullYear() - 20,
+    this.now.getMonth(),
+    this.now.getDate(),
   );
   end: Date = new Date(
     this.now.getFullYear(),
