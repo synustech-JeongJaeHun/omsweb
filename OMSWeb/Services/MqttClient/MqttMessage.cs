@@ -24,6 +24,8 @@ namespace OMSWeb.Services.MqttClient
         public const string ACTION_AI_MODE = "ai_mode";
         public const string ACTION_PAUSE = "pause";
         public const string ACTION_RESUME = "resume";
+        public const string ACTION_ALARM_CLEAR = "alarm_clear";
+        public const string ACTION_WARNING_CLEAR = "warning_clear";
         public const string ACTION_RESET = "reset";
         public const string ACTION_STOP = "stop";                           // estop
         public const string ACTION_INITIALIZE = "initialize";               // set vehicle auto
@@ -65,6 +67,8 @@ namespace OMSWeb.Services.MqttClient
                 case ACTION_AI_MODE:
                 case ACTION_PAUSE:
                 case ACTION_RESUME:
+                case ACTION_ALARM_CLEAR:
+                case ACTION_WARNING_CLEAR:
                 case ACTION_RESET:
                 case ACTION_STOP:
                 case ACTION_INITIALIZE:
@@ -102,6 +106,8 @@ namespace OMSWeb.Services.MqttClient
                 case ACTION_AI_MODE:
                 case ACTION_PAUSE:
                 case ACTION_RESUME:
+                case ACTION_ALARM_CLEAR:
+                case ACTION_WARNING_CLEAR:
                     return REQUEST_VEHICLE_MANAGER;
 
                 case ACTION_RESET:
@@ -150,6 +156,18 @@ namespace OMSWeb.Services.MqttClient
             }
 
             return command.VehicleIds;
+        }
+        public object GetAlarmErrorCode(CommandMessageDto command)
+        {
+            return command.AlarmCode;
+        }
+        public object GetWarningId(CommandMessageDto command)
+        {
+            return command.WarningId;
+        }
+        public object GetWarningAckBy(CommandMessageDto command)
+        {
+            return command.WarningAckBy;
         }
         public object GetZcuId(CommandMessageDto command)
         {
@@ -238,6 +256,16 @@ namespace OMSWeb.Services.MqttClient
                      command.Action == ACTION_RESUME)
             {
 
+            }
+            else if (command.Action == ACTION_ALARM_CLEAR)
+            {
+                data["vehicle_id"] = GetVehicleId(command);
+                data["error_code"] = GetAlarmErrorCode(command);
+            }
+            else if (command.Action == ACTION_WARNING_CLEAR)
+            {
+                data["id"]     = GetWarningId(command);
+                data["ack_by"] = GetWarningAckBy(command);
             }
             else if (command.Action == ACTION_RESET      || command.Action == ACTION_STOP         || 
                      command.Action == ACTION_INITIALIZE || command.Action == ACTION_STATUS       || 

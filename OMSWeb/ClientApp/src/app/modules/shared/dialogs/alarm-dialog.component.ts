@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import DataSource from 'devextreme/data/data_source';
 import { alertSeverities, IVehicleAlarm } from '../../../models/notification.model';
-import { DialogService } from '../../../services/dialog.service';
 import { NotificationsService } from '../../../services/notifications.service';
 import { MessagesService } from '../../../services/messages.service';
 import { AuthService } from '../../../services/auth.service';
@@ -24,7 +23,6 @@ export class AlarmDialogComponent implements OnInit {
     private auth: AuthService,
     private messageSvc: MessagesService,
     private notifySvc: NotificationsService,
-    private dialogSvc: DialogService,
     private t$: TranslateService
   ) {}
 
@@ -40,50 +38,36 @@ export class AlarmDialogComponent implements OnInit {
       return;
     }
     this.currentItem = row.data;
-    this.alaram_note = '';
+    this.alaram_note = row.data.note;
   }
 
   onModifySolution() {
-    //this.dialogSvc
-    //  .confirm({ body: this.t$.instant('messages.confirmCommand') })
-    //  .subscribe((ok) => {
-    //    if (ok) {
-          // db update or insert to annotations and update vehicle_alarms time_resolved
-          //alert('modifySolution [' + this.currentItem.vehicleId + '] : ' + this.currentItem.errorCode + ' - vehicle_errors - ' + this.auth.currentUser.userId + ' - ' + this.alaram_note);
     let annotation: IAnnotation = {
+      id: this.currentItem.id,
       referenceId: this.currentItem.errorCode,
       referenceTable: 'vehicle_errors',
       modifiedBy: this.auth.currentUser.userId,
-      annotation: this.alaram_note,
-      vehicleAlaramId: this.currentItem.id
+      annotation: this.alaram_note
     }
-    this.notifySvc.addAnnotation(annotation).subscribe();
-    //    }
-    //  });    
+    //this.notifySvc
+    //  .addAnnotation(annotation)
+    //  .subscribe();
+    this.notifySvc
+      .addAnnotation(annotation)
+      .subscribe((res) => {
+        this.dataSource = this.notifySvc.alarmsDataSource();
+      });
   }
 
   onReset() {
-    //this.dialogSvc
-    //  .confirm({ body: this.t$.instant('messages.confirmCommand') })
-    //  .subscribe((ok) => {
-    //    if (ok) {
-          // send vehicle reset message
-          //alert('reset : ' + this.currentItem.id + ' - ' + this.currentItem.vehicleId);
-    let vehicleIds: number[] = [ this.currentItem.vehicleId ];
-    this.messageSvc.sendVehicleIDsCommand({ action: 'reset' }, vehicleIds).subscribe();
-    //    }
-    //  });
+    this.messageSvc
+      .sendVehicleDirectCommand({ action: 'reset' }, [this.currentItem.vehicleId])
+      .subscribe();
   }
 
   onClear() {
-    //this.dialogSvc
-    //  .confirm({ body: this.t$.instant('messages.confirmCommand') })
-    //  .subscribe((ok) => {
-    //    if (ok) {
-          // send vehicle_manager alarm_clear message
-          //alert('clear : ' + this.currentItem.id + ' - ' + this.currentItem.vehicleId);
-    this.messageSvc.sendVehicleMangerCommand({ action: 'alarm_clear' }, this.currentItem.vehicleId, this.currentItem.errorCode).subscribe();
-    //    }
-    //  });
+    this.messageSvc
+      .sendAlarmClearCommand({ action: 'alarm_clear' }, [this.currentItem.vehicleId], this.currentItem.errorCode)
+      .subscribe();
   }
 }

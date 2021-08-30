@@ -15,13 +15,18 @@ export interface IAiModeCommandMessage extends ICommandMessage {
   mode?: string;
 }
 
-export interface IAllCommandMessage extends ICommandMessage {
-  vehicleId?: string;
+export interface IAlarmClearCommandMessage extends ICommandMessage {
+  vehicleIds?: number[];
+  alarmCode?: number;
 }
 
-export interface IVehicleManagerCommandMessage extends ICommandMessage {
-  vehicleId?: number;
-  error_code?: number;
+export interface IWarningClearCommandMessage extends ICommandMessage {
+  WarningIds?: number[];
+  WarningAckBy?: string;
+}
+
+export interface IAllCommandMessage extends ICommandMessage {
+  vehicleId?: string;
 }
 
 export interface IVehicleCommandMessage extends ICommandMessage {

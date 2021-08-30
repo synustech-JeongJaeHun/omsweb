@@ -40,8 +40,7 @@ namespace OMSWeb.Controllers
     }
 
     [HttpPost("addannotation")]
-    public int AddAnnotation(AnnotationDto annotationForm)
-    //public object AddAnnotation(AnnotationDto annotationForm)
+    public object AddAnnotation(AnnotationDto annotationForm)
     {
       return this._notificationSvc.AddAnnotation(annotationForm);
     }

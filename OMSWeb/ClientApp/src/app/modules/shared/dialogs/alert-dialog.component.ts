@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { DxDataGridComponent } from 'devextreme-angular';
 import { alertSeverities, IAlert } from '../../../models/notification.model';
+import { MessagesService } from '../../../services/messages.service';
 import { NotificationsService } from '../../../services/notifications.service';
 
 @Component({
@@ -24,7 +25,10 @@ export class AlertDialogComponent implements OnInit, AfterViewInit {
     return this.selectedRows.length > 0;
   }
 
-  constructor(private notifySvc: NotificationsService) {}
+  constructor(
+    private messageSvc: MessagesService,
+    private notifySvc: NotificationsService
+  ) { }
 
   ngAfterViewInit(): void {
     this.loadWarnList();
@@ -44,7 +48,10 @@ export class AlertDialogComponent implements OnInit, AfterViewInit {
 
   onClear() {
     // console.log('## clear one >>', this.selectedRows);
-    this.notifySvc.clearAlerts(this.selectedRows).subscribe();
+    //this.notifySvc.clearAlerts(this.selectedRows).subscribe();
+    //this.messageSvc
+    //  .sendWarningClearCommand({ action: 'warning_clear' }, this.selectedRows, this.email)
+    //  .subscribe();
   }
 
   onClearAll() {

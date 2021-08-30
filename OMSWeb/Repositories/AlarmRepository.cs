@@ -41,17 +41,20 @@ FROM (
     public IQueryable<AlarmHistory> GetAlarms() {
       IQueryable<AlarmHistory> result;
       using (var conn = ConnectTrack()) {
-        var sql = @"
+
+      var sql = @"
     SELECT VA.id, VA.time, 
     extract('epoch' from now()-VA.time) AS age, 
-    VE.level, VA.vehicle_id, VA.error_code, VE.description, VE.action, VA.time_resolved
+    VE.level, VA.vehicle_id, VA.error_code, VE.description, VE.action, VA.time_resolved, AN.annotation AS note
     FROM vehicle_alarms AS VA
     LEFT OUTER JOIN vehicle_errors VE
         ON VA.error_code = VE.id
+    LEFT OUTER JOIN annotations AN
+        ON VA.error_code = AN.reference_id and AN.reference_table = 'vehicle_errors'
     WHERE VA.time_resolved is NULL
     ORDER BY VA.id desc
         ";
-        result = conn.Query<AlarmHistory>(sql).AsQueryable();
+         result = conn.Query<AlarmHistory>(sql).AsQueryable();
       }
       return result;
     }
@@ -60,20 +63,6 @@ FROM (
     {
       int result = -1;
 
-      /* UPSERT this is executed when the reference_id field has unique constraint.
-      var sql = @"      
-      INSERT INTO annotations (reference_id, reference_table, modified_time, modified_by, annotation)
-      VALUES (@reference_id, @reference_table, CURRENT_TIMESTAMP, @modified_by, @annotation)
-      ON CONFLICT (reference_id) 
-      DO 
-        UPDATE SET reference_table = @reference_table, modified_time = CURRENT_TIMESTAMP, modified_by = @modified_by, annotation = @annotation;
-
-      UPDATE vehicle_alarms
-      SET time_resolved = CURRENT_TIMESTAMP
-      WHERE id = @id;
-      ";
-      */
-
       var sqlSelect = @"
       SELECT COUNT(*) as count FROM annotations WHERE reference_id = @reference_id;
       ";
@@ -81,27 +70,21 @@ FROM (
       var sqlUpdate = @"
       UPDATE annotations 
       SET reference_table = @reference_table, 
-        modified_time = CURRENT_TIMESTAMP, 
-        modified_by = @modified_by, 
-        annotation = @annotation
-      WHERE reference_id = @reference_id;
-
-      UPDATE vehicle_alarms
-      SET time_resolved = CURRENT_TIMESTAMP
-      WHERE id = @id;
+          modified_time = CURRENT_TIMESTAMP, 
+          modified_by = @modified_by, 
+          annotation = @annotation
+      WHERE 
+          reference_id = @reference_id;
       ";
 
       var sqlInsert = @"
-      INSERT INTO annotations (reference_id, reference_table, modified_time, modified_by, annotation)
-      VALUES (@reference_id, @reference_table, CURRENT_TIMESTAMP, @modified_by, @annotation);
-
-      UPDATE vehicle_alarms
-      SET time_resolved = CURRENT_TIMESTAMP
-      WHERE id = @id;
+      INSERT INTO 
+            annotations (reference_id, reference_table, modified_time, modified_by, annotation)
+      VALUES 
+            (@reference_id, @reference_table, CURRENT_TIMESTAMP, @modified_by, @annotation);
       ";
 
-      var sql = "";
-
+      string sql;
       using (var conn = ConnectTrack())
       {
         conn.Open();
@@ -125,7 +108,6 @@ FROM (
             cmd.Parameters.AddWithValue("reference_table", annotation.ReferenceTable);
             cmd.Parameters.AddWithValue("modified_by", annotation.ModifiedBy);
             cmd.Parameters.AddWithValue("annotation", annotation.Annotation);
-            cmd.Parameters.AddWithValue("id", annotation.VehicleAlaramID);
             result = cmd.ExecuteNonQuery();
             trans.Commit();
           }
@@ -136,32 +118,6 @@ FROM (
           }
         }        
       }
-      /*
-      using (var conn = ConnectTrack())
-      {
-        using (var cmd = new NpgsqlCommand(sql, conn))
-        {
-          conn.Open();
-          var trans = conn.BeginTransaction();
-
-          try
-          {            
-            cmd.Parameters.AddWithValue("reference_id", annotation.ReferenceID);
-            cmd.Parameters.AddWithValue("reference_table", annotation.ReferenceTable);
-            cmd.Parameters.AddWithValue("modified_by", annotation.ModifiedBy);
-            cmd.Parameters.AddWithValue("annotation", annotation.Annotation);
-            cmd.Parameters.AddWithValue("id", annotation.VehicleAlaramID);
-            result = cmd.ExecuteNonQuery();
-            trans.Commit();
-          }
-          catch (Exception ex)
-          {
-            trans.Rollback();
-            throw ex;
-          }
-        }
-      }
-      */
       return result;
     }
 

@@ -41,11 +41,11 @@ export class ServerUpdateComponent implements OnInit {
         if (ok) {
           //alert('action : ' + action + ' - status(module name) : ' + module.name);
           if (module.name == "OMS Server") {
-            this.messageSvc.sendServerModuleControlCommand({ type: 'MODULE', action: action, state: 'oms-srv' }).subscribe();
+            this.messageSvc.sendServerModuleControlCommand({ action: action, state: 'oms-srv' }).subscribe();
           } else if (module.name == "VAS") {
-            this.messageSvc.sendServerModuleControlCommand({ type: 'MODULE', action: action, state: 'vas' }).subscribe();
+            this.messageSvc.sendServerModuleControlCommand({ action: action, state: 'vas' }).subscribe();
           } else if (module.name == "HAS") {
-            this.messageSvc.sendServerModuleControlCommand({ type: 'MODULE', action: action, state: 'has' }).subscribe();
+            this.messageSvc.sendServerModuleControlCommand({ action: action, state: 'has' }).subscribe();
           }
         }
       });

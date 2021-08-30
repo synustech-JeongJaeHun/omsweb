@@ -7,11 +7,12 @@ import {
   ITrackCommandMessage,
   IOrderCommandMessage,
   IVehicleCommandMessage,
-  IVehicleManagerCommandMessage,
   IAllCommandMessage,
   IAiModeCommandMessage,
   ITscStateCommandMessage,
   IControlStateCommandMessage,
+  IAlarmClearCommandMessage,
+  IWarningClearCommandMessage
 } from '../models/command.model';
 import { IOrderStatusRow } from '../models/order-status.model';
 import { IVehicleStatusRow } from '../models/vehicle-status.model';
@@ -59,6 +60,23 @@ export class MessagesService {
     return this.sendCommand<IAiModeCommandMessage>(command);
   }
 
+  sendAlarmClearCommand(command: IAlarmClearCommandMessage,targets: number[] = [], error_code: number): Observable<void> {
+    command.vehicleIds = targets;
+    command.alarmCode = error_code;
+    return this.sendCommand<IAlarmClearCommandMessage>(command);
+  }
+
+  sendWarningClearCommand(command: IWarningClearCommandMessage, targets: number[] = [], ackBy: string): Observable<void> {
+    command.WarningIds = targets;
+    command.WarningAckBy = ackBy;
+    return this.sendCommand<IWarningClearCommandMessage>(command);
+  }
+
+  sendServerModuleControlCommand(command: IControlStateCommandMessage): Observable<void> {
+    command.type = 'MODULE';
+    return this.sendCommand<IControlStateCommandMessage>(command);
+  }
+
   sendVehicleAllCommand(command: IAllCommandMessage): Observable<void> {
     command.type = 'VEHICLE_ALL';
     return this.sendCommand<IAllCommandMessage>(command);
@@ -70,41 +88,16 @@ export class MessagesService {
   ): Observable<void> {
     command.type = 'VEHICLE';
     command.vehicleIds = targets.map(x => x.id);
-
     return this.sendCommand<IVehicleCommandMessage>(command);
   }
 
-  sendVehicleIDsCommand(
+  sendVehicleDirectCommand(
     command: IVehicleCommandMessage,
     targets: number[] = []
   ): Observable<void> {
     command.type = 'VEHICLE';
     command.vehicleIds = targets;
-
     return this.sendCommand<IVehicleCommandMessage>(command);
-  }
-
-  sendVehicleMangerCommand(
-    command: IVehicleManagerCommandMessage,
-    targets: number,
-    error_code: number
-  ): Observable<void> {
-    command.type = 'VEHICLE_MANAGER';
-    command.action = command.action;
-    command.vehicleId = targets;
-    command.error_code = error_code;
-
-    return this.sendCommand<IVehicleManagerCommandMessage>(command);
-  }
-
-  sendServerModuleControlCommand(
-    command: IControlStateCommandMessage
-  ): Observable<void> {
-    command.type = command.type;
-    command.action = command.action;
-    command.state = command.state;
-
-    return this.sendCommand<IControlStateCommandMessage>(command);
   }
 
   sendOrderCommand(command: IOrderCommandMessage): Observable<void> {
