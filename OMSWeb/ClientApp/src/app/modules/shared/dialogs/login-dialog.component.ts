@@ -1,8 +1,10 @@
+import { error } from '@angular/compiler/src/util';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 
 import { AuthService } from '@oms/services/auth.service';
+import { userInfo } from 'os';
 
 @Component({
   selector: 'oms-login-dialog',
@@ -11,6 +13,7 @@ import { AuthService } from '@oms/services/auth.service';
 })
 export class LoginDialogComponent implements OnInit {
   form: FormGroup;
+  loginInvalid = false;
 
   constructor(
     private authSvc: AuthService,
@@ -21,14 +24,6 @@ export class LoginDialogComponent implements OnInit {
     this.initForm();
   }
 
-  onLogin() {
-    if (this.form.invalid) return;
-    const model = this.form.value;
-    this.authSvc.authenticate(model).subscribe((res) => {
-      this.dialog.close(res);
-    });
-  }
-
   private initForm() {
     this.form = new FormGroup({
       userId: new FormControl('', [Validators.required]),
@@ -37,5 +32,26 @@ export class LoginDialogComponent implements OnInit {
         Validators.minLength(4),
       ]),
     });
+  }
+
+  onKeyDownEvent($event) {
+    this.loginInvalid = false;
+  }
+
+  onLogin() {
+    if (this.form.invalid)
+      return;
+
+    this.loginInvalid = false;
+    const model = this.form.value;
+    this.authSvc.authenticate(model)
+      .subscribe(
+        result => {
+          this.dialog.close(result);
+        },
+        error => {
+          this.loginInvalid = true;
+        }
+      );
   }
 }

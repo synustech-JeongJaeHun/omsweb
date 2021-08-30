@@ -49,9 +49,6 @@ export class AlarmDialogComponent implements OnInit {
       modifiedBy: this.auth.currentUser.userId,
       annotation: this.alaram_note
     }
-    //this.notifySvc
-    //  .addAnnotation(annotation)
-    //  .subscribe();
     this.notifySvc
       .addAnnotation(annotation)
       .subscribe((res) => {

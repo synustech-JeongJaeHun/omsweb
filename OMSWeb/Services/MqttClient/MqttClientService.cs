@@ -33,17 +33,14 @@ namespace OMSWeb.Services
 
         public Task HandleApplicationMessageReceivedAsync(MqttApplicationMessageReceivedEventArgs eventArgs)
         {
-            //throw new System.NotImplementedException();
             try
             {
                 string topic = eventArgs.ApplicationMessage.Topic;
-
                 if (string.IsNullOrWhiteSpace(topic) == false)
                 {
                     string payload = Encoding.UTF8.GetString(eventArgs.ApplicationMessage.Payload);
-                    System.Console.WriteLine($"Topic: {topic}. Message Received: {payload}");
-
-                    //mqttClient.PublishAsync("hello/cyg", "this is a law dakjsjfd", MqttQualityOfServiceLevel.AtMostOnce);
+                    //System.Console.WriteLine($"Topic: {topic}. Message Received: {payload}");
+                    // process msg                    
                 }
             }
             catch (Exception ex)

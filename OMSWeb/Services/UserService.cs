@@ -57,9 +57,12 @@ namespace OMSWeb.Services
     public TokenResponse Authenticate(string userId, string password)
     {
       var user = this._repo.GetUserByUserId(userId);
-      if (user == null) throw new OmsException(ErrorCodes.AuthenticationFailed);
+      if (user == null) //throw new OmsException(ErrorCodes.AuthenticationFailed);  //UserNotExists
+        return null;
+
       var verified = BCrypt.Net.BCrypt.Verify(password, user.Password);
-      if (!verified) throw new OmsException(ErrorCodes.AuthenticationFailed);
+      if (!verified) //throw new OmsException(ErrorCodes.AuthenticationFailed);
+        return null;
 
       return new TokenResponse
       {
@@ -70,7 +73,8 @@ namespace OMSWeb.Services
     public TokenResponse RenewToken()
     {
       var user = this._repo.GetUserById(this.UserId);
-      if (user == null) throw new OmsException(ErrorCodes.AuthenticationFailed);
+      if (user == null) //throw new OmsException(ErrorCodes.AuthenticationFailed);
+        return null;
 
       return new TokenResponse
       {
