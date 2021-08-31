@@ -1976,22 +1976,22 @@ path.cluster_mask {
 }
 
 .loading {
-  fill: var(--vehicle-foup-color);
+  fill: var(--vehicle-foup-loading-color);
   animation: loading 1s infinite;
 }
 
 .unloading {
-  fill: var(--vehicle-foup-color);
+  fill: var(--vehicle-foup-unloading-color);
   animation: unloading 1s infinite;
 }
 
 .loading-legend {
-  fill: var(--vehicle-foup-color);
+  fill: var(--vehicle-foup-loading-color);
   animation: loading-legend 1s infinite;
 }
 
 .unloading-legend {
-  fill: var(--vehicle-foup-color);
+  fill: var(--vehicle-foup-unloading-color);
   animation: unloading-legend 1s infinite;
 }
 

@@ -44,7 +44,6 @@
   --notification-critical-color: rgb(255, 80, 0);
   --invalid-color: rgb(255, 100, 100);
   --monitor-background-color: #fff;
-
   /* Cluster color palette */
   --num-palette-colors: 24;
   --color1: #36382e;
@@ -95,23 +94,19 @@
   --color23-name: PLUM;
   --color24: #5c1a1b;
   --color24-name: CAPUT MORTUUM;
-
   --color-button-width: 20px;
   --color-button-height: 20px;
   --color-tile-width: 16px;
   --color-tile-height: 16px;
   --color-palette-width: 176px;
-
   /* overlap indicator */
   --overlap-fill-color: white;
   --overlap-border-color: #328cc1;
   --overlap-border-width: 2px;
-
   /* Overlap Panel */
   --overlap-scroll-bar-width: 8;
   --overlap-scroll-bar-color: rgb(194, 194, 194);
   --overlap-scroll-bar-color-active: rgb(125, 125, 125);
-
   /* Unassigned floating panel */
   --unassigned-status: active;
   --unassigned-width: 170px;
@@ -122,22 +117,17 @@
   --unassigned-height-inactive: 30px;
   --unassigned-top: calc(50% - var(--unassigned-height) / 2);
   --unassigned-right: calc(50% - var(--unassigned-width) / 2);
-
   /* Status Page Size Percentage */
   --table-percentage: 30%;
-
   /* Table rules */
   --background-color: white;
   --even-row-color: #fbfbfb;
   --table-hover-color: whitesmoke;
-
   /* Baseline font size for SVG elements */
   --element-font-size: 11;
-
   /* svg scale group variables */
   --scale-color: rgb(0, 0, 0);
   --font-size: 10px;
-
   /* Grid variables */
   --grid-line-weight: 1;
   --grid-color: rgb(245, 245, 245);
@@ -149,13 +139,11 @@
   --grid-text-color-show: darkslategray;
   --grid-domain-display: none;
   --grid-axis-color: rgb(200, 200, 200);
-
   /* Point Variables */
   --point-radius: 2;
   --point-color: rgb(80, 80, 80);
   --point-label-color: rgb(80, 80, 80);
   --point-label-offset: 20;
-
   /* Segment Variables */
   --segment-line-weight: 2;
   --segment-direction-width: 5;
@@ -166,7 +154,6 @@
   --segment-color-invalidate: rgb(255, 115, 33);
   --segment-label-color: rgb(80, 80, 80);
   --segment-label-offset: 10;
-
   /* Station Variables */
   --station-radius: 26;
   --station-width: 30;
@@ -184,7 +171,6 @@
   --station-icon-level1: "m-2.5 -2.5 l5 0 l0 5 l-5 0 l0 -5 l1 0";
   --station-icon-level2: "m-10 -10 l20 0 l0 20 l-20 0 l0 -20 l1 0";
   --station-icon-level3: "m-14 -4.5 l0 -9 l9 0 m9 0 l9 0 l0 9 m0 9 l0 9 l-9 0 m-9 0 l-9 0 l0 -9 m0 -9";
-
   /* Buffer Variables */
   --buffer-radius: 13;
   --buffer-width: 30;
@@ -202,7 +188,6 @@
   --buffer-icon-level1: "m0 -2.5 a 2.5 2.5 0 0 1 0 5 a 2.5 2.5 0 0 1 0 -5";
   --buffer-icon-level2: "m0 -10 a 10 10 0 0 1 0 20 a 10 10 0 0 1 0 -20";
   --buffer-icon-level3: "m-15 5 m5 -10 l-5 0 a10 10 0 0 1 10 -10 l0 5 a5 5 0 0 0 -5 5 l-5 0 m20 -5 l0 -5a 10 10 0 0 1 10 10 l-5 0 a5 5 0 0 0 -5 -5 l0 -5 m5 20 l5 0 a10 10 0 0 1 -10 10 l0 -5 a5 5 0 0 0 5 -5 l5 0 m-20 5 l0 5 a10 10 0 0 1 -10 -10 l5 0 a5 5 0 0 0 5 5 l0 5 z";
-
   /* MTL Variables */
   --mtl-radius: 26;
   --mtl-width: 30;
@@ -213,7 +198,6 @@
   --mtl-icon-level1: "m -2.5 -2.5 l 5 0 l -5 5 l 5 0 l -5 -5 z";
   --mtl-icon-level2: "m-10 10 l5 -10 l-5 -10 l20 0 l-5 10 l5 10";
   --mtl-icon-level3: "m-13.5 13.5 l4.5 -4.5 l-4.5 -4.5 l4.5 -4.5 l-4.5 -4.5 l4.5 -4.5 l-4.5 -4.5 l27 0 l-4.5 4.5 l4.5 4.5 l-4.5 4.5 l4.5 4.5 l-4.5 4.5 l4.5 4.5 m-22.5 -22.5 l18 0";
-
   /* ZCU Variables */
   --zcu-radius: 26;
   --zcu-width: 30;
@@ -225,14 +209,12 @@
   --zcu-icon-level1: "M-3,0 L0,-3 L3,0 L0,3 L-3,0 z";
   --zcu-icon-level2: "M-12,0 L0,-12 L12,0 L0,12 L-12,0 z";
   --zcu-icon-level3: "M-16,0 L0,-16 L16,0 L0,16 L-16,0 z";
-
   /* Cluster Variables */
   --cluster-line-weight: 6;
   --cluster-text-offset: 10;
   --cluster-stroke-color: transparent;
   --cluster-fill-color: rgba(255, 204, 0, 0.6);
   --cluster-size: var(--grid-rendering-distance);
-
   /* Vehicle Variables */
   --vehicle-line-weight: 3;
   --vehicle-clean-dash: "4";
@@ -276,6 +258,8 @@
   --vehicle-fail-color: orange;
   --vehicle-foup-radius: 5;
   --vehicle-foup-color: rgb(50, 50, 50);
+  --vehicle-foup-loading-color: rgb(0, 0, 205);
+  --vehicle-foup-unloading-color: rgb(128, 0, 128);
   --vehicle-foup-stroke-color: white;
   --vehicle-foup-stroke-width: 1;
   --expected-path-weight: 8;
@@ -288,7 +272,6 @@
   --vehicle-prevent-call-path: "M144 494 c-44 -46 -45 -90 -5 -159 38 -66 163 -184 228 -214 62 -29 89 -24 141 24 l37 34 -34 35 c-40 41 -60 45 -86 16 -10 -11 -23 -20 -29 -20 -15 0 -126 100 -159 143 l-27 36 25 29 c14 17 25 34 25 40 0 10 -66 72 -77 72 -3 0 -21 -16 -39 -36z";
   --vehicle-prevent-push-path: "M312 398 c-23 -23 -12 -54 33 -98 l46 -45 -182 -5 c-159 -4 -183 -7 -193 -22 -8 -13 -8 -23 0 -35 10 -16 34 -19 193 -23 l182 -5 -46 -45 c-45 -44 -56 -75 -33 -98 25 -25 53 -10 139 75 68 66 89 93 89 113 0 20 -21 47 -89 113 -86 85 -114 100 -139 75z";
   --vehicle-prevent-inner-color: #000000;
-
   /* Mini Map Variables */
   --mini-map-line-weight: 1;
   --mini-map-direction-radius: 3;
@@ -296,7 +279,6 @@
   --mini-map-label-color: rgb(0, 0, 0);
   --mini-map-display-label: false;
   --mini-map-display-direction: false;
-
   /* Group variables */
   --track-size-level1: 8;
   --track-size-level2: 25;
@@ -304,18 +286,13 @@
   --vehicle-size: 8;
   --group-opacity: 0.5;
   --vehicle-scale: 1;
-
   /* Context menu */
   --context-menu-width: 200;
-  --overlay-shadow: 0 0.7px 1.1px rgba(0, 0, 0, 0.042),
-    0 2.2px 3.8px rgba(0, 0, 0, 0.06), 0 10px 17px rgba(0, 0, 0, 0.1);
-
+  --overlay-shadow: 0 0.7px 1.1px rgba(0, 0, 0, 0.042), 0 2.2px 3.8px rgba(0, 0, 0, 0.06), 0 10px 17px rgba(0, 0, 0, 0.1);
   /* Toolbar */
   --toolbar-named-width: 160px;
-
   /* Playback */
   --playback-background-color: rgba(214, 64, 109, 0.1);
-
   /* KPI Status */
   --kpi-status-position-x: 0px;
   --kpi-status-position-y: 32px;
