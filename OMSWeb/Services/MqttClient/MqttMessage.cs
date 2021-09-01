@@ -31,7 +31,8 @@ namespace OMSWeb.Services.MqttClient
         public const string ACTION_INITIALIZE = "initialize";               // set vehicle auto
         public const string ACTION_STATUS = "status";
         public const string ACTION_RAIL_IN = "rail_in";
-        public const string ACTION_REMOVE = "remove";                       // rail_out
+        public const string ACTION_RAIL_OUT = "rail_out";
+        public const string ACTION_REMOVE = "remove";                       
         public const string ACTION_UPDATE_MAP = "update_map";
         public const string ACTION_GET_MAP_INFO = "get_map_info";
         public const string ACTION_SET_BEHAVIOR = "set_behavior";           // push enable, host order enable
@@ -74,6 +75,7 @@ namespace OMSWeb.Services.MqttClient
                 case ACTION_INITIALIZE:
                 case ACTION_STATUS:
                 case ACTION_RAIL_IN:
+                case ACTION_RAIL_OUT:
                 case ACTION_REMOVE:
                 case ACTION_UPDATE_MAP:
                 case ACTION_GET_MAP_INFO:
@@ -115,6 +117,7 @@ namespace OMSWeb.Services.MqttClient
                 case ACTION_INITIALIZE:
                 case ACTION_STATUS:
                 case ACTION_RAIL_IN:
+                case ACTION_RAIL_OUT:
                 case ACTION_REMOVE:
                 case ACTION_UPDATE_MAP:
                 case ACTION_GET_MAP_INFO:
@@ -269,8 +272,9 @@ namespace OMSWeb.Services.MqttClient
             }
             else if (command.Action == ACTION_RESET      || command.Action == ACTION_STOP         || 
                      command.Action == ACTION_INITIALIZE || command.Action == ACTION_STATUS       || 
-                     command.Action == ACTION_RAIL_IN    || command.Action == ACTION_REMOVE       ||
-                     command.Action == ACTION_UPDATE_MAP || command.Action == ACTION_GET_MAP_INFO)
+                     command.Action == ACTION_RAIL_IN    || command.Action == ACTION_RAIL_OUT     ||
+                     command.Action == ACTION_REMOVE     || command.Action == ACTION_UPDATE_MAP   || 
+                     command.Action == ACTION_GET_MAP_INFO)
             {
                 data["vehicle_id"] = GetVehicleId(command);
             }

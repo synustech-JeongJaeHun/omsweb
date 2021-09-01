@@ -107,7 +107,7 @@ export class VehicleControlTableComponent implements OnInit, OnDestroy {
   onRailOut() {
     if (!this.canControl) return;
     this.messageSvc
-      .sendVehicleCommand({ action: 'remove' }, this.selectedItems)
+      .sendVehicleCommand({ action: 'rail_out' }, this.selectedItems)
       .subscribe();
   }
 
