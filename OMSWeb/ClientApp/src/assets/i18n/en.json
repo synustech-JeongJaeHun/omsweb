@@ -319,6 +319,7 @@
     "control": "Control",
     "refreshMapInfo": "Refresh map info",
     "requestMapUpdate": "Request map update",
+    "removeVehicle": "Remove Vehicle",
     "processes": "Processes",
     "processName": "Process Name",
     "version": "Version",
