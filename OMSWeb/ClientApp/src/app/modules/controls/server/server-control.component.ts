@@ -7,11 +7,11 @@ import { SystemsService } from '../../../services/systems.service';
 import { MessagesService } from '../../../services/messages.service';
 
 @Component({
-  selector: 'oms-server-update',
-  templateUrl: './server-update.component.html',
-  styleUrls: ['./server-update.component.scss'],
+  selector: 'oms-server-control',
+  templateUrl: './server-control.component.html',
+  styleUrls: ['./server-control.component.scss'],
 })
-export class ServerUpdateComponent implements OnInit {
+export class ServerControlComponent implements OnInit {
   dataSource2: IServiceProcessStates[] = [];
   dataSource: IModuleStatus[] = [];
 

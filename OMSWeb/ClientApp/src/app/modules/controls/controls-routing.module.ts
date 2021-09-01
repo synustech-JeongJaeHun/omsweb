@@ -2,8 +2,8 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from '../../guards/auth.guard';
 import { ControlsComponent } from './controls.component';
-import { ServerUpdateComponent } from './server/server-update.component';
-import { MapUpdateComponent } from './vehicles/map-update.component';
+import { ServerControlComponent } from './server/server-control.component';
+import { VehicleControlComponent } from './vehicles/vehicle-control.component';
 
 const routes: Routes = [
   {
@@ -12,12 +12,12 @@ const routes: Routes = [
     children: [
       {
         path: 'vehicles',
-        component: MapUpdateComponent,
+        component: VehicleControlComponent,
         canActivate: [AuthGuard],
       },
       {
         path: 'server',
-        component: ServerUpdateComponent,
+        component: ServerControlComponent,
         canActivate: [AuthGuard],
       },
       { path: '', redirectTo: '/controls/vehicles', pathMatch: 'full' },

@@ -8,11 +8,11 @@ import { MessagesService } from '../../../services/messages.service';
 import { SystemsService } from '../../../services/systems.service';
 
 @Component({
-  selector: 'oms-map-update',
-  templateUrl: './map-update.component.html',
-  styleUrls: ['./map-update.component.scss'],
+  selector: 'oms-vehilce-control',
+  templateUrl: './vehicle-control.component.html',
+  styleUrls: ['./vehicle-control.component.scss'],
 })
-export class MapUpdateComponent implements OnInit {
+export class VehicleControlComponent implements OnInit {
   dataGrid: DxDataGridComponent;
   dataSource: DataSource;
   selectedIds: number[] = [];
