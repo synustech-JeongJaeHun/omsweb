@@ -16,6 +16,7 @@ import { DxSortableModule } from 'devextreme-angular/ui/sortable';
 import { DxColorBoxModule } from 'devextreme-angular/ui/color-box';
 import { DxChartModule } from 'devextreme-angular';
 import { DxSparklineModule } from 'devextreme-angular';
+import { DxPieChartModule } from 'devextreme-angular';
 
 @NgModule({
   exports: [
@@ -35,7 +36,8 @@ import { DxSparklineModule } from 'devextreme-angular';
     DxSortableModule,
     DxColorBoxModule,
     DxChartModule,
-    DxSparklineModule
+    DxSparklineModule,
+    DxPieChartModule
   ],
 })
 export class SharedDevextremeModule {}

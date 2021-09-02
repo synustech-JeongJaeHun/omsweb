@@ -55,10 +55,12 @@ namespace OMSWeb.Repositories
     CASE
     WHEN LENGTH(VH.error_list) = 0 THEN '0' ELSE VH.error_list
     END AS error_list,
-    VH.distance_total, VH.runtime_total, VH.type, VH.rail_in
+    VH.distance_total, VH.runtime_total, VH.type, VH.rail_in, GO.group_id
     FROM vehicles AS VH
         LEFT OUTER JOIN orders AS OD
     ON VH.order_id = OD.id AND OD.time_completed IS NULL AND OD.time_aborted IS NULL
+        LEFT JOIN grouped_objects AS GO 
+	  ON VH.id = GO.reference_id AND GO.reference_table = 'vehicle'
     ORDER BY VH.id
         ";
         result = conn.Query<VehicleState>(sql).AsQueryable();

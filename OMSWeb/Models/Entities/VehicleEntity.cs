@@ -29,6 +29,7 @@ namespace OMSWeb.Models.Entities
     public string CargoTransferResult { get; set; }
     public int? OrderId { get; set; }
     public bool RailIn { get; set; }
+    public int? GroupId { get; set; }
   }
 
   public class VehicleHistoryEntity : VehicleEntity

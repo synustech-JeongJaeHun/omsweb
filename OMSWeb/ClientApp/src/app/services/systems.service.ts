@@ -47,5 +47,16 @@ export class SystemsService {
   fileItems(): Observable<IFileItem[]> {
     return this.http.get<IFileItem[]>(`${this.baseUrl}/logs`);
   }
-  
+
+  downloadFileItems(items): Observable<IFileItem[]> {
+    alert('download folders & files');
+    //return this.http.get<IFileItem[]>(`${this.baseUrl}/logs/downloadFileItems`);
+    return;
+  }
+
+  downloadFolderItems(name, key): Observable<IFileItem[]> {
+    alert('download foler');
+    //return this.http.get<IFileItem[]>(`${this.baseUrl}/logs/downloadFolder`);
+    return;
+  }  
 }

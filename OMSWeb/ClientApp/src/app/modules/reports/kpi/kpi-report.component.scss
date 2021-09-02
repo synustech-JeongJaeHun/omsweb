@@ -1,0 +1,110 @@
+#kpi-report-page {
+  background-color: var(--panel-background-color);
+  display: grid;
+  grid-template-rows: 40px auto;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 44px;
+  gap: 4px;
+  height: 100%;
+}
+
+#filter-area {
+  padding: 4px 10px;
+  display: grid;
+  grid-template-columns: 210px 10px 210px 120px;
+  justify-items: center;
+  align-items: center;
+  gap: 4px;
+}
+
+#filter-area button {
+  justify-self: normal;
+  align-self: normal;
+}
+
+#grid-container {
+  //margin-top: 20px;
+  padding: 10px 10px;
+  overflow: auto;
+}
+
+#filter-area .dx-datebox {
+}
+
+.table-kpi-details {
+  width: 100%;
+  background-color: #ffffff;
+  border: none;
+
+  th, td {
+    width: 33%;
+    background-color: #ffffff;
+    border: none;
+    vertical-align: top;
+  }
+
+  th {
+    text-align: center;
+    font-size: 15px;
+  }
+}
+
+.table-details {
+  width: 100%;
+  //background-color: #ffffff;
+  border: 1px solid var(--dialog-border-color);
+
+  .name {
+    width: 50px;
+    background-color: var(--details-background-color);
+    border: 1px solid var(--dialog-border-color);
+    text-align: center;
+  }
+
+  .value {
+    width: 80%;
+    border: 1px solid var(--dialog-border-color);
+  }
+
+  th, td {
+    width: 25%;
+    //background-color: #ffffff;
+    border: 1px solid var(--dialog-border-color);
+    font-size: 12px;
+  }
+
+  th {
+    text-align: center;
+  }
+
+  td {
+    text-align: left;
+    margin-left: 10px;
+  }
+}
+
+#chartUntilization {
+  height: 200px;
+}
+
+#chartDeliveryTime {
+  height: 200px;
+}
+
+#pieChartVehicleStatus {
+  height: 190px;
+}
+
+#pieChartVehicleLoadingUnloading {
+  height: 190px;
+}
+
+#chartCPUSystemInfo {
+  height: 200px;
+}
+
+#chartMemorySystemInfo {
+  height: 200px;
+}

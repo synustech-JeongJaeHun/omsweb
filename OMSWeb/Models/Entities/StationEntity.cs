@@ -22,5 +22,7 @@ namespace OMSWeb.Models.Entities
     public int NextPoint { get; set; }
 
     public int Offset { get; set; }
+
+    public int? GroupId { get; set; }
   }
 }

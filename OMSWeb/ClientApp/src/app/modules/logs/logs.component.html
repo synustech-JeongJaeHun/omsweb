@@ -2,33 +2,17 @@
   id="fileManager"
   [fileSystemProvider]="fileItems"
   (onSelectedFileOpened)="openLog($event)"
+  (onToolbarItemClick)="onToolbarItemClick($event)"
   height="600">
-  <dxo-permissions download="true"></dxo-permissions>
+  <dxo-permissions download="false"></dxo-permissions>
+  <dxo-toolbar>
+    <dxi-item name="showNavPane" visible="true"></dxi-item>
+    <dxi-item name="separator"></dxi-item>
+    <dxi-item name="customDownload" widget="dxButton" [options]="{ text: 'Download', icon: 'download' }"></dxi-item>
+    <dxi-item name="separator"></dxi-item>
+    <dxi-item name="refresh"></dxi-item>
+    <dxi-item name="separator"></dxi-item>
+    <dxi-item name="switchView"></dxi-item>
+    <dxi-file-selection-item name="clearSelection" visible="false"></dxi-file-selection-item>
+  </dxo-toolbar>
 </dx-file-manager>
-<!--
-<dx-sortable
-  filter=".dx-tab"
-  itemOrientation="horizontal"
-  dragDirection="horizontal"
-  [data]="fileItems">
-
-  <dx-tab-panel
-    id="tabpanelStyle"
-    [dataSource]="fileItems"
-    itemTitleTemplate="tabTitle"
-    [deferRendering]="false"
-    [showNavButtons]="true"
-    [repaintChangesOnly]="true"
-    [(selectedIndex)]="tabIndex"
-    (onSelectionChanged)="onTabChanged()">
-    <div id="tabback" *dxTemplate="let content of 'tabTitle'">
-      <span style="text-align: center">{{ content.name }}</span>
-      <dx-button
-        icon="dx-icon dx-icon-close"
-        [visible]="logList.length > 1"
-        (onClick)="clickTabClose(content)">
-      </dx-button>
-    </div>
-  </dx-tab-panel>
-</dx-sortable>
--->
