@@ -5,6 +5,8 @@ using OMSWeb.Repositories;
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
+using System.Security.Cryptography;
+using System;
 
 namespace OMSWeb.Services
 {
@@ -18,9 +20,23 @@ namespace OMSWeb.Services
         public SystemsService(ModeStateRepository _modeStateRepo, IOptions<AppSettings> appSettings)
         {
             this._appSettings = appSettings.Value;
+            this._appSettings.SID = GenerateSID(8);
+
             this._modeStateRepo = _modeStateRepo;
 
             this.HostStates = GetHostStatus();
+        }
+
+        private string GenerateSID(int length)
+        {
+            using (var crypto = new RNGCryptoServiceProvider())
+            {
+                var bits = (length * 6);
+                var byte_size = ((bits + 7) / 8);
+                var bytesarray = new byte[byte_size];
+                crypto.GetBytes(bytesarray);
+                return Convert.ToBase64String(bytesarray);
+            }
         }
 
         public SystemStatusModel GetHostStatus()
@@ -54,6 +70,7 @@ namespace OMSWeb.Services
         public ClientSettings GetClientSettings()
         {
             var client = this._appSettings.Client;
+            client.SID = this._appSettings.SID;
             client.Version = this._appSettings.Version;
             client.KpiEnabled = this._appSettings.KpiEnabled;
             return this._appSettings.Client;

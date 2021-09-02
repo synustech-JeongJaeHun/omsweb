@@ -4,6 +4,8 @@ namespace OMSWeb.Models
   {
     public string JwtSecret { get; set; }
     public uint JwtLifeMinutes { get; set; }
+    
+    public string SID { get; set; }
     public string Version { get; set; }
     public bool KpiEnabled { get; set; }
     public string LogBaseDir { get; set; }

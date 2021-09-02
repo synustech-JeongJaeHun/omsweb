@@ -8,6 +8,7 @@ export type ToggleOptionsType = {
 };
 
 export class ServiceConfig {
+  sid: string;
   allowPublicMonitor = false;
   version: string;
   kpiEnabled: boolean;

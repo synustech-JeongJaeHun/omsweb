@@ -24,6 +24,7 @@ import { AccountUtil } from '../modules/shared/utils/account.util';
 export class AuthService {
   private baseUrl = '/api/auth';
   private _token: string;
+  private _sid: string;
   private _currentUser: ISessionUser;
   private _expiresAt: number;
   private jwtHelper: JwtHelperService;
@@ -37,6 +38,11 @@ export class AuthService {
   get token(): string {
     !this._token && this.readSession();
     return this._token;
+  }
+
+  get sid(): string {
+    !this._sid && this.readSID();
+    return this._sid;
   }
 
   get isAuthenticated(): boolean {
@@ -87,6 +93,15 @@ export class AuthService {
     return AccountUtil.hasPermissions(permissions, this.currentUser);
   }
 
+  getSID() {
+    this.readSID();
+    return this._sid;
+  }
+
+  updateSID(sid: string) {
+    this.writeSID(sid);
+  }
+
   private parseToken(checkCurrentTime = false): ISessionUser {
     const { exp, iat, nbf, ...user } = this.jwtHelper.decodeToken(this._token);
     const roles: number[] = user.roles
@@ -108,6 +123,14 @@ export class AuthService {
       userId: user.userId,
       email: user.email,
     };
+  }
+
+  private readSID() {
+    this._sid = StorageUtil.getLocal('sid');
+  }
+
+  private writeSID(sid: string) {
+    StorageUtil.setLocal('sid', sid);
   }
 
   private readSession(checkExpired = false) {

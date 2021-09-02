@@ -21,6 +21,11 @@ export class GnbComponent implements OnInit {
   ngOnInit(): void {
     this.settingSvc.serviceConfig.subscribe((config) => {
       this.version = config.version;
+
+      if (config.sid != this.auth.sid) {
+        this.auth.updateSID(config.sid);
+        this.auth.logout();
+      }
     });
   }
 }
