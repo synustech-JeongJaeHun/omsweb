@@ -123,6 +123,7 @@ namespace OMSWeb
       services.AddScoped<SettingsService>();
 
       services.AddSingleton<SystemsService>();
+      services.AddSingleton<ModuleStatusRepository>();
       services.AddSingleton<ModeStateRepository>();
       services.AddSingleton<TrackRepository>();
       services.AddSingleton<TrackService>();

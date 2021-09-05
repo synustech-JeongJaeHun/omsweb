@@ -13,15 +13,16 @@ namespace OMSWeb.Services
     public class SystemsService
     {
         private readonly AppSettings _appSettings;
+        private readonly ModuleStatusRepository _modeStatusRepo;
         private readonly ModeStateRepository _modeStateRepo;
 
         public SystemStatusModel HostStates { get; set; }
 
-        public SystemsService(ModeStateRepository _modeStateRepo, IOptions<AppSettings> appSettings)
+        public SystemsService(ModeStateRepository _modeStateRepo, ModuleStatusRepository _modeStatusRepo, IOptions<AppSettings> appSettings)
         {
             this._appSettings = appSettings.Value;
             this._appSettings.SID = GenerateSID(8);
-
+            this._appSettings.Version = _modeStatusRepo.GetOmsServerVersion();
             this._modeStateRepo = _modeStateRepo;
 
             this.HostStates = GetHostStatus();
