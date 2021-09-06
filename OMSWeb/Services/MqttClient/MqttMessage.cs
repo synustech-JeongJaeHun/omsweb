@@ -337,8 +337,11 @@ namespace OMSWeb.Services.MqttClient
                 if (command.LocationDropoff != null) 
                     data["location_dropoff"] = GetLocationDropoff(command);
 
-                if (command.LocationMove    != null) 
+                if (command.LocationMove != null) 
                     data["location_move"]    = GetLocationMove(command);
+
+                if (command.CarrierLabel != null)
+                    data["carrier_id"] = command.CarrierLabel;
 
                 data["origin"] = ORIGIN_OMS;    // oms
             }

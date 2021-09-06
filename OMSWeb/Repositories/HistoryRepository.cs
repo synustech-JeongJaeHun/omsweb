@@ -12,7 +12,7 @@ namespace OMSWeb.Repositories
     {
     }
 
-    public IQueryable<OrderEntity> QueryOrders()
+    public IQueryable<OrderHistoryEntity> QueryOrders()
     {
       var sql = @"
     SELECT id, origin, history_source_id, logical_id, 
@@ -37,10 +37,10 @@ namespace OMSWeb.Repositories
     ) AS LAST_OD
     ON OD.history_source_id = LAST_OD.order_id AND OD.history_change_time = LAST_OD.last_updated
       ";
-      IQueryable<OrderEntity> result;
+      IQueryable<OrderHistoryEntity> result;
       using (var conn = ConnectTrack())
       {
-        result = conn.Query<OrderEntity>(sql).AsQueryable();
+        result = conn.Query<OrderHistoryEntity>(sql).AsQueryable();
       }
       return result;
     }
