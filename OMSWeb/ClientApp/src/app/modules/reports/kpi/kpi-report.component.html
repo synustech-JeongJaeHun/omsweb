@@ -1,5 +1,6 @@
 <div id="kpi-report-page">
-  <div id="filter-area">
+  <!--
+  <div id="filter-area">    
     <dx-date-box
       [placeholder]="'_START_DATE' | translate"
       type="datetime"
@@ -28,129 +29,184 @@
       color="primary"
       (click)="search(startDate.value, endDate.value)">
       {{ "names.search" | translate }}
-    </button>
+    </button>    
   </div>
-
+  -->
   <div id="grid-container">
     <table class="table-kpi-details">
       <tr>
         <th>Summary</th>
         <th>Vehicle</th>
+        <!--
         <th>System Info</th>
+        -->
       </tr>
       <tr>
         <td class="chart">
-          <dx-chart
-            id="chartUntilization"
-            palette="Harmony Light"
-            [dataSource]="vehicleUtilizationData">
-            <dxi-series valueField="utilization" name="Utilization" color="purple"></dxi-series>
-            <dxo-common-series-settings
-               #commonSeries
-               argumentField="period"
-               [type]="types[0]">
-            </dxo-common-series-settings>
-            <dxo-margin [bottom]="20"></dxo-margin>
-            <dxo-argument-axis [valueMarginsEnabled]="false"></dxo-argument-axis>
-            <dxo-export [enabled]="false"></dxo-export>
-            <dxo-legend
-              verticalAlignment="bottom"
-              horizontalAlignment="center">
-            </dxo-legend>
-          </dx-chart>
+          <table class="table-sub-details">
+            <tr>
+              <td class="chart">         
+                <dx-chart
+                  id="chartUntilization"
+                  palette="Harmony Light"
+                  [dataSource]="vehicleUtilizationData">
+                  <dxi-series valueField="utilization" name="Utilization" color="purple"></dxi-series>
+                  <dxo-common-series-settings
+                     #commonSeries
+                     argumentField="period"
+                     [type]="types[0]">
+                  </dxo-common-series-settings>
+                  <dxo-margin [bottom]="20"></dxo-margin>
+                  <dxo-argument-axis [valueMarginsEnabled]="false"></dxo-argument-axis>
+                  <dxo-export [enabled]="false"></dxo-export>
+                  <dxo-legend [visible]="false"></dxo-legend>
+                  <!--
+                  <dxo-legend verticalAlignment="bottom" horizontalAlignment="center">
+                  </dxo-legend>
+                  -->
+                </dx-chart>
+              </td>
+              <td class="text">
+                <div class="sub-title">Utilization</div>
+                <div class="sub-content">67.78%</div>
+              </td>
+             </tr>
+          </table>
         </td>
-        <td class="chart">
-          <dx-pie-chart
-            id="pieChartVehicleStatus"
-            type="doughnut"
-            palette="Soft Pastel"
-            [dataSource]="vehicleStatusData"
-            centerTemplate="centerTemplate">
-            <dxo-export [enabled]="false"></dxo-export>
-            <dxo-legend
-              [margin]="0"
-              horizontalAlignment="right"
-              verticalAlignment="top">
-            </dxo-legend>
-            <dxi-series
-              argumentField="status"
-              valueField="count">
-              <dxo-hover-style color="#ffd700"></dxo-hover-style>
-            </dxi-series>
-            <svg *dxTemplate="let pieChart of 'centerTemplate'">                
-                <text text-anchor="middle" style="font-size: 18px" x="100" y="120" fill="#494949">                    
-                    <tspan x="100" dy="20px" style="font-weight: 600">250</tspan>
-                </text>
-            </svg>
-          </dx-pie-chart>
-        </td>
-        <td class="chart">
-          <dx-chart
-            id="chartCPUSystemInfo"
-            palette="Harmony Light"
-            [dataSource]="cpuSystemInfoData">
-            <dxi-series valueField="cpu" name="CPU" color="red"></dxi-series>
-            <dxo-common-series-settings
-               #commonSeries
-               argumentField="period"
-               [type]="types[0]">
-            </dxo-common-series-settings>
-            <dxo-margin [bottom]="20"></dxo-margin>
-            <dxo-argument-axis [valueMarginsEnabled]="false"></dxo-argument-axis>
-            <dxo-export [enabled]="false"></dxo-export>
-            <dxo-legend
-              verticalAlignment="bottom"
-              horizontalAlignment="center">
-            </dxo-legend>
-          </dx-chart>
+        <td class="chart" rowspan="2">
+          <table class="table-sub-details">
+            <tr>
+              <td class="chart2">                
+                <dx-pie-chart
+                  id="pieChartVehicleStatus"
+                  type="doughnut"
+                  palette="Default"
+                  [dataSource]="vehicleStatusData"
+                  centerTemplate="centerTemplate">
+                  <dxo-export [enabled]="false"></dxo-export>
+                  <dxo-legend [visible]="false"></dxo-legend>
+                  <!--
+                  <dxo-legend [margin]="0" horizontalAlignment="right" verticalAlignment="top">
+                  </dxo-legend>
+                  -->
+                  <dxi-series
+                    argumentField="status"
+                    valueField="count">                    
+                    <dxo-hover-style color="#ffd700"></dxo-hover-style>
+                  </dxi-series>
+                  <svg *dxTemplate="let pieChart of 'centerTemplate'">                
+                      <text text-anchor="middle" style="font-size: 18px" x="100" y="120" fill="#494949">                    
+                          <tspan x="100" dy="20px" style="font-weight: 600">250</tspan>
+                      </text>
+                  </svg>
+                </dx-pie-chart>
+              </td>
+              <td class="text2">
+                <table class="table-piechart">
+                  <tr>
+                    <td class="box"><div class="box1"></div></td>
+                    <td class="title">Error</td>
+                    <td class="value">30</td>
+                    <td class="margin"></td>
+                  </tr>
+                  <tr>
+                    <td class="box"><div class="box2"></div></td>
+                    <td class="title">Idle</td>
+                    <td class="value">20</td>
+                    <td class="margin"></td>
+                  </tr>
+                  <tr>
+                    <td class="box"><div class="box3"></div></td>
+                    <td class="title">Manual</td>
+                    <td class="value">0</td>
+                    <td class="margin"></td>
+                  </tr>
+                  <tr>
+                    <td class="box"><div class="box4"></div></td>
+                    <td class="title">Auto</td>
+                    <td class="value">200</td>
+                    <td class="margin"></td>
+                  </tr>
+                </table>
+              </td>
+              <td class="chart3">
+                <dx-pie-chart
+                  id="pieChartVehicleLoadingUnloading"
+                  type="doughnut"
+                  palette="Soft Pastel"
+                  [dataSource]="vehicleLoadingUnloadingData"
+                  centerTemplate="centerTemplate">
+                  <dxo-export [enabled]="false"></dxo-export>
+                  <dxo-legend [visible]="false"></dxo-legend>
+                  <!--
+                  <dxo-legend [margin]="0" horizontalAlignment="right" verticalAlignment="top">
+                  </dxo-legend>
+                  -->
+                  <dxi-series
+                    argumentField="status"
+                    valueField="count">
+                    <dxo-hover-style color="#ffd700"></dxo-hover-style>
+                  </dxi-series>
+                  <svg *dxTemplate="let pieChart of 'centerTemplate'">                
+                      <text text-anchor="middle" style="font-size: 18px" x="100" y="120" fill="#494949">                    
+                          <tspan x="100" dy="20px" style="font-weight: 600">200</tspan>
+                      </text>
+                  </svg>
+                </dx-pie-chart>
+              </td>
+              <td class="text2">
+                <table class="table-piechart">
+                  <tr>
+                    <td class="box"><div class="box5"></div></td>
+                    <td class="title">Unloading</td>
+                    <td class="value">80</td>
+                    <td class="margin"></td>
+                  </tr>
+                  <tr>
+                    <td class="box"><div class="box6"></div></td>
+                    <td class="title">Loading</td>
+                    <td class="value">120</td>
+                    <td class="margin"></td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
         </td>
       </tr>
       <tr>
         <td class="chart">
-          <dx-chart
-            id="chartDeliveryTime"
-            palette="Harmony Light"
-            [dataSource]="vehicleDeliveryTimeData">
-            <dxi-series valueField="deliveryTime" name="Delivery Time" color="blue"></dxi-series>
-            <dxo-common-series-settings
-              #commonSeries
-              argumentField="period"
-              [type]="types[0]">
-            </dxo-common-series-settings>
-            <dxo-margin [bottom]="20"></dxo-margin>
-            <dxo-argument-axis [valueMarginsEnabled]="false"></dxo-argument-axis>
-            <dxo-export [enabled]="false"></dxo-export>
-            <dxo-legend
-              verticalAlignment="bottom"
-              horizontalAlignment="center">
-            </dxo-legend>
-          </dx-chart>
+          <table class="table-sub-details">
+            <tr>
+              <td class="chart">       
+                <dx-chart
+                  id="chartDeliveryTime"
+                  palette="Harmony Light"
+                  [dataSource]="vehicleDeliveryTimeData">
+                  <dxi-series valueField="deliveryTime" name="Delivery Time" color="blue"></dxi-series>
+                  <dxo-common-series-settings
+                    #commonSeries
+                    argumentField="period"
+                    [type]="types[0]">
+                  </dxo-common-series-settings>
+                  <dxo-margin [bottom]="20"></dxo-margin>
+                  <dxo-argument-axis [valueMarginsEnabled]="false"></dxo-argument-axis>
+                  <dxo-export [enabled]="false"></dxo-export>
+                  <dxo-legend [visible]="false"></dxo-legend>
+                  <!--
+                  <dxo-legend verticalAlignment="bottom" horizontalAlignment="center">
+                  </dxo-legend>
+                  -->
+                </dx-chart>
+              </td>
+              <td class="text">
+                <div class="sub-title">Delivery Time</div>
+                <div class="sub-content">87.10 sec</div>
+              </td>
+            </tr>
+          </table>
         </td>
-        <td class="chart">
-          <dx-pie-chart
-            id="pieChartVehicleLoadingUnloading"
-            type="doughnut"
-            palette="Soft Pastel"
-            [dataSource]="vehicleLoadingUnloadingData"
-            centerTemplate="centerTemplate">
-            <dxo-export [enabled]="false"></dxo-export>
-            <dxo-legend
-              [margin]="0"
-              horizontalAlignment="right"
-              verticalAlignment="top">
-            </dxo-legend>
-            <dxi-series
-              argumentField="status"
-              valueField="count">
-              <dxo-hover-style color="#ffd700"></dxo-hover-style>
-            </dxi-series>
-            <svg *dxTemplate="let pieChart of 'centerTemplate'">                
-                <text text-anchor="middle" style="font-size: 18px" x="100" y="120" fill="#494949">                    
-                    <tspan x="100" dy="20px" style="font-weight: 600">200</tspan>
-                </text>
-            </svg>
-          </dx-pie-chart>
-        </td>
+        <!--
         <td class="chart">
           <dx-chart
             id="chartMemorySystemInfo"
@@ -170,35 +226,42 @@
               horizontalAlignment="center">
             </dxo-legend>
           </dx-chart>
-
         </td>
+        -->
+      </tr>
+      <tr>
+        <th>Details</th>
+        <th>System Info</th>
       </tr>
       <tr>
         <td>
           <table class="table-details">
             <tr>
-              <th class="name">{{ "names.item" | translate }}</th>
-              <th class="value">{{ "names.desc" | translate }}</th>
+              <th class="header-name">{{ "names.item" | translate }}</th>
+              <th class="header-value">{{ "names.desc" | translate }}(localhost/largemap_v3)</th>
+            </tr>
+            <tr>
+              <td class="name">Range</td>
+              <td class="value">2021-09-06 09:05:24(1)~2021-09-06 09:15:24(10,367)</td>
             </tr>
             <tr>
               <td class="name">{{ "names.utilization" | translate }}</td>
-              <td class="value">60.9%</td>
+              <td class="value">67.78%</td>
             </tr>
             <tr>
-              <td class="name">{{ "names.deliveryTime" | translate }}</td>
+              <td class="name">{{ "names.deliveryTime" | translate }} (created ~ completed)</td>
               <td class="value">87.10s, order count: 10,191</td>
             </tr>
-            <!--
             <tr>
-              <td class="name">Wait Time</td>
+              <td class="name">Wait time (created ~ loaded)</td>
               <td class="value">29.28s, order count: 10,310</td>
             </tr>
             <tr>
-              <td class="name">Transfer Time</td>
+              <td class="name">Transfer time (loaded ~ completed)</td>
               <td class="value">57.84s, order count: 10,191</td>
             </tr>
             <tr>
-              <td class="name">Assign Time</td>
+              <td class="name">Assign time (created ~ assigned)</td>
               <td class="value">1.84s, order count: 10,191</td>
             </tr>
             <tr>
@@ -206,13 +269,13 @@
               <td class="value">65.61% (6,792/10,368)</td>
             </tr>
             <tr>
-              <td class="name">Num of order request</td>
-              <td class="value">6,792</td>
+              <td class="name">Number of order request</td>
+              <td class="value">per second: 2.0011, estimated per day: 172,894</td>
             </tr>
-            -->
           </table>
         </td>
         <td>
+          <!--
           <table class="table-details">
             <tr>
               <th class="name">{{ "names.item" | translate }}</th>
@@ -227,7 +290,81 @@
               <td class="value">Unloading: 80, Loading: 120</td>
             </tr>
           </table>
+          -->
+          <table class="table-sub-details">
+            <tr>              
+              <td>
+                <table class="table-sub-details">
+                  <tr>
+                    <td class="chart4">      
+                      <dx-chart
+                        id="chartCPUSystemInfo"
+                        palette="Harmony Light"
+                        [dataSource]="cpuSystemInfoData">
+                        <dxi-series valueField="cpu" name="CPU" color="red">
+                          <dxo-point [visible]="false"></dxo-point>
+                        </dxi-series>
+                        <dxo-common-series-settings
+                           #commonSeries
+                           argumentField="period"
+                           [type]="types[3]">
+                        </dxo-common-series-settings>
+                        <dxo-margin [bottom]="20"></dxo-margin>
+                        <dxo-argument-axis [valueMarginsEnabled]="false"></dxo-argument-axis>
+                        <dxo-export [enabled]="false"></dxo-export>
+                        <dxo-legend [visible]="false"></dxo-legend>
+                        <!--
+                        <dxo-legend verticalAlignment="bottom" horizontalAlignment="center">
+                        </dxo-legend>
+                        -->
+                      </dx-chart>
+                    </td>
+                    <td class="text4">
+                      <div class="sub-title">CPU</div>
+                      <div class="sub-content2">18% 3.84GHz</div>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <table class="table-sub-details">
+                  <tr>
+                    <td class="chart4">    
+                      <dx-chart
+                        id="chartMemorySystemInfo"
+                        palette="Harmony Light"
+                        [dataSource]="memorySystemInfoData">
+                        <dxi-series valueField="memory" name="Memory" color="green">
+                          <dxo-point [visible]="false"></dxo-point>
+                        </dxi-series>
+                        <dxo-common-series-settings
+                           #commonSeries
+                           argumentField="period"
+                           [type]="types[3]">
+                        </dxo-common-series-settings>
+                        <dxo-margin [bottom]="20"></dxo-margin>
+                        <dxo-argument-axis [valueMarginsEnabled]="false"></dxo-argument-axis>
+                        <dxo-export [enabled]="false"></dxo-export>                  
+                        <dxo-legend [visible]="false"></dxo-legend>
+                        <!--
+                        <dxo-legend verticalAlignment="bottom" horizontalAlignment="center">
+                        </dxo-legend>
+                        -->
+                      </dx-chart>
+                    </td>
+                    <td class="text4">
+                      <div class="sub-title">Memory</div>
+                      <div class="sub-content2">7.9 / 15.8GB (50%)</div>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
         </td>
+        <!--
         <td>
           <table class="table-details">
             <tr>
@@ -244,6 +381,7 @@
             </tr>
           </table>
         </td>
+        -->
       </tr>
     </table>
   </div>

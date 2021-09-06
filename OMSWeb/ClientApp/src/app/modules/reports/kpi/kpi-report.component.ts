@@ -33,7 +33,7 @@ export class KpiReportComponent implements OnInit {
     this.now.getMinutes() + 30
   );
 
-  types: string[] = ["splinearea", "stackedsplinearea", "fullstackedsplinearea"];
+  types: string[] = ["splinearea", "stackedsplinearea", "fullstackedsplinearea", "spline"];
 
   vehicleUtilizationData: any[] = [];
   vehicleDeliveryTimeData: any[] = [];
@@ -164,7 +164,7 @@ export class KpiReportComponent implements OnInit {
         cpu: 33.2
       },
       {
-        period: 6,
+        period: 7,
         cpu: 93.2
       }
     ];
@@ -195,8 +195,8 @@ export class KpiReportComponent implements OnInit {
         memory: 33.2
       },
       {
-        period: 6,
-        memory: 93.2
+        period: 7,
+        memory: 53.2
       }
     ];
 
