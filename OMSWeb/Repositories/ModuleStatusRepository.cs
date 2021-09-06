@@ -33,10 +33,8 @@ namespace OMSWeb.Repositories
     {
       IQueryable<ModuleStatusEntity> result;
 
-      var sql = @"
-      SELECT id, name, version, release_time, pid, start_time 
-      FROM module_status
-      ";
+      var sql = @"SELECT id, name, version, release_time, pid, start_time 
+                FROM module_status ORDER BY id";
 
       using (var conn = ConnectTrack())
       {        
