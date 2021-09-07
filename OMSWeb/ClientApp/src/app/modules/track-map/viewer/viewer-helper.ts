@@ -7155,7 +7155,8 @@ export class ViewController {
     vehicle_scale: { scale: number; value: number }
   ) {
     let current_vehicle_label = d3_this.select('.label');
-    let label = logicalId ? logicalId : id;
+    //let label = logicalId ? logicalId : id;
+    let label = id;
     if (
       current_vehicle_label.nodes().length === 0 &&
       vehicle_scale.scale >= 0.6
@@ -11180,9 +11181,8 @@ export class ViewController {
           return y;
         })
         .html(function () {
-          let id = layout_object.logicalId
-            ? layout_object.logicalId
-            : layout_object.id;
+          //let id = layout_object.logicalId ? layout_object.logicalId : layout_object.id;
+          let id = layout_object.id;
           if (overlap_adjustment) {
             return `Vehicle ${id}`;
           } else {
