@@ -11181,7 +11181,6 @@ export class ViewController {
           return y;
         })
         .html(function () {
-          //let id = layout_object.logicalId ? layout_object.logicalId : layout_object.id;
           let id = layout_object.id;
           if (overlap_adjustment) {
             return `Vehicle ${id}`;
