@@ -72,6 +72,12 @@ export class OrderControlTableComponent implements OnInit, OnDestroy {
       .subscribe((e: IDataChangeEvent) => {
         e && this.onTableChanged(e);
       });
+
+    this.hubSvc.vehicleTableChanged$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((e: IDataChangeEvent) => {
+        e && this.onTableChanged(e);
+      });
   }
 
   onDelete() {
