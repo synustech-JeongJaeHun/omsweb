@@ -22,7 +22,11 @@ namespace OMSWeb.Services
         {
             this._appSettings = appSettings.Value;
             this._appSettings.SID = GenerateSID(8);
-            this._appSettings.Version = _modeStatusRepo.GetOmsServerVersion();
+
+            string version = _modeStatusRepo.GetOmsServerVersion();
+            if (!string.IsNullOrEmpty(version))
+                this._appSettings.Version = version;
+
             this._modeStateRepo = _modeStateRepo;
 
             this.HostStates = GetHostStatus();

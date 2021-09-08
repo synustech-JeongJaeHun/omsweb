@@ -130,13 +130,17 @@ namespace OMSWeb.Repositories
 
     public string GetOmsServerVersion()
     {
-      List<string> data;
+      string version = "";
       string sql = string.Format(@"SELECT version FROM module_status WHERE id={0}", ID_OMS_SRV);
       using (var conn = ConnectTrack())
       {
-        data = conn.Query<string>(sql).AsList();
+        List<string> data = conn.Query<string>(sql).AsList();
+        if (data != null)
+        {
+          version = (data.Count > 0) ? version = data[0] : "";
+        }
       }
-      return (data != null) ? data[0] : "";
+      return version;
     }
   }
 }
