@@ -238,6 +238,9 @@
   --vehicle-color-mode-prevent-call-outline: rgb(105, 89, 166);
   --vehicle-color-mode-none: rgb(255, 255, 255);
   --vehicle-color-mode-none-outline: rgb(0, 0, 0);
+  --vehicle-color-sensor-stop: rgb(255, 192, 203);
+  --vehicle-stroke-color-sensor-stop: rgb(255, 90, 90);
+  --vehicle-stroke-width-sensor-stop: 1;
   --vehicle-color-blocked: rgb(240, 30, 35);
   --vehicle-color-hotlot: rgb(255, 128, 0);
   --vehicle-color-label: rgb(65, 65, 68);
@@ -245,6 +248,7 @@
   --vehicle-text-offset: 20;
   --vehicle-label-color: rgb(0, 0, 0);
   --vehicle-xfer-status-color: orange;
+  --vehicle-sensor-stop-radius: 4;
   --vehicle-blocked-radius: 3;
   --vehicle-animation-duration: 250;
   --vehicle-display-label: true;

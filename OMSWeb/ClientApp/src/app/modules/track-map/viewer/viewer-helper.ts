@@ -6128,6 +6128,9 @@ export class ViewController {
           if (is_update_all || update.errorList) {
             this.update_vehicle_error_svg(d3_this, d.errorList, dom_css);
           }
+          if (is_update_all || update.isSensorStopped) {
+            this.update_vehicle_sensor_stop_svg(d3_this, d.isSensorStopped, dom_css);
+          }
           if (is_update_all || update.isBlocked) {
             this.update_vehicle_blocked_svg(d3_this, d.isBlocked, dom_css);
           }
@@ -6712,6 +6715,33 @@ export class ViewController {
       d3_this.select('.fail').remove();
     }
   }
+
+  update_vehicle_sensor_stop_svg(
+    d3_this: d3.Selection<d3.BaseType, unknown, HTMLElement, any>,
+    isSensorStopped: any,
+    dom_css: any
+  ) {
+    if (isSensorStopped) {
+      if (d3_this.select('.corner').nodes().length === 0) {
+        d3_this
+          .append('circle')
+          .attr('class', 'corner')
+          .attr('r', dom_css.sensor_stop_radius)
+          .attr('cx', -(2 + dom_css.radius + dom_css.sensor_stop_radius / 2))
+          .attr('cy', -(2 + dom_css.radius + dom_css.sensor_stop_radius / 2))
+          .attr('fill', dom_css.color_sensor_stop)
+          .attr('stroke', dom_css.stroke_color_sensor_stop)
+          .attr('stroke-width', dom_css.stroke_width_sensor_stop)
+          .attr(
+            'transform',
+            `rotate(${-this.map_rotation})scale(${this.vehicle_scale.scale})`
+          );
+      }
+    } else {
+      d3_this.select('.corner').remove();
+    }
+  }
+
   update_vehicle_blocked_svg(
     d3_this: d3.Selection<d3.BaseType, unknown, HTMLElement, any>,
     isBlocked: any,
@@ -11335,6 +11365,26 @@ export class ViewController {
           .lower();
       } else {
         dom_object_group.select('.foup').remove();
+      }
+
+      if (layout_object.isSensorStopped === true) {
+        dom_object_group
+          .append('circle')
+          .attr('class', 'corner')
+          .attr('r', dom_css.sensor_stop_radius)
+          .attr('cx', -(2 + dom_css.radius + dom_css.sensor_stop_radius / 2))
+          .attr('cy', -(2 + dom_css.radius + dom_css.sensor_stop_radius / 2))
+          .attr('fill', dom_css.color_sensor_stop)
+          .attr('stroke', dom_css.stroke_color_sensor_stop)
+          .attr('stroke-width', dom_css.stroke_width_sensor_stop)
+          .attr('transform', () => {
+            if (!overlap_adjustment)
+              return `rotate(${-this.map_rotation})scale(${this.vehicle_scale.scale
+                })`;
+            else return '';
+          });
+      } else {
+        dom_object_group.select('.corner').remove();
       }
 
       if (layout_object.isBlocked === true) {

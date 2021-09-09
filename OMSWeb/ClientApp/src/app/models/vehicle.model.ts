@@ -54,6 +54,7 @@ export class Vehicle {
       movingState,
       mode,
       errorList,
+      isSensorStopped,
       isBlocked,
       orderId,
       orderLogicalId,
@@ -73,6 +74,7 @@ export class Vehicle {
 
     this.mode = mode;
     this.errorList = errorList;
+    this.isSensorStopped = isSensorStopped;
     this.isBlocked = isBlocked;
     this.orderId = orderId;
     this.orderLogicalId = orderLogicalId;
@@ -135,6 +137,7 @@ export class Vehicle {
         canBePushed: this.push,
         orderOrigin: this.call,
         errorList: this.errorList,
+        isSensorStopped: this.isSensorStopped,
         isBlocked: this.isBlocked,
         orderId: this.orderId,
         orderLogicalId: this.orderLogicalId,

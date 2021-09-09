@@ -645,6 +645,25 @@ export namespace SvgDrawingUtil {
           dom_object_group.select('.foup').remove();
         }
 
+        if (layout_object.isSensorStopped === true) {
+          dom_object_group
+            .append('circle')
+            .attr('class', 'corner')
+            .attr('r', dom_css.sensor_stop_radius)
+            .attr('cx', -(2 + dom_css.sensor_stop + dom_css.sensor_stop_radius / 2))
+            .attr('cy', -(2 + dom_css.sensor_stop + dom_css.sensor_stop_radius / 2))
+            .attr('fill', dom_css.color_sensor_stop)
+            .attr('stroke', dom_css.stroke_color_sensor_stop)
+            .attr('stroke-width', dom_css.stroke_width_sensor_stop)
+            .attr('transform', () => {
+              if (!overlap_adjustment)
+                return `rotate(${-mapRotation})scale(${vehicleScale})`;
+              else return '';
+            });
+        } else {
+          dom_object_group.select('.corner').remove();
+        }
+
         if (layout_object.isBlocked === true) {
           dom_object_group
             .append('circle')
