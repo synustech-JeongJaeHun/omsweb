@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import DataSource from 'devextreme/data/data_source';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
@@ -6,6 +6,7 @@ import { Observable, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 import { IModuleStatus, IServiceProcessStates, ISystemStates, IFileItem } from '@oms/models/system.model';
+import { Form } from '@angular/forms';
 @Injectable({
   providedIn: 'root',
 })
@@ -48,15 +49,21 @@ export class SystemsService {
     return this.http.get<IFileItem[]>(`${this.baseUrl}/logs`);
   }
 
-  downloadFileItems(items): Observable<IFileItem[]> {
-    alert('download folders & files');
-    //return this.http.get<IFileItem[]>(`${this.baseUrl}/logs/downloadFileItems`);
-    return;
+  downloadFile(name: string, path: string): Observable<Blob> {
+    let params = new HttpParams();
+    params = params.append('fileFullPath', path);
+    return this.http.get(`${this.baseUrl}/logs/downloadFile/${name}`, { params: params, responseType: 'blob' });
   }
 
-  downloadFolderItems(name, key): Observable<IFileItem[]> {
-    alert('download foler');
-    //return this.http.get<IFileItem[]>(`${this.baseUrl}/logs/downloadFolder`);
-    return;
-  }  
+  downloadFoldersNFiles(name: string, paths: any): Observable<Blob> {
+    let params = new HttpParams();
+    params = params.append('folderFullPaths', paths);
+    return this.http.get(`${this.baseUrl}/logs/downloadFoldersNFiles/${name}`, { params: params, responseType: 'blob' });
+  }
+
+  downloadFolder(name: string, path: string): Observable<Blob> {
+    let params = new HttpParams();
+    params = params.append('folderFullPath', path);
+    return this.http.get(`${this.baseUrl}/logs/downloadFolder/${name}`, { params: params, responseType: 'blob' });
+  }
 }

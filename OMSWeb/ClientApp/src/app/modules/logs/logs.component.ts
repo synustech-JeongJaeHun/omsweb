@@ -7,6 +7,7 @@ import { SystemsService } from '../../services/systems.service';
 import { IFileItem } from '../../models/system.model';
 import { Observable } from 'rxjs';
 import { DirectiveResolver } from '@angular/compiler';
+import { blob } from 'd3-fetch';
 
 @Component({
   selector: 'oms-logs',
@@ -50,44 +51,57 @@ export class LogsComponent implements OnInit {
   }
 
   onToolbarItemClick(e) {
-
-    //if (e.itemData.name == "customDownload") {
-    if (e.itemData.name = "customDownload") {
-    
-      //alert("need to do download action");
-
-      //alert('Selected Item : [' + this.fileManager.instance.getSelectedItems() + ']');
-
-      if (this.fileManager.instance.getSelectedItems() == null || this.fileManager.instance.getSelectedItems().length == 0) {
-        
-        //alert('this is a directory');
+    if (e.itemData.name == "customDownload") {
+      //alert('Selected Item : [' + this.fileManager.instance.getSelectedItems() + ']' + this.fileManager.instance.getCurrentDirectory().name + ' - ' + this.fileManager.instance.getCurrentDirectory().fullPath + ' - ' + this.fileManager.instance.getCurrentDirectory().key);
+      if (this.fileManager.instance.getSelectedItems() == undefined || this.fileManager.instance.getSelectedItems().length == 0) {
         var directory = e.fileSystemItem || this.fileManager.instance.getCurrentDirectory();
-        //alert(directory.name + ' - ' + directory.key);
 
-        this.systemSvc.downloadFolderItems(directory.name, directory.key);
-        /*
-        this.systemSvc.downloadFolderItems(directory.name, directory.key).subscribe((res) => {
-          return res;
+        //alert(directory.name + ' - ' + directory.key);
+        this.systemSvc.downloadFolder(directory.name, directory.key).subscribe(blob => {
+          const a = document.createElement('a')
+          const objectUrl = URL.createObjectURL(blob)
+          a.href = objectUrl
+          a.download = directory.name + '.zip';
+          a.click();
+          URL.revokeObjectURL(objectUrl);
         });
-        */
       } else {
         //alert('selected : ' + this.fileManager.instance.getSelectedItems());
         var items = null;
+        var paths: string[] = new Array();
+        var directory = e.fileSystemItem || this.fileManager.instance.getCurrentDirectory();
 
         items = this.fileManager.instance.getSelectedItems();
 
         items.forEach(function (item) {
           if (item.dataItem) {
-            //alert(item.dataItem.name + ' - ' + item.dataItem.key);
+            //alert(item.dataItem.name + ' - ' + item.dataItem.key + ' - ' + item.dataItem.isDirectory);
+            paths.push(item.dataItem.key);
           }
         });
 
-        this.systemSvc.downloadFileItems(items);
-        /*
-        this.systemSvc.downloadFileItems(items).subscribe((res) => {
-          return res;
-        });
-        */
+        //alert('items = (' + items + ') count = (' + items.length + ') : ' + items[0].dataItem.isDirectory);
+        if (items != undefined && items.length == 1 && !items[0].dataItem.isDirectory && items[0].dataItem.size < 10485760) {    // 10MB = 10 * 1024 * 1024
+          this.systemSvc.downloadFile(items[0].dataItem.name, items[0].dataItem.key).subscribe(blob => {
+            const a = document.createElement('a')
+            const objectUrl = URL.createObjectURL(blob)
+            a.href = objectUrl
+            a.download = items[0].dataItem.name;
+            a.click();
+            URL.revokeObjectURL(objectUrl);
+          });
+        } else if (items != undefined && items.length >= 1) {
+          this.systemSvc.downloadFoldersNFiles(directory.name, paths).subscribe(blob => {
+            const a = document.createElement('a')
+            const objectUrl = URL.createObjectURL(blob)
+            a.href = objectUrl
+            a.download = directory.name + '.zip';
+            a.click();
+            URL.revokeObjectURL(objectUrl);
+          });
+        } else {
+          alert('Need to select folder or file');
+        }
       }
     }
   }

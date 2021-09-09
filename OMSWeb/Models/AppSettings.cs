@@ -9,6 +9,8 @@ namespace OMSWeb.Models
     public string Version { get; set; }
     public bool KpiEnabled { get; set; }
     public string LogBaseDir { get; set; }
+    public string LogTempZipDir { get; set; }
+    public string LogTempCopyDir { get; set; }
 
     public ClientSettings Client { get; set; }
 

@@ -10,83 +10,126 @@ using System;
 
 namespace OMSWeb.Services
 {
-    public class SystemsService
+  public class SystemsService
+  {
+    private readonly AppSettings _appSettings;
+    private readonly ModuleStatusRepository _modeStatusRepo;
+    private readonly ModeStateRepository _modeStateRepo;
+
+    public SystemStatusModel HostStates { get; set; }
+
+    public string LogBaseDir
     {
-        private readonly AppSettings _appSettings;
-        private readonly ModuleStatusRepository _modeStatusRepo;
-        private readonly ModeStateRepository _modeStateRepo;
-
-        public SystemStatusModel HostStates { get; set; }
-
-        public SystemsService(ModeStateRepository _modeStateRepo, ModuleStatusRepository _modeStatusRepo, IOptions<AppSettings> appSettings)
-        {
-            this._appSettings = appSettings.Value;
-            this._appSettings.SID = GenerateSID(8);
-
-            string version = _modeStatusRepo.GetOmsServerVersion();
-            if (!string.IsNullOrEmpty(version))
-                this._appSettings.Version = version;
-
-            this._modeStateRepo = _modeStateRepo;
-
-            this.HostStates = GetHostStatus();
-        }
-
-        private string GenerateSID(int length)
-        {
-            using (var crypto = new RNGCryptoServiceProvider())
-            {
-                var bits = (length * 6);
-                var byte_size = ((bits + 7) / 8);
-                var bytesarray = new byte[byte_size];
-                crypto.GetBytes(bytesarray);
-                return Convert.ToBase64String(bytesarray);
-            }
-        }
-
-        public SystemStatusModel GetHostStatus()
-        {
-            ModeStateEntity modeStateEntity = this._modeStateRepo.GetModeState();
-
-            if (modeStateEntity != null)
-            {
-                this.HostStates = new SystemStatusModel
-                {
-                    SessionStatus = (HostSessionStatusEnums?)modeStateEntity.comm_state,
-                    HostMode = (HostModeEnums?)modeStateEntity.control_state,
-                    TscMode = (TscModeEnums?)modeStateEntity.tsc_state,
-                    AiMode = (modeStateEntity.ai_mode > 0) ? true : false,
-                };
-            }
-            else
-            {
-                this.HostStates = new SystemStatusModel
-                {
-                    SessionStatus = HostSessionStatusEnums.Offline,
-                    HostMode = HostModeEnums.LOCAL,
-                    TscMode = TscModeEnums.PAUSED,
-                    AiMode = true,
-                };
-            }
-
-            return this.HostStates;
-        }
-
-        public ClientSettings GetClientSettings()
-        {
-            var client = this._appSettings.Client;
-            client.SID = this._appSettings.SID;
-            client.Version = this._appSettings.Version;
-            client.KpiEnabled = this._appSettings.KpiEnabled;
-            return this._appSettings.Client;
-        }
-
-        public List<LogModel> GetLogs()
-        {
-            //LogModel logModel = new LogModel(Directory.CreateDirectory(@"C:\inetpub\logs"));
-            LogModel logModel = new LogModel(Directory.CreateDirectory(this._appSettings.LogBaseDir));
-            List<LogModel> result = new List<LogModel>() { logModel };
-            return result;
-        }
+      get { return this._appSettings.LogBaseDir; }
     }
+    public string LogTempZipDir
+    {
+      get { return this._appSettings.LogTempZipDir; }
+    }
+    public string LogTempCopyDir
+    {
+      get { return this._appSettings.LogTempCopyDir; }
+    }
+
+    public SystemsService(ModeStateRepository _modeStateRepo, ModuleStatusRepository _modeStatusRepo, IOptions<AppSettings> appSettings)
+    {
+      this._appSettings = appSettings.Value;
+      this._appSettings.SID = GenerateSID(8);
+
+      string version = _modeStatusRepo.GetOmsServerVersion();
+      if (!string.IsNullOrEmpty(version))
+        this._appSettings.Version = version;
+
+      this._modeStateRepo = _modeStateRepo;
+
+      this.HostStates = GetHostStatus();
+    }
+
+    private string GenerateSID(int length)
+    {
+      using (var crypto = new RNGCryptoServiceProvider())
+      {
+        var bits = (length * 6);
+        var byte_size = ((bits + 7) / 8);
+        var bytesarray = new byte[byte_size];
+        crypto.GetBytes(bytesarray);
+        return Convert.ToBase64String(bytesarray);
+      }
+    }
+
+    public SystemStatusModel GetHostStatus()
+    {
+      ModeStateEntity modeStateEntity = this._modeStateRepo.GetModeState();
+
+      if (modeStateEntity != null)
+      {
+        this.HostStates = new SystemStatusModel
+        {
+          SessionStatus = (HostSessionStatusEnums?)modeStateEntity.comm_state,
+          HostMode = (HostModeEnums?)modeStateEntity.control_state,
+          TscMode = (TscModeEnums?)modeStateEntity.tsc_state,
+          AiMode = (modeStateEntity.ai_mode > 0) ? true : false,
+        };
+      }
+      else
+      {
+        this.HostStates = new SystemStatusModel
+        {
+          SessionStatus = HostSessionStatusEnums.Offline,
+          HostMode = HostModeEnums.LOCAL,
+          TscMode = TscModeEnums.PAUSED,
+          AiMode = true,
+        };
+      }
+
+      return this.HostStates;
+    }
+
+    public ClientSettings GetClientSettings()
+    {
+      var client = this._appSettings.Client;
+      client.SID = this._appSettings.SID;
+      client.Version = this._appSettings.Version;
+      client.KpiEnabled = this._appSettings.KpiEnabled;
+      return this._appSettings.Client;
+    }
+
+    public List<LogModel> GetLogs()
+    {
+      //LogModel logModel = new LogModel(Directory.CreateDirectory(@"C:\inetpub\logs"));
+      LogModel logModel = new LogModel(Directory.CreateDirectory(this._appSettings.LogBaseDir));
+      List<LogModel> result = new List<LogModel>() { logModel };
+      return result;
+    }
+
+    public void DirectoryCopy(string sourceDirectoryFullPath, string destDirectoryFullPath, bool isCopySubDirectory)
+    {
+      DirectoryInfo directoryInfo = new DirectoryInfo(sourceDirectoryFullPath);
+
+      if (!directoryInfo.Exists)
+      {
+        throw new DirectoryNotFoundException("Source Directory does not exist or could not be found:" + sourceDirectoryFullPath);
+      }
+
+      DirectoryInfo[] directoryInfos = directoryInfo.GetDirectories();
+
+      Directory.CreateDirectory(destDirectoryFullPath);
+
+      FileInfo[] fileInfos = directoryInfo.GetFiles();
+      foreach (FileInfo fileInfo in fileInfos)
+      {
+        string tempPath = Path.Combine(destDirectoryFullPath, fileInfo.Name);
+        fileInfo.CopyTo(tempPath, false);
+      }
+
+      if (isCopySubDirectory)
+      {
+        foreach (DirectoryInfo subDirectoryInfo in directoryInfos)
+        {
+          string tempPath = Path.Combine(destDirectoryFullPath, subDirectoryInfo.Name);
+          DirectoryCopy(subDirectoryInfo.FullName, tempPath, isCopySubDirectory);
+        }
+      }
+    }
+  }
 }

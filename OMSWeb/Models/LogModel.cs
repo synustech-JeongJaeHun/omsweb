@@ -45,7 +45,7 @@ namespace OMSWeb.Models
         FileInfo fileInfo = (FileInfo)fileSystemInfo;
         Size = fileInfo.Length;
       }
-      Key = Name.Replace(" ", "").ToLower();
+      Key = fileSystemInfo.FullName;
       DateModified = fileSystemInfo.LastAccessTimeUtc;
     }
     /*
