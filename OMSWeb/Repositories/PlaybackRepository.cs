@@ -76,10 +76,11 @@ namespace OMSWeb.Repositories
       var sql = $@"
       SELECT TIMESTAMP AS time
       FROM track_snapshots
-      WHERE timestamp  < @start  + '1 day'::interval
-      ORDER BY TIMESTAMP
+      WHERE timestamp  < @start
+      ORDER BY TIMESTAMP DESC
       LIMIT 1
       ";
+      //WHERE timestamp  < @start  + '1 day'::interval
       DateTime result;
       using (var conn = ConnectTrack())
       {

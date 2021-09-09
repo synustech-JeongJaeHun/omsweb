@@ -181,7 +181,6 @@ export class MapDataService {
     this.data.vehicles = this.convert_vehicle_object(rows, eventVersion);
   }
   private setDisabledSegmentsData(rows: any[]) {
-    alert('setDisabledSegmentsData');
     this.data.segmentsDisabled = this.parser.parseDisabledSegments(rows);
   }
 
