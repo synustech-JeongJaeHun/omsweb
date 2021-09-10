@@ -9544,23 +9544,37 @@ export class ViewController {
       this.stations_path = this.stations_svg.selectAll('.station_path');
       // stations_mask = this.stations_svg.selectAll('.station_mask')
       if (group_type === 'LAYOUT') {
-        const rotation = this.map_rotation;
-        const locationScale = this.location_scale.scale;
+        if (zoom_level == 1) {
+          const rotation = this.map_rotation;
+          const locationScale = this.location_scale.scale;
 
-        this.stations_svg
-          .selectAll(
-            '.station_path, .station_mask, .group_svg, .hover, .select'
-          )
-          .each(function (d: any) {
-            d3.select(this).attr(
-              'transform',
-              `translate(${d.directionOffset.x * group_offset_multiplier}, ${
-                d.directionOffset.y * group_offset_multiplier
-              })rotate(${-rotation})scale(${
-                locationScale
-              })`
-            );
-          });
+          this.stations_svg
+            .selectAll(
+              '.station_path, .station_mask, .group_svg, .hover, .select'
+            )
+            .each(function (d: any) {
+              d3.select(this).attr(
+                'transform',
+                `translate(${0}, ${0
+                })rotate(${-rotation})scale(${locationScale})`
+              );
+            });
+        } else {
+          const rotation = this.map_rotation;
+          const locationScale = this.location_scale.scale;
+
+          this.stations_svg
+            .selectAll(
+              '.station_path, .station_mask, .group_svg, .hover, .select'
+            )
+            .each(function (d: any) {
+               d3.select(this).attr(
+                'transform',
+                `translate(${d.directionOffset.x * group_offset_multiplier}, ${d.directionOffset.y * group_offset_multiplier
+                })rotate(${-rotation})scale(${locationScale})`
+              );
+            });
+        }
       }
     } else if (object_type === 'BUFFER') {
       // Offset for translating the stations to the side of track
