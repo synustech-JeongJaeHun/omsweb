@@ -8946,12 +8946,16 @@ export class ViewController {
         d.objectType.toUpperCase() === 'BUFFER'
       ) {
         is_translate = true;
-        //trans_array = transform.apply([d.invertedCoord.x, d.invertedCoord.y]);
-        if      (d.segmentDirection === 'T') trans_array = transform.apply([d.invertedCoord.x, d.invertedCoord.y - d.offset]);
-        else if (d.segmentDirection === 'B') trans_array = transform.apply([d.invertedCoord.x, d.invertedCoord.y + d.offset]);
-        else if (d.segmentDirection === 'L') trans_array = transform.apply([d.invertedCoord.x - d.offset, d.invertedCoord.y]);
-        else if (d.segmentDirection === 'R') trans_array = transform.apply([d.invertedCoord.x + d.offset, d.invertedCoord.y]);
-        else trans_array = transform.apply([d.invertedCoord.x, d.invertedCoord.y]);
+
+        let x_offset: number = 0;
+        let y_offset: number = 0;
+
+        if (d.segmentDirection === 'T') y_offset -= d.offset;
+        else if (d.segmentDirection === 'B') y_offset += d.offset;
+        else if (d.segmentDirection === 'L') x_offset -= d.offset;
+        else if (d.segmentDirection === 'R') x_offset += d.offset;
+
+        trans_array = transform.apply([d.invertedCoord.x + x_offset, d.invertedCoord.y + y_offset]);
       }
       else if (d.objectType.toUpperCase() === 'CLUSTER') {
         trans_array = transform.apply([
@@ -9403,9 +9407,17 @@ export class ViewController {
           });
 
           this.stations_svg.attr('transform', function (d) {
+            let x_offset: number = 0;
+            let y_offset: number = 0;
+
+            if (d.segmentDirection === 'T') y_offset -= d.offset;
+            else if (d.segmentDirection === 'B') y_offset += d.offset;
+            else if (d.segmentDirection === 'L') x_offset -= d.offset;
+            else if (d.segmentDirection === 'R') x_offset += d.offset;
+
             return `translate(${current_zoom.apply([
-              d.invertedCoord.x,
-              d.invertedCoord.y,
+              d.invertedCoord.x + x_offset,
+              d.invertedCoord.y + y_offset,
             ])})`;
           });
 
@@ -9532,17 +9544,20 @@ export class ViewController {
       this.stations_path = this.stations_svg.selectAll('.station_path');
       // stations_mask = this.stations_svg.selectAll('.station_mask')
       if (group_type === 'LAYOUT') {
+        const rotation = this.map_rotation;
+        const locationScale = this.location_scale.scale;
+
         this.stations_svg
           .selectAll(
             '.station_path, .station_mask, .group_svg, .hover, .select'
           )
-          .each((d) => {
-            d3.select(`#id_${d.id}.station`).attr(
+          .each(function (d: any) {
+            d3.select(this).attr(
               'transform',
               `translate(${d.directionOffset.x * group_offset_multiplier}, ${
                 d.directionOffset.y * group_offset_multiplier
-              })rotate(${-this.map_rotation})scale(${
-                this.location_scale.scale
+              })rotate(${-rotation})scale(${
+                locationScale
               })`
             );
           });
@@ -9687,9 +9702,17 @@ export class ViewController {
           });
 
           this.buffers_svg.attr('transform', function (d) {
+            let x_offset: number = 0;
+            let y_offset: number = 0;
+
+            if (d.segmentDirection === 'T') y_offset -= d.offset;
+            else if (d.segmentDirection === 'B') y_offset += d.offset;
+            else if (d.segmentDirection === 'L') x_offset -= d.offset;
+            else if (d.segmentDirection === 'R') x_offset += d.offset;
+
             return `translate(${current_zoom.apply([
-              d.invertedCoord.x,
-              d.invertedCoord.y,
+              d.invertedCoord.x + x_offset,
+              d.invertedCoord.y + y_offset,
             ])})`;
           });
 
