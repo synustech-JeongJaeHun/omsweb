@@ -6083,6 +6083,7 @@ export class ViewController {
               main_css.group,
               group_colors
             );
+            return;
           }
           if (is_update_all || update.id || update.logicalId) {
             this.update_vehicle_label_svg(
