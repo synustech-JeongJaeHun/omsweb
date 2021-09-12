@@ -142,8 +142,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
         .sendDisableSegmentCommand({ type: 'TRACK', action: 'enable-segment' }, this.contextData.id)
         .subscribe();
     }
-        
-    //this.trackData.segmentDisabled[this.contextData.id] = isDisable;
   }
   onApplyPointChange(isHome: boolean, selectedGroup: number) {
     this.trackSvc
@@ -549,11 +547,11 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   }: IDataChangeEvent) {
     if (!this.viewer) return;
     this.viewer.update_disable_segment(data, operation, id);
-    const selected = this.viewer.get_selected_objects('SEGMENT')[0];
-    if (selected) {
+    const selected_segment = this.viewer.get_selected_objects('SEGMENT')[0];
+    if (selected_segment) {
       this.updateSelectedObject(
         'SEGMENT',
-        [this.dataSvc.find_layout_object('SEGMENT', selected.id)],
+        [this.dataSvc.find_layout_object('SEGMENT', selected_segment.id)],
         false
       );
     }

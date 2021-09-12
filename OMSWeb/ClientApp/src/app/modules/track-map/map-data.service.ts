@@ -48,6 +48,8 @@ export class MapDataService {
       );
     }
 
+    this.applyDisableToSegment();
+
     console.log('### parsed track data >>>', this.data);
   }
 
@@ -184,9 +186,10 @@ export class MapDataService {
     this.data.segmentsDisabled = this.parser.parseDisabledSegments(rows);
   }
 
-  private applyDisableToSegment() {
+  public applyDisableToSegment() {
     const segments = this.data.segments;
     const disabled_segments = this.data.segmentsDisabled;
+    let updated_segments = [];
 
     for (let i = 0; i < segments.length; i++) {
       let segment = segments[i];
@@ -199,10 +202,12 @@ export class MapDataService {
         if (cumulative_disable_state_for_segment) {
           segment.set_disable(cumulative_disable_state_for_segment);
 
-          // let updated_segment = {
-          //   status: 'UPDATE',
-          //   object: segment,
-          // };
+          let updated_segment = {
+             status: 'UPDATE',
+             object: segment,
+          };
+
+          updated_segments.push(updated_segment);
         }
       }
     }
@@ -229,20 +234,16 @@ export class MapDataService {
           1
         )[0];
         segment = this.data.segments.find(
-          //(d) => d.id == deleted_disabled_segment.segment_id
-          (d) => d.id == deleted_disabled_segment.segmentId
+          (d) => d.id == deleted_disabled_segment.segment_id
         );
-        this.data.segments[deleted_disabled_segment.segmentId - 1].disableState = false;
       }
     } else {
       // let disabled_segment = convert_disabled_segment(data)[0];
       let disabled_segment = this.parser.parseDisabledSegments(rows)[0];
       if (disabled_segment)
         segment = this.data.segments.find(
-          //(d) => d.id == disabled_segment.segment_id
-          (d) => d.id == disabled_segment.segmentId
+          (d) => d.id == disabled_segment.segment_id
         );
-      this.data.segments[disabled_segment.segmentId - 1].disableState = true;
 
       if (operation === 'INSERT') {
         if (disable_index === -1)
@@ -274,12 +275,12 @@ export class MapDataService {
 
     if (segment) {
       updated_segments.push(segment.id);
-      let cumulative_disable_state_for_segment = this.find_disables_with_segment_id(segment.id);
+      let cumulative_disable_state_for_segment = this.find_disables_with_segment_id(
+        segment.id
+      );
 
       // set disable to the new segment
-      if (cumulative_disable_state_for_segment) {
-        segment.set_disable(cumulative_disable_state_for_segment);
-      }
+      segment.set_disable(cumulative_disable_state_for_segment);
     }
 
     return this.data.segmentsDisabled;

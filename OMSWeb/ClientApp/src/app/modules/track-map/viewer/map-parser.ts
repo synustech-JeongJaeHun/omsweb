@@ -20,28 +20,14 @@ export class MapParser {
 
   parse(data: Dto.ITrackData, geometry: IMapGeometry): IViewerData {
     this.layout_data.groups = this.parseGroups(data.mapType, data.groups);
-    this.layout_data.points = this.parsePoints(
-      data.mapType,
-      data.points,
-      geometry.invertFactorY
-    );
-    this.layout_data.segments = this.parseSegments(
-      data.mapType,
-      data.segments,
-      geometry.invertFactorY
-    );
-    this.layout_data.segmentsDisabled = this.parseDisabledSegments(
-      data.segmentDisabled
-    );
+    this.layout_data.points = this.parsePoints(data.mapType, data.points, geometry.invertFactorY);
+    this.layout_data.segments = this.parseSegments(data.mapType, data.segments, geometry.invertFactorY);
+    this.layout_data.segmentsDisabled = this.parseDisabledSegments(data.segmentDisabled);
     this.layout_data.stations = this.parseStations(data.mapType, data.stations);
     this.layout_data.buffers = this.parseBuffers(data.mapType, data.buffers);
     this.layout_data.mtls = this.parseMtls(data.mapType, data.mtls);
     this.layout_data.clusters = this.parseClusters(data.mapType, data.clusters);
-    this.layout_data.zcus = this.parseZcus(
-      data.mapType,
-      data.zcus,
-      geometry.invertFactorY
-    );
+    this.layout_data.zcus = this.parseZcus(data.mapType, data.zcus, geometry.invertFactorY);
 
     return this.layout_data;
   }
@@ -444,7 +430,7 @@ export class MapParser {
 
           disabled_segment = {
             id: rows[i].id,
-            segmentId: rows[i].segmentId,
+            segment_id: rows[i].segmentId,
             vehicle: null,
             segment: null,
             user: null,
@@ -472,8 +458,6 @@ export class MapParser {
           }
 
           disabled_segments.push(disabled_segment);
-
-          this.layout_data.segments[disabled_segment.segmentId - 1].disableState = true;
         }
       }
     }
