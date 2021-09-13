@@ -77,14 +77,16 @@ export class MapSidePanelComponent implements OnInit, OnChanges {
   changeSegmentDisabled() {
     // disabled 상태값 변경
     this.segmentDisabledInfo.disabled = !this.segmentDisabledInfo.disabled;
-    //alert("Segment disabled : " + this.segmentDisabledInfo.disabled)
 
     if (this.segmentDisabledInfo.disabled) {
-      this.messageSvc.sendDisableSegmentCommand({ type: 'TRACK', action: 'disable-segment' }, this.data.id).subscribe();
+      this.messageSvc
+        .sendDisableSegmentCommand({ action: 'disable-segment' }, this.data.id)
+        .subscribe();
     } else {
-      this.messageSvc.sendDisableSegmentCommand({ type: 'TRACK', action: 'enable-segment' }, this.data.id).subscribe();
+      this.messageSvc
+        .sendDisableSegmentCommand({ action: 'enable-segment' }, this.data.id)
+        .subscribe();
     }
-    //alert("Segment disabled : " + this.segmentDisabledInfo.disabled)
   }
 
   closePanel() {

@@ -612,6 +612,7 @@ export class Segment implements ISegment {
       this.disableState.vehicle = disable_info.vehicle;
       this.disableState.segment = disable_info.segment;
     } else {
+      this.disableState = null;
     }
   }
 

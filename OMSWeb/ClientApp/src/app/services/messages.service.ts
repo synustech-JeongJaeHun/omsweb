@@ -100,19 +100,19 @@ export class MessagesService {
     return this.sendCommand<IVehicleCommandMessage>(command);
   }
 
-  sendOrderCommand(command: IOrderCommandMessage): Observable<void> {
-    return this.sendCommand<IOrderCommandMessage>(command);
-  }
-
   sendDisableSegmentCommand(
     command: ITrackCommandMessage,
     targets: number
   ): Observable<void> {
-    command.type = command.type;
+    command.type = 'TRACK';
     command.segmentId = targets;
     command.source = "uid-admin";
 
     return this.sendCommand<ITrackCommandMessage>(command);
+  }
+
+  sendOrderCommand(command: IOrderCommandMessage): Observable<void> {
+    return this.sendCommand<IOrderCommandMessage>(command);
   }
 
   private sendCommand<T extends ICommandMessage>(command: T): Observable<void> {
