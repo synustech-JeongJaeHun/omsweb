@@ -1,0 +1,399 @@
+<div id="normal-tr-report-page">
+  <div id="filter-area">
+    <dx-date-box
+      [placeholder]="'_START_DATE' | translate"
+      type="datetime"
+      [value]="start"
+      [min]="start"
+      [max]="end"
+      [acceptCustomValue]="false"
+      [showClearButton]="true"
+      [displayFormat]="dateTimeFormat"
+      #startDate>
+    </dx-date-box>
+    <div>~</div>
+    <dx-date-box
+      [placeholder]="'_END_DATE' | translate"
+      type="datetime"
+      [value]="now"
+      [min]="start"
+      [max]="end"
+      [acceptCustomValue]="false"
+      [showClearButton]="true"
+      [displayFormat]="dateTimeFormat"
+      #endDate>
+    </dx-date-box>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="search(startDate.value, endDate.value)">
+      {{ "names.search" | translate }}
+    </button>
+  </div>
+    
+  <div id="grid-container">
+    <table class="table-summary">
+      <tr>
+        <td colspan="3">
+          <table class="table-total-summary">
+            <tr>
+              <td rowspan="2">총 반송량</td>
+              <td colspan="5">기간별 평균 반송량</td>
+              <td colspan="4">소요시간</td>
+            </tr>
+            <tr>
+              <td>연간</td>
+              <td>월별</td>
+              <td>주간</td>
+              <td>일별</td>
+              <td>시간당</td>
+
+              <td>평균</td>
+              <td>최대</td>
+              <td>최소</td>
+              <td>편차</td>
+            </tr>
+            <tr>
+              <td>63,300</td>
+              <td>63,300</td>
+              <td>15,825</td>
+              <td>3,516.67</td>
+              <td>518.85</td>
+              <td>21.61</td>
+
+              <td>09:38.544</td>
+              <td>16:49.583</td>
+              <td>03:10.174</td>
+              <td>05:15.727</td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="3"></td>
+      </tr>
+      <tr>
+        <td class="firstTD">기간별</td>
+        <td class="secondTD">비클별</td>
+        <td class="thirdTD"></td>
+      </tr>
+      <tr>
+        <td rowspan="5" class="firstTD">
+          <table class="table-summary-period">
+            <tr>
+              <td class="chart">
+                <dx-chart
+                  id="chartNormalTRbyPeriod"
+                  palette="vintage"
+                  [dataSource]="normalTRbyPeriodData">
+                  <dxi-series valueField="transferAmount" name="Transfer Amount" color="#4472c4"></dxi-series>
+                  <dxi-series
+                    axis="Average Of Transfer"
+                    type="spline"
+                    valueField="avgTransfer"
+                    name="Average Of Transfer"
+                    color="#ed7d31">
+                  </dxi-series>
+                  <dxo-common-series-settings argumentField="period" type="bar">
+                  </dxo-common-series-settings>
+                  <dxi-value-axis>
+                    <dxo-grid [visible]="false"></dxo-grid>
+                  </dxi-value-axis>
+                  <dxi-value-axis name="Average Of Transfer" position="right">
+                    <dxo-grid [visible]="true"></dxo-grid>
+                    <!--
+                    <dxo-title text="Average of Transfer"></dxo-title>
+                    -->
+                  </dxi-value-axis>
+                  <dxo-legend [visible]="false"></dxo-legend>
+                  <dxo-export [enabled]="false"></dxo-export>
+                  <dxo-tooltip
+                      [enabled]="true"
+                      [shared]="true"
+                      [customizeTooltip]="customizeTooltip">
+                      <dxo-format type="largeNumber" [precision]="1"></dxo-format>
+                  </dxo-tooltip>
+                </dx-chart>
+              </td>
+            </tr>
+            <tr>
+              <td><div></div></td>
+            </tr>
+            <tr>
+              <td></td>
+            </tr>
+            <tr>
+              <td>
+                <div id="grid-container-normalTRbyPeriod">
+                  <dx-data-grid
+                    [dataSource]="normalTRbyPeriodData"
+                    [columnAutoWidth]="true"
+                    [remoteOperations]="true"
+                    [height]="gridHeightByPeriod"
+                    [width]="gridWidthByPeriod"
+                    [showBorders]="true"
+                    [hoverStateEnabled]="true">
+                    <dxo-scrolling mode="standard" rowRenderingMode="standard" showScrollbar="always">
+                    </dxo-scrolling>
+                    <dxo-header-filter [visible]="true"></dxo-header-filter>      
+                    <dxo-filter-row [visible]="false"></dxo-filter-row>
+                    <dxi-column
+                      dataType="string"
+                      dataField="period"
+                      caption="기간별"
+                      [customizeText]="transformPeriod"
+                      alignment="center">
+                    </dxi-column>
+                    <dxi-column
+                      dataType="string"
+                      dataField="transferAmount"
+                      caption="반송량"
+                      alignment="center">
+                    </dxi-column>
+                    <dxi-column
+                      dataType="string"
+                      dataField="avgTransfer"
+                      caption="평균반송소요시간"
+                      alignment="center">
+                    </dxi-column>
+                  </dx-data-grid>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </td>
+        <td class="secondTD">
+          <dx-chart
+            id="chartNormalTRbyVehicle"
+            palette="vintage"
+            [dataSource]="normalTRbyVehicleData">
+            <dxi-series valueField="transferAmount" name="Transfer Amount" color="#4472c4"></dxi-series>
+            <dxi-series
+              axis="Average Of Transfer"
+              type="spline"
+              valueField="avgTransfer"
+              name="Average Of Transfer"
+              color="#ed7d31">
+            </dxi-series>
+            <!--
+            <dxo-common-series-settings argumentField="vehicleId" type="bar">
+            </dxo-common-series-settings>
+            -->
+            <dxo-common-series-settings argumentField="vehicleName" type="bar">
+            </dxo-common-series-settings>
+            <dxi-value-axis>
+              <dxo-grid [visible]="false"></dxo-grid>
+            </dxi-value-axis>
+            <dxi-value-axis name="Average Of Transfer" position="right">
+              <dxo-grid [visible]="true"></dxo-grid>
+              <!--
+              <dxo-title text="Average of Transfer"></dxo-title>
+              -->
+            </dxi-value-axis>
+            <dxo-legend [visible]="false"></dxo-legend>
+            <dxo-export [enabled]="false"></dxo-export>
+            <dxo-tooltip
+              [enabled]="true"
+              [shared]="true"
+              [customizeTooltip]="customizeTooltip">
+              <dxo-format type="largeNumber" [precision]="1"></dxo-format>
+            </dxo-tooltip>
+          </dx-chart>
+        </td>
+        <td class="thirdTD">
+          <div id="grid-container-normalTRbyVehicle">
+            <dx-data-grid
+              [dataSource]="normalTRbyVehicleData"
+              [columnAutoWidth]="true"
+              [remoteOperations]="true"
+              [height]="gridHeightByVehicle"
+              [width]="gridWidthByVehicle"
+              [showBorders]="true"
+              [hoverStateEnabled]="true">
+              <dxo-scrolling mode="standard" rowRenderingMode="standard" showScrollbar="always">
+              </dxo-scrolling>
+              <dxo-header-filter [visible]="true"></dxo-header-filter>      
+              <dxo-filter-row [visible]="false"></dxo-filter-row>
+              <dxi-column
+                dataType="string"
+                dataField="vehicleName"
+                caption="비클별"
+                alignment="center">
+              </dxi-column>
+              <dxi-column
+                dataType="string"
+                dataField="transferAmount"
+                caption="반송량"
+                alignment="center">
+              </dxi-column>
+              <dxi-column
+                dataType="string"
+                dataField="avgTransfer"
+                caption="반송시간"
+                alignment="center">
+              </dxi-column>
+            </dx-data-grid>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td class="secondTD">SOURCE 별</td>
+        <td class="thirdTD"></td>
+      </tr>
+      <tr>
+        <td class="secondTD">
+          <dx-chart
+            id="chartNormalTRbySource"
+            palette="vintage"
+            [dataSource]="normalTRbySourceData">
+            <dxi-series valueField="transferAmount" name="Transfer Amount" color="#4472c4"></dxi-series>
+            <dxi-series
+              axis="Average Of Transfer"
+              type="spline"
+              valueField="avgTransfer"
+              name="Average Of Transfer"
+              color="#ed7d31">
+            </dxi-series>
+            <!--
+            <dxo-common-series-settings argumentField="SourceId" type="bar">
+            </dxo-common-series-settings>
+            -->
+            <dxo-common-series-settings argumentField="SourceName" type="bar">
+            </dxo-common-series-settings>
+            <dxi-value-axis>
+              <dxo-grid [visible]="false"></dxo-grid>
+            </dxi-value-axis>
+            <dxi-value-axis name="Average Of Transfer" position="right">
+              <dxo-grid [visible]="true"></dxo-grid>
+              <!--
+              <dxo-title text="Average of Transfer"></dxo-title>
+              -->
+            </dxi-value-axis>
+            <dxo-legend [visible]="false"></dxo-legend>
+            <dxo-export [enabled]="false"></dxo-export>
+            <dxo-tooltip
+              [enabled]="true"
+              [shared]="true"
+              [customizeTooltip]="customizeTooltip">
+              <dxo-format type="largeNumber" [precision]="1"></dxo-format>
+            </dxo-tooltip>
+          </dx-chart>
+        </td>
+        <td class="thirdTD">
+          <div id="grid-container-normalTRbySource">
+            <dx-data-grid
+              [dataSource]="normalTRbySourceData"
+              [columnAutoWidth]="true"
+              [remoteOperations]="true"
+              [height]="gridHeightBySource"
+              [width]="gridWidthBySource"
+              [showBorders]="true"
+              [hoverStateEnabled]="true">
+              <dxo-scrolling mode="standard" rowRenderingMode="standard" showScrollbar="always">
+              </dxo-scrolling>
+              <dxo-header-filter [visible]="true"></dxo-header-filter>      
+              <dxo-filter-row [visible]="false"></dxo-filter-row>
+              <dxi-column
+                dataType="string"
+                dataField="SourceName"
+                caption="SOURCE 별"
+                alignment="center">
+              </dxi-column>
+              <dxi-column
+                dataType="string"
+                dataField="transferAmount"
+                caption="반송량"
+                alignment="center">
+              </dxi-column>
+              <dxi-column
+                dataType="string"
+                dataField="avgTransfer"
+                caption="반송시간"
+                alignment="center">
+              </dxi-column>
+            </dx-data-grid>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td class="secondTD">DEST 별</td>
+        <td class="thirdTD"></td>
+      </tr>
+      <tr>
+        <td class="secondTD">
+          <dx-chart
+            id="chartNormalTRbyDest"
+            palette="vintage"
+            [dataSource]="normalTRbyDestData">
+            <dxi-series valueField="transferAmount" name="Transfer Amount" color="#4472c4"></dxi-series>
+            <dxi-series
+              axis="Average Of Transfer"
+              type="spline"
+              valueField="avgTransfer"
+              name="Average Of Transfer"
+              color="#ed7d31">
+            </dxi-series>
+            <!--
+            <dxo-common-series-settings argumentField="DestinationId" type="bar">
+            </dxo-common-series-settings>
+            -->
+            <dxo-common-series-settings argumentField="DestinationName" type="bar">
+            </dxo-common-series-settings>
+            <dxi-value-axis>
+              <dxo-grid [visible]="false"></dxo-grid>
+            </dxi-value-axis>
+            <dxi-value-axis name="Average Of Transfer" position="right">
+              <dxo-grid [visible]="true"></dxo-grid>
+              <!--
+              <dxo-title text="Average of Transfer"></dxo-title>
+              -->
+            </dxi-value-axis>
+            <dxo-legend [visible]="false"></dxo-legend>
+            <dxo-export [enabled]="false"></dxo-export>
+            <dxo-tooltip
+              [enabled]="true"
+              [shared]="true"
+              [customizeTooltip]="customizeTooltip">
+              <dxo-format type="largeNumber" [precision]="1"></dxo-format>
+            </dxo-tooltip>
+          </dx-chart>
+        </td>
+        <td class="thirdTD">
+          <div id="grid-container-normalTRbyDest">
+            <dx-data-grid
+              [dataSource]="normalTRbyDestData"
+              [columnAutoWidth]="true"
+              [remoteOperations]="true"
+              [height]="gridHeightByDest"
+              [width]="gridWidthByDest"
+              [showBorders]="true"
+              [hoverStateEnabled]="true">
+              <dxo-scrolling mode="standard" rowRenderingMode="standard" showScrollbar="always">
+              </dxo-scrolling>
+              <dxo-header-filter [visible]="true"></dxo-header-filter>      
+              <dxo-filter-row [visible]="false"></dxo-filter-row>
+              <dxi-column
+                dataType="string"
+                dataField="DestinationName"
+                caption="DEST 별"
+                alignment="center">
+              </dxi-column>
+              <dxi-column
+                dataType="string"
+                dataField="transferAmount"
+                caption="반송량"
+                alignment="center">
+              </dxi-column>
+              <dxi-column
+                dataType="string"
+                dataField="avgTransfer"
+                caption="반송시간"
+                alignment="center">
+              </dxi-column>
+            </dx-data-grid>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>

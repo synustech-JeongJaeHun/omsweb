@@ -47,10 +47,10 @@ export class KpiStatusComponent implements OnInit {
     //if (this.hasPermission(42) == true) {
     if (target == "kpi") {
       this.router.navigate(["/reports/kpi"]);
-    } else if (target == "systeminfo") {
-      this.router.navigate(["/reports/systeminfo"]);
+      //} else if (target == "systeminfo") {
+      //  this.router.navigate(["/reports/systeminfo"]);
     } else {
-      this.router.navigate(["/reports/report"]);
+      this.router.navigate(["/reports/normalTR"]);
     }
     //}
   }

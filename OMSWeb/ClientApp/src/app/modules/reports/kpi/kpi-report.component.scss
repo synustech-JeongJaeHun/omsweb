@@ -51,7 +51,9 @@
     text-align: left;
     padding-left: 30px;
     //font-size: 15px;
-    font-size: 16px;
+    font-size: 18px;
+    padding-top: 15px;
+    padding-bottom: 10px;
   }
 }
 
@@ -79,7 +81,8 @@
   .value {
     width: 10px;
     font-weight: bold;
-    font-size: 22px;
+    //font-size: 22px;
+    font-size: 20px;
     text-align: left;
     vertical-align: baseline;
   }
@@ -95,36 +98,48 @@
   border: none;
 
   .chart {
-    width: 65%;
-    padding-left: 20px;
-    padding-right: 20px;
+    //width: 65%;
+    //padding-left: 20px;
+    //padding-right: 20px;
+    width: 60%;
+    padding-left: 60px;
+    padding-right: 30px;
   }
 
   .text {
-    width: 35%;
+    //width: 35%;
+    width: 40%;
     font-size: 16px;
     //font-weight: bold;
     vertical-align: middle;
   }
 
   .chart2 {
-    width: 300px;
-    padding-left: 40px;
+    //width: 300px;
+    //padding-left: 40px;
+    width: 150px;
+    padding-left: 60px;
   }
 
   .chart3 {
-    width: 300px;
-    padding-left: 10px;
+    //width: 300px;
+    //padding-left: 10px;
+    width: 150px;
+    padding-left: 30px;
   }
 
   .chart4 {
-    width: 60%;
-    padding-left: 20px;
-    padding-right: 20px;
+    //width: 60%;
+    //padding-left: 20px;
+    //padding-right: 20px;
+    width: 55%;
+    padding-left: 50px;
+    padding-right: 30px;
   }
 
   .text4 {
-    width: 40%;
+    //width: 40%;
+    width: 45%;
     font-size: 16px;
     //font-weight: bold;
     vertical-align: middle;
@@ -145,36 +160,41 @@
   .sub-content {
     padding-top: 10px;
     padding-left: 0px;
-    font-size: 40px;
+    //font-size: 40px;
+    font-size: 30px;
     font-weight: normal;
   }
 
   .sub-content2 {
     padding-top: 10px;
     padding-left: 0px;
-    font-size: 24px;
+    //font-size: 24px;
+    font-size: 20px;
     font-weight: normal;
   }
 }
 
 
 .table-details {
-  width: 90%;
+  width: 85%;
   //background-color: #ffffff;
   border: 1px solid var(--dialog-border-color);
   margin-top: 15px;
-  margin-left: 10px;
-  margin-right: 10px;
+  //margin-left: 10px;
+  //margin-right: 10px;
+  margin-left: 70px;
+  margin-right: 50px;
 
   .header-name {
-    width: 130px;
+    //width: 130px;
+    width: 30%;
     background-color: var(--details-background-color);
     border: 1px solid var(--dialog-border-color);
     text-align: center;
   }
 
   .header-value {
-    width: 70%;
+    width: 50%;
     background-color: var(--details-background-color);
     border: 1px solid var(--dialog-border-color);
     text-align: center;
@@ -182,7 +202,8 @@
 
   .name {
     //width: 440px;
-    width: 40%;
+    //width: 40%;
+    width: 30%;
     background-color: var(--details-background-color);
     border: 1px solid var(--dialog-border-color);
     text-align: left;
@@ -190,7 +211,8 @@
   }
 
   .value {
-    width: 60%;
+    //width: 60%;
+    width: 50%;
     border: 1px solid var(--dialog-border-color);
     padding-left: 5px;
   }
@@ -199,7 +221,8 @@
     //width: 25%;
     //background-color: #ffffff;
     border: 1px solid var(--dialog-border-color);
-    font-size: 18px;
+    //font-size: 18px;
+    font-size: 15px;
   }
 
   th {
@@ -213,24 +236,35 @@
 }
 
 #chartUntilization {
-  height: 120px;
+  //height: 120px;
+  height: 110px;
 }
+
 #chartDeliveryTime {
-  height: 120px;
+  //height: 120px;
+  height: 110px;
 }
+
 #pieChartVehicleStatus {
   margin-top: 50px;
-  width: 180px;
-  height: 180px;
+  //width: 180px;
+  //height: 180px;
+  width: 150px;
+  height: 150px;
 }
+
 #pieChartVehicleLoadingUnloading {
   margin-top: 50px;
-  width: 180px;
-  height: 180px;
+  //width: 180px;
+  //height: 180px;
+  width: 150px;
+  height: 150px;
 }
+
 #chartCPUSystemInfo {
   height: 120px;
 }
+
 #chartMemorySystemInfo {
   height: 120px;
 }
@@ -241,30 +275,35 @@
   background: #1db2f5;
   vertical-align: baseline;
 }
+
 .box2 {
   width: 20px;
   height: 20px;
   background: #f5564a;
   vertical-align: baseline;
 }
+
 .box3 {
   width: 20px;
   height: 20px;
   background: #000000;
   vertical-align: baseline;
 }
+
 .box4 {
   width: 20px;
   height: 20px;
   background: #ffc720;
   vertical-align: baseline;
 }
+
 .box5 {
   width: 20px;
   height: 20px;
   background: #78b6d9;
   vertical-align: baseline;
 }
+
 .box6 {
   width: 20px;
   height: 20px;

@@ -84,7 +84,7 @@ export class KpiReportComponent implements OnInit {
       },
       {
         period: 2,
-        deliveryTime: 100
+        deliveryTime: 90
       },
       {
         period: 3,
@@ -165,7 +165,7 @@ export class KpiReportComponent implements OnInit {
       },
       {
         period: 7,
-        cpu: 93.2
+        cpu: 57.2
       }
     ];
 
