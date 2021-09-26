@@ -20,7 +20,7 @@ namespace OMSWeb.Models
     public string Password { get; set; }
   }
 
-  public class ProfileFormDto
+  public class ProfileFormDto : LoginFormDto
   {
     [EmailAddress]
     public string Email { get; set; }
@@ -28,7 +28,6 @@ namespace OMSWeb.Models
     public string FirstName { get; set; }
     [Required]
     public string LastName { get; set; }
-    public string Password { get; set; }
   }
 
   public class AccountFormDto : ProfileFormDto
@@ -36,6 +35,8 @@ namespace OMSWeb.Models
     [Required]
     public string Id { get; set; }
     public bool? IsNew { get; set; }
+
+    public int[] Roles { get; set; }
   }
 
   public class RoleFormDto

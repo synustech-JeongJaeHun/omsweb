@@ -1,6 +1,9 @@
+using System;
 using System.Linq;
 using Dapper;
 using Microsoft.Extensions.Configuration;
+using Npgsql;
+using OMSWeb.Models;
 using OMSWeb.Models.Entities;
 
 namespace OMSWeb.Repositories
@@ -21,7 +24,8 @@ namespace OMSWeb.Repositories
       UserEntity user;
       using (var conn = ConnectUi())
       {
-        user = conn.Query<UserEntity>(sql, new {
+        user = conn.Query<UserEntity>(sql, new
+        {
           userId = userId
         }).SingleOrDefault();
       }
@@ -38,7 +42,8 @@ namespace OMSWeb.Repositories
       UserEntity user;
       using (var conn = ConnectUi())
       {
-        user = conn.Query<UserEntity>(sql, new {
+        user = conn.Query<UserEntity>(sql, new
+        {
           id = id
         }).SingleOrDefault();
       }
@@ -120,5 +125,492 @@ namespace OMSWeb.Repositories
       }
       return result;
     }
+
+    public int AddUser(AccountFormDto accountFormDto)
+    {
+      int result = -1;
+
+      var insertUserSql = @"
+      INSERT INTO users (id, user_id, first_name, last_name, email, password)
+      VALUES (@id, @user_id, @first_name, @last_name, @email, @password);
+      ";
+
+      var insertUserRoleSql = @"
+      INSERT INTO user_roles (user_id, role_id)
+      VALUES (@id, @role_id);
+      ";
+
+      using (var conn = ConnectUi())
+      {
+        conn.Open();
+        var trans = conn.BeginTransaction();
+
+        using (var cmd = new NpgsqlCommand(insertUserSql, conn))
+        {
+          try
+          {
+            cmd.Parameters.AddWithValue("id", Guid.Parse(accountFormDto.Id));
+            cmd.Parameters.AddWithValue("user_id", accountFormDto.UserId);
+            cmd.Parameters.AddWithValue("first_name", accountFormDto.FirstName);
+            cmd.Parameters.AddWithValue("last_name", accountFormDto.LastName);
+            cmd.Parameters.AddWithValue("email", accountFormDto.Email);
+            cmd.Parameters.AddWithValue("password", accountFormDto.Password);
+
+            result = cmd.ExecuteNonQuery();
+          }
+          catch (Exception ex)
+          {
+            trans.Rollback();
+            throw ex;
+          }
+        }
+
+        foreach (int roleId in accountFormDto.Roles)
+        {
+          using (var cmd = new NpgsqlCommand(insertUserRoleSql, conn))
+          {
+            try
+            {
+              cmd.Parameters.AddWithValue("id", Guid.Parse(accountFormDto.Id));
+              cmd.Parameters.AddWithValue("role_id", roleId);
+
+              cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+              trans.Rollback();
+              throw ex;
+            }
+          }
+        }
+        trans.Commit();
+      }
+      return result;
+    }
+
+    public int UpdateUser(AccountFormDto accountFormDto)
+    {
+      int result = -1;
+
+      var updateUserSql = @"
+      UPDATE users 
+      SET user_id = @user_id, first_name = @first_name, last_name = @last_name, email = @email, password = @password 
+      WHERE id = @id;
+      ";
+
+      //var updateUserRoleSql = @"
+      //UPDATE user_roles 
+      //SET role_id = @role_id
+      //WHERE user_id = @id;
+      //";
+      var deleteUserRoleSql = @"
+      DELETE FROM user_roles where user_id = @user_id;
+      ";
+
+      var insertUserRoleSql = @"
+      INSERT INTO user_roles (user_id, role_id)
+      VALUES (@id, @role_id);
+      ";
+
+      using (var conn = ConnectUi())
+      {
+        conn.Open();
+        var trans = conn.BeginTransaction();
+
+        using (var cmd = new NpgsqlCommand(updateUserSql, conn))
+        {
+          try
+          {
+            cmd.Parameters.AddWithValue("id", Guid.Parse(accountFormDto.Id));
+            cmd.Parameters.AddWithValue("user_id", accountFormDto.UserId);
+            cmd.Parameters.AddWithValue("first_name", accountFormDto.FirstName);
+            cmd.Parameters.AddWithValue("last_name", accountFormDto.LastName);
+            cmd.Parameters.AddWithValue("email", accountFormDto.Email);
+            cmd.Parameters.AddWithValue("password", accountFormDto.Password);
+
+            result = cmd.ExecuteNonQuery();
+          }
+          catch (Exception ex)
+          {
+            trans.Rollback();
+            throw ex;
+          }
+        }
+
+        using (var cmd = new NpgsqlCommand(deleteUserRoleSql, conn))
+        {
+          try
+          {
+            cmd.Parameters.AddWithValue("user_id", Guid.Parse(accountFormDto.Id));
+
+            cmd.ExecuteNonQuery();
+          }
+          catch (Exception ex)
+          {
+            trans.Rollback();
+            throw ex;
+          }
+        }
+
+        foreach (int roleId in accountFormDto.Roles)
+        {
+          using (var cmd = new NpgsqlCommand(insertUserRoleSql, conn))
+          {
+            try
+            {
+              cmd.Parameters.AddWithValue("id", Guid.Parse(accountFormDto.Id));
+              cmd.Parameters.AddWithValue("role_id", roleId);
+
+              cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+              trans.Rollback();
+              throw ex;
+            }
+          }
+        }
+        trans.Commit();
+      }
+      return result;
+    }
+
+    public int UpdateUserWithoutPassword(AccountFormDto accountFormDto)
+    {
+      int result = -1;
+
+      var updateUserSql = @"
+      UPDATE users 
+      SET user_id = @user_id, first_name = @first_name, last_name = @last_name, email = @email
+      WHERE id = @id;
+      ";
+
+      var deleteUserRoleSql = @"
+      DELETE FROM user_roles where user_id = @user_id;
+      ";
+
+      var insertUserRoleSql = @"
+      INSERT INTO user_roles (user_id, role_id)
+      VALUES (@id, @role_id);
+      ";
+
+      using (var conn = ConnectUi())
+      {
+        conn.Open();
+        var trans = conn.BeginTransaction();
+
+        using (var cmd = new NpgsqlCommand(updateUserSql, conn))
+        {
+          try
+          {
+            cmd.Parameters.AddWithValue("id", Guid.Parse(accountFormDto.Id));
+            cmd.Parameters.AddWithValue("user_id", accountFormDto.UserId);
+            cmd.Parameters.AddWithValue("first_name", accountFormDto.FirstName);
+            cmd.Parameters.AddWithValue("last_name", accountFormDto.LastName);
+            cmd.Parameters.AddWithValue("email", accountFormDto.Email);
+
+            result = cmd.ExecuteNonQuery();
+          }
+          catch (Exception ex)
+          {
+            trans.Rollback();
+            throw ex;
+          }
+        }
+
+        using (var cmd = new NpgsqlCommand(deleteUserRoleSql, conn))
+        {
+          try
+          {
+            cmd.Parameters.AddWithValue("user_id", Guid.Parse(accountFormDto.Id));
+
+            cmd.ExecuteNonQuery();
+          }
+          catch (Exception ex)
+          {
+            trans.Rollback();
+            throw ex;
+          }
+        }
+
+        foreach (int roleId in accountFormDto.Roles)
+        {
+          using (var cmd = new NpgsqlCommand(insertUserRoleSql, conn))
+          {
+            try
+            {
+              cmd.Parameters.AddWithValue("id", Guid.Parse(accountFormDto.Id));
+              cmd.Parameters.AddWithValue("role_id", roleId);
+
+              cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+              trans.Rollback();
+              throw ex;
+            }
+          }
+        }
+        trans.Commit();
+      }
+      return result;
+    }
+
+    public int DeleteUser(string id)
+    {
+      int result = -1;
+
+      var deleteUserSql = @"
+      DELETE FROM users WHERE id = @id
+      ";
+
+      var deleteUserRoleSql = @"
+      DELETE FROM user_roles WHERE user_id = @id;
+      ";
+
+      using (var conn = ConnectUi())
+      {
+        conn.Open();
+        var trans = conn.BeginTransaction();
+
+        using (var cmd = new NpgsqlCommand(deleteUserSql, conn))
+        {
+          try
+          {
+            cmd.Parameters.AddWithValue("id", Guid.Parse(id));
+
+            result = cmd.ExecuteNonQuery();
+          }
+          catch (Exception ex)
+          {
+            trans.Rollback();
+            throw ex;
+          }
+        }
+
+        using (var cmd = new NpgsqlCommand(deleteUserRoleSql, conn))
+        {
+          try
+          {
+            cmd.Parameters.AddWithValue("id", Guid.Parse(id));
+
+            cmd.ExecuteNonQuery();
+            trans.Commit();
+          }
+          catch (Exception ex)
+          {
+            trans.Rollback();
+            throw ex;
+          }
+        }
+      }
+      return result;
+    }
+
+    public int InsertRolePermissions(RoleFormDto role)
+    {
+      int result = -1;
+
+      var selectRoleMaxIdSql = @"
+      SELECT MAX(id) + 1 AS ID FROM roles;
+      ";
+
+      var insertRoleSql = @"
+      INSERT INTO roles (id, name)
+      VALUES ((SELECT MAX(id) + 1 FROM roles), @name);
+      ";
+
+      var insertRolePermissionsSql = @"
+      INSERT INTO role_permissions (role_id, permission_id)
+      VALUES (@role_id, @permission_id);
+      ";
+
+      using (var conn = ConnectUi())
+      {
+        conn.Open();
+        var trans = conn.BeginTransaction();
+
+        using (var cmd = new NpgsqlCommand(selectRoleMaxIdSql, conn))
+        {
+          try
+          {
+            role.Id = (int)cmd.ExecuteScalar();
+          }
+          catch (Exception ex)
+          {
+            trans.Rollback();
+            throw ex;
+          }
+        }
+
+        using (var cmd = new NpgsqlCommand(insertRoleSql, conn))
+        {
+          try
+          {
+            cmd.Parameters.AddWithValue("id", role.Id);
+            cmd.Parameters.AddWithValue("name", role.Name);
+
+            result = cmd.ExecuteNonQuery();
+          }
+          catch (Exception ex)
+          {
+            trans.Rollback();
+            throw ex;
+          }
+        }
+
+        foreach (int permissionId in role.Permissions)
+        {
+          using (var cmd = new NpgsqlCommand(insertRolePermissionsSql, conn))
+          {
+            try
+            {
+              cmd.Parameters.AddWithValue("role_id", role.Id);
+              cmd.Parameters.AddWithValue("permission_id", permissionId);
+
+              cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+              trans.Rollback();
+              throw ex;
+            }
+          }
+        }
+        trans.Commit();
+      }
+      return result;
+    }
+
+    public int UpdateRolePermissions(RoleFormDto role)
+    {
+      int result = -1;
+
+      var updateRoleSql = @"
+      UPDATE roles 
+      SET name = @name 
+      WHERE id = @id;
+      ";
+
+      var deleteRolePermissionsSql = @"
+      DELETE FROM role_permissions where role_id = @role_id;
+      ";
+
+      var insertRolePermissionsSql = @"
+      INSERT INTO role_permissions (role_id, permission_id)
+      VALUES (@role_id, @permission_id);
+      ";
+
+      using (var conn = ConnectUi())
+      {
+        conn.Open();
+        var trans = conn.BeginTransaction();
+
+        using (var cmd = new NpgsqlCommand(updateRoleSql, conn))
+        {
+          try
+          {
+            cmd.Parameters.AddWithValue("id", role.Id);
+            cmd.Parameters.AddWithValue("name", role.Name);
+
+            result = cmd.ExecuteNonQuery();
+          }
+          catch (Exception ex)
+          {
+            trans.Rollback();
+            throw ex;
+          }
+        }
+
+        using (var cmd = new NpgsqlCommand(deleteRolePermissionsSql, conn))
+        {
+          try
+          {
+            cmd.Parameters.AddWithValue("role_id", role.Id);
+
+            cmd.ExecuteNonQuery();
+          }
+          catch (Exception ex)
+          {
+            trans.Rollback();
+            throw ex;
+          }
+        }
+
+        foreach (int permissionId in role.Permissions)
+        {
+          using (var cmd = new NpgsqlCommand(insertRolePermissionsSql, conn))
+          {
+            try
+            {
+              cmd.Parameters.AddWithValue("role_id", role.Id);
+              cmd.Parameters.AddWithValue("permission_id", permissionId);
+
+              cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+              trans.Rollback();
+              throw ex;
+            }
+          }
+        }
+        trans.Commit();
+      }
+      return result;
+    }
+
+    public int DeleteRole(int roleId)
+    {
+      int result = -1;
+
+      var deleteRoleSql = @"
+      DELETE FROM roles WHERE id = @id 
+      ";
+
+      var deleteRolePermissionSql = @"
+      DELETE FROM role_permissions WHERE role_id = @role_id
+      ";
+
+      using (var conn = ConnectUi())
+      {
+        conn.Open();
+        var trans = conn.BeginTransaction();
+
+        using (var cmd = new NpgsqlCommand(deleteRoleSql, conn))
+        {
+          try
+          {
+            cmd.Parameters.AddWithValue("id", roleId);
+
+            result = cmd.ExecuteNonQuery();
+          }
+          catch (Exception ex)
+          {
+            trans.Rollback();
+            throw ex;
+          }
+        }
+
+        using (var cmd = new NpgsqlCommand(deleteRolePermissionSql, conn))
+        {
+          try
+          {
+            cmd.Parameters.AddWithValue("role_id", roleId);
+
+            cmd.ExecuteNonQuery();
+            trans.Commit();
+          }
+          catch (Exception ex)
+          {
+            trans.Rollback();
+            throw ex;
+          }
+        }
+      }
+
+      return result;
+    }
+
   }
 }

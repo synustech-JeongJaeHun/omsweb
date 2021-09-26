@@ -35,6 +35,7 @@ export class UserManagementComponent implements OnInit, OnDestroy {
   private _removeIds: string[] = [];
 
   dataSource$: Observable<ISimpleUser[]>;
+
   removeIds$ = new BehaviorSubject<string[]>([]);
 
   roles$: Observable<IRole[]>;
@@ -75,6 +76,7 @@ export class UserManagementComponent implements OnInit, OnDestroy {
       disableClose: true,
       closeOnNavigation: true,
     });
+    // TODO : add code role settings
   }
 
   onAddUser(grid) {
@@ -88,6 +90,7 @@ export class UserManagementComponent implements OnInit, OnDestroy {
       if (res) {
         res.id = uuid4();
         res.isNew = true;
+        res.roles = [res.roles];
 
         this._changedItems.push(res);
         grid.instance
@@ -99,6 +102,8 @@ export class UserManagementComponent implements OnInit, OnDestroy {
   }
   onRemoveUsers() {
     this.removeIds$.next(this.selectedIds);
+    for (let selectedId of this.selectedIds)
+      this._removeIds.push(selectedId);
     const canceled = this._changedItems
       .filter((u) => u.isNew && this.selectedIds.includes(u.id))
       .map((u) => u.id);
@@ -114,18 +119,44 @@ export class UserManagementComponent implements OnInit, OnDestroy {
     // console.log('### on update row >>', e);
     const { data, key } = e;
     if (this._changedItems.some((c) => c.id === key)) {
+
       let user = this._changedItems.find((u) => u.id === key);
-      user = data;
+
+      //user = data;
+      user.id = data.id;
+      user.userId = data.userId;
+      user.firstName = data.firstName;
+      user.lastName = data.lastName;
+      user.email = data.email;
+      //user.password = data.password;
+      user.password = (data.password == undefined) ? "NO" : data.password;
+      //user.roles = data.roles;
+      user.roles = (Array.isArray(data.roles)) ? data.roles : [data.roles];
+      user.isNew = (data.isNew == undefined) ? false : data.isNew;
     } else {
-      this._changedItems.push(data);
+      //let user = data;
+      const user: IUserForm = {
+        id: data.id,
+        userId: data.userId,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        //password: data.password,
+        password: (data.password == undefined) ? "NO" : data.password,
+        //roles: data.roles,
+        roles: (Array.isArray(data.roles)) ? data.roles : [data.roles],
+        isNew: (data.isNew == undefined) ? false : data.isNew
+      };
+
+      this._changedItems.push(user);
     }
   }
   onSelectionChanged(e) {
     this.selectedIds = this.selectedIds.filter((x) => x !== NIL);
   }
   onSave(grid) {
-    console.log('### save : remove ids >>>', this._removeIds);
-    console.log('### save : change items >>>', this._changedItems);
+    //console.log('### save : remove ids >>>', this._removeIds);
+    //console.log('### save : change items >>>', this._changedItems);
     const jobs: Observable<void>[] = [];
     this._removeIds.length &&
       jobs.push(this.userSvc.deleteAccounts(this._removeIds));

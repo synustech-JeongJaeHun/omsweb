@@ -56,16 +56,29 @@ namespace OMSWeb.Controllers
     [HttpGet("permissions")]
     public IEnumerable<PermissionEntity> QueryPermissions()
     {
-      return _userSvc.QueryPermissions().ToList();
+      List<PermissionEntity> ret = _userSvc.QueryPermissions().ToList();
+      return ret;
+      //return _userSvc.QueryPermissions().ToList();
     }
 
     [HttpPost("batch/save")]
     public IActionResult SaveAccounts([FromBody] AccountFormDto[] accounts)
     {
-      Console.WriteLine($"# Save Accounts (batch) : {accounts.Length}");
       var updateAccounts = accounts.Where(u => !u.IsNew.HasValue || !u.IsNew.Value).ToList();
       var addAccounts = accounts.Where(u => u.IsNew.HasValue && u.IsNew.Value).ToList();
-      Console.WriteLine($"# --> updated : {updateAccounts.Count()}, added: {addAccounts.Count()}");
+
+      foreach (AccountFormDto accountFormDto in updateAccounts)
+      {
+        if (accountFormDto.Password != "NO")
+          _userSvc.UpdateUser(accountFormDto);
+        else
+          _userSvc.UpdateUserWithoutPassword(accountFormDto);
+      }
+
+      foreach (AccountFormDto accountFormDto in addAccounts)
+      {
+        _userSvc.AddUser(accountFormDto);
+      }
 
       return Ok();
     }
@@ -73,26 +86,40 @@ namespace OMSWeb.Controllers
     [HttpPost("batch/remove")]
     public IActionResult DeleteAccounts([FromBody] string[] ids)
     {
-      Console.WriteLine($"# Remove Accounts (batch) : {ids}");
+      foreach (string id in ids)
+      {
+        _userSvc.DeleteUser(id);
+      }
       return Ok();
     }
 
     [HttpPost("roles")]
     public IActionResult SaveRoles([FromBody] RoleFormDto[] roles)
     {
-      Console.WriteLine($"# Save Roles : {roles.Length}");
       var changed = roles.Where(x => x.Id > 0).ToList();
       var added = roles.Where(x => x.Id == 0).ToList();
-      Console.WriteLine($"# --> updated : {changed.Count()}, added: {added.Count()}");
 
+      foreach (RoleFormDto role in changed)
+      {
+        _userSvc.UpdateRolePermissions(role);
+      }
+
+      foreach (RoleFormDto role in added)
+      {
+        _userSvc.InsertRolePermissions(role);
+      }
       return Ok();
     }
- 
+
     [HttpPost("roles/remove")]
     public IActionResult DeleteRoles([FromBody] int[] ids)
     {
-      Console.WriteLine($"# Remove Roles : {ids}");
+      foreach (int id in ids)
+      {
+        _userSvc.DeleteRole(id);
+      }
+
       return Ok();
     }
- }
+  }
 }

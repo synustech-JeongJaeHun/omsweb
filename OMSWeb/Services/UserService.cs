@@ -42,7 +42,7 @@ namespace OMSWeb.Services
       // return this._repo.QueryPermissions();
       return Enum.GetValues(typeof(UserPermissions))
         .Cast<UserPermissions>()
-        .Select(p => new PermissionEntity{Id = (int)p, Name = p.ToString()})
+        .Select(p => new PermissionEntity { Id = (int)p, Name = p.ToString() })
         .AsQueryable();
     }
     public IQueryable<RoleEntity> QueryRoles()
@@ -123,6 +123,46 @@ namespace OMSWeb.Services
     {
       // return Enum.GetValues(typeof(UserPermissions)).OfType<int>().ToArray();
       return Array.ConvertAll((int[])Enum.GetValues(typeof(UserPermissions)), Convert.ToInt32);
+    }
+
+    public int AddUser(AccountFormDto accountFormDto)
+    {
+      accountFormDto.Password = BCrypt.Net.BCrypt.HashPassword(accountFormDto.Password);
+      return this._repo.AddUser(accountFormDto);
+    }
+
+    public int UpdateUser(AccountFormDto accountFormDto)
+    {
+      accountFormDto.Password = BCrypt.Net.BCrypt.HashPassword(accountFormDto.Password);
+      return this._repo.UpdateUser(accountFormDto);
+    }
+
+    public int UpdateUserWithoutPassword(AccountFormDto accountFormDto)
+    {
+      return this._repo.UpdateUserWithoutPassword(accountFormDto);
+    }
+
+    public int DeleteUser(string id)
+    {
+      return this._repo.DeleteUser(id);
+    }
+
+    public int InsertRolePermissions(RoleFormDto role)
+    {
+      //role.Id;
+      //role.Name;
+      //role.Permissions;
+      return this._repo.InsertRolePermissions(role);
+    }
+
+    public int UpdateRolePermissions(RoleFormDto role)
+    {
+      return this._repo.UpdateRolePermissions(role);
+    }
+
+    public int DeleteRole(int roleId)
+    {
+      return this._repo.DeleteRole(roleId);
     }
   }
 }
