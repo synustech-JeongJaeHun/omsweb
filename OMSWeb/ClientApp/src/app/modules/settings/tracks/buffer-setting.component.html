@@ -1,50 +1,42 @@
 <div class="setting-header">
   <h3 class="setting-title">{{ "names.bufferSetting" | translate }}</h3>
   <div class="setting-actions">
-    <button mat-raised-button class="dense" color="primary">
+    <button mat-raised-button class="dense" [disabled]="!isUpdated" color="primary" (click)="onSave(gridBuffers)">
       {{ "names.save" | translate }}
     </button>
-    <button mat-raised-button class="dense">
+    <button mat-raised-button class="dense" [disabled]="!isUpdated" (click)="onRevert(gridBuffers)">
       {{ "names.revert" | translate }}
     </button>
   </div>
 </div>
 
 <dx-data-grid
-  id="buffer-datagrid"
+  #gridBuffers
   [dataSource]="dataSource"
-  [height]="450"
+  [keyExpr]="'id'"
+  [repaintChangesOnly]="true"
   [showBorders]="true"
-  [allowColumnResizing]="true"
-  keyExpr="id"
-  (onRowUpdated)="onUpdateRow($event)">
+  [height]="450"
+  [allowColumnResizing]="false"
+  [(selectedRowKeys)]="selectedIds"
+  (onRowUpdated)="onUpdateRow($event)"
+  (onSelectionChanged)="onSelectionChanged($event)">
 
-  <dxo-paging [pageSize]="23"></dxo-paging>
+  <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+  <dxo-paging [pageSize]="20"></dxo-paging>
   <dxo-editing
     mode="cell"
+    refreshMode="reshape"
     [allowUpdating]="true"
+    [allowDeleting]="false"
+    [allowAdding]="false"
     [useIcons]="true">
-  </dxo-editing>
+  </dxo-editing>  
+  <dxo-selection mode="multiple" selectAllMode="allPages" showCheckBoxesMode="always"></dxo-selection>
 
-  <dxi-column
-    dataType="number"
-    dataField="id"
-    [allowEditing]="false"
-    [width]="60"
-    alignment="center">
-  </dxi-column>
-  <dxi-column
-    dataType="sting"
-    dataField="logicalId"
-    [caption]="'names.onlineName' | translate"
-    [allowEditing]="false"
-    alignment="center">
-  </dxi-column>
-  <dxi-column
-    dataType="boolean"
-    dataField="unUse"
-    [caption]="'names.unuse' | translate">
-  </dxi-column>
+  <dxi-column dataType="number" dataField="id" [allowEditing]="false" [width]="60" alignment="center"></dxi-column>
+  <dxi-column dataType="sting" dataField="logicalId" [caption]="'names.onlineName' | translate" [allowEditing]="false" alignment="center"></dxi-column>
+  <dxi-column dataType="boolean" dataField="unUse" [caption]="'names.unuse' | translate"></dxi-column>
 
   <dxo-search-panel
     [placeholder]="'names.search' | translate"

@@ -348,7 +348,8 @@
     "alarmName": "Alarm Name",
     "resolution": "Resolution",
     "action": "Action",
-    "mem": "MEM"
+    "mem": "MEM",
+    "vehicleSetting": "Vehicle Setting"
   },
   "enums": {
     "hostSessionStatus": {

@@ -26,21 +26,21 @@ namespace OMSWeb.Controllers
     }
 
     [HttpGet("segments")]
-    public object GetSettingsSegements(DataSourceLoadOptions loadOptions)
+    public IEnumerable<SegmentWithVPartsNBlockingEntity> GetSettingsSegments()
     {
-      return DataSourceLoader.Load(_settingsSvc.GetSettingsSegements(), loadOptions);
+      return _settingsSvc.GetSettingsSegements().ToList();
     }
 
     [HttpGet("stations")]
-    public object GetSettingsStations(DataSourceLoadOptions loadOptions)
+    public IEnumerable<StationWithUnuseEntity> GetSettingsStations()
     {
-      return DataSourceLoader.Load(_settingsSvc.GetSettingsStations(), loadOptions);
+      return _settingsSvc.GetSettingsStations().ToList();
     }
 
     [HttpGet("buffers")]
-    public object GetSettingsBuffers(DataSourceLoadOptions loadOptions)
+    public IEnumerable<BufferWithUnuseEntity> GetSettingsBuffers()
     {
-      return DataSourceLoader.Load(_settingsSvc.GetSettingsBuffers(), loadOptions);
+      return _settingsSvc.GetSettingsBuffers().ToList();
     }
 
     [HttpGet("points")]
@@ -50,15 +50,21 @@ namespace OMSWeb.Controllers
     }
 
     [HttpGet("zcus")]
-    public object GetSettingsZcus(DataSourceLoadOptions loadOptions)
+    public IEnumerable<ZcuEntity> GetSettingsZcus()
     {
-      return DataSourceLoader.Load(_settingsSvc.GetSettingsZcus(), loadOptions);
+      return _settingsSvc.GetSettingsZcus();
     }
 
     [HttpGet("zcu-input-zones")]
     public object GetSettingsZcusInputZones(DataSourceLoadOptions loadOptions)
     {
       return DataSourceLoader.Load(_settingsSvc.GetZcuInputZones(), loadOptions);
+    }
+
+    [HttpGet("vehicleRegs")]
+    public IEnumerable<VehicleRegEntity> GetSettingsVehicleRegs()
+    {
+      return _settingsSvc.GetSettingsVehicleRegs();
     }
   }
 }

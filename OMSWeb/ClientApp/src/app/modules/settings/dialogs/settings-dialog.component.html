@@ -78,6 +78,13 @@
             (click)="onChangeMenu('zcu')"
             class="nav-link">{{ "names.zcu" | translate }}
           </a>
+          <a
+            *ngIf="auth.hasPermissions([37])"
+            mat-list-item
+            [class.active]="isActiveMenu('vehicle')"
+            (click)="onChangeMenu('vehicle')"
+            class="nav-link">{{ "names.vehicle" | translate }}
+          </a>
           <!-- <a
             mat-list-item
             routerLinkActive="active"
@@ -133,6 +140,9 @@
           </ng-container>
           <ng-container *ngSwitchCase="'buffer'">
             <oms-buffer-setting></oms-buffer-setting>
+          </ng-container>
+          <ng-container *ngSwitchCase="'vehicle'">
+            <oms-vehicle-setting></oms-vehicle-setting>
           </ng-container>
           <div *ngSwitchDefault></div>
         </ng-container>

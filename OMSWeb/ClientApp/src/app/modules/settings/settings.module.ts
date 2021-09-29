@@ -20,6 +20,7 @@ import { RoleSettingDialogComponent } from './dialogs/role-setting-dialog.compon
 import { UserFormDialogComponent } from './dialogs/user-form-dialog.component';
 import { UnitPickerComponent } from './tracks/unit-picker.component';
 import { PreferencesComponent } from './preferences/preferences.component';
+import { VehicleSettingComponent } from './tracks/vehicle-setting.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { PreferencesComponent } from './preferences/preferences.component';
     UserFormDialogComponent,
     UnitPickerComponent,
     PreferencesComponent,
+    VehicleSettingComponent,
   ],
   imports: [CommonModule, SharedModule, SettingsRoutingModule],
 })

@@ -43,6 +43,7 @@ export interface IVehicleCommandMessage extends ICommandMessage {
 export interface ITrackCommandMessage extends ICommandMessage {
   vehicleId?: string;
   segmentId?: number;
+  segmentIds?: number[];
   source?: string;
   reason?: string;
   groupId?: number;
@@ -65,3 +66,20 @@ export interface IOrderCommandMessage extends ICommandMessage {
   priority?: number;
 }
 
+export interface IStationCommandMessage extends ICommandMessage {
+  stationIds?: number[];
+}
+
+export interface IBufferCommandMessage extends ICommandMessage {
+  bufferIds?: number[];
+}
+
+export interface IAllSegmentCommandMessage extends ICommandMessage {
+  speedRatio?: number;
+}
+
+export interface IZcuCommandMessage extends ICommandMessage {
+  zcuId?: number;
+  zcuIds?: number[];
+  zcuUsingType?: string;
+}

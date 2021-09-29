@@ -92,4 +92,10 @@ namespace OMSWeb.Models.Entities
     public int PriorityPoint { get; set; }
     public string ZonePoints { get; set; }
   }
+
+  public class VehicleRegEntity : IIntId
+  {
+    public int Id { get; set; }
+    public string LogicalId { get; set; }
+  }
 }

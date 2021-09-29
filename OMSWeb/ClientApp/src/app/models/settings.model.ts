@@ -18,7 +18,7 @@ export class MapConfig {
   vehicleScale?: number = main_css.vehicle.radius;
   mapRotation?: number = 0;
   segmentWidth?: number = 2;
-  segmentDirectionSize? = 5;
+  segmentDirectionSize?= 5;
 }
 
 export class ThemeConfig {
@@ -69,7 +69,7 @@ export class ClientPreferences implements IPreferences {
     this.load();
   }
 
-  getServiceConfig() {}
+  getServiceConfig() { }
 
   private load() {
     const value = StorageUtil.getLocal(this.storeKey) || '{}';
@@ -95,4 +95,64 @@ export class ClientPreferences implements IPreferences {
     };
     StorageUtil.setLocal(this.storeKey, JSON.stringify(pref));
   }
+}
+
+export interface ISettingsSegment {
+  id: number;
+  physicalId: string;
+  logicalId: string;
+  startPoint: number;
+  endPoint: number;
+  speed: number;
+  length: number;
+}
+export interface ISettingsSegmentWithVParts extends ISettingsSegment {
+  steerDir: number;
+  speedRatio: number;
+  obLow: string;
+  obHigh: string;
+  obDistance: string;
+}
+export interface ISettingsSegmentWithVPartsNBlocking extends ISettingsSegmentWithVParts {
+  blockingId: number;
+  segmentId?: number;
+  disabledBy: string;
+  reason: string;
+  unUse: boolean;
+}
+
+export interface ISettingsStationWithUnuse {
+  id: number;
+  physicalId: string;
+  logicalId: string;
+  point: number;
+  direction: string;
+  carrierType?: number;
+  nextpoint: number;
+  offset: number;
+  unUse: boolean;
+}
+
+export interface ISettingsBufferWithUnuse {
+  id: number;
+  physicalId: string;
+  logicalId: string;
+  point: number;
+  direction: string;
+  nextpoint: number;
+  offset: number;
+  unUse: boolean;
+}
+
+export interface ISettingsZcu {
+  id: number;
+  x: number;
+  y: number;
+  usingType: number;
+  zcuType: number;
+}
+
+export interface ISettingsVehicleReg {
+  id: number;
+  logicalId: string;
 }

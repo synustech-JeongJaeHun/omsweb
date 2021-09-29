@@ -12,7 +12,11 @@ import {
   ITscStateCommandMessage,
   IControlStateCommandMessage,
   IAlarmClearCommandMessage,
-  IWarningClearCommandMessage
+  IWarningClearCommandMessage,
+  IStationCommandMessage,
+  IBufferCommandMessage,
+  IAllSegmentCommandMessage,
+  IZcuCommandMessage
 } from '../models/command.model';
 import { IOrderStatusRow } from '../models/order-status.model';
 import { IVehicleStatusRow } from '../models/vehicle-status.model';
@@ -22,7 +26,7 @@ import { IVehicleStatusRow } from '../models/vehicle-status.model';
 })
 export class MessagesService {
   private baseUrl = '/api/messages';
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   sendDeleteOrder(order: IOrderStatusRow): Observable<void> {
     const {
@@ -60,7 +64,7 @@ export class MessagesService {
     return this.sendCommand<IAiModeCommandMessage>(command);
   }
 
-  sendAlarmClearCommand(command: IAlarmClearCommandMessage,targets: number[] = [], error_code: number): Observable<void> {
+  sendAlarmClearCommand(command: IAlarmClearCommandMessage, targets: number[] = [], error_code: number): Observable<void> {
     command.vehicleIds = targets;
     command.alarmCode = error_code;
     return this.sendCommand<IAlarmClearCommandMessage>(command);
@@ -100,19 +104,83 @@ export class MessagesService {
     return this.sendCommand<IVehicleCommandMessage>(command);
   }
 
+  sendOrderCommand(command: IOrderCommandMessage): Observable<void> {
+    return this.sendCommand<IOrderCommandMessage>(command);
+  }
+
   sendDisableSegmentCommand(
     command: ITrackCommandMessage,
     targets: number
   ): Observable<void> {
-    command.type = 'TRACK';
+    command.type = command.type;
     command.segmentId = targets;
     command.source = "uid-admin";
 
     return this.sendCommand<ITrackCommandMessage>(command);
   }
 
-  sendOrderCommand(command: IOrderCommandMessage): Observable<void> {
-    return this.sendCommand<IOrderCommandMessage>(command);
+  sendDisableSegmentsCommand(
+    command: ITrackCommandMessage,
+    targets: number[] = []
+  ): Observable<void> {
+    command.type = command.type;
+    command.segmentIds = targets;
+    command.source = "uid-admin";
+
+    return this.sendCommand<ITrackCommandMessage>(command);
+  }
+
+  sendStationUseCommand(
+    command: IStationCommandMessage,
+    targets: number[] = []
+  ): Observable<void> {
+    command.type = command.type;
+    command.action = command.action;
+    command.stationIds = targets;
+
+    return this.sendCommand<IStationCommandMessage>(command);
+  }
+
+  sendBufferUseCommand(
+    command: IBufferCommandMessage,
+    targets: number[] = []
+  ): Observable<void> {
+    command.type = command.type;
+    command.action = command.action;
+    command.bufferIds = targets;
+
+    return this.sendCommand<IBufferCommandMessage>(command);
+  }
+
+  sendAllSpeedRatioSegmentCommand(
+    command: IAllSegmentCommandMessage,
+    targets: number
+  ): Observable<void> {
+    //command.type = command.type;
+    command.type = 'SEGMENT_ALL';
+    command.speedRatio = targets;
+
+    return this.sendCommand<IAllSegmentCommandMessage>(command);
+  }
+
+  sendZcuUsingTypeCommand(
+    command: IZcuCommandMessage
+  ): Observable<void> {
+    command.type = command.type;
+    command.zcuId = command.zcuId;
+    command.zcuUsingType = command.zcuUsingType;
+
+    return this.sendCommand<IZcuCommandMessage>(command);
+  }
+
+  sendZcusUsingTypeCommand(
+    command: IZcuCommandMessage
+  ): Observable<void> {
+    command.type = command.type;
+    command.zcuIds = command.zcuIds;
+    command.zcuUsingType = command.zcuUsingType;
+
+    return this.sendCommand<IZcuCommandMessage>(command);
   }
 
   private sendCommand<T extends ICommandMessage>(command: T): Observable<void> {

@@ -28,5 +28,9 @@ namespace OMSWeb.Models
     public string AcceptManualCommands { get; set; }
     public string State { get; set; }
     public string Mode { get; set; }
+    public int[] StationIds { get; set; }
+    public int[] BufferIds { get; set; }
+    public int[] SegmentIds { get; set; }
+    public int? SpeedRatio { get; set; }
   }
 }

@@ -1,17 +1,17 @@
 <div class="setting-header">
-  <h3 class="setting-title">{{ "names.stationSetting" | translate }}</h3>
+  <h3 class="setting-title">{{ "names.vehicleSetting" | translate }}</h3>
   <div class="setting-actions">
-    <button mat-raised-button class="dense" [disabled]="!isUpdated" color="primary" (click)="onSave(gridStations)">
+    <button mat-raised-button class="dense" [disabled]="!isUpdated" color="primary" (click)="onSave(gridVehicles)">
       {{ "names.save" | translate }}
     </button>
-    <button mat-raised-button class="dense" [disabled]="!isUpdated" (click)="onRevert(gridStations)">
+    <button mat-raised-button class="dense" [disabled]="!isUpdated" (click)="onRevert(gridVehicles)">
       {{ "names.revert" | translate }}
     </button>
   </div>
 </div>
 
 <dx-data-grid
-  #gridStations
+  #gridVehicles
   [dataSource]="dataSource"
   [keyExpr]="'id'"
   [repaintChangesOnly]="true"
@@ -32,15 +32,10 @@
     [allowAdding]="false"
     [useIcons]="true">
   </dxo-editing>  
-  <dxo-selection mode="multiple" selectAllMode="allPages" showCheckBoxesMode="always"></dxo-selection>
+  <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
 
   <dxi-column dataType="number" dataField="id" [allowEditing]="false" [width]="60" alignment="center"></dxi-column>
-  <dxi-column dataType="sting" dataField="logicalId" [caption]="'names.onlineName' | translate" [allowEditing]="false" alignment="center"></dxi-column>
-  <dxi-column dataType="boolean" dataField="unUse" [caption]="'names.unuse' | translate"></dxi-column>
-
-  <dxi-column dataField="secondaryStation" [caption]="'names.secondary' | translate" alignment="center"></dxi-column>
-  <dxi-column dataField="maxRetrySec" [caption]="'MaxRetry(Sec)'"></dxi-column>
-  <dxi-column dataField="retryIntervalSec" [caption]="'RetryInterval(Sec)'"></dxi-column>
+  <dxi-column dataType="sting" dataField="logicalId" [caption]="'names.onlineName' | translate" [allowEditing]="true" alignment="center"></dxi-column>
 
   <dxo-search-panel
     [placeholder]="'names.search' | translate"

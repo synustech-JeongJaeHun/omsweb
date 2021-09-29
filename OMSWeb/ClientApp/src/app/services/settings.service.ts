@@ -3,9 +3,10 @@ import { Injectable } from '@angular/core';
 import DataSource from 'devextreme/data/data_source';
 import { Observable, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { ClientPreferences, ServiceConfig } from '../models/settings.model';
+import { ClientPreferences, ISettingsBufferWithUnuse, ISettingsSegment, ISettingsSegmentWithVParts, ISettingsSegmentWithVPartsNBlocking, ISettingsStationWithUnuse, ISettingsVehicleReg, ISettingsZcu, ServiceConfig } from '../models/settings.model';
 import { StorageUtil } from '../modules/shared/utils/storage.util';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
+import CustomStore from 'devextreme/data/custom_store';
 
 @Injectable({
   providedIn: 'root',
@@ -42,33 +43,16 @@ export class SettingsService {
     this._globalPreferences = new ClientPreferences('global.pref');
   }
 
-  settingsSegementsDataSource(): DataSource {
-    return new DataSource({
-      store: AspNetData.createStore({
-        key: 'id',
-        loadUrl: `${this.baseUrl}/segments`
-      }),
-    });
+  settingsSegments(): Observable<ISettingsSegmentWithVPartsNBlocking[]> {
+    return this.http.get<ISettingsSegmentWithVPartsNBlocking[]>(`${this.baseUrl}/segments`);
   }
 
-  settingsStationsDataSource(): DataSource {
-    return new DataSource({
-      store: AspNetData.createStore({
-        key: 'id',
-        loadUrl: `${this.baseUrl}/stations`
-      }),
-
-    });
+  settingsStations(): Observable<ISettingsStationWithUnuse[]> {
+    return this.http.get<ISettingsStationWithUnuse[]>(`${this.baseUrl}/stations`);
   }
 
-  settingsBuffersDataSource(): DataSource {
-    return new DataSource({
-      store: AspNetData.createStore({
-        key: 'id',
-        loadUrl: `${this.baseUrl}/buffers`
-      }),
-
-    });
+  settingsBuffers(): Observable<ISettingsBufferWithUnuse[]> {
+    return this.http.get<ISettingsBufferWithUnuse[]>(`${this.baseUrl}/buffers`);
   }
 
   settingsPointsDataSource(): DataSource {
@@ -80,13 +64,8 @@ export class SettingsService {
     });
   }
 
-  settingsZcusDataSource(): DataSource {
-    return new DataSource({
-      store: AspNetData.createStore({
-        key: 'id',
-        loadUrl: `${this.baseUrl}/zcus`
-      })
-    });
+  settingsZcus(): Observable<ISettingsZcu[]> {
+    return this.http.get<ISettingsZcu[]>(`${this.baseUrl}/zcus`);
   }
 
   settingsZcuInputZonesDataSource(id): DataSource {
@@ -99,5 +78,14 @@ export class SettingsService {
         ['zcuId', '=', id],
       ],
     });
+  }
+
+  settingsVehicles(): Observable<ISettingsVehicleReg[]> {
+    return this.http.get<ISettingsVehicleReg[]>(`${this.baseUrl}/vehicleRegs`);
+  }
+
+  saveVehicleRegs(form: any[]): Observable<void> {
+    //alert(form.length);
+    return;
   }
 }

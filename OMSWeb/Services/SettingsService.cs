@@ -44,5 +44,10 @@ namespace OMSWeb.Services
     {
       return _repo.QuerySettingsZcuInputZones();
     }
+
+    public IQueryable<VehicleRegEntity> GetSettingsVehicleRegs()
+    {
+      return _repo.QuerySettingsVehicleRegs();
+    }
   }
 }

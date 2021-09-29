@@ -43,7 +43,7 @@ namespace OMSWeb.Repositories
       using (var conn = ConnectTrack())
       {
         var sql = @"
-        SELECT ST.id, ST.physical_id, ST.logical_id, ST.point, ST.direction, ST.carrier_type, ST.next_point, ST.offset, false as ususe
+        SELECT ST.id, ST.physical_id, ST.logical_id, ST.point, ST.direction, ST.carrier_type, ST.next_point, ST.offset, COALESCE(ST.unuse, false) as ususe
         FROM stations ST
         ORDER BY ST.id;
         ";
@@ -59,7 +59,7 @@ namespace OMSWeb.Repositories
       using (var conn = ConnectTrack())
       {
         var sql = @"
-        SELECT BF.id, BF.physical_id, BF.logical_id, BF.point, BF.direction, BF.next_point, BF.offset, false as unuse
+        SELECT BF.id, BF.physical_id, BF.logical_id, BF.point, BF.direction, BF.next_point, BF.offset, COALESCE(BF.unuse, false) as unuse
         FROM buffers BF
         ORDER BY BF.id;
         ";
@@ -83,7 +83,7 @@ namespace OMSWeb.Repositories
 	        END AS vertex
         FROM points PS
 	        LEFT JOIN ai_vertices AS AIV on PS.id = AIV.point 
-        ORDER BY PS.id
+        ORDER BY PS.id;
         ";
 
         result = conn.Query<PointWithAIVertexEntity>(sql).AsQueryable();
@@ -99,7 +99,7 @@ namespace OMSWeb.Repositories
         var sql = @"
         SELECT ZS.id, ZS.x, ZS.y, ZS.using_type, ZS.zcu_type
         FROM zcus AS ZS
-        ORDER BY ZS.id
+        ORDER BY ZS.id;
         ";
 
         result = conn.Query<ZcuEntity>(sql).AsQueryable();
@@ -121,11 +121,27 @@ namespace OMSWeb.Repositories
         SELECT ZCP.id, ZCP.zcu_id, ZCP.priority_point, ZCP.zone_points
         FROM zcu_input_zones AS ZCP
         WHERE ZCP.zcu_id = @ZCU_ID
-        ORDER BY ZCP.zcu_id, ZCP.id
+        ORDER BY ZCP.zcu_id, ZCP.id;
         ";
 
         result = conn.Query<ZcuInputZoneEntity>(sql).AsQueryable();
         //result = conn.Query<ZcuInputZoneEntity>(sql, new { ZCU_ID = id }).AsQueryable();
+      }
+      return result;
+    }
+
+    public IQueryable<VehicleRegEntity> QuerySettingsVehicleRegs()
+    {
+      IQueryable<VehicleRegEntity> result;
+      using (var conn = ConnectTrack())
+      {
+        var sql = @"
+        SELECT VR.id, VR.logical_id
+        FROM vehicle_reg AS VR
+        ORDER BY VR.id;
+        ";
+
+        result = conn.Query<VehicleRegEntity>(sql).AsQueryable();
       }
       return result;
     }
