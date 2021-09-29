@@ -377,6 +377,7 @@ FROM vehicle_paths
                                     CanBePushed = dr["can_be_pushed"].TryBoolean(),
                                     OrderOrigin = dr["order_origin"].ToString(),
                                     MovingState = dr["moving_state"].ToString(),
+                                    DistancePoint = dr["distance_point"].TryIntegerOrNull(),
                                     CargoState = dr["cargo_state"].ToString(),
                                     IsSensorStopped = dr["is_sensor_stopped"].TryBoolean(),
                                     IsBlocked = dr["is_blocked"].TryBoolean(),

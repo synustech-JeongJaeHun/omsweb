@@ -12,6 +12,7 @@ export class Vehicle {
 
   cargoState: string;
   movingState: string;
+  distancePoint: number;
   hotlot: boolean;
   mode: string;
   push: boolean;
@@ -52,6 +53,7 @@ export class Vehicle {
       physicalId,
       cargoState,
       movingState,
+      distancePoint,
       mode,
       errorList,
       isSensorStopped,
@@ -71,6 +73,7 @@ export class Vehicle {
     this.physicalId = physicalId;
     this.cargoState = cargoState;
     this.movingState = movingState;
+    this.distancePoint = distancePoint;
 
     this.mode = mode;
     this.errorList = errorList;
@@ -133,6 +136,7 @@ export class Vehicle {
         logicalId: this.logicalId,
         cargoState: this.cargoState,
         movingState: this.movingState,
+        distancePoint: this.distancePoint,
         mode: this.mode,
         canBePushed: this.push,
         orderOrigin: this.call,

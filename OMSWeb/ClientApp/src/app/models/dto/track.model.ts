@@ -117,6 +117,7 @@ export namespace Dto {
     mapDb: string;
     mode: string;
     movingState: string;
+    distancePoint: number;
     orderId: number;
     orderLogicalId: string;
     orderOrigin: string | string[];

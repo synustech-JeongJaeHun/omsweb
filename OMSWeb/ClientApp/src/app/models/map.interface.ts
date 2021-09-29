@@ -110,7 +110,7 @@ export class TransferCommandState {
   carrier?: string;
 
   get autoDisabled(): boolean {
-    return !this.active || ['fromTo', 'from', 'to'].includes(this.category);
+    return !this.active || ['fromTo', 'from'].includes(this.category);
   }
   get vehicleDisabled(): boolean {
     return (
@@ -124,7 +124,7 @@ export class TransferCommandState {
     return !this.active || ['to', 'move'].includes(this.category);
   }
   get destDisabled(): boolean {
-    return !this.active || ['from', 'move'].includes(this.category);
+    return !this.active || ['from'].includes(this.category);
   }
   get carrierDisabled(): boolean {
     return !this.active || !this.pointDisabled;

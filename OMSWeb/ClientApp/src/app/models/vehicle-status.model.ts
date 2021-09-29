@@ -3,6 +3,7 @@ export interface IVehicleInfoRow {
   logicalId: string;
   physicalId?: string;
   movingState: string;
+  distancePoint: number;
   distanceTotal: number;
   runtimeTotal: number;
   type: string;

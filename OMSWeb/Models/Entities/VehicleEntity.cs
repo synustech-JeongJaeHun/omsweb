@@ -8,6 +8,7 @@ namespace OMSWeb.Models.Entities
     public string PhysicalId { get; set; }
     public string LogicalId { get; set; }
     public string MovingState { get; set; }
+    public int? DistancePoint { get; set; }
     public int DistanceTotal { get; set; }
     public int RuntimeTotal { get; set; }
     public string Type { get; set; }

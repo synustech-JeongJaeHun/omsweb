@@ -13,7 +13,6 @@ namespace OMSWeb.Services
   public class SystemsService
   {
     private readonly AppSettings _appSettings;
-    private readonly ModuleStatusRepository _modeStatusRepo;
     private readonly ModeStateRepository _modeStateRepo;
 
     public SystemStatusModel HostStates { get; set; }

@@ -54,6 +54,7 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 
     const {
       auto,
+      category,
       vehicle,
       vehicleDisabled,
       pointDisabled,
@@ -73,14 +74,26 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
       carrierLabel: carrier,
       };
 
-    !pointDisabled && (cmd.locationMoveType = point.objectType);
+    if (category == 'move') {
+      if (!pointDisabled && point) !pointDisabled && (cmd.locationMoveType = point.objectType);
+      else if (!destDisabled && dest) !destDisabled && (cmd.locationMoveType = dest.objectType);
+    }
+    else {
+      !pointDisabled && (cmd.locationMoveType = point.objectType);
+      !destDisabled && (cmd.locationDropoffType = dest.objectType);
+    }
     !sourceDisabled && (cmd.locationPickupType = source.objectType);
-    !destDisabled && (cmd.locationDropoffType = dest.objectType);
 
     !vehicleDisabled && (cmd.vehicleId = vehicle.id);
-    !pointDisabled && (cmd.locationMove = point.id.toString());
+    if (category == 'move') {
+      if (!pointDisabled && point) !pointDisabled && (cmd.locationMove = point.id.toString());
+      else if (!destDisabled && dest) !destDisabled && (cmd.locationMove = dest.id.toString());
+    }
+    else {
+      !pointDisabled && (cmd.locationMove = point.id.toString());
+      !destDisabled && (cmd.locationDropoff = dest.id.toString());
+    }
     !sourceDisabled && (cmd.locationPickup = source.id.toString());
-    !destDisabled && (cmd.locationDropoff = dest.id.toString());
 
     //this.dialog.close(cmd);
     this.messageSvc.sendOrderCommand(cmd).subscribe();
@@ -89,6 +102,7 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
   private validate(): undefined | string {
     const {
       auto,
+      category,
       vehicle,
       vehicleDisabled,
       pointDisabled,
@@ -102,8 +116,12 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
     if (!vehicleDisabled && !vehicle)
       return this.t$.instant('messages.required', { field: 'Vehicle' });
 
-    if (!pointDisabled && !point)
-      return this.t$.instant('messages.required', { field: 'Point' });
+    if (!pointDisabled && !point) {
+      if (category == 'move') {
+        if (!destDisabled && !dest) return this.t$.instant('messages.required', { field: 'Point' });
+      }
+      else return this.t$.instant('messages.required', { field: 'Point' });
+    }
 
     if (!sourceDisabled && !source)
       return this.t$.instant('messages.required', { field: 'Source' });
