@@ -7449,15 +7449,15 @@ export class ViewController {
       selective_level = this.option.selective_lvl_display,
       zcu_display = [];
 
-    // if (zoom_level >= 1 && this.show_mtls) {
+    // if (zoom_level >= 1 && this.show_zcus) {
     if (zoom_level >= 1 && this.preferences.toggles.zcus) {
       // find mtl
       zcu_display = this.append_showing_objects('ZCU', view_box);
 
       // If there are elements to show
       if (zcu_display.length > 0) {
-        if (!need_update && this.mtls_svg) {
-          // If there are already mtls in view
+        if (!need_update && this.zcus_svg) {
+          // If there are already zcus in view
           let changed = this.check_data_difference(
             zcu_display,
             this.zcus_svg.nodes()
@@ -7514,7 +7514,7 @@ export class ViewController {
           );
         }
 
-        // Apply transform values to all mtl svg elements
+        // Apply transform values to all zcu svg elements
         this.zcus_svg.attr('transform', this.transform(current_transform));
       } else {
         this.update_dom(
