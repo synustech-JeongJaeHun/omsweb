@@ -26,6 +26,9 @@ export class VehicleControlTableComponent implements OnInit, OnDestroy {
   dataSource: DataSource;
   selectedRows: number[] = [];
 
+  enableRows: IVehicleStatusRow[] = [];
+  disableRows: IVehicleStatusRow[] = [];
+
   //#region Subscriptions
   private destroy$: Subject<void> = new Subject<void>();
   //#endregion
@@ -99,10 +102,24 @@ export class VehicleControlTableComponent implements OnInit, OnDestroy {
   }
   onChangePushActivity() {
     if (!this.canControl) return;
+    this.enableRows = [];
+    this.disableRows = [];
 
-    this.messageSvc
-      .sendVehicleCommand({ action: 'set_behavior', canBePushed: true }, this.selectedItems)
-      .subscribe();
+    for (let index in this.selectedItems) {
+      if (this.selectedItems[index].canBePushed)  // now enable --> to disable
+        this.disableRows.push(this.selectedItems[index]);
+      else
+        this.enableRows.push(this.selectedItems[index]);
+    }
+    if (this.enableRows.length > 0)
+      this.messageSvc
+        .sendVehicleCommand({ action: 'set_behavior', canBePushed: true }, this.enableRows)
+        .subscribe();
+
+    if (this.disableRows.length > 0)
+      this.messageSvc
+        .sendVehicleCommand({ action: 'set_behavior', canBePushed: false }, this.disableRows)
+        .subscribe();
   }
   onRailIn() {
     if (!this.canControl) return;
