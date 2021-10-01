@@ -147,8 +147,8 @@
     "showClusters": "Clusters",
     "showOverlaps": "Overlapping Objects",
 
-    "hostOrderEnable": "Host Order Enable",
-    "pushEnable": "Push Enable",
+    "hostOrderEnable": "Host Order Disable",
+    "pushEnable": "Push Disable",
     "railIn": "Rail In",
     "railOut": "Rail Out",
     "delete": "Delete",
