@@ -59,12 +59,6 @@ export class VehicleControlTableComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.hubSvc.orderTableChanged$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((e: IDataChangeEvent) => {
-        e && this.onTableChanged(e);
-      });
-
     this.hubSvc.vehicleTableChanged$
       .pipe(takeUntil(this.destroy$))
       .subscribe((e: IDataChangeEvent) => {
@@ -142,11 +136,16 @@ export class VehicleControlTableComponent implements OnInit, OnDestroy {
         needReload = true;
       } else {
         needReload = this.dataSource.items().every((x) => x.id !== payload.id);
-        // needReload = true;
+        needReload = true;
       }
     } else {
       needReload = true;
     }
-    needReload && this.dataSource.reload();
+    needReload && this.dataSource.reload().then((data) => {
+      this.selectedRows = [];
+      for (let index in this.selectedItems) {
+        this.selectedRows[index] = this.selectedItems[index].id;
+      }
+    });
   }
 }

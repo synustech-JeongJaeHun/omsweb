@@ -72,12 +72,6 @@ export class OrderControlTableComponent implements OnInit, OnDestroy {
       .subscribe((e: IDataChangeEvent) => {
         e && this.onTableChanged(e);
       });
-
-    this.hubSvc.vehicleTableChanged$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((e: IDataChangeEvent) => {
-        e && this.onTableChanged(e);
-      });
   }
 
   onDelete() {
@@ -95,7 +89,7 @@ export class OrderControlTableComponent implements OnInit, OnDestroy {
         needReload = true;
       } else {
         needReload = this.dataSource.items().every((x) => x.id !== payload.id);
-        // needReload = true;
+        needReload = true;
       }
     } else {
       needReload = true;
