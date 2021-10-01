@@ -120,6 +120,7 @@ export namespace Dto {
     distancePoint: number;
     orderId: number;
     orderLogicalId: string;
+    hostOrder: boolean;
     orderOrigin: string | string[];
     physicalId: string;
     priority?: any;

@@ -22,6 +22,7 @@ namespace OMSWeb.Models.Entities
     public DateTime? LastContact { get; set; }
     public string Mode { get; set; }
     public bool CanBePushed { get; set; }
+    public bool hostOrder { get; set; }
     public string OrderOrigin { get; set; }
     public string CargoState { get; set; }
     public bool IsSensorStopped { get; set; }

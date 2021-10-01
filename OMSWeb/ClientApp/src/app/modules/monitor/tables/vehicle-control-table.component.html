@@ -71,204 +71,161 @@
   </button>
 </div>
 
-<dx-data-grid
-  [dataSource]="dataSource"
-  [remoteOperations]="true"
-  [height]="tableHeight"
-  [repaintChangesOnly]="false"
-  [columnAutoWidth]="false"
-  [showBorders]="false"
-  [highlightChanges]="false"
-  [showColumnLines]="true"
-  [showRowLines]="true"
-  [headerFilter]="false"
-  [(selectedRowKeys)]="selectedRows"
->
+<dx-data-grid [dataSource]="dataSource"
+              [remoteOperations]="true"
+              [height]="tableHeight"
+              [repaintChangesOnly]="false"
+              [columnAutoWidth]="false"
+              [showBorders]="false"
+              [highlightChanges]="false"
+              [showColumnLines]="true"
+              [showRowLines]="true"
+              [headerFilter]="false"
+              [(selectedRowKeys)]="selectedRows">
   <dxo-scrolling mode="virtual" rowRenderingMode="standard"></dxo-scrolling>
   <dxo-paging [pageSize]="50"></dxo-paging>
-  <dxo-pager
-    [showPageSizeSelector]="true"
-    [allowedPageSizes]="[50, 100, 200]"
-    [showInfo]="true"
-    visible="true"
-  ></dxo-pager>
+  <dxo-pager [showPageSizeSelector]="true"
+             [allowedPageSizes]="[50, 100, 200]"
+             [showInfo]="true"
+             visible="true"></dxo-pager>
   <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
-  <dxo-search-panel
-    [placeholder]="'names.search' | translate"
-    [visible]="true"
-  ></dxo-search-panel>
+  <dxo-search-panel [placeholder]="'names.search' | translate"
+                    [visible]="true"></dxo-search-panel>
   <dxo-load-panel [enabled]="false"></dxo-load-panel>
   <dxo-filter-row [visible]="true"></dxo-filter-row>
 
-  <dxi-column
-    [allowFiltering]="true"
-    [width]="60"
-    dataType="string"
-    dataField="id"
-    sortOrder="desc"
-    [caption]="'names.id' | translate"
-  ></dxi-column>
-  <dxi-column
-    [width]="80"
-    dataType="string"
-    dataField="physicalId"
-    [caption]="'names.physicalId' | translate"
-  ></dxi-column>
+  <dxi-column [allowFiltering]="true"
+              [width]="60"
+              dataType="string"
+              dataField="id"
+              sortOrder="desc"
+              [caption]="'names.id' | translate"></dxi-column>
+  <dxi-column [width]="80"
+              dataType="string"
+              dataField="physicalId"
+              [caption]="'names.physicalId' | translate"></dxi-column>
   <!-- Logical ID 추가 -->
-  <dxi-column
-    [width]="90"
-    dataType="string"
-    dataField="logicalId"
-    [caption]="'names.logicalId' | translate"
-  ></dxi-column>
+  <dxi-column [width]="90"
+              dataType="string"
+              dataField="logicalId"
+              [caption]="'names.logicalId' | translate"></dxi-column>
   <!-- Logical ID 추가 -->
-  <dxi-column
-    [width]="80"
-    dataType="string"
-    dataField="mode"
-    [caption]="'names.mode' | translate"
-  ></dxi-column>
-  <dxi-column
-    [allowFiltering]="false"
-    [width]="60"
-    dataType="boolean"
-    dataField="canBePushed"
-    [caption]="'names.canBePushed' | translate"
-  ></dxi-column>
+  <dxi-column [width]="80"
+              dataType="string"
+              dataField="mode"
+              [caption]="'names.mode' | translate"></dxi-column>
+  <dxi-column [allowFiltering]="false"
+              [width]="60"
+              dataType="boolean"
+              dataField="canBePushed"
+              [caption]="'names.canBePushed' | translate"></dxi-column>
   <!-- Rail_In 필드 추가 --->
+  <dxi-column [allowFiltering]="false"
+              [width]="60"
+              dataType="boolean"
+              dataField="railIn"
+              [caption]="'names.railIn' | translate"></dxi-column>
+  <!--host order 필드 추가 --->
+  <dxi-column [allowFiltering]="false"
+              [width]="60"
+              dataType="boolean"
+              dataField="hostOrder"
+              [caption]="'names.hostOrder' | translate"></dxi-column>
   <dxi-column
-    [allowFiltering]="false"
-    [width]="60"
-    dataType="boolean"
-    dataField="railIn"
-    [caption]="'names.railIn' | translate"
+              [allowFiltering]="false"
+              [width]="60"
+              dataType="string"
+              dataField="orderOrigin"
+              [caption]="'names.orderOrigin' | translate"
   ></dxi-column>
-  <!-- Rail_In 필드 추가 --->
-  <dxi-column
-    [allowFiltering]="false"
-    [width]="60"
-    dataType="string"
-    dataField="orderOrigin"
-    [caption]="'names.orderOrigin' | translate"
-  ></dxi-column>
-  <dxi-column
-    [width]="60"
-    dataType="string"
-    dataField="groupId"
-    [caption]="'names.group' | translate">
-  </dxi-column>
-  <dxi-column
-    [width]="60"
-    dataType="string"
-    dataField="curPoint"
-    [caption]="'names.curPoint' | translate"
-  ></dxi-column>
-  <dxi-column
-    [width]="60"
-    dataType="string"
-    dataField="commandPoint"
-    [allowSorting]="false"
-    [caption]="'names.commandPoint' | translate"
-  ></dxi-column>
-  <dxi-column
-    [width]="60"
-    dataType="string"
-    dataField="orderId"
-    [allowSorting]="false"
-    [caption]="'names.orderId' | translate"
-  ></dxi-column>
-  <dxi-column
-    [width]="60"
-    dataType="string"
-    dataField="locationPickup"
-    [caption]="'names.locationPickup' | translate"
-  ></dxi-column>
-  <dxi-column
-    [width]="60"
-    dataType="string"
-    dataField="locationDropoff"
-    [caption]="'names.locationDropoff' | translate"
-  ></dxi-column>
+  <dxi-column [width]="60"
+              dataType="string"
+              dataField="groupId"
+              [caption]="'names.group' | translate"></dxi-column>
+  <dxi-column [width]="60"
+              dataType="string"
+              dataField="curPoint"
+              [caption]="'names.curPoint' | translate"></dxi-column>
+  <dxi-column [width]="60"
+              dataType="string"
+              dataField="commandPoint"
+              [allowSorting]="false"
+              [caption]="'names.commandPoint' | translate"></dxi-column>
+  <dxi-column [width]="60"
+              dataType="string"
+              dataField="orderId"
+              [allowSorting]="false"
+              [caption]="'names.orderId' | translate"></dxi-column>
+  <dxi-column [width]="60"
+              dataType="string"
+              dataField="locationPickup"
+              [caption]="'names.locationPickup' | translate"></dxi-column>
+  <dxi-column [width]="60"
+              dataType="string"
+              dataField="locationDropoff"
+              [caption]="'names.locationDropoff' | translate"></dxi-column>
   <!-- LocationMove 추가 -->
-  <dxi-column
-    [allowFiltering]="true"
-    [width]="60"
-    dataType="string"
-    dataField="locationMove"
-    [allowSorting]="true"
-    [caption]="'names.locationMove' | translate"
-  ></dxi-column>
+  <dxi-column [allowFiltering]="true"
+              [width]="60"
+              dataType="string"
+              dataField="locationMove"
+              [allowSorting]="true"
+              [caption]="'names.locationMove' | translate"></dxi-column>
   <!-- LocationMove 추가 -->
   <!-- Total Runtime 추가 -->
-  <dxi-column
-    [allowFiltering]="true"
-    [width]="80"
-    dataType="string"
-    dataField="runtimeTotal"
-    [allowSorting]="true"
-    [caption]="'names.runtimeTotal' | translate"
-  ></dxi-column>
+  <dxi-column [allowFiltering]="true"
+              [width]="80"
+              dataType="string"
+              dataField="runtimeTotal"
+              [allowSorting]="true"
+              [caption]="'names.runtimeTotal' | translate"></dxi-column>
   <!-- Total Runtime 추가 -->
-  <dxi-column
-    [width]="80"
-    dataType="string"
-    dataField="movingState"
-    [allowSorting]="false"
-    [caption]="'names.movingState' | translate"
-  ></dxi-column>
-  <dxi-column
-    [width]="80"
-    dataType="string"
-    dataField="cargoState"
-    [allowSorting]="false"
-    [caption]="'names.cargoState' | translate"
-  ></dxi-column>
+  <dxi-column [width]="80"
+              dataType="string"
+              dataField="movingState"
+              [allowSorting]="false"
+              [caption]="'names.movingState' | translate"></dxi-column>
+  <dxi-column [width]="80"
+              dataType="string"
+              dataField="cargoState"
+              [allowSorting]="false"
+              [caption]="'names.cargoState' | translate"></dxi-column>
   <!-- Error 추가 -->
-  <dxi-column
-    [allowFiltering]="true"
-    [width]="70"
-    dataType="string"
-    dataField="errorList"
-    [allowSorting]="true"
-    [caption]="'names.error' | translate"
-  ></dxi-column>
+  <dxi-column [allowFiltering]="true"
+              [width]="70"
+              dataType="string"
+              dataField="errorList"
+              [allowSorting]="true"
+              [caption]="'names.error' | translate"></dxi-column>
   <!-- Error  추가 -->
   <!-- Sensor Stop 추가 -->
-  <dxi-column
-    [allowFiltering]="false"
-    [width]="80"
-    dataType="boolean"
-    dataField="isSensorStopped"
-    [allowSorting]="false"
-    [caption]="'names.sensorStopped' | translate"
-  ></dxi-column>
+  <dxi-column [allowFiltering]="false"
+              [width]="80"
+              dataType="boolean"
+              dataField="isSensorStopped"
+              [allowSorting]="false"
+              [caption]="'names.sensorStopped' | translate"></dxi-column>
   <!-- Sensor Stop  추가 -->
   <!-- Blocked 추가 -->
-  <dxi-column
-    [allowFiltering]="false"
-    [width]="80"
-    dataType="boolean"
-    dataField="isBlocked"
-    [allowSorting]="false"
-    [caption]="'names.blocked' | translate"
-  ></dxi-column>
+  <dxi-column [allowFiltering]="false"
+              [width]="80"
+              dataType="boolean"
+              dataField="isBlocked"
+              [allowSorting]="false"
+              [caption]="'names.blocked' | translate"></dxi-column>
   <!-- Blocked 추가 -->
-  <dxi-column
-    [allowFiltering]="true"
-    [width]="80"
-    dataType="number"
-    dataField="distanceTotal"
-    [allowSorting]="true"
-    [caption]="'names.distanceTotal' | translate"
-  ></dxi-column>
+  <dxi-column [allowFiltering]="true"
+              [width]="80"
+              dataType="number"
+              dataField="distanceTotal"
+              [allowSorting]="true"
+              [caption]="'names.distanceTotal' | translate"></dxi-column>
   <!-- MapDB 추가 -->
-  <dxi-column
-    [allowFiltering]="true"
-    [width]="90"
-    dataType="string"
-    dataField="mapDb"
-    [allowSorting]="true"
-    [caption]="'names.mapDb' | translate"
-  ></dxi-column>
+  <dxi-column [allowFiltering]="true"
+              [width]="90"
+              dataType="string"
+              dataField="mapDb"
+              [allowSorting]="true"
+              [caption]="'names.mapDb' | translate"></dxi-column>
   <!-- MapDB 추가 -->
 </dx-data-grid>

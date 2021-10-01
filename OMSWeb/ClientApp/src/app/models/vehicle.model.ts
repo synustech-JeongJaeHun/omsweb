@@ -29,6 +29,7 @@ export class Vehicle {
   cargoTransferResult: string;
   mapDb: string;
 
+  hostOrder?: boolean;
   orderOrigin?: string;
   canBePushed?: boolean;
   isSensorStopped?: boolean;
@@ -65,6 +66,7 @@ export class Vehicle {
       cargoTransferResult,
       mapDb,
       canBePushed, // push
+      hostOrder,
       orderOrigin = [], // call
     } = row;
 
@@ -89,6 +91,7 @@ export class Vehicle {
     this.isMoved = false;
     this.isStale = false;
 
+    this.hostOrder = hostOrder;
     this.call = orderOrigin
       ? Array.isArray(orderOrigin)
         ? orderOrigin
@@ -139,6 +142,7 @@ export class Vehicle {
         distancePoint: this.distancePoint,
         mode: this.mode,
         canBePushed: this.push,
+        hostOrder: this.hostOrder,
         orderOrigin: this.call,
         errorList: this.errorList,
         isSensorStopped: this.isSensorStopped,

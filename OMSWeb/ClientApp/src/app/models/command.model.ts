@@ -33,6 +33,7 @@ export interface IVehicleCommandMessage extends ICommandMessage {
   vehicleId?: string;
   vehicleIds?: number[];
   orderOrigin?: string;
+  hostOrder?: boolean;
   canBePushed?: boolean;
   acceptManualCommands?: string;
 

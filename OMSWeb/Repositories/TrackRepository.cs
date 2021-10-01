@@ -375,6 +375,7 @@ FROM vehicle_paths
                                     LastContact = dr["last_contact"].TryDateTimeOrNull(),
                                     Mode = dr["mode"].ToString(),
                                     CanBePushed = dr["can_be_pushed"].TryBoolean(),
+                                    hostOrder = dr["host_order"].TryBoolean(),
                                     OrderOrigin = dr["order_origin"].ToString(),
                                     MovingState = dr["moving_state"].ToString(),
                                     DistancePoint = dr["distance_point"].TryIntegerOrNull(),

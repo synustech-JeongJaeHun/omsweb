@@ -90,30 +90,46 @@ export class VehicleControlTableComponent implements OnInit, OnDestroy {
   }
   onChangeHostOrderActivity() {
     if (!this.canControl) return;
-    this.messageSvc
-      .sendVehicleCommand({ action: 'set_behavior', orderOrigin: 'OMS,MCS' }, this.selectedItems)
-      .subscribe();
+    this.enableRows = [];
+    this.disableRows = [];
+    for (let index in this.selectedItems) {
+      if (this.selectedItems[index].hostOrder)
+        this.disableRows.push(this.selectedItems[index]);
+      else
+        this.enableRows.push(this.selectedItems[index]);
+    }
+    if (this.enableRows.length > 0) {
+      this.messageSvc
+        .sendVehicleCommand({ action: 'set_behavior', hostOrder: true }, this.enableRows)
+        .subscribe();
+    }
+    if (this.disableRows.length > 0) {
+      this.messageSvc
+        .sendVehicleCommand({ action: 'set_behavior', hostOrder: false }, this.disableRows)
+        .subscribe();
+    }
   }
   onChangePushActivity() {
     if (!this.canControl) return;
     this.enableRows = [];
     this.disableRows = [];
-
     for (let index in this.selectedItems) {
       if (this.selectedItems[index].canBePushed)  // now enable --> to disable
         this.disableRows.push(this.selectedItems[index]);
       else
         this.enableRows.push(this.selectedItems[index]);
     }
-    if (this.enableRows.length > 0)
+    if (this.enableRows.length > 0) {
       this.messageSvc
         .sendVehicleCommand({ action: 'set_behavior', canBePushed: true }, this.enableRows)
         .subscribe();
+    }
 
-    if (this.disableRows.length > 0)
+    if (this.disableRows.length > 0) {
       this.messageSvc
         .sendVehicleCommand({ action: 'set_behavior', canBePushed: false }, this.disableRows)
         .subscribe();
+    }
   }
   onRailIn() {
     if (!this.canControl) return;
@@ -129,7 +145,7 @@ export class VehicleControlTableComponent implements OnInit, OnDestroy {
   }
 
   private onTableChanged(payload: IDataChangeEvent) {
-    console.log('@@ vehicle table updated >', payload);
+    //console.log('@@ vehicle table updated >', payload);
     let needReload = false;
     if (payload && payload.id && payload.operation) {
       if (['INSERT', 'DELETE'].includes(payload.operation)) {

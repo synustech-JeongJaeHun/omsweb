@@ -14,6 +14,7 @@ export interface IVehicleStatusRow extends IVehicleInfoRow {
   curPoint: number;
   cargoState: string;
   mode: string;
+  hostOrder: boolean;
   orderOrigin: string;
   canBePushed: boolean;
   isSensorStopped: boolean;

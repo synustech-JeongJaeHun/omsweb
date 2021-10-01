@@ -50,6 +50,11 @@ namespace OMSWeb.Repositories
     END AS command_point,
     OD.location_pickup, OD.location_dropoff, OD.location_move,
     VH.cargo_state, VH.mode,
+    CASE 
+        WHEN order_origin LIKE '%MCS%' THEN true 
+        WHEN order_origin LIKE '%*%' THEN true 
+        ELSE false
+    END As host_order,  
     order_origin, can_be_pushed,
     VH.is_sensor_stopped, VH.is_blocked,
     CASE

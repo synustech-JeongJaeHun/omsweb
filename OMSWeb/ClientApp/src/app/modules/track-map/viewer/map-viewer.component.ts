@@ -200,7 +200,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
         commandMessage = { action: 'set_behavior', canBePushed: true };
         break;
       case 'hostOrder:enable':
-        commandMessage = { action: 'set_behavior', orderOrigin: 'OMS,MCS' }; 
+        commandMessage = { action: 'set_behavior', hostOrder: true };
         break;
       case 'rail_out':
         commandMessage = { action: 'remove' };

@@ -72,7 +72,13 @@ namespace OMSWeb.Repositories
       {"vehiclePosition", @"
         SELECT 
             VH.id, VH.physical_id, VH.logical_id, VH.last_point AS cur_point, VH.next_point, VH.distance_point, VH.last_contact,
-            VH.mode, VH.can_be_pushed, VH.order_origin, VH.moving_state, VH.cargo_state, VH.is_sensor_stopped, VH.is_blocked, VH.error_list, VH.type, VH.cargo_transfer_result, VH.map_db,
+            VH.mode, VH.can_be_pushed, 
+            CASE 
+                WHEN VH.order_origin LIKE '%MCS%' THEN true 
+                WHEN VH.order_origin LIKE '%*%' THEN true 
+                ELSE false
+            END As host_order, 
+            VH.order_origin, VH.moving_state, VH.cargo_state, VH.is_sensor_stopped, VH.is_blocked, VH.error_list, VH.type, VH.cargo_transfer_result, VH.map_db,
             OD.id AS order_id, OD.logical_id AS order_logical_id, OD.location_pickup, OD.location_dropoff, OD.location_move, OD.priority,
             CASE 
             WHEN OD.location_pickup IS NOT NULL AND OD.location_dropoff IS NOT NULL   -- FROM-TO order

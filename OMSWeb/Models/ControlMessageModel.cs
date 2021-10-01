@@ -15,6 +15,7 @@ namespace OMSWeb.Models
     public string ZcuUsingType { get; set; }
     public int? OrderId { get; set; }
     public int? SegmentId { get; set; }
+    public bool hostOrder { get; set; }
     public string OrderOrigin { get; set; }
     public string LocationPickupType { get; set; }
     public string LocationDropoffType { get; set; }
