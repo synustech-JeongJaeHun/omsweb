@@ -50,6 +50,8 @@ namespace OMSWeb.Services.MqttClient
 
         public const string ORIGIN_DEFAULT = "OMS";
         public const string ORIGIN_OMS = "OMS";
+        public const string ORIGIN_LOCAL_ORDER = "OMS";
+        public const string ORIGIN_HOST_ORDER = "OMS,MCS";
 
         public MqttMessage()
         {
@@ -160,6 +162,15 @@ namespace OMSWeb.Services.MqttClient
 
             return command.VehicleIds;
         }
+
+        public object GetOrderOrigin(CommandMessageDto command)
+        {
+            if (command.hostOrder)
+                return ORIGIN_HOST_ORDER;
+
+            return ORIGIN_LOCAL_ORDER;
+        }
+
         public object GetAlarmErrorCode(CommandMessageDto command)
         {
             return command.AlarmCode;
@@ -283,8 +294,8 @@ namespace OMSWeb.Services.MqttClient
                 if (command.VehicleId != null || command.VehicleIds != null)
                     data["vehicle_id"] = GetVehicleId(command);
 
-                if (command.OrderOrigin != null)  
-                    data["order_origin"]  = command.OrderOrigin;
+                if (command.OrderOrigin == null)
+                    data["order_origin"] = GetOrderOrigin(command);
 
                 if (command.CanBePushed != null)  
                     data["can_be_pushed"] = command.CanBePushed;
