@@ -5974,6 +5974,27 @@ export class ViewController {
       update_list
     );
   }
+  get_distance_point(
+    d: any
+  ) {
+    let x_offset: number = 0;
+    let y_offset: number = 0;
+    if (
+      this.vehicles[d.index].distancePoint !== undefined &&
+      this.vehicles[d.index].distancePoint !== null &&
+      this.vehicles[d.index].distancePoint !== 0
+    ) {
+      let direction: any = this.get_vehicle_direction(
+        this.vehicles[d.index].curPoint,
+        this.vehicles[d.index].nextPoint
+      );
+      if (direction === 'T') y_offset -= this.vehicles[d.index].distancePoint;
+      else if (direction === 'B') y_offset += this.vehicles[d.index].distancePoint;
+      else if (direction === 'L') x_offset -= this.vehicles[d.index].distancePoint;
+      else if (direction === 'R') x_offset += this.vehicles[d.index].distancePoint;
+    }
+    return [x_offset, y_offset];
+  }
   get_vehicle_direction(
     curPoint: any,
     nextPoint: any
@@ -6243,63 +6264,40 @@ export class ViewController {
             );
           }
           if (is_update_all || update.distancePoint) {
-            let x_offset: number = 0;
-            let y_offset: number = 0;
-            if (
-              d.distancePoint !== undefined &&
-              d.distancePoint !== null &&
-              d.distancePoint !== 0
-            ) {
-              let direction: any = this.get_vehicle_direction(
-                d.curPoint,
-                d.nextPoint
-              );
-              if (direction === 'T') y_offset -= d.distancePoint;
-              else if (direction === 'B') y_offset += d.distancePoint;
-              else if (direction === 'L') x_offset -= d.distancePoint;
-              else if (direction === 'R') x_offset += d.distancePoint;
+            this.vehicle_svg.attr('transform', (d) => {
+              if (this.vehicles[d.index]) {
 
-              //this.move_vehicle_offset_svg(
-              //  d3_this,
-              //  d,
-              //  x_offset,
-              //  y_offset,
-              //  this.MIN_ANIMATE_DISTANCE,
-              //  current_zoom
-              //);
-            }
+                let values: any = this.get_distance_point(d);
+                let x_offset: number = values[0];
+                let y_offset: number = values[1];
+
+                let x = this.vehicles[d.index].curPoint.invertedCoord.x + x_offset;
+                let y = this.vehicles[d.index].curPoint.invertedCoord.y + y_offset;
+
+                let trans_array = this.getZoom(MapTypes.MAIN).apply([x, y]);
+                return (
+                  'translate(' + trans_array[0].toString() + ',' + trans_array[1].toString() + ')'
+                );
+              } else {
+                return '';
+              }
+            });
           }
         });
       } else {
         this.vehicle_svg.attr('transform', (d) => {
           if (this.vehicles[d.index]) {
 
-            let x_offset: number = 0;
-            let y_offset: number = 0;
-            if (
-              this.vehicles[d.index].distancePoint !== undefined &&
-              this.vehicles[d.index].distancePoint !== null &&
-              this.vehicles[d.index].distancePoint !== 0
-            ) {
-              let direction: any = this.get_vehicle_direction(
-                this.vehicles[d.index].curPoint,
-                this.vehicles[d.index].nextPoint
-              );
-              if      (direction === 'T') y_offset -= this.vehicles[d.index].distancePoint;
-              else if (direction === 'B') y_offset += this.vehicles[d.index].distancePoint;
-              else if (direction === 'L') x_offset -= this.vehicles[d.index].distancePoint;
-              else if (direction === 'R') x_offset += this.vehicles[d.index].distancePoint;
-            }
+            let values: any = this.get_distance_point(d);
+            let x_offset: number = values[0];
+            let y_offset: number = values[1];
 
             let x = this.vehicles[d.index].curPoint.invertedCoord.x + x_offset;
             let y = this.vehicles[d.index].curPoint.invertedCoord.y + y_offset;
+
             let trans_array = this.getZoom(MapTypes.MAIN).apply([x, y]);
             return (
-              'translate(' +
-              trans_array[0].toString() +
-              ',' +
-              trans_array[1].toString() +
-              ')'
+              'translate(' + trans_array[0].toString() + ',' + trans_array[1].toString() + ')'
             );
           } else {
             return '';
@@ -6386,9 +6384,7 @@ export class ViewController {
     current_zoom: any
   ) {
     if (vehicle_data.isMoved) {
-      let last_point = vehicle_data.last_point
-        ? vehicle_data.last_point.point
-        : null;
+      let last_point = vehicle_data.last_point ? vehicle_data.last_point.point : null;
       let matched_segment = LayoutUtil.find_segment(
         last_point,
         vehicle_data.curPoint.point,
@@ -6425,44 +6421,6 @@ export class ViewController {
           this.render_vehicle_line(d3_this, vehicle_data, is_show_vehicle_line);
         }
       }
-    }
-  }
-  move_vehicle_offset_svg(
-    d3_this: d3.Selection<d3.BaseType, unknown, HTMLElement, any>,
-    vehicle_data: any,
-    x_offset: number,
-    y_offset: number,
-    MIN_ANIMATE_DISTANCE: number,
-    current_zoom: any
-  ) {
-    if (vehicle_data.movingState === 'S') {
-      let last_point = vehicle_data.last_point
-        ? vehicle_data.last_point.point
-        : null;
-      let matched_segment = LayoutUtil.find_segment(
-        last_point,
-        vehicle_data.curPoint.point,
-        this.layout_data.segments,
-        false
-      );
-      if (
-        matched_segment &&
-        current_zoom.k * matched_segment.length > MIN_ANIMATE_DISTANCE
-      ) {
-        //Get the vehicle elements to move along selected path
-        let bzLen = matched_segment.bezierPoints.length;
-        matched_segment.bezierPoints[bzLen-1][0] += x_offset;
-        matched_segment.bezierPoints[bzLen - 1][1] += y_offset;
-
-        vehicle_data.curPoint.invertedCoord.x += x_offset,
-        vehicle_data.curPoint.invertedCoord.y += y_offset,
-
-        this.vehicle_transition(
-          matched_segment.bezierPoints,
-          d3_this,
-          vehicle_data,
-        );
-      } 
     }
   }
   render_vehicle_line(
@@ -6530,7 +6488,7 @@ export class ViewController {
         // Apply transform
         d3_veh.attr(
           'transform',
-          'translate(' + current_point[0] + ',' + current_point[1] + ')'
+          'translate(' + current_point[0] + ',' + current_point[1] +  ')'
         );
       } else {
         //Move vehicle
@@ -9064,33 +9022,6 @@ export class ViewController {
         ]);
         is_scale = true;
       }
-      else if (d.objectType.toUpperCase() === 'VEHICLE') {
-        is_translate = true;
-        is_rotate = true;
-
-        let x_offset: number = 0;
-        let y_offset: number = 0;
-        if (
-          d.distancePoint !== undefined &&
-          d.distancePoint !== null &&
-          d.distancePoint !== 0
-        ) {
-          let direction: any = this.get_vehicle_direction(
-            d.curPoint,
-            d.nextPoint
-          );
-
-          if      (direction === 'T') y_offset -= d.distancePoint;
-          else if (direction === 'B') y_offset += d.distancePoint;
-          else if (direction === 'L') x_offset -= d.distancePoint;
-          else if (direction === 'R') x_offset += d.distancePoint;
-        }
-
-        trans_array = transform.apply([
-          d.invertedCoordFrom.x + x_offset,
-          d.invertedCoordFrom.y + y_offset,
-        ]);
-      }
       else {
         is_translate = true;
         is_rotate = true;
@@ -11379,7 +11310,9 @@ export class ViewController {
           return y;
         })
         .html(function () {
-          let id = layout_object.logicalId ? layout_object.logicalId : layout_object.id;
+          let id = layout_object.logicalId
+            ? layout_object.logicalId
+            : layout_object.id;
           if (overlap_adjustment) {
             return `Vehicle ${id}`;
           } else {
