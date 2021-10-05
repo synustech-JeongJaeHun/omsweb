@@ -16,7 +16,9 @@ import {
   IStationCommandMessage,
   IBufferCommandMessage,
   IAllSegmentCommandMessage,
-  IZcuCommandMessage
+  IZcuCommandMessage,
+  IVehicleRegCommandMessage,
+  ISegmentCommandMessage
 } from '../models/command.model';
 import { IOrderStatusRow } from '../models/order-status.model';
 import { IVehicleStatusRow } from '../models/vehicle-status.model';
@@ -26,7 +28,7 @@ import { IVehicleStatusRow } from '../models/vehicle-status.model';
 })
 export class MessagesService {
   private baseUrl = '/api/messages';
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   sendDeleteOrder(order: IOrderStatusRow): Observable<void> {
     const {
@@ -163,6 +165,19 @@ export class MessagesService {
     return this.sendCommand<IAllSegmentCommandMessage>(command);
   }
 
+  sendSpeedRatioSegmentCommand(
+    command: ISegmentCommandMessage
+  ): Observable<void> {
+    command.type = command.type;
+    command.action = command.action;
+    command.segmentId = command.segmentId;
+    command.speedRatio = command.speedRatio;
+    command.segmentIds = command.segmentIds;
+    command.speedRatios = command.speedRatios;
+
+    return this.sendCommand<ISegmentCommandMessage>(command);
+  }
+
   sendZcuUsingTypeCommand(
     command: IZcuCommandMessage
   ): Observable<void> {
@@ -181,6 +196,39 @@ export class MessagesService {
     command.zcuUsingType = command.zcuUsingType;
 
     return this.sendCommand<IZcuCommandMessage>(command);
+  }
+
+  sendVehicleRegAddCommand(
+    command: IVehicleRegCommandMessage
+  ): Observable<void> {
+    command.type = command.type;
+    command.action = command.action;
+    command.vehicleId = command.vehicleId;
+    command.logicalId = command.logicalId;
+
+    return this.sendCommand<IVehicleRegCommandMessage>(command);
+  }
+
+  sendVehicleRegUpdateCommand(
+    command: IVehicleRegCommandMessage
+  ): Observable<void> {
+    command.type = command.type;
+    command.action = command.action;
+    command.vehicleId = command.vehicleId;
+    command.logicalId = command.logicalId;
+
+    return this.sendCommand<IVehicleRegCommandMessage>(command);
+  }
+
+  sendVehicleRegRemoveCommand(
+    command: IVehicleRegCommandMessage
+  ): Observable<void> {
+    command.type = command.type;
+    command.action = command.action;
+    command.vehicleId = command.vehicleId;
+    command.vehicleIds = command.vehicleIds;
+
+    return this.sendCommand<IVehicleRegCommandMessage>(command);
   }
 
   private sendCommand<T extends ICommandMessage>(command: T): Observable<void> {

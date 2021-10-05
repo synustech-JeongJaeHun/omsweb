@@ -18,7 +18,7 @@ export class MapConfig {
   vehicleScale?: number = main_css.vehicle.radius;
   mapRotation?: number = 0;
   segmentWidth?: number = 2;
-  segmentDirectionSize?= 5;
+  segmentDirectionSize? = 5;
 }
 
 export class ThemeConfig {
@@ -69,7 +69,7 @@ export class ClientPreferences implements IPreferences {
     this.load();
   }
 
-  getServiceConfig() { }
+  getServiceConfig() {}
 
   private load() {
     const value = StorageUtil.getLocal(this.storeKey) || '{}';
@@ -153,6 +153,28 @@ export interface ISettingsZcu {
 }
 
 export interface ISettingsVehicleReg {
-  id: number;
+  id: string;
   logicalId: string;
+  isNew?: boolean;
+}
+
+export interface IVehicleRegForm {
+  id: string;
+  logicalId: string;
+}
+
+export interface ISettingsGroup {
+  id: number;
+  objects?: any[];
+}
+
+export interface ISettingsGroupedObject {
+  id: number;
+  groupId: number;
+  referenceId: number;
+  referenceTable: string;
+}
+
+export interface ISettingsObject {
+  id: number;
 }

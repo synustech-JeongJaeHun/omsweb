@@ -1,0 +1,49 @@
+<form [formGroup]="form" novalidate class="vehicle-form" (ngSubmit)="onSave()">
+  <div mat-dialog-content>
+    <mat-form-field appearance="outline">
+      <mat-label>{{ "names.id" | translate }}</mat-label>
+      <input matInput formControlName="id" />
+      <mat-error *ngIf="f.id.errors">
+        <mat-error *ngIf="f.id.errors.required">
+          {{
+          "messages.required" | translate: { field: "ID" }
+          }}
+        </mat-error>
+        <mat-error *ngIf="f.id.errors?.invalidNumber">
+          {{
+          "This id is not a number."
+          }}
+        </mat-error>
+        <mat-error *ngIf="f.id.errors?.duplicatedNumber">
+          {{
+          "This id is duplicated."
+          }}
+        </mat-error>
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>{{ "names.onlineName" | translate }}</mat-label>
+      <input matInput formControlName="logicalId" />
+      <mat-error *ngIf="f.logicalId.errors">
+        <mat-error *ngIf="f.logicalId.errors.required">
+          {{
+          "messages.required" | translate: { field: "logicalId" }
+          }}
+        </mat-error>
+        <mat-error *ngIf="f.logicalId.errors?.duplicatedLogicalId">
+          {{
+          "This logicalId is duplicated."
+          }}
+        </mat-error>
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <div mat-dialog-actions>
+    <button type="submit" mat-raised-button [disabled]="form.invalid" color="primary">
+      {{ "names.save" | translate }}
+    </button>
+    <button type="button" mat-raised-button (click)="onCancel()">
+      {{ "names.cancel" | translate }}
+    </button>
+  </div>
+</form>

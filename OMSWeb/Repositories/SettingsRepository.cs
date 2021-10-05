@@ -2,6 +2,7 @@
 using System;
 using System.Linq;
 using Dapper;
+using Npgsql;
 using OMSWeb.Models;
 using OMSWeb.Models.Entities;
 
@@ -11,6 +12,193 @@ namespace OMSWeb.Repositories
   {
     public SettingsRepository(IConfiguration configuration) : base(configuration)
     {
+    }
+
+    public IQueryable<GroupEntity> QuerySettingsGroups()
+    {
+      IQueryable<GroupEntity> result;
+      using (var conn = ConnectTrack())
+      {
+        var sql = @"
+        SELECT DISTINCT GOS.group_id AS id
+        FROM grouped_objects GOS
+        ORDER BY GOS.group_id;
+        ";
+
+        result = conn.Query<GroupEntity>(sql).AsQueryable();
+      }
+      return result;
+    }
+
+    public IQueryable<GroupedObjectEntity> QuerySettingsGroupedObjects()
+    {
+      IQueryable<GroupedObjectEntity> result;
+      using (var conn = ConnectTrack())
+      {
+        var sql = @"
+        SELECT GOS.id, GOS.group_id, GOS.reference_id, GOS.reference_table 
+        FROM grouped_objects GOS
+        ORDER BY GOS.id; 
+        ";
+
+        result = conn.Query<GroupedObjectEntity>(sql).AsQueryable();
+      }
+      return result;
+    }
+
+    public IQueryable<ObjectEntity> QuerySettingsGroupHomeObjects()
+    {
+      IQueryable<ObjectEntity> result;
+      using (var conn = ConnectTrack())
+      {
+        // Home이 중복 Group에 포함되도록 허용된 경우 아래 쿼리 사용
+        // Group 중복 처리시에 @group_id 파라미터로 현재 조회중인 그룹 ID를 넘겨서 처리.
+        /*
+        var sql2 = @"        
+        SELECT id
+        FROM homes HMS 
+        WHERE NOT EXISTS
+        (
+	        SELECT 1 
+	        FROM grouped_objects GOS 
+	        WHERE GOS.reference_table = 'home' AND GOS.reference_id = HMS.id AND GOS.group_id = @group_id
+        )
+        ORDER BY HMS.id;
+        ";
+        */
+
+        // 현재 Home (Home point는 중복 그룹에 포함되지 않아서 아래 쿼리 사용함.)
+        var sql = @"
+        SELECT id 
+        FROM homes HMS 
+        WHERE NOT EXISTS
+        (
+	        SELECT 1 
+	        FROM grouped_objects GOS 
+	        WHERE GOS.reference_table = 'home' AND GOS.reference_id = HMS.id
+        )
+        ORDER BY HMS.id;
+        ";
+
+        result = conn.Query<ObjectEntity>(sql).AsQueryable();
+      }
+      return result;
+    }
+
+    public IQueryable<ObjectEntity> QuerySettingsGroupStationObjects()
+    {
+      IQueryable<ObjectEntity> result;
+      using (var conn = ConnectTrack())
+      {
+        // Station이 중복 Group에 포함되도록 허용된 경우 아래 쿼리 사용
+        // Group 중복 처리시에 @group_id 파라미터로 현재 조회중인 그룹 ID를 넘겨서 처리.
+        /*
+        var sql = @"
+        SELECT id
+        FROM stations STS
+        WHERE NOT EXISTS
+        (
+	        SELECT 1 
+	        FROM grouped_objects GOS 
+	        WHERE GOS.reference_table = 'station' AND GOS.reference_id = STS.id	AND GOS.group_id = @group_id
+        )
+        ORDER BY STS.id;
+        ";
+        */
+
+        // 현재 Station (Station은 중복 그룹에 포함되지 않아서 아래 쿼리 사용함.)
+        var sql = @"
+        SELECT id
+        FROM stations STS
+        WHERE NOT EXISTS
+        (
+	        SELECT 1 
+	        FROM grouped_objects GOS 
+	        WHERE GOS.reference_table = 'station' AND GOS.reference_id = STS.id	
+        )
+        ORDER BY STS.id;
+        ";
+
+        result = conn.Query<ObjectEntity>(sql).AsQueryable();
+      }
+      return result;
+    }
+
+    public IQueryable<ObjectEntity> QuerySettingsGroupVehicleObjects()
+    {
+      IQueryable<ObjectEntity> result;
+      using (var conn = ConnectTrack())
+      {
+        // Vehicle이 중복 Group에 포함되도록 허용된 경우 아래 쿼리 사용
+        // Group 중복 처리시에 @group_id 파라미터로 현재 조회중인 그룹 ID를 넘겨서 처리.
+        /*
+        var sql = @"
+        SELECT id
+        FROM vehicles VHS
+        WHERE NOT EXISTS
+        (
+	        SELECT 1 
+	        FROM grouped_objects GOS 
+	        WHERE GOS.reference_table = 'vehicle' AND GOS.reference_id = VHS.id AND GOS.group_id = @group_id
+        )
+        ORDER BY VHS.id;
+        ";
+        */
+
+        // 현재 Vehicle (Vehicle은 중복 그룹에 포함되지 않아서 아래 쿼리 사용함.)
+        var sql = @"
+        SELECT id
+        FROM vehicles VHS
+        WHERE NOT EXISTS
+        (
+	        SELECT 1 
+	        FROM grouped_objects GOS 
+	        WHERE GOS.reference_table = 'vehicle' AND GOS.reference_id = VHS.id		
+        )
+        ORDER BY VHS.id;
+        ";
+
+        result = conn.Query<ObjectEntity>(sql).AsQueryable();
+      }
+      return result;
+    }
+
+    public IQueryable<ObjectEntity> QuerySettingsGroupBufferObjects()
+    {
+      IQueryable<ObjectEntity> result;
+      using (var conn = ConnectTrack())
+      {
+        // Buffer가 중복 Group에 포함되도록 허용된 경우 아래 쿼리 사용
+        // Group 중복 처리시에 @group_id 파라미터로 현재 조회중인 그룹 ID를 넘겨서 처리.
+        /*
+        var sql = @"
+        SELECT id, physical_id, logical_id
+        FROM buffers BFS
+        WHERE NOT EXISTS
+        (
+	        SELECT 1 
+	        FROM grouped_objects GOS 
+	        WHERE GOS.reference_table = 'buffer' AND GOS.reference_id = BFS.id AND GOS.group_id = @group_id
+        )
+        ORDER BY BFS.id;
+        ";
+        */
+
+        // 현재 Buffer (Buffer는 중복 그룹에 포함되지 않아서 아래 쿼리 사용함.)
+        var sql = @"
+        SELECT id
+        FROM buffers BFS
+        WHERE NOT EXISTS
+        (
+	        SELECT 1 
+	        FROM grouped_objects GOS 
+	        WHERE GOS.reference_table = 'buffer' AND GOS.reference_id = BFS.id		
+        )
+        ORDER BY BFS.id;
+        ";
+        result = conn.Query<ObjectEntity>(sql).AsQueryable();
+      }
+      return result;
     }
 
     public IQueryable<SegmentWithVPartsNBlockingEntity> QuerySettingsSegments()
@@ -36,6 +224,67 @@ namespace OMSWeb.Repositories
       }
       return result;
     }
+
+    public int UpdateSettingsSegment(SegmentWithVPartsNBlockingEntity segment)
+    {
+      int result = -1;
+
+      var updateSegmentSql = @"
+      UPDATE segments
+      SET length = @length
+      WHERE id = @id;
+      ";
+
+      var updateSegmentVPartsSql = @"
+      UPDATE segment_vparts
+      SET oblow = @oblow, obhigh = @obhigh, obdistance = @obdistance
+      WHERE id = @id;
+      ";
+
+      using (var conn = ConnectTrack())
+      {
+        conn.Open();
+        var trans = conn.BeginTransaction();
+
+        using (var cmd = new NpgsqlCommand(updateSegmentSql, conn))
+        {
+          try
+          {
+            cmd.Parameters.AddWithValue("id", segment.Id);
+            cmd.Parameters.AddWithValue("length", segment.Length);
+
+            result = cmd.ExecuteNonQuery();
+          }
+          catch (Exception ex)
+          {
+            trans.Rollback();
+            throw ex;
+          }
+        }
+
+        using (var cmd = new NpgsqlCommand(updateSegmentVPartsSql, conn))
+        {
+          try
+          {
+            cmd.Parameters.AddWithValue("id", segment.Id);
+            cmd.Parameters.AddWithValue("oblow", segment.OBLow);
+            cmd.Parameters.AddWithValue("obhigh", segment.OBHigh);
+            cmd.Parameters.AddWithValue("obdistance", segment.OBDistance);
+
+            cmd.ExecuteNonQuery();
+            trans.Commit();
+          }
+          catch (Exception ex)
+          {
+            trans.Rollback();
+            throw ex;
+          }
+        }
+      }
+
+      return result;
+    }
+
 
     public IQueryable<StationWithUnuseEntity> QuerySettingsStations()
     {
@@ -142,6 +391,98 @@ namespace OMSWeb.Repositories
         ";
 
         result = conn.Query<VehicleRegEntity>(sql).AsQueryable();
+      }
+      return result;
+    }
+
+    public int InsertSettingsVehicleRegs(VehicleRegEntity vehicleReg)
+    {
+      int result = -1;
+
+      var insertVehicleRegSql = @"
+      INSERT vehicle_reg (id, logical_id) 
+      VALUES (@id, @logical_id);
+      ";
+
+      using (var conn = ConnectTrack())
+      {
+        conn.Open();
+
+        using (var cmd = new NpgsqlCommand(insertVehicleRegSql, conn))
+        {
+          try
+          {
+            cmd.Parameters.AddWithValue("id", vehicleReg.Id);
+            cmd.Parameters.AddWithValue("logical_id", vehicleReg.LogicalId);
+
+            result = cmd.ExecuteNonQuery();
+          }
+          catch (Exception ex)
+          {
+            throw ex;
+          }
+        }
+      }
+      return result;
+    }
+
+    public int UpdateSettingsVehicleRegs(VehicleRegEntity vehicleReg)
+    {
+      int result = -1;
+
+      var updateVehicleRegSql = @"
+      UPDATE vehicle_reg
+      SET logical_id = @logical_id
+      WHERE id = @id;
+      ";
+
+      using (var conn = ConnectTrack())
+      {
+        conn.Open();
+
+        using (var cmd = new NpgsqlCommand(updateVehicleRegSql, conn))
+        {
+          try
+          {
+            cmd.Parameters.AddWithValue("id", vehicleReg.Id);
+            cmd.Parameters.AddWithValue("logical_id", vehicleReg.LogicalId);
+
+            result = cmd.ExecuteNonQuery();
+          }
+          catch (Exception ex)
+          {
+            throw ex;
+          }
+        }
+      }
+      return result;
+    }
+
+    public int DeleteSettingsVehicleRegs(VehicleRegEntity vehicleReg)
+    {
+      int result = -1;
+
+      var deleteVehicleRegSql = @"
+      DELETE FROM vehicle_reg WHERE id = @id;
+      ";
+
+      using (var conn = ConnectTrack())
+      {
+        conn.Open();
+
+        using (var cmd = new NpgsqlCommand(deleteVehicleRegSql, conn))
+        {
+          try
+          {
+            cmd.Parameters.AddWithValue("id", vehicleReg.Id);
+
+            result = cmd.ExecuteNonQuery();
+          }
+          catch (Exception ex)
+          {
+            throw ex;
+          }
+        }
       }
       return result;
     }

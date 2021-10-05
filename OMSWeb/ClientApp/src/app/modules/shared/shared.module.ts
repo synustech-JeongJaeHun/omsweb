@@ -26,6 +26,7 @@ import { UserFormComponent } from './forms/user-form.component';
 import { SettingsModule } from '../settings/settings.module';
 import { ColorPickerComponent } from './forms/color-picker.component';
 import { UnitListSelectorComponent } from './forms/unit-list-selector.component';
+import { VehicleFormComponent } from './forms/vehicle-form.component';
 
 const inOutModules = [
   FormsModule,
@@ -50,6 +51,7 @@ const inOutModules = [
     UserFormComponent,
     ColorPickerComponent,
     UnitListSelectorComponent,
+    VehicleFormComponent,
   ],
   imports: [
     CommonModule,
@@ -82,6 +84,7 @@ const inOutModules = [
     UserFormComponent,
     ColorPickerComponent,
     UnitListSelectorComponent,
+    VehicleFormComponent,
   ],
 })
 export class SharedModule {}

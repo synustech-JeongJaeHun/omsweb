@@ -33,5 +33,7 @@ namespace OMSWeb.Models
     public int[] BufferIds { get; set; }
     public int[] SegmentIds { get; set; }
     public int? SpeedRatio { get; set; }
+    public string LogicalId { get; set; }
+    public int[] SpeedRatios { get; set; }
   }
 }

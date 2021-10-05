@@ -97,5 +97,24 @@ namespace OMSWeb.Models.Entities
   {
     public int Id { get; set; }
     public string LogicalId { get; set; }
+    public bool? IsNew { get; set; }
+  }
+
+  public class GroupEntity : IIntId
+  {
+    public int Id { get; set; }
+  }
+
+  public class GroupedObjectEntity : IIntId
+  {
+    public int Id { get; set; }
+    public int GroupId { get; set; }
+    public int ReferenceId { get; set; }
+    public string ReferenceTable { get; set; }
+  }
+
+  public class ObjectEntity : IIntId
+  {
+    public int Id { get; set; }
   }
 }

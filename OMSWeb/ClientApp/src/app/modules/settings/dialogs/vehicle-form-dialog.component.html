@@ -1,0 +1,10 @@
+<oms-dialog-base [title]="'names.addVehicle' | translate">
+  <ng-container class="dialog-layout">
+    <oms-vehicle-form
+      [dataSource]="data"
+      [addMode]="addMode"
+      (save)="onSubmit($event)"
+      (cancel)="onCancel()">
+    </oms-vehicle-form>
+  </ng-container>
+</oms-dialog-base>

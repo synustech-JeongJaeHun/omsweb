@@ -290,7 +290,7 @@
     "showOmsVersion": "Show OMS version",
     "segmentNormal": "Segment - normal",
     "segmentDisabled": "Segment - disabled",
-    "revert": "Read",
+    "revert": "Revert",
     "selectResetItem": "Select items to reset",
     "resetToDefault": "Reset to default",
     "segmentDirection": "Segment Direction",
@@ -350,7 +350,8 @@
     "resolution": "Resolution",
     "action": "Action",
     "mem": "MEM",
-    "vehicleSetting": "Vehicle Setting"
+    "vehicleSetting": "Vehicle Setting",
+    "addVehicle": "Add Vehicle"
   },
   "enums": {
     "hostSessionStatus": {

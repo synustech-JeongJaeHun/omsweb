@@ -31,16 +31,18 @@
     [allowDeleting]="false"
     [allowAdding]="false"
     [useIcons]="true">
-  </dxo-editing>  
+  </dxo-editing>
+  <!--
   <dxo-selection mode="multiple" selectAllMode="allPages" showCheckBoxesMode="always"></dxo-selection>
+  -->
 
   <dxi-column dataType="number" dataField="id" [allowEditing]="false" [width]="60" alignment="center"></dxi-column>
   <dxi-column dataType="sting" dataField="logicalId" [caption]="'names.onlineName' | translate" [allowEditing]="false" alignment="center"></dxi-column>
   <dxi-column dataType="boolean" dataField="unUse" [caption]="'names.unuse' | translate"></dxi-column>
 
-  <dxi-column dataField="secondaryStation" [caption]="'names.secondary' | translate" alignment="center"></dxi-column>
-  <dxi-column dataField="maxRetrySec" [caption]="'MaxRetry(Sec)'"></dxi-column>
-  <dxi-column dataField="retryIntervalSec" [caption]="'RetryInterval(Sec)'"></dxi-column>
+  <dxi-column dataField="secondaryStation" [caption]="'names.secondary' | translate" [allowEditing]="false" alignment="center"></dxi-column>
+  <dxi-column dataField="maxRetrySec" [caption]="'MaxRetry(Sec)'" [allowEditing]="false" alignment="center"></dxi-column>
+  <dxi-column dataField="retryIntervalSec" [caption]="'RetryInterval(Sec)'" [allowEditing]="false" alignment="center"></dxi-column>
 
   <dxo-search-panel
     [placeholder]="'names.search' | translate"

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import DataSource from 'devextreme/data/data_source';
 import { Observable, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { ClientPreferences, ISettingsBufferWithUnuse, ISettingsSegment, ISettingsSegmentWithVParts, ISettingsSegmentWithVPartsNBlocking, ISettingsStationWithUnuse, ISettingsVehicleReg, ISettingsZcu, ServiceConfig } from '../models/settings.model';
+import { ClientPreferences, ISettingsBufferWithUnuse, ISettingsGroup, ISettingsObject, ISettingsGroupedObject, ISettingsSegment, ISettingsSegmentWithVParts, ISettingsSegmentWithVPartsNBlocking, ISettingsStationWithUnuse, ISettingsVehicleReg, ISettingsZcu, ServiceConfig } from '../models/settings.model';
 import { StorageUtil } from '../modules/shared/utils/storage.util';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 import CustomStore from 'devextreme/data/custom_store';
@@ -43,8 +43,40 @@ export class SettingsService {
     this._globalPreferences = new ClientPreferences('global.pref');
   }
 
+  //settingsObjects(): Observable<ISettingsObject[]> {
+  //  return this.http.get<ISe
+  //}
+
+  settingsGroups(): Observable<ISettingsGroup[]> {
+    return this.http.get<ISettingsGroup[]>(`${this.baseUrl}/groups`);
+  }
+
+  settingsGroupPointObjects(): Observable<ISettingsObject[]> {
+    return this.http.get<ISettingsObject[]>(`${this.baseUrl}/groups/homes`);
+  }
+
+  settingsGroupStationObjects(): Observable<ISettingsObject[]> {
+    return this.http.get<ISettingsObject[]>(`${this.baseUrl}/groups/stations`);
+  }
+
+  settingsGroupVehicleObjects(): Observable<ISettingsObject[]> {
+    return this.http.get<ISettingsObject[]>(`${this.baseUrl}/groups/vehicles`);
+  }
+
+  settingsGroupBufferObjects(): Observable<ISettingsObject[]> {
+    return this.http.get<ISettingsObject[]>(`${this.baseUrl}/groups/buffers`);
+  }
+
+  settingsGroupedObjects(): Observable<ISettingsGroupedObject[]> {
+    return this.http.get<ISettingsGroupedObject[]>(`${this.baseUrl}/groups/grouped_objects`);
+  }
+
   settingsSegments(): Observable<ISettingsSegmentWithVPartsNBlocking[]> {
     return this.http.get<ISettingsSegmentWithVPartsNBlocking[]>(`${this.baseUrl}/segments`);
+  }
+
+  saveSegments(form: ISettingsSegmentWithVPartsNBlocking[]): Observable<void> {
+    return this.http.post<void>(`${this.baseUrl}/segments/save`, form);
   }
 
   settingsStations(): Observable<ISettingsStationWithUnuse[]> {
@@ -84,8 +116,13 @@ export class SettingsService {
     return this.http.get<ISettingsVehicleReg[]>(`${this.baseUrl}/vehicleRegs`);
   }
 
+  deleteVehicleRegs(form: any[]): Observable<void> {
+    //alert(form.length);
+    return this.http.post<void>(`${this.baseUrl}/vehicleRegs/remove`, form);
+  }
+
   saveVehicleRegs(form: any[]): Observable<void> {
     //alert(form.length);
-    return;
+    return this.http.post<void>(`${this.baseUrl}/vehicleRegs/save`, form);
   }
 }

@@ -75,6 +75,13 @@ export interface IBufferCommandMessage extends ICommandMessage {
   bufferIds?: number[];
 }
 
+export interface ISegmentCommandMessage extends ICommandMessage {
+  segmentId?: number;
+  segmentIds?: number[];
+  speedRatio?: number;
+  speedRatios?: number[];
+}
+
 export interface IAllSegmentCommandMessage extends ICommandMessage {
   speedRatio?: number;
 }
@@ -83,4 +90,10 @@ export interface IZcuCommandMessage extends ICommandMessage {
   zcuId?: number;
   zcuIds?: number[];
   zcuUsingType?: string;
+}
+
+export interface IVehicleRegCommandMessage extends ICommandMessage {
+  vehicleId?: number;
+  vehicleIds?: number[];
+  logicalId?: string;
 }

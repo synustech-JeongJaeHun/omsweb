@@ -21,6 +21,7 @@ import { UserFormDialogComponent } from './dialogs/user-form-dialog.component';
 import { UnitPickerComponent } from './tracks/unit-picker.component';
 import { PreferencesComponent } from './preferences/preferences.component';
 import { VehicleSettingComponent } from './tracks/vehicle-setting.component';
+import { VehicleFormDialogComponent } from './dialogs/vehicle-form-dialog.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { VehicleSettingComponent } from './tracks/vehicle-setting.component';
     UnitPickerComponent,
     PreferencesComponent,
     VehicleSettingComponent,
+    VehicleFormDialogComponent
   ],
   imports: [CommonModule, SharedModule, SettingsRoutingModule],
 })

@@ -15,9 +15,44 @@ namespace OMSWeb.Services
       _repo = repo;
     }
 
+    public IQueryable<GroupEntity> GetSettingsGroups()
+    {
+      return _repo.QuerySettingsGroups();
+    }
+
+    public IQueryable<GroupedObjectEntity> GetSettingsGroupedObjects()
+    {
+      return _repo.QuerySettingsGroupedObjects();
+    }
+
+    public IQueryable<ObjectEntity> GetSettingsGroupHomeObjects()
+    {
+      return _repo.QuerySettingsGroupHomeObjects();
+    }
+
+    public IQueryable<ObjectEntity> GetSettingsGroupStationObjects()
+    {
+      return _repo.QuerySettingsGroupStationObjects();
+    }
+
+    public IQueryable<ObjectEntity> GetSettingsGroupVehicleObjects()
+    {
+      return _repo.QuerySettingsGroupVehicleObjects();
+    }
+
+    public IQueryable<ObjectEntity> GetSettingsGroupBufferObjects()
+    {
+      return _repo.QuerySettingsGroupBufferObjects();
+    }
+
     public IQueryable<SegmentWithVPartsNBlockingEntity> GetSettingsSegements()
     {
       return _repo.QuerySettingsSegments();
+    }
+
+    public int UpdateSettingsSegment(SegmentWithVPartsNBlockingEntity segment)
+    {
+      return _repo.UpdateSettingsSegment(segment);
     }
 
     public IQueryable<StationWithUnuseEntity> GetSettingsStations()
@@ -48,6 +83,21 @@ namespace OMSWeb.Services
     public IQueryable<VehicleRegEntity> GetSettingsVehicleRegs()
     {
       return _repo.QuerySettingsVehicleRegs();
+    }
+
+    public int InsertSettingsVehicleRegs(VehicleRegEntity vehicleReg)
+    {
+      return _repo.InsertSettingsVehicleRegs(vehicleReg);
+    }
+
+    public int UpdateSettingsVehicleRegs(VehicleRegEntity vehicleReg)
+    {
+      return _repo.UpdateSettingsVehicleRegs(vehicleReg);
+    }
+
+    public int DeleteSettingsVehicleRegs(VehicleRegEntity vehicleReg)
+    {
+      return _repo.DeleteSettingsVehicleRegs(vehicleReg);
     }
   }
 }
