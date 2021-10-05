@@ -6256,32 +6256,36 @@ export class ViewController {
             );
           }
           if (is_update_all || update.curPoint) {
-            this.move_vehicle_svg(
-              d3_this,
-              d,
-              this.MIN_ANIMATE_DISTANCE,
-              current_zoom
-            );
+            if (update.distancePoint === undefined) {
+              this.move_vehicle_svg(
+                d3_this,
+                d,
+                this.MIN_ANIMATE_DISTANCE,
+                current_zoom
+              );
+            }
           }
           if (is_update_all || update.distancePoint) {
-            this.vehicle_svg.attr('transform', (d) => {
-              if (this.vehicles[d.index]) {
+            if (d.isMoved == false) {
+              this.vehicle_svg.attr('transform', (d) => {
+                if (this.vehicles[d.index]) {
 
-                let values: any = this.get_distance_point(d);
-                let x_offset: number = values[0];
-                let y_offset: number = values[1];
+                  let values: any = this.get_distance_point(d);
+                  let x_offset: number = values[0];
+                  let y_offset: number = values[1];
 
-                let x = this.vehicles[d.index].curPoint.invertedCoord.x + x_offset;
-                let y = this.vehicles[d.index].curPoint.invertedCoord.y + y_offset;
+                  let x = this.vehicles[d.index].curPoint.invertedCoord.x + x_offset;
+                  let y = this.vehicles[d.index].curPoint.invertedCoord.y + y_offset;
 
-                let trans_array = this.getZoom(MapTypes.MAIN).apply([x, y]);
-                return (
-                  'translate(' + trans_array[0].toString() + ',' + trans_array[1].toString() + ')'
-                );
-              } else {
-                return '';
-              }
-            });
+                  let trans_array = this.getZoom(MapTypes.MAIN).apply([x, y]);
+                  return (
+                    'translate(' + trans_array[0].toString() + ',' + trans_array[1].toString() + ')'
+                  );
+                } else {
+                  return '';
+                }
+              });
+            }
           }
         });
       } else {
