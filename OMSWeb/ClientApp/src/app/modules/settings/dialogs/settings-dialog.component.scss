@@ -106,9 +106,11 @@
       position: relative;
     }
   }
+
   mat-nav-list {
     padding-top: 0;
   }
+
   .nav-link {
     font-size: 12px;
     font-weight: bold;
@@ -122,5 +124,6 @@
   .nav-divider {
     margin: 10px 0;
     border: none;
+    //border: 1px solid var(--dialog-border-color);
   }
 }

@@ -35,5 +35,7 @@ namespace OMSWeb.Models
     public int? SpeedRatio { get; set; }
     public string LogicalId { get; set; }
     public int[] SpeedRatios { get; set; }
+    public int? ClusterId { get; set; }
+    public int? MaxVehicles { get; set; }
   }
 }

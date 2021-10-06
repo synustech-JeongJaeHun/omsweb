@@ -1,21 +1,10 @@
 <div class="setting-header">
   <h3 class="setting-title">{{ "names.clusterSetting" | translate }}</h3>
   <div class="setting-actions">
-    <button
-      mat-raised-button
-      class="dense"
-      color="primary"
-      [disabled]="!canSave"
-      (click)="onSave()"
-    >
+    <button mat-raised-button class="dense" color="primary" [disabled]="!isUpdated" (click)="onSave()">
       {{ "names.save" | translate }}
     </button>
-    <button
-      mat-raised-button
-      class="dense"
-      [disabled]="!canSave"
-      (click)="onRevert()"
-    >
+    <button mat-raised-button class="dense" [disabled]="!isUpdated" (click)="onRevert()">
       {{ "names.revert" | translate }}
     </button>
   </div>
@@ -24,10 +13,8 @@
 <div class="sub-bar">
   <mat-label>{{ "names.selectedCluster" | translate }}</mat-label>
   <mat-form-field class="index-selector dense" appearance="outline">
-    <mat-select [(value)]="selectedItem">
-      <mat-option *ngFor="let item of clusters" [value]="item">{{
-        item.id
-      }}</mat-option>
+    <mat-select [(value)]="selectedItem" (selectionChange)="onClusterChanged()">
+      <mat-option *ngFor="let item of clusters" [value]="item">{{ item.id }}</mat-option>
     </mat-select>
   </mat-form-field>
 </div>
@@ -36,22 +23,24 @@
   <oms-unit-picker
     [title]="'names.point' | translate"
     [unitName]="'names.point' | translate"
-    [gridHeight]="440"
+    [disabled]="false"
+    [gridHeight]="430"
     [pool]="points"
     [picked]="assignedPoints"
-    (selectionChanged)="onAssignChanged($event)"
-  ></oms-unit-picker>
+    [visibleUnassigned]="false"
+    [widthUnassigned]="0"
+    [widthColumnUnassigned]="0"
+    selectionModeUnassigned="none"
+    [visibleAssigned]="true"
+    [widthAssigned]="240"
+    [widthColumnAssigned]="200"
+    selectionModeAssigned="none"
+    [visibleAction]="false">
+  </oms-unit-picker>
   <div class="max-vehicle">
     <h5>{{ "names.maxVehicles" | translate }}</h5>
     <mat-form-field class="dense" appearance="outline">
-      <input
-        #maxVehiclesInput
-        matInput
-        type="number"
-        [value]="selectedItem?.maxVehicles"
-        min="0"
-        (change)="onMaxVehiclesChanged(maxVehiclesInput.value)"
-      />
+      <input #maxVehiclesInput matInput type="number" [value]="selectedItem?.maxVehicles" min="0" max="100" (change)="onMaxVehiclesChanged(maxVehiclesInput.value)" />
     </mat-form-field>
   </div>
 </div>

@@ -9,6 +9,12 @@
   column-gap: 32px;
   justify-items: flex-start;
   align-self: flex-start;
+  margin-left: 8px;
+  width: 450px;
+
+  .assign-container {
+    display: inline;
+  }
 }
 
 mat-label {
@@ -22,4 +28,3 @@ mat-label {
     width: initial;
   }
 }
-

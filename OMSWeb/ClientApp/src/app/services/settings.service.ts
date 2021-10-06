@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import DataSource from 'devextreme/data/data_source';
 import { Observable, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { ClientPreferences, ISettingsBufferWithUnuse, ISettingsGroup, ISettingsObject, ISettingsGroupedObject, ISettingsSegment, ISettingsSegmentWithVParts, ISettingsSegmentWithVPartsNBlocking, ISettingsStationWithUnuse, ISettingsVehicleReg, ISettingsZcu, ServiceConfig } from '../models/settings.model';
+import { ClientPreferences, ISettingsBufferWithUnuse, ISettingsGroup, ISettingsObject, ISettingsGroupedObject, ISettingsCluster, ISettingsClusterPoint, ISettingsSegment, ISettingsSegmentWithVParts, ISettingsSegmentWithVPartsNBlocking, ISettingsStationWithUnuse, ISettingsVehicleReg, ISettingsZcu, ServiceConfig } from '../models/settings.model';
 import { StorageUtil } from '../modules/shared/utils/storage.util';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 import CustomStore from 'devextreme/data/custom_store';
@@ -70,6 +70,23 @@ export class SettingsService {
   settingsGroupedObjects(): Observable<ISettingsGroupedObject[]> {
     return this.http.get<ISettingsGroupedObject[]>(`${this.baseUrl}/groups/grouped_objects`);
   }
+
+  settingsClusters(): Observable<ISettingsCluster[]> {
+    return this.http.get<ISettingsCluster[]>(`${this.baseUrl}/clusters`);
+  }
+
+  settingsClusterPoints(): Observable<ISettingsClusterPoint[]> {
+    return this.http.get<ISettingsClusterPoint[]>(`${this.baseUrl}/clusters/points`);
+  }
+
+  settingsClusterIsAvailablePoints(clusterId: number): Observable<number[]> {
+    return this.http.get<number[]>(`${this.baseUrl}/clusters/isavailablepoints/${clusterId}`);
+  }
+
+  settingsClusterAssignedPoints(clusterId: number): Observable<number[]> {
+    return this.http.get<number[]>(`${this.baseUrl}/clusters/assignedpoints/${clusterId}`);
+  }
+
 
   settingsSegments(): Observable<ISettingsSegmentWithVPartsNBlocking[]> {
     return this.http.get<ISettingsSegmentWithVPartsNBlocking[]>(`${this.baseUrl}/segments`);

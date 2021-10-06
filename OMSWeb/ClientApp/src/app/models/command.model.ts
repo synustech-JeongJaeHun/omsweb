@@ -97,3 +97,8 @@ export interface IVehicleRegCommandMessage extends ICommandMessage {
   vehicleIds?: number[];
   logicalId?: string;
 }
+
+export interface IClusterCommandMessage extends ICommandMessage {
+  clusterId?: number;
+  maxVehicles?: number;
+}

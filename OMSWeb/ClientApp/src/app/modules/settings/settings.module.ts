@@ -22,6 +22,7 @@ import { UnitPickerComponent } from './tracks/unit-picker.component';
 import { PreferencesComponent } from './preferences/preferences.component';
 import { VehicleSettingComponent } from './tracks/vehicle-setting.component';
 import { VehicleFormDialogComponent } from './dialogs/vehicle-form-dialog.component';
+import { ColumnDisplayManagementComponent } from './preferences/column-display-management.component';
 
 @NgModule({
   declarations: [
@@ -43,8 +44,9 @@ import { VehicleFormDialogComponent } from './dialogs/vehicle-form-dialog.compon
     UnitPickerComponent,
     PreferencesComponent,
     VehicleSettingComponent,
-    VehicleFormDialogComponent
+    VehicleFormDialogComponent,
+    ColumnDisplayManagementComponent
   ],
   imports: [CommonModule, SharedModule, SettingsRoutingModule],
 })
-export class SettingsModule {}
+export class SettingsModule { }

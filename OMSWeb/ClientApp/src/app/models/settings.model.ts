@@ -178,3 +178,16 @@ export interface ISettingsGroupedObject {
 export interface ISettingsObject {
   id: number;
 }
+
+export interface ISettingsCluster {
+  id: number;
+  logicalId: string;
+  maxVehicles: number;
+  color?: string;
+}
+
+export interface ISettingsClusterPoint {
+  id: number;
+  pointId: number;
+  clusterId: number;
+}

@@ -61,6 +61,30 @@ namespace OMSWeb.Controllers
       return _settingsSvc.GetSettingsGroupBufferObjects().ToList();
     }
 
+    [HttpGet("clusters")]
+    public IEnumerable<ClusterEntity> GetSettingsClusters()
+    {
+      return _settingsSvc.GetSettingsClusters().ToList();
+    }
+
+    [HttpGet("clusters/points")]
+    public IEnumerable<ClusterPointEntity> GetSettingsClusterPoints()
+    {
+      return _settingsSvc.GetSettingsClusterPoints().ToList();
+    }
+
+    [HttpGet("clusters/isavailablepoints/{clusterId}")]
+    public IEnumerable<int> GetSettingsClusterIsAvailablePoints([FromRoute] int clusterId)
+    {
+      return _settingsSvc.GetSettingsClusterIsAvailablePoints(clusterId).ToList();
+    }
+
+    [HttpGet("clusters/assignedpoints/{clusterId}")]
+    public IEnumerable<int> GetSettingsClusterAssignedPoints([FromRoute] int clusterId)
+    {
+      return _settingsSvc.GetSettingsClusterAssignedPoints(clusterId).ToList();
+    }
+
     [HttpGet("segments")]
     public IEnumerable<SegmentWithVPartsNBlockingEntity> GetSettingsSegments()
     {

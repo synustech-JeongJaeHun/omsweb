@@ -201,6 +201,100 @@ namespace OMSWeb.Repositories
       return result;
     }
 
+    public IQueryable<ClusterEntity> QuerySettingsClusters()
+    {
+      IQueryable<ClusterEntity> result;
+      using (var conn = ConnectTrack())
+      {
+        var sql = @"
+        SELECT CS.id, CS.logical_id, CS.max_vehicles, CS.color 
+        FROM clusters CS
+        ORDER BY CS.id;
+        ";
+
+        result = conn.Query<ClusterEntity>(sql).AsQueryable();
+      }
+      return result;
+    }
+
+    public IQueryable<ClusterPointEntity> QuerySettingsClusterPoints()
+    {
+      IQueryable<ClusterPointEntity> result;
+      using (var conn = ConnectTrack())
+      {
+        var sql = @"
+        SELECT CPS.id, CPS.point_id, CPS.cluster_id 
+        FROM cluster_points CPS 
+        ORDER BY CPS.cluster_id, CPS.point_id; 
+        ";
+
+        result = conn.Query<ClusterPointEntity>(sql).AsQueryable();
+      }
+      return result;
+    }
+
+    public IQueryable<int> QuerySettingsClusterIsAvailablePoints(int clusterId)
+    {
+      IQueryable<int> result;
+      using (var conn = ConnectTrack())
+      {
+        // cluster_points 만 조회
+        /*
+        var sql_ = string.Format(@"
+        SELECT CPS.point_id 
+        FROM cluster_points CPS 
+		    WHERE cluster_id != {0}
+        ORDER BY CPS.point_id;
+        ", clusterId);
+        */
+        var sql = string.Format(@"
+        SELECT id
+        FROM points PS 
+        WHERE NOT EXISTS
+        (
+	        SELECT 1
+	        FROM cluster_points CPS
+	        WHERE CPS.cluster_id = {0} and CPS.point_id = PS.id
+        )
+        ORDER BY PS.id;
+        ", clusterId);
+
+        result = conn.Query<int>(sql).AsQueryable();
+      }
+      return result;
+    }
+
+    public IQueryable<int> QuerySettingsClusterAssignedPoints(int clusterId)
+    {
+      IQueryable<int> result;
+      using (var conn = ConnectTrack())
+      {
+        // cluster_points 만 조회
+        /*
+        var sql_ = string.Format(@"
+        SELECT CPS.point_id 
+        FROM cluster_points CPS 
+		    WHERE cluster_id = {0}
+        ORDER BY CPS.point_id;
+        ", clusterId);
+        */
+        var sql = string.Format(@"
+        SELECT id
+        FROM points PS 
+        WHERE EXISTS
+        (
+	        SELECT 1
+	        FROM cluster_points CPS
+	        WHERE CPS.cluster_id = {0} and CPS.point_id = PS.id
+        )
+        ORDER BY PS.id;        
+        ", clusterId);
+
+        result = conn.Query<int>(sql).AsQueryable();
+      }
+      return result;
+    }
+
     public IQueryable<SegmentWithVPartsNBlockingEntity> QuerySettingsSegments()
     {
       IQueryable<SegmentWithVPartsNBlockingEntity> result;

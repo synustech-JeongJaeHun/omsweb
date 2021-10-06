@@ -117,4 +117,19 @@ namespace OMSWeb.Models.Entities
   {
     public int Id { get; set; }
   }
+
+  public class ClusterEntity : IIntId
+  {
+    public int Id { get; set; }
+    public string LogicalId { get; set; }
+    public int MaxVehicles { get; set; }
+    public string Color { get; set; }
+  }
+
+  public class ClusterPointEntity : IIntId
+  {
+    public int Id { get; set; }
+    public int PointId { get; set; }
+    public int ClusterId { get; set; }
+  }
 }

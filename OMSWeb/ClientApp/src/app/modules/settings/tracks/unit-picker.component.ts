@@ -19,16 +19,30 @@ export class UnitPickerComponent implements OnInit, OnChanges {
   @Input() title: string;
   @Input() unitName: string;
   @Input() gridHeight: number = 200;
-  @Input() pool: number[] = [];
-  @Input() picked: number[] = [];
+
   @Input() disabled = false;
+
+  @Input() pool: number[] = [];
+  @Input() visibleUnassigned = true;
+  @Input() widthUnassigned = 120;
+  @Input() widthColumnUnassigned = 58;
+  @Input() selectionModeUnassigned = "multiple";
+
+  @Input() picked: number[] = [];
+  @Input() visibleAssigned = true;
+  @Input() widthAssigned = 120;
+  @Input() widthColumnAssigned = 58;
+  @Input() selectionModeAssigned = "multiple";
+
+  @Input() visibleAction = true;
+
   @Output() selectionChanged = new EventEmitter<number[]>();
 
   selectedAssignedIds: number[] = [];
   selectedUnassignedIds: number[] = [];
   unassigned: number[] = [];
 
-  constructor() {}
+  constructor() { }
 
   ngOnChanges(changes: SimpleChanges): void {
     const { picked, pool } = changes;
@@ -37,7 +51,7 @@ export class UnitPickerComponent implements OnInit, OnChanges {
     }
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   onAssign() {
     if (this.selectedUnassignedIds.length) {

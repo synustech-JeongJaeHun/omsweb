@@ -17,6 +17,13 @@
             (click)="onChangeMenu('users')"
             class="nav-link">{{ "names.userManagement" | translate }}
           </a>
+          <a
+            *ngIf="auth.hasPermissions([30])"
+            mat-list-item
+            [class.active]="isActiveMenu('column')"
+            (click)="onChangeMenu('column')"
+            class="nav-link">{{ "names.columnDisplayManagement" | translate }}
+          </a>
 
           <mat-divider class="nav-divider"></mat-divider>
 
@@ -116,6 +123,9 @@
           </ng-container>
           <ng-container *ngSwitchCase="'preference'">
             <oms-preferences></oms-preferences>
+          </ng-container>
+          <ng-container *ngSwitchCase="'column'">
+            <oms-column-display-management></oms-column-display-management>
           </ng-container>
           <ng-container *ngSwitchCase="'group'">
             <oms-group-setting></oms-group-setting>

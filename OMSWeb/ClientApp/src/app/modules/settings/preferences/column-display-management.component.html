@@ -1,0 +1,46 @@
+<div class="setting-header">
+  <h3 class="setting-title">{{ "names.columnDisplayManagement" | translate }}</h3>
+  <div class="setting-actions">
+    <button mat-raised-button class="dense"  color="primary" (click)="onSave()">
+      {{ "names.save" | translate }}
+    </button>
+    <button mat-raised-button class="dense"  (click)="onRevert()">
+      {{ "names.revert" | translate }}
+    </button>
+  </div>
+</div>
+
+<div>
+  <span>Vehicle</span>
+  <span>
+    <ul>
+      <li>
+        <input type="checkbox" color="primary" title="ID" /> ID
+      </li>
+      <li>
+        <input type="checkbox" color="primary" title="Physical ID" /> Physical ID
+      </li>
+      <li>
+        <input type="checkbox" color="primary" title="Logical ID" /> Logical ID
+      </li>
+      <li>
+        <input type="checkbox" color="primary" title="Group" /> Group
+      </li>
+      <li>
+        <input type="checkbox" color="primary" title="Point" /> Point
+      </li>
+      <li>
+        <input type="checkbox" color="primary" title="Direction" /> Direction
+      </li>
+      <li>
+        <input type="checkbox" color="primary" title="Carrier Type" /> Carrier Type
+      </li>
+      <li>
+        <input type="checkbox" color="primary" title="Next Point" /> Next Point
+      </li>
+      <li>
+        <input type="checkbox" color="primary" title="Offset" /> Offset
+      </li>
+    </ul>
+  </span>
+</div>

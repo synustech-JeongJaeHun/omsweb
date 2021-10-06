@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { forkJoin } from 'rxjs';
+import { Component, ViewChild, OnInit } from '@angular/core';
+import { forkJoin, Observable, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { Dto } from '../../../models/dto/track.model';
-import { TrackIdService } from '../../../services/track-id.service';
-import { TracksService } from '../../../services/tracks.service';
+import { ISettingsCluster, ISettingsClusterPoint } from '../../../models/settings.model';
+import { SettingsService } from '../../../services/settings.service';
+import { MessagesService } from '../../../services/messages.service';
+import { UnitPickerComponent } from './unit-picker.component';
 
 @Component({
   selector: 'oms-cluster-setting',
@@ -11,83 +12,100 @@ import { TracksService } from '../../../services/tracks.service';
   styleUrls: ['./cluster-setting.component.scss'],
 })
 export class ClusterSettingComponent implements OnInit {
-  selectedItem: Dto.ICluster;
-  clusters: Dto.ICluster[] = [];
+  selectedItem: ISettingsCluster;
+  clusters: ISettingsCluster[] = [];
 
   points: number[] = [];
   assignedPoints: number[] = [];
 
-  private _changed: Dto.ICluster[] = [];
+  private _changedItems: ISettingsCluster[] = [];
 
-  get canSave(): boolean {
-    return this.clusters.length > 0 && this._changed.length > 0;
+  get isUpdated(): boolean {
+    return this.clusters.length > 0 && this._changedItems.length > 0;
   }
 
-  constructor(private trackSvc: TracksService, private idSvc: TrackIdService) {
+  constructor(
+    private settingsSvc: SettingsService,
+    private messageSvc: MessagesService
+  ) {
     this.init();
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
+
+  private init() {
+    forkJoin([this.loadClusters()]).subscribe(() => {
+      if (this.clusters.length) {
+        this.selectedItem = this.clusters[0];
+        forkJoin(this.bindClusterData(this.selectedItem.id));
+      }
+    });
+  }
+
+  private loadClusters() {
+    return this.settingsSvc.settingsClusters().pipe(
+      tap((res) => {
+        this.clusters = res;
+      })
+    );
+  }
+
+  //private loadClusterPointIds() {
+  //  return this.settingsSvc.settingsClusterPoints().pipe(
+  //    tap((res) => {
+  //      this.points = Object.values(res).map((x) => x.id);
+  //    })
+  //  );
+  //}
+
+  private bindClusterData(clusterId: number) {
+    this.settingsSvc.settingsClusterIsAvailablePoints(clusterId).subscribe((res) => {
+      this.points = res;
+    });
+    this.settingsSvc.settingsClusterAssignedPoints(clusterId).subscribe((res) => {
+      this.assignedPoints = res;
+    });
+  }
+
+  onClusterChanged() {
+    this.bindClusterData(this.selectedItem.id);
+  }
 
   onAssignChanged(picked: number[]) {
-    this.selectedItem.points = picked.join(',');
-    this.changeItem(this.selectedItem);
+    //this.selectedItem.points = picked.join(',');
+    //this.changeItem(this.selectedItem);
   }
   onMaxVehiclesChanged(value: number) {
     this.selectedItem.maxVehicles = value;
     this.changeItem(this.selectedItem);
   }
 
-  onSave() {
-    if (!this._changed.length) return;
-    console.log('## changed >>', this._changed);
-    forkJoin(
-      this._changed.map((x) => this.trackSvc.updateCluster(x.id, x))
-    ).subscribe(() => {
-      this.onRevert();
-    });
+  private changeItem(item: ISettingsCluster) {
+    if (this._changedItems.every((x) => x.id !== item.id)) {
+      this._changedItems.push(item);
+    }
   }
+
+  onSave() {
+    if (!this._changedItems.length) return;
+
+    this.SaveMessages(this._changedItems);
+    this._changedItems = [];
+    this.bindClusterData(this.selectedItem.id);
+  }
+
   onRevert() {
-    this._changed = [];
+    this._changedItems = [];
     this.init();
   }
 
-  private init() {
-    forkJoin([this.loadClusters(), this.loadIds()]).subscribe(() => {
-      if (this.clusters.length) {
-        this.selectedItem = this.clusters[0];
-        this.bindData();
-      }
-    });
-  }
-
-  private changeItem(item: Dto.ICluster) {
-    if (this._changed.every((x) => x.id !== item.id)) {
-      this._changed.push(item);
+  SaveMessages(items: ISettingsCluster[]): Observable<void> {
+    // 개별 Max Vehicle 설정
+    for (let idx = 0; idx < items.length; idx++) {
+      this.messageSvc
+        .sendMaxVehiclesClusterCommand({ type: 'CLUSTER', action: 'max-vehicles', clusterId: items[idx].id, maxVehicles: items[idx].maxVehicles })
+        .subscribe();
     }
-  }
-
-  private bindData() {
-    const strPoints = this.selectedItem.points;
-    if (strPoints) {
-      this.assignedPoints = strPoints
-        .split(',')
-        .map((s) => Number(s).valueOf());
-    }
-  }
-
-  private loadClusters() {
-    return this.trackSvc.loadClusters().pipe(
-      tap((clusters) => {
-        this.clusters = clusters;
-      })
-    );
-  }
-  private loadIds() {
-    return this.idSvc.loadIds().pipe(
-      tap(() => {
-        this.points = Object.values(this.idSvc.points).map((x) => x.id);
-      })
-    );
+    return;
   }
 }

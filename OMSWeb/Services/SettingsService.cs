@@ -45,6 +45,26 @@ namespace OMSWeb.Services
       return _repo.QuerySettingsGroupBufferObjects();
     }
 
+    public IQueryable<ClusterEntity> GetSettingsClusters()
+    {
+      return _repo.QuerySettingsClusters();
+    }
+
+    public IQueryable<ClusterPointEntity> GetSettingsClusterPoints()
+    {
+      return _repo.QuerySettingsClusterPoints();
+    }
+
+    public IQueryable<int> GetSettingsClusterIsAvailablePoints(int clusterId)
+    {
+      return _repo.QuerySettingsClusterIsAvailablePoints(clusterId);
+    }
+
+    public IQueryable<int> GetSettingsClusterAssignedPoints(int clusterId)
+    {
+      return _repo.QuerySettingsClusterAssignedPoints(clusterId);
+    }
+
     public IQueryable<SegmentWithVPartsNBlockingEntity> GetSettingsSegements()
     {
       return _repo.QuerySettingsSegments();
