@@ -5988,6 +5988,7 @@ export class ViewController {
         this.vehicles[d.index].curPoint,
         this.vehicles[d.index].nextPoint
       );
+
       if (direction === 'T') y_offset -= this.vehicles[d.index].distancePoint;
       else if (direction === 'B') y_offset += this.vehicles[d.index].distancePoint;
       else if (direction === 'L') x_offset -= this.vehicles[d.index].distancePoint;
@@ -5999,16 +6000,31 @@ export class ViewController {
     curPoint: any,
     nextPoint: any
   ) {
-    if (curPoint.invertedCoord.y === undefined || curPoint.invertedCoord.y === null) return null;
-    if (curPoint.invertedCoord.x === undefined || curPoint.invertedCoord.x === null) return null;
-    if (nextPoint.invertedCoord.y === undefined || nextPoint.invertedCoord.y === null) return null;
-    if (nextPoint.invertedCoord.x === undefined || nextPoint.invertedCoord.x === null) return null;
+    let source: any = curPoint.invertedCoord;
+    let target: any = nextPoint.invertedCoord;
 
-    if (curPoint.invertedCoord.y > nextPoint.invertedCoord.y) return 'T';
-    if (curPoint.invertedCoord.y < nextPoint.invertedCoord.y) return 'B';
-    if (curPoint.invertedCoord.x > nextPoint.invertedCoord.x) return 'L';
-    if (curPoint.invertedCoord.x < nextPoint.invertedCoord.x) return 'R';
+    if (source.y === undefined || source.y === null) return null;
+    if (source.x === undefined || source.x === null) return null;
+    if (target.y === undefined || target.y === null) return null;
+    if (target.x === undefined || target.x === null) return null;
 
+    if (source.x == target.x && source.y > target.y) {
+      return 'T';
+    } else if (source.x == target.x && source.y < target.y) {
+      return 'B';
+    } else if (source.x < target.x && source.y == target.y) {
+      return 'R';
+    } else if (source.x > target.x && source.y == target.y) {
+      return 'L';
+    } else if (source.x > target.x && source.y > target.y) {
+      return 'TL';
+    } else if (source.x > target.x && source.y < target.y) {
+      return 'BL';
+    } else if (source.x < target.x && source.y > target.y) {
+      return 'TR';
+    } else if (source.x < target.x && source.y < target.y) {
+      return 'BR';
+    }
     return null;
   }
   update_vehicle_dom(
@@ -6109,8 +6125,6 @@ export class ViewController {
 
           // Update: if any
           if (
-            // (is_update_all && this.show_groups) ||
-            // (this.show_groups && update.group)
             (is_update_all && this.preferences.toggles.groups) ||
             (this.preferences.toggles.groups && update.group)
           ) {

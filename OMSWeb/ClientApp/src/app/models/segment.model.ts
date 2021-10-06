@@ -133,9 +133,10 @@ export class Segment implements ISegment {
 
   ) {}
   postCreation() {
-    const { candidates, speed } = this;
+    const { candidates, length, speed } = this;
     this.set_candidates(candidates);
-    this.set_length(this.calculate_length());
+    //this.set_length(this.calculate_length());
+    this.set_length(length);
     this.set_speed(speed);
     this.set_travel_time();
   }
