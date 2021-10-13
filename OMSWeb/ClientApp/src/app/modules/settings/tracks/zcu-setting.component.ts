@@ -17,17 +17,15 @@ export class ZcuSettingComponent implements OnInit {
 
   selectedIds: number[] = [];
 
-  zcuInputZoneDataSource: DataSource;
+  zcuTypes = [
+    { type: 0, text: 'Standard' },
+    { type: 1, text: 'NType' },
+  ]
 
   zcuUsingTypes = [
     { type: 0, text: 'Not Use' },
     { type: 1, text: 'Use HW' },
     { type: 2, text: 'Use SW' },
-  ];
-
-  zcuInfos = [
-    { priority: 32, zone: [93, 92, 91, 90] },
-    { priority: 42, zone: [93, 91, 90, 100] },
   ];
 
   get isUpdated(): boolean {
@@ -133,12 +131,5 @@ export class ZcuSettingComponent implements OnInit {
         .subscribe();
 
     return;
-  }
-
-  getZcuInputZones(value) {
-    this.zcuInputZoneDataSource = this.settingsSvc.settingsZcuInputZonesDataSource(value);
-    //alert(this.zcuInputZoneDataSource);
-    return this.zcuInputZoneDataSource;
-    //return this.zcuInfos;
   }
 }

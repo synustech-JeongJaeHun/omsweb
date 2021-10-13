@@ -1,2 +1,50 @@
-﻿body {
+:host {
+  display: flex;
+  flex-direction: column;
+}
+
+.sub-bar2 {
+  display: flex;
+  padding: 8px;
+  align-items: center;
+  width: 100%;
+
+  mat-label {
+    font-size: 13px;
+    font-weight: bold;
+    margin-right: 8px;
+  }
+
+  .index-selector {
+    width: 150px;
+  }
+
+  .sub-bar3 {
+    display: flex;
+    padding: 0px;
+    align-items: center;
+    width: 50%;
+
+    mat-label {
+      font-size: 12px;
+      font-weight: normal;
+      margin-right: 8px;
+      vertical-align: baseline;
+      width: 25%;
+    }
+
+    .index-selector {
+      width: 150px;
+    }
+
+    input {
+      font-size: 12px;
+      font-weight: normal;
+    }
+
+    div {
+      font-size: 12px;
+      font-weight: normal;
+    }
+  }
 }

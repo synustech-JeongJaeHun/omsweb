@@ -46,29 +46,28 @@ namespace OMSWeb.Repositories
       return result;
     }
 
-    public IQueryable<ObjectEntity> QuerySettingsGroupHomeObjects()
+    public IQueryable<int> QuerySettingsGroupIsAvailableHomes(int groupId)
     {
-      IQueryable<ObjectEntity> result;
+      IQueryable<int> result;
       using (var conn = ConnectTrack())
       {
         // Home이 중복 Group에 포함되도록 허용된 경우 아래 쿼리 사용
         // Group 중복 처리시에 @group_id 파라미터로 현재 조회중인 그룹 ID를 넘겨서 처리.
-        /*
-        var sql2 = @"        
+        var sql = string.Format(@"        
         SELECT id
         FROM homes HMS 
         WHERE NOT EXISTS
         (
 	        SELECT 1 
 	        FROM grouped_objects GOS 
-	        WHERE GOS.reference_table = 'home' AND GOS.reference_id = HMS.id AND GOS.group_id = @group_id
+	        WHERE GOS.reference_table = 'home' AND GOS.reference_id = HMS.id AND GOS.group_id = {0}
         )
         ORDER BY HMS.id;
-        ";
-        */
+        ", groupId);
 
         // 현재 Home (Home point는 중복 그룹에 포함되지 않아서 아래 쿼리 사용함.)
-        var sql = @"
+        /*
+        var sql2 = @"
         SELECT id 
         FROM homes HMS 
         WHERE NOT EXISTS
@@ -79,35 +78,35 @@ namespace OMSWeb.Repositories
         )
         ORDER BY HMS.id;
         ";
+        */
 
-        result = conn.Query<ObjectEntity>(sql).AsQueryable();
+        result = conn.Query<int>(sql).AsQueryable();
       }
       return result;
     }
 
-    public IQueryable<ObjectEntity> QuerySettingsGroupStationObjects()
+    public IQueryable<int> QuerySettingsGroupIsAvailableStations(int groupId)
     {
-      IQueryable<ObjectEntity> result;
+      IQueryable<int> result;
       using (var conn = ConnectTrack())
       {
         // Station이 중복 Group에 포함되도록 허용된 경우 아래 쿼리 사용
         // Group 중복 처리시에 @group_id 파라미터로 현재 조회중인 그룹 ID를 넘겨서 처리.
-        /*
-        var sql = @"
+        var sql = string.Format(@"
         SELECT id
         FROM stations STS
         WHERE NOT EXISTS
         (
 	        SELECT 1 
 	        FROM grouped_objects GOS 
-	        WHERE GOS.reference_table = 'station' AND GOS.reference_id = STS.id	AND GOS.group_id = @group_id
+	        WHERE GOS.reference_table = 'station' AND GOS.reference_id = STS.id	AND GOS.group_id = {0}
         )
         ORDER BY STS.id;
-        ";
-        */
+        ", groupId);
 
         // 현재 Station (Station은 중복 그룹에 포함되지 않아서 아래 쿼리 사용함.)
-        var sql = @"
+        /*
+        var sql2 = @"
         SELECT id
         FROM stations STS
         WHERE NOT EXISTS
@@ -118,37 +117,37 @@ namespace OMSWeb.Repositories
         )
         ORDER BY STS.id;
         ";
+        */
 
-        result = conn.Query<ObjectEntity>(sql).AsQueryable();
+        result = conn.Query<int>(sql).AsQueryable();
       }
       return result;
     }
 
-    public IQueryable<ObjectEntity> QuerySettingsGroupVehicleObjects()
+    public IQueryable<int> QuerySettingsGroupIsAvailableVehicles(int groupId)
     {
-      IQueryable<ObjectEntity> result;
+      IQueryable<int> result;
       using (var conn = ConnectTrack())
       {
         // Vehicle이 중복 Group에 포함되도록 허용된 경우 아래 쿼리 사용
         // Group 중복 처리시에 @group_id 파라미터로 현재 조회중인 그룹 ID를 넘겨서 처리.
-        /*
-        var sql = @"
+        var sql = string.Format(@"
         SELECT id
-        FROM vehicles VHS
+        FROM vehicle_reg VHS
         WHERE NOT EXISTS
         (
 	        SELECT 1 
 	        FROM grouped_objects GOS 
-	        WHERE GOS.reference_table = 'vehicle' AND GOS.reference_id = VHS.id AND GOS.group_id = @group_id
+	        WHERE GOS.reference_table = 'vehicle' AND GOS.reference_id = VHS.id AND GOS.group_id = {0}
         )
         ORDER BY VHS.id;
-        ";
-        */
+        ", groupId);
 
         // 현재 Vehicle (Vehicle은 중복 그룹에 포함되지 않아서 아래 쿼리 사용함.)
-        var sql = @"
+        /*
+        var sql2 = @"
         SELECT id
-        FROM vehicles VHS
+        FROM vehicle_reg VHS
         WHERE NOT EXISTS
         (
 	        SELECT 1 
@@ -157,35 +156,36 @@ namespace OMSWeb.Repositories
         )
         ORDER BY VHS.id;
         ";
+        */
 
-        result = conn.Query<ObjectEntity>(sql).AsQueryable();
+        result = conn.Query<int>(sql).AsQueryable();
       }
       return result;
     }
 
-    public IQueryable<ObjectEntity> QuerySettingsGroupBufferObjects()
+    public IQueryable<int> QuerySettingsGroupIsAvailableBuffers(int groupId)
     {
-      IQueryable<ObjectEntity> result;
+      IQueryable<int> result;
       using (var conn = ConnectTrack())
       {
         // Buffer가 중복 Group에 포함되도록 허용된 경우 아래 쿼리 사용
         // Group 중복 처리시에 @group_id 파라미터로 현재 조회중인 그룹 ID를 넘겨서 처리.
-        /*
-        var sql = @"
-        SELECT id, physical_id, logical_id
+        var sql = string.Format(@"
+        SELECT id
         FROM buffers BFS
         WHERE NOT EXISTS
         (
 	        SELECT 1 
 	        FROM grouped_objects GOS 
-	        WHERE GOS.reference_table = 'buffer' AND GOS.reference_id = BFS.id AND GOS.group_id = @group_id
+	        WHERE GOS.reference_table = 'buffer' AND GOS.reference_id = BFS.id AND GOS.group_id = {0}
         )
         ORDER BY BFS.id;
-        ";
-        */
+        ", groupId);
+
 
         // 현재 Buffer (Buffer는 중복 그룹에 포함되지 않아서 아래 쿼리 사용함.)
-        var sql = @"
+        /*
+        var sql2 = @"
         SELECT id
         FROM buffers BFS
         WHERE NOT EXISTS
@@ -196,7 +196,9 @@ namespace OMSWeb.Repositories
         )
         ORDER BY BFS.id;
         ";
-        result = conn.Query<ObjectEntity>(sql).AsQueryable();
+        */
+
+        result = conn.Query<int>(sql).AsQueryable();
       }
       return result;
     }
@@ -446,29 +448,38 @@ namespace OMSWeb.Repositories
         ";
 
         result = conn.Query<ZcuEntity>(sql).AsQueryable();
-      }
-      return result;
-    }
 
-    public IQueryable<ZcuInputZoneEntity> QuerySettingsZcuInputZones()
-    {
-      IQueryable<ZcuInputZoneEntity> result;
-      using (var conn = ConnectTrack())
-      {
-        //var sql = @"
-        //SELECT ZCP.id, ZCP.zcu_id, ZCP.priority_point, ZCP.zone_points
-        //FROM zcu_input_zones AS ZCP
-        //ORDER BY ZCP.zcu_id, ZCP.id
-        //";
-        var sql = @"
-        SELECT ZCP.id, ZCP.zcu_id, ZCP.priority_point, ZCP.zone_points
-        FROM zcu_input_zones AS ZCP
-        WHERE ZCP.zcu_id = @ZCU_ID
-        ORDER BY ZCP.zcu_id, ZCP.id;
-        ";
+        foreach (ZcuEntity zcu in result)
+        {
+          var completePointSql = string.Format(@"
+          SELECT ZCP.id, ZCP.zcu_id, ZCP.complete_point_id
+          FROM zcu_complete_points ZCP
+          WHERE ZCP.zcu_id = {0}
+          ", zcu.Id);
 
-        result = conn.Query<ZcuInputZoneEntity>(sql).AsQueryable();
-        //result = conn.Query<ZcuInputZoneEntity>(sql, new { ZCU_ID = id }).AsQueryable();
+          IQueryable<ZcuCompletePointEntity> resultCompletePoints = conn.Query<ZcuCompletePointEntity>(completePointSql).AsQueryable();
+
+          int idx = 0;
+
+          foreach (ZcuCompletePointEntity completePointEntity in resultCompletePoints)
+          {
+            if (idx == 0)
+              zcu.CompletePoints = completePointEntity.CompletePointId.ToString();
+            else
+              zcu.CompletePoints += string.Format(",{0}", completePointEntity.CompletePointId);
+
+            idx++;
+          }
+
+          var inputZonesSql = string.Format(@"
+          SELECT ZIP.id, ZIP.zcu_id, ZIP.priority_point, ZIP.zone_points
+          FROM zcu_input_zones ZIP
+          WHERE ZIP.zcu_id = {0}
+          ", zcu.Id);
+
+          IQueryable<ZcuInputZoneEntity> resultInputZones = conn.Query<ZcuInputZoneEntity>(inputZonesSql).AsQueryable();
+          zcu.InputZones = resultInputZones.ToArray();
+        }
       }
       return result;
     }

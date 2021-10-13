@@ -150,6 +150,15 @@ export interface ISettingsZcu {
   y: number;
   usingType: number;
   zcuType: number;
+  completePoints: string;
+  inputZones: ISettingsZcuInputZone[];
+}
+
+export interface ISettingsZcuInputZone {
+  id: number;
+  zcuId: number;
+  priorityPoint: number;
+  zonePoints: string;
 }
 
 export interface ISettingsVehicleReg {
@@ -173,10 +182,6 @@ export interface ISettingsGroupedObject {
   groupId: number;
   referenceId: number;
   referenceTable: string;
-}
-
-export interface ISettingsObject {
-  id: number;
 }
 
 export interface ISettingsCluster {

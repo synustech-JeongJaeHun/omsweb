@@ -83,6 +83,15 @@ namespace OMSWeb.Models.Entities
     public int Y { get; set; }
     public int UsingType { get; set; }
     public int ZcuType { get; set; }
+    public string CompletePoints { get; set; }
+    public ZcuInputZoneEntity[] InputZones { get; set; }
+  }
+
+  public class ZcuCompletePointEntity : IIntId
+  {
+    public int Id { get; set; }
+    public int ZcuId { get; set; }
+    public int CompletePointId { get; set; }
   }
 
   public class ZcuInputZoneEntity : IIntId
@@ -111,11 +120,6 @@ namespace OMSWeb.Models.Entities
     public int GroupId { get; set; }
     public int ReferenceId { get; set; }
     public string ReferenceTable { get; set; }
-  }
-
-  public class ObjectEntity : IIntId
-  {
-    public int Id { get; set; }
   }
 
   public class ClusterEntity : IIntId

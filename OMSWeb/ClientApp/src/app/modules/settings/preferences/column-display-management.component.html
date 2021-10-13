@@ -1,46 +1,346 @@
 <div class="setting-header">
   <h3 class="setting-title">{{ "names.columnDisplayManagement" | translate }}</h3>
   <div class="setting-actions">
-    <button mat-raised-button class="dense"  color="primary" (click)="onSave()">
+    <button mat-raised-button class="dense" color="primary" (click)="onSave()">
       {{ "names.save" | translate }}
     </button>
-    <button mat-raised-button class="dense"  (click)="onRevert()">
+    <button mat-raised-button class="dense" (click)="onRevert()">
       {{ "names.revert" | translate }}
     </button>
   </div>
 </div>
 
-<div>
-  <span>Vehicle</span>
-  <span>
-    <ul>
-      <li>
-        <input type="checkbox" color="primary" title="ID" /> ID
-      </li>
-      <li>
-        <input type="checkbox" color="primary" title="Physical ID" /> Physical ID
-      </li>
-      <li>
-        <input type="checkbox" color="primary" title="Logical ID" /> Logical ID
-      </li>
-      <li>
-        <input type="checkbox" color="primary" title="Group" /> Group
-      </li>
-      <li>
-        <input type="checkbox" color="primary" title="Point" /> Point
-      </li>
-      <li>
-        <input type="checkbox" color="primary" title="Direction" /> Direction
-      </li>
-      <li>
-        <input type="checkbox" color="primary" title="Carrier Type" /> Carrier Type
-      </li>
-      <li>
-        <input type="checkbox" color="primary" title="Next Point" /> Next Point
-      </li>
-      <li>
-        <input type="checkbox" color="primary" title="Offset" /> Offset
-      </li>
-    </ul>
-  </span>
+<div class="sub-bar">
+  <mat-label>Control Table</mat-label>
+</div>
+
+<div class="sub-bar2">
+  <div class="sub-bar3">
+    <mat-label>Orders</mat-label>
+    <div>
+      <div>
+        <input type="checkbox" color="primary" title="ID" />ID
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Logical ID" />Logical ID
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Status" />Status
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Vehicle ID" />Vehicle ID
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="From" />From
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="To" />To
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Move" />Move
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Priority" />Priority
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Carrier" />Carrier
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Created" />Created
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Assigned" />Assigned
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Origin" />Origin
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Duration Total" />Duration Total
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Duration Unassigned" />Duration Unassigned
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Duration Pickup" />Duration Pickup
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Duration Load" />Duration Load
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Duration Deliver" />Duration Deliver
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Duration Unload" />Duration Unload
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Duration Move" />Duration Move
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Distance Pickup" />Distance Pickup
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Distance Deliver" />Distance Deliver
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Distance Move" />Distance Move
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Last Reassign Type" />Last Reassign Type
+      </div>
+    </div>
+  </div>
+
+  <div class="sub-bar3">
+    <mat-label>Vehicles</mat-label>
+    <div>
+      <div>
+        <input type="checkbox" color="primary" title="ID" />ID
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Physical ID" />Physical ID
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Logical ID" />Logical ID
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Mode" />Mode
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Push" />Push
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Rail In" />Rail In
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="host Order" />host Order
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Call" />Call
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Group" />Group
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Current" />Current
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Next" />Next
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Order" />Order
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="From" />From
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="To" />To
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Move" />Move
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Total Runtime" />Total Runtime
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Moving Status" />Moving Status
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Cargo Status" />Cargo Status
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Error" />Error
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Sensor Stop" />Sensor Stop
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Blocked" />Blocked
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Total Distance" />Total Distance
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Map" />Map
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sub-bar2">
+  <div class="sub-bar3">
+    <mat-label><input type="checkbox" color="primary" title="Stations" /> Stations</mat-label>
+    <div>
+      <div>
+        <input type="checkbox" color="primary" title="ID" />ID
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Physical ID" />Physical ID
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Logical ID" />Logical ID
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Group" />Group
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Point" />Point
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Direction" />Direction
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Carrier Type" />Carrier Type
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Next Point" />Next Point
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Offset" />Offset
+      </div>
+    </div>
+  </div>
+
+  <div class="sub-bar3">
+    <mat-label><input type="checkbox" color="primary" title="Stations" /> Buffers</mat-label>
+    <div>
+      <div>
+        <input type="checkbox" color="primary" title="ID" />ID
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Physical ID" />Physical ID
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Logical ID" />Logical ID
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Group" />Group
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Point" />Point
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Direction" />Direction
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Next Point" />Next Point
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Offset" />Offset
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sub-bar">
+  <mat-label>History</mat-label>
+</div>
+
+<div class="sub-bar2">
+  <div class="sub-bar3">
+    <mat-label>Orders</mat-label>
+    <div>
+      <div>
+        <input type="checkbox" color="primary" title="ID" />ID
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Logical ID" />Logical ID
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Status" />Status
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Vehicle ID" />Vehicle ID
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="From" />From
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="To" />To
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Move" />Move
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Priority" />Priority
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Carrier" />Carrier
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Created" />Created
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Assigned" />Assigned
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Arrived" />Arrived
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Load Begin" />Load Begin
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Loaded" />Loaded
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Unload Begin" />Unload Begin
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Unloaded" />Unloaded
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Completed" />Completed
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Aborted" />Aborted
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Failed" />Failed
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Origin" />Origin
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Distance Pickup" />Distance Pickup
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Distance Deliver" />Distance Deliver
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Distance Move" />Distance Move
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Assignment Type" />Assignment Type
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Assignment Detail" />Assignment Detail
+      </div>
+    </div>
+  </div>
+
+  <div class="sub-bar3">
+    <mat-label>Vehicles</mat-label>
+    <div>
+      <div>
+        <input type="checkbox" color="primary" title="ID" />ID
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Physical ID" />Physical ID
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Logical ID" />Logical ID
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Total Distance" />Total Distance
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Total Runtime" />Total Runtime
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Type" />Type
+      </div>
+      <div>
+        <input type="checkbox" color="primary" title="Map" />Map
+      </div>
+    </div>
+  </div>
 </div>

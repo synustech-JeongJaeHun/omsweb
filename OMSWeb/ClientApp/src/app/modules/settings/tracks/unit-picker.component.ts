@@ -41,6 +41,7 @@ export class UnitPickerComponent implements OnInit, OnChanges {
   selectedAssignedIds: number[] = [];
   selectedUnassignedIds: number[] = [];
   unassigned: number[] = [];
+  assigned: number[] = [];
 
   constructor() { }
 
@@ -48,6 +49,7 @@ export class UnitPickerComponent implements OnInit, OnChanges {
     const { picked, pool } = changes;
     if (picked?.currentValue || pool?.currentValue) {
       this.getUnassigned(pool?.currentValue, picked?.currentValue);
+      //this.getChanged(pool?.currentValue, picked?.currentValue);
     }
   }
 
@@ -56,7 +58,7 @@ export class UnitPickerComponent implements OnInit, OnChanges {
   onAssign() {
     if (this.selectedUnassignedIds.length) {
       this.picked = [...this.picked, ...this.selectedUnassignedIds];
-      this.getUnassigned(this.pool, this.picked);
+      this.getChanged(this.pool, this.picked);
       this.selectionChanged.emit(this.picked);
     }
   }
@@ -65,12 +67,20 @@ export class UnitPickerComponent implements OnInit, OnChanges {
       this.picked = this.picked.filter(
         (x) => !this.selectedAssignedIds.includes(x)
       );
-      this.getUnassigned(this.pool, this.picked);
+      this.pool = [...this.pool, ...this.selectedAssignedIds];
+      this.getChanged(this.pool, this.picked);
       this.selectionChanged.emit(this.picked);
     }
   }
 
   private getUnassigned(pool: number[] = [], picked: number[] = []) {
     this.unassigned = _.difference(pool, picked);
+    this.pool = this.unassigned;
+  }
+
+  private getChanged(pool: number[] = [], picked: number[] = []) {
+    this.unassigned = _.difference(pool, picked);
+    this.pool = this.unassigned;
+    this.picked = picked;
   }
 }

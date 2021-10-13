@@ -38,8 +38,10 @@
   -->
 
   <dxi-column dataType="number" dataField="id" [allowEditing]="false" alignment="center"></dxi-column>
-  <dxi-column dataField="zcuType" [caption]="'names.type' | translate" cellTemplate="zcuTypeTemplate" [allowEditing]="false" alignment="center"></dxi-column>
-  <dxi-column dataField="completeNodes" [caption]="'names.completeNodes' | translate" [allowEditing]="false"></dxi-column>
+  <dxi-column dataField="zcuType" [caption]="'names.type' | translate" [allowEditing]="false" alignment="center">
+    <dxo-lookup [dataSource]="zcuTypes" valueExpr="type" displayExpr="text"></dxo-lookup>
+  </dxi-column>
+  <dxi-column dataField="completePoints" [caption]="'names.completeNodes' | translate" [allowEditing]="false"></dxi-column>
   <dxi-column dataField="usingType" [caption]="'names.usingType' | translate" [width]="120" alignment="center">
     <dxo-lookup [dataSource]="zcuUsingTypes" valueExpr="type" displayExpr="text"></dxo-lookup>
   </dxi-column>
@@ -49,8 +51,6 @@
     [visible]="true">
   </dxo-search-panel>
 
-  <div *dxTemplate="let data of 'zcuTypeTemplate'">Standard</div>
-
   <div *dxTemplate="let row of 'detailTemplate'">
     <div class="row-detail">
       <div class="detail-title">
@@ -59,23 +59,10 @@
 
       <div class="detail-info">
         <dx-data-grid
-          [dataSource]="getZcuInputZones(row.data.id)"
+          [dataSource]="row.data.inputZones"
           [showBorders]="true">
-
-          <dxi-column
-            dataField="priorityPoint"
-            [caption]="'names.priority' | translate"
-            [allowEditing]="false"
-            [width]="100"
-            alignment="center">
-          </dxi-column>
-          <dxi-column
-            dataField="zonePoints"
-            [caption]="'names.zone' | translate"
-            [allowEditing]="false"
-            alignment="center">
-          </dxi-column>
-
+          <dxi-column dataField="priorityPoint" [caption]="'names.priority' | translate" [allowEditing]="false" [width]="100" alignment="center"></dxi-column>
+          <dxi-column dataField="zonePoints" [caption]="'names.zone' | translate" [allowEditing]="false" alignment="center"></dxi-column>
         </dx-data-grid>
       </div>
     </div>

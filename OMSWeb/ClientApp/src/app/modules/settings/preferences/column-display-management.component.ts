@@ -9,6 +9,7 @@ import { MatCheckboxModule, MatCheckbox } from '@angular/material/checkbox';
   styleUrls: ['./column-display-management.component.scss'],
 })
 export class ColumnDisplayManagementComponent implements OnInit {
+
   ngOnInit(): void { }
 
   onSave() {

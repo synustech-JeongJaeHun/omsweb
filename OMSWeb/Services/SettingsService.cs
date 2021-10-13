@@ -25,24 +25,24 @@ namespace OMSWeb.Services
       return _repo.QuerySettingsGroupedObjects();
     }
 
-    public IQueryable<ObjectEntity> GetSettingsGroupHomeObjects()
+    public IQueryable<int> GetSettingsGroupIsAvailableHomes(int groupId)
     {
-      return _repo.QuerySettingsGroupHomeObjects();
+      return _repo.QuerySettingsGroupIsAvailableHomes(groupId);
     }
 
-    public IQueryable<ObjectEntity> GetSettingsGroupStationObjects()
+    public IQueryable<int> GetSettingsGroupIsAvailableStations(int groupId)
     {
-      return _repo.QuerySettingsGroupStationObjects();
+      return _repo.QuerySettingsGroupIsAvailableStations(groupId);
     }
 
-    public IQueryable<ObjectEntity> GetSettingsGroupVehicleObjects()
+    public IQueryable<int> GetSettingsGroupIsAvailableVehicles(int groupId)
     {
-      return _repo.QuerySettingsGroupVehicleObjects();
+      return _repo.QuerySettingsGroupIsAvailableVehicles(groupId);
     }
 
-    public IQueryable<ObjectEntity> GetSettingsGroupBufferObjects()
+    public IQueryable<int> GetSettingsGroupIsAvailableBuffers(int groupId)
     {
-      return _repo.QuerySettingsGroupBufferObjects();
+      return _repo.QuerySettingsGroupIsAvailableBuffers(groupId);
     }
 
     public IQueryable<ClusterEntity> GetSettingsClusters()
@@ -93,11 +93,6 @@ namespace OMSWeb.Services
     public IQueryable<ZcuEntity> GetSettingsZcus()
     {
       return _repo.QuerySettingsZcus();
-    }
-
-    public IQueryable<ZcuInputZoneEntity> GetZcuInputZones()
-    {
-      return _repo.QuerySettingsZcuInputZones();
     }
 
     public IQueryable<VehicleRegEntity> GetSettingsVehicleRegs()

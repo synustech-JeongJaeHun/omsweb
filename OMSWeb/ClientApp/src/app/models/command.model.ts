@@ -102,3 +102,9 @@ export interface IClusterCommandMessage extends ICommandMessage {
   clusterId?: number;
   maxVehicles?: number;
 }
+
+export interface IGroupCommandMessage extends ICommandMessage {
+  groupId?: number;
+  vehicleId?: number;
+  vehicleIds?: number[];
+}

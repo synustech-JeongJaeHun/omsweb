@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import DataSource from 'devextreme/data/data_source';
 import { Observable, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { ClientPreferences, ISettingsBufferWithUnuse, ISettingsGroup, ISettingsObject, ISettingsGroupedObject, ISettingsCluster, ISettingsClusterPoint, ISettingsSegment, ISettingsSegmentWithVParts, ISettingsSegmentWithVPartsNBlocking, ISettingsStationWithUnuse, ISettingsVehicleReg, ISettingsZcu, ServiceConfig } from '../models/settings.model';
+import { ClientPreferences, ISettingsBufferWithUnuse, ISettingsGroup, ISettingsGroupedObject, ISettingsCluster, ISettingsClusterPoint, ISettingsSegment, ISettingsSegmentWithVParts, ISettingsSegmentWithVPartsNBlocking, ISettingsStationWithUnuse, ISettingsVehicleReg, ISettingsZcu, ServiceConfig } from '../models/settings.model';
 import { StorageUtil } from '../modules/shared/utils/storage.util';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 import CustomStore from 'devextreme/data/custom_store';
@@ -43,32 +43,27 @@ export class SettingsService {
     this._globalPreferences = new ClientPreferences('global.pref');
   }
 
-  //settingsObjects(): Observable<ISettingsObject[]> {
-  //  return this.http.get<ISe
-  //}
-
   settingsGroups(): Observable<ISettingsGroup[]> {
     return this.http.get<ISettingsGroup[]>(`${this.baseUrl}/groups`);
   }
-
-  settingsGroupPointObjects(): Observable<ISettingsObject[]> {
-    return this.http.get<ISettingsObject[]>(`${this.baseUrl}/groups/homes`);
-  }
-
-  settingsGroupStationObjects(): Observable<ISettingsObject[]> {
-    return this.http.get<ISettingsObject[]>(`${this.baseUrl}/groups/stations`);
-  }
-
-  settingsGroupVehicleObjects(): Observable<ISettingsObject[]> {
-    return this.http.get<ISettingsObject[]>(`${this.baseUrl}/groups/vehicles`);
-  }
-
-  settingsGroupBufferObjects(): Observable<ISettingsObject[]> {
-    return this.http.get<ISettingsObject[]>(`${this.baseUrl}/groups/buffers`);
-  }
-
   settingsGroupedObjects(): Observable<ISettingsGroupedObject[]> {
     return this.http.get<ISettingsGroupedObject[]>(`${this.baseUrl}/groups/grouped_objects`);
+  }
+
+  settingsGroupIsAvailableHomePoints(groupId: number): Observable<number[]> {
+    return this.http.get<number[]>(`${this.baseUrl}/groups/isavailablehomes/${groupId}`);
+  }
+
+  settingsGroupIsAvailableStations(groupId: number): Observable<number[]> {
+    return this.http.get<number[]>(`${this.baseUrl}/groups/isavailablestations/${groupId}`);
+  }
+
+  settingsGroupIsAvailableVehicles(groupId: number): Observable<number[]> {
+    return this.http.get<number[]>(`${this.baseUrl}/groups/isavailablevehicles/${groupId}`);
+  }
+
+  settingsGroupIsAvailableBuffers(groupId: number): Observable<number[]> {
+    return this.http.get<number[]>(`${this.baseUrl}/groups/isavailablebuffers/${groupId}`);
   }
 
   settingsClusters(): Observable<ISettingsCluster[]> {
@@ -117,29 +112,15 @@ export class SettingsService {
     return this.http.get<ISettingsZcu[]>(`${this.baseUrl}/zcus`);
   }
 
-  settingsZcuInputZonesDataSource(id): DataSource {
-    return new DataSource({
-      store: AspNetData.createStore({
-        key: 'id',
-        loadUrl: `${this.baseUrl}/zcu-input-zones`
-      }),
-      filter: [
-        ['zcuId', '=', id],
-      ],
-    });
-  }
-
   settingsVehicles(): Observable<ISettingsVehicleReg[]> {
     return this.http.get<ISettingsVehicleReg[]>(`${this.baseUrl}/vehicleRegs`);
   }
 
   deleteVehicleRegs(form: any[]): Observable<void> {
-    //alert(form.length);
     return this.http.post<void>(`${this.baseUrl}/vehicleRegs/remove`, form);
   }
 
   saveVehicleRegs(form: any[]): Observable<void> {
-    //alert(form.length);
     return this.http.post<void>(`${this.baseUrl}/vehicleRegs/save`, form);
   }
 }

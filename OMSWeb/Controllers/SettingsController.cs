@@ -37,28 +37,28 @@ namespace OMSWeb.Controllers
       return _settingsSvc.GetSettingsGroupedObjects().ToList();
     }
 
-    [HttpGet("groups/homes")]
-    public IEnumerable<ObjectEntity> GetSettingsGroupHomeObjects()
+    [HttpGet("groups/isavailablehomes/{groupId}")]
+    public IEnumerable<int> GetSettingsGroupIsAvailableHomes([FromRoute] int groupId)
     {
-      return _settingsSvc.GetSettingsGroupHomeObjects().ToList();
+      return _settingsSvc.GetSettingsGroupIsAvailableHomes(groupId).ToList();
     }
 
-    [HttpGet("groups/stations")]
-    public IEnumerable<ObjectEntity> GetSettingsGroupStationObjects()
+    [HttpGet("groups/isavailablestations/{groupId}")]
+    public IEnumerable<int> GetSettingsGroupIsAvailableStations([FromRoute] int groupId)
     {
-      return _settingsSvc.GetSettingsGroupStationObjects().ToList();
+      return _settingsSvc.GetSettingsGroupIsAvailableStations(groupId).ToList();
     }
 
-    [HttpGet("groups/vehicles")]
-    public IEnumerable<ObjectEntity> GetSettingsGroupVehicleObjects()
+    [HttpGet("groups/isavailablevehicles/{groupId}")]
+    public IEnumerable<int> GetSettingsGroupIsAvailableVehicles([FromRoute] int groupId)
     {
-      return _settingsSvc.GetSettingsGroupVehicleObjects().ToList();
+      return _settingsSvc.GetSettingsGroupIsAvailableVehicles(groupId).ToList();
     }
 
-    [HttpGet("groups/buffers")]
-    public IEnumerable<ObjectEntity> GetSettingsGroupBufferObjects()
+    [HttpGet("groups/isavailablebuffers/{groupId}")]
+    public IEnumerable<int> GetSettingsGroupIsAvailableBuffers([FromRoute] int groupId)
     {
-      return _settingsSvc.GetSettingsGroupBufferObjects().ToList();
+      return _settingsSvc.GetSettingsGroupIsAvailableBuffers(groupId).ToList();
     }
 
     [HttpGet("clusters")]
@@ -126,12 +126,6 @@ namespace OMSWeb.Controllers
     public IEnumerable<ZcuEntity> GetSettingsZcus()
     {
       return _settingsSvc.GetSettingsZcus();
-    }
-
-    [HttpGet("zcu-input-zones")]
-    public object GetSettingsZcusInputZones(DataSourceLoadOptions loadOptions)
-    {
-      return DataSourceLoader.Load(_settingsSvc.GetZcuInputZones(), loadOptions);
     }
 
     [HttpGet("vehicleRegs")]

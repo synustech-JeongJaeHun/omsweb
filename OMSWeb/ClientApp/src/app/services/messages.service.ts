@@ -19,7 +19,8 @@ import {
   IZcuCommandMessage,
   IVehicleRegCommandMessage,
   ISegmentCommandMessage,
-  IClusterCommandMessage
+  IClusterCommandMessage,
+  IGroupCommandMessage
 } from '../models/command.model';
 import { IOrderStatusRow } from '../models/order-status.model';
 import { IVehicleStatusRow } from '../models/vehicle-status.model';
@@ -241,6 +242,17 @@ export class MessagesService {
     command.maxVehicles = command.maxVehicles;
 
     return this.sendCommand<IClusterCommandMessage>(command);
+  }
+
+  sendAssignVehicleGruopCommand(
+    command: IGroupCommandMessage
+  ): Observable<void> {
+    command.type = command.type;
+    command.action = command.action;
+    command.vehicleId = command.vehicleId;
+    command.vehicleIds = command.vehicleIds;
+
+    return this.sendCommand<IGroupCommandMessage>(command);
   }
 
   private sendCommand<T extends ICommandMessage>(command: T): Observable<void> {
