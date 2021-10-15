@@ -279,7 +279,9 @@ export class MapViewerComponent implements OnInit, OnDestroy {
       });
     this.hubSvc.vehicleChanged$
       .pipe(takeUntil(this.destroy$))
-      .subscribe((e: IDataChangeEvent) => this.applyVehicleChange(e));
+      .subscribe((e: IDataChangeEvent) => {
+        this.applyVehicleChange(e)
+      });
     this.hubSvc.segmentChanged$
       .pipe(takeUntil(this.destroy$))
       .subscribe((e: IDataChangeEvent) => {
@@ -299,7 +301,9 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     if (this.auth.isAuthenticated) {
       this.hubSvc.vehiclePathChanged$
         .pipe(takeUntil(this.destroy$))
-        .subscribe((e: IDataChangeEvent) => this.applyVehiclePathChange(e));
+        .subscribe((e: IDataChangeEvent) => {
+          this.applyVehiclePathChange(e)
+        });
 
       this.hubSvc.stationChanged$
         .pipe(takeUntil(this.destroy$))

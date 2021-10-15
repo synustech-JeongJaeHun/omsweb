@@ -120,14 +120,20 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
       if (category == 'move') {
         if (!destDisabled && !dest) return this.t$.instant('messages.required', { field: 'Point' });
       }
-      else return this.t$.instant('messages.required', { field: 'Point' });
+      else
+        return this.t$.instant('messages.required', { field: 'Point' });
     }
 
     if (!sourceDisabled && !source)
       return this.t$.instant('messages.required', { field: 'Source' });
 
-    if (!destDisabled && !dest)
-      return this.t$.instant('messages.required', { field: 'Dest' });
+    if (!destDisabled && !dest) {
+      if (category == 'move') {
+        if (!pointDisabled && !point) return this.t$.instant('messages.required', { field: 'Dest' });
+      }
+      else
+        return this.t$.instant('messages.required', { field: 'Dest' });
+    }
 
     return;
   }
