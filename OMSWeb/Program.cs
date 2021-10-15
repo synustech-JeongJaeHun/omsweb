@@ -13,6 +13,7 @@ namespace OMSWeb
     {
         public static void Main(string[] args)
         {
+            //Console.WriteLine("### Version 1.0.0.2 - dependant dotnetcoreapp 3.1");
             CreateHostBuilder(args).Build().Run();
         }
 

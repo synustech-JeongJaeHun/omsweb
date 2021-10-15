@@ -165,7 +165,7 @@ namespace OMSWeb.Services.MqttClient
 
         public object GetOrderOrigin(CommandMessageDto command)
         {
-            if (command.hostOrder)
+            if (command.hostOrder) // true or false
                 return ORIGIN_HOST_ORDER;
 
             return ORIGIN_LOCAL_ORDER;
@@ -294,11 +294,13 @@ namespace OMSWeb.Services.MqttClient
                 if (command.VehicleId != null || command.VehicleIds != null)
                     data["vehicle_id"] = GetVehicleId(command);
 
-                if (command.OrderOrigin == null)
-                    data["order_origin"] = GetOrderOrigin(command);
-
-                if (command.CanBePushed != null)  
+                if (command.CanBePushed != null)
                     data["can_be_pushed"] = command.CanBePushed;
+                else
+                {
+                    if (command.OrderOrigin == null)
+                        data["order_origin"] = GetOrderOrigin(command);
+                }
             }
             else if (command.Action == ACTION_CALCULATE_PATH || 
                      command.Action == ACTION_CLEAR_PATH)
