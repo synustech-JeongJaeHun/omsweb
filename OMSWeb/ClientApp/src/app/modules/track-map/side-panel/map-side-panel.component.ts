@@ -78,6 +78,8 @@ export class MapSidePanelComponent implements OnInit, OnChanges {
     // disabled 상태값 변경
     this.segmentDisabledInfo.disabled = !this.segmentDisabledInfo.disabled;
 
+    this.bindObject();
+
     if (this.segmentDisabledInfo.disabled) {
       this.messageSvc
         .sendDisableSegmentCommand({ action: 'disable-segment' }, this.data.id)
@@ -103,21 +105,23 @@ export class MapSidePanelComponent implements OnInit, OnChanges {
 
   private bindSegment() {
     this.hasOverlap = false;
+    this.segmentDisabledInfo.authors = new Array(0);
+    this.segmentDisabledInfo.reasons = new Array(0);
 
     const { disableState } = this.data;
     if (disableState) {
       this.segmentDisabledInfo.disabled = true;
       const { vehicle = [], segment = [], user = [] } = disableState;
       vehicle.forEach((v) => {
-        this.segmentDisabledInfo.authors.push(v.sourceId);
+        this.segmentDisabledInfo.authors.push(v.source_id);
         v.reason && this.segmentDisabledInfo.reasons.push(`- ${v.reason}`);
       });
       segment.forEach((s) => {
-        this.segmentDisabledInfo.authors.push(s.sourceId);
+        this.segmentDisabledInfo.authors.push(s.source_id);
         s.reason && this.segmentDisabledInfo.reasons.push(`- ${s.reason}`);
       });
       user.forEach((u) => {
-        this.segmentDisabledInfo.authors.push(u.sourceId);
+        this.segmentDisabledInfo.authors.push(u.source_id);
         u.reason && this.segmentDisabledInfo.reasons.push(`- ${u.reason}`);
       });
     }

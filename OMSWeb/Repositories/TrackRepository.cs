@@ -267,11 +267,45 @@ namespace OMSWeb.Repositories
             var data = _cache.GetValue<List<Zcu>>(key);
             if (data == null)
             {
-                string sql = @"select id, x, y, using_type, zcu_type from zcus";
+                //string sql = @"select id, x, y, using_type, zcu_type from zcus";
+                var zcuSql = @"
+                SELECT ZS.id, ZS.x, ZS.y, ZS.using_type, ZS.zcu_type
+                FROM zcus AS ZS
+                ORDER BY ZS.id;
+                ";
+
+                //using (var conn = ConnectTrack())
+                //{                       
+                //    data = conn.Query<Zcu>(sql).AsList();
+                //}
+
                 using (var conn = ConnectTrack())
                 {
-                    data = conn.Query<Zcu>(sql).AsList();
+                    data = conn.Query<Zcu>(zcuSql).AsList();
+                    
+                    foreach (Zcu zcu in data)
+                    {
+                        var zcuComplePointsSql = string.Format(@"
+                        SELECT ZCP.id, ZCP.zcu_id, ZCP.complete_point_id
+                        FROM zcu_complete_points ZCP
+                        WHERE ZCP.zcu_id = {0}
+                        ORDER BY ZCP.id;
+                        ", zcu.Id);
+
+                        List<ZcuCompletePoint> zcuCompletePoints = conn.Query<ZcuCompletePoint>(zcuComplePointsSql).AsList();
+                        zcu.CompletePoints = zcuCompletePoints.ToArray();
+
+                        var zcuInputZonesSql = string.Format(@"
+                        SELECT ZIP.id, ZIP.zcu_id, ZIP.priority_point, ZIP.zone_points
+                        FROM zcu_input_zones ZIP
+                        WHERE ZIP.zcu_id = {0}
+                        ", zcu.Id);
+
+                        List<ZcuInputZone> zcuInputZones = conn.Query<ZcuInputZone>(zcuInputZonesSql).AsList();
+                        zcu.InputZones = zcuInputZones.ToArray();
+                    }
                 }
+
                 _cache.SetValue<List<Zcu>>(key, data, DateTimeOffset.Now.AddMinutes(CACHE_LIFE));
             }
             return data;

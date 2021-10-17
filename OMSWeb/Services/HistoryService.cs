@@ -21,5 +21,9 @@ namespace OMSWeb.Services {
     public IQueryable<AlarmHistory> QueryAlarms() {
       return this._repo.QueryAlarms();
     }
+    public IQueryable<AlertEntity> QueryAlerts()
+    {
+      return this._repo.QueryAlerts();
+    }
   }
 }

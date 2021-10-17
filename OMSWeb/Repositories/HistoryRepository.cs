@@ -90,5 +90,21 @@ namespace OMSWeb.Repositories
       }
       return result;
     }
+
+    public IQueryable<AlertEntity> QueryAlerts()
+    {
+      var sql = @"
+      SELECT ALT.id, ALT.time, ALT.level, ALT.tag, ALT.message, ALT.ack_time, ALT.ack_by 
+      FROM alerts AS ALT
+      ORDER BY ALT.id desc
+      ";
+
+      IQueryable<AlertEntity> result;
+      using (var conn = ConnectTrack())
+      {
+        result = conn.Query<AlertEntity>(sql).AsQueryable();
+      }
+      return result;
+    }
   }
 }

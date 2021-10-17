@@ -65,8 +65,8 @@ export class HistoriesService {
     return new DataSource({
       store: AspNetData.createStore({
         key: 'id',
-        loadUrl: `/assets/json/get-alerts.json`,
-        // loadUrl: `${this.baseUrl}/alerts`,
+        //loadUrl: `/assets/json/get-alerts.json`,
+        loadUrl: `${this.baseUrl}/alerts`,
       }),
       filter: [
         ['time', '>=', startTime],

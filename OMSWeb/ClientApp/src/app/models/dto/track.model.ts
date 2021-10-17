@@ -47,6 +47,19 @@ export namespace Dto {
     y: number;
     usingType: number;
     zcuType: number;
+    inputZones: IZcuInputZone[];
+    completePoints: IZcuCompletePoint[];
+  }
+  export interface IZcuInputZone {
+    id: number;
+    zcuId: number;
+    priorityPoint: number;
+    zonePoints: string;
+  }
+  export interface IZcuCompletePoint {
+    id: number;
+    zcuId: number;
+    completePointId: number;
   }
   export interface IPoint extends ICoordinate {
     id: number;

@@ -37,5 +37,11 @@ namespace OMSWeb.Controllers
     {
       return DataSourceLoader.Load(_historySvc.QueryAlarms(), loadOptions);
     }
+
+    [HttpGet("alerts")]
+    public object GetAlerts(DataSourceLoadOptions loadOptions)
+    {
+      return DataSourceLoader.Load(_historySvc.QueryAlerts(), loadOptions);
+    }
   }
 }
