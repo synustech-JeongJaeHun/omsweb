@@ -6158,12 +6158,14 @@ export class ViewController {
               this.vehicle_scale
             );
           }
+
           let selected_vehicle = this.get_selected_objects('VEHICLE')[0];
           let is_show_vehicle_line =
             (selected_vehicle && selected_vehicle.id === d.id) ||
             this.get_show_vehicle_lines()
               ? true
               : false;
+
           if (is_update_all || update.commandPoint || update.cargoState) {
             let cur_x =
               d.curPoint && d.curPoint.invertedCoord.x
@@ -6181,12 +6183,19 @@ export class ViewController {
               d.commandPoint && d.commandPoint.invertedCoord.y
                 ? d.commandPoint.invertedCoord.y
                 : cur_y;
+
+            let point_object = {
+              x: command_x,
+              y: command_y,
+            };
+            let cmd_offset = LayoutUtil.find_connected_object_offset(point_object, d.distancePoint, this.layout_data);
+
             this.update_vehicle_command_svg(
               d3_this,
               cur_x,
               cur_y,
-              command_x,
-              command_y,
+              command_x + cmd_offset.x,
+              command_y + cmd_offset.y,
               is_show_vehicle_line,
               d.cargoState
             );
@@ -6231,7 +6240,6 @@ export class ViewController {
             if (d.isMoved == false) {
               this.vehicle_svg.attr('transform', (d) => {
                 if (this.vehicles[d.index]) {
-
                   let distance_object: any = LayoutUtil.get_vehicle_distance_point(
                     this.vehicles[d.index].curPoint.invertedCoord,
                     this.vehicles[d.index].nextPoint.invertedCoord,
@@ -6408,15 +6416,18 @@ export class ViewController {
         ? vehicle_data.commandPoint.invertedCoord
         : fallback;
 
-    let next_offset = LayoutUtil.find_connected_offset(next_pt, this.layout_data);
-    let cmd_offset = LayoutUtil.find_connected_offset(command_pt, this.layout_data);
+    let cmd_point_object = {
+      x: command_pt.x,
+      y: command_pt.y,
+    };
+    let cmd_offset = LayoutUtil.find_connected_object_offset(cmd_point_object, vehicle_data.distancePoint, this.layout_data);
 
     this.update_vehicle_command_svg(
       vehicle_element,
       current_pt.x,
       current_pt.y,
-      command_pt.x,
-      command_pt.y,
+      command_pt.x + cmd_offset.x,
+      command_pt.y + cmd_offset.y,
       is_show,
       vehicle_data.cargoState
     );

@@ -2321,23 +2321,31 @@ export namespace LayoutUtil {
     return speed;
   }
 
-  export function find_connected_offset(point, layout_data) {
+  export function find_connected_object_offset(point, offset, layout_data) {
+    let offset_object = {
+      x: 0,
+      y: 0,
+    };
     for (let i = 0; i < layout_data.stations.length; i++) {
       let station = layout_data.stations[i];
-
-      if (point.id === station.pointId) {
-        return station.segmentDirection;
+      if (point.x === station.invertedCoord.x && point.y === station.invertedCoord.y) {
+        if (offset === station.offset) {
+          offset_object = get_location_object_offset(station.segmentDirection, station.offset, station.objectType);
+          return offset_object;
+        }
       }
     }
 
     for (let i = 0; i < layout_data.buffers.length; i++) {
       let buffer = layout_data.buffers[i];
-
-      if (point.id === buffer.pointId) {
-        return buffer.segmentDirection;
+      if (point.x === buffer.invertedCoord.x && point.y === buffer.invertedCoord.y) {
+        if (offset === buffer.offset) {
+          offset_object = get_location_object_offset(buffer.segmentDirection, buffer.offset, buffer.objectType);
+          return offset_object;
+        }
       }
     }
-    return 0;
+    return offset_object;
   }
 
   export function find_connected_station(point, stations) {
