@@ -5974,59 +5974,7 @@ export class ViewController {
       update_list
     );
   }
-  get_distance_point(
-    d: any
-  ) {
-    let x_offset: number = 0;
-    let y_offset: number = 0;
-    if (
-      this.vehicles[d.index].distancePoint !== undefined &&
-      this.vehicles[d.index].distancePoint !== null &&
-      this.vehicles[d.index].distancePoint !== 0
-    ) {
-      let direction: any = this.get_vehicle_direction(
-        this.vehicles[d.index].curPoint,
-        this.vehicles[d.index].nextPoint
-      );
-
-      if (direction === 'T') y_offset -= this.vehicles[d.index].distancePoint;
-      else if (direction === 'B') y_offset += this.vehicles[d.index].distancePoint;
-      else if (direction === 'L') x_offset -= this.vehicles[d.index].distancePoint;
-      else if (direction === 'R') x_offset += this.vehicles[d.index].distancePoint;
-    }
-    return [x_offset, y_offset];
-  }
-  get_vehicle_direction(
-    curPoint: any,
-    nextPoint: any
-  ) {
-    let source: any = curPoint.invertedCoord;
-    let target: any = nextPoint.invertedCoord;
-
-    if (source.y === undefined || source.y === null) return null;
-    if (source.x === undefined || source.x === null) return null;
-    if (target.y === undefined || target.y === null) return null;
-    if (target.x === undefined || target.x === null) return null;
-
-    if (source.x == target.x && source.y > target.y) {
-      return 'T';
-    } else if (source.x == target.x && source.y < target.y) {
-      return 'B';
-    } else if (source.x < target.x && source.y == target.y) {
-      return 'R';
-    } else if (source.x > target.x && source.y == target.y) {
-      return 'L';
-    } else if (source.x > target.x && source.y > target.y) {
-      return 'TL';
-    } else if (source.x > target.x && source.y < target.y) {
-      return 'BL';
-    } else if (source.x < target.x && source.y > target.y) {
-      return 'TR';
-    } else if (source.x < target.x && source.y < target.y) {
-      return 'BR';
-    }
-    return null;
-  }
+   
   update_vehicle_dom(
     data: any,
     dom_css: any,
@@ -6284,12 +6232,13 @@ export class ViewController {
               this.vehicle_svg.attr('transform', (d) => {
                 if (this.vehicles[d.index]) {
 
-                  let values: any = this.get_distance_point(d);
-                  let x_offset: number = values[0];
-                  let y_offset: number = values[1];
-
-                  let x = this.vehicles[d.index].curPoint.invertedCoord.x + x_offset;
-                  let y = this.vehicles[d.index].curPoint.invertedCoord.y + y_offset;
+                  let distance_object: any = LayoutUtil.get_vehicle_distance_point(
+                    this.vehicles[d.index].curPoint.invertedCoord,
+                    this.vehicles[d.index].nextPoint.invertedCoord,
+                    this.vehicles[d.index].distancePoint
+                  );
+                  let x = this.vehicles[d.index].curPoint.invertedCoord.x + distance_object.x;
+                  let y = this.vehicles[d.index].curPoint.invertedCoord.y + distance_object.y;
 
                   let trans_array = this.getZoom(MapTypes.MAIN).apply([x, y]);
                   return (
@@ -6306,12 +6255,13 @@ export class ViewController {
         this.vehicle_svg.attr('transform', (d) => {
           if (this.vehicles[d.index]) {
 
-            let values: any = this.get_distance_point(d);
-            let x_offset: number = values[0];
-            let y_offset: number = values[1];
-
-            let x = this.vehicles[d.index].curPoint.invertedCoord.x + x_offset;
-            let y = this.vehicles[d.index].curPoint.invertedCoord.y + y_offset;
+            let distance_object: any = LayoutUtil.get_vehicle_distance_point(
+              this.vehicles[d.index].curPoint.invertedCoord,
+              this.vehicles[d.index].nextPoint.invertedCoord,
+              this.vehicles[d.index].distancePoint
+            );
+            let x = this.vehicles[d.index].curPoint.invertedCoord.x + distance_object.x;
+            let y = this.vehicles[d.index].curPoint.invertedCoord.y + distance_object.y;
 
             let trans_array = this.getZoom(MapTypes.MAIN).apply([x, y]);
             return (
@@ -6457,6 +6407,10 @@ export class ViewController {
       vehicle_data.commandPoint && vehicle_data.commandPoint.invertedCoord
         ? vehicle_data.commandPoint.invertedCoord
         : fallback;
+
+    let next_offset = LayoutUtil.find_connected_offset(next_pt, this.layout_data);
+    let cmd_offset = LayoutUtil.find_connected_offset(command_pt, this.layout_data);
+
     this.update_vehicle_command_svg(
       vehicle_element,
       current_pt.x,
@@ -9023,15 +8977,8 @@ export class ViewController {
       ) {
         is_translate = true;
 
-        let x_offset: number = 0;
-        let y_offset: number = 0;
-
-        if (d.segmentDirection === 'T') y_offset -= d.offset;
-        else if (d.segmentDirection === 'B') y_offset += d.offset;
-        else if (d.segmentDirection === 'L') x_offset -= d.offset;
-        else if (d.segmentDirection === 'R') x_offset += d.offset;
-
-        trans_array = transform.apply([d.invertedCoord.x + x_offset, d.invertedCoord.y + y_offset]);
+        let offset = LayoutUtil.get_location_object_offset(d.segmentDirection, d.offset, d.objectType);
+        trans_array = transform.apply([d.invertedCoord.x + offset.x, d.invertedCoord.y + offset.y]);
       }
       else if (d.objectType.toUpperCase() === 'CLUSTER') {
         trans_array = transform.apply([
@@ -9487,17 +9434,10 @@ export class ViewController {
           });
 
           this.stations_svg.attr('transform', function (d) {
-            let x_offset: number = 0;
-            let y_offset: number = 0;
-
-            if (d.segmentDirection === 'T') y_offset -= d.offset;
-            else if (d.segmentDirection === 'B') y_offset += d.offset;
-            else if (d.segmentDirection === 'L') x_offset -= d.offset;
-            else if (d.segmentDirection === 'R') x_offset += d.offset;
-
+            let offset = LayoutUtil.get_location_object_offset(d.segmentDirection, d.offset, d.objectType);
             return `translate(${current_zoom.apply([
-              d.invertedCoord.x + x_offset,
-              d.invertedCoord.y + y_offset,
+              d.invertedCoord.x + offset.x,
+              d.invertedCoord.y + offset.y,
             ])})`;
           });
 
@@ -9796,17 +9736,10 @@ export class ViewController {
           });
 
           this.buffers_svg.attr('transform', function (d) {
-            let x_offset: number = 0;
-            let y_offset: number = 0;
-
-            if (d.segmentDirection === 'T') y_offset -= d.offset;
-            else if (d.segmentDirection === 'B') y_offset += d.offset;
-            else if (d.segmentDirection === 'L') x_offset -= d.offset;
-            else if (d.segmentDirection === 'R') x_offset += d.offset;
-
+            let offset = LayoutUtil.get_location_object_offset(d.segmentDirection, d.offset, d.objectType);
             return `translate(${current_zoom.apply([
-              d.invertedCoord.x + x_offset,
-              d.invertedCoord.y + y_offset,
+              d.invertedCoord.x + offset.x,
+              d.invertedCoord.y + offset.y,
             ])})`;
           });
 

@@ -2133,6 +2133,81 @@ export namespace LayoutUtil {
     return offset_object;
   }
 
+  export function get_location_object_offset(
+    segmentDirection,
+    offset,
+    object_type
+  ) {
+    let offset_object = {
+      x: 0,
+      y: 0,
+    };
+    let alternation_multiplier;
+
+    if (
+      object_type.toUpperCase() === 'STATION' ||
+      object_type.toUpperCase() === 'BUFFER'
+    ) {
+      if (segmentDirection === 'T') {
+        alternation_multiplier = -1;
+        offset_object.y = offset * alternation_multiplier;
+      } else if (segmentDirection === 'B') {
+        alternation_multiplier = 1;
+        offset_object.y = offset * alternation_multiplier;
+      } else if (segmentDirection === 'R') {
+        alternation_multiplier = 1;
+        offset_object.x = offset * alternation_multiplier;
+      } else if (segmentDirection === 'L') {
+        alternation_multiplier = -1;
+        offset_object.x = offset * alternation_multiplier;
+      }
+    }
+
+    return offset_object;
+  }
+
+  export function get_vehicle_distance_point(
+    source,
+    target,
+    distancePoint
+  ) {
+    let distance_object = {
+      x: 0,
+      y: 0,
+    };
+
+    if (distancePoint === undefined || distancePoint === null || distancePoint === 0) return distance_object;
+
+    if (source.y === undefined || source.y === null) return distance_object;
+    if (source.x === undefined || source.x === null) return distance_object;
+    if (target.y === undefined || target.y === null) return distance_object;
+    if (target.x === undefined || target.x === null) return distance_object;
+
+    let direction: any = LayoutUtil.detect_direction(
+      source,
+      target
+    );
+    let alternation_multiplier;
+
+    if (direction === 'T') {
+      alternation_multiplier = -1;
+      distance_object.y = distancePoint * alternation_multiplier;
+    }
+    else if (direction === 'B') {
+      alternation_multiplier = 1;
+      distance_object.y = distancePoint * alternation_multiplier;
+    }
+    else if (direction === 'L') {
+      alternation_multiplier = -1;
+      distance_object.x = distancePoint * alternation_multiplier;
+    }
+    else if (direction === 'R') {
+      alternation_multiplier = 1;
+      distance_object.x = distancePoint * alternation_multiplier;
+    }
+    return distance_object;
+  }
+
   export function calc_snap_coord(coord, snap_distance) {
     let snap_coord: any = {};
     let snap_factor;
@@ -2244,6 +2319,25 @@ export namespace LayoutUtil {
     }
 
     return speed;
+  }
+
+  export function find_connected_offset(point, layout_data) {
+    for (let i = 0; i < layout_data.stations.length; i++) {
+      let station = layout_data.stations[i];
+
+      if (point.id === station.pointId) {
+        return station.segmentDirection;
+      }
+    }
+
+    for (let i = 0; i < layout_data.buffers.length; i++) {
+      let buffer = layout_data.buffers[i];
+
+      if (point.id === buffer.pointId) {
+        return buffer.segmentDirection;
+      }
+    }
+    return 0;
   }
 
   export function find_connected_station(point, stations) {
