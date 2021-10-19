@@ -141,7 +141,7 @@
     </div>
   </mat-expansion-panel>
 
-  <mat-expansion-panel [expanded]="true" *ngIf="hasPermission(10)">
+  <mat-expansion-panel [expanded]="true" *ngIf="hasPermission(permissionEnums.ManualTransfer)">
     <mat-expansion-panel-header>
       <mat-panel-title>Command Interface</mat-panel-title>
     </mat-expansion-panel-header>
@@ -335,7 +335,7 @@
         <mat-slide-toggle
           [(ngModel)]="data.disableState" 
           (change)="changeSegmentDisabled()"
-          [disabled]="!hasPermission(29)"
+          [disabled]="!hasPermission(permissionEnums.SegmentUnuse)"
           color="primary"
           >{{ "names.unuse" | translate }}</mat-slide-toggle
         >

@@ -15,6 +15,7 @@ import { SystemsService } from '../../../services/systems.service';
 import { AccountUtil } from '../utils/account.util';
 import { MessagesService } from '../../../services/messages.service';
 import { IDataChangeEvent } from '../../../models/notification.model';
+import { PermissionEnums } from '../../../models/enums';
 
 @Component({
   selector: 'oms-gnb-states',
@@ -78,7 +79,8 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
   }
 
   changeHostMode() {
-    if (!AccountUtil.hasPermission(1, this.auth.currentUser)) return;
+    //if (!AccountUtil.hasPermission(1, this.auth.currentUser)) return;
+    if (!AccountUtil.hasPermission(PermissionEnums.HostMode, this.auth.currentUser)) return;
     this.dialogSvc.confirm(this.getConfirmMessage('Host')).subscribe((ok) => {
       if (ok) {
         this.messageSvc.sendControlStateCommand({ action: 'control_state', state: 'change' }).subscribe();
@@ -86,7 +88,8 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
     });
   }
   changeTscMode() {
-    if (!AccountUtil.hasPermission(2, this.auth.currentUser)) return;
+    //if (!AccountUtil.hasPermission(2, this.auth.currentUser)) return;
+    if (!AccountUtil.hasPermission(PermissionEnums.TscMode, this.auth.currentUser)) return;
     this.dialogSvc.confirm(this.getConfirmMessage('TSC')).subscribe((ok) => {
       if (ok) {
         this.messageSvc.sendTscStateCommand({ action: 'tsc_state', state: 'change' }).subscribe();

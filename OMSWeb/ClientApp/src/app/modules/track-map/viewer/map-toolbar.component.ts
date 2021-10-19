@@ -36,6 +36,7 @@ import { ShowObjectDialogComponent } from '../dialogs/show-object-dialog.compone
 import { AuthService } from '../../../services/auth.service';
 import { AccountUtil } from '../../shared/utils/account.util';
 import { SettingsService } from '../../../services/settings.service';
+import { PermissionEnums } from '../../../models/enums';
 
 @Component({
   selector: 'oms-map-toolbar',
@@ -45,6 +46,7 @@ import { SettingsService } from '../../../services/settings.service';
 export class MapToolbarComponent implements OnInit, OnDestroy {
   @Input()
   buttonState: ToggleOptionsType = defaultToggleOptions;
+  readonly permissionEnums: typeof PermissionEnums = PermissionEnums;
 
   @ViewChild('btnSearch', { read: ElementRef }) btnSearch: ElementRef;
   @ViewChild('btnTrack', { read: ElementRef }) btnTrack: ElementRef;

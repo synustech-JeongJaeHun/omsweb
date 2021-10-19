@@ -108,7 +108,7 @@
     </mat-card-header>
     <mat-card-content class="context-form">
       <button
-        *ngIf="hasPermissions([17, 14, 15, 23])"
+        *ngIf="hasPermissions([permissionEnums.AutoVehicle, permissionEnums.ResetVehicle, permissionEnums.EstopVehicle, permissionEnums.SetZcuGo])"
         mat-button
         class="menu-trigger"
         (click)="commandMenuTrigger.openMenu()"
@@ -121,7 +121,7 @@
         ></div>
       </button>
       <button
-        *ngIf="hasPermissions([19, 20, 22])"
+        *ngIf="hasPermissions([permissionEnums.PushEnable, permissionEnums.HostOrderEnable, permissionEnums.RailOut])"
         mat-button
         class="menu-trigger"
         (click)="optionMenuTrigger.openMenu()"
@@ -141,28 +141,28 @@
     </mat-card-content>
     <mat-menu #vehicleCommandMenu="matMenu">
       <button
-        *ngIf="hasPermissions([17])"
+        *ngIf="hasPermissions([permissionEnums.AutoVehicle])"
         mat-menu-item
         (click)="onVehicleCommand('initialize')"
       >
         {{ "names.auto" | translate }}
       </button>
       <button
-        *ngIf="hasPermissions([15])"
+        *ngIf="hasPermissions([permissionEnums.ResetVehicle])"
         mat-menu-item
         (click)="onVehicleCommand('reset')"
       >
         {{ "names.reset" | translate }}
       </button>
       <button
-        *ngIf="hasPermissions([14])"
+        *ngIf="hasPermissions([permissionEnums.EstopVehicle])"
         mat-menu-item
         (click)="onVehicleCommand('stop')"
       >
         {{ "names.estop" | translate }}
       </button>
       <button
-        *ngIf="hasPermissions([23])"
+        *ngIf="hasPermissions([permissionEnums.SetZcuGo])"
         mat-menu-item
         (click)="onVehicleCommand('zcu_go')"
       >
@@ -171,21 +171,21 @@
     </mat-menu>
     <mat-menu #vehicleOptionMenu="matMenu">
       <button
-        *ngIf="hasPermissions([20])"
+        *ngIf="hasPermissions([permissionEnums.PushEnable])"
         mat-menu-item
         (click)="onVehicleCommand('push:enable')"
       >
         {{ "names.pushEnable" | translate }}
       </button>
       <button
-        *ngIf="hasPermissions([19])"
+        *ngIf="hasPermissions([permissionEnums.HostOrderEnable])"
         mat-menu-item
         (click)="onVehicleCommand('hostOrder:enable')"
       >
         {{ "names.hostOrderEnable" | translate }}
       </button>
       <button
-        *ngIf="hasPermissions([22])"
+        *ngIf="hasPermissions([permissionEnums.RailOut])"
         mat-menu-item
         (click)="onVehicleCommand('rail_out')"
       >
@@ -226,7 +226,7 @@
 </ng-template>
 
 <ng-template #zcuContext>
-  <mat-card class="context-card" *ngIf="hasPermissions([24])">
+  <mat-card class="context-card" *ngIf="hasPermissions([permissionEnums.SetZcuUsingType])">
     <mat-card-header>
       <mat-card-title>
         {{ contextData.objectType }} #{{ contextData.id }}
@@ -257,7 +257,7 @@
 </ng-template>
 
 <ng-template #pointContext>
-  <mat-card class="context-card" *ngIf="hasPermissions([25])">
+  <mat-card class="context-card" *ngIf="hasPermissions([permissionEnums.SetHomePoint])">
     <mat-card-header>
       <mat-card-title>
         {{ contextData.objectType }} #{{ contextData.id }}
@@ -298,7 +298,7 @@
 </ng-template>
 
 <ng-template #segmentContext>
-  <mat-card class="context-card" *ngIf="hasPermissions([29])">
+  <mat-card class="context-card" *ngIf="hasPermissions([permissionEnums.SegmentUnuse])">
     <mat-card-header>
       <mat-card-title>
         {{ contextData.objectType }} #{{ contextData.id }}

@@ -11,6 +11,7 @@ import { filter } from 'rxjs/operators';
 import { AuthService } from '../../../services/auth.service';
 import { SettingsDialogComponent } from '../../settings/dialogs/settings-dialog.component';
 import { AccountUtil } from '../utils/account.util';
+import { PermissionEnums } from '../../../models/enums';
 
 @Component({
   selector: 'oms-gnb-menus',
@@ -19,6 +20,7 @@ import { AccountUtil } from '../utils/account.util';
 })
 export class GnbMenusComponent implements OnInit, OnDestroy {
   parentRoute: string;
+  readonly permissionEnums: typeof PermissionEnums = PermissionEnums;
 
   private routing$: Subscription;
   private _dlg: MatDialogRef<SettingsDialogComponent>;

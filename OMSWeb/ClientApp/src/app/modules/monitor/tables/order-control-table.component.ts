@@ -12,6 +12,7 @@ import { AccountUtil } from '../../shared/utils/account.util';
 import { takeUntil } from 'rxjs/operators';
 import { MessagesService } from '../../../services/messages.service';
 import { DxDataGridComponent } from 'devextreme-angular';
+import { PermissionEnums } from '../../../models/enums';
 
 @Component({
   selector: 'oms-order-control-table',
@@ -34,7 +35,8 @@ export class OrderControlTableComponent implements OnInit, OnDestroy {
   get hasControlAccess(): boolean {
     return (
       this.auth.isAuthenticated &&
-      AccountUtil.hasPermission(11, this.auth.currentUser)
+      //AccountUtil.hasPermission(11, this.auth.currentUser)
+      AccountUtil.hasPermission(PermissionEnums.DeleteOrder, this.auth.currentUser)
     );
   }
 

@@ -10,6 +10,7 @@ import { AccountUtil } from '../../shared/utils/account.util';
 import { MapDataService } from '../map-data.service';
 import { MapStatesService } from '../map-states.service';
 import { MessagesService } from '../../../services/messages.service';
+import { PermissionEnums } from '../../../models/enums';
 
 @Component({
   selector: 'oms-map-side-panel',
@@ -21,6 +22,8 @@ export class MapSidePanelComponent implements OnInit, OnChanges {
 
   isCalculatedPath = false;
   hasOverlap = true;
+
+  readonly permissionEnums: typeof PermissionEnums = PermissionEnums;
 
   // segment
   segmentDisabledInfo = {

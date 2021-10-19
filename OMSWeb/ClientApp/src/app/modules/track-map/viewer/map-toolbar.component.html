@@ -90,7 +90,7 @@
   <mat-divider></mat-divider>
 
   <button
-    *ngIf="hasPermission(10)"
+    *ngIf="hasPermission(permissionEnums.ManualTransfer)"
     #btnCommand
     matListItem
     mat-button
@@ -124,7 +124,7 @@
   </button>
 
   <button
-    *ngIf="hasPermission(28)"
+    *ngIf="hasPermission(permissionEnums.ViewItemDetails)"
     matListItem
     mat-button
     class="tool-item"
@@ -142,7 +142,7 @@
   </button>
   <mat-divider></mat-divider>
   <button
-    *ngIf="hasPermission(26)"
+    *ngIf="hasPermission(permissionEnums.ViewBuffer)"
     #btnShowObj
     matListItem
     mat-button
@@ -160,7 +160,7 @@
   </button>
 
   <button
-    *ngIf="hasPermission(27)"
+    *ngIf="hasPermission(permissionEnums.ViewVehicleStatus)"
     #btnShowObj
     matListItem
     mat-button

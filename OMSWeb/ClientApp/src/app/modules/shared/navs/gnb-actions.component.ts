@@ -19,6 +19,7 @@ import { AccountUtil } from '../utils/account.util';
 import { MessagesService } from '../../../services/messages.service';
 import { IDataChangeEvent } from '../../../models/notification.model';
 import { HubService } from '../../../services/hub.service';
+import { PermissionEnums } from '../../../models/enums';
 
 @Component({
   selector: 'oms-gnb-actions',
@@ -106,7 +107,8 @@ export class GnbActionsComponent implements OnInit, OnDestroy {
     });
   }
   onChangeAI() {
-    if (!AccountUtil.hasPermission(3, this.auth.currentUser)) return;
+    //if (!AccountUtil.hasPermission(3, this.auth.currentUser)) return;
+    if (!AccountUtil.hasPermission(PermissionEnums.AiMode, this.auth.currentUser)) return;
     const transParam = { name: 'AI Mode' };
     this.dialogSvc
       .confirm({

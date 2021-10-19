@@ -5,7 +5,8 @@
           matTooltipPosition="below"
           matTooltip="Monitor"
           routerLinkActive="active"
-          routerLink="/monitor/status">
+          routerLink="/monitor/status"
+          [disabled]="!hasPermission(permissionEnums.ViewMonitorStatus)">
     <mat-icon>monitor</mat-icon>
   </button>
   <button mat-icon-button
@@ -15,7 +16,7 @@
           matTooltip="History"
           routerLinkActive="active"
           routerLink="/histories"
-          [disabled]="!hasPermission(4)">
+          [disabled]="!hasPermission(permissionEnums.ViewHistory)">
     <mat-icon>history</mat-icon>
   </button>
   <button mat-icon-button
@@ -25,7 +26,7 @@
           matTooltip="Playback"
           routerLinkActive="active"
           routerLink="/playback"
-          [disabled]="!hasPermission(5)">
+          [disabled]="!hasPermission(permissionEnums.ViewPlayback)">
     <mat-icon>play_circle_outline</mat-icon>
   </button>
   <button mat-icon-button
@@ -35,7 +36,7 @@
           matTooltip="Reports"
           routerLinkActive="active"
           routerLink="/reports"
-          [disabled]="!hasPermission(39)">
+          [disabled]="!hasPermission(permissionEnums.ViewReport)">
           <!--[disabled]="!hasPermission(41)"> need to add permission 41-->
     <mat-icon>bar_chart</mat-icon>
   </button>
@@ -46,7 +47,7 @@
           matTooltip="Logs"
           routerLinkActive="active"
           routerLink="/logs"
-          [disabled]="!hasPermission(6)">
+          [disabled]="!hasPermission(permissionEnums.ViewLog)">
     <mat-icon>receipt_long</mat-icon>
     <!-- <mat-icon>library_books</mat-icon> -->
   </button>
@@ -57,7 +58,7 @@
           matTooltip="Control"
           routerLinkActive="active"
           routerLink="/controls"
-          [disabled]="!hasPermission(39)">
+          [disabled]="!hasPermission(permissionEnums.ViewControl)">
     <mat-icon fontSet="material-icons-outlined">layers</mat-icon>
   </button>
   <button mat-icon-button
@@ -66,7 +67,7 @@
           matTooltipPosition="below"
           matTooltip="Settings"
           (click)="onOpenSettings()"
-          [disabled]="!hasPermission(7)">
+          [disabled]="!hasPermission(permissionEnums.ViewSettings)">
     <!-- routerLinkActive="active"
     [routerLink]="['settings', {outlets: {sub: ['users']}}]" -->
     <mat-icon>settings</mat-icon>

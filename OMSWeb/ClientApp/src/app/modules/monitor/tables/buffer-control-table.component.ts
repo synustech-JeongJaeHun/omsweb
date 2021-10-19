@@ -31,8 +31,7 @@ export class BufferControlTableComponent implements OnInit, OnDestroy {
 
   get hasControlAccess(): boolean {
     return (
-      this.auth.isAuthenticated &&
-      AccountUtil.hasPermission(11, this.auth.currentUser)
+      this.auth.isAuthenticated
     );
   }
 

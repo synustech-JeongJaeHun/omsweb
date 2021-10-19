@@ -12,6 +12,7 @@ import { AccountUtil } from '../../shared/utils/account.util';
 import { takeUntil } from 'rxjs/operators';
 import { DxDataGridComponent } from 'devextreme-angular';
 import { MessagesService } from '../../../services/messages.service';
+import { PermissionEnums } from '../../../models/enums';
 
 @Component({
   selector: 'oms-vehicle-control-table',
@@ -32,6 +33,8 @@ export class VehicleControlTableComponent implements OnInit, OnDestroy {
   //#region Subscriptions
   private destroy$: Subject<void> = new Subject<void>();
   //#endregion
+
+  readonly permissionEnums: typeof PermissionEnums = PermissionEnums;
 
   get hasControlAccess(): boolean {
     return this.auth.isAuthenticated;

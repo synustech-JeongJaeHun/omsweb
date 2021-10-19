@@ -1,6 +1,6 @@
 <div class="grid-actions" *ngIf="hasControlAccess">
   <button
-    *ngIf="hasPermission(14)"
+    *ngIf="hasPermission(permissionEnums.EstopVehicle)"
     mat-stroked-button
     color="warn"
     class="dense accent"
@@ -10,7 +10,7 @@
     {{ "names.estop" | translate }}
   </button>
   <button
-    *ngIf="hasPermission(15)"
+    *ngIf="hasPermission(permissionEnums.ResetVehicle)"
     mat-stroked-button
     color="primary"
     class="dense accent"
@@ -20,7 +20,7 @@
     {{ "names.reset" | translate }}
   </button>
   <button
-    *ngIf="hasPermission(17)"
+    *ngIf="hasPermission(permissionEnums.AutoVehicle)"
     mat-stroked-button
     color="primary"
     class="dense accent"
@@ -30,7 +30,7 @@
     {{ "names.auto" | translate }}
   </button>
   <button
-    *ngIf="hasPermission(19)"
+    *ngIf="hasPermission(permissionEnums.HostOrderEnable)"
     mat-stroked-button
     color="primary"
     class="dense"
@@ -40,7 +40,7 @@
     {{ "names.hostOrderEnable" | translate }}
   </button>
   <button
-    *ngIf="hasPermission(20)"
+    *ngIf="hasPermission(permissionEnums.PushEnable)"
     mat-stroked-button
     color="primary"
     class="dense"
@@ -50,7 +50,7 @@
     {{ "names.pushEnable" | translate }}
   </button>
   <button
-    *ngIf="hasPermission(21)"
+    *ngIf="hasPermission(permissionEnums.RailIn)"
     mat-stroked-button
     color="primary"
     class="dense"
@@ -60,7 +60,7 @@
     {{ "names.railIn" | translate }}
   </button>
   <button
-    *ngIf="hasPermission(22)"
+    *ngIf="hasPermission(permissionEnums.RailOut)"
     mat-stroked-button
     color="primary"
     class="dense"

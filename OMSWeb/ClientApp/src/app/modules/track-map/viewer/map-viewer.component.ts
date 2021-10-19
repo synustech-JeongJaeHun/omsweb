@@ -33,6 +33,8 @@ import { SettingsService } from '../../../services/settings.service';
 import { StatusService } from '../../../services/status.service';
 import { DialogService } from '../../../services/dialog.service';
 import { TranslateService } from '@ngx-translate/core';
+import { PermissionEnums } from '../../../models/enums';
+
 @Component({
   selector: 'oms-map-viewer',
   templateUrl: './map-viewer.component.html',
@@ -60,6 +62,8 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   private destroy$: Subject<void> = new Subject<void>();
   private _popupOffsetX = 10;
   private _popupOffsetY = 40;
+
+  readonly permissionEnums: typeof PermissionEnums = PermissionEnums;
 
   get showMinimap(): boolean {
     return this._minimapVisible;

@@ -21,6 +21,8 @@ import { HubService } from '../../../services/hub.service';
 import { AlarmDialogComponent } from '../dialogs/alarm-dialog.component';
 import { AlertDialogComponent } from '../dialogs/alert-dialog.component';
 import { AccountUtil } from '../utils/account.util';
+import { PermissionEnums } from '../../../models/enums';
+
 @Component({
   selector: 'oms-gnb-indicators',
   templateUrl: './gnb-indicators.component.html',
@@ -81,7 +83,8 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
   }
 
   toggleWarnsView() {
-    if (!AccountUtil.hasPermission(9, this.auth.currentUser)) return;
+    //if (!AccountUtil.hasPermission(9, this.auth.currentUser)) return;
+    if (!AccountUtil.hasPermission(PermissionEnums.ViewWarning, this.auth.currentUser)) return;
     // this.btnWarn.togglePopover();
     if (this._alertDlg && this._alertDlg.getState() === MatDialogState.OPEN) {
       this._alertDlg.close();
@@ -98,7 +101,8 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
   }
 
   toggleAlarmsView(enforce = false) {
-    if (!AccountUtil.hasPermission(8, this.auth.currentUser)) return;
+    //if (!AccountUtil.hasPermission(8, this.auth.currentUser)) return;
+    if (!AccountUtil.hasPermission(PermissionEnums.ViewAlarm, this.auth.currentUser)) return;
     if (this._alarmDlg && this._alarmDlg.getState() === MatDialogState.OPEN) {
       this._alarmDlg.close();
       if (!enforce) return;
@@ -131,7 +135,8 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
   }
 
   showAlarmsView() {
-    if (!AccountUtil.hasPermission(8, this.auth.currentUser)) return;
+    //if (!AccountUtil.hasPermission(8, this.auth.currentUser)) return;
+    if (!AccountUtil.hasPermission(PermissionEnums.ViewAlarm, this.auth.currentUser)) return;
     if (this._alarmDlg && this._alarmDlg.getState() === MatDialogState.OPEN) {
       return;
     }
@@ -164,7 +169,8 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
     });
   }
   updateAlarmView(show = true) {
-    if (!AccountUtil.hasPermission(8, this.auth.currentUser)) return;
+    //if (!AccountUtil.hasPermission(8, this.auth.currentUser)) return;
+    if (!AccountUtil.hasPermission(PermissionEnums.ViewAlarm, this.auth.currentUser)) return;
     if (show) this.showAlarmsView();
 
     this._alarmDlg.componentInstance.dataSource = this.notifySvc.alarmsDataSource();

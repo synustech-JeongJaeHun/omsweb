@@ -7,6 +7,7 @@ import { MessagesService } from '../../../services/messages.service';
 import { SettingsService } from '../../../services/settings.service';
 import { AccountUtil } from '../../shared/utils/account.util';
 import { MapStatesService } from '../../track-map/map-states.service';
+import { PermissionEnums } from '../../../models/enums';
 
 @Component({
   selector: 'oms-status-control',
@@ -16,6 +17,8 @@ import { MapStatesService } from '../../track-map/map-states.service';
 export class StatusControlComponent implements OnInit {
   resizeHandler: any;
   tableHeightNum = 300;
+
+  readonly permissionEnums: typeof PermissionEnums = PermissionEnums;
 
   get tableHeight(): string {
     return this.tableHeightNum.toString();
