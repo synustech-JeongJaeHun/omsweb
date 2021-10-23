@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { HubService } from '../../services/hub.service';
 import { SettingsService } from '../../services/settings.service';
@@ -20,14 +20,31 @@ export class AppComponent {
     }
   }
 
+  private translate: TranslateService;
+
   constructor(
     $t: TranslateService,
     private hubSvc: HubService,
     private settingSvc: SettingsService
   ) {
-    $t.setDefaultLang('en');
-    // $t.use($t.getBrowserCultureLang());
-    $t.use('en');
+    this.translate = $t;
+
+    //$t.setDefaultLang('en');
+    //// $t.use($t.getBrowserCultureLang());
+    //$t.use('en');
+
+
+    // Default language Korean
+    //this.translate.setDefaultLang('ko');
+    //this.translate.use('ko');
+
+    // Default language English
+    this.translate.setDefaultLang('en');
+    this.translate.use('en');
+
+    // Default language Chinese
+    //this.translate.setDefaultLang('zh');
+    //this.translate.use('zh');
 
     this.setTheme();
   }
@@ -38,4 +55,10 @@ export class AppComponent {
       setCssValue(key, pref.theme[key]);
     });
   }
+
+  public changeLanguage(lang: string): void {
+    this.translate.use(lang);
+  }
+
+  public ngOnInit(): void {}
 }

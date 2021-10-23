@@ -32,6 +32,8 @@ export class GnbActionsComponent implements OnInit, OnDestroy {
   private _roles: IRole[] = [];
   private destroy$ = new Subject<void>();
 
+  private currentLanguage = "English";
+
   get isAuthenticated() {
     return this.auth.isAuthenticated;
   }
@@ -132,5 +134,16 @@ export class GnbActionsComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.updateState();
     }, 80);
+  }
+
+  public changeLanguage(lang: string): void {
+    this.t$.use(lang);
+
+    if (lang == 'ko')
+      this.currentLanguage = "한국어";//this.t$.translations[lang].names.korean;
+    else if (lang == 'en')
+      this.currentLanguage = "English";//this.t$.translations[lang].names.english;
+    else if (lang == 'zh')
+      this.currentLanguage = "中国人";//this.t$.translations[lang].names.chinese;
   }
 }

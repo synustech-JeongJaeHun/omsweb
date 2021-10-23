@@ -1,5 +1,9 @@
 {
   "names": {
+    "english": "English",
+    "korean": "Korean",
+    "chinese": "Chinese",
+
     "monitor": "Monitor",
     "playback": "Playback",
     "history": "History",
@@ -352,7 +356,16 @@
     "mem": "MEM",
     "vehicleSetting": "Vehicle Setting",
     "addVehicle": "Add Vehicle",
-    "columnDisplayManagement": "Column Display"
+    "columnDisplayManagement": "Column Display",
+
+    "ai": "AI",
+    "reports": "Reports",
+    "server": "Server",
+    "trend": "Trend",
+    "normalTR": "Normal TR",
+    "abnormalTR": "Abnormal TR",
+    "alarm": "Alarm"
+
   },
   "enums": {
     "hostSessionStatus": {

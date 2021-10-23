@@ -3,7 +3,7 @@
           class="nav-item"
           matTooltipClass="gnb-tooltip"
           matTooltipPosition="below"
-          matTooltip="Monitor"
+          matTooltip='{{ "names.monitor" | translate }}'
           routerLinkActive="active"
           routerLink="/monitor/status"
           [disabled]="!hasPermission(permissionEnums.ViewMonitorStatus)">
@@ -13,7 +13,7 @@
           class="nav-item"
           matTooltipClass="gnb-tooltip"
           matTooltipPosition="below"
-          matTooltip="History"
+          matTooltip='{{ "names.history" | translate }}'
           routerLinkActive="active"
           routerLink="/histories"
           [disabled]="!hasPermission(permissionEnums.ViewHistory)">
@@ -23,7 +23,7 @@
           class="nav-item"
           matTooltipClass="gnb-tooltip"
           matTooltipPosition="below"
-          matTooltip="Playback"
+          matTooltip='{{ "names.playback" | translate }}'
           routerLinkActive="active"
           routerLink="/playback"
           [disabled]="!hasPermission(permissionEnums.ViewPlayback)">
@@ -33,7 +33,7 @@
           class="nav-item"
           matTooltipClass="gnb-tooltip"
           matTooltipPosition="below"
-          matTooltip="Reports"
+          matTooltip='{{ "names.reports" | translate }}'
           routerLinkActive="active"
           routerLink="/reports"
           [disabled]="!hasPermission(permissionEnums.ViewReport)">
@@ -44,7 +44,7 @@
           class="nav-item"
           matTooltipClass="gnb-tooltip"
           matTooltipPosition="below"
-          matTooltip="Logs"
+          matTooltip='{{ "names.logs" | translate }}'
           routerLinkActive="active"
           routerLink="/logs"
           [disabled]="!hasPermission(permissionEnums.ViewLog)">
@@ -55,7 +55,7 @@
           class="nav-item"
           matTooltipClass="gnb-tooltip"
           matTooltipPosition="below"
-          matTooltip="Control"
+          matTooltip='{{ "names.control" | translate }}'
           routerLinkActive="active"
           routerLink="/controls"
           [disabled]="!hasPermission(permissionEnums.ViewControl)">
@@ -65,11 +65,9 @@
           class="nav-item"
           matTooltipClass="gnb-tooltip"
           matTooltipPosition="below"
-          matTooltip="Settings"
+          matTooltip='{{ "names.settings" | translate }}'
           (click)="onOpenSettings()"
           [disabled]="!hasPermission(permissionEnums.ViewSettings)">
-    <!-- routerLinkActive="active"
-    [routerLink]="['settings', {outlets: {sub: ['users']}}]" -->
     <mat-icon>settings</mat-icon>
   </button>
 </div>
@@ -82,16 +80,7 @@
         mat-button
         class="nav-item"
         routerLinkActive="active"
-        routerLink="/monitor/status"
-        >Status</a
-      >
-      <!-- <a
-        mat-button
-        class="nav-item"
-        routerLinkActive="active"
-        routerLink="/monitor/metrics"
-        >Metrics</a
-      > -->
+        routerLink="/monitor/status">{{ "names.state" | translate }}</a>
     </ng-container>
 
     <ng-container *ngSwitchCase="'/controls'">
@@ -99,106 +88,66 @@
         mat-button
         class="nav-item"
         routerLinkActive="active"
-        routerLink="/controls/vehicles"
-        >Vehicles</a
-      >
+        routerLink="/controls/vehicles">{{ "names.vehicles" | translate }}</a>
       <a
         mat-button
         class="nav-item"
         routerLinkActive="active"
-        routerLink="/controls/server"
-        >Server</a
-      >
+        routerLink="/controls/server">{{ "names.server" | translate }}</a>
     </ng-container>
     <ng-container *ngSwitchCase="'/playback'">
       <a
         mat-button
         class="nav-item"
         routerLinkActive="active"
-        routerLink="/playback"
-        >Playback</a
-      >
+        routerLink="/playback">{{ "names.playback" | translate }}</a>
     </ng-container>
     <ng-container *ngSwitchCase="'/histories'">
       <a
         mat-button
         class="nav-item tight"
         routerLinkActive="active"
-        routerLink="/histories/orders"
-        >Orders</a
-      >
+        routerLink="/histories/orders">{{ "names.orders" | translate }}</a>
       <a
         mat-button
         class="nav-item tight"
         routerLinkActive="active"
-        routerLink="/histories/vehicles"
-        >Vehicles</a
-      >
+        routerLink="/histories/vehicles">{{ "names.vehicles" | translate }}</a>
       <a
         mat-button
         class="nav-item tight"
         routerLinkActive="active"
-        routerLink="/histories/alarms"
-        >Alarms</a
-      >
+        routerLink="/histories/alarms">{{ "names.alarms" | translate }}</a>
       <a
         mat-button
         class="nav-item tight"
         routerLinkActive="active"
-        routerLink="/histories/warnings"
-        >Warnings</a
-      >
+        routerLink="/histories/warnings">{{ "names.alerts" | translate }}</a>
     </ng-container>
     <ng-container *ngSwitchCase="'/logs'">
       <a
         mat-button
         class="nav-item"
         routerLinkActive="active"
-        routerLink="/logs"
-        >Logs</a
-      >
+        routerLink="/logs">{{ "names.logs" | translate }}</a>
     </ng-container>
     <ng-container *ngSwitchCase="'/reports'">
       <a mat-button
          class="nav-item tight"
          routerLinkActive="active"
-         routerLink="/reports/kpi">
-        Trend
-      </a>
+         routerLink="/reports/kpi">{{ "names.trend" | translate }}</a>
       <a mat-button
          class="nav-item tight"
          routerLinkActive="active"
-         routerLink="/reports/normalTR">
-        Normal TR
-      </a>
+         routerLink="/reports/normalTR">{{ "names.normalTR" | translate }}</a>
       <a mat-button
          class="nav-item tight"
          routerLinkActive="active"
-         routerLink="/reports/abnormalTR">
-        Abnormal TR
-      </a>
+         routerLink="/reports/abnormalTR">{{ "names.abnormalTR" | translate }}</a>
       <a mat-button
          class="nav-item tight"
          routerLinkActive="active"
-         routerLink="/reports/alarm">
-        Alarm
-      </a>
-      <!--
-      <a mat-button
-         class="nav-item tight"
-         routerLinkActive="active"
-         routerLink="/reports/report">
-        Report
-      </a>
-      -->
-      <!--
-      <a mat-button
-         class="nav-item tight"
-         routerLinkActive="active"
-         routerLink="/reports/systeminfo">
-        System Info
-      </a>
-      -->
+         routerLink="/reports/alarm">{{ "names.alarm" | translate }}</a>
     </ng-container>
 
     <div *ngSwitchDefault></div>

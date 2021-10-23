@@ -1,9 +1,28 @@
 <button mat-button class="ai" [class.active]="activeAi" (click)="onChangeAI()">
-  <div class="rect">AI</div>
+  <div class="rect">{{ "names.ai" | translate }}</div>
 </button>
-<button mat-button class="locale"><mat-icon>language</mat-icon> English</button>
+
+<ng-container [ngSwitch]="true">
+  <ng-container *ngSwitchCase="true">
+    <button mat-button class="locale" [matMenuTriggerFor]="localeMenu">
+      <mat-icon>language</mat-icon> {{ currentLanguage }}
+    </button>
+    <mat-menu #localeMenu="matMenu" xPosition="before">
+      <button mat-menu-item (click)="changeLanguage('en')">
+        {{ "names.english" | translate }}
+      </button>
+      <button mat-menu-item (click)="changeLanguage('ko')">
+        {{ "names.korean" | translate }}
+      </button>
+      <button mat-menu-item (click)="changeLanguage('zh')">
+        {{ "names.chinese" | translate }}
+      </button>
+    </mat-menu>
+  </ng-container>
+</ng-container>
+
 <button mat-button class="legend" (click)="onLegend()">
-  <mat-icon>info</mat-icon> Legend
+  <mat-icon>info</mat-icon> {{ "names.legend" | translate }}
 </button>
 
 <ng-container [ngSwitch]="isAuthenticated">
@@ -23,7 +42,7 @@
   </ng-container>
   <ng-container *ngSwitchDefault>
     <button mat-button class="signin" (click)="onLogin()">
-      <mat-icon>person</mat-icon> Login
+      <mat-icon>person</mat-icon> {{ "names.login" | translate }}
     </button>
   </ng-container>
 </ng-container>

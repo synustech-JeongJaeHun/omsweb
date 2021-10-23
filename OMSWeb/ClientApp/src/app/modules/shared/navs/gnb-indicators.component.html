@@ -6,7 +6,7 @@
   (click)="toggleWarnsView()"
   matTooltipClass="gnb-tooltip"
   matTooltipPosition="below"
-  matTooltip="Warnings"
+  matTooltip='{{ "names.alerts" | translate }}'
 >
   <mat-icon
     [matBadge]="warnValue"
@@ -24,7 +24,7 @@
   (click)="toggleAlarmsView()"
   matTooltipClass="gnb-tooltip"
   matTooltipPosition="below"
-  matTooltip="Alarms"
+  matTooltip='{{ "names.alarms" | translate }}'
 >
   <mat-icon
     [fontSet]="hasAlarm ? '' : 'material-icons-outlined'"
