@@ -238,10 +238,10 @@
         class="form-row-start"
         name="type"
         aria-label="Type"
-        [value]="contextData.zcuType"
+        [value]="contextData.usingType"
       >
-        <mat-button-toggle [value]="1">HW</mat-button-toggle>
-        <mat-button-toggle [value]="2">SW</mat-button-toggle>
+        <mat-button-toggle [value]="1">{{ "names.hw" | translate }}</mat-button-toggle>
+        <mat-button-toggle [value]="2">{{ "names.sw" | translate }}</mat-button-toggle>
       </mat-button-toggle-group>
 
       <button
@@ -351,6 +351,9 @@
   <ng-container *ngSwitchCase="'BUFFER'">
     <ng-container *ngTemplateOutlet="bufferTooltip"></ng-container>
   </ng-container>
+  <ng-container *ngSwitchCase="'ZCU'">
+    <ng-container *ngTemplateOutlet="zcuTooltip"></ng-container>
+  </ng-container>
   <ng-container *ngSwitchCase="'POINT'">
     <ng-container *ngTemplateOutlet="pointTooltip"></ng-container>
   </ng-container>
@@ -366,13 +369,13 @@
   >
     <div class="tooltip-title">Station</div>
     <div class="tooltip-content">
-      <div class="name">ID</div>
+      <div class="name">{{ "names.id" | translate }}</div>
       <div class="value">{{ tooltipData?.id }}</div>
-      <div class="name">Logical ID</div>
+      <div class="name">{{ "names.logicalId" | translate }}</div>
       <div class="value">{{ tooltipData?.logicalId }}</div>
-      <div class="name">Physical ID</div>
+      <div class="name">{{ "names.physicalId" | translate }}</div>
       <div class="value">{{ tooltipData?.physicalId }}</div>
-      <div class="name">Point</div>
+      <div class="name">{{ "names.point" | translate }}</div>
       <div class="value">{{ tooltipData?.pointId }}</div>
     </div>
   </dx-tooltip>
@@ -387,13 +390,13 @@
   >
     <div class="tooltip-title">Vehicle</div>
     <div class="tooltip-content">
-      <div class="name">ID</div>
+      <div class="name">{{ "names.id" | translate }}</div>
       <div class="value">{{ tooltipData?.id }}</div>
-      <div class="name">Logical ID</div>
+      <div class="name">{{ "names.logicalId" | translate }}</div>
       <div class="value">{{ tooltipData?.logicalId }}</div>
-      <div class="name">Physical ID</div>
+      <div class="name">{{ "names.physicalId" | translate }}</div>
       <div class="value">{{ tooltipData?.physicalId }}</div>
-      <div class="name">Point</div>
+      <div class="name">{{ "names.point" | translate }}</div>
       <div class="value">{{ tooltipData?.curPoint?.point }}</div>
     </div>
   </dx-tooltip>
@@ -408,11 +411,11 @@
   >
     <div class="tooltip-title">Cluster</div>
     <div class="tooltip-content">
-      <div class="name">ID</div>
+      <div class="name">{{ "names.id" | translate }}</div>
       <div class="value">{{ tooltipData?.id }}</div>
-      <div class="name">Logical ID</div>
+      <div class="name">{{ "names.logicalId" | translate }}</div>
       <div class="value">{{ tooltipData?.logicalId }}</div>
-      <div class="name">Max Vehicles</div>
+      <div class="name">{{ "names.maxVehicles" | translate }}</div>
       <div class="value">{{ tooltipData?.maxVehicles }}</div>
     </div>
   </dx-tooltip>
@@ -427,11 +430,11 @@
   >
     <div class="tooltip-title">Segment</div>
     <div class="tooltip-content">
-      <div class="name">ID</div>
+      <div class="name">{{ "names.id" | translate }}</div>
       <div class="value">{{ tooltipData?.id }}</div>
-      <div class="name">Length</div>
+      <div class="name">{{ "names.length" | translate }}</div>
       <div class="value">{{ tooltipData?.length }}</div>
-      <div class="name">Point</div>
+      <div class="name">{{ "names.point" | translate }}</div>
       <div class="value">{{ tooltipData?.point }}</div>
     </div>
   </dx-tooltip>
@@ -446,14 +449,35 @@
   >
     <div class="tooltip-title">Buffer</div>
     <div class="tooltip-content">
-      <div class="name">ID</div>
+      <div class="name">{{ "names.id" | translate }}</div>
       <div class="value">{{ tooltipData?.id }}</div>
-      <div class="name">Logical ID</div>
+      <div class="name">{{ "names.logicalId" | translate }}</div>
       <div class="value">{{ tooltipData?.logicalId }}</div>
-      <div class="name">Physical ID</div>
+      <div class="name">{{ "names.physicalId" | translate }}</div>
       <div class="value">{{ tooltipData?.physicalId }}</div>
-      <div class="name">Point</div>
+      <div class="name">{{ "names.point" | translate }}</div>
       <div class="value">{{ tooltipData?.pointId }}</div>
+    </div>
+  </dx-tooltip>
+</ng-template>
+
+<ng-template #zcuTooltip>
+  <dx-tooltip
+    class="tooltip-box"
+    [visible]="showTooltip"
+    target="#tooltipView"
+    position="right"
+  >
+    <div class="tooltip-title">Zcu</div>
+    <div class="tooltip-content">
+      <div class="name">{{ "names.id" | translate }}</div>
+      <div class="value">{{ tooltipData?.id }}</div>
+      <!--
+      <div class="name">Type</div>
+      <div class="value">{{ ((tooltipData?.zcuType == 0) ? 'Standard' : ((tooltipData?.zcuType == 1) ? 'NType' : '')) }}</div>
+      -->
+      <div class="name">{{ "names.usingType" | translate }}</div>
+      <div class="value">{{ ((tooltipData?.usingType == 0) ? 'Not Use' : ((tooltipData?.usingType == 1) ? 'Use HW' : ((tooltipData?.usingType == 2) ? 'Use SW' : '')))}}</div>
     </div>
   </dx-tooltip>
 </ng-template>
@@ -467,9 +491,9 @@
   >
     <div class="tooltip-title">Point</div>
     <div class="tooltip-content">
-      <div class="name">ID</div>
+      <div class="name">{{ "names.id" | translate }}</div>
       <div class="value">{{ tooltipData?.id }}</div>
-      <div class="name">Physical ID</div>
+      <div class="name">{{ "names.physicalId" | translate }}</div>
       <div class="value">{{ tooltipData?.physicalId }}</div>
     </div>
   </dx-tooltip>

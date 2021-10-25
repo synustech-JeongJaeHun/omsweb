@@ -248,7 +248,7 @@
     "stationList": "Station List",
     "vehicleList": "Vehicle List",
     "bufferList": "Buffer List",
-    "maxVehicles": "Max Vehicle",
+    "maxVehicles": "Max Vehicles",
     "allSpeedRatio": "All Speed Ratio",
     "length": "Length",
     "obsLow": "OBS Low",
@@ -364,8 +364,17 @@
     "trend": "Trend",
     "normalTR": "Normal TR",
     "abnormalTR": "Abnormal TR",
-    "alarm": "Alarm"
-
+    "alarm": "Alarm",
+    "hw": "HW",
+    "sw": "SW",
+    "idle": "Idle",
+    "details": "Details",
+    "transTime": "Transfer time",
+    "assigTime": "Assign time",
+    "createdToCompleted": "(created ~ completed)",
+    "createdToLoaded": "(created ~ loaded)",
+    "loadedToCompleted": "(loaded ~ completed)",
+    "createdToAssigned": "(created ~ assigned)"
   },
   "enums": {
     "hostSessionStatus": {

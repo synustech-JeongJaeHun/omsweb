@@ -45,6 +45,8 @@ export class KpiStatusComponent implements OnInit {
   onClick(target: string) {
     //need to add permission 42
     //if (this.hasPermission(42) == true) {
+    if (!this.auth.isAuthenticated) return;
+
     if (target == "kpi") {
       this.router.navigate(["/reports/kpi"]);
       //} else if (target == "systeminfo") {

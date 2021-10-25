@@ -35,8 +35,8 @@
   <div id="grid-container">
     <table class="table-kpi-details">
       <tr>
-        <th>Summary</th>
-        <th>Vehicle</th>
+        <th>{{ "names.summary" | translate }}</th>
+        <th>{{ "names.vehicle" | translate }}</th>
         <!--
         <th>System Info</th>
         -->
@@ -67,7 +67,7 @@
                 </dx-chart>
               </td>
               <td class="text">
-                <div class="sub-title">Utilization</div>
+                <div class="sub-title">{{ "names.utilization" | translate }}</div>
                 <div class="sub-content">67.78%</div>
               </td>
              </tr>
@@ -105,25 +105,25 @@
                 <table class="table-piechart">
                   <tr>
                     <td class="box"><div class="box1"></div></td>
-                    <td class="title">Error</td>
+                    <td class="title">{{ "names.error" | translate }}</td>
                     <td class="value">30</td>
                     <td class="margin"></td>
                   </tr>
                   <tr>
                     <td class="box"><div class="box2"></div></td>
-                    <td class="title">Idle</td>
+                    <td class="title">{{ "names.idle" | translate }}</td>
                     <td class="value">20</td>
                     <td class="margin"></td>
                   </tr>
                   <tr>
                     <td class="box"><div class="box3"></div></td>
-                    <td class="title">Manual</td>
+                    <td class="title">{{ "names.manual" | translate }}</td>
                     <td class="value">0</td>
                     <td class="margin"></td>
                   </tr>
                   <tr>
                     <td class="box"><div class="box4"></div></td>
-                    <td class="title">Auto</td>
+                    <td class="title">{{ "names.auto" | translate }}</td>
                     <td class="value">200</td>
                     <td class="margin"></td>
                   </tr>
@@ -158,13 +158,13 @@
                 <table class="table-piechart">
                   <tr>
                     <td class="box"><div class="box5"></div></td>
-                    <td class="title">Unloading</td>
+                    <td class="title">{{ "names.unloading" | translate }}</td>
                     <td class="value">80</td>
                     <td class="margin"></td>
                   </tr>
                   <tr>
                     <td class="box"><div class="box6"></div></td>
-                    <td class="title">Loading</td>
+                    <td class="title">{{ "names.loading" | translate }}</td>
                     <td class="value">120</td>
                     <td class="margin"></td>
                   </tr>
@@ -200,7 +200,7 @@
                 </dx-chart>
               </td>
               <td class="text">
-                <div class="sub-title">Delivery Time</div>
+                <div class="sub-title">{{ "names.deliveryTime" | translate }}</div>
                 <div class="sub-content">87.10 sec</div>
               </td>
             </tr>
@@ -230,18 +230,18 @@
         -->
       </tr>
       <tr>
-        <th>Details</th>
-        <th>System Info</th>
+        <th>{{ "names.details" | translate }}</th>
+        <th>{{ "names.systemInfo" | translate }}</th>
       </tr>
       <tr>
         <td>
           <table class="table-details">
             <tr>
               <th class="header-name">{{ "names.item" | translate }}</th>
-              <th class="header-value">{{ "names.desc" | translate }}(localhost/largemap_v3)</th>
+              <th class="header-value">{{ "names.desc" | translate }} (localhost/largemap_v3)</th>
             </tr>
             <tr>
-              <td class="name">Range</td>
+              <td class="name">{{ "names.range" | translate }}</td>
               <td class="value">2021-09-06 09:05:24(1)~2021-09-06 09:15:24(10,367)</td>
             </tr>
             <tr>
@@ -249,27 +249,27 @@
               <td class="value">67.78%</td>
             </tr>
             <tr>
-              <td class="name">{{ "names.deliveryTime" | translate }} (created ~ completed)</td>
+              <td class="name">{{ "names.deliveryTime" | translate }} {{ "names.createdToCompleted" | translate }}</td>
               <td class="value">87.10s, order count: 10,191</td>
             </tr>
             <tr>
-              <td class="name">Wait time (created ~ loaded)</td>
+              <td class="name">{{ "names.waitTime" | translate }} {{ "names.createdToLoaded" | translate }}</td>
               <td class="value">29.28s, order count: 10,310</td>
             </tr>
             <tr>
-              <td class="name">Transfer time (loaded ~ completed)</td>
+              <td class="name">{{ "names.transTime" | translate }} {{ "names.loadedToCompleted" | translate }}</td>
               <td class="value">57.84s, order count: 10,191</td>
             </tr>
             <tr>
-              <td class="name">Assign time (created ~ assigned)</td>
+              <td class="name">{{ "names.assigTime" | translate }} {{ "names.createdToAssigned" | translate }}</td>
               <td class="value">1.84s, order count: 10,191</td>
             </tr>
             <tr>
-              <td class="name">Order change</td>
+              <td class="name">{{ "names.orderChange" | translate }}</td>
               <td class="value">65.61% (6,792/10,368)</td>
             </tr>
             <tr>
-              <td class="name">Number of order request</td>
+              <td class="name">{{ "names.numOfOrderReq" | translate }}</td>
               <td class="value">per second: 2.0011, estimated per day: 172,894</td>
             </tr>
           </table>
@@ -320,7 +320,7 @@
                       </dx-chart>
                     </td>
                     <td class="text4">
-                      <div class="sub-title">CPU</div>
+                      <div class="sub-title">{{ "names.cpu" | translate }}</div>
                       <div class="sub-content2">18% 3.84GHz</div>
                     </td>
                   </tr>
@@ -355,7 +355,7 @@
                       </dx-chart>
                     </td>
                     <td class="text4">
-                      <div class="sub-title">Memory</div>
+                      <div class="sub-title">{{ "names.memory" | translate }}</div>
                       <div class="sub-content2">7.9 / 15.8GB (50%)</div>
                     </td>
                   </tr>

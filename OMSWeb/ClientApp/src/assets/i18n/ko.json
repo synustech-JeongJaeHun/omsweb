@@ -364,7 +364,17 @@
     "trend": "경향",
     "normalTR": "일반 TR",
     "abnormalTR": "비정상 TR",
-    "alarm": "경보"
+    "alarm": "경보",
+    "hw": "HW",
+    "sw": "SW",
+    "idle": "유휴",
+    "details": "상세정보",
+    "transTime": "전송시간",
+    "assigTime": "할당시간",
+    "createdToCompleted": "(생성 ~ 완료)",
+    "createdToLoaded": "(생성 ~ 로드)",
+    "loadedToCompleted": "(로드 ~ 완료)",
+    "createdToAssigned": "(생성 ~ 완료)"
   },
   "enums": {
     "hostSessionStatus": {
