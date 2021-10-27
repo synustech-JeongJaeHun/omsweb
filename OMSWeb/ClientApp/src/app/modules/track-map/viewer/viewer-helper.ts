@@ -6189,6 +6189,8 @@ export class ViewController {
               y: command_y,
             };
             let cmd_offset = LayoutUtil.find_connected_object_offset(point_object, d.distancePoint, this.layout_data);
+            cmd_offset.x = 0;
+            cmd_offset.y = 0;
 
             this.update_vehicle_command_svg(
               d3_this,
@@ -6421,6 +6423,8 @@ export class ViewController {
       y: command_pt.y,
     };
     let cmd_offset = LayoutUtil.find_connected_object_offset(cmd_point_object, vehicle_data.distancePoint, this.layout_data);
+    cmd_offset.x = 0;
+    cmd_offset.y = 0;
 
     this.update_vehicle_command_svg(
       vehicle_element,
