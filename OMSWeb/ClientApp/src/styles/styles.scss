@@ -721,3 +721,13 @@ snack-bar-container.error {
     padding: 4px;
   }
 }
+
+.pioTrend-modalbox {
+  mat-dialog-container {
+    resize: both;
+    min-width:750px;
+    min-height: 540px;
+    max-width: 1400px;
+    max-height: 1000px;
+  }
+}

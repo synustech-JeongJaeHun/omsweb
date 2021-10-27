@@ -356,7 +356,7 @@
     "mem": "MEM",
     "vehicleSetting": "Vehicle Setting",
     "addVehicle": "Add Vehicle",
-    "columnDisplayManagement": "Column Display",
+    "columnDisplayManagement": "Tables Column",
 
     "ai": "AI",
     "reports": "Reports",
@@ -374,7 +374,8 @@
     "createdToCompleted": "(created ~ completed)",
     "createdToLoaded": "(created ~ loaded)",
     "loadedToCompleted": "(loaded ~ completed)",
-    "createdToAssigned": "(created ~ assigned)"
+    "createdToAssigned": "(created ~ assigned)",
+    "pioTrend": "PIO Trend"
   },
   "enums": {
     "hostSessionStatus": {

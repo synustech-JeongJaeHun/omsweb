@@ -21,7 +21,7 @@
                 color="primary"
                 [disabled]="false"
                 (click)="onToggleVehicleStatusNPIOTrend($event.target)">
-          PIO Trend
+          {{ "names.pioTrend" | translate }}
         </button>
       </div>
       <h4>Status</h4>
@@ -772,6 +772,8 @@
             <th class="value">0</th>
           </tr>
         </table>
+        &nbsp;
+        &nbsp;
       </div>
     </div>
   </ng-container>

@@ -356,7 +356,7 @@
     "mem": "记忆",
     "vehicleSetting": "车辆设置",
     "addVehicle": "添加车辆",
-    "columnDisplayManagement": "列显示",
+    "columnDisplayManagement": "表格列",
 
     "ai": "AI",
     "reports": "报告",
@@ -374,7 +374,8 @@
     "createdToCompleted": "（创建~完成）",
     "createdToLoaded": "（创建〜加载）",
     "loadedToCompleted": "（加载~完成）",
-    "createdToAssigned": "（创建〜分配）"
+    "createdToAssigned": "（创建〜分配）",
+    "pioTrend": "PIO趋势"
   },
   "enums": {
     "hostSessionStatus": {

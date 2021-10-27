@@ -231,6 +231,7 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
 
     this._vhStatusDlg = this.dialog.open(VehicleStatusDialogComponent, {
       width: '750px',
+      height: '540px',
       autoFocus: false,
       hasBackdrop: false,
       disableClose: false,

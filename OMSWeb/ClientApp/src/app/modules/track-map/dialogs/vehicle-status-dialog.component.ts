@@ -9,6 +9,8 @@ import {
 import { Vehicle } from '../../../models/vehicle.model';
 import { StatusService } from '../../../services/status.service';
 import { MapDataService } from '../map-data.service';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { TranslateService } from '@ngx-translate/core';
 
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
@@ -35,8 +37,10 @@ export class VehicleStatusDialogComponent implements OnInit {
   private showOptions: { [key: string]: boolean } = {};
 
   constructor(
+    private dialogRef: MatDialogRef<VehicleStatusDialogComponent>,
     private dataSvc: MapDataService,
-    private statusSvc: StatusService
+    private statusSvc: StatusService,
+    private t$: TranslateService
   ) {
 
     let pioTrendData: any[] = [
@@ -209,12 +213,19 @@ export class VehicleStatusDialogComponent implements OnInit {
   }
 
   onToggleVehicleStatusNPIOTrend(element) {
+    
     this.visiblePIOTrend = !this.visiblePIOTrend;
 
     if (this.visiblePIOTrend) {
-      element.textContent = '<  Vehicle Status';
+      //element.textContent = '<  Vehicle Status';
+      element.textContent = '< ' + this.t$.translations[this.t$.currentLang].names.vehicleStatus;
+      this.dialogRef.addPanelClass('pioTrend-modalbox');
+      this.dialogRef.updateSize('930px', '800px');
     } else {
-      element.textContent = 'PIO Trend';
+      //element.textContent = 'PIO Trend';
+      element.textContent = this.t$.translations[this.t$.currentLang].names.pioTrend;
+      this.dialogRef.removePanelClass('pioTrend-modalbox');
+      this.dialogRef.updateSize('750px', '540px');
     }
   }
 }

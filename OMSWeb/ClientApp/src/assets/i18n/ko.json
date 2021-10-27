@@ -356,7 +356,7 @@
     "mem": "MEM",
     "vehicleSetting": "비클 설정",
     "addVehicle": "비클 추가",
-    "columnDisplayManagement": "컬럼 표시",
+    "columnDisplayManagement": "테이블 컬럼",
 
     "ai": "AI",
     "reports": "보고서",
@@ -374,7 +374,8 @@
     "createdToCompleted": "(생성 ~ 완료)",
     "createdToLoaded": "(생성 ~ 로드)",
     "loadedToCompleted": "(로드 ~ 완료)",
-    "createdToAssigned": "(생성 ~ 완료)"
+    "createdToAssigned": "(생성 ~ 완료)",
+    "pioTrend": "PIO 트렌드"
   },
   "enums": {
     "hostSessionStatus": {
