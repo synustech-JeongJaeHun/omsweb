@@ -37,5 +37,10 @@ namespace OMSWeb.Models
     public int[] SpeedRatios { get; set; }
     public int? ClusterId { get; set; }
     public int? MaxVehicles { get; set; }
+    public int[] HomeIds { get; set; }
+    public int? HomeId { get; set; }
+    public int? StationId { get; set; }
+    public int? BufferId { get; set; }
+
   }
 }

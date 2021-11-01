@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { RoleManagementComponent } from './preferences/role-management.component';
 import { UserManagementComponent } from './preferences/user-management.component';
+import { ColumnDisplayManagementComponent } from './preferences/column-display-management.component';
+import { VehiclePreferenceComponent } from './preferences/vehicle-preference.component';
 
 import { SettingsComponent } from './settings.component';
 import { AlarmSettingComponent } from './tracks/alarm-setting.component';
@@ -20,6 +22,7 @@ const routes: Routes = [
     component: SettingsComponent,
   },
   { outlet: 'sub', path: 'users', component: UserManagementComponent },
+  { outlet: 'sub', path: 'vehiclePreference', component: VehiclePreferenceComponent },
   // { outlet: 'sub', path: 'roles', component: RoleManagementComponent },
   { outlet: 'sub', path: 'tracks/group', component: GroupSettingComponent },
   { outlet: 'sub', path: 'tracks/cluster', component: ClusterSettingComponent },

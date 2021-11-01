@@ -11,6 +11,13 @@
             class="nav-link">{{ "names.preference" | translate }}
           </a>
           <a
+            *ngIf="auth.hasPermissions([permissionEnums.SettingPreference])"
+            mat-list-item
+            [class.active]="isActiveMenu('vehiclePreference')"
+            (click)="onChangeMenu('vehiclePreference')"
+            class="nav-link">{{ "names.vehiclePreference" | translate }}
+          </a>
+          <a
             *ngIf="auth.hasPermissions([permissionEnums.UserManagement])"
             mat-list-item
             [class.active]="isActiveMenu('users')"
@@ -123,6 +130,9 @@
           </ng-container>
           <ng-container *ngSwitchCase="'preference'">
             <oms-preferences></oms-preferences>
+          </ng-container>
+          <ng-container *ngSwitchCase="'vehiclePreference'">
+            <oms-vehicle-preference></oms-vehicle-preference>
           </ng-container>
           <ng-container *ngSwitchCase="'column'">
             <oms-column-display-management></oms-column-display-management>

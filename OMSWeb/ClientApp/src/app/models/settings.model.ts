@@ -175,6 +175,10 @@ export interface IVehicleRegForm {
 export interface ISettingsGroup {
   id: number;
   objects?: any[];
+  homePoints?: any[];
+  stations?: any[];
+  vehicles?: any[];
+  buffers?: any[];
 }
 
 export interface ISettingsGroupedObject {

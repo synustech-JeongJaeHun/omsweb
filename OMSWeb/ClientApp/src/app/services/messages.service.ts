@@ -255,6 +255,39 @@ export class MessagesService {
     return this.sendCommand<IGroupCommandMessage>(command);
   }
 
+  sendAssignHomeGruopCommand(
+    command: IGroupCommandMessage
+  ): Observable<void> {
+    command.type = command.type;
+    command.action = command.action;
+    command.homeId = command.homeId;
+    command.homeIds = command.homeIds;
+
+    return this.sendCommand<IGroupCommandMessage>(command);
+  }
+
+  sendAssignStationGruopCommand(
+    command: IGroupCommandMessage
+  ): Observable<void> {
+    command.type = command.type;
+    command.action = command.action;
+    command.stationId = command.stationId;
+    command.stationIds = command.stationIds;
+
+    return this.sendCommand<IGroupCommandMessage>(command);
+  }
+
+  sendAssignBufferGruopCommand(
+    command: IGroupCommandMessage
+  ): Observable<void> {
+    command.type = command.type;
+    command.action = command.action;
+    command.bufferId = command.bufferId;
+    command.bufferIds = command.bufferIds;
+
+    return this.sendCommand<IGroupCommandMessage>(command);
+  }
+
   private sendCommand<T extends ICommandMessage>(command: T): Observable<void> {
     return this.http.post<void>(`${this.baseUrl}/command`, command);
   }

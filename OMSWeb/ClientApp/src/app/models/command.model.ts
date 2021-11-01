@@ -105,6 +105,12 @@ export interface IClusterCommandMessage extends ICommandMessage {
 
 export interface IGroupCommandMessage extends ICommandMessage {
   groupId?: number;
+  homeId?: number;
+  homeIds?: number[];
+  stationId?: number;
+  stationIds?: number[];
   vehicleId?: number;
   vehicleIds?: number[];
+  bufferId?: number;
+  bufferIds?: number[];
 }

@@ -30,8 +30,7 @@ export class GroupSettingComponent implements OnInit {
   buffers: number[] = [];
 
   private _changedItems: ISettingsGroup[] = [];
-  private _changedVehicleItems: number[] = [];
-
+  //private _changedVehicleItems: number[] = [];
 
   get noData(): boolean {
     return this.ready && this.groups.length === 0;
@@ -113,10 +112,80 @@ export class GroupSettingComponent implements OnInit {
 
     let pushedItem = {} as ISettingsGroup;
     pushedItem.id = this.selectedItem.id;
-    pushedItem.objects = new Array(0);
+    //pushedItem.objects = new Array(0);
+    pushedItem.homePoints = new Array(0);
+    pushedItem.stations = new Array(0);
+    pushedItem.vehicles = new Array(0);
+    pushedItem.buffers = new Array(0);
 
     let items = picked;
 
+    if (type == 'homePoints') {
+      if (this._changedItems.every((x) => x.id !== this.selectedItem.id)) {
+        for (let idx = 0; idx < items.length; idx++) {
+          //pushedItem.objects.push(items[idx]);
+          pushedItem.homePoints.push(items[idx]);
+        }
+        this._changedItems.push(pushedItem);
+      } else {
+        //this._changedItems.find((x) => x.id === this.selectedItem.id).objects = new Array(0);
+        this._changedItems.find((x) => x.id === this.selectedItem.id).homePoints = new Array(0);
+
+        for (let idx = 0; idx < items.length; idx++) {
+          //this._changedItems.find((x) => x.id === this.selectedItem.id).objects.push(items[idx]);
+          this._changedItems.find((x) => x.id === this.selectedItem.id).homePoints.push(items[idx]);
+        }
+      }
+    } else if (type == 'stations') {
+      if (this._changedItems.every((x) => x.id !== this.selectedItem.id)) {
+        for (let idx = 0; idx < items.length; idx++) {
+          //pushedItem.objects.push(items[idx]);
+          pushedItem.stations.push(items[idx]);
+        }
+        this._changedItems.push(pushedItem);
+      } else {
+        //this._changedItems.find((x) => x.id === this.selectedItem.id).objects = new Array(0);
+        this._changedItems.find((x) => x.id === this.selectedItem.id).stations = new Array(0);
+
+        for (let idx = 0; idx < items.length; idx++) {
+          //this._changedItems.find((x) => x.id === this.selectedItem.id).objects.push(items[idx]);
+          this._changedItems.find((x) => x.id === this.selectedItem.id).stations.push(items[idx]);
+        }
+      }
+    } else if (type == 'vehicles') {
+      if (this._changedItems.every((x) => x.id !== this.selectedItem.id)) {
+        for (let idx = 0; idx < items.length; idx++) {
+          //pushedItem.objects.push(items[idx]);
+          pushedItem.vehicles.push(items[idx]);
+        }
+        this._changedItems.push(pushedItem);
+      } else {
+        //this._changedItems.find((x) => x.id === this.selectedItem.id).objects = new Array(0);
+        this._changedItems.find((x) => x.id === this.selectedItem.id).vehicles = new Array(0);
+
+        for (let idx = 0; idx < items.length; idx++) {
+          //this._changedItems.find((x) => x.id === this.selectedItem.id).objects.push(items[idx]);
+          this._changedItems.find((x) => x.id === this.selectedItem.id).vehicles.push(items[idx]);
+        }
+      }
+    } else if (type == 'buffers') {
+      if (this._changedItems.every((x) => x.id !== this.selectedItem.id)) {
+        for (let idx = 0; idx < items.length; idx++) {
+          //pushedItem.objects.push(items[idx]);
+          pushedItem.buffers.push(items[idx]);
+        }
+        this._changedItems.push(pushedItem);
+      } else {
+        //this._changedItems.find((x) => x.id === this.selectedItem.id).objects = new Array(0);
+        this._changedItems.find((x) => x.id === this.selectedItem.id).buffers = new Array(0);
+
+        for (let idx = 0; idx < items.length; idx++) {
+          //this._changedItems.find((x) => x.id === this.selectedItem.id).objects.push(items[idx]);
+          this._changedItems.find((x) => x.id === this.selectedItem.id).buffers.push(items[idx]);
+        }
+      }
+    }
+    /*
     if (this._changedItems.every((x) => x.id !== this.selectedItem.id)) {
       for (let idx = 0; idx < items.length; idx++) {
         pushedItem.objects.push(items[idx]);
@@ -129,6 +198,7 @@ export class GroupSettingComponent implements OnInit {
         this._changedItems.find((x) => x.id === this.selectedItem.id).objects.push(items[idx]);
       }
     }
+    */
   }
 
   onSave() {
@@ -136,13 +206,13 @@ export class GroupSettingComponent implements OnInit {
 
     this.SaveMessages(this._changedItems);
     this._changedItems = [];
-    this._changedVehicleItems = [];
+    //this._changedVehicleItems = [];
     this.bindGroupData(this.selectedItem.id);
   }
 
   onRevert() {
     this._changedItems = [];
-    this._changedVehicleItems = [];
+    //this._changedVehicleItems = [];
 
     this.homePoints = [];
     this.stations = [];
@@ -159,36 +229,141 @@ export class GroupSettingComponent implements OnInit {
 
   SaveMessages(items: ISettingsGroup[]): Observable<void> {
     for (let idx = 0; idx < items.length; idx++) {
-      let currentAssignedVehicles = this.groupedObjects.filter(
-        (x: ISettingsGroupedObject) => x.groupId === items[idx].id && x.referenceTable === 'vehicle'
-      ).map((x) => x.referenceId);
 
-      let addedVehicles = [];
-      addedVehicles = _.difference(items[idx].objects, currentAssignedVehicles);
+      if (items[idx].homePoints.length > 0) {
+        let currentAssignedHomePoints = this.groupedObjects.filter(
+          (x: ISettingsGroupedObject) => x.groupId === items[idx].id && x.referenceTable === 'home'
+        ).map((x) => x.referenceId);
 
-      let removedVehicles = [];
-      removedVehicles = _.difference(currentAssignedVehicles, items[idx].objects);
+        let addedHomePoints = [];
+        addedHomePoints = _.difference(items[idx].homePoints, currentAssignedHomePoints);
 
-      // 그룹별 Vehicle 일괄 추가
-      this.messageSvc
-        .sendAssignVehicleGruopCommand({ type: 'GROUP', action: 'assign-vehicles', vehicleIds: addedVehicles })
-        .subscribe();
-      // 그룹별 Vehicle 개별 추가
-      for (let idy = 0; idy < addedVehicles.length; idy++) {
+        let removedHomePoints = [];
+        removedHomePoints = _.difference(currentAssignedHomePoints, items[idx].homePoints);
+
+        // 그룹별 Home 일괄 추가
         this.messageSvc
-          .sendAssignVehicleGruopCommand({ type: 'GROUP', action: 'assign-vehicle', vehicleId: addedVehicles[idy] })
+          .sendAssignHomeGruopCommand({ type: 'GROUP', action: 'assign-homes', homeIds: addedHomePoints })
           .subscribe();
+        // 그룹별 Home 개별 추가
+        for (let idy = 0; idy < addedHomePoints.length; idy++) {
+          this.messageSvc
+            .sendAssignHomeGruopCommand({ type: 'GROUP', action: 'assign-home', homeId: addedHomePoints[idy] })
+            .subscribe();
+        }
+
+        // 그룹별 Home 일괄 삭제
+        this.messageSvc
+          .sendAssignHomeGruopCommand({ type: 'GROUP', action: 'unassign-homes', homeIds: removedHomePoints })
+          .subscribe();
+        // 그룹별 Home 개별 삭제
+        for (let idy = 0; idy < removedHomePoints.length; idy++) {
+          this.messageSvc
+            .sendAssignHomeGruopCommand({ type: 'GROUP', action: 'unassign-home', homeId: removedHomePoints[idy] })
+            .subscribe();
+        }
       }
 
-      // 그룹별 Vehicle 일괄 삭제
-      this.messageSvc
-        .sendAssignVehicleGruopCommand({ type: 'GROUP', action: 'unassign-vehicles', vehicleIds: removedVehicles })
-        .subscribe();
-      // 그룹별 Vehicle 개별 삭제
-      for (let idy = 0; idy < removedVehicles.length; idy++) {
+      if (items[idx].stations.length > 0) {
+        let currentAssignedStations = this.groupedObjects.filter(
+          (x: ISettingsGroupedObject) => x.groupId === items[idx].id && x.referenceTable === 'station'
+        ).map((x) => x.referenceId);
+
+        let addedStations = [];
+        addedStations = _.difference(items[idx].stations, currentAssignedStations);
+
+        let removedStations = [];
+        removedStations = _.difference(currentAssignedStations, items[idx].stations);
+
+        // 그룹별 Station 일괄 추가
         this.messageSvc
-          .sendAssignVehicleGruopCommand({ type: 'GROUP', action: 'unassign-vehicle', vehicleId: removedVehicles[idy] })
+          .sendAssignStationGruopCommand({ type: 'GROUP', action: 'assign-stations', stationIds: addedStations })
           .subscribe();
+        // 그룹별 Station 개별 추가
+        for (let idy = 0; idy < addedStations.length; idy++) {
+          this.messageSvc
+            .sendAssignStationGruopCommand({ type: 'GROUP', action: 'assign-station', stationId: addedStations[idy] })
+            .subscribe();
+        }
+
+        // 그룹별 Station 일괄 삭제
+        this.messageSvc
+          .sendAssignStationGruopCommand({ type: 'GROUP', action: 'unassign-stations', stationIds: removedStations })
+          .subscribe();
+        // 그룹별 Station 개별 삭제
+        for (let idy = 0; idy < removedStations.length; idy++) {
+          this.messageSvc
+            .sendAssignStationGruopCommand({ type: 'GROUP', action: 'unassign-station', stationId: removedStations[idy] })
+            .subscribe();
+        }
+      }
+
+      if (items[idx].vehicles.length > 0) {
+        let currentAssignedVehicles = this.groupedObjects.filter(
+          (x: ISettingsGroupedObject) => x.groupId === items[idx].id && x.referenceTable === 'vehicle'
+        ).map((x) => x.referenceId);
+
+        let addedVehicles = [];
+        addedVehicles = _.difference(items[idx].vehicles, currentAssignedVehicles);
+
+        let removedVehicles = [];
+        removedVehicles = _.difference(currentAssignedVehicles, items[idx].vehicles);
+
+        // 그룹별 Vehicle 일괄 추가
+        this.messageSvc
+          .sendAssignVehicleGruopCommand({ type: 'GROUP', action: 'assign-vehicles', vehicleIds: addedVehicles })
+          .subscribe();
+        // 그룹별 Vehicle 개별 추가
+        for (let idy = 0; idy < addedVehicles.length; idy++) {
+          this.messageSvc
+            .sendAssignVehicleGruopCommand({ type: 'GROUP', action: 'assign-vehicle', vehicleId: addedVehicles[idy] })
+            .subscribe();
+        }
+
+        // 그룹별 Vehicle 일괄 삭제
+        this.messageSvc
+          .sendAssignVehicleGruopCommand({ type: 'GROUP', action: 'unassign-vehicles', vehicleIds: removedVehicles })
+          .subscribe();
+        // 그룹별 Vehicle 개별 삭제
+        for (let idy = 0; idy < removedVehicles.length; idy++) {
+          this.messageSvc
+            .sendAssignVehicleGruopCommand({ type: 'GROUP', action: 'unassign-vehicle', vehicleId: removedVehicles[idy] })
+            .subscribe();
+        }
+      }
+
+      if (items[idx].buffers.length > 0) {
+        let currentAssignedBuffers = this.groupedObjects.filter(
+          (x: ISettingsGroupedObject) => x.groupId === items[idx].id && x.referenceTable === 'buffer'
+        ).map((x) => x.referenceId);
+
+        let addedBuffers = [];
+        addedBuffers = _.difference(items[idx].buffers, currentAssignedBuffers);
+
+        let removedBuffers = [];
+        removedBuffers = _.difference(currentAssignedBuffers, items[idx].buffers);
+
+        // 그룹별 Station 일괄 추가
+        this.messageSvc
+          .sendAssignBufferGruopCommand({ type: 'GROUP', action: 'assign-buffers', bufferIds: addedBuffers })
+          .subscribe();
+        // 그룹별 Station 개별 추가
+        for (let idy = 0; idy < addedBuffers.length; idy++) {
+          this.messageSvc
+            .sendAssignBufferGruopCommand({ type: 'GROUP', action: 'assign-buffer', bufferId: addedBuffers[idy] })
+            .subscribe();
+        }
+
+        // 그룹별 Station 일괄 삭제
+        this.messageSvc
+          .sendAssignBufferGruopCommand({ type: 'GROUP', action: 'unassign-buffers', bufferIds: removedBuffers })
+          .subscribe();
+        // 그룹별 Station 개별 삭제
+        for (let idy = 0; idy < removedBuffers.length; idy++) {
+          this.messageSvc
+            .sendAssignBufferGruopCommand({ type: 'GROUP', action: 'unassign-buffer', bufferId: removedBuffers[idy] })
+            .subscribe();
+        }
       }
     }
 

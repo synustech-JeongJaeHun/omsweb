@@ -375,7 +375,19 @@
     "createdToLoaded": "(생성 ~ 로드)",
     "loadedToCompleted": "(로드 ~ 완료)",
     "createdToAssigned": "(생성 ~ 완료)",
-    "pioTrend": "PIO 트렌드"
+    "pioTrend": "PIO 트렌드",
+
+    "bulkAddUser": "Bulk Add User",
+
+    "vehiclePreference": "Vehicle Preference",
+    "vehicleModeTheme": "Vehicle Mode Theme",
+    "vehicleCargoStatusTheme": "Vehicle Cargo Status Theme",
+    "VehicleModeAutoBgColor": "Auto Background",
+    "VehicleModeManualBgColor": "Manual Background",
+    "VehicleModeNoneBgColor": "None Background",
+    "VehicleCargoStatusLoadingColor": "Loading Color",
+    "VehicleCargoStatusFullColor": "Full Color",
+    "VehicleCargoStatusUnloadingColor": "Unloading Color"
   },
   "enums": {
     "hostSessionStatus": {

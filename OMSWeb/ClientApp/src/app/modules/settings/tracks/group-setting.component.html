@@ -25,16 +25,16 @@
       [title]="'names.homePointList' | translate"
       [unitName]="'names.point' | translate"
       [pool]="homePoints"
-      [disabled]="true"
+      [disabled]="noData"
       [gridHeight]="190"
       [picked]="assignedHomePoints"
-      (selectionChanged)="onChange('points', $event)">
+      (selectionChanged)="onChange('homePoints', $event)">
     </oms-unit-picker>
     <oms-unit-picker
       [title]="'names.stationList' | translate"
       [unitName]="'names.station' | translate"
       [pool]="stations"
-      [disabled]="true"
+      [disabled]="noData"
       [gridHeight]="190"
       [picked]="assignedStations"
       (selectionChanged)="onChange('stations', $event)">
@@ -51,7 +51,7 @@
       [title]="'names.bufferList' | translate"
       [unitName]="'names.buffer' | translate"
       [pool]="buffers"
-      [disabled]="true"
+      [disabled]="noData"
       [picked]="assignedBuffers"
       (selectionChanged)="onChange('buffers', $event)">
     </oms-unit-picker>
