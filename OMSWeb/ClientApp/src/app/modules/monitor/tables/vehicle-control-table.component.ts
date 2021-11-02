@@ -3,6 +3,7 @@ import DataSource from 'devextreme/data/data_source';
 
 import { IVehicleStatusRow } from '../../../models/vehicle-status.model';
 import { StatusService } from '../../../services/status.service';
+import { SettingsService } from '../../../services/settings.service';
 import { Subject, Subscription } from 'rxjs';
 import { HubService } from '../../../services/hub.service';
 import { IDataChangeEvent } from '../../../models/notification.model';
@@ -13,6 +14,7 @@ import { takeUntil } from 'rxjs/operators';
 import { DxDataGridComponent } from 'devextreme-angular';
 import { MessagesService } from '../../../services/messages.service';
 import { PermissionEnums } from '../../../models/enums';
+import { ClientPreferences } from '../../../models/settings.model';
 
 @Component({
   selector: 'oms-vehicle-control-table',
@@ -29,6 +31,8 @@ export class VehicleControlTableComponent implements OnInit, OnDestroy {
 
   enableRows: IVehicleStatusRow[] = [];
   disableRows: IVehicleStatusRow[] = [];
+
+  preference: ClientPreferences;
 
   //#region Subscriptions
   private destroy$: Subject<void> = new Subject<void>();
@@ -51,11 +55,18 @@ export class VehicleControlTableComponent implements OnInit, OnDestroy {
   constructor(
     private auth: AuthService,
     private statusSvc: StatusService,
+    private settingSvc: SettingsService,
     private messageSvc: MessagesService,
     private hubSvc: HubService
   ) {
     this.dataSource = this.statusSvc.vehicleStatusDataSource();
+    this.preference = this.settingSvc.globalPreferences;
   }
+
+  canDisplayTable(type: string): boolean {
+    return this.preference.controlTables[type];
+  }
+
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();

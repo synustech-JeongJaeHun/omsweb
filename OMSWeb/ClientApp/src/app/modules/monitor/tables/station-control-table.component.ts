@@ -2,6 +2,7 @@ import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import DataSource from 'devextreme/data/data_source';
 
 import { StatusService } from '../../../services/status.service';
+import { SettingsService } from '../../../services/settings.service';
 import { forkJoin, Subject, Subscription } from 'rxjs';
 import { HubService } from '../../../services/hub.service';
 import { IDataChangeEvent } from '../../../models/notification.model';
@@ -11,6 +12,7 @@ import { AccountUtil } from '../../shared/utils/account.util';
 import { takeUntil } from 'rxjs/operators';
 import { MessagesService } from '../../../services/messages.service';
 import { DxDataGridComponent } from 'devextreme-angular';
+import { ClientPreferences } from '../../../models/settings.model';
 
 @Component({
   selector: 'oms-station-control-table',
@@ -24,6 +26,8 @@ export class StationControlTableComponent implements OnInit, OnDestroy {
 
   dataSource: DataSource;
   selectedRows: number[] = [];
+
+  preference: ClientPreferences;
 
   //#region Subscriptions
   private destroy$: Subject<void> = new Subject<void>();
@@ -42,10 +46,16 @@ export class StationControlTableComponent implements OnInit, OnDestroy {
   constructor(
     private auth: AuthService,
     private statusSvc: StatusService,
+    private settingSvc: SettingsService,
     private messageSvc: MessagesService,
     private hubSvc: HubService
   ) {
     this.dataSource = this.statusSvc.stationStatusDataSource();
+    this.preference = this.settingSvc.globalPreferences;
+  }
+
+  canDisplayTable(type: string): boolean {
+    return this.preference.controlTables[type];
   }
 
   ngOnDestroy(): void {

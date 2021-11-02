@@ -99,78 +99,91 @@
               dataType="string"
               dataField="id"
               sortOrder="desc"
-              [caption]="'names.id' | translate"></dxi-column>
+              [caption]="'names.id' | translate"
+              *ngIf="canDisplayTable('vehicles_id')"></dxi-column>
   <dxi-column [width]="80"
               dataType="string"
               dataField="physicalId"
-              [caption]="'names.physicalId' | translate"></dxi-column>
+              [caption]="'names.physicalId' | translate"
+              *ngIf="canDisplayTable('vehicles_physicalId')"></dxi-column>
   <!-- Logical ID 추가 -->
   <dxi-column [width]="90"
               dataType="string"
               dataField="logicalId"
-              [caption]="'names.logicalId' | translate"></dxi-column>
+              [caption]="'names.logicalId' | translate"
+              *ngIf="canDisplayTable('vehicles_logicalId')"></dxi-column>
   <!-- Logical ID 추가 -->
   <dxi-column [width]="80"
               dataType="string"
               dataField="mode"
-              [caption]="'names.mode' | translate"></dxi-column>
+              [caption]="'names.mode' | translate"
+              *ngIf="canDisplayTable('vehicles_mode')"></dxi-column>
   <dxi-column [allowFiltering]="false"
               [width]="60"
               dataType="boolean"
               dataField="canBePushed"
-              [caption]="'names.canBePushed' | translate"></dxi-column>
+              [caption]="'names.canBePushed' | translate"
+              *ngIf="canDisplayTable('vehicles_canBePushed')"></dxi-column>
   <!-- Rail_In 필드 추가 --->
   <dxi-column [allowFiltering]="false"
               [width]="60"
               dataType="boolean"
               dataField="railIn"
-              [caption]="'names.railIn' | translate"></dxi-column>
+              [caption]="'names.railIn' | translate"
+              *ngIf="canDisplayTable('vehicles_railIn')"></dxi-column>
   <!--host order 필드 추가 --->
   <dxi-column [allowFiltering]="false"
               [width]="60"
               dataType="boolean"
               dataField="hostOrder"
-              [caption]="'names.hostOrder' | translate"></dxi-column>
-  <dxi-column
-              [allowFiltering]="false"
+              [caption]="'names.hostOrder' | translate"
+              *ngIf="canDisplayTable('vehicles_hostOrder')"></dxi-column>
+  <dxi-column [allowFiltering]="false"
               [width]="60"
               dataType="string"
               dataField="orderOrigin"
               [caption]="'names.orderOrigin' | translate"
-  ></dxi-column>
+              *ngIf="canDisplayTable('vehicles_orderOrigin')"></dxi-column>
   <dxi-column [width]="60"
               dataType="string"
               dataField="groupId"
-              [caption]="'names.group' | translate"></dxi-column>
+              [caption]="'names.group' | translate"
+              *ngIf="canDisplayTable('vehicles_group')"></dxi-column>
   <dxi-column [width]="60"
               dataType="string"
               dataField="curPoint"
-              [caption]="'names.curPoint' | translate"></dxi-column>
+              [caption]="'names.curPoint' | translate"
+              *ngIf="canDisplayTable('vehicles_curPoint')"></dxi-column>
   <dxi-column [width]="60"
               dataType="string"
               dataField="commandPoint"
               [allowSorting]="false"
-              [caption]="'names.commandPoint' | translate"></dxi-column>
+              [caption]="'names.commandPoint' | translate"
+              *ngIf="canDisplayTable('vehicles_commandPoint')"></dxi-column>
   <dxi-column [width]="60"
               dataType="string"
               dataField="orderId"
               [allowSorting]="false"
-              [caption]="'names.orderId' | translate"></dxi-column>
+              [caption]="'names.orderId' | translate"
+              *ngIf="canDisplayTable('vehicles_orderId')"></dxi-column>
   <dxi-column [width]="60"
               dataType="string"
               dataField="locationPickup"
-              [caption]="'names.locationPickup' | translate"></dxi-column>
+              [caption]="'names.locationPickup' | translate"
+              *ngIf="canDisplayTable('vehicles_locationPickup')"></dxi-column>
   <dxi-column [width]="60"
               dataType="string"
               dataField="locationDropoff"
-              [caption]="'names.locationDropoff' | translate"></dxi-column>
+              [caption]="'names.locationDropoff' | translate"
+              *ngIf="canDisplayTable('vehicles_locationDropoff')"></dxi-column>
   <!-- LocationMove 추가 -->
   <dxi-column [allowFiltering]="true"
               [width]="60"
               dataType="string"
               dataField="locationMove"
               [allowSorting]="true"
-              [caption]="'names.locationMove' | translate"></dxi-column>
+              [caption]="'names.locationMove' | translate"
+              *ngIf="canDisplayTable('vehicles_locationMove')"></dxi-column>
   <!-- LocationMove 추가 -->
   <!-- Total Runtime 추가 -->
   <dxi-column [allowFiltering]="true"
@@ -178,25 +191,29 @@
               dataType="string"
               dataField="runtimeTotal"
               [allowSorting]="true"
-              [caption]="'names.runtimeTotal' | translate"></dxi-column>
+              [caption]="'names.runtimeTotal' | translate"
+              *ngIf="canDisplayTable('vehicles_runtimeTotal')"></dxi-column>
   <!-- Total Runtime 추가 -->
   <dxi-column [width]="80"
               dataType="string"
               dataField="movingState"
               [allowSorting]="false"
-              [caption]="'names.movingState' | translate"></dxi-column>
+              [caption]="'names.movingState' | translate"
+              *ngIf="canDisplayTable('vehicles_movingState')"></dxi-column>
   <dxi-column [width]="80"
               dataType="string"
               dataField="cargoState"
               [allowSorting]="false"
-              [caption]="'names.cargoState' | translate"></dxi-column>
+              [caption]="'names.cargoState' | translate"
+              *ngIf="canDisplayTable('vehicles_cargoState')"></dxi-column>
   <!-- Error 추가 -->
   <dxi-column [allowFiltering]="true"
               [width]="70"
               dataType="string"
               dataField="errorList"
               [allowSorting]="true"
-              [caption]="'names.error' | translate"></dxi-column>
+              [caption]="'names.error' | translate"
+              *ngIf="canDisplayTable('vehicles_error')"></dxi-column>
   <!-- Error  추가 -->
   <!-- Sensor Stop 추가 -->
   <dxi-column [allowFiltering]="false"
@@ -204,7 +221,8 @@
               dataType="boolean"
               dataField="isSensorStopped"
               [allowSorting]="false"
-              [caption]="'names.sensorStopped' | translate"></dxi-column>
+              [caption]="'names.sensorStopped' | translate"
+              *ngIf="canDisplayTable('vehicles_sensorStopped')"></dxi-column>
   <!-- Sensor Stop  추가 -->
   <!-- Blocked 추가 -->
   <dxi-column [allowFiltering]="false"
@@ -212,20 +230,23 @@
               dataType="boolean"
               dataField="isBlocked"
               [allowSorting]="false"
-              [caption]="'names.blocked' | translate"></dxi-column>
+              [caption]="'names.blocked' | translate"
+              *ngIf="canDisplayTable('vehicles_blocked')"></dxi-column>
   <!-- Blocked 추가 -->
   <dxi-column [allowFiltering]="true"
               [width]="80"
               dataType="number"
               dataField="distanceTotal"
               [allowSorting]="true"
-              [caption]="'names.distanceTotal' | translate"></dxi-column>
+              [caption]="'names.distanceTotal' | translate"
+              *ngIf="canDisplayTable('vehicles_distanceTotal')"></dxi-column>
   <!-- MapDB 추가 -->
   <dxi-column [allowFiltering]="true"
               [width]="90"
               dataType="string"
               dataField="mapDb"
               [allowSorting]="true"
-              [caption]="'names.mapDb' | translate"></dxi-column>
+              [caption]="'names.mapDb' | translate"
+              *ngIf="canDisplayTable('vehicles_mapDb')"></dxi-column>
   <!-- MapDB 추가 -->
 </dx-data-grid>

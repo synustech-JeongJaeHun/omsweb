@@ -1,231 +1,706 @@
 <div class="setting-header">
   <h3 class="setting-title">{{ "names.columnDisplayManagement" | translate }}</h3>
-  <div class="setting-actions">
-    <button mat-raised-button class="dense" color="primary" (click)="onSave()">
-      {{ "names.save" | translate }}
-    </button>
-    <button mat-raised-button class="dense" (click)="onRevert()">
-      {{ "names.revert" | translate }}
-    </button>
-  </div>
 </div>
 
-<div class="sub-bar">
-  <mat-label>Control Table</mat-label>
+<div class="table-columns-entries-container">
+  <div>&nbsp;</div>
 </div>
 
-<div class="sub-bar2">
-  <div class="sub-bar3">
-    <mat-label>Orders</mat-label>
-    <div>
+<div class="table-columns-sub-entries-container">
+  <!-- Orders -->
+  <div class="table-format">
+    <div class="table-columns-entries-container">
       <div>
-        <input type="checkbox" color="primary" title="ID" />ID
+        <mat-label>{{ "names.orders" | translate }}</mat-label>
       </div>
       <div>
-        <input type="checkbox" color="primary" title="Logical ID" />Logical ID
+        <input type="checkbox" color="primary" [title]="'names.orders' | translate" [checked]="getCheckedState('orders')" (change)="onChangeControlTable('orders', $event)" />
       </div>
-      <div>
-        <input type="checkbox" color="primary" title="Status" />Status
+    </div>
+    <div class="table-columns-sub-entries-container">
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.id" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.id' | translate" [checked]="getCheckedState('orders_id')" (change)="onChangeControlTable('orders_id', $event)" />
+          </div>
+        </div>
       </div>
-      <div>
-        <input type="checkbox" color="primary" title="Vehicle ID" />Vehicle ID
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.logicalId" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.logicalId' | translate" [checked]="getCheckedState('orders_logicalId')" (change)="onChangeControlTable('orders_logicalId', $event)" />
+          </div>
+        </div>
       </div>
-      <div>
-        <input type="checkbox" color="primary" title="From" />From
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.state" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.state' | translate" [checked]="getCheckedState('orders_state')" (change)="onChangeControlTable('orders_state', $event)" />
+          </div>
+        </div>
       </div>
-      <div>
-        <input type="checkbox" color="primary" title="To" />To
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.vehicleId" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.vehicleId' | translate" [checked]="getCheckedState('orders_vehicleId')" (change)="onChangeControlTable('orders_vehicleId', $event)" />
+          </div>
+        </div>
       </div>
-      <div>
-        <input type="checkbox" color="primary" title="Move" />Move
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.locationPickup" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.locationPickup' | translate" [checked]="getCheckedState('orders_locationPickup')" (change)="onChangeControlTable('orders_locationPickup', $event)" />
+          </div>
+        </div>
       </div>
-      <div>
-        <input type="checkbox" color="primary" title="Priority" />Priority
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.locationDropoff" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.locationDropoff' | translate" [checked]="getCheckedState('orders_locationDropoff')" (change)="onChangeControlTable('orders_locationDropoff', $event)" />
+          </div>
+        </div>
       </div>
-      <div>
-        <input type="checkbox" color="primary" title="Carrier" />Carrier
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.locationMove" | translate}}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.locationMove' | translate" [checked]="getCheckedState('orders_locationMove')" (change)="onChangeControlTable('orders_locationMove', $event)" />
+          </div>
+        </div>
       </div>
-      <div>
-        <input type="checkbox" color="primary" title="Created" />Created
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.priority" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.priority' | translate" [checked]="getCheckedState('orders_priority')" (change)="onChangeControlTable('orders_priority', $event)" />
+          </div>
+        </div>
       </div>
-      <div>
-        <input type="checkbox" color="primary" title="Assigned" />Assigned
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.carrierLabel" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.carrierLabel' | translate" [checked]="getCheckedState('orders_carrierLabel')" (change)="onChangeControlTable('orders_carrierLabel', $event)" />
+          </div>
+        </div>
       </div>
-      <div>
-        <input type="checkbox" color="primary" title="Origin" />Origin
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.timeCreated" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.timeCreated' | translate" [checked]="getCheckedState('orders_timeCreated')" (change)="onChangeControlTable('orders_timeCreated', $event)" />
+          </div>
+        </div>
       </div>
-      <div>
-        <input type="checkbox" color="primary" title="Duration Total" />Duration Total
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.timeAssigned" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.timeAssigned' | translate" [checked]="getCheckedState('orders_timeAssigned')" (change)="onChangeControlTable('orders_timeAssigned', $event)" />
+          </div>
+        </div>
       </div>
-      <div>
-        <input type="checkbox" color="primary" title="Duration Unassigned" />Duration Unassigned
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.origin" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.origin' | translate" [checked]="getCheckedState('orders_origin')" (change)="onChangeControlTable('orders_origin', $event)" />
+          </div>
+        </div>
       </div>
-      <div>
-        <input type="checkbox" color="primary" title="Duration Pickup" />Duration Pickup
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.durationTotal" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.durationTotal' | translate" [checked]="getCheckedState('orders_durationTotal')" (change)="onChangeControlTable('orders_durationTotal', $event)" />
+          </div>
+        </div>
       </div>
-      <div>
-        <input type="checkbox" color="primary" title="Duration Load" />Duration Load
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.durationUnassigned" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.durationUnassigned' | translate" [checked]="getCheckedState('orders_durationUnassigned')" (change)="onChangeControlTable('orders_durationUnassigned', $event)" />
+          </div>
+        </div>
       </div>
-      <div>
-        <input type="checkbox" color="primary" title="Duration Deliver" />Duration Deliver
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.durationPickup" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.durationPickup' | translate" [checked]="getCheckedState('orders_durationPickup')" (change)="onChangeControlTable('orders_durationPickup', $event)" />
+          </div>
+        </div>
       </div>
-      <div>
-        <input type="checkbox" color="primary" title="Duration Unload" />Duration Unload
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.durationLoad" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.durationLoad' | translate" [checked]="getCheckedState('orders_durationLoad')" (change)="onChangeControlTable('orders_durationLoad', $event)" />
+          </div>
+        </div>
       </div>
-      <div>
-        <input type="checkbox" color="primary" title="Duration Move" />Duration Move
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.durationDropoff" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.durationDropoff' | translate" [checked]="getCheckedState('orders_durationDropoff')" (change)="onChangeControlTable('orders_durationDropoff', $event)" />
+          </div>
+        </div>
       </div>
-      <div>
-        <input type="checkbox" color="primary" title="Distance Pickup" />Distance Pickup
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.durationUnload" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.durationUnload' | translate" [checked]="getCheckedState('orders_durationUnload')" (change)="onChangeControlTable('orders_durationUnload', $event)" />
+          </div>
+        </div>
       </div>
-      <div>
-        <input type="checkbox" color="primary" title="Distance Deliver" />Distance Deliver
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.durationMove" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.durationMove' | translate" [checked]="getCheckedState('orders_durationMove')" (change)="onChangeControlTable('orders_durationMove', $event)" />
+          </div>
+        </div>
       </div>
-      <div>
-        <input type="checkbox" color="primary" title="Distance Move" />Distance Move
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.distancePickup" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.distancePickup' | translate" [checked]="getCheckedState('orders_distancePickup')" (change)="onChangeControlTable('orders_distancePickup', $event)" />
+          </div>
+        </div>
       </div>
-      <div>
-        <input type="checkbox" color="primary" title="Last Reassign Type" />Last Reassign Type
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.distanceDropoff" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.distanceDropoff' | translate" [checked]="getCheckedState('orders_distanceDropoff')" (change)="onChangeControlTable('orders_distanceDropoff', $event)" />
+          </div>
+        </div>
+      </div>
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.distanceMove" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.distanceMove' | translate" [checked]="getCheckedState('orders_distanceMove')" (change)="onChangeControlTable('orders_distanceMove', $event)" />
+          </div>
+        </div>
+      </div>
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.lastReassignType" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.lastReassignType' | translate" [checked]="getCheckedState('orders_lastReassignType')" (change)="onChangeControlTable('orders_lastReassignType', $event)" />
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
-  <div class="sub-bar3">
-    <mat-label>Vehicles</mat-label>
-    <div>
+  <div class="table-columns-entries-container">
+    <div>&nbsp;</div>
+  </div>
+
+  <!-- Vehicles -->
+  <div class="table-format">
+    <div class="table-columns-entries-container">
       <div>
-        <input type="checkbox" color="primary" title="ID" />ID
+        <mat-label>{{ "names.vehicles" | translate }}</mat-label>
       </div>
       <div>
-        <input type="checkbox" color="primary" title="Physical ID" />Physical ID
+        <input type="checkbox" color="primary" [title]="'names.vehicles' | translate" [checked]="getCheckedState('vehicles')" (change)="onChangeControlTable('vehicles', $event)" />
       </div>
-      <div>
-        <input type="checkbox" color="primary" title="Logical ID" />Logical ID
+    </div>
+    <div class="table-columns-sub-entries-container">
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.id" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.id' | translate" [checked]="getCheckedState('vehicles_id')" (change)="onChangeControlTable('vehicles_id', $event)" />
+          </div>
+        </div>
       </div>
-      <div>
-        <input type="checkbox" color="primary" title="Mode" />Mode
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.physicalId" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.physicalId' | translate" [checked]="getCheckedState('vehicles_physicalId')" (change)="onChangeControlTable('vehicles_physicalId', $event)" />
+          </div>
+        </div>
       </div>
-      <div>
-        <input type="checkbox" color="primary" title="Push" />Push
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.logicalId" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.logicalId' | translate" [checked]="getCheckedState('vehicles_logicalId')" (change)="onChangeControlTable('vehicles_logicalId', $event)" />
+          </div>
+        </div>
       </div>
-      <div>
-        <input type="checkbox" color="primary" title="Rail In" />Rail In
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.mode" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.mode' | translate" [checked]="getCheckedState('vehicles_mode')" (change)="onChangeControlTable('vehicles_mode', $event)" />
+          </div>
+        </div>
       </div>
-      <div>
-        <input type="checkbox" color="primary" title="host Order" />host Order
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.canBePushed" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.canBePushed' | translate" [checked]="getCheckedState('vehicles_canBePushed')" (change)="onChangeControlTable('vehicles_canBePushed', $event)" />
+          </div>
+        </div>
       </div>
-      <div>
-        <input type="checkbox" color="primary" title="Call" />Call
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.railIn" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.railIn' | translate" [checked]="getCheckedState('vehicles_railIn')" (change)="onChangeControlTable('vehicles_railIn', $event)" />
+          </div>
+        </div>
       </div>
-      <div>
-        <input type="checkbox" color="primary" title="Group" />Group
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.hostOrder" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.hostOrder' | translate" [checked]="getCheckedState('vehicles_hostOrder')" (change)="onChangeControlTable('vehicles_hostOrder', $event)" />
+          </div>
+        </div>
       </div>
-      <div>
-        <input type="checkbox" color="primary" title="Current" />Current
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.orderOrigin" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.orderOrigin' | translate" [checked]="getCheckedState('vehicles_orderOrigin')" (change)="onChangeControlTable('vehicles_orderOrigin', $event)" />
+          </div>
+        </div>
       </div>
-      <div>
-        <input type="checkbox" color="primary" title="Next" />Next
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.group" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.group' | translate" [checked]="getCheckedState('vehicles_group')" (change)="onChangeControlTable('vehicles_group', $event)" />
+          </div>
+        </div>
       </div>
-      <div>
-        <input type="checkbox" color="primary" title="Order" />Order
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.curPoint" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.curPoint' | translate" [checked]="getCheckedState('vehicles_curPoint')" (change)="onChangeControlTable('vehicles_curPoint', $event)" />
+          </div>
+        </div>
       </div>
-      <div>
-        <input type="checkbox" color="primary" title="From" />From
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.commandPoint" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.commandPoint' | translate" [checked]="getCheckedState('vehicles_commandPoint')" (change)="onChangeControlTable('vehicles_commandPoint', $event)" />
+          </div>
+        </div>
       </div>
-      <div>
-        <input type="checkbox" color="primary" title="To" />To
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.orderId" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.orderId' | translate" [checked]="getCheckedState('vehicles_orderId')" (change)="onChangeControlTable('vehicles_orderId', $event)" />
+          </div>
+        </div>
       </div>
-      <div>
-        <input type="checkbox" color="primary" title="Move" />Move
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.locationPickup" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.locationPickup' | translate" [checked]="getCheckedState('vehicles_locationPickup')" (change)="onChangeControlTable('vehicles_locationPickup', $event)" />
+          </div>
+        </div>
       </div>
-      <div>
-        <input type="checkbox" color="primary" title="Total Runtime" />Total Runtime
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.locationDropoff" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.locationDropoff' | translate" [checked]="getCheckedState('vehicles_locationDropoff')" (change)="onChangeControlTable('vehicles_locationDropoff', $event)" />
+          </div>
+        </div>
       </div>
-      <div>
-        <input type="checkbox" color="primary" title="Moving Status" />Moving Status
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.locationMove" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.locationMove' | translate" [checked]="getCheckedState('vehicles_locationMove')" (change)="onChangeControlTable('vehicles_locationMove', $event)" />
+          </div>
+        </div>
       </div>
-      <div>
-        <input type="checkbox" color="primary" title="Cargo Status" />Cargo Status
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.runtimeTotal" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.runtimeTotal' | translate" [checked]="getCheckedState('vehicles_runtimeTotal')" (change)="onChangeControlTable('vehicles_runtimeTotal', $event)" />
+          </div>
+        </div>
       </div>
-      <div>
-        <input type="checkbox" color="primary" title="Error" />Error
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.movingState" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.movingState' | translate" [checked]="getCheckedState('vehicles_movingState')" (change)="onChangeControlTable('vehicles_movingState', $event)" />
+          </div>
+        </div>
       </div>
-      <div>
-        <input type="checkbox" color="primary" title="Sensor Stop" />Sensor Stop
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.cargoState" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.cargoState' | translate" [checked]="getCheckedState('vehicles_cargoState')" (change)="onChangeControlTable('vehicles_cargoState', $event)" />
+          </div>
+        </div>
       </div>
-      <div>
-        <input type="checkbox" color="primary" title="Blocked" />Blocked
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.error" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.error' | translate" [checked]="getCheckedState('vehicles_error')" (change)="onChangeControlTable('vehicles_error', $event)" />
+          </div>
+        </div>
       </div>
-      <div>
-        <input type="checkbox" color="primary" title="Total Distance" />Total Distance
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.sensorStopped" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.sensorStopped' | translate" [checked]="getCheckedState('vehicles_sensorStopped')" (change)="onChangeControlTable('vehicles_sensorStopped', $event)" />
+          </div>
+        </div>
       </div>
-      <div>
-        <input type="checkbox" color="primary" title="Map" />Map
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.blocked" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.blocked' | translate" [checked]="getCheckedState('vehicles_blocked')" (change)="onChangeControlTable('vehicles_blocked', $event)" />
+          </div>
+        </div>
+      </div>
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.distanceTotal" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.distanceTotal' | translate" [checked]="getCheckedState('vehicles_distanceTotal')" (change)="onChangeControlTable('vehicles_distanceTotal', $event)" />
+          </div>
+        </div>
+      </div>
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.mapDb" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.mapDb' | translate" [checked]="getCheckedState('vehicles_mapDb')" (change)="onChangeControlTable('vehicles_mapDb', $event)" />
+          </div>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<div class="sub-bar2">
-  <div class="sub-bar3">
-    <mat-label><input type="checkbox" color="primary" title="Stations" /> Stations</mat-label>
-    <div>
+  <div class="table-columns-entries-container">
+    <div>&nbsp;</div>
+  </div>
+
+  <!-- Stations -->
+  <div class="table-format">
+    <div class="table-columns-entries-container">
       <div>
-        <input type="checkbox" color="primary" title="ID" />ID
+        <mat-label>{{ "names.stations" | translate }}</mat-label>
       </div>
       <div>
-        <input type="checkbox" color="primary" title="Physical ID" />Physical ID
+        <input type="checkbox" color="primary" [title]="'names.stations' | translate" [checked]="getCheckedState('stations')" (change)="onChangeControlTable('stations', $event)" />
       </div>
-      <div>
-        <input type="checkbox" color="primary" title="Logical ID" />Logical ID
+    </div>
+    <div class="table-columns-sub-entries-container">
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.id" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.id' | translate" [checked]="getCheckedState('stations_id')" (change)="onChangeControlTable('stations_id', $event)" />
+          </div>
+        </div>
       </div>
-      <div>
-        <input type="checkbox" color="primary" title="Group" />Group
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.physicalId" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.physicalId' | translate" [checked]="getCheckedState('stations_physicalId')" (change)="onChangeControlTable('stations_physicalId', $event)" />
+          </div>
+        </div>
       </div>
-      <div>
-        <input type="checkbox" color="primary" title="Point" />Point
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.logicalId" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.logicalId' | translate" [checked]="getCheckedState('stations_logicalId')" (change)="onChangeControlTable('stations_logicalId', $event)" />
+          </div>
+        </div>
       </div>
-      <div>
-        <input type="checkbox" color="primary" title="Direction" />Direction
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.group" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.group' | translate" [checked]="getCheckedState('stations_group')" (change)="onChangeControlTable('stations_group', $event)" />
+          </div>
+        </div>
       </div>
-      <div>
-        <input type="checkbox" color="primary" title="Carrier Type" />Carrier Type
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.point" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.point' | translate" [checked]="getCheckedState('stations_point')" (change)="onChangeControlTable('stations_point', $event)" />
+          </div>
+        </div>
       </div>
-      <div>
-        <input type="checkbox" color="primary" title="Next Point" />Next Point
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.direction" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.direction' | translate" [checked]="getCheckedState('stations_direction')" (change)="onChangeControlTable('stations_direction', $event)" />
+          </div>
+        </div>
       </div>
-      <div>
-        <input type="checkbox" color="primary" title="Offset" />Offset
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.carrierType" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.carrierType' | translate" [checked]="getCheckedState('stations_carrierType')" (change)="onChangeControlTable('stations_carrierType', $event)" />
+          </div>
+        </div>
+      </div>
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.nextPoint" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.nextPoint' | translate" [checked]="getCheckedState('stations_nextPoint')" (change)="onChangeControlTable('stations_nextPoint', $event)" />
+          </div>
+        </div>
+      </div>
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.offset" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.offset' | translate" [checked]="getCheckedState('stations_offset')" (change)="onChangeControlTable('stations_offset', $event)" />
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
-  <div class="sub-bar3">
-    <mat-label><input type="checkbox" color="primary" title="Stations" /> Buffers</mat-label>
-    <div>
+  <div class="table-columns-entries-container">
+    <div>&nbsp;</div>
+  </div>
+
+  <!-- Buffers -->
+  <div class="table-format">
+    <div class="table-columns-entries-container">
       <div>
-        <input type="checkbox" color="primary" title="ID" />ID
+        <mat-label>{{ "names.buffers" | translate }}</mat-label>
       </div>
       <div>
-        <input type="checkbox" color="primary" title="Physical ID" />Physical ID
+        <input type="checkbox" color="primary" [title]="'names.buffers' | translate" [checked]="getCheckedState('buffers')" (change)="onChangeControlTable('buffers', $event)" />
       </div>
-      <div>
-        <input type="checkbox" color="primary" title="Logical ID" />Logical ID
+    </div>
+    <div class="table-columns-sub-entries-container">
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.id" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.id' | translate" [checked]="getCheckedState('buffers_id')" (change)="onChangeControlTable('buffers_id', $event)" />
+          </div>
+        </div>
       </div>
-      <div>
-        <input type="checkbox" color="primary" title="Group" />Group
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.physicalId" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.physicalId' | translate" [checked]="getCheckedState('buffers_physicalId')" (change)="onChangeControlTable('buffers_physicalId', $event)" />
+          </div>
+        </div>
       </div>
-      <div>
-        <input type="checkbox" color="primary" title="Point" />Point
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.logicalId" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.logicalId' | translate" [checked]="getCheckedState('buffers_logicalId')" (change)="onChangeControlTable('buffers_logicalId', $event)" />
+          </div>
+        </div>
       </div>
-      <div>
-        <input type="checkbox" color="primary" title="Direction" />Direction
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.group" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.group' | translate" [checked]="getCheckedState('buffers_group')" (change)="onChangeControlTable('buffers_group', $event)" />
+          </div>
+        </div>
       </div>
-      <div>
-        <input type="checkbox" color="primary" title="Next Point" />Next Point
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.point" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.point' | translate" [checked]="getCheckedState('buffers_point')" (change)="onChangeControlTable('buffers_point', $event)" />
+          </div>
+        </div>
       </div>
-      <div>
-        <input type="checkbox" color="primary" title="Offset" />Offset
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.direction" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.direction' | translate" [checked]="getCheckedState('buffers_direction')" (change)="onChangeControlTable('buffers_direction', $event)" />
+          </div>
+        </div>
+      </div>
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.nextPoint" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.nextPoint' | translate" [checked]="getCheckedState('buffers_nextPoint')" (change)="onChangeControlTable('buffers_nextPoint', $event)" />
+          </div>
+        </div>
+      </div>
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.offset" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.offset' | translate" [checked]="getCheckedState('buffers_offset')" (change)="onChangeControlTable('buffers_offset', $event)" />
+          </div>
+        </div>
       </div>
     </div>
   </div>

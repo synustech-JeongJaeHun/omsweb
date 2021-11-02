@@ -26,11 +26,11 @@
     <mat-icon>expand_more</mat-icon>
   </button>
   <div id="status-toolbar" *ngIf="canControl">
-    <button *ngIf="hasPermissions([permissionEnums.ResetAllVehicle])" mat-stroked-button class="dense" (click)="onVehicleReset()">
+    <button *ngIf="hasPermissions([permissionEnums.ResetAllVehicle]) && canDisplayTable('vehicles')" mat-stroked-button class="dense" (click)="onVehicleReset()">
       <mat-icon>settings_backup_restore</mat-icon>
       <span>{{ "names.resetAllVehicle" | translate }}</span>
     </button>
-    <button *ngIf="hasPermissions([permissionEnums.AutoAllVehicle])" mat-stroked-button class="dense" (click)="onSetAuto()">
+    <button *ngIf="hasPermissions([permissionEnums.AutoAllVehicle]) && canDisplayTable('vehicles')" mat-stroked-button class="dense" (click)="onSetAuto()">
       <mat-icon>brightness_auto</mat-icon>
       <span>{{ "names.autoAllVehicle" | translate }}</span>
     </button>
@@ -39,32 +39,24 @@
     class="tab-group"
     [(selectedIndex)]="currentTab"
     (selectedIndexChange)="onChangeTab($event)"
-    animationDuration="0ms"
-  >
-    <mat-tab [label]="'names.orders' | translate">
-      <oms-order-control-table
-        [tableHeight]="tableHeight"
-        *ngIf="currentTab == 0"
-      ></oms-order-control-table>
+    animationDuration="0ms">
+
+    <mat-tab [label]="'names.orders' | translate" *ngIf="canDisplayTable('orders')">
+      <oms-order-control-table [tableHeight]="tableHeight">
+      </oms-order-control-table>
     </mat-tab>
-    <mat-tab [label]="'names.vehicles' | translate">
-      <oms-vehicle-control-table
-        [tableHeight]="tableHeight"
-        *ngIf="currentTab == 1"
-      ></oms-vehicle-control-table>
+    <mat-tab [label]="'names.vehicles' | translate" *ngIf="canDisplayTable('vehicles')">
+      <oms-vehicle-control-table [tableHeight]="tableHeight">
+      </oms-vehicle-control-table>
     </mat-tab>
     <!-- Stations / Buffers 추가 -->
-    <mat-tab [label]="'names.stations' | translate" *ngIf="canControl">
-      <oms-station-control-table
-        [tableHeight]="tableHeight"
-        *ngIf="currentTab == 2"
-      ></oms-station-control-table>
+    <mat-tab [label]="'names.stations' | translate" *ngIf="canControl && canDisplayTable('stations')">
+      <oms-station-control-table [tableHeight]="tableHeight">
+      </oms-station-control-table>
     </mat-tab>
-    <mat-tab [label]="'names.buffers' | translate" *ngIf="canControl">
-      <oms-buffer-control-table
-        [tableHeight]="tableHeight"
-        *ngIf="currentTab == 3"
-      ></oms-buffer-control-table>
+    <mat-tab [label]="'names.buffers' | translate" *ngIf="canControl && canDisplayTable('buffers')">
+      <oms-buffer-control-table [tableHeight]="tableHeight">
+      </oms-buffer-control-table>
     </mat-tab>
     <!-- Stations / Buffers 추가 -->
   </mat-tab-group>

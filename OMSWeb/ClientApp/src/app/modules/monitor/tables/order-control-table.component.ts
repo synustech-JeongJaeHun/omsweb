@@ -3,6 +3,7 @@ import { forkJoin, Subject, Subscription } from 'rxjs';
 import DataSource from 'devextreme/data/data_source';
 
 import { StatusService } from '../../../services/status.service';
+import { SettingsService } from '../../../services/settings.service';
 import { TrackIdService } from '../../../services/track-id.service';
 import { HubService } from '../../../services/hub.service';
 import { IDataChangeEvent } from '../../../models/notification.model';
@@ -13,6 +14,7 @@ import { takeUntil } from 'rxjs/operators';
 import { MessagesService } from '../../../services/messages.service';
 import { DxDataGridComponent } from 'devextreme-angular';
 import { PermissionEnums } from '../../../models/enums';
+import { ClientPreferences } from '../../../models/settings.model';
 
 @Component({
   selector: 'oms-order-control-table',
@@ -27,6 +29,8 @@ export class OrderControlTableComponent implements OnInit, OnDestroy {
   dataSource: DataSource;
   // dataSource: any;
   selectedRows: number[] = [];
+
+  preference: ClientPreferences;
 
   //#region Subscriptions
   private destroy$: Subject<void> = new Subject<void>();
@@ -57,12 +61,19 @@ export class OrderControlTableComponent implements OnInit, OnDestroy {
   constructor(
     private auth: AuthService,
     private statusSvc: StatusService,
+    private settingSvc: SettingsService,
     private messageSvc: MessagesService,
     private idSvc: TrackIdService,
     private hubSvc: HubService
   ) {
     this.dataSource = this.statusSvc.orderStatusDataSource();
+    this.preference = this.settingSvc.globalPreferences;
   }
+
+  canDisplayTable(type: string): boolean {
+    return this.preference.controlTables[type];
+  }
+
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();

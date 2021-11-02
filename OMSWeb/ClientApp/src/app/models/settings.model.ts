@@ -31,6 +31,7 @@ export interface IPreferences {
   map: MapConfig;
   uiStates?: UiStates;
   theme?: ThemeConfig;
+  controlTables?: ControlTable;
 }
 
 export class UiStates {
@@ -59,11 +60,89 @@ export const defaultToggleOptions: ToggleOptionsType = {
   showKpi: true,
 };
 
+export class ControlTable {
+  [key: string]: boolean;
+};
+
+export const defaultControlTable: ControlTable = {
+  "orders": true,
+  "orders_id": true,
+  "orders_logicalId": true,
+  "orders_state": true,
+  "orders_vehicleId": true,
+  "orders_locationPickup": true,
+  "orders_locationDropoff": true,
+  "orders_locationMove": true,
+  "orders_priority": true,
+  "orders_carrierLabel": true,
+  "orders_timeCreated": true,
+  "orders_timeAssigned": true,
+  "orders_origin": true,
+  "orders_durationTotal": true,
+  "orders_durationUnassigned": true,
+  "orders_durationPickup": true,
+  "orders_durationLoad": true,
+  "orders_durationDropoff": true,
+  "orders_durationUnload": true,
+  "orders_durationMove": true,
+  "orders_distancePickup": true,
+  "orders_distanceDropoff": true,
+  "orders_distanceMove": true,
+  "orders_lastReassignType": true,
+
+  "vehicles": true,
+  "vehicles_id": true,
+  "vehicles_physicalId": true,
+  "vehicles_logicalId": true,
+  "vehicles_mode": true,
+  "vehicles_canBePushed": true,
+  "vehicles_railIn": true,
+  "vehicles_hostOrder": true,
+  "vehicles_orderOrigin": true,
+  "vehicles_group": true,
+  "vehicles_curPoint": true,
+  "vehicles_commandPoint": true,
+  "vehicles_orderId": true,
+  "vehicles_locationPickup": true,
+  "vehicles_locationDropoff": true,
+  "vehicles_locationMove": true,
+  "vehicles_runtimeTotal": true,
+  "vehicles_movingState": true,
+  "vehicles_cargoState": true,
+  "vehicles_error": true,
+  "vehicles_sensorStopped": true,
+  "vehicles_blocked": true,
+  "vehicles_distanceTotal": true,
+  "vehicles_mapDb": true,
+
+  "stations": true,
+  "stations_id": true,
+  "stations_physicalId": true,
+  "stations_logicalId": true,
+  "stations_group": true,
+  "stations_point": true,
+  "stations_direction": true,
+  "stations_carrierType": true,
+  "stations_nextPoint": true,
+  "stations_offset": true,
+
+  "buffers": true,
+  "buffers_id": true,
+  "buffers_physicalId": true,
+  "buffers_logicalId": true,
+  "buffers_group": true,
+  "buffers_point": true,
+  "buffers_direction": true,
+  "buffers_nextPoint": true,
+  "buffers_offset": true
+}
+
 export class ClientPreferences implements IPreferences {
   toggles: ToggleOptionsType;
   map: MapConfig;
   uiStates?: UiStates;
   theme?: ThemeConfig;
+  controlTables?: ControlTable;
 
   constructor(private storeKey: string, private base?: IPreferences) {
     this.load();
@@ -78,12 +157,14 @@ export class ClientPreferences implements IPreferences {
       map = {},
       uiStates = {},
       theme = {},
+      controlTables = {},
     } = JSON.parse(value);
-    const { toggles: baseToggle = {}, map: baseMap = {} } = this.base || {};
+    const { toggles: baseToggle = {}, map: baseMap = {}, controlTables: baseControlTable = {} } = this.base || {};
     this.toggles = { ...defaultToggleOptions, ...baseToggle, ...toggles };
     this.map = { ...new MapConfig(), ...baseMap, ...map };
     this.uiStates = { ...new UiStates(), ...uiStates };
     this.theme = { ...new ThemeConfig(), ...theme };
+    this.controlTables = { ...defaultControlTable, ...baseControlTable, ...controlTables };
   }
 
   save() {
@@ -92,6 +173,7 @@ export class ClientPreferences implements IPreferences {
       map: { ...this.map },
       uiStates: { ...this.uiStates },
       theme: { ...this.theme },
+      controlTables: { ...this.controlTables },
     };
     StorageUtil.setLocal(this.storeKey, JSON.stringify(pref));
   }

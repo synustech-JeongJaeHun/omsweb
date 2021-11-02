@@ -1,4 +1,5 @@
 import { CommandKeyType, MapConfigType, ToggleOptionKeyType } from './enums';
+import { ControlTable } from './settings.model';
 
 export interface ISize {
   width?: number;
@@ -67,4 +68,9 @@ export interface IMapConfigChangeEvent {
 export interface IMapNodeScale {
   scale: number;
   value: number;
+}
+
+export interface IControlTableEvent {
+  type: string;
+  value: boolean;
 }

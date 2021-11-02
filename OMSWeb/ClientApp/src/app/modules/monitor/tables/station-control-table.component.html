@@ -37,53 +37,62 @@
     dataType="int"
     dataField="id"
     [caption]="'names.id' | translate"
+    *ngIf="canDisplayTable('stations_id')"
   ></dxi-column>
   <dxi-column
     [width]="120"
     dataType="string"
     dataField="physicalId"
     [caption]="'names.physicalId' | translate"
+    *ngIf="canDisplayTable('stations_physicalId')"
   ></dxi-column>
   <dxi-column
     [width]="120"
     dataType="string"
     dataField="logicalId"
     [caption]="'names.logicalId' | translate"
+    *ngIf="canDisplayTable('stations_logicalId')"
   ></dxi-column>
   <dxi-column
     [width]="60"
     dataType="string"
     dataField="groupId"
-    [caption]="'names.group' | translate">
+    [caption]="'names.group' | translate"
+    *ngIf="canDisplayTable('stations_group')">
   </dxi-column>
   <dxi-column
     [width]="100"
     dataType="string"
     dataField="point"
     [caption]="'names.point' | translate"
+    *ngIf="canDisplayTable('stations_point')"
   ></dxi-column>
   <dxi-column
     [width]="100"
     dataType="string"
     dataField="direction"
     [caption]="'names.direction' | translate"
+    *ngIf="canDisplayTable('stations_direction')"
   ></dxi-column>
   <dxi-column
     [width]="100"
     dataType="string"
     dataField="carrierType"
     [caption]="'names.carrierType' | translate"
+    *ngIf="canDisplayTable('stations_carrierType')"
   ></dxi-column>
   <dxi-column
     [width]="100"
     dataType="string"
     dataField="nextPoint"
     [caption]="'names.nextPoint' | translate"
+    *ngIf="canDisplayTable('stations_nextPoint')"
   ></dxi-column>
   <dxi-column
     [width]="100"
     dataType="string"
     dataField="offset"
     [caption]="'names.offset' | translate"
+    *ngIf="canDisplayTable('stations_offset')"
   ></dxi-column>
 </dx-data-grid>

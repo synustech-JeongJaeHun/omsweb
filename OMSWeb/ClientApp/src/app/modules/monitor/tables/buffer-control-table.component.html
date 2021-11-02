@@ -1,6 +1,4 @@
 <div class="grid-actions" *ngIf="hasControlAccess">
-
-
 </div>
 <dx-data-grid
   [dataSource]="dataSource"
@@ -37,47 +35,55 @@
     dataType="string"
     dataField="id"
     [caption]="'names.id' | translate"
+    *ngIf="canDisplayTable('buffers_id')"
   ></dxi-column>
   <dxi-column
     [width]="120"
     dataType="string"
     dataField="physicalId"
     [caption]="'names.physicalId' | translate"
+    *ngIf="canDisplayTable('buffers_physicalId')"
   ></dxi-column>
   <dxi-column
     [width]="120"
     dataType="string"
     dataField="logicalId"
     [caption]="'names.logicalId' | translate"
+    *ngIf="canDisplayTable('buffers_logicalId')"
   ></dxi-column>
   <dxi-column
     [width]="60"
     dataType="string"
     dataField="groupId"
-    [caption]="'names.group' | translate">
+    [caption]="'names.group' | translate"
+    *ngIf="canDisplayTable('buffers_group')">
   </dxi-column>
   <dxi-column
     [width]="100"
     dataType="string"
     dataField="point"
     [caption]="'names.point' | translate"
+    *ngIf="canDisplayTable('buffers_point')"
   ></dxi-column>
   <dxi-column
     [width]="100"
     dataType="string"
     dataField="direction"
     [caption]="'names.direction' | translate"
+    *ngIf="canDisplayTable('buffers_direction')"
   ></dxi-column>
   <dxi-column
     [width]="100"
     dataType="string"
     dataField="nextPoint"
     [caption]="'names.nextPoint' | translate"
+    *ngIf="canDisplayTable('buffers_nextPoint')"
   ></dxi-column>
   <dxi-column
     [width]="100"
     dataType="string"
     dataField="offset"
     [caption]="'names.offset' | translate"
+    *ngIf="canDisplayTable('buffers_offset')"
   ></dxi-column>
 </dx-data-grid>

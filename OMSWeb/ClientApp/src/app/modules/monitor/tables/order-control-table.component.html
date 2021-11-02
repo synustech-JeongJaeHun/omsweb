@@ -38,6 +38,7 @@
     dataType="string"
     dataField="id"
     [caption]="'names.id' | translate"
+    *ngIf="canDisplayTable('orders_id')"
   ></dxi-column>
   <!-- Logical ID 추가 -->
   <dxi-column
@@ -45,6 +46,7 @@
     dataType="string"
     dataField="logicalId"
     [caption]="'names.logicalId' | translate"
+    *ngIf="canDisplayTable('orders_logicalId')"
   ></dxi-column>
   <!-- Logical ID 추가 -->
   <dxi-column
@@ -52,12 +54,14 @@
     dataType="string"
     dataField="state"
     [caption]="'names.state' | translate"
+    *ngIf="canDisplayTable('orders_state')"
   ></dxi-column>
   <dxi-column
     [width]="70"
     dataType="string"
     dataField="vehicleId"
     [caption]="'names.vehicleId' | translate"
+    *ngIf="canDisplayTable('orders_vehicleId')"
   ></dxi-column>
   <!--[customizeText]="transformVehicleId"-->
   <dxi-column
@@ -66,6 +70,7 @@
     dataField="locationPickup"
     [caption]="'names.locationPickup' | translate"
     [customizeText]="transformLocationId"
+    *ngIf="canDisplayTable('orders_locationPickup')"
   ></dxi-column>
   <dxi-column
     [width]="80"
@@ -73,6 +78,7 @@
     dataField="locationDropoff"
     [caption]="'names.locationDropoff' | translate"
     [customizeText]="transformLocationId"
+    *ngIf="canDisplayTable('orders_locationDropoff')"
   ></dxi-column>
   <!-- LocationMove 추가 -->
   <dxi-column
@@ -82,6 +88,7 @@
     dataField="locationMove"
     [allowSorting]="false"
     [caption]="'names.locationMove' | translate"
+    *ngIf="canDisplayTable('orders_locationMove')"
   ></dxi-column>
   <!-- LocationMove 추가 -->
   <dxi-column
@@ -89,6 +96,7 @@
     dataType="string"
     dataField="priority"
     [caption]="'names.priority' | translate"
+    *ngIf="canDisplayTable('orders_priority')"
   ></dxi-column>
   <dxi-column
     [width]="80"
@@ -96,6 +104,7 @@
     dataField="carrierLabel"
     [allowSorting]="false"
     [caption]="'names.carrierLabel' | translate"
+    *ngIf="canDisplayTable('orders_carrierLabel')"
   ></dxi-column>
   <dxi-column
     [width]="110"
@@ -103,6 +112,7 @@
     dataField="timeCreated"
     [caption]="'names.timeCreated' | translate"
     sortOrder="desc"
+    *ngIf="canDisplayTable('orders_timeCreated')"
   ></dxi-column>
   <dxi-column
     [width]="110"
@@ -110,6 +120,7 @@
     dataField="timeAssigned"
     [caption]="'names.timeAssigned' | translate"
     sortOrder="desc"
+    *ngIf="canDisplayTable('orders_timeAssigned')"
   ></dxi-column>
   <!-- Origin 추가 -->
   <dxi-column
@@ -119,6 +130,7 @@
     dataField="origin"
     [allowSorting]="true"
     [caption]="'names.origin' | translate"
+    *ngIf="canDisplayTable('orders_origin')"
   ></dxi-column>
   <!-- Origin 추가 -->
   <!-- DurationTotal 추가 -->
@@ -129,6 +141,7 @@
     dataField="durationTotal"
     [allowSorting]="true"
     [caption]="'names.durationTotal' | translate"
+    *ngIf="canDisplayTable('orders_durationTotal')"
   ></dxi-column>  
   <!-- DurationTotal 추가 -->
   <!-- DurationUnassigned 추가 -->
@@ -139,6 +152,7 @@
     dataField="durationUnassigned"
     [allowSorting]="true"
     [caption]="'names.durationUnassigned' | translate"
+    *ngIf="canDisplayTable('orders_durationUnassigned')"
   ></dxi-column>  
   <!-- DurationUnassigned 추가 -->
   <!-- DurationPickup 추가 -->
@@ -149,6 +163,7 @@
     dataField="durationPickup"
     [allowSorting]="true"
     [caption]="'names.durationPickup' | translate"
+    *ngIf="canDisplayTable('orders_durationPickup')"
   ></dxi-column>  
   <!-- DurationPickup 추가 -->
   <!-- DurationLoad 추가 -->
@@ -159,6 +174,7 @@
     dataField="durationLoad"
     [allowSorting]="true"
     [caption]="'names.durationLoad' | translate"
+    *ngIf="canDisplayTable('orders_durationLoad')"
   ></dxi-column>  
   <!-- DurationLoad 추가 -->
   <!-- DurationDropoff 추가 -->
@@ -169,6 +185,7 @@
     dataField="durationDropoff"
     [allowSorting]="true"
     [caption]="'names.durationDropoff' | translate"
+    *ngIf="canDisplayTable('orders_durationDropoff')"
   ></dxi-column>  
   <!-- DurationDropoff 추가 -->
   <!-- DurationUnload 추가 -->
@@ -179,6 +196,7 @@
     dataField="durationUnload"
     [allowSorting]="true"
     [caption]="'names.durationUnload' | translate"
+    *ngIf="canDisplayTable('orders_durationUnload')"
   ></dxi-column>  
   <!-- DurationUnload 추가 -->
   <!-- DurationMove 추가 -->
@@ -189,6 +207,7 @@
     dataField="durationMove"
     [allowSorting]="true"
     [caption]="'names.durationMove' | translate"
+    *ngIf="canDisplayTable('orders_durationMove')"
   ></dxi-column>  
   <!-- DurationMove 추가 -->
   <!-- DistancePickup 추가 -->
@@ -199,6 +218,7 @@
     dataField="distancePickup"
     [allowSorting]="true"
     [caption]="'names.distancePickup' | translate"
+    *ngIf="canDisplayTable('orders_distancePickup')"
   ></dxi-column>  
   <!-- DistancePickup 추가 -->
   <!-- DistanceDropoff 추가 -->
@@ -209,6 +229,7 @@
     dataField="distanceDropoff"
     [allowSorting]="true"
     [caption]="'names.distanceDropoff' | translate"
+    *ngIf="canDisplayTable('orders_distanceDropoff')"
   ></dxi-column>  
   <!-- DistanceDropoff 추가 -->
   <!-- DistanceMove 추가 -->
@@ -219,6 +240,7 @@
     dataField="distanceMove"
     [allowSorting]="true"
     [caption]="'names.distanceMove' | translate"
+    *ngIf="canDisplayTable('orders_distanceMove')"
   ></dxi-column>  
   <!-- DistanceMove 추가 -->  
   <!-- AssignmentType 추가 -->
@@ -229,6 +251,7 @@
     dataField="assignmentType"
     [allowSorting]="true"
     [caption]="'names.lastReassignType' | translate"
+    *ngIf="canDisplayTable('orders_lastReassignType')"
   ></dxi-column>
   <!-- AssignmentType 추가 -->
 </dx-data-grid>

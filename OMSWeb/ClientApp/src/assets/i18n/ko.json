@@ -61,12 +61,12 @@
     "physicalId": "물리적 아이디",
     "logicalId": "논리 아이디",
     "state": "상태",
-    "vehicleId": "비클 아이디",
+    "vehicleId": "비클",
     "locationPickup": "시작",
     "locationDropoff": "종점",
     "locationMove": "이동",
     "priority": "우선순위",
-    "carrierLabel": "캐리어",
+    "carrierLabel": "캐리어시간",
     "timeCreated": "생성시간",
     "timeAssigned": "할당시간",
     "timeVehicleArrived": "도착시간",
@@ -377,17 +377,17 @@
     "createdToAssigned": "(생성 ~ 완료)",
     "pioTrend": "PIO 트렌드",
 
-    "bulkAddUser": "Bulk Add User",
+    "bulkAddUser": "사용자 일괄 추가",
 
-    "vehiclePreference": "Vehicle Preference",
-    "vehicleModeTheme": "Vehicle Mode Theme",
-    "vehicleCargoStatusTheme": "Vehicle Cargo Status Theme",
-    "VehicleModeAutoBgColor": "Auto Background",
-    "VehicleModeManualBgColor": "Manual Background",
-    "VehicleModeNoneBgColor": "None Background",
-    "VehicleCargoStatusLoadingColor": "Loading Color",
-    "VehicleCargoStatusFullColor": "Full Color",
-    "VehicleCargoStatusUnloadingColor": "Unloading Color"
+    "vehiclePreference": "비클 기본 설정",
+    "vehicleModeTheme": "비클 모드 테마",
+    "vehicleCargoStatusTheme": "비클 화물 상태 테마",
+    "VehicleModeAutoBgColor": "자동 배경",
+    "VehicleModeManualBgColor": "수동 배경",
+    "VehicleModeNoneBgColor": "배경 없음",
+    "VehicleCargoStatusLoadingColor": "로드중 색상",
+    "VehicleCargoStatusFullColor": "풀 상태 색상",
+    "VehicleCargoStatusUnloadingColor": "언로드중 색상"
   },
   "enums": {
     "hostSessionStatus": {

@@ -8,6 +8,7 @@ import { SettingsService } from '../../../services/settings.service';
 import { AccountUtil } from '../../shared/utils/account.util';
 import { MapStatesService } from '../../track-map/map-states.service';
 import { PermissionEnums } from '../../../models/enums';
+import { ClientPreferences } from '../../../models/settings.model';
 
 @Component({
   selector: 'oms-status-control',
@@ -20,12 +21,15 @@ export class StatusControlComponent implements OnInit {
 
   readonly permissionEnums: typeof PermissionEnums = PermissionEnums;
 
+  preference: ClientPreferences;
+
   get tableHeight(): string {
     return this.tableHeightNum.toString();
   }
   get canControl(): boolean {
     return this.auth.isAuthenticated;
   }
+
 
   tabNames = [
     { id: 1, title: 'Orders' },
@@ -42,7 +46,9 @@ export class StatusControlComponent implements OnInit {
     private settingSvc: SettingsService,
     private dialogSvc: DialogService,
     private $t: TranslateService
-  ) {}
+  ) {
+    this.preference = this.settingSvc.globalPreferences;
+  }
 
   ngOnInit(): void {
     this.resizeHandler = this.onMouseMove.bind(this);
@@ -51,6 +57,10 @@ export class StatusControlComponent implements OnInit {
 
   hasPermissions(permissions: number[]): boolean {
     return this.auth && this.auth.hasPermissions(permissions);
+  }
+
+  canDisplayTable(type: string): boolean {
+    return this.preference.controlTables[type];
   }
 
   onVehicleReset() {
