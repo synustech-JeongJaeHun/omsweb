@@ -378,6 +378,11 @@
     "pioTrend": "PIO趋势",
 
     "bulkAddUser": "批量添加用户",
+    "errorParsingCSVFile": "解析 CSV 文件时出错。",
+    "noFileSelected": "未选择文件。",
+    "csvTotalMessage": "您尝试输入",
+    "csvSuccessMessage": "成功",
+    "csvFailedMessage": "失败",
 
     "vehiclePreference": "车辆偏好",
     "vehicleModeTheme": "车辆模式主题",

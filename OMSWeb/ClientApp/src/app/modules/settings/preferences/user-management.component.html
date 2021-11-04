@@ -8,16 +8,14 @@
       class="dense"
       [disabled]="!isUpdated"
       color="primary"
-      (click)="onSave(grid)"
-    >
+      (click)="onSave(grid)">
       {{ "names.save" | translate }}
     </button>
     <button
       mat-raised-button
       class="dense"
       [disabled]="!isUpdated"
-      (click)="onRevert(grid)"
-    >
+      (click)="onRevert(grid)">
       {{ "names.revert" | translate }}
     </button>
   </div>
@@ -25,19 +23,16 @@
 
 <div class="sub-links">
   <div class="sub-actions">
+    <button mat-raised-button class="dense" (click)="onBulkAddUser(grid)">
+      {{ "names.bulkAddUser" | translate }}
+    </button>
     <a mat-flat-button class="action-link" (click)="onRoleSetting()">
       {{ "names.rolesSetting" | translate }}...
     </a>
-
     <button mat-stroked-button class="dense" (click)="onAddUser(grid)">
       <mat-icon>add</mat-icon>
     </button>
-    <button
-      mat-stroked-button
-      [disabled]="!canRemove"
-      class="dense"
-      (click)="onRemoveUsers()"
-    >
+    <button mat-stroked-button class="dense" [disabled]="!canRemove" (click)="onRemoveUsers()">
       <mat-icon>remove</mat-icon>
     </button>
   </div>
@@ -52,24 +47,18 @@
   [height]="490"
   [(selectedRowKeys)]="selectedIds"
   (onRowUpdated)="onUpdate($event)"
-  (onSelectionChanged)="onSelectionChanged($event)"
->
+  (onSelectionChanged)="onSelectionChanged($event)">
   <dxo-scrolling mode="virtual"></dxo-scrolling>
   <dxo-editing
     mode="cell"
     refreshMode="reshape"
     [allowUpdating]="true"
     [allowDeleting]="false"
-    [allowAdding]="false"
-  >
+    [allowAdding]="false">
   </dxo-editing>
   <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
 
-  <dxi-column
-    dataField="userId"
-    caption="{{ 'names.userId' | translate }}"
-    [allowEditing]="false"
-  >
+  <dxi-column dataField="userId" caption="{{ 'names.userId' | translate }}" [allowEditing]="false">
   </dxi-column>
   <dxi-column dataField="firstName" dataType="string"></dxi-column>
   <dxi-column dataField="lastName"></dxi-column>
@@ -77,11 +66,7 @@
   </dxi-column>
   <!-- <dxi-column dataField="password" [editorOptions]="{mode: 'password'}">
   </dxi-column> -->
-  <dxi-column
-    dataField="password"
-    cellTemplate="passwordCell"
-    [editorOptions]="{ mode: 'password' }"
-  >
+  <dxi-column dataField="password" cellTemplate="passwordCell" [editorOptions]="{ mode: 'password' }">
   </dxi-column>
   <dxi-column dataField="roles" caption="Roles" dataType="number">
     <dxo-lookup

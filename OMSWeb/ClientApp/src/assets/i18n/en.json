@@ -378,6 +378,11 @@
     "pioTrend": "PIO Trend",
 
     "bulkAddUser": "Bulk Add User",
+    "errorParsingCSVFile": "Error Parsing CSV File.",
+    "noFileSelected": "No File Selected.",
+    "csvTotalMessage": "You try to input",
+    "csvSuccessMessage": "Success",
+    "csvFailedMessage": "Failed",
 
     "vehiclePreference": "Vehicle Preference",
     "vehicleModeTheme": "Vehicle Mode Theme",

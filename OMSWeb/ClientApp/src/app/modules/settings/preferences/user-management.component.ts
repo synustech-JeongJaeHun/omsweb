@@ -20,6 +20,7 @@ import {
 } from '@angular/material/dialog';
 import { RoleSettingDialogComponent } from '../dialogs/role-setting-dialog.component';
 import { UserFormDialogComponent } from '../dialogs/user-form-dialog.component';
+import { BulkUserFormDialogComponent } from '../dialogs/bulk-user-from-dialog.component';
 import { filter, map, tap } from 'rxjs/operators';
 import _ = require('lodash');
 
@@ -31,6 +32,7 @@ import _ = require('lodash');
 export class UserManagementComponent implements OnInit, OnDestroy {
   private _roleDlg: MatDialogRef<RoleSettingDialogComponent>;
   private _userDlg: MatDialogRef<UserFormDialogComponent>;
+  private _bulkAddUserDlg: MatDialogRef<BulkUserFormDialogComponent>;
   private _changedItems: IUserForm[] = [];
   private _removeIds: string[] = [];
 
@@ -77,6 +79,37 @@ export class UserManagementComponent implements OnInit, OnDestroy {
       closeOnNavigation: true,
     });
     // TODO : add code role settings
+  }
+
+  onBulkAddUser(grid) {
+    this._bulkAddUserDlg = this.dialog.open(BulkUserFormDialogComponent, {
+      width: '350px',
+      hasBackdrop: true,
+      disableClose: true,
+      closeOnNavigation: true
+    });
+    this._bulkAddUserDlg.afterClosed().subscribe((res) => {
+      if (res) {
+        //alert(res.length);
+        for (let idx = 0; idx < res.length; idx++) {
+          var user = <IUserForm>{};
+          user.id = uuid4();
+          user.isNew = true;
+          user.userId = res[idx][0];
+          user.firstName = res[idx][1];
+          user.lastName = res[idx][2];
+          user.email = res[idx][3];
+          user.password = res[idx][4];
+          user.roles = [res[idx][5]];
+
+          this._changedItems.push(user);
+          grid.instance
+            .getDataSource()
+            .store()
+            .push([{ type: 'insert', data: user }]);
+        }
+      }
+    })
   }
 
   onAddUser(grid) {
