@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
+import { DialogService } from '../../../services/dialog.service';
 import { MessagesService } from '../../../services/messages.service';
 import { IOrderCommandMessage } from '../../../models/command.model';
 import {
@@ -30,6 +31,7 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
   constructor(
     private statesSvc: MapStatesService,
     private dialog: MatDialogRef<CommandDialogComponent>,
+    private dialogSvc: DialogService,
     private messageSvc: MessagesService,
     private t$: TranslateService
   ) {}
@@ -96,7 +98,13 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
     !sourceDisabled && (cmd.locationPickup = source.id.toString());
 
     //this.dialog.close(cmd);
-    this.messageSvc.sendOrderCommand(cmd).subscribe();
+    //this.messageSvc.sendOrderCommand(cmd).subscribe();
+
+    this.dialogSvc.confirm({ body: this.t$.instant('messages.confirmCommand') }).subscribe((ok) => {
+      if (ok) {
+        this.messageSvc.sendOrderCommand(cmd).subscribe();
+      }
+    });
   }
 
   private validate(): undefined | string {
