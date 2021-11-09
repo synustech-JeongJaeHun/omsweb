@@ -13,6 +13,7 @@
   font-family: 'Material Icons';
   font-style: normal;
   font-weight: 400;
+  font-display:block;
   src: url(./google/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2) format('woff2');
 }
 /* fallback */
@@ -20,6 +21,7 @@
   font-family: 'Material Icons Outlined';
   font-style: normal;
   font-weight: 400;
+  font-display: block;
   src: url(./google/gok-H7zzDkdnRel8-DQ6KAXJ69wP1tGnf4ZGhUce.woff2) format('woff2');
 }
 /* fallback */
@@ -27,6 +29,7 @@
   font-family: 'Material Icons Two Tone';
   font-style: normal;
   font-weight: 400;
+  font-display: block;
   src: url(./google/hESh6WRmNCxEqUmNyh3JDeGxjVVyMg4tHGctNCu0.woff2) format('woff2');
 }
 
