@@ -16,7 +16,7 @@ import { SettingsDialogComponent } from './dialogs/settings-dialog.component';
 export class SettingsComponent implements OnInit, OnDestroy {
   private _dlg: MatDialogRef<SettingsDialogComponent>;
 
-  constructor(private dialog: MatDialog, private location: Location) {}
+  constructor(private dialog: MatDialog, private location: Location) { }
 
   ngOnDestroy(): void {
     this._dlg &&

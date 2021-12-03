@@ -8,4 +8,4 @@ import { SharedModule } from '../shared/shared.module';
   imports: [CommonModule, SharedModule],
   exports: [KpiStatusComponent],
 })
-export class KpiModule {}
+export class KpiModule { }

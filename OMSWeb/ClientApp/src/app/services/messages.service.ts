@@ -30,7 +30,7 @@ import { IVehicleStatusRow } from '../models/vehicle-status.model';
 })
 export class MessagesService {
   private baseUrl = '/api/messages';
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   sendDeleteOrder(order: IOrderStatusRow): Observable<void> {
     const {

@@ -462,8 +462,8 @@ export class MapViewerComponent implements OnInit, OnDestroy {
       this.tooltipData.orderLogicalId = orderLogicalId
         ? orderLogicalId
         : orderId
-        ? orderId
-        : null;
+          ? orderId
+          : null;
     }
 
     this.currentTooltipEvent = event;

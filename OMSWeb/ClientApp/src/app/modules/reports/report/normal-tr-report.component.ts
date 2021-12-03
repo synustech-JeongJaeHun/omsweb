@@ -206,7 +206,7 @@ export class NormalTRReportComponent implements OnInit {
   customizeTooltip(arg: any) {
     var items = arg.valueText.split("\n"),
       color = arg.point.getColor();
-      items.forEach(function (item, index) {
+    items.forEach(function (item, index) {
       if (item.indexOf(arg.seriesName) === 0) {
         var element = document.createElement("span");
 

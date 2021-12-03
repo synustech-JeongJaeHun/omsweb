@@ -1,43 +1,20 @@
 <oms-dialog-base [title]="'names.trackVehicle' | translate">
   <ng-container class="dialog-layout">
     <div mat-dialog-content>
-      <dx-data-grid
-        [dataSource]="dataSource | async"
-        keyExpr="id"
-        [height]="300"
-        [(selectedRowKeys)]="selectedVehicle"
-        (onRowDblClick)="onDblClickRow($event)"
-      >
+      <dx-data-grid [dataSource]="dataSource | async" keyExpr="id" [height]="300" [(selectedRowKeys)]="selectedVehicle"
+        (onRowDblClick)="onDblClickRow($event)">
         <dxo-selection mode="single" showCheckBoxesMode="none"></dxo-selection>
         <dxo-scrolling mode="virtual"></dxo-scrolling>
-        <dxi-column
-          [allowFiltering]="false"
-          [width]="60"
-          dataType="string"
-          dataField="id"
-          [caption]="'names.id' | translate"
-        ></dxi-column>
-        <dxi-column
-          [allowFiltering]="false"
-          dataType="string"
-          dataField="physicalId"
-          [caption]="'names.physicalId' | translate"
-        ></dxi-column>
-        <dxi-column
-          [allowFiltering]="false"
-          dataType="string"
-          dataField="logicalId"
-          [caption]="'names.logicalId' | translate"
-        ></dxi-column>
+        <dxi-column [allowFiltering]="false" [width]="60" dataType="string" dataField="id"
+          [caption]="'names.id' | translate"></dxi-column>
+        <dxi-column [allowFiltering]="false" dataType="string" dataField="physicalId"
+          [caption]="'names.physicalId' | translate"></dxi-column>
+        <dxi-column [allowFiltering]="false" dataType="string" dataField="logicalId"
+          [caption]="'names.logicalId' | translate"></dxi-column>
       </dx-data-grid>
     </div>
     <div mat-dialog-actions>
-      <button
-        mat-raised-button
-        [disabled]="!canTracking"
-        color="primary"
-        (click)="onTrack()"
-      >
+      <button mat-raised-button [disabled]="!canTracking" color="primary" (click)="onTrack()">
         {{ "names.track" | translate }}
       </button>
       <button mat-raised-button mat-dialog-close>

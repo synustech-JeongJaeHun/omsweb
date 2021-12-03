@@ -34,7 +34,7 @@ export class MapDataService {
   private parser: MapParser;
   private vehicleStale = 600;
 
-  constructor() {}
+  constructor() { }
 
   parseData(data: Dto.ITrackData, geometry: IMapGeometry) {
     this.geometry = geometry;
@@ -203,8 +203,8 @@ export class MapDataService {
           segment.set_disable(cumulative_disable_state_for_segment);
 
           let updated_segment = {
-             status: 'UPDATE',
-             object: segment,
+            status: 'UPDATE',
+            object: segment,
           };
 
           updated_segments.push(updated_segment);
@@ -222,8 +222,8 @@ export class MapDataService {
     let disable_index = !this.data?.segmentsDisabled
       ? -1
       : this.data.segmentsDisabled.findIndex(
-          (d) => d && d.id == disabled_segment_id
-        );
+        (d) => d && d.id == disabled_segment_id
+      );
     let segment: Segment;
     let updated_segments: number[] = [];
 
@@ -552,8 +552,8 @@ export class MapDataService {
             row.historyChangeTime
               ? new Date(row.historyChangeTime).getTime()
               : eventVersion
-              ? eventVersion
-              : null
+                ? eventVersion
+                : null
           );
           this.store_stale_list(vehicle);
           models.push(vehicle);
@@ -692,7 +692,7 @@ export class MapDataService {
         (new_target_vehicle.curPoint &&
           old_target_vehicle.curPoint &&
           new_target_vehicle.curPoint.point !==
-            old_target_vehicle.curPoint.point) ||
+          old_target_vehicle.curPoint.point) ||
         old_target_vehicle.curPoint == null ||
         old_target_vehicle.curPoint == undefined
       ) {

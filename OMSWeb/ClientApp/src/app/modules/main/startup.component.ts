@@ -18,7 +18,7 @@ export class StartupComponent implements OnInit {
     private settings: SettingsService,
     private dialog: MatDialog,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.settings.serviceConfig.subscribe((x) => {

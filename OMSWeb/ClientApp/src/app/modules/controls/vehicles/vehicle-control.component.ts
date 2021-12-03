@@ -35,7 +35,7 @@ export class VehicleControlComponent implements OnInit {
     this.dataSource = this.systemSvc.vehicles();
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   onRefresh() {
     console.info('# refresh >>', this.selectedIds);

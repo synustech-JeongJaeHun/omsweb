@@ -3,7 +3,6 @@
     "english": "English",
     "korean": "Korean",
     "chinese": "Chinese",
-
     "monitor": "Monitor",
     "playback": "Playback",
     "history": "History",
@@ -13,7 +12,6 @@
     "login": "Login",
     "profile": "Profile",
     "logout": "Logout",
-
     "vehicle": "Vehicle",
     "cluster": "Cluster",
     "point": "Point",
@@ -23,18 +21,15 @@
     "buffer": "Buffer",
     "group": "Group",
     "zcu": "ZCU",
-
     "vehicleType": "Vehicle Type",
     "vehicleMode": "Vehicle Mode",
     "vehicleProperties": "Vehicle Properties",
     "orderPriority": "Order Priority",
     "directions": "Directions",
-
     "orders": "Orders",
     "vehicles": "Vehicles",
     "stations": "Stations",
     "buffers": "Buffers",
-
     "normal": "Normal",
     "cleaning": "Cleaning",
     "manual": "Manual",
@@ -56,7 +51,6 @@
     "dropOff": "Drop Off",
     "disabled": "Disabled",
     "validationError": "Validation Error",
-
     "id": "ID",
     "physicalId": "Physical ID",
     "logicalId": "Logical ID",
@@ -122,7 +116,6 @@
     "basePoint": "Base Point",
     "carrierType": "Carrier Type",
     "direction": "Direction",
-
     "centerZoom": "Center Zoom",
     "search": "Search",
     "trackVehicle": "Track Vehicle",
@@ -136,7 +129,6 @@
     "resetAllVehicle": "Reset All Vehicles",
     "estopAllVehicle": "EStop All Vehicles",
     "autoAllVehicle": "Auto All Vehicles",
-
     "vehicleScale": "Vehicle Scale",
     "mapRotation": "Map Rotation",
     "segmentWidth": "Segment Width",
@@ -150,7 +142,6 @@
     "showGroups": "Groups",
     "showClusters": "Clusters",
     "showOverlaps": "Overlapping Objects",
-
     "hostOrderEnable": "Host Order Disable",
     "pushEnable": "Push Disable",
     "railIn": "Rail In",
@@ -161,17 +152,14 @@
     "auto": "Auto",
     "zcuGo": "ZCU Go",
     "option": "Option",
-
     "ioList": "IO List",
     "vehicleStatus": "Vehicle Status",
     "bufferStatus": "Buffer Status",
-
     "confirm": "Confirm",
     "cancel": "Cancel",
     "close": "Close",
     "track": "Track",
     "apply": "Apply",
-
     "time": "Time",
     "severity": "Severity",
     "tag": "Tag",
@@ -181,10 +169,8 @@
     "code": "Code",
     "alarmCode": "Alarm Code",
     "desc": "Description",
-
     "alarms": "Alarms",
     "alerts": "Warnings",
-
     "manualTransfer": "Manual Transfer",
     "command-move": "Move",
     "command-fromTo": "FromTo",
@@ -197,7 +183,6 @@
     "selectDest": "Select Dest",
     "carrier": "Carrier",
     "searchBuffer": "Search Buffer",
-
     "userId": "User ID",
     "email": "Email",
     "password": "Password",
@@ -207,14 +192,12 @@
     "firstName": "First Name",
     "lastName": "Last Name",
     "save": "Save",
-
     "period": "Period",
     "snapshots": "Snapshots",
     "event": "Event",
     "events": "Events",
     "speed": "Speed",
     "timeToNextEvents": "Time to next events",
-
     "use": "Use",
     "home": "Home",
     "hardware": "Hardware",
@@ -357,7 +340,6 @@
     "vehicleSetting": "Vehicle Setting",
     "addVehicle": "Add Vehicle",
     "columnDisplayManagement": "Tables Column",
-
     "ai": "AI",
     "reports": "Reports",
     "server": "Server",
@@ -376,14 +358,12 @@
     "loadedToCompleted": "(loaded ~ completed)",
     "createdToAssigned": "(created ~ assigned)",
     "pioTrend": "PIO Trend",
-
     "bulkAddUser": "Bulk Add User",
     "errorParsingCSVFile": "Error Parsing CSV File.",
     "noFileSelected": "No File Selected.",
     "csvTotalMessage": "You try to input",
     "csvSuccessMessage": "Success",
     "csvFailedMessage": "Failed",
-
     "vehiclePreference": "Vehicle Preference",
     "vehicleModeTheme": "Vehicle Mode Theme",
     "vehicleCargoStatusTheme": "Vehicle Cargo Status Theme",
@@ -420,7 +400,6 @@
       "8": "View log",
       "9": "View control",
       "10": "View settings",
-
       "11": "View Alarm",
       "12": "View Warning",
       "13": "Manual Transfer",
@@ -431,7 +410,6 @@
       "18": "Reset Vehicle",
       "19": "Reset All Vehicle",
       "20": "Auto Vehicle",
-
       "21": "Auto All Vehicle",
       "22": "Host Order Enable",
       "23": "Push Enable",
@@ -442,7 +420,6 @@
       "28": "Set Home Point",
       "29": "View buffer",
       "30": "View Vehicle Status",
-
       "31": "View Item Details",
       "32": "Segment Unuse",
       "33": "User management",
@@ -453,7 +430,6 @@
       "38": "Setting Segment",
       "39": "Setting Station",
       "40": "Setting Buffer",
-
       "41": "Setting ZCU",
       "42": "Setting Vehicle"
     }

@@ -35,7 +35,7 @@ export class BulkUserFormDialogComponent implements OnInit {
   }
 
   fileChangeListner($event: any): void {
-    
+
     const files = $event.srcElement.files;
 
     if (files !== null && files !== undefined && files.length > 0) {

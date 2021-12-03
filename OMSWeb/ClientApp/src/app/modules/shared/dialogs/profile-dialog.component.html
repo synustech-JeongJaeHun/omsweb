@@ -1,11 +1,6 @@
 <oms-dialog-base [title]="'names.profile' | translate">
   <ng-container class="dialog-layout">
-    <form
-      [formGroup]="form"
-      novalidate
-      class="profile-form"
-      (ngSubmit)="onSave()"
-    >
+    <form [formGroup]="form" novalidate class="profile-form" (ngSubmit)="onSave()">
       <div mat-dialog-content>
         <mat-form-field appearance="outline">
           <mat-label>{{ "names.userId" | translate }}</mat-label>
@@ -13,7 +8,7 @@
           <mat-error *ngIf="f.userId.errors">
             <mat-error *ngIf="f.userId.errors.required">{{
               "messages.required" | translate: { field: "User ID" }
-            }}</mat-error>
+              }}</mat-error>
           </mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline">
@@ -22,7 +17,7 @@
           <mat-error *ngIf="f.firstName.errors">
             <mat-error *ngIf="f.firstName.errors.required">{{
               "messages.required" | translate: { field: "First Name" }
-            }}</mat-error>
+              }}</mat-error>
           </mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline">
@@ -31,7 +26,7 @@
           <mat-error *ngIf="f.lastName.errors">
             <mat-error *ngIf="f.lastName.errors.required">{{
               "messages.required" | translate: { field: "Last Name" }
-            }}</mat-error>
+              }}</mat-error>
           </mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline">
@@ -40,7 +35,7 @@
           <mat-error *ngIf="f.email.errors">
             <mat-error *ngIf="f.email.errors.email">{{
               "messages.invalidEmail" | translate
-            }}</mat-error>
+              }}</mat-error>
           </mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline">
@@ -49,10 +44,10 @@
           <mat-error *ngIf="f.password.errors">
             <mat-error *ngIf="f.password.errors.required">{{
               "messages.required" | translate: { field: "Password" }
-            }}</mat-error>
+              }}</mat-error>
             <mat-error *ngIf="f.password.errors.minlength">{{
               "messages.minLength" | translate: { minLength: 4 }
-            }}</mat-error>
+              }}</mat-error>
           </mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline">
@@ -61,13 +56,13 @@
           <mat-error *ngIf="f.passwordConfirm.errors">
             <mat-error *ngIf="f.passwordConfirm.errors.required">{{
               "messages.required" | translate: { field: "Confirm Password" }
-            }}</mat-error>
+              }}</mat-error>
             <mat-error *ngIf="f.passwordConfirm.errors.minlength">{{
               "messages.minLength" | translate: { minLength: 4 }
-            }}</mat-error>
+              }}</mat-error>
             <mat-error *ngIf="f.passwordConfirm.errors.missMatch">{{
               "messages.passwordMissMatch" | translate
-            }}</mat-error>
+              }}</mat-error>
           </mat-error>
         </mat-form-field>
       </div>

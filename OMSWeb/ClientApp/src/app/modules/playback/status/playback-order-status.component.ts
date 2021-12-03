@@ -48,5 +48,5 @@ export class PlaybackOrderStatusComponent implements OnInit {
     this.destroy$.complete();
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 }

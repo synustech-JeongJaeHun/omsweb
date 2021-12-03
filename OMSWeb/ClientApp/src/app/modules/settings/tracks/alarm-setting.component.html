@@ -12,47 +12,22 @@
   </div>
 </div>
 
-<dx-data-grid
-  [dataSource]="dataSource"
-  [height]="520"
-  [showBorders]="true"
-  [allowColumnResizing]="true"
->
+<dx-data-grid [dataSource]="dataSource" [height]="520" [showBorders]="true" [allowColumnResizing]="true">
   <dxo-paging [pageSize]="23"></dxo-paging>
   <dxo-editing mode="cell" [useIcons]="true"></dxo-editing>
 
-  <dxi-column
-    dataType="number"
-    dataField="id"
-    [caption]="'names.code' | translate"
-    [allowEditing]="false"
-    [width]="60"
+  <dxi-column dataType="number" dataField="id" [caption]="'names.code' | translate" [allowEditing]="false" [width]="60"
     alignment="center">
   </dxi-column>
-  <dxi-column
-    dataType="string"
-    dataField="description"
-    [caption]="'names.alarmName' | translate"
-    alignment="center"
+  <dxi-column dataType="string" dataField="description" [caption]="'names.alarmName' | translate" alignment="center"
     [allowEditing]="false">
   </dxi-column>
-  <dxi-column
-    dataType="string"
-    dataField="cause"
-    [caption]="'names.resolution' | translate"
-    alignment="center"
+  <dxi-column dataType="string" dataField="cause" [caption]="'names.resolution' | translate" alignment="center"
     [allowEditing]="false">
   </dxi-column>
-  <dxi-column
-    dataType="string"
-    dataField="action"
-    [caption]="'names.action' | translate"
-    alignment="center"
+  <dxi-column dataType="string" dataField="action" [caption]="'names.action' | translate" alignment="center"
     [allowEditing]="false">
   </dxi-column>
 
-  <dxo-search-panel
-    [placeholder]="'names.search' | translate"
-    [visible]="true"
-  ></dxo-search-panel>
+  <dxo-search-panel [placeholder]="'names.search' | translate" [visible]="true"></dxo-search-panel>
 </dx-data-grid>

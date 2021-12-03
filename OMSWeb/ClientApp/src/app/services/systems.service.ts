@@ -18,7 +18,7 @@ export class SystemsService {
     return this.states();
   }
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   states(): Observable<ISystemStates> {
     return this.http.get<ISystemStates>(`${this.baseUrl}/states`).pipe(

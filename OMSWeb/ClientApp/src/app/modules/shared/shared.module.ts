@@ -87,4 +87,4 @@ const inOutModules = [
     VehicleFormComponent,
   ],
 })
-export class SharedModule {}
+export class SharedModule { }

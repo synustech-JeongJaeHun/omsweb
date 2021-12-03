@@ -98,5 +98,5 @@ export class MonitorStatusComponent implements OnInit, AfterViewInit {
     // };
   }
 
-  onReady(ready: boolean) {}
+  onReady(ready: boolean) { }
 }

@@ -176,7 +176,7 @@ export class AuthService {
       this.tokenRenewalTimeout && clearTimeout(this.tokenRenewalTimeout);
       this.tokenRenewalTimeout = setTimeout(() => {
         this.renewToken().subscribe(
-          () => {},
+          () => { },
           err => {
             this.logout().subscribe();
             throw err;

@@ -1,37 +1,12 @@
-<button
-  mat-icon-button
-  class="warn"
-  [class.has-issue]="hasWarn"
-  [class.is-critical]="isCriticalWarn"
-  (click)="toggleWarnsView()"
-  matTooltipClass="gnb-tooltip"
-  matTooltipPosition="below"
-  matTooltip='{{ "names.alerts" | translate }}'
->
-  <mat-icon
-    [matBadge]="warnValue"
-    matBadgeColor="warn"
-    [matBadgeHidden]="!hasWarn"
-    >{{ hasWarn ? "warning" : "warning_amber" }}</mat-icon
-  >
+<button mat-icon-button class="warn" [class.has-issue]="hasWarn" [class.is-critical]="isCriticalWarn"
+  (click)="toggleWarnsView()" matTooltipClass="gnb-tooltip" matTooltipPosition="below"
+  matTooltip='{{ "names.alerts" | translate }}'>
+  <mat-icon [matBadge]="warnValue" matBadgeColor="warn" [matBadgeHidden]="!hasWarn">{{ hasWarn ? "warning" :
+    "warning_amber" }}</mat-icon>
 </button>
-<button
-  #btnAlarm
-  mat-icon-button
-  class="alarm"
-  [class.has-issue]="hasAlarm"
-  [class.is-critical]="isCriticalAlarm"
-  (click)="toggleAlarmsView()"
-  matTooltipClass="gnb-tooltip"
-  matTooltipPosition="below"
-  matTooltip='{{ "names.alarms" | translate }}'
->
-  <mat-icon
-    [fontSet]="hasAlarm ? '' : 'material-icons-outlined'"
-    [matBadge]="alarmValue"
-    matBadgeColor="warn"
-    matBadgeSize="medium"
-    [matBadgeHidden]="!hasAlarm"
-    >notifications</mat-icon
-  >
+<button #btnAlarm mat-icon-button class="alarm" [class.has-issue]="hasAlarm" [class.is-critical]="isCriticalAlarm"
+  (click)="toggleAlarmsView()" matTooltipClass="gnb-tooltip" matTooltipPosition="below"
+  matTooltip='{{ "names.alarms" | translate }}'>
+  <mat-icon [fontSet]="hasAlarm ? '' : 'material-icons-outlined'" [matBadge]="alarmValue" matBadgeColor="warn"
+    matBadgeSize="medium" [matBadgeHidden]="!hasAlarm">notifications</mat-icon>
 </button>

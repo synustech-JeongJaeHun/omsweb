@@ -1,6 +1,4 @@
-<oms-dialog-base
-  [title]="message.title || ('messages.confirmTitle' | translate)"
->
+<oms-dialog-base [title]="message.title || ('messages.confirmTitle' | translate)">
   <ng-container class="dialog-layout">
     <div mat-dialog-content class="pre-line">
       {{ message.body }}

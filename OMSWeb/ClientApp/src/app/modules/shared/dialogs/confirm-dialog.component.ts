@@ -12,9 +12,9 @@ export class ConfirmDialogComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) public message: IConfirmMessage<unknown>,
     private dialogRef: MatDialogRef<ConfirmDialogComponent>
-  ) {}
+  ) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   onConfirm() {
     this.dialogRef.close(true);

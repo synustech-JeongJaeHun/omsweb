@@ -12,7 +12,7 @@ import { tap } from 'rxjs/operators';
 
 @Injectable()
 export class CustomHttpInterceptor implements HttpInterceptor {
-  constructor(private auth: AuthService) {}
+  constructor(private auth: AuthService) { }
 
   intercept(
     request: HttpRequest<any>,
@@ -34,7 +34,7 @@ export class CustomHttpInterceptor implements HttpInterceptor {
     }
     return next.handle(request).pipe(
       tap(
-        (_) => {},
+        (_) => { },
         (err) => {
           if (err.status == 401) {
             this.handleUnauthorized();
@@ -45,5 +45,5 @@ export class CustomHttpInterceptor implements HttpInterceptor {
     );
   }
 
-  private handleUnauthorized() {}
+  private handleUnauthorized() { }
 }

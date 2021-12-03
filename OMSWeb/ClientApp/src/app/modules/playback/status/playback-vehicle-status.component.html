@@ -1,92 +1,39 @@
-<dx-data-grid [dataSource]="dataSource"
-              [remoteOperations]="true"
-              [height]="tableHeight"
-              [repaintChangesOnly]="true"
-              [columnAutoWidth]="true"
-              [showBorders]="false"
-              [highlightChanges]="false"
-              [showColumnLines]="true"
-              [showRowLines]="true"
-              [headerFilter]="false"
-              [(selectedRowKeys)]="selectedRows">
+<dx-data-grid [dataSource]="dataSource" [remoteOperations]="true" [height]="tableHeight" [repaintChangesOnly]="true"
+  [columnAutoWidth]="true" [showBorders]="false" [highlightChanges]="false" [showColumnLines]="true"
+  [showRowLines]="true" [headerFilter]="false" [(selectedRowKeys)]="selectedRows">
   <dxo-scrolling mode="virtual"></dxo-scrolling>
   <dxo-paging [pageSize]="50"></dxo-paging>
-  <dxo-pager [showPageSizeSelector]="true"
-             [allowedPageSizes]="[50, 100, 200]"
-             [showInfo]="true"
-             visible="true"></dxo-pager>
+  <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[50, 100, 200]" [showInfo]="true" visible="true">
+  </dxo-pager>
 
-  <dxo-selection [mode]="'none'"
-                 showCheckBoxesMode="always"></dxo-selection>
-  <dxo-search-panel [placeholder]="'names.search' | translate"
-                    [visible]="true"></dxo-search-panel>
+  <dxo-selection [mode]="'none'" showCheckBoxesMode="always"></dxo-selection>
+  <dxo-search-panel [placeholder]="'names.search' | translate" [visible]="true"></dxo-search-panel>
   <dxo-load-panel [enabled]="false"></dxo-load-panel>
 
-  <dxi-column [allowFiltering]="false"
-              [width]="80"
-              dataType="string"
-              dataField="id"
-              sortOrder="desc"
-              [caption]="'names.id' | translate"></dxi-column>
-  <dxi-column [width]="120"
-              dataType="string"
-              dataField="physicalId"
-              [caption]="'names.physicalId' | translate"></dxi-column>
-  <dxi-column [width]="80"
-              dataType="string"
-              dataField="mode"
-              [caption]="'names.mode' | translate"></dxi-column>
-  <dxi-column [allowFiltering]="false"
-              [width]="80"
-              dataType="boolean"
-              dataField="canBePushed"
-              [caption]="'names.canBePushed' | translate"></dxi-column>
-  <dxi-column [allowFiltering]="false"
-              [width]="80"
-              dataType="boolean"
-              dataField="hostOrder"
-              [caption]="'names.hostOrder' | translate"></dxi-column>
-  <dxi-column [allowFiltering]="false"
-              [width]="80"
-              dataType="string"
-              dataField="orderOrigin"
-              [caption]="'names.orderOrigin' | translate"></dxi-column>
-  <dxi-column [width]="60"
-              dataType="string"
-              dataField="curPoint"
-              [caption]="'names.curPoint' | translate"></dxi-column>
-  <dxi-column [width]="60"
-              dataType="string"
-              dataField="commandPoint"
-              [allowSorting]="false"
-              [caption]="'names.commandPoint' | translate"></dxi-column>
-  <dxi-column [width]="70"
-              dataType="string"
-              dataField="orderId"
-              [allowSorting]="false"
-              [caption]="'names.orderId' | translate"></dxi-column>
-  <dxi-column [width]="70"
-              dataType="string"
-              dataField="locationPickup"
-              [caption]="'names.locationPickup' | translate"></dxi-column>
-  <dxi-column [width]="70"
-              dataType="string"
-              dataField="locationDropoff"
-              [caption]="'names.locationDropoff' | translate"></dxi-column>
-  <dxi-column [width]="100"
-              dataType="string"
-              dataField="movingState"
-              [allowSorting]="false"
-              [caption]="'names.movingState' | translate"></dxi-column>
-  <dxi-column [width]="100"
-              dataType="string"
-              dataField="cargoState"
-              [allowSorting]="false"
-              [caption]="'names.cargoState' | translate"></dxi-column>
-  <dxi-column [allowFiltering]="false"
-              [width]="120"
-              dataType="number"
-              dataField="distanceTotal"
-              [allowSorting]="false"
-              [caption]="'names.distanceTotal' | translate"></dxi-column>
+  <dxi-column [allowFiltering]="false" [width]="80" dataType="string" dataField="id" sortOrder="desc"
+    [caption]="'names.id' | translate"></dxi-column>
+  <dxi-column [width]="120" dataType="string" dataField="physicalId" [caption]="'names.physicalId' | translate">
+  </dxi-column>
+  <dxi-column [width]="80" dataType="string" dataField="mode" [caption]="'names.mode' | translate"></dxi-column>
+  <dxi-column [allowFiltering]="false" [width]="80" dataType="boolean" dataField="canBePushed"
+    [caption]="'names.canBePushed' | translate"></dxi-column>
+  <dxi-column [allowFiltering]="false" [width]="80" dataType="boolean" dataField="hostOrder"
+    [caption]="'names.hostOrder' | translate"></dxi-column>
+  <dxi-column [allowFiltering]="false" [width]="80" dataType="string" dataField="orderOrigin"
+    [caption]="'names.orderOrigin' | translate"></dxi-column>
+  <dxi-column [width]="60" dataType="string" dataField="curPoint" [caption]="'names.curPoint' | translate"></dxi-column>
+  <dxi-column [width]="60" dataType="string" dataField="commandPoint" [allowSorting]="false"
+    [caption]="'names.commandPoint' | translate"></dxi-column>
+  <dxi-column [width]="70" dataType="string" dataField="orderId" [allowSorting]="false"
+    [caption]="'names.orderId' | translate"></dxi-column>
+  <dxi-column [width]="70" dataType="string" dataField="locationPickup" [caption]="'names.locationPickup' | translate">
+  </dxi-column>
+  <dxi-column [width]="70" dataType="string" dataField="locationDropoff"
+    [caption]="'names.locationDropoff' | translate"></dxi-column>
+  <dxi-column [width]="100" dataType="string" dataField="movingState" [allowSorting]="false"
+    [caption]="'names.movingState' | translate"></dxi-column>
+  <dxi-column [width]="100" dataType="string" dataField="cargoState" [allowSorting]="false"
+    [caption]="'names.cargoState' | translate"></dxi-column>
+  <dxi-column [allowFiltering]="false" [width]="120" dataType="number" dataField="distanceTotal" [allowSorting]="false"
+    [caption]="'names.distanceTotal' | translate"></dxi-column>
 </dx-data-grid>

@@ -21,7 +21,7 @@ export class ShowObjectDialogComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) public buttonState: ToggleOptionsType,
     private stateSvc: MapStatesService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     const {

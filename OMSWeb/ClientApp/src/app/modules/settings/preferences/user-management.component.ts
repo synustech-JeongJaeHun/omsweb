@@ -69,7 +69,7 @@ export class UserManagementComponent implements OnInit, OnDestroy {
       this._userDlg.close();
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   onRoleSetting() {
     this._roleDlg = this.dialog.open(RoleSettingDialogComponent, {

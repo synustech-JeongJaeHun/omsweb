@@ -28,5 +28,5 @@ export interface IFileItem {
   isDirectory: boolean;
   dateModified: Date;
   size?: number;
-  items?: IFileItem[];  
+  items?: IFileItem[];
 }

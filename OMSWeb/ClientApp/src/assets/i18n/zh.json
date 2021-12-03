@@ -3,7 +3,6 @@
     "english": "英语",
     "korean": "韩国人",
     "chinese": "中国人",
-
     "monitor": "监视器",
     "playback": "播放",
     "history": "历史",
@@ -13,7 +12,6 @@
     "login": "登录",
     "profile": "个人资料",
     "logout": "登出",
-
     "vehicle": "车辆",
     "cluster": "集群",
     "point": "点",
@@ -23,18 +21,15 @@
     "buffer": "缓冲区",
     "group": "组",
     "zcu": "ZCU",
-
     "vehicleType": "车辆类型",
     "vehicleMode": "车辆模式",
     "vehicleProperties": "车辆属性",
     "orderPriority": "订单优先级",
     "directions": "方向",
-
     "orders": "订单",
     "vehicles": "车辆",
     "stations": "站",
     "buffers": "缓冲区",
-
     "normal": "正常",
     "cleaning": "清洁",
     "manual": "手册",
@@ -56,7 +51,6 @@
     "dropOff": "下车",
     "disabled": "已禁用",
     "validationError": "验证错误",
-
     "id": "身份证",
     "physicalId": "物理ID",
     "logicalId": "逻辑 ID",
@@ -122,7 +116,6 @@
     "basePoint": "基点",
     "carrierType": "运营商类型",
     "direction": "方向",
-
     "centerZoom": "中心缩放",
     "search": "搜索",
     "trackVehicle": "轨道车辆",
@@ -136,7 +129,6 @@
     "resetAllVehicle": "重置所有车辆",
     "estopAllVehicle": "紧急停止所有车辆",
     "autoAllVehicle": "汽车所有车辆",
-
     "vehicleScale": "车辆规模",
     "mapRotation": "地图旋转",
     "segmentWidth": "段宽度",
@@ -150,7 +142,6 @@
     "showGroups": "组",
     "showClusters": "集群",
     "showOverlaps": "重叠对象",
-
     "hostOrderEnable": "主机订单禁用",
     "pushEnable": "推送禁用",
     "railIn": "铁路输入",
@@ -161,17 +152,14 @@
     "auto": "自动",
     "zcuGo": "ZCU Go",
     "option": "选项",
-
     "ioList": "IO 列表",
     "vehicleStatus": "车辆状态",
     "bufferStatus": "缓冲区状态",
-
     "confirm": "确认",
     "cancel": "取消",
     "close": "关闭",
     "track": "跟踪",
     "apply": "申请",
-
     "time": "时间",
     "severity": "严重性",
     "tag": "标签",
@@ -181,10 +169,8 @@
     "code": "代码",
     "alarmCode": "报警代码",
     "desc": "说明",
-
     "alarms": "闹钟",
     "alerts": "警告",
-
     "manualTransfer": "手动传输",
     "command-move": "移动",
     "command-fromTo": "从到",
@@ -197,7 +183,6 @@
     "selectDest": "选择目的地",
     "carrier": "承运人",
     "searchBuffer": "搜索缓冲区",
-
     "userId": "用户 ID",
     "email": "电子邮件",
     "password": "密码",
@@ -207,14 +192,12 @@
     "firstName": "名字",
     "lastName": "姓氏",
     "save": "保存",
-
     "period": "期间",
     "snapshots": "快照",
     "event": "事件",
     "events": "事件",
     "speed": "速度",
     "timeToNextEvents": "下一个事件的时间",
-
     "use": "使用",
     "home": "家",
     "hardware": "硬件",
@@ -357,7 +340,6 @@
     "vehicleSetting": "车辆设置",
     "addVehicle": "添加车辆",
     "columnDisplayManagement": "表格列",
-
     "ai": "AI",
     "reports": "报告",
     "server": "服务器",
@@ -376,14 +358,12 @@
     "loadedToCompleted": "（加载~完成）",
     "createdToAssigned": "（创建〜分配）",
     "pioTrend": "PIO趋势",
-
     "bulkAddUser": "批量添加用户",
     "errorParsingCSVFile": "解析 CSV 文件时出错。",
     "noFileSelected": "未选择文件。",
     "csvTotalMessage": "您尝试输入",
     "csvSuccessMessage": "成功",
     "csvFailedMessage": "失败",
-
     "vehiclePreference": "车辆偏好",
     "vehicleModeTheme": "车辆模式主题",
     "vehicleCargoStatusTheme": "车辆货物状态主题",
@@ -420,7 +400,6 @@
       "8": "查看日志",
       "9": "视图控制",
       "10": "查看设置",
-
       "11": "查看闹钟",
       "12": "查看警告",
       "13": "手动传输",
@@ -431,7 +410,6 @@
       "18": "重置车辆",
       "19": "重置所有车辆",
       "20": "汽车",
-
       "21": "汽车所有车辆",
       "22": "主机订单启用",
       "23": "推送启用",
@@ -442,7 +420,6 @@
       "28": "设置返航点",
       "29": "查看缓冲区",
       "30": "查看车辆状态",
-
       "31": "查看商品详情",
       "32": "段未使用",
       "33": "用户管理",
@@ -453,7 +430,6 @@
       "38": "设置段",
       "39": "设置站",
       "40": "设置缓冲区",
-
       "41": "设置 ZCU",
       "42": "载具"
     }

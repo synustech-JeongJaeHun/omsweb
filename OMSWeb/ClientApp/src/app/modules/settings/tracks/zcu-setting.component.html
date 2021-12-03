@@ -10,29 +10,15 @@
   </div>
 </div>
 
-<dx-data-grid
-  #gridZcus
-  [dataSource]="dataSource"
-  [keyExpr]="'id'"
-  [repaintChangesOnly]="true"
-  [showBorders]="true"
-  [height]="450"
-  [allowColumnResizing]="false"
-  [(selectedRowKeys)]="selectedIds"
-  (onRowUpdated)="onUpdateRow($event)"
-  (onSelectionChanged)="onSelectionChanged($event)"
-  [masterDetail]="{ enabled: true, template: 'detailTemplate' }">
-  
+<dx-data-grid #gridZcus [dataSource]="dataSource" [keyExpr]="'id'" [repaintChangesOnly]="true" [showBorders]="true"
+  [height]="450" [allowColumnResizing]="false" [(selectedRowKeys)]="selectedIds" (onRowUpdated)="onUpdateRow($event)"
+  (onSelectionChanged)="onSelectionChanged($event)" [masterDetail]="{ enabled: true, template: 'detailTemplate' }">
+
   <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
   <dxo-paging [pageSize]="20"></dxo-paging>
-  <dxo-editing
-    mode="cell"
-    refreshMode="reshape"
-    [allowUpdating]="true"
-    [allowDeleting]="false"
-    [allowAdding]="false"
+  <dxo-editing mode="cell" refreshMode="reshape" [allowUpdating]="true" [allowDeleting]="false" [allowAdding]="false"
     [useIcons]="true">
-  </dxo-editing>  
+  </dxo-editing>
   <!--
   <dxo-selection mode="multiple" selectAllMode="allPages" showCheckBoxesMode="always"></dxo-selection>
   -->
@@ -41,14 +27,13 @@
   <dxi-column dataField="zcuType" [caption]="'names.type' | translate" [allowEditing]="false" alignment="center">
     <dxo-lookup [dataSource]="zcuTypes" valueExpr="type" displayExpr="text"></dxo-lookup>
   </dxi-column>
-  <dxi-column dataField="completePoints" [caption]="'names.completeNodes' | translate" [allowEditing]="false"></dxi-column>
+  <dxi-column dataField="completePoints" [caption]="'names.completeNodes' | translate" [allowEditing]="false">
+  </dxi-column>
   <dxi-column dataField="usingType" [caption]="'names.usingType' | translate" [width]="120" alignment="center">
     <dxo-lookup [dataSource]="zcuUsingTypes" valueExpr="type" displayExpr="text"></dxo-lookup>
   </dxi-column>
 
-  <dxo-search-panel
-    [placeholder]="'names.search' | translate"
-    [visible]="true">
+  <dxo-search-panel [placeholder]="'names.search' | translate" [visible]="true">
   </dxo-search-panel>
 
   <div *dxTemplate="let row of 'detailTemplate'">
@@ -58,11 +43,11 @@
       </div>
 
       <div class="detail-info">
-        <dx-data-grid
-          [dataSource]="row.data.inputZones"
-          [showBorders]="true">
-          <dxi-column dataField="priorityPoint" [caption]="'names.priority' | translate" [allowEditing]="false" [width]="100" alignment="center"></dxi-column>
-          <dxi-column dataField="zonePoints" [caption]="'names.zone' | translate" [allowEditing]="false" alignment="center"></dxi-column>
+        <dx-data-grid [dataSource]="row.data.inputZones" [showBorders]="true">
+          <dxi-column dataField="priorityPoint" [caption]="'names.priority' | translate" [allowEditing]="false"
+            [width]="100" alignment="center"></dxi-column>
+          <dxi-column dataField="zonePoints" [caption]="'names.zone' | translate" [allowEditing]="false"
+            alignment="center"></dxi-column>
         </dx-data-grid>
       </div>
     </div>

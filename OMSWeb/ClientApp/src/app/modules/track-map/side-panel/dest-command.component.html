@@ -1,39 +1,18 @@
 <mat-form-field>
   <mat-label>{{ "names." + scope | translate }}</mat-label>
-  <input
-    matInput
-    [formControl]="inputControl"
-    [placeholder]="'names.' + this.scope + 'Hint' | translate"
-    [matAutocomplete]="auto"
-  />
-  <button
-    mat-button
-    *ngIf="commandDestTarget"
-    matSuffix
-    mat-icon-button
-    aria-label="Clear"
-    (click)="onTargetClear()"
-  >
+  <input matInput [formControl]="inputControl" [placeholder]="'names.' + this.scope + 'Hint' | translate"
+    [matAutocomplete]="auto" />
+  <button mat-button *ngIf="commandDestTarget" matSuffix mat-icon-button aria-label="Clear" (click)="onTargetClear()">
     <mat-icon>close</mat-icon>
   </button>
 
-  <button
-    mat-stroked-button
-    color="primary"
-    class="dense accent"
-    *ngIf="commandDestTarget"
-    matSuffix
-    (click)="trigger()"
-  >
+  <button mat-stroked-button color="primary" class="dense accent" *ngIf="commandDestTarget" matSuffix
+    (click)="trigger()">
     {{ "names." + scope | translate }}
   </button>
 
-  <mat-autocomplete
-    #auto="matAutocomplete"
-    [autoActiveFirstOption]="false"
-    [displayWith]="displayTargetFn"
-    (optionSelected)="onTargetSelected($event.option.value)"
-  >
+  <mat-autocomplete #auto="matAutocomplete" [autoActiveFirstOption]="false" [displayWith]="displayTargetFn"
+    (optionSelected)="onTargetSelected($event.option.value)">
     <mat-option *ngFor="let item of targetOptions$ | async" [value]="item">
       <span>{{ item.id }}</span>
       <span class="option-type">{{ item.objectType }}</span>

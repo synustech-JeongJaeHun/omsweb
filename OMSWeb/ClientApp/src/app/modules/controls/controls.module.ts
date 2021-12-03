@@ -10,4 +10,4 @@ import { SharedModule } from '../shared/shared.module';
   declarations: [VehicleControlComponent, ServerControlComponent, ControlsComponent],
   imports: [CommonModule, SharedModule, ControlsRoutingModule],
 })
-export class ControlsModule {}
+export class ControlsModule { }

@@ -44,9 +44,9 @@ export class MapSidePanelComponent implements OnInit, OnChanges {
     private statesSvc: MapStatesService,
     private messageSvc: MessagesService,
     private auth: AuthService
-  ) {}
+  ) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   ngOnChanges(changes: SimpleChanges): void {
     const { data } = changes;
@@ -76,7 +76,7 @@ export class MapSidePanelComponent implements OnInit, OnChanges {
     }
   }
 
-  onChangeVehicleCalculatePath() {}
+  onChangeVehicleCalculatePath() { }
   changeSegmentDisabled() {
     // disabled 상태값 변경
     this.segmentDisabledInfo.disabled = !this.segmentDisabledInfo.disabled;

@@ -31,7 +31,7 @@ export class VehicleFormComponent implements OnInit {
   ngOnInit(): void {
     this.initForm();
     this.listenToIDChange();
-    //this.listenToLogicalNameChange();    
+    //this.listenToLogicalNameChange();
   }
 
   onSave() {
@@ -57,7 +57,7 @@ export class VehicleFormComponent implements OnInit {
   listenToIDChange() {
     this.form.controls.id.valueChanges.subscribe(id => {
       if (isNaN(id)) {
-        this.form.controls.id.setErrors({ invalidNumber: true })  // <--- Set invalidNumber to true 
+        this.form.controls.id.setErrors({ invalidNumber: true })  // <--- Set invalidNumber to true
       } else if (this.isContainDataSourceID(id, this.dataSource)) {
         this.form.controls.id.setErrors({ duplicatedNumber: true }) // <--- Set duplicatedNumber to true
       } else {

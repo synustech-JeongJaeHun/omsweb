@@ -83,9 +83,9 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
     private dialogSvc: DialogService,
     private dialog: MatDialog,
     private $t: TranslateService
-  ) {}
+  ) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   ngOnDestroy(): void {
     this._searchDlg &&

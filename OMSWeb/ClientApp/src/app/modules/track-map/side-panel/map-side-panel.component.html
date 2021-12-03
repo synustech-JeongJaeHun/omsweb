@@ -82,12 +82,7 @@
         </mat-form-field>
         <mat-form-field class="info-item readonly" floatLabel="always">
           <mat-label>{{ "names.commandPoint" | translate }}</mat-label>
-          <input
-            matInput
-            type="text"
-            readonly
-            [value]="data.commandPoint?.point"
-          />
+          <input matInput type="text" readonly [value]="data.commandPoint?.point" />
         </mat-form-field>
         <mat-form-field class="info-item readonly" floatLabel="always">
           <mat-label>{{ "names.cargoState" | translate }}</mat-label>
@@ -111,32 +106,18 @@
         </mat-form-field>
         <mat-form-field class="info-item readonly" floatLabel="always">
           <mat-label>{{ "names.cargoTransferResult" | translate }}</mat-label>
-          <input
-            matInput
-            type="text"
-            readonly
-            [value]="data.cargoTransferResult"
-          />
+          <input matInput type="text" readonly [value]="data.cargoTransferResult" />
         </mat-form-field>
         <mat-form-field class="info-item readonly" floatLabel="always">
           <mat-label>{{ "names.lastContact" | translate }}</mat-label>
-          <input
-            matInput
-            type="text"
-            readonly
-            [value]="data.lastContact | date: 'yyyy-MM-dd HH:mm:ss'"
-          />
+          <input matInput type="text" readonly [value]="data.lastContact | date: 'yyyy-MM-dd HH:mm:ss'" />
         </mat-form-field>
         <mat-form-field class="info-item readonly" floatLabel="always">
           <mat-label>{{ "names.mapDb" | translate }}</mat-label>
           <input matInput type="text" readonly [value]="data.mapDb" />
         </mat-form-field>
-        <mat-slide-toggle
-          color="primary"
-          [(ngModel)]="isCalculatedPath"
-          (toggleChange)="onChangeVehicleCalculatePath()"
-          >{{ "names.calculatePath" | translate }}</mat-slide-toggle
-        >
+        <mat-slide-toggle color="primary" [(ngModel)]="isCalculatedPath"
+          (toggleChange)="onChangeVehicleCalculatePath()">{{ "names.calculatePath" | translate }}</mat-slide-toggle>
       </div>
     </div>
   </mat-expansion-panel>
@@ -211,20 +192,11 @@
         </mat-form-field>
         <mat-form-field class="info-item readonly" floatLabel="always">
           <mat-label>{{ "names.carrierType" | translate }}</mat-label>
-          <input
-            matInput
-            type="text"
-            readonly
-            [value]="data.carrierType || ''"
-          />
+          <input matInput type="text" readonly [value]="data.carrierType || ''" />
         </mat-form-field>
         <div class="info-item form-field span-full">
           <label>{{ "names.direction" | translate }}</label>
-          <mat-radio-group
-            [disabled]="true"
-            color="primary"
-            [value]="data.direction"
-          >
+          <mat-radio-group [disabled]="true" color="primary" [value]="data.direction">
             <mat-radio-button value="L">Left</mat-radio-button>
             <mat-radio-button value="R">Right</mat-radio-button>
             <mat-radio-button value="U">Under</mat-radio-button>
@@ -262,20 +234,11 @@
         </mat-form-field>
         <mat-form-field class="info-item readonly" floatLabel="always">
           <mat-label>{{ "names.carrierType" | translate }}</mat-label>
-          <input
-            matInput
-            type="text"
-            readonly
-            [value]="data.carrierType || ''"
-          />
+          <input matInput type="text" readonly [value]="data.carrierType || ''" />
         </mat-form-field>
         <div class="info-item form-field span-full">
           <label>{{ "names.direction" | translate }}</label>
-          <mat-radio-group
-            [disabled]="true"
-            color="primary"
-            [value]="data.direction"
-          >
+          <mat-radio-group [disabled]="true" color="primary" [value]="data.direction">
             <mat-radio-button value="L">Left</mat-radio-button>
             <mat-radio-button value="R">Right</mat-radio-button>
             <mat-radio-button value="U">Under</mat-radio-button>
@@ -321,41 +284,23 @@
         </mat-form-field>
         <mat-form-field class="info-item readonly" floatLabel="always">
           <mat-label>{{ "names.travelTime" | translate }}</mat-label>
-          <input
-            matInput
-            type="text"
-            readonly
-            [value]="data.travelTime | number: '1.0-2'"
-          />
+          <input matInput type="text" readonly [value]="data.travelTime | number: '1.0-2'" />
           <span matSuffix>sec</span>
         </mat-form-field>
       </div>
 
       <div class="disable-table">
-        <mat-slide-toggle
-          [(ngModel)]="data.disableState" 
-          (change)="changeSegmentDisabled()"
-          [disabled]="!hasPermission(permissionEnums.SegmentUnuse)"
-          color="primary"
-          >{{ "names.unuse" | translate }}</mat-slide-toggle
-        >
+        <mat-slide-toggle [(ngModel)]="data.disableState" (change)="changeSegmentDisabled()"
+          [disabled]="!hasPermission(permissionEnums.SegmentUnuse)" color="primary">{{ "names.unuse" | translate }}
+        </mat-slide-toggle>
         <mat-form-field>
           <mat-label>{{ "names.reason" | translate }}</mat-label>
-          <textarea
-            matInput
-            rows="2"
-            [value]="segmentDisabledReasons"
-          ></textarea>
+          <textarea matInput rows="2" [value]="segmentDisabledReasons"></textarea>
         </mat-form-field>
 
         <mat-form-field class="info-item readonly">
           <mat-label>{{ "names.authors" | translate }}</mat-label>
-          <input
-            matInput
-            type="text"
-            readonly
-            [value]="segmentDisableAuthors"
-          />
+          <input matInput type="text" readonly [value]="segmentDisableAuthors" />
         </mat-form-field>
       </div>
     </div>
@@ -396,7 +341,8 @@
         </mat-form-field>
         <mat-form-field class="info-item readonly">
           <mat-label>{{ "names.type" | translate }}</mat-label>
-          <input matInput type="text" readonly [value]="((data.zcuType == 0) ? 'Standard' : ((data.zcuType == 1) ? 'NType' : ''))" />
+          <input matInput type="text" readonly
+            [value]="((data.zcuType == 0) ? 'Standard' : ((data.zcuType == 1) ? 'NType' : ''))" />
           <!--
           <mat-select [(value)]="data.zcuType" [value]="data.zcuType">
             <mat-option value="0">Standard</mat-option>
@@ -405,7 +351,8 @@
         </mat-form-field>
         <mat-form-field class="info-item readonly">
           <mat-label>{{ "names.usingType" | translate }}</mat-label>
-          <input matInput type="text" readonly [value]="((data.usingType == 0) ? 'Not Use' : ((data.usingType == 1) ? 'Use HW' : ((data.usingType == 2) ? 'Use SW' : '')))" />
+          <input matInput type="text" readonly
+            [value]="((data.usingType == 0) ? 'Not Use' : ((data.usingType == 1) ? 'Use HW' : ((data.usingType == 2) ? 'Use SW' : '')))" />
           <!--
           <mat-select [(value)]="data.usingType" [value]="data.usingType">
             <mat-option value="0">Not Use</mat-option>
@@ -413,15 +360,17 @@
             <mat-option value="2">Use SW</mat-option>
           </mat-select>
           -->
-        </mat-form-field>        
+        </mat-form-field>
       </div>
       <div class="inputZones-table" style="border: none;">
         <mat-form-field>
           <mat-label>{{ "names.inputZones" | translate }}</mat-label>
           <input matInput type="text" readonly [value]="data.inputZones" style="display: none;" />
           <dx-data-grid [dataSource]="data.inputZones" [showBorders]="true">
-            <dxi-column dataField="priorityPoint" [caption]="'names.priority' | translate" [allowEditing]="false" [width]="100" alignment="center"></dxi-column>
-            <dxi-column dataField="zonePoints" [caption]="'names.zone' | translate" [allowEditing]="false" alignment="center"></dxi-column>
+            <dxi-column dataField="priorityPoint" [caption]="'names.priority' | translate" [allowEditing]="false"
+              [width]="100" alignment="center"></dxi-column>
+            <dxi-column dataField="zonePoints" [caption]="'names.zone' | translate" [allowEditing]="false"
+              alignment="center"></dxi-column>
           </dx-data-grid>
         </mat-form-field>
       </div>

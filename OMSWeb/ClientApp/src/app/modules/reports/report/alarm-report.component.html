@@ -1,36 +1,17 @@
 <div id="alarm-report-page">
   <div id="filter-area">
-    <dx-date-box
-      [placeholder]="'_START_DATE' | translate"
-      type="datetime"
-      [value]="start"
-      [min]="start"
-      [max]="end"
-      [acceptCustomValue]="false"
-      [showClearButton]="true"
-      [displayFormat]="dateTimeFormat"
-      #startDate>
+    <dx-date-box [placeholder]="'_START_DATE' | translate" type="datetime" [value]="start" [min]="start" [max]="end"
+      [acceptCustomValue]="false" [showClearButton]="true" [displayFormat]="dateTimeFormat" #startDate>
     </dx-date-box>
     <div>~</div>
-    <dx-date-box
-      [placeholder]="'_END_DATE' | translate"
-      type="datetime"
-      [value]="now"
-      [min]="start"
-      [max]="end"
-      [acceptCustomValue]="false"
-      [showClearButton]="true"
-      [displayFormat]="dateTimeFormat"
-      #endDate>
+    <dx-date-box [placeholder]="'_END_DATE' | translate" type="datetime" [value]="now" [min]="start" [max]="end"
+      [acceptCustomValue]="false" [showClearButton]="true" [displayFormat]="dateTimeFormat" #endDate>
     </dx-date-box>
-    <button
-      mat-raised-button
-      color="primary"
-      (click)="search(startDate.value, endDate.value)">
+    <button mat-raised-button color="primary" (click)="search(startDate.value, endDate.value)">
       {{ "names.search" | translate }}
     </button>
   </div>
-    
+
   <div id="grid-container">
     <table class="table-summary">
       <tr>
@@ -82,17 +63,10 @@
           <table class="table-summary-period">
             <tr>
               <td class="chart">
-                <dx-chart
-                  id="chartAlarmByPeriod"
-                  palette="vintage"
-                  [dataSource]="alarmByPeriodData">
+                <dx-chart id="chartAlarmByPeriod" palette="vintage" [dataSource]="alarmByPeriodData">
                   <dxi-series valueField="alarmAmount" name="Alarm Amount" color="#4472c4"></dxi-series>
-                  <dxi-series
-                    axis="Average Time Of Alarm"
-                    type="spline"
-                    valueField="avgAlarm"
-                    name="Average Time Of Alarm"
-                    color="#ed7d31">
+                  <dxi-series axis="Average Time Of Alarm" type="spline" valueField="avgAlarm"
+                    name="Average Time Of Alarm" color="#ed7d31">
                   </dxi-series>
                   <dxo-common-series-settings argumentField="period" type="bar">
                   </dxo-common-series-settings>
@@ -107,17 +81,16 @@
                   </dxi-value-axis>
                   <dxo-legend [visible]="false"></dxo-legend>
                   <dxo-export [enabled]="false"></dxo-export>
-                  <dxo-tooltip
-                      [enabled]="true"
-                      [shared]="true"
-                      [customizeTooltip]="customizeTooltip">
-                      <dxo-format type="largeNumber" [precision]="1"></dxo-format>
+                  <dxo-tooltip [enabled]="true" [shared]="true" [customizeTooltip]="customizeTooltip">
+                    <dxo-format type="largeNumber" [precision]="1"></dxo-format>
                   </dxo-tooltip>
                 </dx-chart>
               </td>
             </tr>
             <tr>
-              <td><div></div></td>
+              <td>
+                <div></div>
+              </td>
             </tr>
             <tr>
               <td></td>
@@ -125,36 +98,19 @@
             <tr>
               <td>
                 <div id="grid-container-alarmByPeriod">
-                  <dx-data-grid
-                    [dataSource]="alarmByPeriodData"
-                    [columnAutoWidth]="true"
-                    [remoteOperations]="true"
-                    [height]="gridHeightByPeriod"
-                    [width]="gridWidthByPeriod"
-                    [showBorders]="true"
+                  <dx-data-grid [dataSource]="alarmByPeriodData" [columnAutoWidth]="true" [remoteOperations]="true"
+                    [height]="gridHeightByPeriod" [width]="gridWidthByPeriod" [showBorders]="true"
                     [hoverStateEnabled]="true">
                     <dxo-scrolling mode="standard" rowRenderingMode="standard" showScrollbar="always">
                     </dxo-scrolling>
-                    <dxo-header-filter [visible]="true"></dxo-header-filter>      
+                    <dxo-header-filter [visible]="true"></dxo-header-filter>
                     <dxo-filter-row [visible]="false"></dxo-filter-row>
-                    <dxi-column
-                      dataType="string"
-                      dataField="period"
-                      caption="기간별"
-                      [customizeText]="transformPeriod"
+                    <dxi-column dataType="string" dataField="period" caption="기간별" [customizeText]="transformPeriod"
                       alignment="center">
                     </dxi-column>
-                    <dxi-column
-                      dataType="string"
-                      dataField="alarmAmount"
-                      caption="발생량"
-                      alignment="center">
+                    <dxi-column dataType="string" dataField="alarmAmount" caption="발생량" alignment="center">
                     </dxi-column>
-                    <dxi-column
-                      dataType="string"
-                      dataField="avgAlarm"
-                      caption="평균알람발생시간"
-                      alignment="center">
+                    <dxi-column dataType="string" dataField="avgAlarm" caption="평균알람발생시간" alignment="center">
                     </dxi-column>
                   </dx-data-grid>
                 </div>
@@ -163,16 +119,9 @@
           </table>
         </td>
         <td class="secondTD">
-          <dx-chart
-            id="chartAlarmByVehicle"
-            palette="vintage"
-            [dataSource]="alarmByVehicleData">
+          <dx-chart id="chartAlarmByVehicle" palette="vintage" [dataSource]="alarmByVehicleData">
             <dxi-series valueField="alarmAmount" name="Alarm Amount" color="#4472c4"></dxi-series>
-            <dxi-series
-              axis="Average Time Of Alarm"
-              type="spline"
-              valueField="avgAlarm"
-              name="Average Time Of Alarm"
+            <dxi-series axis="Average Time Of Alarm" type="spline" valueField="avgAlarm" name="Average Time Of Alarm"
               color="#ed7d31">
             </dxi-series>
             <!--
@@ -192,45 +141,25 @@
             </dxi-value-axis>
             <dxo-legend [visible]="false"></dxo-legend>
             <dxo-export [enabled]="false"></dxo-export>
-            <dxo-tooltip
-              [enabled]="true"
-              [shared]="true"
-              [customizeTooltip]="customizeTooltip">
+            <dxo-tooltip [enabled]="true" [shared]="true" [customizeTooltip]="customizeTooltip">
               <dxo-format type="largeNumber" [precision]="1"></dxo-format>
             </dxo-tooltip>
           </dx-chart>
         </td>
         <td class="thirdTD">
           <div id="grid-container-alarmByVehicle">
-            <dx-data-grid
-              [dataSource]="alarmByVehicleData"
-              [columnAutoWidth]="true"
-              [remoteOperations]="true"
-              [height]="gridHeightByVehicle"
-              [width]="gridWidthByVehicle"
-              [showBorders]="true"
+            <dx-data-grid [dataSource]="alarmByVehicleData" [columnAutoWidth]="true" [remoteOperations]="true"
+              [height]="gridHeightByVehicle" [width]="gridWidthByVehicle" [showBorders]="true"
               [hoverStateEnabled]="true">
               <dxo-scrolling mode="standard" rowRenderingMode="standard" showScrollbar="always">
               </dxo-scrolling>
-              <dxo-header-filter [visible]="true"></dxo-header-filter>      
+              <dxo-header-filter [visible]="true"></dxo-header-filter>
               <dxo-filter-row [visible]="false"></dxo-filter-row>
-              <dxi-column
-                dataType="string"
-                dataField="vehicleName"
-                caption="비클별"
-                alignment="center">
+              <dxi-column dataType="string" dataField="vehicleName" caption="비클별" alignment="center">
               </dxi-column>
-              <dxi-column
-                dataType="string"
-                dataField="alarmAmount"
-                caption="발생량"
-                alignment="center">
+              <dxi-column dataType="string" dataField="alarmAmount" caption="발생량" alignment="center">
               </dxi-column>
-              <dxi-column
-                dataType="string"
-                dataField="avgAlarm"
-                caption="발생시간"
-                alignment="center">
+              <dxi-column dataType="string" dataField="avgAlarm" caption="발생시간" alignment="center">
               </dxi-column>
             </dx-data-grid>
           </div>
@@ -239,19 +168,12 @@
       <tr>
         <td class="secondTD">알람별</td>
         <td class="thirdTD"></td>
-      </tr>      
+      </tr>
       <tr>
         <td class="secondTD">
-          <dx-chart
-            id="chartAlarmByAlarm"
-            palette="vintage"
-            [dataSource]="alarmByAlarmData">
+          <dx-chart id="chartAlarmByAlarm" palette="vintage" [dataSource]="alarmByAlarmData">
             <dxi-series valueField="alarmAmount" name="Alarm Amount" color="#4472c4"></dxi-series>
-            <dxi-series
-              axis="Average Time Of Alarm"
-              type="spline"
-              valueField="avgAlarm"
-              name="Average Time Of Alarm"
+            <dxi-series axis="Average Time Of Alarm" type="spline" valueField="avgAlarm" name="Average Time Of Alarm"
               color="#ed7d31">
             </dxi-series>
             <!--
@@ -271,45 +193,24 @@
             </dxi-value-axis>
             <dxo-legend [visible]="false"></dxo-legend>
             <dxo-export [enabled]="false"></dxo-export>
-            <dxo-tooltip
-              [enabled]="true"
-              [shared]="true"
-              [customizeTooltip]="customizeTooltip">
+            <dxo-tooltip [enabled]="true" [shared]="true" [customizeTooltip]="customizeTooltip">
               <dxo-format type="largeNumber" [precision]="1"></dxo-format>
             </dxo-tooltip>
           </dx-chart>
         </td>
         <td class="thirdTD">
           <div id="grid-container-alarmByAlarm">
-            <dx-data-grid
-              [dataSource]="alarmByAlarmData"
-              [columnAutoWidth]="true"
-              [remoteOperations]="true"
-              [height]="gridHeightBySource"
-              [width]="gridWidthBySource"
-              [showBorders]="true"
-              [hoverStateEnabled]="true">
+            <dx-data-grid [dataSource]="alarmByAlarmData" [columnAutoWidth]="true" [remoteOperations]="true"
+              [height]="gridHeightBySource" [width]="gridWidthBySource" [showBorders]="true" [hoverStateEnabled]="true">
               <dxo-scrolling mode="standard" rowRenderingMode="standard" showScrollbar="always">
               </dxo-scrolling>
-              <dxo-header-filter [visible]="true"></dxo-header-filter>      
+              <dxo-header-filter [visible]="true"></dxo-header-filter>
               <dxo-filter-row [visible]="false"></dxo-filter-row>
-              <dxi-column
-                dataType="string"
-                dataField="alarmName"
-                caption="알람명"
-                alignment="center">
+              <dxi-column dataType="string" dataField="alarmName" caption="알람명" alignment="center">
               </dxi-column>
-              <dxi-column
-                dataType="string"
-                dataField="alarmAmount"
-                caption="발생량"
-                alignment="center">
+              <dxi-column dataType="string" dataField="alarmAmount" caption="발생량" alignment="center">
               </dxi-column>
-              <dxi-column
-                dataType="string"
-                dataField="avgAlarm"
-                caption="발생시간"
-                alignment="center">
+              <dxi-column dataType="string" dataField="avgAlarm" caption="발생시간" alignment="center">
               </dxi-column>
             </dx-data-grid>
           </div>
@@ -321,16 +222,9 @@
       </tr>
       <tr>
         <td class="secondTD">
-          <dx-chart
-            id="chartAlarmBySegment"
-            palette="vintage"
-            [dataSource]="alarmBySegmentData">
+          <dx-chart id="chartAlarmBySegment" palette="vintage" [dataSource]="alarmBySegmentData">
             <dxi-series valueField="alarmAmount" name="Alarm Amount" color="#4472c4"></dxi-series>
-            <dxi-series
-              axis="Average Time Of Alarm"
-              type="spline"
-              valueField="avgAlarm"
-              name="Average Time Of Alarm"
+            <dxi-series axis="Average Time Of Alarm" type="spline" valueField="avgAlarm" name="Average Time Of Alarm"
               color="#ed7d31">
             </dxi-series>
             <!--
@@ -350,45 +244,24 @@
             </dxi-value-axis>
             <dxo-legend [visible]="false"></dxo-legend>
             <dxo-export [enabled]="false"></dxo-export>
-            <dxo-tooltip
-              [enabled]="true"
-              [shared]="true"
-              [customizeTooltip]="customizeTooltip">
+            <dxo-tooltip [enabled]="true" [shared]="true" [customizeTooltip]="customizeTooltip">
               <dxo-format type="largeNumber" [precision]="1"></dxo-format>
             </dxo-tooltip>
           </dx-chart>
         </td>
         <td class="thirdTD">
           <div id="grid-container-alarmBySegment">
-            <dx-data-grid
-              [dataSource]="alarmBySegmentData"
-              [columnAutoWidth]="true"
-              [remoteOperations]="true"
-              [height]="gridHeightByDest"
-              [width]="gridWidthByDest"
-              [showBorders]="true"
-              [hoverStateEnabled]="true">
+            <dx-data-grid [dataSource]="alarmBySegmentData" [columnAutoWidth]="true" [remoteOperations]="true"
+              [height]="gridHeightByDest" [width]="gridWidthByDest" [showBorders]="true" [hoverStateEnabled]="true">
               <dxo-scrolling mode="standard" rowRenderingMode="standard" showScrollbar="always">
               </dxo-scrolling>
-              <dxo-header-filter [visible]="true"></dxo-header-filter>      
+              <dxo-header-filter [visible]="true"></dxo-header-filter>
               <dxo-filter-row [visible]="false"></dxo-filter-row>
-              <dxi-column
-                dataType="string"
-                dataField="segmentName"
-                caption="구간별"
-                alignment="center">
+              <dxi-column dataType="string" dataField="segmentName" caption="구간별" alignment="center">
               </dxi-column>
-              <dxi-column
-                dataType="string"
-                dataField="alarmAmount"
-                caption="발생량"
-                alignment="center">
+              <dxi-column dataType="string" dataField="alarmAmount" caption="발생량" alignment="center">
               </dxi-column>
-              <dxi-column
-                dataType="string"
-                dataField="avgAlarm"
-                caption="발생시간"
-                alignment="center">
+              <dxi-column dataType="string" dataField="avgAlarm" caption="발생시간" alignment="center">
               </dxi-column>
             </dx-data-grid>
           </div>
@@ -397,5 +270,3 @@
     </table>
   </div>
 </div>
-
-

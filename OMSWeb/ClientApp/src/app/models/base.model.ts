@@ -21,14 +21,14 @@ export interface IDialogMessage<T> {
   title?: string;
   payload?: T;
   style?:
-    | 'info'
-    | 'warn'
-    | 'danger'
-    | 'success'
-    | 'primary'
-    | 'secondary'
-    | 'light'
-    | 'dark';
+  | 'info'
+  | 'warn'
+  | 'danger'
+  | 'success'
+  | 'primary'
+  | 'secondary'
+  | 'light'
+  | 'dark';
 }
 
 export interface IConfirmMessage<T> extends IDialogMessage<T> {

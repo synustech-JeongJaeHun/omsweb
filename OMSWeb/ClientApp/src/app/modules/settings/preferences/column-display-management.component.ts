@@ -33,12 +33,12 @@ export class ColumnDisplayManagementComponent implements OnInit {
 
   onChangeControlTable(target: string, value: any) {
     this.changeControlTableState(target, value.currentTarget.checked);
-  }  
-  
+  }
+
   changeControlTableState(type: string, value: any) {
     const pref = this.preference;
     pref.controlTables[type] = value;
     pref.save();
     this.controlTableCommandEvent$.next({ type, value });
-  }  
+  }
 }

@@ -30,7 +30,7 @@ export class Segment implements ISegment {
 
   disableState?: any;
 
-  candidates? = [];
+  candidates?= [];
   isValidate?: boolean;
   validateText?: string;
   updateState?: string;
@@ -131,7 +131,7 @@ export class Segment implements ISegment {
   }
   static createSegment(
 
-  ) {}
+  ) { }
   postCreation() {
     const { candidates, length, speed } = this;
     this.set_candidates(candidates);
@@ -816,15 +816,15 @@ export class Segment implements ISegment {
   ): ICoordinate {
     let x = Math.trunc(
       Math.pow(1 - t, 3) * start.x +
-        3 * t * Math.pow(1 - t, 2) * control_point1.x +
-        3 * t * t * (1 - t) * control_point2.x +
-        t * t * t * end.x
+      3 * t * Math.pow(1 - t, 2) * control_point1.x +
+      3 * t * t * (1 - t) * control_point2.x +
+      t * t * t * end.x
     );
     let y = Math.trunc(
       Math.pow(1 - t, 3) * start.y +
-        3 * t * Math.pow(1 - t, 2) * control_point1.y +
-        3 * t * t * (1 - t) * control_point2.y +
-        t * t * t * end.y
+      3 * t * Math.pow(1 - t, 2) * control_point1.y +
+      3 * t * t * (1 - t) * control_point2.y +
+      t * t * t * end.y
     );
 
     return { x, y };

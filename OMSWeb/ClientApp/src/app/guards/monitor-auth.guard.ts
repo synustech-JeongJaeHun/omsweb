@@ -23,7 +23,7 @@ export class MonitorAuthGuard implements CanActivate {
     private settings: SettingsService,
     private dialog: MatDialog,
     private router: Router
-  ) {}
+  ) { }
 
   canActivate(
     next: ActivatedRouteSnapshot,

@@ -10,7 +10,7 @@ import { Dto } from '@oms/models/dto/track.model';
 export class TracksService {
   private baseUrl = '/api/tracks';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   loadGroups(): Observable<Dto.IGroup[]> {
     return this.http.get<Dto.IGroup[]>(`${this.baseUrl}/groups`);

@@ -17,7 +17,7 @@ export class UserFormDialogComponent implements OnInit {
     this.addMode = !this.user;
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   onSubmit(form: IProfileForm) {
     this.dialog.close(form);

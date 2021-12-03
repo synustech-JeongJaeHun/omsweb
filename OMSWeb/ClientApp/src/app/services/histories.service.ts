@@ -17,7 +17,7 @@ import {
 })
 export class HistoriesService {
   private baseUrl = '/api/histories';
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   ordersDataSource(startTime: Date, endTime: Date): DataSource {
     return new DataSource({

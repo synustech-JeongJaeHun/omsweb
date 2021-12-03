@@ -58,7 +58,7 @@ export class GnbActionsComponent implements OnInit, OnDestroy {
     private systemSvc: SystemsService,
     private userSvc: UsersService,
     private messageSvc: MessagesService
-  ) {}
+  ) { }
 
   ngOnDestroy(): void {
     this.destroy$.next();

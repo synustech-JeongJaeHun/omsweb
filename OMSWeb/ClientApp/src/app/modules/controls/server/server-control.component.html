@@ -17,33 +17,24 @@
       <td>v.{{ item.version }}</td>
       <td>{{ item.releaseTime }}</td>
       <td>{{ item.pid }}</td>
-      <td><img src="{{ (item.startTime == null || item.startTime == undefined || item.startTime == '') ? '/assets/images/module_stopped.gif' : '/assets/images/module_executed.gif' }}" width="15" height="15" /> {{ (item.startTime == null || item.startTime == undefined || item.startTime == '') ? 'Stopped' : 'Running' }}</td>
+      <td><img
+          src="{{ (item.startTime == null || item.startTime == undefined || item.startTime == '') ? '/assets/images/module_stopped.gif' : '/assets/images/module_executed.gif' }}"
+          width="15" height="15" /> {{ (item.startTime == null || item.startTime == undefined || item.startTime == '') ?
+        'Stopped' : 'Running' }}</td>
       <td>
-        <button
-          mat-raised-button
-          class="dense"
-          color="primary"
+        <button mat-raised-button class="dense" color="primary"
           [disabled]="!(item.startTime == null || item.startTime == undefined || item.startTime == '')"
-          (click)="onCommand('start', item)"
-          *ngIf="!(item.id == 2 || item.id == 3)">
+          (click)="onCommand('start', item)" *ngIf="!(item.id == 2 || item.id == 3)">
           {{ "names.start" | translate }}
         </button>
-        <button
-          mat-raised-button
-          class="dense"
-          color="primary"
+        <button mat-raised-button class="dense" color="primary"
           [disabled]="(item.startTime == null || item.startTime == undefined || item.startTime == '')"
-          (click)="onCommand('stop', item)"
-          *ngIf="!(item.id == 2 || item.id == 3)">
+          (click)="onCommand('stop', item)" *ngIf="!(item.id == 2 || item.id == 3)">
           {{ "names.stop" | translate }}
         </button>
-        <button
-          mat-raised-button
-          class="dense"
-          color="primary"
+        <button mat-raised-button class="dense" color="primary"
           [disabled]="(item.startTime == null || item.startTime == undefined || item.startTime == '')"
-          (click)="onCommand('restart', item)"
-          *ngIf="!(item.id == 2 || item.id == 3)">
+          (click)="onCommand('restart', item)" *ngIf="!(item.id == 2 || item.id == 3)">
           {{ "names.restart" | translate }}
         </button>
       </td>

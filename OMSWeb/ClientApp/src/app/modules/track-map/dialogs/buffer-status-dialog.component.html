@@ -2,13 +2,9 @@
   <ng-container class="dialog-layout">
     <div mat-dialog-content class="content-layout">
       <div class="find-container">
-        <oms-unit-list-selector
-          class="full-span-col"
-          [findScopes]="['buffers']"
-          [selectedUnit]="selectedUnit"
-          (selectedUnitChange)="onBufferChange($event)"
-          [placeholder]="'names.searchBuffer' | translate"
-        ></oms-unit-list-selector>
+        <oms-unit-list-selector class="full-span-col" [findScopes]="['buffers']" [selectedUnit]="selectedUnit"
+          (selectedUnitChange)="onBufferChange($event)" [placeholder]="'names.searchBuffer' | translate">
+        </oms-unit-list-selector>
       </div>
       <div class="info-container">
         <h3>Buffer #{{ currentBuffer.id }}</h3>
@@ -37,26 +33,13 @@
             <legend>{{ "names.carrier" | translate }}</legend>
             <div class="field-row">
               <mat-form-field class="dense" appearance="outline">
-                <input
-                  #carrierIdInput
-                  matInput
-                  [placeholder]="'names.carrierId' | translate"
-                />
+                <input #carrierIdInput matInput [placeholder]="'names.carrierId' | translate" />
               </mat-form-field>
-              <button
-                mat-stroked-button
-                color="primary"
-                class="dense accent"
-                (click)="onRemoveCarrier()"
-              >
+              <button mat-stroked-button color="primary" class="dense accent" (click)="onRemoveCarrier()">
                 Remove
               </button>
-              <button
-                mat-stroked-button
-                color="primary"
-                class="dense accent"
-                (click)="onInstallCarrier(carrierIdInput.value)"
-              >
+              <button mat-stroked-button color="primary" class="dense accent"
+                (click)="onInstallCarrier(carrierIdInput.value)">
                 Install
               </button>
             </div>
@@ -66,12 +49,8 @@
             <legend>{{ "names.note" | translate }}</legend>
             <div class="field-row">
               <mat-form-field class="dense" appearance="outline">
-                <input
-                  #noteInput
-                  matInput
-                  [placeholder]="'names.note' | translate"
-                  (keyup.enter)="onUpdateNote(noteInput.value)"
-                />
+                <input #noteInput matInput [placeholder]="'names.note' | translate"
+                  (keyup.enter)="onUpdateNote(noteInput.value)" />
               </mat-form-field>
             </div>
           </fieldset>

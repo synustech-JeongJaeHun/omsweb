@@ -38,7 +38,7 @@ import { Point } from '../../../models/point.model';
 import { MapStatesService } from '../map-states.service';
 import { MapDataService } from '../map-data.service';
 import { IPreferences, UiStates } from '../../../models/settings.model';
-import {} from '@oms/models/drawing.model';
+import { } from '@oms/models/drawing.model';
 import { EventEmitter } from '@angular/core';
 import { Group } from '../../../models/group.model';
 import { ExpectedPath } from '../../../models/expected-path.model';
@@ -337,11 +337,11 @@ export class ViewController {
 
           actual_delta.x = Math.trunc(
             (this.drag_move.mouse_current[0] - this.drag_move.mouse_start[0]) /
-              current_zoom.k
+            current_zoom.k
           );
           actual_delta.y = Math.trunc(
             (this.drag_move.mouse_current[1] - this.drag_move.mouse_start[1]) /
-              current_zoom.k
+            current_zoom.k
           );
 
           // Move screen coords
@@ -1040,7 +1040,7 @@ export class ViewController {
             let selected_vehicle = this.get_selected_objects('VEHICLE')[0];
             let is_show_vehicle_line =
               (selected_vehicle && selected_vehicle.id === d.id) ||
-              this.get_show_vehicle_lines()
+                this.get_show_vehicle_lines()
                 ? true
                 : false;
             this.render_vehicle_line(d3_this, d, is_show_vehicle_line);
@@ -1566,7 +1566,7 @@ export class ViewController {
       // Collocate Module =====================================//
       let collocate_module_showing =
         this.$track_container.find('#overlap_module_panel_svg').length > 0 &&
-        this.$track_container.find('#collocate_header').hasClass('active')
+          this.$track_container.find('#collocate_header').hasClass('active')
           ? true
           : false;
 
@@ -1581,13 +1581,13 @@ export class ViewController {
               (selected_obj.curPoint
                 ? selected_obj.curPoint.point
                 : selected_obj.pointId
-                ? selected_obj.pointId
-                : selected_obj.id) ||
+                  ? selected_obj.pointId
+                  : selected_obj.id) ||
               (updated_vehicle.last_point &&
                 updated_vehicle.last_point.point ===
-                  (selected_obj.curPoint
-                    ? selected_obj.curPoint.point
-                    : selected_obj.pointId
+                (selected_obj.curPoint
+                  ? selected_obj.curPoint.point
+                  : selected_obj.pointId
                     ? selected_obj.pointId
                     : selected_obj.id)))) ||
           updated_vehicle.curPoint == null ||
@@ -1626,12 +1626,12 @@ export class ViewController {
     overlap_type: string
   ) {
     let is_operation_for_selected_vehicle =
-        this.selected_objects.length > 0 &&
+      this.selected_objects.length > 0 &&
         this.selected_objects[0].objectType.toUpperCase() === 'VEHICLE' &&
         this.selected_objects[0].id === vehicle.id &&
         overlap_type === 'OVERLAP_MODULE'
-          ? true
-          : false,
+        ? true
+        : false,
       point_of_interest = overlap_list[0] ? overlap_list[0] : undefined,
       type_at_point = point_of_interest
         ? point_of_interest.objectType.toUpperCase()
@@ -1682,7 +1682,7 @@ export class ViewController {
                 (vehicle.curPoint &&
                   overlap_list[i].curPoint &&
                   overlap_list[i].curPoint.point ===
-                    vehicle.last_point.point))) ||
+                  vehicle.last_point.point))) ||
             (vehicle.last_point &&
               (vehicle.curPoint === undefined || vehicle.curPoint == null))
           ) {
@@ -1966,7 +1966,7 @@ export class ViewController {
           if (
             no_update_object.id === segment_to_check.id &&
             no_update_object.object_type ===
-              segment_to_check.objectType.toUpperCase()
+            segment_to_check.objectType.toUpperCase()
           ) {
             is_found = true;
           }
@@ -2502,10 +2502,10 @@ export class ViewController {
     for (let i = 0; i < module_objects.nodes().length; i++) {
       module_objects
         .nodes()
-        [i].setAttribute(
-          'transform',
-          `translate(${padding}, ${length * i + padding})`
-        );
+      [i].setAttribute(
+        'transform',
+        `translate(${padding}, ${length * i + padding})`
+      );
     }
 
     // Adjust the masking row block layer to be in the right position and raise it to be the highest object.
@@ -2527,9 +2527,9 @@ export class ViewController {
   update_overlap_module_svg(overlap_type: string, svg_height: any) {
     let type_str = overlap_type.toLowerCase();
     let module_layout_svg =
-        overlap_type === 'OVERLAP_MODULE'
-          ? this.overlap_module_panel_svg
-          : this.unassigned_module_panel_svg,
+      overlap_type === 'OVERLAP_MODULE'
+        ? this.overlap_module_panel_svg
+        : this.unassigned_module_panel_svg,
       module_svg =
         overlap_type === 'OVERLAP_MODULE'
           ? this.overlap_module_svg
@@ -2553,21 +2553,21 @@ export class ViewController {
         ? this.$track_container.find('#side_panel')[0]
         : this.$track_container.find('#unassigned_floating_module')[0];
     let parent_dimension = {
-        width:
-          overlap_type === 'OVERLAP_MODULE'
-            ? parent_dom.clientWidth
-            : parseInt(getCss('--unassigned-svg-width')), //in case of floating module (unassigned)
-        height:
-          overlap_type === 'OVERLAP_MODULE'
-            ? parent_dom.clientHeight
-            : parseInt(getCss('--unassigned-svg-height')), //in case of floating module (unassigned)
-      },
+      width:
+        overlap_type === 'OVERLAP_MODULE'
+          ? parent_dom.clientWidth
+          : parseInt(getCss('--unassigned-svg-width')), //in case of floating module (unassigned)
+      height:
+        overlap_type === 'OVERLAP_MODULE'
+          ? parent_dom.clientHeight
+          : parseInt(getCss('--unassigned-svg-height')), //in case of floating module (unassigned)
+    },
       panel_top_dom =
         overlap_type === 'OVERLAP_MODULE'
           ? this.$track_container.find('#collocate_header')[0]
           : this.$track_container.find('#unassigned_floating_module_header')[0];
     const panel_header_top =
-        panel_top_dom.offsetTop + panel_top_dom.offsetHeight,
+      panel_top_dom.offsetTop + panel_top_dom.offsetHeight,
       panel_height =
         overlap_type === 'OVERLAP_MODULE'
           ? parent_dimension.height - panel_header_top
@@ -2719,8 +2719,7 @@ export class ViewController {
     );
     scroll_bar_svg.attr(
       'transform',
-      `translate(0, ${
-        -d3_module_reference.scroll_value * d3_module_reference.ratio
+      `translate(0, ${-d3_module_reference.scroll_value * d3_module_reference.ratio
       })`
     );
   }
@@ -2744,9 +2743,9 @@ export class ViewController {
 
     // Get the coordinate for the panel: If the first object in the overlap_display_objects array is a vehicle, use vehicle curPoint coordinate else, use station/buffer coordinates
     let x =
-        this.overlap_display_objects[0].objectType.toUpperCase() === 'VEHICLE'
-          ? this.overlap_display_objects[0].curPoint.invertedCoord.x
-          : this.overlap_display_objects[0].invertedCoord.x,
+      this.overlap_display_objects[0].objectType.toUpperCase() === 'VEHICLE'
+        ? this.overlap_display_objects[0].curPoint.invertedCoord.x
+        : this.overlap_display_objects[0].invertedCoord.x,
       y =
         this.overlap_display_objects[0].objectType.toUpperCase() === 'VEHICLE'
           ? this.overlap_display_objects[0].curPoint.invertedCoord.y
@@ -3577,7 +3576,7 @@ export class ViewController {
         if (
           object.id === updated_object.id &&
           object.objectType.toUpperCase() ===
-            updated_object.objectType.toUpperCase()
+          updated_object.objectType.toUpperCase()
         )
           return true;
         else return false;
@@ -5202,8 +5201,8 @@ export class ViewController {
 
       let detail_highlight =
         group_type === 'OVERLAP' ||
-        group_type === 'OVERLAP_MODULE' ||
-        group_type === 'UNASSIGNED_MODULE'
+          group_type === 'OVERLAP_MODULE' ||
+          group_type === 'UNASSIGNED_MODULE'
           ? true
           : false;
 
@@ -5492,8 +5491,7 @@ export class ViewController {
             .select(`.${css_class}`)
             .attr(
               'transform',
-              `rotate(${-this.map_rotation + 45})scale(${
-                this.vehicle_scale.scale
+              `rotate(${-this.map_rotation + 45})scale(${this.vehicle_scale.scale
               })`
             );
         }
@@ -5805,7 +5803,7 @@ export class ViewController {
       } else if (event.type === 'wheel') {
         //Rendering from wheel event
         let mouse_x =
-            (event.layerX - current_transform.x) / current_transform.k,
+          (event.layerX - current_transform.x) / current_transform.k,
           mouse_y = (event.layerY - current_transform.y) / current_transform.k,
           x,
           y,
@@ -5974,7 +5972,7 @@ export class ViewController {
       update_list
     );
   }
-   
+
   update_vehicle_dom(
     data: any,
     dom_css: any,
@@ -6162,7 +6160,7 @@ export class ViewController {
           let selected_vehicle = this.get_selected_objects('VEHICLE')[0];
           let is_show_vehicle_line =
             (selected_vehicle && selected_vehicle.id === d.id) ||
-            this.get_show_vehicle_lines()
+              this.get_show_vehicle_lines()
               ? true
               : false;
 
@@ -6392,7 +6390,7 @@ export class ViewController {
         let selected_vehicle = this.get_selected_objects('VEHICLE')[0];
         let is_show_vehicle_line =
           (selected_vehicle && selected_vehicle.id === vehicle_data.id) ||
-          this.get_show_vehicle_lines()
+            this.get_show_vehicle_lines()
             ? true
             : false;
         if (is_show_vehicle_line) {
@@ -6475,7 +6473,7 @@ export class ViewController {
         // Apply transform
         d3_veh.attr(
           'transform',
-          'translate(' + current_point[0] + ',' + current_point[1] +  ')'
+          'translate(' + current_point[0] + ',' + current_point[1] + ')'
         );
       } else {
         //Move vehicle
@@ -6486,8 +6484,8 @@ export class ViewController {
           this.getZoom(MapTypes.MAIN).apply([
             current_point[0],
             current_point[1],
-            ]) +
-            ')'
+          ]) +
+          ')'
         );
       }
 
@@ -6507,7 +6505,7 @@ export class ViewController {
       let selected_vehicle = this.get_selected_objects('VEHICLE')[0];
       let is_show_vehicle_line =
         (selected_vehicle && selected_vehicle.id === veh_data.id) ||
-        this.get_show_vehicle_lines()
+          this.get_show_vehicle_lines()
           ? true
           : false;
       if (is_show_vehicle_line) {
@@ -6668,10 +6666,8 @@ export class ViewController {
           .duration(100)
           .attr(
             'transform',
-            `rotate(${-this.map_rotation})translate(${
-              x_offset * vehicle_scale.scale
-            },${dom_css.radius * vehicle_scale.scale})scale(${
-              vehicle_scale.scale
+            `rotate(${-this.map_rotation})translate(${x_offset * vehicle_scale.scale
+            },${dom_css.radius * vehicle_scale.scale})scale(${vehicle_scale.scale
             })`
           );
         call_svg
@@ -6708,10 +6704,8 @@ export class ViewController {
           .duration(100)
           .attr(
             'transform',
-            `rotate(${-this.map_rotation})translate(${
-              ((dom_css.radius * 4) / 3) * vehicle_scale.scale
-            },${dom_css.radius * vehicle_scale.scale})scale(${
-              vehicle_scale.scale
+            `rotate(${-this.map_rotation})translate(${((dom_css.radius * 4) / 3) * vehicle_scale.scale
+            },${dom_css.radius * vehicle_scale.scale})scale(${vehicle_scale.scale
             })`
           );
         push_svg
@@ -6733,8 +6727,7 @@ export class ViewController {
       .duration(100)
       .attr(
         'transform',
-        `rotate(${-this.map_rotation})translate(${
-          x_offset * vehicle_scale.scale
+        `rotate(${-this.map_rotation})translate(${x_offset * vehicle_scale.scale
         },${dom_css.radius * vehicle_scale.scale})scale(${vehicle_scale.scale})`
       );
   }
@@ -6998,8 +6991,7 @@ export class ViewController {
             .attr('stroke-width', main_css.general.highlight_weight_thick)
             .attr(
               'transform',
-              `rotate(${-this.map_rotation + 45})scale(${
-                this.vehicle_scale.scale
+              `rotate(${-this.map_rotation + 45})scale(${this.vehicle_scale.scale
               })`
             );
         }
@@ -7024,8 +7016,7 @@ export class ViewController {
           .attr('stroke-width', dom_css.clean_line_weight + 2)
           .attr(
             'transform',
-            `rotate(${-this.map_rotation + 45})scale(${
-              this.vehicle_scale.scale
+            `rotate(${-this.map_rotation + 45})scale(${this.vehicle_scale.scale
             })`
           )
           .lower();
@@ -7164,10 +7155,8 @@ export class ViewController {
           .attr('class', 'stale')
           .attr(
             'transform',
-            `rotate(${-this.map_rotation})translate(${
-              dom_css.radius * 2 * this.vehicle_scale.scale
-            },-${dom_css.radius * this.vehicle_scale.scale})scale(${
-              this.vehicle_scale.scale
+            `rotate(${-this.map_rotation})translate(${dom_css.radius * 2 * this.vehicle_scale.scale
+            },-${dom_css.radius * this.vehicle_scale.scale})scale(${this.vehicle_scale.scale
             })`
           );
         stale_svg
@@ -7669,8 +7658,7 @@ export class ViewController {
   transform_center_axis(transform: IZoom) {
     this.canvas_group.attr(
       'transform',
-      `translate(${transform.x},${
-        transform.y + this.geometry.invertFactorY * transform.k
+      `translate(${transform.x},${transform.y + this.geometry.invertFactorY * transform.k
       })scale(${transform.k})`
     );
     this.center_svg_x.attr(
@@ -7680,8 +7668,7 @@ export class ViewController {
     this.center_svg_y.attr('transform', `translate(${transform.x}, 0)`);
     this.center_svg_text.attr(
       'transform',
-      `translate(${transform.x},${
-        transform.y + this.geometry.invertFactorY * transform.k
+      `translate(${transform.x},${transform.y + this.geometry.invertFactorY * transform.k
       })`
     );
   }
@@ -8111,7 +8098,7 @@ export class ViewController {
     } else {
       length.x = Math.sqrt(
         Math.pow(this.geometry.screenSize.width, 2) +
-          Math.pow(this.geometry.screenSize.height, 2)
+        Math.pow(this.geometry.screenSize.height, 2)
       );
       length.y = length.x;
       let lower_width = (this.geometry.screenSize.width - length.x) / 2;
@@ -8187,8 +8174,7 @@ export class ViewController {
     // Reposition the scale group
     this.scale_svg_group.attr(
       'transform',
-      `translate(${this.geometry.screenSize.width - this.scale_offset_x}, ${
-        this.geometry.screenSize.height - this.scale_offset_y
+      `translate(${this.geometry.screenSize.width - this.scale_offset_x}, ${this.geometry.screenSize.height - this.scale_offset_y
       })`
     );
 
@@ -8452,10 +8438,8 @@ export class ViewController {
       .selectAll('.stale')
       .attr(
         'transform',
-        `rotate(${-this.map_rotation})translate(${
-          vehicle_css.radius * 2 * this.vehicle_scale.scale
-        },-${vehicle_css.radius * this.vehicle_scale.scale})scale(${
-          this.vehicle_scale.scale
+        `rotate(${-this.map_rotation})translate(${vehicle_css.radius * 2 * this.vehicle_scale.scale
+        },-${vehicle_css.radius * this.vehicle_scale.scale})scale(${this.vehicle_scale.scale
         })`
       );
     this.vehicle_svg
@@ -8474,10 +8458,8 @@ export class ViewController {
       .selectAll('.push')
       .attr(
         'transform',
-        `rotate(${-this.map_rotation})translate(${
-          ((vehicle_css.radius * 4) / 3) * this.vehicle_scale.scale
-        },${vehicle_css.radius * this.vehicle_scale.scale})scale(${
-          this.vehicle_scale.scale
+        `rotate(${-this.map_rotation})translate(${((vehicle_css.radius * 4) / 3) * this.vehicle_scale.scale
+        },${vehicle_css.radius * this.vehicle_scale.scale})scale(${this.vehicle_scale.scale
         })`
       );
     this.vehicle_svg.each((d) => {
@@ -8490,10 +8472,8 @@ export class ViewController {
         .select('.call')
         .attr(
           'transform',
-          `rotate(${-this.map_rotation})translate(${
-            offset_x * this.vehicle_scale.scale
-          },${vehicle_css.radius * this.vehicle_scale.scale})scale(${
-            this.vehicle_scale.scale
+          `rotate(${-this.map_rotation})translate(${offset_x * this.vehicle_scale.scale
+          },${vehicle_css.radius * this.vehicle_scale.scale})scale(${this.vehicle_scale.scale
           })`
         );
     });
@@ -8522,7 +8502,7 @@ export class ViewController {
         .attr(
           'y',
           (vehicle_css.radius * 2 - vehicle_css.radius / 2) *
-            this.vehicle_scale.scale
+          this.vehicle_scale.scale
         )
         .attr('display', 'block')
         .attr('transform', `rotate(${-this.map_rotation})`);
@@ -8542,7 +8522,7 @@ export class ViewController {
           .attr('y', () => {
             return (
               (vehicle_css.radius * 2 - vehicle_css.radius / 2) *
-                this.vehicle_scale.scale -
+              this.vehicle_scale.scale -
               10
             );
           })
@@ -9300,8 +9280,7 @@ export class ViewController {
         this.directions_svg.selectAll('.dir_triangle').each((d) => {
           d3.select(`#dir_triangle_${d.id}.dir_triangle`).attr(
             'transform',
-            `rotate(${Math.trunc(CommonUtil.degrees(d.dirAngle))},0,0)scale(${
-              this.direction_arrow_scale.scale
+            `rotate(${Math.trunc(CommonUtil.degrees(d.dirAngle))},0,0)scale(${this.direction_arrow_scale.scale
             })`
           );
         });
@@ -9409,8 +9388,7 @@ export class ViewController {
                 .attr('d', main_css.station[`icon_level${zoom_level}`])
                 .attr(
                   'transform',
-                  `translate(${d.directionOffset.x * offset_multiplier}, ${
-                    d.directionOffset.y * offset_multiplier
+                  `translate(${d.directionOffset.x * offset_multiplier}, ${d.directionOffset.y * offset_multiplier
                   })`
                 );
 
@@ -9420,8 +9398,7 @@ export class ViewController {
                 .attr('d', main_css.station[`icon_level${zoom_level}`])
                 .attr(
                   'transform',
-                  `translate(${d.directionOffset.x * offset_multiplier}, ${
-                    d.directionOffset.y * offset_multiplier
+                  `translate(${d.directionOffset.x * offset_multiplier}, ${d.directionOffset.y * offset_multiplier
                   })`
                 );
               this.attach_event_handler(
@@ -9471,8 +9448,7 @@ export class ViewController {
             .selectAll('.station_path, .station_mask, text, .select, .hover')
             .attr(
               'transform',
-              `translate(${d.directionOffset.x * offset_multiplier}, ${
-                d.directionOffset.y * offset_multiplier
+              `translate(${d.directionOffset.x * offset_multiplier}, ${d.directionOffset.y * offset_multiplier
               })rotate(${-this.map_rotation})`
             );
         });
@@ -9603,7 +9579,7 @@ export class ViewController {
               '.station_path, .station_mask, .group_svg, .hover, .select'
             )
             .each(function (d: any) {
-               d3.select(this).attr(
+              d3.select(this).attr(
                 'transform',
                 `translate(${d.directionOffset.x * group_offset_multiplier}, ${d.directionOffset.y * group_offset_multiplier
                 })rotate(${-rotation})scale(${locationScale})`
@@ -9710,8 +9686,7 @@ export class ViewController {
                 .attr('d', main_css.buffer[`icon_level${zoom_level}`])
                 .attr(
                   'transform',
-                  `translate(${d.directionOffset.x * offset_multiplier}, ${
-                    d.directionOffset.y * offset_multiplier
+                  `translate(${d.directionOffset.x * offset_multiplier}, ${d.directionOffset.y * offset_multiplier
                   })`
                 );
 
@@ -9721,8 +9696,7 @@ export class ViewController {
                 .attr('d', main_css.buffer[`icon_level${zoom_level}`])
                 .attr(
                   'transform',
-                  `translate(${d.directionOffset.x * offset_multiplier}, ${
-                    d.directionOffset.y * offset_multiplier
+                  `translate(${d.directionOffset.x * offset_multiplier}, ${d.directionOffset.y * offset_multiplier
                   })`
                 );
 
@@ -9774,8 +9748,7 @@ export class ViewController {
             .selectAll('.buffer_path, .buffer_mask, text, .select, .hover')
             .attr(
               'transform',
-              `translate(${d.directionOffset.x * offset_multiplier}, ${
-                d.directionOffset.y * offset_multiplier
+              `translate(${d.directionOffset.x * offset_multiplier}, ${d.directionOffset.y * offset_multiplier
               })rotate(${-this.map_rotation})`
             );
         });
@@ -9895,8 +9868,7 @@ export class ViewController {
             // d3.select(this).attr(
             d3.select(this).attr(
               'transform',
-              `translate(${d.directionOffset.x * group_offset_multiplier}, ${
-                d.directionOffset.y * group_offset_multiplier
+              `translate(${d.directionOffset.x * group_offset_multiplier}, ${d.directionOffset.y * group_offset_multiplier
               })rotate(${-rotation})scale(${locationScale})`
             );
           });
@@ -9992,7 +9964,7 @@ export class ViewController {
                 });
             }
 
-            this.attach_event_handler(object_type, d3_this.select('.zcu_mask'),d, dom_css, group_type);
+            this.attach_event_handler(object_type, d3_this.select('.zcu_mask'), d, dom_css, group_type);
           });
         }
 
@@ -10403,8 +10375,8 @@ export class ViewController {
     let event_mask,
       overlap_adjustment =
         group_type === 'OVERLAP' ||
-        group_type === 'OVERLAP_MODULE' ||
-        group_type === 'UNASSIGNED_MODULE'
+          group_type === 'OVERLAP_MODULE' ||
+          group_type === 'UNASSIGNED_MODULE'
           ? true
           : false,
       offset_multiplier = (1 / 3) * zoom_level;
@@ -10561,10 +10533,8 @@ export class ViewController {
                 .select('.group_svg')
                 .attr(
                   'transform',
-                  `translate(${
-                    layout_object.directionOffset.x * offset_multiplier
-                  }, ${
-                    layout_object.directionOffset.y * offset_multiplier
+                  `translate(${layout_object.directionOffset.x * offset_multiplier
+                  }, ${layout_object.directionOffset.y * offset_multiplier
                   })rotate(${-this.map_rotation})`
                 );
             }
@@ -10610,10 +10580,8 @@ export class ViewController {
               .attr('d', main_css.station[`icon_level${zoom_level}`])
               .attr(
                 'transform',
-                `translate(${
-                  layout_object.directionOffset.x * offset_multiplier
-                }, ${
-                  layout_object.directionOffset.y * offset_multiplier
+                `translate(${layout_object.directionOffset.x * offset_multiplier
+                }, ${layout_object.directionOffset.y * offset_multiplier
                 })rotate(${-this.map_rotation})`
               );
 
@@ -10624,10 +10592,8 @@ export class ViewController {
               .attr('d', main_css.station[`icon_level${zoom_level}`])
               .attr(
                 'transform',
-                `translate(${
-                  layout_object.directionOffset.x * offset_multiplier
-                }, ${
-                  layout_object.directionOffset.y * offset_multiplier
+                `translate(${layout_object.directionOffset.x * offset_multiplier
+                }, ${layout_object.directionOffset.y * offset_multiplier
                 })rotate(${-this.map_rotation})`
               );
           }
@@ -10670,10 +10636,8 @@ export class ViewController {
         if (!overlap_adjustment) {
           label_svg.attr(
             'transform',
-            `translate(${
-              layout_object.directionOffset.x * offset_multiplier
-            }, ${
-              layout_object.directionOffset.y * offset_multiplier
+            `translate(${layout_object.directionOffset.x * offset_multiplier
+            }, ${layout_object.directionOffset.y * offset_multiplier
             })rotate(${-this.map_rotation})`
           );
         }
@@ -10705,10 +10669,8 @@ export class ViewController {
                 .select('.group_svg')
                 .attr(
                   'transform',
-                  `translate(${
-                    layout_object.directionOffset.x * offset_multiplier
-                  }, ${
-                    layout_object.directionOffset.y * offset_multiplier
+                  `translate(${layout_object.directionOffset.x * offset_multiplier
+                  }, ${layout_object.directionOffset.y * offset_multiplier
                   })rotate(${-this.map_rotation})`
                 );
             }
@@ -10753,10 +10715,8 @@ export class ViewController {
               .attr('d', main_css.buffer[`icon_level${zoom_level}`])
               .attr(
                 'transform',
-                `translate(${
-                  layout_object.directionOffset.x * offset_multiplier
-                }, ${
-                  layout_object.directionOffset.y * offset_multiplier
+                `translate(${layout_object.directionOffset.x * offset_multiplier
+                }, ${layout_object.directionOffset.y * offset_multiplier
                 })rotate(${-this.map_rotation})`
               );
             dom_object_group
@@ -10766,10 +10726,8 @@ export class ViewController {
               .attr('d', main_css.buffer[`icon_level${zoom_level}`])
               .attr(
                 'transform',
-                `translate(${
-                  layout_object.directionOffset.x * offset_multiplier
-                }, ${
-                  layout_object.directionOffset.y * offset_multiplier
+                `translate(${layout_object.directionOffset.x * offset_multiplier
+                }, ${layout_object.directionOffset.y * offset_multiplier
                 })rotate(${-this.map_rotation})`
               );
           }
@@ -10813,10 +10771,8 @@ export class ViewController {
         if (!overlap_adjustment) {
           label_svg.attr(
             'transform',
-            `translate(${
-              layout_object.directionOffset.x * offset_multiplier
-            }, ${
-              layout_object.directionOffset.y * offset_multiplier
+            `translate(${layout_object.directionOffset.x * offset_multiplier
+            }, ${layout_object.directionOffset.y * offset_multiplier
             })rotate(${-this.map_rotation})`
           );
         }
@@ -11040,9 +10996,8 @@ export class ViewController {
               .attr('stroke-width', '3px')
               .attr('transform', () => {
                 if (!overlap_adjustment)
-                  return `rotate(${-this.map_rotation})scale(${
-                    this.vehicle_scale.scale
-                  })`;
+                  return `rotate(${-this.map_rotation})scale(${this.vehicle_scale.scale
+                    })`;
                 else return '';
               })
               .style('opacity', main_css.group.opacity)
@@ -11128,9 +11083,8 @@ export class ViewController {
           .attr('stroke-width', dom_css.clean_line_weight + 2)
           .attr('transform', () => {
             if (!overlap_adjustment)
-              return `rotate(${-this.map_rotation + 45})scale(${
-                this.vehicle_scale.scale
-              })`;
+              return `rotate(${-this.map_rotation + 45})scale(${this.vehicle_scale.scale
+                })`;
             else return 'rotate(45)';
           });
       }
@@ -11141,11 +11095,9 @@ export class ViewController {
           .attr('class', 'stale')
           .attr('transform', () => {
             if (!overlap_adjustment)
-              return `rotate(${-this.map_rotation})translate(${
-                dom_css.radius * 2 * this.vehicle_scale.scale
-              },-${dom_css.radius * this.vehicle_scale.scale})scale(${
-                this.vehicle_scale.scale
-              })`;
+              return `rotate(${-this.map_rotation})translate(${dom_css.radius * 2 * this.vehicle_scale.scale
+                },-${dom_css.radius * this.vehicle_scale.scale})scale(${this.vehicle_scale.scale
+                })`;
             else return `translate(${dom_css.radius * 2},-${dom_css.radius})`;
           });
         let stale_element = dom_object_group.select('g.stale');
@@ -11184,11 +11136,9 @@ export class ViewController {
           .attr('class', 'push')
           .attr('transform', () => {
             if (!overlap_adjustment)
-              return `rotate(${-this.map_rotation})translate(${
-                ((dom_css.radius * 4) / 3) * this.vehicle_scale.scale
-              },${dom_css.radius * this.vehicle_scale.scale})scale(${
-                this.vehicle_scale.scale
-              })`;
+              return `rotate(${-this.map_rotation})translate(${((dom_css.radius * 4) / 3) * this.vehicle_scale.scale
+                },${dom_css.radius * this.vehicle_scale.scale})scale(${this.vehicle_scale.scale
+                })`;
             else
               return `translate(${(dom_css.radius * 4) / 3},${dom_css.radius})`;
           });
@@ -11216,11 +11166,9 @@ export class ViewController {
           .attr('class', 'call')
           .attr('transform', () => {
             if (!overlap_adjustment)
-              return `rotate(${-this.map_rotation})translate(${
-                x_offset * this.vehicle_scale.scale
-              },${dom_css.radius * this.vehicle_scale.scale})scale(${
-                this.vehicle_scale.scale
-              })`;
+              return `rotate(${-this.map_rotation})translate(${x_offset * this.vehicle_scale.scale
+                },${dom_css.radius * this.vehicle_scale.scale})scale(${this.vehicle_scale.scale
+                })`;
             else return `translate(${x_offset},${dom_css.radius})`;
           });
         call_svg
@@ -11314,7 +11262,7 @@ export class ViewController {
           .attr('x', () => {
             return (
               -((dom_css.text_offset * 3) / 4) *
-                (overlap_adjustment ? this.vehicle_scale.scale : 1) -
+              (overlap_adjustment ? this.vehicle_scale.scale : 1) -
               layout_object.orderId.toString().length * 6
             );
             // return -(layout_object.orderId.toString().length * 6 + parseInt(dom_css.text_offset) - 5)
@@ -11322,7 +11270,7 @@ export class ViewController {
           .attr('y', () => {
             return (
               (dom_css.radius * 2 - dom_css.radius / 2) *
-                (overlap_adjustment ? this.vehicle_scale.scale : 1) -
+              (overlap_adjustment ? this.vehicle_scale.scale : 1) -
               10
             );
           })
@@ -11464,9 +11412,8 @@ export class ViewController {
           .attr('fill', dom_css.color_blocked)
           .attr('transform', () => {
             if (!overlap_adjustment)
-              return `rotate(${-this.map_rotation})scale(${
-                this.vehicle_scale.scale
-              })`;
+              return `rotate(${-this.map_rotation})scale(${this.vehicle_scale.scale
+                })`;
             else return '';
           });
       } else {
@@ -11487,9 +11434,8 @@ export class ViewController {
           .attr('stroke-width', `${dom_css.line_weight / 3}px`)
           .attr('transform', () => {
             if (!overlap_adjustment)
-              return `rotate(${-this.map_rotation})scale(${
-                this.vehicle_scale.scale
-              })`;
+              return `rotate(${-this.map_rotation})scale(${this.vehicle_scale.scale
+                })`;
             else return '';
           });
       } else {
@@ -11523,7 +11469,7 @@ export class ViewController {
       let selected_vehicle = this.get_selected_objects('VEHICLE')[0];
       let is_show_vehicle_line =
         (selected_vehicle && selected_vehicle.id === layout_object.id) ||
-        this.get_show_vehicle_lines()
+          this.get_show_vehicle_lines()
           ? true
           : false;
       if (!overlap_adjustment && is_show_vehicle_line) {
@@ -11724,9 +11670,9 @@ export class ViewController {
   layout_object_click(
     click_event: any,
     object_data: { type: string; id: any; group_type: string }
-  ) {}
+  ) { }
   /** @deprecated  use onPrimaryMouseClick() */
-  left_click(object_type: string, object_id: any, group_type: string) {}
+  left_click(object_type: string, object_id: any, group_type: string) { }
   /** @deprecated use onSecondaryMouseClick() */
   right_click(
     object_type: string,
@@ -13332,10 +13278,8 @@ export class ViewController {
       .css('width', this.geometry.minimapSize.rotatedWidth - diff_x)
       .css(
         'padding',
-        `${main_css.general.minimap_padding + diff_y}px ${
-          main_css.general.minimap_padding
-        }px ${main_css.general.minimap_padding}px ${
-          main_css.general.minimap_padding + diff_x
+        `${main_css.general.minimap_padding + diff_y}px ${main_css.general.minimap_padding
+        }px ${main_css.general.minimap_padding}px ${main_css.general.minimap_padding + diff_x
         }px`
       );
   }
@@ -13442,14 +13386,14 @@ export class ViewController {
           let other_side = view.w > view.h ? 'height' : 'width';
           frame[side] = Math.abs(
             this.geometry.minimapSize[side] *
-              (this.geometry.screenSize[side] /
-                k /
-                this.geometry.trackSize[side])
+            (this.geometry.screenSize[side] /
+              k /
+              this.geometry.trackSize[side])
           );
           frame[other_side] = Math.abs(
             frame[side] *
-              (this.geometry.screenSize[other_side] /
-                this.geometry.screenSize[side])
+            (this.geometry.screenSize[other_side] /
+              this.geometry.screenSize[side])
           );
           // Move position indicator box
           this.transform_rect(mini_x, mini_y, frame.width, frame.height);
@@ -13763,8 +13707,8 @@ export class ViewController {
     }
     path
       .attr('d', segment_path_data.path)
-    // .style('stroke-width', scaledSegmentWidth);           Scaled Sgement Width
-    // .attr('stroke-width', `${scaledSegmentWidth}px`);     Scaled Segment Width px
+      // .style('stroke-width', scaledSegmentWidth);           Scaled Sgement Width
+      // .attr('stroke-width', `${scaledSegmentWidth}px`);     Scaled Segment Width px
       .attr('stroke-width', `${this.segmentWidth}px`);    // Segment Width px
 
     let mask = this.segments_svg.select('.segment_mask');
@@ -14081,8 +14025,7 @@ export class ViewController {
       .attr('y', 0)
       .attr(
         'transform',
-        `translate(${this.geometry.screenSize.width - offset}, ${
-          this.geometry.screenSize.height - 10
+        `translate(${this.geometry.screenSize.width - offset}, ${this.geometry.screenSize.height - 10
         })`
       );
 

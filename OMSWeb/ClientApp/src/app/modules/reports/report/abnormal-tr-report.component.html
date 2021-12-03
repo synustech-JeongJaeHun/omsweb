@@ -1,36 +1,17 @@
 <div id="abnormal-tr-report-page">
   <div id="filter-area">
-    <dx-date-box
-      [placeholder]="'_START_DATE' | translate"
-      type="datetime"
-      [value]="start"
-      [min]="start"
-      [max]="end"
-      [acceptCustomValue]="false"
-      [showClearButton]="true"
-      [displayFormat]="dateTimeFormat"
-      #startDate>
+    <dx-date-box [placeholder]="'_START_DATE' | translate" type="datetime" [value]="start" [min]="start" [max]="end"
+      [acceptCustomValue]="false" [showClearButton]="true" [displayFormat]="dateTimeFormat" #startDate>
     </dx-date-box>
     <div>~</div>
-    <dx-date-box
-      [placeholder]="'_END_DATE' | translate"
-      type="datetime"
-      [value]="now"
-      [min]="start"
-      [max]="end"
-      [acceptCustomValue]="false"
-      [showClearButton]="true"
-      [displayFormat]="dateTimeFormat"
-      #endDate>
+    <dx-date-box [placeholder]="'_END_DATE' | translate" type="datetime" [value]="now" [min]="start" [max]="end"
+      [acceptCustomValue]="false" [showClearButton]="true" [displayFormat]="dateTimeFormat" #endDate>
     </dx-date-box>
-    <button
-      mat-raised-button
-      color="primary"
-      (click)="search(startDate.value, endDate.value)">
+    <button mat-raised-button color="primary" (click)="search(startDate.value, endDate.value)">
       {{ "names.search" | translate }}
     </button>
   </div>
-    
+
   <div id="grid-container">
     <table class="table-summary">
       <tr>
@@ -71,10 +52,7 @@
           <table class="table-summary-period">
             <tr>
               <td class="chart">
-                <dx-chart
-                  id="chartAbnormalTRbyPeriod"
-                  palette="vintage"
-                  [dataSource]="abnormalTRbyPeriodData">
+                <dx-chart id="chartAbnormalTRbyPeriod" palette="vintage" [dataSource]="abnormalTRbyPeriodData">
                   <dxi-series valueField="duplicate" name="DUPLICATE" color="#264478"></dxi-series>
                   <dxi-series valueField="mismatch" name="MISMATCH" color="#70AD47"></dxi-series>
                   <dxi-series valueField="readfail" name="READFAIL" color="#5B9BD5"></dxi-series>
@@ -90,7 +68,7 @@
                   <!--
                   <dxi-value-axis name="Average Of Transfer" position="right">
                     <dxo-grid [visible]="true"></dxo-grid>-->
-                    <!--
+                  <!--
                     <dxo-title text="Average of Transfer"></dxo-title>
                     -->
                   <!--
@@ -98,17 +76,16 @@
                   -->
                   <dxo-legend [visible]="true" verticalAlignment="top" horizontalAlignment="right"></dxo-legend>
                   <dxo-export [enabled]="false"></dxo-export>
-                  <dxo-tooltip
-                    [enabled]="true"
-                    [shared]="true"
-                    [customizeTooltip]="customizeTooltip">
+                  <dxo-tooltip [enabled]="true" [shared]="true" [customizeTooltip]="customizeTooltip">
                     <dxo-format type="largeNumber" [precision]="1"></dxo-format>
                   </dxo-tooltip>
                 </dx-chart>
               </td>
             </tr>
             <tr>
-              <td><div></div></td>
+              <td>
+                <div></div>
+              </td>
             </tr>
             <tr>
               <td></td>
@@ -116,30 +93,17 @@
             <tr>
               <td>
                 <div id="grid-container-abnormalTRbyPeriod">
-                  <dx-data-grid
-                    [dataSource]="abnormalTRbyPeriodData"
-                    [columnAutoWidth]="true"
-                    [remoteOperations]="true"
-                    [height]="gridHeightByPeriod"
-                    [width]="gridWidthByPeriod"
-                    [showBorders]="true"
+                  <dx-data-grid [dataSource]="abnormalTRbyPeriodData" [columnAutoWidth]="true" [remoteOperations]="true"
+                    [height]="gridHeightByPeriod" [width]="gridWidthByPeriod" [showBorders]="true"
                     [hoverStateEnabled]="true">
                     <dxo-scrolling mode="standard" rowRenderingMode="standard" showScrollbar="always">
                     </dxo-scrolling>
-                    <dxo-header-filter [visible]="true"></dxo-header-filter>      
+                    <dxo-header-filter [visible]="true"></dxo-header-filter>
                     <dxo-filter-row [visible]="false"></dxo-filter-row>
-                    <dxi-column
-                      dataType="string"
-                      dataField="period"
-                      caption="기간별"
-                      [customizeText]="transformPeriod"
+                    <dxi-column dataType="string" dataField="period" caption="기간별" [customizeText]="transformPeriod"
                       alignment="center">
                     </dxi-column>
-                    <dxi-column
-                      dataType="string"
-                      dataField="total"
-                      caption="실패량"
-                      alignment="center">
+                    <dxi-column dataType="string" dataField="total" caption="실패량" alignment="center">
                     </dxi-column>
                   </dx-data-grid>
                 </div>
@@ -148,10 +112,7 @@
           </table>
         </td>
         <td class="secondTD">
-          <dx-chart
-            id="chartAbnormalTRbyVehicle"
-            palette="vintage"
-            [dataSource]="abnormalTRbyVehicleData">
+          <dx-chart id="chartAbnormalTRbyVehicle" palette="vintage" [dataSource]="abnormalTRbyVehicleData">
             <dxi-series valueField="duplicate" name="DUPLICATE" color="#264478"></dxi-series>
             <dxi-series valueField="mismatch" name="MISMATCH" color="#70AD47"></dxi-series>
             <dxi-series valueField="readfail" name="READFAIL" color="#5B9BD5"></dxi-series>
@@ -171,47 +132,31 @@
             <!--
             <dxi-value-axis name="Average Of Transfer" position="right">
               <dxo-grid [visible]="true"></dxo-grid>-->
-                <!--
+            <!--
                 <dxo-title text="Average of Transfer"></dxo-title>
                 -->
-              <!--
+            <!--
             </dxi-value-axis>
             -->
             <dxo-legend [visible]="true" verticalAlignment="top" horizontalAlignment="right"></dxo-legend>
             <dxo-export [enabled]="false"></dxo-export>
-            <dxo-tooltip
-              [enabled]="true"
-              [shared]="true"
-              [customizeTooltip]="customizeTooltip">
+            <dxo-tooltip [enabled]="true" [shared]="true" [customizeTooltip]="customizeTooltip">
               <dxo-format type="largeNumber" [precision]="1"></dxo-format>
             </dxo-tooltip>
           </dx-chart>
         </td>
         <td class="thirdTD">
           <div id="grid-container-abnormalTRbyVehicle">
-            <dx-data-grid
-              [dataSource]="abnormalTRbyVehicleData"
-              [columnAutoWidth]="true"
-              [remoteOperations]="true"
-              [height]="gridHeightByVehicle"
-              [width]="gridWidthByVehicle"
-              [showBorders]="true"
+            <dx-data-grid [dataSource]="abnormalTRbyVehicleData" [columnAutoWidth]="true" [remoteOperations]="true"
+              [height]="gridHeightByVehicle" [width]="gridWidthByVehicle" [showBorders]="true"
               [hoverStateEnabled]="true">
               <dxo-scrolling mode="standard" rowRenderingMode="standard" showScrollbar="always">
               </dxo-scrolling>
-              <dxo-header-filter [visible]="true"></dxo-header-filter>      
+              <dxo-header-filter [visible]="true"></dxo-header-filter>
               <dxo-filter-row [visible]="false"></dxo-filter-row>
-              <dxi-column
-                dataType="string"
-                dataField="vehicleName"
-                caption="비클별"
-                alignment="center">
+              <dxi-column dataType="string" dataField="vehicleName" caption="비클별" alignment="center">
               </dxi-column>
-              <dxi-column
-                dataType="string"
-                dataField="total"
-                caption="실패량"
-                alignment="center">
+              <dxi-column dataType="string" dataField="total" caption="실패량" alignment="center">
               </dxi-column>
             </dx-data-grid>
           </div>
@@ -223,10 +168,7 @@
       </tr>
       <tr>
         <td class="secondTD">
-          <dx-chart
-            id="chartAbnormalTRbySource"
-            palette="vintage"
-            [dataSource]="abnormalTRbySourceData">            
+          <dx-chart id="chartAbnormalTRbySource" palette="vintage" [dataSource]="abnormalTRbySourceData">
             <dxi-series valueField="duplicate" name="DUPLICATE" color="#264478"></dxi-series>
             <dxi-series valueField="mismatch" name="MISMATCH" color="#70AD47"></dxi-series>
             <dxi-series valueField="readfail" name="READFAIL" color="#5B9BD5"></dxi-series>
@@ -246,47 +188,30 @@
             <!--
             <dxi-value-axis name="Average Of Transfer" position="right">
               <dxo-grid [visible]="true"></dxo-grid>-->
-                <!--
+            <!--
                 <dxo-title text="Average of Transfer"></dxo-title>
                 -->
-              <!--
+            <!--
             </dxi-value-axis>
             -->
             <dxo-legend [visible]="true" verticalAlignment="top" horizontalAlignment="right"></dxo-legend>
             <dxo-export [enabled]="false"></dxo-export>
-            <dxo-tooltip
-              [enabled]="true"
-              [shared]="true"
-              [customizeTooltip]="customizeTooltip">
+            <dxo-tooltip [enabled]="true" [shared]="true" [customizeTooltip]="customizeTooltip">
               <dxo-format type="largeNumber" [precision]="1"></dxo-format>
             </dxo-tooltip>
           </dx-chart>
         </td>
         <td class="thirdTD">
           <div id="grid-container-abnormalTRbySource">
-            <dx-data-grid
-              [dataSource]="abnormalTRbySourceData"
-              [columnAutoWidth]="true"
-              [remoteOperations]="true"
-              [height]="gridHeightBySource"
-              [width]="gridWidthBySource"
-              [showBorders]="true"
-              [hoverStateEnabled]="true">
+            <dx-data-grid [dataSource]="abnormalTRbySourceData" [columnAutoWidth]="true" [remoteOperations]="true"
+              [height]="gridHeightBySource" [width]="gridWidthBySource" [showBorders]="true" [hoverStateEnabled]="true">
               <dxo-scrolling mode="standard" rowRenderingMode="standard" showScrollbar="always">
               </dxo-scrolling>
-              <dxo-header-filter [visible]="true"></dxo-header-filter>      
+              <dxo-header-filter [visible]="true"></dxo-header-filter>
               <dxo-filter-row [visible]="false"></dxo-filter-row>
-              <dxi-column
-                dataType="string"
-                dataField="SourceName"
-                caption="SOURCE 별"
-                alignment="center">
+              <dxi-column dataType="string" dataField="SourceName" caption="SOURCE 별" alignment="center">
               </dxi-column>
-              <dxi-column
-                dataType="string"
-                dataField="total"
-                caption="실패량"
-                alignment="center">
+              <dxi-column dataType="string" dataField="total" caption="실패량" alignment="center">
               </dxi-column>
             </dx-data-grid>
           </div>
@@ -298,10 +223,7 @@
       </tr>
       <tr>
         <td class="secondTD">
-          <dx-chart
-            id="chartAbnormalTRbyDest"
-            palette="vintage"
-            [dataSource]="abnormalTRbyDestData">                        
+          <dx-chart id="chartAbnormalTRbyDest" palette="vintage" [dataSource]="abnormalTRbyDestData">
             <dxi-series valueField="duplicate" name="DUPLICATE" color="#264478"></dxi-series>
             <dxi-series valueField="mismatch" name="MISMATCH" color="#70AD47"></dxi-series>
             <dxi-series valueField="readfail" name="READFAIL" color="#5B9BD5"></dxi-series>
@@ -321,52 +243,35 @@
             <!--
             <dxi-value-axis name="Average Of Transfer" position="right">
               <dxo-grid [visible]="true"></dxo-grid>-->
-                <!--
+            <!--
                 <dxo-title text="Average of Transfer"></dxo-title>
                 -->
-              <!--
+            <!--
             </dxi-value-axis>
             -->
             <dxo-legend [visible]="true" verticalAlignment="top" horizontalAlignment="right"></dxo-legend>
             <dxo-export [enabled]="false"></dxo-export>
-            <dxo-tooltip
-              [enabled]="true"
-              [shared]="true"
-              [customizeTooltip]="customizeTooltip">
+            <dxo-tooltip [enabled]="true" [shared]="true" [customizeTooltip]="customizeTooltip">
               <dxo-format type="largeNumber" [precision]="1"></dxo-format>
             </dxo-tooltip>
           </dx-chart>
         </td>
         <td class="thirdTD">
           <div id="grid-container-abnormalTRbyDest">
-            <dx-data-grid
-              [dataSource]="abnormalTRbyDestData"
-              [columnAutoWidth]="true"
-              [remoteOperations]="true"
-              [height]="gridHeightByDest"
-              [width]="gridWidthByDest"
-              [showBorders]="true"
-              [hoverStateEnabled]="true">
+            <dx-data-grid [dataSource]="abnormalTRbyDestData" [columnAutoWidth]="true" [remoteOperations]="true"
+              [height]="gridHeightByDest" [width]="gridWidthByDest" [showBorders]="true" [hoverStateEnabled]="true">
               <dxo-scrolling mode="standard" rowRenderingMode="standard" showScrollbar="always">
               </dxo-scrolling>
-              <dxo-header-filter [visible]="true"></dxo-header-filter>      
+              <dxo-header-filter [visible]="true"></dxo-header-filter>
               <dxo-filter-row [visible]="false"></dxo-filter-row>
-              <dxi-column
-                dataType="string"
-                dataField="DestinationName"
-                caption="DEST 별"
-                alignment="center">
+              <dxi-column dataType="string" dataField="DestinationName" caption="DEST 별" alignment="center">
               </dxi-column>
-              <dxi-column
-                dataType="string"
-                dataField="total"
-                caption="실패량"
-                alignment="center">
+              <dxi-column dataType="string" dataField="total" caption="실패량" alignment="center">
               </dxi-column>
             </dx-data-grid>
           </div>
         </td>
       </tr>
     </table>
-  </div> 
+  </div>
 </div>

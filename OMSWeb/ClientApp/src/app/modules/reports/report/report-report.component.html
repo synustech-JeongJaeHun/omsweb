@@ -1,41 +1,20 @@
 <div id="report-report-page">
   <div id="filter-area">
-    <dx-date-box
-      [placeholder]="'_START_DATE' | translate"
-      type="datetime"
-      [value]="start"
-      [min]="start"
-      [max]="end"
-      [acceptCustomValue]="false"
-      [showClearButton]="true"
-      [displayFormat]="dateTimeFormat"
-      #startDate>
+    <dx-date-box [placeholder]="'_START_DATE' | translate" type="datetime" [value]="start" [min]="start" [max]="end"
+      [acceptCustomValue]="false" [showClearButton]="true" [displayFormat]="dateTimeFormat" #startDate>
     </dx-date-box>
     <div>~</div>
-    <dx-date-box
-      [placeholder]="'_END_DATE' | translate"
-      type="datetime"
-      [value]="now"
-      [min]="start"
-      [max]="end"
-      [acceptCustomValue]="false"
-      [showClearButton]="true"
-      [displayFormat]="dateTimeFormat"
-      #endDate>
+    <dx-date-box [placeholder]="'_END_DATE' | translate" type="datetime" [value]="now" [min]="start" [max]="end"
+      [acceptCustomValue]="false" [showClearButton]="true" [displayFormat]="dateTimeFormat" #endDate>
     </dx-date-box>
-    <button
-      mat-raised-button
-      color="primary"
-      (click)="search(startDate.value, endDate.value)">
+    <button mat-raised-button color="primary" (click)="search(startDate.value, endDate.value)">
       {{ "names.search" | translate }}
     </button>
   </div>
 
 
   <div id="grid-container">
-    <dx-data-grid 
-      [showBorders]="true"
-      [hoverStateEnabled]="true">
+    <dx-data-grid [showBorders]="true" [hoverStateEnabled]="true">
     </dx-data-grid>
   </div>
 </div>

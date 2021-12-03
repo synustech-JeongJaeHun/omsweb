@@ -21,39 +21,20 @@
   </div>
 
   <div class="assign-grid">
-    <oms-unit-picker
-      [title]="'names.homePointList' | translate"
-      [unitName]="'names.point' | translate"
-      [pool]="homePoints"
-      [disabled]="noData"
-      [gridHeight]="190"
-      [picked]="assignedHomePoints"
+    <oms-unit-picker [title]="'names.homePointList' | translate" [unitName]="'names.point' | translate"
+      [pool]="homePoints" [disabled]="noData" [gridHeight]="190" [picked]="assignedHomePoints"
       (selectionChanged)="onChange('homePoints', $event)">
     </oms-unit-picker>
-    <oms-unit-picker
-      [title]="'names.stationList' | translate"
-      [unitName]="'names.station' | translate"
-      [pool]="stations"
-      [disabled]="noData"
-      [gridHeight]="190"
-      [picked]="assignedStations"
+    <oms-unit-picker [title]="'names.stationList' | translate" [unitName]="'names.station' | translate"
+      [pool]="stations" [disabled]="noData" [gridHeight]="190" [picked]="assignedStations"
       (selectionChanged)="onChange('stations', $event)">
     </oms-unit-picker>
-    <oms-unit-picker
-      [title]="'names.vehicleList' | translate"
-      [unitName]="'names.vehicle' | translate"
-      [pool]="vehicles"
-      [disabled]="noData"
-      [picked]="assignedVehicles"
+    <oms-unit-picker [title]="'names.vehicleList' | translate" [unitName]="'names.vehicle' | translate"
+      [pool]="vehicles" [disabled]="noData" [picked]="assignedVehicles"
       (selectionChanged)="onChange('vehicles', $event)">
     </oms-unit-picker>
-    <oms-unit-picker
-      [title]="'names.bufferList' | translate"
-      [unitName]="'names.buffer' | translate"
-      [pool]="buffers"
-      [disabled]="noData"
-      [picked]="assignedBuffers"
-      (selectionChanged)="onChange('buffers', $event)">
+    <oms-unit-picker [title]="'names.bufferList' | translate" [unitName]="'names.buffer' | translate" [pool]="buffers"
+      [disabled]="noData" [picked]="assignedBuffers" (selectionChanged)="onChange('buffers', $event)">
     </oms-unit-picker>
   </div>
 </ng-container>

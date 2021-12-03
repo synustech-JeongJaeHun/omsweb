@@ -3,7 +3,6 @@
     "english": "영어",
     "korean": "한국어",
     "chinese": "중국어",
-
     "monitor": "모니터링",
     "playback": "플레이백",
     "history": "히스토리",
@@ -13,7 +12,6 @@
     "login": "로그인",
     "profile": "프로파일",
     "logout": "로그아웃",
-
     "vehicle": "비클",
     "cluster": "클러스터",
     "point": "포인트",
@@ -23,18 +21,15 @@
     "buffer": "버퍼",
     "group": "그룹",
     "zcu": "ZCU",
-
     "vehicleType": "비클 유형",
     "vehicleMode": "비클 모드",
     "vehicleProperties": "비클 속성",
     "orderPriority": "비클 우선 순위",
     "directions": "방향성",
-
     "orders": "명령",
     "vehicles": "비클",
     "stations": "스테이션",
     "buffers": "버퍼",
-
     "normal": "정상",
     "cleaning": "지우기",
     "manual": "수동",
@@ -56,7 +51,6 @@
     "dropOff": "하차",
     "disabled": "비활성화",
     "validationError": "검증 오류",
-
     "id": "아이디",
     "physicalId": "물리적 아이디",
     "logicalId": "논리 아이디",
@@ -122,7 +116,6 @@
     "basePoint": "기준점",
     "carrierType": "캐리어 유형",
     "direction": "방향",
-
     "centerZoom": "중앙 줌",
     "search": "검색",
     "trackVehicle": "비클 추적",
@@ -136,7 +129,6 @@
     "resetAllVehicle": "모든 비클 리셋",
     "estopAllVehicle": "모든 비클 긴급 멈춤",
     "autoAllVehicle": "모든 비클 자동 모드",
-
     "vehicleScale": "비클 스케일",
     "mapRotation": "지도 회전",
     "segmentWidth": "세그먼트 너비",
@@ -150,7 +142,6 @@
     "showGroups": "그룹",
     "showClusters": "클러스터",
     "showOverlaps": "개체 겹침",
-
     "hostOrderEnable": "호스트 명령 비활성화",
     "pushEnable": "푸시 비활성화",
     "railIn": "레일 인",
@@ -161,17 +152,14 @@
     "auto": "자동",
     "zcuGo": "ZCU 이동",
     "option": "옵션",
-
     "ioList": "IO 목록",
     "vehicleStatus": "비클 상태",
     "bufferStatus": "버퍼 상태",
-
     "confirm": "확인",
     "cancel": "취소",
     "close": "닫기",
     "track": "추적",
     "apply": "적용",
-
     "time": "시간",
     "severity": "심각도",
     "tag": "태그",
@@ -181,10 +169,8 @@
     "code": "코드",
     "alarmCode": "알람 코드",
     "desc": "설명",
-
     "alarms": "알람",
     "alerts": "경고",
-
     "manualTransfer": "수동 전송",
     "command-move": "이동",
     "command-fromTo": "시작점/종점",
@@ -197,7 +183,6 @@
     "selectDest": "대상 선택",
     "carrier": "캐리어",
     "searchBuffer": "버퍼 검색",
-
     "userId": "사용자 아이디",
     "email": "이메일",
     "password": "비밀번호",
@@ -207,14 +192,12 @@
     "firstName": "이름",
     "lastName": "성",
     "save": "저장",
-
     "period": "기간",
     "snapshots": "스냅샷",
     "event": "이벤트",
     "events": "이벤트들",
     "speed": "속도",
     "timeToNextEvents": "다음 이벤트까지의 시간",
-
     "use": "사용",
     "home": "홈",
     "hardware": "하드웨어",
@@ -357,7 +340,6 @@
     "vehicleSetting": "비클 설정",
     "addVehicle": "비클 추가",
     "columnDisplayManagement": "테이블 컬럼",
-
     "ai": "AI",
     "reports": "보고서",
     "server": "서버",
@@ -376,14 +358,12 @@
     "loadedToCompleted": "(로드 ~ 완료)",
     "createdToAssigned": "(생성 ~ 완료)",
     "pioTrend": "PIO 트렌드",
-
     "bulkAddUser": "사용자 일괄 추가",
     "errorParsingCSVFile": "CSV 파일 구문 분석 오류.",
     "noFileSelected": "선택된 파일이 없습니다.",
     "csvTotalMessage": "전체 CSV 입력 총 건수",
     "csvSuccessMessage": "성공",
     "csvFailedMessage": "실패",
-
     "vehiclePreference": "비클 기본 설정",
     "vehicleModeTheme": "비클 모드 테마",
     "vehicleCargoStatusTheme": "비클 화물 상태 테마",
@@ -420,7 +400,6 @@
       "8": "로그 보기",
       "9": "제어 보기",
       "10": "설정 보기",
-
       "11": "알람 보기",
       "12": "경고 보기",
       "13": "수동 전송",
@@ -431,7 +410,6 @@
       "18": "비클 재설정",
       "19": "모든 비클 재설정",
       "20": "자동 비클",
-
       "21": "자동 모든 비클",
       "22": "호스트 주문 활성화",
       "23": "푸시 활성화",
@@ -442,7 +420,6 @@
       "28": "원점 설정",
       "29": "버퍼 보기",
       "30": "비클 상태 보기",
-
       "31": "항목 세부 정보 보기",
       "32": "세그먼트 미사용",
       "33": "사용자 관리",
@@ -453,7 +430,6 @@
       "38": "세그먼트 설정",
       "39": "스테이션 설정",
       "40": "버퍼 설정",
-
       "41": "ZCU 설정",
       "42": "차량 설정"
     }

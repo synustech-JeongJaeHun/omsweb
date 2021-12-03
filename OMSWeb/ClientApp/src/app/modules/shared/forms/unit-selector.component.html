@@ -1,29 +1,12 @@
 <mat-form-field class="dense" appearance="outline">
-  <input
-    #inputValue
-    matInput
-    [formControl]="inputControl"
-    [placeholder]="placeholder"
-    [matAutocomplete]="auto"
-  />
-  <button
-    mat-button
-    *ngIf="selectedUnit"
-    matSuffix
-    mat-icon-button
-    aria-label="Clear"
-    [disabled]="disabled"
-    (click)="onClear(inputValue)"
-  >
+  <input #inputValue matInput [formControl]="inputControl" [placeholder]="placeholder" [matAutocomplete]="auto" />
+  <button mat-button *ngIf="selectedUnit" matSuffix mat-icon-button aria-label="Clear" [disabled]="disabled"
+    (click)="onClear(inputValue)">
     <mat-icon>close</mat-icon>
   </button>
 
-  <mat-autocomplete
-    #auto="matAutocomplete"
-    [autoActiveFirstOption]="false"
-    [displayWith]="displayFn"
-    (optionSelected)="onSelected($event.option.value)"
-  >
+  <mat-autocomplete #auto="matAutocomplete" [autoActiveFirstOption]="false" [displayWith]="displayFn"
+    (optionSelected)="onSelected($event.option.value)">
     <mat-option *ngFor="let item of targetOptions$ | async" [value]="item">
       <span>{{ item.id }}</span>
       <span class="option-type">{{ item.objectType }}</span>

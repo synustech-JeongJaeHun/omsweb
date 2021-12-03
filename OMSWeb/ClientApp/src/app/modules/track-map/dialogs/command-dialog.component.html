@@ -1,59 +1,32 @@
 <oms-dialog-base [title]="'names.manualTransfer' | translate">
   <ng-container class="dialog-layout">
     <div mat-dialog-content>
-      <mat-tab-group
-        class="tab-group"
-        [(selectedIndex)]="currentTab"
-        (selectedIndexChange)="onTabChanged()"
-        animationDuration="0ms"
-      >
-        <mat-tab
-          *ngFor="let tab of tabs"
-          [label]="'names.command-' + tab | translate"
-        ></mat-tab>
+      <mat-tab-group class="tab-group" [(selectedIndex)]="currentTab" (selectedIndexChange)="onTabChanged()"
+        animationDuration="0ms">
+        <mat-tab *ngFor="let tab of tabs" [label]="'names.command-' + tab | translate"></mat-tab>
       </mat-tab-group>
       <div class="form">
         <div class="form-row">
-          <oms-unit-selector
-            [findScopes]="['vehicles']"
-            [disabled]="commandState.vehicleDisabled"
-            [(selectedUnit)]="commandState.vehicle"
-            [placeholder]="'names.selectVehicle' | translate"
-          ></oms-unit-selector>
+          <oms-unit-selector [findScopes]="['vehicles']" [disabled]="commandState.vehicleDisabled"
+            [(selectedUnit)]="commandState.vehicle" [placeholder]="'names.selectVehicle' | translate">
+          </oms-unit-selector>
         </div>
         <div class="form-row">
-          <oms-unit-selector
-            [findScopes]="['points']"
-            [disabled]="commandState.pointDisabled"
-            [(selectedUnit)]="commandState.point"
-            [placeholder]="'names.selectPoint' | translate"
-          ></oms-unit-selector>
+          <oms-unit-selector [findScopes]="['points']" [disabled]="commandState.pointDisabled"
+            [(selectedUnit)]="commandState.point" [placeholder]="'names.selectPoint' | translate"></oms-unit-selector>
         </div>
         <div class="form-row">
-          <oms-unit-selector
-            [findScopes]="['stations', 'buffers']"
-            [disabled]="commandState.sourceDisabled"
-            [(selectedUnit)]="commandState.source"
-            [placeholder]="'names.selectSource' | translate"
-          ></oms-unit-selector>
+          <oms-unit-selector [findScopes]="['stations', 'buffers']" [disabled]="commandState.sourceDisabled"
+            [(selectedUnit)]="commandState.source" [placeholder]="'names.selectSource' | translate"></oms-unit-selector>
         </div>
         <div class="form-row">
-          <oms-unit-selector
-            [findScopes]="['stations', 'buffers']"
-            [disabled]="commandState.destDisabled"
-            [(selectedUnit)]="commandState.dest"
-            [placeholder]="'names.selectDest' | translate"
-          ></oms-unit-selector>
+          <oms-unit-selector [findScopes]="['stations', 'buffers']" [disabled]="commandState.destDisabled"
+            [(selectedUnit)]="commandState.dest" [placeholder]="'names.selectDest' | translate"></oms-unit-selector>
         </div>
         <div class="form-row">
           <mat-form-field class="dense" appearance="outline">
-            <input
-              matInput
-              name="carrier"
-              [disabled]="commandState.carrierDisabled"
-              [(ngModel)]="commandState.carrier"
-              [placeholder]="'names.carrier' | translate"
-            />
+            <input matInput name="carrier" [disabled]="commandState.carrierDisabled" [(ngModel)]="commandState.carrier"
+              [placeholder]="'names.carrier' | translate" />
           </mat-form-field>
 
           <!-- <dx-text-box
@@ -66,17 +39,12 @@
         <div class="form-row">
           <mat-slide-toggle [(ngModel)]="commandState.auto" color="primary">{{
             "names.auto" | translate
-          }}</mat-slide-toggle>
+            }}</mat-slide-toggle>
         </div>
       </div>
     </div>
     <div mat-dialog-actions>
-      <button
-        mat-raised-button
-        [disabled]="!canApply"
-        color="primary"
-        (click)="onApply()"
-      >
+      <button mat-raised-button [disabled]="!canApply" color="primary" (click)="onApply()">
         {{ "names.apply" | translate }}
       </button>
       <button mat-raised-button mat-dialog-close>

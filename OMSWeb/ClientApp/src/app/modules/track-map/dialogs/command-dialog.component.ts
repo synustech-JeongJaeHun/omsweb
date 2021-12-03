@@ -34,7 +34,7 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
     private dialogSvc: DialogService,
     private messageSvc: MessagesService,
     private t$: TranslateService
-  ) {}
+  ) { }
 
   ngOnDestroy(): void {
     this.statesSvc.transferCommandState.active = false;
@@ -74,7 +74,7 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
       orderOrigin: 'OMS',
       priority: 1, // @TODO priority 기본값 확인
       carrierLabel: carrier,
-      };
+    };
 
     if (category == 'move') {
       if (!pointDisabled && point) !pointDisabled && (cmd.locationMoveType = point.objectType);

@@ -64,7 +64,7 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
     private hubSvc: HubService,
     private dialog: MatDialog,
     private auth: AuthService
-  ) {}
+  ) { }
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();

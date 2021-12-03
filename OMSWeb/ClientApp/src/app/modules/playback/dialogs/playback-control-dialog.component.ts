@@ -65,7 +65,7 @@ export class PlaybackControlDialogComponent implements OnInit, OnDestroy {
   constructor(
     private playbackSvc: PlaybackService,
     private dataSvc: MapDataService
-  ) {}
+  ) { }
 
   ngOnDestroy(): void {
     this.destroy$.next();
@@ -158,7 +158,7 @@ export class PlaybackControlDialogComponent implements OnInit, OnDestroy {
       throw Error('This is the last snapshot.');
     }
   }
-  onFastForward() {}
+  onFastForward() { }
 
   onChangeEventTo() {
     this.moveEventTo(this.options.nextEvent);
@@ -346,8 +346,8 @@ export class PlaybackControlDialogComponent implements OnInit, OnDestroy {
         operation === 'INSERT'
           ? 'DELETE'
           : operation === 'DELETE'
-          ? 'INSERT'
-          : 'UPDATE';
+            ? 'INSERT'
+            : 'UPDATE';
     }
 
     if (table === 'order_history')

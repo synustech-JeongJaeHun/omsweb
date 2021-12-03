@@ -44,7 +44,7 @@ export class RoleSettingDialogComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   onSelectRole(item: IRole) {
     this.selectedRole = item;

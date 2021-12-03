@@ -22,7 +22,7 @@ import {
 export class NotificationsService {
   private baseUrl = '/api/notifications';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   alertCount(): Observable<NotificationCount> {
     return this.http

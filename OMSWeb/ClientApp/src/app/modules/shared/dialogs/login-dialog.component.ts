@@ -18,7 +18,7 @@ export class LoginDialogComponent implements OnInit {
   constructor(
     private authSvc: AuthService,
     private dialog: MatDialogRef<LoginDialogComponent>
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.initForm();

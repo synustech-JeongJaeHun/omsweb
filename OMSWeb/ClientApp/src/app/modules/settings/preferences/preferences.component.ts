@@ -63,5 +63,5 @@ export class PreferencesComponent implements OnInit {
     this.preference.save();
   }
 
-  private loadTheme() {}
+  private loadTheme() { }
 }

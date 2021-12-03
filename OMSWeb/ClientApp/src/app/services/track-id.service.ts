@@ -23,7 +23,7 @@ export class TrackIdService {
   stations: TrackIdMapType = {};
   buffers: TrackIdMapType = {};
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   private queryIds(type: string): Observable<Dto.INodeInfo[]> {
     return this.http.get<Dto.INodeInfo[]>(`${this.baseUrl}/id-list/${type}`);

@@ -7,7 +7,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   providedIn: 'root',
 })
 export class CustomErrorHandler implements ErrorHandler {
-  constructor(private injector: Injector) {}
+  constructor(private injector: Injector) { }
 
   handleError(resError: Error | HttpErrorResponse): void {
     if (resError instanceof HttpErrorResponse) {

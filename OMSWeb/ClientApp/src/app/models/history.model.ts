@@ -16,4 +16,4 @@ export interface IVehicleHistoryRow extends IVehicleInfoRow {
   historySourceId?: number;
 }
 
-export interface IAlarmHistoryRow extends IVehicleAlarm {}
+export interface IAlarmHistoryRow extends IVehicleAlarm { }

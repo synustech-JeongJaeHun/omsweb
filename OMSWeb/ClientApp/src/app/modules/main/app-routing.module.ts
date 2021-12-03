@@ -53,4 +53,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes), MonitorModule],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

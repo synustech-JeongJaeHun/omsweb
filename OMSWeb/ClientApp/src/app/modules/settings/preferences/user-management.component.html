@@ -3,19 +3,10 @@
   <div class="setting-actions">
     <!-- <dx-button icon="save"></dx-button>
     <dx-button icon="undo"></dx-button> -->
-    <button
-      mat-raised-button
-      class="dense"
-      [disabled]="!isUpdated"
-      color="primary"
-      (click)="onSave(grid)">
+    <button mat-raised-button class="dense" [disabled]="!isUpdated" color="primary" (click)="onSave(grid)">
       {{ "names.save" | translate }}
     </button>
-    <button
-      mat-raised-button
-      class="dense"
-      [disabled]="!isUpdated"
-      (click)="onRevert(grid)">
+    <button mat-raised-button class="dense" [disabled]="!isUpdated" (click)="onRevert(grid)">
       {{ "names.revert" | translate }}
     </button>
   </div>
@@ -37,24 +28,11 @@
     </button>
   </div>
 </div>
-<dx-data-grid
-  #grid
-  [dataSource]="dataSource$ | async"
-  [keyExpr]="'id'"
-  [repaintChangesOnly]="true"
-  [showBorders]="true"
-  [sorting]="false"
-  [height]="490"
-  [(selectedRowKeys)]="selectedIds"
-  (onRowUpdated)="onUpdate($event)"
+<dx-data-grid #grid [dataSource]="dataSource$ | async" [keyExpr]="'id'" [repaintChangesOnly]="true" [showBorders]="true"
+  [sorting]="false" [height]="490" [(selectedRowKeys)]="selectedIds" (onRowUpdated)="onUpdate($event)"
   (onSelectionChanged)="onSelectionChanged($event)">
   <dxo-scrolling mode="virtual"></dxo-scrolling>
-  <dxo-editing
-    mode="cell"
-    refreshMode="reshape"
-    [allowUpdating]="true"
-    [allowDeleting]="false"
-    [allowAdding]="false">
+  <dxo-editing mode="cell" refreshMode="reshape" [allowUpdating]="true" [allowDeleting]="false" [allowAdding]="false">
   </dxo-editing>
   <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
 
@@ -69,11 +47,7 @@
   <dxi-column dataField="password" cellTemplate="passwordCell" [editorOptions]="{ mode: 'password' }">
   </dxi-column>
   <dxi-column dataField="roles" caption="Roles" dataType="number">
-    <dxo-lookup
-      [dataSource]="roles$ | async"
-      valueExpr="id"
-      displayExpr="name"
-    ></dxo-lookup>
+    <dxo-lookup [dataSource]="roles$ | async" valueExpr="id" displayExpr="name"></dxo-lookup>
   </dxi-column>
 
   <div *dxTemplate="let item of 'passwordCell'">

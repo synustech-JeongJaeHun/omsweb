@@ -364,9 +364,8 @@ export namespace SvgDrawingUtil {
             .attr('class', 'stale')
             .attr('transform', () => {
               if (!overlap_adjustment)
-                return `rotate(${-mapRotation})translate(${
-                  dom_css.radius * 2 * vehicleScale
-                },-${dom_css.radius * vehicleScale})scale(${vehicleScale})`;
+                return `rotate(${-mapRotation})translate(${dom_css.radius * 2 * vehicleScale
+                  },-${dom_css.radius * vehicleScale})scale(${vehicleScale})`;
               else return `translate(${dom_css.radius * 2},-${dom_css.radius})`;
             });
           let stale_element = dom_object_group.select('g.stale');
@@ -404,13 +403,11 @@ export namespace SvgDrawingUtil {
             .attr('class', 'push')
             .attr('transform', () => {
               if (!overlap_adjustment)
-                return `rotate(${-mapRotation})translate(${
-                  ((dom_css.radius * 4) / 3) * vehicleScale
-                },${dom_css.radius * vehicleScale})scale(${vehicleScale})`;
+                return `rotate(${-mapRotation})translate(${((dom_css.radius * 4) / 3) * vehicleScale
+                  },${dom_css.radius * vehicleScale})scale(${vehicleScale})`;
               else
-                return `translate(${(dom_css.radius * 4) / 3},${
-                  dom_css.radius
-                })`;
+                return `translate(${(dom_css.radius * 4) / 3},${dom_css.radius
+                  })`;
             });
           push_svg
             .append('path')
@@ -436,9 +433,8 @@ export namespace SvgDrawingUtil {
             .attr('class', 'call')
             .attr('transform', () => {
               if (!overlap_adjustment)
-                return `rotate(${-mapRotation})translate(${
-                  x_offset * vehicleScale
-                },${dom_css.radius * vehicleScale})scale(${vehicleScale})`;
+                return `rotate(${-mapRotation})translate(${x_offset * vehicleScale
+                  },${dom_css.radius * vehicleScale})scale(${vehicleScale})`;
               else return `translate(${x_offset},${dom_css.radius})`;
             });
           call_svg
@@ -529,7 +525,7 @@ export namespace SvgDrawingUtil {
             .attr('x', () => {
               return (
                 -((dom_css.text_offset * 3) / 4) *
-                  (overlap_adjustment ? vehicleScale : 1) -
+                (overlap_adjustment ? vehicleScale : 1) -
                 layout_object.orderId.toString().length * 6
               );
               // return -(layout_object.orderId.toString().length * 6 + parseInt(dom_css.text_offset) - 5)
@@ -537,7 +533,7 @@ export namespace SvgDrawingUtil {
             .attr('y', () => {
               return (
                 (dom_css.radius * 2 - dom_css.radius / 2) *
-                  (overlap_adjustment ? vehicleScale : 1) -
+                (overlap_adjustment ? vehicleScale : 1) -
                 10
               );
             })
@@ -809,10 +805,8 @@ export namespace SvgDrawingUtil {
               .attr('d', main_css.buffer[`icon_level${zoom_level}`])
               .attr(
                 'transform',
-                `translate(${
-                  layout_object.directionOffset.x * offset_multiplier
-                }, ${
-                  layout_object.directionOffset.y * offset_multiplier
+                `translate(${layout_object.directionOffset.x * offset_multiplier
+                }, ${layout_object.directionOffset.y * offset_multiplier
                 })rotate(${-mapRotation})`
               );
             dom_object_group
@@ -822,10 +816,8 @@ export namespace SvgDrawingUtil {
               .attr('d', main_css.buffer[`icon_level${zoom_level}`])
               .attr(
                 'transform',
-                `translate(${
-                  layout_object.directionOffset.x * offset_multiplier
-                }, ${
-                  layout_object.directionOffset.y * offset_multiplier
+                `translate(${layout_object.directionOffset.x * offset_multiplier
+                }, ${layout_object.directionOffset.y * offset_multiplier
                 })rotate(${-mapRotation})`
               );
           }

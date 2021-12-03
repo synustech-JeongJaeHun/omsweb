@@ -12,7 +12,7 @@ import { IVehicleDIOStates, IVehicleSignal } from '../models/vehicle-status.mode
 })
 export class StatusService {
   private baseUrl = '/api/status';
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getTrack(): Observable<Dto.ITrackData> {
     return this.http.get<Dto.ITrackData>(`${this.baseUrl}/tracks`);

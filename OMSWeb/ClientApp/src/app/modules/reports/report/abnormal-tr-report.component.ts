@@ -40,7 +40,7 @@ export class AbnormalTRReportComponent implements OnInit {
   );
 
   types: string[] = ["splinearea", "stackedsplinearea", "fullstackedsplinearea", "spline"];
-    
+
   normalTRbyVehicleData: any[] = [];
   normalTRbySourceData: any[] = [];
   normalTRbyDestData: any[] = [];

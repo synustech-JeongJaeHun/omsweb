@@ -9,9 +9,9 @@ import { MatDialogRef } from '@angular/material/dialog';
 export class DialogBaseComponent implements OnInit {
   @Input() title: string;
 
-  constructor(private dialogRef: MatDialogRef<DialogBaseComponent>) {}
+  constructor(private dialogRef: MatDialogRef<DialogBaseComponent>) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   close() {
     this.dialogRef.close();

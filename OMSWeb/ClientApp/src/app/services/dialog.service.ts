@@ -10,7 +10,7 @@ import { ConfirmDialogComponent } from '../modules/shared/dialogs/confirm-dialog
   providedIn: 'root',
 })
 export class DialogService {
-  constructor(private dialog: MatDialog) {}
+  constructor(private dialog: MatDialog) { }
 
   confirm<T>(message: IConfirmMessage<T>): Observable<boolean> {
     return this.dialog

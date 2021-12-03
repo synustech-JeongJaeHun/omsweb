@@ -684,9 +684,9 @@ export class Cluster {
     }
 
     let mid_curve_coord = {
-        x: start[anchor_pt.x] + center.x * mid_length,
-        y: start[anchor_pt.y] + center.y * mid_length,
-      },
+      x: start[anchor_pt.x] + center.x * mid_length,
+      y: start[anchor_pt.y] + center.y * mid_length,
+    },
       first_half_control_pt = {
         x1: start[anchor_pt.x] + bezier_1.x1 * quarter_length,
         y1: start[anchor_pt.y] + bezier_1.y1 * quarter_length,
@@ -704,11 +704,9 @@ export class Cluster {
     let first_curve = `C${first_half_control_pt.x1} ${first_half_control_pt.y1} ${first_half_control_pt.x2} ${first_half_control_pt.y2} ${mid_curve_coord.x} ${mid_curve_coord.y} `;
 
     // Second Curve
-    let second_curve = `C${second_half_control_pt.x1} ${
-      second_half_control_pt.y1
-    } ${second_half_control_pt.x2} ${second_half_control_pt.y2} ${
-      end[anchor_pt.x]
-    } ${end[anchor_pt.y]} `;
+    let second_curve = `C${second_half_control_pt.x1} ${second_half_control_pt.y1
+      } ${second_half_control_pt.x2} ${second_half_control_pt.y2} ${end[anchor_pt.x]
+      } ${end[anchor_pt.y]} `;
 
     return first_curve + second_curve;
   }

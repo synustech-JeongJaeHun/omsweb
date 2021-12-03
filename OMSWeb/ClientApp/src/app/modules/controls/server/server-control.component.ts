@@ -20,7 +20,7 @@ export class ServerControlComponent implements OnInit {
     private dialogSvc: DialogService,
     private messageSvc: MessagesService,
     private t$: TranslateService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.systemSvc.processes().subscribe((res) => {
@@ -30,7 +30,7 @@ export class ServerControlComponent implements OnInit {
     this.systemSvc.moduleStatus().subscribe((res) => {
       //alert(res);
       this.dataSource = res;
-    });    
+    });
   }
 
   onCommand(action: string, module: IModuleStatus) {
@@ -49,5 +49,5 @@ export class ServerControlComponent implements OnInit {
           }
         }
       });
-  } 
+  }
 }

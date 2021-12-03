@@ -57,7 +57,7 @@ export class HubService {
       this.isConnected = true;
       this.connectionChanged$.emit(true);
       console.info('## Hub re-connected. ##');
-  })
+    })
 
     this.attachEvents();
     this.start();
@@ -107,17 +107,17 @@ export class HubService {
   private attachEvents() {
 
     this.hub.on('pointChanged', (meta, body) => {
-       console.info('## hub message : pointChanged >>', { meta, body });
-       this.pointChanged$.emit({ ...meta, data: body });
+      console.info('## hub message : pointChanged >>', { meta, body });
+      this.pointChanged$.emit({ ...meta, data: body });
     });
     this.hub.on('segmentChanged', (meta, body) => {
       console.info('## hub message : segmentChanged >>', { meta, body });
       this.segmentChanged$.emit({ ...meta, data: body });
     });
     this.hub.on('segmentDisabledChanged', (meta, body) => {
-       console.info('## hub message : segmentDisabledChanged >>', {
-         meta,
-         body,
+      console.info('## hub message : segmentDisabledChanged >>', {
+        meta,
+        body,
       });
       this.segmentDisabledChanged$.emit({ ...meta, data: body });
     });

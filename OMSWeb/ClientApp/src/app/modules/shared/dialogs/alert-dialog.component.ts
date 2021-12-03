@@ -34,7 +34,7 @@ export class AlertDialogComponent implements OnInit, AfterViewInit {
     this.loadWarnList();
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   onChangeFilter(value: any) {
     console.log('## filter changed >>', value);

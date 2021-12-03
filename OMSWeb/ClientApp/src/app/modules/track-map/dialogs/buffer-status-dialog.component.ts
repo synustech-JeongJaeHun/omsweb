@@ -16,7 +16,7 @@ export class BufferStatusDialogComponent implements OnInit {
   constructor(
     private dataSvc: MapDataService,
     private trackSvc: TracksService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.getFirstUnit();

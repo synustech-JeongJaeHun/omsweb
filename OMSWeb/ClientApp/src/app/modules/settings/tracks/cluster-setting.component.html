@@ -20,27 +20,16 @@
 </div>
 
 <div class="assign-grid">
-  <oms-unit-picker
-    [title]="'names.point' | translate"
-    [unitName]="'names.point' | translate"
-    [disabled]="false"
-    [gridHeight]="430"
-    [pool]="points"
-    [picked]="assignedPoints"
-    [visibleUnassigned]="false"
-    [widthUnassigned]="0"
-    [widthColumnUnassigned]="0"
-    selectionModeUnassigned="none"
-    [visibleAssigned]="true"
-    [widthAssigned]="240"
-    [widthColumnAssigned]="200"
-    selectionModeAssigned="none"
-    [visibleAction]="false">
+  <oms-unit-picker [title]="'names.point' | translate" [unitName]="'names.point' | translate" [disabled]="false"
+    [gridHeight]="430" [pool]="points" [picked]="assignedPoints" [visibleUnassigned]="false" [widthUnassigned]="0"
+    [widthColumnUnassigned]="0" selectionModeUnassigned="none" [visibleAssigned]="true" [widthAssigned]="240"
+    [widthColumnAssigned]="200" selectionModeAssigned="none" [visibleAction]="false">
   </oms-unit-picker>
   <div class="max-vehicle">
     <h5>{{ "names.maxVehicles" | translate }}</h5>
     <mat-form-field class="dense" appearance="outline">
-      <input #maxVehiclesInput matInput type="number" [value]="selectedItem?.maxVehicles" min="0" max="100" (change)="onMaxVehiclesChanged(maxVehiclesInput.value)" />
+      <input #maxVehiclesInput matInput type="number" [value]="selectedItem?.maxVehicles" min="0" max="100"
+        (change)="onMaxVehiclesChanged(maxVehiclesInput.value)" />
     </mat-form-field>
   </div>
 </div>

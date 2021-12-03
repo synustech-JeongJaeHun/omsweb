@@ -37,7 +37,7 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
   get tscModeText(): string {
     return this.t$.instant(`enums.tscMode.${this.systemStates?.tscMode}`);
   }
- 
+
   get isActiveStatus(): boolean {
     return this.systemStates?.sessionStatus === HostSessionStatusEnums.CONNECTED;
   }
@@ -62,7 +62,7 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
     private dialogSvc: DialogService,
     private t$: TranslateService,
     private messageSvc: MessagesService
-  ) {}
+  ) { }
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();

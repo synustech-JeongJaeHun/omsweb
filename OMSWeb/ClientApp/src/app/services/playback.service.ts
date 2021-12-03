@@ -24,7 +24,7 @@ export class PlaybackService {
   // instance properties
   // eventVersion: number;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   firstSnapshotTime(): Observable<Date> {
     this.ordersChanged$.next([]);
@@ -44,9 +44,8 @@ export class PlaybackService {
   }
 
   playbackDataSet(start: Date, end: Date): Observable<IPlaybackData> {
-    const url = `${
-      this.baseUrl
-    }/snapshots/times/${start.toISOString()}/${end.toISOString()}`;
+    const url = `${this.baseUrl
+      }/snapshots/times/${start.toISOString()}/${end.toISOString()}`;
     return this.http.get<IPlaybackData>(url).pipe(
       tap((data) => {
         this.changeOrders([...data.orders], false);

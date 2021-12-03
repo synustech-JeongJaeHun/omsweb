@@ -16,7 +16,7 @@ export class GnbComponent implements OnInit {
     return this.settingSvc.globalPreferences.toggles.showOmsVersion;
   }
 
-  constructor(private auth: AuthService, private settingSvc: SettingsService) {}
+  constructor(private auth: AuthService, private settingSvc: SettingsService) { }
 
   ngOnInit(): void {
     this.settingSvc.serviceConfig.subscribe((config) => {

@@ -1,8 +1,11 @@
 <oms-dialog-base [title]="'names.bulkAddUser' | translate">
   <ng-container class="dialog-layout">
     <div mat-dialog-content>
-      <input type="file" id="uploadFiles" #uploadFiles name="CSV File Upload" (change)="fileChangeListner($event)" accept=".csv" />
-      <div><mat-label>&nbsp;</mat-label></div>
+      <input type="file" id="uploadFiles" #uploadFiles name="CSV File Upload" (change)="fileChangeListner($event)"
+        accept=".csv" />
+      <div>
+        <mat-label>&nbsp;</mat-label>
+      </div>
       <div>
         <mat-label>{{ csvValidationMessages }}</mat-label>
       </div>

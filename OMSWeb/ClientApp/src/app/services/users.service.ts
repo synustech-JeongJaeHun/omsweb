@@ -15,7 +15,7 @@ import {
 })
 export class UsersService {
   private baseUrl = '/api/users';
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   usersDataSource(): DataSource {
     return new DataSource({

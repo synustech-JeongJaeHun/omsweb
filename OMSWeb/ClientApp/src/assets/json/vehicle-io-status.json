@@ -813,5 +813,12 @@
       "value": false
     }
   ],
-  "categories": ["Disable", "Transfer", "OBS", "ZCU", "PIO", "OTHER"]
+  "categories": [
+    "Disable",
+    "Transfer",
+    "OBS",
+    "ZCU",
+    "PIO",
+    "OTHER"
+  ]
 }

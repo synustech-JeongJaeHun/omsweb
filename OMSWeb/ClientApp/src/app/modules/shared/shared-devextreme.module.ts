@@ -40,4 +40,4 @@ import { DxPieChartModule } from 'devextreme-angular';
     DxPieChartModule
   ],
 })
-export class SharedDevextremeModule {}
+export class SharedDevextremeModule { }

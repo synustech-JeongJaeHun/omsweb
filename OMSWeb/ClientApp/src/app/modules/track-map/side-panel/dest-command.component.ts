@@ -42,7 +42,7 @@ export class DestCommandComponent implements OnInit {
 
   private _searchScopes: string[] = [];
 
-  constructor(private idSvc: TrackIdService) {}
+  constructor(private idSvc: TrackIdService) { }
 
   ngOnInit(): void {
     this._searchScopes =

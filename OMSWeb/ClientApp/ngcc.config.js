@@ -1,6 +1,6 @@
 module.exports = {
   packages: {
-    'devextreme-angular':  {
+    'devextreme-angular': {
       ignorableDeepImportMatchers: [
         /devextreme\//
       ]

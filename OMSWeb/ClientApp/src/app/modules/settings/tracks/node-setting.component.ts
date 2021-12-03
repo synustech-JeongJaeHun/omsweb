@@ -21,7 +21,7 @@ export class NodeSettingComponent implements OnInit {
     this.dataSource = this.settingsSvc.settingsPointsDataSource();
   }
 
-  onUpdateRow(event) {}
+  onUpdateRow(event) { }
 
   transformNodeDirection(data: any) {
     return NodeDirectionNames[data.value];

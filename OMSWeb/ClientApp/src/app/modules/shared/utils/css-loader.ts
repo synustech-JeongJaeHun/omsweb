@@ -1,4 +1,4 @@
-export const getCss = (name:string) => {
+export const getCss = (name: string) => {
   const styles = window.getComputedStyle(document.body);
   return styles.getPropertyValue(name);
 }

@@ -27,4 +27,4 @@ import { KpiModule } from '../kpi/kpi.module';
   ],
   imports: [CommonModule, MonitorRoutingModule, SharedModule, TrackMapModule, KpiModule],
 })
-export class MonitorModule {}
+export class MonitorModule { }

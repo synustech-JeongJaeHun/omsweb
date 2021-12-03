@@ -1,10 +1,6 @@
 <oms-dialog-base [title]="'names.addUser' | translate">
   <ng-container class="dialog-layout">
-    <oms-user-form
-      [addMode]="addMode"
-      [enableRole]="true"
-      (save)="onSubmit($event)"
-      (cancel)="onCancel()"
-    ></oms-user-form>
+    <oms-user-form [addMode]="addMode" [enableRole]="true" (save)="onSubmit($event)" (cancel)="onCancel()">
+    </oms-user-form>
   </ng-container>
 </oms-dialog-base>

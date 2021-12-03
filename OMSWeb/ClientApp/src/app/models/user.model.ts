@@ -18,7 +18,7 @@ export interface ISessionUser extends ISimpleUser {
   permissions?: number[];
 }
 
-export interface IUserToken extends ISessionUser, ITokenStamp {}
+export interface IUserToken extends ISessionUser, ITokenStamp { }
 
 export interface IProfileForm {
   userId: string;
@@ -38,7 +38,7 @@ export interface IRole extends IPermission {
   permissions?: number[];
 }
 
-export interface IPermission{
+export interface IPermission {
   id: number;
   name: string;
 }

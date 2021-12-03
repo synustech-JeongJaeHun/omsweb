@@ -24,14 +24,14 @@ export class AlarmDialogComponent implements OnInit {
     private messageSvc: MessagesService,
     private notifySvc: NotificationsService,
     private t$: TranslateService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.dataSource = this.notifySvc.alarmsDataSource();
   }
 
   onClickRow(row: any) {
-    const {data: {id}} = row;
+    const { data: { id } } = row;
     if (this.currentItem?.id === id) {
       this.currentItem = undefined;
       this.selectedIds = [];

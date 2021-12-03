@@ -39,7 +39,7 @@ export class ColorPickerComponent implements OnInit {
     this.preference = this.settingSvc.globalPreferences;
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   onChanged(value: any) {
     setCssValue(this.configName, value);

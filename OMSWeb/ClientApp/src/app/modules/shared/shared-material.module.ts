@@ -56,4 +56,4 @@ import { MatSidenavModule } from '@angular/material/sidenav';
     DragDropModule,
   ],
 })
-export class SharedMaterialModule {}
+export class SharedMaterialModule { }

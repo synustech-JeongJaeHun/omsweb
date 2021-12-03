@@ -11,9 +11,9 @@ export class SettingsDialogComponent implements OnInit {
   currentMenu: string = 'preference';
   readonly permissionEnums: typeof PermissionEnums = PermissionEnums;
 
-  constructor(public auth: AuthService) {}
+  constructor(public auth: AuthService) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   isActiveMenu(menu: string) {
     return this.currentMenu === menu;

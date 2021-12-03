@@ -3,15 +3,32 @@
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
     "outDir": "./out-tsc/app",
-    "types": ["jquery"],
+    "types": [
+      "jquery"
+    ],
     "paths": {
-      "@oms/root/*": ["src/app/*"],
-      "@oms/models/*": ["src/app/models/*"],
-      "@oms/services/*": ["src/app/services/*"],
-      "@oms/shared/*": ["src/app/modules/shared/*"],
-      "@oms/utils/*": ["src/app/modules/shared/utils/*"],
+      "@oms/root/*": [
+        "src/app/*"
+      ],
+      "@oms/models/*": [
+        "src/app/models/*"
+      ],
+      "@oms/services/*": [
+        "src/app/services/*"
+      ],
+      "@oms/shared/*": [
+        "src/app/modules/shared/*"
+      ],
+      "@oms/utils/*": [
+        "src/app/modules/shared/utils/*"
+      ],
     }
   },
-  "files": ["src/main.ts", "src/polyfills.ts"],
-  "include": ["src/**/*.d.ts"]
+  "files": [
+    "src/main.ts",
+    "src/polyfills.ts"
+  ],
+  "include": [
+    "src/**/*.d.ts"
+  ]
 }

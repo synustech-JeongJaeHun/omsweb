@@ -7,25 +7,12 @@
   <fieldset>
     <legend>{{ "names.settings" | translate }}</legend>
     <div class="form-grid">
-      <mat-slide-toggle
-        [(ngModel)]="preference.toggles.showToolName"
-        color="primary"
-        (change)="onChangedToggle('showToolName')"
-        >{{ "names.showToolName" | translate }}</mat-slide-toggle
-      >
-      <mat-slide-toggle
-        [(ngModel)]="preference.toggles.showOmsVersion"
-        color="primary"
-        (change)="onChangedToggle('showOmsVersion')"
-        >{{ "names.showOmsVersion" | translate }}</mat-slide-toggle
-      >
-      <mat-slide-toggle
-        *ngIf="canUseKpi"
-        [(ngModel)]="preference.toggles.showKpi"
-        color="primary"
-        (change)="onChangedToggle('showKpi')"
-        >{{ "names.showKpi" | translate }}</mat-slide-toggle
-      >
+      <mat-slide-toggle [(ngModel)]="preference.toggles.showToolName" color="primary"
+        (change)="onChangedToggle('showToolName')">{{ "names.showToolName" | translate }}</mat-slide-toggle>
+      <mat-slide-toggle [(ngModel)]="preference.toggles.showOmsVersion" color="primary"
+        (change)="onChangedToggle('showOmsVersion')">{{ "names.showOmsVersion" | translate }}</mat-slide-toggle>
+      <mat-slide-toggle *ngIf="canUseKpi" [(ngModel)]="preference.toggles.showKpi" color="primary"
+        (change)="onChangedToggle('showKpi')">{{ "names.showKpi" | translate }}</mat-slide-toggle>
     </div>
   </fieldset>
 
@@ -33,36 +20,21 @@
     <legend>{{ "names.theme" | translate }}</legend>
 
     <div class="form-grid">
-      <oms-color-picker
-        *ngFor="let item of themeItems"
-        class="form-item home"
-        [configName]="item.style"
-        [name]="'names.' + item.name | translate"
-      ></oms-color-picker>
+      <oms-color-picker *ngFor="let item of themeItems" class="form-item home" [configName]="item.style"
+        [name]="'names.' + item.name | translate"></oms-color-picker>
     </div>
 
     <div class="actions">
       <mat-form-field class="dense theme-selector" appearance="outline">
-        <mat-select
-          #themeItemSelector
-          [value]="resetThemeTargets"
-          [placeholder]="'names.selectResetItem' | translate"
-          (selectionChange)="onSelectResetTheme($event)"
-          multiple
-        >
+        <mat-select #themeItemSelector [value]="resetThemeTargets" [placeholder]="'names.selectResetItem' | translate"
+          (selectionChange)="onSelectResetTheme($event)" multiple>
           <mat-option *ngFor="let item of themeItems" [value]="item.style">{{
             "names." + item.name | translate
-          }}</mat-option>
+            }}</mat-option>
         </mat-select>
       </mat-form-field>
 
-      <button
-        mat-raised-button
-        class="dense"
-        [disabled]="!canResetTheme"
-        color="primary"
-        (click)="onResetTheme()"
-      >
+      <button mat-raised-button class="dense" [disabled]="!canResetTheme" color="primary" (click)="onResetTheme()">
         {{ "names.resetToDefault" | translate }}
       </button>
     </div>

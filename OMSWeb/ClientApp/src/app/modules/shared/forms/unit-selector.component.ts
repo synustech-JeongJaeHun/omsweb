@@ -39,7 +39,7 @@ export class UnitSelectorComponent implements OnInit, OnChanges {
   inputControl = new FormControl();
   targetOptions$: Observable<ILookupUnit[]>;
 
-  constructor(private idSvc: TrackIdService) {}
+  constructor(private idSvc: TrackIdService) { }
   ngOnChanges(changes: SimpleChanges): void {
     const { disabled, selectedUnit } = changes;
     if (disabled) {

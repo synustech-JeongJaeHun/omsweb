@@ -17,7 +17,7 @@ export class Buffer {
   direction: string;
   nextpoint?: number;
   offset?: number;
-  
+
   isValidate?: boolean;
   updateState?: string;
   group?: number;

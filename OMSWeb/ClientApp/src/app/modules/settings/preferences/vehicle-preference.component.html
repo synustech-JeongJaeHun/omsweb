@@ -8,29 +8,24 @@
     <legend>{{ "names.vehicleModeTheme" | translate }}</legend>
 
     <div class="form-grid">
-      <oms-color-picker
-        *ngFor="let item of vehicleModeItems"
-        class="form-item home"
-        [configName]="item.style"
+      <oms-color-picker *ngFor="let item of vehicleModeItems" class="form-item home" [configName]="item.style"
         [name]="'names.' + item.name | translate">
       </oms-color-picker>
     </div>
-    
+
     <div class="actions">
       <mat-form-field class="dense theme-selector" appearance="outline">
-        <mat-select
-          #themeItemSelector
-          [value]="resetVehicleModeThemeTargets"
-          [placeholder]="'names.selectResetItem' | translate"
-          (selectionChange)="onSelectResetVehicleModeTheme($event)"
+        <mat-select #themeItemSelector [value]="resetVehicleModeThemeTargets"
+          [placeholder]="'names.selectResetItem' | translate" (selectionChange)="onSelectResetVehicleModeTheme($event)"
           multiple>
           <mat-option *ngFor="let item of vehicleModeItems" [value]="item.style">{{
             "names." + item.name | translate
-          }}</mat-option>
+            }}</mat-option>
         </mat-select>
       </mat-form-field>
 
-      <button mat-raised-button class="dense" [disabled]="!canResetVehicleModeTheme" color="primary" (click)="onResetVehicleModeTheme()">
+      <button mat-raised-button class="dense" [disabled]="!canResetVehicleModeTheme" color="primary"
+        (click)="onResetVehicleModeTheme()">
         {{ "names.resetToDefault" | translate }}
       </button>
     </div>
@@ -40,29 +35,24 @@
     <legend>{{ "names.vehicleCargoStatusTheme" | translate }}</legend>
 
     <div class="form-grid">
-      <oms-color-picker
-        *ngFor="let item of vehicleCargoStatusItems"
-        class="form-item home"
-        [configName]="item.style"
+      <oms-color-picker *ngFor="let item of vehicleCargoStatusItems" class="form-item home" [configName]="item.style"
         [name]="'names.' + item.name | translate">
       </oms-color-picker>
     </div>
-    
+
     <div class="actions">
       <mat-form-field class="dense theme-selector" appearance="outline">
-        <mat-select
-          #themeItemSelector
-          [value]="resetVehicleCargoStatusItemsTargets"
+        <mat-select #themeItemSelector [value]="resetVehicleCargoStatusItemsTargets"
           [placeholder]="'names.selectResetItem' | translate"
-          (selectionChange)="onSelectResetVehicleCargoStatusTheme($event)"
-          multiple>
+          (selectionChange)="onSelectResetVehicleCargoStatusTheme($event)" multiple>
           <mat-option *ngFor="let item of vehicleCargoStatusItems" [value]="item.style">{{
             "names." + item.name | translate
-          }}</mat-option>
+            }}</mat-option>
         </mat-select>
       </mat-form-field>
 
-      <button mat-raised-button class="dense" [disabled]="!canResetVehicleCargoStatusTheme" color="primary" (click)="onResetVehicleCargoStatusTheme()">
+      <button mat-raised-button class="dense" [disabled]="!canResetVehicleCargoStatusTheme" color="primary"
+        (click)="onResetVehicleCargoStatusTheme()">
         {{ "names.resetToDefault" | translate }}
       </button>
     </div>

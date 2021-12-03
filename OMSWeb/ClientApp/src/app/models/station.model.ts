@@ -40,7 +40,7 @@ export class Station {
       carrierType,
       nextpoint,
       offset,
-      group,      
+      group,
     } = row;
     this.id = id;
     this.logicalId = logicalId;
@@ -50,7 +50,7 @@ export class Station {
     this.carrierType = carrierType;
     this.nextpoint = nextpoint;
     this.offset = offset;
-    this.group = group;    
+    this.group = group;
 
     this.coord = point.coord;
     this.invertedCoord = point.invertedCoord;
@@ -82,7 +82,7 @@ export class Station {
       carrierType,
       nextpoint,
       offset,
-      group,      
+      group,
       isValidate,
       updateState,
     } = this;
@@ -100,12 +100,12 @@ export class Station {
     direction = this.direction;
     carrierType = this.carrierType;
     nextpoint = this.nextpoint,
-    offset = this.offset;
+      offset = this.offset;
 
     isValidate = this.isValidate;
     updateState = this.updateState;
     group = this.group;
-    
+
     // Object
     coord = { ...this.coord };
     invertedCoord = { ...this.invertedCoord };

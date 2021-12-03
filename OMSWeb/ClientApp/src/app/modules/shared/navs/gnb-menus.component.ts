@@ -34,7 +34,7 @@ export class GnbMenusComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private auth: AuthService,
     private location: Location
-  ) {}
+  ) { }
   ngOnDestroy(): void {
     this.routing$ && this.routing$.unsubscribe();
   }

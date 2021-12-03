@@ -22,27 +22,13 @@
   </button>
 </div>
 
-<dx-data-grid
-  #gridSegements
-  [dataSource]="dataSource"
-  [keyExpr]="'id'"
-  [repaintChangesOnly]="true"
-  [showBorders]="true"
-  [height]="520"
-  [allowColumnResizing]="false"
-  [(selectedRowKeys)]="selectedIds"
-  (onRowUpdated)="onUpdateRow($event)"
-  (onSelectionChanged)="onSelectionChanged($event)"
-  [masterDetail]="{ enabled: true, template: 'segInfoTemplate' }">
+<dx-data-grid #gridSegements [dataSource]="dataSource" [keyExpr]="'id'" [repaintChangesOnly]="true" [showBorders]="true"
+  [height]="520" [allowColumnResizing]="false" [(selectedRowKeys)]="selectedIds" (onRowUpdated)="onUpdateRow($event)"
+  (onSelectionChanged)="onSelectionChanged($event)" [masterDetail]="{ enabled: true, template: 'segInfoTemplate' }">
 
   <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
   <dxo-paging [pageSize]="20"></dxo-paging>
-  <dxo-editing
-    mode="cell"
-    refreshMode="reshape"
-    [allowUpdating]="true"
-    [allowDeleting]="false"
-    [allowAdding]="false"
+  <dxo-editing mode="cell" refreshMode="reshape" [allowUpdating]="true" [allowDeleting]="false" [allowAdding]="false"
     [useIcons]="true">
   </dxo-editing>
   <!--
@@ -50,8 +36,10 @@
   -->
 
   <dxi-column dataType="number" dataField="id" [allowEditing]="false" [width]="50"></dxi-column>
-  <dxi-column dataType="number" dataField="speed" [caption]="'names.speed' | translate" [allowEditing]="false"></dxi-column>
-  <dxi-column dataType="number" dataField="speedRatio" [caption]="'names.speedRatio' | translate" [customizeText]="customSpeedRatio" [width]="90">
+  <dxi-column dataType="number" dataField="speed" [caption]="'names.speed' | translate" [allowEditing]="false">
+  </dxi-column>
+  <dxi-column dataType="number" dataField="speedRatio" [caption]="'names.speedRatio' | translate"
+    [customizeText]="customSpeedRatio" [width]="90">
     <dxi-validation-rule type="range" [min]="1" [max]="100" [message]="'_RATIO_MESSAGE'">
     </dxi-validation-rule>
   </dxi-column>
@@ -63,9 +51,7 @@
   <dxi-column dataType="boolean" dataField="unUse" [caption]="'names.unuse' | translate"></dxi-column>
   -->
 
-  <dxo-search-panel
-    [placeholder]="'names.search' | translate"
-    [visible]="true">
+  <dxo-search-panel [placeholder]="'names.search' | translate" [visible]="true">
   </dxo-search-panel>
 
   <div *dxTemplate="let row of 'segInfoTemplate'">

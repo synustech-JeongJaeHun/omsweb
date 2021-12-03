@@ -10,26 +10,13 @@
   </div>
 </div>
 
-<dx-data-grid
-  #gridBuffers
-  [dataSource]="dataSource"
-  [keyExpr]="'id'"
-  [repaintChangesOnly]="true"
-  [showBorders]="true"
-  [height]="450"
-  [allowColumnResizing]="false"
-  [(selectedRowKeys)]="selectedIds"
-  (onRowUpdated)="onUpdateRow($event)"
+<dx-data-grid #gridBuffers [dataSource]="dataSource" [keyExpr]="'id'" [repaintChangesOnly]="true" [showBorders]="true"
+  [height]="450" [allowColumnResizing]="false" [(selectedRowKeys)]="selectedIds" (onRowUpdated)="onUpdateRow($event)"
   (onSelectionChanged)="onSelectionChanged($event)">
 
   <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
   <dxo-paging [pageSize]="20"></dxo-paging>
-  <dxo-editing
-    mode="cell"
-    refreshMode="reshape"
-    [allowUpdating]="true"
-    [allowDeleting]="false"
-    [allowAdding]="false"
+  <dxo-editing mode="cell" refreshMode="reshape" [allowUpdating]="true" [allowDeleting]="false" [allowAdding]="false"
     [useIcons]="true">
   </dxo-editing>
   <!--
@@ -37,11 +24,9 @@
   -->
 
   <dxi-column dataType="number" dataField="id" [allowEditing]="false" [width]="60" alignment="center"></dxi-column>
-  <dxi-column dataType="sting" dataField="logicalId" [caption]="'names.onlineName' | translate" [allowEditing]="false" alignment="center"></dxi-column>
+  <dxi-column dataType="sting" dataField="logicalId" [caption]="'names.onlineName' | translate" [allowEditing]="false"
+    alignment="center"></dxi-column>
   <dxi-column dataType="boolean" dataField="unUse" [caption]="'names.unuse' | translate"></dxi-column>
 
-  <dxo-search-panel
-    [placeholder]="'names.search' | translate"
-    [visible]="true"
-  ></dxo-search-panel>
+  <dxo-search-panel [placeholder]="'names.search' | translate" [visible]="true"></dxo-search-panel>
 </dx-data-grid>

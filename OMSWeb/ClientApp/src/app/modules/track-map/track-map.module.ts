@@ -18,4 +18,4 @@ import { BufferStatusDialogComponent } from './dialogs/buffer-status-dialog.comp
   imports: [CommonModule, SharedModule],
   exports: [MapViewerComponent, MapToolbarComponent],
 })
-export class TrackMapModule {}
+export class TrackMapModule { }

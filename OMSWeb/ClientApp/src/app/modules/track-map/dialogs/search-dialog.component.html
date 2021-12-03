@@ -1,23 +1,11 @@
 <oms-dialog-base [title]="'names.search' | translate">
   <ng-container class="dialog-layout">
     <div mat-dialog-content>
-      <dx-select-box
-        #type
-        class="form-item"
-        [placeholder]="'messages.selectObjectType' | translate"
-        [dataSource]="objectTypes"
-        valueExpr="key"
-        displayExpr="value"
-        [searchEnabled]="true"
-        (selectedItemChange)="onSelectType($event)"
-      ></dx-select-box>
-      <dx-autocomplete
-        #value
-        class="form-item"
-        [placeholder]="'messages.searchId' | translate"
-        [dataSource]="targets"
-        [showClearButton]="true"
-      ></dx-autocomplete>
+      <dx-select-box #type class="form-item" [placeholder]="'messages.selectObjectType' | translate"
+        [dataSource]="objectTypes" valueExpr="key" displayExpr="value" [searchEnabled]="true"
+        (selectedItemChange)="onSelectType($event)"></dx-select-box>
+      <dx-autocomplete #value class="form-item" [placeholder]="'messages.searchId' | translate" [dataSource]="targets"
+        [showClearButton]="true"></dx-autocomplete>
       <!-- <dx-select-box
         #value
         class="form-item"
@@ -28,11 +16,7 @@
       ></dx-select-box> -->
     </div>
     <div mat-dialog-actions>
-      <button
-        mat-raised-button
-        color="primary"
-        (click)="onSearch(type.value, value.value)"
-      >
+      <button mat-raised-button color="primary" (click)="onSearch(type.value, value.value)">
         {{ "names.search" | translate }}
       </button>
       <button mat-raised-button mat-dialog-close>

@@ -1,7 +1,7 @@
 import { ICoordinate } from './drawing.model';
 import { ICoordinateInfo } from './map.interface';
 import { Dto } from './dto/track.model';
-import {IPoint} from './map.interface';
+import { IPoint } from './map.interface';
 
 export class Point implements IPoint {
   objectType = 'Point';

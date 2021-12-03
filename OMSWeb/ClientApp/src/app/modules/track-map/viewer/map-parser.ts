@@ -16,7 +16,7 @@ import { main_css } from '../../shared/utils/css-loader';
 import { Zcu } from '../../../models/zcu.model';
 
 export class MapParser {
-  constructor(private layout_data: IViewerData) {}
+  constructor(private layout_data: IViewerData) { }
 
   parse(data: Dto.ITrackData, geometry: IMapGeometry): IViewerData {
     this.layout_data.groups = this.parseGroups(data.mapType, data.groups);

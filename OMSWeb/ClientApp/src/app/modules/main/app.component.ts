@@ -60,5 +60,5 @@ export class AppComponent {
     this.translate.use(lang);
   }
 
-  public ngOnInit(): void {}
+  public ngOnInit(): void { }
 }

@@ -24,7 +24,7 @@ export class PlaybackStatusPanelComponent implements OnInit {
   constructor(
     private mapStateSvc: MapStatesService,
     private settingSvc: SettingsService,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.resizeHandler = this.onMouseMove.bind(this);

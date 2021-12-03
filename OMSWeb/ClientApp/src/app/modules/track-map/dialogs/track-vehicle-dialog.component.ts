@@ -31,7 +31,7 @@ export class TrackVehicleDialogComponent implements OnInit {
     this.dataSource = of(Object.values(this.idSvc.find_matched_target_object('vehicle')));
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   onTrack() {
     if (!this.canTracking) return;

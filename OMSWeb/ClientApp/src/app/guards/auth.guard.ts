@@ -21,7 +21,7 @@ export class AuthGuard implements CanActivate {
     private auth: AuthService,
     private settings: SettingsService,
     private dialog: MatDialog
-  ) {}
+  ) { }
 
   canActivate(
     next: ActivatedRouteSnapshot,

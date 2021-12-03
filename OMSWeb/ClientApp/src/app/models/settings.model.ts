@@ -18,7 +18,7 @@ export class MapConfig {
   vehicleScale?: number = main_css.vehicle.radius;
   mapRotation?: number = 0;
   segmentWidth?: number = 2;
-  segmentDirectionSize? = 5;
+  segmentDirectionSize?= 5;
 }
 
 export class ThemeConfig {
@@ -148,7 +148,7 @@ export class ClientPreferences implements IPreferences {
     this.load();
   }
 
-  getServiceConfig() {}
+  getServiceConfig() { }
 
   private load() {
     const value = StorageUtil.getLocal(this.storeKey) || '{}';

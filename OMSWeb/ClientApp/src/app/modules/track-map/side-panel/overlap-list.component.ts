@@ -61,7 +61,7 @@ export class OverlapListComponent implements OnInit, OnChanges {
   constructor(
     private dataSvc: MapDataService,
     private stateSvc: MapStatesService
-  ) {}
+  ) { }
 
   ngOnChanges(changes: SimpleChanges): void {
     const { data } = changes;

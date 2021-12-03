@@ -10,97 +10,32 @@
   </button>
 </div>
 
-<dx-data-grid
-  id="dataGrid"
-  [dataSource]="dataSource"
-  [columnAutoWidth]="false"
-  [remoteOperations]="true"
-  width="100%"
-  [showBorders]="true"
-  [hoverStateEnabled]="true"
-  [(selectedRowKeys)]="selectedIds"
->
+<dx-data-grid id="dataGrid" [dataSource]="dataSource" [columnAutoWidth]="false" [remoteOperations]="true" width="100%"
+  [showBorders]="true" [hoverStateEnabled]="true" [(selectedRowKeys)]="selectedIds">
   <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
   <dxo-paging [pageSize]="50"></dxo-paging>
-  <dxo-pager
-    [showPageSizeSelector]="true"
-    [allowedPageSizes]="[50, 100, 200]"
-    [showInfo]="true"
-    visible="true"
-  ></dxo-pager>
-  <dxo-scrolling
-    mode="standard"
-    rowRenderingMode="standard"
-    showScrollbar="always"
-  ></dxo-scrolling>
+  <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[50, 100, 200]" [showInfo]="true" visible="true">
+  </dxo-pager>
+  <dxo-scrolling mode="standard" rowRenderingMode="standard" showScrollbar="always"></dxo-scrolling>
   <dxo-header-filter [visible]="true"></dxo-header-filter>
 
-  <dxi-column
-    [width]="80"
-    dataType="number"
-    dataField="id"
-    [caption]="'names.id' | translate"
-    [allowFiltering]="false"
-  ></dxi-column>
-  <dxi-column
-    [width]="120"
-    dataType="string"
-    dataField="physicalId"
-    [caption]="'names.physicalId' | translate"
-  >
+  <dxi-column [width]="80" dataType="number" dataField="id" [caption]="'names.id' | translate" [allowFiltering]="false">
   </dxi-column>
-  <dxi-column
-    [width]="80"
-    dataType="string"
-    dataField="logicalId"
-    [caption]="'names.logicalId' | translate"
-  ></dxi-column>
-  <dxi-column
-    [width]="80"
-    dataType="string"
-    dataField="mode"
-    [caption]="'names.mode' | translate"
-  ></dxi-column>
-  <dxi-column
-    [width]="120"
-    dataType="string"
-    dataField="canBePushed"
-    [caption]="'names.pushEnable' | translate"
-  ></dxi-column>
-  <dxi-column
-    [width]="120"
-    dataType="string"
-    dataField="hostOrderEnable"
-    [caption]="'names.hostOrderEnable' | translate"
-  ></dxi-column>
-  <dxi-column
-    [width]="120"
-    dataType="string"
-    dataField="movingState"
-    [caption]="'names.movingState' | translate"
-  ></dxi-column>
-  <dxi-column
-    [width]="120"
-    dataType="string"
-    dataField="cargoState"
-    [caption]="'names.cargoState' | translate"
-  ></dxi-column>
-  <dxi-column
-    [width]="100"
-    dataType="string"
-    dataField="error"
-    [caption]="'names.errorList' | translate"
-  ></dxi-column>
-  <dxi-column
-    [width]="100"
-    dataType="string"
-    dataField="map"
-    [caption]="'names.mapDb' | translate"
-  ></dxi-column>
-  <dxi-column
-    [width]="100"
-    dataType="string"
-    dataField="mapVersion"
-    [caption]="'names.mapVersion' | translate"
-  ></dxi-column>
+  <dxi-column [width]="120" dataType="string" dataField="physicalId" [caption]="'names.physicalId' | translate">
+  </dxi-column>
+  <dxi-column [width]="80" dataType="string" dataField="logicalId" [caption]="'names.logicalId' | translate">
+  </dxi-column>
+  <dxi-column [width]="80" dataType="string" dataField="mode" [caption]="'names.mode' | translate"></dxi-column>
+  <dxi-column [width]="120" dataType="string" dataField="canBePushed" [caption]="'names.pushEnable' | translate">
+  </dxi-column>
+  <dxi-column [width]="120" dataType="string" dataField="hostOrderEnable"
+    [caption]="'names.hostOrderEnable' | translate"></dxi-column>
+  <dxi-column [width]="120" dataType="string" dataField="movingState" [caption]="'names.movingState' | translate">
+  </dxi-column>
+  <dxi-column [width]="120" dataType="string" dataField="cargoState" [caption]="'names.cargoState' | translate">
+  </dxi-column>
+  <dxi-column [width]="100" dataType="string" dataField="error" [caption]="'names.errorList' | translate"></dxi-column>
+  <dxi-column [width]="100" dataType="string" dataField="map" [caption]="'names.mapDb' | translate"></dxi-column>
+  <dxi-column [width]="100" dataType="string" dataField="mapVersion" [caption]="'names.mapVersion' | translate">
+  </dxi-column>
 </dx-data-grid>

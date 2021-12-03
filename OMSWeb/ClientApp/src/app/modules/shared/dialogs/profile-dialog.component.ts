@@ -26,7 +26,7 @@ export class ProfileDialogComponent implements OnInit {
   constructor(
     private auth: AuthService,
     private dialog: MatDialogRef<ProfileDialogComponent>
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this._user = this.auth.currentUser;

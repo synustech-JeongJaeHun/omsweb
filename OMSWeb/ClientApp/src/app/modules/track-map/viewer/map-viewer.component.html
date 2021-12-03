@@ -5,18 +5,11 @@
   </div>
 
   <div id="side_panel">
-    <oms-map-side-panel
-      *ngIf="activeDetails"
-      class="side_panel active"
-      [selectedObject]="selectedObject"
-    ></oms-map-side-panel>
+    <oms-map-side-panel *ngIf="activeDetails" class="side_panel active" [selectedObject]="selectedObject">
+    </oms-map-side-panel>
   </div>
-  <oms-map-toolbar
-    id="map-toolbar"
-    class="snb toolbar"
-    [class.show-name]="showToolbarText"
-    [buttonState]="preference.toggles"
-  ></oms-map-toolbar>
+  <oms-map-toolbar id="map-toolbar" class="snb toolbar" [class.show-name]="showToolbarText"
+    [buttonState]="preference.toggles"></oms-map-toolbar>
 </div>
 
 <div id="contextMenu" [hidden]="!showContextMenu" class="context-menu">
@@ -51,47 +44,22 @@
       </mat-card-title>
     </mat-card-header>
     <mat-card-content class="context-form">
-      <button
-        mat-stroked-button
-        class="dense accent"
-        color="primary"
-        [disabled]="!canSetSource"
-        (click)="onSetSource()"
-      >
+      <button mat-stroked-button class="dense accent" color="primary" [disabled]="!canSetSource"
+        (click)="onSetSource()">
         {{ "names.setSource" | translate }}
       </button>
-      <button
-        mat-stroked-button
-        class="dense accent"
-        color="primary"
-        [disabled]="!canSetDest"
-        (click)="onSetDest()"
-      >
+      <button mat-stroked-button class="dense accent" color="primary" [disabled]="!canSetDest" (click)="onSetDest()">
         {{ "names.setDest" | translate }}
       </button>
       <div class="carrier-form">
         <mat-form-field class="dense full-span-col" appearance="outline">
-          <input
-            #carrierIdInput
-            matInput
-            [placeholder]="'names.carrierId' | translate"
-          />
+          <input #carrierIdInput matInput [placeholder]="'names.carrierId' | translate" />
         </mat-form-field>
-        <button
-          mat-stroked-button
-          color="primary"
-          class="dense accent"
-          (click)="onRemoveCarrier()"
-        >
+        <button mat-stroked-button color="primary" class="dense accent" (click)="onRemoveCarrier()">
           Remove
         </button>
-        <button
-          mat-stroked-button
-          [disabled]="!carrierIdInput.value"
-          color="primary"
-          class="dense accent"
-          (click)="onInstallCarrier(carrierIdInput.value)"
-        >
+        <button mat-stroked-button [disabled]="!carrierIdInput.value" color="primary" class="dense accent"
+          (click)="onInstallCarrier(carrierIdInput.value)">
           Install
         </button>
       </div>
@@ -109,29 +77,17 @@
     <mat-card-content class="context-form">
       <button
         *ngIf="hasPermissions([permissionEnums.AutoVehicle, permissionEnums.ResetVehicle, permissionEnums.EstopVehicle, permissionEnums.SetZcuGo])"
-        mat-button
-        class="menu-trigger"
-        (click)="commandMenuTrigger.openMenu()"
-      >
+        mat-button class="menu-trigger" (click)="commandMenuTrigger.openMenu()">
         {{ "names.command" | translate }}
         <mat-icon>arrow_right</mat-icon>
-        <div
-          #commandMenuTrigger="matMenuTrigger"
-          [matMenuTriggerFor]="vehicleCommandMenu"
-        ></div>
+        <div #commandMenuTrigger="matMenuTrigger" [matMenuTriggerFor]="vehicleCommandMenu"></div>
       </button>
       <button
         *ngIf="hasPermissions([permissionEnums.PushEnable, permissionEnums.HostOrderEnable, permissionEnums.RailOut])"
-        mat-button
-        class="menu-trigger"
-        (click)="optionMenuTrigger.openMenu()"
-      >
+        mat-button class="menu-trigger" (click)="optionMenuTrigger.openMenu()">
         {{ "names.option" | translate }}
         <mat-icon>arrow_right</mat-icon>
-        <div
-          #optionMenuTrigger="matMenuTrigger"
-          [matMenuTriggerFor]="vehicleOptionMenu"
-        ></div>
+        <div #optionMenuTrigger="matMenuTrigger" [matMenuTriggerFor]="vehicleOptionMenu"></div>
       </button>
       <!-- <mat-menu #vehicleActions="matMenu">
         <button mat-menu-item [matMenuTriggerFor]="vehicleCommandMenu">
@@ -140,55 +96,30 @@
       </mat-menu> -->
     </mat-card-content>
     <mat-menu #vehicleCommandMenu="matMenu">
-      <button
-        *ngIf="hasPermissions([permissionEnums.AutoVehicle])"
-        mat-menu-item
-        (click)="onVehicleCommand('initialize')"
-      >
+      <button *ngIf="hasPermissions([permissionEnums.AutoVehicle])" mat-menu-item
+        (click)="onVehicleCommand('initialize')">
         {{ "names.auto" | translate }}
       </button>
-      <button
-        *ngIf="hasPermissions([permissionEnums.ResetVehicle])"
-        mat-menu-item
-        (click)="onVehicleCommand('reset')"
-      >
+      <button *ngIf="hasPermissions([permissionEnums.ResetVehicle])" mat-menu-item (click)="onVehicleCommand('reset')">
         {{ "names.reset" | translate }}
       </button>
-      <button
-        *ngIf="hasPermissions([permissionEnums.EstopVehicle])"
-        mat-menu-item
-        (click)="onVehicleCommand('stop')"
-      >
+      <button *ngIf="hasPermissions([permissionEnums.EstopVehicle])" mat-menu-item (click)="onVehicleCommand('stop')">
         {{ "names.estop" | translate }}
       </button>
-      <button
-        *ngIf="hasPermissions([permissionEnums.SetZcuGo])"
-        mat-menu-item
-        (click)="onVehicleCommand('zcu_go')"
-      >
+      <button *ngIf="hasPermissions([permissionEnums.SetZcuGo])" mat-menu-item (click)="onVehicleCommand('zcu_go')">
         {{ "names.zcuGo" | translate }}
       </button>
     </mat-menu>
     <mat-menu #vehicleOptionMenu="matMenu">
-      <button
-        *ngIf="hasPermissions([permissionEnums.PushEnable])"
-        mat-menu-item
-        (click)="onVehicleCommand('push:enable')"
-      >
+      <button *ngIf="hasPermissions([permissionEnums.PushEnable])" mat-menu-item
+        (click)="onVehicleCommand('push:enable')">
         {{ "names.pushEnable" | translate }}
       </button>
-      <button
-        *ngIf="hasPermissions([permissionEnums.HostOrderEnable])"
-        mat-menu-item
-        (click)="onVehicleCommand('hostOrder:enable')"
-      >
+      <button *ngIf="hasPermissions([permissionEnums.HostOrderEnable])" mat-menu-item
+        (click)="onVehicleCommand('hostOrder:enable')">
         {{ "names.hostOrderEnable" | translate }}
       </button>
-      <button
-        *ngIf="hasPermissions([permissionEnums.RailOut])"
-        mat-menu-item
-        (click)="onVehicleCommand('rail_out')"
-      >
+      <button *ngIf="hasPermissions([permissionEnums.RailOut])" mat-menu-item (click)="onVehicleCommand('rail_out')">
         {{ "names.railOut" | translate }}
       </button>
     </mat-menu>
@@ -203,22 +134,11 @@
       </mat-card-title>
     </mat-card-header>
     <mat-card-content class="context-form">
-      <button
-        mat-stroked-button
-        class="dense accent"
-        color="primary"
-        [disabled]="!canSetSource"
-        (click)="onSetSource()"
-      >
+      <button mat-stroked-button class="dense accent" color="primary" [disabled]="!canSetSource"
+        (click)="onSetSource()">
         {{ "names.setSource" | translate }}
       </button>
-      <button
-        mat-stroked-button
-        class="dense accent"
-        color="primary"
-        [disabled]="!canSetDest"
-        (click)="onSetDest()"
-      >
+      <button mat-stroked-button class="dense accent" color="primary" [disabled]="!canSetDest" (click)="onSetDest()">
         {{ "names.setDest" | translate }}
       </button>
     </mat-card-content>
@@ -233,23 +153,13 @@
       </mat-card-title>
     </mat-card-header>
     <mat-card-content class="context-form">
-      <mat-button-toggle-group
-        #zcuTypeSelect="matButtonToggleGroup"
-        class="form-row-start"
-        name="type"
-        aria-label="Type"
-        [value]="contextData.usingType"
-      >
+      <mat-button-toggle-group #zcuTypeSelect="matButtonToggleGroup" class="form-row-start" name="type"
+        aria-label="Type" [value]="contextData.usingType">
         <mat-button-toggle [value]="1">{{ "names.hw" | translate }}</mat-button-toggle>
         <mat-button-toggle [value]="2">{{ "names.sw" | translate }}</mat-button-toggle>
       </mat-button-toggle-group>
 
-      <button
-        mat-stroked-button
-        class="dense accent"
-        color="primary"
-        (click)="onApplyZcuChange(zcuTypeSelect.value)"
-      >
+      <button mat-stroked-button class="dense accent" color="primary" (click)="onApplyZcuChange(zcuTypeSelect.value)">
         {{ "names.apply" | translate }}
       </button>
     </mat-card-content>
@@ -264,12 +174,8 @@
       </mat-card-title>
     </mat-card-header>
     <mat-card-content class="context-form">
-      <mat-slide-toggle
-        #pointHomeSlide
-        [checked]="contextData.isHome"
-        color="primary"
-        >{{ "names.home" | translate }}</mat-slide-toggle
-      >
+      <mat-slide-toggle #pointHomeSlide [checked]="contextData.isHome" color="primary">{{ "names.home" | translate }}
+      </mat-slide-toggle>
       <!-- (change)="onChangePointProperty('home', $event.checked)" -->
 
       <div [hidden]="!pointHomeSlide.checked">
@@ -278,19 +184,14 @@
           <mat-select #pointerGroupSelector [value]="contextData.group">
             <mat-option *ngFor="let item of groupIds" [value]="item">{{
               item
-            }}</mat-option>
+              }}</mat-option>
           </mat-select>
         </mat-form-field>
       </div>
 
-      <button
-        mat-stroked-button
-        class="dense accent"
-        color="primary"
-        (click)="
+      <button mat-stroked-button class="dense accent" color="primary" (click)="
           onApplyPointChange(pointHomeSlide.checked, pointerGroupSelector.value)
-        "
-      >
+        ">
         {{ "names.apply" | translate }}
       </button>
     </mat-card-content>
@@ -318,12 +219,8 @@
         />
       </mat-form-field> -->
 
-      <mat-slide-toggle
-        [checked]="contextData.disableState"
-        color="primary"
-        (change)="onChangeSegmentProperty('unuse', $event.checked)"
-        >{{ "names.unuse" | translate }}</mat-slide-toggle
-      >
+      <mat-slide-toggle [checked]="contextData.disableState" color="primary"
+        (change)="onChangeSegmentProperty('unuse', $event.checked)">{{ "names.unuse" | translate }}</mat-slide-toggle>
       <!-- <mat-slide-toggle
         color="primary"
         (change)="onChangeSegmentProperty('home', $event.checked)"
@@ -361,12 +258,7 @@
 </ng-container>
 
 <ng-template #stationTooltip>
-  <dx-tooltip
-    class="tooltip-box"
-    [visible]="showTooltip"
-    target="#tooltipView"
-    position="right"
-  >
+  <dx-tooltip class="tooltip-box" [visible]="showTooltip" target="#tooltipView" position="right">
     <div class="tooltip-title">Station</div>
     <div class="tooltip-content">
       <div class="name">{{ "names.id" | translate }}</div>
@@ -382,12 +274,7 @@
 </ng-template>
 
 <ng-template #vehicleTooltip>
-  <dx-tooltip
-    class="tooltip-box"
-    [visible]="showTooltip"
-    target="#tooltipView"
-    position="right"
-  >
+  <dx-tooltip class="tooltip-box" [visible]="showTooltip" target="#tooltipView" position="right">
     <div class="tooltip-title">Vehicle</div>
     <div class="tooltip-content">
       <div class="name">{{ "names.id" | translate }}</div>
@@ -403,12 +290,7 @@
 </ng-template>
 
 <ng-template #clusterTooltip>
-  <dx-tooltip
-    class="tooltip-box"
-    [visible]="showTooltip"
-    target="#tooltipView"
-    position="right"
-  >
+  <dx-tooltip class="tooltip-box" [visible]="showTooltip" target="#tooltipView" position="right">
     <div class="tooltip-title">Cluster</div>
     <div class="tooltip-content">
       <div class="name">{{ "names.id" | translate }}</div>
@@ -422,12 +304,7 @@
 </ng-template>
 
 <ng-template #segmentTooltip>
-  <dx-tooltip
-    class="tooltip-box"
-    [visible]="showTooltip"
-    target="#tooltipView"
-    position="right"
-  >
+  <dx-tooltip class="tooltip-box" [visible]="showTooltip" target="#tooltipView" position="right">
     <div class="tooltip-title">Segment</div>
     <div class="tooltip-content">
       <div class="name">{{ "names.id" | translate }}</div>
@@ -441,12 +318,7 @@
 </ng-template>
 
 <ng-template #bufferTooltip>
-  <dx-tooltip
-    class="tooltip-box"
-    [visible]="showTooltip"
-    target="#tooltipView"
-    position="right"
-  >
+  <dx-tooltip class="tooltip-box" [visible]="showTooltip" target="#tooltipView" position="right">
     <div class="tooltip-title">Buffer</div>
     <div class="tooltip-content">
       <div class="name">{{ "names.id" | translate }}</div>
@@ -462,12 +334,7 @@
 </ng-template>
 
 <ng-template #zcuTooltip>
-  <dx-tooltip
-    class="tooltip-box"
-    [visible]="showTooltip"
-    target="#tooltipView"
-    position="right"
-  >
+  <dx-tooltip class="tooltip-box" [visible]="showTooltip" target="#tooltipView" position="right">
     <div class="tooltip-title">Zcu</div>
     <div class="tooltip-content">
       <div class="name">{{ "names.id" | translate }}</div>
@@ -477,18 +344,14 @@
       <div class="value">{{ ((tooltipData?.zcuType == 0) ? 'Standard' : ((tooltipData?.zcuType == 1) ? 'NType' : '')) }}</div>
       -->
       <div class="name">{{ "names.usingType" | translate }}</div>
-      <div class="value">{{ ((tooltipData?.usingType == 0) ? 'Not Use' : ((tooltipData?.usingType == 1) ? 'Use HW' : ((tooltipData?.usingType == 2) ? 'Use SW' : '')))}}</div>
+      <div class="value">{{ ((tooltipData?.usingType == 0) ? 'Not Use' : ((tooltipData?.usingType == 1) ? 'Use HW' :
+        ((tooltipData?.usingType == 2) ? 'Use SW' : '')))}}</div>
     </div>
   </dx-tooltip>
 </ng-template>
 
 <ng-template #pointTooltip>
-  <dx-tooltip
-    class="tooltip-box"
-    [visible]="showTooltip"
-    target="#tooltipView"
-    position="right"
-  >
+  <dx-tooltip class="tooltip-box" [visible]="showTooltip" target="#tooltipView" position="right">
     <div class="tooltip-title">Point</div>
     <div class="tooltip-content">
       <div class="name">{{ "names.id" | translate }}</div>

@@ -33,7 +33,7 @@ export class VehicleStatusDialogComponent implements OnInit {
   pioTrendData: any[] = [];
 
   visiblePIOTrend = false;
- 
+
   private showOptions: { [key: string]: boolean } = {};
 
   constructor(
@@ -148,7 +148,7 @@ export class VehicleStatusDialogComponent implements OnInit {
       }
     ];
 
-    this.pioTrendData = pioTrendData;    
+    this.pioTrendData = pioTrendData;
   }
 
   ngOnInit(): void {
@@ -213,7 +213,7 @@ export class VehicleStatusDialogComponent implements OnInit {
   }
 
   onToggleVehicleStatusNPIOTrend(element) {
-    
+
     this.visiblePIOTrend = !this.visiblePIOTrend;
 
     if (this.visiblePIOTrend) {
