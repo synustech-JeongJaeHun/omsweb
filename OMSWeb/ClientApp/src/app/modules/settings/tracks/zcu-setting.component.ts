@@ -71,7 +71,7 @@ export class ZcuSettingComponent implements OnInit {
     //this._changedItems.length &&
     //  jobs.push(this.settingsSvc.sendZcuUseUnuseMessage(this._changedItems));
     if (this._changedItems.length > 0)
-      this.onUsingType(this._changedItems);
+      this.onSettingZcu(this._changedItems);
 
     jobs.length &&
       forkJoin(jobs).subscribe(() => {
@@ -94,40 +94,25 @@ export class ZcuSettingComponent implements OnInit {
     });
   }
 
-  onUsingType(items: any[]): Observable<void> {
-    //for (let idx = 0; idx < items.length; idx++) {
-    //  let zcuId = items[idx].id;
-    //  let zcuUsingType = ((items[idx].usingType == 0) ? "none" : ((items[idx].usingType == 1) ? "hw" : ((items[idx].usingType == 2) ? "sw" : "none")));
-    //  this.messageSvc
-    //    .sendZcuUsingTypeCommand({ type: 'ZCU', action: 'zcu_using_type', zcuId: zcuId, zcuUsingType: zcuUsingType })
-    //    .subscribe();
-    //}
-    let noneUsingZcus: number[] = [];
-    let hwUsingZcus: number[] = [];
-    let swUsingZcus: number[] = [];
+  onSettingZcu(items: any[]): Observable<void> {
+    const noneUsingZcus = items.filter(item => item.usingType == 0).map(item => parseInt(item.id))
+    const hwUsingZcus = items.filter(item => item.usingType == 1).map(item => parseInt(item.id))
+    const swUsingZcus = items.filter(item => item.usingType == 2).map(item => parseInt(item.id))
 
-    for (let idx = 0; idx < items.length; idx++) {
-      if (items[idx].usingType == 0)
-        noneUsingZcus.push(items[idx].id);
-      else if (items[idx].usingType == 1)
-        hwUsingZcus.push(items[idx].id);
-      else if (items[idx].usingType == 2)
-        swUsingZcus.push(items[idx].id);
-    }
 
     if (noneUsingZcus.length > 0)
       this.messageSvc
-        .sendZcusUsingTypeCommand({ type: 'ZCU', action: 'zcu_using_type', zcuIds: noneUsingZcus, zcuUsingType: 'none' })
+        .sendSettingZcuCommand({ type: 'ZCU', action: 'zcu-setting', zcuIds: noneUsingZcus, zcuUsingType: 'none' })
         .subscribe();
 
     if (hwUsingZcus.length > 0)
       this.messageSvc
-        .sendZcusUsingTypeCommand({ type: 'ZCU', action: 'zcu_using_type', zcuIds: hwUsingZcus, zcuUsingType: 'hw' })
+        .sendSettingZcuCommand({ type: 'ZCU', action: 'zcu-setting', zcuIds: hwUsingZcus, zcuUsingType: 'hw' })
         .subscribe();
 
     if (swUsingZcus.length > 0)
       this.messageSvc
-        .sendZcusUsingTypeCommand({ type: 'ZCU', action: 'zcu_using_type', zcuIds: swUsingZcus, zcuUsingType: 'sw' })
+        .sendSettingZcuCommand({ type: 'ZCU', action: 'zcu-setting', zcuIds: swUsingZcus, zcuUsingType: 'sw' })
         .subscribe();
 
     return;
