@@ -5,7 +5,7 @@
         [dataSource]="objectTypes" valueExpr="key" displayExpr="value" [searchEnabled]="true"
         (selectedItemChange)="onSelectType($event)"></dx-select-box>
       <dx-autocomplete #value class="form-item" [placeholder]="'messages.searchId' | translate" [dataSource]="targets"
-        [showClearButton]="true"></dx-autocomplete>
+        [showClearButton]="true" [disabled]="!type.value"></dx-autocomplete>
       <!-- <dx-select-box
         #value
         class="form-item"
