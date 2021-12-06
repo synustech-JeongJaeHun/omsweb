@@ -122,6 +122,39 @@ export class TrackIdService {
     return of(result);
   }
 
+  lookupUnitsByLogicalId(
+    scopes: string[],
+    logicalId: string,
+  ): Observable<ILookupUnit[]> {
+    const result: ILookupUnit[] = [];
+    if (!logicalId) return of(result);
+    if (scopes.includes('stations')) {
+      const items = Object.values(this.stations)
+        .filter((x) => x.logicalId.toString().includes(logicalId));
+      items.length > 0 && result.push(...items.map((x) => this.toLookupUnit(x, 'Station')));
+
+    }
+    if (scopes.includes('points')) {
+      const items = Object.values(this.points)
+        .filter((x) => x.logicalId.toString().includes(logicalId));
+      items.length > 0 && result.push(...items.map((x) => this.toLookupUnit(x, 'Point')));
+
+    }
+    if (scopes.includes('buffers')) {
+
+      const items = Object.values(this.buffers)
+        .filter((x) => x.logicalId.toString().includes(logicalId));
+      items.length > 0 && result.push(...items.map((x) => this.toLookupUnit(x, 'Buffer')));
+
+    }
+    if (scopes.includes('vehicles')) {
+      const items = Object.values(this.vehicles)
+        .filter((x) => x.logicalId.toString().includes(logicalId));
+      items.length > 0 && result.push(...items.map((x) => this.toLookupUnit(x, 'Vehicle')));
+    }
+    return of(result);
+  }
+
   private toLookupUnit(item: ILookupUnit, objectType: string): ILookupUnit {
     const { id, physicalId, logicalId } = item;
     return { id, objectType, logicalId, physicalId };
