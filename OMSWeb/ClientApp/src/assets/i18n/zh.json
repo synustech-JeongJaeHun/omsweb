@@ -359,6 +359,8 @@
     "createdToAssigned": "（创建〜分配）",
     "pioTrend": "PIO趋势",
     "bulkAddUser": "批量添加用户",
+    "csv": "CSV",
+    "download": "下载",
     "errorParsingCSVFile": "解析 CSV 文件时出错。",
     "noFileSelected": "未选择文件。",
     "csvTotalMessage": "您尝试输入",

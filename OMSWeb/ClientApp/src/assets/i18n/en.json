@@ -359,6 +359,8 @@
     "createdToAssigned": "(created ~ assigned)",
     "pioTrend": "PIO Trend",
     "bulkAddUser": "Bulk Add User",
+    "csv": "CSV",
+    "download": "Download",
     "errorParsingCSVFile": "Error Parsing CSV File.",
     "noFileSelected": "No File Selected.",
     "csvTotalMessage": "You try to input",

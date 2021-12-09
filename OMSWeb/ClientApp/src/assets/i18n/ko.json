@@ -359,6 +359,8 @@
     "createdToAssigned": "(생성 ~ 완료)",
     "pioTrend": "PIO 트렌드",
     "bulkAddUser": "사용자 일괄 추가",
+    "csv": "CSV",
+    "download": "다운로드",
     "errorParsingCSVFile": "CSV 파일 구문 분석 오류.",
     "noFileSelected": "선택된 파일이 없습니다.",
     "csvTotalMessage": "전체 CSV 입력 총 건수",

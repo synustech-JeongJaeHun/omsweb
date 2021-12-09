@@ -1,6 +1,10 @@
 <oms-dialog-base [title]="'names.bulkAddUser' | translate">
   <ng-container class="dialog-layout">
     <div mat-dialog-content>
+      <div>
+        <a href="../../../../assets/files/oms-bulkuser.csv" download>{{"names.csv" | translate}} {{"names.download" |
+          translate}}</a>
+      </div>
       <input type="file" id="uploadFiles" #uploadFiles name="CSV File Upload" (change)="fileChangeListner($event)"
         accept=".csv" />
       <div>
