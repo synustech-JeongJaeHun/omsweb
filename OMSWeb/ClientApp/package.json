@@ -34,7 +34,6 @@
     "devextreme-aspnet-data-nojquery": "^2.8.4",
     "jquery": "^3.6.0",
     "lodash": "^4.17.21",
-    "moment": "^2.29.1",
     "ngx-papaparse": "^5.0.0",
     "rxjs": "~6.5.5",
     "tslib": "^2.0.0",
