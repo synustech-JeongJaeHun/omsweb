@@ -83,31 +83,26 @@ export class UserManagementComponent implements OnInit, OnDestroy {
 
   onBulkAddUser(grid) {
     this._bulkAddUserDlg = this.dialog.open(BulkUserFormDialogComponent, {
-      width: '350px',
+      maxHeight: "80vh",
       hasBackdrop: true,
       disableClose: true,
       closeOnNavigation: true
     });
-    this._bulkAddUserDlg.afterClosed().subscribe((res) => {
-      if (res) {
-        //alert(res.length);
-        for (let idx = 0; idx < res.length; idx++) {
-          var user = <IUserForm>{};
-          user.id = uuid4();
-          user.isNew = true;
-          user.userId = res[idx][0];
-          user.firstName = res[idx][1];
-          user.lastName = res[idx][2];
-          user.email = res[idx][3];
-          user.password = res[idx][4];
-          user.roles = [res[idx][5]];
+    this._bulkAddUserDlg.afterClosed().subscribe((rows) => {
+      if (Array.isArray(rows)) {
+        const newUsers: IUserForm[] = rows.map(row => ({
+          id: uuid4(),
+          isNew: true,
+          userId: row[0],
+          firstName: row[1],
+          lastName: row[2],
+          email: row[3],
+          password: row[4],
+          roles: [rows[5]]
+        }))
 
-          this._changedItems.push(user);
-          grid.instance
-            .getDataSource()
-            .store()
-            .push([{ type: 'insert', data: user }]);
-        }
+        this._changedItems.push(...newUsers);
+        newUsers.forEach(newUser => grid.instance.getDataSource().store().push([{ type: "insert", data: newUser }]))
       }
     })
   }
