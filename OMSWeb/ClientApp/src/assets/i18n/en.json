@@ -452,6 +452,7 @@
     "noObjectSelected": "Nothing is selected.",
     "required": "{{field}} is required.",
     "minLength": "Minimum length is {{minLength}}.",
+    "maxLength": "Maximum length is {{maxLength}}.",
     "passwordMissMatch": "Password is miss match.",
     "changeConfirm": "Are you sure {{name}} change?​",
     "duplicatedRoleName": "Role name is used already.",

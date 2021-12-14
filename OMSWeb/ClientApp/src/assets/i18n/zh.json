@@ -452,6 +452,7 @@
     "noObjectSelected": "没有选择任何东西。",
     "required": "{{field}} 是必需的。",
     "minLength": "最小长度为 {{minLength}}。",
+    "maxLength": "最大长度为 {{maxLength}}。",
     "passwordMissMatch": "密码不匹配。",
     "changeConfirm": "你确定 {{name}} 改变了吗？​",
     "duplicatedRoleName": "角色名称已被使用。",
