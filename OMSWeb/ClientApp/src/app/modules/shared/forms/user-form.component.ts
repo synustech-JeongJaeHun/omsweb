@@ -9,6 +9,7 @@ import { Observable } from 'rxjs';
 import { IProfileForm, IRole, ISessionUser } from '../../../models/user.model';
 import { AuthService } from '../../../services/auth.service';
 import { UsersService } from '../../../services/users.service';
+import { UserDataRestriction } from '../../shared/utils/user.util'
 
 @Component({
   selector: 'oms-user-form',
@@ -30,6 +31,8 @@ export class UserFormComponent implements OnInit {
   get f(): { [key: string]: FormControl } {
     return this.form.controls as { [key: string]: FormControl };
   }
+
+  public UserDataRestriction = UserDataRestriction;
 
   constructor(private auth: AuthService, private userSvc: UsersService) {
     this.roles$ = this.userSvc.roles();
@@ -67,23 +70,38 @@ export class UserFormComponent implements OnInit {
       {
         userId: new FormControl(this._formModel.userId, [
           Validators.required,
+          Validators.minLength(UserDataRestriction.UserId.Minlength),
+          Validators.maxLength(UserDataRestriction.UserId.Maxlength),
         ]),
         firstName: new FormControl(this._formModel.firstName, [
           Validators.required,
+          Validators.minLength(UserDataRestriction.FirstName.Minlength),
+          Validators.maxLength(UserDataRestriction.FirstName.Maxlength)
         ]),
         lastName: new FormControl(this._formModel.lastName, [
           Validators.required,
+          Validators.minLength(UserDataRestriction.LastName.Minlength),
+          Validators.maxLength(UserDataRestriction.LastName.Maxlength)
         ]),
-        email: new FormControl(this._formModel.email, [Validators.email]),
+        email: new FormControl(this._formModel.email, [
+          Validators.required,
+          Validators.email,
+          Validators.minLength(UserDataRestriction.Email.Minlength),
+          Validators.maxLength(UserDataRestriction.Email.Maxlength)
+        ]),
         password: new FormControl('', [
-          // Validators.required,
-          Validators.minLength(4),
+          Validators.required,
+          Validators.minLength(UserDataRestriction.Password.Minlength),
+          Validators.maxLength(UserDataRestriction.Password.Maxlength)
         ]),
         passwordConfirm: new FormControl('', [
-          // Validators.required,
-          Validators.minLength(4),
+          Validators.required,
+          Validators.minLength(UserDataRestriction.Password.Minlength),
+          Validators.maxLength(UserDataRestriction.Password.Maxlength)
         ]),
-        roles: new FormControl(this._formModel.roles, []),
+        roles: new FormControl(this._formModel.roles, [
+          Validators.required
+        ]),
       },
       this.passwordCompareValidator
     );
