@@ -1,2 +1,2 @@
-﻿user_id,first_name,last_name,email,password,roles
-user001,john,doe,johndoe@email.com,mypasssword,exist_role
+﻿user_id,first_name,last_name,email,password,role
+user001,john,doe,johndoe@email.com,mypasssword,VIEWER
