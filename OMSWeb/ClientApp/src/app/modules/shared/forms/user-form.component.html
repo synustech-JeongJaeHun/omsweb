@@ -5,6 +5,9 @@
       <input matInput formControlName="userId" required [minlength]="UserDataRestriction.UserId.Minlength"
         [maxlength]="UserDataRestriction.UserId.Maxlength" />
       <mat-error *ngIf="f.userId.errors">
+        <mat-error *ngIf="f.userId.errors.existUserId"> {{
+          "messages.existUserId" | translate
+          }}</mat-error>
         <mat-error *ngIf="f.userId.errors.required">{{
           "messages.required" | translate: { field: "User ID" }
           }}</mat-error>
