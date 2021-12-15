@@ -27,14 +27,8 @@ export const UserDataRestriction = {
   }
 }
 
-function validateEmail(email: string) {
-  const emailInput = document.createElement('input')
-  emailInput.setAttribute('type', 'email')
-  emailInput.value = email
-  return emailInput.checkValidity()
-}
-
 export function validateUserData(
+  existUsers: { userId: string }[],
   existRoles: IPermission[],
   userId?: string,
   firstName?: string,
@@ -46,20 +40,44 @@ export function validateUserData(
   if ([userId, firstName, lastName, email, password, role].every(value => typeof (value) === "string") === false)
     return false
   else {
-    const isValidUserId = userId.length >= UserDataRestriction.UserId.Minlength && userId.length <= UserDataRestriction.UserId.Maxlength
-    const isValidFirstName = firstName.length >= UserDataRestriction.FirstName.Minlength && firstName.length <= UserDataRestriction.FirstName.Maxlength
-    const isValidLastName = lastName.length >= UserDataRestriction.LastName.Minlength && lastName.length <= UserDataRestriction.LastName.Maxlength
-    const isValidEmail = email.length >= UserDataRestriction.Email.Minlength && email.length <= UserDataRestriction.Email.Maxlength && validateEmail(email)
-    const isValidPassword = password.length >= UserDataRestriction.Password.Minlength && password.length <= UserDataRestriction.Password.Maxlength
-    const isValidRole = role.length >= UserDataRestriction.Role.Minlength && role.length <= UserDataRestriction.Role.Maxlength && existRoles.some(existRole => existRole.name === role)
-
     return (
-      isValidUserId
-      && isValidFirstName
-      && isValidLastName
-      && isValidEmail
-      && isValidPassword
-      && isValidRole
+      validateUserId(existUsers, userId)
+      && validateFirstName(firstName)
+      && validateLastName(lastName)
+      && validateEmail(email)
+      && validatePassword(password)
+      && validateRole(existRoles, role)
     )
   }
+}
+
+function validateRole(existRoles: IPermission[], role: string) {
+  return role.length >= UserDataRestriction.Role.Minlength && role.length <= UserDataRestriction.Role.Maxlength && existRoles.some(existRole => existRole.name === role)
+}
+
+function validatePassword(password: string) {
+  return password.length >= UserDataRestriction.Password.Minlength && password.length <= UserDataRestriction.Password.Maxlength
+}
+
+function validateEmail(email: string) {
+  function validateEmailFormat(email: string) {
+    const emailInput = document.createElement('input')
+    emailInput.setAttribute('type', 'email')
+    emailInput.value = email
+    return emailInput.checkValidity()
+  }
+
+  return email.length >= UserDataRestriction.Email.Minlength && email.length <= UserDataRestriction.Email.Maxlength && validateEmailFormat(email)
+}
+
+function validateLastName(lastName: string) {
+  return lastName.length >= UserDataRestriction.LastName.Minlength && lastName.length <= UserDataRestriction.LastName.Maxlength
+}
+
+export function validateUserId(existUsers: { userId: string }[], userId: string) {
+  return userId.length >= UserDataRestriction.UserId.Minlength && userId.length <= UserDataRestriction.UserId.Maxlength && !existUsers.some(existUser => existUser.userId === userId)
+}
+
+function validateFirstName(firstName: string) {
+  return firstName.length >= UserDataRestriction.FirstName.Minlength && firstName.length <= UserDataRestriction.FirstName.Maxlength
 }
