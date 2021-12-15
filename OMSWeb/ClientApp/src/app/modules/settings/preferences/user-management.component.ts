@@ -1,6 +1,4 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import CustomStore from 'devextreme/data/custom_store';
-import DataSource from 'devextreme/data/data_source';
 import { NIL, v4 as uuid4 } from 'uuid';
 
 import { UsersService } from '@oms/services/users.service';
@@ -8,10 +6,8 @@ import { IRole, ISimpleUser, IUserForm } from '../../../models/user.model';
 import {
   BehaviorSubject,
   combineLatest,
-  concat,
   forkJoin,
   Observable,
-  Subject,
 } from 'rxjs';
 import {
   MatDialog,
@@ -21,8 +17,8 @@ import {
 import { RoleSettingDialogComponent } from '../dialogs/role-setting-dialog.component';
 import { UserFormDialogComponent } from '../dialogs/user-form-dialog.component';
 import { BulkUserFormDialogComponent } from '../dialogs/bulk-user-from-dialog.component';
-import { filter, map, tap } from 'rxjs/operators';
-import _ = require('lodash');
+import { map } from 'rxjs/operators';
+import * as _ from 'lodash'
 
 @Component({
   selector: 'oms-user-management',
@@ -86,9 +82,11 @@ export class UserManagementComponent implements OnInit, OnDestroy {
       maxHeight: "80vh",
       hasBackdrop: true,
       disableClose: true,
-      closeOnNavigation: true
+      closeOnNavigation: true,
+      data: { usersInDraft: grid.instance.getDataSource()._items }
     });
-    this._bulkAddUserDlg.afterClosed().subscribe((rows) => {
+    this._bulkAddUserDlg.afterClosed().subscribe(async (rows) => {
+      const roles = await this.roles$.toPromise()
       if (Array.isArray(rows)) {
         const newUsers: IUserForm[] = rows.map(row => ({
           id: uuid4(),
@@ -98,7 +96,7 @@ export class UserManagementComponent implements OnInit, OnDestroy {
           lastName: row[2],
           email: row[3],
           password: row[4],
-          roles: [rows[5]]
+          roles: [(roles.find(role => role.name === row[5]) ?? roles.find(role => role.name === "VIEWER")).id]
         }))
 
         this._changedItems.push(...newUsers);
@@ -113,6 +111,7 @@ export class UserManagementComponent implements OnInit, OnDestroy {
       hasBackdrop: true,
       disableClose: true,
       closeOnNavigation: true,
+      data: { usersInDraft: grid.instance.getDataSource()._items }
     });
     this._userDlg.afterClosed().subscribe((res) => {
       if (res) {
