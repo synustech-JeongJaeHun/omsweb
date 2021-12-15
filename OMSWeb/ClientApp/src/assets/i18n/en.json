@@ -450,6 +450,7 @@
     "selectObjectType": "Select Type",
     "searchId": "Search ID",
     "noObjectSelected": "Nothing is selected.",
+    "existUserId": "User ID is already exist.",
     "required": "{{field}} is required.",
     "minLength": "Minimum length is {{minLength}}.",
     "maxLength": "Maximum length is {{maxLength}}.",

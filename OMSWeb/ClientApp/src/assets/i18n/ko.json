@@ -450,6 +450,7 @@
     "selectObjectType": "유형 선택",
     "searchId": "검색 ID",
     "noObjectSelected": "선택된 항목이 없습니다.",
+    "existUserId": "유저 ID가 이미 있습니다.",
     "required": "{{field}} 이(가) 필요합니다.",
     "minLength": "최소 길이는 {{minLength}}입니다.",
     "maxLength": "최대 길이는 {{maxLength}}입니다.",
