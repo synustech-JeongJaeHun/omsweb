@@ -22,11 +22,8 @@ import {
 } from '../../../models/drawing.model';
 import { MapTypes, ViewModes } from '../../../models/enums';
 import { rgb } from 'd3';
-import { MapParser } from './map-parser';
 import {
-  IMapMouseEvent,
   IViewerData,
-  MapEventType,
   VehicleTrackingState,
 } from '../../../models/map.interface';
 import { Segment } from '../../../models/segment.model';
@@ -38,10 +35,32 @@ import { Point } from '../../../models/point.model';
 import { MapStatesService } from '../map-states.service';
 import { MapDataService } from '../map-data.service';
 import { IPreferences, UiStates } from '../../../models/settings.model';
-import { } from '@oms/models/drawing.model';
-import { EventEmitter } from '@angular/core';
 import { Group } from '../../../models/group.model';
 import { ExpectedPath } from '../../../models/expected-path.model';
+
+function getDestinationFromLocations(stations: Station[], buffers: Buffer[], commandPoint: any, locationPickup: string | undefined, locationDropoff: string | undefined) {
+  function parseOrderLocation(stations: Station[], buffers: Buffer[], location: string | undefined | null): Station | Buffer | null {
+    if (location === undefined || location === null) return null
+
+    const typeLetter = location[0].toLowerCase()
+    const id = parseInt(location.slice(1))
+    switch (typeLetter) {
+      case "s":
+        return stations.find(s => s.id === id)
+      case "b":
+        return buffers.find(b => b.id === id)
+      default:
+        return null
+    }
+  }
+
+  return [locationPickup, locationDropoff]
+    .filter(location => location)
+    .map(location => parseOrderLocation(stations, buffers, location))
+    .filter(location => location)
+    .find(location => location.pointId === commandPoint.point) as (Station | Buffer | undefined);
+}
+
 export class ViewController {
   //#region properties
   private svg: any; // d3.Selection<d3.ContainerElement, unknown, HTMLElement, any>;
@@ -6182,20 +6201,22 @@ export class ViewController {
                 ? d.commandPoint.invertedCoord.y
                 : cur_y;
 
-            let point_object = {
-              x: command_x,
-              y: command_y,
-            };
-            let cmd_offset = LayoutUtil.find_connected_object_offset(point_object, d.distancePoint, this.layout_data);
-            cmd_offset.x = 0;
-            cmd_offset.y = 0;
+            const { stations, buffers } = this.layout_data
+            const { locationPickup, locationDropoff, commandPoint } = d
+
+            const destination = getDestinationFromLocations(stations, buffers, commandPoint, locationPickup, locationDropoff)
+
+            const offset = destination
+              ? LayoutUtil.find_connected_object_offset(destination)
+              : { x: 0, y: 0 }
+            const invertedOffset = { x: offset.x, y: offset.y * -1 }
 
             this.update_vehicle_command_svg(
               d3_this,
               cur_x,
               cur_y,
-              command_x + cmd_offset.x,
-              command_y + cmd_offset.y,
+              command_x + invertedOffset.x,
+              command_y + invertedOffset.y,
               is_show_vehicle_line,
               d.cargoState
             );
@@ -6416,20 +6437,22 @@ export class ViewController {
         ? vehicle_data.commandPoint.invertedCoord
         : fallback;
 
-    let cmd_point_object = {
-      x: command_pt.x,
-      y: command_pt.y,
-    };
-    let cmd_offset = LayoutUtil.find_connected_object_offset(cmd_point_object, vehicle_data.distancePoint, this.layout_data);
-    cmd_offset.x = 0;
-    cmd_offset.y = 0;
+    const { stations, buffers } = this.layout_data
+    const { locationPickup, locationDropoff, commandPoint } = vehicle_data
+
+    const destination = getDestinationFromLocations(stations, buffers, commandPoint, locationPickup, locationDropoff)
+
+    const offset = destination
+      ? LayoutUtil.find_connected_object_offset(destination)
+      : { x: 0, y: 0 }
+    const invertedOffset = { x: offset.x, y: offset.y * -1 }
 
     this.update_vehicle_command_svg(
       vehicle_element,
       current_pt.x,
       current_pt.y,
-      command_pt.x + cmd_offset.x,
-      command_pt.y + cmd_offset.y,
+      command_pt.x + invertedOffset.x,
+      command_pt.y + invertedOffset.y,
       is_show,
       vehicle_data.cargoState
     );
@@ -11518,50 +11541,26 @@ export class ViewController {
           .lower();
 
         //Order line
-        dom_object_group
-          .append('line')
-          .attr('class', 'command')
-          .attr('stroke', function () {
-            if (layout_object.cargoState === 'E') {
-              return dom_css.order_pickup_color;
-            } else {
-              return dom_css.order_dropoff_color;
-            }
-          })
-          .attr('stroke-width', dom_css.order_weight)
-          .attr('commandPoint', function () {
-            if (!layout_object.curPoint || !layout_object.commandPoint) {
-              return null;
-            } else {
-              return layout_object.commandPoint.point;
-            }
-          })
-          .attr('x1', 0)
-          .attr('y1', 0)
-          .attr('x2', function () {
-            if (!layout_object.curPoint || !layout_object.commandPoint) {
-              // If undefined, set the end point equal to start point for 0 length
-              return 0;
-            } else {
-              return (
-                layout_object.commandPoint.invertedCoord.x -
-                layout_object.curPoint.invertedCoord.x
-              );
-            }
-          })
-          .attr('y2', function () {
-            if (!layout_object.curPoint || !layout_object.commandPoint) {
-              // If undefined, set the end point equal to start point for 0 length
-              return 0;
-            } else {
-              return (
-                layout_object.commandPoint.invertedCoord.y -
-                layout_object.curPoint.invertedCoord.y
-              );
-            }
-          })
-          .attr('transform', `scale(${this.getZoom(MapTypes.MAIN).k})`)
-          .lower();
+        const { stations, buffers } = this.layout_data
+        const { locationPickup, locationDropoff, commandPoint } = layout_object
+
+        const destination = getDestinationFromLocations(stations, buffers, commandPoint, locationPickup, locationDropoff)
+
+        const offset = destination
+          ? LayoutUtil.find_connected_object_offset(destination)
+          : { x: 0, y: 0 }
+        const invertedOffset = { x: offset.x, y: offset.y * -1 }
+
+        if (layout_object.curPoint?.invertedCoord && layout_object.commandPoint?.invertedCoord)
+          this.update_vehicle_command_svg(
+            dom_object_group,
+            layout_object.curPoint.invertedCoord.x,
+            layout_object.curPoint.invertedCoord.y,
+            layout_object.commandPoint.invertedCoord.x + invertedOffset.x,
+            layout_object.commandPoint.invertedCoord.y + invertedOffset.y,
+            true,
+            layout_object.cargoState
+          )
       }
     }
 
