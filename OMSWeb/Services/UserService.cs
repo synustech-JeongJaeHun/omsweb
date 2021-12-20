@@ -68,8 +68,9 @@ namespace OMSWeb.Services
       {
         Token = GenerateUserToken(user)
       };
+      var validTo = this.GetTokenValidTo(tokenResponse.Token);
 
-      this._repo.AddLoginHistory(user, nameof(Authenticate));
+      this._repo.AddTokenHistory(user, validTo,nameof(Authenticate));
 
       return tokenResponse;
     }
@@ -85,8 +86,9 @@ namespace OMSWeb.Services
       {
         Token = GenerateUserToken(user)
       };
-
-      this._repo.AddLoginHistory(user, nameof(RenewToken));
+      var validTo = this.GetTokenValidTo(tokenResponse.Token);
+ 
+      this._repo.AddTokenHistory(user, validTo, nameof(RenewToken));
 
       return tokenResponse;
     }
@@ -95,7 +97,18 @@ namespace OMSWeb.Services
     {
         var user = this._repo.GetUserById(this.UserId);
 
-        this._repo.AddLoginHistory(user, nameof(Logout));
+        var tokenString = this._context.Request.Headers["Authorization"].ToString().Split(" ")[1];
+        var validTo = this.GetTokenValidTo(tokenString);
+
+        this._repo.AddTokenHistory(user, validTo, nameof(Logout));
+    }
+
+    private DateTime GetTokenValidTo(string tokenString)
+    {
+        var jwtHandler = new JwtSecurityTokenHandler();
+
+        var token = jwtHandler.ReadJwtToken(tokenString);
+        return token.ValidTo;
     }
 
     private string GenerateUserToken(UserEntity userEntity)

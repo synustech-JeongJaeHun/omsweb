@@ -613,13 +613,13 @@ namespace OMSWeb.Repositories
     }
 
 
-    public int AddLoginHistory(UserEntity user, string callerMethodName) 
+    public int AddTokenHistory(UserEntity user, DateTime validTo, string callerMethodName) 
     {
         int result = -1;
 
         var insertLoginHistorySql = @"
-            INSERT INTO login_history (user_id, method_name)
-            VALUES (@user_id, @method_name);
+            INSERT INTO token_history (user_id, token_expires, method_name)
+            VALUES (@user_id, @token_expires, @method_name);
         ";
 
         using (var conn = ConnectUi())
@@ -632,6 +632,7 @@ namespace OMSWeb.Repositories
                 try
                 {
                     cmd.Parameters.AddWithValue("user_id", user.UserId);
+                    cmd.Parameters.AddWithValue("token_expires", validTo);
                     cmd.Parameters.AddWithValue("method_name", callerMethodName);
 
                     result = cmd.ExecuteNonQuery();
