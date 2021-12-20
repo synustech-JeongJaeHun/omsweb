@@ -64,22 +64,31 @@ namespace OMSWeb.Services
       if (!verified) //throw new OmsException(ErrorCodes.AuthenticationFailed);
         return null;
 
-      return new TokenResponse
+      var tokenResponse = new TokenResponse
       {
         Token = GenerateUserToken(user)
       };
+
+      this._repo.AddLoginHistory(user, nameof(Authenticate));
+
+      return tokenResponse;
     }
 
     public TokenResponse RenewToken()
     {
       var user = this._repo.GetUserById(this.UserId);
+
       if (user == null) //throw new OmsException(ErrorCodes.AuthenticationFailed);
         return null;
 
-      return new TokenResponse
+      var tokenResponse = new TokenResponse
       {
         Token = GenerateUserToken(user)
       };
+
+      this._repo.AddLoginHistory(user, nameof(RenewToken));
+
+      return tokenResponse;
     }
 
     private string GenerateUserToken(UserEntity userEntity)

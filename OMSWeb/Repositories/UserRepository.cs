@@ -612,5 +612,39 @@ namespace OMSWeb.Repositories
       return result;
     }
 
+
+    public int AddLoginHistory(UserEntity user, string callerMethodName) 
+    {
+        int result = -1;
+
+        var insertLoginHistorySql = @"
+            INSERT INTO login_history (user_id, method_name)
+            VALUES (@user_id, @method_name);
+        ";
+
+        using (var conn = ConnectUi())
+        {
+            conn.Open();
+            var trans = conn.BeginTransaction();
+
+            using (var cmd = new NpgsqlCommand(insertLoginHistorySql, conn))
+            {
+                try
+                {
+                    cmd.Parameters.AddWithValue("user_id", user.UserId);
+                    cmd.Parameters.AddWithValue("method_name", callerMethodName);
+
+                    result = cmd.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                    trans.Rollback();
+                    throw ex;
+                }
+            }
+            trans.Commit();
+        }
+        return result;
+    }
   }
 }
