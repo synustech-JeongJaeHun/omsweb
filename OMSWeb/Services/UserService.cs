@@ -91,6 +91,13 @@ namespace OMSWeb.Services
       return tokenResponse;
     }
 
+    public void Logout()
+    {
+        var user = this._repo.GetUserById(this.UserId);
+
+        this._repo.AddLoginHistory(user, nameof(Logout));
+    }
+
     private string GenerateUserToken(UserEntity userEntity)
     {
       if (this.IsAdministrators(userEntity))
