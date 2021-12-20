@@ -1,14 +1,12 @@
-import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import DataSource from 'devextreme/data/data_source';
 
 import { StatusService } from '../../../services/status.service';
 import { SettingsService } from '../../../services/settings.service';
-import { forkJoin, Subject, Subscription } from 'rxjs';
+import { forkJoin, Subject } from 'rxjs';
 import { HubService } from '../../../services/hub.service';
 import { IDataChangeEvent } from '../../../models/notification.model';
-import { UserPermissions } from '../../../models/enums';
 import { AuthService } from '../../../services/auth.service';
-import { AccountUtil } from '../../shared/utils/account.util';
 import { takeUntil } from 'rxjs/operators';
 import { MessagesService } from '../../../services/messages.service';
 import { DxDataGridComponent } from 'devextreme-angular';
@@ -92,5 +90,10 @@ export class BufferControlTableComponent implements OnInit, OnDestroy {
       needReload = true;
     }
     needReload && this.dataSource.reload();
+  }
+
+  @HostListener('document:visibilitychange', ['$event'])
+  private visibilitychange() {
+    if (!document.hidden) this.dataSource.reload();
   }
 }
