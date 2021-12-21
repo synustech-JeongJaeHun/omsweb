@@ -41,6 +41,12 @@ namespace OMSWeb.Controllers
       return DataSourceLoader.Load(_userSvc.QueryUsers(), loadOptions);
     }
 
+    [HttpGet("token-history")]
+    public IEnumerable<TokenHistoryEntity> QueryTokenHistory([FromQuery] uint offset, [FromQuery] uint limit) 
+    {
+        return _userSvc.QueryTokenHistory(offset, limit);
+    }
+
     [HttpGet("roles")]
     public IEnumerable<RoleEntity> QueryRoles()
     {

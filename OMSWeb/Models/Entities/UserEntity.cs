@@ -28,4 +28,13 @@ namespace OMSWeb.Models.Entities
   {
     public int[] Permissions { get; set; }
   }
+
+  public class TokenHistoryEntity
+  {
+    public int Id { get; set; }
+    public DateTime TimeCreated { get; set; }
+    public string UserId { get; set; }
+    public string MethodName { get; set; }
+    public DateTime TokenExpires { get; set; }
+  }
 }

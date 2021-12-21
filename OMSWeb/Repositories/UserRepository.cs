@@ -647,5 +647,15 @@ namespace OMSWeb.Repositories
         }
         return result;
     }
-  }
+    public IQueryable<TokenHistoryEntity> QueryTokenHistory(uint offset, uint limit)
+    {
+        var sql = $"SELECT * FROM token_history ORDER BY id DESC OFFSET {offset} LIMIT {limit}";
+        IQueryable<TokenHistoryEntity> result;
+        using (var conn = ConnectUi())
+        {
+            result = conn.Query<TokenHistoryEntity>(sql).AsQueryable();
+        }
+        return result;
+    }
+    }
 }

@@ -33,6 +33,11 @@ namespace OMSWeb.Services
       this._context = contextAccessor.HttpContext;
     }
 
+    public IQueryable<TokenHistoryEntity> QueryTokenHistory(uint offset, uint limit)
+    {
+        return this._repo.QueryTokenHistory(offset, limit);
+    }
+
     public IQueryable<UserEntity> QueryUsers()
     {
       return this._repo.QueryUsers();
