@@ -33,9 +33,9 @@ namespace OMSWeb.Services
       this._context = contextAccessor.HttpContext;
     }
 
-    public IQueryable<TokenHistoryEntity> QueryTokenHistory(uint offset, uint limit)
+    public IQueryable<TokenHistoryEntity> QueryTokenHistory()
     {
-        return this._repo.QueryTokenHistory(offset, limit);
+        return this._repo.QueryTokenHistory();
     }
 
     public IQueryable<UserEntity> QueryUsers()
