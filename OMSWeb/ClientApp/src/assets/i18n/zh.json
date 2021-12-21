@@ -343,6 +343,8 @@
     "ai": "AI",
     "reports": "报告",
     "server": "服务器",
+    "tokenHistory": "代币记录",
+    "tokenExpires": "代币到期",
     "trend": "趋势",
     "normalTR": "正常TR",
     "abnormalTR": "异常TR",
