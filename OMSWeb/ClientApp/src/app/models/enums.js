@@ -75,6 +75,7 @@ var HostModeEnums;
 })(HostModeEnums = exports.HostModeEnums || (exports.HostModeEnums = {}));
 var TscModeEnums;
 (function (TscModeEnums) {
+  TscModeEnums[TscModeEnums["DEFAULT"] = 0] = "PAUSED";
   TscModeEnums[TscModeEnums["INIT"] = 1] = "INIT";
   TscModeEnums[TscModeEnums["PAUSED"] = 2] = "PAUSED";
   TscModeEnums[TscModeEnums["AUTO"] = 3] = "AUTO";
