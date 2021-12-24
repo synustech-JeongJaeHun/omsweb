@@ -1,14 +1,13 @@
 {
-  "name": "vite-template-solid",
+  "name": "oms-track-monitor",
   "version": "0.0.0",
-  "description": "",
+  "description": "Web Component for oms-track-monitor",
   "scripts": {
     "start": "vite",
     "dev": "vite",
     "build": "vite build",
     "serve": "vite preview"
   },
-  "license": "MIT",
   "devDependencies": {
     "typescript": "^4.5.4",
     "vite": "^2.7.6",
