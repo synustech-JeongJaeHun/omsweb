@@ -343,7 +343,7 @@
     "ai": "AI",
     "reports": "Reports",
     "server": "Server",
-    "tokenHistory": "Token History",
+    "auditTrail": "Audit Trail",
     "tokenExpires": "Token Expire Time",
     "trend": "Trend",
     "normalTR": "Normal TR",

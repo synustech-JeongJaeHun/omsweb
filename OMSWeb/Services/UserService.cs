@@ -75,7 +75,7 @@ namespace OMSWeb.Services
       };
       var validTo = this.GetTokenValidTo(tokenResponse.Token);
 
-      this._repo.AddTokenHistory(user, validTo,nameof(Authenticate));
+      this._repo.AddTokenHistory(user, validTo, "Logged In");
 
       return tokenResponse;
     }
@@ -93,7 +93,7 @@ namespace OMSWeb.Services
       };
       var validTo = this.GetTokenValidTo(tokenResponse.Token);
  
-      this._repo.AddTokenHistory(user, validTo, nameof(RenewToken));
+      this._repo.AddTokenHistory(user, validTo, "Refresh Logged In");
 
       return tokenResponse;
     }
@@ -105,7 +105,7 @@ namespace OMSWeb.Services
         var tokenString = this._context.Request.Headers["Authorization"].ToString().Split(" ")[1];
         var validTo = this.GetTokenValidTo(tokenString);
 
-        this._repo.AddTokenHistory(user, validTo, nameof(Logout));
+        this._repo.AddTokenHistory(user, validTo, "Logged Out");
     }
 
     private DateTime GetTokenValidTo(string tokenString)
