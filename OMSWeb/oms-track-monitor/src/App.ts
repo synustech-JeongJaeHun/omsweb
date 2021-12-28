@@ -1,4 +1,8 @@
-import { customElement } from "solid-element";
-import OmsTrackMonitor from "./OmsTrackMonitor";
+import { defineCustomElement } from 'vue'
+import OmsTrackMonitor from './OmsTrackMonitor.ce.vue'
 
-customElement('oms-track-monitor', {}, OmsTrackMonitor)
+console.log(OmsTrackMonitor.styles)
+
+const OmsTrackMonitorElement = defineCustomElement(OmsTrackMonitor)
+
+customElements.define('oms-track-monitor', OmsTrackMonitorElement)

@@ -36,6 +36,7 @@
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
     "ngx-papaparse": "^5.0.0",
+    "oms-track-monitor": "file:../oms-track-monitor",
     "rxjs": "~6.5.5",
     "tslib": "^2.0.0",
     "uuid": "^8.3.2",

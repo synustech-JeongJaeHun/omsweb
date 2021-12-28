@@ -1,20 +1,17 @@
-import { defineConfig } from "vite";
-import solidPlugin from "vite-plugin-solid";
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
 
 const path = require('path')
 
-export default defineConfig({
-  plugins: [solidPlugin()],
-  build: {
-    target: "esnext",
-    polyfillDynamicImport: false,
+// https://vitejs.dev/config/
 
-    // lib mode
-    // https://vitejs.dev/guide/build.html#library-mode
+export default defineConfig({
+  plugins: [vue()],
+  build: {
     lib: {
-      entry: path.resolve(__dirname, 'src/App.ts'),
-      name: "oms-track-monitor",
+      entry: path.resolve(__dirname, 'src/app.ts'),
+      name: 'oms-track-monitor',
       fileName: (format) => `oms-track-monitor.${format}.js`
     }
-  },
-});
+  }
+})
