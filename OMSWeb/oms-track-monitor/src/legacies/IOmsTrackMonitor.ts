@@ -8,7 +8,7 @@ import { MapStatesService } from "./serivces/MapStates.service";
 interface IOMSTrackMonitor {
   constructor: (
     mode: ViewModes, // NOTE default ViewModes.minimal
-    track_id: string,
+    track_svg_id: string,
     minimap_svg_id: string,
     dataSvc: MapDataService,
     stateSvc: MapStatesService,
