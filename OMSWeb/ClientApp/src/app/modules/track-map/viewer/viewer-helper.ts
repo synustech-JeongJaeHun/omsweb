@@ -22,11 +22,8 @@ import {
 } from '../../../models/drawing.model';
 import { MapTypes, ViewModes } from '../../../models/enums';
 import { rgb } from 'd3';
-import { MapParser } from './map-parser';
 import {
-  IMapMouseEvent,
   IViewerData,
-  MapEventType,
   VehicleTrackingState,
 } from '../../../models/map.interface';
 import { Segment } from '../../../models/segment.model';
@@ -38,10 +35,32 @@ import { Point } from '../../../models/point.model';
 import { MapStatesService } from '../map-states.service';
 import { MapDataService } from '../map-data.service';
 import { IPreferences, UiStates } from '../../../models/settings.model';
-import { } from '@oms/models/drawing.model';
-import { EventEmitter } from '@angular/core';
 import { Group } from '../../../models/group.model';
 import { ExpectedPath } from '../../../models/expected-path.model';
+
+function getDestinationFromLocations(stations: Station[], buffers: Buffer[], commandPoint: any, locationPickup: string | undefined, locationDropoff: string | undefined) {
+  function parseOrderLocation(stations: Station[], buffers: Buffer[], location: string | undefined | null): Station | Buffer | null {
+    if (location === undefined || location === null) return null
+
+    const typeLetter = location[0].toLowerCase()
+    const id = parseInt(location.slice(1))
+    switch (typeLetter) {
+      case "s":
+        return stations.find(s => s.id === id)
+      case "b":
+        return buffers.find(b => b.id === id)
+      default:
+        return null
+    }
+  }
+
+  return [locationPickup, locationDropoff]
+    .filter(location => location)
+    .map(location => parseOrderLocation(stations, buffers, location))
+    .filter(location => location)
+    .find(location => location.pointId === commandPoint.point) as (Station | Buffer | undefined);
+}
+
 export class ViewController {
   //#region properties
   private svg: any; // d3.Selection<d3.ContainerElement, unknown, HTMLElement, any>;
@@ -6165,37 +6184,41 @@ export class ViewController {
               : false;
 
           if (is_update_all || update.commandPoint || update.cargoState) {
-            let cur_x =
-              d.curPoint && d.curPoint.invertedCoord.x
-                ? d.curPoint.invertedCoord.x
-                : 0;
-            let cur_y =
-              d.curPoint && d.curPoint.invertedCoord.y
-                ? d.curPoint.invertedCoord.y
-                : 0;
-            let command_x =
-              d.commandPoint && d.commandPoint.invertedCoord.x
-                ? d.commandPoint.invertedCoord.x
-                : cur_x;
-            let command_y =
-              d.commandPoint && d.commandPoint.invertedCoord.y
-                ? d.commandPoint.invertedCoord.y
-                : cur_y;
+            const currentInvertedOffset = LayoutUtil.get_vehicle_distance_point(
+              d.curPoint.invertedCoord,
+              d.nextPoint.invertedCoord,
+              d.distancePoint
+            )
 
-            let point_object = {
-              x: command_x,
-              y: command_y,
-            };
-            let cmd_offset = LayoutUtil.find_connected_object_offset(point_object, d.distancePoint, this.layout_data);
-            cmd_offset.x = 0;
-            cmd_offset.y = 0;
+            const { stations, buffers } = this.layout_data
+            const { locationPickup, locationDropoff, commandPoint } = d
+
+            const destination = getDestinationFromLocations(stations, buffers, commandPoint, locationPickup, locationDropoff)
+
+            const commandOffset = destination
+              ? LayoutUtil.find_connected_object_offset(destination)
+              : { x: 0, y: 0 }
+            const commandInvertedOffset = { x: commandOffset.x, y: commandOffset.y * -1 }
+
+            const current = d?.curPoint?.invertedCoord
+              ? {
+                x: d.curPoint.invertedCoord.x + currentInvertedOffset.x,
+                y: d.curPoint.invertedCoord.y + currentInvertedOffset.y
+              }
+              : { x: 0, y: 0 }
+            const command = d?.commandPoint?.invertedCoord
+              ? {
+                x: d.commandPoint.invertedCoord.x + commandInvertedOffset.x,
+                y: d.commandPoint.invertedCoord.y + commandInvertedOffset.y
+              }
+              : current
 
             this.update_vehicle_command_svg(
               d3_this,
-              cur_x,
-              cur_y,
-              command_x + cmd_offset.x,
-              command_y + cmd_offset.y,
+              current.x,
+              current.y,
+              command.x,
+              command.y,
               is_show_vehicle_line,
               d.cargoState
             );
@@ -6404,41 +6427,50 @@ export class ViewController {
     vehicle_data: any,
     is_show: boolean
   ) {
-    let fallback = vehicle_data.curPoint.invertedCoord;
+    const currentInvertedOffset = LayoutUtil.get_vehicle_distance_point(
+      vehicle_data.curPoint.invertedCoord,
+      vehicle_data.nextPoint.invertedCoord,
+      vehicle_data.distancePoint
+    )
 
-    let current_pt = vehicle_data.curPoint.invertedCoord;
-    let next_pt =
-      vehicle_data.nextPoint && vehicle_data.nextPoint.invertedCoord
-        ? vehicle_data.nextPoint.invertedCoord
-        : fallback;
-    let command_pt =
-      vehicle_data.commandPoint && vehicle_data.commandPoint.invertedCoord
-        ? vehicle_data.commandPoint.invertedCoord
-        : fallback;
+    const { stations, buffers } = this.layout_data
+    const { locationPickup, locationDropoff, commandPoint } = vehicle_data
 
-    let cmd_point_object = {
-      x: command_pt.x,
-      y: command_pt.y,
+    const destination = getDestinationFromLocations(stations, buffers, commandPoint, locationPickup, locationDropoff)
+
+    const commandOffset = destination
+      ? LayoutUtil.find_connected_object_offset(destination)
+      : { x: 0, y: 0 }
+    const invertedCommandOffset = { x: commandOffset.x, y: commandOffset.y * -1 }
+
+    const current = {
+      x: vehicle_data.curPoint.invertedCoord.x + currentInvertedOffset.x,
+      y: vehicle_data.curPoint.invertedCoord.y + currentInvertedOffset.y
     };
-    let cmd_offset = LayoutUtil.find_connected_object_offset(cmd_point_object, vehicle_data.distancePoint, this.layout_data);
-    cmd_offset.x = 0;
-    cmd_offset.y = 0;
+    const next = vehicle_data?.nextPoint?.invertedCoord ?? current
+    const command =
+      vehicle_data?.commandPoint?.invertedCoord
+        ? {
+          x: vehicle_data.commandPoint.invertedCoord.x + invertedCommandOffset.x,
+          y: vehicle_data.commandPoint.invertedCoord.y + invertedCommandOffset.y
+        }
+        : current;
 
     this.update_vehicle_command_svg(
       vehicle_element,
-      current_pt.x,
-      current_pt.y,
-      command_pt.x + cmd_offset.x,
-      command_pt.y + cmd_offset.y,
+      current.x,
+      current.y,
+      command.x,
+      command.y,
       is_show,
       vehicle_data.cargoState
     );
     this.update_vehicle_next_svg(
       vehicle_element,
-      current_pt.x,
-      current_pt.y,
-      next_pt.x,
-      next_pt.y,
+      current.x,
+      current.y,
+      next.x,
+      next.y,
       is_show
     );
   }
@@ -11518,50 +11550,43 @@ export class ViewController {
           .lower();
 
         //Order line
-        dom_object_group
-          .append('line')
-          .attr('class', 'command')
-          .attr('stroke', function () {
-            if (layout_object.cargoState === 'E') {
-              return dom_css.order_pickup_color;
-            } else {
-              return dom_css.order_dropoff_color;
-            }
-          })
-          .attr('stroke-width', dom_css.order_weight)
-          .attr('commandPoint', function () {
-            if (!layout_object.curPoint || !layout_object.commandPoint) {
-              return null;
-            } else {
-              return layout_object.commandPoint.point;
-            }
-          })
-          .attr('x1', 0)
-          .attr('y1', 0)
-          .attr('x2', function () {
-            if (!layout_object.curPoint || !layout_object.commandPoint) {
-              // If undefined, set the end point equal to start point for 0 length
-              return 0;
-            } else {
-              return (
-                layout_object.commandPoint.invertedCoord.x -
-                layout_object.curPoint.invertedCoord.x
-              );
-            }
-          })
-          .attr('y2', function () {
-            if (!layout_object.curPoint || !layout_object.commandPoint) {
-              // If undefined, set the end point equal to start point for 0 length
-              return 0;
-            } else {
-              return (
-                layout_object.commandPoint.invertedCoord.y -
-                layout_object.curPoint.invertedCoord.y
-              );
-            }
-          })
-          .attr('transform', `scale(${this.getZoom(MapTypes.MAIN).k})`)
-          .lower();
+        const currentInvertedOffset = LayoutUtil.get_vehicle_distance_point(
+          layout_object.curPoint.invertedCoord,
+          layout_object.nextPoint.invertedCoord,
+          layout_object.distancePoint
+        )
+
+        const { stations, buffers } = this.layout_data
+        const { locationPickup, locationDropoff, commandPoint } = layout_object
+
+        const destination = getDestinationFromLocations(stations, buffers, commandPoint, locationPickup, locationDropoff)
+
+        const commandOffset = destination
+          ? LayoutUtil.find_connected_object_offset(destination)
+          : { x: 0, y: 0 }
+        const invertedCommandOffset = { x: commandOffset.x, y: commandOffset.y * -1 }
+
+        const current = {
+          x: layout_object.curPoint.invertedCoord.x + currentInvertedOffset.x,
+          y: layout_object.curPoint.invertedCoord.y + currentInvertedOffset.y,
+        }
+
+        const command = layout_object.commandPoint?.invertedCoord
+          ? {
+            x: layout_object.commandPoint.invertedCoord.x + invertedCommandOffset.x,
+            y: layout_object.commandPoint.invertedCoord.y + invertedCommandOffset.y,
+          }
+          : current
+
+        this.update_vehicle_command_svg(
+          dom_object_group,
+          current.x,
+          current.y,
+          command.x,
+          command.y,
+          true,
+          layout_object.cargoState
+        )
       }
     }
 

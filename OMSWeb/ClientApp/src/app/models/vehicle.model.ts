@@ -68,6 +68,9 @@ export class Vehicle {
       canBePushed, // push
       hostOrder,
       orderOrigin = [], // call
+      locationDropoff,
+      locationMove,
+      locationPickup,
     } = row;
 
     this.id = id;
@@ -76,6 +79,10 @@ export class Vehicle {
     this.cargoState = cargoState;
     this.movingState = movingState;
     this.distancePoint = distancePoint;
+
+    this.locationDropoff = locationDropoff;
+    this.locationMove = locationMove;
+    this.locationPickup = locationPickup;
 
     this.mode = mode;
     this.errorList = errorList;
@@ -153,6 +160,9 @@ export class Vehicle {
         group: this.group,
         cargoTransferResult: this.cargoTransferResult,
         mapDb: this.mapDb,
+        locationDropoff: this.locationDropoff,
+        locationMove: this.locationMove,
+        locationPickup: this.locationPickup
       },
       curPoint,
       nextPoint,
