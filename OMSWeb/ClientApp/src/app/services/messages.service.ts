@@ -16,11 +16,11 @@ import {
   IStationCommandMessage,
   IBufferCommandMessage,
   IAllSegmentCommandMessage,
-  IZcuCommandMessage,
   IVehicleRegCommandMessage,
   ISegmentCommandMessage,
   IClusterCommandMessage,
-  IGroupCommandMessage
+  IGroupCommandMessage,
+  ISettingZcuCommandMessage
 } from '../models/command.model';
 import { IOrderStatusRow } from '../models/order-status.model';
 import { IVehicleStatusRow } from '../models/vehicle-status.model';
@@ -180,24 +180,10 @@ export class MessagesService {
     return this.sendCommand<ISegmentCommandMessage>(command);
   }
 
-  sendZcuUsingTypeCommand(
-    command: IZcuCommandMessage
+  sendSettingZcuCommand(
+    command: ISettingZcuCommandMessage
   ): Observable<void> {
-    command.type = command.type;
-    command.zcuId = command.zcuId;
-    command.zcuUsingType = command.zcuUsingType;
-
-    return this.sendCommand<IZcuCommandMessage>(command);
-  }
-
-  sendZcusUsingTypeCommand(
-    command: IZcuCommandMessage
-  ): Observable<void> {
-    command.type = command.type;
-    command.zcuIds = command.zcuIds;
-    command.zcuUsingType = command.zcuUsingType;
-
-    return this.sendCommand<IZcuCommandMessage>(command);
+    return this.sendCommand<ISettingZcuCommandMessage>(command);
   }
 
   sendVehicleRegAddCommand(

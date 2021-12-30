@@ -160,9 +160,12 @@ export class MapViewerComponent implements OnInit, OnDestroy {
       .confirm({ body: this.$t.instant('messages.confirmZcuChange') })
       .subscribe((confirm) => {
         confirm &&
-          this.trackSvc
-            .updateZcu(this.contextData.id, {
-              zcuType: value,
+          this.messageSvc
+            .sendSettingZcuCommand({
+              type: "ZCU",
+              action: "zcu-setting",
+              zcuIds: [this.contextData.id],
+              zcuUsingType: value === 1 ? "hw" : "sw",
             })
             .subscribe();
       });

@@ -86,6 +86,15 @@ export interface IAllSegmentCommandMessage extends ICommandMessage {
   speedRatio?: number;
 }
 
+export interface ISettingZcuCommandMessage extends ICommandMessage {
+  action: "zcu-setting"
+  zcuIds: number[]
+  zcuUsingType:
+  | 'none' // NOT_USE
+  | 'hw' // USING_HW
+  | 'sw' // USING_SW
+}
+
 export interface IZcuCommandMessage extends ICommandMessage {
   zcuId?: number;
   zcuIds?: number[];
