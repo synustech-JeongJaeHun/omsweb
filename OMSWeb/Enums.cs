@@ -14,7 +14,8 @@ namespace OMSWeb
 
   public enum TscModeEnums
   {
-    INIT = 1,
+    DEFAULT = 0,
+    INIT,
     PAUSED,
     AUTO,
     PAUSING,

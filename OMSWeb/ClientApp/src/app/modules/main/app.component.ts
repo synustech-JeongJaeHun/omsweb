@@ -11,15 +11,6 @@ import { MapDataService } from '../track-map/map-data.service';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  @HostListener('document:visibilitychange', ['$event'])
-  visibilitychange() {
-    if (document.hidden) {
-      this.hubSvc.stop();
-    } else {
-      this.hubSvc.start();
-    }
-  }
-
   private translate: TranslateService;
 
   constructor(
