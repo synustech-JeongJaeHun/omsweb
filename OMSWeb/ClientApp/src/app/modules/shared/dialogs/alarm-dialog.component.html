@@ -10,7 +10,7 @@
           <dxi-column [allowFiltering]="false" [width]="130" dataType="datetime" dataField="time"
             [caption]="'names.time' | translate" format="yyyy/MM/dd HH:mm:ss">
           </dxi-column>
-          <dxi-column [allowFiltering]="false" [width]="90" alignment="left" dataType="number" dataField="age"
+          <dxi-column [allowFiltering]="false" [width]="90" dataType="number" dataField="age"
             [caption]="'names.elapsedMin' | translate" cellTemplate="minuteCell">
             <div *dxTemplate="let d of 'minuteCell'">
               {{ (d.value / 60).toFixed(1) }}
