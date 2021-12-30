@@ -4,6 +4,9 @@ import { IKeyValuePair } from '@oms/models/base.model';
 import { MapDataService } from '../map-data.service';
 import { MatDialogRef } from '@angular/material/dialog';
 
+type Ids = { id: number, logicalId: string }
+type ObjectTypeKey = "point" | "segment" | "station" | "mtl" | "buffer"
+
 @Component({
   selector: 'oms-search-dialog',
   templateUrl: './search-dialog.component.html',
@@ -16,13 +19,21 @@ import { MatDialogRef } from '@angular/material/dialog';
   ],
 })
 export class SearchDialogComponent implements OnInit {
-  objectTypes: IKeyValuePair<string, string>[] = [];
+  objectTypes = [
+    // { key: 'vehicle', value: 'Vehicle' },
+    { key: 'point', value: 'Point' },
+    { key: 'segment', value: 'Segment' },
+    { key: 'station', value: 'Station' },
+    { key: 'buffer', value: 'Buffer' },
+    { key: 'mtl', value: 'MTL' },
+    // { key: 'cluster', value: 'Cluster' },
+  ];
   targets: number[];
 
   selectedType: string;
   selectedId: number;
 
-  private dataSourceMap: { [key: string]: number[] };
+  private dataSourceMap: Record<ObjectTypeKey, Ids[]>;
 
   get canSelectTarget(): boolean {
     return !!this.selectedType && this.targets.length > 0;
@@ -31,35 +42,26 @@ export class SearchDialogComponent implements OnInit {
   constructor(
     private dataSvc: MapDataService,
     private dialog: MatDialogRef<SearchDialogComponent>
-  ) {
-    this.objectTypes = [
-      // { key: 'vehicle', value: 'Vehicle' },
-      { key: 'point', value: 'Point' },
-      { key: 'segment', value: 'Segment' },
-      { key: 'station', value: 'Station' },
-      { key: 'buffer', value: 'Buffer' },
-      { key: 'mtl', value: 'MTL' },
-      // { key: 'cluster', value: 'Cluster' },
-    ];
-  }
+  ) { }
 
   ngOnInit(): void {
     this.initDataSource();
   }
 
   onSearch(type: string, value: string) {
-    this.dialog.close({ type, value });
+    const { id } = this.dataSourceMap[type].find(e => e.logicalId === value)
+    this.dialog.close({ type, value: id });
   }
 
   private initDataSource() {
     this.dataSourceMap = {
       // vehicle: this.dataSvc.data.vehicles.map((x) => x.id),
-      point: this.dataSvc.data.points.map((x) => x.id),
-      buffer: this.dataSvc.data.buffers.map((x) => x.id),
-      station: this.dataSvc.data.stations.map((x) => x.id),
-      mtl: this.dataSvc.data.mtls.map((x) => x.id),
-      // cluster: this.dataSvc.data.clusters.map((x) => x.id),
-      segment: this.dataSvc.data.segments.map((x) => x.id),
+      point: this.dataSvc.data.points.map((x) => ({ id: x.id, logicalId: x.logicalId })),
+      buffer: this.dataSvc.data.buffers.map((x) => ({ id: x.id, logicalId: x.logicalId })),
+      station: this.dataSvc.data.stations.map((x) => ({ id: x.id, logicalId: x.logicalId })),
+      mtl: this.dataSvc.data.mtls.map((x) => ({ id: x.id, logicalId: x.logicalId })),
+      // cluster: this.dataSvc.data.clusters.map((x) => {id: x.id,  logicalId: x.logicalId}),
+      segment: this.dataSvc.data.segments.map((x) => ({ id: x.id, logicalId: x.logicalId })),
     };
   }
 
