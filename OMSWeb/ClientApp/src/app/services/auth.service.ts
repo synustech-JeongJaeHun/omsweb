@@ -7,9 +7,8 @@ import {
   IProfileForm,
   ISessionUser,
   ISimpleUser,
-  IUserToken,
 } from '../models/user.model';
-import { Observable, of, Subject, throwError } from 'rxjs';
+import { Observable, of, Subject } from 'rxjs';
 
 import { ITokenResult } from '../models/base.model';
 import { StorageUtil } from '../modules/shared/utils/storage.util';
@@ -71,6 +70,7 @@ export class AuthService {
   }
 
   logout(): Observable<void> {
+    this.http.delete(`${this.baseUrl}/logout`).subscribe()
     this.clearSession();
     clearTimeout(this.tokenRenewalTimeout);
     this.router.navigate(['/']);

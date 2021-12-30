@@ -343,6 +343,8 @@
     "ai": "AI",
     "reports": "Reports",
     "server": "Server",
+    "auditTrail": "Audit Trail",
+    "tokenExpires": "Token Expire Time",
     "trend": "Trend",
     "normalTR": "Normal TR",
     "abnormalTR": "Abnormal TR",

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DevExtreme.AspNet.Data;
+using DevExtreme.AspNet.Data.ResponseModel;
 using DevExtreme.AspNet.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -36,9 +37,15 @@ namespace OMSWeb.Controllers
 
     [Obsolete]
     [HttpGet("data-source")]
-    public object QueryUsersDataSource(DataSourceLoadOptions loadOptions)
+    public LoadResult QueryUsersDataSource(DataSourceLoadOptions loadOptions)
     {
       return DataSourceLoader.Load(_userSvc.QueryUsers(), loadOptions);
+    }
+
+    [HttpGet("token-history/data-source")]
+    public LoadResult QueryTokenHistory(DataSourceLoadOptions loadOptions) 
+    {
+        return DataSourceLoader.Load(_userSvc.QueryTokenHistory(), loadOptions);
     }
 
     [HttpGet("roles")]

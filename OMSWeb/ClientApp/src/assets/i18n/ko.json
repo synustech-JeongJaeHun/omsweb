@@ -343,6 +343,8 @@
     "ai": "AI",
     "reports": "보고서",
     "server": "서버",
+    "auditTrail": "감사 내역",
+    "tokenExpires": "토큰 만료시점",
     "trend": "경향",
     "normalTR": "일반 TR",
     "abnormalTR": "비정상 TR",
