@@ -114,20 +114,6 @@
       </div>
     </div>
   </mat-expansion-panel>
-
-  <mat-expansion-panel [expanded]="true" *ngIf="hasPermission(permissionEnums.ManualTransfer)">
-    <mat-expansion-panel-header>
-      <mat-panel-title>Command Interface</mat-panel-title>
-    </mat-expansion-panel-header>
-    <div class="desc">
-      <div class="move-command-table">
-        <oms-dest-command scope="go"></oms-dest-command>
-        <div></div>
-        <oms-dest-command scope="load"></oms-dest-command>
-        <oms-dest-command scope="unload"></oms-dest-command>
-      </div>
-    </div>
-  </mat-expansion-panel>
 </ng-template>
 
 <ng-template #pointInfo>

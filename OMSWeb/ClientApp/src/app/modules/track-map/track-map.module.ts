@@ -9,12 +9,11 @@ import { TrackVehicleDialogComponent } from './dialogs/track-vehicle-dialog.comp
 import { CommandDialogComponent } from './dialogs/command-dialog.component';
 import { ShowObjectDialogComponent } from './dialogs/show-object-dialog.component';
 import { MapSidePanelComponent } from './side-panel/map-side-panel.component';
-import { DestCommandComponent } from './side-panel/dest-command.component';
 import { OverlapListComponent } from './side-panel/overlap-list.component';
 import { VehicleStatusDialogComponent } from './dialogs/vehicle-status-dialog.component';
 import { BufferStatusDialogComponent } from './dialogs/buffer-status-dialog.component';
 @NgModule({
-  declarations: [MapViewerComponent, MapToolbarComponent, SearchDialogComponent, TrackVehicleDialogComponent, CommandDialogComponent, ShowObjectDialogComponent, MapSidePanelComponent, DestCommandComponent, OverlapListComponent, VehicleStatusDialogComponent, BufferStatusDialogComponent],
+  declarations: [MapViewerComponent, MapToolbarComponent, SearchDialogComponent, TrackVehicleDialogComponent, CommandDialogComponent, ShowObjectDialogComponent, MapSidePanelComponent, OverlapListComponent, VehicleStatusDialogComponent, BufferStatusDialogComponent],
   imports: [CommonModule, SharedModule],
   exports: [MapViewerComponent, MapToolbarComponent],
 })
