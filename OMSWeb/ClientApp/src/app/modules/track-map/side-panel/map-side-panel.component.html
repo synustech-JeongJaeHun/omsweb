@@ -57,11 +57,6 @@
     </mat-expansion-panel-header>
     <div class="desc">
       <div class="info-table">
-        <!-- <div class="name">{{ "names.id" | translate }}</div> -->
-        <!-- <mat-form-field class="info-item span-full readonly">
-      <mat-label>{{ "names.id" | translate }}</mat-label>
-      <input matInput type="text" readonly [value]="data.id" />
-    </mat-form-field> -->
         <mat-form-field class="info-item readonly">
           <mat-label>{{ "names.physicalId" | translate }}</mat-label>
           <input matInput type="text" readonly [value]="data.physicalId" />
@@ -116,8 +111,6 @@
           <mat-label>{{ "names.mapDb" | translate }}</mat-label>
           <input matInput type="text" readonly [value]="data.mapDb" />
         </mat-form-field>
-        <mat-slide-toggle color="primary" [(ngModel)]="isCalculatedPath"
-          (toggleChange)="onChangeVehicleCalculatePath()">{{ "names.calculatePath" | translate }}</mat-slide-toggle>
       </div>
     </div>
   </mat-expansion-panel>
