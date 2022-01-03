@@ -5465,6 +5465,23 @@ export class ViewController {
               .attr('stroke', highlight_color)
               .attr('stroke-width', stroke_width)
               .lower();
+
+            target_dom
+              .append('polygon')
+              .attr('class', css_class)
+              .attr('points', `
+                10,-10
+                10,-30
+                17,-23
+                44,-50
+                50,-44
+                23,-17
+                30,-10
+              `)
+              .attr('stroke', highlight_color)
+              .attr('stroke-width', stroke_width)
+              .attr('fill', highlight_color)
+
           }
         }
 

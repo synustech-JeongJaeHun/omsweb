@@ -25,9 +25,6 @@ export class TrackVehicleDialogComponent implements OnInit {
     private idSvc: TrackIdService,
     private dialog: MatDialogRef<TrackVehicleDialogComponent>
   ) {
-    // this.vehicles = this.mapData.data.vehicles;
-    // this.dataSource = of(Object.assign([], this.mapData.data.vehicles));
-
     this.dataSource = of(Object.values(this.idSvc.find_matched_target_object('vehicle')));
   }
 

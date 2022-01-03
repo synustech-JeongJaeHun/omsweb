@@ -5,10 +5,9 @@
         (onRowDblClick)="onDblClickRow($event)">
         <dxo-selection mode="single" showCheckBoxesMode="none"></dxo-selection>
         <dxo-scrolling mode="virtual"></dxo-scrolling>
-        <dxi-column [allowFiltering]="false" [width]="60" dataType="string" dataField="id"
+        <!-- Be careful! PhysicalId is shown as "ID" -->
+        <dxi-column [allowFiltering]="false" alignment="right" width="70" dataType="string" dataField="physicalId"
           [caption]="'names.id' | translate"></dxi-column>
-        <dxi-column [allowFiltering]="false" dataType="string" dataField="physicalId"
-          [caption]="'names.physicalId' | translate"></dxi-column>
         <dxi-column [allowFiltering]="false" dataType="string" dataField="logicalId"
           [caption]="'names.logicalId' | translate"></dxi-column>
       </dx-data-grid>
