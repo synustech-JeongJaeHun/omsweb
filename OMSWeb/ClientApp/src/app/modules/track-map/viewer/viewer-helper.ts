@@ -107,7 +107,7 @@ export class ViewController {
       lvl3: 500,
     },
     selective_lvl_display: {
-      direction: 2,
+      direction: 4,
       point_circle: 2,
       point_label: 3,
       segment_path: 1,
