@@ -11,6 +11,8 @@ import { AuthService } from '../../../services/auth.service';
 import { AccountUtil } from '../../shared/utils/account.util';
 import { takeUntil } from 'rxjs/operators';
 import { DxDataGridComponent } from 'devextreme-angular';
+import { DialogService } from '../../../services/dialog.service';
+import { TranslateService } from '@ngx-translate/core';
 import { MessagesService } from '../../../services/messages.service';
 import { PermissionEnums } from '../../../models/enums';
 import { ClientPreferences } from '../../../models/settings.model';
@@ -55,6 +57,8 @@ export class VehicleControlTableComponent implements OnInit, OnDestroy {
     private auth: AuthService,
     private statusSvc: StatusService,
     private settingSvc: SettingsService,
+    private dialogSvc: DialogService,
+    private $t: TranslateService,
     private messageSvc: MessagesService,
     private hubSvc: HubService
   ) {
@@ -85,21 +89,27 @@ export class VehicleControlTableComponent implements OnInit, OnDestroy {
 
   onEStop() {
     if (!this.canControl) return;
-    this.messageSvc
-      .sendVehicleCommand({ action: 'stop' }, this.selectedItems)
-      .subscribe();
+    this.dialogSvc
+      .confirm({ body: this.$t.instant('messages.confirmCommand') })
+      .subscribe((ok) => {
+        ok && this.messageSvc.sendVehicleCommand({ action: 'stop' }, this.selectedItems).subscribe();
+      });
   }
   onReset() {
     if (!this.canControl) return;
-    this.messageSvc
-      .sendVehicleCommand({ action: 'reset' }, this.selectedItems)
-      .subscribe();
+    this.dialogSvc
+      .confirm({ body: this.$t.instant('messages.confirmCommand') })
+      .subscribe((ok) => {
+        ok && this.messageSvc.sendVehicleCommand({ action: 'reset' }, this.selectedItems).subscribe();
+      });
   }
   onSetAuto() {
     if (!this.canControl) return;
-    this.messageSvc
-      .sendVehicleCommand({ action: 'initialize' }, this.selectedItems)
-      .subscribe();
+    this.dialogSvc
+      .confirm({ body: this.$t.instant('messages.confirmCommand') })
+      .subscribe((ok) => {
+        ok && this.messageSvc.sendVehicleCommand({ action: 'initialize' }, this.selectedItems).subscribe();
+      });
   }
   onChangeHostOrderActivity() {
     if (!this.canControl) return;
