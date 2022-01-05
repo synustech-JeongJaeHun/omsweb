@@ -46,6 +46,8 @@ export class OverlapListComponent implements OnInit, OnChanges {
     switch (this.data.objectType) {
       case 'Point':
         return this.data.id;
+      case 'Zcu':
+        return this.data.id;
       case 'Station':
       case 'Buffer':
       case 'Mtl':

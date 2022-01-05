@@ -728,6 +728,7 @@ export class MapDataService {
           !exist_in_overlap
         ) {
           overlaps.push(layout_objects[i]);
+
         }
       }
     }
@@ -752,6 +753,24 @@ export class MapDataService {
     layout_objects = this.get_layout_objects('BUFFER') || [];
 
     // Check for buffer
+    for (let i = 0; i < layout_objects.length; i++) {
+      // Find matches
+      let exist_in_overlap = this.check_exist_overlap_list(
+        layout_objects[i],
+        overlaps
+      );
+      if (
+        layout_objects[i] &&
+        layout_objects[i].pointId === pointId &&
+        !exist_in_overlap
+      ) {
+        overlaps.push(layout_objects[i]);
+      }
+    }
+
+    layout_objects = this.get_layout_objects('ZCU') || [];
+
+    // Check for zcu
     for (let i = 0; i < layout_objects.length; i++) {
       // Find matches
       let exist_in_overlap = this.check_exist_overlap_list(

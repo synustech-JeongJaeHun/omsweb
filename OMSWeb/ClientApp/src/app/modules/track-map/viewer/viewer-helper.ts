@@ -2343,13 +2343,14 @@ export class ViewController {
       let base_point_id;
 
       // Get base point id
-      if (object_type === 'POINT') {
+      if (object_type === 'POINT' ||
+          object_type === 'ZCU'
+        ) {
         base_point_id = current_object.id;
       } else if (
         object_type === 'STATION' ||
         object_type === 'BUFFER' ||
-        object_type === 'MTL' ||
-        object_type === 'ZCU'
+        object_type === 'MTL'
       ) {
         base_point_id = current_object.pointId;
       } else if (object_type === 'VEHICLE') {
@@ -9953,7 +9954,7 @@ export class ViewController {
             .attr('d', dom_css.icon_level3)
             .attr('level', 'level3');
           this.append_dom_subpart(
-            'MTL_DETAIL',
+            'ZCU_DETAIL',
             overlap_element,
             data,
             dom_css,
