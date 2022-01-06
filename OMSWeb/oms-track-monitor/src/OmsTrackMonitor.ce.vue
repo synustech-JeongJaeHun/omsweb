@@ -11,23 +11,27 @@ const props = defineProps<{
 
 }>()
 
-const emits = defineEmits<{
-  (e: "clickSegment", value: {}): void
+const emit = defineEmits<{
+  (e: "apple", value: "A"): void
+  (e: "blue", value: { B: number }): void
 }>()
-
-const count = ref(0)
 
 // const exposed: IOMSTrackMonitor = {
 //   adjust_floaters: () => {},
 // }
 // defineExpose(exposed)
 
+
+function emitB(event: any) {
+
+  console.log('B', event)
+  emit('blue', { B: Date.now() })
+}
 </script>
 
 <template>
-  <button type="button" @click="count = count - 1">-</button>
-  {{ count }}
-  <button type="button" @click="count = count + 1">+</button>
+  <button type="button" @click="emit('apple', 'A')">A</button>
+  <button type="button" @click="emitB($event)">B</button>
 </template>
 
 <style>

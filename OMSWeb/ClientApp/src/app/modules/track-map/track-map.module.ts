@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { SharedModule } from '../shared/shared.module';
@@ -15,6 +15,7 @@ import { BufferStatusDialogComponent } from './dialogs/buffer-status-dialog.comp
 @NgModule({
   declarations: [MapViewerComponent, MapToolbarComponent, SearchDialogComponent, TrackVehicleDialogComponent, CommandDialogComponent, ShowObjectDialogComponent, MapSidePanelComponent, OverlapListComponent, VehicleStatusDialogComponent, BufferStatusDialogComponent],
   imports: [CommonModule, SharedModule],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   exports: [MapViewerComponent, MapToolbarComponent],
 })
 export class TrackMapModule { }

@@ -35,6 +35,8 @@ import { DialogService } from '../../../services/dialog.service';
 import { TranslateService } from '@ngx-translate/core';
 import { PermissionEnums } from '../../../models/enums';
 
+import "oms-track-monitor"
+
 @Component({
   selector: 'oms-map-viewer',
   templateUrl: './map-viewer.component.html',
@@ -663,5 +665,9 @@ export class MapViewerComponent implements OnInit, OnDestroy {
       false
     );
     // this.dataSvc.updatedVehicleList = {};
+  }
+
+  public doWhat(event: any) {
+    console.log(event)
   }
 }
