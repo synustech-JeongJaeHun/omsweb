@@ -3,12 +3,7 @@ import { ref } from 'vue';
 import { IOMSTrackMonitor } from './legacies/IOmsTrackMonitor';
 
 const props = defineProps<{
-  vehicles: []
-  segments: []
-  points: []
-  stations: []
-  buffer: []
-
+  text: string
 }>()
 
 const emit = defineEmits<{
@@ -23,15 +18,16 @@ const emit = defineEmits<{
 
 
 function emitB(event: any) {
-
-  console.log('B', event)
   emit('blue', { B: Date.now() })
 }
+
+
 </script>
 
 <template>
   <button type="button" @click="emit('apple', 'A')">A</button>
   <button type="button" @click="emitB($event)">B</button>
+  <input type="text" v-model="props.text" />
 </template>
 
 <style>

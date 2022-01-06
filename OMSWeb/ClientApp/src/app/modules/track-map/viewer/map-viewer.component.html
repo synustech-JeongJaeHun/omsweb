@@ -1,5 +1,6 @@
 <div id="track-container" class="track-container">
-  <oms-track-monitor (apple)="doWhat($event)" (blue)="doWhat($event)"></oms-track-monitor>
+  <input #usethistext type="text" />
+  <oms-track-monitor (apple)="doWhat($event)" (blue)="doWhat($event)" [text]="usethistext.value"></oms-track-monitor>
   <!-- <svg id="track-canvas"></svg> -->
   <div [hidden]="!showMinimap" id="minimap-container">
     <svg id="minimap"></svg>
