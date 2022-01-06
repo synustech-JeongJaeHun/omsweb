@@ -43,6 +43,11 @@ export class GnbActionsComponent implements OnInit, OnDestroy {
   get activeAi(): boolean {
     return this._activeAi;
   }
+  get aiParamText(): string[] {
+    if (this.activeAi)
+      return [this.t$.instant(`names.aiOn`), this.t$.instant('names.aiOff')];
+    return [this.t$.instant(`names.aiOff`), this.t$.instant('names.aiOn')];
+  }
   get roleName(): string {
     if (this.user.roles.length === 0) return '#';
     const role = this._roles.find((r) => r.id == this.user.roles[0]);
@@ -109,13 +114,13 @@ export class GnbActionsComponent implements OnInit, OnDestroy {
     });
   }
   onChangeAI() {
-    //if (!AccountUtil.hasPermission(3, this.auth.currentUser)) return;
     if (!AccountUtil.hasPermission(PermissionEnums.AiMode, this.auth.currentUser)) return;
-    const transParam = { name: 'AI Mode' };
+    let param: string[] = this.aiParamText;
+    const transParam = { name: 'AI Mode', from: param[0], to: param[1] };
     this.dialogSvc
       .confirm({
         title: this.t$.instant('names.changeConfirm', transParam),
-        body: this.t$.instant('messages.changeConfirm', transParam),
+        body: this.t$.instant('messages.changeStateConfirm', transParam),
       })
       .subscribe((ok) => {
         if (ok) {
@@ -144,6 +149,6 @@ export class GnbActionsComponent implements OnInit, OnDestroy {
     else if (lang == 'en')
       this.currentLanguage = "English";//this.t$.translations[lang].names.english;
     else if (lang == 'zh')
-      this.currentLanguage = "中国人";//this.t$.translations[lang].names.chinese;
+      this.currentLanguage = "中文";//this.t$.translations[lang].names.chinese;
   }
 }
