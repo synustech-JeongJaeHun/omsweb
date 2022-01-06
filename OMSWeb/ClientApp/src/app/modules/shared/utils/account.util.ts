@@ -1,18 +1,11 @@
 import { ISessionUser, ISimpleUser } from '@oms/models/user.model';
 
 export namespace AccountUtil {
-  export const hasPermission = (
-    needPermission: number,
-    user: ISessionUser
-  ): boolean => {
-    if (!user) return false;
-    const { permissions = [] } = user;
-    return (permissions.includes(needPermission));
+  export function hasPermission(needPermission: number, user: ISessionUser): boolean {
+    return (!user) ? false : (user?.permissions ?? []).includes(needPermission)
   };
 
-  export const hasPermissions = (needPermissions: number[], user: ISessionUser): boolean => {
-    if (!user) return false;
-    const { permissions = [] } = user;
-    return (needPermissions.some(p => permissions.includes(p)));
+  export function hasPermissions(needPermissions: number[], user: ISessionUser): boolean {
+    return (!user) ? false : needPermissions.some(p => hasPermission(p, user))
   }
 }

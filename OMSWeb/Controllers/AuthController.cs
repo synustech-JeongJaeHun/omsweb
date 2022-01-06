@@ -33,5 +33,14 @@ namespace OMSWeb.Controllers
     public ActionResult<TokenResponse> Renew() {
       return _userSvc.RenewToken();
     }
+
+
+    [Authorize]
+    [HttpDelete("logout")]
+    public ActionResult LogOut()
+    {
+        _userSvc.Logout();
+        return Ok();
+    }
   }
 }

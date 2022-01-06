@@ -160,9 +160,12 @@ export class MapViewerComponent implements OnInit, OnDestroy {
       .confirm({ body: this.$t.instant('messages.confirmZcuChange') })
       .subscribe((confirm) => {
         confirm &&
-          this.trackSvc
-            .updateZcu(this.contextData.id, {
-              zcuType: value,
+          this.messageSvc
+            .sendSettingZcuCommand({
+              type: "ZCU",
+              action: "zcu-setting",
+              zcuIds: [this.contextData.id],
+              zcuUsingType: value === 1 ? "hw" : "sw",
             })
             .subscribe();
       });
@@ -187,15 +190,20 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   }
   onVehicleCommand(name: string) {
     let commandMessage: IVehicleCommandMessage;
+    let needConfirm: boolean = false;
+
     switch (name) {
       case 'initialize':
-        commandMessage = { action: 'initialize' };
+        commandMessage = { action: 'initialize' };  //auto
+        needConfirm = true;
         break;
       case 'reset':
         commandMessage = { action: 'reset' };
+        needConfirm = true;
         break;
       case 'stop':
-        commandMessage = { action: 'stop' };
+        commandMessage = { action: 'stop' };  // estop
+        needConfirm = true;
         break;
       case 'zcu_go':
         commandMessage = { action: 'zcu_go' };
@@ -207,15 +215,22 @@ export class MapViewerComponent implements OnInit, OnDestroy {
         commandMessage = { action: 'set_behavior', hostOrder: true };
         break;
       case 'rail_out':
-        commandMessage = { action: 'remove' };
+        commandMessage = { action: 'rail_out' };
         break;
       default:
         commandMessage = { action: name };
         break;
     }
-    this.messageSvc
-      .sendVehicleCommand(commandMessage, [this.contextData])
-      .subscribe();
+
+    if (needConfirm) {
+      this.dialogSvc
+        .confirm({ body: this.$t.instant('messages.confirmCommand') })
+        .subscribe((ok) => {
+          ok && this.messageSvc.sendVehicleCommand(commandMessage, [this.contextData]).subscribe();
+        });
+    } else {
+      this.messageSvc.sendVehicleCommand(commandMessage, [this.contextData]).subscribe();
+    }
   }
   onSetSource() {
     const { id, objectType } = this.contextData;

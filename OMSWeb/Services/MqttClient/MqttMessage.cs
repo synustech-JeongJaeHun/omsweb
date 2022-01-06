@@ -32,7 +32,7 @@ namespace OMSWeb.Services.MqttClient
         public const string ACTION_STATUS = "status";
         public const string ACTION_RAIL_IN = "rail_in";
         public const string ACTION_RAIL_OUT = "rail_out";
-        public const string ACTION_REMOVE = "remove";                       
+        public const string ACTION_REMOVE = "remove";
         public const string ACTION_UPDATE_MAP = "update_map";
         public const string ACTION_GET_MAP_INFO = "get_map_info";
         public const string ACTION_SET_BEHAVIOR = "set_behavior";           // push enable, host order enable
@@ -42,6 +42,7 @@ namespace OMSWeb.Services.MqttClient
         public const string ACTION_ENABLE_SEGMENT = "enable-segment";
         public const string ACTION_ZCU_GO = "zcu_go";
         public const string ACTION_ZCU_USING_TYPE = "zcu_using_type";
+        public const string ACTION_ZCU_SETTING = "zcu-setting";
         public const string ACTION_INSTALL_CARRIER = "install_carrier";
         public const string ACTION_REMOVE_CARRIER = "remove_carrier";
         public const string ACTION_N = "N";                                 // fromto, from, to, move
@@ -88,6 +89,7 @@ namespace OMSWeb.Services.MqttClient
                 case ACTION_ENABLE_SEGMENT:
                 case ACTION_ZCU_GO:
                 case ACTION_ZCU_USING_TYPE:
+                case ACTION_ZCU_SETTING:
                 case ACTION_INSTALL_CARRIER:
                 case ACTION_REMOVE_CARRIER:
                 case ACTION_N:
@@ -112,6 +114,7 @@ namespace OMSWeb.Services.MqttClient
                 case ACTION_RESUME:
                 case ACTION_ALARM_CLEAR:
                 case ACTION_WARNING_CLEAR:
+                case ACTION_ZCU_SETTING:
                     return REQUEST_VEHICLE_MANAGER;
 
                 case ACTION_RESET:
@@ -252,21 +255,21 @@ namespace OMSWeb.Services.MqttClient
             if (command.Action != null)
             {
                 data["request"] = GetRequest(command.Action);
-                data["action"]  = command.Action;
+                data["action"] = command.Action;
             }
 
-            if (command.Action == ACTION_CONTROL_STATE || 
+            if (command.Action == ACTION_CONTROL_STATE ||
                 command.Action == ACTION_TSC_STATE)
             {
-                if (command.State != null) 
+                if (command.State != null)
                     data["state"] = command.State;
             }
             else if (command.Action == ACTION_AI_MODE)
             {
-                if (command.State != null) 
+                if (command.State != null)
                     data["mode"] = command.Mode;
             }
-            else if (command.Action == ACTION_PAUSE || 
+            else if (command.Action == ACTION_PAUSE ||
                      command.Action == ACTION_RESUME)
             {
 
@@ -278,13 +281,13 @@ namespace OMSWeb.Services.MqttClient
             }
             else if (command.Action == ACTION_WARNING_CLEAR)
             {
-                data["id"]     = GetWarningId(command);
+                data["id"] = GetWarningId(command);
                 data["ack_by"] = GetWarningAckBy(command);
             }
-            else if (command.Action == ACTION_RESET      || command.Action == ACTION_STOP         || 
-                     command.Action == ACTION_INITIALIZE || command.Action == ACTION_STATUS       || 
-                     command.Action == ACTION_RAIL_IN    || command.Action == ACTION_RAIL_OUT     ||
-                     command.Action == ACTION_REMOVE     || command.Action == ACTION_UPDATE_MAP   || 
+            else if (command.Action == ACTION_RESET || command.Action == ACTION_STOP ||
+                     command.Action == ACTION_INITIALIZE || command.Action == ACTION_STATUS ||
+                     command.Action == ACTION_RAIL_IN || command.Action == ACTION_RAIL_OUT ||
+                     command.Action == ACTION_REMOVE || command.Action == ACTION_UPDATE_MAP ||
                      command.Action == ACTION_GET_MAP_INFO)
             {
                 data["vehicle_id"] = GetVehicleId(command);
@@ -302,13 +305,13 @@ namespace OMSWeb.Services.MqttClient
                         data["order_origin"] = GetOrderOrigin(command);
                 }
             }
-            else if (command.Action == ACTION_CALCULATE_PATH || 
+            else if (command.Action == ACTION_CALCULATE_PATH ||
                      command.Action == ACTION_CLEAR_PATH)
             {
                 if (command.VehicleId != null || command.VehicleIds != null)
                     data["vehicle_id"] = GetVehicleId(command);
             }
-            else if (command.Action == ACTION_DISABLE_SEGMENT || 
+            else if (command.Action == ACTION_DISABLE_SEGMENT ||
                      command.Action == ACTION_ENABLE_SEGMENT)
             {
                 if (command.SegmentId != null)
@@ -320,51 +323,62 @@ namespace OMSWeb.Services.MqttClient
             }
             else if (command.Action == ACTION_ZCU_GO)
             {
-                if (command.VehicleId != null || command.VehicleIds != null) 
+                if (command.VehicleId != null || command.VehicleIds != null)
                     data["vehicle_id"] = GetVehicleId(command);
+            }
+            else if (command.Action == ACTION_ZCU_SETTING)
+            {
+                data["id"] = GetZcuId(command);
+                data["using_type"] = command.ZcuUsingType switch
+                {
+                    "none" => 0,
+                    "hw" => 1,
+                    "sw" => 2,
+                    _ => throw new NotImplementedException(),
+                };
             }
             else if (command.Action == ACTION_ZCU_USING_TYPE)
             {
-                if (command.ZcuId != null || command.ZcuIds != null) 
+                if (command.ZcuId != null || command.ZcuIds != null)
                     data["zcu_id"] = GetZcuId(command);
 
-                if (command.ZcuUsingType != null) 
+                if (command.ZcuUsingType != null)
                     data["zcu_using_type"] = command.ZcuUsingType;
             }
-            else if (command.Action == ACTION_INSTALL_CARRIER || 
+            else if (command.Action == ACTION_INSTALL_CARRIER ||
                      command.Action == ACTION_REMOVE_CARRIER)
             {
-                if (command.CarrierLabel != null) 
+                if (command.CarrierLabel != null)
                     data["carrier_id"] = command.CarrierLabel;
             }
             else if (command.Action == ACTION_N)
             {
                 data["logical_id"] = GenerateLogicalID("");
 
-                if (command.VehicleId != null || command.VehicleIds != null) 
+                if (command.VehicleId != null || command.VehicleIds != null)
                     data["vehicle_id"] = GetVehicleId(command);
 
-                if (command.LocationPickup != null)  
-                    data["location_pickup"]  = GetLocationPickup(command);
+                if (command.LocationPickup != null)
+                    data["location_pickup"] = GetLocationPickup(command);
 
-                if (command.LocationDropoff != null) 
+                if (command.LocationDropoff != null)
                     data["location_dropoff"] = GetLocationDropoff(command);
 
-                if (command.LocationMove != null) 
-                    data["location_move"]    = GetLocationMove(command);
+                if (command.LocationMove != null)
+                    data["location_move"] = GetLocationMove(command);
 
                 if (command.CarrierLabel != null)
                     data["carrier_id"] = command.CarrierLabel;
 
                 data["origin"] = ORIGIN_OMS;    // oms
             }
-            else if (command.Action == ACTION_A || 
+            else if (command.Action == ACTION_A ||
                      command.Action == ACTION_C)
             {
-                if (command.OrderId != null) 
+                if (command.OrderId != null)
                     data["order_id"] = command.OrderId;
 
-                data["origin"]   = ORIGIN_OMS;    // oms
+                data["origin"] = ORIGIN_OMS;    // oms
             }
 
             // build JSON list

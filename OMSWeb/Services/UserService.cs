@@ -33,6 +33,11 @@ namespace OMSWeb.Services
       this._context = contextAccessor.HttpContext;
     }
 
+    public IQueryable<TokenHistoryEntity> QueryTokenHistory()
+    {
+        return this._repo.QueryTokenHistory();
+    }
+
     public IQueryable<UserEntity> QueryUsers()
     {
       return this._repo.QueryUsers();
@@ -64,22 +69,51 @@ namespace OMSWeb.Services
       if (!verified) //throw new OmsException(ErrorCodes.AuthenticationFailed);
         return null;
 
-      return new TokenResponse
+      var tokenResponse = new TokenResponse
       {
         Token = GenerateUserToken(user)
       };
+      var validTo = this.GetTokenValidTo(tokenResponse.Token);
+
+      this._repo.AddTokenHistory(user, validTo, "Logged In");
+
+      return tokenResponse;
     }
 
     public TokenResponse RenewToken()
     {
       var user = this._repo.GetUserById(this.UserId);
+
       if (user == null) //throw new OmsException(ErrorCodes.AuthenticationFailed);
         return null;
 
-      return new TokenResponse
+      var tokenResponse = new TokenResponse
       {
         Token = GenerateUserToken(user)
       };
+      var validTo = this.GetTokenValidTo(tokenResponse.Token);
+ 
+      this._repo.AddTokenHistory(user, validTo, "Refresh Logged In");
+
+      return tokenResponse;
+    }
+
+    public void Logout()
+    {
+        var user = this._repo.GetUserById(this.UserId);
+
+        var tokenString = this._context.Request.Headers["Authorization"].ToString().Split(" ")[1];
+        var validTo = this.GetTokenValidTo(tokenString);
+
+        this._repo.AddTokenHistory(user, validTo, "Logged Out");
+    }
+
+    private DateTime GetTokenValidTo(string tokenString)
+    {
+        var jwtHandler = new JwtSecurityTokenHandler();
+
+        var token = jwtHandler.ReadJwtToken(tokenString);
+        return token.ValidTo;
     }
 
     private string GenerateUserToken(UserEntity userEntity)

@@ -107,7 +107,7 @@ export class ViewController {
       lvl3: 500,
     },
     selective_lvl_display: {
-      direction: 2,
+      direction: 4,
       point_circle: 2,
       point_label: 3,
       segment_path: 1,
@@ -2343,13 +2343,14 @@ export class ViewController {
       let base_point_id;
 
       // Get base point id
-      if (object_type === 'POINT') {
+      if (object_type === 'POINT' ||
+          object_type === 'ZCU'
+        ) {
         base_point_id = current_object.id;
       } else if (
         object_type === 'STATION' ||
         object_type === 'BUFFER' ||
-        object_type === 'MTL' ||
-        object_type === 'ZCU'
+        object_type === 'MTL'
       ) {
         base_point_id = current_object.pointId;
       } else if (object_type === 'VEHICLE') {
@@ -5465,6 +5466,23 @@ export class ViewController {
               .attr('stroke', highlight_color)
               .attr('stroke-width', stroke_width)
               .lower();
+
+            target_dom
+              .append('polygon')
+              .attr('class', css_class)
+              .attr('points', `
+                10,-10
+                10,-30
+                17,-23
+                44,-50
+                50,-44
+                23,-17
+                30,-10
+              `)
+              .attr('stroke', highlight_color)
+              .attr('stroke-width', stroke_width)
+              .attr('fill', highlight_color)
+
           }
         }
 
@@ -9936,7 +9954,7 @@ export class ViewController {
             .attr('d', dom_css.icon_level3)
             .attr('level', 'level3');
           this.append_dom_subpart(
-            'MTL_DETAIL',
+            'ZCU_DETAIL',
             overlap_element,
             data,
             dom_css,

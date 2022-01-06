@@ -1,6 +1,4 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import CustomStore from 'devextreme/data/custom_store';
-import DataSource from 'devextreme/data/data_source';
 import { NIL, v4 as uuid4 } from 'uuid';
 
 import { UsersService } from '@oms/services/users.service';
@@ -8,10 +6,8 @@ import { IRole, ISimpleUser, IUserForm } from '../../../models/user.model';
 import {
   BehaviorSubject,
   combineLatest,
-  concat,
   forkJoin,
   Observable,
-  Subject,
 } from 'rxjs';
 import {
   MatDialog,
@@ -21,8 +17,8 @@ import {
 import { RoleSettingDialogComponent } from '../dialogs/role-setting-dialog.component';
 import { UserFormDialogComponent } from '../dialogs/user-form-dialog.component';
 import { BulkUserFormDialogComponent } from '../dialogs/bulk-user-from-dialog.component';
-import { filter, map, tap } from 'rxjs/operators';
-import _ = require('lodash');
+import { map } from 'rxjs/operators';
+import * as _ from 'lodash'
 
 @Component({
   selector: 'oms-user-management',
@@ -83,31 +79,28 @@ export class UserManagementComponent implements OnInit, OnDestroy {
 
   onBulkAddUser(grid) {
     this._bulkAddUserDlg = this.dialog.open(BulkUserFormDialogComponent, {
-      width: '350px',
+      maxHeight: "80vh",
       hasBackdrop: true,
       disableClose: true,
-      closeOnNavigation: true
+      closeOnNavigation: true,
+      data: { usersInDraft: grid.instance.getDataSource()._items }
     });
-    this._bulkAddUserDlg.afterClosed().subscribe((res) => {
-      if (res) {
-        //alert(res.length);
-        for (let idx = 0; idx < res.length; idx++) {
-          var user = <IUserForm>{};
-          user.id = uuid4();
-          user.isNew = true;
-          user.userId = res[idx][0];
-          user.firstName = res[idx][1];
-          user.lastName = res[idx][2];
-          user.email = res[idx][3];
-          user.password = res[idx][4];
-          user.roles = [res[idx][5]];
+    this._bulkAddUserDlg.afterClosed().subscribe(async (rows) => {
+      const roles = await this.roles$.toPromise()
+      if (Array.isArray(rows)) {
+        const newUsers: IUserForm[] = rows.map(row => ({
+          id: uuid4(),
+          isNew: true,
+          userId: row[0],
+          firstName: row[1],
+          lastName: row[2],
+          email: row[3],
+          password: row[4],
+          roles: [(roles.find(role => role.name === row[5]) ?? roles.find(role => role.name === "VIEWER")).id]
+        }))
 
-          this._changedItems.push(user);
-          grid.instance
-            .getDataSource()
-            .store()
-            .push([{ type: 'insert', data: user }]);
-        }
+        this._changedItems.push(...newUsers);
+        newUsers.forEach(newUser => grid.instance.getDataSource().store().push([{ type: "insert", data: newUser }]))
       }
     })
   }
@@ -118,6 +111,7 @@ export class UserManagementComponent implements OnInit, OnDestroy {
       hasBackdrop: true,
       disableClose: true,
       closeOnNavigation: true,
+      data: { usersInDraft: grid.instance.getDataSource()._items }
     });
     this._userDlg.afterClosed().subscribe((res) => {
       if (res) {

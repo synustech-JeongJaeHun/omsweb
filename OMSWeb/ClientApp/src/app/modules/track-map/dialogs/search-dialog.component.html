@@ -5,15 +5,8 @@
         [dataSource]="objectTypes" valueExpr="key" displayExpr="value" [searchEnabled]="true"
         (selectedItemChange)="onSelectType($event)"></dx-select-box>
       <dx-autocomplete #value class="form-item" [placeholder]="'messages.searchId' | translate" [dataSource]="targets"
-        [showClearButton]="true"></dx-autocomplete>
-      <!-- <dx-select-box
-        #value
-        class="form-item"
-        placeholder="Select ID"
-        [dataSource]="targets"
-        [disabled]="!canSelectTarget"
-        [searchEnabled]="true"
-      ></dx-select-box> -->
+        [showClearButton]="true" [disabled]="!type.value" valueExpr="logicalId" searchExpr="logicalId">
+      </dx-autocomplete>
     </div>
     <div mat-dialog-actions>
       <button mat-raised-button color="primary" (click)="onSearch(type.value, value.value)">

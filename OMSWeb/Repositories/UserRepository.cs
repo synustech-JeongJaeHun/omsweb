@@ -612,5 +612,50 @@ namespace OMSWeb.Repositories
       return result;
     }
 
-  }
+
+    public int AddTokenHistory(UserEntity user, DateTime validTo, string callerMethodName) 
+    {
+        int result = -1;
+
+        var insertLoginHistorySql = @"
+            INSERT INTO token_history (user_id, token_expires, method_name)
+            VALUES (@user_id, @token_expires, @method_name);
+        ";
+
+        using (var conn = ConnectUi())
+        {
+            conn.Open();
+            var trans = conn.BeginTransaction();
+
+            using (var cmd = new NpgsqlCommand(insertLoginHistorySql, conn))
+            {
+                try
+                {
+                    cmd.Parameters.AddWithValue("user_id", user.UserId);
+                    cmd.Parameters.AddWithValue("token_expires", validTo);
+                    cmd.Parameters.AddWithValue("method_name", callerMethodName);
+
+                    result = cmd.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                    trans.Rollback();
+                    throw ex;
+                }
+            }
+            trans.Commit();
+        }
+        return result;
+    }
+    public IQueryable<TokenHistoryEntity> QueryTokenHistory()
+    {
+        var sql = $"SELECT * FROM token_history";
+        IQueryable<TokenHistoryEntity> result;
+        using (var conn = ConnectUi())
+        {
+            result = conn.Query<TokenHistoryEntity>(sql).AsQueryable();
+        }
+        return result;
+    }
+    }
 }

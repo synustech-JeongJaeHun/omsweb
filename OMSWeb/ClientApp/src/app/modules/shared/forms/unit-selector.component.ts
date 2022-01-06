@@ -57,12 +57,12 @@ export class UnitSelectorComponent implements OnInit, OnChanges {
     this.targetOptions$ = this.inputControl.valueChanges.pipe(
       debounceTime(300),
       distinctUntilChanged(),
-      switchMap((value) => this.idSvc.lookupUnits(this.findScopes, value))
+      switchMap((value) => this.idSvc.lookupUnitsByLogicalId(this.findScopes, value))
     );
   }
   displayFn(item: ILookupUnit): string | undefined {
     if (!item) return;
-    return `${item.objectType} #${item.id}`;
+    return `${item.objectType} #${item.logicalId}`;
   }
   onSelected(item: ILookupUnit) {
     this.selectedUnit = item;

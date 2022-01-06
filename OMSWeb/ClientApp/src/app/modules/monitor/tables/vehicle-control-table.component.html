@@ -13,11 +13,11 @@
   </button>
   <button *ngIf="hasPermission(permissionEnums.HostOrderEnable)" mat-stroked-button color="primary" class="dense"
     [disabled]="!canControl" (click)="onChangeHostOrderActivity()">
-    {{ "names.hostOrderEnable" | translate }}
+    {{ "names.hostOrderDisable" | translate }}
   </button>
   <button *ngIf="hasPermission(permissionEnums.PushEnable)" mat-stroked-button color="primary" class="dense"
     [disabled]="!canControl" (click)="onChangePushActivity()">
-    {{ "names.pushEnable" | translate }}
+    {{ "names.pushDisable" | translate }}
   </button>
   <button *ngIf="hasPermission(permissionEnums.RailIn)" mat-stroked-button color="primary" class="dense"
     [disabled]="!canControl" (click)="onRailIn()">

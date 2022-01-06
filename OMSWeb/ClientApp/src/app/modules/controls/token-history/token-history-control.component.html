@@ -1,0 +1,16 @@
+<h1>{{ "names.auditTrail" | translate }}</h1>
+
+<dx-data-grid [dataSource]="dataSource" [remoteOperations]="true" height="72vh" [showBorders]="true" sorting="id desc">
+  <dxo-filter-row [visible]="true"></dxo-filter-row>
+  <dxo-paging [pageSize]="50"> </dxo-paging>
+  <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[50]" [showInfo]="true" visible="true">
+  </dxo-pager>
+  <dxo-scrolling mode="virtual" showScrollbar="true"></dxo-scrolling>
+
+  <dxi-column dataField="id" dataType="number" sortOrder="desc" width="8em" [caption]="'names.id' | translate">
+  </dxi-column>
+  <dxi-column dataField="timeCreated" dataType="datetime" [caption]="'names.timeCreated' | translate"></dxi-column>
+  <dxi-column dataField="userId" dataType="string" [caption]="'names.userId' | translate"></dxi-column>
+  <dxi-column dataField="methodName" dataType="string" [caption]="'names.state' | translate"></dxi-column>
+  <dxi-column dataField="tokenExpires" dataType="datetime" [caption]="'names.tokenExpires' | translate"></dxi-column>
+</dx-data-grid>

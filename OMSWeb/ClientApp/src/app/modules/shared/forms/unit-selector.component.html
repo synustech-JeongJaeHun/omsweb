@@ -8,7 +8,7 @@
   <mat-autocomplete #auto="matAutocomplete" [autoActiveFirstOption]="false" [displayWith]="displayFn"
     (optionSelected)="onSelected($event.option.value)">
     <mat-option *ngFor="let item of targetOptions$ | async" [value]="item">
-      <span>{{ item.id }}</span>
+      <span>{{ item.logicalId }}</span>
       <span class="option-type">{{ item.objectType }}</span>
     </mat-option>
   </mat-autocomplete>

@@ -20,7 +20,6 @@ import { PermissionEnums } from '../../../models/enums';
 export class MapSidePanelComponent implements OnInit, OnChanges {
   @Input('selectedObject') data: any;
 
-  isCalculatedPath = false;
   hasOverlap = true;
 
   readonly permissionEnums: typeof PermissionEnums = PermissionEnums;
@@ -63,7 +62,6 @@ export class MapSidePanelComponent implements OnInit, OnChanges {
     this.hasOverlap = true;
     switch (this.data.objectType) {
       case 'Vehicle':
-        this.bindVehicle();
         break;
       case 'Segment':
         this.bindSegment();
@@ -76,7 +74,6 @@ export class MapSidePanelComponent implements OnInit, OnChanges {
     }
   }
 
-  onChangeVehicleCalculatePath() { }
   changeSegmentDisabled() {
     // disabled 상태값 변경
     this.segmentDisabledInfo.disabled = !this.segmentDisabledInfo.disabled;
@@ -96,14 +93,6 @@ export class MapSidePanelComponent implements OnInit, OnChanges {
 
   closePanel() {
     this.statesSvc.changeToolbarState('itemDetails', false);
-  }
-
-  private bindVehicle() {
-    this.isCalculatedPath = this.dataSvc.expectedPaths.some(
-      (x) => x.id === this.data.id
-    );
-    // @TODO send message
-    console.warn('TODO : send calculate path message');
   }
 
   private bindSegment() {
