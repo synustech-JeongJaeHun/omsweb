@@ -4,7 +4,6 @@ import { Observable, of } from 'rxjs';
 import { ILookupUnit } from '../../../models/map.interface';
 import { Vehicle } from '../../../models/vehicle.model';
 import { TrackIdService } from '../../../services/track-id.service';
-import { MapDataService } from '../map-data.service';
 
 @Component({
   selector: 'oms-track-vehicle-dialog',
@@ -21,7 +20,6 @@ export class TrackVehicleDialogComponent implements OnInit {
   }
 
   constructor(
-    private mapData: MapDataService,
     private idSvc: TrackIdService,
     private dialog: MatDialogRef<TrackVehicleDialogComponent>
   ) {

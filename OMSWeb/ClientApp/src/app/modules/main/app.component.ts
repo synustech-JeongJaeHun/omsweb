@@ -3,7 +3,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { HubService } from '../../services/hub.service';
 import { SettingsService } from '../../services/settings.service';
 import { setCssValue } from '../shared/utils/css-loader';
-import { MapDataService } from '../track-map/map-data.service';
 
 @Component({
   selector: 'oms-root',

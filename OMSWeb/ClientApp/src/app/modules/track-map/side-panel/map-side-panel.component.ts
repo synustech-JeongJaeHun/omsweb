@@ -7,7 +7,6 @@ import {
 } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
 import { AccountUtil } from '../../shared/utils/account.util';
-import { MapDataService } from '../map-data.service';
 import { MapStatesService } from '../map-states.service';
 import { MessagesService } from '../../../services/messages.service';
 import { PermissionEnums } from '../../../models/enums';
@@ -39,7 +38,6 @@ export class MapSidePanelComponent implements OnInit, OnChanges {
   }
 
   constructor(
-    private dataSvc: MapDataService,
     private statesSvc: MapStatesService,
     private messageSvc: MessagesService,
     private auth: AuthService

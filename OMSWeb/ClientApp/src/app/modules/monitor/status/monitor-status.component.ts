@@ -6,7 +6,6 @@ import { ViewModes } from '../../../models/enums';
 import { IPreferences } from '../../../models/settings.model';
 import { AuthService } from '../../../services/auth.service';
 import { StatusService } from '../../../services/status.service';
-import { MapDataService } from '../../track-map/map-data.service';
 
 @Component({
   selector: 'oms-monitor-status',
@@ -74,7 +73,6 @@ export class MonitorStatusComponent implements OnInit, AfterViewInit {
     private settingSvc: SettingsService,
     private auth: AuthService,
     private statusSvc: StatusService,
-    private dataSvc: MapDataService
   ) {
     this.viewMode = this.auth.isAuthenticated
       ? ViewModes.viewer
