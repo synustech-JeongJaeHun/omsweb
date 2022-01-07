@@ -1,16 +1,6 @@
-type ViewModes =
-  | 'MINIMAL'
-  | 'EDITOR'
-  | 'VIEWER'
-  | 'PUBLIC'
-  | 'PLAYBACK'
+type ViewModes = 'MINIMAL' | 'EDITOR' | 'VIEWER' | 'PUBLIC' | 'PLAYBACK'
 
-type MapTypes =
-  | 'MIN_MAX'
-  | 'MAIN'
-  | 'MINIMAP'
-  | 'FILE'
-  | 'DB'
+type MapTypes = 'MIN_MAX' | 'MAIN' | 'MINIMAP' | 'FILE' | 'DB'
 
 type ToggleOptionKeyType =
   | 'itemDetails'
@@ -31,7 +21,7 @@ type ToggleOptionKeyType =
   | 'showToolName'
   | 'showOmsVersion'
   | 'showKpi'
-  | 'overlaps';
+  | 'overlaps'
 
 type CommandKeyType =
   | 'centerZoom'
@@ -41,12 +31,18 @@ type CommandKeyType =
   | 'getVehicleStatus'
   | 'setAutoVehicles'
   | 'resetVehicles'
-  | 'eStopVehicles';
+  | 'eStopVehicles'
 
 type MapConfigType =
   | 'vehicleScale'
   | 'mapRotation'
   | 'segmentWidth'
-  | 'segmentDirectionSize';
+  | 'segmentDirectionSize'
 
-export { MapTypes, ToggleOptionKeyType, CommandKeyType, MapConfigType, ViewModes }
+export {
+  MapTypes,
+  ToggleOptionKeyType,
+  CommandKeyType,
+  MapConfigType,
+  ViewModes,
+}

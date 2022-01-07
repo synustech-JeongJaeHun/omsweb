@@ -1,6 +1,6 @@
 const getCss = (name: string) => {
-  const styles = window.getComputedStyle(document.body);
-  return styles.getPropertyValue(name);
+  const styles = window.getComputedStyle(document.body)
+  return styles.getPropertyValue(name)
 }
 
 // @NOTE css1_root.css => getCss
@@ -146,12 +146,8 @@ const main_css = {
       '--vehicle-color-mode-manual-outline'
     ),
     color_mode_error: getCss('--vehicle-color-mode-error'),
-    color_mode_error_outline: getCss(
-      '--vehicle-color-mode-error-outline'
-    ),
-    color_mode_sloppy_manual: getCss(
-      '--vehicle-color-mode-sloppy-manual'
-    ),
+    color_mode_error_outline: getCss('--vehicle-color-mode-error-outline'),
+    color_mode_sloppy_manual: getCss('--vehicle-color-mode-sloppy-manual'),
     color_mode_sloppy_manual_outline: getCss(
       '--vehicle-color-mode-sloppy-manual-outline'
     ),
@@ -167,7 +163,9 @@ const main_css = {
     color_mode_none_outline: getCss('--vehicle-color-mode-none-outline'),
     color_sensor_stop: getCss('--vehicle-color-sensor-stop'),
     stroke_color_sensor_stop: getCss('--vehicle-stroke-color-sensor-stop'),
-    stroke_width_sensor_stop: parseInt(getCss('--vehicle-stroke-width-sensor-stop')),
+    stroke_width_sensor_stop: parseInt(
+      getCss('--vehicle-stroke-width-sensor-stop')
+    ),
     color_blocked: getCss('--vehicle-color-blocked'),
     color_load: getCss('--vehicle-color-load'),
     color_hotlot: getCss('--vehicle-color-hotlot'),
@@ -216,19 +214,19 @@ const main_css = {
   color_palette: {
     colors: (function () {
       // create the color palette using the colorN items from css
-      let num_colors = parseInt(getCss('--num-palette-colors'));
-      let color_info = {};
+      let num_colors = parseInt(getCss('--num-palette-colors'))
+      let color_info = {}
       for (let i = 0; i < num_colors; i++) {
-        let color_id = `color${i + 1}`;
-        let color = getCss(`--${color_id}`);
-        let color_name = getCss(`--${color_id}-name`);
+        let color_id = `color${i + 1}`
+        let color = getCss(`--${color_id}`)
+        let color_name = getCss(`--${color_id}-name`)
         // @ts-ignore
         color_info[color_id] = {
           color: color ? color.trim() : color_id,
           name: color_name ? color_name.trim() : `${color_id}-name`,
-        };
+        }
       }
-      return color_info;
+      return color_info
     })(),
     tile_dimensions: {
       width: parseInt(getCss('--color-tile-width')),
@@ -236,12 +234,11 @@ const main_css = {
     },
     num_rows: 3,
   },
-};
+}
 
 function convert_path_to_str(original: string) {
   // Remove ' "' and '"'
   return original.replace(/ "|"/gi, '')
 }
-
 
 export { main_css }
