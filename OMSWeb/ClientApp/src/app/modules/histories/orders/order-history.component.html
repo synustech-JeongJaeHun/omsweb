@@ -77,7 +77,7 @@
   </div>
   <div id="grid-container">
     <dx-data-grid [dataSource]="dataSource" [columnAutoWidth]="true" [remoteOperations]="true" [height]="gridHeight"
-      [width]="gridWidth" [showBorders]="true" [hoverStateEnabled]="true">
+                  [width]="gridWidth" [showBorders]="true" [hoverStateEnabled]="true">
       <dxo-export [enabled]="true" [fileName]="fileName"></dxo-export>
       <dxo-paging [pageSize]="50"></dxo-paging>
       <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[50, 100, 200]" [showInfo]="true" visible="true">
@@ -88,75 +88,76 @@
       <dxo-filter-row [visible]="true"></dxo-filter-row>
 
       <dxi-column [width]="80" dataType="string" dataField="historySourceId" sortOrder="desc"
-        [caption]="'names.id' | translate"></dxi-column>
-      <dxi-column [width]="120" dataType="string" dataField="logicalId" [caption]="'names.logicalId' | translate"
-        [fixed]="true"></dxi-column>
-      <dxi-column [width]="100" dataType="string" dataField="state" [caption]="'names.state' | translate"></dxi-column>
-      <dxi-column [width]="80" dataType="string" dataField="vehicleId" [caption]="'names.vehicleId' | translate">
-      </dxi-column>
+                  [caption]="'names.id' | translate"></dxi-column>
+      <dxi-column [width]="100" dataType="string" dataField="origin"
+                  [caption]="'names.origin' | translate"></dxi-column>
+      <dxi-column [width]="120" dataType="string" dataField="logicalId"
+                  [caption]="'names.logicalId' | translate" [fixed]="true"></dxi-column>
+      <dxi-column [width]="80" dataType="number" dataField="priority"
+                  [caption]="'names.priority' | translate"></dxi-column>
+      <dxi-column [width]="100" dataType="string" dataField="state"
+                  [caption]="'names.state' | translate"></dxi-column>
+      <dxi-column [width]="80" dataType="string" dataField="vehicleId"
+                  [caption]="'names.vehicleId' | translate"></dxi-column>
       <dxi-column [width]="120" dataType="string" dataField="locationPickup"
-        [caption]="'names.locationPickup' | translate" [customizeText]="transformLocationId"></dxi-column>
+                  [caption]="'names.locationPickup' | translate"
+                  [customizeText]="transformLocationId"></dxi-column>
       <dxi-column [width]="120" dataType="string" dataField="locationDropoff"
-        [caption]="'names.locationDropoff' | translate" [customizeText]="transformLocationId"></dxi-column>
-      <dxi-column [width]="120" dataType="string" dataField="locationMove" [caption]="'names.locationMove' | translate"
-        [customizeText]="transformLocationId"></dxi-column>
-      <dxi-column [width]="80" dataType="number" dataField="priority" [caption]="'names.priority' | translate">
-      </dxi-column>
+                  [caption]="'names.locationDropoff' | translate"
+                  [customizeText]="transformLocationId"></dxi-column>
+      <dxi-column [width]="120" dataType="string" dataField="locationMove"
+                  [caption]="'names.locationMove' | translate"
+                  [customizeText]="transformLocationId"></dxi-column>
       <dxi-column dataType="string" dataField="carrierLabel" [allowSorting]="false"
-        [caption]="'names.carrierLabel' | translate"></dxi-column>
-      <dxi-column [width]="120" dataType="datetime" dataField="timeCreated" [caption]="'names.timeCreated' | translate"
-        [format]="dateTimeFormat"></dxi-column>
+                  [caption]="'names.carrierLabel' | translate"></dxi-column>
+      <dxi-column [width]="120" dataType="datetime" dataField="timeCreated"
+                  [caption]="'names.timeCreated' | translate" [format]="dateTimeFormat"></dxi-column>
       <dxi-column [width]="120" dataType="datetime" dataField="timeAssigned"
-        [caption]="'names.timeAssigned' | translate" [format]="dateTimeFormat"></dxi-column>
+                  [caption]="'names.timeAssigned' | translate" [format]="dateTimeFormat"></dxi-column>
       <dxi-column [width]="120" dataType="datetime" dataField="timeVehicleArrived"
-        [caption]="'names.timeVehicleArrived' | translate" [format]="dateTimeFormat"></dxi-column>
+                  [caption]="'names.timeVehicleArrived' | translate" [format]="dateTimeFormat"></dxi-column>
       <dxi-column [width]="120" dataType="datetime" dataField="timeLoadStarted"
-        [caption]="'names.timeLoadStarted' | translate" [format]="dateTimeFormat"></dxi-column>
+                  [caption]="'names.timeLoadStarted' | translate" [format]="dateTimeFormat"></dxi-column>
       <dxi-column [width]="120" dataType="datetime" dataField="timeLoadCompleted"
-        [caption]="'names.timeLoadCompleted' | translate" [format]="dateTimeFormat"></dxi-column>
+                  [caption]="'names.timeLoadCompleted' | translate" [format]="dateTimeFormat"></dxi-column>
       <dxi-column [width]="120" dataType="datetime" dataField="timeUnloadStarted"
-        [caption]="'names.timeUnloadStarted' | translate" [format]="dateTimeFormat"></dxi-column>
+                  [caption]="'names.timeUnloadStarted' | translate" [format]="dateTimeFormat"></dxi-column>
       <dxi-column [width]="120" dataType="datetime" dataField="timeUnloadCompleted"
-        [caption]="'names.timeUnloadCompleted' | translate" [format]="dateTimeFormat"></dxi-column>
+                  [caption]="'names.timeUnloadCompleted' | translate" [format]="dateTimeFormat"></dxi-column>
       <dxi-column [width]="120" dataType="datetime" dataField="timeCompleted"
-        [caption]="'names.timeCompleted' | translate" [format]="dateTimeFormat"></dxi-column>
+                  [caption]="'names.timeCompleted' | translate" [format]="dateTimeFormat"></dxi-column>
       <dxi-column [width]="120" dataType="datetime" dataField="timeAborted" [caption]="'names.timeAborted' | translate"
-        [format]="dateTimeFormat"></dxi-column>
+                  [format]="dateTimeFormat"></dxi-column>
       <dxi-column [width]="120" dataType="datetime" dataField="timeFailed" [caption]="'names.timeFailed' | translate"
-        [format]="dateTimeFormat"></dxi-column>
-
-      <dxi-column [width]="100" dataType="string" dataField="origin" [caption]="'names.origin' | translate">
-      </dxi-column>
-
+                  [format]="dateTimeFormat"></dxi-column>
       <dxi-column [width]="100" dataType="string" dataField="distancePickup"
-        [caption]="'names.distancePickup' | translate" cellTemplate="distanceTemplate"></dxi-column>
+                  [caption]="'names.distancePickup' | translate" cellTemplate="distanceTemplate"></dxi-column>
       <dxi-column [width]="100" dataType="string" dataField="distanceDropoff"
-        [caption]="'names.distanceDropoff' | translate" cellTemplate="distanceTemplate"></dxi-column>
+                  [caption]="'names.distanceDropoff' | translate" cellTemplate="distanceTemplate"></dxi-column>
       <dxi-column [width]="100" dataType="string" dataField="distanceMove" [caption]="'names.distanceMove' | translate"
-        cellTemplate="distanceTemplate"></dxi-column>
-
+                  cellTemplate="distanceTemplate"></dxi-column>
       <dxi-column [width]="100" dataType="string" dataField="assignmentType"
-        [caption]="'names.assignmentType' | translate" cellTemplate="distanceTemplate"></dxi-column>
+                  [caption]="'names.assignmentType' | translate" cellTemplate="distanceTemplate"></dxi-column>
       <dxi-column [width]="100" dataType="string" dataField="assignmentDetails"
-        [caption]="'names.assignmentDetails' | translate" cellTemplate="distanceTemplate"></dxi-column>
+                  [caption]="'names.assignmentDetails' | translate" cellTemplate="distanceTemplate"></dxi-column>
 
       <div *dxTemplate="let data of 'distanceTemplate'">
         {{ data.displayValue / 1000 | number }}
       </div>
       <!-- <div *dxTemplate="let data of 'orderStatusTemplate'">
-        {{ data.displayValue | translate }}
-      </div>
-      <div *dxTemplate="let data of 'dateTimeTemplate'">
-        {{ data.displayValue | date: "yyyy/MM/dd hh:mm:ss" }}
+    {{ data.displayValue | translate }}
+  </div>
+  <div *dxTemplate="let data of 'dateTimeTemplate'">
+    {{ data.displayValue | date: "yyyy/MM/dd hh:mm:ss" }}
 
-        <div *ngIf="!data.displayValue.startsWith('0001'); else elseBlock">
-          {{ data.displayValue | date: "yyyy/MM/dd hh:mm:ss" }}
-        </div>
-        <ng-template #elseBlock>-</ng-template>
-      </div>
-      <div *dxTemplate="let data of 'booleanTemplate'">
-        {{ data.text }}
-      </div> -->
+    <div *ngIf="!data.displayValue.startsWith('0001'); else elseBlock">
+      {{ data.displayValue | date: "yyyy/MM/dd hh:mm:ss" }}
+    </div>
+    <ng-template #elseBlock>-</ng-template>
+  </div>
+  <div *dxTemplate="let data of 'booleanTemplate'">
+    {{ data.text }}
+  </div> -->
     </dx-data-grid>
   </div>
 </div>
