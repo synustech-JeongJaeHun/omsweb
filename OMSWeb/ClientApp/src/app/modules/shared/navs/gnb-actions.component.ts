@@ -43,6 +43,9 @@ export class GnbActionsComponent implements OnInit, OnDestroy {
   get activeAi(): boolean {
     return this._activeAi;
   }
+  get aiParamTitle(): string {
+    return this.t$.instant(`names.ai`) + ' ' + this.t$.instant(`names.mode`);
+  }
   get aiParamText(): string[] {
     if (this.activeAi)
       return [this.t$.instant(`names.aiOn`), this.t$.instant('names.aiOff')];
@@ -115,18 +118,19 @@ export class GnbActionsComponent implements OnInit, OnDestroy {
   }
   onChangeAI() {
     if (!AccountUtil.hasPermission(PermissionEnums.AiMode, this.auth.currentUser)) return;
-    let param: string[] = this.aiParamText;
-    const transParam = { name: 'AI Mode', from: param[0], to: param[1] };
-    this.dialogSvc
-      .confirm({
-        title: this.t$.instant('names.changeConfirm', transParam),
-        body: this.t$.instant('messages.changeStateConfirm', transParam),
-      })
-      .subscribe((ok) => {
-        if (ok) {
-          this.messageSvc.sendAIModeCommand({ action: 'ai_mode', mode: 'change' }).subscribe();
-        }
-      });
+    this.dialogSvc.confirm(this.getConfirmMessage(this.aiParamTitle, this.aiParamText)).subscribe((ok) => {
+      if (ok) {
+        this.messageSvc.sendAIModeCommand({ action: 'ai_mode', mode: 'change' }).subscribe();
+      }
+    });
+  }
+
+  private getConfirmMessage(displayName: string, param: string[]) {
+    const transParam = { name: displayName, from: param[0], to: param[1] };
+    return {
+      title: this.t$.instant('names.changeConfirm', transParam),
+      body: this.t$.instant('messages.changeStateConfirm', transParam),
+    };
   }
 
   private updateState() {

@@ -47,6 +47,9 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
       return [this.t$.instant(`names.host`), this.t$.instant('names.local')];
     return [this.t$.instant(`names.local`), this.t$.instant('names.host')];
   }
+  get tscParamTitle(): string {
+    return this.t$.instant(`names.tsc`);
+  }
   get tscParamText(): string[] {
     if (this.isActiveTscMode)
       return [this.t$.instant(`names.tscAuto`), this.t$.instant('names.tscPause')];
@@ -102,7 +105,7 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
   }
   changeTscMode() {
     if (!AccountUtil.hasPermission(PermissionEnums.TscMode, this.auth.currentUser)) return;
-    this.dialogSvc.confirm(this.getConfirmMessage('TSC', this.tscParamText)).subscribe((ok) => {
+    this.dialogSvc.confirm(this.getConfirmMessage(this.tscParamTitle, this.tscParamText)).subscribe((ok) => {
       if (ok) {
         this.messageSvc.sendTscStateCommand({ action: 'tsc_state', state: 'change' }).subscribe();
       }
