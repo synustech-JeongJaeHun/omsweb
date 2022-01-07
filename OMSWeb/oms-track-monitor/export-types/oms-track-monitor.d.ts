@@ -1,3 +1,6 @@
+// @ts-ignore
+import { IOmsTrackMonitor } from './IOmsTrackMonitor'
+
 interface OmsTrackMonitorEventMap extends HTMLElementEventMap {
     "apple": CustomEvent<{ "A": "A" }>;
     "blue": CustomEvent<{ B: number }>;
@@ -20,4 +23,5 @@ declare global {
         "oms-track-monitor": OmsTrackMonitorElement;
     }
 }
-export { };
+
+export { IOmsTrackMonitor, OmsTrackMonitorElement };

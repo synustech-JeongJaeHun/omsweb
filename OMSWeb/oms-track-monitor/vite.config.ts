@@ -9,7 +9,7 @@ export default defineConfig({
   plugins: [vue()],
   build: {
     lib: {
-      entry: path.resolve(__dirname, 'src/app.ts'),
+      entry: path.resolve(__dirname, 'src/oms-track-monitor.ts'),
       name: 'oms-track-monitor',
       fileName: (format) => `oms-track-monitor.${format}.js`
     }

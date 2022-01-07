@@ -17,7 +17,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
-    "postbuild": "cpy src/App.d.ts dist/ --rename=oms-track-monitor.d.ts",
+    "buildType": "tsc src/legacies/IOmsTrackMonitor.ts --declaration --emitDeclarationOnly --outDir dist && cpy export-types/oms-track-monitor.d.ts dist/",
+    "postbuild": "npm run buildType",
     "preview": "vite preview"
   },
   "dependencies": {

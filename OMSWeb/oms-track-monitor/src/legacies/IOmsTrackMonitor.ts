@@ -5,8 +5,8 @@ import { ITrackData, IVehicle } from "./models/track.model";
 import { MapDataService } from "./serivces/MapData.service";
 import { MapStatesService } from "./serivces/MapStates.service";
 
-interface IOMSTrackMonitor {
-  constructor: (
+interface IOmsTrackMonitor {
+  construct: (
     mode: ViewModes, // NOTE default ViewModes.minimal
     track_svg_id: string,
     minimap_svg_id: string,
@@ -19,6 +19,7 @@ interface IOMSTrackMonitor {
   create_track: (data: ITrackData) => void,
   destroy: () => void,
   get_selected_objects: (object_type?: string) => any[],
+  getUiStates: () => UiStates
   hasShownLayoutObjects: (objectType: string, objectId: number) => boolean,
   highlight: (
     object_type: any,
@@ -89,4 +90,4 @@ interface IOMSTrackMonitor {
   ) => { [id: number]: any },
 }
 
-export { IOMSTrackMonitor }
+export { IOmsTrackMonitor }

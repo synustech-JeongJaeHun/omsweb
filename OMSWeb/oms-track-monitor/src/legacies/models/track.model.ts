@@ -25,10 +25,6 @@ interface IGroup {
   objects?: any[];
 }
 
-interface IGroupedObject {
-  id: number;
-  type: string;
-}
 interface IMTL {
   id: number;
   logicalId: string;
@@ -78,14 +74,6 @@ interface ISegPart {
 }
 interface ISegment extends ISegPart {
   id: number;
-  // type: string;
-  // direction: SteerDirections;
-  // location: string;
-  // x1?: number;
-  // y1?: number;
-  // x2?: number;
-  // y2?: number;
-
   startPoint?: number;
   endPoint?: number;
   length: number;
@@ -164,17 +152,5 @@ interface ITrackData extends IFixedTrackData, IVariableTrackData {
   height?: number;
   minimumSegmentLength?: number;
 }
-
-interface IVehicleTrackData {
-  vehicles?: IVehicle[];
-  vehiclePath?: any[];
-}
-
-interface INodeInfo {
-  id: number;
-  logicalId?: string;
-  physicalId?: string;
-}
-
 
 export { ITrackData, IVehicle, ISegment }

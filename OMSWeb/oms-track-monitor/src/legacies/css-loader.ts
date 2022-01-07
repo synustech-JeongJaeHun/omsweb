@@ -3,13 +3,6 @@ const getCss = (name: string) => {
   return styles.getPropertyValue(name);
 }
 
-const setCssValue = (name: string, value: any) => {
-  document.documentElement.style.setProperty(name, value);
-}
-const removeCssValue = (name: string) => {
-  document.documentElement.style.removeProperty(name);
-}
-
 // @NOTE css1_root.css => getCss
 const main_css = {
   general: {
@@ -244,8 +237,6 @@ const main_css = {
     num_rows: 3,
   },
 };
-
-// Copyright 2019 Zinnotech, all rights reserved
 
 function convert_path_to_str(original: string) {
   // Remove ' "' and '"'

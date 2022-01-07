@@ -36,6 +36,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { PermissionEnums } from '../../../models/enums';
 
 import "oms-track-monitor"
+import { OmsTrackMonitorElement, IOmsTrackMonitor } from "oms-track-monitor"
 
 @Component({
   selector: 'oms-map-viewer',
@@ -60,7 +61,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 
   private _minimapVisible = false;
   private _detailsVisible = false;
-  private viewer: ViewController;
+  private viewer: IOmsTrackMonitor;
   private destroy$: Subject<void> = new Subject<void>();
   private _popupOffsetX = 10;
   private _popupOffsetY = 40;
@@ -371,13 +372,15 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   }
 
   private initMap() {
-    this.viewer = new ViewController(
+    this.viewer = (document.getElementById('track-canvas') as any)._instance.exposed as unknown as IOmsTrackMonitor
+
+    this.viewer.construct(
       this.viewMode,
       'track-canvas',
       'minimap',
       this.dataSvc,
       this.statesSvc
-    );
+    )
 
     this.viewer.setup(this.preference);
 

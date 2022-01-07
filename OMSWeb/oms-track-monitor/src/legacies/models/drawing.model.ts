@@ -21,33 +21,12 @@ interface IMapSize extends ISize {
   min?: any;
   max?: any;
 }
-interface IMapGeometry {
-  screenSize?: ISize;
-  minimapSize?: ISize;
-  trackSize?: IMapSize;
-  fabSize?: IMapSize;
-  initialFabSize?: IMapSize;
-  invertFactorY?: number;
-}
 interface IZoom {
   x?: number;
   y?: number;
   k?: number;
   min?: number;
   max?: number;
-}
-interface IZoomInfos {
-  min?: number;
-  max?: number;
-  main?: IZoom;
-  minimap?: IZoom;
-
-  x?: number;
-  y?: number;
-  k?: number;
-
-  invertY?: number;
-  invertX?: number;
 }
 
 interface IMapToolbarToggleEvent {
@@ -62,16 +41,6 @@ interface IMapToolbarCommandEvent {
 interface IMapConfigChangeEvent {
   type: MapConfigType;
   value?: any;
-}
-
-interface IMapNodeScale {
-  scale: number;
-  value: number;
-}
-
-interface IControlTableEvent {
-  type: string;
-  value: boolean;
 }
 
 export { ICoordinate, IMapSize, IZoom, IMapToolbarToggleEvent, IMapToolbarCommandEvent, IMapConfigChangeEvent }
