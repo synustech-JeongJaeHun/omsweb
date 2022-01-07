@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import { IOmsTrackMonitor } from './legacies/IOmsTrackMonitor';
 import { UiStates } from './legacies/models/setting.model';
-import { isDev } from './utils/devMode';
+import { makeFsProxy } from './utils/devMode';
 
 const props = defineProps<{
   text: string
@@ -15,8 +15,6 @@ const emit = defineEmits<{
 
 const exposed: IOmsTrackMonitor = {
   construct: function (mode, trackSvgId, minimapSvgId, dataSvc, stateSvc) {
-    console.log()
-    console.log(mode, "")
   },
   adjust_floaters: function () { },
   applyAfterSnapshotUpdated: function (updatedPropList) { },
@@ -97,13 +95,9 @@ const exposed: IOmsTrackMonitor = {
   },
 }
 
-const exposedProxy = new Proxy(exposed, {
-  apply: function (target, thisArg, argumentsList) {
-    console.log(arguments)
-  }
-})
+const exposedProxy = makeFsProxy(exposed)
 
-defineExpose(exposed)
+defineExpose(exposedProxy)
 
 function emitB(event: any) {
   emit('blue', { B: Date.now() })
