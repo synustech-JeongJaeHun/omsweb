@@ -53,7 +53,7 @@
     "validationError": "검증 오류",
     "id": "아이디",
     "physicalId": "물리적 아이디",
-    "logicalId": "논리 아이디",
+    "logicalId": "Online Name",
     "state": "상태",
     "vehicleId": "비클",
     "locationPickup": "시작",

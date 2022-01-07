@@ -53,7 +53,7 @@
     "validationError": "Validation Error",
     "id": "ID",
     "physicalId": "Physical ID",
-    "logicalId": "Logical ID",
+    "logicalId": "Online Name",
     "state": "State",
     "vehicleId": "Vehicle",
     "locationPickup": "From",
