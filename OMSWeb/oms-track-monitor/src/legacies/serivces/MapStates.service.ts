@@ -1,8 +1,14 @@
 interface MapStatesService {
   vehicleTrackingState: unknown
   actionState$: unknown
-  resetVehicleTrackingState: unknown
-  preferences: unknown
+  /**
+   * @deprecated Side Effect
+   */
+  resetVehicleTrackingState: unknown // SIDE-EFFECT
+  /**
+   * @deprecated Side Effect
+   */
+  preferences: unknown // SIDE-EFFECT
 }
 
 export { MapStatesService }

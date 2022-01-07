@@ -1,9 +1,24 @@
 interface MapDataService {
-  data: unknown
+  data: {
+    // Something else...
+    /**
+     * @deprecated Side Effect
+     */
+    vehicles: any[]  // SIDE-EFFECT
+  }
   expectedPaths: unknown
-  parseData: unknown
-  applyVehicleData: unknown
-  applyDisableSegmentData: unknown
+  /**
+   * @deprecated Side Effect
+   */
+  parseData: unknown // SIDE-EFFECT
+  /**
+   * @deprecated Side-Effect
+   */
+  applyVehicleData: unknown // SIDE-EFFECT
+  /**
+   * @deprecated Side Effect
+   */
+  applyDisableSegmentData: unknown // SIDE-EFFECT
   find_layout_object: unknown
   get_layout_objects: unknown
   find_point_coords: unknown

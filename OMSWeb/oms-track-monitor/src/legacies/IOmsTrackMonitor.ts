@@ -4,6 +4,7 @@ import {
   IMapToolbarCommandEvent,
   IMapToolbarToggleEvent,
 } from './models/drawing.model'
+import { Segment } from './models/segment.model'
 import { IPreferences, UiStates } from './models/setting.model'
 import { ITrackData, IVehicle } from './models/track.model'
 import { MapDataService } from './serivces/MapData.service'
@@ -73,7 +74,7 @@ interface IOmsTrackMonitor {
     is_apply_revert: boolean
   ) => void
   update_segment_svg: (
-    data: any[], // FIXME input1) Segment[]
+    data: Segment[], // FIXME input1) Segment[]
     dom_css: any, // NOTE not using in function
     excluded_segments: null | any[] | any | boolean,
     is_path_change?: boolean
