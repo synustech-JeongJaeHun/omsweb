@@ -608,7 +608,7 @@
           </div>
           <div>
             <input type="checkbox" color="primary" [title]="'names.id' | translate"
-              [checked]="getCheckedState('stations_id')" (change)="onChangeControlTable('stations_id', $event)" />
+                   [checked]="getCheckedState('stations_id')" (change)="onChangeControlTable('stations_id', $event)" />
           </div>
         </div>
       </div>
@@ -619,8 +619,8 @@
           </div>
           <div>
             <input type="checkbox" color="primary" [title]="'names.physicalId' | translate"
-              [checked]="getCheckedState('stations_physicalId')"
-              (change)="onChangeControlTable('stations_physicalId', $event)" />
+                   [checked]="getCheckedState('stations_physicalId')"
+                   (change)="onChangeControlTable('stations_physicalId', $event)" />
           </div>
         </div>
       </div>
@@ -631,8 +631,8 @@
           </div>
           <div>
             <input type="checkbox" color="primary" [title]="'names.logicalId' | translate"
-              [checked]="getCheckedState('stations_logicalId')"
-              (change)="onChangeControlTable('stations_logicalId', $event)" />
+                   [checked]="getCheckedState('stations_logicalId')"
+                   (change)="onChangeControlTable('stations_logicalId', $event)" />
           </div>
         </div>
       </div>
@@ -643,7 +643,7 @@
           </div>
           <div>
             <input type="checkbox" color="primary" [title]="'names.group' | translate"
-              [checked]="getCheckedState('stations_group')" (change)="onChangeControlTable('stations_group', $event)" />
+                   [checked]="getCheckedState('stations_group')" (change)="onChangeControlTable('stations_group', $event)" />
           </div>
         </div>
       </div>
@@ -654,7 +654,7 @@
           </div>
           <div>
             <input type="checkbox" color="primary" [title]="'names.point' | translate"
-              [checked]="getCheckedState('stations_point')" (change)="onChangeControlTable('stations_point', $event)" />
+                   [checked]="getCheckedState('stations_point')" (change)="onChangeControlTable('stations_point', $event)" />
           </div>
         </div>
       </div>
@@ -665,8 +665,8 @@
           </div>
           <div>
             <input type="checkbox" color="primary" [title]="'names.direction' | translate"
-              [checked]="getCheckedState('stations_direction')"
-              (change)="onChangeControlTable('stations_direction', $event)" />
+                   [checked]="getCheckedState('stations_direction')"
+                   (change)="onChangeControlTable('stations_direction', $event)" />
           </div>
         </div>
       </div>
@@ -677,8 +677,8 @@
           </div>
           <div>
             <input type="checkbox" color="primary" [title]="'names.carrierType' | translate"
-              [checked]="getCheckedState('stations_carrierType')"
-              (change)="onChangeControlTable('stations_carrierType', $event)" />
+                   [checked]="getCheckedState('stations_carrierType')"
+                   (change)="onChangeControlTable('stations_carrierType', $event)" />
           </div>
         </div>
       </div>
@@ -689,8 +689,8 @@
           </div>
           <div>
             <input type="checkbox" color="primary" [title]="'names.nextPoint' | translate"
-              [checked]="getCheckedState('stations_nextPoint')"
-              (change)="onChangeControlTable('stations_nextPoint', $event)" />
+                   [checked]="getCheckedState('stations_nextPoint')"
+                   (change)="onChangeControlTable('stations_nextPoint', $event)" />
           </div>
         </div>
       </div>
@@ -701,8 +701,20 @@
           </div>
           <div>
             <input type="checkbox" color="primary" [title]="'names.offset' | translate"
-              [checked]="getCheckedState('stations_offset')"
-              (change)="onChangeControlTable('stations_offset', $event)" />
+                   [checked]="getCheckedState('stations_offset')"
+                   (change)="onChangeControlTable('stations_offset', $event)" />
+          </div>
+        </div>
+      </div>
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.unuse" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.unuse' | translate"
+                   [checked]="getCheckedState('stations_unuse')"
+                   (change)="onChangeControlTable('stations_unuse', $event)" />
           </div>
         </div>
       </div>
@@ -732,7 +744,7 @@
           </div>
           <div>
             <input type="checkbox" color="primary" [title]="'names.id' | translate"
-              [checked]="getCheckedState('buffers_id')" (change)="onChangeControlTable('buffers_id', $event)" />
+                   [checked]="getCheckedState('buffers_id')" (change)="onChangeControlTable('buffers_id', $event)" />
           </div>
         </div>
       </div>
@@ -743,8 +755,8 @@
           </div>
           <div>
             <input type="checkbox" color="primary" [title]="'names.physicalId' | translate"
-              [checked]="getCheckedState('buffers_physicalId')"
-              (change)="onChangeControlTable('buffers_physicalId', $event)" />
+                   [checked]="getCheckedState('buffers_physicalId')"
+                   (change)="onChangeControlTable('buffers_physicalId', $event)" />
           </div>
         </div>
       </div>
@@ -755,8 +767,8 @@
           </div>
           <div>
             <input type="checkbox" color="primary" [title]="'names.logicalId' | translate"
-              [checked]="getCheckedState('buffers_logicalId')"
-              (change)="onChangeControlTable('buffers_logicalId', $event)" />
+                   [checked]="getCheckedState('buffers_logicalId')"
+                   (change)="onChangeControlTable('buffers_logicalId', $event)" />
           </div>
         </div>
       </div>
@@ -767,7 +779,7 @@
           </div>
           <div>
             <input type="checkbox" color="primary" [title]="'names.group' | translate"
-              [checked]="getCheckedState('buffers_group')" (change)="onChangeControlTable('buffers_group', $event)" />
+                   [checked]="getCheckedState('buffers_group')" (change)="onChangeControlTable('buffers_group', $event)" />
           </div>
         </div>
       </div>
@@ -778,7 +790,7 @@
           </div>
           <div>
             <input type="checkbox" color="primary" [title]="'names.point' | translate"
-              [checked]="getCheckedState('buffers_point')" (change)="onChangeControlTable('buffers_point', $event)" />
+                   [checked]="getCheckedState('buffers_point')" (change)="onChangeControlTable('buffers_point', $event)" />
           </div>
         </div>
       </div>
@@ -789,8 +801,8 @@
           </div>
           <div>
             <input type="checkbox" color="primary" [title]="'names.direction' | translate"
-              [checked]="getCheckedState('buffers_direction')"
-              (change)="onChangeControlTable('buffers_direction', $event)" />
+                   [checked]="getCheckedState('buffers_direction')"
+                   (change)="onChangeControlTable('buffers_direction', $event)" />
           </div>
         </div>
       </div>
@@ -801,8 +813,8 @@
           </div>
           <div>
             <input type="checkbox" color="primary" [title]="'names.nextPoint' | translate"
-              [checked]="getCheckedState('buffers_nextPoint')"
-              (change)="onChangeControlTable('buffers_nextPoint', $event)" />
+                   [checked]="getCheckedState('buffers_nextPoint')"
+                   (change)="onChangeControlTable('buffers_nextPoint', $event)" />
           </div>
         </div>
       </div>
@@ -813,7 +825,18 @@
           </div>
           <div>
             <input type="checkbox" color="primary" [title]="'names.offset' | translate"
-              [checked]="getCheckedState('buffers_offset')" (change)="onChangeControlTable('buffers_offset', $event)" />
+                   [checked]="getCheckedState('buffers_offset')" (change)="onChangeControlTable('buffers_offset', $event)" />
+          </div>
+        </div>
+      </div>
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.unuse" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.unuse' | translate"
+                   [checked]="getCheckedState('buffers_unuse')" (change)="onChangeControlTable('buffers_unuse', $event)" />
           </div>
         </div>
       </div>

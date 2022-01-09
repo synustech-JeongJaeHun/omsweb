@@ -23,6 +23,8 @@ namespace OMSWeb.Models.Entities
 
     public int Offset { get; set; }
 
+    public bool Unuse { get; set; }
+
     public int? GroupId { get; set; }
   }
 }
