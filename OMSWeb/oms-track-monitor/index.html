@@ -1,20 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0"
-    />
-    <title>oms-track-monitor</title>
-  </head>
 
-  <body>
-    <!-- With Vue3 -->
-    <div id="app"></div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>oms-track-monitor</title>
+</head>
 
-    <!-- With Web Component -->
-    <oms-track-monitor id="track-canvas"></oms-track-monitor>
-    <script type="module" src="/src/main.ts"></script>
-  </body>
+<body>
+  <!-- With Vue3 -->
+  <!-- <div id="app"></div> -->
+
+  <!-- With Web Component -->
+  <oms-track-monitor id="track-canvas"></oms-track-monitor>
+  <script type="module" src="/src/main.ts"></script>
+
+  <style>
+    body {
+      padding: 0px;
+      margin: 0px;
+    }
+  </style>
+  <script>
+    const omsTrackMonitorElement = document.getElementById("track-canvas")
+
+    function onResize() {
+      const
+        width = window.innerWidth,
+        height = window.innerHeight
+
+      omsTrackMonitorElement.width = parseInt(width)
+      omsTrackMonitorElement.height = parseInt(height)
+    }
+
+    window.addEventListener('resize', onResize)
+    onResize()
+  </script>
+</body>
+
 </html>

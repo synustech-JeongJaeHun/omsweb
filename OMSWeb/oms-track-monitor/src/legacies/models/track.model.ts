@@ -3,13 +3,15 @@ import { MapTypes } from '../Enums'
 
 interface IBuffer {
   id: number
-  direction: string
   logicalId: string
   physicalId: string
+  direction: string
   pointId: number
+  nextPoint: number
+  offset: number
+
+  // nullable
   group?: number
-  nextpoint?: number
-  offset?: number
 }
 interface ICluster {
   id: number
@@ -20,9 +22,9 @@ interface ICluster {
 }
 interface IGroup {
   id: number
-  logicalId?: string
-  color?: string
-  objects?: any[]
+  logicalId: string
+  color: string
+  objects: { id: number, type: "vehicle" | "station" | "buffer" | "mtl" | "home" }[]
 }
 
 interface IMTL {
@@ -74,15 +76,18 @@ interface ISegPart {
 }
 interface ISegment extends ISegPart {
   id: number
-  startPoint?: number
-  endPoint?: number
-  length: number
   logicalId: string
-  physicalId: string
-  segpartId?: number
-  segparts?: ISegPart[]
+  physicalId?: string
+
+  startPoint: number
+  endPoint: number
+  length: number
   speed: number
 
+  segpartId: number
+
+  // nullable
+  segparts?: ISegPart[]
   candidates?: any[]
   travelTime: any
   isValidate?: boolean
@@ -91,40 +96,45 @@ interface IStation {
   id: number
   logicalId: string
   physicalId: string
+
   direction: string
-  carrierType: string
   pointId: number
+  nextpoint: number
+  offset: number
+
   group?: number
-  nextpoint?: number
-  offset?: number
+  carrierType?: string
 }
 interface IVehicle {
   id: number
+  logicalId: string
+  physicalId: string
+
   canBePushed: boolean
   cargoState: string
-  cargoTransferResult: string
-  curPoint?: number
-  nextPoint?: number
-  commandPoint?: any
+  curPoint: number
+  nextPoint: number
   errorList: string
   isBlocked: boolean
-  isSensorStopped?: boolean
-  lastContact?: string
-  locationDropoff?: string
-  locationMove?: string
-  locationPickup?: string
-  logicalId: string
+  isSensorStopped: boolean
+  lastContact: string
   mapDb: string
   mode: string
   movingState: string
   distancePoint: number
-  orderId: number
-  orderLogicalId: string
   hostOrder: boolean
   orderOrigin: string | string[]
-  physicalId: string
+
+  // nullable
+  cargoTransferResult?: string
+  commandPoint?: any
+  locationDropoff?: string
+  locationMove?: string
+  locationPickup?: string
+  orderId?: number
+  orderLogicalId?: string
   priority?: any
-  type: string
+  type?: string
   group?: number
   historyChangeTime?: any
 }

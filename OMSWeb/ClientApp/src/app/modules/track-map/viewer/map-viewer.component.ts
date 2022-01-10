@@ -1,6 +1,7 @@
 import {
   Component,
   EventEmitter,
+  HostListener,
   Input,
   OnDestroy,
   OnInit,
@@ -670,7 +671,22 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     // this.dataSvc.updatedVehicleList = {};
   }
 
+  // EPIC > OMS-TRACK-MONITOR
+
+  public omsTrackMonitorSize = {
+    width: window.innerWidth,
+    height: window.innerHeight - 40
+  }
+
   public doWhat(event: any) {
     console.log(event)
+  }
+
+  @HostListener('window:resize', ['$event.target'])
+  onResize(window: Window) {
+    this.omsTrackMonitorSize = {
+      width: window.innerWidth,
+      height: window.innerHeight - 40
+    }
   }
 }

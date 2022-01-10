@@ -29,7 +29,7 @@ class Segment implements ISegment {
 
   disableState?: any
 
-  candidates? = []
+  candidates?= []
   isValidate?: boolean
   validateText?: string
   updateState?: string
@@ -54,7 +54,7 @@ class Segment implements ISegment {
       candidates,
     } = row
     this.id = id
-    this.physicalId = physicalId
+    this.physicalId = physicalId!
     this.logicalId = logicalId
     this.pointFrom = {
       id: fromPoint.id,

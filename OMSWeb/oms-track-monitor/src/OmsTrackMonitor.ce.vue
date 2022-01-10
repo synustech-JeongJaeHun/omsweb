@@ -1,25 +1,43 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
-import { ViewModes } from './legacies/Enums'
+import { computed, reactive, ref, watchEffect } from 'vue'
+import { makeFsProxy } from './utils/devMode'
+
 import { IOmsTrackMonitor } from './legacies/IOmsTrackMonitor'
 import { IPreferences, UiStates } from './legacies/models/setting.model'
 import { MapDataService } from './legacies/serivces/MapData.service'
 import { MapStatesService } from './legacies/serivces/MapStates.service'
-import { makeFsProxy } from './utils/devMode'
+
+import { buffers } from './buffer/buffers'
+import { clusters } from './cluster/clusters'
+import { groups } from './group/groups'
+import { calculateMapSizePropertiesFromPoints } from './map/utils/size'
+import { mtls } from './mtl/mtls'
+import { points } from './point/points'
+import { segmentDisableds } from './segment/segmentDisableds'
+import { segments } from './segment/segments'
+import { stations } from './station/stations'
+import { vehicles } from './vehicle/vehicles'
+import { zcus } from './zcu/zcus'
+import { ViewMode } from './map/types/ViewMode'
+import { MapType } from './map/types/MapType'
+import Map from './map/components/Map.vue'
+import Minimap from './map/components/Minimap.vue'
+import { mapSizeProperties } from './map/mapSizeProperties'
+import { resizeCamera } from './map/camera'
 
 const props = defineProps<{
-  width: number,
-  height: number,
+  width: number | string,
+  height: number | string,
 }>()
 
 const emit = defineEmits<{
-  (e: 'apple', value: 'A'): void
-  (e: 'blue', value: { B: number }): void
+  (e: 'backdrop', value: {}): void
 }>()
 
 // State Start
 
-const viewMode = ref<ViewModes>('PUBLIC')
+const viewMode = ref<ViewMode>('PUBLIC')
+const mapType = ref<MapType>('DB');
 const permissions = reactive({
   canManageOrders: false,
   canManageVehicles: false,
@@ -33,6 +51,23 @@ const services = reactive<{
 
 // State End
 
+// Computed Start
+const width = computed(() => typeof props.width === "string" ? parseInt(props.width) : props.width)
+const height = computed(() => typeof props.height === "string" ? parseInt(props.height) : props.height)
+const widthPx = computed(() => `${width.value}px`)
+const heightPx = computed(() => `${height.value}px`)
+
+// Computed End
+
+// Watch Start
+
+// props changes
+watchEffect(() => {
+  resizeCamera(width.value, height.value)
+})
+// Watch End
+
+
 const exposed: IOmsTrackMonitor = {
   construct: function (
     mode,
@@ -45,10 +80,45 @@ const exposed: IOmsTrackMonitor = {
     services.mapDataService = dataSvc
     services.mapStatesService = stateSvc
   },
+  setup: function (
+    paramPreferences,
+    can_manage_orders,
+    can_manage_vehicles,
+    can_modify_display_settings
+  ) {
+    preferences.value = paramPreferences
+    permissions.canManageOrders = can_manage_orders ?? false
+    permissions.canManageVehicles = can_manage_vehicles ?? false
+    permissions.canManageDisplaySettings = can_modify_display_settings ?? false
+  },
+  create_track: function (data) {
+    mapType.value = data.mapType ?? "DB"
+
+    buffers.value = data.buffers ?? []
+    clusters.value = data.clusters ?? []
+    groups.value = data.groups ?? []
+    mtls.value = data.mtls ?? []
+    points.value = data.points ?? []
+    segments.value = data.segments ?? []
+    stations.value = data.stations ?? []
+    zcus.value = data.zcus ?? []
+    vehicles.value = data.vehicles ?? []
+    segmentDisableds.value = data.segmentDisabled ?? []
+
+    const calculatedMapSizeProperties = calculateMapSizePropertiesFromPoints(points.value)
+    mapSizeProperties.height = calculatedMapSizeProperties.height
+    mapSizeProperties.width = calculatedMapSizeProperties.width
+    mapSizeProperties.minX = calculatedMapSizeProperties.minX
+    mapSizeProperties.minY = calculatedMapSizeProperties.minY
+    mapSizeProperties.maxX = calculatedMapSizeProperties.maxX
+    mapSizeProperties.maxY = calculatedMapSizeProperties.maxY
+  },
+
+
   adjust_floaters: function () { },
   applyAfterSnapshotUpdated: function (updatedPropList) { },
   applyUpdatedExpectedPath: function () { },
-  create_track: function (data) { },
+
   destroy: function () { },
   get_selected_objects: function (object_type) {
     return []
@@ -72,17 +142,7 @@ const exposed: IOmsTrackMonitor = {
   onChangeVisibility: function (event) { },
   onCommandAction: function (event) { },
   setUiStates: function (zoomInUiStates) { },
-  setup: function (
-    paramPreferences,
-    can_manage_orders,
-    can_manage_vehicles,
-    can_modify_display_settings
-  ) {
-    preferences.value = paramPreferences
-    permissions.canManageOrders = can_manage_orders ?? false
-    permissions.canManageVehicles = can_manage_vehicles ?? false
-    permissions.canManageDisplaySettings = can_modify_display_settings ?? false
-  },
+
   update_buffers: function (
     update_list,
     is_apply_history,
@@ -134,23 +194,45 @@ const exposed: IOmsTrackMonitor = {
     return { '1': {} }
   },
 }
-
 const exposedProxy = makeFsProxy(exposed)
-
 defineExpose(exposedProxy)
 
-function emitB(event: any) {
-  emit('blue', { B: Date.now() })
-}
 </script>
 
 <template>
-  <div></div>
+  <div class="container">
+    <Map class="mainMap" />
+    <Minimap class="miniMap" />
+  </div>
 </template>
 
 <style scoped>
-div {
-  width: v-bind("props.width");
-  width: v-bind("props.height");
+.container {
+  position: relative;
+  width: v-bind(widthPx);
+  height: v-bind(heightPx);
+
+  /* Value for Test */
+  background-color: blueviolet;
+}
+
+.mainMap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: v-bind(widthPx);
+  height: v-bind(heightPx);
+
+  /* Value for Test */
+  background-color: black;
+}
+
+.miniMap {
+  position: absolute;
+  bottom: 2vw;
+  left: 2vw;
+
+  width: 14vw;
+  height: 8vw;
 }
 </style>

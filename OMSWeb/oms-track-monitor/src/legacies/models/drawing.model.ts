@@ -12,8 +12,8 @@ interface ISize {
   rotatedHeight?: number
 }
 interface ICoordinate {
-  x?: number
-  y?: number
+  x: number
+  y: number
 }
 interface IMapSize extends ISize {
   maxX?: number
