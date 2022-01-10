@@ -81,12 +81,18 @@ namespace OMSWeb.Repositories
     public IQueryable<AlarmHistory> QueryAlarms()
     {
       var sql = @"
-    SELECT VA.id, VA.time, 
+    SELECT VA.id, VA.time, VA.error_code, VA.vehicle_id, VR.logical_id AS vehicle_logical_id,
+    VA.time_resolved, 
     CASE WHEN VA.time_resolved IS NULL THEN  extract('epoch' from now()-VA.time) ELSE  extract('epoch' from VA.time_resolved-VA.time) END AS age,
-    VE.level, VA.vehicle_id, VA.error_code, VE.description, VE.action, VA.time_resolved
+    VE.level, VE.cause, VE.description, VE.action, AN.annotation AS note, 
+    CASE WHEN VA.time_resolved IS NULL THEN  false ELSE true END AS cleared, VA.current
     FROM vehicle_alarms AS VA
+    LEFT OUTER JOIN vehicle_reg VR
+        ON VA.vehicle_id = VR.id
     LEFT OUTER JOIN vehicle_errors VE
-    ON VA.error_code = VE.id
+        ON VA.error_code = VE.id
+    LEFT OUTER JOIN annotations AN
+        ON VA.error_code = AN.reference_id and AN.reference_table = 'vehicle_errors'
     ORDER BY VA.id desc
       ";
       IQueryable<AlarmHistory> result;

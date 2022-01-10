@@ -337,6 +337,7 @@
     "pid": "프로세스 아이디",
     "alarmName": "알람 이름",
     "resolution": "해상도",
+    "cause": "Cause",
     "action": "액션",
     "mem": "MEM",
     "vehicleSetting": "비클 설정",

@@ -8,6 +8,7 @@ namespace OMSWeb.Models.Entities
     public DateTime Time { get; set; }
     public int ErrorCode { get; set; }
     public int VehicleId { get; set; }
+    public string VehicleLogicalId { get; set; }
     public DateTime? TimeResolved { get; set; }
   }
 
@@ -18,6 +19,9 @@ namespace OMSWeb.Models.Entities
     public string Description { get; set; }
     public string Action { get; set; }
     public string Note { get; set; }
+    public string Cause { get; set; }
+    public bool Cleared { get; set; }
+    public string Current { get; set; }
   }
 
   public class VehicleError

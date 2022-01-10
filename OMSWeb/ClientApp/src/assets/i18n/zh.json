@@ -337,6 +337,7 @@
     "pid": "进程 ID",
     "alarmName": "报警名称",
     "resolution": "分辨率",
+    "cause": "Cause",
     "action": "动作",
     "mem": "记忆",
     "vehicleSetting": "车辆设置",

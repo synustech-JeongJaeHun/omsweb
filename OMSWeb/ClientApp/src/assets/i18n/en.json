@@ -337,6 +337,7 @@
     "pid": "Process ID",
     "alarmName": "Alarm Name",
     "resolution": "Resolution",
+    "cause": "Cause",
     "action": "Action",
     "mem": "MEM",
     "vehicleSetting": "Vehicle Setting",
