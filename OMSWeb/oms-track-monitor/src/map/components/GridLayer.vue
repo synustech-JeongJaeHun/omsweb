@@ -34,8 +34,6 @@ const
       </pattern>
     </defs>
 
-    <circle cx="400" cy="400" r="50" fill="red" />
-
     <rect
       fill="url(#mapGridPattern)"
       x="0"

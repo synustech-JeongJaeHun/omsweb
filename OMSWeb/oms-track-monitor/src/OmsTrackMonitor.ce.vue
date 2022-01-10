@@ -23,12 +23,14 @@ import { MapType } from './map/types/MapType'
 import Map from './map/components/Map.vue'
 import Minimap from './map/components/Minimap.vue'
 import { mapSizeProperties } from './map/mapSizeProperties'
-import { resizeCamera } from './map/camera'
+import { cameraInfo, resizeCamera } from './map/camera'
 
 const props = defineProps<{
-  width: number | string,
-  height: number | string,
+  width?: number | string,
+  height?: number | string,
 }>()
+const width = computed(() => parseNumberProp(0, props.width))
+const height = computed(() => parseNumberProp(0, props.height))
 
 const emit = defineEmits<{
   (e: 'backdrop', value: {}): void
@@ -52,10 +54,17 @@ const services = reactive<{
 // State End
 
 // Computed Start
-const width = computed(() => typeof props.width === "string" ? parseInt(props.width) : props.width)
-const height = computed(() => typeof props.height === "string" ? parseInt(props.height) : props.height)
-const widthPx = computed(() => `${width.value}px`)
-const heightPx = computed(() => `${height.value}px`)
+function parseNumberProp(defaultValue: number, n?: number | string) {
+  const type = typeof n
+  switch (type) {
+    case "number":
+      return n as number
+    case "string":
+      return parseInt(n as string)
+    default:
+      return defaultValue;
+  }
+}
 
 // Computed End
 
@@ -209,8 +218,8 @@ defineExpose(exposedProxy)
 <style scoped>
 .container {
   position: relative;
-  width: v-bind(widthPx);
-  height: v-bind(heightPx);
+  width: v-bind(cameraInfo.widthPx);
+  height: v-bind(cameraInfo.heightPx);
 
   /* Value for Test */
   background-color: blueviolet;
@@ -220,8 +229,8 @@ defineExpose(exposedProxy)
   position: absolute;
   top: 0;
   left: 0;
-  width: v-bind(widthPx);
-  height: v-bind(heightPx);
+  width: v-bind(cameraInfo.widthPx);
+  height: v-bind(cameraInfo.heightPx);
 
   /* Value for Test */
   background-color: black;

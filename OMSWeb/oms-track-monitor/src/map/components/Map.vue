@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { computed } from 'vue';
-import Grid from './Grid.vue';
+import GridLayer from './GridLayer.vue';
 import Layer from './Layer.vue';
+import EventLayer from './EventLayer.vue';
+import PointLayer from '../../point/components/PointLayer.vue';
 
 const emit = defineEmits<{
   (event: 'backdrop'): void
@@ -10,21 +11,20 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <div class="container" @click="emit('backdrop')">
-    <Grid />
-    <Layer />
-    <Layer />
-    <Layer />
-    <Layer />
-    <Layer />
+  <div>
+    <GridLayer />
     <!-- <Segments /> -->
+    <PointLayer />
+    <Layer />
+    <Layer />
+    <Layer />
+    <Layer />
+    <Layer />
     <slot name="points" />
     <slot name="buffers" />
     <slot name="stations" />
     <slot name="mtls" />
     <slot name="vehicles" />
+    <EventLayer />
   </div>
 </template>
-
-<style scoped>
-</style>

@@ -1,9 +1,10 @@
-import { computed, reactive, readonly } from "vue";
+import { computed, reactive, readonly, watchEffect } from "vue";
 import { Camera } from "./types/Camera";
 
 const
   DefaultWidth = 1000,
-  DefaultHeight = 1000
+  DefaultHeight = 1000,
+  ZoomUnit = 500
 
 const camera = reactive<Camera>({
   x: 0,
@@ -17,6 +18,12 @@ const center = computed(() => {
     x = camera.x + (camera.width / 2),
     y = camera.y + (camera.height / 2)
   return { x, y }
+})
+
+const panSpeed = computed(() => {
+  // TODO
+  // width, height 작은 쪽 기준으로 배율 하면 될듯? 
+  return 10
 })
 
 const cameraInfo = readonly(computed(() => ({
@@ -35,8 +42,10 @@ function resizeCamera(width: number, height: number) {
   camera.width = width
   camera.height = height
 }
-function zoomIn(event: MouseEvent) { }
-function zoomOut(event: MouseEvent) { }
-function pan(event: MouseEvent) { }
+function zoomIn(x: number, y: number) { }
+function zoomOut(x: number, y: number) { }
+function pan(movementX: number, movementY: number) {
 
-export { cameraInfo, resizeCamera }
+}
+
+export { cameraInfo, resizeCamera, zoomOut, zoomIn, pan }
