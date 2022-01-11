@@ -140,6 +140,8 @@ export namespace Dto {
     type: string;
     group?: number;
     historyChangeTime?: any;
+    isMaint: boolean;
+    isConnected: boolean;
   }
 
   export interface IFixedTrackData {
