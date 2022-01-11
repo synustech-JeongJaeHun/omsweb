@@ -208,6 +208,14 @@ export const main_css = {
     prevent_inner_color: convert_path_to_str(
       getCss('--vehicle-prevent-inner-color')
     ),
+    disconnected_path: convert_path_to_str(
+      getCss('--vehicle-disconnected-path')
+    ),
+    disconnected_color: getCss('--vehicle-disconnected-color'),
+    maintenance_path: convert_path_to_str(
+      getCss('--vehicle-maintenance-path')
+    ),
+    maintenance_color: getCss('--highlight-select-color')
   },
   group: {
     track_group_size: {
