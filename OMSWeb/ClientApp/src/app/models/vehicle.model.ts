@@ -102,8 +102,8 @@ export class Vehicle {
 
     this.isMoved = false;
     this.isStale = false;
-    this.isConnected = true;
-    this.isMaint = false;
+    this.isConnected = isConnected;
+    this.isMaint = isMaint;
 
     this.hostOrder = hostOrder;
     this.call = orderOrigin
