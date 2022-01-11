@@ -40,6 +40,9 @@ export class Vehicle {
 
   index?: number;
 
+  isConnected: boolean;
+  isMaint: boolean;
+
   constructor(
     row: Dto.IVehicle,
     currentPoint: any,
@@ -71,6 +74,8 @@ export class Vehicle {
       locationDropoff,
       locationMove,
       locationPickup,
+      isConnected,
+      isMaint,
     } = row;
 
     this.id = id;
@@ -97,6 +102,8 @@ export class Vehicle {
 
     this.isMoved = false;
     this.isStale = false;
+    this.isConnected = true;
+    this.isMaint = false;
 
     this.hostOrder = hostOrder;
     this.call = orderOrigin
@@ -162,7 +169,9 @@ export class Vehicle {
         mapDb: this.mapDb,
         locationDropoff: this.locationDropoff,
         locationMove: this.locationMove,
-        locationPickup: this.locationPickup
+        locationPickup: this.locationPickup,
+        isConnected: this.isConnected,
+        isMaint: this.isMaint,
       },
       curPoint,
       nextPoint,
