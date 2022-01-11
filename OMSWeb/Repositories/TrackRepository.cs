@@ -426,6 +426,8 @@ FROM vehicle_paths
                                     LocationDropoff = dr["location_dropoff"].ToString(),
                                     LocationMove = dr["location_move"].ToString(),
                                     Priority = dr["priority"].TryIntegerOrNull(),
+                                    IsMaint = dr["is_maint"].TryBoolean(),
+                                    isConnected = dr["isConnected"].TryBoolean(),
                                 }
                                );
                             }

@@ -80,6 +80,14 @@ namespace OMSWeb.Repositories
             END As host_order, 
             VH.order_origin, VH.moving_state, VH.cargo_state, VH.is_sensor_stopped, VH.is_blocked, VH.error_list, VH.type, VH.cargo_transfer_result, VH.map_db,
             OD.id AS order_id, OD.logical_id AS order_logical_id, OD.location_pickup, OD.location_dropoff, OD.location_move, OD.priority,
+            VH.is_maint, 
+            CASE 
+                WHEN VH.connection = 0 THEN FALSE
+                WHEN VH.connection = 1 THEN TRUE
+                WHEN VH.connection = 2 THEN TRUE
+                WHEN VH.connection = 3 THEN FALSE
+                WHEN VH.connection IS NULL THEN FALSE
+            ENd AS isConnected, 
             CASE 
             WHEN OD.location_pickup IS NOT NULL AND OD.location_dropoff IS NOT NULL   -- FROM-TO order
             THEN
