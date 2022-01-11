@@ -2344,8 +2344,8 @@ export class ViewController {
 
       // Get base point id
       if (object_type === 'POINT' ||
-          object_type === 'ZCU'
-        ) {
+        object_type === 'ZCU'
+      ) {
         base_point_id = current_object.id;
       } else if (
         object_type === 'STATION' ||
@@ -6193,6 +6193,16 @@ export class ViewController {
               this.vehicle_scale
             );
           }
+          if (is_update_all || update.isConnected) {
+            this.update_vehicle_disconnected_svg(
+              d3_this, d.isConnected, dom_css
+            );
+          }
+          if (is_update_all || update.isMaint) {
+            this.update_vehicle_maintenance_svg(
+              d3_this, d.isMaint, dom_css
+            );
+          }
 
           let selected_vehicle = this.get_selected_objects('VEHICLE')[0];
           let is_show_vehicle_line =
@@ -6733,6 +6743,44 @@ export class ViewController {
       }
     } else {
       d3_this.select('.call').remove();
+    }
+  }
+  update_vehicle_disconnected_svg(
+    d3_this: d3.Selection<d3.BaseType, unknown, HTMLElement, any>,
+    isConnected: boolean,
+    dom_css: any
+  ) {
+    if (!isConnected) {
+      if (d3_this.select('.disconnected').nodes().length === 0) {
+        d3_this
+          .append('path')
+          .attr('class', 'disconnected')
+          .attr('d', dom_css.disconnected_path)
+          .attr('fill', function () {
+            return dom_css.disconnected_color;
+          })
+      }
+    } else {
+      d3_this.select('.disconnected').remove();
+    }
+  }
+  update_vehicle_maintenance_svg(
+    d3_this: d3.Selection<d3.BaseType, unknown, HTMLElement, any>,
+    isMaint: boolean,
+    dom_css: any
+  ) {
+    if (isMaint) {
+      if (d3_this.select('.maintenance').nodes().length === 0) {
+        d3_this
+          .append('path')
+          .attr('class', 'maintenance')
+          .attr('d', dom_css.maintenance_path)
+          .attr('fill', function () {
+            return dom_css.maintenance_color;
+          })
+      }
+    } else {
+      d3_this.select('.maintenance').remove();
     }
   }
   update_vehicle_push_svg(
