@@ -60,7 +60,15 @@ namespace OMSWeb.Repositories
     CASE
     WHEN LENGTH(VH.error_list) = 0 THEN '0' ELSE VH.error_list
     END AS error_list,
-    VH.distance_total, VH.runtime_total, VH.type, VH.rail_in, GO.group_id
+    VH.distance_total, VH.runtime_total, VH.type, VH.rail_in, VH.is_maint, 
+    CASE 
+        WHEN VH.connection = 0 THEN FALSE
+        WHEN VH.connection = 1 THEN TRUE
+        WHEN VH.connection = 2 THEN TRUE
+        WHEN VH.connection = 3 THEN FALSE
+        WHEN VH.connection IS NULL THEN FALSE
+    ENd AS isConnected, 
+    GO.group_id
     FROM vehicles AS VH
         LEFT OUTER JOIN orders AS OD
     ON VH.order_id = OD.id AND OD.time_completed IS NULL AND OD.time_aborted IS NULL
