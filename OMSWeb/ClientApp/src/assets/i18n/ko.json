@@ -39,6 +39,7 @@
     "stale": "부실",
     "preventCall": "콜 방지",
     "preventPush": "푸시 방지",
+    "disconnected": "연결 끊김",
     "loading": "로드중",
     "full": "가득참",
     "unloading": "언로드",
