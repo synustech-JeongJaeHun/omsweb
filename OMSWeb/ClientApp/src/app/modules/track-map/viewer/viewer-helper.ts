@@ -11385,6 +11385,17 @@ export class ViewController {
           .lower();
       }
 
+      if (layout_object.isMaint) {
+        this.update_vehicle_maintenance_svg(
+          dom_object_group, layout_object.isMaint, dom_css
+        );
+      }
+      if (layout_object.isConnected) {
+        this.update_vehicle_disconnected_svg(
+          dom_object_group, layout_object.isConnected, dom_css
+        );
+      }
+
       dom_object_group
         .append('text')
         .attr('class', 'label_order')
