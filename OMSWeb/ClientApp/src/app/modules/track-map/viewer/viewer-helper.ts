@@ -6758,6 +6758,7 @@ export class ViewController {
           .attr('fill', function () {
             return dom_css.disconnected_color;
           })
+          .attr('transform', `rotate(${-this.map_rotation})`);
       }
     } else {
       d3_this.select('.disconnected').remove();
@@ -6777,6 +6778,7 @@ export class ViewController {
           .attr('fill', function () {
             return dom_css.maintenance_color;
           })
+          .attr('transform', `rotate(${-this.map_rotation})`);
       }
     } else {
       d3_this.select('.maintenance').remove();
@@ -8591,6 +8593,9 @@ export class ViewController {
         .attr('display', 'block')
         .attr('transform', `rotate(${-this.map_rotation})`);
       this.vehicle_svg
+        .selectAll('.disconnected, .maintenance')
+        .attr('transform', `rotate(${-this.map_rotation})`);
+      this.vehicle_svg
         .selectAll('.label_order')
         .attr(
           'x',
@@ -8635,7 +8640,7 @@ export class ViewController {
           `${LayoutUtil.getVehicleFontSize(this.vehicle_scale.value)}px`
         );
       this.vehicle_svg
-        .selectAll('.label, .label_order, .hotlot')
+        .selectAll('.label, .label_order, .hotlot, .disconnected, .maintenance')
         .attr('transform', `rotate(${-this.map_rotation})`);
       // this.vehicle_svg
       //   .selectAll('.label, .label_order, .hotlot')
