@@ -6098,7 +6098,6 @@ export class ViewController {
           // If update does not exist, update everything
           if (updated && typeof updated === 'object') {
             update = updated[d.id];
-
             if (!update) return;
             // if the update for vehicle with id does not exist, move to next iteration
             else is_update_all = false; // only update the existing update properties
@@ -11390,7 +11389,7 @@ export class ViewController {
           dom_object_group, layout_object.isMaint, dom_css
         );
       }
-      if (layout_object.isConnected) {
+      if (!layout_object.isConnected) {
         this.update_vehicle_disconnected_svg(
           dom_object_group, layout_object.isConnected, dom_css
         );
