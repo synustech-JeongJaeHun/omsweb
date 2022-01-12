@@ -1,4 +1,4 @@
-import { computed, reactive, readonly } from "vue";
+import { computed, reactive, readonly, watchEffect } from "vue";
 
 const mapSizeProperties = reactive({
   minX: 0,
@@ -14,7 +14,7 @@ function initMapSizeProperties(minX: number, minY: number, maxX: number, maxY: n
   mapSizeProperties.maxY = maxY
 }
 
-const readonlyMapSizeProperties = readonly(computed(() => ({
+const mapSizePropertiesInfo = readonly(computed(() => ({
   ...mapSizeProperties,
   centerX: (mapSizeProperties.maxX + mapSizeProperties.minX) / 2,
   centerY: (mapSizeProperties.maxY + mapSizeProperties.minY) / 2,
@@ -22,5 +22,13 @@ const readonlyMapSizeProperties = readonly(computed(() => ({
   height: mapSizeProperties.maxY - mapSizeProperties.minY,
 })))
 
+watchEffect(() => console.log("checkthis"
+  , mapSizePropertiesInfo.value.minX
+  , mapSizePropertiesInfo.value.minY
+  , mapSizePropertiesInfo.value.maxX
+  , mapSizePropertiesInfo.value.maxY
+  , mapSizePropertiesInfo.value.width
+  , mapSizePropertiesInfo.value.height
+))
 
-export { initMapSizeProperties, readonlyMapSizeProperties }
+export { initMapSizeProperties, mapSizePropertiesInfo }

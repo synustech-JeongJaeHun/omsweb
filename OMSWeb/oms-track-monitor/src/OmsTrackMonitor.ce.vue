@@ -216,9 +216,6 @@ defineExpose(exposedProxy)
   position: relative;
   width: v-bind("cameraInfo.widthPx");
   height: v-bind("cameraInfo.heightPx");
-
-  /* Value for Test */
-  background-color: blueviolet;
 }
 
 .mainMap {
@@ -227,9 +224,6 @@ defineExpose(exposedProxy)
   left: 0;
   width: v-bind("cameraInfo.widthPx");
   height: v-bind("cameraInfo.heightPx");
-
-  /* Value for Test */
-  background-color: black;
 }
 
 .miniMap {

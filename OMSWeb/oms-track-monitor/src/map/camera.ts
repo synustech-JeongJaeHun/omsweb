@@ -1,5 +1,5 @@
 import { computed, reactive, readonly, watchEffect } from "vue";
-import { readonlyMapSizeProperties } from "./mapSizeProperties";
+import { mapSizePropertiesInfo } from "./mapSizeProperties";
 
 const
   DefaultWidth = 1000,
@@ -47,20 +47,43 @@ function resizeElement(width: number, height: number) {
 
 
 function moveCamera(centerX: number, centerY: number) {
-  camera.x = centerX - (cameraInfo.value.viewBoxWidth / 2)
-  camera.y = centerY - (cameraInfo.value.viewBoxHeight / 2)
+  const
+    halfWidth = cameraInfo.value.viewBoxWidth / 2,
+    halfHeight = cameraInfo.value.viewBoxHeight / 2,
+    screenMinX = centerX - halfWidth,
+    screenMinY = centerY - halfHeight,
+    screenMaxX = centerX + halfWidth,
+    screenMaxY = centerY + halfHeight
+
+  const isHorizontalMoveBeyondCorner =
+    screenMinX > mapSizePropertiesInfo.value.maxX
+    || screenMaxX < mapSizePropertiesInfo.value.minX
+
+  const isVerticalMoveBeyondCorner =
+    screenMinY > mapSizePropertiesInfo.value.maxY
+    || screenMaxY < mapSizePropertiesInfo.value.minY
+
+  if (isHorizontalMoveBeyondCorner === false)
+    camera.x = centerX - halfWidth
+
+  if (isVerticalMoveBeyondCorner === false)
+    camera.y = centerY - halfHeight
 }
 
 
 function initCamera() {
-  moveCamera(readonlyMapSizeProperties.value.centerX, readonlyMapSizeProperties.value.centerY)
-  resizeViewBox('width', readonlyMapSizeProperties.value.width / 2)
+  moveCamera(mapSizePropertiesInfo.value.centerX, mapSizePropertiesInfo.value.centerY)
+  resizeViewBox('width', mapSizePropertiesInfo.value.width / 2)
 }
 
 function zoomIn(x: number, y: number) {
   resizeViewBox('width', cameraInfo.value.viewBoxWidth * 0.8)
 }
 function zoomOut(x: number, y: number) {
+  if (cameraInfo.value.viewBoxWidth > mapSizePropertiesInfo.value.width * 2
+    && cameraInfo.value.viewBoxHeight > mapSizePropertiesInfo.value.width * 2
+  ) return
+
   resizeViewBox('width', cameraInfo.value.viewBoxWidth * 1.2)
 }
 function pan(movementX: number, movementY: number) {

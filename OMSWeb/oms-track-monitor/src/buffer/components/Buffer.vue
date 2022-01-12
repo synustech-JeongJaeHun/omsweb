@@ -36,6 +36,7 @@ const position = readonly(computed(() => {
 
 <template>
   <svg :x="position.x" :y="position.y" style="overflow: visible;">
-    <circle r="20" fill="green" />
+    <circle r="50" fill="green" />
+    <text y="70">{{ props.buffer.logicalId }}</text>
   </svg>
 </template>

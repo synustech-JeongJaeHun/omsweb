@@ -25,6 +25,7 @@ const position = readonly(computed(() => {
 
 <template>
   <svg :x="position.x" :y="position.y" style="overflow: visible;">
-    <circle r="20" fill="red" />
+    <circle r="50" fill="red" />
+    <text y="70">{{ props.station.logicalId }}</text>
   </svg>
 </template>

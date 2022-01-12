@@ -1,46 +1,48 @@
 <script setup lang="ts">
-import { readonlyMapSizeProperties } from '../mapSizeProperties';
+import { mapSizePropertiesInfo } from '../mapSizeProperties';
 import Layer from './Layer.vue';
 
 const
-  width = 10,
-  height = 10,
-  stroke = "grey",
-  strokeWidth = 0.1
-
-
+  MapMargin = 3000,
+  MapCornerStroke = "grey",
+  MapCornerStrokeWidth = 20,
+  PatternWidth = 10,
+  PatternHeight = 10,
+  PatternStroke = "grey",
+  PatternStrokeWidth = 1
 </script>
 
 <template>
   <Layer>
     <defs>
-      <pattern id="mapGridPattern" x="0" y="0" :width="0.05" :height="0.05">
+      <pattern id="mapGridPattern" x="0" y="0" :width="PatternWidth" :height="PatternHeight">
         <line
           :x1="0"
-          :y1="height / 2"
-          :x2="width"
-          :y2="height / 2"
-          :stroke="stroke"
-          :stroke-width="strokeWidth"
+          :y1="PatternHeight / 2"
+          :x2="PatternWidth"
+          :y2="PatternHeight / 2"
+          :stroke="PatternStroke"
+          :stroke-width="PatternStrokeWidth"
         />
         <line
-          :x1="width / 2"
+          :x1="PatternWidth / 2"
           :y1="0"
-          :x2="width / 2"
-          :y2="height"
-          :stroke="stroke"
-          :stroke-width="strokeWidth"
+          :x2="PatternWidth / 2"
+          :y2="PatternHeight"
+          :stroke="PatternStroke"
+          :stroke-width="PatternStrokeWidth"
         />
       </pattern>
     </defs>
 
     <rect
       fill="url(#mapGridPattern)"
-      x="0"
-      y="0"
-      :stroke="stroke"
-      :width="readonlyMapSizeProperties.maxX"
-      :height="readonlyMapSizeProperties.maxY"
+      :x="(-1) * MapMargin"
+      :y="(-1) * MapMargin"
+      :stroke="MapCornerStroke"
+      :stroke-width="MapCornerStrokeWidth"
+      :width="mapSizePropertiesInfo.maxX + (MapMargin * 2)"
+      :height="mapSizePropertiesInfo.maxY + (MapMargin * 2)"
     />
   </Layer>
 </template>

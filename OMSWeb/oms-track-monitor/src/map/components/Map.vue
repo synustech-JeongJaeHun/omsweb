@@ -16,17 +16,15 @@ const emit = defineEmits<{
 <template>
   <div>
     <GridLayer />
-    <!-- <Segments /> -->
+    <!-- group -->
+    <!-- cluster -->
+    <!-- segment + disabled -->
     <PointLayer />
     <BufferLayer />
     <StationLayer />
     <ZcuLayer />
-    <Layer />
-    <Layer />
-    <Layer />
-    <Layer />
-    <slot name="mtls" />
-    <slot name="vehicles" />
+    <!-- mtl -->
+    <!-- vehicles + vehicle paths -->
     <EventLayer />
   </div>
 </template>

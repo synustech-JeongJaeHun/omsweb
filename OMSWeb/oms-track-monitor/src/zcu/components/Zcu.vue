@@ -7,6 +7,7 @@ const props = defineProps<{
 
 <template>
   <svg :x="props.zcu.x" :y="props.zcu.y" style="overflow: visible">
-    <circle r="20" fill="blue" />
+    <circle r="50" fill="blue" />
+    <text y="70">{{ props.zcu.id }}</text>
   </svg>
 </template>
