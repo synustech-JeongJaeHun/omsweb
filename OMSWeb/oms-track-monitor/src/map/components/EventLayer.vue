@@ -3,6 +3,14 @@ import { ref } from 'vue';
 import { pan, zoomIn, zoomOut } from '../camera';
 import Layer from './Layer.vue';
 
+// MouseEvent.button
+// https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/button
+// 0: [LEFT] Main button pressed, usually the left button or the un-initialized state
+// 1: [WHEEL] Auxiliary button pressed, usually the wheel button or the middle button (if present)
+// 2: [RIGHT] Secondary button pressed, usually the right button
+// 3: Fourth button, typically the Browser Back button
+// 4: Fifth button, typically the Browser Forward button
+
 const isPanning = ref(false)
 function enterPanning() { isPanning.value = true }
 function exitPanning() { isPanning.value = false }
@@ -14,8 +22,11 @@ function exitRotating() { isRotating.value = false }
 function rotateTo(event: MouseEvent) { }
 
 function zoomInOut(event: WheelEvent | MouseEvent) {
+  // WheelEvent
+  // https://developer.mozilla.org/en-US/docs/Web/API/WheelEvent/deltaY
   // scrollToForward: deltaY < 0 
   // scrollToBackward: deltaY > 0
+
   const action = (event instanceof WheelEvent) && (event.deltaY > 0) ? zoomOut : zoomIn
   action(event.clientX, event.clientY)
 }
@@ -37,12 +48,12 @@ function logg(event: any) {
 <template>
   <Layer
     @wheel="zoomInOut($event)"
-    @mousedown="[enterPanning(), enterRotating(), logg($event)]"
+    @mousedown="[$event.button === 0 && enterPanning(), $event.button === 2 && enterRotating(), logg($event)]"
     @mousemove="[isPanning && panTo($event), isRotating && rotateTo($event)]"
     @mouseleave="[exitPanning(), exitRotating()]"
     @mouseup="[exitPanning(), exitRotating()]"
     @click="onLeftClick($event)"
     @dblclick="zoomInOut($event)"
-    @contextmenu="onRightClick($event)"
+    @contextmenu.prevent="onRightClick($event)"
   />
 </template>

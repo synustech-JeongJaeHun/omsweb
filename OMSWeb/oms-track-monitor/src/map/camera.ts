@@ -3,7 +3,8 @@ import { mapSizePropertiesInfo } from "./mapSizeProperties";
 
 const
   DefaultWidth = 1000,
-  DefaultHeight = 1000
+  DefaultHeight = 1000,
+  CornerMargin = 1000
 
 const camera = reactive({
   x: 0,
@@ -56,12 +57,12 @@ function moveCamera(centerX: number, centerY: number) {
     screenMaxY = centerY + halfHeight
 
   const isHorizontalMoveBeyondCorner =
-    screenMinX > mapSizePropertiesInfo.value.maxX
-    || screenMaxX < mapSizePropertiesInfo.value.minX
+    screenMinX > mapSizePropertiesInfo.value.maxX + CornerMargin
+    || screenMaxX < mapSizePropertiesInfo.value.minX - CornerMargin
 
   const isVerticalMoveBeyondCorner =
-    screenMinY > mapSizePropertiesInfo.value.maxY
-    || screenMaxY < mapSizePropertiesInfo.value.minY
+    screenMinY > mapSizePropertiesInfo.value.maxY + CornerMargin
+    || screenMaxY < mapSizePropertiesInfo.value.minY - CornerMargin
 
   if (isHorizontalMoveBeyondCorner === false)
     camera.x = centerX - halfWidth

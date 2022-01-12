@@ -4,33 +4,42 @@ import Layer from './Layer.vue';
 
 const
   MapMargin = 3000,
-  MapCornerStroke = "grey",
+  MapCornerStroke = "black",
   MapCornerStrokeWidth = 20,
-  PatternWidth = 10,
-  PatternHeight = 10,
-  PatternStroke = "grey",
-  PatternStrokeWidth = 1
+  unitLength = 1000,
+  halfUnitLength = unitLength / 2,
+  LineStroke = "grey",
+  LineStrokeWidth = 5
+
+
+  // width="10" height="10"
 </script>
 
 <template>
   <Layer>
     <defs>
-      <pattern id="mapGridPattern" x="0" y="0" :width="PatternWidth" :height="PatternHeight">
+      <pattern
+        id="mapGridPattern"
+        :viewBox="`0 0 ${unitLength} ${unitLength}`"
+        :width="unitLength"
+        :height="unitLength"
+        patternUnits="userSpaceOnUse"
+      >
         <line
           :x1="0"
-          :y1="PatternHeight / 2"
-          :x2="PatternWidth"
-          :y2="PatternHeight / 2"
-          :stroke="PatternStroke"
-          :stroke-width="PatternStrokeWidth"
+          :y1="halfUnitLength"
+          :x2="unitLength"
+          :y2="halfUnitLength"
+          :stroke="LineStroke"
+          :stroke-width="LineStrokeWidth"
         />
         <line
-          :x1="PatternWidth / 2"
+          :x1="halfUnitLength"
           :y1="0"
-          :x2="PatternWidth / 2"
-          :y2="PatternHeight"
-          :stroke="PatternStroke"
-          :stroke-width="PatternStrokeWidth"
+          :x2="halfUnitLength"
+          :y2="unitLength"
+          :stroke="LineStroke"
+          :stroke-width="LineStrokeWidth"
         />
       </pattern>
     </defs>
