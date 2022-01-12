@@ -3,4 +3,8 @@ import { Point } from './types/Point'
 
 const points = ref<Point[]>([])
 
-export { points } 
+function findPointById(id: number) {
+  return points.value.find(p => p.id === id)
+}
+
+export { points, findPointById } 

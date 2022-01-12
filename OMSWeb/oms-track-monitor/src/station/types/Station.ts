@@ -5,7 +5,7 @@ type Station = {
 
   direction: string
   pointId: number
-  nextpoint: number
+  nextPoint: number
   offset: number
 
   group?: number

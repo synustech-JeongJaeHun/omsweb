@@ -6,5 +6,7 @@ const props = defineProps<{
 </script>
 
 <template>
-  <circle :cx="props.point.x" :cy="props.point.y" r="20" fill="white" />
+  <svg :x="props.point.x" :y="props.point.y" style="overflow: visible">
+    <circle r="20" fill="white" />
+  </svg>
 </template>

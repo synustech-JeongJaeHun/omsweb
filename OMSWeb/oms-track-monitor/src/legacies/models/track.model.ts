@@ -5,7 +5,7 @@ interface IBuffer {
   id: number
   logicalId: string
   physicalId: string
-  direction: string
+  direction: "L" | "R" | "U"
   pointId: number
   nextPoint: number
   offset: number
@@ -99,7 +99,7 @@ interface IStation {
 
   direction: string
   pointId: number
-  nextpoint: number
+  nextPoint: number
   offset: number
 
   group?: number
