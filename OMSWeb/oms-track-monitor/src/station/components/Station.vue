@@ -25,7 +25,7 @@ const position = readonly(computed(() => {
 
 <template>
   <svg :x="position.x" :y="position.y" style="overflow: visible;">
-    <rect x="-50" y="-50" width="100" height="100" stroke="black" stroke-width="10" fill="none" />
+    <use href="#station" />
     <text y="70">{{ props.station.logicalId }}</text>
   </svg>
 </template>

@@ -8,6 +8,10 @@ import { buffers } from '../buffers'
 
 <template>
   <Layer>
+    <defs>
+      <circle id="buffer" r="50" stroke="black" stroke-width="10" fill="none" />
+    </defs>
+
     <Buffer v-for="buffer of buffers" :key="buffer.id" :buffer="buffer" />
   </Layer>
 </template>

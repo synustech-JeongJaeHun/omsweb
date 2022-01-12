@@ -8,6 +8,9 @@ import { points } from '../points'
 
 <template>
   <Layer>
+    <defs>
+      <circle id="point" r="50" fill="black" />
+    </defs>
     <Point v-for="point of points" :key="point.id" :point="point" />
   </Layer>
 </template>
