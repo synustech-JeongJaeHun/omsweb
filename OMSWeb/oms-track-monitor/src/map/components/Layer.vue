@@ -1,5 +1,9 @@
 <script setup lang="ts">
 import { cameraInfo } from '../camera'
+
+// https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/shape-rendering
+// https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/text-rendering
+// https://developer.mozilla.org/ko/docs/Web/CSS/will-change
 </script>
 
 <template>
@@ -7,7 +11,9 @@ import { cameraInfo } from '../camera'
     :width="cameraInfo.elementWidth"
     :height="cameraInfo.elementHeight"
     :viewBox="cameraInfo.viewBox"
-    style="position: absolute;"
+    shape-rendering="optimizeSpeed"
+    text-rendering="optimizeSpeed"
+    style="position: absolute; will-change: contents;"
   >
     <slot />
   </svg>
