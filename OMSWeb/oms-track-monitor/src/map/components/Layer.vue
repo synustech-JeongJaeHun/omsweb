@@ -4,8 +4,8 @@ import { cameraInfo } from '../camera'
 
 <template>
   <svg
-    :width="cameraInfo.width"
-    :height="cameraInfo.height"
+    :width="cameraInfo.elementWidth"
+    :height="cameraInfo.elementHeight"
     :viewBox="cameraInfo.viewBox"
     style="position: absolute;"
   >

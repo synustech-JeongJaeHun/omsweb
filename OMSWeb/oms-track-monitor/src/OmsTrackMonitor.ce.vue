@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, reactive, ref, watchEffect } from 'vue'
+import { computed, reactive, ref, watch } from 'vue'
 import { makeFsProxy } from './utils/devMode'
 
 import { IOmsTrackMonitor } from './legacies/IOmsTrackMonitor'
@@ -10,7 +10,7 @@ import { MapStatesService } from './legacies/serivces/MapStates.service'
 import { buffers } from './buffer/buffers'
 import { clusters } from './cluster/clusters'
 import { groups } from './group/groups'
-import { calculateMapSizePropertiesFromPoints } from './map/utils/size'
+import { calculateMinMaxXYFromPoints } from './map/utils/size'
 import { mtls } from './mtl/mtls'
 import { points } from './point/points'
 import { segmentDisableds } from './segment/segmentDisableds'
@@ -22,8 +22,8 @@ import { ViewMode } from './map/types/ViewMode'
 import { MapType } from './map/types/MapType'
 import Map from './map/components/Map.vue'
 import Minimap from './map/components/Minimap.vue'
-import { mapSizeProperties } from './map/mapSizeProperties'
-import { cameraInfo, resizeCamera } from './map/camera'
+import { initMapSizeProperties } from './map/mapSizeProperties'
+import { cameraInfo, initCamera, resizeElement } from './map/camera'
 
 const props = defineProps<{
   width?: number | string,
@@ -71,8 +71,8 @@ function parseNumberProp(defaultValue: number, n?: number | string) {
 // Watch Start
 
 // props changes
-watchEffect(() => {
-  resizeCamera(width.value, height.value)
+watch(props, (props) => {
+  resizeElement(width.value, height.value)
 })
 // Watch End
 
@@ -114,13 +114,9 @@ const exposed: IOmsTrackMonitor = {
     vehicles.value = data.vehicles ?? []
     segmentDisableds.value = data.segmentDisabled ?? []
 
-    const calculatedMapSizeProperties = calculateMapSizePropertiesFromPoints(points.value)
-    mapSizeProperties.height = calculatedMapSizeProperties.height
-    mapSizeProperties.width = calculatedMapSizeProperties.width
-    mapSizeProperties.minX = calculatedMapSizeProperties.minX
-    mapSizeProperties.minY = calculatedMapSizeProperties.minY
-    mapSizeProperties.maxX = calculatedMapSizeProperties.maxX
-    mapSizeProperties.maxY = calculatedMapSizeProperties.maxY
+    const { minX, minY, maxX, maxY } = calculateMinMaxXYFromPoints(points.value)
+    initMapSizeProperties(minX, minY, maxX, maxY)
+    initCamera()
   },
 
 
@@ -218,8 +214,8 @@ defineExpose(exposedProxy)
 <style scoped>
 .container {
   position: relative;
-  width: v-bind(cameraInfo.widthPx);
-  height: v-bind(cameraInfo.heightPx);
+  width: v-bind("cameraInfo.widthPx");
+  height: v-bind("cameraInfo.heightPx");
 
   /* Value for Test */
   background-color: blueviolet;
@@ -229,8 +225,8 @@ defineExpose(exposedProxy)
   position: absolute;
   top: 0;
   left: 0;
-  width: v-bind(cameraInfo.widthPx);
-  height: v-bind(cameraInfo.heightPx);
+  width: v-bind("cameraInfo.widthPx");
+  height: v-bind("cameraInfo.heightPx");
 
   /* Value for Test */
   background-color: black;

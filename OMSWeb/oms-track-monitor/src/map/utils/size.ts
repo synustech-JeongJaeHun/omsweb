@@ -1,7 +1,6 @@
 import { Point } from "../../point/types/Point";
-import { MapSizeProperties } from "../types/MapSizeProperties";
 
-function calculateMapSizePropertiesFromPoints(points: Point[]): MapSizeProperties {
+function calculateMinMaxXYFromPoints(points: Point[]) {
   let minX = 0;
   let minY = 0;
   let maxX = 0;
@@ -20,9 +19,7 @@ function calculateMapSizePropertiesFromPoints(points: Point[]): MapSizePropertie
     minY: minY,
     maxX: maxX,
     maxY: maxY,
-    width: Math.abs(maxX - minX),
-    height: Math.abs(maxY - minY),
   };
 }
 
-export { calculateMapSizePropertiesFromPoints }
+export { calculateMinMaxXYFromPoints }

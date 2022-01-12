@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { mapSizeProperties } from '../mapSizeProperties';
+import { readonlyMapSizeProperties } from '../mapSizeProperties';
 import Layer from './Layer.vue';
 
 const
@@ -39,8 +39,8 @@ const
       x="0"
       y="0"
       :stroke="stroke"
-      :width="mapSizeProperties.maxX"
-      :height="mapSizeProperties.maxY"
+      :width="readonlyMapSizeProperties.maxX"
+      :height="readonlyMapSizeProperties.maxY"
     />
   </Layer>
 </template>

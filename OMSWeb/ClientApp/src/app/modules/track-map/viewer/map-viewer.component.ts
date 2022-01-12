@@ -350,11 +350,11 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     this.statusSvc.getVehicles().subscribe((res) => {
       if (!res || !res.vehicles) return;
       if (!this.dataSvc.data.vehicles?.length) {
-        this.viewer.update_vehicles(res.vehicles, 'INSERT', null, false);
+        this.viewer.update_vehicles(res.vehicles as any, 'INSERT', null, false);
         this.trackIdSvc.extract_id_from_track(this.dataSvc.data);
       } else {
         res.vehicles.forEach((v) => {
-          this.viewer.update_vehicles([v], 'UPDATE', v.id, false);
+          this.viewer.update_vehicles([v] as any, 'UPDATE', v.id, false);
         });
       }
     });
@@ -379,7 +379,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
       this.viewMode,
       'track-canvas',
       'minimap',
-      this.dataSvc,
+      this.dataSvc as any,
       this.statesSvc
     )
 
@@ -397,8 +397,8 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   }
 
   private drawMap(track: Dto.ITrackData) {
-    this.viewer.create_track(track);
-    this.viewer.update_vehicles(track.vehicles, 'INSERT', null, false);
+    this.viewer.create_track(track as any);
+    this.viewer.update_vehicles(track.vehicles as any, 'INSERT', null, false);
     this.trackIdSvc.extract_id_from_track(this.dataSvc.data);
     this.groupIds = this.dataSvc.data.groups.map((g) => g.id);
 

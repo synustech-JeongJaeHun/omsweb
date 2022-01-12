@@ -6,5 +6,5 @@ const props = defineProps<{
 </script>
 
 <template>
-  <circle :cx="props.point.x" :cy="props.point.y" />
+  <circle :cx="props.point.x" :cy="props.point.y" r="20" fill="white" />
 </template>
