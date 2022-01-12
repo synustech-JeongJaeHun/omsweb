@@ -19,6 +19,8 @@ const cameraInfo = readonly(computed(() => ({
   ...camera,
   centerX: camera.x + (camera.viewBoxWidth / 2),
   centerY: camera.y + (camera.viewBoxHeight / 2),
+  maxX: camera.x + camera.viewBoxWidth,
+  maxY: camera.x + camera.viewBoxHeight,
   ratio: camera.elementWidth / camera.elementHeight,
   widthPx: `${camera.elementWidth}px`,
   heightPx: `${camera.elementHeight}px`,
@@ -26,8 +28,6 @@ const cameraInfo = readonly(computed(() => ({
 })))
 
 function resizeViewBox(widthOrHeight: "width" | "height", value: number) {
-  console.log("resize", arguments)
-
   if (value < 0) return
   const
     width = widthOrHeight === 'width' ? value : value * cameraInfo.value.ratio,
@@ -95,4 +95,10 @@ function pan(movementX: number, movementY: number) {
   moveCamera(centerX, centerY)
 }
 
-export { cameraInfo, initCamera, resizeViewBox, resizeElement, zoomOut, zoomIn, pan }
+function isPositionInCamera(x: number, y: number) {
+  return cameraInfo.value.x <= x
+    && cameraInfo.value.maxX >= x
+    && cameraInfo.value.y <= y
+    && cameraInfo.value.maxY >= y
+}
+export { cameraInfo, initCamera, resizeViewBox, resizeElement, zoomOut, zoomIn, pan, isPositionInCamera }

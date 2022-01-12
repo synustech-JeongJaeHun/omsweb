@@ -39,16 +39,12 @@ function onRightClick(event: MouseEvent) {
   event.clientX
   event.clientY
 }
-
-function logg(event: any) {
-  console.log(event)
-}
 </script>
 
 <template>
   <Layer
     @wheel="zoomInOut($event)"
-    @mousedown="[$event.button === 0 && enterPanning(), $event.button === 2 && enterRotating(), logg($event)]"
+    @mousedown="[$event.button === 0 && enterPanning(), $event.button === 2 && enterRotating()]"
     @mousemove="[isPanning && panTo($event), isRotating && rotateTo($event)]"
     @mouseleave="[exitPanning(), exitRotating()]"
     @mouseup="[exitPanning(), exitRotating()]"

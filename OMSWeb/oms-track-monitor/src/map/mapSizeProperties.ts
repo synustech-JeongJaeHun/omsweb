@@ -22,13 +22,4 @@ const mapSizePropertiesInfo = readonly(computed(() => ({
   height: mapSizeProperties.maxY - mapSizeProperties.minY,
 })))
 
-watchEffect(() => console.log("checkthis"
-  , mapSizePropertiesInfo.value.minX
-  , mapSizePropertiesInfo.value.minY
-  , mapSizePropertiesInfo.value.maxX
-  , mapSizePropertiesInfo.value.maxY
-  , mapSizePropertiesInfo.value.width
-  , mapSizePropertiesInfo.value.height
-))
-
 export { initMapSizeProperties, mapSizePropertiesInfo }

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import GridLayer from './GridLayer.vue';
-import Layer from './Layer.vue';
 import EventLayer from './EventLayer.vue';
 import PointLayer from '../../point/components/PointLayer.vue';
 import BufferLayer from '../../buffer/components/BufferLayer.vue';
