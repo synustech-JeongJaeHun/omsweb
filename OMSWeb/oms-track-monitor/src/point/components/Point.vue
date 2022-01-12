@@ -10,6 +10,6 @@ const props = defineProps<{
   <svg :x="props.point.x" :y="props.point.y" style="overflow: visible">
     <!-- <circle r="50" fill="black" /> -->
     <use href="#point" />
-    <text y="70">{{ props.point.logicalId }}</text>
+    <!-- <text y="70">{{ props.point.logicalId }}</text> -->
   </svg>
 </template>
