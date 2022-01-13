@@ -208,8 +208,8 @@ defineExpose(exposedProxy)
   <div
     class="relative"
     :style="{
-      width: cameraInfo.elementWidth,
-      height: cameraInfo.elementHeight,
+      width: `${cameraInfo.elementWidth}px`,
+      height: `${cameraInfo.elementHeight}px`,
     }"
   >
     <Map
@@ -217,8 +217,8 @@ defineExpose(exposedProxy)
       :style="{
         top: 0,
         left: 0,
-        width: cameraInfo.elementWidth,
-        height: cameraInfo.elementHeight,
+        width: `${cameraInfo.elementWidth}px`,
+        height: `${cameraInfo.elementHeight}px`,
       }"
     />
     <Minimap
