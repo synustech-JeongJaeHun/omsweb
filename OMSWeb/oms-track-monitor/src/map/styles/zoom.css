@@ -1,0 +1,11 @@
+/* zoom-level-equal-or-bigger = 3 */
+[data-zoom-level="0"] [data-show-zoom-level-equal-or-bigger="3"],
+[data-zoom-level="1"] [data-show-zoom-level-equal-or-bigger="3"],
+[data-zoom-level="2"] [data-show-zoom-level-equal-or-bigger="3"],
+/* zoom-level-equal-or-bigger = 2 */
+[data-zoom-level="0"] [data-show-zoom-level-equal-or-bigger="2"],
+[data-zoom-level="1"] [data-show-zoom-level-equal-or-bigger="2"],
+/* zoom-level-equal-or-bigger = 1 */
+[data-zoom-level="0"] [data-show-zoom-level-equal-or-bigger="1"] {
+  visibility: hidden;
+}

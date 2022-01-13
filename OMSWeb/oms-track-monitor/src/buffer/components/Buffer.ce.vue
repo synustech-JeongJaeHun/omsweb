@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { computed, readonly, ref, watchEffect } from 'vue'
+import { computed, readonly } from 'vue'
 import { findPointById } from '../../point/points'
-import { convertStringToImageDataUrl } from '../../utils/textToImage'
 import { addVectors, getOrthogonalVector, getUnitVector, multipleVector, ZeroVector } from '../../utils/vector'
 import { Buffer } from '../types/Buffer'
+import RasterizedText from '../../map/components/RasterizedText.ce.vue'
 
 const BufferDirectionMargin = 500
 
@@ -33,12 +33,6 @@ const position = readonly(computed(() => {
 
   return addVectors(offsetPosition, directionTransformVector)
 }))
-
-const rasterisedIdTextImageDataUrl = ref<string>('')
-watchEffect(async () => {
-  const dataUrl = await convertStringToImageDataUrl(props.buffer.logicalId)
-  rasterisedIdTextImageDataUrl.value = dataUrl
-})
 </script>
 
 
@@ -46,7 +40,8 @@ watchEffect(async () => {
   <svg :x="position.x" :y="position.y" style="overflow: visible;">
     <!-- <circle r="50" stroke="black" stroke-width="10" fill="none" /> -->
     <use href="#buffer" />
-    <image y="70" :href="rasterisedIdTextImageDataUrl" />
+    <RasterizedText y="70" :text="props.buffer.logicalId" />
+    <!-- <image y="70" :href="rasterisedIdTextImageDataUrl" /> -->
     <!-- <text y="70">{{ props.buffer.logicalId }}</text> -->
     <!-- <image href="" height="" width="" /> -->
   </svg>

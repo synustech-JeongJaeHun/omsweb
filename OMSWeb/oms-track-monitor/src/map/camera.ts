@@ -4,7 +4,11 @@ import { mapSizePropertiesInfo } from "./mapSizeProperties";
 const
   DefaultWidth = 1000,
   DefaultHeight = 1000,
-  CornerMargin = 1000
+  CornerMargin = 1000,
+  ZoomLevel3 = 7500,
+  ZoomLevel2 = 35000,
+  ZoomLevel1 = 70000,
+  ZoomLevel0 = 140000
 
 const camera = reactive({
   x: 0,
@@ -25,6 +29,13 @@ const cameraInfo = readonly(computed(() => ({
   widthPx: `${camera.elementWidth}px`,
   heightPx: `${camera.elementHeight}px`,
   viewBox: `${camera.x} ${camera.y} ${camera.viewBoxWidth} ${camera.viewBoxHeight}`,
+  zoomLevel: (() => {
+    const smallCorner = Math.min(camera.viewBoxHeight, camera.viewBoxWidth)
+    return smallCorner < ZoomLevel3 ? 3
+      : smallCorner < ZoomLevel2 ? 2
+        : smallCorner < ZoomLevel1 ? 1
+          : 0
+  })()
 })))
 
 function resizeViewBox(widthOrHeight: "width" | "height", value: number) {
@@ -95,10 +106,11 @@ function pan(movementX: number, movementY: number) {
   moveCamera(centerX, centerY)
 }
 
-function isPositionInCamera(x: number, y: number) {
+function isVisible(x: number, y: number, zoomLevel?: number) {
   return cameraInfo.value.x <= x
     && cameraInfo.value.maxX >= x
     && cameraInfo.value.y <= y
     && cameraInfo.value.maxY >= y
+    && typeof zoomLevel === "number" ? cameraInfo.value.zoomLevel <= zoomLevel : true
 }
-export { cameraInfo, initCamera, resizeViewBox, resizeElement, zoomOut, zoomIn, pan, isPositionInCamera }
+export { cameraInfo, initCamera, resizeViewBox, resizeElement, zoomOut, zoomIn, pan, isVisible }

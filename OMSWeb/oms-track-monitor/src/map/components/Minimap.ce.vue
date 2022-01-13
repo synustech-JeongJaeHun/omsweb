@@ -6,6 +6,3 @@
     backgroundColor: 'grey',
   }" />
 </template>
-
-<style scoped>
-</style>

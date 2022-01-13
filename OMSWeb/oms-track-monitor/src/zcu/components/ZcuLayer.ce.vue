@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import Layer from '../../map/components/Layer.vue';
-import Zcu from './Zcu.vue';
+import Layer from '../../map/components/Layer.ce.vue';
+import Zcu from './Zcu.ce.vue';
 
 import { zcus } from '../zcus'
 

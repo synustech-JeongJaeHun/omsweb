@@ -20,8 +20,8 @@ import { vehicles } from './vehicle/vehicles'
 import { zcus } from './zcu/zcus'
 import { ViewMode } from './map/types/ViewMode'
 import { MapType } from './map/types/MapType'
-import Map from './map/components/Map.vue'
-import Minimap from './map/components/Minimap.vue'
+import Map from './map/components/Map.ce.vue'
+import Minimap from './map/components/Minimap.ce.vue'
 import { initMapSizeProperties } from './map/mapSizeProperties'
 import { cameraInfo, initCamera, resizeElement } from './map/camera'
 
@@ -210,6 +210,9 @@ defineExpose(exposedProxy)
     <Minimap class="miniMap" />
   </div>
 </template>
+
+
+<style src="./map/styles/zoom.css"></style>
 
 <style scoped>
 .container {

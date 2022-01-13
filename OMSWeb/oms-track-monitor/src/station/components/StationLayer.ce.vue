@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import Layer from '../../map/components/Layer.vue';
-import Station from './Station.vue';
+import Layer from '../../map/components/Layer.ce.vue';
+import Station from './Station.ce.vue';
 
 import { stations } from '../stations'
 

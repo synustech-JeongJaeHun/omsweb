@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { mapSizePropertiesInfo } from '../mapSizeProperties';
-import Layer from './Layer.vue';
+import Layer from './Layer.ce.vue';
 
 const
   MapMargin = 3000,

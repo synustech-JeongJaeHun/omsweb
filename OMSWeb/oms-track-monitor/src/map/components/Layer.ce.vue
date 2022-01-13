@@ -14,6 +14,7 @@ import { cameraInfo } from '../camera'
     shape-rendering="optimizeSpeed"
     text-rendering="optimizeSpeed"
     style="position: absolute; will-change: contents;"
+    :data-zoom-level="cameraInfo.zoomLevel"
   >
     <slot />
   </svg>

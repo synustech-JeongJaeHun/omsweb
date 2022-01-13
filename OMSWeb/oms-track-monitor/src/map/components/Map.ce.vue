@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import GridLayer from './GridLayer.vue';
-import EventLayer from './EventLayer.vue';
-import PointLayer from '../../point/components/PointLayer.vue';
-import BufferLayer from '../../buffer/components/BufferLayer.vue';
-import StationLayer from '../../station/components/StationLayer.vue';
-import ZcuLayer from '../../zcu/components/ZcuLayer.vue';
+import GridLayer from './GridLayer.ce.vue';
+import EventLayer from './EventLayer.ce.vue';
+import PointLayer from '../../point/components/PointLayer.ce.vue';
+import BufferLayer from '../../buffer/components/BufferLayer.ce.vue';
+import StationLayer from '../../station/components/StationLayer.ce.vue';
+import ZcuLayer from '../../zcu/components/ZcuLayer.ce.vue';
 
 const emit = defineEmits<{
   (event: 'backdrop'): void

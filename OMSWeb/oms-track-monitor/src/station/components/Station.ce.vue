@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { computed, readonly, ref, watchEffect } from 'vue';
+import { computed, readonly } from 'vue';
 import { findPointById } from '../../point/points';
-import { convertStringToImageDataUrl } from '../../utils/textToImage';
 import { addVectors, getUnitVector, multipleVector } from '../../utils/vector';
 import { Station } from '../types/Station'
+import RasterizedText from '../../map/components/RasterizedText.ce.vue';
+
 const props = defineProps<{
   station: Station
 }>()
@@ -22,18 +23,13 @@ const position = readonly(computed(() => {
   const offsetVector = multipleVector(unitVector, props.station.offset)
   return addVectors({ x: startPoint.value.x, y: startPoint.value.y }, offsetVector)
 }))
-
-const rasterisedIdTextImageDataUrl = ref<string>('')
-watchEffect(async () => {
-  const dataUrl = await convertStringToImageDataUrl(props.station.logicalId)
-  rasterisedIdTextImageDataUrl.value = dataUrl
-})
 </script>
 
 <template>
   <svg :x="position.x" :y="position.y" style="overflow: visible;">
     <use href="#station" />
-    <image y="70" :href="rasterisedIdTextImageDataUrl" />
+    <RasterizedText y="70" :text="props.station.logicalId" />
+    <!-- <image y="70" :href="rasterisedIdTextImageDataUrl" /> -->
     <!-- <text y="70">{{ props.station.logicalId }}</text> -->
   </svg>
 </template>

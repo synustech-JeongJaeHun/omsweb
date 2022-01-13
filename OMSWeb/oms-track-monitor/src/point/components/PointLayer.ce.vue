@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import Layer from '../../map/components/Layer.vue';
-import Point from './Point.vue';
+import Layer from '../../map/components/Layer.ce.vue';
+import Point from './Point.ce.vue';
 
 import { points } from '../points'
 

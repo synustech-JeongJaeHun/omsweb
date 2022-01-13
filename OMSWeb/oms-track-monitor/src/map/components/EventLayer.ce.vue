@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { pan, zoomIn, zoomOut } from '../camera';
-import Layer from './Layer.vue';
+import Layer from './Layer.ce.vue';
 
 // MouseEvent.button
 // https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/button

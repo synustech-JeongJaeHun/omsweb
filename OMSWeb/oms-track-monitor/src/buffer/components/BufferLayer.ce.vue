@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import Layer from '../../map/components/Layer.vue';
-import Buffer from './Buffer.vue';
+import Layer from '../../map/components/Layer.ce.vue';
+import Buffer from './Buffer.ce.vue';
 
 import { buffers } from '../buffers'
 
