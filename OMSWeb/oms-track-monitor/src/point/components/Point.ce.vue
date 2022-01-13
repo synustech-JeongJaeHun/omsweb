@@ -9,7 +9,7 @@ const props = defineProps<{
 
 
 <template>
-  <svg :x="props.point.x" :y="props.point.y" style="overflow: visible">
+  <svg class="overflow-visible" :x="props.point.x" :y="props.point.y">
     <!-- <circle r="50" fill="black" /> -->
     <use href="#point" />
     <RasterizedText y="70" :text="props.point.logicalId" />

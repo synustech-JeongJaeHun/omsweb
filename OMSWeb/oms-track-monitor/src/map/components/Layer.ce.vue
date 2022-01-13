@@ -13,7 +13,8 @@ import { cameraInfo } from '../camera'
     :viewBox="cameraInfo.viewBox"
     shape-rendering="optimizeSpeed"
     text-rendering="optimizeSpeed"
-    style="position: absolute; will-change: contents;"
+    class="absolute"
+    style="will-change: contents;"
     :data-zoom-level="cameraInfo.zoomLevel"
   >
     <slot />

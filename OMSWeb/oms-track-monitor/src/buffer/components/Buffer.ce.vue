@@ -37,7 +37,7 @@ const position = readonly(computed(() => {
 
 
 <template>
-  <svg :x="position.x" :y="position.y" style="overflow: visible;">
+  <svg class="overflow-visible" :x="position.x" :y="position.y">
     <!-- <circle r="50" stroke="black" stroke-width="10" fill="none" /> -->
     <use href="#buffer" />
     <RasterizedText y="70" :text="props.buffer.logicalId" />

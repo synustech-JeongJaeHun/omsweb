@@ -205,36 +205,39 @@ defineExpose(exposedProxy)
 </script>
 
 <template>
-  <div class="container">
-    <Map class="mainMap" />
-    <Minimap class="miniMap" />
+  <div
+    class="relative"
+    :style="{
+      width: cameraInfo.elementWidth,
+      height: cameraInfo.elementHeight,
+    }"
+  >
+    <Map
+      class="absolute"
+      :style="{
+        top: 0,
+        left: 0,
+        width: cameraInfo.elementWidth,
+        height: cameraInfo.elementHeight,
+      }"
+    />
+    <Minimap
+      class="absolute"
+      :style="{
+        bottom: '2vw',
+        left: '2vw',
+        width: '14vw',
+        height: '8vw',
+      }"
+    />
   </div>
 </template>
 
+<!-- https://v3.vuejs.org/api/sfc-spec.html#src-imports -->
+<!-- https://github.com/vuejs/vue-next/issues/4662 -->
+<!-- https://v3.vuejs.org/guide/web-components.html#sfc-as-custom-element -->
+<style src="./styles/utility.css"></style>
+<style src="./styles/zoom.css"></style>
 
-<style src="./map/styles/zoom.css"></style>
-
-<style scoped>
-.container {
-  position: relative;
-  width: v-bind("cameraInfo.widthPx");
-  height: v-bind("cameraInfo.heightPx");
-}
-
-.mainMap {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: v-bind("cameraInfo.widthPx");
-  height: v-bind("cameraInfo.heightPx");
-}
-
-.miniMap {
-  position: absolute;
-  bottom: 2vw;
-  left: 2vw;
-
-  width: 14vw;
-  height: 8vw;
-}
-</style>
+<!-- Plan B -->
+<!-- https://stackoverflow.com/questions/69797635/how-do-i-create-a-vue-3-custom-element-including-child-component-styles -->

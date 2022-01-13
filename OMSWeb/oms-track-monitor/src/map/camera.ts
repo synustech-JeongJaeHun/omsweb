@@ -26,8 +26,6 @@ const cameraInfo = readonly(computed(() => ({
   maxX: camera.x + camera.viewBoxWidth,
   maxY: camera.x + camera.viewBoxHeight,
   ratio: camera.elementWidth / camera.elementHeight,
-  widthPx: `${camera.elementWidth}px`,
-  heightPx: `${camera.elementHeight}px`,
   viewBox: `${camera.x} ${camera.y} ${camera.viewBoxWidth} ${camera.viewBoxHeight}`,
   zoomLevel: (() => {
     const smallCorner = Math.min(camera.viewBoxHeight, camera.viewBoxWidth)

@@ -1,0 +1,15 @@
+/* 
+  Follow Conventions on TailwindCSS
+  https://tailwindcss.com/
+*/
+.relative {
+  position: relative;
+}
+
+.absolute {
+  position: absolute;
+}
+
+.overflow-visible {
+  overflow: visible;
+}

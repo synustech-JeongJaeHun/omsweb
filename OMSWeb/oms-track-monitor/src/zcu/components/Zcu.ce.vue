@@ -8,7 +8,7 @@ const props = defineProps<{
 </script>
 
 <template>
-  <svg :x="props.zcu.x" :y="props.zcu.y" style="overflow: visible">
+  <svg class="overflow-visible" :x="props.zcu.x" :y="props.zcu.y">
     <path d="M 0 -50 L 50 0 L 0 50 L -50 0 Z" stroke="black" stroke-width="10" fill="none" />
     <!-- <circle r="50" fill="blue" /> -->
     <RasterizedText y="70" :text="String(props.zcu.id)" />
