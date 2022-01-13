@@ -3,4 +3,6 @@ import { Vehicle } from './types/Vehicle'
 
 const vehicles = ref<Vehicle[]>([])
 
-export { vehicles } 
+function findVehicleById(id: number) { return vehicles.value.find(v => v.id === id) }
+
+export { vehicles, findVehicleById } 

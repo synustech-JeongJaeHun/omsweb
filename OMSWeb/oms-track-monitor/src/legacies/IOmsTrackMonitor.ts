@@ -91,7 +91,7 @@ interface IOmsTrackMonitor {
   ) => void
   update_vehicles: (
     raw_data: IVehicle[],
-    operation: string,
+    operation: "INSERT" | "UPDATE" | "DELETE",
     vehicleId: number,
     is_skip_rendering: boolean
   ) => { [id: number]: any }

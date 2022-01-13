@@ -16,7 +16,7 @@ import { points } from './point/points'
 import { segmentDisableds } from './segment/segmentDisableds'
 import { segments } from './segment/segments'
 import { stations } from './station/stations'
-import { vehicles } from './vehicle/vehicles'
+import { findVehicleById, vehicles } from './vehicle/vehicles'
 import { zcus } from './zcu/zcus'
 import { ViewMode } from './map/types/ViewMode'
 import { MapType } from './map/types/MapType'
@@ -191,12 +191,29 @@ const exposed: IOmsTrackMonitor = {
     is_apply_revert
   ) { },
   update_vehicles: function (
-    raw_data,
+    vehicleUpdates,
     operation,
-    vehicleId,
-    is_skip_rendering
+    vehicleId, // discard
+    is_skip_rendering // discard
   ) {
-    return { '1': {} }
+    vehicleUpdates.forEach(update => {
+      const vehicle = findVehicleById(update.id)
+      if (operation === "INSERT") {
+        vehicles.value.push(update)
+      } else if (operation === "UPDATE" && vehicle) {
+        for (const property in update) {
+          // @ts-ignore
+          vehicle[property] = update[property]
+        }
+        // not typed real values. Why????
+        // v.distanceTotal = update.distanceTotal
+        // v.railIn = update.railIn
+        // v.runtimeTotal = update.runtimeTotal
+      } else {
+        // opertaion === "DELETE"
+      }
+    })
+    return {}
   },
 }
 const exposedProxy = makeFsProxy(exposed)
@@ -238,6 +255,7 @@ defineExpose(exposedProxy)
 <!-- https://v3.vuejs.org/guide/web-components.html#sfc-as-custom-element -->
 <style src="./styles/utility.css"></style>
 <style src="./styles/zoom.css"></style>
+<style src="./styles/pan.css"></style>
 
 <!-- Plan B -->
 <!-- https://stackoverflow.com/questions/69797635/how-do-i-create-a-vue-3-custom-element-including-child-component-styles -->
