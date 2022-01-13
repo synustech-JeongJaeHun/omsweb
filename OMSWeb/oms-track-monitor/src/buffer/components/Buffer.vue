@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { computed, readonly } from 'vue'
+import { computed, readonly, ref, watchEffect } from 'vue'
 import { findPointById } from '../../point/points'
+import { convertStringToImageDataUrl } from '../../utils/textToImage'
 import { addVectors, getOrthogonalVector, getUnitVector, multipleVector, ZeroVector } from '../../utils/vector'
 import { Buffer } from '../types/Buffer'
 
@@ -32,12 +33,21 @@ const position = readonly(computed(() => {
 
   return addVectors(offsetPosition, directionTransformVector)
 }))
+
+const rasterisedIdTextImageDataUrl = ref<string>('')
+watchEffect(async () => {
+  const dataUrl = await convertStringToImageDataUrl(props.buffer.logicalId)
+  rasterisedIdTextImageDataUrl.value = dataUrl
+})
 </script>
+
 
 <template>
   <svg :x="position.x" :y="position.y" style="overflow: visible;">
     <!-- <circle r="50" stroke="black" stroke-width="10" fill="none" /> -->
     <use href="#buffer" />
+    <image y="70" :href="rasterisedIdTextImageDataUrl" />
     <!-- <text y="70">{{ props.buffer.logicalId }}</text> -->
+    <!-- <image href="" height="" width="" /> -->
   </svg>
 </template>
