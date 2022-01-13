@@ -28,7 +28,6 @@ import { main_css } from '../../shared/utils/css-loader';
 import { MessagesService } from '../../../services/messages.service';
 import { IVehicleCommandMessage } from '../../../models/command.model';
 import { IPlaybackTrackChangeEvent } from '../../../models/playback.model';
-import { Group } from '../../../models/group.model';
 import { TracksService } from '../../../services/tracks.service';
 import { SettingsService } from '../../../services/settings.service';
 import { StatusService } from '../../../services/status.service';
@@ -49,7 +48,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   @Input() viewMode: ViewModes;
   @Input() trackData: Dto.ITrackData;
   @Output() ready = new EventEmitter<boolean>();
-  @Output() trackRendered = new EventEmitter<void>();
 
   // loadingState = false;
   currentContextEvent: IMapMouseEvent;
@@ -288,90 +286,82 @@ export class MapViewerComponent implements OnInit, OnDestroy {
         this.viewer.adjust_floaters();
       });
 
-    [ViewModes.public, ViewModes.viewer].includes(this.viewMode) &&
-      this.attachHubEvents();
-
-    this.viewMode === ViewModes.playback && this.attachPlaybackEvents();
-  }
-
-  private attachHubEvents() {
-    this.hubSvc.connectionChanged$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((conn) => {
-        conn && this.refreshVehicles();
-      });
-    this.hubSvc.vehicleChanged$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((e: IDataChangeEvent) => {
-        this.applyVehicleChange(e)
-      });
-    this.hubSvc.segmentChanged$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((e: IDataChangeEvent) => {
-        this.applySegmentChange(e);
-      });
-    this.hubSvc.segmentDisabledChanged$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((e: IDataChangeEvent) => {
-        this.applySegmentDisabledChange(e);
-      });
-    this.hubSvc.clusterChanged$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((e: IDataChangeEvent) => {
-        this.applyClusterChange(e);
-      });
-
-    if (this.auth.isAuthenticated) {
-      this.hubSvc.vehiclePathChanged$
+    if ([ViewModes.public, ViewModes.viewer].includes(this.viewMode)) {
+      this.hubSvc.connectionChanged$
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((conn) => {
+          if (conn) {
+            this.statusSvc.getVehicles().subscribe((res) => {
+              if (!res || !res.vehicles) return;
+              if (!this.dataSvc.data.vehicles?.length) {
+                this.viewer.update_vehicles(res.vehicles as any, 'INSERT', null, false);
+                this.trackIdSvc.extract_id_from_track(this.dataSvc.data);
+              } else {
+                res.vehicles.forEach((v) => {
+                  this.viewer.update_vehicles([v] as any, 'UPDATE', v.id, false);
+                });
+              }
+            });
+          }
+        });
+      this.hubSvc.vehicleChanged$
         .pipe(takeUntil(this.destroy$))
         .subscribe((e: IDataChangeEvent) => {
-          this.applyVehiclePathChange(e)
+          this.applyVehicleChange(e)
+        });
+      this.hubSvc.segmentChanged$
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((e: IDataChangeEvent) => {
+          this.applySegmentChange(e);
+        });
+      this.hubSvc.segmentDisabledChanged$
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((e: IDataChangeEvent) => {
+          this.applySegmentDisabledChange(e);
+        });
+      this.hubSvc.clusterChanged$
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((e: IDataChangeEvent) => {
+          this.applyClusterChange(e);
         });
 
-      this.hubSvc.stationChanged$
-        .pipe(takeUntil(this.destroy$))
-        .subscribe((e) => this.applyStationChange(e));
+      if (this.auth.isAuthenticated) {
+        this.hubSvc.vehiclePathChanged$
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((e: IDataChangeEvent) => {
+            this.applyVehiclePathChange(e)
+          });
 
-      this.hubSvc.bufferChanged$
-        .pipe(takeUntil(this.destroy$))
-        .subscribe((e) => this.applyBufferChange(e));
+        this.hubSvc.stationChanged$
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((e) => this.applyStationChange(e));
 
-      this.hubSvc.mtlChanged$
-        .pipe(takeUntil(this.destroy$))
-        .subscribe((e) => this.applyMtlChange(e));
+        this.hubSvc.bufferChanged$
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((e) => this.applyBufferChange(e));
 
-      this.hubSvc.groupChanged$
+        this.hubSvc.mtlChanged$
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((e) => this.applyMtlChange(e));
+
+        this.hubSvc.groupChanged$
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((e) => this.applyGroupChange(e));
+      }
+    }
+
+    if (this.viewMode === ViewModes.playback) {
+      this.dataSvc.snapshotUpdated$
         .pipe(takeUntil(this.destroy$))
-        .subscribe((e) => this.applyGroupChange(e));
+        .subscribe(() => this.applySnapshotUpdated());
+      this.dataSvc.playbackTrackUpdated$
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((data) => this.applyPlaybackTrackUpdated(data));
+      this.dataSvc.afterPlaybackTrackUpdated$
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(() => this.applyAfterPlaybackTrackUpdated());
     }
   }
-
-  private refreshVehicles() {
-    this.statusSvc.getVehicles().subscribe((res) => {
-      if (!res || !res.vehicles) return;
-      if (!this.dataSvc.data.vehicles?.length) {
-        this.viewer.update_vehicles(res.vehicles as any, 'INSERT', null, false);
-        this.trackIdSvc.extract_id_from_track(this.dataSvc.data);
-      } else {
-        res.vehicles.forEach((v) => {
-          this.viewer.update_vehicles([v] as any, 'UPDATE', v.id, false);
-        });
-      }
-    });
-  }
-
-  private attachPlaybackEvents() {
-    this.dataSvc.snapshotUpdated$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => this.applySnapshotUpdated());
-    this.dataSvc.playbackTrackUpdated$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((data) => this.applyPlaybackTrackUpdated(data));
-    this.dataSvc.afterPlaybackTrackUpdated$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => this.applyAfterPlaybackTrackUpdated());
-  }
-
   private initMap() {
     this.viewer = (document.getElementById('track-canvas') as any)._instance.exposed as unknown as IOmsTrackMonitor
 
@@ -404,8 +394,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 
     this.attachEvents();
     this.applyUiStates();
-
-    this.trackRendered.emit();
   }
 
   private onMapMouseEvent(event: IMapMouseEvent) {
@@ -555,7 +543,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     ) {
       return; // @TODO viewer가 아직 생성되지 않은 경우에는 지연 처리할 방법 구현
     }
-    this.viewer.update_vehicles([data], operation, id, false);
+    this.viewer.update_vehicles([data], operation as any, id, false);
     this.updateSelectedObject(
       'VEHICLE',
       [this.dataSvc.data.vehicles.find((v) => v.id === id)],
@@ -640,7 +628,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     } else if (table === 'vehicle_history') {
       const updated = this.viewer.update_vehicles(
         [data],
-        operation,
+        operation as any,
         id,
         skipRender
       );

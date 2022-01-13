@@ -2344,8 +2344,8 @@ export class ViewController {
 
       // Get base point id
       if (object_type === 'POINT' ||
-          object_type === 'ZCU'
-        ) {
+        object_type === 'ZCU'
+      ) {
         base_point_id = current_object.id;
       } else if (
         object_type === 'STATION' ||
