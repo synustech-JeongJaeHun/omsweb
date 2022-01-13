@@ -1,0 +1,7 @@
+#event-layer:hover {
+  cursor: grab;
+}
+
+#event-layer:hover:active {
+  cursor: grabbing;
+}

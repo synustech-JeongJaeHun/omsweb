@@ -43,6 +43,7 @@ function onRightClick(event: MouseEvent) {
 
 <template>
   <Layer
+    id="event-layer"
     @wheel="zoomInOut($event)"
     @mousedown="[$event.button === 0 && enterPanning(), $event.button === 2 && enterRotating()]"
     @mousemove="[isPanning && panTo($event), isRotating && rotateTo($event)]"
