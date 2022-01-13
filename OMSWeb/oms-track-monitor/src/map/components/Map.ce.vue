@@ -5,6 +5,9 @@ import PointLayer from '../../point/components/PointLayer.ce.vue';
 import BufferLayer from '../../buffer/components/BufferLayer.ce.vue';
 import StationLayer from '../../station/components/StationLayer.ce.vue';
 import ZcuLayer from '../../zcu/components/ZcuLayer.ce.vue';
+import MtlLayer from '../../mtl/components/MtlLayer.ce.vue';
+import VehicleLayer from '../../vehicle/components/VehicleLayer.ce.vue';
+import SegmentLayer from '../../segment/components/SegmentLayer.ce.vue';
 
 const emit = defineEmits<{
   (event: 'backdrop'): void
@@ -17,13 +20,13 @@ const emit = defineEmits<{
     <GridLayer />
     <!-- group -->
     <!-- cluster -->
-    <!-- segment + disabled -->
+    <SegmentLayer />
     <PointLayer />
     <BufferLayer />
     <StationLayer />
     <ZcuLayer />
-    <!-- mtl -->
-    <!-- vehicles + vehicle paths -->
+    <MtlLayer />
+    <VehicleLayer />
     <EventLayer />
   </div>
 </template>

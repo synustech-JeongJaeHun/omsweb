@@ -10,10 +10,7 @@ const props = defineProps<{
 
 <template>
   <svg class="overflow-visible" :x="props.point.x" :y="props.point.y">
-    <!-- <circle r="50" fill="black" /> -->
     <use href="#point" />
     <RasterizedText y="70" :text="props.point.logicalId" />
-    <!-- <image y="70" :href="rasterisedIdTextImageDataUrl" /> -->
-    <!-- <text y="70">{{ props.point.logicalId }}</text> -->
   </svg>
 </template>

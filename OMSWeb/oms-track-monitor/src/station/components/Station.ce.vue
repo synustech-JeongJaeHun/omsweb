@@ -29,7 +29,5 @@ const position = readonly(computed(() => {
   <svg class="overflow-visible" :x="position.x" :y="position.y">
     <use href="#station" />
     <RasterizedText y="70" :text="props.station.logicalId" />
-    <!-- <image y="70" :href="rasterisedIdTextImageDataUrl" /> -->
-    <!-- <text y="70">{{ props.station.logicalId }}</text> -->
   </svg>
 </template>

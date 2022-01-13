@@ -8,6 +8,15 @@ import { zcus } from '../zcus'
 
 <template>
   <Layer>
+    <defs>
+      <path
+        id="zcu"
+        d="M 0 -50 L 50 0 L 0 50 L -50 0 Z"
+        stroke="black"
+        stroke-width="10"
+        fill="none"
+      />
+    </defs>
     <Zcu v-for="zcu of zcus" :key="zcu.id" :zcu="zcu" />
   </Layer>
 </template>
