@@ -33,12 +33,16 @@ const position = readonly(computed(() => {
 
   return addVectors(offsetPosition, directionTransformVector)
 }))
+
+function eventPropagationTest() {
+  alert(`BUFFER CLICKED ${props.buffer.logicalId}`)
+}
 </script>
 
 
 <template>
-  <svg class="overflow-visible" :x="position.x" :y="position.y">
-    <use href="#buffer" />
+  <svg class="overflow-visible cursor-pointer" :x="position.x" :y="position.y">
+    <use href="#buffer" @click="eventPropagationTest()" />
     <RasterizedText y="70" :text="props.buffer.logicalId" />
   </svg>
 </template>

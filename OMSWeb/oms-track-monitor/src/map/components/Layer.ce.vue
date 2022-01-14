@@ -8,12 +8,13 @@ import { cameraInfo } from '../camera'
 
 <template>
   <svg
+    x="0"
+    y="0"
     :width="cameraInfo.elementWidth"
     :height="cameraInfo.elementHeight"
     :viewBox="cameraInfo.viewBox"
     shape-rendering="optimizeSpeed"
     text-rendering="optimizeSpeed"
-    class="absolute"
     style="will-change: contents;"
     :data-zoom-level="cameraInfo.zoomLevel"
   >

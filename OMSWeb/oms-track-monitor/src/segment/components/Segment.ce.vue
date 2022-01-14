@@ -12,7 +12,7 @@ const props = defineProps<{
 
 
 <template>
-  <svg class="overflow-visible">
+  <svg class="overflow-visible cursor-pointer">
     <use href="#segment" />
     <RasterizedText y="70" :text="props.segment.logicalId" />
   </svg>

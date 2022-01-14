@@ -23,11 +23,15 @@ const position = readonly(computed(() => {
   const offsetVector = multipleVector(unitVector, props.station.offset)
   return addVectors({ x: startPoint.value.x, y: startPoint.value.y }, offsetVector)
 }))
+
+function eventPropagationTest() {
+  alert(`STATION CLICKED ${props.station.logicalId}`)
+}
 </script>
 
 <template>
-  <svg class="overflow-visible" :x="position.x" :y="position.y">
-    <use href="#station" />
+  <svg class="overflow-visible cursor-pointer" :x="position.x" :y="position.y">
+    <use href="#station" @click="eventPropagationTest()" />
     <RasterizedText y="70" :text="props.station.logicalId" />
   </svg>
 </template>

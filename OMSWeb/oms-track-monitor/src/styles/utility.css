@@ -2,6 +2,7 @@
   Follow Conventions on TailwindCSS
   https://tailwindcss.com/
 */
+
 .relative {
   position: relative;
 }
@@ -12,4 +13,8 @@
 
 .overflow-visible {
   overflow: visible;
+}
+
+.cursor-pointer {
+  cursor: pointer;
 }

@@ -13,7 +13,7 @@ const position = readonly(computed(() => findPointById(props.mtl.pointId) ?? { x
 </script>
 
 <template>
-  <svg class="overflow-visible" :x="position.x" :y="position.y">
+  <svg class="overflow-visible cursor-pointer" :x="position.x" :y="position.y">
     <use href="#mtl" />
     <RasterizedText y="70" :text="props.mtl.logicalId" />
   </svg>

@@ -1,7 +1,7 @@
-#event-layer:hover {
+#layer-container:hover {
   cursor: grab;
 }
 
-#event-layer:hover:active {
+#layer-container:hover[data-is-panning='true'] {
   cursor: grabbing;
 }

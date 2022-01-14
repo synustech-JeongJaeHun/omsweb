@@ -11,8 +11,6 @@ const
   LineStroke = "grey",
   LineStrokeWidth = 5
 
-
-  // width="10" height="10"
 </script>
 
 <template>

@@ -14,7 +14,7 @@ const currentPoint = readonly(computed(() => findPointById(props.vehicle.curPoin
 
 
 <template>
-  <svg class="overflow-visible" :x="currentPoint.x" :y="currentPoint.y">
+  <svg class="overflow-visible cursor-pointer" :x="currentPoint.x" :y="currentPoint.y">
     <use href="#vehicle" />
     <RasterizedText y="70" :text="props.vehicle.logicalId" />
   </svg>
