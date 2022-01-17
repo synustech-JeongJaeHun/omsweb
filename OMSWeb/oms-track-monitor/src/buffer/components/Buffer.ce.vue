@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, readonly } from 'vue'
-import { findPointById } from '../../point/points'
+import { usePointPoisiton } from '../../point/points'
 import { addVectors, getOrthogonalVector, getUnitVector, multipleVector, ZeroVector } from '../../utils/vector'
 import { Buffer } from '../types/Buffer'
 import RasterizedText from '../../map/components/RasterizedText.ce.vue'
@@ -11,19 +11,19 @@ const props = defineProps<{
   buffer: Buffer
 }>()
 
-const startPoint = readonly(computed(() => findPointById(props.buffer.pointId)))
-const endPoint = readonly(computed(() => findPointById(props.buffer.nextPoint)))
+const startPointPosition = usePointPoisiton(computed(() => props.buffer.pointId))
+const nextPointPosition = usePointPoisiton(computed(() => props.buffer.nextPoint))
 const position = readonly(computed(() => {
-  if (startPoint.value === undefined || endPoint.value === undefined)
+  if (startPointPosition.value === undefined || nextPointPosition.value === undefined)
     return { x: 0, y: 0 }
 
   const unitVector = getUnitVector({
-    x: endPoint.value.x - startPoint.value.x,
-    y: endPoint.value.y - startPoint.value.y
+    x: nextPointPosition.value.x - startPointPosition.value.x,
+    y: nextPointPosition.value.y - startPointPosition.value.y
   })
 
   const offsetVector = multipleVector(unitVector, props.buffer.offset)
-  const offsetPosition = addVectors({ x: startPoint.value.x, y: startPoint.value.y }, offsetVector)
+  const offsetPosition = addVectors({ x: startPointPosition.value.x, y: startPointPosition.value.y }, offsetVector)
 
   const orthogonalVector =
     props.buffer.direction === 'L' ? getOrthogonalVector(unitVector, 'counterclockwise')

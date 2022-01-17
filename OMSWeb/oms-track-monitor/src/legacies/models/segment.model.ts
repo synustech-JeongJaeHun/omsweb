@@ -1,4 +1,4 @@
-import { ISegment as ISegmentInTrack } from './track.model'
+import { ISegmentPart as ISegmentInTrack } from './track.model'
 import {
   IPoint,
   ISegment,
@@ -29,10 +29,10 @@ class Segment implements ISegment {
 
   disableState?: any
 
-  candidates?= []
-  isValidate?: boolean
-  validateText?: string
-  updateState?: string
+  candidates?= []  // what is it?
+  isValidate?: boolean  // what is it?
+  validateText?: string  // what is it?
+  updateState?: string  // what is it?
 
   constructor(
     row: ISegmentInTrack,

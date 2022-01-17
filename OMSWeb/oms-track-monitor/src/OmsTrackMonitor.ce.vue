@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { computed, reactive, ref, watch } from 'vue'
+import { reactive, ref, watch } from 'vue'
 import { makeFsProxy } from './utils/devMode'
 
 import { IOmsTrackMonitor } from './legacies/IOmsTrackMonitor'
-import { IPreferences, UiStates } from './legacies/models/setting.model'
+import { IPreferences } from './legacies/models/setting.model'
 import { MapDataService } from './legacies/serivces/MapData.service'
 import { MapStatesService } from './legacies/serivces/MapStates.service'
 
@@ -14,7 +14,6 @@ import { calculateMinMaxXYFromPoints } from './map/utils/size'
 import { mtls } from './mtl/mtls'
 import { points } from './point/points'
 import { segmentDisableds } from './segment/segmentDisableds'
-import { segments } from './segment/segments'
 import { stations } from './station/stations'
 import { findVehicleById, vehicles } from './vehicle/vehicles'
 import { zcus } from './zcu/zcus'
@@ -24,13 +23,13 @@ import Map from './map/components/Map.ce.vue'
 import Minimap from './map/components/Minimap.ce.vue'
 import { initMapSizeProperties } from './map/mapSizeProperties'
 import { cameraInfo, initCamera, resizeElement } from './map/camera'
+import { segments } from './segment/segments'
+import { makeSegmentsFromParts } from './segment/utils/segment'
 
 const props = defineProps<{
   width?: number | string,
   height?: number | string,
 }>()
-const width = computed(() => parseNumberProp(0, props.width))
-const height = computed(() => parseNumberProp(0, props.height))
 
 const emit = defineEmits<{
   (e: 'backdrop', value: {}): void
@@ -53,7 +52,6 @@ const services = reactive<{
 
 // State End
 
-// Computed Start
 function parseNumberProp(defaultValue: number, n?: number | string) {
   const type = typeof n
   switch (type) {
@@ -66,53 +64,34 @@ function parseNumberProp(defaultValue: number, n?: number | string) {
   }
 }
 
-// Computed End
-
 // Watch Start
-
-// props changes
 watch(props, (props) => {
-  resizeElement(width.value, height.value)
+  const width = parseNumberProp(0, props.width)
+  const height = parseNumberProp(0, props.height)
+  resizeElement(width, height)
 })
 // Watch End
 
 
 const exposed: IOmsTrackMonitor = {
-  construct: function (
-    mode,
-    trackSvgId, // discard
-    minimapSvgId, // discard
-    dataSvc,
-    stateSvc
-  ) {
-    viewMode.value = mode
-    services.mapDataService = dataSvc
-    services.mapStatesService = stateSvc
-  },
-  setup: function (
-    paramPreferences,
-    can_manage_orders,
-    can_manage_vehicles,
-    can_modify_display_settings
-  ) {
-    preferences.value = paramPreferences
-    permissions.canManageOrders = can_manage_orders ?? false
-    permissions.canManageVehicles = can_manage_vehicles ?? false
-    permissions.canManageDisplaySettings = can_modify_display_settings ?? false
-  },
-  create_track: function (data) {
-    mapType.value = data.mapType ?? "DB"
+  setViewMode: function (v) { viewMode.value = v },
+  setPreference: function (p) { preferences.value = p },
+  setTrack: function (t) {
+    mapType.value = t.mapType ?? "DB"
 
-    buffers.value = data.buffers ?? []
-    clusters.value = data.clusters ?? []
-    groups.value = data.groups ?? []
-    mtls.value = data.mtls ?? []
-    points.value = data.points ?? []
-    segments.value = data.segments ?? []
-    stations.value = data.stations ?? []
-    zcus.value = data.zcus ?? []
-    vehicles.value = data.vehicles ?? []
-    segmentDisableds.value = data.segmentDisabled ?? []
+    // point must be initialized first.
+    points.value = t.points ?? []
+
+    // and elses...
+    buffers.value = t.buffers ?? []
+    clusters.value = t.clusters ?? []
+    groups.value = t.groups ?? []
+    mtls.value = t.mtls ?? []
+    segments.value = makeSegmentsFromParts(t.segmentParts ?? [])
+    stations.value = t.stations ?? []
+    zcus.value = t.zcus ?? []
+    vehicles.value = t.vehicles ?? []
+    segmentDisableds.value = t.segmentDisabled ?? []
 
     const { minX, minY, maxX, maxY } = calculateMinMaxXYFromPoints(points.value)
     initMapSizeProperties(minX, minY, maxX, maxY)
@@ -120,101 +99,24 @@ const exposed: IOmsTrackMonitor = {
   },
 
 
-  adjust_floaters: function () { },
-  applyAfterSnapshotUpdated: function (updatedPropList) { },
-  applyUpdatedExpectedPath: function () { },
+  updateVehicle: function (op, v) {
+    const vehicle = findVehicleById(v.id)
+    switch (op) {
+      case 'INSERT':
+      case 'UPDATE':
+        if (vehicle) Object.assign(vehicle, v)
+        else vehicles.value.push(v)
+        break;
 
-  destroy: function () { },
-  get_selected_objects: function (object_type) {
-    return []
-  },
-  getUiStates: function () {
-    return new UiStates()
-  },
-  hasShownLayoutObjects: function (objectType, objectId) {
-    return true
-  },
-  highlight: function (
-    object_type,
-    object_id,
-    object_css,
-    group_type,
-    highlight_type,
-    operation_type
-  ) { },
-  init_selection: function (is_clear_sel_objects) { },
-  onChangeConfig: function (event) { },
-  onChangeVisibility: function (event) { },
-  onCommandAction: function (event) { },
-  setUiStates: function (zoomInUiStates) { },
-
-  update_buffers: function (
-    update_list,
-    is_apply_history,
-    is_apply_revert
-  ) { },
-  update_clusters: function (
-    update_list,
-    is_apply_history,
-    is_apply_revert
-  ) { },
-  update_disable_segment: function (
-    data,
-    operation,
-    disabled_segment_id,
-    is_skip_rendering // NOTE default false
-  ) { },
-  update_groups: function (
-    update_list,
-    is_apply_history,
-    is_apply_revert
-  ) { },
-  update_mtls: function (
-    update_list,
-    is_apply_history,
-    is_apply_revert
-  ) { },
-  update_segment_svg: function (
-    data,
-    dom_css, // NOTE not using in function
-    excluded_segments,
-    is_path_change
-  ) { },
-  update_segments: function (
-    update_list,
-    is_apply_history,
-    is_apply_revert
-  ) { },
-  update_stations: function (
-    update_list,
-    is_apply_history,
-    is_apply_revert
-  ) { },
-  update_vehicles: function (
-    vehicleUpdates,
-    operation,
-    vehicleId, // discard
-    is_skip_rendering // discard
-  ) {
-    vehicleUpdates.forEach(update => {
-      const vehicle = findVehicleById(update.id)
-      if (operation === "INSERT") {
-        vehicles.value.push(update)
-      } else if (operation === "UPDATE" && vehicle) {
-        for (const property in update) {
-          // @ts-ignore
-          vehicle[property] = update[property]
+      case 'DELETE':
+        if (vehicle) {
+          const index = vehicles.value.indexOf(vehicle)
+          vehicles.value.splice(index, 1)
         }
-        // not typed real values. Why????
-        // v.distanceTotal = update.distanceTotal
-        // v.railIn = update.railIn
-        // v.runtimeTotal = update.runtimeTotal
-      } else {
-        // opertaion === "DELETE"
-      }
-    })
-    return {}
+        break;
+    }
   },
+  updateSegment: function (op, v) { }
 }
 const exposedProxy = makeFsProxy(exposed)
 defineExpose(exposedProxy)

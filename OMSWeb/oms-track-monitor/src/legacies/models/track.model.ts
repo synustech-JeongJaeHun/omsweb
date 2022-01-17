@@ -74,7 +74,7 @@ interface ISegPart {
   x2?: number
   y2?: number
 }
-interface ISegment extends ISegPart {
+interface ISegmentPart extends ISegPart {
   id: number
   logicalId: string
   physicalId?: string
@@ -150,7 +150,7 @@ interface IFixedTrackData {
   zcus?: IZcu[]
 }
 interface IVariableTrackData {
-  segments?: ISegment[]
+  segmentParts?: ISegmentPart[]
   segmentDisabled?: any[]
   vehicles?: IVehicle[]
 }
@@ -163,4 +163,4 @@ interface ITrackData extends IFixedTrackData, IVariableTrackData {
   minimumSegmentLength?: number
 }
 
-export { ITrackData, IVehicle, ISegment }
+export { ITrackData, IVehicle, ISegmentPart }

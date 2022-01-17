@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { Mtl } from '../types/Mtl'
 import RasterizedText from '../../map/components/RasterizedText.ce.vue';
-import { computed, readonly, Ref } from 'vue';
-import { findPointById } from '../../point/points';
+import { computed } from 'vue';
+import { usePointPoisiton } from '../../point/points';
 
 const props = defineProps<{
   mtl: Mtl
 }>()
 
-const position = readonly(computed(() => findPointById(props.mtl.pointId) ?? { x: 0, y: 0 }))
+const position = usePointPoisiton(computed(() => props.mtl.pointId))
 
 </script>
 

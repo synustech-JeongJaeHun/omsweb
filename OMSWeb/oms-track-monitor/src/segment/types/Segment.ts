@@ -10,13 +10,7 @@ type Segment = {
   length: number
   speed: number
 
-  segpartId: number
-
-  // nullable
-  segparts?: SegmentPart[]
-  candidates?: any[]
-  travelTime: any
-  isValidate?: boolean
+  parts: SegmentPart[]
 }
 
 export { Segment }
