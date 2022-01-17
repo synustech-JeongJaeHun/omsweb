@@ -1,19 +1,18 @@
+/**
+ * @argument A : Counter-Clock
+ * @argument C : Clock
+ */
+type CurveDirection = "A" | "C"
+type Quadrant = "1" | "2" | "3" | "4"
+
 type SegmentPart = { segpartId: number } & (
-  | { type: "D" }
+  | {
+    type: "D"
+  }
   | {
     type: "E",
-    /**
-     * @argument A : Counter-Clock
-     * @argument C : Clock
-     */
-    direction: "A" | "C",
-    /**
-     * @argument 1 : Quadrant 1
-     * @argument 2 : Quadrant 2
-     * @argument 3 : Quadrant 3
-     * @argument 4 : Quadrant 4
-     */
-    location: "1" | "2" | "3" | "4"
+    direction: CurveDirection,
+    location: Quadrant
   })
 
-export { SegmentPart }
+export { CurveDirection, Quadrant, SegmentPart }

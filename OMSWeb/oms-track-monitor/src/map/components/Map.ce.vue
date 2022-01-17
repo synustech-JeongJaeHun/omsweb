@@ -34,12 +34,11 @@ function enterRotating() { isRotating.value = true }
 function exitRotating() { isRotating.value = false }
 function rotateTo(event: MouseEvent) { }
 
+// WheelEvent
+// https://developer.mozilla.org/en-US/docs/Web/API/WheelEvent/deltaY
+// scrollToForward: deltaY < 0 
+// scrollToBackward: deltaY > 0
 function zoomInOut(event: WheelEvent | MouseEvent) {
-  // WheelEvent
-  // https://developer.mozilla.org/en-US/docs/Web/API/WheelEvent/deltaY
-  // scrollToForward: deltaY < 0 
-  // scrollToBackward: deltaY > 0
-
   const action = (event instanceof WheelEvent) && (event.deltaY > 0) ? zoomOut : zoomIn
   action(event.clientX, event.clientY)
 }

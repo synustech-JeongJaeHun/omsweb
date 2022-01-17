@@ -13,5 +13,5 @@ const path = usePath(computed(() => props.segment))
 </script>
 
 <template>
-  <path :id="`${getSegmentPathId(props.segment.id)}`" :d="path" />
+  <path :id="`${getSegmentPathId(props.segment.id)}`" :d="path" fill="none" />
 </template>

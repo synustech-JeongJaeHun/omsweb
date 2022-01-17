@@ -3,15 +3,22 @@ import { Segment } from '../types/Segment'
 import { getSegmentPathId } from '../utils/segment'
 import RasterizedText from '../../map/components/RasterizedText.ce.vue';
 
+const DefaultStrokeWidth = 10
+
 const props = defineProps<{
   segment: Segment
+  strokeWidth?: number
 }>()
 
 </script>
 
 <template>
   <svg class="overflow-visible cursor-pointer">
-    <use :href="`#${getSegmentPathId(props.segment.id)}`" stroke="black" stroke-width="10" />
+    <use
+      :href="`#${getSegmentPathId(props.segment.id)}`"
+      stroke="black"
+      :stroke-width="props.strokeWidth ?? DefaultStrokeWidth"
+    />
     <RasterizedText y="70" :text="props.segment.logicalId" />
   </svg>
 </template>

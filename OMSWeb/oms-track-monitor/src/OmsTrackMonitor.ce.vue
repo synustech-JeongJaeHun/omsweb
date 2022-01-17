@@ -20,7 +20,7 @@ import { zcus } from './zcu/zcus'
 import { ViewMode } from './map/types/ViewMode'
 import { MapType } from './map/types/MapType'
 import Map from './map/components/Map.ce.vue'
-import Minimap from './map/components/Minimap.ce.vue'
+import Minimap from './minimap/components/Minimap.ce.vue'
 import { initMapSizeProperties } from './map/mapSizeProperties'
 import { cameraInfo, initCamera, resizeElement } from './map/camera'
 import { segments } from './segment/segments'
@@ -140,15 +140,10 @@ defineExpose(exposedProxy)
         height: `${cameraInfo.elementHeight}px`,
       }"
     />
-    <Minimap
-      class="absolute"
-      :style="{
-        bottom: '2vw',
-        left: '2vw',
-        width: '14vw',
-        height: '8vw',
-      }"
-    />
+    <Minimap class="absolute" :style="{
+      bottom: '2vw',
+      left: '2vw',
+    }" />
   </div>
 </template>
 
