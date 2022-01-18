@@ -1,26 +1,14 @@
-import { computed, readonly, Ref } from "vue";
-import { usePointPoisiton } from "../../point/points";
-import { Segment } from "../types/Segment";
 import { CurveDirection, Quadrant, SegmentPart } from "../types/SegmentPart";
 
 const
   Radius = 300,
   QuarterRoundLength = 2 * Math.PI * Radius / 4
 
-function usePath(segment: Ref<Segment>) {
-  const startPointPosition = usePointPoisiton(computed(() => segment.value.startPoint))
-  const nextPointPosition = usePointPoisiton(computed(() => segment.value.endPoint))
-  const path = computed(() => makePathFromSegment(startPointPosition.value, nextPointPosition.value, segment.value.parts, segment.value.length))
-
-  return readonly(path)
-}
-
 type Position = { x: number, y: number }
 type Path = string
-function makePathFromSegment(startPos: Position, endPos: Position, parts: SegmentPart[], length: number): Path {
+function makePathFromSegment(startPos: Position, endPos: Position, parts: readonly SegmentPart[], length: number): Path {
 
   const startCommand = `M ${startPos.x} ${startPos.y}`
-
 
   const nextCommands = (function () {
     const typePattern = parts.map(p => (p.type === 'D') ? `D` : `E${p.direction}${p.location}`).join(' ')
@@ -294,4 +282,4 @@ function getBaseLength(length: number, quarterRoundLength: number, middleLength:
   return (length - (2 * quarterRoundLength) - middleLength - deepDiff) / 2
 }
 
-export { usePath }
+export { makePathFromSegment }

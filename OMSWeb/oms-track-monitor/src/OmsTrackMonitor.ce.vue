@@ -1,11 +1,9 @@
 <script setup lang="ts">
-import { reactive, ref, watch } from 'vue'
+import { computed, provide, reactive, readonly, ref, watch } from 'vue'
 import { makeFsProxy } from './utils/devMode'
 
 import { IOmsTrackMonitor } from './legacies/IOmsTrackMonitor'
 import { IPreferences } from './legacies/models/setting.model'
-import { MapDataService } from './legacies/serivces/MapData.service'
-import { MapStatesService } from './legacies/serivces/MapStates.service'
 
 import { buffers } from './buffer/buffers'
 import { clusters } from './cluster/clusters'
@@ -25,6 +23,7 @@ import { initMapSizeProperties } from './map/mapSizeProperties'
 import { cameraInfo, initCamera, resizeElement } from './map/camera'
 import { segments } from './segment/segments'
 import { makeSegmentsFromParts } from './segment/utils/segment'
+import { parseNumberProp } from './utils/props'
 
 const props = defineProps<{
   width?: number | string,
@@ -36,6 +35,8 @@ const emit = defineEmits<{
 }>()
 
 // State Start
+const container = ref<HTMLDivElement>();
+const shadowRoot = readonly(computed(() => container.value?.getRootNode()))
 
 const viewMode = ref<ViewMode>('PUBLIC')
 const mapType = ref<MapType>('DB');
@@ -45,24 +46,11 @@ const permissions = reactive({
   canManageDisplaySettings: false
 })
 const preferences = ref<IPreferences>()
-const services = reactive<{
-  mapDataService?: MapDataService
-  mapStatesService?: MapStatesService
-}>({})
-
 // State End
 
-function parseNumberProp(defaultValue: number, n?: number | string) {
-  const type = typeof n
-  switch (type) {
-    case "number":
-      return n as number
-    case "string":
-      return parseInt(n as string)
-    default:
-      return defaultValue;
-  }
-}
+// Provide Start
+provide('shadowRoot', shadowRoot)
+// Provide End
 
 // Watch Start
 watch(props, (props) => {
@@ -71,7 +59,6 @@ watch(props, (props) => {
   resizeElement(width, height)
 })
 // Watch End
-
 
 const exposed: IOmsTrackMonitor = {
   setViewMode: function (v) { viewMode.value = v },
@@ -96,7 +83,6 @@ const exposed: IOmsTrackMonitor = {
     initMapSizeProperties(minX, minY, maxX, maxY)
     initCamera()
   },
-
 
   updateVehicle: function (op, v) {
     const vehicle = findVehicleById(v.id)
@@ -124,6 +110,7 @@ defineExpose(exposedProxy)
 
 <template>
   <div
+    ref="container"
     class="relative"
     :style="{
       width: `${cameraInfo.elementWidth}px`,

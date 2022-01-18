@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, inject, Ref } from 'vue'
 import { addVectors, getOrthogonalVector } from '../../utils/vector';
 
 //   |   h/2
@@ -13,19 +13,18 @@ const props = defineProps<{
   segmentPathId: string
 }>()
 
-const selfElement = ref<SVGElement>()
+const shadowRoot = inject<Ref<ShadowRoot>>('shadowRoot')
 
 const arrowHeadPathD = computed(() => {
-  const shadowRoot = selfElement.value?.getRootNode() as ShadowRoot | undefined
-  const path = shadowRoot?.getElementById(props.segmentPathId) as SVGPathElement | null | undefined
+  const pathElement = shadowRoot?.value.getElementById(props.segmentPathId) as SVGPathElement | null | undefined
 
-  if (path === undefined || path === null) return ``
+  if (pathElement === undefined || pathElement === null) return ``
 
-  const halfLength = path.getTotalLength() / 2
+  const halfLength = pathElement.getTotalLength() / 2
 
-  const halfMorePoint = path.getPointAtLength(halfLength + height / 2)
-  const halfPoint = path.getPointAtLength(halfLength)
-  const halfLessPoint = path.getPointAtLength(halfLength - height / 2)
+  const halfMorePoint = pathElement.getPointAtLength(halfLength + height / 2)
+  const halfPoint = pathElement.getPointAtLength(halfLength)
+  const halfLessPoint = pathElement.getPointAtLength(halfLength - height / 2)
 
   // size of reverse vector is h/2
   const reverseVector = { x: halfLessPoint.x - halfPoint.x, y: halfLessPoint.y - halfPoint.y }
@@ -37,5 +36,5 @@ const arrowHeadPathD = computed(() => {
 </script>
 
 <template>
-  <path ref="selfElement" :d="arrowHeadPathD" fill="grey" stroke="grey" />
+  <path :d="arrowHeadPathD" fill="grey" stroke="grey" />
 </template>

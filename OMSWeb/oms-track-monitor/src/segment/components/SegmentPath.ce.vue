@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
+import { usePath } from '../segments';
 import { Segment } from '../types/Segment';
-import { usePath } from '../utils/path';
 import { getSegmentPathId } from '../utils/segment'
 
 const props = defineProps<{
