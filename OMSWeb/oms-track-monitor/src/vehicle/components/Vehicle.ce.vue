@@ -9,6 +9,9 @@ const props = defineProps<{
 }>()
 
 const currnetPointPosition = usePointPoisiton(computed(() => props.vehicle.curPoint))
+
+
+
 </script>
 
 <template>
@@ -17,7 +20,9 @@ const currnetPointPosition = usePointPoisiton(computed(() => props.vehicle.curPo
     :x="currnetPointPosition.x"
     :y="currnetPointPosition.y"
   >
-    <use href="#vehicle" />
+    <use href="#vehicle">
+      <animateMotion path />
+    </use>
     <RasterizedText y="70" :text="props.vehicle.logicalId" />
   </svg>
 </template>

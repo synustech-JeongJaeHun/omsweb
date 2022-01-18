@@ -10,6 +10,8 @@ type Segment = {
   length: number
   speed: number
 
+  disabled: boolean
+
   parts: SegmentPart[]
 }
 

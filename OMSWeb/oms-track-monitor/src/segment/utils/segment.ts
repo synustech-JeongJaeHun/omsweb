@@ -22,6 +22,8 @@ function makeSegmentsFromParts(parts: ISegmentPart[]): Segment[] {
         length: sample.length,
         speed: sample.speed,
 
+        disabled: false,
+
         // @ts-ignore
         parts: parts.sort((a, b) => a.segpartId - b.segpartId),
       })

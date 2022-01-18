@@ -79,10 +79,9 @@ const exposed: IOmsTrackMonitor = {
   setTrack: function (t) {
     mapType.value = t.mapType ?? "DB"
 
+    // Order is IMPORTANT!
     // point must be initialized first.
     points.value = t.points ?? []
-
-    // and elses...
     buffers.value = t.buffers ?? []
     clusters.value = t.clusters ?? []
     groups.value = t.groups ?? []

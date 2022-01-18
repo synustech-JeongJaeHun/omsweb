@@ -8,7 +8,7 @@ import { vehicles } from '../vehicles'
 <template>
   <Layer>
     <defs>
-      <circle id="vehicle" r="50" fill="none" stroke="red" stroke-width="10"></circle>
+      <circle id="vehicle" r="80" fill="none" stroke="red" stroke-width="40"></circle>
     </defs>
 
     <Vehicle v-for="vehicle of vehicles" :key="vehicle.id" :vehicle="vehicle" />
