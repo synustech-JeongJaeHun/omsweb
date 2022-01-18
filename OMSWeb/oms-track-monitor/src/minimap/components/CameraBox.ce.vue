@@ -2,14 +2,14 @@
 import { cameraInfo } from '../../map/camera';
 </script>
 
-
 <template>
   <rect
     :x="cameraInfo.x"
     :y="cameraInfo.y"
     :width="cameraInfo.viewBoxWidth"
     :height="cameraInfo.viewBoxHeight"
-    stroke="blue"
-    storke-width="200"
+    fill="rgba(0,0,0,0.3)"
+    stroke="black"
+    stroke-width="500"
   />
 </template>

@@ -111,4 +111,4 @@ function isVisible(x: number, y: number, zoomLevel?: number) {
     && cameraInfo.value.maxY >= y
     && typeof zoomLevel === "number" ? cameraInfo.value.zoomLevel <= zoomLevel : true
 }
-export { cameraInfo, initCamera, resizeViewBox, resizeElement, zoomOut, zoomIn, pan, isVisible }
+export { cameraInfo, initCamera, resizeViewBox, resizeElement, zoomOut, zoomIn, pan, moveCamera, isVisible }

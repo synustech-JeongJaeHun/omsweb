@@ -2,7 +2,7 @@
 import Layer from '../../map/components/Layer.ce.vue';
 import Segment from './Segment.ce.vue';
 import { segments } from '../segments'
-import SegmentPath from './SegmentPath.vue';
+import SegmentPath from './SegmentPath.ce.vue';
 
 </script>
 

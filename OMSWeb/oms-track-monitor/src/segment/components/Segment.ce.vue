@@ -7,7 +7,6 @@ const DefaultStrokeWidth = 10
 
 const props = defineProps<{
   segment: Segment
-  strokeWidth?: number
 }>()
 
 </script>
@@ -17,7 +16,7 @@ const props = defineProps<{
     <use
       :href="`#${getSegmentPathId(props.segment.id)}`"
       stroke="black"
-      :stroke-width="props.strokeWidth ?? DefaultStrokeWidth"
+      :stroke-width="DefaultStrokeWidth"
     />
     <RasterizedText y="70" :text="props.segment.logicalId" />
   </svg>
