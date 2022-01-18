@@ -52,6 +52,7 @@ function onPanning(event: MouseEvent) {
 
 <template>
   <svg
+    id="minimap-container"
     ref="minimapSvgElement"
     :viewBox="`${X} ${Y} ${minimapViewBoxWidth} ${minimapViewBoxHeight}`"
     :style="{
@@ -60,7 +61,7 @@ function onPanning(event: MouseEvent) {
       backgroundColor: 'white',
       border: '2px solid black'
     }"
-    @mousedown="[enterPanning(), onPanning($event)]"
+    @mousedown="enterPanning(), onPanning($event)"
     @mousemove="isPanning && onPanning($event)"
     @mouseup="exitPanning()"
     @mouseleave="exitPanning()"

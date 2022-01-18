@@ -5,3 +5,7 @@
 #layer-container:hover[data-is-panning='true'] {
   cursor: grabbing;
 }
+
+#minimap-container:hover {
+  cursor: move;
+}
