@@ -41,11 +41,11 @@ function exitPanning() {
 function onPanning(event: MouseEvent) {
   if (minimapDomRect.width === 0 || minimapDomRect.height === 0) return
 
-  const
-    x = (event.clientX - minimapDomRect.minX) / minimapDomRect.width * minimapViewBoxWidth.value - MapMargin,
-    y = (event.clientY - minimapDomRect.minY) / minimapDomRect.height * minimapViewBoxHeight.value - MapMargin
-
-  moveCamera(x, y)
+  moveCamera({
+    x: (event.clientX - minimapDomRect.minX) / minimapDomRect.width * minimapViewBoxWidth.value - MapMargin,
+    // 📐🛑 Be careful! logic is dependent on invert
+    y: (minimapDomRect.maxY - event.clientY) / minimapDomRect.height * minimapViewBoxHeight.value - MapMargin
+  })
 }
 
 </script>
@@ -53,6 +53,7 @@ function onPanning(event: MouseEvent) {
 <template>
   <svg
     id="minimap-container"
+    class="invert"
     ref="minimapSvgElement"
     :viewBox="`${X} ${Y} ${minimapViewBoxWidth} ${minimapViewBoxHeight}`"
     :style="{

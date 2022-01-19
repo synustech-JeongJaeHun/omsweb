@@ -66,6 +66,10 @@ const exposed: IOmsTrackMonitor = {
   setTrack: function (t) {
     mapType.value = t.mapType ?? "DB"
 
+    const { minX, minY, maxX, maxY } = calculateMinMaxXYFromPoints(t.points ?? [])
+    initMapSizeProperties(minX, minY, maxX, maxY)
+    initCamera()
+
     // Order is IMPORTANT!
     // point must be initialized first.
     points.value = t.points ?? []
@@ -78,10 +82,6 @@ const exposed: IOmsTrackMonitor = {
     zcus.value = t.zcus ?? []
     vehicles.value = t.vehicles ?? []
     segmentDisableds.value = t.segmentDisabled ?? []
-
-    const { minX, minY, maxX, maxY } = calculateMinMaxXYFromPoints(points.value)
-    initMapSizeProperties(minX, minY, maxX, maxY)
-    initCamera()
   },
 
   updateVehicle: function (op, v) {
@@ -139,6 +139,7 @@ defineExpose(exposedProxy)
 <style src="./styles/utility.css"></style>
 <style src="./styles/zoom.css"></style>
 <style src="./styles/pan.css"></style>
+<style src="./styles/invert.css"></style>
 
 <!-- Plan B -->
 <!-- https://stackoverflow.com/questions/69797635/how-do-i-create-a-vue-3-custom-element-including-child-component-styles -->

@@ -1,3 +1,5 @@
+import { Position } from "../types/Position"
+
 function createSvgElement(name: string) {
   return document.createElementNS('http://www.w3.org/2000/svg', name)
 }
@@ -13,7 +15,7 @@ function getPositionFromD(d: string, distance: number) {
   return pathElement.getPointAtLength(distance)
 }
 
-function isPointInPathD(d: string, position: { x: number, y: number }) {
+function isPointInPathD(d: string, position: Position) {
   const path = createPathElement(d)
   return path.isPointInStroke(position)
 }

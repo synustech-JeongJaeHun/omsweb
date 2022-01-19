@@ -1,3 +1,4 @@
+import { D } from "../../types/D";
 import { SegmentPart } from "./SegmentPart";
 
 type Segment = {
@@ -14,7 +15,7 @@ type Segment = {
 
   parts: SegmentPart[]
 
-  d: string
+  d: D
 }
 
 export { Segment }

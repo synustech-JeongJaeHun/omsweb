@@ -1,4 +1,4 @@
-import { computed, reactive, readonly, watchEffect } from "vue";
+import { computed, reactive, readonly } from "vue";
 
 const mapSizeProperties = reactive({
   minX: 0,

@@ -19,10 +19,6 @@ import { StatusService } from '../../../services/status.service';
         z-index: 3;
         width: 100%;
         height: 100%;
-        /* display: grid;
-        grid-template-columns: 56px 1fr;
-        column-gap: 20px;
-        height: 100%; */
       }
 
       #status-control {
@@ -31,14 +27,10 @@ import { StatusService } from '../../../services/status.service';
         box-shadow: 0px 0px 5px #aaa;
         display: inline-block;
         flex-direction: column;
-        /* background: #77919d; */
         bottom: 0px;
         left: 0px;
-        /* overflow: auto; */
         z-index: 10;
         width: 100%;
-        /* height: 300px; */
-        /* opacity: 0.9; */
       }
       #loading-bar {
         position: absolute;
@@ -50,7 +42,6 @@ import { StatusService } from '../../../services/status.service';
         padding: 20px;
         z-index: 5;
       }
-
       .mat-progress-bar {
         margin-top: 10px;
       }
@@ -64,7 +55,6 @@ export class MonitorStatusComponent implements OnInit, AfterViewInit {
   viewMode: ViewModes;
   trackData: Dto.ITrackData;
 
-  // showControlTable = false;
   get showControlTable(): boolean {
     return this.mapPreference.toggles.controlTable;
   }
@@ -80,7 +70,6 @@ export class MonitorStatusComponent implements OnInit, AfterViewInit {
   }
   ngAfterViewInit(): void {
     this.statusSvc.getTrack().subscribe((res) => {
-      // this.dataSvc.trackDataUpdated$.next(res);
       this.trackData = res;
       this.loadingState = false;
       this.ready = true;
@@ -89,12 +78,5 @@ export class MonitorStatusComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.mapPreference = this.settingSvc.globalPreferences;
-
-    // @TODO loading preference
-    // this.mapPreference = {
-    //   toggles: defaultToggleOptions,
-    // };
   }
-
-  onReady(ready: boolean) { }
 }

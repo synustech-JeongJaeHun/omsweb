@@ -1,10 +1,10 @@
+import { Position } from "../../types/Position";
 import { CurveDirection, Quadrant, SegmentPart } from "../types/SegmentPart";
 
 const
   Radius = 300,
   QuarterRoundLength = 2 * Math.PI * Radius / 4
 
-type Position = { x: number, y: number }
 type Path = string
 function makeDFromSegment(startPos: Position, endPos: Position, parts: readonly SegmentPart[], length: number): Path {
 

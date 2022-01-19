@@ -27,7 +27,10 @@ const emit = defineEmits<{
 const isPanning = ref(false)
 function enterPanning() { isPanning.value = true }
 function exitPanning() { isPanning.value = false }
-function panTo(event: MouseEvent) { pan(event.movementX, event.movementY) }
+function panTo(event: MouseEvent) {
+  // 📐🛑 Be careful! logic is dependent on invert
+  pan(event.movementX, (-1) * event.movementY)
+}
 
 const isRotating = ref(false)
 function enterRotating() { isRotating.value = true }
@@ -40,7 +43,8 @@ function rotateTo(event: MouseEvent) { }
 // scrollToBackward: deltaY > 0
 function zoomInOut(event: WheelEvent | MouseEvent) {
   const action = (event instanceof WheelEvent) && (event.deltaY > 0) ? zoomOut : zoomIn
-  action(event.clientX, event.clientY)
+  // action(event.clientX, event.clientY)
+  action({ x: event.clientX, y: event.clientY })
 }
 
 function onLeftClick(event: MouseEvent) {
@@ -56,6 +60,7 @@ function onRightClick(event: MouseEvent) {
 <template>
   <svg
     id="layer-container"
+    class="invert"
     :width="cameraInfo.elementWidth"
     :height="cameraInfo.elementHeight"
     :viewBox="`0 0 ${cameraInfo.elementWidth} ${cameraInfo.elementHeight}`"

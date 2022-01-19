@@ -22,6 +22,6 @@ function eventPropagationTestRight(event: MouseEvent) {
       @click.left="eventPropagationTestLeft($event)"
       @click.right="eventPropagationTestRight($event)"
     />
-    <RasterizedText y="70" :text="props.point.logicalId" />
+    <RasterizedText class="invert" y="70" :text="props.point.logicalId" />
   </svg>
 </template>

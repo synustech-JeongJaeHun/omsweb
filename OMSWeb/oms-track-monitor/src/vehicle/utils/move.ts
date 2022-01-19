@@ -1,9 +1,9 @@
 import { encodeSVGPath, SVGPathData } from "svg-pathdata";
 import { SVGCommand } from "svg-pathdata/lib/types";
+import { D } from "../../types/D";
+import { Position } from "../../types/Position";
 import { isPointInPathD } from "../../utils/path";
 
-type Position = { x: number, y: number }
-type D = string
 function sliceDFromSVGCommands(commands: SVGCommand[], from: Position, to: Position): D {
   // from ~
   const fromIndex = commands.findIndex((command, index, commands) => {
