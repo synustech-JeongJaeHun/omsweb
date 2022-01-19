@@ -12,4 +12,4 @@ function usePointPoisiton(id: Ref<number>) {
   return readonly(position)
 }
 
-export { points, usePointPoisiton } 
+export { points, findPointById, usePointPoisiton } 

@@ -13,6 +13,8 @@ type Segment = {
   disabled: boolean
 
   parts: SegmentPart[]
+
+  d: string
 }
 
 export { Segment }

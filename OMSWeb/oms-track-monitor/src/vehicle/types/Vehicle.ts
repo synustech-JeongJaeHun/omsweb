@@ -1,3 +1,8 @@
+type UpdateType =
+  | "NoAnimation"
+  | "AnimationIn1Segment"
+  | "AnimationIn2Segments"
+
 type Vehicle = {
   id: number
   logicalId: string
@@ -18,6 +23,10 @@ type Vehicle = {
   hostOrder: boolean
   orderOrigin: string | string[]
 
+  // update
+  lastUpdated?: number, // always assigned with Date.now()
+  updateType?: UpdateType
+
   // nullable
   cargoTransferResult?: string
   commandPoint?: any
@@ -32,4 +41,4 @@ type Vehicle = {
   historyChangeTime?: any
 }
 
-export { Vehicle }
+export { Vehicle, UpdateType }

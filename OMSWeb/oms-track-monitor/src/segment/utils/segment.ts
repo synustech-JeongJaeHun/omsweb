@@ -1,4 +1,5 @@
 import { ISegmentPart } from "../../legacies/models/track.model";
+import { makeD } from "../segments";
 import { Segment } from "../types/Segment";
 
 function makeSegmentsFromParts(parts: ISegmentPart[]): Segment[] {
@@ -12,6 +13,7 @@ function makeSegmentsFromParts(parts: ISegmentPart[]): Segment[] {
   map.forEach((parts, id) => {
     if (parts[0]) {
       const sample = parts[0]
+      const sortedParts = parts.sort((a, b) => a.segpartId - b.segpartId)
       array.push({
         id: id,
         logicalId: sample.logicalId,
@@ -25,7 +27,9 @@ function makeSegmentsFromParts(parts: ISegmentPart[]): Segment[] {
         disabled: false,
 
         // @ts-ignore
-        parts: parts.sort((a, b) => a.segpartId - b.segpartId),
+        parts: sortedParts,
+        // @ts-ignore
+        d: makeD(sample.startPoint, sample.endPoint, sortedParts, sample.length)
       })
     }
   })

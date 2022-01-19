@@ -13,7 +13,7 @@ import { mtls } from './mtl/mtls'
 import { points } from './point/points'
 import { segmentDisableds } from './segment/segmentDisableds'
 import { stations } from './station/stations'
-import { findVehicleById, vehicles } from './vehicle/vehicles'
+import { findVehicleById, updateExistVehicle, vehicles } from './vehicle/vehicles'
 import { zcus } from './zcu/zcus'
 import { ViewMode } from './map/types/ViewMode'
 import { MapType } from './map/types/MapType'
@@ -89,7 +89,7 @@ const exposed: IOmsTrackMonitor = {
     switch (op) {
       case 'INSERT':
       case 'UPDATE':
-        if (vehicle) Object.assign(vehicle, v)
+        if (vehicle) updateExistVehicle(vehicle, v)
         else vehicles.value.push(v)
         break;
 

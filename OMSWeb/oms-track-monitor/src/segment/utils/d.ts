@@ -6,7 +6,7 @@ const
 
 type Position = { x: number, y: number }
 type Path = string
-function makePathFromSegment(startPos: Position, endPos: Position, parts: readonly SegmentPart[], length: number): Path {
+function makeDFromSegment(startPos: Position, endPos: Position, parts: readonly SegmentPart[], length: number): Path {
 
   const startCommand = `M ${startPos.x} ${startPos.y}`
 
@@ -24,49 +24,49 @@ function makePathFromSegment(startPos: Position, endPos: Position, parts: readon
         const p1 = { x: endPos.x + Radius, y: startPos.y }
         const p2 = { x: endPos.x, y: startPos.y + Radius }
         // return combineParts([{ type: 'D', to: p1 }, { type }])
-        return [pathL(p1), pathA(p2, 'A', '2'), pathL(endPos)]
+        return [dL(p1), dA(p2, 'A', '2'), dL(endPos)]
       }
       // ArcBottomLeft 2/2 left to right
       case "D EC2 D": {
         const p1 = { x: startPos.x, y: endPos.y + Radius }
         const p2 = { x: startPos.x + Radius, y: endPos.y }
-        return [pathL(p1), pathA(p2, 'C', '2'), pathL(endPos)]
+        return [dL(p1), dA(p2, 'C', '2'), dL(endPos)]
       }
       // ArcTopLeft 1/2 right to left
       case "D EC3 D": {
         const p1 = { x: endPos.x + Radius, y: startPos.y }
         const p2 = { x: endPos.x, y: startPos.y - Radius }
-        return [pathL(p1), pathA(p2, 'C', '3'), pathL(endPos)]
+        return [dL(p1), dA(p2, 'C', '3'), dL(endPos)]
       }
       // ArcTopLeft 2/2 left to right
       case "D EA3 D": {
         const p1 = { x: startPos.x, y: endPos.y - Radius }
         const p2 = { x: startPos.x + Radius, y: endPos.y }
-        return [pathL(p1), pathA(p2, 'A', '3'), pathL(endPos)]
+        return [dL(p1), dA(p2, 'A', '3'), dL(endPos)]
       }
       // ArcBottomRight 1/2 right to left
       case "D EA1 D": {
         const p1 = { x: startPos.x, y: endPos.y + Radius }
         const p2 = { x: startPos.x - Radius, y: endPos.y }
-        return [pathL(p1), pathA(p2, 'A', '1'), pathL(endPos)]
+        return [dL(p1), dA(p2, 'A', '1'), dL(endPos)]
       }
       // ArcBottomRight 2/2 left to right
       case "D EC1 D": {
         const p1 = { x: endPos.x - Radius, y: startPos.y }
         const p2 = { x: endPos.x, y: startPos.y + Radius }
-        return [pathL(p1), pathA(p2, 'C', '1'), pathL(endPos)]
+        return [dL(p1), dA(p2, 'C', '1'), dL(endPos)]
       }
       // ArcTopRight 1/2 right to left
       case "D EC4 D": {
         const p1 = { x: startPos.x, y: endPos.y - Radius }
         const p2 = { x: startPos.x - Radius, y: endPos.y }
-        return [pathL(p1), pathA(p2, 'C', '4'), pathL(endPos)]
+        return [dL(p1), dA(p2, 'C', '4'), dL(endPos)]
       }
       // ArcTopRight 2/2 left to right
       case "D EA4 D": {
         const p1 = { x: endPos.x - Radius, y: startPos.y }
         const p2 = { x: endPos.x, y: startPos.y - Radius }
-        return [pathL(p1), pathA(p2, 'A', '4'), pathL(endPos)]
+        return [dL(p1), dA(p2, 'A', '4'), dL(endPos)]
       }
 
       // SemiCircleTop 1/2  right to left
@@ -80,7 +80,7 @@ function makePathFromSegment(startPos: Position, endPos: Position, parts: readon
         const p2 = { x: startPos.x - Radius, y: baseY + Radius }
         const p3 = { x: endPos.x + Radius, y: baseY + Radius }
         const p4 = { x: endPos.x, y: baseY }
-        return [pathL(p1), pathA(p2, 'C', '4'), pathL(p3), pathA(p4, 'C', '3'), pathL(endPos)]
+        return [dL(p1), dA(p2, 'C', '4'), dL(p3), dA(p4, 'C', '3'), dL(endPos)]
       }
       // SemiCircleTop 2/2  left to right
       case "D EA3 D EA4 D": {
@@ -93,7 +93,7 @@ function makePathFromSegment(startPos: Position, endPos: Position, parts: readon
         const p2 = { x: startPos.x + Radius, y: baseY + Radius }
         const p3 = { x: endPos.x - Radius, y: baseY + Radius }
         const p4 = { x: endPos.x, y: baseY }
-        return [pathL(p1), pathA(p2, 'A', '3'), pathL(p3), pathA(p4, 'A', '4'), pathL(endPos)]
+        return [dL(p1), dA(p2, 'A', '3'), dL(p3), dA(p4, 'A', '4'), dL(endPos)]
       }
       // SemiCircleBottom 1/2 rigth to left
       case "D EA1 D EA2 D": {
@@ -106,7 +106,7 @@ function makePathFromSegment(startPos: Position, endPos: Position, parts: readon
         const p2 = { x: startPos.x - Radius, y: baseY - Radius }
         const p3 = { x: endPos.x + Radius, y: baseY - Radius }
         const p4 = { x: endPos.x, y: baseY }
-        return [pathL(p1), pathA(p2, 'A', '1'), pathL(p3), pathA(p4, 'A', '2'), pathL(endPos)]
+        return [dL(p1), dA(p2, 'A', '1'), dL(p3), dA(p4, 'A', '2'), dL(endPos)]
       }
       // SemiCircleBottom 2/2 left to right
       case "D EC2 D EC1 D": {
@@ -119,7 +119,7 @@ function makePathFromSegment(startPos: Position, endPos: Position, parts: readon
         const p2 = { x: startPos.x + Radius, y: baseY - Radius }
         const p3 = { x: endPos.x - Radius, y: baseY - Radius }
         const p4 = { x: endPos.x, y: baseY }
-        return [pathL(p1), pathA(p2, 'C', '2'), pathL(p3), pathA(p4, 'C', '1'), pathL(endPos)]
+        return [dL(p1), dA(p2, 'C', '2'), dL(p3), dA(p4, 'C', '1'), dL(endPos)]
       }
       // SemiCircleLeft 1/2 bottom to top
       case "D EA2 D EA3 D": {
@@ -132,7 +132,7 @@ function makePathFromSegment(startPos: Position, endPos: Position, parts: readon
         const p2 = { x: baseX - Radius, y: startPos.y + Radius }
         const p3 = { x: baseX - Radius, y: endPos.y - Radius }
         const p4 = { x: baseX, y: endPos.y }
-        return [pathL(p1), pathA(p2, 'A', '2'), pathL(p3), pathA(p4, 'A', '3'), pathL(endPos)]
+        return [dL(p1), dA(p2, 'A', '2'), dL(p3), dA(p4, 'A', '3'), dL(endPos)]
       }
       // SemiCircleLeft 2/2 top to bottom
       case "D EC3 D EC2 D": {
@@ -145,7 +145,7 @@ function makePathFromSegment(startPos: Position, endPos: Position, parts: readon
         const p2 = { x: baseX - Radius, y: startPos.y - Radius }
         const p3 = { x: baseX - Radius, y: endPos.y + Radius }
         const p4 = { x: baseX, y: endPos.y }
-        return [pathL(p1), pathA(p2, 'C', '3'), pathL(p3), pathA(p4, 'C', '2'), pathL(endPos)]
+        return [dL(p1), dA(p2, 'C', '3'), dL(p3), dA(p4, 'C', '2'), dL(endPos)]
       }
       // SemiCircleRight 1/2 bottom to top
       case "D EC1 D EC4 D": {
@@ -158,7 +158,7 @@ function makePathFromSegment(startPos: Position, endPos: Position, parts: readon
         const p2 = { x: baseX + Radius, y: startPos.y + Radius }
         const p3 = { x: baseX + Radius, y: endPos.y - Radius }
         const p4 = { x: baseX, y: endPos.y }
-        return [pathL(p1), pathA(p2, 'C', '1'), pathL(p3), pathA(p4, 'C', '4'), pathL(endPos)]
+        return [dL(p1), dA(p2, 'C', '1'), dL(p3), dA(p4, 'C', '4'), dL(endPos)]
       }
       // SemiCircleRight 2/2 top to bottom
       case "D EA4 D EA1 D": {
@@ -171,7 +171,7 @@ function makePathFromSegment(startPos: Position, endPos: Position, parts: readon
         const p2 = { x: baseX + Radius, y: startPos.y - Radius }
         const p3 = { x: baseX + Radius, y: endPos.y + Radius }
         const p4 = { x: baseX, y: endPos.y }
-        return [pathL(p1), pathA(p2, 'A', '4'), pathL(p3), pathA(p4, 'A', '1'), pathL(endPos)]
+        return [dL(p1), dA(p2, 'A', '4'), dL(p3), dA(p4, 'A', '1'), dL(endPos)]
       }
       // SCurveHorizontal 1/4 topleft to bottomright
       case "D EC2 D EA4 D": {
@@ -181,7 +181,7 @@ function makePathFromSegment(startPos: Position, endPos: Position, parts: readon
         const p2 = { x: startPos.x + Radius, y: startPos.y - startEndLength - Radius }
         const p3 = { x: endPos.x - Radius, y: endPos.y + startEndLength + Radius }
         const p4 = { x: endPos.x, y: endPos.y + startEndLength }
-        return [pathL(p1), pathA(p2, 'C', '2'), pathL(p3), pathA(p4, 'A', '4'), pathL(endPos)]
+        return [dL(p1), dA(p2, 'C', '2'), dL(p3), dA(p4, 'A', '4'), dL(endPos)]
       }
       // SCurveHorizontal 2/4 bottomright to topleft
       case "D EC4 D EA2 D": {
@@ -191,7 +191,7 @@ function makePathFromSegment(startPos: Position, endPos: Position, parts: readon
         const p2 = { x: startPos.x - Radius, y: startPos.y + startEndLength + Radius }
         const p3 = { x: endPos.x + Radius, y: endPos.y - startEndLength - Radius }
         const p4 = { x: endPos.x, y: endPos.y - startEndLength }
-        return [pathL(p1), pathA(p2, 'C', '4'), pathL(p3), pathA(p4, 'A', '2'), pathL(endPos)]
+        return [dL(p1), dA(p2, 'C', '4'), dL(p3), dA(p4, 'A', '2'), dL(endPos)]
       }
       // SCurveHorizontal 3/4 bottomleft to topright
       case "D EA3 D EC1 D": {
@@ -201,7 +201,7 @@ function makePathFromSegment(startPos: Position, endPos: Position, parts: readon
         const p2 = { x: startPos.x + Radius, y: startPos.y + startEndLength + Radius }
         const p3 = { x: endPos.x - Radius, y: endPos.y - startEndLength - Radius }
         const p4 = { x: endPos.x, y: endPos.y - startEndLength }
-        return [pathL(p1), pathA(p2, 'A', '3'), pathL(p3), pathA(p4, 'C', '1'), pathL(endPos)]
+        return [dL(p1), dA(p2, 'A', '3'), dL(p3), dA(p4, 'C', '1'), dL(endPos)]
       }
       // SCurveHorizontal 4/4 topright to bottomleft
       // here
@@ -212,7 +212,7 @@ function makePathFromSegment(startPos: Position, endPos: Position, parts: readon
         const p2 = { x: startPos.x - Radius, y: startPos.y - startEndLength - Radius }
         const p3 = { x: endPos.x + Radius, y: endPos.y + startEndLength + Radius }
         const p4 = { x: endPos.x, y: endPos.y + startEndLength }
-        return [pathL(p1), pathA(p2, 'A', '1'), pathL(p3), pathA(p4, 'C', '3'), pathL(endPos)]
+        return [dL(p1), dA(p2, 'A', '1'), dL(p3), dA(p4, 'C', '3'), dL(endPos)]
       }
       // SCurveVertical 1/4 bottomright to topleft
       case "D EA2 D EC4 D": {
@@ -222,7 +222,7 @@ function makePathFromSegment(startPos: Position, endPos: Position, parts: readon
         const p2 = { x: startPos.x - startEndLength - Radius, y: startPos.y + Radius }
         const p3 = { x: endPos.x + startEndLength + Radius, y: endPos.y - Radius }
         const p4 = { x: endPos.x + startEndLength, y: endPos.y }
-        return [pathL(p1), pathA(p2, 'A', '2'), pathL(p3), pathA(p4, 'C', '4'), pathL(endPos)]
+        return [dL(p1), dA(p2, 'A', '2'), dL(p3), dA(p4, 'C', '4'), dL(endPos)]
       }
       // SCurveVertical 2/4 topleft to bottomright
       case "D EA4 D EC2 D": {
@@ -232,7 +232,7 @@ function makePathFromSegment(startPos: Position, endPos: Position, parts: readon
         const p2 = { x: startPos.x + startEndLength + Radius, y: startPos.y - Radius }
         const p3 = { x: endPos.x - startEndLength - Radius, y: endPos.y + Radius }
         const p4 = { x: endPos.x - startEndLength, y: endPos.y }
-        return [pathL(p1), pathA(p2, 'A', '4'), pathL(p3), pathA(p4, 'C', '2'), pathL(endPos)]
+        return [dL(p1), dA(p2, 'A', '4'), dL(p3), dA(p4, 'C', '2'), dL(endPos)]
       }
       // SCurveVertical 3/4 topright to bottomleft
       case "D EC3 D EA1 D": {
@@ -242,7 +242,7 @@ function makePathFromSegment(startPos: Position, endPos: Position, parts: readon
         const p2 = { x: startPos.x - startEndLength - Radius, y: startPos.y - Radius }
         const p3 = { x: endPos.x + startEndLength + Radius, y: endPos.y + Radius }
         const p4 = { x: endPos.x + startEndLength, y: endPos.y }
-        return [pathL(p1), pathA(p2, 'C', '3'), pathL(p3), pathA(p4, 'A', '1'), pathL(endPos)]
+        return [dL(p1), dA(p2, 'C', '3'), dL(p3), dA(p4, 'A', '1'), dL(endPos)]
       }
       // SCurveVertical 4/4 bottomleft to topright
       case "D EC1 D EA3 D": {
@@ -252,7 +252,7 @@ function makePathFromSegment(startPos: Position, endPos: Position, parts: readon
         const p2 = { x: startPos.x + startEndLength + Radius, y: startPos.y + Radius }
         const p3 = { x: endPos.x - startEndLength - Radius, y: endPos.y - Radius }
         const p4 = { x: endPos.x - startEndLength, y: endPos.y }
-        return [pathL(p1), pathA(p2, 'C', '1'), pathL(p3), pathA(p4, 'A', '3'), pathL(endPos)]
+        return [dL(p1), dA(p2, 'C', '1'), dL(p3), dA(p4, 'A', '3'), dL(endPos)]
       }
 
       default: {
@@ -264,12 +264,12 @@ function makePathFromSegment(startPos: Position, endPos: Position, parts: readon
   return [startCommand, ...nextCommands].join(' ')
 }
 
-function pathL(to: Position) {
+function dL(to: Position) {
   return `L ${to.x} ${to.y}`
 }
 
 // https://developer.mozilla.org/ko/docs/Web/SVG/Tutorial/Paths#arcs
-function pathA(to: Position, direction: CurveDirection, quardrant: Quadrant) {
+function dA(to: Position, direction: CurveDirection, quardrant: Quadrant) {
   switch (direction) {
     case 'A':
       return `A ${Radius} ${Radius} 0 0 0 ${to.x} ${to.y}`
@@ -282,4 +282,4 @@ function getBaseLength(length: number, quarterRoundLength: number, middleLength:
   return (length - (2 * quarterRoundLength) - middleLength - deepDiff) / 2
 }
 
-export { makePathFromSegment }
+export { makeDFromSegment }
