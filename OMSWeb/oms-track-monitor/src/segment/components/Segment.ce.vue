@@ -11,6 +11,7 @@ const props = defineProps<{
 }>()
 
 const hrefId = readonly(computed(() => getSegmentPathId(props.segment.id)))
+const color = readonly(computed(() => props.segment.disabled ? 'purple' : 'grey'))
 
 </script>
 
@@ -18,9 +19,9 @@ const hrefId = readonly(computed(() => getSegmentPathId(props.segment.id)))
   <svg ref="selfElement" class="overflow-visible cursor-pointer">
     <use
       :href="`#${getSegmentPathId(props.segment.id)}`"
-      :stroke="props.segment.disabled ? 'purple' : 'grey'"
+      :stroke="color"
       :stroke-width="DefaultStrokeWidth"
     />
-    <SegmentDirection :segmentPathId="hrefId" />
+    <SegmentDirection :segmentPathId="hrefId" :color="color" />
   </svg>
 </template>

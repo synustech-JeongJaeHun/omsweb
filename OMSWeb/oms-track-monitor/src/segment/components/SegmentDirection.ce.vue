@@ -11,6 +11,7 @@ const
 
 const props = defineProps<{
   segmentPathId: string
+  color: string
 }>()
 
 const shadowRoot = inject<Ref<ShadowRoot>>('shadowRoot')
@@ -36,5 +37,5 @@ const arrowHeadPathD = computed(() => {
 </script>
 
 <template>
-  <path :d="arrowHeadPathD" fill="grey" stroke="grey" />
+  <path :d="arrowHeadPathD" :fill="color" :stroke="color" />
 </template>
