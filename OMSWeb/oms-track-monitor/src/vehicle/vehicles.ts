@@ -63,6 +63,7 @@ function findVehicleById(id: number) { return vehicles.value.find(v => v.id === 
  *    - is connected X moving in 2 segment 
  */
 function updateExistVehicle(vehicle: Vehicle, updateData: IVehicle) {
+  console.log("before", vehicle)
   const updateType: UpdateType = (function () {
     const isInitialize = vehicle.lastUpdated === undefined
     const isConnected = (vehicle.curPoint === updateData.curPoint
@@ -81,6 +82,8 @@ function updateExistVehicle(vehicle: Vehicle, updateData: IVehicle) {
   Object.assign(vehicle, updateData)
   vehicle.updateType = updateType
   vehicle.lastUpdated = Date.now()
+
+  console.log("after", vehicle)
 }
 
 export { vehicles, findVehicleById, updateExistVehicle } 

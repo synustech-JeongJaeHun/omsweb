@@ -4,7 +4,7 @@ import RasterizedText from '../../map/components/RasterizedText.ce.vue';
 import { findPointById } from '../../point/points';
 import { reactive, ref, watch } from 'vue';
 import { findSegmentByPoints } from '../../segment/segments';
-import { encodeSVGPath, SVGPathData } from 'svg-pathdata'
+import { SVGPathData } from 'svg-pathdata'
 import { getPositionFromD } from '../../utils/path';
 import { Segment } from '../../segment/types/Segment';
 import { SVGCommand } from 'svg-pathdata/lib/types';
@@ -73,6 +73,8 @@ watch(() => props.vehicle.lastUpdated, () => {
         return currentPositionPath
     }
   })()
+
+  console.log("ANIMATION", props.vehicle.updateType, "\nPATH", path)
 
   animateMotionPath.value = path
   animateMotionRef.value?.beginElement()
