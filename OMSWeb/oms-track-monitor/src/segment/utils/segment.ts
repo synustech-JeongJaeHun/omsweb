@@ -28,8 +28,13 @@ function makeSegmentsFromParts(parts: ISegmentPart[]): Segment[] {
 
         // @ts-ignore
         parts: sortedParts,
-        // @ts-ignore
-        d: makeD(sample.startPoint, sample.endPoint, sortedParts, sample.length)
+        pathCommands: makeD(
+          sample.startPoint,
+          sample.endPoint,
+          // @ts-ignore
+          sortedParts,
+          sample.length
+        )
       })
     }
   })

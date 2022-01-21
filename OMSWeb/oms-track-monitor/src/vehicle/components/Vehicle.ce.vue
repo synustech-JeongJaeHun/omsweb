@@ -4,11 +4,10 @@ import RasterizedText from '../../map/components/RasterizedText.ce.vue';
 import { findPointById } from '../../point/points';
 import { reactive, ref, watch } from 'vue';
 import { findSegmentByPoints } from '../../segment/segments';
-import { SVGPathData } from 'svg-pathdata'
-import { getPositionFromD } from '../../utils/path';
+import { getPositionFromD } from '../../utils/svg/path';
 import { Segment } from '../../segment/types/Segment';
-import { SVGCommand } from 'svg-pathdata/lib/types';
 import { sliceDFromSVGCommands } from '../utils/move';
+import { encodeCommandsToD } from '../../utils/svg/pathSegment';
 
 const props = defineProps<{
   vehicle: Vehicle
@@ -29,7 +28,7 @@ watch(() => props.vehicle.lastUpdated, () => {
   const segment = findSegmentByPoints(props.vehicle.curPoint, props.vehicle.nextPoint)
   const { x, y } =
     segment
-      ? getPositionFromD(segment.d, props.vehicle.distancePoint)
+      ? getPositionFromD(encodeCommandsToD(segment.pathCommands), props.vehicle.distancePoint)
       : findPointById(props.vehicle.curPoint) ?? { x: 0, y: 0 }
 
   // current => before
@@ -52,18 +51,17 @@ watch(() => props.vehicle.lastUpdated, () => {
           if (segment === undefined)
             return currentPositionPath;
 
-          const { commands } = new SVGPathData(segment.d)
-          return sliceDFromSVGCommands(commands, beforePosition, currentPosition)
+          return sliceDFromSVGCommands(segment.pathCommands, beforePosition, currentPosition)
         }
       case "AnimationIn2Segments":
         {
           if (segment === undefined || beforeSegment.value === undefined)
             return currentPositionPath;
 
-          const { commands: beforeSegmentCommands } = new SVGPathData(beforeSegment.value.d)
-          const { commands: currentSegmentCommands } = new SVGPathData(segment.d)
+          const beforeSegmentCommands = beforeSegment.value.pathCommands
+          const currentSegmentCommands = segment.pathCommands
 
-          const concatenatedCommands: SVGCommand[] = [
+          const concatenatedCommands = [
             ...beforeSegmentCommands,
             ...currentSegmentCommands.slice(1)
           ]

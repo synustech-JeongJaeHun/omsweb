@@ -1,4 +1,4 @@
-import { D } from "../../types/D";
+import { PathCommand } from "../../utils/svg/pathSegment";
 import { SegmentPart } from "./SegmentPart";
 
 type Segment = {
@@ -15,7 +15,7 @@ type Segment = {
 
   parts: SegmentPart[]
 
-  d: D
+  pathCommands: PathCommand[]
 }
 
 export { Segment }

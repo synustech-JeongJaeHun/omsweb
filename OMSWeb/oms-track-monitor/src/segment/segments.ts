@@ -39,11 +39,4 @@ function makeD(startPointId: number, endPointId: number, parts: SegmentPart[], l
   return makeDFromSegment(startPoint, endPoint, parts, length)
 }
 
-// function useD(segment: Ref<Segment>) {
-//   const startPointPosition = usePointPoisiton(computed(() => segment.value.startPoint))
-//   const nextPointPosition = usePointPoisiton(computed(() => segment.value.endPoint))
-//   const path = computed(() => makePathFromSegment(startPointPosition.value, nextPointPosition.value, segment.value.parts, segment.value.length))
-//   return readonly(path)
-// }
-
 export { segments, findSegmentByPoints, makeD } 

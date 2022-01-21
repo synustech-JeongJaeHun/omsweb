@@ -22,7 +22,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "svg-pathdata": "^6.0.3",
     "vue": "^3.2.25"
   },
   "devDependencies": {
