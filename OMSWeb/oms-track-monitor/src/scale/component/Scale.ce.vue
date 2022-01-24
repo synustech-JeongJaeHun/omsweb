@@ -2,7 +2,7 @@
 import { computed, readonly } from 'vue';
 import { cameraInfo } from '../../map/camera';
 import { Units } from '../Units';
-import { getHumanReadableLength } from '../util/si';
+import { getHumanReadableLength } from '../utils/si';
 
 const
   LineMaxLength = 100

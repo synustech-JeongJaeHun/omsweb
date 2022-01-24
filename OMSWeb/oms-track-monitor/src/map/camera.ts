@@ -6,6 +6,9 @@ const
   DefaultWidth = 1000,
   DefaultHeight = 1000,
   CornerMargin = 1000,
+  MiminumViewBoxCornerLength = 100
+
+const
   ZoomLevel3 = 7500,
   ZoomLevel2 = 35000,
   ZoomLevel1 = 70000,
@@ -38,7 +41,7 @@ const cameraInfo = readonly(computed(() => ({
 })))
 
 function resizeViewBox(widthOrHeight: "width" | "height", value: number) {
-  if (value < 0) return
+  if (value < MiminumViewBoxCornerLength) return
   const
     width = widthOrHeight === 'width' ? value : value * cameraInfo.value.ratio,
     height = widthOrHeight === 'height' ? value : value / cameraInfo.value.ratio
