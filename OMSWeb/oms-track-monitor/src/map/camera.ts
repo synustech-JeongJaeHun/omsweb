@@ -41,14 +41,6 @@ const cameraInfo = readonly(computed(() => ({
 })))
 
 function resizeViewBox(widthOrHeight: "width" | "height", value: number) {
-  // ZoomIn Validation
-  if (value < MiminumViewBoxCornerLength) return
-
-  // ZoomOut Validation
-  if (cameraInfo.value.viewBoxWidth > mapSizePropertiesInfo.value.width * 2
-    && cameraInfo.value.viewBoxHeight > mapSizePropertiesInfo.value.width * 2
-  ) return
-
   // go!
   const
     width = widthOrHeight === 'width' ? value : value * cameraInfo.value.ratio,
@@ -67,7 +59,6 @@ function resizeElement(width: number, height: number) {
   resizeViewBox('width', cameraInfo.value.viewBoxWidth)
 }
 
-
 function moveCamera(center: Position) {
   const
     halfWidth = cameraInfo.value.viewBoxWidth / 2,
@@ -80,18 +71,21 @@ function moveCamera(center: Position) {
   const isHorizontalMoveBeyondCorner =
     screenMinX > mapSizePropertiesInfo.value.maxX + CornerMargin
     || screenMaxX < mapSizePropertiesInfo.value.minX - CornerMargin
+  const isCameraGoingCenterX =
+    Math.abs(mapSizePropertiesInfo.value.centerX - center.x) < Math.abs(mapSizePropertiesInfo.value.centerX - cameraInfo.value.centerX)
 
   const isVerticalMoveBeyondCorner =
     screenMinY > mapSizePropertiesInfo.value.maxY + CornerMargin
     || screenMaxY < mapSizePropertiesInfo.value.minY - CornerMargin
+  const isCameraGoingCenterY =
+    Math.abs(mapSizePropertiesInfo.value.centerY - center.y) < Math.abs(mapSizePropertiesInfo.value.centerY - cameraInfo.value.centerY)
 
-  if (isHorizontalMoveBeyondCorner === false)
+  if (isHorizontalMoveBeyondCorner === false || isCameraGoingCenterX)
     camera.x = center.x - halfWidth
 
-  if (isVerticalMoveBeyondCorner === false)
+  if (isVerticalMoveBeyondCorner === false || isCameraGoingCenterY)
     camera.y = center.y - halfHeight
 }
-
 
 function initCamera() {
   moveCamera({ x: mapSizePropertiesInfo.value.centerX, y: mapSizePropertiesInfo.value.centerY })
@@ -100,10 +94,19 @@ function initCamera() {
 
 function zoom(action: "In" | "Out", position: Position) {
   // TODO using position
-  if (action === 'In')
-    resizeViewBox('width', cameraInfo.value.viewBoxWidth * 0.8)
-  else
+  if (action === 'In') {
+    const width = cameraInfo.value.viewBoxWidth * 0.8
+    // ZoomIn Validation
+    if (width > MiminumViewBoxCornerLength) resizeViewBox('width', width)
+  }
+  else {
+    // ZoomOut Validation
+    if (cameraInfo.value.viewBoxWidth > mapSizePropertiesInfo.value.width * 2
+      && cameraInfo.value.viewBoxHeight > mapSizePropertiesInfo.value.width * 2
+    ) return
+
     resizeViewBox('width', cameraInfo.value.viewBoxWidth * 1.2)
+  }
 }
 function pan(movementX: number, movementY: number) {
   moveCamera({
