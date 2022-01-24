@@ -68,7 +68,7 @@ watch(() => props.vehicle.lastUpdated, () => {
   <svg class="overflow-visible cursor-pointer">
     <use href="#vehicle">
       <RasterizedText y="70" :text="props.vehicle.logicalId" />
-      <animateMotion ref="animateMotionRef" fill="freeze" dur="1s" :path="animateMotionPath" />
+      <animateMotion ref="animateMotionRef" fill="freeze" dur="0.3s" :path="animateMotionPath" />
     </use>
   </svg>
 </template>

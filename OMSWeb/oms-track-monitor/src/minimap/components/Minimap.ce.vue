@@ -3,7 +3,7 @@ import { segments } from '../../segment/segments';
 import { mapSizePropertiesInfo } from '../../map/mapSizeProperties';
 import CameraBox from './CameraBox.ce.vue';
 import { computed, reactive, readonly, ref, watch } from 'vue';
-import { cameraInfo, moveCamera } from '../../map/camera';
+import { cameraInfo, moveCamera, zoom } from '../../map/camera';
 import SegmentOnlyStroke from './SegmentOnlyStroke.ce.vue';
 
 const
@@ -30,6 +30,10 @@ watch([minimapSvgElement, cameraInfo], () => {
   minimapDomRect.maxY = rect.y + rect.height
 })
 
+function zoomInOut(event: WheelEvent | MouseEvent) {
+  const action = (event instanceof WheelEvent) && (event.deltaY > 0) ? 'Out' : 'In'
+  zoom(action, { x: event.clientX, y: event.clientY })
+}
 
 const isPanning = ref(false)
 function enterPanning() {
@@ -62,6 +66,7 @@ function onPanning(event: MouseEvent) {
       backgroundColor: 'white',
       border: '2px solid black'
     }"
+    @wheel="zoomInOut($event)"
     @mousedown="enterPanning(), onPanning($event)"
     @mousemove="isPanning && onPanning($event)"
     @mouseup="exitPanning()"

@@ -41,7 +41,15 @@ const cameraInfo = readonly(computed(() => ({
 })))
 
 function resizeViewBox(widthOrHeight: "width" | "height", value: number) {
+  // ZoomIn Validation
   if (value < MiminumViewBoxCornerLength) return
+
+  // ZoomOut Validation
+  if (cameraInfo.value.viewBoxWidth > mapSizePropertiesInfo.value.width * 2
+    && cameraInfo.value.viewBoxHeight > mapSizePropertiesInfo.value.width * 2
+  ) return
+
+  // go!
   const
     width = widthOrHeight === 'width' ? value : value * cameraInfo.value.ratio,
     height = widthOrHeight === 'height' ? value : value / cameraInfo.value.ratio
@@ -90,17 +98,12 @@ function initCamera() {
   resizeViewBox('width', mapSizePropertiesInfo.value.width / 2)
 }
 
-function zoomIn(position: Position) {
+function zoom(action: "In" | "Out", position: Position) {
   // TODO using position
-  resizeViewBox('width', cameraInfo.value.viewBoxWidth * 0.8)
-}
-function zoomOut(position: Position) {
-  // TODO using position
-  if (cameraInfo.value.viewBoxWidth > mapSizePropertiesInfo.value.width * 2
-    && cameraInfo.value.viewBoxHeight > mapSizePropertiesInfo.value.width * 2
-  ) return
-
-  resizeViewBox('width', cameraInfo.value.viewBoxWidth * 1.2)
+  if (action === 'In')
+    resizeViewBox('width', cameraInfo.value.viewBoxWidth * 0.8)
+  else
+    resizeViewBox('width', cameraInfo.value.viewBoxWidth * 1.2)
 }
 function pan(movementX: number, movementY: number) {
   moveCamera({
@@ -109,4 +112,4 @@ function pan(movementX: number, movementY: number) {
   })
 }
 
-export { cameraInfo, initCamera, resizeViewBox, resizeElement, zoomOut, zoomIn, pan, moveCamera }
+export { cameraInfo, initCamera, resizeElement, zoom, pan, moveCamera }

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { pan, zoomIn, zoomOut } from '../camera';
+import { pan, zoom } from '../camera';
 
 import GridLayer from './GridLayer.ce.vue';
 import PointLayer from '../../point/components/PointLayer.ce.vue';
@@ -42,9 +42,8 @@ function rotateTo(event: MouseEvent) { }
 // scrollToForward: deltaY < 0 
 // scrollToBackward: deltaY > 0
 function zoomInOut(event: WheelEvent | MouseEvent) {
-  const action = (event instanceof WheelEvent) && (event.deltaY > 0) ? zoomOut : zoomIn
-  // action(event.clientX, event.clientY)
-  action({ x: event.clientX, y: event.clientY })
+  const action = (event instanceof WheelEvent) && (event.deltaY > 0) ? 'Out' : 'In'
+  zoom(action, { x: event.clientX, y: event.clientY })
 }
 
 function onLeftClick(event: MouseEvent) {
@@ -66,13 +65,13 @@ function onRightClick(event: MouseEvent) {
     :viewBox="`0 0 ${cameraInfo.elementWidth} ${cameraInfo.elementHeight}`"
     :data-is-panning="isPanning"
     @wheel="zoomInOut($event)"
+    @dblclick="zoomInOut($event)"
     @mousedown.left="enterPanning()"
     @mousedown.right="enterRotating()"
     @mousemove="isPanning && panTo($event), isRotating && rotateTo($event)"
     @mouseleave="exitPanning(), exitRotating()"
     @mouseup="exitPanning(), exitRotating()"
     @click="onLeftClick($event)"
-    @dblclick="zoomInOut($event)"
     @contextmenu.prevent="onRightClick($event)"
   >
     <GridLayer />
