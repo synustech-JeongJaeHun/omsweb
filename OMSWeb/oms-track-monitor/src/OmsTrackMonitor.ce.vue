@@ -24,6 +24,7 @@ import { cameraInfo, initCamera, resizeElement } from './map/camera'
 import { segments } from './segment/segments'
 import { makeSegmentsFromParts } from './segment/utils/segment'
 import { parseNumberProp } from './utils/props'
+import Scale from './scale/component/Scale.ce.vue'
 
 const props = defineProps<{
   width?: number | string,
@@ -126,10 +127,8 @@ defineExpose(exposedProxy)
         height: `${cameraInfo.elementHeight}px`,
       }"
     />
-    <Minimap class="absolute" :style="{
-      bottom: '2vw',
-      left: '2vw',
-    }" />
+    <Minimap class="absolute" style="bottom: 2vw; left: 2vw;" />
+    <Scale class="absolute" style="bottom: 10px; right: 10px;" />
   </div>
 </template>
 
