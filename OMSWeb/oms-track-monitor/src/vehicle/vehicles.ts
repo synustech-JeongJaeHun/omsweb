@@ -1,4 +1,4 @@
-import { Ref, ref } from "vue";
+import { ref } from "vue";
 import { IVehicle } from "../legacies/models/track.model";
 import { UpdateType, Vehicle } from './types/Vehicle'
 
@@ -62,28 +62,29 @@ function findVehicleById(id: number) { return vehicles.value.find(v => v.id === 
  * 3. animation in 2 segment
  *    - is connected X moving in 2 segment 
  */
+function getUpdateType(vehicle: Vehicle, updateData: IVehicle): UpdateType {
+  if (isInitialize(vehicle) || isNotConnected(vehicle, updateData) || isNoDiff(vehicle, updateData))
+    return 'NoAnimation'
+  else if (isDiffInSameSegment(vehicle, updateData))
+    return 'AnimationIn1Segment'
+  else
+    return 'AnimationIn2Segments'
+}
+function isInitialize(vehicle: Vehicle) { return vehicle.lastUpdated === undefined }
+function isNotConnected(vehicle: Vehicle, updateData: IVehicle) { return (vehicle.curPoint === updateData.curPoint || vehicle.nextPoint === updateData.curPoint) === false }
+function isNoDiff(vehicle: Vehicle, updateData: IVehicle) { return vehicle.curPoint === updateData.curPoint && vehicle.distancePoint === updateData.distancePoint }
+function isDiffInSameSegment(vehicle: Vehicle, updateData: IVehicle) {
+  return vehicle.curPoint === updateData.curPoint
+    || (vehicle.nextPoint === updateData.curPoint
+      && (updateData.curPoint === updateData.nextPoint || updateData.distancePoint === 0))
+}
+
 function updateExistVehicle(vehicle: Vehicle, updateData: IVehicle) {
-  console.log("before", vehicle)
-  const updateType: UpdateType = (function () {
-    const isInitialize = vehicle.lastUpdated === undefined
-    const isConnected = (vehicle.curPoint === updateData.curPoint
-      || vehicle.nextPoint === updateData.curPoint)
-    if (isInitialize || isConnected === false) return 'NoAnimation'
-
-    const isNoDiff = (vehicle.curPoint === updateData.curPoint
-      && vehicle.distancePoint === updateData.distancePoint)
-    if (isNoDiff) return "NoAnimation"
-
-    const isDiffInSameSegment = (vehicle.curPoint === updateData.curPoint)
-    if (isDiffInSameSegment) return 'AnimationIn1Segment'
-    else return 'AnimationIn2Segments'
-  })()
+  const updateType = getUpdateType(vehicle, updateData)
 
   Object.assign(vehicle, updateData)
   vehicle.updateType = updateType
   vehicle.lastUpdated = Date.now()
-
-  console.log("after", vehicle)
 }
 
 export { vehicles, findVehicleById, updateExistVehicle } 

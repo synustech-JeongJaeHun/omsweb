@@ -6,8 +6,7 @@ import { reactive, ref, watch } from 'vue';
 import { findSegmentByPoints } from '../../segment/segments';
 import { getPositionFromD } from '../../utils/svg/path';
 import { Segment } from '../../segment/types/Segment';
-import { sliceDFromSVGCommands } from '../utils/move';
-import { encodeCommandsToD } from '../../utils/svg/pathSegment';
+import { encodeCommandsToD, moveTo, slicePathCommands } from '../../utils/svg/pathSegment';
 
 const props = defineProps<{
   vehicle: Vehicle
@@ -17,8 +16,8 @@ const
   currentPosition = reactive({ x: 0, y: 0 }),
   currentSegment = ref<Segment>()
 const
-  beforePosition = reactive(currentPosition),
-  beforeSegment = ref(currentSegment.value)
+  beforePosition = reactive({ x: 0, y: 0 }),
+  beforeSegment = ref<Segment>()
 
 const
   animateMotionRef = ref<SVGAnimateMotionElement>(),
@@ -39,42 +38,27 @@ watch(() => props.vehicle.lastUpdated, () => {
   // v => current
   currentPosition.x = x
   currentPosition.y = y
-  currentSegment.value = segment
+  currentSegment.value = segment ?? currentSegment.value
 
-  const path = (function () {
-    const currentPositionPath = `M ${x} ${y}`
-    switch (props.vehicle.updateType) {
-      case "NoAnimation":
-        return currentPositionPath
-      case "AnimationIn1Segment":
-        {
-          if (segment === undefined)
-            return currentPositionPath;
-
-          return sliceDFromSVGCommands(segment.pathCommands, beforePosition, currentPosition)
-        }
-      case "AnimationIn2Segments":
-        {
-          if (segment === undefined || beforeSegment.value === undefined)
-            return currentPositionPath;
-
-          const beforeSegmentCommands = beforeSegment.value.pathCommands
-          const currentSegmentCommands = segment.pathCommands
-
-          const concatenatedCommands = [
-            ...beforeSegmentCommands,
-            ...currentSegmentCommands.slice(1)
-          ]
-          return sliceDFromSVGCommands(concatenatedCommands, beforePosition, currentPosition)
-        }
-      default:
-        return currentPositionPath
+  const pathCommands = (function () {
+    if (props.vehicle.updateType === 'AnimationIn2Segments' && currentSegment.value && beforeSegment.value) {
+      const concatenatedCommands = [
+        ...beforeSegment.value.pathCommands,
+        ...currentSegment.value.pathCommands.slice(1)
+      ]
+      return slicePathCommands(concatenatedCommands, beforePosition, currentPosition)
     }
+
+    if (props.vehicle.updateType === 'AnimationIn1Segment' && beforeSegment.value)
+      return slicePathCommands(beforeSegment.value.pathCommands, beforePosition, currentPosition)
+
+    const currentPositionPathCommands = [moveTo(currentPosition)]
+    if (props.vehicle.updateType === 'NoAnimation')
+      return currentPositionPathCommands
+    return currentPositionPathCommands
   })()
 
-  console.log("ANIMATION", props.vehicle.updateType, "\nPATH", path)
-
-  animateMotionPath.value = path
+  animateMotionPath.value = encodeCommandsToD(pathCommands)
   animateMotionRef.value?.beginElement()
 })
 

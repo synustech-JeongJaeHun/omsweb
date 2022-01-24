@@ -9,6 +9,9 @@ function getUnitVector(vector: Vector2) {
     y: vector.y / magnitude
   }
 }
+function getNegativeVector(vector: Vector2) {
+  return { x: (-1) * vector.x, y: (-1) * vector.y }
+}
 
 function multipleVector(vector: Vector2, multiple: number) {
   return {
@@ -35,4 +38,4 @@ function getOrthogonalVector(vector: Vector2, directon: "clockwise" | "countercl
     }
   }
 }
-export { ZeroVector, getUnitVector, multipleVector, addVectors, getOrthogonalVector }
+export { ZeroVector, getUnitVector, getNegativeVector, multipleVector, addVectors, getOrthogonalVector }

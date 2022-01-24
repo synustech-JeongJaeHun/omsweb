@@ -38,7 +38,7 @@ function makeFsProxy(fsObject: any) {
     // @ts-ignore
     fsProxied[method] = new Proxy(fsObject[method], {
       apply: function (target: Function, thisArg, argumentsList) {
-        console.group(
+        console.groupCollapsed(
           `%cEXPOSED PROXY => ${target.name
           } | ${new Date().toLocaleTimeString()}`,
           'font-weight: bold; color: aqua;'
