@@ -159,7 +159,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     this.dialogSvc
       .confirm({ body: this.$t.instant('messages.confirmZcuChange') })
       .subscribe((confirm) => {
-        confirm &&
+        if (confirm) {
           this.messageSvc
             .sendSettingZcuCommand({
               type: "ZCU",
@@ -168,8 +168,28 @@ export class MapViewerComponent implements OnInit, OnDestroy {
               zcuUsingType: value === 1 ? "hw" : "sw",
             })
             .subscribe();
+        } else {
+          this.contextData.usingType = value === 1 ? 2 : 1
+        }
       });
   }
+  onResetHWZcu() {
+    this.dialogSvc
+      .confirm({ body: this.$t.instant('reset zcu?') })
+      .subscribe((confirm) => {
+        if (confirm) {
+          this.messageSvc
+          // .sendSettingZcuCommand({
+          //   type: "ZCU",
+          //   action: "zcu-setting",
+          //   zcuIds: [this.contextData.id],
+          //   zcuUsingType: value === 1 ? "hw" : "sw",
+          // })
+          // .subscribe();
+        }
+      });
+  }
+
   onRemoveCarrier() {
     this.dialogSvc
       .confirm({ body: this.$t.instant('messages.confirmBufferChange') })

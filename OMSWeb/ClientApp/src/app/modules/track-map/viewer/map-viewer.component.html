@@ -153,15 +153,20 @@
       </mat-card-title>
     </mat-card-header>
     <mat-card-content class="context-form">
+      <button mat-raised-button [disabled]="contextData.usingType === 2" (click)="onResetHWZcu()">{{"names.reset" |
+        translate
+        }}</button>
       <mat-button-toggle-group #zcuTypeSelect="matButtonToggleGroup" class="form-row-start" name="type"
-        aria-label="Type" [value]="contextData.usingType">
-        <mat-button-toggle [value]="1">{{ "names.hw" | translate }}</mat-button-toggle>
-        <mat-button-toggle [value]="2">{{ "names.sw" | translate }}</mat-button-toggle>
+        aria-label="Type" (change)="onApplyZcuChange($event.value)" [(value)]="contextData.usingType">
+        <mat-button-toggle [value]="1">{{
+          "names.hw" |
+          translate }}
+        </mat-button-toggle>
+        <mat-button-toggle [value]="2">{{
+          "names.sw" |
+          translate }}
+        </mat-button-toggle>
       </mat-button-toggle-group>
-
-      <button mat-stroked-button class="dense accent" color="primary" (click)="onApplyZcuChange(zcuTypeSelect.value)">
-        {{ "names.apply" | translate }}
-      </button>
     </mat-card-content>
   </mat-card>
 </ng-template>
