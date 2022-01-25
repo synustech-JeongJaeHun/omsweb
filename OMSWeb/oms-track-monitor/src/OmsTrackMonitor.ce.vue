@@ -23,13 +23,20 @@ import { initMapSizeProperties } from './map/mapSizeProperties'
 import { cameraInfo, initCamera, resizeElement } from './map/camera'
 import { segments } from './segment/segments'
 import { makeSegmentsFromParts } from './segment/utils/segment'
-import { parseNumberProp } from './utils/props'
+import { parseNumberProp, parseBooleanProp } from './utils/props'
 import Scale from './scale/component/Scale.ce.vue'
 
 const props = defineProps<{
-  width?: number | string,
-  height?: number | string,
+  width: number | string | undefined,
+  height: number | string | undefined,
+  isClusterShowing: boolean | string | undefined,
 }>()
+// watching props for unstable props delivery
+watch(props, (props) => {
+  const width = parseNumberProp(0, props.width)
+  const height = parseNumberProp(0, props.height)
+  resizeElement(width, height)
+})
 
 const emit = defineEmits<{
   (e: 'backdrop', value: {}): void
@@ -54,11 +61,7 @@ provide('shadowRoot', shadowRoot)
 // Provide End
 
 // Watch Start
-watch(props, (props) => {
-  const width = parseNumberProp(0, props.width)
-  const height = parseNumberProp(0, props.height)
-  resizeElement(width, height)
-})
+
 // Watch End
 
 const exposed: IOmsTrackMonitor = {
@@ -126,6 +129,7 @@ defineExpose(exposedProxy)
         width: `${cameraInfo.elementWidth}px`,
         height: `${cameraInfo.elementHeight}px`,
       }"
+      :isClusterShowing="parseBooleanProp(false, props.isClusterShowing)"
     />
     <Minimap class="absolute" style="bottom: 2vw; left: 2vw;" />
     <Scale class="absolute" style="bottom: 10px; right: 10px;" />

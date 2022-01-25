@@ -12,6 +12,10 @@ import VehicleLayer from '../../vehicle/components/VehicleLayer.ce.vue';
 import SegmentLayer from '../../segment/components/SegmentLayer.ce.vue';
 import { cameraInfo } from '../camera'
 
+const props = defineProps<{
+  isClusterShowing: boolean,
+}>()
+
 const emit = defineEmits<{
   (event: 'backdrop'): void
 }>()
@@ -64,6 +68,7 @@ function onRightClick(event: MouseEvent) {
     :height="cameraInfo.elementHeight"
     :viewBox="`0 0 ${cameraInfo.elementWidth} ${cameraInfo.elementHeight}`"
     :data-is-panning="isPanning"
+    :data-is-cluster-showing="props.isClusterShowing"
     @wheel="zoomInOut($event)"
     @dblclick="zoomInOut($event)"
     @mousedown.left="enterPanning()"
@@ -75,8 +80,6 @@ function onRightClick(event: MouseEvent) {
     @contextmenu.prevent="onRightClick($event)"
   >
     <GridLayer />
-    <!-- group -->
-    <!-- cluster -->
     <SegmentLayer />
     <PointLayer />
     <BufferLayer />

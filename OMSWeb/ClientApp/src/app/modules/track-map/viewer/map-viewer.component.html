@@ -1,5 +1,5 @@
 <div id="track-container" class="track-container">
   <oms-track-monitor id="track-canvas" [width]="omsTrackMonitorSize.width" [height]="omsTrackMonitorSize.height"
-    (backdrop)="doWhat($event)">
+    [isClusterShowing]="true" (backdrop)="doWhat($event)">
   </oms-track-monitor>
 </div>

@@ -5,6 +5,7 @@ type Cluster = {
   logicalId: string
   maxVehicles: number
   points?: string
+  segments: number[]
 }
 
 export { Cluster }
