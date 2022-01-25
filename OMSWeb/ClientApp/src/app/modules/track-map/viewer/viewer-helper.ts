@@ -10035,6 +10035,23 @@ export class ViewController {
           .attr('stroke', dom_css.color_zcu)
           .attr('stroke-width', dom_css.line_weight);
 
+        this.zcus_svg.each((d) => {
+          let d3_this = d3.select(`#id_${d.id}.zcu`);
+
+          const type =
+            d.usingType === 0 ? "X"
+              : d.usingType === 1 ? "HW"
+                : d.usingType === 2 ? "SW"
+                  : ""
+          d3_this
+            .select('text')
+            .attr('class', 'usingType')
+            .attr('font-size', 10)
+            .attr('x', (-2) * dom_css.text_offset)
+            .attr('y', (-1) * dom_css.height / 8 * 5)
+            .text(function () { return type })
+        })
+
 
         this.zcus_svg.attr('transform', (d) => {
           return `translate(${current_zoom.apply([
@@ -10163,7 +10180,7 @@ export class ViewController {
         // Add detail ===============================================//
         if (zoom_level < this.option.selective_lvl_display.zcu_det) {
           this.zcus_svg
-            .selectAll('.label, .port_foup, .port_foup_label')
+            .selectAll('.label, .port_foup, .port_foup_label, .usingType')
             .remove();
         }
       }
@@ -10913,6 +10930,20 @@ export class ViewController {
           .attr('stroke', dom_css.color_zcu)
           .attr('stroke-width', dom_css.line_weight)
           .attr('level', `level${zoom_level}`);
+
+        const type =
+          layout_object.usingType === 0 ? "X"
+            : layout_object.usingType === 1 ? "HW"
+              : layout_object.usingType === 2 ? "SW"
+                : ""
+
+        dom_object_group
+          .append('text')
+          .attr('class', 'usingType')
+          .attr('font-size', 10)
+          .attr('x', (-2) * dom_css.text_offset)
+          .attr('y', (-1) * dom_css.height / 8 * 5)
+          .text(function () { return type })
 
         if (overlap_adjustment) {
           dom_object_group
