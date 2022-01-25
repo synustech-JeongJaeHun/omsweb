@@ -359,6 +359,10 @@ export class MapViewerComponent implements OnInit, OnDestroy {
       this.hubSvc.groupChanged$
         .pipe(takeUntil(this.destroy$))
         .subscribe((e) => this.applyGroupChange(e));
+
+      this.hubSvc.zcuChanged$
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((e) => this.applyZcuChange(e));
     }
   }
 
@@ -598,6 +602,12 @@ export class MapViewerComponent implements OnInit, OnDestroy {
         false
       );
     }
+  }
+  private applyZcuChange({ data }: IDataChangeEvent) {
+    if (!this.viewer) return;
+    const updated = this.dataSvc.getChangedZcus(data);
+    this.viewer.update_zcus(updated, false, false);
+    this.updateSelectedObject('ZCU', updated, true);
   }
   private applyClusterChange({ data }: IDataChangeEvent) {
     if (!this.viewer) return;

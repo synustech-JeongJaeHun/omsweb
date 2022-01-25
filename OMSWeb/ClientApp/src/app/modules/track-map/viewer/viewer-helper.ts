@@ -741,6 +741,27 @@ export class ViewController {
       is_apply_revert
     );
   }
+  update_zcus(update_list, is_apply_history, is_apply_revert) {
+    let update_objects = [];
+    // Find updated zcu
+    for (let i = 0; i < update_list.length; i++) {
+      if (update_list[i].status === 'UPDATE') {
+        let zcu = update_list[i].object;
+
+        // Update zcu
+        if (zcu !== null) {
+          // Update object
+          update_objects.push(zcu);
+        }
+      }
+    }
+
+    this.update_layout_object(
+      update_objects,
+      is_apply_history,
+      is_apply_revert
+    )
+  }
   update_stations(update_list, is_apply_history, is_apply_revert) {
     let update_objects = [];
     // Find updated station
