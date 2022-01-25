@@ -15,10 +15,10 @@ interface IBuffer {
 }
 interface ICluster {
   id: number
-  color?: string
+  color: string
   logicalId: string
   maxVehicles: number
-  points?: string
+  segments: number[]
 }
 interface IGroup {
   id: number

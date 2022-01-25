@@ -52,6 +52,17 @@ namespace OMSWeb.Repositories
         ) AS NEW_DATA
         GROUP BY id, logical_id, max_vehicles, color
       "},
+       {"clusterSegments", @"
+        SELECT id, logical_id, max_vehicles, string_agg(segment_id::TEXT, ', ' ORDER BY segment_id) AS segments, color
+        FROM (
+            SELECT CT.id, CT.logical_id, CT.max_vehicles, CS.segment_id AS segment_id, CT.color
+            FROM clusters AS CT
+            INNER JOIN cluster_segments AS CS
+              ON CT.id = CS.cluster_id
+              --*user_id_condition*--WHERE CT.user_id = @userId
+        ) AS NEW_DATA
+        GROUP BY id, logical_id, max_vehicles, color
+      "},
       {"station", @"
         SELECT id AS id, physical_id AS physical_id, logical_id AS logical_id, point AS point_id,
           direction AS direction, carrier_type AS carrier_type, next_point, ""offset"" AS offset

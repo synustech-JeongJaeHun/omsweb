@@ -1,11 +1,13 @@
+import { PathCommand } from "../../utils/svg/pathSegment"
+import { ClusterColor } from "./ClusterColor"
+
 type Cluster = {
-  // TODO test this in cluster existing map
   id: number
-  color?: string
+  color: keyof typeof ClusterColor
   logicalId: string
   maxVehicles: number
-  points?: string
   segments: number[]
+  pathCommands: PathCommand[]
 }
 
 export { Cluster }

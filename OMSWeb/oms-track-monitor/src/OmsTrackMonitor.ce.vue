@@ -25,6 +25,7 @@ import { segments } from './segment/segments'
 import { makeSegmentsFromParts } from './segment/utils/segment'
 import { parseNumberProp, parseBooleanProp } from './utils/props'
 import Scale from './scale/component/Scale.ce.vue'
+import { makeClustersFromSegments } from './cluster/utils/cluster'
 
 const props = defineProps<{
   width: number | string | undefined,
@@ -78,15 +79,16 @@ const exposed: IOmsTrackMonitor = {
     // point must be initialized first.
     points.value = t.points ?? []
     buffers.value = t.buffers ?? []
-    clusters.value = t.clusters ?? []
     groups.value = t.groups ?? []
     mtls.value = t.mtls ?? []
     segments.value = makeSegmentsFromParts(t.segmentParts ?? [])
+    clusters.value = makeClustersFromSegments(t.clusters ?? [], segments.value)
     stations.value = t.stations ?? []
     zcus.value = t.zcus ?? []
     vehicles.value = t.vehicles ?? []
     segmentDisableds.value = t.segmentDisabled ?? []
   },
+
 
   updateVehicle: function (op, v) {
     const vehicle = findVehicleById(v.id)
@@ -107,8 +109,12 @@ const exposed: IOmsTrackMonitor = {
   },
   updateSegment: function (op, v) { }
 }
-const exposedProxy = makeFsProxy(exposed)
-defineExpose(exposedProxy)
+// # in devmode
+// const exposedProxy = makeFsProxy(exposed)
+// defineExpose(exposedProxy)
+
+// # production
+defineExpose(exposed)
 
 </script>
 

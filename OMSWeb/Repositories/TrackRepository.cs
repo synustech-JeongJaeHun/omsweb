@@ -317,7 +317,8 @@ namespace OMSWeb.Repositories
             if (data == null)
             {
                 var models = new List<Cluster>();
-                string sql = QueryFactory.GetSql("cluster");
+                //string sql = QueryFactory.GetSql("cluster");
+                string sql = QueryFactory.GetSql("clusterSegments");
                 using (var conn = ConnectTrack())
                 {
                     using (var cmd = new NpgsqlCommand(sql, conn))
@@ -333,7 +334,7 @@ namespace OMSWeb.Repositories
                                     LogicalId = dr["logical_id"].ToString(),
                                     MaxVehicles = dr["max_vehicles"].TryInteger(),
                                     Color = dr["color"].ToString(),
-                                    Points = dr["points"].ToString(),
+                                    Segments = dr["segments"].ToString(),
                                 }
                                );
                             }

@@ -6,6 +6,6 @@ namespace OMSWeb.Models.Tracks
     public string LogicalId { get; set; }
     public int MaxVehicles { get; set; }
     public string Color { get; set; }
-    public string Points { get; set; }
+    public string Segments { get; set; }
   }
 }
