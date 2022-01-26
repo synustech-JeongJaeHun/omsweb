@@ -2,11 +2,12 @@
 import { Vehicle } from '../types/Vehicle'
 import RasterizedText from '../../map/components/RasterizedText.ce.vue';
 import { findPointById } from '../../point/points';
-import { reactive, ref, watch } from 'vue';
+import { reactive, ref, toRef, watch } from 'vue';
 import { findSegmentByPoints } from '../../segment/segments';
 import { getPositionFromD } from '../../utils/svg/path';
 import { Segment } from '../../segment/types/Segment';
 import { encodeCommandsToD, moveTo, slicePathCommands } from '../../utils/svg/pathSegment';
+import { useGroupColor } from '../../group/groups';
 
 const props = defineProps<{
   vehicle: Vehicle
@@ -62,13 +63,17 @@ watch(() => props.vehicle.lastUpdated, () => {
   animateMotionRef.value?.beginElement()
 })
 
+const groupColor = useGroupColor('vehicle', toRef(props.vehicle, 'id'))
+
 </script>
 
 <template>
-  <svg class="overflow-visible cursor-pointer">
-    <use href="#vehicle">
-      <RasterizedText y="70" :text="props.vehicle.logicalId" />
-      <animateMotion ref="animateMotionRef" fill="freeze" dur="0.3s" :path="animateMotionPath" />
-    </use>
-  </svg>
+  <symbol class="overflow-visible cursor-pointer" :id="`vehicle-${props.vehicle.id}`">
+    <circle v-show="groupColor" class="group-shadow" r="120" :fill="groupColor" />
+    <circle r="80" fill="none" stroke="red" stroke-width="20" />
+    <RasterizedText class="invert" y="100" :text="props.vehicle.logicalId" />
+  </symbol>
+  <use :href="`#vehicle-${props.vehicle.id}`">
+    <animateMotion ref="animateMotionRef" fill="freeze" dur="0.3s" :path="animateMotionPath" />
+  </use>
 </template>

@@ -7,10 +7,6 @@ import { vehicles } from '../vehicles'
 
 <template>
   <Layer>
-    <defs>
-      <circle id="vehicle" r="80" fill="none" stroke="red" stroke-width="80"></circle>
-    </defs>
-
     <Vehicle v-for="vehicle of vehicles" :key="vehicle.id" :vehicle="vehicle" />
   </Layer>
 </template>
