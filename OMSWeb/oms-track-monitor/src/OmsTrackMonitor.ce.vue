@@ -26,11 +26,13 @@ import { makeSegmentsFromParts } from './segment/utils/segment'
 import { parseNumberProp, parseBooleanProp } from './utils/props'
 import Scale from './scale/component/Scale.ce.vue'
 import { makeClustersFromSegments } from './cluster/utils/cluster'
+import { makeGroups } from './group/utils/group'
 
 const props = defineProps<{
   width: number | string | undefined,
   height: number | string | undefined,
   isClusterShowing: boolean | string | undefined,
+  isGroupShowing: boolean | string | undefined,
 }>()
 // watching props for unstable props delivery
 watch(props, (props) => {
@@ -79,7 +81,6 @@ const exposed: IOmsTrackMonitor = {
     // point must be initialized first.
     points.value = t.points ?? []
     buffers.value = t.buffers ?? []
-    groups.value = t.groups ?? []
     mtls.value = t.mtls ?? []
     segments.value = makeSegmentsFromParts(t.segmentParts ?? [])
     clusters.value = makeClustersFromSegments(t.clusters ?? [], segments.value)
@@ -87,6 +88,7 @@ const exposed: IOmsTrackMonitor = {
     zcus.value = t.zcus ?? []
     vehicles.value = t.vehicles ?? []
     segmentDisableds.value = t.segmentDisabled ?? []
+    groups.value = makeGroups(t.groups ?? [])
   },
 
 
@@ -110,11 +112,11 @@ const exposed: IOmsTrackMonitor = {
   updateSegment: function (op, v) { }
 }
 // # in devmode
-// const exposedProxy = makeFsProxy(exposed)
-// defineExpose(exposedProxy)
+const exposedProxy = makeFsProxy(exposed)
+defineExpose(exposedProxy)
 
 // # production
-defineExpose(exposed)
+// defineExpose(exposed)
 
 </script>
 
@@ -136,6 +138,7 @@ defineExpose(exposed)
         height: `${cameraInfo.elementHeight}px`,
       }"
       :isClusterShowing="parseBooleanProp(false, props.isClusterShowing)"
+      :isGroupShowing="parseBooleanProp(false, props.isGroupShowing)"
     />
     <Minimap class="absolute" style="bottom: 2vw; left: 2vw;" />
     <Scale class="absolute" style="bottom: 10px; right: 10px;" />
@@ -149,6 +152,7 @@ defineExpose(exposed)
 <style src="./styles/zoom.css"></style>
 <style src="./styles/pan.css"></style>
 <style src="./styles/invert.css"></style>
+<style src="./styles/group.css"></style>
 
 <!-- Plan B -->
 <!-- https://stackoverflow.com/questions/69797635/how-do-i-create-a-vue-3-custom-element-including-child-component-styles -->

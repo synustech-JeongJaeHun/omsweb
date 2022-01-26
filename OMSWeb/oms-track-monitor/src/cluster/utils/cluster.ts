@@ -1,6 +1,6 @@
 import { Segment } from "../../segment/types/Segment";
 import { Cluster } from "../types/Cluster";
-import { ClusterColor } from "../types/ClusterColor";
+import { Color } from "../../types/Color";
 
 type ClusterWithOutPathCommands = {
   id: number
@@ -13,7 +13,7 @@ function makeClustersFromSegments(clusters: ClusterWithOutPathCommands[], segmen
   return clusters.map(cluster =>
   ({
     ...cluster,
-    color: cluster.color as keyof typeof ClusterColor,
+    color: cluster.color as keyof typeof Color,
     pathCommands: cluster.segments.flatMap((id) => segments.find(s => s.id === id)?.pathCommands ?? []),
   }))
 }

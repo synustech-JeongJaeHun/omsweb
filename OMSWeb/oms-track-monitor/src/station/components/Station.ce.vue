@@ -1,16 +1,17 @@
 <script setup lang="ts">
-import { computed, readonly } from 'vue';
+import { computed, readonly, toRef } from 'vue';
 import { usePointPoisiton } from '../../point/points';
 import { addVectors, getUnitVector, multipleVector } from '../../utils/vector';
 import { Station } from '../types/Station'
 import RasterizedText from '../../map/components/RasterizedText.ce.vue';
+import { useGroupColor } from '../../group/groups';
 
 const props = defineProps<{
   station: Station
 }>()
 
-const startPointPosition = usePointPoisiton(computed(() => props.station.pointId))
-const nextPointPosition = usePointPoisiton(computed(() => props.station.nextPoint))
+const startPointPosition = usePointPoisiton(toRef(props.station, 'pointId'))
+const nextPointPosition = usePointPoisiton(toRef(props.station, 'nextPoint'))
 
 const position = readonly(computed(() => {
   if (startPointPosition.value === undefined || nextPointPosition.value === undefined)
@@ -25,6 +26,8 @@ const position = readonly(computed(() => {
   return addVectors({ x: startPointPosition.value.x, y: startPointPosition.value.y }, offsetVector)
 }))
 
+const groupColor = useGroupColor('station', toRef(props.station, 'id'))
+
 function eventPropagationTest() {
   alert(`STATION CLICKED ${props.station.logicalId}`)
 }
@@ -32,7 +35,8 @@ function eventPropagationTest() {
 
 <template>
   <svg class="overflow-visible cursor-pointer" :x="position.x" :y="position.y">
+    <use v-show="groupColor" href="#station-group-shadow" class="group-shadow" :fill="groupColor" />
     <use href="#station" @click="eventPropagationTest()" />
-    <RasterizedText y="70" :text="props.station.logicalId" />
+    <RasterizedText class="invert" y="70" :text="props.station.logicalId" />
   </svg>
 </template>

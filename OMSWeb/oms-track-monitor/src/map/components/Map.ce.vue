@@ -15,6 +15,7 @@ import { cameraInfo } from '../camera'
 
 const props = defineProps<{
   isClusterShowing: boolean,
+  isGroupShowing: boolean,
 }>()
 
 const emit = defineEmits<{
@@ -69,6 +70,7 @@ function onRightClick(event: MouseEvent) {
     :height="cameraInfo.elementHeight"
     :viewBox="`0 0 ${cameraInfo.elementWidth} ${cameraInfo.elementHeight}`"
     :data-is-panning="isPanning"
+    :data-is-group-showing="props.isGroupShowing"
     @wheel="zoomInOut($event)"
     @dblclick="zoomInOut($event)"
     @mousedown.left="enterPanning()"

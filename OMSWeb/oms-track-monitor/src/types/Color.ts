@@ -1,4 +1,4 @@
-enum ClusterColor {
+enum Color {
   color1 = "#36382e",
   color2 = "#735f3d",
   color3 = "#960200",
@@ -25,4 +25,4 @@ enum ClusterColor {
   color24 = "#5c1a1b",
 }
 
-export { ClusterColor }
+export { Color }

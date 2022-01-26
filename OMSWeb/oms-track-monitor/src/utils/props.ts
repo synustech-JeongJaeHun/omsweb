@@ -10,8 +10,6 @@ function parseNumberProp(defaultValue: number, n: number | string | undefined) {
 }
 
 function parseBooleanProp(defaultValue: boolean, n: boolean | string | undefined) {
-  console.log('boolean', typeof n, n)
-
   switch (typeof n) {
     case "boolean":
       return n

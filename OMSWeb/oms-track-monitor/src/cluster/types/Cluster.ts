@@ -1,9 +1,9 @@
 import { PathCommand } from "../../utils/svg/pathSegment"
-import { ClusterColor } from "./ClusterColor"
+import { Color } from "../../types/Color"
 
 type Cluster = {
   id: number
-  color: keyof typeof ClusterColor
+  color: keyof typeof Color
   logicalId: string
   maxVehicles: number
   segments: number[]

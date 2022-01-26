@@ -163,4 +163,4 @@ interface ITrackData extends IFixedTrackData, IVariableTrackData {
   minimumSegmentLength?: number
 }
 
-export { ITrackData, IVehicle, ISegmentPart }
+export { ITrackData, IVehicle, ISegmentPart, IGroup }

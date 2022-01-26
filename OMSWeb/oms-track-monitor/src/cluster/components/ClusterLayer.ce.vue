@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Layer from '../../map/components/Layer.ce.vue';
-import { ClusterColor } from '../types/ClusterColor';
+import { Color } from '../../types/Color';
 import { encodeCommandsToD } from '../../utils/svg/pathSegment';
 
 import { clusters } from '../clusters'
@@ -14,7 +14,7 @@ import { clusters } from '../clusters'
       :key="cluster.id"
       class="cluster"
       fill="none"
-      :stroke="ClusterColor[cluster.color]"
+      :stroke="Color[cluster.color]"
       stroke-width="100"
       :d="encodeCommandsToD(cluster.pathCommands)"
     />

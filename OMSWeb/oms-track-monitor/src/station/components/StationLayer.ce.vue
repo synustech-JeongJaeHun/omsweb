@@ -19,6 +19,7 @@ import { stations } from '../stations'
         stroke-width="10"
         fill="none"
       />
+      <rect id="station-group-shadow" x="-60" y="-60" width="120" height="120" />
     </defs>
 
     <Station v-for="station of stations" :key="station.id" :station="station" />
