@@ -15,20 +15,24 @@ namespace OMSWeb.Repositories
     public IQueryable<OrderHistoryEntity> QueryOrders()
     {
       var sql = @"
-    SELECT id, origin, history_source_id, logical_id, 
+    SELECT OD.id, OD.origin, OD.history_source_id, OD.logical_id, 
     CASE
-      WHEN time_failed IS NOT NULL THEN 'FAILED'
-      WHEN time_aborted IS NOT NULL THEN 'ABORTED'
-      WHEN time_completed IS NOT NULL THEN 'COMPLETED'
-      WHEN time_unload_completed IS NOT NULL THEN 'UNLOADED'
-      WHEN time_unload_started IS NOT NULL THEN 'UNLOADING'
-      WHEN time_load_completed IS NOT NULL THEN 'LOADED'
-      WHEN time_load_started IS NOT NULL THEN 'LOADING'
-      WHEN time_vehicle_arrived IS NOT NULL THEN 'ARRIVED'
-      WHEN time_assigned IS NOT NULL THEN 'ASSIGNED'
-      WHEN time_assigned IS NULL THEN 'UNASSIGNED'
+      WHEN OD.time_failed IS NOT NULL THEN 'FAILED'
+      WHEN OD.time_aborted IS NOT NULL THEN 'ABORTED'
+      WHEN OD.time_completed IS NOT NULL THEN 'COMPLETED'
+      WHEN OD.time_unload_completed IS NOT NULL THEN 'UNLOADED'
+      WHEN OD.time_unload_started IS NOT NULL THEN 'UNLOADING'
+      WHEN OD.time_load_completed IS NOT NULL THEN 'LOADED'
+      WHEN OD.time_load_started IS NOT NULL THEN 'LOADING'
+      WHEN OD.time_vehicle_arrived IS NOT NULL THEN 'ARRIVED'
+      WHEN OD.time_assigned IS NOT NULL THEN 'ASSIGNED'
+      WHEN OD.time_assigned IS NULL THEN 'UNASSIGNED'
     END AS state,
-    location_pickup, location_dropoff, location_move, priority, vehicle_id, carrier_label, time_created, time_assigned, time_vehicle_arrived, time_load_started, time_load_completed, time_unload_started, time_unload_completed, time_completed, time_aborted, time_failed, distance_pickup, distance_deliver AS distance_dropoff, distance_move, assignment_type, assignment_details
+    OD.location_pickup, OD.location_dropoff, OD.location_move, OD.priority, 
+    VR.logical_id As vehicle_id, 
+    OD.carrier_label, OD.time_created, OD.time_assigned, OD.time_vehicle_arrived, OD.time_load_started, OD.time_load_completed, 
+    OD.time_unload_started, OD.time_unload_completed, OD.time_completed, OD.time_aborted, OD.time_failed, 
+    OD.distance_pickup, OD.distance_deliver AS distance_dropoff, OD.distance_move, OD.assignment_type, OD.assignment_details
     FROM order_history AS OD
     INNER JOIN (
         SELECT history_source_id AS order_id, max(history_change_time) AS last_updated
@@ -36,6 +40,8 @@ namespace OMSWeb.Repositories
         GROUP BY history_source_id
     ) AS LAST_OD
     ON OD.history_source_id = LAST_OD.order_id AND OD.history_change_time = LAST_OD.last_updated
+    LEFT OUTER JOIN vehicle_reg AS VR
+        ON OD.vehicle_id = VR.id
       ";
       IQueryable<OrderHistoryEntity> result;
       using (var conn = ConnectTrack())
@@ -75,12 +81,18 @@ namespace OMSWeb.Repositories
     public IQueryable<AlarmHistory> QueryAlarms()
     {
       var sql = @"
-    SELECT VA.id, VA.time, 
+    SELECT VA.id, VA.time, VA.error_code, VA.vehicle_id, VR.logical_id AS vehicle_logical_id,
+    VA.time_resolved, 
     CASE WHEN VA.time_resolved IS NULL THEN  extract('epoch' from now()-VA.time) ELSE  extract('epoch' from VA.time_resolved-VA.time) END AS age,
-    VE.level, VA.vehicle_id, VA.error_code, VE.description, VE.action, VA.time_resolved
+    VE.level, VE.cause, VE.description, VE.action, AN.annotation AS note, 
+    CASE WHEN VA.time_resolved IS NULL THEN  false ELSE true END AS cleared, VA.current
     FROM vehicle_alarms AS VA
+    LEFT OUTER JOIN vehicle_reg VR
+        ON VA.vehicle_id = VR.id
     LEFT OUTER JOIN vehicle_errors VE
-    ON VA.error_code = VE.id
+        ON VA.error_code = VE.id
+    LEFT OUTER JOIN annotations AN
+        ON VA.error_code = AN.reference_id and AN.reference_table = 'vehicle_errors'
     ORDER BY VA.id desc
       ";
       IQueryable<AlarmHistory> result;

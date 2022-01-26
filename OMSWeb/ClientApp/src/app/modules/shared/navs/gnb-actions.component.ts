@@ -43,6 +43,14 @@ export class GnbActionsComponent implements OnInit, OnDestroy {
   get activeAi(): boolean {
     return this._activeAi;
   }
+  get aiParamTitle(): string {
+    return this.t$.instant(`names.ai`) + ' ' + this.t$.instant(`names.mode`);
+  }
+  get aiParamText(): string[] {
+    if (this.activeAi)
+      return [this.t$.instant(`names.aiOn`), this.t$.instant('names.aiOff')];
+    return [this.t$.instant(`names.aiOff`), this.t$.instant('names.aiOn')];
+  }
   get roleName(): string {
     if (this.user.roles.length === 0) return '#';
     const role = this._roles.find((r) => r.id == this.user.roles[0]);
@@ -109,19 +117,20 @@ export class GnbActionsComponent implements OnInit, OnDestroy {
     });
   }
   onChangeAI() {
-    //if (!AccountUtil.hasPermission(3, this.auth.currentUser)) return;
     if (!AccountUtil.hasPermission(PermissionEnums.AiMode, this.auth.currentUser)) return;
-    const transParam = { name: 'AI Mode' };
-    this.dialogSvc
-      .confirm({
-        title: this.t$.instant('names.changeConfirm', transParam),
-        body: this.t$.instant('messages.changeConfirm', transParam),
-      })
-      .subscribe((ok) => {
-        if (ok) {
-          this.messageSvc.sendAIModeCommand({ action: 'ai_mode', mode: 'change' }).subscribe();
-        }
-      });
+    this.dialogSvc.confirm(this.getConfirmMessage(this.aiParamTitle, this.aiParamText)).subscribe((ok) => {
+      if (ok) {
+        this.messageSvc.sendAIModeCommand({ action: 'ai_mode', mode: 'change' }).subscribe();
+      }
+    });
+  }
+
+  private getConfirmMessage(displayName: string, param: string[]) {
+    const transParam = { name: displayName, from: param[0], to: param[1] };
+    return {
+      title: this.t$.instant('names.changeConfirm', transParam),
+      body: this.t$.instant('messages.changeStateConfirm', transParam),
+    };
   }
 
   private updateState() {
@@ -144,6 +153,6 @@ export class GnbActionsComponent implements OnInit, OnDestroy {
     else if (lang == 'en')
       this.currentLanguage = "English";//this.t$.translations[lang].names.english;
     else if (lang == 'zh')
-      this.currentLanguage = "中国人";//this.t$.translations[lang].names.chinese;
+      this.currentLanguage = "中文";//this.t$.translations[lang].names.chinese;
   }
 }

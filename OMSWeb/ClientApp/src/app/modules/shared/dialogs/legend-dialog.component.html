@@ -209,6 +209,44 @@
               {{ "names.preventPush" | translate }}
             </div>
           </div>
+
+          <!-- Disconnected -->
+          <div class="legend-item">
+            <div class="legend-icon">
+              <svg>
+                <g class="vehicle" transform="translate(50,30)">
+                  <circle class="outline" r="8" cx="0" cy="0" fill="transparent" stroke="rgb(65, 65, 65)"
+                    stroke-width="5"></circle>
+                  <circle class="vehicle_circle" r="8" cx="0" cy="0" fill="transparent" stroke="rgb(95, 95, 95)"
+                    stroke-width="3"></circle>
+                  <path fill='red'
+                    d="m 18.483923,1.1062116 -3.582286,3.5822843 0.603991,0.6039908 2.145206,-2.174364 V 7.4335265 L 18.483923,8.266616 M 11.723401,2.5641182 11.194389,3.0931296 13.843615,5.7423544 10.153028,9.437106 h 7.385338 l 0.83309,0.83309 0.529012,-0.529011 M 14.455935,6.3546749 16.705276,8.604017 h -4.469524" />
+                </g>
+              </svg>
+            </div>
+            <div class="legend-caption">
+              {{ "names.disconnected" | translate }}
+            </div>
+          </div>
+
+          <!-- Maintenance -->
+          <div class="legend-item">
+            <div class="legend-icon">
+              <svg>
+                <g class="vehicle" transform="translate(50,30)">
+                  <circle class="outline" r="8" cx="0" cy="0" fill="transparent" stroke="rgb(65, 65, 65)"
+                    stroke-width="5"></circle>
+                  <circle class="vehicle_circle" r="8" cx="0" cy="0" fill="transparent" stroke="rgb(95, 95, 95)"
+                    stroke-width="3"></circle>
+                  <path style="fill: var(--highlight-select-color)"
+                    d="M 21.910031,9.9058058 18.623202,4.6532395 C 19.293898,3.6712949 19.350918,2.3504581 18.66466,1.2537685 17.942279,0.09935804 16.57789,-0.41234238 15.333009,-0.15544309 L 16.886124,2.3265374 15.15451,3.4101062 13.554472,0.91732788 C 12.732217,1.9137925 12.642794,3.3753866 13.365173,4.5297964 c 0.686257,1.0966925 1.899089,1.622908 3.075449,1.449048 l 3.286829,5.2525656 c 0.144476,0.230878 0.425994,0.295685 0.656874,0.151212 L 21.7119,10.551886 c 0.277801,-0.133677 0.353407,-0.462113 0.198124,-0.6460751 z" />
+                </g>
+              </svg>
+            </div>
+            <div class="legend-caption">
+              {{ "names.maintenance" | translate }}
+            </div>
+          </div>
         </dd>
 
         <dt>{{ "names.cargoState" | translate }}</dt>

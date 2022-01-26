@@ -31,6 +31,8 @@ namespace OMSWeb.Models.Entities
     public string CargoTransferResult { get; set; }
     public int? OrderId { get; set; }
     public bool RailIn { get; set; }
+    public bool IsMaint { get; set; }
+    public bool isConnected { get; set; }
     public int? GroupId { get; set; }
   }
 

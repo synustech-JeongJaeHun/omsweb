@@ -37,7 +37,24 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
   get tscModeText(): string {
     return this.t$.instant(`enums.tscMode.${this.systemStates?.tscMode}`);
   }
-
+  get hostParamTitle(): string {
+    if (this.isActiveHostMode)
+      return this.t$.instant(`names.host`);
+    return this.t$.instant(`names.local`);
+  }
+  get hostParamText(): string[] {
+    if (this.isActiveHostMode)
+      return [this.t$.instant(`names.host`), this.t$.instant('names.local')];
+    return [this.t$.instant(`names.local`), this.t$.instant('names.host')];
+  }
+  get tscParamTitle(): string {
+    return this.t$.instant(`names.tsc`);
+  }
+  get tscParamText(): string[] {
+    if (this.isActiveTscMode)
+      return [this.t$.instant(`names.tscAuto`), this.t$.instant('names.tscPause')];
+    return [this.t$.instant(`names.tscPause`), this.t$.instant('names.tscAuto')];
+  }
   get isActiveStatus(): boolean {
     return this.systemStates?.sessionStatus === HostSessionStatusEnums.CONNECTED;
   }
@@ -79,29 +96,27 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
   }
 
   changeHostMode() {
-    //if (!AccountUtil.hasPermission(1, this.auth.currentUser)) return;
     if (!AccountUtil.hasPermission(PermissionEnums.HostMode, this.auth.currentUser)) return;
-    this.dialogSvc.confirm(this.getConfirmMessage('Host')).subscribe((ok) => {
+    this.dialogSvc.confirm(this.getConfirmMessage(this.hostParamTitle, this.hostParamText)).subscribe((ok) => {
       if (ok) {
         this.messageSvc.sendControlStateCommand({ action: 'control_state', state: 'change' }).subscribe();
       }
     });
   }
   changeTscMode() {
-    //if (!AccountUtil.hasPermission(2, this.auth.currentUser)) return;
     if (!AccountUtil.hasPermission(PermissionEnums.TscMode, this.auth.currentUser)) return;
-    this.dialogSvc.confirm(this.getConfirmMessage('TSC')).subscribe((ok) => {
+    this.dialogSvc.confirm(this.getConfirmMessage(this.tscParamTitle, this.tscParamText)).subscribe((ok) => {
       if (ok) {
         this.messageSvc.sendTscStateCommand({ action: 'tsc_state', state: 'change' }).subscribe();
       }
     });
   }
 
-  private getConfirmMessage(displayName: string) {
-    const transParam = { name: displayName };
+  private getConfirmMessage(displayName: string, param: string[]) {
+    const transParam = { name: displayName, from: param[0], to: param[1] };
     return {
       title: this.t$.instant('names.changeConfirm', transParam),
-      body: this.t$.instant('messages.changeConfirm', transParam),
+      body: this.t$.instant('messages.changeStateConfirm', transParam),
     };
   }
 

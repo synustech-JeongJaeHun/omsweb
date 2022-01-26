@@ -741,6 +741,27 @@ export class ViewController {
       is_apply_revert
     );
   }
+  update_zcus(update_list, is_apply_history, is_apply_revert) {
+    let update_objects = [];
+    // Find updated zcu
+    for (let i = 0; i < update_list.length; i++) {
+      if (update_list[i].status === 'UPDATE') {
+        let zcu = update_list[i].object;
+
+        // Update zcu
+        if (zcu !== null) {
+          // Update object
+          update_objects.push(zcu);
+        }
+      }
+    }
+
+    this.update_layout_object(
+      update_objects,
+      is_apply_history,
+      is_apply_revert
+    )
+  }
   update_stations(update_list, is_apply_history, is_apply_revert) {
     let update_objects = [];
     // Find updated station
@@ -6098,7 +6119,6 @@ export class ViewController {
           // If update does not exist, update everything
           if (updated && typeof updated === 'object') {
             update = updated[d.id];
-
             if (!update) return;
             // if the update for vehicle with id does not exist, move to next iteration
             else is_update_all = false; // only update the existing update properties
@@ -6191,6 +6211,16 @@ export class ViewController {
               d.call,
               dom_css,
               this.vehicle_scale
+            );
+          }
+          if (is_update_all || update.isConnected) {
+            this.update_vehicle_disconnected_svg(
+              d3_this, d.isConnected, dom_css
+            );
+          }
+          if (is_update_all || update.isMaint) {
+            this.update_vehicle_maintenance_svg(
+              d3_this, d.isMaint, dom_css
             );
           }
 
@@ -6733,6 +6763,46 @@ export class ViewController {
       }
     } else {
       d3_this.select('.call').remove();
+    }
+  }
+  update_vehicle_disconnected_svg(
+    d3_this: d3.Selection<d3.BaseType, unknown, HTMLElement, any>,
+    isConnected: boolean,
+    dom_css: any
+  ) {
+    if (!isConnected) {
+      if (d3_this.select('.disconnected').nodes().length === 0) {
+        d3_this
+          .append('path')
+          .attr('class', 'disconnected')
+          .attr('d', dom_css.disconnected_path)
+          .attr('fill', function () {
+            return dom_css.disconnected_color;
+          })
+          .attr('transform', `rotate(${-this.map_rotation})`);
+      }
+    } else {
+      d3_this.select('.disconnected').remove();
+    }
+  }
+  update_vehicle_maintenance_svg(
+    d3_this: d3.Selection<d3.BaseType, unknown, HTMLElement, any>,
+    isMaint: boolean,
+    dom_css: any
+  ) {
+    if (isMaint) {
+      if (d3_this.select('.maintenance').nodes().length === 0) {
+        d3_this
+          .append('path')
+          .attr('class', 'maintenance')
+          .attr('d', dom_css.maintenance_path)
+          .attr('fill', function () {
+            return dom_css.maintenance_color;
+          })
+          .attr('transform', `rotate(${-this.map_rotation})`);
+      }
+    } else {
+      d3_this.select('.maintenance').remove();
     }
   }
   update_vehicle_push_svg(
@@ -8544,6 +8614,9 @@ export class ViewController {
         .attr('display', 'block')
         .attr('transform', `rotate(${-this.map_rotation})`);
       this.vehicle_svg
+        .selectAll('.disconnected, .maintenance')
+        .attr('transform', `rotate(${-this.map_rotation})`);
+      this.vehicle_svg
         .selectAll('.label_order')
         .attr(
           'x',
@@ -8588,7 +8661,7 @@ export class ViewController {
           `${LayoutUtil.getVehicleFontSize(this.vehicle_scale.value)}px`
         );
       this.vehicle_svg
-        .selectAll('.label, .label_order, .hotlot')
+        .selectAll('.label, .label_order, .hotlot, .disconnected, .maintenance')
         .attr('transform', `rotate(${-this.map_rotation})`);
       // this.vehicle_svg
       //   .selectAll('.label, .label_order, .hotlot')
@@ -9983,6 +10056,23 @@ export class ViewController {
           .attr('stroke', dom_css.color_zcu)
           .attr('stroke-width', dom_css.line_weight);
 
+        this.zcus_svg.each((d) => {
+          let d3_this = d3.select(`#id_${d.id}.zcu`);
+
+          const type =
+            d.usingType === 0 ? "X"
+              : d.usingType === 1 ? "HW"
+                : d.usingType === 2 ? "SW"
+                  : ""
+          d3_this
+            .select('text')
+            .attr('class', 'usingType')
+            .attr('font-size', 10)
+            .attr('x', (-2) * dom_css.text_offset)
+            .attr('y', (-1) * dom_css.height / 8 * 5)
+            .text(function () { return type })
+        })
+
 
         this.zcus_svg.attr('transform', (d) => {
           return `translate(${current_zoom.apply([
@@ -10111,7 +10201,7 @@ export class ViewController {
         // Add detail ===============================================//
         if (zoom_level < this.option.selective_lvl_display.zcu_det) {
           this.zcus_svg
-            .selectAll('.label, .port_foup, .port_foup_label')
+            .selectAll('.label, .port_foup, .port_foup_label, .usingType')
             .remove();
         }
       }
@@ -10862,6 +10952,20 @@ export class ViewController {
           .attr('stroke-width', dom_css.line_weight)
           .attr('level', `level${zoom_level}`);
 
+        const type =
+          layout_object.usingType === 0 ? "X"
+            : layout_object.usingType === 1 ? "HW"
+              : layout_object.usingType === 2 ? "SW"
+                : ""
+
+        dom_object_group
+          .append('text')
+          .attr('class', 'usingType')
+          .attr('font-size', 10)
+          .attr('x', (-2) * dom_css.text_offset)
+          .attr('y', (-1) * dom_css.height / 8 * 5)
+          .text(function () { return type })
+
         if (overlap_adjustment) {
           dom_object_group
             .append('rect')
@@ -11335,6 +11439,17 @@ export class ViewController {
             else return '';
           })
           .lower();
+      }
+
+      if (layout_object.isMaint) {
+        this.update_vehicle_maintenance_svg(
+          dom_object_group, layout_object.isMaint, dom_css
+        );
+      }
+      if (!layout_object.isConnected) {
+        this.update_vehicle_disconnected_svg(
+          dom_object_group, layout_object.isConnected, dom_css
+        );
       }
 
       dom_object_group

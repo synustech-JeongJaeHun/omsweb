@@ -94,9 +94,11 @@ export const defaultControlTable: ControlTable = {
   "vehicles_id": true,
   "vehicles_physicalId": true,
   "vehicles_logicalId": true,
-  "vehicles_mode": true,
-  "vehicles_canBePushed": true,
+  "vehicles_connection": true,
   "vehicles_railIn": true,
+  "vehicles_mode": true,
+  "vehicles_isMaint": true,
+  "vehicles_canBePushed": true,
   "vehicles_hostOrder": true,
   "vehicles_orderOrigin": true,
   "vehicles_group": true,
@@ -125,6 +127,7 @@ export const defaultControlTable: ControlTable = {
   "stations_carrierType": true,
   "stations_nextPoint": true,
   "stations_offset": true,
+  "stations_unuse": true,
 
   "buffers": true,
   "buffers_id": true,
@@ -134,7 +137,8 @@ export const defaultControlTable: ControlTable = {
   "buffers_point": true,
   "buffers_direction": true,
   "buffers_nextPoint": true,
-  "buffers_offset": true
+  "buffers_offset": true,
+  "buffers_unuse": true
 }
 
 export class ClientPreferences implements IPreferences {

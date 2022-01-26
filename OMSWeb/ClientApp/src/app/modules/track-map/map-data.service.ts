@@ -59,6 +59,16 @@ export class MapDataService {
     this.stale_vehicles = [];
   }
 
+  getChangedZcus(rows: Dto.IZcu[]): any[] {
+    const oldData = this.data.zcus;
+    const newData = this.parser.parseZcus(
+      MapTypes.DB,
+      rows,
+      this.geometry.invertFactorY
+    );
+    return LayoutUtil.get_changes(oldData, newData, []);
+  }
+
   getChangedSegments(rows: Dto.ISegment[]): any[] {
     const oldData = this.data.segments;
     const newData = this.parser.parseSegments(

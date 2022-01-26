@@ -43,10 +43,12 @@ FROM (
       using (var conn = ConnectTrack()) {
 
       var sql = @"
-    SELECT VA.id, VA.time, 
-    extract('epoch' from now()-VA.time) AS age, 
-    VE.level, VA.vehicle_id, VA.error_code, VE.description, VE.action, VA.time_resolved, AN.annotation AS note
+    SELECT VA.id, VA.time, VA.error_code, VA.vehicle_id, VR.logical_id AS vehicle_logical_id, VA.time_resolved,
+    extract('epoch' from now()-VA.time) AS age, VE.level, VE.cause, VE.description, VE.action,  AN.annotation AS note, 
+    CASE WHEN VA.time_resolved IS NULL THEN  false ELSE true END AS cleared, VA.current
     FROM vehicle_alarms AS VA
+    LEFT OUTER JOIN vehicle_reg VR
+        ON VA.vehicle_id = VR.id
     LEFT OUTER JOIN vehicle_errors VE
         ON VA.error_code = VE.id
     LEFT OUTER JOIN annotations AN

@@ -91,6 +91,14 @@ namespace OMSWeb.Repositories
             END As host_order, 
             VH.order_origin, VH.moving_state, VH.cargo_state, VH.is_sensor_stopped, VH.is_blocked, VH.error_list, VH.type, VH.cargo_transfer_result, VH.map_db,
             OD.id AS order_id, OD.logical_id AS order_logical_id, OD.location_pickup, OD.location_dropoff, OD.location_move, OD.priority,
+            VH.is_maint, 
+            CASE 
+                WHEN VH.connection = 0 THEN FALSE
+                WHEN VH.connection = 1 THEN TRUE
+                WHEN VH.connection = 2 THEN TRUE
+                WHEN VH.connection = 3 THEN FALSE
+                WHEN VH.connection IS NULL THEN FALSE
+            ENd AS isConnected, 
             CASE 
             WHEN OD.location_pickup IS NOT NULL AND OD.location_dropoff IS NOT NULL   -- FROM-TO order
             THEN
@@ -118,64 +126,67 @@ namespace OMSWeb.Repositories
       *
       FROM (
         SELECT
-        id, 
-        origin,
-        logical_id, location_pickup, location_dropoff, location_move,
+        OD.id, 
+        OD.origin,
+        OD.logical_id, OD.location_pickup, OD.location_dropoff, OD.location_move,
         CASE
-          WHEN time_failed IS NOT NULL THEN 'FAILED'
-          WHEN time_aborted IS NOT NULL THEN 'ABORTED'
-          WHEN time_completed IS NOT NULL THEN 'COMPLETED'
-          WHEN time_unload_completed IS NOT NULL THEN 'UNLOADED'
-          WHEN time_unload_started IS NOT NULL THEN 'UNLOADING'
-          WHEN time_load_completed IS NOT NULL THEN 'LOADED'
-          WHEN time_load_started IS NOT NULL THEN 'LOADING'
-          WHEN time_vehicle_arrived IS NOT NULL THEN 'ARRIVED'
-          WHEN time_assigned IS NOT NULL THEN 'ASSIGNED'
-          WHEN time_assigned IS NULL THEN 'UNASSIGNED'
+          WHEN OD.time_failed IS NOT NULL THEN 'FAILED'
+          WHEN OD.time_aborted IS NOT NULL THEN 'ABORTED'
+          WHEN OD.time_completed IS NOT NULL THEN 'COMPLETED'
+          WHEN OD.time_unload_completed IS NOT NULL THEN 'UNLOADED'
+          WHEN OD.time_unload_started IS NOT NULL THEN 'UNLOADING'
+          WHEN OD.time_load_completed IS NOT NULL THEN 'LOADED'
+          WHEN OD.time_load_started IS NOT NULL THEN 'LOADING'
+          WHEN OD.time_vehicle_arrived IS NOT NULL THEN 'ARRIVED'
+          WHEN OD.time_assigned IS NOT NULL THEN 'ASSIGNED'
+          WHEN OD.time_assigned IS NULL THEN 'UNASSIGNED'
         END AS state,
-        vehicle_id,
-        priority,
-        carrier_label,
-        time_created,
-        time_assigned,
-        time_completed,
-        time_aborted,
-        time_failed,
+        VR.logical_id As vehicle_id,
+        OD.priority,
+        OD.carrier_label,
+        OD.time_created,
+        OD.time_assigned,
+        OD.time_completed,
+        OD.time_aborted,
+        OD.time_failed,
         EXTRACT(epoch FROM (
             CASE
-            WHEN time_failed IS NOT NULL THEN (time_failed - time_created)
-            WHEN time_aborted IS NOT NULL THEN (time_aborted - time_created)
-            WHEN time_completed IS NOT NULL THEN (time_completed - time_created)
-            ELSE (now() - time_created)
+            WHEN OD.time_failed IS NOT NULL THEN (OD.time_failed - OD.time_created)
+            WHEN OD.time_aborted IS NOT NULL THEN (OD.time_aborted - OD.time_created)
+            WHEN OD.time_completed IS NOT NULL THEN (OD.time_completed - OD.time_created)
+            ELSE (now() - OD.time_created)
             END)) AS duration_total,
-        EXTRACT(epoch FROM (time_assigned - time_created)) AS duration_unassigned,
-        EXTRACT(epoch FROM (time_load_started - time_assigned)) AS duration_pickup,
-        EXTRACT(epoch FROM (time_load_completed - time_load_started)) AS duration_load,
+        EXTRACT(epoch FROM (OD.time_assigned - OD.time_created)) AS duration_unassigned,
+        EXTRACT(epoch FROM (OD.time_load_started - OD.time_assigned)) AS duration_pickup,
+        EXTRACT(epoch FROM (OD.time_load_completed - OD.time_load_started)) AS duration_load,
         EXTRACT(epoch FROM (
             CASE
-            WHEN time_load_completed IS NOT NULL THEN (time_unload_started - time_load_completed)
-            ELSE (time_unload_started - time_assigned)
+            WHEN OD.time_load_completed IS NOT NULL THEN (OD.time_unload_started - OD.time_load_completed)
+            ELSE (OD.time_unload_started - OD.time_assigned)
             END)) AS duration_dropoff,
-        EXTRACT(epoch FROM (time_unload_completed - time_unload_started)) AS duration_unload,
-        EXTRACT(epoch FROM (time_vehicle_arrived - time_assigned)) AS duration_move,
-        distance_pickup AS distance_pickup,
-        distance_deliver AS distance_dropoff,
-        distance_move AS distance_move,
-        assignment_type, assignment_details
-        FROM orders
-        WHERE time_completed IS NULL AND time_aborted IS NULL AND time_failed IS NULL
+        EXTRACT(epoch FROM (OD.time_unload_completed - OD.time_unload_started)) AS duration_unload,
+        EXTRACT(epoch FROM (OD.time_vehicle_arrived - OD.time_assigned)) AS duration_move,
+        OD.distance_pickup AS distance_pickup,
+        OD.distance_deliver AS distance_dropoff,
+        OD.distance_move AS distance_move,
+        OD.assignment_type, 
+        OD.assignment_details
+        FROM orders AS OD
+        LEFT OUTER JOIN vehicle_reg AS VR
+            ON OD.vehicle_id = VR.id
+        WHERE OD.time_completed IS NULL AND OD.time_aborted IS NULL AND OD.time_failed IS NULL
         --*user_id_condition*-- AND user_id = @userId
       ) AS WRAPPED_TABLE
       "},
       {"stationStatus", @"
-        SELECT SS.id, SS.physical_id, SS.logical_id, SS.point, SS.direction, SS.carrier_type, SS.next_point, SS.""offset"", GO.group_id
+        SELECT SS.id, SS.physical_id, SS.logical_id, SS.point, SS.direction, SS.carrier_type, SS.next_point, SS.""offset"", SS.unuse, GO.group_id
         FROM stations AS SS
             LEFT JOIN grouped_objects AS GO
         ON SS.id = GO.reference_id AND GO.reference_table = 'station'
         --*user_id_condition*-- AND user_id = @userId
       "},
       {"bufferStatus", @"
-        SELECT BS.id, BS.physical_id, BS.logical_id, BS.point, BS.direction, BS.next_point, BS.""offset"", GO.group_id
+        SELECT BS.id, BS.physical_id, BS.logical_id, BS.point, BS.direction, BS.next_point, BS.""offset"", BS.unuse, GO.group_id
         FROM buffers AS BS
             LEFT JOIN grouped_objects AS GO
         ON BS.id = GO.reference_id AND GO.reference_table = 'buffer'

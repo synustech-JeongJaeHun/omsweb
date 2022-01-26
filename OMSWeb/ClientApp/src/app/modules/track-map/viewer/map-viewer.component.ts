@@ -115,8 +115,16 @@ export class MapViewerComponent implements OnInit, OnDestroy {
           .pipe(takeUntil(this.destroy$))
           .subscribe((e) => {
             console.log("station update", e)
+          })
 
-          });
+        this.hubSvc.groupChanged$
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((e) => console.log("group update", e));
+
+        this.hubSvc.zcuChanged$
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((e) => console.log("zcu update", e));
+
 
         this.hubSvc.bufferChanged$
           .pipe(takeUntil(this.destroy$))
