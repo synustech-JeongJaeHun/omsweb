@@ -10,6 +10,7 @@ import { buffers } from '../buffers'
   <Layer>
     <defs>
       <circle id="buffer" r="50" stroke="black" stroke-width="10" fill="none" />
+      <circle id="buffer-group-shadow" r="60" />
     </defs>
 
     <Buffer v-for="buffer of buffers" :key="buffer.id" :buffer="buffer" />
