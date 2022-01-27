@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { cameraInfo } from '../camera'
-import { mapSizePropertiesInfo } from '../mapSizeProperties';
+import MapRotate from '../../rotate/components/MapRotate.ce.vue';
 // https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/shape-rendering
 // https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/text-rendering
 // https://developer.mozilla.org/ko/docs/Web/CSS/will-change
@@ -26,10 +26,8 @@ import { mapSizePropertiesInfo } from '../mapSizeProperties';
       rotate(<a> [<x> <y>])
       unit of a is degree, x y are center of rotating
     -->
-    <g
-      :transform="`rotate(${cameraInfo.rotate} ${mapSizePropertiesInfo.centerX} ${mapSizePropertiesInfo.centerY})`"
-    >
+    <MapRotate>
       <slot />
-    </g>
+    </MapRotate>
   </svg>
 </template>

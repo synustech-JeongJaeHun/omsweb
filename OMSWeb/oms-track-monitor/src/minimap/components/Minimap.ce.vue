@@ -5,6 +5,7 @@ import CameraBox from './CameraBox.ce.vue';
 import { computed, reactive, readonly, ref, watch } from 'vue';
 import { cameraInfo, moveCamera, zoom } from '../../map/camera';
 import SegmentOnlyStroke from './SegmentOnlyStroke.ce.vue';
+import MapRotate from '../../rotate/components/MapRotate.ce.vue';
 
 const
   MapMargin = 3000,
@@ -72,11 +73,9 @@ function onPanning(event: MouseEvent) {
     @mouseup="exitPanning()"
     @mouseleave="exitPanning()"
   >
-    <g
-      :transform="`rotate(${cameraInfo.rotate} ${mapSizePropertiesInfo.centerX} ${mapSizePropertiesInfo.centerY})`"
-    >
+    <MapRotate>
       <SegmentOnlyStroke v-for="segment of segments" :key="segment.id" :segment="segment" />
-    </g>
+    </MapRotate>
     <CameraBox />
   </svg>
 </template>
