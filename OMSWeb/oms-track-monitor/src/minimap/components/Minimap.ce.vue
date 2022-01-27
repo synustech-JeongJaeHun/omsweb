@@ -72,7 +72,11 @@ function onPanning(event: MouseEvent) {
     @mouseup="exitPanning()"
     @mouseleave="exitPanning()"
   >
-    <SegmentOnlyStroke v-for="segment of segments" :key="segment.id" :segment="segment" />
+    <g
+      :transform="`rotate(${cameraInfo.rotate} ${mapSizePropertiesInfo.centerX} ${mapSizePropertiesInfo.centerY})`"
+    >
+      <SegmentOnlyStroke v-for="segment of segments" :key="segment.id" :segment="segment" />
+    </g>
     <CameraBox />
   </svg>
 </template>
