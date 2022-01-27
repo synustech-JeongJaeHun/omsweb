@@ -3,6 +3,7 @@ import { Segment } from '../types/Segment'
 import { getSegmentPathId } from '../utils/segment'
 import { computed, readonly } from 'vue';
 import SegmentDirection from './SegmentDirection.ce.vue';
+import { encodeCommandsToD } from '../../utils/svg/pathSegment';
 
 const DefaultStrokeWidth = 20
 
@@ -10,7 +11,6 @@ const props = defineProps<{
   segment: Segment
 }>()
 
-const hrefId = readonly(computed(() => getSegmentPathId(props.segment.id)))
 const color = readonly(computed(() => props.segment.disabled ? 'purple' : 'grey'))
 
 </script>
@@ -22,6 +22,6 @@ const color = readonly(computed(() => props.segment.disabled ? 'purple' : 'grey'
       :stroke="color"
       :stroke-width="DefaultStrokeWidth"
     />
-    <SegmentDirection :segmentPathId="hrefId" :color="color" />
+    <SegmentDirection :d="encodeCommandsToD(props.segment.pathCommands)" :color="color" />
   </svg>
 </template>

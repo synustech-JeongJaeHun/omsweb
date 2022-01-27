@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { computed, inject, Ref } from 'vue'
+import { computed } from 'vue'
+import { D } from '../../types/D';
+import { createPathElement } from '../../utils/svg/path';
 import { addVectors, getOrthogonalVector } from '../../utils/vector';
 
 //   |   h/2
@@ -10,16 +12,12 @@ const
 // width = height
 
 const props = defineProps<{
-  segmentPathId: string
+  d: D
   color: string
 }>()
 
-const shadowRoot = inject<Ref<ShadowRoot>>('shadowRoot')
-
 const arrowHeadPathD = computed(() => {
-  const pathElement = shadowRoot?.value.getElementById(props.segmentPathId) as SVGPathElement | null | undefined
-
-  if (pathElement === undefined || pathElement === null) return ``
+  const pathElement = createPathElement(props.d)
 
   const halfLength = pathElement.getTotalLength() / 2
 

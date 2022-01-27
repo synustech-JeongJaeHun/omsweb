@@ -11,4 +11,4 @@ function getPositionFromD(d: D, distance: number) {
   return pathElement.getPointAtLength(distance)
 }
 
-export { getPositionFromD }
+export { createPathElement, getPositionFromD }

@@ -43,11 +43,11 @@ watch(props, (props) => {
 
 const emit = defineEmits<{
   (e: 'backdrop', value: {}): void
+  (e: 'hover', value: {}): void
 }>()
 
 // State Start
 const container = ref<HTMLDivElement>();
-const shadowRoot = readonly(computed(() => container.value?.getRootNode()))
 
 const viewMode = ref<ViewMode>('PUBLIC')
 const mapType = ref<MapType>('DB');
@@ -60,7 +60,7 @@ const preferences = ref<IPreferences>()
 // State End
 
 // Provide Start
-provide('shadowRoot', shadowRoot)
+provide('emit', emit)
 // Provide End
 
 // Watch Start
