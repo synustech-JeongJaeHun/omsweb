@@ -21,6 +21,7 @@ const camera = reactive({
   viewBoxHeight: DefaultHeight,
   elementWidth: DefaultWidth,
   elementHeight: DefaultHeight,
+  rotate: 0,
 })
 
 const cameraInfo = readonly(computed(() => ({
@@ -115,4 +116,38 @@ function pan(movementX: number, movementY: number) {
   })
 }
 
-export { cameraInfo, initCamera, resizeElement, zoom, pan, moveCamera }
+
+function rotate(degree: number) {
+  camera.rotate = degree
+}
+function rotateByMouse(movementX: number, movementY: number) {
+  const direction = (function () {
+    const
+      absX = Math.abs(movementX),
+      absY = Math.abs(movementY)
+
+    if (absX > absY && movementX > 0)
+      return "Right"
+    if (absX > absY && movementX < 0)
+      return "Left"
+    // if (absY > absX && movementY > 0)
+    //   return "Up"
+    // if (absY > absX && movementY < 0)
+    //   return "Down"
+  })()
+
+  switch (direction) {
+    case "Left":
+      rotate((cameraInfo.value.rotate + 15) % 360)
+      break;
+
+    case "Right":
+      rotate((cameraInfo.value.rotate + 345) % 360)
+      break;
+
+    default:
+      break;
+  }
+}
+
+export { cameraInfo, initCamera, resizeElement, zoom, pan, rotateByMouse, moveCamera }

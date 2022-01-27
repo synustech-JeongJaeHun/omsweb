@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { pan, zoom } from '../camera';
+import { pan, zoom, rotateByMouse } from '../camera';
 
 import GridLayer from './GridLayer.ce.vue';
 import PointLayer from '../../point/components/PointLayer.ce.vue';
@@ -11,6 +11,7 @@ import MtlLayer from '../../mtl/components/MtlLayer.ce.vue';
 import VehicleLayer from '../../vehicle/components/VehicleLayer.ce.vue';
 import SegmentLayer from '../../segment/components/SegmentLayer.ce.vue';
 import ClusterLayer from '../../cluster/components/ClusterLayer.ce.vue';
+
 import { cameraInfo } from '../camera'
 
 const props = defineProps<{
@@ -38,10 +39,26 @@ function panTo(event: MouseEvent) {
   pan(event.movementX, (-1) * event.movementY)
 }
 
-const isRotating = ref(false)
-function enterRotating() { isRotating.value = true }
-function exitRotating() { isRotating.value = false }
-function rotateTo(event: MouseEvent) { }
+const
+  isRotating = ref(false),
+  canRotate = ref(false)
+function enterRotating() {
+  isRotating.value = true
+  canRotate.value = true
+
+}
+function exitRotating() {
+  isRotating.value = false
+  canRotate.value = false
+}
+function rotateTo(event: MouseEvent) {
+  if (canRotate.value) {
+    // 📐🛑 Be careful! logic is dependent on invert
+    rotateByMouse(event.movementX, (-1) * event.movementY)
+    canRotate.value = false
+    setTimeout(() => { canRotate.value = true }, 50);
+  }
+}
 
 // WheelEvent
 // https://developer.mozilla.org/en-US/docs/Web/API/WheelEvent/deltaY
@@ -70,6 +87,7 @@ function onRightClick(event: MouseEvent) {
     :height="cameraInfo.elementHeight"
     :viewBox="`0 0 ${cameraInfo.elementWidth} ${cameraInfo.elementHeight}`"
     :data-is-panning="isPanning"
+    :data-is-rotating="isRotating"
     :data-is-group-showing="props.isGroupShowing"
     @wheel="zoomInOut($event)"
     @dblclick="zoomInOut($event)"

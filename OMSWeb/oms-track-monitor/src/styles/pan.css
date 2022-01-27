@@ -2,7 +2,7 @@
   cursor: grab;
 }
 
-#layer-container:hover[data-is-panning='true'] {
+#layer-container:hover[data-is-panning='true' i] {
   cursor: grabbing;
 }
 

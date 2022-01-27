@@ -151,6 +151,7 @@ defineExpose(exposedProxy)
 <style src="./styles/utility.css"></style>
 <style src="./styles/zoom.css"></style>
 <style src="./styles/pan.css"></style>
+<style src="./styles/rotate.css"></style>
 <style src="./styles/invert.css"></style>
 <style src="./styles/group.css"></style>
 

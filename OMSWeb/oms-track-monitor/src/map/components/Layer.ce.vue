@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { cameraInfo } from '../camera'
-
+import { mapSizePropertiesInfo } from '../mapSizeProperties';
 // https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/shape-rendering
 // https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/text-rendering
 // https://developer.mozilla.org/ko/docs/Web/CSS/will-change
@@ -18,6 +18,18 @@ import { cameraInfo } from '../camera'
     style="will-change: contents;"
     :data-zoom-level="cameraInfo.zoomLevel"
   >
-    <slot />
+    <!-- 
+      rotate not working in svg, so use g for rotate
+      https://stackoverflow.com/questions/50412618/rotating-nested-svg
+
+      https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/transform#rotate
+      rotate(<a> [<x> <y>])
+      unit of a is degree, x y are center of rotating
+    -->
+    <g
+      :transform="`rotate(${cameraInfo.rotate} ${mapSizePropertiesInfo.centerX} ${mapSizePropertiesInfo.centerY})`"
+    >
+      <slot />
+    </g>
   </svg>
 </template>

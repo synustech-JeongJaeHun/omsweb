@@ -1,0 +1,3 @@
+#layer-container:hover[data-is-rotating='true' i] {
+  cursor: ew-resize;
+}
