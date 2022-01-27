@@ -1,10 +1,8 @@
 <script setup lang="ts">
-import { computed, provide, reactive, readonly, ref, watch } from 'vue'
+import { provide, reactive, readonly, ref, watch } from 'vue'
 import { makeFsProxy } from './utils/devMode'
-
 import { IOmsTrackMonitor } from './legacies/IOmsTrackMonitor'
 import { IPreferences } from './legacies/models/setting.model'
-
 import { buffers } from './buffer/buffers'
 import { clusters } from './cluster/clusters'
 import { groups } from './group/groups'
@@ -27,24 +25,35 @@ import { parseNumberProp, parseBooleanProp } from './utils/props'
 import Scale from './scale/component/Scale.ce.vue'
 import { makeClustersFromSegments } from './cluster/utils/cluster'
 import { makeGroups } from './group/utils/group'
+import { RootEmitInjectionKey, RootEmits } from './types/RootEmits'
 
+/**
+ * https://v3.vuejs.org/api/sfc-script-setup.html#typescript-only-features
+ * 
+ * Currently complex types and type imports from other files are not supported. It is theoretically possible to support type imports in the future.
+ * 
+ * As of now, the type declaration argument must be one of the following to ensure correct static   analysis:
+ * - A type literal
+ * - A reference to an interface or a type literal in the same file
+ */
 const props = defineProps<{
   width: number | string | undefined,
   height: number | string | undefined,
   isClusterShowing: boolean | string | undefined,
   isGroupShowing: boolean | string | undefined,
 }>()
+
+interface Emits extends RootEmits { }
+const emit = defineEmits<Emits>()
+provide(RootEmitInjectionKey, readonly(emit))
+// const emit = inject<RootEmits>(RootEmitInjectionKey)!
+
 // watching props for unstable props delivery
-watch(props, (props) => {
+watch(props, (props, prevProps) => {
   const width = parseNumberProp(0, props.width)
   const height = parseNumberProp(0, props.height)
   resizeElement(width, height)
 })
-
-const emit = defineEmits<{
-  (e: 'backdrop', value: {}): void
-  (e: 'hover', value: {}): void
-}>()
 
 // State Start
 const container = ref<HTMLDivElement>();
@@ -58,14 +67,6 @@ const permissions = reactive({
 })
 const preferences = ref<IPreferences>()
 // State End
-
-// Provide Start
-provide('emit', emit)
-// Provide End
-
-// Watch Start
-
-// Watch End
 
 const exposed: IOmsTrackMonitor = {
   setViewMode: function (v) { viewMode.value = v },
@@ -90,7 +91,6 @@ const exposed: IOmsTrackMonitor = {
     segmentDisableds.value = t.segmentDisabled ?? []
     groups.value = makeGroups(t.groups ?? [])
   },
-
 
   updateVehicle: function (op, v) {
     const vehicle = findVehicleById(v.id)

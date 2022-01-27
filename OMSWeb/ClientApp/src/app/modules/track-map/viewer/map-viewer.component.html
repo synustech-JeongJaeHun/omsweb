@@ -1,5 +1,6 @@
 <div id="track-container" class="track-container">
   <oms-track-monitor id="track-canvas" [width]="omsTrackMonitorSize.width" [height]="omsTrackMonitorSize.height"
-    [isClusterShowing]="true" [isGroupShowing]="true" (backdrop)="doWhat($event)">
+    [isClusterShowing]="true" [isGroupShowing]="true" (leftclick)="doWhat($event)" (rightclick)="doWhat($event)"
+    (mouseover)="doWhat($event)">
   </oms-track-monitor>
 </div>
