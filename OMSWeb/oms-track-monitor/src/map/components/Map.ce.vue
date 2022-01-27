@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { pan, zoom, rotateByMouse } from '../camera';
-
 import GridLayer from './GridLayer.ce.vue';
 import PointLayer from '../../point/components/PointLayer.ce.vue';
 import BufferLayer from '../../buffer/components/BufferLayer.ce.vue';
@@ -19,10 +18,6 @@ const props = defineProps<{
   isGroupShowing: boolean,
 }>()
 
-const emit = defineEmits<{
-  (event: 'backdrop'): void
-}>()
-
 // MouseEvent.button
 // https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/button
 // 0: [LEFT] Main button pressed, usually the left button or the un-initialized state
@@ -30,7 +25,6 @@ const emit = defineEmits<{
 // 2: [RIGHT] Secondary button pressed, usually the right button
 // 3: Fourth button, typically the Browser Back button
 // 4: Fifth button, typically the Browser Forward button
-
 const isPanning = ref(false)
 function enterPanning() { isPanning.value = true }
 function exitPanning() { isPanning.value = false }
@@ -45,7 +39,6 @@ const
 function enterRotating() {
   isRotating.value = true
   canRotate.value = true
-
 }
 function exitRotating() {
   isRotating.value = false

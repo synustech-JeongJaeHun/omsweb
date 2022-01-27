@@ -1,15 +1,12 @@
 <script setup lang="ts">
-import { ref, watchEffect } from 'vue';
+import { computed, readonly } from 'vue';
 import { convertStringToImageDataUrl } from '../../utils/textToImage';
 
 const props = defineProps<{
   text: string,
 }>()
 
-const imageDataUrl = ref<string>()
-watchEffect(async () => {
-  imageDataUrl.value = await convertStringToImageDataUrl(props.text)
-})
+const imageDataUrl = readonly(computed(() => convertStringToImageDataUrl(props.text)))
 
 </script>
 

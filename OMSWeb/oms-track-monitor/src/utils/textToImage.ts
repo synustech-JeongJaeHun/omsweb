@@ -11,7 +11,7 @@ type Style = {
   direction?: "ltr" | "rtl" | "inherit"
 }
 
-async function convertStringToImageDataUrl(text: string, size: number = DefaultFontSize, style?: Style) {
+function convertStringToImageDataUrl(text: string, size: number = DefaultFontSize, style?: Style) {
   const
     VerticalMargin = 0.3 * size,
     HorizontalMargin = 0.1 * size,

@@ -55,9 +55,6 @@ watch(props, (props, prevProps) => {
   resizeElement(width, height)
 })
 
-// State Start
-const container = ref<HTMLDivElement>();
-
 const viewMode = ref<ViewMode>('PUBLIC')
 const mapType = ref<MapType>('DB');
 const permissions = reactive({
@@ -122,7 +119,6 @@ defineExpose(exposedProxy)
 
 <template>
   <div
-    ref="container"
     class="relative"
     :style="{
       width: `${cameraInfo.elementWidth}px`,
