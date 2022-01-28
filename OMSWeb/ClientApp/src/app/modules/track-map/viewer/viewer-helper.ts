@@ -10060,7 +10060,7 @@ export class ViewController {
           let d3_this = d3.select(`#id_${d.id}.zcu`);
 
           const type =
-            d.usingType === 0 ? "X"
+            d.usingType === 0 ? ""
               : d.usingType === 1 ? "HW"
                 : d.usingType === 2 ? "SW"
                   : ""

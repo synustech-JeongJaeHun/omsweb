@@ -43,6 +43,7 @@ namespace OMSWeb.Services.MqttClient
         public const string ACTION_ZCU_GO = "zcu_go";
         public const string ACTION_ZCU_USING_TYPE = "zcu_using_type";
         public const string ACTION_ZCU_SETTING = "zcu-setting";
+        public const string ACTION_ZCU_RESET = "zcu_reset";
         public const string ACTION_INSTALL_CARRIER = "install_carrier";
         public const string ACTION_REMOVE_CARRIER = "remove_carrier";
         public const string ACTION_N = "N";                                 // fromto, from, to, move
@@ -90,6 +91,7 @@ namespace OMSWeb.Services.MqttClient
                 case ACTION_ZCU_GO:
                 case ACTION_ZCU_USING_TYPE:
                 case ACTION_ZCU_SETTING:
+                case ACTION_ZCU_RESET:
                 case ACTION_INSTALL_CARRIER:
                 case ACTION_REMOVE_CARRIER:
                 case ACTION_N:
@@ -101,6 +103,17 @@ namespace OMSWeb.Services.MqttClient
             return null;
         }
 
+        public string GetAction(string action)
+        {
+            switch (action)
+            {
+                case ACTION_ZCU_RESET:
+                    return "reset";
+                default:
+                    return action;
+            }
+        }
+         
         public string GetRequest(string action)
         {
             switch (action)
@@ -137,6 +150,7 @@ namespace OMSWeb.Services.MqttClient
 
                 case ACTION_ZCU_GO:
                 case ACTION_ZCU_USING_TYPE:
+                case ACTION_ZCU_RESET:
                     return REQUEST_ZCU;
 
                 case ACTION_INSTALL_CARRIER:
@@ -255,7 +269,7 @@ namespace OMSWeb.Services.MqttClient
             if (command.Action != null)
             {
                 data["request"] = GetRequest(command.Action);
-                data["action"] = command.Action;
+                data["action"] = GetAction(command.Action);
             }
 
             if (command.Action == ACTION_CONTROL_STATE ||
@@ -344,6 +358,11 @@ namespace OMSWeb.Services.MqttClient
 
                 if (command.ZcuUsingType != null)
                     data["zcu_using_type"] = command.ZcuUsingType;
+            }
+            else if (command.Action == ACTION_ZCU_RESET)
+            {
+                if (command.ZcuId != null || command.ZcuIds != null)
+                    data["zcu_id"] = GetZcuId(command);
             }
             else if (command.Action == ACTION_INSTALL_CARRIER ||
                      command.Action == ACTION_REMOVE_CARRIER)

@@ -310,6 +310,41 @@ namespace OMSWeb.Repositories
             }
             return data;
         }
+        public List<ZcuStatus> LoadZcuStatus()
+        {
+            var key = CacheKeys.ZcuStatus;
+            var data = _cache.GetValue<List<ZcuStatus>>(key);
+            if (data == null)
+            {
+                var models = new List<ZcuStatus>();
+                string sql = QueryFactory.GetSql("zcuStatus");
+                using (var conn = ConnectTrack())
+                {
+                    using (var cmd = new NpgsqlCommand(sql, conn))
+                    {
+                        conn.Open();
+                        using (var dr = cmd.ExecuteReader())
+                        {
+                            while (dr.Read())
+                            {
+                                models.Add(new ZcuStatus
+                                {
+                                    Id = Convert.ToInt32(dr["id"]),
+                                    //LogicalId = dr["logical_id"].ToString(),
+                                    MaxVehicles = dr["max_vehicles"].TryInteger(),
+                                    Color = dr["color"].ToString(),
+                                    Points = dr["points"].ToString(),
+                                }
+                               );
+                            }
+                        }
+                    }
+                }
+                data = models.ToList();
+                _cache.SetValue<List<ZcuStatus>>(key, data, DateTimeOffset.Now.AddMinutes(CACHE_LIFE));
+            }
+            return data;
+        }
         public List<Cluster> LoadClusters()
         {
             var key = CacheKeys.Clusters;

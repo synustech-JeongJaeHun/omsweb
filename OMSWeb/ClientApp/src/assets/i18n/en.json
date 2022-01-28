@@ -460,6 +460,7 @@
     "confirmEstopAll": "Do you want to stop all vehicles?",
     "confirmSetAutoAll": "Do you want to set auto all vehicles?",
     "confirmZcuChange": "Are you sure ZCU change?",
+    "confirmZcuReset": "Are you sure ZCU reset?",
     "confirmBufferChange": "Are you sure Buffer change?",
     "selectObjectType": "Select Type",
     "searchId": "Search ID",

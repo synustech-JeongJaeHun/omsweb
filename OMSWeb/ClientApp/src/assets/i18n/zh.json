@@ -460,6 +460,7 @@
     "confirmEstopAll": "要停止所有车辆吗？",
     "confirmSetAutoAll": "你想设置自动所有车辆吗？",
     "confirmZcuChange": "你确定 ZCU 改变了吗？",
+    "confirmZcuReset": "你確定 ZCU 重置了嗎?",
     "confirmBufferChange": "你确定缓冲区改变了吗？",
     "selectObjectType": "选择类型",
     "searchId": "搜索 ID",

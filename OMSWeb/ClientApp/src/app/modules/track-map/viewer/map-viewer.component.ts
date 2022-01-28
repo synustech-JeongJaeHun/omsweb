@@ -175,17 +175,16 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   }
   onResetHWZcu() {
     this.dialogSvc
-      .confirm({ body: this.$t.instant('reset zcu?') })
+      .confirm({ body: this.$t.instant('messages.confirmZcuReset') })
       .subscribe((confirm) => {
         if (confirm) {
           this.messageSvc
-          // .sendSettingZcuCommand({
-          //   type: "ZCU",
-          //   action: "zcu-setting",
-          //   zcuIds: [this.contextData.id],
-          //   zcuUsingType: value === 1 ? "hw" : "sw",
-          // })
-          // .subscribe();
+           .sendZcuCommand({
+             type: "ZCU",
+             action: "zcu_reset",
+             zcuIds: [this.contextData.id],
+           })
+           .subscribe();
         }
       });
   }
@@ -338,31 +337,37 @@ export class MapViewerComponent implements OnInit, OnDestroy {
       });
 
     if (this.auth.isAuthenticated) {
+      this.hubSvc.vehicleDioChanged$
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((e: IDataChangeEvent) => this.applyVehicleDioChange(e));
+
       this.hubSvc.vehiclePathChanged$
         .pipe(takeUntil(this.destroy$))
-        .subscribe((e: IDataChangeEvent) => {
-          this.applyVehiclePathChange(e)
-        });
+        .subscribe((e: IDataChangeEvent) => this.applyVehiclePathChange(e));
 
       this.hubSvc.stationChanged$
         .pipe(takeUntil(this.destroy$))
-        .subscribe((e) => this.applyStationChange(e));
+        .subscribe((e: IDataChangeEvent) => this.applyStationChange(e));
 
       this.hubSvc.bufferChanged$
         .pipe(takeUntil(this.destroy$))
-        .subscribe((e) => this.applyBufferChange(e));
+        .subscribe((e: IDataChangeEvent) => this.applyBufferChange(e));
 
       this.hubSvc.mtlChanged$
         .pipe(takeUntil(this.destroy$))
-        .subscribe((e) => this.applyMtlChange(e));
+        .subscribe((e: IDataChangeEvent) => this.applyMtlChange(e));
 
       this.hubSvc.groupChanged$
         .pipe(takeUntil(this.destroy$))
-        .subscribe((e) => this.applyGroupChange(e));
+        .subscribe((e: IDataChangeEvent) => this.applyGroupChange(e));
 
       this.hubSvc.zcuChanged$
         .pipe(takeUntil(this.destroy$))
-        .subscribe((e) => this.applyZcuChange(e));
+        .subscribe((e: IDataChangeEvent) => this.applyZcuChange(e));
+
+      this.hubSvc.zcuStatusChanged$
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((e: IDataChangeEvent) => this.applyZcuStatusChange(e));
     }
   }
 
@@ -609,6 +614,11 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     this.viewer.update_zcus(updated, false, false);
     this.updateSelectedObject('ZCU', updated, true);
   }
+  private applyZcuStatusChange({ data }: IDataChangeEvent) {
+    if (!this.viewer) return;
+
+
+  }
   private applyClusterChange({ data }: IDataChangeEvent) {
     if (!this.viewer) return;
     const updated = this.dataSvc.getChangedClusters(data);
@@ -636,6 +646,13 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     const updated = this.dataSvc.getChangedStations(data);
     this.viewer.update_stations(updated, false, false);
     this.updateSelectedObject('STATION', updated, true);
+  }
+  private applyVehicleDioChange({ data }: IDataChangeEvent): void {
+    if (!this.viewer) return;
+    //const updated = this.dataSvc.getChangedExpectedPaths(data);
+    //this.dataSvc.updateDio(updated);
+
+    //this.viewer.applyUpdatedDio();
   }
   private applyVehiclePathChange({ data }: IDataChangeEvent): void {
     if (!this.viewer) return;

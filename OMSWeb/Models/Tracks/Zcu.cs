@@ -8,6 +8,7 @@ namespace OMSWeb.Models.Tracks {
     public int ZcuType { get; set; }
     public ZcuCompletePoint[] CompletePoints { get; set; }
     public ZcuInputZone[] InputZones { get; set; }
+    public bool error { get; set; }
   }
 
   public class ZcuCompletePoint
@@ -23,5 +24,18 @@ namespace OMSWeb.Models.Tracks {
     public int ZcuId { get; set; }
     public int PriorityPoint { get; set; }
     public string ZonePoints { get; set; }
+  }
+
+  public class ZcuStatus
+  {
+    public int id { get; set; }
+    public string logicalId { get; set; }
+    public int usingType { get; set; }
+    public int ZcuType { get; set; }
+    public int status { get; set; }
+    public int errorCode { get; set; }
+    public string[] passVehicle { get; set; }
+    public string[] vehicleCount { get; set; }
+    public string[] vehicleInfo { get; set; }
   }
 }

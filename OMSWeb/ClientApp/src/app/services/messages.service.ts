@@ -20,7 +20,8 @@ import {
   ISegmentCommandMessage,
   IClusterCommandMessage,
   IGroupCommandMessage,
-  ISettingZcuCommandMessage
+  ISettingZcuCommandMessage,
+  IZcuCommandMessage
 } from '../models/command.model';
 import { IOrderStatusRow } from '../models/order-status.model';
 import { IVehicleStatusRow } from '../models/vehicle-status.model';
@@ -184,6 +185,12 @@ export class MessagesService {
     command: ISettingZcuCommandMessage
   ): Observable<void> {
     return this.sendCommand<ISettingZcuCommandMessage>(command);
+  }
+
+  sendZcuCommand(
+    command: IZcuCommandMessage
+  ): Observable<void> {
+    return this.sendCommand<IZcuCommandMessage>(command);
   }
 
   sendVehicleRegAddCommand(
