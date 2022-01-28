@@ -32,7 +32,8 @@ const position = readonly(computed(() => {
         : ZeroVector
   const directionTransformVector = multipleVector(orthogonalVector, BufferDirectionMargin)
 
-  return addVectors(offsetPosition, directionTransformVector)
+  const position = addVectors(offsetPosition, directionTransformVector)
+  return { x: Math.ceil(position.x), y: Math.ceil(position.y) }
 }))
 
 const groupColor = useGroupColor('buffer', toRef(props.buffer, 'id'))

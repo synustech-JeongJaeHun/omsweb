@@ -23,7 +23,8 @@ const position = readonly(computed(() => {
   })
 
   const offsetVector = multipleVector(unitVector, props.station.offset)
-  return addVectors({ x: startPointPosition.value.x, y: startPointPosition.value.y }, offsetVector)
+  const position = addVectors({ x: startPointPosition.value.x, y: startPointPosition.value.y }, offsetVector)
+  return { x: Math.ceil(position.x), y: Math.ceil(position.y) }
 }))
 
 const groupColor = useGroupColor('station', toRef(props.station, 'id'))
