@@ -48,7 +48,7 @@ namespace OMSWeb.Services
         {"zcu_status", new DataChangeEventTarget(CacheKeys.ZcuStatus, new[]{"zcuStatusChanged"}, true)},
         {"vehicles", new DataChangeEventTarget(CacheKeys.Vehicles, new[]{"vehicleChanged", "vehicleTableChanged"}, true)},
         {"vehicle_paths", new DataChangeEventTarget(CacheKeys.VehiclePaths, new[]{"vehiclePath"})},
-        {"vehicle_dio", new DataChangeEventTarget(CacheKeys.VehicleDio, new[]{"vehicleDioChanged", "vehicleDioChanged"}, true)},
+        {"vehicle_dio", new DataChangeEventTarget(CacheKeys.VehicleDio, new[]{"vehicleDioChanged"}, true)},
         {"clusters", new DataChangeEventTarget(CacheKeys.Clusters, new[]{"clusterChanged"})},
         {"cluster_points", new DataChangeEventTarget(CacheKeys.Clusters, new[]{"clusterChanged"})},
         {"location_groups", new DataChangeEventTarget(CacheKeys.Groups, new[]{"groupChanged"})},

@@ -27,7 +27,7 @@ export class HubService {
   alertChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter();
   serverStatusChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter();
   modeStateChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter();
-  zcuChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter();
+  zcuMapChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter();
   zcuStatusChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter();
   //#endregion
 
@@ -106,7 +106,7 @@ export class HubService {
     this.hub.off('alert');
     this.hub.off('serverStatus');
     this.hub.off('modeState');
-    this.hub.off('zcuChanged');
+    this.hub.off('zcuMapChanged');
     this.hub.off('zcuStatusChanged');
   }
 
@@ -182,9 +182,9 @@ export class HubService {
       console.info('## hub message : modeState >>', { meta, body });
       this.modeStateChanged$.emit({ ...meta, data: body });
     });
-    this.hub.on('zcuChanged', (meta, body) => {
-      console.info('## hub message : zcuChanged >>', { meta, body });
-      this.zcuChanged$.emit({ ...meta, data: body });
+    this.hub.on('zcuMapChanged', (meta, body) => {
+      console.info('## hub message : zcuMapChanged >>', { meta, body });
+      this.zcuMapChanged$.emit({ ...meta, data: body });
     });
     this.hub.on('zcuStatusChanged', (meta, body) => {
       console.info('## hub message : zcuStatusChanged >>', { meta, body });

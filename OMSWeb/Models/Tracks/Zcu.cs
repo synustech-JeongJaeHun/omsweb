@@ -1,4 +1,5 @@
-namespace OMSWeb.Models.Tracks {
+namespace OMSWeb.Models.Tracks
+{
   public class Zcu
   {
     public int Id { get; set; }
@@ -26,16 +27,7 @@ namespace OMSWeb.Models.Tracks {
     public string ZonePoints { get; set; }
   }
 
-  public class ZcuStatus
+  public class ZcuStatus : Entities.ZcuStatusEntity
   {
-    public int id { get; set; }
-    public string logicalId { get; set; }
-    public int usingType { get; set; }
-    public int ZcuType { get; set; }
-    public int status { get; set; }
-    public int errorCode { get; set; }
-    public string[] passVehicle { get; set; }
-    public string[] vehicleCount { get; set; }
-    public string[] vehicleInfo { get; set; }
   }
 }

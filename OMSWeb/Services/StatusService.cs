@@ -26,5 +26,13 @@ namespace OMSWeb.Services {
     {
       return _repo.QueryBufferStates();
     }
+    public IQueryable<ZcuState> QueryZcuStates()
+    {
+      return _repo.QueryZcuStates();
+    }
+    public IQueryable<DioState> QueryDioStates()
+    {
+      return _repo.QueryDioStates();
+    }
   }
 }

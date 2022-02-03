@@ -64,6 +64,25 @@ namespace OMSWeb.Repositories
         FROM buffers
         --*user_id_condition*--WHERE user_id =@userId
       "},
+      {"zcu", @"
+        SELECT Z.id, Z.x, Z.y, Z.using_type, Z.zcu_type, 
+        CASE WHEN ZS.status = 5 THEN TRUE ELSE FALSE END AS error 
+        FROM zcus AS Z
+        LEFT OUTER JOIN zcu_status AS ZS
+        ON Z.id = ZS.zcu_id
+        ORDER BY Z.id
+        --*user_id_condition*--WHERE user_id =@userId
+      "},
+      {"zcuStatus", @"
+        SELECT Z.id, Z.id::text AS logical_id, Z.using_type, Z.zcu_type, 
+        CASE WHEN ZS.status = 5 THEN TRUE ELSE FALSE END AS status,
+        ZS.errorCode, ZS.pass_vehicle AS passVehicle, ZS.vehicle_count AS vehicleCount, ZS.vehicle_info AS vehicleInfo 
+        FROM zcus AS Z
+        LEFT OUTER JOIN zcu_status AS ZS
+        ON Z.id = ZS.zcu_id
+        ORDER BY Z.id
+        --*user_id_condition*--WHERE user_id =@userId
+      "},
       {"mtl", @"
         SELECT id, physical_id, logical_id AS logical_id, point AS point_id
         FROM mtls
@@ -87,7 +106,7 @@ namespace OMSWeb.Repositories
                 WHEN VH.connection = 2 THEN TRUE
                 WHEN VH.connection = 3 THEN FALSE
                 WHEN VH.connection IS NULL THEN FALSE
-            ENd AS isConnected, 
+            END AS isConnected, 
             CASE 
             WHEN OD.location_pickup IS NOT NULL AND OD.location_dropoff IS NOT NULL   -- FROM-TO order
             THEN

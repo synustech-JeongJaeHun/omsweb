@@ -29,4 +29,12 @@ namespace OMSWeb.Models
   public class BufferState : BufferEntity
   {
   }
+
+  public class ZcuState : ZcuEntity
+  {
+  }
+
+  public class DioState : DioEntity
+  {
+  }
 }

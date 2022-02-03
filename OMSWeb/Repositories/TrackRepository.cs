@@ -267,21 +267,10 @@ namespace OMSWeb.Repositories
             var data = _cache.GetValue<List<Zcu>>(key);
             if (data == null)
             {
-                //string sql = @"select id, x, y, using_type, zcu_type from zcus";
-                var zcuSql = @"
-                SELECT ZS.id, ZS.x, ZS.y, ZS.using_type, ZS.zcu_type
-                FROM zcus AS ZS
-                ORDER BY ZS.id;
-                ";
-
-                //using (var conn = ConnectTrack())
-                //{                       
-                //    data = conn.Query<Zcu>(sql).AsList();
-                //}
-
                 using (var conn = ConnectTrack())
                 {
-                    data = conn.Query<Zcu>(zcuSql).AsList();
+                    string sql = QueryFactory.GetSql("zcu");
+                    data = conn.Query<Zcu>(sql).AsList();
                     
                     foreach (Zcu zcu in data)
                     {
@@ -329,11 +318,13 @@ namespace OMSWeb.Repositories
                             {
                                 models.Add(new ZcuStatus
                                 {
-                                    Id = Convert.ToInt32(dr["id"]),
-                                    //LogicalId = dr["logical_id"].ToString(),
-                                    MaxVehicles = dr["max_vehicles"].TryInteger(),
-                                    Color = dr["color"].ToString(),
-                                    Points = dr["points"].ToString(),
+                                    id = Convert.ToInt32(dr["id"]),
+                                    logicalId = dr["logical_id"].ToString(),
+                                    status = dr["status"].TryBoolean(),
+                                    errorCode = dr["errorCode"].TryInteger(),
+                                    passVehicle = dr["passVehicle"].ToString()?.Split(";"),
+                                    vehicleCount = dr["vehicleCount"].ToString()?.Split(";"),
+                                    vehicleInfo = dr["vehicleInfo"].ToString()?.Split(";"),
                                 }
                                );
                             }
@@ -377,6 +368,44 @@ namespace OMSWeb.Repositories
                 }
                 data = models.ToList();
                 _cache.SetValue<List<Cluster>>(key, data, DateTimeOffset.Now.AddMinutes(CACHE_LIFE));
+            }
+            return data;
+        }
+
+        public List<VehicleDio> LoadVehicleDio()
+        {
+            var key = CacheKeys.VehicleDio;
+            var data = _cache.GetValue<List<VehicleDio>>(key);
+            if (data == null)
+            {
+                var models = new List<VehicleDio>();
+                string sql = @"SELECT vehicle_id AS id, di_1, di_2, di_3, do_1, do_2, do_3 FROM vehicle_dio";
+                using (var conn = ConnectTrack())
+                {
+                    using (var cmd = new NpgsqlCommand(sql, conn))
+                    {
+                        conn.Open();
+                        using (var dr = cmd.ExecuteReader())
+                        {
+                            while (dr.Read())
+                            {
+                                models.Add(new VehicleDio
+                                {
+                                    Id = Convert.ToInt32(dr["id"]),
+                                    di_1 = Convert.ToInt32(dr["di_1"]),
+                                    di_2 = Convert.ToInt32(dr["di_2"]),
+                                    di_3 = Convert.ToInt32(dr["di_3"]),
+                                    do_1 = Convert.ToInt32(dr["do_1"]),
+                                    do_2 = Convert.ToInt32(dr["do_2"]),
+                                    do_3 = Convert.ToInt32(dr["do_3"]),
+                                }
+                               );
+                            }
+                        }
+                    }
+                }
+                data = models.ToList();
+                _cache.SetValue<List<VehicleDio>>(key, data, DateTimeOffset.Now.AddMinutes(CACHE_LIFE));
             }
             return data;
         }
