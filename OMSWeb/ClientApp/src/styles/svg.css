@@ -1926,7 +1926,7 @@ path.cluster_mask {
 }
 
 .zcu path.zcu_path {
-  fill: none;
+  /* fill: none; for zcu error state */
   stroke: var(--zcu-color);
   stroke-width: 3px;
 }

@@ -8,6 +8,7 @@ export class Zcu {
   // x: number;
   // y: number;
   usingType: number;
+  error: boolean;
   zcuType: number;
 
   coord: ICoordinate;
@@ -17,9 +18,10 @@ export class Zcu {
   completePoints: string;
 
   constructor(row: Dto.IZcu, point: IPoint) {
-    const { id, x, y, usingType, zcuType, inputZones, completePoints } = row;
+    const { id, x, y, usingType, error, zcuType, inputZones, completePoints } = row;
     this.id = id;
     this.usingType = usingType;
+    this.error = error;
     this.zcuType = zcuType;
 
     this.coord = point.coord;
