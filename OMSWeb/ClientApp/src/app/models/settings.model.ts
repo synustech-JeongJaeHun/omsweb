@@ -138,7 +138,18 @@ export const defaultControlTable: ControlTable = {
   "buffers_direction": true,
   "buffers_nextPoint": true,
   "buffers_offset": true,
-  "buffers_unuse": true
+  "buffers_unuse": true,
+
+  "zcus": true,
+  "zcus_id": true,
+  "zcus_logicalId": true,
+  "zcus_using_type": true,
+  "zcus_type": true,
+  "zcus_status": true,
+  "zcus_errorCode": true,
+  "zcus_passVehicle": true,
+  "zcus_vehicleCount": true,
+  "zcus_vehicleInfo": true
 }
 
 export class ClientPreferences implements IPreferences {

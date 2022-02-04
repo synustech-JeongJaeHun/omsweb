@@ -1,0 +1,33 @@
+<div class="grid-actions" *ngIf="hasControlAccess">
+</div>
+<dx-data-grid [dataSource]="dataSource" [remoteOperations]="true" [height]="tableHeight" [repaintChangesOnly]="false"
+              [columnAutoWidth]="false" [showBorders]="false" [highlightChanges]="true" [showColumnLines]="true"
+              [showRowLines]="true" [headerFilter]="false" [(selectedRowKeys)]="selectedRows" [renderAsync]="true">
+  <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
+  <dxo-scrolling mode="virtual" rowRenderingMode="standard"></dxo-scrolling>
+  <dxo-paging [pageSize]="50"></dxo-paging>
+  <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[50, 100, 200]" [showInfo]="true" visible="true">
+  </dxo-pager>
+  <dxo-search-panel [placeholder]="'names.search' | translate" [visible]="true"></dxo-search-panel>
+  <dxo-load-panel [enabled]="false"></dxo-load-panel>
+  <dxo-filter-row [visible]="true"></dxo-filter-row>
+
+  <dxi-column [width]="50" dataType="string" dataField="id" [caption]="'names.id' | translate"
+              *ngIf="canDisplayTable('zcus_id')"></dxi-column>
+  <dxi-column [width]="120" dataType="string" dataField="logicalId" [caption]="'names.logicalId' | translate"
+              *ngIf="canDisplayTable('zcus_logicalId')"></dxi-column>
+  <dxi-column [width]="60" dataType="string" dataField="usingType" [caption]="'names.using_type' | translate"
+              *ngIf="canDisplayTable('zcus_using_type')"></dxi-column>
+  <dxi-column [width]="100" dataType="string" dataField="zcuType" [caption]="'names.zcuType' | translate"
+              *ngIf="canDisplayTable('zcus_type')"></dxi-column>
+  <dxi-column [width]="100" dataType="string" dataField="status" [caption]="'names.status' | translate"
+              *ngIf="canDisplayTable('zcus_status')"></dxi-column>
+  <dxi-column [width]="100" dataType="string" dataField="errorCode" [caption]="'names.errorCode' | translate"
+              *ngIf="canDisplayTable('zcus_errorCode')"></dxi-column>
+  <dxi-column [width]="100" dataType="string" dataField="passVehicle" [caption]="'names.passVehicle' | translate"
+              *ngIf="canDisplayTable('zcus_passVehicle')"></dxi-column>
+  <dxi-column [width]="100" dataType="string" dataField="vehicleCount" [caption]="'names.vehicleCount' | translate"
+              *ngIf="canDisplayTable('zcus_vehicleCount')"></dxi-column>
+  <dxi-column [width]="100" dataType="string" dataField="vehiceInfo" [caption]="'names.vehicleInfo' | translate"
+              *ngIf="canDisplayTable('zcus_vehicleInfo')"></dxi-column>
+</dx-data-grid>

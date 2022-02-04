@@ -160,6 +160,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
       .confirm({ body: this.$t.instant('messages.confirmZcuChange') })
       .subscribe((confirm) => {
         if (confirm) {
+          this.contextData.usingType = value === 1 ? 2 : 1
           this.messageSvc
             .sendSettingZcuCommand({
               type: "ZCU",
