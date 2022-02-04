@@ -1,4 +1,5 @@
 import { ISegmentPart } from "../../legacies/models/track.model";
+import { encodeCommandsToD } from "../../utils/svg/pathSegment";
 import { makeD } from "../segments";
 import { Segment } from "../types/Segment";
 
@@ -14,6 +15,13 @@ function makeSegmentsFromParts(parts: ISegmentPart[]): Segment[] {
     if (parts[0]) {
       const sample = parts[0]
       const sortedParts = parts.sort((a, b) => a.segpartId - b.segpartId)
+      const pathCommands = makeD(
+        sample.startPoint,
+        sample.endPoint,
+        // @ts-ignore
+        sortedParts,
+        sample.length
+      )
       array.push({
         id: id,
         logicalId: sample.logicalId,
@@ -28,13 +36,8 @@ function makeSegmentsFromParts(parts: ISegmentPart[]): Segment[] {
 
         // @ts-ignore
         parts: sortedParts,
-        pathCommands: makeD(
-          sample.startPoint,
-          sample.endPoint,
-          // @ts-ignore
-          sortedParts,
-          sample.length
-        )
+        pathCommands,
+        d: encodeCommandsToD(pathCommands)
       })
     }
   })

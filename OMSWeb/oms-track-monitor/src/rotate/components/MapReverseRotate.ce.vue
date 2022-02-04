@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { cameraInfo } from '../../map/camera';
+import { rotationInfo } from '../../map/rotate';
 </script>
 
 <template>
-  <g :transform="`rotate(${(-1) * cameraInfo.rotate})`">
+  <g :transform="`rotate(${(-1) * rotationInfo})`">
     <slot />
   </g>
 </template>

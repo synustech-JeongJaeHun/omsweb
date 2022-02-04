@@ -38,6 +38,7 @@ function eventPropagationTest() {
   <svg class="overflow-visible cursor-pointer" :x="position.x" :y="position.y">
     <use v-show="groupColor" href="#station-group-shadow" class="group-shadow" :fill="groupColor" />
     <use href="#station" @click="eventPropagationTest()" />
+    <!-- <text y="70">{{ props.station.logicalId }}</text> -->
     <RasterizedText class="invert" y="70" :text="props.station.logicalId" />
   </svg>
 </template>

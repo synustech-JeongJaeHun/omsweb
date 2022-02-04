@@ -10,9 +10,5 @@ const props = defineProps<{
 </script>
 
 <template>
-  <path
-    :id="`${getSegmentPathId(props.segment.id)}`"
-    :d="encodeCommandsToD(props.segment.pathCommands)"
-    fill="none"
-  />
+  <path :id="`${getSegmentPathId(props.segment.id)}`" :d="props.segment.d" fill="none" />
 </template>

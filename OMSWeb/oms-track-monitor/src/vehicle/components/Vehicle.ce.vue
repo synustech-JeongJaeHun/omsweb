@@ -71,6 +71,7 @@ const groupColor = useGroupColor('vehicle', toRef(props.vehicle, 'id'))
   <symbol class="overflow-visible cursor-pointer" :id="`vehicle-${props.vehicle.id}`">
     <circle v-show="groupColor" class="group-shadow" r="120" :fill="groupColor" />
     <circle r="80" fill="none" stroke="red" stroke-width="20" />
+    <!-- <text y="70">{{ props.vehicle.logicalId }}</text> -->
     <RasterizedText class="invert" y="100" :text="props.vehicle.logicalId" />
   </symbol>
   <use :href="`#vehicle-${props.vehicle.id}`">

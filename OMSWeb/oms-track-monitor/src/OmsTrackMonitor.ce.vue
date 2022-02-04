@@ -18,7 +18,7 @@ import { MapType } from './map/types/MapType'
 import Map from './map/components/Map.ce.vue'
 import Minimap from './minimap/components/Minimap.ce.vue'
 import { initMapSizeProperties } from './map/mapSizeProperties'
-import { cameraInfo, initCamera, resizeElement } from './map/camera'
+import { initCamera, resizeViewBox } from './map/camera'
 import { segments } from './segment/segments'
 import { makeSegmentsFromParts } from './segment/utils/segment'
 import { parseNumberProp, parseBooleanProp } from './utils/props'
@@ -26,6 +26,8 @@ import Scale from './scale/component/Scale.ce.vue'
 import { makeClustersFromSegments } from './cluster/utils/cluster'
 import { makeGroups } from './group/utils/group'
 import { RootEmitInjectionKey, RootEmits } from './types/RootEmits'
+import ScreenDetail from './map/components/ScreenDetail.ce.vue'
+import { elementRectInfo, setElementRect } from './map/elementRect'
 
 /**
  * https://v3.vuejs.org/api/sfc-script-setup.html#typescript-only-features
@@ -52,7 +54,9 @@ provide(RootEmitInjectionKey, readonly(emit))
 watch(props, (props, prevProps) => {
   const width = parseNumberProp(0, props.width)
   const height = parseNumberProp(0, props.height)
-  resizeElement(width, height)
+
+  setElementRect(width, height)
+  resizeViewBox(width, height)
 })
 
 const viewMode = ref<ViewMode>('PUBLIC')
@@ -109,8 +113,8 @@ const exposed: IOmsTrackMonitor = {
   updateSegment: function (op, v) { }
 }
 // # in devmode
-const exposedProxy = makeFsProxy(exposed)
-defineExpose(exposedProxy)
+// const exposedProxy = makeFsProxy(exposed)
+defineExpose(exposed)
 
 // # production
 // defineExpose(exposed)
@@ -121,8 +125,8 @@ defineExpose(exposedProxy)
   <div
     class="relative"
     :style="{
-      width: `${cameraInfo.elementWidth}px`,
-      height: `${cameraInfo.elementHeight}px`,
+      width: `${elementRectInfo.width}px`,
+      height: `${elementRectInfo.height}px`,
     }"
   >
     <Map
@@ -130,14 +134,15 @@ defineExpose(exposedProxy)
       :style="{
         top: 0,
         left: 0,
-        width: `${cameraInfo.elementWidth}px`,
-        height: `${cameraInfo.elementHeight}px`,
+        width: `${elementRectInfo.width}px`,
+        height: `${elementRectInfo.height}px`,
       }"
       :isClusterShowing="parseBooleanProp(false, props.isClusterShowing)"
       :isGroupShowing="parseBooleanProp(false, props.isGroupShowing)"
     />
     <Minimap class="absolute" style="bottom: 2vw; left: 2vw;" />
     <Scale class="absolute" style="bottom: 10px; right: 10px;" />
+    <ScreenDetail class="absolute" style="top: 10px; right: 10px" />
   </div>
 </template>
 

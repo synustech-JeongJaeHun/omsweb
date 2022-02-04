@@ -3,9 +3,10 @@ import { segments } from '../../segment/segments';
 import { mapSizePropertiesInfo } from '../../map/mapSizeProperties';
 import CameraBox from './CameraBox.ce.vue';
 import { computed, reactive, readonly, ref, watch } from 'vue';
-import { cameraInfo, moveCamera, zoom } from '../../map/camera';
+import { moveCamera, zoom } from '../../map/camera';
 import SegmentOnlyStroke from './SegmentOnlyStroke.ce.vue';
 import MapRotate from '../../rotate/components/MapRotate.ce.vue';
+import { elementRectInfo } from '../../map/elementRect';
 
 const
   MapMargin = 3000,
@@ -19,7 +20,7 @@ const
 const minimapSvgElement = ref<SVGElement>()
 const minimapDomRect = reactive({ width: 0, height: 0, minX: 0, minY: 0, maxX: 0, maxY: 0 })
 
-watch([minimapSvgElement, cameraInfo], () => {
+watch([minimapSvgElement, elementRectInfo], () => {
   if (minimapSvgElement.value === undefined) return
 
   const rect = minimapSvgElement.value.getBoundingClientRect()

@@ -9,6 +9,11 @@ import { buffers } from '../buffers'
 <template>
   <Layer>
     <defs>
+      <!-- <polygon id="buffer" points="30,60 60,30 60,-30 30,-60 -30,-60 -60,-30 -60,30 -30,60" /> -->
+      <!-- <polygon
+        id="buffer-group-shadow"
+        points="20,40 40,20 40,-20 20,-40 -20,-40 -40,-20 -40,20 -20,40"
+      />-->
       <circle id="buffer" r="50" stroke="black" stroke-width="10" fill="none" />
       <circle id="buffer-group-shadow" r="60" />
     </defs>

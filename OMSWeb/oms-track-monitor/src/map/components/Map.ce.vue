@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { pan, zoom, rotateByMouse } from '../camera';
+import { pan, zoom, initCamera } from '../camera';
 import GridLayer from './GridLayer.ce.vue';
 import PointLayer from '../../point/components/PointLayer.ce.vue';
 import BufferLayer from '../../buffer/components/BufferLayer.ce.vue';
@@ -11,7 +11,8 @@ import VehicleLayer from '../../vehicle/components/VehicleLayer.ce.vue';
 import SegmentLayer from '../../segment/components/SegmentLayer.ce.vue';
 import ClusterLayer from '../../cluster/components/ClusterLayer.ce.vue';
 
-import { cameraInfo } from '../camera'
+import { elementRectInfo } from '../elementRect';
+import { rotateByMouse } from '../rotate';
 
 const props = defineProps<{
   isClusterShowing: boolean,
@@ -25,32 +26,44 @@ const props = defineProps<{
 // 2: [RIGHT] Secondary button pressed, usually the right button
 // 3: Fourth button, typically the Browser Back button
 // 4: Fifth button, typically the Browser Forward button
-const isPanning = ref(false)
-function enterPanning() { isPanning.value = true }
-function exitPanning() { isPanning.value = false }
+const
+  isPanning = ref(false)
+// canPanning = ref(false)
+function enterPanning() {
+  isPanning.value = true
+  // canPanning.value = true
+}
+function exitPanning() {
+  isPanning.value = false
+  // canPanning.value = false
+}
 function panTo(event: MouseEvent) {
+  // if (canPanning.value) {
   // 📐🛑 Be careful! logic is dependent on invert
   pan(event.movementX, (-1) * event.movementY)
+  // canPanning.value = false
+  // setTimeout(() => { canPanning.value = true }, 50);
+  // }
 }
 
 const
-  isRotating = ref(false),
-  canRotate = ref(false)
+  isRotating = ref(false)
+// canRotating = ref(false)
 function enterRotating() {
   isRotating.value = true
-  canRotate.value = true
+  // canRotating.value = true
 }
 function exitRotating() {
   isRotating.value = false
-  canRotate.value = false
+  // canRotating.value = false
 }
 function rotateTo(event: MouseEvent) {
-  if (canRotate.value) {
-    // 📐🛑 Be careful! logic is dependent on invert
-    rotateByMouse(event.movementX, (-1) * event.movementY)
-    canRotate.value = false
-    setTimeout(() => { canRotate.value = true }, 50);
-  }
+  // if (canRotating.value && Math.abs(event.movementX) > 2) {
+  // 📐🛑 Be careful! logic is dependent on invert
+  rotateByMouse(event.movementX, (-1) * event.movementY)
+  // canRotating.value = false
+  // setTimeout(() => { canRotating.value = true }, 50);
+  // }
 }
 
 // WheelEvent
@@ -76,9 +89,9 @@ function onRightClick(event: MouseEvent) {
   <svg
     id="layer-container"
     class="invert"
-    :width="cameraInfo.elementWidth"
-    :height="cameraInfo.elementHeight"
-    :viewBox="`0 0 ${cameraInfo.elementWidth} ${cameraInfo.elementHeight}`"
+    :width="elementRectInfo.width"
+    :height="elementRectInfo.height"
+    :viewBox="`0 0 ${elementRectInfo.width} ${elementRectInfo.height}`"
     :data-is-panning="isPanning"
     :data-is-rotating="isRotating"
     :data-is-group-showing="props.isGroupShowing"
@@ -89,7 +102,8 @@ function onRightClick(event: MouseEvent) {
     @mousemove="isPanning && panTo($event), isRotating && rotateTo($event)"
     @mouseleave="exitPanning(), exitRotating()"
     @mouseup="exitPanning(), exitRotating()"
-    @click="onLeftClick($event)"
+    @click.left="onLeftClick($event)"
+    @click.middle="initCamera()"
     @contextmenu.prevent="onRightClick($event)"
   >
     <GridLayer />

@@ -22,6 +22,6 @@ const color = readonly(computed(() => props.segment.disabled ? 'purple' : 'grey'
       :stroke="color"
       :stroke-width="DefaultStrokeWidth"
     />
-    <SegmentDirection :d="encodeCommandsToD(props.segment.pathCommands)" :color="color" />
+    <SegmentDirection :d="props.segment.d" :color="color" />
   </svg>
 </template>

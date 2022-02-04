@@ -1,21 +1,23 @@
 <script setup lang="ts">
 import { cameraInfo } from '../camera'
+import { elementRectInfo } from '../elementRect';
 import MapRotate from '../../rotate/components/MapRotate.ce.vue';
 // https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/shape-rendering
 // https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/text-rendering
 // https://developer.mozilla.org/ko/docs/Web/CSS/will-change
+// https://developer.mozilla.org/en-US/docs/Web/CSS/custom-ident
 </script>
 
 <template>
   <svg
     x="0"
     y="0"
-    :width="cameraInfo.elementWidth"
-    :height="cameraInfo.elementHeight"
+    :width="elementRectInfo.width"
+    :height="elementRectInfo.height"
     :viewBox="cameraInfo.viewBox"
     shape-rendering="optimizeSpeed"
     text-rendering="optimizeSpeed"
-    style="will-change: contents;"
+    style="will-change: viewBox;"
     :data-zoom-level="cameraInfo.zoomLevel"
   >
     <!-- 

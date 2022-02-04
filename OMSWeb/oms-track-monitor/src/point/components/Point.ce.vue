@@ -32,6 +32,7 @@ function onRightClick() {
       @mouseover="onMouseOver()"
     />
     <MapReverseRotate>
+      <!-- <text y="70">{{ props.point.logicalId }}</text> -->
       <RasterizedText class="invert" y="70" :text="props.point.logicalId" />
     </MapReverseRotate>
   </svg>

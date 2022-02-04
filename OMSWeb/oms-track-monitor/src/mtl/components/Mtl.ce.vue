@@ -24,6 +24,7 @@ const groupColor = useGroupColor('mtl', toRef(props.mtl, 'id'))
       stroke-width="15"
     />
     <use href="#mtl" stroke="black" stroke-width="5" />
+    <!-- <text y="70">{{ props.mtl.id }}</text> -->
     <RasterizedText class="invert" y="70" :text="props.mtl.logicalId" />
   </svg>
 </template>

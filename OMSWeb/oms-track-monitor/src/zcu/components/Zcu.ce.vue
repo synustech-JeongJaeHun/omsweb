@@ -10,6 +10,7 @@ const props = defineProps<{
 <template>
   <svg class="overflow-visible cursor-pointer" :x="props.zcu.x" :y="props.zcu.y">
     <use href="#zcu" />
+    <!-- <text y="70">{{ props.zcu.id }}</text> -->
     <RasterizedText y="70" :text="String(props.zcu.id)" />
   </svg>
 </template>

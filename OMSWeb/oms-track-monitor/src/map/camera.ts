@@ -1,12 +1,11 @@
 import { computed, reactive, readonly } from "vue";
 import { Position } from "../types/Position";
+import { DefaultHeight, DefaultWidth } from "./default";
 import { mapSizePropertiesInfo } from "./mapSizeProperties";
 
-const
-  DefaultWidth = 1000,
-  DefaultHeight = 1000,
-  CornerMargin = 1000,
-  MiminumViewBoxCornerLength = 100
+// const
+//   CornerMargin = 1000,
+//   MiminumViewBoxCornerLength = 100
 
 const
   ZoomLevel3 = 7500,
@@ -19,9 +18,6 @@ const camera = reactive({
   y: 0,
   viewBoxWidth: DefaultWidth,
   viewBoxHeight: DefaultHeight,
-  elementWidth: DefaultWidth,
-  elementHeight: DefaultHeight,
-  rotate: 0,
 })
 
 const cameraInfo = readonly(computed(() => ({
@@ -30,7 +26,7 @@ const cameraInfo = readonly(computed(() => ({
   centerY: camera.y + (camera.viewBoxHeight / 2),
   maxX: camera.x + camera.viewBoxWidth,
   maxY: camera.x + camera.viewBoxHeight,
-  ratio: camera.elementWidth / camera.elementHeight,
+  ratio: camera.viewBoxWidth / camera.viewBoxHeight,
   viewBox: `${Math.ceil(camera.x)} ${Math.ceil(camera.y)} ${Math.ceil(camera.viewBoxWidth)} ${Math.ceil(camera.viewBoxHeight)}`,
   zoomLevel: (() => {
     const smallCorner = Math.min(camera.viewBoxHeight, camera.viewBoxWidth)
@@ -41,113 +37,116 @@ const cameraInfo = readonly(computed(() => ({
   })()
 })))
 
-function resizeViewBox(widthOrHeight: "width" | "height", value: number) {
-  // go!
-  const
-    width = widthOrHeight === 'width' ? value : value * cameraInfo.value.ratio,
-    height = widthOrHeight === 'height' ? value : value / cameraInfo.value.ratio
-
+function resizeViewBox(width: number, height: number) {
   camera.x = cameraInfo.value.centerX - (width / 2)
   camera.y = cameraInfo.value.centerY - (height / 2)
   camera.viewBoxWidth = width
   camera.viewBoxHeight = height
 }
 
-function resizeElement(width: number, height: number) {
-  camera.elementWidth = width
-  camera.elementHeight = height
-
-  resizeViewBox('width', cameraInfo.value.viewBoxWidth)
-}
-
 function moveCamera(center: Position) {
   const
     halfWidth = cameraInfo.value.viewBoxWidth / 2,
-    halfHeight = cameraInfo.value.viewBoxHeight / 2,
-    screenMinX = center.x - halfWidth,
-    screenMinY = center.y - halfHeight,
-    screenMaxX = center.x + halfWidth,
-    screenMaxY = center.y + halfHeight
+    halfHeight = cameraInfo.value.viewBoxHeight / 2
 
-  const isHorizontalMoveBeyondCorner =
-    screenMinX > mapSizePropertiesInfo.value.maxX + CornerMargin
-    || screenMaxX < mapSizePropertiesInfo.value.minX - CornerMargin
-  const isCameraGoingCenterX =
-    Math.abs(mapSizePropertiesInfo.value.centerX - center.x) < Math.abs(mapSizePropertiesInfo.value.centerX - cameraInfo.value.centerX)
+  camera.x = center.x - halfWidth
+  camera.y = center.y - halfHeight
+}
 
-  const isVerticalMoveBeyondCorner =
-    screenMinY > mapSizePropertiesInfo.value.maxY + CornerMargin
-    || screenMaxY < mapSizePropertiesInfo.value.minY - CornerMargin
-  const isCameraGoingCenterY =
-    Math.abs(mapSizePropertiesInfo.value.centerY - center.y) < Math.abs(mapSizePropertiesInfo.value.centerY - cameraInfo.value.centerY)
-
-  if (isHorizontalMoveBeyondCorner === false || isCameraGoingCenterX)
-    camera.x = center.x - halfWidth
-
-  if (isVerticalMoveBeyondCorner === false || isCameraGoingCenterY)
-    camera.y = center.y - halfHeight
+function getHeightFromWidthAndRatio(width: number) {
+  return width / cameraInfo.value.ratio
 }
 
 function initCamera() {
-  moveCamera({ x: mapSizePropertiesInfo.value.centerX, y: mapSizePropertiesInfo.value.centerY })
-  resizeViewBox('width', mapSizePropertiesInfo.value.width / 2)
+  const objective = {
+    position: {
+      x: mapSizePropertiesInfo.value.centerX,
+      y: mapSizePropertiesInfo.value.centerY
+    },
+    rect: {
+      width: mapSizePropertiesInfo.value.width * 2,
+      height: getHeightFromWidthAndRatio(mapSizePropertiesInfo.value.width * 2)
+    }
+  }
+
+  let current = {
+    position: {
+      x: cameraInfo.value.centerX,
+      y: cameraInfo.value.centerY
+    },
+    rect: {
+      width: cameraInfo.value.viewBoxWidth,
+      height: cameraInfo.value.viewBoxHeight
+    }
+  }
+
+  const animationFrameCount = Math.ceil(Math.max(
+    Math.abs((objective.position.x - current.position.x) / 600),
+    Math.abs((objective.position.y - current.position.y) / 600),
+    Math.abs((objective.rect.width - current.rect.width) / 600),
+    Math.abs((objective.rect.height - current.rect.height) / 600)
+  ))
+
+  const term = {
+    position: {
+      x: (objective.position.x - current.position.x) / animationFrameCount,
+      y: (objective.position.y - current.position.y) / animationFrameCount,
+    },
+    rect: {
+      width: (objective.rect.width - current.rect.width) / animationFrameCount,
+      height: (objective.rect.height - current.rect.height) / animationFrameCount,
+    }
+  }
+
+  let count = 0
+
+  function step() {
+    if (count === animationFrameCount) return
+
+    const next = {
+      position: {
+        x: current.position.x + term.position.x,
+        y: current.position.y + term.position.y,
+      },
+      rect: {
+        width: current.rect.width + term.rect.width,
+        height: current.rect.height + term.rect.height
+      }
+    }
+
+    moveCamera(next.position)
+    resizeViewBox(next.rect.width, next.rect.height)
+
+    current = next
+    count += 1
+
+    globalThis.requestAnimationFrame(step)
+  }
+  step()
 }
 
 function zoom(action: "In" | "Out", position: Position) {
   // TODO using position
   if (action === 'In') {
-    const width = cameraInfo.value.viewBoxWidth * 0.8
-    // ZoomIn Validation
-    if (width > MiminumViewBoxCornerLength) resizeViewBox('width', width)
+    const
+      width = cameraInfo.value.viewBoxWidth * 0.7,
+      height = getHeightFromWidthAndRatio(width)
+    resizeViewBox(width, height)
   }
   else {
-    // ZoomOut Validation
-    if (cameraInfo.value.viewBoxWidth > mapSizePropertiesInfo.value.width * 2
-      && cameraInfo.value.viewBoxHeight > mapSizePropertiesInfo.value.width * 2
-    ) return
+    const
+      width = cameraInfo.value.viewBoxWidth * 1.3,
+      height = getHeightFromWidthAndRatio(width)
 
-    resizeViewBox('width', cameraInfo.value.viewBoxWidth * 1.2)
+    resizeViewBox(width, height)
   }
 }
+
 function pan(movementX: number, movementY: number) {
   moveCamera({
-    x: cameraInfo.value.centerX - (0.001 * movementX * cameraInfo.value.viewBoxWidth),
-    y: cameraInfo.value.centerY - (0.001 * movementY * cameraInfo.value.viewBoxHeight)
+    x: cameraInfo.value.centerX - (0.003 * movementX * cameraInfo.value.viewBoxWidth),
+    y: cameraInfo.value.centerY - (0.003 * movementY * cameraInfo.value.viewBoxHeight)
   })
 }
 
-
-function rotate(degree: number) {
-  camera.rotate = degree
-}
-function rotateByMouse(movementX: number, movementY: number) {
-  const direction = (function () {
-    const
-      absX = Math.abs(movementX),
-      absY = Math.abs(movementY)
-
-    if (absX > absY && movementX > 0)
-      return "Right"
-    if (absX > absY && movementX < 0)
-      return "Left"
-    // if (absY > absX && movementY > 0)
-    //   return "Up"
-    // if (absY > absX && movementY < 0)
-    //   return "Down"
-  })()
-
-  switch (direction) {
-    case "Left":
-      rotate((cameraInfo.value.rotate + 15) % 360)
-      break;
-
-    case "Right":
-      rotate((cameraInfo.value.rotate + 345) % 360)
-      break;
-
-    default:
-      break;
-  }
-}
-
-export { cameraInfo, initCamera, resizeElement, zoom, pan, rotateByMouse, moveCamera }
+export { cameraInfo, initCamera, resizeViewBox, zoom, pan, moveCamera }

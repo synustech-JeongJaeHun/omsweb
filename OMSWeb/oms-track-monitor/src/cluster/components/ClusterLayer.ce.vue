@@ -16,7 +16,7 @@ import { clusters } from '../clusters'
       fill="none"
       :stroke="Color[cluster.color]"
       stroke-width="100"
-      :d="encodeCommandsToD(cluster.pathCommands)"
+      :d="cluster.d"
     />
   </Layer>
 </template>
