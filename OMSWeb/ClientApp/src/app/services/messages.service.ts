@@ -25,6 +25,7 @@ import {
 } from '../models/command.model';
 import { IOrderStatusRow } from '../models/order-status.model';
 import { IVehicleStatusRow } from '../models/vehicle-status.model';
+import { IZcuStatusRow } from '../models/zcu-status.model';
 
 @Injectable({
   providedIn: 'root',
@@ -192,7 +193,7 @@ export class MessagesService {
   ): Observable<void> {
     return this.sendCommand<IZcuCommandMessage>(command);
   }
-
+  
   sendVehicleRegAddCommand(
     command: IVehicleRegCommandMessage
   ): Observable<void> {

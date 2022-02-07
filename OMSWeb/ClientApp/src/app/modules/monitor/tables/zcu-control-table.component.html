@@ -1,5 +1,9 @@
 <div class="grid-actions" *ngIf="hasControlAccess">
+  <button mat-stroked-button color="primary" class="dense accent" [disabled]="!canReset" (click)="onReset()">
+    {{ "names.reset" | translate }}
+  </button>
 </div>
+
 <dx-data-grid [dataSource]="dataSource" [remoteOperations]="true" [height]="tableHeight" [repaintChangesOnly]="false"
               [columnAutoWidth]="false" [showBorders]="false" [highlightChanges]="true" [showColumnLines]="true"
               [showRowLines]="true" [headerFilter]="false" [(selectedRowKeys)]="selectedRows" [renderAsync]="true">

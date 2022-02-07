@@ -613,6 +613,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   }
   private applyZcuMapChange({ data }: IDataChangeEvent) {
     if (!this.viewer) return;
+    if (data === null) return;
     const updated = this.dataSvc.getChangedZcus([data]);
     this.viewer.update_zcus(updated, false, false);
     this.updateSelectedObject('ZCU', updated, true);

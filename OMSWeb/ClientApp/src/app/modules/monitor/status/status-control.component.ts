@@ -36,6 +36,7 @@ export class StatusControlComponent implements OnInit {
     { id: 2, title: 'Vehicles' },
     { id: 3, title: 'Stations' },
     { id: 4, title: 'Buffers' },
+    { id: 5, title: 'Zcus' },
   ];
   currentTab: number = 0;
 

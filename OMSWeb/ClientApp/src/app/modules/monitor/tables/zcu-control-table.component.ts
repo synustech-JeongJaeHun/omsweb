@@ -1,6 +1,7 @@
 import { Component, HostListener, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import DataSource from 'devextreme/data/data_source';
 
+import { IZcuStatusRow } from '../../../models/zcu-status.model';
 import { StatusService } from '../../../services/status.service';
 import { SettingsService } from '../../../services/settings.service';
 import { forkJoin, Subject } from 'rxjs';
@@ -11,6 +12,8 @@ import { takeUntil } from 'rxjs/operators';
 import { MessagesService } from '../../../services/messages.service';
 import { DxDataGridComponent } from 'devextreme-angular';
 import { ClientPreferences } from '../../../models/settings.model';
+import { DialogService } from '../../../services/dialog.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'oms-zcu-control-table',
@@ -37,8 +40,12 @@ export class ZcuControlTableComponent implements OnInit, OnDestroy {
     );
   }
 
-  get canDelete(): boolean {
+  get canReset(): boolean {
     return this.selectedRows.length > 0;
+  }
+
+  get selectedItems(): IZcuStatusRow[] {
+    return this.dataGrid.instance.getSelectedRowsData();
   }
 
   constructor(
@@ -46,6 +53,8 @@ export class ZcuControlTableComponent implements OnInit, OnDestroy {
     private statusSvc: StatusService,
     private settingSvc: SettingsService,
     private messageSvc: MessagesService,
+    private dialogSvc: DialogService,
+    private $t: TranslateService,
     private hubSvc: HubService
   ) {
     this.dataSource = this.statusSvc.zcuStatusDataSource();
@@ -62,23 +71,29 @@ export class ZcuControlTableComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.hubSvc.orderTableChanged$
+    this.hubSvc.zcuStatusTableChanged$
       .pipe(takeUntil(this.destroy$))
       .subscribe((e: IDataChangeEvent) => {
         e && this.onTableChanged(e);
       });
   }
 
-  onDelete() {
-    if (!this.canDelete) return;
-    const items = this.dataGrid.instance.getSelectedRowsData();
-    const jobs = items.map((x) => this.messageSvc.sendDeleteOrder(x));
-    forkJoin(jobs).subscribe();
+  onReset() {
+    if (!this.canReset) return;
+
+    this.dialogSvc
+      .confirm({ body: this.$t.instant('messages.confirmZcuReset') })
+      .subscribe((confirm) => {
+        if (confirm) {
+          //confirm && this.messageSvc.sendVehicleCommand({ action: 'stop' }, this.selectedItems).subscribe();
+        }
+      });
+
   }
 
   private onTableChanged(payload: IDataChangeEvent) {
     let needReload = false;
-    console.log('@@ zcu table updated >>>', payload);
+    console.log('@@ zcu status table updated >>>', payload);
     if (payload && payload.id && payload.operation) {
       if (['INSERT', 'DELETE'].includes(payload.operation)) {
         needReload = true;
