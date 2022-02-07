@@ -53,11 +53,15 @@ function moveCamera(center: Position) {
   camera.y = center.y - halfHeight
 }
 
+function getWidthFromHeightAndRatio(height: number) {
+  return cameraInfo.value.ratio * height
+}
+
 function getHeightFromWidthAndRatio(width: number) {
   return width / cameraInfo.value.ratio
 }
 
-const AnimationFrameCount = 40
+const AnimationFrameCount = 20
 let isIniting = false
 function initCamera() {
   if (isIniting) return
@@ -68,10 +72,15 @@ function initCamera() {
       x: mapSizePropertiesInfo.value.centerX,
       y: mapSizePropertiesInfo.value.centerY
     },
-    rect: {
-      width: mapSizePropertiesInfo.value.width * 2,
-      height: getHeightFromWidthAndRatio(mapSizePropertiesInfo.value.width * 2)
-    }
+    rect: cameraInfo.value.viewBoxHeight > cameraInfo.value.viewBoxWidth
+      ? {
+        width: mapSizePropertiesInfo.value.width * 2,
+        height: getHeightFromWidthAndRatio(mapSizePropertiesInfo.value.width * 2)
+      }
+      : {
+        width: getWidthFromHeightAndRatio(mapSizePropertiesInfo.value.height * 2),
+        height: mapSizePropertiesInfo.value.height * 2,
+      }
   }
 
   let current = {
@@ -99,7 +108,13 @@ function initCamera() {
   let count = 0
 
   function step() {
-    if (count === AnimationFrameCount) {
+    if (count === AnimationFrameCount
+      || (
+        current.position.x === term.position.x
+        && current.position.y === term.position.y
+        && current.rect.width === term.rect.width
+        && current.rect.height === term.rect.height
+      )) {
       isIniting = false
       return
     }
