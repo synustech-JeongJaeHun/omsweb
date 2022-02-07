@@ -50,6 +50,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   // loadingState = false;
   currentContextEvent: IMapMouseEvent;
   contextData: any;
+  contextCopy: any;
   currentTooltipEvent: IMapMouseEvent;
   tooltipData: any;
   selectEvent: IMapMouseEvent;
@@ -155,22 +156,25 @@ export class MapViewerComponent implements OnInit, OnDestroy {
       })
       .subscribe();
   }
-  onApplyZcuChange(value: number) {
+  onApplyZcuChange() {
+    let origin = this.contextCopy.usingType;
+    let change = (origin === 1 ? 2 : 1);
+    this.contextCopy.usingType = change;
+
     this.dialogSvc
       .confirm({ body: this.$t.instant('messages.confirmZcuChange') })
       .subscribe((confirm) => {
         if (confirm) {
-          this.contextData.usingType = value === 1 ? 2 : 1
           this.messageSvc
             .sendSettingZcuCommand({
               type: "ZCU",
               action: "zcu-setting",
-              zcuIds: [this.contextData.id],
-              zcuUsingType: value === 1 ? "hw" : "sw",
+              zcuIds: [this.contextCopy.id],
+              zcuUsingType: change === 1 ? "hw" : "sw",
             })
             .subscribe();
         } else {
-          this.contextData.usingType = value === 1 ? 2 : 1
+          this.contextCopy.usingType = origin;
         }
       });
   }
@@ -473,7 +477,8 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     }
     setTimeout(() => {
       const { targetId, targetType } = event;
-      this.contextData = this.dataSvc.find_layout_object(targetType, targetId);
+      this.contextCopy = JSON.parse(JSON.stringify(this.dataSvc.find_layout_object(targetType, targetId)))
+      this.contextData = this.contextCopy;
       console.log('### context data >>', this.contextData);
       this.currentContextEvent = event;
     }, 0);

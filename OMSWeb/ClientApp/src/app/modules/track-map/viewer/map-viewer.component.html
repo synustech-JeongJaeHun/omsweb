@@ -157,7 +157,7 @@
         translate
         }}</button>
       <mat-button-toggle-group #zcuTypeSelect="matButtonToggleGroup" class="form-row-start" name="type"
-        aria-label="Type" (change)="onApplyZcuChange($event.value)" [(value)]="contextData.usingType">
+        aria-label="Type" (change)="onApplyZcuChange()" [value]="contextData.usingType">
         <mat-button-toggle [value]="1">{{
           "names.hw" |
           translate }}
