@@ -57,7 +57,12 @@ function getHeightFromWidthAndRatio(width: number) {
   return width / cameraInfo.value.ratio
 }
 
+const AnimationFrameCount = 40
+let isIniting = false
 function initCamera() {
+  if (isIniting) return
+  else isIniting = true
+
   const objective = {
     position: {
       x: mapSizePropertiesInfo.value.centerX,
@@ -80,28 +85,24 @@ function initCamera() {
     }
   }
 
-  const animationFrameCount = Math.ceil(Math.max(
-    Math.abs((objective.position.x - current.position.x) / 600),
-    Math.abs((objective.position.y - current.position.y) / 600),
-    Math.abs((objective.rect.width - current.rect.width) / 600),
-    Math.abs((objective.rect.height - current.rect.height) / 600)
-  ))
-
   const term = {
     position: {
-      x: (objective.position.x - current.position.x) / animationFrameCount,
-      y: (objective.position.y - current.position.y) / animationFrameCount,
+      x: (objective.position.x - current.position.x) / AnimationFrameCount,
+      y: (objective.position.y - current.position.y) / AnimationFrameCount,
     },
     rect: {
-      width: (objective.rect.width - current.rect.width) / animationFrameCount,
-      height: (objective.rect.height - current.rect.height) / animationFrameCount,
+      width: (objective.rect.width - current.rect.width) / AnimationFrameCount,
+      height: (objective.rect.height - current.rect.height) / AnimationFrameCount,
     }
   }
 
   let count = 0
 
   function step() {
-    if (count === animationFrameCount) return
+    if (count === AnimationFrameCount) {
+      isIniting = false
+      return
+    }
 
     const next = {
       position: {
@@ -120,7 +121,7 @@ function initCamera() {
     current = next
     count += 1
 
-    globalThis.requestAnimationFrame(step)
+    setTimeout(() => { globalThis.requestAnimationFrame(step) }, 20);
   }
   step()
 }
