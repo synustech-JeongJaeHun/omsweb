@@ -12,7 +12,7 @@ import SegmentLayer from '../../segment/components/SegmentLayer.ce.vue';
 import ClusterLayer from '../../cluster/components/ClusterLayer.ce.vue';
 
 import { elementRectInfo } from '../elementRect';
-import { rotateByMouse } from '../rotate';
+import { rotateByMouse } from '../../rotate/rotate';
 
 const props = defineProps<{
   isClusterShowing: boolean,
@@ -58,12 +58,9 @@ function exitRotating() {
   // canRotating.value = false
 }
 function rotateTo(event: MouseEvent) {
-  // if (canRotating.value && Math.abs(event.movementX) > 2) {
-  // 📐🛑 Be careful! logic is dependent on invert
-  rotateByMouse(event.movementX, (-1) * event.movementY)
-  // canRotating.value = false
-  // setTimeout(() => { canRotating.value = true }, 50);
-  // }
+  if (Math.abs(event.movementX) > 3)
+    // 📐🛑 Be careful! logic is dependent on invert
+    rotateByMouse(event.movementX, (-1) * event.movementY)
 }
 
 // WheelEvent

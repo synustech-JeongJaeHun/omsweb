@@ -18,3 +18,11 @@
 .cursor-pointer {
   cursor: pointer;
 }
+
+.flex {
+  display: flex;
+}
+
+.flex-row {
+  flex-direction: row;
+}

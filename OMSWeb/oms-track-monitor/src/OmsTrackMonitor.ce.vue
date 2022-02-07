@@ -141,8 +141,10 @@ defineExpose(exposed)
       :isGroupShowing="parseBooleanProp(false, props.isGroupShowing)"
     />
     <Minimap class="absolute" style="bottom: 2vw; left: 2vw;" />
-    <Scale class="absolute" style="bottom: 10px; right: 10px;" />
-    <ScreenDetail class="absolute" style="top: 10px; right: 10px" />
+    <div class="absolute flex flex-row" style="padding: unset; bottom: 10px; right: 10px;">
+      <Scale />
+      <ScreenDetail />
+    </div>
   </div>
 </template>
 
