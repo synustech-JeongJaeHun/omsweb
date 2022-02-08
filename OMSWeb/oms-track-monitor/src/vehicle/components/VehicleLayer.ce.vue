@@ -2,7 +2,6 @@
 import Layer from '../../map/components/Layer.ce.vue';
 import Vehicle from './Vehicle.ce.vue';
 import { vehicles } from '../vehicles'
-
 </script>
 
 <template>

@@ -1,6 +1,7 @@
 import { readonly, ref } from "vue";
 
 const rotation = ref(0)
+const rotationInfo = readonly(rotation)
 
 function rotate(degree: number) {
   rotation.value = degree
@@ -20,11 +21,11 @@ function rotateByMouse(movementX: number, movementY: number) {
 
   switch (direction) {
     case "Left":
-      rotate((rotation.value + 15) % 360)
+      rotate((rotationInfo.value + 15) % 360)
       break;
 
     case "Right":
-      rotate((rotation.value + 345) % 360)
+      rotate((rotationInfo.value + 345) % 360)
       break;
 
     default:
@@ -32,6 +33,5 @@ function rotateByMouse(movementX: number, movementY: number) {
   }
 }
 
-const rotationInfo = readonly(rotation)
 
 export { rotationInfo, rotate, rotateByMouse }

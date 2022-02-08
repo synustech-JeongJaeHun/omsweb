@@ -4,22 +4,33 @@ import RasterizedText from '../../map/components/RasterizedText.ce.vue';
 import MapReverseRotate from '../../rotate/components/MapReverseRotate.ce.vue';
 import { inject } from 'vue';
 import { RootEmits, RootEmitInjectionKey } from '../../types/RootEmits';
+import { deepCopy } from '../../utils/deepCopy';
 
 const props = defineProps<{
   point: Point
 }>()
 const emit = inject<RootEmits>(RootEmitInjectionKey)!
 
-function onLeftClick() {
-  emit('leftclick', {})
+function onTooltipOn() {
+  emit('tooltipon', {
+    type: 'Point',
+    value: deepCopy(props.point)
+  })
 }
-
-function onMouseOver() {
-  emit('mouseover', {})
+function onTooltipOff() {
+  emit('tooltipoff')
 }
-
-function onRightClick() {
-  emit('rightclick', {})
+function onFocus() {
+  emit('focus', {
+    type: "Point",
+    value: deepCopy(props.point)
+  })
+}
+function onContextmenu() {
+  emit('contextmenuon', {
+    type: "Point",
+    value: deepCopy(props.point)
+  })
 }
 </script>
 
@@ -27,9 +38,11 @@ function onRightClick() {
   <svg class="overflow-visible cursor-pointer" :x="props.point.x" :y="props.point.y">
     <use
       href="#point"
-      @click.left="onLeftClick()"
-      @click.right="onRightClick()"
-      @mouseover="onMouseOver()"
+      @click.left="onFocus()"
+      @click.right="onContextmenu()"
+      @mouseover="onTooltipOn()"
+      @mouseout="onTooltipOff()"
+      @mouseleave="onTooltipOff()"
     />
     <MapReverseRotate>
       <!-- <text y="70">{{ props.point.logicalId }}</text> -->

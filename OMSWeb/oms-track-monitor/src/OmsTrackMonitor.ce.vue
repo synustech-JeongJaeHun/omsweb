@@ -18,7 +18,6 @@ import { MapType } from './map/types/MapType'
 import Map from './map/components/Map.ce.vue'
 import Minimap from './minimap/components/Minimap.ce.vue'
 import { initMapSizeProperties } from './map/mapSizeProperties'
-import { initCamera } from './map/camera'
 import { segments } from './segment/segments'
 import { makeSegmentsFromParts } from './segment/utils/segment'
 import { parseNumberProp, parseBooleanProp } from './utils/props'
@@ -28,6 +27,7 @@ import { makeGroups } from './group/utils/group'
 import { RootEmitInjectionKey, RootEmits } from './types/RootEmits'
 import ScreenDetail from './map/components/ScreenDetail.ce.vue'
 import { elementRectInfo, setElementRect } from './map/elementRect'
+import { initCameraAndRotate } from './init'
 
 /**
  * https://v3.vuejs.org/api/sfc-script-setup.html#typescript-only-features
@@ -75,7 +75,7 @@ const exposed: IOmsTrackMonitor = {
 
     const { minX, minY, maxX, maxY } = calculateMinMaxXYFromPoints(t.points ?? [])
     initMapSizeProperties(minX, minY, maxX, maxY)
-    initCamera()
+    initCameraAndRotate()
 
     // Order is IMPORTANT!
     // point must be initialized first.
@@ -110,10 +110,10 @@ const exposed: IOmsTrackMonitor = {
   },
   updateSegment: function (op, v) { }
 }
+
 // # in devmode
 // const exposedProxy = makeFsProxy(exposed)
 defineExpose(exposed)
-
 // # production
 // defineExpose(exposed)
 

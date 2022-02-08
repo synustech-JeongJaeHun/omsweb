@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import { pan, zoom, initCamera } from '../camera';
+import { inject, ref } from 'vue';
+import { pan, zoom } from '../camera';
+import { initCameraAndRotate } from '../../init';
 import GridLayer from './GridLayer.ce.vue';
 import PointLayer from '../../point/components/PointLayer.ce.vue';
 import BufferLayer from '../../buffer/components/BufferLayer.ce.vue';
@@ -13,11 +14,13 @@ import ClusterLayer from '../../cluster/components/ClusterLayer.ce.vue';
 
 import { elementRectInfo } from '../elementRect';
 import { rotateByMouse } from '../../rotate/rotate';
+import { RootEmitInjectionKey, RootEmits } from '../../types/RootEmits';
 
 const props = defineProps<{
   isClusterShowing: boolean,
   isGroupShowing: boolean,
 }>()
+const emit = inject<RootEmits>(RootEmitInjectionKey)!
 
 // MouseEvent.button
 // https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/button
@@ -73,12 +76,7 @@ function zoomInOut(event: WheelEvent | MouseEvent) {
 }
 
 function onLeftClick(event: MouseEvent) {
-  event.clientX
-  event.clientY
-}
-function onRightClick(event: MouseEvent) {
-  event.clientX
-  event.clientY
+  emit('backdrop')
 }
 </script>
 
@@ -93,16 +91,15 @@ function onRightClick(event: MouseEvent) {
     :data-is-rotating="isRotating"
     :data-is-group-showing="props.isGroupShowing"
     @wheel="zoomInOut($event)"
-    @dblclick="zoomInOut($event)"
-    @mousedown.middle.prevent
+    @dblclick.self="zoomInOut($event)"
     @mousedown.left="enterPanning()"
     @mousedown.right="enterRotating()"
     @mousemove="isPanning && panTo($event), isRotating && rotateTo($event)"
     @mouseleave="exitPanning(), exitRotating()"
     @mouseup="exitPanning(), exitRotating()"
-    @click.left="onLeftClick($event)"
-    @click.middle="initCamera()"
-    @contextmenu.prevent="onRightClick($event)"
+    @click.left.self="onLeftClick($event)"
+    @click.middle.prevent="initCameraAndRotate()"
+    @click.right.prevent
   >
     <GridLayer />
     <ClusterLayer v-show="props.isClusterShowing" />

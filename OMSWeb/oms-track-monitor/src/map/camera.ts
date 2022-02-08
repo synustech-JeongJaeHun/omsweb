@@ -2,7 +2,6 @@ import { computed, reactive, readonly, watch } from "vue";
 import { Position } from "../types/Position";
 import { DefaultHeight, DefaultWidth } from "./default";
 import { elementRectInfo } from "./elementRect";
-import { mapSizePropertiesInfo } from "./mapSizeProperties";
 
 const
   ZoomLevel3 = 7500,
@@ -76,86 +75,6 @@ watch(elementRectInfo, () => {
   moveCamera({ x: cameraInfo.value.centerX, y: cameraInfo.value.centerY })
 })
 
-const AnimationFrameCount = 20
-let isIniting = false
-function initCamera() {
-  if (isIniting) return
-  else isIniting = true
-
-  const objective = {
-    position: {
-      x: mapSizePropertiesInfo.value.centerX,
-      y: mapSizePropertiesInfo.value.centerY
-    },
-    rect: cameraInfo.value.viewBoxHeight > cameraInfo.value.viewBoxWidth
-      ? {
-        width: mapSizePropertiesInfo.value.width * 2,
-        height: getHeightFromWidthAndRatio(mapSizePropertiesInfo.value.width * 2)
-      }
-      : {
-        width: getWidthFromHeightAndRatio(mapSizePropertiesInfo.value.height * 2),
-        height: mapSizePropertiesInfo.value.height * 2,
-      }
-  }
-
-  let current = {
-    position: {
-      x: cameraInfo.value.centerX,
-      y: cameraInfo.value.centerY
-    },
-    rect: {
-      width: cameraInfo.value.viewBoxWidth,
-      height: cameraInfo.value.viewBoxHeight
-    }
-  }
-
-  const term = {
-    position: {
-      x: (objective.position.x - current.position.x) / AnimationFrameCount,
-      y: (objective.position.y - current.position.y) / AnimationFrameCount,
-    },
-    rect: {
-      width: (objective.rect.width - current.rect.width) / AnimationFrameCount,
-      height: (objective.rect.height - current.rect.height) / AnimationFrameCount,
-    }
-  }
-
-  let count = 0
-
-  function step() {
-    if (count === AnimationFrameCount
-      || (
-        current.position.x === term.position.x
-        && current.position.y === term.position.y
-        && current.rect.width === term.rect.width
-        && current.rect.height === term.rect.height
-      )) {
-      isIniting = false
-      return
-    }
-
-    const next = {
-      position: {
-        x: current.position.x + term.position.x,
-        y: current.position.y + term.position.y,
-      },
-      rect: {
-        width: current.rect.width + term.rect.width,
-        height: current.rect.height + term.rect.height
-      }
-    }
-
-    moveCamera(next.position)
-    resizeViewBox(next.rect.width, next.rect.height)
-
-    current = next
-    count += 1
-
-    setTimeout(() => { globalThis.requestAnimationFrame(step) }, 20);
-  }
-  step()
-}
-
 function zoom(action: "In" | "Out", position: Position) {
   // TODO using position
   if (action === 'In') {
@@ -180,4 +99,12 @@ function pan(movementX: number, movementY: number) {
   })
 }
 
-export { cameraInfo, initCamera, resizeViewBox, zoom, pan, moveCamera }
+export {
+  cameraInfo,
+  resizeViewBox,
+  zoom,
+  pan,
+  moveCamera,
+  getHeightFromWidthAndRatio,
+  getWidthFromHeightAndRatio
+}

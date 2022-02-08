@@ -153,8 +153,23 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     height: window.innerHeight - 40
   }
 
-  public doWhat(event: any) {
-    console.log(event)
+  public onTooltipOn(event: CustomEvent) {
+    console.log(event.type, getCustomEventPayload(event))
+  }
+  public onTooltipOff(event: CustomEvent) {
+    console.log(event.type)
+  }
+  public onFocus(event: CustomEvent) {
+    console.log(event.type, getCustomEventPayload(event))
+  }
+  public onContectMenuOn(event: CustomEvent) {
+    console.log(event.type, getCustomEventPayload(event))
+  }
+  public onBackdrop(event: CustomEvent) {
+    console.log(event.type)
+  }
+  public onRotate(event: CustomEvent) {
+    console.log(event.type, getCustomEventPayload(event))
   }
 
   @HostListener('window:resize', ['$event.target'])
@@ -164,4 +179,9 @@ export class MapViewerComponent implements OnInit, OnDestroy {
       height: window.innerHeight - 40
     }
   }
+}
+
+
+function getCustomEventPayload<T>(event: CustomEvent<T[]>) {
+  return event.detail[0]
 }

@@ -1,9 +1,14 @@
 // @ts-ignore
 import { IOmsTrackMonitor } from './IOmsTrackMonitor'
+import { EventDetails } from '../src/types/RootEmits'
 
-interface OmsTrackMonitorEventMap extends HTMLElementEventMap {
-  apple: CustomEvent<{ A: 'A' }>
-  blue: CustomEvent<{ B: number }>
+interface OmsTrackMonitorEventMap {
+  tooltipon: CustomEvent<EventDetails.TooltipOn[]>
+  tooltipoff: CustomEvent<EventDetails.TooltipOff[]>
+  focus: CustomEvent<EventDetails.Focus[]>
+  contextmenu: CustomEvent<EventDetails.Contextmenu[]>
+  backdrop: CustomEvent<EventDetails.Backdrop[]>
+  rotate: CustomEvent<EventDetails.Rotate[]>
 }
 
 interface OmsTrackMonitorElement extends HTMLElement {
@@ -37,7 +42,7 @@ interface OmsTrackMonitorElement extends HTMLElement {
 
 declare var OmsTrackMonitorElement: {
   prototype: OmsTrackMonitorElement
-  new (): OmsTrackMonitorElement
+  new(): OmsTrackMonitorElement
 }
 
 declare global {

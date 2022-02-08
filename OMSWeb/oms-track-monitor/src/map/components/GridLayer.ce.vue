@@ -42,7 +42,9 @@ const
       </pattern>
     </defs>
 
+    <!-- pointer-events="none" for map backdrop event -->
     <rect
+      pointer-events="none"
       fill="url(#mapGridPattern)"
       :x="(-1) * MapMargin"
       :y="(-1) * MapMargin"

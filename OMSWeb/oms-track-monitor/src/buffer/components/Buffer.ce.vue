@@ -1,16 +1,20 @@
 <script setup lang="ts">
-import { computed, readonly, toRef } from 'vue'
+import { computed, inject, readonly, toRef } from 'vue'
 import { usePointPoisiton } from '../../point/points'
 import { addVectors, getOrthogonalVector, getUnitVector, multipleVector, ZeroVector } from '../../utils/vector'
 import { Buffer } from '../types/Buffer'
 import RasterizedText from '../../map/components/RasterizedText.ce.vue'
 import { useGroupColor } from '../../group/groups'
+import { RootEmitInjectionKey, RootEmits } from '../../types/RootEmits'
+import { deepCopy } from '../../utils/deepCopy'
+import MapReverseRotate from '../../rotate/components/MapReverseRotate.ce.vue'
 
 const BufferDirectionMargin = 500
 
 const props = defineProps<{
   buffer: Buffer
 }>()
+const emit = inject<RootEmits>(RootEmitInjectionKey)!
 
 const startPointPosition = usePointPoisiton(toRef(props.buffer, 'pointId'))
 const nextPointPosition = usePointPoisiton(toRef(props.buffer, 'nextPoint'))
@@ -38,8 +42,26 @@ const position = readonly(computed(() => {
 
 const groupColor = useGroupColor('buffer', toRef(props.buffer, 'id'))
 
-function eventPropagationTest() {
-  alert(`BUFFER CLICKED ${props.buffer.logicalId}`)
+function onTooltipOn() {
+  emit('tooltipon', {
+    type: 'Buffer',
+    value: deepCopy(props.buffer)
+  })
+}
+function onTooltipOff() {
+  emit('tooltipoff')
+}
+function onFocus() {
+  emit('focus', {
+    type: "Buffer",
+    value: deepCopy(props.buffer)
+  })
+}
+function onContextmenu() {
+  emit('contextmenuon', {
+    type: "Buffer",
+    value: deepCopy(props.buffer)
+  })
 }
 </script>
 
@@ -47,8 +69,19 @@ function eventPropagationTest() {
 <template>
   <svg class="overflow-visible cursor-pointer" :x="position.x" :y="position.y">
     <use v-show="groupColor" href="#buffer-group-shadow" :fill="groupColor" />
-    <use href="#buffer" @click="eventPropagationTest()" />
+    <use
+      href="#buffer"
+      stroke="black"
+      stroke-width="15"
+      @click.left="onFocus()"
+      @click.right="onContextmenu()"
+      @mouseover="onTooltipOn()"
+      @mouseout="onTooltipOff()"
+      @mouseleave="onTooltipOff()"
+    />
     <!-- <text y="70">{{ props.buffer.logicalId }}</text> -->
-    <RasterizedText class="invert" y="70" :text="props.buffer.logicalId" />
+    <MapReverseRotate>
+      <RasterizedText class="invert" x="75" y="45" :text="props.buffer.logicalId" />
+    </MapReverseRotate>
   </svg>
 </template>

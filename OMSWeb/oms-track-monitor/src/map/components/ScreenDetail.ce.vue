@@ -12,7 +12,7 @@ const isShow = ref(false)
   <div style="font-size: smaller;">
     <button
       type="button"
-      @click="isShow = !isShow"
+      @click.stop="isShow = !isShow"
       style="border: unset; background-color: unset;"
     >ℹ️</button>
     <div

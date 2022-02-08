@@ -89,16 +89,6 @@ function onPanning(event: MouseEvent) {
     @mouseleave="exitPanning()"
   >
     <MapRotate>
-      <rect
-        x="0"
-        y="0"
-        :width="mapSizePropertiesInfo.width"
-        :height="mapSizePropertiesInfo.height"
-        fill="none"
-        stroke="black"
-        stroke-width="200"
-      />
-      <circle cx="0" cy="0" r="4000" fill="red" />
       <SegmentOnlyStroke v-for="segment of segments" :key="segment.id" :segment="segment" />
     </MapRotate>
     <CameraBox />

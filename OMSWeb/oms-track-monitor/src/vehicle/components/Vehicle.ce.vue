@@ -28,7 +28,7 @@ watch(() => props.vehicle.lastUpdated, () => {
   const segment = findSegmentByPoints(props.vehicle.curPoint, props.vehicle.nextPoint)
   const { x, y } =
     segment
-      ? getPositionFromD(encodeCommandsToD(segment.pathCommands), props.vehicle.distancePoint)
+      ? getPositionFromD(segment.d, props.vehicle.distancePoint)
       : findPointById(props.vehicle.curPoint) ?? { x: 0, y: 0 }
 
   // current => before

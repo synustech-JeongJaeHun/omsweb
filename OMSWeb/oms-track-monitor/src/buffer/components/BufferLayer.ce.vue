@@ -14,8 +14,31 @@ import { buffers } from '../buffers'
         id="buffer-group-shadow"
         points="20,40 40,20 40,-20 20,-40 -20,-40 -40,-20 -40,20 -20,40"
       />-->
-      <circle id="buffer" r="50" stroke="black" stroke-width="10" fill="none" />
-      <circle id="buffer-group-shadow" r="60" />
+      <!-- 
+        pointer-events for event from bounding-box
+        https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/pointer-events
+      -->
+      <!-- 
+        arc
+        https://developer.mozilla.org/ko/docs/Web/SVG/Tutorial/Paths#arcs 
+      -->
+      <path
+        id="buffer"
+        pointer-events="bounding-box"
+        fill="none"
+        d="
+        M -56 -18 
+        A 36 36 0 0 1 -18 -56
+        M 18 -56
+        A 36 36 0 0 1 56 -18
+        M 56 18
+        A 36 36 0 0 1 18 56
+        M -18 56 
+        A 36 36 0 0 1 -56 18
+        "
+      />
+      <!-- <circle id="buffer" r="50" stroke="black" stroke-width="10" fill="none" /> -->
+      <circle id="buffer-group-shadow" r="85" />
     </defs>
 
     <Buffer v-for="buffer of buffers" :key="buffer.id" :buffer="buffer" />
