@@ -8,28 +8,40 @@ import SegmentOnlyStroke from './SegmentOnlyStroke.ce.vue';
 import MapRotate from '../../rotate/components/MapRotate.ce.vue';
 import { elementRectInfo } from '../../map/elementRect';
 
-const
-  MapMargin = 3000,
-  X = (-1) * MapMargin,
-  Y = (-1) * MapMargin
+const MapMargin = 10000
 
-const
-  minimapViewBoxWidth = readonly(computed(() => mapSizePropertiesInfo.value.maxX + 2 * MapMargin)),
-  minimapViewBoxHeight = readonly(computed(() => mapSizePropertiesInfo.value.maxY + 2 * MapMargin))
+const baseLength = readonly(computed(() =>
+  Math.max(
+    mapSizePropertiesInfo.value.width,
+    mapSizePropertiesInfo.value.height,
+    (mapSizePropertiesInfo.value.width + mapSizePropertiesInfo.value.height) / Math.pow(8, 1 / 2),
+  )
+))
+const originPosition = readonly(computed(() => ({
+  x: mapSizePropertiesInfo.value.centerX - baseLength.value / 2 - MapMargin,
+  y: mapSizePropertiesInfo.value.centerY - baseLength.value / 2 - MapMargin,
+})))
+
+const minimapViewBoxLength = readonly(computed(() => baseLength.value + 2 * MapMargin))
 
 const minimapSvgElement = ref<SVGElement>()
 const minimapDomRect = reactive({ width: 0, height: 0, minX: 0, minY: 0, maxX: 0, maxY: 0 })
 
 watch([minimapSvgElement, elementRectInfo], () => {
-  if (minimapSvgElement.value === undefined) return
+  // use setTimeout for unexpected domrect value (like negative y)
+  setTimeout(() => {
+    if (minimapSvgElement.value === undefined) return
 
-  const rect = minimapSvgElement.value.getBoundingClientRect()
-  minimapDomRect.width = rect.width
-  minimapDomRect.height = rect.height
-  minimapDomRect.minX = rect.x
-  minimapDomRect.minY = rect.y
-  minimapDomRect.maxX = rect.x + rect.width
-  minimapDomRect.maxY = rect.y + rect.height
+    // https://developer.mozilla.org/ko/docs/Web/API/Element/getBoundingClientRect
+    const rect = minimapSvgElement.value.getBoundingClientRect()
+
+    minimapDomRect.width = rect.width
+    minimapDomRect.height = rect.height
+    minimapDomRect.minX = rect.x
+    minimapDomRect.minY = rect.y
+    minimapDomRect.maxX = rect.x + rect.width
+    minimapDomRect.maxY = rect.y + rect.height
+  }, 0);
 })
 
 function zoomInOut(event: WheelEvent | MouseEvent) {
@@ -47,11 +59,12 @@ function exitPanning() {
 function onPanning(event: MouseEvent) {
   if (minimapDomRect.width === 0 || minimapDomRect.height === 0) return
 
-  moveCamera({
-    x: (event.clientX - minimapDomRect.minX) / minimapDomRect.width * minimapViewBoxWidth.value - MapMargin,
+  const position = {
+    x: (event.clientX - minimapDomRect.minX) / minimapDomRect.width * minimapViewBoxLength.value - MapMargin,
     // 📐🛑 Be careful! logic is dependent on invert
-    y: (minimapDomRect.maxY - event.clientY) / minimapDomRect.height * minimapViewBoxHeight.value - MapMargin
-  })
+    y: (minimapDomRect.maxY - event.clientY) / minimapDomRect.height * minimapViewBoxLength.value - MapMargin
+  }
+  moveCamera(position)
 }
 
 </script>
@@ -61,7 +74,7 @@ function onPanning(event: MouseEvent) {
     id="minimap-container"
     class="invert"
     ref="minimapSvgElement"
-    :viewBox="`${X} ${Y} ${minimapViewBoxWidth} ${minimapViewBoxHeight}`"
+    :viewBox="`${originPosition.x} ${originPosition.y} ${minimapViewBoxLength} ${minimapViewBoxLength}`"
     :style="{
       maxWidth: `20vw`,
       maxHeight: `20vh`,
@@ -69,12 +82,23 @@ function onPanning(event: MouseEvent) {
       border: '2px solid black'
     }"
     @wheel="zoomInOut($event)"
+    @mousedown.middle.prevent
     @mousedown="enterPanning(), onPanning($event)"
     @mousemove="isPanning && onPanning($event)"
     @mouseup="exitPanning()"
     @mouseleave="exitPanning()"
   >
     <MapRotate>
+      <rect
+        x="0"
+        y="0"
+        :width="mapSizePropertiesInfo.width"
+        :height="mapSizePropertiesInfo.height"
+        fill="none"
+        stroke="black"
+        stroke-width="200"
+      />
+      <circle cx="0" cy="0" r="4000" fill="red" />
       <SegmentOnlyStroke v-for="segment of segments" :key="segment.id" :segment="segment" />
     </MapRotate>
     <CameraBox />

@@ -18,7 +18,7 @@ import { MapType } from './map/types/MapType'
 import Map from './map/components/Map.ce.vue'
 import Minimap from './minimap/components/Minimap.ce.vue'
 import { initMapSizeProperties } from './map/mapSizeProperties'
-import { initCamera, resizeViewBox } from './map/camera'
+import { initCamera } from './map/camera'
 import { segments } from './segment/segments'
 import { makeSegmentsFromParts } from './segment/utils/segment'
 import { parseNumberProp, parseBooleanProp } from './utils/props'
@@ -54,9 +54,7 @@ provide(RootEmitInjectionKey, readonly(emit))
 watch(props, (props, prevProps) => {
   const width = parseNumberProp(0, props.width)
   const height = parseNumberProp(0, props.height)
-
   setElementRect(width, height)
-  resizeViewBox(width, height)
 })
 
 const viewMode = ref<ViewMode>('PUBLIC')

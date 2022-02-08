@@ -1,11 +1,8 @@
-import { computed, reactive, readonly } from "vue";
+import { computed, reactive, readonly, watch } from "vue";
 import { Position } from "../types/Position";
 import { DefaultHeight, DefaultWidth } from "./default";
+import { elementRectInfo } from "./elementRect";
 import { mapSizePropertiesInfo } from "./mapSizeProperties";
-
-// const
-//   CornerMargin = 1000,
-//   MiminumViewBoxCornerLength = 100
 
 const
   ZoomLevel3 = 7500,
@@ -18,6 +15,7 @@ const camera = reactive({
   y: 0,
   viewBoxWidth: DefaultWidth,
   viewBoxHeight: DefaultHeight,
+  ratio: DefaultWidth / DefaultHeight
 })
 
 const cameraInfo = readonly(computed(() => ({
@@ -26,7 +24,6 @@ const cameraInfo = readonly(computed(() => ({
   centerY: camera.y + (camera.viewBoxHeight / 2),
   maxX: camera.x + camera.viewBoxWidth,
   maxY: camera.x + camera.viewBoxHeight,
-  ratio: camera.viewBoxWidth / camera.viewBoxHeight,
   viewBox: `${Math.ceil(camera.x)} ${Math.ceil(camera.y)} ${Math.ceil(camera.viewBoxWidth)} ${Math.ceil(camera.viewBoxHeight)}`,
   zoomLevel: (() => {
     const smallCorner = Math.min(camera.viewBoxHeight, camera.viewBoxWidth)
@@ -36,6 +33,14 @@ const cameraInfo = readonly(computed(() => ({
           : 0
   })()
 })))
+
+function getWidthFromHeightAndRatio(height: number) {
+  return cameraInfo.value.ratio * height
+}
+
+function getHeightFromWidthAndRatio(width: number) {
+  return width / cameraInfo.value.ratio
+}
 
 function resizeViewBox(width: number, height: number) {
   camera.x = cameraInfo.value.centerX - (width / 2)
@@ -53,13 +58,23 @@ function moveCamera(center: Position) {
   camera.y = center.y - halfHeight
 }
 
-function getWidthFromHeightAndRatio(height: number) {
-  return cameraInfo.value.ratio * height
-}
+watch(elementRectInfo, () => {
+  camera.ratio = elementRectInfo.width / elementRectInfo.height
 
-function getHeightFromWidthAndRatio(width: number) {
-  return width / cameraInfo.value.ratio
-}
+  if (elementRectInfo.width > elementRectInfo.height)
+    resizeViewBox(
+      cameraInfo.value.viewBoxWidth,
+      getHeightFromWidthAndRatio(cameraInfo.value.viewBoxWidth)
+    )
+
+  else
+    resizeViewBox(
+      getWidthFromHeightAndRatio(cameraInfo.value.viewBoxHeight),
+      cameraInfo.value.viewBoxHeight
+    )
+
+  moveCamera({ x: cameraInfo.value.centerX, y: cameraInfo.value.centerY })
+})
 
 const AnimationFrameCount = 20
 let isIniting = false

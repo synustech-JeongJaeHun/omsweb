@@ -2,8 +2,6 @@
 import { Segment } from '../../segment/types/Segment';
 import { getSegmentPathId } from '../../segment/utils/segment';
 
-const DefaultStrokeWidth = 100
-
 const props = defineProps<{
   segment: Segment
 }>()
@@ -11,9 +9,5 @@ const props = defineProps<{
 </script>
 
 <template>
-  <use
-    :href="`#${getSegmentPathId(props.segment.id)}`"
-    stroke="black"
-    :stroke-width="DefaultStrokeWidth"
-  />
+  <use :href="`#${getSegmentPathId(props.segment.id)}`" stroke="black" stroke-width="100" />
 </template>

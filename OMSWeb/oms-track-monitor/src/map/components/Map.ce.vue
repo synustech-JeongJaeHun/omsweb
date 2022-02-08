@@ -94,6 +94,7 @@ function onRightClick(event: MouseEvent) {
     :data-is-group-showing="props.isGroupShowing"
     @wheel="zoomInOut($event)"
     @dblclick="zoomInOut($event)"
+    @mousedown.middle.prevent
     @mousedown.left="enterPanning()"
     @mousedown.right="enterRotating()"
     @mousemove="isPanning && panTo($event), isRotating && rotateTo($event)"
