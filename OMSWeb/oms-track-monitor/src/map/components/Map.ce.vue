@@ -30,7 +30,8 @@ const emit = inject<RootEmits>(RootEmitInjectionKey)!
 // 3: Fourth button, typically the Browser Back button
 // 4: Fifth button, typically the Browser Forward button
 const
-  isPanning = ref(false)
+  isPanning = ref(false),
+  hasPanned = ref(false)
 // canPanning = ref(false)
 function enterPanning() {
   isPanning.value = true
@@ -44,13 +45,15 @@ function panTo(event: MouseEvent) {
   // if (canPanning.value) {
   // 📐🛑 Be careful! logic is dependent on invert
   pan(event.movementX, (-1) * event.movementY)
+  hasPanned.value = true
   // canPanning.value = false
   // setTimeout(() => { canPanning.value = true }, 50);
   // }
 }
 
 const
-  isRotating = ref(false)
+  isRotating = ref(false),
+  hasRotated = ref(false)
 // canRotating = ref(false)
 function enterRotating() {
   isRotating.value = true
@@ -59,11 +62,14 @@ function enterRotating() {
 function exitRotating() {
   isRotating.value = false
   // canRotating.value = false
+  hasRotated.value = false
 }
 function rotateTo(event: MouseEvent) {
-  if (Math.abs(event.movementX) > 3)
+  if (Math.abs(event.movementX) > 3) {
     // 📐🛑 Be careful! logic is dependent on invert
     rotateByMouse(event.movementX, (-1) * event.movementY)
+    hasRotated.value = true
+  }
 }
 
 // WheelEvent
@@ -75,8 +81,13 @@ function zoomInOut(event: WheelEvent | MouseEvent) {
   zoom(action, { x: event.clientX, y: event.clientY })
 }
 
-function onLeftClick(event: MouseEvent) {
-  emit('backdrop')
+function handleMouseUp() {
+  if (hasPanned.value === false
+    && hasRotated.value === false)
+    emit('backdrop')
+
+  hasPanned.value = false
+  hasRotated.value = false
 }
 </script>
 
@@ -97,7 +108,7 @@ function onLeftClick(event: MouseEvent) {
     @mousemove="isPanning && panTo($event), isRotating && rotateTo($event)"
     @mouseleave="exitPanning(), exitRotating()"
     @mouseup="exitPanning(), exitRotating()"
-    @click.left.self="onLeftClick($event)"
+    @click.left.self="handleMouseUp()"
     @click.middle.prevent="initCameraAndRotate()"
     @click.right.prevent
   >
