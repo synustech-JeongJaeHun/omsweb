@@ -2,7 +2,7 @@
 import { Vehicle } from '../types/Vehicle'
 import RasterizedText from '../../map/components/RasterizedText.ce.vue';
 import { findPointById, usePointPoisiton } from '../../point/points';
-import { reactive, ref, toRef, watch } from 'vue';
+import { inject, reactive, ref, toRef, watch } from 'vue';
 import { findSegmentByPoints } from '../../segment/segments';
 import { createPathElement, getPositionFromD } from '../../utils/svg/path';
 import { Segment } from '../../segment/types/Segment';
@@ -11,10 +11,13 @@ import { useGroupColor } from '../../group/groups';
 import { D } from '../../types/D';
 import MapReverseRotate from '../../rotate/components/MapReverseRotate.ce.vue';
 import { useNextLocationPosition } from '../utils/lines';
+import { RootEmitInjectionKey, RootEmits } from '../../types/RootEmits';
+import { deepCopy } from '../../utils/deepCopy';
 
 const props = defineProps<{
   vehicle: Vehicle
 }>()
+const emit = inject<RootEmits>(RootEmitInjectionKey)!
 
 const groupColor = useGroupColor('vehicle', toRef(props.vehicle, 'id'))
 
@@ -115,6 +118,28 @@ const nextLocationPosition = useNextLocationPosition(
   toRef(props.vehicle, 'locationDropoff'),
   toRef(props.vehicle, 'commandPoint')
 )
+
+function onTooltipOn() {
+  emit('tooltipon', {
+    type: 'Vehicle',
+    value: deepCopy(props.vehicle)
+  })
+}
+function onTooltipOff() {
+  emit('tooltipoff')
+}
+function onFocus() {
+  emit('focus', {
+    type: "Vehicle",
+    value: deepCopy(props.vehicle)
+  })
+}
+function onContextmenu() {
+  emit('contextmenuon', {
+    type: "Vehicle",
+    value: deepCopy(props.vehicle)
+  })
+}
 </script>
 
 <template>
@@ -127,7 +152,16 @@ const nextLocationPosition = useNextLocationPosition(
     </MapReverseRotate>
   </symbol>
 
-  <use :href="`#vehicle-${props.vehicle.id}`" :x="realtimePosition.x" :y="realtimePosition.y" />
+  <use
+    :href="`#vehicle-${props.vehicle.id}`"
+    :x="realtimePosition.x"
+    :y="realtimePosition.y"
+    @click.left="onFocus()"
+    @click.right="onContextmenu()"
+    @mouseover="onTooltipOn()"
+    @mouseout="onTooltipOff()"
+    @mouseleave="onTooltipOff()"
+  />
   <!-- <animateMotion ref="animateMotionRef" fill="freeze" dur="0.3s" :path="animateMotionPath" /> -->
 
   <!-- next point line -->
