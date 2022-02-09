@@ -6,7 +6,7 @@ interface OmsTrackMonitorEventMap {
   tooltipon: CustomEvent<EventDetails.TooltipOn[]>
   tooltipoff: CustomEvent<EventDetails.TooltipOff[]>
   focus: CustomEvent<EventDetails.Focus[]>
-  contextmenu: CustomEvent<EventDetails.Contextmenu[]>
+  contextmenu: CustomEvent<EventDetails.ContextmenuOn[]>
   backdrop: CustomEvent<EventDetails.Backdrop[]>
   rotate: CustomEvent<EventDetails.Rotate[]>
 }
