@@ -29,7 +29,7 @@ type Vehicle = {
 
   // nullable
   cargoTransferResult?: string
-  commandPoint?: any
+  commandPoint?: string
   locationDropoff?: string
   locationMove?: string
   locationPickup?: string

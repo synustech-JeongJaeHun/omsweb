@@ -3,4 +3,6 @@ import { Station } from './types/Station'
 
 const stations = ref<Station[]>([])
 
-export { stations } 
+function findStationById(id: Station['id']) { return stations.value.find(s => s.id === id) }
+
+export { stations, findStationById } 

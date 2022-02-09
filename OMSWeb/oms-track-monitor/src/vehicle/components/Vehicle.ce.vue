@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Vehicle } from '../types/Vehicle'
 import RasterizedText from '../../map/components/RasterizedText.ce.vue';
-import { findPointById } from '../../point/points';
+import { findPointById, usePointPoisiton } from '../../point/points';
 import { reactive, ref, toRef, watch } from 'vue';
 import { findSegmentByPoints } from '../../segment/segments';
 import { createPathElement, getPositionFromD } from '../../utils/svg/path';
@@ -10,10 +10,13 @@ import { encodeCommandsToD, moveTo, slicePathCommands } from '../../utils/svg/pa
 import { useGroupColor } from '../../group/groups';
 import { D } from '../../types/D';
 import MapReverseRotate from '../../rotate/components/MapReverseRotate.ce.vue';
+import { useNextLocationPosition } from '../utils/lines';
 
 const props = defineProps<{
   vehicle: Vehicle
 }>()
+
+const groupColor = useGroupColor('vehicle', toRef(props.vehicle, 'id'))
 
 const
   currentPosition = reactive({ x: 0, y: 0 }),
@@ -106,8 +109,12 @@ function trackVehiclePosition(d: D) {
   globalThis.requestAnimationFrame(step)
 }
 
-const groupColor = useGroupColor('vehicle', toRef(props.vehicle, 'id'))
-
+const nextPointPosition = usePointPoisiton(toRef(props.vehicle, 'nextPoint'))
+const nextLocationPosition = useNextLocationPosition(
+  toRef(props.vehicle, 'locationPickup'),
+  toRef(props.vehicle, 'locationDropoff'),
+  toRef(props.vehicle, 'commandPoint')
+)
 </script>
 
 <template>
@@ -123,14 +130,27 @@ const groupColor = useGroupColor('vehicle', toRef(props.vehicle, 'id'))
   <use :href="`#vehicle-${props.vehicle.id}`" :x="realtimePosition.x" :y="realtimePosition.y" />
   <!-- <animateMotion ref="animateMotionRef" fill="freeze" dur="0.3s" :path="animateMotionPath" /> -->
 
+  <!-- next point line -->
   <line
+    v-if="nextPointPosition"
     :x1="realtimePosition.x"
     :y1="realtimePosition.y"
-    x2="23000"
-    y2="30000"
+    :x2="nextPointPosition.x"
+    :y2="nextPointPosition.y"
+    stroke="green"
+    stroke-width="22"
+    stroke-linecap="round"
+  />
+
+  <!-- next location line -->
+  <line
+    v-if="nextLocationPosition"
+    :x1="realtimePosition.x"
+    :y1="realtimePosition.y"
+    :x2="nextLocationPosition.x"
+    :y2="nextLocationPosition.y"
     stroke="blue"
     stroke-width="22"
     stroke-linecap="round"
-    marker-end="url(#vehicle-line-blue)"
   />
 </template>

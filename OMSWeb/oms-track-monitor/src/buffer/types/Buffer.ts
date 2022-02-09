@@ -2,6 +2,7 @@ type Buffer = {
   id: number
   logicalId: string
   physicalId: string
+
   direction: "L" | "R" | "U"
   pointId: number
   nextPoint: number

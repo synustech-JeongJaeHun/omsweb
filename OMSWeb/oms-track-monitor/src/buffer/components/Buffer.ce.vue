@@ -1,45 +1,19 @@
 <script setup lang="ts">
 import { computed, inject, readonly, toRef } from 'vue'
-import { usePointPoisiton } from '../../point/points'
-import { addVectors, getOrthogonalVector, getUnitVector, multipleVector, ZeroVector } from '../../utils/vector'
 import { Buffer } from '../types/Buffer'
 import RasterizedText from '../../map/components/RasterizedText.ce.vue'
 import { useGroupColor } from '../../group/groups'
 import { RootEmitInjectionKey, RootEmits } from '../../types/RootEmits'
 import { deepCopy } from '../../utils/deepCopy'
 import MapReverseRotate from '../../rotate/components/MapReverseRotate.ce.vue'
-
-const BufferDirectionMargin = 500
+import { getPositionForBufferOrStation } from '../../utils/locationStationBuffer'
 
 const props = defineProps<{
   buffer: Buffer
 }>()
 const emit = inject<RootEmits>(RootEmitInjectionKey)!
 
-const startPointPosition = usePointPoisiton(toRef(props.buffer, 'pointId'))
-const nextPointPosition = usePointPoisiton(toRef(props.buffer, 'nextPoint'))
-const position = readonly(computed(() => {
-  if (startPointPosition.value === undefined || nextPointPosition.value === undefined)
-    return { x: 0, y: 0 }
-
-  const unitVector = getUnitVector({
-    x: nextPointPosition.value.x - startPointPosition.value.x,
-    y: nextPointPosition.value.y - startPointPosition.value.y
-  })
-
-  const offsetVector = multipleVector(unitVector, props.buffer.offset)
-  const offsetPosition = addVectors({ x: startPointPosition.value.x, y: startPointPosition.value.y }, offsetVector)
-
-  const orthogonalVector =
-    props.buffer.direction === 'L' ? getOrthogonalVector(unitVector, 'counterclockwise')
-      : props.buffer.direction === 'R' ? getOrthogonalVector(unitVector, 'clockwise')
-        : ZeroVector
-  const directionTransformVector = multipleVector(orthogonalVector, BufferDirectionMargin)
-
-  const position = addVectors(offsetPosition, directionTransformVector)
-  return { x: Math.ceil(position.x), y: Math.ceil(position.y) }
-}))
-
+const position = readonly(computed(() => getPositionForBufferOrStation(props.buffer)))
 const groupColor = useGroupColor('buffer', toRef(props.buffer, 'id'))
 
 function onTooltipOn() {
