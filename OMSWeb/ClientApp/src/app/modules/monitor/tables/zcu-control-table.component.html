@@ -20,7 +20,7 @@
               *ngIf="canDisplayTable('zcus_id')"></dxi-column>
   <dxi-column [width]="120" dataType="string" dataField="logicalId" [caption]="'names.logicalId' | translate"
               *ngIf="canDisplayTable('zcus_logicalId')"></dxi-column>
-  <dxi-column [width]="60" dataType="string" dataField="usingType" [caption]="'names.usingType' | translate"
+  <dxi-column [width]="100" dataType="string" dataField="usingType" [caption]="'names.usingType' | translate"
               *ngIf="canDisplayTable('zcus_using_type')"></dxi-column>
   <dxi-column [width]="100" dataType="string" dataField="zcuType" [caption]="'names.zcuType' | translate"
               *ngIf="canDisplayTable('zcus_type')"></dxi-column>
@@ -32,6 +32,6 @@
               *ngIf="canDisplayTable('zcus_passVehicle')"></dxi-column>
   <dxi-column [width]="100" dataType="string" dataField="vehicleCount" [caption]="'names.vehicleCount' | translate"
               *ngIf="canDisplayTable('zcus_vehicleCount')"></dxi-column>
-  <dxi-column [width]="100" dataType="string" dataField="vehiceInfo" [caption]="'names.vehicleInfo' | translate"
+  <dxi-column [width]="100" dataType="string" dataField="vehicleInfo" [caption]="'names.vehicleInfo' | translate"
               *ngIf="canDisplayTable('zcus_vehicleInfo')"></dxi-column>
 </dx-data-grid>

@@ -323,9 +323,9 @@ namespace OMSWeb.Repositories
                                     usingType = dr["using_type"].ToString(),
                                     status = dr["status"].ToString(),
                                     errorCode = dr["error_code"].TryInteger(),
-                                    passVehicle = dr["pass_vehicle"].ToString().Split(";"),
-                                    vehicleCount = dr["vehicle_count"].ToString().Split(";"),
-                                    vehicleInfo = dr["vehicle_info"].ToString().Split(";"),
+                                    passVehicle = dr["pass_vehicle"].ToString(),
+                                    vehicleCount = dr["vehicle_count"].ToString(),
+                                    vehicleInfo = dr["vehicle_info"].ToString(),
                                 }
                                );
                             }

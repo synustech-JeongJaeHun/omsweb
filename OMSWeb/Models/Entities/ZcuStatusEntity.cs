@@ -16,13 +16,11 @@ namespace OMSWeb.Models.Entities
 
     public int errorCode { get; set; }
 
-    public string passVehicle1 { get; set; }
-    public string passVehicle2 { get; set; }
-    public string vehicleCount1 { get; set; }
-    public string vehicleCount2 { get; set; }
+    public string passVehicle { get; set; }
 
-    public string vehicleInfo1 { get; set; }
-    public string vehicleInfo2 { get; set; }
+    public string vehicleCount { get; set; }
 
-    }
+    public string vehicleInfo { get; set; }
+
+  }
 }

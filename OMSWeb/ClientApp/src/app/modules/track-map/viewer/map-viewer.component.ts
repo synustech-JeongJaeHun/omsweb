@@ -345,6 +345,11 @@ export class MapViewerComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe((e: IDataChangeEvent) => this.applyZcuMapChange(e));
 
+
+    this.hubSvc.zcuStatusTableChanged$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((e: IDataChangeEvent) => this.applyZcuStatusTableChange(e));
+
     if (this.auth.isAuthenticated) {
       this.hubSvc.vehicleDioChanged$
         .pipe(takeUntil(this.destroy$))
@@ -617,6 +622,11 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     const updated = this.dataSvc.getChangedZcus([data]);
     this.viewer.update_zcus(updated, false, false);
     this.updateSelectedObject('ZCU', updated, true);
+  }
+  private applyZcuStatusTableChange({ data }: IDataChangeEvent) {
+    if (!this.viewer) return;
+    if (data === null) return;
+
   }
   private applyClusterChange({ data }: IDataChangeEvent) {
     if (!this.viewer) return;
