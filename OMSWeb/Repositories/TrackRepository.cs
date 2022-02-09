@@ -318,13 +318,14 @@ namespace OMSWeb.Repositories
                             {
                                 models.Add(new ZcuStatus
                                 {
-                                    id = Convert.ToInt32(dr["id"]),
+                                    Id = Convert.ToInt32(dr["id"]),
                                     logicalId = dr["logical_id"].ToString(),
-                                    status = dr["status"].TryBoolean(),
-                                    errorCode = dr["errorCode"].TryInteger(),
-                                    passVehicle = dr["passVehicle"].ToString()?.Split(";"),
-                                    vehicleCount = dr["vehicleCount"].ToString()?.Split(";"),
-                                    vehicleInfo = dr["vehicleInfo"].ToString()?.Split(";"),
+                                    usingType = dr["using_type"].ToString(),
+                                    status = dr["status"].ToString(),
+                                    errorCode = dr["error_code"].TryInteger(),
+                                    passVehicle = dr["pass_vehicle"].ToString().Split(";"),
+                                    vehicleCount = dr["vehicle_count"].ToString().Split(";"),
+                                    vehicleInfo = dr["vehicle_info"].ToString().Split(";"),
                                 }
                                );
                             }

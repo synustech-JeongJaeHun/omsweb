@@ -30,8 +30,9 @@ namespace OMSWeb.Models
   {
   }
 
-  public class ZcuState : ZcuEntity
+  public class ZcuState : ZcuStatusEntity
   {
+
   }
 
   public class DioState : DioEntity

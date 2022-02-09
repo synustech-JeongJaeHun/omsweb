@@ -74,9 +74,41 @@ namespace OMSWeb.Repositories
         --*user_id_condition*--WHERE user_id =@userId
       "},
       {"zcuStatus", @"
-        SELECT Z.id, Z.id::text AS logical_id, Z.using_type, Z.zcu_type, 
-        CASE WHEN ZS.status = 5 THEN TRUE ELSE FALSE END AS status,
-        ZS.errorCode, ZS.pass_vehicle AS passVehicle, ZS.vehicle_count AS vehicleCount, ZS.vehicle_info AS vehicleInfo 
+        SELECT Z.id, Z.id::text AS logical_id, 
+            CASE 
+                WHEN Z.using_type = 0 THEN 'Not Use'
+                WHEN Z.using_type = 1 THEN 'HW'
+                WHEN Z.using_type = 2 THEN 'SW'
+                ELSE 'HW'
+            END AS using_type, 
+            CASE
+                WHEN Z.zcu_type = 0 THEN 'Std'
+                WHEN Z.zcu_type = 1 THEN 'NType'
+                ELSE 'Std'
+            END AS zcu_type, 
+            CASE 
+                WHEN ZS.status = 5 THEN 'Error' 
+                ELSE 'Normal' 
+            END AS status,
+            CASE
+                WHEN ZS.errorCode IS NULL THEN 0
+                ELSE ZS.errorCode
+            END AS error_code,
+            CASE
+                WHEN ZS.pass_vehicle IS NULL THEN ';'
+                WHEN ZS.pass_vehicle = '' THEN ';'
+                ELSE ZS.pass_vehicle
+            END AS pass_vehicle, 
+            CASE
+                WHEN ZS.vehicle_count IS NULL THEN '0;0'
+                WHEN ZS.vehicle_count = '' THEN '0;0'
+                ELSE ZS.vehicle_count
+            END AS vehicle_count,
+            CASE
+                WHEN ZS.vehicle_info IS NULL THEN ',,,,,;,,,,,'
+                WHEN ZS.vehicle_info = '' THEN ',,,,,;,,,,,'
+                ELSE ZS.vehicle_info
+            END AS vehicle_info
         FROM zcus AS Z
         LEFT OUTER JOIN zcu_status AS ZS
         ON Z.id = ZS.zcu_id

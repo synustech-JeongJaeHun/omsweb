@@ -99,7 +99,7 @@ export class ZcuControlTableComponent implements OnInit, OnDestroy {
         needReload = true;
       } else {
         needReload = this.dataSource.items().every((x) => x.id !== payload.id);
-        // needReload = true;
+        needReload = true;
       }
     } else {
       needReload = true;

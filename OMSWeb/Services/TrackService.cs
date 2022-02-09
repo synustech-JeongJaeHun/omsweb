@@ -101,6 +101,9 @@ namespace OMSWeb.Services
                 case "BUFFER":
                     targetList = this.GetMapItem(CacheKeys.Buffers);
                     break;
+                case "ZCU":
+                    targetList = this.GetMapItem(CacheKeys.Zcus);
+                    break;
                 default:
                     targetList = new dynamic[] { };
                     break;
