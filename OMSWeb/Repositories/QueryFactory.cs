@@ -54,31 +54,29 @@ namespace OMSWeb.Repositories
       "},
       {"station", @"
         SELECT id AS id, physical_id AS physical_id, logical_id AS logical_id, point AS point_id,
-          direction AS direction, carrier_type AS carrier_type, next_point, ""offset"" AS offset
+          direction AS direction, carrier_type AS carrier_type, next_point, ""offset"" AS offset, unuse, carrier_id
         FROM stations
         --*user_id_condition*--WHERE user_id =@userId
       "},
       {"buffer", @"
         SELECT id, physical_id, logical_id AS logical_id, point AS point_id,
-          direction AS direction, next_point, ""offset"" AS offset
+          direction AS direction, next_point, ""offset"" AS offset, unuse, carrier_id
         FROM buffers
         --*user_id_condition*--WHERE user_id =@userId
       "},
       {"zcu", @"
         SELECT Z.id, Z.x, Z.y, Z.using_type, Z.zcu_type, 
-        CASE WHEN ZS.status = 5 THEN TRUE ELSE FALSE END AS error 
+        CASE WHEN Z.status = 5 THEN TRUE ELSE FALSE END AS error 
         FROM zcus AS Z
-        LEFT OUTER JOIN zcu_status AS ZS
-        ON Z.id = ZS.zcu_id
         ORDER BY Z.id
         --*user_id_condition*--WHERE user_id =@userId
       "},
       {"zcuStatus", @"
         SELECT Z.id, Z.id::text AS logical_id, 
             CASE 
-                WHEN Z.using_type = 0 THEN 'Not Use'
-                WHEN Z.using_type = 1 THEN 'HW'
-                WHEN Z.using_type = 2 THEN 'SW'
+                WHEN ZS.using_type = 0 THEN 'Not Use'
+                WHEN ZS.using_type = 1 THEN 'HW'
+                WHEN ZS.using_type = 2 THEN 'SW'
                 ELSE 'HW'
             END AS using_type, 
             CASE
@@ -219,14 +217,14 @@ namespace OMSWeb.Repositories
       ) AS WRAPPED_TABLE
       "},
       {"stationStatus", @"
-        SELECT SS.id, SS.physical_id, SS.logical_id, SS.point, SS.direction, SS.carrier_type, SS.next_point, SS.""offset"", SS.unuse, GO.group_id
+        SELECT SS.id, SS.physical_id, SS.logical_id, SS.point, SS.direction, SS.next_point, SS.""offset"", SS.unuse, SS.carrier_id, GO.group_id
         FROM stations AS SS
             LEFT JOIN grouped_objects AS GO
         ON SS.id = GO.reference_id AND GO.reference_table = 'station'
         --*user_id_condition*-- AND user_id = @userId
       "},
       {"bufferStatus", @"
-        SELECT BS.id, BS.physical_id, BS.logical_id, BS.point, BS.direction, BS.next_point, BS.""offset"", BS.unuse, GO.group_id
+        SELECT BS.id, BS.physical_id, BS.logical_id, BS.point, BS.direction, BS.next_point, BS.""offset"", BS.unuse, BS.carrier_id, GO.group_id
         FROM buffers AS BS
             LEFT JOIN grouped_objects AS GO
         ON BS.id = GO.reference_id AND GO.reference_table = 'buffer'

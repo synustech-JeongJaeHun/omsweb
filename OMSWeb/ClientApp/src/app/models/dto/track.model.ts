@@ -11,6 +11,8 @@ export namespace Dto {
     group?: number;
     nextpoint?: number;
     offset?: number;
+    unuse?: boolean;
+    carrierId?: string;
   }
   export interface ICluster {
     id: number;
@@ -119,6 +121,8 @@ export namespace Dto {
     group?: number;
     nextpoint?: number;
     offset?: number;
+    unuse?: boolean;
+    carrierId?: string;
   }
   export interface IVehicle {
     id: number;

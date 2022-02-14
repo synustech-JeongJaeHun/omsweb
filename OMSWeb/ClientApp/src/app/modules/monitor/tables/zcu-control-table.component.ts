@@ -14,6 +14,7 @@ import { DxDataGridComponent } from 'devextreme-angular';
 import { ClientPreferences } from '../../../models/settings.model';
 import { DialogService } from '../../../services/dialog.service';
 import { TranslateService } from '@ngx-translate/core';
+import { forEach } from 'lodash';
 
 @Component({
   selector: 'oms-zcu-control-table',
@@ -85,7 +86,12 @@ export class ZcuControlTableComponent implements OnInit, OnDestroy {
       .confirm({ body: this.$t.instant('messages.confirmZcuReset') })
       .subscribe((confirm) => {
         if (confirm) {
-          //confirm && this.messageSvc.sendVehicleCommand({ action: 'stop' }, this.selectedItems).subscribe();
+            this.messageSvc
+              .sendZcuCommand({
+                action: "zcu_reset",
+                //zcuIds: this.selectedRows.map
+              })
+              .subscribe();
         }
       });
 

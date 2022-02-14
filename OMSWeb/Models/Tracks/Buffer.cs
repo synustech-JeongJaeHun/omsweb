@@ -9,5 +9,7 @@ namespace OMSWeb.Models.Tracks
     public string Direction { get; set; }
     public int? NextPoint { get; set; }
     public int? Offset { get; set; }
+    public bool? Unuse { get; set; }
+    public string CarrierId { get; set; }
   }
 }

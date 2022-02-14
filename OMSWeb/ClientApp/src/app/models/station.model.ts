@@ -17,6 +17,8 @@ export class Station {
   carrierType: string;
   nextpoint: number;
   offset?: number;
+  unuse?: boolean;
+  carrierId: string;
 
   isValidate?: boolean;
   updateState?: string;
@@ -40,6 +42,8 @@ export class Station {
       carrierType,
       nextpoint,
       offset,
+      unuse,
+      carrierId,
       group,
     } = row;
     this.id = id;
@@ -50,6 +54,8 @@ export class Station {
     this.carrierType = carrierType;
     this.nextpoint = nextpoint;
     this.offset = offset;
+    this.unuse = unuse;
+    this.carrierId = carrierId;
     this.group = group;
 
     this.coord = point.coord;
@@ -82,6 +88,8 @@ export class Station {
       carrierType,
       nextpoint,
       offset,
+      unuse,
+      carrierId,
       group,
       isValidate,
       updateState,
@@ -100,7 +108,9 @@ export class Station {
     direction = this.direction;
     carrierType = this.carrierType;
     nextpoint = this.nextpoint,
-      offset = this.offset;
+    offset = this.offset;
+    unuse = this.unuse;
+    carrierId = this.carrierId;
 
     isValidate = this.isValidate;
     updateState = this.updateState;
@@ -111,7 +121,7 @@ export class Station {
     invertedCoord = { ...this.invertedCoord };
 
     let copied_station = new Station(
-      { id, physicalId, logicalId, pointId, direction, carrierType, nextpoint, offset, group },
+      { id, physicalId, logicalId, pointId, direction, carrierType, nextpoint, offset, unuse, carrierId, group },
       isValidate,
       updateState,
       { coord, invertedCoord }

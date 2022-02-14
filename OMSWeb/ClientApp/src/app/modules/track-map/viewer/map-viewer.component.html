@@ -55,7 +55,8 @@
         <mat-form-field class="dense full-span-col" appearance="outline">
           <input #carrierIdInput matInput [placeholder]="'names.carrierId' | translate" />
         </mat-form-field>
-        <button mat-stroked-button color="primary" class="dense accent" (click)="onRemoveCarrier()">
+        <button mat-stroked-button color="primary" class="dense accent"
+          (click)="onRemoveCarrier(carrierIdInput.value)">
           Remove
         </button>
         <button mat-stroked-button [disabled]="!carrierIdInput.value" color="primary" class="dense accent"

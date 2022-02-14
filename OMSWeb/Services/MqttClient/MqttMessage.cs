@@ -15,7 +15,7 @@ namespace OMSWeb.Services.MqttClient
         public const string REQUEST_VEHICLE_MANAGER = "vehicle_manager";
         public const string REQUEST_VEHICLE = "vehicle";
         public const string REQUEST_TRACK = "track";
-        public const string REQUEST_PORT = "port";
+        public const string REQUEST_CARRIER = "carrier";
         public const string REQUEST_ZCU = "zcu";
         public const string REQUEST_ORDER = "order";
 
@@ -107,6 +107,10 @@ namespace OMSWeb.Services.MqttClient
         {
             switch (action)
             {
+                case ACTION_INSTALL_CARRIER:
+                    return "install";
+                case ACTION_REMOVE_CARRIER:
+                    return "remove";
                 case ACTION_ZCU_RESET:
                     return "reset";
                 default:
@@ -155,7 +159,7 @@ namespace OMSWeb.Services.MqttClient
 
                 case ACTION_INSTALL_CARRIER:
                 case ACTION_REMOVE_CARRIER:
-                    return REQUEST_PORT;
+                    return REQUEST_CARRIER;
 
                 case ACTION_N:
                 case ACTION_A:
@@ -369,6 +373,16 @@ namespace OMSWeb.Services.MqttClient
             {
                 if (command.CarrierLabel != null)
                     data["carrier_id"] = command.CarrierLabel;
+
+                if (command.BufferId != null)
+                {
+                    data["carrier_location"] = "b" + command.BufferId;
+                    data["location_type"] = "b";
+
+                    data["manual"] = true;
+                    data["user_id"] = "admin";
+                    data["note"] = "";
+                }
             }
             else if (command.Action == ACTION_N)
             {

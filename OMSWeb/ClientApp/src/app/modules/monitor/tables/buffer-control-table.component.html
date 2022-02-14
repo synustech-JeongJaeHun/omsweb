@@ -30,4 +30,6 @@
               *ngIf="canDisplayTable('buffers_offset')"></dxi-column>
   <dxi-column [width]="100" dataType="string" dataField="unuse" [caption]="'names.unuse' | translate"
               *ngIf="canDisplayTable('buffers_unuse')"></dxi-column>
+  <dxi-column [width]="100" dataType="string" dataField="carrierId" [caption]="'names.carrierId' | translate"
+              *ngIf="canDisplayTable('buffers_carrierId')"></dxi-column>
 </dx-data-grid>

@@ -75,6 +75,14 @@ export interface IBufferCommandMessage extends ICommandMessage {
   bufferIds?: number[];
 }
 
+export interface ICarrierCommandMessage extends ICommandMessage {
+  bufferId?: number;
+  carrierLabel?: string;
+  manual?: boolean;
+  user?: string;
+  note?: string;
+}
+
 export interface ISegmentCommandMessage extends ICommandMessage {
   segmentId?: number;
   segmentIds?: number[];

@@ -9,7 +9,7 @@ import {
 import * as _ from 'lodash';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { buffer, takeUntil } from 'rxjs/operators';
 import d3 = require('d3');
 
 import { ViewModes } from '../../../models/enums';
@@ -185,31 +185,38 @@ export class MapViewerComponent implements OnInit, OnDestroy {
         if (confirm) {
           this.messageSvc
             .sendZcuCommand({
-              type: "ZCU",
               action: "zcu_reset",
-              zcuIds: [this.contextData.id],
+              zcuId: this.contextData.id,
             })
             .subscribe();
         }
       });
   }
 
-  onRemoveCarrier() {
+  onRemoveCarrier(carrierId: string) {
     this.dialogSvc
       .confirm({ body: this.$t.instant('messages.confirmBufferChange') })
       .subscribe((confirm) => {
-        confirm &&
-          this.trackSvc.removeBufferCarrier(this.contextData.id).subscribe();
+        confirm && this.messageSvc
+          .sendCarrierCommand({
+            action: 'remove_carrier',
+            bufferId: this.contextData.id,
+            carrierLabel: carrierId
+          })
+          .subscribe();
       });
   }
-  onInstallCarrier(carrierId: number) {
+  onInstallCarrier(carrierId: string) {
     this.dialogSvc
       .confirm({ body: this.$t.instant('messages.confirmBufferChange') })
       .subscribe((confirm) => {
-        confirm &&
-          this.trackSvc
-            .installBufferCarrier(this.contextData.id, carrierId)
-            .subscribe();
+        confirm && this.messageSvc
+          .sendCarrierCommand({
+            action: 'install_carrier',
+            bufferId: this.contextData.id,
+            carrierLabel: carrierId
+          })
+          .subscribe();
       });
   }
   onVehicleCommand(name: string) {
@@ -344,11 +351,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     this.hubSvc.zcuMapChanged$
       .pipe(takeUntil(this.destroy$))
       .subscribe((e: IDataChangeEvent) => this.applyZcuMapChange(e));
-
-
-    this.hubSvc.zcuStatusTableChanged$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((e: IDataChangeEvent) => this.applyZcuStatusTableChange(e));
 
     if (this.auth.isAuthenticated) {
       this.hubSvc.vehicleDioChanged$
@@ -622,11 +624,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     const updated = this.dataSvc.getChangedZcus([data]);
     this.viewer.update_zcus(updated, false, false);
     this.updateSelectedObject('ZCU', updated, true);
-  }
-  private applyZcuStatusTableChange({ data }: IDataChangeEvent) {
-    if (!this.viewer) return;
-    if (data === null) return;
-
   }
   private applyClusterChange({ data }: IDataChangeEvent) {
     if (!this.viewer) return;

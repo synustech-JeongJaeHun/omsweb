@@ -697,18 +697,6 @@
       <div class="table-columns-sub-container">
         <div class="table-columns-entries-container">
           <div>
-            <mat-label>{{ "names.carrierType" | translate }}</mat-label>
-          </div>
-          <div>
-            <input type="checkbox" color="primary" [title]="'names.carrierType' | translate"
-                   [checked]="getCheckedState('stations_carrierType')"
-                   (change)="onChangeControlTable('stations_carrierType', $event)" />
-          </div>
-        </div>
-      </div>
-      <div class="table-columns-sub-container">
-        <div class="table-columns-entries-container">
-          <div>
             <mat-label>{{ "names.nextPoint" | translate }}</mat-label>
           </div>
           <div>
@@ -739,6 +727,18 @@
             <input type="checkbox" color="primary" [title]="'names.unuse' | translate"
                    [checked]="getCheckedState('stations_unuse')"
                    (change)="onChangeControlTable('stations_unuse', $event)" />
+          </div>
+        </div>
+      </div>
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.carrierId" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.carrierId' | translate"
+                   [checked]="getCheckedState('stations_carrierId')"
+                   (change)="onChangeControlTable('stations_carrierId', $event)" />
           </div>
         </div>
       </div>
@@ -861,6 +861,17 @@
           <div>
             <input type="checkbox" color="primary" [title]="'names.unuse' | translate"
                    [checked]="getCheckedState('buffers_unuse')" (change)="onChangeControlTable('buffers_unuse', $event)" />
+          </div>
+        </div>
+      </div>
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.carrierId" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.carrierId' | translate"
+                   [checked]="getCheckedState('buffers_carrierId')" (change)="onChangeControlTable('buffers_carrierId', $event)" />
           </div>
         </div>
       </div>

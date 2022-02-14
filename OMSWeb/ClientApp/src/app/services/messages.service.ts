@@ -15,6 +15,7 @@ import {
   IWarningClearCommandMessage,
   IStationCommandMessage,
   IBufferCommandMessage,
+  ICarrierCommandMessage,
   IAllSegmentCommandMessage,
   IVehicleRegCommandMessage,
   ISegmentCommandMessage,
@@ -158,6 +159,15 @@ export class MessagesService {
     return this.sendCommand<IBufferCommandMessage>(command);
   }
 
+  sendCarrierCommand(
+    command: ICarrierCommandMessage
+  ): Observable<void> {
+    command.type = 'CARRIER';
+    command.action = command.action;
+
+    return this.sendCommand<ICarrierCommandMessage>(command);
+  }
+
   sendAllSpeedRatioSegmentCommand(
     command: IAllSegmentCommandMessage,
     targets: number
@@ -191,6 +201,8 @@ export class MessagesService {
   sendZcuCommand(
     command: IZcuCommandMessage
   ): Observable<void> {
+    command.type = 'ZCU';
+
     return this.sendCommand<IZcuCommandMessage>(command);
   }
   

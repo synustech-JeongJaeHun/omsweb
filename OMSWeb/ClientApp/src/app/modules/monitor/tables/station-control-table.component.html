@@ -26,12 +26,12 @@
               *ngIf="canDisplayTable('stations_point')"></dxi-column>
   <dxi-column [width]="100" dataType="string" dataField="direction" [caption]="'names.direction' | translate"
               *ngIf="canDisplayTable('stations_direction')"></dxi-column>
-  <dxi-column [width]="100" dataType="string" dataField="carrierType" [caption]="'names.carrierType' | translate"
-              *ngIf="canDisplayTable('stations_carrierType')"></dxi-column>
   <dxi-column [width]="100" dataType="string" dataField="nextPoint" [caption]="'names.nextPoint' | translate"
               *ngIf="canDisplayTable('stations_nextPoint')"></dxi-column>
   <dxi-column [width]="100" dataType="string" dataField="offset" [caption]="'names.offset' | translate"
               *ngIf="canDisplayTable('stations_offset')"></dxi-column>
   <dxi-column [width]="100" dataType="string" dataField="unuse" [caption]="'names.unuse' | translate"
               *ngIf="canDisplayTable('stations_unuse')"></dxi-column>
+  <dxi-column [width]="100" dataType="string" dataField="carrierId" [caption]="'names.carrierId' | translate"
+              *ngIf="canDisplayTable('stations_carrierId')"></dxi-column>
 </dx-data-grid>
