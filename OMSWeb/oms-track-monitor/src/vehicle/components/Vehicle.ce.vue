@@ -2,7 +2,7 @@
 import { Vehicle } from '../types/Vehicle'
 import RasterizedText from '../../map/components/RasterizedText.ce.vue';
 import { findPointById, usePointPoisiton } from '../../point/points';
-import { inject, reactive, ref, toRef, watch } from 'vue';
+import { computed, inject, reactive, ref, toRef, toRefs, watch, watchEffect } from 'vue';
 import { findSegmentByPoints } from '../../segment/segments';
 import { createPathElement, getPositionFromD } from '../../utils/svg/path';
 import { Segment } from '../../segment/types/Segment';
@@ -10,7 +10,7 @@ import { encodeCommandsToD, moveTo, slicePathCommands } from '../../utils/svg/pa
 import { useGroupColor } from '../../group/groups';
 import { D } from '../../types/D';
 import MapReverseRotate from '../../rotate/components/MapReverseRotate.ce.vue';
-import { useNextLocationPosition } from '../utils/lines';
+import { useCommandPointPosition } from '../utils/lines';
 import { RootEmitInjectionKey, RootEmits } from '../../types/RootEmits';
 import { deepCopy } from '../../utils/deepCopy';
 
@@ -20,6 +20,10 @@ const props = defineProps<{
 const emit = inject<RootEmits>(RootEmitInjectionKey)!
 
 const groupColor = useGroupColor('vehicle', toRef(props.vehicle, 'id'))
+
+const
+  isHotlot = computed(() => Number(props.vehicle.priority) === 99),
+  isStale = computed(() => false)
 
 const
   currentPosition = reactive({ x: 0, y: 0 }),
@@ -113,7 +117,7 @@ function trackVehiclePosition(d: D) {
 }
 
 const nextPointPosition = usePointPoisiton(toRef(props.vehicle, 'nextPoint'))
-const nextLocationPosition = useNextLocationPosition(
+const commandPoint = useCommandPointPosition(
   toRef(props.vehicle, 'locationPickup'),
   toRef(props.vehicle, 'locationDropoff'),
   toRef(props.vehicle, 'commandPoint')
@@ -140,15 +144,124 @@ function onContextmenu() {
     value: deepCopy(props.vehicle)
   })
 }
+
+// only for debug code
+const vehicleRef = toRefs(props.vehicle)
+watchEffect(() => {
+  console.group("vhl")
+  console.log("cargoState", vehicleRef.cargoState.value)
+  console.log("movingState", vehicleRef.movingState.value)
+  console.log("pickup", vehicleRef.locationPickup?.value)
+  console.log("dropoff", vehicleRef.locationDropoff?.value)
+  console.log("priority", vehicleRef.priority?.value)
+  console.log("historytime", vehicleRef.historyChangeTime?.value)
+  console.groupEnd()
+})
 </script>
 
 <template>
   <symbol class="overflow-visible cursor-pointer" :id="`vehicle-${props.vehicle.id}`">
-    <circle v-show="groupColor" class="group-shadow" r="120" :fill="groupColor" />
-    <circle r="80" fill="none" stroke="red" stroke-width="20" />
+    <circle v-show="groupColor" class="group-shadow vehicle-group-shadow" :fill="groupColor" />
+    <!-- vehicle mode -->
+    <circle
+      :class="['vehicle-mode', props.vehicle.mode === 'A' ? 'vehicle-mode-auto' : 'vehicle-mode-manual']"
+    />
+
+    <!-- inner background  -->
+    <circle class="vehicle-inner-background" />
+
+    <!-- cargo state start -->
+    <!-- 1. Loading  -->
+    <circle v-if="props.vehicle.cargoState === 'L'" class="vehicle-cargo-loading" />
+    <!-- 2. Full  -->
+    <circle v-else-if="props.vehicle.cargoState === 'F'" class="vehicle-cargo-full" />
+    <!-- 3. Unloading -->
+    <circle v-else-if="props.vehicle.cargoState === 'U'" class="vehicle-cargo-unloading" />
+    <!-- 4. Empty -->
+    <!-- Empty is Empty! -->
+    <!-- 5. Load Failed -->
+    <g v-else-if="props.vehicle.cargoState === 'loadfailed'" class="vehicle-cargo-loadfailed">
+      <line x1="-40" y1="-40" x2="40" y2="40" />
+      <line x1="-40" y1="40" x2="40" y2="-40" />
+    </g>
+    <!-- 6. Unload Failed -->
+    <g v-else-if="props.vehicle.cargoState === 'unloadfailed'" class="vehicle-cargo-unloadfailed">
+      <circle r="30" />
+      <line x1="-40" y1="-40" x2="40" y2="40" />
+      <line x1="-40" y1="40" x2="40" y2="-40" />
+    </g>
+    <!-- cargo state end -->
+
     <!-- <text y="70">{{ props.vehicle.logicalId }}</text> -->
-    <MapReverseRotate>
-      <RasterizedText class="invert" y="100" :text="props.vehicle.logicalId" />
+    <MapReverseRotate :x="realtimePosition.x" :y="realtimePosition.y">
+      <!-- vehicle id -->
+      <RasterizedText class="invert" x="-150" y="-65" :text="props.vehicle.logicalId" />
+      <!-- vehicle order with priority(hotlot) -->
+      <g :class="{ 'vehicle-order-hotlot-border': isHotlot }">
+        <text
+          v-if="props.vehicle.orderId"
+          :class="['invert', 'select-none', isHotlot && 'vehicle-order-hotlot']"
+          x="-150"
+          y="65"
+        >{{ String(props.vehicle.orderId) }}</text>
+      </g>
+
+      <!-- vehicle properties ordered by priority ==== START -->
+
+      <!-- top left (2) -->
+      <!-- 1. Blocked -->
+      <circle v-if="props.vehicle.isBlocked" class="vehicle-state-blocked" />
+      <!-- 2. Sensor Stop -->
+      <circle v-else-if="props.vehicle.isSensorStopped" class="vehicle-state-sensorstopped" />
+      <template v-else></template>
+
+      <!-- top right (1) -->
+      <!-- 1. Stale -->
+      <!-- where is staled -->
+      <path v-if="isStale" class="vehicle-state-stale" />
+
+      <!-- bottom left (1) -->
+      <!-- 1. Error -->
+      <!-- triangle with width 40 and height 30 -->
+      <path v-if="props.vehicle.errorList" class="vehicle-state-error" />
+
+      <!-- bottom right (4) -->
+      <!-- 1. Disconnected -->
+      <path v-if="false" class="vehicle-state-disconnected" />
+      <!-- 2. Maintained -->
+      <g v-else-if="true">
+        <circle cx="80" cy="-80" r="15" fill="#4e9ff3" />
+        <rect
+          x="80"
+          y="-80"
+          transform="translate(5,-5) rotate(225degree)"
+          width="10"
+          height="15"
+          fill="white"
+        />
+        <rect
+          x="80"
+          y="-80"
+          transform="translate(-10, 10) rotate(45degree)"
+          width="30"
+          height="10"
+          fill="#4e9ff3"
+        />
+      </g>
+
+      <!-- <path class="123" d="M 0 0" /> -->
+      <!-- 3. Prevent Call or Prevent Push -->
+      <!-- where is prevent call or prevent push -->
+      <g v-else-if="true" class="123">
+        <circle />
+        <!-- 3-A. Prevent Call -->
+        <path />
+        <!-- 3-B. Prevent Push -->
+        <path />
+      </g>
+      <template v-else />
+
+      <!-- vehicle properties ordered by priority ==== END -->
     </MapReverseRotate>
   </symbol>
 
@@ -162,29 +275,27 @@ function onContextmenu() {
     @mouseout="onTooltipOff()"
     @mouseleave="onTooltipOff()"
   />
+
   <!-- <animateMotion ref="animateMotionRef" fill="freeze" dur="0.3s" :path="animateMotionPath" /> -->
 
   <!-- next point line -->
   <line
+    class="vehicle-nextpoint-line"
     v-if="nextPointPosition"
     :x1="realtimePosition.x"
     :y1="realtimePosition.y"
     :x2="nextPointPosition.x"
     :y2="nextPointPosition.y"
-    stroke="green"
-    stroke-width="22"
-    stroke-linecap="round"
   />
 
-  <!-- next location line -->
+  <!-- pickup or dropoff line -->
   <line
-    v-if="nextLocationPosition"
+    v-if="commandPoint.position.value"
+    :class="['vehicle-command-line',
+    commandPoint.type.value === 'pickup' ? 'vehicle-pickup-line' : commandPoint.type.value === 'dropoff' ? 'vehicle-dropoff-line' : false]"
     :x1="realtimePosition.x"
     :y1="realtimePosition.y"
-    :x2="nextLocationPosition.x"
-    :y2="nextLocationPosition.y"
-    stroke="blue"
-    stroke-width="22"
-    stroke-linecap="round"
+    :x2="commandPoint.position.value.x"
+    :y2="commandPoint.position.value.y"
   />
 </template>

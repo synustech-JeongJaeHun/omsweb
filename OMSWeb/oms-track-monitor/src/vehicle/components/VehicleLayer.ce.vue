@@ -7,6 +7,20 @@ import { vehicles } from '../vehicles'
 <template>
   <Layer>
     <defs>
+      <defs>
+        <filter x="0" y="0" width="1" height="1" id="vehicle-order-hotlot-background">
+          <feFlood flood-color="orange" result="bg" />
+          <feMerge>
+            <feMergeNode in="bg" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+        <filter x="-0.1" y="-0.1" width="1.2" height="1.2" id="vehicle-order-hotlot-border">
+          <feFlood flood-color="#ff8000" />
+          <feComposite in="SourceGraphic" />
+        </filter>
+      </defs>
+
       <marker
         id="vehicle-line-green"
         viewBox="0 0 10 10"

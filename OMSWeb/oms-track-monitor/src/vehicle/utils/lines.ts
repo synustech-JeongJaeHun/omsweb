@@ -18,7 +18,7 @@ function parseTargetId(location: string) {
   }
 }
 
-function useNextLocationPosition(
+function useCommandPointPosition(
   pickup: Ref<Vehicle['locationPickup']>,
   dropoff: Ref<Vehicle['locationDropoff']>,
   commandPoint: Ref<Vehicle['commandPoint']>
@@ -35,13 +35,19 @@ function useNextLocationPosition(
       .find(location => location!.pointId === commandTarget.value?.pointId)
   ))
 
+  const type = readonly(computed(() =>
+    commandPoint.value === dropoff.value ? "dropoff" :
+      commandPoint.value === pickup.value ? "pickup" :
+        undefined
+  ))
+
   const position = readonly(computed(() =>
     nextLocation.value
       ? getPositionForBufferOrStation(nextLocation.value)
       : undefined
   ))
 
-  return position
+  return { type, position }
 }
 
-export { useNextLocationPosition }
+export { useCommandPointPosition }

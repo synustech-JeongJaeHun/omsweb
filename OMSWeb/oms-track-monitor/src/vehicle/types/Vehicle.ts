@@ -9,7 +9,14 @@ type Vehicle = {
   physicalId: string
 
   canBePushed: boolean
-  cargoState: string
+  cargoState:
+  | "L" // Loading
+  | "F" // Full
+  | "U" // Unload
+  | "E" // Empty
+  | "??What for load fail"
+  | "??What for unload fail"
+  | string
   curPoint: number
   nextPoint: number
   errorList: string
@@ -17,8 +24,13 @@ type Vehicle = {
   isSensorStopped: boolean
   lastContact: string
   mapDb: string
-  mode: string
-  movingState: string
+  mode:
+  | "A" // Auto
+  | "M" // Manual
+  movingState:
+  | "M"
+  | "S"
+  | string
   distancePoint: number
   hostOrder: boolean
   orderOrigin: string | string[]

@@ -119,7 +119,7 @@ interface IVehicle {
   isSensorStopped: boolean
   lastContact: string
   mapDb: string
-  mode: string
+  mode: "A" | "M"
   movingState: string
   distancePoint: number
   hostOrder: boolean

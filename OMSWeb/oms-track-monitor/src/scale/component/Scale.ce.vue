@@ -21,7 +21,8 @@ const lineLength = readonly(computed(() =>
 <template>
   <div>
     <span
-      style="font-size: 3px; font-weight: bold; margin-right: 5px; user-select: none;"
+      class="select-none"
+      style="font-size: 3px; font-weight: bold; margin-right: 5px;"
     >{{ getHumanReadableLength(unit) }}</span>
     <svg class="overflow-visible" :width="`${lineLength}px`" :viewBox="`0 -5 ${lineLength} 10`">
       <!-- start vertical -->
