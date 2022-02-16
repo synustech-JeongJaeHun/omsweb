@@ -74,9 +74,9 @@ namespace OMSWeb.Repositories
       {"zcuStatus", @"
         SELECT Z.id, Z.id::text AS logical_id, 
             CASE 
-                WHEN ZS.using_type = 0 THEN 'Not Use'
-                WHEN ZS.using_type = 1 THEN 'HW'
-                WHEN ZS.using_type = 2 THEN 'SW'
+                WHEN Z.using_type = 0 THEN 'Not Use'
+                WHEN Z.using_type = 1 THEN 'HW'
+                WHEN Z.using_type = 2 THEN 'SW'
                 ELSE 'HW'
             END AS using_type, 
             CASE
