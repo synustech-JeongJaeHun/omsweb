@@ -62,6 +62,7 @@ width: 24px;
 #status-toolbar {
   position: absolute;
   left: 550px;
+  //left: 750px;
   right: 40px;
   padding: 1px;
   padding-left: 80px;
@@ -74,6 +75,7 @@ width: 24px;
 
 .tab-group {
   ::ng-deep.mat-tab-label {
-    min-width: 150px !important;
+    //min-width: 150px !important;
+    min-width: 110px !important;
   }
 }

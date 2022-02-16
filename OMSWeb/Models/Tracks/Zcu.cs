@@ -1,4 +1,5 @@
-namespace OMSWeb.Models.Tracks {
+namespace OMSWeb.Models.Tracks
+{
   public class Zcu
   {
     public int Id { get; set; }
@@ -8,6 +9,7 @@ namespace OMSWeb.Models.Tracks {
     public int ZcuType { get; set; }
     public ZcuCompletePoint[] CompletePoints { get; set; }
     public ZcuInputZone[] InputZones { get; set; }
+    public bool error { get; set; }
   }
 
   public class ZcuCompletePoint
@@ -23,5 +25,9 @@ namespace OMSWeb.Models.Tracks {
     public int ZcuId { get; set; }
     public int PriorityPoint { get; set; }
     public string ZonePoints { get; set; }
+  }
+
+  public class ZcuStatus : Entities.ZcuStatusEntity
+  {
   }
 }

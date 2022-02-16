@@ -11,6 +11,8 @@ export namespace Dto {
     group?: number;
     nextpoint?: number;
     offset?: number;
+    unuse?: boolean;
+    carrierId?: string;
   }
   export interface ICluster {
     id: number;
@@ -49,6 +51,7 @@ export namespace Dto {
     zcuType: number;
     inputZones: IZcuInputZone[];
     completePoints: IZcuCompletePoint[];
+    error: boolean;
   }
   export interface IZcuInputZone {
     id: number;
@@ -60,6 +63,14 @@ export namespace Dto {
     id: number;
     zcuId: number;
     completePointId: number;
+  }
+  export interface IZcuStatus {
+    id: number;
+    runStatus: number;
+    errorCode: number;
+    passVehicle: string[];
+    vehicleCount: string[];
+    vehicleInfo: string[];
   }
   export interface IPoint extends ICoordinate {
     id: number;
@@ -110,6 +121,8 @@ export namespace Dto {
     group?: number;
     nextpoint?: number;
     offset?: number;
+    unuse?: boolean;
+    carrierId?: string;
   }
   export interface IVehicle {
     id: number;

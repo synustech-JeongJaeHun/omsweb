@@ -23,6 +23,8 @@ namespace OMSWeb.Models.Entities
 
     public bool? Unuse { get; set; }
 
+    public string CarrierId { get; set; }
+
     public int? GroupId { get; set; }
   }
 }

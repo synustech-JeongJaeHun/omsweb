@@ -15,15 +15,18 @@ import {
   IWarningClearCommandMessage,
   IStationCommandMessage,
   IBufferCommandMessage,
+  ICarrierCommandMessage,
   IAllSegmentCommandMessage,
   IVehicleRegCommandMessage,
   ISegmentCommandMessage,
   IClusterCommandMessage,
   IGroupCommandMessage,
-  ISettingZcuCommandMessage
+  ISettingZcuCommandMessage,
+  IZcuCommandMessage
 } from '../models/command.model';
 import { IOrderStatusRow } from '../models/order-status.model';
 import { IVehicleStatusRow } from '../models/vehicle-status.model';
+import { IZcuStatusRow } from '../models/zcu-status.model';
 
 @Injectable({
   providedIn: 'root',
@@ -156,6 +159,15 @@ export class MessagesService {
     return this.sendCommand<IBufferCommandMessage>(command);
   }
 
+  sendCarrierCommand(
+    command: ICarrierCommandMessage
+  ): Observable<void> {
+    command.type = 'CARRIER';
+    command.action = command.action;
+
+    return this.sendCommand<ICarrierCommandMessage>(command);
+  }
+
   sendAllSpeedRatioSegmentCommand(
     command: IAllSegmentCommandMessage,
     targets: number
@@ -186,6 +198,14 @@ export class MessagesService {
     return this.sendCommand<ISettingZcuCommandMessage>(command);
   }
 
+  sendZcuCommand(
+    command: IZcuCommandMessage
+  ): Observable<void> {
+    command.type = 'ZCU';
+
+    return this.sendCommand<IZcuCommandMessage>(command);
+  }
+  
   sendVehicleRegAddCommand(
     command: IVehicleRegCommandMessage
   ): Observable<void> {

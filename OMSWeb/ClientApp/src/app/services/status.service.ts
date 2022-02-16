@@ -54,6 +54,14 @@ export class StatusService {
       }),
     });
   }
+  zcuStatusDataSource(): DataSource {
+    return new DataSource({
+      store: AspNetData.createStore({
+        key: 'id',
+        loadUrl: `${this.baseUrl}/zcus`,
+      }),
+    });
+  }
 
   getVehicleSignal(id: number): Observable<IVehicleSignal> {
     console.warn('# from vehicle-signal.json file - for dev #');

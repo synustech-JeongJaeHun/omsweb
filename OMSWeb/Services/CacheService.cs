@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace OMSWeb.Services
@@ -17,7 +14,9 @@ namespace OMSWeb.Services
     Buffers,
     Mtls,
     Zcus,
+    ZcuStatus,
     Clusters,
+    VehicleDio,
     VehiclePaths,
     Vehicles,
     Groups,

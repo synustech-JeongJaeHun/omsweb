@@ -19,7 +19,7 @@
     </button>
   </div>
   <mat-tab-group class="tab-group" [(selectedIndex)]="currentTab" (selectedIndexChange)="onChangeTab($event)"
-    animationDuration="0ms">
+                 animationDuration="0ms">
 
     <mat-tab [label]="'names.orders' | translate" *ngIf="canDisplayTable('orders')">
       <oms-order-control-table [tableHeight]="tableHeight">
@@ -39,5 +39,11 @@
       </oms-buffer-control-table>
     </mat-tab>
     <!-- Stations / Buffers 추가 -->
+    <!-- Zcu 추가 -->
+    <mat-tab [label]="'names.zcus' | translate" *ngIf="canControl && canDisplayTable('zcus')">
+      <oms-zcu-control-table [tableHeight]="tableHeight">
+      </oms-zcu-control-table>
+    </mat-tab>
+    <!-- Zcu 추가 -->
   </mat-tab-group>
 </div>

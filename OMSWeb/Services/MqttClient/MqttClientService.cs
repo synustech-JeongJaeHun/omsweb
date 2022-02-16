@@ -55,7 +55,7 @@ namespace OMSWeb.Services
         {
             try
             {
-                System.Console.WriteLine("connected");
+                System.Console.WriteLine("connected to mqtt broker");
                 await mqttClient.SubscribeAsync("oms/track", MqttQualityOfServiceLevel.AtMostOnce);
             }
             catch (Exception ex)

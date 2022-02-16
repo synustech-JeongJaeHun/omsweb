@@ -13,8 +13,10 @@ namespace OMSWeb.Models.Tracks
     public IList<Buffer> Buffers { get; set; }
     public IList<Mtl> Mtls { get; set; }
     public IList<Zcu> Zcus { get; set; }
+    public IList<ZcuStatus> ZcuStatus { get; set; }
     public IList<VehiclePosition> Vehicles { get; set; }
     public IList<VehiclePath> VehiclePaths { get; set; }
+    public IList<VehicleDio> VehicleDio { get; set; }
     public IList<LocationGroup> Groups { get; set; }
     public MapDimension Size { get; set; }
   }

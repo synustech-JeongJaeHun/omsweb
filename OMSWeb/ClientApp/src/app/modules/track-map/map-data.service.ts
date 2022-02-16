@@ -59,23 +59,9 @@ export class MapDataService {
     this.stale_vehicles = [];
   }
 
-  getChangedZcus(rows: Dto.IZcu[]): any[] {
-    const oldData = this.data.zcus;
-    const newData = this.parser.parseZcus(
-      MapTypes.DB,
-      rows,
-      this.geometry.invertFactorY
-    );
-    return LayoutUtil.get_changes(oldData, newData, []);
-  }
-
   getChangedSegments(rows: Dto.ISegment[]): any[] {
     const oldData = this.data.segments;
-    const newData = this.parser.parseSegments(
-      MapTypes.DB,
-      rows,
-      this.geometry.invertFactorY
-    );
+    const newData = this.parser.parseSegments(MapTypes.DB, rows, this.geometry.invertFactorY);
     return LayoutUtil.get_changes(oldData, newData, []);
   }
   getChangedClusters(rows: Dto.ICluster[]): any[] {
@@ -86,6 +72,11 @@ export class MapDataService {
   getChangedGroups(rows: Dto.IGroup[]): any[] {
     const oldData = this.data.groups;
     const newData = this.parser.parseGroups(MapTypes.DB, rows);
+    return LayoutUtil.get_changes(oldData, newData, []);
+  }
+  getChangedZcus(rows: Dto.IZcu[]): any[] {
+    const oldData = this.data.zcus;
+    const newData = this.parser.parseZcus(MapTypes.DB, rows, this.geometry.invertFactorY);
     return LayoutUtil.get_changes(oldData, newData, []);
   }
   getChangedMtls(rows: Dto.IMTL[]): any[] {

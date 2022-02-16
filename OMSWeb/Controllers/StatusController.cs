@@ -60,9 +60,11 @@ namespace OMSWeb.Controllers
       this._cache.RemoveValue(CacheKeys.SegmentDisabled);
       this._cache.RemoveValue(CacheKeys.Segments);
       this._cache.RemoveValue(CacheKeys.Stations);
+      this._cache.RemoveValue(CacheKeys.VehicleDio);
       this._cache.RemoveValue(CacheKeys.VehiclePaths);
       this._cache.RemoveValue(CacheKeys.Vehicles);
-      this._cache.RemoveValue(CacheKeys.Zcus);
+      //this._cache.RemoveValue(CacheKeys.Zcus);
+      //this._cache.RemoveValue(CacheKeys.ZcuStatus);
 
       return "OK";
     }
@@ -89,6 +91,18 @@ namespace OMSWeb.Controllers
     public object GetBufferStatus(DataSourceLoadOptions loadOptions)
     {
       return DataSourceLoader.Load(_statusSvc.QueryBufferStates(), loadOptions);
+    }
+
+    [HttpGet("zcus")]
+    public object GetZcuStatus(DataSourceLoadOptions loadOptions)
+    {
+      return DataSourceLoader.Load(_statusSvc.QueryZcuStates(), loadOptions);
+    }
+
+    [HttpGet("dio")]
+    public object GetVehicleDio(DataSourceLoadOptions loadOptions)
+    {
+      return DataSourceLoader.Load(_statusSvc.QueryDioStates(), loadOptions);
     }
 
     [HttpGet("id-list/{type}")]

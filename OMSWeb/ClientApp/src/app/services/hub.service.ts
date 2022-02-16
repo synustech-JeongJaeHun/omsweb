@@ -18,6 +18,7 @@ export class HubService {
   mtlChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter();
   vehicleChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter();
   vehicleTableChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter();
+  vehicleDioChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter();
   orderTableChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter();
   vehiclePathChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter();
   clusterChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter();
@@ -26,7 +27,8 @@ export class HubService {
   alertChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter();
   serverStatusChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter();
   modeStateChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter();
-  zcuChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter();
+  zcuMapChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter();
+  zcuStatusTableChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter();
   //#endregion
 
   public isConnected = false;
@@ -95,6 +97,7 @@ export class HubService {
     this.hub.off('mtlChanged');
     this.hub.off('vehicleChanged');
     this.hub.off('vehicleTableChanged');
+    this.hub.off('vehicleDioChanged');
     this.hub.off('orderTableChanged');
     this.hub.off('vehiclePath');
     this.hub.off('clusterChanged');
@@ -103,7 +106,8 @@ export class HubService {
     this.hub.off('alert');
     this.hub.off('serverStatus');
     this.hub.off('modeState');
-    this.hub.off('zcuChanged');
+    this.hub.off('zcuMapChanged');
+    this.hub.off('zcuStatusTableChanged');
   }
 
   private attachEvents() {
@@ -143,6 +147,9 @@ export class HubService {
       // console.info('## hub message : vehicleTableChanged >>', { meta, body });
       this.vehicleTableChanged$.emit({ ...meta, data: body });
     });
+    this.hub.on('vehicleDioChanged', (meta, body) => {
+      this.vehicleDioChanged$.emit({ ...meta, data: body });
+    });
     this.hub.on('orderTableChanged', (meta, body) => {
       // console.info('## hub message : orderTableChanged >>', { meta, body });
       this.orderTableChanged$.emit({ ...meta, data: body });
@@ -175,9 +182,13 @@ export class HubService {
       console.info('## hub message : modeState >>', { meta, body });
       this.modeStateChanged$.emit({ ...meta, data: body });
     });
-    this.hub.on('zcuChanged', (meta, body) => {
-      console.info('## hub message : zcuChanged >>', { meta, body });
-      this.zcuChanged$.emit({ ...meta, data: body });
+    this.hub.on('zcuMapChanged', (meta, body) => {
+      console.info('## hub message : zcuMapChanged >>', { meta, body });
+      this.zcuMapChanged$.emit({ ...meta, data: body });
+    });
+    this.hub.on('zcuStatusTableChanged', (meta, body) => {
+      console.info('## hub message : zcuStatusTableChanged >>', { meta, body });
+      this.zcuStatusTableChanged$.emit({ ...meta, data: body });
     });
   }
 }

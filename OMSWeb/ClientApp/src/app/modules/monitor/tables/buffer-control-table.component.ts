@@ -62,7 +62,7 @@ export class BufferControlTableComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.hubSvc.orderTableChanged$
+    this.hubSvc.bufferChanged$
       .pipe(takeUntil(this.destroy$))
       .subscribe((e: IDataChangeEvent) => {
         e && this.onTableChanged(e);
@@ -84,7 +84,7 @@ export class BufferControlTableComponent implements OnInit, OnDestroy {
         needReload = true;
       } else {
         needReload = this.dataSource.items().every((x) => x.id !== payload.id);
-        // needReload = true;
+        needReload = true;
       }
     } else {
       needReload = true;

@@ -267,21 +267,10 @@ namespace OMSWeb.Repositories
             var data = _cache.GetValue<List<Zcu>>(key);
             if (data == null)
             {
-                //string sql = @"select id, x, y, using_type, zcu_type from zcus";
-                var zcuSql = @"
-                SELECT ZS.id, ZS.x, ZS.y, ZS.using_type, ZS.zcu_type
-                FROM zcus AS ZS
-                ORDER BY ZS.id;
-                ";
-
-                //using (var conn = ConnectTrack())
-                //{                       
-                //    data = conn.Query<Zcu>(sql).AsList();
-                //}
-
                 using (var conn = ConnectTrack())
                 {
-                    data = conn.Query<Zcu>(zcuSql).AsList();
+                    string sql = QueryFactory.GetSql("zcu");
+                    data = conn.Query<Zcu>(sql).AsList();
                     
                     foreach (Zcu zcu in data)
                     {
@@ -307,6 +296,44 @@ namespace OMSWeb.Repositories
                 }
 
                 _cache.SetValue<List<Zcu>>(key, data, DateTimeOffset.Now.AddMinutes(CACHE_LIFE));
+            }
+            return data;
+        }
+        public List<ZcuStatus> LoadZcuStatus()
+        {
+            var key = CacheKeys.ZcuStatus;
+            var data = _cache.GetValue<List<ZcuStatus>>(key);
+            if (data == null)
+            {
+                var models = new List<ZcuStatus>();
+                string sql = QueryFactory.GetSql("zcuStatus");
+                using (var conn = ConnectTrack())
+                {
+                    using (var cmd = new NpgsqlCommand(sql, conn))
+                    {
+                        conn.Open();
+                        using (var dr = cmd.ExecuteReader())
+                        {
+                            while (dr.Read())
+                            {
+                                models.Add(new ZcuStatus
+                                {
+                                    Id = Convert.ToInt32(dr["id"]),
+                                    logicalId = dr["logical_id"].ToString(),
+                                    usingType = dr["using_type"].ToString(),
+                                    status = dr["status"].ToString(),
+                                    errorCode = dr["error_code"].TryInteger(),
+                                    passVehicle = dr["pass_vehicle"].ToString(),
+                                    vehicleCount = dr["vehicle_count"].ToString(),
+                                    vehicleInfo = dr["vehicle_info"].ToString(),
+                                }
+                               );
+                            }
+                        }
+                    }
+                }
+                data = models.ToList();
+                _cache.SetValue<List<ZcuStatus>>(key, data, DateTimeOffset.Now.AddMinutes(CACHE_LIFE));
             }
             return data;
         }
@@ -343,6 +370,44 @@ namespace OMSWeb.Repositories
                 }
                 data = models.ToList();
                 _cache.SetValue<List<Cluster>>(key, data, DateTimeOffset.Now.AddMinutes(CACHE_LIFE));
+            }
+            return data;
+        }
+
+        public List<VehicleDio> LoadVehicleDio()
+        {
+            var key = CacheKeys.VehicleDio;
+            var data = _cache.GetValue<List<VehicleDio>>(key);
+            if (data == null)
+            {
+                var models = new List<VehicleDio>();
+                string sql = @"SELECT vehicle_id AS id, di_1, di_2, di_3, do_1, do_2, do_3 FROM vehicle_dio";
+                using (var conn = ConnectTrack())
+                {
+                    using (var cmd = new NpgsqlCommand(sql, conn))
+                    {
+                        conn.Open();
+                        using (var dr = cmd.ExecuteReader())
+                        {
+                            while (dr.Read())
+                            {
+                                models.Add(new VehicleDio
+                                {
+                                    Id = Convert.ToInt32(dr["id"]),
+                                    di_1 = Convert.ToInt32(dr["di_1"]),
+                                    di_2 = Convert.ToInt32(dr["di_2"]),
+                                    di_3 = Convert.ToInt32(dr["di_3"]),
+                                    do_1 = Convert.ToInt32(dr["do_1"]),
+                                    do_2 = Convert.ToInt32(dr["do_2"]),
+                                    do_3 = Convert.ToInt32(dr["do_3"]),
+                                }
+                               );
+                            }
+                        }
+                    }
+                }
+                data = models.ToList();
+                _cache.SetValue<List<VehicleDio>>(key, data, DateTimeOffset.Now.AddMinutes(CACHE_LIFE));
             }
             return data;
         }

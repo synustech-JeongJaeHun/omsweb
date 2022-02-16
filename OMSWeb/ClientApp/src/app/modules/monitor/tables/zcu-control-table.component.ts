@@ -1,6 +1,7 @@
 import { Component, HostListener, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import DataSource from 'devextreme/data/data_source';
 
+import { IZcuStatusRow } from '../../../models/zcu-status.model';
 import { StatusService } from '../../../services/status.service';
 import { SettingsService } from '../../../services/settings.service';
 import { forkJoin, Subject } from 'rxjs';
@@ -11,13 +12,16 @@ import { takeUntil } from 'rxjs/operators';
 import { MessagesService } from '../../../services/messages.service';
 import { DxDataGridComponent } from 'devextreme-angular';
 import { ClientPreferences } from '../../../models/settings.model';
+import { DialogService } from '../../../services/dialog.service';
+import { TranslateService } from '@ngx-translate/core';
+import { forEach } from 'lodash';
 
 @Component({
-  selector: 'oms-station-control-table',
-  templateUrl: './station-control-table.component.html',
-  styleUrls: ['./station-control-table.component.scss'],
+  selector: 'oms-zcu-control-table',
+  templateUrl: './zcu-control-table.component.html',
+  styleUrls: ['./zcu-control-table.component.scss'],
 })
-export class StationControlTableComponent implements OnInit, OnDestroy {
+export class ZcuControlTableComponent implements OnInit, OnDestroy {
   @Input() tableHeight: number;
   @ViewChild(DxDataGridComponent, { static: false })
   dataGrid: DxDataGridComponent;
@@ -37,8 +41,12 @@ export class StationControlTableComponent implements OnInit, OnDestroy {
     );
   }
 
-  get canDelete(): boolean {
+  get canReset(): boolean {
     return this.selectedRows.length > 0;
+  }
+
+  get selectedItems(): IZcuStatusRow[] {
+    return this.dataGrid.instance.getSelectedRowsData();
   }
 
   constructor(
@@ -46,9 +54,11 @@ export class StationControlTableComponent implements OnInit, OnDestroy {
     private statusSvc: StatusService,
     private settingSvc: SettingsService,
     private messageSvc: MessagesService,
+    private dialogSvc: DialogService,
+    private $t: TranslateService,
     private hubSvc: HubService
   ) {
-    this.dataSource = this.statusSvc.stationStatusDataSource();
+    this.dataSource = this.statusSvc.zcuStatusDataSource();
     this.preference = this.settingSvc.globalPreferences;
   }
 
@@ -62,23 +72,34 @@ export class StationControlTableComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.hubSvc.stationChanged$
+    this.hubSvc.zcuStatusTableChanged$
       .pipe(takeUntil(this.destroy$))
       .subscribe((e: IDataChangeEvent) => {
         e && this.onTableChanged(e);
       });
   }
 
-  onDelete() {
-    if (!this.canDelete) return;
-    const items = this.dataGrid.instance.getSelectedRowsData();
-    const jobs = items.map((x) => this.messageSvc.sendDeleteOrder(x));
-    forkJoin(jobs).subscribe();
+  onReset() {
+    if (!this.canReset) return;
+
+    this.dialogSvc
+      .confirm({ body: this.$t.instant('messages.confirmZcuReset') })
+      .subscribe((confirm) => {
+        if (confirm) {
+            this.messageSvc
+              .sendZcuCommand({
+                action: "zcu_reset",
+                //zcuIds: this.selectedRows.map
+              })
+              .subscribe();
+        }
+      });
+
   }
 
   private onTableChanged(payload: IDataChangeEvent) {
     let needReload = false;
-    console.log('@@ station table updated >>>', payload);
+    console.log('@@ zcu status table updated >>>', payload);
     if (payload && payload.id && payload.operation) {
       if (['INSERT', 'DELETE'].includes(payload.operation)) {
         needReload = true;

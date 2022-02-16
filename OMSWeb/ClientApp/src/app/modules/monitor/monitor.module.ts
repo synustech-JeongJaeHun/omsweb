@@ -12,6 +12,7 @@ import { OrderControlTableComponent } from './tables/order-control-table.compone
 import { VehicleControlTableComponent } from './tables/vehicle-control-table.component';
 import { StationControlTableComponent } from './tables/station-control-table.component';
 import { BufferControlTableComponent } from './tables/buffer-control-table.component';
+import { ZcuControlTableComponent } from './tables/zcu-control-table.component';
 import { KpiModule } from '../kpi/kpi.module';
 
 @NgModule({
@@ -24,6 +25,7 @@ import { KpiModule } from '../kpi/kpi.module';
     VehicleControlTableComponent,
     StationControlTableComponent,
     BufferControlTableComponent,
+    ZcuControlTableComponent,
   ],
   imports: [CommonModule, MonitorRoutingModule, SharedModule, TrackMapModule, KpiModule],
 })

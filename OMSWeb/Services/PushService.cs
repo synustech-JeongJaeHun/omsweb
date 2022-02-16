@@ -1,7 +1,5 @@
 using System;
 using Microsoft.AspNetCore.SignalR;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Linq;
 
 using OMSWeb.Hubs;
@@ -10,12 +8,11 @@ using System.Collections.Generic;
 using Newtonsoft.Json.Serialization;
 using System.Threading.Tasks;
 using OMSWeb.Models.Tracks;
-using Newtonsoft.Json.Linq;
 
 namespace OMSWeb.Services
 {
 
-  class NotificationSendingState
+    class NotificationSendingState
   {
     public DateTime Time { get; set; } = DateTime.MinValue;
     public bool IsReserved { get; set; } = false;
@@ -47,8 +44,11 @@ namespace OMSWeb.Services
         {"stations", new DataChangeEventTarget(CacheKeys.Stations, new[]{"stationChanged"})},
         {"buffers", new DataChangeEventTarget(CacheKeys.Buffers, new[]{"bufferChanged"})},
         {"mtls", new DataChangeEventTarget(CacheKeys.Mtls, new[]{"mtlChanged"})},
+        {"zcus", new DataChangeEventTarget(CacheKeys.Zcus, new[]{"zcuMapChanged"}, true)},
+        {"zcu_status", new DataChangeEventTarget(CacheKeys.ZcuStatus, new[]{"zcuStatusTableChanged"}, true)},
         {"vehicles", new DataChangeEventTarget(CacheKeys.Vehicles, new[]{"vehicleChanged", "vehicleTableChanged"}, true)},
         {"vehicle_paths", new DataChangeEventTarget(CacheKeys.VehiclePaths, new[]{"vehiclePath"})},
+        {"vehicle_dio", new DataChangeEventTarget(CacheKeys.VehicleDio, new[]{"vehicleDioChanged"}, true)},
         {"clusters", new DataChangeEventTarget(CacheKeys.Clusters, new[]{"clusterChanged"})},
         {"cluster_points", new DataChangeEventTarget(CacheKeys.Clusters, new[]{"clusterChanged"})},
         {"location_groups", new DataChangeEventTarget(CacheKeys.Groups, new[]{"groupChanged"})},
@@ -67,8 +67,11 @@ namespace OMSWeb.Services
         {CacheKeys.Stations, new[]{"stationChanged"}},
         {CacheKeys.Buffers, new[]{"bufferChanged"}},
         {CacheKeys.Mtls, new[]{"mtlChanged"}},
+        {CacheKeys.Zcus, new[]{"zcuMapChanged"}},
+        {CacheKeys.ZcuStatus, new[]{"zcuStatusTableChanged"}},
         {CacheKeys.Vehicles, new[]{"vehicleChanged", "vehicleTableChanged"}},
         {CacheKeys.VehiclePaths, new[]{"vehiclePath"}},
+        {CacheKeys.VehicleDio, new[]{"vehicleDioChanged"}},
         {CacheKeys.Clusters, new[]{"clusterChanged"}},
         {CacheKeys.Groups, new[]{"groupChanged"}},
       };
@@ -97,33 +100,31 @@ namespace OMSWeb.Services
       //   Console.WriteLine($">> Watcher VH >> {payload.Id}: {payload.Data.NextPoint}");
 
       // Console.WriteLine($">> Watcher received json object >>, Table = {payload.Table}, Operation = {payload.Operation}, Id = {payload.Id}, VehicleId = {payload.VehicleId}");
-      if (string.IsNullOrEmpty(payload.Table)) return;
+      if (string.IsNullOrEmpty(payload.Table)) 
+        return;
 
       this.tableEventMap.TryGetValue(payload.Table.ToLower(), out var targetInfo);
-      if (targetInfo != null && targetInfo.CacheKey != CacheKeys.None) // table event가 정의된 경우
-      {
 
-        if (payload.Id > 0) // cache update 후 cache 데이터를 사용하여 push
+      if (targetInfo != null)
+      {
+        if (targetInfo.CacheKey != CacheKeys.None) // table event가 정의된 경우
         {
-          // update cache
-          await this.UpdateWithCacheAsync(targetInfo, payload);
-        }
-        else // 변경 event만 push
-        {
-          foreach (var name in targetInfo.PushNames)
+          if (payload.Id > 0) // cache update 후 cache 데이터를 사용하여 push
           {
-            // this._hub.Clients.All.SendAsync(name, payload);
-            await this.SendDBNotificationAsync(name, payload, null);
+            // update cache
+            await this.UpdateWithCacheAsync(targetInfo, payload);
+          }
+          else // 변경 event만 push
+          {
+            foreach (var name in targetInfo.PushNames)
+               await this.SendDBNotificationAsync(name, payload, null);
           }
         }
-
       }
-      else if (targetInfo != null)  // 정의되지 않은 table event 이거나 cache를 사용하지 않은 데이터인 경우
+      else  // 정의되지 않은 table event 이거나 cache를 사용하지 않은 데이터인 경우
       {
         foreach (var name in targetInfo.PushNames)
-        {
           await this.SendDBNotificationAsync(name, payload, null);
-        }
       }
     }
 
@@ -133,10 +134,12 @@ namespace OMSWeb.Services
       {
         var span = new TimeSpan(DateTime.Now.Ticks - ts);
         var milliseconds = span.TotalMilliseconds;
+
         if (milliseconds > 500)
           Console.ForegroundColor = ConsoleColor.Red;
         else if (milliseconds > 100)
           Console.ForegroundColor = ConsoleColor.Magenta;
+
         Console.WriteLine($"[PUSH] ~ {milliseconds,8:N2}\t{message}");
         Console.ResetColor();
       }

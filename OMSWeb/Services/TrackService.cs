@@ -29,10 +29,12 @@ namespace OMSWeb.Services
                 Buffers = this._trackRepo.LoadBuffers(),
                 Mtls = this._trackRepo.LoadMtls(),
                 Clusters = this._trackRepo.LoadClusters(),
+                VehicleDio = this._trackRepo.LoadVehicleDio(),
                 VehiclePaths = this._trackRepo.LoadVehiclePaths(),
                 Vehicles = this._trackRepo.LoadVehiclePositions(),
                 Groups = this._trackRepo.LoadGroups(),
                 Zcus = this._trackRepo.LoadZcus(),
+                ZcuStatus = this._trackRepo.LoadZcuStatus(),
             };
             return map;
         }
@@ -55,6 +57,8 @@ namespace OMSWeb.Services
                     return this._trackRepo.LoadMtls().ToArray() as dynamic[];
                 case CacheKeys.Clusters:
                     return this._trackRepo.LoadClusters().ToArray() as dynamic[];
+                case CacheKeys.VehicleDio:
+                    return this._trackRepo.LoadVehicleDio().ToArray() as dynamic[];
                 case CacheKeys.VehiclePaths:
                     return this._trackRepo.LoadVehiclePaths().ToArray() as dynamic[];
                 case CacheKeys.Vehicles:
@@ -63,6 +67,8 @@ namespace OMSWeb.Services
                     return this._trackRepo.LoadGroups().ToArray() as dynamic[];
                 case CacheKeys.Zcus:
                     return this._trackRepo.LoadZcus().ToArray() as dynamic[];
+                case CacheKeys.ZcuStatus:
+                    return this._trackRepo.LoadZcuStatus().ToArray() as dynamic[];
                 default:
                     return null;
             }
@@ -94,6 +100,9 @@ namespace OMSWeb.Services
                     break;
                 case "BUFFER":
                     targetList = this.GetMapItem(CacheKeys.Buffers);
+                    break;
+                case "ZCU":
+                    targetList = this.GetMapItem(CacheKeys.Zcus);
                     break;
                 default:
                     targetList = new dynamic[] { };

@@ -10049,18 +10049,11 @@ export class ViewController {
           .selectAll('.zcu_path, .zcu_mask')
           .attr('d', main_css.zcu[`icon_level${zoom_level}`])
           .attr('level', `level${zoom_level}`);
-
-        this.zcus_svg
-          .selectAll('.zcu_path')
-          .attr('fill', 'none')
-          .attr('stroke', dom_css.color_zcu)
-          .attr('stroke-width', dom_css.line_weight);
-
         this.zcus_svg.each((d) => {
           let d3_this = d3.select(`#id_${d.id}.zcu`);
 
           const type =
-            d.usingType === 0 ? "X"
+            d.usingType === 0 ? ""
               : d.usingType === 1 ? "HW"
                 : d.usingType === 2 ? "SW"
                   : ""
@@ -10069,8 +10062,14 @@ export class ViewController {
             .attr('class', 'usingType')
             .attr('font-size', 10)
             .attr('x', (-2) * dom_css.text_offset)
-            .attr('y', (-1) * dom_css.height / 8 * 5)
+            .attr('y', (-1) * dom_css.radius / 8 * 5)
             .text(function () { return type })
+
+          d3_this
+            .select('.zcu_path')
+            .attr('fill', d.error ? 'red' : dom_css.color_zcu)
+            .attr('stroke', dom_css.color_zcu)
+            .attr('stroke-width', dom_css.line_weight);
         })
 
 
@@ -10947,7 +10946,7 @@ export class ViewController {
           .append('path')
           .attr('d', main_css.zcu[`icon_level${zoom_level}`])
           .attr('class', 'zcu_path')
-          .attr('fill', 'none')
+          .attr('fill', layout_object.error ? 'red' : dom_css.color_zcu)
           .attr('stroke', dom_css.color_zcu)
           .attr('stroke-width', dom_css.line_weight)
           .attr('level', `level${zoom_level}`);
@@ -10963,7 +10962,7 @@ export class ViewController {
           .attr('class', 'usingType')
           .attr('font-size', 10)
           .attr('x', (-2) * dom_css.text_offset)
-          .attr('y', (-1) * dom_css.height / 8 * 5)
+          .attr('y', (-1) * dom_css.radius / 8 * 5)
           .text(function () { return type })
 
         if (overlap_adjustment) {

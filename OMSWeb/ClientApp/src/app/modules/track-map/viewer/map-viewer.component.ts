@@ -8,6 +8,7 @@ import {
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import d3 = require('d3');
 
 import { ViewModes } from '../../../models/enums';
 import { Dto } from '../../../models/dto/track.model';
@@ -121,7 +122,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
           .pipe(takeUntil(this.destroy$))
           .subscribe((e) => console.log("group update", e));
 
-        this.hubSvc.zcuChanged$
+        this.hubSvc.zcuMapChanged$
           .pipe(takeUntil(this.destroy$))
           .subscribe((e) => console.log("zcu update", e));
 
@@ -180,7 +181,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     }
   }
 }
-
 
 function getCustomEventPayload<T>(event: CustomEvent<T[]>) {
   return event.detail[0]

@@ -102,5 +102,28 @@ namespace OMSWeb.Repositories
       }
       return result;
     }
+
+    public IQueryable<ZcuState> QueryZcuStates()
+    {
+      IQueryable<ZcuState> result;
+      using (var conn = ConnectTrack())
+      {
+        var sql = QueryFactory.GetSql("zcuStatus");
+        result = conn.Query<ZcuState>(sql).AsQueryable();
+      }
+      return result;
+    }
+
+    public IQueryable<DioState> QueryDioStates()
+    {
+      IQueryable<DioState> result;
+      using (var conn = ConnectTrack())
+      {
+        var sql = QueryFactory.GetSql("dioState");
+        result = conn.Query<DioState>(sql).AsQueryable();
+      }
+      return result;
+    }
+
   }
 }
