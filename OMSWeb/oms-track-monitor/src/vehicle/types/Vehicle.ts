@@ -8,39 +8,37 @@ type Vehicle = {
   logicalId: string
   physicalId: string
 
-  canBePushed: boolean
+  canBePushed: boolean // data for prevent push
   cargoState:
   | "L" // Loading
   | "F" // Full
   | "U" // Unload
   | "E" // Empty
-  | "??What for load fail"
-  | "??What for unload fail"
-  | string
   curPoint: number
   nextPoint: number
   errorList: string
   isBlocked: boolean
   isSensorStopped: boolean
+  isMaint: boolean;
+  isConnected: boolean;
   lastContact: string
   mapDb: string
-  mode:
+  mode?:
   | "A" // Auto
   | "M" // Manual
   movingState:
   | "M"
   | "S"
-  | string
   distancePoint: number
   hostOrder: boolean
-  orderOrigin: string | string[]
+  orderOrigin: string | string[] // data for prevent call
 
   // update
   lastUpdated?: number, // always assigned with Date.now()
   updateType?: UpdateType
 
   // nullable
-  cargoTransferResult?: string
+  cargoTransferResult?: string // if it is not nullish, then it means unload/load fail
   commandPoint?: string
   locationDropoff?: string
   locationMove?: string
@@ -48,7 +46,9 @@ type Vehicle = {
   orderId?: number
   orderLogicalId?: string
   priority?: any
-  type?: string
+  type?: // normal: nullish
+  | "CLEANING" // Vehicle type: Cleaning
+  | string
   group?: number
   historyChangeTime?: any
 }

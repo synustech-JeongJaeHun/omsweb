@@ -1,0 +1,16 @@
+<template>
+  <svg viewBox="-10 -10 120 120">
+    <circle cx="50" cy="50" r="50" stroke="red" stroke-width="5" fill="none" />
+    <path
+      stroke="black"
+      stroke-width="5"
+      fill="none"
+      d="
+    M 25 50
+    L 75 50
+    M 60 25
+    L 75 50
+    L 60 75"
+    />
+  </svg>
+</template>

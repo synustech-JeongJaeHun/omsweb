@@ -111,16 +111,24 @@ interface IVehicle {
   physicalId: string
 
   canBePushed: boolean
-  cargoState: string
+  cargoState:
+  | "L" // Loading
+  | "F" // Full
+  | "U" // Unload
+  | "E" // Empty
   curPoint: number
   nextPoint: number
   errorList: string
   isBlocked: boolean
   isSensorStopped: boolean
+  isMaint: boolean;
+  isConnected: boolean;
   lastContact: string
   mapDb: string
   mode: "A" | "M"
-  movingState: string
+  movingState:
+  | "M"
+  | "S"
   distancePoint: number
   hostOrder: boolean
   orderOrigin: string | string[]

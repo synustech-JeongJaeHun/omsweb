@@ -155,7 +155,6 @@ defineExpose(exposed)
 <style src="./styles/rotate.css"></style>
 <style src="./styles/invert.css"></style>
 <style src="./styles/group.css"></style>
-<style src="./styles/vehicle.css"></style>
 
 <!-- Plan B -->
 <!-- https://stackoverflow.com/questions/69797635/how-do-i-create-a-vue-3-custom-element-including-child-component-styles -->
