@@ -53,8 +53,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     // @ts-ignore
     this.viewer = document.getElementById('track-canvas')._instance.exposed
-
-    this.viewer.setViewMode(this.viewMode)
     this.viewer.setPreference(this.preference)
     // @ts-ignore
     this.viewer.setTrack({ ...this.trackData, segmentParts: this.trackData.segments, clusters: this.trackData.clusters.map(c => ({ ...c, segments: c.segments.split(',').map(id => parseInt(id.trim())) })) })
@@ -69,15 +67,10 @@ export class MapViewerComponent implements OnInit, OnDestroy {
       this.hubSvc.connectionChanged$
         .pipe(takeUntil(this.destroy$))
         .subscribe((conn) => {
-          // TODO
           this.statusService.getVehicles().subscribe((res) => {
-
             console.log("connection update", conn, res)
-            if (res?.vehicles) {
-              res.vehicles.forEach(v =>
-                // @ts-ignore
-                this.viewer.updateVehicle('UPDATE', v)
-              )
+            if (conn && res?.vehicles) {
+              res.vehicles.forEach(v => this.viewer.updateVehicle('UPDATE', v))
             }
           })
         });
@@ -90,58 +83,71 @@ export class MapViewerComponent implements OnInit, OnDestroy {
       this.hubSvc.segmentChanged$
         .pipe(takeUntil(this.destroy$))
         .subscribe((e: IDataChangeEvent) => {
+          // TODO what happened on event?
           console.log("segment update", e)
         });
       this.hubSvc.segmentDisabledChanged$
         .pipe(takeUntil(this.destroy$))
         .subscribe((e: IDataChangeEvent) => {
-          console.log("segment disabled update", e)
+          this.viewer.updateSegmentDisabled(e.operation, {
+            id: e.id,
+            operation: e.operation,
+            data: e.data
+          })
         });
       this.hubSvc.clusterChanged$
         .pipe(takeUntil(this.destroy$))
         .subscribe((e: IDataChangeEvent) => {
+          // TODO what happened on event?
           console.log("cluster update", e)
+        });
 
+      this.hubSvc.zcuMapChanged$
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((e) => {
+          this.viewer.updateZcu(e.operation, e.data)
         });
 
       if (this.auth.isAuthenticated) {
         this.hubSvc.vehiclePathChanged$
           .pipe(takeUntil(this.destroy$))
           .subscribe((e: IDataChangeEvent) => {
+            // TODO what happened on event?
             console.log("vehicle path update", e)
-
           });
 
         this.hubSvc.stationChanged$
           .pipe(takeUntil(this.destroy$))
           .subscribe((e) => {
+            // TODO what happened on event?
             console.log("station update", e)
           })
 
         this.hubSvc.groupChanged$
           .pipe(takeUntil(this.destroy$))
-          .subscribe((e) => console.log("group update", e));
-
-        this.hubSvc.zcuMapChanged$
-          .pipe(takeUntil(this.destroy$))
-          .subscribe((e) => console.log("zcu update", e));
-
+          .subscribe((e) => {
+            // TODO what happened on event?
+            console.log("group update", e)
+          });
 
         this.hubSvc.bufferChanged$
           .pipe(takeUntil(this.destroy$))
           .subscribe((e) => {
+            // TODO what happened on event?
             console.log("buffer update", e)
           });
 
         this.hubSvc.mtlChanged$
           .pipe(takeUntil(this.destroy$))
           .subscribe((e) => {
+            // TODO what happened on event?
             console.log("mtl update", e)
           });
 
         this.hubSvc.groupChanged$
           .pipe(takeUntil(this.destroy$))
           .subscribe((e) => {
+            // TODO what happened on event?
             console.log("group update", e)
           });
       }

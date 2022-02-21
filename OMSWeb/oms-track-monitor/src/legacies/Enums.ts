@@ -1,7 +1,3 @@
-type ViewModes = 'MINIMAL' | 'EDITOR' | 'VIEWER' | 'PUBLIC' | 'PLAYBACK'
-
-type MapTypes = 'MIN_MAX' | 'MAIN' | 'MINIMAP' | 'FILE' | 'DB'
-
 type ToggleOptionKeyType =
   | 'itemDetails'
   | 'minimap'
@@ -40,9 +36,7 @@ type MapConfigType =
   | 'segmentDirectionSize'
 
 export {
-  MapTypes,
   ToggleOptionKeyType,
   CommandKeyType,
   MapConfigType,
-  ViewModes,
 }

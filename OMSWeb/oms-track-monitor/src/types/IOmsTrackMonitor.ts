@@ -1,27 +1,29 @@
-import { ViewModes } from './Enums'
-import {
-  IMapConfigChangeEvent,
-  IMapToolbarCommandEvent,
-  IMapToolbarToggleEvent,
-} from './models/drawing.model'
-import { Segment } from './models/segment.model'
-import { IPreferences, UiStates } from './models/setting.model'
-import { ITrackData, IVehicle } from './models/track.model'
-import { MapDataService } from './serivces/MapData.service'
-import { MapStatesService } from './serivces/MapStates.service'
+import { IPreferences } from '../legacies/models/setting.model'
+import { ITrackData } from '../legacies/models/track.model'
+import { ColorProperty, ScaleProperty, VisibleProperty } from '../styles/styleSetting'
+import { Vehicle } from '../vehicle/types/Vehicle'
+import { UpdateDto } from './Dto'
+
 
 interface IOmsTrackMonitor {
   // Set Data
-  setViewMode: (viewMode: ViewModes) => void
-  setPreference: (preferences: IPreferences) => void
-  setTrack: (track: ITrackData) => void
+  setPreference(preferences: IPreferences): void // is this needed?
+
+  setTrack(track: ITrackData): void
+
+  // track
+  trackObject(type: "Vehicle", id: Vehicle['id']): void
 
   // Update Data
-  updateVehicle: (operation: "INSERT" | "UPDATE" | "DELETE", vehicles: IVehicle) => void
-  updateSegment: (operation: "INSERT" | "UPDATE" | "DELETE", vehicles: IVehicle) => void
+  updateVehicle(operation: UpdateDto.Operation, vehicle: UpdateDto.Vehicle): void
+  // updateSegment(operation: UpdateDto.Operation, segment: UpdateDto.Segment): void
+  updateSegmentDisabled(operation: UpdateDto.Operation, segmentDisabled: UpdateDto.SegmentDisabled): void,
+  updateZcu(operation: UpdateDto.Operation, zcu: UpdateDto.Zcu): void
 
-
-
+  // Setting - Scale
+  setStyleSetting(group: 'scale', key: ScaleProperty, value: number): void
+  setStyleSetting(group: 'visible', key: VisibleProperty, value: boolean): void
+  setStyleSetting(group: 'color', key: ColorProperty, value: string): void
 
   // adjust_floaters: () => void
   // applyAfterSnapshotUpdated: (updatedPropList?: {

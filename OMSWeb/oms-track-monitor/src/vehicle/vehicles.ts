@@ -1,6 +1,6 @@
 import { ref } from "vue";
-import { IVehicle } from "../legacies/models/track.model";
 import { UpdateType, Vehicle } from './types/Vehicle'
+import { UpdateDto } from "../types/Dto";
 
 const vehicles = ref<Vehicle[]>([])
 
@@ -62,7 +62,7 @@ function findVehicleById(id: number) { return vehicles.value.find(v => v.id === 
  * 3. animation in 2 segment
  *    - is connected X moving in 2 segment 
  */
-function getUpdateType(vehicle: Vehicle, updateData: IVehicle): UpdateType {
+function getUpdateType(vehicle: Vehicle, updateData: UpdateDto.Vehicle): UpdateType {
   if (isInitialize(vehicle) || isNotConnected(vehicle, updateData) || isNoDiff(vehicle, updateData))
     return 'NoAnimation'
   else if (isDiffInSameSegment(vehicle, updateData))
@@ -71,15 +71,15 @@ function getUpdateType(vehicle: Vehicle, updateData: IVehicle): UpdateType {
     return 'AnimationIn2Segments'
 }
 function isInitialize(vehicle: Vehicle) { return vehicle.lastUpdated === undefined }
-function isNotConnected(vehicle: Vehicle, updateData: IVehicle) { return (vehicle.curPoint === updateData.curPoint || vehicle.nextPoint === updateData.curPoint) === false }
-function isNoDiff(vehicle: Vehicle, updateData: IVehicle) { return vehicle.curPoint === updateData.curPoint && vehicle.distancePoint === updateData.distancePoint }
-function isDiffInSameSegment(vehicle: Vehicle, updateData: IVehicle) {
+function isNotConnected(vehicle: Vehicle, updateData: UpdateDto.Vehicle) { return (vehicle.curPoint === updateData.curPoint || vehicle.nextPoint === updateData.curPoint) === false }
+function isNoDiff(vehicle: Vehicle, updateData: UpdateDto.Vehicle) { return vehicle.curPoint === updateData.curPoint && vehicle.distancePoint === updateData.distancePoint }
+function isDiffInSameSegment(vehicle: Vehicle, updateData: UpdateDto.Vehicle) {
   return vehicle.curPoint === updateData.curPoint
     || (vehicle.nextPoint === updateData.curPoint
       && (updateData.curPoint === updateData.nextPoint || updateData.distancePoint === 0))
 }
 
-function updateExistVehicle(vehicle: Vehicle, updateData: IVehicle) {
+function updateExistVehicle(vehicle: Vehicle, updateData: UpdateDto.Vehicle) {
   const updateType = getUpdateType(vehicle, updateData)
 
   Object.assign(vehicle, updateData)

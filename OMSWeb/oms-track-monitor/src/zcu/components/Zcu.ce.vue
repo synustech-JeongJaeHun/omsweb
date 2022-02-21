@@ -5,6 +5,7 @@ import { inject } from 'vue';
 import { RootEmitInjectionKey, RootEmits } from '../../types/RootEmits';
 import { deepCopy } from '../../utils/deepCopy';
 import MapReverseRotate from '../../rotate/components/MapReverseRotate.ce.vue';
+import { getHumanReadableUsingType } from '../utils/readable'
 
 const props = defineProps<{
   zcu: Zcu
@@ -34,10 +35,17 @@ function onContextmenu() {
 }
 </script>
 
+          <!-- d3_this
+            .select('.zcu_path')
+            .attr('fill', d.error ? 'red' : dom_css.color_zcu)
+            .attr('stroke', dom_css.color_zcu)
+            .attr('stroke-width', dom_css.line_weight); -->
+
 <template>
   <svg class="overflow-visible cursor-pointer" :x="props.zcu.x" :y="props.zcu.y">
     <use
       href="#zcu"
+      :fill="props.zcu.error ? 'red' : 'transparent'"
       @click.left="onFocus()"
       @click.right="onContextmenu()"
       @mouseover="onTooltipOn()"
@@ -46,6 +54,12 @@ function onContextmenu() {
     />
     <!-- <text y="70">{{ props.zcu.id }}</text> -->
     <MapReverseRotate>
+      <RasterizedText
+        class="invert"
+        x="-85"
+        y="-55"
+        :text="getHumanReadableUsingType(props.zcu.usingType)"
+      />
       <RasterizedText class="invert" x="65" y="35" :text="String(props.zcu.id)" />
     </MapReverseRotate>
   </svg>

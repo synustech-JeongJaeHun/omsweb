@@ -1,28 +1,18 @@
-import { ref, watch } from "vue";
+import { ref } from "vue";
 import { findPointById } from "../point/points";
-import { segmentDisableds } from "./segmentDisableds";
 import { Segment } from "./types/Segment";
 import { SegmentPart } from "./types/SegmentPart";
 import { makeDFromSegment } from "./utils/d";
 
 const segments = ref<Segment[]>([])
 
-watch(segmentDisableds, (disableds, prevDisableds) => {
-  const enableds = prevDisableds.filter(pd => disableds.every(d => d.segmentId !== pd.segmentId))
-
-  disableds.forEach((d) => {
-    const segment = findSegmentById(d.segmentId)
-    if (segment) segment.disabled = true
-  })
-  enableds.forEach((d) => {
-    const segment = findSegmentById(d.segmentId)
-    if (segment) segment.disabled = false
-  })
-})
-
-
 function findSegmentById(id: number) {
   return segments.value.find(s => s.id === id)
+}
+
+function setSegmentDisabled(id: Segment['id'], disabled: boolean) {
+  const segment = findSegmentById(id)
+  if (segment) segment.disabled = disabled
 }
 
 function findSegmentByPoints(pointId1: number, pointId2: number) {
@@ -39,4 +29,4 @@ function makeD(startPointId: number, endPointId: number, parts: SegmentPart[], l
   return makeDFromSegment(startPoint, endPoint, parts, length)
 }
 
-export { segments, findSegmentByPoints, makeD } 
+export { segments, findSegmentByPoints, setSegmentDisabled, makeD } 

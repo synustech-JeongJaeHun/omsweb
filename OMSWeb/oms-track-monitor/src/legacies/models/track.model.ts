@@ -1,5 +1,5 @@
 import { ICoordinate, IMapSize } from './drawing.model'
-import { MapTypes } from '../Enums'
+// import { MapTypes } from '../Enums'
 
 interface IBuffer {
   id: number
@@ -42,7 +42,8 @@ interface IZcu {
   id: number
   x: number
   y: number
-  usingType: number
+  usingType: 0 | 1 | 2
+  error: boolean
   zcuType: number
   inputZones: IZcuInputZone[]
   completePoints: IZcuCompletePoint[]
@@ -165,7 +166,6 @@ interface IVariableTrackData {
 interface ITrackData extends IFixedTrackData, IVariableTrackData {
   vehiclePath?: any[]
 
-  mapType?: MapTypes
   width?: number
   height?: number
   minimumSegmentLength?: number
