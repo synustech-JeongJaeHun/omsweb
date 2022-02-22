@@ -2,13 +2,8 @@ import { cameraInfo, getHeightFromWidthAndRatio, getWidthFromHeightAndRatio, mov
 import { mapSizePropertiesInfo } from "./map/mapSizeProperties"
 import { rotate, rotationInfo } from "./rotate/rotate"
 
-const AnimationFrameCount = 20
-let isIniting = false
-function initCameraAndRotate() {
-  if (isIniting) return
-  else isIniting = true
-
-  const objective = {
+function getObjective() {
+  return {
     position: {
       x: mapSizePropertiesInfo.value.centerX,
       y: mapSizePropertiesInfo.value.centerY
@@ -24,6 +19,21 @@ function initCameraAndRotate() {
       },
     rotate: 0
   }
+}
+
+function initCameraAndRotation() {
+  moveCamera({ x: mapSizePropertiesInfo.value.centerX, y: mapSizePropertiesInfo.value.centerY })
+  centerZoom()
+}
+
+const AnimationFrameCount = 20
+let isIniting = false
+
+function centerZoom() {
+  if (isIniting) return
+  else isIniting = true
+
+  const objective = getObjective()
 
   let current = {
     position: {
@@ -87,4 +97,4 @@ function initCameraAndRotate() {
   step()
 }
 
-export { initCameraAndRotate }
+export { initCameraAndRotation, centerZoom }

@@ -1,6 +1,6 @@
 <mat-list [class.show-name]="showToolName" mdePopoverTarget #popoverTarget="mdePopoverTarget">
   <button matListItem mat-button class="tool-item" [matTooltipDisabled]="showToolName" matTooltipClass="snb-tooltip"
-    matTooltipPosition="right" [matTooltip]="'names.centerZoom' | translate" (click)="onCommandTool('centerZoom')">
+    matTooltipPosition="right" [matTooltip]="'names.centerZoom' | translate" (click)="centerZoom.emit()">
     <mat-icon>center_focus_strong</mat-icon>
     <span class="tool-name" *ngIf="showToolName">{{
       "names.centerZoom" | translate
@@ -33,9 +33,9 @@
       "names.showObjects" | translate
       }}</span>
   </button>
-  <button matListItem mat-button class="tool-item" [class.active]="buttonState.minimap"
-    (click)="onToggleTool('minimap')" [matTooltipDisabled]="showToolName" matTooltipClass="snb-tooltip"
-    matTooltipPosition="right" [matTooltip]="'names.showMinimap' | translate">
+  <button matListItem mat-button class="tool-item" [class.active]="buttonState.minimap" (click)="toggleMinimap.emit()"
+    [matTooltipDisabled]="showToolName" matTooltipClass="snb-tooltip" matTooltipPosition="right"
+    [matTooltip]="'names.showMinimap' | translate">
     <mat-icon>map</mat-icon>
     <span class="tool-name" *ngIf="showToolName">{{
       "names.showMinimap" | translate

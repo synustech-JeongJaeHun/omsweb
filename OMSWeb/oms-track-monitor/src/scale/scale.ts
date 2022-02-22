@@ -1,4 +1,4 @@
-import { computed, readonly, Ref } from "vue";
+import { computed, reactive, readonly, Ref, watchEffect } from "vue";
 import { cameraInfo } from "../map/camera";
 import { elementRectInfo } from "../map/elementRect";
 
@@ -9,9 +9,9 @@ const scale = computed(() => ({
 
 const scaleInfo = readonly(scale)
 
-function useScreenFixedScale(scale: Ref<number>, threshold: number) {
+function useScreenFixedScale(fixedScale: Ref<number>, threshold: number) {
   const dynamicSizeInSvg = computed(() => {
-    const calculated = scale.value / scaleInfo.value.pixelPerMm
+    const calculated = fixedScale.value / scaleInfo.value.pixelPerMm
     return calculated < threshold ? threshold : calculated
   })
   return dynamicSizeInSvg

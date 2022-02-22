@@ -20,6 +20,8 @@ import { AuthService } from '../../../services/auth.service';
 import "oms-track-monitor"
 import { OmsTrackMonitorElement, IOmsTrackMonitor } from "oms-track-monitor"
 import { StatusService } from '@oms/root/services/status.service';
+import { MapStatesService } from '../map-states.service';
+import { SettingsService } from '@oms/root/services/settings.service';
 
 @Component({
   selector: 'oms-map-viewer',
@@ -33,14 +35,28 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 
   private viewer: IOmsTrackMonitor;
   private destroy$: Subject<void> = new Subject<void>();
+  public detailsVisible = false;
+  public isMinimapVisible = true;
+
+  public selectedObject: any;
+
+
+  get activeDetails(): boolean {
+    return this.detailsVisible && this.auth.isAuthenticated;
+  }
+  get showToolbarText(): boolean {
+    return this.settingSvc.globalPreferences.toggles.showToolName;
+  }
+
 
   constructor(
     private router: Router,
     private auth: AuthService,
     private hubSvc: HubService,
-    private statusService: StatusService
+    private statusService: StatusService,
+    private mapStatesService: MapStatesService,
+    private settingSvc: SettingsService,
     // private messageSvc: MessagesService,
-    // private settingSvc: SettingsService,
     // private dialogSvc: DialogService,
     // private $t: TranslateService
   ) {
@@ -57,12 +73,53 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     // @ts-ignore
     this.viewer.setTrack({ ...this.trackData, segmentParts: this.trackData.segments, clusters: this.trackData.clusters.map(c => ({ ...c, segments: c.segments.split(',').map(id => parseInt(id.trim())) })) })
     this.attachEvents()
+    this.attachHubEvents()
   }
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
   }
+
   private attachEvents() {
+    this.mapStatesService.toolbarToggleEvent$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((event) => {
+        if (event.type === 'minimap') {
+          this.isMinimapVisible = event.value;
+        } else if (event.type === 'itemDetails') {
+          this.detailsVisible = event.value;
+        } else if (event.type === 'controlTable') {
+          // setTimeout(() => {
+          //   this.viewer.adjust_floaters();
+          // }, 100);
+        } else {
+          // this.viewer?.onChangeVisibility(event);
+        }
+      });
+    this.mapStatesService.toolbarCommandEvent$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((event) => {
+        // this.viewer.onCommandAction(event);
+      });
+    this.mapStatesService.configChangeEvent$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((event) => {
+        // this.viewer.onChangeConfig(event);
+      });
+
+    this.mapStatesService.actionState$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((event) => {
+        // this.onMapMouseEvent(event)
+      });
+
+    this.mapStatesService.statusTableResizeEvent$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        // this.viewer.adjust_floaters();
+      });
+  }
+  private attachHubEvents() {
     if ([ViewModes.public, ViewModes.viewer].includes(this.viewMode)) {
       this.hubSvc.connectionChanged$
         .pipe(takeUntil(this.destroy$))
@@ -160,6 +217,22 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     height: window.innerHeight - 40
   }
 
+  @HostListener('window:resize', ['$event.target'])
+  onResize(window: Window) {
+    this.omsTrackMonitorSize = {
+      width: window.innerWidth,
+      height: window.innerHeight - 40
+    }
+  }
+
+  public onCenterZoom() {
+    this.viewer.centerZoom();
+  }
+
+  public onToggleMinimap() {
+    this.isMinimapVisible = !this.isMinimapVisible
+  }
+
   public onTooltipOn(event: CustomEvent) {
     console.log(event.type, getCustomEventPayload(event))
   }
@@ -179,13 +252,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     console.log(event.type, getCustomEventPayload(event))
   }
 
-  @HostListener('window:resize', ['$event.target'])
-  onResize(window: Window) {
-    this.omsTrackMonitorSize = {
-      width: window.innerWidth,
-      height: window.innerHeight - 40
-    }
-  }
 }
 
 function getCustomEventPayload<T>(event: CustomEvent<T[]>) {

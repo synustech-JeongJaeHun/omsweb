@@ -29,7 +29,7 @@ import { makeGroups } from './group/utils/group'
 import { RootEmitInjectionKey, RootEmits } from './types/RootEmits'
 import ScreenDetail from './map/components/ScreenDetail.ce.vue'
 import { elementRectInfo, setElementRect } from './map/elementRect'
-import { initCameraAndRotate } from './init'
+import { initCameraAndRotation, centerZoom } from './cameraAndRotation'
 import { ViewMode } from './types/ViewMode'
 import { MapType } from './types/MapType'
 import { rotate } from './rotate/rotate'
@@ -51,10 +51,11 @@ import {
 const props = defineProps<{
   viewMode: ViewMode,
   mapType: MapType,
-  width: number | string | undefined,
-  height: number | string | undefined,
-  isClusterShowing: boolean | string | undefined,
-  isGroupShowing: boolean | string | undefined,
+  width: number | string | undefined | null,
+  height: number | string | undefined | null,
+  isMinimapShowing: boolean | string | undefined | null,
+  isClusterShowing: boolean | string | undefined | null,
+  isGroupShowing: boolean | string | undefined | null,
 }>()
 
 // const viewMode = ref<ViewMode>('PUBLIC')
@@ -63,7 +64,7 @@ const props = defineProps<{
 watch(props, (props, prevProps) => {
   const width = parseNumberProp(0, props.width)
   const height = parseNumberProp(0, props.height)
-  setElementRect(width, height)
+  if (width > 0 && height > 0) setElementRect(width, height)
 })
 
 interface Emits extends RootEmits { }
@@ -89,7 +90,6 @@ const exposed: IOmsTrackMonitor = {
   setTrack(t) {
     const { minX, minY, maxX, maxY } = calculateMinMaxXYFromPoints(t.points ?? [])
     initMapSizeProperties(minX, minY, maxX, maxY)
-    initCameraAndRotate()
 
     // Order is IMPORTANT!
     // point must be initialized first.
@@ -103,7 +103,11 @@ const exposed: IOmsTrackMonitor = {
     vehicles.value = t.vehicles ?? []
     initSegmentDisableds(t.segmentDisabled ?? [])
     groups.value = makeGroups(t.groups ?? [])
+
+    // timeout for vue reactive state stabilized
+    setTimeout(initCameraAndRotation, 10);
   },
+  centerZoom,
 
   trackObject(type, id) {
     switch (type) {
@@ -197,7 +201,11 @@ defineExpose(exposed)
       :isClusterShowing="parseBooleanProp(false, props.isClusterShowing)"
       :isGroupShowing="parseBooleanProp(false, props.isGroupShowing)"
     />
-    <Minimap class="absolute" style="bottom: 2vw; left: 2vw;" />
+    <Minimap
+      v-show="parseBooleanProp(true, props.isMinimapShowing)"
+      class="absolute"
+      style="bottom: 2vw; left: 2vw;"
+    />
     <div class="absolute flex flex-row" style="padding: unset; bottom: 10px; right: 10px;">
       <Scale />
       <ScreenDetail />

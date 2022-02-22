@@ -11,6 +11,7 @@ interface IOmsTrackMonitor {
   setPreference(preferences: IPreferences): void // is this needed?
 
   setTrack(track: ITrackData): void
+  centerZoom(): void
 
   // track
   trackObject(type: "Vehicle", id: Vehicle['id']): void

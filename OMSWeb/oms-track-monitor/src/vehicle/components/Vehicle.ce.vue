@@ -1,8 +1,8 @@
 <script setup lang="ts">
+import { computed, inject, reactive, ref, toRef, watch } from 'vue';
 import { Vehicle } from '../types/Vehicle'
 import RasterizedText from '../../map/components/RasterizedText.ce.vue';
 import { findPointById, usePointPoisiton } from '../../point/points';
-import { computed, inject, reactive, ref, toRef, toRefs, watch, watchEffect } from 'vue';
 import { findSegmentByPoints } from '../../segment/segments';
 import { createPathElement, getPositionFromD } from '../../utils/svg/path';
 import { Segment } from '../../segment/types/Segment';

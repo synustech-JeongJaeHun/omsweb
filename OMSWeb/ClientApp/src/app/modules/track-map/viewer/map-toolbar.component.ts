@@ -48,6 +48,10 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
   buttonState: ToggleOptionsType = defaultToggleOptions;
   readonly permissionEnums: typeof PermissionEnums = PermissionEnums;
 
+  @Output() centerZoom = new EventEmitter();
+  @Output() toggleMinimap = new EventEmitter();
+
+
   @ViewChild('btnSearch', { read: ElementRef }) btnSearch: ElementRef;
   @ViewChild('btnTrack', { read: ElementRef }) btnTrack: ElementRef;
   @ViewChild('btnCommand', { read: ElementRef }) btnCommand: ElementRef;

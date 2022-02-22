@@ -79,18 +79,17 @@ const isShow = ref(false)
       <details :open="false">
         <summary>
           <h2 style="margin: 0px; border-bottom: 2px solid black;">👗 styles</h2>
-
-          <dl>
-            <dt>vehicle</dt>
-            <dd>{{ scaleStylesInfo.vehicleSize }}</dd>
-
-            <dt>segment-width</dt>
-            <dd>{{ scaleStylesInfo.segmentWidth }}</dd>
-
-            <dt>segment-direction</dt>
-            <dd>{{ scaleStylesInfo.segmentDirection }}</dd>
-          </dl>
         </summary>
+        <dl>
+          <dt>vehicle</dt>
+          <dd>{{ scaleStylesInfo.vehicleSize }}</dd>
+
+          <dt>segment-width</dt>
+          <dd>{{ scaleStylesInfo.segmentWidth }}</dd>
+
+          <dt>segment-direction</dt>
+          <dd>{{ scaleStylesInfo.segmentDirection }}</dd>
+        </dl>
       </details>
 
       <details :open="false">

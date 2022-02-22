@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { inject, ref } from 'vue';
 import { pan, zoom } from '../camera';
-import { initCameraAndRotate } from '../../init';
+import { centerZoom } from '../../cameraAndRotation';
 import GridLayer from './GridLayer.ce.vue';
 import PointLayer from '../../point/components/PointLayer.ce.vue';
 import BufferLayer from '../../buffer/components/BufferLayer.ce.vue';
@@ -109,7 +109,7 @@ function handleMouseUp() {
     @mouseleave="exitPanning(), exitRotating()"
     @mouseup="exitPanning(), exitRotating()"
     @click.left.self="handleMouseUp()"
-    @click.middle.prevent="initCameraAndRotate()"
+    @click.middle.prevent="centerZoom()"
     @click.right.prevent
   >
     <GridLayer />
