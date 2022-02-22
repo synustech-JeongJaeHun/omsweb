@@ -151,6 +151,16 @@ const commandLineColor = computed(() => {
   else return undefined
 })
 
+
+// const test = 120
+// const threshold = 80
+
+// const outerR = computed(() => {
+//   const calculated = test / scaleInfo.value.pixelPerMm
+//   return calculated < threshold ? threshold : calculated
+// })
+// const innerR = computed(() => outerR.value / 8 * 5)
+
 function onTooltipOn() {
   emit('tooltipon', {
     type: 'Vehicle',
@@ -352,12 +362,10 @@ function onContextmenu() {
     @mouseleave="onTooltipOff()"
   />
 
-  <!-- <animateMotion ref="animateMotionRef" fill="freeze" dur="0.3s" :path="animateMotionPath" /> -->
-
   <!-- next point line -->
   <line
     stroke="rgb(255, 220, 70)"
-    stroke-width="22"
+    stroke-width="40"
     stroke-linecap="round"
     v-if="nextPointPosition"
     :x1="realtimePosition.x"
@@ -370,7 +378,7 @@ function onContextmenu() {
   <line
     v-if="commandPoint.position.value"
     :stroke="commandLineColor"
-    stroke-width="22"
+    stroke-width="40"
     stroke-linecap="round"
     :x1="realtimePosition.x"
     :y1="realtimePosition.y"

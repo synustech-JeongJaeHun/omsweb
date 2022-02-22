@@ -45,8 +45,4 @@ function makeSegmentsFromParts(parts: ISegmentPart[]): Segment[] {
   return array
 }
 
-function getSegmentPathId(id: number) {
-  return `segment-path-${id}`
-}
-
-export { makeSegmentsFromParts, getSegmentPathId }
+export { makeSegmentsFromParts }

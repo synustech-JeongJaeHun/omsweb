@@ -1,13 +1,19 @@
 import { reactive, readonly } from 'vue';
+import { deepCopy } from '../utils/deepCopy';
 import { ColorProperty } from './types/ColorProperty';
 import { ScaleProperty } from './types/ScaleProperty';
 import { VisibleProperty } from './types/VisibleProperty';
 
-const ScaleDefault: Record<ScaleProperty, string> = {
-  vehicleSize: "10px",
-  segmentDirection: "10px",
-  segmentWidth: "10px",
-  mapRotation: "10px",
+const ScaleDefault: Record<ScaleProperty, number> = {
+  vehicleSize: 10,
+  segmentDirection: 6,
+  segmentWidth: 3,
+}
+const scaleStyles = reactive(deepCopy(ScaleDefault))
+const scaleStylesInfo = readonly(scaleStyles)
+
+function updateScaleStyle(key: ScaleProperty, value: number) {
+  scaleStyles[key] = value
 }
 
 const VisibleDefault: Record<VisibleProperty, boolean> = {
@@ -20,6 +26,11 @@ const VisibleDefault: Record<VisibleProperty, boolean> = {
   cluster: true,
   overlappingObjects: true,
   minimap: true,
+}
+const visibleStyles = reactive(deepCopy(VisibleDefault))
+
+function updateVisibleStyle(key: VisibleProperty, value: boolean) {
+  visibleStyles[key] = value
 }
 
 const ColorDefault: Record<ColorProperty, string> = {
@@ -39,34 +50,16 @@ const ColorDefault: Record<ColorProperty, string> = {
   cargoFull: "blue",
   cargoUnloading: "blue"
 }
+const colorStyles = reactive(deepCopy(ColorDefault))
 
-const styleSetting = reactive({
-  scale: ScaleDefault,
-  visible: VisibleDefault,
-  color: ColorDefault,
-})
-
-const styleSettingInfo = readonly(styleSetting)
-
-function setScale(key: ScaleProperty, value: number) {
-  styleSetting.scale[key] = `${value}px`
+function updateColorStyle(key: ColorProperty, value: string) {
+  colorStyles[key] = value
 }
 
-function setVisible(key: VisibleProperty, value: boolean) {
-  styleSetting.visible[key] = value
-}
-
-function setColor(key: ColorProperty, value: string) {
-  styleSetting.color[key] = value
-}
 export {
-  ScaleProperty,
-  VisibleProperty,
-  ColorProperty,
+  scaleStylesInfo,
 
-  styleSettingInfo,
-
-  setScale,
-  setVisible,
-  setColor,
+  updateScaleStyle,
+  updateVisibleStyle,
+  updateColorStyle,
 }

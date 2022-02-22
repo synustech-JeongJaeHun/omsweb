@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { provide, reactive, readonly, ref, watch } from 'vue'
+import { computed, provide, reactive, readonly, ref, watch } from 'vue'
 import { makeFsProxy } from './utils/devMode'
 import { IOmsTrackMonitor } from './types/IOmsTrackMonitor'
 import { IPreferences } from './legacies/models/setting.model'
@@ -10,7 +10,6 @@ import { calculateMinMaxXYFromPoints } from './map/utils/size'
 import { mtls } from './mtl/mtls'
 import { points } from './point/points'
 import {
-  segmentDisableds,
   initSegmentDisableds,
   insertSegmentDisabled,
   deleteSegmentDisabled
@@ -33,6 +32,12 @@ import { elementRectInfo, setElementRect } from './map/elementRect'
 import { initCameraAndRotate } from './init'
 import { ViewMode } from './types/ViewMode'
 import { MapType } from './types/MapType'
+import { rotate } from './rotate/rotate'
+import {
+  updateColorStyle,
+  updateScaleStyle,
+  updateVisibleStyle
+} from './styles/styles'
 
 /**
  * https://v3.vuejs.org/api/sfc-script-setup.html#typescript-only-features
@@ -52,11 +57,6 @@ const props = defineProps<{
   isGroupShowing: boolean | string | undefined,
 }>()
 
-interface Emits extends RootEmits { }
-const emit = defineEmits<Emits>()
-provide(RootEmitInjectionKey, readonly(emit))
-// const emit = inject<RootEmits>(RootEmitInjectionKey)!
-
 // const viewMode = ref<ViewMode>('PUBLIC')
 // const mapType = ref<MapType>('DB');
 // watching props for unstable props delivery
@@ -66,6 +66,15 @@ watch(props, (props, prevProps) => {
   setElementRect(width, height)
 })
 
+interface Emits extends RootEmits { }
+const emit = defineEmits<Emits>()
+provide(RootEmitInjectionKey, readonly(emit))
+// const emit = inject<RootEmits>(RootEmitInjectionKey)!
+
+const selfElement = ref<HTMLDivElement>()
+const shadowRoot = computed(() => selfElement.value?.parentNode as ShadowRoot | null | undefined)
+provide('shadowRoot', readonly(shadowRoot))
+// const shadowRoot = inject<Ref<ShadowRoot>>('shadowRoot')
 
 const permissions = reactive({
   canManageOrders: false,
@@ -150,9 +159,14 @@ const exposed: IOmsTrackMonitor = {
         break;
     }
   },
-  setStyleSetting(group, key, value) {
-    // TODO
-  }
+
+  setMapRotation(degree) {
+    rotate(degree)
+  },
+
+  updateColorStyle,
+  updateScaleStyle,
+  updateVisibleStyle
 }
 
 // # in devmode
@@ -165,6 +179,7 @@ defineExpose(exposed)
 
 <template>
   <div
+    ref="selfElement"
     class="relative"
     :style="{
       width: `${elementRectInfo.width}px`,
@@ -193,12 +208,11 @@ defineExpose(exposed)
 <!-- https://v3.vuejs.org/api/sfc-spec.html#src-imports -->
 <!-- https://github.com/vuejs/vue-next/issues/4662 -->
 <!-- https://v3.vuejs.org/guide/web-components.html#sfc-as-custom-element -->
-<style src="./styles/utility.css"></style>
-<style src="./styles/zoom.css"></style>
-<style src="./styles/pan.css"></style>
-<style src="./styles/rotate.css"></style>
-<style src="./styles/invert.css"></style>
-<style src="./styles/group.css"></style>
+<style src="./styles/sheets/utility.css"></style>
+<style src="./styles/sheets/pan.css"></style>
+<style src="./styles/sheets/rotate.css"></style>
+<style src="./styles/sheets/invert.css"></style>
+<style src="./styles/sheets/group.css"></style>
 
 <!-- Plan B -->
 <!-- https://stackoverflow.com/questions/69797635/how-do-i-create-a-vue-3-custom-element-including-child-component-styles -->

@@ -3,12 +3,6 @@ import { Position } from "../types/Position";
 import { DefaultHeight, DefaultWidth } from "./default";
 import { elementRectInfo } from "./elementRect";
 
-const
-  ZoomLevel3 = 7500,
-  ZoomLevel2 = 35000,
-  ZoomLevel1 = 70000,
-  ZoomLevel0 = 140000
-
 const camera = reactive({
   x: 0,
   y: 0,
@@ -23,14 +17,7 @@ const cameraInfo = readonly(computed(() => ({
   centerY: camera.y + (camera.viewBoxHeight / 2),
   maxX: camera.x + camera.viewBoxWidth,
   maxY: camera.x + camera.viewBoxHeight,
-  viewBox: `${Math.ceil(camera.x)} ${Math.ceil(camera.y)} ${Math.ceil(camera.viewBoxWidth)} ${Math.ceil(camera.viewBoxHeight)}`,
-  zoomLevel: (() => {
-    const smallCorner = Math.min(camera.viewBoxHeight, camera.viewBoxWidth)
-    return smallCorner < ZoomLevel3 ? 3
-      : smallCorner < ZoomLevel2 ? 2
-        : smallCorner < ZoomLevel1 ? 1
-          : 0
-  })()
+  viewBox: `${Math.ceil(camera.x)} ${Math.ceil(camera.y)} ${Math.ceil(camera.viewBoxWidth)} ${Math.ceil(camera.viewBoxHeight)}`
 })))
 
 function getWidthFromHeightAndRatio(height: number) {

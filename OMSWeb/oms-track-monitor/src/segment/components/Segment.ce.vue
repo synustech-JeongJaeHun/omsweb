@@ -1,12 +1,11 @@
 <script setup lang="ts">
 import { Segment } from '../types/Segment'
-import { getSegmentPathId } from '../utils/segment'
-import { computed, inject, readonly } from 'vue';
-import SegmentDirection from './SegmentDirection.ce.vue';
+import { computed, inject, readonly, ref, toRef, watchEffect } from 'vue';
 import { RootEmitInjectionKey, RootEmits } from '../../types/RootEmits';
 import { deepCopy } from '../../utils/deepCopy';
-
-const DefaultStrokeWidth = 20
+import { useScreenFixedScale } from '../../scale/scale';
+import { getAngleFromTwoPoints } from '../../utils/angle';
+import { scaleStylesInfo } from '../../styles/styles'
 
 const props = defineProps<{
   segment: Segment
@@ -14,6 +13,24 @@ const props = defineProps<{
 const emit = inject<RootEmits>(RootEmitInjectionKey)!
 
 const color = readonly(computed(() => props.segment.disabled ? 'purple' : 'grey'))
+const pathElement = ref<SVGPathElement>()
+
+const threshold = 20
+const width = useScreenFixedScale(toRef(scaleStylesInfo, 'segmentWidth'), threshold)
+
+const position = ref<DOMPoint>()
+const angle = ref<number>()
+watchEffect(() => {
+  if (pathElement.value) {
+    const halfLength = pathElement.value.getTotalLength() / 2
+    const halfPosition = pathElement.value.getPointAtLength(halfLength)
+    position.value = halfPosition
+
+    const forwardPosition = pathElement.value.getPointAtLength(halfLength + 40)
+    const backwardPosition = pathElement.value.getPointAtLength(halfLength - 40)
+    angle.value = getAngleFromTwoPoints(backwardPosition, forwardPosition)
+  }
+})
 
 function onTooltipOn() {
   emit('tooltipon', {
@@ -30,20 +47,24 @@ function onContextmenu() {
     value: deepCopy(props.segment)
   })
 }
-
 </script>
 
 <template>
-  <svg ref="selfElement" class="overflow-visible cursor-pointer">
+  <svg
+    class="overflow-visible cursor-pointer"
+    @click.right="onContextmenu()"
+    @mouseover="onTooltipOn()"
+    @mouseout="onTooltipOff()"
+    @mouseleave="onTooltipOff()"
+  >
+    <path ref="pathElement" :d="props.segment.d" fill="none" :stroke="color" :stroke-width="width" />
     <use
-      :href="`#${getSegmentPathId(props.segment.id)}`"
-      :stroke="color"
-      :stroke-width="DefaultStrokeWidth"
-      @click.right="onContextmenu()"
-      @mouseover="onTooltipOn()"
-      @mouseout="onTooltipOff()"
-      @mouseleave="onTooltipOff()"
+      v-if="position !== undefined && angle !== undefined"
+      href="#segment-direction-triangle"
+      :x="position.x"
+      :y="position.y"
+      :fill="color"
+      :transform="`rotate(${angle} ${position.x} ${position.y})`"
     />
-    <SegmentDirection :d="props.segment.d" :color="color" />
   </svg>
 </template>

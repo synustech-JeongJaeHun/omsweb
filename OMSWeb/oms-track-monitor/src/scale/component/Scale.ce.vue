@@ -1,20 +1,14 @@
 <script setup lang="ts">
-import { computed, readonly } from 'vue';
-import { cameraInfo } from '../../map/camera';
-import { elementRectInfo } from '../../map/elementRect';
+import { computed } from 'vue';
+import { scaleInfo } from '../scale';
 import { Units } from '../Units';
 import { getHumanReadableLength } from '../utils/si';
 
-const
-  LineMaxLength = 100
+const LineMaxLength = 100
 
-const scale = readonly(computed(() => cameraInfo.value.viewBoxWidth / elementRectInfo.width))
-const scaleAtLineMaxLength = readonly(computed(() => LineMaxLength * scale.value))
-
-const unit = readonly(computed(() => Units.find(level => scaleAtLineMaxLength.value < level) as number))
-
-const lineLength = readonly(computed(() =>
-  unit.value / scaleAtLineMaxLength.value * LineMaxLength))
+const scaleAtLineMaxLength = computed(() => LineMaxLength * scaleInfo.value.mmPerPixel)
+const unit = computed(() => Units.find(level => scaleAtLineMaxLength.value < level) as number)
+const lineLength = computed(() => unit.value / scaleAtLineMaxLength.value * LineMaxLength)
 
 </script>
 

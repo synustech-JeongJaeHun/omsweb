@@ -1,9 +1,10 @@
 import { IPreferences } from '../legacies/models/setting.model'
 import { ITrackData } from '../legacies/models/track.model'
-import { ColorProperty, ScaleProperty, VisibleProperty } from '../styles/styleSetting'
+import { ColorProperty } from '../styles/types/ColorProperty'
+import { ScaleProperty } from '../styles/types/ScaleProperty'
+import { VisibleProperty } from '../styles/types/VisibleProperty'
 import { Vehicle } from '../vehicle/types/Vehicle'
 import { UpdateDto } from './Dto'
-
 
 interface IOmsTrackMonitor {
   // Set Data
@@ -21,9 +22,10 @@ interface IOmsTrackMonitor {
   updateZcu(operation: UpdateDto.Operation, zcu: UpdateDto.Zcu): void
 
   // Setting - Scale
-  setStyleSetting(group: 'scale', key: ScaleProperty, value: number): void
-  setStyleSetting(group: 'visible', key: VisibleProperty, value: boolean): void
-  setStyleSetting(group: 'color', key: ColorProperty, value: string): void
+  setMapRotation(degree: number): void
+  updateScaleStyle(key: ScaleProperty, value: number): void,
+  updateVisibleStyle(key: VisibleProperty, value: boolean): void,
+  updateColorStyle(key: ColorProperty, value: string): void,
 
   // adjust_floaters: () => void
   // applyAfterSnapshotUpdated: (updatedPropList?: {

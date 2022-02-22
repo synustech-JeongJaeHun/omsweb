@@ -2,14 +2,14 @@
 import Layer from '../../map/components/Layer.ce.vue';
 import Segment from './Segment.ce.vue';
 import { segments } from '../segments'
-import SegmentPath from './SegmentPath.ce.vue';
+import SegmentDirectionTriangle from './SegmentDirectionTriangle.ce.vue';
 
 </script>
 
 <template>
-  <Layer>
+  <Layer class="segment-layer">
     <defs>
-      <SegmentPath v-for="segment of segments" :key="segment.id" :segment="segment" />
+      <SegmentDirectionTriangle />
     </defs>
     <Segment v-for="segment of segments" :key="segment.id" :segment="segment" />
   </Layer>
