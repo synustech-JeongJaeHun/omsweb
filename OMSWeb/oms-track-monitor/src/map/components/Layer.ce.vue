@@ -17,7 +17,6 @@ import MapRotate from '../../rotate/components/MapRotate.ce.vue';
     :viewBox="cameraInfo.viewBox"
     shape-rendering="optimizeSpeed"
     text-rendering="optimizeSpeed"
-    style="will-change: viewBox;"
   >
     <!-- 
       rotate not working in svg, so use g for rotate

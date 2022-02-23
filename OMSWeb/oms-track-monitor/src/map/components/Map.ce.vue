@@ -21,8 +21,7 @@ const emit = inject<RootEmits>(RootEmitInjectionKey)!
 
 const isGroupVisible = toRef(visibleStylesInfo, 'group')
 
-let
-  touches: Touch[] = []
+let touches: Touch[] = []
 
 const
   isPanning = ref(false),

@@ -10,8 +10,6 @@ const length = useScreenFixedScale(toRef(scaleStylesInfo, 'segmentDirection'), t
 <template>
   <path
     id="segment-direction-triangle"
-    stroke="white"
-    stroke-width="1"
     :d="
     `M 0 ${length}`
     + `L -${length} -${length}`
