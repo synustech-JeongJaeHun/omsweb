@@ -51,7 +51,7 @@ function onContextmenu() {
 
 <template>
   <svg
-    class="overflow-visible cursor-pointer"
+    class="overflow-visible cursor-pointer segment"
     @click.right="onContextmenu()"
     @mouseover="onTooltipOn()"
     @mouseout="onTooltipOff()"
@@ -60,6 +60,7 @@ function onContextmenu() {
     <path ref="pathElement" :d="props.segment.d" fill="none" :stroke="color" :stroke-width="width" />
     <use
       v-if="position !== undefined && angle !== undefined"
+      class="direction"
       href="#segment-direction-triangle"
       :x="position.x"
       :y="position.y"

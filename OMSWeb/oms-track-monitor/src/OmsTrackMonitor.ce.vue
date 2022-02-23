@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, provide, reactive, readonly, ref, watch } from 'vue'
+import { computed, provide, readonly, ref, toRefs, watch } from 'vue'
 import { makeFsProxy } from './utils/devMode'
 import { IOmsTrackMonitor } from './types/IOmsTrackMonitor'
 import { IPreferences } from './legacies/models/setting.model'
@@ -34,10 +34,12 @@ import { ViewMode } from './types/ViewMode'
 import { MapType } from './types/MapType'
 import { rotate } from './rotate/rotate'
 import {
+  ScaleDefault,
   updateColorStyle,
   updateScaleStyle,
   updateVisibleStyle
 } from './styles/styles'
+import { Boolish, Numberlish } from './types/Prop'
 
 /**
  * https://v3.vuejs.org/api/sfc-script-setup.html#typescript-only-features
@@ -49,39 +51,101 @@ import {
  * - A reference to an interface or a type literal in the same file
  */
 const props = defineProps<{
-  viewMode: ViewMode,
-  mapType: MapType,
-  width: number | string | undefined | null,
-  height: number | string | undefined | null,
-  isMinimapShowing: boolean | string | undefined | null,
-  isClusterShowing: boolean | string | undefined | null,
-  isGroupShowing: boolean | string | undefined | null,
+  // enums
+  viewMode: ViewMode, // not implemented
+  mapType: MapType, // not implemented
+
+  // rect
+  width: Numberlish,
+  height: Numberlish,
+
+  // rotation
+  rotation: Numberlish
+
+  // scale
+  vehicleSize: Numberlish, // TODO
+  segmentWidth: Numberlish,
+  segmentDirectionSize: Numberlish,
+
+  // visible
+  isMinimapVisible: Boolish,
+  isVehicleLineVisible: Boolish,
+  isSegmentDirectionVisible: Boolish,
+  isPointLabelVisible: Boolish,
+  isStationVisible: Boolish,
+  isBufferVisible: Boolish,
+  isGroupVisible: Boolish, // CHECK
+  isClusterVisible: Boolish, // CHECK
+  isOverlappingObjectsVisible: Boolish, // not implemented
+
+  // color
 }>()
+
+const propRefs = toRefs(props)
 
 // const viewMode = ref<ViewMode>('PUBLIC')
 // const mapType = ref<MapType>('DB');
-// watching props for unstable props delivery
-watch(props, (props, prevProps) => {
+
+// rect
+watch([propRefs.width, propRefs.height], () => {
   const width = parseNumberProp(0, props.width)
   const height = parseNumberProp(0, props.height)
   if (width > 0 && height > 0) setElementRect(width, height)
 })
 
+// rotation
+watch(propRefs.rotation, () => { rotate(parseNumberProp(0, props.rotation)) })
+
+// scale
+watch(propRefs.vehicleSize, (n) => { updateScaleStyle('vehicleSize', parseNumberProp(ScaleDefault.vehicleSize, n)) })
+watch(propRefs.segmentWidth, (n) => { updateScaleStyle('segmentWidth', parseNumberProp(ScaleDefault.segmentWidth, n)) })
+watch(propRefs.segmentDirectionSize, (n) => { updateScaleStyle('segmentDirection', parseNumberProp(ScaleDefault.segmentDirection, n)) })
+
+// visibility
+watch(propRefs.isMinimapVisible, (b) => { updateVisibleStyle('minimap', parseBooleanProp(true, b)) })
+watch(propRefs.isPointLabelVisible, (b) => {
+  updateVisibleStyle('pointLabel', parseBooleanProp(true, b))
+})
+watch(propRefs.isStationVisible, (b) => {
+  updateVisibleStyle('station', parseBooleanProp(true, b))
+})
+watch(propRefs.isBufferVisible, (b) => {
+  updateVisibleStyle('buffer', parseBooleanProp(true, b))
+})
+watch(propRefs.isGroupVisible, (b) => {
+  updateVisibleStyle('group', parseBooleanProp(true, b))
+})
+watch(propRefs.isClusterVisible, (b) => {
+  updateVisibleStyle('cluster', parseBooleanProp(true, b))
+})
+watch(propRefs.isVehicleLineVisible, (b) => {
+  updateVisibleStyle('vehicleLine', parseBooleanProp(true, b))
+})
+watch(propRefs.isSegmentDirectionVisible, (b) => {
+  updateVisibleStyle('segmentDirection', parseBooleanProp(true, b))
+})
+
+// updateColorStyle,
+
+
 interface Emits extends RootEmits { }
 const emit = defineEmits<Emits>()
 provide(RootEmitInjectionKey, readonly(emit))
+// HOW TO USE
 // const emit = inject<RootEmits>(RootEmitInjectionKey)!
 
 const selfElement = ref<HTMLDivElement>()
 const shadowRoot = computed(() => selfElement.value?.parentNode as ShadowRoot | null | undefined)
 provide('shadowRoot', readonly(shadowRoot))
+// HOW TO USE
 // const shadowRoot = inject<Ref<ShadowRoot>>('shadowRoot')
 
-const permissions = reactive({
-  canManageOrders: false,
-  canManageVehicles: false,
-  canManageDisplaySettings: false
-})
+// TODO handle permission on host system, not on tm
+// const permissions = reactive({
+//   canManageOrders: false,
+//   canManageVehicles: false,
+//   canManageDisplaySettings: false
+// })
 const preferences = ref<IPreferences>()
 // State End
 
@@ -137,7 +201,6 @@ const exposed: IOmsTrackMonitor = {
         break;
     }
   },
-  // updateSegment(op, s) { },
   updateSegmentDisabled(op, sd) {
     switch (op) {
       case 'INSERT':
@@ -162,15 +225,7 @@ const exposed: IOmsTrackMonitor = {
       default:
         break;
     }
-  },
-
-  setMapRotation(degree) {
-    rotate(degree)
-  },
-
-  updateColorStyle,
-  updateScaleStyle,
-  updateVisibleStyle
+  }
 }
 
 // # in devmode
@@ -198,14 +253,8 @@ defineExpose(exposed)
         width: `${elementRectInfo.width}px`,
         height: `${elementRectInfo.height}px`,
       }"
-      :isClusterShowing="parseBooleanProp(false, props.isClusterShowing)"
-      :isGroupShowing="parseBooleanProp(false, props.isGroupShowing)"
     />
-    <Minimap
-      v-show="parseBooleanProp(true, props.isMinimapShowing)"
-      class="absolute"
-      style="bottom: 2vw; left: 2vw;"
-    />
+    <Minimap class="absolute" style="bottom: 2vw; left: 2vw;" />
     <div class="absolute flex flex-row" style="padding: unset; bottom: 10px; right: 10px;">
       <Scale />
       <ScreenDetail />
@@ -220,7 +269,7 @@ defineExpose(exposed)
 <style src="./styles/sheets/pan.css"></style>
 <style src="./styles/sheets/rotate.css"></style>
 <style src="./styles/sheets/invert.css"></style>
-<style src="./styles/sheets/group.css"></style>
+<style src="./styles/sheets/visibility.css"></style>
 
 <!-- Plan B -->
 <!-- https://stackoverflow.com/questions/69797635/how-do-i-create-a-vue-3-custom-element-including-child-component-styles -->

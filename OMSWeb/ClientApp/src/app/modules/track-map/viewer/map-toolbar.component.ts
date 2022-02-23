@@ -48,8 +48,20 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
   buttonState: ToggleOptionsType = defaultToggleOptions;
   readonly permissionEnums: typeof PermissionEnums = PermissionEnums;
 
-  @Output() centerZoom = new EventEmitter();
-  @Output() toggleMinimap = new EventEmitter();
+  @Output() centerZoom = new EventEmitter<void>();
+  @Output() toggleMinimap = new EventEmitter<void>();
+
+  // from showDialog - start
+  @Output() rotationChanged = new EventEmitter<number>()
+  @Output() scaleChanged = new EventEmitter<{
+    type: "Vehicle" | "SegmentWidth" | "SegmentDirection",
+    value: number
+  }>()
+  @Output() visibleChanged = new EventEmitter<{
+    type: "VehicleLine" | "SegmentDirection" | "PointLabel" | "Station" | "Buffer" | "Group" | "Cluster" | "OverlappingObjects",
+    value: boolean
+  }>()
+  // from showDialog - end
 
 
   @ViewChild('btnSearch', { read: ElementRef }) btnSearch: ElementRef;
@@ -212,6 +224,16 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
       position: { left: this.tooltipOffset, top: `${rect.top}px` },
       data: this.buttonState,
     });
+
+    this._showObjDlg.componentInstance.scaleChanged.subscribe((event) => {
+      this.scaleChanged.emit(event)
+    })
+    this._showObjDlg.componentInstance.rotationChanged.subscribe((event) => {
+      this.rotationChanged.emit(event)
+    })
+    this._showObjDlg.componentInstance.visibleChanged.subscribe((event) => {
+      this.visibleChanged.emit(event)
+    })
   }
 
   onToggleTool(action: ToggleOptionKeyType) {

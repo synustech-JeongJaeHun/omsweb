@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import Layer from '../../map/components/Layer.ce.vue';
 import Buffer from './Buffer.ce.vue';
-
 import { buffers } from '../buffers'
+import { toRef } from 'vue';
+import { visibleStylesInfo } from '../../styles/styles';
 
+const isBufferVisible = toRef(visibleStylesInfo, 'buffer')
 </script>
 
 <template>
-  <Layer>
+  <Layer id="buffer-layer" :data-is-buffer-visible="isBufferVisible">
     <defs>
       <!-- <polygon id="buffer" points="30,60 60,30 60,-30 30,-60 -30,-60 -60,-30 -60,30 -30,60" /> -->
       <!-- <polygon

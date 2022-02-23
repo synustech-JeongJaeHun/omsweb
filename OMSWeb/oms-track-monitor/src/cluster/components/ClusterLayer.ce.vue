@@ -1,12 +1,15 @@
 <script setup lang="ts">
+import { toRef } from 'vue';
 import Layer from '../../map/components/Layer.ce.vue';
+import { visibleStylesInfo } from '../../styles/styles';
 import { Color } from '../../types/Color';
 import { clusters } from '../clusters'
 
+const isClusterVisible = toRef(visibleStylesInfo, 'cluster')
 </script>
 
 <template>
-  <Layer>
+  <Layer id="cluster-layer" :data-is-cluster-visible="isClusterVisible">
     <path
       v-for="cluster of clusters"
       :key="cluster.id"

@@ -28,6 +28,7 @@ const VisibleDefault: Record<VisibleProperty, boolean> = {
   minimap: true,
 }
 const visibleStyles = reactive(deepCopy(VisibleDefault))
+const visibleStylesInfo = readonly(visibleStyles)
 
 function updateVisibleStyle(key: VisibleProperty, value: boolean) {
   visibleStyles[key] = value
@@ -57,7 +58,10 @@ function updateColorStyle(key: ColorProperty, value: string) {
 }
 
 export {
+  ScaleDefault,
+
   scaleStylesInfo,
+  visibleStylesInfo,
 
   updateScaleStyle,
   updateVisibleStyle,

@@ -2,10 +2,14 @@
 import Layer from '../../map/components/Layer.ce.vue';
 import Vehicle from './Vehicle.ce.vue';
 import { vehicles } from '../vehicles'
+import { toRef } from 'vue';
+import { visibleStylesInfo } from '../../styles/styles';
+
+const isLineVisible = toRef(visibleStylesInfo, 'vehicleLine')
 </script>
 
 <template>
-  <Layer>
+  <Layer id="vehicle-layer" :data-is-line-visible="isLineVisible">
     <defs>
       <defs>
         <filter x="0" y="0" width="1" height="1" id="vehicle-order-hotlot-background">

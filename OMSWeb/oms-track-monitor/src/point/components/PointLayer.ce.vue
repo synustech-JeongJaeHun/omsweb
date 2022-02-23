@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import Layer from '../../map/components/Layer.ce.vue';
 import Point from './Point.ce.vue';
-
 import { points } from '../points'
 import PointCircle from './PointCircle.ce.vue';
+import { visibleStylesInfo } from '../../styles/styles';
+import { toRef } from 'vue';
 
+const isPointLabelVisible = toRef(visibleStylesInfo, "pointLabel")
 </script>
 
 <template>
-  <Layer>
+  <Layer id="point-layer" :data-is-label-visible="isPointLabelVisible">
     <defs>
       <!-- <polygon
         id="point"

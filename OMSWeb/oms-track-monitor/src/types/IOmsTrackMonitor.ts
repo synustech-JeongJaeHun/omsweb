@@ -22,12 +22,6 @@ interface IOmsTrackMonitor {
   updateSegmentDisabled(operation: UpdateDto.Operation, segmentDisabled: UpdateDto.SegmentDisabled): void,
   updateZcu(operation: UpdateDto.Operation, zcu: UpdateDto.Zcu): void
 
-  // Setting - Scale
-  setMapRotation(degree: number): void
-  updateScaleStyle(key: ScaleProperty, value: number): void,
-  updateVisibleStyle(key: VisibleProperty, value: boolean): void,
-  updateColorStyle(key: ColorProperty, value: string): void,
-
   // adjust_floaters: () => void
   // applyAfterSnapshotUpdated: (updatedPropList?: {
   //   [id: number]: any

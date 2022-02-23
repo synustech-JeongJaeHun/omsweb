@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { inject, ref } from 'vue';
+import { inject, ref, toRef } from 'vue';
 import { pan, zoom } from '../camera';
 import { centerZoom } from '../../cameraAndRotation';
 import GridLayer from './GridLayer.ce.vue';
@@ -13,61 +13,70 @@ import SegmentLayer from '../../segment/components/SegmentLayer.ce.vue';
 import ClusterLayer from '../../cluster/components/ClusterLayer.ce.vue';
 
 import { elementRectInfo } from '../elementRect';
-import { rotateByMouse } from '../../rotate/rotate';
+import { rotate, rotationInfo } from '../../rotate/rotate';
 import { RootEmitInjectionKey, RootEmits } from '../../types/RootEmits';
+import { visibleStylesInfo } from '../../styles/styles';
 
-const props = defineProps<{
-  isClusterShowing: boolean,
-  isGroupShowing: boolean,
-}>()
 const emit = inject<RootEmits>(RootEmitInjectionKey)!
 
-// MouseEvent.button
-// https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/button
-// 0: [LEFT] Main button pressed, usually the left button or the un-initialized state
-// 1: [WHEEL] Auxiliary button pressed, usually the wheel button or the middle button (if present)
-// 2: [RIGHT] Secondary button pressed, usually the right button
-// 3: Fourth button, typically the Browser Back button
-// 4: Fifth button, typically the Browser Forward button
+const isGroupVisible = toRef(visibleStylesInfo, 'group')
+
+let
+  touches: Touch[] = []
+
 const
   isPanning = ref(false),
   hasPanned = ref(false)
-// canPanning = ref(false)
+
 function enterPanning() {
   isPanning.value = true
-  // canPanning.value = true
 }
 function exitPanning() {
   isPanning.value = false
-  // canPanning.value = false
 }
-function panTo(event: MouseEvent) {
-  // if (canPanning.value) {
+function panByMouse(event: MouseEvent) {
   // 📐🛑 Be careful! logic is dependent on invert
   pan(event.movementX, (-1) * event.movementY)
   hasPanned.value = true
-  // canPanning.value = false
-  // setTimeout(() => { canPanning.value = true }, 50);
-  // }
+}
+function panByTouch(event: TouchEvent) {
+  // console.log('touchevent', event)
+  // pan(event.movementX, (-1) * event.movementY) no movement in touchevent
+  hasPanned.value = true
 }
 
 const
   isRotating = ref(false),
   hasRotated = ref(false)
-// canRotating = ref(false)
+
 function enterRotating() {
   isRotating.value = true
-  // canRotating.value = true
 }
 function exitRotating() {
   isRotating.value = false
-  // canRotating.value = false
   hasRotated.value = false
 }
-function rotateTo(event: MouseEvent) {
+function rotateToByMouse(event: MouseEvent) {
   if (Math.abs(event.movementX) > 3) {
     // 📐🛑 Be careful! logic is dependent on invert
-    rotateByMouse(event.movementX, (-1) * event.movementY)
+    const
+      movementX = event.movementX,
+      movementY = event.movementY * (-1)
+
+    const direction = (function () {
+      const
+        absX = Math.abs(movementX),
+        absY = Math.abs(movementY)
+
+      if (absX > absY && movementX > 0) return "Right"
+      if (absX > absY && movementX < 0) return "Left"
+    })()
+
+    if (direction === 'Left')
+      rotate((rotationInfo.value + 15) % 360)
+    else if (direction === 'Right')
+      rotate((rotationInfo.value + 345) % 360)
+
     hasRotated.value = true
   }
 }
@@ -91,6 +100,19 @@ function handleMouseUp() {
 }
 </script>
 
+  <!-- TODO -->
+  <!-- touch need 
+  1)pan
+  2)zoom
+  3)rotate
+  4)focus
+  5)backdrop
+
+  @touchstart="enterPanning()"
+  @touchstart.right.prevent
+  @touchend="exitPanning()"
+  @touchcancel="exitPanning()" -->
+
 <template>
   <svg
     id="layer-container"
@@ -100,12 +122,13 @@ function handleMouseUp() {
     :viewBox="`0 0 ${elementRectInfo.width} ${elementRectInfo.height}`"
     :data-is-panning="isPanning"
     :data-is-rotating="isRotating"
-    :data-is-group-showing="props.isGroupShowing"
+    :data-is-group-visible="isGroupVisible"
     @wheel="zoomInOut($event)"
     @dblclick.self="zoomInOut($event)"
     @mousedown.left="enterPanning()"
     @mousedown.right="enterRotating()"
-    @mousemove="isPanning && panTo($event), isRotating && rotateTo($event)"
+    @mousemove="isPanning && panByMouse($event), isRotating && rotateToByMouse($event)"
+    @touchmove="isPanning && panByTouch($event)"
     @mouseleave="exitPanning(), exitRotating()"
     @mouseup="exitPanning(), exitRotating()"
     @click.left.self="handleMouseUp()"
@@ -113,7 +136,7 @@ function handleMouseUp() {
     @click.right.prevent
   >
     <GridLayer />
-    <ClusterLayer v-show="props.isClusterShowing" />
+    <ClusterLayer />
     <SegmentLayer />
     <PointLayer />
     <BufferLayer />

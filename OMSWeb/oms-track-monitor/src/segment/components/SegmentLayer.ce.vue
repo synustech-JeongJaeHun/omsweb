@@ -3,11 +3,14 @@ import Layer from '../../map/components/Layer.ce.vue';
 import Segment from './Segment.ce.vue';
 import { segments } from '../segments'
 import SegmentDirectionTriangle from './SegmentDirectionTriangle.ce.vue';
+import { toRef } from 'vue';
+import { visibleStylesInfo } from '../../styles/styles';
 
+const isDirectionVisible = toRef(visibleStylesInfo, 'segmentDirection')
 </script>
 
 <template>
-  <Layer class="segment-layer">
+  <Layer id="segment-layer" :data-is-direction-visible="isDirectionVisible">
     <defs>
       <SegmentDirectionTriangle />
     </defs>

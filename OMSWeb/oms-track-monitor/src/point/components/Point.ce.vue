@@ -7,7 +7,7 @@ import { RootEmits, RootEmitInjectionKey } from '../../types/RootEmits';
 import { deepCopy } from '../../utils/deepCopy';
 
 const props = defineProps<{
-  point: Point
+  point: Point,
 }>()
 const emit = inject<RootEmits>(RootEmitInjectionKey)!
 
@@ -35,9 +35,9 @@ function onContextmenu() {
 </script>
 
 <template>
-  <svg class="overflow-visible cursor-pointer" :x="props.point.x" :y="props.point.y">
+  <svg class="overflow-visible cursor-pointer point" :x="props.point.x" :y="props.point.y">
     <use
-      href="#point"
+      href="#point-circle"
       @click.left="onFocus()"
       @click.right="onContextmenu()"
       @mouseover="onTooltipOn()"
@@ -46,7 +46,7 @@ function onContextmenu() {
     />
     <MapReverseRotate>
       <!-- <text y="70">{{ props.point.logicalId }}</text> -->
-      <RasterizedText class="invert" y="70" :text="props.point.logicalId" />
+      <RasterizedText class="invert label" y="70" :text="props.point.logicalId" />
     </MapReverseRotate>
   </svg>
 </template>

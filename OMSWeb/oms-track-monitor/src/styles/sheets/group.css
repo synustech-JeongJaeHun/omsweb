@@ -1,6 +1,0 @@
-.group-shadow {
-  visibility: hidden;
-}
-[data-is-group-showing='true' i] .group-shadow {
-  visibility: visible;
-}

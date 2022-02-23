@@ -38,6 +38,30 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   public detailsVisible = false;
   public isMinimapVisible = true;
 
+  public viewerSetting = {
+    rect: {
+      width: window.innerWidth,
+      height: window.innerHeight - 40,
+    },
+    scale: {
+      vehicleSize: 10,
+      segmentWidth: 5,
+      segmentDirectionSize: 10
+    },
+    rotation: 0,
+    visible: {
+      isMinimapVisible: true,
+      isVehicleLineVisible: true,
+      isSegmentDirectionVisible: true,
+      isPointLabelVisible: true,
+      isStationVisible: true,
+      isBufferVisible: true,
+      isGroupVisible: true,
+      isClusterVisible: true,
+      isOverlappingObjectsVisible: true
+    }
+  }
+
   public selectedObject: any;
 
 
@@ -212,17 +236,10 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   }
 
   // EPIC > OMS-TRACK-MONITOR
-  public omsTrackMonitorSize = {
-    width: window.innerWidth,
-    height: window.innerHeight - 40
-  }
-
   @HostListener('window:resize', ['$event.target'])
   onResize(window: Window) {
-    this.omsTrackMonitorSize = {
-      width: window.innerWidth,
-      height: window.innerHeight - 40
-    }
+    this.viewerSetting.rect.width = window.innerWidth
+    this.viewerSetting.rect.height = window.innerHeight - 40
   }
 
   public onCenterZoom() {
@@ -230,7 +247,66 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   }
 
   public onToggleMinimap() {
-    this.isMinimapVisible = !this.isMinimapVisible
+    this.viewerSetting.visible.isMinimapVisible = !this.viewerSetting.visible.isMinimapVisible
+  }
+
+  public onScaleChanged(event: {
+    type: "Vehicle" | "SegmentWidth" | "SegmentDirection";
+    value: number;
+  }) {
+    switch (event.type) {
+      case 'Vehicle':
+        this.viewerSetting.scale.vehicleSize = event.value
+        break;
+      case 'SegmentDirection':
+        this.viewerSetting.scale.segmentDirectionSize = event.value
+        break;
+      case 'SegmentWidth':
+        this.viewerSetting.scale.segmentWidth = event.value
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  public onRotationChanged(event: number) {
+    this.viewerSetting.rotation = event
+  }
+
+  public onVisibleChanged(event: {
+    type: "VehicleLine" | "SegmentDirection" | "PointLabel" | "Station" | "Buffer" | "Group" | "Cluster" | "OverlappingObjects",
+    value: boolean
+  }) {
+    switch (event.type) {
+      case 'VehicleLine':
+        this.viewerSetting.visible.isVehicleLineVisible = event.value
+        break;
+      case 'SegmentDirection':
+        this.viewerSetting.visible.isSegmentDirectionVisible = event.value
+        break;
+      case 'PointLabel':
+        this.viewerSetting.visible.isPointLabelVisible = event.value
+        break;
+      case 'Station':
+        this.viewerSetting.visible.isStationVisible = event.value
+        break;
+      case 'Buffer':
+        this.viewerSetting.visible.isBufferVisible = event.value
+        break;
+      case 'Group':
+        this.viewerSetting.visible.isGroupVisible = event.value
+        break;
+      case 'Cluster':
+        this.viewerSetting.visible.isClusterVisible = event.value
+        break;
+      case 'OverlappingObjects':
+        this.viewerSetting.visible.isOverlappingObjectsVisible = event.value
+        break;
+
+      default:
+        break;
+    }
   }
 
   public onTooltipOn(event: CustomEvent) {

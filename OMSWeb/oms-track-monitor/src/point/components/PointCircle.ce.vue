@@ -8,5 +8,5 @@ const r = useScreenFixedScale(size, threshold)
 </script>
 
 <template>
-  <circle id="point" :r="r" fill="black" />
+  <circle id="point-circle" :r="r" fill="black" />
 </template>

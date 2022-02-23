@@ -1,9 +1,6 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatSliderChange } from '@angular/material/slider';
-import { MapConfigType, ToggleOptionKeyType } from '../../../models/enums';
+import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ToggleOptionsType } from '../../../models/settings.model';
-import { MapStatesService } from '../map-states.service';
 
 @Component({
   selector: 'oms-show-object-dialog',
@@ -18,36 +15,31 @@ export class ShowObjectDialogComponent implements OnInit {
     segmentDirectionSize: 2,
   };
 
+  @Output() rotationChanged = new EventEmitter<number>()
+  @Output() scaleChanged = new EventEmitter<{
+    type: "Vehicle" | "SegmentWidth" | "SegmentDirection",
+    value: number
+  }>()
+  @Output() visibleChanged = new EventEmitter<{
+    type: "VehicleLine" | "SegmentDirection" | "PointLabel" | "Station" | "Buffer" | "Group" | "Cluster" | "OverlappingObjects",
+    value: boolean
+  }>()
+
   constructor(
+    public dialogRef: MatDialogRef<ShowObjectDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public buttonState: ToggleOptionsType,
-    private stateSvc: MapStatesService
   ) { }
 
   ngOnInit(): void {
-    const {
-      map: { mapRotation, vehicleScale, segmentWidth, segmentDirectionSize },
-    } = this.stateSvc.preferences;
-    this.slideValues = {
-      vehicleScale,
-      mapRotation,
-      segmentWidth,
-      segmentDirectionSize,
-    };
-  }
-
-  onChangedToggle(action: ToggleOptionKeyType) {
-    const value = this.buttonState[action];
-    this.stateSvc.changeToolbarState(action, value);
-  }
-  onSlideChange(type: MapConfigType) {
-    const value = this.slideValues[type];
-    this.stateSvc.changeConfig({ type, value });
-  }
-
-  rotationValueLabel(value: number) {
-    return `${value}°`;
-  }
-  scaleValueLabel(value: number) {
-    return `${value}px`;
+    // TODO get current values
+    // const {
+    //   map: { mapRotation, vehicleScale, segmentWidth, segmentDirectionSize },
+    // } = this.stateSvc.preferences;
+    // this.slideValues = {
+    //   vehicleScale,
+    //   mapRotation,
+    //   segmentWidth,
+    //   segmentDirectionSize,
+    // };
   }
 }

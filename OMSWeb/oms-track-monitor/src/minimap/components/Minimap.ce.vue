@@ -2,14 +2,16 @@
 import { segments } from '../../segment/segments';
 import { mapSizePropertiesInfo } from '../../map/mapSizeProperties';
 import CameraBox from './CameraBox.ce.vue';
-import { computed, reactive, readonly, ref, watch } from 'vue';
+import { computed, reactive, readonly, ref, toRef, watch } from 'vue';
 import { moveCamera, zoom } from '../../map/camera';
 import SegmentOnlyStroke from './SegmentOnlyStroke.ce.vue';
 import MapRotate from '../../rotate/components/MapRotate.ce.vue';
 import { elementRectInfo } from '../../map/elementRect';
+import { visibleStylesInfo } from '../../styles/styles'
 
 const MapMargin = 10000
 
+const isMinimapVisible = toRef(visibleStylesInfo, 'minimap')
 const baseLength = readonly(computed(() =>
   Math.max(
     mapSizePropertiesInfo.value.width,
@@ -72,6 +74,7 @@ function onPanning(event: MouseEvent) {
 <template>
   <svg
     id="minimap-container"
+    v-show="isMinimapVisible"
     class="invert"
     ref="minimapSvgElement"
     :viewBox="`${originPosition.x} ${originPosition.y} ${minimapViewBoxLength} ${minimapViewBoxLength}`"

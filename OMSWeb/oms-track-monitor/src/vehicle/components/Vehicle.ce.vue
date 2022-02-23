@@ -364,10 +364,11 @@ function onContextmenu() {
 
   <!-- next point line -->
   <line
+    v-if="nextPointPosition"
+    class="line"
     stroke="rgb(255, 220, 70)"
     stroke-width="40"
     stroke-linecap="round"
-    v-if="nextPointPosition"
     :x1="realtimePosition.x"
     :y1="realtimePosition.y"
     :x2="nextPointPosition.x"
@@ -377,6 +378,7 @@ function onContextmenu() {
   <!-- pickup or dropoff line -->
   <line
     v-if="commandPoint.position.value"
+    class="line"
     :stroke="commandLineColor"
     stroke-width="40"
     stroke-linecap="round"
