@@ -12,7 +12,7 @@
     [isClusterVisible]="viewerSetting.visible.isClusterVisible"
     [isOverlappingObjectsVisible]="viewerSetting.visible.isOverlappingObjectsVisible" (tooltipon)="onTooltipOn($event)"
     (tooltipoff)="onTooltipOff($event)" (focus)="onFocus($event)" (contextmenuon)="onContectMenuOn($event)"
-    (backdrop)="onBackdrop($event)" (rotate)="onRotate($event)">
+    (backdrop)="onBackdrop($event)">
   </oms-track-monitor>
 
   <div id="side_panel">
@@ -28,4 +28,6 @@
     (scaleChanged)="onScaleChanged($event)" (rotationChanged)="onRotationChanged($event)"
     (visibleChanged)="onVisibleChanged($event)">
   </oms-map-toolbar>
+
+
 </div>

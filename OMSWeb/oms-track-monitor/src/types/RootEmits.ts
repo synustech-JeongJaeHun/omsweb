@@ -6,6 +6,12 @@ import { Zcu } from "../zcu/types/Zcu"
 import { Vehicle } from "../vehicle/types/Vehicle"
 import { Segment } from "../segment/types/Segment"
 
+/**
+ * if you change this file,
+ * then change "export-types\oms-track-monitor.d.ts" file too
+ */
+
+
 const RootEmitInjectionKey = "RootEmit"
 interface RootEmits {
   (e: 'tooltipon', value: EventDetails.TooltipOn): void
@@ -16,7 +22,6 @@ interface RootEmits {
    */
   (e: 'contextmenuon', value: EventDetails.ContextmenuOn): void
   (e: 'backdrop', value: EventDetails.Backdrop): void
-  (e: 'rotate', value: EventDetails.Rotate): void
 }
 
 namespace EventDetails {
@@ -51,8 +56,6 @@ namespace EventDetails {
     | { type: "Vehicle", value: Vehicle }
 
   export type Backdrop = void
-
-  export type Rotate = { degree: number }
 }
 
 export {

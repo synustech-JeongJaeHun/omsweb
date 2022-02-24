@@ -3,11 +3,12 @@ import { segments } from '../../segment/segments';
 import { mapSizePropertiesInfo } from '../../map/mapSizeProperties';
 import CameraBox from './CameraBox.ce.vue';
 import { computed, reactive, readonly, ref, toRef, watch } from 'vue';
-import { moveCamera, zoom } from '../../map/camera';
+import { moveCamera, zoomInOutByWheel, enterPanning, exitPanning, isPanning } from '../../map/camera';
 import SegmentOnlyStroke from './SegmentOnlyStroke.ce.vue';
 import MapRotate from '../../rotate/components/MapRotate.ce.vue';
 import { elementRectInfo } from '../../map/elementRect';
 import { visibleStylesInfo } from '../../styles/styles'
+import { centerZoom } from '../../cameraAndRotation';
 
 const MapMargin = 10000
 
@@ -46,20 +47,8 @@ watch([minimapSvgElement, elementRectInfo], () => {
   }, 0);
 })
 
-function zoomInOut(event: WheelEvent | MouseEvent) {
-  const action = (event instanceof WheelEvent) && (event.deltaY > 0) ? 'Out' : 'In'
-  zoom(action, { x: event.clientX, y: event.clientY })
-}
-
-const isPanning = ref(false)
-function enterPanning() {
-  isPanning.value = true
-}
-function exitPanning() {
-  isPanning.value = false
-}
 function onPanning(event: MouseEvent) {
-  if (minimapDomRect.width === 0 || minimapDomRect.height === 0) return
+  // if (minimapDomRect.width === 0 || minimapDomRect.height === 0) return
 
   const position = {
     x: (event.clientX - minimapDomRect.minX) / minimapDomRect.width * minimapViewBoxLength.value - MapMargin,
@@ -84,12 +73,14 @@ function onPanning(event: MouseEvent) {
       backgroundColor: 'white',
       border: '2px solid black'
     }"
-    @wheel="zoomInOut($event)"
-    @mousedown.middle.prevent
+    @wheel="zoomInOutByWheel($event)"
     @mousedown="enterPanning(), onPanning($event)"
     @mousemove="isPanning && onPanning($event)"
     @mouseup="exitPanning()"
     @mouseleave="exitPanning()"
+    @click.middle.prevent="centerZoom()"
+    @mousedown.middle.prevent
+    @click.right.prevent
   >
     <MapRotate>
       <SegmentOnlyStroke v-for="segment of segments" :key="segment.id" :segment="segment" />

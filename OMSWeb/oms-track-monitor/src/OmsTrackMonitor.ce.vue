@@ -29,7 +29,7 @@ import { makeGroups } from './group/utils/group'
 import { RootEmitInjectionKey, RootEmits } from './types/RootEmits'
 import ScreenDetail from './map/components/ScreenDetail.ce.vue'
 import { elementRectInfo, setElementRect } from './map/elementRect'
-import { initCameraAndRotation, centerZoom } from './cameraAndRotation'
+import { initCameraAndRotation, centerZoom, getCameraAndRotation } from './cameraAndRotation'
 import { ViewMode } from './types/ViewMode'
 import { MapType } from './types/MapType'
 import { rotate } from './rotate/rotate'
@@ -150,6 +150,8 @@ const preferences = ref<IPreferences>()
 // State End
 
 const exposed: IOmsTrackMonitor = {
+  getCameraAndRotation,
+
   setPreference(p) { preferences.value = p },
   setTrack(t) {
     const { minX, minY, maxX, maxY } = calculateMinMaxXYFromPoints(t.points ?? [])

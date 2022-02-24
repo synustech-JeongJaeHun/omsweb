@@ -8,7 +8,6 @@ interface OmsTrackMonitorEventMap {
   focus: CustomEvent<EventDetails.Focus[]>
   contextmenu: CustomEvent<EventDetails.ContextmenuOn[]>
   backdrop: CustomEvent<EventDetails.Backdrop[]>
-  rotate: CustomEvent<EventDetails.Rotate[]>
 }
 
 interface OmsTrackMonitorElement extends HTMLElement {

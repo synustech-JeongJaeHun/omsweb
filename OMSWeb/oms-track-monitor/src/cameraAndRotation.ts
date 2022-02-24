@@ -2,25 +2,6 @@ import { cameraInfo, getHeightFromWidthAndRatio, getWidthFromHeightAndRatio, mov
 import { mapSizePropertiesInfo } from "./map/mapSizeProperties"
 import { rotate, rotationInfo } from "./rotate/rotate"
 
-function getObjective() {
-  return {
-    position: {
-      x: mapSizePropertiesInfo.value.centerX,
-      y: mapSizePropertiesInfo.value.centerY
-    },
-    rect: cameraInfo.value.viewBoxHeight > cameraInfo.value.viewBoxWidth
-      ? {
-        width: mapSizePropertiesInfo.value.width * 2,
-        height: getHeightFromWidthAndRatio(mapSizePropertiesInfo.value.width * 2)
-      }
-      : {
-        width: getWidthFromHeightAndRatio(mapSizePropertiesInfo.value.height * 2),
-        height: mapSizePropertiesInfo.value.height * 2,
-      },
-    rotate: 0
-  }
-}
-
 function initCameraAndRotation() {
   moveCamera({ x: mapSizePropertiesInfo.value.centerX, y: mapSizePropertiesInfo.value.centerY })
   centerZoom()
@@ -28,10 +9,28 @@ function initCameraAndRotation() {
 
 const AnimationFrameCount = 20
 let isIniting = false
-
 function centerZoom() {
   if (isIniting) return
   else isIniting = true
+
+  function getObjective() {
+    return {
+      position: {
+        x: mapSizePropertiesInfo.value.centerX,
+        y: mapSizePropertiesInfo.value.centerY
+      },
+      rect: cameraInfo.value.viewBoxHeight > cameraInfo.value.viewBoxWidth
+        ? {
+          width: mapSizePropertiesInfo.value.width * 2,
+          height: getHeightFromWidthAndRatio(mapSizePropertiesInfo.value.width * 2)
+        }
+        : {
+          width: getWidthFromHeightAndRatio(mapSizePropertiesInfo.value.height * 2),
+          height: mapSizePropertiesInfo.value.height * 2,
+        },
+      rotation: 0
+    }
+  }
 
   const objective = getObjective()
 
@@ -44,7 +43,7 @@ function centerZoom() {
       width: cameraInfo.value.viewBoxWidth,
       height: cameraInfo.value.viewBoxHeight
     },
-    rotate: rotationInfo.value
+    rotation: rotationInfo.value
   }
 
   const term = {
@@ -56,19 +55,13 @@ function centerZoom() {
       width: (objective.rect.width - current.rect.width) / AnimationFrameCount,
       height: (objective.rect.height - current.rect.height) / AnimationFrameCount,
     },
-    rotate: (current.rotate - objective.rotate) / AnimationFrameCount
+    rotation: (current.rotation - objective.rotation) / AnimationFrameCount
   }
 
   let count = 0
 
   function step() {
-    if (count === AnimationFrameCount
-      || (
-        current.position.x === term.position.x
-        && current.position.y === term.position.y
-        && current.rect.width === term.rect.width
-        && current.rect.height === term.rect.height
-      )) {
+    if (count === AnimationFrameCount) {
       isIniting = false
       return
     }
@@ -82,12 +75,12 @@ function centerZoom() {
         width: current.rect.width + term.rect.width,
         height: current.rect.height + term.rect.height
       },
-      rotate: current.rotate - term.rotate
+      rotation: current.rotation - term.rotation
     }
 
     moveCamera(next.position)
     resizeViewBox(next.rect.width, next.rect.height)
-    rotate(next.rotate)
+    rotate(next.rotation)
 
     current = next
     count += 1
@@ -97,4 +90,12 @@ function centerZoom() {
   step()
 }
 
-export { initCameraAndRotation, centerZoom }
+function getCameraAndRotation() {
+  return {
+    position: { x: cameraInfo.value.centerX, y: cameraInfo.value.centerY },
+    viewBox: { width: cameraInfo.value.viewBoxWidth, height: cameraInfo.value.viewBoxHeight },
+    rotation: rotationInfo.value
+  }
+}
+
+export { initCameraAndRotation, centerZoom, getCameraAndRotation }

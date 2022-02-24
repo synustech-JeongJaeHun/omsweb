@@ -1,4 +1,4 @@
-import { computed, reactive, readonly, watch } from "vue";
+import { computed, reactive, readonly, ref, watch } from "vue";
 import { Position } from "../types/Position";
 import { DefaultHeight, DefaultWidth } from "./default";
 import { elementRectInfo } from "./elementRect";
@@ -62,36 +62,88 @@ watch(elementRectInfo, () => {
   moveCamera({ x: cameraInfo.value.centerX, y: cameraInfo.value.centerY })
 })
 
-function zoom(action: "In" | "Out", position: Position) {
+function zoom(action: "In" | "Out", position: Position, count: number) {
   // TODO using position
   if (action === 'In') {
     const
-      width = cameraInfo.value.viewBoxWidth * 0.7,
+      width = cameraInfo.value.viewBoxWidth * (0.7 ** count),
       height = getHeightFromWidthAndRatio(width)
     resizeViewBox(width, height)
   }
   else {
     const
-      width = cameraInfo.value.viewBoxWidth * 1.3,
+      width = cameraInfo.value.viewBoxWidth * (1.3 ** count),
       height = getHeightFromWidthAndRatio(width)
 
     resizeViewBox(width, height)
   }
 }
 
-function pan(movementX: number, movementY: number) {
+// element event listener
+function zoomIn1Time(event: MouseEvent) {
+  zoom('In', { x: event.clientX, y: event.clientY }, 1)
+}
+
+const MaximumZoomCount = 3
+let zoomCount = 0
+let zoomAction: "Out" | "In" | undefined = undefined
+let zoomDebounceTimeoutId: number | undefined = undefined
+function zoomInOutByWheel(event: WheelEvent) {
+  const action = event.deltaY > 0 ? 'Out' : 'In'
+
+  if (zoomCount === 0) zoomAction = action
+
+  if (zoomAction === action) {
+    if (zoomCount > MaximumZoomCount && zoomDebounceTimeoutId) return
+
+    clearTimeout(zoomDebounceTimeoutId)
+    zoomCount += 1
+
+    // @ts-ignore
+    zoomDebounceTimeoutId = setTimeout(() => {
+      zoom(action, { x: event.clientX, y: event.clientY }, zoomCount > MaximumZoomCount ? MaximumZoomCount : zoomCount)
+      zoomCount = 0
+      zoomAction = undefined
+      zoomDebounceTimeoutId = undefined
+    }, 55);
+  }
+}
+
+const
+  isPanning = ref(false),
+  hasPanned = ref(false)
+
+function enterPanning() { isPanning.value = true }
+
+function exitPanning() { isPanning.value = false }
+
+function handleMouseUp(emitBackdrop: () => void) {
+  if (hasPanned.value === false) emitBackdrop()
+  hasPanned.value = false
+}
+
+function panByMouse(event: MouseEvent) {
+  const { movementX, movementY } = event
+
   moveCamera({
     x: cameraInfo.value.centerX - (0.003 * movementX * cameraInfo.value.viewBoxWidth),
-    y: cameraInfo.value.centerY - (0.003 * movementY * cameraInfo.value.viewBoxHeight)
+    // 📐🛑 Be careful! logic is dependent on invert
+    y: cameraInfo.value.centerY - (0.003 * (-1) * movementY * cameraInfo.value.viewBoxHeight)
   })
+  hasPanned.value = true
 }
 
 export {
   cameraInfo,
   resizeViewBox,
-  zoom,
-  pan,
   moveCamera,
+  zoomIn1Time,
+  zoomInOutByWheel,
+  isPanning,
+  enterPanning,
+  exitPanning,
+  panByMouse,
+  handleMouseUp,
   getHeightFromWidthAndRatio,
   getWidthFromHeightAndRatio
 }

@@ -244,6 +244,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 
   public onCenterZoom() {
     this.viewer.centerZoom();
+    this.getCameraAndRotation();
   }
 
   public onToggleMinimap() {
@@ -324,8 +325,9 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   public onBackdrop(event: CustomEvent) {
     console.log(event.type)
   }
-  public onRotate(event: CustomEvent) {
-    console.log(event.type, getCustomEventPayload(event))
+  public getCameraAndRotation() {
+    const data = this.viewer.getCameraAndRotation()
+    console.log(data)
   }
 
 }
