@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { TrackStatusService } from '@oms/root/services/track-status.service';
 
 import { SettingsService } from '@oms/services/settings.service';
 import { Dto } from '../../../models/dto/track.model';
@@ -63,17 +64,27 @@ export class MonitorStatusComponent implements OnInit, AfterViewInit {
     private settingSvc: SettingsService,
     private auth: AuthService,
     private statusSvc: StatusService,
+    private trackStatusService: TrackStatusService
   ) {
     this.viewMode = this.auth.isAuthenticated
       ? ViewModes.viewer
       : ViewModes.public;
+
+    const pullTrackData = (isTrackReady: boolean) => {
+      if (isTrackReady) {
+        this.trackData = this.trackStatusService.trackData
+        this.loadingState = false;
+        this.ready = true;
+      }
+    }
+
+    if (this.trackStatusService.isTrackReady)
+      pullTrackData(this.trackStatusService.isTrackReady)
+    else
+      this.trackStatusService.isTrackReadyChanged.subscribe(pullTrackData)
   }
   ngAfterViewInit(): void {
-    this.statusSvc.getTrack().subscribe((res) => {
-      this.trackData = res;
-      this.loadingState = false;
-      this.ready = true;
-    });
+
   }
 
   ngOnInit(): void {

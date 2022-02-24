@@ -22,6 +22,8 @@ import { OmsTrackMonitorElement, IOmsTrackMonitor } from "oms-track-monitor"
 import { StatusService } from '@oms/root/services/status.service';
 import { MapStatesService } from '../map-states.service';
 import { SettingsService } from '@oms/root/services/settings.service';
+import { TrackStatusService } from '../../../services/track-status.service'
+import { TrackSettingService } from '../../../services/track-setting.service'
 
 @Component({
   selector: 'oms-map-viewer',
@@ -80,6 +82,8 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     private statusService: StatusService,
     private mapStatesService: MapStatesService,
     private settingSvc: SettingsService,
+    private trackStatusService: TrackStatusService,
+    private trackSettingSerivce: TrackSettingService,
     // private messageSvc: MessagesService,
     // private dialogSvc: DialogService,
     // private $t: TranslateService

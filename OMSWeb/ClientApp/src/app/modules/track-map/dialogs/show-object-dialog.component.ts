@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, Output } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { TrackSettingService } from '@oms/root/services/track-setting.service';
 import { ToggleOptionsType } from '../../../models/settings.model';
 
 @Component({
@@ -7,7 +8,7 @@ import { ToggleOptionsType } from '../../../models/settings.model';
   templateUrl: './show-object-dialog.component.html',
   styleUrls: ['./show-object-dialog.component.scss'],
 })
-export class ShowObjectDialogComponent implements OnInit {
+export class ShowObjectDialogComponent {
   slideValues = {
     vehicleScale: 3,
     mapRotation: 0,
@@ -28,18 +29,6 @@ export class ShowObjectDialogComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<ShowObjectDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public buttonState: ToggleOptionsType,
+    public trackSettingService: TrackSettingService
   ) { }
-
-  ngOnInit(): void {
-    // TODO get current values
-    // const {
-    //   map: { mapRotation, vehicleScale, segmentWidth, segmentDirectionSize },
-    // } = this.stateSvc.preferences;
-    // this.slideValues = {
-    //   vehicleScale,
-    //   mapRotation,
-    //   segmentWidth,
-    //   segmentDirectionSize,
-    // };
-  }
 }

@@ -242,12 +242,12 @@ const exposed: IOmsTrackMonitor = {
   }
 }
 
-// # in devmode
+// # development
 // const exposedProxy = makeFsProxy(exposed)
-defineExpose(exposed)
-// # production
-// defineExpose(exposed)
+// defineExpose(exposedProxy)
 
+// # production
+defineExpose(exposed)
 </script>
 
 <template>
