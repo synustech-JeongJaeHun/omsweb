@@ -38,6 +38,7 @@ function onContextmenu() {
   <svg class="overflow-visible cursor-pointer point" :x="props.point.x" :y="props.point.y">
     <use
       href="#point-circle"
+      class="point-path"
       @click.left="onFocus()"
       @click.right="onContextmenu()"
       @mouseover="onTooltipOn()"

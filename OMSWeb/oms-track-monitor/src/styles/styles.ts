@@ -35,35 +35,29 @@ function updateVisibleStyle(key: VisibleProperty, value: boolean) {
 }
 
 const ColorDefault: Record<ColorProperty, string> = {
-  homeBackground: "white",
-  playbackBackground: "white",
+  background: "white",
   station: "black",
   buffer: "black",
   point: "black",
-  vehicleExpectedPath: "green",
-  normalSegment: "gray",
+  vehicleExpectedPath: "green", // something weird
+  normalSegment: "grey",
   disabledSegment: "purple",
-  segmentDirection: "gray",
-  autoModeVehicle: "gray",
+  segmentDirection: "grey",
+  autoModeVehicle: "grey",
   manualModeVehicle: "green",
   noneModeVehicle: "transparent",
-  cargoLoading: "blue",
-  cargoFull: "blue",
+  cargoLoading: "rgb(0, 0, 205)",
+  cargoFull: "rgb(50,50,50)",
   cargoUnloading: "blue"
-}
-const colorStyles = reactive(deepCopy(ColorDefault))
-
-function updateColorStyle(key: ColorProperty, value: string) {
-  colorStyles[key] = value
 }
 
 export {
   ScaleDefault,
+  ColorDefault,
 
   scaleStylesInfo,
   visibleStylesInfo,
 
   updateScaleStyle,
   updateVisibleStyle,
-  updateColorStyle,
 }

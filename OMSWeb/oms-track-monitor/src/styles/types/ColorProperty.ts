@@ -1,6 +1,5 @@
 type ColorProperty =
-  | "homeBackground"
-  | "playbackBackground"
+  | "background"
   | "station"
   | "buffer"
   | "point"

@@ -22,7 +22,7 @@ import Minimap from './minimap/components/Minimap.ce.vue'
 import { initMapSizeProperties } from './map/mapSizeProperties'
 import { segments } from './segment/segments'
 import { makeSegmentsFromParts } from './segment/utils/segment'
-import { parseNumberProp, parseBooleanProp } from './utils/props'
+import { parseNumberProp, parseBooleanProp, parseStringProp } from './utils/props'
 import Scale from './scale/component/Scale.ce.vue'
 import { makeClustersFromSegments } from './cluster/utils/cluster'
 import { makeGroups } from './group/utils/group'
@@ -34,12 +34,12 @@ import { ViewMode } from './types/ViewMode'
 import { MapType } from './types/MapType'
 import { rotate } from './rotate/rotate'
 import {
+  ColorDefault,
   ScaleDefault,
-  updateColorStyle,
   updateScaleStyle,
   updateVisibleStyle
 } from './styles/styles'
-import { Boolish, Numberlish } from './types/Prop'
+import { Boolish, Numberlish, Stringlish } from './types/Prop'
 
 /**
  * https://v3.vuejs.org/api/sfc-script-setup.html#typescript-only-features
@@ -74,11 +74,26 @@ const props = defineProps<{
   isPointLabelVisible: Boolish,
   isStationVisible: Boolish,
   isBufferVisible: Boolish,
-  isGroupVisible: Boolish, // CHECK
-  isClusterVisible: Boolish, // CHECK
+  isGroupVisible: Boolish,
+  isClusterVisible: Boolish,
   isOverlappingObjectsVisible: Boolish, // not implemented
 
   // color
+  backgroundColor: Stringlish
+  playbackBackgroundColor: Stringlish
+  stationColor: Stringlish
+  bufferColor: Stringlish
+  pointColor: Stringlish
+  vehicleExpectedPathColor: Stringlish
+  normalSegmentColor: Stringlish
+  disabledSegmentColor: Stringlish
+  segmentDirectionColor: Stringlish
+  autoModeVehicleColor: Stringlish
+  manualModeVehicleColor: Stringlish
+  noneModeVehicleColor: Stringlish
+  cargoLoadingColor: Stringlish
+  cargoFullColor: Stringlish
+  cargoUnloadingColor: Stringlish
 }>()
 
 const propRefs = toRefs(props)
@@ -124,9 +139,6 @@ watch(propRefs.isVehicleLineVisible, (b) => {
 watch(propRefs.isSegmentDirectionVisible, (b) => {
   updateVisibleStyle('segmentDirection', parseBooleanProp(true, b))
 })
-
-// updateColorStyle,
-
 
 interface Emits extends RootEmits { }
 const emit = defineEmits<Emits>()
@@ -272,6 +284,80 @@ defineExpose(exposed)
 <style src="./styles/sheets/rotate.css"></style>
 <style src="./styles/sheets/invert.css"></style>
 <style src="./styles/sheets/visibility.css"></style>
+
+<!-- dynamic css for configurable styling -->
+<style>
+#layer-container {
+  background-color: v-bind(
+    "parseStringProp(ColorDefault.background, props.backgroundColor)"
+  );
+}
+
+#station-layer .station .station-path {
+  stroke: v-bind("parseStringProp(ColorDefault.station, props.stationColor)");
+}
+
+#buffer-layer .buffer .buffer-path {
+  stroke: v-bind("parseStringProp(ColorDefault.buffer, props.bufferColor)");
+}
+
+#point-layer .point .point-path {
+  fill: v-bind("parseStringProp(ColorDefault.point, props.pointColor)");
+}
+
+#segment-layer .segment .segment-path {
+  stroke: v-bind(
+    "parseStringProp(ColorDefault.normalSegment, props.normalSegmentColor)"
+  );
+}
+
+#segment-layer .segment[data-is-disabled="true" i] .segment-path {
+  stroke: v-bind(
+    "parseStringProp(ColorDefault.disabledSegment, props.disabledSegmentColor)"
+  );
+}
+
+#segment-layer .segment .segment-direction {
+  fill: v-bind(
+    "parseStringProp(ColorDefault.segmentDirection, props.segmentDirectionColor)"
+  );
+}
+
+#vehicle-layer .vehicle-mode-path {
+  /* mode === none */
+  fill: v-bind(
+    "parseStringProp(ColorDefault.noneModeVehicle, props.noneModeVehicleColor)"
+  );
+}
+
+#vehicle-layer .vehicle-mode-path[data-mode="A" i] {
+  /* mode === auto */
+  fill: v-bind(
+    "parseStringProp(ColorDefault.autoModeVehicle, props.autoModeVehicleColor)"
+  );
+}
+
+#vehicle-layer .vehicle-mode-path[data-mode="M" i] {
+  /* mode === manual */
+  fill: v-bind(
+    "parseStringProp(ColorDefault.manualModeVehicle, props.manualModeVehicleColor)"
+  );
+}
+
+#vehicle-layer .cargo-loading {
+  fill: v-bind(
+    "parseStringProp(ColorDefault.cargoLoading, props.cargoLoadingColor)"
+  );
+}
+#vehicle-layer .cargo-full {
+  fill: v-bind("parseStringProp(ColorDefault.cargoFull, props.cargoFullColor)");
+}
+#vehicle-layer .cargo-unloading {
+  fill: v-bind(
+    "parseStringProp(ColorDefault.cargoUnloading, props.cargoUnloadingColor)"
+  );
+}
+</style>
 
 <!-- Plan B -->
 <!-- https://stackoverflow.com/questions/69797635/how-do-i-create-a-vue-3-custom-element-including-child-component-styles -->

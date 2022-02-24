@@ -40,11 +40,11 @@ function onContextmenu() {
 </script>
 
 <template>
-  <svg class="overflow-visible cursor-pointer" :x="position.x" :y="position.y">
+  <svg class="overflow-visible cursor-pointer station" :x="position.x" :y="position.y">
     <use v-show="groupColor" href="#station-group-shadow" class="group-shadow" :fill="groupColor" />
     <use
       href="#station"
-      stroke="black"
+      class="station-path"
       stroke-width="15"
       @click.left="onFocus()"
       @click.right="onContextmenu()"

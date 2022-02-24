@@ -10,7 +10,11 @@
     [isStationVisible]="viewerSetting.visible.isStationVisible"
     [isBufferVisible]="viewerSetting.visible.isBufferVisible" [isGroupVisible]="viewerSetting.visible.isGroupVisible"
     [isClusterVisible]="viewerSetting.visible.isClusterVisible"
-    [isOverlappingObjectsVisible]="viewerSetting.visible.isOverlappingObjectsVisible" (tooltipon)="onTooltipOn($event)"
+    [isOverlappingObjectsVisible]="viewerSetting.visible.isOverlappingObjectsVisible" [backgroundColor]="'white'"
+    [stationColor]="'yellow'" [bufferColor]="'blue'" [pointColor]="'green'" [normalSegmentColor]="'pink'"
+    [disabledSegmentColor]="'black'" [segmentDirectionColor]="'red'" [autoModeVehicleColor]="'cyan'"
+    [manualModeVehicleColor]="'coral'" [noneModeVehicleColor]="'darkseagreen'" [cargoLoadingColor]="'hotpink'"
+    [cargoFullColor]="'palevioletred'" [cargoUnloadingColor]="'royalblue'" (tooltipon)="onTooltipOn($event)"
     (tooltipoff)="onTooltipOff($event)" (focus)="onFocus($event)" (contextmenuon)="onContectMenuOn($event)"
     (backdrop)="onBackdrop($event)">
   </oms-track-monitor>

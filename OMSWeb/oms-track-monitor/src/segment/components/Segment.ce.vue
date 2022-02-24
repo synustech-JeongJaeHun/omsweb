@@ -12,7 +12,6 @@ const props = defineProps<{
 }>()
 const emit = inject<RootEmits>(RootEmitInjectionKey)!
 
-const color = readonly(computed(() => props.segment.disabled ? 'purple' : 'grey'))
 const pathElement = ref<SVGPathElement>()
 
 const threshold = 20
@@ -52,19 +51,25 @@ function onContextmenu() {
 <template>
   <svg
     class="overflow-visible cursor-pointer segment"
+    :data-is-disabled="props.segment.disabled"
     @click.right="onContextmenu()"
     @mouseover="onTooltipOn()"
     @mouseout="onTooltipOff()"
     @mouseleave="onTooltipOff()"
   >
-    <path ref="pathElement" :d="props.segment.d" fill="none" :stroke="color" :stroke-width="width" />
+    <path
+      ref="pathElement"
+      class="segment-path"
+      :d="props.segment.d"
+      fill="none"
+      :stroke-width="width"
+    />
     <use
       v-if="position !== undefined && angle !== undefined"
-      class="direction"
+      class="segment-direction"
       href="#segment-direction-triangle"
       :x="position.x"
       :y="position.y"
-      :fill="color"
       :transform="`rotate(${angle} ${position.x} ${position.y})`"
     />
   </svg>

@@ -41,12 +41,7 @@ const
     else
       return true
   }),
-  isPreventPush = computed(() => props.vehicle.canBePushed === false),
-  vehicleModeColor = computed(() => {
-    if (props.vehicle.mode === 'A') return 'gray'
-    else if (props.vehicle.mode === 'M') return 'green'
-    else return 'transparent'
-  })
+  isPreventPush = computed(() => props.vehicle.canBePushed === false)
 
 const
   currentPosition = reactive({ x: 0, y: 0 }),
@@ -191,9 +186,10 @@ function onContextmenu() {
     <!-- vehicle type && vehicle mode start -->
     <path
       v-if="props.vehicle.type === 'CLEANING'"
+      class="vehicle-mode-path"
+      :data-mode="props.vehicle.mode"
       stroke="rgb(65,65,65)"
       stroke-width="4"
-      :fill="vehicleModeColor"
       d="
       M 0 80
       L -80 0
@@ -204,9 +200,10 @@ function onContextmenu() {
     />
     <path
       v-else
+      class="vehicle-mode-path"
+      :data-mode="props.vehicle.mode"
       stroke="black"
       stroke-width="3"
-      :fill="vehicleModeColor"
       d="
       M 0 -80
       A 80 80 0 1 0 0 80
@@ -221,13 +218,13 @@ function onContextmenu() {
 
     <!-- cargo state start -->
     <!-- 1. Loading  -->
-    <circle v-if="props.vehicle.cargoState === 'L'" fill="rgb(0, 0, 205)">
+    <circle v-if="props.vehicle.cargoState === 'L'" class="cargo-loading">
       <animate attributeName="r" values="0;40" dur="1s" repeatCount="indefinite" />
     </circle>
     <!-- 2. Full  -->
-    <circle v-else-if="props.vehicle.cargoState === 'F'" r="40" fill="rgb(50,50,50)" />
+    <circle v-else-if="props.vehicle.cargoState === 'F'" class="cargo-full" r="40" />
     <!-- 3. Unloading -->
-    <circle v-else-if="props.vehicle.cargoState === 'U'">
+    <circle v-else-if="props.vehicle.cargoState === 'U'" class="cargo-unloading">
       <animate attributeName="r" values="40;0" dur="1s" repeatCount="indefinite" />
     </circle>
     <template v-else />
