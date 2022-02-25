@@ -23,7 +23,9 @@
   /* visibility: hidden; */
 }
 
-#segment-layer[data-is-direction-visible='false' i] .segment .direction {
+#segment-layer[data-is-direction-visible='false' i]
+  .segment
+  .segment-direction {
   display: none;
   /* visibility: hidden; */
 }

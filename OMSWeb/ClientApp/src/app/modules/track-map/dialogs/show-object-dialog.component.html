@@ -3,34 +3,46 @@
     <fieldset class="option-form">
       <legend class="form-title">{{ "names.vehicleScale" | translate }}</legend>
       <div class="slider-form">
-        <mat-slider #frmVehicleScale color="primary" min="3" max="20" (change)="scaleChanged.emit({ type: 'Vehicle'
-          ,value: frmVehicleScale.value})">
+        <mat-slider color="primary" min="3" max="20" [value]="setting.vehicleSize" (change)="update({
+          group: 'Scale',
+          key: 'vehicleSize',
+          value: $event.value
+        })">
         </mat-slider>
-        <div class="slider-value">{{ frmVehicleScale.value }}px</div>
+        <div class="slider-value">{{ trackSettingService.trackSetting.vehicleSize }}px</div>
       </div>
     </fieldset>
     <fieldset class="option-form">
       <legend class="form-title">{{ "names.mapRotation" | translate }}</legend>
       <div class="slider-form">
-        <mat-slider #frmMapRotation color="primary" [step]="45" min="0" max="315" [(ngModel)]="slideValues.mapRotation"
-          (change)="rotationChanged.emit(frmMapRotation.value)"></mat-slider>
-        <div class="slider-value">{{ frmMapRotation.value }}&deg;</div>
+        <mat-slider color="primary" [step]="45" min="0" max="315" [value]="setting.rotation" (change)="update({
+          group: 'Rotation',
+          key: 'rotation',
+          value: $event.value
+        })"></mat-slider>
+        <div class="slider-value">{{ setting.rotation }}&deg;</div>
       </div>
     </fieldset>
     <fieldset class="option-form">
       <legend class="form-title">{{ "names.segmentWidth" | translate }}</legend>
       <div class="slider-form">
-        <mat-slider #frmSegmentWidth color="primary" min="1" max="20" step="2" [(ngModel)]="slideValues.segmentWidth"
-          (change)="scaleChanged.emit({type: 'SegmentWidth', value: frmSegmentWidth.value})"></mat-slider>
-        <div class="slider-value">{{ frmSegmentWidth.value }}px</div>
+        <mat-slider color="primary" min="1" max="20" step="2" [value]="setting.segmentWidth" (change)="update({
+            group: 'Scale',
+            key: 'segmentWidth',
+            value: $event.value
+          })"></mat-slider>
+        <div class="slider-value">{{ setting.segmentWidth }}px</div>
       </div>
     </fieldset>
     <fieldset class="option-form">
       <legend class="form-title">{{ "names.segmentDirection" | translate }}</legend>
       <div class="slider-form">
-        <mat-slider #frmSegmentDirection color="primary" min="2" max="13" [(ngModel)]="slideValues.segmentDirectionSize"
-          (change)="scaleChanged.emit({type: 'SegmentDirection', value: frmSegmentDirection.value})"></mat-slider>
-        <div class="slider-value">{{ frmSegmentDirection.value }}px</div>
+        <mat-slider color="primary" min="2" max="13" [value]="setting.segmentDirectionSize" (change)="update({
+            group: 'Scale',
+            key: 'segmentDirectionSize',
+            value: $event.value
+          })"></mat-slider>
+        <div class="slider-value">{{ setting.segmentDirectionSize }}px</div>
       </div>
     </fieldset>
     <fieldset class="option-form">
@@ -38,32 +50,57 @@
         {{ "names.visibleOptions" | translate }}
       </legend>
       <div class="option-list">
-        <mat-slide-toggle [(ngModel)]="buttonState.vehicleLines"
-          (change)="visibleChanged.emit({type: 'VehicleLine', value: $event.checked})" color="primary">{{
+        <mat-slide-toggle [checked]="setting.isVehicleLineVisible" (change)="update({
+            group: 'Visibility',
+            key: 'isVehicleLineVisible',
+            value: $event.checked
+          })" color="primary">{{
           "names.showVehicleLines" |
           translate }}</mat-slide-toggle>
-        <mat-slide-toggle [(ngModel)]="buttonState.segmentDirections"
-          (change)="visibleChanged.emit({type: 'SegmentDirection', value: $event.checked})" color="primary">{{
+        <mat-slide-toggle [checked]="setting.isSegmentDirectionVisible" (change)="update({
+            group: 'Visibility',
+            key: 'isSegmentDirectionVisible',
+            value: $event.checked
+          })" color="primary">{{
           "names.showSegmentDirections"
           | translate }}</mat-slide-toggle>
-        <mat-slide-toggle [(ngModel)]="buttonState.pointLabels"
-          (change)="visibleChanged.emit({type: 'PointLabel', value: $event.checked})" color="primary">{{
+        <mat-slide-toggle [checked]="setting.isPointLabelVisible" (change)="update({
+            group: 'Visibility',
+            key: 'isPointLabelVisible',
+            value: $event.checked
+          })" color="primary">{{
           "names.showPointLabels" |
           translate }}</mat-slide-toggle>
-        <mat-slide-toggle [(ngModel)]="buttonState.stations"
-          (change)="visibleChanged.emit({type: 'Station', value: $event.checked})" color="primary">{{
+        <mat-slide-toggle [checked]="setting.isStationVisible" (change)="update({
+            group: 'Visibility',
+            key: 'isStationVisible',
+            value: $event.checked
+          })" color="primary">{{
           "names.showStations" | translate }}</mat-slide-toggle>
-        <mat-slide-toggle [(ngModel)]="buttonState.buffers"
-          (change)="visibleChanged.emit({type: 'Buffer', value: $event.checked})" color="primary">{{
+        <mat-slide-toggle [checked]="setting.isBufferVisible" (change)="update({
+            group: 'Visibility',
+            key: 'isBufferVisible',
+            value: $event.checked
+          })" color="primary">{{
           "names.showBuffers" | translate }}</mat-slide-toggle>
-        <mat-slide-toggle [(ngModel)]="buttonState.groups"
-          (change)="visibleChanged.emit({type: 'Group', value: $event.checked})" color="primary">{{
+        <mat-slide-toggle [checked]="setting.isGroupVisible" (change)="update({
+            group: 'Visibility',
+            key: 'isGroupVisible',
+            value: $event.checked
+          })" color="primary">{{
           "names.showGroups" | translate }}</mat-slide-toggle>
-        <mat-slide-toggle [(ngModel)]="buttonState.clusters"
-          (change)="visibleChanged.emit({type: 'Cluster', value: $event.checked})" color="primary">{{
+
+        <mat-slide-toggle [checked]="setting.isClusterVisible" (change)="update({
+            group: 'Visibility',
+            key: 'isClusterVisible',
+            value: $event.checked
+          })" color="primary">{{
           "names.showClusters" | translate }}</mat-slide-toggle>
-        <mat-slide-toggle [(ngModel)]="buttonState.overlaps"
-          (change)="visibleChanged.emit({type: 'OverlappingObjects', value: $event.checked})" color="primary">{{
+        <mat-slide-toggle [checked]="setting.isOverlappingObjectsVisible" (change)="update({
+            group: 'Visibility',
+            key: 'isOverlappingObjectsVisible',
+            value: $event.checked
+          })" color="primary">{{
           "names.showOverlaps" | translate }}</mat-slide-toggle>
       </div>
     </fieldset>

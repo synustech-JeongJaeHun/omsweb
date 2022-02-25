@@ -8,7 +8,6 @@ import {
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import d3 = require('d3');
 
 import { ViewModes } from '../../../models/enums';
 import { Dto } from '../../../models/dto/track.model';
@@ -23,7 +22,7 @@ import { StatusService } from '@oms/root/services/status.service';
 import { MapStatesService } from '../map-states.service';
 import { SettingsService } from '@oms/root/services/settings.service';
 import { TrackStatusService } from '../../../services/track-status.service'
-import { TrackSettingService } from '../../../services/track-setting.service'
+import { TrackMonitorSettingService } from '../../../services/track-monitor-setting.service'
 
 @Component({
   selector: 'oms-map-viewer',
@@ -38,29 +37,15 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   private viewer: IOmsTrackMonitor;
   private destroy$: Subject<void> = new Subject<void>();
   public detailsVisible = false;
-  public isMinimapVisible = true;
+
+  get tmSetting() {
+    return this.trackMonitorSettingService.trackSetting
+  }
 
   public viewerSetting = {
     rect: {
       width: window.innerWidth,
       height: window.innerHeight - 40,
-    },
-    scale: {
-      vehicleSize: 10,
-      segmentWidth: 5,
-      segmentDirectionSize: 10
-    },
-    rotation: 0,
-    visible: {
-      isMinimapVisible: true,
-      isVehicleLineVisible: true,
-      isSegmentDirectionVisible: true,
-      isPointLabelVisible: true,
-      isStationVisible: true,
-      isBufferVisible: true,
-      isGroupVisible: true,
-      isClusterVisible: true,
-      isOverlappingObjectsVisible: true
     }
   }
 
@@ -74,7 +59,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     return this.settingSvc.globalPreferences.toggles.showToolName;
   }
 
-
   constructor(
     private router: Router,
     private auth: AuthService,
@@ -83,7 +67,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     private mapStatesService: MapStatesService,
     private settingSvc: SettingsService,
     private trackStatusService: TrackStatusService,
-    private trackSettingSerivce: TrackSettingService,
+    private trackMonitorSettingService: TrackMonitorSettingService,
     // private messageSvc: MessagesService,
     // private dialogSvc: DialogService,
     // private $t: TranslateService
@@ -112,9 +96,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     this.mapStatesService.toolbarToggleEvent$
       .pipe(takeUntil(this.destroy$))
       .subscribe((event) => {
-        if (event.type === 'minimap') {
-          this.isMinimapVisible = event.value;
-        } else if (event.type === 'itemDetails') {
+        if (event.type === 'itemDetails') {
           this.detailsVisible = event.value;
         } else if (event.type === 'controlTable') {
           // setTimeout(() => {
@@ -249,69 +231,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   public onCenterZoom() {
     this.viewer.centerZoom();
     this.getCameraAndRotation();
-  }
-
-  public onToggleMinimap() {
-    this.viewerSetting.visible.isMinimapVisible = !this.viewerSetting.visible.isMinimapVisible
-  }
-
-  public onScaleChanged(event: {
-    type: "Vehicle" | "SegmentWidth" | "SegmentDirection";
-    value: number;
-  }) {
-    switch (event.type) {
-      case 'Vehicle':
-        this.viewerSetting.scale.vehicleSize = event.value
-        break;
-      case 'SegmentDirection':
-        this.viewerSetting.scale.segmentDirectionSize = event.value
-        break;
-      case 'SegmentWidth':
-        this.viewerSetting.scale.segmentWidth = event.value
-        break;
-
-      default:
-        break;
-    }
-  }
-
-  public onRotationChanged(event: number) {
-    this.viewerSetting.rotation = event
-  }
-
-  public onVisibleChanged(event: {
-    type: "VehicleLine" | "SegmentDirection" | "PointLabel" | "Station" | "Buffer" | "Group" | "Cluster" | "OverlappingObjects",
-    value: boolean
-  }) {
-    switch (event.type) {
-      case 'VehicleLine':
-        this.viewerSetting.visible.isVehicleLineVisible = event.value
-        break;
-      case 'SegmentDirection':
-        this.viewerSetting.visible.isSegmentDirectionVisible = event.value
-        break;
-      case 'PointLabel':
-        this.viewerSetting.visible.isPointLabelVisible = event.value
-        break;
-      case 'Station':
-        this.viewerSetting.visible.isStationVisible = event.value
-        break;
-      case 'Buffer':
-        this.viewerSetting.visible.isBufferVisible = event.value
-        break;
-      case 'Group':
-        this.viewerSetting.visible.isGroupVisible = event.value
-        break;
-      case 'Cluster':
-        this.viewerSetting.visible.isClusterVisible = event.value
-        break;
-      case 'OverlappingObjects':
-        this.viewerSetting.visible.isOverlappingObjectsVisible = event.value
-        break;
-
-      default:
-        break;
-    }
   }
 
   public onTooltipOn(event: CustomEvent) {

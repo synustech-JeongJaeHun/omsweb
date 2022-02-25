@@ -33,8 +33,11 @@
       "names.showObjects" | translate
       }}</span>
   </button>
-  <button matListItem mat-button class="tool-item" [class.active]="buttonState.minimap" (click)="toggleMinimap.emit()"
-    [matTooltipDisabled]="showToolName" matTooltipClass="snb-tooltip" matTooltipPosition="right"
+  <button matListItem mat-button class="tool-item" [class.active]="buttonState.minimap" (click)="trackMonitorSettingService.update({
+    group: 'Visibility',
+    key: 'isMinimapVisible',
+    value: !trackMonitorSettingService.trackSetting.isMinimapVisible
+  })" [matTooltipDisabled]="showToolName" matTooltipClass="snb-tooltip" matTooltipPosition="right"
     [matTooltip]="'names.showMinimap' | translate">
     <mat-icon>map</mat-icon>
     <span class="tool-name" *ngIf="showToolName">{{

@@ -37,6 +37,7 @@ import { AuthService } from '../../../services/auth.service';
 import { AccountUtil } from '../../shared/utils/account.util';
 import { SettingsService } from '../../../services/settings.service';
 import { PermissionEnums } from '../../../models/enums';
+import { TrackMonitorSettingService } from '@oms/root/services/track-monitor-setting.service';
 
 @Component({
   selector: 'oms-map-toolbar',
@@ -49,20 +50,6 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
   readonly permissionEnums: typeof PermissionEnums = PermissionEnums;
 
   @Output() centerZoom = new EventEmitter<void>();
-  @Output() toggleMinimap = new EventEmitter<void>();
-
-  // from showDialog - start
-  @Output() rotationChanged = new EventEmitter<number>()
-  @Output() scaleChanged = new EventEmitter<{
-    type: "Vehicle" | "SegmentWidth" | "SegmentDirection",
-    value: number
-  }>()
-  @Output() visibleChanged = new EventEmitter<{
-    type: "VehicleLine" | "SegmentDirection" | "PointLabel" | "Station" | "Buffer" | "Group" | "Cluster" | "OverlappingObjects",
-    value: boolean
-  }>()
-  // from showDialog - end
-
 
   @ViewChild('btnSearch', { read: ElementRef }) btnSearch: ElementRef;
   @ViewChild('btnTrack', { read: ElementRef }) btnTrack: ElementRef;
@@ -98,7 +85,8 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
     private settingSvc: SettingsService,
     private dialogSvc: DialogService,
     private dialog: MatDialog,
-    private $t: TranslateService
+    private $t: TranslateService,
+    public trackMonitorSettingService: TrackMonitorSettingService
   ) { }
 
   ngOnInit(): void { }
@@ -224,16 +212,6 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
       position: { left: this.tooltipOffset, top: `${rect.top}px` },
       data: this.buttonState,
     });
-
-    this._showObjDlg.componentInstance.scaleChanged.subscribe((event) => {
-      this.scaleChanged.emit(event)
-    })
-    this._showObjDlg.componentInstance.rotationChanged.subscribe((event) => {
-      this.rotationChanged.emit(event)
-    })
-    this._showObjDlg.componentInstance.visibleChanged.subscribe((event) => {
-      this.visibleChanged.emit(event)
-    })
   }
 
   onToggleTool(action: ToggleOptionKeyType) {
