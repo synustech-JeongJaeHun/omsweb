@@ -1,0 +1,177 @@
+<div class="setting-header">
+  <h3 class="setting-title">{{ "names.themePreference" | translate }}</h3>
+  <div class="setting-actions"></div>
+</div>
+
+<div class="setting-container">
+  <fieldset>
+    <legend>{{ "names.theme" | translate }}</legend>
+
+    <div class="form-grid">
+      <oms-color-picker [name]="'names.homeBgColor' | translate" (changed)="setting.homeBackgroundColor = $event"
+        [value]="setting.homeBackgroundColor">
+      </oms-color-picker>
+      <oms-color-picker [name]="'names.playbackBgColor' | translate"
+        (changed)="setting.playbackBackgroundColor = $event" [value]="setting.playbackBackgroundColor">
+      </oms-color-picker>
+      <oms-color-picker [name]="'names.station' | translate" (changed)="setting.stationColor = $event"
+        [value]="setting.stationColor">
+      </oms-color-picker>
+      <oms-color-picker [name]="'names.buffer' | translate" (changed)="setting.bufferColor = $event"
+        [value]="setting.bufferColor">
+      </oms-color-picker>
+      <oms-color-picker [name]="'names.point' | translate" (changed)="setting.pointColor = $event"
+        [value]="setting.pointColor">
+      </oms-color-picker>
+      <oms-color-picker [name]="'names.segmentNormal' | translate" (changed)="setting.normalSegmentColor = $event"
+        [value]="setting.normalSegmentColor">
+      </oms-color-picker>
+      <oms-color-picker [name]="'names.segmentDisabled' | translate" (changed)="setting.disabledSegmentColor = $event"
+        [value]="setting.disabledSegmentColor">
+      </oms-color-picker>
+      <oms-color-picker [name]="'names.segmentDirection' | translate" (changed)="setting.segmentDirectionColor = $event"
+        [value]="setting.segmentDirectionColor">
+      </oms-color-picker>
+    </div>
+
+    <div class="actions">
+      <mat-form-field class="dense theme-selector" appearance="outline">
+        <mat-select [value]="resetBasicThemeTargets" [placeholder]="'names.selectResetItem' | translate"
+          (selectionChange)="resetBasicThemeTargets = $event.value" multiple>
+          <mat-option [value]="'homeBackgroundColor'">{{'names.homeBgColor'| translate}}</mat-option>
+          <mat-option [value]="'playbackBackgroundColor'">{{'names.playbackBgColor'| translate}}</mat-option>
+          <mat-option [value]="'stationColor'">{{'names.station'| translate}}</mat-option>
+          <mat-option [value]="'bufferColor'">{{'names.buffer'| translate}}</mat-option>
+          <mat-option [value]="'pointColor'">{{'names.point'| translate}}</mat-option>
+          <mat-option [value]="'normalSegmentColor'">{{'names.segmentNormal'| translate}}</mat-option>
+          <mat-option [value]="'disabledSegmentColor'">{{'names.segmentDisabled'| translate}}</mat-option>
+          <mat-option [value]="'segmentDirectionColor'">{{'names.segmentDirection'| translate}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button mat-raised-button class="dense" [disabled]="resetBasicThemeTargets.length === 0" color="primary"
+        (click)="onResetBasicTheme()">
+        {{ "names.resetToDefault" | translate }}
+      </button>
+    </div>
+  </fieldset>
+  <fieldset>
+    <legend>{{ "names.vehicleModeTheme" | translate }}</legend>
+
+    <!-- TODO comment off when you ready to use vhl web component -->
+    <!-- <div class="vehicle-examples-container">
+      <div class="vehicle-example">
+        <svg width="50" height="50" viewBox="0 0 50 50">
+          <circle r="25" cx="25" cy="25" fill="red" />
+        </svg>
+        <span>{{'names.auto' | translate}}</span>
+      </div>
+
+      <div class="vehicle-example">
+        <svg width="50" height="50" viewBox="0 0 50 50">
+          <circle r="25" cx="25" cy="25" fill="red" />
+        </svg>
+        <span>{{'names.manual' | translate}}</span>
+      </div>
+
+      <div class="vehicle-example">
+        <svg width="50" height="50" viewBox="0 0 50 50">
+          <circle r="25" cx="25" cy="25" fill="red" />
+        </svg>
+        <span>{{'names.none' | translate}}</span>
+      </div>
+    </div>
+    <hr /> -->
+
+    <div class="form-grid">
+      <oms-color-picker [name]="'names.VehicleModeAutoBgColor' | translate"
+        (changed)="setting.autoModeVehicleColor = $event" [value]="setting.autoModeVehicleColor">
+      </oms-color-picker>
+      <oms-color-picker [name]="'names.VehicleModeManualBgColor' | translate"
+        (changed)="setting.manualModeVehicleColor = $event" [value]="setting.manualModeVehicleColor">
+      </oms-color-picker>
+      <oms-color-picker [name]="'names.VehicleModeNoneBgColor' | translate"
+        (changed)="setting.noneModeVehicleColor = $event" [value]="setting.noneModeVehicleColor">
+      </oms-color-picker>
+    </div>
+
+    <div class="actions">
+      <mat-form-field class="dense theme-selector" appearance="outline">
+        <mat-select [value]="resetVehicleModeThemeTargets" [placeholder]="'names.selectResetItem' | translate"
+          (selectionChange)="resetVehicleModeThemeTargets = $event.value" multiple>
+          <mat-option [value]="'autoModeVehicleColor'">{{'names.VehicleModeAutoBgColor'| translate}}</mat-option>
+          <mat-option [value]="'manualModeVehicleColor'">{{'names.VehicleModeManualBgColor'| translate}}
+          </mat-option>
+          <mat-option [value]="'noneModeVehicleColor'">{{'names.VehicleModeNoneBgColor'| translate}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button mat-raised-button class="dense" [disabled]="resetVehicleModeThemeTargets.length === 0" color="primary"
+        (click)="onResetVehicleModeTheme()">
+        {{ "names.resetToDefault" | translate }}
+      </button>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>{{ "names.vehicleCargoStatusTheme" | translate }}</legend>
+
+    <!-- TODO comment off when you ready to use vhl web component -->
+    <!-- <div class="vehicle-examples-container">
+      <div class="vehicle-example">
+        <svg width="50" height="50" viewBox="0 0 50 50">
+          <circle r="25" cx="25" cy="25" fill="red" />
+        </svg>
+        <span>{{'names.loading' | translate}}</span>
+      </div>
+
+
+      <div class="vehicle-example">
+        <svg width="50" height="50" viewBox="0 0 50 50">
+          <circle r="25" cx="25" cy="25" fill="red" />
+        </svg>
+        <span>{{'names.full' | translate}}</span>
+      </div>
+
+
+      <div class="vehicle-example">
+        <svg width="50" height="50" viewBox="0 0 50 50">
+          <circle r="25" cx="25" cy="25" fill="red" />
+        </svg>
+        <span>{{'names.unloading' | translate}}</span>
+      </div>
+    </div>
+    <hr /> -->
+
+    <div class="form-grid">
+      <oms-color-picker [name]="'names.VehicleCargoStatusLoadingColor' | translate"
+        (changed)="setting.cargoLoadingColor = $event" [value]="setting.cargoLoadingColor">
+      </oms-color-picker>
+      <oms-color-picker [name]="'names.VehicleCargoStatusFullColor' | translate"
+        (changed)="setting.cargoFullColor = $event" [value]="setting.cargoFullColor">
+      </oms-color-picker>
+      <oms-color-picker [name]="'names.VehicleCargoStatusUnloadingColor' | translate"
+        (changed)="setting.cargoUnloadingColor = $event" [value]="setting.cargoUnloadingColor">
+      </oms-color-picker>
+    </div>
+
+    <div class="actions">
+      <mat-form-field class="dense theme-selector" appearance="outline">
+        <mat-select [value]="resetVehicleCargoStatusItemsTargets" [placeholder]="'names.selectResetItem' | translate"
+          (selectionChange)="resetVehicleCargoStatusItemsTargets = $event.value" multiple>
+          <mat-option [value]="'cargoLoadingColor'">{{'names.VehicleCargoStatusLoadingColor'| translate}}
+          </mat-option>
+          <mat-option [value]="'cargoFullColor'">{{'names.VehicleCargoStatusFullColor'| translate}}</mat-option>
+          <mat-option [value]="'cargoUnloadingColor'">{{'names.VehicleCargoStatusUnloadingColor'| translate}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button mat-raised-button class="dense" [disabled]="resetVehicleCargoStatusItemsTargets.length === 0"
+        color="primary" (click)="onResetVehicleCargoStatusTheme()">
+        {{ "names.resetToDefault" | translate }}
+      </button>
+    </div>
+  </fieldset>
+
+</div>

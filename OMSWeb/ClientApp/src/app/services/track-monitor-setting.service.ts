@@ -1,4 +1,4 @@
-import { EventEmitter, Injectable, Output } from '@angular/core';
+import { Injectable } from '@angular/core';
 
 type ChangedEvent =
   | VisibilityChangedEvent
@@ -112,7 +112,10 @@ export class TrackMonitorSettingService {
     // @ts-ignore
     this.trackSetting[event.key] = event.value
     writeTrackSettingOnLocalStorage(this.trackSetting)
-    // this.settingChanged.emit(event)
+  }
+  reset = (key: keyof TrackMonitorSetting) => {
+    // @ts-ignore
+    this.update({ key, value: DefaultTrackMonitorSetting[key] })
   }
 }
 

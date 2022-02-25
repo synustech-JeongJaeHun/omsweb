@@ -1,7 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ClientPreferences } from '../../../models/settings.model';
-import { SettingsService } from '../../../services/settings.service';
-import { getCss, setCssValue } from '../utils/css-loader';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'oms-color-picker',
@@ -27,28 +24,8 @@ import { getCss, setCssValue } from '../utils/css-loader';
     `,
   ],
 })
-export class ColorPickerComponent implements OnInit {
+export class ColorPickerComponent {
   @Input() name: string;
-  @Input() configName: string;
-  @Output() onChange = new EventEmitter<any>();
-
-  preference: ClientPreferences;
-
-
-  constructor(private settingSvc: SettingsService) {
-    this.preference = this.settingSvc.globalPreferences;
-  }
-
-  ngOnInit(): void { }
-
-  onChanged(value: any) {
-    setCssValue(this.configName, value);
-    this.preference.theme[this.configName] = value;
-    this.preference.save();
-    this.onChange.emit(value);
-  }
-
-  getThemeValue() {
-    return this.preference.theme[this.configName] || getCss(this.configName);
-  }
+  @Input() value: string;
+  @Output() changed = new EventEmitter<string>();
 }

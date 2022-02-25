@@ -29,3 +29,23 @@ fieldset {
   width: 240px;
   margin-right: 8px;
 }
+
+.vehicle-examples-container {
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.vehicle-example {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.vehicle-example span {
+  margin: 5px;
+  font-style: oblique;
+  font-size: 0.8em;
+  text-align: center;
+}

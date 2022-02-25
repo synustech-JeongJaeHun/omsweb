@@ -23,7 +23,7 @@ import { PreferencesComponent } from './preferences/preferences.component';
 import { VehicleSettingComponent } from './tracks/vehicle-setting.component';
 import { VehicleFormDialogComponent } from './dialogs/vehicle-form-dialog.component';
 import { ColumnDisplayManagementComponent } from './preferences/column-display-management.component';
-import { VehiclePreferenceComponent } from './preferences/vehicle-preference.component';
+import { ThemePreferenceComponent } from './preferences/theme-preference.component';
 import { BulkUserFormDialogComponent } from './dialogs/bulk-user-from-dialog.component';
 
 @NgModule({
@@ -48,7 +48,7 @@ import { BulkUserFormDialogComponent } from './dialogs/bulk-user-from-dialog.com
     VehicleSettingComponent,
     VehicleFormDialogComponent,
     ColumnDisplayManagementComponent,
-    VehiclePreferenceComponent,
+    ThemePreferenceComponent,
     BulkUserFormDialogComponent
   ],
   imports: [CommonModule, SharedModule, SettingsRoutingModule],

@@ -384,7 +384,7 @@
     "csvTotalMessage": "전체 CSV 입력 총 건수",
     "csvSuccessMessage": "성공",
     "csvFailedMessage": "실패",
-    "vehiclePreference": "비클 기본 설정",
+    "themePreference": "테마 기본 설정",
     "vehicleModeTheme": "비클 모드 테마",
     "vehicleCargoStatusTheme": "비클 화물 상태 테마",
     "VehicleModeAutoBgColor": "자동 배경",
