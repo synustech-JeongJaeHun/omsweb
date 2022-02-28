@@ -248,11 +248,9 @@ export class PlaybackControlDialogComponent implements OnInit, OnDestroy {
 
           this.options.startAt = new Date(time);
           const startTime = this.options.startAt.getTime();
-          this.options.endAt =
-            now.getTime() - startTime < this.oneDay
-              ? now
-              : new Date(startTime + this.oneDay);
+          this.options.endAt = now.getTime() - startTime < this.oneDay ? now : new Date(startTime + this.oneDay);
           this.options.maxTime = new Date(now.getTime() + 60000);
+
           return this.queryPlaybackData();
         })
       )
