@@ -1,45 +1,73 @@
 import { cameraInfo, getHeightFromWidthAndRatio, getWidthFromHeightAndRatio, moveCamera, resizeViewBox } from "./map/camera"
 import { mapSizePropertiesInfo } from "./map/mapSizeProperties"
 import { rotate, rotationInfo } from "./rotate/rotate"
+import { Position } from "./types/Position"
+
+type Objective = {
+  position: Position,
+  viewBox: {
+    width: number,
+    height: number,
+  },
+  rotation: number
+}
+
+function getCameraAndRotation() {
+  return {
+    position: { x: cameraInfo.value.centerX, y: cameraInfo.value.centerY },
+    viewBox: { width: cameraInfo.value.viewBoxWidth, height: cameraInfo.value.viewBoxHeight },
+    rotation: rotationInfo.value
+  }
+}
 
 function initCameraAndRotation() {
   moveCamera({ x: mapSizePropertiesInfo.value.centerX, y: mapSizePropertiesInfo.value.centerY })
   centerZoom()
 }
 
-const AnimationFrameCount = 20
-let isIniting = false
 function centerZoom() {
-  if (isIniting) return
-  else isIniting = true
-
-  function getObjective() {
-    return {
-      position: {
-        x: mapSizePropertiesInfo.value.centerX,
-        y: mapSizePropertiesInfo.value.centerY
+  approachIterative({
+    position: {
+      x: mapSizePropertiesInfo.value.centerX,
+      y: mapSizePropertiesInfo.value.centerY
+    },
+    viewBox: cameraInfo.value.viewBoxHeight > cameraInfo.value.viewBoxWidth
+      ? {
+        width: mapSizePropertiesInfo.value.width * 2,
+        height: getHeightFromWidthAndRatio(mapSizePropertiesInfo.value.width * 2)
+      }
+      : {
+        width: getWidthFromHeightAndRatio(mapSizePropertiesInfo.value.height * 2),
+        height: mapSizePropertiesInfo.value.height * 2,
       },
-      rect: cameraInfo.value.viewBoxHeight > cameraInfo.value.viewBoxWidth
-        ? {
-          width: mapSizePropertiesInfo.value.width * 2,
-          height: getHeightFromWidthAndRatio(mapSizePropertiesInfo.value.width * 2)
-        }
-        : {
-          width: getWidthFromHeightAndRatio(mapSizePropertiesInfo.value.height * 2),
-          height: mapSizePropertiesInfo.value.height * 2,
-        },
-      rotation: 0
-    }
-  }
+    rotation: 0
+  })
+}
 
-  const objective = getObjective()
+function approachToPosition(position: Position) {
+  approachIterative({
+    position,
+    rotation: rotationInfo.value,
+    viewBox: {
+      width: getWidthFromHeightAndRatio(3000),
+      height: 3000, //mm
+    }
+  })
+}
+
+
+const AnimationFrameCount = 20
+let isApproaching = false
+function approachIterative(objective: Objective) {
+  if (isApproaching) return
+  else isApproaching = true
 
   let current = {
     position: {
       x: cameraInfo.value.centerX,
       y: cameraInfo.value.centerY
     },
-    rect: {
+    viewBox: {
       width: cameraInfo.value.viewBoxWidth,
       height: cameraInfo.value.viewBoxHeight
     },
@@ -51,9 +79,9 @@ function centerZoom() {
       x: (objective.position.x - current.position.x) / AnimationFrameCount,
       y: (objective.position.y - current.position.y) / AnimationFrameCount,
     },
-    rect: {
-      width: (objective.rect.width - current.rect.width) / AnimationFrameCount,
-      height: (objective.rect.height - current.rect.height) / AnimationFrameCount,
+    viewBox: {
+      width: (objective.viewBox.width - current.viewBox.width) / AnimationFrameCount,
+      height: (objective.viewBox.height - current.viewBox.height) / AnimationFrameCount,
     },
     rotation: (current.rotation - objective.rotation) / AnimationFrameCount
   }
@@ -62,7 +90,7 @@ function centerZoom() {
 
   function step() {
     if (count === AnimationFrameCount) {
-      isIniting = false
+      isApproaching = false
       return
     }
 
@@ -71,15 +99,15 @@ function centerZoom() {
         x: current.position.x + term.position.x,
         y: current.position.y + term.position.y,
       },
-      rect: {
-        width: current.rect.width + term.rect.width,
-        height: current.rect.height + term.rect.height
+      viewBox: {
+        width: current.viewBox.width + term.viewBox.width,
+        height: current.viewBox.height + term.viewBox.height
       },
       rotation: current.rotation - term.rotation
     }
 
     moveCamera(next.position)
-    resizeViewBox(next.rect.width, next.rect.height)
+    resizeViewBox(next.viewBox.width, next.viewBox.height)
     rotate(next.rotation)
 
     current = next
@@ -90,12 +118,5 @@ function centerZoom() {
   step()
 }
 
-function getCameraAndRotation() {
-  return {
-    position: { x: cameraInfo.value.centerX, y: cameraInfo.value.centerY },
-    viewBox: { width: cameraInfo.value.viewBoxWidth, height: cameraInfo.value.viewBoxHeight },
-    rotation: rotationInfo.value
-  }
-}
 
-export { initCameraAndRotation, centerZoom, getCameraAndRotation }
+export { getCameraAndRotation, initCameraAndRotation, centerZoom, approachToPosition }

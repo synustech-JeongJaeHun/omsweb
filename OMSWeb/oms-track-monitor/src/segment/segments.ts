@@ -29,4 +29,4 @@ function makeD(startPointId: number, endPointId: number, parts: SegmentPart[], l
   return makeDFromSegment(startPoint, endPoint, parts, length)
 }
 
-export { segments, findSegmentByPoints, setSegmentDisabled, makeD } 
+export { segments, findSegmentById, findSegmentByPoints, setSegmentDisabled, makeD } 

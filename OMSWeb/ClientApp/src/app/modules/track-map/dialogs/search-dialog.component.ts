@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { IKeyValuePair } from '@oms/models/base.model';
-import { MapDataService } from '../map-data.service';
 import { MatDialogRef } from '@angular/material/dialog';
+import { TrackStatusService } from '@oms/root/services/track-status.service';
 
 type Ids = { id: number, logicalId: string }
 type ObjectTypeKey = "point" | "segment" | "station" | "mtl" | "buffer"
@@ -18,15 +18,13 @@ type ObjectTypeKey = "point" | "segment" | "station" | "mtl" | "buffer"
     `,
   ],
 })
-export class SearchDialogComponent implements OnInit {
+export class SearchDialogComponent {
   objectTypes = [
-    // { key: 'vehicle', value: 'Vehicle' },
     { key: 'point', value: 'Point' },
     { key: 'segment', value: 'Segment' },
     { key: 'station', value: 'Station' },
     { key: 'buffer', value: 'Buffer' },
     { key: 'mtl', value: 'MTL' },
-    // { key: 'cluster', value: 'Cluster' },
   ];
   targets: number[];
 
@@ -35,43 +33,34 @@ export class SearchDialogComponent implements OnInit {
 
   private dataSourceMap: Record<ObjectTypeKey, Ids[]>;
 
-  get canSelectTarget(): boolean {
-    return !!this.selectedType && this.targets.length > 0;
+  canSelectTarget(type: ObjectTypeKey, logicalId: string): boolean {
+    return this.dataSourceMap[type]?.find(o => o.logicalId === logicalId)
+      ? true
+      : false
   }
 
   constructor(
-    private dataSvc: MapDataService,
+    private trackStatusService: TrackStatusService,
     private dialog: MatDialogRef<SearchDialogComponent>
-  ) { }
-
-  ngOnInit(): void {
-    this.initDataSource();
+  ) {
+    this.dataSourceMap = {
+      point: this.trackStatusService.trackData.points.map((x) => ({ id: x.id, logicalId: x.logicalId })),
+      buffer: this.trackStatusService.trackData.buffers.map((x) => ({ id: x.id, logicalId: x.logicalId })),
+      station: this.trackStatusService.trackData.stations.map((x) => ({ id: x.id, logicalId: x.logicalId })),
+      mtl: this.trackStatusService.trackData.mtls.map((x) => ({ id: x.id, logicalId: x.logicalId })),
+      // distinct element because segment data is mixed with segparts
+      segment: [...new Map(this.trackStatusService.trackData.segments.map((x) => [x.id, x.logicalId]))].map((x) => ({ id: x[0], logicalId: x[1] }))
+    };
   }
 
   onSearch(type: string, value: string) {
     const { id } = this.dataSourceMap[type].find(e => e.logicalId === value)
-    this.dialog.close({ type, value: id });
-  }
-
-  private initDataSource() {
-    this.dataSourceMap = {
-      // vehicle: this.dataSvc.data.vehicles.map((x) => x.id),
-      point: this.dataSvc.data.points.map((x) => ({ id: x.id, logicalId: x.logicalId })),
-      buffer: this.dataSvc.data.buffers.map((x) => ({ id: x.id, logicalId: x.logicalId })),
-      station: this.dataSvc.data.stations.map((x) => ({ id: x.id, logicalId: x.logicalId })),
-      mtl: this.dataSvc.data.mtls.map((x) => ({ id: x.id, logicalId: x.logicalId })),
-      // cluster: this.dataSvc.data.clusters.map((x) => {id: x.id,  logicalId: x.logicalId}),
-      segment: this.dataSvc.data.segments.map((x) => ({ id: x.id, logicalId: x.logicalId })),
-    };
+    this.dialog.close({ type, id });
   }
 
   onSelectType(item: IKeyValuePair<string, string>) {
     if (!item) return;
     this.selectedType = item.key;
-    this.targets = this.getSelectionTargets(item.key);
-  }
-
-  private getSelectionTargets(selectedType: string): number[] {
-    return this.dataSourceMap[selectedType];
+    this.targets = this.dataSourceMap[item.key];
   }
 }

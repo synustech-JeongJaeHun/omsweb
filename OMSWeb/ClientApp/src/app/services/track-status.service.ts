@@ -1,7 +1,6 @@
 import { EventEmitter, Injectable, Output } from '@angular/core';
 import { StatusService } from './status.service'
 import { HubService } from './hub.service'
-import { AuthService } from './auth.service'
 import { Dto } from '../models/dto/track.model';
 import { IDataChangeEvent } from '../models/notification.model';
 
@@ -10,12 +9,12 @@ import { IDataChangeEvent } from '../models/notification.model';
  *
  * ## realtime data
  *
- * - point
- * - segment
- * - station
- * - buffer
- * - mtl
- * - vhl
+ * - point x
+ * - segment o|x
+ * - station x
+ * - buffer x
+ * - mtl x
+ * - vhl o
  *
  */
 
@@ -32,7 +31,7 @@ export class TrackStatusService {
   constructor(
     private statusService: StatusService,
     private hubService: HubService,
-    private authService: AuthService,
+    // private authService: AuthService,
   ) {
     this.fetchTrack().then(() => this.attachHubEvents())
   }
@@ -48,78 +47,128 @@ export class TrackStatusService {
   private attachHubEvents() {
     this.hubService.connectionChanged$
       .subscribe((conn) => {
-        this.statusService.getVehicles().subscribe((res) => {
-          console.log("connection update", conn, res)
-          if (conn && res?.vehicles) {
-            // TODO
-          }
-        })
+        this.handleConnectionChanged(conn)
       });
     this.hubService.vehicleChanged$
       .subscribe((e: IDataChangeEvent) => {
-        // TODO
+        this.handleVehicleChanged(e)
       });
+    this.hubService.segmentDisabledChanged$
+      .subscribe((e: IDataChangeEvent) => {
+        this.handleSegmentDisabledChanged(e)
+      });
+    this.hubService.zcuMapChanged$
+      .subscribe((e: IDataChangeEvent) => {
+        this.handleZcuMapChanged(e)
+      });
+
     // this.hubService.segmentChanged$
     //   .subscribe((e: IDataChangeEvent) => {
     //     // what happened on event?
     //     console.log("segment update", e)
     //   });
-    this.hubService.segmentDisabledChanged$
-      .subscribe((e: IDataChangeEvent) => {
-        // TODO
-        // this.viewer.updateSegmentDisabled(e.operation, {
-        //   id: e.id,
-        //   operation: e.operation,
-        //   data: e.data
-        // })
-      });
     // this.hubService.clusterChanged$
     //   .subscribe((e: IDataChangeEvent) => {
-    //     // TODO what happened on event?
+    //     // what happened on event?
     //     console.log("cluster update", e)
     //   });
 
-    this.hubService.zcuMapChanged$
-      .subscribe((e) => {
-        // TODO
-        // this.viewer.updateZcu(e.operation, e.data)
-      });
+    // if (this.authService.isAuthenticated) {
+    // this.hubService.vehiclePathChanged$
+    //   .subscribe((e: IDataChangeEvent) => {
+    //     // what happened on event?
+    //     console.log("vehicle path update", e)
+    //   });
 
-    if (this.authService.isAuthenticated) {
-      // this.hubService.vehiclePathChanged$
-      //   .subscribe((e: IDataChangeEvent) => {
-      //     // TODO what happened on event?
-      //     console.log("vehicle path update", e)
-      //   });
+    // this.hubService.stationChanged$
+    //   .subscribe((e) => {
+    //     //  what happened on event?
+    //     console.log("station update", e)
+    //   })
 
-      this.hubService.stationChanged$
-        .subscribe((e) => {
-          // TODO what happened on event?
-          console.log("station update", e)
-        })
+    // this.hubService.groupChanged$
+    //   .subscribe((e) => {
+    //     // what happened on event?
+    //     console.log("group update", e)
+    //   });
 
-      // this.hubService.groupChanged$
-      //   .subscribe((e) => {
-      //     // TODO what happened on event?
-      //     console.log("group update", e)
-      //   });
+    // this.hubService.bufferChanged$
+    //   .subscribe((e) => {
+    //     // what happened on event?
+    //     console.log("buffer update", e)
+    //   });
 
-      this.hubService.bufferChanged$
-        .subscribe((e) => {
-          // TODO what happened on event?
-          console.log("buffer update", e)
-        });
+    // this.hubService.mtlChanged$
+    //   .subscribe((e) => {
+    //     // what happened on event?
+    //     console.log("mtl update", e)
+    //   });
 
-      this.hubService.mtlChanged$
-        .subscribe((e) => {
-          // TODO what happened on event?
-          console.log("mtl update", e)
-        });
+    // this.hubService.groupChanged$
+    //   .subscribe((e) => {
+    //     console.log("group update", e)
+    //   });
+    // }
+  }
 
-      // this.hubService.groupChanged$
-      //   .subscribe((e) => {
-      //     console.log("group update", e)
-      //   });
+  handleConnectionChanged(connection) {
+    this.statusService.getVehicles().subscribe((res) => {
+      if (connection && res?.vehicles)
+        this.trackData.vehicles = res.vehicles
+    })
+  }
+
+  handleVehicleChanged(e: IDataChangeEvent) {
+    const changedVehicle = e.data as Dto.IVehicle
+
+    const finded = this.trackData.vehicles.find(v => v.id === changedVehicle.id)
+
+    switch (e.operation) {
+      case 'INSERT':
+      case 'UPDATE':
+        if (finded)
+          Object.assign(finded, changedVehicle)
+        else
+          this.trackData.vehicles.push(changedVehicle)
+
+        break;
+      case 'DELETE':
+        if (finded) {
+          const index = this.trackData.vehicles.indexOf(finded)
+          this.trackData.vehicles.splice(index, 1)
+        }
+        break;
+    }
+  }
+
+  handleSegmentDisabledChanged(e: IDataChangeEvent) {
+    switch (e.operation) {
+      case 'INSERT':
+        this.trackData.segmentDisabled.push(e.data)
+        break;
+      case 'DELETE':
+        const index = this.trackData.segmentDisabled.findIndex(sd => sd.id === e.id)
+        if (index > -1)
+          this.trackData.segmentDisabled.splice(index, 1)
+        break;
+    }
+  }
+
+  handleZcuMapChanged(e: IDataChangeEvent) {
+    const finded = this.trackData.zcus.find(z => z.id === e.data.id)
+    switch (e.operation) {
+      case 'UPDATE':
+        if (finded) Object.assign(finded, e.data)
+        break;
+      case 'DELETE':
+        if (finded) {
+          const index = this.trackData.zcus.indexOf(finded)
+          this.trackData.zcus.splice(index, 1)
+        }
+        break;
+
+      default:
+        break;
     }
   }
 }

@@ -10,6 +10,9 @@ type Station = {
 
   group?: number
   carrierType?: string
+
+  // for tm
+  isFocused?: boolean
 }
 
 export { Station }

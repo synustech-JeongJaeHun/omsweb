@@ -18,6 +18,9 @@ type Segment = {
 
   pathCommands: PathCommand[]
   d: D
+
+  // for tm
+  isFocused?: boolean
 }
 
 export { Segment }

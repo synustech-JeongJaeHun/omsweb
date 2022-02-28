@@ -10,6 +10,9 @@ type Mtl = {
   position?: any
   mode?: any
   errorList?: any
+
+  // for tm
+  isFocused?: boolean
 }
 
 export { Mtl }

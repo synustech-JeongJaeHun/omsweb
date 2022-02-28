@@ -3,24 +3,24 @@ import { computed, provide, readonly, ref, toRefs, watch } from 'vue'
 import { makeFsProxy } from './utils/devMode'
 import { IOmsTrackMonitor } from './types/IOmsTrackMonitor'
 import { IPreferences } from './legacies/models/setting.model'
-import { buffers } from './buffer/buffers'
+import { buffers, findBufferById } from './buffer/buffers'
 import { clusters } from './cluster/clusters'
 import { groups } from './group/groups'
 import { calculateMinMaxXYFromPoints } from './map/utils/size'
-import { mtls } from './mtl/mtls'
-import { points } from './point/points'
+import { mtls, findMtlById } from './mtl/mtls'
+import { findPointById, points } from './point/points'
 import {
   initSegmentDisableds,
   insertSegmentDisabled,
   deleteSegmentDisabled
 } from './segment/segmentDisableds'
-import { stations } from './station/stations'
+import { findStationById, stations } from './station/stations'
 import { findVehicleById, updateExistVehicle, vehicles } from './vehicle/vehicles'
 import { findZcuById, zcus, updateExistZcu } from './zcu/zcus'
 import Map from './map/components/Map.ce.vue'
 import Minimap from './minimap/components/Minimap.ce.vue'
 import { initMapSizeProperties } from './map/mapSizeProperties'
-import { segments } from './segment/segments'
+import { segments, findSegmentById } from './segment/segments'
 import { makeSegmentsFromParts } from './segment/utils/segment'
 import { parseNumberProp, parseBooleanProp, parseStringProp } from './utils/props'
 import Scale from './scale/component/Scale.ce.vue'
@@ -29,7 +29,7 @@ import { makeGroups } from './group/utils/group'
 import { RootEmitInjectionKey, RootEmits } from './types/RootEmits'
 import ScreenDetail from './map/components/ScreenDetail.ce.vue'
 import { elementRectInfo, setElementRect } from './map/elementRect'
-import { initCameraAndRotation, centerZoom, getCameraAndRotation } from './cameraAndRotation'
+import { initCameraAndRotation, centerZoom, getCameraAndRotation, approachToPosition } from './cameraAndRotation'
 import { ViewMode } from './types/ViewMode'
 import { MapType } from './types/MapType'
 import { rotate } from './rotate/rotate'
@@ -40,6 +40,8 @@ import {
   updateVisibleStyle
 } from './styles/styles'
 import { Boolish, Numberlish, Stringlish } from './types/Prop'
+import { getPositionForBufferOrStation } from './utils/locationStationBuffer'
+import { createPathElement } from './utils/svg/path'
 
 /**
  * https://v3.vuejs.org/api/sfc-script-setup.html#typescript-only-features
@@ -187,10 +189,93 @@ const exposed: IOmsTrackMonitor = {
   },
   centerZoom,
 
-  trackObject(type, id) {
-    switch (type) {
-      case 'Vehicle':
+  focus(type, id) {
+    switch (type.trim().toLowerCase()) {
+      case 'vehicle':
+        const vehicle = findVehicleById(id)
+        // setFocusObject(point)
+        break;
+      case 'point':
+        const point = findPointById(id)
+        if (point) {
+          // setFocusObject(point)
+        }
+        break;
+      case 'segment':
+        const segment = findSegmentById(id)
+        if (segment) {
+          const path = createPathElement(segment.d)
+          // setFocusObject(segment)
+        }
+        break;
+      case 'station':
+        const station = findStationById(id)
+        if (station) {
+          // setFocusObject(station)
+        }
+        break;
+      case 'buffer':
+        const buffer = findBufferById(id)
+        if (buffer) {
+          // setFocusObject(buffer)
+        }
+        break;
+      case 'mtl':
+        const mtl = findMtlById(id)
+        if (mtl) {
+          // setFocusObject(mtl)
+        }
+
+        break;
+
+      default:
+        break;
+    }
+  },
+
+  find(type, id) {
+    switch (type.trim().toLowerCase()) {
+      case 'vehicle':
+        const vehicle = findVehicleById(id)
         // TODO
+        break;
+      case 'point':
+        const point = findPointById(id)
+        if (point) {
+          approachToPosition({ x: point.x, y: point.y })
+        }
+        break;
+      case 'segment':
+        const segment = findSegmentById(id)
+        if (segment) {
+          const path = createPathElement(segment.d)
+          const position = path.getPointAtLength(path.getTotalLength() / 2)
+
+          approachToPosition({ x: position.x, y: position.y })
+        }
+        break;
+      case 'station':
+        const station = findStationById(id)
+        if (station) {
+          const position = getPositionForBufferOrStation(station)
+
+          if (position)
+            approachToPosition({ x: position.x, y: position.y })
+        }
+        break;
+      case 'buffer':
+        const buffer = findBufferById(id)
+        if (buffer) {
+          const position = getPositionForBufferOrStation(buffer)
+
+          if (position)
+            approachToPosition({ x: position.x, y: position.y })
+        }
+        break;
+      case 'mtl':
+        const mtl = findMtlById(id)
+        if (mtl) this.focus('point', mtl.pointId)
+
         break;
 
       default:

@@ -8,8 +8,10 @@
         [showClearButton]="true" [disabled]="!type.value" valueExpr="logicalId" searchExpr="logicalId">
       </dx-autocomplete>
     </div>
+
     <div mat-dialog-actions>
-      <button mat-raised-button color="primary" (click)="onSearch(type.value, value.value)">
+      <button mat-raised-button color="primary" [disabled]="!canSelectTarget(type.value, value.value)"
+        (click)="onSearch(type.value, value.value)">
         {{ "names.search" | translate }}
       </button>
       <button mat-raised-button mat-dialog-close>

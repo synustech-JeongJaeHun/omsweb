@@ -4,7 +4,6 @@ import { Station } from "../station/types/Station"
 import { addVectors, getOrthogonalVector, getUnitVector, multipleVector, ZeroVector } from "./vector"
 
 const DirectionMargin = 500
-const DefaultPosition = { x: 0, y: 0 }
 
 function getPositionForBufferOrStation(bufferOrStation: Buffer | Station) {
   const
@@ -12,7 +11,7 @@ function getPositionForBufferOrStation(bufferOrStation: Buffer | Station) {
     nextPointPosition = findPointById(bufferOrStation.nextPoint)
 
   if (startPointPosition === undefined || nextPointPosition === undefined)
-    return DefaultPosition
+    return undefined
 
   const unitVector = getUnitVector({
     x: nextPointPosition.x - startPointPosition.x,

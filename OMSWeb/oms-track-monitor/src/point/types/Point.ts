@@ -8,6 +8,9 @@ type Point = {
   // nullable
   group?: number
   isHome?: boolean
+
+  // for tm
+  isFocused?: boolean
 }
 
 export { Point }

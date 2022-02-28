@@ -10,6 +10,9 @@ type Buffer = {
 
   // nullable
   group?: number
+
+  // for tm
+  isFocused?: boolean
 }
 
 export { Buffer } 

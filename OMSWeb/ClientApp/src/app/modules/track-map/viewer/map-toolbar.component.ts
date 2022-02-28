@@ -50,6 +50,7 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
   readonly permissionEnums: typeof PermissionEnums = PermissionEnums;
 
   @Output() centerZoom = new EventEmitter<void>();
+  @Output() track = new EventEmitter<{ type: string, id: any }>()
 
   @ViewChild('btnSearch', { read: ElementRef }) btnSearch: ElementRef;
   @ViewChild('btnTrack', { read: ElementRef }) btnTrack: ElementRef;
@@ -135,9 +136,9 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
       position: { left: this.tooltipOffset, top: `${rect.top}px` },
     });
 
-    this._searchDlg.afterClosed().subscribe((payload: any) => {
-      if (!payload || !payload.type || !payload.value) return;
-      this.stateSvc.commandToolbar('search', payload);
+    this._searchDlg.afterClosed().subscribe((payload: { type: string, id: any }) => {
+      if (!payload || !payload.type || !payload.id) return;
+      this.track.emit({ type: payload.type, id: payload.id })
     });
   }
 

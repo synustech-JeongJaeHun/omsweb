@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Segment } from '../types/Segment'
-import { computed, inject, readonly, ref, toRef, watchEffect } from 'vue';
+import { inject, ref, toRef, watchEffect } from 'vue';
 import { RootEmitInjectionKey, RootEmits } from '../../types/RootEmits';
 import { deepCopy } from '../../utils/deepCopy';
 import { useScreenFixedScale } from '../../scale/scale';

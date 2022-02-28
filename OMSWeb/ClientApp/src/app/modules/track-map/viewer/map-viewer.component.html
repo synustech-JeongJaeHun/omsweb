@@ -29,7 +29,7 @@
 
   <!-- maptoolbar at left side -->
   <oms-map-toolbar id="map-toolbar" class="snb toolbar" [class.show-name]="showToolbarText"
-    [buttonState]="preference.toggles" (centerZoom)="onCenterZoom()">
+    [buttonState]="preference.toggles" (centerZoom)="onCenterZoom()" (track)="onTrack($event)">
   </oms-map-toolbar>
 
 
