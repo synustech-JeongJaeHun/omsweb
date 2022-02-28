@@ -1,5 +1,17 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "src/*": [
+        "src/*"
+      ],
+      "TrackObjects/*": [
+        "src/TrackObjects/*"
+      ],
+      "MapObjects/*": [
+        "src/MapObjects/*"
+      ]
+    },
     "target": "esnext",
     "useDefineForClassFields": true,
     "module": "esnext",
@@ -9,7 +21,10 @@
     "sourceMap": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
-    "lib": ["esnext", "dom"]
+    "lib": [
+      "esnext",
+      "dom"
+    ]
   },
   "include": [
     "src/**/*.ts",
@@ -17,5 +32,7 @@
     "src/**/*.tsx",
     "src/**/*.vue"
   ],
-  "exclude": ["src/main.ts"]
+  "exclude": [
+    "src/main.ts"
+  ]
 }

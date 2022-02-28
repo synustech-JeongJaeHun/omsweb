@@ -1,13 +1,14 @@
-import { IPreferences } from '../legacies/models/setting.model'
-import { ITrackData } from '../legacies/models/track.model'
-import { Point } from '../point/types/Point'
-import { Segment } from '../segment/types/Segment'
-import { Station } from '../station/types/Station'
-import { Vehicle } from '../vehicle/types/Vehicle'
-import { Buffer } from '../buffer/types/Buffer'
-import { UpdateDto } from './Dto'
-import { Mtl } from '../mtl/types/Mtl'
+import { IPreferences } from "../legacies/models/setting.model";
+import { ITrackData } from "../legacies/models/track.model";
+import { Mtl } from "../TrackObjects/mtl/types/Mtl";
+import { Point } from "../TrackObjects/point/types/Point";
+import { Segment } from "../TrackObjects/segment/types/Segment";
+import { Station } from "../TrackObjects/station/types/Station";
+import { Vehicle } from "../TrackObjects/vehicle/types/Vehicle";
+import { Buffer } from "../TrackObjects/buffer/types/Buffer";
+import { UpdateDto } from "./Dto";
 
+// also update /export-types
 interface IOmsTrackMonitor {
   // Get Data
   getCameraAndRotation(): {

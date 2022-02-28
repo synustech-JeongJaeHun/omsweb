@@ -17,7 +17,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
-    "buildType": "tsc src/types/IOmsTrackMonitor.ts --declaration --emitDeclarationOnly --outDir dist && cpy export-types/oms-track-monitor.d.ts dist/",
+    "buildType": "cpy export-types/ dist/",
     "postbuild": "npm run buildType",
     "preview": "vite preview"
   },

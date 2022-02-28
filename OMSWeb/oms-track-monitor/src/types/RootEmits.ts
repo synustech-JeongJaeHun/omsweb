@@ -1,10 +1,10 @@
-import { Point } from "../point/types/Point"
-import { Station } from "../station/types/Station"
-import { Buffer } from '../buffer/types/Buffer'
-import { Mtl } from "../mtl/types/Mtl"
-import { Zcu } from "../zcu/types/Zcu"
-import { Vehicle } from "../vehicle/types/Vehicle"
-import { Segment } from "../segment/types/Segment"
+import { Point } from "TrackObjects/point/types/Point"
+import { Station } from "TrackObjects/station/types/Station"
+import { Buffer } from 'TrackObjects/buffer/types/Buffer'
+import { Mtl } from "TrackObjects/mtl/types/Mtl"
+import { Zcu } from "TrackObjects/zcu/types/Zcu"
+import { Vehicle } from "TrackObjects/vehicle/types/Vehicle"
+import { Segment } from "TrackObjects/segment/types/Segment"
 
 /**
  * if you change this file,

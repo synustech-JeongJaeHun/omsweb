@@ -1,13 +1,13 @@
 // @ts-ignore
 import { IOmsTrackMonitor } from './IOmsTrackMonitor'
-import { EventDetails } from '../src/types/RootEmits'
+// import { EventDetails } from '../src/types/RootEmits'
 
 interface OmsTrackMonitorEventMap {
-  tooltipon: CustomEvent<EventDetails.TooltipOn[]>
-  tooltipoff: CustomEvent<EventDetails.TooltipOff[]>
-  focus: CustomEvent<EventDetails.Focus[]>
-  contextmenu: CustomEvent<EventDetails.ContextmenuOn[]>
-  backdrop: CustomEvent<EventDetails.Backdrop[]>
+  // tooltipon: CustomEvent<EventDetails.TooltipOn[]>
+  // tooltipoff: CustomEvent<EventDetails.TooltipOff[]>
+  // focus: CustomEvent<EventDetails.Focus[]>
+  // contextmenu: CustomEvent<EventDetails.ContextmenuOn[]>
+  // backdrop: CustomEvent<EventDetails.Backdrop[]>
 }
 
 interface OmsTrackMonitorElement extends HTMLElement {
