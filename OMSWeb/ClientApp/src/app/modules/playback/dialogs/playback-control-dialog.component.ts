@@ -364,7 +364,7 @@ export class PlaybackControlDialogComponent implements OnInit, OnDestroy {
   }
   private takeEvent(tableName: string, id?: number) {
     const table = this.data.eventTables[tableName];
-    if (id) {
+    if (table && id) {
       return table[id];
     } else {
       if (table) return table;
