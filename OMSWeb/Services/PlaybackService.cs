@@ -52,7 +52,11 @@ namespace OMSWeb.Services
       {
         Start = times[0],
       };
-      if (times.Count > 1) options.End = times[1];
+
+      if (times.Count > 1)
+        options.End = times[1];
+      else
+        options.End = times[0];
 
       var timelines = this._repo.GetTimeline("event_list", options);
       var boundaries = this._repo.GetEventBoundaries(options);
