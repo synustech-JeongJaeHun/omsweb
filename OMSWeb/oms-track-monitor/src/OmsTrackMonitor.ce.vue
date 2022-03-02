@@ -189,7 +189,9 @@ const exposed: IOmsTrackMonitor = {
     switch (type.trim().toLowerCase()) {
       case 'vehicle':
         const vehicle = findVehicleById(id)
-        // setFocusObject(point)
+        if (vehicle) {
+          // setFocusObject(point)
+        }
         break;
       case 'point':
         const point = findPointById(id)
@@ -246,7 +248,7 @@ const exposed: IOmsTrackMonitor = {
           const path = createPathElement(segment.d)
           const position = path.getPointAtLength(path.getTotalLength() / 2)
 
-          approachToPosition({ x: position.x, y: position.y })
+          approachToPosition(position)
         }
         break;
       case 'station':
@@ -255,7 +257,7 @@ const exposed: IOmsTrackMonitor = {
           const position = getPositionForBufferOrStation(station)
 
           if (position)
-            approachToPosition({ x: position.x, y: position.y })
+            approachToPosition(position)
         }
         break;
       case 'buffer':
@@ -264,7 +266,7 @@ const exposed: IOmsTrackMonitor = {
           const position = getPositionForBufferOrStation(buffer)
 
           if (position)
-            approachToPosition({ x: position.x, y: position.y })
+            approachToPosition(position)
         }
         break;
       case 'mtl':

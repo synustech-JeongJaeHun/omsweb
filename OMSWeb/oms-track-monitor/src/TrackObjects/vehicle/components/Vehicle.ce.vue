@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, inject, reactive, ref, toRef, watch } from 'vue';
+import { computed, inject, onUnmounted, ref, toRef, watch } from 'vue';
 import { Vehicle } from '../types/Vehicle'
 import RasterizedText from 'MapObjects/map/components/RasterizedText.ce.vue';
 import { findPointById, usePointPoisiton } from '../../point/points';
@@ -13,14 +13,16 @@ import VehicleStatePreventPushSvg from '../assets/VehicleStatePreventPushSvg.ce.
 import VehicleStatePreventCallSvg from '../assets/VehicleStatePreventCallSvg.ce.vue'
 import { RootEmitInjectionKey, RootEmits } from 'src/types/RootEmits';
 import { createPathElement, getPositionFromD } from 'src/utils/svg/path';
-import { encodeCommandsToD, moveTo, slicePathCommands } from 'src/utils/svg/pathSegment';
 import { D } from 'src/types/D';
 import { deepCopy } from 'src/utils/deepCopy';
+import MakeDInUpdateWorker from '../utils/workers/makeDInUpdate?worker&inline'
+import { Position } from 'src/types/Position';
 
 const props = defineProps<{
   vehicle: Vehicle
 }>()
 const emit = inject<RootEmits>(RootEmitInjectionKey)!
+const makeDInUpdateWorker = new MakeDInUpdateWorker()
 
 const groupColor = useGroupColor('vehicle', toRef(props.vehicle, 'id'))
 
@@ -43,19 +45,15 @@ const
   isPreventPush = computed(() => props.vehicle.canBePushed === false)
 
 const
-  currentPosition = reactive({ x: 0, y: 0 }),
+  currentPosition = ref<Position>(),
   currentSegment = ref<Segment>()
 
 const
-  beforePosition = reactive({ x: 0, y: 0 }),
+  beforePosition = ref<Position>(),
   beforeSegment = ref<Segment>()
 
 const
-  realtimePosition = reactive({ x: 0, y: 0 })
-
-// const
-// animateMotionRef = ref<SVGAnimateMotionElement>(),
-// animateMotionPath = ref('M 0 0')
+  realtimePosition = ref<Position>()
 
 watch(() => props.vehicle.lastUpdated, () => {
   const segment = findSegmentByPoints(props.vehicle.curPoint, props.vehicle.nextPoint)
@@ -65,42 +63,29 @@ watch(() => props.vehicle.lastUpdated, () => {
       : findPointById(props.vehicle.curPoint) ?? { x: 0, y: 0 }
 
   // current => before
-  beforePosition.x = currentPosition.x
-  beforePosition.y = currentPosition.y
+  beforePosition.value = currentPosition.value
   beforeSegment.value = currentSegment.value
 
   // v => current
-  currentPosition.x = x
-  currentPosition.y = y
+  currentPosition.value = { x, y }
   currentSegment.value = segment ?? currentSegment.value
 
   // v => realtime
-  realtimePosition.x = x
-  realtimePosition.y = y
+  realtimePosition.value = { x, y }
 
-  const pathCommands = (function () {
-    if (props.vehicle.updateType === 'AnimationIn2Segments' && currentSegment.value && beforeSegment.value) {
-      const concatenatedCommands = [
-        ...beforeSegment.value.pathCommands,
-        ...currentSegment.value.pathCommands.slice(1)
-      ]
-      return slicePathCommands(concatenatedCommands, beforePosition, currentPosition)
-    }
-
-    if (props.vehicle.updateType === 'AnimationIn1Segment' && beforeSegment.value)
-      return slicePathCommands(beforeSegment.value.pathCommands, beforePosition, currentPosition)
-
-    const currentPositionPathCommands = [moveTo(currentPosition)]
-    if (props.vehicle.updateType === 'NoAnimation')
-      return currentPositionPathCommands
-
-    return currentPositionPathCommands
-  })()
-
-  if (props.vehicle.updateType !== 'NoAnimation' && props.vehicle.lastUpdated)
-    trackVehiclePosition(encodeCommandsToD(pathCommands), props.vehicle.lastUpdated)
+  makeDInUpdateWorker.postMessage(deepCopy({
+    updateType: props.vehicle.updateType,
+    lastUpdated: props.vehicle.lastUpdated,
+    currentSegment: currentSegment.value,
+    beforeSegment: beforeSegment.value,
+    beforePosition: beforePosition.value,
+    currentPosition: currentPosition.value
+  }))
 })
 
+// time with microsecond
+// animation duration 0.3s with linear
+const TotalVehicleAnimationDuration = 300
 function trackVehiclePosition(d: D, lastUpdated: number) {
   const pathElement = createPathElement(d)
   const totalLength = pathElement.getTotalLength()
@@ -108,21 +93,19 @@ function trackVehiclePosition(d: D, lastUpdated: number) {
   const startTime = performance.now()
 
   function step(now: DOMHighResTimeStamp) {
-    // time with microsecond
-    // animation duration 0.3s with linear
     if (props.vehicle.lastUpdated !== lastUpdated) return
 
     const diff = now - startTime
-    if (diff > 300) {
+    if (diff > TotalVehicleAnimationDuration) {
       const endPosition = pathElement.getPointAtLength(totalLength)
-      realtimePosition.x = endPosition.x
-      realtimePosition.y = endPosition.y
+      realtimePosition.value = { x: endPosition.x, y: endPosition.y }
       return
     }
 
-    const position = pathElement.getPointAtLength(totalLength / 300 * diff)
-    realtimePosition.x = position.x
-    realtimePosition.y = position.y
+    const position = pathElement.getPointAtLength(totalLength / TotalVehicleAnimationDuration * diff)
+    realtimePosition.value = { x: position.x, y: position.y }
+    // realtimePosition.x = position.x
+    // realtimePosition.y = position.y
 
     globalThis.requestAnimationFrame(step)
   }
@@ -130,6 +113,11 @@ function trackVehiclePosition(d: D, lastUpdated: number) {
   // https://developer.mozilla.org/ko/docs/Web/API/Window/requestAnimationFrame
   globalThis.requestAnimationFrame(step)
 }
+
+makeDInUpdateWorker.addEventListener('message',
+  (e: MessageEvent<{ d: string, lastUpdate?: number }>) => {
+    if (e.data.lastUpdate) trackVehiclePosition(e.data.d, e.data.lastUpdate)
+  })
 
 const nextPointPosition = usePointPoisiton(toRef(props.vehicle, 'nextPoint'))
 const commandPoint = useCommandPointPosition(
@@ -142,16 +130,6 @@ const commandLineColor = computed(() => {
   else if (commandPoint.type.value === 'dropoff') return 'rgb(65, 175, 250)'
   else return undefined
 })
-
-
-// const test = 120
-// const threshold = 80
-
-// const outerR = computed(() => {
-//   const calculated = test / scaleInfo.value.pixelPerMm
-//   return calculated < threshold ? threshold : calculated
-// })
-// const innerR = computed(() => outerR.value / 8 * 5)
 
 function onTooltipOn() {
   emit('tooltipon', {
@@ -174,6 +152,8 @@ function onContextmenu() {
     value: deepCopy(props.vehicle)
   })
 }
+
+onUnmounted(() => { makeDInUpdateWorker.terminate() })
 </script>
 
 <template>
@@ -241,7 +221,7 @@ function onContextmenu() {
     <!-- cargo state end -->
 
     <!-- <text y="70">{{ props.vehicle.logicalId }}</text> -->
-    <MapReverseRotate :x="realtimePosition.x" :y="realtimePosition.y">
+    <MapReverseRotate v-if="realtimePosition" :x="realtimePosition.x" :y="realtimePosition.y">
       <!-- vehicle id -->
       <RasterizedText class="invert" x="-150" y="-65" :text="props.vehicle.logicalId" />
       <!-- vehicle order with priority(hotlot) -->
@@ -347,6 +327,7 @@ function onContextmenu() {
 
   <use
     :href="`#vehicle-${props.vehicle.id}`"
+    v-if="realtimePosition"
     :x="realtimePosition.x"
     :y="realtimePosition.y"
     @click.left="onFocus()"
@@ -358,7 +339,7 @@ function onContextmenu() {
 
   <!-- next point line -->
   <line
-    v-if="nextPointPosition"
+    v-if="nextPointPosition && realtimePosition"
     class="line"
     stroke="rgb(255, 220, 70)"
     stroke-width="40"
@@ -371,7 +352,7 @@ function onContextmenu() {
 
   <!-- pickup or dropoff line -->
   <line
-    v-if="commandPoint.position.value"
+    v-if="commandPoint.position.value && realtimePosition"
     class="line"
     :stroke="commandLineColor"
     stroke-width="40"
