@@ -1,5 +1,4 @@
 import { ICoordinate, IMapSize } from './drawing.model'
-// import { MapTypes } from '../Enums'
 
 interface IBuffer {
   id: number

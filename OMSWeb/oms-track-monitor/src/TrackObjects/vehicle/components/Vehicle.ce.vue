@@ -4,16 +4,10 @@ import { Vehicle } from '../types/Vehicle'
 import RasterizedText from 'MapObjects/map/components/RasterizedText.ce.vue';
 import { findPointById, usePointPoisiton } from '../../point/points';
 import { findSegmentByPoints } from '../../segment/segments';
-// import { createPathElement, getPositionFromD } from '../../utils/svg/path';
 import { Segment } from '../../segment/types/Segment';
-// import { encodeCommandsToD, moveTo, slicePathCommands } from '../../utils/svg/pathSegment';
 import { useGroupColor } from '../../group/groups';
-// import { D } from '../../types/D';
 import MapReverseRotate from 'MapObjects/rotate/components/MapReverseRotate.ce.vue';
 import { useCommandPointPosition } from '../utils/lines';
-// import { RootEmitInjectionKey, RootEmits } from '../../types/RootEmits';
-// import { deepCopy } from '../../utils/deepCopy';
-
 import VehicleStateMaintainedSvg from '../assets/VehicleStateMaintainedSvg.ce.vue'
 import VehicleStatePreventPushSvg from '../assets/VehicleStatePreventPushSvg.ce.vue'
 import VehicleStatePreventCallSvg from '../assets/VehicleStatePreventCallSvg.ce.vue'
@@ -103,15 +97,11 @@ watch(() => props.vehicle.lastUpdated, () => {
     return currentPositionPathCommands
   })()
 
-  const d = encodeCommandsToD(pathCommands)
-
-  // animateMotionPath.value = d
-  // animateMotionRef.value?.beginElement()
-  if (props.vehicle.updateType !== 'NoAnimation')
-    trackVehiclePosition(d)
+  if (props.vehicle.updateType !== 'NoAnimation' && props.vehicle.lastUpdated)
+    trackVehiclePosition(encodeCommandsToD(pathCommands), props.vehicle.lastUpdated)
 })
 
-function trackVehiclePosition(d: D) {
+function trackVehiclePosition(d: D, lastUpdated: number) {
   const pathElement = createPathElement(d)
   const totalLength = pathElement.getTotalLength()
   // https://developer.mozilla.org/ko/docs/Web/API/Performance/now
@@ -120,6 +110,8 @@ function trackVehiclePosition(d: D) {
   function step(now: DOMHighResTimeStamp) {
     // time with microsecond
     // animation duration 0.3s with linear
+    if (props.vehicle.lastUpdated !== lastUpdated) return
+
     const diff = now - startTime
     if (diff > 300) {
       const endPosition = pathElement.getPointAtLength(totalLength)

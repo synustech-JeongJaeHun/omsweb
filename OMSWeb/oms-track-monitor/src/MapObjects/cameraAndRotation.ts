@@ -1,5 +1,6 @@
 import { Position } from "src/types/Position"
-import { cameraInfo, getHeightFromWidthAndRatio, getWidthFromHeightAndRatio, moveCamera, resizeViewBox } from "./map/camera"
+import { cameraTotalInfo, moveCamera, resizeViewBox } from "./map/camera"
+import { getHeightFromWidthAndRatio, getWidthFromHeightAndRatio } from "./map/elementRect"
 import { mapSizePropertiesInfo } from "./map/mapSizeProperties"
 import { rotate, rotationInfo } from "./rotate/rotate"
 
@@ -14,8 +15,8 @@ type Objective = {
 
 function getCameraAndRotation() {
   return {
-    position: { x: cameraInfo.value.centerX, y: cameraInfo.value.centerY },
-    viewBox: { width: cameraInfo.value.viewBoxWidth, height: cameraInfo.value.viewBoxHeight },
+    position: { x: cameraTotalInfo.value.centerX, y: cameraTotalInfo.value.centerY },
+    viewBox: { width: cameraTotalInfo.value.viewBoxWidth, height: cameraTotalInfo.value.viewBoxHeight },
     rotation: rotationInfo.value
   }
 }
@@ -31,7 +32,7 @@ function centerZoom() {
       x: mapSizePropertiesInfo.value.centerX,
       y: mapSizePropertiesInfo.value.centerY
     },
-    viewBox: cameraInfo.value.viewBoxHeight > cameraInfo.value.viewBoxWidth
+    viewBox: cameraTotalInfo.value.viewBoxHeight > cameraTotalInfo.value.viewBoxWidth
       ? {
         width: mapSizePropertiesInfo.value.width * 2,
         height: getHeightFromWidthAndRatio(mapSizePropertiesInfo.value.width * 2)
@@ -56,66 +57,68 @@ function approachToPosition(position: Position) {
 }
 
 
-const AnimationFrameCount = 20
+// time with microsecond
+// animation duration 2.0s with linear
+const TotalAnimationDuration = 800
 let isApproaching = false
 function approachIterative(objective: Objective) {
   if (isApproaching) return
   else isApproaching = true
 
-  let current = {
+  const start = {
     position: {
-      x: cameraInfo.value.centerX,
-      y: cameraInfo.value.centerY
+      x: cameraTotalInfo.value.centerX,
+      y: cameraTotalInfo.value.centerY
     },
     viewBox: {
-      width: cameraInfo.value.viewBoxWidth,
-      height: cameraInfo.value.viewBoxHeight
+      width: cameraTotalInfo.value.viewBoxWidth,
+      height: cameraTotalInfo.value.viewBoxHeight
     },
     rotation: rotationInfo.value
   }
 
   const term = {
     position: {
-      x: (objective.position.x - current.position.x) / AnimationFrameCount,
-      y: (objective.position.y - current.position.y) / AnimationFrameCount,
+      x: (objective.position.x - start.position.x),
+      y: (objective.position.y - start.position.y),
     },
     viewBox: {
-      width: (objective.viewBox.width - current.viewBox.width) / AnimationFrameCount,
-      height: (objective.viewBox.height - current.viewBox.height) / AnimationFrameCount,
+      width: (objective.viewBox.width - start.viewBox.width),
+      height: (objective.viewBox.height - start.viewBox.height),
     },
-    rotation: (current.rotation - objective.rotation) / AnimationFrameCount
+    rotation: (start.rotation - objective.rotation)
   }
 
-  let count = 0
+  const startTime = performance.now()
 
   function step() {
-    if (count === AnimationFrameCount) {
+    const now = performance.now()
+    const passedInTotalRatio = (now - startTime) / TotalAnimationDuration
+
+    if (passedInTotalRatio >= 1) {
       isApproaching = false
+
+      moveCamera(objective.position)
+      resizeViewBox(objective.viewBox.width, objective.viewBox.height)
+      rotate(objective.rotation)
+
       return
     }
 
-    const next = {
-      position: {
-        x: current.position.x + term.position.x,
-        y: current.position.y + term.position.y,
-      },
-      viewBox: {
-        width: current.viewBox.width + term.viewBox.width,
-        height: current.viewBox.height + term.viewBox.height
-      },
-      rotation: current.rotation - term.rotation
-    }
 
-    moveCamera(next.position)
-    resizeViewBox(next.viewBox.width, next.viewBox.height)
-    rotate(next.rotation)
+    moveCamera({
+      x: start.position.x + term.position.x * passedInTotalRatio,
+      y: start.position.y + term.position.y * passedInTotalRatio,
+    })
+    resizeViewBox(
+      start.viewBox.width + term.viewBox.width * passedInTotalRatio,
+      start.viewBox.height + term.viewBox.height * passedInTotalRatio
+    )
+    rotate(start.rotation + term.rotation * passedInTotalRatio)
 
-    current = next
-    count += 1
-
-    setTimeout(() => { globalThis.requestAnimationFrame(step) }, 20);
+    globalThis.requestAnimationFrame(step);
   }
-  step()
+  globalThis.requestAnimationFrame(step);
 }
 
 

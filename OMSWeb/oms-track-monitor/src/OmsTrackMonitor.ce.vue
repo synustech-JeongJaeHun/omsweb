@@ -74,7 +74,7 @@ const props = defineProps<{
   isBufferVisible: Boolish,
   isGroupVisible: Boolish,
   isClusterVisible: Boolish,
-  isOverlappingObjectsVisible: Boolish, // not implemented
+  isOverlappingObjectsVisible: Boolish, // TODO
 
   // color
   backgroundColor: Stringlish
@@ -200,7 +200,6 @@ const exposed: IOmsTrackMonitor = {
       case 'segment':
         const segment = findSegmentById(id)
         if (segment) {
-          const path = createPathElement(segment.d)
           // setFocusObject(segment)
         }
         break;

@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { cameraInfo } from 'MapObjects/map/camera';
+import { cameraTotalInfo } from 'MapObjects/map/camera';
 </script>
 
 <template>
   <rect
-    :x="cameraInfo.x"
-    :y="cameraInfo.y"
-    :width="cameraInfo.viewBoxWidth"
-    :height="cameraInfo.viewBoxHeight"
+    :x="cameraTotalInfo.x"
+    :y="cameraTotalInfo.y"
+    :width="cameraTotalInfo.viewBoxWidth"
+    :height="cameraTotalInfo.viewBoxHeight"
     fill="rgba(0,0,0,0.3)"
     stroke="black"
     stroke-width="500"

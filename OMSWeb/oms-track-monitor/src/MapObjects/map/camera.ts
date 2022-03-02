@@ -1,78 +1,74 @@
 import { Position } from "src/types/Position";
 import { computed, reactive, readonly, ref, watch } from "vue";
 import { DefaultHeight, DefaultWidth } from "./default";
-import { elementRectInfo } from "./elementRect";
+import { elementRectInfo, getHeightFromWidthAndRatio, getWidthFromHeightAndRatio } from "./elementRect";
 
-const camera = reactive({
+const cameraPosition = reactive({
   x: 0,
   y: 0,
-  viewBoxWidth: DefaultWidth,
-  viewBoxHeight: DefaultHeight,
-  ratio: DefaultWidth / DefaultHeight
 })
+const cameraPositionInfo = readonly(cameraPosition)
 
-const cameraInfo = readonly(computed(() => ({
-  ...camera,
-  centerX: camera.x + (camera.viewBoxWidth / 2),
-  centerY: camera.y + (camera.viewBoxHeight / 2),
-  maxX: camera.x + camera.viewBoxWidth,
-  maxY: camera.x + camera.viewBoxHeight,
-  viewBox: `${Math.ceil(camera.x)} ${Math.ceil(camera.y)} ${Math.ceil(camera.viewBoxWidth)} ${Math.ceil(camera.viewBoxHeight)}`
+const cameraViewBox = reactive({
+  width: DefaultWidth,
+  height: DefaultHeight,
+})
+const cameraViewBoxInfo = readonly(cameraViewBox)
+
+const cameraTotalInfo = readonly(computed(() => ({
+  x: cameraPositionInfo.x,
+  y: cameraPositionInfo.y,
+  viewBoxWidth: cameraViewBoxInfo.width,
+  viewBoxHeight: cameraViewBoxInfo.height,
+  centerX: cameraPositionInfo.x + (cameraViewBoxInfo.width / 2),
+  centerY: cameraPositionInfo.y + (cameraViewBoxInfo.height / 2),
+  maxX: cameraPositionInfo.x + cameraViewBoxInfo.width,
+  maxY: cameraPositionInfo.x + cameraViewBoxInfo.height,
+  viewBox: `${Math.ceil(cameraPositionInfo.x)} ${Math.ceil(cameraPositionInfo.y)} ${Math.ceil(cameraViewBoxInfo.width)} ${Math.ceil(cameraViewBoxInfo.height)}`
 })))
 
-function getWidthFromHeightAndRatio(height: number) {
-  return cameraInfo.value.ratio * height
-}
-
-function getHeightFromWidthAndRatio(width: number) {
-  return width / cameraInfo.value.ratio
-}
-
 function resizeViewBox(width: number, height: number) {
-  camera.x = cameraInfo.value.centerX - (width / 2)
-  camera.y = cameraInfo.value.centerY - (height / 2)
-  camera.viewBoxWidth = width
-  camera.viewBoxHeight = height
+  cameraPosition.x = cameraTotalInfo.value.centerX - (width / 2)
+  cameraPosition.y = cameraTotalInfo.value.centerY - (height / 2)
+  cameraViewBox.width = width
+  cameraViewBox.height = height
 }
 
 function moveCamera(center: Position) {
   const
-    halfWidth = cameraInfo.value.viewBoxWidth / 2,
-    halfHeight = cameraInfo.value.viewBoxHeight / 2
+    halfWidth = cameraViewBoxInfo.width / 2,
+    halfHeight = cameraViewBoxInfo.height / 2
 
-  camera.x = center.x - halfWidth
-  camera.y = center.y - halfHeight
+  cameraPosition.x = center.x - halfWidth
+  cameraPosition.y = center.y - halfHeight
 }
 
 watch(elementRectInfo, () => {
-  camera.ratio = elementRectInfo.width / elementRectInfo.height
-
   if (elementRectInfo.width > elementRectInfo.height)
     resizeViewBox(
-      cameraInfo.value.viewBoxWidth,
-      getHeightFromWidthAndRatio(cameraInfo.value.viewBoxWidth)
+      cameraViewBoxInfo.width,
+      getHeightFromWidthAndRatio(cameraViewBoxInfo.width)
     )
-
   else
     resizeViewBox(
-      getWidthFromHeightAndRatio(cameraInfo.value.viewBoxHeight),
-      cameraInfo.value.viewBoxHeight
+      getWidthFromHeightAndRatio(cameraViewBoxInfo.height),
+      cameraViewBoxInfo.height
     )
 
-  moveCamera({ x: cameraInfo.value.centerX, y: cameraInfo.value.centerY })
+  moveCamera({ x: cameraTotalInfo.value.centerX, y: cameraTotalInfo.value.centerY })
 })
 
 function zoom(action: "In" | "Out", position: Position, count: number) {
   // TODO using position
   if (action === 'In') {
     const
-      width = cameraInfo.value.viewBoxWidth * (0.7 ** count),
+      width = cameraViewBoxInfo.width * (0.7 ** count),
       height = getHeightFromWidthAndRatio(width)
     resizeViewBox(width, height)
   }
   else {
     const
-      width = cameraInfo.value.viewBoxWidth * (1.3 ** count),
+      width = cameraViewBoxInfo.width * (1.3 ** count),
       height = getHeightFromWidthAndRatio(width)
 
     resizeViewBox(width, height)
@@ -126,15 +122,17 @@ function panByMouse(event: MouseEvent) {
   const { movementX, movementY } = event
 
   moveCamera({
-    x: cameraInfo.value.centerX - (0.003 * movementX * cameraInfo.value.viewBoxWidth),
+    x: cameraTotalInfo.value.centerX - (0.003 * movementX * cameraViewBoxInfo.width),
     // 📐🛑 Be careful! logic is dependent on invert
-    y: cameraInfo.value.centerY - (0.003 * (-1) * movementY * cameraInfo.value.viewBoxHeight)
+    y: cameraTotalInfo.value.centerY - (0.003 * (-1) * movementY * cameraViewBoxInfo.width)
   })
   hasPanned.value = true
 }
 
 export {
-  cameraInfo,
+  cameraPositionInfo,
+  cameraViewBoxInfo,
+  cameraTotalInfo,
   resizeViewBox,
   moveCamera,
   zoomIn1Time,
@@ -144,6 +142,4 @@ export {
   exitPanning,
   panByMouse,
   handleMouseUp,
-  getHeightFromWidthAndRatio,
-  getWidthFromHeightAndRatio
 }

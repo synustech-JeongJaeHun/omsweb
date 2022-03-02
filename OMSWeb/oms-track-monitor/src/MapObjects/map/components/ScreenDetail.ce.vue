@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { cameraInfo } from '../camera';
+import { cameraTotalInfo } from '../camera';
 import { rotationInfo } from 'MapObjects/rotate/rotate';
 import { scaleInfo } from '../../scale/scale';
-import { elementRectInfo } from '../elementRect';
+import { elementRectInfo, getElementRatio } from '../elementRect';
 import { mapSizePropertiesInfo } from '../mapSizeProperties';
 import { scaleStylesInfo } from 'src/styles/styles';
 
@@ -29,25 +29,25 @@ const isShow = ref(false)
 
         <dl>
           <dt>x y</dt>
-          <dd>x: {{ cameraInfo.x.toFixed(2) }} y: {{ cameraInfo.y.toFixed(2) }}</dd>
+          <dd>x: {{ cameraTotalInfo.x.toFixed(2) }} y: {{ cameraTotalInfo.y.toFixed(2) }}</dd>
 
           <dt>viewBox</dt>
-          <dd>w: {{ cameraInfo.viewBoxWidth.toFixed(2) }} h: {{ cameraInfo.viewBoxHeight.toFixed(2) }}</dd>
+          <dd>w: {{ cameraTotalInfo.viewBoxWidth.toFixed(2) }} h: {{ cameraTotalInfo.viewBoxHeight.toFixed(2) }}</dd>
 
           <dt>element</dt>
           <dd>w: {{ elementRectInfo.width }} h: {{ elementRectInfo.height }}</dd>
 
+          <dt>ratio</dt>
+          <dd>{{ getElementRatio().toFixed(8) }}</dd>
+
           <dt>center</dt>
-          <dd>x: {{ cameraInfo.centerX.toFixed(2) }} y: {{ cameraInfo.centerY.toFixed(2) }}</dd>
+          <dd>x: {{ cameraTotalInfo.centerX.toFixed(2) }} y: {{ cameraTotalInfo.centerY.toFixed(2) }}</dd>
 
           <dt>max</dt>
-          <dd>x: {{ cameraInfo.maxX.toFixed(2) }} y: {{ cameraInfo.maxY.toFixed(2) }}</dd>
-
-          <dt>ratio</dt>
-          <dd>{{ cameraInfo.ratio.toFixed(8) }}</dd>
+          <dd>x: {{ cameraTotalInfo.maxX.toFixed(2) }} y: {{ cameraTotalInfo.maxY.toFixed(2) }}</dd>
 
           <dt>viewBox</dt>
-          <dd>{{ cameraInfo.viewBox }}</dd>
+          <dd>{{ cameraTotalInfo.viewBox }}</dd>
         </dl>
       </details>
 

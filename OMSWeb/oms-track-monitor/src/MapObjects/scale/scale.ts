@@ -1,10 +1,10 @@
-import { computed, reactive, readonly, Ref, watchEffect } from "vue";
-import { cameraInfo } from "../map/camera";
+import { computed, readonly, Ref } from "vue";
+import { cameraViewBoxInfo } from "../map/camera";
 import { elementRectInfo } from "../map/elementRect";
 
 const scale = computed(() => ({
-  mmPerPixel: cameraInfo.value.viewBoxWidth / elementRectInfo.width,
-  pixelPerMm: elementRectInfo.width / cameraInfo.value.viewBoxWidth
+  mmPerPixel: cameraViewBoxInfo.width / elementRectInfo.width,
+  pixelPerMm: elementRectInfo.width / cameraViewBoxInfo.width
 }))
 
 const scaleInfo = readonly(scale)

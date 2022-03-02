@@ -12,4 +12,17 @@ function setElementRect(width: number, height: number) {
 
 const elementRectInfo = readonly(elementRect)
 
-export { elementRectInfo, setElementRect }
+function getElementRatio() {
+  return elementRectInfo.width / elementRectInfo.height
+}
+
+function getWidthFromHeightAndRatio(height: number) {
+  return getElementRatio() * height
+}
+
+function getHeightFromWidthAndRatio(width: number) {
+  return width / getElementRatio()
+}
+
+
+export { elementRectInfo, setElementRect, getElementRatio, getWidthFromHeightAndRatio, getHeightFromWidthAndRatio }

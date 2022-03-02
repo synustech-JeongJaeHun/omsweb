@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { cameraInfo } from '../camera'
+import { cameraTotalInfo } from '../camera'
 import { elementRectInfo } from '../elementRect';
 import MapRotate from 'MapObjects/rotate/components/MapRotate.ce.vue';
 // https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/shape-rendering
@@ -14,7 +14,7 @@ import MapRotate from 'MapObjects/rotate/components/MapRotate.ce.vue';
     y="0"
     :width="elementRectInfo.width"
     :height="elementRectInfo.height"
-    :viewBox="cameraInfo.viewBox"
+    :viewBox="cameraTotalInfo.viewBox"
     shape-rendering="optimizeSpeed"
     text-rendering="optimizeSpeed"
   >
