@@ -1,3 +1,5 @@
+import { CanBeFocused } from "src/MapObjects/focus/types/CanBeFocused"
+
 type Buffer = {
   id: number
   logicalId: string
@@ -10,9 +12,6 @@ type Buffer = {
 
   // nullable
   group?: number
-
-  // for tm
-  isFocused?: boolean
-}
+} & CanBeFocused
 
 export { Buffer } 

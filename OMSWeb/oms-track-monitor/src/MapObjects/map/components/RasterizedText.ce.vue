@@ -11,5 +11,5 @@ const imageDataUrl = readonly(computed(() => convertStringToImageDataUrl(props.t
 </script>
 
 <template>
-  <image v-if="imageDataUrl" :href="imageDataUrl" data-show-zoom-level-equal-or-bigger="3" />
+  <image v-if="imageDataUrl" :href="imageDataUrl" />
 </template>

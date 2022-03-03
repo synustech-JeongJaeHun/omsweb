@@ -38,6 +38,7 @@ import { makeGroups } from './TrackObjects/group/utils/group'
 import { groups } from './TrackObjects/group/groups'
 import { makeSegmentsFromParts } from './TrackObjects/segment/utils/segment'
 import { makeClustersFromSegments } from './TrackObjects/cluster/utils/cluster'
+import { setFocusedObject } from 'src/MapObjects/focus/focus'
 
 /**
  * https://v3.vuejs.org/api/sfc-script-setup.html#typescript-only-features
@@ -190,37 +191,37 @@ const exposed: IOmsTrackMonitor = {
       case 'vehicle':
         const vehicle = findVehicleById(id)
         if (vehicle) {
-          // setFocusObject(point)
+          // setFocusedObject(vehicle)
         }
         break;
       case 'point':
         const point = findPointById(id)
         if (point) {
-          // setFocusObject(point)
+          setFocusedObject(point)
         }
         break;
       case 'segment':
         const segment = findSegmentById(id)
         if (segment) {
-          // setFocusObject(segment)
+          setFocusedObject(segment)
         }
         break;
       case 'station':
         const station = findStationById(id)
         if (station) {
-          // setFocusObject(station)
+          setFocusedObject(station)
         }
         break;
       case 'buffer':
         const buffer = findBufferById(id)
         if (buffer) {
-          // setFocusObject(buffer)
+          setFocusedObject(buffer)
         }
         break;
       case 'mtl':
         const mtl = findMtlById(id)
         if (mtl) {
-          // setFocusObject(mtl)
+          setFocusedObject(mtl)
         }
 
         break;
@@ -366,6 +367,8 @@ defineExpose(exposed)
 <style src="./styles/sheets/rotate.css"></style>
 <style src="./styles/sheets/invert.css"></style>
 <style src="./styles/sheets/visibility.css"></style>
+<style src="./styles/sheets/focus.css"></style>
+<style src="./styles/sheets/fixed-scale.css"></style>
 
 <!-- dynamic css for configurable styling -->
 <style>
@@ -400,6 +403,9 @@ defineExpose(exposed)
 }
 
 #segment-layer .segment .segment-direction {
+  stroke: v-bind(
+    "parseStringProp(ColorDefault.segmentDirection, props.segmentDirectionColor)"
+  );
   fill: v-bind(
     "parseStringProp(ColorDefault.segmentDirection, props.segmentDirectionColor)"
   );

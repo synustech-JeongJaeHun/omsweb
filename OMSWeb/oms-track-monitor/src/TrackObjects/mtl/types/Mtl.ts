@@ -1,3 +1,5 @@
+import { CanBeFocused } from "src/MapObjects/focus/types/CanBeFocused"
+
 type Mtl = {
   id: number
   logicalId: string
@@ -10,9 +12,6 @@ type Mtl = {
   position?: any
   mode?: any
   errorList?: any
-
-  // for tm
-  isFocused?: boolean
-}
+} & CanBeFocused
 
 export { Mtl }

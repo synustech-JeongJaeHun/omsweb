@@ -1,3 +1,4 @@
+import { CanBeFocused } from "src/MapObjects/focus/types/CanBeFocused";
 import { D } from "../../../types/D";
 import { PathCommand } from "../../../utils/svg/pathSegment";
 import { SegmentPart } from "./SegmentPart";
@@ -18,9 +19,6 @@ type Segment = {
 
   pathCommands: PathCommand[]
   d: D
-
-  // for tm
-  isFocused?: boolean
-}
+} & CanBeFocused
 
 export { Segment }

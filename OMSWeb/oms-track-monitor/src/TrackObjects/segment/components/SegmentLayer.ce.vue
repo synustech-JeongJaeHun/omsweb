@@ -2,17 +2,19 @@
 import Layer from 'MapObjects/map/components/Layer.ce.vue';
 import Segment from './Segment.ce.vue';
 import { segments } from '../segments'
-import SegmentDirectionTriangle from './SegmentDirectionTriangle.ce.vue';
-import { toRef } from 'vue';
 import { visibleStylesInfo } from 'src/styles/styles';
-
-const isDirectionVisible = toRef(visibleStylesInfo, 'segmentDirection')
+import { scaleStylesInfo } from 'src/styles/styles';
 </script>
 
 <template>
-  <Layer id="segment-layer" :data-is-direction-visible="isDirectionVisible">
+  <Layer id="segment-layer" :data-is-direction-visible="visibleStylesInfo.segmentDirection">
     <defs>
-      <SegmentDirectionTriangle />
+      <path
+        id="segment-direction-triangle"
+        class="fixed-scale-stroke"
+        :stroke-width="scaleStylesInfo.segmentDirection"
+        :d="`M 0 5` + `L -5 -5` + `L 5 -5` + `Z`"
+      />
     </defs>
     <Segment v-for="segment of segments" :key="segment.id" :segment="segment" />
   </Layer>

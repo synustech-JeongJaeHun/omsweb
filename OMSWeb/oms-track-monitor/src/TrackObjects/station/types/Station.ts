@@ -1,3 +1,5 @@
+import { CanBeFocused } from "src/MapObjects/focus/types/CanBeFocused"
+
 type Station = {
   id: number
   logicalId: string
@@ -10,9 +12,6 @@ type Station = {
 
   group?: number
   carrierType?: string
-
-  // for tm
-  isFocused?: boolean
-}
+} & CanBeFocused
 
 export { Station }

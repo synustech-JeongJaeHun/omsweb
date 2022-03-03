@@ -1,36 +1,30 @@
-#point-layer[data-is-label-visible='false' i] .point .label {
+/* not using right now */
+/* #point-layer[data-is-label-visible='false' i] .point .label {
   display: none;
-  /* visibility: hidden; */
 }
 
 #station-layer[data-is-station-visible='false' i] {
   display: none;
-  /* visibility: hidden; */
 }
 
 #buffer-layer[data-is-buffer-visible='false' i] {
   display: none;
-  /* visibility: hidden; */
 }
 
 #layer-container[data-is-group-visible='false' i] .group-shadow {
   display: none;
-  /* visibility: hidden; */
 }
 
 #cluster-layer[data-is-cluster-visible='false' i] {
   display: none;
-  /* visibility: hidden; */
 }
 
 #segment-layer[data-is-direction-visible='false' i]
   .segment
   .segment-direction {
   display: none;
-  /* visibility: hidden; */
 }
 
 #vehicle-layer[data-is-line-visible='false' i] .line {
   display: none;
-  /* visibility: hidden; */
-}
+} */

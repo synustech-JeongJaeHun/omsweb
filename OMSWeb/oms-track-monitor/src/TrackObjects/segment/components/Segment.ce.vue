@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { Segment } from '../types/Segment'
-import { inject, ref, toRef, watchEffect } from 'vue';
+import { inject, ref, watchEffect } from 'vue';
 import { RootEmitInjectionKey, RootEmits } from 'src/types/RootEmits';
-import { useScreenFixedScale } from 'src/MapObjects/scale/scale';
 import { scaleStylesInfo } from 'src/styles/styles';
 import { getAngleFromTwoPoints } from 'src/utils/angle';
 import { deepCopy } from 'src/utils/deepCopy';
@@ -13,9 +12,6 @@ const props = defineProps<{
 const emit = inject<RootEmits>(RootEmitInjectionKey)!
 
 const pathElement = ref<SVGPathElement>()
-
-const threshold = 20
-const width = useScreenFixedScale(toRef(scaleStylesInfo, 'segmentWidth'), threshold)
 
 const position = ref<DOMPoint>()
 const angle = ref<number>()
@@ -58,11 +54,18 @@ function onContextmenu() {
     @mouseleave="onTooltipOff()"
   >
     <path
-      ref="pathElement"
-      class="segment-path"
+      v-if="props.segment.isFocused"
+      class="focus fixed-scale-stroke"
       :d="props.segment.d"
       fill="none"
-      :stroke-width="width"
+      :stroke-width="scaleStylesInfo.segmentWidth * 3"
+    />
+    <path
+      ref="pathElement"
+      class="segment-path fixed-scale-stroke"
+      :d="props.segment.d"
+      fill="none"
+      :stroke-width="scaleStylesInfo.segmentWidth"
     />
     <use
       v-if="position !== undefined && angle !== undefined"

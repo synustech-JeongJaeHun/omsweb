@@ -1,3 +1,5 @@
+import { CanBeFocused } from "src/MapObjects/focus/types/CanBeFocused"
+
 type Point = {
   id: number
   logicalId: string
@@ -8,9 +10,6 @@ type Point = {
   // nullable
   group?: number
   isHome?: boolean
-
-  // for tm
-  isFocused?: boolean
-}
+} & CanBeFocused
 
 export { Point }

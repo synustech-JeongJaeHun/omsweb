@@ -1,0 +1,8 @@
+.fixed-scale-stroke {
+  vector-effect: non-scaling-stroke;
+}
+
+/* not supported in current browsers */
+/* .fixed-scale-size {
+  vector-effect: non-scaling-size;
+} */
