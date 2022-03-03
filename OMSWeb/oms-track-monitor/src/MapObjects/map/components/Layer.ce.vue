@@ -2,14 +2,15 @@
 import { cameraTotalInfo } from '../camera'
 import { elementRectInfo } from '../elementRect';
 import MapRotate from 'MapObjects/rotate/components/MapRotate.ce.vue';
+import { scaleLevelInfo } from 'src/MapObjects/scale/scale';
 // https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/shape-rendering
 // https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/text-rendering
-// https://developer.mozilla.org/ko/docs/Web/CSS/will-change
 // https://developer.mozilla.org/en-US/docs/Web/CSS/custom-ident
 </script>
 
 <template>
   <svg
+    class="will-change-viewBox"
     x="0"
     y="0"
     :width="elementRectInfo.width"
@@ -17,6 +18,7 @@ import MapRotate from 'MapObjects/rotate/components/MapRotate.ce.vue';
     :viewBox="cameraTotalInfo.viewBox"
     shape-rendering="optimizeSpeed"
     text-rendering="optimizeSpeed"
+    :data-scale-level="scaleLevelInfo"
   >
     <!-- 
       rotate not working in svg, so use g for rotate

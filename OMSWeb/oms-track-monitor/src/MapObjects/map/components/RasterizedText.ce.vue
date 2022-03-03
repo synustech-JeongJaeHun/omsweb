@@ -6,10 +6,10 @@ const props = defineProps<{
   text: string,
 }>()
 
-const imageDataUrl = readonly(computed(() => convertStringToImageDataUrl(props.text)))
-
+const rasterized = readonly(computed(() => convertStringToImageDataUrl(props.text)))
 </script>
 
 <template>
-  <image v-if="imageDataUrl" :href="imageDataUrl" />
+  <!-- <text class="select-none" text-rendering="optimizeSpeed">{{ props.text }}</text> -->
+  <image v-if="rasterized" :href="rasterized.dataURL" />
 </template>

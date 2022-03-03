@@ -7,6 +7,7 @@ import MapReverseRotate from 'MapObjects/rotate/components/MapReverseRotate.ce.v
 import { RootEmitInjectionKey, RootEmits } from 'src/types/RootEmits';
 import { getPositionForBufferOrStation } from 'src/TrackObjects/utils/locationStationBuffer';
 import { deepCopy } from 'src/utils/deepCopy';
+import ScaleByScale from 'src/MapObjects/scale/component/ScaleByScale.ce.vue';
 
 const props = defineProps<{
   station: Station
@@ -46,20 +47,25 @@ function onContextmenu() {
     :x="position.x"
     :y="position.y"
   >
-    <use v-show="groupColor" href="#station-group-shadow" class="group-shadow" :fill="groupColor" />
-    <use
-      href="#station"
-      class="station-path"
-      stroke-width="15"
-      @click.left="onFocus()"
-      @click.right="onContextmenu()"
-      @mouseover="onTooltipOn()"
-      @mouseout="onTooltipOff()"
-      @mouseleave="onTooltipOff()"
-    />
-    <!-- <text y="70">{{ props.station.logicalId }}</text> -->
-    <MapReverseRotate>
-      <RasterizedText class="invert" x="75" y="45" :text="props.station.logicalId" />
-    </MapReverseRotate>
+    <ScaleByScale>
+      <MapReverseRotate>
+        <use
+          v-show="groupColor"
+          href="#station-group-shadow"
+          class="group-shadow"
+          :fill="groupColor"
+        />
+        <use
+          href="#station"
+          class="station-path"
+          @click.left="onFocus()"
+          @click.right="onContextmenu()"
+          @mouseover="onTooltipOn()"
+          @mouseout="onTooltipOff()"
+          @mouseleave="onTooltipOff()"
+        />
+        <RasterizedText class="invert" x="15" y="-10" :text="props.station.logicalId" />
+      </MapReverseRotate>
+    </ScaleByScale>
   </svg>
 </template>

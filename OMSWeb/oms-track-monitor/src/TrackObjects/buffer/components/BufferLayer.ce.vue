@@ -2,20 +2,12 @@
 import Layer from 'MapObjects/map/components/Layer.ce.vue';
 import Buffer from './Buffer.ce.vue';
 import { buffers } from '../buffers'
-import { toRef } from 'vue';
 import { visibleStylesInfo } from 'src/styles/styles';
-
-const isBufferVisible = toRef(visibleStylesInfo, 'buffer')
 </script>
 
 <template>
-  <Layer id="buffer-layer" :data-is-buffer-visible="isBufferVisible">
+  <Layer id="buffer-layer" :data-is-buffer-visible="visibleStylesInfo.buffer">
     <defs>
-      <!-- <polygon id="buffer" points="30,60 60,30 60,-30 30,-60 -30,-60 -60,-30 -60,30 -30,60" /> -->
-      <!-- <polygon
-        id="buffer-group-shadow"
-        points="20,40 40,20 40,-20 20,-40 -20,-40 -40,-20 -40,20 -20,40"
-      />-->
       <!-- 
         pointer-events for event from bounding-box
         https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/pointer-events
@@ -28,19 +20,20 @@ const isBufferVisible = toRef(visibleStylesInfo, 'buffer')
         id="buffer"
         pointer-events="bounding-box"
         fill="none"
+        stroke-width="4"
         d="
-        M -56 -18 
-        A 36 36 0 0 1 -18 -56
-        M 18 -56
-        A 36 36 0 0 1 56 -18
-        M 56 18
-        A 36 36 0 0 1 18 56
-        M -18 56 
-        A 36 36 0 0 1 -56 18
+        M -12 -4 
+        A 8 8 0 0 1 -4 -12
+        M 4 -12
+        A 8 8 0 0 1 12 -4
+        M 12 4
+        A 8 8 0 0 1 4 12
+        M -4 12 
+        A 8 8 0 0 1 -12 4
         "
       />
       <!-- <circle id="buffer" r="50" stroke="black" stroke-width="10" fill="none" /> -->
-      <circle id="buffer-group-shadow" r="85" />
+      <circle id="buffer-group-shadow" r="20" />
     </defs>
 
     <Buffer v-for="buffer of buffers" :key="buffer.id" :buffer="buffer" />

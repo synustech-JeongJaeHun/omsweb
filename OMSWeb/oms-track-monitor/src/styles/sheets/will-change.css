@@ -1,0 +1,4 @@
+/* https://developer.mozilla.org/ko/docs/Web/CSS/will-change */
+.will-change-viewBox {
+  will-change: viewBox;
+}

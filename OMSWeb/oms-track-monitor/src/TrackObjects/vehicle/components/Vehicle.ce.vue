@@ -15,8 +15,9 @@ import { RootEmitInjectionKey, RootEmits } from 'src/types/RootEmits';
 import { createPathElement, getPositionFromD } from 'src/utils/svg/path';
 import { D } from 'src/types/D';
 import { deepCopy } from 'src/utils/deepCopy';
-import MakeDInUpdateWorker from '../utils/workers/makeDInUpdate?worker&inline'
+import MakeDInUpdateWorker from '../utils/workers/MakeDInUpdateWorker?worker&inline'
 import { Position } from 'src/types/Position';
+import ScaleByScale from 'src/MapObjects/scale/component/ScaleByScale.ce.vue';
 
 const props = defineProps<{
   vehicle: Vehicle
@@ -158,30 +159,31 @@ onUnmounted(() => { makeDInUpdateWorker.terminate() })
 
 <template>
   <symbol class="overflow-visible cursor-pointer" :id="`vehicle-${props.vehicle.id}`">
-    <circle v-show="groupColor" class="group-shadow" r="120" :fill="groupColor" />
+    <ScaleByScale>
+      <circle v-show="groupColor" class="group-shadow" r="120" :fill="groupColor" />
 
-    <!-- vehicle type && vehicle mode start -->
-    <path
-      v-if="props.vehicle.type === 'CLEANING'"
-      class="vehicle-mode-path"
-      :data-mode="props.vehicle.mode"
-      stroke="rgb(65,65,65)"
-      stroke-width="4"
-      d="
+      <!-- vehicle type && vehicle mode start -->
+      <path
+        v-if="props.vehicle.type === 'CLEANING'"
+        class="vehicle-mode-path"
+        :data-mode="props.vehicle.mode"
+        stroke="rgb(65,65,65)"
+        stroke-width="4"
+        d="
       M 0 80
       L -80 0
       L 0 -80
       L 80 0
       Z
       "
-    />
-    <path
-      v-else
-      class="vehicle-mode-path"
-      :data-mode="props.vehicle.mode"
-      stroke="black"
-      stroke-width="3"
-      d="
+      />
+      <path
+        v-else
+        class="vehicle-mode-path"
+        :data-mode="props.vehicle.mode"
+        stroke="black"
+        stroke-width="3"
+        d="
       M 0 -80
       A 80 80 0 1 0 0 80
       A 80 80 0 1 0 0 -80 
@@ -190,77 +192,77 @@ onUnmounted(() => { makeDInUpdateWorker.terminate() })
       A 50 50 0 1 1 0 50
       A 50 50 0 1 1 0 -50 
       Z"
-    />
-    <!-- vehicle type && vehicle mode end -->
+      />
+      <!-- vehicle type && vehicle mode end -->
 
-    <!-- cargo state start -->
-    <!-- 1. Loading  -->
-    <circle v-if="props.vehicle.cargoState === 'L'" class="cargo-loading">
-      <animate attributeName="r" values="0;40" dur="1s" repeatCount="indefinite" />
-    </circle>
-    <!-- 2. Full  -->
-    <circle v-else-if="props.vehicle.cargoState === 'F'" class="cargo-full" r="40" />
-    <!-- 3. Unloading -->
-    <circle v-else-if="props.vehicle.cargoState === 'U'" class="cargo-unloading">
-      <animate attributeName="r" values="40;0" dur="1s" repeatCount="indefinite" />
-    </circle>
-    <template v-else />
-    <!-- 4. Empty -->
-    <!-- Empty is Empty! -->
-    <!-- 5. Load/Unload Failed -->
-    <path
-      v-if="props.vehicle.cargoTransferResult"
-      stroke="orange"
-      stroke-width="4"
-      d="
+      <!-- cargo state start -->
+      <!-- 1. Loading  -->
+      <circle v-if="props.vehicle.cargoState === 'L'" class="cargo-loading">
+        <animate attributeName="r" values="0;40" dur="1s" repeatCount="indefinite" />
+      </circle>
+      <!-- 2. Full  -->
+      <circle v-else-if="props.vehicle.cargoState === 'F'" class="cargo-full" r="40" />
+      <!-- 3. Unloading -->
+      <circle v-else-if="props.vehicle.cargoState === 'U'" class="cargo-unloading">
+        <animate attributeName="r" values="40;0" dur="1s" repeatCount="indefinite" />
+      </circle>
+      <template v-else />
+      <!-- 4. Empty -->
+      <!-- Empty is Empty! -->
+      <!-- 5. Load/Unload Failed -->
+      <path
+        v-if="props.vehicle.cargoTransferResult"
+        stroke="orange"
+        stroke-width="4"
+        d="
     M -32 -32
     L 32 32
     M -32 32
     L 32 -32"
-    />
-    <!-- cargo state end -->
-
-    <!-- <text y="70">{{ props.vehicle.logicalId }}</text> -->
-    <MapReverseRotate v-if="realtimePosition" :x="realtimePosition.x" :y="realtimePosition.y">
-      <!-- vehicle id -->
-      <RasterizedText class="invert" x="-150" y="-65" :text="props.vehicle.logicalId" />
-      <!-- vehicle order with priority(hotlot) -->
-      <g :filter="isHotlot ? `url(#vehicle-order-hotlot-border)` : undefined">
-        <text
-          v-if="props.vehicle.orderId"
-          class="invert select-none"
-          :filter="isHotlot ? `url(#vehicle-order-hotlot-background)` : undefined"
-          x="-150"
-          y="65"
-        >{{ String(props.vehicle.orderId) }}</text>
-      </g>
-
-      <!-- vehicle properties ordered by priority ==== START -->
-
-      <!-- top left (2) -->
-      <!-- 1. Blocked -->
-      <circle v-if="props.vehicle.isBlocked" cx="-80" cy="80" r="20" fill="red" />
-      <!-- 2. Sensor Stop -->
-      <circle
-        v-else-if="props.vehicle.isSensorStopped"
-        cx="-80"
-        cy="80"
-        r="15"
-        stroke="rgb(255, 90, 90)"
-        stroke-width="5"
-        fill="rgb(255, 192, 203)"
       />
-      <template v-else></template>
+      <!-- cargo state end -->
 
-      <!-- top right (1) -->
-      <!-- 1. Stale -->
-      <!-- where is staled -->
-      <path
-        v-if="isStale"
-        fill="none"
-        stroke="black"
-        stroke-width="2"
-        d="
+      <!-- <text y="70">{{ props.vehicle.logicalId }}</text> -->
+      <MapReverseRotate v-if="realtimePosition" :x="realtimePosition.x" :y="realtimePosition.y">
+        <!-- vehicle id -->
+        <RasterizedText class="invert" x="-150" y="-65" :text="props.vehicle.logicalId" />
+        <!-- vehicle order with priority(hotlot) -->
+        <g :filter="isHotlot ? `url(#vehicle-order-hotlot-border)` : undefined">
+          <text
+            v-if="props.vehicle.orderId"
+            class="invert select-none"
+            :filter="isHotlot ? `url(#vehicle-order-hotlot-background)` : undefined"
+            x="-150"
+            y="65"
+          >{{ String(props.vehicle.orderId) }}</text>
+        </g>
+
+        <!-- vehicle properties ordered by priority ==== START -->
+
+        <!-- top left (2) -->
+        <!-- 1. Blocked -->
+        <circle v-if="props.vehicle.isBlocked" cx="-80" cy="80" r="20" fill="red" />
+        <!-- 2. Sensor Stop -->
+        <circle
+          v-else-if="props.vehicle.isSensorStopped"
+          cx="-80"
+          cy="80"
+          r="15"
+          stroke="rgb(255, 90, 90)"
+          stroke-width="5"
+          fill="rgb(255, 192, 203)"
+        />
+        <template v-else></template>
+
+        <!-- top right (1) -->
+        <!-- 1. Stale -->
+        <!-- where is staled -->
+        <path
+          v-if="isStale"
+          fill="none"
+          stroke="black"
+          stroke-width="2"
+          d="
       M 80 80 
       m -15 0 
       a 15 15 0 1 0 30 0 
@@ -269,31 +271,31 @@ onUnmounted(() => { makeDInUpdateWorker.terminate() })
       L 80 80 
       L 70 80
       "
-      />
+        />
 
-      <!-- bottom left (1) -->
-      <!-- 1. Error -->
-      <!-- triangle with width 40 and height 30 -->
-      <path
-        v-if="props.vehicle.errorList"
-        fill="yellow"
-        stroke="orange"
-        stroke-width="5"
-        d="
+        <!-- bottom left (1) -->
+        <!-- 1. Error -->
+        <!-- triangle with width 40 and height 30 -->
+        <path
+          v-if="props.vehicle.errorList"
+          fill="yellow"
+          stroke="orange"
+          stroke-width="5"
+          d="
       M -80 -65 
       L -100 -95 
       L -60 -95 
       Z"
-      />
+        />
 
-      <!-- bottom right (4) -->
-      <!-- 1. Disconnected -->
-      <path
-        v-if="props.vehicle.isConnected === false"
-        stroke="red"
-        stroke-width="3"
-        fill="none"
-        d="
+        <!-- bottom right (4) -->
+        <!-- 1. Disconnected -->
+        <path
+          v-if="props.vehicle.isConnected === false"
+          stroke="red"
+          stroke-width="3"
+          fill="none"
+          d="
       M 80 -70 
       L 90 -60 
       L 90 -85 
@@ -303,26 +305,27 @@ onUnmounted(() => { makeDInUpdateWorker.terminate() })
       M 60 -60 
       L 95 -95
       "
-      />
-      <!-- 2. Maintained -->
-      <VehicleStateMaintainedSvg
-        v-else-if="props.vehicle.isMaint"
-        width="50"
-        height="50"
-        x="80"
-        y="-80"
-      />
-      <!-- 3. Prevent Call or Prevent Push -->
-      <template v-else-if="isPreventCall || isPreventPush">
-        <!-- 3-A. Prevent Call -->
-        <VehicleStatePreventCallSvg v-if="isPreventCall" width="50" height="50" x="80" y="-80" />
-        <!-- 3-B. Prevent Push -->
-        <VehicleStatePreventPushSvg v-if="isPreventPush" width="50" height="50" x="80" y="-80" />
-      </template>
-      <template v-else />
+        />
+        <!-- 2. Maintained -->
+        <VehicleStateMaintainedSvg
+          v-else-if="props.vehicle.isMaint"
+          width="50"
+          height="50"
+          x="80"
+          y="-80"
+        />
+        <!-- 3. Prevent Call or Prevent Push -->
+        <template v-else-if="isPreventCall || isPreventPush">
+          <!-- 3-A. Prevent Call -->
+          <VehicleStatePreventCallSvg v-if="isPreventCall" width="50" height="50" x="80" y="-80" />
+          <!-- 3-B. Prevent Push -->
+          <VehicleStatePreventPushSvg v-if="isPreventPush" width="50" height="50" x="80" y="-80" />
+        </template>
+        <template v-else />
 
-      <!-- vehicle properties ordered by priority ==== END -->
-    </MapReverseRotate>
+        <!-- vehicle properties ordered by priority ==== END -->
+      </MapReverseRotate>
+    </ScaleByScale>
   </symbol>
 
   <use
@@ -340,9 +343,9 @@ onUnmounted(() => { makeDInUpdateWorker.terminate() })
   <!-- next point line -->
   <line
     v-if="nextPointPosition && realtimePosition"
-    class="line"
+    class="line fixed-scale-stroke"
     stroke="rgb(255, 220, 70)"
-    stroke-width="40"
+    stroke-width="4"
     stroke-linecap="round"
     :x1="realtimePosition.x"
     :y1="realtimePosition.y"
@@ -353,9 +356,9 @@ onUnmounted(() => { makeDInUpdateWorker.terminate() })
   <!-- pickup or dropoff line -->
   <line
     v-if="commandPoint.position.value && realtimePosition"
-    class="line"
+    class="line fixed-scale-stroke"
     :stroke="commandLineColor"
-    stroke-width="40"
+    stroke-width="4"
     stroke-linecap="round"
     :x1="realtimePosition.x"
     :y1="realtimePosition.y"

@@ -54,13 +54,6 @@ function onContextmenu() {
     @mouseleave="onTooltipOff()"
   >
     <path
-      v-if="props.segment.isFocused"
-      class="focus fixed-scale-stroke"
-      :d="props.segment.d"
-      fill="none"
-      :stroke-width="scaleStylesInfo.segmentWidth * 3"
-    />
-    <path
       ref="pathElement"
       class="segment-path fixed-scale-stroke"
       :d="props.segment.d"
@@ -74,6 +67,13 @@ function onContextmenu() {
       :x="position.x"
       :y="position.y"
       :transform="`rotate(${angle} ${position.x} ${position.y})`"
+    />
+    <path
+      v-if="props.segment.isFocused"
+      class="focus fixed-scale-stroke"
+      :d="props.segment.d"
+      fill="none"
+      :stroke-width="scaleStylesInfo.segmentWidth * 3"
     />
   </svg>
 </template>

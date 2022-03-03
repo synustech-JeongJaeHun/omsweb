@@ -1,30 +1,8 @@
-/* not using right now */
-/* #point-layer[data-is-label-visible='false' i] .point .label {
-  display: none;
+#point-layer[data-scale-level='BELOW17' i] .point,
+#point-layer[data-scale-level='BELOW20' i] .point {
+  visibility: visible;
 }
 
-#station-layer[data-is-station-visible='false' i] {
-  display: none;
+#point-layer .point {
+  visibility: hidden;
 }
-
-#buffer-layer[data-is-buffer-visible='false' i] {
-  display: none;
-}
-
-#layer-container[data-is-group-visible='false' i] .group-shadow {
-  display: none;
-}
-
-#cluster-layer[data-is-cluster-visible='false' i] {
-  display: none;
-}
-
-#segment-layer[data-is-direction-visible='false' i]
-  .segment
-  .segment-direction {
-  display: none;
-}
-
-#vehicle-layer[data-is-line-visible='false' i] .line {
-  display: none;
-} */

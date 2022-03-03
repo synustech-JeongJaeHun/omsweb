@@ -2,14 +2,11 @@
 import Layer from 'MapObjects/map/components/Layer.ce.vue';
 import Station from './Station.ce.vue';
 import { stations } from '../stations'
-import { toRef } from 'vue';
 import { visibleStylesInfo } from 'src/styles/styles';
-
-const isStationVisible = toRef(visibleStylesInfo, 'station')
 </script>
 
 <template>
-  <Layer id="station-layer" :data-is-station-visible="isStationVisible">
+  <Layer id="station-layer" :data-is-station-visible="visibleStylesInfo.station">
     <defs>
       <!-- 
         pointer-events for event from bounding-box
@@ -19,22 +16,22 @@ const isStationVisible = toRef(visibleStylesInfo, 'station')
         id="station"
         pointer-events="bounding-box"
         fill="none"
+        stroke-width="3"
         d="
-        m -56 -18 
-        l 0 -36 
-        l 36 0 
-        m 36 0 
-        l 36 0 
-        l 0 36 
-        m 0 36 
-        l 0 36 
-        l -36 0 
-        m -36 0 
-        l -36 0 
-        l 0 -36 
-        m 0 -36"
+        M 3 10
+        L 10 10
+        L 10 3
+        M 10 -3
+        L 10 -10
+        L 3 -10
+        M -3 -10
+        L -10 -10
+        L -10 -3
+        M -10 3
+        L -10 10
+        L -3 10"
       />
-      <rect id="station-group-shadow" x="-70" y="-70" width="140" height="140" />
+      <rect id="station-group-shadow" x="-13" y="-13" width="26" height="26" />
     </defs>
 
     <Station v-for="station of stations" :key="station.id" :station="station" />

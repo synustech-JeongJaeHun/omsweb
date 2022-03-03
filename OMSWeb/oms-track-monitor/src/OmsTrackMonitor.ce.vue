@@ -6,7 +6,7 @@ import { IPreferences } from './legacies/models/setting.model'
 import Map from 'src/MapObjects/map/components/Map.ce.vue'
 import Minimap from 'src/MapObjects/minimap/components/Minimap.ce.vue'
 import { parseNumberProp, parseBooleanProp, parseStringProp } from './utils/props'
-import Scale from 'src/MapObjects/scale/component/Scale.ce.vue'
+import ScaleBar from 'src/MapObjects/scale/component/ScaleBar.ce.vue'
 import { RootEmitInjectionKey, RootEmits } from './types/RootEmits'
 import ScreenDetail from 'MapObjects/map/components/ScreenDetail.ce.vue'
 import { initCameraAndRotation, centerZoom, getCameraAndRotation, approachToPosition } from 'MapObjects/cameraAndRotation'
@@ -39,15 +39,17 @@ import { groups } from './TrackObjects/group/groups'
 import { makeSegmentsFromParts } from './TrackObjects/segment/utils/segment'
 import { makeClustersFromSegments } from './TrackObjects/cluster/utils/cluster'
 import { setFocusedObject } from 'src/MapObjects/focus/focus'
+import { scaleInfo } from './MapObjects/scale/scale'
+import { rotationInfo } from './MapObjects/rotate/rotate'
 
 /**
- * https://v3.vuejs.org/api/sfc-script-setup.html#typescript-only-features
- * 
- * Currently complex types and type imports from other files are not supported. It is theoretically possible to support type imports in the future.
- * 
- * As of now, the type declaration argument must be one of the following to ensure correct static analysis:
- * - A type literal
- * - A reference to an interface or a type literal in the same file
+ *  ttps://v3.vuejs.org/api/sfc-script-setup.html#typescript-only-features
+ *  
+ *  urrently complex types and type imports from other files are not supported. It is theoretically possible to support type imports in the future.
+ *  
+ *  s of now, the type declaration argument must be one of the following to ensure correct static analysis:
+ *   A type literal
+ *   A reference to an interface or a type literal in the same file
  */
 const props = defineProps<{
   // enums
@@ -353,7 +355,7 @@ defineExpose(exposed)
     />
     <Minimap class="absolute" style="bottom: 2vw; left: 2vw;" />
     <div class="absolute flex flex-row" style="padding: unset; bottom: 10px; right: 10px;">
-      <Scale />
+      <ScaleBar />
       <ScreenDetail />
     </div>
   </div>
@@ -369,6 +371,7 @@ defineExpose(exposed)
 <style src="./styles/sheets/visibility.css"></style>
 <style src="./styles/sheets/focus.css"></style>
 <style src="./styles/sheets/fixed-scale.css"></style>
+<style src="./styles/sheets/will-change.css"></style>
 
 <!-- dynamic css for configurable styling -->
 <style>
@@ -387,6 +390,7 @@ defineExpose(exposed)
 }
 
 #point-layer .point .point-path {
+  stroke: v-bind("parseStringProp(ColorDefault.point, props.pointColor)");
   fill: v-bind("parseStringProp(ColorDefault.point, props.pointColor)");
 }
 
@@ -444,6 +448,26 @@ defineExpose(exposed)
   fill: v-bind(
     "parseStringProp(ColorDefault.cargoUnloading, props.cargoUnloadingColor)"
   );
+}
+
+.scale-by-scale {
+  transform: scale(v-bind("scaleInfo.mmPerPixel"));
+}
+
+#buffer-layer[data-scale-level="BELOW17" i] .buffer .scale-by-scale,
+#station-layer[data-scale-level="BELOW17" i] .station .scale-by-scale,
+#zcu-layer[data-scale-level="BELOW17" i] .zcu .scale-by-scale {
+  transform: scale(v-bind("scaleInfo.mmPerPixel"));
+}
+
+#buffer-layer .buffer .scale-by-scale,
+#station-layer .station .scale-by-scale,
+#zcu-layer .zcu .scale-by-scale {
+  transform: scale(v-bind("scaleInfo.mmPerPixel / 4"));
+}
+
+.reverse-rotate-by-rotation {
+  transform: rotate(v-bind("`${rotationInfo * (-1)}deg`"));
 }
 </style>
 

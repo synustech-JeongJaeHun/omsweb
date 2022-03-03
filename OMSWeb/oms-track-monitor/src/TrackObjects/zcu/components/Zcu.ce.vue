@@ -6,6 +6,7 @@ import MapReverseRotate from 'MapObjects/rotate/components/MapReverseRotate.ce.v
 import { getHumanReadableUsingType } from '../utils/readable'
 import { RootEmitInjectionKey, RootEmits } from '../../../types/RootEmits';
 import { deepCopy } from '../../../utils/deepCopy';
+import ScaleByScale from 'src/MapObjects/scale/component/ScaleByScale.ce.vue';
 
 const props = defineProps<{
   zcu: Zcu
@@ -35,32 +36,27 @@ function onContextmenu() {
 }
 </script>
 
-          <!-- d3_this
-            .select('.zcu_path')
-            .attr('fill', d.error ? 'red' : dom_css.color_zcu)
-            .attr('stroke', dom_css.color_zcu)
-            .attr('stroke-width', dom_css.line_weight); -->
-
 <template>
-  <svg class="overflow-visible cursor-pointer" :x="props.zcu.x" :y="props.zcu.y">
-    <use
-      href="#zcu"
-      :fill="props.zcu.error ? 'red' : 'transparent'"
-      @click.left="onFocus()"
-      @click.right="onContextmenu()"
-      @mouseover="onTooltipOn()"
-      @mouseout="onTooltipOff()"
-      @mouseleave="onTooltipOff()"
-    />
-    <!-- <text y="70">{{ props.zcu.id }}</text> -->
-    <MapReverseRotate>
-      <RasterizedText
-        class="invert"
-        x="-85"
-        y="-55"
-        :text="getHumanReadableUsingType(props.zcu.usingType)"
-      />
-      <RasterizedText class="invert" x="65" y="35" :text="String(props.zcu.id)" />
-    </MapReverseRotate>
+  <svg class="overflow-visible cursor-pointer zcu" :x="props.zcu.x" :y="props.zcu.y">
+    <ScaleByScale>
+      <MapReverseRotate>
+        <use
+          href="#zcu"
+          :fill="props.zcu.error ? 'red' : 'transparent'"
+          @click.left="onFocus()"
+          @click.right="onContextmenu()"
+          @mouseover="onTooltipOn()"
+          @mouseout="onTooltipOff()"
+          @mouseleave="onTooltipOff()"
+        />
+        <RasterizedText
+          class="invert"
+          x="-45"
+          y="-30"
+          :text="getHumanReadableUsingType(props.zcu.usingType)"
+        />
+        <RasterizedText class="invert" x="18" y="9" :text="String(props.zcu.id)" />
+      </MapReverseRotate>
+    </ScaleByScale>
   </svg>
 </template>

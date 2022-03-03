@@ -7,14 +7,29 @@ const scale = computed(() => ({
   pixelPerMm: elementRectInfo.width / cameraViewBoxInfo.width
 }))
 
+/**
+ * mm means, track real unit
+ */
 const scaleInfo = readonly(scale)
 
-function useScreenFixedScale(fixedScale: Ref<number>, threshold: number) {
-  const dynamicSizeInSvg = computed(() => {
-    const calculated = fixedScale.value / scaleInfo.value.pixelPerMm
-    return calculated < threshold ? threshold : calculated
-  })
-  return dynamicSizeInSvg
-}
+const scaleLevel = computed(() => {
+  const value = scaleInfo.value.mmPerPixel
+  if (value < 17)
+    return "BELOW17"
+  if (value < 20)
+    return "BELOW20"
+  else
+    return "ELSE"
+})
 
-export { scaleInfo, useScreenFixedScale }
+const scaleLevelInfo = readonly(scaleLevel)
+
+// function useScreenFixedScale(fixedScale: Ref<number>, threshold: number) {
+//   const dynamicSizeInSvg = computed(() => {
+//     const calculated = fixedScale.value / scaleInfo.value.pixelPerMm
+//     return calculated < threshold ? threshold : calculated
+//   })
+//   return dynamicSizeInSvg
+// }
+
+export { scaleInfo, scaleLevelInfo }

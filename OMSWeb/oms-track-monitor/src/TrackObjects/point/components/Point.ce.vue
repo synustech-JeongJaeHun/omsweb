@@ -5,6 +5,7 @@ import MapReverseRotate from 'MapObjects/rotate/components/MapReverseRotate.ce.v
 import { inject } from 'vue';
 import { RootEmitInjectionKey, RootEmits } from 'src/types/RootEmits';
 import { deepCopy } from 'src/utils/deepCopy';
+import ScaleByScale from 'src/MapObjects/scale/component/ScaleByScale.ce.vue';
 
 const props = defineProps<{
   point: Point,
@@ -36,18 +37,20 @@ function onContextmenu() {
 
 <template>
   <svg class="overflow-visible cursor-pointer point" :x="props.point.x" :y="props.point.y">
-    <use
-      href="#point-circle"
-      class="point-path"
-      @click.left="onFocus()"
-      @click.right="onContextmenu()"
-      @mouseover="onTooltipOn()"
-      @mouseout="onTooltipOff()"
-      @mouseleave="onTooltipOff()"
-    />
-    <MapReverseRotate>
-      <!-- <text y="70">{{ props.point.logicalId }}</text> -->
-      <RasterizedText class="invert label" y="70" :text="props.point.logicalId" />
-    </MapReverseRotate>
+    <ScaleByScale>
+      <MapReverseRotate>
+        <circle
+          r="5"
+          class="point-path"
+          @click.left="onFocus()"
+          @click.right="onContextmenu()"
+          @mouseover="onTooltipOn()"
+          @mouseout="onTooltipOff()"
+          @mouseleave="onTooltipOff()"
+        />
+        <!-- <text y="70">{{ props.point.logicalId }}</text> -->
+        <RasterizedText class="invert label" y="10" :text="props.point.logicalId" />
+      </MapReverseRotate>
+    </ScaleByScale>
   </svg>
 </template>

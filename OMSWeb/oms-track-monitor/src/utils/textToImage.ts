@@ -32,7 +32,11 @@ function convertStringToImageDataUrl(text: string, size: number = DefaultFontSiz
 
   // https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toDataURL
   // https://developer.mozilla.org/en-US/docs/Web/API/createImageBitmap
-  return canvasElement.toDataURL(Type, EncoderOptions)
+  return {
+    dataURL: canvasElement.toDataURL(Type, EncoderOptions),
+    width: canvasElement.width,
+    height: canvasElement.height
+  }
 }
 
 export { convertStringToImageDataUrl }
