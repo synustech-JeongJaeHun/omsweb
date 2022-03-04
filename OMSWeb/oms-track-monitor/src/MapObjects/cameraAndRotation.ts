@@ -86,7 +86,7 @@ function approachIterative(objective: Objective) {
       width: (objective.viewBox.width - start.viewBox.width),
       height: (objective.viewBox.height - start.viewBox.height),
     },
-    rotation: (start.rotation - objective.rotation)
+    rotation: (objective.rotation + 360 - start.rotation) % 360
   }
 
   const startTime = performance.now()
