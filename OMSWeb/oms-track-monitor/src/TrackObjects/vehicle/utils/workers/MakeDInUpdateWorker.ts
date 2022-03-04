@@ -8,14 +8,14 @@ type Arguments = {
   lastUpdated?: number,
   currentSegment?: Segment
   beforeSegment?: Segment
-  beforePosition: Position,
+  beforePosition?: Position,
   currentPosition: Position,
 }
 
 function makeDInUpdate(event: MessageEvent<Arguments>) {
   const args = event.data
   const pathCommands = (function () {
-    if (args.updateType === 'AnimationIn2Segments' && args.currentSegment && args.beforeSegment) {
+    if (args.updateType === 'AnimationIn2Segments' && args.currentSegment && args.beforeSegment && args.beforePosition) {
       const concatenatedCommands = [
         ...args.beforeSegment.pathCommands,
         ...args.currentSegment.pathCommands.slice(1)
@@ -23,7 +23,7 @@ function makeDInUpdate(event: MessageEvent<Arguments>) {
       return slicePathCommands(concatenatedCommands, args.beforePosition, args.currentPosition)
     }
 
-    if (args.updateType === 'AnimationIn1Segment' && args.beforeSegment)
+    if (args.updateType === 'AnimationIn1Segment' && args.beforeSegment && args.beforePosition)
       return slicePathCommands(args.beforeSegment.pathCommands, args.beforePosition, args.currentPosition)
 
     const currentPositionPathCommands = [moveTo(args.currentPosition)]

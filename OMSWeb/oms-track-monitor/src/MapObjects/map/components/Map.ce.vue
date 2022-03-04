@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { inject, toRef } from 'vue';
+import { inject } from 'vue';
 import { panByMouse, isPanning, enterPanning, exitPanning, zoomIn1Time, zoomInOutByWheel, handleMouseUp } from '../camera';
 import { centerZoom } from '../../cameraAndRotation';
 import GridLayer from './GridLayer.ce.vue';
@@ -15,11 +15,8 @@ import ClusterLayer from 'TrackObjects/cluster/components/ClusterLayer.ce.vue';
 import { elementRectInfo } from '../elementRect';
 import { isRotating, rotateToByMouse, enterRotating, exitRotating } from 'MapObjects/rotate/rotate';
 import { RootEmitInjectionKey, RootEmits } from 'src/types/RootEmits';
-import { visibleStylesInfo } from 'src/styles/styles';
 
 const emit = inject<RootEmits>(RootEmitInjectionKey)!
-
-const isGroupVisible = toRef(visibleStylesInfo, 'group')
 </script>
 
 <template>
@@ -31,7 +28,6 @@ const isGroupVisible = toRef(visibleStylesInfo, 'group')
     :viewBox="`0 0 ${elementRectInfo.width} ${elementRectInfo.height}`"
     :data-is-panning="isPanning"
     :data-is-rotating="isRotating"
-    :data-is-group-visible="isGroupVisible"
     @wheel="zoomInOutByWheel($event)"
     @dblclick.self="zoomIn1Time($event)"
     @mousedown.left="enterPanning()"

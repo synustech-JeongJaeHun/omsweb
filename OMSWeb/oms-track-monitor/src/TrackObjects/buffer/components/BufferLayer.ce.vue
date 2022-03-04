@@ -2,11 +2,10 @@
 import Layer from 'MapObjects/map/components/Layer.ce.vue';
 import Buffer from './Buffer.ce.vue';
 import { buffers } from '../buffers'
-import { visibleStylesInfo } from 'src/styles/styles';
 </script>
 
 <template>
-  <Layer id="buffer-layer" :data-is-buffer-visible="visibleStylesInfo.buffer">
+  <Layer id="buffer-layer">
     <defs>
       <!-- 
         pointer-events for event from bounding-box

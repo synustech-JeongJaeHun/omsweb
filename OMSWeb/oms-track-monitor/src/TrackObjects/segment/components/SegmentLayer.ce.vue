@@ -2,12 +2,11 @@
 import Layer from 'MapObjects/map/components/Layer.ce.vue';
 import Segment from './Segment.ce.vue';
 import { segments } from '../segments'
-import { visibleStylesInfo } from 'src/styles/styles';
 import { scaleStylesInfo } from 'src/styles/styles';
 </script>
 
 <template>
-  <Layer id="segment-layer" :data-is-direction-visible="visibleStylesInfo.segmentDirection">
+  <Layer id="segment-layer">
     <defs>
       <path
         id="segment-direction-triangle"

@@ -2,11 +2,10 @@
 import Layer from 'MapObjects/map/components/Layer.ce.vue';
 import Station from './Station.ce.vue';
 import { stations } from '../stations'
-import { visibleStylesInfo } from 'src/styles/styles';
 </script>
 
 <template>
-  <Layer id="station-layer" :data-is-station-visible="visibleStylesInfo.station">
+  <Layer id="station-layer">
     <defs>
       <!-- 
         pointer-events for event from bounding-box

@@ -5,9 +5,9 @@ import { ScaleProperty } from './types/ScaleProperty';
 import { VisibleProperty } from './types/VisibleProperty';
 
 const ScaleDefault: Record<ScaleProperty, number> = {
-  vehicleSize: 10,
-  segmentDirection: 6,
-  segmentWidth: 3,
+  vehicleSize: 10, // applied in OmsTrackMonitor.ce.vue
+  segmentDirection: 6, // applied in SegmentLayer.ce.vue
+  segmentWidth: 3, // applied in OmsTrackMonitor.ce.vue
 }
 const scaleStyles = reactive(deepCopy(ScaleDefault))
 const scaleStylesInfo = readonly(scaleStyles)
@@ -17,15 +17,15 @@ function updateScaleStyle(key: ScaleProperty, value: number) {
 }
 
 const VisibleDefault: Record<VisibleProperty, boolean> = {
-  vehicleLine: true,
-  segmentDirection: true,
-  pointLabel: true,
-  station: true,
-  buffer: true,
-  group: true,
-  cluster: true,
-  overlappingObjects: true,
-  minimap: true,
+  vehicleLine: true, // applied in OmsTrackMonitor.ce.vue
+  segmentDirection: true, // applied in OmsTrackMonitor.ce.vue
+  pointLabel: true, // applied in OmsTrackMonitor.ce.vue
+  station: true, // applied in OmsTrackMonitor.ce.vue
+  buffer: true, // applied in OmsTrackMonitor.ce.vue
+  group: true, // applied in OmsTrackMonitor.ce.vue
+  cluster: true, // applied in OmsTrackMonitor.ce.vue
+  overlappingObjects: true, // TODO notimplemented
+  minimap: true, // applied in OmsTrackMonitor.ce.vue
 }
 const visibleStyles = reactive(deepCopy(VisibleDefault))
 const visibleStylesInfo = readonly(visibleStyles)
@@ -34,12 +34,12 @@ function updateVisibleStyle(key: VisibleProperty, value: boolean) {
   visibleStyles[key] = value
 }
 
+// All color configurations are applied in OmsTrackMonitor.ce.vue
 const ColorDefault: Record<ColorProperty, string> = {
   background: "white",
   station: "black",
   buffer: "black",
   point: "black",
-  vehicleExpectedPath: "green", // something weird
   normalSegment: "grey",
   disabledSegment: "purple",
   segmentDirection: "grey",

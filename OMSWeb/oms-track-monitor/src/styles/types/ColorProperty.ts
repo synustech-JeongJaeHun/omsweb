@@ -3,7 +3,6 @@ type ColorProperty =
   | "station"
   | "buffer"
   | "point"
-  | "vehicleExpectedPath"
   | "normalSegment"
   | "disabledSegment"
   | "segmentDirection"

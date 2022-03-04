@@ -1,0 +1,11 @@
+<svg viewBox="-15 -15 30 30">
+  <path fill="none" stroke="black" stroke-width="2" d="
+      M 0 0 
+      m -15 0 
+      a 15 15 0 1 0 30 0 
+      a 15 15 0 1 0 -30 0 
+      M 0 10 
+      L 0 0 
+      L -10 0
+      " />
+</svg>

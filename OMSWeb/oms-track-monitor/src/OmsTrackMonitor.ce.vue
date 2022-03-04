@@ -15,8 +15,10 @@ import { MapType } from './types/MapType'
 import {
   ColorDefault,
   ScaleDefault,
+  scaleStylesInfo,
+  visibleStylesInfo,
   updateScaleStyle,
-  updateVisibleStyle
+  updateVisibleStyle,
 } from './styles/styles'
 import { Boolish, Numberlish, Stringlish } from './types/Prop'
 import { getPositionForBufferOrStation } from './TrackObjects/utils/locationStationBuffer'
@@ -85,7 +87,6 @@ const props = defineProps<{
   stationColor: Stringlish
   bufferColor: Stringlish
   pointColor: Stringlish
-  vehicleExpectedPathColor: Stringlish
   normalSegmentColor: Stringlish
   disabledSegmentColor: Stringlish
   segmentDirectionColor: Stringlish
@@ -361,20 +362,9 @@ defineExpose(exposed)
   </div>
 </template>
 
-<!-- https://v3.vuejs.org/api/sfc-spec.html#src-imports -->
-<!-- https://github.com/vuejs/vue-next/issues/4662 -->
-<!-- https://v3.vuejs.org/guide/web-components.html#sfc-as-custom-element -->
-<style src="./styles/sheets/utility.css"></style>
-<style src="./styles/sheets/pan.css"></style>
-<style src="./styles/sheets/rotate.css"></style>
-<style src="./styles/sheets/invert.css"></style>
-<style src="./styles/sheets/visibility.css"></style>
-<style src="./styles/sheets/focus.css"></style>
-<style src="./styles/sheets/fixed-scale.css"></style>
-<style src="./styles/sheets/will-change.css"></style>
-
-<!-- dynamic css for configurable styling -->
 <style>
+/* dynamic css */
+/* Configurable Color Start */
 #layer-container {
   background-color: v-bind(
     "parseStringProp(ColorDefault.background, props.backgroundColor)"
@@ -415,21 +405,21 @@ defineExpose(exposed)
   );
 }
 
-#vehicle-layer .vehicle-mode-path {
+#vehicle-layer .vehicle-symbol .vehicle-mode-path {
   /* mode === none */
   fill: v-bind(
     "parseStringProp(ColorDefault.noneModeVehicle, props.noneModeVehicleColor)"
   );
 }
 
-#vehicle-layer .vehicle-mode-path[data-mode="A" i] {
+#vehicle-layer .vehicle-symbol[data-mode="A" i] .vehicle-mode-path {
   /* mode === auto */
   fill: v-bind(
     "parseStringProp(ColorDefault.autoModeVehicle, props.autoModeVehicleColor)"
   );
 }
 
-#vehicle-layer .vehicle-mode-path[data-mode="M" i] {
+#vehicle-layer .vehicle-symbol[data-mode="M" i] .vehicle-mode-path {
   /* mode === manual */
   fill: v-bind(
     "parseStringProp(ColorDefault.manualModeVehicle, props.manualModeVehicleColor)"
@@ -449,7 +439,67 @@ defineExpose(exposed)
     "parseStringProp(ColorDefault.cargoUnloading, props.cargoUnloadingColor)"
   );
 }
+/* Configurable Color End */
 
+/* Configurable Visibility Start */
+#vehicle-layer .line {
+  visibility: v-bind("visibleStylesInfo.vehicleLine ? 'initial' : 'hidden'");
+}
+
+#segment-layer .segment-direction {
+  visibility: v-bind(
+    "visibleStylesInfo.segmentDirection ? 'initial' : 'hidden'"
+  );
+}
+
+#station-layer {
+  visibility: v-bind("visibleStylesInfo.station ? 'initial' : 'hidden'");
+}
+
+#buffer-layer {
+  visibility: v-bind("visibleStylesInfo.buffer ? 'initial' : 'hidden'");
+}
+
+#cluster-layer {
+  visibility: v-bind("visibleStylesInfo.cluster ? 'initial' : 'hidden'");
+}
+
+#minimap-container {
+  visibility: v-bind("visibleStylesInfo.minimap ? 'initial' : 'hidden'");
+}
+
+#point-layer .label {
+  visibility: v-bind("visibleStylesInfo.pointLabel ? 'initial' : 'hidden'");
+}
+
+.group-shadow {
+  visibility: v-bind("visibleStylesInfo.group ? 'initial' : 'hidden'");
+}
+
+/* Configurable Visibility End */
+
+/* Configurable Scale Start */
+#vehicle-layer .vehicle-symbol .scale-by-scale {
+  transform: scale(
+    v-bind("scaleInfo.mmPerPixel * scaleStylesInfo.vehicleSize * 1/10")
+  );
+}
+
+#segment-layer .segment-path {
+  stroke-width: v-bind("scaleStylesInfo.segmentWidth");
+}
+
+#segment-layer .focus {
+  stroke-width: v-bind("scaleStylesInfo.segmentWidth * 3");
+}
+
+#cluster-layer .cluster {
+  stroke-width: v-bind("scaleStylesInfo.segmentWidth * 2.2");
+}
+
+/* Configurable Scale End */
+
+/* ScreenFixedScale Start */
 .scale-by-scale {
   transform: scale(v-bind("scaleInfo.mmPerPixel"));
 }
@@ -465,11 +515,26 @@ defineExpose(exposed)
 #zcu-layer .zcu .scale-by-scale {
   transform: scale(v-bind("scaleInfo.mmPerPixel / 4"));
 }
+/* ScreenFixedScale End */
 
+/* Rotation Start */
 .reverse-rotate-by-rotation {
   transform: rotate(v-bind("`${rotationInfo * (-1)}deg`"));
 }
+/* Rotation End */
 </style>
+
+<!-- https://v3.vuejs.org/api/sfc-spec.html#src-imports -->
+<!-- https://github.com/vuejs/vue-next/issues/4662 -->
+<!-- https://v3.vuejs.org/guide/web-components.html#sfc-as-custom-element -->
+<style src="./styles/sheets/utility.css"></style>
+<style src="./styles/sheets/pan.css"></style>
+<style src="./styles/sheets/rotate.css"></style>
+<style src="./styles/sheets/invert.css"></style>
+<style src="./styles/sheets/visibility.css"></style>
+<style src="./styles/sheets/focus.css"></style>
+<style src="./styles/sheets/fixed-scale.css"></style>
+<style src="./styles/sheets/will-change.css"></style>
 
 <!-- Plan B -->
 <!-- https://stackoverflow.com/questions/69797635/how-do-i-create-a-vue-3-custom-element-including-child-component-styles -->

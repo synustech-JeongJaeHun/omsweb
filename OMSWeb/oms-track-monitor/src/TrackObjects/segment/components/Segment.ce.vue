@@ -2,7 +2,6 @@
 import { Segment } from '../types/Segment'
 import { inject, ref, watchEffect } from 'vue';
 import { RootEmitInjectionKey, RootEmits } from 'src/types/RootEmits';
-import { scaleStylesInfo } from 'src/styles/styles';
 import { getAngleFromTwoPoints } from 'src/utils/angle';
 import { deepCopy } from 'src/utils/deepCopy';
 
@@ -58,7 +57,6 @@ function onContextmenu() {
       class="segment-path fixed-scale-stroke"
       :d="props.segment.d"
       fill="none"
-      :stroke-width="scaleStylesInfo.segmentWidth"
     />
     <use
       v-if="position !== undefined && angle !== undefined"
@@ -73,7 +71,6 @@ function onContextmenu() {
       class="focus fixed-scale-stroke"
       :d="props.segment.d"
       fill="none"
-      :stroke-width="scaleStylesInfo.segmentWidth * 3"
     />
   </svg>
 </template>
