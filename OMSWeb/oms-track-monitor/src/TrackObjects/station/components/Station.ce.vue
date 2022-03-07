@@ -64,6 +64,7 @@ function onContextmenu() {
           @mouseout="onTooltipOff()"
           @mouseleave="onTooltipOff()"
         />
+        <rect v-if="props.station.isFocused" class="focus" x="-13" y="-13" width="26" height="26" />
         <RasterizedText class="invert" x="15" y="-10" :text="props.station.logicalId" />
       </MapReverseRotate>
     </ScaleByScale>

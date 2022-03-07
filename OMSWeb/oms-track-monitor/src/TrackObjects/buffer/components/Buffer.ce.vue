@@ -64,7 +64,7 @@ function onContextmenu() {
           @mouseout="onTooltipOff()"
           @mouseleave="onTooltipOff()"
         />
-        <!-- <text y="70">{{ props.buffer.logicalId }}</text> -->
+        <circle v-if="props.buffer.isFocused" class="focus" r="20" />
         <RasterizedText class="invert" x="10" y="5" :text="props.buffer.logicalId" />
       </MapReverseRotate>
     </ScaleByScale>

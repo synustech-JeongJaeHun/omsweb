@@ -1,3 +1,28 @@
-#layer-container .focus {
-  stroke: rgba(150, 211, 255, 0.5);
+.focus {
+  --focus-color: rgba(150, 211, 255, 0.5);
+}
+
+#point-layer .focus {
+  fill: var(--focus-color);
+  pointer-events: none;
+}
+
+#segment-layer .focus {
+  stroke: var(--focus-color);
+  pointer-events: none;
+}
+
+#station-layer .focus {
+  fill: var(--focus-color);
+  pointer-events: none;
+}
+
+#buffer-layer .focus {
+  fill: var(--focus-color);
+  pointer-events: none;
+}
+
+#mtl-layer .focus {
+  stroke: var(--focus-color);
+  pointer-events: none;
 }

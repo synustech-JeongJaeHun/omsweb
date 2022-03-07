@@ -58,6 +58,7 @@ function onContextmenu() {
       @mouseout="onTooltipOff()"
       @mouseleave="onTooltipOff()"
     />
+    <use v-if="props.mtl.isFocused" href="#mtl" class="focus" stroke-width="20" />
     <!-- <text y="70">{{ props.mtl.id }}</text> -->
     <MapReverseRotate>
       <RasterizedText class="invert" x="80" y="45" :text="props.mtl.logicalId" />

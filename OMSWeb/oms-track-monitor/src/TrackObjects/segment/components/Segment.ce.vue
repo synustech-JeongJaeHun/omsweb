@@ -44,19 +44,16 @@ function onContextmenu() {
 </script>
 
 <template>
-  <svg
-    class="overflow-visible cursor-pointer segment"
-    :data-is-disabled="props.segment.disabled"
-    @click.right="onContextmenu()"
-    @mouseover="onTooltipOn()"
-    @mouseout="onTooltipOff()"
-    @mouseleave="onTooltipOff()"
-  >
+  <svg class="overflow-visible cursor-pointer segment" :data-is-disabled="props.segment.disabled">
     <path
       ref="pathElement"
       class="segment-path fixed-scale-stroke"
       :d="props.segment.d"
       fill="none"
+      @click.right="onContextmenu()"
+      @mouseover="onTooltipOn()"
+      @mouseout="onTooltipOff()"
+      @mouseleave="onTooltipOff()"
     />
     <use
       v-if="position !== undefined && angle !== undefined"
@@ -65,6 +62,10 @@ function onContextmenu() {
       :x="position.x"
       :y="position.y"
       :transform="`rotate(${angle} ${position.x} ${position.y})`"
+      @click.right="onContextmenu()"
+      @mouseover="onTooltipOn()"
+      @mouseout="onTooltipOff()"
+      @mouseleave="onTooltipOff()"
     />
     <path
       v-if="props.segment.isFocused"

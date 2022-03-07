@@ -48,6 +48,7 @@ function onContextmenu() {
           @mouseout="onTooltipOff()"
           @mouseleave="onTooltipOff()"
         />
+        <circle v-if="props.point.isFocused" r="10" class="focus" />
         <!-- <text y="70">{{ props.point.logicalId }}</text> -->
         <RasterizedText class="invert label" y="10" :text="props.point.logicalId" />
       </MapReverseRotate>
