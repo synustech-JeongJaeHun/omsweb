@@ -2,7 +2,7 @@
   <ng-container class="dialog-layout">
     <div mat-dialog-content>
       <dx-data-grid [dataSource]="dataSource | async" keyExpr="id" [height]="300" [(selectedRowKeys)]="selectedVehicle"
-        (onRowDblClick)="onDblClickRow($event)">
+        (onRowDblClick)="onTrack()">
         <dxo-selection mode="single" showCheckBoxesMode="none"></dxo-selection>
         <dxo-scrolling mode="virtual"></dxo-scrolling>
         <!-- Be careful! PhysicalId is shown as "ID" -->

@@ -26,3 +26,9 @@
   stroke: var(--focus-color);
   pointer-events: none;
 }
+
+#vehicle-layer .focus path {
+  stroke: #4e9ff3;
+  stroke-width: 40;
+  pointer-events: none;
+}

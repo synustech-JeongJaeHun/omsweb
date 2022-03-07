@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
+import { TrackStatusService } from '@oms/root/services/track-status.service';
 import { Observable, of } from 'rxjs';
 import { ILookupUnit } from '../../../models/map.interface';
 import { Vehicle } from '../../../models/vehicle.model';
-import { TrackIdService } from '../../../services/track-id.service';
 
 @Component({
   selector: 'oms-track-vehicle-dialog',
   templateUrl: './track-vehicle-dialog.component.html',
   styleUrls: ['./track-vehicle-dialog.component.scss'],
 })
-export class TrackVehicleDialogComponent implements OnInit {
+export class TrackVehicleDialogComponent {
   dataSource: Observable<ILookupUnit[]>;
   vehicles: Vehicle[] = [];
   selectedVehicle: number[] = [];
@@ -20,21 +20,15 @@ export class TrackVehicleDialogComponent implements OnInit {
   }
 
   constructor(
-    private idSvc: TrackIdService,
+    trackStatusService: TrackStatusService,
     private dialog: MatDialogRef<TrackVehicleDialogComponent>
   ) {
-    this.dataSource = of(Object.values(this.idSvc.find_matched_target_object('vehicle')));
+    this.dataSource = of(trackStatusService.trackData.vehicles);
   }
-
-  ngOnInit(): void { }
 
   onTrack() {
     if (!this.canTracking) return;
     const [id] = this.selectedVehicle;
     this.dialog.close(id);
-  }
-
-  onDblClickRow(event: any) {
-    this.onTrack();
   }
 }

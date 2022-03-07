@@ -19,6 +19,8 @@ import VehicleStateSensorStopSvg from '../assets/VehicleStateSensorStop.svg?comp
 import VehicleStateStaleSvg from '../assets/VehicleStateStale.svg?component';
 import VehicleStateErrorSvg from '../assets/VehicleStateError.svg?component';
 import VehicleStateDisconnectedSvg from '../assets/VehicleStateDisconnected.svg?component'
+import VehicleFocusedOnTypeCleaning from '../assets/VehicleFocusedOnTypeCleaning.svg?component'
+import VehicleFocusedOnTypeNormal from '../assets/VehicleFocusedOnTypeNormal.svg?component'
 
 const props = defineProps<{
   symbolId: string,
@@ -43,6 +45,9 @@ const props = defineProps<{
   isStale: boolean,
   isPreventCall: boolean,
   isPreventPush: boolean,
+
+  // TM attr,
+  isFocused?: boolean,
 }>()
 </script>
 
@@ -67,14 +72,30 @@ const props = defineProps<{
         <circle v-show="groupColor" class="group-shadow" r="25" :fill="groupColor" />
 
         <!-- vehicle type && vehicle mode start -->
-        <VehicleTypeCleaning
-          v-if="props.type === 'CLEANING'"
-          width="40"
-          height="40"
-          x="-20"
-          y="-20"
-        />
-        <VehicleTypeNormal v-else width="40" height="40" x="-20" y="-20" />
+        <template v-if="props.type === 'CLEANING'">
+          <VehicleFocusedOnTypeCleaning
+            v-if="props.isFocused"
+            class="focus"
+            width="40"
+            height="40"
+            x="-20"
+            y="-20"
+          />
+          <VehicleTypeCleaning width="40" height="40" x="-20" y="-20" />
+        </template>
+
+        <template v-else>
+          <VehicleFocusedOnTypeNormal
+            v-if="props.isFocused"
+            class="focus"
+            width="40"
+            height="40"
+            x="-20"
+            y="-20"
+          />
+          <VehicleTypeNormal width="40" height="40" x="-20" y="-20" />
+        </template>
+
         <!-- vehicle type && vehicle mode end -->
 
         <!-- cargo state start -->

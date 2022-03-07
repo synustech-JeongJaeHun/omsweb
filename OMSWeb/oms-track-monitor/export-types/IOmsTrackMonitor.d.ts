@@ -17,6 +17,9 @@ interface IOmsTrackMonitor {
   // focus
   focus(type: string, id: number): void
 
+  // track
+  track(type: string, id: number): void
+
   // Update Data
   updateVehicle(operation: string, vehicle: any): void
   // updateSegment(operation: UpdateDto.Operation, segment: UpdateDto.Segment): void

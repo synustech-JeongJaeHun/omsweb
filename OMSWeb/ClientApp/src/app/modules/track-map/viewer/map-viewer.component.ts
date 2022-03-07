@@ -233,9 +233,15 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     this.getCameraAndRotation();
   }
 
-  public onTrack(event: { type: string, id: any }) {
+  public findOnTM(event: { type: string, id: any }) {
     this.viewer.find(event.type, event.id)
+  }
+  public focusOnTM(event: { type: string, id: any }) {
     this.viewer.focus(event.type, event.id)
+  }
+
+  public trackOnTM(event: { type: string, id: any }) {
+    this.viewer.track(event.type, event.id)
   }
 
   public onTooltipOn(event: CustomEvent) {

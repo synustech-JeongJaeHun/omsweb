@@ -43,6 +43,7 @@ import { makeClustersFromSegments } from './TrackObjects/cluster/utils/cluster'
 import { setFocusedObject } from 'src/MapObjects/focus/focus'
 import { scaleInfo } from './MapObjects/scale/scale'
 import { rotationInfo } from './MapObjects/rotate/rotate'
+import { setTrackedObject } from './MapObjects/track/track'
 
 /**
  *  ttps://v3.vuejs.org/api/sfc-script-setup.html#typescript-only-features
@@ -194,7 +195,7 @@ const exposed: IOmsTrackMonitor = {
       case 'vehicle':
         const vehicle = findVehicleById(id)
         if (vehicle) {
-          // setFocusedObject(vehicle)
+          setFocusedObject(vehicle)
         }
         break;
       case 'point':
@@ -238,7 +239,7 @@ const exposed: IOmsTrackMonitor = {
     switch (type.trim().toLowerCase()) {
       case 'vehicle':
         const vehicle = findVehicleById(id)
-        // TODO
+        if (vehicle) this.find('point', vehicle.curPoint)
         break;
       case 'point':
         const point = findPointById(id)
@@ -281,6 +282,15 @@ const exposed: IOmsTrackMonitor = {
 
       default:
         break;
+    }
+  },
+
+  track(type, id) {
+    // there is only vehicle.
+
+    const vehicle = findVehicleById(id)
+    if (vehicle) {
+      setTrackedObject(vehicle)
     }
   },
 

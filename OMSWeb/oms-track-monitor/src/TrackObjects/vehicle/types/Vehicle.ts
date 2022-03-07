@@ -1,3 +1,6 @@
+import { CanBeFocused } from "src/MapObjects/focus/types/CanBeFocused"
+import { CanBeTracked } from "src/MapObjects/track/types/CanBeTracked"
+
 type UpdateType =
   | "NoAnimation"
   | "AnimationIn1Segment"
@@ -51,6 +54,6 @@ type Vehicle = {
   | string
   group?: number
   historyChangeTime?: any
-}
+} & CanBeFocused & CanBeTracked
 
 export { Vehicle, UpdateType }

@@ -13,6 +13,7 @@ import { deepCopy } from 'src/utils/deepCopy';
 import MakeDInUpdateWorker from '../utils/workers/MakeDInUpdateWorker?worker&inline'
 import { Position } from 'src/types/Position';
 import VehicleSymbol from './VehicleSymbol.ce.vue';
+import { moveCamera } from 'src/MapObjects/map/camera';
 
 const props = defineProps<{
   vehicle: Vehicle
@@ -97,18 +98,20 @@ function trackVehiclePosition(d: D, lastUpdated: number) {
     if (props.vehicle.lastUpdated !== lastUpdated) return
 
     const diff = now - startTime
+
     if (diff > TotalVehicleAnimationDuration) {
-      const endPosition = pathElement.getPointAtLength(totalLength)
-      realtimePosition.value = { x: endPosition.x, y: endPosition.y }
-      return
+      const p = pathElement.getPointAtLength(totalLength)
+      realtimePosition.value = { x: p.x, y: p.y }
+
+      if (props.vehicle.isTracked) moveCamera(p)
+      globalThis.requestAnimationFrame(() => { })
+    } else {
+      const p = pathElement.getPointAtLength(totalLength / TotalVehicleAnimationDuration * diff)
+      realtimePosition.value = { x: p.x, y: p.y }
+      if (props.vehicle.isTracked) moveCamera(p)
+
+      globalThis.requestAnimationFrame(step)
     }
-
-    const position = pathElement.getPointAtLength(totalLength / TotalVehicleAnimationDuration * diff)
-    realtimePosition.value = { x: position.x, y: position.y }
-    // realtimePosition.x = position.x
-    // realtimePosition.y = position.y
-
-    globalThis.requestAnimationFrame(step)
   }
 
   // https://developer.mozilla.org/ko/docs/Web/API/Window/requestAnimationFrame
@@ -178,6 +181,7 @@ onUnmounted(() => { makeDInUpdateWorker.terminate() })
     :isStale="isStale"
     :isPreventCall="isPreventCall"
     :isPreventPush="isPreventPush"
+    :isFocused="props.vehicle.isFocused"
   />
 
   <!-- use symbol -->

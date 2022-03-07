@@ -50,6 +50,8 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
   readonly permissionEnums: typeof PermissionEnums = PermissionEnums;
 
   @Output() centerZoom = new EventEmitter<void>();
+  @Output() find = new EventEmitter<{ type: string, id: any }>()
+  @Output() focus = new EventEmitter<{ type: string, id: any }>()
   @Output() track = new EventEmitter<{ type: string, id: any }>()
 
   @ViewChild('btnSearch', { read: ElementRef }) btnSearch: ElementRef;
@@ -138,15 +140,12 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
 
     this._searchDlg.afterClosed().subscribe((payload: { type: string, id: any }) => {
       if (!payload || !payload.type || !payload.id) return;
-      this.track.emit({ type: payload.type, id: payload.id })
+      this.find.emit({ type: payload.type, id: payload.id })
+      this.focus.emit({ type: payload.type, id: payload.id })
     });
   }
 
   onTrackVehicle() {
-    if (this.isTracking) {
-      this.stateSvc.commandToolbar('trackVehicle', null);
-      return;
-    }
     if (this._trackDlg && this._trackDlg.getState() === MatDialogState.OPEN) {
       this._trackDlg.close();
       return;
@@ -162,9 +161,11 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
       position: { left: this.tooltipOffset, top: `${rect.top}px` },
     });
 
-    this._trackDlg.afterClosed().subscribe((payload: any) => {
+    this._trackDlg.afterClosed().subscribe((payload?: number) => {
       if (!payload) return;
-      this.stateSvc.commandToolbar('trackVehicle', payload);
+      this.find.emit({ type: 'vehicle', id: payload })
+      this.focus.emit({ type: 'vehicle', id: payload })
+      this.track.emit({ type: 'vehicle', id: payload })
     });
   }
 
