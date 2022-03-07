@@ -3,46 +3,47 @@
     <fieldset class="option-form">
       <legend class="form-title">{{ "names.vehicleScale" | translate }}</legend>
       <div class="slider-form">
-        <mat-slider color="primary" min="3" max="20" [value]="setting.vehicleSize" (change)="update({
+        <mat-slider #vehicleSize color="primary" min="3" max="20" [value]="setting.vehicleSize" (change)="update({
           group: 'Scale',
           key: 'vehicleSize',
           value: $event.value
         })">
         </mat-slider>
-        <div class="slider-value">{{ trackSettingService.trackSetting.vehicleSize }}px</div>
+        <div class="slider-value">{{ vehicleSize.value }}px</div>
       </div>
     </fieldset>
     <fieldset class="option-form">
       <legend class="form-title">{{ "names.mapRotation" | translate }}</legend>
       <div class="slider-form">
-        <mat-slider color="primary" [step]="45" min="0" max="315" [value]="setting.rotation" (change)="update({
+        <mat-slider #rotation color="primary" [step]="45" min="0" max="315" [value]="setting.rotation" (change)="update({
           group: 'Rotation',
           key: 'rotation',
           value: $event.value
         })"></mat-slider>
-        <div class="slider-value">{{ setting.rotation }}&deg;</div>
+        <div class="slider-value">{{ rotation.value }}&deg;</div>
       </div>
     </fieldset>
     <fieldset class="option-form">
       <legend class="form-title">{{ "names.segmentWidth" | translate }}</legend>
       <div class="slider-form">
-        <mat-slider color="primary" min="1" max="20" step="2" [value]="setting.segmentWidth" (change)="update({
+        <mat-slider #segmentWidth color="primary" min="1" max="20" step="2" [value]="setting.segmentWidth" (change)="update({
             group: 'Scale',
             key: 'segmentWidth',
             value: $event.value
           })"></mat-slider>
-        <div class="slider-value">{{ setting.segmentWidth }}px</div>
+        <div class="slider-value">{{ segmentWidth.value }}px</div>
       </div>
     </fieldset>
     <fieldset class="option-form">
       <legend class="form-title">{{ "names.segmentDirection" | translate }}</legend>
       <div class="slider-form">
-        <mat-slider color="primary" min="2" max="13" [value]="setting.segmentDirectionSize" (change)="update({
+        <mat-slider #segmentDirectionSize color="primary" min="2" max="13" [value]="setting.segmentDirectionSize"
+          (change)="update({
             group: 'Scale',
             key: 'segmentDirectionSize',
             value: $event.value
           })"></mat-slider>
-        <div class="slider-value">{{ setting.segmentDirectionSize }}px</div>
+        <div class="slider-value">{{ segmentDirectionSize.value }}px</div>
       </div>
     </fieldset>
     <fieldset class="option-form">
