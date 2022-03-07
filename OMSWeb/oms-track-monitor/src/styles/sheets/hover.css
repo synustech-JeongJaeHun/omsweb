@@ -1,0 +1,27 @@
+:hover {
+  --hover-color: rgba(150, 211, 255, 0.5);
+}
+
+#point-layer :hover {
+  /* TODO */
+}
+
+#segment-layer :hover {
+  /* TODO */
+}
+
+#station-layer :hover {
+  /* TODO */
+}
+
+#buffer-layer :hover {
+  /* TODO */
+}
+
+#mtl-layer :hover {
+  /* TODO */
+}
+
+#vehicle-layer :hover path {
+  /* TODO */
+}

@@ -171,4 +171,16 @@ export class TrackStatusService {
         break;
     }
   }
+
+  getOverlapObjectOnPoint(pointId: number) {
+    const stations = this.trackData.stations.filter(s => s.pointId === pointId)
+    const buffers = this.trackData.buffers.filter(b => b.pointId === pointId)
+    const mtls = this.trackData.mtls.filter(m => m.pointId)
+
+    return {
+      stations,
+      buffers,
+      mtls,
+    }
+  }
 }

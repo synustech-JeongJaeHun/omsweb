@@ -252,12 +252,20 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   }
   public onFocus(event: CustomEvent) {
     console.log(event.type, getCustomEventPayload(event))
+
+    const payload = getCustomEventPayload(event)
+    // @ts-ignore
+    this.selectedObject = { objectType: payload.type, ...payload.value }
+    // @ts-ignore
+    this.focusOnTM({ type: payload.type, id: payload.value.id })
   }
   public onContectMenuOn(event: CustomEvent) {
     console.log(event.type, getCustomEventPayload(event))
   }
   public onBackdrop(event: CustomEvent) {
     console.log(event.type)
+
+    this.selectedObject = undefined
   }
   public getCameraAndRotation() {
     const data = this.viewer.getCameraAndRotation()

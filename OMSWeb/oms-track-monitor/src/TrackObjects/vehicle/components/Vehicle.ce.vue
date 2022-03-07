@@ -135,24 +135,24 @@ const commandLineColor = computed(() => {
   else return undefined
 })
 
-function onTooltipOn() {
-  emit('tooltipon', {
-    type: 'Vehicle',
+function onMouseover() {
+  emit('mouseoverOnObject', {
+    type: "VEHICLE",
     value: deepCopy(props.vehicle)
   })
 }
-function onTooltipOff() {
-  emit('tooltipoff')
+function onMouseleave() {
+  emit('mouseleaveOnObject')
 }
-function onFocus() {
-  emit('focus', {
-    type: "Vehicle",
+function onLeftClick() {
+  emit('mainClickOnObject', {
+    type: "VEHICLE",
     value: deepCopy(props.vehicle)
   })
 }
-function onContextmenu() {
-  emit('contextmenuon', {
-    type: "Vehicle",
+function onRightClick() {
+  emit('secondaryClickOnObject', {
+    type: "VEHICLE",
     value: deepCopy(props.vehicle)
   })
 }
@@ -190,11 +190,11 @@ onUnmounted(() => { makeDInUpdateWorker.terminate() })
     v-if="realtimePosition"
     :x="realtimePosition.x"
     :y="realtimePosition.y"
-    @click.left="onFocus()"
-    @click.right="onContextmenu()"
-    @mouseover="onTooltipOn()"
-    @mouseout="onTooltipOff()"
-    @mouseleave="onTooltipOff()"
+    @click.left="onLeftClick()"
+    @click.right="onRightClick()"
+    @mouseover="onMouseover()"
+    @mouseout="onMouseleave()"
+    @mouseleave="onMouseleave()"
   />
 
   <!-- next point line -->

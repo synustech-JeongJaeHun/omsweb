@@ -2,7 +2,6 @@ import {
   Component,
   Input,
   OnChanges,
-  OnInit,
   SimpleChanges,
 } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
@@ -16,7 +15,7 @@ import { PermissionEnums } from '../../../models/enums';
   templateUrl: './map-side-panel.component.html',
   styleUrls: ['./map-side-panel.component.scss'],
 })
-export class MapSidePanelComponent implements OnInit, OnChanges {
+export class MapSidePanelComponent implements OnChanges {
   @Input('selectedObject') data: any;
 
   hasOverlap = true;
@@ -43,8 +42,6 @@ export class MapSidePanelComponent implements OnInit, OnChanges {
     private auth: AuthService
   ) { }
 
-  ngOnInit(): void { }
-
   ngOnChanges(changes: SimpleChanges): void {
     const { data } = changes;
     if (data.currentValue) {
@@ -57,17 +54,13 @@ export class MapSidePanelComponent implements OnInit, OnChanges {
   }
 
   private bindObject() {
-    this.hasOverlap = true;
-    switch (this.data.objectType) {
-      case 'Vehicle':
-        break;
-      case 'Segment':
-        this.bindSegment();
-        break;
+    switch (this.data.objectType.toUpperCase()) {
+      case 'SEGMENT':
       case 'ZCU':
         this.hasOverlap = false;
         break;
       default:
+        this.hasOverlap = true;
         break;
     }
   }

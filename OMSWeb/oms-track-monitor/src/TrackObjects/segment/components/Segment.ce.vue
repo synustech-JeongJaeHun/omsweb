@@ -26,18 +26,24 @@ watchEffect(() => {
   }
 })
 
-function onTooltipOn() {
-  emit('tooltipon', {
-    type: 'Segment',
+function onMouseover() {
+  emit('mouseoverOnObject', {
+    type: "SEGMENT",
     value: deepCopy(props.segment)
   })
 }
-function onTooltipOff() {
-  emit('tooltipoff')
+function onMouseleave() {
+  emit('mouseleaveOnObject')
 }
-function onContextmenu() {
-  emit('contextmenuon', {
-    type: "Segment",
+function onLeftClick() {
+  emit('mainClickOnObject', {
+    type: "SEGMENT",
+    value: deepCopy(props.segment)
+  })
+}
+function onRightClick() {
+  emit('secondaryClickOnObject', {
+    type: "SEGMENT",
     value: deepCopy(props.segment)
   })
 }
@@ -50,10 +56,11 @@ function onContextmenu() {
       class="segment-path fixed-scale-stroke"
       :d="props.segment.d"
       fill="none"
-      @click.right="onContextmenu()"
-      @mouseover="onTooltipOn()"
-      @mouseout="onTooltipOff()"
-      @mouseleave="onTooltipOff()"
+      @click.left="onLeftClick()"
+      @click.right="onRightClick()"
+      @mouseover="onMouseover()"
+      @mouseout="onMouseleave()"
+      @mouseleave="onMouseleave()"
     />
     <use
       v-if="position !== undefined && angle !== undefined"
@@ -62,10 +69,10 @@ function onContextmenu() {
       :x="position.x"
       :y="position.y"
       :transform="`rotate(${angle} ${position.x} ${position.y})`"
-      @click.right="onContextmenu()"
-      @mouseover="onTooltipOn()"
-      @mouseout="onTooltipOff()"
-      @mouseleave="onTooltipOff()"
+      @click.right="onRightClick()"
+      @mouseover="onMouseover()"
+      @mouseout="onMouseleave()"
+      @mouseleave="onMouseleave()"
     />
     <path
       v-if="props.segment.isFocused"

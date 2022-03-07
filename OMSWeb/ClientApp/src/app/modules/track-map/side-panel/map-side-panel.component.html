@@ -9,20 +9,20 @@
 <div class="panel-body" [ngSwitch]="!data">
   <div *ngSwitchCase="false">
     <mat-accordion multi>
-      <ng-container [ngSwitch]="data?.objectType">
-        <ng-container *ngSwitchCase="'Vehicle'">
+      <ng-container [ngSwitch]="data?.objectType.toUpperCase()">
+        <ng-container *ngSwitchCase="'VEHICLE'">
           <ng-container *ngTemplateOutlet="vehicleInfo"></ng-container>
         </ng-container>
-        <ng-container *ngSwitchCase="'Point'">
+        <ng-container *ngSwitchCase="'POINT'">
           <ng-container *ngTemplateOutlet="pointInfo"></ng-container>
         </ng-container>
-        <ng-container *ngSwitchCase="'Segment'">
+        <ng-container *ngSwitchCase="'SEGMENT'">
           <ng-container *ngTemplateOutlet="segmentInfo"></ng-container>
         </ng-container>
-        <ng-container *ngSwitchCase="'Station'">
+        <ng-container *ngSwitchCase="'STATION'">
           <ng-container *ngTemplateOutlet="stationInfo"></ng-container>
         </ng-container>
-        <ng-container *ngSwitchCase="'Buffer'">
+        <ng-container *ngSwitchCase="'BUFFER'">
           <ng-container *ngTemplateOutlet="bufferInfo"></ng-container>
         </ng-container>
         <!-- ZCU Item Detail -->
@@ -245,13 +245,13 @@
         </mat-form-field>
         <mat-form-field class="info-item readonly" floatLabel="always">
           <mat-label>{{ "names.pointFrom" | translate }}</mat-label>
-          <input matInput type="text" readonly [value]="data.pointFrom?.id" />
+          <input matInput type="text" readonly [value]="data.startPoint" />
         </mat-form-field>
         <mat-form-field class="info-item readonly" floatLabel="always">
           <mat-label>{{ "names.pointTo" | translate }}</mat-label>
-          <input matInput type="text" readonly [value]="data.pointTo?.id" />
+          <input matInput type="text" readonly [value]="data.endPoint" />
         </mat-form-field>
-        <mat-form-field class="info-item readonly" floatLabel="always">
+        <mat-form-field class=" info-item readonly" floatLabel="always">
           <mat-label>{{ "names.speed" | translate }}</mat-label>
           <input matInput type="text" readonly [value]="data.speed" />
           <span matSuffix>mm/s</span>
@@ -263,7 +263,7 @@
         </mat-form-field>
         <mat-form-field class="info-item readonly" floatLabel="always">
           <mat-label>{{ "names.travelTime" | translate }}</mat-label>
-          <input matInput type="text" readonly [value]="data.travelTime | number: '1.0-2'" />
+          <input matInput type="text" readonly [value]="(data.length / data.speed) | number: '1.0-2'" />
           <span matSuffix>sec</span>
         </mat-form-field>
       </div>
@@ -300,33 +300,25 @@
         </mat-form-field>
         <mat-form-field class="info-item readonly" floatLabel="always">
           <mat-label>{{ "names.completeNodes" | translate }}</mat-label>
-          <input matInput type="text" readonly [value]="data.completePoints" />
+          <input matInput type="text" readonly [value]="data.completePoints[0].completePointId" />
         </mat-form-field>
         <mat-form-field class="info-item readonly">
           <mat-label>{{ "names.coord-x" | translate }}</mat-label>
-          <input matInput type="text" readonly [value]="data.coord.x" />
+          <input matInput type="text" readonly [value]="data.x" />
         </mat-form-field>
         <mat-form-field class="info-item readonly">
           <mat-label>{{ "names.coord-y" | translate }}</mat-label>
-          <input matInput type="text" readonly [value]="data.coord.y" />
-        </mat-form-field>
-        <mat-form-field class="info-item readonly">
-          <mat-label>{{ "names.invertedCoord-x" | translate }}</mat-label>
-          <input matInput type="text" readonly [value]="data.invertedCoord.x" />
-        </mat-form-field>
-        <mat-form-field class="info-item readonly">
-          <mat-label>{{ "names.invertedCoord-y" | translate }}</mat-label>
-          <input matInput type="text" readonly [value]="data.invertedCoord.y" />
+          <input matInput type="text" readonly [value]="data.y" />
         </mat-form-field>
         <mat-form-field class="info-item readonly">
           <mat-label>{{ "names.type" | translate }}</mat-label>
           <input matInput type="text" readonly
             [value]="((data.zcuType == 0) ? 'Standard' : ((data.zcuType == 1) ? 'NType' : ''))" />
-          <!--
-          <mat-select [(value)]="data.zcuType" [value]="data.zcuType">
+
+          <!-- <mat-select [(value)]="data.zcuType" [value]="data.zcuType">
             <mat-option value="0">Standard</mat-option>
-          </mat-select>
-          -->
+          </mat-select> -->
+
         </mat-form-field>
         <mat-form-field class="info-item readonly">
           <mat-label>{{ "names.usingType" | translate }}</mat-label>

@@ -15,7 +15,7 @@ const isShow = ref(false)
     <button
       type="button"
       @click.stop="isShow = !isShow"
-      style="border: unset; background-color: unset;"
+      style="border: unset; background-color: unset; user-select: none;"
     >ℹ️</button>
     <div
       v-if="isShow"

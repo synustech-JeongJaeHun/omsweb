@@ -7,6 +7,7 @@ import { Station } from "../TrackObjects/station/types/Station";
 import { Vehicle } from "../TrackObjects/vehicle/types/Vehicle";
 import { Buffer } from "../TrackObjects/buffer/types/Buffer";
 import { UpdateDto } from "./Dto";
+import { Zcu } from "src/TrackObjects/zcu/types/Zcu";
 
 // also update /export-types
 interface IOmsTrackMonitor {
@@ -37,6 +38,7 @@ interface IOmsTrackMonitor {
   focus(type: "station", id: Station['id']): void
   focus(type: "buffer", id: Buffer['id']): void
   focus(type: "mtl", id: Mtl['id']): void
+  focus(type: "zcu", id: Zcu['id']): void
 
   track(type: 'vehicle', id: Vehicle['id']): void
 

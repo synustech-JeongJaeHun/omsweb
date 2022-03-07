@@ -190,51 +190,6 @@ const exposed: IOmsTrackMonitor = {
   },
   centerZoom,
 
-  focus(type, id) {
-    switch (type.trim().toLowerCase()) {
-      case 'vehicle':
-        const vehicle = findVehicleById(id)
-        if (vehicle) {
-          setFocusedObject(vehicle)
-        }
-        break;
-      case 'point':
-        const point = findPointById(id)
-        if (point) {
-          setFocusedObject(point)
-        }
-        break;
-      case 'segment':
-        const segment = findSegmentById(id)
-        if (segment) {
-          setFocusedObject(segment)
-        }
-        break;
-      case 'station':
-        const station = findStationById(id)
-        if (station) {
-          setFocusedObject(station)
-        }
-        break;
-      case 'buffer':
-        const buffer = findBufferById(id)
-        if (buffer) {
-          setFocusedObject(buffer)
-        }
-        break;
-      case 'mtl':
-        const mtl = findMtlById(id)
-        if (mtl) {
-          setFocusedObject(mtl)
-        }
-
-        break;
-
-      default:
-        break;
-    }
-  },
-
   find(type, id) {
     switch (type.trim().toLowerCase()) {
       case 'vehicle':
@@ -277,6 +232,55 @@ const exposed: IOmsTrackMonitor = {
       case 'mtl':
         const mtl = findMtlById(id)
         if (mtl) this.focus('point', mtl.pointId)
+        break;
+
+      default:
+        break;
+    }
+  },
+
+  focus(type, id) {
+    switch (type.trim().toLowerCase()) {
+      case 'vehicle':
+        const vehicle = findVehicleById(id)
+        if (vehicle) {
+          setFocusedObject(vehicle)
+        }
+        break;
+      case 'point':
+        const point = findPointById(id)
+        if (point) {
+          setFocusedObject(point)
+        }
+        break;
+      case 'segment':
+        const segment = findSegmentById(id)
+        if (segment) {
+          setFocusedObject(segment)
+        }
+        break;
+      case 'station':
+        const station = findStationById(id)
+        if (station) {
+          setFocusedObject(station)
+        }
+        break;
+      case 'buffer':
+        const buffer = findBufferById(id)
+        if (buffer) {
+          setFocusedObject(buffer)
+        }
+        break;
+      case 'mtl':
+        const mtl = findMtlById(id)
+        if (mtl) {
+          setFocusedObject(mtl)
+        }
+      case 'zcu':
+        const zcu = findZcuById(id)
+        if (zcu) {
+          setFocusedObject(zcu)
+        }
 
         break;
 
@@ -543,6 +547,7 @@ defineExpose(exposed)
 <style src="./styles/sheets/invert.css"></style>
 <style src="./styles/sheets/visibility.css"></style>
 <style src="./styles/sheets/focus.css"></style>
+<style src="./styles/sheets/hover.css"></style>
 <style src="./styles/sheets/fixed-scale.css"></style>
 <style src="./styles/sheets/will-change.css"></style>
 

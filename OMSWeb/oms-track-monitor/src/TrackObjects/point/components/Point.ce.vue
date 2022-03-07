@@ -12,24 +12,24 @@ const props = defineProps<{
 }>()
 const emit = inject<RootEmits>(RootEmitInjectionKey)!
 
-function onTooltipOn() {
-  emit('tooltipon', {
-    type: 'Point',
+function onMouseover() {
+  emit('mouseoverOnObject', {
+    type: "POINT",
     value: deepCopy(props.point)
   })
 }
-function onTooltipOff() {
-  emit('tooltipoff')
+function onMouseleave() {
+  emit('mouseleaveOnObject')
 }
-function onFocus() {
-  emit('focus', {
-    type: "Point",
+function onLeftClick() {
+  emit('mainClickOnObject', {
+    type: "POINT",
     value: deepCopy(props.point)
   })
 }
-function onContextmenu() {
-  emit('contextmenuon', {
-    type: "Point",
+function onRightClick() {
+  emit('secondaryClickOnObject', {
+    type: "POINT",
     value: deepCopy(props.point)
   })
 }
@@ -42,11 +42,11 @@ function onContextmenu() {
         <circle
           r="5"
           class="point-path"
-          @click.left="onFocus()"
-          @click.right="onContextmenu()"
-          @mouseover="onTooltipOn()"
-          @mouseout="onTooltipOff()"
-          @mouseleave="onTooltipOff()"
+          @click.left="onLeftClick()"
+          @click.right="onRightClick()"
+          @mouseover="onMouseover()"
+          @mouseout="onMouseleave()"
+          @mouseleave="onMouseleave()"
         />
         <circle v-if="props.point.isFocused" r="10" class="focus" />
         <!-- <text y="70">{{ props.point.logicalId }}</text> -->

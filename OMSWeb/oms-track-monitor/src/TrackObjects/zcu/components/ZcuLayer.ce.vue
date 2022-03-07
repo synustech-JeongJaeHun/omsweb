@@ -7,17 +7,7 @@ import { zcus } from '../zcus'
 <template>
   <Layer id="zcu-layer">
     <defs>
-      <!-- 
-        pointer-events for event from bounding-box
-        https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/pointer-events
-      -->
-      <path
-        id="zcu"
-        pointer-events="bounding-box"
-        d="M 0 -12 L 12 0 L 0 12 L -12 0 Z"
-        stroke="black"
-        stroke-width="3"
-      />
+      <path id="zcu" d="M 0 -12 L 12 0 L 0 12 L -12 0 Z" />
     </defs>
     <Zcu v-for="zcu of zcus" :key="zcu.id" :zcu="zcu" />
   </Layer>

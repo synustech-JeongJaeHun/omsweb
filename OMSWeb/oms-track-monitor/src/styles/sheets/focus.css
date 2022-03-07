@@ -1,5 +1,5 @@
 .focus {
-  --focus-color: rgba(150, 211, 255, 0.5);
+  --focus-color: rgb(78, 159, 243, 0.5);
 }
 
 #point-layer .focus {
@@ -28,7 +28,13 @@
 }
 
 #vehicle-layer .focus path {
-  stroke: #4e9ff3;
+  stroke: var(--focus-color);
   stroke-width: 40;
+  pointer-events: none;
+}
+
+#zcu-layer .focus {
+  stroke: var(--focus-color);
+  stroke-width: 10;
   pointer-events: none;
 }

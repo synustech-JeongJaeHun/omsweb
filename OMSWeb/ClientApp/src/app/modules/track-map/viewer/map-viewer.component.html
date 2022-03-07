@@ -15,9 +15,9 @@
     [segmentDirectionColor]="tmSetting.segmentDirectionColor" [autoModeVehicleColor]="tmSetting.autoModeVehicleColor"
     [manualModeVehicleColor]="tmSetting.manualModeVehicleColor" [noneModeVehicleColor]="tmSetting.noneModeVehicleColor"
     [cargoLoadingColor]="tmSetting.cargoLoadingColor" [cargoFullColor]="tmSetting.cargoFullColor"
-    [cargoUnloadingColor]="tmSetting.cargoUnloadingColor" (tooltipon)="onTooltipOn($event)"
-    (tooltipoff)="onTooltipOff($event)" (focus)="onFocus($event)" (contextmenuon)="onContectMenuOn($event)"
-    (backdrop)="onBackdrop($event)">
+    [cargoUnloadingColor]="tmSetting.cargoUnloadingColor" (mouseoverOnObject)="onTooltipOn($event)"
+    (mouseleaveOnObject)="onTooltipOff($event)" (mainClickOnObject)="onFocus($event)"
+    (secondaryClickOnObject)="onContectMenuOn($event)" (clickOutObject)="onBackdrop($event)">
   </oms-track-monitor>
 
   <div id="side_panel">

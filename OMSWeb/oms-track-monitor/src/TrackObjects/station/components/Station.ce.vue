@@ -17,24 +17,24 @@ const emit = inject<RootEmits>(RootEmitInjectionKey)!
 const position = readonly(computed(() => getPositionForBufferOrStation(props.station)))
 const groupColor = useGroupColor('station', toRef(props.station, 'id'))
 
-function onTooltipOn() {
-  emit('tooltipon', {
-    type: 'Station',
+function onMouseover() {
+  emit('mouseoverOnObject', {
+    type: "STATION",
     value: deepCopy(props.station)
   })
 }
-function onTooltipOff() {
-  emit('tooltipoff')
+function onMouseleave() {
+  emit('mouseleaveOnObject')
 }
-function onFocus() {
-  emit('focus', {
-    type: "Station",
+function onLeftClick() {
+  emit('mainClickOnObject', {
+    type: "STATION",
     value: deepCopy(props.station)
   })
 }
-function onContextmenu() {
-  emit('contextmenuon', {
-    type: "Station",
+function onRightClick() {
+  emit('secondaryClickOnObject', {
+    type: "STATION",
     value: deepCopy(props.station)
   })
 }
@@ -58,11 +58,11 @@ function onContextmenu() {
         <use
           href="#station"
           class="station-path"
-          @click.left="onFocus()"
-          @click.right="onContextmenu()"
-          @mouseover="onTooltipOn()"
-          @mouseout="onTooltipOff()"
-          @mouseleave="onTooltipOff()"
+          @click.left="onLeftClick()"
+          @click.right="onRightClick()"
+          @mouseover="onMouseover()"
+          @mouseout="onMouseleave()"
+          @mouseleave="onMouseleave()"
         />
         <rect v-if="props.station.isFocused" class="focus" x="-13" y="-13" width="26" height="26" />
         <RasterizedText class="invert" x="15" y="-10" :text="props.station.logicalId" />

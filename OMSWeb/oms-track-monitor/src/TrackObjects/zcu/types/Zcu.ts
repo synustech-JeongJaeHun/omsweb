@@ -1,3 +1,4 @@
+import { CanBeFocused } from "src/MapObjects/focus/types/CanBeFocused";
 import { ZcuCompletePoint } from "./ZcuCompletePoint";
 import { ZcuInputZone } from "./ZcuInputZone";
 
@@ -13,6 +14,6 @@ type Zcu = {
   zcuType: number
   inputZones: ZcuInputZone[]
   completePoints: ZcuCompletePoint[]
-}
+} & CanBeFocused
 
 export { Zcu }

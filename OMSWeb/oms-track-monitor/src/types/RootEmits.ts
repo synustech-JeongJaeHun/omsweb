@@ -9,53 +9,56 @@ import { Segment } from "TrackObjects/segment/types/Segment"
 /**
  * if you change this file,
  * then change "export-types\oms-track-monitor.d.ts" file too
+ * 
+ * NOT NOW...
  */
-
 
 const RootEmitInjectionKey = "RootEmit"
 interface RootEmits {
-  (e: 'tooltipon', value: EventDetails.TooltipOn): void
-  (e: 'tooltipoff', value: EventDetails.TooltipOff): void
-  (e: 'focus', value: EventDetails.Focus): void
-  /**
-   * avoid "contextmenu" for basic htmlelement event fired
-   */
-  (e: 'contextmenuon', value: EventDetails.ContextmenuOn): void
-  (e: 'backdrop', value: EventDetails.Backdrop): void
+  // for focus ...
+  (e: 'mainClickOnObject', value: EventDetails.MainClickOnObject): void
+  // for contextmenu ...
+  (e: 'secondaryClickOnObject', value: EventDetails.SecondaryClickOnObject): void
+  // for backdrop...
+  (e: 'clickOutObject', value: EventDetails.ClickOutObject): void
+  // tooltip on
+  (e: 'mouseoverOnObject', value: EventDetails.MouseoverOnObject): void
+  // tooltip off
+  (e: 'mouseleaveOnObject', value: EventDetails.MouseleaveOnObject): void
 }
 
 namespace EventDetails {
 
-  export type TooltipOn =
-    | { type: "Point", value: Point }
-    | { type: "Segment", value: Segment }
-    | { type: "Station", value: Station }
-    | { type: "Buffer", value: Buffer }
-    | { type: "Mtl", value: Mtl }
-    | { type: "Zcu", value: Zcu }
-    | { type: "Vehicle", value: Vehicle }
+  export type MouseoverOnObject =
+    | { type: "POINT", value: Point }
+    | { type: "SEGMENT", value: Segment }
+    | { type: "STATION", value: Station }
+    | { type: "BUFFER", value: Buffer }
+    | { type: "MTL", value: Mtl }
+    | { type: "ZCU", value: Zcu }
+    | { type: "VEHICLE", value: Vehicle }
 
-  export type TooltipOff = void
+  export type MouseleaveOnObject = void
 
-  export type Focus =
-    | { type: "Point", value: Point }
-    | { type: "Segment", value: Segment }
-    | { type: "Station", value: Station }
-    | { type: "Buffer", value: Buffer }
-    | { type: "Mtl", value: Mtl }
-    | { type: "Zcu", value: Zcu }
-    | { type: "Vehicle", value: Vehicle }
+  export type MainClickOnObject =
+    | { type: "POINT", value: Point }
+    | { type: "SEGMENT", value: Segment }
+    | { type: "STATION", value: Station }
+    | { type: "BUFFER", value: Buffer }
+    | { type: "MTL", value: Mtl }
+    | { type: "ZCU", value: Zcu }
+    | { type: "VEHICLE", value: Vehicle }
 
-  export type ContextmenuOn =
-    | { type: "Point", value: Point }
-    | { type: "Segment", value: Segment }
-    | { type: "Station", value: Station }
-    | { type: "Buffer", value: Buffer }
-    | { type: "Mtl", value: Mtl }
-    | { type: "Zcu", value: Zcu }
-    | { type: "Vehicle", value: Vehicle }
+  export type SecondaryClickOnObject =
+    | { type: "POINT", value: Point }
+    | { type: "SEGMENT", value: Segment }
+    | { type: "STATION", value: Station }
+    | { type: "BUFFER", value: Buffer }
+    | { type: "MTL", value: Mtl }
+    | { type: "ZCU", value: Zcu }
+    | { type: "VEHICLE", value: Vehicle }
 
-  export type Backdrop = void
+  export type ClickOutObject = void
 }
 
 export {

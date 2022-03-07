@@ -16,24 +16,24 @@ const emit = inject<RootEmits>(RootEmitInjectionKey)!
 const position = usePointPoisiton(toRef(props.mtl, 'pointId'))
 const groupColor = useGroupColor('mtl', toRef(props.mtl, 'id'))
 
-function onTooltipOn() {
-  emit('tooltipon', {
-    type: 'Mtl',
+function onMouseover() {
+  emit('mouseoverOnObject', {
+    type: "MTL",
     value: deepCopy(props.mtl)
   })
 }
-function onTooltipOff() {
-  emit('tooltipoff')
+function onMouseleave() {
+  emit('mouseleaveOnObject')
 }
-function onFocus() {
-  emit('focus', {
-    type: "Mtl",
+function onLeftClick() {
+  emit('mainClickOnObject', {
+    type: "MTL",
     value: deepCopy(props.mtl)
   })
 }
-function onContextmenu() {
-  emit('contextmenuon', {
-    type: "Mtl",
+function onRightClick() {
+  emit('secondaryClickOnObject', {
+    type: "MTL",
     value: deepCopy(props.mtl)
   })
 }
@@ -52,11 +52,11 @@ function onContextmenu() {
       href="#mtl"
       stroke="grey"
       stroke-width="10"
-      @click.left="onFocus()"
-      @click.right="onContextmenu()"
-      @mouseover="onTooltipOn()"
-      @mouseout="onTooltipOff()"
-      @mouseleave="onTooltipOff()"
+      @click.left="onLeftClick()"
+      @click.right="onRightClick()"
+      @mouseover="onMouseover()"
+      @mouseout="onMouseleave()"
+      @mouseleave="onMouseleave()"
     />
     <use v-if="props.mtl.isFocused" href="#mtl" class="focus" stroke-width="20" />
     <!-- <text y="70">{{ props.mtl.id }}</text> -->

@@ -13,24 +13,24 @@ const props = defineProps<{
 }>()
 const emit = inject<RootEmits>(RootEmitInjectionKey)!
 
-function onTooltipOn() {
-  emit('tooltipon', {
-    type: 'Zcu',
+function onMouseover() {
+  emit('mouseoverOnObject', {
+    type: "ZCU",
     value: deepCopy(props.zcu)
   })
 }
-function onTooltipOff() {
-  emit('tooltipoff')
+function onMouseleave() {
+  emit('mouseleaveOnObject')
 }
-function onFocus() {
-  emit('focus', {
-    type: "Zcu",
+function onLeftClick() {
+  emit('mainClickOnObject', {
+    type: "ZCU",
     value: deepCopy(props.zcu)
   })
 }
-function onContextmenu() {
-  emit('contextmenuon', {
-    type: "Zcu",
+function onRightClick() {
+  emit('secondaryClickOnObject', {
+    type: "ZCU",
     value: deepCopy(props.zcu)
   })
 }
@@ -40,15 +40,25 @@ function onContextmenu() {
   <svg class="overflow-visible cursor-pointer zcu" :x="props.zcu.x" :y="props.zcu.y">
     <ScaleByScale>
       <MapReverseRotate>
+        <use v-if="props.zcu.isFocused" href="#zcu" class="focus" fill="none" />
+
+        <!-- 
+        pointer-events for event from bounding-box
+        https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/pointer-events
+        -->
         <use
           href="#zcu"
+          pointer-events="bounding-box"
+          stroke="black"
+          stroke-width="3"
           :fill="props.zcu.error ? 'red' : 'transparent'"
-          @click.left="onFocus()"
-          @click.right="onContextmenu()"
-          @mouseover="onTooltipOn()"
-          @mouseout="onTooltipOff()"
-          @mouseleave="onTooltipOff()"
+          @click.left="onLeftClick()"
+          @click.right="onRightClick()"
+          @mouseover="onMouseover()"
+          @mouseout="onMouseleave()"
+          @mouseleave="onMouseleave()"
         />
+
         <RasterizedText
           class="invert"
           x="-45"
