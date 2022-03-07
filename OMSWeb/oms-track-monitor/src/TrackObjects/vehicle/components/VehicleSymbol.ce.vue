@@ -114,6 +114,7 @@ const props = defineProps<{
         />
         <!-- cargo state end -->
 
+        <!-- Text fields START -->
         <!-- vehicle id -->
         <!-- 📐🛑 Be careful! logic is dependent on invert -->
         <text
@@ -136,106 +137,61 @@ const props = defineProps<{
             :filter="props.isHotlot ? `url(#vehicle-order-hotlot-background)` : undefined"
           >{{ props.orderId }}</text>
         </g>
+        <!-- Text fields END -->
 
         <!-- vehicle properties ordered by priority ==== START -->
 
         <!-- top left (2) -->
         <!-- 1. Blocked -->
-        <VehicleStateBlockSvg v-if="props.isBlocked" x="-80" y="80" width="20" height="20" />
-        <!-- <circle v-if="props.isBlocked" cx="-80" cy="80" r="20" fill="red" /> -->
+        <VehicleStateBlockSvg v-if="props.isBlocked" x="-25" y="15" width="10" height="10" />
         <!-- 2. Sensor Stop -->
         <VehicleStateSensorStopSvg
           v-else-if="props.isSensorStopped"
-          x="-80"
-          y="80"
-          width="15"
-          height="15"
+          x="-25"
+          y="15"
+          width="10"
+          height="10"
         />
-        <!-- <circle
-          v-else-if="props.isSensorStopped"
-          cx="-80"
-          cy="80"
-          r="15"
-          stroke="rgb(255, 90, 90)"
-          stroke-width="5"
-          fill="rgb(255, 192, 203)"
-        />-->
         <template v-else />
 
         <!-- top right (1) -->
         <!-- 1. Stale -->
         <!-- where is staled -->
-        <VehicleStateStaleSvg v-if="props.isStale" x="80" y="80" width="15" height="15" />
-        <!-- <path
-          v-if="props.isStale"
-          fill="none"
-          stroke="black"
-          stroke-width="2"
-          d="
-      M 80 80 
-      m -15 0 
-      a 15 15 0 1 0 30 0 
-      a 15 15 0 1 0 -30 0 
-      M 80 90 
-      L 80 80 
-      L 70 80
-      "
-        />-->
+        <VehicleStateStaleSvg v-if="props.isStale" x="15" y="15" width="10" height="10" />
 
         <!-- bottom left (1) -->
         <!-- 1. Error -->
         <!-- triangle with width 40 and height 30 -->
-        <VehicleStateErrorSvg v-if="props.errorList" x="-80" y="-80" width="20" height="15" />
-        <!-- <path
-          v-if="props.errorList"
-          fill="yellow"
-          stroke="orange"
-          stroke-width="5"
-          d="
-      M -80 -65 
-      L -100 -95 
-      L -60 -95 
-      Z"
-        />-->
+        <VehicleStateErrorSvg v-if="props.errorList" x="-20" y="-15" width="20" height="15" />
 
         <!-- bottom right (4) -->
         <!-- 1. Disconnected -->
-        <VehicleStateDisconnectedSvg v-if="props.isConnected === false" width="40" height="40" />
-        <!-- <path
+        <VehicleStateDisconnectedSvg
           v-if="props.isConnected === false"
-          stroke="red"
-          stroke-width="3"
-          fill="none"
-          d="
-      M 80 -70 
-      L 90 -60 
-      L 90 -85 
-      M 90 -90 
-      L 60 -90 
-      L 75 -75 
-      M 60 -60 
-      L 95 -95
-      "
-        />-->
+          x="22"
+          y="-18"
+          width="15"
+          height="15"
+        />
         <!-- 2. Maintained -->
-        <VehicleStateMaintainedSvg v-else-if="props.isMaint" width="50" height="50" x="80" y="-80" />
+        <VehicleStateMaintainedSvg v-else-if="props.isMaint" x="22" y="-18" width="20" height="20" />
         <!-- 3. Prevent Call or Prevent Push -->
         <template v-else-if="props.isPreventCall || props.isPreventPush">
-          <!-- 3-A. Prevent Call -->
-          <VehicleStatePreventCallSvg
-            v-if="props.isPreventCall"
-            width="50"
-            height="50"
-            x="80"
-            y="-80"
-          />
-          <!-- 3-B. Prevent Push -->
+          <!-- 3-A. Prevent Push -->
           <VehicleStatePreventPushSvg
             v-if="props.isPreventPush"
-            width="50"
-            height="50"
-            x="80"
-            y="-80"
+            width="15"
+            height="15"
+            x="22"
+            y="-18"
+          />
+          <!-- 3-B. Prevent Call -->
+          <VehicleStatePreventCallSvg
+            v-if="props.isPreventCall"
+            width="15"
+            height="15"
+            :x="props.isPreventPush ? 40 : 22"
+            y="-18"
           />
         </template>
         <template v-else />

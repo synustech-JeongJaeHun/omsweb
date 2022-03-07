@@ -1,5 +1,5 @@
 <svg viewBox="-10 -10 120 120">
-  <circle cx="50" cy="50" r="50" stroke="red" stroke-width="5" fill="none" />
+  <circle cx="50" cy="50" r="50" stroke="red" stroke-width="10" fill="none" />
   <path fill="black" d="
       M 60 40
       L 65 45
