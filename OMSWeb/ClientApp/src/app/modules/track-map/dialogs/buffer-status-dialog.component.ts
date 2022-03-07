@@ -1,56 +1,44 @@
-import { Component, OnInit } from '@angular/core';
-import { Buffer } from '../../../models/buffer.model';
+import { Component } from '@angular/core';
+import { Dto } from '@oms/root/models/dto/track.model';
+import { TrackStatusService } from '@oms/root/services/track-status.service';
 import { ILookupUnit } from '../../../models/map.interface';
 import { TracksService } from '../../../services/tracks.service';
-import { MapDataService } from '../map-data.service';
 
 @Component({
   selector: 'oms-buffer-status-dialog',
   templateUrl: './buffer-status-dialog.component.html',
   styleUrls: ['./buffer-status-dialog.component.scss'],
 })
-export class BufferStatusDialogComponent implements OnInit {
-  selectedUnit: ILookupUnit;
-  currentBuffer: Buffer;
+export class BufferStatusDialogComponent {
+  selectedUnit: Dto.IBuffer;
+  currentBuffer: Dto.IBuffer;
 
   constructor(
-    private dataSvc: MapDataService,
-    private trackSvc: TracksService
-  ) { }
-
-  ngOnInit(): void {
-    this.getFirstUnit();
+    private trackSvc: TracksService,
+    private trackStatusService: TrackStatusService,
+  ) {
+    if (this.trackStatusService.trackData.buffers.length > 0) {
+      this.currentBuffer = this.trackStatusService.trackData.buffers[0];
+      this.selectedUnit = this.currentBuffer;
+    }
   }
 
   onBufferChange(data: ILookupUnit) {
-    if (data) {
-      this.currentBuffer = this.dataSvc.data.buffers.find(
-        (x) => x.id === data.id
-      );
-    }
+    if (data)
+      this.currentBuffer = this.trackStatusService.trackData.buffers.find(b => b.id === data.id)
   }
 
   onRemoveCarrier() {
     this.trackSvc.removeBufferCarrier(this.currentBuffer.id).subscribe();
   }
+
   onInstallCarrier(carrierId: number) {
     this.trackSvc
       .installBufferCarrier(this.currentBuffer.id, carrierId)
       .subscribe();
   }
+
   onUpdateNote(note: string) {
     this.trackSvc.updateBuffer(this.currentBuffer.id, { note }).subscribe();
-  }
-
-  private getFirstUnit() {
-    const { buffers } = this.dataSvc.data;
-    if (buffers.length > 0) {
-      this.currentBuffer = buffers[0];
-      const { id, objectType } = this.currentBuffer;
-      this.selectedUnit = {
-        id,
-        objectType,
-      };
-    }
   }
 }
