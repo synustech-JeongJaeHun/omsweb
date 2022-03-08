@@ -221,6 +221,12 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     }
   }
 
+  changeFocus(event: any) {
+    this.selectedObject = event
+    // @ts-ignore
+    this.focusOnTM({ type: event.objectType, id: event.id })
+  }
+
   // EPIC > OMS-TRACK-MONITOR
   @HostListener('window:resize', ['$event.target'])
   onResize(window: Window) {

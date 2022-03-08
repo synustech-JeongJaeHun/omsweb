@@ -49,8 +49,8 @@ export namespace SvgDrawingUtil {
           .append('g')
           .attr('class', `point-unit ${className}`)
           .attr('id', `id_${data.id}`)
-          .attr('x', data.invertedCoord.x)
-          .attr('y', data.invertedCoord.y);
+          .attr('x', data.x)
+          .attr('y', data.y);
 
         if (zoom_level === 2) {
           buildSubUnit(
@@ -422,7 +422,7 @@ export namespace SvgDrawingUtil {
         }
 
         // Prevent call
-        if (layout_object.call.length === 0) {
+        if (layout_object.orderOrigin.length === 0) {
           let push_svg = dom_object_group.select('.push');
           let x_offset = (dom_css.radius * 4) / 3;
           if (push_svg.nodes().length > 0) {

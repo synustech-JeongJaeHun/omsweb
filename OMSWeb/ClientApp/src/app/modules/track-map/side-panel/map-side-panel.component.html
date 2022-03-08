@@ -9,7 +9,7 @@
 <div class="panel-body" [ngSwitch]="!data">
   <div *ngSwitchCase="false">
     <mat-accordion multi>
-      <ng-container [ngSwitch]="data?.objectType.toUpperCase()">
+      <ng-container [ngSwitch]="data?.objectType?.toUpperCase()">
         <ng-container *ngSwitchCase="'VEHICLE'">
           <ng-container *ngTemplateOutlet="vehicleInfo"></ng-container>
         </ng-container>
@@ -42,7 +42,8 @@
               }}
             </mat-panel-title>
           </mat-expansion-panel-header>
-          <oms-overlap-list [selectedObject]="data"></oms-overlap-list>
+          <oms-overlap-list [selectedObject]="data" [overlapList]="overlapList" (focus)="focus.emit($event)">
+          </oms-overlap-list>
         </mat-expansion-panel>
       </ng-container>
     </mat-accordion>
@@ -133,11 +134,11 @@
         </mat-form-field>
         <mat-form-field class="info-item readonly" floatLabel="always">
           <mat-label>{{ "names.coord-x" | translate }}</mat-label>
-          <input matInput type="text" readonly [value]="data.coord?.x" />
+          <input matInput type="text" readonly [value]="data.x" />
         </mat-form-field>
         <mat-form-field class="info-item readonly" floatLabel="always">
           <mat-label>{{ "names.coord-y" | translate }}</mat-label>
-          <input matInput type="text" readonly [value]="data.coord?.y" />
+          <input matInput type="text" readonly [value]="data.y" />
         </mat-form-field>
       </div>
     </div>

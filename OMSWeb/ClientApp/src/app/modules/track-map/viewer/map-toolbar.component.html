@@ -33,7 +33,8 @@
       "names.showObjects" | translate
       }}</span>
   </button>
-  <button matListItem mat-button class="tool-item" [class.active]="buttonState.minimap" (click)="trackMonitorSettingService.update({
+  <button matListItem mat-button class="tool-item"
+    [class.active]="trackMonitorSettingService.trackSetting.isMinimapVisible" (click)="trackMonitorSettingService.update({
     group: 'Visibility',
     key: 'isMinimapVisible',
     value: !trackMonitorSettingService.trackSetting.isMinimapVisible
