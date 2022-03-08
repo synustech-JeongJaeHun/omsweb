@@ -45,10 +45,10 @@ function centerZoom() {
   })
 }
 
-function approachToPosition(position: Position) {
+function approachTo(position: Position) {
   approachIterative({
     position,
-    rotation: rotationInfo.value,
+    rotation: 0,
     viewBox: {
       width: getWidthFromHeightAndRatio(3000),
       height: 3000, //mm
@@ -122,4 +122,4 @@ function approachIterative(objective: Objective) {
 }
 
 
-export { getCameraAndRotation, initCameraAndRotation, centerZoom, approachToPosition }
+export { getCameraAndRotation, initCameraAndRotation, centerZoom, approachTo }

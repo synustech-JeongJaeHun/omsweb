@@ -9,7 +9,7 @@ import { parseNumberProp, parseBooleanProp, parseStringProp } from './utils/prop
 import ScaleBar from 'src/MapObjects/scale/component/ScaleBar.ce.vue'
 import { RootEmitInjectionKey, RootEmits } from './types/RootEmits'
 import ScreenDetail from 'MapObjects/map/components/ScreenDetail.ce.vue'
-import { initCameraAndRotation, centerZoom, getCameraAndRotation, approachToPosition } from 'MapObjects/cameraAndRotation'
+import { initCameraAndRotation, centerZoom, getCameraAndRotation, approachTo } from 'MapObjects/cameraAndRotation'
 import { ViewMode } from './types/ViewMode'
 import { MapType } from './types/MapType'
 import {
@@ -199,7 +199,7 @@ const exposed: IOmsTrackMonitor = {
       case 'point':
         const point = findPointById(id)
         if (point) {
-          approachToPosition({ x: point.x, y: point.y })
+          approachTo({ x: point.x, y: point.y })
         }
         break;
       case 'segment':
@@ -208,7 +208,7 @@ const exposed: IOmsTrackMonitor = {
           const path = createPathElement(segment.d)
           const position = path.getPointAtLength(path.getTotalLength() / 2)
 
-          approachToPosition(position)
+          approachTo(position)
         }
         break;
       case 'station':
@@ -217,7 +217,7 @@ const exposed: IOmsTrackMonitor = {
           const position = getPositionForBufferOrStation(station)
 
           if (position)
-            approachToPosition(position)
+            approachTo(position)
         }
         break;
       case 'buffer':
@@ -226,7 +226,7 @@ const exposed: IOmsTrackMonitor = {
           const position = getPositionForBufferOrStation(buffer)
 
           if (position)
-            approachToPosition(position)
+            approachTo(position)
         }
         break;
       case 'mtl':
