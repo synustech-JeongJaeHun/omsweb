@@ -1,5 +1,6 @@
 import { Position } from "src/types/Position";
 import { computed, reactive, readonly, ref, watch } from "vue";
+import { scaleInfo } from "../scale/scale";
 import { DefaultHeight, DefaultWidth } from "./default";
 import { elementRectInfo, getHeightFromWidthAndRatio, getWidthFromHeightAndRatio } from "./elementRect";
 
@@ -109,7 +110,12 @@ const
   isPanning = ref(false),
   hasPanned = ref(false)
 
-function enterPanning() { isPanning.value = true }
+let mmPerPixel = 0
+
+function enterPanning() {
+  isPanning.value = true
+  mmPerPixel = scaleInfo.value.mmPerPixel
+}
 
 function exitPanning() { isPanning.value = false }
 
@@ -119,12 +125,10 @@ function handleMouseUp(emitBackdrop: () => void) {
 }
 
 function panByMouse(event: MouseEvent) {
-  const { movementX, movementY } = event
-
   moveCamera({
-    x: cameraTotalInfo.value.centerX - (0.003 * movementX * cameraViewBoxInfo.width),
+    x: cameraTotalInfo.value.centerX - (event.movementX * mmPerPixel),
     // 📐🛑 Be careful! logic is dependent on invert
-    y: cameraTotalInfo.value.centerY - (0.003 * (-1) * movementY * cameraViewBoxInfo.width)
+    y: cameraTotalInfo.value.centerY - ((-1) * event.movementY * mmPerPixel)
   })
   hasPanned.value = true
 }
