@@ -16,9 +16,11 @@ interface IOmsTrackMonitor {
 
   // focus
   focus(type: string, id: number): void
+  dropFocus(): void
 
   // track
   track(type: string, id: number): void
+  stopTrack(): void
 
   // Update Data
   updateVehicle(operation: string, vehicle: any): void

@@ -1,40 +1,44 @@
 .focus {
-  --focus-color: rgb(78, 159, 243, 0.5);
+  --focus-color-transparent: rgba(78, 159, 243, 0.5);
+  --focus-color-solid: rgb(78, 159, 243);
 }
 
 #point-layer .focus {
-  fill: var(--focus-color);
+  fill: var(--focus-color-solid);
   pointer-events: none;
 }
 
 #segment-layer .focus {
-  stroke: var(--focus-color);
+  stroke: var(--focus-color-transparent);
   pointer-events: none;
 }
 
 #station-layer .focus {
-  fill: var(--focus-color);
+  stroke: var(--focus-color-solid);
   pointer-events: none;
 }
 
 #buffer-layer .focus {
-  fill: var(--focus-color);
+  stroke: var(--focus-color-solid);
   pointer-events: none;
 }
 
 #mtl-layer .focus {
-  stroke: var(--focus-color);
-  pointer-events: none;
-}
-
-#vehicle-layer .focus path {
-  stroke: var(--focus-color);
-  stroke-width: 40;
+  stroke: var(--focus-color-transparent);
   pointer-events: none;
 }
 
 #zcu-layer .focus {
-  stroke: var(--focus-color);
+  stroke: var(--focus-color-transparent);
   stroke-width: 10;
   pointer-events: none;
+}
+
+#vehicle-layer .type.focus path {
+  stroke: var(--focus-color-solid);
+  stroke-width: 40;
+  pointer-events: none;
+}
+#vehicle-layer .arrow.focus path {
+  fill: var(--focus-color-solid);
 }

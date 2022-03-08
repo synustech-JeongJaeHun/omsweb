@@ -288,6 +288,9 @@ const exposed: IOmsTrackMonitor = {
         break;
     }
   },
+  dropFocus() {
+    setFocusedObject(undefined)
+  },
 
   track(type, id) {
     // there is only vehicle.
@@ -296,6 +299,9 @@ const exposed: IOmsTrackMonitor = {
     if (vehicle) {
       setTrackedObject(vehicle)
     }
+  },
+  stopTrack() {
+    setTrackedObject(undefined)
   },
 
   updateVehicle(op, v) {
@@ -536,6 +542,10 @@ defineExpose(exposed)
   transform: rotate(v-bind("`${rotationInfo * (-1)}deg`"));
 }
 /* Rotation End */
+
+:hover {
+  --filter-size: v-bind("`${scaleInfo.mmPerPixel * 10}px`");
+}
 </style>
 
 <!-- https://v3.vuejs.org/api/sfc-spec.html#src-imports -->

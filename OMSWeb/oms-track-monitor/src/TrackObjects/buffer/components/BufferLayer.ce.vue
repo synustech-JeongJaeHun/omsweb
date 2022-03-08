@@ -19,7 +19,6 @@ import { buffers } from '../buffers'
         id="buffer"
         pointer-events="bounding-box"
         fill="none"
-        stroke-width="4"
         d="
         M -12 -4 
         A 8 8 0 0 1 -4 -12
@@ -31,8 +30,7 @@ import { buffers } from '../buffers'
         A 8 8 0 0 1 -12 4
         "
       />
-      <!-- <circle id="buffer" r="50" stroke="black" stroke-width="10" fill="none" /> -->
-      <circle id="buffer-group-shadow" r="20" />
+      <circle id="buffer-group-shadow" r="22" />
     </defs>
 
     <Buffer v-for="buffer of buffers" :key="buffer.id" :buffer="buffer" />

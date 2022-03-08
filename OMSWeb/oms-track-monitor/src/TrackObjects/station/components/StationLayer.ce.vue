@@ -15,7 +15,6 @@ import { stations } from '../stations'
         id="station"
         pointer-events="bounding-box"
         fill="none"
-        stroke-width="3"
         d="
         M 3 10
         L 10 10
@@ -30,7 +29,7 @@ import { stations } from '../stations'
         L -10 10
         L -3 10"
       />
-      <rect id="station-group-shadow" x="-13" y="-13" width="26" height="26" />
+      <rect id="station-group-shadow" x="-16" y="-16" width="32" height="32" />
     </defs>
 
     <Station v-for="station of stations" :key="station.id" :station="station" />

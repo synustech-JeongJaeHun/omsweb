@@ -39,8 +39,10 @@ interface IOmsTrackMonitor {
   focus(type: "buffer", id: Buffer['id']): void
   focus(type: "mtl", id: Mtl['id']): void
   focus(type: "zcu", id: Zcu['id']): void
+  dropFocus(): void
 
   track(type: 'vehicle', id: Vehicle['id']): void
+  stopTrack(): void
 
   // Update Data
   updateVehicle(operation: UpdateDto.Operation, vehicle: UpdateDto.Vehicle): void

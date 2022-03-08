@@ -14,6 +14,8 @@ import MakeDInUpdateWorker from '../utils/workers/MakeDInUpdateWorker?worker&inl
 import { Position } from 'src/types/Position';
 import VehicleSymbol from './VehicleSymbol.ce.vue';
 import { moveCamera } from 'src/MapObjects/map/camera';
+import { setHoveredVehicle } from '../hoveredVehicle'
+import { setTrackedObject } from 'src/MapObjects/track/track';
 
 const props = defineProps<{
   vehicle: Vehicle
@@ -136,13 +138,18 @@ const commandLineColor = computed(() => {
 })
 
 function onMouseover() {
+  setHoveredVehicle(props.vehicle)
   emit('mouseoverOnObject', {
     type: "VEHICLE",
     value: deepCopy(props.vehicle)
   })
 }
 function onMouseleave() {
+  setHoveredVehicle(undefined)
   emit('mouseleaveOnObject')
+}
+function onDbClick() {
+  setTrackedObject(props.vehicle)
 }
 function onLeftClick() {
   emit('mainClickOnObject', {
@@ -182,6 +189,7 @@ onUnmounted(() => { makeDInUpdateWorker.terminate() })
     :isPreventCall="isPreventCall"
     :isPreventPush="isPreventPush"
     :isFocused="props.vehicle.isFocused"
+    :isHovered="props.vehicle.isHovered"
   />
 
   <!-- use symbol -->
@@ -190,6 +198,7 @@ onUnmounted(() => { makeDInUpdateWorker.terminate() })
     v-if="realtimePosition"
     :x="realtimePosition.x"
     :y="realtimePosition.y"
+    @dblclick="onDbClick()"
     @click.left="onLeftClick()"
     @click.right="onRightClick()"
     @mouseover="onMouseover()"

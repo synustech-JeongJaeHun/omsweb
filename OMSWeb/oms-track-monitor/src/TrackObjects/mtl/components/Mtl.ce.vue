@@ -40,7 +40,7 @@ function onRightClick() {
 </script>
 
 <template>
-  <svg class="overflow-visible cursor-pointer" :x="position.x" :y="position.y">
+  <svg class="overflow-visible cursor-pointer mtl" :x="position.x" :y="position.y">
     <use
       v-show="groupColor"
       href="#mtl"

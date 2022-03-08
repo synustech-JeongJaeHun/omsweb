@@ -266,6 +266,8 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     console.log(event.type)
 
     this.selectedObject = undefined
+    this.viewer.dropFocus()
+    this.viewer.stopTrack()
   }
   public getCameraAndRotation() {
     const data = this.viewer.getCameraAndRotation()

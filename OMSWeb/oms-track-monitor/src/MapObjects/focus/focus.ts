@@ -11,7 +11,7 @@ watch(focusedObject, (focusedObject, prevFocusedObject) => {
     focusedObject.isFocused = true
 })
 
-function setFocusedObject(fo: FocusedObject) {
+function setFocusedObject(fo?: FocusedObject) {
   focusedObject.value = fo
 }
 

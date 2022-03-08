@@ -55,16 +55,17 @@ function onRightClick() {
           class="group-shadow"
           :fill="groupColor"
         />
+        <use v-if="props.station.isFocused" href="#station" class="focus" stroke-width="10" />
         <use
           href="#station"
           class="station-path"
+          stroke-width="4"
           @click.left="onLeftClick()"
           @click.right="onRightClick()"
           @mouseover="onMouseover()"
           @mouseout="onMouseleave()"
           @mouseleave="onMouseleave()"
         />
-        <rect v-if="props.station.isFocused" class="focus" x="-13" y="-13" width="26" height="26" />
         <RasterizedText class="invert" x="15" y="-10" :text="props.station.logicalId" />
       </MapReverseRotate>
     </ScaleByScale>

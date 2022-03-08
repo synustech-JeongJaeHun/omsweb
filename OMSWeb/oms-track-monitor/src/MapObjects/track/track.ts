@@ -11,7 +11,7 @@ watch(trackedObject, (trackedObject, prevTrackedObject) => {
     trackedObject.isTracked = true
 })
 
-function setTrackedObject(to: TrackedObject) {
+function setTrackedObject(to?: TrackedObject) {
   trackedObject.value = to
 }
 

@@ -7,7 +7,6 @@ import { getSvgTranformsInString } from 'src/utils/svg/transform'
 import VehicleStateMaintainedSvg from '../assets/VehicleStateMaintained.svg?component'
 import VehicleStatePreventPushSvg from '../assets/VehicleStatePreventPush.svg?component'
 import VehicleStatePreventCallSvg from '../assets/VehicleStatePreventCall.svg?component'
-import RasterizedText from 'src/MapObjects/map/components/RasterizedText.ce.vue';
 import VehicleTypeNormal from '../assets/VehicleTypeNormal.svg?component';
 import VehicleTypeCleaning from '../assets/VehicleTypeCleaning.svg?component';
 import VehicleCargoLoadingSvg from '../assets/VehicleCargoLoading.svg?component';
@@ -19,8 +18,9 @@ import VehicleStateSensorStopSvg from '../assets/VehicleStateSensorStop.svg?comp
 import VehicleStateStaleSvg from '../assets/VehicleStateStale.svg?component';
 import VehicleStateErrorSvg from '../assets/VehicleStateError.svg?component';
 import VehicleStateDisconnectedSvg from '../assets/VehicleStateDisconnected.svg?component'
-import VehicleFocusedOnTypeCleaning from '../assets/VehicleFocusedOnTypeCleaning.svg?component'
-import VehicleFocusedOnTypeNormal from '../assets/VehicleFocusedOnTypeNormal.svg?component'
+import VehicleTypeCleaningOutline from '../assets/VehicleTypeCleaningOutline.svg?component'
+import VehicleTypeNormalOutline from '../assets/VehicleTypeNormalOutline.svg?component'
+import VehicleFocusArrow from '../assets/VehicleFocusArrow.svg?component'
 
 const props = defineProps<{
   symbolId: string,
@@ -48,6 +48,7 @@ const props = defineProps<{
 
   // TM attr,
   isFocused?: boolean,
+  isHovered?: boolean
 }>()
 </script>
 
@@ -73,9 +74,18 @@ const props = defineProps<{
 
         <!-- vehicle type && vehicle mode start -->
         <template v-if="props.type === 'CLEANING'">
-          <VehicleFocusedOnTypeCleaning
+          <!-- using discrete svg element to overlap effects -->
+          <VehicleTypeCleaningOutline
             v-if="props.isFocused"
-            class="focus"
+            class="type focus"
+            width="40"
+            height="40"
+            x="-20"
+            y="-20"
+          />
+          <VehicleTypeCleaningOutline
+            v-if="props.isHovered"
+            class="type hover"
             width="40"
             height="40"
             x="-20"
@@ -85,9 +95,18 @@ const props = defineProps<{
         </template>
 
         <template v-else>
-          <VehicleFocusedOnTypeNormal
+          <!-- using discrete svg element to overlap effects -->
+          <VehicleTypeNormalOutline
             v-if="props.isFocused"
-            class="focus"
+            class="type focus"
+            width="40"
+            height="40"
+            x="-20"
+            y="-20"
+          />
+          <VehicleTypeNormalOutline
+            v-if="props.isHovered"
+            class="type hover"
             width="40"
             height="40"
             x="-20"
@@ -95,6 +114,15 @@ const props = defineProps<{
           />
           <VehicleTypeNormal width="40" height="40" x="-20" y="-20" />
         </template>
+
+        <VehicleFocusArrow
+          v-if="props.isHovered || props.isFocused"
+          :class="['arrow', props.isHovered && 'hover', props.isFocused && 'focus']"
+          width="40"
+          height="40"
+          x="20"
+          y="20"
+        />
 
         <!-- vehicle type && vehicle mode end -->
 

@@ -55,16 +55,17 @@ function onRightClick() {
           href="#buffer-group-shadow"
           :fill="groupColor"
         />
+        <use v-if="props.buffer.isFocused" href="#buffer" class="focus" stroke-width="10" />
         <use
           href="#buffer"
           class="buffer-path"
+          stroke-width="4"
           @click.left="onLeftClick()"
           @click.right="onRightClick()"
           @mouseover="onMouseover()"
           @mouseout="onMouseleave()"
           @mouseleave="onMouseleave()"
         />
-        <circle v-if="props.buffer.isFocused" class="focus" r="20" />
         <RasterizedText class="invert" x="10" y="5" :text="props.buffer.logicalId" />
       </MapReverseRotate>
     </ScaleByScale>

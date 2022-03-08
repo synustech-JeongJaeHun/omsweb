@@ -9,5 +9,5 @@ const props = defineProps<{
 
 <template>
   <!-- <image v-if="rasterized" :href="rasterized.dataURL" /> -->
-  <text class="select-none" text-rendering="optimizeSpeed">{{ props.text }}</text>
+  <text class="select-none" text-rendering="optimizeSpeed" pointer-events="none">{{ props.text }}</text>
 </template>

@@ -1,27 +1,43 @@
 :hover {
-  --hover-color: rgba(150, 211, 255, 0.5);
+  --hover-color-solid: rgb(0, 94, 161);
+  --hover-color-transparent: rgb(0, 94, 161, 0.5);
+  /* --filter-size is in OmsTrackMonitor.ce.vue */
 }
 
-#point-layer :hover {
-  /* TODO */
+/* 
+  Check this doc for filter & func: drop-shadow
+  https://developer.mozilla.org/en-US/docs/Web/CSS/filter 
+*/
+
+#point-layer .point:hover {
+  filter: drop-shadow(0 0 var(--filter-size) var(--hover-color-solid));
 }
 
-#segment-layer :hover {
-  /* TODO */
+#segment-layer .segment:hover {
+  filter: drop-shadow(0 0 var(--filter-size) var(--hover-color-solid));
 }
 
-#station-layer :hover {
-  /* TODO */
+#station-layer .station:hover {
+  filter: drop-shadow(0 0 var(--filter-size) var(--hover-color-solid));
 }
 
-#buffer-layer :hover {
-  /* TODO */
+#buffer-layer .buffer:hover {
+  filter: drop-shadow(0 0 var(--filter-size) var(--hover-color-solid));
 }
 
-#mtl-layer :hover {
-  /* TODO */
+#mtl-layer .mtl:hover {
+  filter: drop-shadow(0 0 var(--filter-size) var(--hover-color-solid));
 }
 
-#vehicle-layer :hover path {
-  /* TODO */
+#zcu-layer .zcu:hover {
+  filter: drop-shadow(0 0 var(--filter-size) var(--hover-color-solid));
+}
+
+#vehicle-layer .type.hover path {
+  stroke: var(--hover-color-transparent);
+  stroke-width: 40;
+  pointer-events: none;
+}
+#vehicle-layer .arrow.hover path {
+  fill: var(--hover-color-solid);
 }

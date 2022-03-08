@@ -173,9 +173,9 @@ export class TrackStatusService {
   }
 
   getOverlapObjectOnPoint(pointId: number) {
-    const stations = this.trackData.stations.filter(s => s.pointId === pointId)
-    const buffers = this.trackData.buffers.filter(b => b.pointId === pointId)
-    const mtls = this.trackData.mtls.filter(m => m.pointId)
+    const stations = this.trackData?.stations.filter(s => s.pointId === pointId) ?? []
+    const buffers = this.trackData?.buffers.filter(b => b.pointId === pointId) ?? []
+    const mtls = this.trackData?.mtls.filter(m => m.pointId) ?? []
 
     return {
       stations,

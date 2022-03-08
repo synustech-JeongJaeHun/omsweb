@@ -39,6 +39,7 @@ function onRightClick() {
   <svg class="overflow-visible cursor-pointer point" :x="props.point.x" :y="props.point.y">
     <ScaleByScale>
       <MapReverseRotate>
+        <circle v-if="props.point.isFocused" r="15" class="focus" />
         <circle
           r="5"
           class="point-path"
@@ -48,7 +49,6 @@ function onRightClick() {
           @mouseout="onMouseleave()"
           @mouseleave="onMouseleave()"
         />
-        <circle v-if="props.point.isFocused" r="10" class="focus" />
         <!-- <text y="70">{{ props.point.logicalId }}</text> -->
         <RasterizedText class="invert label" y="10" :text="props.point.logicalId" />
       </MapReverseRotate>
