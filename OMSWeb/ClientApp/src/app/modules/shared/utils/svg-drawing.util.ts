@@ -422,7 +422,7 @@ export namespace SvgDrawingUtil {
         }
 
         // Prevent call
-        if (layout_object.orderOrigin.length === 0) {
+        if (layout_object.orderOrigin?.length === 0) {
           let push_svg = dom_object_group.select('.push');
           let x_offset = (dom_css.radius * 4) / 3;
           if (push_svg.nodes().length > 0) {

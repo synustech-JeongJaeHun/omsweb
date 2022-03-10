@@ -41,7 +41,7 @@ function onRightClick() {
 </script>
 
 <template>
-  <svg class="overflow-visible cursor-pointer mtl" :x="position.x" :y="position.y">
+  <svg v-if="position" class="overflow-visible cursor-pointer mtl" :x="position.x" :y="position.y">
     <use
       v-if="group"
       href="#mtl"
