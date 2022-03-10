@@ -2,12 +2,13 @@
 import { computed, inject, readonly, toRef } from 'vue';
 import { Station } from '../types/Station'
 import RasterizedText from 'MapObjects/map/components/RasterizedText.ce.vue';
-import { useGroupColor } from '../../group/groups';
+import { useGroup } from '../../group/groups';
 import MapReverseRotate from 'MapObjects/rotate/components/MapReverseRotate.ce.vue';
 import { RootEmitInjectionKey, RootEmits } from 'src/types/RootEmits';
 import { getPositionForBufferOrStation } from 'src/TrackObjects/utils/locationStationBuffer';
 import { deepCopy } from 'src/utils/deepCopy';
 import ScaleByScale from 'src/MapObjects/scale/component/ScaleByScale.ce.vue';
+import { getGroupColorWithAlpha } from 'TrackObjects/group/utils/color'
 
 const props = defineProps<{
   station: Station
@@ -15,7 +16,8 @@ const props = defineProps<{
 const emit = inject<RootEmits>(RootEmitInjectionKey)!
 
 const position = readonly(computed(() => getPositionForBufferOrStation(props.station)))
-const groupColor = useGroupColor('station', toRef(props.station, 'id'))
+const group = useGroup('station', toRef(props.station, 'id'))
+
 
 function onMouseover() {
   emit('mouseoverOnObject', {
@@ -50,10 +52,10 @@ function onRightClick() {
     <ScaleByScale>
       <MapReverseRotate>
         <use
-          v-show="groupColor"
+          v-if="group"
           href="#station-group-shadow"
           class="group-shadow"
-          :fill="groupColor"
+          :fill="getGroupColorWithAlpha(group.color)"
         />
         <use v-if="props.station.isFocused" href="#station" class="focus" stroke-width="10" />
         <use

@@ -69,16 +69,16 @@
 
         <mat-form-field class="info-item readonly" floatLabel="always">
           <mat-label>{{ "names.group" | translate }}</mat-label>
-          <input matInput type="text" readonly [value]="data.group" />
+          <input matInput type="text" readonly [value]="data.groupId ? data.groupId : ''" />
         </mat-form-field>
 
         <mat-form-field class="info-item readonly" floatLabel="always">
           <mat-label>{{ "names.curPoint" | translate }}</mat-label>
-          <input matInput type="text" readonly [value]="data.curPoint?.point" />
+          <input matInput type="text" readonly [value]="data.curPoint" />
         </mat-form-field>
         <mat-form-field class="info-item readonly" floatLabel="always">
           <mat-label>{{ "names.commandPoint" | translate }}</mat-label>
-          <input matInput type="text" readonly [value]="data.commandPoint?.point" />
+          <input matInput type="text" readonly [value]="data.commandPoint ? data.commandPoint : ''" />
         </mat-form-field>
         <mat-form-field class="info-item readonly" floatLabel="always">
           <mat-label>{{ "names.cargoState" | translate }}</mat-label>
@@ -102,7 +102,7 @@
         </mat-form-field>
         <mat-form-field class="info-item readonly" floatLabel="always">
           <mat-label>{{ "names.cargoTransferResult" | translate }}</mat-label>
-          <input matInput type="text" readonly [value]="data.cargoTransferResult" />
+          <input matInput type="text" readonly [value]="data.cargoTransferResult ? data.cargoTransferResult : ''" />
         </mat-form-field>
         <mat-form-field class="info-item readonly" floatLabel="always">
           <mat-label>{{ "names.lastContact" | translate }}</mat-label>
@@ -163,7 +163,7 @@
 
         <mat-form-field class="info-item readonly" floatLabel="always">
           <mat-label>{{ "names.group" | translate }}</mat-label>
-          <input matInput type="text" readonly [value]="data.group" />
+          <input matInput type="text" readonly [value]="data.groupId ? data.groupId : ''" />
         </mat-form-field>
 
         <mat-form-field class="info-item readonly" floatLabel="always">
@@ -205,7 +205,7 @@
 
         <mat-form-field class="info-item readonly" floatLabel="always">
           <mat-label>{{ "names.group" | translate }}</mat-label>
-          <input matInput type="text" readonly [value]="data.group" />
+          <input matInput type="text" readonly [value]="data.groupId ? data.groupId : ''" />
         </mat-form-field>
 
         <mat-form-field class="info-item readonly" floatLabel="always">

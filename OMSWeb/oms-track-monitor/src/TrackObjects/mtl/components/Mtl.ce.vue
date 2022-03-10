@@ -3,10 +3,11 @@ import { Mtl } from '../types/Mtl'
 import RasterizedText from 'MapObjects/map/components/RasterizedText.ce.vue';
 import { inject, toRef } from 'vue';
 import { usePointPoisiton } from '../../point/points';
-import { useGroupColor } from '../../group/groups';
+import { useGroup } from '../../group/groups';
 import MapReverseRotate from 'MapObjects/rotate/components/MapReverseRotate.ce.vue';
 import { RootEmitInjectionKey, RootEmits } from 'src/types/RootEmits';
 import { deepCopy } from 'src/utils/deepCopy';
+import { getGroupColorWithAlpha } from 'TrackObjects/group/utils/color'
 
 const props = defineProps<{
   mtl: Mtl
@@ -14,7 +15,7 @@ const props = defineProps<{
 const emit = inject<RootEmits>(RootEmitInjectionKey)!
 
 const position = usePointPoisiton(toRef(props.mtl, 'pointId'))
-const groupColor = useGroupColor('mtl', toRef(props.mtl, 'id'))
+const group = useGroup('mtl', toRef(props.mtl, 'id'))
 
 function onMouseover() {
   emit('mouseoverOnObject', {
@@ -42,10 +43,10 @@ function onRightClick() {
 <template>
   <svg class="overflow-visible cursor-pointer mtl" :x="position.x" :y="position.y">
     <use
-      v-show="groupColor"
+      v-if="group"
       href="#mtl"
       class="group-shadow"
-      :stroke="groupColor"
+      :stroke="getGroupColorWithAlpha(group.color)"
       stroke-width="20"
     />
     <use

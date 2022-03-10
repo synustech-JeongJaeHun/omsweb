@@ -4,7 +4,7 @@ import { Vehicle } from '../types/Vehicle'
 import { findPointById, usePointPoisiton } from '../../point/points';
 import { findSegmentByPoints } from '../../segment/segments';
 import { Segment } from '../../segment/types/Segment';
-import { useGroupColor } from '../../group/groups';
+import { useGroup } from '../../group/groups';
 import { useCommandPointPosition } from '../utils/lines';
 import { RootEmitInjectionKey, RootEmits } from 'src/types/RootEmits';
 import { createPathElement, getPositionFromD } from 'src/utils/svg/path';
@@ -16,6 +16,7 @@ import VehicleSymbol from './VehicleSymbol.ce.vue';
 import { moveCamera } from 'src/MapObjects/map/camera';
 import { setHoveredVehicle } from '../hoveredVehicle'
 import { setTrackedObject } from 'src/MapObjects/track/track';
+import { getGroupColorWithAlpha } from 'TrackObjects/group/utils/color'
 
 const props = defineProps<{
   vehicle: Vehicle
@@ -24,7 +25,7 @@ const emit = inject<RootEmits>(RootEmitInjectionKey)!
 const makeDInUpdateWorker = new MakeDInUpdateWorker()
 
 const symbolId = computed(() => `vehicle-${props.vehicle.id}`)
-const groupColor = useGroupColor('vehicle', toRef(props.vehicle, 'id'))
+const group = useGroup('vehicle', toRef(props.vehicle, 'id'))
 
 const
   isHotlot = computed(() => Number(props.vehicle.priority) === 99),
@@ -183,7 +184,7 @@ onUnmounted(() => { makeDInUpdateWorker.terminate() })
     :isConnected="props.vehicle.isConnected"
     :isSensorStopped="props.vehicle.isSensorStopped"
     :isBlocked="props.vehicle.isBlocked"
-    :groupColor="groupColor"
+    :groupColor="group ? getGroupColorWithAlpha(group.color) : undefined"
     :isHotlot="isHotlot"
     :isStale="isStale"
     :isPreventCall="isPreventCall"
