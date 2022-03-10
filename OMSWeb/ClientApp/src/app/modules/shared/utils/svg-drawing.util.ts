@@ -164,6 +164,44 @@ export namespace SvgDrawingUtil {
           options
         );
         break;
+      case 'MTL':
+        mainUnit = svg
+          .append('g')
+          .attr('class', `mtl-unit ${className}`)
+          .attr('id', `id_${data.id}`)
+          .attr('x', 0)
+          .attr('y', 0)
+          .attr('transform', `translate(0, 0) scale(0.1)`);
+
+        buildSubUnit(
+          'MTL',
+          mainUnit,
+          data,
+          dom_css,
+          zoom_level,
+          group_type,
+          null,
+          options,
+        )
+        mainUnit
+          .select('.mtl_path')
+          .attr('d', dom_css.icon_level3)
+          .attr('level', 'level3');
+        mainUnit
+          .select('.mtl_mask')
+          .attr('d', dom_css.icon_level3)
+          .attr('level', 'level3');
+        buildSubUnit(
+          'MTL_DETAIL',
+          mainUnit,
+          data,
+          dom_css,
+          zoom_level,
+          group_type,
+          null,
+          options
+        );
+        break;
       default:
         break;
     }

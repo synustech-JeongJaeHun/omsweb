@@ -30,6 +30,11 @@
           <ng-container *ngTemplateOutlet="zcuInfo"></ng-container>
         </ng-container>
         <!-- ZCU Item Detail -->
+        <!-- MTL Item Detail -->
+        <ng-container *ngSwitchCase="'MTL'">
+          <ng-container *ngTemplateOutlet="mtlInfo"></ng-container>
+        </ng-container>
+        <!-- MTL Item Detail -->
         <ng-container *ngSwitchDefault></ng-container>
       </ng-container>
 
@@ -357,3 +362,19 @@
   </mat-expansion-panel>
 </ng-template>
 <!-- ZCU Item Detail -->
+
+<ng-template #mtlInfo>
+  <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel-header>
+      <mat-panel-title> {{ data?.objectType }} #{{ data.id }}</mat-panel-title>
+    </mat-expansion-panel-header>
+    <div class="desc">
+      <div class="info-table">
+        <mat-form-field class="info-item readonly" floatLabel="always">
+          <mat-label>{{ "names.id" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.id" />
+        </mat-form-field>
+      </div>
+    </div>
+  </mat-expansion-panel>
+</ng-template>

@@ -51,6 +51,7 @@ export class OverlapListComponent implements OnInit, OnChanges {
       case 'Station':
       case 'Buffer':
       case 'Mtl':
+      case 'MTL':
         return this.data.pointId;
       case 'Vehicle':
         const { curPoint } = this.data;
