@@ -84,6 +84,7 @@ export class MapSidePanelComponent implements OnChanges, OnDestroy {
       case 'STATION':
       case 'BUFFER':
       case 'VEHICLE':
+      case 'MTL':
         this.startIntervalUpdateDataSelf(type, this.data.id)
         this.startIntervalUpdateOverlapObjects(type, this.data.id)
         this.hasOverlap = true;
@@ -98,6 +99,12 @@ export class MapSidePanelComponent implements OnChanges, OnDestroy {
 
     const action = () => {
       switch (type) {
+        case 'MTL':
+          {
+            const current = this.trackStatusService.trackData.mtls.find(m => m.id === id)
+            this.data = { ...current, objectType: "MTL" }
+          }
+          break
         case 'SEGMENT':
           {
             const current = this.trackStatusService.trackData.segments.find(s => s.id === id)
@@ -152,6 +159,8 @@ export class MapSidePanelComponent implements OnChanges, OnDestroy {
       switch (type) {
         case 'POINT':
           return this.data.id
+        case 'MTL':
+          return this.data.pointId
         case 'STATION':
           return this.data.pointId
         case 'BUFFER':

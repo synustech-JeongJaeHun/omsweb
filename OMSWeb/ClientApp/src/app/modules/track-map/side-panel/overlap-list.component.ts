@@ -85,7 +85,7 @@ export class OverlapListComponent implements OnInit, OnChanges {
         // update_overlap_module_panel('ADD', x.objectType, x, 'OVERLAP_MODULE')
         const className = overlap.objectType.toLowerCase();
         const currentClass =
-          overlap.objectType === this.data.objectType && overlap.id === this.data.id
+          overlap.objectType?.toUpperCase() === this.data.objectType?.toUpperCase() && overlap.id === this.data.id
             ? 'current'
             : '';
         const svg = this.listContainer
