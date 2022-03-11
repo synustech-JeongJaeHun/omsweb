@@ -34,6 +34,31 @@
     (focus)="focusOnTM($event)" (track)="trackOnTM($event)">
   </oms-map-toolbar>
 
+  <!-- context -->
+  <div id="contextMenu" [hidden]="!showContextMenu" class="context-menu">
+    <div [ngSwitch]="contextMenuObject?.type?.toUpperCase()">
+      <ng-container *ngSwitchCase="'SEGMENT'">
+        <ng-container *ngTemplateOutlet="segmentContext"></ng-container>
+      </ng-container>
+      <!-- <ng-container *ngSwitchCase="'VEHICLE'">
+        <ng-container *ngTemplateOutlet="vehicleContext"></ng-container>
+      </ng-container> -->
+      <!-- <ng-container *ngSwitchCase="'BUFFER'">
+        <ng-container *ngTemplateOutlet="bufferContext"></ng-container>
+      </ng-container> -->
+      <!-- <ng-container *ngSwitchCase="'STATION'">
+        <ng-container *ngTemplateOutlet="stationContext"></ng-container>
+      </ng-container> -->
+      <ng-container *ngSwitchCase="'ZCU'">
+        <ng-container *ngTemplateOutlet="zcuContext"></ng-container>
+      </ng-container>
+      <ng-container *ngSwitchCase="'POINT'">
+        <ng-container *ngTemplateOutlet="pointContext"></ng-container>
+      </ng-container>
+      <div *ngSwitchDefault></div>
+    </div>
+  </div>
+
   <!-- tooltip -->
   <div id="tooltipView" class="tooltip-view"></div>
   <ng-container [ngSwitch]="tooltipObject?.type?.toUpperCase()">
@@ -62,6 +87,7 @@
   </ng-container>
 </div>
 
+<!-- tooltips start -->
 <ng-template #stationTooltip>
   <dx-tooltip class="tooltip-box" [visible]="showTooltip" target="#tooltipView" position="right">
     <div class="tooltip-title">Station</div>
@@ -167,3 +193,134 @@
     </div>
   </dx-tooltip>
 </ng-template>
+
+<!-- tooltips end -->
+
+<!-- context start -->
+
+
+<ng-template #segmentContext>
+  <mat-card class="context-card" *ngIf="hasPermissions([permissionEnums.SegmentUnuse])">
+    <mat-card-header>
+      <mat-card-title>
+        Segment #{{ contextMenuObject?.value.id }}
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="context-form">
+      <mat-slide-toggle [checked]="contextMenuObject?.value.disableState" color="primary"
+        (change)="onChangeSegmentProperty($event.checked)">{{ "names.unuse" | translate }}</mat-slide-toggle>
+    </mat-card-content>
+  </mat-card>
+</ng-template>
+
+
+<ng-template #bufferContext>
+  <mat-card class="context-card">
+    <mat-card-header>
+      <mat-card-title>
+        Buffer #{{ contextMenuObject?.value.id }}
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="context-form">
+      <button mat-stroked-button class="dense accent" color="primary" [disabled]="!canSetSource"
+        (click)="onSetSource()">
+        {{ "names.setSource" | translate }}
+      </button>
+      <button mat-stroked-button class="dense accent" color="primary" [disabled]="!canSetDest" (click)="onSetDest()">
+        {{ "names.setDest" | translate }}
+      </button>
+      <div class="carrier-form">
+        <mat-form-field class="dense full-span-col" appearance="outline">
+          <input #carrierIdInput matInput [placeholder]="'names.carrierId' | translate" />
+        </mat-form-field>
+        <button mat-stroked-button color="primary" class="dense accent" (click)="onRemoveCarrier(carrierIdInput.value)">
+          Remove
+        </button>
+        <button mat-stroked-button [disabled]="!carrierIdInput.value" color="primary" class="dense accent"
+          (click)="onInstallCarrier(carrierIdInput.value)">
+          Install
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</ng-template>
+
+<ng-template #stationContext>
+  <mat-card class="context-card">
+    <mat-card-header>
+      <mat-card-title>
+        Station #{{ contextMenuObject?.value.id }}
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="context-form">
+      <button mat-stroked-button class="dense accent" color="primary" [disabled]="!canSetSource"
+        (click)="onSetSource()">
+        {{ "names.setSource" | translate }}
+      </button>
+      <button mat-stroked-button class="dense accent" color="primary" [disabled]="!canSetDest" (click)="onSetDest()">
+        {{ "names.setDest" | translate }}
+      </button>
+    </mat-card-content>
+  </mat-card>
+</ng-template>
+
+<ng-template #zcuContext>
+  <mat-card class="context-card" *ngIf="hasPermissions([permissionEnums.SetZcuUsingType])">
+    <mat-card-header>
+      <mat-card-title>
+        ZCU #{{ contextMenuObject?.value.id }}
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="context-form">
+      <button mat-raised-button [disabled]="contextMenuObject?.value.usingType === 2"
+        (click)="onResetHWZcu()">{{"names.reset" |
+        translate
+        }}</button>
+      <mat-button-toggle-group #zcuTypeSelect="matButtonToggleGroup" class="form-row-start" name="type"
+        aria-label="Type" (change)="onApplyZcuChange()" [value]="contextMenuObject?.value.usingType">
+        <mat-button-toggle [value]="1">{{
+          "names.hw" |
+          translate }}
+        </mat-button-toggle>
+        <mat-button-toggle [value]="2">{{
+          "names.sw" |
+          translate }}
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+    </mat-card-content>
+  </mat-card>
+</ng-template>
+
+<ng-template #pointContext>
+  <mat-card class="context-card" *ngIf="hasPermissions([permissionEnums.SetHomePoint])">
+    <mat-card-header>
+      <mat-card-title>
+        Point #{{ contextMenuObject?.value.id }}
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="context-form">
+      <mat-slide-toggle #pointHomeSlide [checked]="contextMenuObject?.value.isHome" color="primary">{{ "names.home" |
+        translate }}
+      </mat-slide-toggle>
+
+      <div [hidden]="!pointHomeSlide.checked">
+        <mat-form-field class="index-selector dense" appearance="outline">
+          <mat-label>{{ "names.group" | translate }}</mat-label>
+          <mat-select #pointerGroupSelector [value]="contextMenuObject?.value.group">
+            <mat-option *ngFor="let item of groupIds" [value]="item">{{
+              item
+              }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <button mat-stroked-button class="dense accent" color="primary" (click)="
+          onApplyPointChange(contextMenuObject?.value.id, pointHomeSlide.checked, pointerGroupSelector.value)
+        ">
+        {{ "names.apply" | translate }}
+      </button>
+    </mat-card-content>
+  </mat-card>
+</ng-template>
+
+<!-- context end -->

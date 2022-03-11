@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { ViewModes } from '../../../models/enums';
+import { PermissionEnums, ViewModes } from '../../../models/enums';
 import { Dto } from '../../../models/dto/track.model';
 import { IPreferences } from '../../../models/settings.model';
 import { HubService } from '../../../services/hub.service';
@@ -24,6 +24,10 @@ import { SettingsService } from '@oms/root/services/settings.service';
 import { TrackStatusService } from '../../../services/track-status.service'
 import { TrackMonitorSettingService } from '../../../services/track-monitor-setting.service'
 import d3 = require('d3');
+import { TracksService } from '@oms/root/services/tracks.service';
+import { TranslateService } from '@ngx-translate/core';
+import { MessagesService } from '@oms/root/services/messages.service';
+import { DialogService } from '@oms/root/services/dialog.service';
 
 @Component({
   selector: 'oms-map-viewer',
@@ -43,6 +47,10 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     return this.trackMonitorSettingService.trackSetting
   }
 
+  get groupIds() {
+    return this.trackData.groups.map(g => String(g.id))
+  }
+
   public viewerSetting = {
     rect: {
       width: window.innerWidth,
@@ -53,6 +61,8 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   public selectedObject: any;
   public tooltipObject: { type: string, value: any } | undefined;
   public showTooltip = false
+  public contextMenuObject: { type: string, value: any } | undefined;
+  public showContextMenu = false
 
 
   get activeDetails(): boolean {
@@ -70,10 +80,11 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     private mapStatesService: MapStatesService,
     private settingSvc: SettingsService,
     private trackStatusService: TrackStatusService,
+    private tracksService: TracksService,
     private trackMonitorSettingService: TrackMonitorSettingService,
-    // private messageSvc: MessagesService,
-    // private dialogSvc: DialogService,
-    // private $t: TranslateService
+    private messageSvc: MessagesService,
+    private dialogSvc: DialogService,
+    private $t: TranslateService
   ) {
     this.auth.certUpdated$.pipe(takeUntil(this.destroy$)).subscribe((cert) => {
       this.router.navigateByUrl('/', { skipLocationChange: false }).then(() => {
@@ -81,6 +92,12 @@ export class MapViewerComponent implements OnInit, OnDestroy {
       });
     });
   }
+
+  hasPermissions(permissions: number[]): boolean {
+    return this.auth.hasPermissions(permissions);
+  }
+  readonly permissionEnums: typeof PermissionEnums = PermissionEnums;
+
   ngOnInit(): void {
     // @ts-ignore
     this.viewer = document.getElementById('track-canvas')._instance.exposed
@@ -230,6 +247,105 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     this.focusOnTM({ type: event.objectType, id: event.id })
   }
 
+  onApplyPointChange(id: number, isHome: boolean, selectedGroup: number) {
+    console.log(arguments)
+    this.tracksService
+      .updatePoint(id, {
+        isHome,
+        group: selectedGroup,
+      })
+      .subscribe();
+  }
+  onApplyZcuChange() {
+    let origin = this.contextMenuObject.value.usingType;
+    let change = (origin === 1 ? 2 : 1);
+    this.contextMenuObject.value.usingType = change;
+
+    this.dialogSvc
+      .confirm({ body: this.$t.instant('messages.confirmZcuChange') })
+      .subscribe((confirm) => {
+        if (confirm) {
+          this.messageSvc
+            .sendSettingZcuCommand({
+              type: "ZCU",
+              action: "zcu-setting",
+              zcuIds: [this.contextMenuObject.value.id],
+              zcuUsingType: change === 1 ? "hw" : "sw",
+            })
+            .subscribe();
+        } else {
+          this.contextMenuObject.value.usingType = origin;
+        }
+      });
+  }
+  onResetHWZcu() {
+    this.dialogSvc
+      .confirm({ body: this.$t.instant('messages.confirmZcuReset') })
+      .subscribe((confirm) => {
+        if (confirm) {
+          this.messageSvc
+            .sendZcuCommand({
+              action: "zcu_reset",
+              zcuId: this.contextMenuObject.value.id,
+            })
+            .subscribe();
+        }
+      });
+  }
+  // onSetSource() {
+  //   const { id, objectType } = this.contextMenuObject.value;
+  //   this.statesSvc.transferCommandState.source = {
+  //     id,
+  //     objectType,
+  //   };
+  // }
+  // onSetDest() {
+  //   const { id, objectType } = this.contextMenuObject.value;
+  //   this.statesSvc.transferCommandState.dest = {
+  //     id,
+  //     objectType,
+  //   };
+  // }
+  // onRemoveCarrier(carrierId: string) {
+  //   this.dialogSvc
+  //     .confirm({ body: this.$t.instant('messages.confirmBufferChange') })
+  //     .subscribe((confirm) => {
+  //       confirm && this.messageSvc
+  //         .sendCarrierCommand({
+  //           action: 'remove_carrier',
+  //           bufferId: this.contextData.id,
+  //           carrierLabel: carrierId
+  //         })
+  //         .subscribe();
+  //     });
+  // }
+  // onInstallCarrier(carrierId: string) {
+  //   this.dialogSvc
+  //     .confirm({ body: this.$t.instant('messages.confirmBufferChange') })
+  //     .subscribe((confirm) => {
+  //       confirm && this.messageSvc
+  //         .sendCarrierCommand({
+  //           action: 'install_carrier',
+  //           bufferId: this.contextData.id,
+  //           carrierLabel: carrierId
+  //         })
+  //         .subscribe();
+  //     });
+  // }
+
+  onChangeSegmentProperty(isDisable: boolean) {
+    if (isDisable) {
+      this.messageSvc
+        .sendDisableSegmentCommand({ action: 'disable-segment' }, this.contextMenuObject.value.id)
+        .subscribe();
+    }
+    else {
+      this.messageSvc
+        .sendDisableSegmentCommand({ action: 'enable-segment' }, this.contextMenuObject.value.id)
+        .subscribe();
+    }
+  }
+
   // EPIC > OMS-TRACK-MONITOR
   @HostListener('window:resize', ['$event.target'])
   onResize(window: Window) {
@@ -254,12 +370,9 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   }
 
   public onTooltipOn(event: CustomEvent) {
-    // console.log(event.type, getCustomEventPayload(event))
     const payload = getCustomEventPayload(event)
-
     // @ts-ignore
     if (!(payload.type && payload.value && payload.event)) return
-
     // @ts-ignore
     this.tooltipObject = { type: payload.type, value: payload.value }
 
@@ -291,8 +404,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
         .style('left', 'inherit');
     }
 
-
-
     this.showTooltip = true
   }
   public onTooltipOff(event: CustomEvent) {
@@ -307,9 +418,39 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     this.focusOnTM({ type: payload.type, id: payload.value.id })
   }
   public onContectMenuOn(event: CustomEvent) {
-    console.log(event.type, getCustomEventPayload(event))
+    console.log('context ', event)
+    const payload = getCustomEventPayload(event)
+    // @ts-ignore
+    if (!(payload.type && payload.value && payload.event)) return
+    // @ts-ignore
+    this.contextMenuObject = { type: payload.type, value: payload.value }
+
+    const leftThreshold = window.innerWidth - 200;
+    const popupOffsetX = 10;
+    const popupOffsetY = 40;
+
+    // @ts-ignore
+    const { pageX: x, pageY: y } = payload.event;
+
+    const container = d3
+      .select('#contextMenu')
+      .style('top', `${y - popupOffsetY}px`);
+
+    if (leftThreshold > x) {
+      container
+        .style('left', `${x + popupOffsetX}px`)
+        .style('right', 'inherit');
+    } else {
+      container
+        .style('right', `${window.innerWidth - x + popupOffsetX}px`)
+        .style('left', 'inherit');
+    }
+
+    this.showContextMenu = true
   }
   public onBackdrop(event: CustomEvent) {
+    this.showContextMenu = false
+    this.contextMenuObject = undefined
     this.selectedObject = undefined
     this.viewer.dropFocus()
     this.viewer.stopTrack()
