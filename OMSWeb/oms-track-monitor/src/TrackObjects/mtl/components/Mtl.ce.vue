@@ -18,10 +18,11 @@ const emit = inject<RootEmits>(RootEmitInjectionKey)!
 const position = usePointPoisiton(toRef(props.mtl, 'pointId'))
 const group = useGroup('mtl', toRef(props.mtl, 'id'))
 
-function onMouseover() {
+function onMouseover(event: MouseEvent) {
   emit('mouseoverOnObject', {
     type: "MTL",
-    value: deepCopy(props.mtl)
+    value: deepCopy(props.mtl),
+    event
   })
 }
 function onMouseleave() {
@@ -33,10 +34,11 @@ function onLeftClick() {
     value: deepCopy(props.mtl)
   })
 }
-function onRightClick() {
+function onRightClick(event: MouseEvent) {
   emit('secondaryClickOnObject', {
     type: "MTL",
-    value: deepCopy(props.mtl)
+    value: deepCopy(props.mtl),
+    event
   })
 }
 </script>
@@ -58,8 +60,8 @@ function onRightClick() {
           stroke="grey"
           stroke-width="3"
           @click.left="onLeftClick()"
-          @click.right="onRightClick()"
-          @mouseover="onMouseover()"
+          @click.right="onRightClick($event)"
+          @mouseover="onMouseover($event)"
           @mouseout="onMouseleave()"
           @mouseleave="onMouseleave()"
         />

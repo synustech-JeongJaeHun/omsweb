@@ -2,7 +2,6 @@
 import ScaleByScale from 'src/MapObjects/scale/component/ScaleByScale.ce.vue';
 import MapReverseRotate from 'src/MapObjects/rotate/components/MapReverseRotate.ce.vue';
 import { Vehicle } from '../types/Vehicle';
-import { getSvgTranformsInString } from 'src/utils/svg/transform'
 // svg component
 import VehicleStateMaintainedSvg from '../assets/VehicleStateMaintained.svg?component'
 import VehicleStatePreventPushSvg from '../assets/VehicleStatePreventPush.svg?component'
@@ -50,6 +49,15 @@ const props = defineProps<{
   isFocused?: boolean,
   isHovered?: boolean
 }>()
+
+const emit = defineEmits<{
+  (event: 'dblclick'): void
+  (event: 'leftclick'): void
+  (event: 'rightclick', mouseEvent: MouseEvent): void
+  (event: 'mouseover', mouseEvent: MouseEvent): void
+  (event: 'mouseout'): void
+  (event: 'mouseleave'): void
+}>()
 </script>
 
 <template>
@@ -63,7 +71,7 @@ const props = defineProps<{
     Group Circle size
     w 50 h 50 r 25
   -->
-  <symbol
+  <svg
     class="overflow-visible cursor-pointer vehicle-symbol"
     :id="props.symbolId"
     :data-mode="props.mode"
@@ -91,7 +99,18 @@ const props = defineProps<{
             x="-20"
             y="-20"
           />
-          <VehicleTypeCleaning width="40" height="40" x="-20" y="-20" />
+          <VehicleTypeCleaning
+            width="40"
+            height="40"
+            x="-20"
+            y="-20"
+            @dblclick="emit('dblclick')"
+            @click.left="emit('leftclick')"
+            @click.right="emit('rightclick', $event)"
+            @mouseover="emit('mouseover', $event)"
+            @mouseout="emit('mouseout')"
+            @mouseleave="emit('mouseleave')"
+          />
         </template>
 
         <template v-else>
@@ -112,7 +131,18 @@ const props = defineProps<{
             x="-20"
             y="-20"
           />
-          <VehicleTypeNormal width="40" height="40" x="-20" y="-20" />
+          <VehicleTypeNormal
+            width="40"
+            height="40"
+            x="-20"
+            y="-20"
+            @dblclick="emit('dblclick')"
+            @click.left="emit('leftclick')"
+            @click.right="emit('rightclick', $event)"
+            @mouseover="emit('mouseover', $event)"
+            @mouseout="emit('mouseout')"
+            @mouseleave="emit('mouseleave')"
+          />
         </template>
 
         <VehicleFocusArrow
@@ -254,5 +284,5 @@ const props = defineProps<{
         <!-- vehicle properties ordered by priority ==== END -->
       </MapReverseRotate>
     </ScaleByScale>
-  </symbol>
+  </svg>
 </template>

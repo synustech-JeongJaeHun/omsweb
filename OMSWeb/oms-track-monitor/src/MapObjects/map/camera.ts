@@ -68,6 +68,7 @@ function zoom(
   offset: { x: MouseEvent['offsetX'], y: MouseEvent['offsetY'] },
   count: number
 ) {
+  // 📐🛑 Be careful! logic is dependent on invert
   const invertedOffsetY = (elementRectInfo.height - offset.y)
 
   const cursorPosition = {

@@ -34,6 +34,11 @@
   pointer-events: none;
 }
 
+#cluster-layer .focus {
+  stroke: var(--focus-color-solid);
+  pointer-events: none;
+}
+
 #vehicle-layer .type.focus path {
   stroke: var(--focus-color-solid);
   stroke-width: 40;

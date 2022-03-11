@@ -13,10 +13,11 @@ const props = defineProps<{
 }>()
 const emit = inject<RootEmits>(RootEmitInjectionKey)!
 
-function onMouseover() {
+function onMouseover(event: MouseEvent) {
   emit('mouseoverOnObject', {
     type: "ZCU",
-    value: deepCopy(props.zcu)
+    value: deepCopy(props.zcu),
+    event
   })
 }
 function onMouseleave() {
@@ -28,10 +29,11 @@ function onLeftClick() {
     value: deepCopy(props.zcu)
   })
 }
-function onRightClick() {
+function onRightClick(event: MouseEvent) {
   emit('secondaryClickOnObject', {
     type: "ZCU",
-    value: deepCopy(props.zcu)
+    value: deepCopy(props.zcu),
+    event
   })
 }
 </script>
@@ -53,8 +55,8 @@ function onRightClick() {
           stroke-width="3"
           :fill="props.zcu.error ? 'red' : 'transparent'"
           @click.left="onLeftClick()"
-          @click.right="onRightClick()"
-          @mouseover="onMouseover()"
+          @click.right="onRightClick($event)"
+          @mouseover="onMouseover($event)"
           @mouseout="onMouseleave()"
           @mouseleave="onMouseleave()"
         />

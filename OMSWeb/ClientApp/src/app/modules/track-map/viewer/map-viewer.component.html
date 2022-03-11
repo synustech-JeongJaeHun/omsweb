@@ -34,5 +34,136 @@
     (focus)="focusOnTM($event)" (track)="trackOnTM($event)">
   </oms-map-toolbar>
 
-
+  <!-- tooltip -->
+  <div id="tooltipView" class="tooltip-view"></div>
+  <ng-container [ngSwitch]="tooltipObject?.type?.toUpperCase()">
+    <ng-container *ngSwitchCase="'STATION'">
+      <ng-container *ngTemplateOutlet="stationTooltip"></ng-container>
+    </ng-container>
+    <ng-container *ngSwitchCase="'VEHICLE'">
+      <ng-container *ngTemplateOutlet="vehicleTooltip"></ng-container>
+    </ng-container>
+    <ng-container *ngSwitchCase="'CLUSTER'">
+      <ng-container *ngTemplateOutlet="clusterTooltip"></ng-container>
+    </ng-container>
+    <ng-container *ngSwitchCase="'SEGMENT'">
+      <ng-container *ngTemplateOutlet="segmentTooltip"></ng-container>
+    </ng-container>
+    <ng-container *ngSwitchCase="'BUFFER'">
+      <ng-container *ngTemplateOutlet="bufferTooltip"></ng-container>
+    </ng-container>
+    <ng-container *ngSwitchCase="'ZCU'">
+      <ng-container *ngTemplateOutlet="zcuTooltip"></ng-container>
+    </ng-container>
+    <ng-container *ngSwitchCase="'POINT'">
+      <ng-container *ngTemplateOutlet="pointTooltip"></ng-container>
+    </ng-container>
+    <ng-container *ngSwitchDefault> </ng-container>
+  </ng-container>
 </div>
+
+<ng-template #stationTooltip>
+  <dx-tooltip class="tooltip-box" [visible]="showTooltip" target="#tooltipView" position="right">
+    <div class="tooltip-title">Station</div>
+    <div class="tooltip-content">
+      <div class="name">{{ "names.id" | translate }}</div>
+      <div class="value">{{ tooltipObject?.value.id }}</div>
+      <div class="name">{{ "names.logicalId" | translate }}</div>
+      <div class="value">{{ tooltipObject?.value.logicalId }}</div>
+      <div class="name">{{ "names.physicalId" | translate }}</div>
+      <div class="value">{{ tooltipObject?.value.physicalId }}</div>
+      <div class="name">{{ "names.point" | translate }}</div>
+      <div class="value">{{ tooltipObject?.value.pointId }}</div>
+    </div>
+  </dx-tooltip>
+</ng-template>
+
+<ng-template #vehicleTooltip>
+  <dx-tooltip class="tooltip-box" [visible]="showTooltip" target="#tooltipView" position="right">
+    <div class="tooltip-title">Vehicle</div>
+    <div class="tooltip-content">
+      <div class="name">{{ "names.id" | translate }}</div>
+      <div class="value">{{ tooltipObject?.value.id }}</div>
+      <div class="name">{{ "names.logicalId" | translate }}</div>
+      <div class="value">{{ tooltipObject?.value.logicalId }}</div>
+      <div class="name">{{ "names.physicalId" | translate }}</div>
+      <div class="value">{{ tooltipObject?.value.physicalId }}</div>
+      <div class="name">{{ "names.point" | translate }}</div>
+      <div class="value">{{ tooltipObject?.value.curPoint }}</div>
+    </div>
+  </dx-tooltip>
+</ng-template>
+
+<ng-template #clusterTooltip>
+  <dx-tooltip class="tooltip-box" [visible]="showTooltip" target="#tooltipView" position="right">
+    <div class="tooltip-title">Cluster</div>
+    <div class="tooltip-content">
+      <div class="name">{{ "names.id" | translate }}</div>
+      <div class="value">{{ tooltipObject?.value.id }}</div>
+      <div class="name">{{ "names.logicalId" | translate }}</div>
+      <div class="value">{{ tooltipObject?.value.logicalId }}</div>
+      <div class="name">{{ "names.maxVehicles" | translate }}</div>
+      <div class="value">{{ tooltipObject?.value.maxVehicles }}</div>
+    </div>
+  </dx-tooltip>
+</ng-template>
+
+<ng-template #segmentTooltip>
+  <dx-tooltip class="tooltip-box" [visible]="showTooltip" target="#tooltipView" position="right">
+    <div class="tooltip-title">Segment</div>
+    <div class="tooltip-content">
+      <div class="name">{{ "names.id" | translate }}</div>
+      <div class="value">{{ tooltipObject?.value.id }}</div>
+      <div class="name">{{ "names.length" | translate }}</div>
+      <div class="value">{{ tooltipObject?.value.length }}</div>
+      <div class="name">{{ "names.point" | translate }}</div>
+      <div class="value">{{ tooltipObject?.value.point }}</div>
+    </div>
+  </dx-tooltip>
+</ng-template>
+
+<ng-template #bufferTooltip>
+  <dx-tooltip class="tooltip-box" [visible]="showTooltip" target="#tooltipView" position="right">
+    <div class="tooltip-title">Buffer</div>
+    <div class="tooltip-content">
+      <div class="name">{{ "names.id" | translate }}</div>
+      <div class="value">{{ tooltipObject?.value.id }}</div>
+      <div class="name">{{ "names.logicalId" | translate }}</div>
+      <div class="value">{{ tooltipObject?.value.logicalId }}</div>
+      <div class="name">{{ "names.physicalId" | translate }}</div>
+      <div class="value">{{ tooltipObject?.value.physicalId }}</div>
+      <div class="name">{{ "names.point" | translate }}</div>
+      <div class="value">{{ tooltipObject?.value.pointId }}</div>
+    </div>
+  </dx-tooltip>
+</ng-template>
+
+<ng-template #zcuTooltip>
+  <dx-tooltip class="tooltip-box" [visible]="showTooltip" target="#tooltipView" position="right">
+    <div class="tooltip-title">Zcu</div>
+    <div class="tooltip-content">
+      <div class="name">{{ "names.id" | translate }}</div>
+      <div class="value">{{ tooltipObject?.value.id }}</div>
+      <!--
+      <div class="name">Type</div>
+      <div class="value">{{ ((tooltipObject?.zcuType == 0) ? 'Standard' : ((tooltipObject?.zcuType == 1) ? 'NType' : '')) }}</div>
+      -->
+      <div class="name">{{ "names.usingType" | translate }}</div>
+      <div class="value">{{ ((tooltipObject?.value.usingType == 0) ? 'Not Use' : ((tooltipObject?.value.usingType == 1)
+        ? 'Use HW' :
+        ((tooltipObject?.value.usingType == 2) ? 'Use SW' : '')))}}</div>
+    </div>
+  </dx-tooltip>
+</ng-template>
+
+<ng-template #pointTooltip>
+  <dx-tooltip class="tooltip-box" [visible]="showTooltip" target="#tooltipView" position="right">
+    <div class="tooltip-title">Point</div>
+    <div class="tooltip-content">
+      <div class="name">{{ "names.id" | translate }}</div>
+      <div class="value">{{ tooltipObject?.value.id }}</div>
+      <div class="name">{{ "names.physicalId" | translate }}</div>
+      <div class="value">{{ tooltipObject?.value.physicalId }}</div>
+    </div>
+  </dx-tooltip>
+</ng-template>

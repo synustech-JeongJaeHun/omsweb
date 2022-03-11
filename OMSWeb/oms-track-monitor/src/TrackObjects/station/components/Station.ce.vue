@@ -19,10 +19,11 @@ const position = readonly(computed(() => getPositionForBufferOrStation(props.sta
 const group = useGroup('station', toRef(props.station, 'id'))
 
 
-function onMouseover() {
+function onMouseover(event: MouseEvent) {
   emit('mouseoverOnObject', {
     type: "STATION",
-    value: deepCopy(props.station)
+    value: deepCopy(props.station),
+    event
   })
 }
 function onMouseleave() {
@@ -34,10 +35,11 @@ function onLeftClick() {
     value: deepCopy(props.station)
   })
 }
-function onRightClick() {
+function onRightClick(event: MouseEvent) {
   emit('secondaryClickOnObject', {
     type: "STATION",
-    value: deepCopy(props.station)
+    value: deepCopy(props.station),
+    event
   })
 }
 </script>
@@ -63,8 +65,8 @@ function onRightClick() {
           class="station-path"
           stroke-width="4"
           @click.left="onLeftClick()"
-          @click.right="onRightClick()"
-          @mouseover="onMouseover()"
+          @click.right="onRightClick($event)"
+          @mouseover="onMouseover($event)"
           @mouseout="onMouseleave()"
           @mouseleave="onMouseleave()"
         />

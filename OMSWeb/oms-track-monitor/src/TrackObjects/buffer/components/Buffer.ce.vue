@@ -19,10 +19,11 @@ const position = readonly(computed(() => getPositionForBufferOrStation(props.buf
 
 const group = useGroup('buffer', toRef(props.buffer, 'id'))
 
-function onMouseover() {
+function onMouseover(event: MouseEvent) {
   emit('mouseoverOnObject', {
     type: "BUFFER",
-    value: deepCopy(props.buffer)
+    value: deepCopy(props.buffer),
+    event
   })
 }
 function onMouseleave() {
@@ -34,10 +35,11 @@ function onLeftClick() {
     value: deepCopy({ ...props.buffer, groupId: group.value?.id })
   })
 }
-function onRightClick() {
+function onRightClick(event: MouseEvent) {
   emit('secondaryClickOnObject', {
     type: "BUFFER",
-    value: deepCopy(props.buffer)
+    value: deepCopy(props.buffer),
+    event
   })
 }
 </script>
@@ -63,8 +65,8 @@ function onRightClick() {
           class="buffer-path"
           stroke-width="4"
           @click.left="onLeftClick()"
-          @click.right="onRightClick()"
-          @mouseover="onMouseover()"
+          @click.right="onRightClick($event)"
+          @mouseover="onMouseover($event)"
           @mouseout="onMouseleave()"
           @mouseleave="onMouseleave()"
         />

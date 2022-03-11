@@ -23,6 +23,7 @@ import { MapStatesService } from '../map-states.service';
 import { SettingsService } from '@oms/root/services/settings.service';
 import { TrackStatusService } from '../../../services/track-status.service'
 import { TrackMonitorSettingService } from '../../../services/track-monitor-setting.service'
+import d3 = require('d3');
 
 @Component({
   selector: 'oms-map-viewer',
@@ -50,6 +51,8 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   }
 
   public selectedObject: any;
+  public tooltipObject: { type: string, value: any } | undefined;
+  public showTooltip = false
 
 
   get activeDetails(): boolean {
@@ -251,14 +254,52 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   }
 
   public onTooltipOn(event: CustomEvent) {
-    console.log(event.type, getCustomEventPayload(event))
+    // console.log(event.type, getCustomEventPayload(event))
+    const payload = getCustomEventPayload(event)
+
+    // @ts-ignore
+    if (!(payload.type && payload.value && payload.event)) return
+
+    // @ts-ignore
+    this.tooltipObject = { type: payload.type, value: payload.value }
+
+
+    if (this.tooltipObject.type === 'SEGMENT') {
+      const { startPoint, endPoint } = this.tooltipObject.value;
+      this.tooltipObject.value.point =
+        startPoint && endPoint ? `${startPoint} → ${endPoint}` : null;
+    }
+
+    // @ts-ignore
+    const { pageX: x, pageY: y } = payload.event;
+
+    const leftThreshold = window.innerWidth - 200;
+    const popupOffsetX = 10;
+    const popupOffsetY = 40;
+
+    const container = d3
+      .select('#tooltipView')
+      .style('top', `${y - popupOffsetY}px`);
+
+    if (leftThreshold > x) {
+      container
+        .style('left', `${x + popupOffsetX}px`)
+        .style('right', 'inherit');
+    } else {
+      container
+        .style('right', `${window.innerWidth - x + popupOffsetX}px`)
+        .style('left', 'inherit');
+    }
+
+
+
+    this.showTooltip = true
   }
   public onTooltipOff(event: CustomEvent) {
-    console.log(event.type)
+    this.showTooltip = false
+    this.tooltipObject = undefined
   }
   public onFocus(event: CustomEvent) {
-    console.log(event.type, getCustomEventPayload(event))
-
     const payload = getCustomEventPayload(event)
     // @ts-ignore
     this.selectedObject = { objectType: payload.type, ...payload.value }
@@ -269,15 +310,13 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     console.log(event.type, getCustomEventPayload(event))
   }
   public onBackdrop(event: CustomEvent) {
-    console.log(event.type)
-
     this.selectedObject = undefined
     this.viewer.dropFocus()
     this.viewer.stopTrack()
   }
   public getCameraAndRotation() {
-    const data = this.viewer.getCameraAndRotation()
-    console.log(data)
+    // const data = this.viewer.getCameraAndRotation()
+    // console.log(data)
   }
 
 }

@@ -33,6 +33,10 @@
   filter: drop-shadow(0 0 var(--filter-size) var(--hover-color-solid));
 }
 
+#cluster-layer .cluster:hover {
+  filter: drop-shadow(0 0 var(--filter-size) var(--hover-color-solid));
+}
+
 #vehicle-layer .type.hover path {
   stroke: var(--hover-color-transparent);
   stroke-width: 40;

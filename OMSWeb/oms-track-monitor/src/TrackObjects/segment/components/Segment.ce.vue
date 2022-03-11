@@ -26,10 +26,11 @@ watchEffect(() => {
   }
 })
 
-function onMouseover() {
+function onMouseover(event: MouseEvent) {
   emit('mouseoverOnObject', {
     type: "SEGMENT",
-    value: deepCopy(props.segment)
+    value: deepCopy(props.segment),
+    event
   })
 }
 function onMouseleave() {
@@ -41,10 +42,11 @@ function onLeftClick() {
     value: deepCopy(props.segment)
   })
 }
-function onRightClick() {
+function onRightClick(event: MouseEvent) {
   emit('secondaryClickOnObject', {
     type: "SEGMENT",
-    value: deepCopy(props.segment)
+    value: deepCopy(props.segment),
+    event
   })
 }
 </script>
@@ -63,8 +65,8 @@ function onRightClick() {
       :d="props.segment.d"
       fill="none"
       @click.left="onLeftClick()"
-      @click.right="onRightClick()"
-      @mouseover="onMouseover()"
+      @click.right="onRightClick($event)"
+      @mouseover="onMouseover($event)"
       @mouseout="onMouseleave()"
       @mouseleave="onMouseleave()"
     />
@@ -75,8 +77,8 @@ function onRightClick() {
       :x="position.x"
       :y="position.y"
       :transform="`rotate(${angle} ${position.x} ${position.y})`"
-      @click.right="onRightClick()"
-      @mouseover="onMouseover()"
+      @click.right="onRightClick($event)"
+      @mouseover="onMouseover($event)"
       @mouseout="onMouseleave()"
       @mouseleave="onMouseleave()"
     />

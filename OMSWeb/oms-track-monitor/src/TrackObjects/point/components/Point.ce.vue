@@ -12,10 +12,11 @@ const props = defineProps<{
 }>()
 const emit = inject<RootEmits>(RootEmitInjectionKey)!
 
-function onMouseover() {
+function onMouseover(event: MouseEvent) {
   emit('mouseoverOnObject', {
     type: "POINT",
-    value: deepCopy(props.point)
+    value: deepCopy(props.point),
+    event,
   })
 }
 function onMouseleave() {
@@ -27,10 +28,11 @@ function onLeftClick() {
     value: deepCopy(props.point)
   })
 }
-function onRightClick() {
+function onRightClick(event: MouseEvent) {
   emit('secondaryClickOnObject', {
     type: "POINT",
-    value: deepCopy(props.point)
+    value: deepCopy(props.point),
+    event
   })
 }
 </script>
@@ -44,8 +46,8 @@ function onRightClick() {
           r="5"
           class="point-path"
           @click.left="onLeftClick()"
-          @click.right="onRightClick()"
-          @mouseover="onMouseover()"
+          @click.right="onRightClick($event)"
+          @mouseover="onMouseover($event)"
           @mouseout="onMouseleave()"
           @mouseleave="onMouseleave()"
         />

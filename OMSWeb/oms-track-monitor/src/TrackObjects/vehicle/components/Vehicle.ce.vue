@@ -12,7 +12,7 @@ import { D } from 'src/types/D';
 import { deepCopy } from 'src/utils/deepCopy';
 import MakeDInUpdateWorker from '../utils/workers/MakeDInUpdateWorker?worker&inline'
 import { Position } from 'src/types/Position';
-import VehicleSymbol from './VehicleSymbol.ce.vue';
+import VehiclePresentation from './VehiclePresentation.ce.vue';
 import { moveCamera } from 'src/MapObjects/map/camera';
 import { setHoveredVehicle } from '../hoveredVehicle'
 import { setTrackedObject } from 'src/MapObjects/track/track';
@@ -139,11 +139,12 @@ const commandLineColor = computed(() => {
   else return undefined
 })
 
-function onMouseover() {
+function onMouseover(event: MouseEvent) {
   setHoveredVehicle(props.vehicle)
   emit('mouseoverOnObject', {
     type: "VEHICLE",
-    value: deepCopy(props.vehicle)
+    value: deepCopy(props.vehicle),
+    event
   })
 }
 function onMouseleave() {
@@ -159,10 +160,11 @@ function onLeftClick() {
     value: deepCopy(props.vehicle)
   })
 }
-function onRightClick() {
+function onRightClick(event: MouseEvent) {
   emit('secondaryClickOnObject', {
     type: "VEHICLE",
-    value: deepCopy(props.vehicle)
+    value: deepCopy(props.vehicle),
+    event
   })
 }
 
@@ -171,7 +173,10 @@ onUnmounted(() => { makeDInUpdateWorker.terminate() })
 
 <template>
   <!-- presentation component without logic -->
-  <VehicleSymbol
+  <VehiclePresentation
+    v-if="realtimePosition"
+    :x="realtimePosition.x"
+    :y="realtimePosition.y"
     :symbolId="symbolId"
     :vid="props.vehicle.id"
     :logicalId="props.vehicle.logicalId"
@@ -192,18 +197,10 @@ onUnmounted(() => { makeDInUpdateWorker.terminate() })
     :isPreventPush="isPreventPush"
     :isFocused="props.vehicle.isFocused"
     :isHovered="props.vehicle.isHovered"
-  />
-
-  <!-- use symbol -->
-  <use
-    :href="`#${symbolId}`"
-    v-if="realtimePosition"
-    :x="realtimePosition.x"
-    :y="realtimePosition.y"
     @dblclick="onDbClick()"
-    @click.left="onLeftClick()"
-    @click.right="onRightClick()"
-    @mouseover="onMouseover()"
+    @leftclick="onLeftClick()"
+    @rightclick="onRightClick($event)"
+    @mouseover="onMouseover($event)"
     @mouseout="onMouseleave()"
     @mouseleave="onMouseleave()"
   />

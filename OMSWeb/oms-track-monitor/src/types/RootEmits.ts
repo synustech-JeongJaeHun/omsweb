@@ -5,6 +5,7 @@ import { Mtl } from "TrackObjects/mtl/types/Mtl"
 import { Zcu } from "TrackObjects/zcu/types/Zcu"
 import { Vehicle } from "TrackObjects/vehicle/types/Vehicle"
 import { Segment } from "TrackObjects/segment/types/Segment"
+import { Cluster } from "src/TrackObjects/cluster/types/Cluster"
 
 /**
  * if you change this file,
@@ -30,13 +31,14 @@ interface RootEmits {
 namespace EventDetails {
 
   export type MouseoverOnObject =
-    | { type: "POINT", value: Point }
-    | { type: "SEGMENT", value: Segment }
-    | { type: "STATION", value: Station }
-    | { type: "BUFFER", value: Buffer }
-    | { type: "MTL", value: Mtl }
-    | { type: "ZCU", value: Zcu }
-    | { type: "VEHICLE", value: Vehicle }
+    | { type: "POINT", value: Point, event: MouseEvent }
+    | { type: "SEGMENT", value: Segment, event: MouseEvent }
+    | { type: "CLUSTER", value: Cluster, event: MouseEvent }
+    | { type: "STATION", value: Station, event: MouseEvent }
+    | { type: "BUFFER", value: Buffer, event: MouseEvent }
+    | { type: "MTL", value: Mtl, event: MouseEvent }
+    | { type: "ZCU", value: Zcu, event: MouseEvent }
+    | { type: "VEHICLE", value: Vehicle, event: MouseEvent }
 
   export type MouseleaveOnObject = void
 
@@ -50,13 +52,13 @@ namespace EventDetails {
     | { type: "VEHICLE", value: Vehicle }
 
   export type SecondaryClickOnObject =
-    | { type: "POINT", value: Point }
-    | { type: "SEGMENT", value: Segment }
-    | { type: "STATION", value: Station }
-    | { type: "BUFFER", value: Buffer }
-    | { type: "MTL", value: Mtl }
-    | { type: "ZCU", value: Zcu }
-    | { type: "VEHICLE", value: Vehicle }
+    | { type: "POINT", value: Point, event: MouseEvent }
+    | { type: "SEGMENT", value: Segment, event: MouseEvent }
+    | { type: "STATION", value: Station, event: MouseEvent }
+    | { type: "BUFFER", value: Buffer, event: MouseEvent }
+    | { type: "MTL", value: Mtl, event: MouseEvent }
+    | { type: "ZCU", value: Zcu, event: MouseEvent }
+    | { type: "VEHICLE", value: Vehicle, event: MouseEvent }
 
   export type ClickOutObject = void
 }
