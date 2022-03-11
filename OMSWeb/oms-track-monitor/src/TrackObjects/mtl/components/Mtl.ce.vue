@@ -8,6 +8,7 @@ import MapReverseRotate from 'MapObjects/rotate/components/MapReverseRotate.ce.v
 import { RootEmitInjectionKey, RootEmits } from 'src/types/RootEmits';
 import { deepCopy } from 'src/utils/deepCopy';
 import { getGroupColorWithAlpha } from 'TrackObjects/group/utils/color'
+import ScaleByScale from 'src/MapObjects/scale/component/ScaleByScale.ce.vue';
 
 const props = defineProps<{
   mtl: Mtl
@@ -42,27 +43,29 @@ function onRightClick() {
 
 <template>
   <svg v-if="position" class="overflow-visible cursor-pointer mtl" :x="position.x" :y="position.y">
-    <use
-      v-if="group"
-      href="#mtl"
-      class="group-shadow"
-      :stroke="getGroupColorWithAlpha(group.color)"
-      stroke-width="20"
-    />
-    <use
-      href="#mtl"
-      stroke="grey"
-      stroke-width="10"
-      @click.left="onLeftClick()"
-      @click.right="onRightClick()"
-      @mouseover="onMouseover()"
-      @mouseout="onMouseleave()"
-      @mouseleave="onMouseleave()"
-    />
-    <use v-if="props.mtl.isFocused" href="#mtl" class="focus" stroke-width="20" />
-    <!-- <text y="70">{{ props.mtl.id }}</text> -->
-    <MapReverseRotate>
-      <RasterizedText class="invert" x="80" y="45" :text="props.mtl.logicalId" />
-    </MapReverseRotate>
+    <ScaleByScale>
+      <MapReverseRotate>
+        <use
+          v-if="group"
+          href="#mtl"
+          class="group-shadow"
+          :stroke="getGroupColorWithAlpha(group.color)"
+          stroke-width="15"
+        />
+        <use v-if="props.mtl.isFocused" href="#mtl" class="focus" stroke-width="8" />
+        <use
+          href="#mtl"
+          stroke="grey"
+          stroke-width="3"
+          @click.left="onLeftClick()"
+          @click.right="onRightClick()"
+          @mouseover="onMouseover()"
+          @mouseout="onMouseleave()"
+          @mouseleave="onMouseleave()"
+        />
+        <!-- <text y="70">{{ props.mtl.id }}</text> -->
+        <RasterizedText class="invert" x="20" y="10" :text="props.mtl.logicalId" />
+      </MapReverseRotate>
+    </ScaleByScale>
   </svg>
 </template>

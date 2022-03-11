@@ -17,6 +17,7 @@ import { moveCamera } from 'src/MapObjects/map/camera';
 import { setHoveredVehicle } from '../hoveredVehicle'
 import { setTrackedObject } from 'src/MapObjects/track/track';
 import { getGroupColorWithAlpha } from 'TrackObjects/group/utils/color'
+import { getRotatedPosition } from 'src/MapObjects/cameraAndRotation';
 
 const props = defineProps<{
   vehicle: Vehicle
@@ -106,12 +107,12 @@ function trackVehiclePosition(d: D, lastUpdated: number) {
       const p = pathElement.getPointAtLength(totalLength)
       realtimePosition.value = { x: p.x, y: p.y }
 
-      if (props.vehicle.isTracked) moveCamera(p)
+      if (props.vehicle.isTracked) moveCamera(getRotatedPosition(p))
       globalThis.requestAnimationFrame(() => { })
     } else {
       const p = pathElement.getPointAtLength(totalLength / TotalVehicleAnimationDuration * diff)
       realtimePosition.value = { x: p.x, y: p.y }
-      if (props.vehicle.isTracked) moveCamera(p)
+      if (props.vehicle.isTracked) moveCamera(getRotatedPosition(p))
 
       globalThis.requestAnimationFrame(step)
     }

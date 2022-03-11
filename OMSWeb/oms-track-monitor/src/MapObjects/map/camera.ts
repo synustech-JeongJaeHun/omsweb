@@ -59,26 +59,38 @@ watch(elementRectInfo, () => {
   moveCamera({ x: cameraTotalInfo.value.centerX, y: cameraTotalInfo.value.centerY })
 })
 
-function zoom(action: "In" | "Out", position: Position, count: number) {
-  // TODO using position
-  if (action === 'In') {
-    const
-      width = cameraViewBoxInfo.width * (0.7 ** count),
-      height = getHeightFromWidthAndRatio(width)
-    resizeViewBox(width, height)
-  }
-  else {
-    const
-      width = cameraViewBoxInfo.width * (1.3 ** count),
-      height = getHeightFromWidthAndRatio(width)
-
-    resizeViewBox(width, height)
-  }
+function getZoomRatio(action: "In" | "Out") {
+  return action === 'In' ? 0.7 : 1.3
 }
 
+function zoom(
+  action: "In" | "Out",
+  offset: { x: MouseEvent['offsetX'], y: MouseEvent['offsetY'] },
+  count: number
+) {
+  const invertedOffsetY = (elementRectInfo.height - offset.y)
+
+  const cursorPosition = {
+    x: cameraPositionInfo.x + offset.x * scaleInfo.value.mmPerPixel,
+    y: cameraPositionInfo.y + invertedOffsetY * scaleInfo.value.mmPerPixel,
+  }
+
+  const
+    width = cameraViewBoxInfo.width * (getZoomRatio(action) ** count),
+    height = getHeightFromWidthAndRatio(width)
+
+  const
+    centerX = (cursorPosition.x - width / elementRectInfo.width * offset.x) + width / 2,
+    centerY = (cursorPosition.y - height / elementRectInfo.height * invertedOffsetY) + height / 2
+
+
+  resizeViewBox(width, height)
+  moveCamera({ x: centerX, y: centerY })
+}
 // element event listener
+
 function zoomIn1Time(event: MouseEvent) {
-  zoom('In', { x: event.clientX, y: event.clientY }, 1)
+  zoom('In', { x: event.offsetX, y: event.offsetY }, 1)
 }
 
 const MaximumZoomCount = 3
@@ -98,7 +110,8 @@ function zoomInOutByWheel(event: WheelEvent) {
 
     // @ts-ignore
     zoomDebounceTimeoutId = setTimeout(() => {
-      zoom(action, { x: event.clientX, y: event.clientY }, zoomCount > MaximumZoomCount ? MaximumZoomCount : zoomCount)
+      console.log('zoomevent ', event)
+      zoom(action, { x: event.offsetX, y: event.offsetY }, zoomCount > MaximumZoomCount ? MaximumZoomCount : zoomCount)
       zoomCount = 0
       zoomAction = undefined
       zoomDebounceTimeoutId = undefined

@@ -21,6 +21,36 @@ function getCameraAndRotation() {
   }
 }
 
+/**
+ * check this file to how map rotated
+ * `src\MapObjects\rotate\components\MapRotate.ce.vue`
+ */
+function getRotatedPosition(position: Position) {
+  // https://blog.naver.com/web2011/221367932781
+  const origin = {
+    x: mapSizePropertiesInfo.value.centerX,
+    y: mapSizePropertiesInfo.value.centerY
+  }
+
+  const diff = {
+    x: position.x - origin.x,
+    y: position.y - origin.y,
+  }
+
+  const
+    r = Math.hypot(diff.x, diff.y),
+    p = Math.atan2(diff.y, diff.x) // in radians
+
+  const rotated = ((p * 180 / Math.PI) + rotationInfo.value) / 180 * Math.PI // in radians
+
+  const correction = {
+    x: r * Math.cos(rotated) + origin.x,
+    y: r * Math.sin(rotated) + origin.y,
+  }
+
+  return correction
+}
+
 function initCameraAndRotation() {
   moveCamera({ x: mapSizePropertiesInfo.value.centerX, y: mapSizePropertiesInfo.value.centerY })
   centerZoom()
@@ -47,8 +77,8 @@ function centerZoom() {
 
 function approachTo(position: Position) {
   approachIterative({
-    position,
-    rotation: 0,
+    position: getRotatedPosition(position),
+    rotation: rotationInfo.value,
     viewBox: {
       width: getWidthFromHeightAndRatio(3000),
       height: 3000, //mm
@@ -122,4 +152,4 @@ function approachIterative(objective: Objective) {
 }
 
 
-export { getCameraAndRotation, initCameraAndRotation, centerZoom, approachTo }
+export { getCameraAndRotation, getRotatedPosition, initCameraAndRotation, centerZoom, approachTo }

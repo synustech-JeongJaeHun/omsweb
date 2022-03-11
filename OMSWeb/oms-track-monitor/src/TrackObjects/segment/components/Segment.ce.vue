@@ -52,6 +52,12 @@ function onRightClick() {
 <template>
   <svg class="overflow-visible cursor-pointer segment" :data-is-disabled="props.segment.disabled">
     <path
+      v-if="props.segment.isFocused"
+      class="focus fixed-scale-stroke"
+      :d="props.segment.d"
+      fill="none"
+    />
+    <path
       ref="pathElement"
       class="segment-path fixed-scale-stroke"
       :d="props.segment.d"
@@ -73,12 +79,6 @@ function onRightClick() {
       @mouseover="onMouseover()"
       @mouseout="onMouseleave()"
       @mouseleave="onMouseleave()"
-    />
-    <path
-      v-if="props.segment.isFocused"
-      class="focus fixed-scale-stroke"
-      :d="props.segment.d"
-      fill="none"
     />
   </svg>
 </template>

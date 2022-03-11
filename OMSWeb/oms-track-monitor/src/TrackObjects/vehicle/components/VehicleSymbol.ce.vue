@@ -164,6 +164,7 @@ const props = defineProps<{
         <!-- cargo state end -->
 
         <!-- Text fields START -->
+        <!-- https://stackoverflow.com/questions/442164/how-to-get-an-outline-effect-on-text-in-svg -->
         <!-- vehicle id -->
         <!-- 📐🛑 Be careful! logic is dependent on invert -->
         <text
@@ -172,6 +173,11 @@ const props = defineProps<{
           transform="scale(1 -1) translate(-25 -2)"
           text-anchor="end"
           alignment-baseline="baseline"
+          font-weight="bold"
+          stroke="white"
+          stroke-width="1px"
+          fill="black"
+          paint-order="stroke"
         >{{ props.logicalId }}</text>
         <!-- vehicle order with priority(hotlot) -->
         <g :filter="isHotlot ? `url(#vehicle-order-hotlot-border)` : undefined">

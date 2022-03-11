@@ -9,7 +9,7 @@
 }
 
 #segment-layer .focus {
-  stroke: var(--focus-color-transparent);
+  stroke: var(--focus-color-solid);
   pointer-events: none;
 }
 
@@ -24,12 +24,12 @@
 }
 
 #mtl-layer .focus {
-  stroke: var(--focus-color-transparent);
+  stroke: var(--focus-color-solid);
   pointer-events: none;
 }
 
 #zcu-layer .focus {
-  stroke: var(--focus-color-transparent);
+  stroke: var(--focus-color-solid);
   stroke-width: 10;
   pointer-events: none;
 }

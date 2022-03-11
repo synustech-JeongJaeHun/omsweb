@@ -5,7 +5,7 @@ import { mtls } from '../mtls'
 </script>
 
 <template>
-  <Layer>
+  <Layer id="mtl-layer">
     <defs>
       <!-- 
         pointer-events for event from visiblePainted (default value)
@@ -17,22 +17,22 @@ import { mtls } from '../mtls'
         pointer-events="visiblePainted"
         fill="none"
         d="
-        M -60 -60
-        L -40 -40
-        L -60 -20
-        L -40 0
-        L -60 20
-        L -40 40
-        L -60 60
-        L 60 60
-        L 40 40
-        L 60 20
-        L 40 0
-        L 60 -20
-        L 40 -40
-        L 60 -60
-        M -40 40
-        L 40 40
+        M -12 -12
+        L -8 -8
+        L -12 -4
+        L -8 0
+        L -12 4
+        L -8 8
+        L -12 12
+        L 12 12
+        L 8 8
+        L 12 4
+        L 8 0
+        L 12 -4
+        L 8 -8
+        L 12 -12
+        M -8 8
+        L 8 8
       "
       />
     </defs>
