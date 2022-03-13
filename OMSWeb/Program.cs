@@ -15,9 +15,11 @@ namespace OMSWeb
     {
         public static void Main(string[] args)
         {
+            /*
             string module_name = Process.GetCurrentProcess().MainModule.FileName;
             string path = Path.GetDirectoryName(module_name);
             Directory.SetCurrentDirectory(path);
+            */
 
             CreateHostBuilder(args).Build().Run();
         }
