@@ -1,0 +1,28 @@
+#map-overlapped {
+  max-width: 200px;
+
+  z-index: -1;
+
+  display: flex;
+  flex-direction: column;
+
+  background-color: white;
+  border-radius: 5px;
+  border: 2px solid black;
+}
+
+#map-overlapped ::ng-deep.overlap-item {
+  height: 40px;
+  cursor: pointer;
+  padding: 8px 8px;
+}
+#map-overlapped ::ng-deep.overlap-item.current {
+  font-weight: bold;
+  background-color: var(--button-active-color);
+  border-radius: 5px;
+}
+
+
+#map-overlapped ::ng-deep.overlap-item:hover {
+  background-color: rgba(78, 159, 243, 0.2);
+}

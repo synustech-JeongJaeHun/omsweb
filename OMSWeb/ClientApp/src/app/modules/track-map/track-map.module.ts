@@ -12,8 +12,9 @@ import { MapSidePanelComponent } from './side-panel/map-side-panel.component';
 import { OverlapListComponent } from './side-panel/overlap-list.component';
 import { VehicleStatusDialogComponent } from './dialogs/vehicle-status-dialog.component';
 import { BufferStatusDialogComponent } from './dialogs/buffer-status-dialog.component';
+import { MapOverlappedComponent } from './viewer/map-overlapped.component'
 @NgModule({
-  declarations: [MapViewerComponent, MapToolbarComponent, SearchDialogComponent, TrackVehicleDialogComponent, CommandDialogComponent, ShowObjectDialogComponent, MapSidePanelComponent, OverlapListComponent, VehicleStatusDialogComponent, BufferStatusDialogComponent],
+  declarations: [MapViewerComponent, MapToolbarComponent, MapOverlappedComponent, SearchDialogComponent, TrackVehicleDialogComponent, CommandDialogComponent, ShowObjectDialogComponent, MapSidePanelComponent, OverlapListComponent, VehicleStatusDialogComponent, BufferStatusDialogComponent],
   imports: [CommonModule, SharedModule],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   exports: [MapViewerComponent, MapToolbarComponent],

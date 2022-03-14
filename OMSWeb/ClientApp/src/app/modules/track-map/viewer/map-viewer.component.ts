@@ -61,6 +61,10 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   public showTooltip = false
   public contextMenuObject: { type: string, value: any } | undefined;
   public showContextMenu = false
+  public colocatedViewPosition: { top: string, left: string, right: string } | undefined;
+  public colocatedObjects = [];
+  public mainColocatedObject: any;
+  public showColocatedView = false;
 
 
   get activeDetails(): boolean {
@@ -416,13 +420,125 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     this.viewer.track(event.type, event.id)
   }
 
-  public onTooltipOn(event: CustomEvent) {
+  public onMouseoverTM(event: CustomEvent) {
     const payload = getCustomEventPayload(event)
     // @ts-ignore
     if (!(payload.type && payload.value && payload.event)) return
+
+    // @ts-ignore
+    const type = payload.type, object = payload.value;
+
+    const getPointId = () => {
+      switch (type.toUpperCase()) {
+        case 'POINT':
+          return object.id
+        case 'MTL':
+          return object.pointId
+        case 'STATION':
+          return object.pointId
+        case 'BUFFER':
+          return object.pointId
+        case 'VEHICLE':
+          return object.curPoint
+      }
+    }
+
+    switch (type.toUpperCase()) {
+      case "SEGMENT":
+      case "CLUSTER":
+      case "ZCU":
+        this.onTooltipOn(event)
+        break;
+      case 'POINT':
+      case 'MTL':
+      case 'STATION':
+      case 'BUFFER':
+      case 'VEHICLE':
+        const objectsOnSamePoint = this.trackStatusService.getOverlapObjectOnPoint(getPointId())
+
+        if (objectsOnSamePoint.length === 1) {
+          this.onTooltipOn(event)
+        }
+        else {
+          // @ts-ignore
+          this.mainColocatedObject = payload.value;
+          this.colocatedObjects = objectsOnSamePoint;
+          this.onCoLocatedObjectPanelOn(event)
+        }
+        break;
+
+      default:
+
+        break;
+    }
+  }
+
+  public onCoLocatedObjectPanelOn(event: CustomEvent) {
+    const payload = getCustomEventPayload(event)
+
+    // @ts-ignore
+    const { pageX: x, pageY: y } = payload.event;
+
+    const leftThreshold = window.innerWidth - 200;
+    const popupOffsetX = -50;
+    const popupOffsetY = 50;
+
+    const container = d3
+      .select('#colocatedView')
+      .style('top', `${y - popupOffsetY}px`);
+
+    if (leftThreshold > x) {
+      container
+        .style('left', `${x + popupOffsetX}px`)
+        .style('right', 'inherit');
+    } else {
+      container
+        .style('right', `${window.innerWidth - x + popupOffsetX}px`)
+        .style('left', 'inherit');
+    }
+
+    this.showColocatedView = true
+  }
+  public onCoLocatedObjectPanelOff() {
+    this.showColocatedView = false
+  }
+
+  public onFocusFromOverlapped(object: any) {
+    this.selectedObject = object
+    this.focusOnTM({ type: object.objectType, id: object.id })
+  }
+  public onContextMenuOnFromOverlapped(event: { object: any, event: Event }) {
+    this.contextMenuObject = { type: event.object.objectType, value: event.object }
+
+    const leftThreshold = window.innerWidth - 200;
+    const popupOffsetX = 10;
+    const popupOffsetY = 40;
+
+    // @ts-ignore
+    const { pageX: x, pageY: y } = event.event;
+
+    const container = d3
+      .select('#contextMenu')
+      .style('top', `${y - popupOffsetY}px`);
+
+    if (leftThreshold > x) {
+      container
+        .style('left', `${x + popupOffsetX}px`)
+        .style('right', 'inherit');
+    } else {
+      container
+        .style('right', `${window.innerWidth - x + popupOffsetX}px`)
+        .style('left', 'inherit');
+    }
+
+    this.showContextMenu = true
+  }
+
+  public onTooltipOn(event: CustomEvent) {
+    const payload = getCustomEventPayload(event)
+
     // @ts-ignore
     this.tooltipObject = { type: payload.type, value: payload.value }
-
 
     if (this.tooltipObject.type === 'SEGMENT') {
       const { startPoint, endPoint } = this.tooltipObject.value;
@@ -453,7 +569,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 
     this.showTooltip = true
   }
-  public onTooltipOff(event: CustomEvent) {
+  public onMouseleaveTM(event: CustomEvent) {
     this.showTooltip = false
     this.tooltipObject = undefined
   }

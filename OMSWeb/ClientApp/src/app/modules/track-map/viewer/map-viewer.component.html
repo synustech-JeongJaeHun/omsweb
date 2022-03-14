@@ -15,8 +15,8 @@
     [segmentDirectionColor]="tmSetting.segmentDirectionColor" [autoModeVehicleColor]="tmSetting.autoModeVehicleColor"
     [manualModeVehicleColor]="tmSetting.manualModeVehicleColor" [noneModeVehicleColor]="tmSetting.noneModeVehicleColor"
     [cargoLoadingColor]="tmSetting.cargoLoadingColor" [cargoFullColor]="tmSetting.cargoFullColor"
-    [cargoUnloadingColor]="tmSetting.cargoUnloadingColor" (mouseoverOnObject)="onTooltipOn($event)"
-    (mouseleaveOnObject)="onTooltipOff($event)" (mainClickOnObject)="onFocus($event)"
+    [cargoUnloadingColor]="tmSetting.cargoUnloadingColor" (mouseoverOnObject)="onMouseoverTM($event)"
+    (mouseleaveOnObject)="onMouseleaveTM($event)" (mainClickOnObject)="onFocus($event)"
     (secondaryClickOnObject)="onContectMenuOn($event)" (clickOutObject)="onBackdrop($event)">
   </oms-track-monitor>
 
@@ -35,7 +35,7 @@
   </oms-map-toolbar>
 
   <!-- context -->
-  <div id="contextMenu" [hidden]="!showContextMenu" class="context-menu">
+  <div id="contextMenu" [hidden]="!showContextMenu" class="context-menu" [style.zIndex]="5">
     <div [ngSwitch]="contextMenuObject?.type?.toUpperCase()">
       <ng-container *ngSwitchCase="'SEGMENT'">
         <ng-container *ngTemplateOutlet="segmentContext"></ng-container>
@@ -58,6 +58,16 @@
       <div *ngSwitchDefault></div>
     </div>
   </div>
+
+  <!-- co-located objects -->
+  <div id="colocatedView" (mouseleave)="onCoLocatedObjectPanelOff()">
+    <ng-container *ngIf="showColocatedView">
+      <oms-map-overlapped [selectedObject]="mainColocatedObject" [overlapList]="colocatedObjects"
+        (leftClick)="onFocusFromOverlapped($event)" (rightClick)="onContextMenuOnFromOverlapped($event)">
+      </oms-map-overlapped>
+    </ng-container>
+  </div>
+
 
   <!-- tooltip -->
   <div id="tooltipView" class="tooltip-view"></div>
