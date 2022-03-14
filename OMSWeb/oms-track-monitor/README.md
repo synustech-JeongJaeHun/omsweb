@@ -18,16 +18,16 @@
 
 ## 컴포넌트 기능
 
-[컴포넌트 기능]('./docs/component-feature.md)
+[컴포넌트 기능](./docs/component-feature.md)
 
 ## 인터페이스
 
-[oms-track-monitor 인터페이스]('./docs/component-interface.md')
+[oms-track-monitor 인터페이스](./docs/component-interface.md)
 
 ## 시나리오
 
-- [Component Setup 시나리오]('./docs/component-setup.md')
-- [Scale Level별 Visibility 시나리오]('./docs/scale-level-visibility.md)
-- [Scale Level별 Event 시나리오]('./docs/scale-level-event.md)
-- [Realtime Track Data Update 시나리오]('./docs/realtime-update.md')
-- [Playback Track Data Update 시나리오]('./docs/playback-update.md')
+- [Component Setup 시나리오](./docs/component-setup.md)
+- [Scale Level별 Visibility 시나리오](./docs/scale-level-visibility.md)
+- [Scale Level별 Event 시나리오](./docs/scale-level-event.md)
+- [Realtime Track Data Update 시나리오](./docs/realtime-update.md)
+- [Playback Track Data Update 시나리오](./docs/playback-update.md)
