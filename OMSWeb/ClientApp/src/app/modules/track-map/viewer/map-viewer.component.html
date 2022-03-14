@@ -40,15 +40,15 @@
       <ng-container *ngSwitchCase="'SEGMENT'">
         <ng-container *ngTemplateOutlet="segmentContext"></ng-container>
       </ng-container>
-      <!-- <ng-container *ngSwitchCase="'VEHICLE'">
+      <ng-container *ngSwitchCase="'VEHICLE'">
         <ng-container *ngTemplateOutlet="vehicleContext"></ng-container>
-      </ng-container> -->
-      <!-- <ng-container *ngSwitchCase="'BUFFER'">
+      </ng-container>
+      <ng-container *ngSwitchCase="'BUFFER'">
         <ng-container *ngTemplateOutlet="bufferContext"></ng-container>
-      </ng-container> -->
-      <!-- <ng-container *ngSwitchCase="'STATION'">
+      </ng-container>
+      <ng-container *ngSwitchCase="'STATION'">
         <ng-container *ngTemplateOutlet="stationContext"></ng-container>
-      </ng-container> -->
+      </ng-container>
       <ng-container *ngSwitchCase="'ZCU'">
         <ng-container *ngTemplateOutlet="zcuContext"></ng-container>
       </ng-container>
@@ -198,6 +198,65 @@
 
 <!-- context start -->
 
+<ng-template #vehicleContext>
+  <mat-card class="context-card">
+    <mat-card-header>
+      <mat-card-title>
+        Vehicle #{{ contextMenuObject?.value.id }}
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="context-form">
+      <button
+        *ngIf="hasPermissions([permissionEnums.AutoVehicle, permissionEnums.ResetVehicle, permissionEnums.EstopVehicle, permissionEnums.SetZcuGo])"
+        mat-button class="menu-trigger" (click)="commandMenuTrigger.openMenu()">
+        {{ "names.command" | translate }}
+        <mat-icon>arrow_right</mat-icon>
+        <div #commandMenuTrigger="matMenuTrigger" [matMenuTriggerFor]="vehicleCommandMenu"></div>
+      </button>
+      <button
+        *ngIf="hasPermissions([permissionEnums.PushEnable, permissionEnums.HostOrderEnable, permissionEnums.RailOut])"
+        mat-button class="menu-trigger" (click)="optionMenuTrigger.openMenu()">
+        {{ "names.option" | translate }}
+        <mat-icon>arrow_right</mat-icon>
+        <div #optionMenuTrigger="matMenuTrigger" [matMenuTriggerFor]="vehicleOptionMenu"></div>
+      </button>
+      <!-- <mat-menu #vehicleActions="matMenu">
+        <button mat-menu-item [matMenuTriggerFor]="vehicleCommandMenu">
+          Command
+        </button>
+      </mat-menu> -->
+    </mat-card-content>
+    <mat-menu #vehicleCommandMenu="matMenu">
+      <button *ngIf="hasPermissions([permissionEnums.AutoVehicle])" mat-menu-item
+        (click)="onVehicleCommand('initialize')">
+        {{ "names.auto" | translate }}
+      </button>
+      <button *ngIf="hasPermissions([permissionEnums.ResetVehicle])" mat-menu-item (click)="onVehicleCommand('reset')">
+        {{ "names.reset" | translate }}
+      </button>
+      <button *ngIf="hasPermissions([permissionEnums.EstopVehicle])" mat-menu-item (click)="onVehicleCommand('stop')">
+        {{ "names.estop" | translate }}
+      </button>
+      <button *ngIf="hasPermissions([permissionEnums.SetZcuGo])" mat-menu-item (click)="onVehicleCommand('zcu_go')">
+        {{ "names.zcuGo" | translate }}
+      </button>
+    </mat-menu>
+    <mat-menu #vehicleOptionMenu="matMenu">
+      <button *ngIf="hasPermissions([permissionEnums.PushEnable])" mat-menu-item
+        (click)="onVehicleCommand('push:enable')">
+        {{ "names.pushEnable" | translate }}
+      </button>
+      <button *ngIf="hasPermissions([permissionEnums.HostOrderEnable])" mat-menu-item
+        (click)="onVehicleCommand('hostOrder:enable')">
+        {{ "names.hostOrderEnable" | translate }}
+      </button>
+      <button *ngIf="hasPermissions([permissionEnums.RailOut])" mat-menu-item (click)="onVehicleCommand('rail_out')">
+        {{ "names.railOut" | translate }}
+      </button>
+    </mat-menu>
+  </mat-card>
+</ng-template>
+
 
 <ng-template #segmentContext>
   <mat-card class="context-card" *ngIf="hasPermissions([permissionEnums.SegmentUnuse])">
@@ -223,10 +282,11 @@
     </mat-card-header>
     <mat-card-content class="context-form">
       <button mat-stroked-button class="dense accent" color="primary" [disabled]="!canSetSource"
-        (click)="onSetSource()">
+        (click)="onSetSource('Buffer')">
         {{ "names.setSource" | translate }}
       </button>
-      <button mat-stroked-button class="dense accent" color="primary" [disabled]="!canSetDest" (click)="onSetDest()">
+      <button mat-stroked-button class="dense accent" color="primary" [disabled]="!canSetDest"
+        (click)="onSetDest('Buffer')">
         {{ "names.setDest" | translate }}
       </button>
       <div class="carrier-form">
@@ -254,10 +314,11 @@
     </mat-card-header>
     <mat-card-content class="context-form">
       <button mat-stroked-button class="dense accent" color="primary" [disabled]="!canSetSource"
-        (click)="onSetSource()">
+        (click)="onSetSource('Station')">
         {{ "names.setSource" | translate }}
       </button>
-      <button mat-stroked-button class="dense accent" color="primary" [disabled]="!canSetDest" (click)="onSetDest()">
+      <button mat-stroked-button class="dense accent" color="primary" [disabled]="!canSetDest"
+        (click)="onSetDest('Station')">
         {{ "names.setDest" | translate }}
       </button>
     </mat-card-content>

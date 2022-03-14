@@ -28,6 +28,7 @@ import { TracksService } from '@oms/root/services/tracks.service';
 import { TranslateService } from '@ngx-translate/core';
 import { MessagesService } from '@oms/root/services/messages.service';
 import { DialogService } from '@oms/root/services/dialog.service';
+import { IVehicleCommandMessage } from '@oms/root/models/command.model';
 
 @Component({
   selector: 'oms-map-viewer',
@@ -43,13 +44,10 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   private destroy$: Subject<void> = new Subject<void>();
   public detailsVisible = false;
 
-  get tmSetting() {
-    return this.trackMonitorSettingService.trackSetting
-  }
-
-  get groupIds() {
-    return this.trackData.groups.map(g => String(g.id))
-  }
+  get tmSetting() { return this.trackMonitorSettingService.trackSetting }
+  get groupIds() { return this.trackData.groups.map(g => String(g.id)) }
+  get canSetSource() { return !this.mapStatesService.transferCommandState.sourceDisabled; }
+  get canSetDest() { return !this.mapStatesService.transferCommandState.destDisabled; }
 
   public viewerSetting = {
     rect: {
@@ -248,7 +246,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   }
 
   onApplyPointChange(id: number, isHome: boolean, selectedGroup: number) {
-    console.log(arguments)
     this.tracksService
       .updatePoint(id, {
         isHome,
@@ -256,6 +253,52 @@ export class MapViewerComponent implements OnInit, OnDestroy {
       })
       .subscribe();
   }
+
+  onVehicleCommand(name: string) {
+    let commandMessage: IVehicleCommandMessage;
+    let needConfirm: boolean = false;
+
+    switch (name) {
+      case 'initialize':
+        commandMessage = { action: 'initialize' };  //auto
+        needConfirm = true;
+        break;
+      case 'reset':
+        commandMessage = { action: 'reset' };
+        needConfirm = true;
+        break;
+      case 'stop':
+        commandMessage = { action: 'stop' };  // estop
+        needConfirm = true;
+        break;
+      case 'zcu_go':
+        commandMessage = { action: 'zcu_go' };
+        break;
+      case 'push:enable':
+        commandMessage = { action: 'set_behavior', canBePushed: true };
+        break;
+      case 'hostOrder:enable':
+        commandMessage = { action: 'set_behavior', hostOrder: true };
+        break;
+      case 'rail_out':
+        commandMessage = { action: 'rail_out' };
+        break;
+      default:
+        commandMessage = { action: name };
+        break;
+    }
+
+    if (needConfirm) {
+      this.dialogSvc
+        .confirm({ body: this.$t.instant('messages.confirmCommand') })
+        .subscribe((ok) => {
+          ok && this.messageSvc.sendVehicleCommand(commandMessage, [this.contextMenuObject.value]).subscribe();
+        });
+    } else {
+      this.messageSvc.sendVehicleCommand(commandMessage, [this.contextMenuObject.value]).subscribe();
+    }
+  }
+
   onApplyZcuChange() {
     let origin = this.contextMenuObject.value.usingType;
     let change = (origin === 1 ? 2 : 1);
@@ -292,46 +335,50 @@ export class MapViewerComponent implements OnInit, OnDestroy {
         }
       });
   }
-  // onSetSource() {
-  //   const { id, objectType } = this.contextMenuObject.value;
-  //   this.statesSvc.transferCommandState.source = {
-  //     id,
-  //     objectType,
-  //   };
-  // }
-  // onSetDest() {
-  //   const { id, objectType } = this.contextMenuObject.value;
-  //   this.statesSvc.transferCommandState.dest = {
-  //     id,
-  //     objectType,
-  //   };
-  // }
-  // onRemoveCarrier(carrierId: string) {
-  //   this.dialogSvc
-  //     .confirm({ body: this.$t.instant('messages.confirmBufferChange') })
-  //     .subscribe((confirm) => {
-  //       confirm && this.messageSvc
-  //         .sendCarrierCommand({
-  //           action: 'remove_carrier',
-  //           bufferId: this.contextData.id,
-  //           carrierLabel: carrierId
-  //         })
-  //         .subscribe();
-  //     });
-  // }
-  // onInstallCarrier(carrierId: string) {
-  //   this.dialogSvc
-  //     .confirm({ body: this.$t.instant('messages.confirmBufferChange') })
-  //     .subscribe((confirm) => {
-  //       confirm && this.messageSvc
-  //         .sendCarrierCommand({
-  //           action: 'install_carrier',
-  //           bufferId: this.contextData.id,
-  //           carrierLabel: carrierId
-  //         })
-  //         .subscribe();
-  //     });
-  // }
+  onSetSource(objectType) {
+    const { id, logicalId, physicalId } = this.contextMenuObject.value;
+    this.mapStatesService.transferCommandState.source = {
+      objectType,
+      id,
+      logicalId,
+      physicalId
+    };
+  }
+  onSetDest(objectType) {
+    const { id, logicalId, physicalId } = this.contextMenuObject.value;
+    this.mapStatesService.transferCommandState.dest = {
+      objectType,
+      id,
+      logicalId,
+      physicalId
+    };
+  }
+  onRemoveCarrier(carrierId: string) {
+    this.dialogSvc
+      .confirm({ body: this.$t.instant('messages.confirmBufferChange') })
+      .subscribe((confirm) => {
+        confirm && this.messageSvc
+          .sendCarrierCommand({
+            action: 'remove_carrier',
+            bufferId: this.contextMenuObject.value.id,
+            carrierLabel: carrierId
+          })
+          .subscribe();
+      });
+  }
+  onInstallCarrier(carrierId: string) {
+    this.dialogSvc
+      .confirm({ body: this.$t.instant('messages.confirmBufferChange') })
+      .subscribe((confirm) => {
+        confirm && this.messageSvc
+          .sendCarrierCommand({
+            action: 'install_carrier',
+            bufferId: this.contextMenuObject.value.id,
+            carrierLabel: carrierId
+          })
+          .subscribe();
+      });
+  }
 
   onChangeSegmentProperty(isDisable: boolean) {
     if (isDisable) {
@@ -418,7 +465,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     this.focusOnTM({ type: payload.type, id: payload.value.id })
   }
   public onContectMenuOn(event: CustomEvent) {
-    console.log('context ', event)
     const payload = getCustomEventPayload(event)
     // @ts-ignore
     if (!(payload.type && payload.value && payload.event)) return
@@ -457,7 +503,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   }
   public getCameraAndRotation() {
     // const data = this.viewer.getCameraAndRotation()
-    // console.log(data)
   }
 
 }
