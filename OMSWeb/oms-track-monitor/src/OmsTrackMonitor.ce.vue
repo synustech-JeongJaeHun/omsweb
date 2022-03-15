@@ -80,11 +80,9 @@ const props = defineProps<{
   isBufferVisible: Boolish,
   isGroupVisible: Boolish,
   isClusterVisible: Boolish,
-  isOverlappingObjectsVisible: Boolish, // TODO
 
   // color
   backgroundColor: Stringlish
-  playbackBackgroundColor: Stringlish
   stationColor: Stringlish
   bufferColor: Stringlish
   pointColor: Stringlish
@@ -155,19 +153,9 @@ provide('shadowRoot', readonly(shadowRoot))
 // HOW TO USE
 // const shadowRoot = inject<Ref<ShadowRoot>>('shadowRoot')
 
-// TODO handle permission on host system, not on tm
-// const permissions = reactive({
-//   canManageOrders: false,
-//   canManageVehicles: false,
-//   canManageDisplaySettings: false
-// })
-const preferences = ref<IPreferences>()
-// State End
-
 const exposed: IOmsTrackMonitor = {
   getCameraAndRotation,
 
-  setPreference(p) { preferences.value = p },
   setTrack(t) {
     const { minX, minY, maxX, maxY } = calculateMinMaxXYFromPoints(t.points ?? [])
     initMapSizeProperties(minX, minY, maxX, maxY)

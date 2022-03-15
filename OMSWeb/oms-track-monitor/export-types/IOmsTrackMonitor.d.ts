@@ -7,7 +7,6 @@ interface IOmsTrackMonitor {
   }
 
   // Set Data
-  setPreference(preferences: any): void // is this needed?
   setTrack(track: any): void
   centerZoom(): void
 

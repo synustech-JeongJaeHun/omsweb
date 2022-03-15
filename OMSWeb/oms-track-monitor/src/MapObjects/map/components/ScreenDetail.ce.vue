@@ -5,7 +5,6 @@ import { rotationInfo } from 'MapObjects/rotate/rotate';
 import { scaleInfo } from '../../scale/scale';
 import { elementRectInfo, getElementRatio } from '../elementRect';
 import { mapSizePropertiesInfo } from '../mapSizeProperties';
-import { scaleStylesInfo } from 'src/styles/styles';
 
 const isShow = ref(false)
 </script>
@@ -20,11 +19,11 @@ const isShow = ref(false)
     <div
       v-if="isShow"
       class="absolute"
-      style="padding: 10px;bottom: 40px;right: 5px; min-width: 20em; width: max-content; background-color: rgba(0, 0, 0, 0.255); overflow: scroll;"
+      style="padding: 10px;bottom: 40px;right: 5px; min-width: 20em; width: max-content; background-color: rgba(0, 0, 0, 0.255); overflow: scroll; max-height: 500px;"
     >
       <details :open="false">
         <summary>
-          <h2 style="margin: 0px; border-bottom: 2px solid black;">📷 camera</h2>
+          <h2 style="margin: 0px; border-bottom: 2px solid black;">📷 Camera</h2>
         </summary>
 
         <dl>
@@ -67,34 +66,18 @@ const isShow = ref(false)
 
       <details :open="false">
         <summary>
-          <h2 style="margin: 0px; border-bottom: 2px solid black;">♻️ rotate</h2>
+          <h2 style="margin: 0px; border-bottom: 2px solid black;">♻️ Rotation</h2>
         </summary>
 
         <dl>
-          <dt>rotate</dt>
+          <dt>Rotation</dt>
           <dd>{{ rotationInfo }}</dd>
         </dl>
       </details>
 
       <details :open="false">
         <summary>
-          <h2 style="margin: 0px; border-bottom: 2px solid black;">👗 styles</h2>
-        </summary>
-        <dl>
-          <dt>vehicle</dt>
-          <dd>{{ scaleStylesInfo.vehicleSize }}</dd>
-
-          <dt>segment-width</dt>
-          <dd>{{ scaleStylesInfo.segmentWidth }}</dd>
-
-          <dt>segment-direction</dt>
-          <dd>{{ scaleStylesInfo.segmentDirection }}</dd>
-        </dl>
-      </details>
-
-      <details :open="false">
-        <summary>
-          <h2 style="margin: 0px; border-bottom: 2px solid black;">🗺️ map</h2>
+          <h2 style="margin: 0px; border-bottom: 2px solid black;">🗺️ Map</h2>
         </summary>
 
         <dl>

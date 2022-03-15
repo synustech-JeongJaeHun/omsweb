@@ -103,7 +103,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     // @ts-ignore
     this.viewer = document.getElementById('track-canvas')._instance.exposed
-    this.viewer.setPreference(this.preference)
     // @ts-ignore
     this.viewer.setTrack({ ...this.trackData, segmentParts: this.trackData.segments, clusters: this.trackData.clusters.map(c => ({ ...c, segments: c.segments.split(',').map(id => parseInt(id.trim())) })) })
     this.attachEvents()

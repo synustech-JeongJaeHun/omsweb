@@ -24,7 +24,6 @@ const VisibleDefault: Record<VisibleProperty, boolean> = {
   buffer: true, // applied in OmsTrackMonitor.ce.vue
   group: true, // applied in OmsTrackMonitor.ce.vue
   cluster: true, // applied in OmsTrackMonitor.ce.vue
-  overlappingObjects: true, // TODO notimplemented
   minimap: true, // applied in OmsTrackMonitor.ce.vue
 }
 const visibleStyles = reactive(deepCopy(VisibleDefault))

@@ -6,7 +6,6 @@ type VisibleProperty =
   | "buffer"
   | "group"
   | "cluster"
-  | "overlappingObjects"
   | "minimap"
 
 export { VisibleProperty }
