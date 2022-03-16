@@ -1,8 +1,22 @@
-#point-layer[data-scale-level='BELOW17' i] .point,
-#point-layer[data-scale-level='BELOW20' i] .point {
+#point-layer[data-scale-level~='BELOW17' i] .point,
+#point-layer[data-scale-level~='BELOW20' i] .point {
   visibility: visible;
 }
 
 #point-layer .point {
   visibility: hidden;
+}
+
+#buffer-layer .buffer .label,
+#station-layer .station .label,
+#zcu-layer .zcu .label,
+#mtl-layer .mtl .label {
+  visibility: hidden;
+}
+
+#buffer-layer[data-scale-level~='BELOW17' i] .buffer .label,
+#station-layer[data-scale-level~='BELOW17' i] .station .label,
+#zcu-layer[data-scale-level~='BELOW17' i] .zcu .label,
+#mtl-layer[data-scale-level~='BELOW17' i] .mtl .label {
+  visibility: inherit;
 }

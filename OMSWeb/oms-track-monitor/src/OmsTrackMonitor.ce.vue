@@ -512,10 +512,10 @@ defineExpose(exposed)
   transform: scale(v-bind("scaleInfo.mmPerPixel"));
 }
 
-#buffer-layer[data-scale-level="BELOW17" i] .buffer .scale-by-scale,
-#station-layer[data-scale-level="BELOW17" i] .station .scale-by-scale,
-#zcu-layer[data-scale-level="BELOW17" i] .zcu .scale-by-scale,
-#mtl-layer[data-scale-level="BELOW17" i] .mtl .scale-by-scale {
+#buffer-layer[data-scale-level~="BELOW17" i] .buffer .scale-by-scale,
+#station-layer[data-scale-level~="BELOW17" i] .station .scale-by-scale,
+#zcu-layer[data-scale-level~="BELOW17" i] .zcu .scale-by-scale,
+#mtl-layer[data-scale-level~="BELOW17" i] .mtl .scale-by-scale {
   transform: scale(v-bind("scaleInfo.mmPerPixel"));
 }
 

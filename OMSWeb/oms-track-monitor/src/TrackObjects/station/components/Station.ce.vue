@@ -70,7 +70,7 @@ function onRightClick(event: MouseEvent) {
           @mouseout="onMouseleave()"
           @mouseleave="onMouseleave()"
         />
-        <RasterizedText class="invert" x="15" y="-10" :text="props.station.logicalId" />
+        <RasterizedText class="invert label" x="15" y="-10" :text="props.station.logicalId" />
       </MapReverseRotate>
     </ScaleByScale>
   </svg>

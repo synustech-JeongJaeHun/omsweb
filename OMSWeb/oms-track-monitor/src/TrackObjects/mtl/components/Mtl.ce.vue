@@ -66,7 +66,7 @@ function onRightClick(event: MouseEvent) {
           @mouseleave="onMouseleave()"
         />
         <!-- <text y="70">{{ props.mtl.id }}</text> -->
-        <RasterizedText class="invert" x="20" y="10" :text="props.mtl.logicalId" />
+        <RasterizedText class="invert label" x="20" y="10" :text="props.mtl.logicalId" />
       </MapReverseRotate>
     </ScaleByScale>
   </svg>

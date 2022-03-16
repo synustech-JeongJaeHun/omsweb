@@ -4,34 +4,43 @@
 
 ## Buffer
 
-| Buffer           | Base  | ELSE | BELOW80 | BELOW20 | BELOW17 |
-| ---------------- | ----- | ---- | ------- | ------- | ------- |
-| total visibility | TRUE  |      |         |         |         |
-| label visibility | FALSE |      |         |         | TRUE    |
-| scale            | 0.25  |      |         |         | 1       |
-| event fire       |       |      |         |         |         |
+|                  | Base   | ELSE | BELOW80 | BELOW20 | BELOW17 |
+| ---------------- | ------ | ---- | ------- | ------- | ------- |
+| total visibility |        |      |         |         |         |
+| label visibility | hidden | -    | -       | -       | visible |
+| scale            | 0.25   | -    | -       | -       | 1       |
+| event fire       |        |      |         |         |         |
 
-## Cluster
+## Station
 
-| Cluster          | Base | ELSE | BELOW80 | BELOW20 | BELOW17 |
-| ---------------- | ---- | ---- | ------- | ------- | ------- |
-| total visibility |      |      |         |         |         |
-| label visibility |      |      |         |         |         |
-| scale            |      |      |         |         |         |
-| event fire       |      |      |         |         |         |
+|                  | Base   | ELSE | BELOW80 | BELOW20 | BELOW17 |
+| ---------------- | ------ | ---- | ------- | ------- | ------- |
+| total visibility |        |      |         |         |         |
+| label visibility | hidden | -    | -       | -       | visible |
+| scale            | 0.25   | -    | -       | -       | 1       |
+| event fire       |        |      |         |         |         |
 
-## Group
+## Zcu
 
-| Group            | Base | ELSE | BELOW80 | BELOW20 | BELOW17 |
-| ---------------- | ---- | ---- | ------- | ------- | ------- |
-| total visibility |      |      |         |         |         |
-| label visibility |      |      |         |         |         |
-| scale            |      |      |         |         |         |
-| event fire       |      |      |         |         |         |
+|                  | Base   | ELSE | BELOW80 | BELOW20 | BELOW17 |
+| ---------------- | ------ | ---- | ------- | ------- | ------- |
+| total visibility |        |      |         |         |         |
+| label visibility | hidden | -    | -       | -       | visible |
+| scale            | 0.25   | -    | -       | -       | 1       |
+| event fire       |        |      |         |         |         |
 
 ## Mtl
 
-| Mtl              | Base | ELSE | BELOW80 | BELOW20 | BELOW17 |
+|                  | Base   | ELSE | BELOW80 | BELOW20 | BELOW17 |
+| ---------------- | ------ | ---- | ------- | ------- | ------- |
+| total visibility |        |      |         |         |         |
+| label visibility | hidden | -    | -       | -       | visible |
+| scale            | 0.25   | -    | -       | -       | 1       |
+| event fire       |        |      |         |         |         |
+
+## Group
+
+|                  | Base | ELSE | BELOW80 | BELOW20 | BELOW17 |
 | ---------------- | ---- | ---- | ------- | ------- | ------- |
 | total visibility |      |      |         |         |         |
 | label visibility |      |      |         |         |         |
@@ -40,42 +49,37 @@
 
 ## Point
 
-| Point            | Base | ELSE | BELOW80 | BELOW20 | BELOW17 |
-| ---------------- | ---- | ---- | ------- | ------- | ------- |
-| total visibility |      |      |         |         |         |
-| label visibility |      |      |         |         |         |
-| scale            |      |      |         |         |         |
-| event fire       |      |      |         |         |         |
+|                  | Base   | ELSE | BELOW80 | BELOW20 | BELOW17 |
+| ---------------- | ------ | ---- | ------- | ------- | ------- |
+| total visibility | hidden | -    | -       | visible | -       |
+| label visibility | -      | -    | -       | -       | -       |
+| scale            | 1      | -    | -       | -       | -       |
+| event fire       | -      | -    | -       | -       | -       |
 
 ## Segment
 
-| Segment          | Base | ELSE | BELOW80 | BELOW20 | BELOW17 |
+|                  | Base | ELSE | BELOW80 | BELOW20 | BELOW17 |
 | ---------------- | ---- | ---- | ------- | ------- | ------- |
 | total visibility |      |      |         |         |         |
 | label visibility |      |      |         |         |         |
-| width scale      |      |      |         |         |         |
-| direction scale  |      |      |         |         |         |
+| width scale      | 1    | -    | -       | -       | -       |
+| direction scale  | 1    | -    | -       | -       | -       |
 | event fire       |      |      |         |         |         |
 
-## Station
+## Cluster
 
-| Station          | Base | ELSE | BELOW80 | BELOW20 | BELOW17 |
+|                  | Base | ELSE | BELOW80 | BELOW20 | BELOW17 |
 | ---------------- | ---- | ---- | ------- | ------- | ------- |
 | total visibility |      |      |         |         |         |
 | label visibility |      |      |         |         |         |
-| scale            |      |      |         |         |         |
+| scale            | 1    | -    | -       | -       | -       |
 | event fire       |      |      |         |         |         |
 
-| Vehicle          | Base | ELSE | BELOW80 | BELOW20 | BELOW17 |
-| ---------------- | ---- | ---- | ------- | ------- | ------- |
-| total visibility |      |      |         |         |         |
-| label visibility |      |      |         |         |         |
-| scale            | 1    |      |         |         |         |
-| event fire       |      |      |         |         |         |
+## Vehicle
 
-| Zcu              | Base | ELSE | BELOW80 | BELOW20 | BELOW17 |
+|                  | Base | ELSE | BELOW80 | BELOW20 | BELOW17 |
 | ---------------- | ---- | ---- | ------- | ------- | ------- |
-| total visibility |      |      |         |         |         |
-| label visibility |      |      |         |         |         |
-| scale            |      |      |         |         |         |
-| event fire       |      |      |         |         |         |
+| total visibility | -    | -    | -       | -       | -       |
+| label visibility | -    | -    | -       | -       | -       |
+| scale            | 1    | -    | -       | -       | -       |
+| event fire       | -    | -    | -       | -       | -       |

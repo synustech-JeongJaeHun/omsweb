@@ -43,35 +43,35 @@ Attribute는 DOM에 컴포넌트를 삽입한 후 언제든지 변경 가능하�
 | 이벤트 이름         | `mainClickOnObject`                                |
 | 이벤트 대상         | Point, Segment, Station, Buffer, Mtl, Zcu, Vehicle |
 | 발생 조건           | 마우스 메인 버튼으로 오브젝트를 클릭하였을 때      |
-| 이벤트 타입         | `CustomEvent<MainClickOnObject>`                   |
+| 이벤트 타입         | `CustomEvent<MainClickOnObject[]>` index 0 만 활용 |
 
-| `secondaryClickOnObject` | .                                                  |
-| ------------------------ | -------------------------------------------------- |
-| 이벤트 이름              | `secondaryClickOnObject`                           |
-| 이벤트 대상              | Point, Segment, Station, Buffer, Mtl, Zcu, Vehicle |
-| 발생 조건                | 마우스 보조 버튼으로 오브젝트를 클릭하였을 때      |
-| 이벤트 타입              | `SecondaryClickOnObject`                           |
+| `secondaryClickOnObject` | .                                                       |
+| ------------------------ | ------------------------------------------------------- |
+| 이벤트 이름              | `secondaryClickOnObject`                                |
+| 이벤트 대상              | Point, Segment, Station, Buffer, Mtl, Zcu, Vehicle      |
+| 발생 조건                | 마우스 보조 버튼으로 오브젝트를 클릭하였을 때           |
+| 이벤트 타입              | `CustomEvent<SecondaryClickOnObject[]>` index 0 만 활용 |
 
 | `clickOutObject` | .                                                |
 | ---------------- | ------------------------------------------------ |
 | 이벤트 이름      | `clickOutObject`                                 |
 | 이벤트 대상      | Map                                              |
 | 발생 조건        | 오브젝트가 없는 맵 영역을 패닝없이 클릭하였을 때 |
-| 이벤트 타입      | `ClickOutObject`                                 |
+| 이벤트 타입      | `CustomEvent<ClickOutObject[]>` index 0 만 활용  |
 
 | `mouseoverOnObject` | .                                                           |
 | ------------------- | ----------------------------------------------------------- |
 | 이벤트 이름         | `mouseoverOnObject`                                         |
 | 이벤트 대상         | Point, Segment, Cluster, Station, Buffer, Mtl, Zcu, Vehicle |
 | 발생 조건           | 마우스가 오브젝트 안으로 진입하였을 때                      |
-| 이벤트 타입         | `MouseoverOnObject`                                         |
+| 이벤트 타입         | `CustomEvent<MouseoverOnObject>` index 0 만 활용            |
 
 | `mouseleaveOnObject` | .                                                     |
 | -------------------- | ----------------------------------------------------- |
 | 이벤트 이름          | `mouseleaveOnObject`                                  |
 | 이벤트 대상          | `mouseoverOnObject` 이벤트 대상과 동일                |
 | 발생 조건            | mouseoverOnObject 후 마우스가 오브젝트 밖으로 나갈 때 |
-| 이벤트 타입          | `MouseleaveOnObject`                                  |
+| 이벤트 타입          | `CustomEvent<MouseleaveOnObject[]>` index 0 만 활용   |
 
 ## Method
 

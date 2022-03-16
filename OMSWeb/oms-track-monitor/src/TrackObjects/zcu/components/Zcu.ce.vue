@@ -67,7 +67,7 @@ function onRightClick(event: MouseEvent) {
           y="-30"
           :text="getHumanReadableUsingType(props.zcu.usingType)"
         />
-        <RasterizedText class="invert" x="18" y="9" :text="String(props.zcu.id)" />
+        <RasterizedText class="invert label" x="18" y="9" :text="String(props.zcu.id)" />
       </MapReverseRotate>
     </ScaleByScale>
   </svg>

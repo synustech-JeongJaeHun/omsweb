@@ -1,4 +1,4 @@
-import { computed, readonly, Ref } from "vue";
+import { computed, readonly } from "vue";
 import { cameraViewBoxInfo } from "../map/camera";
 import { elementRectInfo } from "../map/elementRect";
 
@@ -12,24 +12,22 @@ const scale = computed(() => ({
  */
 const scaleInfo = readonly(scale)
 
+/**  
+ * https://developer.mozilla.org/ko/docs/Web/CSS/Attribute_selectors 
+ */
 const scaleLevel = computed(() => {
   const value = scaleInfo.value.mmPerPixel
-  if (value < 17)
-    return "BELOW17"
+
+  const scaleLevels = ["ELSE"]
+
   if (value < 20)
-    return "BELOW20"
-  else
-    return "ELSE"
+    scaleLevels.push("BELOW20")
+  if (value < 17)
+    scaleLevels.push("BELOW17")
+
+  return scaleLevels.join(' ')
 })
 
 const scaleLevelInfo = readonly(scaleLevel)
-
-// function useScreenFixedScale(fixedScale: Ref<number>, threshold: number) {
-//   const dynamicSizeInSvg = computed(() => {
-//     const calculated = fixedScale.value / scaleInfo.value.pixelPerMm
-//     return calculated < threshold ? threshold : calculated
-//   })
-//   return dynamicSizeInSvg
-// }
 
 export { scaleInfo, scaleLevelInfo }
