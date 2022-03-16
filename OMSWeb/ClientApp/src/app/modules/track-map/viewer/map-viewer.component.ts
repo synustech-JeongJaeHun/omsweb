@@ -427,21 +427,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     // @ts-ignore
     const type = payload.type, object = payload.value;
 
-    const getPointId = () => {
-      switch (type.toUpperCase()) {
-        case 'POINT':
-          return object.id
-        case 'MTL':
-          return object.pointId
-        case 'STATION':
-          return object.pointId
-        case 'BUFFER':
-          return object.pointId
-        case 'VEHICLE':
-          return object.curPoint
-      }
-    }
-
     switch (type.toUpperCase()) {
       case "SEGMENT":
       case "CLUSTER":
@@ -453,16 +438,28 @@ export class MapViewerComponent implements OnInit, OnDestroy {
       case 'STATION':
       case 'BUFFER':
       case 'VEHICLE':
-        const objectsOnSamePoint = this.trackStatusService.getOverlapObjectOnPoint(getPointId())
-
-        if (objectsOnSamePoint.length === 1) {
-          this.onTooltipOn(event)
-        }
-        else {
+        // @ts-ignore
+        if ((payload.event as MouseEvent).ctrlKey) {
+          const pointId = (() => {
+            switch (type.toUpperCase()) {
+              case 'POINT':
+                return object.id
+              case 'MTL':
+                return object.pointId
+              case 'STATION':
+                return object.pointId
+              case 'BUFFER':
+                return object.pointId
+              case 'VEHICLE':
+                return object.curPoint
+            }
+          })()
           // @ts-ignore
           this.mainColocatedObject = payload.value;
-          this.colocatedObjects = objectsOnSamePoint;
+          this.colocatedObjects = this.trackStatusService.getOverlapObjectOnPoint(pointId);
           this.onCoLocatedObjectPanelOn(event)
+        } else {
+          this.onTooltipOn(event)
         }
         break;
 

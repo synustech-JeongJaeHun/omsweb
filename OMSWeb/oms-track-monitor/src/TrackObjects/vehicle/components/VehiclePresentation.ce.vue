@@ -197,16 +197,18 @@ const emit = defineEmits<{
         <!-- https://stackoverflow.com/questions/442164/how-to-get-an-outline-effect-on-text-in-svg -->
         <!-- vehicle id -->
         <!-- 📐🛑 Be careful! logic is dependent on invert -->
+
+        <!-- font-weight="bold" -->
         <text
           class="select-none"
           text-rendering="optimizeSpeed"
           transform="scale(1 -1) translate(-25 -2)"
           text-anchor="end"
           alignment-baseline="baseline"
-          font-weight="bold"
           stroke="white"
           stroke-width="1px"
           fill="black"
+          font-size="0.8em"
           paint-order="stroke"
         >{{ props.logicalId }}</text>
         <!-- vehicle order with priority(hotlot) -->

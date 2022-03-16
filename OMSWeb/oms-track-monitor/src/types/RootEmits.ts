@@ -16,15 +16,10 @@ import { Cluster } from "src/TrackObjects/cluster/types/Cluster"
 
 const RootEmitInjectionKey = "RootEmit"
 interface RootEmits {
-  // for focus ...
   (e: 'mainClickOnObject', value: EventDetails.MainClickOnObject): void
-  // for contextmenu ...
   (e: 'secondaryClickOnObject', value: EventDetails.SecondaryClickOnObject): void
-  // for backdrop...
   (e: 'clickOutObject', value: EventDetails.ClickOutObject): void
-  // tooltip on
   (e: 'mouseoverOnObject', value: EventDetails.MouseoverOnObject): void
-  // tooltip off
   (e: 'mouseleaveOnObject', value: EventDetails.MouseleaveOnObject): void
 }
 

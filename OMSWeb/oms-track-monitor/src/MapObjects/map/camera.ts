@@ -111,7 +111,6 @@ function zoomInOutByWheel(event: WheelEvent) {
 
     // @ts-ignore
     zoomDebounceTimeoutId = setTimeout(() => {
-      console.log('zoomevent ', event)
       zoom(action, { x: event.offsetX, y: event.offsetY }, zoomCount > MaximumZoomCount ? MaximumZoomCount : zoomCount)
       zoomCount = 0
       zoomAction = undefined
