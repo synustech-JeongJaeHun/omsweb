@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
@@ -13,7 +15,12 @@ namespace OMSWeb
     {
         public static void Main(string[] args)
         {
-            //Console.WriteLine("### Version 1.0.0.2 - dependant dotnetcoreapp 3.1");
+            /*
+            string module_name = Process.GetCurrentProcess().MainModule.FileName;
+            string path = Path.GetDirectoryName(module_name);
+            Directory.SetCurrentDirectory(path);
+            */
+
             CreateHostBuilder(args).Build().Run();
         }
 
@@ -24,6 +31,7 @@ namespace OMSWeb
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                });
+                })
+                .UseWindowsService();
     }
 }

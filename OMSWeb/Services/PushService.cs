@@ -111,7 +111,6 @@ namespace OMSWeb.Services
         {
           if (payload.Id > 0) // cache update 후 cache 데이터를 사용하여 push
           {
-            // update cache
             await this.UpdateWithCacheAsync(targetInfo, payload);
           }
           else // 변경 event만 push
@@ -120,11 +119,11 @@ namespace OMSWeb.Services
                await this.SendDBNotificationAsync(name, payload, null);
           }
         }
-      }
-      else  // 정의되지 않은 table event 이거나 cache를 사용하지 않은 데이터인 경우
-      {
-        foreach (var name in targetInfo.PushNames)
-          await this.SendDBNotificationAsync(name, payload, null);
+        else  // 정의되지 않은 table event 이거나 cache를 사용하지 않은 데이터인 경우
+        {
+            foreach (var name in targetInfo.PushNames)
+                await this.SendDBNotificationAsync(name, payload, null);
+        }
       }
     }
 

@@ -89,7 +89,7 @@ export class ZcuControlTableComponent implements OnInit, OnDestroy {
             this.messageSvc
               .sendZcuCommand({
                 action: "zcu_reset",
-                //zcuIds: this.selectedRows.map
+                zcuIds: this.selectedRows
               })
               .subscribe();
         }
