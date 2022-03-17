@@ -23,7 +23,7 @@
 
 ### 시나리오
 
-- [Scale Level별 시각화/이벤트 시나리오 (excel)](./docs/scale-level-scenario.xlsx)
+- [Scale Level별 시각화/이벤트 시나리오](./docs/scale-level-scenario.md)
 
 ---
 
