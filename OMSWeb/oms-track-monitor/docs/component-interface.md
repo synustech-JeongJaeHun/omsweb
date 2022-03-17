@@ -105,7 +105,7 @@ declare function getCameraAndRotation(): {
 function setTrack(track: ITrackData): void
 ```
 
-Track의 기초 데이터를 설정
+Track의 기초 데이터를 설정한다.
 
 ### `centerZoom`
 
@@ -113,7 +113,7 @@ Track의 기초 데이터를 설정
 function centerZoom(): void
 ```
 
-카메라의 위치 목표는 맵의 중앙, 크기 목표는 맵의 비율에 따라 폭을 맵 폭의 2배 혹은 높이를 맵 높이의 2배로 설정하여 카메라를 단계적으로 이동한다.
+카메라의 위치 목표는 맵의 중앙, 크기 목표는 카메라의 비율에 따라 폭을 맵 폭의 2배 혹은 높이를 맵 높이의 2배로 설정하여 카메라를 단계적으로 이동한다.
 
 ### `find`
 
@@ -198,9 +198,3 @@ function updateZcu(
 ```
 
 Zcu의 상태를 업데이트한다.
-
-<style>
-table {
-  min-width: 500px;
-}
-</style>

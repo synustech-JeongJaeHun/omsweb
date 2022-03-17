@@ -4,10 +4,12 @@
 
 oms-track-monitor 컴포넌트에서 사용하는 스타일은 아래 중 하나를 통해 적용된다.
 
-1. id, class, data 등의 element attribute를 통한 stylesheet rule 적용
-1. inline style
-
-별도의 파일로 관리하기에 너무 적거나, 중요하지 않은 경우, 그리고 컴포넌트의 퍼포먼스에 영향을 주지 않는 경우 inline style을 적용하며 그외의 경우에는 stylesheet rule을 적용한다.
+- **inline style**
+  - 별도의 파일로 관리하기에 너무 적은 경우
+  - 중요하지 않은 경우
+  - 컴포넌트의 퍼포먼스에 영향을 주지 않는 경우
+- id, class, data 등의 **element attribute를 통한 stylesheet rule 적용**
+  - 위에 해당하지 않은 경우
 
 ## `root style` vs `stylesheet file`
 

@@ -1,32 +1,59 @@
 <script setup lang="ts">
-import { segments } from 'src/TrackObjects/segment/segments';
-import { mapSizePropertiesInfo } from 'MapObjects/map/mapSizeProperties';
-import { computed, reactive, readonly, ref, watch } from 'vue';
-import { moveCamera, zoomInOutByWheel, enterPanning, exitPanning, isPanning } from 'MapObjects/map/camera';
-import SegmentOnlyStroke from './SegmentOnlyStroke.ce.vue';
-import MapRotate from 'MapObjects/rotate/components/MapRotate.ce.vue';
-import { elementRectInfo } from 'MapObjects/map/elementRect';
-import { centerZoom } from 'src/MapObjects/cameraAndRotation';
-import CameraBox from './CameraBox.ce.vue';
+import { segments } from 'src/TrackObjects/segment/segments'
+import { mapSizePropertiesInfo } from 'MapObjects/map/mapSizeProperties'
+import { computed, reactive, readonly, ref, watch } from 'vue'
+import {
+  moveCamera,
+  zoomInOutByWheel,
+  enterPanning,
+  exitPanning,
+  isPanning,
+} from 'MapObjects/map/camera'
+import SegmentOnlyStroke from './SegmentOnlyStroke.ce.vue'
+import MapRotate from 'MapObjects/rotate/components/MapRotate.ce.vue'
+import { elementRectInfo } from 'MapObjects/map/elementRect'
+import { centerZoom } from 'src/MapObjects/cameraAndRotation'
+import CameraBox from './CameraBox.ce.vue'
 
 const MapMargin = 10000
 
-const baseLength = readonly(computed(() =>
-  Math.max(
-    mapSizePropertiesInfo.value.width,
-    mapSizePropertiesInfo.value.height,
-    (mapSizePropertiesInfo.value.width + mapSizePropertiesInfo.value.height) / Math.pow(8, 1 / 2),
+const baseLength = readonly(
+  computed(() =>
+    Math.max(
+      mapSizePropertiesInfo.value.width,
+      mapSizePropertiesInfo.value.height,
+      (mapSizePropertiesInfo.value.width +
+        mapSizePropertiesInfo.value.height) /
+        Math.pow(8, 1 / 2)
+    )
   )
-))
-const originPosition = readonly(computed(() => ({
-  x: mapSizePropertiesInfo.value.centerX - baseLength.value / 2 - MapMargin,
-  y: mapSizePropertiesInfo.value.centerY - baseLength.value / 2 - MapMargin,
-})))
+)
+const originPosition = readonly(
+  computed(() => ({
+    x:
+      mapSizePropertiesInfo.value.centerX -
+      baseLength.value / 2 -
+      MapMargin,
+    y:
+      mapSizePropertiesInfo.value.centerY -
+      baseLength.value / 2 -
+      MapMargin,
+  }))
+)
 
-const minimapViewBoxLength = readonly(computed(() => baseLength.value + 2 * MapMargin))
+const minimapViewBoxLength = readonly(
+  computed(() => baseLength.value + 2 * MapMargin)
+)
 
 const minimapSvgElement = ref<SVGElement>()
-const minimapDomRect = reactive({ width: 0, height: 0, minX: 0, minY: 0, maxX: 0, maxY: 0 })
+const minimapDomRect = reactive({
+  width: 0,
+  height: 0,
+  minX: 0,
+  minY: 0,
+  maxX: 0,
+  maxY: 0,
+})
 
 watch([minimapSvgElement, elementRectInfo], () => {
   // use setTimeout for unexpected domrect value (like negative y)
@@ -42,20 +69,25 @@ watch([minimapSvgElement, elementRectInfo], () => {
     minimapDomRect.minY = rect.y
     minimapDomRect.maxX = rect.x + rect.width
     minimapDomRect.maxY = rect.y + rect.height
-  }, 0);
+  }, 0)
 })
 
 function onPanning(event: MouseEvent) {
   // if (minimapDomRect.width === 0 || minimapDomRect.height === 0) return
 
   const position = {
-    x: (event.clientX - minimapDomRect.minX) / minimapDomRect.width * minimapViewBoxLength.value - MapMargin,
+    x:
+      ((event.clientX - minimapDomRect.minX) / minimapDomRect.width) *
+        minimapViewBoxLength.value -
+      MapMargin,
     // 📐🛑 Be careful! logic is dependent on invert
-    y: (minimapDomRect.maxY - event.clientY) / minimapDomRect.height * minimapViewBoxLength.value - MapMargin
+    y:
+      ((minimapDomRect.maxY - event.clientY) / minimapDomRect.height) *
+        minimapViewBoxLength.value -
+      MapMargin,
   }
   moveCamera(position)
 }
-
 </script>
 
 <template>
@@ -68,9 +100,8 @@ function onPanning(event: MouseEvent) {
       maxWidth: `20vw`,
       maxHeight: `20vh`,
       backgroundColor: 'white',
-      border: '2px solid black'
+      border: '2px solid black',
     }"
-    @wheel="zoomInOutByWheel($event)"
     @mousedown="enterPanning(), onPanning($event)"
     @mousemove="isPanning && onPanning($event)"
     @mouseup="exitPanning()"
@@ -80,7 +111,11 @@ function onPanning(event: MouseEvent) {
     @click.right.prevent
   >
     <MapRotate>
-      <SegmentOnlyStroke v-for="segment of segments" :key="segment.id" :segment="segment" />
+      <SegmentOnlyStroke
+        v-for="segment of segments"
+        :key="segment.id"
+        :segment="segment"
+      />
     </MapRotate>
     <CameraBox />
   </svg>
