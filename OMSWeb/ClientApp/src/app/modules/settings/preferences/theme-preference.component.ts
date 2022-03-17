@@ -10,6 +10,7 @@ export class ThemePreferenceComponent {
   constructor(private trackMonitorSettingService: TrackMonitorSettingService) { }
 
   get setting() { return this.trackMonitorSettingService.trackSetting }
+  get update() {return this.trackMonitorSettingService.update }
 
   resetBasicThemeTargets: string[] = [];
   resetVehicleModeThemeTargets: string[] = [];

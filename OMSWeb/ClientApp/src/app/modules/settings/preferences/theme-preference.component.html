@@ -8,28 +8,36 @@
     <legend>{{ "names.theme" | translate }}</legend>
 
     <div class="form-grid">
-      <oms-color-picker [name]="'names.homeBgColor' | translate" (changed)="setting.homeBackgroundColor = $event"
+      <oms-color-picker [name]="'names.homeBgColor' | translate"
+        (changed)="update({key: 'homeBackgroundColor', value: $event})"
         [value]="setting.homeBackgroundColor">
       </oms-color-picker>
       <oms-color-picker [name]="'names.playbackBgColor' | translate"
-        (changed)="setting.playbackBackgroundColor = $event" [value]="setting.playbackBackgroundColor">
+        (changed)="update({key: 'playbackBackgroundColor', value: $event})"
+        [value]="setting.playbackBackgroundColor">
       </oms-color-picker>
-      <oms-color-picker [name]="'names.station' | translate" (changed)="setting.stationColor = $event"
+      <oms-color-picker [name]="'names.station' | translate"
+        (changed)="update({key: 'stationColor', value: $event})"
         [value]="setting.stationColor">
       </oms-color-picker>
-      <oms-color-picker [name]="'names.buffer' | translate" (changed)="setting.bufferColor = $event"
+      <oms-color-picker [name]="'names.buffer' | translate"
+        (changed)="update({key: 'bufferColor', value: $event})"
         [value]="setting.bufferColor">
       </oms-color-picker>
-      <oms-color-picker [name]="'names.point' | translate" (changed)="setting.pointColor = $event"
+      <oms-color-picker [name]="'names.point' | translate"
+        (changed)="update({key: 'pointColor', value: $event})"
         [value]="setting.pointColor">
       </oms-color-picker>
-      <oms-color-picker [name]="'names.segmentNormal' | translate" (changed)="setting.normalSegmentColor = $event"
+      <oms-color-picker [name]="'names.segmentNormal' | translate"
+        (changed)="update({key: 'normalSegmentColor', value: $event})"
         [value]="setting.normalSegmentColor">
       </oms-color-picker>
-      <oms-color-picker [name]="'names.segmentDisabled' | translate" (changed)="setting.disabledSegmentColor = $event"
+      <oms-color-picker [name]="'names.segmentDisabled' | translate"
+        (changed)="update({key: 'disabledSegmentColor', value: $event})"
         [value]="setting.disabledSegmentColor">
       </oms-color-picker>
-      <oms-color-picker [name]="'names.segmentDirection' | translate" (changed)="setting.segmentDirectionColor = $event"
+      <oms-color-picker [name]="'names.segmentDirection' | translate"
+        (changed)="update({key: 'segmentDirectionColor', value: $event})"
         [value]="setting.segmentDirectionColor">
       </oms-color-picker>
     </div>
@@ -85,13 +93,16 @@
 
     <div class="form-grid">
       <oms-color-picker [name]="'names.VehicleModeAutoBgColor' | translate"
-        (changed)="setting.autoModeVehicleColor = $event" [value]="setting.autoModeVehicleColor">
+        (changed)="update({key: 'autoModeVehicleColor', value: $event})"
+        [value]="setting.autoModeVehicleColor">
       </oms-color-picker>
       <oms-color-picker [name]="'names.VehicleModeManualBgColor' | translate"
-        (changed)="setting.manualModeVehicleColor = $event" [value]="setting.manualModeVehicleColor">
+        (changed)="update({key: 'manualModeVehicleColor', value: $event})"
+        [value]="setting.manualModeVehicleColor">
       </oms-color-picker>
       <oms-color-picker [name]="'names.VehicleModeNoneBgColor' | translate"
-        (changed)="setting.noneModeVehicleColor = $event" [value]="setting.noneModeVehicleColor">
+        (changed)="update({key: 'noneModeVehicleColor', value: $event})"
+        [value]="setting.noneModeVehicleColor">
       </oms-color-picker>
     </div>
 
@@ -145,13 +156,16 @@
 
     <div class="form-grid">
       <oms-color-picker [name]="'names.VehicleCargoStatusLoadingColor' | translate"
-        (changed)="setting.cargoLoadingColor = $event" [value]="setting.cargoLoadingColor">
+        (changed)="update({key: 'cargoLoadingColor', value: $event})"
+        [value]="setting.cargoLoadingColor">
       </oms-color-picker>
       <oms-color-picker [name]="'names.VehicleCargoStatusFullColor' | translate"
-        (changed)="setting.cargoFullColor = $event" [value]="setting.cargoFullColor">
+        (changed)="update({key: 'cargoFullColor', value: $event})"
+        [value]="setting.cargoFullColor">
       </oms-color-picker>
       <oms-color-picker [name]="'names.VehicleCargoStatusUnloadingColor' | translate"
-        (changed)="setting.cargoUnloadingColor = $event" [value]="setting.cargoUnloadingColor">
+        (changed)="update({key: 'cargoUnloadingColor', value: $event})"
+        [value]="setting.cargoUnloadingColor">
       </oms-color-picker>
     </div>
 
