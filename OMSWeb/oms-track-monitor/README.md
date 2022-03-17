@@ -40,10 +40,6 @@
    1. [Web Workers](https://vitejs.dev/guide/features.html#web-workers)
    1. [vite-svg-loader](https://github.com/jpkleemans/vite-svg-loader#readme)
 
-### 프로젝트 구조
-
-[프로젝트 구조 문서](./docs/project-structure.md)
-
 ### 개발 환경
 
 - `npm: 6`
@@ -56,6 +52,11 @@
 1. `npm run dev`를 통해 테스트 페이지에서 개발
    - esmodule 기반 핫리로딩 적용
    - 별도의 테스트용 코드 필요
+
+### 프로젝트 가이드
+
+- [프로젝트 구조 문서](./docs/structure.md)
+- [컴포넌트 스타일](./docs/style.md)
 
 ### 빌드
 

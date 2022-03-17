@@ -12,9 +12,6 @@ const scale = computed(() => ({
  */
 const scaleInfo = readonly(scale)
 
-/**  
- * https://developer.mozilla.org/ko/docs/Web/CSS/Attribute_selectors 
- */
 const scaleLevel = computed(() => {
   const value = scaleInfo.value.mmPerPixel
 

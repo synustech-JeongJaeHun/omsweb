@@ -1,0 +1,7 @@
+#zcu-layer .zcu .label {
+  visibility: hidden;
+}
+
+#zcu-layer[data-scale-level~='BELOW17' i] .zcu .label {
+  visibility: inherit;
+}

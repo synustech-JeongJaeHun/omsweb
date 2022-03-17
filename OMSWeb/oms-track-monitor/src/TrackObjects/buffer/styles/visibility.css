@@ -1,0 +1,7 @@
+#buffer-layer .buffer .label {
+  visibility: hidden;
+}
+
+#buffer-layer[data-scale-level~='BELOW17' i] .buffer .label {
+  visibility: inherit;
+}

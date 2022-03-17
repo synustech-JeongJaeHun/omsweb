@@ -177,7 +177,6 @@ onUnmounted(() => { makeDInUpdateWorker.terminate() })
     v-if="realtimePosition"
     :x="realtimePosition.x"
     :y="realtimePosition.y"
-    :symbolId="symbolId"
     :vid="props.vehicle.id"
     :logicalId="props.vehicle.logicalId"
     :orderId="props.vehicle.orderId"

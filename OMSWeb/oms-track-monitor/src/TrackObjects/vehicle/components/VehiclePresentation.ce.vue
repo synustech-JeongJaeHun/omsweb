@@ -22,7 +22,6 @@ import VehicleTypeNormalOutline from '../assets/VehicleTypeNormalOutline.svg?com
 import VehicleFocusArrow from '../assets/VehicleFocusArrow.svg?component'
 
 const props = defineProps<{
-  symbolId: string,
   // Vehicle attr
   // vid for avoid keyword conflict with vue
   vid: Vehicle['id'],
@@ -73,7 +72,6 @@ const emit = defineEmits<{
   -->
   <svg
     class="overflow-visible cursor-pointer vehicle-symbol"
-    :id="props.symbolId"
     :data-mode="props.mode"
   >
     <ScaleByScale>

@@ -1,0 +1,7 @@
+#zcu-layer .zcu .scale-by-scale {
+  transform: scale(calc(var(--mm-per-pixel) / 4));
+}
+
+#zcu-layer[data-scale-level~='BELOW17' i] .zcu .scale-by-scale {
+  transform: scale(var(--mm-per-pixel));
+}
