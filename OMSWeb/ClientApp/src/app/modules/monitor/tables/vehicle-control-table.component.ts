@@ -111,6 +111,14 @@ export class VehicleControlTableComponent implements OnInit, OnDestroy {
         ok && this.messageSvc.sendVehicleCommand({ action: 'initialize' }, this.selectedItems).subscribe();
       });
   }
+  onSetAutoReverse() {
+    if (!this.canControl) return;
+    this.dialogSvc
+      .confirm({ body: this.$t.instant('messages.confirmCommand') })
+      .subscribe((ok) => {
+        ok && this.messageSvc.sendVehicleCommand({ action: 'initialize', direction: 'reverse' }, this.selectedItems).subscribe();
+      });
+  }
   onChangeHostOrderActivity() {
     if (!this.canControl) return;
     this.enableRows = [];

@@ -39,6 +39,7 @@ export interface IVehicleCommandMessage extends ICommandMessage {
 
   destination?: string;
   mode?: string;
+  direction?: string;
 }
 
 export interface ITrackCommandMessage extends ICommandMessage {
