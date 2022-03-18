@@ -1,18 +1,14 @@
-import { ref, watch } from "vue";
-import { TrackedObject } from "./types/TrackedObject";
+import { TrackedObject } from './types/TrackedObject'
 
-const trackedObject = ref<TrackedObject>()
-
-watch(trackedObject, (trackedObject, prevTrackedObject) => {
-  if (prevTrackedObject)
-    prevTrackedObject.isTracked = undefined
-
-  if (trackedObject)
-    trackedObject.isTracked = true
-})
+let trackedObject: TrackedObject | undefined = undefined
 
 function setTrackedObject(to?: TrackedObject) {
-  trackedObject.value = to
+  if (trackedObject) trackedObject.isTracked = undefined
+
+  if (to) {
+    to.isTracked = true
+    trackedObject = to
+  }
 }
 
 export { setTrackedObject }

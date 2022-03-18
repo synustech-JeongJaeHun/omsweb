@@ -1,8 +1,8 @@
-import { Position } from "src/types/Position";
-import { computed, reactive, readonly, ref, watch } from "vue";
-import { scaleInfo } from "../scale/scale";
-import { CameraDefaultRect } from "./default";
-import { elementRectInfo, getHeightFromWidthAndRatio, getWidthFromHeightAndRatio } from "./elementRect";
+import { Position } from 'src/types/Position'
+import { computed, reactive, readonly, ref } from 'vue'
+import { scaleInfo } from '../scale/scale'
+import { CameraDefaultRect } from './default'
+import { elementRectInfo, getHeightFromWidthAndRatio } from './elementRect'
 
 const cameraPosition = reactive({
   x: 0,
@@ -16,74 +16,67 @@ const cameraViewBox = reactive({
 })
 const cameraViewBoxInfo = readonly(cameraViewBox)
 
-const cameraTotalInfo = readonly(computed(() => ({
-  x: cameraPositionInfo.x,
-  y: cameraPositionInfo.y,
-  viewBoxWidth: cameraViewBoxInfo.width,
-  viewBoxHeight: cameraViewBoxInfo.height,
-  centerX: cameraPositionInfo.x + (cameraViewBoxInfo.width / 2),
-  centerY: cameraPositionInfo.y + (cameraViewBoxInfo.height / 2),
-  maxX: cameraPositionInfo.x + cameraViewBoxInfo.width,
-  maxY: cameraPositionInfo.x + cameraViewBoxInfo.height,
-  viewBox: `${Math.ceil(cameraPositionInfo.x)} ${Math.ceil(cameraPositionInfo.y)} ${Math.ceil(cameraViewBoxInfo.width)} ${Math.ceil(cameraViewBoxInfo.height)}`
-})))
+const cameraTotalInfo = readonly(
+  computed(() => ({
+    x: cameraPositionInfo.x,
+    y: cameraPositionInfo.y,
+    viewBoxWidth: cameraViewBoxInfo.width,
+    viewBoxHeight: cameraViewBoxInfo.height,
+    centerX: cameraPositionInfo.x + cameraViewBoxInfo.width / 2,
+    centerY: cameraPositionInfo.y + cameraViewBoxInfo.height / 2,
+    maxX: cameraPositionInfo.x + cameraViewBoxInfo.width,
+    maxY: cameraPositionInfo.x + cameraViewBoxInfo.height,
+    viewBox: `${Math.ceil(cameraPositionInfo.x)} ${Math.ceil(
+      cameraPositionInfo.y
+    )} ${Math.ceil(cameraViewBoxInfo.width)} ${Math.ceil(
+      cameraViewBoxInfo.height
+    )}`,
+  }))
+)
 
 function resizeViewBox(width: number, height: number) {
-  cameraPosition.x = cameraTotalInfo.value.centerX - (width / 2)
-  cameraPosition.y = cameraTotalInfo.value.centerY - (height / 2)
+  cameraPosition.x = cameraTotalInfo.value.centerX - width / 2
+  cameraPosition.y = cameraTotalInfo.value.centerY - height / 2
   cameraViewBox.width = width
   cameraViewBox.height = height
 }
 
 function moveCamera(center: Position) {
-  const
-    halfWidth = cameraViewBoxInfo.width / 2,
+  const halfWidth = cameraViewBoxInfo.width / 2,
     halfHeight = cameraViewBoxInfo.height / 2
 
   cameraPosition.x = center.x - halfWidth
   cameraPosition.y = center.y - halfHeight
 }
 
-watch(elementRectInfo, () => {
-  if (elementRectInfo.width > elementRectInfo.height)
-    resizeViewBox(
-      cameraViewBoxInfo.width,
-      getHeightFromWidthAndRatio(cameraViewBoxInfo.width)
-    )
-  else
-    resizeViewBox(
-      getWidthFromHeightAndRatio(cameraViewBoxInfo.height),
-      cameraViewBoxInfo.height
-    )
-
-  moveCamera({ x: cameraTotalInfo.value.centerX, y: cameraTotalInfo.value.centerY })
-})
-
-function getZoomRatio(action: "In" | "Out") {
+function getZoomRatio(action: 'In' | 'Out') {
   return action === 'In' ? 0.7 : 1.3
 }
 
 function zoom(
-  action: "In" | "Out",
-  offset: { x: MouseEvent['offsetX'], y: MouseEvent['offsetY'] },
+  action: 'In' | 'Out',
+  offset: { x: MouseEvent['offsetX']; y: MouseEvent['offsetY'] },
   count: number
 ) {
   // 📐🛑 Be careful! logic is dependent on invert
-  const invertedOffsetY = (elementRectInfo.height - offset.y)
+  const invertedOffsetY = elementRectInfo.height - offset.y
 
   const cursorPosition = {
     x: cameraPositionInfo.x + offset.x * scaleInfo.value.mmPerPixel,
     y: cameraPositionInfo.y + invertedOffsetY * scaleInfo.value.mmPerPixel,
   }
 
-  const
-    width = cameraViewBoxInfo.width * (getZoomRatio(action) ** count),
+  const width = cameraViewBoxInfo.width * getZoomRatio(action) ** count,
     height = getHeightFromWidthAndRatio(width)
 
-  const
-    centerX = (cursorPosition.x - width / elementRectInfo.width * offset.x) + width / 2,
-    centerY = (cursorPosition.y - height / elementRectInfo.height * invertedOffsetY) + height / 2
-
+  const centerX =
+      cursorPosition.x -
+      (width / elementRectInfo.width) * offset.x +
+      width / 2,
+    centerY =
+      cursorPosition.y -
+      (height / elementRectInfo.height) * invertedOffsetY +
+      height / 2
 
   resizeViewBox(width, height)
   moveCamera({ x: centerX, y: centerY })
@@ -96,7 +89,7 @@ function zoomIn1Time(event: MouseEvent) {
 
 const MaximumZoomCount = 3
 let zoomCount = 0
-let zoomAction: "Out" | "In" | undefined = undefined
+let zoomAction: 'Out' | 'In' | undefined = undefined
 let zoomDebounceTimeoutId: number | undefined = undefined
 function zoomInOutByWheel(event: WheelEvent) {
   const action = event.deltaY > 0 ? 'Out' : 'In'
@@ -111,16 +104,19 @@ function zoomInOutByWheel(event: WheelEvent) {
 
     // @ts-ignore
     zoomDebounceTimeoutId = setTimeout(() => {
-      zoom(action, { x: event.offsetX, y: event.offsetY }, zoomCount > MaximumZoomCount ? MaximumZoomCount : zoomCount)
+      zoom(
+        action,
+        { x: event.offsetX, y: event.offsetY },
+        zoomCount > MaximumZoomCount ? MaximumZoomCount : zoomCount
+      )
       zoomCount = 0
       zoomAction = undefined
       zoomDebounceTimeoutId = undefined
-    }, 55);
+    }, 55)
   }
 }
 
-const
-  isPanning = ref(false),
+const isPanning = ref(false),
   hasPanned = ref(false)
 
 let mmPerPixel = 0
@@ -130,7 +126,9 @@ function enterPanning() {
   mmPerPixel = scaleInfo.value.mmPerPixel
 }
 
-function exitPanning() { isPanning.value = false }
+function exitPanning() {
+  isPanning.value = false
+}
 
 function handleMouseUp(emitBackdrop: () => void) {
   if (hasPanned.value === false) emitBackdrop()
@@ -139,9 +137,9 @@ function handleMouseUp(emitBackdrop: () => void) {
 
 function panByMouse(event: MouseEvent) {
   moveCamera({
-    x: cameraTotalInfo.value.centerX - (event.movementX * mmPerPixel),
+    x: cameraTotalInfo.value.centerX - event.movementX * mmPerPixel,
     // 📐🛑 Be careful! logic is dependent on invert
-    y: cameraTotalInfo.value.centerY - ((-1) * event.movementY * mmPerPixel)
+    y: cameraTotalInfo.value.centerY - -1 * event.movementY * mmPerPixel,
   })
   hasPanned.value = true
 }

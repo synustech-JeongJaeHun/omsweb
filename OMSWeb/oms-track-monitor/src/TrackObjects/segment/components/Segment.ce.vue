@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { Segment } from '../types/Segment'
-import { inject, ref, watchEffect } from 'vue';
-import { RootEmitInjectionKey, RootEmits } from 'src/types/RootEmits';
-import { getAngleFromTwoPoints } from 'src/utils/angle';
-import { deepCopy } from 'src/utils/deepCopy';
+import { computed, inject, ref, watch, watchEffect } from 'vue'
+import { RootEmitInjectionKey, RootEmits } from 'src/types/RootEmits'
+import { getAngleFromTwoPoints } from 'src/utils/angle'
+import { deepCopy } from 'src/utils/deepCopy'
 
 const props = defineProps<{
   segment: Segment
@@ -12,25 +12,45 @@ const emit = inject<RootEmits>(RootEmitInjectionKey)!
 
 const pathElement = ref<SVGPathElement>()
 
+const segmentDirectionInfo = computed(() => {
+  if (pathElement.value === undefined) return
+
+  const halfLength = pathElement.value.getTotalLength() / 2
+  const halfPosition = pathElement.value.getPointAtLength(halfLength)
+
+  const forwardPosition = pathElement.value.getPointAtLength(
+    halfLength + 40
+  )
+  const backwardPosition = pathElement.value.getPointAtLength(
+    halfLength - 40
+  )
+
+  return {
+    position: halfPosition,
+    angle: getAngleFromTwoPoints(backwardPosition, forwardPosition),
+  }
+})
+
 const position = ref<DOMPoint>()
 const angle = ref<number>()
-watchEffect(() => {
-  if (pathElement.value) {
-    const halfLength = pathElement.value.getTotalLength() / 2
-    const halfPosition = pathElement.value.getPointAtLength(halfLength)
+
+watch(pathElement, (pathElement) => {
+  if (pathElement) {
+    const halfLength = pathElement.getTotalLength() / 2
+    const halfPosition = pathElement.getPointAtLength(halfLength)
     position.value = halfPosition
 
-    const forwardPosition = pathElement.value.getPointAtLength(halfLength + 40)
-    const backwardPosition = pathElement.value.getPointAtLength(halfLength - 40)
+    const forwardPosition = pathElement.getPointAtLength(halfLength + 40)
+    const backwardPosition = pathElement.getPointAtLength(halfLength - 40)
     angle.value = getAngleFromTwoPoints(backwardPosition, forwardPosition)
   }
 })
 
 function onMouseover(event: MouseEvent) {
   emit('mouseoverOnObject', {
-    type: "SEGMENT",
+    type: 'SEGMENT',
     value: deepCopy(props.segment),
-    event
+    event,
   })
 }
 function onMouseleave() {
@@ -38,21 +58,24 @@ function onMouseleave() {
 }
 function onLeftClick() {
   emit('mainClickOnObject', {
-    type: "SEGMENT",
-    value: deepCopy(props.segment)
+    type: 'SEGMENT',
+    value: deepCopy(props.segment),
   })
 }
 function onRightClick(event: MouseEvent) {
   emit('secondaryClickOnObject', {
-    type: "SEGMENT",
+    type: 'SEGMENT',
     value: deepCopy(props.segment),
-    event
+    event,
   })
 }
 </script>
 
 <template>
-  <svg class="overflow-visible cursor-pointer segment" :data-is-disabled="props.segment.disabled">
+  <svg
+    class="overflow-visible cursor-pointer segment"
+    :data-is-disabled="props.segment.disabled"
+  >
     <path
       v-if="props.segment.isFocused"
       class="focus fixed-scale-stroke"

@@ -1,23 +1,23 @@
 <script setup lang="ts">
-import { computed, inject, onUnmounted, ref, toRef, watch } from 'vue';
+import { computed, inject, onUnmounted, ref, toRef, watch } from 'vue'
 import { Vehicle } from '../types/Vehicle'
-import { findPointById, usePointPoisiton } from '../../point/points';
-import { findSegmentByPoints } from '../../segment/segments';
-import { Segment } from '../../segment/types/Segment';
-import { useGroup } from '../../group/groups';
-import { useCommandPointPosition } from '../utils/lines';
-import { RootEmitInjectionKey, RootEmits } from 'src/types/RootEmits';
-import { createPathElement, getPositionFromD } from 'src/utils/svg/path';
-import { D } from 'src/types/D';
-import { deepCopy } from 'src/utils/deepCopy';
+import { findPointById, usePointPoisiton } from '../../point/points'
+import { findSegmentByPoints } from '../../segment/segments'
+import { Segment } from '../../segment/types/Segment'
+import { useGroup } from '../../group/groups'
+import { useCommandPointPosition } from '../utils/lines'
+import { RootEmitInjectionKey, RootEmits } from 'src/types/RootEmits'
+import { createPathElement, getPositionFromD } from 'src/utils/svg/path'
+import { D } from 'src/types/D'
+import { deepCopy } from 'src/utils/deepCopy'
 import MakeDInUpdateWorker from '../utils/workers/MakeDInUpdateWorker?worker&inline'
-import { Position } from 'src/types/Position';
-import VehiclePresentation from './VehiclePresentation.ce.vue';
-import { moveCamera } from 'src/MapObjects/map/camera';
+import { Position } from 'src/types/Position'
+import VehiclePresentation from './VehiclePresentation.ce.vue'
+import { moveCamera } from 'src/MapObjects/map/camera'
 import { setHoveredVehicle } from '../hoveredVehicle'
-import { setTrackedObject } from 'src/MapObjects/track/track';
+import { setTrackedObject } from 'src/MapObjects/track/track'
 import { getGroupColorWithAlpha } from 'TrackObjects/group/utils/color'
-import { getRotatedPosition } from 'src/MapObjects/cameraAndRotation';
+import { getRotatedPosition } from 'src/MapObjects/cameraAndRotation'
 
 const props = defineProps<{
   vehicle: Vehicle
@@ -25,11 +25,9 @@ const props = defineProps<{
 const emit = inject<RootEmits>(RootEmitInjectionKey)!
 const makeDInUpdateWorker = new MakeDInUpdateWorker()
 
-const symbolId = computed(() => `vehicle-${props.vehicle.id}`)
 const group = useGroup('vehicle', toRef(props.vehicle, 'id'))
 
-const
-  isHotlot = computed(() => Number(props.vehicle.priority) === 99),
+const isHotlot = computed(() => Number(props.vehicle.priority) === 99),
   isStale = computed(() => {
     // TODO: stale 상태는 db에서 받아올 수 있을 때 작업을 시작하도록 하자
     return false
@@ -38,56 +36,56 @@ const
     if (props.vehicle.orderOrigin) {
       if (typeof props.vehicle.orderOrigin === 'string')
         return props.vehicle.orderOrigin.trim().length === 0
-      else
-        return props.vehicle.orderOrigin.length === 0
-    }
-    else
-      return true
+      else return props.vehicle.orderOrigin.length === 0
+    } else return true
   }),
   isPreventPush = computed(() => props.vehicle.canBePushed === false)
 
-const
-  currentPosition = ref<Position>(),
+const currentPosition = ref<Position>(),
   currentSegment = ref<Segment>()
 
-const
-  beforePosition = ref<Position>(),
+const beforePosition = ref<Position>(),
   beforeSegment = ref<Segment>()
 
-const
-  realtimePosition = ref<Position>()
+const realtimePosition = ref<Position>()
 
-watch(() => props.vehicle.lastUpdated, () => {
-  const segment = findSegmentByPoints(props.vehicle.curPoint, props.vehicle.nextPoint)
-  const newPosition =
-    segment
+watch(
+  () => props.vehicle.lastUpdated,
+  () => {
+    const segment = findSegmentByPoints(
+      props.vehicle.curPoint,
+      props.vehicle.nextPoint
+    )
+    const newPosition = segment
       ? getPositionFromD(segment.d, props.vehicle.distancePoint)
       : findPointById(props.vehicle.curPoint)
 
-  // current => before
-  beforePosition.value = currentPosition.value
-  beforeSegment.value = currentSegment.value
+    // current => before
+    beforePosition.value = currentPosition.value
+    beforeSegment.value = currentSegment.value
 
-  // v => current
-  currentPosition.value =
-    newPosition
-      // DomPoint not copied by deconstructed
-      ? { x: newPosition.x, y: newPosition.y }
+    // v => current
+    currentPosition.value = newPosition
+      ? // DomPoint not copied by deconstructed
+        { x: newPosition.x, y: newPosition.y }
       : undefined
-  currentSegment.value = segment ?? currentSegment.value
+    currentSegment.value = segment ?? currentSegment.value
 
-  // v => realtime
-  realtimePosition.value = newPosition
+    // v => realtime
+    realtimePosition.value = newPosition
 
-  makeDInUpdateWorker.postMessage(deepCopy({
-    updateType: props.vehicle.updateType,
-    lastUpdated: props.vehicle.lastUpdated,
-    currentSegment: currentSegment.value,
-    beforeSegment: beforeSegment.value,
-    beforePosition: beforePosition.value,
-    currentPosition: currentPosition.value
-  }))
-})
+    makeDInUpdateWorker.postMessage(
+      deepCopy({
+        updateType: props.vehicle.updateType,
+        lastUpdated: props.vehicle.lastUpdated,
+        currentSegment: currentSegment.value,
+        beforeSegment: beforeSegment.value,
+        beforePosition: beforePosition.value,
+        currentPosition: currentPosition.value,
+      })
+    )
+  }
+)
 
 // time with microsecond
 // animation duration 0.3s with linear
@@ -108,9 +106,11 @@ function trackVehiclePosition(d: D, lastUpdated: number) {
       realtimePosition.value = { x: p.x, y: p.y }
 
       if (props.vehicle.isTracked) moveCamera(getRotatedPosition(p))
-      globalThis.requestAnimationFrame(() => { })
+      globalThis.requestAnimationFrame(() => {})
     } else {
-      const p = pathElement.getPointAtLength(totalLength / TotalVehicleAnimationDuration * diff)
+      const p = pathElement.getPointAtLength(
+        (totalLength / TotalVehicleAnimationDuration) * diff
+      )
       realtimePosition.value = { x: p.x, y: p.y }
       if (props.vehicle.isTracked) moveCamera(getRotatedPosition(p))
 
@@ -122,12 +122,17 @@ function trackVehiclePosition(d: D, lastUpdated: number) {
   globalThis.requestAnimationFrame(step)
 }
 
-makeDInUpdateWorker.addEventListener('message',
-  (e: MessageEvent<{ d: string, lastUpdate?: number }>) => {
-    if (e.data.lastUpdate) trackVehiclePosition(e.data.d, e.data.lastUpdate)
-  })
+makeDInUpdateWorker.addEventListener(
+  'message',
+  (e: MessageEvent<{ d: string; lastUpdate?: number }>) => {
+    if (e.data.lastUpdate)
+      trackVehiclePosition(e.data.d, e.data.lastUpdate)
+  }
+)
 
-const nextPointPosition = usePointPoisiton(toRef(props.vehicle, 'nextPoint'))
+const nextPointPosition = usePointPoisiton(
+  toRef(props.vehicle, 'nextPoint')
+)
 const commandPoint = useCommandPointPosition(
   toRef(props.vehicle, 'locationPickup'),
   toRef(props.vehicle, 'locationDropoff'),
@@ -135,16 +140,17 @@ const commandPoint = useCommandPointPosition(
 )
 const commandLineColor = computed(() => {
   if (commandPoint.type.value === 'pickup') return 'rgb(40, 180, 115)'
-  else if (commandPoint.type.value === 'dropoff') return 'rgb(65, 175, 250)'
+  else if (commandPoint.type.value === 'dropoff')
+    return 'rgb(65, 175, 250)'
   else return undefined
 })
 
 function onMouseover(event: MouseEvent) {
   setHoveredVehicle(props.vehicle)
   emit('mouseoverOnObject', {
-    type: "VEHICLE",
+    type: 'VEHICLE',
     value: deepCopy(props.vehicle),
-    event
+    event,
   })
 }
 function onMouseleave() {
@@ -156,19 +162,21 @@ function onDbClick() {
 }
 function onLeftClick() {
   emit('mainClickOnObject', {
-    type: "VEHICLE",
-    value: deepCopy(props.vehicle)
+    type: 'VEHICLE',
+    value: deepCopy(props.vehicle),
   })
 }
 function onRightClick(event: MouseEvent) {
   emit('secondaryClickOnObject', {
-    type: "VEHICLE",
+    type: 'VEHICLE',
     value: deepCopy(props.vehicle),
-    event
+    event,
   })
 }
 
-onUnmounted(() => { makeDInUpdateWorker.terminate() })
+onUnmounted(() => {
+  makeDInUpdateWorker.terminate()
+})
 </script>
 
 <template>

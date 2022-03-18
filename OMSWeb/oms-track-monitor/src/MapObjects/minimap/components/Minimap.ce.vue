@@ -1,17 +1,15 @@
 <script setup lang="ts">
 import { segments } from 'src/TrackObjects/segment/segments'
 import { mapSizePropertiesInfo } from 'MapObjects/map/mapSizeProperties'
-import { computed, reactive, readonly, ref, watch } from 'vue'
+import { computed, readonly, ref } from 'vue'
 import {
   moveCamera,
-  zoomInOutByWheel,
   enterPanning,
   exitPanning,
   isPanning,
 } from 'MapObjects/map/camera'
 import SegmentOnlyStroke from './SegmentOnlyStroke.ce.vue'
 import MapRotate from 'MapObjects/rotate/components/MapRotate.ce.vue'
-import { elementRectInfo } from 'MapObjects/map/elementRect'
 import { centerZoom } from 'src/MapObjects/cameraAndRotation'
 import CameraBox from './CameraBox.ce.vue'
 
@@ -46,34 +44,19 @@ const minimapViewBoxLength = readonly(
 )
 
 const minimapSvgElement = ref<SVGElement>()
-const minimapDomRect = reactive({
-  width: 0,
-  height: 0,
-  minX: 0,
-  minY: 0,
-  maxX: 0,
-  maxY: 0,
-})
-
-watch([minimapSvgElement, elementRectInfo], () => {
-  // use setTimeout for unexpected domrect value (like negative y)
-  setTimeout(() => {
-    if (minimapSvgElement.value === undefined) return
-
-    // https://developer.mozilla.org/ko/docs/Web/API/Element/getBoundingClientRect
-    const rect = minimapSvgElement.value.getBoundingClientRect()
-
-    minimapDomRect.width = rect.width
-    minimapDomRect.height = rect.height
-    minimapDomRect.minX = rect.x
-    minimapDomRect.minY = rect.y
-    minimapDomRect.maxX = rect.x + rect.width
-    minimapDomRect.maxY = rect.y + rect.height
-  }, 0)
-})
 
 function onPanning(event: MouseEvent) {
-  // if (minimapDomRect.width === 0 || minimapDomRect.height === 0) return
+  if (minimapSvgElement.value === undefined) return
+
+  const rect = minimapSvgElement.value.getBoundingClientRect()
+  const minimapDomRect = {
+    width: rect.width,
+    height: rect.height,
+    minX: rect.x,
+    minY: rect.y,
+    maxX: rect.x + rect.width,
+    maxY: rect.y + rect.height,
+  }
 
   const position = {
     x:

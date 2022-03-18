@@ -14,10 +14,10 @@ export default defineConfig({
   plugins: [vue(), svgLoader({ svgo: false })],
   resolve: {
     alias: {
-      'src': resolvePath('./src'),
-      'TrackObjects': resolvePath('./src/TrackObjects'),
-      'MapObjects': resolvePath('./src/MapObjects')
-    }
+      src: resolvePath('./src'),
+      TrackObjects: resolvePath('./src/TrackObjects'),
+      MapObjects: resolvePath('./src/MapObjects'),
+    },
   },
   build: {
     lib: {

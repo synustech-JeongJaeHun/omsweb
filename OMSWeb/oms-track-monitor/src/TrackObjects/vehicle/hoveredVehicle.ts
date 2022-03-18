@@ -1,18 +1,16 @@
-import { ref, watch } from "vue";
-import { Vehicle } from "./types/Vehicle";
+import { IsHovered } from './types/IsHovered'
 
-const hoveredVehicle = ref<Vehicle>()
+let hoveredVehicle: IsHovered | undefined = undefined
 
-watch(hoveredVehicle, (hoveredVehicle, prevHoveredVehicle) => {
-  if (prevHoveredVehicle)
-    prevHoveredVehicle.isHovered = undefined
+function setHoveredVehicle(hv?: IsHovered) {
+  // prev
+  if (hoveredVehicle) hoveredVehicle.isHovered = undefined
 
-  if (hoveredVehicle)
-    hoveredVehicle.isHovered = true
-})
-
-function setHoveredVehicle(hv?: Vehicle) {
-  hoveredVehicle.value = hv
+  // now
+  if (hv) {
+    hv.isHovered = true
+    hoveredVehicle = hv
+  }
 }
 
 export { setHoveredVehicle }
