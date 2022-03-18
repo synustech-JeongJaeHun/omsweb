@@ -1,5 +1,6 @@
+// ElementRect Ratio and CameraRect Ratio must be same
 const
-  DefaultWidth = 1000,
-  DefaultHeight = 1000
+  ElementDefaultRect = {width: 1000, height: 1000},
+  CameraDefaultRect = {width: 100000, height: 100000}
 
-export { DefaultWidth, DefaultHeight }
+export { CameraDefaultRect, ElementDefaultRect }

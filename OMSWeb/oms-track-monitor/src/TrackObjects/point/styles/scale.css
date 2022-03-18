@@ -1,3 +1,0 @@
-#point-layer .point .scale-by-scale {
-  transform: scale(var(--mm-per-pixel));
-}

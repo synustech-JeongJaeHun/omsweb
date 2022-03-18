@@ -19,8 +19,8 @@ const scaleLevel = computed(() => {
 
   if (value < 20)
     scaleLevels.push("BELOW20")
-  if (value < 17)
-    scaleLevels.push("BELOW17")
+  if (value < 15)
+    scaleLevels.push("BELOW15")
 
   return scaleLevels.join(' ')
 })

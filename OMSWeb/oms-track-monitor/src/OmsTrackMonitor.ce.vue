@@ -2,7 +2,6 @@
 import { computed, provide, readonly, ref, toRefs, watch } from 'vue'
 import { makeFsProxy } from './utils/devMode'
 import { IOmsTrackMonitor } from './types/IOmsTrackMonitor'
-import { IPreferences } from './legacies/models/setting.model'
 import Map from 'src/MapObjects/map/components/Map.ce.vue'
 import Minimap from 'src/MapObjects/minimap/components/Minimap.ce.vue'
 import {
@@ -47,9 +46,10 @@ import { clusters } from './TrackObjects/cluster/clusters'
 import { findStationById, stations } from './TrackObjects/station/stations'
 import { findZcuById, updateExistZcu, zcus } from './TrackObjects/zcu/zcus'
 import {
+  deleteVehicle,
   findVehicleById,
-  updateExistVehicle,
-  vehicles,
+  initVehicles,
+  setVehicle,
 } from './TrackObjects/vehicle/vehicles'
 import {
   deleteSegmentDisabled,
@@ -215,7 +215,8 @@ const exposed: IOmsTrackMonitor = {
     )
     stations.value = t.stations ?? []
     zcus.value = t.zcus ?? []
-    vehicles.value = t.vehicles ?? []
+    // vehicles.value = t.vehicles ?? []
+    initVehicles(t.vehicles ?? [])
     initSegmentDisableds(t.segmentDisabled ?? [])
     groups.value = makeGroups(t.groups ?? [])
 
@@ -337,19 +338,14 @@ const exposed: IOmsTrackMonitor = {
   },
 
   updateVehicle(op, v) {
-    const vehicle = findVehicleById(v.id)
     switch (op) {
       case 'INSERT':
       case 'UPDATE':
-        if (vehicle) updateExistVehicle(vehicle, v)
-        else vehicles.value.push(v)
+        setVehicle(v)
         break
 
       case 'DELETE':
-        if (vehicle) {
-          const index = vehicles.value.indexOf(vehicle)
-          vehicles.value.splice(index, 1)
-        }
+        deleteVehicle(v)
         break
     }
   },
@@ -543,10 +539,12 @@ defineExpose(exposed)
 /* Configurable Visibility End */
 
 /* Configurable Scale Start */
-#vehicle-layer .vehicle-symbol .scale-by-scale {
+#vehicle-layer .vehicle-symbol .scale-and-reverse-rotate {
+  /* transform */
   transform: scale(
-    v-bind('scaleInfo.mmPerPixel * scaleStylesInfo.vehicleSize * 1/10')
-  );
+      v-bind('scaleInfo.mmPerPixel * scaleStylesInfo.vehicleSize * 1/10')
+    )
+    rotate(var(--reverse-rotation-degree));
 }
 
 #segment-layer .segment-path {
@@ -562,17 +560,13 @@ defineExpose(exposed)
 }
 /* Configurable Scale End */
 
-/* Rotation Start */
-.reverse-rotate-by-rotation {
-  transform: rotate(v-bind('`${rotationInfo * (-1)}deg`'));
+.scale-and-reverse-rotate {
+  --reverse-rotation-degree: v-bind('`${rotationInfo * (-1)}deg`');
+  --mm-per-pixel: v-bind('scaleInfo.mmPerPixel');
 }
-/* Rotation End */
 
 :hover {
   --filter-size: v-bind('`${scaleInfo.mmPerPixel * 10}px`');
-}
-.scale-by-scale {
-  --mm-per-pixel: v-bind('scaleInfo.mmPerPixel');
 }
 </style>
 
@@ -596,7 +590,7 @@ defineExpose(exposed)
 <style src="./TrackObjects/buffer/styles/focus.css"></style>
 <style src="./TrackObjects/buffer/styles/hover.css"></style>
 <style src="./TrackObjects/buffer/styles/visibility.css"></style>
-<style src="./TrackObjects/buffer/styles/scale.css"></style>
+<style src="./TrackObjects/buffer/styles/transform.css"></style>
 <!-- Track > cluster -->
 <style src="./TrackObjects/cluster/styles/focus.css"></style>
 <style src="./TrackObjects/cluster/styles/hover.css"></style>
@@ -609,12 +603,12 @@ defineExpose(exposed)
 <style src="./TrackObjects/mtl/styles/focus.css"></style>
 <style src="./TrackObjects/mtl/styles/hover.css"></style>
 <style src="./TrackObjects/mtl/styles/visibility.css"></style>
-<style src="./TrackObjects/mtl/styles/scale.css"></style>
+<style src="./TrackObjects/mtl/styles/transform.css"></style>
 <!-- Track > point -->
 <style src="./TrackObjects/point/styles/focus.css"></style>
 <style src="./TrackObjects/point/styles/hover.css"></style>
 <style src="./TrackObjects/point/styles/visibility.css"></style>
-<style src="./TrackObjects/point/styles/scale.css"></style>
+<style src="./TrackObjects/point/styles/transform.css"></style>
 <!-- Track > segment -->
 <style src="./TrackObjects/segment/styles/focus.css"></style>
 <style src="./TrackObjects/segment/styles/hover.css"></style>
@@ -623,7 +617,7 @@ defineExpose(exposed)
 <style src="./TrackObjects/station/styles/focus.css"></style>
 <style src="./TrackObjects/station/styles/hover.css"></style>
 <style src="./TrackObjects/station/styles/visibility.css"></style>
-<style src="./TrackObjects/station/styles/scale.css"></style>
+<style src="./TrackObjects/station/styles/transform.css"></style>
 <!-- Track > vehicle -->
 <style src="./TrackObjects/vehicle/styles/focus.css"></style>
 <style src="./TrackObjects/vehicle/styles/hover.css"></style>
@@ -632,7 +626,7 @@ defineExpose(exposed)
 <style src="./TrackObjects/zcu/styles/focus.css"></style>
 <style src="./TrackObjects/zcu/styles/hover.css"></style>
 <style src="./TrackObjects/zcu/styles/visibility.css"></style>
-<style src="./TrackObjects/zcu/styles/scale.css"></style>
+<style src="./TrackObjects/zcu/styles/transform.css"></style>
 
 <!-- Common -->
 <style src="./styles/sheets/utility.css"></style>

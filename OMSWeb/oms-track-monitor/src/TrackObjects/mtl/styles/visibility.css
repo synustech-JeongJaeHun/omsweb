@@ -2,6 +2,6 @@
   visibility: hidden;
 }
 
-#mtl-layer[data-scale-level~='BELOW17' i] .mtl .label {
+#mtl-layer[data-scale-level~='BELOW15' i] .mtl .label {
   visibility: inherit;
 }

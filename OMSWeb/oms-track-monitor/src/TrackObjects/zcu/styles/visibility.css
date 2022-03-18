@@ -2,6 +2,6 @@
   visibility: hidden;
 }
 
-#zcu-layer[data-scale-level~='BELOW17' i] .zcu .label {
+#zcu-layer[data-scale-level~='BELOW15' i] .zcu .label {
   visibility: inherit;
 }

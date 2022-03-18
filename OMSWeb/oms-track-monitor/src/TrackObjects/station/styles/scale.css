@@ -1,7 +1,0 @@
-#station-layer .station .scale-by-scale {
-  transform: scale(calc(var(--mm-per-pixel) / 4));
-}
-
-#station-layer[data-scale-level~='BELOW17' i] .station .scale-by-scale {
-  transform: scale(var(--mm-per-pixel));
-}

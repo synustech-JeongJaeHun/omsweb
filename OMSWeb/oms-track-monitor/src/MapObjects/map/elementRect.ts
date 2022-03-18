@@ -1,9 +1,9 @@
 import { reactive, readonly } from "vue";
-import { DefaultHeight, DefaultWidth } from "./default";
+import { ElementDefaultRect } from "./default";
 
 const elementRect = reactive({
-  width: DefaultWidth,
-  height: DefaultHeight,
+  width: ElementDefaultRect.width,
+  height: ElementDefaultRect.height,
 })
 function setElementRect(width: number, height: number) {
   elementRect.width = width

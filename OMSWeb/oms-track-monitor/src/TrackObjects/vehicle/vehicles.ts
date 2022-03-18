@@ -1,10 +1,41 @@
+import { IVehicle } from "src/legacies/models/track.model";
 import { UpdateDto } from "src/types/Dto";
 import { ref } from "vue";
 import { UpdateType, Vehicle } from './types/Vehicle'
 
 const vehicles = ref<Vehicle[]>([])
+const vehicleMap = new Map<Vehicle['id'], Vehicle>()
 
-function findVehicleById(id: number) { return vehicles.value.find(v => v.id === id) }
+function findVehicleById(id: number) { return vehicleMap.get(id) }
+
+function initVehicles(vs: IVehicle[]){
+  vehicles.value = vs
+  vehicles.value.forEach(v => vehicleMap.set(v.id, v))
+}
+
+function setVehicle(v: UpdateDto.Vehicle){
+  const vehicle = findVehicleById(v.id)
+
+  if(vehicle){ 
+    updateExistVehicle(vehicle, v)
+  }
+  else {
+    vehicles.value.push(v)
+    vehicleMap.set(v.id, v)
+  }
+}
+
+
+function deleteVehicle(v: UpdateDto.Vehicle){
+  const vehicle = findVehicleById(v.id)
+
+  if(vehicle) {
+    const index = vehicles.value.indexOf(vehicle)
+    vehicles.value.splice(index, 1)
+    vehicleMap.delete(v.id)
+  }
+}
+
 
 /**
  * # Vehicle Update Strategy
@@ -87,4 +118,4 @@ function updateExistVehicle(vehicle: Vehicle, updateData: UpdateDto.Vehicle) {
   vehicle.lastUpdated = Date.now()
 }
 
-export { vehicles, findVehicleById, updateExistVehicle } 
+export { vehicles, initVehicles, setVehicle, deleteVehicle, findVehicleById, updateExistVehicle } 

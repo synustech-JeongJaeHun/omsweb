@@ -3,7 +3,7 @@ import { arcTo, lineTo, moveTo, PathCommand, SweepFlag } from "src/utils/svg/pat
 import { SegmentPart } from "../types/SegmentPart";
 
 const
-  Radius = 500,
+  Radius = 300,
   QuarterRoundLength = 2 * Math.PI * Radius / 4
 
 const arcToWithRadius = (to: Position, sweepFlag: SweepFlag) => arcTo(to, Radius, sweepFlag)

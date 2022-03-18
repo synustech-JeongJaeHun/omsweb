@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { rotationInfo } from '../rotate';
-import { mapSizePropertiesInfo } from 'MapObjects/map/mapSizeProperties';
+import { rotationInfo } from '../rotate'
+import { mapSizePropertiesInfo } from 'MapObjects/map/mapSizeProperties'
 </script>
 
 <template>

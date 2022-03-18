@@ -1,0 +1,11 @@
+#buffer-layer .buffer .scale-and-reverse-rotate {
+  transform: scale(calc(var(--mm-per-pixel) / 4))
+    rotate(var(--reverse-rotation-degree));
+}
+
+#buffer-layer[data-scale-level~='BELOW15' i]
+  .buffer
+  .scale-and-reverse-rotate {
+  transform: scale(var(--mm-per-pixel))
+    rotate(var(--reverse-rotation-degree));
+}

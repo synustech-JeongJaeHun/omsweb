@@ -1,7 +1,7 @@
 import { Position } from "src/types/Position";
 import { computed, reactive, readonly, ref, watch } from "vue";
 import { scaleInfo } from "../scale/scale";
-import { DefaultHeight, DefaultWidth } from "./default";
+import { CameraDefaultRect } from "./default";
 import { elementRectInfo, getHeightFromWidthAndRatio, getWidthFromHeightAndRatio } from "./elementRect";
 
 const cameraPosition = reactive({
@@ -11,8 +11,8 @@ const cameraPosition = reactive({
 const cameraPositionInfo = readonly(cameraPosition)
 
 const cameraViewBox = reactive({
-  width: DefaultWidth,
-  height: DefaultHeight,
+  width: CameraDefaultRect.width,
+  height: CameraDefaultRect.height,
 })
 const cameraViewBoxInfo = readonly(cameraViewBox)
 

@@ -1,0 +1,11 @@
+#station-layer .station .scale-and-reverse-rotate {
+  transform: scale(calc(var(--mm-per-pixel) / 4))
+    rotate(var(--reverse-rotation-degree));
+}
+
+#station-layer[data-scale-level~='BELOW15' i]
+  .station
+  .scale-and-reverse-rotate {
+  transform: scale(var(--mm-per-pixel))
+    rotate(var(--reverse-rotation-degree));
+}

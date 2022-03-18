@@ -1,5 +1,0 @@
-<template>
-  <g class="reverse-rotate-by-rotation">
-    <slot />
-  </g>
-</template>

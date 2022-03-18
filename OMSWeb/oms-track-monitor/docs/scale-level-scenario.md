@@ -4,7 +4,7 @@
 
 ## Buffer
 
-|                  | Base   | ELSE | BELOW80 | BELOW20 | BELOW17 |
+|                  | Base   | ELSE | BELOW80 | BELOW20 | BELOW15 |
 | ---------------- | ------ | ---- | ------- | ------- | ------- |
 | total visibility |        |      |         |         |         |
 | label visibility | hidden | -    | -       | -       | visible |
@@ -13,7 +13,7 @@
 
 ## Station
 
-|                  | Base   | ELSE | BELOW80 | BELOW20 | BELOW17 |
+|                  | Base   | ELSE | BELOW80 | BELOW20 | BELOW15 |
 | ---------------- | ------ | ---- | ------- | ------- | ------- |
 | total visibility |        |      |         |         |         |
 | label visibility | hidden | -    | -       | -       | visible |
@@ -22,7 +22,7 @@
 
 ## Zcu
 
-|                  | Base   | ELSE | BELOW80 | BELOW20 | BELOW17 |
+|                  | Base   | ELSE | BELOW80 | BELOW20 | BELOW15 |
 | ---------------- | ------ | ---- | ------- | ------- | ------- |
 | total visibility |        |      |         |         |         |
 | label visibility | hidden | -    | -       | -       | visible |
@@ -31,7 +31,7 @@
 
 ## Mtl
 
-|                  | Base   | ELSE | BELOW80 | BELOW20 | BELOW17 |
+|                  | Base   | ELSE | BELOW80 | BELOW20 | BELOW15 |
 | ---------------- | ------ | ---- | ------- | ------- | ------- |
 | total visibility |        |      |         |         |         |
 | label visibility | hidden | -    | -       | -       | visible |
@@ -40,7 +40,7 @@
 
 ## Group
 
-|                  | Base | ELSE | BELOW80 | BELOW20 | BELOW17 |
+|                  | Base | ELSE | BELOW80 | BELOW20 | BELOW15 |
 | ---------------- | ---- | ---- | ------- | ------- | ------- |
 | total visibility |      |      |         |         |         |
 | label visibility |      |      |         |         |         |
@@ -49,7 +49,7 @@
 
 ## Point
 
-|                  | Base   | ELSE | BELOW80 | BELOW20 | BELOW17 |
+|                  | Base   | ELSE | BELOW80 | BELOW20 | BELOW15 |
 | ---------------- | ------ | ---- | ------- | ------- | ------- |
 | total visibility | hidden | -    | -       | visible | -       |
 | label visibility | -      | -    | -       | -       | -       |
@@ -58,7 +58,7 @@
 
 ## Segment
 
-|                  | Base | ELSE | BELOW80 | BELOW20 | BELOW17 |
+|                  | Base | ELSE | BELOW80 | BELOW20 | BELOW15 |
 | ---------------- | ---- | ---- | ------- | ------- | ------- |
 | total visibility |      |      |         |         |         |
 | label visibility |      |      |         |         |         |
@@ -68,7 +68,7 @@
 
 ## Cluster
 
-|                  | Base | ELSE | BELOW80 | BELOW20 | BELOW17 |
+|                  | Base | ELSE | BELOW80 | BELOW20 | BELOW15 |
 | ---------------- | ---- | ---- | ------- | ------- | ------- |
 | total visibility |      |      |         |         |         |
 | label visibility |      |      |         |         |         |
@@ -77,7 +77,7 @@
 
 ## Vehicle
 
-|                  | Base | ELSE | BELOW80 | BELOW20 | BELOW17 |
+|                  | Base | ELSE | BELOW80 | BELOW20 | BELOW15 |
 | ---------------- | ---- | ---- | ------- | ------- | ------- |
 | total visibility | -    | -    | -       | -       | -       |
 | label visibility | -    | -    | -       | -       | -       |

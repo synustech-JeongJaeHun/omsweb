@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { cameraTotalInfo } from '../camera'
-import { elementRectInfo } from '../elementRect';
-import MapRotate from 'MapObjects/rotate/components/MapRotate.ce.vue';
-import { scaleLevelInfo } from 'src/MapObjects/scale/scale';
+import { elementRectInfo } from '../elementRect'
+import MapRotate from 'MapObjects/rotate/components/MapRotate.ce.vue'
+import { scaleLevelInfo } from 'src/MapObjects/scale/scale'
 // https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/shape-rendering
 // https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/text-rendering
 // https://developer.mozilla.org/en-US/docs/Web/CSS/custom-ident
