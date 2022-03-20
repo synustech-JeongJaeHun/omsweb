@@ -523,7 +523,7 @@ namespace OMSWeb.Repositories
         param = new
         {
           start = options.Start.Value,
-          end = options.End.Value,
+          end = options.End.Value
         };
       }
       return (sql, param);

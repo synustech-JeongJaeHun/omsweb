@@ -29,11 +29,11 @@ namespace OMSWeb.Services
     public PlaybackData GetSnapshotDataByTime(string userId, DateTime start, DateTime end)
     {
       // get_snapshot_time_info
-      var lastTrackTime = this._repo.GetLastTrackSnapshotTime(start);
-      if (lastTrackTime == null) throw new OmsException(ErrorCodes.TrackSnapshotNotExists);
+      DateTime lastTrackTime = this._repo.GetLastTrackSnapshotTime(start);
+      if (lastTrackTime == DateTime.MinValue) throw new OmsException(ErrorCodes.TrackSnapshotNotExists);
 
       // @NOTE LAB : 조회 구간내에서 처음 이벤트가 발생한 시각
-      var firstEventTime = this._repo.GetFirstEventTime(start, end);
+      DateTime? firstEventTime = this._repo.GetFirstEventTime(start, end);
       if (!firstEventTime.HasValue) throw new OmsException(ErrorCodes.EventNotExists);
 
       Console.WriteLine($"first event time >> {firstEventTime:o}");
@@ -56,7 +56,7 @@ namespace OMSWeb.Services
       if (times.Count > 1)
         options.End = times[1];
       else
-        options.End = times[0];
+        options.End = DateTime.MaxValue;
 
       var timelines = this._repo.GetTimeline("event_list", options);
       var boundaries = this._repo.GetEventBoundaries(options);
