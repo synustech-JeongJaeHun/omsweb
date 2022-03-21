@@ -1,15 +1,17 @@
-import { reactive, ref } from 'vue'
+import { reactive } from 'vue'
 
-const height = ref(window.innerHeight)
-const width = ref(window.innerWidth)
+const rect = reactive({
+  height: window.innerHeight,
+  width: window.innerWidth,
+})
 
 window.addEventListener('resize', () => {
-  height.value = window.innerHeight
-  width.value = window.innerWidth
+  rect.height = window.innerHeight
+  rect.width = window.innerWidth
 })
 
 function useWindowRect() {
-  return reactive({ width, height })
+  return rect
 }
 
 export { useWindowRect }
