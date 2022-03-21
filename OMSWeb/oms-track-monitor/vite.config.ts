@@ -11,7 +11,16 @@ import path from 'path'
 
 const resolvePath = (str: string) => path.resolve(__dirname, str)
 export default defineConfig({
-  plugins: [vue(), svgLoader({ svgo: false })],
+  plugins: [
+    vue({
+      template: {
+        compilerOptions: {
+          isCustomElement: (tag) => tag.includes('-'),
+        },
+      },
+    }),
+    svgLoader({ svgo: false }),
+  ],
   resolve: {
     alias: {
       src: resolvePath('./src'),
@@ -24,6 +33,12 @@ export default defineConfig({
       entry: resolvePath('src/oms-track-monitor.ts'),
       name: 'oms-track-monitor',
       fileName: (format) => `oms-track-monitor.${format}.js`,
+    },
+  },
+  server: {
+    proxy: {
+      '/api': 'http://localhost:5004',
+      '/hubs': 'http://localhost:5004',
     },
   },
 })

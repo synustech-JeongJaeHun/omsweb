@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, provide, readonly, ref, toRefs, watch } from 'vue'
-import { makeFsProxy } from './utils/devMode'
+import { makeFsProxy } from './devOnly/utils/devMode'
 import { IOmsTrackMonitor } from './types/IOmsTrackMonitor'
 import Map from 'src/MapObjects/map/components/Map.ce.vue'
 import Minimap from 'src/MapObjects/minimap/components/Minimap.ce.vue'
@@ -87,7 +87,7 @@ const props = defineProps<{
   rotation: Numberlish
 
   // scale
-  vehicleSize: Numberlish // TODO
+  vehicleSize: Numberlish
   segmentWidth: Numberlish
   segmentDirectionSize: Numberlish
 
