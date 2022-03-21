@@ -6,7 +6,7 @@ namespace OMSWeb.Models.Tracks
 {
   public class SnapshotTimeInfo
   {
-    public DateTime TrackSnapshot { get; set; }
+    public DateTime? TrackSnapshot { get; set; }
     public IList<DateTime> DynamicSnapshotList { get; set; }
   }
 

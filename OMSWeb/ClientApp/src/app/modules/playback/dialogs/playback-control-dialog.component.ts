@@ -199,7 +199,7 @@ export class PlaybackControlDialogComponent implements OnInit, OnDestroy {
     this.states.playing = true;
     if (this.data.timeline[this.states.event]) {
       this.updateTrack(this.states.event, false, false);
-      // this.states.playTime = this.data.timeline[this.states.event].eventTime;
+      this.states.playTime = this.data.timeline[this.states.event].eventTime;
 
       if (this.states.playing && !this.isLastEvent) {
         const nextTime = this.getNextEventInterval();

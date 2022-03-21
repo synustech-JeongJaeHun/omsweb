@@ -55,6 +55,8 @@ namespace OMSWeb.Services.MqttClient
         public const string ORIGIN_LOCAL_ORDER = "OMS";
         public const string ORIGIN_HOST_ORDER = "OMS,MCS";
 
+        public const string DEFAULT_DIRECTION = "forward";
+
         public MqttMessage()
         {
 
@@ -303,12 +305,20 @@ namespace OMSWeb.Services.MqttClient
                 data["ack_by"] = GetWarningAckBy(command);
             }
             else if (command.Action == ACTION_RESET || command.Action == ACTION_STOP ||
-                     command.Action == ACTION_INITIALIZE || command.Action == ACTION_STATUS ||
                      command.Action == ACTION_RAIL_IN || command.Action == ACTION_RAIL_OUT ||
                      command.Action == ACTION_REMOVE || command.Action == ACTION_UPDATE_MAP ||
                      command.Action == ACTION_GET_MAP_INFO)
             {
                 data["vehicle_id"] = GetVehicleId(command);
+            }
+            else if (command.Action == ACTION_INITIALIZE)
+            {
+                data["vehicle_id"] = GetVehicleId(command);
+
+                if (command.Direction != null)
+                    data["direction"] = command.Direction;
+                else
+                    data["direction"] = DEFAULT_DIRECTION;
             }
             else if (command.Action == ACTION_SET_BEHAVIOR)
             {
