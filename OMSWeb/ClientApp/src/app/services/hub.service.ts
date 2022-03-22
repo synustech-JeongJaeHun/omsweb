@@ -48,8 +48,7 @@ export class HubService {
       console.log('# Hub connection closed.');
     });
 
-
-    this.hub.onreconnecting(err => {
+    this.hub.onreconnecting((err) => {
       console.assert(!err, err);
       this.isConnected = false;
       this.connectionChanged$.emit(false);
@@ -60,7 +59,7 @@ export class HubService {
       this.isConnected = true;
       this.connectionChanged$.emit(true);
       console.info('## Hub re-connected. ##');
-    })
+    });
 
     this.attachEvents();
     this.start();
@@ -111,7 +110,6 @@ export class HubService {
   }
 
   private attachEvents() {
-
     this.hub.on('pointChanged', (meta, body) => {
       console.info('## hub message : pointChanged >>', { meta, body });
       this.pointChanged$.emit({ ...meta, data: body });

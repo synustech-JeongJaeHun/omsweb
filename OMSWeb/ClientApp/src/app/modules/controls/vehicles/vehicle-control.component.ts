@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { HubService } from '@oms/root/services/hub.service';
 import { DxDataGridComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import { AuthService } from '../../../services/auth.service';
@@ -17,6 +18,20 @@ export class VehicleControlComponent implements OnInit {
   dataSource: DataSource;
   selectedIds: number[] = [];
 
+  // current info (readonly)
+  currentMapName = '';
+  currentMapVersion = '';
+  currentFileName = '';
+
+  // update info (two-way bind)
+  updateMapName = '';
+  public get updateMapVersion() {
+    return parseInt(this.currentMapVersion) + 1;
+  }
+  updateFileName = '';
+
+  isUpdating = false;
+
   get hasControlAccess(): boolean {
     return this.auth.isAuthenticated;
   }
@@ -31,16 +46,47 @@ export class VehicleControlComponent implements OnInit {
     private dialogSvc: DialogService,
     private messageSvc: MessagesService,
     private t$: TranslateService,
+    private hubService: HubService
   ) {
     this.dataSource = this.systemSvc.vehicles();
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    // fetch current map in here
+
+    this.currentMapName = 'current_map_name';
+    this.currentMapVersion = String(1);
+    this.currentFileName = 'current_file.json';
+
+    // listen update complete from hub service
+    // below is example
+    // this.hubService.connectionChanged$.subscribe(() => {
+    //  this.isUpdating = false;
+    // })
+    this.hubService;
+  }
+
+  onUpdateMap() {
+    this.dialogSvc
+      .confirm({ body: this.t$.instant('messages.confirmCommand') })
+      .subscribe((ok) => {
+        if (ok) {
+          // @TODO call update
+
+          // use this property
+          this.updateMapName;
+          this.updateMapVersion;
+          this.updateFileName;
+
+          this.isUpdating = true;
+        }
+      });
+  }
 
   onRefresh() {
     console.info('# refresh >>', this.selectedIds);
   }
-  onUpdate() {
+  onUpdateVehicles() {
     this.dialogSvc
       .confirm({ body: this.t$.instant('messages.confirmCommand') })
       .subscribe((ok) => {
@@ -60,5 +106,19 @@ export class VehicleControlComponent implements OnInit {
             .subscribe();
         }
       });
+  }
+
+  calculateConflict(rowData: { mapDb?: string; mapVersion?: number }) {
+    // there is no mapVersion in row, now
+
+    const isMapSame = rowData?.mapDb === this.currentMapName;
+    const isVersionSame =
+      rowData?.mapVersion === parseInt(this.currentMapVersion);
+
+    return isMapSame
+      ? isVersionSame
+        ? ''
+        : 'Version Conflict'
+      : 'Map Conflict';
   }
 }

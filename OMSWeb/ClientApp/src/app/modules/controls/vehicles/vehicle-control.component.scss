@@ -1,12 +1,35 @@
 :host {
-  display: grid;
-  grid-template-rows: 32px 1fr;
-  gap: 4px;
-  padding: 8px;
+  padding: 20px;
+  padding-bottom: 15px;
+}
+
+mat-form-field .mat-form-field-wrapper {
+  padding-bottom: 0px;
+}
+
+h2 {
+  margin-top: 0px;
+}
+
+mat-form-field {
+  margin-right: 10px;
+}
+
+.mb-30 {
+  margin-bottom: 30px;
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+
+  align-items: center;
 }
 
 .actions-container {
+  margin-bottom: 10px;
+
   button {
-    margin-right: 4px;
+    margin-right: 10px;
   }
 }
