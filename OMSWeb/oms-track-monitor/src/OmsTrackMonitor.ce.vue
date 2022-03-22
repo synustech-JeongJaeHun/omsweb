@@ -447,20 +447,22 @@ defineExpose(exposed)
   );
 }
 
-#segment-layer .segment[data-is-disabled='true' i] .segment-path {
+#disabled-segment-layer .segment .segment-path {
   stroke: v-bind(
     'parseStringProp(ColorDefault.disabledSegment, props.disabledSegmentColor)'
   );
 }
-#segment-layer
-  .segment[data-is-disabled='true' i][data-is-disabled-by-mtl='true' i]
+
+#disabled-segment-layer
+  .segment[data-is-disabled-by-mtl='true' i]
   .segment-path {
   stroke: v-bind(
     'parseStringProp(ColorDefault.disabledSegment, props.normalSegmentColor)'
   );
 }
 
-#segment-layer .segment .segment-direction {
+#segment-layer .segment .segment-direction,
+#disabled-segment-layer .segment .segment-direction {
   stroke: v-bind(
     'parseStringProp(ColorDefault.segmentDirection, props.segmentDirectionColor)'
   );
@@ -514,7 +516,8 @@ defineExpose(exposed)
   );
 }
 
-#segment-layer .segment-direction {
+#segment-layer .segment-direction,
+#disabled-segment-layer .segment-direction {
   visibility: v-bind(
     "visibleStylesInfo.segmentDirection ? 'initial' : 'hidden'"
   );
@@ -556,11 +559,13 @@ defineExpose(exposed)
     rotate(var(--reverse-rotation-degree));
 }
 
-#segment-layer .segment-path {
+#segment-layer .segment-path,
+#disabled-segment-layer .segment-path {
   stroke-width: v-bind('scaleStylesInfo.segmentWidth');
 }
 
-#segment-layer .focus {
+#segment-layer .focus,
+#disabled-segment-layer .focus {
   stroke-width: v-bind('scaleStylesInfo.segmentWidth * 3');
 }
 

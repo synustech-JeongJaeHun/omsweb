@@ -271,7 +271,7 @@
       </div>
 
       <div class="disable-table">
-        <mat-slide-toggle [(ngModel)]="data.disableState" (change)="changeSegmentDisabled()"
+        <mat-slide-toggle [(ngModel)]="data.disabled" (change)="changeSegmentDisabled()"
           [disabled]="!hasPermission(permissionEnums.SegmentUnuse)" color="primary">{{ "names.unuse" | translate }}
         </mat-slide-toggle>
         <mat-form-field>

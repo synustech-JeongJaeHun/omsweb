@@ -1,14 +1,19 @@
 <script setup lang="ts">
-import { Segment } from '../types/Segment'
-import { inject, ref, watch } from 'vue'
 import { RootEmitInjectionKey, RootEmits } from 'src/types/RootEmits'
 import { getAngleFromTwoPoints } from 'src/utils/angle'
 import { deepCopy } from 'src/utils/deepCopy'
+import { computed, inject, ref, watch } from 'vue'
+import { findSegmentById } from '../segments'
+import { SegmentDisabled } from '../types/SegmentDisabled'
 
 const props = defineProps<{
-  segment: Segment
+  segmentDisabled: SegmentDisabled
 }>()
 const emit = inject<RootEmits>(RootEmitInjectionKey)!
+
+const segment = computed(() =>
+  findSegmentById(props.segmentDisabled.segmentId)
+)
 
 const pathElement = ref<SVGPathElement>()
 
@@ -28,42 +33,49 @@ watch(pathElement, (pathElement) => {
 })
 
 function onMouseover(event: MouseEvent) {
-  emit('mouseoverOnObject', {
-    type: 'SEGMENT',
-    value: deepCopy(props.segment),
-    event,
-  })
+  if (segment.value)
+    emit('mouseoverOnObject', {
+      type: 'SEGMENT',
+      value: deepCopy(segment.value),
+      event,
+    })
 }
 function onMouseleave() {
-  emit('mouseleaveOnObject')
+  if (segment.value) emit('mouseleaveOnObject')
 }
 function onLeftClick() {
-  emit('mainClickOnObject', {
-    type: 'SEGMENT',
-    value: deepCopy(props.segment),
-  })
+  if (segment.value)
+    emit('mainClickOnObject', {
+      type: 'SEGMENT',
+      value: deepCopy(segment.value),
+    })
 }
 function onRightClick(event: MouseEvent) {
-  emit('secondaryClickOnObject', {
-    type: 'SEGMENT',
-    value: deepCopy(props.segment),
-    event,
-  })
+  if (segment.value)
+    emit('secondaryClickOnObject', {
+      type: 'SEGMENT',
+      value: deepCopy(segment.value),
+      event,
+    })
 }
 </script>
 
 <template>
-  <svg class="overflow-visible cursor-pointer segment">
+  <svg
+    v-if="segment"
+    class="overflow-visible cursor-pointer segment"
+    :data-is-disabled-by-mtl="segment.disabledByMtl"
+  >
     <path
-      v-if="props.segment.isFocused"
+      v-if="segment.isFocused"
       class="focus fixed-scale-stroke"
-      :d="props.segment.d"
+      :d="segment.d"
       fill="none"
     />
     <path
       ref="pathElement"
       class="segment-path fixed-scale-stroke"
-      :d="props.segment.d"
+      :d="segment.d"
       fill="none"
       @click.left="onLeftClick()"
       @click.right="onRightClick($event)"
