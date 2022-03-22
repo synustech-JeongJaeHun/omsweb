@@ -73,9 +73,10 @@ function onRightClick(event: MouseEvent) {
       />
       <text
         class="invert label select-none"
-        x="20"
-        y="0"
+        x="0"
+        y="-30"
         alignment-baseline="hanging"
+        text-anchor="middle"
         text-rendering="optimizeSpeed"
         font-size="0.9em"
         pointer-events="none"
