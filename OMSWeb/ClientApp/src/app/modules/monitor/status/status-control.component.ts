@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { UserPermissions } from '../../../models/enums';
 import { AuthService } from '../../../services/auth.service';
@@ -15,7 +15,7 @@ import { ClientPreferences } from '../../../models/settings.model';
   templateUrl: './status-control.component.html',
   styleUrls: ['./status-control.component.scss'],
 })
-export class StatusControlComponent implements OnInit {
+export class StatusControlComponent implements OnInit, OnDestroy {
   resizeHandler: any;
   tableHeightNum = 300;
 
@@ -29,7 +29,6 @@ export class StatusControlComponent implements OnInit {
   get canControl(): boolean {
     return this.auth.isAuthenticated;
   }
-
 
   tabNames = [
     { id: 1, title: 'Orders' },
@@ -54,6 +53,17 @@ export class StatusControlComponent implements OnInit {
   ngOnInit(): void {
     this.resizeHandler = this.onMouseMove.bind(this);
     this.currentTab = this.settingSvc.globalPreferences.uiStates.controlTab;
+
+    setTimeout(() => {
+      this.mapStateSvc.statusTableHeight = this.tableHeightNum;
+      this.mapStateSvc.statusTableResizeEvent$.next(this.tableHeightNum);
+    }, 0);
+  }
+
+  ngOnDestroy(): void {
+    setTimeout(() => {
+      this.mapStateSvc.statusTableResizeEvent$.next(0);
+    }, 0);
   }
 
   hasPermissions(permissions: number[]): boolean {
@@ -111,6 +121,8 @@ export class StatusControlComponent implements OnInit {
       resizedH + 'px';
 
     this.tableHeightNum = resizedH - 37; /* header:40px, tab-panel:25px */
+
+    this.mapStateSvc.statusTableResizeEvent$.next(this.tableHeightNum);
   }
   onChangeTab(selectedIndex: number) {
     const pref = this.settingSvc.globalPreferences;
@@ -132,11 +144,12 @@ export class StatusControlComponent implements OnInit {
       window.removeEventListener('mousemove', this.resizeHandler);
     }
 
-    this.mapStateSvc.statusTableResizeEvent$.next();
+    // this.mapStateSvc.statusTableResizeEvent$.next();
   }
 
   viewerHide() {
     this.mapStateSvc.changeToolbarState('controlTable', false);
+    this.mapStateSvc.statusTableResizeEvent$.next(0);
   }
   shrinkViewer() {
     const height = document.getElementById('status-control-container').style

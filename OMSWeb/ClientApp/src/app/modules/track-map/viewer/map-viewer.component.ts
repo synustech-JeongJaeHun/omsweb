@@ -16,13 +16,13 @@ import { HubService } from '../../../services/hub.service';
 import { IDataChangeEvent } from '../../../models/notification.model';
 import { AuthService } from '../../../services/auth.service';
 
-import "oms-track-monitor"
-import { OmsTrackMonitorElement, IOmsTrackMonitor } from "oms-track-monitor"
+import 'oms-track-monitor';
+import { OmsTrackMonitorElement, IOmsTrackMonitor } from 'oms-track-monitor';
 import { StatusService } from '@oms/root/services/status.service';
 import { MapStatesService } from '../map-states.service';
 import { SettingsService } from '@oms/root/services/settings.service';
-import { TrackStatusService } from '../../../services/track-status.service'
-import { TrackMonitorSettingService } from '../../../services/track-monitor-setting.service'
+import { TrackStatusService } from '../../../services/track-status.service';
+import { TrackMonitorSettingService } from '../../../services/track-monitor-setting.service';
 import d3 = require('d3');
 import { TracksService } from '@oms/root/services/tracks.service';
 import { TranslateService } from '@ngx-translate/core';
@@ -44,28 +44,42 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   private destroy$: Subject<void> = new Subject<void>();
   public detailsVisible = false;
 
-  get tmSetting() { return this.trackMonitorSettingService.trackSetting }
-  get groupIds() { return this.trackData.groups.map(g => String(g.id)) }
-  get canSetSource() { return !this.mapStatesService.transferCommandState.sourceDisabled; }
-  get canSetDest() { return !this.mapStatesService.transferCommandState.destDisabled; }
+  get tmSetting() {
+    return this.trackMonitorSettingService.trackSetting;
+  }
+  get groupIds() {
+    return this.trackData.groups.map((g) => String(g.id));
+  }
+  get canSetSource() {
+    return !this.mapStatesService.transferCommandState.sourceDisabled;
+  }
+  get canSetDest() {
+    return !this.mapStatesService.transferCommandState.destDisabled;
+  }
 
   public viewerSetting = {
     rect: {
       width: window.innerWidth,
-      height: window.innerHeight - 40,
-    }
-  }
+      height:
+        window.innerHeight -
+        40 -
+        (this.mapStatesService.statusTableHeight === 0
+          ? 0
+          : this.mapStatesService.statusTableHeight + 50),
+    },
+  };
 
   public selectedObject: any;
-  public tooltipObject: { type: string, value: any } | undefined;
-  public showTooltip = false
-  public contextMenuObject: { type: string, value: any } | undefined;
-  public showContextMenu = false
-  public colocatedViewPosition: { top: string, left: string, right: string } | undefined;
+  public tooltipObject: { type: string; value: any } | undefined;
+  public showTooltip = false;
+  public contextMenuObject: { type: string; value: any } | undefined;
+  public showContextMenu = false;
+  public colocatedViewPosition:
+    | { top: string; left: string; right: string }
+    | undefined;
   public colocatedObjects = [];
   public mainColocatedObject: any;
   public showColocatedView = false;
-
 
   get activeDetails(): boolean {
     return this.detailsVisible && this.auth.isAuthenticated;
@@ -102,11 +116,19 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     // @ts-ignore
-    this.viewer = document.getElementById('track-canvas')._instance.exposed
+    this.viewer = document.getElementById('track-canvas')._instance.exposed;
     // @ts-ignore
-    this.viewer.setTrack({ ...this.trackData, segmentParts: this.trackData.segments, clusters: this.trackData.clusters.map(c => ({ ...c, segments: c.segments.split(',').map(id => parseInt(id.trim())) })) })
-    this.attachEvents()
-    this.attachHubEvents()
+    this.viewer.setTrack({
+      ...this.trackData,
+      segmentParts: this.trackData.segments,
+      clusters: this.trackData.clusters.map((c) => ({
+        ...c,
+        // @ts-ignore
+        segments: c.segments.split(',').map((id) => parseInt(id.trim())),
+      })),
+    });
+    this.attachEvents();
+    this.attachHubEvents();
   }
   ngOnDestroy(): void {
     this.destroy$.next();
@@ -146,8 +168,11 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 
     this.mapStatesService.statusTableResizeEvent$
       .pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
-        // this.viewer.adjust_floaters();
+      .subscribe((tableHeightNum) => {
+        this.viewerSetting.rect.height =
+          window.innerHeight -
+          40 -
+          (tableHeightNum === 0 ? 0 : tableHeightNum + 50);
       });
   }
   private attachHubEvents() {
@@ -156,23 +181,25 @@ export class MapViewerComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.destroy$))
         .subscribe((conn) => {
           this.statusService.getVehicles().subscribe((res) => {
-            console.log("connection update", conn, res)
+            console.log('connection update', conn, res);
             if (conn && res?.vehicles) {
-              res.vehicles.forEach(v => this.viewer.updateVehicle('UPDATE', v))
+              res.vehicles.forEach((v) =>
+                this.viewer.updateVehicle('UPDATE', v)
+              );
             }
-          })
+          });
         });
       this.hubSvc.vehicleChanged$
         .pipe(takeUntil(this.destroy$))
         .subscribe((e: IDataChangeEvent) => {
           // @ts-ignore
-          this.viewer.updateVehicle(e.operation, e.data)
+          this.viewer.updateVehicle(e.operation, e.data);
         });
       this.hubSvc.segmentChanged$
         .pipe(takeUntil(this.destroy$))
         .subscribe((e: IDataChangeEvent) => {
           // TODO what happened on event?
-          console.log("segment update", e)
+          console.log('segment update', e);
         });
       this.hubSvc.segmentDisabledChanged$
         .pipe(takeUntil(this.destroy$))
@@ -180,20 +207,20 @@ export class MapViewerComponent implements OnInit, OnDestroy {
           this.viewer.updateSegmentDisabled(e.operation, {
             id: e.id,
             operation: e.operation,
-            data: e.data
-          })
+            data: e.data,
+          });
         });
       this.hubSvc.clusterChanged$
         .pipe(takeUntil(this.destroy$))
         .subscribe((e: IDataChangeEvent) => {
           // TODO what happened on event?
-          console.log("cluster update", e)
+          console.log('cluster update', e);
         });
 
       this.hubSvc.zcuMapChanged$
         .pipe(takeUntil(this.destroy$))
         .subscribe((e) => {
-          this.viewer.updateZcu(e.operation, e.data)
+          this.viewer.updateZcu(e.operation, e.data);
         });
 
       if (this.auth.isAuthenticated) {
@@ -201,51 +228,51 @@ export class MapViewerComponent implements OnInit, OnDestroy {
           .pipe(takeUntil(this.destroy$))
           .subscribe((e: IDataChangeEvent) => {
             // TODO what happened on event?
-            console.log("vehicle path update", e)
+            console.log('vehicle path update', e);
           });
 
         this.hubSvc.stationChanged$
           .pipe(takeUntil(this.destroy$))
           .subscribe((e) => {
             // TODO what happened on event?
-            console.log("station update", e)
-          })
+            console.log('station update', e);
+          });
 
         this.hubSvc.groupChanged$
           .pipe(takeUntil(this.destroy$))
           .subscribe((e) => {
             // TODO what happened on event?
-            console.log("group update", e)
+            console.log('group update', e);
           });
 
         this.hubSvc.bufferChanged$
           .pipe(takeUntil(this.destroy$))
           .subscribe((e) => {
             // TODO what happened on event?
-            console.log("buffer update", e)
+            console.log('buffer update', e);
           });
 
         this.hubSvc.mtlChanged$
           .pipe(takeUntil(this.destroy$))
           .subscribe((e) => {
             // TODO what happened on event?
-            console.log("mtl update", e)
+            console.log('mtl update', e);
           });
 
         this.hubSvc.groupChanged$
           .pipe(takeUntil(this.destroy$))
           .subscribe((e) => {
             // TODO what happened on event?
-            console.log("group update", e)
+            console.log('group update', e);
           });
       }
     }
   }
 
   changeFocus(event: any) {
-    this.selectedObject = event
+    this.selectedObject = event;
     // @ts-ignore
-    this.focusOnTM({ type: event.objectType, id: event.id })
+    this.focusOnTM({ type: event.objectType, id: event.id });
   }
 
   onApplyPointChange(id: number, isHome: boolean, selectedGroup: number) {
@@ -263,7 +290,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 
     switch (name) {
       case 'initialize':
-        commandMessage = { action: 'initialize' };  //auto
+        commandMessage = { action: 'initialize' }; //auto
         needConfirm = true;
         break;
       case 'reset':
@@ -271,7 +298,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
         needConfirm = true;
         break;
       case 'stop':
-        commandMessage = { action: 'stop' };  // estop
+        commandMessage = { action: 'stop' }; // estop
         needConfirm = true;
         break;
       case 'zcu_go':
@@ -295,16 +322,23 @@ export class MapViewerComponent implements OnInit, OnDestroy {
       this.dialogSvc
         .confirm({ body: this.$t.instant('messages.confirmCommand') })
         .subscribe((ok) => {
-          ok && this.messageSvc.sendVehicleCommand(commandMessage, [this.contextMenuObject.value]).subscribe();
+          ok &&
+            this.messageSvc
+              .sendVehicleCommand(commandMessage, [
+                this.contextMenuObject.value,
+              ])
+              .subscribe();
         });
     } else {
-      this.messageSvc.sendVehicleCommand(commandMessage, [this.contextMenuObject.value]).subscribe();
+      this.messageSvc
+        .sendVehicleCommand(commandMessage, [this.contextMenuObject.value])
+        .subscribe();
     }
   }
 
   onApplyZcuChange() {
     let origin = this.contextMenuObject.value.usingType;
-    let change = (origin === 1 ? 2 : 1);
+    let change = origin === 1 ? 2 : 1;
     this.contextMenuObject.value.usingType = change;
 
     this.dialogSvc
@@ -313,10 +347,10 @@ export class MapViewerComponent implements OnInit, OnDestroy {
         if (confirm) {
           this.messageSvc
             .sendSettingZcuCommand({
-              type: "ZCU",
-              action: "zcu-setting",
+              type: 'ZCU',
+              action: 'zcu-setting',
               zcuIds: [this.contextMenuObject.value.id],
-              zcuUsingType: change === 1 ? "hw" : "sw",
+              zcuUsingType: change === 1 ? 'hw' : 'sw',
             })
             .subscribe();
         } else {
@@ -331,7 +365,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
         if (confirm) {
           this.messageSvc
             .sendZcuCommand({
-              action: "zcu_reset",
+              action: 'zcu_reset',
               zcuId: this.contextMenuObject.value.id,
             })
             .subscribe();
@@ -344,7 +378,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
       objectType,
       id,
       logicalId,
-      physicalId
+      physicalId,
     };
   }
   onSetDest(objectType) {
@@ -353,45 +387,52 @@ export class MapViewerComponent implements OnInit, OnDestroy {
       objectType,
       id,
       logicalId,
-      physicalId
+      physicalId,
     };
   }
   onRemoveCarrier(carrierId: string) {
     this.dialogSvc
       .confirm({ body: this.$t.instant('messages.confirmBufferChange') })
       .subscribe((confirm) => {
-        confirm && this.messageSvc
-          .sendCarrierCommand({
-            action: 'remove_carrier',
-            bufferId: this.contextMenuObject.value.id,
-            carrierLabel: carrierId
-          })
-          .subscribe();
+        confirm &&
+          this.messageSvc
+            .sendCarrierCommand({
+              action: 'remove_carrier',
+              bufferId: this.contextMenuObject.value.id,
+              carrierLabel: carrierId,
+            })
+            .subscribe();
       });
   }
   onInstallCarrier(carrierId: string) {
     this.dialogSvc
       .confirm({ body: this.$t.instant('messages.confirmBufferChange') })
       .subscribe((confirm) => {
-        confirm && this.messageSvc
-          .sendCarrierCommand({
-            action: 'install_carrier',
-            bufferId: this.contextMenuObject.value.id,
-            carrierLabel: carrierId
-          })
-          .subscribe();
+        confirm &&
+          this.messageSvc
+            .sendCarrierCommand({
+              action: 'install_carrier',
+              bufferId: this.contextMenuObject.value.id,
+              carrierLabel: carrierId,
+            })
+            .subscribe();
       });
   }
 
   onChangeSegmentProperty(isDisable: boolean) {
     if (isDisable) {
       this.messageSvc
-        .sendDisableSegmentCommand({ action: 'disable-segment' }, this.contextMenuObject.value.id)
+        .sendDisableSegmentCommand(
+          { action: 'disable-segment' },
+          this.contextMenuObject.value.id
+        )
         .subscribe();
-    }
-    else {
+    } else {
       this.messageSvc
-        .sendDisableSegmentCommand({ action: 'enable-segment' }, this.contextMenuObject.value.id)
+        .sendDisableSegmentCommand(
+          { action: 'enable-segment' },
+          this.contextMenuObject.value.id
+        )
         .subscribe();
     }
   }
@@ -399,8 +440,8 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   // EPIC > OMS-TRACK-MONITOR
   @HostListener('window:resize', ['$event.target'])
   onResize(window: Window) {
-    this.viewerSetting.rect.width = window.innerWidth
-    this.viewerSetting.rect.height = window.innerHeight - 40
+    this.viewerSetting.rect.width = window.innerWidth;
+    this.viewerSetting.rect.height = window.innerHeight - 40;
   }
 
   public onCenterZoom() {
@@ -408,30 +449,32 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     this.getCameraAndRotation();
   }
 
-  public findOnTM(event: { type: string, id: any }) {
-    this.viewer.find(event.type, event.id)
+  public findOnTM(event: { type: string; id: any }) {
+    this.viewer.find(event.type, event.id);
   }
-  public focusOnTM(event: { type: string, id: any }) {
-    this.viewer.focus(event.type, event.id)
+  public focusOnTM(event: { type: string; id: any }) {
+    this.viewer.focus(event.type, event.id);
   }
 
-  public trackOnTM(event: { type: string, id: any }) {
-    this.viewer.track(event.type, event.id)
+  public trackOnTM(event: { type: string; id: any }) {
+    this.viewer.track(event.type, event.id);
   }
 
   public onMouseoverTM(event: CustomEvent) {
-    const payload = getCustomEventPayload(event)
+    const payload = getCustomEventPayload(event);
     // @ts-ignore
-    if (!(payload.type && payload.value && payload.event)) return
+    if (!(payload.type && payload.value && payload.event)) return;
 
     // @ts-ignore
-    const type = payload.type, object = payload.value;
+    const type = payload.type,
+      // @ts-ignore
+      object = payload.value;
 
     switch (type.toUpperCase()) {
-      case "SEGMENT":
-      case "CLUSTER":
-      case "ZCU":
-        this.onTooltipOn(event)
+      case 'SEGMENT':
+      case 'CLUSTER':
+      case 'ZCU':
+        this.onTooltipOn(event);
         break;
       case 'POINT':
       case 'MTL':
@@ -443,34 +486,34 @@ export class MapViewerComponent implements OnInit, OnDestroy {
           const pointId = (() => {
             switch (type.toUpperCase()) {
               case 'POINT':
-                return object.id
+                return object.id;
               case 'MTL':
-                return object.pointId
+                return object.pointId;
               case 'STATION':
-                return object.pointId
+                return object.pointId;
               case 'BUFFER':
-                return object.pointId
+                return object.pointId;
               case 'VEHICLE':
-                return object.curPoint
+                return object.curPoint;
             }
-          })()
+          })();
           // @ts-ignore
           this.mainColocatedObject = payload.value;
-          this.colocatedObjects = this.trackStatusService.getOverlapObjectOnPoint(pointId);
-          this.onCoLocatedObjectPanelOn(event)
+          this.colocatedObjects =
+            this.trackStatusService.getOverlapObjectOnPoint(pointId);
+          this.onCoLocatedObjectPanelOn(event);
         } else {
-          this.onTooltipOn(event)
+          this.onTooltipOn(event);
         }
         break;
 
       default:
-
         break;
     }
   }
 
   public onCoLocatedObjectPanelOn(event: CustomEvent) {
-    const payload = getCustomEventPayload(event)
+    const payload = getCustomEventPayload(event);
 
     // @ts-ignore
     const { pageX: x, pageY: y } = payload.event;
@@ -493,18 +536,21 @@ export class MapViewerComponent implements OnInit, OnDestroy {
         .style('left', 'inherit');
     }
 
-    this.showColocatedView = true
+    this.showColocatedView = true;
   }
   public onCoLocatedObjectPanelOff() {
-    this.showColocatedView = false
+    this.showColocatedView = false;
   }
 
   public onFocusFromOverlapped(object: any) {
-    this.selectedObject = object
-    this.focusOnTM({ type: object.objectType, id: object.id })
+    this.selectedObject = object;
+    this.focusOnTM({ type: object.objectType, id: object.id });
   }
-  public onContextMenuOnFromOverlapped(event: { object: any, event: Event }) {
-    this.contextMenuObject = { type: event.object.objectType, value: event.object }
+  public onContextMenuOnFromOverlapped(event: { object: any; event: Event }) {
+    this.contextMenuObject = {
+      type: event.object.objectType,
+      value: event.object,
+    };
 
     const leftThreshold = window.innerWidth - 200;
     const popupOffsetX = 10;
@@ -527,14 +573,14 @@ export class MapViewerComponent implements OnInit, OnDestroy {
         .style('left', 'inherit');
     }
 
-    this.showContextMenu = true
+    this.showContextMenu = true;
   }
 
   public onTooltipOn(event: CustomEvent) {
-    const payload = getCustomEventPayload(event)
+    const payload = getCustomEventPayload(event);
 
     // @ts-ignore
-    this.tooltipObject = { type: payload.type, value: payload.value }
+    this.tooltipObject = { type: payload.type, value: payload.value };
 
     if (this.tooltipObject.type === 'SEGMENT') {
       const { startPoint, endPoint } = this.tooltipObject.value;
@@ -563,25 +609,25 @@ export class MapViewerComponent implements OnInit, OnDestroy {
         .style('left', 'inherit');
     }
 
-    this.showTooltip = true
+    this.showTooltip = true;
   }
   public onMouseleaveTM(event: CustomEvent) {
-    this.showTooltip = false
-    this.tooltipObject = undefined
+    this.showTooltip = false;
+    this.tooltipObject = undefined;
   }
   public onFocus(event: CustomEvent) {
-    const payload = getCustomEventPayload(event)
+    const payload = getCustomEventPayload(event);
     // @ts-ignore
-    this.selectedObject = { objectType: payload.type, ...payload.value }
+    this.selectedObject = { objectType: payload.type, ...payload.value };
     // @ts-ignore
-    this.focusOnTM({ type: payload.type, id: payload.value.id })
+    this.focusOnTM({ type: payload.type, id: payload.value.id });
   }
   public onContectMenuOn(event: CustomEvent) {
-    const payload = getCustomEventPayload(event)
+    const payload = getCustomEventPayload(event);
     // @ts-ignore
-    if (!(payload.type && payload.value && payload.event)) return
+    if (!(payload.type && payload.value && payload.event)) return;
     // @ts-ignore
-    this.contextMenuObject = { type: payload.type, value: payload.value }
+    this.contextMenuObject = { type: payload.type, value: payload.value };
 
     const leftThreshold = window.innerWidth - 200;
     const popupOffsetX = 10;
@@ -604,21 +650,20 @@ export class MapViewerComponent implements OnInit, OnDestroy {
         .style('left', 'inherit');
     }
 
-    this.showContextMenu = true
+    this.showContextMenu = true;
   }
   public onBackdrop(event: CustomEvent) {
-    this.showContextMenu = false
-    this.contextMenuObject = undefined
-    this.selectedObject = undefined
-    this.viewer.dropFocus()
-    this.viewer.stopTrack()
+    this.showContextMenu = false;
+    this.contextMenuObject = undefined;
+    this.selectedObject = undefined;
+    this.viewer.dropFocus();
+    this.viewer.stopTrack();
   }
   public getCameraAndRotation() {
     // const data = this.viewer.getCameraAndRotation()
   }
-
 }
 
 function getCustomEventPayload<T>(event: CustomEvent<T[]>) {
-  return event.detail[0]
+  return event.detail[0];
 }

@@ -276,7 +276,7 @@
       </mat-card-title>
     </mat-card-header>
     <mat-card-content class="context-form">
-      <mat-slide-toggle [checked]="contextMenuObject?.value.disableState" color="primary"
+      <mat-slide-toggle [checked]="contextMenuObject?.value.disabled" color="primary"
         (change)="onChangeSegmentProperty($event.checked)">{{ "names.unuse" | translate }}</mat-slide-toggle>
     </mat-card-content>
   </mat-card>

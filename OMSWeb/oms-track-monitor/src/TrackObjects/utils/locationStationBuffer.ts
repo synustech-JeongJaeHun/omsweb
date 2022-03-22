@@ -54,4 +54,23 @@ function getPositionForBufferOrStation(bufferOrStation: Buffer | Station) {
   return { x: Math.ceil(position.x), y: Math.ceil(position.y) }
 }
 
-export { getPositionForBufferOrStation }
+function getPositionForBufferOfStationOffsetPosition(
+  bufferOrStation: Buffer | Station
+) {
+  const segment = findSegmentByPoints(
+    bufferOrStation.pointId,
+    bufferOrStation.nextPoint
+  )
+  if (segment === undefined) return undefined
+
+  const segmentPath = createPathElement(segment.d)
+  const offsetPosition = segmentPath.getPointAtLength(
+    bufferOrStation.offset
+  )
+  return offsetPosition
+}
+
+export {
+  getPositionForBufferOrStation,
+  getPositionForBufferOfStationOffsetPosition,
+}

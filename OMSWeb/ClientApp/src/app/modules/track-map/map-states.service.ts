@@ -21,12 +21,14 @@ export class MapStatesService {
   toolbarToggleEvent$ = new Subject<IMapToolbarToggleEvent>();
   toolbarCommandEvent$ = new Subject<IMapToolbarCommandEvent>();
   configChangeEvent$ = new Subject<IMapConfigChangeEvent>();
-  statusTableResizeEvent$ = new Subject<void>();
+  statusTableResizeEvent$ = new Subject<number>();
   actionState$ = new EventEmitter<IMapMouseEvent>();
   // transferCommandState$ = new Subject<TransferCommandState>();
 
   private _transferCommandState: TransferCommandState;
   private _vehicleTrackingState: VehicleTrackingState;
+
+  public statusTableHeight = 0;
 
   get preferences(): ClientPreferences {
     return this.settingSvc.globalPreferences;

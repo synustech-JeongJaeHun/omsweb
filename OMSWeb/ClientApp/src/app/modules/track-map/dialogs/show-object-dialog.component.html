@@ -26,7 +26,7 @@
     <fieldset class="option-form">
       <legend class="form-title">{{ "names.segmentWidth" | translate }}</legend>
       <div class="slider-form">
-        <mat-slider #segmentWidth color="primary" min="1" max="20" step="2" [value]="setting.segmentWidth" (change)="update({
+        <mat-slider #segmentWidth color="primary" min="1" max="20" step="1" [value]="setting.segmentWidth" (change)="update({
             group: 'Scale',
             key: 'segmentWidth',
             value: $event.value

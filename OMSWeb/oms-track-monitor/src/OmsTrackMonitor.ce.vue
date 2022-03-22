@@ -402,7 +402,7 @@ defineExpose(exposed)
         height: `${elementRectInfo.height}px`,
       }"
     />
-    <Minimap class="absolute" style="bottom: 2vw; left: 2vw" />
+    <Minimap class="absolute" style="bottom: 45px; margin-left: 45px" />
     <div
       class="absolute flex flex-row"
       style="padding: unset; bottom: 10px; right: 10px"

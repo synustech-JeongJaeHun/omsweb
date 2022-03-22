@@ -1,4 +1,4 @@
-import { getPositionForBufferOrStation } from 'src/TrackObjects/utils/locationStationBuffer'
+import { getPositionForBufferOfStationOffsetPosition } from 'src/TrackObjects/utils/locationStationBuffer'
 import { computed, Ref } from 'vue'
 import { findBufferById } from '../../buffer/buffers'
 import { findStationById } from '../../station/stations'
@@ -47,7 +47,7 @@ function useCommandPointPosition(
 
   const position = computed(() =>
     nextLocation.value
-      ? getPositionForBufferOrStation(nextLocation.value)
+      ? getPositionForBufferOfStationOffsetPosition(nextLocation.value)
       : undefined
   )
 

@@ -139,9 +139,10 @@ const commandPoint = useCommandPointPosition(
   toRef(props.vehicle, 'commandPoint')
 )
 const commandLineColor = computed(() => {
-  if (commandPoint.type.value === 'pickup') return 'rgb(40, 180, 115)'
+  if (commandPoint.type.value === 'pickup')
+    return 'rgba(40, 180, 115, 0.8)'
   else if (commandPoint.type.value === 'dropoff')
-    return 'rgb(65, 175, 250)'
+    return 'rgba(65, 175, 250, 0.8)'
   else return undefined
 })
 
@@ -214,10 +215,14 @@ onUnmounted(() => {
 
   <!-- next point line -->
   <line
-    v-if="nextPointPosition && realtimePosition"
+    v-if="
+      props.vehicle.movingState === 'M' &&
+      nextPointPosition &&
+      realtimePosition
+    "
     class="line fixed-scale-stroke"
-    stroke="rgb(255, 220, 70)"
-    stroke-width="2"
+    stroke="rgba(255, 220, 70, 0.8)"
+    stroke-width="1.5"
     stroke-linecap="round"
     :x1="realtimePosition.x"
     :y1="realtimePosition.y"
@@ -230,7 +235,7 @@ onUnmounted(() => {
     v-if="commandPoint.position.value && realtimePosition"
     class="line fixed-scale-stroke"
     :stroke="commandLineColor"
-    stroke-width="2"
+    stroke-width="1.5"
     stroke-linecap="round"
     :x1="realtimePosition.x"
     :y1="realtimePosition.y"
