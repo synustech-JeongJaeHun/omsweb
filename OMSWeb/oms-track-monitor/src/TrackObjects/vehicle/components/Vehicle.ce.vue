@@ -137,9 +137,9 @@ const commandPoint = useCommandPointPosition(
 )
 const commandLineColor = computed(() => {
   if (commandPoint.type.value === 'pickup')
-    return 'rgba(40, 180, 115, 0.8)'
+    return 'rgba(40, 180, 115, 0.4)'
   else if (commandPoint.type.value === 'dropoff')
-    return 'rgba(65, 175, 250, 0.8)'
+    return 'rgba(65, 175, 250, 0.4)'
   else return undefined
 })
 
@@ -218,9 +218,10 @@ onUnmounted(() => {
       realtimePosition
     "
     class="line fixed-scale-stroke"
-    stroke="rgba(255, 220, 70, 0.8)"
-    stroke-width="1.5"
+    stroke="rgba(255, 220, 70, 0.5)"
+    stroke-width="1"
     stroke-linecap="round"
+    shape-rendering="auto"
     :x1="realtimePosition.x"
     :y1="realtimePosition.y"
     :x2="nextPointPosition.x"
@@ -232,8 +233,9 @@ onUnmounted(() => {
     v-if="commandPoint.position.value && realtimePosition"
     class="line fixed-scale-stroke"
     :stroke="commandLineColor"
-    stroke-width="1.5"
+    stroke-width="1"
     stroke-linecap="round"
+    shape-rendering="auto"
     :x1="realtimePosition.x"
     :y1="realtimePosition.y"
     :x2="commandPoint.position.value.x"

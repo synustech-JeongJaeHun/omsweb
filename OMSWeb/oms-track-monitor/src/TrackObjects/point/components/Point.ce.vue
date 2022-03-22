@@ -43,7 +43,7 @@ function onRightClick(event: MouseEvent) {
     <g class="scale-and-reverse-rotate">
       <circle v-if="props.point.isFocused" r="15" class="focus" />
       <circle
-        r="5"
+        r="3"
         class="point-path"
         @click.left="onLeftClick()"
         @click.right="onRightClick($event)"

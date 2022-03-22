@@ -164,36 +164,36 @@ const emit = defineEmits<{
       <!-- 1. Loading  -->
       <VehicleCargoLoadingSvg
         v-if="props.cargoState === 'L'"
-        width="20"
-        height="20"
-        x="-10"
-        y="-10"
+        width="15"
+        height="15"
+        x="-7.5"
+        y="-7.5"
       />
       <!-- 2. Full  -->
       <VehicleCargoFullSvg
         v-else-if="props.cargoState === 'F'"
-        width="20"
-        height="20"
-        x="-10"
-        y="-10"
+        width="15"
+        height="15"
+        x="-7.5"
+        y="-7.5"
       />
       <!-- 3. Unloading -->
       <VehicleCargoUnloadingSvg
         v-else-if="props.cargoState === 'U'"
-        width="20"
-        height="20"
-        x="-10"
-        y="-10"
+        width="15"
+        height="15"
+        x="-7.5"
+        y="-7.5"
       />
       <!-- 4. Empty: Empty is Empty! -->
       <template v-else />
       <!-- 5. Load/Unload Failed -->
       <VehicleCargoTransferFailSvg
         v-if="props.cargoTransferResult"
-        width="26"
-        height="26"
-        x="-13"
-        y="-13"
+        width="20"
+        height="20"
+        x="-10"
+        y="-10"
       />
       <!-- cargo state end -->
 
