@@ -42,6 +42,6 @@ namespace OMSWeb.Models
     public int? HomeId { get; set; }
     public int? StationId { get; set; }
     public int? BufferId { get; set; }
-
+    public int? MtlId { get; set; }
   }
 }

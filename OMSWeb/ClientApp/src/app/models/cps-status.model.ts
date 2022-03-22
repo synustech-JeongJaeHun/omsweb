@@ -8,7 +8,7 @@ export interface ICpsStatusRow {
   cps_current_track: number;
   cps_frequency: number;
   cps_temp_radiator: number;
-  cps_temp_inernal: number;
+  cps_temp_internal: number;
   cps_sync: number;
   cps_backup_id: number;
   cps_error_code: number;

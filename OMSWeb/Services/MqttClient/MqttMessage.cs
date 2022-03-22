@@ -30,6 +30,8 @@ namespace OMSWeb.Services.MqttClient
         public const string ACTION_STOP = "stop";                           // estop
         public const string ACTION_INITIALIZE = "initialize";               // set vehicle auto
         public const string ACTION_STATUS = "status";
+        public const string ACTION_MTL_IN = "mtl_in";
+        public const string ACTION_MTL_OUT = "mtl_out";
         public const string ACTION_RAIL_IN = "rail_in";
         public const string ACTION_RAIL_OUT = "rail_out";
         public const string ACTION_REMOVE = "remove";
@@ -80,6 +82,8 @@ namespace OMSWeb.Services.MqttClient
                 case ACTION_STOP:
                 case ACTION_INITIALIZE:
                 case ACTION_STATUS:
+                case ACTION_MTL_IN:
+                case ACTION_MTL_OUT:
                 case ACTION_RAIL_IN:
                 case ACTION_RAIL_OUT:
                 case ACTION_REMOVE:
@@ -140,6 +144,8 @@ namespace OMSWeb.Services.MqttClient
                 case ACTION_STOP:
                 case ACTION_INITIALIZE:
                 case ACTION_STATUS:
+                case ACTION_MTL_IN:
+                case ACTION_MTL_OUT:
                 case ACTION_RAIL_IN:
                 case ACTION_RAIL_OUT:
                 case ACTION_REMOVE:
@@ -303,6 +309,12 @@ namespace OMSWeb.Services.MqttClient
             {
                 data["id"] = GetWarningId(command);
                 data["ack_by"] = GetWarningAckBy(command);
+            }
+            else if (command.Action == ACTION_MTL_IN || command.Action == ACTION_MTL_OUT)
+            {
+                data["vehicle_id"] = GetVehicleId(command);
+                if (command.MtlId != null)
+                    data["mtl_id"] = command.MtlId;
             }
             else if (command.Action == ACTION_RESET || command.Action == ACTION_STOP ||
                      command.Action == ACTION_RAIL_IN || command.Action == ACTION_RAIL_OUT ||

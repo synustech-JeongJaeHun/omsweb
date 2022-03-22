@@ -162,7 +162,7 @@ export const defaultControlTable: ControlTable = {
   "cps_current_track": true,
   "cps_frequency": true,
   "cps_temp_radiator": true,
-  "cps_temp_inernal": true,
+  "cps_temp_internal": true,
   "cps_sync": true,
   "cps_backup_id": true,
   "cps_error_code": true,
