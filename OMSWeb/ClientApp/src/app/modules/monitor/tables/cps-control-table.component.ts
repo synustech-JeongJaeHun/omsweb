@@ -1,7 +1,7 @@
 import { Component, HostListener, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import DataSource from 'devextreme/data/data_source';
 
-import { IZcuStatusRow } from '../../../models/zcu-status.model';
+import { ICpsStatusRow } from '../../../models/cps-status.model';
 import { StatusService } from '../../../services/status.service';
 import { SettingsService } from '../../../services/settings.service';
 import { forkJoin, Subject } from 'rxjs';

@@ -179,7 +179,7 @@ namespace OMSWeb.Services.MqttClient
 
         public object GetVehicleId(CommandMessageDto command)
         {
-            if (command.VehicleId != null && command.VehicleIds == null)
+            if (command.VehicleId != null && (command.VehicleIds == null || command.VehicleIds.Length == 0))
             {
                 int numericValue;
                 bool isNumber = int.TryParse(command.VehicleId, out numericValue);
