@@ -1,34 +1,30 @@
 <div class="grid-actions" *ngIf="hasControlAccess">
   <button *ngIf="hasPermission(permissionEnums.EstopVehicle)" mat-stroked-button color="warn" class="dense accent"
-    [disabled]="!canControl" (click)="onEStop()">
+          [disabled]="!canControl" (click)="onEStop()">
     {{ "names.estop" | translate }}
   </button>
   <button *ngIf="hasPermission(permissionEnums.ResetVehicle)" mat-stroked-button color="primary" class="dense accent"
-    [disabled]="!canControl" (click)="onReset()">
+          [disabled]="!canControl" (click)="onReset()">
     {{ "names.reset" | translate }}
   </button>
   <button *ngIf="hasPermission(permissionEnums.AutoVehicle)" mat-stroked-button color="primary" class="dense accent"
-    [disabled]="!canControl" (click)="onSetAuto()">
+          [disabled]="!canControl" (click)="onSetAuto()">
     {{ "names.auto" | translate }}
   </button>
-  <button *ngIf="hasPermission(permissionEnums.AutoVehicle)" mat-stroked-button color="primary" class="dense accent"
-          [disabled]="!canControl" (click)="onSetAutoReverse()">
-    {{ "names.MTLOut" | translate }}
-  </button>
   <button *ngIf="hasPermission(permissionEnums.HostOrderEnable)" mat-stroked-button color="primary" class="dense"
-    [disabled]="!canControl" (click)="onChangeHostOrderActivity()">
+          [disabled]="!canControl" (click)="onChangeHostOrderActivity()">
     {{ "names.hostOrderDisable" | translate }}
   </button>
   <button *ngIf="hasPermission(permissionEnums.PushEnable)" mat-stroked-button color="primary" class="dense"
-    [disabled]="!canControl" (click)="onChangePushActivity()">
+          [disabled]="!canControl" (click)="onChangePushActivity()">
     {{ "names.pushDisable" | translate }}
   </button>
   <button *ngIf="hasPermission(permissionEnums.RailIn)" mat-stroked-button color="primary" class="dense"
-    [disabled]="!canControl" (click)="onRailIn()">
+          [disabled]="!canControl" (click)="onRailIn()">
     {{ "names.railIn" | translate }}
   </button>
   <button *ngIf="hasPermission(permissionEnums.RailOut)" mat-stroked-button color="primary" class="dense"
-    [disabled]="!canControl" (click)="onRailOut()">
+          [disabled]="!canControl" (click)="onRailOut()">
     {{ "names.railOut" | translate }}
   </button>
 </div>

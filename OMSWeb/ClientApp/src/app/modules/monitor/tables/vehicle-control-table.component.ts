@@ -111,6 +111,7 @@ export class VehicleControlTableComponent implements OnInit, OnDestroy {
         ok && this.messageSvc.sendVehicleCommand({ action: 'initialize' }, this.selectedItems).subscribe();
       });
   }
+  /*
   onSetAutoReverse() {
     if (!this.canControl) return;
     this.dialogSvc
@@ -119,6 +120,7 @@ export class VehicleControlTableComponent implements OnInit, OnDestroy {
         ok && this.messageSvc.sendVehicleCommand({ action: 'initialize', direction: 'reverse' }, this.selectedItems).subscribe();
       });
   }
+  */
   onChangeHostOrderActivity() {
     if (!this.canControl) return;
     this.enableRows = [];
