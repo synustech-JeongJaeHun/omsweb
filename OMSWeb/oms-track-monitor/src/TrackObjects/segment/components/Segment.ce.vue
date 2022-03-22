@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Segment } from '../types/Segment'
-import { computed, inject, ref, watch, watchEffect } from 'vue'
+import { inject, ref, watch } from 'vue'
 import { RootEmitInjectionKey, RootEmits } from 'src/types/RootEmits'
 import { getAngleFromTwoPoints } from 'src/utils/angle'
 import { deepCopy } from 'src/utils/deepCopy'
@@ -11,25 +11,6 @@ const props = defineProps<{
 const emit = inject<RootEmits>(RootEmitInjectionKey)!
 
 const pathElement = ref<SVGPathElement>()
-
-const segmentDirectionInfo = computed(() => {
-  if (pathElement.value === undefined) return
-
-  const halfLength = pathElement.value.getTotalLength() / 2
-  const halfPosition = pathElement.value.getPointAtLength(halfLength)
-
-  const forwardPosition = pathElement.value.getPointAtLength(
-    halfLength + 40
-  )
-  const backwardPosition = pathElement.value.getPointAtLength(
-    halfLength - 40
-  )
-
-  return {
-    position: halfPosition,
-    angle: getAngleFromTwoPoints(backwardPosition, forwardPosition),
-  }
-})
 
 const position = ref<DOMPoint>()
 const angle = ref<number>()
