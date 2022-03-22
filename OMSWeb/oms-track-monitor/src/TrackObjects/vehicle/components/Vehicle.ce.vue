@@ -71,9 +71,6 @@ watch(
       : undefined
     currentSegment.value = segment ?? currentSegment.value
 
-    // v => realtime
-    realtimePosition.value = newPosition
-
     makeDInUpdateWorker.postMessage(
       deepCopy({
         updateType: props.vehicle.updateType,

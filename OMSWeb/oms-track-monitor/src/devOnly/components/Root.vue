@@ -24,8 +24,6 @@ watchEffect(async () => {
     res.json()
   )
 
-  console.log(omsTrackMonitorMethods.value)
-
   // @ts-ignore
   omsTrackMonitorMethods.value.setTrack({
     ...trackData,
