@@ -11,7 +11,7 @@ function findVehicleById(id: number) {
 }
 
 function initVehicles(vs: IVehicle[]) {
-  vehicles.value = vs
+  vehicles.value = vs.map((v) => ({ ...v }))
   vehicles.value.forEach((v) => vehicleMap.set(v.id, v))
 }
 

@@ -44,7 +44,12 @@ import { findMtlById, mtls } from './TrackObjects/mtl/mtls'
 import { findSegmentById, segments } from './TrackObjects/segment/segments'
 import { clusters } from './TrackObjects/cluster/clusters'
 import { findStationById, stations } from './TrackObjects/station/stations'
-import { findZcuById, updateExistZcu, zcus } from './TrackObjects/zcu/zcus'
+import {
+  findZcuById,
+  initZcus,
+  setZcu,
+  deleteZcu,
+} from './TrackObjects/zcu/zcus'
 import {
   deleteVehicle,
   findVehicleById,
@@ -214,7 +219,8 @@ const exposed: IOmsTrackMonitor = {
       segments.value
     )
     stations.value = t.stations ?? []
-    zcus.value = t.zcus ?? []
+    initZcus(t.zcus)
+    // zcus.value = t.zcus ?? []
     // vehicles.value = t.vehicles ?? []
     initVehicles(t.vehicles ?? [])
     initSegmentDisableds(t.segmentDisabled ?? [])
@@ -360,16 +366,12 @@ const exposed: IOmsTrackMonitor = {
     }
   },
   updateZcu(op, z) {
-    const zcu = findZcuById(z.id)
     switch (op) {
       case 'UPDATE':
-        if (zcu) updateExistZcu(zcu, z)
+        setZcu(z)
         break
       case 'DELETE':
-        if (zcu) {
-          const index = zcus.value.indexOf(zcu)
-          zcus.value.splice(index, 1)
-        }
+        deleteZcu(z)
       default:
         break
     }
