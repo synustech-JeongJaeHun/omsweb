@@ -72,11 +72,14 @@ export class VehicleControlComponent implements OnInit {
       .subscribe((ok) => {
         if (ok) {
           // @TODO call update
-
-          // use this property
-          this.updateMapName;
-          this.updateMapVersion;
-          this.updateFileName;
+          this.messageSvc
+            .sendMapUpdateCommand({
+              action: 'map_update',
+              map_db_name: this.updateMapName,
+              map_source_file: this.updateFileName,
+              //this.updateMapVersion;
+            })
+            .subscribe();
 
           this.isUpdating = true;
         }

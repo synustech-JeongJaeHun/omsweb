@@ -39,17 +39,17 @@
       </oms-buffer-control-table>
     </mat-tab>
     <!-- Stations / Buffers 추가 -->
-    <!-- cps 추가 -->
-    <mat-tab [label]="'names.cps' | translate" *ngIf="canControl && canDisplayTable('cps')">
-      <oms-zcu-control-table [tableHeight]="tableHeight">
-      </oms-zcu-control-table>
-    </mat-tab>
-    <!-- cps 추가 -->
     <!-- Zcu 추가 -->
     <mat-tab [label]="'names.zcus' | translate" *ngIf="canControl && canDisplayTable('zcus')">
       <oms-zcu-control-table [tableHeight]="tableHeight">
       </oms-zcu-control-table>
     </mat-tab>
     <!-- Zcu 추가 -->
+    <!-- cps 추가 -->
+    <mat-tab [label]="'names.cps' | translate" *ngIf="canControl && canDisplayTable('cps')">
+      <oms-cps-control-table [tableHeight]="tableHeight">
+      </oms-cps-control-table>
+    </mat-tab>
+    <!-- cps 추가 -->
   </mat-tab-group>
 </div>

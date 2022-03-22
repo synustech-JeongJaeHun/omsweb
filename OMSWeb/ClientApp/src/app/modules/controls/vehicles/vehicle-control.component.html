@@ -1,7 +1,7 @@
 <h2>{{ "names.mapInfo" | translate }}</h2>
 
 <div class="flex-row">
-  <mat-form-field appearance="outline" >
+  <mat-form-field appearance="outline">
     <mat-label>{{ "names.mapName" | translate }}</mat-label>
     <input [readonly]="true" matInput [value]="currentMapName" />
   </mat-form-field>
@@ -18,7 +18,7 @@
 <h2>{{ "names.mapUpdate" | translate }}</h2>
 
 <div class="flex-row">
-  <mat-form-field appearance="outline" >
+  <mat-form-field appearance="outline">
     <mat-label>{{ "names.mapName" | translate }}</mat-label>
     <input matInput [(ngModel)]="updateMapName" />
   </mat-form-field>
@@ -47,7 +47,7 @@
 </div>
 
 <dx-data-grid id="dataGrid" [dataSource]="dataSource" [columnAutoWidth]="false" [remoteOperations]="true" width="100%" [height]="250"
-  [showBorders]="true" [hoverStateEnabled]="true" [(selectedRowKeys)]="selectedIds">
+              [showBorders]="true" [hoverStateEnabled]="true" [(selectedRowKeys)]="selectedIds">
   <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
   <dxo-paging [pageSize]="20"></dxo-paging>
   <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20 ,50, 100, 200]" [showInfo]="true" visible="true">
@@ -61,5 +61,5 @@
   </dxi-column>
   <dxi-column [width]="100" dataType="string" dataField="map" [caption]="'names.mapDb' | translate"></dxi-column>
   <dxi-column [width]="100" dataType="string" dataField="mapVersion" [caption]="'names.mapVersion' | translate"></dxi-column>
-  <dxi-column [width]="100" [caption]="'names.mapVersion' | translate"  [calculateCellValue]="calculateConflict" ></dxi-column>
+  <dxi-column [width]="100" [caption]="'names.mapVersion' | translate" [calculateCellValue]="calculateConflict"></dxi-column>
 </dx-data-grid>

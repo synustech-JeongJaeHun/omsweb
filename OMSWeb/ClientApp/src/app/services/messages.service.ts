@@ -10,6 +10,7 @@ import {
   IAllCommandMessage,
   IAiModeCommandMessage,
   ITscStateCommandMessage,
+  IMapUpdateCommandMessage,
   IControlStateCommandMessage,
   IAlarmClearCommandMessage,
   IWarningClearCommandMessage,
@@ -86,6 +87,11 @@ export class MessagesService {
   sendServerModuleControlCommand(command: IControlStateCommandMessage): Observable<void> {
     command.type = 'MODULE';
     return this.sendCommand<IControlStateCommandMessage>(command);
+  }
+
+  sendMapUpdateCommand(command: IMapUpdateCommandMessage): Observable<void> {
+    command.type = 'MAPUPDATE';
+    return this.sendCommand<IMapUpdateCommandMessage>(command);
   }
 
   sendVehicleAllCommand(command: IAllCommandMessage): Observable<void> {

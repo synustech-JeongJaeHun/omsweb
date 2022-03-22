@@ -2,6 +2,7 @@
 using OMSWeb.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -19,6 +20,7 @@ namespace OMSWeb.Services.MqttClient
         public const string REQUEST_ZCU = "zcu";
         public const string REQUEST_ORDER = "order";
 
+        public const string ACTION_MAP_UPDATE = "map_update";
         public const string ACTION_CONTROL_STATE = "control_state";
         public const string ACTION_TSC_STATE = "tsc_state";
         public const string ACTION_AI_MODE = "ai_mode";
@@ -71,6 +73,7 @@ namespace OMSWeb.Services.MqttClient
 
             switch (command.Action)
             {
+                case ACTION_MAP_UPDATE:
                 case ACTION_CONTROL_STATE:
                 case ACTION_TSC_STATE:
                 case ACTION_AI_MODE:
@@ -132,6 +135,7 @@ namespace OMSWeb.Services.MqttClient
                 case ACTION_TSC_STATE:
                     return REQUEST_HAS;
 
+                case ACTION_MAP_UPDATE:
                 case ACTION_AI_MODE:
                 case ACTION_PAUSE:
                 case ACTION_RESUME:
@@ -289,6 +293,37 @@ namespace OMSWeb.Services.MqttClient
             {
                 if (command.State != null)
                     data["state"] = command.State;
+            }
+            else if (command.Action == ACTION_MAP_UPDATE)
+            {
+                /*
+                if (command.map_db_name != null)
+                    data["map_db_name"] = command.map_db_name;
+
+                if (command.map_source_file != null)
+                    data["map_source_file"] = command.map_source_file;
+                */
+                if (command.map_db_name != null && command.map_source_file != null)
+                {
+                    // kill oms & vas
+                    foreach(Process process in Process.GetProcesses())
+                    {
+                        if (process.ProcessName.ToLower() == "oms_srv")
+                            process.Kill();
+
+                        if (process.ProcessName.ToLower() == "vas")
+                            process.Kill();
+                    }
+
+                    // do map update !!
+                    ProcessStartInfo psi = new ProcessStartInfo();
+                    psi.FileName = String.Format("{0}oms-config.exe", @"c:\oms\bin\");
+                    psi.Arguments = String.Format("update --name {0} --map {1}{2}", 
+                                        command.map_db_name, @"c:\oms\map\", command.map_source_file);
+                    Process.Start(psi);
+                }
+
+                return null;
             }
             else if (command.Action == ACTION_AI_MODE)
             {

@@ -43,5 +43,7 @@ namespace OMSWeb.Models
     public int? StationId { get; set; }
     public int? BufferId { get; set; }
     public int? MtlId { get; set; }
+    public string map_db_name { get; set; }
+    public string map_source_file { get; set; }
   }
 }

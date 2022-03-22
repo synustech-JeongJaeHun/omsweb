@@ -3,6 +3,11 @@ export interface ICommandMessage {
   action: string;
 }
 
+export interface IMapUpdateCommandMessage extends ICommandMessage {
+  map_db_name?: string;
+  map_source_file?: string;
+}
+
 export interface IControlStateCommandMessage extends ICommandMessage {
   state?: string;
 }
