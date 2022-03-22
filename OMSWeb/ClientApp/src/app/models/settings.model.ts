@@ -151,7 +151,30 @@ export const defaultControlTable: ControlTable = {
   "zcus_errorCode": true,
   "zcus_passVehicle": true,
   "zcus_vehicleCount": true,
-  "zcus_vehicleInfo": true
+  "zcus_vehicleInfo": true,
+
+  "cps": true,
+  "cps_can_id": true,
+  "cps_converter_id": true,
+  "cps_status": true,
+  "cps_voltage": true,
+  "cps_current_igbt": true,
+  "cps_current_track": true,
+  "cps_frequency": true,
+  "cps_temp_radiator": true,
+  "cps_temp_inernal": true,
+  "cps_sync": true,
+  "cps_backup_id": true,
+  "cps_error_code": true,
+  "cps_voltage_rs": true,
+  "cps_voltage_st": true,
+  "cps_voltage_tr": true,
+  "cps_current_r": true,
+  "cps_current_s": true,
+  "cps_current_t": true,
+  "cps_total_kw": true,
+  "cps_wh": true
+
 }
 
 export class ClientPreferences implements IPreferences {
