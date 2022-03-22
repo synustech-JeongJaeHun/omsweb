@@ -97,7 +97,12 @@ export interface IMapMouseEvent {
   position?: ICoordinate;
 }
 
-export type TransferCommandCategoryType = 'fromTo' | 'from' | 'to' | 'move';
+export type TransferCommandCategoryType =
+  | 'fromTo'
+  | 'from'
+  | 'to'
+  | 'move'
+  | 'mtl';
 
 export class TransferCommandState {
   active: boolean = false;
@@ -107,24 +112,29 @@ export class TransferCommandState {
   point?: ILookupUnit;
   source?: ILookupUnit;
   dest?: ILookupUnit;
+  mtl?: ILookupUnit;
   carrier?: string;
+  mtlInOut: boolean = true;
 
   get autoDisabled(): boolean {
     return !this.active || ['fromTo', 'from'].includes(this.category);
   }
   get vehicleDisabled(): boolean {
     return (
-      !this.active || (this.auto && ['fromTo', 'from'].includes(this.category))
+      !this.active ||
+      (this.auto && ['fromTo', 'from', 'to'].includes(this.category))
     );
   }
   get pointDisabled(): boolean {
-    return !this.active || ['fromTo', 'from', 'to'].includes(this.category);
+    return (
+      !this.active || ['fromTo', 'from', 'to', 'mtl'].includes(this.category)
+    );
   }
   get sourceDisabled(): boolean {
-    return !this.active || ['to', 'move'].includes(this.category);
+    return !this.active || ['to', 'move', 'mtl'].includes(this.category);
   }
   get destDisabled(): boolean {
-    return !this.active || ['from'].includes(this.category);
+    return !this.active || ['from', 'mtl'].includes(this.category);
   }
   get carrierDisabled(): boolean {
     return !this.active || !this.pointDisabled;

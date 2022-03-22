@@ -40,6 +40,8 @@ export interface IVehicleCommandMessage extends ICommandMessage {
   destination?: string;
   mode?: string;
   direction?: string;
+
+  mtlId?: string;
 }
 
 export interface ITrackCommandMessage extends ICommandMessage {
@@ -96,12 +98,12 @@ export interface IAllSegmentCommandMessage extends ICommandMessage {
 }
 
 export interface ISettingZcuCommandMessage extends ICommandMessage {
-  action: "zcu-setting"
-  zcuIds: number[]
+  action: 'zcu-setting';
+  zcuIds: number[];
   zcuUsingType:
-  | 'none' // NOT_USE
-  | 'hw' // USING_HW
-  | 'sw' // USING_SW
+    | 'none' // NOT_USE
+    | 'hw' // USING_HW
+    | 'sw'; // USING_SW
 }
 
 export interface IZcuCommandMessage extends ICommandMessage {

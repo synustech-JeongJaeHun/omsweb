@@ -50,9 +50,9 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
   readonly permissionEnums: typeof PermissionEnums = PermissionEnums;
 
   @Output() centerZoom = new EventEmitter<void>();
-  @Output() find = new EventEmitter<{ type: string, id: any }>()
-  @Output() focus = new EventEmitter<{ type: string, id: any }>()
-  @Output() track = new EventEmitter<{ type: string, id: any }>()
+  @Output() find = new EventEmitter<{ type: string; id: any }>();
+  @Output() focus = new EventEmitter<{ type: string; id: any }>();
+  @Output() track = new EventEmitter<{ type: string; id: any }>();
 
   @ViewChild('btnSearch', { read: ElementRef }) btnSearch: ElementRef;
   @ViewChild('btnTrack', { read: ElementRef }) btnTrack: ElementRef;
@@ -90,9 +90,9 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private $t: TranslateService,
     public trackMonitorSettingService: TrackMonitorSettingService
-  ) { }
+  ) {}
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   ngOnDestroy(): void {
     this._searchDlg &&
@@ -138,11 +138,13 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
       position: { left: this.tooltipOffset, top: `${rect.top}px` },
     });
 
-    this._searchDlg.afterClosed().subscribe((payload: { type: string, id: any }) => {
-      if (!payload || !payload.type || !payload.id) return;
-      this.find.emit({ type: payload.type, id: payload.id })
-      this.focus.emit({ type: payload.type, id: payload.id })
-    });
+    this._searchDlg
+      .afterClosed()
+      .subscribe((payload: { type: string; id: any }) => {
+        if (!payload || !payload.type || !payload.id) return;
+        this.find.emit({ type: payload.type, id: payload.id });
+        this.focus.emit({ type: payload.type, id: payload.id });
+      });
   }
 
   onTrackVehicle() {
@@ -163,9 +165,9 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
 
     this._trackDlg.afterClosed().subscribe((payload?: number) => {
       if (!payload) return;
-      this.find.emit({ type: 'vehicle', id: payload })
-      this.focus.emit({ type: 'vehicle', id: payload })
-      this.track.emit({ type: 'vehicle', id: payload })
+      this.find.emit({ type: 'vehicle', id: payload });
+      this.focus.emit({ type: 'vehicle', id: payload });
+      this.track.emit({ type: 'vehicle', id: payload });
     });
   }
 
@@ -177,7 +179,7 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
 
     const rect: DOMRect = this.btnCommand.nativeElement.getBoundingClientRect();
     this._cmdDlg = this.dialog.open(CommandDialogComponent, {
-      width: '350px',
+      width: '440px',
       autoFocus: false,
       hasBackdrop: false,
       disableClose: true,

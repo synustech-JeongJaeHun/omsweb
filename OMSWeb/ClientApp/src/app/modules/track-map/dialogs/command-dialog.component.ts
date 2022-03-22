@@ -3,7 +3,10 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { DialogService } from '../../../services/dialog.service';
 import { MessagesService } from '../../../services/messages.service';
-import { IOrderCommandMessage } from '../../../models/command.model';
+import {
+  IOrderCommandMessage,
+  IVehicleCommandMessage,
+} from '../../../models/command.model';
 import {
   TransferCommandCategoryType,
   TransferCommandState,
@@ -19,7 +22,7 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
   currentTab = 0;
   isAuto = true;
 
-  tabs: TransferCommandCategoryType[] = ['fromTo', 'from', 'to', 'move'];
+  tabs: TransferCommandCategoryType[] = ['fromTo', 'from', 'to', 'move', 'mtl'];
 
   get canApply(): boolean {
     return true;
@@ -34,7 +37,7 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
     private dialogSvc: DialogService,
     private messageSvc: MessagesService,
     private t$: TranslateService
-  ) { }
+  ) {}
 
   ngOnDestroy(): void {
     this.statesSvc.transferCommandState.active = false;
@@ -66,7 +69,27 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
       dest,
       destDisabled,
       carrier,
+      mtl,
+      mtlInOut,
     } = this.commandState;
+
+    if (category === 'mtl') {
+      const cmd: IVehicleCommandMessage = {
+        action: mtlInOut ? 'mtl_in' : 'mtl_out',
+        vehicleId: String(vehicle.id),
+        mtlId: String(mtl.id),
+      };
+
+      this.dialogSvc
+        .confirm({ body: this.t$.instant('messages.confirmCommand') })
+        .subscribe((ok) => {
+          if (ok) {
+            this.messageSvc.sendVehicleCommand(cmd).subscribe();
+          }
+        });
+
+      return;
+    }
 
     const cmd: IOrderCommandMessage = {
       type: 'ORDER',
@@ -77,10 +100,11 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
     };
 
     if (category == 'move') {
-      if (!pointDisabled && point) !pointDisabled && (cmd.locationMoveType = point.objectType);
-      else if (!destDisabled && dest) !destDisabled && (cmd.locationMoveType = dest.objectType);
-    }
-    else {
+      if (!pointDisabled && point)
+        !pointDisabled && (cmd.locationMoveType = point.objectType);
+      else if (!destDisabled && dest)
+        !destDisabled && (cmd.locationMoveType = dest.objectType);
+    } else {
       !pointDisabled && (cmd.locationMoveType = point.objectType);
       !destDisabled && (cmd.locationDropoffType = dest.objectType);
     }
@@ -88,10 +112,11 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 
     !vehicleDisabled && (cmd.vehicleId = vehicle.id);
     if (category == 'move') {
-      if (!pointDisabled && point) !pointDisabled && (cmd.locationMove = point.id.toString());
-      else if (!destDisabled && dest) !destDisabled && (cmd.locationMove = dest.id.toString());
-    }
-    else {
+      if (!pointDisabled && point)
+        !pointDisabled && (cmd.locationMove = point.id.toString());
+      else if (!destDisabled && dest)
+        !destDisabled && (cmd.locationMove = dest.id.toString());
+    } else {
       !pointDisabled && (cmd.locationMove = point.id.toString());
       !destDisabled && (cmd.locationDropoff = dest.id.toString());
     }
@@ -100,11 +125,13 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
     //this.dialog.close(cmd);
     //this.messageSvc.sendOrderCommand(cmd).subscribe();
 
-    this.dialogSvc.confirm({ body: this.t$.instant('messages.confirmCommand') }).subscribe((ok) => {
-      if (ok) {
-        this.messageSvc.sendOrderCommand(cmd).subscribe();
-      }
-    });
+    this.dialogSvc
+      .confirm({ body: this.t$.instant('messages.confirmCommand') })
+      .subscribe((ok) => {
+        if (ok) {
+          this.messageSvc.sendOrderCommand(cmd).subscribe();
+        }
+      });
   }
 
   private validate(): undefined | string {
@@ -126,10 +153,9 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 
     if (!pointDisabled && !point) {
       if (category == 'move') {
-        if (!destDisabled && !dest) return this.t$.instant('messages.required', { field: 'Point' });
-      }
-      else
-        return this.t$.instant('messages.required', { field: 'Point' });
+        if (!destDisabled && !dest)
+          return this.t$.instant('messages.required', { field: 'Point' });
+      } else return this.t$.instant('messages.required', { field: 'Point' });
     }
 
     if (!sourceDisabled && !source)
@@ -137,10 +163,9 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 
     if (!destDisabled && !dest) {
       if (category == 'move') {
-        if (!pointDisabled && !point) return this.t$.instant('messages.required', { field: 'Dest' });
-      }
-      else
-        return this.t$.instant('messages.required', { field: 'Dest' });
+        if (!pointDisabled && !point)
+          return this.t$.instant('messages.required', { field: 'Dest' });
+      } else return this.t$.instant('messages.required', { field: 'Dest' });
     }
 
     return;

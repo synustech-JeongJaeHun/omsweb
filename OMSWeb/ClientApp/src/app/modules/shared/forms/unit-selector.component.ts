@@ -39,7 +39,7 @@ export class UnitSelectorComponent implements OnInit, OnChanges {
   inputControl = new FormControl();
   targetOptions$: Observable<ILookupUnit[]>;
 
-  constructor(private trackStatusService: TrackStatusService) { }
+  constructor(private trackStatusService: TrackStatusService) {}
   ngOnChanges(changes: SimpleChanges): void {
     const { disabled, selectedUnit } = changes;
     if (disabled) {
@@ -49,7 +49,8 @@ export class UnitSelectorComponent implements OnInit, OnChanges {
     }
 
     if (selectedUnit) {
-      selectedUnit.currentValue && this.inputControl.setValue(selectedUnit.currentValue);
+      selectedUnit.currentValue &&
+        this.inputControl.setValue(selectedUnit.currentValue);
     }
   }
 
@@ -59,30 +60,70 @@ export class UnitSelectorComponent implements OnInit, OnChanges {
       distinctUntilChanged(),
       // switchMap((value) => this.idSvc.lookupUnitsByLogicalId(this.findScopes, value))
       switchMap((value) => {
-        const result: ILookupUnit[] = []
+        const result: ILookupUnit[] = [];
         if (this.findScopes.includes('vehicles')) {
-          result.push(...this.trackStatusService.trackData.vehicles
-            .filter(v => v.logicalId.includes(value))
-            .map(v => ({ id: v.id, objectType: "Vehicle", logicalId: v.logicalId, physicalId: v.physicalId })))
+          result.push(
+            ...this.trackStatusService.trackData.vehicles
+              .filter((v) => v.logicalId.includes(value))
+              .map((v) => ({
+                id: v.id,
+                objectType: 'Vehicle',
+                logicalId: v.logicalId,
+                physicalId: v.physicalId,
+              }))
+          );
         }
         if (this.findScopes.includes('points')) {
-          result.push(...this.trackStatusService.trackData.points
-            .filter(p => p.logicalId.includes(value))
-            .map(p => ({ id: p.id, objectType: "Point", logicalId: p.logicalId, physicalId: p.physicalId })))
+          result.push(
+            ...this.trackStatusService.trackData.points
+              .filter((p) => p.logicalId.includes(value))
+              .map((p) => ({
+                id: p.id,
+                objectType: 'Point',
+                logicalId: p.logicalId,
+                physicalId: p.physicalId,
+              }))
+          );
         }
         if (this.findScopes.includes('stations')) {
-
-          result.push(...this.trackStatusService.trackData.stations
-            .filter(s => s.logicalId.includes(value))
-            .map(s => ({ id: s.id, objectType: "Station", logicalId: s.logicalId, physicalId: s.physicalId })))
+          result.push(
+            ...this.trackStatusService.trackData.stations
+              .filter((s) => s.logicalId.includes(value))
+              .map((s) => ({
+                id: s.id,
+                objectType: 'Station',
+                logicalId: s.logicalId,
+                physicalId: s.physicalId,
+              }))
+          );
         }
         if (this.findScopes.includes('buffers')) {
-          result.push(...this.trackStatusService.trackData.buffers
-            .filter(b => b.logicalId.includes(value))
-            .map(b => ({ id: b.id, objectType: "Buffer", logicalId: b.logicalId, physicalId: b.physicalId })))
+          result.push(
+            ...this.trackStatusService.trackData.buffers
+              .filter((b) => b.logicalId.includes(value))
+              .map((b) => ({
+                id: b.id,
+                objectType: 'Buffer',
+                logicalId: b.logicalId,
+                physicalId: b.physicalId,
+              }))
+          );
         }
 
-        return of(result)
+        if (this.findScopes.includes('mtls')) {
+          result.push(
+            ...this.trackStatusService.trackData.mtls
+              .filter((m) => m.logicalId.includes(value))
+              .map((m) => ({
+                id: m.id,
+                objectType: 'Mtl',
+                logicalId: m.logicalId,
+                physicalId: m.physicalId,
+              }))
+          );
+        }
+
+        return of(result);
       })
     );
   }
