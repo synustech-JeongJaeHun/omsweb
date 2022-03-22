@@ -1,17 +1,24 @@
-import { ref } from "vue";
-import { setSegmentDisabled } from "./segments";
+import { ref } from 'vue'
+import { setSegmentDisabled } from './segments'
 import { SegmentDisabled } from './types/SegmentDisabled'
 
 const segmentDisableds = ref<SegmentDisabled[]>([])
-const segmentDisabledMap = new Map<SegmentDisabled['id'], SegmentDisabled>()
+const segmentDisabledMap = new Map<
+  SegmentDisabled['id'],
+  SegmentDisabled
+>()
 
 function initSegmentDisableds(sds: SegmentDisabled[]) {
-  sds.forEach(insertSegmentDisabled);
+  sds.forEach(insertSegmentDisabled)
 }
 
 function insertSegmentDisabled(segmentDisabled: SegmentDisabled) {
   // segments
-  setSegmentDisabled(segmentDisabled.segmentId, true)
+  setSegmentDisabled(
+    segmentDisabled.segmentId,
+    true,
+    segmentDisabled.disabledBy.toUpperCase().includes('MTL')
+  )
 
   // segmentDisableds
   segmentDisableds.value.push(segmentDisabled)
@@ -23,7 +30,7 @@ function deleteSegmentDisabled(id: SegmentDisabled['id']) {
 
   if (segmentDisabled) {
     // segments
-    setSegmentDisabled(segmentDisabled.segmentId, false)
+    setSegmentDisabled(segmentDisabled.segmentId, false, false)
 
     // segmentDisableds
     const index = segmentDisableds.value.indexOf(segmentDisabled)
@@ -38,7 +45,9 @@ function findSegmentDisabledById(id: SegmentDisabled['id']) {
 }
 
 export {
-  segmentDisableds, findSegmentDisabledById,
-  initSegmentDisableds
-  , insertSegmentDisabled, deleteSegmentDisabled
-} 
+  segmentDisableds,
+  findSegmentDisabledById,
+  initSegmentDisableds,
+  insertSegmentDisabled,
+  deleteSegmentDisabled,
+}

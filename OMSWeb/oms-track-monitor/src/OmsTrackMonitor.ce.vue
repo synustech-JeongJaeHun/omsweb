@@ -450,6 +450,13 @@ defineExpose(exposed)
     'parseStringProp(ColorDefault.disabledSegment, props.disabledSegmentColor)'
   );
 }
+#segment-layer
+  .segment[data-is-disabled='true' i][data-is-disabled-by-mtl='true' i]
+  .segment-path {
+  stroke: v-bind(
+    'parseStringProp(ColorDefault.disabledSegment, props.normalSegmentColor)'
+  );
+}
 
 #segment-layer .segment .segment-direction {
   stroke: v-bind(

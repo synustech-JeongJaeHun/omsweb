@@ -56,6 +56,7 @@ function onRightClick(event: MouseEvent) {
   <svg
     class="overflow-visible cursor-pointer segment"
     :data-is-disabled="props.segment.disabled"
+    :data-is-disabled-by-mtl="props.segment.disabledByMtl"
   >
     <path
       v-if="props.segment.isFocused"
