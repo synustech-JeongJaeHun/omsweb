@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed, provide, readonly, ref, toRefs, watch } from 'vue'
 import { makeFsProxy } from './devOnly/utils/devMode'
+import { computed, provide, readonly, ref, toRefs, watch } from 'vue'
 import { IOmsTrackMonitor } from './types/IOmsTrackMonitor'
 import Map from 'src/MapObjects/map/components/Map.ce.vue'
 import Minimap from 'src/MapObjects/minimap/components/Minimap.ce.vue'
@@ -38,12 +38,18 @@ import {
 import { rotate } from './MapObjects/rotate/rotate'
 import { calculateMinMaxXYFromPoints } from './MapObjects/map/utils/size'
 import { initMapSizeProperties } from './MapObjects/map/mapSizeProperties'
-import { findPointById, points } from './TrackObjects/point/points'
-import { buffers, findBufferById } from './TrackObjects/buffer/buffers'
-import { findMtlById, mtls } from './TrackObjects/mtl/mtls'
-import { findSegmentById, segments } from './TrackObjects/segment/segments'
-import { clusters } from './TrackObjects/cluster/clusters'
-import { findStationById, stations } from './TrackObjects/station/stations'
+import { findPointById, initPoints } from './TrackObjects/point/points'
+import { initBuffers, findBufferById } from './TrackObjects/buffer/buffers'
+import { findMtlById, initMtls } from './TrackObjects/mtl/mtls'
+import {
+  findSegmentById,
+  initSegments,
+} from './TrackObjects/segment/segments'
+import { initClusters } from './TrackObjects/cluster/clusters'
+import {
+  findStationById,
+  initStations,
+} from './TrackObjects/station/stations'
 import {
   findZcuById,
   initZcus,
@@ -61,23 +67,20 @@ import {
   initSegmentDisableds,
   insertSegmentDisabled,
 } from './TrackObjects/segment/segmentDisableds'
-import { makeGroups } from './TrackObjects/group/utils/group'
-import { groups } from './TrackObjects/group/groups'
-import { makeSegmentsFromParts } from './TrackObjects/segment/utils/segment'
-import { makeClustersFromSegments } from './TrackObjects/cluster/utils/cluster'
+import { initGroups } from './TrackObjects/group/groups'
 import { setFocusedObject } from 'src/MapObjects/focus/focus'
 import { scaleInfo } from './MapObjects/scale/scale'
 import { rotationInfo } from './MapObjects/rotate/rotate'
 import { setTrackedObject } from './MapObjects/track/track'
 
 /**
- *  ttps://v3.vuejs.org/api/sfc-script-setup.html#typescript-only-features
+ *  https://v3.vuejs.org/api/sfc-script-setup.html#typescript-only-features
  *
- *  urrently complex types and type imports from other files are not supported. It is theoretically possible to support type imports in the future.
+ *  Currently complex types and type imports from other files are not supported. It is theoretically possible to support type imports in the future.
  *
- *  s of now, the type declaration argument must be one of the following to ensure correct static analysis:
- *   A type literal
- *   A reference to an interface or a type literal in the same file
+ *  As of now, the type declaration argument must be one of the following to ensure correct static analysis:
+ *    A type literal
+ *    A reference to an interface or a type literal in the same file
  */
 const props = defineProps<{
   // enums
@@ -210,21 +213,16 @@ const exposed: IOmsTrackMonitor = {
 
     // Order is IMPORTANT!
     // point must be initialized first.
-    points.value = t.points ?? []
-    buffers.value = t.buffers ?? []
-    mtls.value = t.mtls ?? []
-    segments.value = makeSegmentsFromParts(t.segmentParts ?? [])
-    clusters.value = makeClustersFromSegments(
-      t.clusters ?? [],
-      segments.value
-    )
-    stations.value = t.stations ?? []
+    initPoints(t.points)
+    initBuffers(t.buffers)
+    initMtls(t.mtls)
+    initSegments(t.segmentParts)
+    initClusters(t.clusters)
+    initStations(t.stations)
     initZcus(t.zcus)
-    // zcus.value = t.zcus ?? []
-    // vehicles.value = t.vehicles ?? []
     initVehicles(t.vehicles ?? [])
     initSegmentDisableds(t.segmentDisabled ?? [])
-    groups.value = makeGroups(t.groups ?? [])
+    initGroups(t.groups)
 
     // timeout for vue reactive state stabilized
     setTimeout(initCameraAndRotation, 10)
@@ -270,7 +268,7 @@ const exposed: IOmsTrackMonitor = {
         break
       case 'mtl':
         const mtl = findMtlById(id)
-        if (mtl) this.focus('point', mtl.pointId)
+        if (mtl) this.find('point', mtl.pointId)
         break
 
       default:

@@ -1,33 +1,25 @@
-import { Ref, ref, watchEffect } from "vue";
+import { ITrackData } from 'src/legacies/models/track.model'
+import { Color } from 'src/types/Color'
+import { computed, Ref, ref } from 'vue'
 import { Group, ObjectInGroupType } from './types/Group'
-import { getGroupColorWithAlpha } from "./utils/color";
 
 const groups = ref<Group[]>([])
 
+function initGroups(gs: ITrackData['groups']) {
+  groups.value = (gs ?? []).map((g) => ({
+    ...g,
+    color: g.color as keyof typeof Color,
+  }))
+}
+
 function findGroupByTypeAndObjectId(type: ObjectInGroupType, id: number) {
-  return groups.value.find(g => g.objects.some(o => o.id === id && o.type === type))
+  return groups.value.find((g) =>
+    g.objects.some((o) => o.id === id && o.type === type)
+  )
 }
 
 function useGroup(type: ObjectInGroupType, id: Ref<number>) {
-  const group = ref<Group>()
-
-  watchEffect(() => {
-    group.value = findGroupByTypeAndObjectId(type, id.value)
-  })
-
-  return group
+  return computed(() => findGroupByTypeAndObjectId(type, id.value))
 }
 
-function useGroupColor(type: ObjectInGroupType, id: Ref<number>) {
-  const group = useGroup(type, id)
-  const color = ref<string>()
-
-  watchEffect(() => {
-    color.value = group.value
-      ? getGroupColorWithAlpha(group.value.color)
-      : undefined
-  })
-  return color
-}
-
-export { groups, useGroup, useGroupColor } 
+export { groups, initGroups, useGroup }

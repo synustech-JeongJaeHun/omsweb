@@ -1,32 +1,35 @@
-import { computed, ref } from 'vue'
+import { ITrackData } from 'src/legacies/models/track.model'
+import { ref } from 'vue'
 import { findPointById } from '../point/points'
 import { Point } from '../point/types/Point'
 import { Segment } from './types/Segment'
 import { SegmentPart } from './types/SegmentPart'
 import { makeDFromSegment } from './utils/d'
+import { makeSegmentsFromParts } from './utils/segment'
 
 const segments = ref<Segment[]>([])
 /**
  * segments aren't updated, so we can use computed with shallow reference changed.
  * when segments become realtime-update object, then refactoring this map.
  */
-const segmentMap = computed(
-  () => new Map(segments.value.map((s) => [s.id, s]))
-)
-const segmentMapByStartPointId = computed(() => {
-  const map = new Map<Point['id'], Segment[]>()
+const segmentMap = new Map<Segment['id'], Segment>()
+const segmentMapByStartPointId = new Map<Point['id'], Segment[]>()
 
-  segments.value.forEach((segment) => {
-    const key = segment.startPoint
-    const value = map.get(key) ?? []
-    map.set(key, [...value, segment])
+function initSegments(segparts: ITrackData['segmentParts']) {
+  segments.value = makeSegmentsFromParts(segparts ?? [])
+  segments.value.forEach((s) => {
+    // segmentMap
+    segmentMap.set(s.id, s)
+
+    // segmentMapByStartPoint
+    const key = s.startPoint
+    const value = segmentMapByStartPointId.get(key) ?? []
+    segmentMapByStartPointId.set(key, [...value, s])
   })
-
-  return map
-})
+}
 
 function findSegmentById(id: number) {
-  return segmentMap.value.get(id)
+  return segmentMap.get(id)
 }
 
 function setSegmentDisabled(
@@ -46,7 +49,7 @@ function setSegmentDisabled(
 }
 
 function findSegmentByPoints(startPointId: number, endPointId: number) {
-  return segmentMapByStartPointId.value
+  return segmentMapByStartPointId
     .get(startPointId)
     ?.find((s) => s.endPoint === endPointId)
 }
@@ -65,6 +68,7 @@ function makeD(
 
 export {
   segments,
+  initSegments,
   findSegmentById,
   findSegmentByPoints,
   setSegmentDisabled,
