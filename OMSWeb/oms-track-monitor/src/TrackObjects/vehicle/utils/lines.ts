@@ -4,6 +4,8 @@ import { findBufferById } from '../../buffer/buffers'
 import { findStationById } from '../../station/stations'
 import { Vehicle } from '../types/Vehicle'
 
+// command, next line utils
+
 function parseTargetId(location: string) {
   const typeLetter = location[0].toLowerCase()
   const id = parseInt(location.slice(1))
