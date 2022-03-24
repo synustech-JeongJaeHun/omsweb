@@ -1,18 +1,23 @@
 <script setup lang="ts">
-import Layer from 'MapObjects/map/components/Layer.ce.vue';
-import { Color } from 'src/types/Color';
-import { RootEmitInjectionKey, RootEmits } from 'src/types/RootEmits';
-import { deepCopy } from 'src/utils/deepCopy';
-import { inject } from 'vue';
-import { clusters } from '../clusters'
-import { Cluster } from '../types/Cluster';
+import Layer from 'MapObjects/map/components/Layer.ce.vue'
+import { Color } from 'src/types/Color'
+import { RootEmitInjectionKey, RootEmits } from 'src/types/RootEmits'
+import { deepCopy } from 'src/utils/deepCopy'
+import { inject } from 'vue'
+import { clusters, findClusterById } from '../clusters'
 
 const emit = inject<RootEmits>(RootEmitInjectionKey)!
 
-function onMouseover(cluster: Cluster, event: MouseEvent) {
+function getDeepCopiedCluster(event: MouseEvent) {
+  const clusterId = parseInt((event.target as SVGElement).dataset.id!)
+  const cluster = findClusterById(clusterId)!
+  return deepCopy(cluster)
+}
+
+function onMouseover(event: MouseEvent) {
   emit('mouseoverOnObject', {
-    type: "CLUSTER",
-    value: deepCopy(cluster),
+    type: 'CLUSTER',
+    value: getDeepCopiedCluster(event),
     event,
   })
 }
@@ -30,9 +35,10 @@ function onMouseleave() {
       fill="none"
       :stroke="Color[cluster.color]"
       :d="cluster.d"
-      @mouseover="onMouseover(cluster, $event)"
-      @mouseleave="onMouseleave()"
-      @mouseout="onMouseleave()"
+      :data-id="cluster.id"
+      @mouseover="onMouseover"
+      @mouseleave="onMouseleave"
+      @mouseout="onMouseleave"
     />
   </Layer>
 </template>

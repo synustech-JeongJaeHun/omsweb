@@ -5,9 +5,15 @@ import { Cluster } from './types/Cluster'
 import { makeClustersFromSegments } from './utils/cluster'
 
 const clusters = ref<Cluster[]>([])
+const clusterMap = new Map<Cluster['id'], Cluster>()
 
 function initClusters(cs: ITrackData['clusters']) {
   clusters.value = makeClustersFromSegments(cs ?? [], segments.value)
+  clusters.value.forEach((c) => clusterMap.set(c.id, c))
 }
 
-export { clusters, initClusters }
+function findClusterById(id: Cluster['id']) {
+  return clusterMap.get(id)
+}
+
+export { clusters, initClusters, findClusterById }

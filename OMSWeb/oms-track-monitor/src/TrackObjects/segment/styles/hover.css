@@ -1,3 +1,7 @@
 #segment-layer .segment:hover {
   filter: drop-shadow(0 0 var(--filter-size) var(--hover-color-solid));
 }
+
+#disabled-segment-layer .segment:hover {
+  filter: drop-shadow(0 0 var(--filter-size) var(--hover-color-solid));
+}

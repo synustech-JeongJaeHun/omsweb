@@ -1,38 +1,14 @@
 <script setup lang="ts">
 import { Zcu } from '../types/Zcu'
-import { inject } from 'vue'
 import { getHumanReadableUsingType } from '../utils/readable'
-import { RootEmitInjectionKey, RootEmits } from '../../../types/RootEmits'
-import { deepCopy } from '../../../utils/deepCopy'
 
 const props = defineProps<{
   zcu: Zcu
+  handleLeftClick: (event: MouseEvent) => void
+  handleRightClick: (event: MouseEvent) => void
+  handleMouseover: (event: MouseEvent) => void
+  handleMouseleave: (event: MouseEvent) => void
 }>()
-const emit = inject<RootEmits>(RootEmitInjectionKey)!
-
-function onMouseover(event: MouseEvent) {
-  emit('mouseoverOnObject', {
-    type: 'ZCU',
-    value: deepCopy(props.zcu),
-    event,
-  })
-}
-function onMouseleave() {
-  emit('mouseleaveOnObject')
-}
-function onLeftClick() {
-  emit('mainClickOnObject', {
-    type: 'ZCU',
-    value: deepCopy(props.zcu),
-  })
-}
-function onRightClick(event: MouseEvent) {
-  emit('secondaryClickOnObject', {
-    type: 'ZCU',
-    value: deepCopy(props.zcu),
-    event,
-  })
-}
 </script>
 
 <template>
@@ -61,11 +37,12 @@ function onRightClick(event: MouseEvent) {
         stroke="black"
         stroke-width="3"
         :fill="props.zcu.error ? 'red' : 'transparent'"
-        @click.left="onLeftClick()"
-        @click.right="onRightClick($event)"
-        @mouseover="onMouseover($event)"
-        @mouseout="onMouseleave()"
-        @mouseleave="onMouseleave()"
+        :data-id="props.zcu.id"
+        @click.left="handleLeftClick"
+        @click.right="handleRightClick"
+        @mouseover="handleMouseover"
+        @mouseout="handleMouseleave"
+        @mouseleave="handleMouseleave"
       />
       <text
         class="invert label select-none"
