@@ -3,7 +3,7 @@ import Layer from 'MapObjects/map/components/Layer.ce.vue'
 import Buffer from './Buffer.ce.vue'
 import { buffers, findBufferById } from '../buffers'
 import { inject } from 'vue'
-import { RootEmitInjectionKey, RootEmits } from 'src/types/RootEmits'
+import { RootEmitInjectionKey, RootEmits } from 'src/Root/types/RootEmits'
 
 const emit = inject<RootEmits>(RootEmitInjectionKey)!
 

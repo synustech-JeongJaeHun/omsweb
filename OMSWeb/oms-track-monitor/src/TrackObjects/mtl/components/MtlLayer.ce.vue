@@ -3,7 +3,7 @@ import Layer from 'MapObjects/map/components/Layer.ce.vue'
 import Mtl from './Mtl.ce.vue'
 import { findMtlById, mtls } from '../mtls'
 import { inject } from 'vue'
-import { RootEmitInjectionKey, RootEmits } from 'src/types/RootEmits'
+import { RootEmitInjectionKey, RootEmits } from 'src/Root/types/RootEmits'
 
 const emit = inject<RootEmits>(RootEmitInjectionKey)!
 

@@ -6,7 +6,7 @@ import DisabledSegment from './DisabledSegment.ce.vue'
 import { findSegmentById } from '../segments'
 import { deepCopy } from 'src/utils/deepCopy'
 import { inject } from 'vue'
-import { RootEmitInjectionKey, RootEmits } from 'src/types/RootEmits'
+import { RootEmitInjectionKey, RootEmits } from 'src/Root/types/RootEmits'
 
 const emit = inject<RootEmits>(RootEmitInjectionKey)!
 

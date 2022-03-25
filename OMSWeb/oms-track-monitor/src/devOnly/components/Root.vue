@@ -1,12 +1,6 @@
 <script setup lang="ts">
-import OmsTrackMonitor from 'src/OmsTrackMonitor.ce.vue'
-import {
-  computed,
-  defineCustomElement,
-  reactive,
-  ref,
-  watchEffect,
-} from 'vue'
+import OmsTrackMonitor from 'src/Root/OmsTrackMonitor.ce.vue'
+import { computed, ref, watchEffect } from 'vue'
 import { useWindowRect } from '../hooks/useWindowRect'
 import { useHub } from '../hooks/useHub'
 

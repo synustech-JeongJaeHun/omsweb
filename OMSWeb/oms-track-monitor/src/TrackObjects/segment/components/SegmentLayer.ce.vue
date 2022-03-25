@@ -4,7 +4,7 @@ import Segment from './Segment.ce.vue'
 import { findSegmentById, segments } from '../segments'
 import { scaleStylesInfo } from 'src/styles/styles'
 import { inject } from 'vue'
-import { RootEmitInjectionKey, RootEmits } from 'src/types/RootEmits'
+import { RootEmitInjectionKey, RootEmits } from 'src/Root/types/RootEmits'
 import { deepCopy } from 'src/utils/deepCopy'
 
 const emit = inject<RootEmits>(RootEmitInjectionKey)!

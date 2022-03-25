@@ -6,7 +6,7 @@ import { findSegmentByPoints } from '../../segment/segments'
 import { Segment } from '../../segment/types/Segment'
 import { useGroup } from '../../group/groups'
 import { useCommandPointPosition } from '../utils/lines'
-import { RootEmitInjectionKey, RootEmits } from 'src/types/RootEmits'
+import { RootEmitInjectionKey, RootEmits } from 'src/Root/types/RootEmits'
 import { createPathElement, getPositionFromD } from 'src/utils/svg/path'
 import { D } from 'src/types/D'
 import { deepCopy } from 'src/utils/deepCopy'
@@ -80,8 +80,8 @@ watch(
     ) {
       const d = makeVehicleAnimationPath(
         props.vehicle.updateType,
-        currentSegment.value,
         beforeSegment.value,
+        currentSegment.value,
         beforePosition.value,
         currentPosition.value
       )

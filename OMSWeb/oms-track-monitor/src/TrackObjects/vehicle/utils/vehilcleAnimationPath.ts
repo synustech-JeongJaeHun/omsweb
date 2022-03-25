@@ -24,12 +24,13 @@ function makeVehicleAnimationPath(
         beforePosition,
         currentPosition!
       )
-    } else updateType === 'AnimationIn1Segment'
-    return slicePathCommands(
-      beforeSegment.pathCommands,
-      beforePosition,
-      currentPosition!
-    )
+    } else {
+      return slicePathCommands(
+        beforeSegment.pathCommands,
+        beforePosition,
+        currentPosition!
+      )
+    }
   })()
 
   return encodeCommandsToD(pathCommands)

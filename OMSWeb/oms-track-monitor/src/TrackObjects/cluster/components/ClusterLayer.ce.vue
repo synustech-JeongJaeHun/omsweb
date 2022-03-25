@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Layer from 'MapObjects/map/components/Layer.ce.vue'
 import { Color } from 'src/types/Color'
-import { RootEmitInjectionKey, RootEmits } from 'src/types/RootEmits'
+import { RootEmitInjectionKey, RootEmits } from 'src/Root/types/RootEmits'
 import { deepCopy } from 'src/utils/deepCopy'
 import { inject } from 'vue'
 import { clusters, findClusterById } from '../clusters'
