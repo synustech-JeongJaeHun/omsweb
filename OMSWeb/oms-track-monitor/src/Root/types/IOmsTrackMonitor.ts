@@ -17,7 +17,11 @@ interface IOmsTrackMonitor {
     viewBox: { width: number; height: number }
     rotation: number
   }
-
+  setCameraAndRotation(objective: {
+    position?: { x: number; y: number }
+    viewBoxWidth?: number
+    rotation?: number
+  }): void
   // Set Data
   setTrack(track: ITrackData): void
   centerZoom(): void

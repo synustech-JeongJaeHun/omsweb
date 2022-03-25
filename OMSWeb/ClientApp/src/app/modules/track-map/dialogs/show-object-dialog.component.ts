@@ -13,13 +13,22 @@ export class ShowObjectDialogComponent {
     public dialogRef: MatDialogRef<ShowObjectDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public buttonState: ToggleOptionsType,
     public trackSettingService: TrackMonitorSettingService
-  ) { }
+  ) {}
+
+  public get Math() {
+    return Math;
+  }
 
   public get setting() {
-    return this.trackSettingService.trackSetting
+    return this.trackSettingService.trackSetting;
   }
 
   public get update() {
-    return this.trackSettingService.update
+    return this.trackSettingService.update;
+  }
+
+  public changeRotation(event) {
+    this.trackSettingService.rotationChanged.emit(event.value);
+    this.update({ key: 'rotation', value: event.value });
   }
 }

@@ -44,6 +44,8 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   private destroy$: Subject<void> = new Subject<void>();
   public detailsVisible = false;
 
+  private cameraAndRotationSyncId;
+
   get tmSetting() {
     return this.trackMonitorSettingService.trackSetting;
   }
@@ -129,10 +131,29 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     });
     this.attachEvents();
     this.attachHubEvents();
+
+    this.viewer.setCameraAndRotation({
+      position: this.tmSetting.position ?? {
+        x: (this.trackData.size.minX + this.trackData.size.maxX) / 2,
+        y: (this.trackData.size.minY + this.trackData.size.maxY) / 2,
+      },
+      viewBoxWidth: this.tmSetting.viewBoxWidth,
+      rotation: this.tmSetting.rotation,
+    });
+
+    this.cameraAndRotationSyncId = setInterval(() => {
+      this.getCameraAndRotation();
+    }, 500);
+
+    this.trackMonitorSettingService.rotationChanged.subscribe((rotation) =>
+      this.viewer.setCameraAndRotation({ rotation })
+    );
   }
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+
+    clearInterval(this.cameraAndRotationSyncId);
   }
 
   private attachEvents() {
@@ -446,7 +467,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 
   public onCenterZoom() {
     this.viewer.centerZoom();
-    this.getCameraAndRotation();
   }
 
   public findOnTM(event: { type: string; id: any }) {
@@ -660,7 +680,20 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     this.viewer.stopTrack();
   }
   public getCameraAndRotation() {
-    // const data = this.viewer.getCameraAndRotation()
+    const data = this.viewer.getCameraAndRotation();
+
+    this.trackMonitorSettingService.update({
+      key: 'rotation',
+      value: data.rotation,
+    });
+    this.trackMonitorSettingService.update({
+      key: 'viewBoxWidth',
+      value: data.viewBox.width,
+    });
+    this.trackMonitorSettingService.update({
+      key: 'position',
+      value: data.position,
+    });
   }
 }
 

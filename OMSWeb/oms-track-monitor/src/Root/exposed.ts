@@ -1,8 +1,8 @@
 import { IOmsTrackMonitor } from './types/IOmsTrackMonitor'
 import {
-  initCameraAndRotation,
   centerZoom,
   getCameraAndRotation,
+  setCameraAndRotation,
   approachTo,
 } from 'MapObjects/cameraAndRotation'
 import { calculateMinMaxXYFromPoints } from 'src/MapObjects/map/utils/size'
@@ -47,6 +47,7 @@ import { setTrackedObject } from 'src/MapObjects/track/track'
 
 const exposed: IOmsTrackMonitor = {
   getCameraAndRotation,
+  setCameraAndRotation,
 
   setTrack(t) {
     const { minX, minY, maxX, maxY } = calculateMinMaxXYFromPoints(
@@ -66,9 +67,6 @@ const exposed: IOmsTrackMonitor = {
     initVehicles(t.vehicles ?? [])
     initSegmentDisableds(t.segmentDisabled ?? [])
     initGroups(t.groups)
-
-    // timeout for vue reactive state stabilized
-    setTimeout(initCameraAndRotation, 10)
   },
   centerZoom,
 

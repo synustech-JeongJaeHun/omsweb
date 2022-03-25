@@ -49,9 +49,6 @@ const props = defineProps<{
   width: Numberlish
   height: Numberlish
 
-  // rotation
-  rotation: Numberlish
-
   // scale
   vehicleSize: Numberlish
   segmentWidth: Numberlish
@@ -99,11 +96,6 @@ watch([propRefs.width, propRefs.height], () => {
   const width = parseNumberProp(0, props.width)
   const height = parseNumberProp(0, props.height)
   if (width > 0 && height > 0) setElementRect(width, height)
-})
-
-// rotation
-watch(propRefs.rotation, () => {
-  rotate(parseNumberProp(0, props.rotation))
 })
 
 // scale
