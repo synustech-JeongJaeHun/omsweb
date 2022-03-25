@@ -45,6 +45,8 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.statesSvc.transferCommandState.active = true;
+
+    this.onTabChanged();
   }
 
   onTabChanged() {

@@ -164,7 +164,7 @@
     "estop": "EStop",
     "reset": "Reset",
     "auto": "Auto",
-    "MTLOut": "MTL Out",
+    "reverseAuto": "Reverse Auto",
     "zcuGo": "ZCU Go",
     "option": "Option",
     "ioList": "IO List",
