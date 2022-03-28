@@ -25,7 +25,7 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
   tabs: TransferCommandCategoryType[] = ['fromTo', 'from', 'to', 'move', 'mtl'];
 
   get canApply(): boolean {
-    return true;
+    return this.validate() === undefined;
   }
   get commandState(): TransferCommandState {
     return this.statesSvc.transferCommandState;
@@ -39,12 +39,15 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
     private t$: TranslateService
   ) {}
 
-  ngOnDestroy(): void {
-    this.statesSvc.transferCommandState.active = false;
-  }
-
   ngOnInit(): void {
     this.statesSvc.transferCommandState.active = true;
+    this.currentTab = this.tabs.findIndex(
+      (t) => t === this.statesSvc.transferCommandState.category
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.statesSvc.transferCommandState.active = false;
   }
 
   onTabChanged() {
