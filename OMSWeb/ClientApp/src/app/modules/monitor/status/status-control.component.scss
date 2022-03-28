@@ -20,7 +20,7 @@
   background-color: var(--dialog-border-color);
   color: white;
   z-index: 5;
-width: 24px;
+  width: 24px;
   height: 24px;
   min-width: 24px;
   border-radius: 0;
@@ -61,7 +61,7 @@ width: 24px;
 
 #status-toolbar {
   position: absolute;
-  left: 550px;
+  left: 620px;
   //left: 750px;
   right: 40px;
   padding: 1px;
