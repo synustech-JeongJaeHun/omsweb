@@ -1,37 +1,13 @@
 <script setup lang="ts">
 import { Point } from '../types/Point'
-import { inject } from 'vue'
-import { RootEmitInjectionKey, RootEmits } from 'src/types/RootEmits'
-import { deepCopy } from 'src/utils/deepCopy'
 
 const props = defineProps<{
   point: Point
+  handleLeftClick: (event: MouseEvent) => void
+  handleRightClick: (event: MouseEvent) => void
+  handleMouseover: (event: MouseEvent) => void
+  handleMouseleave: (event: MouseEvent) => void
 }>()
-const emit = inject<RootEmits>(RootEmitInjectionKey)!
-
-function onMouseover(event: MouseEvent) {
-  emit('mouseoverOnObject', {
-    type: 'POINT',
-    value: deepCopy(props.point),
-    event,
-  })
-}
-function onMouseleave() {
-  emit('mouseleaveOnObject')
-}
-function onLeftClick() {
-  emit('mainClickOnObject', {
-    type: 'POINT',
-    value: deepCopy(props.point),
-  })
-}
-function onRightClick(event: MouseEvent) {
-  emit('secondaryClickOnObject', {
-    type: 'POINT',
-    value: deepCopy(props.point),
-    event,
-  })
-}
 </script>
 
 <template>
@@ -45,11 +21,12 @@ function onRightClick(event: MouseEvent) {
       <circle
         r="3"
         class="point-path"
-        @click.left="onLeftClick()"
-        @click.right="onRightClick($event)"
-        @mouseover="onMouseover($event)"
-        @mouseout="onMouseleave()"
-        @mouseleave="onMouseleave()"
+        :data-id="props.point.id"
+        @click.left="handleLeftClick"
+        @click.right="handleRightClick"
+        @mouseover="handleMouseover"
+        @mouseout="handleMouseleave"
+        @mouseleave="handleMouseleave"
       />
       <text
         class="invert label select-none"

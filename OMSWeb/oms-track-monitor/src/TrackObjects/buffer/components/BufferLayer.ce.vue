@@ -1,7 +1,41 @@
 <script setup lang="ts">
-import Layer from 'MapObjects/map/components/Layer.ce.vue';
-import Buffer from './Buffer.ce.vue';
-import { buffers } from '../buffers'
+import Layer from 'MapObjects/map/components/Layer.ce.vue'
+import Buffer from './Buffer.ce.vue'
+import { buffers, findBufferById } from '../buffers'
+import { inject } from 'vue'
+import { RootEmitInjectionKey, RootEmits } from 'src/Root/types/RootEmits'
+
+const emit = inject<RootEmits>(RootEmitInjectionKey)!
+
+function getDeepCopiedBuffer(event: MouseEvent) {
+  const bufferId = parseInt((event.target as SVGElement).dataset.id!)
+  const buffer = findBufferById(bufferId)!
+  return { ...buffer, groupId: buffer.group }
+}
+
+function handleMouseover(event: MouseEvent) {
+  emit('mouseoverOnObject', {
+    type: 'BUFFER',
+    value: getDeepCopiedBuffer(event),
+    event,
+  })
+}
+function handleMouseleave(event: MouseEvent) {
+  emit('mouseleaveOnObject')
+}
+function handleLeftClick(event: MouseEvent) {
+  emit('mainClickOnObject', {
+    type: 'BUFFER',
+    value: getDeepCopiedBuffer(event),
+  })
+}
+function handleRightClick(event: MouseEvent) {
+  emit('secondaryClickOnObject', {
+    type: 'BUFFER',
+    value: getDeepCopiedBuffer(event),
+    event,
+  })
+}
 </script>
 
 <template>
@@ -33,6 +67,14 @@ import { buffers } from '../buffers'
       <circle id="buffer-group-shadow" r="22" />
     </defs>
 
-    <Buffer v-for="buffer of buffers" :key="buffer.id" :buffer="buffer" />
+    <Buffer
+      v-for="buffer of buffers"
+      :key="buffer.id"
+      :buffer="buffer"
+      :handleMouseover="handleMouseover"
+      :handleMouseleave="handleMouseleave"
+      :handleLeftClick="handleLeftClick"
+      :handleRightClick="handleRightClick"
+    />
   </Layer>
 </template>

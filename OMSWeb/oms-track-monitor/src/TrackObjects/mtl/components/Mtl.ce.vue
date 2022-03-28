@@ -1,43 +1,19 @@
 <script setup lang="ts">
 import { Mtl } from '../types/Mtl'
-import { inject, toRef } from 'vue'
+import { toRef } from 'vue'
 import { usePointPoisiton } from '../../point/points'
 import { useGroup } from '../../group/groups'
-import { RootEmitInjectionKey, RootEmits } from 'src/types/RootEmits'
-import { deepCopy } from 'src/utils/deepCopy'
 import { getGroupColorWithAlpha } from 'TrackObjects/group/utils/color'
 
 const props = defineProps<{
   mtl: Mtl
+  handleLeftClick: (event: MouseEvent) => void
+  handleRightClick: (event: MouseEvent) => void
+  handleMouseover: (event: MouseEvent) => void
+  handleMouseleave: (event: MouseEvent) => void
 }>()
-const emit = inject<RootEmits>(RootEmitInjectionKey)!
-
 const position = usePointPoisiton(toRef(props.mtl, 'pointId'))
 const group = useGroup('mtl', toRef(props.mtl, 'id'))
-
-function onMouseover(event: MouseEvent) {
-  emit('mouseoverOnObject', {
-    type: 'MTL',
-    value: deepCopy(props.mtl),
-    event,
-  })
-}
-function onMouseleave() {
-  emit('mouseleaveOnObject')
-}
-function onLeftClick() {
-  emit('mainClickOnObject', {
-    type: 'MTL',
-    value: deepCopy(props.mtl),
-  })
-}
-function onRightClick(event: MouseEvent) {
-  emit('secondaryClickOnObject', {
-    type: 'MTL',
-    value: deepCopy(props.mtl),
-    event,
-  })
-}
 </script>
 
 <template>
@@ -65,11 +41,12 @@ function onRightClick(event: MouseEvent) {
         href="#mtl"
         stroke="grey"
         stroke-width="3"
-        @click.left="onLeftClick()"
-        @click.right="onRightClick($event)"
-        @mouseover="onMouseover($event)"
-        @mouseout="onMouseleave()"
-        @mouseleave="onMouseleave()"
+        :data-id="props.mtl.id"
+        @click.left="handleLeftClick"
+        @click.right="handleRightClick"
+        @mouseover="handleMouseover"
+        @mouseout="handleMouseleave"
+        @mouseleave="handleMouseleave"
       />
       <text
         class="invert label select-none"

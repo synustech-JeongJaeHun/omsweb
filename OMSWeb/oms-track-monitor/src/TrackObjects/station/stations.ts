@@ -1,14 +1,21 @@
-import { computed, ref } from "vue";
+import { ITrackData } from 'src/legacies/models/track.model'
+import { ref } from 'vue'
 import { Station } from './types/Station'
 
 const stations = ref<Station[]>([])
+const stationMap = new Map<Station['id'], Station>()
 
 /**
  * points aren't updated, so we can use computed with shallow reference changed.
  * when points become realtime-update object, then refactoring this map.
  */
-const stationMap = computed(() => new Map(stations.value.map(s => [s.id, s])))
+function initStations(ss: ITrackData['stations']) {
+  stations.value = (ss ?? []).map((s) => ({ ...s }))
+  stations.value.forEach((s) => stationMap.set(s.id, s))
+}
 
-function findStationById(id: Station['id']) { return stationMap.value.get(id) }
+function findStationById(id: Station['id']) {
+  return stationMap.get(id)
+}
 
-export { stations, findStationById } 
+export { stations, initStations, findStationById }

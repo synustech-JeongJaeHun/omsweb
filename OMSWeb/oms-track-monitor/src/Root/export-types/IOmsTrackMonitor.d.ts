@@ -1,10 +1,15 @@
 interface IOmsTrackMonitor {
   // Get Data
   getCameraAndRotation(): {
-    position: { x: number, y: number },
-    viewBox: { width: number, height: number },
+    position: { x: number; y: number }
+    viewBox: { width: number; height: number }
     rotation: number
   }
+  setCameraAndRotation(objective: {
+    position?: { x: number; y: number }
+    viewBoxWidth?: number
+    rotation?: number
+  }): void
 
   // Set Data
   setTrack(track: any): void
@@ -24,7 +29,7 @@ interface IOmsTrackMonitor {
   // Update Data
   updateVehicle(operation: string, vehicle: any): void
   // updateSegment(operation: UpdateDto.Operation, segment: UpdateDto.Segment): void
-  updateSegmentDisabled(operation: string, segmentDisabled: any): void,
+  updateSegmentDisabled(operation: string, segmentDisabled: any): void
   updateZcu(operation: string, zcu: any): void
 }
 

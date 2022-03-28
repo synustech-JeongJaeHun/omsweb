@@ -1,19 +1,26 @@
 <script setup lang="ts">
-import { Segment } from '../types/Segment'
-import { computed } from 'vue'
 import { getAngleFromTwoPoints } from 'src/utils/angle'
 import { createPathElement } from 'src/utils/svg/path'
+import { computed } from 'vue'
+import { findSegmentById } from '../segments'
+import { SegmentDisabled } from '../types/SegmentDisabled'
 
 const props = defineProps<{
-  segment: Segment
+  segmentDisabled: SegmentDisabled
   handleLeftClick: (event: MouseEvent) => void
   handleRightClick: (event: MouseEvent) => void
   handleMouseover: (event: MouseEvent) => void
   handleMouseleave: (event: MouseEvent) => void
 }>()
 
+const segment = computed(() =>
+  findSegmentById(props.segmentDisabled.segmentId)
+)
+
 const direction = computed(() => {
-  const pathElement = createPathElement(props.segment.d)
+  if (segment.value === undefined) return
+
+  const pathElement = createPathElement(segment.value.d)
 
   const halfLength = pathElement.getTotalLength() / 2
   const position = pathElement.getPointAtLength(halfLength)
@@ -27,19 +34,23 @@ const direction = computed(() => {
 </script>
 
 <template>
-  <svg class="overflow-visible cursor-pointer segment">
+  <svg
+    v-if="segment"
+    class="overflow-visible cursor-pointer segment"
+    :data-is-disabled-by-mtl="segment.disabledByMtl"
+  >
     <path
-      v-if="props.segment.isFocused"
+      v-if="segment.isFocused"
       class="focus fixed-scale-stroke"
-      :d="props.segment.d"
+      :d="segment.d"
       fill="none"
     />
     <path
       ref="pathElement"
       class="segment-path fixed-scale-stroke"
-      :d="props.segment.d"
+      :d="segment.d"
       fill="none"
-      :data-id="props.segment.id"
+      :data-segment-id="segment.id"
       @click.left="handleLeftClick"
       @click.right="handleRightClick"
       @mouseover="handleMouseover"
@@ -47,12 +58,13 @@ const direction = computed(() => {
       @mouseleave="handleMouseleave"
     />
     <use
+      v-if="direction"
       class="segment-direction"
       href="#segment-direction-triangle"
       :x="direction.position.x"
       :y="direction.position.y"
       :transform="`rotate(${direction.angle} ${direction.position.x} ${direction.position.y})`"
-      :data-id="props.segment.id"
+      :data-segment-id="segment.id"
       @click.left="handleLeftClick"
       @click.right="handleRightClick"
       @mouseover="handleMouseover"

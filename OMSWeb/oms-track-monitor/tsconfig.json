@@ -33,6 +33,6 @@
     "src/**/*.vue"
   ],
   "exclude": [
-    "src/main.ts"
+    "src/devOnly/main.ts"
   ]
 }

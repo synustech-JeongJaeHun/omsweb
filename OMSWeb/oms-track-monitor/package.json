@@ -17,7 +17,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
-    "buildType": "cpy export-types/ dist/",
+    "buildType": "cpy src/Root/export-types/ dist/",
     "postbuild": "npm run buildType",
     "preview": "vite preview"
   },

@@ -1,16 +1,15 @@
 <script setup lang="ts">
-import { computed, inject, onUnmounted, ref, toRef, watch } from 'vue'
+import { computed, inject, ref, toRef, watch } from 'vue'
 import { Vehicle } from '../types/Vehicle'
 import { findPointById, usePointPoisiton } from '../../point/points'
 import { findSegmentByPoints } from '../../segment/segments'
 import { Segment } from '../../segment/types/Segment'
 import { useGroup } from '../../group/groups'
 import { useCommandPointPosition } from '../utils/lines'
-import { RootEmitInjectionKey, RootEmits } from 'src/types/RootEmits'
+import { RootEmitInjectionKey, RootEmits } from 'src/Root/types/RootEmits'
 import { createPathElement, getPositionFromD } from 'src/utils/svg/path'
 import { D } from 'src/types/D'
 import { deepCopy } from 'src/utils/deepCopy'
-import MakeDInUpdateWorker from '../utils/workers/MakeDInUpdateWorker?worker&inline'
 import { Position } from 'src/types/Position'
 import VehiclePresentation from './VehiclePresentation.ce.vue'
 import { moveCamera } from 'src/MapObjects/map/camera'
@@ -18,12 +17,12 @@ import { setHoveredVehicle } from '../hoveredVehicle'
 import { setTrackedObject } from 'src/MapObjects/track/track'
 import { getGroupColorWithAlpha } from 'TrackObjects/group/utils/color'
 import { getRotatedPosition } from 'src/MapObjects/cameraAndRotation'
+import { makeVehicleAnimationPath } from '../utils/vehilcleAnimationPath'
 
 const props = defineProps<{
   vehicle: Vehicle
 }>()
 const emit = inject<RootEmits>(RootEmitInjectionKey)!
-const makeDInUpdateWorker = new MakeDInUpdateWorker()
 
 const group = useGroup('vehicle', toRef(props.vehicle, 'id'))
 
@@ -71,23 +70,33 @@ watch(
       : undefined
     currentSegment.value = segment ?? currentSegment.value
 
-    makeDInUpdateWorker.postMessage(
-      deepCopy({
-        updateType: props.vehicle.updateType,
-        lastUpdated: props.vehicle.lastUpdated,
-        currentSegment: currentSegment.value,
-        beforeSegment: beforeSegment.value,
-        beforePosition: beforePosition.value,
-        currentPosition: currentPosition.value,
-      })
-    )
+    if (
+      (props.vehicle.updateType === 'AnimationIn1Segment' ||
+        props.vehicle.updateType === 'AnimationIn2Segments') &&
+      currentSegment.value &&
+      beforeSegment.value &&
+      currentPosition.value &&
+      beforePosition.value
+    ) {
+      const d = makeVehicleAnimationPath(
+        props.vehicle.updateType,
+        beforeSegment.value,
+        currentSegment.value,
+        beforePosition.value,
+        currentPosition.value
+      )
+
+      trackVehiclePosition(d, props.vehicle.lastUpdated)
+    } else {
+      realtimePosition.value = newPosition
+    }
   }
 )
 
 // time with microsecond
 // animation duration 0.3s with linear
 const TotalVehicleAnimationDuration = 300
-function trackVehiclePosition(d: D, lastUpdated: number) {
+function trackVehiclePosition(d: D, lastUpdated?: number) {
   const pathElement = createPathElement(d)
   const totalLength = pathElement.getTotalLength()
   // https://developer.mozilla.org/ko/docs/Web/API/Performance/now
@@ -118,14 +127,6 @@ function trackVehiclePosition(d: D, lastUpdated: number) {
   // https://developer.mozilla.org/ko/docs/Web/API/Window/requestAnimationFrame
   globalThis.requestAnimationFrame(step)
 }
-
-makeDInUpdateWorker.addEventListener(
-  'message',
-  (e: MessageEvent<{ d: string; lastUpdate?: number }>) => {
-    if (e.data.lastUpdate)
-      trackVehiclePosition(e.data.d, e.data.lastUpdate)
-  }
-)
 
 const nextPointPosition = usePointPoisiton(
   toRef(props.vehicle, 'nextPoint')
@@ -171,10 +172,6 @@ function onRightClick(event: MouseEvent) {
     event,
   })
 }
-
-onUnmounted(() => {
-  makeDInUpdateWorker.terminate()
-})
 </script>
 
 <template>

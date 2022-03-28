@@ -54,15 +54,18 @@ export class StatusControlComponent implements OnInit, OnDestroy {
     this.resizeHandler = this.onMouseMove.bind(this);
     this.currentTab = this.settingSvc.globalPreferences.uiStates.controlTab;
 
-    setTimeout(() => {
-      this.mapStateSvc.statusTableHeight = this.tableHeightNum;
-      this.mapStateSvc.statusTableResizeEvent$.next(this.tableHeightNum);
-    }, 0);
+    this.resizeTableHeight(this.tableHeightNum);
   }
 
   ngOnDestroy(): void {
+    this.resizeTableHeight(0);
+  }
+
+  resizeTableHeight(height: number) {
+    this.tableHeightNum = height;
     setTimeout(() => {
-      this.mapStateSvc.statusTableResizeEvent$.next(0);
+      this.mapStateSvc.statusTableHeight = this.tableHeightNum;
+      this.mapStateSvc.statusTableResizeEvent$.next(this.tableHeightNum);
     }, 0);
   }
 
@@ -120,9 +123,7 @@ export class StatusControlComponent implements OnInit, OnDestroy {
     document.getElementById('status-control-container').style.height =
       resizedH + 'px';
 
-    this.tableHeightNum = resizedH - 37; /* header:40px, tab-panel:25px */
-
-    this.mapStateSvc.statusTableResizeEvent$.next(this.tableHeightNum);
+    this.resizeTableHeight(resizedH - 37);
   }
   onChangeTab(selectedIndex: number) {
     const pref = this.settingSvc.globalPreferences;
@@ -149,7 +150,7 @@ export class StatusControlComponent implements OnInit, OnDestroy {
 
   viewerHide() {
     this.mapStateSvc.changeToolbarState('controlTable', false);
-    this.mapStateSvc.statusTableResizeEvent$.next(0);
+    this.resizeTableHeight(0);
   }
   shrinkViewer() {
     const height = document.getElementById('status-control-container').style
@@ -157,10 +158,10 @@ export class StatusControlComponent implements OnInit, OnDestroy {
     if (height === '40px') {
       document.getElementById('status-control-container').style.height =
         '365px';
-      this.tableHeightNum = 300;
+      this.resizeTableHeight(300);
     } else {
       document.getElementById('status-control-container').style.height = '40px';
-      this.tableHeightNum = 0;
+      this.resizeTableHeight(0);
     }
   }
 }

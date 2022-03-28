@@ -4,6 +4,8 @@ import { findBufferById } from '../../buffer/buffers'
 import { findStationById } from '../../station/stations'
 import { Vehicle } from '../types/Vehicle'
 
+// command, next line utils
+
 function parseTargetId(location: string) {
   const typeLetter = location[0].toLowerCase()
   const id = parseInt(location.slice(1))
@@ -23,20 +25,6 @@ function useCommandPointPosition(
   dropoff: Ref<Vehicle['locationDropoff']>,
   commandPoint: Ref<Vehicle['commandPoint']>
 ) {
-  const commandTarget = computed(() =>
-    commandPoint.value ? parseTargetId(commandPoint.value) : undefined
-  )
-
-  const nextLocation = computed(() =>
-    [pickup.value, dropoff.value]
-      .filter((notNullish) => notNullish)
-      .map((location) => parseTargetId(location!))
-      .filter((notNullish) => notNullish)
-      .find(
-        (location) => location!.pointId === commandTarget.value?.pointId
-      )
-  )
-
   const type = computed(() =>
     commandPoint.value === dropoff.value
       ? 'dropoff'
@@ -45,11 +33,21 @@ function useCommandPointPosition(
       : undefined
   )
 
-  const position = computed(() =>
-    nextLocation.value
-      ? getPositionForBufferOfStationOffsetPosition(nextLocation.value)
+  const position = computed(() => {
+    const commandTarget = commandPoint.value
+      ? parseTargetId(commandPoint.value)
       : undefined
-  )
+
+    const nextLocation = [pickup.value, dropoff.value]
+      .filter((notNullish) => notNullish)
+      .map((location) => parseTargetId(location!))
+      .filter((notNullish) => notNullish)
+      .find((location) => location!.pointId === commandTarget?.pointId)
+
+    return nextLocation
+      ? getPositionForBufferOfStationOffsetPosition(nextLocation)
+      : undefined
+  })
 
   return { type, position }
 }
