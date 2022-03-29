@@ -19,208 +19,250 @@ using OMSWeb.Repositories;
 using OMSWeb.Services;
 using OMSWeb.MqttSettings;
 using OMSWeb.Extensions;
+using OMSWeb.OMSSettings;
 
 namespace OMSWeb
 {
     public class Startup
-  {
-    public Startup(IConfiguration configuration)
     {
-       Configuration = configuration;
-       MapConfiguration();
-    }
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
 
-    public IConfiguration Configuration { get; }
+            OmsConfiguration();
+        }
 
-    private void MapConfiguration()
-    {
-        MapBrokerHostSettings();
-        MapClientSettings();
-    }
+        public IConfiguration Configuration { get; }
 
-    private void MapBrokerHostSettings()
-    {
-        BrokerHostSettings brokerHostSettings = new BrokerHostSettings();
-        Configuration.GetSection(nameof(BrokerHostSettings)).Bind(brokerHostSettings);
-        MqttAppSettingsProvider.BrokerHostSettings = brokerHostSettings;
-    }
+        private void OmsConfiguration()
+        {
+            // from default Appsettings.json
+            MqttConfiguration();
 
-    private void MapClientSettings()
-    {
-        MqttClientSettings clientSettings = new MqttClientSettings();
-        Configuration.GetSection(nameof(ClientSettings)).Bind(clientSettings);
-        MqttAppSettingsProvider.ClientSettings = clientSettings;
-    }
+            // config from oms_setting.ini
+            OMSConfigSettings omsConfigSettings = new OMSConfigSettings();
+            Configuration.GetSection(nameof(OMSConfigSettings)).Bind(omsConfigSettings);
+            if (!String.IsNullOrWhiteSpace(omsConfigSettings.Path))
+            {
+                var dic = INIFile.GetData(omsConfigSettings.Path);
+                try
+                {
+                    string host = dic["MessageManager-host"];
+                    string port = dic["MessageManager-port"];
+                    string topic = dic["MessageManager-topic_root"];
+
+                    if (!String.IsNullOrWhiteSpace(host) &&
+                        !String.IsNullOrWhiteSpace(port) &&
+                        !String.IsNullOrWhiteSpace(topic))
+                    {
+                        // set MqttAppSettingsProvider
+                        BrokerHostSettings brokerHostSettings = new BrokerHostSettings();
+                        MqttClientSettings clientSettings = new MqttClientSettings();
+
+                        brokerHostSettings.Host = host;
+                        brokerHostSettings.Port = Int32.Parse(port);
+                        brokerHostSettings.TopicRoot = topic;
+
+                        MqttAppSettingsProvider.BrokerHostSettings = brokerHostSettings;
+                        //MqttAppSettingsProvider.ClientSettings은 추후 보완시, 추가 예정
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("OmsConfiguration() : " + e.Message);
+                }
+            }
+        }
+
+        private void MqttConfiguration()
+        {
+            MqttBrokerSettings();
+            MqttClientSettings();
+        }
+
+        private void MqttBrokerSettings()
+        {
+            BrokerHostSettings brokerHostSettings = new BrokerHostSettings();
+            Configuration.GetSection(nameof(BrokerHostSettings)).Bind(brokerHostSettings);
+            MqttAppSettingsProvider.BrokerHostSettings = brokerHostSettings;
+        }
+
+        private void MqttClientSettings()
+        {
+            MqttClientSettings clientSettings = new MqttClientSettings();
+            Configuration.GetSection(nameof(ClientSettings)).Bind(clientSettings);
+            MqttAppSettingsProvider.ClientSettings = clientSettings;
+        }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-    {
-      // services.AddControllersWithViews();
-
-      // json options
-      services.AddControllers().AddNewtonsoftJson(options =>
-      {
-        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-        options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
-        options.SerializerSettings.DateFormatHandling = DateFormatHandling.MicrosoftDateFormat;
-        options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-        // options.SerializerSettings.ContractResolver = new DefaultContractResolver { NamingStrategy = new SnakeCaseNamingStrategy() };
-      });
-
-      // load appSettings
-      var appSettingsSection = Configuration.GetSection("AppSettings");
-      services.Configure<AppSettings>(appSettingsSection);
-      var appSettings = appSettingsSection.Get<AppSettings>();
-
-      #region configure jwt authentication
-      var jwtKey = Encoding.ASCII.GetBytes(appSettings.JwtSecret);
-      services.AddAuthentication(x =>
         {
-          x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-          x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        })
-        .AddJwtBearer(x =>
-        {
-          x.RequireHttpsMetadata = false;
-          x.SaveToken = true;
-          x.TokenValidationParameters = new TokenValidationParameters
-          {
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(jwtKey),
-            ValidateIssuer = false,
-            ValidateAudience = false,
-            ClockSkew = TimeSpan.Zero,
-          };
-        });
-      #endregion
+            // services.AddControllersWithViews();
 
-      services.AddHttpContextAccessor();
-      services.AddMemoryCache();
+            // json options
+            services.AddControllers().AddNewtonsoftJson(options =>
+            {
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+                options.SerializerSettings.DateFormatHandling = DateFormatHandling.MicrosoftDateFormat;
+                options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                // options.SerializerSettings.ContractResolver = new DefaultContractResolver { NamingStrategy = new SnakeCaseNamingStrategy() };
+            });
 
-      #region DI
-      services.AddScoped<UserRepository>();
-      services.AddScoped<AlarmRepository>();
-      services.AddScoped<AlertRepository>();
-      services.AddScoped<HistoryRepository>();
-      services.AddScoped<MessageRepository>();
-      services.AddScoped<OrderRepository>();
-      services.AddScoped<PlaybackRepository>();
-      services.AddScoped<StatusRepository>();
-      services.AddScoped<TrackRepository>();
-      services.AddScoped<UserRepository>();
-      services.AddScoped<ModeStateRepository>();
-      services.AddScoped<ModuleStatusRepository>();
-      services.AddScoped<SettingsRepository>();
+            // load appSettings
+            var appSettingsSection = Configuration.GetSection("AppSettings");
+            services.Configure<AppSettings>(appSettingsSection);
+            var appSettings = appSettingsSection.Get<AppSettings>();
 
-      services.AddScoped<ModuleStatusService>();
-      services.AddScoped<StatusService>();
-      services.AddScoped<OrderService>();
-      services.AddScoped<NotificationsService>();
-      services.AddScoped<MessageService>();
-      services.AddScoped<HistoryService>();
-      services.AddScoped<UserService>();
-      services.AddScoped<PlaybackService>();
-      services.AddScoped<SettingsService>();
+            #region configure jwt authentication
+            var jwtKey = Encoding.ASCII.GetBytes(appSettings.JwtSecret);
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+              .AddJwtBearer(x =>
+              {
+                  x.RequireHttpsMetadata = false;
+                  x.SaveToken = true;
+                  x.TokenValidationParameters = new TokenValidationParameters
+                  {
+                      ValidateIssuerSigningKey = true,
+                      IssuerSigningKey = new SymmetricSecurityKey(jwtKey),
+                      ValidateIssuer = false,
+                      ValidateAudience = false,
+                      ClockSkew = TimeSpan.Zero,
+                  };
+              });
+            #endregion
 
-      services.AddSingleton<SystemsService>();
-      services.AddSingleton<ModuleStatusRepository>();
-      services.AddSingleton<ModeStateRepository>();
-      services.AddSingleton<TrackRepository>();
-      services.AddSingleton<TrackService>();
-      services.AddSingleton<PushService>();
-      services.AddSingleton<CacheService>();
+            services.AddHttpContextAccessor();
+            services.AddMemoryCache();
 
-      // services.AddTransient<ProblemDetailsFactory, OmsProblemDetailsFactory>();  // @TODO problem handler 작성 후 사용
-      #endregion
+            #region DI
+            services.AddScoped<UserRepository>();
+            services.AddScoped<AlarmRepository>();
+            services.AddScoped<AlertRepository>();
+            services.AddScoped<HistoryRepository>();
+            services.AddScoped<MessageRepository>();
+            services.AddScoped<OrderRepository>();
+            services.AddScoped<PlaybackRepository>();
+            services.AddScoped<StatusRepository>();
+            services.AddScoped<TrackRepository>();
+            services.AddScoped<UserRepository>();
+            services.AddScoped<ModeStateRepository>();
+            services.AddScoped<ModuleStatusRepository>();
+            services.AddScoped<SettingsRepository>();
 
-      #region mqtt
-      services.AddMqttClientHostedService();
-      services.AddSingleton<ExtarnalService>();
-      #endregion
+            services.AddScoped<ModuleStatusService>();
+            services.AddScoped<StatusService>();
+            services.AddScoped<OrderService>();
+            services.AddScoped<NotificationsService>();
+            services.AddScoped<MessageService>();
+            services.AddScoped<HistoryService>();
+            services.AddScoped<UserService>();
+            services.AddScoped<PlaybackService>();
+            services.AddScoped<SettingsService>();
 
-      #region SignalR
-      services.AddSignalR();
-      #endregion
+            services.AddSingleton<SystemsService>();
+            services.AddSingleton<ModuleStatusRepository>();
+            services.AddSingleton<ModeStateRepository>();
+            services.AddSingleton<TrackRepository>();
+            services.AddSingleton<TrackService>();
+            services.AddSingleton<PushService>();
+            services.AddSingleton<CacheService>();
 
-      services.AddHostedService<DataWatcherService>();
+            // services.AddTransient<ProblemDetailsFactory, OmsProblemDetailsFactory>();  // @TODO problem handler 작성 후 사용
+            #endregion
 
-      services.AddTransient<ProblemDetailsFactory, OmsProblemDetailsFactory>();
+            #region mqtt
+            services.AddMqttClientHostedService();
+            services.AddSingleton<ExtarnalService>();
+            #endregion
 
-      services.AddMvcCore(o =>
-      {
-        o.Filters.Add(new ResponseCacheAttribute { NoStore = true, Location = ResponseCacheLocation.None });
-      });
+            #region SignalR
+            services.AddSignalR();
+            #endregion
 
-      // In production, the Angular files will be served from this directory
-      services.AddSpaStaticFiles(configuration =>
-      {
-        configuration.RootPath = "ClientApp/dist";
-      });
-    }
+            services.AddHostedService<DataWatcherService>();
 
-    // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-    {
-      app.UseOmsExceptionHandler();
+            services.AddTransient<ProblemDetailsFactory, OmsProblemDetailsFactory>();
 
-      if (env.IsDevelopment())
-      {
-        app.UseDeveloperExceptionPage();
-      }
-      else
-      {
-        app.UseExceptionHandler("/Error");
-      }
+            services.AddMvcCore(o =>
+            {
+                o.Filters.Add(new ResponseCacheAttribute { NoStore = true, Location = ResponseCacheLocation.None });
+            });
 
-      app.UseStaticFiles(new StaticFileOptions()
-      {
-        OnPrepareResponse = context =>
-        {
-          context.Context.Response.Headers.Add("Cache-Control", "no-cache, no-store");
-          context.Context.Response.Headers.Add("Expires", "-1");
+            // In production, the Angular files will be served from this directory
+            services.AddSpaStaticFiles(configuration =>
+            {
+                configuration.RootPath = "ClientApp/dist";
+            });
         }
-      });
 
-      if (!env.IsDevelopment())
-      {
-        app.UseSpaStaticFiles(new StaticFileOptions
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-          OnPrepareResponse = context =>
-          {
-            context.Context.Response.Headers.Add("Cache-Control", "no-cache, no-store, must-revalidate");
-            context.Context.Response.Headers.Add("Expires", "0");
-            context.Context.Response.Headers.Add("Pragma", "no-cache");
-          }
-        });
-      }
+            app.UseOmsExceptionHandler();
 
-      app.UseRouting();
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseExceptionHandler("/Error");
+            }
 
-      app.UseAuthentication();
-      app.UseAuthorization();
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                OnPrepareResponse = context =>
+                {
+                    context.Context.Response.Headers.Add("Cache-Control", "no-cache, no-store");
+                    context.Context.Response.Headers.Add("Expires", "-1");
+                }
+            });
 
-      // @NOTE guard 정의 (optional)
+            if (!env.IsDevelopment())
+            {
+                app.UseSpaStaticFiles(new StaticFileOptions
+                {
+                    OnPrepareResponse = context =>
+                    {
+                        context.Context.Response.Headers.Add("Cache-Control", "no-cache, no-store, must-revalidate");
+                        context.Context.Response.Headers.Add("Expires", "0");
+                        context.Context.Response.Headers.Add("Pragma", "no-cache");
+                    }
+                });
+            }
 
-      app.UseEndpoints(endpoints =>
-      {
-        endpoints.MapHub<OMSHub>("/hubs/oms");
-        endpoints.MapControllerRoute(
-                  name: "default",
-                  pattern: "{controller}/{action=Index}/{id?}");
-      });
+            app.UseRouting();
 
-      app.UseSpa(spa =>
-      {
-        // To learn more about options for serving an Angular SPA from ASP.NET Core,
-        // see https://go.microsoft.com/fwlink/?linkid=864501
+            app.UseAuthentication();
+            app.UseAuthorization();
 
-        spa.Options.SourcePath = "ClientApp";
+            // @NOTE guard 정의 (optional)
 
-        if (env.IsDevelopment())
-        {
-          spa.UseAngularCliServer(npmScript: "start");
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapHub<OMSHub>("/hubs/oms");
+                endpoints.MapControllerRoute(
+                          name: "default",
+                          pattern: "{controller}/{action=Index}/{id?}");
+            });
+
+            app.UseSpa(spa =>
+            {
+                // To learn more about options for serving an Angular SPA from ASP.NET Core,
+                // see https://go.microsoft.com/fwlink/?linkid=864501
+
+                spa.Options.SourcePath = "ClientApp";
+
+                if (env.IsDevelopment())
+                {
+                    spa.UseAngularCliServer(npmScript: "start");
+                }
+            });
         }
-      });
     }
-  }
 }
