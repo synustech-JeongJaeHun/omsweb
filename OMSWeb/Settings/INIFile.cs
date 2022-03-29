@@ -16,7 +16,15 @@ namespace OMSWeb.OMSSettings
 
         public static Dictionary<string, string> GetData(string fileName)
         {
-            return ParseIniDataWithSections(File.ReadAllLines(fileName));
+            try
+            {
+                return ParseIniDataWithSections(File.ReadAllLines(fileName));
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("GetData() : " + e.Message);
+            }
+            return new Dictionary<string, string>();
         }
 
         public static Dictionary<string, string> ParseIniDataWithSections(string[] iniData)
