@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Dapper;
 using Microsoft.Extensions.Configuration;
@@ -6,15 +7,15 @@ using OMSWeb.Models.Entities;
 
 namespace OMSWeb.Repositories
 {
-  public class HistoryRepository : DataAccess
-  {
-    public HistoryRepository(IConfiguration configuration) : base(configuration)
+    public class HistoryRepository : DataAccess
     {
-    }
+        public HistoryRepository(IConfiguration configuration) : base(configuration)
+        {
+        }
 
-    public IQueryable<OrderHistoryEntity> QueryOrders()
-    {
-      var sql = @"
+        public IQueryable<OrderHistoryEntity> QueryOrders()
+        {
+            var sql = @"
     SELECT OD.id, OD.origin, OD.history_source_id, OD.logical_id, 
     CASE
       WHEN OD.time_failed IS NOT NULL THEN 'FAILED'
@@ -43,17 +44,17 @@ namespace OMSWeb.Repositories
     LEFT OUTER JOIN vehicle_reg AS VR
         ON OD.vehicle_id = VR.id
       ";
-      IQueryable<OrderHistoryEntity> result;
-      using (var conn = ConnectTrack())
-      {
-        result = conn.Query<OrderHistoryEntity>(sql).AsQueryable();
-      }
-      return result;
-    }
+            IQueryable<OrderHistoryEntity> result;
+            using (var conn = ConnectTrack())
+            {
+                result = conn.Query<OrderHistoryEntity>(sql).AsQueryable();
+            }
+            return result;
+        }
 
-    public IQueryable<VehicleHistoryEntity> QueryVehicles()
-    {
-      var sql = @"
+        public IQueryable<VehicleHistoryEntity> QueryVehicles()
+        {
+            var sql = @"
     SELECT
     VH.history_change_time, VH.id, VH.history_source_id,
     VH.physical_id, VH.logical_id, 
@@ -70,17 +71,17 @@ namespace OMSWeb.Repositories
     ON VH.id = LVH.max_id    
     ORDER BY VH.id        
       ";
-      IQueryable<VehicleHistoryEntity> result;
-      using (var conn = ConnectTrack())
-      {
-        result = conn.Query<VehicleHistoryEntity>(sql).AsQueryable();
-      }
-      return result;
-    }
+            IQueryable<VehicleHistoryEntity> result;
+            using (var conn = ConnectTrack())
+            {
+                result = conn.Query<VehicleHistoryEntity>(sql).AsQueryable();
+            }
+            return result;
+        }
 
-    public IQueryable<AlarmHistory> QueryAlarms()
-    {
-      var sql = @"
+        public IQueryable<AlarmHistory> QueryAlarms()
+        {
+            var sql = @"
     SELECT VA.id, VA.time, VA.error_code, VA.vehicle_id, VR.logical_id AS vehicle_logical_id,
     VA.time_resolved, 
     CASE WHEN VA.time_resolved IS NULL THEN  extract('epoch' from now()-VA.time) ELSE  extract('epoch' from VA.time_resolved-VA.time) END AS age,
@@ -95,28 +96,57 @@ namespace OMSWeb.Repositories
         ON VA.error_code = AN.reference_id and AN.reference_table = 'vehicle_errors'
     ORDER BY VA.id desc
       ";
-      IQueryable<AlarmHistory> result;
-      using (var conn = ConnectTrack())
-      {
-        result = conn.Query<AlarmHistory>(sql).AsQueryable();
-      }
-      return result;
-    }
+            IQueryable<AlarmHistory> result;
+            using (var conn = ConnectTrack())
+            {
+                result = conn.Query<AlarmHistory>(sql).AsQueryable();
+            }
+            return result;
+        }
 
-    public IQueryable<AlertEntity> QueryAlerts()
-    {
-      var sql = @"
+        public IQueryable<AlertEntity> QueryAlerts()
+        {
+            var sql = @"
       SELECT ALT.id, ALT.time, ALT.level, ALT.tag, ALT.message, ALT.ack_time, ALT.ack_by 
       FROM alerts AS ALT
       ORDER BY ALT.id desc
       ";
 
-      IQueryable<AlertEntity> result;
-      using (var conn = ConnectTrack())
-      {
-        result = conn.Query<AlertEntity>(sql).AsQueryable();
-      }
-      return result;
+            IQueryable<AlertEntity> result;
+            using (var conn = ConnectTrack())
+            {
+                result = conn.Query<AlertEntity>(sql).AsQueryable();
+            }
+            return result;
+        }
+
+        public IQueryable<VehicleDioHistoryEntity> QueryVehicleDios(int vehicleId, DateTimeOffset from, DateTimeOffset to)
+        {
+            var sql = @"
+      SELECT DIO.id, DIO.vehicle_id, 
+        DIO.di_1, DIO.di_2, DIO.di_3, DIO.do_1, DIO.do_2, DIO.do_3, 
+        DIO.history_change_time, DIO.history_change_type, DIO.history_source_id
+      FROM vehicle_dio_history AS DIO
+      WHERE
+        DIO.vehicle_id = @vehicle_id 
+        and
+        @from <= DIO.history_change_time 
+        and
+        DIO.history_change_time <= @to
+      ORDER BY DIO.history_change_time desc
+      ";
+
+            IQueryable<VehicleDioHistoryEntity> result;
+            using (var conn = ConnectTrack())
+            {
+                result = conn.Query<VehicleDioHistoryEntity>(sql, new
+                {
+                    vehicle_id = vehicleId,
+                    from = from,
+                    to = to
+                }).AsQueryable();
+            }
+            return result;
+        }
     }
-  }
 }
