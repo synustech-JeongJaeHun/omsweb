@@ -44,5 +44,11 @@ namespace OMSWeb.Controllers
         {
             return _historySvc.QueryVehicleDios(vehicleId, from, to);
         }
+
+        [HttpGet("dio-categories")]
+        public object GetVehicleDioCategory()
+        {
+            return _vehicleSvc.QueryDioCategory();
+        }
     }
 }

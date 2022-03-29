@@ -25,5 +25,10 @@ namespace OMSWeb.Services
             else
                 return null;
         }
+
+        public IQueryable<VehicleDioCategory> QueryDioCategory()
+        {
+            return this._repo.QueryDioCategories();
+        }
     }
 }

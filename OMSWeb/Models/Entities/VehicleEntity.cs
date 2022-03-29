@@ -68,4 +68,13 @@ namespace OMSWeb.Models.Entities
         public int Do2 { get; set; }
         public int Do3 { get; set; }
     }
+
+    public class VehicleDioCategory
+    {
+        public int Id { get; set; }
+        public string InCategory { get; set; }
+        public string InName { get; set; }
+        public string OutCategory { get; set; }
+        public string OutName { get; set; }
+    }
 }

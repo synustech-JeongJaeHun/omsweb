@@ -33,5 +33,20 @@ namespace OMSWeb.Repositories
             }
             return result;
         }
+
+        public IQueryable<VehicleDioCategory> QueryDioCategories()
+        {
+            var sql = @"
+      SELECT CAT.id, CAT.in_category, CAT.in_name, CAT.out_category, CAT.out_name
+      FROM vehicle_dio_category AS CAT
+      ";
+
+            IQueryable<VehicleDioCategory> result;
+            using (var conn = ConnectTrack())
+            {
+                result = conn.Query<VehicleDioCategory>(sql).AsQueryable();
+            }
+            return result;
+        }
     }
 }
