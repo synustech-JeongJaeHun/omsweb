@@ -551,6 +551,18 @@
       <div class="table-columns-sub-container">
         <div class="table-columns-entries-container">
           <div>
+            <mat-label>{{ "names.carrierLabel" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.carrierLabel' | translate"
+                   [checked]="getCheckedState('vehicles_carrierLabel')"
+                   (change)="onChangeControlTable('vehicles_carrierLabel', $event)" />
+          </div>
+        </div>
+      </div>
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
             <mat-label>{{ "names.error" | translate }}</mat-label>
           </div>
           <div>

@@ -66,7 +66,7 @@
     "locationDropoff": "종점",
     "locationMove": "이동",
     "priority": "우선순위",
-    "carrierLabel": "캐리어시간",
+    "carrierLabel": "캐리어 아이디",
     "timeCreated": "생성시간",
     "timeAssigned": "할당시간",
     "timeVehicleArrived": "도착시간",
