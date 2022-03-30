@@ -11,6 +11,10 @@
           [disabled]="!canControl" (click)="onSetAuto()">
     {{ "names.auto" | translate }}
   </button>
+  <button *ngIf="hasPermission(permissionEnums.AutoVehicle)" mat-stroked-button color="primary" class="dense accent"
+          [disabled]="!canControl" (click)="onSetAutoReverse()">
+    {{ "names.reverseAuto" | translate }}
+  </button>
   <button *ngIf="hasPermission(permissionEnums.HostOrderEnable)" mat-stroked-button color="primary" class="dense"
           [disabled]="!canControl" (click)="onChangeHostOrderActivity()">
     {{ "names.hostOrderDisable" | translate }}
@@ -85,6 +89,8 @@
               [caption]="'names.movingState' | translate" *ngIf="canDisplayTable('vehicles_movingState')"></dxi-column>
   <dxi-column [width]="80" dataType="string" dataField="cargoState" [allowSorting]="false"
               [caption]="'names.cargoState' | translate" *ngIf="canDisplayTable('vehicles_cargoState')"></dxi-column>
+  <dxi-column [width]="80" dataType="string" dataField="carrierLabel" [allowSorting]="false"
+              [caption]="'names.carrierLabel' | translate" *ngIf="canDisplayTable('vehicles_carrierLabel')"></dxi-column>
   <!-- Error 추가 -->
   <dxi-column [allowFiltering]="true" [width]="70" dataType="string" dataField="errorList" [allowSorting]="true"
               [caption]="'names.error' | translate" *ngIf="canDisplayTable('vehicles_error')"></dxi-column>

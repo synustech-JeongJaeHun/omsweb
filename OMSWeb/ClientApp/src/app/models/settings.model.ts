@@ -111,6 +111,7 @@ export const defaultControlTable: ControlTable = {
   "vehicles_runtimeTotal": true,
   "vehicles_movingState": true,
   "vehicles_cargoState": true,
+  "vehicles_carrierLabel": true,
   "vehicles_error": true,
   "vehicles_sensorStopped": true,
   "vehicles_blocked": true,
