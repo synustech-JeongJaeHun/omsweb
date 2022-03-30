@@ -43,4 +43,39 @@ namespace OMSWeb.Models.Entities
         public DateTime HistoryChangeTime { get; set; }
         public string HistoryChangeType { get; set; }
     }
+
+    public class VehicleDioHistoryEntity
+    {
+        public int Id { get; set; }
+        public int VehicleId { get; set; }
+        public int Di1 { get; set; }
+        public int Di2 { get; set; }
+        public int Di3 { get; set; }
+        public int Do1 { get; set; }
+        public int Do2 { get; set; }
+        public int Do3 { get; set; }
+        public DateTimeOffset HistoryChangeTime { get; set; }
+        public string HistoryChangeType { get; set; }
+        public int HistorySourceId { get; set; }
+    }
+
+    public class VehicleDio
+    {
+        public int VehicleId { get; set; }
+        public int Di1 { get; set; }
+        public int Di2 { get; set; }
+        public int Di3 { get; set; }
+        public int Do1 { get; set; }
+        public int Do2 { get; set; }
+        public int Do3 { get; set; }
+    }
+
+    public class VehicleDioCategory
+    {
+        public int Id { get; set; }
+        public string InCategory { get; set; }
+        public string InName { get; set; }
+        public string OutCategory { get; set; }
+        public string OutName { get; set; }
+    }
 }
