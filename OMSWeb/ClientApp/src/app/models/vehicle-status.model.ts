@@ -40,16 +40,56 @@ export interface IVehicleSignal {
   hostOrderEnable: boolean;
   pushEnable: boolean;
 }
-
-export interface IVehicleDIO {
+export interface IRecentVehicleDio {
+  vehicleId: number;
+  di1: number;
+  di2: number;
+  di3: number;
+  do1: number;
+  do2: number;
+  do3: number;
+}
+export interface IVehicleDioHistory {
   id: number;
-  category: string;
-  name: string;
-  value: boolean;
+  vehicleId: number;
+  di1: number;
+  di2: number;
+  di3: number;
+  do1: number;
+  do2: number;
+  do3: number;
+  historyChangeTime: string;
+  historyChangeType: string;
+  historySourceId: number;
 }
 
-export interface IVehicleDIOStates {
-  vehicleDI: IVehicleDIO[];
-  vehicleDO: IVehicleDIO[];
-  categories: string[];
+export interface IVehicleDioCategory {
+  id: number;
+  inCategory: string;
+  inName: string;
+  outCategory: string;
+  outName: string;
+}
+
+export interface IVehicleStatus {
+  id: number;
+  physicalId: string;
+  logicalId: string;
+  movingState: string;
+  distanceTotal: number;
+  runtimeTotal: number;
+  mapDb: string;
+  curPoint: number;
+  mode: string;
+  canBePushed: boolean;
+  hostOrder: boolean;
+  orderOrigin: string;
+  cargoState: string;
+  isSensorStopped: boolean;
+  isBlocked: boolean;
+  errorList: string;
+  railIn: boolean;
+  isMaint: boolean;
+  isConnected: boolean;
+  groupId: number;
 }

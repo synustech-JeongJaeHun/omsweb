@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using OMSWeb.Models;
 using OMSWeb.Models.Tracks;
 using OMSWeb.Repositories;
 using OMSWeb.Services;
 using DevExtreme.AspNet.Data;
 using DevExtreme.AspNet.Mvc;
 using OMSWeb.Filters;
-using OMSWeb.Models;
 
 namespace OMSWeb.Controllers
 {
@@ -26,6 +26,17 @@ namespace OMSWeb.Controllers
         {
             this._historySvc = historyService;
             this._vehicleSvc = vehicleService;
+        }
+
+        [HttpGet("{vehicleId}/status")]
+        public ActionResult<VehicleState> GetVehicleStatus(int vehicleId)
+        {
+            var result = _vehicleSvc.QueryVehicleStatus(vehicleId);
+
+            if (result == null)
+                return NotFound();
+            else
+                return Ok(result);
         }
 
         [HttpGet("{vehicleId}/recent-dio")]

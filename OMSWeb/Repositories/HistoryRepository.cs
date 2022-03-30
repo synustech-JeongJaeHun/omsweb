@@ -133,7 +133,7 @@ namespace OMSWeb.Repositories
         @from <= DIO.history_change_time 
         and
         DIO.history_change_time <= @to
-      ORDER BY DIO.history_change_time desc
+      ORDER BY DIO.history_change_time asc
       ";
 
             IQueryable<VehicleDioHistoryEntity> result;
