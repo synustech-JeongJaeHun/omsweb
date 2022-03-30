@@ -76,6 +76,7 @@ width: 24px;
 .tab-group {
   ::ng-deep.mat-tab-label {
     //min-width: 150px !important;
-    min-width: 110px !important;
+    //min-width: 110px !important;
+    min-width: 85px !important;
   }
 }
