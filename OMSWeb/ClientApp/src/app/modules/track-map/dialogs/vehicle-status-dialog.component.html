@@ -1,7 +1,6 @@
 <oms-dialog-base [title]="'names.vehicleStatus' | translate">
   <ng-container class="dialog-layout">
     <div mat-dialog-content class="content-layout">
-
       <div class="full-col">
         <mat-form-field class="dense2" appearance="outline">
           <mat-select [value]="currentVehicle" (selectionChange)="onVehicleSelect($event)">
@@ -13,6 +12,7 @@
           {{ "names.pioTrend" | translate }}
         </button>
       </div>
+      <ng-container *ngIf="visiblePIOTrend===false">
       <h4>Status</h4>
       <h4>DI</h4>
       <h4>DO</h4>
@@ -99,6 +99,7 @@
           *ngFor="let category of categories" >{{
           category.name }}</mat-slide-toggle>
       </div>
+      </ng-container>
 
       <div class="pioTrend" *ngIf="visiblePIOTrend">
         <!--
@@ -143,8 +144,8 @@
               </th>
               <td>
                 <dx-sparkline class="sparkline" [dataSource]="dioHistoriesIn30Seconds"
-                argumentField="historyChangeTimeFrom30SecondsBefore" [valueField]="valueFieldName('po', 0)"
-                  type="stepline" lineColor="#181818" >
+                argumentField="historyChangeTimeFrom30SecondsBefore" valueField="po_valid"
+                  type="stepline" lineColor="#181818" pointSymbol="none" >
                   <!-- <dxo-tooltip format="currency"></dxo-tooltip> -->
                 </dx-sparkline>
               </td>
@@ -158,8 +159,8 @@
               </th>
               <td>
                 <dx-sparkline class="sparkline" [dataSource]="dioHistoriesIn30Seconds"
-                argumentField="historyChangeTimeFrom30SecondsBefore" [valueField]="valueFieldName('po', 1)"
-                  type="stepline" lineColor="#181818" >
+                argumentField="historyChangeTimeFrom30SecondsBefore" valueField="po_cs_0"
+                  type="stepline" lineColor="#181818"  pointSymbol="none" >
                   <!-- <dxo-tooltip format="currency"></dxo-tooltip> -->
                 </dx-sparkline>
               </td>
@@ -173,8 +174,8 @@
               </th>
               <td>
                 <dx-sparkline class="sparkline" [dataSource]="dioHistoriesIn30Seconds"
-                argumentField="historyChangeTimeFrom30SecondsBefore" [valueField]="valueFieldName('po', 2)"
-                  type="stepline" lineColor="#181818" >
+                argumentField="historyChangeTimeFrom30SecondsBefore" valueField="po_cs_1"
+                  type="stepline" lineColor="#181818"  pointSymbol="none">
                   <!-- <dxo-tooltip format="currency"></dxo-tooltip> -->
                 </dx-sparkline>
               </td>
@@ -188,8 +189,8 @@
               </th>
               <td>
                 <dx-sparkline class="sparkline" [dataSource]="dioHistoriesIn30Seconds"
-                argumentField="historyChangeTimeFrom30SecondsBefore" [valueField]="valueFieldName('po', 4)"
-                  type="stepline" lineColor="#181818" >
+                argumentField="historyChangeTimeFrom30SecondsBefore" valueField="po_tr_req"
+                  type="stepline" lineColor="#181818"  pointSymbol="none">
                   <!-- <dxo-tooltip format="currency"></dxo-tooltip> -->
                 </dx-sparkline>
               </td>
@@ -203,8 +204,8 @@
               </th>
               <td>
                 <dx-sparkline class="sparkline" [dataSource]="dioHistoriesIn30Seconds"
-                argumentField="historyChangeTimeFrom30SecondsBefore" [valueField]="valueFieldName('po', 5)"
-                  type="stepline" lineColor="#181818" >
+                argumentField="historyChangeTimeFrom30SecondsBefore" valueField="po_busy"
+                  type="stepline" lineColor="#181818"  pointSymbol="none">
                   <!-- <dxo-tooltip format="currency"></dxo-tooltip> -->
                 </dx-sparkline>
               </td>
@@ -218,13 +219,12 @@
               </th>
               <td>
                 <dx-sparkline class="sparkline" [dataSource]="dioHistoriesIn30Seconds"
-                argumentField="historyChangeTimeFrom30SecondsBefore" [valueField]="valueFieldName('po', 6)"
-                  type="stepline" lineColor="#181818" >
+                argumentField="historyChangeTimeFrom30SecondsBefore" valueField="po_compt"
+                  type="stepline" lineColor="#181818"  pointSymbol="none">
                   <!-- <dxo-tooltip format="currency"></dxo-tooltip> -->
                 </dx-sparkline>
               </td>
             </tr>
-
             <tr>
               <th>CONT</th>
               <th>
@@ -233,12 +233,13 @@
               </th>
               <td>
                 <dx-sparkline class="sparkline" [dataSource]="dioHistoriesIn30Seconds"
-                argumentField="historyChangeTimeFrom30SecondsBefore" [valueField]="valueFieldName('po', 7)"
-                  type="stepline" lineColor="#181818" >
+                argumentField="historyChangeTimeFrom30SecondsBefore" valueField="po_cont"
+                  type="stepline" lineColor="#181818"  pointSymbol="none">
                   <!-- <dxo-tooltip format="currency"></dxo-tooltip> -->
                 </dx-sparkline>
               </td>
             </tr>
+
             <!-- PI -->
             <tr >
               <th>L_REQ</th>
@@ -248,22 +249,22 @@
               </th>
               <td>
                 <dx-sparkline class="sparkline" [dataSource]="dioHistoriesIn30Seconds"
-                argumentField="historyChangeTimeFrom30SecondsBefore" [valueField]="valueFieldName('pi', 0)"
-                  type="stepline" lineColor="#181818" width="300px">
+                argumentField="historyChangeTimeFrom30SecondsBefore" valueField="pi_l_req"
+                  type="stepline" lineColor="#181818"  pointSymbol="none">
                   <!-- <dxo-tooltip format="currency"></dxo-tooltip> -->
                 </dx-sparkline>
               </td>
             </tr>
             <tr >
-              <th>R_REQ</th>
+              <th>U_REQ</th>
               <th>
                 <div>ON</div>
                 <div>OFF</div>
               </th>
               <td>
                 <dx-sparkline class="sparkline" [dataSource]="dioHistoriesIn30Seconds"
-                argumentField="historyChangeTimeFrom30SecondsBefore" [valueField]="valueFieldName('pi', 1)"
-                  type="stepline" lineColor="#181818" width="300px">
+                argumentField="historyChangeTimeFrom30SecondsBefore" valueField="pi_u_req"
+                  type="stepline" lineColor="#181818"  pointSymbol="none">
                   <!-- <dxo-tooltip format="currency"></dxo-tooltip> -->
                 </dx-sparkline>
               </td>
@@ -276,8 +277,8 @@
               </th>
               <td>
                 <dx-sparkline class="sparkline" [dataSource]="dioHistoriesIn30Seconds"
-                argumentField="historyChangeTimeFrom30SecondsBefore" [valueField]="valueFieldName('pi', 3)"
-                  type="stepline" lineColor="#181818" width="300px">
+                argumentField="historyChangeTimeFrom30SecondsBefore" valueField="pi_ready"
+                  type="stepline" lineColor="#181818"  pointSymbol="none">
                   <!-- <dxo-tooltip format="currency"></dxo-tooltip> -->
                 </dx-sparkline>
               </td>
@@ -290,8 +291,8 @@
               </th>
               <td>
                 <dx-sparkline class="sparkline" [dataSource]="dioHistoriesIn30Seconds"
-                argumentField="historyChangeTimeFrom30SecondsBefore" [valueField]="valueFieldName('pi', 5)"
-                  type="stepline" lineColor="#181818" width="300px">
+                argumentField="historyChangeTimeFrom30SecondsBefore" valueField="pi_ho_avbl"
+                  type="stepline" lineColor="#181818"  pointSymbol="none">
                   <!-- <dxo-tooltip format="currency"></dxo-tooltip> -->
                 </dx-sparkline>
               </td>
@@ -304,8 +305,8 @@
               </th>
               <td>
                 <dx-sparkline class="sparkline" [dataSource]="dioHistoriesIn30Seconds"
-                argumentField="historyChangeTimeFrom30SecondsBefore" [valueField]="valueFieldName('pi', 6)"
-                  type="stepline" lineColor="#181818" width="300px">
+                argumentField="historyChangeTimeFrom30SecondsBefore" valueField="pi_es"
+                  type="stepline" lineColor="#181818"  pointSymbol="none">
                   <!-- <dxo-tooltip format="currency"></dxo-tooltip> -->
                 </dx-sparkline>
               </td>

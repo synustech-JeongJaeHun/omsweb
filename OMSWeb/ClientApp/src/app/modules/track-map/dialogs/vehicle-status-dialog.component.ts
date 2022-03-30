@@ -4,10 +4,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { TrackStatusService } from '@oms/root/services/track-status.service';
 import { VehicleService } from '@oms/root/services/vehicle.service';
 import { Dto } from '@oms/root/models/dto/track.model';
-import {
-  IVehicleDioCategory,
-  IVehicleDioHistory,
-} from '@oms/root/models/vehicle-status.model';
+import { IVehicleDioCategory } from '@oms/root/models/vehicle-status.model';
 
 @Component({
   selector: 'oms-vehicle-status-dialog',
@@ -33,22 +30,18 @@ export class VehicleStatusDialogComponent implements OnInit, OnDestroy {
 
   dioHistoriesIn30Seconds: {
     historyChangeTimeFrom30SecondsBefore: number;
-    pi0: number;
-    pi1: number;
-    pi2: number;
-    pi3: number;
-    pi4: number;
-    pi5: number;
-    pi6: number;
-    pi7: number;
-    po0: number;
-    po1: number;
-    po2: number;
-    po3: number;
-    po4: number;
-    po5: number;
-    po6: number;
-    po7: number;
+    po_valid: number;
+    po_cs_0: number;
+    po_cs_1: number;
+    po_tr_req: number;
+    po_busy: number;
+    po_compt: number;
+    po_cont: number;
+    pi_l_req: number;
+    pi_u_req: number;
+    pi_ready: number;
+    pi_ho_avbl: number;
+    pi_es: number;
     pattern: string;
   }[] = [];
 
@@ -83,22 +76,20 @@ export class VehicleStatusDialogComponent implements OnInit, OnDestroy {
       >();
       const categorySet = new Set<string>();
       dios.forEach((dio) => {
-        {
+        if (dio?.inCategory?.length > 0) {
           const values = diCategoryMap.get(dio.inCategory) ?? [];
           diCategoryMap.set(dio.inCategory, [
             ...values,
             { label: dio.inName, index: dio.id },
           ]);
+          categorySet.add(dio.inCategory);
         }
-        {
+        if (dio?.outCategory?.length > 0) {
           const values = doCategoryMap.get(dio.outCategory) ?? [];
           doCategoryMap.set(dio.outCategory, [
             ...values,
             { label: dio.outName, index: dio.id },
           ]);
-        }
-        {
-          categorySet.add(dio.inCategory);
           categorySet.add(dio.outCategory);
         }
       });
@@ -141,32 +132,20 @@ export class VehicleStatusDialogComponent implements OnInit, OnDestroy {
           .subscribe(
             (res) => {
               this.dis = (
-                convertSignedIntegerToUnsigned(res.di1, 32)
-                  .toString(2)
-                  .padStart(32, '0') +
-                convertSignedIntegerToUnsigned(res.di2, 32)
-                  .toString(2)
-                  .padStart(32, '0') +
-                convertSignedIntegerToUnsigned(res.di3, 16)
-                  .toString(2)
-                  .padStart(16, '0')
+                convertSignedIntegerToBitString(res.di1, 32) +
+                convertSignedIntegerToBitString(res.di2, 32) +
+                convertSignedIntegerToBitString(res.di3, 32)
               ).split('') as ('0' | '1')[];
 
               this.dos = (
-                convertSignedIntegerToUnsigned(res.do1, 32)
-                  .toString(2)
-                  .padStart(32, '0') +
-                convertSignedIntegerToUnsigned(res.do2, 32)
-                  .toString(2)
-                  .padStart(32, '0') +
-                convertSignedIntegerToUnsigned(res.do3, 16)
-                  .toString(2)
-                  .padStart(16, '0')
+                convertSignedIntegerToBitString(res.do1, 32) +
+                convertSignedIntegerToBitString(res.do2, 32) +
+                convertSignedIntegerToBitString(res.do3, 32)
               ).split('') as ('0' | '1')[];
             },
             (error) => {
-              this.dis = Array(72).fill('0');
-              this.dos = Array(72).fill('0');
+              this.dis = Array(96).fill('0');
+              this.dos = Array(96).fill('0');
             }
           );
 
@@ -182,75 +161,64 @@ export class VehicleStatusDialogComponent implements OnInit, OnDestroy {
               this.vehicleService
                 .getRecentVehicleDio(this.currentVehicle.id)
                 .subscribe((res) => {
-                  const piBinary = convertSignedIntegerToUnsigned(res.di3, 16)
-                    .toString(2)
-                    .padStart(16, '0')
-                    .split('')
-                    .slice(0, 8) as ('0' | '1')[];
+                  const di3Binary = convertSignedIntegerToBitString(
+                    res.di3,
+                    32
+                  ).split('') as ('0' | '1')[];
 
-                  const poBinary = convertSignedIntegerToUnsigned(res.do3, 16)
-                    .toString(2)
-                    .padStart(16, '0')
-                    .split('')
-                    .slice(0, 8) as ('0' | '1')[];
+                  const do3Binary = convertSignedIntegerToBitString(
+                    res.do3,
+                    32
+                  ).split('') as ('0' | '1')[];
 
                   // this!
                   this.dioHistoriesIn30Seconds = [
                     {
                       historyChangeTimeFrom30SecondsBefore: 0,
-                      pi0: parseInt(piBinary[0]),
-                      pi1: parseInt(piBinary[1]),
-                      pi2: parseInt(piBinary[2]),
-                      pi3: parseInt(piBinary[3]),
-                      pi4: parseInt(piBinary[4]),
-                      pi5: parseInt(piBinary[5]),
-                      pi6: parseInt(piBinary[6]),
-                      pi7: parseInt(piBinary[7]),
-                      po0: parseInt(poBinary[0]),
-                      po1: parseInt(poBinary[1]),
-                      po2: parseInt(poBinary[2]),
-                      po3: parseInt(poBinary[3]),
-                      po4: parseInt(poBinary[4]),
-                      po5: parseInt(poBinary[5]),
-                      po6: parseInt(poBinary[6]),
-                      po7: parseInt(poBinary[7]),
+                      po_valid: parseInt(do3Binary[8]),
+                      po_cs_0: parseInt(do3Binary[9]),
+                      po_cs_1: parseInt(do3Binary[10]),
+                      po_tr_req: parseInt(do3Binary[12]),
+                      po_busy: parseInt(do3Binary[13]),
+                      po_compt: parseInt(do3Binary[14]),
+                      po_cont: parseInt(do3Binary[16]),
+                      pi_l_req: parseInt(di3Binary[0]),
+                      pi_u_req: parseInt(di3Binary[1]),
+                      pi_ready: parseInt(di3Binary[3]),
+                      pi_ho_avbl: parseInt(di3Binary[6]),
+                      pi_es: parseInt(di3Binary[7]),
                       pattern: parsePIO(
-                        parseInt(piBinary[0]),
-                        parseInt(piBinary[1]),
-                        parseInt(piBinary[2]),
-                        parseInt(piBinary[3]),
-                        parseInt(piBinary[4]),
-                        parseInt(piBinary[5]),
-                        parseInt(piBinary[6]),
-                        parseInt(piBinary[7]),
-                        parseInt(poBinary[0]),
-                        parseInt(poBinary[1]),
-                        parseInt(poBinary[2]),
-                        parseInt(poBinary[3]),
-                        parseInt(poBinary[4]),
-                        parseInt(poBinary[5]),
-                        parseInt(poBinary[6]),
-                        parseInt(poBinary[7])
+                        {
+                          L_REQ: di3Binary[0],
+                          U_REQ: di3Binary[1],
+                          READY: di3Binary[3],
+                          HO_AVBL: di3Binary[6],
+                          ES: di3Binary[7],
+                        },
+                        {
+                          VALID: do3Binary[8],
+                          CS_0: do3Binary[9],
+                          CS_1: do3Binary[10],
+                          TR_REQ: do3Binary[12],
+                          BUSY: do3Binary[13],
+                          COMPT: do3Binary[14],
+                        }
                       ),
                     },
                     {
                       historyChangeTimeFrom30SecondsBefore: 30,
-                      pi0: parseInt(piBinary[0]),
-                      pi1: parseInt(piBinary[1]),
-                      pi2: parseInt(piBinary[2]),
-                      pi3: parseInt(piBinary[3]),
-                      pi4: parseInt(piBinary[4]),
-                      pi5: parseInt(piBinary[5]),
-                      pi6: parseInt(piBinary[6]),
-                      pi7: parseInt(piBinary[7]),
-                      po0: parseInt(poBinary[0]),
-                      po1: parseInt(poBinary[1]),
-                      po2: parseInt(poBinary[2]),
-                      po3: parseInt(poBinary[3]),
-                      po4: parseInt(poBinary[4]),
-                      po5: parseInt(poBinary[5]),
-                      po6: parseInt(poBinary[6]),
-                      po7: parseInt(poBinary[7]),
+                      po_valid: parseInt(do3Binary[8]),
+                      po_cs_0: parseInt(do3Binary[9]),
+                      po_cs_1: parseInt(do3Binary[10]),
+                      po_tr_req: parseInt(do3Binary[12]),
+                      po_busy: parseInt(do3Binary[13]),
+                      po_compt: parseInt(do3Binary[14]),
+                      po_cont: parseInt(do3Binary[16]),
+                      pi_l_req: parseInt(di3Binary[0]),
+                      pi_u_req: parseInt(di3Binary[1]),
+                      pi_ready: parseInt(di3Binary[3]),
+                      pi_ho_avbl: parseInt(di3Binary[6]),
+                      pi_es: parseInt(di3Binary[7]),
                       pattern: '',
                     },
                   ];
@@ -258,57 +226,52 @@ export class VehicleStatusDialogComponent implements OnInit, OnDestroy {
               return;
             }
 
-            const data = res.map((moment) => {
-              const piBinary = convertSignedIntegerToUnsigned(moment.di3, 16)
-                .toString(2)
-                .padStart(16, '0')
-                .split('')
-                .slice(0, 8) as ('0' | '1')[];
+            // if histories exists
 
-              const poBinary = convertSignedIntegerToUnsigned(moment.do3, 16)
-                .toString(2)
-                .padStart(16, '0')
-                .split('')
-                .slice(0, 8) as ('0' | '1')[];
+            const data = res.map((moment) => {
+              const di3Binary = convertSignedIntegerToBitString(
+                moment.di3,
+                32
+              ).split('') as ('0' | '1')[];
+
+              const do3Binary = convertSignedIntegerToBitString(
+                moment.do3,
+                32
+              ).split('') as ('0' | '1')[];
 
               return {
                 historyChangeTimeFrom30SecondsBefore:
                   (new Date(moment.historyChangeTime).getTime() -
                     (Date.now() - 30000)) /
                   1000,
-                pi0: parseInt(piBinary[0]),
-                pi1: parseInt(piBinary[1]),
-                pi2: parseInt(piBinary[2]),
-                pi3: parseInt(piBinary[3]),
-                pi4: parseInt(piBinary[4]),
-                pi5: parseInt(piBinary[5]),
-                pi6: parseInt(piBinary[6]),
-                pi7: parseInt(piBinary[7]),
-                po0: parseInt(poBinary[0]),
-                po1: parseInt(poBinary[1]),
-                po2: parseInt(poBinary[2]),
-                po3: parseInt(poBinary[3]),
-                po4: parseInt(poBinary[4]),
-                po5: parseInt(poBinary[5]),
-                po6: parseInt(poBinary[6]),
-                po7: parseInt(poBinary[7]),
+                po_valid: parseInt(do3Binary[8]),
+                po_cs_0: parseInt(do3Binary[9]),
+                po_cs_1: parseInt(do3Binary[10]),
+                po_tr_req: parseInt(do3Binary[12]),
+                po_busy: parseInt(do3Binary[13]),
+                po_compt: parseInt(do3Binary[14]),
+                po_cont: parseInt(do3Binary[16]),
+                pi_l_req: parseInt(di3Binary[0]),
+                pi_u_req: parseInt(di3Binary[1]),
+                pi_ready: parseInt(di3Binary[3]),
+                pi_ho_avbl: parseInt(di3Binary[6]),
+                pi_es: parseInt(di3Binary[7]),
                 pattern: parsePIO(
-                  parseInt(piBinary[0]),
-                  parseInt(piBinary[1]),
-                  parseInt(piBinary[2]),
-                  parseInt(piBinary[3]),
-                  parseInt(piBinary[4]),
-                  parseInt(piBinary[5]),
-                  parseInt(piBinary[6]),
-                  parseInt(piBinary[7]),
-                  parseInt(poBinary[0]),
-                  parseInt(poBinary[1]),
-                  parseInt(poBinary[2]),
-                  parseInt(poBinary[3]),
-                  parseInt(poBinary[4]),
-                  parseInt(poBinary[5]),
-                  parseInt(poBinary[6]),
-                  parseInt(poBinary[7])
+                  {
+                    L_REQ: di3Binary[0],
+                    U_REQ: di3Binary[1],
+                    READY: di3Binary[3],
+                    HO_AVBL: di3Binary[6],
+                    ES: di3Binary[7],
+                  },
+                  {
+                    VALID: do3Binary[8],
+                    CS_0: do3Binary[9],
+                    CS_1: do3Binary[10],
+                    TR_REQ: do3Binary[12],
+                    BUSY: do3Binary[13],
+                    COMPT: do3Binary[14],
+                  }
                 ),
               };
             });
@@ -359,55 +322,49 @@ export class VehicleStatusDialogComponent implements OnInit, OnDestroy {
 }
 
 function parsePIO(
-  pi0: number,
-  pi1: number,
-  pi2: number,
-  pi3: number,
-  pi4: number,
-  pi5: number,
-  pi6: number,
-  pi7: number,
-  po0: number,
-  po1: number,
-  po2: number,
-  po3: number,
-  po4: number,
-  po5: number,
-  po6: number,
-  po7: number
+  pi: {
+    L_REQ: '0' | '1';
+    U_REQ: '0' | '1';
+    READY: '0' | '1';
+    HO_AVBL: '0' | '1';
+    ES: '0' | '1';
+  },
+  po: {
+    VALID: '0' | '1';
+    CS_0: '0' | '1';
+    CS_1: '0' | '1';
+    TR_REQ: '0' | '1';
+    BUSY: '0' | '1';
+    COMPT: '0' | '1';
+  }
 ) {
   const pattern =
-    String(pi0) +
-    String(pi1) +
-    String(pi2) +
-    String(pi3) +
-    String(pi4) +
-    String(pi5) +
-    String(pi6) +
-    String(pi7) +
-    String(po0) +
-    String(po1) +
-    String(po2) +
-    String(po3) +
-    String(po4) +
-    String(po5) +
-    String(po6) +
-    String(po7);
+    pi.L_REQ +
+    pi.U_REQ +
+    pi.READY +
+    pi.HO_AVBL +
+    pi.ES +
+    po.VALID +
+    po.CS_0 +
+    po.CS_1 +
+    po.TR_REQ +
+    po.BUSY +
+    po.COMPT;
 
   switch (pattern) {
-    case '0000011000000000':
+    case '00011000000':
       return 'Before Arrival';
-    case '0000011001000000':
+    case '00011010000':
       return 'OHT Arrival';
-    case '1001011011001100':
-      return 'Transfer Start';
-    case '0001011011001100':
-      return 'Carrier Detection On';
-    case '0001011011001100':
-      return 'Carrier Detection Off';
-    case '0001011011001000':
+    case '10111110110':
+      return 'Transfer Start - On';
+    case '01111110110':
+      return 'Transfer Start - Off';
+    case '00111110110':
+      return 'Carrier Detection';
+    case '00111110100':
       return 'Transfer Complete';
-    case '0000011000000000':
+    case '00011000000':
       return 'OHT Start';
 
     default:
@@ -415,10 +372,25 @@ function parsePIO(
   }
 }
 
-function convertSignedIntegerToUnsigned(
+/**
+ * Parsing rule: right bit first, left bit last
+ *
+ * @param value
+ * @param bitLength
+ * @returns string
+ */
+function convertSignedIntegerToBitString(
   value: number,
   bitLength: number
-): number {
-  if (value >= 0) return value;
-  else return -1 * value + 2 ** (bitLength - 1);
+): string {
+  const absoluteValue = Math.abs(value);
+
+  const data = [...Array(bitLength).keys()].map((index) => {
+    const bit = (absoluteValue >> index) & 1;
+    return String(bit);
+  });
+
+  if (value < 0) data[data.length - 1] = '1';
+
+  return data.join('');
 }

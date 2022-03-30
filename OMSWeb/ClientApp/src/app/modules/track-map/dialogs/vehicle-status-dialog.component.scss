@@ -1,9 +1,10 @@
 .content-layout {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: 41px 40px 370px 40px;
+  grid-template-rows: 41px 40px 500px 40px;
   column-gap: 4px;
   row-gap: 1px;
+  max-height: 100vh;
 }
 
 .full-col {
@@ -104,6 +105,7 @@ fieldset {
 
 .io-panel {
   grid-column: 2 /4;
+  margin-top: 60px;
   justify-self: center;
   align-self: center;
 
@@ -117,22 +119,22 @@ fieldset {
 }
 
 .pioTrend {
-  position: absolute;
-  top: 90px;
-  left: 0px;
-  z-index: 2;
-  display: block;
+  // position: absolute;
+  // top: 90px;
+  // left: 0px;
+  // z-index: 2;
+  // display: block;
   background-color: #fff;
+
+  margin-top: 50px;
   //width: 740px;
-  width: 900px;
-  height: 84%;
+  // width: 900px;
+  // height: 84%;
 }
 
 #pioTrendChart {
   vertical-align: central;
   padding: 0px 0px 0px 20px;
-  //height: 460px;
-  height: 500px;
 }
 
 .pioTrendTable {
