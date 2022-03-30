@@ -6,29 +6,29 @@ using OMSWeb.Models;
 
 namespace OMSWeb.Repositories
 {
-  public class StatusRepository : DataAccess
-  {
-    public StatusRepository(IConfiguration configuration) : base(configuration)
+    public class StatusRepository : DataAccess
     {
-    }
+        public StatusRepository(IConfiguration configuration) : base(configuration)
+        {
+        }
 
-    public IQueryable<OrderState> QueryOrderStates()
-    {
-      IQueryable<OrderState> result;
-      using (var conn = ConnectTrack())
-      {
-        var sql = QueryFactory.GetSql("orderStatus");
-        result = conn.Query<OrderState>(sql).AsQueryable();
-      }
-      return result;
-    }
+        public IQueryable<OrderState> QueryOrderStates()
+        {
+            IQueryable<OrderState> result;
+            using (var conn = ConnectTrack())
+            {
+                var sql = QueryFactory.GetSql("orderStatus");
+                result = conn.Query<OrderState>(sql).AsQueryable();
+            }
+            return result;
+        }
 
-    public IQueryable<VehicleState> QueryVehicleStates()
-    {
-      IQueryable<VehicleState> result;
-      using (var conn = ConnectTrack())
-      {
-        var sql = @"
+        public IQueryable<VehicleState> QueryVehicleStates()
+        {
+            IQueryable<VehicleState> result;
+            using (var conn = ConnectTrack())
+            {
+                var sql = @"
     SELECT
     VH.id, VH.physical_id, VH.logical_id, VH.last_point AS cur_point, 
     VH.moving_state, VH.map_db,
@@ -49,7 +49,9 @@ namespace OMSWeb.Repositories
     THEN OD.location_move		                                                -- display MOVETO
     END AS command_point,
     OD.location_pickup, OD.location_dropoff, OD.location_move,
-    VH.cargo_state, VH.mode,
+    VH.cargo_state, 
+    CR.carrier_id AS CarrierLabel,
+    VH.mode,
     CASE 
         WHEN order_origin LIKE '%MCS%' THEN true 
         WHEN order_origin LIKE '%*%' THEN true 
@@ -70,60 +72,62 @@ namespace OMSWeb.Repositories
     ENd AS isConnected, 
     GO.group_id
     FROM vehicles AS VH
-        LEFT OUTER JOIN orders AS OD
-    ON VH.order_id = OD.id AND OD.time_completed IS NULL AND OD.time_aborted IS NULL
-        LEFT JOIN grouped_objects AS GO 
-	  ON VH.id = GO.reference_id AND GO.reference_table = 'vehicle'
+    LEFT OUTER JOIN orders AS OD
+        ON VH.order_id = OD.id AND OD.time_completed IS NULL AND OD.time_aborted IS NULL
+    LEFT JOIN grouped_objects AS GO 
+	    ON VH.id = GO.reference_id AND GO.reference_table = 'vehicle'
+    LEFT JOIN carriers AS CR 
+	    ON VH.logical_id = CR.carrier_location
     ORDER BY VH.id
         ";
-        result = conn.Query<VehicleState>(sql).AsQueryable();
-      }
-      return result;
-    }
+                result = conn.Query<VehicleState>(sql).AsQueryable();
+            }
+            return result;
+        }
 
-    public IQueryable<StationState> QueryStationStates()
-    {
-      IQueryable<StationState> result;
-      using (var conn = ConnectTrack())
-      {
-        var sql = QueryFactory.GetSql("stationStatus");
-        result = conn.Query<StationState>(sql).AsQueryable();
-      }
-      return result;
-    }
+        public IQueryable<StationState> QueryStationStates()
+        {
+            IQueryable<StationState> result;
+            using (var conn = ConnectTrack())
+            {
+                var sql = QueryFactory.GetSql("stationStatus");
+                result = conn.Query<StationState>(sql).AsQueryable();
+            }
+            return result;
+        }
 
-    public IQueryable<BufferState> QueryBufferStates()
-    {
-      IQueryable<BufferState> result;
-      using (var conn = ConnectTrack())
-      {
-        var sql = QueryFactory.GetSql("bufferStatus");
-        result = conn.Query<BufferState>(sql).AsQueryable();
-      }
-      return result;
-    }
+        public IQueryable<BufferState> QueryBufferStates()
+        {
+            IQueryable<BufferState> result;
+            using (var conn = ConnectTrack())
+            {
+                var sql = QueryFactory.GetSql("bufferStatus");
+                result = conn.Query<BufferState>(sql).AsQueryable();
+            }
+            return result;
+        }
 
-    public IQueryable<ZcuState> QueryZcuStates()
-    {
-      IQueryable<ZcuState> result;
-      using (var conn = ConnectTrack())
-      {
-        var sql = QueryFactory.GetSql("zcuStatus");
-        result = conn.Query<ZcuState>(sql).AsQueryable();
-      }
-      return result;
-    }
+        public IQueryable<ZcuState> QueryZcuStates()
+        {
+            IQueryable<ZcuState> result;
+            using (var conn = ConnectTrack())
+            {
+                var sql = QueryFactory.GetSql("zcuStatus");
+                result = conn.Query<ZcuState>(sql).AsQueryable();
+            }
+            return result;
+        }
 
-    public IQueryable<DioState> QueryDioStates()
-    {
-      IQueryable<DioState> result;
-      using (var conn = ConnectTrack())
-      {
-        var sql = QueryFactory.GetSql("dioState");
-        result = conn.Query<DioState>(sql).AsQueryable();
-      }
-      return result;
-    }
+        public IQueryable<DioState> QueryDioStates()
+        {
+            IQueryable<DioState> result;
+            using (var conn = ConnectTrack())
+            {
+                var sql = QueryFactory.GetSql("dioState");
+                result = conn.Query<DioState>(sql).AsQueryable();
+            }
+            return result;
+        }
 
-  }
+    }
 }
