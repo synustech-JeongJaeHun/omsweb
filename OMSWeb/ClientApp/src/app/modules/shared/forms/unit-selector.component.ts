@@ -126,6 +126,8 @@ export class UnitSelectorComponent implements OnInit, OnChanges {
         return of(result);
       })
     );
+
+    if (this.selectedUnit) this.inputControl.disable();
   }
   displayFn(item: ILookupUnit): string | undefined {
     if (!item) return;

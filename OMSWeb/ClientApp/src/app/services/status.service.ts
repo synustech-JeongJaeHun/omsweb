@@ -5,14 +5,13 @@ import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 import DataSource from 'devextreme/data/data_source';
 
 import { Dto } from '@oms/models/dto/track.model';
-import { IVehicleDIOStates, IVehicleSignal } from '../models/vehicle-status.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class StatusService {
   private baseUrl = '/api/status';
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   getTrack(): Observable<Dto.ITrackData> {
     return this.http.get<Dto.ITrackData>(`${this.baseUrl}/tracks`);
@@ -61,15 +60,5 @@ export class StatusService {
         loadUrl: `${this.baseUrl}/zcus`,
       }),
     });
-  }
-
-  getVehicleSignal(id: number): Observable<IVehicleSignal> {
-    console.warn('# from vehicle-signal.json file - for dev #');
-    return this.http.get<IVehicleSignal>('/assets/json/vehicle-signal.json');
-  }
-
-  vehicleDIOStates(id: number): Observable<IVehicleDIOStates> {
-    console.warn('# from vehicle-io-status.json file - for dev #');
-    return this.http.get<IVehicleDIOStates>('/assets/json/vehicle-io-status.json');
   }
 }
