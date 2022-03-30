@@ -155,7 +155,7 @@ export const defaultControlTable: ControlTable = {
   "zcus_vehicleInfo": true,
 
   "cps": true,
-  "cps_can_id": true,
+  "cps_server_id": true,
   "cps_converter_id": true,
   "cps_status": true,
   "cps_voltage": true,
@@ -175,7 +175,6 @@ export const defaultControlTable: ControlTable = {
   "cps_current_t": true,
   "cps_total_kw": true,
   "cps_wh": true
-
 }
 
 export class ClientPreferences implements IPreferences {

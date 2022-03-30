@@ -1008,6 +1008,242 @@
     </div>
   </div>
 
+
+  <!-- Cps -->
+  <div class="table-format">
+    <div class="table-columns-entries-container">
+      <div>
+        <mat-label>{{ "names.cps" | translate }}</mat-label>
+      </div>
+      <div>
+        <input type="checkbox" color="primary" [title]="'names.cps' | translate"
+               [checked]="getCheckedState('cps')" (change)="onChangeControlTable('cps', $event)" />
+      </div>
+    </div>
+    <div class="table-columns-sub-entries-container">
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.cps_server_id" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.cps_server_id' | translate"
+                   [checked]="getCheckedState('cps_server_id')" (change)="onChangeControlTable('cps_server_id', $event)" />
+          </div>
+        </div>
+      </div>
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.cps_converter_id" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.cps_converter_id' | translate"
+                   [checked]="getCheckedState('cps_converter_id')" (change)="onChangeControlTable('cps_converter_id', $event)" />
+          </div>
+        </div>
+      </div>
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.cps_status" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.cps_status' | translate"
+                   [checked]="getCheckedState('cps_status')" (change)="onChangeControlTable('cps_status', $event)" />
+          </div>
+        </div>
+      </div>
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.cps_voltage" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.cps_voltage' | translate"
+                   [checked]="getCheckedState('cps_voltage')" (change)="onChangeControlTable('cps_voltage', $event)" />
+          </div>
+        </div>
+      </div>
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.cps_current_igbt" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.cps_current_igbt' | translate"
+                   [checked]="getCheckedState('cps_current_igbt')" (change)="onChangeControlTable('cps_current_igbt', $event)" />
+          </div>
+        </div>
+      </div>
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.cps_current_track" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.cps_current_track' | translate"
+                   [checked]="getCheckedState('cps_current_track')" (change)="onChangeControlTable('cps_current_track', $event)" />
+          </div>
+        </div>
+      </div>
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.cps_frequency" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.cps_frequency' | translate"
+                   [checked]="getCheckedState('cps_frequency')" (change)="onChangeControlTable('cps_frequency', $event)" />
+          </div>
+        </div>
+      </div>
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.cps_temp_radiator" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.cps_temp_radiator' | translate"
+                   [checked]="getCheckedState('cps_temp_radiator')" (change)="onChangeControlTable('cps_temp_radiator', $event)" />
+          </div>
+        </div>
+      </div>
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.cps_temp_internal" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.cps_temp_internal' | translate"
+                   [checked]="getCheckedState('cps_temp_internal')" (change)="onChangeControlTable('cps_temp_internal', $event)" />
+          </div>
+        </div>
+      </div>
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.cps_sync" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.cps_sync' | translate"
+                   [checked]="getCheckedState('cps_sync')" (change)="onChangeControlTable('cps_sync', $event)" />
+          </div>
+        </div>
+      </div>
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.cps_backup_id" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.cps_backup_id' | translate"
+                   [checked]="getCheckedState('cps_backup_id')" (change)="onChangeControlTable('cps_backup_id', $event)" />
+          </div>
+        </div>
+      </div>
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.cps_error_code" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.cps_error_code' | translate"
+                   [checked]="getCheckedState('cps_error_code')" (change)="onChangeControlTable('cps_error_code', $event)" />
+          </div>
+        </div>
+      </div>
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.cps_voltage_rs" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.cps_voltage_rs' | translate"
+                   [checked]="getCheckedState('cps_voltage_rs')" (change)="onChangeControlTable('cps_voltage_rs', $event)" />
+          </div>
+        </div>
+      </div>
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.cps_voltage_st" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.cps_voltage_st' | translate"
+                   [checked]="getCheckedState('cps_voltage_st')" (change)="onChangeControlTable('cps_voltage_st', $event)" />
+          </div>
+        </div>
+      </div>
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.cps_voltage_tr" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.cps_voltage_tr' | translate"
+                   [checked]="getCheckedState('cps_voltage_tr')" (change)="onChangeControlTable('cps_voltage_tr', $event)" />
+          </div>
+        </div>
+      </div>
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.cps_current_r" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.cps_current_r' | translate"
+                   [checked]="getCheckedState('cps_current_r')" (change)="onChangeControlTable('cps_current_r', $event)" />
+          </div>
+        </div>
+      </div>
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.cps_current_s" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.cps_current_s' | translate"
+                   [checked]="getCheckedState('cps_current_s')" (change)="onChangeControlTable('cps_current_s', $event)" />
+          </div>
+        </div>
+      </div>
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.cps_current_t" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.cps_current_t' | translate"
+                   [checked]="getCheckedState('cps_current_t')" (change)="onChangeControlTable('cps_current_t', $event)" />
+          </div>
+        </div>
+      </div>
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.cps_total_kw" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.cps_total_kw' | translate"
+                   [checked]="getCheckedState('cps_total_kw')" (change)="onChangeControlTable('cps_total_kw', $event)" />
+          </div>
+        </div>
+      </div>
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.cps_wh" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.cps_wh' | translate"
+                   [checked]="getCheckedState('cps_wh')" (change)="onChangeControlTable('cps_wh', $event)" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="table-columns-entries-container">
     <div>&nbsp;</div>
   </div>

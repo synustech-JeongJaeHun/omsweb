@@ -265,7 +265,7 @@
     "inputZones": "输入区域",
     "zone": "区",
     "cps": "Cps",
-    "cps_can_id": "Can Id",
+    "cps_server_id": "Server Id",
     "cps_converter_id": "Converter Id",
     "cps_status": "Status",
     "cps_voltage": "Voltage",
