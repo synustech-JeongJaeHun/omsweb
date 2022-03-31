@@ -15,7 +15,7 @@ export const playbackSpeedValues = [0.1, 0.5, 1, 2, 5, 10];
 
 export interface IPlaybackState {
   playing: boolean;
-  playTime?: Date;
+  playTime?: Date | string; // 사실 string이다.
   lastSnapshot?: number;
   event?: number;
   snapshot?: number;

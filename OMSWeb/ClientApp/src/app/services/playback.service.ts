@@ -4,7 +4,11 @@ import { BehaviorSubject, Observable, Subject, throwError } from 'rxjs';
 
 import { ISimpleResponse } from '@oms/models/base.model';
 import { map, mergeMap, tap } from 'rxjs/operators';
-import { IPlaybackData, ISnapshotData } from '../models/playback.model';
+import {
+  IPlaybackData,
+  IPlaybackState,
+  ISnapshotData,
+} from '../models/playback.model';
 
 @Injectable({
   providedIn: 'root',
@@ -24,7 +28,9 @@ export class PlaybackService {
   // instance properties
   // eventVersion: number;
 
-  constructor(private http: HttpClient) { }
+  states: IPlaybackState;
+
+  constructor(private http: HttpClient) {}
 
   firstSnapshotTime(): Observable<Date> {
     this.ordersChanged$.next([]);
@@ -44,8 +50,9 @@ export class PlaybackService {
   }
 
   playbackDataSet(start: Date, end: Date): Observable<IPlaybackData> {
-    const url = `${this.baseUrl
-      }/snapshots/times/${start.toISOString()}/${end.toISOString()}`;
+    const url = `${
+      this.baseUrl
+    }/snapshots/times/${start.toISOString()}/${end.toISOString()}`;
     return this.http.get<IPlaybackData>(url).pipe(
       tap((data) => {
         this.changeOrders([...data.orders], false);

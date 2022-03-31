@@ -18,6 +18,7 @@ import { LegacyMapViewerComponent } from './viewer/legacy-map-viewer.component';
 import { LegacySearchDialogComponent } from './dialogs/legacy-search-dialog.component';
 import { LegacyShowObjectDialogComponent } from './dialogs/legacy-show-object-dialog.component';
 import { LegacyTrackVehicleDialogComponent } from './dialogs/legacy-track-vehicle-dialog.component';
+import { PlaybackVehicleStatusDialogComponent } from './dialogs/playback-vehicle-status-dialog.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,8 @@ import { LegacyTrackVehicleDialogComponent } from './dialogs/legacy-track-vehicl
     LegacySearchDialogComponent,
     LegacyShowObjectDialogComponent,
     LegacyTrackVehicleDialogComponent,
+    // playback
+    PlaybackVehicleStatusDialogComponent,
   ],
   imports: [CommonModule, SharedModule],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

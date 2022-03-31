@@ -21,6 +21,14 @@ export class VehicleService {
       `${this.baseUrl}/${vehicleId}/recent-dio`
     );
   }
+  getRecentVehicleDioBefore(
+    vehicleId: number,
+    before: Date
+  ): Observable<IRecentVehicleDio> {
+    return this.http.get<IRecentVehicleDio>(
+      `${this.baseUrl}/${vehicleId}/recent-dio-before/${before.toISOString()}`
+    );
+  }
   getVehicleStatus(vehicleId: number): Observable<IVehicleStatus> {
     return this.http.get<IVehicleStatus>(`${this.baseUrl}/${vehicleId}/status`);
   }

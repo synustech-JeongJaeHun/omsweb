@@ -65,7 +65,7 @@ export class PlaybackControlDialogComponent implements OnInit, OnDestroy {
   constructor(
     private playbackSvc: PlaybackService,
     private dataSvc: MapDataService
-  ) { }
+  ) {}
 
   ngOnDestroy(): void {
     this.destroy$.next();
@@ -84,6 +84,9 @@ export class PlaybackControlDialogComponent implements OnInit, OnDestroy {
       nextEvent: 0,
     };
     this.loadInitData();
+
+    // reference link
+    this.playbackSvc.states = this.states;
   }
 
   getCurrentSnapshot(index: number): Date {
@@ -112,6 +115,8 @@ export class PlaybackControlDialogComponent implements OnInit, OnDestroy {
               event: 0,
               nextEvent: 0,
             };
+            // sync service state
+            this.playbackSvc.states = this.states;
             this.ready = true;
           })
         )
@@ -158,7 +163,7 @@ export class PlaybackControlDialogComponent implements OnInit, OnDestroy {
       throw Error('This is the last snapshot.');
     }
   }
-  onFastForward() { }
+  onFastForward() {}
 
   onChangeEventTo() {
     this.moveEventTo(this.options.nextEvent);
@@ -248,7 +253,10 @@ export class PlaybackControlDialogComponent implements OnInit, OnDestroy {
 
           this.options.startAt = new Date(time);
           const startTime = this.options.startAt.getTime();
-          this.options.endAt = now.getTime() - startTime < this.oneDay ? now : new Date(startTime + this.oneDay);
+          this.options.endAt =
+            now.getTime() - startTime < this.oneDay
+              ? now
+              : new Date(startTime + this.oneDay);
           this.options.maxTime = new Date(now.getTime() + 60000);
 
           return this.queryPlaybackData();
@@ -344,8 +352,8 @@ export class PlaybackControlDialogComponent implements OnInit, OnDestroy {
         operation === 'INSERT'
           ? 'DELETE'
           : operation === 'DELETE'
-            ? 'INSERT'
-            : 'UPDATE';
+          ? 'INSERT'
+          : 'UPDATE';
     }
 
     if (table === 'order_history')

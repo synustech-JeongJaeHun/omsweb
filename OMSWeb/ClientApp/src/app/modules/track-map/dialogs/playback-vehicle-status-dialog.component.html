@@ -1,0 +1,659 @@
+<oms-dialog-base [title]="'names.vehicleStatus' | translate">
+  <ng-container class="dialog-layout">
+    <div mat-dialog-content class="content-layout">
+      <div class="full-col">
+        <mat-form-field class="dense2" appearance="outline">
+          <mat-select [value]="currentVehicle" (selectionChange)="onVehicleSelect($event)">
+            <mat-option *ngFor="let item of vehicles" [value]="item">#{{ item.id }} {{ item.logicalId }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <button id="btnToggleVehicleStatusNPIOTrend" mat-raised-button class="dense" color="primary" [disabled]="false"
+        (click)="onToggleVehicleStatusNPIOTrend($event.target)">
+        {{ "names.pioTrend" | translate }}
+      </button>
+      </div>
+      <ng-container *ngIf="visiblePIOTrend===false">
+      <h4>Status</h4>
+      <h4>DI</h4>
+      <h4>DO</h4>
+      <div class="details status-panel">
+        <fieldset>
+          <legend>{{ "names.vehicleStatus" | translate }}</legend>
+          <div class="detail-grid">
+            <label class="name">{{ "names.id" | translate }}</label>
+            <div class="value">{{ currentVehicle.id }}</div>
+            <label class="name">{{ "names.mode" | translate }}</label>
+            <div class="value">{{ currentVehicle.mode }}</div>
+            <!-- <label class="name">{{ "names.transferState" | translate }}</label>
+            <div class="value">{{ currentVehicle.transferState }}</div>
+            <label class="name">{{ "names.driveState" | translate }}</label>
+            <div class="value">{{ currentVehicle.driveState }}</div>
+            <label class="name">{{ "names.before" | translate }}</label>
+            <div class="value">{{ currentVehicle.before }}</div>
+            <label class="name">{{ "names.current" | translate }}</label>
+            <div class="value">{{ currentVehicle.current }}</div>
+            <label class="name">{{ "names.barcode" | translate }}</label>
+            <div class="value">{{ currentVehicle.barcode }}</div>
+            <label class="name">{{ "names.target" | translate }}</label>
+            <div class="value">{{ currentVehicle.target }}</div>
+            <label class="name">{{ "names.carrierId" | translate }}</label>
+            <div class="value">{{ currentVehicle.carrierId }}</div>
+            <label class="name">{{ "names.bufferId" | translate }}</label>
+            <div class="value">{{ currentVehicle.bufferId }}</div> -->
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>{{ "names.vehicleSignal" | translate }}</legend>
+          <div class="status-grid">
+            <div class="status-item" [class.active]="currentVehicle?.railIn === true">
+              {{ "names.railIn" | translate }}
+            </div>
+            <div class="status-item" [class.active]="currentVehicle.cargoState === 'F'">
+              {{ "names.carrier" | translate }}
+            </div>
+            <div class="status-item" [class.active]="currentVehicle.isConnected">
+              {{ "names.connected" | translate }}
+            </div>
+            <div class="status-item" [class.active]="currentVehicle.isSensorStopped">
+              {{ "names.sensorStopped" | translate }}
+            </div>
+            <div class="status-item" [class.active]="currentVehicle.isMaint">
+              {{ "names.maintenance" | translate }}
+            </div>
+            <div class="status-item" [class.active]="currentVehicle.hostOrder">
+              {{ "names.hostOrderEnable" | translate }}
+            </div>
+            <div class="status-item" [class.active]="currentVehicle.canBePushed">
+              {{ "names.pushEnable" | translate }}
+            </div>
+          </div>
+        </fieldset>
+      </div>
+      <div class="details di-panel">
+        <ng-container *ngFor="let category of categories">
+          <fieldset *ngIf="category.show">
+            <legend>{{ category.name }}</legend>
+            <div class="status-grid">
+              <div class="status-item" [class.active]="dis[di.index] === '1'" *ngFor="let di of category.dis">
+                {{ di.label }}
+              </div>
+            </div>
+          </fieldset>
+        </ng-container>
+      </div>
+      <div class="details do-panel">
+        <ng-container *ngFor="let category of categories">
+          <fieldset *ngIf="category.show">
+            <legend>{{ category.name }}</legend>
+            <div class="status-grid">
+              <div class="status-item" [class.active]="dos[do.index] === '1'" *ngFor="let do of category.dos">
+                {{ do.label }}
+              </div>
+            </div>
+          </fieldset>
+        </ng-container>
+      </div>
+
+      <div class="io-panel">
+        <mat-slide-toggle #toggleCategory color="primary" [(ngModel)]="category.show"
+          *ngFor="let category of categories" >{{
+          category.name }}</mat-slide-toggle>
+      </div>
+      </ng-container>
+
+      <div class="pioTrend" *ngIf="visiblePIOTrend">
+        <!--
+        <dx-chart
+          id="chartPIOTrend"
+          class="chartPIO"
+          title="PIO Trend"
+          [dataSource]="chartDataSource">
+          <dxi-series valueField="bronze" name="Bronze Medals" color="#cd7f32"></dxi-series>
+          <dxi-series valueField="silver" name="Silver Medals" color="#c0c0c0"></dxi-series>
+          <dxi-series valueField="gold" name="Gold Medals" color="#ffd700"></dxi-series>
+          <dxo-common-series-settings
+            type="stepline"
+            argumentField="year">
+            <dxo-stepline>
+              <dxo-point [visible]="false"></dxo-point>
+            </dxo-stepline>
+          </dxo-common-series-settings>
+          <dxo-export [enabled]="true"></dxo-export>
+          <dxo-argument-axis>
+            <dxo-label>
+              <dxo-format type="decimal"></dxo-format>
+            </dxo-label>
+          </dxo-argument-axis>
+          <dxo-legend
+            verticalAlignment="bottom"
+            horizontalAlignment="center">
+          </dxo-legend>
+        </dx-chart>
+        -->
+        <!--
+        <div class="long-title"><h3>PIO Trend</h3></div>
+        -->
+        <div id="pioTrendChart" >
+          <table class="pioTrendTable">
+             <!-- PO -->
+            <tr>
+              <th>VALID</th>
+              <th>
+                <div>ON</div>
+                <div>OFF</div>
+              </th>
+              <td>
+                <dx-sparkline class="sparkline" [dataSource]="dioHistoriesIn30Seconds"
+                argumentField="historyChangeTimeFrom30SecondsBefore" valueField="po_valid"
+                  type="stepline" lineColor="#181818" pointSymbol="none" >
+                  <!-- <dxo-tooltip format="currency"></dxo-tooltip> -->
+                </dx-sparkline>
+              </td>
+            </tr>
+
+            <tr>
+              <th>CS_0</th>
+              <th>
+                <div>ON</div>
+                <div>OFF</div>
+              </th>
+              <td>
+                <dx-sparkline class="sparkline" [dataSource]="dioHistoriesIn30Seconds"
+                argumentField="historyChangeTimeFrom30SecondsBefore" valueField="po_cs_0"
+                  type="stepline" lineColor="#181818"  pointSymbol="none" >
+                  <!-- <dxo-tooltip format="currency"></dxo-tooltip> -->
+                </dx-sparkline>
+              </td>
+            </tr>
+
+            <tr>
+              <th>CS_1</th>
+              <th>
+                <div>ON</div>
+                <div>OFF</div>
+              </th>
+              <td>
+                <dx-sparkline class="sparkline" [dataSource]="dioHistoriesIn30Seconds"
+                argumentField="historyChangeTimeFrom30SecondsBefore" valueField="po_cs_1"
+                  type="stepline" lineColor="#181818"  pointSymbol="none">
+                  <!-- <dxo-tooltip format="currency"></dxo-tooltip> -->
+                </dx-sparkline>
+              </td>
+            </tr>
+
+            <tr>
+              <th>TR_REQ</th>
+              <th>
+                <div>ON</div>
+                <div>OFF</div>
+              </th>
+              <td>
+                <dx-sparkline class="sparkline" [dataSource]="dioHistoriesIn30Seconds"
+                argumentField="historyChangeTimeFrom30SecondsBefore" valueField="po_tr_req"
+                  type="stepline" lineColor="#181818"  pointSymbol="none">
+                  <!-- <dxo-tooltip format="currency"></dxo-tooltip> -->
+                </dx-sparkline>
+              </td>
+            </tr>
+
+            <tr>
+              <th>BUSY</th>
+              <th>
+                <div>ON</div>
+                <div>OFF</div>
+              </th>
+              <td>
+                <dx-sparkline class="sparkline" [dataSource]="dioHistoriesIn30Seconds"
+                argumentField="historyChangeTimeFrom30SecondsBefore" valueField="po_busy"
+                  type="stepline" lineColor="#181818"  pointSymbol="none">
+                  <!-- <dxo-tooltip format="currency"></dxo-tooltip> -->
+                </dx-sparkline>
+              </td>
+            </tr>
+
+            <tr>
+              <th>COMPT</th>
+              <th>
+                <div>ON</div>
+                <div>OFF</div>
+              </th>
+              <td>
+                <dx-sparkline class="sparkline" [dataSource]="dioHistoriesIn30Seconds"
+                argumentField="historyChangeTimeFrom30SecondsBefore" valueField="po_compt"
+                  type="stepline" lineColor="#181818"  pointSymbol="none">
+                  <!-- <dxo-tooltip format="currency"></dxo-tooltip> -->
+                </dx-sparkline>
+              </td>
+            </tr>
+            <tr>
+              <th>CONT</th>
+              <th>
+                <div>ON</div>
+                <div>OFF</div>
+              </th>
+              <td>
+                <dx-sparkline class="sparkline" [dataSource]="dioHistoriesIn30Seconds"
+                argumentField="historyChangeTimeFrom30SecondsBefore" valueField="po_cont"
+                  type="stepline" lineColor="#181818"  pointSymbol="none">
+                  <!-- <dxo-tooltip format="currency"></dxo-tooltip> -->
+                </dx-sparkline>
+              </td>
+            </tr>
+
+            <!-- PI -->
+            <tr >
+              <th>L_REQ</th>
+              <th>
+                <div>ON</div>
+                <div>OFF</div>
+              </th>
+              <td>
+                <dx-sparkline class="sparkline" [dataSource]="dioHistoriesIn30Seconds"
+                argumentField="historyChangeTimeFrom30SecondsBefore" valueField="pi_l_req"
+                  type="stepline" lineColor="#181818"  pointSymbol="none">
+                  <!-- <dxo-tooltip format="currency"></dxo-tooltip> -->
+                </dx-sparkline>
+              </td>
+            </tr>
+            <tr >
+              <th>U_REQ</th>
+              <th>
+                <div>ON</div>
+                <div>OFF</div>
+              </th>
+              <td>
+                <dx-sparkline class="sparkline" [dataSource]="dioHistoriesIn30Seconds"
+                argumentField="historyChangeTimeFrom30SecondsBefore" valueField="pi_u_req"
+                  type="stepline" lineColor="#181818"  pointSymbol="none">
+                  <!-- <dxo-tooltip format="currency"></dxo-tooltip> -->
+                </dx-sparkline>
+              </td>
+            </tr>
+            <tr >
+              <th>READY</th>
+              <th>
+                <div>ON</div>
+                <div>OFF</div>
+              </th>
+              <td>
+                <dx-sparkline class="sparkline" [dataSource]="dioHistoriesIn30Seconds"
+                argumentField="historyChangeTimeFrom30SecondsBefore" valueField="pi_ready"
+                  type="stepline" lineColor="#181818"  pointSymbol="none">
+                  <!-- <dxo-tooltip format="currency"></dxo-tooltip> -->
+                </dx-sparkline>
+              </td>
+            </tr>
+            <tr >
+              <th>HO_AVBL</th>
+              <th>
+                <div>ON</div>
+                <div>OFF</div>
+              </th>
+              <td>
+                <dx-sparkline class="sparkline" [dataSource]="dioHistoriesIn30Seconds"
+                argumentField="historyChangeTimeFrom30SecondsBefore" valueField="pi_ho_avbl"
+                  type="stepline" lineColor="#181818"  pointSymbol="none">
+                  <!-- <dxo-tooltip format="currency"></dxo-tooltip> -->
+                </dx-sparkline>
+              </td>
+            </tr>
+            <tr >
+              <th>ES</th>
+              <th>
+                <div>ON</div>
+                <div>OFF</div>
+              </th>
+              <td>
+                <dx-sparkline class="sparkline" [dataSource]="dioHistoriesIn30Seconds"
+                argumentField="historyChangeTimeFrom30SecondsBefore" valueField="pi_es"
+                  type="stepline" lineColor="#181818"  pointSymbol="none">
+                  <!-- <dxo-tooltip format="currency"></dxo-tooltip> -->
+                </dx-sparkline>
+              </td>
+            </tr>
+
+            <tr>
+              <th><strong>Pattern</strong></th>
+              <th></th>
+              <td style="position: relative;">
+                <span *ngFor="let history of dioHistoriesIn30Seconds"
+                [ngStyle]="{'position': 'absolute', 'left.px': parseInt(history.historyChangeTimeFrom30SecondsBefore) / 30 * 500
+              }" >
+                  {{ history.pattern }}
+                </span>
+              </td>
+            </tr>
+
+          </table>
+        </div>
+
+        <!-- <table class="table-details">
+          <tr>
+            <th class="name"></th>
+            <th class="title"></th>
+            <th class="title"></th>
+            <th class="value" colspan="8">OUTPUT (OHT -> STK or Port)</th>
+            <th class="value" colspan="8">INPUT (STK or Port -> OHT)</th>
+          </tr>
+          <tr>
+            <th class="name"></th>
+            <th class="title"></th>
+            <th class="title"></th>
+            <th class="value">15</th>
+            <th class="value">14</th>
+            <th class="value">13</th>
+            <th class="value">12</th>
+            <th class="value">11</th>
+            <th class="value">10</th>
+            <th class="value">9</th>
+            <th class="value">8</th>
+            <th class="value">7</th>
+            <th class="value">6</th>
+            <th class="value">5</th>
+            <th class="value">4</th>
+            <th class="value">3</th>
+            <th class="value">2</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+          </tr>
+          <tr>
+            <th class="name"></th>
+            <th class="title">ms</th>
+            <th class="title">hex</th>
+            <th class="value">-</th>
+            <th class="value">COMP</th>
+            <th class="value">BUSY</th>
+            <th class="value">TR_REQ</th>
+            <th class="value">-</th>
+            <th class="value">CS_1</th>
+            <th class="value">CS_0</th>
+            <th class="value">VALID</th>
+            <th class="value">-</th>
+            <th class="value">ES</th>
+            <th class="value">HQ_AVBL</th>
+            <th class="value">-</th>
+            <th class="value">READY</th>
+            <th class="value">-</th>
+            <th class="value">U_REQ</th>
+            <th class="value">L_REQ</th>
+          </tr>
+
+          <tr>
+            <th class="name">Before Arrival</th>
+            <th class="title">0</th>
+            <th class="title"></th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+          </tr>
+          <tr>
+            <th class="name">OHT Arrival</th>
+            <th class="title">0</th>
+            <th class="title"></th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+          </tr>
+          <tr>
+            <th class="name"></th>
+            <th class="title">50</th>
+            <th class="title">0x0360</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+          </tr>
+          <tr>
+            <th class="name"></th>
+            <th class="title">1050</th>
+            <th class="title">0x0361</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+          </tr>
+          <tr>
+            <th class="name"></th>
+            <th class="title">1100</th>
+            <th class="title">0x1361</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+          </tr>
+          <tr>
+            <th class="name"></th>
+            <th class="title">2100</th>
+            <th class="title">0x1369</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+          </tr>
+          <tr>
+            <th class="name">Transfer Start</th>
+            <th class="title">2150</th>
+            <th class="title">0x3369</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+          </tr>
+          <tr>
+            <th class="name">Carrier Dectection On</th>
+            <th class="title">12150</th>
+            <th class="title">0x3368</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+          </tr>
+          <tr>
+            <th class="name">Transfer Complete</th>
+            <th class="title"></th>
+            <th class="title"></th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+          </tr>
+          <tr>
+            <th class="name"></th>
+            <th class="title"></th>
+            <th class="title"></th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+          </tr>
+          <tr>
+            <th class="name"></th>
+            <th class="title">12200</th>
+            <th class="title">0x4368</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+          </tr>
+          <tr>
+            <th class="name"></th>
+            <th class="title">13200</th>
+            <th class="title">0x4360</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+          </tr>
+          <tr>
+            <th class="name">OHT Start</th>
+            <th class="title">13250</th>
+            <th class="title">0x0060</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">1</th>
+            <th class="value">1</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+            <th class="value">0</th>
+          </tr>
+        </table> -->
+
+      </div>
+    </div>
+  </ng-container>
+</oms-dialog-base>

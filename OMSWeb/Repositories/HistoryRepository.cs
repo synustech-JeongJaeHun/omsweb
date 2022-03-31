@@ -148,5 +148,31 @@ namespace OMSWeb.Repositories
             }
             return result;
         }
+        public IQueryable<VehicleDio> QueryRecentDioBefore(int vehicleId, DateTimeOffset before)
+        {
+            var sql = @"
+      SELECT 
+        DIO.vehicle_id, 
+        DIO.di_1, DIO.di_2, DIO.di_3, DIO.do_1, DIO.do_2, DIO.do_3
+      FROM vehicle_dio_history AS DIO
+      WHERE
+        DIO.vehicle_id = @vehicle_id 
+        and
+        DIO.history_change_time <= @before
+      ORDER BY DIO.history_change_time desc
+      LIMIT 1
+      ";
+
+            IQueryable<VehicleDio> result;
+            using (var conn = ConnectTrack())
+            {
+                result = conn.Query<VehicleDio>(sql, new
+                {
+                    vehicle_id = vehicleId,
+                    before = before
+                }).AsQueryable();
+            }
+            return result;
+        }
     }
 }

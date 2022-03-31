@@ -45,7 +45,37 @@ namespace OMSWeb.Controllers
             var result = _vehicleSvc.QueryRecentDio(vehicleId);
 
             if (result == null)
-                return NotFound();
+                return Ok(new VehicleDio()
+                {
+                    Id = vehicleId,
+                    di_1 = 0,
+                    di_2 = 0,
+                    di_3 = 0,
+                    do_1 = 0,
+                    do_2 = 0,
+                    do_3 = 0
+                });
+            else
+                return Ok(result);
+        }
+
+
+        [HttpGet("{vehicleId}/recent-dio-before/{before}")]
+        public ActionResult<VehicleDio> GetRecentVehicleDioBefore(int vehicleId, DateTimeOffset before)
+        {
+            var result = _historySvc.QueryRecentDioBefore(vehicleId, before);
+
+            if (result == null)
+                return Ok(new VehicleDio()
+                {
+                    Id = vehicleId,
+                    di_1 = 0,
+                    di_2 = 0,
+                    di_3 = 0,
+                    do_1 = 0,
+                    do_2 = 0,
+                    do_3 = 0
+                });
             else
                 return Ok(result);
         }

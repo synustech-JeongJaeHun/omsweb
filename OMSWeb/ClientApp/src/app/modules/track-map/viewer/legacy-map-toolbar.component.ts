@@ -16,7 +16,6 @@ import { MapStatesService } from '../map-states.service';
 import { MessagesService } from '@oms/services/messages.service';
 import { DialogService } from '@oms/services/dialog.service';
 import { TranslateService } from '@ngx-translate/core';
-import { VehicleStatusDialogComponent } from '../dialogs/vehicle-status-dialog.component';
 import {
   MatDialog,
   MatDialogRef,
@@ -29,6 +28,7 @@ import { PermissionEnums } from '../../../models/enums';
 import { LegacySearchDialogComponent } from '../dialogs/legacy-search-dialog.component';
 import { LegacyTrackVehicleDialogComponent } from '../dialogs/legacy-track-vehicle-dialog.component';
 import { LegacyShowObjectDialogComponent } from '../dialogs/legacy-show-object-dialog.component';
+import { PlaybackVehicleStatusDialogComponent } from '../dialogs/playback-vehicle-status-dialog.component';
 
 @Component({
   selector: 'oms-legacy-map-toolbar',
@@ -63,7 +63,7 @@ export class LegacyMapToolbarComponent implements OnInit, OnDestroy {
   private _searchDlg: MatDialogRef<LegacySearchDialogComponent, any>;
   private _trackDlg: MatDialogRef<LegacyTrackVehicleDialogComponent, any>;
   private _showObjDlg: MatDialogRef<LegacyShowObjectDialogComponent, any>;
-  private _vhStatusDlg: MatDialogRef<VehicleStatusDialogComponent, any>;
+  private _vhStatusDlg: MatDialogRef<PlaybackVehicleStatusDialogComponent, any>;
 
   constructor(
     private auth: AuthService,
@@ -185,7 +185,7 @@ export class LegacyMapToolbarComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this._vhStatusDlg = this.dialog.open(VehicleStatusDialogComponent, {
+    this._vhStatusDlg = this.dialog.open(PlaybackVehicleStatusDialogComponent, {
       width: '750px',
       height: '540px',
       autoFocus: false,

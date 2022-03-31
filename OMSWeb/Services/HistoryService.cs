@@ -3,6 +3,8 @@ using System.Linq;
 using OMSWeb.Models.Entities;
 using OMSWeb.Repositories;
 
+#nullable enable
+
 namespace OMSWeb.Services
 {
     public class HistoryService
@@ -34,6 +36,16 @@ namespace OMSWeb.Services
         public IQueryable<VehicleDioHistoryEntity> QueryVehicleDios(int vehicleId, DateTimeOffset from, DateTimeOffset to)
         {
             return this._repo.QueryVehicleDios(vehicleId, from, to);
+        }
+
+        public VehicleDio? QueryRecentDioBefore(int vehicleId, DateTimeOffset before)
+        {
+            var vehicleDios = this._repo.QueryRecentDioBefore(vehicleId, before);
+
+            if (vehicleDios.AsEnumerable().Count() == 1)
+                return vehicleDios.First();
+            else
+                return null;
         }
     }
 }
