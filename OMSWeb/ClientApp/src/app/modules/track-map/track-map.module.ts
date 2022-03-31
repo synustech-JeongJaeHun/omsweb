@@ -12,11 +12,40 @@ import { MapSidePanelComponent } from './side-panel/map-side-panel.component';
 import { OverlapListComponent } from './side-panel/overlap-list.component';
 import { VehicleStatusDialogComponent } from './dialogs/vehicle-status-dialog.component';
 import { BufferStatusDialogComponent } from './dialogs/buffer-status-dialog.component';
-import { MapOverlappedComponent } from './viewer/map-overlapped.component'
+import { MapOverlappedComponent } from './viewer/map-overlapped.component';
+import { LegacyMapToolbarComponent } from './viewer/legacy-map-toolbar.component';
+import { LegacyMapViewerComponent } from './viewer/legacy-map-viewer.component';
+import { LegacySearchDialogComponent } from './dialogs/legacy-search-dialog.component';
+import { LegacyShowObjectDialogComponent } from './dialogs/legacy-show-object-dialog.component';
+import { LegacyTrackVehicleDialogComponent } from './dialogs/legacy-track-vehicle-dialog.component';
+
 @NgModule({
-  declarations: [MapViewerComponent, MapToolbarComponent, MapOverlappedComponent, SearchDialogComponent, TrackVehicleDialogComponent, CommandDialogComponent, ShowObjectDialogComponent, MapSidePanelComponent, OverlapListComponent, VehicleStatusDialogComponent, BufferStatusDialogComponent],
+  declarations: [
+    MapViewerComponent,
+    MapToolbarComponent,
+    MapOverlappedComponent,
+    SearchDialogComponent,
+    TrackVehicleDialogComponent,
+    CommandDialogComponent,
+    ShowObjectDialogComponent,
+    MapSidePanelComponent,
+    OverlapListComponent,
+    VehicleStatusDialogComponent,
+    BufferStatusDialogComponent,
+    // legacy
+    LegacyMapViewerComponent,
+    LegacyMapToolbarComponent,
+    LegacySearchDialogComponent,
+    LegacyShowObjectDialogComponent,
+    LegacyTrackVehicleDialogComponent,
+  ],
   imports: [CommonModule, SharedModule],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  exports: [MapViewerComponent, MapToolbarComponent],
+  exports: [
+    MapViewerComponent,
+    LegacyMapViewerComponent,
+    MapToolbarComponent,
+    LegacyMapToolbarComponent,
+  ],
 })
-export class TrackMapModule { }
+export class TrackMapModule {}

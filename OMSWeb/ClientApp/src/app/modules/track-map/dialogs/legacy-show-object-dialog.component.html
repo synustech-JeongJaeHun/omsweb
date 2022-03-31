@@ -1,0 +1,59 @@
+<oms-dialog-base [title]="'names.showObjects' | translate">
+  <ng-container class="dialog-layout">
+    <fieldset class="option-form">
+      <legend class="form-title">{{ "names.vehicleScale" | translate }}</legend>
+      <div class="slider-form">
+        <mat-slider #frmVehicleScale color="primary" min="3" max="20" [(ngModel)]="slideValues.vehicleScale"
+          (change)="onSlideChange('vehicleScale')"></mat-slider>
+        <div class="slider-value">{{ frmVehicleScale.value }}px</div>
+      </div>
+    </fieldset>
+    <fieldset class="option-form">
+      <legend class="form-title">{{ "names.mapRotation" | translate }}</legend>
+      <div class="slider-form">
+        <mat-slider #frmMapRotation color="primary" [step]="45" min="0" max="315" [(ngModel)]="slideValues.mapRotation"
+          (change)="onSlideChange('mapRotation')"></mat-slider>
+        <div class="slider-value">{{ frmMapRotation.value }}&deg;</div>
+      </div>
+    </fieldset>
+    <fieldset class="option-form">
+      <legend class="form-title">{{ "names.segmentWidth" | translate }}</legend>
+      <div class="slider-form">
+        <mat-slider #frmSegmentWidth color="primary" min="1" max="20" step="2" [(ngModel)]="slideValues.segmentWidth"
+          (change)="onSlideChange('segmentWidth')"></mat-slider>
+        <div class="slider-value">{{ frmSegmentWidth.value }}px</div>
+      </div>
+    </fieldset>
+    <fieldset class="option-form">
+      <legend class="form-title">{{ "names.segmentDirection" | translate }}</legend>
+      <div class="slider-form">
+        <mat-slider #frmSegmentDirection color="primary" min="2" max="13" [(ngModel)]="slideValues.segmentDirectionSize"
+          (change)="onSlideChange('segmentDirectionSize')"></mat-slider>
+        <div class="slider-value">{{ frmSegmentDirection.value }}px</div>
+      </div>
+    </fieldset>
+    <fieldset class="option-form">
+      <legend class="form-title">
+        {{ "names.visibleOptions" | translate }}
+      </legend>
+      <div class="option-list">
+        <mat-slide-toggle [(ngModel)]="buttonState.vehicleLines" (change)="onChangedToggle('vehicleLines')"
+          color="primary">{{ "names.showVehicleLines" | translate }}</mat-slide-toggle>
+        <mat-slide-toggle [(ngModel)]="buttonState.segmentDirections" (change)="onChangedToggle('segmentDirections')"
+          color="primary">{{ "names.showSegmentDirections" | translate }}</mat-slide-toggle>
+        <mat-slide-toggle [(ngModel)]="buttonState.pointLabels" (change)="onChangedToggle('pointLabels')"
+          color="primary">{{ "names.showPointLabels" | translate }}</mat-slide-toggle>
+        <mat-slide-toggle [(ngModel)]="buttonState.stations" (change)="onChangedToggle('stations')" color="primary">{{
+          "names.showStations" | translate }}</mat-slide-toggle>
+        <mat-slide-toggle [(ngModel)]="buttonState.buffers" (change)="onChangedToggle('buffers')" color="primary">{{
+          "names.showBuffers" | translate }}</mat-slide-toggle>
+        <mat-slide-toggle [(ngModel)]="buttonState.groups" (change)="onChangedToggle('groups')" color="primary">{{
+          "names.showGroups" | translate }}</mat-slide-toggle>
+        <mat-slide-toggle [(ngModel)]="buttonState.clusters" (change)="onChangedToggle('clusters')" color="primary">{{
+          "names.showClusters" | translate }}</mat-slide-toggle>
+        <mat-slide-toggle [(ngModel)]="buttonState.overlaps" (change)="onChangedToggle('overlaps')" color="primary">{{
+          "names.showOverlaps" | translate }}</mat-slide-toggle>
+      </div>
+    </fieldset>
+  </ng-container>
+</oms-dialog-base>

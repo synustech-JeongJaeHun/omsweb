@@ -2,8 +2,8 @@
   <mat-progress-bar mode="indeterminate" aria-label="Loading"></mat-progress-bar>
 </div>
 
-<oms-map-viewer *ngIf="ready" [preference]="mapPreference" [viewMode]="viewMode" [trackData]="playbackData"
-  class="map-viewer"></oms-map-viewer>
+<oms-legacy-map-viewer *ngIf="ready" [preference]="mapPreference" [viewMode]="viewMode" [trackData]="playbackData"
+  class="map-viewer"></oms-legacy-map-viewer>
 
 <div id="map-status" *ngIf="showControlTable">
   <oms-playback-status-panel></oms-playback-status-panel>
