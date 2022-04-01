@@ -5,6 +5,7 @@ import { RootEmitInjectionKey, RootEmits } from 'src/Root/types/RootEmits'
 import { deepCopy } from 'src/utils/deepCopy'
 import { inject } from 'vue'
 import { clusters, findClusterById } from '../clusters'
+import { getClusterColorWithAlpha } from '../utils/color'
 
 const emit = inject<RootEmits>(RootEmitInjectionKey)!
 
@@ -33,7 +34,7 @@ function onMouseleave() {
       :key="cluster.id"
       class="cluster fixed-scale-stroke"
       fill="none"
-      :stroke="Color[cluster.color]"
+      :stroke="getClusterColorWithAlpha(cluster.color)"
       :d="cluster.d"
       :data-id="cluster.id"
       @mouseover="onMouseover"

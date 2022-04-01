@@ -1,11 +1,11 @@
-import { Color } from "src/types/Color"
-import { Group } from "../types/Group"
+import { Color } from 'src/types/Color'
+import { Group } from '../types/Group'
 
 /**
-* apply rgba alpha 50%
-*/
+ * apply rgba alpha
+ */
 function getGroupColorWithAlpha(color: Group['color']) {
-  return `${Color[color]}80`
+  return `${Color[color]}30`
 }
 
 export { getGroupColorWithAlpha }

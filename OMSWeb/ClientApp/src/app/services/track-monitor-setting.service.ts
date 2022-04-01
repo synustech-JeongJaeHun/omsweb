@@ -104,7 +104,7 @@ const DefaultTrackMonitorSetting: TrackMonitorSetting = {
   bufferColor: 'rgba(100, 100, 100, 1)',
   pointColor: 'rgba(80, 80, 80, 1)',
   normalSegmentColor: 'rgba(200, 200, 200, 1)',
-  disabledSegmentColor: 'rgba(66, 0, 99, 1)',
+  disabledSegmentColor: 'rgba(165, 127, 184, 1)',
   segmentDirectionColor: 'rgba(110, 110, 110, 1)',
   autoModeVehicleColor: 'rgba(95, 95, 95, 1)',
   manualModeVehicleColor: 'rgba(40, 180, 115, 1)',
