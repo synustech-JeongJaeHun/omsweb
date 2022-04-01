@@ -6,7 +6,7 @@
           (selectedUnitChange)="onBufferChange($event)" [placeholder]="'names.searchBuffer' | translate">
         </oms-unit-list-selector>
       </div>
-      <div class="info-container">
+      <div class="info-container" *ngIf="currentBuffer">
         <h3>Buffer #{{ currentBuffer.id }}</h3>
         <div class="unit-details">
           <label class="name">{{ "names.id" | translate }}</label>
