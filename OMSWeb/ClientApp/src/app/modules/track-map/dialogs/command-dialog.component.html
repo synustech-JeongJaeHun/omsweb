@@ -48,8 +48,8 @@
         </mat-form-field>
       </div>
       <div class="form-row">
-        <mat-slide-toggle [(ngModel)]="commandState.auto" color="primary">{{
-          "names.auto" | translate
+        <mat-slide-toggle [(ngModel)]="commandState.selectVehicle" color="primary">{{
+          "names.selectVehicle" | translate
           }}</mat-slide-toggle>
       </div>
     </div>
@@ -86,8 +86,8 @@
         </mat-form-field>
       </div>
       <div class="form-row">
-        <mat-slide-toggle [(ngModel)]="commandState.auto" color="primary">{{
-          "names.auto" | translate
+        <mat-slide-toggle [(ngModel)]="commandState.selectVehicle" color="primary">{{
+          "names.selectVehicle" | translate
           }}</mat-slide-toggle>
       </div>
     </div>
@@ -122,11 +122,6 @@
           <input matInput name="carrier" [disabled]="commandState.carrierDisabled" [(ngModel)]="commandState.carrier"
             [placeholder]="'names.carrier' | translate" />
         </mat-form-field>
-      </div>
-      <div class="form-row">
-        <mat-slide-toggle [(ngModel)]="commandState.auto" color="primary">{{
-          "names.auto" | translate
-          }}</mat-slide-toggle>
       </div>
     </div>
   </div>

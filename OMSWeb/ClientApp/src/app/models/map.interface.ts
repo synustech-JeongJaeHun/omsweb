@@ -107,7 +107,7 @@ export type TransferCommandCategoryType =
 export class TransferCommandState {
   active: boolean = false;
   category: TransferCommandCategoryType = 'fromTo';
-  auto: boolean = true;
+  selectVehicle: boolean = false;
   vehicle?: ILookupUnit;
   point?: ILookupUnit;
   source?: ILookupUnit;
@@ -122,7 +122,7 @@ export class TransferCommandState {
   get vehicleDisabled(): boolean {
     return (
       !this.active ||
-      (this.auto && ['fromTo', 'from', 'to'].includes(this.category))
+      (!this.selectVehicle && ['fromTo', 'from'].includes(this.category))
     );
   }
   get pointDisabled(): boolean {

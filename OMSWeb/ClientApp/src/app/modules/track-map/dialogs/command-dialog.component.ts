@@ -61,7 +61,6 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
     }
 
     const {
-      auto,
       category,
       vehicle,
       vehicleDisabled,
@@ -139,7 +138,6 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 
   private validate(): undefined | string {
     const {
-      auto,
       category,
       vehicle,
       vehicleDisabled,
