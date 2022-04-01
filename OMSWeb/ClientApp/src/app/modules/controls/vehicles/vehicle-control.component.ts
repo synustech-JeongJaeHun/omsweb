@@ -30,6 +30,9 @@ export class VehicleControlComponent implements OnInit {
   }
   updateFileName = '';
 
+  // map files
+  maps: string[] = [];
+
   isUpdating = false;
 
   get hasControlAccess(): boolean {
@@ -38,6 +41,10 @@ export class VehicleControlComponent implements OnInit {
 
   get canControl(): boolean {
     return this.selectedIds.length > 0;
+  }
+
+  updateMapFiles() {
+    return this.systemSvc.maps().subscribe((maps) => (this.maps = maps));
   }
 
   constructor(
@@ -49,6 +56,7 @@ export class VehicleControlComponent implements OnInit {
     private hubService: HubService
   ) {
     this.dataSource = this.systemSvc.vehicles();
+    this.updateMapFiles();
   }
 
   ngOnInit(): void {

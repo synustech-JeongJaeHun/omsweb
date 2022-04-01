@@ -8,6 +8,7 @@ namespace OMSWeb.Models
     public string SID { get; set; }
     public string Version { get; set; }
     public bool KpiEnabled { get; set; }
+    public string MapDir { get; set; }
     public string LogBaseDir { get; set; }
     public string LogTempZipDir { get; set; }
     public string LogTempCopyDir { get; set; }

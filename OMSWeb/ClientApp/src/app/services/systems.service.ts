@@ -49,6 +49,10 @@ export class SystemsService {
     return this.http.get<IFileItem[]>(`${this.baseUrl}/logs`);
   }
 
+  maps() {
+    return this.http.get<string[]>(`${this.baseUrl}/maps`);
+  }
+
   downloadFile(name: string, path: string): Observable<Blob> {
     let params = new HttpParams();
     params = params.append('fileFullPath', path);

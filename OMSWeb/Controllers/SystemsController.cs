@@ -45,13 +45,19 @@ namespace OMSWeb.Controllers
       return this._moduleStatusSvc.GetModuleStatus();
     }
 
+    [HttpGet("maps")]
+    public object GetMaps()
+    {
+      return this._systemSvc.GetMaps();
+    }
+
     [HttpGet("logs")]
     public object GetLogs()
     {
       return this._systemSvc.GetLogs();
     }
 
-    // ÆÄÀÏ ÇÑ°³ ´Ù¿î·Îµå (ÆÄÀÏ Å©±â 10MB ¹Ì¸¸)
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½Ñ°ï¿½ ï¿½Ù¿ï¿½Îµï¿½ (ï¿½ï¿½ï¿½ï¿½ Å©ï¿½ï¿½ 10MB ï¿½Ì¸ï¿½)
     [HttpGet("logs/downloadFile/{fileName}")]
     public FileContentResult DownloadFile([FromRoute] string fileName, [FromQuery] string fileFullPath)
     {
@@ -80,7 +86,7 @@ namespace OMSWeb.Controllers
       return File(bytes, "application/octect-stream", fileName);
     }
 
-    // ÆÄÀÏ ¿©·¯°³ ¼±ÅÃ½Ã Æú´õ ¼±ÅÃ½Ã Æú´õ + ÆÄÀÏ ¼±ÅÃ È¤Àº ÇÑ°³ÀÇ ÆÄÀÏÀÌ Å©±â°¡ 10MB ÀÌ»óÀÎ °æ¿ì
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ã½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ã½ï¿½ ï¿½ï¿½ï¿½ï¿½ + ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ È¤ï¿½ï¿½ ï¿½Ñ°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å©ï¿½â°¡ 10MB ï¿½Ì»ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
     [HttpGet("logs/downloadFoldersNFiles/{folderName}")]
     public object DownloadFoldersNFiles([FromRoute] string folderName, [FromQuery] string folderFullPaths)
     {
@@ -105,7 +111,7 @@ namespace OMSWeb.Controllers
       {
         if ((System.IO.File.GetAttributes(path) & FileAttributes.Directory) == FileAttributes.Directory)
         {
-          // Temp Folder¿¡ ÆÄÀÏ º¹»ç
+          // Temp Folderï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
           DirectoryInfo directoryInfo = new DirectoryInfo(path);
           if (!Directory.Exists(logTempCopyDir + "\\" + directoryInfo.Name))
             Directory.CreateDirectory(logTempCopyDir + "\\" + directoryInfo.Name);
@@ -122,20 +128,20 @@ namespace OMSWeb.Controllers
       {
         System.IO.Compression.ZipFile.CreateFromDirectory(folderPath, logZipFilePath, CompressionLevel.Optimal, true);
 
-        // Temp FolderÀÇ Æú´õ ÆÄÀÏ »èÁ¦
+        // Temp Folderï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         Directory.Delete(logTempCopyDir, true);
       }
       catch
       {
-        // Zip ÆÄÀÏ »èÁ¦
+        // Zip ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         System.IO.File.Delete(logZipFilePath);
 
-        // Temp Folder¿¡ ÆÄÀÏ º¹»ç
+        // Temp Folderï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         foreach (string path in folderFullPaths.Split(','))
         {
           if ((System.IO.File.GetAttributes(path) & FileAttributes.Directory) == FileAttributes.Directory)
           {
-            // Temp Folder¿¡ ÆÄÀÏ º¹»ç
+            // Temp Folderï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             DirectoryInfo directoryInfo = new DirectoryInfo(path);
             if (!Directory.Exists(logTempCopyDir + "\\" + directoryInfo.Name))
               Directory.CreateDirectory(logTempCopyDir + "\\" + directoryInfo.Name);
@@ -148,10 +154,10 @@ namespace OMSWeb.Controllers
           }
         }
 
-        // Zip ÆÄÀÏ ¾ÐÃà
+        // Zip ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         System.IO.Compression.ZipFile.CreateFromDirectory(logTempCopyDir, logZipFilePath, CompressionLevel.Optimal, true);
 
-        // Temp FolderÀÇ Æú´õ ÆÄÀÏ »èÁ¦
+        // Temp Folderï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         Directory.Delete(logTempCopyDir, true);
       }
 
@@ -165,7 +171,7 @@ namespace OMSWeb.Controllers
       return File(zipResult, "application/zip", fileName);
     }
 
-    // ÇÑ Æú´õ ¼±ÅÃ ÈÄ¿¡ zip ÆÄÀÏ ´Ù¿î·Îµå
+    // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ä¿ï¿½ zip ï¿½ï¿½ï¿½ï¿½ ï¿½Ù¿ï¿½Îµï¿½
     [HttpGet("logs/downloadFolder/{folderName}")]
     public FileContentResult DownloadFolder([FromRoute] string folderName, [FromQuery] string folderFullPath)
     {
@@ -196,16 +202,16 @@ namespace OMSWeb.Controllers
         if (!Directory.Exists(logTempCopyDir))
           Directory.CreateDirectory(logTempCopyDir);
 
-        // Zip ÆÄÀÏ »èÁ¦
+        // Zip ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         System.IO.File.Delete(logZipFilePath);
 
-        // Temp Folder¿¡ ÆÄÀÏ º¹»ç
+        // Temp Folderï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         _systemSvc.DirectoryCopy(folderPath, logTempCopyDir, true);
 
-        // Zip ÆÄÀÏ ¾ÐÃà
+        // Zip ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         System.IO.Compression.ZipFile.CreateFromDirectory(logTempCopyDir, logZipFilePath, CompressionLevel.Optimal, true);
 
-        // Temp FolderÀÇ Æú´õ ÆÄÀÏ »èÁ¦
+        // Temp Folderï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         Directory.Delete(logTempCopyDir, true);
       }
 

@@ -100,6 +100,14 @@ namespace OMSWeb.Services
             List<LogModel> result = new List<LogModel>() { logModel };
             return result;
         }
+        public IEnumerable<string> GetMaps()
+        {
+
+            var maps = Directory.GetFiles(this._appSettings.MapDir)
+                .Where((file) => file.EndsWith(".json"))
+                .Select(map => Path.GetFileName(map));
+            return maps;
+        }
 
         public void DirectoryCopy(string sourceDirectoryFullPath, string destDirectoryFullPath, bool isCopySubDirectory)
         {
