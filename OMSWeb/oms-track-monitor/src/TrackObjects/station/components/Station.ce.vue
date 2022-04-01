@@ -58,7 +58,6 @@ const group = useGroup('station', toRef(props.station, 'id'))
         alignment-baseline="hanging"
         text-anchor="middle"
         text-rendering="optimizeSpeed"
-        font-size="0.9em"
         pointer-events="none"
       >
         {{ props.station.logicalId }}

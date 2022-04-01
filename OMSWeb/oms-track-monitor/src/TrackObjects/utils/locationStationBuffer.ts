@@ -10,7 +10,7 @@ import {
 import { findSegmentByPoints } from '../segment/segments'
 import { createPathElement } from 'src/utils/svg/path'
 
-const DirectionMargin = 500
+const DirectionMargin = 300
 
 function getPositionForBufferOrStation(bufferOrStation: Buffer | Station) {
   const segment = findSegmentByPoints(

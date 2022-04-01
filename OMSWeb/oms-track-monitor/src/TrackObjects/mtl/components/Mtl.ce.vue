@@ -55,7 +55,6 @@ const group = useGroup('mtl', toRef(props.mtl, 'id'))
         alignment-baseline="hanging"
         text-anchor="middle"
         text-rendering="optimizeSpeed"
-        font-size="0.9em"
         pointer-events="none"
       >
         {{ props.mtl.logicalId }}

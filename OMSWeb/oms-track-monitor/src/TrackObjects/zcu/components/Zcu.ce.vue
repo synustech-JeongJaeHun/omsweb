@@ -51,7 +51,6 @@ const props = defineProps<{
         text-anchor="end"
         alignment-baseline="baseline"
         text-rendering="optimizeSpeed"
-        font-size="0.9em"
         pointer-events="none"
       >
         {{ getHumanReadableUsingType(props.zcu.usingType) }}
@@ -63,7 +62,6 @@ const props = defineProps<{
         text-anchor="start"
         alignment-baseline="hanging"
         text-rendering="optimizeSpeed"
-        font-size="0.9em"
         pointer-events="none"
       >
         {{ String(props.zcu.id) }}
