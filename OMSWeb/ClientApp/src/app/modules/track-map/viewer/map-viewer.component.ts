@@ -230,6 +230,19 @@ export class MapViewerComponent implements OnInit, OnDestroy {
             operation: e.operation,
             data: e.data,
           });
+
+          if (this.contextMenuObject) {
+            this.contextMenuObject.value.disabled =
+              this.trackStatusService.trackData.segmentDisabled.some(
+                (sd) => sd.segmentId === this.contextMenuObject.value.id
+              );
+          }
+          if (this.selectedObject) {
+            this.selectedObject.disabled =
+              this.trackStatusService.trackData.segmentDisabled.some(
+                (sd) => sd.segmentId === this.selectedObject.id
+              );
+          }
         });
       this.hubSvc.clusterChanged$
         .pipe(takeUntil(this.destroy$))
