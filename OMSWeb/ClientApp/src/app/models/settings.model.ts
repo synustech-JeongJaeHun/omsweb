@@ -152,9 +152,9 @@ export const defaultControlTable: ControlTable = {
   zcus_type: true,
   zcus_status: true,
   zcus_errorCode: true,
-  zcus_passVehicle: true,
-  zcus_vehicleCount: true,
-  zcus_vehicleInfo: true,
+  zcus_passVehicle: false,
+  zcus_vehicleCount: false,
+  zcus_vehicleInfo: false,
 
   cps: true,
   cps_server_id: true,
