@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { computed, inject, ref, toRef, watch } from 'vue'
 import { Vehicle } from '../types/Vehicle'
-import { findPointById, usePointPoisiton } from '../../point/points'
+import { findPointById } from '../../point/points'
 import { findSegmentByPoints } from '../../segment/segments'
 import { Segment } from '../../segment/types/Segment'
 import { useGroup } from '../../group/groups'
-import { useCommandPointPosition } from '../utils/lines'
+import {
+  useNextPointPosition,
+  useCommandPointPosition,
+} from '../utils/lines'
 import { RootEmitInjectionKey, RootEmits } from 'src/Root/types/RootEmits'
 import { createPathElement, getPositionFromD } from 'src/utils/svg/path'
 import { D } from 'src/types/D'
@@ -22,6 +25,7 @@ import { makeVehicleAnimationPath } from '../utils/vehilcleAnimationPath'
 const props = defineProps<{
   vehicle: Vehicle
 }>()
+const vehicle = toRef(props, 'vehicle')
 const emit = inject<RootEmits>(RootEmitInjectionKey)!
 
 const group = useGroup('vehicle', toRef(props.vehicle, 'id'))
@@ -128,14 +132,8 @@ function trackVehiclePosition(d: D, lastUpdated?: number) {
   globalThis.requestAnimationFrame(step)
 }
 
-const nextPointPosition = usePointPoisiton(
-  toRef(props.vehicle, 'nextPoint')
-)
-const commandPoint = useCommandPointPosition(
-  toRef(props.vehicle, 'locationPickup'),
-  toRef(props.vehicle, 'locationDropoff'),
-  toRef(props.vehicle, 'commandPoint')
-)
+const nextPointPosition = useNextPointPosition(vehicle)
+const commandPoint = useCommandPointPosition(vehicle)
 const commandLineColor = computed(() => {
   if (commandPoint.type.value === 'pickup')
     return 'rgba(40, 180, 115, 0.4)'

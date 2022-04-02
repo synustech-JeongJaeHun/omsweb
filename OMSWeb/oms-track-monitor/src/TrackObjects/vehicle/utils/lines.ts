@@ -1,3 +1,4 @@
+import { usePointPoisiton } from 'src/TrackObjects/point/points'
 import { getPositionForBufferOfStationOffsetPosition } from 'src/TrackObjects/utils/locationStationBuffer'
 import { computed, Ref } from 'vue'
 import { findBufferById } from '../../buffer/buffers'
@@ -5,6 +6,12 @@ import { findStationById } from '../../station/stations'
 import { Vehicle } from '../types/Vehicle'
 
 // command, next line utils
+
+function useNextPointPosition(vehicle: Ref<Vehicle>) {
+  const nextPoint = computed(() => vehicle.value.nextPoint)
+  const position = usePointPoisiton(nextPoint)
+  return position
+}
 
 function parseTargetId(location: string) {
   const typeLetter = location[0].toLowerCase()
@@ -20,25 +27,24 @@ function parseTargetId(location: string) {
   }
 }
 
-function useCommandPointPosition(
-  pickup: Ref<Vehicle['locationPickup']>,
-  dropoff: Ref<Vehicle['locationDropoff']>,
-  commandPoint: Ref<Vehicle['commandPoint']>
-) {
+function useCommandPointPosition(vehicle: Ref<Vehicle>) {
   const type = computed(() =>
-    commandPoint.value === dropoff.value
+    vehicle.value.commandPoint === vehicle.value.locationDropoff
       ? 'dropoff'
-      : commandPoint.value === pickup.value
+      : vehicle.value.commandPoint === vehicle.value.locationPickup
       ? 'pickup'
       : undefined
   )
 
   const position = computed(() => {
-    const commandTarget = commandPoint.value
-      ? parseTargetId(commandPoint.value)
+    const commandTarget = vehicle.value.commandPoint
+      ? parseTargetId(vehicle.value.commandPoint)
       : undefined
 
-    const nextLocation = [pickup.value, dropoff.value]
+    const nextLocation = [
+      vehicle.value.locationPickup,
+      vehicle.value.locationDropoff,
+    ]
       .filter((notNullish) => notNullish)
       .map((location) => parseTargetId(location!))
       .filter((notNullish) => notNullish)
@@ -52,4 +58,4 @@ function useCommandPointPosition(
   return { type, position }
 }
 
-export { useCommandPointPosition }
+export { useNextPointPosition, useCommandPointPosition }
