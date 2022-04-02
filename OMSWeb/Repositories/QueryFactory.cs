@@ -138,7 +138,8 @@ namespace OMSWeb.Repositories
                 WHEN VH.order_origin LIKE '%*%' THEN true 
                 ELSE false
             END As host_order, 
-            VH.order_origin, VH.moving_state, VH.cargo_state, VH.is_sensor_stopped, VH.is_blocked, VH.error_list, VH.type, VH.cargo_transfer_result, VH.map_db,
+            VH.order_origin, VH.moving_state, VH.cargo_state, VH.is_sensor_stopped, VH.is_blocked, VH.error_list, VH.type, VH.cargo_transfer_result, 
+            VH.map_db, 0 AS mapVersion,
             OD.id AS order_id, OD.logical_id AS order_logical_id, OD.location_pickup, OD.location_dropoff, OD.location_move, OD.priority,
             VH.is_maint, 
             CASE 

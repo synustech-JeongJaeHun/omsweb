@@ -13,6 +13,7 @@ namespace OMSWeb.Models.Entities
         public int RuntimeTotal { get; set; }
         public string Type { get; set; }
         public string MapDb { get; set; }
+        public string MapVersion { get; set; }
 
 
         public int? LastPoint { get; set; }
