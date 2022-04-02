@@ -16,10 +16,12 @@ namespace OMSWeb.Services
     Zcus,
     ZcuStatus,
     Clusters,
+    CpsStatus,
     VehicleDio,
     VehiclePaths,
     Vehicles,
     Groups,
+    Kpi,
   }
 
   public class CacheService

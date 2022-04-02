@@ -37,44 +37,48 @@ namespace OMSWeb.Services
             this._cache = cacheSvc;
             this._trackSvc = trackSvc;
 
-            this.tableEventMap = new Dictionary<string, DataChangeEventTarget> {
-        // {"points", new DataChangeEventTarget(CacheKeys.Points, new[]{"pointChanged"})},
-        {"segments", new DataChangeEventTarget(CacheKeys.Segments, new[]{"segmentChanged"})},
-        {"segment_blocking", new DataChangeEventTarget(CacheKeys.SegmentDisabled, new[]{"segmentDisabledChanged"}, true)},
-        {"stations", new DataChangeEventTarget(CacheKeys.Stations, new[]{"stationChanged"})},
-        {"buffers", new DataChangeEventTarget(CacheKeys.Buffers, new[]{"bufferChanged"})},
-        {"mtls", new DataChangeEventTarget(CacheKeys.Mtls, new[]{"mtlChanged"})},
-        {"zcus", new DataChangeEventTarget(CacheKeys.Zcus, new[]{"zcuMapChanged"}, true)},
-        {"zcu_status", new DataChangeEventTarget(CacheKeys.ZcuStatus, new[]{"zcuStatusTableChanged"}, true)},
-        {"vehicles", new DataChangeEventTarget(CacheKeys.Vehicles, new[]{"vehicleChanged", "vehicleTableChanged"}, true)},
-        {"vehicle_paths", new DataChangeEventTarget(CacheKeys.VehiclePaths, new[]{"vehiclePath"})},
-        {"vehicle_dio", new DataChangeEventTarget(CacheKeys.VehicleDio, new[]{"vehicleDioChanged"}, true)},
-        {"clusters", new DataChangeEventTarget(CacheKeys.Clusters, new[]{"clusterChanged"})},
-        {"cluster_points", new DataChangeEventTarget(CacheKeys.Clusters, new[]{"clusterChanged"})},
-        {"location_groups", new DataChangeEventTarget(CacheKeys.Groups, new[]{"groupChanged"})},
-        {"grouped_objects", new DataChangeEventTarget(CacheKeys.Groups, new[]{"groupChanged"})},
-        {"orders", new DataChangeEventTarget(CacheKeys.None, new[]{"orderTableChanged"}, true)},
-        {"vehicle_alarms", new DataChangeEventTarget(CacheKeys.None, new[]{"alarm"})},
-        {"alerts", new DataChangeEventTarget(CacheKeys.None, new[]{"alert"})},
-        {"server_status", new DataChangeEventTarget(CacheKeys.None, new[]{"serverStatus"})},
-        {"mode_state", new DataChangeEventTarget(CacheKeys.None, new[]{"modeState"})},
-      };
+            this.tableEventMap = new Dictionary<string, DataChangeEventTarget> 
+            {
+                // {"points", new DataChangeEventTarget(CacheKeys.Points, new[]{"pointChanged"})},
+                {"segments", new DataChangeEventTarget(CacheKeys.Segments, new[]{"segmentChanged"})},
+                {"segment_blocking", new DataChangeEventTarget(CacheKeys.SegmentDisabled, new[]{"segmentDisabledChanged"}, true)},
+                {"stations", new DataChangeEventTarget(CacheKeys.Stations, new[]{"stationChanged"})},
+                {"buffers", new DataChangeEventTarget(CacheKeys.Buffers, new[]{"bufferChanged"})},
+                {"mtls", new DataChangeEventTarget(CacheKeys.Mtls, new[]{"mtlChanged"})},
+                {"zcus", new DataChangeEventTarget(CacheKeys.Zcus, new[]{"zcuMapChanged"}, true)},
+                {"zcu_status", new DataChangeEventTarget(CacheKeys.ZcuStatus, new[]{"zcuStatusTableChanged"}, true)},
+                {"vehicles", new DataChangeEventTarget(CacheKeys.Vehicles, new[]{"vehicleChanged", "vehicleTableChanged"}, true)},
+                {"vehicle_paths", new DataChangeEventTarget(CacheKeys.VehiclePaths, new[]{"vehiclePath"})},
+                {"vehicle_dio", new DataChangeEventTarget(CacheKeys.VehicleDio, new[]{"vehicleDioChanged"}, true)},
+                {"clusters", new DataChangeEventTarget(CacheKeys.Clusters, new[]{"clusterChanged"})},
+                {"cluster_points", new DataChangeEventTarget(CacheKeys.Clusters, new[]{"clusterChanged"})},
+                {"cps_status", new DataChangeEventTarget(CacheKeys.CpsStatus, new[]{"cpsStatusTableChanged"}, true)},
+                {"location_groups", new DataChangeEventTarget(CacheKeys.Groups, new[]{"groupChanged"})},
+                {"grouped_objects", new DataChangeEventTarget(CacheKeys.Groups, new[]{"groupChanged"})},
+                {"orders", new DataChangeEventTarget(CacheKeys.None, new[]{"orderTableChanged"}, true)},
+                {"vehicle_alarms", new DataChangeEventTarget(CacheKeys.None, new[]{"alarm"})},
+                {"alerts", new DataChangeEventTarget(CacheKeys.None, new[]{"alert"})},
+                {"server_status", new DataChangeEventTarget(CacheKeys.None, new[]{"serverStatus"})},
+                {"mode_state", new DataChangeEventTarget(CacheKeys.None, new[]{"modeState"})},
+                {"kpi_trend", new DataChangeEventTarget(CacheKeys.None, new[]{"kpiTrend"})},
+            };                        
 
-            this.cacheEventMap = new Dictionary<CacheKeys, string[]> {
-        // {CacheKeys.Points, new[]{"pointChanged"}},
-        {CacheKeys.Segments, new[]{"segmentChanged"}},
-        {CacheKeys.SegmentDisabled, new[]{"segmentDisabledChanged"}},
-        {CacheKeys.Stations, new[]{"stationChanged"}},
-        {CacheKeys.Buffers, new[]{"bufferChanged"}},
-        {CacheKeys.Mtls, new[]{"mtlChanged"}},
-        {CacheKeys.Zcus, new[]{"zcuMapChanged"}},
-        {CacheKeys.ZcuStatus, new[]{"zcuStatusTableChanged"}},
-        {CacheKeys.Vehicles, new[]{"vehicleChanged", "vehicleTableChanged"}},
-        {CacheKeys.VehiclePaths, new[]{"vehiclePath"}},
-        {CacheKeys.VehicleDio, new[]{"vehicleDioChanged"}},
-        {CacheKeys.Clusters, new[]{"clusterChanged"}},
-        {CacheKeys.Groups, new[]{"groupChanged"}},
-      };
+            this.cacheEventMap = new Dictionary<CacheKeys, string[]> 
+            {
+                // {CacheKeys.Points, new[]{"pointChanged"}},
+                {CacheKeys.Segments, new[]{"segmentChanged"}},
+                {CacheKeys.SegmentDisabled, new[]{"segmentDisabledChanged"}},
+                {CacheKeys.Stations, new[]{"stationChanged"}},
+                {CacheKeys.Buffers, new[]{"bufferChanged"}},
+                {CacheKeys.Mtls, new[]{"mtlChanged"}},
+                {CacheKeys.Zcus, new[]{"zcuMapChanged"}},
+                {CacheKeys.ZcuStatus, new[]{"zcuStatusTableChanged"}},
+                {CacheKeys.Vehicles, new[]{"vehicleChanged", "vehicleTableChanged"}},
+                {CacheKeys.VehiclePaths, new[]{"vehiclePath"}},
+                {CacheKeys.VehicleDio, new[]{"vehicleDioChanged"}},
+                {CacheKeys.Clusters, new[]{"clusterChanged"}},
+                {CacheKeys.Groups, new[]{"groupChanged"}},
+            };
 
             this.sendingMap = new Dictionary<string, NotificationSendingState>();
             this.jsonSerializerSettings = new Newtonsoft.Json.JsonSerializerSettings()

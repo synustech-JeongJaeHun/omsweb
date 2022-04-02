@@ -58,7 +58,7 @@ export class CpsControlTableComponent implements OnInit, OnDestroy {
     private $t: TranslateService,
     private hubSvc: HubService
   ) {
-    this.dataSource = this.statusSvc.zcuStatusDataSource();
+    this.dataSource = this.statusSvc.cpsStatusDataSource();
     this.preference = this.settingSvc.globalPreferences;
   }
 
@@ -72,7 +72,7 @@ export class CpsControlTableComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.hubSvc.zcuStatusTableChanged$
+    this.hubSvc.cpsStatusTableChanged$
       .pipe(takeUntil(this.destroy$))
       .subscribe((e: IDataChangeEvent) => {
         e && this.onTableChanged(e);
@@ -81,7 +81,7 @@ export class CpsControlTableComponent implements OnInit, OnDestroy {
 
   private onTableChanged(payload: IDataChangeEvent) {
     let needReload = false;
-    console.log('@@ zcu status table updated >>>', payload);
+    console.log('@@ cps status table updated >>>', payload);
     if (payload && payload.id && payload.operation) {
       if (['INSERT', 'DELETE'].includes(payload.operation)) {
         needReload = true;

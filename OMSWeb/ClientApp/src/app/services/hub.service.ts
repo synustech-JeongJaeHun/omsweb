@@ -29,6 +29,8 @@ export class HubService {
   modeStateChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter();
   zcuMapChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter();
   zcuStatusTableChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter();
+  cpsStatusTableChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter();
+  kpiChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter();
   //#endregion
 
   public isConnected = false;
@@ -107,6 +109,8 @@ export class HubService {
     this.hub.off('modeState');
     this.hub.off('zcuMapChanged');
     this.hub.off('zcuStatusTableChanged');
+    this.hub.off('cpsStatusTableChanged');
+    this.hub.off('kpiChanged');
   }
 
   private attachEvents() {
@@ -187,6 +191,14 @@ export class HubService {
     this.hub.on('zcuStatusTableChanged', (meta, body) => {
       console.info('## hub message : zcuStatusTableChanged >>', { meta, body });
       this.zcuStatusTableChanged$.emit({ ...meta, data: body });
+    });
+    this.hub.on('cpsStatusTableChanged', (meta, body) => {
+      console.info('## hub message : cpsStatusTableChanged >>', { meta, body });
+      this.cpsStatusTableChanged$.emit({ ...meta, data: body });
+    });
+    this.hub.on('kpiChanged', (meta, body) => {
+      console.info('## hub message : kpiChanged >>', { meta, body });
+      this.kpiChanged$.emit({ ...meta, data: body });
     });
   }
 }

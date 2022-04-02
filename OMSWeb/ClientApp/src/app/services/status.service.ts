@@ -61,4 +61,12 @@ export class StatusService {
       }),
     });
   }
+  cpsStatusDataSource(): DataSource {
+    return new DataSource({
+      store: AspNetData.createStore({
+        key: 'id',
+        loadUrl: `${this.baseUrl}/cps`,
+      }),
+    });
+  }
 }
