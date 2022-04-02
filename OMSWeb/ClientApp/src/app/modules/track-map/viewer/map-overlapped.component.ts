@@ -1,7 +1,14 @@
-import { Component, EventEmitter, Input, Output, SimpleChanges } from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
+import { TrackMonitorSettingService } from '@oms/root/services/track-monitor-setting.service';
 import d3 = require('d3');
-import { main_css } from "../../shared/utils/css-loader";
-import { SvgDrawingUtil } from "../../shared/utils/svg-drawing.util";
+import { main_css } from '../../shared/utils/css-loader';
+import { SvgDrawingUtil } from '../../shared/utils/svg-drawing.util';
 
 @Component({
   selector: 'oms-map-overlapped',
@@ -12,9 +19,11 @@ export class MapOverlappedComponent {
   @Input('selectedObject') data: any;
   @Input() overlapList: any[] = [];
   @Output() leftClick = new EventEmitter<any>();
-  @Output() rightClick = new EventEmitter<{ object: any, event: Event }>();
+  @Output() rightClick = new EventEmitter<{ object: any; event: Event }>();
 
   listContainer: d3.Selection<d3.BaseType, unknown, HTMLElement, any>;
+
+  constructor(private tmSettingService: TrackMonitorSettingService) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     const { data } = changes;
@@ -22,7 +31,6 @@ export class MapOverlappedComponent {
       this.bindOverlapData();
     }
   }
-
 
   ngOnInit(): void {
     this.bindOverlapData();
@@ -34,7 +42,7 @@ export class MapOverlappedComponent {
     // clear list
     this.listContainer.selectAll('svg').remove();
 
-    const overlaps = this.overlapList
+    const overlaps = this.overlapList;
 
     // put_selected_on_top
     for (let i = overlaps.length - 1; i > -1; i--) {
@@ -62,7 +70,8 @@ export class MapOverlappedComponent {
         // update_overlap_module_panel('ADD', x.objectType, x, 'OVERLAP_MODULE')
         const className = overlap.objectType.toLowerCase();
         const currentClass =
-          overlap.objectType?.toUpperCase() === this.data.objectType?.toUpperCase() && overlap.id === this.data.id
+          overlap.objectType?.toUpperCase() ===
+            this.data.objectType?.toUpperCase() && overlap.id === this.data.id
             ? 'current'
             : '';
         const svg = this.listContainer
@@ -79,7 +88,8 @@ export class MapOverlappedComponent {
             3,
             'OVERLAP_MODULE',
             false,
-            { mapRotation: 0 }
+            { mapRotation: 0 },
+            this.tmSettingService.trackSetting
           );
         } else {
           // update_dom(objectType, x, main_css[objectType.toLowerCase()], 3, 'OVERLAP_MODULE',false)
@@ -92,7 +102,8 @@ export class MapOverlappedComponent {
             3,
             'OVERLAP_MODULE',
             false,
-            { mapRotation: 0 }
+            { mapRotation: 0 },
+            this.tmSettingService.trackSetting
           );
         }
 
@@ -101,14 +112,14 @@ export class MapOverlappedComponent {
           .attr('transform', `translate(${padding}, ${padding})`);
 
         svg.on('click', () => {
-          this.leftClick.emit(overlap)
+          this.leftClick.emit(overlap);
         });
         svg.on('contextmenu', () => {
-          if (d3?.event?.preventDefault) d3.event.preventDefault()
+          if (d3?.event?.preventDefault) d3.event.preventDefault();
           this.rightClick.emit({
             object: overlap,
-            event: d3.event
-          })
+            event: d3.event,
+          });
         });
       });
     }

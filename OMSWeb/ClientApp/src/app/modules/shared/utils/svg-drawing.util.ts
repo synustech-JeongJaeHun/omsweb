@@ -1,3 +1,4 @@
+import { TrackMonitorSettingService } from '@oms/root/services/track-monitor-setting.service';
 import { main_css } from '../../shared/utils/css-loader';
 
 export namespace SvgDrawingUtil {
@@ -9,7 +10,8 @@ export namespace SvgDrawingUtil {
     zoom_level: number,
     group_type: string,
     is_zoom_only: boolean,
-    options: any = {}
+    options: any = {},
+    trackMonitorSetting: TrackMonitorSettingService['trackSetting']
   ) => {
     const mainUnit = svg
       .append('g')
@@ -27,7 +29,8 @@ export namespace SvgDrawingUtil {
       zoom_level,
       group_type,
       null,
-      options
+      options,
+      trackMonitorSetting
     );
   };
 
@@ -40,7 +43,8 @@ export namespace SvgDrawingUtil {
     zoom_level: number,
     group_type: string,
     is_zoom_only: boolean,
-    options: any = {}
+    options: any = {},
+    trackMonitorSetting: TrackMonitorSettingService['trackSetting']
   ) => {
     let mainUnit: any;
     switch (object_type) {
@@ -61,7 +65,8 @@ export namespace SvgDrawingUtil {
             zoom_level,
             group_type,
             null,
-            options
+            options,
+            trackMonitorSetting
           );
         } else if (zoom_level === 3) {
           buildSubUnit(
@@ -72,7 +77,8 @@ export namespace SvgDrawingUtil {
             zoom_level,
             group_type,
             null,
-            options
+            options,
+            trackMonitorSetting
           );
           buildSubUnit(
             'POINT_LABEL',
@@ -82,7 +88,8 @@ export namespace SvgDrawingUtil {
             zoom_level,
             group_type,
             null,
-            options
+            options,
+            trackMonitorSetting
           );
         }
         break;
@@ -103,7 +110,8 @@ export namespace SvgDrawingUtil {
           zoom_level,
           group_type,
           null,
-          options
+          options,
+          trackMonitorSetting
         );
         mainUnit
           .select('.station_path')
@@ -122,7 +130,8 @@ export namespace SvgDrawingUtil {
           zoom_level,
           group_type,
           null,
-          options
+          options,
+          trackMonitorSetting
         );
 
         break;
@@ -143,7 +152,8 @@ export namespace SvgDrawingUtil {
           zoom_level,
           group_type,
           null,
-          options
+          options,
+          trackMonitorSetting
         );
         mainUnit
           .select('.buffer_path')
@@ -161,7 +171,8 @@ export namespace SvgDrawingUtil {
           zoom_level,
           group_type,
           null,
-          options
+          options,
+          trackMonitorSetting
         );
         break;
       case 'MTL':
@@ -182,7 +193,8 @@ export namespace SvgDrawingUtil {
           group_type,
           null,
           options,
-        )
+          trackMonitorSetting
+        );
         mainUnit
           .select('.mtl_path')
           .attr('d', dom_css.icon_level3)
@@ -199,7 +211,8 @@ export namespace SvgDrawingUtil {
           zoom_level,
           group_type,
           null,
-          options
+          options,
+          trackMonitorSetting
         );
         break;
       default:
@@ -215,7 +228,8 @@ export namespace SvgDrawingUtil {
     zoom_level: number = 3,
     group_type: string,
     group_colors: any,
-    options: any = {}
+    options: any = {},
+    trackMonitorSetting: TrackMonitorSettingService['trackSetting']
   ) => {
     const overlap_adjustment = true;
     const offset_multiplier = zoom_level / 3;
@@ -225,8 +239,7 @@ export namespace SvgDrawingUtil {
       case 'POINT':
         dom_object_group
           .append('circle')
-          .attr('class', 'point_circle')
-          .attr('fill', main_css.point.color)
+          .attr('fill', trackMonitorSetting.pointColor)
           .attr('r', main_css.point.radius)
           .attr('cx', 0)
           .attr('cy', 0);
@@ -356,13 +369,16 @@ export namespace SvgDrawingUtil {
             .attr('stroke', function () {
               let color;
               if (layout_object.mode == 'M') {
-                color = dom_css.color_mode_manual;
+                color = trackMonitorSetting.manualModeVehicleColor;
+                // color = dom_css.color_mode_manual;
               } else if (layout_object.mode == 'S') {
                 color = dom_css.color_mode_sloppy_manual;
               } else if (layout_object.mode == 'A') {
-                color = dom_css.color_mode_auto;
+                color = trackMonitorSetting.autoModeVehicleColor;
+                // color = dom_css.color_mode_auto;
               } else {
-                color = dom_css.color_mode_none;
+                color = trackMonitorSetting.noneModeVehicleColor;
+                // color = dom_css.color_mode_none;
               }
 
               return color;
@@ -383,7 +399,8 @@ export namespace SvgDrawingUtil {
             .attr('x', -dom_css.radius)
             .attr('y', -dom_css.radius)
             .attr('fill', function () {
-              return dom_css.color_mode_auto;
+              return trackMonitorSetting.autoModeVehicleColor;
+              // return dom_css.color_mode_auto;
             })
             .attr('stroke', function () {
               return dom_css.color_mode_auto_outline;
@@ -402,8 +419,9 @@ export namespace SvgDrawingUtil {
             .attr('class', 'stale')
             .attr('transform', () => {
               if (!overlap_adjustment)
-                return `rotate(${-mapRotation})translate(${dom_css.radius * 2 * vehicleScale
-                  },-${dom_css.radius * vehicleScale})scale(${vehicleScale})`;
+                return `rotate(${-mapRotation})translate(${
+                  dom_css.radius * 2 * vehicleScale
+                },-${dom_css.radius * vehicleScale})scale(${vehicleScale})`;
               else return `translate(${dom_css.radius * 2},-${dom_css.radius})`;
             });
           let stale_element = dom_object_group.select('g.stale');
@@ -435,17 +453,19 @@ export namespace SvgDrawingUtil {
         }
 
         // Prevent push
-        if (!layout_object.push) {
+        if (!layout_object.canBePushed) {
           let push_svg = dom_object_group
             .append('g')
             .attr('class', 'push')
             .attr('transform', () => {
               if (!overlap_adjustment)
-                return `rotate(${-mapRotation})translate(${((dom_css.radius * 4) / 3) * vehicleScale
-                  },${dom_css.radius * vehicleScale})scale(${vehicleScale})`;
+                return `rotate(${-mapRotation})translate(${
+                  ((dom_css.radius * 4) / 3) * vehicleScale
+                },${dom_css.radius * vehicleScale})scale(${vehicleScale})`;
               else
-                return `translate(${(dom_css.radius * 4) / 3},${dom_css.radius
-                  })`;
+                return `translate(${(dom_css.radius * 4) / 3},${
+                  dom_css.radius
+                })`;
             });
           push_svg
             .append('path')
@@ -471,8 +491,9 @@ export namespace SvgDrawingUtil {
             .attr('class', 'call')
             .attr('transform', () => {
               if (!overlap_adjustment)
-                return `rotate(${-mapRotation})translate(${x_offset * vehicleScale
-                  },${dom_css.radius * vehicleScale})scale(${vehicleScale})`;
+                return `rotate(${-mapRotation})translate(${
+                  x_offset * vehicleScale
+                },${dom_css.radius * vehicleScale})scale(${vehicleScale})`;
               else return `translate(${x_offset},${dom_css.radius})`;
             });
           call_svg
@@ -563,7 +584,7 @@ export namespace SvgDrawingUtil {
             .attr('x', () => {
               return (
                 -((dom_css.text_offset * 3) / 4) *
-                (overlap_adjustment ? vehicleScale : 1) -
+                  (overlap_adjustment ? vehicleScale : 1) -
                 layout_object.orderId.toString().length * 6
               );
               // return -(layout_object.orderId.toString().length * 6 + parseInt(dom_css.text_offset) - 5)
@@ -571,7 +592,7 @@ export namespace SvgDrawingUtil {
             .attr('y', () => {
               return (
                 (dom_css.radius * 2 - dom_css.radius / 2) *
-                (overlap_adjustment ? vehicleScale : 1) -
+                  (overlap_adjustment ? vehicleScale : 1) -
                 10
               );
             })
@@ -659,22 +680,54 @@ export namespace SvgDrawingUtil {
           layout_object.cargoState === 'U' ||
           layout_object.cargoState === 'L'
         ) {
-          dom_object_group
+          const foup = dom_object_group
             .append('circle')
-            .attr('class', function () {
+            .attr('r', 5)
+            .attr('cx', '0')
+            .attr('cy', '0')
+            .attr('stroke-width', 1)
+            .attr('stroke', 'white')
+            .attr('fill', function () {
               if (layout_object.cargoState === 'F') {
-                return 'foup loaded';
+                return trackMonitorSetting.cargoFullColor;
               } else if (layout_object.cargoState === 'L') {
-                return 'foup loading';
+                return trackMonitorSetting.cargoLoadingColor;
               } else {
-                return 'foup unloading';
+                return trackMonitorSetting.cargoUnloadingColor;
               }
             })
+            // .attr('class', function () {
+            //   if (layout_object.cargoState === 'F') {
+            //     return 'foup loaded';
+            //   } else if (layout_object.cargoState === 'L') {
+            //     return 'foup loading';
+            //   } else {
+            //     return 'foup unloading';
+            //   }
+            // })
             .attr('transform', () => {
               if (!overlap_adjustment) return `scale(${vehicleScale})`;
               else return '';
             })
             .lower();
+
+          if (layout_object.cargoState === 'F') {
+          } else if (layout_object.cargoState === 'L') {
+            //  <animate attributeName="r" values="0;40" dur="1s" repeatCount="indefinite" />
+            foup
+              .append('animate')
+              .attr('attributeName', 'r')
+              .attr('values', '0;5')
+              .attr('dur', '1s')
+              .attr('repeatCount', 'indefinite');
+          } else {
+            foup
+              .append('animate')
+              .attr('attributeName', 'r')
+              .attr('values', '5;0')
+              .attr('dur', '1s')
+              .attr('repeatCount', 'indefinite');
+          }
         } else {
           dom_object_group.select('.foup').remove();
         }
@@ -684,8 +737,14 @@ export namespace SvgDrawingUtil {
             .append('circle')
             .attr('class', 'corner')
             .attr('r', dom_css.sensor_stop_radius)
-            .attr('cx', -(2 + dom_css.sensor_stop + dom_css.sensor_stop_radius / 2))
-            .attr('cy', -(2 + dom_css.sensor_stop + dom_css.sensor_stop_radius / 2))
+            .attr(
+              'cx',
+              -(2 + dom_css.sensor_stop + dom_css.sensor_stop_radius / 2)
+            )
+            .attr(
+              'cy',
+              -(2 + dom_css.sensor_stop + dom_css.sensor_stop_radius / 2)
+            )
             .attr('fill', dom_css.color_sensor_stop)
             .attr('stroke', dom_css.stroke_color_sensor_stop)
             .attr('stroke-width', dom_css.stroke_width_sensor_stop)
@@ -761,7 +820,10 @@ export namespace SvgDrawingUtil {
       case 'STATION':
         dom_object_group
           .append('path')
-          .attr('class', 'station_path')
+          // .attr('class', 'station_path')
+          .attr('fill', 'none')
+          .attr('stroke', trackMonitorSetting.stationColor)
+          .attr('stroke-width', '5px')
           .attr('level', `level${zoom_level}`)
           .attr('d', main_css.station[`icon_level${zoom_level}`]);
 
@@ -809,7 +871,9 @@ export namespace SvgDrawingUtil {
         if (zoom_level === 1) {
           dom_object_group
             .append('circle')
-            .attr('class', 'buffer_path')
+            // .attr('class', 'buffer_path')
+            .attr('fill', trackMonitorSetting.bufferColor)
+            .attr('stroke-width', '0px')
             .attr('level', `level${zoom_level}`)
             .attr('transform', `rotate(${-mapRotation})`);
 
@@ -823,7 +887,9 @@ export namespace SvgDrawingUtil {
             // only when going into overlap or floating module at level 3
             dom_object_group
               .append('path')
-              .attr('class', 'buffer_path')
+              // .attr('class', 'buffer_path')
+              .attr('fill', trackMonitorSetting.bufferColor)
+              .attr('stroke-width', '0px')
               .attr('level', `level${zoom_level}`)
               .attr('d', main_css.buffer[`icon_level${zoom_level}`]);
 
@@ -838,13 +904,17 @@ export namespace SvgDrawingUtil {
           } else {
             dom_object_group
               .append('path')
-              .attr('class', 'buffer_path')
+              // .attr('class', 'buffer_path')
+              .attr('fill', trackMonitorSetting.bufferColor)
+              .attr('stroke-width', '0px')
               .attr('level', `level${zoom_level}`)
               .attr('d', main_css.buffer[`icon_level${zoom_level}`])
               .attr(
                 'transform',
-                `translate(${layout_object.directionOffset.x * offset_multiplier
-                }, ${layout_object.directionOffset.y * offset_multiplier
+                `translate(${
+                  layout_object.directionOffset.x * offset_multiplier
+                }, ${
+                  layout_object.directionOffset.y * offset_multiplier
                 })rotate(${-mapRotation})`
               );
             dom_object_group
@@ -854,8 +924,10 @@ export namespace SvgDrawingUtil {
               .attr('d', main_css.buffer[`icon_level${zoom_level}`])
               .attr(
                 'transform',
-                `translate(${layout_object.directionOffset.x * offset_multiplier
-                }, ${layout_object.directionOffset.y * offset_multiplier
+                `translate(${
+                  layout_object.directionOffset.x * offset_multiplier
+                }, ${
+                  layout_object.directionOffset.y * offset_multiplier
                 })rotate(${-mapRotation})`
               );
           }
