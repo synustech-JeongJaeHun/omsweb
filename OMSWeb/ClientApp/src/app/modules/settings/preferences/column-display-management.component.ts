@@ -4,7 +4,11 @@ import { BrowserModule } from '@angular/platform-browser';
 import { MatCheckboxModule, MatCheckbox } from '@angular/material/checkbox';
 import { Subject } from 'rxjs';
 import { IControlTableEvent } from '../../../models/drawing.model';
-import { ClientPreferences, ControlTable, defaultControlTable } from '../../../models/settings.model';
+import {
+  ClientPreferences,
+  ControlTable,
+  defaultControlTable,
+} from '../../../models/settings.model';
 import { SettingsService } from '../../../services/settings.service';
 import { type } from 'jquery';
 
@@ -15,6 +19,7 @@ import { type } from 'jquery';
 })
 export class ColumnDisplayManagementComponent implements OnInit {
   preference: ClientPreferences;
+  bufferEnabled: boolean;
 
   controlTableCommandEvent$ = new Subject<IControlTableEvent>();
 
@@ -24,12 +29,16 @@ export class ColumnDisplayManagementComponent implements OnInit {
   }
 
   constructor(
-    private settingSvc: SettingsService
+    private settingSvc: SettingsService,
+    private settingsService: SettingsService
   ) {
     this.preference = this.settingSvc.globalPreferences;
+    settingsService.serviceConfig.subscribe(
+      (config) => (this.bufferEnabled = config.bufferEnabled)
+    );
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   onChangeControlTable(target: string, value: any) {
     this.changeControlTableState(target, value.currentTarget.checked);

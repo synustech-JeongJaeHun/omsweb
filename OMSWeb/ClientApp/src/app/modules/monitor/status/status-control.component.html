@@ -34,7 +34,7 @@
       <oms-station-control-table [tableHeight]="tableHeight">
       </oms-station-control-table>
     </mat-tab>
-    <mat-tab [label]="'names.buffers' | translate" *ngIf="canControl && canDisplayTable('buffers')">
+    <mat-tab [label]="'names.buffers' | translate" *ngIf="bufferEnabled && canControl && canDisplayTable('buffers')">
       <oms-buffer-control-table [tableHeight]="tableHeight">
       </oms-buffer-control-table>
     </mat-tab>

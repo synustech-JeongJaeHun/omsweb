@@ -48,6 +48,7 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
   @Input()
   buttonState: ToggleOptionsType = defaultToggleOptions;
   readonly permissionEnums: typeof PermissionEnums = PermissionEnums;
+  bufferEnabled: boolean;
 
   @Output() centerZoom = new EventEmitter<void>();
   @Output() find = new EventEmitter<{ type: string; id: any }>();
@@ -90,7 +91,11 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private $t: TranslateService,
     public trackMonitorSettingService: TrackMonitorSettingService
-  ) {}
+  ) {
+    settingSvc.serviceConfig.subscribe((config) => {
+      this.bufferEnabled = config.bufferEnabled;
+    });
+  }
 
   ngOnInit(): void {}
 

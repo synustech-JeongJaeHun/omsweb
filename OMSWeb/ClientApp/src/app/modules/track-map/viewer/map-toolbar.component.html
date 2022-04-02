@@ -74,14 +74,14 @@
       }}</span>
   </button>
   <mat-divider></mat-divider>
-  <!-- <button *ngIf="hasPermission(permissionEnums.ViewBuffer)" #btnShowObj matListItem mat-button class="tool-item"
+  <button *ngIf="bufferEnabled && hasPermission(permissionEnums.ViewBuffer)" #btnShowObj matListItem mat-button class="tool-item"
     [matTooltipDisabled]="showToolName" matTooltipClass="snb-tooltip" matTooltipPosition="right"
     [matTooltip]="'names.buffer' | translate" (click)="onOpenBufferStatus()">
     <mat-icon>sensor_window</mat-icon>
     <span class="tool-name" *ngIf="showToolName">{{
       "names.buffer" | translate
       }}</span>
-  </button> -->
+  </button>
 
   <button *ngIf="hasPermission(permissionEnums.ViewVehicleStatus)" #btnShowObj matListItem mat-button class="tool-item"
     [matTooltipDisabled]="showToolName" matTooltipClass="snb-tooltip" matTooltipPosition="right"

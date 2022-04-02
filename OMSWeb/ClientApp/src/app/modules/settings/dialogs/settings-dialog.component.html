@@ -51,7 +51,7 @@
             [class.active]="isActiveMenu('station')" (click)="onChangeMenu('station')" class="nav-link">{{
             "names.station" | translate }}
           </a>
-          <a *ngIf="auth.hasPermissions([permissionEnums.SettingBuffer])" mat-list-item
+          <a *ngIf="bufferEnabled && auth.hasPermissions([permissionEnums.SettingBuffer])" mat-list-item
             [class.active]="isActiveMenu('buffer')" (click)="onChangeMenu('buffer')" class="nav-link">{{ "names.buffer"
             | translate }}
           </a>

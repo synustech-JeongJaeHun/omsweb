@@ -20,6 +20,7 @@ export class StatusControlComponent implements OnInit, OnDestroy {
   tableHeightNum = 300;
 
   readonly permissionEnums: typeof PermissionEnums = PermissionEnums;
+  bufferEnabled: boolean;
 
   preference: ClientPreferences;
 
@@ -48,6 +49,9 @@ export class StatusControlComponent implements OnInit, OnDestroy {
     private $t: TranslateService
   ) {
     this.preference = this.settingSvc.globalPreferences;
+    settingSvc.serviceConfig.subscribe(
+      (config) => (this.bufferEnabled = config.bufferEnabled)
+    );
   }
 
   ngOnInit(): void {

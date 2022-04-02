@@ -90,6 +90,7 @@ namespace OMSWeb.Services
             client.SID = this._appSettings.SID;
             client.Version = this._appSettings.Version;
             client.KpiEnabled = this._appSettings.KpiEnabled;
+            client.BufferEnabled = this._appSettings.BufferEnabled;
             return this._appSettings.Client;
         }
 
