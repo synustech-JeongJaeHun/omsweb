@@ -54,7 +54,8 @@ namespace OMSWeb.Repositories
             var sql = @"
              SELECT
     VH.id, VH.physical_id, VH.logical_id, VH.last_point AS cur_point, 
-    VH.moving_state, VH.map_db,
+    VH.moving_state, 
+    VH.map_db, 0 AS mapVersion,
     OD.id AS order_id,
     CASE 
     WHEN OD.location_pickup IS NOT NULL AND OD.location_dropoff IS NOT NULL        -- FROM-TO order

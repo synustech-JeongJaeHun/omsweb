@@ -93,7 +93,7 @@
               [caption]="'names.carrierLabel' | translate" *ngIf="canDisplayTable('vehicles_carrierLabel')"></dxi-column>
   <!-- Error 추가 -->
   <dxi-column [allowFiltering]="true" [width]="70" dataType="string" dataField="errorList" [allowSorting]="true"
-              [caption]="'names.error' | translate" *ngIf="canDisplayTable('vehicles_error')"></dxi-column>
+              [caption]="'names.errorList' | translate" *ngIf="canDisplayTable('vehicles_error')"></dxi-column>
   <!-- Error  추가 -->
   <!-- Sensor Stop 추가 -->
   <dxi-column [allowFiltering]="false" [width]="80" dataType="boolean" dataField="isSensorStopped"
@@ -110,4 +110,8 @@
   <dxi-column [allowFiltering]="true" [width]="90" dataType="string" dataField="mapDb" [allowSorting]="true"
               [caption]="'names.mapDb' | translate" *ngIf="canDisplayTable('vehicles_mapDb')"></dxi-column>
   <!-- MapDB 추가 -->
+  <!-- MapVersion 추가 -->
+  <dxi-column [allowFiltering]="true" [width]="90" dataType="string" dataField="mapVersion" [allowSorting]="true"
+              [caption]="'names.mapVersion' | translate" *ngIf="canDisplayTable('vehicles_mapVersion')"></dxi-column>
+  <!-- MapVersion 추가 -->
 </dx-data-grid>
