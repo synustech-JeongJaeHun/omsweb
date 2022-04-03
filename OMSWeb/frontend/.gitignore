@@ -20,10 +20,14 @@ test-results.xml
 
 # Yarn v2
 # https://yarnpkg.com/advanced/qa#which-files-should-be-gitignored
-.pnp.*
+# We use Zero-Installs:
 .yarn/*
 !.yarn/releases
 !.yarn/plugins
 !.yarn/sdks
 !.yarn/versions
-!.yarn/cache
+
+# if don't want to use zero-installs
+# .pnp.*
+# !.yarn/cache
+# add aboves

@@ -28,7 +28,7 @@
   <div class="max-vehicle">
     <h5>{{ "names.maxVehicles" | translate }}</h5>
     <mat-form-field class="dense" appearance="outline">
-      <input #maxVehiclesInput matInput type="number" [value]="selectedItem?.maxVehicles" min="0" max="100"
+      <input #maxVehiclesInput matInput type="number" [value]="selectedItem?.maxVehicles" min="0" max="100" onkeydown="return false"
         (change)="onMaxVehiclesChanged(maxVehiclesInput.value)" />
     </mat-form-field>
   </div>

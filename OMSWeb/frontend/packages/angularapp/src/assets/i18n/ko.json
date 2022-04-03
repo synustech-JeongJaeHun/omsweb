@@ -21,6 +21,7 @@
     "buffer": "버퍼",
     "group": "그룹",
     "zcu": "ZCU",
+    "zcu_label": "Zcu",
     "vehicleType": "비클 유형",
     "vehicleMode": "비클 모드",
     "vehicleProperties": "비클 속성",

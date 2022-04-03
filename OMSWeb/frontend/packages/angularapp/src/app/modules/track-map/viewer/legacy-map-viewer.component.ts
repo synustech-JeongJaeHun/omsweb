@@ -1,733 +1,584 @@
 import {
-  Component,
-  EventEmitter,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output,
-} from '@angular/core';
-import * as _ from 'lodash';
-import { Router } from '@angular/router';
-import { Subject } from 'rxjs';
-import { buffer, takeUntil } from 'rxjs/operators';
-import d3 = require('d3');
+	Component,
+	HostListener,
+	Input,
+	OnDestroy,
+	OnInit,
+} from '@angular/core'
+import { Router } from '@angular/router'
+import { Subject } from 'rxjs'
+import { takeUntil } from 'rxjs/operators'
 
-import { ViewModes } from '../../../models/enums';
-import { ViewController } from './viewer-helper';
-import { TrackIdService } from '../../../services/track-id.service';
-import { Dto } from '../../../models/dto/track.model';
-import { MapStatesService } from '../map-states.service';
-import { MapDataService } from '../map-data.service';
-import { IPreferences } from '../../../models/settings.model';
-import { HubService } from '../../../services/hub.service';
-import { IDataChangeEvent } from '../../../models/notification.model';
-import { IMapMouseEvent } from '../../../models/map.interface';
-import { AuthService } from '../../../services/auth.service';
-import { main_css } from '../../shared/utils/css-loader';
-import { MessagesService } from '../../../services/messages.service';
-import { IVehicleCommandMessage } from '../../../models/command.model';
-import { IPlaybackTrackChangeEvent } from '../../../models/playback.model';
-import { Group } from '../../../models/group.model';
-import { TracksService } from '../../../services/tracks.service';
-import { SettingsService } from '../../../services/settings.service';
-import { StatusService } from '../../../services/status.service';
-import { DialogService } from '../../../services/dialog.service';
-import { TranslateService } from '@ngx-translate/core';
-import { PermissionEnums } from '../../../models/enums';
+import { PermissionEnums } from '../../../models/enums'
+import { IPreferences } from '../../../models/settings.model'
+import { HubService } from '../../../services/hub.service'
+import { AuthService } from '../../../services/auth.service'
+
+import '@daimre/oms-track-monitor'
+import {
+	OmsTrackMonitorElement,
+	IOmsTrackMonitor,
+} from '@daimre/oms-track-monitor'
+import { StatusService } from '@oms/root/services/status.service'
+import { MapStatesService } from '../map-states.service'
+import { SettingsService } from '@oms/root/services/settings.service'
+import { TrackStatusService } from '../../../services/track-status.service'
+import { TrackMonitorSettingService } from '../../../services/track-monitor-setting.service'
+import d3 = require('d3')
+import { TracksService } from '@oms/root/services/tracks.service'
+import { TranslateService } from '@ngx-translate/core'
+import { MessagesService } from '@oms/root/services/messages.service'
+import { DialogService } from '@oms/root/services/dialog.service'
+import { IVehicleCommandMessage } from '@oms/root/models/command.model'
+import { PlaybackPlayService } from '@oms/root/services/playback-play.service'
+import { MatDialog, MatDialogRef } from '@angular/material/dialog'
+import { ClockChangedEvent } from '@oms/root/models/playback.model'
 
 @Component({
-  selector: 'oms-legacy-map-viewer',
-  templateUrl: './legacy-map-viewer.component.html',
-  styleUrls: ['./legacy-map-viewer.component.scss'],
+	selector: 'oms-legacy-map-viewer',
+	templateUrl: './legacy-map-viewer.component.html',
+	styleUrls: ['./legacy-map-viewer.component.scss'],
 })
 export class LegacyMapViewerComponent implements OnInit, OnDestroy {
-  @Input() preference: IPreferences;
-  @Input() viewMode: ViewModes;
-  @Input() trackData: Dto.ITrackData;
-  @Output() ready = new EventEmitter<boolean>();
-  @Output() trackRendered = new EventEmitter<void>();
+	@Input() preference: IPreferences
 
-  // loadingState = false;
-  currentContextEvent: IMapMouseEvent;
-  contextData: any;
-  contextCopy: any;
-  currentTooltipEvent: IMapMouseEvent;
-  tooltipData: any;
-  selectEvent: IMapMouseEvent;
-  selectedObject: any;
-  groupIds: number[] = [];
+	private viewer: IOmsTrackMonitor
+	private destroy$: Subject<void> = new Subject<void>()
 
-  private _minimapVisible = false;
-  private _detailsVisible = false;
-  private viewer: ViewController;
-  private destroy$: Subject<void> = new Subject<void>();
-  private _popupOffsetX = 10;
-  private _popupOffsetY = 40;
+	public detailsVisible = false
 
-  readonly permissionEnums: typeof PermissionEnums = PermissionEnums;
+	private cameraAndRotationSyncId
 
-  get showMinimap(): boolean {
-    return this._minimapVisible;
-  }
-  get activeDetails(): boolean {
-    return this._detailsVisible && this.auth.isAuthenticated;
-  }
-  get showContextMenu(): boolean {
-    return !!this.contextData;
-  }
-  get showTooltip(): boolean {
-    return !!this.tooltipData;
-  }
-  get canSetSource(): boolean {
-    return !this.statesSvc.transferCommandState.sourceDisabled;
-  }
-  get canSetDest(): boolean {
-    return !this.statesSvc.transferCommandState.destDisabled;
-  }
-  get showToolbarText(): boolean {
-    return this.settingSvc.globalPreferences.toggles.showToolName;
-  }
+	get tmSetting() {
+		return this.trackMonitorSettingService.trackSetting
+	}
+	get canSetSource() {
+		return !this.mapStatesService.transferCommandState.sourceDisabled
+	}
+	get canSetDest() {
+		return !this.mapStatesService.transferCommandState.destDisabled
+	}
 
-  constructor(
-    private auth: AuthService,
-    private dataSvc: MapDataService,
-    private trackIdSvc: TrackIdService,
-    private trackSvc: TracksService,
-    private statesSvc: MapStatesService,
-    private statusSvc: StatusService,
-    private hubSvc: HubService,
-    private messageSvc: MessagesService,
-    private settingSvc: SettingsService,
-    private dialogSvc: DialogService,
-    private router: Router,
-    private $t: TranslateService
-  ) {
-    this.auth.certUpdated$.pipe(takeUntil(this.destroy$)).subscribe((cert) => {
-      this.router.navigateByUrl('/', { skipLocationChange: false }).then(() => {
-        this.router.navigate([cert ? '/monitor/status' : '/']);
-      });
-    });
-  }
+	public viewerSetting = {
+		rect: {
+			width: window.innerWidth,
+			height:
+				window.innerHeight -
+				40 -
+				(this.mapStatesService.statusTableHeight === 0
+					? 0
+					: this.mapStatesService.statusTableHeight + 50),
+		},
+	}
 
-  ngOnDestroy(): void {
-    this.saveUiStates();
-    this.destroy$.next();
-    this.destroy$.complete();
-    this.dataSvc.clear();
-    this.currentContextEvent = undefined;
-    this.viewer && this.viewer.destroy();
-    this.viewer = null;
-  }
+	public selectedObject: any
+	public tooltipObject: { type: string; value: any } | undefined
+	public showTooltip = false
+	public contextMenuObject: { type: string; value: any } | undefined
+	public showContextMenu = false
+	public colocatedViewPosition:
+		| { top: string; left: string; right: string }
+		| undefined
+	public colocatedObjects = []
+	public mainColocatedObject: any
+	public showColocatedView = false
 
-  ngOnInit(): void {
-    // if (!this.trackData) return;
+	get activeDetails(): boolean {
+		return this.detailsVisible && this.auth.isAuthenticated
+	}
+	get showToolbarText(): boolean {
+		return this.settingSvc.globalPreferences.toggles.showToolName
+	}
 
-    this.initMap();
-    this.trackData && this.drawMap(this.trackData);
-  }
+	constructor(
+		private router: Router,
+		private auth: AuthService,
+		private hubSvc: HubService,
+		private statusService: StatusService,
+		private mapStatesService: MapStatesService,
+		private settingSvc: SettingsService,
+		private trackStatusService: TrackStatusService,
+		private tracksService: TracksService,
+		private trackMonitorSettingService: TrackMonitorSettingService,
+		private messageSvc: MessagesService,
+		private dialogSvc: DialogService,
+		private $t: TranslateService,
+		private playbackPlayService: PlaybackPlayService,
+		private dialog: MatDialog,
+	) {
+		this.auth.certUpdated$.pipe(takeUntil(this.destroy$)).subscribe((cert) => {
+			this.router.navigateByUrl('/', { skipLocationChange: false }).then(() => {
+				this.router.navigate([cert ? '/monitor/status' : '/'])
+			})
+		})
 
-  hasPermissions(permissions: number[]): boolean {
-    return this.auth.hasPermissions(permissions);
-  }
+		this.playbackPlayService.clockChanged.subscribe(
+			(event: ClockChangedEvent) => {
+				console.log('clockchanged', event)
+				switch (event.type) {
+					case 'TrackChanged':
+						break
+					case 'SnapshotChanged':
+						break
+					case 'EventsChanged':
+						break
+					case 'NextFrameEvent':
+						break
 
-  onChangePointProperty(name: string, value: any) {
-    console.log('## changed point property >>', { name, value });
-    // @TODO: change point prop api 연동
-  }
-  onChangeSegmentProperty(name: string, value: any) {
-    console.log('## changed segment property >>', { name, value });
-    let isDisable: boolean = value;
-    if (isDisable) {
-      this.messageSvc
-        .sendDisableSegmentCommand(
-          { action: 'disable-segment' },
-          this.contextData.id
-        )
-        .subscribe();
-    } else {
-      this.messageSvc
-        .sendDisableSegmentCommand(
-          { action: 'enable-segment' },
-          this.contextData.id
-        )
-        .subscribe();
-    }
-  }
-  onApplyPointChange(isHome: boolean, selectedGroup: number) {
-    this.trackSvc
-      .updatePoint(this.contextData.id, {
-        isHome,
-        group: selectedGroup,
-      })
-      .subscribe();
-  }
-  onApplyZcuChange() {
-    let origin = this.contextCopy.usingType;
-    let change = origin === 1 ? 2 : 1;
-    this.contextCopy.usingType = change;
+					default:
+						break
+				}
+			},
+		)
+	}
 
-    this.dialogSvc
-      .confirm({ body: this.$t.instant('messages.confirmZcuChange') })
-      .subscribe((confirm) => {
-        if (confirm) {
-          this.messageSvc
-            .sendSettingZcuCommand({
-              type: 'ZCU',
-              action: 'zcu-setting',
-              zcuIds: [this.contextCopy.id],
-              zcuUsingType: change === 1 ? 'hw' : 'sw',
-            })
-            .subscribe();
-        } else {
-          this.contextCopy.usingType = origin;
-        }
-      });
-  }
-  onResetHWZcu() {
-    this.dialogSvc
-      .confirm({ body: this.$t.instant('messages.confirmZcuReset') })
-      .subscribe((confirm) => {
-        if (confirm) {
-          this.messageSvc
-            .sendZcuCommand({
-              action: 'zcu_reset',
-              zcuId: this.contextData.id,
-            })
-            .subscribe();
-        }
-      });
-  }
+	hasPermissions(permissions: number[]): boolean {
+		return this.auth.hasPermissions(permissions)
+	}
+	readonly permissionEnums: typeof PermissionEnums = PermissionEnums
 
-  onRemoveCarrier(carrierId: string) {
-    this.dialogSvc
-      .confirm({ body: this.$t.instant('messages.confirmBufferChange') })
-      .subscribe((confirm) => {
-        confirm &&
-          this.messageSvc
-            .sendCarrierCommand({
-              action: 'remove_carrier',
-              bufferId: this.contextData.id,
-              carrierLabel: carrierId,
-            })
-            .subscribe();
-      });
-  }
-  onInstallCarrier(carrierId: string) {
-    this.dialogSvc
-      .confirm({ body: this.$t.instant('messages.confirmBufferChange') })
-      .subscribe((confirm) => {
-        confirm &&
-          this.messageSvc
-            .sendCarrierCommand({
-              action: 'install_carrier',
-              bufferId: this.contextData.id,
-              carrierLabel: carrierId,
-            })
-            .subscribe();
-      });
-  }
-  onVehicleCommand(name: string) {
-    let commandMessage: IVehicleCommandMessage;
-    let needConfirm: boolean = false;
+	ngOnInit(): void {
+		// @ts-ignore
+		this.viewer = document.getElementById('track-canvas')._instance.exposed
 
-    switch (name) {
-      case 'initialize':
-        commandMessage = { action: 'initialize' }; //auto
-        needConfirm = true;
-        break;
-      case 'reset':
-        commandMessage = { action: 'reset' };
-        needConfirm = true;
-        break;
-      case 'stop':
-        commandMessage = { action: 'stop' }; // estop
-        needConfirm = true;
-        break;
-      case 'zcu_go':
-        commandMessage = { action: 'zcu_go' };
-        break;
-      case 'push:enable':
-        commandMessage = { action: 'set_behavior', canBePushed: true };
-        break;
-      case 'hostOrder:enable':
-        commandMessage = { action: 'set_behavior', hostOrder: true };
-        break;
-      case 'rail_out':
-        commandMessage = { action: 'rail_out' };
-        break;
-      default:
-        commandMessage = { action: name };
-        break;
-    }
+		this.cameraAndRotationSyncId = setInterval(() => {
+			this.getCameraAndRotation()
+		}, 500)
 
-    if (needConfirm) {
-      this.dialogSvc
-        .confirm({ body: this.$t.instant('messages.confirmCommand') })
-        .subscribe((ok) => {
-          ok &&
-            this.messageSvc
-              .sendVehicleCommand(commandMessage, [this.contextData])
-              .subscribe();
-        });
-    } else {
-      this.messageSvc
-        .sendVehicleCommand(commandMessage, [this.contextData])
-        .subscribe();
-    }
-  }
-  onSetSource() {
-    const { id, objectType } = this.contextData;
-    this.statesSvc.transferCommandState.source = {
-      id,
-      objectType,
-    };
-  }
-  onSetDest() {
-    const { id, objectType } = this.contextData;
-    this.statesSvc.transferCommandState.dest = {
-      id,
-      objectType,
-    };
-  }
+		this.trackMonitorSettingService.rotationChanged.subscribe((rotation) =>
+			this.viewer.setCameraAndRotation({ rotation }),
+		)
 
-  private attachEvents() {
-    this.statesSvc.toolbarToggleEvent$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((event) => {
-        if (event.type === 'minimap') {
-          this._minimapVisible = event.value;
-        } else if (event.type === 'itemDetails') {
-          this._detailsVisible = event.value;
-        } else if (event.type === 'controlTable') {
-          setTimeout(() => {
-            this.viewer.adjust_floaters();
-          }, 100);
-        } else {
-          this.viewer?.onChangeVisibility(event);
-        }
-      });
-    this.statesSvc.toolbarCommandEvent$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((event) => {
-        this.viewer.onCommandAction(event);
-      });
-    this.statesSvc.configChangeEvent$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((event) => {
-        this.viewer.onChangeConfig(event);
-      });
+		// // @ts-ignore
+		// this.viewer.setTrack({
+		//   ...this.trackData,
+		//   segmentParts: this.trackData.segments,
+		//   clusters: this.trackData.clusters.map((c) => ({
+		//     ...c,
+		//     // @ts-ignore
+		//     segments: c.segments.split(',').map((id) => parseInt(id.trim())),
+		//   })),
+		// });
+		// this.attachEvents();
+		// this.attachHubEvents();
 
-    this.statesSvc.actionState$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((event) => this.onMapMouseEvent(event));
+		// this.viewer.setCameraAndRotation({
+		//   position: this.tmSetting.position ?? {
+		//     x: (this.trackData.size.minX + this.trackData.size.maxX) / 2,
+		//     y: (this.trackData.size.minY + this.trackData.size.maxY) / 2,
+		//   },
+		//   viewBoxWidth: this.tmSetting.viewBoxWidth,
+		//   rotation: this.tmSetting.rotation,
+		// });
+	}
+	ngOnDestroy(): void {
+		this.destroy$.next()
+		this.destroy$.complete()
 
-    this.statesSvc.statusTableResizeEvent$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
-        this.viewer.adjust_floaters();
-      });
+		clearInterval(this.cameraAndRotationSyncId)
+	}
 
-    [ViewModes.public, ViewModes.viewer].includes(this.viewMode) &&
-      this.attachHubEvents();
+	setTrackByTime() {}
 
-    this.viewMode === ViewModes.playback && this.attachPlaybackEvents();
-  }
+	changeFocus(event: any) {
+		this.selectedObject = event
+		// @ts-ignore
+		this.focusOnTM({ type: event.objectType, id: event.id })
+	}
 
-  private attachHubEvents() {
-    this.hubSvc.connectionChanged$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((conn) => {
-        conn && this.refreshVehicles();
-      });
-    this.hubSvc.vehicleChanged$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((e: IDataChangeEvent) => {
-        this.applyVehicleChange(e);
-      });
-    this.hubSvc.segmentChanged$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((e: IDataChangeEvent) => {
-        this.applySegmentChange(e);
-      });
-    this.hubSvc.segmentDisabledChanged$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((e: IDataChangeEvent) => {
-        this.applySegmentDisabledChange(e);
-      });
-    this.hubSvc.clusterChanged$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((e: IDataChangeEvent) => {
-        this.applyClusterChange(e);
-      });
+	onApplyPointChange(id: number, isHome: boolean, selectedGroup: number) {
+		this.tracksService
+			.updatePoint(id, {
+				isHome,
+				group: selectedGroup,
+			})
+			.subscribe()
+	}
 
-    this.hubSvc.zcuMapChanged$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((e: IDataChangeEvent) => this.applyZcuMapChange(e));
+	onVehicleCommand(name: string) {
+		let commandMessage: IVehicleCommandMessage
+		let needConfirm: boolean = false
 
-    if (this.auth.isAuthenticated) {
-      this.hubSvc.vehicleDioChanged$
-        .pipe(takeUntil(this.destroy$))
-        .subscribe((e: IDataChangeEvent) => this.applyVehicleDioChange(e));
+		switch (name) {
+			case 'initialize':
+				commandMessage = { action: 'initialize' } //auto
+				needConfirm = true
+				break
+			case 'reset':
+				commandMessage = { action: 'reset' }
+				needConfirm = true
+				break
+			case 'stop':
+				commandMessage = { action: 'stop' } // estop
+				needConfirm = true
+				break
+			case 'zcu_go':
+				commandMessage = { action: 'zcu_go' }
+				break
+			case 'push:enable':
+				commandMessage = { action: 'set_behavior', canBePushed: true }
+				break
+			case 'hostOrder:enable':
+				commandMessage = { action: 'set_behavior', hostOrder: true }
+				break
+			case 'rail_out':
+				commandMessage = { action: 'rail_out' }
+				break
+			default:
+				commandMessage = { action: name }
+				break
+		}
 
-      this.hubSvc.vehiclePathChanged$
-        .pipe(takeUntil(this.destroy$))
-        .subscribe((e: IDataChangeEvent) => this.applyVehiclePathChange(e));
+		if (needConfirm) {
+			this.dialogSvc
+				.confirm({ body: this.$t.instant('messages.confirmCommand') })
+				.subscribe((ok) => {
+					ok &&
+						this.messageSvc
+							.sendVehicleCommand(commandMessage, [
+								this.contextMenuObject.value,
+							])
+							.subscribe()
+				})
+		} else {
+			this.messageSvc
+				.sendVehicleCommand(commandMessage, [this.contextMenuObject.value])
+				.subscribe()
+		}
+	}
 
-      this.hubSvc.stationChanged$
-        .pipe(takeUntil(this.destroy$))
-        .subscribe((e: IDataChangeEvent) => this.applyStationChange(e));
+	onApplyZcuChange() {
+		let origin = this.contextMenuObject.value.usingType
+		let change = origin === 1 ? 2 : 1
+		this.contextMenuObject.value.usingType = change
 
-      this.hubSvc.bufferChanged$
-        .pipe(takeUntil(this.destroy$))
-        .subscribe((e: IDataChangeEvent) => this.applyBufferChange(e));
+		this.dialogSvc
+			.confirm({ body: this.$t.instant('messages.confirmZcuChange') })
+			.subscribe((confirm) => {
+				if (confirm) {
+					this.messageSvc
+						.sendSettingZcuCommand({
+							type: 'ZCU',
+							action: 'zcu-setting',
+							zcuIds: [this.contextMenuObject.value.id],
+							zcuUsingType: change === 1 ? 'hw' : 'sw',
+						})
+						.subscribe()
+				} else {
+					this.contextMenuObject.value.usingType = origin
+				}
+			})
+	}
+	onResetHWZcu() {
+		this.dialogSvc
+			.confirm({ body: this.$t.instant('messages.confirmZcuReset') })
+			.subscribe((confirm) => {
+				if (confirm) {
+					this.messageSvc
+						.sendZcuCommand({
+							action: 'zcu_reset',
+							zcuId: this.contextMenuObject.value.id,
+						})
+						.subscribe()
+				}
+			})
+	}
+	onSetSource(objectType) {
+		const { id, logicalId, physicalId } = this.contextMenuObject.value
+		this.mapStatesService.transferCommandState.source = {
+			objectType,
+			id,
+			logicalId,
+			physicalId,
+		}
+	}
+	onSetDest(objectType) {
+		const { id, logicalId, physicalId } = this.contextMenuObject.value
+		this.mapStatesService.transferCommandState.dest = {
+			objectType,
+			id,
+			logicalId,
+			physicalId,
+		}
+	}
+	onRemoveCarrier(carrierId: string) {
+		this.dialogSvc
+			.confirm({ body: this.$t.instant('messages.confirmBufferChange') })
+			.subscribe((confirm) => {
+				confirm &&
+					this.messageSvc
+						.sendCarrierCommand({
+							action: 'remove_carrier',
+							bufferId: this.contextMenuObject.value.id,
+							carrierLabel: carrierId,
+						})
+						.subscribe()
+			})
+	}
+	onInstallCarrier(carrierId: string) {
+		this.dialogSvc
+			.confirm({ body: this.$t.instant('messages.confirmBufferChange') })
+			.subscribe((confirm) => {
+				confirm &&
+					this.messageSvc
+						.sendCarrierCommand({
+							action: 'install_carrier',
+							bufferId: this.contextMenuObject.value.id,
+							carrierLabel: carrierId,
+						})
+						.subscribe()
+			})
+	}
 
-      this.hubSvc.mtlChanged$
-        .pipe(takeUntil(this.destroy$))
-        .subscribe((e: IDataChangeEvent) => this.applyMtlChange(e));
+	onChangeSegmentProperty(isDisable: boolean) {
+		if (isDisable) {
+			this.messageSvc
+				.sendDisableSegmentCommand(
+					{ action: 'disable-segment' },
+					this.contextMenuObject.value.id,
+				)
+				.subscribe()
+		} else {
+			this.messageSvc
+				.sendDisableSegmentCommand(
+					{ action: 'enable-segment' },
+					this.contextMenuObject.value.id,
+				)
+				.subscribe()
+		}
+	}
 
-      this.hubSvc.groupChanged$
-        .pipe(takeUntil(this.destroy$))
-        .subscribe((e: IDataChangeEvent) => this.applyGroupChange(e));
-    }
-  }
+	// EPIC > OMS-TRACK-MONITOR
+	@HostListener('window:resize', ['$event.target'])
+	onResize(window: Window) {
+		this.viewerSetting.rect.width = window.innerWidth
+		this.viewerSetting.rect.height = window.innerHeight - 40
+	}
 
-  private refreshVehicles() {
-    this.statusSvc.getVehicles().subscribe((res) => {
-      if (!res || !res.vehicles) return;
-      if (!this.dataSvc.data.vehicles?.length) {
-        this.viewer.update_vehicles(res.vehicles, 'INSERT', null, false);
-        this.trackIdSvc.extract_id_from_track(this.dataSvc.data);
-      } else {
-        res.vehicles.forEach((v) => {
-          this.viewer.update_vehicles([v], 'UPDATE', v.id, false);
-        });
-      }
-    });
-  }
+	public onCenterZoom() {
+		this.viewer.centerZoom()
+	}
 
-  private attachPlaybackEvents() {
-    this.dataSvc.snapshotUpdated$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => this.applySnapshotUpdated());
-    this.dataSvc.playbackTrackUpdated$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((data) => this.applyPlaybackTrackUpdated(data));
-    this.dataSvc.afterPlaybackTrackUpdated$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => this.applyAfterPlaybackTrackUpdated());
-  }
+	public findOnTM(event: { type: string; id: any }) {
+		this.viewer.find(event.type, event.id)
+	}
+	public focusOnTM(event: { type: string; id: any }) {
+		this.viewer.focus(event.type, event.id)
+	}
 
-  private initMap() {
-    this.viewer = new ViewController(
-      this.viewMode,
-      'track-canvas',
-      'minimap',
-      this.dataSvc,
-      this.statesSvc
-    );
+	public trackOnTM(event: { type: string; id: any }) {
+		this.viewer.track(event.type, event.id)
+	}
 
-    this.viewer.setup(this.preference);
+	public onMouseoverTM(event: CustomEvent) {
+		const payload = getCustomEventPayload(event)
+		// @ts-ignore
+		if (!(payload.type && payload.value && payload.event)) return
 
-    this._minimapVisible = this.preference.toggles.minimap;
-    this._detailsVisible = this.preference.toggles.itemDetails;
+		// @ts-ignore
+		const type = payload.type,
+			// @ts-ignore
+			object = payload.value
 
-    this.dataSvc.trackDataUpdated$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((data) => {
-        this.drawMap(data);
-      });
-    this.ready.emit(true);
-  }
+		switch (type.toUpperCase()) {
+			case 'SEGMENT':
+			case 'CLUSTER':
+			case 'ZCU':
+				this.onTooltipOn(event)
+				break
+			case 'POINT':
+			case 'MTL':
+			case 'STATION':
+			case 'BUFFER':
+			case 'VEHICLE':
+				// @ts-ignore
+				if ((payload.event as MouseEvent).ctrlKey) {
+					const pointId = (() => {
+						switch (type.toUpperCase()) {
+							case 'POINT':
+								return object.id
+							case 'MTL':
+								return object.pointId
+							case 'STATION':
+								return object.pointId
+							case 'BUFFER':
+								return object.pointId
+							case 'VEHICLE':
+								return object.curPoint
+						}
+					})()
+					// @ts-ignore
+					this.mainColocatedObject = payload.value
+					this.colocatedObjects =
+						this.trackStatusService.getOverlapObjectOnPoint(pointId)
+					this.onCoLocatedObjectPanelOn(event)
+				} else {
+					this.onTooltipOn(event)
+				}
+				break
 
-  private drawMap(track: Dto.ITrackData) {
-    this.viewer.create_track(track);
-    this.viewer.update_vehicles(track.vehicles, 'INSERT', null, false);
-    this.trackIdSvc.extract_id_from_track(this.dataSvc.data);
-    this.groupIds = this.dataSvc.data.groups.map((g) => g.id);
+			default:
+				break
+		}
+	}
 
-    this.attachEvents();
-    this.applyUiStates();
+	public onCoLocatedObjectPanelOn(event: CustomEvent) {
+		const payload = getCustomEventPayload(event)
 
-    this.trackRendered.emit();
-  }
+		// @ts-ignore
+		const { pageX: x, pageY: y } = payload.event
 
-  private onMapMouseEvent(event: IMapMouseEvent) {
-    const { type } = event;
+		const leftThreshold = window.innerWidth - 200
+		const popupOffsetX = -50
+		const popupOffsetY = 50
 
-    switch (type) {
-      case 'contextmenu':
-        this.closeContextMenu();
-        this.openContextMenu(event);
-        break;
-      case 'mouseenter':
-        this.openTooltip(event);
-        break;
-      case 'mouseout':
-        this.closeTooltip();
-        break;
-      case 'backdrop':
-        this.closeContextMenu();
-        break;
-      case 'selectUnit':
-        this.showDetails(event);
-        break;
-      default:
-        break;
-    }
-  }
+		const container = d3
+			.select('#colocatedView')
+			.style('top', `${y - popupOffsetY}px`)
 
-  private openContextMenu(event: IMapMouseEvent) {
-    const leftThreshold = window.innerWidth - 200;
-    const { pageX: x, pageY: y } = d3.event;
+		if (leftThreshold > x) {
+			container.style('left', `${x + popupOffsetX}px`).style('right', 'inherit')
+		} else {
+			container
+				.style('right', `${window.innerWidth - x + popupOffsetX}px`)
+				.style('left', 'inherit')
+		}
 
-    const container = d3
-      .select('#contextMenu')
-      .style('top', `${y - this._popupOffsetY}px`);
+		this.showColocatedView = true
+	}
+	public onCoLocatedObjectPanelOff() {
+		this.showColocatedView = false
+	}
 
-    if (leftThreshold > x) {
-      container
-        .style('left', `${x + this._popupOffsetX}px`)
-        .style('right', 'inherit');
-    } else {
-      container
-        .style('right', `${window.innerWidth - x + this._popupOffsetX}px`)
-        .style('left', 'inherit');
-    }
-    setTimeout(() => {
-      const { targetId, targetType } = event;
-      this.contextCopy = JSON.parse(
-        JSON.stringify(this.dataSvc.find_layout_object(targetType, targetId))
-      );
-      this.contextData = this.contextCopy;
-      console.log('### context data >>', this.contextData);
-      this.currentContextEvent = event;
-    }, 0);
-  }
-  private applyUiStates() {
-    this.viewer.setUiStates(this.settingSvc.globalPreferences.uiStates);
-  }
-  private saveUiStates() {
-    const states = this.viewer.getUiStates();
-    const pref = this.settingSvc.globalPreferences;
-    pref.uiStates = { ...pref.uiStates, ...states };
-    this.settingSvc.globalPreferences.save();
-  }
-  private closeContextMenu() {
-    this.contextData = undefined;
-    this.currentContextEvent = undefined;
-  }
-  private openTooltip(event: IMapMouseEvent) {
-    const { targetId, targetType } = event;
-    if (this.viewer.hasShownLayoutObjects(targetType, targetId)) return;
-    this.tooltipData = this.dataSvc.find_layout_object(targetType, targetId);
-    if (targetType === 'SEGMENT') {
-      const { pointFrom, pointTo } = this.tooltipData;
-      this.tooltipData.point =
-        pointFrom && pointTo ? `${pointFrom.id} . ${pointTo.id}` : null;
-    } else if (targetType === 'VEHICLE') {
-      const { orderLogicalId, orderId } = this.tooltipData;
-      this.tooltipData.orderLogicalId = orderLogicalId
-        ? orderLogicalId
-        : orderId
-        ? orderId
-        : null;
-    }
+	public onFocusFromOverlapped(object: any) {
+		this.selectedObject = object
+		this.focusOnTM({ type: object.objectType, id: object.id })
+	}
+	public onContextMenuOnFromOverlapped(event: { object: any; event: Event }) {
+		this.contextMenuObject = {
+			type: event.object.objectType,
+			value: event.object,
+		}
 
-    this.currentTooltipEvent = event;
+		const leftThreshold = window.innerWidth - 200
+		const popupOffsetX = 10
+		const popupOffsetY = 40
 
-    const leftThreshold = window.innerWidth - 200;
-    const { pageX: x, pageY: y } = d3.event;
+		// @ts-ignore
+		const { pageX: x, pageY: y } = event.event
 
-    const container = d3
-      .select('#tooltipView')
-      .style('top', `${y - this._popupOffsetY}px`);
+		const container = d3
+			.select('#contextMenu')
+			.style('top', `${y - popupOffsetY}px`)
 
-    if (leftThreshold > x) {
-      container
-        .style('left', `${x + this._popupOffsetX}px`)
-        .style('right', 'inherit');
-    } else {
-      container
-        .style('right', `${window.innerWidth - x + this._popupOffsetX}px`)
-        .style('left', 'inherit');
-    }
-  }
-  private closeTooltip() {
-    this.tooltipData = undefined;
-    this.currentTooltipEvent = undefined;
-  }
-  private showDetails(event: IMapMouseEvent) {
-    if (!this.activeDetails) return;
-    this.selectEvent = event;
-    const { targetId, targetType } = event;
-    this.selectedObject = this.dataSvc.find_layout_object(targetType, targetId);
-    this.viewer.init_selection(true);
-    this.viewer.highlight(
-      targetType,
-      targetId,
-      main_css[targetType.toLowerCase()],
-      'LAYOUT',
-      'SELECT'
-    );
-  }
+		if (leftThreshold > x) {
+			container.style('left', `${x + popupOffsetX}px`).style('right', 'inherit')
+		} else {
+			container
+				.style('right', `${window.innerWidth - x + popupOffsetX}px`)
+				.style('left', 'inherit')
+		}
 
-  private updateSelectedObject(
-    objectType: string,
-    objects: any[] = [],
-    updateFiltering = true
-  ) {
-    if (
-      objects.length === 0 ||
-      !this.selectedObject ||
-      objectType !== this.selectedObject.objectType.toUpperCase()
-    )
-      return;
-    updateFiltering &&
-      (objects = objects
-        .filter((x) => x.status === 'UPDATE')
-        .map((x) => x.object));
-    const updatedObject = objects.find((x) => x.id === this.selectedObject.id);
-    updatedObject && (this.selectedObject = updatedObject);
-  }
+		this.showContextMenu = true
+	}
 
-  private applyVehicleChange(event: IDataChangeEvent) {
-    // console.log('### update vehicle push >>', event);
-    const { data, operation, id } = event;
-    // console.log('### update vehicle push >>', { data, operation, id });
-    if (
-      !this.viewer ||
-      !this.dataSvc.data.points ||
-      !this.dataSvc.data.points.length
-    ) {
-      return; // @TODO viewer가 아직 생성되지 않은 경우에는 지연 처리할 방법 구현
-    }
-    this.viewer.update_vehicles([data], operation, id, false);
-    this.updateSelectedObject(
-      'VEHICLE',
-      [this.dataSvc.data.vehicles.find((v) => v.id === id)],
-      false
-    );
-    this.trackIdSvc.update_vehicle_ids(data);
-  }
-  private applySegmentChange({ data }: IDataChangeEvent) {
-    if (!this.viewer) return;
-    const updated = this.dataSvc.getChangedSegments(data);
-    this.viewer.update_segments(updated, false, false);
-    this.updateSelectedObject('SEGMENT', updated, true);
-  }
-  private applySegmentDisabledChange({
-    data,
-    operation,
-    id,
-  }: IDataChangeEvent) {
-    if (!this.viewer) return;
-    this.viewer.update_disable_segment(data, operation, id);
-    const selected_segment = this.viewer.get_selected_objects('SEGMENT')[0];
-    if (selected_segment) {
-      this.updateSelectedObject(
-        'SEGMENT',
-        [this.dataSvc.find_layout_object('SEGMENT', selected_segment.id)],
-        false
-      );
-    }
-  }
-  private applyZcuMapChange({ data }: IDataChangeEvent) {
-    if (!this.viewer) return;
-    if (data === null) return;
-    const updated = this.dataSvc.getChangedZcus([data]);
-    this.viewer.update_zcus(updated, false, false);
-    this.updateSelectedObject('ZCU', updated, true);
-  }
-  private applyClusterChange({ data }: IDataChangeEvent) {
-    if (!this.viewer) return;
-    const updated = this.dataSvc.getChangedClusters(data);
-    this.viewer.update_clusters(updated, false, false);
-  }
-  private applyGroupChange({ data }: IDataChangeEvent): void {
-    if (!this.viewer) return;
-    const updated = this.dataSvc.getChangedGroups(data);
-    this.viewer.update_groups(updated, false, false);
-  }
-  private applyMtlChange({ data }: IDataChangeEvent): void {
-    if (!this.viewer) return;
-    const updated = this.dataSvc.getChangedMtls(data);
-    this.viewer.update_mtls(updated, false, false);
-    this.updateSelectedObject('MTL', updated, true);
-  }
-  private applyBufferChange({ data }: IDataChangeEvent): void {
-    if (!this.viewer) return;
-    const updated = this.dataSvc.getChangedBuffers(data);
-    this.viewer.update_buffers(updated, false, false);
-    this.updateSelectedObject('BUFFER', updated, true);
-  }
-  private applyStationChange({ data }: IDataChangeEvent): void {
-    if (!this.viewer) return;
-    const updated = this.dataSvc.getChangedStations(data);
-    this.viewer.update_stations(updated, false, false);
-    this.updateSelectedObject('STATION', updated, true);
-  }
-  private applyVehicleDioChange({ data }: IDataChangeEvent): void {
-    if (!this.viewer) return;
-    //const updated = this.dataSvc.getChangedExpectedPaths(data);
-    //this.dataSvc.updateDio(updated);
+	public onTooltipOn(event: CustomEvent) {
+		const payload = getCustomEventPayload(event)
 
-    //this.viewer.applyUpdatedDio();
-  }
-  private applyVehiclePathChange({ data }: IDataChangeEvent): void {
-    if (!this.viewer) return;
-    const updated = this.dataSvc.getChangedExpectedPaths(data);
-    this.dataSvc.updateExpectedPath(updated);
+		// @ts-ignore
+		this.tooltipObject = { type: payload.type, value: payload.value }
 
-    this.viewer.applyUpdatedExpectedPath();
-  }
-  private applySnapshotUpdated() {
-    this.viewer.applyAfterSnapshotUpdated();
-  }
-  private applyPlaybackTrackUpdated(event: IPlaybackTrackChangeEvent) {
-    const { table, skipRender, data, id, operation, useVehicleChangedProps } =
-      event;
-    if (table === 'segment_blocking_history') {
-      this.viewer.update_disable_segment(data, operation, id, skipRender);
-      if (!skipRender) {
-        this.updateSelectedObject(
-          'VEHICLE',
-          [this.dataSvc.data.vehicles.find((v) => v.id === id)],
-          false
-        );
-      }
-    } else if (table === 'order_history') {
-      // @TODO update table
-    } else if (table === 'vehicle_history') {
-      const updated = this.viewer.update_vehicles(
-        [data],
-        operation,
-        id,
-        skipRender
-      );
-      if (useVehicleChangedProps) {
-        this.dataSvc.updateVehicleChangedProps(updated, id);
-      }
-      if (!skipRender) {
-        const selected = this.viewer.get_selected_objects('SEGMENT')[0];
-        selected &&
-          this.updateSelectedObject(
-            'SEGMENT',
-            [this.dataSvc.find_layout_object('SEGMENT', selected.id)],
-            false
-          );
-      }
-      this.trackIdSvc.update_vehicle_ids(data);
-      // @TODO update table
-    }
-  }
-  private applyAfterPlaybackTrackUpdated() {
-    this.viewer.applyAfterSnapshotUpdated(this.dataSvc.updatedVehicleList);
-    this.viewer.update_segment_svg(
-      this.dataSvc.get_layout_objects('SEGMENT'),
-      main_css.segment,
-      null,
-      false
-    );
-    // this.dataSvc.updatedVehicleList = {};
-  }
+		if (this.tooltipObject.type === 'SEGMENT') {
+			const { startPoint, endPoint } = this.tooltipObject.value
+			this.tooltipObject.value.point =
+				startPoint && endPoint ? `${startPoint} → ${endPoint}` : null
+		}
+
+		// @ts-ignore
+		const { pageX: x, pageY: y } = payload.event
+
+		const leftThreshold = window.innerWidth - 200
+		const popupOffsetX = 10
+		const popupOffsetY = 40
+
+		const container = d3
+			.select('#tooltipView')
+			.style('top', `${y - popupOffsetY}px`)
+
+		if (leftThreshold > x) {
+			container.style('left', `${x + popupOffsetX}px`).style('right', 'inherit')
+		} else {
+			container
+				.style('right', `${window.innerWidth - x + popupOffsetX}px`)
+				.style('left', 'inherit')
+		}
+
+		this.showTooltip = true
+	}
+	public onMouseleaveTM(event: CustomEvent) {
+		this.showTooltip = false
+		this.tooltipObject = undefined
+	}
+	public onFocus(event: CustomEvent) {
+		const payload = getCustomEventPayload(event)
+		// @ts-ignore
+		this.selectedObject = { objectType: payload.type, ...payload.value }
+		// @ts-ignore
+		this.focusOnTM({ type: payload.type, id: payload.value.id })
+	}
+	public onContectMenuOn(event: CustomEvent) {
+		const payload = getCustomEventPayload(event)
+		// @ts-ignore
+		if (!(payload.type && payload.value && payload.event)) return
+		// @ts-ignore
+		this.contextMenuObject = { type: payload.type, value: payload.value }
+
+		const leftThreshold = window.innerWidth - 200
+		const popupOffsetX = 10
+		const popupOffsetY = 40
+
+		// @ts-ignore
+		const { pageX: x, pageY: y } = payload.event
+
+		const container = d3
+			.select('#contextMenu')
+			.style('top', `${y - popupOffsetY}px`)
+
+		if (leftThreshold > x) {
+			container.style('left', `${x + popupOffsetX}px`).style('right', 'inherit')
+		} else {
+			container
+				.style('right', `${window.innerWidth - x + popupOffsetX}px`)
+				.style('left', 'inherit')
+		}
+
+		this.showContextMenu = true
+	}
+	public onBackdrop(event: CustomEvent) {
+		this.showContextMenu = false
+		this.contextMenuObject = undefined
+		this.selectedObject = undefined
+		this.viewer.dropFocus()
+		this.viewer.stopTrack()
+	}
+	public getCameraAndRotation() {
+		const data = this.viewer.getCameraAndRotation()
+
+		this.trackMonitorSettingService.update({
+			key: 'rotation',
+			value: data.rotation,
+		})
+		this.trackMonitorSettingService.update({
+			key: 'viewBoxWidth',
+			value: data.viewBox.width,
+		})
+		this.trackMonitorSettingService.update({
+			key: 'position',
+			value: data.position,
+		})
+	}
+}
+
+function getCustomEventPayload<T>(event: CustomEvent<T[]>) {
+	return event.detail[0]
 }

@@ -1,91 +1,99 @@
 <oms-dialog-base [title]="'names.playback' | translate">
   <ng-container class="dialog-layout">
     <div mat-dialog-content class="control-container">
+      <div class="window-period">
+        <span> {{playService.firstSnapshotTime | date: 'yyyy-MM-dd HH:mm:ss'}}</span>
+        <span>{{'  '}}</span>
+        <span>{{playService.lastTimelineEventTime | date: 'yyyy-MM-dd HH:mm:ss'}}</span>
+      </div>
       <div class="form-period">
-        <!-- <div class="control-title">{{ "names.period" | translate }}</div> -->
-        <dx-date-box [(value)]="options.startAt" type="datetime" class="timePicker" id="fromTime"
-          displayFormat="yyyy-MM-dd HH:mm" [min]="firstTime" [(max)]="options.endAt" [disabled]="!ready"
-          (onValueChanged)="onTimeRangeChanged($event)">
+        <dx-date-box
+          displayFormat="yyyy-MM-dd HH:mm"
+          type="datetime"
+          [min]="playService.firstSnapshotTime"
+          [max]="playService.lastTimelineEventTime"
+          [value]="playService.window.start"
+          (valueChange)="playService.setWindowStart($event)">
         </dx-date-box>
         <div class="date-divider">~</div>
-        <dx-date-box [(value)]="options.endAt" type="datetime" class="timePicker" id="toTime"
-          displayFormat="yyyy-MM-dd HH:mm" [(min)]="firstTime" [max]="options.maxTime" [disabled]="!ready"
-          (onValueChanged)="onTimeRangeChanged($event)">
+        <dx-date-box
+          displayFormat="yyyy-MM-dd HH:mm"
+          type="datetime"
+          [min]="playService.firstSnapshotTime"
+          [max]="playService.lastTimelineEventTime"
+          [value]="playService.window.end"
+          (valueChange)="playService.setWindowEnd($event)">
         </dx-date-box>
       </div>
       <div class="control-slider">
-        <div class="slider-name">{{ "names.snapshots" | translate }}</div>
-        <mat-slider #snapshotSlider min="0" [max]="options.snapshotMax" [disabled]="!ready"
-          [(ngModel)]="states.snapshot" (valueChange)="onSlideSnapshot(snapshotSlider.value)" color="primary">
-        </mat-slider>
+        <div class="slider-name">{{ "names.time" | translate }}</div>
+
+        <dx-range-slider
+          [min]="0" [max]="timeRangeMax" [step]="0.5"
+          [tooltip]="timeRangeTooltip"
+          [start]="timeRangeStart" [end]="timeRangeEnd"
+          [label]="timeRangeLabel"
+          (onValueChanged)="onSnapshotRangeSliderChanged($event)" >
+        </dx-range-slider>
+
         <div class="slider-value">
-          {{
-          (getCurrentSnapshot(snapshotSlider.value) | date: "HH:mm:ss") || ""
-          }}
+
         </div>
       </div>
-      <div class="control-slider" *ngIf="showEventHandle">
+      <div class="control-slider" >
         <div class="slider-name">{{ "names.events" | translate }}</div>
-        <mat-slider #eventSlider min="0" [max]="options.eventMax" [value]="states.event" color="primary"
-          [disabled]="!ready" (valueChange)="onSlideEvent(eventSlider.value)"></mat-slider>
-        <div class="slider-value">{{ getCurrentEvent(eventSlider.value) }}</div>
+        <dx-slider [min]="0" [max]="timeSliderMax" [value]="timeSliderValue"
+        (onValueChanged)="onTimeSliderChanged($event)">
+          <dxo-label
+          [visible]="true"
+          [format]="timeSliderLabelFormat"
+          position="top"
+        ></dxo-label>
+        <dxo-tooltip
+          [enabled]="true"
+          [format]="timeSliderLabelFormat"
+          showMode="always"
+          position="bottom"
+        ></dxo-tooltip>
+
+        </dx-slider>
+        <div class="slider-value">{{ 'TODO #1' }}</div>
       </div>
       <div class="control-play">
-        <button mat-icon-button id="prev" [disabled]="!ready || !showEventHandle || isFirstSnapshot"
-          (click)="onBefore()" [matTooltip]="'Previous snapshot'">
+        <button mat-icon-button id="prev" [matTooltip]="'Previous snapshot'"
+          [disabled]="!isAvailableToBeforeSnapshot" (click)="onBeforeSnapshot()">
           <mat-icon>skip_previous</mat-icon>
         </button>
-        <button mat-icon-button id="play" [disabled]="!ready || !showEventHandle" (click)="onTogglePlay()"
-          [matTooltip]="states.playing ? 'Pause':'Play'">
-          <mat-icon>{{ states.playing ? "pause" : "play_arrow" }}</mat-icon>
+
+        <button mat-icon-button id="play"
+          [matTooltip]="playService.isPlaying ? 'Pause' : 'Play'"
+          (click)="playService.isPlaying ? playService.stop() : playService.resume()">
+          <mat-icon>{{ playService.isPlaying ? "pause": "play_arrow" }}</mat-icon>
         </button>
-        <!-- <button
-          mat-icon-button
-          id="ff"
-          [disabled]="!ready || !showEventHandle || !enableFastForward"
-          (click)="onFastForward()"
-        >
-          <mat-icon>fast_forward</mat-icon>
-        </button> -->
-        <button mat-icon-button id="next" [disabled]="!ready || !showEventHandle || isLastSnapshot" (click)="onNext()"
-          [matTooltip]="'Next snapshot'">
+
+        <button mat-icon-button id="next" [matTooltip]="'Next snapshot'"
+          [disabled]="!isAvailableToNextSnapshot" (click)="onNextSnapshot()">
           <mat-icon>skip_next</mat-icon>
         </button>
       </div>
       <mat-form-field appearance="fill" class="form-speed">
         <mat-label>{{ "names.speed" | translate }}</mat-label>
-        <mat-select [(ngModel)]="options.speed" [disabled]="!ready">
-          <mat-option *ngFor="let speed of speedValues" [value]="speed">{{ speed }}x</mat-option>
+        <mat-select [(ngModel)]="playService.playSpeed" >
+          <mat-option *ngFor="let playSpeed of playService.playSpeeds " [value]="playSpeed">{{ playSpeed }}x</mat-option>
         </mat-select>
       </mat-form-field>
 
-      <mat-form-field appearance="fill" class="form-step" *ngIf="showEventHandle">
+      <mat-form-field appearance="fill" class="form-step">
         <mat-label>{{ "names.events" | translate }}</mat-label>
-        <mat-select [disabled]="!ready" [(value)]="options.nextEvent" (valueChange)="onChangeEventTo()">
+        <!-- <mat-select [disabled]="!ready" [(value)]="options.nextEvent" (valueChange)="onChangeEventTo()">
           <mat-option *ngFor="let item of eventList; let i = index" [value]="i">#{{ item.eventId }} / {{ item.eventTime
             | date: 'MM-dd HH:mm:ss' }} / {{ item.tableName }}</mat-option>
+        </mat-select> -->
+        <mat-select [value]="playService.currentEvent?.eventId" (valueChange)="changeTimeByEvent($event)">
+          <mat-option *ngFor="let event of playService.timelineEvents" [value]="event.eventId">
+            #{{event.eventId}} | {{event.eventTime | date: "HH:mm:ss"}} | {{event.tableName}}
+          </mat-option>
         </mat-select>
-        <!-- <input
-          [disabled]="!ready"
-          matInput
-          type="number"
-          min="1"
-          [max]="options.eventMax + 1"
-          [(ngModel)]="options.nextEvent"
-        /> -->
-      </mat-form-field>
-
-      <mat-form-field class="form-time readonly full-width">
-        <mat-label>{{ "names.time" | translate }}</mat-label>
-        <input matInput type="text" readonly [value]="(states?.playTime | date: 'yyyy-MM-dd HH:mm:ss') || ''" />
-      </mat-form-field>
-      <mat-form-field class="form-event readonly">
-        <mat-label>{{ "names.event" | translate }}</mat-label>
-        <input matInput readonly [value]="currentEvent" />
-      </mat-form-field>
-      <mat-form-field class="form-next readonly">
-        <mat-label>{{ "names.timeToNextEvents" | translate }}</mat-label>
-        <input matInput type="number" readonly [value]="states.nextEvent" />
       </mat-form-field>
     </div>
   </ng-container>

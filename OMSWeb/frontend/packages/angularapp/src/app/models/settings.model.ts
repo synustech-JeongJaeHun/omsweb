@@ -13,6 +13,7 @@ export class ServiceConfig {
   version: string;
   kpiEnabled: boolean;
   bufferEnabled: boolean;
+  i18nEnabled: boolean;
 }
 
 export class MapConfig {

@@ -11,6 +11,7 @@ import { IRole } from '../../../models/user.model';
 import { AuthService } from '../../../services/auth.service';
 import { DialogService } from '../../../services/dialog.service';
 import { SystemsService } from '../../../services/systems.service';
+import { SettingsService } from '@oms/root/services/settings.service';
 import { UsersService } from '../../../services/users.service';
 import { LegendDialogComponent } from '../dialogs/legend-dialog.component';
 import { LoginDialogComponent } from '../dialogs/login-dialog.component';
@@ -32,7 +33,9 @@ export class GnbActionsComponent implements OnInit, OnDestroy {
   private _roles: IRole[] = [];
   private destroy$ = new Subject<void>();
 
+  private menuName = "[matMenuTriggerFor]='localeMenu'";
   private currentLanguage = "English";
+  public i18nEnabled: boolean = true;
 
   get isAuthenticated() {
     return this.auth.isAuthenticated;
@@ -65,8 +68,11 @@ export class GnbActionsComponent implements OnInit, OnDestroy {
     private t$: TranslateService,
     private systemSvc: SystemsService,
     private userSvc: UsersService,
-    private messageSvc: MessagesService
-  ) { }
+    private messageSvc: MessagesService,
+    private settingsService: SettingsService
+  ) {
+
+  }
 
   ngOnDestroy(): void {
     this.destroy$.next();
@@ -83,6 +89,11 @@ export class GnbActionsComponent implements OnInit, OnDestroy {
       .subscribe((states) => { this._activeAi = states.aiMode; });
 
     this.userSvc.roles().subscribe((data) => (this._roles = data));
+
+    this.settingsService.serviceConfig.
+      subscribe((config) => {
+        this.i18nEnabled = config.i18nEnabled;
+      });
   }
 
   onLegend() {

@@ -1,5 +1,3 @@
-using System;
-using System.Data;
 using Microsoft.Extensions.Configuration;
 using Npgsql;
 using OMSWeb.OMSSettings;
@@ -19,11 +17,9 @@ namespace OMSWeb.Repositories
             this.connectionStringTrack = configuration.GetConnectionString("OMS-Track");
 
             // get config from oms_settings.ini
-            if (OMSConfigSettings.GetConnectStrFromOmsSettings(configuration, out string connectUiStr, out string connectTrackStr))
-            {
-                this.connectionStringUi = connectUiStr;
-                this.connectionStringTrack = connectTrackStr;
-            }
+            AppConfig.GetConnectStrFromOmsSettings(out string connectUiStr, out string connectTrackStr);
+            this.connectionStringUi = connectUiStr;
+            this.connectionStringTrack = connectTrackStr;
         }
 
         protected NpgsqlConnection ConnectUi()

@@ -7,6 +7,8 @@ using System.Linq;
 using System.IO;
 using System.Security.Cryptography;
 using System;
+using OMSWeb.OMSSettings;
+using System.Diagnostics;
 
 namespace OMSWeb.Services
 {
@@ -19,15 +21,26 @@ namespace OMSWeb.Services
 
         public string LogBaseDir
         {
-            get { return this._appSettings.LogBaseDir; }
+            get 
+            {
+                return AppConfig.GetFromOMSConfig("Log", "base_dir", "..\\..\\Log");
+            }
         }
         public string LogTempZipDir
         {
-            get { return this._appSettings.LogTempZipDir; }
+            get 
+            {
+                string module_name = Process.GetCurrentProcess().MainModule.FileName;
+                return Path.GetDirectoryName(module_name) + "\\Temp\\Zip";
+            }
         }
         public string LogTempCopyDir
         {
-            get { return this._appSettings.LogTempCopyDir; }
+            get 
+            {
+                string module_name = Process.GetCurrentProcess().MainModule.FileName;
+                return Path.GetDirectoryName(module_name) + "\\Temp\\CopyFolder";
+            }
         }
 
         public SystemsService(ModeStateRepository _modeStateRepo, ModuleStatusRepository _modeStatusRepo, IOptions<AppSettings> appSettings)
@@ -91,20 +104,23 @@ namespace OMSWeb.Services
             client.Version = this._appSettings.Version;
             client.KpiEnabled = this._appSettings.KpiEnabled;
             client.BufferEnabled = this._appSettings.BufferEnabled;
+            client.i18nEnabled = this._appSettings.i18nEnabled;
             return this._appSettings.Client;
         }
 
         public List<LogModel> GetLogs()
         {
             //LogModel logModel = new LogModel(Directory.CreateDirectory(@"C:\inetpub\logs"));
-            LogModel logModel = new LogModel(Directory.CreateDirectory(this._appSettings.LogBaseDir));
+            string LogBaseDir = AppConfig.GetFromOMSConfig("Log", "base_dir", "..\\..\\Log");
+            LogModel logModel = new LogModel(Directory.CreateDirectory(LogBaseDir));
             List<LogModel> result = new List<LogModel>() { logModel };
             return result;
         }
         public IEnumerable<string> GetMaps()
         {
 
-            var maps = Directory.GetFiles(this._appSettings.MapDir)
+            string MapDir = AppConfig.GetFromOMSConfig("Map", "map_dir", "..\\..\\map");
+            var maps = Directory.GetFiles(MapDir)
                 .Where((file) => file.EndsWith(".json"))
                 .Select(map => Path.GetFileName(map));
             return maps;

@@ -1,34 +1,43 @@
 import {
   Component,
   ElementRef,
+  EventEmitter,
   Input,
   OnDestroy,
   OnInit,
+  Output,
   ViewChild,
 } from '@angular/core';
 import {
   defaultToggleOptions,
   ToggleOptionsType,
 } from '@oms/models/settings.model';
-import { CommandKeyType, ToggleOptionKeyType } from '../../../models/enums';
+import {
+  CommandKeyType,
+  ToggleOptionKeyType,
+  UserPermissions,
+} from '../../../models/enums';
 
 import { MapStatesService } from '../map-states.service';
 import { MessagesService } from '@oms/services/messages.service';
 import { DialogService } from '@oms/services/dialog.service';
 import { TranslateService } from '@ngx-translate/core';
+import { SearchDialogComponent } from '../dialogs/search-dialog.component';
 import {
   MatDialog,
   MatDialogRef,
   MatDialogState,
 } from '@angular/material/dialog';
+import { TrackVehicleDialogComponent } from '../dialogs/track-vehicle-dialog.component';
+import { CommandDialogComponent } from '../dialogs/command-dialog.component';
+import { ShowObjectDialogComponent } from '../dialogs/show-object-dialog.component';
 import { AuthService } from '../../../services/auth.service';
 import { AccountUtil } from '../../shared/utils/account.util';
 import { SettingsService } from '../../../services/settings.service';
 import { PermissionEnums } from '../../../models/enums';
-import { LegacySearchDialogComponent } from '../dialogs/legacy-search-dialog.component';
-import { LegacyTrackVehicleDialogComponent } from '../dialogs/legacy-track-vehicle-dialog.component';
-import { LegacyShowObjectDialogComponent } from '../dialogs/legacy-show-object-dialog.component';
+import { TrackMonitorSettingService } from '@oms/root/services/track-monitor-setting.service';
 import { PlaybackVehicleStatusDialogComponent } from '../dialogs/playback-vehicle-status-dialog.component';
+import { PlaybackControlDialogComponent } from '../../playback/dialogs/playback-control-dialog.component';
 
 @Component({
   selector: 'oms-legacy-map-toolbar',
@@ -39,6 +48,12 @@ export class LegacyMapToolbarComponent implements OnInit, OnDestroy {
   @Input()
   buttonState: ToggleOptionsType = defaultToggleOptions;
   readonly permissionEnums: typeof PermissionEnums = PermissionEnums;
+  bufferEnabled: boolean;
+
+  @Output() centerZoom = new EventEmitter<void>();
+  @Output() find = new EventEmitter<{ type: string; id: any }>();
+  @Output() focus = new EventEmitter<{ type: string; id: any }>();
+  @Output() track = new EventEmitter<{ type: string; id: any }>();
 
   @ViewChild('btnSearch', { read: ElementRef }) btnSearch: ElementRef;
   @ViewChild('btnTrack', { read: ElementRef }) btnTrack: ElementRef;
@@ -60,10 +75,13 @@ export class LegacyMapToolbarComponent implements OnInit, OnDestroy {
     return this.showToolName ? '164px' : '36px';
   }
 
-  private _searchDlg: MatDialogRef<LegacySearchDialogComponent, any>;
-  private _trackDlg: MatDialogRef<LegacyTrackVehicleDialogComponent, any>;
-  private _showObjDlg: MatDialogRef<LegacyShowObjectDialogComponent, any>;
+  private _searchDlg: MatDialogRef<SearchDialogComponent, any>;
+  private _trackDlg: MatDialogRef<TrackVehicleDialogComponent, any>;
+  private _cmdDlg: MatDialogRef<CommandDialogComponent, any>;
+  private _showObjDlg: MatDialogRef<ShowObjectDialogComponent, any>;
   private _vhStatusDlg: MatDialogRef<PlaybackVehicleStatusDialogComponent, any>;
+  private _controlDlg: MatDialogRef<PlaybackControlDialogComponent, any>;
+  // private _bfStatusDlg: MatDialogRef<BufferStatusDialogComponent, any>;
 
   constructor(
     private auth: AuthService,
@@ -72,8 +90,32 @@ export class LegacyMapToolbarComponent implements OnInit, OnDestroy {
     private settingSvc: SettingsService,
     private dialogSvc: DialogService,
     private dialog: MatDialog,
-    private $t: TranslateService
-  ) {}
+    private $t: TranslateService,
+    public trackMonitorSettingService: TrackMonitorSettingService
+  ) {
+    // settingSvc.serviceConfig.subscribe((config) => {
+    //   this.bufferEnabled = config.bufferEnabled;
+    // });
+    this.onPlaybackDialog();
+  }
+
+  onPlaybackDialog() {
+    if (
+      this._controlDlg &&
+      this._controlDlg.getState() === MatDialogState.OPEN
+    ) {
+      this._controlDlg.close();
+      return;
+    }
+
+    this._controlDlg = this.dialog.open(PlaybackControlDialogComponent, {
+      width: '90vw',
+      maxWidth: '800px',
+      hasBackdrop: false,
+      disableClose: true,
+      closeOnNavigation: true,
+    });
+  }
 
   ngOnInit(): void {}
 
@@ -86,6 +128,10 @@ export class LegacyMapToolbarComponent implements OnInit, OnDestroy {
       this._trackDlg.getState() === MatDialogState.OPEN &&
       this._trackDlg.close();
 
+    this._cmdDlg &&
+      this._cmdDlg.getState() === MatDialogState.OPEN &&
+      this._cmdDlg.close();
+
     this._showObjDlg &&
       this._showObjDlg.getState() === MatDialogState.OPEN &&
       this._showObjDlg.close();
@@ -93,6 +139,14 @@ export class LegacyMapToolbarComponent implements OnInit, OnDestroy {
     this._vhStatusDlg &&
       this._vhStatusDlg.getState() === MatDialogState.OPEN &&
       this._vhStatusDlg.close();
+
+    this._controlDlg &&
+      this._controlDlg.getState() === MatDialogState.OPEN &&
+      this._controlDlg.close();
+
+    // this._bfStatusDlg &&
+    //   this._bfStatusDlg.getState() === MatDialogState.OPEN &&
+    //   this._bfStatusDlg.close();
   }
 
   hasPermission(permission: number): boolean {
@@ -105,7 +159,7 @@ export class LegacyMapToolbarComponent implements OnInit, OnDestroy {
       return;
     }
     const rect: DOMRect = this.btnSearch.nativeElement.getBoundingClientRect();
-    this._searchDlg = this.dialog.open(LegacySearchDialogComponent, {
+    this._searchDlg = this.dialog.open(SearchDialogComponent, {
       width: '350px',
       hasBackdrop: false,
       disableClose: true,
@@ -113,24 +167,23 @@ export class LegacyMapToolbarComponent implements OnInit, OnDestroy {
       position: { left: this.tooltipOffset, top: `${rect.top}px` },
     });
 
-    this._searchDlg.afterClosed().subscribe((payload: any) => {
-      if (!payload || !payload.type || !payload.value) return;
-      this.stateSvc.commandToolbar('search', payload);
-    });
+    this._searchDlg
+      .afterClosed()
+      .subscribe((payload: { type: string; id: any }) => {
+        if (!payload || !payload.type || !payload.id) return;
+        this.find.emit({ type: payload.type, id: payload.id });
+        this.focus.emit({ type: payload.type, id: payload.id });
+      });
   }
 
   onTrackVehicle() {
-    if (this.isTracking) {
-      this.stateSvc.commandToolbar('trackVehicle', null);
-      return;
-    }
     if (this._trackDlg && this._trackDlg.getState() === MatDialogState.OPEN) {
       this._trackDlg.close();
       return;
     }
 
     const rect: DOMRect = this.btnTrack.nativeElement.getBoundingClientRect();
-    this._trackDlg = this.dialog.open(LegacyTrackVehicleDialogComponent, {
+    this._trackDlg = this.dialog.open(TrackVehicleDialogComponent, {
       width: '350px',
       autoFocus: false,
       hasBackdrop: false,
@@ -139,9 +192,11 @@ export class LegacyMapToolbarComponent implements OnInit, OnDestroy {
       position: { left: this.tooltipOffset, top: `${rect.top}px` },
     });
 
-    this._trackDlg.afterClosed().subscribe((payload: any) => {
+    this._trackDlg.afterClosed().subscribe((payload?: number) => {
       if (!payload) return;
-      this.stateSvc.commandToolbar('trackVehicle', payload);
+      this.find.emit({ type: 'vehicle', id: payload });
+      this.focus.emit({ type: 'vehicle', id: payload });
+      this.track.emit({ type: 'vehicle', id: payload });
     });
   }
 
@@ -155,7 +210,7 @@ export class LegacyMapToolbarComponent implements OnInit, OnDestroy {
     }
 
     const rect = this.btnShowObj.nativeElement.getBoundingClientRect();
-    this._showObjDlg = this.dialog.open(LegacyShowObjectDialogComponent, {
+    this._showObjDlg = this.dialog.open(ShowObjectDialogComponent, {
       width: '350px',
       autoFocus: false,
       hasBackdrop: false,
@@ -170,10 +225,6 @@ export class LegacyMapToolbarComponent implements OnInit, OnDestroy {
     const value = !this.buttonState[action];
     this.buttonState[action] = value;
     this.stateSvc.changeToolbarState(action, value);
-  }
-
-  onCommandTool(action: CommandKeyType) {
-    this.stateSvc.commandToolbar(action);
   }
 
   onOpenVehicleStatus() {
@@ -194,4 +245,22 @@ export class LegacyMapToolbarComponent implements OnInit, OnDestroy {
       closeOnNavigation: true,
     });
   }
+
+  // onOpenBufferStatus() {
+  //   if (
+  //     this._bfStatusDlg &&
+  //     this._bfStatusDlg.getState() === MatDialogState.OPEN
+  //   ) {
+  //     this._bfStatusDlg.close();
+  //     return;
+  //   }
+
+  //   this._bfStatusDlg = this.dialog.open(BufferStatusDialogComponent, {
+  //     width: '450px',
+  //     autoFocus: false,
+  //     hasBackdrop: false,
+  //     disableClose: false,
+  //     closeOnNavigation: true,
+  //   });
+  // }
 }

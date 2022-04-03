@@ -37,16 +37,16 @@ export class PlaybackOrderStatusComponent implements OnInit {
     private playbackSvc: PlaybackService,
     private idSvc: TrackIdService
   ) {
-    this.playbackSvc.ordersChanged$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((data) => {
-        this.dataSource = data;
-      });
+    // this.playbackSvc.ordersChanged$
+    //   .pipe(takeUntil(this.destroy$))
+    //   .subscribe((data) => {
+    //     this.dataSource = data;
+    //   });
   }
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 }

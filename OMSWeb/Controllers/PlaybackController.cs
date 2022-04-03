@@ -8,45 +8,60 @@ using Microsoft.AspNetCore.Mvc;
 using OMSWeb.Models;
 using OMSWeb.Models.Tracks;
 using OMSWeb.Services;
+using OMSWeb.Models.Entities;
 
 namespace OMSWeb.Controllers
 {
-  [Authorize]
-  [Route("api/[controller]")]
-  [ApiController]
-  public class PlaybackController : ControllerBase
-  {
-    private readonly PlaybackService _svc;
-    private readonly UserService _userSvc;
-
-    public PlaybackController(PlaybackService playbackService, UserService userService)
+    // [Authorize]
+    [Route("api/[controller]")]
+    [ApiController]
+    public class PlaybackController : ControllerBase
     {
-      this._svc = playbackService;
-      this._userSvc = userService;
-    }
+        private readonly PlaybackService _svc;
+        private readonly UserService _userSvc;
 
-    [HttpGet("snapshots/first")]
-    public ActionResult<SimpleResponse<DateTime?>> GetFirstSnapshot()
-    {
-      var time = this._svc.GetFirstSnapshotTime();
-      return new SimpleResponse<DateTime?>
-      {
-        Data = time
-      };
-    }
+        public PlaybackController(PlaybackService playbackService, UserService userService)
+        {
+            this._svc = playbackService;
+            this._userSvc = userService;
+        }
 
-    [HttpGet("snapshots/times/{start}/{end}")]
-    public ActionResult<PlaybackData> GetSnapshotOfTime([FromRoute] string start, [FromRoute] string end)
-    {
-      Console.WriteLine($"## Get Snapshot time >> {start} ~ {end}");
-      return _svc.GetSnapshotDataByTime(_userSvc.UserId, DateTime.Parse(start), DateTime.Parse(end));
-    }
+        [HttpGet("info")]
+        public ActionResult<object> GetPlaybackInfo()
+        {
+            return new
+            {
+                FirstSnapshotTime = _svc.GetFirstSnapshotTime(),
+                LastTimelineEventTime = _svc.GetLastTimelineEventTime()
+            };
+        }
 
-    [HttpGet("snapshots/{track}/{snapshot}")]
-    public ActionResult<PlaybackData> GetSnapshotOfTrack([FromRoute] string track, [FromRoute] string snapshot)
-    {
-      Console.WriteLine($"## Get Snapshot track >> {track} ~ {snapshot}");
-      return _svc.GetSnapshotDataByTrack(_userSvc.UserId, DateTime.Parse(track), DateTime.Parse(snapshot));
+        [HttpGet("track-times")]
+        public IList<DateTimeOffset> GetTrackTimes()
+        {
+            return _svc.GetTrackTimes();
+        }
+
+        [HttpGet("recent-track/{before}")]
+        public ActionResult<TrackSnapshotEntity> GetRecentTrackBefore(DateTimeOffset before)
+        {
+            return _svc.GetRecentTrackBefore(before);
+        }
+
+        [HttpGet("before-next-snapshots/{from}")]
+        public ActionResult<BeforeNextSnapshots> GetRecentSnapshotsFrom(DateTimeOffset from)
+        {
+            return _svc.GetBeforeNextSnapshots(from);
+        }
+
+        [HttpGet("timeline-events")]
+        public ActionResult<object> GetTimelineEventsBetween([FromQuery] DateTimeOffset from, [FromQuery] DateTimeOffset to)
+        {
+            var vehicleEvents = _svc.GetVehicleTimelineEventsBetween(from, to).ToList<ITimeline>();
+            var segmentBlockingEvents = _svc.GetSegmentBlockingTimelineEventsBetween(from, to).ToList<ITimeline>();
+            var orderEvents = _svc.GetOrderTimelineEventsBetween(from, to).ToList<ITimeline>();
+
+            return vehicleEvents.Concat(segmentBlockingEvents).Concat(orderEvents).OrderBy(e => e.EventTime).ToList();
+        }
     }
-  }
 }

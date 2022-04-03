@@ -21,6 +21,7 @@
     "buffer": "Buffer",
     "group": "Group",
     "zcu": "ZCU",
+    "zcu_label": "Zcu",
     "vehicleType": "Vehicle Type",
     "vehicleMode": "Vehicle Mode",
     "vehicleProperties": "Vehicle Properties",

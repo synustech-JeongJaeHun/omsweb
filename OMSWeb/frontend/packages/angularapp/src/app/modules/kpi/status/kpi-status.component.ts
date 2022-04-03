@@ -1,15 +1,19 @@
-import { Component, HostBinding, OnInit } from '@angular/core';
+import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
 import { SettingsService } from '../../../services/settings.service';
 import { Router } from '@angular/router';
+import { HubService } from '../../../services/hub.service';
+import { IDataChangeEvent } from '../../../models/notification.model';
 import { AuthService } from '../../../services/auth.service';
 import { AccountUtil } from '../../shared/utils/account.util';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'oms-kpi-status',
   templateUrl: './kpi-status.component.html',
   styleUrls: ['./kpi-status.component.scss'],
 })
-export class KpiStatusComponent implements OnInit {
+export class KpiStatusComponent implements OnInit, OnDestroy {
   @HostBinding('class.has-name-margin') get left() {
     return this.toolNameShown;
   }
@@ -17,6 +21,10 @@ export class KpiStatusComponent implements OnInit {
   expanded = false;
 
   private enabled = false;
+
+  //#region Subscriptions
+  private destroy$: Subject<void> = new Subject<void>();
+  //#endregion
 
   get toolNameShown(): boolean {
     return this.settingSvc.globalPreferences.toggles.showToolName;
@@ -29,14 +37,22 @@ export class KpiStatusComponent implements OnInit {
   constructor(
     private auth: AuthService,
     private settingSvc: SettingsService,
-    private router: Router
+    private router: Router,
+    private hubSvc: HubService
   ) {
     this.settingSvc.serviceConfig.subscribe(cfg => {
       this.enabled = cfg.kpiEnabled;
     })
   }
 
-  ngOnInit(): void { }
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  ngOnInit(): void {
+
+  }
 
   onToggleExpand() {
     this.expanded = !this.expanded;

@@ -20,6 +20,8 @@ using OMSWeb.Services;
 using OMSWeb.MqttSettings;
 using OMSWeb.Extensions;
 using OMSWeb.OMSSettings;
+using System.IO;
+using System.Diagnostics;
 
 namespace OMSWeb
 {
@@ -39,39 +41,13 @@ namespace OMSWeb
             // from default Appsettings.json
             MqttConfiguration();
 
-            // config from oms_setting.ini
-            OMSConfigSettings omsConfigSettings = new OMSConfigSettings();
-            Configuration.GetSection(nameof(OMSConfigSettings)).Bind(omsConfigSettings);
-            if (!String.IsNullOrWhiteSpace(omsConfigSettings.Path))
-            {
-                var dic = INIFile.GetData(omsConfigSettings.Path);
-                try
-                {
-                    string host = dic["MessageManager-host"];
-                    string port = dic["MessageManager-port"];
-                    string topic = dic["MessageManager-topic_root"];
-
-                    if (!String.IsNullOrWhiteSpace(host) &&
-                        !String.IsNullOrWhiteSpace(port) &&
-                        !String.IsNullOrWhiteSpace(topic))
-                    {
-                        // set MqttAppSettingsProvider
-                        BrokerHostSettings brokerHostSettings = new BrokerHostSettings();
-                        MqttClientSettings clientSettings = new MqttClientSettings();
-
-                        brokerHostSettings.Host = host;
-                        brokerHostSettings.Port = Int32.Parse(port);
-                        brokerHostSettings.TopicRoot = topic;
-
-                        MqttAppSettingsProvider.BrokerHostSettings = brokerHostSettings;
-                        //MqttAppSettingsProvider.ClientSettings은 추후 보완시, 추가 예정
-                    }
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("OmsConfiguration() : " + e.Message);
-                }
-            }
+            // set MqttAppSettingsProvider
+            MqttAppSettingsProvider.BrokerHostSettings = new BrokerHostSettings(
+                    AppConfig.GetFromOMSConfig("MessageManager", "host", "localhost"),
+                    Convert.ToInt32(AppConfig.GetFromOMSConfig("MessageManager", "port", "1883")),
+                    AppConfig.GetFromOMSConfig("MessageManager", "topic_root", "oms")
+                );
+            //MqttAppSettingsProvider.ClientSettings은 추후 보완시, 추가 예정
         }
 
         private void MqttConfiguration()
@@ -154,6 +130,7 @@ namespace OMSWeb
             services.AddScoped<ModuleStatusRepository>();
             services.AddScoped<SettingsRepository>();
             services.AddScoped<VehicleRepository>();
+            services.AddScoped<ReportRepository>();
 
             services.AddScoped<ModuleStatusService>();
             services.AddScoped<StatusService>();
@@ -165,6 +142,7 @@ namespace OMSWeb
             services.AddScoped<PlaybackService>();
             services.AddScoped<SettingsService>();
             services.AddScoped<VehicleService>();
+            services.AddScoped<ReportService>();
 
             services.AddSingleton<SystemsService>();
             services.AddSingleton<ModuleStatusRepository>();
@@ -263,12 +241,15 @@ namespace OMSWeb
                 if (env.IsDevelopment())
                 {
                     var isProxy = Configuration.GetSection("Proxy").Get<Boolean>();
-                    if (isProxy) {
+                    if (isProxy)
+                    {
                         spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
-                    } else {
+                    }
+                    else
+                    {
                         spa.UseAngularCliServer(npmScript: "start");
                     }
-                    
+
                 }
             });
         }

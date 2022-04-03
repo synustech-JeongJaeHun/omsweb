@@ -1,6 +1,16 @@
 <mat-list [class.show-name]="showToolName" mdePopoverTarget #popoverTarget="mdePopoverTarget">
   <button matListItem mat-button class="tool-item" [matTooltipDisabled]="showToolName" matTooltipClass="snb-tooltip"
-    matTooltipPosition="right" [matTooltip]="'names.centerZoom' | translate" (click)="onCommandTool('centerZoom')">
+    matTooltipPosition="right" [matTooltip]="'names.playback' | translate" (click)="onPlaybackDialog()">
+    <mat-icon>play_circle_outline</mat-icon>
+    <span class="tool-name" *ngIf="showToolName">{{
+      "names.centerZoom" | translate
+      }}</span>
+  </button>
+
+  <mat-divider></mat-divider>
+
+  <button matListItem mat-button class="tool-item" [matTooltipDisabled]="showToolName" matTooltipClass="snb-tooltip"
+    matTooltipPosition="right" [matTooltip]="'names.centerZoom' | translate" (click)="centerZoom.emit()">
     <mat-icon>center_focus_strong</mat-icon>
     <span class="tool-name" *ngIf="showToolName">{{
       "names.centerZoom" | translate
@@ -33,9 +43,13 @@
       "names.showObjects" | translate
       }}</span>
   </button>
-  <button matListItem mat-button class="tool-item" [class.active]="buttonState.minimap"
-    (click)="onToggleTool('minimap')" [matTooltipDisabled]="showToolName" matTooltipClass="snb-tooltip"
-    matTooltipPosition="right" [matTooltip]="'names.showMinimap' | translate">
+  <button matListItem mat-button class="tool-item"
+    [class.active]="trackMonitorSettingService.trackSetting.isMinimapVisible" (click)="trackMonitorSettingService.update({
+    group: 'Visibility',
+    key: 'isMinimapVisible',
+    value: !trackMonitorSettingService.trackSetting.isMinimapVisible
+  })" [matTooltipDisabled]="showToolName" matTooltipClass="snb-tooltip" matTooltipPosition="right"
+    [matTooltip]="'names.showMinimap' | translate">
     <mat-icon>map</mat-icon>
     <span class="tool-name" *ngIf="showToolName">{{
       "names.showMinimap" | translate
@@ -43,15 +57,7 @@
   </button>
 
   <mat-divider></mat-divider>
-<!--
-  <button *ngIf="hasPermission(permissionEnums.ManualTransfer)" #btnCommand matListItem mat-button class="tool-item"
-    [matTooltipDisabled]="showToolName" matTooltipClass="snb-tooltip" matTooltipPosition="right"
-    [matTooltip]="'names.manualOrder' | translate" (click)="onManualCommand()">
-    <mat-icon>post_add</mat-icon>
-    <span class="tool-name" *ngIf="showToolName">{{
-      "names.manualOrder" | translate
-      }}</span>
-  </button> -->
+
   <button matListItem mat-button class="tool-item" [class.active]="buttonState.controlTable"
     [matTooltipDisabled]="showToolName" matTooltipClass="snb-tooltip" matTooltipPosition="right"
     [matTooltip]="'names.showControlTable' | translate" (click)="onToggleTool('controlTable')">
@@ -69,8 +75,8 @@
       "names.itemDetails" | translate
       }}</span>
   </button>
-  <!-- <mat-divider></mat-divider> -->
-  <!-- <button *ngIf="hasPermission(permissionEnums.ViewBuffer)" #btnShowObj matListItem mat-button class="tool-item"
+  <mat-divider></mat-divider>
+  <!-- <button *ngIf="bufferEnabled && hasPermission(permissionEnums.ViewBuffer)" #btnShowObj matListItem mat-button class="tool-item"
     [matTooltipDisabled]="showToolName" matTooltipClass="snb-tooltip" matTooltipPosition="right"
     [matTooltip]="'names.buffer' | translate" (click)="onOpenBufferStatus()">
     <mat-icon>sensor_window</mat-icon>
@@ -87,56 +93,6 @@
       "names.vehicleStatus" | translate
       }}</span>
   </button>
-
-  <!-- <mat-divider></mat-divider>
-
-  <button
-    matListItem
-    mat-button
-    class="tool-item"
-    matTooltipClass="snb-tooltip"
-    matTooltipPosition="right"
-    [matTooltip]="'names.getStatusAllVehicle' | translate"
-    (click)="onPing()"
-  >
-    <mat-icon>motion_photos_on</mat-icon>
-  </button>
-  <ng-container *ngIf="canControl">
-    <button
-      matListItem
-      mat-button
-      class="tool-item"
-      matTooltipClass="snb-tooltip"
-      matTooltipPosition="right"
-      [matTooltip]="'names.setAutoAllVehicle' | translate"
-      (click)="onSetAuto()"
-    >
-      <mat-icon>brightness_auto</mat-icon>
-    </button>
-    <button
-      matListItem
-      mat-button
-      class="tool-item"
-      matTooltipClass="snb-tooltip"
-      matTooltipPosition="right"
-      [matTooltip]="'names.resetAllVehicle' | translate"
-      matTooltip="Reset All Vehicle"
-      (click)="onVehicleReset()"
-    >
-      <mat-icon>settings_backup_restore</mat-icon>
-    </button>
-    <button
-      matListItem
-      mat-button
-      class="tool-item"
-      matTooltipClass="snb-tooltip"
-      matTooltipPosition="right"
-      [matTooltip]="'names.estopAllVehicle' | translate"
-      (click)="onEStop()"
-    >
-      <mat-icon fontSet="material-icons-outlined">stop_circle</mat-icon>
-    </button>
-  </ng-container> -->
 </mat-list>
 
 <mde-popover #visibilityPopover="mdePopover" [mdePopoverOverlapTrigger]="false" mdePopoverArrowWidth="0"

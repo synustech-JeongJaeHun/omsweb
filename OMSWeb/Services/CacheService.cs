@@ -21,7 +21,6 @@ namespace OMSWeb.Services
     VehiclePaths,
     Vehicles,
     Groups,
-    Kpi,
   }
 
   public class CacheService

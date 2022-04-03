@@ -32,11 +32,11 @@ export class PlaybackVehicleStatusComponent implements OnInit {
     private playbackSvc: PlaybackService,
     private idSvc: TrackIdService
   ) {
-    this.playbackSvc.vehiclesChanged$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((data) => {
-        this.dataSource = data;
-      });
+    // this.playbackSvc.vehiclesChanged$
+    //   .pipe(takeUntil(this.destroy$))
+    //   .subscribe((data) => {
+    //     this.dataSource = data;
+    //   });
   }
 
   ngOnDestroy(): void {
@@ -44,5 +44,5 @@ export class PlaybackVehicleStatusComponent implements OnInit {
     this.destroy$.complete();
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 }

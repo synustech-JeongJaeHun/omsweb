@@ -14,7 +14,11 @@ import { DxFileManagerModule } from 'devextreme-angular/ui/file-manager';
 import { DxoPermissionsModule } from 'devextreme-angular/ui/nested';
 import { DxSortableModule } from 'devextreme-angular/ui/sortable';
 import { DxColorBoxModule } from 'devextreme-angular/ui/color-box';
-import { DxChartModule } from 'devextreme-angular';
+import {
+  DxChartModule,
+  DxRangeSliderModule,
+  DxSliderModule,
+} from 'devextreme-angular';
 import { DxSparklineModule } from 'devextreme-angular';
 import { DxPieChartModule } from 'devextreme-angular';
 
@@ -37,7 +41,9 @@ import { DxPieChartModule } from 'devextreme-angular';
     DxColorBoxModule,
     DxChartModule,
     DxSparklineModule,
-    DxPieChartModule
+    DxPieChartModule,
+    DxRangeSliderModule,
+    DxSliderModule,
   ],
 })
-export class SharedDevextremeModule { }
+export class SharedDevextremeModule {}

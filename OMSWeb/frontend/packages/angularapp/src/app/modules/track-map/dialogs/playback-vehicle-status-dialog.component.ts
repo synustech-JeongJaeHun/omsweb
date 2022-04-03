@@ -123,194 +123,194 @@ export class PlaybackVehicleStatusDialogComponent implements OnInit, OnDestroy {
       this.currentVehicle = value;
       if (this.intervalId) clearInterval(this.intervalId);
 
-      const update = () => {
-        this.vehicleService
-          .getVehicleStatus(this.currentVehicle.id)
-          .subscribe((res) => {
-            Object.assign(this.currentVehicle, res);
-          });
-        this.vehicleService
-          .getRecentVehicleDioBefore(
-            this.currentVehicle.id,
-            new Date(this.playbackService.states.playTime as string)
-          )
-          .subscribe(
-            (res) => {
-              this.dis = (
-                convertSignedIntegerToBitString(res.di1, 32) +
-                convertSignedIntegerToBitString(res.di2, 32) +
-                convertSignedIntegerToBitString(res.di3, 32)
-              ).split('') as ('0' | '1')[];
+      // const update = () => {
+      //   this.vehicleService
+      //     .getVehicleStatus(this.currentVehicle.id)
+      //     .subscribe((res) => {
+      //       Object.assign(this.currentVehicle, res);
+      //     });
+      //   this.vehicleService
+      //     .getRecentVehicleDioBefore(
+      //       this.currentVehicle.id,
+      //       new Date(this.playbackService.states.playTime as string)
+      //     )
+      //     .subscribe(
+      //       (res) => {
+      //         this.dis = (
+      //           convertSignedIntegerToBitString(res.di1, 32) +
+      //           convertSignedIntegerToBitString(res.di2, 32) +
+      //           convertSignedIntegerToBitString(res.di3, 32)
+      //         ).split('') as ('0' | '1')[];
 
-              this.dos = (
-                convertSignedIntegerToBitString(res.do1, 32) +
-                convertSignedIntegerToBitString(res.do2, 32) +
-                convertSignedIntegerToBitString(res.do3, 32)
-              ).split('') as ('0' | '1')[];
-            },
-            (error) => {
-              this.dis = Array(96).fill('0');
-              this.dos = Array(96).fill('0');
-            }
-          );
+      //         this.dos = (
+      //           convertSignedIntegerToBitString(res.do1, 32) +
+      //           convertSignedIntegerToBitString(res.do2, 32) +
+      //           convertSignedIntegerToBitString(res.do3, 32)
+      //         ).split('') as ('0' | '1')[];
+      //       },
+      //       (error) => {
+      //         this.dis = Array(96).fill('0');
+      //         this.dos = Array(96).fill('0');
+      //       }
+      //     );
 
-        this.vehicleService
-          .getVehicleDioHistories(
-            this.currentVehicle.id,
-            new Date(
-              new Date(
-                this.playbackService.states.playTime as string
-              ).getTime() - 30000
-            ),
-            new Date(this.playbackService.states.playTime as string)
-          )
-          .subscribe((res) => {
-            // if no data, use last
-            if (res.length === 0) {
-              this.vehicleService
-                .getRecentVehicleDioBefore(
-                  this.currentVehicle.id,
-                  new Date(this.playbackService.states.playTime as string)
-                )
-                .subscribe((res) => {
-                  const di3Binary = convertSignedIntegerToBitString(
-                    res.di3,
-                    32
-                  ).split('') as ('0' | '1')[];
+      //   this.vehicleService
+      //     .getVehicleDioHistories(
+      //       this.currentVehicle.id,
+      //       new Date(
+      //         new Date(
+      //           this.playbackService.states.playTime as string
+      //         ).getTime() - 30000
+      //       ),
+      //       new Date(this.playbackService.states.playTime as string)
+      //     )
+      //     .subscribe((res) => {
+      //       // if no data, use last
+      //       if (res.length === 0) {
+      //         this.vehicleService
+      //           .getRecentVehicleDioBefore(
+      //             this.currentVehicle.id,
+      //             new Date(this.playbackService.states.playTime as string)
+      //           )
+      //           .subscribe((res) => {
+      //             const di3Binary = convertSignedIntegerToBitString(
+      //               res.di3,
+      //               32
+      //             ).split('') as ('0' | '1')[];
 
-                  const do3Binary = convertSignedIntegerToBitString(
-                    res.do3,
-                    32
-                  ).split('') as ('0' | '1')[];
+      //             const do3Binary = convertSignedIntegerToBitString(
+      //               res.do3,
+      //               32
+      //             ).split('') as ('0' | '1')[];
 
-                  // this!
-                  this.dioHistoriesIn30Seconds = [
-                    {
-                      historyChangeTimeFrom30SecondsBefore: 0,
-                      po_valid: parseInt(do3Binary[8]),
-                      po_cs_0: parseInt(do3Binary[9]),
-                      po_cs_1: parseInt(do3Binary[10]),
-                      po_tr_req: parseInt(do3Binary[12]),
-                      po_busy: parseInt(do3Binary[13]),
-                      po_compt: parseInt(do3Binary[14]),
-                      po_cont: parseInt(do3Binary[16]),
-                      pi_l_req: parseInt(di3Binary[0]),
-                      pi_u_req: parseInt(di3Binary[1]),
-                      pi_ready: parseInt(di3Binary[3]),
-                      pi_ho_avbl: parseInt(di3Binary[6]),
-                      pi_es: parseInt(di3Binary[7]),
-                      pattern: parsePIO(
-                        {
-                          L_REQ: di3Binary[0],
-                          U_REQ: di3Binary[1],
-                          READY: di3Binary[3],
-                          HO_AVBL: di3Binary[6],
-                          ES: di3Binary[7],
-                        },
-                        {
-                          VALID: do3Binary[8],
-                          CS_0: do3Binary[9],
-                          CS_1: do3Binary[10],
-                          TR_REQ: do3Binary[12],
-                          BUSY: do3Binary[13],
-                          COMPT: do3Binary[14],
-                        }
-                      ),
-                    },
-                    {
-                      historyChangeTimeFrom30SecondsBefore: 30,
-                      po_valid: parseInt(do3Binary[8]),
-                      po_cs_0: parseInt(do3Binary[9]),
-                      po_cs_1: parseInt(do3Binary[10]),
-                      po_tr_req: parseInt(do3Binary[12]),
-                      po_busy: parseInt(do3Binary[13]),
-                      po_compt: parseInt(do3Binary[14]),
-                      po_cont: parseInt(do3Binary[16]),
-                      pi_l_req: parseInt(di3Binary[0]),
-                      pi_u_req: parseInt(di3Binary[1]),
-                      pi_ready: parseInt(di3Binary[3]),
-                      pi_ho_avbl: parseInt(di3Binary[6]),
-                      pi_es: parseInt(di3Binary[7]),
-                      pattern: '',
-                    },
-                  ];
-                });
-              return;
-            }
+      //             // this!
+      //             this.dioHistoriesIn30Seconds = [
+      //               {
+      //                 historyChangeTimeFrom30SecondsBefore: 0,
+      //                 po_valid: parseInt(do3Binary[8]),
+      //                 po_cs_0: parseInt(do3Binary[9]),
+      //                 po_cs_1: parseInt(do3Binary[10]),
+      //                 po_tr_req: parseInt(do3Binary[12]),
+      //                 po_busy: parseInt(do3Binary[13]),
+      //                 po_compt: parseInt(do3Binary[14]),
+      //                 po_cont: parseInt(do3Binary[16]),
+      //                 pi_l_req: parseInt(di3Binary[0]),
+      //                 pi_u_req: parseInt(di3Binary[1]),
+      //                 pi_ready: parseInt(di3Binary[3]),
+      //                 pi_ho_avbl: parseInt(di3Binary[6]),
+      //                 pi_es: parseInt(di3Binary[7]),
+      //                 pattern: parsePIO(
+      //                   {
+      //                     L_REQ: di3Binary[0],
+      //                     U_REQ: di3Binary[1],
+      //                     READY: di3Binary[3],
+      //                     HO_AVBL: di3Binary[6],
+      //                     ES: di3Binary[7],
+      //                   },
+      //                   {
+      //                     VALID: do3Binary[8],
+      //                     CS_0: do3Binary[9],
+      //                     CS_1: do3Binary[10],
+      //                     TR_REQ: do3Binary[12],
+      //                     BUSY: do3Binary[13],
+      //                     COMPT: do3Binary[14],
+      //                   }
+      //                 ),
+      //               },
+      //               {
+      //                 historyChangeTimeFrom30SecondsBefore: 30,
+      //                 po_valid: parseInt(do3Binary[8]),
+      //                 po_cs_0: parseInt(do3Binary[9]),
+      //                 po_cs_1: parseInt(do3Binary[10]),
+      //                 po_tr_req: parseInt(do3Binary[12]),
+      //                 po_busy: parseInt(do3Binary[13]),
+      //                 po_compt: parseInt(do3Binary[14]),
+      //                 po_cont: parseInt(do3Binary[16]),
+      //                 pi_l_req: parseInt(di3Binary[0]),
+      //                 pi_u_req: parseInt(di3Binary[1]),
+      //                 pi_ready: parseInt(di3Binary[3]),
+      //                 pi_ho_avbl: parseInt(di3Binary[6]),
+      //                 pi_es: parseInt(di3Binary[7]),
+      //                 pattern: '',
+      //               },
+      //             ];
+      //           });
+      //         return;
+      //       }
 
-            // if histories exists
+      //       // if histories exists
 
-            const data = res.map((moment) => {
-              const di3Binary = convertSignedIntegerToBitString(
-                moment.di3,
-                32
-              ).split('') as ('0' | '1')[];
+      //       const data = res.map((moment) => {
+      //         const di3Binary = convertSignedIntegerToBitString(
+      //           moment.di3,
+      //           32
+      //         ).split('') as ('0' | '1')[];
 
-              const do3Binary = convertSignedIntegerToBitString(
-                moment.do3,
-                32
-              ).split('') as ('0' | '1')[];
+      //         const do3Binary = convertSignedIntegerToBitString(
+      //           moment.do3,
+      //           32
+      //         ).split('') as ('0' | '1')[];
 
-              return {
-                historyChangeTimeFrom30SecondsBefore:
-                  (new Date(moment.historyChangeTime).getTime() -
-                    (Date.now() - 30000)) /
-                  1000,
-                po_valid: parseInt(do3Binary[8]),
-                po_cs_0: parseInt(do3Binary[9]),
-                po_cs_1: parseInt(do3Binary[10]),
-                po_tr_req: parseInt(do3Binary[12]),
-                po_busy: parseInt(do3Binary[13]),
-                po_compt: parseInt(do3Binary[14]),
-                po_cont: parseInt(do3Binary[16]),
-                pi_l_req: parseInt(di3Binary[0]),
-                pi_u_req: parseInt(di3Binary[1]),
-                pi_ready: parseInt(di3Binary[3]),
-                pi_ho_avbl: parseInt(di3Binary[6]),
-                pi_es: parseInt(di3Binary[7]),
-                pattern: parsePIO(
-                  {
-                    L_REQ: di3Binary[0],
-                    U_REQ: di3Binary[1],
-                    READY: di3Binary[3],
-                    HO_AVBL: di3Binary[6],
-                    ES: di3Binary[7],
-                  },
-                  {
-                    VALID: do3Binary[8],
-                    CS_0: do3Binary[9],
-                    CS_1: do3Binary[10],
-                    TR_REQ: do3Binary[12],
-                    BUSY: do3Binary[13],
-                    COMPT: do3Binary[14],
-                  }
-                ),
-              };
-            });
+      //         return {
+      //           historyChangeTimeFrom30SecondsBefore:
+      //             (new Date(moment.historyChangeTime).getTime() -
+      //               (Date.now() - 30000)) /
+      //             1000,
+      //           po_valid: parseInt(do3Binary[8]),
+      //           po_cs_0: parseInt(do3Binary[9]),
+      //           po_cs_1: parseInt(do3Binary[10]),
+      //           po_tr_req: parseInt(do3Binary[12]),
+      //           po_busy: parseInt(do3Binary[13]),
+      //           po_compt: parseInt(do3Binary[14]),
+      //           po_cont: parseInt(do3Binary[16]),
+      //           pi_l_req: parseInt(di3Binary[0]),
+      //           pi_u_req: parseInt(di3Binary[1]),
+      //           pi_ready: parseInt(di3Binary[3]),
+      //           pi_ho_avbl: parseInt(di3Binary[6]),
+      //           pi_es: parseInt(di3Binary[7]),
+      //           pattern: parsePIO(
+      //             {
+      //               L_REQ: di3Binary[0],
+      //               U_REQ: di3Binary[1],
+      //               READY: di3Binary[3],
+      //               HO_AVBL: di3Binary[6],
+      //               ES: di3Binary[7],
+      //             },
+      //             {
+      //               VALID: do3Binary[8],
+      //               CS_0: do3Binary[9],
+      //               CS_1: do3Binary[10],
+      //               TR_REQ: do3Binary[12],
+      //               BUSY: do3Binary[13],
+      //               COMPT: do3Binary[14],
+      //             }
+      //           ),
+      //         };
+      //       });
 
-            const startCorrection = data[0];
-            const endCorrection = data[data.length - 1];
+      //       const startCorrection = data[0];
+      //       const endCorrection = data[data.length - 1];
 
-            this.dioHistoriesIn30Seconds = [
-              {
-                ...startCorrection,
-                historyChangeTimeFrom30SecondsBefore: 0,
-                pattern: '',
-              },
-              ...data,
-              {
-                ...endCorrection,
-                historyChangeTimeFrom30SecondsBefore: 30,
-                pattern: '',
-              },
-            ];
-          });
-      };
+      //       this.dioHistoriesIn30Seconds = [
+      //         {
+      //           ...startCorrection,
+      //           historyChangeTimeFrom30SecondsBefore: 0,
+      //           pattern: '',
+      //         },
+      //         ...data,
+      //         {
+      //           ...endCorrection,
+      //           historyChangeTimeFrom30SecondsBefore: 30,
+      //           pattern: '',
+      //         },
+      //       ];
+      //     });
+      // };
 
-      update();
-      this.intervalId = setInterval(() => {
-        update();
-      }, 500);
+      // update();
+      // this.intervalId = setInterval(() => {
+      //   update();
+      // }, 500);
     }
   }
 

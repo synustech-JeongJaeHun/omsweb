@@ -60,7 +60,6 @@ namespace OMSWeb.Services
                 {"alerts", new DataChangeEventTarget(CacheKeys.None, new[]{"alert"})},
                 {"server_status", new DataChangeEventTarget(CacheKeys.None, new[]{"serverStatus"})},
                 {"mode_state", new DataChangeEventTarget(CacheKeys.None, new[]{"modeState"})},
-                {"kpi_trend", new DataChangeEventTarget(CacheKeys.None, new[]{"kpiTrend"})},
             };                        
 
             this.cacheEventMap = new Dictionary<CacheKeys, string[]> 
@@ -212,9 +211,7 @@ namespace OMSWeb.Services
                 }
                 else
                 {
-                    vehicles = new List<VehiclePosition> {
-            payload.Data
-          };
+                    vehicles = new List<VehiclePosition> { payload.Data };
                     needUpdate = true;
                 }
                 if (needUpdate)
