@@ -40,7 +40,7 @@ function setCameraAndRotation(objective: {
       objective.viewBoxWidth,
       getHeightFromWidthAndRatio(objective.viewBoxWidth)
     )
-  if (objective.rotation) rotate(objective.rotation)
+  if (objective.rotation !== undefined) rotate(objective.rotation)
 }
 
 /**
