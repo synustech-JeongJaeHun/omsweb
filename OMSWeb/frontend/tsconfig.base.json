@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "lib": ["es2015", "es6", "esnext", "dom"],
+    "jsx": "react-jsx",
+    "jsxImportSource": "@emotion/react",
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "keyofStringsOnly": true,
+    "resolveJsonModule": true
+  },
+  "exclude": [
+    "./dist",
+    "**/dist",
+    "node_modules",
+    "**/node_modules",
+    "**/*.spec.ts",
+    "**/__tests__",
+    "**/*.test.ts",
+    "**/*.test.js",
+    "**/*.stories.*"
+  ]
+}
