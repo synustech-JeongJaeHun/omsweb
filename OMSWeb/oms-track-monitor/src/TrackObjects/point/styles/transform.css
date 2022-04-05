@@ -1,4 +1,0 @@
-#point-layer .point .scale-and-reverse-rotate {
-  transform: scale(var(--mm-per-pixel))
-    rotate(var(--reverse-rotation-degree));
-}

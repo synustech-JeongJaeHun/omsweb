@@ -1,5 +1,0 @@
-<svg viewBox="0 0 80 80">
-  <circle cx="40" cy="40" class="cargo-loading">
-    <animate attributeName="r" values="0;40" dur="1s" repeatCount="indefinite" />
-  </circle>
-</svg>

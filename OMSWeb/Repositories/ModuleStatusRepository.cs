@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,8 +16,6 @@ namespace OMSWeb.Repositories
 {
   public class ModuleStatusRepository : DataAccess
   {
-    [DllImport("kernel32")]
-    public static extern Int32 GetCurrentProcessId();
 
     private readonly int ID_OMS_SRV = 1;
     private readonly int ID_AI_MODULE = 2;
@@ -111,7 +110,7 @@ namespace OMSWeb.Repositories
         strFileVersion = fv.FileVersion;
         strBuildDate = buildDate.ToString("yyyy-MM-ddT HH:mm:ss.ffffff");
 
-        pid = GetCurrentProcessId();
+        pid =  Process.GetCurrentProcess().Id;
     }
 
     public IQueryable<ModuleStatusEntity> GetModuleStatus()

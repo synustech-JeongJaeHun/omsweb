@@ -1,7 +1,0 @@
-#point-layer .point {
-  visibility: hidden;
-}
-
-#point-layer[data-scale-level~='BELOW20' i] .point {
-  visibility: visible;
-}

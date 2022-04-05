@@ -1,4 +1,0 @@
-#point-layer .focus {
-  fill: var(--focus-color-solid);
-  pointer-events: none;
-}

@@ -1,8 +1,0 @@
-#vehicle-layer .type.hover path {
-  stroke: var(--hover-color-transparent);
-  stroke-width: 40;
-  pointer-events: none;
-}
-#vehicle-layer .arrow.hover path {
-  fill: var(--hover-color-solid);
-}

@@ -1,9 +1,0 @@
-<svg viewBox="-100 -100 200 200">
-  <path class="vehicle-mode-path" stroke="rgb(65,65,65)" stroke-width="4" d="
-      M 0 80
-      L -80 0
-      L 0 -80
-      L 80 0
-      Z
-      " />
-</svg>

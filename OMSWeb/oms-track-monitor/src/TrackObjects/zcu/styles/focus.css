@@ -1,5 +1,0 @@
-#zcu-layer .focus {
-  stroke: var(--focus-color-solid);
-  stroke-width: 10;
-  pointer-events: none;
-}

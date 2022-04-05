@@ -1,7 +1,0 @@
-#station-layer .station .label {
-  visibility: hidden;
-}
-
-#station-layer[data-scale-level~='BELOW15' i] .station .label {
-  visibility: inherit;
-}

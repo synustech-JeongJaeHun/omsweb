@@ -1,4 +1,0 @@
-#segment-layer .focus {
-  stroke: var(--focus-color-solid);
-  pointer-events: none;
-}
