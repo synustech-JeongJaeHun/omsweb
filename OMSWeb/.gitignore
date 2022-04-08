@@ -260,3 +260,6 @@ test-results.xml
 !.yarn/sdks
 !.yarn/versions
 !.yarn/cache
+
+
+appsettings.Development.json
