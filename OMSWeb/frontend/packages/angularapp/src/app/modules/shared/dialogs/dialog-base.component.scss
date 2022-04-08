@@ -1,0 +1,32 @@
+:host {
+  display: block;
+  position: relative;
+}
+.close-icon {
+  position: absolute;
+  right: -8px;
+  top: -2px;
+  color: white;
+}
+.close-icon .mat-icon {
+  font-size: 18px;
+  height: 18px;
+  width: 18px;
+  line-height: 18px;
+}
+.mat-icon-button.close {
+  width: 32px;
+  height: 32px;
+  line-height: 18px;
+}
+.dialog-layout {
+  display: flex;
+  flex-direction: column;
+}
+.drag-handle {
+  position: absolute;
+  color: #ccc;
+  top: -8px;
+  left: -8px;
+}
+

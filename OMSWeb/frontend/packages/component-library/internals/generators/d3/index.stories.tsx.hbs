@@ -1,0 +1,31 @@
+import * as React from 'react'
+import * as d3 from 'd3'
+import {{camelCase name }} from './index'
+import { SvgDivContainer } from '../../utils'
+
+
+export default {
+  title: '@daimre-dataviz/{{camelCase name }}',
+  component: () => <div />,
+}
+
+export const Basic = () => {
+  const [data, setData] = React.useState([])
+
+  React.useEffect(() => {
+
+    async function init() {
+      const ret = await d3.csv('/dataviz/data/multiple-line-chart.csv')
+      setData(ret)
+    }
+
+    init()
+  }, [])
+
+  return data.length == 0 ? <div /> : <SvgDivContainer
+    func={ {{camelCase name }} }
+    data={data}
+    width={700}
+    height={400}
+  />
+}

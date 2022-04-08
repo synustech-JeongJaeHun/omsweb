@@ -1,0 +1,16 @@
+<oms-dialog-base [title]="message.title || ('messages.confirmTitle' | translate)">
+  <ng-container class="dialog-layout">
+    <div mat-dialog-content class="pre-line">
+      {{ message.body }}
+    </div>
+
+    <div mat-dialog-actions>
+      <button mat-raised-button color="primary" (click)="onConfirm()">
+        {{ message.confirmText || ("names.confirm" | translate) }}
+      </button>
+      <button mat-stroked-button color="primary" mat-dialog-close>
+        {{ message.declineText || ("names.cancel" | translate) }}
+      </button>
+    </div>
+  </ng-container>
+</oms-dialog-base>

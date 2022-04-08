@@ -1,0 +1,28 @@
+enum Color {
+  color1 = "#36382e",
+  color2 = "#735f3d",
+  color3 = "#960200",
+  color4 = "#ff0000",
+  color5 = "#ef6f6c",
+  color6 = "#ffa5a5",
+  color7 = "#f6ca83",
+  color8 = "#ffd046",
+  color9 = "#ff8800",
+  color10 = "#c6a15b",
+  color11 = "#949d6a",
+  color12 = "#adffbb",
+  color13 = "#80b5a7",
+  color14 = "#91dcf7",
+  color15 = "#57b8ff",
+  color16 = "#0099ff",
+  color17 = "#ff3fa5",
+  color18 = "#4f359b",
+  color19 = "#241e4e",
+  color20 = "#8c2155",
+  color21 = "#ff006a",
+  color22 = "#d34cd3",
+  color23 = "#e2a1dc",
+  color24 = "#5c1a1b",
+}
+
+export { Color }

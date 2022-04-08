@@ -1,0 +1,92 @@
+<oms-dialog-base [title]="'names.playback' | translate">
+  <ng-container class="dialog-layout">
+    <div mat-dialog-content class="control-container">
+      <div class="form-period">
+        <!-- <div class="control-title">{{ "names.period" | translate }}</div> -->
+        <dx-date-box [(value)]="options.startAt" type="datetime" class="timePicker" id="fromTime"
+          displayFormat="yyyy-MM-dd HH:mm" [min]="firstTime" [(max)]="options.endAt" [disabled]="!ready"
+          (onValueChanged)="onTimeRangeChanged($event)">
+        </dx-date-box>
+        <div class="date-divider">~</div>
+        <dx-date-box [(value)]="options.endAt" type="datetime" class="timePicker" id="toTime"
+          displayFormat="yyyy-MM-dd HH:mm" [(min)]="firstTime" [max]="options.maxTime" [disabled]="!ready"
+          (onValueChanged)="onTimeRangeChanged($event)">
+        </dx-date-box>
+      </div>
+      <div class="control-slider">
+        <div class="slider-name">{{ "names.snapshots" | translate }}</div>
+        <mat-slider #snapshotSlider min="0" [max]="options.snapshotMax" [disabled]="!ready"
+          [(ngModel)]="states.snapshot" (valueChange)="onSlideSnapshot(snapshotSlider.value)" color="primary">
+        </mat-slider>
+        <div class="slider-value">
+          {{
+          (getCurrentSnapshot(snapshotSlider.value) | date: "HH:mm:ss") || ""
+          }}
+        </div>
+      </div>
+      <div class="control-slider" *ngIf="showEventHandle">
+        <div class="slider-name">{{ "names.events" | translate }}</div>
+        <mat-slider #eventSlider min="0" [max]="options.eventMax" [value]="states.event" color="primary"
+          [disabled]="!ready" (valueChange)="onSlideEvent(eventSlider.value)"></mat-slider>
+        <div class="slider-value">{{ getCurrentEvent(eventSlider.value) }}</div>
+      </div>
+      <div class="control-play">
+        <button mat-icon-button id="prev" [disabled]="!ready || !showEventHandle || isFirstSnapshot"
+          (click)="onBefore()" [matTooltip]="'Previous snapshot'">
+          <mat-icon>skip_previous</mat-icon>
+        </button>
+        <button mat-icon-button id="play" [disabled]="!ready || !showEventHandle" (click)="onTogglePlay()"
+          [matTooltip]="states.playing ? 'Pause':'Play'">
+          <mat-icon>{{ states.playing ? "pause" : "play_arrow" }}</mat-icon>
+        </button>
+        <!-- <button
+          mat-icon-button
+          id="ff"
+          [disabled]="!ready || !showEventHandle || !enableFastForward"
+          (click)="onFastForward()"
+        >
+          <mat-icon>fast_forward</mat-icon>
+        </button> -->
+        <button mat-icon-button id="next" [disabled]="!ready || !showEventHandle || isLastSnapshot" (click)="onNext()"
+          [matTooltip]="'Next snapshot'">
+          <mat-icon>skip_next</mat-icon>
+        </button>
+      </div>
+      <mat-form-field appearance="fill" class="form-speed">
+        <mat-label>{{ "names.speed" | translate }}</mat-label>
+        <mat-select [(ngModel)]="options.speed" [disabled]="!ready">
+          <mat-option *ngFor="let speed of speedValues" [value]="speed">{{ speed }}x</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="form-step" *ngIf="showEventHandle">
+        <mat-label>{{ "names.events" | translate }}</mat-label>
+        <mat-select [disabled]="!ready" [(value)]="options.nextEvent" (valueChange)="onChangeEventTo()">
+          <mat-option *ngFor="let item of eventList; let i = index" [value]="i">#{{ item.eventId }} / {{ item.eventTime
+            | date: 'MM-dd HH:mm:ss' }} / {{ item.tableName }}</mat-option>
+        </mat-select>
+        <!-- <input
+          [disabled]="!ready"
+          matInput
+          type="number"
+          min="1"
+          [max]="options.eventMax + 1"
+          [(ngModel)]="options.nextEvent"
+        /> -->
+      </mat-form-field>
+
+      <mat-form-field class="form-time readonly full-width">
+        <mat-label>{{ "names.time" | translate }}</mat-label>
+        <input matInput type="text" readonly [value]="(states?.playTime | date: 'yyyy-MM-dd HH:mm:ss') || ''" />
+      </mat-form-field>
+      <mat-form-field class="form-event readonly">
+        <mat-label>{{ "names.event" | translate }}</mat-label>
+        <input matInput readonly [value]="currentEvent" />
+      </mat-form-field>
+      <mat-form-field class="form-next readonly">
+        <mat-label>{{ "names.timeToNextEvents" | translate }}</mat-label>
+        <input matInput type="number" readonly [value]="states.nextEvent" />
+      </mat-form-field>
+    </div>
+  </ng-container>
+</oms-dialog-base>

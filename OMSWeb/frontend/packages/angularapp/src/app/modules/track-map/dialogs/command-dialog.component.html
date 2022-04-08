@@ -1,0 +1,196 @@
+<oms-dialog-base [title]="'names.manualTransfer' | translate">
+  <ng-container class="dialog-layout">
+    <ng-container [ngSwitch]="currentTab">
+      <ng-container *ngSwitchCase="0">
+        <ng-container *ngTemplateOutlet="fromtoForm"></ng-container>
+      </ng-container>
+      <ng-container *ngSwitchCase="1">
+        <ng-container *ngTemplateOutlet="fromForm"></ng-container>
+      </ng-container>
+      <ng-container *ngSwitchCase="2">
+        <ng-container *ngTemplateOutlet="toForm"></ng-container>
+      </ng-container>
+      <ng-container *ngSwitchCase="3">
+        <ng-container *ngTemplateOutlet="moveForm"></ng-container>
+      </ng-container>
+      <ng-container *ngSwitchCase="4">
+        <ng-container *ngTemplateOutlet="mtlForm"></ng-container>
+      </ng-container>
+      <ng-container *ngSwitchDefault> </ng-container>
+    </ng-container>
+  </ng-container>
+</oms-dialog-base>
+
+<ng-template #fromtoForm>
+  <div mat-dialog-content>
+    <mat-tab-group class="tab-group" [(selectedIndex)]="currentTab" (selectedIndexChange)="onTabChanged()"
+      animationDuration="0ms">
+      <mat-tab *ngFor="let tab of tabs" [label]="'names.command-' + tab | translate"></mat-tab>
+    </mat-tab-group>
+    <div class="form">
+      <div class="form-row">
+        <oms-unit-selector [findScopes]="['vehicles']" [disabled]="commandState.vehicleDisabled"
+          [(selectedUnit)]="commandState.vehicle" [placeholder]="'names.selectVehicle' | translate">
+        </oms-unit-selector>
+      </div>
+      <div class="form-row">
+        <oms-unit-selector [findScopes]="['stations', 'buffers']" [disabled]="commandState.sourceDisabled"
+          [(selectedUnit)]="commandState.source" [placeholder]="'names.selectSource' | translate"></oms-unit-selector>
+      </div>
+      <div class="form-row">
+        <oms-unit-selector [findScopes]="['stations', 'buffers']" [disabled]="commandState.destDisabled"
+          [(selectedUnit)]="commandState.dest" [placeholder]="'names.selectDest' | translate"></oms-unit-selector>
+      </div>
+      <div class="form-row">
+        <mat-form-field class="dense" appearance="outline">
+          <input matInput name="carrier" [disabled]="commandState.carrierDisabled" [(ngModel)]="commandState.carrier"
+            [placeholder]="'names.carrier' | translate" />
+        </mat-form-field>
+      </div>
+      <div class="form-row">
+        <mat-slide-toggle [(ngModel)]="commandState.selectVehicle" color="primary">{{
+          "names.selectVehicle" | translate
+          }}</mat-slide-toggle>
+      </div>
+    </div>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-raised-button [disabled]="!canApply" color="primary" (click)="onApply()">
+      {{ "names.apply" | translate }}
+    </button>
+    <button mat-raised-button mat-dialog-close>
+      {{ "names.cancel" | translate }}
+    </button>
+  </div>
+</ng-template>
+<ng-template #fromForm>
+  <div mat-dialog-content>
+    <mat-tab-group class="tab-group" [(selectedIndex)]="currentTab" (selectedIndexChange)="onTabChanged()"
+      animationDuration="0ms">
+      <mat-tab *ngFor="let tab of tabs" [label]="'names.command-' + tab | translate"></mat-tab>
+    </mat-tab-group>
+    <div class="form">
+      <div class="form-row">
+        <oms-unit-selector [findScopes]="['vehicles']" [disabled]="commandState.vehicleDisabled"
+          [(selectedUnit)]="commandState.vehicle" [placeholder]="'names.selectVehicle' | translate">
+        </oms-unit-selector>
+      </div>
+      <div class="form-row">
+        <oms-unit-selector [findScopes]="['stations', 'buffers']" [disabled]="commandState.sourceDisabled"
+          [(selectedUnit)]="commandState.source" [placeholder]="'names.selectSource' | translate"></oms-unit-selector>
+      </div>
+      <div class="form-row">
+        <mat-form-field class="dense" appearance="outline">
+          <input matInput name="carrier" [disabled]="commandState.carrierDisabled" [(ngModel)]="commandState.carrier"
+            [placeholder]="'names.carrier' | translate" />
+        </mat-form-field>
+      </div>
+      <div class="form-row">
+        <mat-slide-toggle [(ngModel)]="commandState.selectVehicle" color="primary">{{
+          "names.selectVehicle" | translate
+          }}</mat-slide-toggle>
+      </div>
+    </div>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-raised-button [disabled]="!canApply" color="primary" (click)="onApply()">
+      {{ "names.apply" | translate }}
+    </button>
+    <button mat-raised-button mat-dialog-close>
+      {{ "names.cancel" | translate }}
+    </button>
+  </div>
+</ng-template>
+<ng-template #toForm>
+  <div mat-dialog-content>
+    <mat-tab-group class="tab-group" [(selectedIndex)]="currentTab" (selectedIndexChange)="onTabChanged()"
+      animationDuration="0ms">
+      <mat-tab *ngFor="let tab of tabs" [label]="'names.command-' + tab | translate"></mat-tab>
+    </mat-tab-group>
+    <div class="form">
+      <div class="form-row">
+        <oms-unit-selector [findScopes]="['vehicles']" [disabled]="commandState.vehicleDisabled"
+          [(selectedUnit)]="commandState.vehicle" [placeholder]="'names.selectVehicle' | translate">
+        </oms-unit-selector>
+      </div>
+      <div class="form-row">
+        <oms-unit-selector [findScopes]="['stations', 'buffers']" [disabled]="commandState.destDisabled"
+          [(selectedUnit)]="commandState.dest" [placeholder]="'names.selectDest' | translate"></oms-unit-selector>
+      </div>
+      <div class="form-row">
+        <mat-form-field class="dense" appearance="outline">
+          <input matInput name="carrier" [disabled]="commandState.carrierDisabled" [(ngModel)]="commandState.carrier"
+            [placeholder]="'names.carrier' | translate" />
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-raised-button [disabled]="!canApply" color="primary" (click)="onApply()">
+      {{ "names.apply" | translate }}
+    </button>
+    <button mat-raised-button mat-dialog-close>
+      {{ "names.cancel" | translate }}
+    </button>
+  </div>
+</ng-template>
+<ng-template #moveForm>
+  <div mat-dialog-content>
+    <mat-tab-group class="tab-group" [(selectedIndex)]="currentTab" (selectedIndexChange)="onTabChanged()"
+      animationDuration="0ms">
+      <mat-tab *ngFor="let tab of tabs" [label]="'names.command-' + tab | translate"></mat-tab>
+    </mat-tab-group>
+    <div class="form">
+      <div class="form-row">
+        <oms-unit-selector [findScopes]="['vehicles']" [disabled]="commandState.vehicleDisabled"
+          [(selectedUnit)]="commandState.vehicle" [placeholder]="'names.selectVehicle' | translate">
+        </oms-unit-selector>
+      </div>
+      <div class="form-row">
+        <oms-unit-selector [findScopes]="['points', 'stations', 'buffers']" [disabled]="commandState.destDisabled"
+          [(selectedUnit)]="commandState.dest" [placeholder]="'names.selectDest' | translate"></oms-unit-selector>
+      </div>
+    </div>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-raised-button [disabled]="!canApply" color="primary" (click)="onApply()">
+      {{ "names.apply" | translate }}
+    </button>
+    <button mat-raised-button mat-dialog-close>
+      {{ "names.cancel" | translate }}
+    </button>
+  </div>
+</ng-template>
+<ng-template #mtlForm>
+  <div mat-dialog-content>
+    <mat-tab-group class="tab-group" [(selectedIndex)]="currentTab" (selectedIndexChange)="onTabChanged()"
+      animationDuration="0ms">
+      <mat-tab *ngFor="let tab of tabs" [label]="'names.command-' + tab | translate"></mat-tab>
+    </mat-tab-group>
+    <div class="form">
+      <div class="form-row">
+        <oms-unit-selector [findScopes]="['vehicles']" [disabled]="commandState.vehicleDisabled"
+          [(selectedUnit)]="commandState.vehicle" [placeholder]="'names.selectVehicle' | translate">
+        </oms-unit-selector>
+      </div>
+      <div class="form-row">
+        <oms-unit-selector [findScopes]="['mtls']"
+          [(selectedUnit)]="commandState.mtl" [placeholder]="'names.selectMTL' | translate"></oms-unit-selector>
+      </div>
+      <div class="form-row">
+        <mat-radio-group [(ngModel)]="commandState.mtlInOut" color="primary">
+          <mat-radio-button [value]="true" style="margin-left: 10px">In [Line → MTL]</mat-radio-button>
+          <mat-radio-button [value]="false" style="margin-left: 160px;">Out [MTL→Line]</mat-radio-button>
+        </mat-radio-group>
+      </div>
+    </div>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-raised-button [disabled]="!canApply" color="primary" (click)="onApply()">
+      {{ "names.apply" | translate }}
+    </button>
+    <button mat-raised-button mat-dialog-close>
+      {{ "names.cancel" | translate }}
+    </button>
+  </div>
+</ng-template>

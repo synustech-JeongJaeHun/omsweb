@@ -1,0 +1,22 @@
+[
+  {
+    "name": "OMS Server",
+    "version": "0.0.0.012",
+    "isRunning": true
+  },
+  {
+    "name": "DSC Adapter",
+    "version": "0.0.0.1",
+    "isRunning": false
+  },
+  {
+    "name": "MCS Adapter",
+    "version": "0.0.0.1",
+    "isRunning": false
+  },
+  {
+    "name": "AI Module",
+    "version": "0.0.0.3",
+    "isRunning": true
+  }
+]

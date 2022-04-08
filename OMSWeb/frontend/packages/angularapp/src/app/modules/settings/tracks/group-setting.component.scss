@@ -1,0 +1,19 @@
+:host {
+  display: flex;
+  flex-direction: column;
+}
+
+.assign-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  column-gap: 50px;
+  row-gap: 8px;
+  justify-items: flex-start;
+  align-self: flex-start;
+}
+
+#no-data {
+  text-align: center;
+  margin-top: 100px;
+  color: var(--theme-text-color);
+}

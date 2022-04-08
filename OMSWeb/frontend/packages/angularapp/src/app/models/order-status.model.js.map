@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "order-status.model.js",
+  "sourceRoot": "",
+  "sources": [
+    "order-status.model.ts"
+  ],
+  "names": [],
+  "mappings": ""
+}

@@ -1,0 +1,7 @@
+#mtl-layer .mtl .label {
+  visibility: hidden;
+}
+
+#mtl-layer[data-scale-level~='BELOW15' i] .mtl .label {
+  visibility: inherit;
+}

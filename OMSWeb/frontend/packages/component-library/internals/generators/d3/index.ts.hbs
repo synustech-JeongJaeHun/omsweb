@@ -1,0 +1,101 @@
+/**
+ *
+ * {{camelCase name }}
+ *
+ */
+
+import * as d3 from 'd3'
+import * as R from 'ramda'
+import moment from 'moment'
+import { 
+  set, safePx, getDimensions, genTooltip, genLegend,
+  initSvg, getMargin, getDomBox
+} from '@daimre/shared/dist/dataviz'
+
+
+const {{camelCase name }} = ({ container, data, width, height }) => {
+
+  container = d3.select(container).call(set('style'), {
+    width: safePx(width),
+    height: safePx(height)
+  })
+
+  const margin = getMargin([20, 20, 30, 80])
+
+  const {
+    tooltip, tooltipContent,
+    getTooltipStyle, genTooltipContent
+  } = genTooltip(container, { width: 15, height: 15, bgColor: 'red' })
+
+  let svg = null
+
+  function draw() {
+
+    const { width, height } = getDomBox(container)
+    svg = initSvg({ svg, container, width, height })
+
+    // append legend
+    // svg.call(genLegend, {
+    //   svg,
+    //   data,
+    //   width, height, margin,
+    //   callback: (boxSize) => {
+    //   },
+    //   opt: {
+    //     direction: 'horizon',
+    //     pos: 'bc',
+    //     hItemSpace: 18,
+    //     vItemSpace: 8,
+    //     fontSize: 12,
+    //     widthBoxSizing: 'margin',
+    //     // dx: -50,
+    //     // dy: -100,
+    //     events: {
+    //       mouseover: (el, d) => {
+    //       },
+    //       mouseout: (el, d) => {
+    //       }
+    //     }
+    //   }
+    // })
+
+    const dim = getDimensions({ margin, width, height })
+
+
+    const overlay = svg.append('rect')
+      .attr('class', 'overlay')
+      .call(set('attr'), {
+        x: dim.chart.x,
+        y: dim.chart.y,
+        width: Math.abs(dim.chart.width),
+        height: Math.abs(dim.chart.height),
+        fill: 'transparent'
+      })
+
+    // add events
+    overlay
+      .on('mouseover', mouseOver)
+      .on('mousemove', mouseMove)
+      .on('mouseout', mouseOut)
+
+    function mouseOver(e) {
+    }
+
+    function mouseOut(e) {
+    }
+
+    function mouseMove(e, d) {
+      const mouse = d3.pointer(e)
+      const [xCoord, yCoord] = mouse
+    }
+
+  }
+
+  draw()
+  window.addEventListener('resize', draw)
+
+
+  // return svg
+}
+
+export default {{camelCase name }}

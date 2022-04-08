@@ -1,0 +1,43 @@
+button {
+  position: relative;
+  color: rgba(#666, 0.3);
+  margin-right: 4px;
+
+  mat-icon {
+    font-size: 20px;
+  }
+
+  &.alarm mat-icon {
+    font-size: 22px;
+  }
+}
+button.has-issue {
+  color: rgba(#666, 0.5);
+}
+button.warn.is-critical {
+  color: rgba(rgb(255, 180, 0), 0.6);
+}
+button.alarm.is-critical {
+  color: rgba(rgb(255, 80, 0), 0.6);
+}
+mat-icon ::ng-deep.mat-badge-content {
+  font-size: 11px;
+  line-height: 16px;
+  font-weight: normal;
+  border-radius: 3px;
+  left: 16px;
+  right: initial !important;
+  top: -8px !important;
+  width: initial;
+  min-width: 20px;
+  max-width: 40px;
+  height: 14px;
+  padding: 2px 2px;
+}
+
+.notification-viewer {
+  padding: 8px;
+  border: 2px solid red;
+  border-radius: 4px;
+  box-shadow: 3px 3px 15px #7f7f7f;
+}

@@ -12,6 +12,8 @@ using OMSWeb.Models;
 using OMSWeb.OMSSettings;
 using OMSWeb.Repositories;
 
+#pragma warning disable 0168
+
 namespace OMSWeb.Services
 {
     public class DataWatcherService : BackgroundService

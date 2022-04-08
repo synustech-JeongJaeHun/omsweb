@@ -1,0 +1,32 @@
+<oms-dialog-base [title]="'names.login' | translate">
+  <ng-container class="dialog-layout">
+    <form [formGroup]="form" novalidate class="login-form" (ngSubmit)="onLogin()">
+      <div mat-dialog-content>
+        <mat-error *ngIf="loginInvalid">
+          Login failed
+        </mat-error>
+        <mat-form-field appearance="fill">
+          <mat-label>{{ "names.userId" | translate }}</mat-label>
+          <input matInput formControlName="userId" (keydown)="onKeyDownEvent($event)" />
+          <mat-error>
+            Please enter a valid Id
+          </mat-error>
+          <mat-icon matSuffix>person</mat-icon>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>{{ "names.password" | translate }}</mat-label>
+          <input type="password" matInput formControlName="password" (keydown)="onKeyDownEvent($event)" />
+          <mat-error>
+            Please enter a valid password
+          </mat-error>
+          <mat-icon matSuffix>lock</mat-icon>
+        </mat-form-field>
+      </div>
+      <div mat-dialog-actions>
+        <button type="submit" mat-raised-button color="primary">
+          {{ "names.login" | translate }}
+        </button>
+      </div>
+    </form>
+  </ng-container>
+</oms-dialog-base>

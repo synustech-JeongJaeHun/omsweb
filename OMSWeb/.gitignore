@@ -142,7 +142,7 @@ publish/
 # NuGet Packages
 *.nupkg
 # The packages folder can be ignored because of Package Restore
-**/packages/*
+# **/packages/*
 # except build/, which is used as an MSBuild target.
 !**/packages/build/
 # Uncomment if necessary however generally it will be regenerated when needed
@@ -229,3 +229,34 @@ _Pvt_Extensions
 
 # FAKE - F# Make
 .fake/
+
+
+node_modules/
+packages/*/dist
+packages/*/lib
+__site__
+__site_prerender__
+tsconfig.tsbuildinfo
+
+# Test Artifacts
+coverage/
+test-results.xml
+.jest-cache
+.env
+*.tsbuildinfo
+
+# Misc
+*-*.log
+.idea
+.DS_Store
+.rollup.cache/
+
+# Yarn v2
+# https://yarnpkg.com/advanced/qa#which-files-should-be-gitignored
+.pnp.*
+.yarn/*
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+!.yarn/cache

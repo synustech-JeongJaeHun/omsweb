@@ -1,0 +1,129 @@
+.settings-container {
+  width: 100%;
+  background-color: #fff;
+  min-height: 570px;
+  height: 570px;
+}
+
+.settings-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 0 8px;
+  position: relative;
+
+  ::ng-deep {
+    .dx-datagrid {
+      font-size: 11px;
+    }
+    .dx-datagrid-text-content {
+      font-size: 11px;
+      font-weight: bold;
+    }
+    .dx-header-row {
+      background-color: var(--dialog-border-color);
+      color: white;
+    }
+    .dx-datagrid-rowsview .dx-texteditor-input {
+      padding: 0px 7px;
+      min-height: unset;
+      font-size: 11px;
+    }
+    .setting-header {
+      display: flex;
+      justify-content: space-between;
+      padding-left: 8px;
+      border-bottom: 1px solid var(--theme-border-color);
+
+      .setting-actions {
+        justify-self: flex-end;
+
+        button {
+          margin-left: 4px;
+        }
+
+        dx-button {
+          margin-left: 8px;
+          width: 32px;
+          height: 32px;
+
+          &.dx-button-has-icon ::ng-deep.dx-button-content {
+            padding: 6px;
+          }
+        }
+      }
+    }
+    .dx-datagrid-rowsview .dx-row > .dx-master-detail-cell {
+      padding: 8px;
+    }
+
+    .row-detail {
+      padding-left: 12px;
+
+      .detail-title {
+        padding: 4px;
+        font-size: 13px;
+        font-weight: bold;
+        border-bottom: 1px solid var(--dialog-border-color);
+      }
+
+      .detail-info {
+        padding: 8px;
+
+        .name {
+          font-weight: bold;
+          justify-self: flex-end;
+        }
+      }
+    }
+
+    .sub-bar {
+      display: flex;
+      padding: 8px;
+      align-items: center;
+
+      mat-label {
+        font-size: 13px;
+        font-weight: bold;
+        margin-right: 8px;
+      }
+
+      .index-selector {
+        width: 150px;
+      }
+    }
+  }
+}
+
+.settings-sidenav {
+  padding: 8px;
+  background-color: var(--toolbar-background-color);
+
+  ::ng-deep {
+    .mat-drawer-inner-container {
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+  }
+
+  mat-nav-list {
+    padding-top: 0;
+  }
+
+  .nav-link {
+    font-size: 12px;
+    font-weight: bold;
+    height: 24px;
+
+    &.active {
+      background-color: var(--button-active-color);
+    }
+  }
+
+  .nav-divider {
+    margin: 10px 0;
+    border: none;
+    //border: 1px solid var(--dialog-border-color);
+  }
+}

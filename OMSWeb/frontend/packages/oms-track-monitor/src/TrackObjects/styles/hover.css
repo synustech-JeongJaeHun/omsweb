@@ -1,0 +1,10 @@
+:hover {
+  --hover-color-solid: rgb(0, 94, 161);
+  --hover-color-transparent: rgb(0, 94, 161, 0.5);
+  /* --filter-size is in OmsTrackMonitor.ce.vue */
+}
+
+/* 
+  Check this doc for filter & func: drop-shadow
+  https://developer.mozilla.org/en-US/docs/Web/CSS/filter 
+*/

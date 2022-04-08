@@ -1,0 +1,40 @@
+<div class="setting-header">
+  <h3 class="setting-title">{{ "names.groupSetting" | translate }}</h3>
+  <div class="setting-actions">
+    <button mat-raised-button class="dense" [disabled]="!isUpdated" color="primary" (click)="onSave()">
+      {{ "names.save" | translate }}
+    </button>
+    <button mat-raised-button class="dense" [disabled]="!isUpdated" (click)="onRevert()">
+      {{ "names.revert" | translate }}
+    </button>
+  </div>
+</div>
+
+<ng-container *ngIf="ready">
+  <div class="sub-bar">
+    <mat-label>{{ "names.selectedGroup" | translate }}</mat-label>
+    <mat-form-field class="index-selector dense" appearance="outline">
+      <mat-select [disabled]="noData" [(value)]="selectedItem" (selectionChange)="onGroupChanged()">
+        <mat-option *ngFor="let item of groups" [value]="item">{{ item.id }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="assign-grid">
+    <oms-unit-picker [title]="'names.homePointList' | translate" [unitName]="'names.point' | translate"
+      [pool]="homePoints" [disabled]="noData" [gridHeight]="190" [picked]="assignedHomePoints"
+      (selectionChanged)="onChange('homePoints', $event)">
+    </oms-unit-picker>
+    <oms-unit-picker [title]="'names.stationList' | translate" [unitName]="'names.station' | translate"
+      [pool]="stations" [disabled]="noData" [gridHeight]="190" [picked]="assignedStations"
+      (selectionChanged)="onChange('stations', $event)">
+    </oms-unit-picker>
+    <oms-unit-picker [title]="'names.vehicleList' | translate" [unitName]="'names.vehicle' | translate"
+      [pool]="vehicles" [disabled]="noData" [picked]="assignedVehicles"
+      (selectionChanged)="onChange('vehicles', $event)">
+    </oms-unit-picker>
+    <oms-unit-picker [title]="'names.bufferList' | translate" [unitName]="'names.buffer' | translate" [pool]="buffers"
+      [disabled]="noData" [picked]="assignedBuffers" (selectionChanged)="onChange('buffers', $event)">
+    </oms-unit-picker>
+  </div>
+</ng-container>

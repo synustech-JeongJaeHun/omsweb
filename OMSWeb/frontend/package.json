@@ -1,5 +1,5 @@
 {
-  "name": "yarn-workspace-starter",
+  "name": "daimre",
   "private": true,
   "workspaces": [
     "packages/*"
@@ -12,22 +12,26 @@
     "cl": "yarn workspace @daimre/component-library",
     "styles": "yarn workspace @daimre/styles",
     "otm": "yarn workspace @daimre/oms-track-monitor",
-    "clean:src": "yarn cl clean && yarn shared clean && yarn styles clean && yarn otm clean",
-    "clean:all": "yarn workspaces foreach -pv run clean",
-    "build:src": "yarn clean:src && yarn styles build && yarn shared build && yarn cl build && yarn otm build",
+    "clean:src": "yarn workspaces foreach -pv --exclude angularapp run clean",
+    "clean": "yarn workspaces foreach -pv run clean",
+    "build:src": "yarn workspaces foreach -pvtR --from '{@daimre/styles,@daimre/shared,@daimre/component-library,@daimre/oms-track-monitor}' run build",
     "build:app": "yarn ap build",
-    "build": "npm-run-all clean:all build:src build:app",
-    "watch:src": "concurrently 'yarn styles watch' 'yarn shared watch' 'yarn cl watch' 'yarn otm watch'",
+    "build": "run-s clean build:src build:app",
+    "watch:src": "yarn workspaces foreach -pi run watch",
     "storybook": "yarn cl storybook",
     "storybook:publish": "yarn cl storybook:publish",
-    "start": "yarn ap start:ng"
+    "ng:start": "yarn ap start",
+    "start": "concurrently yarn:watch:src yarn:ng:start",
+    "start:all": "yarn build:src && yarn start",
+    "reset": "yarn clean && npkill"
   },
   "devDependencies": {
-    "@types/concurrently": "^6",
     "@types/prettier": "^2",
-    "concurrently": "^6.1.0",
+    "concurrently": "^7.1.0",
+    "npkill": "^0.8.3",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.5.1",
     "typescript": "~3.9.5"
-  }
+  },
+  "packageManager": "yarn@3.2.0"
 }

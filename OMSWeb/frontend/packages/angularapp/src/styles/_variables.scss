@@ -1,0 +1,28 @@
+$color-primary: #673ab7;
+
+$color-inactive: rgba(#000, 0.5);
+// $color-active: $color-primary;
+$color-active: var(--theme-color-active);
+// $color-active: orange;
+
+@mixin activeButton {
+  color: $color-active;
+}
+
+@mixin inactiveButton {
+  color: $color-inactive;
+}
+
+@mixin hoverButton {
+  color: #000;
+  background-color: rgba($color: #000, $alpha: 0.05);
+}
+
+@mixin tooltip {
+  font-family: Mulish, Roboto, "Helvetica Neue", sans-serif;
+  font-size: 12px;
+  font-weight: normal;
+  color: #666 !important;
+  background-color: #eee;
+  border: #ccc 1px solid;
+}

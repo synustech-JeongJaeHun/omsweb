@@ -1,0 +1,11 @@
+#layer-container:hover {
+  cursor: grab;
+}
+
+#layer-container:hover[data-is-panning='true' i] {
+  cursor: grabbing;
+}
+
+#minimap-container:hover {
+  cursor: move;
+}

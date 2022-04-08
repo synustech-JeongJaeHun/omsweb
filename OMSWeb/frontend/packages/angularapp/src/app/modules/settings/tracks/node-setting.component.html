@@ -1,0 +1,32 @@
+<div class="setting-header">
+  <h3 class="setting-title">{{ "names.nodeSetting" | translate }}</h3>
+  <div class="setting-actions">
+    <button mat-raised-button class="dense" color="primary">
+      {{ "names.save" | translate }}
+    </button>
+    <button mat-raised-button class="dense">
+      {{ "names.revert" | translate }}
+    </button>
+  </div>
+</div>
+
+<dx-data-grid id="point-datagrid" #grid [dataSource]="dataSource" [height]="450" [showBorders]="true"
+  [allowColumnResizing]="true" (onRowUpdated)="onUpdateRow($event)">
+
+  <dxo-paging [pageSize]="23"></dxo-paging>
+  <dxo-editing mode="cell" [allowUpdating]="true" [useIcons]="true">
+  </dxo-editing>
+
+  <dxi-column dataType="number" dataField="id" [allowEditing]="false" [width]="60">
+  </dxi-column>
+  <dxi-column dataType="string" dataField="physicalId" [caption]="'names.barcode' | translate" [allowEditing]="false">
+  </dxi-column>
+  <dxi-column dataField="dir" [customizeText]="transformNodeDirection" [caption]="'names.direction' | translate"
+    [allowEditing]="false" alignment="center">
+  </dxi-column>
+  <dxi-column dataField="vertex" [width]="80" [allowEditing]="false" dataType="boolean">
+  </dxi-column>
+
+  <dxo-search-panel [placeholder]="'names.search' | translate" [visible]="true">
+  </dxo-search-panel>
+</dx-data-grid>

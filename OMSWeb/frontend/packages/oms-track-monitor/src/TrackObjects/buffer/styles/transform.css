@@ -1,0 +1,43 @@
+/* Total Scale */
+#buffer-layer .buffer .scale-and-reverse-rotate {
+  transform: scale(calc(var(--mm-per-pixel) / 4))
+    rotate(var(--reverse-rotation-degree));
+}
+
+#buffer-layer[data-scale-level~='BELOW15' i]
+  .buffer
+  .scale-and-reverse-rotate {
+  transform: scale(var(--mm-per-pixel))
+    rotate(var(--reverse-rotation-degree));
+}
+
+/* Text Scale */
+#buffer-layer[data-scale-level~='BELOW15' i]
+ .buffer .label {
+  font-size: 0.1em;
+}
+
+#buffer-layer[data-scale-level~='BELOW13' i]
+ .buffer .label {
+  font-size: 0.2em;
+}
+
+#buffer-layer[data-scale-level~='BELOW11' i]
+ .buffer .label {
+  font-size: 0.4em;
+}
+
+#buffer-layer[data-scale-level~='BELOW9' i]
+ .buffer .label {
+  font-size: 0.6em;
+}
+
+#buffer-layer[data-scale-level~='BELOW7' i]
+ .buffer .label {
+  font-size: 0.8em;
+}
+
+#buffer-layer[data-scale-level~='BELOW5' i]
+ .buffer .label {
+  font-size: 1em;
+}

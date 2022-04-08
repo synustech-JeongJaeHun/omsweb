@@ -1,0 +1,29 @@
+mat-tab-group {
+  height: 38px;
+  // background-color: #eee;
+  margin: 0 -8px;
+  padding: 4px 2px 0 2px;
+
+  ::ng-deep.mat-tab-labels {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+  }
+  // ::ng-deep.mat-tab-label {
+  //   height: 36px;
+  //   min-width: 70px;
+  //   padding: 0 8px;
+  //   font-weight: bold;
+
+  //   &.mat-tab-label-active {
+  //     background-color: white;
+  //   }
+  // }
+}
+
+.form-row {
+  padding-top: 4px;
+}
+
+.mat-dialog-content {
+  overflow: inherit;
+}

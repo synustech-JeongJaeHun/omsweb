@@ -1,0 +1,5 @@
+<label class="name">{{ name }}</label>
+<div class="value">
+  <dx-color-box #colorPicker [height]="33" [value]="value" applyValueMode="useButtons" [editAlphaChannel]="true"
+    (onValueChanged)="changed.emit(colorPicker.value)"></dx-color-box>
+</div>

@@ -1,0 +1,56 @@
+<div id="history-page">
+  <div id="filter-area">
+    <!-- <dx-select-box
+      [items]="VehicleListAll"
+      [placeholder]="'_VEHICLE' | translate"
+      [dataSource]="VehicleListAll"
+      displayExpr="OnlineName"
+      valueExpr="Id"
+      [searchEnabled]="true"
+      [showClearButton]="true"
+      #vehicle
+    ></dx-select-box>
+    <dx-select-box
+      [items]="AlarmcodeListAll"
+      [placeholder]="'_ALARMCODE' | translate"
+      [dataSource]="AlarmcodeListAll"
+      displayExpr="_id"
+      valueExpr="_id"
+      [searchEnabled]="true"
+      [showClearButton]="true"
+      #alarmcode
+    ></dx-select-box> -->
+    <dx-date-box [placeholder]="'_START_DATE' | translate" type="datetime" [value]="start" [min]="base" [max]="end"
+      [acceptCustomValue]="false" [showClearButton]="true" [displayFormat]="dateTimeFormat" #startDate></dx-date-box>
+    <div>~</div>
+    <dx-date-box [placeholder]="'_END_DATE' | translate" type="datetime" [value]="now" [min]="base" [max]="end"
+      [acceptCustomValue]="false" [showClearButton]="true" [displayFormat]="dateTimeFormat" #endDate></dx-date-box>
+    <button mat-raised-button color="primary" (click)="search(startDate.value, endDate.value)">
+      {{ "names.search" | translate }}
+    </button>
+  </div>
+  <div id="grid-container">
+    <dx-data-grid [dataSource]="dataSource" [columnAutoWidth]="true" [remoteOperations]="true" [height]="gridHeight"
+      [width]="gridWidth" [showBorders]="true" [hoverStateEnabled]="true">
+      <dxo-export [enabled]="true" [fileName]="fileName"></dxo-export>
+      <dxo-paging [pageSize]="50"></dxo-paging>
+      <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[50, 100, 200]" [showInfo]="true" visible="true">
+      </dxo-pager>
+      <dxo-scrolling mode="standard" rowRenderingMode="standard" showScrollbar="always"></dxo-scrolling>
+      <dxo-search-panel [placeholder]="'names.search' | translate" [visible]="true"></dxo-search-panel>
+      <dxo-header-filter [visible]="true"></dxo-header-filter>
+      <dxo-filter-row [visible]="true"></dxo-filter-row>
+
+      <dxi-column [width]="120" dataType="datetime" dataField="time" [caption]="'names.time' | translate"
+        [format]="dateTimeFormat" [fixed]="true"></dxi-column>
+      <dxi-column [width]="80" dataType="string" dataField="level" [caption]="'names.severity' | translate">
+      </dxi-column>
+      <dxi-column [width]="120" dataType="string" dataField="tag" [caption]="'names.tag' | translate"></dxi-column>
+      <dxi-column dataType="string" dataField="message" [caption]="'names.message' | translate"></dxi-column>
+      <dxi-column [width]="110" dataType="datetime" dataField="ackTime" [caption]="'names.ackTime' | translate"
+        [format]="dateTimeFormat"></dxi-column>
+      <dxi-column [width]="80" dataType="string" dataField="ackBy" [caption]="'names.ackBy' | translate"
+        [format]="dateTimeFormat"></dxi-column>
+    </dx-data-grid>
+  </div>
+</div>

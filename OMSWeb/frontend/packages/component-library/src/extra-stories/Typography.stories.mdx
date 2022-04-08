@@ -1,0 +1,86 @@
+import { Meta, Typeset } from '@storybook/addon-docs/blocks'
+
+import { typography, color } from '@daimre/styles'
+
+<Meta title="@daimre-base/Typography" />
+
+# Typography
+
+**Font:** Nanum Square
+
+**Weights:** 300(light), 400(regular), 700(bold), 800(extrabold)
+
+#### light
+
+<Typeset
+  sampleText="실제 CPU에 액세스하기 위해 경쟁하기 때문에 가상 머신을 실제 CPU.. "
+  fontFamily={typography.type}
+  fontSizes={[
+    typography.size.s1 + 'px',
+    typography.size.s2 + 'px',
+    typography.size.s3 + 'px',
+    typography.size.s4 + 'px',
+    typography.size.m1 + 'px',
+    typography.size.m2 + 'px',
+    typography.size.l1 + 'px',
+    typography.size.l2 + 'px',
+  ]}
+  fontWeight={typography.weight.light}
+  style={{ lineHeight: typography.lineHeight.default, color: color.text }}
+/>
+
+#### regular
+
+<Typeset
+  sampleText="실제 CPU에 액세스하기 위해 경쟁하기 때문에 가상 머신을 실제 CPU.. "
+  fontSizes={[
+    typography.size.s1 + 'px',
+    typography.size.s2 + 'px',
+    typography.size.s3 + 'px',
+    typography.size.s4 + 'px',
+    typography.size.m1 + 'px',
+    typography.size.m2 + 'px',
+    typography.size.l1 + 'px',
+    typography.size.l2 + 'px',
+  ]}
+  fontWeight={typography.weight.regular}
+  style={{ lineHeight: typography.lineHeight.default, color: color.text }}
+/>
+
+#### bold
+
+<Typeset
+  sampleText="실제 CPU에 액세스하기 위해 경쟁하기 때문에 가상 머신을 실제 CPU.. "
+  fontFamily={typography.type}
+  fontSizes={[
+    typography.size.s1 + 'px',
+    typography.size.s2 + 'px',
+    typography.size.s3 + 'px',
+    typography.size.s4 + 'px',
+    typography.size.m1 + 'px',
+    typography.size.m2 + 'px',
+    typography.size.l1 + 'px',
+    typography.size.l2 + 'px',
+  ]}
+  fontWeight={typography.weight.bold}
+  style={{ lineHeight: typography.lineHeight.default, color: color.text }}
+/>
+
+#### extrabold
+
+<Typeset
+  sampleText="실제 CPU에 액세스하기 위해 경쟁하기 때문에 가상 머신을 실제 CPU.. "
+  fontFamily={typography.type}
+  fontSizes={[
+    typography.size.s1 + 'px',
+    typography.size.s2 + 'px',
+    typography.size.s3 + 'px',
+    typography.size.s4 + 'px',
+    typography.size.m1 + 'px',
+    typography.size.m2 + 'px',
+    typography.size.l1 + 'px',
+    typography.size.l2 + 'px',
+  ]}
+  fontWeight={typography.weight.extrabold}
+  style={{ lineHeight: typography.lineHeight.default, color: color.text }}
+/>

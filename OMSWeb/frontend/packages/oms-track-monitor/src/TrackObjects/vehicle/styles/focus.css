@@ -1,0 +1,8 @@
+#vehicle-layer .type.focus path {
+  stroke: var(--focus-color-solid);
+  stroke-width: 40;
+  pointer-events: none;
+}
+#vehicle-layer .arrow.focus path {
+  fill: var(--focus-color-solid);
+}

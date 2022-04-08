@@ -1,0 +1,68 @@
+<div class="setting-header">
+  <h3 class="setting-title">{{ "names.segmentSetting" | translate }}</h3>
+  <div class="setting-actions">
+    <button mat-raised-button class="dense" [disabled]="!isUpdated" color="primary" (click)="onSave(gridSegements)">
+      {{ "names.save" | translate }}
+    </button>
+    <button mat-raised-button class="dense" [disabled]="!isUpdated" (click)="onRevert(gridSegements)">
+      {{ "names.revert" | translate }}
+    </button>
+  </div>
+</div>
+
+<div class="sub-bar">
+  <mat-label>{{ "names.allSpeedRatio" | translate }}</mat-label>
+  <mat-form-field class="speed-ratio dense" appearance="outline">
+    <input #inputAllSppedRatio matInput type="number" value="100" min="1" max="100" />
+    <span matSuffix>%</span>
+  </mat-form-field>
+
+  <button mat-flat-button class="dense" color="primary" (click)="onApplyAllSpeedRatio(inputAllSppedRatio)">
+    {{ "names.apply" | translate }}
+  </button>
+</div>
+
+<dx-data-grid #gridSegements [dataSource]="dataSource" [keyExpr]="'id'" [repaintChangesOnly]="true" [showBorders]="true"
+  [height]="520" [allowColumnResizing]="false" [(selectedRowKeys)]="selectedIds" (onRowUpdated)="onUpdateRow($event)"
+  (onSelectionChanged)="onSelectionChanged($event)" [masterDetail]="{ enabled: true, template: 'segInfoTemplate' }">
+
+  <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+  <dxo-paging [pageSize]="20"></dxo-paging>
+  <dxo-editing mode="cell" refreshMode="reshape" [allowUpdating]="true" [allowDeleting]="false" [allowAdding]="false"
+    [useIcons]="true">
+  </dxo-editing>
+  <!--
+  <dxo-selection mode="multiple" selectAllMode="allPages" showCheckBoxesMode="always"></dxo-selection>
+  -->
+
+  <dxi-column dataType="number" dataField="id" [allowEditing]="false" [width]="50"></dxi-column>
+  <dxi-column dataType="number" dataField="speed" [caption]="'names.speed' | translate" [allowEditing]="false">
+  </dxi-column>
+  <dxi-column dataType="number" dataField="speedRatio" [caption]="'names.speedRatio' | translate"
+    [customizeText]="customSpeedRatio" [width]="90">
+    <dxi-validation-rule type="range" [min]="1" [max]="100" [message]="'_RATIO_MESSAGE'">
+    </dxi-validation-rule>
+  </dxi-column>
+  <dxi-column dataType="number" dataField="length" [caption]="'names.length' | translate" [width]="60"></dxi-column>
+  <dxi-column dataType="string" dataField="obLow" [caption]="'names.obsLow' | translate"></dxi-column>
+  <dxi-column dataType="string" dataField="obHigh" [caption]="'names.obsHigh' | translate"></dxi-column>
+  <dxi-column dataType="string" dataField="obDistance" [caption]="'names.obsDistance' | translate"></dxi-column>
+  <!--
+  <dxi-column dataType="boolean" dataField="unUse" [caption]="'names.unuse' | translate"></dxi-column>
+  -->
+
+  <dxo-search-panel [placeholder]="'names.search' | translate" [visible]="true">
+  </dxo-search-panel>
+
+  <div *dxTemplate="let row of 'segInfoTemplate'">
+    <div class="row-detail">
+      <div class="detail-title">Segment #{{ row.data.id }}</div>
+      <div class="detail-info">
+        <div class="name">{{ "names.startPoint" | translate }}</div>
+        <div class="value">{{ row.data.startPoint }}</div>
+        <div class="name">{{ "names.endPoint" | translate }}</div>
+        <div class="value">{{ row.data.endPoint }}</div>
+      </div>
+    </div>
+  </div>
+</dx-data-grid>

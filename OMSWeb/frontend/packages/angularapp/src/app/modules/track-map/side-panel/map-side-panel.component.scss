@@ -1,0 +1,134 @@
+.panel-header {
+  font-size: 15px;
+  font-weight: bold;
+  padding: 8px;
+  color: rgba(#000, 0.7);
+  background-color: var(--panel-background-color);
+  // background-color: rgba(#000, 0.1);
+
+  .close-icon {
+    position: absolute;
+    right: 4px;
+    top: 4px;
+  }
+  .close-icon .mat-icon {
+    font-size: 18px;
+    height: 18px;
+    width: 18px;
+    line-height: 18px;
+  }
+  .mat-icon-button.close {
+    width: 24px;
+    height: 24px;
+    line-height: 18px;
+  }
+}
+
+.panel-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+
+  .not-selected {
+    margin-top: 16px;
+    color:rgba(0, 0, 0, 0.7);
+    font-size: 12px;
+  }
+}
+
+// mat-accordion {
+//   display: block;
+//   padding: 2px;
+// }
+
+mat-expansion-panel {
+  ::ng-deep.mat-expansion-panel-body {
+    padding: 10px;
+  }
+}
+
+.mat-expansion-panel-header {
+  padding: 0 10px;
+  height: 32px;
+  background-color: rgba(#000, 0.02);
+  font-weight: bold;
+
+  &.mat-expanded {
+    height: 36px;
+  }
+  .mat-panel-title {
+    font-weight: bold;
+  }
+}
+
+.info-table {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 5px;
+
+  .info-item {
+    &.span-full {
+      grid-column: 1/-1;
+    }
+  }
+}
+
+.disable-table {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 5px;
+
+  mat-form-field {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+mat-form-field {
+  font-size: 12px;
+  max-width: 180px;
+}
+
+mat-form-field {
+  ::ng-deep {
+    .mat-form-field-wrapper {
+      margin-bottom: -10px;
+    }
+  }
+}
+
+.move-command-table {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+
+  label {
+    transform-origin: top left;
+    transform: scale(0.75);
+    color: rgba(0, 0, 0, 0.54);
+  }
+}
+
+.inputZones-table {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 5px;
+
+  mat-form-field {
+    width: 100%;
+    max-width: 100%;
+
+    ::ng-deep {
+      .mat-form-field-underline {
+        height: 0px;
+        //height: 1px;
+      }
+    }
+  }
+}

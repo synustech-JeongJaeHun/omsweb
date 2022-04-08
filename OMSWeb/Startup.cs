@@ -198,7 +198,7 @@ namespace OMSWeb
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
-                configuration.RootPath = "ClientApp/dist";
+                configuration.RootPath = "frontend/packages/angularapp/dist";
             });
         }
 
@@ -258,11 +258,17 @@ namespace OMSWeb
                 // To learn more about options for serving an Angular SPA from ASP.NET Core,
                 // see https://go.microsoft.com/fwlink/?linkid=864501
 
-                spa.Options.SourcePath = "frontend/packages/angularapp";
+                spa.Options.SourcePath = "frontend/";
 
                 if (env.IsDevelopment())
                 {
-                    spa.UseAngularCliServer(npmScript: "start");
+                    var isProxy = Configuration.GetSection("Proxy").Get<Boolean>();
+                    if (isProxy) {
+                        spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
+                    } else {
+                        spa.UseAngularCliServer(npmScript: "start");
+                    }
+                    
                 }
             });
         }

@@ -1,0 +1,23 @@
+.sub-bar {
+  position: absolute;
+  top: 34px;
+  left: 0;
+  z-index: 1;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
+  button {
+    margin-left: 8px;
+  }
+}
+
+.speed-ratio {
+  width: 100px;
+}
+
+.detail-info {
+  display: grid;
+  grid-template-columns: repeat(2, 100px 1fr);
+  column-gap: 10px;
+}

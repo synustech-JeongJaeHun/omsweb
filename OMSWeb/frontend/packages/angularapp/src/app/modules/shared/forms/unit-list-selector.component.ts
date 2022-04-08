@@ -1,0 +1,69 @@
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { TrackStatusService } from '@oms/root/services/track-status.service';
+import { Observable, of } from 'rxjs';
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { ILookupUnit } from '../../../models/map.interface';
+
+@Component({
+  selector: 'oms-unit-list-selector',
+  templateUrl: './unit-list-selector.component.html',
+  styleUrls: ['./unit-list-selector.component.scss']
+})
+export class UnitListSelectorComponent implements OnInit {
+  @Input() findScopes: string[] = ['points', 'stations', 'buffers'];
+  @Input() disabled: boolean = false;
+  @Input() selectedUnit: ILookupUnit;
+  @Input() placeholder: string;
+  @Output() selectedUnitChange = new EventEmitter<ILookupUnit>();
+
+  inputControl = new FormControl();
+  targetOptions$: Observable<ILookupUnit[]>;
+
+  constructor(private trackStatusService: TrackStatusService) { }
+  ngOnInit(): void {
+    this.targetOptions$ = this.inputControl.valueChanges.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap((value) => {
+        const result: ILookupUnit[] = []
+        if (this.findScopes.includes('vehicles')) {
+          result.push(...this.trackStatusService.trackData.vehicles
+            .filter(v => v.logicalId.includes(value))
+            .map(v => ({ id: v.id, objectType: "Vehicle", logicalId: v.logicalId, physicalId: v.physicalId })))
+        }
+        if (this.findScopes.includes('points')) {
+          result.push(...this.trackStatusService.trackData.points
+            .filter(p => p.logicalId.includes(value))
+            .map(p => ({ id: p.id, objectType: "Point", logicalId: p.logicalId, physicalId: p.physicalId })))
+        }
+        if (this.findScopes.includes('stations')) {
+
+          result.push(...this.trackStatusService.trackData.stations
+            .filter(s => s.logicalId.includes(value))
+            .map(s => ({ id: s.id, objectType: "Station", logicalId: s.logicalId, physicalId: s.physicalId })))
+        }
+        if (this.findScopes.includes('buffers')) {
+          result.push(...this.trackStatusService.trackData.buffers
+            .filter(b => b.logicalId.includes(value))
+            .map(b => ({ id: b.id, objectType: "Buffer", logicalId: b.logicalId, physicalId: b.physicalId })))
+        }
+
+        return of(result)
+      })
+    );
+  }
+  displayFn(item: ILookupUnit): string | undefined {
+    if (!item) return;
+    return `${item.objectType} #${item.id}`;
+  }
+  onSelected(item: ILookupUnit) {
+    this.selectedUnit = item;
+    this.selectedUnitChange.emit(item);
+  }
+  onClear() {
+    this.selectedUnit = undefined;
+    this.selectedUnitChange.emit(undefined);
+    this.inputControl.reset();
+  }
+}

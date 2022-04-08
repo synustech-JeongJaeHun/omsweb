@@ -1,0 +1,27 @@
+.user-form {
+  mat-form-field {
+    width: 100%;
+  }
+  ::ng-deep {
+    .mat-form-field-flex {
+      padding: 4px 1rem;
+    }
+    .mat-form-field-infix {
+      padding: 4px 0;
+    }
+    .mat-form-field-wrapper {
+      padding-bottom: 0;
+    }
+  }
+
+  .mat-form-field-invalid {
+    ::ng-deep.mat-form-field-wrapper {
+      padding-bottom: 1rem;
+    }
+  }
+}
+
+.mat-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+}

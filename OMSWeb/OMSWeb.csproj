@@ -7,7 +7,6 @@
     <IsPackable>false</IsPackable>
     <SpaRoot>frontend\packages\angularapp\</SpaRoot>
     <PackageRoot>frontend\</PackageRoot>
-    <OmsTrackMonitor>oms-track-monitor\</OmsTrackMonitor>
     <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
 
     <!-- Set this to true if you enable server-side prerendering -->
@@ -55,7 +54,7 @@
     <Folder Include="Temp\Zip\" />
   </ItemGroup>
 
-  <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
+  <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(PackageRoot)node_modules') ">
     <!-- Ensure Node.js is installed -->
     <Exec Command="node --version" ContinueOnError="true">
       <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
@@ -63,10 +62,12 @@
     <Error Condition="'$(ErrorCode)' != '0'" Text="Node.js is required to build and run this project. To continue, please install Node.js from https://nodejs.org/, and then restart your command prompt or IDE." />
     <Message Importance="high" Text="Restoring dependencies using 'npm'. This may take several minutes..." />
     <Exec WorkingDirectory="$(PackageRoot)" Command="yarn" />
+    <Exec WorkingDirectory="$(PackageRoot)" Command="yarn build" />
   </Target>
 
   <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
     <!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
+    <Exec WorkingDirectory="$(PackageRoot)" Command="yarn" />
     <Exec WorkingDirectory="$(PackageRoot)" Command="yarn build" />
 
     <!-- Include the newly-built files in the publish output -->

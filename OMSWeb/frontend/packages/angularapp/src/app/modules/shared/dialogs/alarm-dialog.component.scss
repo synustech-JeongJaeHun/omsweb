@@ -1,0 +1,39 @@
+.dialog-container {
+  position: relative;
+  cursor: move;
+}
+
+#solutionContainer {
+  padding: 8px;
+
+  .grid-form {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 1fr 32px;
+    gap: 4px;
+
+    button {
+      align-self: flex-start;
+      justify-self: flex-start;
+    }
+
+    textarea::placeholder{
+      font-size: 11px;
+    }
+
+    .primary-actions {
+      text-align: right;
+
+      button {
+        margin-left: 4px;
+      }
+    }
+
+    ::ng-deep {
+      .mat-form-field-wrapper {
+        margin: 0;
+        padding-bottom: 4px;
+      }
+    }
+  }
+}

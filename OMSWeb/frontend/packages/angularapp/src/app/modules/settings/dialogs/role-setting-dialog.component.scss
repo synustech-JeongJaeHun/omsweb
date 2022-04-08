@@ -1,0 +1,54 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.role-panel {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  column-gap: 16px;
+  padding: 8px;
+}
+
+h5 {
+  padding-left: 16px;
+  margin: 0;
+}
+.new-role-name {
+  border-radius: 4px;
+  border: 1px solid var(--dialog-border-color);
+  margin-left: 12px;
+}
+
+.add-role-form {
+  display: flex;
+
+  .icon-btn {
+    margin-left: 4px;
+    cursor: pointer;
+  }
+}
+
+.mat-list-item.active {
+  background-color: var(--button-active-color);
+  font-weight: bold;
+}
+
+.permission-list {
+  border-left: 1px solid var(--dialog-border-color);
+}
+
+.mat-dialog-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .secondary-actions {
+    button {
+      margin-left: 4px;
+      padding: 0 4px;
+      min-width: 40px;
+      height: 24px;
+    }
+  }
+}

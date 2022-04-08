@@ -1,0 +1,48 @@
+<button mat-button class="ai" [class.active]="activeAi" (click)="onChangeAI()">
+  <div class="rect">{{ "names.ai" | translate }}</div>
+</button>
+
+<ng-container [ngSwitch]="true">
+  <ng-container *ngSwitchCase="true">
+    <button mat-button class="locale" [matMenuTriggerFor]="localeMenu">
+      <mat-icon>language</mat-icon> {{ currentLanguage }}
+    </button>
+    <mat-menu #localeMenu="matMenu" xPosition="before">
+      <button mat-menu-item (click)="changeLanguage('en')">
+        {{ "names.english" | translate }}
+      </button>
+      <button mat-menu-item (click)="changeLanguage('ko')">
+        {{ "names.korean" | translate }}
+      </button>
+      <button mat-menu-item (click)="changeLanguage('zh')">
+        {{ "names.chinese" | translate }}
+      </button>
+    </mat-menu>
+  </ng-container>
+</ng-container>
+
+<button mat-button class="legend" (click)="onLegend()">
+  <mat-icon>info</mat-icon> {{ "names.legend" | translate }}
+</button>
+
+<ng-container [ngSwitch]="isAuthenticated">
+  <ng-container *ngSwitchCase="true">
+    <button mat-button class="signin" [matMenuTriggerFor]="accountMenu">
+      <mat-icon>person</mat-icon> {{ user?.firstName }} {{ user?.lastName }}{{ roleName }}
+    </button>
+    <mat-menu #accountMenu="matMenu" xPosition="before">
+      <button mat-menu-item (click)="onProfile()">
+        <mat-icon>account_circle</mat-icon> {{ "names.profile" | translate
+        }}
+      </button>
+      <button mat-menu-item (click)="onLogout()">
+        <mat-icon>logout</mat-icon> {{ "names.logout" | translate }}
+      </button>
+    </mat-menu>
+  </ng-container>
+  <ng-container *ngSwitchDefault>
+    <button mat-button class="signin" (click)="onLogin()">
+      <mat-icon>person</mat-icon> {{ "names.login" | translate }}
+    </button>
+  </ng-container>
+</ng-container>

@@ -1,0 +1,24 @@
+dl {
+  margin: 0;
+}
+dt {
+  font-weight: bold;
+  font-size: 15px;
+  margin-top: 16px;
+
+  &:first-child {
+    margin-top: 0;
+  }
+}
+dd {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: 16px;
+}
+.legend-item {
+  width: 100px;
+}
+.legend-icon svg {
+  width: 100px;
+  height: 45px;
+}

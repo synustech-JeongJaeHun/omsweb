@@ -1,0 +1,50 @@
+.content-layout {
+  display: grid;
+  grid-template-columns: 140px auto;
+  column-gap: 8px;
+}
+
+.find-container {
+  background-color: var(--panel-background-color);
+  padding: 4px;
+}
+
+.unit-details {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  font-size: 12px;
+  row-gap: 4px;
+  column-gap: 4px;
+
+  label.name {
+    font-weight: bold;
+    background-color: var(--details-background-color);
+    text-align: right;
+    padding: 4px 8px;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+  }
+  .value {
+    padding: 4px 8px;
+    border-bottom: 1px solid var(--details-background-color);
+  }
+}
+
+fieldset {
+  border: 1px solid var(--theme-border-color);
+  border-radius: 4px;
+  padding: 4px 8px;
+}
+
+.field-row {
+  display: flex;
+  align-items: center;
+
+  ::ng-deep.mat-form-field-infix {
+    width: initial;
+  }
+
+  button {
+    margin-left: 4px;
+  }
+}
