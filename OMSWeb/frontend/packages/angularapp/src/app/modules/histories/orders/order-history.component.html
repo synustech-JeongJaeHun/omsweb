@@ -114,6 +114,7 @@
                   [caption]="'names.timeCreated' | translate" [format]="dateTimeFormat"></dxi-column>
       <dxi-column [width]="120" dataType="datetime" dataField="timeAssigned"
                   [caption]="'names.timeAssigned' | translate" [format]="dateTimeFormat"></dxi-column>
+      <!--
       <dxi-column [width]="120" dataType="datetime" dataField="timeVehicleArrived"
                   [caption]="'names.timeVehicleArrived' | translate" [format]="dateTimeFormat"></dxi-column>
       <dxi-column [width]="120" dataType="datetime" dataField="timeLoadStarted"
@@ -124,12 +125,14 @@
                   [caption]="'names.timeUnloadStarted' | translate" [format]="dateTimeFormat"></dxi-column>
       <dxi-column [width]="120" dataType="datetime" dataField="timeUnloadCompleted"
                   [caption]="'names.timeUnloadCompleted' | translate" [format]="dateTimeFormat"></dxi-column>
+      -->
       <dxi-column [width]="120" dataType="datetime" dataField="timeCompleted"
                   [caption]="'names.timeCompleted' | translate" [format]="dateTimeFormat"></dxi-column>
       <dxi-column [width]="120" dataType="datetime" dataField="timeAborted" [caption]="'names.timeAborted' | translate"
                   [format]="dateTimeFormat"></dxi-column>
       <dxi-column [width]="120" dataType="datetime" dataField="timeFailed" [caption]="'names.timeFailed' | translate"
                   [format]="dateTimeFormat"></dxi-column>
+      <!--
       <dxi-column [width]="100" dataType="string" dataField="distancePickup"
                   [caption]="'names.distancePickup' | translate" cellTemplate="distanceTemplate"></dxi-column>
       <dxi-column [width]="100" dataType="string" dataField="distanceDropoff"
@@ -140,6 +143,7 @@
                   [caption]="'names.assignmentType' | translate" cellTemplate="distanceTemplate"></dxi-column>
       <dxi-column [width]="100" dataType="string" dataField="assignmentDetails"
                   [caption]="'names.assignmentDetails' | translate" cellTemplate="distanceTemplate"></dxi-column>
+       -->
 
       <div *dxTemplate="let data of 'distanceTemplate'">
         {{ data.displayValue / 1000 | number }}
