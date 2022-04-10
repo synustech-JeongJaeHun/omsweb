@@ -44,6 +44,12 @@ namespace OMSWeb.Services.MqttClient
         public const string ACTION_CLEAR_PATH = "clear_path";
         public const string ACTION_DISABLE_SEGMENT = "disable-segment";
         public const string ACTION_ENABLE_SEGMENT = "enable-segment";
+        public const string ACTION_GROUP_SETTING = "group-setting";
+        public const string ACTION_CLUSTER_SETTING = "cluster-setting";
+        public const string ACTION_SEGMENT_SETTING = "segment-setting";
+        public const string ACTION_STATION_SETTING = "station-setting";
+        public const string ACTION_BUFFER_SETTING = "buffer-setting";
+        public const string ACTION_VEHICLE_SETTING = "vehicle-setting";
         public const string ACTION_ZCU_GO = "zcu_go";
         public const string ACTION_ZCU_USING_TYPE = "zcu_using_type";
         public const string ACTION_ZCU_SETTING = "zcu-setting";
@@ -97,6 +103,12 @@ namespace OMSWeb.Services.MqttClient
                 case ACTION_CLEAR_PATH:
                 case ACTION_DISABLE_SEGMENT:
                 case ACTION_ENABLE_SEGMENT:
+                case ACTION_GROUP_SETTING:
+                case ACTION_CLUSTER_SETTING:
+                case ACTION_SEGMENT_SETTING:
+                case ACTION_STATION_SETTING:
+                case ACTION_BUFFER_SETTING:
+                case ACTION_VEHICLE_SETTING:
                 case ACTION_ZCU_GO:
                 case ACTION_ZCU_USING_TYPE:
                 case ACTION_ZCU_SETTING:
@@ -141,6 +153,12 @@ namespace OMSWeb.Services.MqttClient
                 case ACTION_RESUME:
                 case ACTION_ALARM_CLEAR:
                 case ACTION_WARNING_CLEAR:
+                case ACTION_GROUP_SETTING:
+                case ACTION_CLUSTER_SETTING:
+                case ACTION_SEGMENT_SETTING:
+                case ACTION_STATION_SETTING:
+                case ACTION_BUFFER_SETTING:
+                case ACTION_VEHICLE_SETTING:
                 case ACTION_ZCU_SETTING:
                     return REQUEST_VEHICLE_MANAGER;
 
@@ -394,6 +412,88 @@ namespace OMSWeb.Services.MqttClient
                     data["segment_id"] = command.SegmentId;
                     data["source"] = "uid-admin";
                     data["reason"] = "";
+                }
+            }
+            else if (command.Action == ACTION_GROUP_SETTING)
+            {
+                try
+                {
+                    data["group"] = command.GroupId;
+                    data["home_pt"] = command.HomeIds;
+                    data["home_pt_removed"] = command.HomeIds_Removed;
+                    data["ation_id"] = command.StationIds;
+                    data["sation_id_removed"] = command.StationIds_Removed;
+                    data["buffer_id"] = command.BufferIds;
+                    data["buffer_id_removed"] = command.BufferIds_Removed;
+                    data["vehicle_id"] = command.VehicleIds;
+                    data["vehicle_id_removed"] = command.VehicleIds_Removed;
+                }
+                catch (Exception ex) {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+            else if (command.Action == ACTION_CLUSTER_SETTING)
+            {
+                try
+                {
+                    data["cluster"] = command.ClusterId;
+                    data["max_vehicle"] = command.MaxVehicles;
+                }
+                catch (Exception ex) {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+            else if (command.Action == ACTION_SEGMENT_SETTING) 
+            {
+                try
+                {
+                    if (command.Type == "SEGMENT-ALL")
+                    {
+                        data["id"] = "*";
+                        data["speed_ratio"] = command.SpeedRatio;
+                    }
+                    else
+                    {
+                        data["id"] = command.SegmentIds;
+                        data["speed_ratio"] = command.SpeedRatios;
+                    }
+                }
+                catch (Exception ex) {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+            else if (command.Action == ACTION_STATION_SETTING) 
+            {
+                try
+                {
+                    data["id"] = command.StationIds;
+                    data["unused"] = command.Unused;
+                }
+                catch (Exception ex) {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+            else if (command.Action == ACTION_BUFFER_SETTING) 
+            {
+                try
+                {
+                    data["id"] = command.BufferIds;
+                    data["unused"] = command.Unused;
+                }
+                catch (Exception ex) {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+            else if (command.Action == ACTION_VEHICLE_SETTING) 
+            {
+                try
+                {
+                    data["id"] = command.VehicleIds;
+                    data["id_removed"] = command.VehicleIds_Removed;
+                    data["online_name"] = command.LogicalIds;
+                 }
+                catch (Exception ex) {
+                    Console.WriteLine(ex.Message);
                 }
             }
             else if (command.Action == ACTION_ZCU_GO)

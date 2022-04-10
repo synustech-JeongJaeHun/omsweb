@@ -77,10 +77,12 @@ export interface IOrderCommandMessage extends ICommandMessage {
 
 export interface IStationCommandMessage extends ICommandMessage {
   stationIds?: number[];
+  unused: number;
 }
 
 export interface IBufferCommandMessage extends ICommandMessage {
   bufferIds?: number[];
+  unused: number;
 }
 
 export interface ICarrierCommandMessage extends ICommandMessage {
@@ -120,6 +122,7 @@ export interface IVehicleRegCommandMessage extends ICommandMessage {
   vehicleId?: number;
   vehicleIds?: number[];
   logicalId?: string;
+  logicalIds?: string[];
 }
 
 export interface IClusterCommandMessage extends ICommandMessage {
@@ -131,10 +134,14 @@ export interface IGroupCommandMessage extends ICommandMessage {
   groupId?: number;
   homeId?: number;
   homeIds?: number[];
+  homeIds_removed?: number[];
   stationId?: number;
   stationIds?: number[];
-  vehicleId?: number;
-  vehicleIds?: number[];
+  stationIds_removed?: number[];
   bufferId?: number;
   bufferIds?: number[];
+  bufferIds_removed?: number[];
+  vehicleId?: number;
+  vehicleIds?: number[];
+  vehicleIds_removed?: number[];
 }

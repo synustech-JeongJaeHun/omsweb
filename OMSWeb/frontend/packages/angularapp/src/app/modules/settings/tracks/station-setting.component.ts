@@ -95,12 +95,12 @@ export class StationSettingComponent implements OnInit {
 
     if (useStationIds.length > 0)
       this.messageSvc
-        .sendStationUseCommand({ type: 'STATION', action: 'use-station' }, useStationIds)
+        .sendStationSettingCommand({ type: 'USE', action: 'station-setting', unused: 0 }, useStationIds)
         .subscribe();
 
     if (unUseStationIds.length > 0)
       this.messageSvc
-        .sendStationUseCommand({ type: 'STATION', action: 'unuse-station' }, unUseStationIds)
+        .sendStationSettingCommand({ type: 'UNUSE', action: 'station-setting', unused: 1 }, unUseStationIds)
         .subscribe();
 
     return;

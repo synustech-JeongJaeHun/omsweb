@@ -132,10 +132,10 @@ export class VehicleSettingComponent implements OnInit {
     //this._changedItems.length &&
     //  jobs.push(this.settingsSvc.saveVehicleRegs(this._changedItems));
     if (this._removeItems.length > 0)
-      this.RemoveMessages(this._removeItems);
+      this.Remove(this._removeItems);
 
     if (this._changedItems.length > 0)
-      this.SaveMessages(this._changedItems);
+      this.Update(this._changedItems);
 
     this._removeItems = [];
     this._changedItems = [];
@@ -152,34 +152,52 @@ export class VehicleSettingComponent implements OnInit {
     });
   }
 
-  RemoveMessages(items: any[]): Observable<void> {
-    // 개별 삭제 메시지 전송
-    for (let idx = 0; idx < items.length; idx++) {
-      this.messageSvc
-        .sendVehicleRegRemoveCommand({ type: 'VEHICLE', action: 'vehicle_reg_remove', vehicleId: items[idx] })
-        .subscribe();
-    }
-
+  Remove(items: any[]): Observable<void> {
     // 일괄 삭제 메시지 전송
     this.messageSvc
-      .sendVehicleRegRemoveCommand({ type: 'VEHICLE', action: 'vehicle_reg_remove', vehicleIds: items })
+      .sendVehicleRegSettingCommand({ type: 'REMOVE', action: 'vehicle-setting', vehicleIds: items })
       .subscribe();
 
     return;
   }
 
-  SaveMessages(items: any[]): Observable<void> {
-    // 개별 수정/추가 메시지 전송
+  Update(items: any[]): Observable<void> {
+    // 일괄 수정/추가 메시지 전송
+    let newVehicleIds: number[] = [];
+    let newLogicalIds: string[] = [];
+    let updateVehicleIds: number[] = [];
+    let updateLogicalIds: string[] = [];
+
     for (let idx = 0; idx < items.length; idx++) {
       if (items[idx].isNew) {
+        newVehicleIds.push(items[idx].id);
+        newLogicalIds.push(items[idx].logicalId);
+      }
+      else {
+        updateVehicleIds.push(items[idx].id);
+        updateLogicalIds.push(items[idx].logicalId);
+    }
+
+      if (newVehicleIds.length > 0) {
         this.messageSvc
-          .sendVehicleRegAddCommand({ type: 'VEHICLE', action: 'vehicle_reg_add', vehicleId: items[idx].id, logicalId: items[idx].logicalId })
-          .subscribe();
-      } else {
-        this.messageSvc
-          .sendVehicleRegUpdateCommand({ type: 'VEHICLE', action: 'vehicle_reg_update', vehicleId: items[idx].id, logicalId: items[idx].logicalId })
+          .sendVehicleRegSettingCommand({
+            type: 'NEW',
+            action: 'vehicle-setting',
+            vehicleIds: newVehicleIds,
+            logicalIds: newLogicalIds
+          })
           .subscribe();
       }
+
+      if (updateVehicleIds.length > 0)
+        this.messageSvc
+          .sendVehicleRegSettingCommand({
+            type: 'NEW',
+            action: 'vehicle-setting',
+            vehicleIds: updateVehicleIds,
+            logicalIds: updateLogicalIds
+          })
+          .subscribe();
     }
 
     return;

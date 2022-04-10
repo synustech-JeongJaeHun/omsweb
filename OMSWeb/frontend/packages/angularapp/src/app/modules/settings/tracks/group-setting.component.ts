@@ -230,141 +230,71 @@ export class GroupSettingComponent implements OnInit {
   SaveMessages(items: ISettingsGroup[]): Observable<void> {
     for (let idx = 0; idx < items.length; idx++) {
 
+      let addedHomePoints = [];
+      let removedHomePoints = [];
+
       if (items[idx].homePoints.length > 0) {
         let currentAssignedHomePoints = this.groupedObjects.filter(
           (x: ISettingsGroupedObject) => x.groupId === items[idx].id && x.referenceTable === 'home'
         ).map((x) => x.referenceId);
-
-        let addedHomePoints = [];
+        
         addedHomePoints = _.difference(items[idx].homePoints, currentAssignedHomePoints);
-
-        let removedHomePoints = [];
         removedHomePoints = _.difference(currentAssignedHomePoints, items[idx].homePoints);
-
-        // 그룹별 Home 일괄 추가
-        this.messageSvc
-          .sendAssignHomeGruopCommand({ type: 'GROUP', action: 'assign-homes', homeIds: addedHomePoints })
-          .subscribe();
-        // 그룹별 Home 개별 추가
-        for (let idy = 0; idy < addedHomePoints.length; idy++) {
-          this.messageSvc
-            .sendAssignHomeGruopCommand({ type: 'GROUP', action: 'assign-home', homeId: addedHomePoints[idy] })
-            .subscribe();
-        }
-
-        // 그룹별 Home 일괄 삭제
-        this.messageSvc
-          .sendAssignHomeGruopCommand({ type: 'GROUP', action: 'unassign-homes', homeIds: removedHomePoints })
-          .subscribe();
-        // 그룹별 Home 개별 삭제
-        for (let idy = 0; idy < removedHomePoints.length; idy++) {
-          this.messageSvc
-            .sendAssignHomeGruopCommand({ type: 'GROUP', action: 'unassign-home', homeId: removedHomePoints[idy] })
-            .subscribe();
-        }
       }
+
+      let addedStations = [];
+      let removedStations = [];
 
       if (items[idx].stations.length > 0) {
         let currentAssignedStations = this.groupedObjects.filter(
           (x: ISettingsGroupedObject) => x.groupId === items[idx].id && x.referenceTable === 'station'
         ).map((x) => x.referenceId);
 
-        let addedStations = [];
         addedStations = _.difference(items[idx].stations, currentAssignedStations);
-
-        let removedStations = [];
         removedStations = _.difference(currentAssignedStations, items[idx].stations);
-
-        // 그룹별 Station 일괄 추가
-        this.messageSvc
-          .sendAssignStationGruopCommand({ type: 'GROUP', action: 'assign-stations', stationIds: addedStations })
-          .subscribe();
-        // 그룹별 Station 개별 추가
-        for (let idy = 0; idy < addedStations.length; idy++) {
-          this.messageSvc
-            .sendAssignStationGruopCommand({ type: 'GROUP', action: 'assign-station', stationId: addedStations[idy] })
-            .subscribe();
-        }
-
-        // 그룹별 Station 일괄 삭제
-        this.messageSvc
-          .sendAssignStationGruopCommand({ type: 'GROUP', action: 'unassign-stations', stationIds: removedStations })
-          .subscribe();
-        // 그룹별 Station 개별 삭제
-        for (let idy = 0; idy < removedStations.length; idy++) {
-          this.messageSvc
-            .sendAssignStationGruopCommand({ type: 'GROUP', action: 'unassign-station', stationId: removedStations[idy] })
-            .subscribe();
-        }
       }
+
+      let addedVehicles = [];
+      let removedVehicles = [];
 
       if (items[idx].vehicles.length > 0) {
         let currentAssignedVehicles = this.groupedObjects.filter(
           (x: ISettingsGroupedObject) => x.groupId === items[idx].id && x.referenceTable === 'vehicle'
         ).map((x) => x.referenceId);
 
-        let addedVehicles = [];
         addedVehicles = _.difference(items[idx].vehicles, currentAssignedVehicles);
-
-        let removedVehicles = [];
         removedVehicles = _.difference(currentAssignedVehicles, items[idx].vehicles);
-
-        // 그룹별 Vehicle 일괄 추가
-        this.messageSvc
-          .sendAssignVehicleGruopCommand({ type: 'GROUP', action: 'assign-vehicles', vehicleIds: addedVehicles })
-          .subscribe();
-        // 그룹별 Vehicle 개별 추가
-        for (let idy = 0; idy < addedVehicles.length; idy++) {
-          this.messageSvc
-            .sendAssignVehicleGruopCommand({ type: 'GROUP', action: 'assign-vehicle', vehicleId: addedVehicles[idy] })
-            .subscribe();
-        }
-
-        // 그룹별 Vehicle 일괄 삭제
-        this.messageSvc
-          .sendAssignVehicleGruopCommand({ type: 'GROUP', action: 'unassign-vehicles', vehicleIds: removedVehicles })
-          .subscribe();
-        // 그룹별 Vehicle 개별 삭제
-        for (let idy = 0; idy < removedVehicles.length; idy++) {
-          this.messageSvc
-            .sendAssignVehicleGruopCommand({ type: 'GROUP', action: 'unassign-vehicle', vehicleId: removedVehicles[idy] })
-            .subscribe();
-        }
       }
+
+      let addedBuffers = [];
+      let removedBuffers = [];
 
       if (items[idx].buffers.length > 0) {
         let currentAssignedBuffers = this.groupedObjects.filter(
           (x: ISettingsGroupedObject) => x.groupId === items[idx].id && x.referenceTable === 'buffer'
         ).map((x) => x.referenceId);
 
-        let addedBuffers = [];
         addedBuffers = _.difference(items[idx].buffers, currentAssignedBuffers);
-
-        let removedBuffers = [];
         removedBuffers = _.difference(currentAssignedBuffers, items[idx].buffers);
-
-        // 그룹별 Station 일괄 추가
-        this.messageSvc
-          .sendAssignBufferGruopCommand({ type: 'GROUP', action: 'assign-buffers', bufferIds: addedBuffers })
-          .subscribe();
-        // 그룹별 Station 개별 추가
-        for (let idy = 0; idy < addedBuffers.length; idy++) {
-          this.messageSvc
-            .sendAssignBufferGruopCommand({ type: 'GROUP', action: 'assign-buffer', bufferId: addedBuffers[idy] })
-            .subscribe();
-        }
-
-        // 그룹별 Station 일괄 삭제
-        this.messageSvc
-          .sendAssignBufferGruopCommand({ type: 'GROUP', action: 'unassign-buffers', bufferIds: removedBuffers })
-          .subscribe();
-        // 그룹별 Station 개별 삭제
-        for (let idy = 0; idy < removedBuffers.length; idy++) {
-          this.messageSvc
-            .sendAssignBufferGruopCommand({ type: 'GROUP', action: 'unassign-buffer', bufferId: removedBuffers[idy] })
-            .subscribe();
-        }
       }
+
+      const group: number = this.selectedItem.id;
+
+      this.messageSvc
+        .sendAssignBufferGruopCommand({
+          type: 'GROUP',
+          action: 'group-setting',
+          groupId: group,
+          homeIds: addedHomePoints,
+          homeIds_removed: removedHomePoints,
+          stationIds: addedStations,
+          stationIds_removed: removedStations,
+          bufferIds: addedBuffers,
+          bufferIds_removed: removedBuffers,
+          vehicleIds: addedVehicles,
+          vehicleIds_removed: removedVehicles
+        })
+        .subscribe();
     }
 
     return;

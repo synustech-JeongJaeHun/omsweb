@@ -38,10 +38,13 @@ export class BufferSettingComponent implements OnInit {
 
   onUpdateRow(e) {
     const { data, key } = e;
-    if (this._changedItems.some((c) => c.id === key)) {
+    if (this._changedItems.some((c) => c.id === key))
+    {
       let buffer = this._changedItems.find((u) => u.id === key);
       buffer.unUse = data.unUse;
-    } else {
+    }
+    else
+    {
       let buffer = data;
       this._changedItems.push(buffer);
       this.selectedIds.push(buffer.id);
@@ -95,12 +98,12 @@ export class BufferSettingComponent implements OnInit {
 
     if (useBufferIds.length > 0)
       this.messageSvc
-        .sendBufferUseCommand({ type: 'BUFFER', action: 'use-buffer' }, useBufferIds)
+        .sendBufferSettingCommand({ type: 'USE', action: 'buffer-setting', unused: 0 }, useBufferIds)
         .subscribe();
 
     if (unUseBufferIds.length > 0)
       this.messageSvc
-        .sendBufferUseCommand({ type: 'BUFFER', action: 'unuse-buffer' }, unUseBufferIds)
+        .sendBufferSettingCommand({ type: 'UNUSE', action: 'buffer-setting', unused: 1 }, unUseBufferIds)
         .subscribe();
 
     return;

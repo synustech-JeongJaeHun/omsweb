@@ -57,10 +57,7 @@ export class SegmentSettingComponent implements OnInit {
 
   onSave(grid) {
     const jobs: Observable<void>[] = [];
-    //this._changedItems.length &&
-    //  jobs.push(this.settingsSvc.sendSegementUseUnuseMessage(this._changedItems));
     if (this._changedItems.length > 0) {
-      //this.onUseUnuse(this._changedItems);
       this.onSaveItems(this._changedItems);
 
       this.selectedIds = [];
@@ -84,14 +81,15 @@ export class SegmentSettingComponent implements OnInit {
   }
 
   onSaveItems(items: any[]): Observable<void> {
-    for (let idx = 0; idx < items.length; idx++) {
-      // 개별 Speed Ratio Mqtt Msg
-      this.messageSvc
-        .sendSpeedRatioSegmentCommand({ type: 'SEGMENT', action: 'spped-ratio', segmentId: items[idx].id, speedRatio: items[idx].speedRatio })
-        .subscribe();
-    }
 
     // 개별 Speed Ratio Mqtt Msg
+    //for (let idx = 0; idx < items.length; idx++) {
+    //  this.messageSvc
+    //    .sendSpeedRatioSegmentCommand({ type: 'SEGMENT', action: 'segment-setting', segmentId: items[idx].id, speedRatio: items[idx].speedRatio })
+    //    .subscribe();
+    //}
+
+    // 일괄 Speed Ratio Mqtt Msg
     let segmentIds: number[] = [];
     let speedRatios: number[] = [];
 
@@ -100,56 +98,20 @@ export class SegmentSettingComponent implements OnInit {
       speedRatios.push(items[idx].speedRatio);
     }
 
-    // 일괄 Speed Ratio Mqtt Msg
     this.messageSvc
-      .sendSpeedRatioSegmentCommand({ type: 'SEGMENT', action: 'spped-ratio', segmentIds: segmentIds, speedRatios: speedRatios })
+      .sendSegmentSettingCommand({ type: 'SEGMENT', action: 'segment-setting', segmentIds: segmentIds, speedRatios: speedRatios })
       .subscribe();
 
     // DB Update
-    this.settingsSvc.saveSegments(items).subscribe();
+    //this.settingsSvc.saveSegments(items).subscribe();
 
     return;
   }
 
   onApplyAllSpeedRatio(inputAllSppedRatio) {
-    //alert('ApplyAllSpeedRatio' + inputAllSppedRatio.value);
     this.messageSvc
-      .sendAllSpeedRatioSegmentCommand({ type: 'SEGMENT_ALL', action: 'all-spped-ratio' }, inputAllSppedRatio.value)
+      .sendAllSpeedRatioSegmentCommand({ type: 'SEGMENT-ALL', action: 'segment-setting' }, inputAllSppedRatio.value)
       .subscribe();
-  }
-
-  onUseUnuse(items: any[]): Observable<void> {
-    let useSegmentIds: number[] = [];
-    let unUseSegmentIds: number[] = [];
-
-    for (let idx = 0; idx < items.length; idx++) {
-      if (items[idx].unUse)
-        unUseSegmentIds.push(items[idx].id);
-      else
-        useSegmentIds.push(items[idx].id);
-    }
-
-    if (useSegmentIds.length > 0) {
-      this.messageSvc
-        .sendDisableSegmentsCommand({ type: 'TRACK', action: 'enable-segment' }, useSegmentIds)
-        .subscribe();
-      //  for (let useSegIdx = 0; useSegIdx < useSegmentIds.length; useSegIdx++)
-      //    this.messageSvc
-      //      .sendDisableSegmentCommand({ type: 'TRACK', action: 'enable-segment' }, useSegmentIds[useSegIdx])
-      //      .subscribe();
-    }
-
-    if (unUseSegmentIds.length > 0) {
-      this.messageSvc
-        .sendDisableSegmentsCommand({ type: 'TRACK', action: 'disable-segment' }, unUseSegmentIds)
-        .subscribe();
-      //  for (let unUseSegIdx = 0; unUseSegIdx < unUseSegmentIds.length; unUseSegIdx++)
-      //    this.messageSvc
-      //      .sendDisableSegmentCommand({ type: 'TRACK', action: 'disable-segment' }, unUseSegmentIds[unUseSegIdx])
-      //      .subscribe();
-    }
-
-    return;
   }
 
   customSpeedRatio(cellInfo) {

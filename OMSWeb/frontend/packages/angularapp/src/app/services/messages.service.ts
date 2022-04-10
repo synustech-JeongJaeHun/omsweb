@@ -143,23 +143,25 @@ export class MessagesService {
     return this.sendCommand<ITrackCommandMessage>(command);
   }
 
-  sendStationUseCommand(
+  sendStationSettingCommand(
     command: IStationCommandMessage,
     targets: number[] = []
   ): Observable<void> {
     command.type = command.type;
     command.action = command.action;
+    command.unused = command.unused;
     command.stationIds = targets;
 
     return this.sendCommand<IStationCommandMessage>(command);
   }
 
-  sendBufferUseCommand(
+  sendBufferSettingCommand(
     command: IBufferCommandMessage,
     targets: number[] = []
   ): Observable<void> {
     command.type = command.type;
     command.action = command.action;
+    command.unused = command.unused;
     command.bufferIds = targets;
 
     return this.sendCommand<IBufferCommandMessage>(command);
@@ -178,14 +180,13 @@ export class MessagesService {
     command: IAllSegmentCommandMessage,
     targets: number
   ): Observable<void> {
-    //command.type = command.type;
-    command.type = 'SEGMENT_ALL';
+    command.type = 'SEGMENT-ALL';
     command.speedRatio = targets;
 
     return this.sendCommand<IAllSegmentCommandMessage>(command);
   }
 
-  sendSpeedRatioSegmentCommand(
+  sendSegmentSettingCommand(
     command: ISegmentCommandMessage
   ): Observable<void> {
     command.type = command.type;
@@ -212,35 +213,13 @@ export class MessagesService {
     return this.sendCommand<IZcuCommandMessage>(command);
   }
   
-  sendVehicleRegAddCommand(
+  sendVehicleRegSettingCommand(
     command: IVehicleRegCommandMessage
   ): Observable<void> {
     command.type = command.type;
     command.action = command.action;
-    command.vehicleId = command.vehicleId;
-    command.logicalId = command.logicalId;
-
-    return this.sendCommand<IVehicleRegCommandMessage>(command);
-  }
-
-  sendVehicleRegUpdateCommand(
-    command: IVehicleRegCommandMessage
-  ): Observable<void> {
-    command.type = command.type;
-    command.action = command.action;
-    command.vehicleId = command.vehicleId;
-    command.logicalId = command.logicalId;
-
-    return this.sendCommand<IVehicleRegCommandMessage>(command);
-  }
-
-  sendVehicleRegRemoveCommand(
-    command: IVehicleRegCommandMessage
-  ): Observable<void> {
-    command.type = command.type;
-    command.action = command.action;
-    command.vehicleId = command.vehicleId;
     command.vehicleIds = command.vehicleIds;
+    command.logicalIds = command.logicalIds;
 
     return this.sendCommand<IVehicleRegCommandMessage>(command);
   }
