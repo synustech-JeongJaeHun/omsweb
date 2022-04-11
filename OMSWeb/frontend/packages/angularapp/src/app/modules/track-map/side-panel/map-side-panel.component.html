@@ -271,18 +271,24 @@
       </div>
 
       <div class="disable-table">
-        <mat-slide-toggle [(ngModel)]="data.disabled" (change)="changeSegmentDisabled()"
-          [disabled]="!hasPermission(permissionEnums.SegmentUnuse)" color="primary">{{ "names.unuse" | translate }}
+        <mat-slide-toggle [value]="disableds.length > 0" (change)="changeSegmentDisabled($event.checked)"
+          [disabled]="!hasPermission(permissionEnums.SegmentUnuse) || disabledByMtl"
+          color="primary">{{ "names.unuse" | translate }}
         </mat-slide-toggle>
-        <mat-form-field>
-          <mat-label>{{ "names.reason" | translate }}</mat-label>
-          <textarea matInput rows="2" [value]="segmentDisabledReasons"></textarea>
-        </mat-form-field>
 
-        <mat-form-field class="info-item readonly">
-          <mat-label>{{ "names.authors" | translate }}</mat-label>
-          <input matInput type="text" readonly [value]="segmentDisableAuthors" />
-        </mat-form-field>
+        <div class="disableds">
+          <div *ngFor="let disabled of disableds" style="margin-bottom: 30px;">
+            <mat-form-field >
+              <mat-label>{{ "names.reason" | translate }}</mat-label>
+              <input matInput type="text" readonly [value]="disabled.disabledBy" />
+            </mat-form-field>
+
+            <mat-form-field class="info-item readonly">
+              <mat-label>{{ "names.authors" | translate }}</mat-label>
+              <input matInput type="text" readonly [value]="disabled.disabledReason" />
+            </mat-form-field>
+          </div>
+        </div>
       </div>
     </div>
   </mat-expansion-panel>
