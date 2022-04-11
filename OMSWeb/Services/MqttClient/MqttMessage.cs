@@ -421,8 +421,8 @@ namespace OMSWeb.Services.MqttClient
                     data["group"] = command.GroupId;
                     data["home_pt"] = command.HomeIds;
                     data["home_pt_removed"] = command.HomeIds_Removed;
-                    data["ation_id"] = command.StationIds;
-                    data["sation_id_removed"] = command.StationIds_Removed;
+                    data["station_id"] = command.StationIds;
+                    data["station_id_removed"] = command.StationIds_Removed;
                     data["buffer_id"] = command.BufferIds;
                     data["buffer_id_removed"] = command.BufferIds_Removed;
                     data["vehicle_id"] = command.VehicleIds;

@@ -176,7 +176,14 @@ namespace OMSWeb
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
+#if DEBUG
                 configuration.RootPath = "frontend/packages/angularapp/dist";
+#else
+                string module_name = Process.GetCurrentProcess().MainModule.FileName;
+                string currentDirectory = Path.GetDirectoryName(module_name);
+                string RootPath = Path.GetFullPath(Path.Combine(currentDirectory, "./frontend/packages/angularapp/dist"));
+                configuration.RootPath = RootPath;
+#endif
             });
         }
 
