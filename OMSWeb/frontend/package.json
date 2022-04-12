@@ -12,7 +12,7 @@
     "cl": "yarn workspace @daimre/component-library",
     "styles": "yarn workspace @daimre/styles",
     "otm": "yarn workspace @daimre/oms-track-monitor",
-    "clean:src": "yarn workspaces foreach -pv --exclude angularapp run clean",
+    "clean:src": "yarn workspaces foreach -pv --exclude app run clean",
     "clean": "yarn workspaces foreach -pv run clean",
     "build:src": "yarn workspaces foreach -pvtR --from '{@daimre/styles,@daimre/shared,@daimre/component-library,@daimre/oms-track-monitor}' run build",
     "build:app": "yarn ap build",

@@ -177,11 +177,11 @@ namespace OMSWeb
             services.AddSpaStaticFiles(configuration =>
             {
 #if DEBUG
-                configuration.RootPath = "frontend/packages/angularapp/dist";
+                configuration.RootPath = "frontend/packages/app/dist";
 #else
                 string module_name = Process.GetCurrentProcess().MainModule.FileName;
                 string currentDirectory = Path.GetDirectoryName(module_name);
-                string RootPath = Path.GetFullPath(Path.Combine(currentDirectory, "./frontend/packages/angularapp/dist"));
+                string RootPath = Path.GetFullPath(Path.Combine(currentDirectory, "./frontend/packages/app/dist"));
                 configuration.RootPath = RootPath;
 #endif
             });
