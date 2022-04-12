@@ -19,11 +19,13 @@ namespace OMSWeb.Controllers
     public class SystemsController : ControllerBase
     {
         private SystemsService _systemSvc;
+        private DbService _dbSvc;
         private ModuleStatusService _moduleStatusSvc;
 
-        public SystemsController(SystemsService systemSvc, ModuleStatusService moduleStatusSvc)
+        public SystemsController(SystemsService systemSvc, DbService dbSvc, ModuleStatusService moduleStatusSvc)
         {
             this._systemSvc = systemSvc;
+            this._dbSvc = dbSvc;
             this._moduleStatusSvc = moduleStatusSvc;
         }
 
@@ -49,6 +51,11 @@ namespace OMSWeb.Controllers
         public object GetMaps()
         {
             return this._systemSvc.GetMaps();
+        }
+        [HttpGet("current-map")]
+        public object GetCurrentMap()
+        {
+            return this._dbSvc.GetCurrentMap();
         }
 
         [HttpGet("logs")]

@@ -131,6 +131,7 @@ namespace OMSWeb
             services.AddScoped<SettingsRepository>();
             services.AddScoped<VehicleRepository>();
             services.AddScoped<ReportRepository>();
+            services.AddScoped<DbVersionRepository>();
 
             services.AddScoped<ModuleStatusService>();
             services.AddScoped<StatusService>();
@@ -143,6 +144,7 @@ namespace OMSWeb
             services.AddScoped<SettingsService>();
             services.AddScoped<VehicleService>();
             services.AddScoped<ReportService>();
+            services.AddScoped<DbService>();
 
             services.AddSingleton<SystemsService>();
             services.AddSingleton<ModuleStatusRepository>();
