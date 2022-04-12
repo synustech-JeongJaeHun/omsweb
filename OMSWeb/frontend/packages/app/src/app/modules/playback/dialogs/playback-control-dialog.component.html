@@ -33,12 +33,11 @@
           [tooltip]="timeRangeTooltip"
           [start]="timeRangeStart" [end]="timeRangeEnd"
           [label]="timeRangeLabel"
+          [disabled]="!isAvailableSnapshotSliderChange"
           (onValueChanged)="onSnapshotRangeSliderChanged($event)" >
         </dx-range-slider>
 
-        <div class="slider-value">
-
-        </div>
+        <div class="slider-value"></div>
       </div>
       <div class="control-slider" >
         <div class="slider-name">{{ "names.events" | translate }}</div>
@@ -57,7 +56,7 @@
         ></dxo-tooltip>
 
         </dx-slider>
-        <div class="slider-value">{{ 'TODO #1' }}</div>
+        <div class="slider-value"></div>
       </div>
       <div class="control-play">
         <button mat-icon-button id="prev" [matTooltip]="'Previous snapshot'"
