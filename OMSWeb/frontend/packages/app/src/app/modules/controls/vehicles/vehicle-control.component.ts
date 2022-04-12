@@ -74,16 +74,10 @@ export class VehicleControlComponent implements OnInit {
 		this.dialogSvc
 			.confirm({ body: this.t$.instant('messages.confirmCommand') })
 			.subscribe((ok) => {
-				if (ok) {
-					// @TODO call update
-					this.messageSvc
-						.sendMapUpdateCommand({
-							action: 'map_update',
-							map_db_name: this.updateMapName,
-							map_source_file: this.updateFileName,
-							//this.updateMapVersion;
-						})
-						.subscribe(() => {
+        if (ok) {
+          this.systemSvc
+            .updateMap(this.updateMapName, this.updateFileName)
+            .subscribe(() => {
 							this.getCurrentMap()
 							this.isUpdating = false
 						})

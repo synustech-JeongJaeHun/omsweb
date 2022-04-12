@@ -90,5 +90,14 @@ export class SystemsService {
 			params: params,
 			responseType: 'blob',
 		})
-	}
+  }
+
+  updateMap(mapName: string, mapFile: string): Observable<Blob> {
+    let params = new HttpParams()
+    params = params.append('mapFile', mapFile)
+    return this.http.get(`${this.baseUrl}/control/updateMap/${mapName}`, {
+      params: params,
+      responseType: 'blob',
+    })
+  }
 }

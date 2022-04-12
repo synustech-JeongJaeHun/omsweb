@@ -12,14 +12,14 @@ using OMSWeb.Services;
 
 namespace OMSWeb.Controllers
 {
-  [Route("api/[controller]")]
-  [ApiController]
-  public class OrdersController : ControllerBase
-  {
-    private readonly OrderService _orderSvc;
-    public OrdersController(OrderService orderSvc)
+    [Route("api/[controller]")]
+    [ApiController]
+    public class OrdersController : ControllerBase
     {
-      this._orderSvc = orderSvc;
+        private readonly OrderService _orderSvc;
+        public OrdersController(OrderService orderSvc)
+        {
+            this._orderSvc = orderSvc;
+        }
     }
-  }
 }

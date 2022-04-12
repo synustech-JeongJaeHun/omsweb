@@ -15,100 +15,100 @@ using OMSWeb.Models;
 
 namespace OMSWeb.Controllers
 {
-  [Route("api/[controller]")]
-  [ApiController]
-  public class StatusController : ControllerBase
-  {
-    private readonly TrackService _trackSvc;
-    private readonly StatusService _statusSvc;
-    private readonly CacheService _cache;
-
-    public StatusController(TrackService trackSvc, StatusService statusSvc, CacheService cache)
+    [Route("api/[controller]")]
+    [ApiController]
+    public class StatusController : ControllerBase
     {
-      this._trackSvc = trackSvc;
-      this._statusSvc = statusSvc;
-      this._cache = cache;
-    }
+        private readonly TrackService _trackSvc;
+        private readonly StatusService _statusSvc;
+        private readonly CacheService _cache;
 
-    // [SnakeCase]
-    [HttpGet("tracks")]
-    public ActionResult<MapData> GetMapTrack()
-    {
-      return this._trackSvc.GetMapData();
-    }
-    [HttpGet("tracks/vehicles")]
-    public ActionResult<VehicleResponse> GetVehicles()
-    {
-      var vehicles = this._trackSvc.GetVehicles(true);
-      var paths = this._trackSvc.GetVehiclePaths();
+        public StatusController(TrackService trackSvc, StatusService statusSvc, CacheService cache)
+        {
+            this._trackSvc = trackSvc;
+            this._statusSvc = statusSvc;
+            this._cache = cache;
+        }
 
-      return new VehicleResponse
-      {
-        Vehicles = vehicles,
-        VehiclePaths = paths,
-      };
-    }
-    [HttpGet("tracks/clear")]
-    public ActionResult<string> ClearCache()
-    {
-      this._cache.RemoveValue(CacheKeys.Buffers);
-      this._cache.RemoveValue(CacheKeys.Clusters);
-      this._cache.RemoveValue(CacheKeys.Groups);
-      this._cache.RemoveValue(CacheKeys.MapSize);
-      this._cache.RemoveValue(CacheKeys.Mtls);
-      this._cache.RemoveValue(CacheKeys.Points);
-      this._cache.RemoveValue(CacheKeys.SegmentDisabled);
-      this._cache.RemoveValue(CacheKeys.Segments);
-      this._cache.RemoveValue(CacheKeys.Stations);
-      this._cache.RemoveValue(CacheKeys.VehicleDio);
-      this._cache.RemoveValue(CacheKeys.VehiclePaths);
-      this._cache.RemoveValue(CacheKeys.Vehicles);
-      //this._cache.RemoveValue(CacheKeys.Zcus);
-      //this._cache.RemoveValue(CacheKeys.ZcuStatus);
+        // [SnakeCase]
+        [HttpGet("tracks")]
+        public ActionResult<MapData> GetMapTrack()
+        {
+            return this._trackSvc.GetMapData();
+        }
+        [HttpGet("tracks/vehicles")]
+        public ActionResult<VehicleResponse> GetVehicles()
+        {
+            var vehicles = this._trackSvc.GetVehicles(true);
+            var paths = this._trackSvc.GetVehiclePaths();
 
-      return "OK";
-    }
+            return new VehicleResponse
+            {
+                Vehicles = vehicles,
+                VehiclePaths = paths,
+            };
+        }
+        [HttpGet("tracks/clear")]
+        public ActionResult<string> ClearCache()
+        {
+            this._cache.RemoveValue(CacheKeys.Buffers);
+            this._cache.RemoveValue(CacheKeys.Clusters);
+            this._cache.RemoveValue(CacheKeys.Groups);
+            this._cache.RemoveValue(CacheKeys.MapSize);
+            this._cache.RemoveValue(CacheKeys.Mtls);
+            this._cache.RemoveValue(CacheKeys.Points);
+            this._cache.RemoveValue(CacheKeys.SegmentDisabled);
+            this._cache.RemoveValue(CacheKeys.Segments);
+            this._cache.RemoveValue(CacheKeys.Stations);
+            this._cache.RemoveValue(CacheKeys.VehicleDio);
+            this._cache.RemoveValue(CacheKeys.VehiclePaths);
+            this._cache.RemoveValue(CacheKeys.Vehicles);
+            //this._cache.RemoveValue(CacheKeys.Zcus);
+            //this._cache.RemoveValue(CacheKeys.ZcuStatus);
 
-    [HttpGet("orders")]
-    public object GetOrderStatus(DataSourceLoadOptions loadOptions)
-    {
-      return DataSourceLoader.Load(_statusSvc.QueryOrderStates(), loadOptions);
-    }
+            return "OK";
+        }
 
-    [HttpGet("vehicles")]
-    public object GetVehicleStatus(DataSourceLoadOptions loadOptions)
-    {
-      return DataSourceLoader.Load(_statusSvc.QueryVehicleStates(), loadOptions);
-    }
+        [HttpGet("orders")]
+        public object GetOrderStatus(DataSourceLoadOptions loadOptions)
+        {
+            return DataSourceLoader.Load(_statusSvc.QueryOrderStates(), loadOptions);
+        }
 
-    [HttpGet("stations")]
-    public object GetStationStatus(DataSourceLoadOptions loadOptions)
-    {
-      return DataSourceLoader.Load(_statusSvc.QueryStationStates(), loadOptions);
-    }
+        [HttpGet("vehicles")]
+        public object GetVehicleStatus(DataSourceLoadOptions loadOptions)
+        {
+            return DataSourceLoader.Load(_statusSvc.QueryVehicleStates(), loadOptions);
+        }
 
-    [HttpGet("buffers")]
-    public object GetBufferStatus(DataSourceLoadOptions loadOptions)
-    {
-      return DataSourceLoader.Load(_statusSvc.QueryBufferStates(), loadOptions);
-    }
+        [HttpGet("stations")]
+        public object GetStationStatus(DataSourceLoadOptions loadOptions)
+        {
+            return DataSourceLoader.Load(_statusSvc.QueryStationStates(), loadOptions);
+        }
 
-    [HttpGet("zcus")]
-    public object GetZcuStatus(DataSourceLoadOptions loadOptions)
-    {
-      return DataSourceLoader.Load(_statusSvc.QueryZcuStates(), loadOptions);
-    }
+        [HttpGet("buffers")]
+        public object GetBufferStatus(DataSourceLoadOptions loadOptions)
+        {
+            return DataSourceLoader.Load(_statusSvc.QueryBufferStates(), loadOptions);
+        }
 
-    [HttpGet("dio")]
-    public object GetVehicleDio(DataSourceLoadOptions loadOptions)
-    {
-      return DataSourceLoader.Load(_statusSvc.QueryDioStates(), loadOptions);
-    }
+        [HttpGet("zcus")]
+        public object GetZcuStatus(DataSourceLoadOptions loadOptions)
+        {
+            return DataSourceLoader.Load(_statusSvc.QueryZcuStates(), loadOptions);
+        }
 
-    [HttpGet("id-list/{type}")]
-    public IEnumerable<NodeInfo> GetIdList(string type)
-    {
-      return this._trackSvc.GetIdList(type.ToUpper());
+        [HttpGet("dio")]
+        public object GetVehicleDio(DataSourceLoadOptions loadOptions)
+        {
+            return DataSourceLoader.Load(_statusSvc.QueryDioStates(), loadOptions);
+        }
+
+        [HttpGet("id-list/{type}")]
+        public IEnumerable<NodeInfo> GetIdList(string type)
+        {
+            return this._trackSvc.GetIdList(type.ToUpper());
+        }
     }
-  }
 }

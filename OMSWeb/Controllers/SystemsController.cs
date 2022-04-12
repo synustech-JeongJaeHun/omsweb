@@ -213,5 +213,59 @@ namespace OMSWeb.Controllers
 
             return File(zipResult, "application/zip", fileName);
         }
+
+        /*
+        [HttpGet("control/updateMap/{mapName}")]
+        public object UpdateMap([FromRoute] string mapName, [FromQuery] string mapFile)
+        {
+            // TSCState Paused 체크
+            IQueryable<ModuleStatusEntity> ms = this._moduleStatusSvc.GetModuleStatus();
+            int tscState = ms.Where(tscState == 2);
+
+            // map update start send
+
+            // oms-config 실행
+            // do map update !!
+            ProcessStartInfo psi = new ProcessStartInfo();
+            psi.FileName = String.Format("{0}oms-config.exe", @"c:\oms\bin\");
+            psi.Arguments = String.Format("update --name {0} --map {1}{2}",
+                                command.map_db_name, @"c:\oms\map\", command.map_source_file);
+            Process.Start(psi);
+
+            try
+            {
+                // get config
+                string targetPath = ConfigManager.ReadCfgData("Log", "base_dir", "..\\..\\Log");
+                string days = ConfigManager.ReadCfgData("Log", "compress_day", "7");
+
+                string module_name = Process.GetCurrentProcess().MainModule.FileName;
+                string path = Path.GetDirectoryName(module_name);
+                string exeName = "..\\..\\bin\\oms-compress-log.exe";
+
+                string filePath = Path.GetFullPath(Path.Combine(path, exeName));
+                string aruguments = string.Format("{0} {1}", targetPath, days);
+                //string param = string.Format("--path {0} --days {1}", targetPath, days);
+
+                if (File.Exists(exeName))
+                {
+                    Process ocl = new Process();
+                    ocl.StartInfo.FileName = filePath;
+                    ocl.StartInfo.Arguments = aruguments;
+                    ocl.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                    ocl.Start();
+                }
+            }
+            catch (Exception ex)
+            { }
+
+
+
+            // 10초간 map update 
+            DbVersionEntity dbVer = this._dbSvc.GetCurrentMap();
+
+            // map update end send
+            return dbVer;
+        }
+        */
     }
 }
