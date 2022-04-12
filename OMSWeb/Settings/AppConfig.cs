@@ -19,7 +19,7 @@ namespace OMSWeb.OMSSettings
         {
             string module_name = Process.GetCurrentProcess().MainModule.FileName;
             string currentDirectory = Path.GetDirectoryName(module_name);
-            AppSettingsPath = Path.GetFullPath(Path.Combine(currentDirectory, ".\\appsettings.json"));
+            AppSettingsPath = Path.GetFullPath(Path.Combine(currentDirectory, "appsettings.json"));
 
             Configuration = new ConfigurationBuilder()
                                 .AddJsonFile(AppSettingsPath, optional: false, reloadOnChange: false).Build();

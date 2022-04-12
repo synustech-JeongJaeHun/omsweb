@@ -2264,9 +2264,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@daimre/angularapp@workspace:packages/angularapp":
+"@daimre/app@workspace:packages/app":
   version: 0.0.0-use.local
-  resolution: "@daimre/angularapp@workspace:packages/angularapp"
+  resolution: "@daimre/app@workspace:packages/app"
   dependencies:
     "@angular-devkit/build-angular": ~0.1000.5
     "@angular/animations": ~10.0.6

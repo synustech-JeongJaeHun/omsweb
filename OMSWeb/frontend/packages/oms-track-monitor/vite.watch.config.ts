@@ -37,6 +37,7 @@ export default defineConfig({
 		watch: {
 			include: 'src/**'
 		},
-		outDir: './dist'
+		outDir: './dist',
+		emptyOutDir: false,
   },
 })

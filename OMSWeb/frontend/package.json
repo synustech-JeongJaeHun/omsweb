@@ -7,7 +7,7 @@
   "type": "module",
   "scripts": {
     "preinstall": "npx only-allow yarn",
-    "ap": "yarn workspace @daimre/angularapp",
+    "ap": "yarn workspace @daimre/app",
     "shared": "yarn workspace @daimre/shared",
     "cl": "yarn workspace @daimre/component-library",
     "styles": "yarn workspace @daimre/styles",
