@@ -219,7 +219,6 @@ export class MapSidePanelComponent implements OnChanges, OnDestroy {
 	}
 
 	changeSegmentDisabled(value: boolean) {
-		console.log('value', value)
 		if (value) {
 			this.messageSvc
 				.sendDisableSegmentCommand({ action: 'disable-segment' }, this.data.id)
