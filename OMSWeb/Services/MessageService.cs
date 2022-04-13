@@ -8,33 +8,46 @@ using OMSWeb.Services.MqttClient;
 
 namespace OMSWeb.Services
 {
-  public class MessageService
-  {
+    public class MessageService
+    {
         private readonly IMqttClientService _mqttClientService;
 
-    public MessageService(MqttClientServiceProvider provider)
-    {
-        _mqttClientService = provider.MqttClientService;
-    }
-
-    public Task SendMessage(CommandMessageDto command)
-    {
-        // Console.WriteLine($"# SendMessage -> {command.Type}, {command.Action}, {command.OrderId}");
-        MqttMessage m = new MqttMessage();
-        string topic = m.GetTopic(command);
-        List<string> payloads = m.GetPayload(command);
-
-        if (topic == null || payloads == null)
+        public MessageService(MqttClientServiceProvider provider)
         {
+            _mqttClientService = provider.MqttClientService;
+        }
+
+        public Task SendMessage(CommandMessageDto command)
+        {
+            // Console.WriteLine($"# SendMessage -> {command.Type}, {command.Action}, {command.OrderId}");
+            MqttMessage m = new MqttMessage();
+            string topic = m.GetTopic(command);
+            List<string> payloads = m.GetPayload(command);
+
+            if (topic == null || payloads == null)
+            {
+                return Task.CompletedTask;
+            }
+
+            foreach (string payload in payloads)
+            {
+                _mqttClientService.SendMessage(topic, payload);
+            }
+
             return Task.CompletedTask;
         }
 
-        foreach (string payload in payloads)
+        public Task SendMessage(string topic, string payload)
         {
+            if (string.IsNullOrWhiteSpace(topic) || string.IsNullOrWhiteSpace(payload))
+            {
+                return Task.CompletedTask;
+            }
+
             _mqttClientService.SendMessage(topic, payload);
+
+            return Task.CompletedTask;
         }
 
-        return Task.CompletedTask;
     }
-  }
 }

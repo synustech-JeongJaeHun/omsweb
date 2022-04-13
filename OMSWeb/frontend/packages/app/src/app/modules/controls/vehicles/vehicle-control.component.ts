@@ -34,6 +34,8 @@ export class VehicleControlComponent implements OnInit {
 	maps: string[] = []
 
 	isUpdating = false
+	isUpdateFail = false
+	failReason = ''
 
 	get hasControlAccess(): boolean {
 		return this.auth.isAuthenticated
@@ -74,11 +76,18 @@ export class VehicleControlComponent implements OnInit {
 		this.dialogSvc
 			.confirm({ body: this.t$.instant('messages.confirmCommand') })
 			.subscribe((ok) => {
-        if (ok) {
-          this.systemSvc
-            .updateMap(this.updateMapName, this.updateFileName)
-            .subscribe(() => {
-							this.getCurrentMap()
+				if (ok) {
+					this.systemSvc
+						.updateMap(this.currentMapName, this.updateFileName)
+						.subscribe((res) => {
+							if (res.bResult) {
+								this.getCurrentMap()
+								this.isUpdateFail = false
+								this.failReason = ''
+							} else {
+								this.isUpdateFail = true
+								this.failReason = res.message
+							}
 							this.isUpdating = false
 						})
 

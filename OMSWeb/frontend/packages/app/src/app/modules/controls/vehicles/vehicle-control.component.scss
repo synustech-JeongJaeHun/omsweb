@@ -39,3 +39,9 @@ label {
 .expected {
   background-color: rgba($color: #b8b8b8, $alpha: 0.3);
 }
+
+.update-fail {
+  font-size: x-small;
+  color: red;
+  margin-top: 5px;
+}

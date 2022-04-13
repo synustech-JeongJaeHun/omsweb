@@ -11,6 +11,11 @@ using Microsoft.AspNetCore.Mvc;
 using OMSWeb.Models;
 using OMSWeb.Models.Entities;
 using OMSWeb.Services;
+using Newtonsoft.Json;
+using OMSWeb.Services.MqttClient;
+using System.Diagnostics;
+using OMSWeb.OMSSettings;
+using System.Threading;
 
 namespace OMSWeb.Controllers
 {
@@ -21,12 +26,14 @@ namespace OMSWeb.Controllers
         private SystemsService _systemSvc;
         private DbService _dbSvc;
         private ModuleStatusService _moduleStatusSvc;
+        private readonly MessageService _msgSvc;
 
-        public SystemsController(SystemsService systemSvc, DbService dbSvc, ModuleStatusService moduleStatusSvc)
+        public SystemsController(SystemsService systemSvc, DbService dbSvc, ModuleStatusService moduleStatusSvc, MessageService messageService)
         {
             this._systemSvc = systemSvc;
             this._dbSvc = dbSvc;
             this._moduleStatusSvc = moduleStatusSvc;
+            this._msgSvc = messageService;
         }
 
         [HttpGet("states")]
@@ -214,58 +221,101 @@ namespace OMSWeb.Controllers
             return File(zipResult, "application/zip", fileName);
         }
 
-        /*
-        [HttpGet("control/updateMap/{mapName}")]
-        public object UpdateMap([FromRoute] string mapName, [FromQuery] string mapFile)
+        public class MapFileDto { public string MapFile { get; set; } }
+
+        [HttpPost("control/updateMap/{mapName}")]
+        public ActionResult<MapUpdateResultModel> UpdateMap([FromRoute] string mapName, [FromBody] MapFileDto mapFileDto)
         {
+            string mapFile = mapFileDto.MapFile;
+            bool bResult = false;
+
             // TSCState Paused Ã¼Å©
-            IQueryable<ModuleStatusEntity> ms = this._moduleStatusSvc.GetModuleStatus();
-            int tscState = ms.Where(tscState == 2);
+            SystemStatusModel sm = this._systemSvc.GetHostStatus();
+            if (sm.TscMode != TscModeEnums.PAUSED)
+            {
+                bResult = false;
+                return new MapUpdateResultModel
+                {
+                    Message = string.Format("TSCState is Not PAUSED, set PAUSED and Retry Again!"),
+                    bResult = bResult
+                };
+            }
+
+            // get current ver
+            DbVersionEntity dbVer = this._dbSvc.GetCurrentMap();
+            int current_ver = Convert.ToInt32(dbVer.DbVersion);
 
             // map update start send
+            Dictionary<string, object> data_begin = new Dictionary<string, object>();
+            data_begin.Add("request", "map-update");
+            data_begin.Add("action", "status");
+            data_begin.Add("status", "start");
+            data_begin.Add("worker", "omsweb");
+            this._msgSvc.SendMessage(MqttMessage.TOPIC_MAP_UPDATE, JsonConvert.SerializeObject(data_begin));
 
-            // oms-config ½ÇÇà
-            // do map update !!
-            ProcessStartInfo psi = new ProcessStartInfo();
-            psi.FileName = String.Format("{0}oms-config.exe", @"c:\oms\bin\");
-            psi.Arguments = String.Format("update --name {0} --map {1}{2}",
-                                command.map_db_name, @"c:\oms\map\", command.map_source_file);
-            Process.Start(psi);
-
+            // oms-config ï¿½ï¿½ï¿½ï¿½
             try
             {
-                // get config
-                string targetPath = ConfigManager.ReadCfgData("Log", "base_dir", "..\\..\\Log");
-                string days = ConfigManager.ReadCfgData("Log", "compress_day", "7");
-
                 string module_name = Process.GetCurrentProcess().MainModule.FileName;
                 string path = Path.GetDirectoryName(module_name);
-                string exeName = "..\\..\\bin\\oms-compress-log.exe";
+                string exeName = "..\\..\\bin\\oms-config.exe";
 
                 string filePath = Path.GetFullPath(Path.Combine(path, exeName));
-                string aruguments = string.Format("{0} {1}", targetPath, days);
-                //string param = string.Format("--path {0} --days {1}", targetPath, days);
+                string mapDir = AppConfig.GetFromOMSConfig("Map", "map_dir", "..\\..\\map");
+                string arguments = $"update --name {mapName} --map {mapDir}{mapFile}";
 
-                if (File.Exists(exeName))
+                if (!System.IO.File.Exists(filePath))
                 {
-                    Process ocl = new Process();
-                    ocl.StartInfo.FileName = filePath;
-                    ocl.StartInfo.Arguments = aruguments;
-                    ocl.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                    ocl.Start();
+                    bResult = false;
+                    return new MapUpdateResultModel
+                    {
+                        Message = string.Format("Map update {0}", bResult ? "complete" : "failed"),
+                        bResult = bResult
+                    };
                 }
+
+                // execute oms-conig.exe
+                Process ocl = new Process();
+                ocl.StartInfo.FileName = filePath;
+                ocl.StartInfo.Arguments = arguments;
+                ocl.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                ocl.Start();
+
             }
             catch (Exception ex)
             { }
 
+            // 10ï¿½Ê°ï¿½ map update 
+            DateTime startTime = DateTime.Now;
+            int timeSecondSpan = 0;
+            while (timeSecondSpan < 10) // wait for max 10 sec
+            {
+                DbVersionEntity DbVerNew = this._dbSvc.GetCurrentMap();
+                if (current_ver < DbVerNew.DbVersion)
+                {
+                    bResult = true;
+                    break;
+                }
 
+                TimeSpan diff = DateTime.Now - startTime;
+                timeSecondSpan = diff.Seconds;
 
-            // 10ÃÊ°£ map update 
-            DbVersionEntity dbVer = this._dbSvc.GetCurrentMap();
+                Thread.Sleep(300);
+            }
 
             // map update end send
-            return dbVer;
+            Dictionary<string, object> data_end = new Dictionary<string, object>();
+            data_end.Add("request", "map-update");
+            data_end.Add("action", "status");
+            data_end.Add("status", bResult ? "complete" : "failed");
+            data_end.Add("worker", "omsweb");
+            this._msgSvc.SendMessage(MqttMessage.TOPIC_MAP_UPDATE, JsonConvert.SerializeObject(data_end));
+
+            return new MapUpdateResultModel
+            {
+                Message = string.Format("Map update {0}", bResult ? "complete" : "failed"),
+                bResult = bResult
+            };
         }
-        */
     }
 }

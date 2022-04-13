@@ -290,6 +290,7 @@
     "secondary": "Secondary",
     "contain": "Contain",
     "updated": "Updated",
+    "updateFailed": "Update Failed",
     "carrierId": "Carrier ID",
     "clean": "Clean",
     "note": "Note",

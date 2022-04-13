@@ -290,6 +290,7 @@
     "secondary": "보조",
     "contain": "포함",
     "updated": "업데이트",
+    "updateFailed": "Update Failed",
     "carrierId": "캐리어 아이디",
     "clean": "삭제",
     "note": "참고",
