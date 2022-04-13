@@ -314,34 +314,6 @@ namespace OMSWeb.Services.MqttClient
             }
             else if (command.Action == ACTION_MAP_UPDATE)
             {
-                /*
-                if (command.map_db_name != null)
-                    data["map_db_name"] = command.map_db_name;
-
-                if (command.map_source_file != null)
-                    data["map_source_file"] = command.map_source_file;
-                */
-                if (command.map_db_name != null && command.map_source_file != null)
-                {
-                    // kill oms & vas
-                    foreach(Process process in Process.GetProcesses())
-                    {
-                        if (process.ProcessName.ToLower() == "oms_srv")
-                            process.Kill();
-
-                        if (process.ProcessName.ToLower() == "vas")
-                            process.Kill();
-                    }
-
-                    // do map update !!
-                    ProcessStartInfo psi = new ProcessStartInfo();
-                    psi.FileName = String.Format("{0}oms-config.exe", @"c:\oms\bin\");
-                    psi.Arguments = String.Format("update --name {0} --map {1}{2}", 
-                                        command.map_db_name, @"c:\oms\map\", command.map_source_file);
-                    Process.Start(psi);
-                }
-
-                return null;
             }
             else if (command.Action == ACTION_AI_MODE)
             {

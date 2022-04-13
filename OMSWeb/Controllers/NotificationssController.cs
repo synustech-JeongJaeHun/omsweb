@@ -12,42 +12,45 @@ using OMSWeb.Services;
 
 namespace OMSWeb.Controllers
 {
-  [Route("api/[controller]")]
-  [ApiController]
-  public class NotificationsController : ControllerBase
-  {
-    private readonly NotificationsService _notificationSvc;
-
-    public NotificationsController(NotificationsService notificationsService)
+    [Route("api/[controller]")]
+    [ApiController]
+    public class NotificationsController : ControllerBase
     {
-      this._notificationSvc = notificationsService;
-    }
+        private readonly NotificationsService _notificationSvc;
 
-    [HttpGet("alert-count")]
-    public ActionResult<NotificationCountModel> AlertCount()
-    {
-      return this._notificationSvc.GetAlertCount();
-    }
+        public NotificationsController(NotificationsService notificationsService)
+        {
+            this._notificationSvc = notificationsService;
+        }
 
-    [HttpGet("alarm-count")]
-    public ActionResult<NotificationCountModel> AlarmCount() {
-      return this._notificationSvc.GetAlarmCount();
-    }
+        [HttpGet("alert-count")]
+        public ActionResult<NotificationCountModel> AlertCount()
+        {
+            return this._notificationSvc.GetAlertCount();
+        }
 
-    [HttpGet("alarms")]
-    public object GetAlarms(DataSourceLoadOptions loadOptions) {
-     return DataSourceLoader.Load(_notificationSvc.GetAlarms(), loadOptions); 
-    }
+        [HttpGet("alarm-count")]
+        public ActionResult<NotificationCountModel> AlarmCount()
+        {
+            return this._notificationSvc.GetAlarmCount();
+        }
 
-    [HttpPost("addannotation")]
-    public object AddAnnotation(AnnotationDto annotationForm)
-    {
-      return this._notificationSvc.AddAnnotation(annotationForm);
-    }
+        [HttpGet("alarms")]
+        public object GetAlarms(DataSourceLoadOptions loadOptions)
+        {
+            return DataSourceLoader.Load(_notificationSvc.GetAlarms(), loadOptions);
+        }
 
-    [HttpGet("vehicle-errors")]
-    public object GetVehicleErrors(DataSourceLoadOptions loadOptions) {
-      return DataSourceLoader.Load(_notificationSvc.GetVehicleErrors(), loadOptions);
+        [HttpPost("addannotation")]
+        public object AddAnnotation(AnnotationDto annotationForm)
+        {
+            return this._notificationSvc.AddAnnotation(annotationForm);
+        }
+
+        [HttpGet("vehicle-errors")]
+        public object GetVehicleErrors(DataSourceLoadOptions loadOptions)
+        {
+            return DataSourceLoader.Load(_notificationSvc.GetVehicleErrors(), loadOptions);
+        }
     }
-  }
 }
