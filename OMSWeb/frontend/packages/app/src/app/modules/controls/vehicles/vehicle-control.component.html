@@ -51,6 +51,7 @@
 
 <mat-progress-bar class="mb-30" *ngIf="isUpdating" mode="indeterminate" aria-label="Loading"></mat-progress-bar>
 <button *ngIf="(isUpdating === false)" mat-raised-button color="primary" class="mb-30" (click)="onUpdateMap()">Update</button>
+<div class="update-fail" *ngIf="isUpdateFail">{{ "names.updateFailed" | translate }}: {{failReason}} </div>
 
 <!-- <h2>{{ "names.vehicleMap" | translate }}</h2> -->
 <!-- <div class="actions-container">

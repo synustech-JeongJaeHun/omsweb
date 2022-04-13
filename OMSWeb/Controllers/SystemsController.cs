@@ -221,9 +221,12 @@ namespace OMSWeb.Controllers
             return File(zipResult, "application/zip", fileName);
         }
 
-        [HttpGet("control/updateMap/{mapName}")]
-        public ActionResult<MapUpdateResultModel> UpdateMap([FromRoute] string mapName, [FromQuery] string mapFile)
+        public class MapFileDto { public string MapFile { get; set; } }
+
+        [HttpPost("control/updateMap/{mapName}")]
+        public ActionResult<MapUpdateResultModel> UpdateMap([FromRoute] string mapName, [FromBody] MapFileDto mapFileDto)
         {
+            string mapFile = mapFileDto.MapFile;
             bool bResult = false;
 
             // TSCState Paused Ã¼Å©
@@ -250,7 +253,7 @@ namespace OMSWeb.Controllers
             data_begin.Add("worker", "omsweb");
             this._msgSvc.SendMessage(MqttMessage.TOPIC_MAP_UPDATE, JsonConvert.SerializeObject(data_begin));
 
-            // oms-config ½ÇÇà
+            // oms-config ï¿½ï¿½ï¿½ï¿½
             try
             {
                 string module_name = Process.GetCurrentProcess().MainModule.FileName;
@@ -277,12 +280,12 @@ namespace OMSWeb.Controllers
                 ocl.StartInfo.Arguments = arguments;
                 ocl.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
                 ocl.Start();
-                
+
             }
             catch (Exception ex)
             { }
 
-            // 10ÃÊ°£ map update 
+            // 10ï¿½Ê°ï¿½ map update 
             DateTime startTime = DateTime.Now;
             int timeSecondSpan = 0;
             while (timeSecondSpan < 10) // wait for max 10 sec
@@ -304,11 +307,11 @@ namespace OMSWeb.Controllers
             Dictionary<string, object> data_end = new Dictionary<string, object>();
             data_end.Add("request", "map-update");
             data_end.Add("action", "status");
-            data_end.Add("status", bResult ? "complete":"failed");
+            data_end.Add("status", bResult ? "complete" : "failed");
             data_end.Add("worker", "omsweb");
             this._msgSvc.SendMessage(MqttMessage.TOPIC_MAP_UPDATE, JsonConvert.SerializeObject(data_end));
 
-            return new MapUpdateResultModel 
+            return new MapUpdateResultModel
             {
                 Message = string.Format("Map update {0}", bResult ? "complete" : "failed"),
                 bResult = bResult
