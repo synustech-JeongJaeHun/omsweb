@@ -327,7 +327,7 @@ namespace OMSWeb.Controllers
             // 8. check if map update is completed for 10sec
             DateTime startTime = DateTime.Now;
             int timeSecondSpan = 0;
-            while (timeSecondSpan < 10) // wait for max 10 sec
+            while (timeSecondSpan < 10000) // wait for max 10 sec
             {
                 DbVersionEntity DbVerNew = this._dbSvc.GetCurrentMap();
                 if (current_ver < DbVerNew.DbVersion)
@@ -337,9 +337,9 @@ namespace OMSWeb.Controllers
                 }
 
                 TimeSpan diff = DateTime.Now - startTime;
-                timeSecondSpan = diff.Seconds;
+                timeSecondSpan = diff.Milliseconds;
 
-                Thread.Sleep(300);
+                Thread.Sleep(150);
             }
 
             // 9. send end status of map update
