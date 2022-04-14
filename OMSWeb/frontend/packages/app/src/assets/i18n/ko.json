@@ -345,7 +345,7 @@
     "item": "항목",
     "range": "범위",
     "control": "제어",
-    "overwriteSegmentUnuseInfo": "Overwrite Segment Unuse Info",
+    "overwriteDbInfo": "Overwrite DB's Segment Unuse Info",
     "refreshMapInfo": "지도 정보 새로 고침",
     "requestMapUpdate": "지도 업데이트 요청",
     "removeVehicle": "비클 제거",
