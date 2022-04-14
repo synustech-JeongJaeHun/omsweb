@@ -131,39 +131,46 @@ export class LegacyMapViewerComponent implements OnInit, OnDestroy {
 	}
 
 	private setToCurrentSnapshot() {
-		console.log('playback - track', this.playService.track.data)
-		console.log('playback - snapshot', this.playService.currentSnapshot.data)
-
-		// // @ts-ignore
+		// @ts-ignore
 		this.viewer.setTrack({
-			points: this.playService.track.data.points.map((p) => ({
+			points: (this.playService.track.data.points ?? []).map((p) => ({
 				...p,
 				logicalId: p.logical_id,
 				physicalId: p.physical_id,
 			})),
 
-			segmentParts: this.playService.track.data.segment_parts.map((sp) => {
-				const segment = this.playService.track.data.segments.find(
-					(s) => s.id === sp.segment_id,
-				)
+			segmentParts: (this.playService.track.data.segment_parts ?? []).map(
+				(sp) => {
+					const segment = (this.playService.track.data.segments ?? []).find(
+						(s) => s.id === sp.segment_id,
+					)
 
-				return {
-					id: segment.id,
-					logicalId: segment.logical_id,
-					physicalId: segment.physical_id,
-					startPoint: segment.start_point,
-					endPoint: segment.end_point,
-					length: segment.length,
-					speed: segment.speed,
+					return {
+						id: segment.id,
+						logicalId: segment.logical_id,
+						physicalId: segment.physical_id,
+						startPoint: segment.start_point,
+						endPoint: segment.end_point,
+						length: segment.length,
+						speed: segment.speed,
 
-					segpartId: sp.id,
-					type: sp.type,
-					location: sp.location,
-					direction: sp.direction,
-				}
-			}),
-			// buffers: this.playService.track.data.buffers,
-			stations: this.playService.track.data.stations.map((s) => ({
+						segpartId: sp.id,
+						type: sp.type,
+						location: sp.location,
+						direction: sp.direction,
+					}
+				},
+			),
+			buffers: (this.playService.track.data.buffers ?? []).map((b) => ({
+				id: b.id,
+				logicalId: b.logical_id,
+				physicalId: b.physical_id,
+				direction: b.direction,
+				pointId: b.point,
+				nextPoint: b.next_point,
+				offset: b.offset,
+			})),
+			stations: (this.playService.track.data.stations ?? []).map((s) => ({
 				...s,
 				carrierId: s.carrier_id,
 				carrierType: s.carrier_type,
@@ -172,19 +179,20 @@ export class LegacyMapViewerComponent implements OnInit, OnDestroy {
 				pointId: s.point,
 				nextPoint: s.next_point,
 			})),
-			mtls: this.playService.track.data.mtls.map((m) => ({
+			mtls: (this.playService.track.data.mtls ?? []).map((m) => ({
 				id: m.id,
 				pointId: m.point,
 				logicalId: m.logical_id,
 				physicalId: m.physical_id,
 			})),
 			vehicles: [],
-			segmentDisabled:
-				[] ??
-				this.playService.currentSnapshot.data.segment_blocking.map((sb) => {}),
+			segmentDisabled: [],
 		})
+
+		// make other task
 		setTimeout(() => {
-			this.playService.currentSnapshot.data.vehicles.forEach((v) => {
+			const vehicles = this.playService.currentSnapshot.data.vehicles ?? []
+			vehicles.forEach((v) => {
 				this.viewer.updateVehicle('INSERT', {
 					id: v.id,
 					logicalId: v.logical_id,
@@ -229,6 +237,21 @@ export class LegacyMapViewerComponent implements OnInit, OnDestroy {
 					// id: "push_point_list",
 					// id: "preassigned_order_id",
 					// id: "blocked_segment_pairs",
+				})
+			})
+
+			const segmentBlockings =
+				this.playService.currentSnapshot.data.segment_blocking ?? []
+			segmentBlockings.forEach((sb) => {
+				this.viewer.updateSegmentDisabled('INSERT', {
+					operation: 'INSERT',
+					id: sb.id,
+					data: {
+						id: sb.id,
+						segmentId: sb.segment_id,
+						disabledBy: sb.disabled_by,
+						disabledReason: sb.reason,
+					},
 				})
 			})
 		}, 1)

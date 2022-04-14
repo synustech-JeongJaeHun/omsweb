@@ -312,7 +312,7 @@ export class PlaybackPlayService {
 				.map((s) => ({ ...s, objectType: 'station' })) ?? []
 		const buffers =
 			this.track.data.buffers
-				.filter((b) => b.pointId === pointId)
+				.filter((b) => b.point === pointId)
 				.map((b) => ({ ...b, objectType: 'buffer' })) ?? []
 		const mtls =
 			this.track.data.mtls

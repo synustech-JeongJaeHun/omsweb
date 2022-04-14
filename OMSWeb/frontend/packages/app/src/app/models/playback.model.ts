@@ -22,11 +22,15 @@ type PlaybackTrackData = {
 type PlaybackBuffer = {
 	direction: string
 	id: number
-	logicalId: LogicalId
-	nextPoint: number
+	logical_id: LogicalId
+	next_point: number
 	offset: number
-	physicalId: PhysicalId
-	pointId: number
+	physical_id: PhysicalId
+	point: number
+	unuse: boolean
+	carrier_id: null
+	x: null
+	y: null
 }
 type PlaybackClusterPoint = {
 	id: number

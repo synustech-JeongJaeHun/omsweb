@@ -61,7 +61,7 @@ export class LegacySearchDialogComponent implements OnInit {
 			})),
 			buffer: this.playbackPlayService.track.data.buffers.map((x) => ({
 				id: x.id,
-				logicalId: x.logicalId,
+				logicalId: x.logical_id,
 			})),
 			station: this.playbackPlayService.track.data.stations.map((x) => ({
 				id: x.id,
