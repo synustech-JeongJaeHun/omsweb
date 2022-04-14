@@ -159,7 +159,7 @@ export class LegacyMapViewerComponent implements OnInit, OnDestroy {
 		//     segments: c.segments.split(',').map((id) => parseInt(id.trim())),
 		//   })),
 		// });
-		// this.attachEvents();
+		this.attachEvents()
 		// this.attachHubEvents();
 
 		// this.viewer.setCameraAndRotation({
@@ -176,6 +176,31 @@ export class LegacyMapViewerComponent implements OnInit, OnDestroy {
 		this.destroy$.complete()
 
 		clearInterval(this.cameraAndRotationSyncId)
+	}
+
+	private attachEvents() {
+		this.mapStatesService.toolbarToggleEvent$
+			.pipe(takeUntil(this.destroy$))
+			.subscribe((event) => {
+				if (event.type === 'itemDetails') {
+					this.detailsVisible = event.value
+				} else if (event.type === 'controlTable') {
+					// setTimeout(() => {
+					//   this.viewer.adjust_floaters();
+					// }, 100);
+				} else {
+					// this.viewer?.onChangeVisibility(event);
+				}
+			})
+
+		this.mapStatesService.statusTableResizeEvent$
+			.pipe(takeUntil(this.destroy$))
+			.subscribe((tableHeightNum) => {
+				this.viewerSetting.rect.height =
+					window.innerHeight -
+					40 -
+					(tableHeightNum === 0 ? 0 : tableHeightNum + 50)
+			})
 	}
 
 	setTrackByTime() {}

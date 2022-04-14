@@ -138,7 +138,7 @@ namespace OMSWeb.Repositories
                 }
                 catch (System.Exception)
                 {
-                    Console.WriteLine("[GetFirstSnapshotTime] => null");
+                    Console.WriteLine("[BeforeSnapshotTime] => null");
                     result.Before = null;
                 }
             }
@@ -163,7 +163,7 @@ namespace OMSWeb.Repositories
                 }
                 catch (System.Exception)
                 {
-                    Console.WriteLine("[GetFirstSnapshotTime] => null");
+                    Console.WriteLine("[NextSnapshotTime] => null");
                     result.Next = null;
                 }
             }
