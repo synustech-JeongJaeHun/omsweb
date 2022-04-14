@@ -221,15 +221,20 @@ namespace OMSWeb.Controllers
             return File(zipResult, "application/zip", fileName);
         }
 
-        public class MapFileDto { public string MapFile { get; set; } }
+        public class MapFileDto 
+        { 
+            public string MapFile { get; set; }
+            public bool Overwrite { get; set; }
+        }
 
         [HttpPost("control/updateMap/{mapName}")]
-        public ActionResult<MapUpdateResultModel> UpdateMap([FromRoute] string mapName, [FromBody] MapFileDto mapFileDto)
+        public ActionResult<MapUpdateResultModel> UpdateMap([FromRoute] string mapName, [FromBody] MapFileDto mapFileDto )
         {
-            string mapFile = mapFileDto.MapFile;
             bool bResult = false;
-
-            // TSCState Paused üũ
+            string mapFile = mapFileDto.MapFile;
+            bool bOverwrite = mapFileDto.Overwrite;
+            
+            // 1. TSCState Paused üũ
             SystemStatusModel sm = this._systemSvc.GetHostStatus();
             if (sm.TscMode != TscModeEnums.PAUSED)
             {
@@ -241,11 +246,11 @@ namespace OMSWeb.Controllers
                 };
             }
 
-            // get current ver
+            // 2. get current ver
             DbVersionEntity dbVer = this._dbSvc.GetCurrentMap();
             int current_ver = Convert.ToInt32(dbVer.DbVersion);
 
-            // map update start send
+            // 3. send start status of map update
             Dictionary<string, object> data_begin = new Dictionary<string, object>();
             data_begin.Add("request", "map-update");
             data_begin.Add("action", "status");
@@ -253,18 +258,20 @@ namespace OMSWeb.Controllers
             data_begin.Add("worker", "omsweb");
             this._msgSvc.SendMessage(MqttMessage.TOPIC_MAP_UPDATE, JsonConvert.SerializeObject(data_begin));
 
-            // oms-config ����
+            // 4. execute oms-config
             try
             {
                 string module_name = Process.GetCurrentProcess().MainModule.FileName;
-                string path = Path.GetDirectoryName(module_name);
+                string currenPath = Path.GetDirectoryName(module_name);
                 string exeName = "..\\..\\bin\\oms-config.exe";
+                string exePath = Path.GetFullPath(Path.Combine(currenPath, exeName));
 
-                string filePath = Path.GetFullPath(Path.Combine(path, exeName));
                 string mapDir = AppConfig.GetFromOMSConfig("Map", "map_dir", "..\\..\\map");
-                string arguments = $"update --name {mapName} --map {mapDir}{mapFile}";
+                string mapPath = Path.GetFullPath(Path.Combine(mapDir, mapFile));
+                string arguments = (bOverwrite) ? $"update --name {mapName} --map \"{mapPath}\" --overwrite" :
+                                                  $"update --name {mapName} --map \"{mapPath}\"";
 
-                if (!System.IO.File.Exists(filePath))
+                if (!System.IO.File.Exists(exePath))
                 {
                     bResult = false;
                     return new MapUpdateResultModel
@@ -274,9 +281,9 @@ namespace OMSWeb.Controllers
                     };
                 }
 
-                // execute oms-conig.exe
+                // 4-1 execute oms-conig.exe
                 Process ocl = new Process();
-                ocl.StartInfo.FileName = filePath;
+                ocl.StartInfo.FileName = exePath;
                 ocl.StartInfo.Arguments = arguments;
                 ocl.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
                 ocl.Start();
@@ -285,7 +292,7 @@ namespace OMSWeb.Controllers
             catch (Exception ex)
             { }
 
-            // 10�ʰ� map update 
+            // 5. check if map update is completed for 10sec
             DateTime startTime = DateTime.Now;
             int timeSecondSpan = 0;
             while (timeSecondSpan < 10) // wait for max 10 sec
@@ -303,7 +310,7 @@ namespace OMSWeb.Controllers
                 Thread.Sleep(300);
             }
 
-            // map update end send
+            // 6. send end status of map update
             Dictionary<string, object> data_end = new Dictionary<string, object>();
             data_end.Add("request", "map-update");
             data_end.Add("action", "status");
@@ -311,6 +318,7 @@ namespace OMSWeb.Controllers
             data_end.Add("worker", "omsweb");
             this._msgSvc.SendMessage(MqttMessage.TOPIC_MAP_UPDATE, JsonConvert.SerializeObject(data_end));
 
+            // 7. return result to front
             return new MapUpdateResultModel
             {
                 Message = string.Format("Map update {0}", bResult ? "complete" : "failed"),

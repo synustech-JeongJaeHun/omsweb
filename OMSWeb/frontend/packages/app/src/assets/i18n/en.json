@@ -345,6 +345,7 @@
     "item": "Item",
     "range": "Range",
     "control": "Control",
+    "overwriteSegmentUnuseInfo": "Overwrite Segment Unuse Info",
     "refreshMapInfo": "Refresh map info",
     "requestMapUpdate": "Request map update",
     "removeVehicle": "Remove Vehicle",

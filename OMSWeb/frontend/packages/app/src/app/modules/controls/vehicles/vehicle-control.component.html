@@ -1,56 +1,54 @@
 <section>
-<h2>{{ "names.mapInfo" | translate }}</h2>
+  <h2>{{ "names.mapInfo" | translate }}</h2>
 
-<div class="flex-row">
-  <div class="flex-column label-form">
-    <label>{{ "names.mapName" | translate }}</label>
-    <dx-text-box [disabled]="true" [value]="currentMapName" width="100%"> </dx-text-box>
+  <div class="flex-row">
+    <div class="flex-column label-form">
+      <label>{{ "names.mapName" | translate }}</label>
+      <dx-text-box [disabled]="true" [value]="currentMapName" width="100%"> </dx-text-box>
+    </div>
+    <div class="flex-column label-form">
+      <label>{{ "names.mapVersion" | translate }}</label>
+      <dx-text-box [disabled]="true" [value]="currentMapVersion" width="100%"> </dx-text-box>
+    </div>
+    <div class="flex-column label-form">
+      <label>{{ "names.fileName" | translate }}</label>
+      <dx-text-box [disabled]="true" [value]="currentFileName" width="100%"> </dx-text-box>
+    </div>
   </div>
-  <div class="flex-column label-form">
-    <label>{{ "names.mapVersion" | translate }}</label>
-    <dx-text-box [disabled]="true" [value]="currentMapVersion" width="100%"> </dx-text-box>
-  </div>
-  <div class="flex-column label-form">
-    <label>{{ "names.fileName" | translate }}</label>
-    <dx-text-box [disabled]="true" [value]="currentFileName" width="100%"> </dx-text-box>
-  </div>
-</div>
 </section>
 
 <section>
-<h2>{{ "names.mapUpdate" | translate }}</h2>
+  <h2>{{ "names.mapUpdate" | translate }}</h2>
 
-<div class="flex-row">
-  <div class="flex-column label-form">
-    <label>{{ "names.mapName" | translate }}</label>
-    <dx-text-box
-      class="expected"
-      [disabled]="true"
-      [(value)]="currentMapName"
-      width="100%"
-    > </dx-text-box>
+  <div class="flex-row">
+    <div class="flex-column label-form">
+      <label>{{ "names.mapName" | translate }}</label>
+      <dx-text-box class="expected"
+                   [disabled]="true"
+                   [(value)]="currentMapName"
+                   width="100%"> </dx-text-box>
+    </div>
+    <div class="flex-column label-form">
+      <label>{{ "names.mapVersion" | translate }}</label>
+      <dx-text-box class="expected"
+                   [disabled]="true" [value]="updateMapVersion" width="100%"> </dx-text-box>
+    </div>
+    <div class="flex-column label-form">
+      <label>{{ "names.fileName" | translate }}</label>
+      <dx-autocomplete [disabled]="isUpdating"
+                       width="100%"
+                       [(value)]="updateFileName"
+                       [dataSource]="maps"
+                       (onFocusIn)="updateMapFiles()"> </dx-autocomplete>
+    </div>
   </div>
-  <div class="flex-column label-form">
-    <label>{{ "names.mapVersion" | translate }}</label>
-    <dx-text-box
-      class="expected"
-      [disabled]="true" [value]="updateMapVersion" width="100%"> </dx-text-box>
-  </div>
-  <div class="flex-column label-form">
-    <label>{{ "names.fileName" | translate }}</label>
-    <dx-autocomplete
-      [disabled]="isUpdating"
-      width="100%"
-      [(value)]="updateFileName"
-      [dataSource]="maps"
-      (onFocusIn)="updateMapFiles()"
-    > </dx-autocomplete>
-  </div>
-</div>
 </section>
-
+<div>
+  <label><input type="checkbox" (click)="onChangedOverwrite()"/>{{ "names.overwriteSegmentUnuseInfo" | translate }} </label>
+</div>
+<br />
 <mat-progress-bar class="mb-30" *ngIf="isUpdating" mode="indeterminate" aria-label="Loading"></mat-progress-bar>
-<button *ngIf="(isUpdating === false)" mat-raised-button color="primary" class="mb-30" (click)="onUpdateMap()">Update</button>
+<label><button *ngIf="(isUpdating === false)" mat-raised-button color="primary" class="mb-30" (click)="onUpdateMap()">Update</button>
 <div class="update-fail" *ngIf="isUpdateFail">{{ "names.updateFailed" | translate }}: {{failReason}} </div>
 
 <!-- <h2>{{ "names.vehicleMap" | translate }}</h2> -->

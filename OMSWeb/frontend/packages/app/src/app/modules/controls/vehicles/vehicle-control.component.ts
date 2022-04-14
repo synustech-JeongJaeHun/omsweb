@@ -28,7 +28,8 @@ export class VehicleControlComponent implements OnInit {
 	public get updateMapVersion() {
 		return parseInt(this.currentMapVersion) + 1
 	}
-	updateFileName = ''
+    updateFileName = ''
+    overWrite = false
 
 	// map files
 	maps: string[] = []
@@ -78,7 +79,7 @@ export class VehicleControlComponent implements OnInit {
 			.subscribe((ok) => {
 				if (ok) {
 					this.systemSvc
-						.updateMap(this.currentMapName, this.updateFileName)
+            .updateMap(this.currentMapName, this.updateFileName, this.overWrite)
 						.subscribe((res) => {
 							if (res.bResult) {
 								this.getCurrentMap()
@@ -94,6 +95,10 @@ export class VehicleControlComponent implements OnInit {
 					this.isUpdating = true
 				}
 			})
+    }
+
+    onChangedOverwrite() {
+       this.overWrite = !this.overWrite;
 	}
 
 	// onRefresh() {

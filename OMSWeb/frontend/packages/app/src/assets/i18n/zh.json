@@ -345,6 +345,7 @@
     "item": "项目",
     "range": "范围",
     "control": "控制",
+    "overwriteSegmentUnuseInfo": "Overwrite Segment Unuse Info",
     "refreshMapInfo": "刷新地图信息",
     "requestMapUpdate": "请求地图更新",
     "removeVehicle": "移除车辆",
