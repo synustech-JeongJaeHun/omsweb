@@ -44,11 +44,11 @@
   </div>
 </section>
 <div>
-  <label><input type="checkbox" (click)="onChangedOverwrite()"/>{{ "names.overwriteSegmentUnuseInfo" | translate }} </label>
+  <label><input type="checkbox" (click)="onChangedOverwrite()" />{{ "names.overwriteDbInfo" | translate }} </label>
 </div>
 <br />
 <mat-progress-bar class="mb-30" *ngIf="isUpdating" mode="indeterminate" aria-label="Loading"></mat-progress-bar>
-<label><button *ngIf="(isUpdating === false)" mat-raised-button color="primary" class="mb-30" (click)="onUpdateMap()">Update</button>
+<label><button *ngIf="(isUpdating === false)" mat-raised-button color="primary" class="mb-30" (click)="onUpdateMap()">Update</button></label>
 <div class="update-fail" *ngIf="isUpdateFail">{{ "names.updateFailed" | translate }}: {{failReason}} </div>
 
 <!-- <h2>{{ "names.vehicleMap" | translate }}</h2> -->

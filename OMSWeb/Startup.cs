@@ -38,8 +38,14 @@ namespace OMSWeb
 
         private void OmsConfiguration()
         {
+            /*
+            "BrokerHostSettings": {
+		       "Host": "localhost",
+		       "Port": 1883
+             }
+	        */
             // from default Appsettings.json
-            MqttConfiguration();
+            //MqttConfiguration();
 
             // set MqttAppSettingsProvider
             MqttAppSettingsProvider.BrokerHostSettings = new BrokerHostSettings(
@@ -47,7 +53,12 @@ namespace OMSWeb
                     Convert.ToInt32(AppConfig.GetFromOMSConfig("MessageManager", "port", "1883")),
                     AppConfig.GetFromOMSConfig("MessageManager", "topic_root", "oms")
                 );
-            //MqttAppSettingsProvider.ClientSettings은 추후 보완시, 추가 예정
+
+            MqttAppSettingsProvider.ClientSettings = new MqttClientSettings(
+                    AppConfig.GetFromOMSConfig("MessageManager", "id", ""),
+                    AppConfig.GetFromOMSConfig("MessageManager", "userName", ""),
+                    AppConfig.GetFromOMSConfig("MessageManager", "password", "")
+                );
         }
 
         private void MqttConfiguration()
