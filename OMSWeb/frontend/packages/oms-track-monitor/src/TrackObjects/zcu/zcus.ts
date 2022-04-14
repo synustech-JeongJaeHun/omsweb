@@ -7,27 +7,32 @@ const zcus = ref<Zcu[]>([])
 const zcuMap = new Map<Zcu['id'], Zcu>()
 
 function findZcuById(id: Zcu['id']) {
-  return zcuMap.get(id)
+	return zcuMap.get(id)
 }
 
 function initZcus(zs: ITrackData['zcus']) {
-  zcus.value = (zs ?? []).map((z) => ({ ...z }))
-  zcus.value.forEach((z) => zcuMap.set(z.id, z))
+	// clean
+	zcus.value = []
+	zcuMap.clear()
+
+	// set
+	zcus.value = (zs ?? []).map((z) => ({ ...z }))
+	zcus.value.forEach((z) => zcuMap.set(z.id, z))
 }
 
 function setZcu(updateData: UpdateDto.Zcu) {
-  const zcu = findZcuById(updateData.id)
+	const zcu = findZcuById(updateData.id)
 
-  if (zcu) Object.assign(zcu, updateData)
+	if (zcu) Object.assign(zcu, updateData)
 }
 function deleteZcu(updateData: UpdateDto.Zcu) {
-  const zcu = findZcuById(updateData.id)
+	const zcu = findZcuById(updateData.id)
 
-  if (zcu) {
-    const index = zcus.value.indexOf(zcu)
-    zcus.value.splice(index, 1)
-    zcuMap.delete(zcu.id)
-  }
+	if (zcu) {
+		const index = zcus.value.indexOf(zcu)
+		zcus.value.splice(index, 1)
+		zcuMap.delete(zcu.id)
+	}
 }
 
 export { zcus, findZcuById, initZcus, setZcu, deleteZcu }

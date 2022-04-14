@@ -41,42 +41,42 @@ type PlaybackCluster = {
 }
 type PlaybackMtl = {
 	id: number
-	logicalId: LogicalId
-	physicalId: PhysicalId
+	logical_id: LogicalId
+	physical_id: PhysicalId
 	point: number
 }
 type PlaybackPoint = {
 	x: number
 	y: number
 	id: number
-	logicalId: LogicalId
-	physicalId: PhysicalId
+	logical_id: LogicalId
+	physical_id: PhysicalId
 }
 type PlaybackSegmentPart = {
 	id: number
 	type: string
 	location: string
 	direction: string
-	segmentId: number
+	segment_id: number
 }
 type PlaybackSegment = {
-	endPoint: number
+	end_point: number
 	id: number
 	length: number
-	logicalId: LogicalId
-	physicalId: PhysicalId
+	logical_id: LogicalId
+	physical_id: PhysicalId
 	speed: number
-	startPoint: number
+	start_point: number
 }
 type PlaybackStation = {
-	carrierId: null
-	carrierType: null
+	carrier_id: null
+	carrier_type: null
 	direction: string
 	id: number
-	logicalId: LogicalId
-	nextPoint: number
+	logical_id: LogicalId
+	next_point: number
 	offset: number
-	physicalId: PhysicalId
+	physical_id: PhysicalId
 	point: number
 	unuse: boolean
 	x: null

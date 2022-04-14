@@ -57,7 +57,7 @@ export class LegacySearchDialogComponent implements OnInit {
 		this.dataSourceMap = {
 			point: this.playbackPlayService.track.data.points.map((x) => ({
 				id: x.id,
-				logicalId: x.logicalId,
+				logicalId: x.logical_id,
 			})),
 			buffer: this.playbackPlayService.track.data.buffers.map((x) => ({
 				id: x.id,
@@ -65,15 +65,15 @@ export class LegacySearchDialogComponent implements OnInit {
 			})),
 			station: this.playbackPlayService.track.data.stations.map((x) => ({
 				id: x.id,
-				logicalId: x.logicalId,
+				logicalId: x.logical_id,
 			})),
 			mtl: this.playbackPlayService.track.data.mtls.map((x) => ({
 				id: x.id,
-				logicalId: x.logicalId,
+				logicalId: x.logical_id,
 			})),
 			segment: this.playbackPlayService.track.data.segments.map((x) => ({
 				id: x.id,
-				logicalId: x.logicalId,
+				logicalId: x.logical_id,
 			})),
 		}
 	}
