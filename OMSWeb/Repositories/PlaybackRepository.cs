@@ -176,7 +176,7 @@ namespace OMSWeb.Repositories
             var sql = @"
             SELECT t.id as event_id, t.event_time, t.table_name, jt.*
             FROM timeline t join vehicle_history jt ON t.event_id = jt.id
-            WHERE t.event_time between @from AND @to
+            WHERE t.event_time between @from AND @to and table_name = 'vehicle_history'
             ORDER BY t.event_time ASC
             ";
 
@@ -203,7 +203,7 @@ namespace OMSWeb.Repositories
             var sql = @"
             SELECT t.id as event_id, t.event_time, t.table_name, jt.*
             FROM timeline t join order_history jt ON t.event_id = jt.id
-            WHERE t.event_time between @from AND @to
+            WHERE t.event_time between @from AND @to table_name = 'segment_blocking_history'
             ORDER BY t.event_time ASC
             ";
 

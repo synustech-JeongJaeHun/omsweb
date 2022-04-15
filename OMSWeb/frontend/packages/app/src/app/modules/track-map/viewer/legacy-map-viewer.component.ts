@@ -23,7 +23,6 @@ import { SettingsService } from '@oms/root/services/settings.service'
 import { TrackMonitorSettingService } from '../../../services/track-monitor-setting.service'
 import d3 = require('d3')
 import { TranslateService } from '@ngx-translate/core'
-import { MessagesService } from '@oms/root/services/messages.service'
 import { DialogService } from '@oms/root/services/dialog.service'
 import { PlaybackPlayService } from '@oms/root/services/playback-play.service'
 import { MatDialog, MatDialogRef } from '@angular/material/dialog'
@@ -259,35 +258,37 @@ export class LegacyMapViewerComponent implements OnInit, OnDestroy {
 			})
 		}, 1)
 	}
+
 	private applyEvents(events: TimelineEvent[]) {
 		this.setToCurrentSnapshot()
 		setTimeout(() => this.consumeEvents(events), 2)
 	}
+
 	private consumeEvents(events: TimelineEvent[]) {
-		const eventsReduceBySourceIdMap = new Map<
+		const vehicleReduceMap = new Map<
 			TimelineEvent['historySourceId'],
-			TimelineEvent
+			VehicleHistoryEvent
+		>()
+		const segmentBlockingReduceMap = new Map<
+			TimelineEvent['historySourceId'],
+			SegmentBlockingHistoryEvent
 		>()
 		events.forEach((event) => {
 			const id = event.historySourceId
-			const eventInMap = eventsReduceBySourceIdMap.get(id)
-			eventsReduceBySourceIdMap.set(id, { ...eventInMap, ...event })
-		})
-
-		eventsReduceBySourceIdMap.forEach((event) => {
-			switch (event.tableName) {
-				case 'vehicle_history':
-					this.applyVehicleHistoryEvent(event)
-					break
-				case 'segment_blocking_history':
-					break
-				case 'order_history':
-					break
-
-				default:
-					break
+			if (event.tableName === 'vehicle_history') {
+				const eventInMap = vehicleReduceMap.get(id)
+				vehicleReduceMap.set(id, { ...eventInMap, ...event })
+			}
+			if (event.tableName === 'segment_blocking_history') {
+				const eventInMap = segmentBlockingReduceMap.get(id)
+				segmentBlockingReduceMap.set(id, { ...eventInMap, ...event })
 			}
 		})
+
+		vehicleReduceMap.forEach((event) => this.applyVehicleHistoryEvent(event))
+		segmentBlockingReduceMap.forEach((event) =>
+			this.applySegmentBlockingHistoryEvent(event),
+		)
 	}
 	private applyVehicleHistoryEvent(event: VehicleHistoryEvent) {
 		this.viewer.updateVehicle(event.historyChangeType, {
@@ -326,10 +327,13 @@ export class LegacyMapViewerComponent implements OnInit, OnDestroy {
 			// historyChangeTime?: any
 		})
 	}
-	private applySegmentBlockingHistoryEvent(
-		event: SegmentBlockingHistoryEvent,
-	) {}
-	private applyOrderHistoryEvent(event: OrderHistoryEvent) {}
+	private applySegmentBlockingHistoryEvent(event: SegmentBlockingHistoryEvent) {
+		this.viewer.updateSegmentDisabled(event.historyChangeType, {
+			id: event.historySourceId,
+			operation: event.historyChangeType,
+			data: event,
+		})
+	}
 
 	private attachEvents() {
 		this.mapStatesService.toolbarToggleEvent$

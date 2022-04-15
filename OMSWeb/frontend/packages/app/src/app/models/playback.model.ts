@@ -1,5 +1,3 @@
-import { Dto } from './dto/track.model'
-
 type PhysicalId = string | undefined | null
 type LogicalId = string | undefined | null
 
@@ -169,10 +167,7 @@ type PlaybackSnapshotData = {
 	}[]
 }
 
-type TimelineEvent =
-	| VehicleHistoryEvent
-	| OrderHistoryEvent
-	| SegmentBlockingHistoryEvent
+type TimelineEvent = VehicleHistoryEvent | SegmentBlockingHistoryEvent
 
 type Timeline = { eventId: number; eventTime: string; tableName: string }
 type History = {
@@ -212,29 +207,28 @@ type VehicleHistoryEvent = { tableName: 'vehicle_history' } & Timeline &
 		railIn: boolean
 		runtimeTotal: number
 	}
-type OrderHistoryEvent = { tableName: 'order_history' } & Timeline &
-	History & {
-		id: number
-		logicalId: string
-		origin: string
-		vehicleId: string
-		state: string
-		locationPickup: string
-		locationDropoff: string
-		locationMove: string
-		priority: number
-		assignmentDetails: string
-		assignmentType: string
-		carrierLabel: string
-		timeCreated: string | null | undefined
-		timeAssigned: string | null | undefined
-		timeCompleted: string | null | undefined
-		timeAborted: string | null | undefined
-		timeFailed: string | null | undefined
-		distancePickup: number | null | undefined
-		distanceDropoff: number | null | undefined
-		distanceMove: number | null | undefined
-	}
+type OrderHistoryEvent = {
+	id: number
+	logicalId: string
+	origin: string
+	vehicleId: string
+	state: string
+	locationPickup: string
+	locationDropoff: string
+	locationMove: string
+	priority: number
+	assignmentDetails: string
+	assignmentType: string
+	carrierLabel: string
+	timeCreated: string | null | undefined
+	timeAssigned: string | null | undefined
+	timeCompleted: string | null | undefined
+	timeAborted: string | null | undefined
+	timeFailed: string | null | undefined
+	distancePickup: number | null | undefined
+	distanceDropoff: number | null | undefined
+	distanceMove: number | null | undefined
+}
 type SegmentBlockingHistoryEvent = {
 	tableName: 'segment_blocking_history'
 } & Timeline &

@@ -59,9 +59,7 @@ namespace OMSWeb.Controllers
         {
             var vehicleEvents = _svc.GetVehicleTimelineEventsBetween(from, to).ToList<ITimeline>();
             var segmentBlockingEvents = _svc.GetSegmentBlockingTimelineEventsBetween(from, to).ToList<ITimeline>();
-            var orderEvents = _svc.GetOrderTimelineEventsBetween(from, to).ToList<ITimeline>();
-
-            return vehicleEvents.Concat(segmentBlockingEvents).Concat(orderEvents).OrderBy(e => e.EventTime).ToList();
+            return vehicleEvents.Concat(segmentBlockingEvents).OrderBy(e => e.EventTime).ToList();
         }
     }
 }
