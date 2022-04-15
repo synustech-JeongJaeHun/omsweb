@@ -58,7 +58,7 @@ const realtimePosition = ref<Position | undefined>(
 )
 
 watch(
-  () => props.vehicle.lastUpdated,
+  () => vehicle.value.lastUpdated,
   () => {
     const segment = findSegmentByPoints(
       props.vehicle.curPoint,

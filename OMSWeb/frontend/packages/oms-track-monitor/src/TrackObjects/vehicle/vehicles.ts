@@ -10,7 +10,8 @@ const vehicles = ref<Vehicle[]>([])
 const vehicleMap = new Map<Vehicle['id'], Vehicle>()
 
 function findVehicleById(id: number) {
-	return vehicleMap.get(id)
+	return vehicles.value.find((v) => v.id === id)
+	// return vehicleMap.get(id) // bug occur in playback
 }
 
 function initVehicles(vs: IVehicle[]) {
@@ -148,15 +149,15 @@ function isDiffInSameSegment(
 	)
 }
 
+let count = 0
 function updateExistVehicle(
 	vehicle: Vehicle,
 	updateData: UpdateDto.Vehicle
 ) {
 	const updateType = getUpdateType(vehicle, updateData)
-
 	Object.assign(vehicle, updateData)
 	vehicle.updateType = updateType
-	vehicle.lastUpdated = Date.now()
+	vehicle.lastUpdated = count++
 }
 
 export {
@@ -166,5 +167,4 @@ export {
 	deleteVehicle,
 	getVehiclePosition,
 	findVehicleById,
-	updateExistVehicle,
 }

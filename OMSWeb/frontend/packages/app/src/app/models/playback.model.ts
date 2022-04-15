@@ -176,14 +176,42 @@ type TimelineEvent =
 
 type Timeline = { eventId: number; eventTime: string; tableName: string }
 type History = {
-	HistorySourceId: number
-	HistoryChangeTime: string
-	HistoryChangeType: string
+	historySourceId: number
+	historyChangeTime: string
+	historyChangeType: string
 }
 
 type VehicleHistoryEvent = { tableName: 'vehicle_history' } & Timeline &
-	History &
-	Dto.IVehicle
+	History & {
+		canBePushed: boolean
+		cargoState: string
+		commandPoint: string
+		distancePoint: number
+		distanceTotal: number
+		errorList: string
+		eventId: number
+		eventTime: string
+		historyChangeTime: string
+		historyChangeType: string
+		historySourceId: number
+		hostOrder: boolean
+		id: number
+		isBlocked: boolean
+		isMaint: boolean
+		isSensorStopped: boolean
+		lastContact: string
+		lastPoint: number
+		logicalId: string
+		mapDb: string
+		mode: string
+		movingState: string
+		nextPoint: number
+		orderId: number
+		orderOrigin: string
+		physicalId: string
+		railIn: boolean
+		runtimeTotal: number
+	}
 type OrderHistoryEvent = { tableName: 'order_history' } & Timeline &
 	History & {
 		id: number

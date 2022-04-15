@@ -27,7 +27,13 @@ import { MessagesService } from '@oms/root/services/messages.service'
 import { DialogService } from '@oms/root/services/dialog.service'
 import { PlaybackPlayService } from '@oms/root/services/playback-play.service'
 import { MatDialog, MatDialogRef } from '@angular/material/dialog'
-import { ClockChangedEvent } from '@oms/root/models/playback.model'
+import {
+	ClockChangedEvent,
+	OrderHistoryEvent,
+	SegmentBlockingHistoryEvent,
+	TimelineEvent,
+	VehicleHistoryEvent,
+} from '@oms/root/models/playback.model'
 
 @Component({
 	selector: 'oms-legacy-map-viewer',
@@ -47,9 +53,6 @@ export class LegacyMapViewerComponent implements OnInit, OnDestroy {
 	get tmSetting() {
 		return this.trackMonitorSettingService.trackSetting
 	}
-
-	readonly canSetSource = false
-	readonly canSetDest = false
 
 	public viewerSetting = {
 		rect: {
@@ -256,8 +259,77 @@ export class LegacyMapViewerComponent implements OnInit, OnDestroy {
 			})
 		}, 1)
 	}
-	private applyEvents() {}
-	private consumeEvents() {}
+	private applyEvents(events: TimelineEvent[]) {
+		this.setToCurrentSnapshot()
+		setTimeout(() => this.consumeEvents(events), 2)
+	}
+	private consumeEvents(events: TimelineEvent[]) {
+		const eventsReduceBySourceIdMap = new Map<
+			TimelineEvent['historySourceId'],
+			TimelineEvent
+		>()
+		events.forEach((event) => {
+			const id = event.historySourceId
+			const eventInMap = eventsReduceBySourceIdMap.get(id)
+			eventsReduceBySourceIdMap.set(id, { ...eventInMap, ...event })
+		})
+
+		eventsReduceBySourceIdMap.forEach((event) => {
+			switch (event.tableName) {
+				case 'vehicle_history':
+					this.applyVehicleHistoryEvent(event)
+					break
+				case 'segment_blocking_history':
+					break
+				case 'order_history':
+					break
+
+				default:
+					break
+			}
+		})
+	}
+	private applyVehicleHistoryEvent(event: VehicleHistoryEvent) {
+		this.viewer.updateVehicle(event.historyChangeType, {
+			id: event.historySourceId,
+
+			canBePushed: event.canBePushed,
+			cargoState: event.cargoState,
+			curPoint: event.lastPoint,
+			nextPoint: event.nextPoint,
+			errorList: event.errorList,
+			isBlocked: event.isBlocked,
+
+			isSensorStopped: event.isSensorStopped,
+			isMaint: event.isMaint,
+			// isConnected: event.connection, <= nullable number
+			lastContact: event.lastContact,
+			mapDb: event.mapDb,
+			mode: event.mode,
+			movingState: event.movingState,
+
+			distancePoint: event.distancePoint,
+			hostOrder: event.hostOrder,
+			orderOrigin: event.orderOrigin,
+
+			orderId: event.orderId,
+			// commandPoint: event.commandPoint, // not comes with prefix, just number
+
+			// cargoTransferResult?: string
+			// locationDropoff?: string
+			// locationMove?: string
+			// locationPickup?: string
+			// orderLogicalId?: string
+			// priority?: any
+			// type?: string
+			// group?: number
+			// historyChangeTime?: any
+		})
+	}
+	private applySegmentBlockingHistoryEvent(
+		event: SegmentBlockingHistoryEvent,
+	) {}
+	private applyOrderHistoryEvent(event: OrderHistoryEvent) {}
 
 	private attachEvents() {
 		this.mapStatesService.toolbarToggleEvent$
@@ -292,14 +364,14 @@ export class LegacyMapViewerComponent implements OnInit, OnDestroy {
 		this.playService.clockChanged.subscribe((event: ClockChangedEvent) => {
 			console.log('clockchanged', event)
 			switch (event.type) {
-				case 'TrackChanged':
-					break
 				case 'SnapshotChanged':
 					this.setToCurrentSnapshot()
 					break
 				case 'EventsChanged':
+					this.applyEvents(event.events)
 					break
 				case 'NextFrameEvent':
+					this.consumeEvents(event.events)
 					break
 
 				default:
