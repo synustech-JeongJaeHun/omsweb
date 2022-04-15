@@ -18,11 +18,18 @@ namespace OMSWeb.Services
 
         public DataWatcherService(IConfiguration configuration, PushService pushSvc)
         {
+            /*
+            // appsettings.json
+            //"ConnectionStrings": {
+            //    "OMS-UI": "Server=localhost;Port=5432;Database=oms_ui;User Id=oms;Password=oms;",
+            //    "OMS-Track": "Server=localhost;Port=5432;Database=semioht;User Id=oms;Password=oms;"
+            //},
+            */
             // get default AppSetting.json
-            this.connectionStringTrack = configuration.GetConnectionString("OMS-Track");
+            //this.connectionStringTrack = configuration.GetConnectionString("OMS-Track");
 
             // get config from oms_settings.ini
-            AppConfig.GetConnectStrFromOmsSettings(out string connectUiStr, out string connectTrackStr);
+             AppConfig.GetConnectStrFromOmsSettings(out string connectUiStr, out string connectTrackStr);
             this.connectionStringTrack = connectTrackStr;
 
             this.trackConn = new NpgsqlConnection(this.connectionStringTrack);

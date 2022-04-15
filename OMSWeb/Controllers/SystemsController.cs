@@ -221,15 +221,49 @@ namespace OMSWeb.Controllers
             return File(zipResult, "application/zip", fileName);
         }
 
-        public class MapFileDto { public string MapFile { get; set; } }
+        public class MapFileDto 
+        { 
+            public string MapFile { get; set; }
+            public bool Overwrite { get; set; }
+        }
 
         [HttpPost("control/updateMap/{mapName}")]
-        public ActionResult<MapUpdateResultModel> UpdateMap([FromRoute] string mapName, [FromBody] MapFileDto mapFileDto)
+        public ActionResult<MapUpdateResultModel> UpdateMap([FromRoute] string mapName, [FromBody] MapFileDto mapFileDto )
         {
-            string mapFile = mapFileDto.MapFile;
             bool bResult = false;
+            string mapFile = mapFileDto.MapFile;
+            bool bOverwrite = mapFileDto.Overwrite;
 
-            // TSCState Paused üũ
+            string module_name = Process.GetCurrentProcess().MainModule.FileName;
+            string currenPath = Path.GetDirectoryName(module_name);
+            string exeName = "..\\..\\bin\\oms-config.exe";
+            string exePath = Path.GetFullPath(Path.Combine(currenPath, exeName));
+
+            // 1. check if oms-config.exe exits
+            if (!System.IO.File.Exists(exePath))
+            {
+                bResult = false;
+                return new MapUpdateResultModel
+                {
+                    Message = string.Format("Manp Updater Module is not found"),
+                    bResult = bResult
+                };
+            }
+
+            // 2. check if map file exists
+            string mapDir = AppConfig.GetFromOMSConfig("Map", "map_dir", "..\\..\\map");
+            string mapPath = Path.GetFullPath(Path.Combine(mapDir, mapFile));
+            if (!System.IO.File.Exists(mapPath))
+            {
+                bResult = false;
+                return new MapUpdateResultModel
+                {
+                    Message = string.Format("The map file {0} is not found", mapFile),
+                    bResult = bResult
+                };
+            }
+
+            // 3. TSCState Paused check
             SystemStatusModel sm = this._systemSvc.GetHostStatus();
             if (sm.TscMode != TscModeEnums.PAUSED)
             {
@@ -241,11 +275,11 @@ namespace OMSWeb.Controllers
                 };
             }
 
-            // get current ver
+            // 4. get current ver
             DbVersionEntity dbVer = this._dbSvc.GetCurrentMap();
             int current_ver = Convert.ToInt32(dbVer.DbVersion);
 
-            // map update start send
+            // 5. send start status of map update
             Dictionary<string, object> data_begin = new Dictionary<string, object>();
             data_begin.Add("request", "map-update");
             data_begin.Add("action", "status");
@@ -253,18 +287,16 @@ namespace OMSWeb.Controllers
             data_begin.Add("worker", "omsweb");
             this._msgSvc.SendMessage(MqttMessage.TOPIC_MAP_UPDATE, JsonConvert.SerializeObject(data_begin));
 
-            // oms-config ����
+            // 6. wait for each module stand by
+            Thread.Sleep(2000);
+
+            // 7. execute oms-config - do map update
             try
             {
-                string module_name = Process.GetCurrentProcess().MainModule.FileName;
-                string path = Path.GetDirectoryName(module_name);
-                string exeName = "..\\..\\bin\\oms-config.exe";
+                string arguments = (bOverwrite) ? $"update --name {mapName} --map \"{mapPath}\" --overwrite" :
+                                                  $"update --name {mapName} --map \"{mapPath}\"";
 
-                string filePath = Path.GetFullPath(Path.Combine(path, exeName));
-                string mapDir = AppConfig.GetFromOMSConfig("Map", "map_dir", "..\\..\\map");
-                string arguments = $"update --name {mapName} --map {mapDir}{mapFile}";
-
-                if (!System.IO.File.Exists(filePath))
+                if (!System.IO.File.Exists(exePath))
                 {
                     bResult = false;
                     return new MapUpdateResultModel
@@ -276,16 +308,23 @@ namespace OMSWeb.Controllers
 
                 // execute oms-conig.exe
                 Process ocl = new Process();
-                ocl.StartInfo.FileName = filePath;
+                ocl.StartInfo.FileName = exePath;
                 ocl.StartInfo.Arguments = arguments;
                 ocl.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
                 ocl.Start();
 
             }
             catch (Exception ex)
-            { }
+            {
+                bResult = false;
+                return new MapUpdateResultModel
+                {
+                    Message = string.Format("Map Update Module invoke error"),
+                    bResult = bResult
+                };
+            }
 
-            // 10�ʰ� map update 
+            // 8. check if map update is completed for 10sec
             DateTime startTime = DateTime.Now;
             int timeSecondSpan = 0;
             while (timeSecondSpan < 10) // wait for max 10 sec
@@ -300,10 +339,10 @@ namespace OMSWeb.Controllers
                 TimeSpan diff = DateTime.Now - startTime;
                 timeSecondSpan = diff.Seconds;
 
-                Thread.Sleep(300);
+                Thread.Sleep(150);
             }
 
-            // map update end send
+            // 9. send end status of map update
             Dictionary<string, object> data_end = new Dictionary<string, object>();
             data_end.Add("request", "map-update");
             data_end.Add("action", "status");
@@ -311,6 +350,7 @@ namespace OMSWeb.Controllers
             data_end.Add("worker", "omsweb");
             this._msgSvc.SendMessage(MqttMessage.TOPIC_MAP_UPDATE, JsonConvert.SerializeObject(data_end));
 
+            // 10. return result to front
             return new MapUpdateResultModel
             {
                 Message = string.Format("Map update {0}", bResult ? "complete" : "failed"),

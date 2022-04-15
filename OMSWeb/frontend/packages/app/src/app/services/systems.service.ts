@@ -92,10 +92,10 @@ export class SystemsService {
 		})
 	}
 
-	updateMap(mapName: string, mapFile: string) {
+	updateMap(mapName: string, mapFile: string, overWrite: boolean) {
 		return this.http.post<{ message: string; bResult: boolean }>(
 			`${this.baseUrl}/control/updateMap/${mapName}`,
-			{ mapFile },
+			{ mapFile, overWrite },
 		)
 	}
 }
