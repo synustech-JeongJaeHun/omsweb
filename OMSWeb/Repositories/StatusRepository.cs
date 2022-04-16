@@ -118,6 +118,17 @@ namespace OMSWeb.Repositories
             return result;
         }
 
+        public IQueryable<ClusterState> QueryClusterStates()
+        {
+            IQueryable<ClusterState> result;
+            using (var conn = ConnectTrack())
+            {
+                var sql = QueryFactory.GetSql("clusterStatus");
+                result = conn.Query<ClusterState>(sql).AsQueryable();
+            }
+            return result;
+        }
+
         public IQueryable<DioState> QueryDioStates()
         {
             IQueryable<DioState> result;

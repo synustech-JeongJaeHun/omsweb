@@ -52,7 +52,7 @@ namespace OMSWeb.Services
                 {"vehicle_dio", new DataChangeEventTarget(CacheKeys.VehicleDio, new[]{"vehicleDioChanged"}, true)},
                 {"clusters", new DataChangeEventTarget(CacheKeys.Clusters, new[]{"clusterChanged"})},
                 {"cluster_points", new DataChangeEventTarget(CacheKeys.Clusters, new[]{"clusterChanged"})},
-                {"cps_status", new DataChangeEventTarget(CacheKeys.CpsStatus, new[]{"cpsStatusTableChanged"}, true)},
+                {"cluster_status", new DataChangeEventTarget(CacheKeys.ClusterStatus, new[]{"clusterStatusTableChanged"}, true)},
                 {"location_groups", new DataChangeEventTarget(CacheKeys.Groups, new[]{"groupChanged"})},
                 {"grouped_objects", new DataChangeEventTarget(CacheKeys.Groups, new[]{"groupChanged"})},
                 {"orders", new DataChangeEventTarget(CacheKeys.None, new[]{"orderTableChanged"}, true)},
@@ -76,6 +76,7 @@ namespace OMSWeb.Services
                 {CacheKeys.VehiclePaths, new[]{"vehiclePath"}},
                 {CacheKeys.VehicleDio, new[]{"vehicleDioChanged"}},
                 {CacheKeys.Clusters, new[]{"clusterChanged"}},
+                {CacheKeys.ClusterStatus, new[]{"clusterStatusTableChanged"}},
                 {CacheKeys.Groups, new[]{"groupChanged"}},
             };
 

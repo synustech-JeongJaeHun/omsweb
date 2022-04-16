@@ -99,6 +99,12 @@ namespace OMSWeb.Controllers
             return DataSourceLoader.Load(_statusSvc.QueryZcuStates(), loadOptions);
         }
 
+        [HttpGet("clusters")]
+        public object GetClusterStatus(DataSourceLoadOptions loadOptions)
+        {
+            return DataSourceLoader.Load(_statusSvc.QueryClusterStates(), loadOptions);
+        }
+
         [HttpGet("dio")]
         public object GetVehicleDio(DataSourceLoadOptions loadOptions)
         {

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace OMSWeb.Repositories
 {
-  public class QueryFactory
-  {
-    private static IDictionary<string, string> sqlMap = new Dictionary<string, string> {
+    public class QueryFactory
+    {
+        private static IDictionary<string, string> sqlMap = new Dictionary<string, string> {
       {"size", @"
         SELECT min(x) AS min_x,
           min(y) AS min_y,
@@ -62,6 +62,17 @@ namespace OMSWeb.Repositories
               --*user_id_condition*--WHERE CT.user_id = @userId
         ) AS NEW_DATA
         GROUP BY id, logical_id, max_vehicles, color
+      "},
+       {"clusterStatus", @"
+         SELECT CT.id, CT.logical_id, CS.server_id, CS.status, CS.voltage, CS.current_igbt,
+            CS.current_track, CS.frequency, CS.temp_radiator, CS.temp_radiator, CS.sync, CS.backup_id,
+            CS.error_code, CS.voltage_rs, CS.voltage_st, CS.voltage_tr, CS.current_r, CS.current_s, CS.current_t,
+            CS.total_kw, CS.wh
+        FROM clusters AS CT
+        LEFT OUTER JOIN cluster_status AS CS
+        ON CT.id = CS.converter_id
+        ORDER BY CT.id
+        --*user_id_condition*--WHERE user_id =@userId
       "},
       {"station", @"
         SELECT id AS id, physical_id AS physical_id, logical_id AS logical_id, point AS point_id,
@@ -243,51 +254,51 @@ namespace OMSWeb.Repositories
         --*user_id_condition*--WHERE user_id =@userId
       "}
     };
-    public static string GetSql(string name)
-    {
-      sqlMap.TryGetValue(name, out var sql);
-      return sql;
+        public static string GetSql(string name)
+        {
+            sqlMap.TryGetValue(name, out var sql);
+            return sql;
+        }
+
+        public static string GetSql(string name, string userId)
+        {
+            var sql = GetSql(name);
+            sql = sql.Replace("from points", "from playback_points", StringComparison.OrdinalIgnoreCase);
+            sql = sql.Replace("join points", "join playback_points", StringComparison.OrdinalIgnoreCase);
+
+            sql = sql.Replace("from segments", "from playback_segments", StringComparison.OrdinalIgnoreCase);
+            sql = sql.Replace("join segments", "join playback_segments", StringComparison.OrdinalIgnoreCase);
+
+            sql = sql.Replace("from segment_parts", "from playback_segment_parts", StringComparison.OrdinalIgnoreCase);
+            sql = sql.Replace("join segment_parts", "join playback_segment_parts", StringComparison.OrdinalIgnoreCase);
+
+            sql = sql.Replace("from segment_blocking", "from playback_segment_blocking", StringComparison.OrdinalIgnoreCase);
+            sql = sql.Replace("join segment_blocking", "join playback_segment_blocking", StringComparison.OrdinalIgnoreCase);
+
+            sql = sql.Replace("from stations", "from playback_stations", StringComparison.OrdinalIgnoreCase);
+            sql = sql.Replace("join stations", "join playback_stations", StringComparison.OrdinalIgnoreCase);
+
+            sql = sql.Replace("from buffers", "from playback_buffers", StringComparison.OrdinalIgnoreCase);
+            sql = sql.Replace("join buffers", "join playback_buffers", StringComparison.OrdinalIgnoreCase);
+
+            sql = sql.Replace("from mtls", "from playback_mtls", StringComparison.OrdinalIgnoreCase);
+            sql = sql.Replace("join mtls", "join playback_mtls", StringComparison.OrdinalIgnoreCase);
+
+            sql = sql.Replace("from clusters", "from playback_clusters", StringComparison.OrdinalIgnoreCase);
+            sql = sql.Replace("join clusters", "join playback_clusters", StringComparison.OrdinalIgnoreCase);
+
+            sql = sql.Replace("from cluster_points", "from playback_cluster_points", StringComparison.OrdinalIgnoreCase);
+            sql = sql.Replace("join cluster_points", "join playback_cluster_points", StringComparison.OrdinalIgnoreCase);
+
+            sql = sql.Replace("from vehicles", "from playback_vehicles", StringComparison.OrdinalIgnoreCase);
+            sql = sql.Replace("join vehicles", "join playback_vehicles", StringComparison.OrdinalIgnoreCase);
+
+            sql = sql.Replace("from orders", "from playback_orders", StringComparison.OrdinalIgnoreCase);
+            sql = sql.Replace("join orders", "join playback_orders", StringComparison.OrdinalIgnoreCase);
+
+            sql = sql.Replace("--*user_id_condition*--", "", StringComparison.OrdinalIgnoreCase);
+
+            return sql;
+        }
     }
-
-    public static string GetSql(string name, string userId)
-    {
-      var sql = GetSql(name);
-      sql = sql.Replace("from points", "from playback_points", StringComparison.OrdinalIgnoreCase);
-      sql = sql.Replace("join points", "join playback_points", StringComparison.OrdinalIgnoreCase);
-
-      sql = sql.Replace("from segments", "from playback_segments", StringComparison.OrdinalIgnoreCase);
-      sql = sql.Replace("join segments", "join playback_segments", StringComparison.OrdinalIgnoreCase);
-
-      sql = sql.Replace("from segment_parts", "from playback_segment_parts", StringComparison.OrdinalIgnoreCase);
-      sql = sql.Replace("join segment_parts", "join playback_segment_parts", StringComparison.OrdinalIgnoreCase);
-
-      sql = sql.Replace("from segment_blocking", "from playback_segment_blocking", StringComparison.OrdinalIgnoreCase);
-      sql = sql.Replace("join segment_blocking", "join playback_segment_blocking", StringComparison.OrdinalIgnoreCase);
-
-      sql = sql.Replace("from stations", "from playback_stations", StringComparison.OrdinalIgnoreCase);
-      sql = sql.Replace("join stations", "join playback_stations", StringComparison.OrdinalIgnoreCase);
-
-      sql = sql.Replace("from buffers", "from playback_buffers", StringComparison.OrdinalIgnoreCase);
-      sql = sql.Replace("join buffers", "join playback_buffers", StringComparison.OrdinalIgnoreCase);
-
-      sql = sql.Replace("from mtls", "from playback_mtls", StringComparison.OrdinalIgnoreCase);
-      sql = sql.Replace("join mtls", "join playback_mtls", StringComparison.OrdinalIgnoreCase);
-
-      sql = sql.Replace("from clusters", "from playback_clusters", StringComparison.OrdinalIgnoreCase);
-      sql = sql.Replace("join clusters", "join playback_clusters", StringComparison.OrdinalIgnoreCase);
-
-      sql = sql.Replace("from cluster_points", "from playback_cluster_points", StringComparison.OrdinalIgnoreCase);
-      sql = sql.Replace("join cluster_points", "join playback_cluster_points", StringComparison.OrdinalIgnoreCase);
-
-      sql = sql.Replace("from vehicles", "from playback_vehicles", StringComparison.OrdinalIgnoreCase);
-      sql = sql.Replace("join vehicles", "join playback_vehicles", StringComparison.OrdinalIgnoreCase);
-
-      sql = sql.Replace("from orders", "from playback_orders", StringComparison.OrdinalIgnoreCase);
-      sql = sql.Replace("join orders", "join playback_orders", StringComparison.OrdinalIgnoreCase);
-
-      sql = sql.Replace("--*user_id_condition*--", "", StringComparison.OrdinalIgnoreCase);
-
-      return sql;
-    }
-  }
 }

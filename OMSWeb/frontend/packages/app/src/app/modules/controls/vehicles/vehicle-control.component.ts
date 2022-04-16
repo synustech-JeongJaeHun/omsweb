@@ -84,7 +84,7 @@ export class VehicleControlComponent implements OnInit {
 							if (res.bResult) {
 								this.getCurrentMap()
 								this.isUpdateFail = false
-								this.failReason = ''
+								this.failReason = res.message
 							} else {
 								this.isUpdateFail = true
 								this.failReason = res.message

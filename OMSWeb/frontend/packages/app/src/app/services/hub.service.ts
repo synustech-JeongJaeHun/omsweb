@@ -29,7 +29,7 @@ export class HubService {
   modeStateChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter();
   zcuMapChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter();
   zcuStatusTableChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter();
-  cpsStatusTableChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter();
+  clusterStatusTableChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter();
   kpiChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter();
   //#endregion
 
@@ -109,7 +109,7 @@ export class HubService {
     this.hub.off('modeState');
     this.hub.off('zcuMapChanged');
     this.hub.off('zcuStatusTableChanged');
-    this.hub.off('cpsStatusTableChanged');
+    this.hub.off('clusterStatusTableChanged');
     this.hub.off('kpiChanged');
   }
 
@@ -192,9 +192,9 @@ export class HubService {
       console.info('## hub message : zcuStatusTableChanged >>', { meta, body });
       this.zcuStatusTableChanged$.emit({ ...meta, data: body });
     });
-    this.hub.on('cpsStatusTableChanged', (meta, body) => {
-      console.info('## hub message : cpsStatusTableChanged >>', { meta, body });
-      this.cpsStatusTableChanged$.emit({ ...meta, data: body });
+    this.hub.on('clusterStatusTableChanged', (meta, body) => {
+      console.info('## hub message : clusterStatusTableChanged >>', { meta, body });
+      this.clusterStatusTableChanged$.emit({ ...meta, data: body });
     });
     this.hub.on('kpiChanged', (meta, body) => {
       console.info('## hub message : kpiChanged >>', { meta, body });

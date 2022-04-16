@@ -16,7 +16,7 @@ namespace OMSWeb.Services
     Zcus,
     ZcuStatus,
     Clusters,
-    CpsStatus,
+    ClusterStatus,
     VehicleDio,
     VehiclePaths,
     Vehicles,
