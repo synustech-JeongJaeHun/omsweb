@@ -1,39 +1,54 @@
 import { IVehicle } from 'src/legacies/models/track.model'
 import { UpdateDto } from 'src/types/Dto'
+import { getPositionFromD } from 'src/utils/svg/path'
 import { ref } from 'vue'
+import { findPointById } from '../point/points'
+import { findSegmentByPoints } from '../segment/segments'
 import { UpdateType, Vehicle } from './types/Vehicle'
 
 const vehicles = ref<Vehicle[]>([])
 const vehicleMap = new Map<Vehicle['id'], Vehicle>()
 
 function findVehicleById(id: number) {
-  return vehicleMap.get(id)
+	return vehicleMap.get(id)
 }
 
 function initVehicles(vs: IVehicle[]) {
-  vehicles.value = vs.map((v) => ({ ...v }))
-  vehicles.value.forEach((v) => vehicleMap.set(v.id, v))
+	// clean
+	vehicles.value = []
+	vehicleMap.clear()
+
+	// set
+	vehicles.value = vs.map((v) => ({ ...v }))
+	vehicles.value.forEach((v) => vehicleMap.set(v.id, v))
 }
 
 function setVehicle(v: UpdateDto.Vehicle) {
-  const vehicle = findVehicleById(v.id)
+	const vehicle = findVehicleById(v.id)
 
-  if (vehicle) {
-    updateExistVehicle(vehicle, v)
-  } else {
-    vehicles.value.push(v)
-    vehicleMap.set(v.id, v)
-  }
+	if (vehicle) {
+		updateExistVehicle(vehicle, v)
+	} else {
+		vehicles.value.push(v)
+		vehicleMap.set(v.id, v)
+	}
 }
 
 function deleteVehicle(v: UpdateDto.Vehicle) {
-  const vehicle = findVehicleById(v.id)
+	const vehicle = findVehicleById(v.id)
 
-  if (vehicle) {
-    const index = vehicles.value.indexOf(vehicle)
-    vehicles.value.splice(index, 1)
-    vehicleMap.delete(v.id)
-  }
+	if (vehicle) {
+		const index = vehicles.value.indexOf(vehicle)
+		vehicles.value.splice(index, 1)
+		vehicleMap.delete(v.id)
+	}
+}
+
+function getVehiclePosition(vehicle: Vehicle) {
+	const segment = findSegmentByPoints(vehicle.curPoint, vehicle.nextPoint)
+	return segment
+		? getPositionFromD(segment.d, vehicle.distancePoint)
+		: findPointById(vehicle.curPoint)
 }
 
 /**
@@ -93,62 +108,63 @@ function deleteVehicle(v: UpdateDto.Vehicle) {
  *    - is connected X moving in 2 segment
  */
 function getUpdateType(
-  vehicle: Vehicle,
-  updateData: UpdateDto.Vehicle
+	vehicle: Vehicle,
+	updateData: UpdateDto.Vehicle
 ): UpdateType {
-  if (
-    isInitialize(vehicle) ||
-    isNotConnected(vehicle, updateData) ||
-    isNoDiff(vehicle, updateData)
-  )
-    return 'NoAnimation'
-  else if (isDiffInSameSegment(vehicle, updateData))
-    return 'AnimationIn1Segment'
-  else return 'AnimationIn2Segments'
+	if (
+		isInitialize(vehicle) ||
+		isNotConnected(vehicle, updateData) ||
+		isNoDiff(vehicle, updateData)
+	)
+		return 'NoAnimation'
+	else if (isDiffInSameSegment(vehicle, updateData))
+		return 'AnimationIn1Segment'
+	else return 'AnimationIn2Segments'
 }
 function isInitialize(vehicle: Vehicle) {
-  return vehicle.lastUpdated === undefined
+	return vehicle.lastUpdated === undefined
 }
 function isNotConnected(vehicle: Vehicle, updateData: UpdateDto.Vehicle) {
-  return (
-    (vehicle.curPoint === updateData.curPoint ||
-      vehicle.nextPoint === updateData.curPoint) === false
-  )
+	return (
+		(vehicle.curPoint === updateData.curPoint ||
+			vehicle.nextPoint === updateData.curPoint) === false
+	)
 }
 function isNoDiff(vehicle: Vehicle, updateData: UpdateDto.Vehicle) {
-  return (
-    vehicle.curPoint === updateData.curPoint &&
-    vehicle.distancePoint === updateData.distancePoint
-  )
+	return (
+		vehicle.curPoint === updateData.curPoint &&
+		vehicle.distancePoint === updateData.distancePoint
+	)
 }
 function isDiffInSameSegment(
-  vehicle: Vehicle,
-  updateData: UpdateDto.Vehicle
+	vehicle: Vehicle,
+	updateData: UpdateDto.Vehicle
 ) {
-  return (
-    vehicle.curPoint === updateData.curPoint ||
-    (vehicle.nextPoint === updateData.curPoint &&
-      (updateData.curPoint === updateData.nextPoint ||
-        updateData.distancePoint === 0))
-  )
+	return (
+		vehicle.curPoint === updateData.curPoint ||
+		(vehicle.nextPoint === updateData.curPoint &&
+			(updateData.curPoint === updateData.nextPoint ||
+				updateData.distancePoint === 0))
+	)
 }
 
 function updateExistVehicle(
-  vehicle: Vehicle,
-  updateData: UpdateDto.Vehicle
+	vehicle: Vehicle,
+	updateData: UpdateDto.Vehicle
 ) {
-  const updateType = getUpdateType(vehicle, updateData)
+	const updateType = getUpdateType(vehicle, updateData)
 
-  Object.assign(vehicle, updateData)
-  vehicle.updateType = updateType
-  vehicle.lastUpdated = Date.now()
+	Object.assign(vehicle, updateData)
+	vehicle.updateType = updateType
+	vehicle.lastUpdated = Date.now()
 }
 
 export {
-  vehicles,
-  initVehicles,
-  setVehicle,
-  deleteVehicle,
-  findVehicleById,
-  updateExistVehicle,
+	vehicles,
+	initVehicles,
+	setVehicle,
+	deleteVehicle,
+	getVehiclePosition,
+	findVehicleById,
+	updateExistVehicle,
 }

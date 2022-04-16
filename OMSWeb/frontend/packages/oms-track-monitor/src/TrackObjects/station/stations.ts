@@ -10,12 +10,17 @@ const stationMap = new Map<Station['id'], Station>()
  * when points become realtime-update object, then refactoring this map.
  */
 function initStations(ss: ITrackData['stations']) {
-  stations.value = (ss ?? []).map((s) => ({ ...s }))
-  stations.value.forEach((s) => stationMap.set(s.id, s))
+	// clean
+	stations.value = []
+	stationMap.clear()
+
+	// set
+	stations.value = (ss ?? []).map((s) => ({ ...s }))
+	stations.value.forEach((s) => stationMap.set(s.id, s))
 }
 
 function findStationById(id: Station['id']) {
-  return stationMap.get(id)
+	return stationMap.get(id)
 }
 
 export { stations, initStations, findStationById }
