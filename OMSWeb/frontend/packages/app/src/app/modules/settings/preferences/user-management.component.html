@@ -29,14 +29,14 @@
   </div>
 </div>
 <dx-data-grid #grid [dataSource]="dataSource$ | async" [keyExpr]="'id'" [repaintChangesOnly]="true" [showBorders]="true"
-  [sorting]="false" [height]="490" [(selectedRowKeys)]="selectedIds" (onRowUpdated)="onUpdate($event)"
+  [sorting]="true" [height]="490" [(selectedRowKeys)]="selectedIds" (onRowUpdated)="onUpdate($event)"
   (onSelectionChanged)="onSelectionChanged($event)">
   <dxo-scrolling mode="virtual"></dxo-scrolling>
   <dxo-editing mode="cell" refreshMode="reshape" [allowUpdating]="true" [allowDeleting]="false" [allowAdding]="false">
   </dxo-editing>
   <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
 
-  <dxi-column dataField="userId" caption="{{ 'names.userId' | translate }}" [allowEditing]="false">
+  <dxi-column dataField="userId" caption="{{ 'names.userId' | translate }}" sortOrder="asc" [allowEditing]="false">
   </dxi-column>
   <dxi-column dataField="firstName" dataType="string"></dxi-column>
   <dxi-column dataField="lastName"></dxi-column>
