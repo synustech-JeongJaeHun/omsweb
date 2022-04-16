@@ -29,8 +29,8 @@
   </div>
 </div>
 <dx-data-grid #grid [dataSource]="dataSource$ | async" [keyExpr]="'id'" [repaintChangesOnly]="true" [showBorders]="true"
-  [sorting]="true" [height]="490" [(selectedRowKeys)]="selectedIds" (onRowUpdated)="onUpdate($event)"
-  (onSelectionChanged)="onSelectionChanged($event)">
+              [sorting]="true" [height]="490" [(selectedRowKeys)]="selectedIds" (onRowUpdated)="onUpdate($event)"
+              (onSelectionChanged)="onSelectionChanged($event)">
   <dxo-scrolling mode="virtual"></dxo-scrolling>
   <dxo-editing mode="cell" refreshMode="reshape" [allowUpdating]="true" [allowDeleting]="false" [allowAdding]="false">
   </dxo-editing>
@@ -49,6 +49,8 @@
   <dxi-column dataField="roles" caption="Roles" dataType="number">
     <dxo-lookup [dataSource]="roles$ | async" valueExpr="id" displayExpr="name"></dxo-lookup>
   </dxi-column>
+  <dxi-column [width]="110" dataType="datetime" dataField="timeCreated" [caption]="'names.timeCreated' | translate" [allowEditing]="false">
+    </dxi-column>
 
   <div *dxTemplate="let item of 'passwordCell'">
     ****
