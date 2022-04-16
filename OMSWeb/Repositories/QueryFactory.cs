@@ -64,10 +64,37 @@ namespace OMSWeb.Repositories
         GROUP BY id, logical_id, max_vehicles, color
       "},
        {"clusterStatus", @"
-         SELECT CT.id, CT.logical_id, CS.server_id, CS.status, CS.voltage, CS.current_igbt,
-            CS.current_track, CS.frequency, CS.temp_radiator, CS.temp_radiator, CS.sync, CS.backup_id,
-            CS.error_code, CS.voltage_rs, CS.voltage_st, CS.voltage_tr, CS.current_r, CS.current_s, CS.current_t,
-            CS.total_kw, CS.wh
+         SELECT CT.id, CT.logical_id, CS.server_id, 
+            CASE 
+                WHEN CS.status = 0 THEN 'RUN'
+                WHEN CS.status = 1 THEN 'STOP'
+                WHEN CS.status = 2 THEN 'Fault'
+                WHEN CS.status = 3 THEN 'Warning'
+                WHEN CS.status = 4 THEN 'Fail-Over'
+                WHEN CS.status = 5 THEN 'Comm Fail'
+                ELSE ' '
+            END AS status, 
+            CONCAT( CAST(CS.voltage AS TEXT),' [V]' ) AS voltage, 
+            CONCAT( CAST(CS.current_igbt AS TEXT), ' [A]' ) AS current_igbt,
+            CONCAT( CAST(CS.current_track AS TEXT), ' [A]' ) AS current_track, 
+            CONCAT( CAST(TRUNC(CS.frequency::numeric / 10, 1) AS TEXT), ' [kHz]' ) AS frequency, 
+            CONCAT( CAST(TRUNC(CS.temp_radiator::numeric / 10, 1) AS TEXT), ' [กษ]' ) AS temp_radiator, 
+            CONCAT( CAST(TRUNC(CS.temp_internal::numeric / 10, 1) AS TEXT), ' [กษ]' ) AS temp_internal,  
+            CASE 
+                WHEN CS.sync = 0 THEN 'N.G'
+                WHEN CS.sync = 11 THEN 'OK'
+                ELSE ' '
+            END AS status, 
+            CS.backup_id,
+            CS.error_code, 
+            CONCAT( CAST(CS.voltage_rs AS TEXT), ' [V]' ) AS voltage_rs, 
+            CONCAT( CAST(CS.voltage_st AS TEXT), ' [V]' ) AS voltage_st,  
+            CONCAT( CAST(CS.voltage_tr AS TEXT), ' [V]' ) AS voltage_tr,  
+            CONCAT( CAST(CS.current_r AS TEXT), ' [A]' ) AS current_r, 
+            CONCAT( CAST(CS.current_s AS TEXT), ' [A]' ) AS current_s,  
+            CONCAT( CAST(CS.current_t AS TEXT), ' [A]' ) AS current_t, 
+            CONCAT( CAST(CS.total_kw AS TEXT), ' [kW]' ) AS total_kw, 
+            CONCAT( CAST(TRUNC(CS.wh::numeric / 1000, 3) AS TEXT), ' [kWh]' ) AS wh
         FROM clusters AS CT
         LEFT OUTER JOIN cluster_status AS CS
         ON CT.id = CS.converter_id
