@@ -84,7 +84,7 @@ namespace OMSWeb.Repositories
                 WHEN CS.sync = 0 THEN 'N.G'
                 WHEN CS.sync = 11 THEN 'OK'
                 ELSE ' '
-            END AS status, 
+            END AS sync, 
             CS.backup_id,
             CS.error_code, 
             CONCAT( CAST(CS.voltage_rs AS TEXT), ' [V]' ) AS voltage_rs, 
