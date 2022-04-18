@@ -58,9 +58,9 @@ namespace OMSWeb.Controllers
         public ActionResult<object> GetTimelineEventsBetween([FromQuery] DateTimeOffset from, [FromQuery] DateTimeOffset to)
         {
             var vehicleEvents = _svc.GetVehicleTimelineEventsBetween(from, to).ToList<ITimeline>();
-            // var orderEvents = _svc.GetOrderTimelineEventsBetween(from, to).ToList<ITimeline>();
+            var orderEvents = _svc.GetOrderTimelineEventsBetween(from, to).ToList<ITimeline>();
             var segmentBlockingEvents = _svc.GetSegmentBlockingTimelineEventsBetween(from, to).ToList<ITimeline>();
-            return vehicleEvents.Concat(segmentBlockingEvents).OrderBy(e => e.EventTime).ToList();
+            return vehicleEvents.Concat(orderEvents).Concat(segmentBlockingEvents).OrderBy(e => e.EventTime).ToList();
         }
     }
 }

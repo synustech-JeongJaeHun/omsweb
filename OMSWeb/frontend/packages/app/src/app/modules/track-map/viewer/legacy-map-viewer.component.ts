@@ -33,6 +33,16 @@ import {
 	TimelineEvent,
 	VehicleHistoryEvent,
 } from '@oms/root/models/playback.model'
+import {
+	convertSegmentBlockingHistoryEventToTmUpdateDtoSegmentDisabled,
+	convertSnapshotSegmentBlockingToTmUpdateDtoSegmentDisabled,
+	convertSnapshotVehicleToTmUpdateDtoVehicle,
+	convertTrackBufferToTmBuffer,
+	convertTrackMtlToTmMtl,
+	convertTrackPointToTmPoint,
+	convertTrackStationToTmStation,
+	convertVehicleHistoryEventToTmUpdateDtoVehicle,
+} from '../../playback/utils/playback-convert.util'
 
 @Component({
 	selector: 'oms-legacy-map-viewer',
@@ -135,11 +145,9 @@ export class LegacyMapViewerComponent implements OnInit, OnDestroy {
 	private setToCurrentSnapshot() {
 		// @ts-ignore
 		this.viewer.setTrack({
-			points: (this.playService.track.data.points ?? []).map((p) => ({
-				...p,
-				logicalId: p.logical_id,
-				physicalId: p.physical_id,
-			})),
+			points: (this.playService.track.data.points ?? []).map(
+				convertTrackPointToTmPoint,
+			),
 
 			segmentParts: (this.playService.track.data.segment_parts ?? []).map(
 				(sp) => {
@@ -163,30 +171,15 @@ export class LegacyMapViewerComponent implements OnInit, OnDestroy {
 					}
 				},
 			),
-			buffers: (this.playService.track.data.buffers ?? []).map((b) => ({
-				id: b.id,
-				logicalId: b.logical_id,
-				physicalId: b.physical_id,
-				direction: b.direction,
-				pointId: b.point,
-				nextPoint: b.next_point,
-				offset: b.offset,
-			})),
-			stations: (this.playService.track.data.stations ?? []).map((s) => ({
-				...s,
-				carrierId: s.carrier_id,
-				carrierType: s.carrier_type,
-				logicalId: s.logical_id,
-				physicalId: s.physical_id,
-				pointId: s.point,
-				nextPoint: s.next_point,
-			})),
-			mtls: (this.playService.track.data.mtls ?? []).map((m) => ({
-				id: m.id,
-				pointId: m.point,
-				logicalId: m.logical_id,
-				physicalId: m.physical_id,
-			})),
+			buffers: (this.playService.track.data.buffers ?? []).map(
+				convertTrackBufferToTmBuffer,
+			),
+			stations: (this.playService.track.data.stations ?? []).map(
+				convertTrackStationToTmStation,
+			),
+			mtls: (this.playService.track.data.mtls ?? []).map(
+				convertTrackMtlToTmMtl,
+			),
 			vehicles: [],
 			segmentDisabled: [],
 		})
@@ -195,66 +188,22 @@ export class LegacyMapViewerComponent implements OnInit, OnDestroy {
 		setTimeout(() => {
 			const vehicles = this.playService.currentSnapshot.data.vehicles ?? []
 			vehicles.forEach((v) => {
-				this.viewer.updateVehicle('INSERT', {
-					id: v.id,
-					logicalId: v.logical_id,
-					physicalId: v.physical_id,
-					canBePushed: v.can_be_pushed,
-					cargoState: v.cargo_state,
-					curPoint: v.last_point, // right?
-					nextPoint: v.next_point,
-					errorList: v.error_list,
-					isBlocked: v.is_blocked,
-					isSensorStopped: v.is_sensor_stopped,
-					isMaint: v.is_maint,
-					isConnected: 'connection', // convert number to boolean  isConnected ??
-					lastContact: v.last_contact,
-					mapDb: v.map_db,
-					mode: v.mode,
-					movingState: v.moving_state,
-					distancePoint: v.distance_point,
-					hostOrder: undefined, // ?
-					orderOrigin: v.order_origin,
-					cargoTransferResult: v.cargo_transfer_result, // string
-					commandPoint: String(v.command_point),
-
-					locationDropoff: undefined,
-					locationMove: undefined,
-					locationPickup: undefined,
-
-					orderId: v.order_id,
-					orderLogicalId: undefined,
-					priority: undefined,
-
-					type: v.type,
-					// id: "command",
-					// id: "nonce",
-					// id: "rail_in",
-					// id: "runtime",
-					// id: "distance",
-					// id: "soon_arrive",
-					// id: "runtime_total",
-					// id: "distance_total",
-					// id: "next_end_point",
-					// id: "push_point_list",
-					// id: "preassigned_order_id",
-					// id: "blocked_segment_pairs",
-				})
+				this.viewer.updateVehicle(
+					'INSERT',
+					convertSnapshotVehicleToTmUpdateDtoVehicle(v),
+				)
 			})
 
 			const segmentBlockings =
 				this.playService.currentSnapshot.data.segment_blocking ?? []
 			segmentBlockings.forEach((sb) => {
-				this.viewer.updateSegmentDisabled('INSERT', {
-					operation: 'INSERT',
-					id: sb.id,
-					data: {
-						id: sb.id,
-						segmentId: sb.segment_id,
-						disabledBy: sb.disabled_by,
-						disabledReason: sb.reason,
-					},
-				})
+				this.viewer.updateSegmentDisabled(
+					'INSERT',
+					convertSnapshotSegmentBlockingToTmUpdateDtoSegmentDisabled(
+						'INSERT',
+						sb,
+					),
+				)
 			})
 		}, 1)
 	}
@@ -286,56 +235,16 @@ export class LegacyMapViewerComponent implements OnInit, OnDestroy {
 		)
 	}
 	private applyVehicleHistoryEvent(event: VehicleHistoryEvent) {
-		this.viewer.updateVehicle(event.historyChangeType, {
-			id: event.historySourceId,
-
-			canBePushed: event.canBePushed,
-			cargoState: event.cargoState,
-			curPoint: event.lastPoint,
-			nextPoint: event.nextPoint,
-			errorList: event.errorList,
-			isBlocked: event.isBlocked,
-
-			isSensorStopped: event.isSensorStopped,
-			isMaint: event.isMaint,
-			// isConnected: event.connection, <= nullable number
-			lastContact: event.lastContact,
-			mapDb: event.mapDb,
-			mode: event.mode,
-			movingState: event.movingState,
-
-			distancePoint: event.distancePoint,
-			hostOrder: event.hostOrder,
-			orderOrigin: event.orderOrigin,
-
-			orderId: event.orderId,
-			// commandPoint: event.commandPoint, // not comes with prefix, just number
-
-			// cargoTransferResult?: string
-			// locationDropoff?: string
-			// locationMove?: string
-			// locationPickup?: string
-			// orderLogicalId?: string
-			// priority?: any
-			// type?: string
-			// group?: number
-			// historyChangeTime?: any
-		})
+		this.viewer.updateVehicle(
+			event.historyChangeType,
+			convertVehicleHistoryEventToTmUpdateDtoVehicle(event),
+		)
 	}
 	private applySegmentBlockingHistoryEvent(event: SegmentBlockingHistoryEvent) {
-		this.viewer.updateSegmentDisabled(event.historyChangeType, {
-			id: event.historySourceId,
-			operation: event.historyChangeType,
-			data:
-				event.historyChangeType === 'INSERT'
-					? {
-							id: event.historySourceId,
-							segmentId: event.segmentId,
-							disabledBy: event.disabledBy,
-							disabledReason: event.reason,
-					  }
-					: {},
-		})
+		this.viewer.updateSegmentDisabled(
+			event.historyChangeType,
+			convertSegmentBlockingHistoryEventToTmUpdateDtoSegmentDisabled(event),
+		)
 	}
 
 	private attachEvents() {

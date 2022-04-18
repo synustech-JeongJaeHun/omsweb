@@ -96,8 +96,8 @@ type PlaybackSnapshotData = {
 	vehicles: PlaybackSnapshotVehicle[]
 }
 type PlaybackSnapshotOrder = {
-	assignment_details: unknown
-	assignment_type: unknown
+	assignment_details: string | null
+	assignment_type: string | null
 	carrier_label: string
 	clean_status: unknown
 	distance_deliver: unknown
@@ -109,7 +109,7 @@ type PlaybackSnapshotOrder = {
 	location_pickup: string
 	logical_id: LogicalId
 	origin: string
-	priority: unknown
+	priority: number | string | null
 	status_details: unknown
 	time_aborted: string | null
 	time_assigned: string | null
@@ -168,7 +168,10 @@ type PlaybackSnapshotVehicle = {
 	type: unknown
 }
 
-type TimelineEvent = VehicleHistoryEvent | SegmentBlockingHistoryEvent
+type TimelineEvent =
+	| VehicleHistoryEvent
+	| SegmentBlockingHistoryEvent
+	| OrderHistoryEvent
 
 type Timeline = { eventId: number; eventTime: string; tableName: string }
 type History = {
@@ -208,28 +211,7 @@ type VehicleHistoryEvent = { tableName: 'vehicle_history' } & Timeline &
 		railIn: boolean
 		runtimeTotal: number
 	}
-type OrderHistoryEvent = {
-	id: number
-	logicalId: string
-	origin: string
-	vehicleId: string
-	state: string
-	locationPickup: string
-	locationDropoff: string
-	locationMove: string
-	priority: number
-	assignmentDetails: string
-	assignmentType: string
-	carrierLabel: string
-	timeCreated: string | null | undefined
-	timeAssigned: string | null | undefined
-	timeCompleted: string | null | undefined
-	timeAborted: string | null | undefined
-	timeFailed: string | null | undefined
-	distancePickup: number | null | undefined
-	distanceDropoff: number | null | undefined
-	distanceMove: number | null | undefined
-}
+
 type SegmentBlockingHistoryEvent = {
 	tableName: 'segment_blocking_history'
 } & Timeline &
@@ -238,6 +220,23 @@ type SegmentBlockingHistoryEvent = {
 		segmentId: number
 		disabledBy: string
 		reason: string
+	}
+
+type OrderHistoryEvent = { tableName: 'order_history' } & Timeline &
+	History & {
+		assignmentDetails: string
+		assignmentType: string
+		carrierLabel: string
+		id: number
+		locationDropoff: string
+		locationPickup: string
+		logicalId: LogicalId
+		origin: string
+		priority: number
+		timeAssigned: string
+		timeCreated: string
+		timeCompleted: string | undefined
+		vehicleId: string // parse to int
 	}
 
 type PlaybackSpeed = 0.1 | 0.5 | 1 | 2 | 5 | 10
@@ -307,20 +306,42 @@ type CurrentSegmentBlocking = {
 	disabledBy: string
 	reason: string
 }
-type CurrentOrder = {}
+type CurrentOrder = {
+	assignmentDetails: string | null
+	assignmentType: string | null
+	carrierLabel: string | null
+	id: number
+	locationDropoff: string
+	locationPickup: string
+	logicalId: LogicalId
+	origin: string
+	priority: string | number
+	timeAssigned: string
+	timeCreated: string
+	vehicleId: number // parse to int
+}
 
 export {
 	LogicalId,
 	PhysicalId,
 	PlaybackTrack,
 	PlaybackTrackData,
+	PlaybackPoint,
+	PlaybackBuffer,
+	PlaybackStation,
+	PlaybackMtl,
 	PlaybackSnapshot,
 	PlaybackSnapshotData,
 	PlaybackSnapshotVehicle,
+	PlaybackSnapshotSegmentBlocking,
+	PlaybackSnapshotOrder,
 	VehicleHistoryEvent,
 	OrderHistoryEvent,
 	SegmentBlockingHistoryEvent,
 	TimelineEvent,
 	PlaybackSpeed,
 	ClockChangedEvent,
+	CurrentVehicle,
+	CurrentSegmentBlocking,
+	CurrentOrder,
 }

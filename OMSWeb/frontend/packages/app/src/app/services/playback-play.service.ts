@@ -3,12 +3,24 @@ import { PlaybackService } from './playback.service'
 import * as DateFns from 'date-fns'
 import {
 	ClockChangedEvent,
+	CurrentOrder,
+	CurrentSegmentBlocking,
+	CurrentVehicle,
 	PlaybackSnapshot,
+	PlaybackSnapshotData,
 	PlaybackSnapshotVehicle,
 	PlaybackSpeed,
 	PlaybackTrack,
 	TimelineEvent,
 } from '../models/playback.model'
+import {
+	convertOrderHistoryEventToCurrentORder,
+	convertSegmentBlockingHistoryEventToCurrentSegmentBlocking,
+	convertSnapshotOrderToCurrentOrder,
+	convertSnapshotSegmentBlockingToCurrentSegmentBlocking,
+	convertSnapshotVehicleToCurrentVehicle,
+	convertVehicleHistoryEventToCurrentVehicle,
+} from '../modules/playback/utils/playback-convert.util'
 
 @Injectable({
 	providedIn: 'root',
@@ -52,9 +64,9 @@ export class PlaybackPlayService {
 	public currentSnapshot: PlaybackSnapshot
 	public nextSnapshot: PlaybackSnapshot
 
-	public currentVehicles: PlaybackSnapshotVehicle[] = []
-	public currentSegmentBlockings = []
-	public currentOrders = []
+	public currentVehicles: CurrentVehicle[] = []
+	public currentSegmentBlockings: CurrentSegmentBlocking[] = []
+	public currentOrders: CurrentOrder[] = []
 
 	public timelineEvents: TimelineEvent[]
 
@@ -70,7 +82,9 @@ export class PlaybackPlayService {
 	public playSpeed: PlaybackSpeed = 1
 	public readonly playSpeeds = [0.1, 0.5, 1, 2, 5, 10]
 
-	constructor(private playbackService: PlaybackService) {}
+	constructor(private playbackService: PlaybackService) {
+		this.clockChanged.subscribe((event) => this.reduceCurrentState(event))
+	}
 
 	public getRecentTrackTimeBy(date: Date) {
 		return this.trackTimes.find((time) => time.getTime() <= date.getTime())
@@ -184,7 +198,6 @@ export class PlaybackPlayService {
 			this.clock = date
 			this.remainedFirstEventIndex = index
 		}
-		this.reduceCurrentState()
 	}
 
 	// browse by eventid is always inside current snapshot times
@@ -198,12 +211,73 @@ export class PlaybackPlayService {
 
 		this.clock = new Date(this.timelineEvents[index].eventTime)
 		this.remainedFirstEventIndex = index + 1
-		this.reduceCurrentState()
 	}
 
-	private reduceCurrentState() {
-		// TODO: convert snapshot to current list
-		// TODO: convert events to current list
+	private reduceCurrentState(event: ClockChangedEvent) {
+		if (event.type === 'SnapshotChanged' || event.type === 'EventsChanged') {
+			this.currentVehicles = this.currentSnapshot.data.vehicles.map(
+				convertSnapshotVehicleToCurrentVehicle,
+			)
+			this.currentSegmentBlockings =
+				this.currentSnapshot.data.segment_blocking.map(
+					convertSnapshotSegmentBlockingToCurrentSegmentBlocking,
+				)
+			this.currentOrders = this.currentSnapshot.data.orders
+				.filter((event) => event.time_completed?.length > 0 === false)
+				.map(convertSnapshotOrderToCurrentOrder)
+		}
+		if (event.type === 'EventsChanged' || event.type === 'NextFrameEvent') {
+			// event
+			event.events.forEach((event) => {
+				if (event.tableName === 'vehicle_history') {
+					const vehicle = this.currentVehicles.find(
+						(c) => c.id === event.historySourceId,
+					)
+					if (vehicle && event.historyChangeType === 'UPDATE')
+						Object.assign(
+							vehicle,
+							convertVehicleHistoryEventToCurrentVehicle(event),
+						)
+				} else if (event.tableName === 'segment_blocking_history') {
+					if (event.historyChangeType === 'INSERT') {
+						this.currentSegmentBlockings.push(
+							convertSegmentBlockingHistoryEventToCurrentSegmentBlocking(event),
+						)
+					} else if (event.historyChangeType === 'DELETE') {
+						const index = this.currentSegmentBlockings.findIndex(
+							(sb) => sb.id === event.historySourceId,
+						)
+						if (index > -1) this.currentSegmentBlockings.splice(index, 1)
+					}
+				} else if (event.tableName === 'order_history') {
+					if (event.historyChangeType === 'INSERT') {
+						this.currentOrders.push(
+							convertOrderHistoryEventToCurrentORder(event),
+						)
+					} else if (
+						event.historyChangeType === 'UPDATE' &&
+						event.timeCompleted === undefined
+					) {
+						const order = this.currentOrders.find(
+							(o) => o.id === event.historySourceId,
+						)
+						if (order)
+							Object.assign(
+								order,
+								convertOrderHistoryEventToCurrentORder(event),
+							)
+					} else if (
+						event.historyChangeType === 'DELETE' ||
+						event.timeCompleted?.length > 0
+					) {
+						const index = this.currentOrders.findIndex(
+							(o) => o.id === event.historySourceId,
+						)
+						this.currentOrders.splice(index, 1)
+					}
+				}
+			})
+		}
 	}
 
 	public async goToStartOfSnapshot(order: 'previous' | 'next') {
