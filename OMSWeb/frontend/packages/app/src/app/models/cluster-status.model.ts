@@ -20,6 +20,6 @@ export interface IClusterStatusRow {
   current_s: string;
   current_t: string;
   total_kw: string;
-  wh: string;
+  cps_wh: string;
 }
 

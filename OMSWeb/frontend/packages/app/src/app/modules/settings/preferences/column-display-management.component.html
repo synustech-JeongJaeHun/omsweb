@@ -942,7 +942,7 @@
       <div class="table-columns-sub-container">
         <div class="table-columns-entries-container">
           <div>
-            <mat-label>{{ "names.using_type" | translate }}</mat-label>
+            <mat-label>{{ "names.usingType" | translate }}</mat-label>
           </div>
           <div>
             <input type="checkbox" color="primary" [title]="'names.group' | translate"
@@ -1044,6 +1044,17 @@
           <div>
             <input type="checkbox" color="primary" [title]="'names.cps_server_id' | translate"
                    [checked]="getCheckedState('cps_server_id')" (change)="onChangeControlTable('cps_server_id', $event)" />
+          </div>
+        </div>
+      </div>
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
+            <mat-label>{{ "names.logicalId" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.cps_logical_id' | translate"
+                   [checked]="getCheckedState('cps_logical_id')" (change)="onChangeControlTable('cps_logical_id', $event)" />
           </div>
         </div>
       </div>

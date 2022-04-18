@@ -48,6 +48,7 @@ export function useHub(handlers: {
 // orderTableChanged:
 // groupChanged:
 // zcuStatusTableChanged:
+// clusterStatusTableChanged:
 // hub.on('pointChanged', (meta, body) => {})
 // hub.on('segmentChanged', (meta, body) => {})
 // hub.on('stationChanged', (meta, body) => {})
@@ -64,3 +65,4 @@ export function useHub(handlers: {
 // hub.on('serverStatus', (meta, body) => {})
 // hub.on('modeState', (meta, body) => {})
 // hub.on('zcuStatusTableChanged', (meta, body) => {})
+// hub.on('clusterStatusTableChanged', (meta, body) => {})

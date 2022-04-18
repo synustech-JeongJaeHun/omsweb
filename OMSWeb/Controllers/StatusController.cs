@@ -65,6 +65,7 @@ namespace OMSWeb.Controllers
             this._cache.RemoveValue(CacheKeys.Vehicles);
             //this._cache.RemoveValue(CacheKeys.Zcus);
             //this._cache.RemoveValue(CacheKeys.ZcuStatus);
+            //this._cache.RemoveValue(CacheKeys.ClusterStatus);
 
             return "OK";
         }
@@ -97,6 +98,12 @@ namespace OMSWeb.Controllers
         public object GetZcuStatus(DataSourceLoadOptions loadOptions)
         {
             return DataSourceLoader.Load(_statusSvc.QueryZcuStates(), loadOptions);
+        }
+
+        [HttpGet("clusters")]
+        public object GetClusterStatus(DataSourceLoadOptions loadOptions)
+        {
+            return DataSourceLoader.Load(_statusSvc.QueryClusterStates(), loadOptions);
         }
 
         [HttpGet("dio")]

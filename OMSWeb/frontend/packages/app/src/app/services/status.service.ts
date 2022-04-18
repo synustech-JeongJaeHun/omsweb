@@ -61,11 +61,11 @@ export class StatusService {
       }),
     });
   }
-  cpsStatusDataSource(): DataSource {
+  clusterStatusDataSource(): DataSource {
     return new DataSource({
       store: AspNetData.createStore({
         key: 'id',
-        loadUrl: `${this.baseUrl}/cps`,
+        loadUrl: `${this.baseUrl}/clusters`,
       }),
     });
   }
