@@ -1,52 +1,40 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { DxDataGridComponent } from 'devextreme-angular';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-import { PlaybackService } from '../../../services/playback.service';
-import { TrackIdService } from '../../../services/track-id.service';
+import { Component, Input, ViewChild } from '@angular/core'
+import { PlaybackPlayService } from '@oms/root/services/playback-play.service'
+import { DxDataGridComponent } from 'devextreme-angular'
+import { TrackIdService } from '../../../services/track-id.service'
+import { DateUtil } from '../../shared/utils/date.util'
 
 @Component({
-  selector: 'oms-playback-order-status',
-  templateUrl: './playback-order-status.component.html',
-  styles: [],
+	selector: 'oms-playback-order-status',
+	templateUrl: './playback-order-status.component.html',
+	styles: [],
 })
-export class PlaybackOrderStatusComponent implements OnInit {
-  @Input() tableHeight: number;
+export class PlaybackOrderStatusComponent {
+	@Input() tableHeight: number
 
-  @ViewChild(DxDataGridComponent, { static: false })
-  dataGrid: DxDataGridComponent;
+	@ViewChild(DxDataGridComponent, { static: false })
+	dataGrid: DxDataGridComponent
 
-  dataSource: any[] = [];
-  selectedRows: number[] = [];
+	dateTimeFormat = DateUtil.DateTimeFormat
 
-  //#region Subscriptions
-  private destroy$: Subject<void> = new Subject<void>();
-  //#endregion
+	get dataSource() {
+		return this.playService.currentOrders
+	}
+	selectedRows: number[] = []
 
-  transformVehicleId = ({ value = '' }): string => {
-    const text =
-      this.idSvc.get_alternative_id('vehicle', 'logicalId', value) || value;
-    return text.toString();
-  };
+	transformVehicleId = ({ value = '' }): string => {
+		const vehicle = this.playService.currentVehicles.find(
+			(v) => v.id === parseInt(value),
+		)
+		return vehicle?.logicalId ?? ''
+	}
 
-  transformLocationId = ({ value = '' }): string => {
-    return this.idSvc.guessLocationId(value);
-  };
+	transformLocationId = ({ value = '' }): string => {
+		return this.idSvc.guessLocationId(value)
+	}
 
-  constructor(
-    private playbackSvc: PlaybackService,
-    private idSvc: TrackIdService
-  ) {
-    // this.playbackSvc.ordersChanged$
-    //   .pipe(takeUntil(this.destroy$))
-    //   .subscribe((data) => {
-    //     this.dataSource = data;
-    //   });
-  }
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
-  ngOnInit(): void {}
+	constructor(
+		private idSvc: TrackIdService,
+		private playService: PlaybackPlayService,
+	) {}
 }

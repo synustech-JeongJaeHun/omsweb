@@ -21,8 +21,8 @@
   <dxi-column [width]="80" dataType="string" dataField="priority" [caption]="'names.priority' | translate"></dxi-column>
   <dxi-column dataType="string" dataField="carrierLabel" [allowSorting]="false"
     [caption]="'names.carrierLabel' | translate"></dxi-column>
-  <dxi-column [width]="120" dataType="datetime" dataField="timeCreated" [caption]="'names.timeCreated' | translate">
+  <dxi-column [width]="120" dataType="datetime" dataField="timeCreated" [format]="dateTimeFormat" [caption]="'names.timeCreated' | translate">
   </dxi-column>
-  <dxi-column [width]="120" dataType="datetime" dataField="timeAssigned" [caption]="'names.timeAssigned' | translate">
+  <dxi-column [width]="120" dataType="datetime" dataField="timeAssigned" [format]="dateTimeFormat" [caption]="'names.timeAssigned' | translate">
   </dxi-column>
 </dx-data-grid>

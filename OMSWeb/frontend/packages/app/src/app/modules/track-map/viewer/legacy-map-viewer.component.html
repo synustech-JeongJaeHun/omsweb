@@ -22,9 +22,9 @@
 
   <div id="side_panel">
     <!-- detail panel at right side -->
-    <oms-map-side-panel *ngIf="activeDetails" class="side_panel active" [selectedObject]="selectedObject"
-      (focus)="changeFocus($event)">
-    </oms-map-side-panel>
+    <oms-legacy-map-side-panel *ngIf="activeDetails" class="side_panel active" [selectedObject]="selectedObject"
+      (focus)="changeFocus($event)" >
+    </oms-legacy-map-side-panel>
   </div>
 
 

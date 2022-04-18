@@ -23,11 +23,26 @@ import { SettingsService } from '@oms/root/services/settings.service'
 import { TrackMonitorSettingService } from '../../../services/track-monitor-setting.service'
 import d3 = require('d3')
 import { TranslateService } from '@ngx-translate/core'
-import { MessagesService } from '@oms/root/services/messages.service'
 import { DialogService } from '@oms/root/services/dialog.service'
 import { PlaybackPlayService } from '@oms/root/services/playback-play.service'
 import { MatDialog, MatDialogRef } from '@angular/material/dialog'
-import { ClockChangedEvent } from '@oms/root/models/playback.model'
+import {
+	ClockChangedEvent,
+	OrderHistoryEvent,
+	SegmentBlockingHistoryEvent,
+	TimelineEvent,
+	VehicleHistoryEvent,
+} from '@oms/root/models/playback.model'
+import {
+	convertSegmentBlockingHistoryEventToTmUpdateDtoSegmentDisabled,
+	convertSnapshotSegmentBlockingToTmUpdateDtoSegmentDisabled,
+	convertSnapshotVehicleToTmUpdateDtoVehicle,
+	convertTrackBufferToTmBuffer,
+	convertTrackMtlToTmMtl,
+	convertTrackPointToTmPoint,
+	convertTrackStationToTmStation,
+	convertVehicleHistoryEventToTmUpdateDtoVehicle,
+} from '../../playback/utils/playback-convert.util'
 
 @Component({
 	selector: 'oms-legacy-map-viewer',
@@ -47,9 +62,6 @@ export class LegacyMapViewerComponent implements OnInit, OnDestroy {
 	get tmSetting() {
 		return this.trackMonitorSettingService.trackSetting
 	}
-
-	readonly canSetSource = false
-	readonly canSetDest = false
 
 	public viewerSetting = {
 		rect: {
@@ -133,11 +145,9 @@ export class LegacyMapViewerComponent implements OnInit, OnDestroy {
 	private setToCurrentSnapshot() {
 		// @ts-ignore
 		this.viewer.setTrack({
-			points: (this.playService.track.data.points ?? []).map((p) => ({
-				...p,
-				logicalId: p.logical_id,
-				physicalId: p.physical_id,
-			})),
+			points: (this.playService.track.data.points ?? []).map(
+				convertTrackPointToTmPoint,
+			),
 
 			segmentParts: (this.playService.track.data.segment_parts ?? []).map(
 				(sp) => {
@@ -161,30 +171,15 @@ export class LegacyMapViewerComponent implements OnInit, OnDestroy {
 					}
 				},
 			),
-			buffers: (this.playService.track.data.buffers ?? []).map((b) => ({
-				id: b.id,
-				logicalId: b.logical_id,
-				physicalId: b.physical_id,
-				direction: b.direction,
-				pointId: b.point,
-				nextPoint: b.next_point,
-				offset: b.offset,
-			})),
-			stations: (this.playService.track.data.stations ?? []).map((s) => ({
-				...s,
-				carrierId: s.carrier_id,
-				carrierType: s.carrier_type,
-				logicalId: s.logical_id,
-				physicalId: s.physical_id,
-				pointId: s.point,
-				nextPoint: s.next_point,
-			})),
-			mtls: (this.playService.track.data.mtls ?? []).map((m) => ({
-				id: m.id,
-				pointId: m.point,
-				logicalId: m.logical_id,
-				physicalId: m.physical_id,
-			})),
+			buffers: (this.playService.track.data.buffers ?? []).map(
+				convertTrackBufferToTmBuffer,
+			),
+			stations: (this.playService.track.data.stations ?? []).map(
+				convertTrackStationToTmStation,
+			),
+			mtls: (this.playService.track.data.mtls ?? []).map(
+				convertTrackMtlToTmMtl,
+			),
 			vehicles: [],
 			segmentDisabled: [],
 		})
@@ -193,71 +188,64 @@ export class LegacyMapViewerComponent implements OnInit, OnDestroy {
 		setTimeout(() => {
 			const vehicles = this.playService.currentSnapshot.data.vehicles ?? []
 			vehicles.forEach((v) => {
-				this.viewer.updateVehicle('INSERT', {
-					id: v.id,
-					logicalId: v.logical_id,
-					physicalId: v.physical_id,
-					canBePushed: v.can_be_pushed,
-					cargoState: v.cargo_state,
-					curPoint: v.last_point, // right?
-					nextPoint: v.next_point,
-					errorList: v.error_list,
-					isBlocked: v.is_blocked,
-					isSensorStopped: v.is_sensor_stopped,
-					isMaint: v.is_maint,
-					isConnected: 'connection', // convert number to boolean  isConnected ??
-					lastContact: v.last_contact,
-					mapDb: v.map_db,
-					mode: v.mode,
-					movingState: v.moving_state,
-					distancePoint: v.distance_point,
-					hostOrder: undefined, // ?
-					orderOrigin: v.order_origin,
-					cargoTransferResult: v.cargo_transfer_result, // string
-					commandPoint: String(v.command_point),
-
-					locationDropoff: undefined,
-					locationMove: undefined,
-					locationPickup: undefined,
-
-					orderId: v.order_id,
-					orderLogicalId: undefined,
-					priority: undefined,
-
-					type: v.type,
-					// id: "command",
-					// id: "nonce",
-					// id: "rail_in",
-					// id: "runtime",
-					// id: "distance",
-					// id: "soon_arrive",
-					// id: "runtime_total",
-					// id: "distance_total",
-					// id: "next_end_point",
-					// id: "push_point_list",
-					// id: "preassigned_order_id",
-					// id: "blocked_segment_pairs",
-				})
+				this.viewer.updateVehicle(
+					'INSERT',
+					convertSnapshotVehicleToTmUpdateDtoVehicle(v),
+				)
 			})
 
 			const segmentBlockings =
 				this.playService.currentSnapshot.data.segment_blocking ?? []
 			segmentBlockings.forEach((sb) => {
-				this.viewer.updateSegmentDisabled('INSERT', {
-					operation: 'INSERT',
-					id: sb.id,
-					data: {
-						id: sb.id,
-						segmentId: sb.segment_id,
-						disabledBy: sb.disabled_by,
-						disabledReason: sb.reason,
-					},
-				})
+				this.viewer.updateSegmentDisabled(
+					'INSERT',
+					convertSnapshotSegmentBlockingToTmUpdateDtoSegmentDisabled(
+						'INSERT',
+						sb,
+					),
+				)
 			})
 		}, 1)
 	}
-	private applyEvents() {}
-	private consumeEvents() {}
+
+	private applyEvents(events: TimelineEvent[]) {
+		this.setToCurrentSnapshot()
+		setTimeout(() => this.consumeEvents(events), 2)
+	}
+
+	private consumeEvents(events: TimelineEvent[]) {
+		const vehicleReduceMap = new Map<
+			TimelineEvent['historySourceId'],
+			VehicleHistoryEvent
+		>()
+		events
+			.filter((e) => e.tableName === 'vehicle_history')
+			.forEach((event) => {
+				const id = event.historySourceId
+				const eventInMap = vehicleReduceMap.get(id)
+				// @ts-ignore
+				vehicleReduceMap.set(id, { ...eventInMap, ...event })
+			})
+		const segmentBlockingEvents = events.filter(
+			(e) => e.tableName === 'segment_blocking_history',
+		) as SegmentBlockingHistoryEvent[]
+		vehicleReduceMap.forEach((event) => this.applyVehicleHistoryEvent(event))
+		segmentBlockingEvents.forEach((event) =>
+			this.applySegmentBlockingHistoryEvent(event),
+		)
+	}
+	private applyVehicleHistoryEvent(event: VehicleHistoryEvent) {
+		this.viewer.updateVehicle(
+			event.historyChangeType,
+			convertVehicleHistoryEventToTmUpdateDtoVehicle(event),
+		)
+	}
+	private applySegmentBlockingHistoryEvent(event: SegmentBlockingHistoryEvent) {
+		this.viewer.updateSegmentDisabled(
+			event.historyChangeType,
+			convertSegmentBlockingHistoryEventToTmUpdateDtoSegmentDisabled(event),
+		)
+	}
 
 	private attachEvents() {
 		this.mapStatesService.toolbarToggleEvent$
@@ -292,14 +280,14 @@ export class LegacyMapViewerComponent implements OnInit, OnDestroy {
 		this.playService.clockChanged.subscribe((event: ClockChangedEvent) => {
 			console.log('clockchanged', event)
 			switch (event.type) {
-				case 'TrackChanged':
-					break
 				case 'SnapshotChanged':
 					this.setToCurrentSnapshot()
 					break
 				case 'EventsChanged':
+					this.applyEvents(event.events)
 					break
 				case 'NextFrameEvent':
+					this.consumeEvents(event.events)
 					break
 
 				default:
