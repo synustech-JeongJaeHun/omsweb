@@ -269,24 +269,19 @@ export class LegacyMapViewerComponent implements OnInit, OnDestroy {
 			TimelineEvent['historySourceId'],
 			VehicleHistoryEvent
 		>()
-		const segmentBlockingReduceMap = new Map<
-			TimelineEvent['historySourceId'],
-			SegmentBlockingHistoryEvent
-		>()
-		events.forEach((event) => {
-			const id = event.historySourceId
-			if (event.tableName === 'vehicle_history') {
+		events
+			.filter((e) => e.tableName === 'vehicle_history')
+			.forEach((event) => {
+				const id = event.historySourceId
 				const eventInMap = vehicleReduceMap.get(id)
+				// @ts-ignore
 				vehicleReduceMap.set(id, { ...eventInMap, ...event })
-			}
-			if (event.tableName === 'segment_blocking_history') {
-				const eventInMap = segmentBlockingReduceMap.get(id)
-				segmentBlockingReduceMap.set(id, { ...eventInMap, ...event })
-			}
-		})
-
+			})
+		const segmentBlockingEvents = events.filter(
+			(e) => e.tableName === 'segment_blocking_history',
+		) as SegmentBlockingHistoryEvent[]
 		vehicleReduceMap.forEach((event) => this.applyVehicleHistoryEvent(event))
-		segmentBlockingReduceMap.forEach((event) =>
+		segmentBlockingEvents.forEach((event) =>
 			this.applySegmentBlockingHistoryEvent(event),
 		)
 	}
@@ -331,7 +326,15 @@ export class LegacyMapViewerComponent implements OnInit, OnDestroy {
 		this.viewer.updateSegmentDisabled(event.historyChangeType, {
 			id: event.historySourceId,
 			operation: event.historyChangeType,
-			data: event,
+			data:
+				event.historyChangeType === 'INSERT'
+					? {
+							id: event.historySourceId,
+							segmentId: event.segmentId,
+							disabledBy: event.disabledBy,
+							disabledReason: event.reason,
+					  }
+					: {},
 		})
 	}
 

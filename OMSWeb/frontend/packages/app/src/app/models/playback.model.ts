@@ -91,80 +91,81 @@ type PlaybackSnapshot = {
 }
 
 type PlaybackSnapshotData = {
-	orders: {
-		assignment_details: unknown
-		assignment_type: unknown
-		carrier_label: string
-		clean_status: unknown
-		distance_deliver: unknown
-		distance_move: unknown
-		distance_pickup: unknown
-		id: number
-		location_dropoff: string
-		location_move: unknown
-		location_pickup: string
-		logical_id: LogicalId
-		origin: string
-		priority: unknown
-		status_details: unknown
-		time_aborted: string | null
-		time_assigned: string | null
-		time_completed: string | null
-		time_created: string | null
-		time_failed: string | null
-		time_load_completed: string | null
-		time_load_started: string | null
-		time_modified: string | null
-		time_unload_completed: string | null
-		time_unload_started: string | null
-		time_vehicle_arrived: string | null
-		transfer_state: number
-		vehicle_id: number
-	}[]
-
-	segment_blocking: {
-		disabled_by: string
-		id: number
-		reason: string
-		segment_id: number
-	}[]
-
-	vehicles: {
-		blocked_segment_pairs: string
-		can_be_pushed: boolean
-		cargo_state: string
-		cargo_transfer_result: null
-		command: string
-		command_point: number
-		connection: number
-		distance: number
-		distance_point: number
-		distance_total: number
-		error_list: string
-		id: number
-		is_blocked: boolean
-		is_maint: boolean
-		is_sensor_stopped: boolean
-		last_contact: string
-		last_point: number
-		logical_id: LogicalId
-		map_db: string
-		mode: string
-		moving_state: string
-		next_end_point: number
-		next_point: number
-		nonce: number
-		order_id: number
-		order_origin: string
-		physical_id: PhysicalId
-		preassigned_order_id: number
-		push_point_list: string
-		rail_in: boolean
-		runtime: number
-		runtime_total: number
-		soon_arrive: boolean
-		type: unknown
-	}[]
+	orders: PlaybackSnapshotOrder[]
+	segment_blocking: PlaybackSnapshotSegmentBlocking[]
+	vehicles: PlaybackSnapshotVehicle[]
+}
+type PlaybackSnapshotOrder = {
+	assignment_details: unknown
+	assignment_type: unknown
+	carrier_label: string
+	clean_status: unknown
+	distance_deliver: unknown
+	distance_move: unknown
+	distance_pickup: unknown
+	id: number
+	location_dropoff: string
+	location_move: unknown
+	location_pickup: string
+	logical_id: LogicalId
+	origin: string
+	priority: unknown
+	status_details: unknown
+	time_aborted: string | null
+	time_assigned: string | null
+	time_completed: string | null
+	time_created: string | null
+	time_failed: string | null
+	time_load_completed: string | null
+	time_load_started: string | null
+	time_modified: string | null
+	time_unload_completed: string | null
+	time_unload_started: string | null
+	time_vehicle_arrived: string | null
+	transfer_state: number
+	vehicle_id: number
+}
+type PlaybackSnapshotSegmentBlocking = {
+	disabled_by: string
+	id: number
+	reason: string
+	segment_id: number
+}
+type PlaybackSnapshotVehicle = {
+	blocked_segment_pairs: string
+	can_be_pushed: boolean
+	cargo_state: string
+	cargo_transfer_result: null
+	command: string
+	command_point: number
+	connection: number
+	distance: number
+	distance_point: number
+	distance_total: number
+	error_list: string
+	id: number
+	is_blocked: boolean
+	is_maint: boolean
+	is_sensor_stopped: boolean
+	last_contact: string
+	last_point: number
+	logical_id: LogicalId
+	map_db: string
+	mode: string
+	moving_state: string
+	next_end_point: number
+	next_point: number
+	nonce: number
+	order_id: number
+	order_origin: string
+	physical_id: PhysicalId
+	preassigned_order_id: number
+	push_point_list: string
+	rail_in: boolean
+	runtime: number
+	runtime_total: number
+	soon_arrive: boolean
+	type: unknown
 }
 
 type TimelineEvent = VehicleHistoryEvent | SegmentBlockingHistoryEvent
@@ -276,6 +277,38 @@ type NextFrameEvent = {
 	events: TimelineEvent[]
 }
 
+type CurrentVehicle = {
+	canBePushed: boolean
+	cargoState: string
+	commandPoint: string
+	distancePoint: number
+	distanceTotal: number
+	errorList: string
+	id: number
+	isBlocked: boolean
+	isMaint: boolean
+	isSensorStopped: boolean
+	lastContact: string
+	lastPoint: number
+	logicalId: string
+	mapDb: string
+	mode: string
+	movingState: string
+	nextPoint: number
+	orderId: number
+	orderOrigin: string
+	physicalId: string
+	railIn: boolean
+	runtimeTotal: number
+}
+type CurrentSegmentBlocking = {
+	id: number
+	segmentId: number
+	disabledBy: string
+	reason: string
+}
+type CurrentOrder = {}
+
 export {
 	LogicalId,
 	PhysicalId,
@@ -283,6 +316,7 @@ export {
 	PlaybackTrackData,
 	PlaybackSnapshot,
 	PlaybackSnapshotData,
+	PlaybackSnapshotVehicle,
 	VehicleHistoryEvent,
 	OrderHistoryEvent,
 	SegmentBlockingHistoryEvent,

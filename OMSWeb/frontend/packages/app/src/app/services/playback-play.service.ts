@@ -4,6 +4,7 @@ import * as DateFns from 'date-fns'
 import {
 	ClockChangedEvent,
 	PlaybackSnapshot,
+	PlaybackSnapshotVehicle,
 	PlaybackSpeed,
 	PlaybackTrack,
 	TimelineEvent,
@@ -50,6 +51,10 @@ export class PlaybackPlayService {
 
 	public currentSnapshot: PlaybackSnapshot
 	public nextSnapshot: PlaybackSnapshot
+
+	public currentVehicles: PlaybackSnapshotVehicle[] = []
+	public currentSegmentBlockings = []
+	public currentOrders = []
 
 	public timelineEvents: TimelineEvent[]
 
@@ -145,22 +150,13 @@ export class PlaybackPlayService {
 				) === false
 
 			if (isTrackDifference) await this.fetchTrack(date)
-
 			await this.fetchSnapshot(date)
 
-			if (isTrackDifference)
-				// 🎉 event
-				this.clockChanged.emit({
-					type: 'TrackChanged',
-					track: this.track.data,
-					snapshot: this.currentSnapshot.data,
-				})
 			// 🎉 event
-			else
-				this.clockChanged.emit({
-					type: 'SnapshotChanged',
-					snapshot: this.currentSnapshot.data,
-				})
+			this.clockChanged.emit({
+				type: 'SnapshotChanged',
+				snapshot: this.currentSnapshot.data,
+			})
 
 			if (this.currentSnapshot?.timestamp)
 				await this.fetchEvents(
@@ -188,8 +184,10 @@ export class PlaybackPlayService {
 			this.clock = date
 			this.remainedFirstEventIndex = index
 		}
+		this.reduceCurrentState()
 	}
 
+	// browse by eventid is always inside current snapshot times
 	public setClockByEventId(id: TimelineEvent['id']) {
 		const index = this.timelineEvents.findIndex((event) => event.eventId === id)
 		// 🎉 event
@@ -200,6 +198,12 @@ export class PlaybackPlayService {
 
 		this.clock = new Date(this.timelineEvents[index].eventTime)
 		this.remainedFirstEventIndex = index + 1
+		this.reduceCurrentState()
+	}
+
+	private reduceCurrentState() {
+		// TODO: convert snapshot to current list
+		// TODO: convert events to current list
 	}
 
 	public async goToStartOfSnapshot(order: 'previous' | 'next') {
