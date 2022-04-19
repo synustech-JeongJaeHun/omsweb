@@ -110,8 +110,8 @@ export class LegacyMapToolbarComponent implements OnInit, OnDestroy {
 		}
 
 		this._controlDlg = this.dialog.open(PlaybackControlDialogComponent, {
-			width: '90vw',
-			maxWidth: '800px',
+			maxWidth: '600px',
+			maxHeight: '50vh',
 			hasBackdrop: false,
 			disableClose: true,
 			closeOnNavigation: true,
