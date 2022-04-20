@@ -1,5 +1,5 @@
 :host {
-  width: calc(100vw - 50px);
+  width: calc(100vw - 40px);
   height: calc(100vh - 30px);
   padding: 20px;
 }
@@ -20,20 +20,36 @@ h2 {
   justify-content: space-between;
   width: 100%;
 }
+
 .flex-column {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
 }
 
-label {
-  margin-left: 2px;
-  font-size: 5px;
-  margin-bottom: 2px;
-}
-
 .label-form {
   width: 30%;
+
+  label {
+    margin-left: 2px;
+    font-size: 5px;
+    margin-bottom: 2px;
+  }
+}
+
+.overwrite-form label {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  input[type='checkbox'] {
+    margin: 0px;
+    margin-right: 5px;
+  }
+
+  span {
+    font-size: small;
+  }
 }
 
 .expected {
