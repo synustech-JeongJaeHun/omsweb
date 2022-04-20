@@ -1,58 +1,39 @@
-.content-layout {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: 41px 40px 500px 40px;
-  column-gap: 4px;
-  row-gap: 1px;
-  max-height: 100vh;
+.container {
+  overflow-y: hidden;
 }
 
-.full-col {
-  grid-column: 1/-1;
-}
+.dialog-header {
+  display: flex;
+  flex-direction: row;
 
-.half-span-col {
-  grid-column: 2/4;
-}
-
-mat-form-field.dense2 {
-  font-size: 12px;
-  width: 75%;
-  margin: 4px;
-}
-
-button.dense {
-  font-size: 12px;
-  align-content: center;
-  text-align: center;
-  align-items: center;
-  width: 20%;
-  height: 35px;
-  margin: 4px;
-  vertical-align: top;
-  margin-top: 10px;
-  margin-left: 10px;
-}
-
-h4 {
-  border-bottom: 2px solid var(--details-background-color);
-  text-align: center;
-}
-
-.details {
-  overflow: auto;
-}
-
-fieldset {
-  border: 1px solid var(--theme-border-color);
-  border-radius: 4px;
-  padding: 4px;
-  min-height: 30px;
-
-  legend {
-    font-size: 14px;
-    font-weight: bold;
+  button {
+    margin-left: 15px;
+    width: 10em;
   }
+}
+
+.status-dio-columns {
+  display: flex;
+  flex-direction: row;
+
+  .column {
+    flex: 1;
+    height: 470px;
+  }
+
+  .dio-fieldsets {
+    max-height: 420px;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  h4 {
+    text-align: center;
+  }
+}
+
+.dio-toggle-section {
+  margin-top: 10px;
 }
 
 .detail-grid {
@@ -95,119 +76,27 @@ fieldset {
   }
 }
 
-.status-panel {
-  grid-row: 3 /5;
-}
-// .di-panel {
-// }
-// .do-panel {
-// }
 
-.io-panel {
-  grid-column: 2 /4;
-  margin-top: 60px;
-  justify-self: center;
-  align-self: center;
+.pio-trend-table {
+  width: calc(100% - 20px);
+  margin-top: 10px;
 
-  mat-slide-toggle {
-    margin-left: 20px;
-
-    &:first-child {
-      margin-left: 0;
-    }
+  td {
+    width: 580px;
   }
 }
 
-.pioTrend {
-  // position: absolute;
-  // top: 90px;
-  // left: 0px;
-  // z-index: 2;
-  // display: block;
-  background-color: #fff;
+.pattern-legend {
+  margin-top: 15px;
 
-  margin-top: 50px;
-  //width: 740px;
-  // width: 900px;
-  // height: 84%;
-}
+  font-size: x-small;
 
-#pioTrendChart {
-  vertical-align: central;
-  padding: 0px 0px 0px 20px;
-}
-
-.pioTrendTable {
-  //width: 320px;
-  width: 95%;
-  height: 100%;
-  border: 0px solid #c2c2c2;
-  border-collapse: collapse;
-  padding: 0px 30px 0px 20px;
-}
-
-.pioTrendTable tr {
-  height: 20px;
-}
-
-.pioTrendTable th {
-  //font-weight: 400;
-  font-size: 10px;
-  width: 80px;
-  height: 10px;
-  padding: 1px 1px 1px 1px;
-  border: 0px solid #c2c2c2;
-  background: #fff;
-}
-
-.pioTrendTable th:nth-child(2) {
-  font-size: 10px;
-  width: 20px;
-  height: 10px;
-  padding: 1px 1px 1px 1px;
-  border: 0px solid #c2c2c2;
-}
-
-.pioTrendTable td {
-  //font-weight: 400;
-  font-size: 10px;
-  width: 280px;
-  height: 10px;
-  border: 0px solid #c2c2c2;
-}
-
-.pioTrendTable .sparkline {
-  width: 500px;
-  height: 30px;
-}
-
-.long-title h3 {
-  font-weight: 200;
-  font-size: 15px;
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.table-details {
-  width: 98%;
-  margin-top: 30px;
-
-  .name {
-    //width: 80px;
-    width: 8%;
-    background: #fff;
-    text-align: center;
+  .item {
+    margin-right: 3px;
   }
+}
 
-  .title {
-    width: 6%;
-    background: #fff;
-    text-align: center;
-  }
 
-  .value {
-    width: 5%;
-    background: #fff;
-    text-align: center;
-  }
+svg {
+  margin-right: 0px;
 }
