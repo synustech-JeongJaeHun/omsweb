@@ -236,6 +236,8 @@ type OrderHistoryEvent = { tableName: 'order_history' } & Timeline &
 		timeAssigned: string
 		timeCreated: string
 		timeCompleted: string | undefined
+		timeAborted: string | undefined
+		timeFailed: string | undefined
 		vehicleId: string // parse to int
 	}
 
@@ -318,6 +320,9 @@ type CurrentOrder = {
 	priority: string | number
 	timeAssigned: string
 	timeCreated: string
+	timeCompleted?: string
+	timeAborted?: string
+	timeFailed?: string
 	vehicleId: number // parse to int
 }
 

@@ -9,20 +9,20 @@
   <dxo-search-panel [placeholder]="'names.search' | translate" [visible]="true"></dxo-search-panel>
   <dxo-load-panel [enabled]="false"></dxo-load-panel>
 
-  <dxi-column [width]="80" dataType="string" dataField="id" sortOrder="desc" [caption]="'names.id' | translate">
+  <dxi-column [width]="80" dataType="string" dataField="id" sortOrder="asc" [caption]="'names.id' | translate">
   </dxi-column>
-  <dxi-column [width]="100" dataType="string" dataField="state" [caption]="'names.state' | translate"></dxi-column>
   <dxi-column [width]="80" dataType="string" dataField="vehicleId" [caption]="'names.vehicleId' | translate"
     [customizeText]="transformVehicleId"></dxi-column>
   <dxi-column [width]="120" dataType="string" dataField="locationPickup" [caption]="'names.locationPickup' | translate"
     [customizeText]="transformLocationId"></dxi-column>
   <dxi-column [width]="120" dataType="string" dataField="locationDropoff"
     [caption]="'names.locationDropoff' | translate" [customizeText]="transformLocationId"></dxi-column>
-  <dxi-column [width]="80" dataType="string" dataField="priority" [caption]="'names.priority' | translate"></dxi-column>
-  <dxi-column dataType="string" dataField="carrierLabel" [allowSorting]="false"
+  <dxi-column [width]="120" dataType="string" dataField="carrierLabel" [allowSorting]="false"
     [caption]="'names.carrierLabel' | translate"></dxi-column>
-  <dxi-column [width]="120" dataType="datetime" dataField="timeCreated" [format]="dateTimeFormat" [caption]="'names.timeCreated' | translate">
+  <dxi-column [width]="150" dataType="datetime" dataField="timeCreated" [format]="dateTimeFormat" [caption]="'names.timeCreated' | translate">
   </dxi-column>
-  <dxi-column [width]="120" dataType="datetime" dataField="timeAssigned" [format]="dateTimeFormat" [caption]="'names.timeAssigned' | translate">
+  <dxi-column [width]="150" dataType="datetime" dataField="timeAssigned" [format]="dateTimeFormat" [caption]="'names.timeAssigned' | translate">
   </dxi-column>
+  <dxi-column [width]="100" dataType="string" dataField="state" [caption]="'names.state' | translate"></dxi-column>
+  <dxi-column [width]="80" dataType="string" dataField="priority" [caption]="'names.priority' | translate"></dxi-column>
 </dx-data-grid>

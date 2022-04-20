@@ -7,14 +7,12 @@ import {
 	CurrentSegmentBlocking,
 	CurrentVehicle,
 	PlaybackSnapshot,
-	PlaybackSnapshotData,
-	PlaybackSnapshotVehicle,
 	PlaybackSpeed,
 	PlaybackTrack,
 	TimelineEvent,
 } from '../models/playback.model'
 import {
-	convertOrderHistoryEventToCurrentORder,
+	convertOrderHistoryEventToCurrentOrder,
 	convertSegmentBlockingHistoryEventToCurrentSegmentBlocking,
 	convertSnapshotOrderToCurrentOrder,
 	convertSnapshotSegmentBlockingToCurrentSegmentBlocking,
@@ -215,19 +213,17 @@ export class PlaybackPlayService {
 
 	private reduceCurrentState(event: ClockChangedEvent) {
 		if (event.type === 'SnapshotChanged' || event.type === 'EventsChanged') {
-			this.currentVehicles = this.currentSnapshot.data.vehicles.map(
+			this.currentVehicles = (this.currentSnapshot.data.vehicles ?? []).map(
 				convertSnapshotVehicleToCurrentVehicle,
 			)
-			this.currentSegmentBlockings =
-				this.currentSnapshot.data.segment_blocking.map(
-					convertSnapshotSegmentBlockingToCurrentSegmentBlocking,
-				)
-			this.currentOrders = this.currentSnapshot.data.orders
+			this.currentSegmentBlockings = (
+				this.currentSnapshot.data.segment_blocking ?? []
+			).map(convertSnapshotSegmentBlockingToCurrentSegmentBlocking)
+			this.currentOrders = (this.currentSnapshot.data.orders ?? [])
 				.filter((event) => event.time_completed?.length > 0 === false)
 				.map(convertSnapshotOrderToCurrentOrder)
 		}
 		if (event.type === 'EventsChanged' || event.type === 'NextFrameEvent') {
-			// event
 			event.events.forEach((event) => {
 				if (event.tableName === 'vehicle_history') {
 					const vehicle = this.currentVehicles.find(
@@ -252,11 +248,13 @@ export class PlaybackPlayService {
 				} else if (event.tableName === 'order_history') {
 					if (event.historyChangeType === 'INSERT') {
 						this.currentOrders.push(
-							convertOrderHistoryEventToCurrentORder(event),
+							convertOrderHistoryEventToCurrentOrder(event),
 						)
 					} else if (
 						event.historyChangeType === 'UPDATE' &&
-						event.timeCompleted === undefined
+						event.timeCompleted == null &&
+						event.timeAborted == null &&
+						event.timeFailed == null
 					) {
 						const order = this.currentOrders.find(
 							(o) => o.id === event.historySourceId,
@@ -264,11 +262,13 @@ export class PlaybackPlayService {
 						if (order)
 							Object.assign(
 								order,
-								convertOrderHistoryEventToCurrentORder(event),
+								convertOrderHistoryEventToCurrentOrder(event),
 							)
 					} else if (
 						event.historyChangeType === 'DELETE' ||
-						event.timeCompleted?.length > 0
+						event.timeCompleted != null ||
+						event.timeAborted != null ||
+						event.timeFailed != null
 					) {
 						const index = this.currentOrders.findIndex(
 							(o) => o.id === event.historySourceId,

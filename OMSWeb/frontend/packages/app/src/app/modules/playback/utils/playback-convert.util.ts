@@ -233,6 +233,9 @@ function convertSnapshotOrderToCurrentOrder(
 		priority: order.priority,
 		timeAssigned: order.time_assigned,
 		timeCreated: order.time_created,
+		timeAborted: order.time_aborted,
+		timeFailed: order.time_failed,
+		timeCompleted: order.time_completed,
 		vehicleId: order.vehicle_id,
 	}
 }
@@ -277,7 +280,7 @@ function convertSegmentBlockingHistoryEventToCurrentSegmentBlocking(
 	}
 }
 
-function convertOrderHistoryEventToCurrentORder(
+function convertOrderHistoryEventToCurrentOrder(
 	event: OrderHistoryEvent,
 ): CurrentOrder {
 	return {
@@ -292,6 +295,9 @@ function convertOrderHistoryEventToCurrentORder(
 		priority: event.priority,
 		timeAssigned: event.timeAssigned,
 		timeCreated: event.timeCreated,
+		timeAborted: event.timeAborted,
+		timeFailed: event.timeFailed,
+		timeCompleted: event.timeCompleted,
 		vehicleId: parseInt(event.vehicleId),
 	}
 }
@@ -317,5 +323,5 @@ export {
 	// For CurrentState from Events
 	convertVehicleHistoryEventToCurrentVehicle,
 	convertSegmentBlockingHistoryEventToCurrentSegmentBlocking,
-	convertOrderHistoryEventToCurrentORder,
+	convertOrderHistoryEventToCurrentOrder,
 }

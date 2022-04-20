@@ -110,8 +110,8 @@ export class LegacyMapToolbarComponent implements OnInit, OnDestroy {
 		}
 
 		this._controlDlg = this.dialog.open(PlaybackControlDialogComponent, {
-			width: '90vw',
-			maxWidth: '800px',
+			maxWidth: '600px',
+			maxHeight: '50vh',
 			hasBackdrop: false,
 			disableClose: true,
 			closeOnNavigation: true,
@@ -239,7 +239,11 @@ export class LegacyMapToolbarComponent implements OnInit, OnDestroy {
 
 		this._vhStatusDlg = this.dialog.open(PlaybackVehicleStatusDialogComponent, {
 			width: '750px',
-			height: '540px',
+			minWidth: '750px',
+			maxWidth: '750px',
+			height: '620px',
+			minHeight: '620px',
+			maxHeight: '620px',
 			autoFocus: false,
 			hasBackdrop: false,
 			disableClose: false,
