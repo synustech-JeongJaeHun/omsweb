@@ -15,32 +15,21 @@ import CameraBox from './CameraBox.ce.vue'
 
 const MapMargin = 10000
 
-const baseLength = readonly(
-  computed(() =>
-    Math.max(
-      mapSizePropertiesInfo.value.width,
-      mapSizePropertiesInfo.value.height,
-      (mapSizePropertiesInfo.value.width +
-        mapSizePropertiesInfo.value.height) /
-        Math.pow(8, 1 / 2)
-    )
-  )
-)
 const originPosition = readonly(
   computed(() => ({
     x:
       mapSizePropertiesInfo.value.centerX -
-      baseLength.value / 2 -
+      mapSizePropertiesInfo.value.baseLength / 2 -
       MapMargin,
     y:
       mapSizePropertiesInfo.value.centerY -
-      baseLength.value / 2 -
+      mapSizePropertiesInfo.value.baseLength / 2 -
       MapMargin,
   }))
 )
 
 const minimapViewBoxLength = readonly(
-  computed(() => baseLength.value + 2 * MapMargin)
+  computed(() => mapSizePropertiesInfo.value.baseLength + 2 * MapMargin)
 )
 
 const minimapSvgElement = ref<SVGElement>()
