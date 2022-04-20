@@ -23,32 +23,31 @@
   <div class="flex-row">
     <div class="flex-column label-form">
       <label>{{ "names.mapName" | translate }}</label>
-      <dx-text-box class="expected"
-                   [disabled]="true"
-                   [(value)]="currentMapName"
-                   width="100%"> </dx-text-box>
+      <dx-text-box class="expected" [disabled]="true" [(value)]="currentMapName" width="100%"> </dx-text-box>
     </div>
     <div class="flex-column label-form">
       <label>{{ "names.mapVersion" | translate }}</label>
-      <dx-text-box class="expected"
-                   [disabled]="true" [value]="updateMapVersion" width="100%"> </dx-text-box>
+      <dx-text-box class="expected" [disabled]="true" [value]="updateMapVersion" width="100%"> </dx-text-box>
     </div>
     <div class="flex-column label-form">
       <label>{{ "names.fileName" | translate }}</label>
-      <dx-autocomplete [disabled]="isUpdating"
-                       width="100%"
-                       [(value)]="updateFileName"
-                       [dataSource]="maps"
-                       (onFocusIn)="updateMapFiles()"> </dx-autocomplete>
+      <dx-autocomplete [disabled]="isUpdating" width="100%" [(value)]="updateFileName" [dataSource]="maps"
+        (onFocusIn)="updateMapFiles()"> </dx-autocomplete>
     </div>
   </div>
 </section>
-<div>
-  <label><input type="checkbox" (click)="onChangedOverwrite()" />{{ "names.overwriteDbInfo" | translate }} </label>
+<div class="overwrite-form">
+  <label>
+    <input type="checkbox" (click)="onChangedOverwrite()" />
+    <span>
+      {{ "names.overwriteDbInfo" | translate }}
+    </span>
+  </label>
 </div>
 <br />
 <mat-progress-bar class="mb-30" *ngIf="isUpdating" mode="indeterminate" aria-label="Loading"></mat-progress-bar>
-<label><button *ngIf="(isUpdating === false)" mat-raised-button color="primary" class="mb-30" (click)="onUpdateMap()">Update</button></label>
+<label><button *ngIf="(isUpdating === false)" mat-raised-button color="primary" class="mb-30"
+    (click)="onUpdateMap()">Update</button></label>
 <div class="update-fail" *ngIf="isUpdateFail">{{ "names.updateFailed" | translate }}: {{failReason}} </div>
 
 <!-- <h2>{{ "names.vehicleMap" | translate }}</h2> -->
