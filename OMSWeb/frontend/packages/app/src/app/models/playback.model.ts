@@ -243,24 +243,16 @@ type OrderHistoryEvent = { tableName: 'order_history' } & Timeline &
 
 type PlaybackSpeed = 0.1 | 0.5 | 1 | 2 | 5 | 10
 type ClockChangedEvent =
-	| TrackChangedEvent
 	| SnapshotChangedEvent
 	| EventsChangedEvent
 	| NextFrameEvent
 
 /**
- * Event when need to change track, snapshot and empty events
- */
-type TrackChangedEvent = {
-	type: 'TrackChanged'
-	track: PlaybackTrackData
-	snapshot: PlaybackSnapshotData
-}
-/**
  * Event when need to change snapshot and empty events
  */
 type SnapshotChangedEvent = {
 	type: 'SnapshotChanged'
+	clock: Date
 	snapshot: PlaybackSnapshotData
 }
 /**
@@ -268,6 +260,7 @@ type SnapshotChangedEvent = {
  */
 type EventsChangedEvent = {
 	type: 'EventsChanged'
+	clock: Date
 	events: TimelineEvent[]
 }
 /**
@@ -275,6 +268,7 @@ type EventsChangedEvent = {
  */
 type NextFrameEvent = {
 	type: 'NextFrameEvent'
+	clock: Date
 	events: TimelineEvent[]
 }
 

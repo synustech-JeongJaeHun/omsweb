@@ -25,6 +25,10 @@
   min-width: 325px;
 }
 
+#colocatedView {
+  position: absolute;
+}
+
 #tooltipView {
   position: absolute;
 }
@@ -41,6 +45,7 @@
   &.dx-tooltip-wrapper.dx-popover-wrapper .dx-popover-arrow::after {
     border: 1px solid var(--dialog-border-color);
   }
+
   &.dx-tooltip-wrapper .dx-overlay-content .dx-popup-content {
     padding: 0;
   }
@@ -64,6 +69,7 @@
     font-weight: bold;
     justify-self: end;
   }
+
   .value {
     justify-self: start;
   }
@@ -139,6 +145,8 @@
         width: 100%;
         height: 38px;
       }
+
+
     }
 
     .mat-button {
@@ -157,14 +165,17 @@
 
   mat-form-field {
     width: 80px;
+
     input {
       font-size: 11px;
     }
+
     ::ng-deep {
       .mat-form-field-wrapper {
         // padding-bottom: 0;
         margin-bottom: -1.25em;
       }
+
       // .mat-form-field-underline {
       //   display: none;
       // }

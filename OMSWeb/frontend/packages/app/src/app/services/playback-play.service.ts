@@ -69,12 +69,6 @@ export class PlaybackPlayService {
 	public timelineEvents: TimelineEvent[]
 
 	public clock: Date
-	public getClock() {
-		return this.clock
-	}
-	public setClock(date: Date) {
-		this.clock = date
-	}
 	public isPlaying = false
 
 	public playSpeed: PlaybackSpeed = 1
@@ -164,9 +158,14 @@ export class PlaybackPlayService {
 			if (isTrackDifference) await this.fetchTrack(date)
 			await this.fetchSnapshot(date)
 
+			// if other snapshot, goto very first time of snapshot
+			this.clock = this.currentSnapshot.timestamp
+			this.remainedFirstEventIndex = 0
+
 			// 🎉 event
 			this.clockChanged.emit({
 				type: 'SnapshotChanged',
+				clock: this.clock,
 				snapshot: this.currentSnapshot.data,
 			})
 
@@ -175,10 +174,6 @@ export class PlaybackPlayService {
 					this.currentSnapshot.timestamp,
 					this.nextSnapshot?.timestamp,
 				)
-
-			// if other snapshot, goto very first time of snapshot
-			this.clock = this.currentSnapshot.timestamp
-			this.remainedFirstEventIndex = 0
 		} else {
 			const time = date.getTime()
 			const index = findIndexDefault(
@@ -187,35 +182,38 @@ export class PlaybackPlayService {
 				),
 				this.timelineEvents.length,
 			)
+
+			this.clock = date
+			this.remainedFirstEventIndex = index
+
 			this.clockChanged.emit({
 				type: 'EventsChanged',
+				clock: this.clock,
 				events: this.timelineEvents.slice(0, index),
 			})
 
 			// if current snapshot, goto date in arts
-			this.clock = date
-			this.remainedFirstEventIndex = index
 		}
 	}
 
 	// browse by eventid is always inside current snapshot times
 	public setClockByEventId(id: TimelineEvent['id']) {
 		const index = this.timelineEvents.findIndex((event) => event.eventId === id)
+		this.clock = new Date(this.timelineEvents[index].eventTime)
+		this.remainedFirstEventIndex = index + 1
 		// 🎉 event
 		this.clockChanged.emit({
 			type: 'EventsChanged',
+			clock: this.clock,
 			events: this.timelineEvents.slice(0, index + 1),
 		})
-
-		this.clock = new Date(this.timelineEvents[index].eventTime)
-		this.remainedFirstEventIndex = index + 1
 	}
 
 	private reduceCurrentState(event: ClockChangedEvent) {
 		if (event.type === 'SnapshotChanged' || event.type === 'EventsChanged') {
-			this.currentVehicles = (this.currentSnapshot.data.vehicles ?? []).map(
-				convertSnapshotVehicleToCurrentVehicle,
-			)
+			this.currentVehicles = (this.currentSnapshot.data.vehicles ?? [])
+				.map(convertSnapshotVehicleToCurrentVehicle)
+				.sort((a, b) => a.id - b.id)
 			this.currentSegmentBlockings = (
 				this.currentSnapshot.data.segment_blocking ?? []
 			).map(convertSnapshotSegmentBlockingToCurrentSegmentBlocking)
@@ -292,10 +290,14 @@ export class PlaybackPlayService {
 		await this.setClockByDate(date)
 	}
 	public goToStartOfCurrentSnapshot() {
-		// 🎉 event
-		this.clockChanged.emit({ type: 'EventsChanged', events: [] })
 		this.clock = this.currentSnapshot.timestamp
 		this.remainedFirstEventIndex = 0
+		// 🎉 event
+		this.clockChanged.emit({
+			type: 'EventsChanged',
+			clock: this.clock,
+			events: [],
+		})
 	}
 
 	private intervalId = undefined
@@ -339,6 +341,7 @@ export class PlaybackPlayService {
 			this.remainedFirstEventIndex = 0
 			this.clockChanged.emit({
 				type: 'SnapshotChanged',
+				clock: this.clock,
 				snapshot: this.currentSnapshot.data,
 			})
 			this.resume()
@@ -356,17 +359,17 @@ export class PlaybackPlayService {
 				: this.remainedFirstEventIndex + index
 		})()
 
+		this.clock = nextDate
+		this.remainedFirstEventIndex = nextIndex
 		// 🎉 event
 		this.clockChanged.emit({
 			type: 'NextFrameEvent',
+			clock: this.clock,
 			events: this.timelineEvents.slice(
 				this.remainedFirstEventIndex,
 				nextIndex,
 			),
 		})
-
-		this.clock = nextDate
-		this.remainedFirstEventIndex = nextIndex
 	}
 
 	public stop() {
@@ -381,28 +384,28 @@ export class PlaybackPlayService {
 	 */
 	public getOverlapObjectOnPoint(pointId: number) {
 		const points =
-			this.track.data.points
+			(this.track.data.points ?? [])
 				.filter((p) => p.id === pointId)
 				.map((p) => ({ ...p, objectType: 'point' })) ?? []
 		const stations =
-			this.track.data.stations
+			(this.track.data.stations ?? [])
 				.filter((s) => s.point === pointId)
 				.map((s) => ({ ...s, objectType: 'station' })) ?? []
 		const buffers =
-			this.track.data.buffers
+			(this.track.data.buffers ?? [])
 				.filter((b) => b.point === pointId)
 				.map((b) => ({ ...b, objectType: 'buffer' })) ?? []
 		const mtls =
-			this.track.data.mtls
+			(this.track.data.mtls ?? [])
 				.filter((m) => m.point === pointId)
 				.map((m) => ({ ...m, objectType: 'mtl' })) ?? []
 		const vehicles =
-			this.currentSnapshot.data.vehicles
-				.filter((v) => v.last_point === pointId)
+			(this.currentVehicles ?? [])
+				.filter((v) => v.lastPoint === pointId)
 				.map((v) => ({
 					...v,
 					objectType: 'vehicle',
-					type: v.type ?? 'STANDARD',
+					type: 'STANDARD',
 				})) ?? []
 
 		return [...points, ...stations, ...buffers, ...vehicles, ...mtls]

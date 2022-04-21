@@ -79,12 +79,11 @@ export class PlaybackComponent implements OnInit, OnDestroy {
 							this.playbackPlayService.currentSnapshot = res.before
 							this.playbackPlayService.nextSnapshot = res.next
 
-							if (this.playbackPlayService.currentSnapshot)
-								this.playbackPlayService.clockChanged.emit({
-									type: 'TrackChanged',
-									track: this.playbackPlayService.track.data,
-									snapshot: this.playbackPlayService.currentSnapshot.data,
-								})
+							this.playbackPlayService.clockChanged.emit({
+								type: 'SnapshotChanged',
+								clock: this.playbackPlayService.clock,
+								snapshot: this.playbackPlayService.currentSnapshot.data,
+							})
 
 							if (this.playbackPlayService.currentSnapshot?.timestamp)
 								this.playbackService
