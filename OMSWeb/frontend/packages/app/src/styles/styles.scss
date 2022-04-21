@@ -310,12 +310,14 @@ html,
 body {
   height: 100%;
 }
+
 body {
   margin: 0;
   font-family: Mulish, Roboto, "Helvetica Neue", sans-serif;
   font-size: 16px;
   overflow: hidden;
 }
+
 * {
   font-family: Mulish, Roboto, "Helvetica Neue", sans-serif;
 }
@@ -323,6 +325,7 @@ body {
 header {
   width: 100vw;
 }
+
 button.active {
   background-color: var(--button-active-color);
 }
@@ -443,12 +446,15 @@ oms-kpi-status {
 .pre-line {
   white-space: pre-line;
 }
+
 .full-span-col {
   grid-column: 1/-1;
 }
+
 .full-span-row {
   grid-row: 1/-1;
 }
+
 .pointer {
   cursor: pointer;
 }
@@ -457,10 +463,12 @@ table {
   border-collapse: collapse;
   border: 1px solid var(--dialog-border-color);
 
-  th, td {
+  th,
+  td {
     padding: 4px;
     border: 1px solid var(--dialog-border-color);
   }
+
   th {
     font-size: 12px;
     text-align: left;
@@ -474,9 +482,11 @@ table {
 
 table.table-details {
 
-  th.name, td.name {
+  th.name,
+  td.name {
     text-align: right;
   }
+
   td.name {
     background-color: var(--toolbar-background-color);
     font-weight: bold;
@@ -487,6 +497,7 @@ table.table-details {
 .mat-dialog-container {
   padding: 8px !important;
 }
+
 [mat-dialog-title] {
   font-family: Mulish, Roboto, "Helvetica Neue", sans-serif;
   font-size: 14px;
@@ -497,35 +508,44 @@ table.table-details {
   color: #fff;
   cursor: move;
 }
+
 .alarms-dialog {
   .mat-dialog-container {
     border: 2px solid var(--notification-critical-color);
   }
+
   [mat-dialog-title] {
     background-color: var(--notification-critical-color);
   }
 }
+
 .alerts-dialog {
   .mat-dialog-container {
     border: 2px solid var(--notification-color);
   }
+
   [mat-dialog-title] {
     background-color: var(--notification-color);
   }
 }
+
 button.warn .mat-badge-warn .mat-badge-content {
   background-color: var(--notification-color);
 }
+
 .mat-dialog-content {
+  max-height: initial !important;
   margin: 0 -8px !important;
   padding: 0 8px !important;
 }
+
 .mat-dialog-actions {
   display: flex;
   justify-content: flex-end;
   margin-bottom: -8px !important;
   padding: 4px 0 0 0 !important;
 }
+
 .mat-tooltip {
   @include tooltip;
 }
@@ -545,10 +565,12 @@ button.warn .mat-badge-warn .mat-badge-content {
     mat-icon {
       margin-right: 4px;
     }
+
     .mat-icon:last-child {
       margin-right: 0px;
     }
   }
+
   &.dense {
     line-height: 23px;
     font-size: 12px;
@@ -565,7 +587,9 @@ mat-nav-list,
 mat-selection-list,
 mat-list {
   &.dense {
-    .mat-list-item, .mat-list-option {
+
+    .mat-list-item,
+    .mat-list-option {
       font-size: 12px !important;
       height: 24px !important;
     }
@@ -599,6 +623,7 @@ mat-list {
     &.mat-primary {
       background-color: #dae7ff;
     }
+
     &.mat-warn {
       background-color: #ffdddb;
     }
@@ -625,6 +650,7 @@ mat-button-toggle-group {
   .mat-menu-content:not(:empty) {
     padding: 0;
   }
+
   .mat-menu-item {
     line-height: 24px;
     height: 32px;
@@ -634,7 +660,8 @@ mat-button-toggle-group {
 mat-radio-button {
   font-size: 12px;
 }
-.mat-radio-button ~ .mat-radio-button {
+
+.mat-radio-button~.mat-radio-button {
   margin-left: 16px;
 }
 
@@ -646,11 +673,13 @@ mat-radio-button {
     font-family: var(--theme-font);
   }
 }
+
 snack-bar-container.error {
   &.server {
     background-color: var(--notification-critical-color);
     color: white;
   }
+
   &.client {
     color: var(--notification-color);
   }
@@ -659,6 +688,7 @@ snack-bar-container.error {
 .mat-form-field.full-width {
   max-width: 100% !important;
 }
+
 .mat-form-field.dense {
   font-size: 12px;
   width: 100%;
@@ -672,10 +702,12 @@ snack-bar-container.error {
       padding: 5px 0 10px 0;
     }
   }
+
   &.mat-form-field-disabled {
     input::placeholder {
       color: rgba(0, 0, 0, 0.2);
     }
+
     .mat-form-field-outline {
       color: rgba(0, 0, 0, 0.05);
     }
@@ -691,7 +723,7 @@ snack-bar-container.error {
   font-size: 10px;
 }
 
-.dx-datagrid .dx-row > td {
+.dx-datagrid .dx-row>td {
   padding: 3px;
 }
 
@@ -721,6 +753,7 @@ snack-bar-container.error {
   .dx-page-sizes .dx-page-size {
     padding: 4px;
   }
+
   .dx-pages .dx-page {
     padding: 4px;
   }
