@@ -74,23 +74,37 @@ namespace OMSWeb.Controllers
         [HttpGet("logs/downloadFile/{fileName}")]
         public FileContentResult DownloadFile([FromRoute] string fileName, [FromQuery] string fileFullPath)
         {
-            string path = fileFullPath;
+            string filePath = fileFullPath;
             byte[] bytes = null;
-
-            //var tempFolderPath = "C:\\OMS\\app\\omsweb\\Temp\\CopyFolder\\";
-            var logTempCopyDir = this._systemSvc.LogTempCopyDir;
 
             try
             {
-                bytes = System.IO.File.ReadAllBytes(path);
+                using (var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                {
+                    using (var ms = new MemoryStream())
+                    {
+                        fs.CopyTo(ms);
+                        bytes = ms.ToArray();
+                    }
+                }
             }
             catch
             {
+                //var tempFolderPath = "C:\\OMS\\app\\omsweb\\Temp\\CopyFolder\\";
+                var logTempCopyDir = this._systemSvc.LogTempCopyDir;
+
                 if (!Directory.Exists(logTempCopyDir))
                     Directory.CreateDirectory(logTempCopyDir);
 
-                System.IO.File.Copy(path, logTempCopyDir + "\\" + fileName);
-                bytes = System.IO.File.ReadAllBytes(logTempCopyDir + "\\" + fileName);
+                System.IO.File.Copy(filePath, logTempCopyDir + "\\" + fileName);
+                using (var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                {
+                    using (var ms = new MemoryStream())
+                    {
+                        fs.CopyTo(ms);
+                        bytes = ms.ToArray();
+                    }
+                }
 
                 if (System.IO.File.Exists(logTempCopyDir + "\\" + fileName))
                     System.IO.File.Delete(logTempCopyDir + "\\" + fileName);
@@ -126,6 +140,7 @@ namespace OMSWeb.Controllers
                     DirectoryInfo directoryInfo = new DirectoryInfo(path);
                     if (!Directory.Exists(logTempCopyDir + "\\" + directoryInfo.Name))
                         Directory.CreateDirectory(logTempCopyDir + "\\" + directoryInfo.Name);
+
                     _systemSvc.DirectoryCopy(path, logTempCopyDir + "\\" + directoryInfo.Name, true);
                 }
                 else
@@ -152,6 +167,7 @@ namespace OMSWeb.Controllers
                         DirectoryInfo directoryInfo = new DirectoryInfo(path);
                         if (!Directory.Exists(logTempCopyDir + "\\" + directoryInfo.Name))
                             Directory.CreateDirectory(logTempCopyDir + "\\" + directoryInfo.Name);
+
                         _systemSvc.DirectoryCopy(path, logTempCopyDir, true);
                     }
                     else
@@ -166,7 +182,15 @@ namespace OMSWeb.Controllers
                 Directory.Delete(logTempCopyDir, true);
             }
 
-            byte[] zipResult = System.IO.File.ReadAllBytes(logZipFilePath);
+            byte[] zipResult;
+            using (var fs = new FileStream(logZipFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            {
+                using (var ms = new MemoryStream())
+                {
+                    fs.CopyTo(ms);
+                    zipResult = ms.ToArray();
+                }
+            }
             if (System.IO.File.Exists(logZipFilePath))
                 System.IO.File.Delete(logZipFilePath);
 
@@ -211,7 +235,15 @@ namespace OMSWeb.Controllers
                 Directory.Delete(logTempCopyDir, true);
             }
 
-            byte[] zipResult = System.IO.File.ReadAllBytes(logZipFilePath);
+            byte[] zipResult;
+            using (var fs = new FileStream(logZipFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            {
+                using (var ms = new MemoryStream())
+                {
+                    fs.CopyTo(ms);
+                    zipResult = ms.ToArray();
+                }
+            }
             if (System.IO.File.Exists(logZipFilePath))
                 System.IO.File.Delete(logZipFilePath);
 
