@@ -10,7 +10,7 @@
           {{ "names.pioTrend" | translate }}
         </button>
       </div>
-      <div *ngIf="visiblePIOTrend === false">
+      <div *ngIf="visiblePIOTrend === false && currentVehicle">
         <div class="status-dio-columns">
           <div class="column">
             <h4>Status</h4>
@@ -33,25 +33,27 @@
                 <div class="status-item" [class.active]="currentVehicle.cargoState === 'F'">
                   {{ "names.carrier" | translate }}
                 </div>
-                <div class="status-item" [class.active]="currentVehicle.isConnected">
+                <!-- currently connection data is not existed in history, and connection from snapshot is impossible to interpret -->
+                <!-- <div class="status-item" [class.active]="currentVehicle.isConnected">
                   {{ "names.connected" | translate }}
-                </div>
+                </div> -->
                 <div class="status-item" [class.active]="currentVehicle.isSensorStopped">
                   {{ "names.sensorStopped" | translate }}
                 </div>
                 <div class="status-item" [class.active]="currentVehicle.isMaint">
                   {{ "names.maintenance" | translate }}
                 </div>
-                <div class="status-item" [class.active]="currentVehicle.hostOrder">
+                <!-- currently connection data is not existed in snapshot -->
+                <!-- <div class="status-item" [class.active]="currentVehicle.hostOrder">
                   {{ "names.hostOrderEnable" | translate }}
-                </div>
+                </div> -->
                 <div class="status-item" [class.active]="currentVehicle.canBePushed">
                   {{ "names.pushEnable" | translate }}
                 </div>
               </div>
             </fieldset>
           </div>
-          <div class="column ">
+          <div class="column">
             <h4>DI</h4>
             <hr />
             <div class="dio-fieldsets">
@@ -91,7 +93,7 @@
             category.name }}</mat-slide-toggle>
         </div>
       </div>
-      <div *ngIf="visiblePIOTrend === true">
+      <div *ngIf="visiblePIOTrend === true && currentVehicle">
         <table class="pio-trend-table">
           <tbody>
             <!-- PO -->
