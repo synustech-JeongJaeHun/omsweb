@@ -81,8 +81,14 @@
   width: calc(100% - 20px);
   margin-top: 10px;
 
-  td {
-    width: 580px;
+  tr {
+    th:nth-child(2) {
+      font-size: xx-small;
+    }
+
+    td {
+      width: 580px;
+    }
   }
 }
 
