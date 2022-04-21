@@ -328,6 +328,10 @@ namespace OMSWeb.Controllers
                 string arguments = (bOverwrite) ? $"update --name {mapName} --map \"{mapPath}\" --overwrite" :
                                                   $"update --name {mapName} --map \"{mapPath}\"";
 
+                string dsbv = AppConfig.GetFromOMSConfig("VehicleProcessor", "is_disabled_seg_by_veh", "true");
+                arguments += Convert.ToBoolean(dsbv) ? String.Empty : " --dsbv";
+
+
                 if (!System.IO.File.Exists(exePath))
                 {
                     bResult = false;
