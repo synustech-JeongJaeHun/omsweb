@@ -384,28 +384,28 @@ export class PlaybackPlayService {
 	 */
 	public getOverlapObjectOnPoint(pointId: number) {
 		const points =
-			this.track.data.points
+			(this.track.data.points ?? [])
 				.filter((p) => p.id === pointId)
 				.map((p) => ({ ...p, objectType: 'point' })) ?? []
 		const stations =
-			this.track.data.stations
+			(this.track.data.stations ?? [])
 				.filter((s) => s.point === pointId)
 				.map((s) => ({ ...s, objectType: 'station' })) ?? []
 		const buffers =
-			this.track.data.buffers
+			(this.track.data.buffers ?? [])
 				.filter((b) => b.point === pointId)
 				.map((b) => ({ ...b, objectType: 'buffer' })) ?? []
 		const mtls =
-			this.track.data.mtls
+			(this.track.data.mtls ?? [])
 				.filter((m) => m.point === pointId)
 				.map((m) => ({ ...m, objectType: 'mtl' })) ?? []
 		const vehicles =
-			this.currentSnapshot.data.vehicles
-				.filter((v) => v.last_point === pointId)
+			(this.currentVehicles ?? [])
+				.filter((v) => v.lastPoint === pointId)
 				.map((v) => ({
 					...v,
 					objectType: 'vehicle',
-					type: v.type ?? 'STANDARD',
+					type: 'STANDARD',
 				})) ?? []
 
 		return [...points, ...stations, ...buffers, ...vehicles, ...mtls]
