@@ -35,6 +35,12 @@ namespace OMSWeb.Controllers
             return this._notificationSvc.GetAlarmCount();
         }
 
+        [HttpGet("alerts")]
+        public object GetAlerts(DataSourceLoadOptions loadOptions)
+        {
+            return DataSourceLoader.Load(_notificationSvc.GetAlerts(), loadOptions);
+        }
+
         [HttpGet("alarms")]
         public object GetAlarms(DataSourceLoadOptions loadOptions)
         {

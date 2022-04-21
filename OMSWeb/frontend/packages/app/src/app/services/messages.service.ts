@@ -94,6 +94,15 @@ export class MessagesService {
 		return this.sendCommand<IWarningClearCommandMessage>(command)
 	}
 
+	sendWarningAllClearCommand(
+		command: IWarningClearCommandMessage,
+		ackBy: string,
+	): Observable<void> {
+		command.WarningIds = [-1]
+		command.WarningAckBy = ackBy
+		return this.sendCommand<IWarningClearCommandMessage>(command)
+	}
+
 	sendServerModuleControlCommand(
 		command: IControlStateCommandMessage,
 	): Observable<void> {

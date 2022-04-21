@@ -11,6 +11,7 @@ namespace OMSWeb.Models
         public string Direction { get; set; }
         public int AlarmCode { get; set; }
         public int WarningId { get; set; }
+        public int[] WarningIds { get; set; }
         public string WarningAckBy { get; set; }
         public int[] ZcuIds { get; set; }
         public string ZcuId { get; set; }
