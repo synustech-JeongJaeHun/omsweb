@@ -7,36 +7,45 @@ using System.Threading.Tasks;
 
 namespace OMSWeb.Services
 {
-  public class NotificationsService
-  {
-    private readonly AlarmRepository _alarmRepo;
-    private readonly AlertRepository _alertRepo;
-
-    public NotificationsService(AlarmRepository alarm, AlertRepository alert)
+    public class NotificationsService
     {
-      this._alarmRepo = alarm;
-      this._alertRepo = alert;
-    }
+        private readonly AlarmRepository _alarmRepo;
+        private readonly AlertRepository _alertRepo;
 
-    public NotificationCountModel GetAlarmCount() {
-      return this._alarmRepo.GetCount();
-    }
+        public NotificationsService(AlarmRepository alarm, AlertRepository alert)
+        {
+            this._alarmRepo = alarm;
+            this._alertRepo = alert;
+        }
 
-    public NotificationCountModel GetAlertCount() {
-      return this._alertRepo.GetCount();
-    }
+        public NotificationCountModel GetAlarmCount()
+        {
+            return this._alarmRepo.GetCount();
+        }
 
-    public IQueryable<AlarmHistory> GetAlarms() {
-      return this._alarmRepo.GetAlarms();
-    }
+        public NotificationCountModel GetAlertCount()
+        {
+            return this._alertRepo.GetCount();
+        }
 
-    public int AddAnnotation(AnnotationDto annotation)
-    {
-      return this._alarmRepo.AddAnnotation(annotation);
-    }
+        public IQueryable<AlertHistory> GetAlerts()
+        {
+            return this._alertRepo.GetAlerts();
+        }
 
-    public IQueryable<VehicleError> GetVehicleErrors() {
-      return this._alarmRepo.GetVehicleErrors();
+        public IQueryable<AlarmHistory> GetAlarms()
+        {
+            return this._alarmRepo.GetAlarms();
+        }
+
+        public int AddAnnotation(AnnotationDto annotation)
+        {
+            return this._alarmRepo.AddAnnotation(annotation);
+        }
+
+        public IQueryable<VehicleError> GetVehicleErrors()
+        {
+            return this._alarmRepo.GetVehicleErrors();
+        }
     }
-  }
 }

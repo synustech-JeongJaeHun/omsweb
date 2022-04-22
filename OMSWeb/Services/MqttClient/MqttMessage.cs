@@ -230,6 +230,18 @@ namespace OMSWeb.Services.MqttClient
         }
         public object GetWarningId(CommandMessageDto command)
         {
+            if (command.WarningIds != null)
+            {
+                if (command.WarningIds.Length > 0)
+                    if (command.WarningIds[0] == -1)
+                        return "*"; // all selected
+                    else
+                        return command.WarningIds[0];  // use single selection
+            }
+
+            if (command.WarningId == -1)
+                return "*";
+
             return command.WarningId;
         }
         public object GetWarningAckBy(CommandMessageDto command)
