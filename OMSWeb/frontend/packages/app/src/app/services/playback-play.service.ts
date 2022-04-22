@@ -359,8 +359,6 @@ export class PlaybackPlayService {
 				: this.remainedFirstEventIndex + index
 		})()
 
-		this.clock = nextDate
-		this.remainedFirstEventIndex = nextIndex
 		// 🎉 event
 		this.clockChanged.emit({
 			type: 'NextFrameEvent',
@@ -370,6 +368,11 @@ export class PlaybackPlayService {
 				nextIndex,
 			),
 		})
+
+		// change state after event emit
+		// because this state before and after are used for event emit
+		this.clock = nextDate
+		this.remainedFirstEventIndex = nextIndex
 	}
 
 	public stop() {
