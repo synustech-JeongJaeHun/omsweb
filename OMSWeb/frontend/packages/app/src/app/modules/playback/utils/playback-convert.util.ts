@@ -233,6 +233,20 @@ function convertSnapshotSegmentBlockingToCurrentSegmentBlocking(
 function convertSnapshotOrderToCurrentOrder(
 	order: PlaybackSnapshotOrder,
 ): CurrentOrder {
+	const state = (function () {
+		if (order.time_failed) return 'FAILED'
+		else if (order.time_aborted) return 'ABORTED'
+		else if (order.time_completed) return 'COMPLETED'
+		else if (order.time_unload_completed) return 'UNLOADED'
+		else if (order.time_unload_started) return 'UNLOADING'
+		else if (order.time_load_completed) return 'LOADED'
+		else if (order.time_load_started) return 'LOADING'
+		else if (order.time_vehicle_arrived) return 'ARRIVED'
+		else if (order.time_assigned) return 'ASSIGNED'
+		else if (order.time_assigned == null) return 'UNASSIGNED'
+		else return ''
+	})()
+
 	return {
 		assignmentDetails: order.assignment_details,
 		assignmentType: order.assignment_type,
@@ -249,6 +263,7 @@ function convertSnapshotOrderToCurrentOrder(
 		timeFailed: order.time_failed,
 		timeCompleted: order.time_completed,
 		vehicleId: order.vehicle_id,
+		state,
 	}
 }
 
@@ -314,6 +329,7 @@ function convertOrderHistoryEventToCurrentOrder(
 		timeFailed: event.timeFailed,
 		timeCompleted: event.timeCompleted,
 		vehicleId: parseInt(event.vehicleId),
+		state: event.state ?? '',
 	}
 }
 

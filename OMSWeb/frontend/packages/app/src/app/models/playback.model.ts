@@ -242,6 +242,7 @@ type OrderHistoryEvent = { tableName: 'order_history' } & Timeline &
 		timeAborted: string | undefined
 		timeFailed: string | undefined
 		vehicleId: string // parse to int
+		state: string | undefined
 	}
 
 type PlaybackSpeed = 0.1 | 0.5 | 1 | 2 | 5 | 10
@@ -327,6 +328,7 @@ type CurrentOrder = {
 	timeAborted?: string
 	timeFailed?: string
 	vehicleId: number // parse to int
+	state: string
 }
 
 export {
