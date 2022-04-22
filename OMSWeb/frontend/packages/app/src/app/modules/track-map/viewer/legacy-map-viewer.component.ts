@@ -190,7 +190,10 @@ export class LegacyMapViewerComponent implements OnInit, OnDestroy {
 			vehicles.forEach((v) => {
 				this.viewer.updateVehicle(
 					'INSERT',
-					convertSnapshotVehicleToTmUpdateDtoVehicle(v),
+					convertSnapshotVehicleToTmUpdateDtoVehicle(
+						v,
+						this.playService.currentOrders,
+					),
 				)
 			})
 
@@ -237,7 +240,10 @@ export class LegacyMapViewerComponent implements OnInit, OnDestroy {
 	private applyVehicleHistoryEvent(event: VehicleHistoryEvent) {
 		this.viewer.updateVehicle(
 			event.historyChangeType,
-			convertVehicleHistoryEventToTmUpdateDtoVehicle(event),
+			convertVehicleHistoryEventToTmUpdateDtoVehicle(
+				event,
+				this.playService.currentOrders,
+			),
 		)
 	}
 	private applySegmentBlockingHistoryEvent(event: SegmentBlockingHistoryEvent) {

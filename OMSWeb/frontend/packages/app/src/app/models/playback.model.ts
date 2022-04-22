@@ -184,6 +184,7 @@ type VehicleHistoryEvent = { tableName: 'vehicle_history' } & Timeline &
 	History & {
 		canBePushed: boolean
 		cargoState: string
+		command: string | null | undefined
 		commandPoint: string
 		distancePoint: number
 		distanceTotal: number
@@ -198,6 +199,8 @@ type VehicleHistoryEvent = { tableName: 'vehicle_history' } & Timeline &
 		isBlocked: boolean
 		isMaint: boolean
 		isSensorStopped: boolean
+		// isConnected: boolean
+		connection: number
 		lastContact: string
 		lastPoint: number
 		logicalId: string
@@ -239,6 +242,7 @@ type OrderHistoryEvent = { tableName: 'order_history' } & Timeline &
 		timeAborted: string | undefined
 		timeFailed: string | undefined
 		vehicleId: string // parse to int
+		state: string | undefined
 	}
 
 type PlaybackSpeed = 0.1 | 0.5 | 1 | 2 | 5 | 10
@@ -275,7 +279,6 @@ type NextFrameEvent = {
 type CurrentVehicle = {
 	canBePushed: boolean
 	cargoState: string
-	commandPoint: string
 	distancePoint: number
 	distanceTotal: number
 	errorList: string
@@ -295,6 +298,13 @@ type CurrentVehicle = {
 	physicalId: string
 	railIn: boolean
 	runtimeTotal: number
+	// new - with connection
+	command: string
+	commandPoint: string
+	isConnected: boolean
+	// new - with order
+	locationDropoff?: string
+	locationPickup?: string
 }
 type CurrentSegmentBlocking = {
 	id: number
@@ -318,6 +328,7 @@ type CurrentOrder = {
 	timeAborted?: string
 	timeFailed?: string
 	vehicleId: number // parse to int
+	state: string
 }
 
 export {

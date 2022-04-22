@@ -14,6 +14,7 @@ import {
 	parsePIO,
 } from '../../shared/utils/dio.util'
 import * as DateFns from 'date-fns'
+import { isHostOrder } from '../../playback/utils/playback-parse.util'
 
 @Component({
 	selector: 'oms-playback-vehicle-status-dialog',
@@ -27,6 +28,10 @@ export class PlaybackVehicleStatusDialogComponent implements OnInit {
 		return this.playService.currentVehicles
 	}
 	currentVehicle: CurrentVehicle | undefined
+
+	get currentVehicleIsHostOrder() {
+		return isHostOrder(this.currentVehicle.orderOrigin)
+	}
 
 	categories: {
 		name: string

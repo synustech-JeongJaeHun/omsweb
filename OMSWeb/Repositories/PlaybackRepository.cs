@@ -201,7 +201,23 @@ namespace OMSWeb.Repositories
         public IList<OrderHistoryWithTimeLine> GetOrderTimelineEventsBetween(DateTimeOffset from, DateTimeOffset to)
         {
             var sql = @"
-            SELECT t.id as event_id, t.event_time, t.table_name, jt.*
+            SELECT 
+                t.id as event_id, 
+                t.event_time, 
+                t.table_name, 
+                jt.*, 
+                CASE
+                    WHEN jt.time_failed IS NOT NULL THEN 'FAILED'
+                    WHEN jt.time_aborted IS NOT NULL THEN 'ABORTED'
+                    WHEN jt.time_completed IS NOT NULL THEN 'COMPLETED'
+                    WHEN jt.time_unload_completed IS NOT NULL THEN 'UNLOADED'
+                    WHEN jt.time_unload_started IS NOT NULL THEN 'UNLOADING'
+                    WHEN jt.time_load_completed IS NOT NULL THEN 'LOADED'
+                    WHEN jt.time_load_started IS NOT NULL THEN 'LOADING'
+                    WHEN jt.time_vehicle_arrived IS NOT NULL THEN 'ARRIVED'
+                    WHEN jt.time_assigned IS NOT NULL THEN 'ASSIGNED'
+                    WHEN jt.time_assigned IS NULL THEN 'UNASSIGNED'    
+                END AS state
             FROM timeline t join order_history jt ON t.event_id = jt.id
             WHERE t.event_time between @from AND @to AND table_name = 'order_history'
             ORDER BY t.event_time ASC
