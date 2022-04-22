@@ -19,6 +19,7 @@ import {
 	convertSnapshotVehicleToCurrentVehicle,
 	convertVehicleHistoryEventToCurrentVehicle,
 } from '../modules/playback/utils/playback-convert.util'
+import { addOrderInfoToCurrenVehicle } from '../modules/playback/utils/playback-join.util'
 
 @Injectable({
 	providedIn: 'root',
@@ -211,26 +212,30 @@ export class PlaybackPlayService {
 
 	private reduceCurrentState(event: ClockChangedEvent) {
 		if (event.type === 'SnapshotChanged' || event.type === 'EventsChanged') {
-			this.currentVehicles = (this.currentSnapshot.data.vehicles ?? [])
-				.map(convertSnapshotVehicleToCurrentVehicle)
-				.sort((a, b) => a.id - b.id)
-			this.currentSegmentBlockings = (
-				this.currentSnapshot.data.segment_blocking ?? []
-			).map(convertSnapshotSegmentBlockingToCurrentSegmentBlocking)
 			this.currentOrders = (this.currentSnapshot.data.orders ?? [])
 				.filter((event) => event.time_completed?.length > 0 === false)
 				.map(convertSnapshotOrderToCurrentOrder)
+			this.currentSegmentBlockings = (
+				this.currentSnapshot.data.segment_blocking ?? []
+			).map(convertSnapshotSegmentBlockingToCurrentSegmentBlocking)
 		}
+		this.currentVehicles = (this.currentSnapshot.data.vehicles ?? [])
+			.map(convertSnapshotVehicleToCurrentVehicle)
+			.map((cv) => addOrderInfoToCurrenVehicle(cv, this.currentOrders))
+			.sort((a, b) => a.id - b.id)
 		if (event.type === 'EventsChanged' || event.type === 'NextFrameEvent') {
 			event.events.forEach((event) => {
 				if (event.tableName === 'vehicle_history') {
 					const vehicle = this.currentVehicles.find(
-						(c) => c.id === event.historySourceId,
+						(cv) => cv.id === event.historySourceId,
 					)
 					if (vehicle && event.historyChangeType === 'UPDATE')
 						Object.assign(
 							vehicle,
-							convertVehicleHistoryEventToCurrentVehicle(event),
+							addOrderInfoToCurrenVehicle(
+								convertVehicleHistoryEventToCurrentVehicle(event),
+								this.currentOrders,
+							),
 						)
 				} else if (event.tableName === 'segment_blocking_history') {
 					if (event.historyChangeType === 'INSERT') {

@@ -13,6 +13,7 @@ import {
 	SegmentBlockingHistoryEvent,
 	VehicleHistoryEvent,
 } from '../../../models/playback.model'
+import { getPortVehicleCommand, isConnected } from './playback-parse.util'
 
 function convertTrackPointToTmPoint(point: PlaybackPoint) {
 	return {
@@ -57,7 +58,10 @@ function convertTrackMtlToTmMtl(mtl: PlaybackMtl) {
 
 function convertSnapshotVehicleToTmUpdateDtoVehicle(
 	vehicle: PlaybackSnapshotVehicle,
+	orders: CurrentOrder[],
 ) {
+	const order = orders.find((o) => o.id === vehicle.order_id)
+
 	return {
 		id: vehicle.id,
 		logicalId: vehicle.logical_id,
@@ -70,7 +74,6 @@ function convertSnapshotVehicleToTmUpdateDtoVehicle(
 		isBlocked: vehicle.is_blocked,
 		isSensorStopped: vehicle.is_sensor_stopped,
 		isMaint: vehicle.is_maint,
-		isConnected: 'connection', // convert number to boolean  isConnected ??
 		lastContact: vehicle.last_contact,
 		mapDb: vehicle.map_db,
 		mode: vehicle.mode,
@@ -79,11 +82,12 @@ function convertSnapshotVehicleToTmUpdateDtoVehicle(
 		hostOrder: undefined, // ?
 		orderOrigin: vehicle.order_origin,
 		cargoTransferResult: vehicle.cargo_transfer_result, // string
-		commandPoint: String(vehicle.command_point),
 
-		locationDropoff: undefined,
+		isConnected: isConnected(vehicle.connection), // convert number to boolean  isConnected ??
+		commandPoint: getPortVehicleCommand(vehicle.command),
+		locationDropoff: order?.locationDropoff,
+		locationPickup: order?.locationPickup,
 		locationMove: undefined,
-		locationPickup: undefined,
 
 		orderId: vehicle.order_id,
 		orderLogicalId: undefined,
@@ -123,7 +127,10 @@ function convertSnapshotSegmentBlockingToTmUpdateDtoSegmentDisabled(
 
 function convertVehicleHistoryEventToTmUpdateDtoVehicle(
 	event: VehicleHistoryEvent,
+	orders: CurrentOrder[],
 ) {
+	const order = orders.find((o) => o.id === event?.orderId)
+
 	return {
 		id: event.historySourceId,
 
@@ -149,10 +156,12 @@ function convertVehicleHistoryEventToTmUpdateDtoVehicle(
 		orderId: event.orderId,
 		// commandPoint: event.commandPoint, // not comes with prefix, just number
 
+		isConnected: isConnected(event.connection), // convert number to boolean  isConnected ??
+		commandPoint: getPortVehicleCommand(event.command),
+		locationDropoff: order?.locationDropoff,
+		locationPickup: order?.locationPickup,
+		locationMove: undefined,
 		// cargoTransferResult?: string
-		// locationDropoff?: string
-		// locationMove?: string
-		// locationPickup?: string
 		// orderLogicalId?: string
 		// priority?: any
 		// type?: string
@@ -185,7 +194,6 @@ function convertSnapshotVehicleToCurrentVehicle(
 	return {
 		canBePushed: vehicle.can_be_pushed,
 		cargoState: vehicle.cargo_state,
-		commandPoint: String(vehicle.command_point),
 		distancePoint: vehicle.distance_point,
 		distanceTotal: vehicle.distance_total,
 		errorList: vehicle.error_list,
@@ -205,6 +213,10 @@ function convertSnapshotVehicleToCurrentVehicle(
 		physicalId: vehicle.physical_id,
 		railIn: vehicle.rail_in,
 		runtimeTotal: vehicle.runtime_total,
+
+		command: vehicle.command,
+		commandPoint: getPortVehicleCommand(vehicle.command),
+		isConnected: isConnected(vehicle.connection),
 	}
 }
 
@@ -226,7 +238,7 @@ function convertSnapshotOrderToCurrentOrder(
 		assignmentType: order.assignment_type,
 		carrierLabel: order.carrier_label,
 		id: order.id,
-		locationDropoff: order.location_dropoff,
+		locationDropoff: order?.location_dropoff,
 		locationPickup: order.location_pickup,
 		logicalId: order.logical_id,
 		origin: order.origin,
@@ -246,7 +258,6 @@ function convertVehicleHistoryEventToCurrentVehicle(
 	return {
 		canBePushed: event.canBePushed,
 		cargoState: event.cargoState,
-		commandPoint: event.commandPoint,
 		distancePoint: event.distancePoint,
 		distanceTotal: event.distanceTotal,
 		errorList: event.errorList,
@@ -266,6 +277,10 @@ function convertVehicleHistoryEventToCurrentVehicle(
 		physicalId: event.physicalId,
 		railIn: event.railIn,
 		runtimeTotal: event.runtimeTotal,
+
+		command: event.command,
+		commandPoint: getPortVehicleCommand(event.command),
+		isConnected: isConnected(event.connection),
 	}
 }
 
@@ -288,8 +303,8 @@ function convertOrderHistoryEventToCurrentOrder(
 		assignmentType: event.assignmentType,
 		carrierLabel: event.carrierLabel,
 		id: event.historySourceId,
-		locationDropoff: event.locationDropoff,
-		locationPickup: event.locationPickup,
+		locationDropoff: event?.locationDropoff,
+		locationPickup: event?.locationPickup,
 		logicalId: event.logicalId,
 		origin: event.origin,
 		priority: event.priority,

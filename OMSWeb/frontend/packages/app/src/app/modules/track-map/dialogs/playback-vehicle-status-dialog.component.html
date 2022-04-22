@@ -33,20 +33,18 @@
                 <div class="status-item" [class.active]="currentVehicle.cargoState === 'F'">
                   {{ "names.carrier" | translate }}
                 </div>
-                <!-- currently connection data is not existed in history, and connection from snapshot is impossible to interpret -->
-                <!-- <div class="status-item" [class.active]="currentVehicle.isConnected">
+                <div class="status-item" [class.active]="currentVehicle.isConnected">
                   {{ "names.connected" | translate }}
-                </div> -->
+                </div>
                 <div class="status-item" [class.active]="currentVehicle.isSensorStopped">
                   {{ "names.sensorStopped" | translate }}
                 </div>
                 <div class="status-item" [class.active]="currentVehicle.isMaint">
                   {{ "names.maintenance" | translate }}
                 </div>
-                <!-- currently connection data is not existed in snapshot -->
-                <!-- <div class="status-item" [class.active]="currentVehicle.hostOrder">
+                <div class="status-item" [class.active]="currentVehicleIsHostOrder">
                   {{ "names.hostOrderEnable" | translate }}
-                </div> -->
+                </div>
                 <div class="status-item" [class.active]="currentVehicle.canBePushed">
                   {{ "names.pushEnable" | translate }}
                 </div>

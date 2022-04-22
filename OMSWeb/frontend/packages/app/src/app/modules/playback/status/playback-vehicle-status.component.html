@@ -19,19 +19,20 @@
   <dxi-column [width]="40" dataType="string" dataField="mode" [caption]="'names.mode' | translate"></dxi-column>
   <dxi-column [allowFiltering]="false" [width]="40" dataType="boolean" dataField="canBePushed"
     [caption]="'names.canBePushed' | translate"></dxi-column>
-  <dxi-column [allowFiltering]="false" [width]="80" dataType="boolean" dataField="hostOrder"
+  <dxi-column [allowFiltering]="false" [width]="80" dataType="boolean" [calculateCellValue]="calculateHostOrder"
     [caption]="'names.hostOrder' | translate"></dxi-column>
   <dxi-column [allowFiltering]="false" [width]="80" dataType="string" dataField="orderOrigin"
     [caption]="'names.orderOrigin' | translate"></dxi-column>
-  <dxi-column [width]="60" dataType="string" dataField="lastPoint" [caption]="'names.curPoint' | translate"></dxi-column>
+  <dxi-column [width]="60" dataType="string" dataField="lastPoint" [caption]="'names.curPoint' | translate">
+  </dxi-column>
   <dxi-column [width]="60" dataType="string" dataField="commandPoint" [allowSorting]="false"
     [caption]="'names.commandPoint' | translate"></dxi-column>
   <dxi-column [width]="50" dataType="string" dataField="orderId" [allowSorting]="false"
     [caption]="'names.orderId' | translate"></dxi-column>
-  <!-- <dxi-column [width]="50" dataType="string" dataField="locationPickup" [caption]="'names.locationPickup' | translate">
+  <dxi-column [width]="50" dataType="string" dataField="locationPickup" [caption]="'names.locationPickup' | translate">
   </dxi-column>
   <dxi-column [width]="50" dataType="string" dataField="locationDropoff"
-    [caption]="'names.locationDropoff' | translate"></dxi-column> -->
+    [caption]="'names.locationDropoff' | translate"></dxi-column>
   <dxi-column [width]="80" dataType="string" dataField="movingState" [allowSorting]="false"
     [caption]="'names.movingState' | translate"></dxi-column>
   <dxi-column [width]="80" dataType="string" dataField="cargoState" [allowSorting]="false"

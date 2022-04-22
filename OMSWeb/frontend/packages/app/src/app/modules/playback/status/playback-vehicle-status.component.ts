@@ -1,7 +1,9 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core'
+import { CurrentVehicle } from '@oms/root/models/playback.model'
 import { PlaybackPlayService } from '@oms/root/services/playback-play.service'
 import { DxDataGridComponent } from 'devextreme-angular'
 import { IVehicleStatusRow } from '../../../models/vehicle-status.model'
+import { isHostOrder } from '../utils/playback-parse.util'
 @Component({
 	selector: 'oms-playback-vehicle-status',
 	templateUrl: './playback-vehicle-status.component.html',
@@ -23,4 +25,8 @@ export class PlaybackVehicleStatusComponent {
 	}
 
 	constructor(private playService: PlaybackPlayService) {}
+
+	calculateHostOrder(rowData: CurrentVehicle) {
+		return isHostOrder(rowData.orderOrigin)
+	}
 }
