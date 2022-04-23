@@ -218,11 +218,13 @@ export class PlaybackPlayService {
 			this.currentSegmentBlockings = (
 				this.currentSnapshot.data.segment_blocking ?? []
 			).map(convertSnapshotSegmentBlockingToCurrentSegmentBlocking)
+
+			this.currentVehicles = (this.currentSnapshot.data.vehicles ?? [])
+				.map(convertSnapshotVehicleToCurrentVehicle)
+				.map((cv) => addOrderInfoToCurrenVehicle(cv, this.currentOrders))
+				.sort((a, b) => a.id - b.id)
 		}
-		this.currentVehicles = (this.currentSnapshot.data.vehicles ?? [])
-			.map(convertSnapshotVehicleToCurrentVehicle)
-			.map((cv) => addOrderInfoToCurrenVehicle(cv, this.currentOrders))
-			.sort((a, b) => a.id - b.id)
+
 		if (event.type === 'EventsChanged' || event.type === 'NextFrameEvent') {
 			event.events.forEach((event) => {
 				if (event.tableName === 'vehicle_history') {
@@ -338,10 +340,12 @@ export class PlaybackPlayService {
 		) {
 			clearInterval(this.intervalId)
 			await this.fetchSnapshot(nextDate)
+
 			await this.fetchEvents(
 				this.currentSnapshot.timestamp,
-				this.nextSnapshot.timestamp,
+				this.nextSnapshot.timestamp ?? new Date(9999, 1, 1),
 			)
+
 			this.clock = this.currentSnapshot.timestamp
 			this.remainedFirstEventIndex = 0
 			this.clockChanged.emit({

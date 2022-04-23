@@ -10,9 +10,8 @@ import {
 import { AuthService } from '../../../services/auth.service'
 import { AccountUtil } from '../../shared/utils/account.util'
 import { MapStatesService } from '../map-states.service'
-import { MessagesService } from '../../../services/messages.service'
-import { PermissionEnums } from '../../../models/enums'
-import { TrackStatusService } from '@oms/root/services/track-status.service'
+import { PlaybackPlayService } from '@oms/root/services/playback-play.service'
+import { Subscription } from 'rxjs'
 
 @Component({
 	selector: 'oms-legacy-map-side-panel',
@@ -24,11 +23,10 @@ export class LegacyMapSidePanelComponent implements OnChanges, OnDestroy {
 	@Output() focus = new EventEmitter<any>()
 
 	hasOverlap = true
-	private selfUpdateIntervalId
-	private overlapObjectsUpdateIntervalId
 	overlapList = []
 
-	readonly permissionEnums: typeof PermissionEnums = PermissionEnums
+	private selfUpdateSubscription: Subscription
+	private overlapObjectsUpdateSubscription: Subscription
 
 	// segment disableds
 	disableds = []
@@ -40,25 +38,31 @@ export class LegacyMapSidePanelComponent implements OnChanges, OnDestroy {
 
 	constructor(
 		private statesSvc: MapStatesService,
-		private messageSvc: MessagesService,
-		private trackStatusService: TrackStatusService,
+		private playService: PlaybackPlayService,
 		private auth: AuthService,
 	) {}
 
 	ngOnChanges(changes: SimpleChanges): void {
 		this.disableds = []
-		if (this.selfUpdateIntervalId) clearInterval(this.selfUpdateIntervalId)
-		if (this.overlapObjectsUpdateIntervalId)
-			clearInterval(this.overlapObjectsUpdateIntervalId)
+		this.clearSubscription()
 
 		if (changes?.data?.currentValue) {
 			this.bindObject()
 		}
 	}
 	ngOnDestroy(): void {
-		if (this.selfUpdateIntervalId) clearInterval(this.selfUpdateIntervalId)
-		if (this.overlapObjectsUpdateIntervalId)
-			clearInterval(this.overlapObjectsUpdateIntervalId)
+		this.clearSubscription()
+	}
+
+	clearSubscription() {
+		if (this.selfUpdateSubscription) {
+			this.selfUpdateSubscription.unsubscribe()
+			this.selfUpdateSubscription = undefined
+		}
+		if (this.overlapObjectsUpdateSubscription) {
+			this.overlapObjectsUpdateSubscription.unsubscribe()
+			this.overlapObjectsUpdateSubscription = undefined
+		}
 	}
 
 	hasPermission(permission: number): boolean {
@@ -67,12 +71,13 @@ export class LegacyMapSidePanelComponent implements OnChanges, OnDestroy {
 
 	private bindObject() {
 		const type = this.data.objectType.toUpperCase()
+
 		switch (type) {
 			case 'ZCU':
 				this.hasOverlap = false
 				break
 			case 'SEGMENT':
-				this.startIntervalUpdateDataSelf(type, this.data.id)
+				this.startUpdateDataSelfWhenClockChanged(type, this.data.id)
 				this.hasOverlap = false
 				break
 
@@ -81,8 +86,8 @@ export class LegacyMapSidePanelComponent implements OnChanges, OnDestroy {
 			case 'BUFFER':
 			case 'VEHICLE':
 			case 'MTL':
-				this.startIntervalUpdateDataSelf(type, this.data.id)
-				this.startIntervalUpdateOverlapObjects(type, this.data.id)
+				this.startUpdateDataSelfWhenClockChanged(type, this.data.id)
+				this.startUpdateOverlapObjectsWhenClockChanged(type, this.data.id)
 				this.hasOverlap = true
 				break
 
@@ -91,12 +96,13 @@ export class LegacyMapSidePanelComponent implements OnChanges, OnDestroy {
 		}
 	}
 
-	private startIntervalUpdateDataSelf(type, id) {
-		const action = () => {
+	private startUpdateDataSelfWhenClockChanged(type, id) {
+		// playback doesnt support group
+		const update = () => {
 			switch (type) {
 				case 'MTL':
 					{
-						const current = this.trackStatusService.trackData.mtls.find(
+						const current = this.playService.track.data.mtls.find(
 							(m) => m.id === id,
 						)
 						this.data = { ...current, objectType: 'MTL' }
@@ -104,80 +110,90 @@ export class LegacyMapSidePanelComponent implements OnChanges, OnDestroy {
 					break
 				case 'SEGMENT':
 					{
-						const current = this.trackStatusService.trackData.segments.find(
+						const current = this.playService.track.data.segments.find(
 							(s) => s.id === id,
 						)
-						const disableds = (
-							this.trackStatusService.trackData.segmentDisabled ?? []
-						)
+						const disableds = (this.playService.currentSegmentBlockings ?? [])
 							.filter((sd) => sd.segmentId === id)
 							.sort((a, b) => a.id - b.id)
+							.map((sb) => ({ ...sb, disabledReason: sb.reason }))
 
-						this.data = { ...current, objectType: 'SEGMENT' }
+						this.data = {
+							...current,
+							logicalId: current.logical_id,
+							physicalId: current.physical_id,
+							startPoint: current.start_point,
+							endPoint: current.end_point,
+							objectType: 'SEGMENT',
+						}
 						this.disableds = disableds
 					}
 					break
 				case 'ZCU':
-					{
-						const current = this.trackStatusService.trackData.zcus.find(
-							(z) => z.id === id,
-						)
-						this.data = { ...current, objectType: 'ZCU' }
-					}
+					// no zcus in playback track data
+					// {
+					// 	const current = this.playService.track.data.zcus.find(
+					// 		(z) => z.id === id,
+					// 	)
+					// 	this.data = { ...current, objectType: 'ZCU' }
+					// }
 					break
 
 				case 'POINT':
 					{
-						const current = this.trackStatusService.trackData.points.find(
+						const current = this.playService.track.data.points.find(
 							(p) => p.id === id,
 						)
-						this.data = { ...current, objectType: 'POINT' }
+						this.data = {
+							...current,
+							logicalId: current.logical_id,
+							physicalId: current.physical_id,
+							objectType: 'POINT',
+						}
 					}
 					break
 				case 'STATION':
 					{
-						const current = this.trackStatusService.trackData.stations.find(
+						const current = this.playService.track.data.stations.find(
 							(s) => s.id === id,
-						)
-						const group = this.trackStatusService.trackData.groups.find((g) =>
-							g.objects.some(
-								(o) => o.id === id && o.type.toUpperCase() === type,
-							),
 						)
 						this.data = {
 							...current,
+							logicalId: current.logical_id,
+							physicalId: current.physical_id,
+							pointId: current.point,
 							objectType: 'STATION',
-							groupId: group?.id,
+							groupId: undefined,
 						}
 					}
 					break
 				case 'BUFFER':
 					{
-						const current = this.trackStatusService.trackData.buffers.find(
+						const current = this.playService.track.data.buffers.find(
 							(b) => b.id === id,
 						)
-						const group = this.trackStatusService.trackData.groups.find((g) =>
-							g.objects.some(
-								(o) => o.id === id && o.type.toUpperCase() === type,
-							),
-						)
-						this.data = { ...current, objectType: 'BUFFER', groupId: group?.id }
+						this.data = {
+							...current,
+							logicalId: current.logical_id,
+							physicalId: current.physical_id,
+							pointId: current.point,
+							objectType: 'BUFFER',
+							groupId: undefined,
+						}
 					}
 					break
 				case 'VEHICLE':
 					{
-						const current = this.trackStatusService.trackData.vehicles.find(
+						const current = this.playService.currentVehicles.find(
 							(v) => v.id === id,
 						)
-						const group = this.trackStatusService.trackData.groups.find((g) =>
-							g.objects.some(
-								(o) => o.id === id && o.type.toUpperCase() === type,
-							),
-						)
+
 						this.data = {
 							...current,
+							curPoint: current.lastPoint,
+							cargoState: current.cargoState,
 							objectType: 'VEHICLE',
-							groupId: group?.id,
+							groupId: undefined,
 						}
 					}
 					break
@@ -186,48 +202,37 @@ export class LegacyMapSidePanelComponent implements OnChanges, OnDestroy {
 					break
 			}
 		}
-		action()
-		this.selfUpdateIntervalId = setInterval(action, 800)
-	}
 
-	private startIntervalUpdateOverlapObjects(type, id) {
-		const getPointId = () => {
-			switch (type) {
-				case 'POINT':
-					return this.data.id
-				case 'MTL':
-					return this.data.pointId
-				case 'STATION':
-					return this.data.pointId
-				case 'BUFFER':
-					return this.data.pointId
-				case 'VEHICLE':
-					return this.trackStatusService.trackData.vehicles.find(
-						(v) => v.id === id,
-					)?.curPoint
-			}
-		}
-
-		this.overlapList = this.trackStatusService.getOverlapObjectOnPoint(
-			getPointId(),
+		update()
+		this.selfUpdateSubscription = this.playService.clockChanged.subscribe(() =>
+			setTimeout(update, 50),
 		)
-		this.overlapObjectsUpdateIntervalId = setInterval(() => {
-			this.overlapList = this.trackStatusService.getOverlapObjectOnPoint(
-				getPointId(),
-			)
-		}, 800)
 	}
 
-	changeSegmentDisabled(value: boolean) {
-		if (value) {
-			this.messageSvc
-				.sendDisableSegmentCommand({ action: 'disable-segment' }, this.data.id)
-				.subscribe()
-		} else {
-			this.messageSvc
-				.sendDisableSegmentCommand({ action: 'enable-segment' }, this.data.id)
-				.subscribe()
+	private startUpdateOverlapObjectsWhenClockChanged(type, id) {
+		const update = () => {
+			const pointId = (() => {
+				switch (type) {
+					case 'POINT':
+						return this.data.id
+					case 'MTL':
+						return this.data.pointId ?? this.data.point
+					case 'STATION':
+						return this.data.pointId ?? this.data.point
+					case 'BUFFER':
+						return this.data.pointId
+					case 'VEHICLE':
+						return this.playService.currentVehicles.find((cv) => cv.id === id)
+							?.lastPoint
+				}
+			})()
+
+			this.overlapList = this.playService.getOverlapObjectOnPoint(pointId)
 		}
+
+		update()
+		this.overlapObjectsUpdateSubscription =
+			this.playService.clockChanged.subscribe(() => setTimeout(update, 50))
 	}
 
 	closePanel() {
