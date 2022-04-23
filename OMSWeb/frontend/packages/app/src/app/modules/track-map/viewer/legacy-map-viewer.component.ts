@@ -28,7 +28,6 @@ import { PlaybackPlayService } from '@oms/root/services/playback-play.service'
 import { MatDialog, MatDialogRef } from '@angular/material/dialog'
 import {
 	ClockChangedEvent,
-	OrderHistoryEvent,
 	SegmentBlockingHistoryEvent,
 	TimelineEvent,
 	VehicleHistoryEvent,

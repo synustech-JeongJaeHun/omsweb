@@ -338,10 +338,12 @@ export class PlaybackPlayService {
 		) {
 			clearInterval(this.intervalId)
 			await this.fetchSnapshot(nextDate)
+
 			await this.fetchEvents(
 				this.currentSnapshot.timestamp,
-				this.nextSnapshot.timestamp,
+				this.nextSnapshot.timestamp ?? new Date(9999, 1, 1),
 			)
+
 			this.clock = this.currentSnapshot.timestamp
 			this.remainedFirstEventIndex = 0
 			this.clockChanged.emit({
