@@ -176,6 +176,7 @@ export class LegacyMapSidePanelComponent implements OnChanges, OnDestroy {
 							...current,
 							logicalId: current.logical_id,
 							physicalId: current.physical_id,
+							pointId: current.point,
 							objectType: 'BUFFER',
 							groupId: undefined,
 						}
