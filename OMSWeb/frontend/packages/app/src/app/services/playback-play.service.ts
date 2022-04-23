@@ -218,11 +218,13 @@ export class PlaybackPlayService {
 			this.currentSegmentBlockings = (
 				this.currentSnapshot.data.segment_blocking ?? []
 			).map(convertSnapshotSegmentBlockingToCurrentSegmentBlocking)
+
+			this.currentVehicles = (this.currentSnapshot.data.vehicles ?? [])
+				.map(convertSnapshotVehicleToCurrentVehicle)
+				.map((cv) => addOrderInfoToCurrenVehicle(cv, this.currentOrders))
+				.sort((a, b) => a.id - b.id)
 		}
-		this.currentVehicles = (this.currentSnapshot.data.vehicles ?? [])
-			.map(convertSnapshotVehicleToCurrentVehicle)
-			.map((cv) => addOrderInfoToCurrenVehicle(cv, this.currentOrders))
-			.sort((a, b) => a.id - b.id)
+
 		if (event.type === 'EventsChanged' || event.type === 'NextFrameEvent') {
 			event.events.forEach((event) => {
 				if (event.tableName === 'vehicle_history') {
