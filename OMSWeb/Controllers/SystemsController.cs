@@ -302,7 +302,7 @@ namespace OMSWeb.Controllers
                 bResult = false;
                 return new MapUpdateResultModel
                 {
-                    Message = string.Format("TSCState is Not PAUSED, set PAUSED and Retry Again!"),
+                    Message = string.Format("TSCState is not paused, set paused and try again!"),
                     bResult = bResult
                 };
             }

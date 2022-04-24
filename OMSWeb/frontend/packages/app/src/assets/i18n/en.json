@@ -501,6 +501,7 @@
     "confirmZcuChange": "Are you sure ZCU change?",
     "confirmZcuReset": "Are you sure ZCU reset?",
     "confirmBufferChange": "Are you sure Buffer change?",
+    "confirmTSCStateNotPaused": "TSC State is not paused, change and try again",
     "selectObjectType": "Select Type",
     "searchId": "Search ID",
     "noObjectSelected": "Nothing is selected.",

@@ -2,11 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import {
-  HostModeEnums,
-  HostSessionStatusEnums,
-  TscModeEnums,
-} from '../../../models/enums';
+import { HostModeEnums, HostSessionStatusEnums, TscModeEnums, } from '../../../models/enums';
 import { ISystemStates } from '../../../models/system.model';
 import { AuthService } from '../../../services/auth.service';
 import { HubService } from '../../../services/hub.service';
