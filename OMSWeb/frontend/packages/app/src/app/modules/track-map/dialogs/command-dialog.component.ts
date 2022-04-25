@@ -82,13 +82,23 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
         mtlId: String(mtl.id),
       };
 
-      this.dialogSvc
-        .confirm({ body: this.t$.instant('messages.confirmCommand') })
-        .subscribe((ok) => {
-          if (ok) {
-            this.messageSvc.sendVehicleCommand(cmd).subscribe();
-          }
-        });
+      if (cmd.action == 'mtl_in') {
+        this.dialogSvc
+          .confirm({ body: this.t$.instant('messages.confirmCommand') })
+          .subscribe((ok) => {
+            if (ok) {
+              this.messageSvc.sendVehicleCommand(cmd).subscribe();
+            }
+          });
+      } else if (cmd.action == 'mtl_out') {
+        this.dialogSvc
+          .confirm({ body: this.t$.instant('messages.confirmMtloutCommand') })
+          .subscribe((ok) => {
+            if (ok) {
+              this.messageSvc.sendVehicleCommand(cmd).subscribe();
+            }
+          });
+      }
 
       return;
     }

@@ -502,6 +502,7 @@
     "confirmZcuReset": "你確定 ZCU 重置了嗎?",
     "confirmBufferChange": "你确定缓冲区改变了吗？",
     "confirmTSCStateNotPaused": "TSC State is not paused, change and try again",
+    "confirmMtloutCommand": "Make sure the segment near the exit is empty, then execute the command",
     "selectObjectType": "选择类型",
     "searchId": "搜索 ID",
     "noObjectSelected": "没有选择任何东西。",

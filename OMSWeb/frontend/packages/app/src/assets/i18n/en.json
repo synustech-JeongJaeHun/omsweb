@@ -502,6 +502,7 @@
     "confirmZcuReset": "Are you sure ZCU reset?",
     "confirmBufferChange": "Are you sure Buffer change?",
     "confirmTSCStateNotPaused": "TSC State is not paused, change and try again",
+    "confirmMtloutCommand": "Make sure the segment near the exit is empty, then execute the command",
     "selectObjectType": "Select Type",
     "searchId": "Search ID",
     "noObjectSelected": "Nothing is selected.",
