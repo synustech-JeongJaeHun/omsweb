@@ -23,7 +23,7 @@ export class ZcuSettingComponent implements OnInit {
   ]
 
   zcuUsingTypes = [
-    { type: 0, text: 'Not Use' },
+   // { type: 0, text: 'Not Use' },
     { type: 1, text: 'Use HW' },
     { type: 2, text: 'Use SW' },
   ];
