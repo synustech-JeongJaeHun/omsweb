@@ -70,17 +70,17 @@ export class VehicleControlTableComponent implements OnInit, OnDestroy {
     return this.preference.controlTables[type];
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
   ngOnInit(): void {
     this.hubSvc.vehicleTableChanged$
       .pipe(takeUntil(this.destroy$))
       .subscribe((e: IDataChangeEvent) => {
         e && this.onTableChanged(e);
       });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   hasPermission(permission: number): boolean {

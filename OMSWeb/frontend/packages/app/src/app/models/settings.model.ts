@@ -299,6 +299,7 @@ export interface ISettingsZcuInputZone {
 export interface ISettingsVehicleReg {
   id: string;
   logicalId: string;
+  railIn: boolean;
   isNew?: boolean;
 }
 
