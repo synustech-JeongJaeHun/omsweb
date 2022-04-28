@@ -2,9 +2,11 @@ import { Component, OnDestroy, OnInit } from '@angular/core'
 import { MatDialog, MatDialogRef } from '@angular/material/dialog'
 import { TranslateService } from '@ngx-translate/core'
 import { TrackStatusService } from '@oms/root/services/track-status.service'
+import { MessagesService } from '../../../services/messages.service'
 import { VehicleService } from '@oms/root/services/vehicle.service'
 import { Dto } from '@oms/root/models/dto/track.model'
 import { IVehicleDioCategory } from '@oms/root/models/vehicle-status.model'
+import { ICarrierCommandMessage } from '@oms/root/models/command.model'
 import {
 	convertPatternToColor,
 	convertSignedIntegerToBitString,
@@ -17,6 +19,8 @@ import {
 	styleUrls: ['./vehicle-status-dialog.component.scss'],
 })
 export class VehicleStatusDialogComponent implements OnInit, OnDestroy {
+    carrierId: string
+
 	visiblePIOTrend = false
 
 	vehicles: Dto.IVehicle[]
@@ -64,7 +68,7 @@ export class VehicleStatusDialogComponent implements OnInit, OnDestroy {
 		private dialogRef: MatDialogRef<VehicleStatusDialogComponent>,
 		private trackStatusService: TrackStatusService,
 		private vehicleService: VehicleService,
-		private t$: TranslateService,
+        private messageSvc: MessagesService
 	) {}
 
 	ngOnInit(): void {
@@ -120,6 +124,26 @@ export class VehicleStatusDialogComponent implements OnInit, OnDestroy {
 	ngOnDestroy(): void {
 		clearInterval(this.intervalId)
 	}
+
+    onRemoveCarrier() {
+       this.messageSvc
+          .sendCarrierCommand({
+            action: 'remove_carrier',
+            carrierLabel: this.carrierId,
+            vehicleId: this.currentVehicle.id
+          })
+          .subscribe()
+    }
+
+    onInstallCarrier(carrierIdInput: string) {
+        this.messageSvc
+          .sendCarrierCommand({
+            action: 'install_carrier',
+            carrierLabel: this.carrierId,
+            vehicleId: this.currentVehicle.id
+          })
+          .subscribe()
+    }
 
 	onVehicleSelect({ selectedItem: value }) {
 		if (value) {

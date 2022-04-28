@@ -526,6 +526,15 @@ namespace OMSWeb.Services.MqttClient
                     data["user_id"] = "admin";
                     data["note"] = "";
                 }
+                else if (command.VehicleId != null)
+                {
+                    data["carrier_location"] = "v" + command.VehicleId;
+                    data["location_type"] = "v";
+
+                    data["manual"] = true;
+                    data["user_id"] = "admin";
+                    data["note"] = "";
+                }
             }
             else if (command.Action == ACTION_N)
             {

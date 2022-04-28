@@ -50,6 +50,22 @@
                 </div>
               </div>
             </fieldset>
+
+            <fieldset>
+              <legend>{{ "names.carrier" | translate }}</legend>
+              <div class="field-row">
+                <mat-form-field class="dense" appearance="outline">
+                  <input #carrierIdInput matInput [placeholder]="'names.carrierId' | translate" [value]=""/>
+                </mat-form-field>
+                <button mat-stroked-button color="primary" class="dense accent" (click)="onRemoveCarrier()">
+                  Remove
+                </button>
+                <button mat-stroked-button color="primary" class="dense accent"
+                        (click)="onInstallCarrier(carrierIdInput.value)">
+                  Install
+                </button>
+              </div>
+            </fieldset>
           </div>
           <div class="column ">
             <h4>DI</h4>

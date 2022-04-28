@@ -87,6 +87,7 @@ export interface IBufferCommandMessage extends ICommandMessage {
 
 export interface ICarrierCommandMessage extends ICommandMessage {
   bufferId?: number;
+  vehicleId?: number;
   carrierLabel?: string;
   manual?: boolean;
   user?: string;
