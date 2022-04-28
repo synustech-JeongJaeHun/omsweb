@@ -2,28 +2,29 @@
   <div class="rect">{{ "names.ai" | translate }}</div>
 </button>
 
-
-  <ng-container *ngIf="i18nEnabled === true">
-    <button mat-button class="locale" [matMenuTriggerFor]="localeMenu">
-      <mat-icon>language</mat-icon> {{ currentLanguage }}
+<!--
+<ng-container *ngIf="i18nEnabled === true">
+  <button mat-button class="locale" [matMenuTriggerFor]="localeMenu">
+    <mat-icon>language</mat-icon> {{ currentLanguage }}
+  </button>
+  <mat-menu #localeMenu="matMenu" xPosition="before">
+    <button mat-menu-item (click)="changeLanguage('en')">
+      {{ "names.english" | translate }}
     </button>
-    <mat-menu #localeMenu="matMenu" xPosition="before">
-      <button mat-menu-item (click)="changeLanguage('en')">
-        {{ "names.english" | translate }}
-      </button>
-      <button mat-menu-item (click)="changeLanguage('ko')">
-        {{ "names.korean" | translate }}
-      </button>
-      <button mat-menu-item (click)="changeLanguage('zh')">
-        {{ "names.chinese" | translate }}
-      </button>
-    </mat-menu>
-  </ng-container>
-  <ng-container *ngIf="i18nEnabled === false">
-    <button mat-button class="locale" >
-      <mat-icon>language</mat-icon> {{ currentLanguage }}
+    <button mat-menu-item (click)="changeLanguage('ko')">
+      {{ "names.korean" | translate }}
     </button>
-  </ng-container>
+    <button mat-menu-item (click)="changeLanguage('zh')">
+      {{ "names.chinese" | translate }}
+    </button>
+  </mat-menu>
+</ng-container>
+<ng-container *ngIf="i18nEnabled === false">
+  <button mat-button class="locale" >
+    <mat-icon>language</mat-icon> {{ currentLanguage }}
+  </button>
+</ng-container>
+-->
 
 <button mat-button class="legend" (click)="onLegend()">
   <mat-icon>info</mat-icon> {{ "names.legend" | translate }}
