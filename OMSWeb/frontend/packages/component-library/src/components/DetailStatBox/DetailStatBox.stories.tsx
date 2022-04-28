@@ -73,6 +73,28 @@ Ex2.args = {
 	],
 }
 
+export const Ex3 = (args) => <DetailStatBox {...args} />
+Ex3.args = {
+	title: '소요시간',
+	subLabel: '평균',
+	value: '1시간 25분 56초',
+	unit: '',
+	details: [
+		{
+			label: '최대',
+			value: '3일 16시간 16분 49초',
+		},
+		{
+			label: '최소',
+			value: '21초',
+		},
+		{
+			label: '편차',
+			value: '3일 16시간 16분 27초',
+		},
+	],
+}
+
 export const Empty = (args) => <DetailStatBox {...args} />
 Empty.args = {
 	title: '소요시간',

@@ -8,14 +8,14 @@ import * as R from 'ramda'
 import styled from '@emotion/styled'
 import { css } from '@emotion/react'
 import { color } from '@daimre/styles'
-import { numberWithCommas, isFullEmpty, omitArray } from '@daimre/shared'
+import { numberWithCommas, isFullEmpty, omitArray, bdFormat } from '@daimre/shared'
 import Container from '../../layout/Container'
 import RCol from '../../layout/RCol'
 import Col from '../../layout/Col'
 import BarlineTableV from '../../chart-set/BarlineTableV'
 import BarlineTableH from '../../chart-set/BarlineTableH'
 import BarlineRangeTable from '../../chart-set/BarlineRangeTable'
-import TitleSet from '../TitleSet'
+import TitleSet, { Props as TitleSetProps } from '../TitleSet'
 import { genNormaltr } from '@daimre/shared'
 import { exStatData, exEmptyData } from './exData'
 import { useImmer } from 'use-immer'
@@ -148,12 +148,26 @@ const DetailChart = ({ variant, data, onClickClose }) => {
 	)
 }
 
-const TitleBarlineSet: React.FC<Props> & any = ({
+const TitleBarlineSet: React.FC<Props & any> & any = React.forwardRef(
+({
 	pageVariant,
 	data,
 	stats,
-	isPlaceholder
-}: Props) => {
+	isStatPlaceholder,
+	isChartPlaceholder,
+	onClickItem,
+	onDateChange,
+	startDay,
+	endDay,
+	beforeRangeValue,
+	beforeRangeUnit
+}: Props,
+inRef: any
+) => {
+	const ref = React.useRef({
+		reset: () => {}
+	})
+	const [cnt, updateCnt] = React.useState(0)
 	const [state, updateState] = useImmer({
 		isZoomed: false,
 		isClicked: false,
@@ -172,6 +186,33 @@ const TitleBarlineSet: React.FC<Props> & any = ({
 			draft._data = data
 		})
 	}, [data])
+
+	React.useEffect(() => {
+		if (cnt !== 0) {
+			setTimeout(() => {
+				updateState((draft) => {
+					draft.isZoomed = false
+					draft.isClicked= false
+					draft.layoutKey= 'overview'
+					draft.layoutValue= null
+					draft.zoomedSection= null
+					draft.zoomedData = {
+						header: [],
+						body: [],
+					}
+				})
+			}, 500)
+
+		}
+	}, [cnt])
+
+	React.useImperativeHandle(inRef, () => {
+		const temp = () => updateCnt(cnt + 1)
+		if (ref.current) {
+			ref.current.reset = temp
+		}
+		return ref.current
+	}, [ref, cnt])
 
 	const {
 		isZoomed,
@@ -193,14 +234,14 @@ const TitleBarlineSet: React.FC<Props> & any = ({
 		return layoutKey === 'overview' ? '' : `${dic[layoutKey]} - ${layoutValue}`
 	}
 
-	const handleClick = ({ key, value }) => {
-		const clickedData = getExData(key)
+	const handleClick = async ({ key, value, detail }) => {
+		const isDay = R.test(/-/, value)
+		!isDay && onClickItem && onClickItem({ key, value })
 
-		updateState((draft) => {
+		!isDay && updateState((draft) => {
 			draft.isClicked = true
 			draft.layoutKey = key
 			draft.layoutValue = value
-			draft._data = clickedData
 		})
 	}
 
@@ -210,7 +251,11 @@ const TitleBarlineSet: React.FC<Props> & any = ({
 				draft.isClicked = false
 				draft.layoutKey = 'overview'
 				draft.layoutValue = null
-				draft._data = data
+			})
+
+			onClickItem && onClickItem({
+				key: 'overview',
+				value: ''
 			})
 		} else {
 			updateState((draft) => {
@@ -234,7 +279,6 @@ const TitleBarlineSet: React.FC<Props> & any = ({
 	}
 
 	return (
-		<QueryContext.Provider value={{ isPlaceholder }}>
 			<ContentPaneBody>
 				<Scrollable
 					scroll='y'
@@ -249,33 +293,41 @@ const TitleBarlineSet: React.FC<Props> & any = ({
 									subtitle={getSectionTitle()}
 									onClick={handleClickBack}
 									stats={stats}
+									onDateChange={onDateChange}
+									isPlaceholder={isStatPlaceholder}
+									startDay={startDay}
+									endDay={endDay}
+									beforeRangeValue={beforeRangeValue}
+									beforeRangeUnit={beforeRangeUnit}
 								/>
-								<div className="chart-container">
-									{!isZoomed ? (
-										<Pane
-											variant={layoutKey}
-											data={_data}
-											onClick={handleClick}
-											onZoom={handleZoom}
-											pageVariant={pageVariant}
-										/>
-									) : (
-										<DetailChart
-											variant={zoomedSection}
-											data={zoomedData}
-											onClickClose={handleZoomout}
-										/>
-									)}
-								</div>
+								<QueryContext.Provider value={{ isPlaceholder: isChartPlaceholder }}>
+									<div className="chart-container">
+										{!isZoomed ? (
+											<Pane
+												variant={layoutKey}
+												data={_data}
+												onClick={handleClick}
+												onZoom={handleZoom}
+												pageVariant={pageVariant}
+											/>
+										) : (
+											<DetailChart
+												variant={zoomedSection}
+												data={zoomedData}
+												onClickClose={handleZoomout}
+											/>
+										)}
+									</div>
+								</ QueryContext.Provider>
 							</RCol >
 						</Container >
 						<div className="space"></div>
 					</Wrapper>
 				</Scrollable>
 			</ContentPaneBody>
-		</ QueryContext.Provider>
+
 	)
-}
+})
 
 TitleBarlineSet.exEmptyData = exEmptyData
 TitleBarlineSet.exStatData = exStatData
@@ -285,14 +337,30 @@ TitleBarlineSet.defaultProps = {
 	data: getExData('overview'),
 	pageVariant: 'alarm',
 	stats: exStatData.alarm,
-	isPlaceholder: false
+	onClickItem: (values) => {},
+	onDateChange: (values) => {},
+	isStatPlaceholder: false,
+	isChartPlaceholder: false,
+	startDay: bdFormat(1),
+	endDay: bdFormat(0),
+	beforeRangeValue: 3,
+	beforeRangeUnit: 'months'
 }
 
-interface Props {
+interface Props extends Pick<
+	TitleSetProps,
+	'startDay'
+	| 'endDay'
+	| 'onDateChange'
+	| 'beforeRangeValue'
+	| 'beforeRangeUnit'
+>  {
 	data?: any
 	pageVariant?: 'normaltr' | 'alarm'
 	stats?: any
-	isPlaceholder?: boolean
+	isStatPlaceholder?: boolean
+	isChartPlaceholder?: boolean
+	onClickItem?: (any) => void
 }
 
 export default TitleBarlineSet

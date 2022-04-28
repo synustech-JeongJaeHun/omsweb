@@ -163,6 +163,25 @@ const SimpleStatBox: React.FC<Props> & any = ({
 	isPlaceholder,
 	children
 }: Props) => {
+	if (isPlaceholder) {
+		return (
+			<Wrapper isPlaceholder={isPlaceholder}>
+			<div className="left">
+				<div className="box-header">
+					<div className="box-header-title"></div>
+					<div className="box-header-duration"></div>
+				</div>
+				<div className="box-body">
+					<span className="box-body-value"></span>
+					<span className="box-body-unit"></span>
+				</div>
+			</div>
+			<div className="right">
+			</div>
+		</Wrapper>
+		)
+	}
+
 
 	return (
 		<Wrapper isPlaceholder={isPlaceholder}>

@@ -3,8 +3,8 @@ import { getStorage } from '@daimre/shared'
 
 const ss = getStorage(window.sessionStorage)
 
-const origin = window.location.origin
-const apiBaseUri = '/api'
+const origin = 'http://localhost:3000'
+const apiBaseUri = '/api/v1'
 
 const ax = axios.create({
   baseURL: `${origin}${apiBaseUri}`,
@@ -48,7 +48,10 @@ export const getAgt = () => {
   const rpAuth = request(headers)('post')
 
   return {
-    systemSettingsClient: rgAuth('/systems/settings/client'),
-    systemStates: rgAuth('/systems/states'),
+    // systemSettingsClient: rgAuth('/systems/settings/client'),
+    // systemStates: rgAuth('/systems/states'),
+    stats: rpAuth('/report/stats'),
+    charts: rpAuth('/report/charts'),
+    labels: rgAuth('/report/labels'),
   }
 }

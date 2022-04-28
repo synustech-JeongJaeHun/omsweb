@@ -15,6 +15,8 @@ const DatePicker: FC<Props> = ({
   endDay,
   onDateChangeCB,
   onFocusChangeCB,
+	beforeRangeValue,
+	beforeRangeUnit
 }: Props) => {
   const [startDate, setStartDate] = useState(moment(startDay))
   const [endDate, setEndDate] = useState(moment(endDay))
@@ -31,8 +33,8 @@ const DatePicker: FC<Props> = ({
     onFocusChangeCB && onFocusChangeCB(input)
   }
 
-  const isOutsideRange = day => 
-    day.isAfter(moment()) || day.isBefore(moment().subtract(7, "days"));
+  const isOutsideRange = day =>
+    day.isAfter(moment()) || day.isBefore(moment().subtract(beforeRangeValue, beforeRangeUnit));
 
   return (
     <DateRangePicker
@@ -58,12 +60,16 @@ const DatePicker: FC<Props> = ({
 
 DatePicker.defaultProps = {
   startDay: defaultStart,
-  endDay: defaultEnd
+  endDay: defaultEnd,
+	beforeRangeValue: 3,
+	beforeRangeUnit: 'months'
 }
 
-interface Props {
+export interface Props {
   startDay?: string
   endDay?: string
+	beforeRangeValue?: number
+	beforeRangeUnit?: 'months' | 'days' | 'years'
   onDateChangeCB?: (data: any) => void
   onFocusChangeCB?: (data: any) => void
 }

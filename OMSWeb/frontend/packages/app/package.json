@@ -41,6 +41,7 @@
     "devextreme": "^20.2.10",
     "devextreme-angular": "^20.2.10",
     "devextreme-aspnet-data-nojquery": "^2.8.6",
+    "immer": "^9.0.12",
     "jquery": "^3.6.0",
     "lodash": "^4.17.21",
     "ngx-papaparse": "^5.0.0",
@@ -51,6 +52,7 @@
     "react-query": "^3.34.19",
     "rxjs": "~6.5.5",
     "tslib": "^2.0.0",
+    "use-immer": "^0.7.0",
     "uuid": "^8.3.2",
     "zone.js": "~0.10.3"
   },

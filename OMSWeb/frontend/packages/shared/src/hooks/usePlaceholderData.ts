@@ -34,9 +34,9 @@ const genPlaceholder = ({ data, height, isH }) => {
 				enabled: false
 			}
 		},
-		tooltip: {
-			enabled: false
-		},
+		// tooltip: {
+		// 	enabled: false
+		// },
 		legend: {
 			enabled: false,
 		},

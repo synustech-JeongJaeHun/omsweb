@@ -68,7 +68,7 @@ const Wrapper = styled.div<StyleType>`
 
 		dl {
 			display: flex;
-			width: 110px;
+			min-width: 110px;
 			justify-content: space-between;
 			align-items: center;
 			line-height: 1;
@@ -80,6 +80,7 @@ const Wrapper = styled.div<StyleType>`
 
 			dt {
 				font-size: 12px;
+				margin-right: 15px;
 			}
 
 			dd {
@@ -165,6 +166,35 @@ const DetailStatBox: React.FC<Props> = ({
 	unit,
 	isPlaceholder
 }) => {
+
+	if (isPlaceholder) {
+		return (
+			<Wrapper isPlaceholder={isPlaceholder}>
+			<div className="summary">
+				<div className="box-header">
+					<div className="box-header-title"></div>
+				</div>
+				<div className="box-body">
+					<div className="box-body-label"></div>
+					<div className="box-body-values">
+						<span className="box-body-value"></span>
+						<span className="box-body-unit"></span>
+					</div>
+				</div>
+			</div>
+			<div className="detail">
+				{placeholderProps.details.map((item, i) => {
+					return (
+						<dl key={i.toString()}>
+							<dt>{item.label}</dt>
+							<dd>{item.value}</dd>
+						</dl>
+					)
+				})}
+			</div>
+		</Wrapper>
+		)
+	}
 
 	return (
 		<Wrapper isPlaceholder={isPlaceholder}>

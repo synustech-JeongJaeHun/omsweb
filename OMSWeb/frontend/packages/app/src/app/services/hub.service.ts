@@ -4,6 +4,8 @@ import * as camelcaseKeys from 'camelcase-keys';
 
 import { IDataChangeEvent } from '../models/notification.model';
 
+const showLogger = false
+
 @Injectable({
   providedIn: 'root',
 })
@@ -44,23 +46,23 @@ export class HubService {
       .build();
 
     this.hub.onclose((err) => {
-      console.assert(!err, err);
+      showLogger && console.assert(!err, err);
       this.isConnected = false;
       this.connectionChanged$.emit(false);
-      console.log('# Hub connection closed.');
+      showLogger && console.log('# Hub connection closed.');
     });
 
     this.hub.onreconnecting((err) => {
-      console.assert(!err, err);
+      showLogger && console.assert(!err, err);
       this.isConnected = false;
       this.connectionChanged$.emit(false);
-      console.log('# Hub re-connecting...');
+      showLogger && console.log('# Hub re-connecting...');
     });
 
     this.hub.onreconnected(() => {
       this.isConnected = true;
       this.connectionChanged$.emit(true);
-      console.info('## Hub re-connected. ##');
+      showLogger && console.info('## Hub re-connected. ##');
     });
 
     this.attachEvents();
@@ -73,7 +75,7 @@ export class HubService {
   public stop() {
     // this.detachEvents();
     this.hub.stop().then(() => {
-      console.info('## Hub stopped. ##');
+      showLogger && console.info('## Hub stopped. ##');
     });
   }
 
@@ -84,7 +86,7 @@ export class HubService {
       .then(() => {
         this.isConnected = true;
         this.connectionChanged$.emit(true);
-        console.info('## Hub connected. ##');
+        showLogger && console.info('## Hub connected. ##');
       })
       .catch((err) => console.error(err));
   }
@@ -115,45 +117,45 @@ export class HubService {
 
   private attachEvents() {
     this.hub.on('pointChanged', (meta, body) => {
-      console.info('## hub message : pointChanged >>', { meta, body });
+      showLogger && console.info('## hub message : pointChanged >>', { meta, body });
       this.pointChanged$.emit({ ...meta, data: body });
     });
     this.hub.on('segmentChanged', (meta, body) => {
-      console.info('## hub message : segmentChanged >>', { meta, body });
+      showLogger && console.info('## hub message : segmentChanged >>', { meta, body });
       this.segmentChanged$.emit({ ...meta, data: body });
     });
     this.hub.on('segmentDisabledChanged', (meta, body) => {
-      console.info('## hub message : segmentDisabledChanged >>', {
+      showLogger && console.info('## hub message : segmentDisabledChanged >>', {
         meta,
         body,
       });
       this.segmentDisabledChanged$.emit({ ...meta, data: body });
     });
     this.hub.on('stationChanged', (meta, body) => {
-      console.info('## hub message : stationChanged >>', { meta, body });
+      showLogger && console.info('## hub message : stationChanged >>', { meta, body });
       this.stationChanged$.emit({ ...meta, data: body });
     });
     this.hub.on('bufferChanged', (meta, body) => {
-      console.info('## hub message : bufferChanged >>', { meta, body });
+      showLogger && console.info('## hub message : bufferChanged >>', { meta, body });
       this.bufferChanged$.emit({ ...meta, data: body });
     });
     this.hub.on('mtlChanged', (meta, body) => {
-      console.info('## hub message : mtlChanged >>', { meta, body });
+      showLogger && console.info('## hub message : mtlChanged >>', { meta, body });
       this.mtlChanged$.emit({ ...meta, data: body });
     });
     this.hub.on('vehicleChanged', (meta, body) => {
-      // console.info('## hub message : vehicleChanged >>', meta.id, { meta, body });
+      showLogger && console.info('## hub message : vehicleChanged >>', meta.id, { meta, body });
       this.vehicleChanged$.emit({ ...meta, data: body });
     });
     this.hub.on('vehicleTableChanged', (meta, body) => {
-      // console.info('## hub message : vehicleTableChanged >>', { meta, body });
+      showLogger && console.info('## hub message : vehicleTableChanged >>', { meta, body });
       this.vehicleTableChanged$.emit({ ...meta, data: body });
     });
     this.hub.on('vehicleDioChanged', (meta, body) => {
       this.vehicleDioChanged$.emit({ ...meta, data: body });
     });
     this.hub.on('orderTableChanged', (meta, body) => {
-      // console.info('## hub message : orderTableChanged >>', { meta, body });
+      showLogger && console.info('## hub message : orderTableChanged >>', { meta, body });
       this.orderTableChanged$.emit({ ...meta, data: body });
     });
     this.hub.on('vehiclePath', (meta, body) => {
@@ -161,43 +163,43 @@ export class HubService {
       this.vehiclePathChanged$.emit({ ...meta, data: body });
     });
     this.hub.on('clusterChanged', (meta, body) => {
-      // console.info('## hub message : clusterChanged >>', { meta, body });
+      showLogger && console.info('## hub message : clusterChanged >>', { meta, body });
       this.clusterChanged$.emit({ ...meta, data: body });
     });
     this.hub.on('groupChanged', (meta, body) => {
-      console.info('## hub message : groupChanged >>', { meta, body });
+      showLogger && console.info('## hub message : groupChanged >>', { meta, body });
       this.groupChanged$.emit({ ...meta, data: body });
     });
     this.hub.on('alarm', (meta, body) => {
-      console.info('## hub message : alarm >>', { meta, body });
+      showLogger && console.info('## hub message : alarm >>', { meta, body });
       this.alarmChanged$.emit({ ...meta, data: body });
     });
     this.hub.on('alert', (meta, body) => {
-      console.info('## hub message : alert >>', { meta, body });
+      showLogger && console.info('## hub message : alert >>', { meta, body });
       this.alertChanged$.emit({ ...meta, data: body });
     });
     this.hub.on('serverStatus', (meta, body) => {
-      console.info('## hub message : serverStatus >>', { meta, body });
+      showLogger && console.info('## hub message : serverStatus >>', { meta, body });
       this.serverStatusChanged$.emit({ ...meta, data: body });
     });
     this.hub.on('modeState', (meta, body) => {
-      console.info('## hub message : modeState >>', { meta, body });
+      showLogger && console.info('## hub message : modeState >>', { meta, body });
       this.modeStateChanged$.emit({ ...meta, data: body });
     });
     this.hub.on('zcuMapChanged', (meta, body) => {
-      console.info('## hub message : zcuMapChanged >>', { meta, body });
+      showLogger && console.info('## hub message : zcuMapChanged >>', { meta, body });
       this.zcuMapChanged$.emit({ ...meta, data: body });
     });
     this.hub.on('zcuStatusTableChanged', (meta, body) => {
-      console.info('## hub message : zcuStatusTableChanged >>', { meta, body });
+      showLogger && console.info('## hub message : zcuStatusTableChanged >>', { meta, body });
       this.zcuStatusTableChanged$.emit({ ...meta, data: body });
     });
     this.hub.on('cpsStatusTableChanged', (meta, body) => {
-      console.info('## hub message : cpsStatusTableChanged >>', { meta, body });
+      showLogger && console.info('## hub message : cpsStatusTableChanged >>', { meta, body });
       this.cpsStatusTableChanged$.emit({ ...meta, data: body });
     });
     this.hub.on('kpiChanged', (meta, body) => {
-      console.info('## hub message : kpiChanged >>', { meta, body });
+      showLogger && console.info('## hub message : kpiChanged >>', { meta, body });
       this.kpiChanged$.emit({ ...meta, data: body });
     });
   }

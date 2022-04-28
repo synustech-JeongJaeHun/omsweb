@@ -8,8 +8,8 @@ import * as React from 'react'
 import styled from '@emotion/styled'
 import { css } from '@emotion/react'
 import { color } from '@daimre/styles'
-import { numberWithCommas, isFullEmpty, isNotFullEmpty } from '@daimre/shared'
-import DatePicker from '../../DatePicker'
+import { numberWithCommas, isFullEmpty, isNotFullEmpty, bdFormat } from '@daimre/shared'
+import DatePicker, { Props as DatePickerProps }  from '../../DatePicker'
 import SimpleStatBox from '../../SimpleStatBox'
 import DetailStatBox from '../../DetailStatBox'
 import { QueryContext } from '../../../context'
@@ -61,12 +61,15 @@ const TitleSet: React.FC<Props> = ({
 	subtitle,
 	stats,
 	onClick,
-	isPlaceholder
+	isPlaceholder,
+	onDateChange,
+	startDay,
+	endDay,
+	beforeRangeValue,
+	beforeRangeUnit
 }: Props) => {
-	const qc = React.useContext(QueryContext)
 	const { width } = React.useContext(PaneBodyContext)
 	const breakpoint = calcBreakpoint(width)
-	const _isPlaceholder = qc.isPlaceholder || isPlaceholder
 	const hAlign = breakpoint === 'lg' || breakpoint === 'md' ? 'right': 'left'
 
 	return (
@@ -79,7 +82,12 @@ const TitleSet: React.FC<Props> = ({
 								<span className="text">{title}</span>
 							</div>
 							<div className="picker-wrapper">
-								<DatePicker />
+								<DatePicker
+									startDay={startDay}
+									endDay={endDay}
+									beforeRangeValue={beforeRangeValue}
+									beforeRangeUnit={beforeRangeUnit}
+									onDateChangeCB={onDateChange} />
 							</div>
 						</div>
 						<div className="bottom">
@@ -98,13 +106,13 @@ const TitleSet: React.FC<Props> = ({
 									case 'simple':
 										return (
 											<div key={i.toString()}>
-												<SimpleStatBox isPlaceholder={_isPlaceholder} duration="" {...data} />
+												<SimpleStatBox isPlaceholder={isPlaceholder} duration="" {...data} />
 											</div>
 										)
 									default:
 										return (
 											<div key={i.toString()}>
-												<DetailStatBox isPlaceholder={_isPlaceholder} {...data} />
+												<DetailStatBox isPlaceholder={isPlaceholder} {...data} />
 											</div>
 										)
 								}
@@ -122,15 +130,21 @@ TitleSet.defaultProps = {
 	subtitle: '',
 	stats: [],
 	onClick: () => {},
-	isPlaceholder: false
+	isPlaceholder: false,
+	onDateChange: (value) => {},
+	startDay: bdFormat(1),
+	endDay: bdFormat(0),
+	beforeRangeValue: 3,
+	beforeRangeUnit: 'months'
 }
 
-interface Props {
+export interface Props extends DatePickerProps {
 	title: string
 	subtitle?: string
 	stats?: any
 	onClick?: (e: any) => void
 	isPlaceholder?: boolean
+	onDateChange?: (any) => void
 }
 
 export default TitleSet

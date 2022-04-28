@@ -4,15 +4,18 @@ import { isFullEmpty } from '@daimre/shared'
 import styled from '@emotion/styled'
 import { TitleBarlineSet, GlobalStyle } from '@daimre/component-library'
 
+
 const Wrapper = styled.div`
   height: 100%;
 `
 
+const key = 'alarm'
+
 const exStat = TitleBarlineSet.exStatData
-const placeholderData = TitleBarlineSet.exEmptyData.normaltr
+const placeholderData = TitleBarlineSet.exEmptyData[key]
 const genNormaltr = TitleBarlineSet.genNormaltr
 
-const Test = () => {
+const Comp = () => {
   const [isPlaceholder, updateState] = React.useState(true)
 	const [ data, setData ] = React.useState(placeholderData)
 
@@ -20,8 +23,8 @@ const Test = () => {
 		const id = setTimeout(() => {
 			updateState(false)
 			setData({
-				pageVariant: 'normaltr',
-				stats: exStat.normaltr,
+				pageVariant: key,
+				stats: exStat[key],
 				data: genNormaltr('overview')
 			})
 		}, 1000)
@@ -38,4 +41,4 @@ const Test = () => {
 	)
 }
 
-export default Test
+export default Comp

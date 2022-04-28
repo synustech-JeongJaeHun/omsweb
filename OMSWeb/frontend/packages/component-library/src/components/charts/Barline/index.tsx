@@ -13,6 +13,7 @@ import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 import { dic } from '../shared'
 import { usePlaceholderData } from '@daimre/shared'
+import { useImmer } from 'use-immer'
 
 type StyleType = {}
 
@@ -112,6 +113,7 @@ const getOptions = ({
 		yAxis,
 		tooltip: {
 			shared: true,
+			enabled: true
 		},
 		legend: {
 			enabled: false,
@@ -159,15 +161,16 @@ const Barline: React.FC<Props> = ({
 		isH
 	})
 
+
 	React.useEffect(() => {
 		if (ref.current) {
 			setTimeout(() => {
 				ref.current.chart.reflow()
-				ref.current.chart.update({
-					chart: {
-						animation: true
-					}
-				})
+				// ref.current.chart.update({
+				// 	chart: {
+				// 		animation: true
+				// 	}
+				// })
 			})
 		}
 	}, [])
@@ -186,7 +189,7 @@ const Barline: React.FC<Props> = ({
 			<HighchartsReact
 				ref={ref}
 				highcharts={Highcharts}
-				options={currentOpt} />
+				options={R.clone(currentOpt)} />
 		</Wrapper>
 	)
 }
