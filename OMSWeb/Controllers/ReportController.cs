@@ -26,27 +26,45 @@ namespace OMSWeb.Controllers
             this._reportSvc = reportSvc;
         }
 
-        [HttpGet("report/tran/normal/{start}/{end}")]
-        //public object GetReportTranNormal(DataSourceLoadOptions loadOptions)
-        public object GetReportTranNormal([FromRoute] string start, [FromRoute] string end, DataSourceLoadOptions loadOptions)
+        [HttpGet("labels")]
+        public object GetLabels()
         {
-            //return DataSourceLoader.Load(_reportSvc.QueryReportTranNormal(), loadOptions);
-            Console.WriteLine($"## Get Report Trans time >> {start} ~ {end}");
-            return DataSourceLoader.Load(_reportSvc.QueryReportTranNormal(DateTime.Parse(start), DateTime.Parse(end)), loadOptions);
+            return _reportSvc.QueryLabels();
         }
 
-
-        [HttpGet("report/tran/abnormal/{start}/{end}")]
-        public object GetReportTranAbnormal(DataSourceLoadOptions loadOptions)
+        [HttpPost("stats")]
+        public async Task<ActionResult<object>> GetStats([FromBody] ReportRequestStats requestBody)
         {
-            return DataSourceLoader.Load(_reportSvc.QueryReportTranAbnormal(), loadOptions);
+            var firstDay = new DateTime(DateTime.Now.Year, 1, 1).ToString("yyyy-MM-dd");
+            var lastDay = DateTime.Now.ToString("yyyy-MM-dd");
+
+            return requestBody.Variant switch
+            {
+                "normaltr" => await _reportSvc.QueryNormaltrStatsBetween(firstDay, lastDay),
+                "alarm" => await _reportSvc.QueryAlarmStatsBetween(firstDay, lastDay),
+                _ => BadRequest()
+            };
         }
 
-        [HttpGet("report/alarms/{start}/{end}")]
-        public object GetReportAlarms(DataSourceLoadOptions loadOptions)
+        [HttpPost("charts")]
+        public async Task<object> GetCharts([FromBody] ReportRequestCharts requestBody)
         {
-            return DataSourceLoader.Load(_reportSvc.QueryReportAlarms(), loadOptions);
+            return requestBody.Variant switch
+            {
+                "normaltr" => await _reportSvc.QueryNormaltrChartsBetween(
+                    requestBody.Section,
+                    requestBody.Selected_Item,
+                    requestBody.Start,
+                    requestBody.End
+                ),
+                "alarm" => await _reportSvc.QueryAlarmChartsBetween(
+                    requestBody.Section,
+                    requestBody.Selected_Item,
+                    requestBody.Start,
+                    requestBody.End
+                ),
+                _ => BadRequest()
+            };
         }
-
     }
 }

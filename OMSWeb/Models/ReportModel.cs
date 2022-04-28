@@ -1,29 +1,27 @@
-using System;
-using System.ComponentModel.DataAnnotations.Schema;
-using OMSWeb.Models.Entities;
-
 namespace OMSWeb.Models
 {
-    public class ReportTranNormal
+    public class ReportLabel
     {
-        public int? DurationTotal { get; set; }
-        public int? DurationDropoff { get; set; }
-        public int? DurationPickup { get; set; }
-        public int? DurationUnassigned { get; set; }
-        public int? DurationLoad { get; set; }
-        public int? DurationUnload { get; set; }
-        public int? DurationMove { get; set; }
+        public string Id { get; set; }
+        public string Label { get; set; }
     }
 
-    public class ReportTranAbnormal
+    public class ReportRequestStats
     {
-        public string LocationPickup { get; set; }
-        public string LocationDropoff { get; set; }
-        public string LocationMove { get; set; }
+        public string Variant { get; set; }
     }
 
-    public class ReportAlarms
+    public class ReportRequestCharts
     {
-
+        // normaltr, abnormaltr, alarm
+        public string Variant { get; set; }
+        // overview, duration, vehicle, source, dest
+        public string Section { get; set; }
+        // duration일 경우 1월, 2월 | 나머지는 vehicle명, source명, dest명
+        public string Selected_Item { get; set; } = "";
+        // '2022-03-15' 시작일
+        public string Start { get; set; }
+        // '2022-03-16' 종료일
+        public string End { get; set; }
     }
 }
