@@ -103,6 +103,7 @@ export class GnbActionsComponent implements OnInit, OnDestroy {
     }
 
     this._legendDlg = this.dialog.open(LegendDialogComponent, {
+      maxHeight: '80vh',
       width: '650px',
       hasBackdrop: false,
       disableClose: true,
