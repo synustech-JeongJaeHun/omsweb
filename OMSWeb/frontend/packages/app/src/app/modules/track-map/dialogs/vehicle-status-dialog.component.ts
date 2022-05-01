@@ -19,7 +19,7 @@ import {
 	styleUrls: ['./vehicle-status-dialog.component.scss'],
 })
 export class VehicleStatusDialogComponent implements OnInit, OnDestroy {
-    carrierId: string
+    public carrierId: string
 
 	visiblePIOTrend = false
 
@@ -125,11 +125,11 @@ export class VehicleStatusDialogComponent implements OnInit, OnDestroy {
 		clearInterval(this.intervalId)
 	}
 
-    onRemoveCarrier() {
+    onRemoveCarrier(carrierIdInput: string) {
        this.messageSvc
           .sendCarrierCommand({
             action: 'remove_carrier',
-            carrierLabel: this.carrierId,
+            carrierLabel: carrierIdInput,
             vehicleId: this.currentVehicle.id
           })
           .subscribe()
@@ -139,7 +139,7 @@ export class VehicleStatusDialogComponent implements OnInit, OnDestroy {
         this.messageSvc
           .sendCarrierCommand({
             action: 'install_carrier',
-            carrierLabel: this.carrierId,
+            carrierLabel: carrierIdInput,
             vehicleId: this.currentVehicle.id
           })
           .subscribe()
