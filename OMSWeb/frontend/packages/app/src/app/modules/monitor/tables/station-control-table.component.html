@@ -1,5 +1,10 @@
 <div class="grid-actions" *ngIf="hasControlAccess">
-
+  <button mat-stroked-button color="primary" class="dense accent" [disabled]="!canControl" (click)="onUnuse()">
+    {{ "names.unuse" | translate }}
+  </button>
+    <button mat-stroked-button color="primary" class="dense accent" [disabled]="!canControl" (click)="onUse()">
+    {{ "names.use" | translate }}
+  </button>
 
 </div>
 <dx-data-grid [dataSource]="dataSource" [remoteOperations]="true" [height]="tableHeight" [repaintChangesOnly]="false"
