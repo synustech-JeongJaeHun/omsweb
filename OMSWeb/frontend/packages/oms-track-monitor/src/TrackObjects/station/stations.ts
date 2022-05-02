@@ -1,4 +1,5 @@
 import { ITrackData } from 'src/legacies/models/track.model'
+import { UpdateDto } from 'src/types/Dto'
 import { ref } from 'vue'
 import { Station } from './types/Station'
 
@@ -23,4 +24,19 @@ function findStationById(id: Station['id']) {
 	return stationMap.get(id)
 }
 
-export { stations, initStations, findStationById }
+function setStation(s: UpdateDto.Station) {
+	const station = findStationById(s.id)
+
+	if (station) {
+		updateExistStation(station, s)
+	}
+}
+
+function updateExistStation(
+	station: Station,
+	updateData: UpdateDto.Station
+) {
+	Object.assign(station, updateData)
+}
+
+export { stations, initStations, setStation, findStationById }

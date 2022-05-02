@@ -122,7 +122,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 	ngOnInit(): void {
 		// @ts-ignore
 		this.viewer = document.getElementById('track-canvas')._instance.exposed
-		console.log('realtime', this.trackData)
 		// @ts-ignore
 		this.viewer.setTrack({
 			...this.trackData,
@@ -261,19 +260,19 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 					this.viewer.updateZcu(e.operation, e.data)
 				})
 
+			this.hubSvc.stationChanged$
+				.pipe(takeUntil(this.destroy$))
+				.subscribe((e) => {
+					// @ts-ignore
+					this.viewer.updateStation(e.operation, { id: e.id, unuse: e.unuse })
+				})
+
 			if (this.auth.isAuthenticated) {
 				this.hubSvc.vehiclePathChanged$
 					.pipe(takeUntil(this.destroy$))
 					.subscribe((e: IDataChangeEvent) => {
 						// TODO what happened on event?
 						console.log('vehicle path update', e)
-					})
-
-				this.hubSvc.stationChanged$
-					.pipe(takeUntil(this.destroy$))
-					.subscribe((e) => {
-						// TODO what happened on event?
-						console.log('station update', e)
 					})
 
 				this.hubSvc.groupChanged$

@@ -1,173 +1,176 @@
 import { ICoordinate, IMapSize } from './drawing.model'
 
 interface IBuffer {
-  id: number
-  logicalId: string
-  physicalId: string
-  direction: "L" | "R" | "U"
-  pointId: number
-  nextPoint: number
-  offset: number
+	id: number
+	logicalId: string
+	physicalId: string
+	direction: 'L' | 'R' | 'U'
+	pointId: number
+	nextPoint: number
+	offset: number
 
-  // nullable
-  group?: number
+	// nullable
+	group?: number
 }
 interface ICluster {
-  id: number
-  color: string
-  logicalId: string
-  maxVehicles: number
-  segments: number[]
+	id: number
+	color: string
+	logicalId: string
+	maxVehicles: number
+	segments: number[]
 }
 interface IGroup {
-  id: number
-  logicalId: string
-  color: string
-  objects: { id: number, type: "vehicle" | "station" | "buffer" | "mtl" | "home" }[]
+	id: number
+	logicalId: string
+	color: string
+	objects: {
+		id: number
+		type: 'vehicle' | 'station' | 'buffer' | 'mtl' | 'home'
+	}[]
 }
 
 interface IMTL {
-  id: number
-  logicalId: string
-  physicalId: string
-  pointId: number
-  group?: number
-  inUse?: boolean
-  position?: any
-  mode?: any
-  errorList?: any
+	id: number
+	logicalId: string
+	physicalId: string
+	pointId: number
+	group?: number
+	inUse?: boolean
+	position?: any
+	mode?: any
+	errorList?: any
 }
 interface IZcu {
-  id: number
-  x: number
-  y: number
-  usingType: 0 | 1 | 2
-  error: boolean
-  zcuType: number
-  inputZones: IZcuInputZone[]
-  completePoints: IZcuCompletePoint[]
+	id: number
+	x: number
+	y: number
+	usingType: 0 | 1 | 2
+	error: boolean
+	zcuType: number
+	inputZones: IZcuInputZone[]
+	completePoints: IZcuCompletePoint[]
 }
 interface IZcuInputZone {
-  id: number
-  zcuId: number
-  priorityPoint: number
-  zonePoints: string
+	id: number
+	zcuId: number
+	priorityPoint: number
+	zonePoints: string
 }
 interface IZcuCompletePoint {
-  id: number
-  zcuId: number
-  completePointId: number
+	id: number
+	zcuId: number
+	completePointId: number
 }
 interface IPoint extends ICoordinate {
-  id: number
-  logicalId: string
-  physicalId: string
-  group?: number
-  isHome?: boolean
+	id: number
+	logicalId: string
+	physicalId: string
+	group?: number
+	isHome?: boolean
 }
 interface ISegPart {
-  type?: string
-  direction?: string
-  location?: string
-  x1?: number
-  y1?: number
-  x2?: number
-  y2?: number
+	type?: string
+	direction?: string
+	location?: string
+	x1?: number
+	y1?: number
+	x2?: number
+	y2?: number
 }
 interface ISegmentPart extends ISegPart {
-  id: number
-  logicalId: string
-  physicalId?: string
+	id: number
+	logicalId: string
+	physicalId?: string
 
-  startPoint: number
-  endPoint: number
-  length: number
-  speed: number
+	startPoint: number
+	endPoint: number
+	length: number
+	speed: number
 
-  segpartId: number
+	segpartId: number
 
-  // nullable
-  segparts?: ISegPart[]
-  candidates?: any[]
-  travelTime: any
-  isValidate?: boolean
+	// nullable
+	segparts?: ISegPart[]
+	candidates?: any[]
+	travelTime: any
+	isValidate?: boolean
 }
 interface IStation {
-  id: number
-  logicalId: string
-  physicalId: string
+	id: number
+	logicalId: string
+	physicalId: string
 
-  direction: string
-  pointId: number
-  nextPoint: number
-  offset: number
+	direction: string
+	pointId: number
+	nextPoint: number
+	offset: number
 
-  group?: number
-  carrierType?: string
+	unuse?: boolean
+
+	group?: number
+	carrierType?: string
 }
 interface IVehicle {
-  id: number
-  logicalId: string
-  physicalId: string
+	id: number
+	logicalId: string
+	physicalId: string
 
-  canBePushed: boolean
-  cargoState:
-  | "L" // Loading
-  | "F" // Full
-  | "U" // Unload
-  | "E" // Empty
-  curPoint: number
-  nextPoint: number
-  errorList: string
-  isBlocked: boolean
-  isSensorStopped: boolean
-  isMaint: boolean;
-  isConnected: boolean;
-  lastContact: string
-  mapDb: string
-  mode: "A" | "M"
-  movingState:
-  | "M"
-  | "S"
-  distancePoint: number
-  hostOrder: boolean
-  orderOrigin: string | string[]
+	canBePushed: boolean
+	cargoState:
+		| 'L' // Loading
+		| 'F' // Full
+		| 'U' // Unload
+		| 'E' // Empty
+	curPoint: number
+	nextPoint: number
+	errorList: string
+	isBlocked: boolean
+	isSensorStopped: boolean
+	isMaint: boolean
+	isConnected: boolean
+	lastContact: string
+	mapDb: string
+	mode: 'A' | 'M'
+	movingState: 'M' | 'S'
+	distancePoint: number
+	hostOrder: boolean
+	orderOrigin: string | string[]
 
-  // nullable
-  cargoTransferResult?: string
-  commandPoint?: any
-  locationDropoff?: string
-  locationMove?: string
-  locationPickup?: string
-  orderId?: number
-  orderLogicalId?: string
-  priority?: any
-  type?: string
-  group?: number
-  historyChangeTime?: any
+	// nullable
+	cargoTransferResult?: string
+	commandPoint?: any
+	locationDropoff?: string
+	locationMove?: string
+	locationPickup?: string
+	orderId?: number
+	orderLogicalId?: string
+	priority?: any
+	type?: string
+	group?: number
+	historyChangeTime?: any
 }
 
 interface IFixedTrackData {
-  buffers?: IBuffer[]
-  clusters?: ICluster[]
-  groups?: IGroup[]
-  mtls?: IMTL[]
-  points?: IPoint[]
-  size?: IMapSize
-  stations?: IStation[]
-  zcus?: IZcu[]
+	buffers?: IBuffer[]
+	clusters?: ICluster[]
+	groups?: IGroup[]
+	mtls?: IMTL[]
+	points?: IPoint[]
+	size?: IMapSize
+	stations?: IStation[]
+	zcus?: IZcu[]
 }
 interface IVariableTrackData {
-  segmentParts?: ISegmentPart[]
-  segmentDisabled?: any[]
-  vehicles?: IVehicle[]
+	segmentParts?: ISegmentPart[]
+	segmentDisabled?: any[]
+	vehicles?: IVehicle[]
 }
 interface ITrackData extends IFixedTrackData, IVariableTrackData {
-  vehiclePath?: any[]
+	vehiclePath?: any[]
 
-  width?: number
-  height?: number
-  minimumSegmentLength?: number
+	width?: number
+	height?: number
+	minimumSegmentLength?: number
 }
 
 export { ITrackData, IVehicle, ISegmentPart, IGroup }
