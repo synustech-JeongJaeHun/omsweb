@@ -37,7 +37,7 @@ namespace OMSWeb.Services
             this._cache = cacheSvc;
             this._trackSvc = trackSvc;
 
-            this.tableEventMap = new Dictionary<string, DataChangeEventTarget> 
+            this.tableEventMap = new Dictionary<string, DataChangeEventTarget>
             {
                 // {"points", new DataChangeEventTarget(CacheKeys.Points, new[]{"pointChanged"})},
                 {"segments", new DataChangeEventTarget(CacheKeys.Segments, new[]{"segmentChanged"})},
@@ -60,9 +60,9 @@ namespace OMSWeb.Services
                 {"alerts", new DataChangeEventTarget(CacheKeys.None, new[]{"alert"})},
                 {"server_status", new DataChangeEventTarget(CacheKeys.None, new[]{"serverStatus"})},
                 {"mode_state", new DataChangeEventTarget(CacheKeys.None, new[]{"modeState"})},
-            };                        
+            };
 
-            this.cacheEventMap = new Dictionary<CacheKeys, string[]> 
+            this.cacheEventMap = new Dictionary<CacheKeys, string[]>
             {
                 // {CacheKeys.Points, new[]{"pointChanged"}},
                 {CacheKeys.Segments, new[]{"segmentChanged"}},
@@ -235,6 +235,7 @@ namespace OMSWeb.Services
                 Id = payload.Id,
                 Level = payload.Level,
                 VehicleId = payload.VehicleId,
+                Unuse = payload.Unuse // only for station
             };
             if (!pushName.Contains("table", StringComparison.OrdinalIgnoreCase))
             {

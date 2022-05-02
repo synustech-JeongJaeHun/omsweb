@@ -1,164 +1,166 @@
-import { EventEmitter, Injectable, Output } from '@angular/core';
+import { EventEmitter, Injectable, Output } from '@angular/core'
 
 type ChangedEvent =
-  | VisibilityChangedEvent
-  | ColorChangedEvent
-  | ScaleChangedEvent
-  | RotationChangedEvent
-  | CameraPositionChangedEvent
-  | CameraViewBoxWidthChangedEvent;
+	| VisibilityChangedEvent
+	| ColorChangedEvent
+	| ScaleChangedEvent
+	| RotationChangedEvent
+	| CameraPositionChangedEvent
+	| CameraViewBoxWidthChangedEvent
 
 type VisibilityChangedEvent = {
-  key:
-    | 'isMinimapVisible'
-    | 'isVehicleLineVisible'
-    | 'isSegmentDirectionVisible'
-    | 'isPointLabelVisible'
-    | 'isStationVisible'
-    | 'isBufferVisible'
-    | 'isGroupVisible'
-    | 'isClusterVisible'
-    | 'isOverlappingObjectsVisible';
-  value: boolean;
-};
+	key:
+		| 'isMinimapVisible'
+		| 'isVehicleLineVisible'
+		| 'isSegmentDirectionVisible'
+		| 'isPointLabelVisible'
+		| 'isStationVisible'
+		| 'isBufferVisible'
+		| 'isGroupVisible'
+		| 'isClusterVisible'
+		| 'isOverlappingObjectsVisible'
+	value: boolean
+}
 type ColorChangedEvent = {
-  key:
-    | 'homeBackgroundColor'
-    | 'playbackBackgroundColor'
-    | 'stationColor'
-    | 'bufferColor'
-    | 'pointColor'
-    | 'normalSegmentColor'
-    | 'disabledSegmentColor'
-    | 'segmentDirectionColor'
-    | 'autoModeVehicleColor'
-    | 'manualModeVehicleColor'
-    | 'noneModeVehicleColor'
-    | 'cargoLoadingColor'
-    | 'cargoFullColor'
-    | 'cargoUnloadingColor';
-  value: string;
-};
+	key:
+		| 'homeBackgroundColor'
+		| 'playbackBackgroundColor'
+		| 'stationColor'
+		| 'stationDisabledColor'
+		| 'bufferColor'
+		| 'pointColor'
+		| 'normalSegmentColor'
+		| 'disabledSegmentColor'
+		| 'segmentDirectionColor'
+		| 'autoModeVehicleColor'
+		| 'manualModeVehicleColor'
+		| 'noneModeVehicleColor'
+		| 'cargoLoadingColor'
+		| 'cargoFullColor'
+		| 'cargoUnloadingColor'
+	value: string
+}
 type ScaleChangedEvent = {
-  key: 'vehicleSize' | 'segmentWidth' | 'segmentDirectionSize';
-  value: number;
-};
+	key: 'vehicleSize' | 'segmentWidth' | 'segmentDirectionSize'
+	value: number
+}
 type RotationChangedEvent = {
-  key: 'rotation';
-  value: number;
-};
+	key: 'rotation'
+	value: number
+}
 
 type CameraPositionChangedEvent = {
-  key: 'position';
-  value?: { x: number; y: number };
-};
+	key: 'position'
+	value?: { x: number; y: number }
+}
 type CameraViewBoxWidthChangedEvent = {
-  key: 'viewBoxWidth';
-  value?: number;
-};
+	key: 'viewBoxWidth'
+	value?: number
+}
 
 type TrackMonitorSetting = Record<
-  ColorChangedEvent['key'],
-  ColorChangedEvent['value']
+	ColorChangedEvent['key'],
+	ColorChangedEvent['value']
 > &
-  Record<ScaleChangedEvent['key'], ScaleChangedEvent['value']> &
-  Record<VisibilityChangedEvent['key'], VisibilityChangedEvent['value']> &
-  Record<RotationChangedEvent['key'], RotationChangedEvent['value']> &
-  Record<
-    CameraPositionChangedEvent['key'],
-    CameraPositionChangedEvent['value']
-  > &
-  Record<
-    CameraViewBoxWidthChangedEvent['key'],
-    CameraViewBoxWidthChangedEvent['value']
-  >;
+	Record<ScaleChangedEvent['key'], ScaleChangedEvent['value']> &
+	Record<VisibilityChangedEvent['key'], VisibilityChangedEvent['value']> &
+	Record<RotationChangedEvent['key'], RotationChangedEvent['value']> &
+	Record<
+		CameraPositionChangedEvent['key'],
+		CameraPositionChangedEvent['value']
+	> &
+	Record<
+		CameraViewBoxWidthChangedEvent['key'],
+		CameraViewBoxWidthChangedEvent['value']
+	>
 
 const DefaultTrackMonitorSetting: TrackMonitorSetting = {
-  // scale
-  vehicleSize: 10,
-  segmentWidth: 5,
-  segmentDirectionSize: 10,
+	// scale
+	vehicleSize: 10,
+	segmentWidth: 5,
+	segmentDirectionSize: 10,
 
-  // camera
-  viewBoxWidth: undefined,
-  position: undefined,
+	// camera
+	viewBoxWidth: undefined,
+	position: undefined,
 
-  // rotation
-  rotation: 0,
+	// rotation
+	rotation: 0,
 
-  // visibility
-  isMinimapVisible: true,
-  isVehicleLineVisible: true,
-  isSegmentDirectionVisible: true,
-  isPointLabelVisible: true,
-  isStationVisible: true,
-  isBufferVisible: true,
-  isGroupVisible: true,
-  isClusterVisible: true,
-  isOverlappingObjectsVisible: true,
+	// visibility
+	isMinimapVisible: true,
+	isVehicleLineVisible: true,
+	isSegmentDirectionVisible: true,
+	isPointLabelVisible: true,
+	isStationVisible: true,
+	isBufferVisible: true,
+	isGroupVisible: true,
+	isClusterVisible: true,
+	isOverlappingObjectsVisible: true,
 
-  // color
-  homeBackgroundColor: 'rgba(255, 255, 255, 1)',
-  playbackBackgroundColor: 'rgba(214, 64, 109, 0.1)',
-  stationColor: 'rgba(0, 0, 0, 1)',
-  bufferColor: 'rgba(100, 100, 100, 1)',
-  pointColor: 'rgba(80, 80, 80, 1)',
-  normalSegmentColor: 'rgba(200, 200, 200, 1)',
-  disabledSegmentColor: 'rgba(165, 127, 184, 1)',
-  segmentDirectionColor: 'rgba(110, 110, 110, 1)',
-  autoModeVehicleColor: 'rgba(95, 95, 95, 1)',
-  manualModeVehicleColor: 'rgba(40, 180, 115, 1)',
-  noneModeVehicleColor: 'rgba(255, 255, 255, 1)',
-  cargoLoadingColor: 'rgba(0, 0, 205, 1)',
-  cargoFullColor: 'rgba(50, 50, 50, 1)',
-  cargoUnloadingColor: 'rgba(128, 0, 128, 1)',
-};
+	// color
+	homeBackgroundColor: 'rgba(255, 255, 255, 1)',
+	playbackBackgroundColor: 'rgba(214, 64, 109, 0.1)',
+	stationColor: 'rgba(0, 0, 0, 1)',
+	stationDisabledColor: '#bfbfbf',
+	bufferColor: 'rgba(100, 100, 100, 1)',
+	pointColor: 'rgba(80, 80, 80, 1)',
+	normalSegmentColor: 'rgba(200, 200, 200, 1)',
+	disabledSegmentColor: 'rgba(165, 127, 184, 1)',
+	segmentDirectionColor: 'rgba(110, 110, 110, 1)',
+	autoModeVehicleColor: 'rgba(95, 95, 95, 1)',
+	manualModeVehicleColor: 'rgba(40, 180, 115, 1)',
+	noneModeVehicleColor: 'rgba(255, 255, 255, 1)',
+	cargoLoadingColor: 'rgba(0, 0, 205, 1)',
+	cargoFullColor: 'rgba(50, 50, 50, 1)',
+	cargoUnloadingColor: 'rgba(128, 0, 128, 1)',
+}
 
 @Injectable({
-  providedIn: 'root',
+	providedIn: 'root',
 })
 // use arrow function for prevent dynamic context changing
 export class TrackMonitorSettingService {
-  @Output() rotationChanged = new EventEmitter<number>();
+	@Output() rotationChanged = new EventEmitter<number>()
 
-  public trackSetting = deepCopy(DefaultTrackMonitorSetting);
+	public trackSetting = deepCopy(DefaultTrackMonitorSetting)
 
-  constructor() {
-    this.loadSetting();
-  }
+	constructor() {
+		this.loadSetting()
+	}
 
-  loadSetting = () => {
-    Object.assign(this.trackSetting, readTrackSettingFromLocalStorage());
-    writeTrackSettingOnLocalStorage(this.trackSetting);
-  };
+	loadSetting = () => {
+		Object.assign(this.trackSetting, readTrackSettingFromLocalStorage())
+		writeTrackSettingOnLocalStorage(this.trackSetting)
+	}
 
-  update = (event: ChangedEvent) => {
-    // @ts-ignore
-    this.trackSetting[event.key] = event.value;
-    writeTrackSettingOnLocalStorage(this.trackSetting);
-  };
-  reset = (key: keyof TrackMonitorSetting) => {
-    // @ts-ignore
-    this.update({ key, value: DefaultTrackMonitorSetting[key] });
-  };
+	update = (event: ChangedEvent) => {
+		// @ts-ignore
+		this.trackSetting[event.key] = event.value
+		writeTrackSettingOnLocalStorage(this.trackSetting)
+	}
+	reset = (key: keyof TrackMonitorSetting) => {
+		// @ts-ignore
+		this.update({ key, value: DefaultTrackMonitorSetting[key] })
+	}
 }
 
-const TrackSettingLocalStorageKey = 'track-monitor-setting';
+const TrackSettingLocalStorageKey = 'track-monitor-setting'
 
 function readTrackSettingFromLocalStorage() {
-  try {
-    return JSON.parse(
-      localStorage.getItem(TrackSettingLocalStorageKey)
-    ) as Partial<TrackMonitorSetting> | null;
-  } catch {
-    return null;
-  }
+	try {
+		return JSON.parse(
+			localStorage.getItem(TrackSettingLocalStorageKey),
+		) as Partial<TrackMonitorSetting> | null
+	} catch {
+		return null
+	}
 }
 
 function writeTrackSettingOnLocalStorage(update: TrackMonitorSetting) {
-  localStorage.setItem(TrackSettingLocalStorageKey, JSON.stringify(update));
+	localStorage.setItem(TrackSettingLocalStorageKey, JSON.stringify(update))
 }
 
 function deepCopy<T>(target: T) {
-  return JSON.parse(JSON.stringify(target)) as T;
+	return JSON.parse(JSON.stringify(target)) as T
 }

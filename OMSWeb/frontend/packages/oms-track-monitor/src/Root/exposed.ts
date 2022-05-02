@@ -21,6 +21,7 @@ import { initClusters } from 'src/TrackObjects/cluster/clusters'
 import {
 	findStationById,
 	initStations,
+	setStation,
 } from 'src/TrackObjects/station/stations'
 import {
 	deleteZcu,
@@ -224,6 +225,17 @@ const exposed: IOmsTrackMonitor = {
 				break
 			case 'DELETE':
 				deleteZcu(z)
+			default:
+				break
+		}
+	},
+
+	updateStation(op, s) {
+		switch (op) {
+			case 'UPDATE':
+				setStation(s)
+				break
+
 			default:
 				break
 		}
