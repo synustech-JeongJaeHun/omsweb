@@ -10,14 +10,15 @@
     [isClusterVisible]="tmSetting.isClusterVisible"
     [isOverlappingObjectsVisible]="tmSetting.isOverlappingObjectsVisible"
     [backgroundColor]="tmSetting.homeBackgroundColor" [stationColor]="tmSetting.stationColor"
-    [bufferColor]="tmSetting.bufferColor" [pointColor]="tmSetting.pointColor"
-    [normalSegmentColor]="tmSetting.normalSegmentColor" [disabledSegmentColor]="tmSetting.disabledSegmentColor"
-    [segmentDirectionColor]="tmSetting.segmentDirectionColor" [autoModeVehicleColor]="tmSetting.autoModeVehicleColor"
-    [manualModeVehicleColor]="tmSetting.manualModeVehicleColor" [noneModeVehicleColor]="tmSetting.noneModeVehicleColor"
-    [cargoLoadingColor]="tmSetting.cargoLoadingColor" [cargoFullColor]="tmSetting.cargoFullColor"
-    [cargoUnloadingColor]="tmSetting.cargoUnloadingColor" (mouseoverOnObject)="onMouseoverTM($event)"
-    (mouseleaveOnObject)="onMouseleaveTM($event)" (mainClickOnObject)="onFocus($event)"
-    (secondaryClickOnObject)="onContectMenuOn($event)" (clickOutObject)="onBackdrop($event)">
+    [stationDisabledColor]="tmSetting.stationDisabledColor" [bufferColor]="tmSetting.bufferColor"
+    [pointColor]="tmSetting.pointColor" [normalSegmentColor]="tmSetting.normalSegmentColor"
+    [disabledSegmentColor]="tmSetting.disabledSegmentColor" [segmentDirectionColor]="tmSetting.segmentDirectionColor"
+    [autoModeVehicleColor]="tmSetting.autoModeVehicleColor" [manualModeVehicleColor]="tmSetting.manualModeVehicleColor"
+    [noneModeVehicleColor]="tmSetting.noneModeVehicleColor" [cargoLoadingColor]="tmSetting.cargoLoadingColor"
+    [cargoFullColor]="tmSetting.cargoFullColor" [cargoUnloadingColor]="tmSetting.cargoUnloadingColor"
+    (mouseoverOnObject)="onMouseoverTM($event)" (mouseleaveOnObject)="onMouseleaveTM($event)"
+    (mainClickOnObject)="onFocus($event)" (secondaryClickOnObject)="onContectMenuOn($event)"
+    (clickOutObject)="onBackdrop($event)">
   </oms-track-monitor>
 
   <div id="side_panel">
@@ -278,7 +279,8 @@
       </mat-card-title>
     </mat-card-header>
     <mat-card-content class="context-form">
-      <mat-slide-toggle [disabled]="contextMenuObject?.value.disabledByMtl" [checked]="contextMenuObject?.value.disabled" color="primary"
+      <mat-slide-toggle [disabled]="contextMenuObject?.value.disabledByMtl"
+        [checked]="contextMenuObject?.value.disabled" color="primary"
         (change)="onChangeSegmentProperty($event.checked)">{{ "names.unuse" | translate }}</mat-slide-toggle>
     </mat-card-content>
   </mat-card>

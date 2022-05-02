@@ -26,7 +26,6 @@ import {
   setElementRect,
   elementRectInfo,
 } from '../MapObjects/map/elementRect'
-import { rotate } from '../MapObjects/rotate/rotate'
 import { scaleInfo } from '../MapObjects/scale/scale'
 import { rotationInfo } from '../MapObjects/rotate/rotate'
 import { exposed } from './exposed'
@@ -67,6 +66,7 @@ const props = defineProps<{
   // color
   backgroundColor: Stringlish
   stationColor: Stringlish
+  stationDisabledColor: Stringlish
   bufferColor: Stringlish
   pointColor: Stringlish
   normalSegmentColor: Stringlish
@@ -201,6 +201,11 @@ defineExpose(exposed)
 #station-layer .station .station-path {
   stroke: v-bind(
     'parseStringProp(ColorDefault.station, props.stationColor)'
+  );
+}
+#station-layer .station[data-disabled='true' i] .station-path {
+  stroke: v-bind(
+    'parseStringProp(ColorDefault.stationDisabled, props.stationDisabledColor)'
   );
 }
 

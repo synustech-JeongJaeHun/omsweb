@@ -26,6 +26,7 @@ const group = useGroup('station', toRef(props.station, 'id'))
     class="overflow-visible cursor-pointer station"
     :x="position.x"
     :y="position.y"
+    :data-disabled="props.station.unuse"
   >
     <g class="scale-and-reverse-rotate">
       <use

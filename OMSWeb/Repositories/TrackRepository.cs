@@ -150,43 +150,44 @@ namespace OMSWeb.Repositories
         {
             var key = CacheKeys.Stations;
             var data = _cache.GetValue<List<Station>>(key);
-            if (data == null)
+
+            // if (true)
+            // {
+            var models = new List<Station>();
+            string sql = QueryFactory.GetSql("station");
+            using (var conn = ConnectTrack())
             {
-                var models = new List<Station>();
-                string sql = QueryFactory.GetSql("station");
-                using (var conn = ConnectTrack())
+                using (var cmd = new NpgsqlCommand(sql, conn))
                 {
-                    using (var cmd = new NpgsqlCommand(sql, conn))
+                    conn.Open();
+                    using (var dr = cmd.ExecuteReader())
                     {
-                        conn.Open();
-                        using (var dr = cmd.ExecuteReader())
+                        while (dr.Read())
                         {
-                            while (dr.Read())
+                            models.Add(new Station
                             {
-                                models.Add(new Station
-                                {
-                                    Id = Convert.ToInt32(dr["id"]),
-                                    PhysicalId = dr["physical_id"].ToString(),
-                                    LogicalId = dr["logical_id"].ToString(),
-                                    PointId = dr["point_id"].TryIntegerOrNull(),
-                                    Direction = dr["direction"].ToString(),
-                                    CarrierType = dr["carrier_type"].TryIntegerOrNull(),
-                                    NextPoint = dr["next_point"].TryIntegerOrNull(),
-                                    Offset = dr["offset"].TryIntegerOrNull(),
-                                }
-                               );
+                                Id = Convert.ToInt32(dr["id"]),
+                                PhysicalId = dr["physical_id"].ToString(),
+                                LogicalId = dr["logical_id"].ToString(),
+                                PointId = dr["point_id"].TryIntegerOrNull(),
+                                Direction = dr["direction"].ToString(),
+                                CarrierType = dr["carrier_type"].TryIntegerOrNull(),
+                                NextPoint = dr["next_point"].TryIntegerOrNull(),
+                                Offset = dr["offset"].TryIntegerOrNull(),
+                                Unuse = dr["unuse"].TryBooleanOrNull()
                             }
+                           );
                         }
                     }
                 }
-                
-                data = models.ToList();
-                _cache.SetValue<List<Station>>(key, data, DateTimeOffset.Now.AddMinutes(CACHE_LIFE));
             }
+            data = models.ToList();
+            _cache.SetValue(key, data, DateTimeOffset.Now.AddMinutes(CACHE_LIFE));
+            // }
             return data;
         }
-            
-  
+
+
         public List<Buffer> LoadBuffers()
         {
             var key = CacheKeys.Buffers;
@@ -225,7 +226,7 @@ namespace OMSWeb.Repositories
             }
             return data;
         }
-    
+
         public List<Mtl> LoadMtls()
         {
             var key = CacheKeys.Mtls;
@@ -271,7 +272,7 @@ namespace OMSWeb.Repositories
                 {
                     string sql = QueryFactory.GetSql("zcu");
                     data = conn.Query<Zcu>(sql).AsList();
-                    
+
                     foreach (Zcu zcu in data)
                     {
                         var zcuComplePointsSql = string.Format(@"
