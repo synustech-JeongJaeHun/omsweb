@@ -247,9 +247,11 @@
       <button *ngIf="hasPermissions([permissionEnums.EstopVehicle])" mat-menu-item (click)="onVehicleCommand('stop')">
         {{ "names.estop" | translate }}
       </button>
+      <!--
       <button *ngIf="hasPermissions([permissionEnums.SetZcuGo])" mat-menu-item (click)="onVehicleCommand('zcu_go')">
         {{ "names.zcuGo" | translate }}
       </button>
+      -->
     </mat-menu>
     <mat-menu #vehicleOptionMenu="matMenu">
       <button *ngIf="hasPermissions([permissionEnums.PushEnable])" mat-menu-item
