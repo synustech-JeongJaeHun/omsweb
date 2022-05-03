@@ -178,7 +178,26 @@ namespace OMSWeb.Repositories
             END As host_order, 
             VH.order_origin, VH.moving_state, VH.cargo_state, VH.is_sensor_stopped, VH.is_blocked, VH.error_list, VH.type, VH.cargo_transfer_result, 
             VH.map_db, 0 AS mapVersion,
-            OD.id AS order_id, OD.logical_id AS order_logical_id, OD.location_pickup, OD.location_dropoff, OD.location_move, OD.priority,
+            OD.id AS order_id, OD.logical_id AS order_logical_id, 
+            --OD.location_pickup, 
+            --OD.location_dropoff, 
+            --OD.location_move, 
+            CASE
+			    WHEN OD.location_pickup LIKE '%s%' THEN	(SELECT ST.logical_Id FROM stations ST WHERE concat('s', cast(ST.id as varchar)) = OD.location_pickup)
+			    WHEN OD.location_pickup LIKE '%b%' THEN	(SELECT ST.logical_Id FROM stations ST WHERE concat('b', cast(ST.id as varchar)) = OD.location_pickup)
+			    ELSE OD.location_pickup
+		    EnD AS location_pickup,
+		    CASE
+			    WHEN OD.location_dropoff LIKE '%s%' THEN	(SELECT ST.logical_Id FROM stations ST WHERE concat('s', cast(ST.id as varchar)) = OD.location_dropoff)
+			    WHEN OD.location_dropoff LIKE '%b%' THEN	(SELECT ST.logical_Id FROM stations ST WHERE concat('b', cast(ST.id as varchar)) = OD.location_dropoff)
+			    ELSE OD.location_dropoff
+		    EnD AS location_dropoff,
+		    CASE
+			    WHEN OD.location_move LIKE '%s%' THEN	(SELECT ST.logical_Id FROM stations ST WHERE concat('s', cast(ST.id as varchar)) = OD.location_move)
+			    WHEN OD.location_move LIKE '%b%' THEN	(SELECT ST.logical_Id FROM stations ST WHERE concat('b', cast(ST.id as varchar)) = OD.location_move)
+			    ELSE OD.location_move
+		    EnD AS location_move,
+            OD.priority,
             VH.is_maint, 
             CASE 
                 WHEN VH.connection = 0 THEN FALSE
@@ -216,7 +235,22 @@ namespace OMSWeb.Repositories
         SELECT
         OD.id, 
         OD.origin,
-        OD.logical_id, OD.location_pickup, OD.location_dropoff, OD.location_move,
+        OD.logical_id, 
+		CASE
+			WHEN OD.location_pickup LIKE '%s%' THEN	(SELECT ST.logical_Id FROM stations ST WHERE concat('s', cast(ST.id as varchar)) = OD.location_pickup)
+			WHEN OD.location_pickup LIKE '%b%' THEN	(SELECT ST.logical_Id FROM stations ST WHERE concat('b', cast(ST.id as varchar)) = OD.location_pickup)
+			ELSE OD.location_pickup
+		EnD AS location_pickup,
+		CASE
+			WHEN OD.location_dropoff LIKE '%s%' THEN	(SELECT ST.logical_Id FROM stations ST WHERE concat('s', cast(ST.id as varchar)) = OD.location_dropoff)
+			WHEN OD.location_dropoff LIKE '%b%' THEN	(SELECT ST.logical_Id FROM stations ST WHERE concat('b', cast(ST.id as varchar)) = OD.location_dropoff)
+			ELSE OD.location_dropoff
+		EnD AS location_dropoff,
+		CASE
+			WHEN OD.location_move LIKE '%s%' THEN	(SELECT ST.logical_Id FROM stations ST WHERE concat('s', cast(ST.id as varchar)) = OD.location_move)
+			WHEN OD.location_move LIKE '%b%' THEN	(SELECT ST.logical_Id FROM stations ST WHERE concat('b', cast(ST.id as varchar)) = OD.location_move)
+			ELSE OD.location_move
+		EnD AS location_move,
         CASE
           WHEN OD.time_failed IS NOT NULL THEN 'FAILED'
           WHEN OD.time_aborted IS NOT NULL THEN 'ABORTED'
