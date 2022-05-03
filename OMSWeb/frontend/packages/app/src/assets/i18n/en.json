@@ -317,6 +317,8 @@
     "showOmsVersion": "Show OMS version",
     "segmentNormal": "Segment - normal",
     "segmentDisabled": "Segment - disabled",
+    "stationNormal": "Station - normal",
+    "stationUnuse": "Station - unuse",
     "revert": "Revert",
     "selectResetItem": "Select items to reset",
     "resetToDefault": "Reset to default",

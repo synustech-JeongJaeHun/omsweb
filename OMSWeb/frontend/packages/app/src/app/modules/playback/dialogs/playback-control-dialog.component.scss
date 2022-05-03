@@ -2,6 +2,7 @@
   mat-form-field {
     max-width: 130px;
   }
+
   mat-select {
     max-height: 18px;
   }
@@ -24,23 +25,27 @@
     font-size: 0.7rem;
   }
 }
+
 .form-period {
   display: grid;
   grid-column: span 3;
   grid-template-columns: 1fr 16px 1fr;
   align-items: center;
 }
+
 .form-time {
   grid-column-start: 1;
 }
+
 .form-speed {
   margin-right: 5px;
 }
+
 .form-step {
   min-width: 200px;
 }
 
-::ng-deep .mat-form-field-wrapper{
+::ng-deep .mat-form-field-wrapper {
   margin-bottom: -1.25em;
 }
 
@@ -58,6 +63,7 @@
   .slider-name {
     font-weight: bold;
   }
+
   .slider-value {
     text-align: right;
     font-size: 11px;
@@ -69,7 +75,7 @@ mat-select {
 }
 
 .control-play {
-  margin-top: 15px;
+  margin-top: 40px;
   $playIconSize: 40px;
   $playButtonSize: 50px;
 
@@ -90,6 +96,7 @@ mat-select {
     line-height: $playButtonSize;
   }
 }
+
 mat-slider {
   width: 100%;
 }

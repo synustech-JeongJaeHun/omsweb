@@ -335,6 +335,14 @@
         (click)="onSetDest('Station')">
         {{ "names.setDest" | translate }}
       </button>
+      <button *ngIf="contextMenuObject?.value.unuse === true" mat-stroked-button class="dense accent" color="primary"
+        (click)="onToggleStationUnuse(contextMenuObject.value.id, 'USE')">
+        {{ "names.use" | translate}}
+      </button>
+      <button *ngIf="contextMenuObject?.value.unuse !== true" mat-stroked-button class="dense accent" color="primary"
+        (click)="onToggleStationUnuse(contextMenuObject.value.id, 'UNUSE')">
+        {{ "names.unuse" | translate}}
+      </button>
     </mat-card-content>
   </mat-card>
 </ng-template>

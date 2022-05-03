@@ -321,6 +321,22 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 			.subscribe()
 	}
 
+	onToggleStationUnuse(id: number, toState: 'UNUSE' | 'USE') {
+		const message =
+			toState === 'USE'
+				? { type: 'USE', action: 'station-setting', unused: 0 }
+				: { type: 'UNUSE', action: 'station-setting', unused: 1 }
+
+		this.dialogSvc
+			.confirm({ body: this.$t.instant('messages.confirmCommand') })
+			.subscribe((ok) => {
+				if (ok) {
+					this.messageSvc.sendStationSettingCommand(message, [id]).subscribe()
+					this.showContextMenu = false
+				}
+			})
+	}
+
 	onVehicleCommand(name: string) {
 		let commandMessage: IVehicleCommandMessage
 		let needConfirm: boolean = false
