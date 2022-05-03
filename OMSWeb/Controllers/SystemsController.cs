@@ -205,7 +205,26 @@ namespace OMSWeb.Controllers
         {
             var fileName = string.Format("{0}.zip", folderName);
             var logBaseDir = this._systemSvc.LogBaseDir;
-            var folderPath = (folderFullPath == "Logs" || folderFullPath == string.Empty) ? logBaseDir : logBaseDir.Replace("Logs", "") + folderFullPath.Replace("/", "\\");
+            var folderPath = string.Empty;
+            if (folderFullPath == "Logs" || folderFullPath == string.Empty)
+            {
+                folderPath = logBaseDir;
+            }
+            else
+            {
+                folderFullPath = folderFullPath.Replace("/", "\\");
+                string[] vs = folderFullPath.Split('\\');
+
+                folderFullPath = ".\\";
+                for (int i = 1; i < vs.Length; i++)
+                {
+                    folderFullPath += vs[i];
+                    if (i < vs.Length - 1)
+                        folderFullPath += "\\";
+                }
+
+                folderPath = Path.GetFullPath(Path.Combine(logBaseDir, folderFullPath));
+            }
 
             //var tempOutPutPath = "C:\\OMS\\app\\omsweb\\Temp\\Zip\\";
             //var tempZipFilePath = "C:\\OMS\\app\\omsweb\\Temp\\Zip\\" + fileName;
