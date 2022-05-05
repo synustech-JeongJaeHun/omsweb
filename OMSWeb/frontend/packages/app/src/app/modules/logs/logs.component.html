@@ -1,6 +1,6 @@
 <dx-file-manager id="fileManager" [fileSystemProvider]="fileItems" (onSelectedFileOpened)="openLog($event)"
                  (onToolbarItemClick)="onToolbarItemClick($event)" height="600">
-  <dxo-permissions download="true"></dxo-permissions>
+  <dxo-permissions download="true" refresh ="true"></dxo-permissions>
   <dxo-toolbar>
     <dxi-item name="showNavPane" visible="true"></dxi-item>
     <dxi-item name="separator"></dxi-item>
