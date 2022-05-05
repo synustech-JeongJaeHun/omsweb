@@ -29,7 +29,26 @@ namespace OMSWeb.Repositories
       WHEN OD.time_assigned IS NOT NULL THEN 'ASSIGNED'
       WHEN OD.time_assigned IS NULL THEN 'UNASSIGNED'
     END AS state,
-    OD.location_pickup, OD.location_dropoff, OD.location_move, OD.priority, 
+    --OD.location_pickup, 
+    --OD.location_dropoff, 
+    --OD.location_move, 
+    CASE
+		WHEN OD.location_pickup LIKE '%s%' THEN	(SELECT ST.logical_Id FROM stations ST WHERE concat('s', cast(ST.id as varchar)) = OD.location_pickup)
+		WHEN OD.location_pickup LIKE '%b%' THEN	(SELECT ST.logical_Id FROM stations ST WHERE concat('b', cast(ST.id as varchar)) = OD.location_pickup)
+		ELSE OD.location_pickup
+	EnD AS location_pickup,
+	CASE
+		WHEN OD.location_dropoff LIKE '%s%' THEN	(SELECT ST.logical_Id FROM stations ST WHERE concat('s', cast(ST.id as varchar)) = OD.location_dropoff)
+		WHEN OD.location_dropoff LIKE '%b%' THEN	(SELECT ST.logical_Id FROM stations ST WHERE concat('b', cast(ST.id as varchar)) = OD.location_dropoff)
+		ELSE OD.location_dropoff
+	EnD AS location_dropoff,
+	CASE
+		WHEN OD.location_move LIKE '%s%' THEN	(SELECT ST.logical_Id FROM stations ST WHERE concat('s', cast(ST.id as varchar)) = OD.location_move)
+		WHEN OD.location_move LIKE '%b%' THEN	(SELECT ST.logical_Id FROM stations ST WHERE concat('b', cast(ST.id as varchar)) = OD.location_move)
+		ELSE OD.location_move
+	EnD AS location_move,
+
+    OD.priority, 
     VR.logical_id As vehicle_id, 
     OD.carrier_label, OD.time_created, OD.time_assigned, OD.time_vehicle_arrived, OD.time_load_started, OD.time_load_completed, 
     OD.time_unload_started, OD.time_unload_completed, OD.time_completed, OD.time_aborted, OD.time_failed, 
