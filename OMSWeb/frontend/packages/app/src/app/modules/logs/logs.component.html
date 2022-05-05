@@ -1,6 +1,6 @@
 <dx-file-manager id="fileManager" [fileSystemProvider]="fileItems" (onSelectedFileOpened)="openLog($event)"
-  (onToolbarItemClick)="onToolbarItemClick($event)" height="600">
-  <dxo-permissions download="false"></dxo-permissions>
+                 (onToolbarItemClick)="onToolbarItemClick($event)" height="600">
+  <dxo-permissions download="true"></dxo-permissions>
   <dxo-toolbar>
     <dxi-item name="showNavPane" visible="true"></dxi-item>
     <dxi-item name="separator"></dxi-item>
@@ -11,4 +11,7 @@
     <dxi-item name="switchView"></dxi-item>
     <dxi-file-selection-item name="clearSelection" visible="false"></dxi-file-selection-item>
   </dxo-toolbar>
+  <dxo-context-menu>
+    <dxi-item name="refresh"></dxi-item>
+  </dxo-context-menu>
 </dx-file-manager>
