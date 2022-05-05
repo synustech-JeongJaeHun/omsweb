@@ -11,10 +11,12 @@
           [disabled]="!canControl" (click)="onSetAuto()">
     {{ "names.auto" | translate }}
   </button>
+  <!--
   <button *ngIf="hasPermission(permissionEnums.AutoVehicle)" mat-stroked-button color="primary" class="dense accent"
           [disabled]="!canControl" (click)="onSetAutoReverse()">
     {{ "names.reverseAuto" | translate }}
   </button>
+    -->
   <button *ngIf="hasPermission(permissionEnums.HostOrderEnable)" mat-stroked-button color="primary" class="dense"
           [disabled]="!canControl" (click)="onChangeHostOrderActivity()">
     {{ "names.hostOrderDisable" | translate }}
