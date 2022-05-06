@@ -188,6 +188,46 @@ namespace OMSWeb.Repositories
       return result;
     }
 
+    public int UpdateUser(Guid id, ProfileFormDto profileFormDto)
+    {
+      var result = -1;
+      var updateUserSql = @"
+        UPDATE users 
+        SET 
+          first_name = @first_name, 
+          last_name = @last_name, 
+          email = @email, 
+          password = @password 
+        WHERE id = @id;
+        ";
+      using (var conn = ConnectUi())
+      {
+        conn.Open();
+        var trans = conn.BeginTransaction();
+        using (var cmd = new NpgsqlCommand(updateUserSql, conn))
+        {
+          try
+          {
+            cmd.Parameters.AddWithValue("id", id);
+            cmd.Parameters.AddWithValue("first_name", profileFormDto.FirstName);
+            cmd.Parameters.AddWithValue("last_name", profileFormDto.LastName);
+            cmd.Parameters.AddWithValue("email", profileFormDto.Email);
+            cmd.Parameters.AddWithValue("password", profileFormDto.Password);
+
+            result = cmd.ExecuteNonQuery();
+          }
+          catch (Exception ex)
+          {
+            trans.Rollback();
+            throw ex;
+          }
+        }
+        trans.Commit();
+      }
+
+      return result;
+    }
+
     public int UpdateUser(AccountFormDto accountFormDto)
     {
       int result = -1;
