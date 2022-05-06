@@ -107,6 +107,11 @@ namespace OMSWeb.Services
             client.i18nEnabled = this._appSettings.i18nEnabled;
             return this._appSettings.Client;
         }
+        
+        public DefaultColorSettings GetDefaultColorSettings()
+        {
+            return this._appSettings.DefaultColor;
+        }
 
         public List<LogModel> GetLogs()
         {
