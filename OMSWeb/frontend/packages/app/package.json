@@ -27,6 +27,7 @@
     "@daimre/component-library": "workspace:packages/component-library",
     "@daimre/oms-track-monitor": "workspace:packages/oms-track-monitor",
     "@daimre/shared": "workspace:packages/shared",
+    "@emotion/css": "^11.9.0",
     "@emotion/react": "^11.8.2",
     "@emotion/styled": "^11.8.1",
     "@material-extended/mde": "^3.0.3",
