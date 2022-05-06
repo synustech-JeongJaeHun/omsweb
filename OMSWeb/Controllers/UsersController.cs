@@ -1,3 +1,4 @@
+using System.Net;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using OMSWeb.Models;
 using OMSWeb.Models.Entities;
 using OMSWeb.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace OMSWeb.Controllers
 {
@@ -23,9 +25,11 @@ namespace OMSWeb.Controllers
             this._userSvc = userService;
         }
 
+        [Authorize]
         [HttpPatch("profile")]
         public IActionResult UpdateProfile([FromBody] ProfileFormDto form)
         {
+            this._userSvc.UpdateUserByProfile(form);
             return Ok();
         }
 

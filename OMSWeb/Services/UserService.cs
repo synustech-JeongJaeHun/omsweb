@@ -171,6 +171,14 @@ namespace OMSWeb.Services
       return this._repo.UpdateUser(accountFormDto);
     }
 
+    public int UpdateUserByProfile(ProfileFormDto profileFormDto)
+    {
+      var user = _repo.GetUserByUserId(profileFormDto.UserId);
+      profileFormDto.Password = BCrypt.Net.BCrypt.HashPassword(profileFormDto.Password);
+
+      return this._repo.UpdateUser(user.Id, profileFormDto);
+    }
+
     public int UpdateUserWithoutPassword(AccountFormDto accountFormDto)
     {
       return this._repo.UpdateUserWithoutPassword(accountFormDto);
