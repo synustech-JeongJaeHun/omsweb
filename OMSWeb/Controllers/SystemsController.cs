@@ -47,6 +47,11 @@ namespace OMSWeb.Controllers
         {
             return this._systemSvc.GetClientSettings();
         }
+        [HttpGet("settings/default-colors")]
+        public ActionResult<DefaultColorSettings> GetDefaultColors()
+        {
+            return this._systemSvc.GetDefaultColorSettings();
+        }
 
         [HttpGet("module-status")]
         public IQueryable<ModuleStatusEntity> GetModuleStatus()
@@ -272,14 +277,14 @@ namespace OMSWeb.Controllers
             return File(zipResult, "application/zip", fileName);
         }
 
-        public class MapFileDto 
-        { 
+        public class MapFileDto
+        {
             public string MapFile { get; set; }
             public bool Overwrite { get; set; }
         }
 
         [HttpPost("control/updateMap/{mapName}")]
-        public ActionResult<MapUpdateResultModel> UpdateMap([FromRoute] string mapName, [FromBody] MapFileDto mapFileDto )
+        public ActionResult<MapUpdateResultModel> UpdateMap([FromRoute] string mapName, [FromBody] MapFileDto mapFileDto)
         {
             bool bResult = false;
             string mapFile = mapFileDto.MapFile;

@@ -1,4 +1,5 @@
 import { EventEmitter, Injectable, Output } from '@angular/core'
+import { SettingsService } from './settings.service'
 
 type ChangedEvent =
 	| VisibilityChangedEvent
@@ -125,13 +126,16 @@ export class TrackMonitorSettingService {
 
 	public trackSetting = deepCopy(DefaultTrackMonitorSetting)
 
-	constructor() {
+	constructor(private settingsService: SettingsService) {
 		this.loadSetting()
 	}
 
 	loadSetting = () => {
-		Object.assign(this.trackSetting, readTrackSettingFromLocalStorage())
-		writeTrackSettingOnLocalStorage(this.trackSetting)
+		this.settingsService.loadDefaultColors().subscribe((defaultColors) => {
+			Object.assign(this.trackSetting, defaultColors)
+			Object.assign(this.trackSetting, readTrackSettingFromLocalStorage())
+			writeTrackSettingOnLocalStorage(this.trackSetting)
+		})
 	}
 
 	update = (event: ChangedEvent) => {

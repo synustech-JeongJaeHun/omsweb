@@ -13,5 +13,6 @@ namespace OMSWeb.Models
 
         public ClientSettings Client { get; set; }
 
+        public DefaultColorSettings DefaultColor { get; set; }
     }
 }
