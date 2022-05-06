@@ -132,7 +132,7 @@ export class TrackMonitorSettingService {
 
 	loadSetting = () => {
 		this.settingsService.loadDefaultColors().subscribe((defaultColors) => {
-			Object.assign(this.trackSetting, defaultColors)
+			Object.assign(DefaultTrackMonitorSetting, defaultColors)
 			Object.assign(this.trackSetting, readTrackSettingFromLocalStorage())
 			writeTrackSettingOnLocalStorage(this.trackSetting)
 		})
