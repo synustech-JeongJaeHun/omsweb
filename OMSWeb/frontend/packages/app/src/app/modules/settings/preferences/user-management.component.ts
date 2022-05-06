@@ -192,6 +192,11 @@ export class UserManagementComponent implements OnInit, OnDestroy {
 
     jobs.length &&
       forkJoin(jobs).subscribe(() => {
+        grid.instance
+          .getDataSource()
+          .items()
+          .forEach((item) => (item.isNew = false))
+
         this._removeIds = [];
         this._changedItems = [];
         grid.instance.refresh();
