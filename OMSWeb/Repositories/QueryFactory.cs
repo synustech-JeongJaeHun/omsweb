@@ -183,18 +183,20 @@ namespace OMSWeb.Repositories
             --OD.location_dropoff, 
             --OD.location_move, 
             CASE
-			    WHEN OD.location_pickup LIKE '%s%' THEN	(SELECT ST.logical_Id FROM stations ST WHERE concat('s', cast(ST.id as varchar)) = OD.location_pickup)
-			    WHEN OD.location_pickup LIKE '%b%' THEN	(SELECT ST.logical_Id FROM stations ST WHERE concat('b', cast(ST.id as varchar)) = OD.location_pickup)
+			    WHEN OD.location_pickup LIKE '%s%' THEN	(SELECT logical_Id FROM stations WHERE concat('s', cast(id as varchar)) = OD.location_pickup)
+			    WHEN OD.location_pickup LIKE '%b%' THEN	(SELECT logical_Id FROM buffers WHERE concat('b', cast(id as varchar)) = OD.location_pickup)
+                WHEN OD.location_pickup LIKE '%v%' THEN	(SELECT logical_Id FROM vehicles WHERE concat('v', cast(id as varchar)) = OD.location_pickup)
+                WHEN OD.location_pickup IS NULL AND OD.location_dropoff IS NOT NULL THEN VH.logical_id
 			    ELSE OD.location_pickup
 		    EnD AS location_pickup,
 		    CASE
-			    WHEN OD.location_dropoff LIKE '%s%' THEN	(SELECT ST.logical_Id FROM stations ST WHERE concat('s', cast(ST.id as varchar)) = OD.location_dropoff)
-			    WHEN OD.location_dropoff LIKE '%b%' THEN	(SELECT ST.logical_Id FROM stations ST WHERE concat('b', cast(ST.id as varchar)) = OD.location_dropoff)
+			    WHEN OD.location_dropoff LIKE '%s%' THEN (SELECT logical_Id FROM stations WHERE concat('s', cast(id as varchar)) = OD.location_dropoff)
+			    WHEN OD.location_dropoff LIKE '%b%' THEN (SELECT logical_Id FROM buffers WHERE concat('b', cast(id as varchar)) = OD.location_dropoff)
 			    ELSE OD.location_dropoff
 		    EnD AS location_dropoff,
 		    CASE
-			    WHEN OD.location_move LIKE '%s%' THEN	(SELECT ST.logical_Id FROM stations ST WHERE concat('s', cast(ST.id as varchar)) = OD.location_move)
-			    WHEN OD.location_move LIKE '%b%' THEN	(SELECT ST.logical_Id FROM stations ST WHERE concat('b', cast(ST.id as varchar)) = OD.location_move)
+			    WHEN OD.location_move LIKE '%s%' THEN (SELECT logical_Id FROM stations WHERE concat('s', cast(id as varchar)) = OD.location_move)
+			    WHEN OD.location_move LIKE '%b%' THEN (SELECT logical_Id FROM buffers WHERE concat('b', cast(id as varchar)) = OD.location_move)
 			    ELSE OD.location_move
 		    EnD AS location_move,
             OD.priority,
@@ -242,29 +244,31 @@ namespace OMSWeb.Repositories
                     ELSE OD.location_dropoff		                                    -- display To
                 END
                 WHEN OD.location_pickup IS NOT NULL AND OD.location_dropoff IS NULL            -- FROM order
-                    THEN OD.location_pickup		                                                -- display FROM
+                    THEN OD.location_pickup		                                               -- display FROM
                 WHEN OD.location_pickup IS NULL AND OD.location_dropoff IS NOT NULL            -- TO order
-                    THEN OD.location_dropoff		                                            -- display TO
+                    THEN OD.location_dropoff		                                           -- display TO
                 WHEN OD.location_move IS NOT NULL                                              -- MOVE order
-                    THEN OD.location_move		                                                -- display MOVETO
+                    THEN OD.location_move		                                               -- display MOVETO
             END AS command_point,
 
             --OD.location_pickup, 
             --OD.location_dropoff, 
             --OD.location_move,
             CASE
-			    WHEN OD.location_pickup LIKE '%s%' THEN	(SELECT ST.logical_Id FROM stations ST WHERE concat('s', cast(ST.id as varchar)) = OD.location_pickup)
-			    WHEN OD.location_pickup LIKE '%b%' THEN	(SELECT ST.logical_Id FROM stations ST WHERE concat('b', cast(ST.id as varchar)) = OD.location_pickup)
+			    WHEN OD.location_pickup LIKE '%s%' THEN	(SELECT logical_Id FROM stations WHERE concat('s', cast(id as varchar)) = OD.location_pickup)
+			    WHEN OD.location_pickup LIKE '%b%' THEN	(SELECT logical_Id FROM buffers WHERE concat('b', cast(id as varchar)) = OD.location_pickup)
+                WHEN OD.location_pickup LIKE '%v%' THEN	(SELECT logical_Id FROM vehicles WHERE concat('v', cast(id as varchar)) = OD.location_pickup)
+                WHEN OD.location_pickup IS NULL AND OD.location_dropoff IS NOT NULL THEN VH.logical_id
 			    ELSE OD.location_pickup
 		    EnD AS location_pickup,
 		    CASE
-			    WHEN OD.location_dropoff LIKE '%s%' THEN	(SELECT ST.logical_Id FROM stations ST WHERE concat('s', cast(ST.id as varchar)) = OD.location_dropoff)
-			    WHEN OD.location_dropoff LIKE '%b%' THEN	(SELECT ST.logical_Id FROM stations ST WHERE concat('b', cast(ST.id as varchar)) = OD.location_dropoff)
+			    WHEN OD.location_dropoff LIKE '%s%' THEN (SELECT logical_Id FROM stations WHERE concat('s', cast(id as varchar)) = OD.location_dropoff)
+			    WHEN OD.location_dropoff LIKE '%b%' THEN (SELECT logical_Id FROM buffers WHERE concat('b', cast(id as varchar)) = OD.location_dropoff)
 			    ELSE OD.location_dropoff
 		    EnD AS location_dropoff,
 		    CASE
-			    WHEN OD.location_move LIKE '%s%' THEN	(SELECT ST.logical_Id FROM stations ST WHERE concat('s', cast(ST.id as varchar)) = OD.location_move)
-			    WHEN OD.location_move LIKE '%b%' THEN	(SELECT ST.logical_Id FROM stations ST WHERE concat('b', cast(ST.id as varchar)) = OD.location_move)
+			    WHEN OD.location_move LIKE '%s%' THEN (SELECT logical_Id FROM stations WHERE concat('s', cast(id as varchar)) = OD.location_move)
+			    WHEN OD.location_move LIKE '%b%' THEN (SELECT logical_Id FROM buffers WHERE concat('b', cast(id as varchar)) = OD.location_move)
 			    ELSE OD.location_move
 		    EnD AS location_move,
 
@@ -308,18 +312,20 @@ namespace OMSWeb.Repositories
         OD.origin,
         OD.logical_id, 
 		CASE
-			WHEN OD.location_pickup LIKE '%s%' THEN	(SELECT ST.logical_Id FROM stations ST WHERE concat('s', cast(ST.id as varchar)) = OD.location_pickup)
-			WHEN OD.location_pickup LIKE '%b%' THEN	(SELECT ST.logical_Id FROM stations ST WHERE concat('b', cast(ST.id as varchar)) = OD.location_pickup)
+			WHEN OD.location_pickup LIKE '%s%' THEN	(SELECT logical_Id FROM stations WHERE concat('s', cast(id as varchar)) = OD.location_pickup)
+			WHEN OD.location_pickup LIKE '%b%' THEN	(SELECT logical_Id FROM buffers WHERE concat('b', cast(id as varchar)) = OD.location_pickup)
+            WHEN OD.location_pickup LIKE '%v%' THEN	(SELECT logical_Id FROM vehicles WHERE concat('v', cast(id as varchar)) = OD.location_pickup)
+            WHEN OD.location_pickup IS NULL AND OD.location_dropoff IS NOT NULL THEN VR.logical_id
 			ELSE OD.location_pickup
 		EnD AS location_pickup,
 		CASE
-			WHEN OD.location_dropoff LIKE '%s%' THEN	(SELECT ST.logical_Id FROM stations ST WHERE concat('s', cast(ST.id as varchar)) = OD.location_dropoff)
-			WHEN OD.location_dropoff LIKE '%b%' THEN	(SELECT ST.logical_Id FROM stations ST WHERE concat('b', cast(ST.id as varchar)) = OD.location_dropoff)
+			WHEN OD.location_dropoff LIKE '%s%' THEN	(SELECT logical_Id FROM stations WHERE concat('s', cast(id as varchar)) = OD.location_dropoff)
+			WHEN OD.location_dropoff LIKE '%b%' THEN	(SELECT logical_Id FROM buffers WHERE concat('b', cast(id as varchar)) = OD.location_dropoff)
 			ELSE OD.location_dropoff
 		EnD AS location_dropoff,
 		CASE
-			WHEN OD.location_move LIKE '%s%' THEN	(SELECT ST.logical_Id FROM stations ST WHERE concat('s', cast(ST.id as varchar)) = OD.location_move)
-			WHEN OD.location_move LIKE '%b%' THEN	(SELECT ST.logical_Id FROM stations ST WHERE concat('b', cast(ST.id as varchar)) = OD.location_move)
+			WHEN OD.location_move LIKE '%s%' THEN	(SELECT logical_Id FROM stations WHERE concat('s', cast(id as varchar)) = OD.location_move)
+			WHEN OD.location_move LIKE '%b%' THEN	(SELECT logical_Id FROM buffers WHERE concat('b', cast(id as varchar)) = OD.location_move)
 			ELSE OD.location_move
 		EnD AS location_move,
         CASE
