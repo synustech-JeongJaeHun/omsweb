@@ -64,7 +64,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 	get canSetSourceStation() {
         if (!this.mapStatesService.transferCommandState.sourceDisabled) {
 		    const { id, logicalId, physicalId } = this.contextMenuObject.value
-            if (logicalId.indexOf('OUT') > 0)
+            if (logicalId && logicalId.indexOf('OUT') > 0)
                 return true
         }
         return false
@@ -72,7 +72,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 	get canSetDestStation() {
         if (!this.mapStatesService.transferCommandState.destDisabled) {
 		    const { id, logicalId, physicalId } = this.contextMenuObject.value
-            if (logicalId.indexOf('IN') > 0)
+            if (logicalId && logicalId.indexOf('IN') > 0)
                 return true
         }
         return false

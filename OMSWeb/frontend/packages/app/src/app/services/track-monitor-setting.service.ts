@@ -103,7 +103,7 @@ const DefaultTrackMonitorSetting: TrackMonitorSetting = {
 	homeBackgroundColor: 'rgba(255, 255, 255, 1)',
 	playbackBackgroundColor: 'rgba(214, 64, 109, 0.1)',
 	stationColor: 'rgba(0, 0, 0, 1)',
-	stationDisabledColor: '#bfbfbf',
+	stationDisabledColor: '#f06767',
 	bufferColor: 'rgba(100, 100, 100, 1)',
 	pointColor: 'rgba(80, 80, 80, 1)',
 	normalSegmentColor: 'rgba(200, 200, 200, 1)',
