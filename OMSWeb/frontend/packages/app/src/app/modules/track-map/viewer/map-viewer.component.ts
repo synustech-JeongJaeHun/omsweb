@@ -56,12 +56,27 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		return this.trackData.groups.map((g) => String(g.id))
 	}
 	get canSetSource() {
-		return !this.mapStatesService.transferCommandState.sourceDisabled
+        return !this.mapStatesService.transferCommandState.sourceDisabled
 	}
 	get canSetDest() {
-		return !this.mapStatesService.transferCommandState.destDisabled
+        return !this.mapStatesService.transferCommandState.destDisabled
 	}
-
+	get canSetSourceStation() {
+        if (!this.mapStatesService.transferCommandState.sourceDisabled) {
+		    const { id, logicalId, physicalId } = this.contextMenuObject.value
+            if (logicalId.indexOf('OUT') > 0)
+                return true
+        }
+        return false
+	}
+	get canSetDestStation() {
+        if (!this.mapStatesService.transferCommandState.destDisabled) {
+		    const { id, logicalId, physicalId } = this.contextMenuObject.value
+            if (logicalId.indexOf('IN') > 0)
+                return true
+        }
+        return false
+	}
 	public viewerSetting = {
 		rect: {
 			width: window.innerWidth,
