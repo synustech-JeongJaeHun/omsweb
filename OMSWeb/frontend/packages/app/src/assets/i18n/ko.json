@@ -61,6 +61,7 @@
     "id": "아이디",
     "physicalId": "물리적 아이디",
     "logicalId": "Online Name",
+    "commandId": "Command ID",
     "state": "상태",
     "vehicleId": "비클",
     "locationPickup": "시작",

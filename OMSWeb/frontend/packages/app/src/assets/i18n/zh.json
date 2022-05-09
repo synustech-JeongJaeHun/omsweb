@@ -60,6 +60,7 @@
     "id": "身份证",
     "physicalId": "物理ID",
     "logicalId": "Online Name",
+    "commandId": "Command ID",
     "state": "状态",
     "vehicleId": "车辆",
     "locationPickup": "来自",

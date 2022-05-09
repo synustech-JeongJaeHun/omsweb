@@ -21,7 +21,7 @@
   <mat-tab-group class="tab-group" [(selectedIndex)]="currentTab" (selectedIndexChange)="onChangeTab($event)"
                  animationDuration="0ms">
 
-    <mat-tab [label]="'names.orders' | translate" *ngIf="canDisplayTable('orders')">
+    <mat-tab [label]="'names.transfer' | translate" *ngIf="canDisplayTable('orders')">
       <oms-order-control-table [tableHeight]="tableHeight">
       </oms-order-control-table>
     </mat-tab>

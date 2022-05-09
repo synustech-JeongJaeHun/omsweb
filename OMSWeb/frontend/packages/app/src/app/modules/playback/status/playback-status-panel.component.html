@@ -5,7 +5,7 @@
   </button>
   <mat-tab-group class="tab-group" [(selectedIndex)]="currentTab" (selectedIndexChange)="onChangeTab($event)"
     animationDuration="0ms">
-    <mat-tab [label]="'names.orders' | translate">
+    <mat-tab [label]="'names.transfer' | translate">
       <oms-playback-order-status *ngIf="currentTab == 0" [tableHeight]="tableHeight"></oms-playback-order-status>
     </mat-tab>
     <mat-tab [label]="'names.vehicles'| translate">

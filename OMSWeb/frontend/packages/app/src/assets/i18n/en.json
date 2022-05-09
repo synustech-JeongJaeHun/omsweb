@@ -61,6 +61,7 @@
     "id": "ID",
     "physicalId": "Physical ID",
     "logicalId": "Online Name",
+    "commandId": "Command ID",
     "state": "State",
     "vehicleId": "Vehicle",
     "locationPickup": "From",

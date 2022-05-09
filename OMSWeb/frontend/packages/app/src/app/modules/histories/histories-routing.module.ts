@@ -12,11 +12,11 @@ const routes: Routes = [
     path: '',
     component: HistoriesComponent,
     children: [
-      { path: 'orders', component: OrderHistoryComponent },
+      { path: 'transfer', component: OrderHistoryComponent },
       { path: 'vehicles', component: VehicleHistoryComponent },
       { path: 'alarms', component: AlarmHistoryComponent },
       { path: 'warnings', component: WarningHistoryComponent },
-      { path: '', redirectTo: 'orders', pathMatch: 'full' },
+      { path: '', redirectTo: 'transfer', pathMatch: 'full' },
     ],
   },
 ];
