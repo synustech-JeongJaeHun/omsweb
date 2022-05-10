@@ -261,7 +261,7 @@
       </button>
       <button *ngIf="hasPermissions([permissionEnums.HostOrderEnable])" mat-menu-item
         (click)="onVehicleCommand('hostOrder:enable')">
-        {{ "names.hostOrderEnable" | translate }}
+        {{ "names.hostCommandEnable" | translate }}
       </button>
       <button *ngIf="hasPermissions([permissionEnums.RailOut])" mat-menu-item (click)="onVehicleCommand('rail_out')">
         {{ "names.railOut" | translate }}
