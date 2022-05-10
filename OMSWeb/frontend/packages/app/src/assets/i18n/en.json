@@ -119,6 +119,8 @@
     "loadHint": "Station, or Buffer ID",
     "unload": "Unload",
     "unloadHint": "Station, or Buffer ID",
+    "loadRetryCount": "Load Retry Count",
+    "unloadRetryCount": "Unload Retry Count",
     "sideOverlapModule": "Co-Located Objects",
     "coord-x": "Coordinate:X",
     "coord-y": "Coordinate:Y",

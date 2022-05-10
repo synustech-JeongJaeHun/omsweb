@@ -128,6 +128,12 @@
         [format]="dateTimeFormat"></dxi-column>
       <dxi-column [width]="120" dataType="datetime" dataField="timeFailed" [caption]="'names.timeFailed' | translate"
         [format]="dateTimeFormat"></dxi-column>
+      <dxi-column [width]="120" dataType="number" dataField="loadRetryCnt"
+        [caption]="'names.loadRetryCount' | translate">
+      </dxi-column>
+      <dxi-column [width]="120" dataType="number" dataField="unloadRetryCnt"
+        [caption]="'names.unloadRetryCount' | translate">
+      </dxi-column>
       <!--
       <dxi-column [width]="100" dataType="string" dataField="distancePickup"
                   [caption]="'names.distancePickup' | translate" cellTemplate="distanceTemplate"></dxi-column>

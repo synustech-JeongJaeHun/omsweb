@@ -54,7 +54,8 @@ namespace OMSWeb.Repositories
     VR.logical_id As vehicle_id, 
     OD.carrier_label, OD.time_created, OD.time_assigned, OD.time_vehicle_arrived, OD.time_load_started, OD.time_load_completed, 
     OD.time_unload_started, OD.time_unload_completed, OD.time_completed, OD.time_aborted, OD.time_failed, 
-    OD.distance_pickup, OD.distance_deliver AS distance_dropoff, OD.distance_move, OD.assignment_type, OD.assignment_details
+    OD.distance_pickup, OD.distance_deliver AS distance_dropoff, OD.distance_move, OD.assignment_type, OD.assignment_details,
+    OD.load_retry_cnt, OD.unload_retry_cnt
     FROM order_history AS OD
     INNER JOIN (
         SELECT history_source_id AS order_id, max(history_change_time) AS last_updated
