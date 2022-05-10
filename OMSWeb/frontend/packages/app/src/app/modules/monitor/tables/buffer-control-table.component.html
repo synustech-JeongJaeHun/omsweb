@@ -2,7 +2,7 @@
 </div>
 <dx-data-grid [dataSource]="dataSource" [remoteOperations]="true" [height]="tableHeight" [repaintChangesOnly]="false"
               [columnAutoWidth]="false" [showBorders]="false" [highlightChanges]="true" [showColumnLines]="true"
-              [showRowLines]="true" [headerFilter]="false" [(selectedRowKeys)]="selectedRows" [renderAsync]="true">
+              [showRowLines]="true" [headerFilter]="false" [(selectedRowKeys)]="selectedRows">
   <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
   <!--dxo-scrolling mode="virtual" rowRenderingMode="standard"></dxo-scrolling-->
   <dxo-paging [pageSize]="50"></dxo-paging>
