@@ -17,6 +17,7 @@ type VisibilityChangedEvent = {
 		| 'isPointLabelVisible'
 		| 'isStationVisible'
 		| 'isBufferVisible'
+		| 'isZcuVisible'
 		| 'isGroupVisible'
 		| 'isClusterVisible'
 		| 'isOverlappingObjectsVisible'
@@ -95,6 +96,7 @@ const DefaultTrackMonitorSetting: TrackMonitorSetting = {
 	isPointLabelVisible: true,
 	isStationVisible: true,
 	isBufferVisible: true,
+	isZcuVisible: true,
 	isGroupVisible: true,
 	isClusterVisible: true,
 	isOverlappingObjectsVisible: true,

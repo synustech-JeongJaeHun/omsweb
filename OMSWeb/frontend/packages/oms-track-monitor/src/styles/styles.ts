@@ -22,6 +22,7 @@ const VisibleDefault: Record<VisibleProperty, boolean> = {
 	pointLabel: true, // applied in OmsTrackMonitor.ce.vue
 	station: true, // applied in OmsTrackMonitor.ce.vue
 	buffer: true, // applied in OmsTrackMonitor.ce.vue
+	zcu: true, // applied in OmsTrackMonitor.ce.vue
 	group: true, // applied in OmsTrackMonitor.ce.vue
 	cluster: true, // applied in OmsTrackMonitor.ce.vue
 	minimap: true, // applied in OmsTrackMonitor.ce.vue

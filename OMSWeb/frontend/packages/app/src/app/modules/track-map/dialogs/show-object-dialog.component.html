@@ -80,6 +80,12 @@
             value: $event.checked
           })" color="primary">{{
           "names.showBuffers" | translate }}</mat-slide-toggle>
+        <mat-slide-toggle [checked]="setting.isZcuVisible" (change)="update({
+          group: 'Visibility',
+          key: 'isZcuVisible',
+          value: $event.checked
+        })" color="primary">{{
+        "names.showZcus" | translate }}</mat-slide-toggle>
         <mat-slide-toggle [checked]="setting.isGroupVisible" (change)="update({
             group: 'Visibility',
             key: 'isGroupVisible',
