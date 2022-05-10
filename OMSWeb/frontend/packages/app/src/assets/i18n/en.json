@@ -81,7 +81,7 @@
     "timeFailed": "Failed",
     "mode": "Mode",
     "origin": "Origin",
-    "hostOrder": "Host Order",
+    "hostCommand": "Host Command",
     "orderOrigin": "Call",
     "curPoint": "Current",
     "commandPoint": "Next",

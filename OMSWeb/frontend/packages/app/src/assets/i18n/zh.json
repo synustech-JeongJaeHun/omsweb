@@ -80,7 +80,7 @@
     "timeFailed": "失败",
     "mode": "模式",
     "origin": "起源",
-    "hostOrder": "主机订单",
+    "hostCommand": "主机订单",
     "orderOrigin": "呼叫",
     "curPoint": "当前",
     "commandPoint": "下一个",

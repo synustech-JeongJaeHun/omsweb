@@ -81,7 +81,7 @@
     "timeFailed": "실패 시간",
     "mode": "모드",
     "origin": "원점",
-    "hostOrder": "호스트 명령",
+    "hostCommand": "호스트 명령",
     "orderOrigin": "초기 명령",
     "curPoint": "현재",
     "commandPoint": "다음",
