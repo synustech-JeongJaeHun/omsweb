@@ -153,6 +153,7 @@
     "showSegmentDirections": "세그먼트 방향",
     "showStations": "스테이션",
     "showBuffers": "버퍼",
+    "showZcus": "ZCU",
     "showGroups": "그룹",
     "showClusters": "클러스터",
     "showOverlaps": "개체 겹침",

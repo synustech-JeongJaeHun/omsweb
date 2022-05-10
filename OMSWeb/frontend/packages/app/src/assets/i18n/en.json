@@ -153,6 +153,7 @@
     "showSegmentDirections": "Segment Directions",
     "showStations": "Stations",
     "showBuffers": "Buffers",
+    "showZcus": "Zcus",
     "showGroups": "Groups",
     "showClusters": "Clusters",
     "showOverlaps": "Overlapping Objects",

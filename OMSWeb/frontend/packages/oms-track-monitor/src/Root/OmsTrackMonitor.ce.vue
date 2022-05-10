@@ -60,6 +60,7 @@ const props = defineProps<{
   isPointLabelVisible: Boolish
   isStationVisible: Boolish
   isBufferVisible: Boolish
+  isZcuVisible: Boolish
   isGroupVisible: Boolish
   isClusterVisible: Boolish
 
@@ -130,6 +131,9 @@ watch(propRefs.isStationVisible, (b) => {
 })
 watch(propRefs.isBufferVisible, (b) => {
   updateVisibleStyle('buffer', parseBooleanProp(true, b))
+})
+watch(propRefs.isZcuVisible, (b) => {
+  updateVisibleStyle('zcu', parseBooleanProp(true, b))
 })
 watch(propRefs.isGroupVisible, (b) => {
   updateVisibleStyle('group', parseBooleanProp(true, b))
@@ -308,6 +312,10 @@ defineExpose(exposed)
 
 #buffer-layer {
   visibility: v-bind("visibleStylesInfo.buffer ? 'initial' : 'hidden'");
+}
+
+#zcu-layer {
+  visibility: v-bind("visibleStylesInfo.zcu ? 'initial' : 'hidden'");
 }
 
 #cluster-layer {
