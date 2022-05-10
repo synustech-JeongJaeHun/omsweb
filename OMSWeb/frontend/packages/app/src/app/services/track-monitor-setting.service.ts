@@ -124,17 +124,26 @@ const DefaultTrackMonitorSetting: TrackMonitorSetting = {
 export class TrackMonitorSettingService {
 	@Output() rotationChanged = new EventEmitter<number>()
 
-	public trackSetting = deepCopy(DefaultTrackMonitorSetting)
+	public trackSetting: TrackMonitorSetting = deepCopy(
+		DefaultTrackMonitorSetting,
+	)
 
 	constructor(private settingsService: SettingsService) {
 		this.loadSetting()
 	}
 
 	loadSetting = () => {
+		Object.assign(this.trackSetting, readTrackSettingFromLocalStorage())
+		writeTrackSettingOnLocalStorage(this.trackSetting)
+
 		this.settingsService.loadDefaultColors().subscribe((defaultColors) => {
+			if (readFirstRunFromLocalStorage)
+				Object.assign(this.trackSetting, defaultColors)
+
 			Object.assign(DefaultTrackMonitorSetting, defaultColors)
-			Object.assign(this.trackSetting, readTrackSettingFromLocalStorage())
+
 			writeTrackSettingOnLocalStorage(this.trackSetting)
+			writeFirstRunOnLocalStorage()
 		})
 	}
 
@@ -167,4 +176,14 @@ function writeTrackSettingOnLocalStorage(update: TrackMonitorSetting) {
 
 function deepCopy<T>(target: T) {
 	return JSON.parse(JSON.stringify(target)) as T
+}
+
+const FirstRunStorageKey = 'track-monitor-first-run'
+
+function readFirstRunFromLocalStorage() {
+	return localStorage.getItem(FirstRunStorageKey) == null
+}
+
+function writeFirstRunOnLocalStorage() {
+	localStorage.setItem(FirstRunStorageKey, 'false')
 }
