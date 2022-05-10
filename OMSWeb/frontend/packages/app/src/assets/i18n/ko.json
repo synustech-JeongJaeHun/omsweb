@@ -119,6 +119,8 @@
     "loadHint": "스테이션 혹은 버퍼의 아이디",
     "unload": "언로드",
     "unloadHint": "스테이션 혹은 버퍼의 아이디",
+    "loadRetryCount": "로드 재시도 횟수",
+    "unloadRetryCount": "언로드 재시도 횟수",
     "sideOverlapModule": "연관된 개체",
     "coord-x": "좌표:X",
     "coord-y": "좌표:Y",
