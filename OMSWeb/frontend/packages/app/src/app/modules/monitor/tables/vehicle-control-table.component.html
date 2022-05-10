@@ -19,7 +19,7 @@
     -->
   <button *ngIf="hasPermission(permissionEnums.HostOrderEnable)" mat-stroked-button color="primary" class="dense"
           [disabled]="!canControl" (click)="onChangeHostOrderActivity()">
-    {{ "names.hostOrderDisable" | translate }}
+    {{ "names.hostCommandDisable" | translate }}
   </button>
   <button *ngIf="hasPermission(permissionEnums.PushEnable)" mat-stroked-button color="primary" class="dense"
           [disabled]="!canControl" (click)="onChangePushActivity()">
@@ -63,8 +63,8 @@
               [caption]="'names.maintenance' | translate" *ngIf="canDisplayTable('vehicles_isMaint')"></dxi-column>
   <dxi-column [allowFiltering]="false" [width]="60" dataType="boolean" dataField="canBePushed"
               [caption]="'names.canBePushed' | translate" *ngIf="canDisplayTable('vehicles_canBePushed')"></dxi-column>
-  <dxi-column [allowFiltering]="false" [width]="60" dataType="boolean" dataField="hostOrder"
-              [caption]="'names.hostOrder' | translate" *ngIf="canDisplayTable('vehicles_hostOrder')"></dxi-column>
+  <dxi-column [allowFiltering]="false" [width]="90" dataType="boolean" dataField="hostOrder"
+              [caption]="'names.hostCommand' | translate" *ngIf="canDisplayTable('vehicles_hostOrder')"></dxi-column>
   <dxi-column [allowFiltering]="false" [width]="60" dataType="string" dataField="orderOrigin"
               [caption]="'names.orderOrigin' | translate" *ngIf="canDisplayTable('vehicles_orderOrigin')"></dxi-column>
   <dxi-column [width]="60" dataType="string" dataField="groupId" [caption]="'names.group' | translate"

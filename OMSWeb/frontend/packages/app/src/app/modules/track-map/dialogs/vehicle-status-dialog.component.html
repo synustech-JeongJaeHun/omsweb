@@ -43,7 +43,7 @@
                   {{ "names.maintenance" | translate }}
                 </div>
                 <div class="status-item" [class.active]="currentVehicle.hostOrder">
-                  {{ "names.hostOrderEnable" | translate }}
+                  {{ "names.hostCommandEnable" | translate }}
                 </div>
                 <div class="status-item" [class.active]="currentVehicle.canBePushed">
                   {{ "names.pushEnable" | translate }}
@@ -55,14 +55,14 @@
               <legend>{{ "names.carrier" | translate }}</legend>
               <div class="field-row">
                 <mat-form-field class="dense" appearance="outline">
-                  <input #carrierIdInput matInput [placeholder]="'names.carrierId' | translate" [value]=""/>
+                  <input #carrierIdInput matInput [placeholder]="'names.carrierId' | translate" [value]="" />
                 </mat-form-field>
                 <button mat-stroked-button color="primary" class="dense accent"
-                        (click)="onRemoveCarrier(carrierIdInput.value)">
+                  (click)="onRemoveCarrier(carrierIdInput.value)">
                   Remove
                 </button>
                 <button mat-stroked-button color="primary" class="dense accent"
-                        (click)="onInstallCarrier(carrierIdInput.value)">
+                  (click)="onInstallCarrier(carrierIdInput.value)">
                   Install
                 </button>
               </div>
