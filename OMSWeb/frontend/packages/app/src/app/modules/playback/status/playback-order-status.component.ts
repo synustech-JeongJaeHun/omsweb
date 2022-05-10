@@ -1,7 +1,6 @@
 import { Component, Input, ViewChild } from '@angular/core'
 import { PlaybackPlayService } from '@oms/root/services/playback-play.service'
 import { DxDataGridComponent } from 'devextreme-angular'
-import { TrackIdService } from '../../../services/track-id.service'
 import { DateUtil } from '../../shared/utils/date.util'
 
 @Component({
@@ -17,6 +16,8 @@ export class PlaybackOrderStatusComponent {
 
 	dateTimeFormat = DateUtil.DateTimeFormat
 
+	constructor(private playService: PlaybackPlayService) {}
+
 	get dataSource() {
 		return this.playService.currentOrders
 	}
@@ -29,12 +30,19 @@ export class PlaybackOrderStatusComponent {
 		return vehicle?.logicalId ?? ''
 	}
 
-	transformLocationId = ({ value = '' }): string => {
-		return this.idSvc.guessLocationId(value)
-	}
+	transformLocationId = ({ value }: { value: string }) => {
+		const locationType = value[0]
+		const id = parseInt(value.substring(1))
 
-	constructor(
-		private idSvc: TrackIdService,
-		private playService: PlaybackPlayService,
-	) {}
+		const list =
+			locationType === 's'
+				? this.playService.track.data.stations ?? []
+				: locationType === 'b'
+				? this.playService.track.data.buffers
+				: []
+
+		const location = list.find((e) => e.id === id)
+
+		return location?.logical_id ?? ''
+	}
 }
