@@ -38,7 +38,7 @@ function updateVisibleStyle(key: VisibleProperty, value: boolean) {
 const ColorDefault: Record<ColorProperty, string> = {
 	background: 'white',
 	station: 'black',
-	stationDisabled: '#bfbfbf',
+	stationDisabled: '#f06767',
 	buffer: 'black',
 	point: 'black',
 	normalSegment: 'grey',
