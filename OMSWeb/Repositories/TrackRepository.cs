@@ -67,13 +67,24 @@ namespace OMSWeb.Repositories
                 string sql = QueryFactory.GetSql("point");
                 using (var conn = ConnectTrack())
                 {
-                    try
+                    using (var cmd = new NpgsqlCommand(sql, conn))
                     {
-                        models = conn.Query<Point>(sql).ToList();
-                    }
-                    catch (System.Exception)
-                    {
-                        Console.WriteLine("[LoadPoints] => null");
+                        conn.Open();
+                        using (var dr = cmd.ExecuteReader())
+                        {
+                            while (dr.Read())
+                            {
+                                models.Add(new Point
+                                {
+                                    Id = Convert.ToInt32(dr["id"]),
+                                    X = Convert.ToInt32(dr["x"]),
+                                    Y = Convert.ToInt32(dr["y"]),
+                                    PhysicalId = dr["physical_id"].ToString(),
+                                    LogicalId = dr["logical_id"].ToString(),
+                                }
+                               );
+                            }
+                        }
                     }
                 }
                 data = models.ToList();
