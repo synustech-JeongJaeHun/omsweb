@@ -1,5 +1,9 @@
 <script setup lang="ts">
 import { Point } from '../types/Point'
+import PointHome from '../assets/PointHome.svg?component'
+import { useGroup } from 'src/TrackObjects/group/groups'
+import { toRef } from 'vue'
+import { getGroupColorWithAlpha } from 'TrackObjects/group/utils/color'
 
 const props = defineProps<{
   point: Point
@@ -8,6 +12,8 @@ const props = defineProps<{
   handleMouseover: (event: MouseEvent) => void
   handleMouseleave: (event: MouseEvent) => void
 }>()
+
+const group = useGroup('home', toRef(props.point, 'homeId', -1))
 </script>
 
 <template>
@@ -28,6 +34,27 @@ const props = defineProps<{
         @mouseout="handleMouseleave"
         @mouseleave="handleMouseleave"
       />
+      <!-- home with group -->
+      <rect
+        v-if="group"
+        class="group-shadow"
+        x="-10"
+        y="-3"
+        width="20"
+        height="27"
+        rx="4"
+        ry="4"
+        :fill="getGroupColorWithAlpha(group.color)"
+      />
+      <!-- home -->
+      <PointHome
+        v-if="props.point.homeId"
+        width="13.5"
+        height="21"
+        x="-6.75"
+        y="0"
+      />
+
       <text
         class="invert label select-none"
         x="0"
