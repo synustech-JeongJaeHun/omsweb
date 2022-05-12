@@ -374,7 +374,7 @@ namespace OMSWeb.Controllers
                 ocl.Start();
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 bResult = false;
                 return new MapUpdateResultModel

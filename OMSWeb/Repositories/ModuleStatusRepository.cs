@@ -11,7 +11,6 @@ using OMSWeb.Models.Entities;
 using Npgsql;
 using System.Runtime.InteropServices;
 using System.IO;
-using System.Diagnostics;
 
 namespace OMSWeb.Repositories
 {
