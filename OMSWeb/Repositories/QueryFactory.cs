@@ -17,10 +17,17 @@ namespace OMSWeb.Repositories
         --*user_id_condition*--WHERE user_id =@userId
       "},
       {"point", @"
-        SELECT id AS id, x AS x, y AS y, physical_id AS physical_id, logical_id AS logical_id  
-        FROM points
-        --*user_id_condition*--WHERE user_id = @userId
-        ORDER BY id
+       SELECT 
+          points.id AS id, 
+          points.x AS x, 
+          points.y AS y, 
+          points.physical_id AS physical_id, 
+          points.logical_id AS logical_id,
+          HOMES.group_id as group_id 
+        FROM 
+          points
+          LEFT JOIN (select * from grouped_objects where reference_table = 'home') as HOMES ON points.id = HOMES.reference_id
+        ORDER BY points.id
       "},
       {"segment", @"
         SELECT SP.segment_id AS id, SG.physical_id AS physical_id, SG.logical_id AS logical_id, SG.start_point, SG.end_point, 
@@ -78,8 +85,8 @@ namespace OMSWeb.Repositories
             CONCAT( CAST(CS.current_igbt AS TEXT), ' [A]' ) AS current_igbt,
             CONCAT( CAST(CS.current_track AS TEXT), ' [A]' ) AS current_track, 
             CONCAT( CAST(TRUNC(CS.frequency::numeric / 10, 1) AS TEXT), ' [kHz]' ) AS frequency, 
-            CONCAT( CAST(TRUNC(CS.temp_radiator::numeric / 10, 1) AS TEXT), ' [¡É]' ) AS temp_radiator, 
-            CONCAT( CAST(TRUNC(CS.temp_internal::numeric / 10, 1) AS TEXT), ' [¡É]' ) AS temp_internal,  
+            CONCAT( CAST(TRUNC(CS.temp_radiator::numeric / 10, 1) AS TEXT), ' [ï¿½ï¿½]' ) AS temp_radiator, 
+            CONCAT( CAST(TRUNC(CS.temp_internal::numeric / 10, 1) AS TEXT), ' [ï¿½ï¿½]' ) AS temp_internal,  
             CASE 
                 WHEN CS.sync = 0 THEN 'N.G'
                 WHEN CS.sync = 11 THEN 'OK'
