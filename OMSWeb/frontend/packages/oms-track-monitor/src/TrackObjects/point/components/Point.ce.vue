@@ -21,19 +21,17 @@ const group = useGroup('home', toRef(props.point, 'homeId', -1))
     class="overflow-visible cursor-pointer point"
     :x="props.point.x"
     :y="props.point.y"
+    :data-id="props.point.id"
+    :data-group-id="group?.id"
+    @click.left="handleLeftClick"
+    @click.right="handleRightClick"
+    @mouseover="handleMouseover"
+    @mouseout="handleMouseleave"
+    @mouseleave="handleMouseleave"
   >
     <g class="scale-and-reverse-rotate">
       <circle v-if="props.point.isFocused" r="15" class="focus" />
-      <circle
-        r="3"
-        class="point-path"
-        :data-id="props.point.id"
-        @click.left="handleLeftClick"
-        @click.right="handleRightClick"
-        @mouseover="handleMouseover"
-        @mouseout="handleMouseleave"
-        @mouseleave="handleMouseleave"
-      />
+      <circle r="3" class="point-path" />
       <!-- home with group -->
       <rect
         v-if="group"

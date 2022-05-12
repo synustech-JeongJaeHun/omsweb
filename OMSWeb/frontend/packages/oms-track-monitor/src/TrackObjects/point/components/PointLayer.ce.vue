@@ -8,9 +8,12 @@ import { RootEmitInjectionKey, RootEmits } from 'src/Root/types/RootEmits'
 const emit = inject<RootEmits>(RootEmitInjectionKey)!
 
 function getDeepCopiedPoint(event: MouseEvent) {
-  const pointId = parseInt((event.target as SVGElement).dataset.id!)
+  const pointId = parseInt((event.currentTarget as SVGElement).dataset.id!)
+  const groupId = parseInt(
+    (event.currentTarget as SVGElement).dataset.groupId ?? ''
+  )
   const point = findPointById(pointId)!
-  return { ...point }
+  return { ...point, groupId: Number.isNaN(groupId) ? undefined : groupId }
 }
 
 function handleMouseover(event: MouseEvent) {

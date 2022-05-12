@@ -376,7 +376,6 @@
 </ng-template>
 
 <ng-template #pointContext>
-  <!--
   <mat-card class="context-card" *ngIf="hasPermissions([permissionEnums.SetHomePoint])">
     <mat-card-header>
       <mat-card-title>
@@ -384,29 +383,17 @@
       </mat-card-title>
     </mat-card-header>
     <mat-card-content class="context-form">
-      <mat-slide-toggle #pointHomeSlide [checked]="contextMenuObject?.value.isHome" color="primary">{{ "names.home" |
-        translate }}
-      </mat-slide-toggle>
-
-      <div [hidden]="!pointHomeSlide.checked">
-        <mat-form-field class="index-selector dense" appearance="outline">
-          <mat-label>{{ "names.group" | translate }}</mat-label>
-          <mat-select #pointerGroupSelector [value]="contextMenuObject?.value.group">
-            <mat-option *ngFor="let item of groupIds" [value]="item">{{
-              item
-              }}</mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
+      <dx-select-box displayExpr="label" valueExpr="value" [items]="homeAndGroupSelectList"
+        [value]="contextMenuObject?.value.home" (onSelectionChanged)="onHomeValueChanged($event)">
+      </dx-select-box>
 
       <button mat-stroked-button class="dense accent" color="primary" (click)="
-          onApplyPointChange(contextMenuObject?.value.id, pointHomeSlide.checked, pointerGroupSelector.value)
+          onApplyPointHomeChange(contextMenuObject?.value.id, contextMenuObject?.value.home)
         ">
         {{ "names.apply" | translate }}
       </button>
     </mat-card-content>
   </mat-card>
-    -->
 </ng-template>
 
 <!-- context end -->

@@ -52,30 +52,26 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 	get tmSetting() {
 		return this.trackMonitorSettingService.trackSetting
 	}
-	get groupIds() {
-		return this.trackData.groups.map((g) => String(g.id))
-	}
+
 	get canSetSource() {
-        return !this.mapStatesService.transferCommandState.sourceDisabled
+		return !this.mapStatesService.transferCommandState.sourceDisabled
 	}
 	get canSetDest() {
-        return !this.mapStatesService.transferCommandState.destDisabled
+		return !this.mapStatesService.transferCommandState.destDisabled
 	}
 	get canSetSourceStation() {
-        if (!this.mapStatesService.transferCommandState.sourceDisabled) {
-		    const { id, logicalId, physicalId } = this.contextMenuObject.value
-            if (logicalId && logicalId.indexOf('OUT') > 0)
-                return true
-        }
-        return false
+		if (!this.mapStatesService.transferCommandState.sourceDisabled) {
+			const { id, logicalId, physicalId } = this.contextMenuObject.value
+			if (logicalId && logicalId.indexOf('OUT') > 0) return true
+		}
+		return false
 	}
 	get canSetDestStation() {
-        if (!this.mapStatesService.transferCommandState.destDisabled) {
-		    const { id, logicalId, physicalId } = this.contextMenuObject.value
-            if (logicalId && logicalId.indexOf('IN') > 0)
-                return true
-        }
-        return false
+		if (!this.mapStatesService.transferCommandState.destDisabled) {
+			const { id, logicalId, physicalId } = this.contextMenuObject.value
+			if (logicalId && logicalId.indexOf('IN') > 0) return true
+		}
+		return false
 	}
 	public viewerSetting = {
 		rect: {
@@ -327,15 +323,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		this.focusOnTM({ type: event.objectType, id: event.id })
 	}
 
-	onApplyPointChange(id: number, isHome: boolean, selectedGroup: number) {
-		this.tracksService
-			.updatePoint(id, {
-				isHome,
-				group: selectedGroup,
-			})
-			.subscribe()
-	}
-
 	onToggleStationUnuse(id: number, toState: 'UNUSE' | 'USE') {
 		const message =
 			toState === 'USE'
@@ -502,6 +489,30 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 					this.contextMenuObject.value.id,
 				)
 				.subscribe()
+		}
+	}
+
+	// point > home
+	homeAndGroupSelectList = [
+		{ value: 'OFF', label: 'OFF' },
+		{ value: 'No Group', label: 'Group: Not Selected' },
+		...this.trackStatusService.trackData.groups
+			.map((g) => String(g.id))
+			.map((e) => ({ value: e, label: `Group: ${e}` })),
+	]
+	// homeAndGroupSelectList = [
+	// 	'OFF',
+	// 	'No Group',
+	// 	...this.trackStatusService.trackData.groups.map((g) => String(g.id)),
+	// ].map((e) => ({ value: e }))
+
+	onHomeValueChanged(event: { selectedItem: { value: string } }) {
+		this.contextMenuObject.value.home = event.selectedItem.value
+	}
+	onApplyPointHomeChange(id: number, home: 'OFF' | 'No Group' | string) {
+		if (home === 'OFF') {
+		} else if (home === 'No Group') {
+		} else {
 		}
 	}
 
@@ -689,6 +700,14 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		if (!(payload.type && payload.value && payload.event)) return
 		// @ts-ignore
 		this.contextMenuObject = { type: payload.type, value: payload.value }
+
+		if (this.contextMenuObject.type === 'POINT') {
+			const point = this.contextMenuObject.value
+			if (point?.groupId)
+				this.contextMenuObject.value.home = String(point.groupId)
+			else if (point?.homeId) this.contextMenuObject.value.home = 'No Group'
+			else this.contextMenuObject.value.home = 'OFF'
+		}
 
 		const leftThreshold = window.innerWidth - 200
 		const popupOffsetX = 10
