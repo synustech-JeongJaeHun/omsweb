@@ -2,6 +2,7 @@ type VisibleProperty =
 	| 'vehicleLine'
 	| 'segmentDirection'
 	| 'pointLabel'
+	| 'pointHome'
 	| 'station'
 	| 'buffer'
 	| 'zcu'

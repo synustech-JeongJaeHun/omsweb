@@ -37,7 +37,7 @@ const group = useGroup('home', toRef(props.point, 'homeId', -1))
       <!-- home with group -->
       <rect
         v-if="group"
-        class="group-shadow"
+        class="group-shadow home"
         x="-10"
         y="-3"
         width="20"
@@ -49,6 +49,7 @@ const group = useGroup('home', toRef(props.point, 'homeId', -1))
       <!-- home -->
       <PointHome
         v-if="props.point.homeId"
+        class="home"
         width="13.5"
         height="21"
         x="-6.75"

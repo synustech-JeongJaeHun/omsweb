@@ -152,6 +152,7 @@
     "showVehicleLines": "Vehicle Lines",
     "showExpectedPaths": "Expected Paths",
     "showPointLabels": "Point Labels",
+    "showPointHomes": "Point Homes",
     "showSegmentDirections": "Segment Directions",
     "showStations": "Stations",
     "showBuffers": "Buffers",
