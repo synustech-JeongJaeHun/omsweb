@@ -2,7 +2,7 @@
 import { Point } from '../types/Point'
 import PointHome from '../assets/PointHome.svg?component'
 import { useGroup } from 'src/TrackObjects/group/groups'
-import { toRef } from 'vue'
+import { computed } from 'vue'
 import { getGroupColorWithAlpha } from 'TrackObjects/group/utils/color'
 
 const props = defineProps<{
@@ -13,7 +13,10 @@ const props = defineProps<{
   handleMouseleave: (event: MouseEvent) => void
 }>()
 
-const group = useGroup('home', toRef(props.point, 'homeId', -1))
+const group = useGroup(
+  'home',
+  computed(() => props.point.homeId ?? -1)
+)
 </script>
 
 <template>
