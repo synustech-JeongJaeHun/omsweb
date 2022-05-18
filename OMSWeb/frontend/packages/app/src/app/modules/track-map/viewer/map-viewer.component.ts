@@ -27,11 +27,13 @@ import { SettingsService } from '@oms/root/services/settings.service'
 import { TrackStatusService } from '../../../services/track-status.service'
 import { TrackMonitorSettingService } from '../../../services/track-monitor-setting.service'
 import d3 = require('d3')
-import { TracksService } from '@oms/root/services/tracks.service'
 import { TranslateService } from '@ngx-translate/core'
 import { MessagesService } from '@oms/root/services/messages.service'
 import { DialogService } from '@oms/root/services/dialog.service'
 import { IVehicleCommandMessage } from '@oms/root/models/command.model'
+import { SystemsService } from '@oms/root/services/systems.service'
+import { ISystemStates } from '@oms/root/models/system.model'
+import { MatSnackBar } from '@angular/material/snack-bar'
 
 @Component({
 	selector: 'oms-map-viewer',
@@ -48,6 +50,8 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 	public detailsVisible = false
 
 	private cameraAndRotationSyncId
+
+	public systemStates: ISystemStates
 
 	get tmSetting() {
 		return this.trackMonitorSettingService.trackSetting
@@ -112,17 +116,22 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		private mapStatesService: MapStatesService,
 		private settingSvc: SettingsService,
 		private trackStatusService: TrackStatusService,
-		private tracksService: TracksService,
 		private trackMonitorSettingService: TrackMonitorSettingService,
 		private messageSvc: MessagesService,
 		private dialogSvc: DialogService,
 		private $t: TranslateService,
+		private systemsService: SystemsService,
+		private snackBar: MatSnackBar,
 	) {
 		this.auth.certUpdated$.pipe(takeUntil(this.destroy$)).subscribe((cert) => {
 			this.router.navigateByUrl('/', { skipLocationChange: false }).then(() => {
 				this.router.navigate([cert ? '/monitor/status' : '/'])
 			})
 		})
+
+		this.systemsService.currentState$
+			.pipe(takeUntil(this.destroy$))
+			.subscribe((states) => (this.systemStates = states))
 	}
 
 	hasPermissions(permissions: number[]): boolean {
@@ -224,6 +233,15 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 						}
 					})
 				})
+
+			this.hubSvc.modeStateChanged$
+				.pipe(takeUntil(this.destroy$))
+				.subscribe((e) => {
+					this.systemsService.currentState$
+						.pipe(takeUntil(this.destroy$))
+						.subscribe((states) => (this.systemStates = states))
+				})
+
 			this.hubSvc.vehicleChanged$
 				.pipe(takeUntil(this.destroy$))
 				.subscribe((e: IDataChangeEvent) => {
@@ -704,6 +722,29 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		const payload = getCustomEventPayload(event)
 		// @ts-ignore
 		if (!(payload.type && payload.value && payload.event)) return
+
+		if (
+			this.hasPermissions([this.permissionEnums.SetHomePoint]) &&
+			// @ts-ignore
+			payload.type === 'POINT' &&
+			!(
+				this.systemStates.tscMode === 0 ||
+				this.systemStates.tscMode === 1 ||
+				this.systemStates.tscMode === 2
+			)
+		) {
+			this.snackBar.open(
+				this.$t.instant('messages.confirmTSCStateNotPaused'),
+				null,
+				{
+					duration: 3000,
+					horizontalPosition: 'center',
+					verticalPosition: 'top',
+				},
+			)
+			return
+		}
+
 		// @ts-ignore
 		this.contextMenuObject = { type: payload.type, value: payload.value }
 
