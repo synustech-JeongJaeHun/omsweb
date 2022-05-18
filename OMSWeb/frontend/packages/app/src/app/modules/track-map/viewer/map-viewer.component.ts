@@ -524,20 +524,22 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 			.map((g) => String(g.id))
 			.map((e) => ({ value: e, label: `Group: ${e}` })),
 	]
-	// homeAndGroupSelectList = [
-	// 	'OFF',
-	// 	'No Group',
-	// 	...this.trackStatusService.trackData.groups.map((g) => String(g.id)),
-	// ].map((e) => ({ value: e }))
 
 	onHomeValueChanged(event: { selectedItem: { value: string } }) {
 		this.contextMenuObject.value.home = event.selectedItem.value
 	}
-	onApplyPointHomeChange(id: number, home: 'OFF' | 'No Group' | string) {
-		if (home === 'OFF') {
-		} else if (home === 'No Group') {
+	onApplyPointHomeChange(id: number, offOrGroup: 'OFF' | 'No Group' | string) {
+		if (offOrGroup === 'OFF') {
+			// home off
+		} else if (offOrGroup === 'No Group') {
+			// home on with no group
 		} else {
+			// home on with group
+			const groupId = parseInt(offOrGroup)
 		}
+
+		this.showContextMenu = false
+		this.contextMenuObject = undefined
 	}
 
 	// EPIC > OMS-TRACK-MONITOR
