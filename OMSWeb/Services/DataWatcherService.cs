@@ -29,7 +29,7 @@ namespace OMSWeb.Services
             //this.connectionStringTrack = configuration.GetConnectionString("OMS-Track");
 
             // get config from oms_settings.ini
-             AppConfig.GetConnectStrFromOmsSettings(out string connectUiStr, out string connectTrackStr);
+            AppConfig.GetConnectStrFromOmsSettings(out string connectUiStr, out string connectTrackStr);
             this.connectionStringTrack = connectTrackStr;
 
             this.trackConn = new NpgsqlConnection(this.connectionStringTrack);
