@@ -59,29 +59,30 @@ namespace OMSWeb.Repositories
 
         public List<Point> LoadPoints()
         {
+            // var data = _cache.GetValue<List<Point>>(key);
+            // if (data == null)
+            // {
             var key = CacheKeys.Points;
-            var data = _cache.GetValue<List<Point>>(key);
-            if (data == null)
+            var data = new List<Point>();
+            var models = new List<Point>();
+            string sql = QueryFactory.GetSql("point");
+            using (var conn = ConnectTrack())
             {
-                var models = new List<Point>();
-                string sql = QueryFactory.GetSql("point");
-                using (var conn = ConnectTrack())
+                using (var cmd = new NpgsqlCommand(sql, conn))
                 {
-                    using (var cmd = new NpgsqlCommand(sql, conn))
+                    try
                     {
-                        try
-                        {
-                            models = conn.Query<Point>(sql).ToList();
-                        }
-                        catch (System.Exception)
-                        {
-                            Console.WriteLine("[LoadPoints] => null");
-                        }
+                        models = conn.Query<Point>(sql).ToList();
+                    }
+                    catch (System.Exception)
+                    {
+                        Console.WriteLine("[LoadPoints] => null");
                     }
                 }
-                data = models.ToList();
-                _cache.SetValue<List<Point>>(key, data, DateTimeOffset.Now.AddMinutes(CACHE_LIFE));
             }
+            data = models.ToList();
+            _cache.SetValue<List<Point>>(key, data, DateTimeOffset.Now.AddMinutes(CACHE_LIFE));
+            // }
             return data;
         }
 

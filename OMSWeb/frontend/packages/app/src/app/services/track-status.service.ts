@@ -15,6 +15,8 @@ import { IDataChangeEvent } from '../models/notification.model'
  * - buffer x
  * - mtl x
  * - vhl o
+ * - home o
+ * - group o
  *
  */
 
@@ -57,6 +59,12 @@ export class TrackStatusService {
 		})
 		this.hubService.stationChanged$.subscribe((e) => {
 			this.handleStationChanged(e)
+		})
+		this.hubService.groupChanged$.subscribe((e) => {
+			this.handleGroupChanged(e)
+		})
+		this.hubService.homeChanged$.subscribe((e) => {
+			this.handleHomeChanged(e)
 		})
 
 		// this.hubService.segmentChanged$
@@ -175,6 +183,43 @@ export class TrackStatusService {
 			case 'UPDATE':
 				// @ts-ignore
 				if (finded) Object.assign(finded, { id: e.id, unuse: e.unuse })
+				break
+
+			default:
+				break
+		}
+	}
+
+	handleGroupChanged(e: IDataChangeEvent) {
+		this.trackData.groups = e.data
+	}
+
+	handleHomeChanged(e: IDataChangeEvent) {
+		const row = { id: e.id as number, point: e.point as number }
+
+		const pointByRowHome = this.trackData.points.find(
+			(p) => p.homeId === row.id,
+		)
+		const pointByRowPoint = this.trackData.points.find(
+			(p) => p.id === row.point,
+		)
+
+		switch (e.operation) {
+			case 'INSERT':
+				{
+					if (pointByRowPoint) pointByRowPoint.homeId = row.id
+				}
+				break
+			case 'UPDATE':
+				{
+					if (pointByRowHome) pointByRowHome.homeId = undefined
+					if (pointByRowPoint) pointByRowPoint.homeId = row.id
+				}
+				break
+			case 'DELETE':
+				{
+					if (pointByRowPoint) pointByRowPoint.homeId = undefined
+				}
 				break
 
 			default:

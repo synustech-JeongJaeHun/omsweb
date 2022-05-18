@@ -278,42 +278,48 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 					this.viewer.updateStation(e.operation, { id: e.id, unuse: e.unuse })
 				})
 
-			if (this.auth.isAuthenticated) {
-				this.hubSvc.vehiclePathChanged$
-					.pipe(takeUntil(this.destroy$))
-					.subscribe((e: IDataChangeEvent) => {
-						// TODO what happened on event?
-						console.log('vehicle path update', e)
-					})
+			this.hubSvc.groupChanged$
+				.pipe(takeUntil(this.destroy$))
+				.subscribe((e) => {
+					this.viewer.updateGroupObject(
+						e.operation,
+						{
+							id: e.id as number,
+							groupId: e.groupId as number,
+							referenceId: e.referenceId as number,
+							referenceTable: e.referenceTable as string,
+						},
+						e.data,
+					)
+				})
 
-				this.hubSvc.groupChanged$
-					.pipe(takeUntil(this.destroy$))
-					.subscribe((e) => {
-						// TODO what happened on event?
-						console.log('group update', e)
-					})
+			this.hubSvc.homeChanged$.pipe(takeUntil(this.destroy$)).subscribe((e) => {
+				this.viewer.updateHome(e.operation, {
+					id: e.id as number,
+					point: e.point as number,
+				})
+			})
 
-				this.hubSvc.bufferChanged$
-					.pipe(takeUntil(this.destroy$))
-					.subscribe((e) => {
-						// TODO what happened on event?
-						console.log('buffer update', e)
-					})
-
-				this.hubSvc.mtlChanged$
-					.pipe(takeUntil(this.destroy$))
-					.subscribe((e) => {
-						// TODO what happened on event?
-						console.log('mtl update', e)
-					})
-
-				this.hubSvc.groupChanged$
-					.pipe(takeUntil(this.destroy$))
-					.subscribe((e) => {
-						// TODO what happened on event?
-						console.log('group update', e)
-					})
-			}
+			// if (this.auth.isAuthenticated) {
+			// this.hubSvc.vehiclePathChanged$
+			// 	.pipe(takeUntil(this.destroy$))
+			// 	.subscribe((e: IDataChangeEvent) => {
+			// 		// TODO what happened on event?
+			// 		console.log('vehicle path update', e)
+			// 	})
+			// this.hubSvc.bufferChanged$
+			// 	.pipe(takeUntil(this.destroy$))
+			// 	.subscribe((e) => {
+			// 		// TODO what happened on event?
+			// 		console.log('buffer update', e)
+			// 	})
+			// this.hubSvc.mtlChanged$
+			// 	.pipe(takeUntil(this.destroy$))
+			// 	.subscribe((e) => {
+			// 		// TODO what happened on event?
+			// 		console.log('mtl update', e)
+			// 	})
+			// }
 		}
 	}
 

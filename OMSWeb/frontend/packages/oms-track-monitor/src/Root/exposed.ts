@@ -7,7 +7,13 @@ import {
 } from 'MapObjects/cameraAndRotation'
 import { calculateMinMaxXYFromPoints } from 'src/MapObjects/map/utils/size'
 import { initMapSizeProperties } from 'src/MapObjects/map/mapSizeProperties'
-import { findPointById, initPoints } from 'src/TrackObjects/point/points'
+import {
+	deleteHomeToPoint,
+	findPointById,
+	initPoints,
+	insertHomeToPoint,
+	updateHomeToPoint,
+} from 'src/TrackObjects/point/points'
 import {
 	findBufferById,
 	initBuffers,
@@ -40,7 +46,12 @@ import {
 	initSegmentDisableds,
 	insertSegmentDisabled,
 } from 'src/TrackObjects/segment/segmentDisableds'
-import { initGroups } from 'src/TrackObjects/group/groups'
+import {
+	deleteGroupObject,
+	insertGroupObject,
+	updateGroupObject,
+	initGroups,
+} from 'src/TrackObjects/group/groups'
 import { createPathElement } from 'src/utils/svg/path'
 import { getPositionForBufferOrStation } from 'src/TrackObjects/utils/locationStationBuffer'
 import { setFocusedObject } from 'src/MapObjects/focus/focus'
@@ -234,6 +245,40 @@ const exposed: IOmsTrackMonitor = {
 		switch (op) {
 			case 'UPDATE':
 				setStation(s)
+				break
+
+			default:
+				break
+		}
+	},
+
+	updateGroupObject(op, go, data) {
+		switch (op) {
+			case 'INSERT':
+				insertGroupObject(go)
+				break
+			case 'UPDATE':
+				if (data) updateGroupObject(data)
+				break
+			case 'DELETE':
+				deleteGroupObject(go)
+				break
+
+			default:
+				break
+		}
+	},
+
+	updateHome(op, h) {
+		switch (op) {
+			case 'INSERT':
+				insertHomeToPoint(h)
+				break
+			case 'UPDATE':
+				updateHomeToPoint(h)
+				break
+			case 'DELETE':
+				deleteHomeToPoint(h)
 				break
 
 			default:

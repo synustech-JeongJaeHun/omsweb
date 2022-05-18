@@ -31,6 +31,7 @@ export class HubService {
 	clusterStatusTableChanged$: EventEmitter<IDataChangeEvent> =
 		new EventEmitter()
 	kpiChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter()
+	homeChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter()
 	//#endregion
 
 	public isConnected = false
@@ -111,6 +112,7 @@ export class HubService {
 		this.hub.off('zcuStatusTableChanged')
 		this.hub.off('clusterStatusTableChanged')
 		this.hub.off('kpiChanged')
+		this.hub.off('homeChanged')
 	}
 
 	private attachEvents() {
@@ -202,6 +204,10 @@ export class HubService {
 		this.hub.on('kpiChanged', (meta, body) => {
 			console.info('## hub message : kpiChanged >>', { meta, body })
 			this.kpiChanged$.emit({ ...meta, data: body })
+		})
+		this.hub.on('homeChanged', (meta, body) => {
+			console.info('## hub message : homeChanged >>', { meta, body })
+			this.homeChanged$.emit({ ...meta, data: body })
 		})
 	}
 }

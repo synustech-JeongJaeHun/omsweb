@@ -32,27 +32,23 @@ const group = useGroup('home', toRef(props.point, 'homeId', -1))
     <g class="scale-and-reverse-rotate">
       <circle v-if="props.point.isFocused" r="15" class="focus" />
       <circle r="3" class="point-path" />
-      <!-- home with group -->
-      <rect
-        v-if="group"
-        class="group-shadow home"
-        x="-10"
-        y="-3"
-        width="20"
-        height="27"
-        rx="4"
-        ry="4"
-        :fill="getGroupColorWithAlpha(group.color)"
-      />
-      <!-- home -->
-      <PointHome
-        v-if="props.point.homeId"
-        class="home"
-        width="13.5"
-        height="21"
-        x="-6.75"
-        y="0"
-      />
+
+      <template v-if="props.point.homeId">
+        <!-- home with group -->
+        <rect
+          v-if="group"
+          class="group-shadow home"
+          x="-10"
+          y="-3"
+          width="20"
+          height="27"
+          rx="4"
+          ry="4"
+          :fill="getGroupColorWithAlpha(group.color)"
+        />
+        <!-- home -->
+        <PointHome class="home" width="13.5" height="21" x="-6.75" y="0" />
+      </template>
 
       <text
         class="invert label select-none"

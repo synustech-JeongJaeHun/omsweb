@@ -54,7 +54,7 @@ namespace OMSWeb.Services
                 {"cluster_points", new DataChangeEventTarget(CacheKeys.Clusters, new[]{"clusterChanged"})},
                 {"cluster_status", new DataChangeEventTarget(CacheKeys.ClusterStatus, new[]{"clusterStatusTableChanged"}, true)},
                 {"location_groups", new DataChangeEventTarget(CacheKeys.Groups, new[]{"groupChanged"})},
-                {"grouped_objects", new DataChangeEventTarget(CacheKeys.Groups, new[]{"groupChanged"}, true)},
+                {"grouped_objects", new DataChangeEventTarget(CacheKeys.Groups, new[]{"groupChanged"})},
                 {"homes", new DataChangeEventTarget(CacheKeys.None, new[]{"homeChanged"}, true)},
                 {"orders", new DataChangeEventTarget(CacheKeys.None, new[]{"orderTableChanged"}, true)},
                 {"vehicle_alarms", new DataChangeEventTarget(CacheKeys.None, new[]{"alarm"})},
