@@ -253,7 +253,7 @@ function convertSnapshotOrderToCurrentOrder(
 		carrierLabel: order.carrier_label,
 		id: order.id,
 		locationDropoff: order?.location_dropoff,
-		locationPickup: order.location_pickup,
+		locationPickup: order?.location_pickup,
 		logicalId: order.logical_id,
 		origin: order.origin,
 		priority: order.priority,

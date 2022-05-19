@@ -104,9 +104,9 @@ type PlaybackSnapshotOrder = {
 	distance_move: unknown
 	distance_pickup: unknown
 	id: number
-	location_dropoff: string
+	location_dropoff: string | null | undefined
 	location_move: unknown
-	location_pickup: string
+	location_pickup: string | null | undefined
 	logical_id: LogicalId
 	origin: string
 	priority: number | string | null
@@ -231,8 +231,8 @@ type OrderHistoryEvent = { tableName: 'order_history' } & Timeline &
 		assignmentType: string
 		carrierLabel: string
 		id: number
-		locationDropoff: string
-		locationPickup: string
+		locationDropoff: string | null | undefined
+		locationPickup: string | null | undefined
 		logicalId: LogicalId
 		origin: string
 		priority: number
@@ -317,8 +317,8 @@ type CurrentOrder = {
 	assignmentType: string | null
 	carrierLabel: string | null
 	id: number
-	locationDropoff: string
-	locationPickup: string
+	locationDropoff: string | null | undefined
+	locationPickup: string | null | undefined
 	logicalId: LogicalId
 	origin: string
 	priority: string | number
