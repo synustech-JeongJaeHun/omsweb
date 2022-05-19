@@ -58,11 +58,11 @@ export class VehicleSettingComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.hubSvc.vehicleTableChanged$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((e: IDataChangeEvent) => {
-        e && this.onTableChanged(e);
-      });
+    //this.hubSvc.vehicleTableChanged$
+    //  .pipe(takeUntil(this.destroy$))
+    //  .subscribe((e: IDataChangeEvent) => {
+    //    e && this.onTableChanged(e);
+    //  });
   }
 
   ngOnDestroy(): void {

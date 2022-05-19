@@ -10,6 +10,7 @@
   </div>
 </div>
 
+<!--
 <div class="sub-links">
   <div class="sub-actions">
     <button mat-stroked-button class="dense" (click)="onAddVehicle(gridVehicles)">
@@ -20,6 +21,7 @@
     </button>
   </div>
 </div>
+-->
 
 <dx-data-grid #gridVehicles [dataSource]="dataSource" [keyExpr]="'id'" [repaintChangesOnly]="true" [showBorders]="true"
               [height]="450" [allowColumnResizing]="false" [(selectedRowKeys)]="selectedIds" (onRowUpdated)="onUpdateRow($event)"
