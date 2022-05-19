@@ -1,6 +1,6 @@
 <dx-data-grid [dataSource]="dataSource" [height]="tableHeight" [repaintChangesOnly]="true" [columnAutoWidth]="true"
   [showBorders]="false" [highlightChanges]="false" [showColumnLines]="true" [showRowLines]="true"
-  [hoverStateEnabled]="true" [(selectedRowKeys)]="selectedRows" [headerFilter]="false">
+  [hoverStateEnabled]="true" [(selectedRowKeys)]="selectedRows" [headerFilter]="false" allowColumnResizing="true">
   <dxo-selection [mode]="'none'" showCheckBoxesMode="always"></dxo-selection>
   <!-- <dxo-scrolling mode="virtual"></dxo-scrolling> -->
   <dxo-paging [pageSize]="50"></dxo-paging>
