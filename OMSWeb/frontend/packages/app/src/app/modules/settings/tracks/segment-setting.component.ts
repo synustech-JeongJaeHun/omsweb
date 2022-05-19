@@ -62,11 +62,12 @@ export class SegmentSettingComponent implements OnInit {
 
       this.selectedIds = [];
       this._changedItems = [];
-      grid.instance.refresh();
+      //grid.instance.refresh();
 
-      this.settingsSvc.settingsSegments().subscribe((res) => {
-        this.dataSource = res;
-      });
+      setTimeout(() => {
+        this.updateState();
+      }, 600);
+
     }
   }
 
@@ -112,6 +113,16 @@ export class SegmentSettingComponent implements OnInit {
     this.messageSvc
       .sendAllSpeedRatioSegmentCommand({ type: 'SEGMENT-ALL', action: 'segment-setting' }, inputAllSppedRatio.value)
       .subscribe();
+
+    setTimeout(() => {
+      this.updateState();
+    }, 600);
+  }
+
+  private updateState() {
+    this.settingsSvc.settingsSegments().subscribe((res) => {
+      this.dataSource = res;
+    });
   }
 
   customSpeedRatio(cellInfo) {

@@ -20,7 +20,7 @@
               *ngIf="canDisplayTable('orders_id')"></dxi-column>
   <dxi-column [allowFiltering]="true" [width]="70" dataType="string" dataField="origin" [allowSorting]="true"
               [caption]="'names.origin' | translate" *ngIf="canDisplayTable('orders_origin')"></dxi-column>
-  <dxi-column [width]="170" dataType="string" dataField="logicalId" [caption]="'names.commandId' | translate"
+  <dxi-column [width]="240" dataType="string" dataField="logicalId" [caption]="'names.commandId' | translate"
               *ngIf="canDisplayTable('orders_logicalId')"></dxi-column>
   <dxi-column [width]="70" dataType="string" dataField="priority" [caption]="'names.priority' | translate"
               *ngIf="canDisplayTable('orders_priority')"></dxi-column>

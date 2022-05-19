@@ -67,6 +67,8 @@ namespace OMSWeb.Services.MqttClient
         public const string ORIGIN_LOCAL_ORDER = "OMS";
         public const string ORIGIN_HOST_ORDER = "OMS,MCS";
 
+        public const int DEFAULT_PRIORITY = 30;
+
         public const string DEFAULT_DIRECTION = "forward";
 
         public MqttMessage()
@@ -554,6 +556,11 @@ namespace OMSWeb.Services.MqttClient
 
                 if (command.CarrierLabel != null)
                     data["carrier_id"] = command.CarrierLabel;
+
+                if (command.Priority != null)
+                    data["priority"] = command.Priority;
+                else
+                    data["priority"] = DEFAULT_PRIORITY;
 
                 data["origin"] = ORIGIN_OMS;    // oms
             }
