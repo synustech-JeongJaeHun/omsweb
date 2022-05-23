@@ -5,17 +5,17 @@ import styled from '@emotion/styled'
 import { OverviewAbnormal, GlobalStyle } from '@daimre/component-library'
 
 const Wrapper = styled.div`
-  height: 100%;
+	height: 100%;
 `
 
 const exEmptyData = OverviewAbnormal.exEmptyData
 const exData = OverviewAbnormal.exData
 
 const Comp = () => {
-  const [isPlaceholder, updateState] = React.useState(true)
-	const [ data, setData ] = React.useState(exEmptyData)
+	const [isPlaceholder, updateState] = React.useState(true)
+	const [data, setData] = React.useState(exEmptyData)
 
-  React.useEffect(() => {
+	React.useEffect(() => {
 		const id = setTimeout(() => {
 			updateState(false)
 			setData(exData)
@@ -24,8 +24,7 @@ const Comp = () => {
 		return () => clearTimeout(id)
 	}, [])
 
-
-	return <OverviewAbnormal {...data} isPlaceholder={isPlaceholder}/>
+	return <OverviewAbnormal {...data} isPlaceholder={isPlaceholder} />
 }
 
 export default Comp

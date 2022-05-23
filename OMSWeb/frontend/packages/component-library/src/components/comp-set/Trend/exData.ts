@@ -53,24 +53,9 @@ const exTableData = [
 
 const exStats = [
 	{
-		title: 'Utilization',
-		value: '67.78',
-		unit: '%'
-	},
-	{
 		title: 'Delivery Time',
 		value: '87.10',
 		unit: 'sec'
-	},
-	{
-		title: 'CPU',
-		value: '18',
-		unit: '%'
-	},
-	{
-		title: 'Memory',
-		value: '50',
-		unit: '%'
 	},
 ]
 

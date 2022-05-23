@@ -1,8 +1,5 @@
 import * as R from 'ramda'
-import {
-	getDurationStr,
-	getDurationLabel
-} from '@daimre/shared'
+import { getDurationStr, getDurationLabel } from '@daimre/shared'
 import { format, getYear } from 'date-fns/fp'
 import { dic, getSubsection } from '../shared'
 import { query } from '../../../dbconnection'
@@ -34,10 +31,9 @@ const getName = (key) => {
 			)
 			`
 		default:
-			break;
+			break
 	}
 }
-
 
 const subFilter = (key, value) => {
 	switch (key) {
@@ -45,29 +41,31 @@ const subFilter = (key, value) => {
 		case 'duration':
 			return ''
 		default:
-			return value ? ` AND ${dic[key].name} = '${value}'`: ''
+			return value ? ` AND ${dic[key].name} = '${value}'` : ''
 	}
 }
 
-const getFilter = ({ section, start, end }) => (key, value) => {
-	switch (section) {
-		case 'overview':
-			return `
+const getFilter =
+	({ section, start, end }) =>
+	(key, value) => {
+		switch (section) {
+			case 'overview':
+				return `
 				time::DATE BETWEEN '${start}' AND '${end}'
 			`
-		case 'duration': {
-			const [startStr, endStr] = R.split('_', value)
-			return `
+			case 'duration': {
+				const [startStr, endStr] = R.split('_', value)
+				return `
 				time::DATE BETWEEN '${startStr}' AND '${endStr}'
 			`
-		}
-		default:
-			return `
+			}
+			default:
+				return `
 				time::DATE BETWEEN '${start}' AND '${end}'
 				${subFilter(key, value)}
 			`
+		}
 	}
-}
 
 const joinTable = `
 	select
@@ -85,14 +83,14 @@ const joinTable = `
 			(
 				select
 				*
-				from orders
+				from total_orders
 			) as oh
 		on oh.id = (
 			select ord.id
-			from orders as ord
+			from total_orders as ord
 			where
 				va.vehicle_id = ord.vehicle_id and
-				va.time between ord.time_created and greatest (
+				va.time::Date between ord.time_created and greatest (
 					time_assigned, time_vehicle_arrived,
 					time_load_started, time_load_completed,
 					time_unload_started, time_unload_completed,
@@ -112,11 +110,32 @@ COALESCE(
 )
 `
 
-const makeDuration = ({ section, start, end }) =>  async (subsection, value) => {
-	const filter = getFilter({ section, start, end})
+const createOrderView = (start, end) => {
+	const queryStr = `
+	CREATE or REPLACE VIEW total_orders as (
+		select *
+		from (
+			select
+				history_source_id as order_id,
+				max(id) as history_id
+			from order_history
+			where time_modified::date between '${start}' and '${end}'
+			group by history_source_id
+		) temp
+		join order_history oh
+		on oh.id = temp.history_id
+	)
+	`
+	return query(queryStr, '')
+}
 
-	const getDurationByDay = (subsection, value, startStr, endStr) => {
-		const queryStr = `
+const makeDuration =
+	({ section, start, end }) =>
+	async (subsection, value) => {
+		const filter = getFilter({ section, start, end })
+
+		const getDurationByDay = (subsection, value, startStr, endStr) => {
+			const queryStr = `
 			SELECT
 			TO_CHAR(days, 'YYYY-MM-DD') as label,
 			(
@@ -136,15 +155,16 @@ const makeDuration = ({ section, start, end }) =>  async (subsection, value) => 
 			)::int
 			FROM GENERATE_SERIES('${startStr}'::DATE, '${endStr}'::DATE, '1 days') days
 		`
-		return query(queryStr, '')
-	}
+			return query(queryStr, '')
+		}
 
-	const getDurationByMonth = async (subsection, value) => {
-		const durationList = getDurationStr(start, end)
-		const queryStr = (arr) => {
-			const { label, startStr, endStr } = getDurationLabel(arr)
+		const getDurationByMonth = async (subsection, value) => {
+			const durationList = getDurationStr(start, end)
+			const queryStr = (arr) => {
+				const { label, startStr, endStr } = getDurationLabel(arr)
+				const _filter = getFilter({ section, start: startStr, end: endStr })
 
-			const sql = `
+				const sql = `
 				select
 				'${label}' as label,
 				count(*)::int,
@@ -154,30 +174,30 @@ const makeDuration = ({ section, start, end }) =>  async (subsection, value) => 
 				from (${joinTable}) as temp
 				where
 					time::date between '${startStr}' and '${endStr}' and
-					${filter(subsection, value)}
+					${_filter(subsection, value)}
 			`
-			return sql
+				return sql
+			}
+
+			const queryPromiseList = durationList.map(async (startEnd) => {
+				const ret = await query(queryStr(startEnd), '')
+				return R.head(ret.rows)
+			})
+
+			return await Promise.all(queryPromiseList)
 		}
 
-		const queryPromiseList = durationList.map(async (startEnd) => {
-			const ret = await query(queryStr(startEnd), '')
-			return R.head(ret.rows)
-		})
+		if (section === 'duration') {
+			const [startStr, endStr] = R.split('_', value)
+			const ret = await getDurationByDay(subsection, '', startStr, endStr)
+			return ret.rows
+		}
 
-		return await Promise.all(queryPromiseList)
+		return await getDurationByMonth(subsection, value)
 	}
-
-	if (section === 'duration') {
-		const [startStr, endStr] = R.split('_', value)
-		const ret = await getDurationByDay(subsection, '', startStr, endStr)
-		return ret.rows
-	}
-
-	return await getDurationByMonth(subsection, value)
-}
 
 const getOthers = async ({ section, start, end, selected_item }) => {
-	const filter = getFilter({ section, start, end})
+	const filter = getFilter({ section, start, end })
 	const sectionList = getSubsection(section)
 
 	const getQuery = (key, subsection = '', value = '') => {
@@ -205,13 +225,11 @@ const getAlarmChart = async ({ section, selected_item, start, end }) => {
 	const getDuration = makeDuration({ section, start, end })
 	const sectionList = getSubsection(section)
 
+	await createOrderView(start, end)
 	const duration: any = await getDuration(section, selected_item)
 	const others = await getOthers({ section, start, end, selected_item })
 
-	return R.zipObj(
-		['duration', ...sectionList],
-		[duration, ...others]
-	)
+	return R.zipObj(['duration', ...sectionList], [duration, ...others])
 }
 
 export default getAlarmChart

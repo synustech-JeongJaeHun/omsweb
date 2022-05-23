@@ -112,10 +112,10 @@ const DataListWrapper = styled.div`
 	}
 `
 
-const Datalist = ({
+const Datalist: React.FC<DatalistProps> = ({
 	unit,
 	data
-}) => {
+}: DatalistProps) => {
 
 	return (
 		<DataListWrapper>
@@ -141,17 +141,26 @@ Datalist.defaultProps = {
 	data: [],
 }
 
+interface DatalistProps {
+	unit: string
+	data: any[]
+}
+
 const InlineLineChartWrapper = styled.div`
 	margin-left: 37px;
 `
 
-const InlineLineChart: React.FC = ({ data }) => {
+const InlineLineChart: React.FC<InlineLineChartProps> = ({ data }:InlineLineChartProps) => {
 
 	return (
 		<InlineLineChartWrapper>
 			<Inline data={data} />
 		</InlineLineChartWrapper>
 	)
+}
+
+interface InlineLineChartProps {
+	data: any[]
 }
 
 const SimpleStatBox: React.FC<Props> & any = ({

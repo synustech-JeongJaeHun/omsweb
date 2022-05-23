@@ -3,7 +3,6 @@ import { query } from '../../../dbconnection'
 import * as R from 'ramda'
 
 const getStat = async () => {
-
 	const current = new Date()
 	const currentYear = getYear(current)
 	const firstDay = `${currentYear}-01-01`
@@ -19,13 +18,13 @@ const getStat = async () => {
 		FROM (
 			SELECT
 				time_completed - time_created as calctime
-			FROM orders
+			FROM order_history
 			WHERE time_completed IS NOT NULL
 				AND time_completed::DATE BETWEEN '${firstDay}' AND '${lastDay}'
 		) AS a
 	`
 
-	const sql2 =`
+	const sql2 = `
 		SELECT
 			days,
 			weeks,
@@ -58,7 +57,7 @@ const getStat = async () => {
 				(
 					SELECT
 						count(*)
-					FROM orders oh
+					FROM order_history oh
 					WHERE time_completed IS NOT NULL
 						AND time_completed::DATE BETWEEN '${firstDay}' AND '${lastDay}'
 				) AS total
@@ -68,7 +67,7 @@ const getStat = async () => {
 					(
 						SELECT
 						time_completed
-						FROM orders
+						FROM order_history
 						WHERE time_completed IS NOT NULL
 						AND time_completed::DATE BETWEEN '${firstDay}' AND '${lastDay}'
 						ORDER BY time_completed ASC
@@ -77,7 +76,7 @@ const getStat = async () => {
 					(
 						SELECT
 						time_completed
-						FROM orders
+						FROM order_history
 						WHERE time_completed IS NOT NULL
 						AND time_completed::DATE BETWEEN '${firstDay}' AND '${lastDay}'
 						ORDER BY time_completed DESC
@@ -92,20 +91,24 @@ const getStat = async () => {
 		return R.head(temp.rows)
 	})
 	const ret = await Promise.all(pList)
-	const {
-		total,
-		avg, min, max, devn,
-		ph, daily, weekly, monthly, yearly
-	} = R.mergeAll(ret)
+	const { total, avg, min, max, devn, ph, daily, weekly, monthly, yearly } =
+		R.mergeAll(ret)
 
 	return {
 		total,
 		time: {
-			avg, min, max, devn,
+			avg,
+			min,
+			max,
+			devn,
 		},
 		avg: {
-			ph, daily, weekly, monthly, yearly
-		}
+			ph,
+			daily,
+			weekly,
+			monthly,
+			yearly,
+		},
 	}
 }
 

@@ -3,7 +3,6 @@ import { query } from '../../../dbconnection'
 import * as R from 'ramda'
 
 const getStat = async () => {
-
 	const current = new Date()
 	const currentYear = getYear(current)
 	const firstDay = `${currentYear}-01-01`
@@ -24,7 +23,7 @@ const getStat = async () => {
 		) AS a
 	`
 
-	const sql2 =`
+	const sql2 = `
 		SELECT
 			days,
 			weeks,
@@ -44,8 +43,8 @@ const getStat = async () => {
 			END::int AS monthly,
 			CASE
 				WHEN hours = 0 THEN total
-				ELSE total / hours
-			END::int AS ph,
+				ELSE round( total::numeric / hours::numeric, 2 )
+			END::float AS ph,
 			total::int as yearly
 			FROM
 			(
@@ -88,20 +87,24 @@ const getStat = async () => {
 		return R.head(temp.rows)
 	})
 	const ret = await Promise.all(pList)
-	const {
-		total,
-		avg, min, max, devn,
-		ph, daily, weekly, monthly, yearly
-	} = R.mergeAll(ret)
+	const { total, avg, min, max, devn, ph, daily, weekly, monthly, yearly } =
+		R.mergeAll(ret)
 
 	return {
 		total,
 		time: {
-			avg, min, max, devn,
+			avg,
+			min,
+			max,
+			devn,
 		},
 		avg: {
-			ph, daily, weekly, monthly, yearly
-		}
+			ph,
+			daily,
+			weekly,
+			monthly,
+			yearly,
+		},
 	}
 }
 

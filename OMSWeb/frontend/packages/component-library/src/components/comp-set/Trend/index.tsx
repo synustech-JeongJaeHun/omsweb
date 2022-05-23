@@ -8,7 +8,7 @@ import * as React from 'react'
 import styled from '@emotion/styled'
 import { css } from '@emotion/react'
 import { color } from '@daimre/styles'
-import { numberWithCommas } from '@daimre/shared'
+import { numberWithCommas, genBaseline } from '@daimre/shared'
 import Container from '../../layout/Container'
 import RCol from '../../layout/RCol'
 import Col from '../../layout/Col'
@@ -70,21 +70,53 @@ const Trend: React.FC<Props> & any = ({ data, isPlaceholder }: Props) => {
 									<Col col={12}>
 										<div className="section-title">Summary</div>
 										<div className="stat-list">
-											{
-												stats.map((item, i) => {
-													const { title, value, unit } = item
-													return (
-														<div key={i.toString()}>
-															<SimpleStatBox
-																duration=''
-																title={title}
-																value={value}
-																unit={unit}
-																isPlaceholder={isPlaceholder} />
-														</div>
-													)
-												})
-											}
+											<SimpleStatBox
+												title="Utilization"
+												unit="%"
+												value="67.78"
+											>
+												<SimpleStatBox.InlineLineChart data={[
+													{
+														name: 'Utilization',
+														data: genBaseline(),
+													},
+												]} />
+											</SimpleStatBox>
+											<SimpleStatBox
+												title="Delivery Time"
+												unit="sec"
+												value="87.10"
+											>
+												<SimpleStatBox.InlineLineChart data={[
+													{
+														name: 'Delivery Time',
+														data: genBaseline(),
+													},
+												]} />
+											</SimpleStatBox>
+											<SimpleStatBox
+												title="CPU"
+												unit="%"
+												value="18"
+												duration='3.84GHz'
+
+											/>
+											<SimpleStatBox
+												title="Memory"
+												unit="%"
+												value="50"
+											>
+												<SimpleStatBox.DataList unit='GB' data={[
+													{
+														label: 'use',
+														value: 7.9
+													},
+													{
+														label: 'total',
+														value: 15.8
+													}
+												]} />
+											</SimpleStatBox>
 										</div>
 										<InfoTable data={table} isPlaceholder={isPlaceholder} />
 									</Col>
