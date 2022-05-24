@@ -42,7 +42,7 @@ namespace OMSWeb.Repositories
                     FROM (
                         SELECT
                             time_completed - time_created as calctime
-                        FROM orders
+                        FROM order_history
                         WHERE time_completed IS NOT NULL
                             AND time_completed::DATE BETWEEN '{start}' AND '{end}'
                     ) AS a
@@ -92,7 +92,7 @@ namespace OMSWeb.Repositories
                             (
                                 SELECT
                                     count(*)
-                                FROM orders oh
+                                FROM order_history oh
                                 WHERE time_completed IS NOT NULL
                                     AND time_completed::DATE BETWEEN '{start}' AND '{end}'
                             ) AS total
@@ -102,7 +102,7 @@ namespace OMSWeb.Repositories
                                 (
                                     SELECT
                                     time_completed
-                                    FROM orders
+                                    FROM order_history
                                     WHERE time_completed IS NOT NULL
                                     AND time_completed::DATE BETWEEN '{start}' AND '{end}'
                                     ORDER BY time_completed ASC
@@ -111,7 +111,7 @@ namespace OMSWeb.Repositories
                                 (
                                     SELECT
                                     time_completed
-                                    FROM orders
+                                    FROM order_history
                                     WHERE time_completed IS NOT NULL
                                     AND time_completed::DATE BETWEEN '{start}' AND '{end}'
                                     ORDER BY time_completed DESC
@@ -129,8 +129,6 @@ namespace OMSWeb.Repositories
         public Func<string, string, Task<dynamic[]>> BuildQueryDuration(string section, string start, string end)
             => async (subsection, value) =>
             {
-                var filter = GetFilter(section, start, end);
-
                 async Task<dynamic[]> getDurationByDay(string? subsection, string value, string startStr, string endStr)
                 {
                     dynamic[] result;
@@ -142,16 +140,18 @@ namespace OMSWeb.Repositories
                                 (
                                     SELECT
                                     {_avgEpochPerHour}
-                                    FROM orders oh
+                                    FROM order_history oh
                                     WHERE
+                                        time_completed is not null and
                                         time_completed::DATE BETWEEN days AND days
                                         {SubFilter(subsection, value)}
                                 ) AS avg,
                                 (
                                     SELECT count(*)
-                                    FROM orders oh
+                                    FROM order_history oh
                                     WHERE
-                                        time_completed::DATE BETWEEN days AND days
+                                        time_completed is not null and
+					                    time_completed::DATE BETWEEN days AND days
                                         {SubFilter(subsection, value)}
                                 )::int
                                 FROM GENERATE_SERIES('{startStr}'::DATE, '{endStr}'::DATE, '1 days') days
@@ -168,6 +168,8 @@ namespace OMSWeb.Repositories
                     string queryStr(string[] arr)
                     {
                         var (label, startStr, endStr) = GetDurationLabel(arr);
+                        var _filter = GetFilter(section, startStr, endStr);
+
                         return $@"
                             select
                             '{label}' as label,
@@ -175,9 +177,8 @@ namespace OMSWeb.Repositories
                             {_avgEpochPerHour} as avg,
                             '{startStr}' as start_day,
                             '{endStr}' as end_day
-                            from orders
-                            where time_completed::date between '{startStr}' and '{endStr}'
-                            {filter(subsection, value)}
+                            from order_history
+                            where time_completed is not null and {_filter(subsection, value)}
                         ";
                     }
 
@@ -217,10 +218,8 @@ namespace OMSWeb.Repositories
                         {GetName(key)} as label,
                         COUNT(*)::int AS count,
                         {_avgEpochPerHour} as avg
-                        FROM orders
-                        WHERE
-                            time_completed IS NOT NULL
-                            {filter(subsection, value)}
+                        FROM order_history
+			            WHERE time_completed is not null and {filter(subsection, value)}
                         GROUP BY {GetColumnFromDic(key)}
                         ORDER BY label asc
                     ";
@@ -240,14 +239,14 @@ namespace OMSWeb.Repositories
                 switch (section)
                 {
                     case "overview":
-                        return $" AND time_completed BETWEEN '{start}' AND '{end}'";
+                        return $"time_completed::DATE BETWEEN '{start}' AND '{end}'";
                     case "duration":
                         var strs = value.Split("_");
                         var startStr = strs[0];
                         var endStr = strs[1];
-                        return $" AND time_completed::DATE BETWEEN '{startStr}' AND '{endStr}'";
+                        return $"time_completed::DATE BETWEEN '{startStr}' AND '{endStr}'";
                     default:
-                        return $" AND time_completed::DATE BETWEEN '{start}' AND '{end}'{SubFilter(key, value)}";
+                        return $"time_completed::DATE BETWEEN '{start}' AND '{end}'{SubFilter(key, value)}";
                 }
             };
 

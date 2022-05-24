@@ -66,5 +66,22 @@ namespace OMSWeb.Controllers
                 _ => BadRequest()
             };
         }
+
+        [HttpGet("trend")]
+        public async Task<object> GetTrend()
+        {
+            return await _reportSvc.QueryTrend();
+        }
+
+        [HttpGet("trend/utilization")]
+        public object GetTrendUtilization()
+        {
+            throw new NotImplementedException("Not Implemented Route: GetTrendUtilization");
+        }
+        [HttpGet("trend/delivery-time")]
+        public object GetTrendDeliveryTime()
+        {
+            throw new NotImplementedException("Not Implemented Route: GetTrendDeliveryTime");
+        }
     }
 }

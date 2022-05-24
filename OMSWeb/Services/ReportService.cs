@@ -28,16 +28,19 @@ namespace OMSWeb.Services
         private readonly ReportRepository _reportRepo;
         private readonly ReportNormaltrRepository _reportNormaltrRepository;
         private readonly ReportAlarmRepository _reportAlarmRepository;
+        private readonly ReportTrendReposity _reportTrendRepository;
 
         public ReportService(
                 ReportRepository reportRepository,
                 ReportNormaltrRepository reportNormaltrRepository,
-                ReportAlarmRepository reportAlarmRepository
+                ReportAlarmRepository reportAlarmRepository,
+                ReportTrendReposity reportTrendReposity
         )
         {
             _reportRepo = reportRepository;
             _reportNormaltrRepository = reportNormaltrRepository;
             _reportAlarmRepository = reportAlarmRepository;
+            _reportTrendRepository = reportTrendReposity;
         }
 
         public object QueryLabels() => _reportRepo.QueryLabels();
@@ -128,6 +131,7 @@ namespace OMSWeb.Services
             var queryDuration = _reportAlarmRepository.BuildQueryDuration(section, start, end);
             var sectionList = ReportServiceShared.GetSubsection(section);
 
+            await _reportAlarmRepository.CreateOrderView(start, end);
             var duration = await queryDuration(section, selectedItem);
             var others = await _reportAlarmRepository.QuerySections(section, selectedItem, start, end);
 
@@ -136,6 +140,54 @@ namespace OMSWeb.Services
             sectionList.Zip(others).ToList().ForEach(tuple => data.Add(tuple.First, tuple.Second));
 
             return data;
+        }
+
+        public async Task<object> QueryTrend()
+        {
+            var deliveryTimeTask = _reportTrendRepository.QueryDeliveryTime();
+            var waitTimeTask = _reportTrendRepository.QueryWaitTime();
+            var transferTimeTask = _reportTrendRepository.QueryTransferTime();
+            var assignTimeTask = _reportTrendRepository.QueryAssignTime();
+            var numberOfOrderRequestTask = _reportTrendRepository.QueryNumberOfOrderRequest();
+            var vehiclesTask = _reportTrendRepository.QueryVehicles();
+            var loadingUnLoadingTask = _reportTrendRepository.QueryLoadingUnLoading();
+            var rangeTask = _reportTrendRepository.QueryRange();
+            var utilizationTask = _reportTrendRepository.QueryUtilization();
+
+            await Task.WhenAll(new Task[] {
+                deliveryTimeTask,
+                waitTimeTask,
+                transferTimeTask,
+                assignTimeTask,
+                numberOfOrderRequestTask,
+                vehiclesTask,
+                loadingUnLoadingTask,
+                rangeTask,
+                utilizationTask,
+            });
+
+            var delivery_time = await deliveryTimeTask;
+            var wait_time = await waitTimeTask;
+            var transfer_time = await transferTimeTask;
+            var assign_time = await assignTimeTask;
+            var number_of_order_request = await numberOfOrderRequestTask;
+            var vehicles = await vehiclesTask;
+            var loading_unLoading = await loadingUnLoadingTask;
+            var range = await rangeTask;
+            var utilization = await utilizationTask;
+
+            return new
+            {
+                delivery_time,
+                wait_time,
+                transfer_time,
+                assign_time,
+                number_of_order_request,
+                vehicles,
+                loading_unLoading,
+                range,
+                utilization,
+            };
         }
     }
 }

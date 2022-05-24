@@ -42,14 +42,14 @@ namespace OMSWeb.Repositories
                     (
                         select
                         *
-                        from orders
+                        from total_orders
                     ) as oh
                 on oh.id = (
                     select ord.id
-                    from orders as ord
+                    from total_orders as ord
                     where
                         va.vehicle_id = ord.vehicle_id and
-                        va.time between ord.time_created and greatest (
+                        va.time::Date between ord.time_created and greatest (
                             time_assigned, time_vehicle_arrived,
                             time_load_started, time_load_completed,
                             time_unload_started, time_unload_completed,
@@ -112,8 +112,8 @@ namespace OMSWeb.Repositories
                         END::int AS monthly,
                         CASE
                             WHEN hours = 0 THEN total
-                            ELSE total / hours
-                        END::int AS ph,
+                            ELSE round( total::numeric / hours::numeric, 2 )
+                        END::float AS ph,
                         total::int as yearly
                         FROM
                         (
@@ -154,6 +154,30 @@ namespace OMSWeb.Repositories
                 result = await conn.QueryFirstAsync<(int Days, int Weeks, int Months, int Hours, int Daily, int Weekly, int Monthly, int Ph, int Yearly)>(sql);
             }
             return result;
+        }
+
+        public async Task CreateOrderView(string start, string end)
+        {
+            using (var conn = ConnectTrack())
+            {
+                var sql = $@"
+                    CREATE or REPLACE VIEW total_orders as (
+                        select *
+                        from (
+                            select
+                                history_source_id as order_id,
+                                max(id) as history_id
+                            from order_history
+                            where time_modified::date between '{start}' and '{end}'
+                            group by history_source_id
+                        ) temp
+                        join order_history oh
+                        on oh.id = temp.history_id
+                    )
+                ";
+
+                await conn.ExecuteAsync(sql);
+            }
         }
 
         public Func<string, string, Task<dynamic[]>> BuildQueryDuration(string section, string start, string end)
@@ -198,6 +222,8 @@ namespace OMSWeb.Repositories
                     string queryStr(string[] arr)
                     {
                         var (label, startStr, endStr) = GetDurationLabel(arr);
+                        var _filter = GetFilter(section, startStr, endStr);
+
                         return $@"
                             select
                             '{label}' as label,
@@ -208,7 +234,7 @@ namespace OMSWeb.Repositories
                             from ({_joinTable}) as temp
                             where
                                 time::date between '{startStr}' and '{endStr}' and
-                                {filter(subsection, value)}
+                                {_filter(subsection, value)}
                         ";
                     }
 
