@@ -41,7 +41,7 @@
       <dxo-header-filter [visible]="true"></dxo-header-filter>
       <dxo-filter-row [visible]="true"></dxo-filter-row>
 
-      <dxi-column [width]="160" dataType="string" dataField="vehicleLogicalId" sortOrder="desc"
+      <dxi-column [width]="160" dataType="string" dataField="vehicleLogicalId" 
                   [caption]="'names.vehicle' | translate"></dxi-column>
       <dxi-column [width]="320" dataType="string" dataField="description"
                   [caption]="'names.alarmName' | translate"></dxi-column>
@@ -53,7 +53,7 @@
                   [caption]="'names.cause' | translate"></dxi-column>
       <dxi-column [width]="100" dataType="string" dataField="cleared"
                   [caption]="'names.cleared' | translate"></dxi-column>
-      <dxi-column [width]="120" dataType="datetime" dataField="time"
+      <dxi-column [width]="120" dataType="datetime" dataField="time" sortOrder="desc"
                   [caption]="'names.time' | translate" [format]="dateTimeFormat"></dxi-column>
       <dxi-column [width]="120" dataType="datetime" dataField="timeResolved"
                   [caption]="'names.timeResolved' | translate" [format]="dateTimeFormat"></dxi-column>
