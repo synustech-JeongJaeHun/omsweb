@@ -2,7 +2,7 @@ import * as React from 'react'
 import SimpleStatBox from './index'
 import styled from '@emotion/styled'
 import { css } from '@emotion/react'
-import { genBaseline } from '@daimre/shared'
+import { genBaseline, useInterval, useSelfUpdatedData } from '@daimre/shared'
 
 export default {
 	title: '@daimre-ui/SimpleStatBox',
@@ -22,8 +22,6 @@ const Wrapper = styled.div`
 			margin-right: -1px;
 		`}
 `
-
-
 
 export const Basic = (args) => <SimpleStatBox {...args} />
 Basic.args = {
@@ -52,23 +50,21 @@ Placeholder.args = {
 	unit: '',
 }
 
-
 const datalistProps = {
 	unit: 'GB',
 	data: [
 		{
 			label: 'use',
-			value: 7.9
+			value: 7.9,
 		},
 		{
 			label: 'total',
-			value: 15.8
-		}
+			value: 15.8,
+		},
 	],
 }
 
 export const Extension1 = (args) => {
-
 	return (
 		<Wrapper>
 			<SimpleStatBox {...args}>
@@ -86,16 +82,18 @@ Extension1.args = {
 }
 
 export const Extension2 = (args) => {
+	const range = 60 * 10 * 1000
+	const interval = 1000 * 3
+	const [data, updateData] = useSelfUpdatedData(range, interval)
+
+	useInterval(() => {
+		updateData(Math.random() * 100)
+	}, interval)
 
 	return (
 		<Wrapper>
 			<SimpleStatBox {...args}>
-				<SimpleStatBox.InlineLineChart data={[
-					  {
-							name: 'Utilization',
-							data: genBaseline(),
-						},
-				]} />
+				<SimpleStatBox.InlineLineChart name="utilization" data={data} />
 			</SimpleStatBox>
 		</Wrapper>
 	)
@@ -107,4 +105,3 @@ Extension2.args = {
 	value: '67.78',
 	unit: '%',
 }
-

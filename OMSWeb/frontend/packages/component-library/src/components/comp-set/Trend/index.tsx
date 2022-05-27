@@ -5,17 +5,23 @@
  */
 
 import * as React from 'react'
+import * as R from 'ramda'
 import styled from '@emotion/styled'
 import { css } from '@emotion/react'
 import { color } from '@daimre/styles'
-import { numberWithCommas, genBaseline } from '@daimre/shared'
+import {
+	numberWithCommas,
+	genBaseline,
+	numRound,
+	convertEpochToStr,
+} from '@daimre/shared'
 import Container from '../../layout/Container'
 import RCol from '../../layout/RCol'
 import Col from '../../layout/Col'
 import Donut from '../../charts/Donut'
 import InfoTable from '../../InfoTable'
 import SimpleStatBox from '../../SimpleStatBox'
-import { exData } from './exData'
+import { exData, makeData } from './exData'
 import { QueryContext } from '../../../context'
 import ContentPaneBody from '../../ContentPaneBody'
 import Scrollable from '../../Scrollable'
@@ -50,20 +56,36 @@ const Wrapper = styled.div`
 		margin-bottom: 35px;
 	}
 `
+const avg = (arr = []) => {
+	const { length } = arr
+	return R.sum(arr) / length
+}
+const getAvg = R.compose(
+	avg,
+	R.map(R.prop(1)),
+	R.reject(([a, b, isDummy]) => isDummy === 0),
+)
 
-const Trend: React.FC<Props> & any = ({ data, isPlaceholder }: Props) => {
+const numRound2 = numRound(2, true)
+
+const convertUtilValue = R.compose(numRound2, getAvg)
+const convertDtValue = R.compose(convertEpochToStr, getAvg)
+
+const Trend: React.FC<Props> & any = ({
+	data,
+	utilization,
+	deliveryTime,
+	isPlaceholder,
+}: Props) => {
 	const { stats, table, donuts } = data
+	const { cpu, memory } = stats
 
 	return (
 		<QueryContext.Provider value={{ isPlaceholder }}>
 			<ContentPaneBody>
-				<Scrollable
-					scroll='y'
-					width='100%'
-					height='100%'
-				>
+				<Scrollable scroll="y" width="100%" height="100%">
 					<Wrapper>
-						<Container h='center'>
+						<Container h="center">
 							<RCol col={12} sm={12} md={12} lg={8}>
 								<div className="title">Trend</div>
 								<Container gutter={20}>
@@ -71,51 +93,51 @@ const Trend: React.FC<Props> & any = ({ data, isPlaceholder }: Props) => {
 										<div className="section-title">Summary</div>
 										<div className="stat-list">
 											<SimpleStatBox
-												title="Utilization"
+												title="Utilization(avg)"
 												unit="%"
-												value="67.78"
+												value={convertUtilValue(utilization)}
 											>
-												<SimpleStatBox.InlineLineChart data={[
-													{
-														name: 'Utilization',
-														data: genBaseline(),
-													},
-												]} />
+												<SimpleStatBox.InlineLineChart
+													name="utilization"
+													data={utilization}
+													converter={(value) => `${value}%`}
+												/>
 											</SimpleStatBox>
 											<SimpleStatBox
-												title="Delivery Time"
-												unit="sec"
-												value="87.10"
+												title="Delivery Time(avg)"
+												unit=""
+												value={convertDtValue(deliveryTime)}
 											>
-												<SimpleStatBox.InlineLineChart data={[
-													{
-														name: 'Delivery Time',
-														data: genBaseline(),
-													},
-												]} />
+												<SimpleStatBox.InlineLineChart
+													name="delivery time"
+													data={deliveryTime}
+													converter={convertEpochToStr}
+												/>
 											</SimpleStatBox>
 											<SimpleStatBox
 												title="CPU"
 												unit="%"
-												value="18"
-												duration='3.84GHz'
-
+												value={cpu.usage}
+												duration={cpu.model}
 											/>
 											<SimpleStatBox
 												title="Memory"
 												unit="%"
-												value="50"
+												value={numRound2(memory.usedPercent)}
 											>
-												<SimpleStatBox.DataList unit='GB' data={[
-													{
-														label: 'use',
-														value: 7.9
-													},
-													{
-														label: 'total',
-														value: 15.8
-													}
-												]} />
+												<SimpleStatBox.DataList
+													unit="GB"
+													data={[
+														{
+															label: 'used',
+															value: numRound2(memory.used / 1024),
+														},
+														{
+															label: 'total',
+															value: numRound2(memory.total / 1024),
+														},
+													]}
+												/>
 											</SimpleStatBox>
 										</div>
 										<InfoTable data={table} isPlaceholder={isPlaceholder} />
@@ -123,41 +145,41 @@ const Trend: React.FC<Props> & any = ({ data, isPlaceholder }: Props) => {
 									<Col col={12}>
 										<div className="section-title">Vehicle</div>
 										<Container>
-											{
-												donuts.map((donut, i) => {
-													return (
-														<Col col={6} key={i.toString()}>
-															<Donut
-																data={donut}
-																isPlaceholder={isPlaceholder}
-															/>
-														</Col>
-													)
-												})
-											}
+											{donuts.map((donut, i) => {
+												return (
+													<Col col={6} key={i.toString()}>
+														<Donut data={donut} isPlaceholder={isPlaceholder} />
+													</Col>
+												)
+											})}
 										</Container>
 									</Col>
 								</Container>
 								<div className="space"></div>
-							</RCol >
-						</Container >
+							</RCol>
+						</Container>
 					</Wrapper>
 				</Scrollable>
 			</ContentPaneBody>
-		</ QueryContext.Provider>
+		</QueryContext.Provider>
 	)
 }
 
 Trend.defaultProps = {
 	data: exData,
-	isPlaceholder: false
+	isPlaceholder: false,
+	utilization: genBaseline(),
+	deliveryTime: genBaseline(),
 }
 
 Trend.exData = exData
+Trend.makeData = makeData
 
 interface Props {
 	data?: any
 	isPlaceholder?: boolean
+	utilization?: any
+	deliveryTime?: any
 }
 
 export default Trend

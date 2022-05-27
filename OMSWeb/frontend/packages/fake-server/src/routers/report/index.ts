@@ -1,9 +1,11 @@
 // @ts-ignore
+import osu from 'node-os-utils'
 import express from 'express'
 import * as R from 'ramda'
 const reportRouter = express.Router()
 import { query } from '../../dbconnection'
 import { getNormaltrChart, getNormaltrStat } from './normaltr'
+import { getAbnormaltrChart, getAbnormaltrStat } from './abnormaltr'
 import { getAlarmChart, getAlarmStat } from './alarm'
 
 reportRouter.get('/report/labels', async (req, res) => {
@@ -49,6 +51,8 @@ reportRouter.post('/report/stats', async (req, res) => {
 				return await getNormaltrStat()
 			case 'alarm':
 				return await getAlarmStat()
+			case 'abnormaltr':
+				return await getAbnormaltrStat()
 			default:
 				break
 		}
@@ -74,6 +78,8 @@ reportRouter.post('/report/charts', async (req, res) => {
 		switch (variant) {
 			case 'normaltr':
 				return await getNormaltrChart(obj)
+			case 'abnormaltr':
+				return await getAbnormaltrChart(obj)
 			case 'alarm':
 				return await getAlarmChart(obj)
 			default:
@@ -87,6 +93,8 @@ reportRouter.post('/report/charts', async (req, res) => {
 })
 
 reportRouter.get('/report/trend', async (req, res) => {
+	const { cpu, mem } = osu
+
 	const delivery_time = await query(
 		`
 		select
@@ -196,15 +204,15 @@ reportRouter.get('/report/trend', async (req, res) => {
     from (
       select
       CASE
-         when time_created > now() - interval '1 hours' and max_column is null then now() - time_created
-         when time_created <= now() - interval '1 hours' and max_column is null then interval '1 hours'
-         when time_created <= now() - interval '1 hours' and max_column is not null and time_completed is null then interval '1 hours'
+         when time_created > now() - interval '1 hours' and max_field is null then now() - time_created
+         when time_created <= now() - interval '1 hours' and max_field is null then interval '1 hours'
+         when time_created <= now() - interval '1 hours' and max_field is not null and time_completed is null then interval '1 hours'
          when time_completed is not null then time_completed - (now() - interval '1 hours')
          ELSE interval '1 hours'
       end as time,
       id,
       time_created,
-      max_column,
+      max_field,
       time_completed
       from (
         select * from (
@@ -216,17 +224,21 @@ reportRouter.get('/report/trend', async (req, res) => {
             time_load_started, time_load_completed,
             time_unload_started, time_unload_completed,
             time_completed
-          ) as max_column,
+          ) as max_field,
           time_completed
           from orders
-          where time_aborted is null
+          where time_aborted is null and
+          time_modified between now() - interval '1 hours' and now()
         ) temp
-        where time_created > now() -  interval '1 hours' or max_column > now() -  interval '1 hours'
       ) temp
     ) temp
   `,
 		'',
 	)
+
+	const cpuUsage = await cpu.usage()
+	const cpuModel = await cpu.model()
+	const memory = await mem.info()
 
 	const obj = {
 		vehicles,
@@ -246,16 +258,79 @@ reportRouter.get('/report/trend', async (req, res) => {
 	// }
 
 	const ret = R.map(R.compose(R.map(Number), R.path(['rows', '0'])), obj)
+	ret.cpu = {
+		usage: cpuUsage,
+		model: cpuModel,
+	}
+	ret.memory = {
+		total: memory.totalMemMb,
+		used: memory.usedMemMb,
+		usedPercent: 100 - memory.freeMemPercentage,
+	}
 
 	res.json(ret)
 })
 
 reportRouter.get('/report/trend/utilization', async (req, res) => {
-	res.json({ hello: 'world' })
+	const ret = await query(
+		`
+    select
+    TRUNC((EXTRACT(epoch FROM avg(time)) / 3600) * 100, 2)::float as value
+    from (
+      select
+      CASE
+         when time_created > now() - interval '1 hours' and max_field is null then now() - time_created
+         when time_created <= now() - interval '1 hours' and max_field is null then interval '1 hours'
+         when time_created <= now() - interval '1 hours' and max_field is not null and time_completed is null then interval '1 hours'
+         when time_completed is not null then time_completed - (now() - interval '1 hours')
+         ELSE interval '1 hours'
+      end as time,
+      id,
+      time_created,
+      max_field,
+      time_completed
+      from (
+        select * from (
+          select
+          id,
+          time_created,
+          greatest (
+            time_assigned, time_vehicle_arrived,
+            time_load_started, time_load_completed,
+            time_unload_started, time_unload_completed,
+            time_completed
+          ) as max_field,
+          time_completed
+          from orders
+          where time_aborted is null and
+          time_modified between now() - interval '1 hours' and now()
+        ) temp
+      ) temp
+    ) temp
+  `,
+		'',
+	)
+
+	const temp = R.compose(R.head, R.prop('rows'))(ret)
+
+	res.json(temp)
 })
 
 reportRouter.get('/report/trend/delivery-time', async (req, res) => {
-	res.json({ hello: 'world' })
+	const ret = await query(
+		`
+		select
+		EXTRACT(EPOCH FROM avg(time_completed - time_created))::int as value,
+		count(*)
+		from orders
+		where time_completed >= now() - interval '1 hours'
+  `,
+		'',
+	)
+
+	const temp = R.compose(R.head, R.prop('rows'))(ret)
+
+	res.json(temp)
 })
 
 export default reportRouter

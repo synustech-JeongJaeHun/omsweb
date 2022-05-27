@@ -2455,6 +2455,7 @@ __metadata:
     "@types/jest": ^26.0.23
     "@types/json-server": ^0.14.3
     "@types/node": ^15.12.2
+    "@types/node-os-utils": ^1
     "@types/pg": ^8
     body-parser: ^1.19.0
     date-fns: ^2.28.0
@@ -2464,6 +2465,7 @@ __metadata:
     jest: ^27.0.4
     json-server: ^0.16.3
     moment: ^2.29.1
+    node-os-utils: ^1.3.6
     nodemon: ^2.0.7
     pg: ^8.7.3
     ramda: ^0.27.1
@@ -6389,6 +6391,13 @@ __metadata:
     "@types/node": "*"
     form-data: ^3.0.0
   checksum: a3e5d7f413d1638d795dff03f7b142b1b0e0c109ed210479000ce7b3ea11f9a6d89d9a024c96578d9249570c5fe5287a5f0f4aaba98199222230196ff2d6b283
+  languageName: node
+  linkType: hard
+
+"@types/node-os-utils@npm:^1":
+  version: 1.2.0
+  resolution: "@types/node-os-utils@npm:1.2.0"
+  checksum: 5dc8339a297689e9af275e17eedcf01bd601192d248aa8153d58d4a0969114703bc31768259534ffe6128a39665706f401f210c2b95a830cc975a7870b1a60c5
   languageName: node
   linkType: hard
 
@@ -20810,6 +20819,13 @@ fsevents@~2.1.2:
     uuid: ^8.3.0
     which: ^2.0.2
   checksum: 7db1683003f6aaa4324959dfa663cd56e301ccc0165977a9e7737989ffe3b4763297f9fc85f44d0662b63a4fd85516eda43411b492a4d2fae207afb23773f912
+  languageName: node
+  linkType: hard
+
+"node-os-utils@npm:^1.3.6":
+  version: 1.3.6
+  resolution: "node-os-utils@npm:1.3.6"
+  checksum: 8ce66b648061dff3978c6e63ca7fa8748b285d28a5ebb57c6e6ce2250c34d8be408344d24a79590725a542eb4b6b297b1fa32ac6d73d85a3871b16afa204df6c
   languageName: node
   linkType: hard
 
