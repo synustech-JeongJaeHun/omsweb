@@ -185,7 +185,12 @@ defineExpose(exposed)
     <Minimap class="absolute" style="bottom: 45px; margin-left: 45px" />
     <div
       class="absolute flex flex-row"
-      style="padding: unset; bottom: 10px; right: 10px"
+      style="
+        padding: unset;
+        bottom: 10px;
+        right: 10px;
+        align-items: center;
+      "
     >
       <ScaleBar />
       <ScreenDetail />
@@ -381,6 +386,8 @@ defineExpose(exposed)
 <style src="src/MapObjects/styles/rotate.css"></style>
 <style src="src/MapObjects/styles/will-change.css"></style>
 <!-- <style src="./MapObjects/styles/will-change.css"></style> -->
+<!-- Map > Scale -->
+<style src="src/MapObjects/scale/styles/transform.css"></style>
 
 <!-- TrackObjects -->
 <!-- Track > common -->
