@@ -78,6 +78,10 @@ export class TransferHistoryComponent implements OnInit, OnDestroy {
 
 	dataSource: DataSource
 
+	setDateWithMaxLimit() {
+		this.now = new Date()
+	}
+
 	transformVehicleId = ({ value = '' }): string => {
 		const text =
 			this.idSvc.get_alternative_id('vehicle', 'logicalId', value) || value
