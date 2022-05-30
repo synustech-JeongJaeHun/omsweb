@@ -119,7 +119,7 @@ namespace OMSWeb.Services
                 };
             }
 
-            return this.HostStates;
+            return this.SettingModeModel;
         }
 
         public ClientSettings GetClientSettings()
