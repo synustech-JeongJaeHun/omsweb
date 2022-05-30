@@ -26,6 +26,7 @@ export class HubService {
 	alertChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter()
 	serverStatusChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter()
 	modeStateChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter()
+    settingModeChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter()
 	zcuMapChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter()
 	zcuStatusTableChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter()
 	clusterStatusTableChanged$: EventEmitter<IDataChangeEvent> =
@@ -107,6 +108,7 @@ export class HubService {
 		this.hub.off('alert')
 		this.hub.off('serverStatus')
 		this.hub.off('modeState')
+        this.hub.off('settingMode')
 		this.hub.off('zcuMapChanged')
 		this.hub.off('zcuStatusTableChanged')
 		this.hub.off('clusterStatusTableChanged')
@@ -183,6 +185,10 @@ export class HubService {
 		this.hub.on('modeState', (meta, body) => {
 			console.info('## hub message : modeState >>', { meta, body })
 			this.modeStateChanged$.emit({ ...meta, data: body })
+		})
+		this.hub.on('settingMode', (meta, body) => {
+			console.info('## hub message : settingMode >>', { meta, body })
+			this.settingModeChanged$.emit({ ...meta, data: body })
 		})
 		this.hub.on('zcuMapChanged', (meta, body) => {
 			console.info('## hub message : zcuMapChanged >>', { meta, body })
