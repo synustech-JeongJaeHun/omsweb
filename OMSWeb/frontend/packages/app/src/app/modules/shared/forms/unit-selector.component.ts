@@ -32,6 +32,7 @@ import { ILookupUnit } from '../../../models/map.interface'
 export class UnitSelectorComponent implements OnInit, OnChanges {
 	@Input() findScopes: string[] = ['points', 'stations', 'buffers']
 	@Input() filterWord?: string
+	@Input() excludeMtlPoints?: boolean
 	@Input() disabled: boolean = false
 	@Input() selectedUnit: ILookupUnit
 	@Input() placeholder: string
@@ -75,16 +76,25 @@ export class UnitSelectorComponent implements OnInit, OnChanges {
 					)
 				}
 				if (this.findScopes.includes('points')) {
-					result.push(
-						...this.trackStatusService.trackData.points
-							.filter((p) => p.logicalId.includes(value))
-							.map((p) => ({
-								id: p.id,
-								objectType: 'Point',
-								logicalId: p.logicalId,
-								physicalId: p.physicalId,
-							})),
-					)
+					const points = this.trackStatusService.trackData.points
+						.filter((p) => p.logicalId.includes(value))
+						.map((p) => ({
+							id: p.id,
+							objectType: 'Point',
+							logicalId: p.logicalId,
+							physicalId: p.physicalId,
+						}))
+
+					if (this.excludeMtlPoints) {
+						const mtlPoints = (
+							this.trackStatusService.trackData.mtls ?? []
+						).map((mtl) => mtl.pointId)
+						const filtered = points.filter((p) => !mtlPoints.includes(p.id))
+
+						result.push(...filtered)
+					} else {
+						result.push(...points)
+					}
 				}
 				if (this.findScopes.includes('stations')) {
 					result.push(
