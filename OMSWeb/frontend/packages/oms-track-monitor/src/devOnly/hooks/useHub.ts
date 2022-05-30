@@ -64,5 +64,6 @@ export function useHub(handlers: {
 // hub.on('alert', (meta, body) => {})
 // hub.on('serverStatus', (meta, body) => {})
 // hub.on('modeState', (meta, body) => {})
+// hub.on('settingMode', (meta, body) => {})
 // hub.on('zcuStatusTableChanged', (meta, body) => {})
 // hub.on('clusterStatusTableChanged', (meta, body) => {})

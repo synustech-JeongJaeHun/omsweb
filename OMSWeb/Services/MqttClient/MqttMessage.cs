@@ -347,7 +347,7 @@ namespace OMSWeb.Services.MqttClient
             }
             else if (command.Action == ACTION_HOME_MODE)
             {
-                if (command.State != null)
+                if (command.Mode != null)
                     data["mode"] = command.Mode;
             }
             else if (command.Action == ACTION_PAUSE ||
@@ -422,7 +422,14 @@ namespace OMSWeb.Services.MqttClient
                 if (command.PointId != null)
                 {
                     data["point_id"] = command.PointId;
+                }
+                if (command.GroupId != null)
+                { 
                     data["group_id"] = command.GroupId;
+                }
+                else if (command.GroupIds != null)
+                {
+                    data["group_id"] = command.GroupIds;
                 }
             }
             else if (command.Action == ACTION_GROUP_SETTING)
