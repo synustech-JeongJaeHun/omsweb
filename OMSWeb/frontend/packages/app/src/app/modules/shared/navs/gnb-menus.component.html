@@ -45,19 +45,6 @@
         "names.status" | translate }}</a>
     </ng-container>
 
-    <ng-container *ngSwitchCase="'/controls'">
-      <a mat-button class="nav-item" routerLinkActive="active" routerLink="/controls/vehicles">{{ "names.map" |
-        translate }}</a>
-      <a mat-button class="nav-item" routerLinkActive="active" routerLink="/controls/server">{{ "names.version" |
-        translate }}</a>
-      <a mat-button class="nav-item" routerLinkActive="active" routerLink="/controls/token-history">{{
-        "names.auditTrail" |
-        translate }}</a>
-    </ng-container>
-    <ng-container *ngSwitchCase="'/playback'">
-      <a mat-button class="nav-item" routerLinkActive="active" routerLink="/playback">{{ "names.playback" | translate
-        }}</a>
-    </ng-container>
     <ng-container *ngSwitchCase="'/histories'">
       <a mat-button class="nav-item tight" routerLinkActive="active" routerLink="/histories/transfer">
         {{"names.transfer"| translate }}</a>
@@ -70,9 +57,26 @@
         | translate }}</a>
       -->
     </ng-container>
+
+    <ng-container *ngSwitchCase="'/playback'">
+      <a mat-button class="nav-item" routerLinkActive="active" routerLink="/playback">{{ "names.playback" | translate
+        }}</a>
+    </ng-container>
+
     <ng-container *ngSwitchCase="'/logs'">
       <a mat-button class="nav-item" routerLinkActive="active" routerLink="/logs">{{ "names.logs" | translate }}</a>
     </ng-container>
+
+    <ng-container *ngSwitchCase="'/controls'">
+      <!-- <a mat-button class="nav-item" routerLinkActive="active" routerLink="/controls/vehicles">{{ "names.map" |
+        translate }}</a> -->
+      <a mat-button class="nav-item" routerLinkActive="active" routerLink="/controls/server">{{ "names.version" |
+        translate }}</a>
+      <a mat-button class="nav-item" routerLinkActive="active" routerLink="/controls/token-history">{{
+        "names.auditTrail" |
+        translate }}</a>
+    </ng-container>
+
     <ng-container *ngSwitchCase="'/reports'">
       <a mat-button class="nav-item tight" routerLinkActive="active" routerLink="/reports/kpi">{{ "names.trend" |
         translate }}</a>
