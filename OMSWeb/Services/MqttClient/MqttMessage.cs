@@ -26,6 +26,7 @@ namespace OMSWeb.Services.MqttClient
         public const string ACTION_CONTROL_STATE = "control_state";
         public const string ACTION_TSC_STATE = "tsc_state";
         public const string ACTION_AI_MODE = "ai_mode";
+        public const string ACTION_HOME_MODE = "home_mode";
         public const string ACTION_PAUSE = "pause";
         public const string ACTION_RESUME = "resume";
         public const string ACTION_ALARM_CLEAR = "alarm_clear";
@@ -46,6 +47,8 @@ namespace OMSWeb.Services.MqttClient
         public const string ACTION_CLEAR_PATH = "clear_path";
         public const string ACTION_DISABLE_SEGMENT = "disable-segment";
         public const string ACTION_ENABLE_SEGMENT = "enable-segment";
+        public const string ACTION_DISABLE_HOME = "disable-home";
+        public const string ACTION_ENABLE_HOME = "enable-home";
         public const string ACTION_GROUP_SETTING = "group-setting";
         public const string ACTION_CLUSTER_SETTING = "cluster-setting";
         public const string ACTION_SEGMENT_SETTING = "segment-setting";
@@ -87,6 +90,7 @@ namespace OMSWeb.Services.MqttClient
                 case ACTION_CONTROL_STATE:
                 case ACTION_TSC_STATE:
                 case ACTION_AI_MODE:
+                case ACTION_HOME_MODE:
                 case ACTION_PAUSE:
                 case ACTION_RESUME:
                 case ACTION_ALARM_CLEAR:
@@ -107,6 +111,8 @@ namespace OMSWeb.Services.MqttClient
                 case ACTION_CLEAR_PATH:
                 case ACTION_DISABLE_SEGMENT:
                 case ACTION_ENABLE_SEGMENT:
+                case ACTION_DISABLE_HOME:
+                case ACTION_ENABLE_HOME:
                 case ACTION_GROUP_SETTING:
                 case ACTION_CLUSTER_SETTING:
                 case ACTION_SEGMENT_SETTING:
@@ -153,6 +159,7 @@ namespace OMSWeb.Services.MqttClient
 
                 case ACTION_MAP_UPDATE:
                 case ACTION_AI_MODE:
+                case ACTION_HOME_MODE:
                 case ACTION_PAUSE:
                 case ACTION_RESUME:
                 case ACTION_ALARM_CLEAR:
@@ -184,6 +191,8 @@ namespace OMSWeb.Services.MqttClient
 
                 case ACTION_DISABLE_SEGMENT:
                 case ACTION_ENABLE_SEGMENT:
+                case ACTION_DISABLE_HOME:
+                case ACTION_ENABLE_HOME:
                     return REQUEST_TRACK;
 
                 case ACTION_ZCU_GO:
@@ -336,6 +345,11 @@ namespace OMSWeb.Services.MqttClient
                 if (command.State != null)
                     data["mode"] = command.Mode;
             }
+            else if (command.Action == ACTION_HOME_MODE)
+            {
+                if (command.State != null)
+                    data["mode"] = command.Mode;
+            }
             else if (command.Action == ACTION_PAUSE ||
                      command.Action == ACTION_RESUME)
             {
@@ -400,6 +414,15 @@ namespace OMSWeb.Services.MqttClient
                     data["segment_id"] = command.SegmentId;
                     data["source"] = "uid-admin";
                     data["reason"] = "";
+                }
+            }
+            else if (command.Action == ACTION_DISABLE_HOME ||
+                     command.Action == ACTION_ENABLE_HOME)
+            {
+                if (command.PointId != null)
+                {
+                    data["point_id"] = command.PointId;
+                    data["group_id"] = command.GroupId;
                 }
             }
             else if (command.Action == ACTION_GROUP_SETTING)
