@@ -519,7 +519,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 	// point > home
 	homeAndGroupSelectList = [
 		{ value: 'OFF', label: 'OFF' },
-		{ value: 'No Group', label: 'Group: Not Selected' },
+		{ value: 'No Group', label: 'Group: 0 (Default)' },
 		...this.trackStatusService.trackData.groups
 			.map((g) => String(g.id))
 			.map((e) => ({ value: e, label: `Group: ${e}` })),
