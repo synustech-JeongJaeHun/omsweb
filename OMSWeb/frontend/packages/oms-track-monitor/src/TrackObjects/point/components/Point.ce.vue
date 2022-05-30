@@ -36,11 +36,11 @@ const group = useGroup(
       <circle v-if="props.point.isFocused" r="15" class="focus" />
       <circle r="3" class="point-path" />
 
-      <template v-if="props.point.homeId">
+      <g v-if="props.point.homeId" class="home">
         <!-- home with group -->
         <rect
           v-if="group"
-          class="group-shadow home"
+          class="group-shadow"
           x="-10"
           y="-3"
           width="20"
@@ -50,8 +50,8 @@ const group = useGroup(
           :fill="getGroupColorWithAlpha(group.color)"
         />
         <!-- home -->
-        <PointHome class="home" width="13.5" height="21" x="-6.75" y="0" />
-      </template>
+        <PointHome width="13.5" height="21" x="-6.75" y="0" />
+      </g>
 
       <text
         class="invert label select-none"
