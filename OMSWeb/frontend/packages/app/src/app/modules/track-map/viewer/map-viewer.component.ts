@@ -77,6 +77,13 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		}
 		return false
 	}
+
+	get canSetDestPoint() {
+		const isTabMove =
+			this.mapStatesService.transferCommandState.category === 'move'
+		return this.canSetDest && isTabMove
+	}
+
 	public viewerSetting = {
 		rect: {
 			width: window.innerWidth,

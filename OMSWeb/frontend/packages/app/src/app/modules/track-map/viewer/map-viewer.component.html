@@ -383,6 +383,11 @@
       </mat-card-title>
     </mat-card-header>
     <mat-card-content class="context-form">
+      <button mat-stroked-button class="dense accent" color="primary" [disabled]="!canSetDestPoint"
+        (click)="onSetDest('Point')">
+        {{ "names.setDest" | translate }}
+      </button>
+      <div style="height: 25px"></div>
       <dx-select-box displayExpr="label" valueExpr="value" [items]="homeAndGroupSelectList"
         [value]="contextMenuObject?.value.home" (onSelectionChanged)="onHomeValueChanged($event)">
       </dx-select-box>
