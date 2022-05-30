@@ -30,7 +30,9 @@ export class PlaybackOrderStatusComponent {
 		return vehicle?.logicalId ?? ''
 	}
 
-	transformLocationId = ({ value }: { value: string }) => {
+	transformLocationId = ({ value }: { value: string | undefined | null }) => {
+		if (value == null) return ''
+
 		const locationType = value[0]
 		const id = parseInt(value.substring(1))
 

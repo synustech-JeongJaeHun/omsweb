@@ -2,14 +2,11 @@
 using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 using Dapper;
 using Microsoft.Extensions.Configuration;
-using OMSWeb.Models;
 using OMSWeb.Models.Entities;
 using Npgsql;
-using System.Runtime.InteropServices;
 using System.IO;
 
 namespace OMSWeb.Repositories

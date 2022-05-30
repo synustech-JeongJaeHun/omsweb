@@ -34,11 +34,12 @@
         </oms-unit-selector>
       </div>
       <div class="form-row">
-        <oms-unit-selector [findScopes]="['stations', 'buffers']" [disabled]="commandState.sourceDisabled"
-          [(selectedUnit)]="commandState.source" [placeholder]="'names.selectSource' | translate"></oms-unit-selector>
+        <oms-unit-selector [findScopes]="['stations', 'buffers']" filterWord="OUT"
+          [disabled]="commandState.sourceDisabled" [(selectedUnit)]="commandState.source"
+          [placeholder]="'names.selectSource' | translate"></oms-unit-selector>
       </div>
       <div class="form-row">
-        <oms-unit-selector [findScopes]="['stations', 'buffers']" [disabled]="commandState.destDisabled"
+        <oms-unit-selector [findScopes]="['stations', 'buffers']" filterWord="IN" [disabled]="commandState.destDisabled"
           [(selectedUnit)]="commandState.dest" [placeholder]="'names.selectDest' | translate"></oms-unit-selector>
       </div>
       <div class="form-row">
@@ -76,8 +77,9 @@
         </oms-unit-selector>
       </div>
       <div class="form-row">
-        <oms-unit-selector [findScopes]="['stations', 'buffers']" [disabled]="commandState.sourceDisabled"
-          [(selectedUnit)]="commandState.source" [placeholder]="'names.selectSource' | translate"></oms-unit-selector>
+        <oms-unit-selector [findScopes]="['stations', 'buffers']" filterWord="OUT"
+          [disabled]="commandState.sourceDisabled" [(selectedUnit)]="commandState.source"
+          [placeholder]="'names.selectSource' | translate"></oms-unit-selector>
       </div>
       <div class="form-row">
         <mat-form-field class="dense" appearance="outline">
@@ -114,7 +116,7 @@
         </oms-unit-selector>
       </div>
       <div class="form-row">
-        <oms-unit-selector [findScopes]="['stations', 'buffers']" [disabled]="commandState.destDisabled"
+        <oms-unit-selector [findScopes]="['stations', 'buffers']" filterWord="IN" [disabled]="commandState.destDisabled"
           [(selectedUnit)]="commandState.dest" [placeholder]="'names.selectDest' | translate"></oms-unit-selector>
       </div>
       <div class="form-row">
@@ -148,7 +150,8 @@
       </div>
       <div class="form-row">
         <oms-unit-selector [findScopes]="['points', 'stations', 'buffers']" [disabled]="commandState.destDisabled"
-          [(selectedUnit)]="commandState.dest" [placeholder]="'names.selectDest' | translate"></oms-unit-selector>
+          [excludeMtlPoints]="true" [(selectedUnit)]="commandState.dest" [placeholder]="'names.selectDest' | translate">
+        </oms-unit-selector>
       </div>
     </div>
   </div>
@@ -174,8 +177,8 @@
         </oms-unit-selector>
       </div>
       <div class="form-row">
-        <oms-unit-selector [findScopes]="['mtls']"
-          [(selectedUnit)]="commandState.mtl" [placeholder]="'names.selectMTL' | translate"></oms-unit-selector>
+        <oms-unit-selector [findScopes]="['mtls']" [(selectedUnit)]="commandState.mtl"
+          [placeholder]="'names.selectMTL' | translate"></oms-unit-selector>
       </div>
       <div class="form-row">
         <mat-radio-group [(ngModel)]="commandState.mtlInOut" color="primary">

@@ -37,7 +37,7 @@
 
 <dx-data-grid [dataSource]="dataSource" [remoteOperations]="true" [height]="tableHeight" [repaintChangesOnly]="false"
               [columnAutoWidth]="false" [showBorders]="false" [highlightChanges]="false" [showColumnLines]="true"
-              [showRowLines]="true" [headerFilter]="false" [(selectedRowKeys)]="selectedRows">
+              [showRowLines]="true" [headerFilter]="false" [(selectedRowKeys)]="selectedRows" allowColumnResizing="true">
   <!--dxo-scrolling mode="virtual" rowRenderingMode="standard"><dxo-scrolling-->
   <dxo-paging [pageSize]="50"></dxo-paging>
   <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[50, 100, 200]" [showInfo]="true" visible="true">
