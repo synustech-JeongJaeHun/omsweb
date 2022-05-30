@@ -32,7 +32,8 @@ namespace OMSWeb.Models
         public string AcceptManualCommands { get; set; }
         public string State { get; set; }
         public string Mode { get; set; }
-        public int GroupId { get; set; }
+        public int? GroupId { get; set; }
+        public int[] GroupIds { get; set; }
         public int[] StationIds { get; set; }
         public int[] StationIds_Removed { get; set; }
         public int[] BufferIds { get; set; }
