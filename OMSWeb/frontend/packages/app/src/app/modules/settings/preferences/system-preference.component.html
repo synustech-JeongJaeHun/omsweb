@@ -1,0 +1,22 @@
+<div class="setting-header">
+  <h3 class="setting-title">{{ "names.systemPreference" | translate }}</h3>
+  <div class="setting-actions"></div>
+</div>
+
+<div class="setting-container">
+  <fieldset>
+    <label>
+      {{'Home Editing: '}}
+      <ng-container *ngIf="true">
+        {{"names.on" | translate}}
+        <button mat-raised-button class="dense" color="primary" (click)="setHomeEditing('disable')">{{"names.disable" |
+          translate}}</button>
+      </ng-container>
+      <ng-container *ngIf="true">
+        {{"names.off" | translate}}
+        <button mat-raised-button class="dense" color="primary" (click)="setHomeEditing('enable')">{{"names.enable" |
+          translate}}</button>
+      </ng-container>
+    </label>
+  </fieldset>
+</div>
