@@ -50,7 +50,7 @@ const group = useGroup(
           :fill="getGroupColorWithAlpha(group.color)"
         />
         <!-- home -->
-        <PointHome width="13.5" height="21" x="-6.75" y="0" />
+        <PointHome width="16.875" height="26.25" x="-8.4375" y="0" />
       </g>
 
       <text
