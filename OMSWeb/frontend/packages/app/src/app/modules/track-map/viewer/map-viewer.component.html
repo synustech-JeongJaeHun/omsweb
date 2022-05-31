@@ -391,7 +391,7 @@
       <ng-container *ngIf="isHomeMode">
         <div style="height: 25px"></div>
 
-        <dx-select-box displayExpr="label" valueExpr="value" [items]="homeAndGroupSelectList"
+        <dx-select-box style="max-width: 12em" displayExpr="label" valueExpr="value" [items]="homeAndGroupSelectList"
           [value]="contextMenuObject?.value.home" (onSelectionChanged)="onHomeValueChanged($event)">
         </dx-select-box>
 
