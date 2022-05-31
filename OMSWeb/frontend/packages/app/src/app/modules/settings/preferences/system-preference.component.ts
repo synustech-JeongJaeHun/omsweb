@@ -1,5 +1,4 @@
 import { Component } from '@angular/core'
-import { MatSnackBar } from '@angular/material/snack-bar'
 import { TranslateService } from '@ngx-translate/core'
 import { PermissionEnums } from '@oms/root/models/enums'
 import { AuthService } from '@oms/root/services/auth.service'
@@ -16,7 +15,6 @@ export class SystemPreferenceComponent {
 	constructor(
 		private $t: TranslateService,
 		private auth: AuthService,
-		private snackBar: MatSnackBar,
 		private dialogSvc: DialogService,
 		private messageSvc: MessagesService,
 		private systemStatusService: SystemStatusService,
@@ -40,15 +38,9 @@ export class SystemPreferenceComponent {
 				this.systemStatusService.systemStates.tscMode === 2
 			)
 		) {
-			this.snackBar.open(
-				this.$t.instant('messages.confirmTSCStateNotPaused'),
-				null,
-				{
-					duration: 3000,
-					horizontalPosition: 'center',
-					verticalPosition: 'top',
-				},
-			)
+			this.dialogSvc.alert({
+				body: this.$t.instant('messages.confirmTSCStateNotPaused'),
+			})
 
 			return
 		}

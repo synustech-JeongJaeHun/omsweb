@@ -31,8 +31,6 @@ import { TranslateService } from '@ngx-translate/core'
 import { MessagesService } from '@oms/root/services/messages.service'
 import { DialogService } from '@oms/root/services/dialog.service'
 import { IVehicleCommandMessage } from '@oms/root/models/command.model'
-import { SystemsService } from '@oms/root/services/systems.service'
-import { MatSnackBar } from '@angular/material/snack-bar'
 import { SystemStatusService } from '@oms/root/services/system-status.service'
 
 @Component({
@@ -136,8 +134,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		private messageSvc: MessagesService,
 		private dialogSvc: DialogService,
 		private $t: TranslateService,
-		private systemsService: SystemsService,
-		private snackBar: MatSnackBar,
 		private systemStatusService: SystemStatusService,
 	) {
 		this.auth.certUpdated$.pipe(takeUntil(this.destroy$)).subscribe((cert) => {
