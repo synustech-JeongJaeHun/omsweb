@@ -13,6 +13,7 @@ import {
 } from '../../../models/map.interface'
 import { MapStatesService } from '../map-states.service'
 import { TrackStatusService } from '@oms/root/services/track-status.service'
+import * as DateFns from 'date-fns'
 
 @Component({
 	selector: 'oms-command-dialog',
@@ -85,6 +86,7 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 				const mtlInfo = (this.trackStatusService.trackData?.mtls ?? []).find(
 					(m) => m.id === mtl.id,
 				)
+				const now = new Date()
 				const cmd: IOrderCommandMessage = {
 					type: 'ORDER',
 					action: 'N',
@@ -93,7 +95,14 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 					vehicleId: vehicle.id,
 					locationMoveType: 'Point',
 					locationMove: mtlInfo.pointId.toString(),
+					// 2022_05_31_11_09_52.94
+					// @ts-ignore
+					commandID: `MTL_IN-OC_OHTC_01-${DateFns.format(
+						now,
+						'yyyyMMddHHmmssSS',
+					)}`,
 				}
+
 				this.dialogSvc
 					.confirm({ body: this.t$.instant('messages.confirmCommand') })
 					.subscribe((ok) => {
