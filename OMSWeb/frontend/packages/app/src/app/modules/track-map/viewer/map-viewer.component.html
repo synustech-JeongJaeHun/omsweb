@@ -376,7 +376,7 @@
 </ng-template>
 
 <ng-template #pointContext>
-  <mat-card class="context-card" *ngIf="hasPermissions([permissionEnums.SetHomePoint])">
+  <mat-card class="context-card">
     <mat-card-header>
       <mat-card-title>
         Point #{{ contextMenuObject?.value.id }}
@@ -388,10 +388,10 @@
         {{ "names.setDest" | translate }}
       </button>
 
-      <ng-container *ngIf="isHomeMode">
+      <ng-container *ngIf="isHomeModeAndTscPaused && hasPermissions([permissionEnums.SetHomePoint])">
         <div style="height: 25px"></div>
 
-        <dx-select-box displayExpr="label" valueExpr="value" [items]="homeAndGroupSelectList"
+        <dx-select-box style="max-width: 12em" displayExpr="label" valueExpr="value" [items]="homeAndGroupSelectList"
           [value]="contextMenuObject?.value.home" (onSelectionChanged)="onHomeValueChanged($event)">
         </dx-select-box>
 
