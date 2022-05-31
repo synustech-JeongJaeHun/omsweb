@@ -12,6 +12,7 @@ import {
 	TransferCommandState,
 } from '../../../models/map.interface'
 import { MapStatesService } from '../map-states.service'
+import { TrackStatusService } from '@oms/root/services/track-status.service'
 
 @Component({
 	selector: 'oms-command-dialog',
@@ -37,6 +38,7 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 		private dialogSvc: DialogService,
 		private messageSvc: MessagesService,
 		private t$: TranslateService,
+		private trackStatusService: TrackStatusService,
 	) {}
 
 	ngOnInit(): void {
@@ -79,21 +81,32 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 		} = this.commandState
 
 		if (category === 'mtl') {
-			const cmd: IVehicleCommandMessage = {
-				action: mtlInOut ? 'mtl_in' : 'mtl_out',
-				vehicleId: String(vehicle.id),
-				mtlId: String(mtl.id),
-			}
-
-			if (cmd.action == 'mtl_in') {
+			if (mtlInOut) {
+				const mtlInfo = (this.trackStatusService.trackData?.mtls ?? []).find(
+					(m) => m.id === mtl.id,
+				)
+				const cmd: IOrderCommandMessage = {
+					type: 'ORDER',
+					action: 'N',
+					orderOrigin: 'OMS',
+					priority: 1, // @TODO priority 기본값 확인
+					vehicleId: vehicle.id,
+					locationMoveType: 'Point',
+					locationMove: mtlInfo.pointId.toString(),
+				}
 				this.dialogSvc
 					.confirm({ body: this.t$.instant('messages.confirmCommand') })
 					.subscribe((ok) => {
 						if (ok) {
-							this.messageSvc.sendVehicleCommand(cmd).subscribe()
+							this.messageSvc.sendOrderCommand(cmd).subscribe()
 						}
 					})
-			} else if (cmd.action == 'mtl_out') {
+			} else {
+				const cmd: IVehicleCommandMessage = {
+					action: 'mtl_out',
+					vehicleId: String(vehicle.id),
+					mtlId: String(mtl.id),
+				}
 				this.dialogSvc
 					.confirm({ body: this.t$.instant('messages.confirmMtloutCommand') })
 					.subscribe((ok) => {
