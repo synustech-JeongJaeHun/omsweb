@@ -54,11 +54,26 @@ export class SystemPreferenceComponent {
 		}
 
 		this.dialogSvc
-			.confirm({ body: this.$t.instant('messages.confirmCommand') })
+			.confirm(
+				this.getConfirmMessage(
+					this.$t.instant(`names.homeMode`),
+					this.isHomeMode
+						? [this.$t.instant(`names.on`), this.$t.instant('names.off')]
+						: [this.$t.instant(`names.off`), this.$t.instant('names.on')],
+				),
+			)
 			.subscribe((ok) => {
 				if (ok) {
 					this.messageSvc.sendHomeModeToggle().subscribe()
 				}
 			})
+	}
+
+	private getConfirmMessage(displayName: string, param: string[]) {
+		const transParam = { name: displayName, from: param[0], to: param[1] }
+		return {
+			title: this.$t.instant('names.changeConfirm', transParam),
+			body: this.$t.instant('messages.changeStateConfirm', transParam),
+		}
 	}
 }

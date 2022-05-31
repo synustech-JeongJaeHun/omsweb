@@ -5,9 +5,11 @@
 
 <div class="setting-container">
   <fieldset>
+    <legend>
+      {{'names.homeMode' | translate}}
+    </legend>
     <label>
-      {{'Home Mode: '}}
-
+      {{"names.state" | translate}}{{": "}}
       <ng-container *ngIf="isHomeMode === true">
         {{"names.on" | translate}}
         <button mat-raised-button class="dense" [disabled]="!hasPermissions([permissionEnums.SetHomePoint])"
