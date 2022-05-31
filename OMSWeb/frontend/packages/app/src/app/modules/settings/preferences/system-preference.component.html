@@ -6,15 +6,18 @@
 <div class="setting-container">
   <fieldset>
     <label>
-      {{'Home Editing: '}}
-      <ng-container *ngIf="true">
+      {{'Home Mode: '}}
+
+      <ng-container *ngIf="isHomeMode === true">
         {{"names.on" | translate}}
-        <button mat-raised-button class="dense" color="primary" (click)="setHomeEditing('disable')">{{"names.disable" |
+        <button mat-raised-button class="dense" [disabled]="!hasPermissions([permissionEnums.SetHomePoint])"
+          color="primary" (click)="setHomeEditing()">{{"names.disable" |
           translate}}</button>
       </ng-container>
-      <ng-container *ngIf="true">
+      <ng-container *ngIf="isHomeMode === false">
         {{"names.off" | translate}}
-        <button mat-raised-button class="dense" color="primary" (click)="setHomeEditing('enable')">{{"names.enable" |
+        <button mat-raised-button class="dense" [disabled]="!hasPermissions([permissionEnums.SetHomePoint])"
+          color="primary" (click)="setHomeEditing()">{{"names.enable" |
           translate}}</button>
       </ng-container>
     </label>

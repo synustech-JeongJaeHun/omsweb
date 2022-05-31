@@ -24,6 +24,9 @@ import {
 	IGroupCommandMessage,
 	ISettingZcuCommandMessage,
 	IZcuCommandMessage,
+	IDisableHomeCommandMessage,
+	IEnableHomeCommandMessage,
+	IToggleHomeModeCommandMessage,
 } from '../models/command.model'
 import { IOrderStatusRow } from '../models/order-status.model'
 import { IVehicleStatusRow } from '../models/vehicle-status.model'
@@ -288,6 +291,28 @@ export class MessagesService {
 		command.bufferIds = command.bufferIds
 
 		return this.sendCommand<IGroupCommandMessage>(command)
+	}
+
+	sendEnableHome(pointId: number, groupIds: number[]) {
+		return this.sendCommand<IEnableHomeCommandMessage>({
+			action: 'enable-home',
+			pointId: pointId,
+			groupIds: groupIds,
+		})
+	}
+
+	sendDisableHome(pointId: number) {
+		return this.sendCommand<IDisableHomeCommandMessage>({
+			action: 'disable-home',
+			pointId: pointId,
+		})
+	}
+
+	sendHomeModeToggle() {
+		return this.sendCommand<IToggleHomeModeCommandMessage>({
+			action: 'home_mode',
+			mode: 'change',
+		})
 	}
 
 	private sendCommand<T extends ICommandMessage>(command: T): Observable<void> {

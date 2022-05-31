@@ -34,6 +34,7 @@ import { IVehicleCommandMessage } from '@oms/root/models/command.model'
 import { SystemsService } from '@oms/root/services/systems.service'
 import { ISystemStates } from '@oms/root/models/system.model'
 import { MatSnackBar } from '@angular/material/snack-bar'
+import { SystemStatusService } from '@oms/root/services/system-status.service'
 
 @Component({
 	selector: 'oms-map-viewer',
@@ -115,6 +116,10 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		return this.settingSvc.globalPreferences.toggles.showToolName
 	}
 
+	get isHomeMode() {
+		return this.systemStatusService.homeMode ?? false
+	}
+
 	constructor(
 		private router: Router,
 		private auth: AuthService,
@@ -129,6 +134,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		private $t: TranslateService,
 		private systemsService: SystemsService,
 		private snackBar: MatSnackBar,
+		private systemStatusService: SystemStatusService,
 	) {
 		this.auth.certUpdated$.pipe(takeUntil(this.destroy$)).subscribe((cert) => {
 			this.router.navigateByUrl('/', { skipLocationChange: false }).then(() => {
@@ -537,12 +543,14 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 	}
 	onApplyPointHomeChange(id: number, offOrGroup: 'OFF' | 'No Group' | string) {
 		if (offOrGroup === 'OFF') {
-			// home off
+			this.messageSvc.sendDisableHome(id).subscribe()
 		} else if (offOrGroup === 'No Group') {
 			// home on with no group
+			this.messageSvc.sendEnableHome(id, []).subscribe()
 		} else {
 			// home on with group
 			const groupId = parseInt(offOrGroup)
+			this.messageSvc.sendEnableHome(id, [groupId]).subscribe()
 		}
 
 		this.showContextMenu = false
