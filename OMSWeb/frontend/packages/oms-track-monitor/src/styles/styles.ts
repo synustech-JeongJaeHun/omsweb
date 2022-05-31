@@ -20,6 +20,7 @@ const VisibleDefault: Record<VisibleProperty, boolean> = {
 	vehicleLine: true, // applied in OmsTrackMonitor.ce.vue
 	segmentDirection: true, // applied in OmsTrackMonitor.ce.vue
 	pointLabel: true, // applied in OmsTrackMonitor.ce.vue
+	pointHome: true, // applied in OmsTrackMonitor.ce.vue
 	station: true, // applied in OmsTrackMonitor.ce.vue
 	buffer: true, // applied in OmsTrackMonitor.ce.vue
 	zcu: true, // applied in OmsTrackMonitor.ce.vue

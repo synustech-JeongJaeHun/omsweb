@@ -55,6 +55,7 @@ namespace OMSWeb.Services
                 {"cluster_status", new DataChangeEventTarget(CacheKeys.ClusterStatus, new[]{"clusterStatusTableChanged"}, true)},
                 {"location_groups", new DataChangeEventTarget(CacheKeys.Groups, new[]{"groupChanged"})},
                 {"grouped_objects", new DataChangeEventTarget(CacheKeys.Groups, new[]{"groupChanged"})},
+                {"homes", new DataChangeEventTarget(CacheKeys.None, new[]{"homeChanged"}, true)},
                 {"orders", new DataChangeEventTarget(CacheKeys.None, new[]{"orderTableChanged"}, true)},
                 {"vehicle_alarms", new DataChangeEventTarget(CacheKeys.None, new[]{"alarm"})},
                 {"alerts", new DataChangeEventTarget(CacheKeys.None, new[]{"alert"})},
@@ -94,7 +95,7 @@ namespace OMSWeb.Services
 
         public async Task PushWatcherEventAsync(long ts, string jsonPayload)
         {
-            // this.PrintLog(ts, $"01 data received);
+            // this.PrintLog(ts, $"01 data received");
             // Console.WriteLine($">> Watcher received data >>, {jsonPayload}");
             var payload = Newtonsoft.Json.JsonConvert.DeserializeObject<DataWatcherPayload>(jsonPayload, this.jsonSerializerSettings);
             payload.Timestamp = ts;
@@ -236,7 +237,14 @@ namespace OMSWeb.Services
                 Id = payload.Id,
                 Level = payload.Level,
                 VehicleId = payload.VehicleId,
-                Unuse = payload.Unuse // only for station
+
+                Unuse = payload.Unuse, // only for Station
+
+                Point = payload.Point, // only for Home
+
+                GroupId = payload.GroupId, // only for GroupedObject
+                ReferenceId = payload.ReferenceId, // only for GroupedObject
+                ReferenceTable = payload.ReferenceTable // only for GroupedObject
             };
             if (!pushName.Contains("table", StringComparison.OrdinalIgnoreCase))
             {

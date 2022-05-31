@@ -27,11 +27,13 @@ import { SettingsService } from '@oms/root/services/settings.service'
 import { TrackStatusService } from '../../../services/track-status.service'
 import { TrackMonitorSettingService } from '../../../services/track-monitor-setting.service'
 import d3 = require('d3')
-import { TracksService } from '@oms/root/services/tracks.service'
 import { TranslateService } from '@ngx-translate/core'
 import { MessagesService } from '@oms/root/services/messages.service'
 import { DialogService } from '@oms/root/services/dialog.service'
 import { IVehicleCommandMessage } from '@oms/root/models/command.model'
+import { SystemsService } from '@oms/root/services/systems.service'
+import { MatSnackBar } from '@angular/material/snack-bar'
+import { SystemStatusService } from '@oms/root/services/system-status.service'
 
 @Component({
 	selector: 'oms-map-viewer',
@@ -52,31 +54,34 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 	get tmSetting() {
 		return this.trackMonitorSettingService.trackSetting
 	}
-	get groupIds() {
-		return this.trackData.groups.map((g) => String(g.id))
-	}
+
 	get canSetSource() {
-        return !this.mapStatesService.transferCommandState.sourceDisabled
+		return !this.mapStatesService.transferCommandState.sourceDisabled
 	}
 	get canSetDest() {
-        return !this.mapStatesService.transferCommandState.destDisabled
+		return !this.mapStatesService.transferCommandState.destDisabled
 	}
 	get canSetSourceStation() {
-        if (!this.mapStatesService.transferCommandState.sourceDisabled) {
-		    const { id, logicalId, physicalId } = this.contextMenuObject.value
-            if (logicalId && logicalId.indexOf('OUT') > 0)
-                return true
-        }
-        return false
+		if (!this.mapStatesService.transferCommandState.sourceDisabled) {
+			const { id, logicalId, physicalId } = this.contextMenuObject.value
+			if (logicalId && logicalId.indexOf('OUT') > 0) return true
+		}
+		return false
 	}
 	get canSetDestStation() {
-        if (!this.mapStatesService.transferCommandState.destDisabled) {
-		    const { id, logicalId, physicalId } = this.contextMenuObject.value
-            if (logicalId && logicalId.indexOf('IN') > 0)
-                return true
-        }
-        return false
+		if (!this.mapStatesService.transferCommandState.destDisabled) {
+			const { id, logicalId, physicalId } = this.contextMenuObject.value
+			if (logicalId && logicalId.indexOf('IN') > 0) return true
+		}
+		return false
 	}
+
+	get canSetDestPoint() {
+		const isTabMove =
+			this.mapStatesService.transferCommandState.category === 'move'
+		return this.canSetDest && isTabMove
+	}
+
 	public viewerSetting = {
 		rect: {
 			width: window.innerWidth,
@@ -108,6 +113,10 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		return this.settingSvc.globalPreferences.toggles.showToolName
 	}
 
+	get isHomeMode() {
+		return this.systemStatusService.homeMode ?? false
+	}
+
 	constructor(
 		private router: Router,
 		private auth: AuthService,
@@ -116,11 +125,13 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		private mapStatesService: MapStatesService,
 		private settingSvc: SettingsService,
 		private trackStatusService: TrackStatusService,
-		private tracksService: TracksService,
 		private trackMonitorSettingService: TrackMonitorSettingService,
 		private messageSvc: MessagesService,
 		private dialogSvc: DialogService,
 		private $t: TranslateService,
+		private systemsService: SystemsService,
+		private snackBar: MatSnackBar,
+		private systemStatusService: SystemStatusService,
 	) {
 		this.auth.certUpdated$.pipe(takeUntil(this.destroy$)).subscribe((cert) => {
 			this.router.navigateByUrl('/', { skipLocationChange: false }).then(() => {
@@ -228,6 +239,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 						}
 					})
 				})
+
 			this.hubSvc.vehicleChanged$
 				.pipe(takeUntil(this.destroy$))
 				.subscribe((e: IDataChangeEvent) => {
@@ -282,42 +294,48 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 					this.viewer.updateStation(e.operation, { id: e.id, unuse: e.unuse })
 				})
 
-			if (this.auth.isAuthenticated) {
-				this.hubSvc.vehiclePathChanged$
-					.pipe(takeUntil(this.destroy$))
-					.subscribe((e: IDataChangeEvent) => {
-						// TODO what happened on event?
-						console.log('vehicle path update', e)
-					})
+			this.hubSvc.groupChanged$
+				.pipe(takeUntil(this.destroy$))
+				.subscribe((e) => {
+					this.viewer.updateGroupObject(
+						e.operation,
+						{
+							id: e.id as number,
+							groupId: e.groupId as number,
+							referenceId: e.referenceId as number,
+							referenceTable: e.referenceTable as string,
+						},
+						e.data,
+					)
+				})
 
-				this.hubSvc.groupChanged$
-					.pipe(takeUntil(this.destroy$))
-					.subscribe((e) => {
-						// TODO what happened on event?
-						console.log('group update', e)
-					})
+			this.hubSvc.homeChanged$.pipe(takeUntil(this.destroy$)).subscribe((e) => {
+				this.viewer.updateHome(e.operation, {
+					id: e.id as number,
+					point: e.point as number,
+				})
+			})
 
-				this.hubSvc.bufferChanged$
-					.pipe(takeUntil(this.destroy$))
-					.subscribe((e) => {
-						// TODO what happened on event?
-						console.log('buffer update', e)
-					})
-
-				this.hubSvc.mtlChanged$
-					.pipe(takeUntil(this.destroy$))
-					.subscribe((e) => {
-						// TODO what happened on event?
-						console.log('mtl update', e)
-					})
-
-				this.hubSvc.groupChanged$
-					.pipe(takeUntil(this.destroy$))
-					.subscribe((e) => {
-						// TODO what happened on event?
-						console.log('group update', e)
-					})
-			}
+			// if (this.auth.isAuthenticated) {
+			// this.hubSvc.vehiclePathChanged$
+			// 	.pipe(takeUntil(this.destroy$))
+			// 	.subscribe((e: IDataChangeEvent) => {
+			// 		// TODO what happened on event?
+			// 		console.log('vehicle path update', e)
+			// 	})
+			// this.hubSvc.bufferChanged$
+			// 	.pipe(takeUntil(this.destroy$))
+			// 	.subscribe((e) => {
+			// 		// TODO what happened on event?
+			// 		console.log('buffer update', e)
+			// 	})
+			// this.hubSvc.mtlChanged$
+			// 	.pipe(takeUntil(this.destroy$))
+			// 	.subscribe((e) => {
+			// 		// TODO what happened on event?
+			// 		console.log('mtl update', e)
+			// 	})
+			// }
 		}
 	}
 
@@ -325,15 +343,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		this.selectedObject = event
 		// @ts-ignore
 		this.focusOnTM({ type: event.objectType, id: event.id })
-	}
-
-	onApplyPointChange(id: number, isHome: boolean, selectedGroup: number) {
-		this.tracksService
-			.updatePoint(id, {
-				isHome,
-				group: selectedGroup,
-			})
-			.subscribe()
 	}
 
 	onToggleStationUnuse(id: number, toState: 'UNUSE' | 'USE') {
@@ -503,6 +512,34 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 				)
 				.subscribe()
 		}
+	}
+
+	// point > home
+	homeAndGroupSelectList = [
+		{ value: 'OFF', label: 'OFF' },
+		{ value: 'No Group', label: 'Group: 0 (Default)' },
+		...this.trackStatusService.trackData.groups
+			.map((g) => String(g.id))
+			.map((e) => ({ value: e, label: `Group: ${e}` })),
+	]
+
+	onHomeValueChanged(event: { selectedItem: { value: string } }) {
+		this.contextMenuObject.value.home = event.selectedItem.value
+	}
+	onApplyPointHomeChange(id: number, offOrGroup: 'OFF' | 'No Group' | string) {
+		if (offOrGroup === 'OFF') {
+			this.messageSvc.sendDisableHome(id).subscribe()
+		} else if (offOrGroup === 'No Group') {
+			// home on with no group
+			this.messageSvc.sendEnableHome(id, []).subscribe()
+		} else {
+			// home on with group
+			const groupId = parseInt(offOrGroup)
+			this.messageSvc.sendEnableHome(id, [groupId]).subscribe()
+		}
+
+		this.showContextMenu = false
+		this.contextMenuObject = undefined
 	}
 
 	// EPIC > OMS-TRACK-MONITOR
@@ -683,12 +720,47 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		// @ts-ignore
 		this.focusOnTM({ type: payload.type, id: payload.value.id })
 	}
-	public onContectMenuOn(event: CustomEvent) {
+	public onContextMenuOn(event: CustomEvent) {
 		const payload = getCustomEventPayload(event)
 		// @ts-ignore
 		if (!(payload.type && payload.value && payload.event)) return
+
+		if (
+			this.hasPermissions([this.permissionEnums.SetHomePoint]) &&
+			// @ts-ignore
+			payload.type === 'POINT'
+		) {
+			if (
+				!(
+					this.systemStatusService.systemStates.tscMode === 0 ||
+					this.systemStatusService.systemStates.tscMode === 1 ||
+					this.systemStatusService.systemStates.tscMode === 2
+				)
+			) {
+				this.snackBar.open(
+					this.$t.instant('messages.confirmTSCStateNotPaused'),
+					null,
+					{
+						duration: 3000,
+						horizontalPosition: 'center',
+						verticalPosition: 'top',
+					},
+				)
+
+				return
+			}
+		}
+
 		// @ts-ignore
 		this.contextMenuObject = { type: payload.type, value: payload.value }
+
+		if (this.contextMenuObject.type === 'POINT') {
+			const point = this.contextMenuObject.value
+			if (point?.groupId)
+				this.contextMenuObject.value.home = String(point.groupId)
+			else if (point?.homeId) this.contextMenuObject.value.home = 'No Group'
+			else this.contextMenuObject.value.home = 'OFF'
+		}
 
 		const leftThreshold = window.innerWidth - 200
 		const popupOffsetX = 10

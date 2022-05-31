@@ -42,6 +42,13 @@ namespace OMSWeb.Controllers
             return this._systemSvc.GetHostStatus();
         }
 
+
+        [HttpGet("settings/mode")]
+        public ActionResult<SettingModeModel> GetSettingMode()
+        {
+            return this._systemSvc.GetSettingMode();
+        }
+
         [HttpGet("settings/client")]
         public ActionResult<ClientSettings> GetClientSettings()
         {
@@ -374,7 +381,7 @@ namespace OMSWeb.Controllers
                 ocl.Start();
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 bResult = false;
                 return new MapUpdateResultModel

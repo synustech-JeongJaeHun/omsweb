@@ -1,4 +1,4 @@
-import { ITrackData } from '../../legacies/models/track.model'
+import { IGroup, ITrackData } from '../../legacies/models/track.model'
 import { Mtl } from '../../TrackObjects/mtl/types/Mtl'
 import { Point } from '../../TrackObjects/point/types/Point'
 import { Segment } from '../../TrackObjects/segment/types/Segment'
@@ -61,6 +61,12 @@ interface IOmsTrackMonitor {
 		operation: UpdateDto.Operation,
 		station: UpdateDto.Station
 	): void
+	updateGroupObject(
+		operation: UpdateDto.Operation,
+		groupObject: UpdateDto.GroupObject,
+		data?: IGroup[]
+	): void
+	updateHome(operation: UpdateDto.Operation, home: UpdateDto.Home): void
 }
 
 export { IOmsTrackMonitor }

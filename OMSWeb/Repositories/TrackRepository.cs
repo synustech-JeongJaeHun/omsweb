@@ -59,37 +59,30 @@ namespace OMSWeb.Repositories
 
         public List<Point> LoadPoints()
         {
+            // var data = _cache.GetValue<List<Point>>(key);
+            // if (data == null)
+            // {
             var key = CacheKeys.Points;
-            var data = _cache.GetValue<List<Point>>(key);
-            if (data == null)
+            var data = new List<Point>();
+            var models = new List<Point>();
+            string sql = QueryFactory.GetSql("point");
+            using (var conn = ConnectTrack())
             {
-                var models = new List<Point>();
-                string sql = QueryFactory.GetSql("point");
-                using (var conn = ConnectTrack())
+                using (var cmd = new NpgsqlCommand(sql, conn))
                 {
-                    using (var cmd = new NpgsqlCommand(sql, conn))
+                    try
                     {
-                        conn.Open();
-                        using (var dr = cmd.ExecuteReader())
-                        {
-                            while (dr.Read())
-                            {
-                                models.Add(new Point
-                                {
-                                    Id = Convert.ToInt32(dr["id"]),
-                                    X = Convert.ToInt32(dr["x"]),
-                                    Y = Convert.ToInt32(dr["y"]),
-                                    PhysicalId = dr["physical_id"].ToString(),
-                                    LogicalId = dr["logical_id"].ToString(),
-                                }
-                               );
-                            }
-                        }
+                        models = conn.Query<Point>(sql).ToList();
+                    }
+                    catch (System.Exception)
+                    {
+                        Console.WriteLine("[LoadPoints] => null");
                     }
                 }
-                data = models.ToList();
-                _cache.SetValue<List<Point>>(key, data, DateTimeOffset.Now.AddMinutes(CACHE_LIFE));
             }
+            data = models.ToList();
+            _cache.SetValue<List<Point>>(key, data, DateTimeOffset.Now.AddMinutes(CACHE_LIFE));
+            // }
             return data;
         }
 

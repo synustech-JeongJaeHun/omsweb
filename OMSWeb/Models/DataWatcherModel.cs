@@ -29,6 +29,21 @@ namespace OMSWeb.Models
         // public JObject Data { get; set; }
         public int? VehicleId { get; set; }
         // public VehiclePosition Vehicle { get; set; }
+
+        #region Station
         public bool? Unuse { get; set; }
+        #endregion
+
+        #region Home
+        public int? Point { get; set; }
+        #endregion
+
+        #region GroupedObject
+        public int? GroupId { get; set; }
+        public int? ReferenceId { get; set; }
+#nullable enable
+        public string? ReferenceTable { get; set; }
+#nullable disable
+        #endregion
     }
 }

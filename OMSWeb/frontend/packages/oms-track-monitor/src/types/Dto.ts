@@ -71,6 +71,18 @@ namespace UpdateDto {
 		id: number
 		unuse?: boolean
 	}
+
+	export type GroupObject = {
+		id: number
+		groupId: number
+		referenceId: number
+		referenceTable: 'vehicle' | 'station' | 'buffer' | 'mtl' | 'home'
+	}
+
+	export type Home = {
+		id: number
+		point: number
+	}
 }
 
 export { UpdateDto }

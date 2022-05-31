@@ -15,6 +15,7 @@ type VisibilityChangedEvent = {
 		| 'isVehicleLineVisible'
 		| 'isSegmentDirectionVisible'
 		| 'isPointLabelVisible'
+		| 'isPointHomeVisible'
 		| 'isStationVisible'
 		| 'isBufferVisible'
 		| 'isZcuVisible'
@@ -94,6 +95,7 @@ const DefaultTrackMonitorSetting: TrackMonitorSetting = {
 	isVehicleLineVisible: true,
 	isSegmentDirectionVisible: true,
 	isPointLabelVisible: true,
+	isPointHomeVisible: true,
 	isStationVisible: true,
 	isBufferVisible: true,
 	isZcuVisible: true,

@@ -32,6 +32,12 @@ interface IOmsTrackMonitor {
 	updateSegmentDisabled(operation: string, segmentDisabled: any): void
 	updateZcu(operation: string, zcu: any): void
 	updateStation(operation: string, station: any): void
+	updateGroupObject(
+		operation: UpdateDto.Operation,
+		groupObject: any,
+		data?: any[]
+	): void
+	updateHome(operation: UpdateDto.Operation, home: any): void
 }
 
 export { IOmsTrackMonitor }

@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import DataSource from 'devextreme/data/data_source'
 import * as AspNetData from 'devextreme-aspnet-data-nojquery'
-import { Observable, of } from 'rxjs'
+import { Observable } from 'rxjs'
 import { tap } from 'rxjs/operators'
 
 import {
@@ -10,8 +10,8 @@ import {
 	IServiceProcessStates,
 	ISystemStates,
 	IFileItem,
+	ISettingMode,
 } from '@oms/models/system.model'
-import { Form } from '@angular/forms'
 @Injectable({
 	providedIn: 'root',
 })
@@ -31,6 +31,10 @@ export class SystemsService {
 				this._states = res
 			}),
 		)
+	}
+
+	settingMode() {
+		return this.http.get<ISettingMode>(`${this.baseUrl}/settings/mode`)
 	}
 
 	vehicles(): DataSource {

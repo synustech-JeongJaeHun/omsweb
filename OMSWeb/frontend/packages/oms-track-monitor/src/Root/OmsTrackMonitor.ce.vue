@@ -58,6 +58,7 @@ const props = defineProps<{
   isVehicleLineVisible: Boolish
   isSegmentDirectionVisible: Boolish
   isPointLabelVisible: Boolish
+  isPointHomeVisible: Boolish
   isStationVisible: Boolish
   isBufferVisible: Boolish
   isZcuVisible: Boolish
@@ -125,6 +126,9 @@ watch(propRefs.isMinimapVisible, (b) => {
 })
 watch(propRefs.isPointLabelVisible, (b) => {
   updateVisibleStyle('pointLabel', parseBooleanProp(true, b))
+})
+watch(propRefs.isPointHomeVisible, (b) => {
+  updateVisibleStyle('pointHome', parseBooleanProp(true, b))
 })
 watch(propRefs.isStationVisible, (b) => {
   updateVisibleStyle('station', parseBooleanProp(true, b))
@@ -335,6 +339,9 @@ defineExpose(exposed)
   visibility: v-bind(
     "visibleStylesInfo.pointLabel ? 'initial' : 'hidden'"
   );
+}
+#point-layer .home {
+  visibility: v-bind("visibleStylesInfo.pointHome ? 'initial' : 'hidden'");
 }
 
 .group-shadow {
