@@ -113,8 +113,15 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		return this.settingSvc.globalPreferences.toggles.showToolName
 	}
 
-	get isHomeMode() {
-		return this.systemStatusService.homeMode ?? false
+	get isHomeModeAndTscPaused() {
+		const isHomeMode = this.systemStatusService.homeMode ?? false
+
+		const isTSCPaused =
+			this.systemStatusService.systemStates.tscMode === 0 ||
+			this.systemStatusService.systemStates.tscMode === 1 ||
+			this.systemStatusService.systemStates.tscMode === 2
+
+		return isHomeMode && isTSCPaused
 	}
 
 	constructor(
@@ -724,32 +731,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		const payload = getCustomEventPayload(event)
 		// @ts-ignore
 		if (!(payload.type && payload.value && payload.event)) return
-
-		if (
-			this.hasPermissions([this.permissionEnums.SetHomePoint]) &&
-			// @ts-ignore
-			payload.type === 'POINT'
-		) {
-			if (
-				!(
-					this.systemStatusService.systemStates.tscMode === 0 ||
-					this.systemStatusService.systemStates.tscMode === 1 ||
-					this.systemStatusService.systemStates.tscMode === 2
-				)
-			) {
-				this.snackBar.open(
-					this.$t.instant('messages.confirmTSCStateNotPaused'),
-					null,
-					{
-						duration: 3000,
-						horizontalPosition: 'center',
-						verticalPosition: 'top',
-					},
-				)
-
-				return
-			}
-		}
 
 		// @ts-ignore
 		this.contextMenuObject = { type: payload.type, value: payload.value }
