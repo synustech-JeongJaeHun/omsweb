@@ -60,6 +60,7 @@ namespace OMSWeb.Services
                 {"alerts", new DataChangeEventTarget(CacheKeys.None, new[]{"alert"})},
                 {"server_status", new DataChangeEventTarget(CacheKeys.None, new[]{"serverStatus"})},
                 {"mode_state", new DataChangeEventTarget(CacheKeys.None, new[]{"modeState"})},
+                {"setting_mode", new DataChangeEventTarget(CacheKeys.None, new[]{"settingMode"})},
             };
 
             this.cacheEventMap = new Dictionary<CacheKeys, string[]>

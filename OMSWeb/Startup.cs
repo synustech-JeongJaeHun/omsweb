@@ -139,6 +139,7 @@ namespace OMSWeb
             services.AddScoped<UserRepository>();
             services.AddScoped<ModeStateRepository>();
             services.AddScoped<ModuleStatusRepository>();
+            services.AddScoped<SettingModeRepository>();
             services.AddScoped<SettingsRepository>();
             services.AddScoped<VehicleRepository>();
             services.AddScoped<ReportRepository>();
@@ -160,6 +161,7 @@ namespace OMSWeb
             services.AddSingleton<SystemsService>();
             services.AddSingleton<ModuleStatusRepository>();
             services.AddSingleton<ModeStateRepository>();
+            services.AddSingleton<SettingModeRepository>();
             services.AddSingleton<TrackRepository>();
             services.AddSingleton<TrackService>();
             services.AddSingleton<PushService>();
