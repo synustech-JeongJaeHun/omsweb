@@ -18,7 +18,7 @@
     [noneModeVehicleColor]="tmSetting.noneModeVehicleColor" [cargoLoadingColor]="tmSetting.cargoLoadingColor"
     [cargoFullColor]="tmSetting.cargoFullColor" [cargoUnloadingColor]="tmSetting.cargoUnloadingColor"
     (mouseoverOnObject)="onMouseoverTM($event)" (mouseleaveOnObject)="onMouseleaveTM($event)"
-    (mainClickOnObject)="onFocus($event)" (secondaryClickOnObject)="onContectMenuOn($event)"
+    (mainClickOnObject)="onFocus($event)" (secondaryClickOnObject)="onContextMenuOn($event)"
     (clickOutObject)="onBackdrop($event)">
   </oms-track-monitor>
 
@@ -387,16 +387,20 @@
         (click)="onSetDest('Point')">
         {{ "names.setDest" | translate }}
       </button>
-      <div style="height: 25px"></div>
-      <dx-select-box displayExpr="label" valueExpr="value" [items]="homeAndGroupSelectList"
-        [value]="contextMenuObject?.value.home" (onSelectionChanged)="onHomeValueChanged($event)">
-      </dx-select-box>
 
-      <button mat-stroked-button class="dense accent" color="primary" (click)="
-          onApplyPointHomeChange(contextMenuObject?.value.id, contextMenuObject?.value.home)
-        ">
-        {{ "names.apply" | translate }}
-      </button>
+      <ng-container *ngIf="isHomeMode">
+        <div style="height: 25px"></div>
+
+        <dx-select-box displayExpr="label" valueExpr="value" [items]="homeAndGroupSelectList"
+          [value]="contextMenuObject?.value.home" (onSelectionChanged)="onHomeValueChanged($event)">
+        </dx-select-box>
+
+        <button mat-stroked-button class="dense accent" color="primary" (click)="
+            onApplyPointHomeChange(contextMenuObject?.value.id, contextMenuObject?.value.home)
+          ">
+          {{ "names.apply" | translate }}
+        </button>
+      </ng-container>
     </mat-card-content>
   </mat-card>
 </ng-template>

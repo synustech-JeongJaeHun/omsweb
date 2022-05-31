@@ -32,7 +32,6 @@ import { MessagesService } from '@oms/root/services/messages.service'
 import { DialogService } from '@oms/root/services/dialog.service'
 import { IVehicleCommandMessage } from '@oms/root/models/command.model'
 import { SystemsService } from '@oms/root/services/systems.service'
-import { ISystemStates } from '@oms/root/models/system.model'
 import { MatSnackBar } from '@angular/material/snack-bar'
 import { SystemStatusService } from '@oms/root/services/system-status.service'
 
@@ -51,8 +50,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 	public detailsVisible = false
 
 	private cameraAndRotationSyncId
-
-	public systemStates: ISystemStates
 
 	get tmSetting() {
 		return this.trackMonitorSettingService.trackSetting
@@ -141,10 +138,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 				this.router.navigate([cert ? '/monitor/status' : '/'])
 			})
 		})
-
-		this.systemsService.currentState$
-			.pipe(takeUntil(this.destroy$))
-			.subscribe((states) => (this.systemStates = states))
 	}
 
 	hasPermissions(permissions: number[]): boolean {
@@ -245,14 +238,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 							)
 						}
 					})
-				})
-
-			this.hubSvc.modeStateChanged$
-				.pipe(takeUntil(this.destroy$))
-				.subscribe((e) => {
-					this.systemsService.currentState$
-						.pipe(takeUntil(this.destroy$))
-						.subscribe((states) => (this.systemStates = states))
 				})
 
 			this.hubSvc.vehicleChanged$
@@ -735,7 +720,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		// @ts-ignore
 		this.focusOnTM({ type: payload.type, id: payload.value.id })
 	}
-	public onContectMenuOn(event: CustomEvent) {
+	public onContextMenuOn(event: CustomEvent) {
 		const payload = getCustomEventPayload(event)
 		// @ts-ignore
 		if (!(payload.type && payload.value && payload.event)) return
@@ -743,23 +728,27 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		if (
 			this.hasPermissions([this.permissionEnums.SetHomePoint]) &&
 			// @ts-ignore
-			payload.type === 'POINT' &&
-			!(
-				this.systemStates.tscMode === 0 ||
-				this.systemStates.tscMode === 1 ||
-				this.systemStates.tscMode === 2
-			)
+			payload.type === 'POINT'
 		) {
-			this.snackBar.open(
-				this.$t.instant('messages.confirmTSCStateNotPaused'),
-				null,
-				{
-					duration: 3000,
-					horizontalPosition: 'center',
-					verticalPosition: 'top',
-				},
-			)
-			return
+			if (
+				!(
+					this.systemStatusService.systemStates.tscMode === 0 ||
+					this.systemStatusService.systemStates.tscMode === 1 ||
+					this.systemStatusService.systemStates.tscMode === 2
+				)
+			) {
+				this.snackBar.open(
+					this.$t.instant('messages.confirmTSCStateNotPaused'),
+					null,
+					{
+						duration: 3000,
+						horizontalPosition: 'center',
+						verticalPosition: 'top',
+					},
+				)
+
+				return
+			}
 		}
 
 		// @ts-ignore

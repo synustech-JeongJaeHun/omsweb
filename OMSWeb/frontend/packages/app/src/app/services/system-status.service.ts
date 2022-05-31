@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core'
+import { ISystemStates } from '../models/system.model'
 import { HubService } from './hub.service'
 import { SystemsService } from './systems.service'
 
@@ -6,6 +7,7 @@ import { SystemsService } from './systems.service'
 	providedIn: 'root',
 })
 export class SystemStatusService {
+	public systemStates: ISystemStates
 	public homeMode?: boolean = undefined
 
 	constructor(
@@ -15,9 +17,21 @@ export class SystemStatusService {
 		this.systemsService.settingMode().subscribe((res) => {
 			this.homeMode = res.homeMode
 		})
-
 		this.hubService.settingModeChanged$.subscribe((res) => {
-			// TODO
+			this.updateSystemState()
 		})
+
+		this.updateSystemState()
+		this.hubService.modeStateChanged$.subscribe((e) => {
+			setTimeout(() => {
+				this.updateSystemState()
+			}, 80)
+		})
+	}
+
+	private updateSystemState() {
+		this.systemsService.currentState$.subscribe(
+			(states) => (this.systemStates = states),
+		)
 	}
 }
