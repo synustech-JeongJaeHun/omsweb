@@ -592,6 +592,12 @@ namespace OMSWeb.Services.MqttClient
                 else
                     data["priority"] = DEFAULT_PRIORITY;
 
+                if (command.CommandID != null)
+                {
+                    data["logical_id"] = command.CommandID;
+                    data["commandID"] = command.CommandID;
+                }
+
                 data["origin"] = ORIGIN_OMS;    // oms
             }
             else if (command.Action == ACTION_A ||

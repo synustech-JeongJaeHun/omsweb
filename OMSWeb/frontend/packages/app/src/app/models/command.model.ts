@@ -72,7 +72,8 @@ export interface IOrderCommandMessage extends ICommandMessage {
 	locationDropoff?: string
 	locationMove?: string
 	carrierLabel?: string
-	priority?: number
+    priority?: number
+    commandID?: string
 }
 
 export interface IStationCommandMessage extends ICommandMessage {
