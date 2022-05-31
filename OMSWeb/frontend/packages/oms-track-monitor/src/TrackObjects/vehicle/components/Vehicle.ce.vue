@@ -37,11 +37,16 @@ const isHotlot = computed(() => Number(props.vehicle.priority) === 99),
     return false
   }),
   isPreventCall = computed(() => {
-    if (props.vehicle.orderOrigin) {
-      if (typeof props.vehicle.orderOrigin === 'string')
-        return props.vehicle.orderOrigin.trim().length === 0
-      else return props.vehicle.orderOrigin.length === 0
-    } else return true
+    const originInUpper = (
+      typeof props.vehicle.orderOrigin === 'string'
+        ? props.vehicle.orderOrigin
+        : (props.vehicle.orderOrigin ?? []).join('')
+    ).toUpperCase()
+
+    const hasMCS = originInUpper.includes('MCS')
+    const hasAsterisk = originInUpper.includes('*')
+
+    return hasMCS === false && hasAsterisk === false
   }),
   isPreventPush = computed(() => props.vehicle.canBePushed === false)
 
