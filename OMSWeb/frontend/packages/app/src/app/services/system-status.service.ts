@@ -14,11 +14,9 @@ export class SystemStatusService {
 		private hubService: HubService,
 		private systemsService: SystemsService,
 	) {
-		this.systemsService.settingMode().subscribe((res) => {
-			this.homeMode = res.homeMode
-		})
+		this.updateSettingMode()
 		this.hubService.settingModeChanged$.subscribe((res) => {
-			this.updateSystemState()
+			this.updateSettingMode()
 		})
 
 		this.updateSystemState()
@@ -26,6 +24,12 @@ export class SystemStatusService {
 			setTimeout(() => {
 				this.updateSystemState()
 			}, 80)
+		})
+	}
+
+	private updateSettingMode() {
+		this.systemsService.settingMode().subscribe((res) => {
+			this.homeMode = res.homeMode
 		})
 	}
 
