@@ -12,14 +12,16 @@
       {{"names.state" | translate}}{{": "}}
       <ng-container *ngIf="isHomeMode === true">
         {{"names.on" | translate}}
-        <button mat-raised-button class="dense" [disabled]="!hasPermissions([permissionEnums.SetHomePoint])"
-          color="primary" (click)="setHomeEditing()">{{"names.disable" |
+        <button style="margin-left: 15px" mat-raised-button class="dense"
+          [disabled]="!hasPermissions([permissionEnums.SetHomePoint])" color="primary"
+          (click)="setHomeEditing()">{{"names.disable" |
           translate}}</button>
       </ng-container>
       <ng-container *ngIf="isHomeMode === false">
         {{"names.off" | translate}}
-        <button mat-raised-button class="dense" [disabled]="!hasPermissions([permissionEnums.SetHomePoint])"
-          color="primary" (click)="setHomeEditing()">{{"names.enable" |
+        <button style="margin-left: 15px" mat-raised-button class="dense"
+          [disabled]="!hasPermissions([permissionEnums.SetHomePoint])" color="primary"
+          (click)="setHomeEditing()">{{"names.enable" |
           translate}}</button>
       </ng-container>
     </label>
