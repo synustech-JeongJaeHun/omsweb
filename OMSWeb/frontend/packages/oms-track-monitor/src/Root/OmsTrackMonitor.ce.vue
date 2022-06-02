@@ -71,6 +71,7 @@ const props = defineProps<{
   stationDisabledColor: Stringlish
   bufferColor: Stringlish
   pointColor: Stringlish
+  homeColor: Stringlish
   normalSegmentColor: Stringlish
   disabledSegmentColor: Stringlish
   segmentDirectionColor: Stringlish
@@ -231,6 +232,10 @@ defineExpose(exposed)
 #point-layer .point .point-path {
   stroke: v-bind('parseStringProp(ColorDefault.point, props.pointColor)');
   fill: v-bind('parseStringProp(ColorDefault.point, props.pointColor)');
+}
+
+#point-layer .point .home .home-path {
+  fill: v-bind('parseStringProp(ColorDefault.home, props.homeColor)');
 }
 
 #segment-layer .segment .segment-path {
