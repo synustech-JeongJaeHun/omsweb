@@ -69,7 +69,7 @@ const getOptions = ({ height, data, rotation, limit = null, showLegend }) => {
 			height,
 			marginRight: 30,
 			marginBottom: showLegend ? 75 : 74,
-			animation: true
+			animation: true,
 		},
 		colors,
 		title: {
@@ -90,7 +90,7 @@ const getOptions = ({ height, data, rotation, limit = null, showLegend }) => {
 					return this.value
 				},
 			},
-			visible: true
+			visible: true,
 		},
 		lang: {
 			noData: '데이타가 없습니다',
@@ -138,16 +138,14 @@ const StackedBar: React.FC<Props> = ({
 	limit,
 	showLegend,
 	labelRotation,
-	isPlaceholder
+	isPlaceholder,
 }: Props) => {
-
 	const ref = React.useRef<any>()
 	const [placeholderOpt, updatePlaceholderState] = usePlaceholderData({
 		currentState: isPlaceholder,
 		height,
-		isH: !showLegend
+		isH: !showLegend,
 	})
-
 
 	React.useEffect(() => {
 		if (ref.current) {
@@ -157,13 +155,15 @@ const StackedBar: React.FC<Props> = ({
 		}
 	}, [])
 
-	const currentOpt = isPlaceholder ? placeholderOpt : getOptions({
-		height,
-		data,
-		limit,
-		showLegend,
-		rotation: labelRotation,
-	})
+	const currentOpt = isPlaceholder
+		? placeholderOpt
+		: getOptions({
+				height,
+				data,
+				limit,
+				showLegend,
+				rotation: labelRotation,
+		  })
 
 	return (
 		<Wrapper>
@@ -192,7 +192,7 @@ interface Props {
 	data?: {
 		header: any[]
 		body: any[]
-	},
+	}
 	isPlaceholder?: boolean
 }
 

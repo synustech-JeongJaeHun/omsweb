@@ -8,7 +8,12 @@ import * as R from 'ramda'
 import styled from '@emotion/styled'
 import { css } from '@emotion/react'
 import { color } from '@daimre/styles'
-import { numberWithCommas, isFullEmpty, omitArray, bdFormat } from '@daimre/shared'
+import {
+	numberWithCommas,
+	isFullEmpty,
+	omitArray,
+	bdFormat,
+} from '@daimre/shared'
 import Container from '../../layout/Container'
 import RCol from '../../layout/RCol'
 import Col from '../../layout/Col'
@@ -133,7 +138,6 @@ const Pane = ({ variant, data, onClick, onZoom, pageVariant }) => {
 }
 
 const DetailChart = ({ variant, data, onClickClose }) => {
-
 	return (
 		<div>
 			<div>
@@ -149,144 +153,148 @@ const DetailChart = ({ variant, data, onClickClose }) => {
 }
 
 const TitleBarlineSet: React.FC<Props & any> & any = React.forwardRef(
-({
-	pageVariant,
-	data,
-	stats,
-	isStatPlaceholder,
-	isChartPlaceholder,
-	onClickItem,
-	onDateChange,
-	startDay,
-	endDay,
-	beforeRangeValue,
-	beforeRangeUnit
-}: Props,
-inRef: any
-) => {
-	const ref = React.useRef({
-		reset: () => {}
-	})
-	const [cnt, updateCnt] = React.useState(0)
-	const [state, updateState] = useImmer({
-		isZoomed: false,
-		isClicked: false,
-		layoutKey: 'overview', // overview, duration, vehicle, source, dest
-		layoutValue: null,
-		zoomedSection: null,
-		zoomedData: {
-			header: [],
-			body: [],
-		},
-		_data: data,
-	})
-
-	React.useEffect(() => {
-		updateState(draft => {
-			draft._data = data
+	(
+		{
+			pageVariant,
+			data,
+			stats,
+			isStatPlaceholder,
+			isChartPlaceholder,
+			onClickItem,
+			onDateChange,
+			startDay,
+			endDay,
+			beforeRangeValue,
+			beforeRangeUnit,
+		}: Props,
+		inRef: any,
+	) => {
+		const ref = React.useRef({
+			reset: () => {},
 		})
-	}, [data])
+		const [cnt, updateCnt] = React.useState(0)
+		const [state, updateState] = useImmer({
+			isZoomed: false,
+			isClicked: false,
+			layoutKey: 'overview', // overview, duration, vehicle, source, dest
+			layoutValue: null,
+			zoomedSection: null,
+			zoomedData: {
+				header: [],
+				body: [],
+			},
+			_data: data,
+		})
 
-	React.useEffect(() => {
-		if (cnt !== 0) {
-			setTimeout(() => {
+		React.useEffect(() => {
+			updateState((draft) => {
+				draft._data = data
+			})
+		}, [data])
+
+		React.useEffect(() => {
+			if (cnt !== 0) {
+				setTimeout(() => {
+					updateState((draft) => {
+						draft.isZoomed = false
+						draft.isClicked = false
+						draft.layoutKey = 'overview'
+						draft.layoutValue = null
+						draft.zoomedSection = null
+						draft.zoomedData = {
+							header: [],
+							body: [],
+						}
+					})
+				}, 500)
+			}
+		}, [cnt])
+
+		React.useImperativeHandle(
+			inRef,
+			() => {
+				const temp = () => updateCnt(cnt + 1)
+				if (ref.current) {
+					ref.current.reset = temp
+				}
+				return ref.current
+			},
+			[ref, cnt],
+		)
+
+		const {
+			isZoomed,
+			isClicked,
+			layoutKey,
+			layoutValue,
+			zoomedSection,
+			zoomedData,
+			_data,
+		} = state
+
+		const getSectionTitle = () => {
+			if (isZoomed) {
+				return layoutKey === 'overview'
+					? `${dic[zoomedSection]} 전체`
+					: `${dic[layoutKey]} - ${layoutValue} | ${dic[zoomedSection]}`
+			}
+
+			return layoutKey === 'overview'
+				? ''
+				: `${dic[layoutKey]} - ${layoutValue}`
+		}
+
+		const handleClick = async ({ key, value, detail }) => {
+			const isDay = R.test(/-/, value)
+			!isDay && onClickItem && onClickItem({ key, value })
+
+			!isDay &&
+				updateState((draft) => {
+					draft.isClicked = true
+					draft.layoutKey = key
+					draft.layoutValue = value
+				})
+		}
+
+		const handleClickBack = (e) => {
+			if (!isZoomed) {
+				updateState((draft) => {
+					draft.isClicked = false
+					draft.layoutKey = 'overview'
+					draft.layoutValue = null
+				})
+
+				onClickItem &&
+					onClickItem({
+						key: 'overview',
+						value: '',
+					})
+			} else {
 				updateState((draft) => {
 					draft.isZoomed = false
-					draft.isClicked= false
-					draft.layoutKey= 'overview'
-					draft.layoutValue= null
-					draft.zoomedSection= null
-					draft.zoomedData = {
-						header: [],
-						body: [],
-					}
 				})
-			}, 500)
-
-		}
-	}, [cnt])
-
-	React.useImperativeHandle(inRef, () => {
-		const temp = () => updateCnt(cnt + 1)
-		if (ref.current) {
-			ref.current.reset = temp
-		}
-		return ref.current
-	}, [ref, cnt])
-
-	const {
-		isZoomed,
-		isClicked,
-		layoutKey,
-		layoutValue,
-		zoomedSection,
-		zoomedData,
-		_data,
-	} = state
-
-	const getSectionTitle = () => {
-		if (isZoomed) {
-			return layoutKey === 'overview'
-				? `${dic[zoomedSection]} 전체`
-				: `${dic[layoutKey]} - ${layoutValue} | ${dic[zoomedSection]}`
+			}
 		}
 
-		return layoutKey === 'overview' ? '' : `${dic[layoutKey]} - ${layoutValue}`
-	}
-
-	const handleClick = async ({ key, value, detail }) => {
-		const isDay = R.test(/-/, value)
-		!isDay && onClickItem && onClickItem({ key, value })
-
-		!isDay && updateState((draft) => {
-			draft.isClicked = true
-			draft.layoutKey = key
-			draft.layoutValue = value
-		})
-	}
-
-	const handleClickBack = (e) => {
-		if (!isZoomed) {
+		const handleZoom = ({ variant: chartType, data }) => {
 			updateState((draft) => {
-				draft.isClicked = false
-				draft.layoutKey = 'overview'
-				draft.layoutValue = null
+				draft.isZoomed = true
+				draft.zoomedSection = chartType
+				draft.zoomedData = data
 			})
+		}
 
-			onClickItem && onClickItem({
-				key: 'overview',
-				value: ''
-			})
-		} else {
+		const handleZoomout = () => {
 			updateState((draft) => {
 				draft.isZoomed = false
 			})
 		}
-	}
 
-	const handleZoom = ({ variant: chartType, data }) => {
-		updateState((draft) => {
-			draft.isZoomed = true
-			draft.zoomedSection = chartType
-			draft.zoomedData = data
-		})
-	}
-
-	const handleZoomout = () => {
-		updateState((draft) => {
-			draft.isZoomed = false
-		})
-	}
-
-	return (
+		return (
 			<ContentPaneBody>
-				<Scrollable
-					scroll='y'
-					width='100%'
-					height='100%'
-				>
+				<Scrollable scroll="y" width="100%" height="100%">
 					<Wrapper>
-						<Container h='center'>
+						<Container h="center">
 							<RCol col={12} sm={12} md={12} lg={9}>
 								<TitleSet
 									title={pageDic[pageVariant]}
@@ -300,7 +308,9 @@ inRef: any
 									beforeRangeValue={beforeRangeValue}
 									beforeRangeUnit={beforeRangeUnit}
 								/>
-								<QueryContext.Provider value={{ isPlaceholder: isChartPlaceholder }}>
+								<QueryContext.Provider
+									value={{ isPlaceholder: isChartPlaceholder }}
+								>
 									<div className="chart-container">
 										{!isZoomed ? (
 											<Pane
@@ -318,16 +328,16 @@ inRef: any
 											/>
 										)}
 									</div>
-								</ QueryContext.Provider>
-							</RCol >
-						</Container >
+								</QueryContext.Provider>
+							</RCol>
+						</Container>
 						<div className="space"></div>
 					</Wrapper>
 				</Scrollable>
 			</ContentPaneBody>
-
-	)
-})
+		)
+	},
+)
 
 TitleBarlineSet.exEmptyData = exEmptyData
 TitleBarlineSet.exStatData = exStatData
@@ -344,17 +354,18 @@ TitleBarlineSet.defaultProps = {
 	startDay: bdFormat(1),
 	endDay: bdFormat(0),
 	beforeRangeValue: 3,
-	beforeRangeUnit: 'months'
+	beforeRangeUnit: 'months',
 }
 
-interface Props extends Pick<
-	TitleSetProps,
-	'startDay'
-	| 'endDay'
-	| 'onDateChange'
-	| 'beforeRangeValue'
-	| 'beforeRangeUnit'
->  {
+interface Props
+	extends Pick<
+		TitleSetProps,
+		| 'startDay'
+		| 'endDay'
+		| 'onDateChange'
+		| 'beforeRangeValue'
+		| 'beforeRangeUnit'
+	> {
 	data?: any
 	pageVariant?: 'normaltr' | 'alarm'
 	stats?: any

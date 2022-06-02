@@ -75,7 +75,7 @@ const TitleSet: React.FC<Props> = ({
 	return (
 		<Wrapper>
 			<Container>
-				<RCol col={4} sm={12} md={4} lg={5}>
+				<RCol col={4} sm={12} md={4} lg={4}>
 					<div className="title-area">
 						<div className="top">
 							<div className="title">
@@ -97,7 +97,7 @@ const TitleSet: React.FC<Props> = ({
 						</div>
 					</div>
 				</RCol>
-				<RCol col={8} sm={12} md={8} lg={7} >
+				<RCol col={8} sm={12} md={8} lg={8} >
 					<Container h={hAlign}>
 						<div className="stats">
 							{stats.map((item, i) => {

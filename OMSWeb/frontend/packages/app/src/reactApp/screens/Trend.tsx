@@ -1,70 +1,76 @@
 // @ts-nocheck
 import * as React from 'react'
-import { isFullEmpty } from '@daimre/shared'
+import * as R from 'ramda'
+import { isFullEmpty, useSelfUpdatedData } from '@daimre/shared'
 import styled from '@emotion/styled'
-import { Trend } from '@daimre/component-library'
+import { Trend, GlobalStyle } from '@daimre/component-library'
 import { useQuery } from 'react-query'
 import { getAgt } from '../utils'
 
-
 const Wrapper = styled.div`
-  height: 100%;
+	height: 100%;
 `
 
 const placeholderData = {
-	stats: [
-		{
-			value: ''
-		},
-		{
-			value: ''
-		},
-		{
-			value: ''
-		},
-		{
-			value: ''
-		},
-	],
+	stats: { cpu: {}, memory: {} },
 	table: [],
-	donuts: [[], []]
+	donuts: [[], []],
 }
 
 const exData = Trend.exData
-
-// const getData = () => new Promise((resolve, reject) => {
-//   setTimeout(() => {
-//     resolve(exData)
-//   }, 3000)
-// })
-
+const makeData = Trend.makeData
+const agt = getAgt()
 
 const TrendWrapper: React.FC = () => {
-  const agt = getAgt()
-  const [isPlaceholder, updatePlaceholder] = React.useState(true)
-  const [ data, setData ] = React.useState(placeholderData)
+	const range = 60 * 10 * 1000
+	const interval = 1000 * 3
+	const [utilData, updateUtilData] = useSelfUpdatedData(range, interval)
+	const [dtData, updateDtData] = useSelfUpdatedData(range, interval)
 
-  React.useEffect(() => {
-		const id = setTimeout(() => {
-			updatePlaceholder(false)
-			setData(exData)
-		}, 1000)
+	const { data } = useQuery(
+		['trend'],
+		async () => {
+			const ret = await agt.trend()
+			return makeData(ret.data)
+		},
+		{
+			placeholderData: placeholderData,
+			refetchInterval: 10000,
+		},
+	)
 
-		return () => clearTimeout(id)
-	}, [])
+	useQuery(
+		['utilization'],
+		async () => {
+			const ret = await agt.utilization()
+			const value = R.path(['data', 'value'], ret)
+			updateUtilData(value)
+		},
+		{
+			refetchInterval: 5000,
+		},
+	)
 
-
-  // const { data, status } = useQuery('systemStates', async () => {
-  //   const ret = await getData()
-  //   updatePlaceholder(false)
-  //   return ret
-  // }, {
-  //   placeholderData,
-  // })
+	useQuery(
+		['deliveryTime'],
+		async () => {
+			const ret = await agt.deliveryTime()
+			const value = R.path(['data', 'value'], ret)
+			updateDtData(value)
+		},
+		{
+			refetchInterval: 5000,
+		},
+	)
 
 	return (
 		<>
-			<Trend data={data} isPlaceholder={isPlaceholder} />
+			<Trend
+				data={data}
+				utilization={utilData}
+				deliveryTime={dtData}
+				isPlaceholder={false}
+			/>
 		</>
 	)
 }

@@ -2303,6 +2303,7 @@ __metadata:
     "@daimre/component-library": "workspace:packages/component-library"
     "@daimre/oms-track-monitor": "workspace:packages/oms-track-monitor"
     "@daimre/shared": "workspace:packages/shared"
+    "@emotion/css": ^11.9.0
     "@emotion/react": ^11.8.2
     "@emotion/styled": ^11.8.1
     "@material-extended/mde": ^3.0.3
@@ -2454,6 +2455,7 @@ __metadata:
     "@types/jest": ^26.0.23
     "@types/json-server": ^0.14.3
     "@types/node": ^15.12.2
+    "@types/node-os-utils": ^1
     "@types/pg": ^8
     body-parser: ^1.19.0
     date-fns: ^2.28.0
@@ -2463,6 +2465,7 @@ __metadata:
     jest: ^27.0.4
     json-server: ^0.16.3
     moment: ^2.29.1
+    node-os-utils: ^1.3.6
     nodemon: ^2.0.7
     pg: ^8.7.3
     ramda: ^0.27.1
@@ -2696,6 +2699,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@emotion/css@npm:^11.9.0":
+  version: 11.9.0
+  resolution: "@emotion/css@npm:11.9.0"
+  dependencies:
+    "@emotion/babel-plugin": ^11.7.1
+    "@emotion/cache": ^11.7.1
+    "@emotion/serialize": ^1.0.3
+    "@emotion/sheet": ^1.0.3
+    "@emotion/utils": ^1.0.0
+  peerDependencies:
+    "@babel/core": ^7.0.0
+  peerDependenciesMeta:
+    "@babel/core":
+      optional: true
+  checksum: bd83d9af5cf87b82992dea030b5c7db9cc26f8fee508fc8c20257bc040d35b0cc595143c5c8e3f5d6719351f3ae1c53b152899c22b60a2a5ff37d3439304401e
+  languageName: node
+  linkType: hard
+
 "@emotion/hash@npm:0.8.0, @emotion/hash@npm:^0.8.0":
   version: 0.8.0
   resolution: "@emotion/hash@npm:0.8.0"
@@ -2784,6 +2805,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@emotion/serialize@npm:^1.0.3":
+  version: 1.0.3
+  resolution: "@emotion/serialize@npm:1.0.3"
+  dependencies:
+    "@emotion/hash": ^0.8.0
+    "@emotion/memoize": ^0.7.4
+    "@emotion/unitless": ^0.7.5
+    "@emotion/utils": ^1.0.0
+    csstype: ^3.0.2
+  checksum: 99a9053bd98c99d63af542ebee029281eeaf653e3a12e97ee79bad7330c68408104c30be6fc07a528e38bb69aba680655181744b76ec6c6f459c121cb805fac2
+  languageName: node
+  linkType: hard
+
 "@emotion/sheet@npm:0.9.4":
   version: 0.9.4
   resolution: "@emotion/sheet@npm:0.9.4"
@@ -2791,7 +2825,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@emotion/sheet@npm:^1.1.0":
+"@emotion/sheet@npm:^1.0.3, @emotion/sheet@npm:^1.1.0":
   version: 1.1.0
   resolution: "@emotion/sheet@npm:1.1.0"
   checksum: a4b74e16a8fea1157413efe4904f5f679d724323cb605d66d20a0b98744422f5d411fca927ceb52e4de454a0a819c5273ca9496db9f011b4ecd17b9f1b212007
@@ -6357,6 +6391,13 @@ __metadata:
     "@types/node": "*"
     form-data: ^3.0.0
   checksum: a3e5d7f413d1638d795dff03f7b142b1b0e0c109ed210479000ce7b3ea11f9a6d89d9a024c96578d9249570c5fe5287a5f0f4aaba98199222230196ff2d6b283
+  languageName: node
+  linkType: hard
+
+"@types/node-os-utils@npm:^1":
+  version: 1.2.0
+  resolution: "@types/node-os-utils@npm:1.2.0"
+  checksum: 5dc8339a297689e9af275e17eedcf01bd601192d248aa8153d58d4a0969114703bc31768259534ffe6128a39665706f401f210c2b95a830cc975a7870b1a60c5
   languageName: node
   linkType: hard
 
@@ -11851,6 +11892,7 @@ __metadata:
     npkill: ^0.8.3
     npm-run-all: ^4.1.5
     prettier: ^2.5.1
+    ts-node: ^10.7.0
     typescript: ~3.9.5
   languageName: unknown
   linkType: soft
@@ -20780,6 +20822,13 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
+"node-os-utils@npm:^1.3.6":
+  version: 1.3.6
+  resolution: "node-os-utils@npm:1.3.6"
+  checksum: 8ce66b648061dff3978c6e63ca7fa8748b285d28a5ebb57c6e6ce2250c34d8be408344d24a79590725a542eb4b6b297b1fa32ac6d73d85a3871b16afa204df6c
+  languageName: node
+  linkType: hard
+
 "node-plop@npm:^0.26.3":
   version: 0.26.3
   resolution: "node-plop@npm:0.26.3"
@@ -27338,7 +27387,7 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
-"ts-node@npm:^10.0.0":
+"ts-node@npm:^10.0.0, ts-node@npm:^10.7.0":
   version: 10.7.0
   resolution: "ts-node@npm:10.7.0"
   dependencies:
