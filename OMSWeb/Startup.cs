@@ -132,6 +132,7 @@ namespace OMSWeb
             services.AddScoped<VehicleRepository>();
             services.AddScoped<ReportRepository>();
             services.AddScoped<ReportNormaltrRepository>();
+            services.AddScoped<ReportAbnormaltrRepository>();
             services.AddScoped<ReportAlarmRepository>();
             services.AddScoped<ReportTrendReposity>();
 

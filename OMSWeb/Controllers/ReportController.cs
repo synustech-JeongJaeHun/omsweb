@@ -42,6 +42,7 @@ namespace OMSWeb.Controllers
             {
                 "normaltr" => await _reportSvc.QueryNormaltrStatsBetween(firstDay, lastDay),
                 "alarm" => await _reportSvc.QueryAlarmStatsBetween(firstDay, lastDay),
+                "abnormaltr" => await _reportSvc.QueryAbnormaltrStatsBetween(firstDay, lastDay),
                 _ => BadRequest()
             };
         }
@@ -63,6 +64,12 @@ namespace OMSWeb.Controllers
                     requestBody.Start,
                     requestBody.End
                 ),
+                "abnormaltr" => await _reportSvc.QueryAbnormaltrChartsBetween(
+                    requestBody.Section,
+                    requestBody.Selected_Item,
+                    requestBody.Start,
+                    requestBody.End
+                ),
                 _ => BadRequest()
             };
         }
@@ -74,14 +81,14 @@ namespace OMSWeb.Controllers
         }
 
         [HttpGet("trend/utilization")]
-        public object GetTrendUtilization()
+        public async Task<object> GetTrendUtilization()
         {
-            throw new NotImplementedException("Not Implemented Route: GetTrendUtilization");
+            return await _reportSvc.QueryTrendUtilization();
         }
         [HttpGet("trend/delivery-time")]
-        public object GetTrendDeliveryTime()
+        public async Task<object> GetTrendDeliveryTime()
         {
-            throw new NotImplementedException("Not Implemented Route: GetTrendDeliveryTime");
+            return await _reportSvc.QueryTrendDeliveryTime();
         }
     }
 }

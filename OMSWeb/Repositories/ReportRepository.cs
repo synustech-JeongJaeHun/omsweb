@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace OMSWeb.Repositories
 {
-    
+
     public class ReportRepository : DataAccess
     {
         public ReportRepository(IConfiguration configuration) : base(configuration) { }
@@ -45,6 +45,53 @@ namespace OMSWeb.Repositories
                 result = conn.Query<ReportLabel>(sql).AsQueryable();
             }
             return result;
+        }
+
+        public async Task CreateOrderView(string start, string end)
+        {
+            using (var conn = ConnectTrack())
+            {
+                var sql = $@"
+                    CREATE or REPLACE VIEW total_orders as (
+                        select *
+                        from (
+                            select
+                                history_source_id as order_id,
+                                max(id) as history_id
+                            from order_history
+                            where time_modified::date between '{start}' and '{end}'
+                            group by history_source_id
+                        ) temp
+                        join order_history oh
+                        on oh.id = temp.history_id
+                    )
+                ";
+
+                await conn.ExecuteAsync(sql);
+            }
+        }
+
+        public async Task CreateOrderViewAll()
+        {
+            using (var conn = ConnectTrack())
+            {
+                var sql = @"
+                	CREATE or REPLACE VIEW total_all_orders as (
+                        select *
+                        from (
+                            select
+                                history_source_id as order_id,
+                                max(id) as history_id
+                            from order_history
+                            group by history_source_id
+                        ) temp
+                        join order_history oh
+                        on oh.id = temp.history_id
+                    )
+                ";
+
+                await conn.ExecuteAsync(sql);
+            }
         }
     }
 }

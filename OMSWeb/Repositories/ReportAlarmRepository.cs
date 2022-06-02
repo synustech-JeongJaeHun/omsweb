@@ -156,30 +156,6 @@ namespace OMSWeb.Repositories
             return result;
         }
 
-        public async Task CreateOrderView(string start, string end)
-        {
-            using (var conn = ConnectTrack())
-            {
-                var sql = $@"
-                    CREATE or REPLACE VIEW total_orders as (
-                        select *
-                        from (
-                            select
-                                history_source_id as order_id,
-                                max(id) as history_id
-                            from order_history
-                            where time_modified::date between '{start}' and '{end}'
-                            group by history_source_id
-                        ) temp
-                        join order_history oh
-                        on oh.id = temp.history_id
-                    )
-                ";
-
-                await conn.ExecuteAsync(sql);
-            }
-        }
-
         public Func<string, string, Task<dynamic[]>> BuildQueryDuration(string section, string start, string end)
             => async (subsection, value) =>
             {

@@ -27,18 +27,21 @@ namespace OMSWeb.Services
     {
         private readonly ReportRepository _reportRepo;
         private readonly ReportNormaltrRepository _reportNormaltrRepository;
+        private readonly ReportAbnormaltrRepository _reportAbnormaltrRepository;
         private readonly ReportAlarmRepository _reportAlarmRepository;
         private readonly ReportTrendReposity _reportTrendRepository;
 
         public ReportService(
                 ReportRepository reportRepository,
                 ReportNormaltrRepository reportNormaltrRepository,
+                ReportAbnormaltrRepository reportAbnormaltrRepository,
                 ReportAlarmRepository reportAlarmRepository,
                 ReportTrendReposity reportTrendReposity
         )
         {
             _reportRepo = reportRepository;
             _reportNormaltrRepository = reportNormaltrRepository;
+            _reportAbnormaltrRepository = reportAbnormaltrRepository;
             _reportAlarmRepository = reportAlarmRepository;
             _reportTrendRepository = reportTrendReposity;
         }
@@ -131,9 +134,31 @@ namespace OMSWeb.Services
             var queryDuration = _reportAlarmRepository.BuildQueryDuration(section, start, end);
             var sectionList = ReportServiceShared.GetSubsection(section);
 
-            await _reportAlarmRepository.CreateOrderView(start, end);
+            await _reportRepo.CreateOrderView(start, end);
             var duration = await queryDuration(section, selectedItem);
             var others = await _reportAlarmRepository.QuerySections(section, selectedItem, start, end);
+
+            var data = new Dictionary<string, dynamic[]>();
+            data.Add("duration", duration);
+            sectionList.Zip(others).ToList().ForEach(tuple => data.Add(tuple.First, tuple.Second));
+
+            return data;
+        }
+
+        public async Task<object> QueryAbnormaltrStatsBetween(string start, string end)
+        {
+            await _reportRepo.CreateOrderViewAll();
+            return await _reportAbnormaltrRepository.QueryStatsAggregatedByTotalTimeSpan(start, end);
+        }
+
+        public async Task<object> QueryAbnormaltrChartsBetween(string section, string selectedItem, string start, string end)
+        {
+            var queryDuration = _reportAbnormaltrRepository.BuildQueryDuration(section, start, end);
+            var sectionList = ReportServiceShared.GetSubsection(section);
+
+            await _reportRepo.CreateOrderView(start, end);
+            var duration = await queryDuration(section, selectedItem);
+            var others = await _reportAbnormaltrRepository.QuerySections(section, selectedItem, start, end);
 
             var data = new Dictionary<string, dynamic[]>();
             data.Add("duration", duration);
@@ -189,5 +214,11 @@ namespace OMSWeb.Services
                 utilization,
             };
         }
+
+        public async Task<object> QueryTrendUtilization()
+         => await _reportTrendRepository.QueryTrendUtilization();
+
+        public async Task<object> QueryTrendDeliveryTime()
+         => await _reportTrendRepository.QueryTrendDeliveryTime();
     }
 }

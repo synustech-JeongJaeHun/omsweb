@@ -187,15 +187,15 @@ namespace OMSWeb.Repositories
                     from (
                     select
                     CASE
-                        when time_created > now() - interval '1 hours' and max_column is null then now() - time_created
-                        when time_created <= now() - interval '1 hours' and max_column is null then interval '1 hours'
-                        when time_created <= now() - interval '1 hours' and max_column is not null and time_completed is null then interval '1 hours'
+                        when time_created > now() - interval '1 hours' and max_field is null then now() - time_created
+                        when time_created <= now() - interval '1 hours' and max_field is null then interval '1 hours'
+                        when time_created <= now() - interval '1 hours' and max_field is not null and time_completed is null then interval '1 hours'
                         when time_completed is not null then time_completed - (now() - interval '1 hours')
                         ELSE interval '1 hours'
                     end as time,
                     id,
                     time_created,
-                    max_column,
+                    max_field,
                     time_completed
                     from (
                         select * from (
@@ -207,12 +207,12 @@ namespace OMSWeb.Repositories
                             time_load_started, time_load_completed,
                             time_unload_started, time_unload_completed,
                             time_completed
-                        ) as max_column,
+                        ) as max_field,
                         time_completed
                         from orders
-                        where time_aborted is null
+                        where time_aborted is null and
+                        time_modified between now() - interval '1 hours' and now()
                         ) temp
-                        where time_created > now() -  interval '1 hours' or max_column > now() -  interval '1 hours'
                     ) temp
                     ) temp
                 ";
@@ -227,6 +227,92 @@ namespace OMSWeb.Repositories
                 }
             }
             return new { Value = result };
+        }
+
+        public async Task<object> QueryTrendUtilization()
+        {
+            float? result = null;
+            using (var conn = ConnectTrack())
+            {
+                var sql = @"
+                    select
+                    TRUNC((EXTRACT(epoch FROM avg(time)) / 3600) * 100, 2)::float as value
+                    from (
+                    select
+                    CASE
+                        when time_created > now() - interval '1 hours' and max_field is null then now() - time_created
+                        when time_created <= now() - interval '1 hours' and max_field is null then interval '1 hours'
+                        when time_created <= now() - interval '1 hours' and max_field is not null and time_completed is null then interval '1 hours'
+                        when time_completed is not null then time_completed - (now() - interval '1 hours')
+                        ELSE interval '1 hours'
+                    end as time,
+                    id,
+                    time_created,
+                    max_field,
+                    time_completed
+                    from (
+                        select * from (
+                        select
+                        id,
+                        time_created,
+                        greatest (
+                            time_assigned, time_vehicle_arrived,
+                            time_load_started, time_load_completed,
+                            time_unload_started, time_unload_completed,
+                            time_completed
+                        ) as max_field,
+                        time_completed
+                        from orders
+                        where time_aborted is null and
+                        time_modified between now() - interval '1 hours' and now()
+                        ) temp
+                    ) temp
+                    ) temp
+                ";
+                try
+                {
+                    result = await conn.QueryFirstAsync<float>(sql);
+                }
+                catch (System.Exception)
+                {
+                    result = null;
+                }
+            }
+
+            var ret = new Dictionary<string, float?>();
+            ret.Add("Value", result);
+
+            return ret;
+        }
+
+        public async Task<object> QueryTrendDeliveryTime()
+        {
+            (int? Value, int Count) result;
+            using (var conn = ConnectTrack())
+            {
+                var sql = @"
+                    select
+                    EXTRACT(EPOCH FROM avg(time_completed - time_created))::int as value,
+                    count(*)
+                    from orders
+                    where time_completed >= now() - interval '1 hours'
+                ";
+
+                try
+                {
+                    result = await conn.QueryFirstAsync<(int? Value, int Count)>(sql);
+                }
+                catch (System.Exception)
+                {
+                    result = (null, 0);
+                }
+            }
+
+            var ret = new Dictionary<string, dynamic>();
+            ret.Add("Value", result.Value);
+            ret.Add("Count", result.Count.ToString());
+
+            return ret;
         }
     }
 }
