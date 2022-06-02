@@ -122,6 +122,11 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		return isHomeMode && isTSCPaused
 	}
 
+	get homeColor() {
+		const isHomeMode = this.systemStatusService.homeMode ?? false
+		return isHomeMode ? '#ff510080' : undefined
+	}
+
 	constructor(
 		private router: Router,
 		private auth: AuthService,

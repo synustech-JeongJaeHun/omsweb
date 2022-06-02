@@ -4,6 +4,7 @@ type ColorProperty =
 	| 'stationDisabled'
 	| 'buffer'
 	| 'point'
+	| 'home'
 	| 'normalSegment'
 	| 'disabledSegment'
 	| 'segmentDirection'
