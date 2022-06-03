@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, inject, ref, toRef, watch } from 'vue'
 import { Vehicle } from '../types/Vehicle'
+import { getVehiclePosition } from '../vehicles'
 import { findPointById } from '../../point/points'
 import { findSegmentByPoints } from '../../segment/segments'
 import { Segment } from '../../segment/types/Segment'
@@ -36,24 +37,33 @@ const isHotlot = computed(() => Number(props.vehicle.priority) === 99),
     return false
   }),
   isPreventCall = computed(() => {
-    if (props.vehicle.orderOrigin) {
-      if (typeof props.vehicle.orderOrigin === 'string')
-        return props.vehicle.orderOrigin.trim().length === 0
-      else return props.vehicle.orderOrigin.length === 0
-    } else return true
+    const originInUpper = (
+      typeof props.vehicle.orderOrigin === 'string'
+        ? props.vehicle.orderOrigin
+        : (props.vehicle.orderOrigin ?? []).join('')
+    ).toUpperCase()
+
+    const hasMCS = originInUpper.includes('MCS')
+    const hasAsterisk = originInUpper.includes('*')
+
+    return hasMCS === false && hasAsterisk === false
   }),
   isPreventPush = computed(() => props.vehicle.canBePushed === false)
 
-const currentPosition = ref<Position>(),
+const currentPosition = ref<Position | undefined>(
+    getVehiclePosition(props.vehicle)
+  ),
   currentSegment = ref<Segment>()
 
 const beforePosition = ref<Position>(),
   beforeSegment = ref<Segment>()
 
-const realtimePosition = ref<Position>()
+const realtimePosition = ref<Position | undefined>(
+  currentPosition.value ?? undefined
+)
 
 watch(
-  () => props.vehicle.lastUpdated,
+  () => vehicle.value.lastUpdated,
   () => {
     const segment = findSegmentByPoints(
       props.vehicle.curPoint,

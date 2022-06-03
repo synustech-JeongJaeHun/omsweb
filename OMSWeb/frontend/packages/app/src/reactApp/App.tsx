@@ -62,9 +62,7 @@ const App: React.FC<Props> = ({ location }: Props) => {
 
 	return <Wrapper>{renderPath()}</Wrapper>
 }
-
 interface Props {
 	location: any
 }
-
 export default App

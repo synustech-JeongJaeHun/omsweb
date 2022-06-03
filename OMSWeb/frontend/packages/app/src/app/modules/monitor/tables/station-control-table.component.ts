@@ -8,6 +8,8 @@ import { HubService } from '../../../services/hub.service';
 import { IDataChangeEvent } from '../../../models/notification.model';
 import { AuthService } from '../../../services/auth.service';
 import { takeUntil } from 'rxjs/operators';
+import { DialogService } from '../../../services/dialog.service';
+import { TranslateService } from '@ngx-translate/core';
 import { MessagesService } from '../../../services/messages.service';
 import { DxDataGridComponent } from 'devextreme-angular';
 import { ClientPreferences } from '../../../models/settings.model';
@@ -37,7 +39,7 @@ export class StationControlTableComponent implements OnInit, OnDestroy {
     );
   }
 
-  get canDelete(): boolean {
+  get canControl(): boolean {
     return this.selectedRows.length > 0;
   }
 
@@ -45,6 +47,8 @@ export class StationControlTableComponent implements OnInit, OnDestroy {
     private auth: AuthService,
     private statusSvc: StatusService,
     private settingSvc: SettingsService,
+    private dialogSvc: DialogService,
+    private $t: TranslateService,
     private messageSvc: MessagesService,
     private hubSvc: HubService
   ) {
@@ -69,11 +73,46 @@ export class StationControlTableComponent implements OnInit, OnDestroy {
       });
   }
 
-  onDelete() {
-    if (!this.canDelete) return;
+  onUnuse() {
+    if (!this.canControl) return;
+
+    let stationIds: number[] = [];
     const items = this.dataGrid.instance.getSelectedRowsData();
-    const jobs = items.map((x) => this.messageSvc.sendDeleteOrder(x));
-    forkJoin(jobs).subscribe();
+    for (let idx = 0; idx < items.length; idx++) {
+        stationIds.push(items[idx].id);
+    }
+
+    if (stationIds.length > 0) {
+        this.dialogSvc
+          .confirm({ body: this.$t.instant('messages.confirmCommand') })
+          .subscribe((ok) => {
+            ok &&
+            this.messageSvc
+              .sendStationSettingCommand({type:'UNUSE', action: 'station-setting', unused: 1}, stationIds)
+              .subscribe();
+          });
+     }
+  }
+
+  onUse() {
+    if (!this.canControl) return;
+    
+    let stationIds: number[] = [];
+    const items = this.dataGrid.instance.getSelectedRowsData();
+    for (let idx = 0; idx < items.length; idx++) {
+        stationIds.push(items[idx].id);
+    }
+
+    if (stationIds.length > 0) {
+        this.dialogSvc
+          .confirm({ body: this.$t.instant('messages.confirmCommand') })
+          .subscribe((ok) => {
+            ok &&
+            this.messageSvc
+              .sendStationSettingCommand({type: 'USE', action: 'station-setting', unused: 0}, stationIds)
+              .subscribe();
+          });
+     }
   }
 
   private onTableChanged(payload: IDataChangeEvent) {

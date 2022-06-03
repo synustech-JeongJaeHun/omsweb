@@ -2,6 +2,10 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { DxDataGridComponent } from 'devextreme-angular'
 import { TranslateService } from '@ngx-translate/core';
 import { BehaviorSubject, forkJoin, Observable } from 'rxjs';
+import { Subject } from 'rxjs';
+import { HubService } from '../../../services/hub.service';
+import { IDataChangeEvent } from '../../../models/notification.model';
+import { takeUntil } from 'rxjs/operators';
 import { SettingsService } from '../../../services/settings.service';
 import { MessagesService } from '../../../services/messages.service';
 import { ISettingsVehicleReg } from '../../../models/settings.model';
@@ -29,6 +33,8 @@ export class VehicleSettingComponent implements OnInit {
   removeIds$ = new BehaviorSubject<number[]>([]);
   selectedIds: number[] = [];
 
+  private destroy$: Subject<void> = new Subject<void>();
+
 
   get canRemove(): boolean {
     return this.selectedIds.length > 0;
@@ -44,6 +50,7 @@ export class VehicleSettingComponent implements OnInit {
     private dialog: MatDialog,
     private dialogSvc: DialogService,
     private t$: TranslateService,
+    private hubSvc: HubService
   ) {
     this.settingsSvc.settingsVehicles().subscribe((res) => {
       this.dataSource = res;
@@ -51,12 +58,26 @@ export class VehicleSettingComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    //this.hubSvc.vehicleTableChanged$
+    //  .pipe(takeUntil(this.destroy$))
+    //  .subscribe((e: IDataChangeEvent) => {
+    //    e && this.onTableChanged(e);
+    //  });
   }
 
   ngOnDestroy(): void {
     this._vehicleDlg &&
       this._vehicleDlg.getState() === MatDialogState.OPEN &&
       this._vehicleDlg.close();
+
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  private onTableChanged(payload: IDataChangeEvent) {
+    this.settingsSvc.settingsVehicles().subscribe((res) => {
+      this.dataSource = res;
+    });
   }
 
   onAddVehicle(grid) {
@@ -70,6 +91,7 @@ export class VehicleSettingComponent implements OnInit {
 
     this._vehicleDlg.afterClosed().subscribe((res) => {
       if (res) {
+        res.railIn = false;
         res.isNew = true;
 
         this._changedItems.push(res);
@@ -92,7 +114,7 @@ export class VehicleSettingComponent implements OnInit {
           for (let selectedId of this.selectedIds)
             this._removeItems.push(selectedId);
           const canceled = this._changedItems
-            .filter((u) => u.isNew && this.selectedIds.includes(u.id))
+            .filter((u) => u.railIn && u.isNew && this.selectedIds.includes(u.id))
             .map((u) => u.id);
           if (canceled && canceled.length > 0) {
             this._removeItems = _.difference(this.selectedIds, canceled);

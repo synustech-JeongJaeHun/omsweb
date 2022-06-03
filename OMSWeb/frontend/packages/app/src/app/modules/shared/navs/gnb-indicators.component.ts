@@ -37,6 +37,7 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
   isCriticalWarn = false;
   isCriticalAlarm = false;
   target: any;
+  isPopupWarn: boolean = false;
 
   warnList: IAlert[] = [];
 
@@ -83,7 +84,6 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
   }
 
   toggleWarnsView() {
-    //if (!AccountUtil.hasPermission(9, this.auth.currentUser)) return;
     if (!AccountUtil.hasPermission(PermissionEnums.ViewWarning, this.auth.currentUser)) return;
     // this.btnWarn.togglePopover();
     if (this._alertDlg && this._alertDlg.getState() === MatDialogState.OPEN) {
@@ -101,7 +101,6 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
   }
 
   toggleAlarmsView(enforce = false) {
-    //if (!AccountUtil.hasPermission(8, this.auth.currentUser)) return;
     if (!AccountUtil.hasPermission(PermissionEnums.ViewAlarm, this.auth.currentUser)) return;
     if (this._alarmDlg && this._alarmDlg.getState() === MatDialogState.OPEN) {
       this._alarmDlg.close();
@@ -135,7 +134,6 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
   }
 
   showAlarmsView() {
-    //if (!AccountUtil.hasPermission(8, this.auth.currentUser)) return;
     if (!AccountUtil.hasPermission(PermissionEnums.ViewAlarm, this.auth.currentUser)) return;
     if (this._alarmDlg && this._alarmDlg.getState() === MatDialogState.OPEN) {
       return;
@@ -156,10 +154,26 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
     });
   }
 
+  showWarnsView() {
+    if (!AccountUtil.hasPermission(PermissionEnums.ViewWarning, this.auth.currentUser)) return;
+    if (this._alertDlg && this._alertDlg.getState() === MatDialogState.OPEN) {
+      return;
+    }
+
+    this._alertDlg = this.dialog.open(AlertDialogComponent, {
+      autoFocus: false,
+      hasBackdrop: false,
+      disableClose: true,
+      closeOnNavigation: true,
+      panelClass: 'alerts-dialog',
+    });
+  }
+
   private updateAlertCount() {
     this.notifySvc.alertCount().subscribe((warn) => {
       this.warnCount = warn.total;
       this.isCriticalWarn = warn.critical > 0;
+      this.isPopupWarn = warn.level2 > 0;
     });
   }
   private updateAlarmCount() {
@@ -169,20 +183,32 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
     });
   }
   updateAlarmView(show = true) {
-    //if (!AccountUtil.hasPermission(8, this.auth.currentUser)) return;
     if (!AccountUtil.hasPermission(PermissionEnums.ViewAlarm, this.auth.currentUser)) return;
     if (show) this.showAlarmsView();
 
     this._alarmDlg.componentInstance.dataSource = this.notifySvc.alarmsDataSource();
   }
 
+  updateAlertView(show = true) {
+    if (!AccountUtil.hasPermission(PermissionEnums.ViewWarning, this.auth.currentUser)) return;
+    if (show) this.showWarnsView();
+
+    this._alertDlg.componentInstance.dataSource = this.notifySvc.alertsDataSource();
+  }
 
   private onAlertChanged(event: IDataChangeEvent) {
     this.updateAlertCount();
+    //this.updateAlertView(this.isPopupWarn);
+    setTimeout(() => {
+      this.updateStateWarns();
+    }, 100);
   }
+  private updateStateWarns() {
+    this.updateAlertView(this.isPopupWarn);
+  }
+
   private onAlarmChanged(event: IDataChangeEvent) {
     this.updateAlarmCount();
     this.updateAlarmView(true);
-    //this.toggleAlarmsView(true);
   }
 }

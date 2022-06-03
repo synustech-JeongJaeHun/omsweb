@@ -11,6 +11,8 @@ namespace OMSWeb.Services.MqttClient
     public class MqttMessage
     {
         public const string TOPIC_DEFAULT = "oms/vehicle-manager/request";
+        public const string TOPIC_MAP_UPDATE = "oms/map-update/status";
+        public const string TOPIC_ALIVE = "oms/alive/request";
 
         public const string REQUEST_HAS = "has";
         public const string REQUEST_VEHICLE_MANAGER = "vehicle_manager";
@@ -24,6 +26,7 @@ namespace OMSWeb.Services.MqttClient
         public const string ACTION_CONTROL_STATE = "control_state";
         public const string ACTION_TSC_STATE = "tsc_state";
         public const string ACTION_AI_MODE = "ai_mode";
+        public const string ACTION_HOME_MODE = "home_mode";
         public const string ACTION_PAUSE = "pause";
         public const string ACTION_RESUME = "resume";
         public const string ACTION_ALARM_CLEAR = "alarm_clear";
@@ -44,6 +47,8 @@ namespace OMSWeb.Services.MqttClient
         public const string ACTION_CLEAR_PATH = "clear_path";
         public const string ACTION_DISABLE_SEGMENT = "disable-segment";
         public const string ACTION_ENABLE_SEGMENT = "enable-segment";
+        public const string ACTION_DISABLE_HOME = "disable-home";
+        public const string ACTION_ENABLE_HOME = "enable-home";
         public const string ACTION_GROUP_SETTING = "group-setting";
         public const string ACTION_CLUSTER_SETTING = "cluster-setting";
         public const string ACTION_SEGMENT_SETTING = "segment-setting";
@@ -65,6 +70,8 @@ namespace OMSWeb.Services.MqttClient
         public const string ORIGIN_LOCAL_ORDER = "OMS";
         public const string ORIGIN_HOST_ORDER = "OMS,MCS";
 
+        public const int DEFAULT_PRIORITY = 30;
+
         public const string DEFAULT_DIRECTION = "forward";
 
         public MqttMessage()
@@ -83,6 +90,7 @@ namespace OMSWeb.Services.MqttClient
                 case ACTION_CONTROL_STATE:
                 case ACTION_TSC_STATE:
                 case ACTION_AI_MODE:
+                case ACTION_HOME_MODE:
                 case ACTION_PAUSE:
                 case ACTION_RESUME:
                 case ACTION_ALARM_CLEAR:
@@ -103,6 +111,8 @@ namespace OMSWeb.Services.MqttClient
                 case ACTION_CLEAR_PATH:
                 case ACTION_DISABLE_SEGMENT:
                 case ACTION_ENABLE_SEGMENT:
+                case ACTION_DISABLE_HOME:
+                case ACTION_ENABLE_HOME:
                 case ACTION_GROUP_SETTING:
                 case ACTION_CLUSTER_SETTING:
                 case ACTION_SEGMENT_SETTING:
@@ -149,6 +159,7 @@ namespace OMSWeb.Services.MqttClient
 
                 case ACTION_MAP_UPDATE:
                 case ACTION_AI_MODE:
+                case ACTION_HOME_MODE:
                 case ACTION_PAUSE:
                 case ACTION_RESUME:
                 case ACTION_ALARM_CLEAR:
@@ -180,6 +191,8 @@ namespace OMSWeb.Services.MqttClient
 
                 case ACTION_DISABLE_SEGMENT:
                 case ACTION_ENABLE_SEGMENT:
+                case ACTION_DISABLE_HOME:
+                case ACTION_ENABLE_HOME:
                     return REQUEST_TRACK;
 
                 case ACTION_ZCU_GO:
@@ -228,6 +241,18 @@ namespace OMSWeb.Services.MqttClient
         }
         public object GetWarningId(CommandMessageDto command)
         {
+            if (command.WarningIds != null)
+            {
+                if (command.WarningIds.Length > 0)
+                    if (command.WarningIds[0] == -1)
+                        return "*"; // all selected
+                    else
+                        return command.WarningIds[0];  // use single selection
+            }
+
+            if (command.WarningId == -1)
+                return "*";
+
             return command.WarningId;
         }
         public object GetWarningAckBy(CommandMessageDto command)
@@ -314,38 +339,15 @@ namespace OMSWeb.Services.MqttClient
             }
             else if (command.Action == ACTION_MAP_UPDATE)
             {
-                /*
-                if (command.map_db_name != null)
-                    data["map_db_name"] = command.map_db_name;
-
-                if (command.map_source_file != null)
-                    data["map_source_file"] = command.map_source_file;
-                */
-                if (command.map_db_name != null && command.map_source_file != null)
-                {
-                    // kill oms & vas
-                    foreach(Process process in Process.GetProcesses())
-                    {
-                        if (process.ProcessName.ToLower() == "oms_srv")
-                            process.Kill();
-
-                        if (process.ProcessName.ToLower() == "vas")
-                            process.Kill();
-                    }
-
-                    // do map update !!
-                    ProcessStartInfo psi = new ProcessStartInfo();
-                    psi.FileName = String.Format("{0}oms-config.exe", @"c:\oms\bin\");
-                    psi.Arguments = String.Format("update --name {0} --map {1}{2}", 
-                                        command.map_db_name, @"c:\oms\map\", command.map_source_file);
-                    Process.Start(psi);
-                }
-
-                return null;
             }
             else if (command.Action == ACTION_AI_MODE)
             {
                 if (command.State != null)
+                    data["mode"] = command.Mode;
+            }
+            else if (command.Action == ACTION_HOME_MODE)
+            {
+                if (command.Mode != null)
                     data["mode"] = command.Mode;
             }
             else if (command.Action == ACTION_PAUSE ||
@@ -412,6 +414,22 @@ namespace OMSWeb.Services.MqttClient
                     data["segment_id"] = command.SegmentId;
                     data["source"] = "uid-admin";
                     data["reason"] = "";
+                }
+            }
+            else if (command.Action == ACTION_DISABLE_HOME ||
+                     command.Action == ACTION_ENABLE_HOME)
+            {
+                if (command.PointId != null)
+                {
+                    data["point_id"] = command.PointId;
+                }
+                if (command.GroupId != null)
+                { 
+                    data["group_id"] = command.GroupId;
+                }
+                else if (command.GroupIds != null)
+                {
+                    data["group_id"] = command.GroupIds;
                 }
             }
             else if (command.Action == ACTION_GROUP_SETTING)
@@ -540,6 +558,15 @@ namespace OMSWeb.Services.MqttClient
                     data["user_id"] = "admin";
                     data["note"] = "";
                 }
+                else if (command.VehicleId != null)
+                {
+                    data["carrier_location"] = "v" + command.VehicleId;
+                    data["location_type"] = "v";
+
+                    data["manual"] = true;
+                    data["user_id"] = "admin";
+                    data["note"] = "";
+                }
             }
             else if (command.Action == ACTION_N)
             {
@@ -559,6 +586,17 @@ namespace OMSWeb.Services.MqttClient
 
                 if (command.CarrierLabel != null)
                     data["carrier_id"] = command.CarrierLabel;
+
+                if (command.Priority != null)
+                    data["priority"] = command.Priority;
+                else
+                    data["priority"] = DEFAULT_PRIORITY;
+
+                if (command.CommandID != null)
+                {
+                    data["logical_id"] = command.CommandID;
+                    data["commandID"] = command.CommandID;
+                }
 
                 data["origin"] = ORIGIN_OMS;    // oms
             }

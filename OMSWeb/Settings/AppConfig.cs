@@ -46,7 +46,7 @@ namespace OMSWeb.OMSSettings
 
                     return value;
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     //Console.WriteLine("DataAccess() : " + e.Message);
                 }

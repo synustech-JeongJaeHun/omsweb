@@ -1,0 +1,29 @@
+<div class="setting-header">
+  <h3 class="setting-title">{{ "names.systemPreference" | translate }}</h3>
+  <div class="setting-actions"></div>
+</div>
+
+<div class="setting-container">
+  <fieldset>
+    <legend>
+      {{'names.homeMode' | translate}}
+    </legend>
+    <label>
+      {{"names.state" | translate}}{{": "}}
+      <ng-container *ngIf="isHomeMode === true">
+        {{"names.on" | translate}}
+        <button style="margin-left: 15px" mat-raised-button class="dense"
+          [disabled]="!hasPermissions([permissionEnums.SetHomePoint])" color="primary"
+          (click)="setHomeEditing()">{{"names.disable" |
+          translate}}</button>
+      </ng-container>
+      <ng-container *ngIf="isHomeMode === false">
+        {{"names.off" | translate}}
+        <button style="margin-left: 15px" mat-raised-button class="dense"
+          [disabled]="!hasPermissions([permissionEnums.SetHomePoint])" color="primary"
+          (click)="setHomeEditing()">{{"names.enable" |
+          translate}}</button>
+      </ng-container>
+    </label>
+  </fieldset>
+</div>

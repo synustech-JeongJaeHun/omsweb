@@ -11,6 +11,11 @@ using Microsoft.AspNetCore.Mvc;
 using OMSWeb.Models;
 using OMSWeb.Models.Entities;
 using OMSWeb.Services;
+using Newtonsoft.Json;
+using OMSWeb.Services.MqttClient;
+using System.Diagnostics;
+using OMSWeb.OMSSettings;
+using System.Threading;
 
 namespace OMSWeb.Controllers
 {
@@ -19,12 +24,16 @@ namespace OMSWeb.Controllers
     public class SystemsController : ControllerBase
     {
         private SystemsService _systemSvc;
+        private DbService _dbSvc;
         private ModuleStatusService _moduleStatusSvc;
+        private readonly MessageService _msgSvc;
 
-        public SystemsController(SystemsService systemSvc, ModuleStatusService moduleStatusSvc)
+        public SystemsController(SystemsService systemSvc, DbService dbSvc, ModuleStatusService moduleStatusSvc, MessageService messageService)
         {
             this._systemSvc = systemSvc;
+            this._dbSvc = dbSvc;
             this._moduleStatusSvc = moduleStatusSvc;
+            this._msgSvc = messageService;
         }
 
         [HttpGet("states")]
@@ -33,10 +42,22 @@ namespace OMSWeb.Controllers
             return this._systemSvc.GetHostStatus();
         }
 
+
+        [HttpGet("settings/mode")]
+        public ActionResult<SettingModeModel> GetSettingMode()
+        {
+            return this._systemSvc.GetSettingMode();
+        }
+
         [HttpGet("settings/client")]
         public ActionResult<ClientSettings> GetClientSettings()
         {
             return this._systemSvc.GetClientSettings();
+        }
+        [HttpGet("settings/default-colors")]
+        public ActionResult<DefaultColorSettings> GetDefaultColors()
+        {
+            return this._systemSvc.GetDefaultColorSettings();
         }
 
         [HttpGet("module-status")]
@@ -50,6 +71,11 @@ namespace OMSWeb.Controllers
         {
             return this._systemSvc.GetMaps();
         }
+        [HttpGet("current-map")]
+        public object GetCurrentMap()
+        {
+            return this._dbSvc.GetCurrentMap();
+        }
 
         [HttpGet("logs")]
         public object GetLogs()
@@ -60,23 +86,37 @@ namespace OMSWeb.Controllers
         [HttpGet("logs/downloadFile/{fileName}")]
         public FileContentResult DownloadFile([FromRoute] string fileName, [FromQuery] string fileFullPath)
         {
-            string path = fileFullPath;
+            string filePath = fileFullPath;
             byte[] bytes = null;
-
-            //var tempFolderPath = "C:\\OMS\\app\\omsweb\\Temp\\CopyFolder\\";
-            var logTempCopyDir = this._systemSvc.LogTempCopyDir;
 
             try
             {
-                bytes = System.IO.File.ReadAllBytes(path);
+                using (var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                {
+                    using (var ms = new MemoryStream())
+                    {
+                        fs.CopyTo(ms);
+                        bytes = ms.ToArray();
+                    }
+                }
             }
             catch
             {
+                //var tempFolderPath = "C:\\OMS\\app\\omsweb\\Temp\\CopyFolder\\";
+                var logTempCopyDir = this._systemSvc.LogTempCopyDir;
+
                 if (!Directory.Exists(logTempCopyDir))
                     Directory.CreateDirectory(logTempCopyDir);
 
-                System.IO.File.Copy(path, logTempCopyDir + "\\" + fileName);
-                bytes = System.IO.File.ReadAllBytes(logTempCopyDir + "\\" + fileName);
+                System.IO.File.Copy(filePath, logTempCopyDir + "\\" + fileName);
+                using (var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                {
+                    using (var ms = new MemoryStream())
+                    {
+                        fs.CopyTo(ms);
+                        bytes = ms.ToArray();
+                    }
+                }
 
                 if (System.IO.File.Exists(logTempCopyDir + "\\" + fileName))
                     System.IO.File.Delete(logTempCopyDir + "\\" + fileName);
@@ -112,6 +152,7 @@ namespace OMSWeb.Controllers
                     DirectoryInfo directoryInfo = new DirectoryInfo(path);
                     if (!Directory.Exists(logTempCopyDir + "\\" + directoryInfo.Name))
                         Directory.CreateDirectory(logTempCopyDir + "\\" + directoryInfo.Name);
+
                     _systemSvc.DirectoryCopy(path, logTempCopyDir + "\\" + directoryInfo.Name, true);
                 }
                 else
@@ -138,6 +179,7 @@ namespace OMSWeb.Controllers
                         DirectoryInfo directoryInfo = new DirectoryInfo(path);
                         if (!Directory.Exists(logTempCopyDir + "\\" + directoryInfo.Name))
                             Directory.CreateDirectory(logTempCopyDir + "\\" + directoryInfo.Name);
+
                         _systemSvc.DirectoryCopy(path, logTempCopyDir, true);
                     }
                     else
@@ -152,7 +194,15 @@ namespace OMSWeb.Controllers
                 Directory.Delete(logTempCopyDir, true);
             }
 
-            byte[] zipResult = System.IO.File.ReadAllBytes(logZipFilePath);
+            byte[] zipResult;
+            using (var fs = new FileStream(logZipFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            {
+                using (var ms = new MemoryStream())
+                {
+                    fs.CopyTo(ms);
+                    zipResult = ms.ToArray();
+                }
+            }
             if (System.IO.File.Exists(logZipFilePath))
                 System.IO.File.Delete(logZipFilePath);
 
@@ -167,7 +217,26 @@ namespace OMSWeb.Controllers
         {
             var fileName = string.Format("{0}.zip", folderName);
             var logBaseDir = this._systemSvc.LogBaseDir;
-            var folderPath = (folderFullPath == "Logs" || folderFullPath == string.Empty) ? logBaseDir : logBaseDir.Replace("Logs", "") + folderFullPath.Replace("/", "\\");
+            var folderPath = string.Empty;
+            if (folderFullPath == "Logs" || folderFullPath == string.Empty)
+            {
+                folderPath = logBaseDir;
+            }
+            else
+            {
+                folderFullPath = folderFullPath.Replace("/", "\\");
+                string[] vs = folderFullPath.Split('\\');
+
+                folderFullPath = ".\\";
+                for (int i = 1; i < vs.Length; i++)
+                {
+                    folderFullPath += vs[i];
+                    if (i < vs.Length - 1)
+                        folderFullPath += "\\";
+                }
+
+                folderPath = Path.GetFullPath(Path.Combine(logBaseDir, folderFullPath));
+            }
 
             //var tempOutPutPath = "C:\\OMS\\app\\omsweb\\Temp\\Zip\\";
             //var tempZipFilePath = "C:\\OMS\\app\\omsweb\\Temp\\Zip\\" + fileName;
@@ -197,7 +266,15 @@ namespace OMSWeb.Controllers
                 Directory.Delete(logTempCopyDir, true);
             }
 
-            byte[] zipResult = System.IO.File.ReadAllBytes(logZipFilePath);
+            byte[] zipResult;
+            using (var fs = new FileStream(logZipFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            {
+                using (var ms = new MemoryStream())
+                {
+                    fs.CopyTo(ms);
+                    zipResult = ms.ToArray();
+                }
+            }
             if (System.IO.File.Exists(logZipFilePath))
                 System.IO.File.Delete(logZipFilePath);
 
@@ -205,6 +282,147 @@ namespace OMSWeb.Controllers
                 throw new Exception(String.Format("No Files found."));
 
             return File(zipResult, "application/zip", fileName);
+        }
+
+        public class MapFileDto
+        {
+            public string MapFile { get; set; }
+            public bool Overwrite { get; set; }
+        }
+
+        [HttpPost("control/updateMap/{mapName}")]
+        public ActionResult<MapUpdateResultModel> UpdateMap([FromRoute] string mapName, [FromBody] MapFileDto mapFileDto)
+        {
+            bool bResult = false;
+            string mapFile = mapFileDto.MapFile;
+            bool bOverwrite = mapFileDto.Overwrite;
+
+            string module_name = Process.GetCurrentProcess().MainModule.FileName;
+            string currenPath = Path.GetDirectoryName(module_name);
+            string exeName = "..\\..\\bin\\oms-config.exe";
+            string exePath = Path.GetFullPath(Path.Combine(currenPath, exeName));
+
+            // 1. check if oms-config.exe exits
+            if (!System.IO.File.Exists(exePath))
+            {
+                bResult = false;
+                return new MapUpdateResultModel
+                {
+                    Message = string.Format("Manp Updater Module is not found"),
+                    bResult = bResult
+                };
+            }
+
+            // 2. check if map file exists
+            string mapDir = AppConfig.GetFromOMSConfig("Map", "map_dir", "..\\..\\map");
+            string mapPath = Path.GetFullPath(Path.Combine(mapDir, mapFile));
+            if (!System.IO.File.Exists(mapPath))
+            {
+                bResult = false;
+                return new MapUpdateResultModel
+                {
+                    Message = string.Format("The map file {0} is not found", mapFile),
+                    bResult = bResult
+                };
+            }
+
+            // 3. TSCState Paused check
+            SystemStatusModel sm = this._systemSvc.GetHostStatus();
+            if (sm.TscMode != TscModeEnums.PAUSED)
+            {
+                bResult = false;
+                return new MapUpdateResultModel
+                {
+                    Message = string.Format("TSCState is not paused, set paused and try again!"),
+                    bResult = bResult
+                };
+            }
+
+            // 4. get current ver
+            DbVersionEntity dbVer = this._dbSvc.GetCurrentMap();
+            int current_ver = Convert.ToInt32(dbVer.DbVersion);
+
+            // 5. send start status of map update
+            Dictionary<string, object> data_begin = new Dictionary<string, object>();
+            data_begin.Add("request", "map-update");
+            data_begin.Add("action", "status");
+            data_begin.Add("status", "start");
+            data_begin.Add("worker", "omsweb");
+            this._msgSvc.SendMessage(MqttMessage.TOPIC_MAP_UPDATE, JsonConvert.SerializeObject(data_begin));
+
+            // 6. wait for each module stand by
+            Thread.Sleep(2000);
+
+            // 7. execute oms-config - do map update
+            try
+            {
+                string arguments = (bOverwrite) ? $"update --name {mapName} --map \"{mapPath}\" --overwrite" :
+                                                  $"update --name {mapName} --map \"{mapPath}\"";
+
+                string dsbv = AppConfig.GetFromOMSConfig("VehicleProcessor", "is_disabled_seg_by_veh", "true");
+                arguments += Convert.ToBoolean(dsbv) ? String.Empty : " --dsbv";
+
+
+                if (!System.IO.File.Exists(exePath))
+                {
+                    bResult = false;
+                    return new MapUpdateResultModel
+                    {
+                        Message = string.Format("Map update {0}", bResult ? "complete" : "failed"),
+                        bResult = bResult
+                    };
+                }
+
+                // execute oms-conig.exe
+                Process ocl = new Process();
+                ocl.StartInfo.FileName = exePath;
+                ocl.StartInfo.Arguments = arguments;
+                ocl.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                ocl.Start();
+
+            }
+            catch (Exception)
+            {
+                bResult = false;
+                return new MapUpdateResultModel
+                {
+                    Message = string.Format("Map Update Module invoke error"),
+                    bResult = bResult
+                };
+            }
+
+            // 8. check if map update is completed for 10sec
+            DateTime startTime = DateTime.Now;
+            int timeSecondSpan = 0;
+            while (timeSecondSpan < 10) // wait for max 10 sec
+            {
+                DbVersionEntity DbVerNew = this._dbSvc.GetCurrentMap();
+                if (current_ver < DbVerNew.DbVersion)
+                {
+                    bResult = true;
+                    break;
+                }
+
+                TimeSpan diff = DateTime.Now - startTime;
+                timeSecondSpan = diff.Seconds;
+
+                Thread.Sleep(150);
+            }
+
+            // 9. send end status of map update
+            Dictionary<string, object> data_end = new Dictionary<string, object>();
+            data_end.Add("request", "map-update");
+            data_end.Add("action", "status");
+            data_end.Add("status", bResult ? "complete" : "failed");
+            data_end.Add("worker", "omsweb");
+            this._msgSvc.SendMessage(MqttMessage.TOPIC_MAP_UPDATE, JsonConvert.SerializeObject(data_end));
+
+            // 10. return result to front
+            return new MapUpdateResultModel
+            {
+                Message = string.Format("Map update {0}", bResult ? "complete" : "failed"),
+                bResult = bResult
+            };
         }
     }
 }

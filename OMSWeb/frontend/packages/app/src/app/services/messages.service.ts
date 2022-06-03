@@ -1,285 +1,321 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { EMPTY, Observable, of } from 'rxjs';
+import { HttpClient } from '@angular/common/http'
+import { Injectable } from '@angular/core'
+import { Observable } from 'rxjs'
 
 import {
-  ICommandMessage,
-  ITrackCommandMessage,
-  IOrderCommandMessage,
-  IVehicleCommandMessage,
-  IAllCommandMessage,
-  IAiModeCommandMessage,
-  ITscStateCommandMessage,
-  IMapUpdateCommandMessage,
-  IControlStateCommandMessage,
-  IAlarmClearCommandMessage,
-  IWarningClearCommandMessage,
-  IStationCommandMessage,
-  IBufferCommandMessage,
-  ICarrierCommandMessage,
-  IAllSegmentCommandMessage,
-  IVehicleRegCommandMessage,
-  ISegmentCommandMessage,
-  IClusterCommandMessage,
-  IGroupCommandMessage,
-  ISettingZcuCommandMessage,
-  IZcuCommandMessage
-} from '../models/command.model';
-import { IOrderStatusRow } from '../models/order-status.model';
-import { IVehicleStatusRow } from '../models/vehicle-status.model';
-import { IZcuStatusRow } from '../models/zcu-status.model';
+	ICommandMessage,
+	ITrackCommandMessage,
+	IOrderCommandMessage,
+	IVehicleCommandMessage,
+	IAllCommandMessage,
+	IAiModeCommandMessage,
+	ITscStateCommandMessage,
+	IMapUpdateCommandMessage,
+	IControlStateCommandMessage,
+	IAlarmClearCommandMessage,
+	IWarningClearCommandMessage,
+	IStationCommandMessage,
+	IBufferCommandMessage,
+	ICarrierCommandMessage,
+	IAllSegmentCommandMessage,
+	IVehicleRegCommandMessage,
+	ISegmentCommandMessage,
+	IClusterCommandMessage,
+	IGroupCommandMessage,
+	ISettingZcuCommandMessage,
+	IZcuCommandMessage,
+	IDisableHomeCommandMessage,
+	IEnableHomeCommandMessage,
+	IToggleHomeModeCommandMessage,
+} from '../models/command.model'
+import { IOrderStatusRow } from '../models/order-status.model'
+import { IVehicleStatusRow } from '../models/vehicle-status.model'
+import { IZcuStatusRow } from '../models/zcu-status.model'
 
 @Injectable({
-  providedIn: 'root',
+	providedIn: 'root',
 })
 export class MessagesService {
-  private baseUrl = '/api/messages';
-  constructor(private http: HttpClient) { }
+	private baseUrl = '/api/messages'
+	constructor(private http: HttpClient) {}
 
-  sendDeleteOrder(order: IOrderStatusRow): Observable<void> {
-    const {
-      vehicleId,
-      id: orderId,
-      locationPickup,
-      locationDropoff,
-      locationMove,
-      priority,
-      carrierLabel,
-    } = order;
-    return this.sendOrderCommand({
-      type: 'ORDER',
-      action: 'A',
-      orderId,
-      vehicleId,
-      orderOrigin: 'OMS',
-      locationPickup,
-      locationDropoff,
-      locationMove,
-      priority,
-      carrierLabel,
-    });
-  }
+	sendDeleteOrder(order: IOrderStatusRow): Observable<void> {
+		const {
+			vehicleId,
+			id: orderId,
+			locationPickup,
+			locationDropoff,
+			locationMove,
+			priority,
+			carrierLabel,
+		} = order
+		return this.sendOrderCommand({
+			type: 'ORDER',
+			action: 'A',
+			orderId,
+			vehicleId,
+			orderOrigin: 'OMS',
+			locationPickup,
+			locationDropoff,
+			locationMove,
+			priority,
+			carrierLabel,
+		})
+	}
 
-  sendControlStateCommand(command: IControlStateCommandMessage): Observable<void> {
-    return this.sendCommand<IControlStateCommandMessage>(command);
-  }
+	sendControlStateCommand(
+		command: IControlStateCommandMessage,
+	): Observable<void> {
+		return this.sendCommand<IControlStateCommandMessage>(command)
+	}
 
-  sendTscStateCommand(command: ITscStateCommandMessage): Observable<void> {
-    return this.sendCommand<ITscStateCommandMessage>(command);
-  }
+	sendTscStateCommand(command: ITscStateCommandMessage): Observable<void> {
+		return this.sendCommand<ITscStateCommandMessage>(command)
+	}
 
-  sendAIModeCommand(command: IAiModeCommandMessage): Observable<void> {
-    return this.sendCommand<IAiModeCommandMessage>(command);
-  }
+	sendAIModeCommand(command: IAiModeCommandMessage): Observable<void> {
+		return this.sendCommand<IAiModeCommandMessage>(command)
+	}
 
-  sendAlarmClearCommand(command: IAlarmClearCommandMessage, targets: number[] = [], error_code: number): Observable<void> {
-    command.vehicleIds = targets;
-    command.alarmCode = error_code;
-    return this.sendCommand<IAlarmClearCommandMessage>(command);
-  }
+	sendAlarmClearCommand(
+		command: IAlarmClearCommandMessage,
+		targets: number[] = [],
+		error_code: number,
+	): Observable<void> {
+		command.vehicleIds = targets
+		command.alarmCode = error_code
+		return this.sendCommand<IAlarmClearCommandMessage>(command)
+	}
 
-  sendWarningClearCommand(command: IWarningClearCommandMessage, targets: number[] = [], ackBy: string): Observable<void> {
-    command.WarningIds = targets;
-    command.WarningAckBy = ackBy;
-    return this.sendCommand<IWarningClearCommandMessage>(command);
-  }
+	sendWarningClearCommand(
+		command: IWarningClearCommandMessage,
+		targets: number[] = [],
+		ackBy: string,
+	): Observable<void> {
+		command.WarningIds = targets
+		command.WarningAckBy = ackBy
+		return this.sendCommand<IWarningClearCommandMessage>(command)
+	}
 
-  sendServerModuleControlCommand(command: IControlStateCommandMessage): Observable<void> {
-    command.type = 'MODULE';
-    return this.sendCommand<IControlStateCommandMessage>(command);
-  }
+	sendWarningAllClearCommand(
+		command: IWarningClearCommandMessage,
+		ackBy: string,
+	): Observable<void> {
+		command.WarningIds = [-1]
+		command.WarningAckBy = ackBy
+		return this.sendCommand<IWarningClearCommandMessage>(command)
+	}
 
-  sendMapUpdateCommand(command: IMapUpdateCommandMessage): Observable<void> {
-    command.type = 'MAPUPDATE';
-    return this.sendCommand<IMapUpdateCommandMessage>(command);
-  }
+	sendServerModuleControlCommand(
+		command: IControlStateCommandMessage,
+	): Observable<void> {
+		command.type = 'MODULE'
+		return this.sendCommand<IControlStateCommandMessage>(command)
+	}
 
-  sendVehicleAllCommand(command: IAllCommandMessage): Observable<void> {
-    command.type = 'VEHICLE_ALL';
-    return this.sendCommand<IAllCommandMessage>(command);
-  }
+	sendMapUpdateCommand(command: IMapUpdateCommandMessage): Observable<void> {
+		command.type = 'MAPUPDATE'
+		return this.sendCommand<IMapUpdateCommandMessage>(command)
+	}
 
-  sendVehicleCommand(
-    command: IVehicleCommandMessage,
-    targets: IVehicleStatusRow[] = []
-  ): Observable<void> {
-    command.type = 'VEHICLE';
-    command.vehicleIds = targets.map(x => x.id);
-    return this.sendCommand<IVehicleCommandMessage>(command);
-  }
+	sendVehicleAllCommand(command: IAllCommandMessage): Observable<void> {
+		command.type = 'VEHICLE_ALL'
+		return this.sendCommand<IAllCommandMessage>(command)
+	}
 
-  sendVehicleDirectCommand(
-    command: IVehicleCommandMessage,
-    targets: number[] = []
-  ): Observable<void> {
-    command.type = 'VEHICLE';
-    command.vehicleIds = targets;
-    return this.sendCommand<IVehicleCommandMessage>(command);
-  }
+	sendVehicleCommand(
+		command: IVehicleCommandMessage,
+		targets: IVehicleStatusRow[] = [],
+	): Observable<void> {
+		command.type = 'VEHICLE'
+		command.vehicleIds = targets.map((x) => x.id)
+		return this.sendCommand<IVehicleCommandMessage>(command)
+	}
 
-  sendOrderCommand(command: IOrderCommandMessage): Observable<void> {
-    return this.sendCommand<IOrderCommandMessage>(command);
-  }
+	sendVehicleDirectCommand(
+		command: IVehicleCommandMessage,
+		targets: number[] = [],
+	): Observable<void> {
+		command.type = 'VEHICLE'
+		command.vehicleIds = targets
+		return this.sendCommand<IVehicleCommandMessage>(command)
+	}
 
-  sendDisableSegmentCommand(
-    command: ITrackCommandMessage,
-    targets: number
-  ): Observable<void> {
-    command.type = command.type;
-    command.segmentId = targets;
-    command.source = "uid-admin";
+	sendOrderCommand(command: IOrderCommandMessage): Observable<void> {
+		return this.sendCommand<IOrderCommandMessage>(command)
+	}
 
-    return this.sendCommand<ITrackCommandMessage>(command);
-  }
+	sendDisableSegmentCommand(
+		command: ITrackCommandMessage,
+		targets: number,
+	): Observable<void> {
+		command.type = command.type
+		command.segmentId = targets
+		command.source = 'uid-admin'
 
-  sendDisableSegmentsCommand(
-    command: ITrackCommandMessage,
-    targets: number[] = []
-  ): Observable<void> {
-    command.type = command.type;
-    command.segmentIds = targets;
-    command.source = "uid-admin";
+		return this.sendCommand<ITrackCommandMessage>(command)
+	}
 
-    return this.sendCommand<ITrackCommandMessage>(command);
-  }
+	sendDisableSegmentsCommand(
+		command: ITrackCommandMessage,
+		targets: number[] = [],
+	): Observable<void> {
+		command.type = command.type
+		command.segmentIds = targets
+		command.source = 'uid-admin'
 
-  sendStationSettingCommand(
-    command: IStationCommandMessage,
-    targets: number[] = []
-  ): Observable<void> {
-    command.type = command.type;
-    command.action = command.action;
-    command.unused = command.unused;
-    command.stationIds = targets;
+		return this.sendCommand<ITrackCommandMessage>(command)
+	}
 
-    return this.sendCommand<IStationCommandMessage>(command);
-  }
+	sendStationSettingCommand(
+		command: IStationCommandMessage,
+		targets: number[] = [],
+	): Observable<void> {
+		command.type = command.type
+		command.action = command.action
+		command.unused = command.unused
+		command.stationIds = targets
 
-  sendBufferSettingCommand(
-    command: IBufferCommandMessage,
-    targets: number[] = []
-  ): Observable<void> {
-    command.type = command.type;
-    command.action = command.action;
-    command.unused = command.unused;
-    command.bufferIds = targets;
+		return this.sendCommand<IStationCommandMessage>(command)
+	}
 
-    return this.sendCommand<IBufferCommandMessage>(command);
-  }
+	sendBufferSettingCommand(
+		command: IBufferCommandMessage,
+		targets: number[] = [],
+	): Observable<void> {
+		command.type = command.type
+		command.action = command.action
+		command.unused = command.unused
+		command.bufferIds = targets
 
-  sendCarrierCommand(
-    command: ICarrierCommandMessage
-  ): Observable<void> {
-    command.type = 'CARRIER';
-    command.action = command.action;
+		return this.sendCommand<IBufferCommandMessage>(command)
+	}
 
-    return this.sendCommand<ICarrierCommandMessage>(command);
-  }
+	sendCarrierCommand(command: ICarrierCommandMessage): Observable<void> {
+		command.type = 'CARRIER'
+		command.action = command.action
 
-  sendAllSpeedRatioSegmentCommand(
-    command: IAllSegmentCommandMessage,
-    targets: number
-  ): Observable<void> {
-    command.type = 'SEGMENT-ALL';
-    command.speedRatio = targets;
+		return this.sendCommand<ICarrierCommandMessage>(command)
+	}
 
-    return this.sendCommand<IAllSegmentCommandMessage>(command);
-  }
+	sendAllSpeedRatioSegmentCommand(
+		command: IAllSegmentCommandMessage,
+		targets: number,
+	): Observable<void> {
+		command.type = 'SEGMENT-ALL'
+		command.speedRatio = targets
 
-  sendSegmentSettingCommand(
-    command: ISegmentCommandMessage
-  ): Observable<void> {
-    command.type = command.type;
-    command.action = command.action;
-    command.segmentId = command.segmentId;
-    command.speedRatio = command.speedRatio;
-    command.segmentIds = command.segmentIds;
-    command.speedRatios = command.speedRatios;
+		return this.sendCommand<IAllSegmentCommandMessage>(command)
+	}
 
-    return this.sendCommand<ISegmentCommandMessage>(command);
-  }
+	sendSegmentSettingCommand(command: ISegmentCommandMessage): Observable<void> {
+		command.type = command.type
+		command.action = command.action
+		command.segmentId = command.segmentId
+		command.speedRatio = command.speedRatio
+		command.segmentIds = command.segmentIds
+		command.speedRatios = command.speedRatios
 
-  sendSettingZcuCommand(
-    command: ISettingZcuCommandMessage
-  ): Observable<void> {
-    return this.sendCommand<ISettingZcuCommandMessage>(command);
-  }
+		return this.sendCommand<ISegmentCommandMessage>(command)
+	}
 
-  sendZcuCommand(
-    command: IZcuCommandMessage
-  ): Observable<void> {
-    command.type = 'ZCU';
+	sendSettingZcuCommand(command: ISettingZcuCommandMessage): Observable<void> {
+		return this.sendCommand<ISettingZcuCommandMessage>(command)
+	}
 
-    return this.sendCommand<IZcuCommandMessage>(command);
-  }
-  
-  sendVehicleRegSettingCommand(
-    command: IVehicleRegCommandMessage
-  ): Observable<void> {
-    command.type = command.type;
-    command.action = command.action;
-    command.vehicleIds = command.vehicleIds;
-    command.logicalIds = command.logicalIds;
+	sendZcuCommand(command: IZcuCommandMessage): Observable<void> {
+		command.type = 'ZCU'
 
-    return this.sendCommand<IVehicleRegCommandMessage>(command);
-  }
+		return this.sendCommand<IZcuCommandMessage>(command)
+	}
 
-  sendMaxVehiclesClusterCommand(
-    command: IClusterCommandMessage
-  ): Observable<void> {
-    command.type = command.type;
-    command.action = command.action;
-    command.clusterId = command.clusterId;
-    command.maxVehicles = command.maxVehicles;
+	sendVehicleRegSettingCommand(
+		command: IVehicleRegCommandMessage,
+	): Observable<void> {
+		command.type = command.type
+		command.action = command.action
+		command.vehicleIds = command.vehicleIds
+		command.logicalIds = command.logicalIds
 
-    return this.sendCommand<IClusterCommandMessage>(command);
-  }
+		return this.sendCommand<IVehicleRegCommandMessage>(command)
+	}
 
-  sendAssignVehicleGruopCommand(
-    command: IGroupCommandMessage
-  ): Observable<void> {
-    command.type = command.type;
-    command.action = command.action;
-    command.vehicleId = command.vehicleId;
-    command.vehicleIds = command.vehicleIds;
+	sendMaxVehiclesClusterCommand(
+		command: IClusterCommandMessage,
+	): Observable<void> {
+		command.type = command.type
+		command.action = command.action
+		command.clusterId = command.clusterId
+		command.maxVehicles = command.maxVehicles
 
-    return this.sendCommand<IGroupCommandMessage>(command);
-  }
+		return this.sendCommand<IClusterCommandMessage>(command)
+	}
 
-  sendAssignHomeGruopCommand(
-    command: IGroupCommandMessage
-  ): Observable<void> {
-    command.type = command.type;
-    command.action = command.action;
-    command.homeId = command.homeId;
-    command.homeIds = command.homeIds;
+	sendAssignVehicleGruopCommand(
+		command: IGroupCommandMessage,
+	): Observable<void> {
+		command.type = command.type
+		command.action = command.action
+		command.vehicleId = command.vehicleId
+		command.vehicleIds = command.vehicleIds
 
-    return this.sendCommand<IGroupCommandMessage>(command);
-  }
+		return this.sendCommand<IGroupCommandMessage>(command)
+	}
 
-  sendAssignStationGruopCommand(
-    command: IGroupCommandMessage
-  ): Observable<void> {
-    command.type = command.type;
-    command.action = command.action;
-    command.stationId = command.stationId;
-    command.stationIds = command.stationIds;
+	sendAssignHomeGruopCommand(command: IGroupCommandMessage): Observable<void> {
+		command.type = command.type
+		command.action = command.action
+		command.homeId = command.homeId
+		command.homeIds = command.homeIds
 
-    return this.sendCommand<IGroupCommandMessage>(command);
-  }
+		return this.sendCommand<IGroupCommandMessage>(command)
+	}
 
-  sendAssignBufferGruopCommand(
-    command: IGroupCommandMessage
-  ): Observable<void> {
-    command.type = command.type;
-    command.action = command.action;
-    command.bufferId = command.bufferId;
-    command.bufferIds = command.bufferIds;
+	sendAssignStationGruopCommand(
+		command: IGroupCommandMessage,
+	): Observable<void> {
+		command.type = command.type
+		command.action = command.action
+		command.stationId = command.stationId
+		command.stationIds = command.stationIds
 
-    return this.sendCommand<IGroupCommandMessage>(command);
-  }
+		return this.sendCommand<IGroupCommandMessage>(command)
+	}
 
-  private sendCommand<T extends ICommandMessage>(command: T): Observable<void> {
-    return this.http.post<void>(`${this.baseUrl}/command`, command);
-  }
+	sendAssignBufferGruopCommand(
+		command: IGroupCommandMessage,
+	): Observable<void> {
+		command.type = command.type
+		command.action = command.action
+		command.bufferId = command.bufferId
+		command.bufferIds = command.bufferIds
+
+		return this.sendCommand<IGroupCommandMessage>(command)
+	}
+
+	sendEnableHome(pointId: number, groupIds: number[]) {
+		return this.sendCommand<IEnableHomeCommandMessage>({
+			action: 'enable-home',
+			pointId: pointId,
+			groupIds: groupIds,
+		})
+	}
+
+	sendDisableHome(pointId: number) {
+		return this.sendCommand<IDisableHomeCommandMessage>({
+			action: 'disable-home',
+			pointId: pointId,
+		})
+	}
+
+	sendHomeModeToggle() {
+		return this.sendCommand<IToggleHomeModeCommandMessage>({
+			action: 'home_mode',
+			mode: 'change',
+		})
+	}
+
+	private sendCommand<T extends ICommandMessage>(command: T): Observable<void> {
+		return this.http.post<void>(`${this.baseUrl}/command`, command)
+	}
 }

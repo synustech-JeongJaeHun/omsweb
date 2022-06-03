@@ -36,7 +36,6 @@
     "@ngx-translate/http-loader": "^6.0.0",
     "@ngxs/store": "^3.7.3",
     "axios": "^0.26.1",
-    "camelcase-keys": "^6.2.2",
     "d3": "^5.16.0",
     "date-fns": "^2.28.0",
     "devextreme": "^20.2.10",

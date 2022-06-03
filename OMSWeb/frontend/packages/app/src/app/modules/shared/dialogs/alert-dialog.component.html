@@ -1,5 +1,6 @@
 <oms-dialog-base [title]="'names.alerts' | translate">
   <ng-container class="dialog-layout">
+    <!--
     <div class="filters">
       <mat-label>{{ "names.cleared" | translate }}</mat-label>
       <mat-form-field class="dense" appearance="outline">
@@ -12,34 +13,35 @@
         </mat-select>
       </mat-form-field>
     </div>
+      -->
     <div class="alert-list">
-      <dx-data-grid #grid [dataSource]="warnList" [remoteOperations]="true" keyExpr="id" [height]="300" [width]="700"
-        [hoverStateEnabled]="true" [(selectedRowKeys)]="selectedRows">
+      <dx-data-grid #grid [dataSource]="dataSource" [remoteOperations]="true" keyExpr="id" [height]="300" [width]="700"
+                    [hoverStateEnabled]="true" [(selectedRowKeys)]="selectedRows">
         <dxo-selection mode="single"></dxo-selection>
         <dxo-scrolling mode="standard"></dxo-scrolling>
         <dxo-header-filter [visible]="true"></dxo-header-filter>
         <dxi-column [allowFiltering]="false" [width]="110" dataType="datetime" dataField="time"
-          [caption]="'names.time' | translate" cellTemplate="dateCell">
+                    [caption]="'names.time' | translate" cellTemplate="dateCell">
           <div *dxTemplate="let data of 'dateCell'">
             {{ data.value | date: "yyyy/MM/dd HH:mm:ss" }}
           </div>
         </dxi-column>
         <dxi-column [allowFiltering]="true" [width]="80" dataType="string" dataField="level"
-          [caption]="'names.severity' | translate">
+                    [caption]="'names.severity' | translate">
           <dxo-lookup [dataSource]="severityLookup" displayExpr="name" valueExpr="value"></dxo-lookup>
         </dxi-column>
         <dxi-column [allowFiltering]="true" [width]="120" dataType="string" dataField="tag"
-          [caption]="'names.tag' | translate"></dxi-column>
+                    [caption]="'names.tag' | translate"></dxi-column>
         <dxi-column [allowFiltering]="false" dataType="string" dataField="message"
-          [caption]="'names.message' | translate"></dxi-column>
+                    [caption]="'names.message' | translate"></dxi-column>
         <dxi-column [allowFiltering]="false" [width]="110" dataType="datetime" dataField="ackTime"
-          [caption]="'names.ackTime' | translate" cellTemplate="dateCell">
+                    [caption]="'names.ackTime' | translate" cellTemplate="dateCell">
           <div *dxTemplate="let data of 'dateCell'">
             {{ data.value | date: "yyyy/MM/dd HH:mm:ss" }}
           </div>
         </dxi-column>
         <dxi-column [allowFiltering]="false" [width]="80" dataType="string" dataField="ackBy"
-          [caption]="'names.ackBy' | translate"></dxi-column>
+                    [caption]="'names.ackBy' | translate"></dxi-column>
       </dx-data-grid>
     </div>
     <div mat-dialog-actions class="actions">

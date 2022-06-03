@@ -16,9 +16,13 @@
         (changed)="update({key: 'playbackBackgroundColor', value: $event})"
         [value]="setting.playbackBackgroundColor">
       </oms-color-picker>
-      <oms-color-picker [name]="'names.station' | translate"
+      <oms-color-picker [name]="'names.stationNormal' | translate"
         (changed)="update({key: 'stationColor', value: $event})"
         [value]="setting.stationColor">
+      </oms-color-picker>
+      <oms-color-picker [name]="'names.stationUnuse' | translate"
+        (changed)="update({key: 'stationDisabledColor', value: $event})"
+        [value]="setting.stationDisabledColor">
       </oms-color-picker>
       <oms-color-picker [name]="'names.buffer' | translate"
         (changed)="update({key: 'bufferColor', value: $event})"
@@ -48,7 +52,8 @@
           (selectionChange)="resetBasicThemeTargets = $event.value" multiple>
           <mat-option [value]="'homeBackgroundColor'">{{'names.homeBgColor'| translate}}</mat-option>
           <mat-option [value]="'playbackBackgroundColor'">{{'names.playbackBgColor'| translate}}</mat-option>
-          <mat-option [value]="'stationColor'">{{'names.station'| translate}}</mat-option>
+          <mat-option [value]="'stationColor'">{{'names.stationNormal'| translate}}</mat-option>
+          <mat-option [value]="'stationDisabledColor'">{{'names.stationUnuse'| translate}}</mat-option>
           <mat-option [value]="'bufferColor'">{{'names.buffer'| translate}}</mat-option>
           <mat-option [value]="'pointColor'">{{'names.point'| translate}}</mat-option>
           <mat-option [value]="'normalSegmentColor'">{{'names.segmentNormal'| translate}}</mat-option>

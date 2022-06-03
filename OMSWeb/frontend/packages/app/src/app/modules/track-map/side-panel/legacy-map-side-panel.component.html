@@ -1,0 +1,369 @@
+<div class="panel-header">
+  {{ "names.itemDetails" | translate }}
+  <div class="pointer close-icon" (click)="closePanel()" title="Close">
+    <button mat-icon-button aria-label="Close" class="close" tabindex="-1">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+</div>
+<div class="panel-body" [ngSwitch]="!data">
+  <div *ngSwitchCase="false">
+    <mat-accordion multi>
+      <ng-container [ngSwitch]="data?.objectType?.toUpperCase()">
+        <ng-container *ngSwitchCase="'VEHICLE'">
+          <ng-container *ngTemplateOutlet="vehicleInfo"></ng-container>
+        </ng-container>
+        <ng-container *ngSwitchCase="'POINT'">
+          <ng-container *ngTemplateOutlet="pointInfo"></ng-container>
+        </ng-container>
+        <ng-container *ngSwitchCase="'SEGMENT'">
+          <ng-container *ngTemplateOutlet="segmentInfo"></ng-container>
+        </ng-container>
+        <ng-container *ngSwitchCase="'STATION'">
+          <ng-container *ngTemplateOutlet="stationInfo"></ng-container>
+        </ng-container>
+        <ng-container *ngSwitchCase="'BUFFER'">
+          <ng-container *ngTemplateOutlet="bufferInfo"></ng-container>
+        </ng-container>
+        <ng-container *ngSwitchCase="'ZCU'">
+          <ng-container *ngTemplateOutlet="zcuInfo"></ng-container>
+        </ng-container>
+        <ng-container *ngSwitchCase="'MTL'">
+          <ng-container *ngTemplateOutlet="mtlInfo"></ng-container>
+        </ng-container>
+        <ng-container *ngSwitchDefault></ng-container>
+      </ng-container>
+
+      <ng-container *ngIf="hasOverlap">
+        <mat-expansion-panel [expanded]="true">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              {{
+              "names.sideOverlapModule" | translate
+              }}
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <oms-overlap-list [selectedObject]="data" [overlapList]="overlapList" (focus)="focus.emit($event)">
+          </oms-overlap-list>
+        </mat-expansion-panel>
+      </ng-container>
+    </mat-accordion>
+  </div>
+  <div class="not-selected" *ngSwitchDefault>{{ "messages.noObjectSelected" | translate }}</div>
+</div>
+
+<ng-template #vehicleInfo>
+  <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel-header>
+      <mat-panel-title> {{ data?.objectType }} #{{ data.id }}</mat-panel-title>
+    </mat-expansion-panel-header>
+    <div class="desc">
+      <div class="info-table">
+        <mat-form-field class="info-item readonly">
+          <mat-label>{{ "names.physicalId" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.physicalId" />
+        </mat-form-field>
+        <mat-form-field class="info-item readonly" floatLabel="always">
+          <mat-label>{{ "names.logicalId" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.logicalId" />
+        </mat-form-field>
+
+        <mat-form-field class="info-item readonly" floatLabel="always">
+          <mat-label>{{ "names.group" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.groupId ? data.groupId : ''" />
+        </mat-form-field>
+
+        <mat-form-field class="info-item readonly" floatLabel="always">
+          <mat-label>{{ "names.curPoint" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.curPoint" />
+        </mat-form-field>
+        <mat-form-field class="info-item readonly" floatLabel="always">
+          <mat-label>{{ "names.commandPoint" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.commandPoint ? data.commandPoint : ''" />
+        </mat-form-field>
+        <mat-form-field class="info-item readonly" floatLabel="always">
+          <mat-label>{{ "names.cargoState" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.cargoState" />
+        </mat-form-field>
+        <mat-form-field class="info-item readonly" floatLabel="always">
+          <mat-label>{{ "names.orderId" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.orderId || ''" />
+        </mat-form-field>
+        <mat-form-field class="info-item readonly" floatLabel="always">
+          <mat-label>{{ "names.movingState" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.movingState" />
+        </mat-form-field>
+        <mat-form-field class="info-item readonly" floatLabel="always">
+          <mat-label>{{ "names.mode" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.mode" />
+        </mat-form-field>
+        <mat-form-field class="info-item readonly" floatLabel="always">
+          <mat-label>{{ "names.errorList" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.errorList" />
+        </mat-form-field>
+        <mat-form-field class="info-item readonly" floatLabel="always">
+          <mat-label>{{ "names.cargoTransferResult" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.cargoTransferResult ? data.cargoTransferResult : ''" />
+        </mat-form-field>
+        <mat-form-field class="info-item readonly" floatLabel="always">
+          <mat-label>{{ "names.lastContact" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.lastContact | date: 'yyyy-MM-dd HH:mm:ss'" />
+        </mat-form-field>
+        <mat-form-field class="info-item readonly" floatLabel="always">
+          <mat-label>{{ "names.mapDb" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.mapDb" />
+        </mat-form-field>
+      </div>
+    </div>
+  </mat-expansion-panel>
+</ng-template>
+
+<ng-template #pointInfo>
+  <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel-header>
+      <mat-panel-title> {{ data?.objectType }} #{{ data.id }}</mat-panel-title>
+    </mat-expansion-panel-header>
+    <div class="desc">
+      <div class="info-table">
+        <mat-form-field class="info-item readonly" floatLabel="always">
+          <mat-label>{{ "names.logicalId" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.logicalId" />
+        </mat-form-field>
+        <mat-form-field class="info-item readonly">
+          <mat-label>{{ "names.physicalId" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.physicalId" />
+        </mat-form-field>
+        <mat-form-field class="info-item readonly" floatLabel="always">
+          <mat-label>{{ "names.coord-x" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.x" />
+        </mat-form-field>
+        <mat-form-field class="info-item readonly" floatLabel="always">
+          <mat-label>{{ "names.coord-y" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.y" />
+        </mat-form-field>
+      </div>
+    </div>
+  </mat-expansion-panel>
+</ng-template>
+
+<ng-template #bufferInfo>
+  <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel-header>
+      <mat-panel-title> {{ data?.objectType }} #{{ data.id }}</mat-panel-title>
+    </mat-expansion-panel-header>
+    <div class="desc">
+      <div class="info-table">
+        <mat-form-field class="info-item readonly" floatLabel="always">
+          <mat-label>{{ "names.logicalId" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.logicalId" />
+        </mat-form-field>
+        <mat-form-field class="info-item readonly">
+          <mat-label>{{ "names.physicalId" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.physicalId" />
+        </mat-form-field>
+
+        <mat-form-field class="info-item readonly" floatLabel="always">
+          <mat-label>{{ "names.group" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.groupId ? data.groupId : ''" />
+        </mat-form-field>
+
+        <mat-form-field class="info-item readonly" floatLabel="always">
+          <mat-label>{{ "names.basePoint" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.pointId" />
+        </mat-form-field>
+        <mat-form-field class="info-item readonly" floatLabel="always">
+          <mat-label>{{ "names.carrierType" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.carrierType || ''" />
+        </mat-form-field>
+        <div class="info-item form-field span-full">
+          <label>{{ "names.direction" | translate }}</label>
+          <mat-radio-group [disabled]="true" color="primary" [value]="data.direction">
+            <mat-radio-button value="L">Left</mat-radio-button>
+            <mat-radio-button value="R">Right</mat-radio-button>
+            <mat-radio-button value="U">Under</mat-radio-button>
+          </mat-radio-group>
+        </div>
+      </div>
+    </div>
+  </mat-expansion-panel>
+</ng-template>
+
+<ng-template #stationInfo>
+  <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel-header>
+      <mat-panel-title> {{ data?.objectType }} #{{ data.id }}</mat-panel-title>
+    </mat-expansion-panel-header>
+    <div class="desc">
+      <div class="info-table">
+        <mat-form-field class="info-item readonly" floatLabel="always">
+          <mat-label>{{ "names.logicalId" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.logicalId" />
+        </mat-form-field>
+        <mat-form-field class="info-item readonly">
+          <mat-label>{{ "names.physicalId" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.physicalId" />
+        </mat-form-field>
+
+        <mat-form-field class="info-item readonly" floatLabel="always">
+          <mat-label>{{ "names.group" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.groupId ? data.groupId : ''" />
+        </mat-form-field>
+
+        <mat-form-field class="info-item readonly" floatLabel="always">
+          <mat-label>{{ "names.basePoint" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.pointId" />
+        </mat-form-field>
+        <mat-form-field class="info-item readonly" floatLabel="always">
+          <mat-label>{{ "names.carrierType" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.carrierType || ''" />
+        </mat-form-field>
+        <div class="info-item form-field span-full">
+          <label>{{ "names.direction" | translate }}</label>
+          <mat-radio-group [disabled]="true" color="primary" [value]="data.direction">
+            <mat-radio-button value="L">Left</mat-radio-button>
+            <mat-radio-button value="R">Right</mat-radio-button>
+            <mat-radio-button value="U">Under</mat-radio-button>
+          </mat-radio-group>
+        </div>
+      </div>
+    </div>
+  </mat-expansion-panel>
+</ng-template>
+
+<ng-template #segmentInfo>
+  <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel-header>
+      <mat-panel-title> {{ data?.objectType }} #{{ data.id }}</mat-panel-title>
+    </mat-expansion-panel-header>
+    <div class="desc">
+      <div class="info-table">
+        <mat-form-field class="info-item readonly" floatLabel="always">
+          <mat-label>{{ "names.logicalId" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.logicalId" />
+        </mat-form-field>
+        <mat-form-field class="info-item readonly">
+          <mat-label>{{ "names.physicalId" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.physicalId" />
+        </mat-form-field>
+        <mat-form-field class="info-item readonly" floatLabel="always">
+          <mat-label>{{ "names.pointFrom" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.startPoint" />
+        </mat-form-field>
+        <mat-form-field class="info-item readonly" floatLabel="always">
+          <mat-label>{{ "names.pointTo" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.endPoint" />
+        </mat-form-field>
+        <mat-form-field class=" info-item readonly" floatLabel="always">
+          <mat-label>{{ "names.speed" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.speed" />
+          <span matSuffix>mm/s</span>
+        </mat-form-field>
+        <mat-form-field class="info-item readonly" floatLabel="always">
+          <mat-label>{{ "names.length" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.length" />
+          <span matSuffix>mm</span>
+        </mat-form-field>
+        <mat-form-field class="info-item readonly" floatLabel="always">
+          <mat-label>{{ "names.travelTime" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="(data.length / data.speed) | number: '1.0-2'" />
+          <span matSuffix>sec</span>
+        </mat-form-field>
+      </div>
+
+      <div class="disable-table">
+
+        <div class="disableds">
+          <div *ngFor="let disabled of disableds" style="margin-bottom: 30px;">
+            <mat-form-field>
+              <mat-label>{{ "names.authors" | translate }}</mat-label>
+              <input matInput type="text" readonly [value]="disabled.disabledBy" />
+            </mat-form-field>
+
+            <mat-form-field class="info-item readonly">
+              <mat-label>{{ "names.reason" | translate }}</mat-label>
+              <input matInput type="text" readonly [value]="disabled.disabledReason" />
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-expansion-panel>
+</ng-template>
+
+<ng-template #zcuInfo>
+  <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel-header>
+      <mat-panel-title> {{ data?.objectType }} #{{ data.id }}</mat-panel-title>
+    </mat-expansion-panel-header>
+    <div class="desc">
+      <div class="info-table">
+        <mat-form-field class="info-item readonly" floatLabel="always">
+          <mat-label>{{ "names.id" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.id" />
+        </mat-form-field>
+        <mat-form-field class="info-item readonly" floatLabel="always">
+          <mat-label>{{ "names.completeNodes" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.completePoints[0].completePointId" />
+        </mat-form-field>
+        <mat-form-field class="info-item readonly">
+          <mat-label>{{ "names.coord-x" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.x" />
+        </mat-form-field>
+        <mat-form-field class="info-item readonly">
+          <mat-label>{{ "names.coord-y" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.y" />
+        </mat-form-field>
+        <mat-form-field class="info-item readonly">
+          <mat-label>{{ "names.type" | translate }}</mat-label>
+          <input matInput type="text" readonly
+            [value]="((data.zcuType == 0) ? 'Standard' : ((data.zcuType == 1) ? 'NType' : ''))" />
+
+          <!-- <mat-select [(value)]="data.zcuType" [value]="data.zcuType">
+            <mat-option value="0">Standard</mat-option>
+          </mat-select> -->
+
+        </mat-form-field>
+        <mat-form-field class="info-item readonly">
+          <mat-label>{{ "names.usingType" | translate }}</mat-label>
+          <input matInput type="text" readonly
+            [value]="((data.usingType == 0) ? 'Not Use' : ((data.usingType == 1) ? 'Use HW' : ((data.usingType == 2) ? 'Use SW' : '')))" />
+          <!--
+          <mat-select [(value)]="data.usingType" [value]="data.usingType">
+            <mat-option value="0">Not Use</mat-option>
+            <mat-option value="1">Use HW</mat-option>
+            <mat-option value="2">Use SW</mat-option>
+          </mat-select>
+          -->
+        </mat-form-field>
+      </div>
+      <div class="inputZones-table" style="border: none;">
+        <mat-form-field>
+          <mat-label>{{ "names.inputZones" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.inputZones" style="display: none;" />
+          <dx-data-grid [dataSource]="data.inputZones" [showBorders]="true">
+            <dxi-column dataField="priorityPoint" [caption]="'names.priority' | translate" [allowEditing]="false"
+              [width]="100" alignment="center"></dxi-column>
+            <dxi-column dataField="zonePoints" [caption]="'names.zone' | translate" [allowEditing]="false"
+              alignment="center"></dxi-column>
+          </dx-data-grid>
+        </mat-form-field>
+      </div>
+    </div>
+  </mat-expansion-panel>
+</ng-template>
+
+<ng-template #mtlInfo>
+  <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel-header>
+      <mat-panel-title> {{ data?.objectType }} #{{ data.id }}</mat-panel-title>
+    </mat-expansion-panel-header>
+    <div class="desc">
+      <div class="info-table">
+        <mat-form-field class="info-item readonly" floatLabel="always">
+          <mat-label>{{ "names.id" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.id" />
+        </mat-form-field>
+      </div>
+    </div>
+  </mat-expansion-panel>
+</ng-template>

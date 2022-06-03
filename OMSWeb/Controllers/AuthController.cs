@@ -10,37 +10,38 @@ using OMSWeb.Services;
 
 namespace OMSWeb.Controllers
 {
-  [Route("api/[controller]")]
-  [ApiController]
-  public class AuthController : ControllerBase
-  {
-    private readonly UserService _userSvc;
-
-    public AuthController(UserService userService)
+    [Route("api/[controller]")]
+    [ApiController]
+    public class AuthController : ControllerBase
     {
-      this._userSvc = userService;
-    }
+        private readonly UserService _userSvc;
 
-    [HttpPost("")]
-    public ActionResult<TokenResponse> Login(LoginFormDto form)
-    {
-      if (!ModelState.IsValid) throw new OmsException(ErrorCodes.BadRequestModel);
-      return _userSvc.Authenticate(form.UserId, form.Password);
-    }
+        public AuthController(UserService userService)
+        {
+            this._userSvc = userService;
+        }
 
-    [Authorize]
-    [HttpGet("renew")]
-    public ActionResult<TokenResponse> Renew() {
-      return _userSvc.RenewToken();
-    }
+        [HttpPost("")]
+        public ActionResult<TokenResponse> Login(LoginFormDto form)
+        {
+            if (!ModelState.IsValid) throw new OmsException(ErrorCodes.BadRequestModel);
+            return _userSvc.Authenticate(form.UserId, form.Password);
+        }
+
+        [Authorize]
+        [HttpGet("renew")]
+        public ActionResult<TokenResponse> Renew()
+        {
+            return _userSvc.RenewToken();
+        }
 
 
-    [Authorize]
-    [HttpDelete("logout")]
-    public ActionResult LogOut()
-    {
-        _userSvc.Logout();
-        return Ok();
+        [Authorize]
+        [HttpDelete("logout")]
+        public ActionResult LogOut()
+        {
+            _userSvc.Logout();
+            return Ok();
+        }
     }
-  }
 }

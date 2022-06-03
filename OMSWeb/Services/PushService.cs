@@ -37,7 +37,7 @@ namespace OMSWeb.Services
             this._cache = cacheSvc;
             this._trackSvc = trackSvc;
 
-            this.tableEventMap = new Dictionary<string, DataChangeEventTarget> 
+            this.tableEventMap = new Dictionary<string, DataChangeEventTarget>
             {
                 // {"points", new DataChangeEventTarget(CacheKeys.Points, new[]{"pointChanged"})},
                 {"segments", new DataChangeEventTarget(CacheKeys.Segments, new[]{"segmentChanged"})},
@@ -52,17 +52,19 @@ namespace OMSWeb.Services
                 {"vehicle_dio", new DataChangeEventTarget(CacheKeys.VehicleDio, new[]{"vehicleDioChanged"}, true)},
                 {"clusters", new DataChangeEventTarget(CacheKeys.Clusters, new[]{"clusterChanged"})},
                 {"cluster_points", new DataChangeEventTarget(CacheKeys.Clusters, new[]{"clusterChanged"})},
-                {"cps_status", new DataChangeEventTarget(CacheKeys.CpsStatus, new[]{"cpsStatusTableChanged"}, true)},
+                {"cluster_status", new DataChangeEventTarget(CacheKeys.ClusterStatus, new[]{"clusterStatusTableChanged"}, true)},
                 {"location_groups", new DataChangeEventTarget(CacheKeys.Groups, new[]{"groupChanged"})},
                 {"grouped_objects", new DataChangeEventTarget(CacheKeys.Groups, new[]{"groupChanged"})},
+                {"homes", new DataChangeEventTarget(CacheKeys.None, new[]{"homeChanged"}, true)},
                 {"orders", new DataChangeEventTarget(CacheKeys.None, new[]{"orderTableChanged"}, true)},
                 {"vehicle_alarms", new DataChangeEventTarget(CacheKeys.None, new[]{"alarm"})},
                 {"alerts", new DataChangeEventTarget(CacheKeys.None, new[]{"alert"})},
                 {"server_status", new DataChangeEventTarget(CacheKeys.None, new[]{"serverStatus"})},
                 {"mode_state", new DataChangeEventTarget(CacheKeys.None, new[]{"modeState"})},
-            };                        
+                {"setting_mode", new DataChangeEventTarget(CacheKeys.None, new[]{"settingMode"})},
+            };
 
-            this.cacheEventMap = new Dictionary<CacheKeys, string[]> 
+            this.cacheEventMap = new Dictionary<CacheKeys, string[]>
             {
                 // {CacheKeys.Points, new[]{"pointChanged"}},
                 {CacheKeys.Segments, new[]{"segmentChanged"}},
@@ -76,6 +78,7 @@ namespace OMSWeb.Services
                 {CacheKeys.VehiclePaths, new[]{"vehiclePath"}},
                 {CacheKeys.VehicleDio, new[]{"vehicleDioChanged"}},
                 {CacheKeys.Clusters, new[]{"clusterChanged"}},
+                {CacheKeys.ClusterStatus, new[]{"clusterStatusTableChanged"}},
                 {CacheKeys.Groups, new[]{"groupChanged"}},
             };
 
@@ -92,7 +95,7 @@ namespace OMSWeb.Services
 
         public async Task PushWatcherEventAsync(long ts, string jsonPayload)
         {
-            // this.PrintLog(ts, $"01 data received);
+            // this.PrintLog(ts, $"01 data received");
             // Console.WriteLine($">> Watcher received data >>, {jsonPayload}");
             var payload = Newtonsoft.Json.JsonConvert.DeserializeObject<DataWatcherPayload>(jsonPayload, this.jsonSerializerSettings);
             payload.Timestamp = ts;
@@ -234,6 +237,14 @@ namespace OMSWeb.Services
                 Id = payload.Id,
                 Level = payload.Level,
                 VehicleId = payload.VehicleId,
+
+                Unuse = payload.Unuse, // only for Station
+
+                Point = payload.Point, // only for Home
+
+                GroupId = payload.GroupId, // only for GroupedObject
+                ReferenceId = payload.ReferenceId, // only for GroupedObject
+                ReferenceTable = payload.ReferenceTable // only for GroupedObject
             };
             if (!pushName.Contains("table", StringComparison.OrdinalIgnoreCase))
             {

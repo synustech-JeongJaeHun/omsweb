@@ -1,15 +1,14 @@
 <div id="track-container" class="track-container">
-  <oms-track-monitor id="track-canvas"
-    [width]="viewerSetting.rect.width" [height]="viewerSetting.rect.height" [vehicleSize]="tmSetting.vehicleSize"
-    [segmentDirectionSize]="tmSetting.segmentDirectionSize" [segmentWidth]="tmSetting.segmentWidth"
-    [rotation]="tmSetting.rotation" [isMinimapVisible]="tmSetting.isMinimapVisible"
-    [isVehicleLineVisible]="tmSetting.isVehicleLineVisible"
+  <oms-track-monitor id="track-canvas" [width]="viewerSetting.rect.width" [height]="viewerSetting.rect.height"
+    [vehicleSize]="tmSetting.vehicleSize" [segmentDirectionSize]="tmSetting.segmentDirectionSize"
+    [segmentWidth]="tmSetting.segmentWidth" [rotation]="tmSetting.rotation"
+    [isMinimapVisible]="tmSetting.isMinimapVisible" [isVehicleLineVisible]="tmSetting.isVehicleLineVisible"
     [isSegmentDirectionVisible]="tmSetting.isSegmentDirectionVisible"
     [isPointLabelVisible]="tmSetting.isPointLabelVisible" [isStationVisible]="tmSetting.isStationVisible"
     [isBufferVisible]="tmSetting.isBufferVisible" [isGroupVisible]="tmSetting.isGroupVisible"
     [isClusterVisible]="tmSetting.isClusterVisible"
     [isOverlappingObjectsVisible]="tmSetting.isOverlappingObjectsVisible"
-    [backgroundColor]="tmSetting.homeBackgroundColor" [stationColor]="tmSetting.stationColor"
+    [backgroundColor]="tmSetting.playbackBackgroundColor" [stationColor]="tmSetting.stationColor"
     [bufferColor]="tmSetting.bufferColor" [pointColor]="tmSetting.pointColor"
     [normalSegmentColor]="tmSetting.normalSegmentColor" [disabledSegmentColor]="tmSetting.disabledSegmentColor"
     [segmentDirectionColor]="tmSetting.segmentDirectionColor" [autoModeVehicleColor]="tmSetting.autoModeVehicleColor"
@@ -22,9 +21,9 @@
 
   <div id="side_panel">
     <!-- detail panel at right side -->
-    <oms-map-side-panel *ngIf="activeDetails" class="side_panel active" [selectedObject]="selectedObject"
+    <oms-legacy-map-side-panel *ngIf="activeDetails" class="side_panel active" [selectedObject]="selectedObject"
       (focus)="changeFocus($event)">
-    </oms-map-side-panel>
+    </oms-legacy-map-side-panel>
   </div>
 
 

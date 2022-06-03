@@ -16,8 +16,10 @@ namespace OMSWeb.Services
     {
         private readonly AppSettings _appSettings;
         private readonly ModeStateRepository _modeStateRepo;
+        private readonly SettingModeRepository _settingModeRepo;
 
         public SystemStatusModel HostStates { get; set; }
+        public SettingModeModel SettingModeModel { get; set; }
 
         public string LogBaseDir
         {
@@ -43,7 +45,7 @@ namespace OMSWeb.Services
             }
         }
 
-        public SystemsService(ModeStateRepository _modeStateRepo, ModuleStatusRepository _modeStatusRepo, IOptions<AppSettings> appSettings)
+        public SystemsService(SettingModeRepository _settingModeRepo, ModeStateRepository _modeStateRepo, ModuleStatusRepository _modeStatusRepo, IOptions<AppSettings> appSettings)
         {
             this._appSettings = appSettings.Value;
             this._appSettings.SID = GenerateSID(8);
@@ -53,6 +55,7 @@ namespace OMSWeb.Services
                 this._appSettings.Version = version;
 
             this._modeStateRepo = _modeStateRepo;
+            this._settingModeRepo = _settingModeRepo;
 
             this.HostStates = GetHostStatus();
         }
@@ -97,6 +100,28 @@ namespace OMSWeb.Services
             return this.HostStates;
         }
 
+        public SettingModeModel GetSettingMode()
+        {
+            SettingModeEntity settingModeEntity = this._settingModeRepo.GetSettingMode();
+
+            if (settingModeEntity != null)
+            {
+                this.SettingModeModel = new SettingModeModel
+                {
+                    HomeMode = (settingModeEntity.home_mode > 0) ? true : false,
+                };
+            }
+            else
+            {
+                this.SettingModeModel = new SettingModeModel
+                {
+                    HomeMode = true,
+                };
+            }
+
+            return this.SettingModeModel;
+        }
+
         public ClientSettings GetClientSettings()
         {
             var client = this._appSettings.Client;
@@ -106,6 +131,11 @@ namespace OMSWeb.Services
             client.BufferEnabled = this._appSettings.BufferEnabled;
             client.i18nEnabled = this._appSettings.i18nEnabled;
             return this._appSettings.Client;
+        }
+        
+        public DefaultColorSettings GetDefaultColorSettings()
+        {
+            return this._appSettings.DefaultColor;
         }
 
         public List<LogModel> GetLogs()

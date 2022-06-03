@@ -24,6 +24,8 @@ namespace OMSWeb.Models.Entities
     public float? DistancePickup { get; set; }
     public float? DistanceDropoff { get; set; }
     public float? DistanceMove { get; set; }
+    public int? LoadRetryCnt { get; set; }
+    public int? UnloadRetryCnt { get; set; }
   }
   public class OrderHistoryEntity : OrderEntity
   {

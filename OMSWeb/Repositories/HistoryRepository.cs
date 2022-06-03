@@ -29,11 +29,33 @@ namespace OMSWeb.Repositories
       WHEN OD.time_assigned IS NOT NULL THEN 'ASSIGNED'
       WHEN OD.time_assigned IS NULL THEN 'UNASSIGNED'
     END AS state,
-    OD.location_pickup, OD.location_dropoff, OD.location_move, OD.priority, 
+    --OD.location_pickup, 
+    --OD.location_dropoff, 
+    --OD.location_move, 
+    CASE
+		WHEN OD.location_pickup LIKE '%s%' THEN	(SELECT logical_Id FROM stations WHERE concat('s', cast(id as varchar)) = OD.location_pickup)
+		WHEN OD.location_pickup LIKE '%b%' THEN	(SELECT logical_Id FROM buffers WHERE concat('b', cast(id as varchar)) = OD.location_pickup)
+        WHEN OD.location_pickup LIKE '%v%' THEN	(SELECT logical_Id FROM vehicles WHERE concat('v', cast(id as varchar)) = OD.location_pickup)
+        WHEN OD.location_pickup IS NULL AND OD.location_dropoff IS NOT NULL THEN VR.logical_id
+		ELSE OD.location_pickup
+	EnD AS location_pickup,
+	CASE
+		WHEN OD.location_dropoff LIKE '%s%' THEN (SELECT logical_Id FROM stations WHERE concat('s', cast(id as varchar)) = OD.location_dropoff)
+		WHEN OD.location_dropoff LIKE '%b%' THEN (SELECT logical_Id FROM buffers WHERE concat('b', cast(id as varchar)) = OD.location_dropoff)
+		ELSE OD.location_dropoff
+	EnD AS location_dropoff,
+	CASE
+		WHEN OD.location_move LIKE '%s%' THEN (SELECT logical_Id FROM stations WHERE concat('s', cast(id as varchar)) = OD.location_move)
+		WHEN OD.location_move LIKE '%b%' THEN (SELECT logical_Id FROM buffers WHERE concat('b', cast(id as varchar)) = OD.location_move)
+		ELSE OD.location_move
+	EnD AS location_move,
+
+    OD.priority, 
     VR.logical_id As vehicle_id, 
     OD.carrier_label, OD.time_created, OD.time_assigned, OD.time_vehicle_arrived, OD.time_load_started, OD.time_load_completed, 
     OD.time_unload_started, OD.time_unload_completed, OD.time_completed, OD.time_aborted, OD.time_failed, 
-    OD.distance_pickup, OD.distance_deliver AS distance_dropoff, OD.distance_move, OD.assignment_type, OD.assignment_details
+    OD.distance_pickup, OD.distance_deliver AS distance_dropoff, OD.distance_move, OD.assignment_type, OD.assignment_details,
+    OD.load_retry_cnt, OD.unload_retry_cnt
     FROM order_history AS OD
     INNER JOIN (
         SELECT history_source_id AS order_id, max(history_change_time) AS last_updated

@@ -1,52 +1,50 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { DxDataGridComponent } from 'devextreme-angular';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-import { PlaybackService } from '../../../services/playback.service';
-import { TrackIdService } from '../../../services/track-id.service';
+import { Component, Input, ViewChild } from '@angular/core'
+import { PlaybackPlayService } from '@oms/root/services/playback-play.service'
+import { DxDataGridComponent } from 'devextreme-angular'
+import { DateUtil } from '../../shared/utils/date.util'
 
 @Component({
-  selector: 'oms-playback-order-status',
-  templateUrl: './playback-order-status.component.html',
-  styles: [],
+	selector: 'oms-playback-order-status',
+	templateUrl: './playback-order-status.component.html',
+	styles: [],
 })
-export class PlaybackOrderStatusComponent implements OnInit {
-  @Input() tableHeight: number;
+export class PlaybackOrderStatusComponent {
+	@Input() tableHeight: number
 
-  @ViewChild(DxDataGridComponent, { static: false })
-  dataGrid: DxDataGridComponent;
+	@ViewChild(DxDataGridComponent, { static: false })
+	dataGrid: DxDataGridComponent
 
-  dataSource: any[] = [];
-  selectedRows: number[] = [];
+	dateTimeFormat = DateUtil.DateTimeFormat
 
-  //#region Subscriptions
-  private destroy$: Subject<void> = new Subject<void>();
-  //#endregion
+	constructor(private playService: PlaybackPlayService) {}
 
-  transformVehicleId = ({ value = '' }): string => {
-    const text =
-      this.idSvc.get_alternative_id('vehicle', 'logicalId', value) || value;
-    return text.toString();
-  };
+	get dataSource() {
+		return this.playService.currentOrders
+	}
+	selectedRows: number[] = []
 
-  transformLocationId = ({ value = '' }): string => {
-    return this.idSvc.guessLocationId(value);
-  };
+	transformVehicleId = ({ value = '' }): string => {
+		const vehicle = this.playService.currentVehicles.find(
+			(v) => v.id === parseInt(value),
+		)
+		return vehicle?.logicalId ?? ''
+	}
 
-  constructor(
-    private playbackSvc: PlaybackService,
-    private idSvc: TrackIdService
-  ) {
-    // this.playbackSvc.ordersChanged$
-    //   .pipe(takeUntil(this.destroy$))
-    //   .subscribe((data) => {
-    //     this.dataSource = data;
-    //   });
-  }
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
+	transformLocationId = ({ value }: { value: string | undefined | null }) => {
+		if (value == null) return ''
 
-  ngOnInit(): void {}
+		const locationType = value[0]
+		const id = parseInt(value.substring(1))
+
+		const list =
+			locationType === 's'
+				? this.playService.track.data.stations ?? []
+				: locationType === 'b'
+				? this.playService.track.data.buffers
+				: []
+
+		const location = list.find((e) => e.id === id)
+
+		return location?.logical_id ?? ''
+	}
 }

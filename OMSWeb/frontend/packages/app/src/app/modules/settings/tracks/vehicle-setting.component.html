@@ -10,6 +10,7 @@
   </div>
 </div>
 
+<!--
 <div class="sub-links">
   <div class="sub-actions">
     <button mat-stroked-button class="dense" (click)="onAddVehicle(gridVehicles)">
@@ -20,21 +21,23 @@
     </button>
   </div>
 </div>
+-->
 
 <dx-data-grid #gridVehicles [dataSource]="dataSource" [keyExpr]="'id'" [repaintChangesOnly]="true" [showBorders]="true"
-  [height]="450" [allowColumnResizing]="false" [(selectedRowKeys)]="selectedIds" (onRowUpdated)="onUpdateRow($event)"
-  (onSelectionChanged)="onSelectionChanged($event)">
+              [height]="450" [allowColumnResizing]="false" [(selectedRowKeys)]="selectedIds" (onRowUpdated)="onUpdateRow($event)"
+              (onSelectionChanged)="onSelectionChanged($event)">
 
   <dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
   <dxo-paging [pageSize]="20"></dxo-paging>
   <dxo-editing mode="cell" refreshMode="reshape" [allowUpdating]="true" [allowDeleting]="false" [allowAdding]="false"
-    [confirmDelete]="false" [useIcons]="true">
+               [confirmDelete]="false" [useIcons]="true">
   </dxo-editing>
   <dxo-selection mode="multiple" selectAllMode="allPages" showCheckBoxesMode="always"></dxo-selection>
 
   <dxi-column dataType="number" dataField="id" [allowEditing]="false" [width]="60" alignment="center"></dxi-column>
   <dxi-column dataType="sting" dataField="logicalId" [caption]="'names.onlineName' | translate" [allowEditing]="true"
-    alignment="center"></dxi-column>
-
+              alignment="center"></dxi-column>
+  <dxi-column dataType="boolean" dataField="railIn" [allowEditing]="false" [width]="60"
+              [caption]="'names.railIn' | translate"></dxi-column>
   <dxo-search-panel [placeholder]="'names.search' | translate" [visible]="false"></dxo-search-panel>
 </dx-data-grid>

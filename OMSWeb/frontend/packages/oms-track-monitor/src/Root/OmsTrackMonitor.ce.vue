@@ -26,7 +26,6 @@ import {
   setElementRect,
   elementRectInfo,
 } from '../MapObjects/map/elementRect'
-import { rotate } from '../MapObjects/rotate/rotate'
 import { scaleInfo } from '../MapObjects/scale/scale'
 import { rotationInfo } from '../MapObjects/rotate/rotate'
 import { exposed } from './exposed'
@@ -59,16 +58,20 @@ const props = defineProps<{
   isVehicleLineVisible: Boolish
   isSegmentDirectionVisible: Boolish
   isPointLabelVisible: Boolish
+  isPointHomeVisible: Boolish
   isStationVisible: Boolish
   isBufferVisible: Boolish
+  isZcuVisible: Boolish
   isGroupVisible: Boolish
   isClusterVisible: Boolish
 
   // color
   backgroundColor: Stringlish
   stationColor: Stringlish
+  stationDisabledColor: Stringlish
   bufferColor: Stringlish
   pointColor: Stringlish
+  homeColor: Stringlish
   normalSegmentColor: Stringlish
   disabledSegmentColor: Stringlish
   segmentDirectionColor: Stringlish
@@ -125,11 +128,17 @@ watch(propRefs.isMinimapVisible, (b) => {
 watch(propRefs.isPointLabelVisible, (b) => {
   updateVisibleStyle('pointLabel', parseBooleanProp(true, b))
 })
+watch(propRefs.isPointHomeVisible, (b) => {
+  updateVisibleStyle('pointHome', parseBooleanProp(true, b))
+})
 watch(propRefs.isStationVisible, (b) => {
   updateVisibleStyle('station', parseBooleanProp(true, b))
 })
 watch(propRefs.isBufferVisible, (b) => {
   updateVisibleStyle('buffer', parseBooleanProp(true, b))
+})
+watch(propRefs.isZcuVisible, (b) => {
+  updateVisibleStyle('zcu', parseBooleanProp(true, b))
 })
 watch(propRefs.isGroupVisible, (b) => {
   updateVisibleStyle('group', parseBooleanProp(true, b))
@@ -181,7 +190,12 @@ defineExpose(exposed)
     <Minimap class="absolute" style="bottom: 45px; margin-left: 45px" />
     <div
       class="absolute flex flex-row"
-      style="padding: unset; bottom: 10px; right: 10px"
+      style="
+        padding: unset;
+        bottom: 10px;
+        right: 10px;
+        align-items: center;
+      "
     >
       <ScaleBar />
       <ScreenDetail />
@@ -203,6 +217,11 @@ defineExpose(exposed)
     'parseStringProp(ColorDefault.station, props.stationColor)'
   );
 }
+#station-layer .station[data-disabled='true' i] .station-path {
+  stroke: v-bind(
+    'parseStringProp(ColorDefault.stationDisabled, props.stationDisabledColor)'
+  );
+}
 
 #buffer-layer .buffer .buffer-path {
   stroke: v-bind(
@@ -213,6 +232,10 @@ defineExpose(exposed)
 #point-layer .point .point-path {
   stroke: v-bind('parseStringProp(ColorDefault.point, props.pointColor)');
   fill: v-bind('parseStringProp(ColorDefault.point, props.pointColor)');
+}
+
+#point-layer .point .home .home-path {
+  fill: v-bind('parseStringProp(ColorDefault.home, props.homeColor)');
 }
 
 #segment-layer .segment .segment-path {
@@ -305,6 +328,10 @@ defineExpose(exposed)
   visibility: v-bind("visibleStylesInfo.buffer ? 'initial' : 'hidden'");
 }
 
+#zcu-layer {
+  visibility: v-bind("visibleStylesInfo.zcu ? 'initial' : 'hidden'");
+}
+
 #cluster-layer {
   visibility: v-bind("visibleStylesInfo.cluster ? 'initial' : 'hidden'");
 }
@@ -317,6 +344,9 @@ defineExpose(exposed)
   visibility: v-bind(
     "visibleStylesInfo.pointLabel ? 'initial' : 'hidden'"
   );
+}
+#point-layer .home {
+  visibility: v-bind("visibleStylesInfo.pointHome ? 'initial' : 'hidden'");
 }
 
 .group-shadow {
@@ -368,6 +398,8 @@ defineExpose(exposed)
 <style src="src/MapObjects/styles/rotate.css"></style>
 <style src="src/MapObjects/styles/will-change.css"></style>
 <!-- <style src="./MapObjects/styles/will-change.css"></style> -->
+<!-- Map > Scale -->
+<style src="src/MapObjects/scale/styles/transform.css"></style>
 
 <!-- TrackObjects -->
 <!-- Track > common -->

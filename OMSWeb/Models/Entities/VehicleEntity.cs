@@ -43,6 +43,10 @@ namespace OMSWeb.Models.Entities
         public int HistorySourceId { get; set; }
         public DateTime HistoryChangeTime { get; set; }
         public string HistoryChangeType { get; set; }
+
+        // not in vehicle entity
+        public string Command { get; set; }
+        public int Connection { get; set; }
     }
 
     public class VehicleDioHistoryEntity

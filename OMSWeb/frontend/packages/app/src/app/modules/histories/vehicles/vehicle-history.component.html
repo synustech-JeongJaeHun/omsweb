@@ -25,18 +25,19 @@
       [showClearButton]="true"
       #vehicle
     ></dx-select-box> -->
-    <dx-date-box [placeholder]="'_START_DATE' | translate" type="datetime" [value]="start" [min]="base" [max]="end"
+    <dx-date-box [placeholder]="'_START_DATE' | translate" type="datetime" [(value)]="start" [min]="base" [max]="end"
       [acceptCustomValue]="false" [showClearButton]="true" [displayFormat]="dateTimeFormat" #startDate></dx-date-box>
     <div>~</div>
-    <dx-date-box [placeholder]="'_END_DATE' | translate" type="datetime" [value]="now" [min]="base" [max]="end"
-      [acceptCustomValue]="false" [showClearButton]="true" [displayFormat]="dateTimeFormat" #endDate></dx-date-box>
+    <dx-date-box [placeholder]="'_END_DATE' | translate" type="datetime" [(value)]="now" [min]="base" [max]="end"
+      [acceptCustomValue]="false" [showClearButton]="true" (validationErrorChange)="setDateWithMaxLimit()"
+      [displayFormat]="dateTimeFormat" #endDate></dx-date-box>
     <button mat-raised-button color="primary" (click)="search(startDate.value, endDate.value)">
       {{ "names.search" | translate }}
     </button>
   </div>
   <div id="grid-container">
     <dx-data-grid [dataSource]="dataSource" [columnAutoWidth]="true" [remoteOperations]="true" [height]="gridHeight"
-      [width]="gridWidth" [showBorders]="true" [hoverStateEnabled]="true">
+      [width]="gridWidth" [showBorders]="true" [hoverStateEnabled]="true" allowColumnResizing="true">
       <dxo-export [enabled]="true" [fileName]="fileName"></dxo-export>
       <dxo-paging [pageSize]="50"></dxo-paging>
       <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[50, 100, 200]" [showInfo]="true" visible="true">

@@ -272,19 +272,19 @@
 
       <div class="disable-table">
         <mat-slide-toggle [value]="disableds.length > 0" (change)="changeSegmentDisabled($event.checked)"
-          [disabled]="!hasPermission(permissionEnums.SegmentUnuse) || disabledByMtl"
-          color="primary">{{ "names.unuse" | translate }}
+          [disabled]="!hasPermission(permissionEnums.SegmentUnuse) || disabledByMtl" color="primary">{{ "names.unuse" |
+          translate }}
         </mat-slide-toggle>
 
         <div class="disableds">
           <div *ngFor="let disabled of disableds" style="margin-bottom: 30px;">
-            <mat-form-field >
-              <mat-label>{{ "names.reason" | translate }}</mat-label>
+            <mat-form-field>
+              <mat-label>{{ "names.authors" | translate }}</mat-label>
               <input matInput type="text" readonly [value]="disabled.disabledBy" />
             </mat-form-field>
 
             <mat-form-field class="info-item readonly">
-              <mat-label>{{ "names.authors" | translate }}</mat-label>
+              <mat-label>{{ "names.reason" | translate }}</mat-label>
               <input matInput type="text" readonly [value]="disabled.disabledReason" />
             </mat-form-field>
           </div>

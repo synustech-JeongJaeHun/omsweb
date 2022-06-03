@@ -159,6 +159,7 @@ export const defaultControlTable: ControlTable = {
 
   cps: true,
   cps_server_id: true,
+  cps_logical_id: true,
   cps_converter_id: true,
   cps_status: true,
   cps_voltage: true,
@@ -298,6 +299,7 @@ export interface ISettingsZcuInputZone {
 export interface ISettingsVehicleReg {
   id: string;
   logicalId: string;
+  railIn: boolean;
   isNew?: boolean;
 }
 

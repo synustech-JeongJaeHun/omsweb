@@ -38,8 +38,14 @@ namespace OMSWeb
 
         private void OmsConfiguration()
         {
+            /*
+            "BrokerHostSettings": {
+		       "Host": "localhost",
+		       "Port": 1883
+             }
+	        */
             // from default Appsettings.json
-            MqttConfiguration();
+            //MqttConfiguration();
 
             // set MqttAppSettingsProvider
             MqttAppSettingsProvider.BrokerHostSettings = new BrokerHostSettings(
@@ -47,7 +53,12 @@ namespace OMSWeb
                     Convert.ToInt32(AppConfig.GetFromOMSConfig("MessageManager", "port", "1883")),
                     AppConfig.GetFromOMSConfig("MessageManager", "topic_root", "oms")
                 );
-            //MqttAppSettingsProvider.ClientSettings은 추후 보완시, 추가 예정
+
+            MqttAppSettingsProvider.ClientSettings = new MqttClientSettings(
+                    AppConfig.GetFromOMSConfig("MessageManager", "id", ""),
+                    AppConfig.GetFromOMSConfig("MessageManager", "userName", ""),
+                    AppConfig.GetFromOMSConfig("MessageManager", "password", "")
+                );
         }
 
         private void MqttConfiguration()
@@ -128,6 +139,7 @@ namespace OMSWeb
             services.AddScoped<UserRepository>();
             services.AddScoped<ModeStateRepository>();
             services.AddScoped<ModuleStatusRepository>();
+            services.AddScoped<SettingModeRepository>();
             services.AddScoped<SettingsRepository>();
             services.AddScoped<VehicleRepository>();
             services.AddScoped<ReportRepository>();
@@ -135,6 +147,7 @@ namespace OMSWeb
             services.AddScoped<ReportAbnormaltrRepository>();
             services.AddScoped<ReportAlarmRepository>();
             services.AddScoped<ReportTrendReposity>();
+            services.AddScoped<DbVersionRepository>();
 
             services.AddScoped<ModuleStatusService>();
             services.AddScoped<StatusService>();
@@ -147,10 +160,12 @@ namespace OMSWeb
             services.AddScoped<SettingsService>();
             services.AddScoped<VehicleService>();
             services.AddScoped<ReportService>();
+            services.AddScoped<DbService>();
 
             services.AddSingleton<SystemsService>();
             services.AddSingleton<ModuleStatusRepository>();
             services.AddSingleton<ModeStateRepository>();
+            services.AddSingleton<SettingModeRepository>();
             services.AddSingleton<TrackRepository>();
             services.AddSingleton<TrackService>();
             services.AddSingleton<PushService>();

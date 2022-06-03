@@ -3,7 +3,7 @@
 
 <dx-data-grid [dataSource]="dataSource" [remoteOperations]="true" [height]="tableHeight" [repaintChangesOnly]="false"
               [columnAutoWidth]="false" [showBorders]="false" [highlightChanges]="true" [showColumnLines]="true"
-              [showRowLines]="true" [headerFilter]="false" [(selectedRowKeys)]="selectedRows" [renderAsync]="true">
+              [showRowLines]="true" [headerFilter]="false" [(selectedRowKeys)]="selectedRows" allowColumnResizing="true">
   <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
   <!--dxo-scrolling mode="virtual" rowRenderingMode="standard"></dxo-scrolling-->
   <dxo-paging [pageSize]="50"></dxo-paging>
@@ -13,44 +13,48 @@
   <dxo-load-panel [enabled]="false"></dxo-load-panel>
   <dxo-filter-row [visible]="true"></dxo-filter-row>
 
-  <dxi-column [width]="50" dataType="string" dataField="cps_server_id" [caption]="'names.cps_server_id' | translate"
-              *ngIf="canDisplayTable('cps_server_id')"></dxi-column>
-  <dxi-column [width]="120" dataType="string" dataField="cps_converter_id" [caption]="'names.cps_converter_id' | translate"
+  <dxi-column [width]="70" dataType="string" dataField="id" [caption]="'names.cps_converter_id' | translate"
               *ngIf="canDisplayTable('cps_converter_id')"></dxi-column>
-  <dxi-column [width]="100" dataType="string" dataField="cps_status" [caption]="'names.cps_status' | translate"
+  <!--
+  <dxi-column [width]="70" dataType="string" dataField="server_id" [caption]="'names.cps_server_id' | translate"
+              *ngIf="canDisplayTable('cps_server_id')"></dxi-column>
+  -->
+  <dxi-column [width]="120" dataType="string" dataField="logicalId" [caption]="'names.logicalId' | translate"
+              *ngIf="canDisplayTable('cps_logical_id')"></dxi-column>
+  <dxi-column [width]="120" dataType="string" dataField="status" [caption]="'names.cps_status' | translate"
               *ngIf="canDisplayTable('cps_status')"></dxi-column>
-  <dxi-column [width]="100" dataType="string" dataField="cps_voltage" [caption]="'names.cps_voltage' | translate"
+  <dxi-column [width]="60" dataType="string" dataField="voltage" [caption]="'names.cps_voltage' | translate"
               *ngIf="canDisplayTable('cps_voltage')"></dxi-column>
-  <dxi-column [width]="100" dataType="string" dataField="cps_current_igbt" [caption]="'names.cps_current_igbt' | translate"
+  <dxi-column [width]="60" dataType="string" dataField="current_igbt" [caption]="'names.cps_current_igbt' | translate"
               *ngIf="canDisplayTable('cps_current_igbt')"></dxi-column>
-  <dxi-column [width]="100" dataType="string" dataField="cps_current_track" [caption]="'names.cps_current_track' | translate"
+  <dxi-column [width]="60" dataType="string" dataField="current_track" [caption]="'names.cps_current_track' | translate"
               *ngIf="canDisplayTable('cps_current_track')"></dxi-column>
-  <dxi-column [width]="100" dataType="string" dataField="cps_frequency" [caption]="'names.cps_frequency' | translate"
+  <dxi-column [width]="70" dataType="string" dataField="frequency" [caption]="'names.cps_frequency' | translate"
               *ngIf="canDisplayTable('cps_frequency')"></dxi-column>
-  <dxi-column [width]="100" dataType="string" dataField="cps_temp_radiator" [caption]="'names.cps_temp_radiator' | translate"
+  <dxi-column [width]="80" dataType="string" dataField="temp_radiator" [caption]="'names.cps_temp_radiator' | translate"
               *ngIf="canDisplayTable('cps_temp_radiator')"></dxi-column>
-  <dxi-column [width]="100" dataType="string" dataField="cps_temp_internal" [caption]="'names.cps_temp_internal' | translate"
+  <dxi-column [width]="80" dataType="string" dataField="temp_internal" [caption]="'names.cps_temp_internal' | translate"
               *ngIf="canDisplayTable('cps_temp_internal')"></dxi-column>
-  <dxi-column [width]="50" dataType="string" dataField="cps_sync" [caption]="'names.cps_sync' | translate"
+  <dxi-column [width]="60" dataType="string" dataField="sync" [caption]="'names.cps_sync' | translate"
               *ngIf="canDisplayTable('cps_sync')"></dxi-column>
-  <dxi-column [width]="120" dataType="string" dataField="cps_backup_id" [caption]="'names.cps_backup_id' | translate"
+  <dxi-column [width]="60" dataType="string" dataField="backup_id" [caption]="'names.cps_backup_id' | translate"
               *ngIf="canDisplayTable('cps_backup_id')"></dxi-column>
-  <dxi-column [width]="100" dataType="string" dataField="cps_error_code" [caption]="'names.cps_error_code' | translate"
+  <dxi-column [width]="60" dataType="string" dataField="error_code" [caption]="'names.cps_error_code' | translate"
               *ngIf="canDisplayTable('cps_error_code')"></dxi-column>
-  <dxi-column [width]="100" dataType="string" dataField="cps_voltage_rs" [caption]="'names.cps_voltage_rs' | translate"
+  <dxi-column [width]="60" dataType="string" dataField="voltage_rs" [caption]="'names.cps_voltage_rs' | translate"
               *ngIf="canDisplayTable('cps_voltage_rs')"></dxi-column>
-  <dxi-column [width]="100" dataType="string" dataField="cps_voltage_st" [caption]="'names.cps_voltage_st' | translate"
+  <dxi-column [width]="60" dataType="string" dataField="voltage_st" [caption]="'names.cps_voltage_st' | translate"
               *ngIf="canDisplayTable('cps_voltage_st')"></dxi-column>
-  <dxi-column [width]="100" dataType="string" dataField="cps_voltage_tr" [caption]="'names.cps_voltage_tr' | translate"
+  <dxi-column [width]="60" dataType="string" dataField="voltage_tr" [caption]="'names.cps_voltage_tr' | translate"
               *ngIf="canDisplayTable('cps_voltage_tr')"></dxi-column>
-  <dxi-column [width]="100" dataType="string" dataField="cps_current_r" [caption]="'names.cps_current_r' | translate"
+  <dxi-column [width]="60" dataType="string" dataField="current_r" [caption]="'names.cps_current_r' | translate"
               *ngIf="canDisplayTable('cps_current_r')"></dxi-column>
-  <dxi-column [width]="100" dataType="string" dataField="cps_current_s" [caption]="'names.cps_current_s' | translate"
+  <dxi-column [width]="60" dataType="string" dataField="current_s" [caption]="'names.cps_current_s' | translate"
               *ngIf="canDisplayTable('cps_current_s')"></dxi-column>
-  <dxi-column [width]="100" dataType="string" dataField="cps_current_t" [caption]="'names.cps_current_t' | translate"
+  <dxi-column [width]="60" dataType="string" dataField="current_t" [caption]="'names.cps_current_t' | translate"
               *ngIf="canDisplayTable('cps_current_t')"></dxi-column>
-  <dxi-column [width]="100" dataType="string" dataField="cps_total_kw" [caption]="'names.cps_total_kw' | translate"
+  <dxi-column [width]="80" dataType="string" dataField="total_kw" [caption]="'names.cps_total_kw' | translate"
               *ngIf="canDisplayTable('cps_total_kw')"></dxi-column>
-  <dxi-column [width]="100" dataType="string" dataField="cps_wh" [caption]="'names.cps_wh' | translate"
+  <dxi-column [width]="60" dataType="string" dataField="wh" [caption]="'names.cps_wh' | translate"
               *ngIf="canDisplayTable('cps_wh')"></dxi-column>
 </dx-data-grid>

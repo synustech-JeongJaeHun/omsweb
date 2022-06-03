@@ -1,13 +1,24 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, OnDestroy } from '@angular/core'
 import { forkJoin, Observable, of } from 'rxjs'
 import _ = require('lodash')
 import { tap } from 'rxjs/operators'
+import { Subject } from 'rxjs'
+import { takeUntil } from 'rxjs/operators'
 import {
 	ISettingsGroup,
 	ISettingsGroupedObject,
 } from '../../../models/settings.model'
+import { TranslateService } from '@ngx-translate/core'
 import { SettingsService } from '../../../services/settings.service'
 import { MessagesService } from '../../../services/messages.service'
+import { DialogService } from '../../../services/dialog.service'
+import { SystemsService } from '../../../services/systems.service'
+import { ISystemStates } from '../../../models/system.model'
+import {
+	HostModeEnums,
+	HostSessionStatusEnums,
+	TscModeEnums,
+} from '@oms/models/enums'
 
 @Component({
 	selector: 'oms-group-setting',
@@ -16,6 +27,9 @@ import { MessagesService } from '../../../services/messages.service'
 })
 export class GroupSettingComponent implements OnInit {
 	ready = false
+
+	private systemStates: ISystemStates
+	private destroy$ = new Subject<void>()
 
 	groups: ISettingsGroup[] = []
 	groupedObjects: ISettingsGroupedObject[] = []
@@ -46,6 +60,9 @@ export class GroupSettingComponent implements OnInit {
 	constructor(
 		private settingsSvc: SettingsService,
 		private messageSvc: MessagesService,
+		private systemSvc: SystemsService,
+		private dialogSvc: DialogService,
+		private $t: TranslateService,
 	) {
 		this.init()
 	}
@@ -128,6 +145,11 @@ export class GroupSettingComponent implements OnInit {
 	}
 
 	ngOnInit(): void {}
+
+	ngOnDestroy(): void {
+		this.destroy$.next()
+		this.destroy$.complete()
+	}
 
 	onChange(type: string, picked: number[]) {
 		const { objects } = this.selectedItem
@@ -239,17 +261,27 @@ export class GroupSettingComponent implements OnInit {
 	onSave() {
 		if (!this._changedItems.length) return
 
-		this.SaveMessages(this._changedItems)
+		this.systemSvc.currentState$
+			.pipe(takeUntil(this.destroy$))
+			.subscribe((states) => {
+				if (states.tscMode === TscModeEnums.PAUSED) {
+					this.SaveMessages(this._changedItems)
 
-		// before code for update
-		// this._changedItems = []
-		// // this._changedVehicleItems = [];
-		// this.bindGroupData(this.selectedItem.id)
+					// before code for update
+					// this._changedItems = []
+					// // this._changedVehicleItems = [];
+					// this.bindGroupData(this.selectedItem.id)
 
-		// after code for update
-		setTimeout(() => {
-			this.onRevert()
-		}, 500)
+					// after code for update
+					setTimeout(() => {
+						this.onRevert()
+					}, 500)
+				} else {
+					this.dialogSvc.alert({
+						body: this.$t.instant('messages.confirmTSCStateNotPaused'),
+					})
+				}
+			})
 	}
 
 	onRevert() {

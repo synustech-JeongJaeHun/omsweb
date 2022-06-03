@@ -1,5 +1,9 @@
 <script setup lang="ts">
 import { Point } from '../types/Point'
+import PointHome from '../assets/PointHome.svg?component'
+import { useGroup } from 'src/TrackObjects/group/groups'
+import { computed } from 'vue'
+import { getGroupColorWithAlpha } from 'TrackObjects/group/utils/color'
 
 const props = defineProps<{
   point: Point
@@ -8,6 +12,11 @@ const props = defineProps<{
   handleMouseover: (event: MouseEvent) => void
   handleMouseleave: (event: MouseEvent) => void
 }>()
+
+const group = useGroup(
+  'home',
+  computed(() => props.point.homeId ?? -1)
+)
 </script>
 
 <template>
@@ -15,19 +24,41 @@ const props = defineProps<{
     class="overflow-visible cursor-pointer point"
     :x="props.point.x"
     :y="props.point.y"
+    :data-id="props.point.id"
+    :data-group-id="group?.id"
+    @click.left="handleLeftClick"
+    @click.right="handleRightClick"
+    @mouseover="handleMouseover"
+    @mouseout="handleMouseleave"
+    @mouseleave="handleMouseleave"
   >
     <g class="scale-and-reverse-rotate">
       <circle v-if="props.point.isFocused" r="15" class="focus" />
-      <circle
-        r="3"
-        class="point-path"
-        :data-id="props.point.id"
-        @click.left="handleLeftClick"
-        @click.right="handleRightClick"
-        @mouseover="handleMouseover"
-        @mouseout="handleMouseleave"
-        @mouseleave="handleMouseleave"
-      />
+      <circle r="3" class="point-path" />
+
+      <g v-if="props.point.homeId" class="home">
+        <!-- home with group -->
+        <rect
+          v-if="group"
+          class="group-shadow"
+          x="-10"
+          y="-3"
+          width="20"
+          height="27"
+          rx="4"
+          ry="4"
+          :fill="getGroupColorWithAlpha(group.color)"
+        />
+        <!-- home -->
+        <PointHome
+          class="home-path"
+          width="16.875"
+          height="26.25"
+          x="-8.4375"
+          y="0"
+        />
+      </g>
+
       <text
         class="invert label select-none"
         x="0"

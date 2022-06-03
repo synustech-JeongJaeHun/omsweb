@@ -1,73 +1,105 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import DataSource from 'devextreme/data/data_source';
-import * as AspNetData from 'devextreme-aspnet-data-nojquery';
-import { Observable, of } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { HttpClient, HttpParams } from '@angular/common/http'
+import { Injectable } from '@angular/core'
+import DataSource from 'devextreme/data/data_source'
+import * as AspNetData from 'devextreme-aspnet-data-nojquery'
+import { Observable } from 'rxjs'
+import { tap } from 'rxjs/operators'
 
-import { IModuleStatus, IServiceProcessStates, ISystemStates, IFileItem } from '@oms/models/system.model';
-import { Form } from '@angular/forms';
+import {
+	IModuleStatus,
+	IServiceProcessStates,
+	ISystemStates,
+	IFileItem,
+	ISettingMode,
+} from '@oms/models/system.model'
 @Injectable({
-  providedIn: 'root',
+	providedIn: 'root',
 })
 export class SystemsService {
-  private baseUrl = '/api/systems';
-  private _states: ISystemStates;
+	private baseUrl = '/api/systems'
+	private _states: ISystemStates
 
-  get currentState$(): Observable<ISystemStates> {
-    return this.states();
-  }
+	get currentState$(): Observable<ISystemStates> {
+		return this.states()
+	}
 
-  constructor(private http: HttpClient) { }
+	constructor(private http: HttpClient) {}
 
-  states(): Observable<ISystemStates> {
-    return this.http.get<ISystemStates>(`${this.baseUrl}/states`).pipe(
-      tap((res) => {
-        this._states = res;
-      })
-    );
-  }
+	states(): Observable<ISystemStates> {
+		return this.http.get<ISystemStates>(`${this.baseUrl}/states`).pipe(
+			tap((res) => {
+				this._states = res
+			}),
+		)
+	}
 
-  vehicles(): DataSource {
-    return new DataSource({
-      store: AspNetData.createStore({
-        key: 'id',
-        loadUrl: `/assets/json/vehicles.json`,
-      }),
-    });
-  }
+	settingMode() {
+		return this.http.get<ISettingMode>(`${this.baseUrl}/settings/mode`)
+	}
 
-  processes(): Observable<IServiceProcessStates[]> {
-    return this.http.get<IServiceProcessStates[]>('/assets/json/processes.json');
-  }
+	vehicles(): DataSource {
+		return new DataSource({
+			store: AspNetData.createStore({
+				key: 'id',
+				loadUrl: `/assets/json/vehicles.json`,
+			}),
+		})
+	}
 
-  moduleStatus(): Observable<IModuleStatus[]> {
-    return this.http.get<IModuleStatus[]>(`${this.baseUrl}/module-status`);
-  }
+	processes(): Observable<IServiceProcessStates[]> {
+		return this.http.get<IServiceProcessStates[]>('/assets/json/processes.json')
+	}
 
-  fileItems(): Observable<IFileItem[]> {
-    return this.http.get<IFileItem[]>(`${this.baseUrl}/logs`);
-  }
+	moduleStatus(): Observable<IModuleStatus[]> {
+		return this.http.get<IModuleStatus[]>(`${this.baseUrl}/module-status`)
+	}
 
-  maps() {
-    return this.http.get<string[]>(`${this.baseUrl}/maps`);
-  }
+	fileItems(): Observable<IFileItem[]> {
+		return this.http.get<IFileItem[]>(`${this.baseUrl}/logs`)
+	}
 
-  downloadFile(name: string, path: string): Observable<Blob> {
-    let params = new HttpParams();
-    params = params.append('fileFullPath', path);
-    return this.http.get(`${this.baseUrl}/logs/downloadFile/${name}`, { params: params, responseType: 'blob' });
-  }
+	maps() {
+		return this.http.get<string[]>(`${this.baseUrl}/maps`)
+	}
+	currentMap() {
+		return this.http.get<{
+			dbName: string
+			dbVersion: number
+			srcMapFile: string
+		}>(`${this.baseUrl}/current-map`)
+	}
 
-  downloadFoldersNFiles(name: string, paths: any): Observable<Blob> {
-    let params = new HttpParams();
-    params = params.append('folderFullPaths', paths);
-    return this.http.get(`${this.baseUrl}/logs/downloadFoldersNFiles/${name}`, { params: params, responseType: 'blob' });
-  }
+	downloadFile(name: string, path: string): Observable<Blob> {
+		let params = new HttpParams()
+		params = params.append('fileFullPath', path)
+		return this.http.get(`${this.baseUrl}/logs/downloadFile/${name}`, {
+			params: params,
+			responseType: 'blob',
+		})
+	}
 
-  downloadFolder(name: string, path: string): Observable<Blob> {
-    let params = new HttpParams();
-    params = params.append('folderFullPath', path);
-    return this.http.get(`${this.baseUrl}/logs/downloadFolder/${name}`, { params: params, responseType: 'blob' });
-  }
+	downloadFoldersNFiles(name: string, paths: any): Observable<Blob> {
+		let params = new HttpParams()
+		params = params.append('folderFullPaths', paths)
+		return this.http.get(`${this.baseUrl}/logs/downloadFoldersNFiles/${name}`, {
+			params: params,
+			responseType: 'blob',
+		})
+	}
+
+	downloadFolder(name: string, path: string): Observable<Blob> {
+		let params = new HttpParams()
+		params = params.append('folderFullPath', path)
+		return this.http.get(`${this.baseUrl}/logs/downloadFolder/${name}`, {
+			params: params,
+			responseType: 'blob',
+		})
+	}
+
+	updateMap(mapName: string, mapFile: string, overWrite: boolean) {
+		return this.http.post<{ message: string; bResult: boolean }>(
+			`${this.baseUrl}/control/updateMap/${mapName}`,
+			{ mapFile, overWrite },
+		)
+	}
 }

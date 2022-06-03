@@ -9,7 +9,7 @@
       <th>{{ "names.releaseTime" | translate }}</th>
       <th>{{ "names.pid" | translate }}</th>
       <th>{{ "names.status" | translate }}</th>
-      <th>{{ "names.control" | translate }}</th>
+      <!--<th>{{ "names.control" | translate }}</th>-->
     </tr>
     <tr *ngFor="let item of dataSource">
       <td>{{ item.id }}</td>
@@ -21,6 +21,7 @@
           src="{{ (item.startTime == null || item.startTime == undefined || item.startTime == '') ? '/assets/images/module_stopped.gif' : '/assets/images/module_executed.gif' }}"
           width="15" height="15" /> {{ (item.startTime == null || item.startTime == undefined || item.startTime == '') ?
         'Stopped' : 'Running' }}</td>
+      <!--
       <td>
         <button mat-raised-button class="dense" color="primary"
           [disabled]="!(item.startTime == null || item.startTime == undefined || item.startTime == '')"
@@ -38,6 +39,7 @@
           {{ "names.restart" | translate }}
         </button>
       </td>
+      -->
     </tr>
   </table>
 </fieldset>

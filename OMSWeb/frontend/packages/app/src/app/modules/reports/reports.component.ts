@@ -24,7 +24,6 @@ export class ReportsComponent
 	private rootDomID: string
 
 	constructor(private route: ActivatedRoute) {}
-
 	protected getRootDomNode() {
 		const node = document.getElementById('react-root')
 		return node
@@ -40,19 +39,15 @@ export class ReportsComponent
 			ReactDOM.render(rnode, this.getRootDomNode())
 		}
 	}
-
 	ngOnInit() {
 		this.rootDomID = uuid.v1()
 	}
-
 	ngOnChanges() {
 		this.render()
 	}
-
 	ngAfterViewInit() {
 		this.render()
 	}
-
 	ngOnDestroy() {
 		ReactDOM.unmountComponentAtNode(this.getRootDomNode())
 	}

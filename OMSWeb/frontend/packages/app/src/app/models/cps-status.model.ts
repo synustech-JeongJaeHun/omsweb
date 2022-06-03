@@ -1,24 +1,25 @@
 
-export interface ICpsStatusRow {
-  cps_can_id: number;
-  cps_converter_id: number;
-  cps_status: number;
-  cps_voltage: number;
-  cps_current_igbt: number;
-  cps_current_track: number;
-  cps_frequency: number;
-  cps_temp_radiator: number;
-  cps_temp_internal: number;
-  cps_sync: number;
-  cps_backup_id: number;
-  cps_error_code: number;
-  cps_voltage_rs: number;
-  cps_voltage_st: number;
-  cps_voltage_tr: number;
-  cps_current_r: number;
-  cps_current_s: number;
-  cps_current_t: number;
-  cps_total_kw: number;
-  cps_wh: number;
+export interface IClusterStatusRow {
+  id: number;
+  server_id: number;
+  logicalId: string;
+  status: string;
+  voltage: string;
+  current_igbt: string;
+  current_track: string;
+  frequency: string;
+  temp_radiator: string;
+  temp_internal: string;
+  sync: string;
+  backup_id: string;
+  error_code: string;
+  voltage_rs: string;
+  voltage_st: string;
+  voltage_tr: string;
+  current_r: string;
+  current_s: string;
+  current_t: string;
+  total_kw: string;
+  wh: string;
 }
 

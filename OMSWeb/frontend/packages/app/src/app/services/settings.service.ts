@@ -39,6 +39,12 @@ export class SettingsService {
     // return this.http.get<ServiceConfig>(`/api/systems/config`);
   }
 
+  loadDefaultColors(){
+    return this.http.get(
+      `/api/systems/settings/default-colors`
+    )
+  }
+
   loadPreferences() {
     this._globalPreferences = new ClientPreferences('global.pref');
   }

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace OMSWeb.Repositories
 {
-  public class QueryFactory
-  {
-    private static IDictionary<string, string> sqlMap = new Dictionary<string, string> {
+    public class QueryFactory
+    {
+        private static IDictionary<string, string> sqlMap = new Dictionary<string, string> {
       {"size", @"
         SELECT min(x) AS min_x,
           min(y) AS min_y,
@@ -17,10 +17,17 @@ namespace OMSWeb.Repositories
         --*user_id_condition*--WHERE user_id =@userId
       "},
       {"point", @"
-        SELECT id AS id, x AS x, y AS y, physical_id AS physical_id, logical_id AS logical_id  
-        FROM points
-        --*user_id_condition*--WHERE user_id = @userId
-        ORDER BY id
+        SELECT 
+          points.id AS id, 
+          points.x AS x, 
+          points.y AS y, 
+          points.physical_id AS physical_id, 
+          points.logical_id AS logical_id,
+          homes.id as home_id
+        FROM 
+          points
+          LEFT JOIN homes ON points.id = homes.point 
+        ORDER BY points.id
       "},
       {"segment", @"
         SELECT SP.segment_id AS id, SG.physical_id AS physical_id, SG.logical_id AS logical_id, SG.start_point, SG.end_point, 
@@ -62,6 +69,44 @@ namespace OMSWeb.Repositories
               --*user_id_condition*--WHERE CT.user_id = @userId
         ) AS NEW_DATA
         GROUP BY id, logical_id, max_vehicles, color
+      "},
+       {"clusterStatus", @"
+         SELECT CT.id, CT.logical_id, CS.server_id, 
+            CASE 
+                WHEN CS.status = 0 THEN 'RUN'
+                WHEN CS.status = 1 THEN 'STOP'
+                WHEN CS.status = 2 THEN 'Fault'
+                WHEN CS.status = 3 THEN 'Warning'
+                WHEN CS.status = 4 THEN 'Fail-Over'
+                WHEN CS.status = 5 THEN 'Comm Fail'
+                ELSE ' '
+            END AS status, 
+            CONCAT( CAST(CS.voltage AS TEXT),' [V]' ) AS voltage, 
+            CONCAT( CAST(CS.current_igbt AS TEXT), ' [A]' ) AS current_igbt,
+            CONCAT( CAST(CS.current_track AS TEXT), ' [A]' ) AS current_track, 
+            CONCAT( CAST(TRUNC(CS.frequency::numeric / 10, 1) AS TEXT), ' [kHz]' ) AS frequency, 
+            CONCAT( CAST(TRUNC(CS.temp_radiator::numeric / 10, 1) AS TEXT), ' [��]' ) AS temp_radiator, 
+            CONCAT( CAST(TRUNC(CS.temp_internal::numeric / 10, 1) AS TEXT), ' [��]' ) AS temp_internal,  
+            CASE 
+                WHEN CS.sync = 0 THEN 'N.G'
+                WHEN CS.sync = 11 THEN 'OK'
+                ELSE ' '
+            END AS sync, 
+            CS.backup_id,
+            CS.error_code, 
+            CONCAT( CAST(CS.voltage_rs AS TEXT), ' [V]' ) AS voltage_rs, 
+            CONCAT( CAST(CS.voltage_st AS TEXT), ' [V]' ) AS voltage_st,  
+            CONCAT( CAST(CS.voltage_tr AS TEXT), ' [V]' ) AS voltage_tr,  
+            CONCAT( CAST(CS.current_r AS TEXT), ' [A]' ) AS current_r, 
+            CONCAT( CAST(CS.current_s AS TEXT), ' [A]' ) AS current_s,  
+            CONCAT( CAST(CS.current_t AS TEXT), ' [A]' ) AS current_t, 
+            CONCAT( CAST(CS.total_kw AS TEXT), ' [kW]' ) AS total_kw, 
+            CONCAT( CAST(TRUNC(CS.wh::numeric / 1000, 3) AS TEXT), ' [kWh]' ) AS wh
+        FROM clusters AS CT
+        LEFT OUTER JOIN cluster_status AS CS
+        ON CT.id = CS.converter_id
+        ORDER BY CT.id
+        --*user_id_condition*--WHERE user_id =@userId
       "},
       {"station", @"
         SELECT id AS id, physical_id AS physical_id, logical_id AS logical_id, point AS point_id,
@@ -140,7 +185,28 @@ namespace OMSWeb.Repositories
             END As host_order, 
             VH.order_origin, VH.moving_state, VH.cargo_state, VH.is_sensor_stopped, VH.is_blocked, VH.error_list, VH.type, VH.cargo_transfer_result, 
             VH.map_db, 0 AS mapVersion,
-            OD.id AS order_id, OD.logical_id AS order_logical_id, OD.location_pickup, OD.location_dropoff, OD.location_move, OD.priority,
+            OD.id AS order_id, OD.logical_id AS order_logical_id, 
+            --OD.location_pickup, 
+            --OD.location_dropoff, 
+            --OD.location_move, 
+            CASE
+			    WHEN OD.location_pickup LIKE '%s%' THEN	(SELECT logical_Id FROM stations WHERE concat('s', cast(id as varchar)) = OD.location_pickup)
+			    WHEN OD.location_pickup LIKE '%b%' THEN	(SELECT logical_Id FROM buffers WHERE concat('b', cast(id as varchar)) = OD.location_pickup)
+                WHEN OD.location_pickup LIKE '%v%' THEN	(SELECT logical_Id FROM vehicles WHERE concat('v', cast(id as varchar)) = OD.location_pickup)
+                WHEN OD.location_pickup IS NULL AND OD.location_dropoff IS NOT NULL THEN VH.logical_id
+			    ELSE OD.location_pickup
+		    EnD AS location_pickup,
+		    CASE
+			    WHEN OD.location_dropoff LIKE '%s%' THEN (SELECT logical_Id FROM stations WHERE concat('s', cast(id as varchar)) = OD.location_dropoff)
+			    WHEN OD.location_dropoff LIKE '%b%' THEN (SELECT logical_Id FROM buffers WHERE concat('b', cast(id as varchar)) = OD.location_dropoff)
+			    ELSE OD.location_dropoff
+		    EnD AS location_dropoff,
+		    CASE
+			    WHEN OD.location_move LIKE '%s%' THEN (SELECT logical_Id FROM stations WHERE concat('s', cast(id as varchar)) = OD.location_move)
+			    WHEN OD.location_move LIKE '%b%' THEN (SELECT logical_Id FROM buffers WHERE concat('b', cast(id as varchar)) = OD.location_move)
+			    ELSE OD.location_move
+		    EnD AS location_move,
+            OD.priority,
             VH.is_maint, 
             CASE 
                 WHEN VH.connection = 0 THEN FALSE
@@ -151,25 +217,98 @@ namespace OMSWeb.Repositories
             END AS isConnected, 
             CASE 
             WHEN OD.location_pickup IS NOT NULL AND OD.location_dropoff IS NOT NULL   -- FROM-TO order
-            THEN
-            CASE 
-                WHEN OD.time_vehicle_arrived IS NULL
-                THEN OD.location_pickup		                                      -- display FROM
-                ELSE OD.location_dropoff		                                      -- display To
-            END
+                THEN
+                    CASE 
+                        WHEN OD.time_vehicle_arrived IS NULL
+                        THEN OD.location_pickup		                                          -- display FROM
+                        ELSE OD.location_dropoff		                                      -- display To
+                    END
             WHEN OD.location_pickup IS NOT NULL AND OD.location_dropoff IS NULL       -- FROM order
-            THEN OD.location_pickup		                                      -- display FROM
+                THEN OD.location_pickup		                                          -- display FROM
             WHEN OD.location_pickup IS NULL AND OD.location_dropoff IS NOT NULL       -- TO order
-            THEN OD.location_dropoff		                                      -- display TO
+                THEN OD.location_dropoff		                                      -- display TO
             WHEN OD.location_move IS NOT NULL                                         -- MOVE order
-            THEN OD.location_move		                                      -- display MOVETO
+                THEN OD.location_move		                                          -- display MOVETO
             END AS command_point
-        FROM vehicles AS VH
-        LEFT OUTER JOIN orders AS OD
-        ON VH.order_id = OD.id AND OD.time_completed IS NULL AND OD.time_aborted IS NULL
-        --*user_id_condition*--AND VH.user_id = OD.user_id    
-        --*user_id_condition*--WHERE VH.user_id = @userId
-        ORDER BY VH.id
+
+            FROM vehicles AS VH
+            LEFT OUTER JOIN orders AS OD
+            ON VH.order_id = OD.id AND OD.time_completed IS NULL AND OD.time_aborted IS NULL
+            --*user_id_condition*--AND VH.user_id = OD.user_id    
+            --*user_id_condition*--WHERE VH.user_id = @userId
+            ORDER BY VH.id
+      "},
+       {"vehicleStates",  @"
+            SELECT
+            VH.id, VH.physical_id, VH.logical_id, VH.last_point AS cur_point, 
+            VH.moving_state, VH.map_db,
+            OD.id AS order_id,
+            CASE 
+                WHEN OD.location_pickup IS NOT NULL AND OD.location_dropoff IS NOT NULL        -- FROM-TO order
+                    THEN
+                CASE 
+                    WHEN OD.time_vehicle_arrived IS NULL THEN OD.location_pickup		                                        -- display FROM
+                    ELSE OD.location_dropoff		                                    -- display To
+                END
+                WHEN OD.location_pickup IS NOT NULL AND OD.location_dropoff IS NULL            -- FROM order
+                    THEN OD.location_pickup		                                               -- display FROM
+                WHEN OD.location_pickup IS NULL AND OD.location_dropoff IS NOT NULL            -- TO order
+                    THEN OD.location_dropoff		                                           -- display TO
+                WHEN OD.location_move IS NOT NULL                                              -- MOVE order
+                    THEN OD.location_move		                                               -- display MOVETO
+            END AS command_point,
+
+            --OD.location_pickup, 
+            --OD.location_dropoff, 
+            --OD.location_move,
+            CASE
+			    WHEN OD.location_pickup LIKE '%s%' THEN	(SELECT logical_Id FROM stations WHERE concat('s', cast(id as varchar)) = OD.location_pickup)
+			    WHEN OD.location_pickup LIKE '%b%' THEN	(SELECT logical_Id FROM buffers WHERE concat('b', cast(id as varchar)) = OD.location_pickup)
+                WHEN OD.location_pickup LIKE '%v%' THEN	(SELECT logical_Id FROM vehicles WHERE concat('v', cast(id as varchar)) = OD.location_pickup)
+                WHEN OD.location_pickup IS NULL AND OD.location_dropoff IS NOT NULL THEN VH.logical_id
+			    ELSE OD.location_pickup
+		    EnD AS location_pickup,
+		    CASE
+			    WHEN OD.location_dropoff LIKE '%s%' THEN (SELECT logical_Id FROM stations WHERE concat('s', cast(id as varchar)) = OD.location_dropoff)
+			    WHEN OD.location_dropoff LIKE '%b%' THEN (SELECT logical_Id FROM buffers WHERE concat('b', cast(id as varchar)) = OD.location_dropoff)
+			    ELSE OD.location_dropoff
+		    EnD AS location_dropoff,
+		    CASE
+			    WHEN OD.location_move LIKE '%s%' THEN (SELECT logical_Id FROM stations WHERE concat('s', cast(id as varchar)) = OD.location_move)
+			    WHEN OD.location_move LIKE '%b%' THEN (SELECT logical_Id FROM buffers WHERE concat('b', cast(id as varchar)) = OD.location_move)
+			    ELSE OD.location_move
+		    EnD AS location_move,
+
+            VH.cargo_state, 
+            CR.carrier_id AS CarrierLabel,
+            VH.mode,
+            CASE 
+                WHEN order_origin LIKE '%MCS%' THEN true 
+                WHEN order_origin LIKE '%*%' THEN true 
+                ELSE false
+            END As host_order,  
+            order_origin, can_be_pushed,
+            VH.is_sensor_stopped, VH.is_blocked,
+            CASE
+            WHEN LENGTH(VH.error_list) = 0 THEN '0' ELSE VH.error_list
+            END AS error_list,
+            VH.distance_total, VH.runtime_total, VH.type, VH.rail_in, VH.is_maint, 
+            CASE 
+                WHEN VH.connection = 0 THEN FALSE
+                WHEN VH.connection = 1 THEN TRUE
+                WHEN VH.connection = 2 THEN TRUE
+                WHEN VH.connection = 3 THEN FALSE
+                WHEN VH.connection IS NULL THEN FALSE
+            ENd AS isConnected, 
+            GO.group_id
+            FROM vehicles AS VH
+            LEFT OUTER JOIN orders AS OD
+                ON VH.order_id = OD.id AND OD.time_completed IS NULL AND OD.time_aborted IS NULL
+            LEFT JOIN grouped_objects AS GO 
+	            ON VH.id = GO.reference_id AND GO.reference_table = 'vehicle'
+            LEFT JOIN carriers AS CR 
+	            ON VH.logical_id = CR.carrier_location
+            ORDER BY VH.id
       "},
       {"orderStatus", @"
       SELECT --*order_condition*
@@ -178,7 +317,24 @@ namespace OMSWeb.Repositories
         SELECT
         OD.id, 
         OD.origin,
-        OD.logical_id, OD.location_pickup, OD.location_dropoff, OD.location_move,
+        OD.logical_id, 
+		CASE
+			WHEN OD.location_pickup LIKE '%s%' THEN	(SELECT logical_Id FROM stations WHERE concat('s', cast(id as varchar)) = OD.location_pickup)
+			WHEN OD.location_pickup LIKE '%b%' THEN	(SELECT logical_Id FROM buffers WHERE concat('b', cast(id as varchar)) = OD.location_pickup)
+            WHEN OD.location_pickup LIKE '%v%' THEN	(SELECT logical_Id FROM vehicles WHERE concat('v', cast(id as varchar)) = OD.location_pickup)
+            WHEN OD.location_pickup IS NULL AND OD.location_dropoff IS NOT NULL THEN VR.logical_id
+			ELSE OD.location_pickup
+		EnD AS location_pickup,
+		CASE
+			WHEN OD.location_dropoff LIKE '%s%' THEN	(SELECT logical_Id FROM stations WHERE concat('s', cast(id as varchar)) = OD.location_dropoff)
+			WHEN OD.location_dropoff LIKE '%b%' THEN	(SELECT logical_Id FROM buffers WHERE concat('b', cast(id as varchar)) = OD.location_dropoff)
+			ELSE OD.location_dropoff
+		EnD AS location_dropoff,
+		CASE
+			WHEN OD.location_move LIKE '%s%' THEN	(SELECT logical_Id FROM stations WHERE concat('s', cast(id as varchar)) = OD.location_move)
+			WHEN OD.location_move LIKE '%b%' THEN	(SELECT logical_Id FROM buffers WHERE concat('b', cast(id as varchar)) = OD.location_move)
+			ELSE OD.location_move
+		EnD AS location_move,
         CASE
           WHEN OD.time_failed IS NOT NULL THEN 'FAILED'
           WHEN OD.time_aborted IS NOT NULL THEN 'ABORTED'
@@ -243,51 +399,51 @@ namespace OMSWeb.Repositories
         --*user_id_condition*--WHERE user_id =@userId
       "}
     };
-    public static string GetSql(string name)
-    {
-      sqlMap.TryGetValue(name, out var sql);
-      return sql;
+        public static string GetSql(string name)
+        {
+            sqlMap.TryGetValue(name, out var sql);
+            return sql;
+        }
+
+        public static string GetSql(string name, string userId)
+        {
+            var sql = GetSql(name);
+            sql = sql.Replace("from points", "from playback_points", StringComparison.OrdinalIgnoreCase);
+            sql = sql.Replace("join points", "join playback_points", StringComparison.OrdinalIgnoreCase);
+
+            sql = sql.Replace("from segments", "from playback_segments", StringComparison.OrdinalIgnoreCase);
+            sql = sql.Replace("join segments", "join playback_segments", StringComparison.OrdinalIgnoreCase);
+
+            sql = sql.Replace("from segment_parts", "from playback_segment_parts", StringComparison.OrdinalIgnoreCase);
+            sql = sql.Replace("join segment_parts", "join playback_segment_parts", StringComparison.OrdinalIgnoreCase);
+
+            sql = sql.Replace("from segment_blocking", "from playback_segment_blocking", StringComparison.OrdinalIgnoreCase);
+            sql = sql.Replace("join segment_blocking", "join playback_segment_blocking", StringComparison.OrdinalIgnoreCase);
+
+            sql = sql.Replace("from stations", "from playback_stations", StringComparison.OrdinalIgnoreCase);
+            sql = sql.Replace("join stations", "join playback_stations", StringComparison.OrdinalIgnoreCase);
+
+            sql = sql.Replace("from buffers", "from playback_buffers", StringComparison.OrdinalIgnoreCase);
+            sql = sql.Replace("join buffers", "join playback_buffers", StringComparison.OrdinalIgnoreCase);
+
+            sql = sql.Replace("from mtls", "from playback_mtls", StringComparison.OrdinalIgnoreCase);
+            sql = sql.Replace("join mtls", "join playback_mtls", StringComparison.OrdinalIgnoreCase);
+
+            sql = sql.Replace("from clusters", "from playback_clusters", StringComparison.OrdinalIgnoreCase);
+            sql = sql.Replace("join clusters", "join playback_clusters", StringComparison.OrdinalIgnoreCase);
+
+            sql = sql.Replace("from cluster_points", "from playback_cluster_points", StringComparison.OrdinalIgnoreCase);
+            sql = sql.Replace("join cluster_points", "join playback_cluster_points", StringComparison.OrdinalIgnoreCase);
+
+            sql = sql.Replace("from vehicles", "from playback_vehicles", StringComparison.OrdinalIgnoreCase);
+            sql = sql.Replace("join vehicles", "join playback_vehicles", StringComparison.OrdinalIgnoreCase);
+
+            sql = sql.Replace("from orders", "from playback_orders", StringComparison.OrdinalIgnoreCase);
+            sql = sql.Replace("join orders", "join playback_orders", StringComparison.OrdinalIgnoreCase);
+
+            sql = sql.Replace("--*user_id_condition*--", "", StringComparison.OrdinalIgnoreCase);
+
+            return sql;
+        }
     }
-
-    public static string GetSql(string name, string userId)
-    {
-      var sql = GetSql(name);
-      sql = sql.Replace("from points", "from playback_points", StringComparison.OrdinalIgnoreCase);
-      sql = sql.Replace("join points", "join playback_points", StringComparison.OrdinalIgnoreCase);
-
-      sql = sql.Replace("from segments", "from playback_segments", StringComparison.OrdinalIgnoreCase);
-      sql = sql.Replace("join segments", "join playback_segments", StringComparison.OrdinalIgnoreCase);
-
-      sql = sql.Replace("from segment_parts", "from playback_segment_parts", StringComparison.OrdinalIgnoreCase);
-      sql = sql.Replace("join segment_parts", "join playback_segment_parts", StringComparison.OrdinalIgnoreCase);
-
-      sql = sql.Replace("from segment_blocking", "from playback_segment_blocking", StringComparison.OrdinalIgnoreCase);
-      sql = sql.Replace("join segment_blocking", "join playback_segment_blocking", StringComparison.OrdinalIgnoreCase);
-
-      sql = sql.Replace("from stations", "from playback_stations", StringComparison.OrdinalIgnoreCase);
-      sql = sql.Replace("join stations", "join playback_stations", StringComparison.OrdinalIgnoreCase);
-
-      sql = sql.Replace("from buffers", "from playback_buffers", StringComparison.OrdinalIgnoreCase);
-      sql = sql.Replace("join buffers", "join playback_buffers", StringComparison.OrdinalIgnoreCase);
-
-      sql = sql.Replace("from mtls", "from playback_mtls", StringComparison.OrdinalIgnoreCase);
-      sql = sql.Replace("join mtls", "join playback_mtls", StringComparison.OrdinalIgnoreCase);
-
-      sql = sql.Replace("from clusters", "from playback_clusters", StringComparison.OrdinalIgnoreCase);
-      sql = sql.Replace("join clusters", "join playback_clusters", StringComparison.OrdinalIgnoreCase);
-
-      sql = sql.Replace("from cluster_points", "from playback_cluster_points", StringComparison.OrdinalIgnoreCase);
-      sql = sql.Replace("join cluster_points", "join playback_cluster_points", StringComparison.OrdinalIgnoreCase);
-
-      sql = sql.Replace("from vehicles", "from playback_vehicles", StringComparison.OrdinalIgnoreCase);
-      sql = sql.Replace("join vehicles", "join playback_vehicles", StringComparison.OrdinalIgnoreCase);
-
-      sql = sql.Replace("from orders", "from playback_orders", StringComparison.OrdinalIgnoreCase);
-      sql = sql.Replace("join orders", "join playback_orders", StringComparison.OrdinalIgnoreCase);
-
-      sql = sql.Replace("--*user_id_condition*--", "", StringComparison.OrdinalIgnoreCase);
-
-      return sql;
-    }
-  }
 }

@@ -1,7 +1,7 @@
 import { Component, HostListener, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import DataSource from 'devextreme/data/data_source';
 
-import { ICpsStatusRow } from '../../../models/cps-status.model';
+import { IClusterStatusRow } from '../../../models/cluster-status.model';
 import { StatusService } from '../../../services/status.service';
 import { SettingsService } from '../../../services/settings.service';
 import { forkJoin, Subject } from 'rxjs';
@@ -45,7 +45,7 @@ export class CpsControlTableComponent implements OnInit, OnDestroy {
     return this.selectedRows.length > 0;
   }
 
-  get selectedItems(): ICpsStatusRow[] {
+  get selectedItems(): IClusterStatusRow[] {
     return this.dataGrid.instance.getSelectedRowsData();
   }
 
@@ -58,7 +58,7 @@ export class CpsControlTableComponent implements OnInit, OnDestroy {
     private $t: TranslateService,
     private hubSvc: HubService
   ) {
-    this.dataSource = this.statusSvc.cpsStatusDataSource();
+    this.dataSource = this.statusSvc.clusterStatusDataSource();
     this.preference = this.settingSvc.globalPreferences;
   }
 
@@ -72,7 +72,7 @@ export class CpsControlTableComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.hubSvc.cpsStatusTableChanged$
+    this.hubSvc.clusterStatusTableChanged$
       .pipe(takeUntil(this.destroy$))
       .subscribe((e: IDataChangeEvent) => {
         e && this.onTableChanged(e);

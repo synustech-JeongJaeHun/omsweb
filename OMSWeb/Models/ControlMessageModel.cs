@@ -11,6 +11,7 @@ namespace OMSWeb.Models
         public string Direction { get; set; }
         public int AlarmCode { get; set; }
         public int WarningId { get; set; }
+        public int[] WarningIds { get; set; }
         public string WarningAckBy { get; set; }
         public int[] ZcuIds { get; set; }
         public string ZcuId { get; set; }
@@ -27,11 +28,13 @@ namespace OMSWeb.Models
         public string LocationMove { get; set; }
         public int? Priority { get; set; }
         public string CarrierLabel { get; set; }
+        public string CommandID { get; set; }
         public bool? CanBePushed { get; set; }
         public string AcceptManualCommands { get; set; }
         public string State { get; set; }
         public string Mode { get; set; }
-        public int GroupId { get; set; }
+        public int? GroupId { get; set; }
+        public int[] GroupIds { get; set; }
         public int[] StationIds { get; set; }
         public int[] StationIds_Removed { get; set; }
         public int[] BufferIds { get; set; }
@@ -46,6 +49,7 @@ namespace OMSWeb.Models
         public int[] HomeIds { get; set; }
         public int[] HomeIds_Removed { get; set; }
         public int? HomeId { get; set; }
+        public int? PointId { get; set; }
         public int? StationId { get; set; }
         public int? BufferId { get; set; }
         public int? MtlId { get; set; }

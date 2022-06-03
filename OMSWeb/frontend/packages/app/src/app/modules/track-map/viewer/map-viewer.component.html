@@ -5,19 +5,21 @@
     [rotation]="tmSetting.rotation" [isMinimapVisible]="tmSetting.isMinimapVisible"
     [isVehicleLineVisible]="tmSetting.isVehicleLineVisible"
     [isSegmentDirectionVisible]="tmSetting.isSegmentDirectionVisible"
-    [isPointLabelVisible]="tmSetting.isPointLabelVisible" [isStationVisible]="tmSetting.isStationVisible"
-    [isBufferVisible]="tmSetting.isBufferVisible" [isGroupVisible]="tmSetting.isGroupVisible"
+    [isPointLabelVisible]="tmSetting.isPointLabelVisible" [isPointHomeVisible]="tmSetting.isPointHomeVisible"
+    [isStationVisible]="tmSetting.isStationVisible" [isBufferVisible]="tmSetting.isBufferVisible"
+    [isZcuVisible]="tmSetting.isZcuVisible" [isGroupVisible]="tmSetting.isGroupVisible"
     [isClusterVisible]="tmSetting.isClusterVisible"
     [isOverlappingObjectsVisible]="tmSetting.isOverlappingObjectsVisible"
     [backgroundColor]="tmSetting.homeBackgroundColor" [stationColor]="tmSetting.stationColor"
-    [bufferColor]="tmSetting.bufferColor" [pointColor]="tmSetting.pointColor"
-    [normalSegmentColor]="tmSetting.normalSegmentColor" [disabledSegmentColor]="tmSetting.disabledSegmentColor"
-    [segmentDirectionColor]="tmSetting.segmentDirectionColor" [autoModeVehicleColor]="tmSetting.autoModeVehicleColor"
-    [manualModeVehicleColor]="tmSetting.manualModeVehicleColor" [noneModeVehicleColor]="tmSetting.noneModeVehicleColor"
-    [cargoLoadingColor]="tmSetting.cargoLoadingColor" [cargoFullColor]="tmSetting.cargoFullColor"
-    [cargoUnloadingColor]="tmSetting.cargoUnloadingColor" (mouseoverOnObject)="onMouseoverTM($event)"
-    (mouseleaveOnObject)="onMouseleaveTM($event)" (mainClickOnObject)="onFocus($event)"
-    (secondaryClickOnObject)="onContectMenuOn($event)" (clickOutObject)="onBackdrop($event)">
+    [stationDisabledColor]="tmSetting.stationDisabledColor" [bufferColor]="tmSetting.bufferColor"
+    [pointColor]="tmSetting.pointColor" [homeColor]="homeColor" [normalSegmentColor]="tmSetting.normalSegmentColor"
+    [disabledSegmentColor]="tmSetting.disabledSegmentColor" [segmentDirectionColor]="tmSetting.segmentDirectionColor"
+    [autoModeVehicleColor]="tmSetting.autoModeVehicleColor" [manualModeVehicleColor]="tmSetting.manualModeVehicleColor"
+    [noneModeVehicleColor]="tmSetting.noneModeVehicleColor" [cargoLoadingColor]="tmSetting.cargoLoadingColor"
+    [cargoFullColor]="tmSetting.cargoFullColor" [cargoUnloadingColor]="tmSetting.cargoUnloadingColor"
+    (mouseoverOnObject)="onMouseoverTM($event)" (mouseleaveOnObject)="onMouseleaveTM($event)"
+    (mainClickOnObject)="onFocus($event)" (secondaryClickOnObject)="onContextMenuOn($event)"
+    (clickOutObject)="onBackdrop($event)">
   </oms-track-monitor>
 
   <div id="side_panel">
@@ -247,9 +249,11 @@
       <button *ngIf="hasPermissions([permissionEnums.EstopVehicle])" mat-menu-item (click)="onVehicleCommand('stop')">
         {{ "names.estop" | translate }}
       </button>
+      <!--
       <button *ngIf="hasPermissions([permissionEnums.SetZcuGo])" mat-menu-item (click)="onVehicleCommand('zcu_go')">
         {{ "names.zcuGo" | translate }}
       </button>
+      -->
     </mat-menu>
     <mat-menu #vehicleOptionMenu="matMenu">
       <button *ngIf="hasPermissions([permissionEnums.PushEnable])" mat-menu-item
@@ -258,7 +262,7 @@
       </button>
       <button *ngIf="hasPermissions([permissionEnums.HostOrderEnable])" mat-menu-item
         (click)="onVehicleCommand('hostOrder:enable')">
-        {{ "names.hostOrderEnable" | translate }}
+        {{ "names.hostCommandEnable" | translate }}
       </button>
       <button *ngIf="hasPermissions([permissionEnums.RailOut])" mat-menu-item (click)="onVehicleCommand('rail_out')">
         {{ "names.railOut" | translate }}
@@ -276,7 +280,8 @@
       </mat-card-title>
     </mat-card-header>
     <mat-card-content class="context-form">
-      <mat-slide-toggle [disabled]="contextMenuObject?.value.disabledByMtl" [checked]="contextMenuObject?.value.disabled" color="primary"
+      <mat-slide-toggle [disabled]="contextMenuObject?.value.disabledByMtl"
+        [checked]="contextMenuObject?.value.disabled" color="primary"
         (change)="onChangeSegmentProperty($event.checked)">{{ "names.unuse" | translate }}</mat-slide-toggle>
     </mat-card-content>
   </mat-card>
@@ -323,13 +328,21 @@
       </mat-card-title>
     </mat-card-header>
     <mat-card-content class="context-form">
-      <button mat-stroked-button class="dense accent" color="primary" [disabled]="!canSetSource"
+      <button mat-stroked-button class="dense accent" color="primary" [disabled]="!canSetSourceStation"
         (click)="onSetSource('Station')">
         {{ "names.setSource" | translate }}
       </button>
-      <button mat-stroked-button class="dense accent" color="primary" [disabled]="!canSetDest"
+      <button mat-stroked-button class="dense accent" color="primary" [disabled]="!canSetDestStation"
         (click)="onSetDest('Station')">
         {{ "names.setDest" | translate }}
+      </button>
+      <button *ngIf="contextMenuObject?.value.unuse === true" mat-stroked-button class="dense accent" color="primary"
+        (click)="onToggleStationUnuse(contextMenuObject.value.id, 'USE')">
+        {{ "names.use" | translate}}
+      </button>
+      <button *ngIf="contextMenuObject?.value.unuse !== true" mat-stroked-button class="dense accent" color="primary"
+        (click)="onToggleStationUnuse(contextMenuObject.value.id, 'UNUSE')">
+        {{ "names.unuse" | translate}}
       </button>
     </mat-card-content>
   </mat-card>
@@ -363,33 +376,31 @@
 </ng-template>
 
 <ng-template #pointContext>
-  <mat-card class="context-card" *ngIf="hasPermissions([permissionEnums.SetHomePoint])">
+  <mat-card class="context-card">
     <mat-card-header>
       <mat-card-title>
         Point #{{ contextMenuObject?.value.id }}
       </mat-card-title>
     </mat-card-header>
     <mat-card-content class="context-form">
-      <mat-slide-toggle #pointHomeSlide [checked]="contextMenuObject?.value.isHome" color="primary">{{ "names.home" |
-        translate }}
-      </mat-slide-toggle>
-
-      <div [hidden]="!pointHomeSlide.checked">
-        <mat-form-field class="index-selector dense" appearance="outline">
-          <mat-label>{{ "names.group" | translate }}</mat-label>
-          <mat-select #pointerGroupSelector [value]="contextMenuObject?.value.group">
-            <mat-option *ngFor="let item of groupIds" [value]="item">{{
-              item
-              }}</mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-
-      <button mat-stroked-button class="dense accent" color="primary" (click)="
-          onApplyPointChange(contextMenuObject?.value.id, pointHomeSlide.checked, pointerGroupSelector.value)
-        ">
-        {{ "names.apply" | translate }}
+      <button mat-stroked-button class="dense accent" color="primary" [disabled]="!canSetDestPoint"
+        (click)="onSetDest('Point')">
+        {{ "names.setDest" | translate }}
       </button>
+
+      <ng-container *ngIf="isHomeModeAndTscPaused && hasPermissions([permissionEnums.SetHomePoint])">
+        <div style="height: 25px"></div>
+
+        <dx-select-box style="max-width: 12em" displayExpr="label" valueExpr="value" [items]="homeAndGroupSelectList"
+          [value]="contextMenuObject?.value.home" (onSelectionChanged)="onHomeValueChanged($event)">
+        </dx-select-box>
+
+        <button mat-stroked-button class="dense accent" color="primary" (click)="
+            onApplyPointHomeChange(contextMenuObject?.value.id, contextMenuObject?.value.home)
+          ">
+          {{ "names.apply" | translate }}
+        </button>
+      </ng-container>
     </mat-card-content>
   </mat-card>
 </ng-template>

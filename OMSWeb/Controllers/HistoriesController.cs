@@ -10,38 +10,38 @@ using OMSWeb.Services;
 
 namespace OMSWeb.Controllers
 {
-  [Route("api/[controller]")]
-  [ApiController]
-  public class HistoriesController : ControllerBase
-  {
-    private readonly HistoryService _historySvc;
-    public HistoriesController(HistoryService historyService)
+    [Route("api/[controller]")]
+    [ApiController]
+    public class HistoriesController : ControllerBase
     {
-      this._historySvc = historyService;
-    }
+        private readonly HistoryService _historySvc;
+        public HistoriesController(HistoryService historyService)
+        {
+            this._historySvc = historyService;
+        }
 
-    [HttpGet("orders")]
-    public object GetOrders(DataSourceLoadOptions loadOptions)
-    {
-      return DataSourceLoader.Load(_historySvc.QueryOrders(), loadOptions);
-    }
+        [HttpGet("orders")]
+        public object GetOrders(DataSourceLoadOptions loadOptions)
+        {
+            return DataSourceLoader.Load(_historySvc.QueryOrders(), loadOptions);
+        }
 
-    [HttpGet("vehicles")]
-    public object GetVehicles(DataSourceLoadOptions loadOptions)
-    {
-      return DataSourceLoader.Load(_historySvc.QueryVehicles(), loadOptions);
-    }
+        [HttpGet("vehicles")]
+        public object GetVehicles(DataSourceLoadOptions loadOptions)
+        {
+            return DataSourceLoader.Load(_historySvc.QueryVehicles(), loadOptions);
+        }
 
-    [HttpGet("alarms")]
-    public object GetAlarms(DataSourceLoadOptions loadOptions)
-    {
-      return DataSourceLoader.Load(_historySvc.QueryAlarms(), loadOptions);
-    }
+        [HttpGet("alarms")]
+        public object GetAlarms(DataSourceLoadOptions loadOptions)
+        {
+            return DataSourceLoader.Load(_historySvc.QueryAlarms(), loadOptions);
+        }
 
-    [HttpGet("alerts")]
-    public object GetAlerts(DataSourceLoadOptions loadOptions)
-    {
-      return DataSourceLoader.Load(_historySvc.QueryAlerts(), loadOptions);
+        [HttpGet("alerts")]
+        public object GetAlerts(DataSourceLoadOptions loadOptions)
+        {
+            return DataSourceLoader.Load(_historySvc.QueryAlerts(), loadOptions);
+        }
     }
-  }
 }

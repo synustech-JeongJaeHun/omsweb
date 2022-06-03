@@ -9,23 +9,23 @@ using OMSWeb.Services;
 
 namespace OMSWeb.Controllers
 {
-  [Route("api/[controller]")]
-  [ApiController]
-  public class MessagesController : ControllerBase
-  {
-    private readonly MessageService _msgSvc;
-        
-    public MessagesController(MessageService messageService)
+    [Route("api/[controller]")]
+    [ApiController]
+    public class MessagesController : ControllerBase
     {
-      this._msgSvc = messageService;
-    }
+        private readonly MessageService _msgSvc;
 
-    [HttpPost("command")]
-    public async Task SendCommand(CommandMessageDto command)
-    {
-      await this._msgSvc.SendMessage(command);
-      return;
+        public MessagesController(MessageService messageService)
+        {
+            this._msgSvc = messageService;
+        }
+
+        [HttpPost("command")]
+        public async Task SendCommand(CommandMessageDto command)
+        {
+            await this._msgSvc.SendMessage(command);
+            return;
+        }
+
     }
-        
-  }
 }

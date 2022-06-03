@@ -1,0 +1,15 @@
+:host {
+  display: flex;
+  flex-direction: column;
+}
+
+fieldset {
+  margin-top: 8px;
+}
+
+label {
+  font-size: 12px;
+  font-weight: bold;
+  text-align: right;
+  padding: 4px 8px;
+}

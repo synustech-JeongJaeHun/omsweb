@@ -1,220 +1,290 @@
 import { IOmsTrackMonitor } from './types/IOmsTrackMonitor'
 import {
-  centerZoom,
-  getCameraAndRotation,
-  setCameraAndRotation,
-  approachTo,
+	centerZoom,
+	getCameraAndRotation,
+	setCameraAndRotation,
+	approachTo,
 } from 'MapObjects/cameraAndRotation'
 import { calculateMinMaxXYFromPoints } from 'src/MapObjects/map/utils/size'
 import { initMapSizeProperties } from 'src/MapObjects/map/mapSizeProperties'
-import { findPointById, initPoints } from 'src/TrackObjects/point/points'
 import {
-  findBufferById,
-  initBuffers,
+	deleteHomeToPoint,
+	findPointById,
+	initPoints,
+	insertHomeToPoint,
+	updateHomeToPoint,
+} from 'src/TrackObjects/point/points'
+import {
+	findBufferById,
+	initBuffers,
 } from 'src/TrackObjects/buffer/buffers'
 import { findMtlById, initMtls } from 'src/TrackObjects/mtl/mtls'
 import {
-  findSegmentById,
-  initSegments,
+	findSegmentById,
+	initSegments,
 } from 'src/TrackObjects/segment/segments'
 import { initClusters } from 'src/TrackObjects/cluster/clusters'
 import {
-  findStationById,
-  initStations,
+	findStationById,
+	initStations,
+	setStation,
 } from 'src/TrackObjects/station/stations'
 import {
-  deleteZcu,
-  findZcuById,
-  initZcus,
-  setZcu,
+	deleteZcu,
+	findZcuById,
+	initZcus,
+	setZcu,
 } from 'src/TrackObjects/zcu/zcus'
 import {
-  deleteVehicle,
-  findVehicleById,
-  initVehicles,
-  setVehicle,
+	deleteVehicle,
+	findVehicleById,
+	initVehicles,
+	setVehicle,
 } from 'src/TrackObjects/vehicle/vehicles'
 import {
-  deleteSegmentDisabled,
-  initSegmentDisableds,
-  insertSegmentDisabled,
+	deleteSegmentDisabled,
+	initSegmentDisableds,
+	insertSegmentDisabled,
 } from 'src/TrackObjects/segment/segmentDisableds'
-import { initGroups } from 'src/TrackObjects/group/groups'
+import {
+	deleteGroupObject,
+	insertGroupObject,
+	updateGroupObject,
+	initGroups,
+} from 'src/TrackObjects/group/groups'
 import { createPathElement } from 'src/utils/svg/path'
 import { getPositionForBufferOrStation } from 'src/TrackObjects/utils/locationStationBuffer'
 import { setFocusedObject } from 'src/MapObjects/focus/focus'
 import { setTrackedObject } from 'src/MapObjects/track/track'
 
 const exposed: IOmsTrackMonitor = {
-  getCameraAndRotation,
-  setCameraAndRotation,
+	getCameraAndRotation,
+	setCameraAndRotation,
 
-  setTrack(t) {
-    const { minX, minY, maxX, maxY } = calculateMinMaxXYFromPoints(
-      t.points ?? []
-    )
-    initMapSizeProperties(minX, minY, maxX, maxY)
+	setTrack(t) {
+		// clean up : order is reverse of setup
+		initGroups([])
+		initSegmentDisableds([])
+		initVehicles([])
+		initZcus([])
+		initStations([])
+		initClusters([])
+		initSegments([])
+		initMtls([])
+		initBuffers([])
+		initPoints([])
 
-    // Order is IMPORTANT!
-    // point must be initialized first.
-    initPoints(t.points)
-    initBuffers(t.buffers)
-    initMtls(t.mtls)
-    initSegments(t.segmentParts)
-    initClusters(t.clusters)
-    initStations(t.stations)
-    initZcus(t.zcus)
-    initVehicles(t.vehicles ?? [])
-    initSegmentDisableds(t.segmentDisabled ?? [])
-    initGroups(t.groups)
-  },
-  centerZoom,
+		// setup
+		const { minX, minY, maxX, maxY } = calculateMinMaxXYFromPoints(
+			t.points ?? []
+		)
+		initMapSizeProperties(minX, minY, maxX, maxY)
 
-  find(type, id) {
-    switch (type.trim().toLowerCase()) {
-      case 'vehicle':
-        const vehicle = findVehicleById(id)
-        if (vehicle) this.find('point', vehicle.curPoint)
-        break
-      case 'point':
-        const point = findPointById(id)
-        if (point) {
-          approachTo({ x: point.x, y: point.y })
-        }
-        break
-      case 'segment':
-        const segment = findSegmentById(id)
-        if (segment) {
-          const path = createPathElement(segment.d)
-          const position = path.getPointAtLength(path.getTotalLength() / 2)
+		// Order is IMPORTANT!
+		// point must be initialized first.
+		initPoints(t.points)
+		initBuffers(t.buffers)
+		initMtls(t.mtls)
+		initSegments(t.segmentParts)
+		initClusters(t.clusters)
+		initStations(t.stations)
+		initZcus(t.zcus)
+		initVehicles(t.vehicles ?? [])
+		initSegmentDisableds(t.segmentDisabled ?? [])
+		initGroups(t.groups)
+	},
+	centerZoom,
 
-          approachTo(position)
-        }
-        break
-      case 'station':
-        const station = findStationById(id)
-        if (station) {
-          const position = getPositionForBufferOrStation(station)
+	find(type, id) {
+		switch (type.trim().toLowerCase()) {
+			case 'vehicle':
+				const vehicle = findVehicleById(id)
+				if (vehicle) this.find('point', vehicle.curPoint)
+				break
+			case 'point':
+				const point = findPointById(id)
+				if (point) {
+					approachTo({ x: point.x, y: point.y })
+				}
+				break
+			case 'segment':
+				const segment = findSegmentById(id)
+				if (segment) {
+					const path = createPathElement(segment.d)
+					const position = path.getPointAtLength(path.getTotalLength() / 2)
 
-          if (position) approachTo(position)
-        }
-        break
-      case 'buffer':
-        const buffer = findBufferById(id)
-        if (buffer) {
-          const position = getPositionForBufferOrStation(buffer)
+					approachTo(position)
+				}
+				break
+			case 'station':
+				const station = findStationById(id)
+				if (station) {
+					const position = getPositionForBufferOrStation(station)
 
-          if (position) approachTo(position)
-        }
-        break
-      case 'mtl':
-        const mtl = findMtlById(id)
-        if (mtl) this.find('point', mtl.pointId)
-        break
+					if (position) approachTo(position)
+				}
+				break
+			case 'buffer':
+				const buffer = findBufferById(id)
+				if (buffer) {
+					const position = getPositionForBufferOrStation(buffer)
 
-      default:
-        break
-    }
-  },
+					if (position) approachTo(position)
+				}
+				break
+			case 'mtl':
+				const mtl = findMtlById(id)
+				if (mtl) this.find('point', mtl.pointId)
+				break
 
-  focus(type, id) {
-    switch (type.trim().toLowerCase()) {
-      case 'vehicle':
-        const vehicle = findVehicleById(id)
-        if (vehicle) {
-          setFocusedObject(vehicle)
-        }
-        break
-      case 'point':
-        const point = findPointById(id)
-        if (point) {
-          setFocusedObject(point)
-        }
-        break
-      case 'segment':
-        const segment = findSegmentById(id)
-        if (segment) {
-          setFocusedObject(segment)
-        }
-        break
-      case 'station':
-        const station = findStationById(id)
-        if (station) {
-          setFocusedObject(station)
-        }
-        break
-      case 'buffer':
-        const buffer = findBufferById(id)
-        if (buffer) {
-          setFocusedObject(buffer)
-        }
-        break
-      case 'mtl':
-        const mtl = findMtlById(id)
-        if (mtl) {
-          setFocusedObject(mtl)
-        }
-      case 'zcu':
-        const zcu = findZcuById(id)
-        if (zcu) {
-          setFocusedObject(zcu)
-        }
+			default:
+				break
+		}
+	},
 
-        break
+	focus(type, id) {
+		switch (type.trim().toLowerCase()) {
+			case 'vehicle':
+				const vehicle = findVehicleById(id)
+				if (vehicle) {
+					setFocusedObject(vehicle)
+				}
+				break
+			case 'point':
+				const point = findPointById(id)
+				if (point) {
+					setFocusedObject(point)
+				}
+				break
+			case 'segment':
+				const segment = findSegmentById(id)
+				if (segment) {
+					setFocusedObject(segment)
+				}
+				break
+			case 'station':
+				const station = findStationById(id)
+				if (station) {
+					setFocusedObject(station)
+				}
+				break
+			case 'buffer':
+				const buffer = findBufferById(id)
+				if (buffer) {
+					setFocusedObject(buffer)
+				}
+				break
+			case 'mtl':
+				const mtl = findMtlById(id)
+				if (mtl) {
+					setFocusedObject(mtl)
+				}
+			case 'zcu':
+				const zcu = findZcuById(id)
+				if (zcu) {
+					setFocusedObject(zcu)
+				}
 
-      default:
-        break
-    }
-  },
-  dropFocus() {
-    setFocusedObject(undefined)
-  },
+				break
 
-  track(type, id) {
-    // there is only vehicle.
+			default:
+				break
+		}
+	},
+	dropFocus() {
+		setFocusedObject(undefined)
+	},
 
-    const vehicle = findVehicleById(id)
-    if (vehicle) {
-      setTrackedObject(vehicle)
-    }
-  },
-  stopTrack() {
-    setTrackedObject(undefined)
-  },
+	track(type, id) {
+		// there is only vehicle.
 
-  updateVehicle(op, v) {
-    switch (op) {
-      case 'INSERT':
-      case 'UPDATE':
-        setVehicle(v)
-        break
+		const vehicle = findVehicleById(id)
+		if (vehicle) {
+			setTrackedObject(vehicle)
+		}
+	},
+	stopTrack() {
+		setTrackedObject(undefined)
+	},
 
-      case 'DELETE':
-        deleteVehicle(v)
-        break
-    }
-  },
-  updateSegmentDisabled(op, sd) {
-    switch (op) {
-      case 'INSERT':
-        if (sd.operation === 'INSERT') insertSegmentDisabled(sd.data)
-        break
-      case 'DELETE':
-        deleteSegmentDisabled(sd.id)
-        break
-    }
-  },
-  updateZcu(op, z) {
-    switch (op) {
-      case 'UPDATE':
-        setZcu(z)
-        break
-      case 'DELETE':
-        deleteZcu(z)
-      default:
-        break
-    }
-  },
+	updateVehicle(op, v) {
+		switch (op) {
+			case 'INSERT':
+			case 'UPDATE':
+				setVehicle(v)
+				break
+
+			case 'DELETE':
+				deleteVehicle(v)
+				break
+		}
+	},
+	updateSegmentDisabled(op, sd) {
+		switch (op) {
+			case 'INSERT':
+				if (sd.operation === 'INSERT') insertSegmentDisabled(sd.data)
+				break
+			case 'DELETE':
+				deleteSegmentDisabled(sd.id)
+				break
+		}
+	},
+	updateZcu(op, z) {
+		switch (op) {
+			case 'UPDATE':
+				setZcu(z)
+				break
+			case 'DELETE':
+				deleteZcu(z)
+			default:
+				break
+		}
+	},
+
+	updateStation(op, s) {
+		switch (op) {
+			case 'UPDATE':
+				setStation(s)
+				break
+
+			default:
+				break
+		}
+	},
+
+	updateGroupObject(op, go, data) {
+		switch (op) {
+			case 'INSERT':
+				insertGroupObject(go)
+				break
+			case 'UPDATE':
+				if (data) updateGroupObject(data)
+				break
+			case 'DELETE':
+				deleteGroupObject(go)
+				break
+
+			default:
+				break
+		}
+	},
+
+	updateHome(op, h) {
+		switch (op) {
+			case 'INSERT':
+				insertHomeToPoint(h)
+				break
+			case 'UPDATE':
+				updateHomeToPoint(h)
+				break
+			case 'DELETE':
+				deleteHomeToPoint(h)
+				break
+
+			default:
+				break
+		}
+	},
 }
 
 export { exposed }

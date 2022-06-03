@@ -1,56 +1,65 @@
-<h2>{{ "names.mapInfo" | translate }}</h2>
+<section>
+  <h2>{{ "names.mapInfo" | translate }}</h2>
 
-<div class="flex-row">
-  <mat-form-field appearance="outline">
-    <mat-label>{{ "names.mapName" | translate }}</mat-label>
-    <input [readonly]="true" matInput [value]="currentMapName" />
-  </mat-form-field>
-  <mat-form-field appearance="outline">
-    <mat-label>{{ "names.mapVersion" | translate }}</mat-label>
-    <input [readonly]="true" matInput [value]="currentMapVersion">
-  </mat-form-field>
-  <mat-form-field appearance="outline">
-    <mat-label>{{ "names.fileName" | translate }}</mat-label>
-    <input [readonly]="true" matInput [value]="currentFileName">
-  </mat-form-field>
+  <div class="flex-row">
+    <div class="flex-column label-form">
+      <label>{{ "names.mapName" | translate }}</label>
+      <dx-text-box [disabled]="true" [value]="currentMapName" width="100%"> </dx-text-box>
+    </div>
+    <div class="flex-column label-form">
+      <label>{{ "names.mapVersion" | translate }}</label>
+      <dx-text-box [disabled]="true" [value]="currentMapVersion" width="100%"> </dx-text-box>
+    </div>
+    <div class="flex-column label-form">
+      <label>{{ "names.fileName" | translate }}</label>
+      <dx-text-box [disabled]="true" [value]="currentFileName" width="100%"> </dx-text-box>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>{{ "names.mapUpdate" | translate }}</h2>
+
+  <div class="flex-row">
+    <div class="flex-column label-form">
+      <label>{{ "names.mapName" | translate }}</label>
+      <dx-text-box class="expected" [disabled]="true" [(value)]="currentMapName" width="100%"> </dx-text-box>
+    </div>
+    <div class="flex-column label-form">
+      <label>{{ "names.mapVersion" | translate }}</label>
+      <dx-text-box class="expected" [disabled]="true" [value]="updateMapVersion" width="100%"> </dx-text-box>
+    </div>
+    <div class="flex-column label-form">
+      <label>{{ "names.fileName" | translate }}</label>
+      <dx-autocomplete [disabled]="isUpdating" width="100%" [(value)]="updateFileName" [dataSource]="maps"
+        (onFocusIn)="updateMapFiles()"> </dx-autocomplete>
+    </div>
+  </div>
+</section>
+<div class="overwrite-form">
+  <label>
+    <input type="checkbox" (click)="onChangedOverwrite()" />
+    <span>
+      {{ "names.overwriteDbInfo" | translate }}
+    </span>
+  </label>
 </div>
-
-<h2>{{ "names.mapUpdate" | translate }}</h2>
-
-<div class="flex-row">
-  <mat-form-field appearance="outline">
-    <mat-label>{{ "names.mapName" | translate }}</mat-label>
-    <input matInput [(ngModel)]="updateMapName" />
-  </mat-form-field>
-  <mat-form-field appearance="outline">
-    <mat-label>{{ "names.mapVersion" | translate }}</mat-label>
-    <input [readonly]="true" matInput [value]="updateMapVersion">
-  </mat-form-field>
-  <mat-form-field appearance="outline">
-    <mat-label>{{ "names.fileName" | translate }}</mat-label>
-    <input matInput [(ngModel)]="updateFileName" [matAutocomplete]="auto" (focus)="updateMapFiles()">
-    <mat-autocomplete #auto>
-      <mat-option *ngFor="let map of maps" [value]="map">
-        {{map}}
-      </mat-option>
-    </mat-autocomplete>
-  </mat-form-field>
-</div>
-
+<br />
 <mat-progress-bar class="mb-30" *ngIf="isUpdating" mode="indeterminate" aria-label="Loading"></mat-progress-bar>
-<button *ngIf="(isUpdating === false)" mat-raised-button color="primary" class="mb-30" (click)="onUpdateMap()">Update</button>
+<label><button *ngIf="(isUpdating === false)" mat-raised-button color="primary" class="mb-30"
+    (click)="onUpdateMap()">Update</button></label>
+<div class="update-fail" *ngIf="isUpdateFail">{{ "names.updateFailed" | translate }}: {{failReason}} </div>
 
-<h2>{{ "names.vehicleMap" | translate }}</h2>
-
-<div class="actions-container">
+<!-- <h2>{{ "names.vehicleMap" | translate }}</h2> -->
+<!-- <div class="actions-container">
   <button mat-raised-button class="dense" color="primary" (click)="onRefresh()">
     {{ "names.refreshMapInfo" | translate }}
   </button>
   <button mat-raised-button class="dense" color="primary" (click)="onUpdateVehicles()" [disabled]="!canControl">
     {{ "names.requestMapUpdate" | translate }}
   </button>
-</div>
-
+</div> -->
+<!--
 <dx-data-grid id="dataGrid" [dataSource]="dataSource" [columnAutoWidth]="false" [remoteOperations]="true" width="100%" [height]="250"
               [showBorders]="true" [hoverStateEnabled]="true" [(selectedRowKeys)]="selectedIds">
   <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
@@ -67,4 +76,4 @@
   <dxi-column [width]="100" dataType="string" dataField="map" [caption]="'names.mapDb' | translate"></dxi-column>
   <dxi-column [width]="100" dataType="string" dataField="mapVersion" [caption]="'names.mapVersion' | translate"></dxi-column>
   <dxi-column [width]="100" [caption]="'names.mapVersion' | translate" [calculateCellValue]="calculateConflict"></dxi-column>
-</dx-data-grid>
+</dx-data-grid> -->

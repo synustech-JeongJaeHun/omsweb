@@ -11,10 +11,18 @@ namespace OMSWeb.Repositories
 
         public DataAccess(IConfiguration configuration)
         {
+            /*
+            // appsettings.json
+            //"ConnectionStrings": {
+		    //    "OMS-UI": "Server=localhost;Port=5432;Database=oms_ui;User Id=oms;Password=oms;",
+		    //    "OMS-Track": "Server=localhost;Port=5432;Database=semioht;User Id=oms;Password=oms;"
+	        //},
+            */
             // get default AppSetting.json
             Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
-            this.connectionStringUi = configuration.GetConnectionString("OMS-UI");
-            this.connectionStringTrack = configuration.GetConnectionString("OMS-Track");
+            //this.connectionStringUi = configuration.GetConnectionString("OMS-UI");
+            //this.connectionStringTrack = configuration.GetConnectionString("OMS-Track");
+            
 
             // get config from oms_settings.ini
             AppConfig.GetConnectStrFromOmsSettings(out string connectUiStr, out string connectTrackStr);

@@ -16,57 +16,63 @@ const segmentMap = new Map<Segment['id'], Segment>()
 const segmentMapByStartPointId = new Map<Point['id'], Segment[]>()
 
 function initSegments(segparts: ITrackData['segmentParts']) {
-  segments.value = makeSegmentsFromParts(segparts ?? [])
-  segments.value.forEach((s) => {
-    // segmentMap
-    segmentMap.set(s.id, s)
+	// clean
+	segments.value = []
+	segmentMap.clear()
+	segmentMapByStartPointId.clear()
 
-    // segmentMapByStartPoint
-    const key = s.startPoint
-    const value = segmentMapByStartPointId.get(key) ?? []
-    segmentMapByStartPointId.set(key, [...value, s])
-  })
+	// set
+	segments.value = makeSegmentsFromParts(segparts ?? [])
+	segments.value.forEach((s) => {
+		// segmentMap
+		segmentMap.set(s.id, s)
+
+		// segmentMapByStartPoint
+		const key = s.startPoint
+		const value = segmentMapByStartPointId.get(key) ?? []
+		segmentMapByStartPointId.set(key, [...value, s])
+	})
 }
 
 function findSegmentById(id: number) {
-  return segmentMap.get(id)
+	return segmentMap.get(id)
 }
 
 function setSegmentDisabled(
-  id: Segment['id'],
-  disabled: boolean,
-  disabledByMtl: boolean
+	id: Segment['id'],
+	disabled: boolean,
+	disabledByMtl: boolean
 ) {
-  const segment = findSegmentById(id)
-  if (segment === undefined) return
+	const segment = findSegmentById(id)
+	if (segment === undefined) return
 
-  segment.disabled = disabled
-  segment.disabledByMtl = disabledByMtl
+	segment.disabled = disabled
+	segment.disabledByMtl = disabledByMtl
 }
 
 function findSegmentByPoints(startPointId: number, endPointId: number) {
-  return segmentMapByStartPointId
-    .get(startPointId)
-    ?.find((s) => s.endPoint === endPointId)
+	return segmentMapByStartPointId
+		.get(startPointId)
+		?.find((s) => s.endPoint === endPointId)
 }
 
 function makeD(
-  startPointId: number,
-  endPointId: number,
-  parts: SegmentPart[],
-  length: number
+	startPointId: number,
+	endPointId: number,
+	parts: SegmentPart[],
+	length: number
 ) {
-  const startPoint = findPointById(startPointId) ?? { x: 0, y: 0 }
-  const endPoint = findPointById(endPointId) ?? { x: 0, y: 0 }
+	const startPoint = findPointById(startPointId) ?? { x: 0, y: 0 }
+	const endPoint = findPointById(endPointId) ?? { x: 0, y: 0 }
 
-  return makeDFromSegment(startPoint, endPoint, parts, length)
+	return makeDFromSegment(startPoint, endPoint, parts, length)
 }
 
 export {
-  segments,
-  initSegments,
-  findSegmentById,
-  findSegmentByPoints,
-  setSegmentDisabled,
-  makeD,
+	segments,
+	initSegments,
+	findSegmentById,
+	findSegmentByPoints,
+	setSegmentDisabled,
+	makeD,
 }

@@ -1,17 +1,13 @@
 .control-container {
-  display: grid;
-  // grid-template-columns: repeat(2, 1fr) 12px repeat(2, 1fr);
-  // grid-template-columns: repeat(3, 1fr);
-  grid-template-columns: 1fr repeat(2, fit-content(130px));
-  column-gap: 8px;
-  align-items: flex-end;
-
   mat-form-field {
     max-width: 130px;
   }
+
   mat-select {
     max-height: 18px;
   }
+
+  overflow: hidden;
 }
 
 .window-period {
@@ -29,14 +25,28 @@
     font-size: 0.7rem;
   }
 }
+
 .form-period {
-  grid-column: span 3;
   display: grid;
+  grid-column: span 3;
   grid-template-columns: 1fr 16px 1fr;
   align-items: center;
 }
+
 .form-time {
   grid-column-start: 1;
+}
+
+.form-speed {
+  margin-right: 5px;
+}
+
+.form-step {
+  min-width: 200px;
+}
+
+::ng-deep .mat-form-field-wrapper {
+  margin-bottom: -1.25em;
 }
 
 .date-divider {
@@ -44,15 +54,16 @@
 }
 
 .control-slider {
-  margin-top: 20px;
-  grid-column: span 3;
+  margin-top: 5px;
+  grid-column: span 2;
   display: grid;
-  grid-template-columns: 100px 1fr 50px;
+  grid-template-columns: 70px 1fr;
   align-items: center;
 
   .slider-name {
     font-weight: bold;
   }
+
   .slider-value {
     text-align: right;
     font-size: 11px;
@@ -63,27 +74,14 @@ mat-select {
   font-size: 12px;
 }
 
-mat-form-field.readonly {
-  ::ng-deep {
-    .mat-form-field-wrapper {
-      padding-bottom: 0;
-    }
-    .mat-form-field-underline {
-      display: none;
-    }
-    input {
-      font-size: 12px;
-    }
-  }
-}
-
 .control-play {
-  margin-top: 30px;
+  margin-top: 40px;
   $playIconSize: 40px;
   $playButtonSize: 50px;
-  // grid-column: span 3;
-  padding-bottom: 20px;
-  text-align: center;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
 
   mat-icon {
     font-size: $playIconSize;
@@ -98,6 +96,7 @@ mat-form-field.readonly {
     line-height: $playButtonSize;
   }
 }
+
 mat-slider {
   width: 100%;
 }

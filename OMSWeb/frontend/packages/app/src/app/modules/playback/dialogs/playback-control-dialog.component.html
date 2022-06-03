@@ -33,12 +33,11 @@
           [tooltip]="timeRangeTooltip"
           [start]="timeRangeStart" [end]="timeRangeEnd"
           [label]="timeRangeLabel"
+          [disabled]="!isAvailableSnapshotSliderChange"
           (onValueChanged)="onSnapshotRangeSliderChanged($event)" >
         </dx-range-slider>
 
-        <div class="slider-value">
-
-        </div>
+        <div class="slider-value"></div>
       </div>
       <div class="control-slider" >
         <div class="slider-name">{{ "names.events" | translate }}</div>
@@ -57,44 +56,44 @@
         ></dxo-tooltip>
 
         </dx-slider>
-        <div class="slider-value">{{ 'TODO #1' }}</div>
+        <div class="slider-value"></div>
       </div>
       <div class="control-play">
-        <button mat-icon-button id="prev" [matTooltip]="'Previous snapshot'"
-          [disabled]="!isAvailableToBeforeSnapshot" (click)="onBeforeSnapshot()">
-          <mat-icon>skip_previous</mat-icon>
-        </button>
+        <div>
+          <button mat-icon-button id="prev" [matTooltip]="'Previous snapshot'"
+            [disabled]="!isAvailableToBeforeSnapshot" (click)="onBeforeSnapshot()">
+            <mat-icon>skip_previous</mat-icon>
+          </button>
 
-        <button mat-icon-button id="play"
-          [matTooltip]="playService.isPlaying ? 'Pause' : 'Play'"
-          (click)="playService.isPlaying ? playService.stop() : playService.resume()">
-          <mat-icon>{{ playService.isPlaying ? "pause": "play_arrow" }}</mat-icon>
-        </button>
+          <button mat-icon-button id="play"
+            [matTooltip]="playService.isPlaying ? 'Pause' : 'Play'"
+            (click)="playService.isPlaying ? playService.stop() : playService.resume()">
+            <mat-icon>{{ playService.isPlaying ? "pause": "play_arrow" }}</mat-icon>
+          </button>
 
-        <button mat-icon-button id="next" [matTooltip]="'Next snapshot'"
-          [disabled]="!isAvailableToNextSnapshot" (click)="onNextSnapshot()">
-          <mat-icon>skip_next</mat-icon>
-        </button>
+          <button mat-icon-button id="next" [matTooltip]="'Next snapshot'"
+            [disabled]="!isAvailableToNextSnapshot" (click)="onNextSnapshot()">
+            <mat-icon>skip_next</mat-icon>
+          </button>
+        </div>
+        <div>
+          <mat-form-field appearance="fill" class="form-speed">
+            <mat-label>{{ "names.speed" | translate }}</mat-label>
+            <mat-select [(ngModel)]="playService.playSpeed" >
+              <mat-option *ngFor="let playSpeed of playService.playSpeeds " [value]="playSpeed">{{ playSpeed }}x</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill" class="form-step">
+            <mat-label>{{ "names.events" | translate }}</mat-label>
+            <mat-select class="form-select" [value]="playService.currentEvent?.eventId" (valueChange)="changeTimeByEvent($event)">
+              <mat-option *ngFor="let event of playService.timelineEvents" [value]="event.eventId">
+                #{{event.eventId}} | {{event.eventTime | date: "HH:mm:ss"}} | {{event.tableName}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
       </div>
-      <mat-form-field appearance="fill" class="form-speed">
-        <mat-label>{{ "names.speed" | translate }}</mat-label>
-        <mat-select [(ngModel)]="playService.playSpeed" >
-          <mat-option *ngFor="let playSpeed of playService.playSpeeds " [value]="playSpeed">{{ playSpeed }}x</mat-option>
-        </mat-select>
-      </mat-form-field>
-
-      <mat-form-field appearance="fill" class="form-step">
-        <mat-label>{{ "names.events" | translate }}</mat-label>
-        <!-- <mat-select [disabled]="!ready" [(value)]="options.nextEvent" (valueChange)="onChangeEventTo()">
-          <mat-option *ngFor="let item of eventList; let i = index" [value]="i">#{{ item.eventId }} / {{ item.eventTime
-            | date: 'MM-dd HH:mm:ss' }} / {{ item.tableName }}</mat-option>
-        </mat-select> -->
-        <mat-select [value]="playService.currentEvent?.eventId" (valueChange)="changeTimeByEvent($event)">
-          <mat-option *ngFor="let event of playService.timelineEvents" [value]="event.eventId">
-            #{{event.eventId}} | {{event.eventTime | date: "HH:mm:ss"}} | {{event.tableName}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
     </div>
   </ng-container>
 </oms-dialog-base>

@@ -1,35 +1,63 @@
 :host {
+  width: calc(100vw - 40px);
+  height: calc(100vh - 30px);
   padding: 20px;
-  padding-bottom: 15px;
 }
 
-mat-form-field .mat-form-field-wrapper {
-  padding-bottom: 0px;
+section {
+  margin-bottom: 20px;
 }
 
 h2 {
   margin-top: 0px;
-}
-
-mat-form-field {
-  margin-right: 10px;
-}
-
-.mb-30 {
-  margin-bottom: 30px;
+  font-size: 14px;
 }
 
 .flex-row {
   display: flex;
   flex-direction: row;
-
   align-items: center;
+  justify-content: space-between;
+  width: 100%;
 }
 
-.actions-container {
-  margin-bottom: 10px;
+.flex-column {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
 
-  button {
-    margin-right: 10px;
+.label-form {
+  width: 30%;
+
+  label {
+    margin-left: 2px;
+    font-size: 5px;
+    margin-bottom: 2px;
   }
+}
+
+.overwrite-form label {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  input[type='checkbox'] {
+    margin: 0px;
+    margin-right: 5px;
+  }
+
+  span {
+    font-size: small;
+  }
+}
+
+.expected {
+  background-color: rgba($color: #b8b8b8, $alpha: 0.3);
+}
+
+.update-fail {
+  font-size: x-small;
+  color: red;
+  margin-top: 5px;
 }

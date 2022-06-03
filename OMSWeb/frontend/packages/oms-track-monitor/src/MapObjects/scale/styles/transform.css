@@ -1,0 +1,11 @@
+@media (min-resolution: 120dpi) {
+  #scale-text {
+    font-size: 12px;
+  }
+}
+
+@media (max-resolution: 119dpi) {
+  #scale-text {
+    font-size: max(0.66vmax, 12px);
+  }
+}

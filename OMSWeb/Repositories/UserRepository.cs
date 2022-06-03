@@ -17,7 +17,7 @@ namespace OMSWeb.Repositories
     public UserEntity GetUserByUserId(string userId)
     {
       var sql = $@"
-      SELECT id, user_id, first_name, last_name, email, password,
+      SELECT id, user_id, first_name, last_name, email, password, time_created,
   ARRAY(SELECT DISTINCT role_id FROM user_roles WHERE user_id=id ORDER BY role_id ASC) AS roles,
   ARRAY(SELECT DISTINCT permission_id FROM role_permissions INNER JOIN user_roles ON role_permissions.role_id = user_roles.role_id AND user_roles.user_id=id ORDER BY permission_id ASC) as permissions
   FROM users WHERE user_id = @userId";
@@ -35,7 +35,7 @@ namespace OMSWeb.Repositories
     public UserEntity GetUserById(string id)
     {
       var sql = $@"
-      SELECT id, user_id, first_name, last_name, email, password,
+      SELECT id, user_id, first_name, last_name, email, password, time_created,
   ARRAY(SELECT DISTINCT role_id FROM user_roles WHERE user_id=id ORDER BY role_id ASC) AS roles,
   ARRAY(SELECT DISTINCT permission_id FROM role_permissions INNER JOIN user_roles ON role_permissions.role_id = user_roles.role_id AND user_roles.user_id=id ORDER BY permission_id ASC) as permissions
   FROM users WHERE id = @id ::uuid";
@@ -53,7 +53,7 @@ namespace OMSWeb.Repositories
     public UserEntity GetUserByEmail(string email)
     {
       var sql = $@"
-      SELECT id, user_id, first_name, last_name, email, password,
+      SELECT id, user_id, first_name, last_name, email, password, time_created,
   ARRAY(SELECT DISTINCT role_id FROM user_roles WHERE user_id=id ORDER BY role_id ASC) AS roles,
   ARRAY(SELECT DISTINCT permission_id FROM role_permissions INNER JOIN user_roles ON role_permissions.role_id = user_roles.role_id AND user_roles.user_id=id ORDER BY permission_id ASC) as permissions
   FROM users WHERE email = '{email}'";
@@ -68,7 +68,7 @@ namespace OMSWeb.Repositories
     public IQueryable<UserEntity> QueryUsers()
     {
       var sql = @"
-    SELECT users.id, users.user_id, first_name, last_name, email, '****' as password, 
+    SELECT users.id, users.user_id, first_name, last_name, email, '****' as password, time_created,
     array_remove(array_agg(DISTINCT role_id),NULL) AS roles, 
     array_remove(array_agg(DISTINCT permission_id),NULL) AS permissions
     FROM (
@@ -131,8 +131,8 @@ namespace OMSWeb.Repositories
       int result = -1;
 
       var insertUserSql = @"
-      INSERT INTO users (id, user_id, first_name, last_name, email, password)
-      VALUES (@id, @user_id, @first_name, @last_name, @email, @password);
+      INSERT INTO users (id, user_id, first_name, last_name, email, password, time_created)
+      VALUES (@id, @user_id, @first_name, @last_name, @email, @password, now());
       ";
 
       var insertUserRoleSql = @"
@@ -185,6 +185,46 @@ namespace OMSWeb.Repositories
         }
         trans.Commit();
       }
+      return result;
+    }
+
+    public int UpdateUser(Guid id, ProfileFormDto profileFormDto)
+    {
+      var result = -1;
+      var updateUserSql = @"
+        UPDATE users 
+        SET 
+          first_name = @first_name, 
+          last_name = @last_name, 
+          email = @email, 
+          password = @password 
+        WHERE id = @id;
+        ";
+      using (var conn = ConnectUi())
+      {
+        conn.Open();
+        var trans = conn.BeginTransaction();
+        using (var cmd = new NpgsqlCommand(updateUserSql, conn))
+        {
+          try
+          {
+            cmd.Parameters.AddWithValue("id", id);
+            cmd.Parameters.AddWithValue("first_name", profileFormDto.FirstName);
+            cmd.Parameters.AddWithValue("last_name", profileFormDto.LastName);
+            cmd.Parameters.AddWithValue("email", profileFormDto.Email);
+            cmd.Parameters.AddWithValue("password", profileFormDto.Password);
+
+            result = cmd.ExecuteNonQuery();
+          }
+          catch (Exception ex)
+          {
+            trans.Rollback();
+            throw ex;
+          }
+        }
+        trans.Commit();
+      }
+
       return result;
     }
 

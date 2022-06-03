@@ -56,6 +56,15 @@ export class NotificationsService {
   //   );
   // }
 
+  alertsDataSource(): DataSource {
+    return new DataSource({
+      store: AspNetData.createStore({
+        key: 'id',
+        loadUrl: `${this.baseUrl}/alerts`,
+      }),
+    });
+  }
+
   alarmsDataSource(): DataSource {
     return new DataSource({
       store: AspNetData.createStore({
@@ -63,12 +72,11 @@ export class NotificationsService {
         loadUrl: `${this.baseUrl}/alarms`,
       }),
     });
-
   }
 
-  clearAlerts(ids: number[]): Observable<void> {
-    console.error('@@ TODO : clear alert api 구현 필요');
-    return EMPTY;
+  clearAlerts(id: number[]): Observable<void> {
+    return this.http
+      .put<void>(`${this.baseUrl}/clearwarning`, id);
   }
 
   clearAlarm(id: number): Observable<void> {

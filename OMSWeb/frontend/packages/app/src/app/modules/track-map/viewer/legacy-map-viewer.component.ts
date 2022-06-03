@@ -11,7 +11,6 @@ import { takeUntil } from 'rxjs/operators'
 
 import { PermissionEnums } from '../../../models/enums'
 import { IPreferences } from '../../../models/settings.model'
-import { HubService } from '../../../services/hub.service'
 import { AuthService } from '../../../services/auth.service'
 
 import '@daimre/oms-track-monitor'
@@ -19,20 +18,30 @@ import {
 	OmsTrackMonitorElement,
 	IOmsTrackMonitor,
 } from '@daimre/oms-track-monitor'
-import { StatusService } from '@oms/root/services/status.service'
 import { MapStatesService } from '../map-states.service'
 import { SettingsService } from '@oms/root/services/settings.service'
-import { TrackStatusService } from '../../../services/track-status.service'
 import { TrackMonitorSettingService } from '../../../services/track-monitor-setting.service'
 import d3 = require('d3')
-import { TracksService } from '@oms/root/services/tracks.service'
 import { TranslateService } from '@ngx-translate/core'
-import { MessagesService } from '@oms/root/services/messages.service'
 import { DialogService } from '@oms/root/services/dialog.service'
-import { IVehicleCommandMessage } from '@oms/root/models/command.model'
 import { PlaybackPlayService } from '@oms/root/services/playback-play.service'
 import { MatDialog, MatDialogRef } from '@angular/material/dialog'
-import { ClockChangedEvent } from '@oms/root/models/playback.model'
+import {
+	ClockChangedEvent,
+	SegmentBlockingHistoryEvent,
+	TimelineEvent,
+	VehicleHistoryEvent,
+} from '@oms/root/models/playback.model'
+import {
+	convertSegmentBlockingHistoryEventToTmUpdateDtoSegmentDisabled,
+	convertSnapshotSegmentBlockingToTmUpdateDtoSegmentDisabled,
+	convertSnapshotVehicleToTmUpdateDtoVehicle,
+	convertTrackBufferToTmBuffer,
+	convertTrackMtlToTmMtl,
+	convertTrackPointToTmPoint,
+	convertTrackStationToTmStation,
+	convertVehicleHistoryEventToTmUpdateDtoVehicle,
+} from '../../playback/utils/playback-convert.util'
 
 @Component({
 	selector: 'oms-legacy-map-viewer',
@@ -51,12 +60,6 @@ export class LegacyMapViewerComponent implements OnInit, OnDestroy {
 
 	get tmSetting() {
 		return this.trackMonitorSettingService.trackSetting
-	}
-	get canSetSource() {
-		return !this.mapStatesService.transferCommandState.sourceDisabled
-	}
-	get canSetDest() {
-		return !this.mapStatesService.transferCommandState.destDisabled
 	}
 
 	public viewerSetting = {
@@ -93,44 +96,14 @@ export class LegacyMapViewerComponent implements OnInit, OnDestroy {
 	constructor(
 		private router: Router,
 		private auth: AuthService,
-		private hubSvc: HubService,
-		private statusService: StatusService,
 		private mapStatesService: MapStatesService,
+		private playService: PlaybackPlayService,
 		private settingSvc: SettingsService,
-		private trackStatusService: TrackStatusService,
-		private tracksService: TracksService,
 		private trackMonitorSettingService: TrackMonitorSettingService,
-		private messageSvc: MessagesService,
 		private dialogSvc: DialogService,
 		private $t: TranslateService,
-		private playbackPlayService: PlaybackPlayService,
 		private dialog: MatDialog,
-	) {
-		this.auth.certUpdated$.pipe(takeUntil(this.destroy$)).subscribe((cert) => {
-			this.router.navigateByUrl('/', { skipLocationChange: false }).then(() => {
-				this.router.navigate([cert ? '/monitor/status' : '/'])
-			})
-		})
-
-		this.playbackPlayService.clockChanged.subscribe(
-			(event: ClockChangedEvent) => {
-				console.log('clockchanged', event)
-				switch (event.type) {
-					case 'TrackChanged':
-						break
-					case 'SnapshotChanged':
-						break
-					case 'EventsChanged':
-						break
-					case 'NextFrameEvent':
-						break
-
-					default:
-						break
-				}
-			},
-		)
-	}
+	) {}
 
 	hasPermissions(permissions: number[]): boolean {
 		return this.auth.hasPermissions(permissions)
@@ -141,35 +114,25 @@ export class LegacyMapViewerComponent implements OnInit, OnDestroy {
 		// @ts-ignore
 		this.viewer = document.getElementById('track-canvas')._instance.exposed
 
+		this.setToCurrentSnapshot()
+
 		this.cameraAndRotationSyncId = setInterval(() => {
 			this.getCameraAndRotation()
 		}, 500)
+		this.viewer.setCameraAndRotation({
+			position: this.tmSetting.position ?? {
+				x: (this.playService.size.minX + this.playService.size.maxX) / 2,
+				y: (this.playService.size.minY + this.playService.size.maxY) / 2,
+			},
+			viewBoxWidth: this.tmSetting.viewBoxWidth,
+			rotation: this.tmSetting.rotation,
+		})
 
 		this.trackMonitorSettingService.rotationChanged.subscribe((rotation) =>
 			this.viewer.setCameraAndRotation({ rotation }),
 		)
 
-		// // @ts-ignore
-		// this.viewer.setTrack({
-		//   ...this.trackData,
-		//   segmentParts: this.trackData.segments,
-		//   clusters: this.trackData.clusters.map((c) => ({
-		//     ...c,
-		//     // @ts-ignore
-		//     segments: c.segments.split(',').map((id) => parseInt(id.trim())),
-		//   })),
-		// });
-		// this.attachEvents();
-		// this.attachHubEvents();
-
-		// this.viewer.setCameraAndRotation({
-		//   position: this.tmSetting.position ?? {
-		//     x: (this.trackData.size.minX + this.trackData.size.maxX) / 2,
-		//     y: (this.trackData.size.minY + this.trackData.size.maxY) / 2,
-		//   },
-		//   viewBoxWidth: this.tmSetting.viewBoxWidth,
-		//   rotation: this.tmSetting.rotation,
-		// });
+		this.attachEvents()
 	}
 	ngOnDestroy(): void {
 		this.destroy$.next()
@@ -178,174 +141,170 @@ export class LegacyMapViewerComponent implements OnInit, OnDestroy {
 		clearInterval(this.cameraAndRotationSyncId)
 	}
 
-	setTrackByTime() {}
+	private setToCurrentSnapshot() {
+		// @ts-ignore
+		this.viewer.setTrack({
+			points: (this.playService.track.data.points ?? []).map(
+				convertTrackPointToTmPoint,
+			),
+
+			segmentParts: (this.playService.track.data.segment_parts ?? []).map(
+				(sp) => {
+					const segment = (this.playService.track.data.segments ?? []).find(
+						(s) => s.id === sp.segment_id,
+					)
+
+					return {
+						id: segment.id,
+						logicalId: segment.logical_id,
+						physicalId: segment.physical_id,
+						startPoint: segment.start_point,
+						endPoint: segment.end_point,
+						length: segment.length,
+						speed: segment.speed,
+
+						segpartId: sp.id,
+						type: sp.type,
+						location: sp.location,
+						direction: sp.direction,
+					}
+				},
+			),
+			buffers: (this.playService.track.data.buffers ?? []).map(
+				convertTrackBufferToTmBuffer,
+			),
+			stations: (this.playService.track.data.stations ?? []).map(
+				convertTrackStationToTmStation,
+			),
+			mtls: (this.playService.track.data.mtls ?? []).map(
+				convertTrackMtlToTmMtl,
+			),
+			vehicles: [],
+			segmentDisabled: [],
+		})
+
+		// make other task
+		setTimeout(() => {
+			const vehicles = this.playService.currentSnapshot.data.vehicles ?? []
+			vehicles.forEach((v) => {
+				this.viewer.updateVehicle(
+					'INSERT',
+					convertSnapshotVehicleToTmUpdateDtoVehicle(
+						v,
+						this.playService.currentOrders,
+					),
+				)
+			})
+
+			const segmentBlockings =
+				this.playService.currentSnapshot.data.segment_blocking ?? []
+			segmentBlockings.forEach((sb) => {
+				this.viewer.updateSegmentDisabled(
+					'INSERT',
+					convertSnapshotSegmentBlockingToTmUpdateDtoSegmentDisabled(
+						'INSERT',
+						sb,
+					),
+				)
+			})
+		}, 1)
+	}
+
+	private applyEvents(events: TimelineEvent[]) {
+		this.setToCurrentSnapshot()
+		setTimeout(() => this.consumeEvents(events), 2)
+	}
+
+	private consumeEvents(events: TimelineEvent[]) {
+		const vehicleReduceMap = new Map<
+			TimelineEvent['historySourceId'],
+			VehicleHistoryEvent
+		>()
+		events
+			.filter((e) => e.tableName === 'vehicle_history')
+			.forEach((event) => {
+				const id = event.historySourceId
+				const eventInMap = vehicleReduceMap.get(id)
+				// @ts-ignore
+				vehicleReduceMap.set(id, { ...eventInMap, ...event })
+			})
+		const segmentBlockingEvents = events.filter(
+			(e) => e.tableName === 'segment_blocking_history',
+		) as SegmentBlockingHistoryEvent[]
+		vehicleReduceMap.forEach((event) => this.applyVehicleHistoryEvent(event))
+		segmentBlockingEvents.forEach((event) =>
+			this.applySegmentBlockingHistoryEvent(event),
+		)
+	}
+	private applyVehicleHistoryEvent(event: VehicleHistoryEvent) {
+		this.viewer.updateVehicle(
+			event.historyChangeType,
+			convertVehicleHistoryEventToTmUpdateDtoVehicle(
+				event,
+				this.playService.currentOrders,
+			),
+		)
+	}
+	private applySegmentBlockingHistoryEvent(event: SegmentBlockingHistoryEvent) {
+		this.viewer.updateSegmentDisabled(
+			event.historyChangeType,
+			convertSegmentBlockingHistoryEventToTmUpdateDtoSegmentDisabled(event),
+		)
+	}
+
+	private attachEvents() {
+		this.mapStatesService.toolbarToggleEvent$
+			.pipe(takeUntil(this.destroy$))
+			.subscribe((event) => {
+				if (event.type === 'itemDetails') {
+					this.detailsVisible = event.value
+				} else if (event.type === 'controlTable') {
+					// setTimeout(() => {
+					//   this.viewer.adjust_floaters();
+					// }, 100);
+				} else {
+					// this.viewer?.onChangeVisibility(event);
+				}
+			})
+
+		this.mapStatesService.statusTableResizeEvent$
+			.pipe(takeUntil(this.destroy$))
+			.subscribe((tableHeightNum) => {
+				this.viewerSetting.rect.height =
+					window.innerHeight -
+					40 -
+					(tableHeightNum === 0 ? 0 : tableHeightNum + 50)
+			})
+
+		this.auth.certUpdated$.pipe(takeUntil(this.destroy$)).subscribe((cert) => {
+			this.router.navigateByUrl('/', { skipLocationChange: false }).then(() => {
+				this.router.navigate([cert ? '/monitor/status' : '/'])
+			})
+		})
+
+		this.playService.clockChanged.subscribe((event: ClockChangedEvent) => {
+			console.log('clockchanged', event)
+			switch (event.type) {
+				case 'SnapshotChanged':
+					this.setToCurrentSnapshot()
+					break
+				case 'EventsChanged':
+					this.applyEvents(event.events)
+					break
+				case 'NextFrameEvent':
+					this.consumeEvents(event.events)
+					break
+
+				default:
+					break
+			}
+		})
+	}
 
 	changeFocus(event: any) {
 		this.selectedObject = event
 		// @ts-ignore
 		this.focusOnTM({ type: event.objectType, id: event.id })
-	}
-
-	onApplyPointChange(id: number, isHome: boolean, selectedGroup: number) {
-		this.tracksService
-			.updatePoint(id, {
-				isHome,
-				group: selectedGroup,
-			})
-			.subscribe()
-	}
-
-	onVehicleCommand(name: string) {
-		let commandMessage: IVehicleCommandMessage
-		let needConfirm: boolean = false
-
-		switch (name) {
-			case 'initialize':
-				commandMessage = { action: 'initialize' } //auto
-				needConfirm = true
-				break
-			case 'reset':
-				commandMessage = { action: 'reset' }
-				needConfirm = true
-				break
-			case 'stop':
-				commandMessage = { action: 'stop' } // estop
-				needConfirm = true
-				break
-			case 'zcu_go':
-				commandMessage = { action: 'zcu_go' }
-				break
-			case 'push:enable':
-				commandMessage = { action: 'set_behavior', canBePushed: true }
-				break
-			case 'hostOrder:enable':
-				commandMessage = { action: 'set_behavior', hostOrder: true }
-				break
-			case 'rail_out':
-				commandMessage = { action: 'rail_out' }
-				break
-			default:
-				commandMessage = { action: name }
-				break
-		}
-
-		if (needConfirm) {
-			this.dialogSvc
-				.confirm({ body: this.$t.instant('messages.confirmCommand') })
-				.subscribe((ok) => {
-					ok &&
-						this.messageSvc
-							.sendVehicleCommand(commandMessage, [
-								this.contextMenuObject.value,
-							])
-							.subscribe()
-				})
-		} else {
-			this.messageSvc
-				.sendVehicleCommand(commandMessage, [this.contextMenuObject.value])
-				.subscribe()
-		}
-	}
-
-	onApplyZcuChange() {
-		let origin = this.contextMenuObject.value.usingType
-		let change = origin === 1 ? 2 : 1
-		this.contextMenuObject.value.usingType = change
-
-		this.dialogSvc
-			.confirm({ body: this.$t.instant('messages.confirmZcuChange') })
-			.subscribe((confirm) => {
-				if (confirm) {
-					this.messageSvc
-						.sendSettingZcuCommand({
-							type: 'ZCU',
-							action: 'zcu-setting',
-							zcuIds: [this.contextMenuObject.value.id],
-							zcuUsingType: change === 1 ? 'hw' : 'sw',
-						})
-						.subscribe()
-				} else {
-					this.contextMenuObject.value.usingType = origin
-				}
-			})
-	}
-	onResetHWZcu() {
-		this.dialogSvc
-			.confirm({ body: this.$t.instant('messages.confirmZcuReset') })
-			.subscribe((confirm) => {
-				if (confirm) {
-					this.messageSvc
-						.sendZcuCommand({
-							action: 'zcu_reset',
-							zcuId: this.contextMenuObject.value.id,
-						})
-						.subscribe()
-				}
-			})
-	}
-	onSetSource(objectType) {
-		const { id, logicalId, physicalId } = this.contextMenuObject.value
-		this.mapStatesService.transferCommandState.source = {
-			objectType,
-			id,
-			logicalId,
-			physicalId,
-		}
-	}
-	onSetDest(objectType) {
-		const { id, logicalId, physicalId } = this.contextMenuObject.value
-		this.mapStatesService.transferCommandState.dest = {
-			objectType,
-			id,
-			logicalId,
-			physicalId,
-		}
-	}
-	onRemoveCarrier(carrierId: string) {
-		this.dialogSvc
-			.confirm({ body: this.$t.instant('messages.confirmBufferChange') })
-			.subscribe((confirm) => {
-				confirm &&
-					this.messageSvc
-						.sendCarrierCommand({
-							action: 'remove_carrier',
-							bufferId: this.contextMenuObject.value.id,
-							carrierLabel: carrierId,
-						})
-						.subscribe()
-			})
-	}
-	onInstallCarrier(carrierId: string) {
-		this.dialogSvc
-			.confirm({ body: this.$t.instant('messages.confirmBufferChange') })
-			.subscribe((confirm) => {
-				confirm &&
-					this.messageSvc
-						.sendCarrierCommand({
-							action: 'install_carrier',
-							bufferId: this.contextMenuObject.value.id,
-							carrierLabel: carrierId,
-						})
-						.subscribe()
-			})
-	}
-
-	onChangeSegmentProperty(isDisable: boolean) {
-		if (isDisable) {
-			this.messageSvc
-				.sendDisableSegmentCommand(
-					{ action: 'disable-segment' },
-					this.contextMenuObject.value.id,
-				)
-				.subscribe()
-		} else {
-			this.messageSvc
-				.sendDisableSegmentCommand(
-					{ action: 'enable-segment' },
-					this.contextMenuObject.value.id,
-				)
-				.subscribe()
-		}
 	}
 
 	// EPIC > OMS-TRACK-MONITOR
@@ -410,7 +369,7 @@ export class LegacyMapViewerComponent implements OnInit, OnDestroy {
 					// @ts-ignore
 					this.mainColocatedObject = payload.value
 					this.colocatedObjects =
-						this.trackStatusService.getOverlapObjectOnPoint(pointId)
+						this.playService.getOverlapObjectOnPoint(pointId)
 					this.onCoLocatedObjectPanelOn(event)
 				} else {
 					this.onTooltipOn(event)
@@ -526,34 +485,7 @@ export class LegacyMapViewerComponent implements OnInit, OnDestroy {
 		// @ts-ignore
 		this.focusOnTM({ type: payload.type, id: payload.value.id })
 	}
-	public onContectMenuOn(event: CustomEvent) {
-		const payload = getCustomEventPayload(event)
-		// @ts-ignore
-		if (!(payload.type && payload.value && payload.event)) return
-		// @ts-ignore
-		this.contextMenuObject = { type: payload.type, value: payload.value }
-
-		const leftThreshold = window.innerWidth - 200
-		const popupOffsetX = 10
-		const popupOffsetY = 40
-
-		// @ts-ignore
-		const { pageX: x, pageY: y } = payload.event
-
-		const container = d3
-			.select('#contextMenu')
-			.style('top', `${y - popupOffsetY}px`)
-
-		if (leftThreshold > x) {
-			container.style('left', `${x + popupOffsetX}px`).style('right', 'inherit')
-		} else {
-			container
-				.style('right', `${window.innerWidth - x + popupOffsetX}px`)
-				.style('left', 'inherit')
-		}
-
-		this.showContextMenu = true
-	}
+	public onContectMenuOn(event: CustomEvent) {}
 	public onBackdrop(event: CustomEvent) {
 		this.showContextMenu = false
 		this.contextMenuObject = undefined

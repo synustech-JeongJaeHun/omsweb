@@ -4,39 +4,62 @@
       <mat-drawer #drawer class="settings-sidenav" mode="side" opened>
         <mat-nav-list>
           <a *ngIf="auth.hasPermissions([permissionEnums.SettingPreference])" mat-list-item
-            [class.active]="isActiveMenu('preference')" (click)="onChangeMenu('preference')" class="nav-link">{{
-            "names.preference" | translate }}
+            [class.active]="isActiveMenu('preference')" (click)="onChangeMenu('preference')" class="nav-link">
+            {{
+            "names.preference" | translate
+            }}
           </a>
           <a *ngIf="auth.hasPermissions([permissionEnums.SettingPreference])" mat-list-item
-            [class.active]="isActiveMenu('themePreference')" (click)="onChangeMenu('themePreference')"
-            class="nav-link">{{ "names.themePreference" | translate }}
+            [class.active]="isActiveMenu('systemPreference')" (click)="onChangeMenu('systemPreference')"
+            class="nav-link">
+            {{
+            "names.systemPreference" | translate
+            }}
+          </a>
+          <a *ngIf="auth.hasPermissions([permissionEnums.SettingPreference])" mat-list-item
+            [class.active]="isActiveMenu('themePreference')" (click)="onChangeMenu('themePreference')" class="nav-link">
+            {{ "names.themePreference" | translate }}
           </a>
           <a *ngIf="auth.hasPermissions([permissionEnums.UserManagement])" mat-list-item
-            [class.active]="isActiveMenu('users')" (click)="onChangeMenu('users')" class="nav-link">{{
-            "names.userManagement" | translate }}
+            [class.active]="isActiveMenu('users')" (click)="onChangeMenu('users')" class="nav-link">
+            {{
+            "names.userManagement" | translate
+            }}
           </a>
           <a *ngIf="auth.hasPermissions([permissionEnums.SettingPreference])" mat-list-item
-            [class.active]="isActiveMenu('column')" (click)="onChangeMenu('column')" class="nav-link">{{
-            "names.columnDisplayManagement" | translate }}
+            [class.active]="isActiveMenu('column')" (click)="onChangeMenu('column')" class="nav-link">
+            {{
+            "names.columnDisplayManagement" | translate
+            }}
           </a>
 
           <mat-divider class="nav-divider"></mat-divider>
 
           <a *ngIf="auth.hasPermissions([permissionEnums.SettingGroup])" mat-list-item
-            [class.active]="isActiveMenu('group')" (click)="onChangeMenu('group')" class="nav-link">{{ "names.group" |
-            translate }}
+            [class.active]="isActiveMenu('group')" (click)="onChangeMenu('group')" class="nav-link">
+            {{
+            "names.group" |
+            translate
+            }}
           </a>
           <a *ngIf="auth.hasPermissions([permissionEnums.SettingCluster])" mat-list-item
-            [class.active]="isActiveMenu('cluster')" (click)="onChangeMenu('cluster')" class="nav-link">{{
-            "names.cluster" | translate }}
+            [class.active]="isActiveMenu('cluster')" (click)="onChangeMenu('cluster')" class="nav-link">
+            {{
+            "names.cluster" | translate
+            }}
           </a>
           <a *ngIf="auth.hasPermissions([permissionEnums.SettingAlarmList])" mat-list-item
-            [class.active]="isActiveMenu('alarm')" (click)="onChangeMenu('alarm')" class="nav-link">{{ "names.alarmList"
-            | translate }}
+            [class.active]="isActiveMenu('alarm')" (click)="onChangeMenu('alarm')" class="nav-link">
+            {{
+            "names.alarmList"
+            | translate
+            }}
           </a>
           <a *ngIf="auth.hasPermissions([permissionEnums.SettingSegment])" mat-list-item
-            [class.active]="isActiveMenu('segment')" (click)="onChangeMenu('segment')" class="nav-link">{{
-            "names.segment" | translate }}
+            [class.active]="isActiveMenu('segment')" (click)="onChangeMenu('segment')" class="nav-link">
+            {{
+            "names.segment" | translate
+            }}
           </a>
           <!--
           <a
@@ -47,42 +70,54 @@
             class="nav-link">{{ "names.node" | translate }}
           </a>
           -->
+
+          <!--
           <a *ngIf="auth.hasPermissions([permissionEnums.SettingStation])" mat-list-item
             [class.active]="isActiveMenu('station')" (click)="onChangeMenu('station')" class="nav-link">{{
             "names.station" | translate }}
           </a>
+          -->
+
           <a *ngIf="bufferEnabled && auth.hasPermissions([permissionEnums.SettingBuffer])" mat-list-item
-            [class.active]="isActiveMenu('buffer')" (click)="onChangeMenu('buffer')" class="nav-link">{{ "names.buffer"
-            | translate }}
+            [class.active]="isActiveMenu('buffer')" (click)="onChangeMenu('buffer')" class="nav-link">
+            {{
+            "names.buffer"
+            | translate
+            }}
           </a>
           <a *ngIf="auth.hasPermissions([permissionEnums.SettingZcu])" mat-list-item
-            [class.active]="isActiveMenu('zcu')" (click)="onChangeMenu('zcu')" class="nav-link">{{ "names.zcu" |
-            translate }}
+            [class.active]="isActiveMenu('zcu')" (click)="onChangeMenu('zcu')" class="nav-link">
+            {{
+            "names.zcu" |
+            translate
+            }}
           </a>
           <a *ngIf="auth.hasPermissions([permissionEnums.SettingVehicle])" mat-list-item
-            [class.active]="isActiveMenu('vehicle')" (click)="onChangeMenu('vehicle')" class="nav-link">{{
-            "names.vehicle" | translate }}
+            [class.active]="isActiveMenu('vehicle')" (click)="onChangeMenu('vehicle')" class="nav-link">
+            {{
+            "names.vehicle" | translate
+            }}
           </a>
           <!-- <a
-            mat-list-item
-            routerLinkActive="active"
-            [routerLink]="[
-              'settings',
-              { outlets: { sub: ['tracks', 'buffer'] } }
-            ]"
-            class="nav-link"
-            >{{ "names.buffer" | translate }}</a
-          > -->
+    mat-list-item
+    routerLinkActive="active"
+    [routerLink]="[
+      'settings',
+      { outlets: { sub: ['tracks', 'buffer'] } }
+    ]"
+    class="nav-link"
+    >{{ "names.buffer" | translate }}</a
+  > -->
           <!-- <a
-            mat-list-item
-            routerLinkActive="active"
-            [routerLink]="[
-              'settings',
-              { outlets: { sub: ['tracks', 'blockzone'] } }
-            ]"
-            class="nav-link"
-            >{{ "names.blockZone" | translate }}</a
-          > -->
+    mat-list-item
+    routerLinkActive="active"
+    [routerLink]="[
+      'settings',
+      { outlets: { sub: ['tracks', 'blockzone'] } }
+    ]"
+    class="nav-link"
+    >{{ "names.blockZone" | translate }}</a
+  > -->
         </mat-nav-list>
       </mat-drawer>
 
@@ -94,6 +129,9 @@
           </ng-container>
           <ng-container *ngSwitchCase="'preference'">
             <oms-preferences></oms-preferences>
+          </ng-container>
+          <ng-container *ngSwitchCase="'systemPreference'">
+            <oms-system-preference></oms-system-preference>
           </ng-container>
           <ng-container *ngSwitchCase="'themePreference'">
             <oms-theme-preference></oms-theme-preference>

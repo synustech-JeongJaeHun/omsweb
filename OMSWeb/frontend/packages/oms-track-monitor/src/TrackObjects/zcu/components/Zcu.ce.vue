@@ -18,8 +18,6 @@ const props = defineProps<{
     :y="props.zcu.y"
   >
     <g class="scale-and-reverse-rotate">
-      <!-- <ScaleByScale>
-      <MapReverseRotate> -->
       <use
         v-if="props.zcu.isFocused"
         href="#zcu"
@@ -36,7 +34,7 @@ const props = defineProps<{
         pointer-events="bounding-box"
         stroke="black"
         stroke-width="3"
-        :fill="props.zcu.error ? 'red' : 'transparent'"
+        :fill="(props.zcu.error && props.zcu.usingType !== 2) ? 'red' : 'transparent'"
         :data-id="props.zcu.id"
         @click.left="handleLeftClick"
         @click.right="handleRightClick"
@@ -66,8 +64,6 @@ const props = defineProps<{
       >
         {{ String(props.zcu.id) }}
       </text>
-      <!-- </MapReverseRotate>
-    </ScaleByScale> -->
     </g>
   </svg>
 </template>

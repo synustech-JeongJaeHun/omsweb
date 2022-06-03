@@ -1,48 +1,32 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { DxDataGridComponent } from 'devextreme-angular';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-import { IVehicleStatusRow } from '../../../models/vehicle-status.model';
-import { PlaybackService } from '../../../services/playback.service';
-import { TrackIdService } from '../../../services/track-id.service';
-
+import { Component, Input, OnInit, ViewChild } from '@angular/core'
+import { CurrentVehicle } from '@oms/root/models/playback.model'
+import { PlaybackPlayService } from '@oms/root/services/playback-play.service'
+import { DxDataGridComponent } from 'devextreme-angular'
+import { IVehicleStatusRow } from '../../../models/vehicle-status.model'
+import { isHostOrder } from '../utils/playback-parse.util'
 @Component({
-  selector: 'oms-playback-vehicle-status',
-  templateUrl: './playback-vehicle-status.component.html',
-  styles: [],
+	selector: 'oms-playback-vehicle-status',
+	templateUrl: './playback-vehicle-status.component.html',
+	styles: [],
 })
-export class PlaybackVehicleStatusComponent implements OnInit {
-  @Input() tableHeight: number;
+export class PlaybackVehicleStatusComponent {
+	@Input() tableHeight: number
 
-  @ViewChild(DxDataGridComponent, { static: false })
-  dataGrid: DxDataGridComponent;
+	@ViewChild(DxDataGridComponent, { static: false })
+	dataGrid: DxDataGridComponent
 
-  dataSource: any[] = [];
-  selectedRows: number[] = [];
+	get dataSource() {
+		return this.playService.currentVehicles
+	}
+	selectedRows: number[] = []
 
-  //#region Subscriptions
-  private destroy$: Subject<void> = new Subject<void>();
-  //#endregion
+	get selectedItems(): IVehicleStatusRow[] {
+		return this.dataGrid.instance.getSelectedRowsData()
+	}
 
-  get selectedItems(): IVehicleStatusRow[] {
-    return this.dataGrid.instance.getSelectedRowsData();
-  }
+	constructor(private playService: PlaybackPlayService) {}
 
-  constructor(
-    private playbackSvc: PlaybackService,
-    private idSvc: TrackIdService
-  ) {
-    // this.playbackSvc.vehiclesChanged$
-    //   .pipe(takeUntil(this.destroy$))
-    //   .subscribe((data) => {
-    //     this.dataSource = data;
-    //   });
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
-  ngOnInit(): void {}
+	calculateHostOrder(rowData: CurrentVehicle) {
+		return isHostOrder(rowData.orderOrigin)
+	}
 }
