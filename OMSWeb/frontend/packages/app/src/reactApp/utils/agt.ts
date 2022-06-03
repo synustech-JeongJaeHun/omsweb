@@ -3,8 +3,8 @@ import { getStorage } from '@daimre/shared'
 
 const ss = getStorage(window.sessionStorage)
 
-const origin = 'http://localhost:3000'
-const apiBaseUri = '/api/v1'
+const origin = ''
+const apiBaseUri = '/api/'
 
 const ax = axios.create({
 	baseURL: `${origin}${apiBaseUri}`,
