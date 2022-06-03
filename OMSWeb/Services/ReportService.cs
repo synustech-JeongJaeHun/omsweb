@@ -197,7 +197,7 @@ namespace OMSWeb.Services
             var assign_time = await assignTimeTask;
             var number_of_order_request = await numberOfOrderRequestTask;
             var vehicles = await vehiclesTask;
-            var loading_unLoading = await loadingUnLoadingTask;
+            var loading_unloading = await loadingUnLoadingTask;
             var range = await rangeTask;
             var utilization = await utilizationTask;
 
@@ -209,9 +209,20 @@ namespace OMSWeb.Services
                 assign_time,
                 number_of_order_request,
                 vehicles,
-                loading_unLoading,
+                loading_unloading,
                 range,
                 utilization,
+                cpu = new
+                {
+                    usage = 7.77,
+                    model = "M1 MAC"
+                },
+                memory = new
+                {
+                    total = 32677.39,
+                    used = 20875.86,
+                    usedPercent = 63.88
+                }
             };
         }
 
