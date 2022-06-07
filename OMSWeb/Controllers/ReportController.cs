@@ -20,10 +20,15 @@ namespace OMSWeb.Controllers
     public class ReportController : ControllerBase
     {
         private readonly ReportService _reportSvc;
+        private readonly ComputerPerformanceService _computerPerformanceService;
 
-        public ReportController(ReportService reportSvc)
+        public ReportController(
+            ReportService reportSvc,
+            ComputerPerformanceService computerPerformanceService
+        )
         {
             this._reportSvc = reportSvc;
+            this._computerPerformanceService = computerPerformanceService;
         }
 
         [HttpGet("labels")]
@@ -77,7 +82,23 @@ namespace OMSWeb.Controllers
         [HttpGet("trend")]
         public async Task<object> GetTrend()
         {
-            return await _reportSvc.QueryTrend();
+            var trend = await _reportSvc.QueryTrend();
+            var cpu = _computerPerformanceService.getCurrentCpuNameAndUsage();
+            var memory = _computerPerformanceService.getRAMInformation();
+            return new
+            {
+                delivery_time = trend.delivery_time,
+                wait_time = trend.wait_time,
+                transfer_time = trend.transfer_time,
+                assign_time = trend.assign_time,
+                number_of_order_request = trend.number_of_order_request,
+                vehicles = trend.vehicles,
+                loading_unloading = trend.loading_unloading,
+                range = trend.range,
+                utilization = trend.utilization,
+                cpu,
+                memory
+            };
         }
 
         [HttpGet("trend/utilization")]

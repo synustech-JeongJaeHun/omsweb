@@ -167,7 +167,7 @@ namespace OMSWeb.Services
             return data;
         }
 
-        public async Task<object> QueryTrend()
+        public async Task<dynamic> QueryTrend()
         {
             var deliveryTimeTask = _reportTrendRepository.QueryDeliveryTime();
             var waitTimeTask = _reportTrendRepository.QueryWaitTime();
@@ -211,18 +211,7 @@ namespace OMSWeb.Services
                 vehicles,
                 loading_unloading,
                 range,
-                utilization,
-                cpu = new
-                {
-                    usage = 7.77,
-                    model = "M1 MAC"
-                },
-                memory = new
-                {
-                    total = 32677.39,
-                    used = 20875.86,
-                    usedPercent = 63.88
-                }
+                utilization
             };
         }
 

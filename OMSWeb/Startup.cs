@@ -170,6 +170,7 @@ namespace OMSWeb
             services.AddSingleton<TrackService>();
             services.AddSingleton<PushService>();
             services.AddSingleton<CacheService>();
+            services.AddSingleton<ComputerPerformanceService>();
 
             // services.AddTransient<ProblemDetailsFactory, OmsProblemDetailsFactory>();  // @TODO problem handler 작성 후 사용
             #endregion
