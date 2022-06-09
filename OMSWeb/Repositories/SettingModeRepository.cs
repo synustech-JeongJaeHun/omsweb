@@ -1,13 +1,7 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using Dapper;
 using Microsoft.Extensions.Configuration;
-using Npgsql;
 using OMSWeb.Models.Entities;
-using OMSWeb.Models.Tracks;
-using Buffer = OMSWeb.Models.Tracks.Buffer;
-using OMSWeb.Models;
 
 namespace OMSWeb.Repositories
 {
@@ -21,7 +15,7 @@ namespace OMSWeb.Repositories
         {
             IQueryable<SettingModeEntity> result;
 
-            var sql = @"SELECT home_mode FROM setting_mode";
+            var sql = @"SELECT home_mode, chain_manual_command_disabled FROM setting_mode";
             
             using (var conn = ConnectTrack())
             {
@@ -35,7 +29,8 @@ namespace OMSWeb.Repositories
             IQueryable<SettingModeEntity> settingModeEntity = this.QuerySettingMode();
             var list = settingModeEntity.Select(w => new SettingModeEntity
             {
-                home_mode = w.home_mode
+                home_mode = w.home_mode,
+                chain_manual_command_disabled = w.chain_manual_command_disabled
             }).ToList();
 
             if (list.Count > 0)

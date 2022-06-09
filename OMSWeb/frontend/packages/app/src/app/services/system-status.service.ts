@@ -8,7 +8,8 @@ import { SystemsService } from './systems.service'
 })
 export class SystemStatusService {
 	public systemStates: ISystemStates
-	public homeMode?: boolean = undefined
+    public homeMode?: boolean = undefined
+    public chainManualCommandDisabled?: boolean = undefined
 
 	constructor(
 		private hubService: HubService,
@@ -29,7 +30,8 @@ export class SystemStatusService {
 
 	private updateSettingMode() {
 		this.systemsService.settingMode().subscribe((res) => {
-			this.homeMode = res.homeMode
+            this.homeMode = res.homeMode,
+            this.chainManualCommandDisabled = res.chainManualCommandDisabled
 		})
 	}
 

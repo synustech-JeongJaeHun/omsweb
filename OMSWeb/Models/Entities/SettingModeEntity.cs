@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace OMSWeb.Models.Entities
 {
-  public class SettingModeEntity
-  {
-    public int home_mode { get; set; }
-  }
+    public class SettingModeEntity
+    {
+        public int home_mode { get; set; }
+        public int chain_manual_command_disabled { get; set; }
+    }
 }

@@ -109,6 +109,7 @@ namespace OMSWeb.Services
                 this.SettingModeModel = new SettingModeModel
                 {
                     HomeMode = (settingModeEntity.home_mode > 0) ? true : false,
+                    ChainManualCommandDisabled = (settingModeEntity.chain_manual_command_disabled > 0) ? true : false,
                 };
             }
             else
@@ -116,6 +117,7 @@ namespace OMSWeb.Services
                 this.SettingModeModel = new SettingModeModel
                 {
                     HomeMode = true,
+                    ChainManualCommandDisabled = false,
                 };
             }
 

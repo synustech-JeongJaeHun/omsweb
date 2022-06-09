@@ -12,7 +12,8 @@ export interface ISystemStates {
 }
 
 export interface ISettingMode {
-	homeMode?: boolean
+    homeMode?: boolean
+    chainManualCommandDisabled?: boolean
 }
 
 export interface IServiceProcessStates {
