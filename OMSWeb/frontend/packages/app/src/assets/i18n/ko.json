@@ -228,6 +228,7 @@
     "use": "사용",
     "home": "홈",
     "homeMode": "홈 모드",
+    "chainManualCommandDisabled": "Chain Manual Command Disabled",
     "hardware": "하드웨어",
     "software": "소프트웨어",
     "setSource": "소스 설정",

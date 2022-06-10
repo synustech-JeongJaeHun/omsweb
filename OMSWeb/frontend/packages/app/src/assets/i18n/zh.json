@@ -227,6 +227,7 @@
     "use": "使用",
     "home": "家",
     "homeMode": "家模式",
+    "chainManualCommandDisabled": "Chain Manual Command Disabled",
     "hardware": "硬件",
     "software": "软件",
     "setSource": "设置源",

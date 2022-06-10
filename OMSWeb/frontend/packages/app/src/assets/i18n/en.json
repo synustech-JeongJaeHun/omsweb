@@ -228,6 +228,7 @@
     "use": "Use",
     "home": "Home",
     "homeMode": "Home Mode",
+    "chainManualCommandDisabled": "Chain Manual Command Disabled",
     "hardware": "Hardware",
     "software": "Software",
     "setSource": "Set Source",
