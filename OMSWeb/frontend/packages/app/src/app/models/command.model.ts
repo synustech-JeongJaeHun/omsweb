@@ -72,8 +72,8 @@ export interface IOrderCommandMessage extends ICommandMessage {
 	locationDropoff?: string
 	locationMove?: string
 	carrierLabel?: string
-    priority?: number
-    commandID?: string
+	priority?: number
+	commandID?: string
 }
 
 export interface IStationCommandMessage extends ICommandMessage {
@@ -160,5 +160,11 @@ export interface IDisableHomeCommandMessage extends ICommandMessage {
 
 export interface IToggleHomeModeCommandMessage extends ICommandMessage {
 	action: 'home_mode'
+	mode: 'change'
+}
+
+export interface IToggleChainManualCommandDisabledCommandMessage
+	extends ICommandMessage {
+	action: 'chain_manual_command_disabled'
 	mode: 'change'
 }

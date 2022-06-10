@@ -26,6 +26,10 @@ export class SystemPreferenceComponent {
 		return this.systemStatusService.homeMode ?? false
 	}
 
+	get isChainManualCommandDisabled() {
+		return this.systemStatusService.chainManualCommandDisabled ?? false
+	}
+
 	hasPermissions(permissions: number[]): boolean {
 		return this.auth.hasPermissions(permissions)
 	}
@@ -57,6 +61,23 @@ export class SystemPreferenceComponent {
 			.subscribe((ok) => {
 				if (ok) {
 					this.messageSvc.sendHomeModeToggle().subscribe()
+				}
+			})
+	}
+
+	setChainManualCommandDisabled() {
+		this.dialogSvc
+			.confirm(
+				this.getConfirmMessage(
+					this.$t.instant(`names.chainManualCommandDisabled`),
+					this.isChainManualCommandDisabled
+						? [this.$t.instant(`names.on`), this.$t.instant('names.off')]
+						: [this.$t.instant(`names.off`), this.$t.instant('names.on')],
+				),
+			)
+			.subscribe((ok) => {
+				if (ok) {
+					this.messageSvc.sendChainManualCommandDisabled().subscribe()
 				}
 			})
 	}

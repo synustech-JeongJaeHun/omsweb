@@ -27,6 +27,7 @@ import {
 	IDisableHomeCommandMessage,
 	IEnableHomeCommandMessage,
 	IToggleHomeModeCommandMessage,
+	IToggleChainManualCommandDisabledCommandMessage,
 } from '../models/command.model'
 import { IOrderStatusRow } from '../models/order-status.model'
 import { IVehicleStatusRow } from '../models/vehicle-status.model'
@@ -311,6 +312,13 @@ export class MessagesService {
 	sendHomeModeToggle() {
 		return this.sendCommand<IToggleHomeModeCommandMessage>({
 			action: 'home_mode',
+			mode: 'change',
+		})
+	}
+
+	sendChainManualCommandDisabled() {
+		return this.sendCommand<IToggleChainManualCommandDisabledCommandMessage>({
+			action: 'chain_manual_command_disabled',
 			mode: 'change',
 		})
 	}
