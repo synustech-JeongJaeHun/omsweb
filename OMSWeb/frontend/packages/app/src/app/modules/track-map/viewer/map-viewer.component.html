@@ -328,11 +328,11 @@
       </mat-card-title>
     </mat-card-header>
     <mat-card-content class="context-form">
-      <button mat-stroked-button class="dense accent" color="primary" [disabled]="!canSetSourceStation"
+      <button mat-stroked-button class="dense accent" color="primary" [disabled]="!canSetSource"
         (click)="onSetSource('Station')">
         {{ "names.setSource" | translate }}
       </button>
-      <button mat-stroked-button class="dense accent" color="primary" [disabled]="!canSetDestStation"
+      <button mat-stroked-button class="dense accent" color="primary" [disabled]="!canSetDest"
         (click)="onSetDest('Station')">
         {{ "names.setDest" | translate }}
       </button>

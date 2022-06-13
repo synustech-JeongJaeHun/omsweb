@@ -59,20 +59,20 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 	get canSetDest() {
 		return !this.mapStatesService.transferCommandState.destDisabled
 	}
-	get canSetSourceStation() {
-		if (!this.mapStatesService.transferCommandState.sourceDisabled) {
-			const { id, logicalId, physicalId } = this.contextMenuObject.value
-			if (logicalId && logicalId.indexOf('OUT') > 0) return true
-		}
-		return false
-	}
-	get canSetDestStation() {
-		if (!this.mapStatesService.transferCommandState.destDisabled) {
-			const { id, logicalId, physicalId } = this.contextMenuObject.value
-			if (logicalId && logicalId.indexOf('IN') > 0) return true
-		}
-		return false
-	}
+	// get canSetSourceStation() {
+	// 	if (!this.mapStatesService.transferCommandState.sourceDisabled) {
+	// 		const { id, logicalId, physicalId } = this.contextMenuObject.value
+	// 		if (logicalId && logicalId.indexOf('OUT') > 0) return true
+	// 	}
+	// 	return false
+	// }
+	// get canSetDestStation() {
+	// 	if (!this.mapStatesService.transferCommandState.destDisabled) {
+	// 		const { id, logicalId, physicalId } = this.contextMenuObject.value
+	// 		if (logicalId && logicalId.indexOf('IN') > 0) return true
+	// 	}
+	// 	return false
+	// }
 
 	get canSetDestPoint() {
 		const isTabMove =
