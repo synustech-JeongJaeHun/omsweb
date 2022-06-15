@@ -36,7 +36,7 @@
         {{"names.on" | translate}}
         <button style="margin-left: 15px" mat-raised-button class="dense"
           [disabled]="!hasPermissions([permissionEnums.HostOrderEnable])" color="primary"
-          (click)="setHomeEditing()">{{"names.disable" |
+          (click)="setChainManualCommandDisabled()">{{"names.disable" |
           translate}}</button>
       </ng-container>
       <ng-container *ngIf="isChainManualCommandDisabled === false">
