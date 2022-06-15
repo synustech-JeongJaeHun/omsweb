@@ -2,15 +2,9 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "src/*": [
-        "src/*"
-      ],
-      "TrackObjects/*": [
-        "src/TrackObjects/*"
-      ],
-      "MapObjects/*": [
-        "src/MapObjects/*"
-      ]
+      "src/*": ["src/*"],
+      "TrackObjects/*": ["src/TrackObjects/*"],
+      "MapObjects/*": ["src/MapObjects/*"]
     },
     "target": "esnext",
     "useDefineForClassFields": true,
@@ -22,10 +16,7 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "lib": [
-      "esnext",
-      "dom"
-    ]
+    "lib": ["esnext", "dom"]
   },
   "include": [
     "src/**/*.ts",
@@ -33,7 +24,5 @@
     "src/**/*.tsx",
     "src/**/*.vue"
   ],
-  "exclude": [
-    "src/devOnly/main.ts"
-  ]
+  "exclude": ["src/devOnly/main.ts"]
 }

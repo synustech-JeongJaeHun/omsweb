@@ -10,6 +10,9 @@ import VehicleLayer from 'TrackObjects/vehicle/components/VehicleLayer.ce.vue'
 import SegmentLayer from 'TrackObjects/segment/components/SegmentLayer.ce.vue'
 import ClusterLayer from 'TrackObjects/cluster/components/ClusterLayer.ce.vue'
 import DisabledSegmentLayer from 'src/TrackObjects/segment/components/DisabledSegmentLayer.ce.vue'
+//XXX: fireshutterLayer
+import FireshutterLayer from 'src/TrackObjects/fireshutter/components/FireshutterLayer.ce.vue'
+
 import {
   panByMouse,
   isPanning,
@@ -65,5 +68,7 @@ const emit = inject<RootEmits>(RootEmitInjectionKey)!
     <ZcuLayer />
     <MtlLayer />
     <VehicleLayer />
+    <!-- XXX:FireShutter -->
+    <FireshutterLayer />
   </svg>
 </template>

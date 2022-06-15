@@ -59,7 +59,7 @@ function handleRightClick(event: MouseEvent) {
         M 4 -12
         A 8 8 0 0 1 12 -4
         M 12 4
-        A 8 8 0 0 1 4 12
+        A 8 8 0 0 1 4 12T
         M -4 12 
         A 8 8 0 0 1 -12 4
         "

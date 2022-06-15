@@ -35,6 +35,12 @@ import {
 	initZcus,
 	setZcu,
 } from 'src/TrackObjects/zcu/zcus'
+//XXX: fireshutter
+import {
+	findFireshutterById,
+	initFireshutters,
+	setFireshutter,
+} from 'src/TrackObjects/fireshutter/fireshutters'
 import {
 	deleteVehicle,
 	findVehicleById,
@@ -57,6 +63,7 @@ import { getPositionForBufferOrStation } from 'src/TrackObjects/utils/locationSt
 import { setFocusedObject } from 'src/MapObjects/focus/focus'
 import { setTrackedObject } from 'src/MapObjects/track/track'
 
+const echo = () => console.log('howling hello just for confidence')
 const exposed: IOmsTrackMonitor = {
 	getCameraAndRotation,
 	setCameraAndRotation,
@@ -73,6 +80,8 @@ const exposed: IOmsTrackMonitor = {
 		initMtls([])
 		initBuffers([])
 		initPoints([])
+		// XXX: fireshutter init
+		initFireshutters([])
 
 		// setup
 		const { minX, minY, maxX, maxY } = calculateMinMaxXYFromPoints(
@@ -92,6 +101,12 @@ const exposed: IOmsTrackMonitor = {
 		initVehicles(t.vehicles ?? [])
 		initSegmentDisableds(t.segmentDisabled ?? [])
 		initGroups(t.groups)
+
+		// XXX:set fireshutters
+		// 여기까지 했으면 service 찍어보면 fireshutter 정보가 나오지 않을까
+		// initFireshutters(t.fireshutters)
+		initFireshutters([{ id: 1, x: 37600, y: 30900, status: 'OPEN' }])
+		echo()
 	},
 	centerZoom,
 
