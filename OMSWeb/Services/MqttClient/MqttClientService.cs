@@ -9,6 +9,7 @@ using System;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Text.Json;
 
 namespace OMSWeb.Services
 {
@@ -72,7 +73,7 @@ namespace OMSWeb.Services
                 await Task.Delay(TimeSpan.FromSeconds(1));
                 await mqttClient.ConnectAsync(options, CancellationToken.None);
             }
-            catch (Exception ex)
+            catch (Exception ex) 
             {
                 string s = string.Format("MqttClientService.HandleDisconnectedAsync exception : {0}", ex.Message);
                 Console.WriteLine(s);

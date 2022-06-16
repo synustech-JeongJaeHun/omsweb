@@ -21,44 +21,11 @@ namespace OMSWeb.Repositories
         private readonly string _avgEpochPerHour = @"
             COALESCE(
                 TRUNC(
-                    (extract(epoch from avg(duration)) / 3600)::numeric, 2
+                    (extract(epoch from avg(time_resolved - time)) / 3600)::numeric, 2
                 )::float,
                 0
             )
             ";
-        private readonly string _joinTable = @"
-            select
-            va.id as alarm_id,
-            oh.id as order_id,
-            va.vehicle_id as vehicle,
-            oh.location_pickup as source,
-            oh.location_dropoff as dest,
-            va.time,
-            va.time_resolved,
-            va.time_resolved - va.time as duration
-            from
-                vehicle_alarms va
-                left join
-                    (
-                        select
-                        *
-                        from total_orders
-                    ) as oh
-                on oh.id = (
-                    select ord.id
-                    from total_orders as ord
-                    where
-                        va.vehicle_id = ord.vehicle_id and
-                        va.time::Date between ord.time_created and greatest (
-                            time_assigned, time_vehicle_arrived,
-                            time_load_started, time_load_completed,
-                            time_unload_started, time_unload_completed,
-                            time_completed, time_aborted, time_failed
-                        )
-                    order by ord.id
-                    limit 1
-                )
-        ";
 
         public async Task<(int Min, int Max, int Devn, int Avg, int Total)> QueryAlarmsStatsAggregatedByTotalTimeSpan(string start, string end)
         {
@@ -126,7 +93,7 @@ namespace OMSWeb.Repositories
                                 SELECT
                                     count(*)
                                 FROM vehicle_alarms va
-                                WHERE time::DATE BETWEEN '{start}' AND '{end}'
+                                WHERE time_resolved::DATE BETWEEN '{start}' AND '{end}'
                             ) AS total
                             FROM
                             (
@@ -135,7 +102,7 @@ namespace OMSWeb.Repositories
                                     SELECT
                                     time
                                     FROM vehicle_alarms va
-                                    WHERE time::DATE BETWEEN '{start}' AND '{end}'
+                                    WHERE time_resolved::DATE BETWEEN '{start}' AND '{end}'
                                     ORDER BY time ASC
                                     LIMIT 1
                                 ) AS first,
@@ -143,7 +110,7 @@ namespace OMSWeb.Repositories
                                     SELECT
                                     time
                                     FROM vehicle_alarms va
-                                    WHERE time::DATE BETWEEN '{start}' AND '{end}'
+                                    WHERE time_resolved::DATE BETWEEN '{start}' AND '{end}'
                                     ORDER BY time DESC
                                     LIMIT 1
                                 ) AS last
@@ -172,16 +139,16 @@ namespace OMSWeb.Repositories
                                 (
                                     SELECT
                                     {_avgEpochPerHour}
-                                    FROM ({_joinTable}) as temp
+                                    FROM vehicle_alarms
                                     WHERE
-                                        time::DATE BETWEEN days AND days
+                                        time_resolved::DATE BETWEEN days AND days
                                         {SubFilter(subsection, value)}
                                 ) AS avg,
                                 (
                                     SELECT count(*)
-                                    FROM ({_joinTable}) as temp
+                                    FROM vehicle_alarms
                                     WHERE
-                                        time::DATE BETWEEN days AND days
+                                        time_resolved::DATE BETWEEN days AND days
                                         {SubFilter(subsection, value)}
                                 )::int
                                 FROM GENERATE_SERIES('{startStr}'::DATE, '{endStr}'::DATE, '1 days') days
@@ -207,9 +174,9 @@ namespace OMSWeb.Repositories
                             {_avgEpochPerHour} as avg,
                             '{startStr}' as start_day,
                             '{endStr}' as end_day
-                            from ({_joinTable}) as temp
+                            from vehicle_alarms
                             where
-                                time::date between '{startStr}' and '{endStr}' and
+                                time_resolved::date between '{startStr}' and '{endStr}' and
                                 {_filter(subsection, value)}
                         ";
                     }
@@ -237,7 +204,8 @@ namespace OMSWeb.Repositories
         public async Task<dynamic[]> QuerySections(string section, string selectedItem, string start, string end)
         {
             var filter = GetFilter(section, start, end);
-            var sectionList = GetSubsection(section);
+            var sectionList = GetSubsection(section, "alarm");
+            // var sectionList = new[] { "vehicle", "alarm", "segment" };
 
             async Task<dynamic[]> Query(string key, string subsection = "", string value = "")
             {
@@ -249,9 +217,9 @@ namespace OMSWeb.Repositories
                         {this.GetName(key)} as label,
                         count(*)::int,
                         {_avgEpochPerHour} as avg
-                        from ({_joinTable}) as temp
-                        where {filter(subsection, value)} and {GetNameFromDic(key)} is not null
-                        group by {GetNameFromDic(key)}
+                        from vehicle_alarms
+                        where {filter(subsection, value)} and {GetColumnFromDic(key)} is not null
+                        group by {GetColumnFromDic(key)}
                     ";
 
                     result = (await conn.QueryAsync(sql)).ToArray();
@@ -269,15 +237,15 @@ namespace OMSWeb.Repositories
                 switch (section)
                 {
                     case "overview":
-                        return $" time::DATE BETWEEN '{start}' AND '{end}' ";
+                        return $" time_resolved::DATE BETWEEN '{start}' AND '{end}' ";
                     case "duration":
                         var strs = value.Split("_");
                         var startStr = strs[0];
                         var endStr = strs[1];
-                        return $" time::DATE BETWEEN '{startStr}' AND '{endStr}' ";
+                        return $" time_resolved::DATE BETWEEN '{startStr}' AND '{endStr}' ";
                     default:
                         return $@" 
-                            time::DATE BETWEEN '{start}' AND '{end}'
+                            time_resolved::DATE BETWEEN '{start}' AND '{end}'
                             {SubFilter(key, value)}
                         ";
                 }
@@ -310,12 +278,29 @@ namespace OMSWeb.Repositories
                         END
                     )
                     ";
+                case "alarm":
+                    return $@"
+                    (
+                        select description
+                        from vehicle_errors
+                        where id = error_code
+                    )
+                    ";
+                case "segment":
+                    return $@"
+                    (
+                        select logical_id
+                        from segments
+                        where start_point = current::int
+                        limit 1
+                    )
+                    ";
                 case "vehicle":
                     return $@"
                         (
                             SELECT logical_id
                             FROM vehicles
-                            WHERE id = vehicle
+                            WHERE id = vehicle_id
                         )
                         ";
                 default:

@@ -48,6 +48,8 @@ const dic = {
 	vehicle: 'Vehicle별',
 	source: 'Source별',
 	dest: 'Dest별',
+	alarm: 'Alarm별',
+	segment: 'Segment별',
 }
 
 const pageDic = {
@@ -56,14 +58,18 @@ const pageDic = {
 }
 
 const keys = ['duration', 'vehicle', 'source', 'dest']
+const keys2 = ['duration', 'vehicle', 'alarm', 'segment']
 
 const getExData = (layoutKey) => {
 	return genNormaltr(layoutKey)
 }
 
+const getKeys = (pageVariant) => (pageVariant === 'normaltr' ? keys : keys2)
+
 const makeTableData = (pageVariant, data) => {
 	const tc = tableConfig[pageVariant]
-	return keys.reduce((acc, key) => {
+	const _keys = getKeys(pageVariant)
+	return _keys.reduce((acc, key) => {
 		const { header, keys: hKeys } = tc[key]
 		const _data = data[key]
 		acc[key] = {
@@ -84,8 +90,8 @@ const makeTableData = (pageVariant, data) => {
 const genConfig = (variant, data, pageVariant) => {
 	let temp = []
 	const ret = makeTableData(pageVariant, data)
-
-	const list = keys.map((key) => {
+	const _keys = getKeys(pageVariant)
+	const list = _keys.map((key) => {
 		return {
 			variant: key,
 			title: `${dic[key]}`,
@@ -100,10 +106,12 @@ const genConfig = (variant, data, pageVariant) => {
 		case 'vehicle':
 		case 'source':
 		case 'dest':
-			temp = omitArray(['duration', variant], keys, list)
+		case 'alarm':
+		case 'segment':
+			temp = omitArray(['duration', variant], _keys, list)
 			break
 		default:
-			temp = omitArray(['duration'], keys, list)
+			temp = omitArray(['duration'], _keys, list)
 			break
 	}
 
@@ -344,7 +352,7 @@ TitleBarlineSet.exStatData = exStatData
 TitleBarlineSet.genNormaltr = genNormaltr
 
 TitleBarlineSet.defaultProps = {
-	data: getExData('overview'),
+	data: getExData({ variant: 'overview', pageType: 'alarm' }),
 	pageVariant: 'alarm',
 	stats: exStatData.alarm,
 	onClickItem: (values) => {},

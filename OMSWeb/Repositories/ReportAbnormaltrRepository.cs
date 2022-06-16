@@ -58,8 +58,15 @@ namespace OMSWeb.Repositories
                         (
                             SELECT
                                 count(*)
-                            FROM total_all_orders oh
-                            WHERE time_aborted IS NOT NULL
+                            FROM (
+                                select distinct on (logical_id) * from 
+                                (
+                                    select * from orders
+                                    union 
+                                    select * from order_completed oc
+                                ) temp
+                            ) oh 
+                            WHERE time_aborted IS NOT NULL or time_failed is not null
                                 AND time_modified::DATE BETWEEN '{start}' AND '{end}'
                         ) AS total
                         FROM
@@ -68,7 +75,14 @@ namespace OMSWeb.Repositories
                             (
                                 SELECT
                                 time_modified
-                                FROM total_all_orders
+                                FROM (
+                                    select distinct on (logical_id) * from 
+                                    (
+                                        select * from orders
+                                        union 
+                                        select * from order_completed oc
+                                    ) temp
+                                ) oh
                                 WHERE time_modified::DATE BETWEEN '{start}' AND '{end}'
                                 ORDER BY time_modified ASC
                                 LIMIT 1
@@ -76,7 +90,14 @@ namespace OMSWeb.Repositories
                             (
                                 SELECT
                                 time_modified
-                                FROM total_all_orders
+                                FROM (
+                                    select distinct on (logical_id) * from 
+                                    (
+                                        select * from orders
+                                        union 
+                                        select * from order_completed oc
+                                    ) temp
+                                ) oh
                                 WHERE time_modified::DATE BETWEEN '{start}' AND '{end}'
                                 ORDER BY time_modified DESC
                                 LIMIT 1
@@ -138,16 +159,24 @@ namespace OMSWeb.Repositories
                             TO_CHAR(days, 'YYYY-MM-DD') as label,
                             (
                                 SELECT
-                        count(*)::int as failureAmount,
-                        0 as dest,
-                        0 as source,
-                        count(*)::int as abort,
-                        0 as cancel
-                                FROM total_orders oh
-                                WHERE
-                        time_aborted is not null and
-                                    time_aborted::DATE BETWEEN days AND days
-                                    {SubFilter(subsection, value)}
+                                    count(*)::int as failureAmount,
+                                    0 as dest,
+                                    0 as source,
+                                    count(*)::int as abort,
+                                    0 as cancel
+                                FROM (
+                                    select distinct on (logical_id) * from 
+                                    (
+                                        select * from orders
+                                        union 
+                                        select * from order_completed oc
+                                    ) temp
+                                ) oh
+                                WHERE (
+                                    time_aborted is not null and time_aborted::DATE BETWEEN days AND days
+                                ) or (
+                                    time_failed is not null and time_failed::DATE BETWEEN days AND days
+                                )
                             )
                             FROM GENERATE_SERIES('{startStr}'::DATE, '{endStr}'::DATE, '1 days') days
                                 ";
@@ -163,18 +192,40 @@ namespace OMSWeb.Repositories
                    string queryStr(string[] arr)
                    {
                        var (label, startStr, endStr) = GetDurationLabel(arr);
-                       var _filter = GetFilter(section, startStr, endStr);
 
                        return $@"
-                            select
-                            '{label}' as label,
-                            count(*)::int as failureAmount,
-                    0 as dest,
-                    0 as source,
-                    count(*)::int as abort,
-                    0 as cancel
-                            from total_orders
-                            where time_aborted is not null and {_filter(subsection, value)}
+                            with recursive cte as (
+                                select *
+                                from (
+                                    select distinct on (logical_id) * from 
+                                    (
+                                        select * from orders
+                                        union 
+                                        select * from order_completed oc
+                                    ) temp
+                                ) oh
+                                where (
+                                    time_aborted is not null and time_aborted::DATE BETWEEN '{startStr}' AND '{endStr}'
+                                ) or (
+                                    time_failed is not null and time_failed::DATE BETWEEN '{startStr}' AND '{endStr}'
+                                )
+                            )
+                            select 
+                                '{label}' as label,
+                                count(*)::int as failureamount,
+                                (
+                                    select count(*) from cte where time_failed is not null and err_port_pos = 'S'
+                                )::int as source,
+                                (
+                                    select count(*) from cte where time_failed is not null and err_port_pos = 'D'
+                                )::int as dest,
+                                (
+                                    select count(*) from cte where time_aborted is not null and abort_type = 'A'
+                                )::int as abort,
+                                (
+                                    select count(*) from cte where time_aborted is not null and abort_type = 'C'
+                                )::int as cancel
+                            from cte
                         ";
                    }
 
@@ -209,18 +260,48 @@ namespace OMSWeb.Repositories
                 using (var conn = ConnectTrack())
                 {
                     var sql = $@"
-                        SELECT
-                        {GetColumnFromDic(key)} AS id,
-                        {GetName(key)} as label,
-                        count(*)::int as failureAmount,
-                0 as dest,
-                0 as source,
-                count(*)::int as abort,
-                0 as cancel
-                        FROM total_orders
-                        WHERE time_aborted is not null and {filter(subsection, value)}
-                        GROUP BY {GetColumnFromDic(key)}
-                        ORDER BY label asc
+                        with recursive cte as (
+                            select *
+                            from (
+                                select distinct on (logical_id) * from 
+                                (
+                                    select * from orders
+                                    union 
+                                    select * from order_completed oc
+                                ) temp
+                            ) oh
+                            where (
+                                time_aborted is not null and time_aborted::DATE BETWEEN '{start}' AND '{end}'
+                            ) or (
+                                time_failed is not null and time_failed::DATE BETWEEN '{start}' AND '{end}'
+                            )
+                        )
+                        select * 
+                        from (                        
+                            SELECT
+                                label,
+                                (
+                                    select count(*) from cte where {GetColumnFromDic(key)} = t.name
+                                )::int as failureamount,
+                                (
+                                    select count(*) from cte where time_failed is not null and err_port_pos = 'S' and {GetColumnFromDic(key)} = t.name
+                                )::int as source,
+                                (
+                                    select count(*) from cte where time_failed is not null and err_port_pos = 'D' and {GetColumnFromDic(key)} = t.name
+                                )::int as dest,
+                                (
+                                    select count(*) from cte where time_aborted is not null and abort_type = 'A' and {GetColumnFromDic(key)} = t.name
+                                )::int as abort,
+                                (
+                                    select count(*) from cte where time_aborted is not null and abort_type = 'C' and {GetColumnFromDic(key)} = t.name
+                                )::int as cancel
+                            FROM (
+                                select {GetColumnFromDic(key)} AS name, {GetName(key)} as label
+                                from cte
+                                group by {GetColumnFromDic(key)}
+                            ) t
+                        ) temp
+                        where failureamount != 0
                     ";
 
                     result = (await conn.QueryAsync(sql)).ToArray();

@@ -35,7 +35,7 @@ const TrendWrapper: React.FC = () => {
 		},
 		{
 			placeholderData: placeholderData,
-			refetchInterval: 10000,
+			refetchInterval: 5000,
 		},
 	)
 

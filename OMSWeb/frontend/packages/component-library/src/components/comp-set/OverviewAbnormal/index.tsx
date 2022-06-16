@@ -69,7 +69,7 @@ const OverviewAbnormal: React.FC<Props> & any = ({
 										<Container bottomGutter={8}>
 											<RCol col={12} sm={12} md={12} lg={12}>
 												<StackedBarTableH
-													{...getConfig('vehicle', data.duration)}
+													{...getConfig('vehicle', data.vehicle)}
 													isPlaceholder={isChartPlaceholder}
 												/>
 											</RCol>
@@ -102,8 +102,8 @@ OverviewAbnormal.exData = exData
 OverviewAbnormal.exEmptyData = exEmptyData
 
 OverviewAbnormal.defaultProps = {
-	stats: exData.stats,
-	data: exData.data,
+	stats: exEmptyData.stats,
+	data: exEmptyData.data,
 	isStatPlaceholder: false,
 	isChartPlaceholder: false,
 	startDay: bdFormat(1),

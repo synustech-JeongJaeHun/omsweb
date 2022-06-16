@@ -49,7 +49,7 @@ namespace OMSWeb
 
             // set MqttAppSettingsProvider
             MqttAppSettingsProvider.BrokerHostSettings = new BrokerHostSettings(
-                    AppConfig.GetFromOMSConfig("MessageManager", "host", "localhost"),
+                    AppConfig.GetFromOMSConfig("MessageManager", "host", "172.30.1.48"),
                     Convert.ToInt32(AppConfig.GetFromOMSConfig("MessageManager", "port", "1883")),
                     AppConfig.GetFromOMSConfig("MessageManager", "topic_root", "oms")
                 );

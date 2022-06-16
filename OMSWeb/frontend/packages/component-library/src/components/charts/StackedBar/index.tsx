@@ -47,7 +47,11 @@ const getList = (data, limit) => {
 			acc['series'].push({
 				name: y,
 				animation: false,
-				data,
+				data: data.map((v, idx) => ({
+					y: v,
+					color: colors[i],
+				})),
+				legendColor: colors[i],
 			})
 
 			return acc

@@ -61,7 +61,7 @@ const avg = (arr = []) => {
 	return R.sum(arr) / length
 }
 const getAvg = R.compose(
-	avg,
+	R.last,
 	R.map(R.prop(1)),
 	R.reject(([a, b, isDummy]) => isDummy === 0),
 )

@@ -6,14 +6,14 @@ export default {
 		},
 		{
 			caption: '실패량',
-			dataField: 'failureAmount',
+			dataField: 'failureamount',
 			width: 80,
 		},
 	],
 	body: [
 		{
 			label: '1월',
-			failureAmount: 21,
+			failureamount: 21,
 			dest: 2,
 			source: 3,
 			abort: 3,
@@ -21,7 +21,7 @@ export default {
 		},
 		{
 			label: '2월',
-			failureAmount: 23,
+			failureamount: 23,
 			dest: 2,
 			source: 4,
 			abort: 4,
@@ -29,7 +29,7 @@ export default {
 		},
 		{
 			label: '3월',
-			failureAmount: 26,
+			failureamount: 26,
 			dest: 3,
 			source: 4,
 			abort: 4,
@@ -37,7 +37,7 @@ export default {
 		},
 		{
 			label: '4월',
-			failureAmount: 19,
+			failureamount: 19,
 			dest: 2,
 			source: 2,
 			abort: 2,

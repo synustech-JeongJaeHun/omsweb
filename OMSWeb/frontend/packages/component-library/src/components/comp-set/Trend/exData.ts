@@ -159,7 +159,7 @@ const makeTable = (data) => {
 		[
 			{
 				label: 'Number of order requests',
-				value: `per hour: ${number_of_order_request['value']}`,
+				value: `per second: ${number_of_order_request['value']}, estimated per day: ${number_of_order_request['count']}`,
 			},
 		],
 	]

@@ -24,8 +24,15 @@ namespace OMSWeb.Repositories
                     select
                     EXTRACT(EPOCH FROM avg(time_completed - time_created))::int as value,
                     count(*)
-                    from orders
-                    where time_completed >= now() - interval '1 hours'
+                    from (
+                        select distinct on (logical_id) * from 
+                        (
+                            select * from orders
+                            union 
+                            select * from order_completed oc
+                        ) temp
+                    ) temp
+                    where time_completed >= now() - interval '10 minutes'
                 ";
 
                 result = await conn.QueryFirstAsync<(int Value, int Count)>(sql);
@@ -41,8 +48,15 @@ namespace OMSWeb.Repositories
                     select
                     EXTRACT(EPOCH FROM avg(time_load_completed  - time_created))::int as value,
                     count(*)
-                    from orders
-                    where time_load_completed >= now() - interval '1 hours'
+                    from (
+                        select distinct on (logical_id) * from 
+                        (
+                            select * from orders
+                            union 
+                            select * from order_completed oc
+                        ) temp
+                    ) temp
+                    where time_load_completed >= now() - interval '10 minutes'
                 ";
 
                 result = await conn.QueryFirstAsync<(int Value, int Count)>(sql);
@@ -58,8 +72,15 @@ namespace OMSWeb.Repositories
                     select
                     EXTRACT(EPOCH FROM avg(time_completed  - time_load_completed))::int as value,
                     count(*)
-                    from orders
-                    where time_load_completed >= now() - interval '1 hours'
+                    from (
+                        select distinct on (logical_id) * from 
+                        (
+                            select * from orders
+                            union 
+                            select * from order_completed oc
+                        ) temp
+                    ) temp
+                    where time_load_completed >= now() - interval '10 minutes'
                 ";
 
                 result = await conn.QueryFirstAsync<(int Value, int Count)>(sql);
@@ -75,8 +96,15 @@ namespace OMSWeb.Repositories
                     select
                     EXTRACT(EPOCH FROM avg(time_assigned  - time_created))::int as value,
                     count(*)
-                    from orders
-                    where time_assigned >= now() - interval '1 hours'
+                    from (
+                        select distinct on (logical_id) * from 
+                        (
+                            select * from orders
+                            union 
+                            select * from order_completed oc
+                        ) temp
+                    ) temp
+                    where time_assigned >= now() - interval '10 minutes'
                 ";
 
                 result = await conn.QueryFirstAsync<(int Value, int Count)>(sql);
@@ -85,18 +113,25 @@ namespace OMSWeb.Repositories
         }
         public async Task<object> QueryNumberOfOrderRequest()
         {
-            (int Value, int Count) result;
+            (float Value, float Count) result;
             using (var conn = ConnectTrack())
             {
                 var sql = @"
                     select
-                    count(*) as value,
-                    count(*)
-                    from orders
-                    where time_created >= now() - interval '1 hours'
+                    trunc((CAST(count(*) AS DECIMAL(5,1))/600), 2) as value,
+                    trunc((CAST(count(*) AS DECIMAL(5,1)) * 6 * 24), 2) as count
+                    from (
+                        select distinct on (logical_id) * from 
+                        (
+                            select * from orders
+                            union 
+                            select * from order_completed oc
+                        ) temp
+                    ) temp
+                    where time_created >= now() - interval '10 minutes'
                 ";
 
-                result = await conn.QueryFirstAsync<(int Value, int Count)>(sql);
+                result = await conn.QueryFirstAsync<(float Value, float Count)>(sql);
             }
             return new { Value = result.Value, Count = result.Count };
         }
@@ -161,10 +196,18 @@ namespace OMSWeb.Repositories
             {
                 var sql = @"
                     select
-                    now() - interval '1 hours' as before_time,
+                    now() - interval '10 minutes' as before_time,
                     now() as current_time,
                     count(*)
-                    from orders where time_modified >= now() - interval '1 hours'
+                    from (
+                        select distinct on (logical_id) * from 
+                        (
+                            select * from orders
+                            union 
+                            select * from order_completed oc
+                        ) temp
+                    ) temp
+                    where time_modified >= now() - interval '10 minutes'
                 ";
 
                 result = await conn.QueryFirstAsync<(DateTimeOffset BeforeTime, DateTimeOffset CurrentTime, int Count)>(sql);
@@ -182,38 +225,47 @@ namespace OMSWeb.Repositories
             using (var conn = ConnectTrack())
             {
                 var sql = @"
-                    select
-                    TRUNC((EXTRACT(epoch FROM avg(time)) / 3600) * 100, 2)::float as value
+                    select 
+                        TRUNC((sum(time) / (600 * (
+                        select count(*)::int 
+                            from vehicles 
+                            where rail_in = true and mode = 'A'
+                        ))) * 100, 2) as value
                     from (
-                    select
-                    CASE
-                        when time_created > now() - interval '1 hours' and max_field is null then now() - time_created
-                        when time_created <= now() - interval '1 hours' and max_field is null then interval '1 hours'
-                        when time_created <= now() - interval '1 hours' and max_field is not null and time_completed is null then interval '1 hours'
-                        when time_completed is not null then time_completed - (now() - interval '1 hours')
-                        ELSE interval '1 hours'
-                    end as time,
-                    id,
-                    time_created,
-                    max_field,
-                    time_completed
-                    from (
-                        select * from (
                         select
-                        id,
-                        time_created,
-                        greatest (
-                            time_assigned, time_vehicle_arrived,
-                            time_load_started, time_load_completed,
-                            time_unload_started, time_unload_completed,
-                            time_completed
-                        ) as max_field,
-                        time_completed
-                        from orders
-                        where time_aborted is null and
-                        time_modified between now() - interval '1 hours' and now()
+                            extract(epoch from time) as time
+                        from (
+                            select
+                            CASE
+                                when time_assigned > now() - interval '10 minutes' and time_completed is null then now() - time_assigned
+                                when time_assigned > now() - interval '10 minutes' and time_completed is not null then time_completed - time_assigned
+                                when time_assigned <= now() - interval '10 minutes' and time_completed is null then interval '10 minutes'
+                                when time_assigned <= now() - interval '10 minutes' and time_completed is not null then time_completed - (now() - interval '10 minutes')
+                                ELSE interval '0 minutes'
+                            end as time
+                            from ( 
+                            select
+                                time_assigned,
+                                greatest (
+                                    time_vehicle_arrived,
+                                    time_load_started, time_load_completed,
+                                    time_unload_started, time_unload_completed,
+                                    time_completed
+                                ) as max_field,
+                                time_completed
+                            from (
+                                select distinct on (logical_id) * from 
+                                (
+                                    select * from orders
+                                    union 
+                                    select * from order_completed oc
+                                ) temp
+                            ) temp
+                            where time_aborted is null and
+                            vehicle_id is not null and
+                            time_modified between now() - interval '10 minutes' and now()
+                            ) temp
                         ) temp
-                    ) temp
                     ) temp
                 ";
 
@@ -235,38 +287,47 @@ namespace OMSWeb.Repositories
             using (var conn = ConnectTrack())
             {
                 var sql = @"
-                    select
-                    TRUNC((EXTRACT(epoch FROM avg(time)) / 3600) * 100, 2)::float as value
+                    select 
+                        TRUNC((sum(time) / (600 * (
+                        select count(*)::int 
+                            from vehicles 
+                            where rail_in = true and mode = 'A'
+                        ))) * 100, 2) as value
                     from (
-                    select
-                    CASE
-                        when time_created > now() - interval '1 hours' and max_field is null then now() - time_created
-                        when time_created <= now() - interval '1 hours' and max_field is null then interval '1 hours'
-                        when time_created <= now() - interval '1 hours' and max_field is not null and time_completed is null then interval '1 hours'
-                        when time_completed is not null then time_completed - (now() - interval '1 hours')
-                        ELSE interval '1 hours'
-                    end as time,
-                    id,
-                    time_created,
-                    max_field,
-                    time_completed
-                    from (
-                        select * from (
                         select
-                        id,
-                        time_created,
-                        greatest (
-                            time_assigned, time_vehicle_arrived,
-                            time_load_started, time_load_completed,
-                            time_unload_started, time_unload_completed,
-                            time_completed
-                        ) as max_field,
-                        time_completed
-                        from orders
-                        where time_aborted is null and
-                        time_modified between now() - interval '1 hours' and now()
+                            extract(epoch from time) as time
+                        from (
+                            select
+                            CASE
+                                when time_assigned > now() - interval '10 minutes' and time_completed is null then now() - time_assigned
+                                when time_assigned > now() - interval '10 minutes' and time_completed is not null then time_completed - time_assigned
+                                when time_assigned <= now() - interval '10 minutes' and time_completed is null then interval '10 minutes'
+                                when time_assigned <= now() - interval '10 minutes' and time_completed is not null then time_completed - (now() - interval '10 minutes')
+                                ELSE interval '0 minutes'
+                            end as time
+                            from ( 
+                            select
+                                time_assigned,
+                                greatest (
+                                    time_vehicle_arrived,
+                                    time_load_started, time_load_completed,
+                                    time_unload_started, time_unload_completed,
+                                    time_completed
+                                ) as max_field,
+                                time_completed
+                            from (
+                                select distinct on (logical_id) * from 
+                                (
+                                    select * from orders
+                                    union 
+                                    select * from order_completed oc
+                                ) temp
+                            ) temp
+                            where time_aborted is null and
+                            vehicle_id is not null and
+                            time_modified between now() - interval '10 minutes' and now()
+                            ) temp
                         ) temp
-                    ) temp
                     ) temp
                 ";
                 try
@@ -294,8 +355,15 @@ namespace OMSWeb.Repositories
                     select
                     EXTRACT(EPOCH FROM avg(time_completed - time_created))::int as value,
                     count(*)
-                    from orders
-                    where time_completed >= now() - interval '1 hours'
+                    from (
+                        select distinct on (logical_id) * from 
+                        (
+                            select * from orders
+                            union 
+                            select * from order_completed oc
+                        ) temp
+                    ) temp
+                    where time_completed >= now() - interval '10 minutes'
                 ";
 
                 try

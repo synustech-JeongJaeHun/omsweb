@@ -6,14 +6,14 @@ export default {
 		},
 		{
 			caption: '실패량',
-			dataField: 'failureAmount',
+			dataField: 'failureamount',
 			width: 80,
 		},
 	],
 	body: [
 		{
 			label: 'VEH_001asdfasdfasfsaf',
-			failureAmount: 21,
+			failureamount: 21,
 			dest: 2,
 			source: 3,
 			abort: 3,
@@ -21,7 +21,7 @@ export default {
 		},
 		{
 			label: 'VEH_002',
-			failureAmount: 23,
+			failureamount: 23,
 			dest: 2,
 			source: 4,
 			abort: 4,
@@ -29,7 +29,7 @@ export default {
 		},
 		{
 			label: 'VEH_003',
-			failureAmount: 26,
+			failureamount: 26,
 			dest: 3,
 			source: 4,
 			abort: 4,
@@ -37,7 +37,7 @@ export default {
 		},
 		{
 			label: 'VEH_004',
-			failureAmount: 19,
+			failureamount: 19,
 			dest: 2,
 			source: 2,
 			abort: 2,
@@ -45,7 +45,7 @@ export default {
 		},
 		{
 			label: 'VEH_005',
-			failureAmount: 24,
+			failureamount: 24,
 			dest: 1,
 			source: 5,
 			abort: 5,
@@ -53,7 +53,7 @@ export default {
 		},
 		{
 			label: 'VEH_006',
-			failureAmount: 26,
+			failureamount: 26,
 			dest: 3,
 			source: 4,
 			abort: 4,
@@ -61,7 +61,7 @@ export default {
 		},
 		{
 			label: 'VEH_007',
-			failureAmount: 19,
+			failureamount: 19,
 			dest: 2,
 			source: 2,
 			abort: 2,
@@ -69,7 +69,7 @@ export default {
 		},
 		{
 			label: 'VEH_008',
-			failureAmount: 24,
+			failureamount: 24,
 			dest: 1,
 			source: 5,
 			abort: 5,
@@ -77,7 +77,7 @@ export default {
 		},
 		{
 			label: 'VEH_009',
-			failureAmount: 19,
+			failureamount: 19,
 			dest: 2,
 			source: 2,
 			abort: 2,
@@ -85,7 +85,7 @@ export default {
 		},
 		{
 			label: 'VEH_010',
-			failureAmount: 24,
+			failureamount: 24,
 			dest: 1,
 			source: 5,
 			abort: 5,
@@ -93,7 +93,7 @@ export default {
 		},
 		{
 			label: 'VEH_011',
-			failureAmount: 21,
+			failureamount: 21,
 			dest: 2,
 			source: 3,
 			abort: 3,
@@ -101,7 +101,7 @@ export default {
 		},
 		{
 			label: 'VEH_012',
-			failureAmount: 23,
+			failureamount: 23,
 			dest: 2,
 			source: 4,
 			abort: 4,
@@ -109,7 +109,7 @@ export default {
 		},
 		{
 			label: 'VEH_013',
-			failureAmount: 26,
+			failureamount: 26,
 			dest: 3,
 			source: 4,
 			abort: 4,
@@ -117,7 +117,7 @@ export default {
 		},
 		{
 			label: 'VEH_014',
-			failureAmount: 19,
+			failureamount: 19,
 			dest: 2,
 			source: 2,
 			abort: 2,
@@ -125,7 +125,7 @@ export default {
 		},
 		{
 			label: 'VEH_015',
-			failureAmount: 24,
+			failureamount: 24,
 			dest: 1,
 			source: 5,
 			abort: 5,
@@ -133,7 +133,7 @@ export default {
 		},
 		{
 			label: 'VEH_016',
-			failureAmount: 26,
+			failureamount: 26,
 			dest: 3,
 			source: 4,
 			abort: 4,
@@ -141,7 +141,7 @@ export default {
 		},
 		{
 			label: 'VEH_017',
-			failureAmount: 19,
+			failureamount: 19,
 			dest: 2,
 			source: 2,
 			abort: 2,
@@ -149,7 +149,7 @@ export default {
 		},
 		{
 			label: 'VEH_018',
-			failureAmount: 24,
+			failureamount: 24,
 			dest: 1,
 			source: 5,
 			abort: 5,
@@ -157,7 +157,7 @@ export default {
 		},
 		{
 			label: 'VEH_019',
-			failureAmount: 19,
+			failureamount: 19,
 			dest: 2,
 			source: 2,
 			abort: 2,
@@ -165,7 +165,7 @@ export default {
 		},
 		{
 			label: 'VEH_020',
-			failureAmount: 24,
+			failureamount: 24,
 			dest: 1,
 			source: 5,
 			abort: 5,
@@ -173,7 +173,7 @@ export default {
 		},
 		{
 			label: 'VEH_021',
-			failureAmount: 21,
+			failureamount: 21,
 			dest: 2,
 			source: 3,
 			abort: 3,
@@ -181,7 +181,7 @@ export default {
 		},
 		{
 			label: 'VEH_022',
-			failureAmount: 23,
+			failureamount: 23,
 			dest: 2,
 			source: 4,
 			abort: 4,
@@ -189,7 +189,7 @@ export default {
 		},
 		{
 			label: 'VEH_023',
-			failureAmount: 26,
+			failureamount: 26,
 			dest: 3,
 			source: 4,
 			abort: 4,
@@ -197,7 +197,7 @@ export default {
 		},
 		{
 			label: 'VEH_024',
-			failureAmount: 19,
+			failureamount: 19,
 			dest: 2,
 			source: 2,
 			abort: 2,

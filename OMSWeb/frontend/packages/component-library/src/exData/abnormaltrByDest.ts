@@ -6,14 +6,14 @@ export default {
 		},
 		{
 			caption: '실패량',
-			dataField: 'failureAmount',
+			dataField: 'failureamount',
 			width: 80,
 		},
 	],
 	body: [
 		{
 			label: 'PORT_101asdfasdfasfsaf',
-			failureAmount: 21,
+			failureamount: 21,
 			dest: 2,
 			source: 3,
 			abort: 3,
@@ -21,7 +21,7 @@ export default {
 		},
 		{
 			label: 'PORT_102',
-			failureAmount: 23,
+			failureamount: 23,
 			dest: 2,
 			source: 4,
 			abort: 4,
@@ -29,7 +29,7 @@ export default {
 		},
 		{
 			label: 'PORT_103',
-			failureAmount: 26,
+			failureamount: 26,
 			dest: 3,
 			source: 4,
 			abort: 4,
@@ -37,7 +37,7 @@ export default {
 		},
 		{
 			label: 'PORT_104',
-			failureAmount: 19,
+			failureamount: 19,
 			dest: 2,
 			source: 2,
 			abort: 2,
@@ -45,7 +45,7 @@ export default {
 		},
 		{
 			label: 'PORT_105',
-			failureAmount: 24,
+			failureamount: 24,
 			dest: 1,
 			source: 5,
 			abort: 5,
@@ -53,7 +53,7 @@ export default {
 		},
 		{
 			label: 'PORT_106',
-			failureAmount: 26,
+			failureamount: 26,
 			dest: 3,
 			source: 4,
 			abort: 4,
@@ -61,7 +61,7 @@ export default {
 		},
 		{
 			label: 'PORT_107',
-			failureAmount: 19,
+			failureamount: 19,
 			dest: 2,
 			source: 2,
 			abort: 2,
@@ -69,7 +69,7 @@ export default {
 		},
 		{
 			label: 'PORT_108',
-			failureAmount: 24,
+			failureamount: 24,
 			dest: 1,
 			source: 5,
 			abort: 5,
@@ -77,7 +77,7 @@ export default {
 		},
 		{
 			label: 'PORT_109',
-			failureAmount: 19,
+			failureamount: 19,
 			dest: 2,
 			source: 2,
 			abort: 2,
@@ -85,7 +85,7 @@ export default {
 		},
 		{
 			label: 'PORT_110',
-			failureAmount: 24,
+			failureamount: 24,
 			dest: 1,
 			source: 5,
 			abort: 5,
@@ -93,7 +93,7 @@ export default {
 		},
 		{
 			label: 'PORT_111',
-			failureAmount: 21,
+			failureamount: 21,
 			dest: 2,
 			source: 3,
 			abort: 3,
@@ -101,7 +101,7 @@ export default {
 		},
 		{
 			label: 'PORT_112',
-			failureAmount: 23,
+			failureamount: 23,
 			dest: 2,
 			source: 4,
 			abort: 4,
@@ -109,7 +109,7 @@ export default {
 		},
 		{
 			label: 'PORT_113',
-			failureAmount: 26,
+			failureamount: 26,
 			dest: 3,
 			source: 4,
 			abort: 4,
@@ -117,7 +117,7 @@ export default {
 		},
 		{
 			label: 'PORT_114',
-			failureAmount: 19,
+			failureamount: 19,
 			dest: 2,
 			source: 2,
 			abort: 2,
@@ -125,7 +125,7 @@ export default {
 		},
 		{
 			label: 'PORT_115',
-			failureAmount: 24,
+			failureamount: 24,
 			dest: 1,
 			source: 5,
 			abort: 5,
@@ -133,7 +133,7 @@ export default {
 		},
 		{
 			label: 'PORT_116',
-			failureAmount: 26,
+			failureamount: 26,
 			dest: 3,
 			source: 4,
 			abort: 4,
@@ -141,7 +141,7 @@ export default {
 		},
 		{
 			label: 'PORT_117',
-			failureAmount: 19,
+			failureamount: 19,
 			dest: 2,
 			source: 2,
 			abort: 2,
@@ -149,7 +149,7 @@ export default {
 		},
 		{
 			label: 'PORT_118',
-			failureAmount: 24,
+			failureamount: 24,
 			dest: 1,
 			source: 5,
 			abort: 5,
@@ -157,7 +157,7 @@ export default {
 		},
 		{
 			label: 'PORT_119',
-			failureAmount: 19,
+			failureamount: 19,
 			dest: 2,
 			source: 2,
 			abort: 2,
@@ -165,7 +165,7 @@ export default {
 		},
 		{
 			label: 'PORT_120',
-			failureAmount: 24,
+			failureamount: 24,
 			dest: 1,
 			source: 5,
 			abort: 5,
@@ -173,7 +173,7 @@ export default {
 		},
 		{
 			label: 'PORT_121',
-			failureAmount: 21,
+			failureamount: 21,
 			dest: 2,
 			source: 3,
 			abort: 3,
@@ -181,7 +181,7 @@ export default {
 		},
 		{
 			label: 'PORT_122',
-			failureAmount: 23,
+			failureamount: 23,
 			dest: 2,
 			source: 4,
 			abort: 4,
@@ -189,7 +189,7 @@ export default {
 		},
 		{
 			label: 'PORT_123',
-			failureAmount: 26,
+			failureamount: 26,
 			dest: 3,
 			source: 4,
 			abort: 4,
@@ -197,7 +197,7 @@ export default {
 		},
 		{
 			label: 'PORT_124',
-			failureAmount: 19,
+			failureamount: 19,
 			dest: 2,
 			source: 2,
 			abort: 2,

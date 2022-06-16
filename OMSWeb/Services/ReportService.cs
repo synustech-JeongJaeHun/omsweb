@@ -10,17 +10,22 @@ namespace OMSWeb.Services
 {
     public static class ReportServiceShared
     {
-        public static string[] GetSubsection(string? section)
+        public static string[] GetSubsection(string? section, string? pageType = "normaltr")
         {
-            switch (section)
-            {
-                case "vehicle":
-                case "source":
-                case "dest":
-                    return new[] { "vehicle", "source", "dest" };
-                default:
-                    return new[] { "vehicle", "source", "dest" };
-            };
+            if (pageType == "alarm") {
+                return new[] { "vehicle", "alarm", "segment" };
+            } else {
+                switch (section)
+                {
+                    case "vehicle":
+                    case "source":
+                    case "dest":
+                        return new[] { "vehicle", "source", "dest" };
+                    default:
+                        return new[] { "vehicle", "source", "dest" };
+                };
+            }
+
         }
     }
     public class ReportService
@@ -132,9 +137,8 @@ namespace OMSWeb.Services
         public async Task<object> QueryAlarmChartsBetween(string section, string selectedItem, string start, string end)
         {
             var queryDuration = _reportAlarmRepository.BuildQueryDuration(section, start, end);
-            var sectionList = ReportServiceShared.GetSubsection(section);
+            var sectionList = ReportServiceShared.GetSubsection(section, "alarm");
 
-            await _reportRepo.CreateOrderView(start, end);
             var duration = await queryDuration(section, selectedItem);
             var others = await _reportAlarmRepository.QuerySections(section, selectedItem, start, end);
 
@@ -147,7 +151,6 @@ namespace OMSWeb.Services
 
         public async Task<object> QueryAbnormaltrStatsBetween(string start, string end)
         {
-            await _reportRepo.CreateOrderViewAll();
             return await _reportAbnormaltrRepository.QueryStatsAggregatedByTotalTimeSpan(start, end);
         }
 
@@ -156,7 +159,6 @@ namespace OMSWeb.Services
             var queryDuration = _reportAbnormaltrRepository.BuildQueryDuration(section, start, end);
             var sectionList = ReportServiceShared.GetSubsection(section);
 
-            await _reportRepo.CreateOrderView(start, end);
             var duration = await queryDuration(section, selectedItem);
             var others = await _reportAbnormaltrRepository.QuerySections(section, selectedItem, start, end);
 

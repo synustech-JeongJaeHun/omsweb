@@ -12,6 +12,8 @@ namespace OMSWeb.Repositories
             "vehicle" => "vehicle_id",
             "source" => "location_pickup",
             "dest" => "location_dropoff",
+            "alarm" => "error_code",
+            "segment" => "current",
             _ => null
         };
 
@@ -20,6 +22,8 @@ namespace OMSWeb.Repositories
             "vehicle" => "vehicle",
             "source" => "source",
             "dest" => "dest",
+            "alarm" => "alarm",
+            "segment" => "segment",
             _ => null
         };
 

@@ -170,6 +170,44 @@ export const tableConfig = {
 				},
 			],
 		},
+		alarm: {
+			keys: ['name', 'alarmNum', 'avgHour'],
+			header: [
+				{
+					caption: 'alarm명',
+					dataField: 'name',
+				},
+				{
+					caption: '발생량',
+					dataField: 'alarmNum',
+					width: 80,
+				},
+				{
+					caption: '평균시간',
+					dataField: 'avgHour',
+					width: 115,
+				},
+			],
+		},
+		segment: {
+			keys: ['name', 'alarmNum', 'avgHour'],
+			header: [
+				{
+					caption: 'segment명',
+					dataField: 'name',
+				},
+				{
+					caption: '발생량',
+					dataField: 'alarmNum',
+					width: 80,
+				},
+				{
+					caption: '평균시간',
+					dataField: 'avgHour',
+					width: 115,
+				},
+			],
+		},
 		source: {
 			keys: ['name', 'alarmNum', 'avgHour'],
 			header: [

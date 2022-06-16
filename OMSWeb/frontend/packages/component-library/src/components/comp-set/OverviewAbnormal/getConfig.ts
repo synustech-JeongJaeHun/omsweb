@@ -32,7 +32,7 @@ const dic2 = {
 			},
 			{
 				caption: '실패량',
-				dataField: 'failureAmount',
+				dataField: 'failureamount',
 				width: 80,
 			},
 		],
@@ -46,7 +46,7 @@ const dic2 = {
 			},
 			{
 				caption: '실패량',
-				dataField: 'failureAmount',
+				dataField: 'failureamount',
 				width: 80,
 			},
 		],
@@ -60,7 +60,7 @@ const dic2 = {
 			},
 			{
 				caption: '실패량',
-				dataField: 'failureAmount',
+				dataField: 'failureamount',
 				width: 80,
 			},
 		],
@@ -74,7 +74,7 @@ const dic2 = {
 			},
 			{
 				caption: '실패량',
-				dataField: 'failureAmount',
+				dataField: 'failureamount',
 				width: 80,
 			},
 		],
@@ -87,7 +87,7 @@ const getConfig = (variant, data) => {
 		...dic[variant],
 		data: {
 			...dic2[variant],
-			data,
+			body: data,
 		},
 	}
 }
