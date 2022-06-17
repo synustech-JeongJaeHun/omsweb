@@ -84,7 +84,7 @@ namespace UpdateDto {
 		point: number
 	}
 	// XXX:update DTO
-	export type FireShutter = {
+	export type Fireshutter = {
 		id: number
 		x: number
 		y: number

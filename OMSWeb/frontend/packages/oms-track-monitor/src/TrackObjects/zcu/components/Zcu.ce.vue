@@ -34,7 +34,11 @@ const props = defineProps<{
         pointer-events="bounding-box"
         stroke="black"
         stroke-width="3"
-        :fill="(props.zcu.error && props.zcu.usingType !== 2) ? 'red' : 'transparent'"
+        :fill="
+          props.zcu.error && props.zcu.usingType !== 2
+            ? 'red'
+            : 'transparent'
+        "
         :data-id="props.zcu.id"
         @click.left="handleLeftClick"
         @click.right="handleRightClick"

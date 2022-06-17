@@ -7,6 +7,7 @@ import { Vehicle } from '../../TrackObjects/vehicle/types/Vehicle'
 import { Buffer } from '../../TrackObjects/buffer/types/Buffer'
 import { UpdateDto } from '../../types/Dto'
 import { Zcu } from 'src/TrackObjects/zcu/types/Zcu'
+import { Fireshutter } from 'src/TrackObjects/fireshutter/types/Fireshutter'
 
 // also update /export-types
 interface IOmsTrackMonitor {
@@ -25,6 +26,7 @@ interface IOmsTrackMonitor {
 	setTrack(track: ITrackData): void
 	centerZoom(): void
 
+	// XXX: fireshutter find
 	// find
 	find(type: 'vehicle', id: Vehicle['id']): void
 	find(type: 'point', id: Point['id']): void
@@ -32,7 +34,8 @@ interface IOmsTrackMonitor {
 	find(type: 'station', id: Station['id']): void
 	find(type: 'buffer', id: Buffer['id']): void
 	find(type: 'mtl', id: Mtl['id']): void
-
+	find(type: 'fireshutter', id: Mtl['id']): void
+	// XXX: fireshutter focus
 	// focus
 	focus(type: 'vehicle', id: Vehicle['id']): void
 	focus(type: 'point', id: Point['id']): void
@@ -41,11 +44,19 @@ interface IOmsTrackMonitor {
 	focus(type: 'buffer', id: Buffer['id']): void
 	focus(type: 'mtl', id: Mtl['id']): void
 	focus(type: 'zcu', id: Zcu['id']): void
+	focus(type: 'fireshutter', id: Fireshutter['id']): void
 	dropFocus(): void
 
 	track(type: 'vehicle', id: Vehicle['id']): void
 	stopTrack(): void
 
+	/*XXX: fireshutter는 업데이트 될 가능성이 있는지?
+	과거에 segment가 고정일 줄 알고 코드를 작성했는데, 추후에 업데이트 쿼리를 받도록
+	기능 추가 요구가 들어왔다고 합니다. 
+
+	우선 UpdateDto에 fireshutter 타입은 반영해놓은 상태
+
+	*/
 	// Update Data
 	updateVehicle(
 		operation: UpdateDto.Operation,

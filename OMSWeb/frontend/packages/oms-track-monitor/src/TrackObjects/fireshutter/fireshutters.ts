@@ -1,14 +1,14 @@
 import { ITrackData } from 'src/legacies/models/track.model'
 import { UpdateDto } from 'src/types/Dto'
 import { ref } from 'vue'
-import { FireShutter } from './types/Fireshutter'
+import { Fireshutter } from './types/Fireshutter'
 
-const fireshutters = ref<FireShutter[]>([])
-const fireshutterMap = new Map<FireShutter['id'], FireShutter>()
+const fireshutters = ref<Fireshutter[]>([])
+const fireshutterMap = new Map<Fireshutter['id'], Fireshutter>()
 
 //implicate CR only
 
-function findFireshutterById(id: FireShutter['id']) {
+function findFireshutterById(id: Fireshutter['id']) {
 	return fireshutterMap.get(id)
 }
 
@@ -20,9 +20,11 @@ function initFireshutters(fs: ITrackData['fireshutters']) {
 	//set values from server on ref
 	fireshutters.value = (fs ?? []).map((f) => ({ ...f }))
 	fireshutters.value.forEach((f) => fireshutterMap.set(f.id, f))
+
+	console.log('=======FSMAP==', fireshutterMap)
 }
 
-function setFireshutter(updateData: UpdateDto.FireShutter) {
+function setFireshutter(updateData: UpdateDto.Fireshutter) {
 	const fs = findFireshutterById(updateData.id)
 	if (fs) Object.assign(fs, updateData)
 }

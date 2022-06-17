@@ -63,7 +63,6 @@ import { getPositionForBufferOrStation } from 'src/TrackObjects/utils/locationSt
 import { setFocusedObject } from 'src/MapObjects/focus/focus'
 import { setTrackedObject } from 'src/MapObjects/track/track'
 
-const echo = () => console.log('howling hello just for confidence')
 const exposed: IOmsTrackMonitor = {
 	getCameraAndRotation,
 	setCameraAndRotation,
@@ -103,10 +102,12 @@ const exposed: IOmsTrackMonitor = {
 		initGroups(t.groups)
 
 		// XXX:set fireshutters
-		// 여기까지 했으면 service 찍어보면 fireshutter 정보가 나오지 않을까
+		// DB에도 값이 들어가게 되면 아래와 같이 수정
 		// initFireshutters(t.fireshutters)
-		initFireshutters([{ id: 1, x: 37600, y: 30900, status: 'OPEN' }])
-		echo()
+		initFireshutters([
+			{ id: 1, x: 9794, y: 2957, status: 'CLOSE' },
+			{ id: 2, x: 9900, y: 3000, status: 'OPEN' },
+		])
 	},
 	centerZoom,
 
@@ -150,6 +151,9 @@ const exposed: IOmsTrackMonitor = {
 			case 'mtl':
 				const mtl = findMtlById(id)
 				if (mtl) this.find('point', mtl.pointId)
+				break
+			///XXX: fireshutter
+			case 'fireshutter':
 				break
 
 			default:
@@ -200,6 +204,9 @@ const exposed: IOmsTrackMonitor = {
 					setFocusedObject(zcu)
 				}
 
+				break
+			case 'fireshutter':
+				// XXX: focus case 가 필요할 시 추가할 것
 				break
 
 			default:

@@ -20,6 +20,7 @@ function handleMouseover(event: MouseEvent) {
     event,
   })
 }
+
 function handleMouseleave(event: MouseEvent) {
   emit('mouseleaveOnObject')
 }
