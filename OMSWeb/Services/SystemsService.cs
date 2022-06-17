@@ -139,6 +139,10 @@ namespace OMSWeb.Services
         {
             return this._appSettings.DefaultColor;
         }
+        public ManualTransferFilters GetManualTransferFilters()
+        {
+            return this._appSettings.ManualTransferFilters;
+        }
 
         public List<LogModel> GetLogs()
         {

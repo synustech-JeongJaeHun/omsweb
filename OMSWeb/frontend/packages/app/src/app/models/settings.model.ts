@@ -16,6 +16,13 @@ export class ServiceConfig {
   i18nEnabled: boolean;
 }
 
+export interface ManualTransferFilterSettings {
+	sourceFilterEnabled: boolean
+	sourceWords: string[]
+	destinationFilterEnabled: boolean
+	destinationWords: string[]
+}
+
 export class MapConfig {
   vehicleScale?: number = main_css.vehicle.radius;
   mapRotation?: number = 0;
