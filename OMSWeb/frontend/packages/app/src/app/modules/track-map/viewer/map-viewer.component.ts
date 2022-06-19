@@ -500,7 +500,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		this.dialogSvc
 			.confirm({ body: this.$t.instant('messages.confirmBufferChange') })
 			.subscribe((confirm) => {
-				confirm &&
+				if(confirm)
 					this.messageSvc
 						.sendCarrierCommand({
 							action: 'remove_carrier',
@@ -514,7 +514,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		this.dialogSvc
 			.confirm({ body: this.$t.instant('messages.confirmBufferChange') })
 			.subscribe((confirm) => {
-				confirm &&
+				if(confirm)
 					this.messageSvc
 						.sendCarrierCommand({
 							action: 'install_carrier',
