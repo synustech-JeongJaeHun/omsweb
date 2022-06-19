@@ -34,12 +34,12 @@
         </oms-unit-selector>
       </div>
       <div class="form-row">
-        <oms-unit-selector [findScopes]="['stations', 'buffers']" 
+        <oms-unit-selector [findScopes]="['stations', 'buffers']" [filterWords]="sourceFilterWords"
           [disabled]="commandState.sourceDisabled" [(selectedUnit)]="commandState.source"
           [placeholder]="'names.selectSource' | translate"></oms-unit-selector>
       </div>
       <div class="form-row">
-        <oms-unit-selector [findScopes]="['stations', 'buffers']" [disabled]="commandState.destDisabled"
+        <oms-unit-selector [findScopes]="['stations', 'buffers']" [filterWords]="destinationFilterWords" [disabled]="commandState.destDisabled"
           [(selectedUnit)]="commandState.dest" [placeholder]="'names.selectDest' | translate"></oms-unit-selector>
       </div>
       <div class="form-row">
@@ -77,7 +77,7 @@
         </oms-unit-selector>
       </div>
       <div class="form-row">
-        <oms-unit-selector [findScopes]="['stations', 'buffers']" 
+        <oms-unit-selector [findScopes]="['stations', 'buffers']" [filterWords]="sourceFilterWords"
           [disabled]="commandState.sourceDisabled" [(selectedUnit)]="commandState.source"
           [placeholder]="'names.selectSource' | translate"></oms-unit-selector>
       </div>
@@ -116,7 +116,7 @@
         </oms-unit-selector>
       </div>
       <div class="form-row">
-        <oms-unit-selector [findScopes]="['stations', 'buffers']" [disabled]="commandState.destDisabled"
+        <oms-unit-selector [findScopes]="['stations', 'buffers']" [filterWords]="destinationFilterWords" [disabled]="commandState.destDisabled"
           [(selectedUnit)]="commandState.dest" [placeholder]="'names.selectDest' | translate"></oms-unit-selector>
       </div>
       <div class="form-row">

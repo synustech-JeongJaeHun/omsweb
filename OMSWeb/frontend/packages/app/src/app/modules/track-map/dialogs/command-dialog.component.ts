@@ -14,6 +14,7 @@ import {
 import { MapStatesService } from '../map-states.service'
 import { TrackStatusService } from '@oms/root/services/track-status.service'
 import * as DateFns from 'date-fns'
+import { SystemStatusService } from '@oms/root/services/system-status.service'
 
 @Component({
 	selector: 'oms-command-dialog',
@@ -33,6 +34,20 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 		return this.statesSvc.transferCommandState
 	}
 
+	get sourceFilterWords() {
+		return this.systemStatusService.manualTransferFilterSettings
+			?.sourceFilterEnabled
+			? this.systemStatusService.manualTransferFilterSettings.sourceWords
+			: undefined
+	}
+
+	get destinationFilterWords() {
+		return this.systemStatusService.manualTransferFilterSettings
+			.destinationFilterEnabled
+			? this.systemStatusService.manualTransferFilterSettings?.destinationWords
+			: undefined
+	}
+
 	constructor(
 		private statesSvc: MapStatesService,
 		private dialog: MatDialogRef<CommandDialogComponent>,
@@ -40,6 +55,7 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 		private messageSvc: MessagesService,
 		private t$: TranslateService,
 		private trackStatusService: TrackStatusService,
+		private systemStatusService: SystemStatusService,
 	) {}
 
 	ngOnInit(): void {
