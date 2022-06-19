@@ -10,6 +10,7 @@ export namespace Dto {
 		pointId: number
 		group?: number
 		nextpoint?: number
+		nextPoint?: number
 		offset?: number
 		unuse?: boolean
 		carrierId?: string

@@ -314,6 +314,9 @@
         {{ "names.unuse" | translate}}
       </button>
 
+      <span style="font-size: xx-small;">
+        Carrier : {{ contextMenuObject?.value.carrierId ? contextMenuObject?.value.carrierId : 'None' }}
+      </span>
       <div class="carrier-form">
         <mat-form-field class="dense full-span-col" appearance="outline">
           <input #carrierIdInput matInput [placeholder]="'names.carrierId' | translate" />

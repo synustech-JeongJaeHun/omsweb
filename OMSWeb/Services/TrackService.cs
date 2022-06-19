@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using OMSWeb.Models;
 using OMSWeb.Models.Tracks;
 using OMSWeb.Repositories;
+using Buffer = OMSWeb.Models.Tracks.Buffer;
 
 namespace OMSWeb.Services
 {
@@ -139,6 +137,11 @@ namespace OMSWeb.Services
         public IList<Station> GetStations()
         {
             return this._trackRepo.LoadStations();
+        }
+
+        public Buffer GetBufferById(int id)
+        {
+            return this._trackRepo.LoadBufferById(id);
         }
     }
 }
