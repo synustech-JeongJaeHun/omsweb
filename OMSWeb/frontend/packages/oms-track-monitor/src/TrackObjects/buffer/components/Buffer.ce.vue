@@ -26,6 +26,7 @@ const group = useGroup('buffer', toRef(props.buffer, 'id'))
     class="overflow-visible cursor-pointer buffer"
     :x="position.x"
     :y="position.y"
+    :data-disabled="props.buffer.unuse"
   >
     <g class="scale-and-reverse-rotate">
       <use

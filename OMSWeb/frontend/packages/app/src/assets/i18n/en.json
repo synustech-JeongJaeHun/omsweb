@@ -330,6 +330,8 @@
     "segmentDisabled": "Segment - disabled",
     "stationNormal": "Station - normal",
     "stationUnuse": "Station - unuse",
+    "bufferNormal": "Buffer - normal",
+    "bufferUnuse": "Buffer - unuse",
     "revert": "Revert",
     "selectResetItem": "Select items to reset",
     "resetToDefault": "Reset to default",

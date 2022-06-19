@@ -41,6 +41,7 @@ const ColorDefault: Record<ColorProperty, string> = {
 	station: 'black',
 	stationDisabled: '#f06767',
 	buffer: 'black',
+	bufferDisabled: '#ff9494',
 	point: 'black',
 	home: '#00000060',
 	normalSegment: 'grey',

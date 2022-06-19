@@ -330,6 +330,8 @@
     "segmentDisabled": "세그먼트 - 비활성화",
     "stationNormal": "스테이션 - 일반",
     "stationUnuse": "스테이션 - 미사용",
+    "bufferNormal": "Buffer - 일반",
+    "bufferUnuse": "Buffer - 미사용",
     "revert": "되돌리기",
     "selectResetItem": "재설정할 항목 선택",
     "resetToDefault": "기본값으로 재설정",

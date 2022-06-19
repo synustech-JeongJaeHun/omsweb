@@ -305,6 +305,13 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 					this.viewer.updateStation(e.operation, { id: e.id, unuse: e.unuse })
 				})
 
+      this.hubSvc.bufferChanged$
+				.pipe(takeUntil(this.destroy$))
+				.subscribe((e) => {
+          // @ts-ignore
+					this.viewer.updateBuffer(e.operation, { id: e.id, unuse: e.unuse })
+				})
+
 			this.hubSvc.groupChanged$
 				.pipe(takeUntil(this.destroy$))
 				.subscribe((e) => {
@@ -334,12 +341,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 			// 		// TODO what happened on event?
 			// 		console.log('vehicle path update', e)
 			// 	})
-			// this.hubSvc.bufferChanged$
-			// 	.pipe(takeUntil(this.destroy$))
-			// 	.subscribe((e) => {
-			// 		// TODO what happened on event?
-			// 		console.log('buffer update', e)
-			// 	})
+
 			// this.hubSvc.mtlChanged$
 			// 	.pipe(takeUntil(this.destroy$))
 			// 	.subscribe((e) => {
@@ -367,6 +369,22 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 			.subscribe((ok) => {
 				if (ok) {
 					this.messageSvc.sendStationSettingCommand(message, [id]).subscribe()
+					this.showContextMenu = false
+				}
+			})
+	}
+
+	onToggleBufferUnuse(id: number, toState: 'UNUSE' | 'USE') {
+		const message =
+			toState === 'USE'
+				? { type: 'USE', action: 'buffer-setting', unused: 0 }
+				: { type: 'UNUSE', action: 'buffer-setting', unused: 1 }
+
+		this.dialogSvc
+			.confirm({ body: this.$t.instant('messages.confirmCommand') })
+			.subscribe((ok) => {
+				if (ok) {
+					this.messageSvc.sendBufferSettingCommand(message, [id]).subscribe()
 					this.showContextMenu = false
 				}
 			})

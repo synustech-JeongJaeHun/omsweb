@@ -17,6 +17,7 @@ import {
 import {
 	findBufferById,
 	initBuffers,
+	setBuffer,
 } from 'src/TrackObjects/buffer/buffers'
 import { findMtlById, initMtls } from 'src/TrackObjects/mtl/mtls'
 import {
@@ -245,6 +246,17 @@ const exposed: IOmsTrackMonitor = {
 		switch (op) {
 			case 'UPDATE':
 				setStation(s)
+				break
+
+			default:
+				break
+		}
+	},
+
+	updateBuffer(op, s) {
+		switch (op) {
+			case 'UPDATE':
+				setBuffer(s)
 				break
 
 			default:

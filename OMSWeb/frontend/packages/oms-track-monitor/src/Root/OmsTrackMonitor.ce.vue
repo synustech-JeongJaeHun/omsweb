@@ -70,6 +70,7 @@ const props = defineProps<{
   stationColor: Stringlish
   stationDisabledColor: Stringlish
   bufferColor: Stringlish
+  bufferDisabledColor: Stringlish
   pointColor: Stringlish
   homeColor: Stringlish
   normalSegmentColor: Stringlish
@@ -226,6 +227,11 @@ defineExpose(exposed)
 #buffer-layer .buffer .buffer-path {
   stroke: v-bind(
     'parseStringProp(ColorDefault.buffer, props.bufferColor)'
+  );
+}
+#buffer-layer .buffer[data-disabled='true' i] .buffer-path {
+  stroke: v-bind(
+    'parseStringProp(ColorDefault.bufferDisabled, props.bufferDisabledColor)'
   );
 }
 
