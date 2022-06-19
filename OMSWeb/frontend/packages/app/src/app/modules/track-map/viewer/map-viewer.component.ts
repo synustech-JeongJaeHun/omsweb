@@ -59,20 +59,23 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 	get canSetDest() {
 		return !this.mapStatesService.transferCommandState.destDisabled
 	}
-	// get canSetSourceStation() {
-	// 	if (!this.mapStatesService.transferCommandState.sourceDisabled) {
-	// 		const { id, logicalId, physicalId } = this.contextMenuObject.value
-	// 		if (logicalId && logicalId.indexOf('OUT') > 0) return true
-	// 	}
-	// 	return false
-	// }
-	// get canSetDestStation() {
-	// 	if (!this.mapStatesService.transferCommandState.destDisabled) {
-	// 		const { id, logicalId, physicalId } = this.contextMenuObject.value
-	// 		if (logicalId && logicalId.indexOf('IN') > 0) return true
-	// 	}
-	// 	return false
-	// }
+
+  get canSetSourceWithFilter() {
+    const logicalId = this.contextMenuObject.value.logicalId
+    if (logicalId == null) return false
+    if (this.mapStatesService.transferCommandState.sourceDisabled === true) return false
+    if (this.systemStatusService.manualTransferFilterSettings.sourceFilterEnabled === false) return true
+
+    return this.systemStatusService.manualTransferFilterSettings.sourceWords.some(word => logicalId.includes(word))
+	}
+	get canSetDestWithFilter() {
+    const logicalId = this.contextMenuObject.value.logicalId
+    if (logicalId == null) return false
+    if (this.mapStatesService.transferCommandState.destDisabled === true) return false
+    if (this.systemStatusService.manualTransferFilterSettings.destinationFilterEnabled === false) return true
+
+    return this.systemStatusService.manualTransferFilterSettings.destinationWords.some(word => logicalId.includes(word))
+	}
 
 	get canSetDestPoint() {
 		const isTabMove =
