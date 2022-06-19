@@ -60,6 +60,9 @@ export class TrackStatusService {
 		this.hubService.stationChanged$.subscribe((e) => {
 			this.handleStationChanged(e)
 		})
+		this.hubService.bufferChanged$.subscribe((e) => {
+			this.handleBufferChanged(e)
+		})
 		this.hubService.groupChanged$.subscribe((e) => {
 			this.handleGroupChanged(e)
 		})
@@ -179,6 +182,19 @@ export class TrackStatusService {
 
 	handleStationChanged(e: IDataChangeEvent) {
 		const finded = this.trackData.stations.find((s) => s.id === e.id)
+		switch (e.operation) {
+			case 'UPDATE':
+				// @ts-ignore
+				if (finded) Object.assign(finded, { id: e.id, unuse: e.unuse })
+				break
+
+			default:
+				break
+		}
+	}
+
+	handleBufferChanged(e: IDataChangeEvent) {
+		const finded = this.trackData.buffers.find((s) => s.id === e.id)
 		switch (e.operation) {
 			case 'UPDATE':
 				// @ts-ignore

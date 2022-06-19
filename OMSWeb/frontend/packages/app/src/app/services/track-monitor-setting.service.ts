@@ -31,6 +31,7 @@ type ColorChangedEvent = {
 		| 'stationColor'
 		| 'stationDisabledColor'
 		| 'bufferColor'
+		| 'bufferDisabledColor'
 		| 'pointColor'
 		| 'normalSegmentColor'
 		| 'disabledSegmentColor'
@@ -109,6 +110,7 @@ const DefaultTrackMonitorSetting: TrackMonitorSetting = {
 	stationColor: 'rgba(0, 0, 0, 1)',
 	stationDisabledColor: '#f06767',
 	bufferColor: 'rgba(100, 100, 100, 1)',
+	bufferDisabledColor: '#ff9494',
 	pointColor: 'rgba(80, 80, 80, 1)',
 	normalSegmentColor: 'rgba(200, 200, 200, 1)',
 	disabledSegmentColor: 'rgba(165, 127, 184, 1)',

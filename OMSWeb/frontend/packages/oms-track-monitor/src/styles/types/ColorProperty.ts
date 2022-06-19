@@ -3,6 +3,7 @@ type ColorProperty =
 	| 'station'
 	| 'stationDisabled'
 	| 'buffer'
+	| 'bufferDisabled'
 	| 'point'
 	| 'home'
 	| 'normalSegment'

@@ -207,6 +207,7 @@ namespace OMSWeb.Repositories
                                     Direction = dr["direction"].ToString(),
                                     NextPoint = dr["next_point"].TryIntegerOrNull(),
                                     Offset = dr["offset"].TryIntegerOrNull(),
+                                    Unuse = dr["unuse"].TryBooleanOrNull(),
                                 }
                                );
                             }

@@ -12,6 +12,7 @@
     [isOverlappingObjectsVisible]="tmSetting.isOverlappingObjectsVisible"
     [backgroundColor]="tmSetting.homeBackgroundColor" [stationColor]="tmSetting.stationColor"
     [stationDisabledColor]="tmSetting.stationDisabledColor" [bufferColor]="tmSetting.bufferColor"
+    [bufferDisabledColor]="tmSetting.bufferDisabledColor"
     [pointColor]="tmSetting.pointColor" [homeColor]="homeColor" [normalSegmentColor]="tmSetting.normalSegmentColor"
     [disabledSegmentColor]="tmSetting.disabledSegmentColor" [segmentDirectionColor]="tmSetting.segmentDirectionColor"
     [autoModeVehicleColor]="tmSetting.autoModeVehicleColor" [manualModeVehicleColor]="tmSetting.manualModeVehicleColor"
@@ -304,6 +305,15 @@
         (click)="onSetDest('Buffer')">
         {{ "names.setDest" | translate }}
       </button>
+      <button *ngIf="contextMenuObject?.value.unuse === true" mat-stroked-button class="dense accent" color="primary"
+        (click)="onToggleBufferUnuse(contextMenuObject.value.id, 'USE')">
+        {{ "names.use" | translate}}
+      </button>
+      <button *ngIf="contextMenuObject?.value.unuse !== true" mat-stroked-button class="dense accent" color="primary"
+        (click)="onToggleBufferUnuse(contextMenuObject.value.id, 'UNUSE')">
+        {{ "names.unuse" | translate}}
+      </button>
+
       <div class="carrier-form">
         <mat-form-field class="dense full-span-col" appearance="outline">
           <input #carrierIdInput matInput [placeholder]="'names.carrierId' | translate" />
