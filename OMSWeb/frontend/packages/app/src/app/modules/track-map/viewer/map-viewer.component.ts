@@ -32,6 +32,7 @@ import { MessagesService } from '@oms/root/services/messages.service'
 import { DialogService } from '@oms/root/services/dialog.service'
 import { IVehicleCommandMessage } from '@oms/root/models/command.model'
 import { SystemStatusService } from '@oms/root/services/system-status.service'
+import { TracksService } from '@oms/root/services/tracks.service'
 
 @Component({
 	selector: 'oms-map-viewer',
@@ -137,6 +138,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		private statusService: StatusService,
 		private mapStatesService: MapStatesService,
 		private settingSvc: SettingsService,
+		private tracksService: TracksService,
 		private trackStatusService: TrackStatusService,
 		private trackMonitorSettingService: TrackMonitorSettingService,
 		private messageSvc: MessagesService,
@@ -749,7 +751,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		// @ts-ignore
 		this.focusOnTM({ type: payload.type, id: payload.value.id })
 	}
-	public onContextMenuOn(event: CustomEvent) {
+	public async onContextMenuOn(event: CustomEvent) {
 		const payload = getCustomEventPayload(event)
 		// @ts-ignore
 		if (!(payload.type && payload.value && payload.event)) return
@@ -764,6 +766,10 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 			else if (point?.homeId) this.contextMenuObject.value.home = 'No Group'
 			else this.contextMenuObject.value.home = 'OFF'
 		}
+    if(this.contextMenuObject.type === 'BUFFER'){
+      const result = await this.tracksService.loadBufferById(this.contextMenuObject.value.id).toPromise()
+      Object.assign(this.contextMenuObject.value, result)
+    }
 
 		const leftThreshold = window.innerWidth - 200
 		const popupOffsetX = 10
@@ -784,7 +790,8 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 				.style('left', 'inherit')
 		}
 
-		this.showContextMenu = true
+   
+    this.showContextMenu = true
 	}
 	public onBackdrop(event: CustomEvent) {
 		this.showContextMenu = false

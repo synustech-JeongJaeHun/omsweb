@@ -1,13 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using OMSWeb.Models;
 using OMSWeb.Models.Tracks;
-using OMSWeb.Repositories;
 using OMSWeb.Services;
+using Buffer = OMSWeb.Models.Tracks.Buffer;
 
 namespace OMSWeb.Controllers
 {
@@ -58,16 +54,17 @@ namespace OMSWeb.Controllers
         {
             return this._svc.GetPoints();
         }
-        [HttpPatch("points/{id}")]
-        public ActionResult UpdatePoint([FromRoute] int id, [FromBody] PointUpdateDto point)
-        {
-            return Ok();
-        }
 
         [HttpGet("stations")]
         public IEnumerable<Station> GetStations()
         {
             return this._svc.GetStations();
+        }
+
+        [HttpGet("buffers/{id}")]
+        public Buffer GetBufferById([FromRoute] int id)
+        {
+            return this._svc.GetBufferById(id);
         }
     }
 }

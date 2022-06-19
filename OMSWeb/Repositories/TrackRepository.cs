@@ -1,12 +1,10 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Dapper;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Npgsql;
-using OMSWeb.Models;
 using OMSWeb.Models.Tracks;
 using OMSWeb.Services;
 using Buffer = OMSWeb.Models.Tracks.Buffer;
@@ -219,6 +217,42 @@ namespace OMSWeb.Repositories
                 _cache.SetValue<List<Buffer>>(key, data, DateTimeOffset.Now.AddMinutes(CACHE_LIFE));
             }
             return data;
+        }
+
+        public Buffer LoadBufferById(int id)
+        {
+
+            var sql = $@"
+            SELECT 
+                id, 
+                physical_id, 
+                logical_id, 
+                point as point_id, 
+                direction, 
+                next_point,
+                ""offset"",
+                unuse,
+                carrier_id
+            FROM buffers
+            WHERE id = {id}
+            ";
+
+            Buffer result;
+
+            using (var conn = ConnectTrack())
+            {
+                 try
+                {
+                    result = conn.QueryFirst<Buffer>(sql);
+                }
+                catch (System.Exception)
+                {
+                    Console.WriteLine("[LoadBufferById] => null");
+                    result = null;
+                }
+            }
+
+            return result;
         }
 
         public List<Mtl> LoadMtls()

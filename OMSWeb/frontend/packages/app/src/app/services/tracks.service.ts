@@ -39,4 +39,8 @@ export class TracksService {
 	loadStations(): Observable<Dto.IStation[]> {
 		return this.http.get<Dto.IStation[]>(`${this.baseUrl}/stations`)
 	}
+
+	loadBufferById(id: number) {
+		return this.http.get<Dto.IBuffer>(`${this.baseUrl}/buffers/${id}`)
+	}
 }
