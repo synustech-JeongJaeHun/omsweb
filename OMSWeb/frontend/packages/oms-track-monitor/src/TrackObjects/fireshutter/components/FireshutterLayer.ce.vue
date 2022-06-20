@@ -20,7 +20,6 @@ function handleMouseover(event: MouseEvent) {
     value: getDeepCopiedFireshutter(event),
     event,
   })
-  console.log('*fireshutter mouse over')
 }
 
 function handleMouseleave(event: MouseEvent) {
@@ -34,7 +33,6 @@ function handleLeftClick(event: MouseEvent) {
     type: 'FIRESHUTTER',
     value: getDeepCopiedFireshutter(event),
   })
-  console.log('FS handle Left Click event!')
 }
 
 function handleRightClick(event: MouseEvent) {

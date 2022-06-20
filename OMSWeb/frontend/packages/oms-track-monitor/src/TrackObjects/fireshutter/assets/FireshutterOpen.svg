@@ -1,7 +1,9 @@
 <svg 
 class="cursor-pointer fireshutter"
-viewBox="0 0 1280 1280" fill="none" pointer-events="bounding-box">
-    <g fill="#2AFB26" class='scale-and-reverse-rotate '>
+viewBox="0 0 1280 1280" fill="none" pointer-events="bounding-box"
+>
+    <g fill="#2AFB26" class='scale-and-reverse-rotate'
+    >
     <rect x="242" y="1051" width="130" height="830" transform="rotate(180 242 1053)" />
     <rect x="1168" y="1051" width="130" height="830" transform="rotate(180 1168 1053)"/>
     <rect x="1016" y="994" width="752" height="100" rx="50" transform="rotate(180 1016 994)"/>

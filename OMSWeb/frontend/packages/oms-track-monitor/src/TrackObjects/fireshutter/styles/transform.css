@@ -2,6 +2,7 @@
   transform: scale(
     calc(var(--mm-per-pixel) / rotate(var(--reverse-rotation-degree)))
   );
+  transform-origin: center;
 }
 
 #fireshutter-layer[data-scale-level~='BELOW15' i]
@@ -9,4 +10,5 @@
   .scale-and-reverse-rotate {
   transform: scale(calc(var(--mm-per-pixel) + 1))
     rotate(var(--reverse-rotation-degree));
+  transform-origin: center;
 }

@@ -105,8 +105,9 @@ const exposed: IOmsTrackMonitor = {
 		// DB에도 값이 들어가게 되면 아래와 같이 수정
 		// initFireshutters(t.fireshutters)
 		initFireshutters([
-			{ id: 1, x: 9794, y: 2957, status: 'CLOSE' },
-			{ id: 2, x: 9900, y: 3000, status: 'OPEN' },
+			{ id: 1, x: 9594, y: 2957, status: 'OPEN' },
+			{ id: 2, x: 9900, y: 3000, status: 'CLOSE' },
+			{ id: 3, x: 10900, y: 3400, status: 'CLOSE' },
 		])
 	},
 	centerZoom,

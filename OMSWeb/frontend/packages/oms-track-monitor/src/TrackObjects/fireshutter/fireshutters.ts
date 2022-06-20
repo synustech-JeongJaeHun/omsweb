@@ -20,8 +20,6 @@ function initFireshutters(fs: ITrackData['fireshutters']) {
 	//set values from server on ref
 	fireshutters.value = (fs ?? []).map((f) => ({ ...f }))
 	fireshutters.value.forEach((f) => fireshutterMap.set(f.id, f))
-
-	console.log('=======FSMAP==', fireshutterMap)
 }
 
 function setFireshutter(updateData: UpdateDto.Fireshutter) {

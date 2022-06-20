@@ -565,8 +565,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		this.viewer.find(event.type, event.id)
 	}
 	public focusOnTM(event: { type: string; id: any }) {
-		console.log('*focusOnTm viewer:', this.viewer)
-
 		this.viewer.focus(event.type, event.id)
 	}
 
@@ -577,7 +575,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 	// XXX: mouseover(hover) trigger
 	public onMouseoverTM(event: CustomEvent) {
 		const payload = getCustomEventPayload(event)
-		console.log('* onMouseover payload', payload)
 		// @ts-ignore
 		if (!(payload.type && payload.value && payload.event)) return
 
@@ -691,7 +688,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 
 	public onTooltipOn(event: CustomEvent) {
 		const payload = getCustomEventPayload(event)
-		console.log('tooltip')
 		// @ts-ignore
 		this.tooltipObject = { type: payload.type, value: payload.value }
 
@@ -728,7 +724,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 	}
 	public onFocus(event: CustomEvent) {
 		const payload = getCustomEventPayload(event)
-		console.log('*onFocus payload :', payload)
 		// @ts-ignore
 		this.selectedObject = { objectType: payload.type, ...payload.value }
 		// @ts-ignore

@@ -56,8 +56,8 @@ const emit = inject<RootEmits>(RootEmitInjectionKey)!
     @mouseup="exitPanning(), exitRotating()"
     @click.left.self="handleMouseUp(() => emit('clickOutObject'))"
     @click.middle.prevent="centerZoom()"
+    @click.right.prevent
   >
-    <!-- @click.right.prevent -->
     <GridLayer />
     <ClusterLayer />
     <SegmentLayer />

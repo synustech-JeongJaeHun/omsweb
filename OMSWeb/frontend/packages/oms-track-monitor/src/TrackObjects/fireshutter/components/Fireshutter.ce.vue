@@ -16,7 +16,7 @@ const props = defineProps<{
   <svg
     :x="props.fireshutter.x"
     :y="props.fireshutter.y"
-    class="fireshutter-wrapper"
+    class="fireshutter-wrapper overflow-visible"
   >
     <FireshutterOpen
       v-if="props.fireshutter.status === 'OPEN'"
