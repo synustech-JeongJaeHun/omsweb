@@ -26,6 +26,7 @@ const props = defineProps<{
       class="overflow-visible"
       @click.left="handleLeftClick"
       @mouseover="handleMouseover"
+      @mouseleave="handleMouseleave"
       width="50"
       height="50"
     />
@@ -36,6 +37,7 @@ const props = defineProps<{
       class="overflow-visible"
       @click.left="handleLeftClick"
       @mouseover="handleMouseover"
+      @mouseleave="handleMouseleave"
       :data-id="props.fireshutter.id"
       width="50"
       height="50"

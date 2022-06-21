@@ -107,7 +107,6 @@ const exposed: IOmsTrackMonitor = {
 		initFireshutters([
 			{ id: 1, x: 9594, y: 2957, status: 'OPEN' },
 			{ id: 2, x: 9900, y: 3000, status: 'CLOSE' },
-			{ id: 3, x: 10900, y: 3400, status: 'CLOSE' },
 		])
 	},
 	centerZoom,
