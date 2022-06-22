@@ -61,21 +61,35 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		return !this.mapStatesService.transferCommandState.destDisabled
 	}
 
-  get canSetSourceWithFilter() {
-    const logicalId = this.contextMenuObject.value.logicalId
-    if (logicalId == null) return false
-    if (this.mapStatesService.transferCommandState.sourceDisabled === true) return false
-    if (this.systemStatusService.manualTransferFilterSettings.sourceFilterEnabled === false) return true
+	get canSetSourceWithFilter() {
+		const logicalId = this.contextMenuObject.value.logicalId
+		if (logicalId == null) return false
+		if (this.mapStatesService.transferCommandState.sourceDisabled === true)
+			return false
+		if (
+			this.systemStatusService.manualTransferFilterSetting
+				.sourceFilterEnabled === false
+		)
+			return true
 
-    return this.systemStatusService.manualTransferFilterSettings.sourceWords.some(word => logicalId.includes(word))
+		return this.systemStatusService.manualTransferFilterSetting.sourceWords.some(
+			(word) => logicalId.includes(word),
+		)
 	}
 	get canSetDestWithFilter() {
-    const logicalId = this.contextMenuObject.value.logicalId
-    if (logicalId == null) return false
-    if (this.mapStatesService.transferCommandState.destDisabled === true) return false
-    if (this.systemStatusService.manualTransferFilterSettings.destinationFilterEnabled === false) return true
+		const logicalId = this.contextMenuObject.value.logicalId
+		if (logicalId == null) return false
+		if (this.mapStatesService.transferCommandState.destDisabled === true)
+			return false
+		if (
+			this.systemStatusService.manualTransferFilterSetting
+				.destinationFilterEnabled === false
+		)
+			return true
 
-    return this.systemStatusService.manualTransferFilterSettings.destinationWords.some(word => logicalId.includes(word))
+		return this.systemStatusService.manualTransferFilterSetting.destinationWords.some(
+			(word) => logicalId.includes(word),
+		)
 	}
 
 	get canSetDestPoint() {
@@ -129,6 +143,13 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 	get homeColor() {
 		const isHomeMode = this.systemStatusService.homeMode ?? false
 		return isHomeMode ? '#ff510080' : undefined
+	}
+
+	get stationMargin() {
+		return this.systemStatusService.nodeMarginSetting?.stationMargin
+	}
+	get bufferMargin() {
+		return this.systemStatusService.nodeMarginSetting?.bufferMargin
 	}
 
 	constructor(
@@ -307,10 +328,10 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 					this.viewer.updateStation(e.operation, { id: e.id, unuse: e.unuse })
 				})
 
-      this.hubSvc.bufferChanged$
+			this.hubSvc.bufferChanged$
 				.pipe(takeUntil(this.destroy$))
 				.subscribe((e) => {
-          // @ts-ignore
+					// @ts-ignore
 					this.viewer.updateBuffer(e.operation, { id: e.id, unuse: e.unuse })
 				})
 
@@ -502,7 +523,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		this.dialogSvc
 			.confirm({ body: this.$t.instant('messages.confirmBufferChange') })
 			.subscribe((confirm) => {
-				if(confirm)
+				if (confirm)
 					this.messageSvc
 						.sendCarrierCommand({
 							action: 'remove_carrier',
@@ -516,7 +537,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		this.dialogSvc
 			.confirm({ body: this.$t.instant('messages.confirmBufferChange') })
 			.subscribe((confirm) => {
-				if(confirm)
+				if (confirm)
 					this.messageSvc
 						.sendCarrierCommand({
 							action: 'install_carrier',
@@ -766,10 +787,12 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 			else if (point?.homeId) this.contextMenuObject.value.home = 'No Group'
 			else this.contextMenuObject.value.home = 'OFF'
 		}
-    if(this.contextMenuObject.type === 'BUFFER'){
-      const result = await this.tracksService.loadBufferById(this.contextMenuObject.value.id).toPromise()
-      Object.assign(this.contextMenuObject.value, result)
-    }
+		if (this.contextMenuObject.type === 'BUFFER') {
+			const result = await this.tracksService
+				.loadBufferById(this.contextMenuObject.value.id)
+				.toPromise()
+			Object.assign(this.contextMenuObject.value, result)
+		}
 
 		const leftThreshold = window.innerWidth - 200
 		const popupOffsetX = 10
@@ -790,8 +813,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 				.style('left', 'inherit')
 		}
 
-   
-    this.showContextMenu = true
+		this.showContextMenu = true
 	}
 	public onBackdrop(event: CustomEvent) {
 		this.showContextMenu = false

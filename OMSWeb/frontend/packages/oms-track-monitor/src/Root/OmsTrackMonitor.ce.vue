@@ -52,6 +52,8 @@ const props = defineProps<{
   vehicleSize: Numberlish
   segmentWidth: Numberlish
   segmentDirectionSize: Numberlish
+  stationMargin: Numberlish
+  bufferMargin: Numberlish
 
   // visible
   isMinimapVisible: Boolish
@@ -119,6 +121,18 @@ watch(propRefs.segmentDirectionSize, (n) => {
   updateScaleStyle(
     'segmentDirection',
     parseNumberProp(ScaleDefault.segmentDirection, n)
+  )
+})
+watch(propRefs.stationMargin, (n) => {
+  updateScaleStyle(
+    'stationMargin',
+    parseNumberProp(ScaleDefault.stationMargin, n)
+  )
+})
+watch(propRefs.bufferMargin, (n) => {
+  updateScaleStyle(
+    'bufferMargin',
+    parseNumberProp(ScaleDefault.bufferMargin, n)
   )
 })
 

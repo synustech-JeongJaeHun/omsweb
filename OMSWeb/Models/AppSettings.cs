@@ -16,5 +16,7 @@ namespace OMSWeb.Models
         public DefaultColorSettings DefaultColor { get; set; }
 
         public ManualTransferFilters ManualTransferFilters { get; set; }  
+
+        public NodeMargins NodeMargins {get;set;}
     }
 }
