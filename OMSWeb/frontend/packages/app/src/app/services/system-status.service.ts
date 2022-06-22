@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core'
-import { ManualTransferFilterSettings } from '../models/settings.model'
+import {
+	ManualTransferFiltersSetting,
+	NodeMarginSetting,
+} from '../models/settings.model'
 import { ISystemStates } from '../models/system.model'
 import { HubService } from './hub.service'
 import { SettingsService } from './settings.service'
@@ -12,7 +15,8 @@ export class SystemStatusService {
 	public systemStates: ISystemStates
 	public homeMode?: boolean = undefined
 	public chainManualCommandDisabled?: boolean = undefined
-	public manualTransferFilterSettings?: ManualTransferFilterSettings = undefined
+	public manualTransferFilterSetting?: ManualTransferFiltersSetting = undefined
+	public nodeMarginSetting?: NodeMarginSetting = undefined
 
 	constructor(
 		private hubService: HubService,
@@ -32,6 +36,7 @@ export class SystemStatusService {
 		})
 
 		this.updateManualTransferFiltersSetting()
+		this.updateNodeMarginsSetting()
 	}
 
 	private updateSettingMode() {
@@ -50,6 +55,13 @@ export class SystemStatusService {
 	private updateManualTransferFiltersSetting() {
 		this.settingsService
 			.loadManualTransferFiltersSetting()
-			.subscribe((res) => (this.manualTransferFilterSettings = res))
+			.subscribe((res) => (this.manualTransferFilterSetting = res))
+	}
+
+	public updateNodeMarginsSetting() {
+		this.settingsService
+			.loadNodeMarginsSettings()
+			.subscribe((res) => (this.nodeMarginSetting = res))
+
 	}
 }

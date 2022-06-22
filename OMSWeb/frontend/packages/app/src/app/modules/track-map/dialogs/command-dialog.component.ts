@@ -35,16 +35,16 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 	}
 
 	get sourceFilterWords() {
-		return this.systemStatusService.manualTransferFilterSettings
+		return this.systemStatusService.manualTransferFilterSetting
 			?.sourceFilterEnabled
-			? this.systemStatusService.manualTransferFilterSettings.sourceWords
+			? this.systemStatusService.manualTransferFilterSetting.sourceWords
 			: undefined
 	}
 
 	get destinationFilterWords() {
-		return this.systemStatusService.manualTransferFilterSettings
+		return this.systemStatusService.manualTransferFilterSetting
 			.destinationFilterEnabled
-			? this.systemStatusService.manualTransferFilterSettings?.destinationWords
+			? this.systemStatusService.manualTransferFilterSetting?.destinationWords
 			: undefined
 	}
 

@@ -143,6 +143,10 @@ namespace OMSWeb.Services
         {
             return this._appSettings.ManualTransferFilters;
         }
+        public NodeMargins GetNodeMargins()
+        {
+            return this._appSettings.NodeMargins;
+        }
 
         public List<LogModel> GetLogs()
         {

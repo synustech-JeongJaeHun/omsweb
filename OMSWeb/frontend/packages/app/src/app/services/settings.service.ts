@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import DataSource from 'devextreme/data/data_source'
 import { Observable, of } from 'rxjs'
-import { tap } from 'rxjs/operators'
+import { map, tap } from 'rxjs/operators'
 import {
 	ClientPreferences,
 	ISettingsBufferWithUnuse,
@@ -15,7 +15,8 @@ import {
 	ISettingsVehicleReg,
 	ISettingsZcu,
 	ServiceConfig,
-	ManualTransferFilterSettings,
+	ManualTransferFiltersSetting,
+	NodeMarginSetting,
 } from '../models/settings.model'
 import * as AspNetData from 'devextreme-aspnet-data-nojquery'
 
@@ -55,8 +56,14 @@ export class SettingsService {
 	}
 
 	loadManualTransferFiltersSetting() {
-		return this.http.get<ManualTransferFilterSettings>(
+		return this.http.get<ManualTransferFiltersSetting>(
 			`/api/systems/settings/manual-transfer-filters`,
+		)
+	}
+
+	loadNodeMarginsSettings() {
+		return this.http.get<NodeMarginSetting>(
+			`/api/systems/settings/node-margins`,
 		)
 	}
 

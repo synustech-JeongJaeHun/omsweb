@@ -8,6 +8,8 @@ const ScaleDefault: Record<ScaleProperty, number> = {
 	vehicleSize: 10, // applied in OmsTrackMonitor.ce.vue
 	segmentDirection: 6, // applied in SegmentLayer.ce.vue
 	segmentWidth: 3, // applied in OmsTrackMonitor.ce.vue
+	stationMargin: 300, // applied in OmsTrackMonitor.ce.vue
+	bufferMargin: 300, // applied in OmsTrackMonitor.ce.vue
 }
 const scaleStyles = reactive(deepCopy(ScaleDefault))
 const scaleStylesInfo = readonly(scaleStyles)

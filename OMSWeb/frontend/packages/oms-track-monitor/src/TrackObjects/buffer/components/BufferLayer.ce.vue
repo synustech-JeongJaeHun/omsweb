@@ -4,6 +4,7 @@ import Buffer from './Buffer.ce.vue'
 import { buffers, findBufferById } from '../buffers'
 import { inject } from 'vue'
 import { RootEmitInjectionKey, RootEmits } from 'src/Root/types/RootEmits'
+import { scaleStylesInfo } from '../../../styles/styles'
 
 const emit = inject<RootEmits>(RootEmitInjectionKey)!
 
@@ -71,6 +72,7 @@ function handleRightClick(event: MouseEvent) {
       v-for="buffer of buffers"
       :key="buffer.id"
       :buffer="buffer"
+      :margin="scaleStylesInfo.bufferMargin"
       :handleMouseover="handleMouseover"
       :handleMouseleave="handleMouseleave"
       :handleLeftClick="handleLeftClick"

@@ -3,10 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 using System.IO.Compression;
-using System.Threading.Tasks;
-using DevExtreme.AspNet.Data;
-using DevExtreme.AspNet.Mvc;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OMSWeb.Models;
 using OMSWeb.Models.Entities;
@@ -63,6 +59,11 @@ namespace OMSWeb.Controllers
         public ActionResult<ManualTransferFilters> GetManualTransferFilters()
         {
             return this._systemSvc.GetManualTransferFilters();
+        }
+        [HttpGet("settings/node-margins")]
+        public ActionResult<NodeMargins> GetNodeMargins()
+        {
+            return this._systemSvc.GetNodeMargins();
         }
 
         [HttpGet("module-status")]
