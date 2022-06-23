@@ -1,138 +1,138 @@
-import { Component, HostListener, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import DataSource from 'devextreme/data/data_source';
+import {
+	Component,
+	HostListener,
+	Input,
+	OnDestroy,
+	OnInit,
+	ViewChild,
+} from '@angular/core'
+import DataSource from 'devextreme/data/data_source'
 
-import { StatusService } from '../../../services/status.service';
-import { SettingsService } from '../../../services/settings.service';
-import { Subject } from 'rxjs';
-import { HubService } from '../../../services/hub.service';
-import { IDataChangeEvent } from '../../../models/notification.model';
-import { AuthService } from '../../../services/auth.service';
-import { takeUntil } from 'rxjs/operators';
-import { MessagesService } from '../../../services/messages.service';
-import { DxDataGridComponent } from 'devextreme-angular';
-import { ClientPreferences } from '../../../models/settings.model';
-import { DialogService } from '@oms/root/services/dialog.service';
-import { TranslateService } from '@ngx-translate/core';
+import { StatusService } from '../../../services/status.service'
+import { SettingsService } from '../../../services/settings.service'
+import { Subject } from 'rxjs'
+import { HubService } from '../../../services/hub.service'
+import { IDataChangeEvent } from '../../../models/notification.model'
+import { AuthService } from '../../../services/auth.service'
+import { takeUntil, auditTime } from 'rxjs/operators'
+import { MessagesService } from '../../../services/messages.service'
+import { DxDataGridComponent } from 'devextreme-angular'
+import { ClientPreferences } from '../../../models/settings.model'
+import { DialogService } from '@oms/root/services/dialog.service'
+import { TranslateService } from '@ngx-translate/core'
+import { AuditTimeDuration } from './constants'
 
 @Component({
-  selector: 'oms-buffer-control-table',
-  templateUrl: './buffer-control-table.component.html',
-  styleUrls: ['./buffer-control-table.component.scss'],
+	selector: 'oms-buffer-control-table',
+	templateUrl: './buffer-control-table.component.html',
+	styleUrls: ['./buffer-control-table.component.scss'],
 })
 export class BufferControlTableComponent implements OnInit, OnDestroy {
-  @Input() tableHeight: number;
-  @ViewChild(DxDataGridComponent, { static: false })
-  dataGrid: DxDataGridComponent;
+	@Input() tableHeight: number
+	@ViewChild(DxDataGridComponent, { static: false })
+	dataGrid: DxDataGridComponent
 
-  dataSource: DataSource;
-  selectedRows: number[] = [];
+	dataSource: DataSource
+	selectedRows: number[] = []
 
-  preference: ClientPreferences;
+	preference: ClientPreferences
 
-  //#region Subscriptions
-  private destroy$: Subject<void> = new Subject<void>();
-  //#endregion
+	//#region Subscriptions
+	private destroy$: Subject<void> = new Subject<void>()
+	//#endregion
 
-  get hasControlAccess(): boolean {
-    return (
-      this.auth.isAuthenticated
-    );
-  }
+	get hasControlAccess(): boolean {
+		return this.auth.isAuthenticated
+	}
 
-  get canControl(): boolean {
-    return this.selectedRows.length > 0;
-  }
+	get canControl(): boolean {
+		return this.selectedRows.length > 0
+	}
 
-  constructor(
-    private auth: AuthService,
-    private statusSvc: StatusService,
-    private settingSvc: SettingsService,
-    private dialogSvc: DialogService,
-    private $t: TranslateService,
-    private messageSvc: MessagesService,
-    private hubSvc: HubService
-  ) {
-    this.dataSource = this.statusSvc.bufferStatusDataSource();
-    this.preference = this.settingSvc.globalPreferences;
-  }
+	constructor(
+		private auth: AuthService,
+		private statusSvc: StatusService,
+		private settingSvc: SettingsService,
+		private dialogSvc: DialogService,
+		private $t: TranslateService,
+		private messageSvc: MessagesService,
+		private hubSvc: HubService,
+	) {
+		this.dataSource = this.statusSvc.bufferStatusDataSource()
+		this.preference = this.settingSvc.globalPreferences
+	}
 
-  canDisplayTable(type: string): boolean {
-    return this.preference.controlTables[type];
-  }
+	canDisplayTable(type: string): boolean {
+		return this.preference.controlTables[type]
+	}
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
+	ngOnDestroy(): void {
+		this.destroy$.next()
+		this.destroy$.complete()
+	}
 
-  ngOnInit(): void {
-    this.hubSvc.bufferChanged$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((e: IDataChangeEvent) => {
-        e && this.onTableChanged(e);
-      });
-  }
+	ngOnInit(): void {
+		this.hubSvc.bufferChanged$
+			.pipe(takeUntil(this.destroy$), auditTime(AuditTimeDuration))
+			.subscribe((e: IDataChangeEvent) => {
+				e && this.onTableChanged(e)
+			})
+	}
 
-  onUnuse() {
-    if (!this.canControl) return;
+	onUnuse() {
+		if (!this.canControl) return
 
-    let bufferIds: number[] = [];
-    const items = this.dataGrid.instance.getSelectedRowsData();
-    for (let idx = 0; idx < items.length; idx++) {
-        bufferIds.push(items[idx].id);
-    }
+		let bufferIds: number[] = []
+		const items = this.dataGrid.instance.getSelectedRowsData()
+		for (let idx = 0; idx < items.length; idx++) {
+			bufferIds.push(items[idx].id)
+		}
 
-    if (bufferIds.length > 0) {
-        this.dialogSvc
-          .confirm({ body: this.$t.instant('messages.confirmCommand') })
-          .subscribe((ok) => {
-            ok &&
-            this.messageSvc
-              .sendBufferSettingCommand({type:'UNUSE', action: 'buffer-setting', unused: 1}, bufferIds)
-              .subscribe();
-          });
-     }
-  }
+		if (bufferIds.length > 0) {
+			this.dialogSvc
+				.confirm({ body: this.$t.instant('messages.confirmCommand') })
+				.subscribe((ok) => {
+					ok &&
+						this.messageSvc
+							.sendBufferSettingCommand(
+								{ type: 'UNUSE', action: 'buffer-setting', unused: 1 },
+								bufferIds,
+							)
+							.subscribe()
+				})
+		}
+	}
 
-  onUse() {
-    if (!this.canControl) return;
-    
-    let bufferIds: number[] = [];
-    const items = this.dataGrid.instance.getSelectedRowsData();
-    for (let idx = 0; idx < items.length; idx++) {
-        bufferIds.push(items[idx].id);
-    }
+	onUse() {
+		if (!this.canControl) return
 
-    if (bufferIds.length > 0) {
-        this.dialogSvc
-          .confirm({ body: this.$t.instant('messages.confirmCommand') })
-          .subscribe((ok) => {
-            ok &&
-            this.messageSvc
-              .sendBufferSettingCommand({type: 'USE', action: 'buffer-setting', unused: 0}, bufferIds)
-              .subscribe();
-          });
-     }
-  }
+		let bufferIds: number[] = []
+		const items = this.dataGrid.instance.getSelectedRowsData()
+		for (let idx = 0; idx < items.length; idx++) {
+			bufferIds.push(items[idx].id)
+		}
 
-  private onTableChanged(payload: IDataChangeEvent) {
-    let needReload = false;
-    console.log('@@ buffer table updated >>>', payload);
-    if (payload && payload.id && payload.operation) {
-      if (['INSERT', 'DELETE'].includes(payload.operation)) {
-        needReload = true;
-      } else {
-        needReload = this.dataSource.items().every((x) => x.id !== payload.id);
-        needReload = true;
-      }
-    } else {
-      needReload = true;
-    }
-    needReload && this.dataSource.reload();
-  }
+		if (bufferIds.length > 0) {
+			this.dialogSvc
+				.confirm({ body: this.$t.instant('messages.confirmCommand') })
+				.subscribe((ok) => {
+					ok &&
+						this.messageSvc
+							.sendBufferSettingCommand(
+								{ type: 'USE', action: 'buffer-setting', unused: 0 },
+								bufferIds,
+							)
+							.subscribe()
+				})
+		}
+	}
 
-  @HostListener('document:visibilitychange', ['$event'])
-  private visibilitychange() {
-    if (!document.hidden) this.dataSource.reload();
-  }
+	private onTableChanged(payload: IDataChangeEvent) {
+		this.dataSource.reload()
+	}
+
+	@HostListener('document:visibilitychange', ['$event'])
+	private visibilitychange() {
+		if (!document.hidden) this.dataSource.reload()
+	}
 }
