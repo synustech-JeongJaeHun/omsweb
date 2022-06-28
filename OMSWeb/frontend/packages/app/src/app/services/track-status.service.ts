@@ -271,4 +271,18 @@ export class TrackStatusService {
 
 		return [...points, ...stations, ...buffers, ...vehicles, ...mtls]
 	}
+
+	getGroupsFromObject(type: string, id: number) {
+		const typeInLowerCase = type.toLowerCase()
+		const groups = this.trackData?.groups ?? []
+
+		const objectRelatedGroups = groups.filter((g) =>
+			g.objects.some(
+				(o: { id: number; type: string }) =>
+					o.type === typeInLowerCase && o.id === id,
+			),
+		)
+
+		return objectRelatedGroups.map((g) => g.id)
+	}
 }
