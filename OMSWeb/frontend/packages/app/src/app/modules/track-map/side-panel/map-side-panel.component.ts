@@ -99,7 +99,8 @@ export class MapSidePanelComponent implements OnChanges, OnDestroy {
 						const current = this.trackStatusService.trackData.mtls.find(
 							(m) => m.id === id,
 						)
-						this.data = { ...current, objectType: 'MTL' }
+						const groups = this.trackStatusService.getGroupsFromObject('mtl', id)
+						this.data = { ...current, objectType: 'MTL', groups }
 					}
 					break
 				case 'SEGMENT':
@@ -132,6 +133,9 @@ export class MapSidePanelComponent implements OnChanges, OnDestroy {
 							(p) => p.id === id,
 						)
 						this.data = { ...current, objectType: 'POINT' }
+            this.data.groups = current.homeId 
+              ? this.trackStatusService.getGroupsFromObject('home', this.data.homeId)
+              : []
 					}
 					break
 				case 'STATION':
@@ -139,15 +143,11 @@ export class MapSidePanelComponent implements OnChanges, OnDestroy {
 						const current = this.trackStatusService.trackData.stations.find(
 							(s) => s.id === id,
 						)
-						const group = this.trackStatusService.trackData.groups.find((g) =>
-							g.objects.some(
-								(o) => o.id === id && o.type.toUpperCase() === type,
-							),
-						)
+						const groups = this.trackStatusService.getGroupsFromObject('station', id)
 						this.data = {
 							...current,
 							objectType: 'STATION',
-							groupId: group?.id,
+							groups
 						}
 					}
 					break
@@ -156,12 +156,8 @@ export class MapSidePanelComponent implements OnChanges, OnDestroy {
 						const current = this.trackStatusService.trackData.buffers.find(
 							(b) => b.id === id,
 						)
-						const group = this.trackStatusService.trackData.groups.find((g) =>
-							g.objects.some(
-								(o) => o.id === id && o.type.toUpperCase() === type,
-							),
-						)
-						this.data = { ...current, objectType: 'BUFFER', groupId: group?.id }
+						const groups = this.trackStatusService.getGroupsFromObject('buffer', id)
+						this.data = { ...current, objectType: 'BUFFER', groups }
 					}
 					break
 				case 'VEHICLE':
@@ -169,15 +165,11 @@ export class MapSidePanelComponent implements OnChanges, OnDestroy {
 						const current = this.trackStatusService.trackData.vehicles.find(
 							(v) => v.id === id,
 						)
-						const group = this.trackStatusService.trackData.groups.find((g) =>
-							g.objects.some(
-								(o) => o.id === id && o.type.toUpperCase() === type,
-							),
-						)
+						const groups = this.trackStatusService.getGroupsFromObject('vehicle', id)
 						this.data = {
 							...current,
 							objectType: 'VEHICLE',
-							groupId: group?.id,
+							groups,
 						}
 					}
 					break
