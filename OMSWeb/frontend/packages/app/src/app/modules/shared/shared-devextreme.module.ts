@@ -1,49 +1,52 @@
-import { NgModule } from '@angular/core';
-import { DxTemplateModule } from 'devextreme-angular/core';
-import { DxPopoverModule } from 'devextreme-angular/ui/popover';
-import { DxSelectBoxModule } from 'devextreme-angular/ui/select-box';
-import { DxAutocompleteModule } from 'devextreme-angular/ui/autocomplete';
-import { DxTabPanelModule } from 'devextreme-angular/ui/tab-panel';
-import { DxTabsModule } from 'devextreme-angular/ui/tabs';
-import { DxDataGridModule } from 'devextreme-angular/ui/data-grid';
-import { DxButtonModule } from 'devextreme-angular/ui/button';
-import { DxTextBoxModule } from 'devextreme-angular/ui/text-box';
-import { DxDateBoxModule } from 'devextreme-angular/ui/date-box';
-import { DxTooltipModule } from 'devextreme-angular/ui/tooltip';
-import { DxFileManagerModule } from 'devextreme-angular/ui/file-manager';
-import { DxoPermissionsModule } from 'devextreme-angular/ui/nested';
-import { DxSortableModule } from 'devextreme-angular/ui/sortable';
-import { DxColorBoxModule } from 'devextreme-angular/ui/color-box';
+import { NgModule } from '@angular/core'
+import { DxTemplateModule } from 'devextreme-angular/core'
+import { DxPopoverModule } from 'devextreme-angular/ui/popover'
+import { DxSelectBoxModule } from 'devextreme-angular/ui/select-box'
+import { DxAutocompleteModule } from 'devextreme-angular/ui/autocomplete'
+import { DxTabPanelModule } from 'devextreme-angular/ui/tab-panel'
+import { DxTabsModule } from 'devextreme-angular/ui/tabs'
+import { DxDataGridModule } from 'devextreme-angular/ui/data-grid'
+import { DxButtonModule } from 'devextreme-angular/ui/button'
+import { DxTextBoxModule } from 'devextreme-angular/ui/text-box'
+import { DxDateBoxModule } from 'devextreme-angular/ui/date-box'
+import { DxTooltipModule } from 'devextreme-angular/ui/tooltip'
+import { DxFileManagerModule } from 'devextreme-angular/ui/file-manager'
+import { DxoPermissionsModule } from 'devextreme-angular/ui/nested'
+import { DxSortableModule } from 'devextreme-angular/ui/sortable'
+import { DxColorBoxModule } from 'devextreme-angular/ui/color-box'
 import {
-  DxChartModule,
-  DxRangeSliderModule,
-  DxSliderModule,
-} from 'devextreme-angular';
-import { DxSparklineModule } from 'devextreme-angular';
-import { DxPieChartModule } from 'devextreme-angular';
-
+	DxChartModule,
+	DxRangeSliderModule,
+	DxSliderModule,
+	DxCheckBoxModule,
+	DxTagBoxModule,
+} from 'devextreme-angular'
+import { DxSparklineModule } from 'devextreme-angular'
+import { DxPieChartModule } from 'devextreme-angular'
 @NgModule({
-  exports: [
-    DxPopoverModule,
-    DxTemplateModule,
-    DxSelectBoxModule,
-    DxAutocompleteModule,
-    DxTabPanelModule,
-    DxTabsModule,
-    DxDataGridModule,
-    DxButtonModule,
-    DxTextBoxModule,
-    DxDateBoxModule,
-    DxTooltipModule,
-    DxFileManagerModule,
-    DxoPermissionsModule,
-    DxSortableModule,
-    DxColorBoxModule,
-    DxChartModule,
-    DxSparklineModule,
-    DxPieChartModule,
-    DxRangeSliderModule,
-    DxSliderModule,
-  ],
+	exports: [
+		DxPopoverModule,
+		DxTemplateModule,
+		DxSelectBoxModule,
+		DxAutocompleteModule,
+		DxTabPanelModule,
+		DxTabsModule,
+		DxDataGridModule,
+		DxButtonModule,
+		DxTextBoxModule,
+		DxDateBoxModule,
+		DxTooltipModule,
+		DxFileManagerModule,
+		DxoPermissionsModule,
+		DxSortableModule,
+		DxColorBoxModule,
+		DxChartModule,
+		DxSparklineModule,
+		DxPieChartModule,
+		DxRangeSliderModule,
+		DxSliderModule,
+		DxCheckBoxModule,
+		DxTagBoxModule,
+	],
 })
 export class SharedDevextremeModule {}

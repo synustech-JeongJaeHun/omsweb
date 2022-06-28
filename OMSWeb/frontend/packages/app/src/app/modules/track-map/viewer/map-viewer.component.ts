@@ -33,7 +33,7 @@ import { DialogService } from '@oms/root/services/dialog.service'
 import { IVehicleCommandMessage } from '@oms/root/models/command.model'
 import { SystemStatusService } from '@oms/root/services/system-status.service'
 import { TracksService } from '@oms/root/services/tracks.service'
-
+import ArrayStore from 'devextreme/data/array_store'
 @Component({
 	selector: 'oms-map-viewer',
 	templateUrl: './map-viewer.component.html',
@@ -575,7 +575,29 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 			.map((e) => ({ value: e, label: `Group: ${e}` })),
 	]
 
+	//point > home SimpleData
+
+	testingHomeAndGroupSelectList = new ArrayStore({
+		data: [
+			{ value: 'OFF', id: 'OFF' },
+			...this.trackStatusService.trackData.groups
+				.map((g) => String(g.id))
+				.map((e) => ({ id: e, value: `Group: ${e}` })),
+		],
+	})
+
+	// 여기서 contextMenuObject에 삽임
+	testingHomeValueChanged(event: { value: String[] }) {
+		console.log('event', event)
+		console.log('apply value', event.value)
+		this.contextMenuObject.value.home = event.value
+		console.log('after', this.contextMenuObject.value)
+	}
+
 	onHomeValueChanged(event: { selectedItem: { value: string } }) {
+		//XXX:
+		console.log('event', event)
+		console.log(this.contextMenuObject.value)
 		this.contextMenuObject.value.home = event.selectedItem.value
 	}
 	onApplyPointHomeChange(id: number, offOrGroup: 'OFF' | 'No Group' | string) {
@@ -780,12 +802,15 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		// @ts-ignore
 		this.contextMenuObject = { type: payload.type, value: payload.value }
 
+		console.log('get event and payload', payload)
+
 		if (this.contextMenuObject.type === 'POINT') {
 			const point = this.contextMenuObject.value
 			if (point?.groupId)
-				this.contextMenuObject.value.home = String(point.groupId)
-			else if (point?.homeId) this.contextMenuObject.value.home = 'No Group'
-			else this.contextMenuObject.value.home = 'OFF'
+				//XXX:
+				this.contextMenuObject.value.home = [String(point.groupId)]
+			else if (point?.homeId) this.contextMenuObject.value.home = ['No Group']
+			else this.contextMenuObject.value.home = ['OFF']
 		}
 		if (this.contextMenuObject.type === 'BUFFER') {
 			const result = await this.tracksService
