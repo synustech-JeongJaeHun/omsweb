@@ -115,6 +115,9 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 	public showTooltip = false
 	public contextMenuObject: { type: string; value: any } | undefined
 	public showContextMenu = false
+	//XXX:
+	public homeActive = false
+
 	public colocatedViewPosition:
 		| { top: string; left: string; right: string }
 		| undefined
@@ -567,49 +570,34 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 	}
 
 	// point > home
-	homeAndGroupSelectList = [
-		{ value: 'OFF', label: 'OFF' },
-		// { value: 'No Group', label: 'Group: 0 (Default)' },
-		...this.trackStatusService.trackData.groups
-			.map((g) => String(g.id))
-			.map((e) => ({ value: e, label: `Group: ${e}` })),
-	]
 
-	//point > home SimpleData
-
-	testingHomeAndGroupSelectList = new ArrayStore({
-		data: [
-			{ value: 'OFF', id: 'OFF' },
-			...this.trackStatusService.trackData.groups
-				.map((g) => String(g.id))
-				.map((e) => ({ id: e, value: `Group: ${e}` })),
-		],
-	})
+	HomeAndGroupSelectList = this.trackStatusService.trackData.groups
+		.map((g) => String(g.id))
+		.map((e) => ({ id: e, value: `Group:${e}` }))
 
 	// 여기서 contextMenuObject에 삽임
-	testingHomeValueChanged(event: { value: String[] }) {
-		console.log('event', event)
-		console.log('apply value', event.value)
+	onHomeValueChanged(event: { value: String[] }) {
 		this.contextMenuObject.value.home = event.value
-		console.log('after', this.contextMenuObject.value)
+	}
+	onHomeSettingChanged(event: { value: boolean }) {
+		this.homeActive = event.value
+		// clear Point Context home when Home feature turns 'off'
+		if (event.value === false && this.contextMenuObject.value.home.length > 0) {
+			this.contextMenuObject.value.home = []
+		}
 	}
 
-	onHomeValueChanged(event: { selectedItem: { value: string } }) {
-		//XXX:
-		console.log('event', event)
-		console.log(this.contextMenuObject.value)
-		this.contextMenuObject.value.home = event.selectedItem.value
-	}
-	onApplyPointHomeChange(id: number, offOrGroup: 'OFF' | 'No Group' | string) {
-		if (offOrGroup === 'OFF') {
+	onApplyPointHomeChange(id: number, homeGroups: string[]) {
+		if (homeGroups.length === 0) {
 			this.messageSvc.sendDisableHome(id).subscribe()
-		} else if (offOrGroup === 'No Group') {
-			// home on with no group
-			this.messageSvc.sendEnableHome(id, []).subscribe()
 		} else {
 			// home on with group
-			const groupId = parseInt(offOrGroup)
-			this.messageSvc.sendEnableHome(id, [groupId]).subscribe()
+			this.messageSvc
+				.sendEnableHome(
+					id,
+					homeGroups.map((e) => Number(e)),
+				)
+				.subscribe()
 		}
 
 		this.showContextMenu = false
@@ -802,15 +790,15 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		// @ts-ignore
 		this.contextMenuObject = { type: payload.type, value: payload.value }
 
-		console.log('get event and payload', payload)
-
 		if (this.contextMenuObject.type === 'POINT') {
 			const point = this.contextMenuObject.value
-			if (point?.groupId)
-				//XXX:
+			if (point?.groupId) {
 				this.contextMenuObject.value.home = [String(point.groupId)]
-			else if (point?.homeId) this.contextMenuObject.value.home = ['No Group']
-			else this.contextMenuObject.value.home = ['OFF']
+				this.homeActive = true
+			} else {
+				this.contextMenuObject.value.home = []
+				this.homeActive = false
+			}
 		}
 		if (this.contextMenuObject.type === 'BUFFER') {
 			const result = await this.tracksService

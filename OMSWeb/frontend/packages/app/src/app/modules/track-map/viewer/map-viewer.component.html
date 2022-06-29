@@ -614,26 +614,23 @@
 					hasPermissions([permissionEnums.SetHomePoint])
 				"
 			>
-				<div style="height: 25px"></div>
+				<div style="padding: 10px 10px 5px 5px">
+					<span style="margin-right: 5px">{{ 'names.home' | translate }}: </span
+					><dx-switch
+						[value]="homeActive"
+						(onValueChanged)="onHomeSettingChanged($event)"
+					></dx-switch>
+				</div>
 
-				<!-- <dx-select-box
-					style="max-width: 12em"
-					displayExpr="label"
-					valueExpr="value"
-					[dataSource]="homeAndGroupSelectList"
-					(onSelectionChanged)="onHomeValueChanged($event)"
-					[value]="contextMenuObject?.value.home"
-					(click)="clickHandlerTest($event)"
-				>
-				</dx-select-box> -->
 				<dx-tag-box
-					[dataSource]="testingHomeAndGroupSelectList"
-					displayExpr="value"
-					valueExpr="id"
-					(onValueChanged)="testingHomeValueChanged($event)"
-					[value]="contextMenuObject?.value.home"
+					[dataSource]="HomeAndGroupSelectList"
+					(onValueChanged)="onHomeValueChanged($event)"
 					[showSelectionControls]="true"
 					applyValueMode="useButtons"
+					[value]="contextMenuObject?.value.home"
+					valueExpr="id"
+					displayExpr="value"
+					[disabled]="!homeActive"
 				>
 				</dx-tag-box>
 
@@ -647,6 +644,7 @@
 							contextMenuObject?.value.home
 						)
 					"
+					[disabled]="contextMenuObject?.value.home.length === 0 && homeActive"
 				>
 					{{ 'names.apply' | translate }}
 				</button>

@@ -20,6 +20,7 @@ import {
 	DxSliderModule,
 	DxCheckBoxModule,
 	DxTagBoxModule,
+	DxSwitchModule,
 } from 'devextreme-angular'
 import { DxSparklineModule } from 'devextreme-angular'
 import { DxPieChartModule } from 'devextreme-angular'
@@ -47,6 +48,7 @@ import { DxPieChartModule } from 'devextreme-angular'
 		DxSliderModule,
 		DxCheckBoxModule,
 		DxTagBoxModule,
+		DxSwitchModule,
 	],
 })
 export class SharedDevextremeModule {}
