@@ -58,6 +58,7 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 
 		this.commandState.source = undefined
 		this.commandState.dest = undefined
+    this.commandState.carrier = ''
 	}
 
 	onApply() {
@@ -182,6 +183,7 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 			source,
 			dest,
 			destDisabled,
+			carrier,
 		} = this.commandState
 
 		if (!vehicleDisabled && !vehicle)
@@ -202,6 +204,12 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 				if (!pointDisabled && !point)
 					return this.t$.instant('messages.required', { field: 'Dest' })
 			} else return this.t$.instant('messages.required', { field: 'Dest' })
+		}
+
+		if (category === 'fromTo' || category === 'from' || category === 'to') {
+			const isCarrierEmpty = carrier == null || carrier.trim().length === 0
+			if (isCarrierEmpty)
+				return this.t$.instant('messages.required', { field: 'Carrier' })
 		}
 
 		return
