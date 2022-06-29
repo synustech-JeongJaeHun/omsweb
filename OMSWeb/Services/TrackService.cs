@@ -116,6 +116,11 @@ namespace OMSWeb.Services
             }).ToList();
         }
 
+        public string GetCarrierId(string carrierLocation)
+        {
+            return this._trackRepo.QueryCarrierId(carrierLocation);
+        }
+
         public IList<LocationGroup> GetGroups()
         {
             return this._trackRepo.LoadGroups();

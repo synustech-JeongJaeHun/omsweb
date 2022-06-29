@@ -22,6 +22,12 @@ namespace OMSWeb.Controllers
             this._svc = trackService;
         }
 
+        [HttpGet("carriers/{carrierLocation}")]
+        public string GetCarrierId([FromRoute] string carrierLocation)
+        {
+            return this._svc.GetCarrierId(carrierLocation);
+        }
+
         [HttpGet("groups")]
         public IEnumerable<LocationGroup> GetGroups()
         {

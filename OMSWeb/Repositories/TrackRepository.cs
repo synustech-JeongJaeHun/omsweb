@@ -543,5 +543,36 @@ ORDER BY location_groups.id ASC
             }
             return data;
         }
+
+        public string QueryCarrierId(string carrierLocation)
+        {
+            var sql = $@"
+                    SELECT 
+                        carrier_id
+                    FROM 
+                        carriers
+                    WHERE 
+                        carrier_location='{carrierLocation}' and installed=1
+                ";
+
+            string result = null;
+
+            using (var conn = ConnectTrack())
+            {
+                try
+                {
+                    result = conn.QueryFirst<string>(sql);
+                }
+                catch (System.Exception)
+                {
+                    Console.WriteLine("[QueryCarrierId] => null");
+                    result = null;
+                }
+            }
+
+            return result;
+        }
     }
+
+   
 }
