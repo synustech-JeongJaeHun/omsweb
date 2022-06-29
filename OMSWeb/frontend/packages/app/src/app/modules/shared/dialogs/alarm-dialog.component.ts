@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import DataSource from 'devextreme/data/data_source';
 import { alertSeverities, IVehicleAlarm } from '../../../models/notification.model';
@@ -12,7 +12,7 @@ import { IAnnotation } from '../../../models/annotation.model';
   templateUrl: './alarm-dialog.component.html',
   styleUrls: ['./alarm-dialog.component.scss'],
 })
-export class AlarmDialogComponent implements OnInit {
+export class AlarmDialogComponent {
   alaram_note: string;
   dataSource: DataSource;
   severityLookup = alertSeverities;
@@ -24,9 +24,7 @@ export class AlarmDialogComponent implements OnInit {
     private messageSvc: MessagesService,
     private notifySvc: NotificationsService,
     private t$: TranslateService
-  ) { }
-
-  ngOnInit(): void {
+  ) { 
     this.dataSource = this.notifySvc.alarmsDataSource();
   }
 

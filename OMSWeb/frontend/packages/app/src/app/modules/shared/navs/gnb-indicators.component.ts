@@ -186,14 +186,15 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
     if (!AccountUtil.hasPermission(PermissionEnums.ViewAlarm, this.auth.currentUser)) return;
     if (show) this.showAlarmsView();
 
-    this._alarmDlg.componentInstance.dataSource = this.notifySvc.alarmsDataSource();
+    if(this._alarmDlg?.componentInstance)
+      this._alarmDlg.componentInstance.dataSource = this.notifySvc.alarmsDataSource();
   }
 
   updateAlertView(show = true) {
     if (!AccountUtil.hasPermission(PermissionEnums.ViewWarning, this.auth.currentUser)) return;
     if (show) this.showWarnsView();
 
-    if(this._alarmDlg?.componentInstance)
+    if(this._alertDlg?.componentInstance)
       this._alertDlg.componentInstance.dataSource = this.notifySvc.alertsDataSource();
   }
 

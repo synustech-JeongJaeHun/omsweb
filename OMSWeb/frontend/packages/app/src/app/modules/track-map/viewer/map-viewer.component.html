@@ -239,6 +239,8 @@
 			<div class="value">{{ tooltipObject?.value.physicalId }}</div>
 			<div class="name">{{ 'names.point' | translate }}</div>
 			<div class="value">{{ tooltipObject?.value.pointId }}</div>
+			<div class="name">{{ 'names.group' | translate }}</div>
+			<div class="value">{{ tooltipObject?.value.groups.join(', ') }}</div>
 		</div>
 	</dx-tooltip>
 </ng-template>

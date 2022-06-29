@@ -744,6 +744,11 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		// @ts-ignore
 		this.tooltipObject = { type: payload.type, value: payload.value }
 
+    const groups = this.tooltipObject.type.toUpperCase() === 'POINT' && this.tooltipObject.value.homeId
+      ? this.trackStatusService.getGroupsFromObject("home", this.tooltipObject.value.homeId)
+      : this.trackStatusService.getGroupsFromObject(this.tooltipObject.type, this.tooltipObject.value.id)
+    this.tooltipObject.value.groups = groups
+
 		if (this.tooltipObject.type === 'SEGMENT') {
 			const { startPoint, endPoint } = this.tooltipObject.value
 			this.tooltipObject.value.point =
