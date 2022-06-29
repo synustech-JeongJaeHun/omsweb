@@ -159,7 +159,9 @@ export class TransferCommandState {
 	}
 
 	set source(s: ILookupUnit) {
-    if((this.category === 'fromTo' || this.category === 'from') && s?.logicalId)
+    if((this.category === 'fromTo' || this.category === 'from') 
+      && ((s?.objectType?.toLowerCase() ?? '') === 'buffer') 
+      && s?.logicalId)
       getCarrierId(s.logicalId)
         .then((carrierId) => (this.carrier = carrierId))
         .catch(() => (this.carrier = ''))
