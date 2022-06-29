@@ -1,7 +1,7 @@
-import { AfterViewInit, Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnDestroy, ViewChild } from '@angular/core';
 import { DxDataGridComponent } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
-import { Subject, Subscription } from 'rxjs';
+import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { alertSeverities, IAlert, IDataChangeEvent } from '../../../models/notification.model';
 import { AuthService } from '../../../services/auth.service';
@@ -14,7 +14,7 @@ import { NotificationsService } from '../../../services/notifications.service';
   templateUrl: './alert-dialog.component.html',
   styleUrls: ['./alert-dialog.component.scss'],
 })
-export class AlertDialogComponent implements OnInit, OnDestroy, AfterViewInit {
+export class AlertDialogComponent implements OnDestroy {
   @ViewChild(DxDataGridComponent, { static: false })
   dataGrid: DxDataGridComponent;
   selectedRows: number[] = [];
@@ -38,18 +38,11 @@ export class AlertDialogComponent implements OnInit, OnDestroy, AfterViewInit {
     private hubSvc: HubService,
     private messageSvc: MessagesService,
     private notifySvc: NotificationsService
-  ) { }
-
-  ngAfterViewInit(): void {
-    //this.loadWarnList();
-  }
-
-  ngOnInit(): void {
+  ) { 
+    this.dataSource = this.notifySvc.alertsDataSource();
     this.hubSvc.alertChanged$
       .pipe(takeUntil(this.destroy$))
       .subscribe((e) => this.onAlertChanged(e));
-
-    this.dataSource = this.notifySvc.alertsDataSource();
   }
 
   ngOnDestroy(): void {
