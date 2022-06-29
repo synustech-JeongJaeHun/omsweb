@@ -12,6 +12,11 @@ export class TracksService {
 
 	constructor(private http: HttpClient) {}
 
+	// not used, using in map.interface.ts
+	// getCarrierId(carrierLocation: string) {
+	// 	return this.http.get<string>(`${this.baseUrl}/carriers/${carrierLocation}`)
+	// }
+
 	loadGroups(): Observable<Dto.IGroup[]> {
 		return this.http.get<Dto.IGroup[]>(`${this.baseUrl}/groups`)
 	}
