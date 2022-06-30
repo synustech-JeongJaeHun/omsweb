@@ -609,7 +609,6 @@
 			>
 				{{ 'names.setDest' | translate }}
 			</button>
-
 			<ng-container
 				*ngIf="
 					isHomeModeAndTscPaused &&
@@ -625,7 +624,7 @@
 				</div>
 
 				<dx-tag-box
-					[dataSource]="HomeAndGroupSelectList"
+					[dataSource]="homeAndGroupSelectList"
 					(onValueChanged)="onHomeValueChanged($event)"
 					[showSelectionControls]="true"
 					applyValueMode="useButtons"
