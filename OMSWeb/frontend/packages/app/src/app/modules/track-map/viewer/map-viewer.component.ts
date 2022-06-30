@@ -33,7 +33,6 @@ import { DialogService } from '@oms/root/services/dialog.service'
 import { IVehicleCommandMessage } from '@oms/root/models/command.model'
 import { SystemStatusService } from '@oms/root/services/system-status.service'
 import { TracksService } from '@oms/root/services/tracks.service'
-import ArrayStore from 'devextreme/data/array_store'
 @Component({
 	selector: 'oms-map-viewer',
 	templateUrl: './map-viewer.component.html',
@@ -571,12 +570,12 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 
 	// point > home
 
-	HomeAndGroupSelectList = this.trackStatusService.trackData.groups
-		.map((g) => String(g.id))
+	//NOTE: currently use in "id". change it with "logicalId" on demend
+	homeAndGroupSelectList = this.trackStatusService.trackData.groups
+		.map((g) => g.id)
 		.map((e) => ({ id: e, value: `Group:${e}` }))
 
-	// 여기서 contextMenuObject에 삽임
-	onHomeValueChanged(event: { value: String[] }) {
+	onHomeValueChanged(event: { value: Number[] }) {
 		this.contextMenuObject.value.home = event.value
 	}
 	onHomeSettingChanged(event: { value: boolean }) {
@@ -587,17 +586,11 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		}
 	}
 
-	onApplyPointHomeChange(id: number, homeGroups: string[]) {
-		if (homeGroups.length === 0) {
-			this.messageSvc.sendDisableHome(id).subscribe()
+	onApplyPointHomeChange(id: number, homeGroups: number[]) {
+		if (this.homeActive) {
+			this.messageSvc.sendEnableHome(id, homeGroups).subscribe()
 		} else {
-			// home on with group
-			this.messageSvc
-				.sendEnableHome(
-					id,
-					homeGroups.map((e) => Number(e)),
-				)
-				.subscribe()
+			this.messageSvc.sendDisableHome(id).subscribe()
 		}
 
 		this.showContextMenu = false
@@ -744,10 +737,18 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		// @ts-ignore
 		this.tooltipObject = { type: payload.type, value: payload.value }
 
-    const groups = this.tooltipObject.type.toUpperCase() === 'POINT' && this.tooltipObject.value.homeId
-      ? this.trackStatusService.getGroupsFromObject("home", this.tooltipObject.value.homeId)
-      : this.trackStatusService.getGroupsFromObject(this.tooltipObject.type, this.tooltipObject.value.id)
-    this.tooltipObject.value.groups = groups
+		const groups =
+			this.tooltipObject.type.toUpperCase() === 'POINT' &&
+			this.tooltipObject.value.homeId
+				? this.trackStatusService.getGroupsFromObject(
+						'home',
+						this.tooltipObject.value.homeId,
+				  )
+				: this.trackStatusService.getGroupsFromObject(
+						this.tooltipObject.type,
+						this.tooltipObject.value.id,
+				  )
+		this.tooltipObject.value.groups = groups
 
 		if (this.tooltipObject.type === 'SEGMENT') {
 			const { startPoint, endPoint } = this.tooltipObject.value
@@ -796,14 +797,14 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		this.contextMenuObject = { type: payload.type, value: payload.value }
 
 		if (this.contextMenuObject.type === 'POINT') {
-			const point = this.contextMenuObject.value
-			if (point?.groupId) {
-				this.contextMenuObject.value.home = [String(point.groupId)]
-				this.homeActive = true
-			} else {
-				this.contextMenuObject.value.home = []
-				this.homeActive = false
-			}
+			const homeId = (payload as any).value.homeId
+			const homeGroups = this.trackStatusService.getGroupsFromObject(
+				'HOME',
+				homeId,
+			)
+
+			this.contextMenuObject.value.home = homeGroups
+			this.homeActive = homeGroups.length > 0 && true
 		}
 		if (this.contextMenuObject.type === 'BUFFER') {
 			const result = await this.tracksService
