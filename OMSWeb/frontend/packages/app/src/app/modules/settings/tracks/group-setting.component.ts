@@ -1,5 +1,5 @@
-import { Component, OnInit, OnDestroy } from '@angular/core'
-import { forkJoin, Observable, of } from 'rxjs'
+import { Component, OnInit } from '@angular/core'
+import { forkJoin, Observable } from 'rxjs'
 import _ = require('lodash')
 import { tap } from 'rxjs/operators'
 import { Subject } from 'rxjs'
@@ -15,10 +15,9 @@ import { DialogService } from '../../../services/dialog.service'
 import { SystemsService } from '../../../services/systems.service'
 import { ISystemStates } from '../../../models/system.model'
 import {
-	HostModeEnums,
-	HostSessionStatusEnums,
 	TscModeEnums,
 } from '@oms/models/enums'
+import { TrackStatusService } from '@oms/root/services/track-status.service'
 
 @Component({
 	selector: 'oms-group-setting',
@@ -58,6 +57,7 @@ export class GroupSettingComponent implements OnInit {
 	}
 
 	constructor(
+		private trackStatusService: TrackStatusService,
 		private settingsSvc: SettingsService,
 		private messageSvc: MessagesService,
 		private systemSvc: SystemsService,
@@ -93,27 +93,6 @@ export class GroupSettingComponent implements OnInit {
 	}
 
 	private bindGroupData(groupId: number) {
-		this.settingsSvc
-			.settingsGroupIsAvailableHomePoints(groupId)
-			.subscribe((res) => {
-				this.homePoints = res
-			})
-		this.settingsSvc
-			.settingsGroupIsAvailableStations(groupId)
-			.subscribe((res) => {
-				this.stations = res
-			})
-		this.settingsSvc
-			.settingsGroupIsAvailableVehicles(groupId)
-			.subscribe((res) => {
-				this.vehicles = res
-			})
-		this.settingsSvc
-			.settingsGroupIsAvailableBuffers(groupId)
-			.subscribe((res) => {
-				this.buffers = res
-			})
-
 		this.assignedHomePoints = this.groupedObjects
 			.filter(
 				(x: ISettingsGroupedObject) =>
@@ -138,6 +117,27 @@ export class GroupSettingComponent implements OnInit {
 					x.groupId === groupId && x.referenceTable === 'buffer',
 			)
 			.map((x) => x.referenceId)
+
+		const {
+			buffers = [],
+			stations = [],
+			vehicles = [],
+			points = [],
+		} = this.trackStatusService.trackData
+
+		this.stations = stations
+			.map((s) => s.id)
+			.filter((id) => this.assignedStations.includes(id) === false)
+		this.buffers = buffers
+			.map((b) => b.id)
+			.filter((id) => this.assignedBuffers.includes(id) === false)
+		this.vehicles = vehicles
+			.map((v) => v.id)
+			.filter((id) => this.assignedVehicles.includes(id) === false)
+		this.homePoints = points
+			.filter((p) => p.homeId)
+			.map((p) => p.homeId)
+			.filter((id) => this.assignedHomePoints.includes(id) === false)
 	}
 
 	onGroupChanged() {
