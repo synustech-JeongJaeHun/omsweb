@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using OMSWeb.Models;
 using OMSWeb.Models.Tracks;
 using OMSWeb.Repositories;
 using Buffer = OMSWeb.Models.Tracks.Buffer;
@@ -118,6 +121,17 @@ namespace OMSWeb.Services
         {
             return this._trackRepo.QueryCarrierId(carrierLocation);
         }
+
+        public CarrierInfo GetCarrierInfo(string carrierLocation)
+        {
+            var carrierInfos = this._trackRepo.QueryCarrierInfo(carrierLocation);
+
+            if (carrierInfos.AsEnumerable().Count() == 1)
+                return carrierInfos.First();
+            else
+                return null;
+        }
+
 
         public IList<LocationGroup> GetGroups()
         {

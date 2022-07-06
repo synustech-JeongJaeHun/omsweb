@@ -307,7 +307,7 @@ namespace OMSWeb.Repositories
             LEFT JOIN grouped_objects AS GO 
 	            ON VH.id = GO.reference_id AND GO.reference_table = 'vehicle'
             LEFT JOIN carriers AS CR 
-	            ON VH.logical_id = CR.carrier_location
+	            ON VH.logical_id = CR.carrier_location and installed=1
             ORDER BY VH.id
       "},
       {"orderStatus", @"

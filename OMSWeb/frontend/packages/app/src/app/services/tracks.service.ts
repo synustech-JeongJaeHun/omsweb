@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
 import { Observable } from 'rxjs'
-
+import { ICarrier } from '@oms/models/carrier.model'
 import { Dto } from '@oms/models/dto/track.model'
 
 @Injectable({
 	providedIn: 'root',
 })
 export class TracksService {
-	private baseUrl = '/api/tracks'
+    private baseUrl = '/api/tracks'
+    private _states: ICarrier
 
 	constructor(private http: HttpClient) {}
 
@@ -16,6 +17,10 @@ export class TracksService {
 	// getCarrierId(carrierLocation: string) {
 	// 	return this.http.get<string>(`${this.baseUrl}/carriers/${carrierLocation}`)
 	// }
+
+    getCarrierInfo(carrierLocation: string): Observable<ICarrier> {
+        return this.http.get<ICarrier>(`${this.baseUrl}/carrierinfo/${carrierLocation}`)
+    }
 
 	loadGroups(): Observable<Dto.IGroup[]> {
 		return this.http.get<Dto.IGroup[]>(`${this.baseUrl}/groups`)
@@ -45,7 +50,22 @@ export class TracksService {
 		return this.http.get<Dto.IStation[]>(`${this.baseUrl}/stations`)
 	}
 
-	loadBufferById(id: number) {
-		return this.http.get<Dto.IBuffer>(`${this.baseUrl}/buffers/${id}`)
+    loadBufferById(id: number) {
+      return this.http.get<Dto.IBuffer>(`${this.baseUrl}/buffers/${id}`)
+    }
+
+    updateBuffer(bufferId: number, form: any): Observable<void> {
+      return this.http.patch<void>(`${this.baseUrl}/buffers/${bufferId}`, form)
+    }
+
+	installBufferCarrier(bufferId: number, carrierId: number): Observable<void> {
+		return this.http.post<void>(
+			`${this.baseUrl}/buffers/${bufferId}/carrier/${carrierId}`,
+			{},
+		)
+	}
+
+	removeBufferCarrier(bufferId: number): Observable<void> {
+		return this.http.delete<void>(`${this.baseUrl}/buffers/${bufferId}/carrier`)
 	}
 }

@@ -24,6 +24,20 @@ namespace OMSWeb.Controllers
             return this._svc.GetCarrierId(carrierLocation);
         }
 
+        [HttpGet("carrierinfo/{carrierLocation}")]
+        public ActionResult<CarrierInfo> GetCarrierInfo(string carrierLocation)
+        {
+            var result = this._svc.GetCarrierInfo(carrierLocation);
+
+            if (result == null)
+                return Ok(new CarrierInfo()
+                {
+                    CarrierId = String.Empty,
+                });
+            else
+                return Ok(result);
+        }
+
         [HttpGet("groups")]
         public IEnumerable<LocationGroup> GetGroups()
         {

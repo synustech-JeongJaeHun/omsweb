@@ -521,33 +521,62 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 			physicalId,
 		}
 	}
-	onRemoveCarrier(carrierId: string) {
-		this.dialogSvc
-			.confirm({ body: this.$t.instant('messages.confirmBufferChange') })
-			.subscribe((confirm) => {
-				if (confirm)
-					this.messageSvc
-						.sendCarrierCommand({
-							action: 'remove_carrier',
-							bufferId: this.contextMenuObject.value.id,
-							carrierLabel: carrierId,
-						})
-						.subscribe()
-			})
-	}
-	onInstallCarrier(carrierId: string) {
-		this.dialogSvc
-			.confirm({ body: this.$t.instant('messages.confirmBufferChange') })
-			.subscribe((confirm) => {
-				if (confirm)
-					this.messageSvc
-						.sendCarrierCommand({
-							action: 'install_carrier',
-							bufferId: this.contextMenuObject.value.id,
-							carrierLabel: carrierId,
-						})
-						.subscribe()
-			})
+    onRemoveCarrier(carrierId: string) {
+      this.tracksService.getCarrierInfo(this.contextMenuObject.value.logicalId)
+        .subscribe(
+          (res) => {
+            if (res.carrierId === carrierId) {
+              this.messageSvc
+                .sendCarrierCommand({
+                  action: 'remove_carrier',
+                  carrierLabel: carrierId,
+                  logicalId: this.contextMenuObject.value.logicalId
+                })
+                .subscribe()
+            }
+            else if (res.carrierId === '') {
+              this.dialogSvc.alert({
+                body: this.$t.instant('messages.confirmCarrierEmptyAtBuffer'),
+              })
+            }
+            else {
+              this.dialogSvc.alert({
+                body: this.$t.instant('messages.confirmCarrierInvalid'),
+              })
+            }
+          },
+          (error) => {
+            this.dialogSvc.alert({
+              body: this.$t.instant('messages.confirmCarrierInvalid'),
+            })
+          },
+      );
+    }
+    onInstallCarrier(carrierId: string) {
+      this.tracksService.getCarrierInfo(this.contextMenuObject.value.logicalId)
+        .subscribe(
+          (res) => {
+            if (res.carrierId === '') {
+              this.messageSvc
+                .sendCarrierCommand({
+                  action: 'install_carrier',
+                  carrierLabel: carrierId,
+                  logicalId: this.contextMenuObject.value.logicalId
+                })
+                .subscribe()
+            }
+            else {
+              this.dialogSvc.alert({
+                body: this.$t.instant('messages.confirmCarrierAlreadyExistAtBuffer'),
+              })
+            }
+          },
+          (error) => {
+            this.dialogSvc.alert({
+              body: this.$t.instant('messages.confirmCarrierAlreadyExistAtBuffer'),
+            })
+          },
+      );
 	}
 
 	onChangeSegmentProperty(isDisable: boolean) {

@@ -557,20 +557,26 @@ namespace OMSWeb.Services.MqttClient
                 if (command.CarrierLabel != null)
                     data["carrier_id"] = command.CarrierLabel;
 
-                if (command.BufferId != null)
+                if (command.LogicalId != null)
                 {
-                    data["carrier_location"] = "b" + command.BufferId;
+                    data["carrier_loc"] = command.LogicalId;
                     data["location_type"] = "b";
-
+                    data["manual"] = true;
+                    data["user_id"] = "admin";
+                    data["note"] = "";
+                }
+                else if (command.BufferId != null)
+                {
+                    data["carrier_loc"] = "b" + command.BufferId;
+                    data["location_type"] = "b";
                     data["manual"] = true;
                     data["user_id"] = "admin";
                     data["note"] = "";
                 }
                 else if (command.VehicleId != null)
                 {
-                    data["carrier_location"] = "v" + command.VehicleId;
+                    data["carrier_loc"] = "v" + command.VehicleId;
                     data["location_type"] = "v";
-
                     data["manual"] = true;
                     data["user_id"] = "admin";
                     data["note"] = "";
