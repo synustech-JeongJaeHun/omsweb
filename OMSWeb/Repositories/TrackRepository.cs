@@ -1,10 +1,12 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Dapper;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Npgsql;
+using OMSWeb.Models;
 using OMSWeb.Models.Tracks;
 using OMSWeb.Services;
 using Buffer = OMSWeb.Models.Tracks.Buffer;
@@ -605,6 +607,23 @@ ORDER BY location_groups.id ASC
                 }
             }
 
+            return result;
+        }
+
+
+        public IQueryable<CarrierInfo> QueryCarrierInfo(string carrierLocation)
+        {
+            IQueryable<CarrierInfo> result;
+            using (var conn = ConnectTrack())
+            {
+                var sql = $@"
+        SELECT carrier_id
+        FROM carriers 
+        WHERE carrier_location='{carrierLocation}' and installed=1
+        ";
+
+                result = conn.Query<CarrierInfo>(sql).AsQueryable();
+            }
             return result;
         }
     }

@@ -2,7 +2,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core'
 import { MatDialog, MatDialogRef } from '@angular/material/dialog'
 import { TranslateService } from '@ngx-translate/core'
 import { TrackStatusService } from '@oms/root/services/track-status.service'
+import { DialogService } from '@oms/root/services/dialog.service'
 import { MessagesService } from '../../../services/messages.service'
+import { TracksService } from '../../../services/tracks.service';
 import { VehicleService } from '@oms/root/services/vehicle.service'
 import { Dto } from '@oms/root/models/dto/track.model'
 import { IVehicleDioCategory } from '@oms/root/models/vehicle-status.model'
@@ -64,11 +66,14 @@ export class VehicleStatusDialogComponent implements OnInit, OnDestroy {
 		return parseInt
 	}
 
-	constructor(
-		private dialogRef: MatDialogRef<VehicleStatusDialogComponent>,
-		private trackStatusService: TrackStatusService,
-		private vehicleService: VehicleService,
-        private messageSvc: MessagesService
+  constructor(
+    	private $t: TranslateService,
+    	private trackSvc: TracksService,
+	private dialogRef: MatDialogRef<VehicleStatusDialogComponent>,
+	private trackStatusService: TrackStatusService,
+    	private vehicleService: VehicleService,
+    	private dialogSvc: DialogService,
+    	private messageSvc: MessagesService
 	) {}
 
 	ngOnInit(): void {
@@ -125,24 +130,63 @@ export class VehicleStatusDialogComponent implements OnInit, OnDestroy {
 		clearInterval(this.intervalId)
 	}
 
-    onRemoveCarrier(carrierIdInput: string) {
-       this.messageSvc
-          .sendCarrierCommand({
-            action: 'remove_carrier',
-            carrierLabel: carrierIdInput,
-            vehicleId: this.currentVehicle.id
+  onRemoveCarrier(carrierIdInput: string) {
+    this.trackSvc.getCarrierInfo(this.currentVehicle.logicalId)
+      .subscribe(
+        (res) => {
+          if (res.carrierId === carrierIdInput) {
+            this.messageSvc
+              .sendCarrierCommand({
+                action: 'remove_carrier',
+                carrierLabel: carrierIdInput,
+                logicalId: this.currentVehicle.logicalId
+              })
+              .subscribe()
+          }
+          else if (res.carrierId === '') {
+            this.dialogSvc.alert({
+              body: this.$t.instant('messages.confirmCarrierEmptyAtVehicle'),
+            })
+          }
+          else {
+            this.dialogSvc.alert({
+              body: this.$t.instant('messages.confirmCarrierInvalid'),
+            })
+          }
+        },
+        (error) => {
+          this.dialogSvc.alert({
+            body: this.$t.instant('messages.confirmCarrierInvalid'),
           })
-          .subscribe()
+        },
+      );
     }
 
-    onInstallCarrier(carrierIdInput: string) {
-        this.messageSvc
-          .sendCarrierCommand({
-            action: 'install_carrier',
-            carrierLabel: carrierIdInput,
-            vehicleId: this.currentVehicle.id
+  onInstallCarrier(carrierIdInput: string) {
+    this.trackSvc.getCarrierInfo(this.currentVehicle.logicalId)
+      .subscribe(
+        (res) => {
+          if (res.carrierId === '') {
+            this.messageSvc
+              .sendCarrierCommand({
+                action: 'install_carrier',
+                carrierLabel: carrierIdInput,
+                logicalId: this.currentVehicle.logicalId
+              })
+              .subscribe()
+          }
+          else {
+            this.dialogSvc.alert({
+              body: this.$t.instant('messages.confirmCarrierAlreadyExistAtVehicle'),
+            })
+          }
+        },
+        (error) => {
+          this.dialogSvc.alert({
+            body: this.$t.instant('messages.confirmCarrierAlreadyExistAtVehicle'),
           })
-          .subscribe()
+        },
+      );
     }
 
 	onVehicleSelect({ selectedItem: value }) {

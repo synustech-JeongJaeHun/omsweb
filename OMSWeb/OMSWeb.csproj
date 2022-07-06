@@ -50,6 +50,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Remove="frontend\packages\app\src\app\models\carrier.model.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Temp\CopyFolder\" />
     <Folder Include="Temp\Zip\" />
   </ItemGroup>

@@ -69,31 +69,61 @@ export class BufferStatusDialogComponent implements OnDestroy {
 	}
 
 	onRemoveCarrier(carrierId: string) {
-		this.dialogSvc
-			.confirm({ body: this.$t.instant('messages.confirmBufferChange') })
-			.subscribe((confirm) => {
-				if (confirm)
-					this.messageSvc
-						.sendCarrierCommand({
-							action: 'remove_carrier',
-							bufferId: this.currentBuffer.id,
-							carrierLabel: carrierId,
-						})
-						.subscribe()
-			})
+		this.tracksService.getCarrierInfo(this.currentBuffer.logicalId)
+		      .subscribe(
+		        (res) => {
+              if (res.carrierId === carrierId) {
+		            this.messageSvc
+		              .sendCarrierCommand({
+		                action: 'remove_carrier',
+                        carrierLabel: carrierId,
+		                logicalId: this.currentBuffer.logicalId
+		              })
+		              .subscribe()
+		          }
+		          else if (res.carrierId === '') {
+		            this.dialogSvc.alert({
+		              body: this.$t.instant('messages.confirmCarrierEmptyAtBuffer'),
+		            })
+		          }
+		          else {
+		            this.dialogSvc.alert({
+		              body: this.$t.instant('messages.confirmCarrierInvalid'),
+		            })
+		          }
+		        },
+		        (error) => {
+		          this.dialogSvc.alert({
+		            body: this.$t.instant('messages.confirmCarrierInvalid'),
+		          })
+		        },
+		    );
+
 	}
 	onInstallCarrier(carrierId: string) {
-		this.dialogSvc
-			.confirm({ body: this.$t.instant('messages.confirmBufferChange') })
-			.subscribe((confirm) => {
-				if (confirm)
-					this.messageSvc
-						.sendCarrierCommand({
-							action: 'install_carrier',
-							bufferId: this.currentBuffer.id,
-							carrierLabel: carrierId,
-						})
-						.subscribe()
-			})
+		this.tracksService.getCarrierInfo(this.currentBuffer.logicalId)
+	      .subscribe(
+	        (res) => {
+	          if (res.carrierId === '') {
+	            this.messageSvc
+	              .sendCarrierCommand({
+	                action: 'install_carrier',
+                    carrierLabel: carrierId,
+	                logicalId: this.currentBuffer.logicalId
+	              })
+	              .subscribe()
+	          }
+	          else {
+	            this.dialogSvc.alert({
+	              body: this.$t.instant('messages.confirmCarrierAlreadyExistAtBuffer'),
+	            })
+	          }
+	        },
+	        (error) => {
+	          this.dialogSvc.alert({
+	            body: this.$t.instant('messages.confirmCarrierAlreadyExistAtBuffer'),
+	          })
+	        },
+	    );
 	}
 }
