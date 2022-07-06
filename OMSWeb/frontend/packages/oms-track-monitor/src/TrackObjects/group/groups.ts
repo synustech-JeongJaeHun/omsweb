@@ -5,6 +5,7 @@ import { computed, Ref, ref } from 'vue'
 import { Group, ObjectInGroupType } from './types/Group'
 
 const groups = ref<Group[]>([])
+const sortedByIdAscendingGroups = computed(() => groups.value.slice().sort((a,b) => a.id - b.id))
 
 function initGroups(gs: ITrackData['groups']) {
 	groups.value = (gs ?? []).map((g) => ({
@@ -14,7 +15,7 @@ function initGroups(gs: ITrackData['groups']) {
 }
 
 function findGroupByTypeAndObjectId(type: ObjectInGroupType, id: number) {
-	return groups.value.find((g) =>
+	return sortedByIdAscendingGroups.value.find((g) =>
 		g.objects.some((o) => o.id === id && o.type === type)
 	)
 }
