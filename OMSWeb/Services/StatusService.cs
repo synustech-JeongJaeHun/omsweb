@@ -33,6 +33,10 @@ namespace OMSWeb.Services
         {
             return _repo.QueryZcuStates();
         }
+        public IQueryable<FireShutterState> QueryFireShutterStates()
+        {
+            return _repo.QueryFireShutterStates();
+        }
         public IQueryable<ClusterState> QueryClusterStates()
         {
             return _repo.QueryClusterStates();

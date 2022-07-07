@@ -36,6 +36,8 @@ namespace OMSWeb.Services
                 Groups = this._trackRepo.LoadGroups(),
                 Zcus = this._trackRepo.LoadZcus(),
                 ZcuStatus = this._trackRepo.LoadZcuStatus(),
+                FireShutters = this._trackRepo.LoadFireShutters(),
+                FireShutterStatus = this._trackRepo.LoadFireShutterStatus(),
             };
             return map;
         }
@@ -70,6 +72,10 @@ namespace OMSWeb.Services
                     return this._trackRepo.LoadZcus().ToArray() as dynamic[];
                 case CacheKeys.ZcuStatus:
                     return this._trackRepo.LoadZcuStatus().ToArray() as dynamic[];
+                case CacheKeys.FireShutters:
+                    return this._trackRepo.LoadFireShutters().ToArray() as dynamic[];
+                case CacheKeys.FireShutterStatus:
+                    return this._trackRepo.LoadFireShutterStatus().ToArray() as dynamic[];
                 default:
                     return null;
             }
@@ -104,6 +110,9 @@ namespace OMSWeb.Services
                     break;
                 case "ZCU":
                     targetList = this.GetMapItem(CacheKeys.Zcus);
+                    break;
+                case "FireShutter":
+                    targetList = this.GetMapItem(CacheKeys.FireShutters);
                     break;
                 default:
                     targetList = new dynamic[] { };
