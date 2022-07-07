@@ -84,6 +84,7 @@ export namespace Dto {
 	export interface IFireShutterStatus {
 		id: number
 		logicalId: string
+        segments: string
 		status: number
 		statusMsg: string
 	}

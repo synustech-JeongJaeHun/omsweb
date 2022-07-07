@@ -15,6 +15,8 @@ namespace OMSWeb.Services
     Mtls,
     Zcus,
     ZcuStatus,
+    FireShutters,
+    FireShutterStatus,
     Clusters,
     ClusterStatus,
     VehicleDio,

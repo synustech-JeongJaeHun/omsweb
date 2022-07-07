@@ -368,6 +368,79 @@ namespace OMSWeb.Repositories
             }
             return data;
         }
+
+        public List<FireShutter> LoadFireShutters()
+        {
+            var key = CacheKeys.FireShutters;
+            var data = _cache.GetValue<List<FireShutter>>(key);
+            if (data == null)
+            {
+                var models = new List<FireShutter>();
+                string sql = QueryFactory.GetSql("fireShutter");
+                using (var conn = ConnectTrack())
+                {
+                    using (var cmd = new NpgsqlCommand(sql, conn))
+                    {
+                        conn.Open();
+                        using (var dr = cmd.ExecuteReader())
+                        {
+                            while (dr.Read())
+                            {
+                                models.Add(new FireShutter
+                                {
+                                    Id = Convert.ToInt32(dr["id"]),
+                                    X = dr["x"].TryInteger(),
+                                    Y = dr["y"].TryInteger(),
+                                    LogicalId = dr["logical_id"].ToString(),
+                                    Segments = dr["segments"].ToString(),
+                                    Status = dr["status"].TryInteger(),
+                                }
+                               );
+                            }
+                        }
+                    }
+                }
+                data = models.ToList();
+                _cache.SetValue<List<FireShutter>>(key, data, DateTimeOffset.Now.AddMinutes(CACHE_LIFE));
+            }
+            return data;
+        }
+        public List<FireShutterStatus> LoadFireShutterStatus()
+        {
+            var key = CacheKeys.FireShutterStatus;
+            var data = _cache.GetValue<List<FireShutterStatus>>(key);
+            if (data == null)
+            {
+                var models = new List<FireShutterStatus>();
+                string sql = QueryFactory.GetSql("fireShutterStatus");
+                using (var conn = ConnectTrack())
+                {
+                    using (var cmd = new NpgsqlCommand(sql, conn))
+                    {
+                        conn.Open();
+                        using (var dr = cmd.ExecuteReader())
+                        {
+                            while (dr.Read())
+                            {
+                                models.Add(new FireShutterStatus
+                                {
+                                    Id = Convert.ToInt32(dr["id"]),
+                                    logicalId = dr["logical_id"].ToString(),
+                                    segments = dr["segments"].ToString(),
+                                    status = dr["status"].TryInteger(),
+                                    statusMsg = dr["logical_id"].ToString()
+                                }
+                               );
+                            }
+                        }
+                    }
+                }
+                data = models.ToList();
+                _cache.SetValue<List<FireShutterStatus>>(key, data, DateTimeOffset.Now.AddMinutes(CACHE_LIFE));
+            }
+            return data;
+        }
+
         public List<Cluster> LoadClusters()
         {
             var key = CacheKeys.Clusters;

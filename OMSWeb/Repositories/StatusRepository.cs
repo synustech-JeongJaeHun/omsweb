@@ -67,6 +67,17 @@ namespace OMSWeb.Repositories
             return result;
         }
 
+        public IQueryable<FireShutterState> QueryFireShutterStates()
+        {
+            IQueryable<FireShutterState> result;
+            using (var conn = ConnectTrack())
+            {
+                var sql = QueryFactory.GetSql("fireShutterStatus");
+                result = conn.Query<FireShutterState>(sql).AsQueryable();
+            }
+            return result;
+        }
+
         public IQueryable<ClusterState> QueryClusterStates()
         {
             IQueryable<ClusterState> result;
