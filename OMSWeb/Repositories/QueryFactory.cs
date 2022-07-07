@@ -169,6 +169,22 @@ namespace OMSWeb.Repositories
         ORDER BY Z.id
         --*user_id_condition*--WHERE user_id =@userId
       "},
+      {"fireShutter", @"
+        SELECT F.id, F.x, F.y, F.logical_id, F.segments, F.status 
+        FROM fireshutters AS F
+        ORDER BY F.id
+        --*user_id_condition*--WHERE user_id =@userId
+      "},
+      {"fireShutterStatus", @"
+        SELECT F.id, F.logical_id, F.status, 
+            CASE 
+                WHEN F.status = 0 THEN 'Door closed'
+                WHEN F.status = 1 THEN 'Door opened'
+                ELSE 'Door opened'
+            END AS status_msg
+        FROM fireshutters AS F
+        --*user_id_condition*--WHERE user_id =@userId
+      "},
       {"mtl", @"
         SELECT id, physical_id, logical_id AS logical_id, point AS point_id
         FROM mtls
