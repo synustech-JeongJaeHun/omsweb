@@ -8,6 +8,8 @@ namespace OMSWeb.Models.Entities
 
         public string logicalId { get; set; }
 
+        public string segments { get; set; }
+
         public int status { get; set; }
 
         public string statusMsg { get; set; }

@@ -73,6 +73,20 @@ export namespace Dto {
 		vehicleCount: string[]
 		vehicleInfo: string[]
 	}
+	export interface IFireShutter {
+		id: number
+		x: number
+		y: number
+		logicalId: string
+		segments: string
+		status: number
+	}
+	export interface IFireShutterStatus {
+		id: number
+		logicalId: string
+		status: number
+		statusMsg: string
+	}
 	export interface IPoint extends ICoordinate {
 		id: number
 		logicalId: string

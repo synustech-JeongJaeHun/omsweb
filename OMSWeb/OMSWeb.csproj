@@ -51,6 +51,8 @@
 
   <ItemGroup>
     <TypeScriptCompile Remove="frontend\packages\app\src\app\models\carrier.model.ts" />
+    <TypeScriptCompile Remove="frontend\packages\app\src\app\models\fireshutter-status.model.ts" />
+    <TypeScriptCompile Remove="frontend\packages\app\src\app\models\fireshutter.model.ts" />
   </ItemGroup>
 
   <ItemGroup>
