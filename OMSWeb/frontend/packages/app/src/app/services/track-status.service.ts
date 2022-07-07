@@ -57,6 +57,9 @@ export class TrackStatusService {
 		this.hubService.zcuMapChanged$.subscribe((e: IDataChangeEvent) => {
 			this.handleZcuMapChanged(e)
 		})
+		this.hubService.fireShutterMapChanged$.subscribe((e: IDataChangeEvent) => {
+			this.handleFireShutterMapChanged(e)
+		})
 		this.hubService.stationChanged$.subscribe((e) => {
 			this.handleStationChanged(e)
 		})
@@ -178,6 +181,24 @@ export class TrackStatusService {
 			default:
 				break
 		}
+	}
+
+    handleFireShutterMapChanged(e: IDataChangeEvent) {
+		//const finded = this.trackData.fireshutters.find((z) => z.id === e.data.id)
+		//switch (e.operation) {
+		//	case 'UPDATE':
+		//		if (finded) Object.assign(finded, e.data)
+		//		break
+		//	case 'DELETE':
+		//		if (finded) {
+		//			const index = this.trackData.fireshutters.indexOf(finded)
+		//			this.trackData.fireshutters.splice(index, 1)
+		//		}
+		//		break
+
+		//	default:
+		//		break
+		//}
 	}
 
 	handleStationChanged(e: IDataChangeEvent) {

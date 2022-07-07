@@ -323,6 +323,12 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 					this.viewer.updateZcu(e.operation, e.data)
 				})
 
+			this.hubSvc.fireShutterMapChanged$
+				.pipe(takeUntil(this.destroy$))
+				.subscribe((e) => {
+					this.viewer.updateFireShutter(e.operation, e.data)
+				})
+
 			this.hubSvc.stationChanged$
 				.pipe(takeUntil(this.destroy$))
 				.subscribe((e) => {
