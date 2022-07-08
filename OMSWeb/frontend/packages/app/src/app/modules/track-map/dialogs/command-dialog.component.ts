@@ -203,7 +203,8 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 								this.messageSvc.sendOrderCommand(cmd).subscribe()
 							} else {
 								this.dialogSvc.alert({
-									body: this.t$.instant('messages.confirmCarrierInvalid'),
+									title: this.t$.instant('names.blocked'),
+									body: this.t$.instant('messages.confirmCarrierNotSame'),
 								})
 							}
 						})
