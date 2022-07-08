@@ -524,6 +524,7 @@
     "confirmCarrierAlreadyExistAtBuffer": "The buffer has a carrier already and cannot be Installed ",
     "confirmCarrierAlreadyExistAtVehicle": "The vehicle has a carrier already and cannot be Installed ",
     "confirmCarrierInvalid": "The carrier id is different and cannot be deleted",
+    "confirmCarrierNotSame": "The carrier id is different.",
     "selectObjectType": "选择类型",
     "searchId": "搜索 ID",
     "noObjectSelected": "没有选择任何东西。",
