@@ -15,6 +15,7 @@ import { MapStatesService } from '../map-states.service'
 import { TrackStatusService } from '@oms/root/services/track-status.service'
 import * as DateFns from 'date-fns'
 import { SystemStatusService } from '@oms/root/services/system-status.service'
+import { TracksService } from '@oms/root/services/tracks.service'
 
 @Component({
 	selector: 'oms-command-dialog',
@@ -56,6 +57,7 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 		private t$: TranslateService,
 		private trackStatusService: TrackStatusService,
 		private systemStatusService: SystemStatusService,
+		private tracksService: TracksService,
 	) {}
 
 	ngOnInit(): void {
@@ -74,7 +76,7 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 
 		this.commandState.source = undefined
 		this.commandState.dest = undefined
-    this.commandState.carrier = ''
+		this.commandState.carrier = ''
 	}
 
 	onApply() {
@@ -183,7 +185,31 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 			.confirm({ body: this.t$.instant('messages.confirmCommand') })
 			.subscribe((ok) => {
 				if (ok) {
-					this.messageSvc.sendOrderCommand(cmd).subscribe()
+					// fromto from to : carrier value validation
+					// carrierid input must be same in current status
+					if (
+						((category === 'fromTo' || category === 'from') &&
+							source?.objectType?.toLowerCase() === 'buffer') ||
+						category === 'to'
+					) {
+						const logicalId =
+							category === 'to'
+								? vehicle?.logicalId ?? ''
+								: source?.logicalId ?? ''
+
+						this.tracksService.getCarrierInfo(logicalId).subscribe((res) => {
+							// exit this function with alert
+							if (res.carrierId === carrier) {
+								this.messageSvc.sendOrderCommand(cmd).subscribe()
+							} else {
+								this.dialogSvc.alert({
+									body: this.t$.instant('messages.confirmCarrierInvalid'),
+								})
+							}
+						})
+					} else {
+						this.messageSvc.sendOrderCommand(cmd).subscribe()
+					}
 				}
 			})
 	}
