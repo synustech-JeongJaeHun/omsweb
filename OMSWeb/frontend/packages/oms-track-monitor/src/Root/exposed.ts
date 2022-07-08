@@ -63,6 +63,7 @@ import { createPathElement } from 'src/utils/svg/path'
 import { getPositionForBufferOrStation } from 'src/TrackObjects/utils/locationStationBuffer'
 import { setFocusedObject } from 'src/MapObjects/focus/focus'
 import { setTrackedObject } from 'src/MapObjects/track/track'
+import { scaleStylesInfo } from '../styles/styles'
 
 const exposed: IOmsTrackMonitor = {
 	getCameraAndRotation,
@@ -130,7 +131,7 @@ const exposed: IOmsTrackMonitor = {
 			case 'station':
 				const station = findStationById(id)
 				if (station) {
-					const position = getPositionForBufferOrStation(station)
+					const position = getPositionForBufferOrStation(station, scaleStylesInfo.stationMargin)
 
 					if (position) approachTo(position)
 				}
@@ -138,7 +139,7 @@ const exposed: IOmsTrackMonitor = {
 			case 'buffer':
 				const buffer = findBufferById(id)
 				if (buffer) {
-					const position = getPositionForBufferOrStation(buffer)
+					const position = getPositionForBufferOrStation(buffer, scaleStylesInfo.bufferMargin)
 
 					if (position) approachTo(position)
 				}
