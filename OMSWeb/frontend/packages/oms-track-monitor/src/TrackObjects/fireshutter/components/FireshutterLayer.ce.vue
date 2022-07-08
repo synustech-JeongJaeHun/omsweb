@@ -27,8 +27,6 @@ function handleMouseleave(event: MouseEvent) {
 }
 
 function handleLeftClick(event: MouseEvent) {
-  // 여기서 이제 emit으로 부모에게 이벤트가 발생했다고 알리는데
-  // 그럼 실제 이벤트를 처리하는 부모는 어디?
   emit('mainClickOnObject', {
     type: 'FIRESHUTTER',
     value: getDeepCopiedFireshutter(event),

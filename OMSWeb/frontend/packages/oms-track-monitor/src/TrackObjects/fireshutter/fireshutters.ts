@@ -12,7 +12,7 @@ function findFireshutterById(id: Fireshutter['id']) {
 	return fireshutterMap.get(id)
 }
 
-function initFireshutters(fs: ITrackData['fireshutters']) {
+function initFireshutters(fs: ITrackData['fireShutters']) {
 	// clean Map and ref
 	fireshutters.value = []
 	fireshutterMap.clear()

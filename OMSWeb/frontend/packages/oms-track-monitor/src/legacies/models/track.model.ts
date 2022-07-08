@@ -159,7 +159,7 @@ interface IFixedTrackData {
 	size?: IMapSize
 	stations?: IStation[]
 	zcus?: IZcu[]
-	fireshutters?: IFireshutter[]
+	fireShutters?: IFireshutter[]
 }
 interface IVariableTrackData {
 	segmentParts?: ISegmentPart[]
@@ -177,7 +177,9 @@ interface IFireshutter {
 	id: number
 	x: number
 	y: number
-	status: 'OPEN' | 'CLOSE'
+	logicalId: string
+	segments: string
+	status: number
 }
 
 export { ITrackData, IVehicle, ISegmentPart, IGroup }

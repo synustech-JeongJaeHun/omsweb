@@ -19,7 +19,7 @@ const props = defineProps<{
     class="fireshutter-wrapper overflow-visible"
   >
     <FireshutterOpen
-      v-if="props.fireshutter.status === 'OPEN'"
+      v-if="props.fireshutter.status === 0"
       :x="50"
       :y="100"
       :data-id="props.fireshutter.id"
@@ -27,11 +27,11 @@ const props = defineProps<{
       @click.left="handleLeftClick"
       @mouseover="handleMouseover"
       @mouseleave="handleMouseleave"
-      width="50"
-      height="50"
+      width="35"
+      height="35"
     />
     <FireshutterClose
-      v-if="props.fireshutter.status === 'CLOSE'"
+      v-if="props.fireshutter.status === 1"
       :x="50"
       :y="100"
       class="overflow-visible"
@@ -39,8 +39,8 @@ const props = defineProps<{
       @mouseover="handleMouseover"
       @mouseleave="handleMouseleave"
       :data-id="props.fireshutter.id"
-      width="50"
-      height="50"
+      width="35"
+      height="35"
     />
   </svg>
 </template>

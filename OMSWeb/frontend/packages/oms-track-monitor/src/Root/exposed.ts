@@ -101,14 +101,8 @@ const exposed: IOmsTrackMonitor = {
 		initVehicles(t.vehicles ?? [])
 		initSegmentDisableds(t.segmentDisabled ?? [])
 		initGroups(t.groups)
-
 		// XXX:set fireshutters
-		// DB에도 값이 들어가게 되면 아래와 같이 수정
-		// initFireshutters(t.fireshutters)
-		initFireshutters([
-			{ id: 1, x: 9594, y: 2957, status: 'OPEN' },
-			{ id: 2, x: 9900, y: 3000, status: 'CLOSE' },
-		])
+		initFireshutters(t.fireShutters)
 	},
 	centerZoom,
 
