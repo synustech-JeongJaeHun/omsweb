@@ -84,7 +84,7 @@ export namespace Dto {
 	export interface IFireShutterStatus {
 		id: number
 		logicalId: string
-        segments: string
+		segments: string
 		status: number
 		statusMsg: string
 	}
@@ -182,6 +182,7 @@ export namespace Dto {
 		size?: IMapSize
 		stations?: IStation[]
 		zcus?: IZcu[]
+		fireShutters?: IFireShutter[]
 	}
 	export interface IVariableTrackData {
 		segments?: ISegment[]

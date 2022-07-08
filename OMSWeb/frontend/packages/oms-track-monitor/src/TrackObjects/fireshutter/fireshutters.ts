@@ -22,7 +22,7 @@ function initFireshutters(fs: ITrackData['fireShutters']) {
 	fireshutters.value.forEach((f) => fireshutterMap.set(f.id, f))
 }
 
-function setFireshutter(updateData: UpdateDto.Fireshutter) {
+function updateFireshutter(updateData: UpdateDto.Fireshutter) {
 	const fs = findFireshutterById(updateData.id)
 	if (fs) Object.assign(fs, updateData)
 }
@@ -31,5 +31,5 @@ export {
 	fireshutters,
 	findFireshutterById,
 	initFireshutters,
-	setFireshutter,
+	updateFireshutter,
 }

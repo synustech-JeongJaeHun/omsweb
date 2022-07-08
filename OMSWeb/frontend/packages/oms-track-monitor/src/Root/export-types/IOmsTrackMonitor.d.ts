@@ -1,3 +1,5 @@
+import { UpdateDto } from 'src/types/Dto'
+
 interface IOmsTrackMonitor {
 	// Get Data
 	getCameraAndRotation(): {
@@ -39,6 +41,7 @@ interface IOmsTrackMonitor {
 		data?: any[]
 	): void
 	updateHome(operation: UpdateDto.Operation, home: any): void
+	updateFireshutter(operation: UpdateDto.Operation, fireshutter: any): void
 }
 
 export { IOmsTrackMonitor }

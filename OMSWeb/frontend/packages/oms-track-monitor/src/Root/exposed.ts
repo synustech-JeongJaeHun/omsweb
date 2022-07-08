@@ -40,7 +40,7 @@ import {
 import {
 	findFireshutterById,
 	initFireshutters,
-	setFireshutter,
+	updateFireshutter,
 } from 'src/TrackObjects/fireshutter/fireshutters'
 import {
 	deleteVehicle,
@@ -131,7 +131,10 @@ const exposed: IOmsTrackMonitor = {
 			case 'station':
 				const station = findStationById(id)
 				if (station) {
-					const position = getPositionForBufferOrStation(station, scaleStylesInfo.stationMargin)
+					const position = getPositionForBufferOrStation(
+						station,
+						scaleStylesInfo.stationMargin
+					)
 
 					if (position) approachTo(position)
 				}
@@ -139,7 +142,10 @@ const exposed: IOmsTrackMonitor = {
 			case 'buffer':
 				const buffer = findBufferById(id)
 				if (buffer) {
-					const position = getPositionForBufferOrStation(buffer, scaleStylesInfo.bufferMargin)
+					const position = getPositionForBufferOrStation(
+						buffer,
+						scaleStylesInfo.bufferMargin
+					)
 
 					if (position) approachTo(position)
 				}
@@ -310,6 +316,19 @@ const exposed: IOmsTrackMonitor = {
 				deleteHomeToPoint(h)
 				break
 
+			default:
+				break
+		}
+	},
+	updateFireshutter(op, f) {
+		switch (op) {
+			case 'INSERT':
+				break
+			case 'UPDATE':
+				updateFireshutter(f)
+				break
+			case 'DELETE':
+				break
 			default:
 				break
 		}

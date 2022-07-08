@@ -50,13 +50,6 @@ interface IOmsTrackMonitor {
 	track(type: 'vehicle', id: Vehicle['id']): void
 	stopTrack(): void
 
-	/*XXX: fireshutter는 업데이트 될 가능성이 있는지?
-	과거에 segment가 고정일 줄 알고 코드를 작성했는데, 추후에 업데이트 쿼리를 받도록
-	기능 추가 요구가 들어왔다고 합니다. 
-
-	우선 UpdateDto에 fireshutter 타입은 반영해놓은 상태
-
-	*/
 	// Update Data
 	updateVehicle(
 		operation: UpdateDto.Operation,
@@ -82,6 +75,11 @@ interface IOmsTrackMonitor {
 		data?: IGroup[]
 	): void
 	updateHome(operation: UpdateDto.Operation, home: UpdateDto.Home): void
+	// XXX: fireshutter
+	updateFireshutter(
+		operation: UpdateDto.Operation,
+		fireshutter: UpdateDto.Fireshutter
+	): void
 }
 
 export { IOmsTrackMonitor }
