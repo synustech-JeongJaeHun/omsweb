@@ -137,7 +137,6 @@
 		<ng-container *ngSwitchCase="'POINT'">
 			<ng-container *ngTemplateOutlet="pointTooltip"></ng-container>
 		</ng-container>
-		<!-- XXX:fireshutter container -->
 		<ng-container *ngSwitchCase="'FIRESHUTTER'">
 			<ng-container *ngTemplateOutlet="fireshutterTooltip"></ng-container>
 		</ng-container>
@@ -331,7 +330,6 @@
 	</dx-tooltip>
 </ng-template>
 
-<!--XXX: fireshutter Tooltip-->
 <ng-template #fireshutterTooltip>
 	<dx-tooltip
 		class="tooltip-box"

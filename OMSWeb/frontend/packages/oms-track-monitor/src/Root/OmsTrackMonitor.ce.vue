@@ -435,7 +435,7 @@ defineExpose(exposed)
 <style src="src/TrackObjects/zcu/styles/hover.css"></style>
 <style src="src/TrackObjects/zcu/styles/visibility.css"></style>
 <style src="src/TrackObjects/zcu/styles/transform.css"></style>
-<!-- XXX:Track > Fireshutter -->
+<!-- Track > Fireshutter -->
 <style src="src/TrackObjects/fireshutter/styles/focus.css"></style>
 <style src="src/TrackObjects/fireshutter/styles/hover.css"></style>
 <style src="src/TrackObjects/fireshutter/styles/visibility.css"></style>

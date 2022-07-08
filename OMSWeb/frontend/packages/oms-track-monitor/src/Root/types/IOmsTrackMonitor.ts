@@ -26,7 +26,6 @@ interface IOmsTrackMonitor {
 	setTrack(track: ITrackData): void
 	centerZoom(): void
 
-	// XXX: fireshutter find
 	// find
 	find(type: 'vehicle', id: Vehicle['id']): void
 	find(type: 'point', id: Point['id']): void
@@ -35,7 +34,6 @@ interface IOmsTrackMonitor {
 	find(type: 'buffer', id: Buffer['id']): void
 	find(type: 'mtl', id: Mtl['id']): void
 	find(type: 'fireshutter', id: Mtl['id']): void
-	// XXX: fireshutter focus
 	// focus
 	focus(type: 'vehicle', id: Vehicle['id']): void
 	focus(type: 'point', id: Point['id']): void
@@ -75,7 +73,6 @@ interface IOmsTrackMonitor {
 		data?: IGroup[]
 	): void
 	updateHome(operation: UpdateDto.Operation, home: UpdateDto.Home): void
-	// XXX: fireshutter
 	updateFireshutter(
 		operation: UpdateDto.Operation,
 		fireshutter: UpdateDto.Fireshutter

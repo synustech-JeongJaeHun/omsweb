@@ -91,7 +91,9 @@ namespace UpdateDto {
 		id: number
 		x: number
 		y: number
-		status: 'OPEN' | 'CLOSE'
+		logicalId: string
+		segments: string
+		status: number
 	}
 }
 
