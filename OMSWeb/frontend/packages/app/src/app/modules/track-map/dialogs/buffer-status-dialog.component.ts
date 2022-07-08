@@ -1,44 +1,129 @@
-import { Component } from '@angular/core';
-import { Dto } from '@oms/root/models/dto/track.model';
-import { TrackStatusService } from '@oms/root/services/track-status.service';
-import { ILookupUnit } from '../../../models/map.interface';
-import { TracksService } from '../../../services/tracks.service';
+import { Component, OnDestroy } from '@angular/core'
+import { TranslateService } from '@ngx-translate/core'
+import { Dto } from '@oms/root/models/dto/track.model'
+import { DialogService } from '@oms/root/services/dialog.service'
+import { HubService } from '@oms/root/services/hub.service'
+import { MessagesService } from '@oms/root/services/messages.service'
+import { TrackStatusService } from '@oms/root/services/track-status.service'
+import { TracksService } from '@oms/root/services/tracks.service'
+import { Subject } from 'rxjs'
+import { takeUntil } from 'rxjs/operators'
+import { ILookupUnit } from '../../../models/map.interface'
 
 @Component({
-  selector: 'oms-buffer-status-dialog',
-  templateUrl: './buffer-status-dialog.component.html',
-  styleUrls: ['./buffer-status-dialog.component.scss'],
+	selector: 'oms-buffer-status-dialog',
+	templateUrl: './buffer-status-dialog.component.html',
+	styleUrls: ['./buffer-status-dialog.component.scss'],
 })
-export class BufferStatusDialogComponent {
-  selectedUnit: Dto.IBuffer;
-  currentBuffer: Dto.IBuffer;
+export class BufferStatusDialogComponent implements OnDestroy {
+	selectedUnit: Dto.IBuffer
+	currentBuffer: Dto.IBuffer
 
-  constructor(
-    private trackSvc: TracksService,
-    private trackStatusService: TrackStatusService,
-  ) {
-    if (this.trackStatusService.trackData.buffers.length > 0) {
-      this.currentBuffer = this.trackStatusService.trackData.buffers[0];
-      this.selectedUnit = this.currentBuffer;
-    }
-  }
+	private destroy$: Subject<void> = new Subject<void>()
+	constructor(
+		private trackStatusService: TrackStatusService,
+		private dialogSvc: DialogService,
+		private $t: TranslateService,
+		private messageSvc: MessagesService,
+		private tracksService: TracksService,
+		hubSvc: HubService,
+	) {
+		if (this.trackStatusService.trackData.buffers.length > 0) {
+			this.currentBuffer = this.trackStatusService.trackData.buffers[0]
+			this.selectedUnit = this.currentBuffer
 
-  onBufferChange(data: ILookupUnit) {
-    if (data)
-      this.currentBuffer = this.trackStatusService.trackData.buffers.find(b => b.id === data.id)
-  }
+			this.refreshBuffer()
+		}
 
-  onRemoveCarrier() {
-    this.trackSvc.removeBufferCarrier(this.currentBuffer.id).subscribe();
-  }
+		hubSvc.bufferChanged$
+			.pipe(takeUntil(this.destroy$))
+			.subscribe((res) => this.handleBufferChangedEvent(res.id))
+	}
 
-  onInstallCarrier(carrierId: number) {
-    this.trackSvc
-      .installBufferCarrier(this.currentBuffer.id, carrierId)
-      .subscribe();
-  }
+	ngOnDestroy(): void {
+		this.destroy$.next()
+		this.destroy$.complete()
+	}
 
-  onUpdateNote(note: string) {
-    this.trackSvc.updateBuffer(this.currentBuffer.id, { note }).subscribe();
-  }
+	onBufferChange(data: ILookupUnit) {
+		if (data) {
+			this.currentBuffer = this.trackStatusService.trackData.buffers.find(
+				(b) => b.id === data.id,
+			)
+			this.refreshBuffer()
+		}
+	}
+
+	handleBufferChangedEvent(changedBufferId: number) {
+		if (changedBufferId !== this.currentBuffer.id) return
+
+		this.refreshBuffer()
+	}
+
+	refreshBuffer() {
+		this.tracksService
+			.loadBufferById(this.currentBuffer.id)
+			.subscribe((res) => {
+				Object.assign(this.currentBuffer, res)
+			})
+	}
+
+	onRemoveCarrier(carrierId: string) {
+		this.tracksService.getCarrierInfo(this.currentBuffer.logicalId)
+		      .subscribe(
+		        (res) => {
+              if (res.carrierId === carrierId) {
+		            this.messageSvc
+		              .sendCarrierCommand({
+		                action: 'remove_carrier',
+                        carrierLabel: carrierId,
+		                logicalId: this.currentBuffer.logicalId
+		              })
+		              .subscribe()
+		          }
+		          else if (res.carrierId === '') {
+		            this.dialogSvc.alert({
+		              body: this.$t.instant('messages.confirmCarrierEmptyAtBuffer'),
+		            })
+		          }
+		          else {
+		            this.dialogSvc.alert({
+		              body: this.$t.instant('messages.confirmCarrierInvalid'),
+		            })
+		          }
+		        },
+		        (error) => {
+		          this.dialogSvc.alert({
+		            body: this.$t.instant('messages.confirmCarrierInvalid'),
+		          })
+		        },
+		    );
+
+	}
+	onInstallCarrier(carrierId: string) {
+		this.tracksService.getCarrierInfo(this.currentBuffer.logicalId)
+	      .subscribe(
+	        (res) => {
+	          if (res.carrierId === '') {
+	            this.messageSvc
+	              .sendCarrierCommand({
+	                action: 'install_carrier',
+                    carrierLabel: carrierId,
+	                logicalId: this.currentBuffer.logicalId
+	              })
+	              .subscribe()
+	          }
+	          else {
+	            this.dialogSvc.alert({
+	              body: this.$t.instant('messages.confirmCarrierAlreadyExistAtBuffer'),
+	            })
+	          }
+	        },
+	        (error) => {
+	          this.dialogSvc.alert({
+	            body: this.$t.instant('messages.confirmCarrierAlreadyExistAtBuffer'),
+	          })
+	        },
+	    );
+	}
 }

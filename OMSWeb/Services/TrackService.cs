@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using OMSWeb.Models;
 using OMSWeb.Models.Tracks;
 using OMSWeb.Repositories;
+using Buffer = OMSWeb.Models.Tracks.Buffer;
 
 namespace OMSWeb.Services
 {
@@ -35,6 +36,8 @@ namespace OMSWeb.Services
                 Groups = this._trackRepo.LoadGroups(),
                 Zcus = this._trackRepo.LoadZcus(),
                 ZcuStatus = this._trackRepo.LoadZcuStatus(),
+                FireShutters = this._trackRepo.LoadFireShutters(),
+                FireShutterStatus = this._trackRepo.LoadFireShutterStatus(),
             };
             return map;
         }
@@ -69,6 +72,10 @@ namespace OMSWeb.Services
                     return this._trackRepo.LoadZcus().ToArray() as dynamic[];
                 case CacheKeys.ZcuStatus:
                     return this._trackRepo.LoadZcuStatus().ToArray() as dynamic[];
+                case CacheKeys.FireShutters:
+                    return this._trackRepo.LoadFireShutters().ToArray() as dynamic[];
+                case CacheKeys.FireShutterStatus:
+                    return this._trackRepo.LoadFireShutterStatus().ToArray() as dynamic[];
                 default:
                     return null;
             }
@@ -104,6 +111,9 @@ namespace OMSWeb.Services
                 case "ZCU":
                     targetList = this.GetMapItem(CacheKeys.Zcus);
                     break;
+                case "FireShutter":
+                    targetList = this.GetMapItem(CacheKeys.FireShutters);
+                    break;
                 default:
                     targetList = new dynamic[] { };
                     break;
@@ -115,6 +125,22 @@ namespace OMSWeb.Services
                 PhysicalId = x.PhysicalId,
             }).ToList();
         }
+
+        public string GetCarrierId(string carrierLocation)
+        {
+            return this._trackRepo.QueryCarrierId(carrierLocation);
+        }
+
+        public CarrierInfo GetCarrierInfo(string carrierLocation)
+        {
+            var carrierInfos = this._trackRepo.QueryCarrierInfo(carrierLocation);
+
+            if (carrierInfos.AsEnumerable().Count() == 1)
+                return carrierInfos.First();
+            else
+                return null;
+        }
+
 
         public IList<LocationGroup> GetGroups()
         {
@@ -139,6 +165,11 @@ namespace OMSWeb.Services
         public IList<Station> GetStations()
         {
             return this._trackRepo.LoadStations();
+        }
+
+        public Buffer GetBufferById(int id)
+        {
+            return this._trackRepo.LoadBufferById(id);
         }
     }
 }

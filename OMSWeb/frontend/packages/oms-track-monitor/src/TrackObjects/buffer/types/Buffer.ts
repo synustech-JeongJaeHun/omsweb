@@ -1,17 +1,19 @@
-import { CanBeFocused } from "src/MapObjects/focus/types/CanBeFocused"
+import { CanBeFocused } from 'src/MapObjects/focus/types/CanBeFocused'
 
 type Buffer = {
-  id: number
-  logicalId: string
-  physicalId: string
+	id: number
+	logicalId: string
+	physicalId: string
 
-  direction: "L" | "R" | "U"
-  pointId: number
-  nextPoint: number
-  offset: number
+	direction: 'L' | 'R' | 'U'
+	pointId: number
+	nextPoint: number
+	offset: number
 
-  // nullable
-  group?: number
+	unuse?: boolean
+
+	// nullable
+	group?: number
 } & CanBeFocused
 
-export { Buffer } 
+export { Buffer }

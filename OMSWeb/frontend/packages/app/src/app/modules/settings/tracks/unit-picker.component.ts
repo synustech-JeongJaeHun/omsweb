@@ -3,19 +3,17 @@ import {
   EventEmitter,
   Input,
   OnChanges,
-  OnInit,
   Output,
   SimpleChanges,
 } from '@angular/core';
 import _ = require('lodash');
-import { Observable, of } from 'rxjs';
 
 @Component({
   selector: 'oms-unit-picker',
   templateUrl: './unit-picker.component.html',
   styleUrls: ['./unit-picker.component.scss'],
 })
-export class UnitPickerComponent implements OnInit, OnChanges {
+export class UnitPickerComponent implements OnChanges {
   @Input() title: string;
   @Input() unitName: string;
   @Input() gridHeight: number = 200;
@@ -43,17 +41,14 @@ export class UnitPickerComponent implements OnInit, OnChanges {
   unassigned: number[] = [];
   assigned: number[] = [];
 
-  constructor() { }
-
   ngOnChanges(changes: SimpleChanges): void {
     const { picked, pool } = changes;
     if (picked?.currentValue || pool?.currentValue) {
       this.getUnassigned(pool?.currentValue, picked?.currentValue);
       //this.getChanged(pool?.currentValue, picked?.currentValue);
     }
+    this.sort('all')
   }
-
-  ngOnInit(): void { }
 
   onAssign() {
     if (this.selectedUnassignedIds.length) {
@@ -61,6 +56,7 @@ export class UnitPickerComponent implements OnInit, OnChanges {
       this.getChanged(this.pool, this.picked);
       this.selectionChanged.emit(this.picked);
     }
+    this.sort('picked')
   }
   onUnassign() {
     if (this.selectedAssignedIds.length) {
@@ -71,6 +67,15 @@ export class UnitPickerComponent implements OnInit, OnChanges {
       this.getChanged(this.pool, this.picked);
       this.selectionChanged.emit(this.picked);
     }
+    this.sort('pool')
+  }
+
+  private sort(target: "all" | "picked" | "pool"){
+    if(target !== 'pool')
+      this.picked.sort((a, b) => a - b)
+
+    if(target !== 'picked')
+      this.pool.sort((a, b) => a - b)
   }
 
   private getUnassigned(pool: number[] = [], picked: number[] = []) {

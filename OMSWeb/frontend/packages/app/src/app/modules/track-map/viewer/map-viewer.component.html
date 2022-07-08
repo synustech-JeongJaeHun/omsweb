@@ -8,6 +8,8 @@
 		[vehicleSize]="tmSetting.vehicleSize"
 		[segmentDirectionSize]="tmSetting.segmentDirectionSize"
 		[segmentWidth]="tmSetting.segmentWidth"
+		[stationMargin]="stationMargin"
+		[bufferMargin]="bufferMargin"
 		[rotation]="tmSetting.rotation"
 		[isMinimapVisible]="tmSetting.isMinimapVisible"
 		[isVehicleLineVisible]="tmSetting.isVehicleLineVisible"
@@ -24,6 +26,7 @@
 		[stationColor]="tmSetting.stationColor"
 		[stationDisabledColor]="tmSetting.stationDisabledColor"
 		[bufferColor]="tmSetting.bufferColor"
+		[bufferDisabledColor]="tmSetting.bufferDisabledColor"
 		[pointColor]="tmSetting.pointColor"
 		[homeColor]="homeColor"
 		[normalSegmentColor]="tmSetting.normalSegmentColor"
@@ -138,6 +141,9 @@
 		<ng-container *ngSwitchCase="'FIRESHUTTER'">
 			<ng-container *ngTemplateOutlet="fireshutterTooltip"></ng-container>
 		</ng-container>
+		<ng-container *ngSwitchCase="'MTL'">
+			<ng-container *ngTemplateOutlet="mtlTooltip"></ng-container>
+		</ng-container>
 		<ng-container *ngSwitchDefault> </ng-container>
 	</ng-container>
 </div>
@@ -160,6 +166,8 @@
 			<div class="value">{{ tooltipObject?.value.physicalId }}</div>
 			<div class="name">{{ 'names.point' | translate }}</div>
 			<div class="value">{{ tooltipObject?.value.pointId }}</div>
+			<div class="name">{{ 'names.group' | translate }}</div>
+			<div class="value">{{ tooltipObject?.value.groups.join(', ') }}</div>
 		</div>
 	</dx-tooltip>
 </ng-template>
@@ -181,6 +189,8 @@
 			<div class="value">{{ tooltipObject?.value.physicalId }}</div>
 			<div class="name">{{ 'names.point' | translate }}</div>
 			<div class="value">{{ tooltipObject?.value.curPoint }}</div>
+			<div class="name">{{ 'names.group' | translate }}</div>
+			<div class="value">{{ tooltipObject?.value.groups.join(', ') }}</div>
 		</div>
 	</dx-tooltip>
 </ng-template>
@@ -240,6 +250,8 @@
 			<div class="value">{{ tooltipObject?.value.physicalId }}</div>
 			<div class="name">{{ 'names.point' | translate }}</div>
 			<div class="value">{{ tooltipObject?.value.pointId }}</div>
+			<div class="name">{{ 'names.group' | translate }}</div>
+			<div class="value">{{ tooltipObject?.value.groups.join(', ') }}</div>
 		</div>
 	</dx-tooltip>
 </ng-template>
@@ -288,11 +300,38 @@
 			<div class="value">{{ tooltipObject?.value.id }}</div>
 			<div class="name">{{ 'names.physicalId' | translate }}</div>
 			<div class="value">{{ tooltipObject?.value.physicalId }}</div>
+			<ng-container *ngIf="tooltipObject?.value?.homeId">
+				<div class="name" style="height: 10px"></div>
+				<div class="value"></div>
+				<div class="name">{{ 'names.home' | translate }}</div>
+				<div class="value">{{ tooltipObject?.value.homeId }}</div>
+				<div class="name">{{ 'names.group' | translate }}</div>
+				<div class="value">{{ tooltipObject?.value.groups.join(', ') }}</div>
+			</ng-container>
 		</div>
 	</dx-tooltip>
 </ng-template>
 
-<!-- XXX:fireshutter tooltip -->
+<ng-template #mtlTooltip>
+	<dx-tooltip
+		class="tooltip-box"
+		[visible]="showTooltip"
+		target="#tooltipView"
+		position="right"
+	>
+		<div class="tooltip-title">Mtl</div>
+		<div class="tooltip-content">
+			<div class="name">{{ 'names.id' | translate }}</div>
+			<div class="value">{{ tooltipObject?.value.id }}</div>
+			<div class="name">{{ 'names.logicalId' | translate }}</div>
+			<div class="value">{{ tooltipObject?.value.logicalId }}</div>
+			<div class="name">{{ 'names.group' | translate }}</div>
+			<div class="value">{{ tooltipObject?.value.groups.join(', ') }}</div>
+		</div>
+	</dx-tooltip>
+</ng-template>
+
+<!--XXX: fireshutter Tooltip-->
 <ng-template #fireshutterTooltip>
 	<dx-tooltip
 		class="tooltip-box"
@@ -309,7 +348,6 @@
 		</div>
 	</dx-tooltip>
 </ng-template>
-
 <!-- tooltips end -->
 
 <!-- context start -->
@@ -455,7 +493,7 @@
 				mat-stroked-button
 				class="dense accent"
 				color="primary"
-				[disabled]="!canSetSource"
+				[disabled]="!canSetSourceWithFilter"
 				(click)="onSetSource('Buffer')"
 			>
 				{{ 'names.setSource' | translate }}
@@ -464,11 +502,38 @@
 				mat-stroked-button
 				class="dense accent"
 				color="primary"
-				[disabled]="!canSetDest"
+				[disabled]="!canSetDestWithFilter"
 				(click)="onSetDest('Buffer')"
 			>
 				{{ 'names.setDest' | translate }}
 			</button>
+			<button
+				*ngIf="contextMenuObject?.value.unuse === true"
+				mat-stroked-button
+				class="dense accent"
+				color="primary"
+				(click)="onToggleBufferUnuse(contextMenuObject.value.id, 'USE')"
+			>
+				{{ 'names.use' | translate }}
+			</button>
+			<button
+				*ngIf="contextMenuObject?.value.unuse !== true"
+				mat-stroked-button
+				class="dense accent"
+				color="primary"
+				(click)="onToggleBufferUnuse(contextMenuObject.value.id, 'UNUSE')"
+			>
+				{{ 'names.unuse' | translate }}
+			</button>
+
+			<span style="font-size: xx-small">
+				Carrier :
+				{{
+					contextMenuObject?.value.carrierId
+						? contextMenuObject?.value.carrierId
+						: 'None'
+				}}
+			</span>
 			<div class="carrier-form">
 				<mat-form-field class="dense full-span-col" appearance="outline">
 					<input
@@ -511,7 +576,7 @@
 				mat-stroked-button
 				class="dense accent"
 				color="primary"
-				[disabled]="!canSetSourceStation"
+				[disabled]="!canSetSourceWithFilter"
 				(click)="onSetSource('Station')"
 			>
 				{{ 'names.setSource' | translate }}
@@ -520,7 +585,7 @@
 				mat-stroked-button
 				class="dense accent"
 				color="primary"
-				[disabled]="!canSetDestStation"
+				[disabled]="!canSetDestWithFilter"
 				(click)="onSetDest('Station')"
 			>
 				{{ 'names.setDest' | translate }}
@@ -583,7 +648,7 @@
 </ng-template>
 
 <ng-template #pointContext>
-	<mat-card class="context-card">
+	<mat-card class="context-card" style="min-width: 200px">
 		<mat-card-header>
 			<mat-card-title>
 				Point #{{ contextMenuObject?.value.id }}
@@ -599,24 +664,31 @@
 			>
 				{{ 'names.setDest' | translate }}
 			</button>
-
 			<ng-container
 				*ngIf="
 					isHomeModeAndTscPaused &&
 					hasPermissions([permissionEnums.SetHomePoint])
 				"
 			>
-				<div style="height: 25px"></div>
+				<div style="padding: 10px 10px 5px 5px">
+					<span style="margin-right: 5px">{{ 'names.home' | translate }}: </span
+					><dx-switch
+						[value]="homeActive"
+						(onValueChanged)="onHomeSettingChanged($event)"
+					></dx-switch>
+				</div>
 
-				<dx-select-box
-					style="max-width: 12em"
-					displayExpr="label"
-					valueExpr="value"
-					[items]="homeAndGroupSelectList"
+				<dx-tag-box
+					[dataSource]="homeAndGroupSelectList"
+					(onValueChanged)="onHomeValueChanged($event)"
+					[showSelectionControls]="true"
+					applyValueMode="useButtons"
 					[value]="contextMenuObject?.value.home"
-					(onSelectionChanged)="onHomeValueChanged($event)"
+					valueExpr="id"
+					displayExpr="value"
+					[disabled]="!homeActive"
 				>
-				</dx-select-box>
+				</dx-tag-box>
 
 				<button
 					mat-stroked-button
@@ -628,6 +700,7 @@
 							contextMenuObject?.value.home
 						)
 					"
+					[disabled]="contextMenuObject?.value.home.length === 0 && homeActive"
 				>
 					{{ 'names.apply' | translate }}
 				</button>

@@ -1,93 +1,91 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
-import { TrackStatusService } from '@oms/root/services/track-status.service';
+import { Component, OnInit } from '@angular/core'
+import { SystemStatusService } from '@oms/root/services/system-status.service'
+import { TrackStatusService } from '@oms/root/services/track-status.service'
 
-import { SettingsService } from '@oms/services/settings.service';
-import { Dto } from '../../../models/dto/track.model';
-import { ViewModes } from '../../../models/enums';
-import { IPreferences } from '../../../models/settings.model';
-import { AuthService } from '../../../services/auth.service';
-import { StatusService } from '../../../services/status.service';
+import { SettingsService } from '@oms/services/settings.service'
+import { Dto } from '../../../models/dto/track.model'
+import { ViewModes } from '../../../models/enums'
+import { IPreferences } from '../../../models/settings.model'
+import { AuthService } from '../../../services/auth.service'
 
 @Component({
-  selector: 'oms-monitor-status',
-  templateUrl: './monitor-status.component.html',
-  styles: [
-    `
-      :host {
-        background-color: var(--monitor-background-color);
-        display: block;
-        position: relative;
-        z-index: 3;
-        width: 100%;
-        height: 100%;
-      }
+	selector: 'oms-monitor-status',
+	templateUrl: './monitor-status.component.html',
+	styles: [
+		`
+			:host {
+				background-color: var(--monitor-background-color);
+				display: block;
+				position: relative;
+				z-index: 3;
+				width: 100%;
+				height: 100%;
+			}
 
-      #status-control {
-        position: absolute;
-        /* border-radius: 5px; */
-        box-shadow: 0px 0px 5px #aaa;
-        display: inline-block;
-        flex-direction: column;
-        bottom: 0px;
-        left: 0px;
-        z-index: 10;
-        width: 100%;
-      }
-      #loading-bar {
-        position: absolute;
-        top: 40%;
-        left: 25%;
-        width: 50%;
-        text-align: center;
-        background-color: white;
-        padding: 20px;
-        z-index: 5;
-      }
-      .mat-progress-bar {
-        margin-top: 10px;
-      }
-    `,
-  ],
+			#status-control {
+				position: absolute;
+				/* border-radius: 5px; */
+				box-shadow: 0px 0px 5px #aaa;
+				display: inline-block;
+				flex-direction: column;
+				bottom: 0px;
+				left: 0px;
+				z-index: 10;
+				width: 100%;
+			}
+			#loading-bar {
+				position: absolute;
+				top: 40%;
+				left: 25%;
+				width: 50%;
+				text-align: center;
+				background-color: white;
+				padding: 20px;
+				z-index: 5;
+			}
+			.mat-progress-bar {
+				margin-top: 10px;
+			}
+		`,
+	],
 })
-export class MonitorStatusComponent implements OnInit, AfterViewInit {
-  loadingState = true;
-  ready = false;
-  mapPreference: IPreferences;
-  viewMode: ViewModes;
-  trackData: Dto.ITrackData;
+export class MonitorStatusComponent implements OnInit {
+	loadingState = true
+	ready = false
+	mapPreference: IPreferences
+	viewMode: ViewModes
+	trackData: Dto.ITrackData
 
-  get showControlTable(): boolean {
-    return this.mapPreference.toggles.controlTable;
-  }
+	get showControlTable(): boolean {
+		return this.mapPreference.toggles.controlTable
+	}
 
-  constructor(
-    private settingSvc: SettingsService,
-    private auth: AuthService,
-    private statusSvc: StatusService,
-    private trackStatusService: TrackStatusService
-  ) {
-    this.viewMode = this.auth.isAuthenticated
-      ? ViewModes.viewer
-      : ViewModes.public;
+	constructor(
+		private auth: AuthService,
+		private settingSvc: SettingsService,
+		private trackStatusService: TrackStatusService,
+		systemStatusService: SystemStatusService,
+	) {
+		this.viewMode = this.auth.isAuthenticated
+			? ViewModes.viewer
+			: ViewModes.public
 
-    const pullTrackData = (isTrackReady: boolean) => {
-      if (isTrackReady) {
-        this.trackData = this.trackStatusService.trackData
-        this.loadingState = false;
-        this.ready = true;
-      }
-    }
+		const pullTrackData = (isTrackReady: boolean) => {
+			if (isTrackReady) {
+				this.trackData = this.trackStatusService.trackData
+				this.loadingState = false
+				this.ready = true
+			}
+		}
 
-    if (this.trackStatusService.isTrackReady)
-      pullTrackData(this.trackStatusService.isTrackReady)
-    else
-      this.trackStatusService.isTrackReadyChanged.subscribe(pullTrackData)
-  }
-  ngAfterViewInit(): void {
+		if (this.trackStatusService.isTrackReady)
+			pullTrackData(this.trackStatusService.isTrackReady)
+		else this.trackStatusService.isTrackReadyChanged.subscribe(pullTrackData)
 
-  }
+		systemStatusService.updateNodeMarginsSetting()
+	}
 
-  ngOnInit(): void {
-    this.mapPreference = this.settingSvc.globalPreferences;
-  }
+	ngOnInit() {
+		this.mapPreference = this.settingSvc.globalPreferences
+	}
 }

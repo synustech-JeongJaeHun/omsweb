@@ -72,6 +72,10 @@ interface IOmsTrackMonitor {
 		operation: UpdateDto.Operation,
 		station: UpdateDto.Station
 	): void
+	updateBuffer(
+		operation: UpdateDto.Operation,
+		buffer: UpdateDto.Buffer
+	): void
 	updateGroupObject(
 		operation: UpdateDto.Operation,
 		groupObject: UpdateDto.GroupObject,

@@ -32,7 +32,7 @@ import { MessagesService } from '@oms/root/services/messages.service'
 import { DialogService } from '@oms/root/services/dialog.service'
 import { IVehicleCommandMessage } from '@oms/root/models/command.model'
 import { SystemStatusService } from '@oms/root/services/system-status.service'
-
+import { TracksService } from '@oms/root/services/tracks.service'
 @Component({
 	selector: 'oms-map-viewer',
 	templateUrl: './map-viewer.component.html',
@@ -59,19 +59,36 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 	get canSetDest() {
 		return !this.mapStatesService.transferCommandState.destDisabled
 	}
-	get canSetSourceStation() {
-		if (!this.mapStatesService.transferCommandState.sourceDisabled) {
-			const { id, logicalId, physicalId } = this.contextMenuObject.value
-			if (logicalId && logicalId.indexOf('OUT') > 0) return true
-		}
-		return false
+
+	get canSetSourceWithFilter() {
+		const logicalId = this.contextMenuObject.value.logicalId
+		if (logicalId == null) return false
+		if (this.mapStatesService.transferCommandState.sourceDisabled === true)
+			return false
+		if (
+			this.systemStatusService.manualTransferFilterSetting
+				.sourceFilterEnabled === false
+		)
+			return true
+
+		return this.systemStatusService.manualTransferFilterSetting.sourceWords.some(
+			(word) => logicalId.includes(word),
+		)
 	}
-	get canSetDestStation() {
-		if (!this.mapStatesService.transferCommandState.destDisabled) {
-			const { id, logicalId, physicalId } = this.contextMenuObject.value
-			if (logicalId && logicalId.indexOf('IN') > 0) return true
-		}
-		return false
+	get canSetDestWithFilter() {
+		const logicalId = this.contextMenuObject.value.logicalId
+		if (logicalId == null) return false
+		if (this.mapStatesService.transferCommandState.destDisabled === true)
+			return false
+		if (
+			this.systemStatusService.manualTransferFilterSetting
+				.destinationFilterEnabled === false
+		)
+			return true
+
+		return this.systemStatusService.manualTransferFilterSetting.destinationWords.some(
+			(word) => logicalId.includes(word),
+		)
 	}
 
 	get canSetDestPoint() {
@@ -97,6 +114,9 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 	public showTooltip = false
 	public contextMenuObject: { type: string; value: any } | undefined
 	public showContextMenu = false
+	//XXX:
+	public homeActive = false
+
 	public colocatedViewPosition:
 		| { top: string; left: string; right: string }
 		| undefined
@@ -127,6 +147,13 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		return isHomeMode ? '#ff510080' : undefined
 	}
 
+	get stationMargin() {
+		return this.systemStatusService.nodeMarginSetting?.stationMargin
+	}
+	get bufferMargin() {
+		return this.systemStatusService.nodeMarginSetting?.bufferMargin
+	}
+
 	constructor(
 		private router: Router,
 		private auth: AuthService,
@@ -134,6 +161,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		private statusService: StatusService,
 		private mapStatesService: MapStatesService,
 		private settingSvc: SettingsService,
+		private tracksService: TracksService,
 		private trackStatusService: TrackStatusService,
 		private trackMonitorSettingService: TrackMonitorSettingService,
 		private messageSvc: MessagesService,
@@ -295,11 +323,24 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 					this.viewer.updateZcu(e.operation, e.data)
 				})
 
+			this.hubSvc.fireShutterMapChanged$
+				.pipe(takeUntil(this.destroy$))
+				.subscribe((e) => {
+					this.viewer.updateFireShutter(e.operation, e.data)
+				})
+
 			this.hubSvc.stationChanged$
 				.pipe(takeUntil(this.destroy$))
 				.subscribe((e) => {
 					// @ts-ignore
 					this.viewer.updateStation(e.operation, { id: e.id, unuse: e.unuse })
+				})
+
+			this.hubSvc.bufferChanged$
+				.pipe(takeUntil(this.destroy$))
+				.subscribe((e) => {
+					// @ts-ignore
+					this.viewer.updateBuffer(e.operation, { id: e.id, unuse: e.unuse })
 				})
 
 			this.hubSvc.groupChanged$
@@ -331,12 +372,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 			// 		// TODO what happened on event?
 			// 		console.log('vehicle path update', e)
 			// 	})
-			// this.hubSvc.bufferChanged$
-			// 	.pipe(takeUntil(this.destroy$))
-			// 	.subscribe((e) => {
-			// 		// TODO what happened on event?
-			// 		console.log('buffer update', e)
-			// 	})
+
 			// this.hubSvc.mtlChanged$
 			// 	.pipe(takeUntil(this.destroy$))
 			// 	.subscribe((e) => {
@@ -364,6 +400,22 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 			.subscribe((ok) => {
 				if (ok) {
 					this.messageSvc.sendStationSettingCommand(message, [id]).subscribe()
+					this.showContextMenu = false
+				}
+			})
+	}
+
+	onToggleBufferUnuse(id: number, toState: 'UNUSE' | 'USE') {
+		const message =
+			toState === 'USE'
+				? { type: 'USE', action: 'buffer-setting', unused: 0 }
+				: { type: 'UNUSE', action: 'buffer-setting', unused: 1 }
+
+		this.dialogSvc
+			.confirm({ body: this.$t.instant('messages.confirmCommand') })
+			.subscribe((ok) => {
+				if (ok) {
+					this.messageSvc.sendBufferSettingCommand(message, [id]).subscribe()
 					this.showContextMenu = false
 				}
 			})
@@ -475,33 +527,62 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 			physicalId,
 		}
 	}
-	onRemoveCarrier(carrierId: string) {
-		this.dialogSvc
-			.confirm({ body: this.$t.instant('messages.confirmBufferChange') })
-			.subscribe((confirm) => {
-				confirm &&
-					this.messageSvc
-						.sendCarrierCommand({
-							action: 'remove_carrier',
-							bufferId: this.contextMenuObject.value.id,
-							carrierLabel: carrierId,
-						})
-						.subscribe()
-			})
-	}
-	onInstallCarrier(carrierId: string) {
-		this.dialogSvc
-			.confirm({ body: this.$t.instant('messages.confirmBufferChange') })
-			.subscribe((confirm) => {
-				confirm &&
-					this.messageSvc
-						.sendCarrierCommand({
-							action: 'install_carrier',
-							bufferId: this.contextMenuObject.value.id,
-							carrierLabel: carrierId,
-						})
-						.subscribe()
-			})
+    onRemoveCarrier(carrierId: string) {
+      this.tracksService.getCarrierInfo(this.contextMenuObject.value.logicalId)
+        .subscribe(
+          (res) => {
+            if (res.carrierId === carrierId) {
+              this.messageSvc
+                .sendCarrierCommand({
+                  action: 'remove_carrier',
+                  carrierLabel: carrierId,
+                  logicalId: this.contextMenuObject.value.logicalId
+                })
+                .subscribe()
+            }
+            else if (res.carrierId === '') {
+              this.dialogSvc.alert({
+                body: this.$t.instant('messages.confirmCarrierEmptyAtBuffer'),
+              })
+            }
+            else {
+              this.dialogSvc.alert({
+                body: this.$t.instant('messages.confirmCarrierInvalid'),
+              })
+            }
+          },
+          (error) => {
+            this.dialogSvc.alert({
+              body: this.$t.instant('messages.confirmCarrierInvalid'),
+            })
+          },
+      );
+    }
+    onInstallCarrier(carrierId: string) {
+      this.tracksService.getCarrierInfo(this.contextMenuObject.value.logicalId)
+        .subscribe(
+          (res) => {
+            if (res.carrierId === '') {
+              this.messageSvc
+                .sendCarrierCommand({
+                  action: 'install_carrier',
+                  carrierLabel: carrierId,
+                  logicalId: this.contextMenuObject.value.logicalId
+                })
+                .subscribe()
+            }
+            else {
+              this.dialogSvc.alert({
+                body: this.$t.instant('messages.confirmCarrierAlreadyExistAtBuffer'),
+              })
+            }
+          },
+          (error) => {
+            this.dialogSvc.alert({
+              body: this.$t.instant('messages.confirmCarrierAlreadyExistAtBuffer'),
+            })
+          },
+      );
 	}
 
 	onChangeSegmentProperty(isDisable: boolean) {
@@ -523,27 +604,28 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 	}
 
 	// point > home
-	homeAndGroupSelectList = [
-		{ value: 'OFF', label: 'OFF' },
-		// { value: 'No Group', label: 'Group: 0 (Default)' },
-		...this.trackStatusService.trackData.groups
-			.map((g) => String(g.id))
-			.map((e) => ({ value: e, label: `Group: ${e}` })),
-	]
 
-	onHomeValueChanged(event: { selectedItem: { value: string } }) {
-		this.contextMenuObject.value.home = event.selectedItem.value
+	//NOTE: currently use in "id". change it with "logicalId" on demend
+	homeAndGroupSelectList = this.trackStatusService.trackData.groups
+		.map((g) => g.id)
+		.map((e) => ({ id: e, value: `Group:${e}` }))
+
+	onHomeValueChanged(event: { value: Number[] }) {
+		this.contextMenuObject.value.home = event.value
 	}
-	onApplyPointHomeChange(id: number, offOrGroup: 'OFF' | 'No Group' | string) {
-		if (offOrGroup === 'OFF') {
-			this.messageSvc.sendDisableHome(id).subscribe()
-		} else if (offOrGroup === 'No Group') {
-			// home on with no group
-			this.messageSvc.sendEnableHome(id, []).subscribe()
+	onHomeSettingChanged(event: { value: boolean }) {
+		this.homeActive = event.value
+		// clear Point Context home when Home feature turns 'off'
+		if (event.value === false && this.contextMenuObject.value.home.length > 0) {
+			this.contextMenuObject.value.home = []
+		}
+	}
+
+	onApplyPointHomeChange(id: number, homeGroups: number[]) {
+		if (this.homeActive) {
+			this.messageSvc.sendEnableHome(id, homeGroups).subscribe()
 		} else {
-			// home on with group
-			const groupId = parseInt(offOrGroup)
-			this.messageSvc.sendEnableHome(id, [groupId]).subscribe()
+			this.messageSvc.sendDisableHome(id).subscribe()
 		}
 
 		this.showContextMenu = false
@@ -691,6 +773,19 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		// @ts-ignore
 		this.tooltipObject = { type: payload.type, value: payload.value }
 
+		const groups =
+			this.tooltipObject.type.toUpperCase() === 'POINT' &&
+			this.tooltipObject.value.homeId
+				? this.trackStatusService.getGroupsFromObject(
+						'home',
+						this.tooltipObject.value.homeId,
+				  )
+				: this.trackStatusService.getGroupsFromObject(
+						this.tooltipObject.type,
+						this.tooltipObject.value.id,
+				  )
+		this.tooltipObject.value.groups = groups
+
 		if (this.tooltipObject.type === 'SEGMENT') {
 			const { startPoint, endPoint } = this.tooltipObject.value
 			this.tooltipObject.value.point =
@@ -729,7 +824,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		// @ts-ignore
 		this.focusOnTM({ type: payload.type, id: payload.value.id })
 	}
-	public onContextMenuOn(event: CustomEvent) {
+	public async onContextMenuOn(event: CustomEvent) {
 		const payload = getCustomEventPayload(event)
 		// @ts-ignore
 		if (!(payload.type && payload.value && payload.event)) return
@@ -738,11 +833,20 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		this.contextMenuObject = { type: payload.type, value: payload.value }
 
 		if (this.contextMenuObject.type === 'POINT') {
-			const point = this.contextMenuObject.value
-			if (point?.groupId)
-				this.contextMenuObject.value.home = String(point.groupId)
-			else if (point?.homeId) this.contextMenuObject.value.home = 'No Group'
-			else this.contextMenuObject.value.home = 'OFF'
+			const homeId = (payload as any).value.homeId
+			const homeGroups = this.trackStatusService.getGroupsFromObject(
+				'HOME',
+				homeId,
+			)
+
+			this.contextMenuObject.value.home = homeGroups
+			this.homeActive = homeGroups.length > 0 && true
+		}
+		if (this.contextMenuObject.type === 'BUFFER') {
+			const result = await this.tracksService
+				.loadBufferById(this.contextMenuObject.value.id)
+				.toPromise()
+			Object.assign(this.contextMenuObject.value, result)
 		}
 
 		const leftThreshold = window.innerWidth - 200

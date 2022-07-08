@@ -70,7 +70,7 @@
 
         <mat-form-field class="info-item readonly" floatLabel="always">
           <mat-label>{{ "names.group" | translate }}</mat-label>
-          <input matInput type="text" readonly [value]="data.groupId ? data.groupId : ''" />
+          <input matInput type="text" readonly [value]="data.groups.join(', ')" />
         </mat-form-field>
 
         <mat-form-field class="info-item readonly" floatLabel="always">
@@ -141,6 +141,15 @@
           <mat-label>{{ "names.coord-y" | translate }}</mat-label>
           <input matInput type="text" readonly [value]="data.y" />
         </mat-form-field>
+
+        <mat-form-field class="info-item readonly" floatLabel="always">
+          <mat-label>{{ "names.home" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.homeId || ''" />
+        </mat-form-field>
+        <mat-form-field class="info-item readonly" floatLabel="always">
+          <mat-label>{{ "names.group" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.groups.join(', ')" />
+        </mat-form-field>
       </div>
     </div>
   </mat-expansion-panel>
@@ -164,7 +173,7 @@
 
         <mat-form-field class="info-item readonly" floatLabel="always">
           <mat-label>{{ "names.group" | translate }}</mat-label>
-          <input matInput type="text" readonly [value]="data.groupId ? data.groupId : ''" />
+          <input matInput type="text" readonly [value]="data.groups.join(', ')" />
         </mat-form-field>
 
         <mat-form-field class="info-item readonly" floatLabel="always">
@@ -206,7 +215,7 @@
 
         <mat-form-field class="info-item readonly" floatLabel="always">
           <mat-label>{{ "names.group" | translate }}</mat-label>
-          <input matInput type="text" readonly [value]="data.groupId ? data.groupId : ''" />
+          <input matInput type="text" readonly [value]="data.groups.join(', ')" />
         </mat-form-field>
 
         <mat-form-field class="info-item readonly" floatLabel="always">
@@ -366,6 +375,10 @@
         <mat-form-field class="info-item readonly" floatLabel="always">
           <mat-label>{{ "names.id" | translate }}</mat-label>
           <input matInput type="text" readonly [value]="data.id" />
+        </mat-form-field>
+        <mat-form-field class="info-item readonly" floatLabel="always">
+          <mat-label>{{ "names.group" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.groups.join(', ')" />
         </mat-form-field>
       </div>
     </div>

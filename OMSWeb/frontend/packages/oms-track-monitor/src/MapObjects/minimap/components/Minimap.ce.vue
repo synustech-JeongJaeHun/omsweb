@@ -38,26 +38,17 @@ function onPanning(event: MouseEvent) {
   if (minimapSvgElement.value === undefined) return
 
   const rect = minimapSvgElement.value.getBoundingClientRect()
-  const minimapDomRect = {
-    width: rect.width,
-    height: rect.height,
-    minX: rect.x,
-    minY: rect.y,
-    maxX: rect.x + rect.width,
-    maxY: rect.y + rect.height,
-  }
+
+  const 
+    absXFromOriginPosition = (event.clientX - rect.left) / rect.width * minimapViewBoxLength.value,
+    absYFromOriginPosition = (rect.bottom - event.clientY) / rect.height * minimapViewBoxLength.value
 
   const position = {
-    x:
-      ((event.clientX - minimapDomRect.minX) / minimapDomRect.width) *
-        minimapViewBoxLength.value -
-      MapMargin,
+    x: originPosition.value.x + absXFromOriginPosition,
     // 📐🛑 Be careful! logic is dependent on invert
-    y:
-      ((minimapDomRect.maxY - event.clientY) / minimapDomRect.height) *
-        minimapViewBoxLength.value -
-      MapMargin,
+    y: originPosition.value.y + absYFromOriginPosition,
   }
+  
   moveCamera(position)
 }
 </script>

@@ -1,13 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using OMSWeb.Models;
 using OMSWeb.Models.Tracks;
-using OMSWeb.Repositories;
 using OMSWeb.Services;
+using Buffer = OMSWeb.Models.Tracks.Buffer;
 
 namespace OMSWeb.Controllers
 {
@@ -20,6 +16,26 @@ namespace OMSWeb.Controllers
         public TracksController(TrackService trackService)
         {
             this._svc = trackService;
+        }
+
+        [HttpGet("carriers/{carrierLocation}")]
+        public string GetCarrierId([FromRoute] string carrierLocation)
+        {
+            return this._svc.GetCarrierId(carrierLocation);
+        }
+
+        [HttpGet("carrierinfo/{carrierLocation}")]
+        public ActionResult<CarrierInfo> GetCarrierInfo(string carrierLocation)
+        {
+            var result = this._svc.GetCarrierInfo(carrierLocation);
+
+            if (result == null)
+                return Ok(new CarrierInfo()
+                {
+                    CarrierId = String.Empty,
+                });
+            else
+                return Ok(result);
         }
 
         [HttpGet("groups")]
@@ -58,11 +74,6 @@ namespace OMSWeb.Controllers
         {
             return this._svc.GetPoints();
         }
-        [HttpPatch("points/{id}")]
-        public ActionResult UpdatePoint([FromRoute] int id, [FromBody] PointUpdateDto point)
-        {
-            return Ok();
-        }
 
         [HttpGet("stations")]
         public IEnumerable<Station> GetStations()
@@ -70,28 +81,10 @@ namespace OMSWeb.Controllers
             return this._svc.GetStations();
         }
 
-        [HttpPost("buffers/{id}/carrier/{carrierId}")]
-        public ActionResult InstallBufferCarrier([FromRoute] int id, [FromRoute] int carrierId)
+        [HttpGet("buffers/{id}")]
+        public Buffer GetBufferById([FromRoute] int id)
         {
-            return Ok();
-        }
-
-        [HttpDelete("buffers/{id}/carrier")]
-        public ActionResult RemoveBufferCarrier([FromRoute] int id)
-        {
-            return Ok();
-        }
-
-        [HttpPatch("buffers/{id}")]
-        public ActionResult UpdateBuffer([FromRoute] int id, [FromBody] BufferUpdateDto form)
-        {
-            return Ok();
-        }
-
-        [HttpPatch("zcus/{id}")]
-        public ActionResult UpdateZcu([FromRoute] int id, [FromBody] ZcuUpdateDto form)
-        {
-            return Ok();
+            return this._svc.GetBufferById(id);
         }
     }
 }

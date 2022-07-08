@@ -4,6 +4,7 @@ import Station from './Station.ce.vue'
 import { findStationById, stations } from '../stations'
 import { inject } from 'vue'
 import { RootEmitInjectionKey, RootEmits } from 'src/Root/types/RootEmits'
+import { scaleStylesInfo } from '../../../styles/styles'
 
 const emit = inject<RootEmits>(RootEmitInjectionKey)!
 
@@ -76,6 +77,7 @@ function handleRightClick(event: MouseEvent) {
       v-for="station of stations"
       :key="station.id"
       :station="station"
+      :margin="scaleStylesInfo.stationMargin"
       :handleMouseover="handleMouseover"
       :handleMouseleave="handleMouseleave"
       :handleLeftClick="handleLeftClick"

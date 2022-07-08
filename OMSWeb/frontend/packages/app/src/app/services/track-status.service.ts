@@ -57,8 +57,14 @@ export class TrackStatusService {
 		this.hubService.zcuMapChanged$.subscribe((e: IDataChangeEvent) => {
 			this.handleZcuMapChanged(e)
 		})
+		this.hubService.fireShutterMapChanged$.subscribe((e: IDataChangeEvent) => {
+			this.handleFireShutterMapChanged(e)
+		})
 		this.hubService.stationChanged$.subscribe((e) => {
 			this.handleStationChanged(e)
+		})
+		this.hubService.bufferChanged$.subscribe((e) => {
+			this.handleBufferChanged(e)
 		})
 		this.hubService.groupChanged$.subscribe((e) => {
 			this.handleGroupChanged(e)
@@ -177,8 +183,39 @@ export class TrackStatusService {
 		}
 	}
 
+    handleFireShutterMapChanged(e: IDataChangeEvent) {
+		//const finded = this.trackData.fireshutters.find((z) => z.id === e.data.id)
+		//switch (e.operation) {
+		//	case 'UPDATE':
+		//		if (finded) Object.assign(finded, e.data)
+		//		break
+		//	case 'DELETE':
+		//		if (finded) {
+		//			const index = this.trackData.fireshutters.indexOf(finded)
+		//			this.trackData.fireshutters.splice(index, 1)
+		//		}
+		//		break
+
+		//	default:
+		//		break
+		//}
+	}
+
 	handleStationChanged(e: IDataChangeEvent) {
 		const finded = this.trackData.stations.find((s) => s.id === e.id)
+		switch (e.operation) {
+			case 'UPDATE':
+				// @ts-ignore
+				if (finded) Object.assign(finded, { id: e.id, unuse: e.unuse })
+				break
+
+			default:
+				break
+		}
+	}
+
+	handleBufferChanged(e: IDataChangeEvent) {
+		const finded = this.trackData.buffers.find((s) => s.id === e.id)
 		switch (e.operation) {
 			case 'UPDATE':
 				// @ts-ignore
@@ -254,5 +291,19 @@ export class TrackStatusService {
 				})) ?? []
 
 		return [...points, ...stations, ...buffers, ...vehicles, ...mtls]
+	}
+
+	getGroupsFromObject(type: string, id: number) {
+		const typeInLowerCase = type.toLowerCase()
+		const groups = this.trackData?.groups ?? []
+
+		const objectRelatedGroups = groups.filter((g) =>
+			g.objects.some(
+				(o: { id: number; type: string }) =>
+					o.type === typeInLowerCase && o.id === id,
+			),
+		)
+
+		return objectRelatedGroups.map((g) => g.id)
 	}
 }

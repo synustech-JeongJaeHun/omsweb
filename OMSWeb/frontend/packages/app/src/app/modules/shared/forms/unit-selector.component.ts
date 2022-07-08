@@ -31,7 +31,7 @@ import { ILookupUnit } from '../../../models/map.interface'
 })
 export class UnitSelectorComponent implements OnInit, OnChanges {
 	@Input() findScopes: string[] = ['points', 'stations', 'buffers']
-	@Input() filterWord?: string
+	@Input() filterWords?: string[]
 	@Input() excludeMtlPoints?: boolean
 	@Input() disabled: boolean = false
 	@Input() selectedUnit: ILookupUnit
@@ -134,9 +134,9 @@ export class UnitSelectorComponent implements OnInit, OnChanges {
 					)
 				}
 
-				if (this.filterWord) {
+				if (this.filterWords) {
 					const filtered = result.filter((unit) =>
-						unit.logicalId?.includes(this.filterWord),
+						this.filterWords.some((word) => unit.logicalId?.includes(word)),
 					)
 					return of(filtered)
 				} else {

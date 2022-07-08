@@ -22,32 +22,32 @@
                  animationDuration="0ms">
 
     <mat-tab [label]="'names.transfer' | translate" *ngIf="canDisplayTable('orders')">
-      <oms-order-control-table [tableHeight]="tableHeight">
+      <oms-order-control-table *ngIf="currentTab === 0" [tableHeight]="tableHeight">
       </oms-order-control-table>
     </mat-tab>
     <mat-tab [label]="'names.vehicles' | translate" *ngIf="canDisplayTable('vehicles')">
-      <oms-vehicle-control-table [tableHeight]="tableHeight">
+      <oms-vehicle-control-table *ngIf="currentTab === 1" [tableHeight]="tableHeight">
       </oms-vehicle-control-table>
     </mat-tab>
     <!-- Stations / Buffers 추가 -->
     <mat-tab [label]="'names.stations' | translate" *ngIf="canControl && canDisplayTable('stations')">
-      <oms-station-control-table [tableHeight]="tableHeight">
+      <oms-station-control-table *ngIf="currentTab === 2" [tableHeight]="tableHeight">
       </oms-station-control-table>
     </mat-tab>
     <mat-tab [label]="'names.buffers' | translate" *ngIf="bufferEnabled && canControl && canDisplayTable('buffers')">
-      <oms-buffer-control-table [tableHeight]="tableHeight">
+      <oms-buffer-control-table *ngIf="currentTab === 3" [tableHeight]="tableHeight">
       </oms-buffer-control-table>
     </mat-tab>
     <!-- Stations / Buffers 추가 -->
     <!-- Zcu 추가 -->
     <mat-tab [label]="'names.zcu_label' | translate" *ngIf="canControl && canDisplayTable('zcus')">
-      <oms-zcu-control-table [tableHeight]="tableHeight">
+      <oms-zcu-control-table *ngIf="currentTab === 4" [tableHeight]="tableHeight">
       </oms-zcu-control-table>
     </mat-tab>
     <!-- Zcu 추가 -->
     <!-- cps 추가 -->
     <mat-tab [label]="'names.cps' | translate" *ngIf="canControl && canDisplayTable('cps')">
-      <oms-cps-control-table [tableHeight]="tableHeight">
+      <oms-cps-control-table *ngIf="currentTab === 5" [tableHeight]="tableHeight">
       </oms-cps-control-table>
     </mat-tab>
     <!-- cps 추가 -->

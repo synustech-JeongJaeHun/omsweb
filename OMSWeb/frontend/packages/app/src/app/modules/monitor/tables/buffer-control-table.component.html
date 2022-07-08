@@ -1,6 +1,12 @@
 <div class="grid-actions" *ngIf="hasControlAccess">
+  <button mat-stroked-button color="primary" class="dense accent" [disabled]="!canControl" (click)="onUnuse()">
+    {{ "names.unuse" | translate }}
+  </button>
+  <button mat-stroked-button color="primary" class="dense accent" [disabled]="!canControl" (click)="onUse()">
+    {{ "names.use" | translate }}
+  </button>
 </div>
-<dx-data-grid [dataSource]="dataSource" [remoteOperations]="true" [height]="tableHeight" [repaintChangesOnly]="false"
+<dx-data-grid [dataSource]="dataSource" [remoteOperations]="true" [height]="tableHeight" [repaintChangesOnly]="true"
               [columnAutoWidth]="false" [showBorders]="false" [highlightChanges]="true" [showColumnLines]="true"
               [showRowLines]="true" [headerFilter]="false" [(selectedRowKeys)]="selectedRows" allowColumnResizing="true">
   <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
@@ -28,7 +34,7 @@
               *ngIf="canDisplayTable('buffers_nextPoint')"></dxi-column>
   <dxi-column [width]="100" dataType="string" dataField="offset" [caption]="'names.offset' | translate"
               *ngIf="canDisplayTable('buffers_offset')"></dxi-column>
-  <dxi-column [width]="100" dataType="string" dataField="unuse" [caption]="'names.unuse' | translate"
+  <dxi-column [width]="100" dataType="boolean" dataField="unuse" [caption]="'names.unuse' | translate"
               *ngIf="canDisplayTable('buffers_unuse')"></dxi-column>
   <dxi-column [width]="100" dataType="string" dataField="carrierId" [caption]="'names.carrierId' | translate"
               *ngIf="canDisplayTable('buffers_carrierId')"></dxi-column>

@@ -71,6 +71,10 @@ namespace UpdateDto {
 		id: number
 		unuse?: boolean
 	}
+	export type Buffer = {
+		id: number
+		unuse?: boolean
+	}
 
 	export type GroupObject = {
 		id: number

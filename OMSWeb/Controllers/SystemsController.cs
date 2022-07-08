@@ -59,6 +59,16 @@ namespace OMSWeb.Controllers
         {
             return this._systemSvc.GetDefaultColorSettings();
         }
+        [HttpGet("settings/manual-transfer-filters")]
+        public ActionResult<ManualTransferFilters> GetManualTransferFilters()
+        {
+            return this._systemSvc.GetManualTransferFilters();
+        }
+        [HttpGet("settings/node-margins")]
+        public ActionResult<NodeMargins> GetNodeMargins()
+        {
+            return this._systemSvc.GetNodeMargins();
+        }
 
         [HttpGet("module-status")]
         public IQueryable<ModuleStatusEntity> GetModuleStatus()

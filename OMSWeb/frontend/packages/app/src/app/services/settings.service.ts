@@ -1,132 +1,173 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import DataSource from 'devextreme/data/data_source';
-import { Observable, of } from 'rxjs';
-import { tap } from 'rxjs/operators';
-import { ClientPreferences, ISettingsBufferWithUnuse, ISettingsGroup, ISettingsGroupedObject, ISettingsCluster, ISettingsClusterPoint, ISettingsSegment, ISettingsSegmentWithVParts, ISettingsSegmentWithVPartsNBlocking, ISettingsStationWithUnuse, ISettingsVehicleReg, ISettingsZcu, ServiceConfig } from '../models/settings.model';
-import { StorageUtil } from '../modules/shared/utils/storage.util';
-import * as AspNetData from 'devextreme-aspnet-data-nojquery';
-import CustomStore from 'devextreme/data/custom_store';
+import { HttpClient } from '@angular/common/http'
+import { Injectable } from '@angular/core'
+import DataSource from 'devextreme/data/data_source'
+import { Observable, of } from 'rxjs'
+import { map, tap } from 'rxjs/operators'
+import {
+	ClientPreferences,
+	ISettingsBufferWithUnuse,
+	ISettingsGroup,
+	ISettingsGroupedObject,
+	ISettingsCluster,
+	ISettingsClusterPoint,
+	ISettingsSegmentWithVPartsNBlocking,
+	ISettingsStationWithUnuse,
+	ISettingsVehicleReg,
+	ISettingsZcu,
+	ServiceConfig,
+	ManualTransferFiltersSetting,
+	NodeMarginSetting,
+} from '../models/settings.model'
+import * as AspNetData from 'devextreme-aspnet-data-nojquery'
 
 @Injectable({
-  providedIn: 'root',
+	providedIn: 'root',
 })
 export class SettingsService {
-  private baseUrl = '/api/settings';
+	private baseUrl = '/api/settings'
 
-  private _globalPreferences: ClientPreferences;
-  private _serviceConfig: ServiceConfig;
+	private _globalPreferences: ClientPreferences
+	private _serviceConfig: ServiceConfig
 
-  get globalPreferences(): ClientPreferences {
-    return this._globalPreferences;
-  }
+	get globalPreferences(): ClientPreferences {
+		return this._globalPreferences
+	}
 
-  get serviceConfig(): Observable<ServiceConfig> {
-    if (this._serviceConfig) return of(this._serviceConfig);
-    return this.loadConfig();
-  }
+	get serviceConfig(): Observable<ServiceConfig> {
+		if (this._serviceConfig) return of(this._serviceConfig)
+		return this.loadConfig()
+	}
 
-  constructor(private http: HttpClient) {
-    this.loadPreferences();
-  }
+	constructor(private http: HttpClient) {
+		this.loadPreferences()
+	}
 
-  private loadConfig(): Observable<ServiceConfig> {
-    return this.http.get<ServiceConfig>(`/api/systems/settings/client`).pipe(
-      tap((x) => {
-        this._serviceConfig = x;
-      })
-    );
-    // return this.http.get<ServiceConfig>(`/api/systems/config`);
-  }
+	private loadConfig(): Observable<ServiceConfig> {
+		return this.http.get<ServiceConfig>(`/api/systems/settings/client`).pipe(
+			tap((x) => {
+				this._serviceConfig = x
+			}),
+		)
+		// return this.http.get<ServiceConfig>(`/api/systems/config`);
+	}
 
-  loadDefaultColors(){
-    return this.http.get(
-      `/api/systems/settings/default-colors`
-    )
-  }
+	loadDefaultColors() {
+		return this.http.get(`/api/systems/settings/default-colors`)
+	}
 
-  loadPreferences() {
-    this._globalPreferences = new ClientPreferences('global.pref');
-  }
+	loadManualTransferFiltersSetting() {
+		return this.http.get<ManualTransferFiltersSetting>(
+			`/api/systems/settings/manual-transfer-filters`,
+		)
+	}
 
-  settingsGroups(): Observable<ISettingsGroup[]> {
-    return this.http.get<ISettingsGroup[]>(`${this.baseUrl}/groups`);
-  }
-  settingsGroupedObjects(): Observable<ISettingsGroupedObject[]> {
-    return this.http.get<ISettingsGroupedObject[]>(`${this.baseUrl}/groups/grouped_objects`);
-  }
+	loadNodeMarginsSettings() {
+		return this.http.get<NodeMarginSetting>(
+			`/api/systems/settings/node-margins`,
+		)
+	}
 
-  settingsGroupIsAvailableHomePoints(groupId: number): Observable<number[]> {
-    return this.http.get<number[]>(`${this.baseUrl}/groups/isavailablehomes/${groupId}`);
-  }
+	loadPreferences() {
+		this._globalPreferences = new ClientPreferences('global.pref')
+	}
 
-  settingsGroupIsAvailableStations(groupId: number): Observable<number[]> {
-    return this.http.get<number[]>(`${this.baseUrl}/groups/isavailablestations/${groupId}`);
-  }
+	settingsGroups(): Observable<ISettingsGroup[]> {
+		return this.http.get<ISettingsGroup[]>(`${this.baseUrl}/groups`)
+	}
+	settingsGroupedObjects(): Observable<ISettingsGroupedObject[]> {
+		return this.http.get<ISettingsGroupedObject[]>(
+			`${this.baseUrl}/groups/grouped_objects`,
+		)
+	}
 
-  settingsGroupIsAvailableVehicles(groupId: number): Observable<number[]> {
-    return this.http.get<number[]>(`${this.baseUrl}/groups/isavailablevehicles/${groupId}`);
-  }
+	settingsGroupIsAvailableHomePoints(groupId: number): Observable<number[]> {
+		return this.http.get<number[]>(
+			`${this.baseUrl}/groups/isavailablehomes/${groupId}`,
+		)
+	}
 
-  settingsGroupIsAvailableBuffers(groupId: number): Observable<number[]> {
-    return this.http.get<number[]>(`${this.baseUrl}/groups/isavailablebuffers/${groupId}`);
-  }
+	settingsGroupIsAvailableStations(groupId: number): Observable<number[]> {
+		return this.http.get<number[]>(
+			`${this.baseUrl}/groups/isavailablestations/${groupId}`,
+		)
+	}
 
-  settingsClusters(): Observable<ISettingsCluster[]> {
-    return this.http.get<ISettingsCluster[]>(`${this.baseUrl}/clusters`);
-  }
+	settingsGroupIsAvailableVehicles(groupId: number): Observable<number[]> {
+		return this.http.get<number[]>(
+			`${this.baseUrl}/groups/isavailablevehicles/${groupId}`,
+		)
+	}
 
-  settingsClusterPoints(): Observable<ISettingsClusterPoint[]> {
-    return this.http.get<ISettingsClusterPoint[]>(`${this.baseUrl}/clusters/points`);
-  }
+	settingsGroupIsAvailableBuffers(groupId: number): Observable<number[]> {
+		return this.http.get<number[]>(
+			`${this.baseUrl}/groups/isavailablebuffers/${groupId}`,
+		)
+	}
 
-  settingsClusterIsAvailablePoints(clusterId: number): Observable<number[]> {
-    return this.http.get<number[]>(`${this.baseUrl}/clusters/isavailablepoints/${clusterId}`);
-  }
+	settingsClusters(): Observable<ISettingsCluster[]> {
+		return this.http.get<ISettingsCluster[]>(`${this.baseUrl}/clusters`)
+	}
 
-  settingsClusterAssignedPoints(clusterId: number): Observable<number[]> {
-    return this.http.get<number[]>(`${this.baseUrl}/clusters/assignedpoints/${clusterId}`);
-  }
+	settingsClusterPoints(): Observable<ISettingsClusterPoint[]> {
+		return this.http.get<ISettingsClusterPoint[]>(
+			`${this.baseUrl}/clusters/points`,
+		)
+	}
 
+	settingsClusterIsAvailablePoints(clusterId: number): Observable<number[]> {
+		return this.http.get<number[]>(
+			`${this.baseUrl}/clusters/isavailablepoints/${clusterId}`,
+		)
+	}
 
-  settingsSegments(): Observable<ISettingsSegmentWithVPartsNBlocking[]> {
-    return this.http.get<ISettingsSegmentWithVPartsNBlocking[]>(`${this.baseUrl}/segments`);
-  }
+	settingsClusterAssignedPoints(clusterId: number): Observable<number[]> {
+		return this.http.get<number[]>(
+			`${this.baseUrl}/clusters/assignedpoints/${clusterId}`,
+		)
+	}
 
-  saveSegments(form: ISettingsSegmentWithVPartsNBlocking[]): Observable<void> {
-    return this.http.post<void>(`${this.baseUrl}/segments/save`, form);
-  }
+	settingsSegments(): Observable<ISettingsSegmentWithVPartsNBlocking[]> {
+		return this.http.get<ISettingsSegmentWithVPartsNBlocking[]>(
+			`${this.baseUrl}/segments`,
+		)
+	}
 
-  settingsStations(): Observable<ISettingsStationWithUnuse[]> {
-    return this.http.get<ISettingsStationWithUnuse[]>(`${this.baseUrl}/stations`);
-  }
+	saveSegments(form: ISettingsSegmentWithVPartsNBlocking[]): Observable<void> {
+		return this.http.post<void>(`${this.baseUrl}/segments/save`, form)
+	}
 
-  settingsBuffers(): Observable<ISettingsBufferWithUnuse[]> {
-    return this.http.get<ISettingsBufferWithUnuse[]>(`${this.baseUrl}/buffers`);
-  }
+	settingsStations(): Observable<ISettingsStationWithUnuse[]> {
+		return this.http.get<ISettingsStationWithUnuse[]>(
+			`${this.baseUrl}/stations`,
+		)
+	}
 
-  settingsPointsDataSource(): DataSource {
-    return new DataSource({
-      store: AspNetData.createStore({
-        key: 'id',
-        loadUrl: `${this.baseUrl}/points`
-      }),
-    });
-  }
+	settingsBuffers(): Observable<ISettingsBufferWithUnuse[]> {
+		return this.http.get<ISettingsBufferWithUnuse[]>(`${this.baseUrl}/buffers`)
+	}
 
-  settingsZcus(): Observable<ISettingsZcu[]> {
-    return this.http.get<ISettingsZcu[]>(`${this.baseUrl}/zcus`);
-  }
+	settingsPointsDataSource(): DataSource {
+		return new DataSource({
+			store: AspNetData.createStore({
+				key: 'id',
+				loadUrl: `${this.baseUrl}/points`,
+			}),
+		})
+	}
 
-  settingsVehicles(): Observable<ISettingsVehicleReg[]> {
-    return this.http.get<ISettingsVehicleReg[]>(`${this.baseUrl}/vehicleRegs`);
-  }
+	settingsZcus(): Observable<ISettingsZcu[]> {
+		return this.http.get<ISettingsZcu[]>(`${this.baseUrl}/zcus`)
+	}
 
-  deleteVehicleRegs(form: any[]): Observable<void> {
-    return this.http.post<void>(`${this.baseUrl}/vehicleRegs/remove`, form);
-  }
+	settingsVehicles(): Observable<ISettingsVehicleReg[]> {
+		return this.http.get<ISettingsVehicleReg[]>(`${this.baseUrl}/vehicleRegs`)
+	}
 
-  saveVehicleRegs(form: any[]): Observable<void> {
-    return this.http.post<void>(`${this.baseUrl}/vehicleRegs/save`, form);
-  }
+	deleteVehicleRegs(form: any[]): Observable<void> {
+		return this.http.post<void>(`${this.baseUrl}/vehicleRegs/remove`, form)
+	}
+
+	saveVehicleRegs(form: any[]): Observable<void> {
+		return this.http.post<void>(`${this.baseUrl}/vehicleRegs/save`, form)
+	}
 }

@@ -7,6 +7,7 @@ import { getGroupColorWithAlpha } from 'TrackObjects/group/utils/color'
 
 const props = defineProps<{
   buffer: Buffer
+  margin: number
   handleLeftClick: (event: MouseEvent) => void
   handleRightClick: (event: MouseEvent) => void
   handleMouseover: (event: MouseEvent) => void
@@ -14,7 +15,7 @@ const props = defineProps<{
 }>()
 
 const position = computed(() =>
-  getPositionForBufferOrStation(props.buffer)
+  getPositionForBufferOrStation(props.buffer, props.margin)
 )
 
 const group = useGroup('buffer', toRef(props.buffer, 'id'))
@@ -26,6 +27,7 @@ const group = useGroup('buffer', toRef(props.buffer, 'id'))
     class="overflow-visible cursor-pointer buffer"
     :x="position.x"
     :y="position.y"
+    :data-disabled="props.buffer.unuse"
   >
     <g class="scale-and-reverse-rotate">
       <use

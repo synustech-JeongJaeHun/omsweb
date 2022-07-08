@@ -10,6 +10,7 @@ export namespace Dto {
 		pointId: number
 		group?: number
 		nextpoint?: number
+		nextPoint?: number
 		offset?: number
 		unuse?: boolean
 		carrierId?: string
@@ -71,6 +72,21 @@ export namespace Dto {
 		passVehicle: string[]
 		vehicleCount: string[]
 		vehicleInfo: string[]
+	}
+	export interface IFireShutter {
+		id: number
+		x: number
+		y: number
+		logicalId: string
+		segments: string
+		status: number
+	}
+	export interface IFireShutterStatus {
+		id: number
+		logicalId: string
+        segments: string
+		status: number
+		statusMsg: string
 	}
 	export interface IPoint extends ICoordinate {
 		id: number

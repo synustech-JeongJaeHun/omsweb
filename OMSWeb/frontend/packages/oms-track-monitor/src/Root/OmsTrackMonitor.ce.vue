@@ -53,6 +53,8 @@ const props = defineProps<{
   vehicleSize: Numberlish
   segmentWidth: Numberlish
   segmentDirectionSize: Numberlish
+  stationMargin: Numberlish
+  bufferMargin: Numberlish
 
   // visible
   isMinimapVisible: Boolish
@@ -68,6 +70,7 @@ const props = defineProps<{
   backgroundColor: Stringlish
   stationColor: Stringlish
   bufferColor: Stringlish
+  bufferDisabledColor: Stringlish
   pointColor: Stringlish
   normalSegmentColor: Stringlish
   disabledSegmentColor: Stringlish
@@ -115,6 +118,18 @@ watch(propRefs.segmentDirectionSize, (n) => {
   updateScaleStyle(
     'segmentDirection',
     parseNumberProp(ScaleDefault.segmentDirection, n)
+  )
+})
+watch(propRefs.stationMargin, (n) => {
+  updateScaleStyle(
+    'stationMargin',
+    parseNumberProp(ScaleDefault.stationMargin, n)
+  )
+})
+watch(propRefs.bufferMargin, (n) => {
+  updateScaleStyle(
+    'bufferMargin',
+    parseNumberProp(ScaleDefault.bufferMargin, n)
   )
 })
 
@@ -178,7 +193,7 @@ defineExpose(exposed)
         height: `${elementRectInfo.height}px`,
       }"
     />
-    <Minimap class="absolute" style="bottom: 45px; margin-left: 45px" />
+    <Minimap class="absolute" style="bottom: 45px; left: 45px" />
     <div
       class="absolute flex flex-row"
       style="padding: unset; bottom: 10px; right: 10px"
@@ -207,6 +222,11 @@ defineExpose(exposed)
 #buffer-layer .buffer .buffer-path {
   stroke: v-bind(
     'parseStringProp(ColorDefault.buffer, props.bufferColor)'
+  );
+}
+#buffer-layer .buffer[data-disabled='true' i] .buffer-path {
+  stroke: v-bind(
+    'parseStringProp(ColorDefault.bufferDisabled, props.bufferDisabledColor)'
   );
 }
 

@@ -7,6 +7,7 @@ import { getGroupColorWithAlpha } from 'TrackObjects/group/utils/color'
 
 const props = defineProps<{
   station: Station
+  margin: number
   handleLeftClick: (event: MouseEvent) => void
   handleRightClick: (event: MouseEvent) => void
   handleMouseover: (event: MouseEvent) => void
@@ -14,7 +15,7 @@ const props = defineProps<{
 }>()
 
 const position = computed(() =>
-  getPositionForBufferOrStation(props.station)
+  getPositionForBufferOrStation(props.station, props.margin)
 )
 
 const group = useGroup('station', toRef(props.station, 'id'))

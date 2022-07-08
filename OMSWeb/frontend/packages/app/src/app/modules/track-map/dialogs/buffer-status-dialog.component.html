@@ -1,61 +1,85 @@
 <oms-dialog-base [title]="'names.buffer' | translate">
-  <ng-container class="dialog-layout">
-    <div mat-dialog-content class="content-layout">
-      <div class="find-container">
-        <oms-unit-list-selector class="full-span-col" [findScopes]="['buffers']" [selectedUnit]="selectedUnit"
-          (selectedUnitChange)="onBufferChange($event)" [placeholder]="'names.searchBuffer' | translate">
-        </oms-unit-list-selector>
-      </div>
-      <div class="info-container" *ngIf="currentBuffer">
-        <h3>Buffer #{{ currentBuffer.id }}</h3>
-        <div class="unit-details">
-          <label class="name">{{ "names.id" | translate }}</label>
-          <div class="value">{{ currentBuffer.id }}</div>
-          <label class="name">{{ "names.onlineName" | translate }}</label>
-          <div class="value"></div>
-          <label class="name">{{ "names.node" | translate }}</label>
-          <div class="value">{{ currentBuffer.pointId }}</div>
-          <label class="name">{{ "names.unuse" | translate }}</label>
-          <div class="value"></div>
-          <label class="name">{{ "names.barcode" | translate }}</label>
-          <div class="value"></div>
-          <label class="name">{{ "names.contain" | translate }}</label>
-          <div class="value"></div>
-          <label class="name">{{ "names.updated" | translate }}</label>
-          <div class="value"></div>
-          <label class="name">{{ "names.carrierId" | translate }}</label>
-          <div class="value"></div>
-          <label class="name">{{ "names.clean" | translate }}</label>
-          <div class="value"></div>
-        </div>
-        <div class="unit-update">
-          <fieldset>
-            <legend>{{ "names.carrier" | translate }}</legend>
-            <div class="field-row">
-              <mat-form-field class="dense" appearance="outline">
-                <input #carrierIdInput matInput [placeholder]="'names.carrierId' | translate" />
-              </mat-form-field>
-              <button mat-stroked-button color="primary" class="dense accent" (click)="onRemoveCarrier()">
-                Remove
-              </button>
-              <button mat-stroked-button color="primary" class="dense accent"
-                (click)="onInstallCarrier(carrierIdInput.value)">
-                Install
-              </button>
-            </div>
-          </fieldset>
+	<ng-container class="dialog-layout">
+		<div mat-dialog-content class="content-layout">
+			<div class="find-container">
+				<oms-unit-list-selector
+					class="full-span-col"
+					[findScopes]="['buffers']"
+					[selectedUnit]="selectedUnit"
+					(selectedUnitChange)="onBufferChange($event)"
+					[placeholder]="'names.searchBuffer' | translate"
+				>
+				</oms-unit-list-selector>
+			</div>
+			<div class="info-container" *ngIf="currentBuffer">
+				<h3>Buffer #{{ currentBuffer.id }}</h3>
+				<div class="unit-details">
+					<label class="name">{{ 'names.id' | translate }}</label>
+					<div class="value">{{ currentBuffer.id }}</div>
+					<label class="name">{{ 'names.onlineName' | translate }}</label>
+					<div class="value">{{ currentBuffer.logicalId }}</div>
+					<label class="name">{{ 'names.node' | translate }}</label>
+					<div class="value">{{ currentBuffer.pointId }}</div>
+					<label class="name">{{ 'names.unuse' | translate }}</label>
+					<div class="value">{{ currentBuffer.unuse ? 'Y' : 'N' }}</div>
+					<label class="name">{{ 'names.barcode' | translate }}</label>
+					<div class="value"></div>
+					<label class="name">{{ 'names.contain' | translate }}</label>
+					<div class="value"></div>
+					<label class="name">{{ 'names.updated' | translate }}</label>
+					<div class="value"></div>
+					<label class="name">{{ 'names.carrierId' | translate }}</label>
+					<div class="value">{{ currentBuffer.carrierId }}</div>
+					<label class="name">{{ 'names.clean' | translate }}</label>
+					<div class="value"></div>
+				</div>
+				<div class="unit-update">
+					<fieldset>
+						<legend>{{ 'names.carrier' | translate }}</legend>
+						<div class="field-row">
+							<mat-form-field class="dense" appearance="outline">
+								<input
+									#carrierIdInput
+									matInput
+									[placeholder]="'names.carrierId' | translate"
+								/>
+							</mat-form-field>
+							<button
+								mat-stroked-button
+								[disabled]="!carrierIdInput.value"
+								color="primary"
+								class="dense accent"
+								(click)="onRemoveCarrier(carrierIdInput.value)"
+							>
+								Remove
+							</button>
+							<button
+								mat-stroked-button
+								[disabled]="!carrierIdInput.value"
+								color="primary"
+								class="dense accent"
+								(click)="onInstallCarrier(carrierIdInput.value)"
+							>
+								Install
+							</button>
+						</div>
+					</fieldset>
 
-          <fieldset>
-            <legend>{{ "names.note" | translate }}</legend>
-            <div class="field-row">
-              <mat-form-field class="dense" appearance="outline">
-                <input #noteInput matInput [placeholder]="'names.note' | translate"
-                  (keyup.enter)="onUpdateNote(noteInput.value)" />
-              </mat-form-field>
-            </div>
-          </fieldset>
-        </div>
-      </div>
-    </div>
-  </ng-container>
+					<!-- <fieldset>
+						<legend>{{ 'names.note' | translate }}</legend>
+						<div class="field-row">
+							<mat-form-field class="dense" appearance="outline">
+								<input
+									#noteInput
+									matInput
+									[placeholder]="'names.note' | translate"
+									(keyup.enter)="onUpdateNote(noteInput.value)"
+								/>
+							</mat-form-field>
+						</div>
+					</fieldset> -->
+				</div>
+			</div>
+		</div>
+	</ng-container>
 </oms-dialog-base>
