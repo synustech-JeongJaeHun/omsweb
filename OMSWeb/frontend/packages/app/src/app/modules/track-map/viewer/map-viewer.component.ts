@@ -114,7 +114,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 	public showTooltip = false
 	public contextMenuObject: { type: string; value: any } | undefined
 	public showContextMenu = false
-	//XXX:
 	public homeActive = false
 
 	public colocatedViewPosition:
@@ -657,7 +656,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		this.viewer.track(event.type, event.id)
 	}
 
-	// XXX: mouseover(hover) trigger
 	public onMouseoverTM(event: CustomEvent) {
 		const payload = getCustomEventPayload(event)
 		// @ts-ignore

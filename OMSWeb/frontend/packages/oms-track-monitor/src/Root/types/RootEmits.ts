@@ -37,7 +37,6 @@ namespace EventDetails {
 		| { type: 'MTL'; value: Mtl; event: MouseEvent }
 		| { type: 'ZCU'; value: Zcu; event: MouseEvent }
 		| { type: 'VEHICLE'; value: Vehicle; event: MouseEvent }
-		// XXX: inject Fireshutter on RootEmit
 		| { type: 'FIRESHUTTER'; value: Fireshutter; event: MouseEvent }
 
 	export type MouseleaveOnObject = void
@@ -50,7 +49,6 @@ namespace EventDetails {
 		| { type: 'MTL'; value: Mtl }
 		| { type: 'ZCU'; value: Zcu }
 		| { type: 'VEHICLE'; value: Vehicle }
-		// XXX: injext Fireshutter on RootEmit
 		| { type: 'FIRESHUTTER'; value: Fireshutter }
 
 	export type SecondaryClickOnObject =
@@ -61,7 +59,6 @@ namespace EventDetails {
 		| { type: 'MTL'; value: Mtl; event: MouseEvent }
 		| { type: 'ZCU'; value: Zcu; event: MouseEvent }
 		| { type: 'VEHICLE'; value: Vehicle; event: MouseEvent }
-		// XXX: inject Fireshutter on RootEmit
 		| { type: 'FIRESHUTTER'; value: Fireshutter; event: MouseEvent }
 
 	export type ClickOutObject = void

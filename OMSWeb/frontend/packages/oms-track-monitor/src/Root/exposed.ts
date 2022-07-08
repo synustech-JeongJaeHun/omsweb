@@ -36,7 +36,6 @@ import {
 	initZcus,
 	setZcu,
 } from 'src/TrackObjects/zcu/zcus'
-//XXX: fireshutter
 import {
 	findFireshutterById,
 	initFireshutters,
@@ -81,7 +80,6 @@ const exposed: IOmsTrackMonitor = {
 		initMtls([])
 		initBuffers([])
 		initPoints([])
-		// XXX: fireshutter init
 		initFireshutters([])
 
 		// setup
@@ -102,7 +100,6 @@ const exposed: IOmsTrackMonitor = {
 		initVehicles(t.vehicles ?? [])
 		initSegmentDisableds(t.segmentDisabled ?? [])
 		initGroups(t.groups)
-		// XXX:set fireshutters
 		initFireshutters(t.fireShutters)
 	},
 	centerZoom,
@@ -154,7 +151,6 @@ const exposed: IOmsTrackMonitor = {
 				const mtl = findMtlById(id)
 				if (mtl) this.find('point', mtl.pointId)
 				break
-			///XXX: fireshutter
 			case 'fireshutter':
 				break
 
@@ -208,7 +204,6 @@ const exposed: IOmsTrackMonitor = {
 
 				break
 			case 'fireshutter':
-				// XXX: focus case 가 필요할 시 추가할 것
 				break
 
 			default:
