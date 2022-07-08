@@ -1,22 +1,23 @@
 <script setup lang="ts">
 import Layer from 'MapObjects/map/components/Layer.ce.vue'
-import Zcu from './Zcu.ce.vue'
-import { findZcuById, zcus } from '../zcus'
+import Fireshutter from './Fireshutter.ce.vue'
+import { findFireshutterById, fireshutters } from '../fireshutters'
 import { inject } from 'vue'
 import { RootEmitInjectionKey, RootEmits } from 'src/Root/types/RootEmits'
 
+// Root에서 선언한 RootEmits를 이 Layer에 inject(여기서 컨슈머로서 가져다 씀)
 const emit = inject<RootEmits>(RootEmitInjectionKey)!
 
-function getDeepCopiedZcu(event: MouseEvent) {
-  const zcuId = parseInt((event.target as SVGElement).dataset.id!)
-  const zcu = findZcuById(zcuId)!
-  return { ...zcu }
+function getDeepCopiedFireshutter(event: MouseEvent) {
+  const fsId = parseInt((event.currentTarget as SVGElement).dataset.id!)
+  const fs = findFireshutterById(fsId)!
+  return { ...fs }
 }
 
 function handleMouseover(event: MouseEvent) {
   emit('mouseoverOnObject', {
-    type: 'ZCU',
-    value: getDeepCopiedZcu(event),
+    type: 'FIRESHUTTER',
+    value: getDeepCopiedFireshutter(event),
     event,
   })
 }
@@ -24,30 +25,29 @@ function handleMouseover(event: MouseEvent) {
 function handleMouseleave(event: MouseEvent) {
   emit('mouseleaveOnObject')
 }
+
 function handleLeftClick(event: MouseEvent) {
   emit('mainClickOnObject', {
-    type: 'ZCU',
-    value: getDeepCopiedZcu(event),
+    type: 'FIRESHUTTER',
+    value: getDeepCopiedFireshutter(event),
   })
 }
+
 function handleRightClick(event: MouseEvent) {
   emit('secondaryClickOnObject', {
-    type: 'ZCU',
-    value: getDeepCopiedZcu(event),
+    type: 'FIRESHUTTER',
+    value: getDeepCopiedFireshutter(event),
     event,
   })
 }
 </script>
-
 <template>
-  <Layer id="zcu-layer">
-    <defs>
-      <path id="zcu" d="M 0 -12 L 12 0 L 0 12 L -12 0 Z" />
-    </defs>
-    <Zcu
-      v-for="zcu of zcus"
-      :key="zcu.id"
-      :zcu="zcu"
+  <Layer id="fireshutter-layer">
+    <defs> </defs>
+    <Fireshutter
+      v-for="fireshutter of fireshutters"
+      :key="fireshutter.id"
+      :fireshutter="fireshutter"
       :handleMouseover="handleMouseover"
       :handleMouseleave="handleMouseleave"
       :handleLeftClick="handleLeftClick"

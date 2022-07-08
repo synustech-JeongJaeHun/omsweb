@@ -1,0 +1,8 @@
+#fireshutter-layer .fireshutter-wrapper:hover {
+  filter: drop-shadow(0 0 var(--filter-size) var(--hover-color-solid));
+  /* overflow: visible; */
+}
+
+#fireshutter-layer .fireshutter-wrapper {
+  /* overflow: visible; */
+}

@@ -37,6 +37,11 @@ import {
 	setZcu,
 } from 'src/TrackObjects/zcu/zcus'
 import {
+	findFireshutterById,
+	initFireshutters,
+	updateFireshutter,
+} from 'src/TrackObjects/fireshutter/fireshutters'
+import {
 	deleteVehicle,
 	findVehicleById,
 	initVehicles,
@@ -75,6 +80,7 @@ const exposed: IOmsTrackMonitor = {
 		initMtls([])
 		initBuffers([])
 		initPoints([])
+		initFireshutters([])
 
 		// setup
 		const { minX, minY, maxX, maxY } = calculateMinMaxXYFromPoints(
@@ -94,6 +100,7 @@ const exposed: IOmsTrackMonitor = {
 		initVehicles(t.vehicles ?? [])
 		initSegmentDisableds(t.segmentDisabled ?? [])
 		initGroups(t.groups)
+		initFireshutters(t.fireShutters)
 	},
 	centerZoom,
 
@@ -121,7 +128,10 @@ const exposed: IOmsTrackMonitor = {
 			case 'station':
 				const station = findStationById(id)
 				if (station) {
-					const position = getPositionForBufferOrStation(station, scaleStylesInfo.stationMargin)
+					const position = getPositionForBufferOrStation(
+						station,
+						scaleStylesInfo.stationMargin
+					)
 
 					if (position) approachTo(position)
 				}
@@ -129,7 +139,10 @@ const exposed: IOmsTrackMonitor = {
 			case 'buffer':
 				const buffer = findBufferById(id)
 				if (buffer) {
-					const position = getPositionForBufferOrStation(buffer, scaleStylesInfo.bufferMargin)
+					const position = getPositionForBufferOrStation(
+						buffer,
+						scaleStylesInfo.bufferMargin
+					)
 
 					if (position) approachTo(position)
 				}
@@ -137,6 +150,8 @@ const exposed: IOmsTrackMonitor = {
 			case 'mtl':
 				const mtl = findMtlById(id)
 				if (mtl) this.find('point', mtl.pointId)
+				break
+			case 'fireshutter':
 				break
 
 			default:
@@ -187,6 +202,8 @@ const exposed: IOmsTrackMonitor = {
 					setFocusedObject(zcu)
 				}
 
+				break
+			case 'fireshutter':
 				break
 
 			default:
@@ -294,6 +311,19 @@ const exposed: IOmsTrackMonitor = {
 				deleteHomeToPoint(h)
 				break
 
+			default:
+				break
+		}
+	},
+	updateFireshutter(op, f) {
+		switch (op) {
+			case 'INSERT':
+				break
+			case 'UPDATE':
+				updateFireshutter(f)
+				break
+			case 'DELETE':
+				break
 			default:
 				break
 		}

@@ -11,34 +11,27 @@
     rotate(var(--reverse-rotation-degree));
 }
 
-
 /* Text Scale */
-#station-layer[data-scale-level~='BELOW15' i]
- .station .label {
+#station-layer[data-scale-level~='BELOW15' i] .station .label {
   font-size: 0.1em;
 }
 
-#station-layer[data-scale-level~='BELOW13' i]
- .station .label {
+#station-layer[data-scale-level~='BELOW13' i] .station .label {
   font-size: 0.2em;
 }
 
-#station-layer[data-scale-level~='BELOW11' i]
- .station .label {
+#station-layer[data-scale-level~='BELOW11' i] .station .label {
   font-size: 0.4em;
 }
 
-#station-layer[data-scale-level~='BELOW9' i]
- .station .label {
+#station-layer[data-scale-level~='BELOW9' i] .station .label {
   font-size: 0.6em;
 }
 
-#station-layer[data-scale-level~='BELOW7' i]
- .station .label {
+#station-layer[data-scale-level~='BELOW7' i] .station .label {
   font-size: 0.8em;
 }
 
-#station-layer[data-scale-level~='BELOW5' i]
- .station .label {
+#station-layer[data-scale-level~='BELOW5' i] .station .label {
   font-size: 1em;
 }

@@ -183,22 +183,23 @@ export class TrackStatusService {
 		}
 	}
 
-    handleFireShutterMapChanged(e: IDataChangeEvent) {
-		//const finded = this.trackData.fireshutters.find((z) => z.id === e.data.id)
-		//switch (e.operation) {
-		//	case 'UPDATE':
-		//		if (finded) Object.assign(finded, e.data)
-		//		break
-		//	case 'DELETE':
-		//		if (finded) {
-		//			const index = this.trackData.fireshutters.indexOf(finded)
-		//			this.trackData.fireshutters.splice(index, 1)
-		//		}
-		//		break
+	handleFireShutterMapChanged(e: IDataChangeEvent) {
+		const finded = this.trackData.fireShutters.find((f) => f.id === e.data.id)
+		switch (e.operation) {
+			case 'UPDATE':
+				if (finded) Object.assign(finded, e.data)
+				break
+			//NOTE: not yet implemented. use it on demand
+			// case 'DELETE':
+			// 	if (finded) {
+			// 		const index = this.trackData.fireShutters.indexOf(finded)
+			// 		this.trackData.fireShutters.splice(index, 1)
+			// 	}
+			// 	break
 
-		//	default:
-		//		break
-		//}
+			default:
+				break
+		}
 	}
 
 	handleStationChanged(e: IDataChangeEvent) {

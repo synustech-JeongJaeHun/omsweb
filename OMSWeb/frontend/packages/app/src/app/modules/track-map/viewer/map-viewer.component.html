@@ -137,9 +137,12 @@
 		<ng-container *ngSwitchCase="'POINT'">
 			<ng-container *ngTemplateOutlet="pointTooltip"></ng-container>
 		</ng-container>
-    <ng-container *ngSwitchCase="'MTL'">
-      <ng-container *ngTemplateOutlet="mtlTooltip"></ng-container>
-    </ng-container>
+		<ng-container *ngSwitchCase="'FIRESHUTTER'">
+			<ng-container *ngTemplateOutlet="fireshutterTooltip"></ng-container>
+		</ng-container>
+		<ng-container *ngSwitchCase="'MTL'">
+			<ng-container *ngTemplateOutlet="mtlTooltip"></ng-container>
+		</ng-container>
 		<ng-container *ngSwitchDefault> </ng-container>
 	</ng-container>
 </div>
@@ -162,8 +165,8 @@
 			<div class="value">{{ tooltipObject?.value.physicalId }}</div>
 			<div class="name">{{ 'names.point' | translate }}</div>
 			<div class="value">{{ tooltipObject?.value.pointId }}</div>
-      <div class="name">{{ "names.group" | translate }}</div>
-      <div class="value">{{ tooltipObject?.value.groups.join(', ') }}</div>
+			<div class="name">{{ 'names.group' | translate }}</div>
+			<div class="value">{{ tooltipObject?.value.groups.join(', ') }}</div>
 		</div>
 	</dx-tooltip>
 </ng-template>
@@ -185,8 +188,8 @@
 			<div class="value">{{ tooltipObject?.value.physicalId }}</div>
 			<div class="name">{{ 'names.point' | translate }}</div>
 			<div class="value">{{ tooltipObject?.value.curPoint }}</div>
-      <div class="name">{{ "names.group" | translate }}</div>
-      <div class="value">{{ tooltipObject?.value.groups.join(', ') }}</div>
+			<div class="name">{{ 'names.group' | translate }}</div>
+			<div class="value">{{ tooltipObject?.value.groups.join(', ') }}</div>
 		</div>
 	</dx-tooltip>
 </ng-template>
@@ -283,41 +286,67 @@
 	</dx-tooltip>
 </ng-template>
 
-
 <ng-template #pointTooltip>
-  <dx-tooltip class="tooltip-box" [visible]="showTooltip" target="#tooltipView" position="right">
-    <div class="tooltip-title">Point</div>
-    <div class="tooltip-content">
-      <div class="name">{{ "names.id" | translate }}</div>
-      <div class="value">{{ tooltipObject?.value.id }}</div>
-      <div class="name">{{ "names.physicalId" | translate }}</div>
-      <div class="value">{{ tooltipObject?.value.physicalId }}</div>
-      <ng-container *ngIf="tooltipObject?.value?.homeId">
-        <div class="name" style="height: 10px"></div>
-        <div class="value"></div>
-        <div class="name">{{ "names.home" | translate }}</div>
-        <div class="value">{{ tooltipObject?.value.homeId }}</div>
-        <div class="name">{{ "names.group" | translate }}</div>
-        <div class="value">{{ tooltipObject?.value.groups.join(', ') }}</div>
-      </ng-container>
-    </div>
-  </dx-tooltip>
+	<dx-tooltip
+		class="tooltip-box"
+		[visible]="showTooltip"
+		target="#tooltipView"
+		position="right"
+	>
+		<div class="tooltip-title">Point</div>
+		<div class="tooltip-content">
+			<div class="name">{{ 'names.id' | translate }}</div>
+			<div class="value">{{ tooltipObject?.value.id }}</div>
+			<div class="name">{{ 'names.physicalId' | translate }}</div>
+			<div class="value">{{ tooltipObject?.value.physicalId }}</div>
+			<ng-container *ngIf="tooltipObject?.value?.homeId">
+				<div class="name" style="height: 10px"></div>
+				<div class="value"></div>
+				<div class="name">{{ 'names.home' | translate }}</div>
+				<div class="value">{{ tooltipObject?.value.homeId }}</div>
+				<div class="name">{{ 'names.group' | translate }}</div>
+				<div class="value">{{ tooltipObject?.value.groups.join(', ') }}</div>
+			</ng-container>
+		</div>
+	</dx-tooltip>
 </ng-template>
 
 <ng-template #mtlTooltip>
-  <dx-tooltip class="tooltip-box" [visible]="showTooltip" target="#tooltipView" position="right">
-    <div class="tooltip-title">Mtl</div>
-    <div class="tooltip-content">
-      <div class="name">{{ "names.id" | translate }}</div>
-      <div class="value">{{ tooltipObject?.value.id }}</div>
-      <div class="name">{{ "names.logicalId" | translate }}</div>
-      <div class="value">{{ tooltipObject?.value.logicalId }}</div>
-      <div class="name">{{ "names.group" | translate }}</div>
-      <div class="value">{{ tooltipObject?.value.groups.join(', ') }}</div>
-    </div>
-  </dx-tooltip>
+	<dx-tooltip
+		class="tooltip-box"
+		[visible]="showTooltip"
+		target="#tooltipView"
+		position="right"
+	>
+		<div class="tooltip-title">Mtl</div>
+		<div class="tooltip-content">
+			<div class="name">{{ 'names.id' | translate }}</div>
+			<div class="value">{{ tooltipObject?.value.id }}</div>
+			<div class="name">{{ 'names.logicalId' | translate }}</div>
+			<div class="value">{{ tooltipObject?.value.logicalId }}</div>
+			<div class="name">{{ 'names.group' | translate }}</div>
+			<div class="value">{{ tooltipObject?.value.groups.join(', ') }}</div>
+		</div>
+	</dx-tooltip>
 </ng-template>
 
+<ng-template #fireshutterTooltip>
+	<dx-tooltip
+		class="tooltip-box"
+		[visible]="showTooltip"
+		target="#tooltipView"
+		position="right"
+	>
+		<div class="tooltip-title">Fireshutter</div>
+		<div class="tooltip-content">
+			<div class="name">{{ 'names.id' | translate }}</div>
+			<div class="value">{{ tooltipObject?.value.id }}</div>
+			<div class="name">{{ 'status' }}</div>
+			<div class="value" *ngIf="tooltipObject?.value.status === 0">OPEN</div>
+			<div class="value" *ngIf="tooltipObject?.value.status === 1">CLOSED</div>
+		</div>
+	</dx-tooltip>
+</ng-template>
 <!-- tooltips end -->
 
 <!-- context start -->

@@ -159,6 +159,7 @@ interface IFixedTrackData {
 	size?: IMapSize
 	stations?: IStation[]
 	zcus?: IZcu[]
+	fireShutters?: IFireshutter[]
 }
 interface IVariableTrackData {
 	segmentParts?: ISegmentPart[]
@@ -171,6 +172,14 @@ interface ITrackData extends IFixedTrackData, IVariableTrackData {
 	width?: number
 	height?: number
 	minimumSegmentLength?: number
+}
+interface IFireshutter {
+	id: number
+	x: number
+	y: number
+	logicalId: string
+	segments: string
+	status: number
 }
 
 export { ITrackData, IVehicle, ISegmentPart, IGroup }
