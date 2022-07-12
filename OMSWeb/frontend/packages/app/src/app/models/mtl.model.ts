@@ -2,7 +2,6 @@ import { LayoutUtil } from '../modules/shared/utils/layout.util';
 import { ICoordinate } from './drawing.model';
 import { Dto } from './dto/track.model';
 import { IPoint } from './map.interface';
-import { Point } from './point.model';
 
 export class MTL {
   objectType = 'MTL';
@@ -14,10 +13,12 @@ export class MTL {
   coord: ICoordinate;
   invertedCoord: ICoordinate;
 
-  inUse?: boolean;
+  unuse?: boolean;
   position?: any;
   mode?: any;
   errorList?: any;
+  inDirection: 'R' | 'A'
+  outDirection: 'R' | 'A'
 
   isValidate?: boolean;
   updateState?: string;
@@ -36,9 +37,11 @@ export class MTL {
       pointId,
       group,
       position,
-      inUse,
+      unuse,
       mode,
       errorList,
+      inDirection,
+      outDirection
     } = row;
     this.id = id;
     this.logicalId = logicalId;
@@ -53,9 +56,11 @@ export class MTL {
     this.invertedCoord = point.invertedCoord;
 
     this.position = position;
-    this.inUse = inUse;
+    this.unuse = unuse;
     this.mode = mode;
     this.errorList = errorList;
+    this.inDirection = inDirection
+    this.outDirection = outDirection
   }
 
   copy(newId) {
@@ -66,13 +71,15 @@ export class MTL {
       pointId,
       coord,
       invertedCoord,
-      inUse,
+      unuse,
       position,
       mode,
       errorList,
       group,
       isValidate,
       updateState,
+      inDirection,
+      outDirection
     } = this;
 
     // Replace ID
@@ -85,13 +92,15 @@ export class MTL {
     physicalId = this.physicalId;
     logicalId = this.logicalId;
     pointId = this.pointId;
-    inUse = this.inUse;
+    unuse = this.unuse;
     position = this.position;
     mode = this.mode;
     errorList = this.errorList;
 
     isValidate = this.isValidate;
     updateState = this.updateState;
+    inDirection = this.inDirection
+    outDirection = this.outDirection
 
     // Object
     coord = { ...this.coord };
@@ -104,11 +113,13 @@ export class MTL {
         physicalId,
         logicalId,
         pointId,
-        inUse,
+        unuse,
         position,
         mode,
         errorList,
         group,
+        inDirection,
+        outDirection
       },
       isValidate,
       updateState,
