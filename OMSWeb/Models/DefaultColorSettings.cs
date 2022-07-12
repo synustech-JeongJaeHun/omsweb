@@ -9,6 +9,7 @@ namespace OMSWeb.Models
         public string? StationColor { get; set; }
         public string? StationDisabledColor { get; set; }
         public string? BufferColor { get; set; }
+        public string? BufferDisabledColor { get; set; }
         public string? PointColor { get; set; }
         public string? NormalSegmentColor { get; set; }
         public string? DisabledSegmentColor { get; set; }
@@ -19,5 +20,7 @@ namespace OMSWeb.Models
         public string? CargoLoadingColor { get; set; }
         public string? CargoFullColor { get; set; }
         public string? CargoUnloadingColor { get; set; }
+        public string? FireshutterClosedColor { get; set; }
+        public string? FireshutterOpenedColor { get; set; }
     }
 }

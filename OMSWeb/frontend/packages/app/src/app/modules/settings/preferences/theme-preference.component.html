@@ -29,9 +29,17 @@
         [value]="setting.bufferColor">
       </oms-color-picker>
       <oms-color-picker [name]="'names.bufferUnuse' | translate"
-      (changed)="update({key: 'bufferDisabledColor', value: $event})"
-      [value]="setting.bufferDisabledColor">
-    </oms-color-picker>
+        (changed)="update({key: 'bufferDisabledColor', value: $event})"
+        [value]="setting.bufferDisabledColor">
+      </oms-color-picker>
+      <oms-color-picker [name]="'names.fireshutterOpened' | translate"
+        (changed)="update({key: 'fireshutterOpenedColor', value: $event})"
+        [value]="setting.fireshutterOpenedColor">
+      </oms-color-picker>
+      <oms-color-picker [name]="'names.fireshutterClosed' | translate"
+        (changed)="update({key: 'fireshutterClosedColor', value: $event})"
+        [value]="setting.fireshutterClosedColor">
+      </oms-color-picker>
       <oms-color-picker [name]="'names.point' | translate"
         (changed)="update({key: 'pointColor', value: $event})"
         [value]="setting.pointColor">
@@ -60,6 +68,8 @@
           <mat-option [value]="'stationDisabledColor'">{{'names.stationUnuse'| translate}}</mat-option>
           <mat-option [value]="'bufferColor'">{{'names.bufferNormal'| translate}}</mat-option>
           <mat-option [value]="'bufferDisabledColor'">{{'names.bufferUnuse'| translate}}</mat-option>
+          <mat-option [value]="'fireshutterOpenedColor'">{{'names.fireshutterOpened'| translate}}</mat-option>
+          <mat-option [value]="'fireshutterClosedColor'">{{'names.fireshutterClosed'| translate}}</mat-option>
           <mat-option [value]="'pointColor'">{{'names.point'| translate}}</mat-option>
           <mat-option [value]="'normalSegmentColor'">{{'names.segmentNormal'| translate}}</mat-option>
           <mat-option [value]="'disabledSegmentColor'">{{'names.segmentDisabled'| translate}}</mat-option>

@@ -15,5 +15,7 @@ type ColorProperty =
 	| 'cargoLoading'
 	| 'cargoFull'
 	| 'cargoUnloading'
+	| 'fireshutterOpened'
+	| 'fireshutterClosed'
 
 export { ColorProperty }

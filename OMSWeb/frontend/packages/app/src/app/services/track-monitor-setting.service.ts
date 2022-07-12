@@ -21,6 +21,7 @@ type VisibilityChangedEvent = {
 		| 'isZcuVisible'
 		| 'isGroupVisible'
 		| 'isClusterVisible'
+		| 'isFireshutterVisible'
 		| 'isOverlappingObjectsVisible'
 	value: boolean
 }
@@ -42,6 +43,8 @@ type ColorChangedEvent = {
 		| 'cargoLoadingColor'
 		| 'cargoFullColor'
 		| 'cargoUnloadingColor'
+		| 'fireshutterOpenedColor'
+		| 'fireshutterClosedColor'
 	value: string
 }
 type ScaleChangedEvent = {
@@ -102,6 +105,7 @@ const DefaultTrackMonitorSetting: TrackMonitorSetting = {
 	isZcuVisible: true,
 	isGroupVisible: true,
 	isClusterVisible: true,
+	isFireshutterVisible: true,
 	isOverlappingObjectsVisible: true,
 
 	// color
@@ -121,6 +125,8 @@ const DefaultTrackMonitorSetting: TrackMonitorSetting = {
 	cargoLoadingColor: 'rgba(0, 0, 205, 1)',
 	cargoFullColor: 'rgba(50, 50, 50, 1)',
 	cargoUnloadingColor: 'rgba(128, 0, 128, 1)',
+  fireshutterClosedColor: '#F04907',
+  fireshutterOpenedColor: 'rgb(50, 145, 236)',
 }
 
 @Injectable({
