@@ -280,7 +280,7 @@
       </div>
 
       <div class="disable-table">
-        <mat-slide-toggle [value]="disableds.length > 0" (change)="changeSegmentDisabled($event.checked)"
+        <mat-slide-toggle [checked]="(disableds.length > 0)" (change)="changeSegmentDisabled($event.checked)"
           [disabled]="!hasPermission(permissionEnums.SegmentUnuse) || disabledByMtl" color="primary">{{ "names.unuse" |
           translate }}
         </mat-slide-toggle>
