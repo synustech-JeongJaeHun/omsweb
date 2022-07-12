@@ -509,6 +509,7 @@
     }
   },
   "errors": {
+    "NotAvailiable": "{{name}} is not availiable",
     "TrackSnapshotNotExists": "track snapshot does not exist for selected day",
     "DaySnapshotNotExists": "event snapshot does not exist for the selected day"
   },

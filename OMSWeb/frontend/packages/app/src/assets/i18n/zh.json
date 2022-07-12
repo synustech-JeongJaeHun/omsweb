@@ -509,6 +509,7 @@
     }
   },
   "errors": {
+    "NotAvailiable": "{{name}} is not availiable",
     "TrackSnapshotNotExists": "所选日期的轨道快照不存在",
     "DaySnapshotNotExists": "所选日期的事件快照不存在"
   },

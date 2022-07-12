@@ -106,8 +106,8 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 			)
 			if (mtlInfo.unuse) {
 				this.dialogSvc.alert({
-					title: 'Alert',
-					body: 'Selected MTL is not availiable.',
+					title: this.t$.instant('messages.confirmCommand'),
+					body: this.t$.instant('errors.NotAvailiable', { name: 'MTL' }),
 				})
 				return
 			}

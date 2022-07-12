@@ -144,7 +144,6 @@ export class UnitSelectorComponent implements OnInit, OnChanges {
 					const filtered = result.filter((unit) =>
 						this.filterWords.some((word) => unit.logicalId?.includes(word)),
 					)
-					console.log('filterd', filtered)
 					return of(filtered)
 				} else {
 					return of(result)
