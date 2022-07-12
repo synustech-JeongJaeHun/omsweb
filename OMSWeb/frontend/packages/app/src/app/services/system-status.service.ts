@@ -17,6 +17,7 @@ export class SystemStatusService {
 	public chainManualCommandDisabled?: boolean = undefined
 	public manualTransferFilterSetting?: ManualTransferFiltersSetting = undefined
 	public nodeMarginSetting?: NodeMarginSetting = undefined
+  public zcusWithFireshutter: number[] = []
 
 	constructor(
 		private hubService: HubService,
@@ -37,6 +38,7 @@ export class SystemStatusService {
 
 		this.updateManualTransferFiltersSetting()
 		this.updateNodeMarginsSetting()
+    this.updateZcusWithFireshutter()
 	}
 
 	private updateSettingMode() {
@@ -62,6 +64,11 @@ export class SystemStatusService {
 		this.settingsService
 			.loadNodeMarginsSettings()
 			.subscribe((res) => (this.nodeMarginSetting = res))
-
 	}
+
+  private updateZcusWithFireshutter() {
+    this.systemsService
+      .zcusWithFireshutter()
+      .subscribe(res => this.zcusWithFireshutter = res)
+  }
 }
