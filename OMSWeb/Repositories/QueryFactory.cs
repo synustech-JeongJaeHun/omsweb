@@ -186,7 +186,7 @@ namespace OMSWeb.Repositories
         --*user_id_condition*--WHERE user_id =@userId
       "},
       {"mtl", @"
-        SELECT id, physical_id, logical_id AS logical_id, point AS point_id
+        SELECT id, physical_id, logical_id AS logical_id, point AS point_id, in_direction, out_direction, unuse
         FROM mtls
         --*user_id_condition*--WHERE user_id =@userId
       "},

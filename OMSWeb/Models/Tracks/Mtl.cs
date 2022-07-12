@@ -7,5 +7,8 @@ namespace OMSWeb.Models.Tracks
     public string LogicalId { get; set; }
     public int? PointId { get; set; }
 
+    public bool? Unuse { get; set; }
+    public string InDirection {get;set;}
+    public string OutDirection {get;set;}
   }
 }

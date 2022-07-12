@@ -280,6 +280,9 @@ namespace OMSWeb.Repositories
                                     PhysicalId = dr["physical_id"].ToString(),
                                     LogicalId = dr["logical_id"].ToString(),
                                     PointId = dr["point_id"].TryIntegerOrNull(),
+                                    InDirection = dr["in_direction"].ToString(),
+                                    OutDirection = dr["out_direction"].ToString(),
+                                    Unuse = dr["unuse"].TryBooleanOrNull()
                                 }
                                );
                             }

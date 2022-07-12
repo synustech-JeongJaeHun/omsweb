@@ -101,10 +101,18 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 		} = this.commandState
 
 		if (category === 'mtl') {
+			const mtlInfo = (this.trackStatusService.trackData?.mtls ?? []).find(
+				(m) => m.id === mtl.id,
+			)
+			if (mtlInfo.unuse) {
+				this.dialogSvc.alert({
+					title: 'Alert',
+					body: 'Selected MTL is not availiable.',
+				})
+				return
+			}
+
 			if (mtlInOut) {
-				const mtlInfo = (this.trackStatusService.trackData?.mtls ?? []).find(
-					(m) => m.id === mtl.id,
-				)
 				const now = new Date()
 				const cmd: IOrderCommandMessage = {
 					type: 'ORDER',
@@ -135,6 +143,7 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 					vehicleId: String(vehicle.id),
 					mtlId: String(mtl.id),
 				}
+
 				this.dialogSvc
 					.confirm({ body: this.t$.instant('messages.confirmMtloutCommand') })
 					.subscribe((ok) => {
@@ -227,6 +236,7 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 			dest,
 			destDisabled,
 			carrier,
+			mtl,
 		} = this.commandState
 
 		if (!vehicleDisabled && !vehicle)
@@ -253,6 +263,9 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 			const isCarrierEmpty = carrier == null || carrier.trim().length === 0
 			if (isCarrierEmpty)
 				return this.t$.instant('messages.required', { field: 'Carrier' })
+		}
+		if (category === 'mtl' && !mtl) {
+			return this.t$.instant('messages.required', { field: 'MTL' })
 		}
 
 		return
