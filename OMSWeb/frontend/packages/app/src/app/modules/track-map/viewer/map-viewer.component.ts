@@ -180,6 +180,10 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 	}
 	readonly permissionEnums: typeof PermissionEnums = PermissionEnums
 
+  isZcuWithFireshutter(id: number){
+    return this.systemStatusService.zcusWithFireshutter.includes(id)
+  }
+
 	ngOnInit(): void {
 		// @ts-ignore
 		this.viewer = document.getElementById('track-canvas')._instance.exposed

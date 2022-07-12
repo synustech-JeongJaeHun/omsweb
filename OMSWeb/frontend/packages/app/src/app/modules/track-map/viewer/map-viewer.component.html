@@ -628,6 +628,7 @@
 				{{ 'names.reset' | translate }}
 			</button>
 			<mat-button-toggle-group
+        *ngIf="isZcuWithFireshutter(contextMenuObject?.value.id) === false"
 				#zcuTypeSelect="matButtonToggleGroup"
 				class="form-row-start"
 				name="type"
