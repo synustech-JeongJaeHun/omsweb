@@ -107,6 +107,12 @@
             value: $event.checked
           })" color="primary">{{
           "names.showClusters" | translate }}</mat-slide-toggle>
+        <mat-slide-toggle [checked]="setting.isFireshutterVisible" (change)="update({
+            group: 'Visibility',
+            key: 'isFireshutterVisible',
+            value: $event.checked
+          })" color="primary">{{
+          "names.showFireshutters" | translate }}</mat-slide-toggle>
       </div>
     </fieldset>
   </ng-container>

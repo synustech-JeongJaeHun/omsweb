@@ -62,6 +62,7 @@ const props = defineProps<{
   isZcuVisible: Boolish
   isGroupVisible: Boolish
   isClusterVisible: Boolish
+  isFireshutterVisible: Boolish
   // color
   backgroundColor: Stringlish
   stationColor: Stringlish
@@ -149,6 +150,9 @@ watch(propRefs.isGroupVisible, (b) => {
 })
 watch(propRefs.isClusterVisible, (b) => {
   updateVisibleStyle('cluster', parseBooleanProp(true, b))
+})
+watch(propRefs.isFireshutterVisible, (b) => {
+  updateVisibleStyle('fireshutter', parseBooleanProp(true, b))
 })
 watch(propRefs.isVehicleLineVisible, (b) => {
   updateVisibleStyle('vehicleLine', parseBooleanProp(true, b))
@@ -320,6 +324,9 @@ defineExpose(exposed)
 }
 #cluster-layer {
   visibility: v-bind("visibleStylesInfo.cluster ? 'initial' : 'hidden'");
+}
+#fireshutter-layer {
+  visibility: v-bind("visibleStylesInfo.fireshutter ? 'initial' : 'hidden'");
 }
 #minimap-container {
   visibility: v-bind("visibleStylesInfo.minimap ? 'initial' : 'hidden'");

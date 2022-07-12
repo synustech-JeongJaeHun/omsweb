@@ -28,6 +28,7 @@ const VisibleDefault: Record<VisibleProperty, boolean> = {
 	zcu: true, // applied in OmsTrackMonitor.ce.vue
 	group: true, // applied in OmsTrackMonitor.ce.vue
 	cluster: true, // applied in OmsTrackMonitor.ce.vue
+	fireshutter: true, // applied in OmsTrackMonitor.ce.vue
 	minimap: true, // applied in OmsTrackMonitor.ce.vue
 }
 const visibleStyles = reactive(deepCopy(VisibleDefault))
