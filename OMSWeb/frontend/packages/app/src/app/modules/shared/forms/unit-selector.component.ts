@@ -122,16 +122,29 @@ export class UnitSelectorComponent implements OnInit, OnChanges {
 				}
 
 				if (this.findScopes.includes('mtls')) {
+					console.log(
+						'non filtered result',
+						this.trackStatusService.trackData.mtls,
+					)
 					result.push(
 						...this.trackStatusService.trackData.mtls
-							.filter((m) => m.logicalId.includes(value))
-							.map((m) => ({
-								id: m.id,
-								objectType: 'Mtl',
-								logicalId: m.logicalId,
-								physicalId: m.physicalId,
-							})),
+							.filter(
+								(m) => m.logicalId.includes(value) && m.inDirection !== 'R',
+							)
+							.map((m) => {
+								console.log('member', m)
+								return {
+									id: m.id,
+									objectType: 'Mtl',
+									logicalId: m.logicalId,
+									physicalId: m.physicalId,
+									unuse: m.unuse,
+									inDirection: m.inDirection,
+									outDirection: m.outDirection,
+								}
+							}),
 					)
+					console.log('filtered result', result)
 				}
 
 				if (this.filterWords) {

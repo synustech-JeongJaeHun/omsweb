@@ -39,10 +39,12 @@ export namespace Dto {
 		physicalId: string
 		pointId: number
 		group?: number
-		inUse?: boolean
+		unuse?: boolean
 		position?: any
 		mode?: any
 		errorList?: any
+		inDirection: 'R' | 'A'
+		outDirection: 'R' | 'A'
 	}
 	export interface IZcu {
 		id: number
