@@ -80,6 +80,8 @@ const props = defineProps<{
   cargoLoadingColor: Stringlish
   cargoFullColor: Stringlish
   cargoUnloadingColor: Stringlish
+  fireshutterOpenedColor: Stringlish
+  fireshutterClosedColor: Stringlish
 }>()
 const propRefs = toRefs(props)
 interface Emits extends RootEmits {}
@@ -298,6 +300,17 @@ defineExpose(exposed)
 #vehicle-layer .cargo-unloading {
   fill: v-bind(
     'parseStringProp(ColorDefault.cargoUnloading, props.cargoUnloadingColor)'
+  );
+}
+
+#fireshutter-layer .fireshutter.opened g {
+  fill: v-bind(
+    'parseStringProp(ColorDefault.fireshutterOpened, props.fireshutterOpenedColor)'
+  );
+}
+#fireshutter-layer .fireshutter.closed g {
+  fill: v-bind(
+    'parseStringProp(ColorDefault.fireshutterClosed, props.fireshutterClosedColor)'
   );
 }
 /* Configurable Color End */

@@ -333,6 +333,8 @@
     "stationUnuse": "Station - unuse",
     "bufferNormal": "Buffer - normal",
     "bufferUnuse": "Buffer - unuse",
+    "fireshutterOpened": "Fireshutter - opened",
+    "fireshutterClosed": "Fireshutter - closed",
     "revert": "Revert",
     "selectResetItem": "Select items to reset",
     "resetToDefault": "Reset to default",

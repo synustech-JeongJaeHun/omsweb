@@ -333,6 +333,8 @@
     "stationUnuse": "스테이션 - 미사용",
     "bufferNormal": "Buffer - 일반",
     "bufferUnuse": "Buffer - 미사용",
+    "fireshutterOpened": "Fireshutter - 열림",
+    "fireshutterClosed": "Fireshutter - 닫힘",
     "revert": "되돌리기",
     "selectResetItem": "재설정할 항목 선택",
     "resetToDefault": "기본값으로 재설정",

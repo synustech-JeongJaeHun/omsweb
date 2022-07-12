@@ -56,6 +56,8 @@ const ColorDefault: Record<ColorProperty, string> = {
 	cargoLoading: 'rgb(0, 0, 205)',
 	cargoFull: 'rgb(50,50,50)',
 	cargoUnloading: 'blue',
+	fireshutterOpened: 'rgb(50, 145, 236)',
+	fireshutterClosed: '#F04907',
 }
 
 export {

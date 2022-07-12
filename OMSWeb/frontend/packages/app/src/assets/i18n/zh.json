@@ -333,6 +333,8 @@
     "stationUnuse": "站 - 禁用",
     "bufferNormal": "Buffer - 正常",
     "bufferUnuse": "Buffer - 禁用",
+    "fireshutterOpened": "Fireshutter - opened",
+    "fireshutterClosed": "Fireshutter - closed",
     "revert": "恢复",
     "selectResetItem": "选择要重置的项目",
     "resetToDefault": "重置为默认值",
