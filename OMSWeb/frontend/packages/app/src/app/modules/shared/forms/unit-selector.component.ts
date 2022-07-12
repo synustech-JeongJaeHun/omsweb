@@ -122,17 +122,12 @@ export class UnitSelectorComponent implements OnInit, OnChanges {
 				}
 
 				if (this.findScopes.includes('mtls')) {
-					console.log(
-						'non filtered result',
-						this.trackStatusService.trackData.mtls,
-					)
 					result.push(
 						...this.trackStatusService.trackData.mtls
 							.filter(
 								(m) => m.logicalId.includes(value) && m.inDirection !== 'R',
 							)
 							.map((m) => {
-								console.log('member', m)
 								return {
 									id: m.id,
 									objectType: 'Mtl',
@@ -144,13 +139,12 @@ export class UnitSelectorComponent implements OnInit, OnChanges {
 								}
 							}),
 					)
-					console.log('filtered result', result)
 				}
-
 				if (this.filterWords) {
 					const filtered = result.filter((unit) =>
 						this.filterWords.some((word) => unit.logicalId?.includes(word)),
 					)
+					console.log('filterd', filtered)
 					return of(filtered)
 				} else {
 					return of(result)
