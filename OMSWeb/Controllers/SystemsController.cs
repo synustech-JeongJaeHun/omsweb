@@ -92,8 +92,12 @@ namespace OMSWeb.Controllers
         [HttpGet(template: "zcus-with-fireshutter")]
         public int[] GetZcusWithFireshutter()
         {
-            var zcusWithFireshutterString = AppConfig.GetFromOMSConfig("Map", "zcu_with_fireshutter", "");
-            return zcusWithFireshutterString.Split(',').Select(s => int.Parse(s)).ToArray();
+            var zcusWithFireshutterString = AppConfig.GetFromOMSConfig("Map", "zcu_with_fireshutter", "") ?? "";
+            return zcusWithFireshutterString
+                .Split(',')
+                .Where(s => int.TryParse(s, out var i))
+                .Select(s => int.Parse(s))
+                .ToArray();
         }
 
         [HttpGet("logs/downloadFile/{fileName}")]
