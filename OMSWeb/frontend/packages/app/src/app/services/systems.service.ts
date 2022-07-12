@@ -37,6 +37,10 @@ export class SystemsService {
 		return this.http.get<ISettingMode>(`${this.baseUrl}/settings/mode`)
 	}
 
+  zcusWithFireshutter() {
+    return this.http.get<number[]>(`${this.baseUrl}/zcus-with-fireshutter`)
+  }
+
 	vehicles(): DataSource {
 		return new DataSource({
 			store: AspNetData.createStore({
