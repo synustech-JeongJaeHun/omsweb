@@ -3,18 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 using System.IO.Compression;
-using System.Threading.Tasks;
-using DevExtreme.AspNet.Data;
-using DevExtreme.AspNet.Mvc;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OMSWeb.Models;
+using OMSWeb.OMSSettings;
 using OMSWeb.Models.Entities;
 using OMSWeb.Services;
 using Newtonsoft.Json;
 using OMSWeb.Services.MqttClient;
 using System.Diagnostics;
-using OMSWeb.OMSSettings;
 using System.Threading;
 
 namespace OMSWeb.Controllers
@@ -91,6 +87,13 @@ namespace OMSWeb.Controllers
         public object GetLogs()
         {
             return this._systemSvc.GetLogs();
+        }
+
+        [HttpGet(template: "zcus-with-fireshutter")]
+        public int[] GetZcusWithFireshutter()
+        {
+            var zcusWithFireshutterString = AppConfig.GetFromOMSConfig("Map", "zcu_with_fireshutter", "");
+            return zcusWithFireshutterString.Split(',').Select(s => int.Parse(s)).ToArray();
         }
 
         [HttpGet("logs/downloadFile/{fileName}")]
