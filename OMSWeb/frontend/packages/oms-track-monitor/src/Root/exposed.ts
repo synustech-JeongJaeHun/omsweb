@@ -196,12 +196,12 @@ const exposed: IOmsTrackMonitor = {
 				if (mtl) {
 					setFocusedObject(mtl)
 				}
+				break;
 			case 'zcu':
 				const zcu = findZcuById(id)
 				if (zcu) {
 					setFocusedObject(zcu)
 				}
-
 				break
 			case 'fireshutter':
 				break

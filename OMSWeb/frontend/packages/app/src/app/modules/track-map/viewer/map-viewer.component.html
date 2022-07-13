@@ -329,6 +329,8 @@
 			<div class="value">{{ tooltipObject?.value.logicalId }}</div>
 			<div class="name">{{ 'names.group' | translate }}</div>
 			<div class="value">{{ tooltipObject?.value.groups.join(', ') }}</div>
+			<div class="name">{{ 'names.unuse' | translate }}</div>
+			<div class="value">{{ tooltipObject?.value.unuse ? 'T' : 'F' }}</div>
 		</div>
 	</dx-tooltip>
 </ng-template>
