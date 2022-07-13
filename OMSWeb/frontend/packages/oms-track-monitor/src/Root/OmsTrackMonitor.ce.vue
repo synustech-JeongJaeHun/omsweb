@@ -83,6 +83,8 @@ const props = defineProps<{
   cargoUnloadingColor: Stringlish
   fireshutterOpenedColor: Stringlish
   fireshutterClosedColor: Stringlish
+  mtlUnuseColor: Stringlish
+  mtlUseColor: Stringlish
 }>()
 const propRefs = toRefs(props)
 interface Emits extends RootEmits {}
@@ -306,7 +308,6 @@ defineExpose(exposed)
     'parseStringProp(ColorDefault.cargoUnloading, props.cargoUnloadingColor)'
   );
 }
-
 #fireshutter-layer .fireshutter.opened g {
   fill: v-bind(
     'parseStringProp(ColorDefault.fireshutterOpened, props.fireshutterOpenedColor)'
@@ -317,6 +318,17 @@ defineExpose(exposed)
     'parseStringProp(ColorDefault.fireshutterClosed, props.fireshutterClosedColor)'
   );
 }
+#mtl-layer .mtl[data-unuse='unuse' i] .mtl-path {
+  stroke: v-bind(
+    'parseStringProp(ColorDefault.mtlUnuse, props.mtlUnuseColor)'
+  );
+}
+#mtl-layer .mtl[data-unuse='use' i] .mtl-path {
+  stroke: v-bind(
+    'parseStringProp(ColorDefault.mtlUse, props.mtlUseColor)'
+  );
+}
+
 /* Configurable Color End */
 /* Configurable Visibility Start */
 #vehicle-layer .line {

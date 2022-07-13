@@ -336,6 +336,8 @@
     "bufferUnuse": "Buffer - unuse",
     "fireshutterOpened": "Fireshutter - opened",
     "fireshutterClosed": "Fireshutter - closed",
+    "mtlUnuse": "MTL - Unuse",
+    "mtlUse": "MTL - Use",
     "revert": "Revert",
     "selectResetItem": "Select items to reset",
     "resetToDefault": "Reset to default",

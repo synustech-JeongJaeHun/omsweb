@@ -22,5 +22,7 @@ namespace OMSWeb.Models
         public string? CargoUnloadingColor { get; set; }
         public string? FireshutterClosedColor { get; set; }
         public string? FireshutterOpenedColor { get; set; }
+        public string? MtlUnuseColor { get; set; }
+        public string? MtlUseColor { get; set; }
     }
 }
