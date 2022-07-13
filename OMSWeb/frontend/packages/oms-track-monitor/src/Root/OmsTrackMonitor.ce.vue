@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { makeFsProxy } from '../devOnly/utils/devMode'
 import { computed, provide, readonly, ref, toRefs, watch } from 'vue'
 import Map from 'src/MapObjects/map/components/Map.ce.vue'
 import Minimap from 'src/MapObjects/minimap/components/Minimap.ce.vue'
@@ -16,10 +15,9 @@ import { MapType } from './types/MapType'
 import {
   ColorDefault,
   ScaleDefault,
+  VisibleDefault,
   scaleStylesInfo,
-  visibleStylesInfo,
   updateScaleStyle,
-  updateVisibleStyle,
 } from '../styles/styles'
 import { Boolish, Numberlish, Stringlish } from './types/Prop'
 import {
@@ -63,6 +61,7 @@ const props = defineProps<{
   isGroupVisible: Boolish
   isClusterVisible: Boolish
   isFireshutterVisible: Boolish
+  isMtlVisible: Boolish
   // color
   backgroundColor: Stringlish
   stationColor: Stringlish
@@ -82,6 +81,8 @@ const props = defineProps<{
   cargoUnloadingColor: Stringlish
   fireshutterOpenedColor: Stringlish
   fireshutterClosedColor: Stringlish
+  mtlUnuseColor: Stringlish
+  mtlUseColor: Stringlish
 }>()
 const propRefs = toRefs(props)
 interface Emits extends RootEmits {}
@@ -127,40 +128,6 @@ watch(propRefs.bufferMargin, (n) => {
     'bufferMargin',
     parseNumberProp(ScaleDefault.bufferMargin, n)
   )
-})
-// visibility
-watch(propRefs.isMinimapVisible, (b) => {
-  updateVisibleStyle('minimap', parseBooleanProp(true, b))
-})
-watch(propRefs.isPointLabelVisible, (b) => {
-  updateVisibleStyle('pointLabel', parseBooleanProp(true, b))
-})
-watch(propRefs.isPointHomeVisible, (b) => {
-  updateVisibleStyle('pointHome', parseBooleanProp(true, b))
-})
-watch(propRefs.isStationVisible, (b) => {
-  updateVisibleStyle('station', parseBooleanProp(true, b))
-})
-watch(propRefs.isBufferVisible, (b) => {
-  updateVisibleStyle('buffer', parseBooleanProp(true, b))
-})
-watch(propRefs.isZcuVisible, (b) => {
-  updateVisibleStyle('zcu', parseBooleanProp(true, b))
-})
-watch(propRefs.isGroupVisible, (b) => {
-  updateVisibleStyle('group', parseBooleanProp(true, b))
-})
-watch(propRefs.isClusterVisible, (b) => {
-  updateVisibleStyle('cluster', parseBooleanProp(true, b))
-})
-watch(propRefs.isFireshutterVisible, (b) => {
-  updateVisibleStyle('fireshutter', parseBooleanProp(true, b))
-})
-watch(propRefs.isVehicleLineVisible, (b) => {
-  updateVisibleStyle('vehicleLine', parseBooleanProp(true, b))
-})
-watch(propRefs.isSegmentDirectionVisible, (b) => {
-  updateVisibleStyle('segmentDirection', parseBooleanProp(true, b))
 })
 const selfElement = ref<HTMLDivElement>()
 const shadowRoot = computed(
@@ -302,7 +269,6 @@ defineExpose(exposed)
     'parseStringProp(ColorDefault.cargoUnloading, props.cargoUnloadingColor)'
   );
 }
-
 #fireshutter-layer .fireshutter.opened g {
   fill: v-bind(
     'parseStringProp(ColorDefault.fireshutterOpened, props.fireshutterOpenedColor)'
@@ -313,47 +279,79 @@ defineExpose(exposed)
     'parseStringProp(ColorDefault.fireshutterClosed, props.fireshutterClosedColor)'
   );
 }
+#mtl-layer .mtl[data-unuse='unuse' i] .mtl-path {
+  stroke: v-bind(
+    'parseStringProp(ColorDefault.mtlUnuse, props.mtlUnuseColor)'
+  );
+}
+#mtl-layer .mtl[data-unuse='use' i] .mtl-path {
+  stroke: v-bind(
+    'parseStringProp(ColorDefault.mtlUse, props.mtlUseColor)'
+  );
+}
+
 /* Configurable Color End */
 /* Configurable Visibility Start */
 #vehicle-layer .line {
   visibility: v-bind(
-    "visibleStylesInfo.vehicleLine ? 'initial' : 'hidden'"
+    "parseBooleanProp(VisibleDefault.vehicleLine, props.isVehicleLineVisible) ? 'initial' : 'hidden'"
   );
 }
 #segment-layer .segment-direction,
 #disabled-segment-layer .segment-direction {
   visibility: v-bind(
-    "visibleStylesInfo.segmentDirection ? 'initial' : 'hidden'"
+    "parseBooleanProp(VisibleDefault.segmentDirection, props.isSegmentDirectionVisible) ? 'initial' : 'hidden'"
   );
 }
 #station-layer {
-  visibility: v-bind("visibleStylesInfo.station ? 'initial' : 'hidden'");
+  visibility: v-bind(
+    "parseBooleanProp(VisibleDefault.station, props.isStationVisible) ? 'initial' : 'hidden'"
+  );
 }
 #buffer-layer {
-  visibility: v-bind("visibleStylesInfo.buffer ? 'initial' : 'hidden'");
+  visibility: v-bind(
+    "parseBooleanProp(VisibleDefault.buffer, props.isBufferVisible) ? 'initial' : 'hidden'"
+  );
 }
 #zcu-layer {
-  visibility: v-bind("visibleStylesInfo.zcu ? 'initial' : 'hidden'");
+  visibility: v-bind(
+    "parseBooleanProp(VisibleDefault.zcu, props.isZcuVisible) ? 'initial' : 'hidden'"
+  );
 }
 #cluster-layer {
-  visibility: v-bind("visibleStylesInfo.cluster ? 'initial' : 'hidden'");
+  visibility: v-bind(
+    "parseBooleanProp(VisibleDefault.cluster, props.isClusterVisible) ? 'initial' : 'hidden'"
+  );
 }
 #fireshutter-layer {
-  visibility: v-bind("visibleStylesInfo.fireshutter ? 'initial' : 'hidden'");
+  visibility: v-bind(
+    "parseBooleanProp(VisibleDefault.fireshutter, props.isFireshutterVisible) ? 'initial' : 'hidden'"
+  );
+}
+#mtl-layer {
+  visibility: v-bind(
+    "parseBooleanProp(VisibleDefault.mtl, props.isMtlVisible) ? 'initial' : 'hidden'"
+  );
 }
 #minimap-container {
-  visibility: v-bind("visibleStylesInfo.minimap ? 'initial' : 'hidden'");
+  visibility: v-bind(
+    "parseBooleanProp(VisibleDefault.minimap, props.isMinimapVisible) ? 'initial' : 'hidden'"
+  );
 }
 #point-layer .label {
   visibility: v-bind(
-    "visibleStylesInfo.pointLabel ? 'initial' : 'hidden'"
+    "parseBooleanProp(VisibleDefault.pointLabel, props.isPointLabelVisible) ? 'initial' : 'hidden'"
   );
 }
 #point-layer .home {
-  visibility: v-bind("visibleStylesInfo.pointHome ? 'initial' : 'hidden'");
+  visibility: v-bind(
+    "parseBooleanProp(VisibleDefault.pointHome, props.isPointHomeVisible) ? 'initial' : 'hidden'"
+  );
 }
 .group-shadow {
-  visibility: v-bind("visibleStylesInfo.group ? 'initial' : 'hidden'");
+  visibility: v-bind(
+    "parseBooleanProp(VisibleDefault.group, props.isGroupVisible) ? 'initial' : 'hidden'"
+  );
 }
 /* Configurable Visibility End */
 /* Configurable Scale Start */

@@ -22,6 +22,7 @@
 		[isGroupVisible]="tmSetting.isGroupVisible"
 		[isClusterVisible]="tmSetting.isClusterVisible"
 		[isFireshutterVisible]="tmSetting.isFireshutterVisible"
+		[isMtlVisible]="tmSetting.isMtlVisible"
 		[isOverlappingObjectsVisible]="tmSetting.isOverlappingObjectsVisible"
 		[backgroundColor]="tmSetting.homeBackgroundColor"
 		[stationColor]="tmSetting.stationColor"
@@ -41,6 +42,8 @@
 		[cargoUnloadingColor]="tmSetting.cargoUnloadingColor"
 		[fireshutterOpenedColor]="tmSetting.fireshutterOpenedColor"
 		[fireshutterClosedColor]="tmSetting.fireshutterClosedColor"
+		[mtlUnuseColor]="tmSetting.mtlUnuseColor"
+		[mtlUseColor]="tmSetting.mtlUseColor"
 		(mouseoverOnObject)="onMouseoverTM($event)"
 		(mouseleaveOnObject)="onMouseleaveTM($event)"
 		(mainClickOnObject)="onFocus($event)"
@@ -633,7 +636,7 @@
 				{{ 'names.reset' | translate }}
 			</button>
 			<mat-button-toggle-group
-        *ngIf="isZcuWithFireshutter(contextMenuObject?.value.id) === false"
+				*ngIf="isZcuWithFireshutter(contextMenuObject?.value.id) === false"
 				#zcuTypeSelect="matButtonToggleGroup"
 				class="form-row-start"
 				name="type"

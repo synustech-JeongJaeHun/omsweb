@@ -9,6 +9,7 @@ type VisibleProperty =
 	| 'group'
 	| 'cluster'
 	| 'fireshutter'
+	| 'mtl'
 	| 'minimap'
 
 export { VisibleProperty }

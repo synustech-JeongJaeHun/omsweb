@@ -20,6 +20,7 @@ const group = useGroup('mtl', toRef(props.mtl, 'id'))
   <svg
     v-if="position"
     class="overflow-visible cursor-pointer mtl"
+    :data-unuse="props.mtl.unuse ? 'unuse' : 'use'"
     :x="position.x"
     :y="position.y"
   >
@@ -39,7 +40,7 @@ const group = useGroup('mtl', toRef(props.mtl, 'id'))
       />
       <use
         href="#mtl"
-        stroke="grey"
+        class="mtl-path"
         stroke-width="3"
         :data-id="props.mtl.id"
         @click.left="handleLeftClick"

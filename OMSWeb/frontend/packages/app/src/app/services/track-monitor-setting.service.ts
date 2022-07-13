@@ -22,6 +22,7 @@ type VisibilityChangedEvent = {
 		| 'isGroupVisible'
 		| 'isClusterVisible'
 		| 'isFireshutterVisible'
+		| 'isMtlVisible'
 		| 'isOverlappingObjectsVisible'
 	value: boolean
 }
@@ -45,6 +46,8 @@ type ColorChangedEvent = {
 		| 'cargoUnloadingColor'
 		| 'fireshutterOpenedColor'
 		| 'fireshutterClosedColor'
+		| 'mtlUnuseColor'
+		| 'mtlUseColor'
 	value: string
 }
 type ScaleChangedEvent = {
@@ -106,6 +109,7 @@ const DefaultTrackMonitorSetting: TrackMonitorSetting = {
 	isGroupVisible: true,
 	isClusterVisible: true,
 	isFireshutterVisible: true,
+	isMtlVisible: true,
 	isOverlappingObjectsVisible: true,
 
 	// color
@@ -127,6 +131,8 @@ const DefaultTrackMonitorSetting: TrackMonitorSetting = {
 	cargoUnloadingColor: 'rgba(128, 0, 128, 1)',
   fireshutterClosedColor: '#F04907',
   fireshutterOpenedColor: 'rgb(50, 145, 236)',
+  mtlUnuseColor: '#f98080',
+  mtlUseColor: 'grey',
 }
 
 @Injectable({
