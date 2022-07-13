@@ -1,4 +1,4 @@
-import { CanBeFocused } from "src/MapObjects/focus/types/CanBeFocused"
+import { CanBeFocused } from 'src/MapObjects/focus/types/CanBeFocused'
 
 type Mtl = {
   id: number
@@ -7,8 +7,8 @@ type Mtl = {
   pointId: number
 
   // nullable
+  unuse?: boolean
   group?: number
-  inUse?: boolean
   position?: any
   mode?: any
   errorList?: any
