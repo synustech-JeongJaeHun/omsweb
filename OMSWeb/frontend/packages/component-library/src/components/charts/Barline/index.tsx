@@ -83,7 +83,7 @@ const getOptions = ({
 			// zoomType: 'xy',
 			height,
 			marginBottom: isH ? 77 : undefined,
-			animation: false
+			animation: false,
 		},
 		title: {
 			text: null,
@@ -108,12 +108,12 @@ const getOptions = ({
 			},
 		],
 		lang: {
-			noData: '데이타가 없습니다',
+			noData: 'no data',
 		},
 		yAxis,
 		tooltip: {
 			shared: true,
-			enabled: true
+			enabled: true,
 		},
 		legend: {
 			enabled: false,
@@ -135,8 +135,8 @@ const getOptions = ({
 				},
 			},
 			series: {
-				animation: false
-			}
+				animation: false,
+			},
 		},
 		series,
 	}
@@ -205,7 +205,7 @@ Barline.defaultProps = {
 	isH: false,
 	onClick: () => {},
 	variant: '',
-	isPlaceholder: false
+	isPlaceholder: false,
 }
 
 interface Props {

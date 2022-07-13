@@ -14,13 +14,13 @@ import RCol from '../../layout/RCol'
 import Col from '../../layout/Col'
 import StackedBarTableV from '../../chart-set/StackedBarTableV'
 import StackedBarTableH from '../../chart-set/StackedBarTableH'
-import { Props as DatePickerProps } from '../../DatePicker'
-import TitleSet from '../TitleSet'
+import TitleSet, { Props as TitleSetProps } from '../TitleSet'
 import { exData, exEmptyData } from './exData'
 import { QueryContext } from '../../../context'
 import ContentPaneBody from '../../ContentPaneBody'
 import Scrollable from '../../Scrollable'
 import getConfig from './getConfig'
+import MultipleSelectSet from '../MultipleSelectSet'
 
 type StyleType = {}
 
@@ -34,14 +34,24 @@ const Wrapper = styled.div`
 	}
 `
 
+const getColors = (legends) => {
+	return legends.reduce((acc, legend) => {
+		const { id, color } = legend
+		acc[id] = color
+		return acc
+	}, {})
+}
+
 const OverviewAbnormal: React.FC<Props> & any = ({
 	stats,
 	data,
 	onDateChange,
+	onClickConfig,
 	isStatPlaceholder,
 	isChartPlaceholder,
 	startDay,
 	endDay,
+	colors,
 }: Props) => {
 	return (
 		<ContentPaneBody>
@@ -56,6 +66,7 @@ const OverviewAbnormal: React.FC<Props> & any = ({
 								startDay={startDay}
 								endDay={endDay}
 								onDateChange={onDateChange}
+								onClickConfig={onClickConfig}
 							/>
 							<div className="chart-container">
 								<Container gutter={20}>
@@ -63,6 +74,7 @@ const OverviewAbnormal: React.FC<Props> & any = ({
 										<StackedBarTableV
 											{...getConfig('duration', data.duration)}
 											isPlaceholder={isChartPlaceholder}
+											colors={colors}
 										/>
 									</RCol>
 									<RCol col={6} sm={12} md={6} lg={6}>
@@ -71,18 +83,21 @@ const OverviewAbnormal: React.FC<Props> & any = ({
 												<StackedBarTableH
 													{...getConfig('vehicle', data.vehicle)}
 													isPlaceholder={isChartPlaceholder}
+													colors={colors}
 												/>
 											</RCol>
 											<RCol col={12} sm={12} md={12} lg={12}>
 												<StackedBarTableH
 													{...getConfig('source', data.source)}
 													isPlaceholder={isChartPlaceholder}
+													colors={colors}
 												/>
 											</RCol>
 											<RCol col={12} sm={12} md={12} lg={12}>
 												<StackedBarTableH
 													{...getConfig('dest', data.dest)}
 													isPlaceholder={isChartPlaceholder}
+													colors={colors}
 												/>
 											</RCol>
 										</Container>
@@ -109,14 +124,26 @@ OverviewAbnormal.defaultProps = {
 	startDay: bdFormat(1),
 	endDay: bdFormat(0),
 	onDateChange: (values) => {},
+	onClickConfig: (values) => {},
+	colors: getColors(MultipleSelectSet.defaultState.legends),
 }
 
-interface Props extends DatePickerProps {
+interface Props
+	extends Pick<
+		TitleSetProps,
+		| 'startDay'
+		| 'endDay'
+		| 'onDateChange'
+		| 'onClickConfig'
+		| 'beforeRangeValue'
+		| 'beforeRangeUnit'
+	> {
 	stats?: any
 	data?: any
 	isStatPlaceholder?: boolean
 	isChartPlaceholder?: boolean
 	onDateChange?: (any) => void
+	colors?: string[]
 }
 
 export default OverviewAbnormal

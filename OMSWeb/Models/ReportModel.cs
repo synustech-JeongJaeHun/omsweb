@@ -4,11 +4,18 @@ namespace OMSWeb.Models
     {
         public string Id { get; set; }
         public string Label { get; set; }
+        public string Section { get; set; }
     }
 
     public class ReportRequestStats
     {
         public string Variant { get; set; }
+                // '2022-03-15' 시작일
+        public string Start { get; set; }
+        // '2022-03-16' 종료일
+        public string End { get; set; }
+        public object Subfilter { get; set; }
+        public string[] BlacklistIds { get; set; }
     }
 
     public class ReportRequestCharts
@@ -23,5 +30,7 @@ namespace OMSWeb.Models
         public string Start { get; set; }
         // '2022-03-16' 종료일
         public string End { get; set; }
+
+        public object Subfilter { get; set; }
     }
 }

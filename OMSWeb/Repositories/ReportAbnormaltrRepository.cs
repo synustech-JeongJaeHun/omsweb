@@ -19,9 +19,10 @@ namespace OMSWeb.Repositories
     {
         public ReportAbnormaltrRepository(IConfiguration configuration) : base(configuration) { }
 
-        public async Task<object> QueryStatsAggregatedByTotalTimeSpan(string start, string end)
+        public async Task<object> QueryStatsAggregatedByTotalTimeSpan(string start, string end, object subfilter, string[] blacklistIds)
         {
-            (int Days, int Weeks, int Months, int Hours, int Daily, int Weekly, int Monthly, int Ph, int Yearly, int Total) result;
+            
+            (int Days, int Weeks, int Months, int Hours, int Daily, int Weekly, int Monthly, decimal Ph, int Yearly, int Total) result;
             using (var conn = ConnectTrack())
             {
                 var sql = $@"
@@ -44,10 +45,10 @@ namespace OMSWeb.Repositories
                         END::int AS monthly,
                         CASE
                             WHEN hours = 0 THEN total
-                            ELSE total / hours
-                        END::int AS ph,
+                            ELSE trunc(total/hours::decimal, 2)
+                        END AS ph,
                         total::int as yearly,
-                    total::int
+                        total::int
                     FROM
                     (
                         SELECT
@@ -56,18 +57,18 @@ namespace OMSWeb.Repositories
                         DATE_PART('month', AGE(last, first)) AS months,
                         (EXTRACT(EPOCH FROM last - first)/3600)::int AS hours,
                         (
-                            SELECT
-                                count(*)
-                            FROM (
-                                select distinct on (logical_id) * from 
-                                (
-                                    select * from orders
-                                    union 
-                                    select * from order_completed oc
-                                ) temp
-                            ) oh 
-                            WHERE time_aborted IS NOT NULL or time_failed is not null
-                                AND time_modified::DATE BETWEEN '{start}' AND '{end}'
+                            select count(*) from (
+                                SELECT
+                                    id
+                                FROM order_completed
+                                WHERE (time_aborted IS NOT NULL or time_failed is not null)
+                                    AND time_modified::DATE BETWEEN '{start}' AND '{end}' {GetSubfilter(subfilter)}
+                                except
+                                select 
+                                    id
+                                from order_completed
+                                where id in (null) {GetBlacklist(blacklistIds)}
+                            ) temp
                         ) AS total
                         FROM
                         (
@@ -75,14 +76,7 @@ namespace OMSWeb.Repositories
                             (
                                 SELECT
                                 time_modified
-                                FROM (
-                                    select distinct on (logical_id) * from 
-                                    (
-                                        select * from orders
-                                        union 
-                                        select * from order_completed oc
-                                    ) temp
-                                ) oh
+                                FROM order_completed
                                 WHERE time_modified::DATE BETWEEN '{start}' AND '{end}'
                                 ORDER BY time_modified ASC
                                 LIMIT 1
@@ -90,14 +84,7 @@ namespace OMSWeb.Repositories
                             (
                                 SELECT
                                 time_modified
-                                FROM (
-                                    select distinct on (logical_id) * from 
-                                    (
-                                        select * from orders
-                                        union 
-                                        select * from order_completed oc
-                                    ) temp
-                                ) oh
+                                FROM order_completed
                                 WHERE time_modified::DATE BETWEEN '{start}' AND '{end}'
                                 ORDER BY time_modified DESC
                                 LIMIT 1
@@ -106,7 +93,7 @@ namespace OMSWeb.Repositories
                     ) AS base
                 ";
 
-                result = await conn.QueryFirstAsync<(int Days, int Weeks, int Months, int Hours, int Daily, int Weekly, int Monthly, int Ph, int Yearly, int Total)>(sql);
+                result = await conn.QueryFirstAsync<(int Days, int Weeks, int Months, int Hours, int Daily, int Weekly, int Monthly, decimal Ph, int Yearly, int Total)>(sql);
             }
             return new
             {
@@ -146,7 +133,7 @@ namespace OMSWeb.Repositories
                 }
             };
 
-        public Func<string, string, Task<dynamic[]>> BuildQueryDuration(string section, string start, string end)
+        public Func<string, string, Task<dynamic[]>> BuildQueryDuration(string section, string start, string end, object subfilter)
            => async (subsection, value) =>
            {
                async Task<dynamic[]> getDurationByDay(string? subsection, string value, string startStr, string endStr)
@@ -164,13 +151,8 @@ namespace OMSWeb.Repositories
                                     0 as source,
                                     count(*)::int as abort,
                                     0 as cancel
-                                FROM (
-                                    select distinct on (logical_id) * from 
-                                    (
-                                        select * from orders
-                                        union 
-                                        select * from order_completed oc
-                                    ) temp
+                                FROM order_completed
+                                where id is not null {GetSubfilter(subfilter)}
                                 ) oh
                                 WHERE (
                                     time_aborted is not null and time_aborted::DATE BETWEEN days AND days
@@ -196,35 +178,38 @@ namespace OMSWeb.Repositories
                        return $@"
                             with recursive cte as (
                                 select *
-                                from (
-                                    select distinct on (logical_id) * from 
-                                    (
-                                        select * from orders
-                                        union 
-                                        select * from order_completed oc
-                                    ) temp
-                                ) oh
-                                where (
+                                FROM order_completed
+                                where ((
                                     time_aborted is not null and time_aborted::DATE BETWEEN '{startStr}' AND '{endStr}'
                                 ) or (
                                     time_failed is not null and time_failed::DATE BETWEEN '{startStr}' AND '{endStr}'
-                                )
+                                )) {GetSubfilter(subfilter)}
                             )
                             select 
                                 '{label}' as label,
                                 count(*)::int as failureamount,
+                                0 as id_mismatch,
+                                0 as id_read_fail,
+                                0 as id_duplicate,
                                 (
-                                    select count(*) from cte where time_failed is not null and err_port_pos = 'S'
-                                )::int as source,
+                                    select count(*) from cte where time_failed is not null and err_result_code = 'SourceInterlockError'
+                                )::int as source_pio_timeout,
                                 (
-                                    select count(*) from cte where time_failed is not null and err_port_pos = 'D'
-                                )::int as dest,
+                                    select count(*) from cte where time_failed is not null and err_result_code = 'DestInterlockError'
+                                )::int as dest_pio_timeout,
+                                (
+                                    select count(*) from cte where time_failed is not null and err_result_code = 'SourceEmptyError'
+                                )::int as source_empty,
+                                (
+                                    select count(*) from cte where time_failed is not null and err_result_code = 'DoubleStorage'
+                                )::int as double_storage,
                                 (
                                     select count(*) from cte where time_aborted is not null and abort_type = 'A'
                                 )::int as abort,
                                 (
                                     select count(*) from cte where time_aborted is not null and abort_type = 'C'
-                                )::int as cancel
+                                )::int as cancel,
+                                0 as vehicle_error
                             from cte
                         ";
                    }
@@ -249,7 +234,7 @@ namespace OMSWeb.Repositories
                return await getDurationByMonth(subsection, value);
            };
 
-        public async Task<dynamic[]> QuerySections(string section, string selectedItem, string start, string end)
+        public async Task<dynamic[]> QuerySections(string section, string selectedItem, string start, string end, object subfilter)
         {
             var filter = GetFilter(section, start, end);
             var sectionList = GetSubsection(section);
@@ -262,19 +247,12 @@ namespace OMSWeb.Repositories
                     var sql = $@"
                         with recursive cte as (
                             select *
-                            from (
-                                select distinct on (logical_id) * from 
-                                (
-                                    select * from orders
-                                    union 
-                                    select * from order_completed oc
-                                ) temp
-                            ) oh
-                            where (
+                            from order_completed
+                            where ((
                                 time_aborted is not null and time_aborted::DATE BETWEEN '{start}' AND '{end}'
                             ) or (
                                 time_failed is not null and time_failed::DATE BETWEEN '{start}' AND '{end}'
-                            )
+                            )) {GetSubfilter(subfilter)}
                         )
                         select * 
                         from (                        
@@ -283,18 +261,28 @@ namespace OMSWeb.Repositories
                                 (
                                     select count(*) from cte where {GetColumnFromDic(key)} = t.name
                                 )::int as failureamount,
+                                0 as id_mismatch,
+                                0 as id_read_fail,
+                                0 as id_duplicate,
                                 (
-                                    select count(*) from cte where time_failed is not null and err_port_pos = 'S' and {GetColumnFromDic(key)} = t.name
-                                )::int as source,
+                                    select count(*) from cte where time_failed is not null and err_result_code = 'SourceInterlockError' and {GetColumnFromDic(key)} = t.name
+                                )::int as source_pio_timeout,
                                 (
-                                    select count(*) from cte where time_failed is not null and err_port_pos = 'D' and {GetColumnFromDic(key)} = t.name
-                                )::int as dest,
+                                    select count(*) from cte where time_failed is not null and err_result_code = 'DestInterlockError' and {GetColumnFromDic(key)} = t.name
+                                )::int as dest_pio_timeout,
+                                (
+                                    select count(*) from cte where time_failed is not null and err_result_code = 'SourceEmptyError' and {GetColumnFromDic(key)} = t.name
+                                )::int as source_empty,
+                                (
+                                    select count(*) from cte where time_failed is not null and err_result_code = 'DoubleStorage' and {GetColumnFromDic(key)} = t.name
+                                )::int as double_storage,
                                 (
                                     select count(*) from cte where time_aborted is not null and abort_type = 'A' and {GetColumnFromDic(key)} = t.name
                                 )::int as abort,
                                 (
                                     select count(*) from cte where time_aborted is not null and abort_type = 'C' and {GetColumnFromDic(key)} = t.name
-                                )::int as cancel
+                                )::int as cancel,
+                                0 as vehice_error
                             FROM (
                                 select {GetColumnFromDic(key)} AS name, {GetName(key)} as label
                                 from cte
@@ -311,6 +299,59 @@ namespace OMSWeb.Repositories
 
             var queryTaskList = sectionList.Select(async (key) => await Query(key, section, selectedItem));
             return await Task.WhenAll(queryTaskList);
+        }
+
+        private string GetSubfilter(dynamic subfilter) {
+            string GetString(string section) {
+                var item = subfilter.GetValue(section);
+                var count = item.Count;
+                string value = item.ToString();
+                string cleanedValue = value.Replace(System.Environment.NewLine, String.Empty);
+                string arr = section != "vehicle" ? cleanedValue.Replace("\"", "'") : cleanedValue;
+                return count == 0 ? "is null": $@"= any (array{arr})";
+            };
+
+            if ( subfilter == null )
+            {
+                return "";
+            } else {
+                var sql = $@" and (vehicle_id {GetString("vehicle")} or vehicle_id is null)
+                and (location_pickup {GetString("source")} or location_pickup is null)
+                and (location_dropoff {GetString("dest")} or location_dropoff is null)";
+                return sql;
+            }
+        }
+
+        private string GetBlacklist(string[] blacklistIds) {
+            return blacklistIds.Aggregate("", (acc, item) => {
+                string temp = "";
+
+                switch (item) {
+                    case "source_pio_timeout":
+                    temp += " or err_result_code = 'SourceInterlockError'";
+                    break;
+                    case "dest_pio_timeout":
+                    temp += " or err_result_code = 'DestInterlockError'";
+                    break;
+                    case "abort":
+                    temp += " or abort_type = 'A'";
+                    break;
+                    case "cancel":
+                    temp += " or abort_type = 'C'";
+                    break;
+                    case "source_empty":
+                    temp += " or err_result_code = 'SourceEmptyError'";
+                    break;
+                    case "double_storage":
+                    temp += " or err_result_code = 'DoubleStorage'";
+                    break;
+                    default:
+                    temp += "";
+                    break;
+                }
+
+                return acc + temp;
+            });
         }
     }
 }

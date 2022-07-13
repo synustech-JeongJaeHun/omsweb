@@ -13,7 +13,7 @@ namespace OMSWeb.Repositories
             "source" => "location_pickup",
             "dest" => "location_dropoff",
             "alarm" => "error_code",
-            "segment" => "current",
+            "point" => "current",
             _ => null
         };
 
@@ -23,7 +23,7 @@ namespace OMSWeb.Repositories
             "source" => "source",
             "dest" => "dest",
             "alarm" => "alarm",
-            "segment" => "segment",
+            "point" => "point",
             _ => null
         };
 
@@ -90,18 +90,6 @@ namespace OMSWeb.Repositories
                 return new[] { makeDateForms(firstMon), makeDateForms(endMon) };
             }
 
-            if (sameMonth)
-            {
-                return new[] { makeDateForms(new[] { start, end }) };
-            }
-
-            if (monthDiff < 2)
-            {
-                var firstMon = new[] { start, EndOfMonth(start) };
-                var endMon = new[] { StartOfMonth(end), end };
-                return new[] { makeDateForms(firstMon), makeDateForms(endMon) };
-            }
-
             // 2개월 이상 차이 나는 경우
             var mList = Enumerable.Range(start.Month + 1, monthDiff)
                 .Select(m => (start.Month + m) % 12 + 1)
@@ -114,7 +102,7 @@ namespace OMSWeb.Repositories
                 }
                 else if (idx == mList.Length - 1)
                 {
-                    return makeDateForms(new[] { EndOfMonth(end), end });
+                    return makeDateForms(new[] { StartOfMonth(end), end });
                 }
                 else
                 {
@@ -130,7 +118,8 @@ namespace OMSWeb.Repositories
             var start = DateTime.Parse(arr[0]);
             var end = DateTime.Parse(arr[1]);
 
-            var month = start.ToString("M월");
+            System.Globalization.CultureInfo culture = new System.Globalization.CultureInfo("en-US");
+            var month = start.ToString("MMM", culture);
             var startDay = start.Day.ToString();
             var endDay = end.Day.ToString();
             var isSameStart = StartOfMonth(start).Day == start.Day;

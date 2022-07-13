@@ -30,34 +30,34 @@ const stats = (data) => {
 	const totalconv = {
 		variant: 'simple',
 		data: {
-			title: '총 실패량',
+			title: 'Total Abnormal TR',
 			value: numberWithCommas(total),
-			unit: '개',
+			unit: 'ea',
 		},
 	}
 
 	const convByDuration = {
 		variant: 'detail',
 		data: {
-			title: '기간별 평균 실패량',
-			subLabel: '시간당',
+			title: 'Avg Abnormal TR by Duration',
+			subLabel: 'per hour',
 			value: avg.ph,
-			unit: '개',
+			unit: 'ea',
 			details: [
 				{
-					label: '연간',
+					label: 'yearly',
 					value: numberWithCommas(avg.yearly),
 				},
 				{
-					label: '월별',
+					label: 'monthly',
 					value: numberWithCommas(avg.monthly),
 				},
 				{
-					label: '주간',
+					label: 'weekly',
 					value: numberWithCommas(avg.weekly),
 				},
 				{
-					label: '일별',
+					label: 'daily',
 					value: numberWithCommas(avg.daily),
 				},
 			],

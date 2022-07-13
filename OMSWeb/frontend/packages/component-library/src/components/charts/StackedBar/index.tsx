@@ -17,17 +17,20 @@ type StyleType = {}
 
 const Wrapper = styled.div``
 
-const colors = [
-	'#4C73C3',
-	'#E27E3C',
-	'#A4A5A7',
-	'#F7C02D',
-	'#669CD5',
-	'#78AC4E',
-	'#2B4578',
-]
+const defaultColors = {
+	id_mismatch: '#4C73C3',
+	id_read_fail: '#E27E3C',
+	id_duplicate: '#A4A5A7',
+	source_pio_timeout: '#F7C02D',
+	dest_pio_timeout: '#669CD5',
+	soruce_empty: '#78AC4E',
+	double_storage: '#2B4578',
+	abort: '#fff',
+	cancel: '#fff',
+	vehicle_error: '#fff',
+}
 
-const getList = (data, limit) => {
+const getList = (data, limit, colors) => {
 	let { header: theader, body: tbody } = data
 	tbody = limit !== null ? R.take(limit, tbody) : tbody
 	const keys = R.pluck<string, any>('dataField', theader)
@@ -49,9 +52,9 @@ const getList = (data, limit) => {
 				animation: false,
 				data: data.map((v, idx) => ({
 					y: v,
-					color: colors[i],
+					color: colors[y],
 				})),
-				legendColor: colors[i],
+				color: colors[y],
 			})
 
 			return acc
@@ -64,8 +67,15 @@ const getList = (data, limit) => {
 	return { ...otherList, categories, xKey, tbody }
 }
 
-const getOptions = ({ height, data, rotation, limit = null, showLegend }) => {
-	const { categories, series, tbody, xKey } = getList(data, limit)
+const getOptions = ({
+	height,
+	data,
+	rotation,
+	limit = null,
+	showLegend,
+	colors,
+}) => {
+	const { categories, series, tbody, xKey } = getList(data, limit, colors)
 
 	return {
 		chart: {
@@ -75,7 +85,6 @@ const getOptions = ({ height, data, rotation, limit = null, showLegend }) => {
 			marginBottom: showLegend ? 75 : 74,
 			animation: true,
 		},
-		colors,
 		title: {
 			text: null,
 		},
@@ -97,7 +106,7 @@ const getOptions = ({ height, data, rotation, limit = null, showLegend }) => {
 			visible: true,
 		},
 		lang: {
-			noData: '데이타가 없습니다',
+			noData: 'no data',
 		},
 		yAxis: {
 			min: 0,
@@ -143,6 +152,7 @@ const StackedBar: React.FC<Props> = ({
 	showLegend,
 	labelRotation,
 	isPlaceholder,
+	colors,
 }: Props) => {
 	const ref = React.useRef<any>()
 	const [placeholderOpt, updatePlaceholderState] = usePlaceholderData({
@@ -167,6 +177,7 @@ const StackedBar: React.FC<Props> = ({
 				limit,
 				showLegend,
 				rotation: labelRotation,
+				colors,
 		  })
 
 	return (
@@ -186,9 +197,10 @@ StackedBar.defaultProps = {
 		body: [],
 	},
 	isPlaceholder: false,
+	colors: defaultColors,
 }
 
-interface Props {
+export interface Props {
 	height?: number | string
 	labelRotation?: number
 	showLegend?: boolean
@@ -198,6 +210,7 @@ interface Props {
 		body: any[]
 	}
 	isPlaceholder?: boolean
+	colors?: any
 }
 
 export default StackedBar

@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Npgsql;
 using OMSWeb.Models;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 
 using static OMSWeb.Services.ReportServiceShared;
@@ -27,7 +28,7 @@ namespace OMSWeb.Repositories
                 0
             )";
 
-        public async Task<(int Min, int Max, int Devn, int Avg, int Total)> QueryOrdersStatsAggregatedByTotalTimeSpan(string start, string end)
+        public async Task<(int Min, int Max, int Devn, int Avg, int Total)> QueryOrdersStatsAggregatedByTotalTimeSpan(string start, string end, object subfilter)
         {
             (int Min, int Max, int Devn, int Avg, int Total) result;
             using (var conn = ConnectTrack())
@@ -42,96 +43,50 @@ namespace OMSWeb.Repositories
                     FROM (
                         SELECT
                             time_completed - time_created as calctime
-                        FROM order_history
+                        from order_completed
                         WHERE time_completed IS NOT NULL
-                            AND time_completed::DATE BETWEEN '{start}' AND '{end}'
+                            AND time_completed::DATE BETWEEN '{start}' AND '{end}' {GetSubfilter(subfilter)}
                     ) AS a
                 ";
-
                 result = await conn.QueryFirstAsync<(int Min, int Max, int Devn, int Avg, int Total)>(sql);
             }
             return result;
         }
-        public async Task<(int Days, int Weeks, int Months, int Hours, int Daily, int Weekly, int Monthly, int Ph, int Yearly)> QueryOrdersStatsAggregatedByEachTimeSpans(string start, string end)
+        public async Task<(float Hours, float Daily, float Weekly, float Monthly, float Ph, float Yearly)> QueryOrdersStatsAggregatedByEachTimeSpans(string start, string end, object subfilter)
         {
-            (int Days, int Weeks, int Months, int Hours,
-                int Daily, int Weekly, int Monthly, int Ph, int Yearly) result;
+            (float Hours, float Daily, float Weekly, float Monthly, float Ph, float Yearly) result;
 
             using (var conn = ConnectTrack())
             {
                 var sql = $@"
-                	SELECT
-                        days,
-                        weeks,
-                        months,
-                        hours,
-                        CASE
-                            WHEN days = 0 THEN total
-                            ELSE total / days
-                        END::int AS daily,
-                        CASE
-                            WHEN weeks = 0 THEN total
-                            ELSE total / weeks
-                        END::int AS weekly,
-                        CASE
-                            WHEN months = 0 THEN total
-                            ELSE total / months
-                        END::int AS monthly,
-                        CASE
-                            WHEN hours = 0 THEN total
-                            ELSE total / hours
-                        END::int AS ph,
-                        total::int as yearly
-                        FROM
-                        (
-                            SELECT
-                            (EXTRACT(days FROM last - first))::int AS days,
-                            (Ceil(EXTRACT(days FROM last - first) / 7))::int AS weeks,
-                            DATE_PART('month', AGE(last, first)) AS months,
-                            (EXTRACT(EPOCH FROM last - first)/3600)::int AS hours,
-                            (
-                                SELECT
-                                    count(*)
-                                FROM order_history oh
-                                WHERE time_completed IS NOT NULL
-                                    AND time_completed::DATE BETWEEN '{start}' AND '{end}'
-                            ) AS total
-                            FROM
-                            (
-                                SELECT
-                                (
-                                    SELECT
-                                    time_completed
-                                    FROM order_history
-                                    WHERE time_completed IS NOT NULL
-                                    AND time_completed::DATE BETWEEN '{start}' AND '{end}'
-                                    ORDER BY time_completed ASC
-                                    LIMIT 1
-                                ) AS first,
-                                (
-                                    SELECT
-                                    time_completed
-                                    FROM order_history
-                                    WHERE time_completed IS NOT NULL
-                                    AND time_completed::DATE BETWEEN '{start}' AND '{end}'
-                                    ORDER BY time_completed DESC
-                                    LIMIT 1
-                                ) AS last
-                            ) AS temp
-                        ) AS base
+                    select 
+                        hourly as hours,
+                        trunc(hourly * 24, 2) as daily,
+                        trunc(hourly * 24 * 7, 2) as weekly,
+                        trunc(hourly * 24 * 30, 2) as monthly,
+                        hourly as ph,
+                        trunc(hourly * 24 * 365, 2) as yearly
+                    from (
+                        select 
+                        trunc(count(*) / (extract( EPOCH from ('{end}'::timestamp - '{start}'::timestamp))/3600), 2) as hourly
+                        from order_completed
+                        where time_completed is not null and
+                        time_completed::date between '{start}' and '{end}' {GetSubfilter(subfilter)}
+                    ) temp
                 ";
 
-                result = await conn.QueryFirstAsync<(int Days, int Weeks, int Months, int Hours, int Daily, int Weekly, int Monthly, int Ph, int Yearly)>(sql);
+                result = await conn.QueryFirstAsync<(float Hours, float Daily, float Weekly, float Monthly, float Ph, float Yearly)>(sql);
             }
             return result;
         }
 
-        public Func<string, string, Task<dynamic[]>> BuildQueryDuration(string section, string start, string end)
+        public Func<string, string, Task<dynamic[]>> BuildQueryDuration(string section, string start, string end, object subfilter)
             => async (subsection, value) =>
             {
                 async Task<dynamic[]> getDurationByDay(string? subsection, string value, string startStr, string endStr)
                 {
                     dynamic[] result;
+
                     using (var conn = ConnectTrack())
                     {
                         var sql = $@"
@@ -140,19 +95,13 @@ namespace OMSWeb.Repositories
                                 (
                                     SELECT
                                     {_avgEpochPerHour}
-                                    FROM order_history oh
-                                    WHERE
-                                        time_completed is not null and
-                                        time_completed::DATE BETWEEN days AND days
-                                        {SubFilter(subsection, value)}
+                                    from order_completed
+                                    WHERE time_completed is not null and time_completed::DATE BETWEEN days AND days {SubFilter(subsection, value)} {GetSubfilter(subfilter)}
                                 ) AS avg,
                                 (
                                     SELECT count(*)
-                                    FROM order_history oh
-                                    WHERE
-                                        time_completed is not null and
-					                    time_completed::DATE BETWEEN days AND days
-                                        {SubFilter(subsection, value)}
+                                    from order_completed
+                                    WHERE time_completed is not null and time_completed::DATE BETWEEN days AND days {SubFilter(subsection, value)} {GetSubfilter(subfilter)}
                                 )::int
                                 FROM GENERATE_SERIES('{startStr}'::DATE, '{endStr}'::DATE, '1 days') days
                                 ";
@@ -177,19 +126,22 @@ namespace OMSWeb.Repositories
                             {_avgEpochPerHour} as avg,
                             '{startStr}' as start_day,
                             '{endStr}' as end_day
-                            from order_history
-                            where time_completed is not null and {_filter(subsection, value)}
+                            from order_completed
+                            where time_completed is not null and {_filter(subsection, value)} {GetSubfilter(subfilter)}
                         ";
                     }
 
                     var queryTaskList = durationList.Select(async (startEnd) =>
                     {
                         using var conn = ConnectTrack();
-                        return await conn.QueryFirstAsync(queryStr(startEnd));
+                        var ret = queryStr(startEnd);
+                        return await conn.QueryFirstAsync(ret);
                     });
+
 
                     return (await Task.WhenAll(queryTaskList)).ToArray();
                 }
+
 
                 if (section == "duration")
                 {
@@ -202,7 +154,7 @@ namespace OMSWeb.Repositories
                 return await getDurationByMonth(subsection, value);
             };
 
-        public async Task<dynamic[]> QuerySections(string section, string selectedItem, string start, string end)
+        public async Task<dynamic[]> QuerySections(string section, string selectedItem, string start, string end, object subfilter)
         {
             var filter = GetFilter(section, start, end);
             var sectionList = GetSubsection(section);
@@ -218,8 +170,8 @@ namespace OMSWeb.Repositories
                         {GetName(key)} as label,
                         COUNT(*)::int AS count,
                         {_avgEpochPerHour} as avg
-                        FROM order_history
-			            WHERE time_completed is not null and {filter(subsection, value)}
+                        from order_completed
+			            WHERE time_completed is not null and {filter(subsection, value)} {GetSubfilter(subfilter)}
                         GROUP BY {GetColumnFromDic(key)}
                         ORDER BY label asc
                     ";
@@ -249,6 +201,27 @@ namespace OMSWeb.Repositories
                         return $"time_completed::DATE BETWEEN '{start}' AND '{end}'{SubFilter(key, value)}";
                 }
             };
+
+        private string GetSubfilter(dynamic subfilter) {
+            string GetString(string section) {
+                var item = subfilter.GetValue(section);
+                var count = item.Count;
+                string value = item.ToString();
+                string cleanedValue = value.Replace(System.Environment.NewLine, String.Empty);
+                string arr = section != "vehicle" ? cleanedValue.Replace("\"", "'") : cleanedValue;
+                return count == 0 ? "in (null)": $@"= any (array{arr})";
+            };
+
+            if ( subfilter == null )
+            {
+                return "";
+            } else {
+                var sql = $@" and vehicle_id {GetString("vehicle")} 
+                and location_pickup {GetString("source")} 
+                and location_dropoff {GetString("dest")}";
+                return sql;
+            }
+        }
 
         private string SubFilter(string? key, string value) => key switch
         {

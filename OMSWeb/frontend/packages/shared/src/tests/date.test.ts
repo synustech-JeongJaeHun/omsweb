@@ -3,7 +3,7 @@ import {
 	getDurationLabel,
 	convertDurationLabel,
 	getEpoch,
-	convertEpochToStr
+	convertEpochToStr,
 } from '../utils/date'
 
 const obj = {
@@ -22,7 +22,7 @@ describe('date string and label', () => {
 		const ret = getDurationStr(obj.ex2[0], obj.ex2[1])
 		expect(ret).toEqual([
 			['2022-03-02', '2022-03-31'],
-			['2022-04-01', '2022-04-25']
+			['2022-04-01', '2022-04-25'],
 		])
 	})
 	it('ex3', () => {
@@ -33,7 +33,7 @@ describe('date string and label', () => {
 			['2022-01-01', '2022-01-31'],
 			['2022-02-01', '2022-02-28'],
 			['2022-03-01', '2022-03-31'],
-			['2022-04-01', '2022-04-25']
+			['2022-04-01', '2022-04-25'],
 		])
 	})
 	it('ex4', () => {
@@ -42,11 +42,11 @@ describe('date string and label', () => {
 			['2022-01-28', '2022-01-31'],
 			['2022-02-01', '2022-02-28'],
 			['2022-03-01', '2022-03-31'],
-			['2022-04-01', '2022-04-26']
+			['2022-04-01', '2022-04-26'],
 		])
 	})
 
-	it('duration label' , () => {
+	it('duration label', () => {
 		const ret = getDurationLabel(['2022-04-18', '2022-04-25'])
 		expect(ret).toEqual({
 			label: '4월(18~25)',
@@ -55,25 +55,25 @@ describe('date string and label', () => {
 		})
 	})
 
-	it('convert duration label 4월(16~25)' , () => {
+	it('convert duration label 4월(16~25)', () => {
 		const ret = convertDurationLabel('4월(16~25)', '2022')
 		expect(ret).toEqual('2022-4-16_2022-4-25')
 	})
 
-	it('convert duration label 4월' , () => {
+	it('convert duration label 4월', () => {
 		const ret = convertDurationLabel('4월', '2022')
 		expect(ret).toEqual('2022-4-01_2022-04-30')
 	})
 
 	it('epoch -> interval string', () => {
 		const ret = convertEpochToStr(220406400)
-		expect(ret).toBe('7년 1개월 1일')
+		expect(ret).toBe('7y 1M 1d')
 	})
 
 	it('epoch -> interval string - ex2', () => {
 		const epoch = getEpoch('2022-04-15 07:15:45', '2022-04-25')
 		const ret = convertEpochToStr(epoch)
-		expect(ret).toBe('10일 1시간 44분 15초')
+		expect(ret).toBe('10d 1h 44m 15s')
 	})
 
 	it('epoch -> interval string - ex3', () => {
@@ -82,7 +82,7 @@ describe('date string and label', () => {
 			days: 'd',
 			hours: 'h',
 			minutes: 'm',
-			seconds: 's'
+			seconds: 's',
 		})
 		expect(ret).toBe('10d 1h 44m 15s')
 	})

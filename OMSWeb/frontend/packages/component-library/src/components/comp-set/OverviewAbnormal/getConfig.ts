@@ -1,24 +1,24 @@
 const dic = {
 	duration: {
-		title: '기간별',
-		exportFilename: 'abnormaltr_기간별',
+		title: 'By Duration',
+		exportFilename: 'abnormaltr_by_duration',
 	},
 	vehicle: {
-		title: 'Vehicle별',
+		title: 'By Vehicle',
 		subText: '(TOP 6)',
-		exportFilename: 'abnormaltr_vehicle별',
+		exportFilename: 'abnormaltr_by_vehicle',
 		limit: 6,
 	},
 	source: {
-		title: 'Source별',
+		title: 'By Source',
 		subText: '(TOP 6)',
-		exportFilename: 'abnormaltr_source별',
+		exportFilename: 'abnormaltr_by_source',
 		limit: 6,
 	},
 	dest: {
-		title: 'Dest별',
+		title: 'By Dest',
 		subText: '(TOP 6)',
-		exportFilename: 'abnormaltr_dest별',
+		exportFilename: 'abnormaltr_by_dest',
 		limit: 6,
 	},
 }
@@ -27,13 +27,13 @@ const dic2 = {
 	duration: {
 		header: [
 			{
-				caption: '기간',
+				caption: 'duration',
 				dataField: 'label',
 			},
 			{
-				caption: '실패량',
+				caption: 'abnormal TR count',
 				dataField: 'failureamount',
-				width: 80,
+				width: 120,
 			},
 		],
 		body: [],
@@ -41,13 +41,13 @@ const dic2 = {
 	vehicle: {
 		header: [
 			{
-				caption: 'Vehicle명',
+				caption: 'vehicle name',
 				dataField: 'label',
 			},
 			{
-				caption: '실패량',
+				caption: 'abnormal TR count',
 				dataField: 'failureamount',
-				width: 80,
+				width: 120,
 			},
 		],
 		body: [],
@@ -55,13 +55,13 @@ const dic2 = {
 	source: {
 		header: [
 			{
-				caption: 'Source명',
+				caption: 'source name',
 				dataField: 'label',
 			},
 			{
-				caption: '실패량',
+				caption: 'abnormal TR count',
 				dataField: 'failureamount',
-				width: 80,
+				width: 120,
 			},
 		],
 		body: [],
@@ -69,13 +69,13 @@ const dic2 = {
 	dest: {
 		header: [
 			{
-				caption: 'Dest명',
+				caption: 'dest name',
 				dataField: 'label',
 			},
 			{
-				caption: '실패량',
+				caption: 'abnormal TR count',
 				dataField: 'failureamount',
-				width: 80,
+				width: 120,
 			},
 		],
 		body: [],

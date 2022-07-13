@@ -27,7 +27,7 @@ namespace OMSWeb.Repositories
             )
             ";
 
-        public async Task<(int Min, int Max, int Devn, int Avg, int Total)> QueryAlarmsStatsAggregatedByTotalTimeSpan(string start, string end)
+        public async Task<(int Min, int Max, int Devn, int Avg, int Total)> QueryAlarmsStatsAggregatedByTotalTimeSpan(string start, string end, object subfilter)
         {
             (int Min, int Max, int Devn, int Avg, int Total) result;
             using (var conn = ConnectTrack())
@@ -43,7 +43,7 @@ namespace OMSWeb.Repositories
                         SELECT
                             time_resolved - time as calctime
                         FROM vehicle_alarms
-                        WHERE time::DATE BETWEEN '{start}' AND '{end}'
+                        WHERE time::DATE BETWEEN '{start}' AND '{end}' {GetSubfilter(subfilter)}
                     ) AS a
                 ";
 
@@ -52,7 +52,7 @@ namespace OMSWeb.Repositories
             return result;
         }
 
-        public async Task<(int Days, int Weeks, int Months, int Hours, int Daily, int Weekly, int Monthly, int Ph, int Yearly)> QueryAlarmsStatsAggregatedByEachTimeSpans(string start, string end)
+        public async Task<(int Days, int Weeks, int Months, int Hours, int Daily, int Weekly, int Monthly, int Ph, int Yearly)> QueryAlarmsStatsAggregatedByEachTimeSpans(string start, string end, object subfilter)
         {
             (int Days, int Weeks, int Months, int Hours,
                            int Daily, int Weekly, int Monthly, int Ph, int Yearly) result;
@@ -93,7 +93,7 @@ namespace OMSWeb.Repositories
                                 SELECT
                                     count(*)
                                 FROM vehicle_alarms va
-                                WHERE time_resolved::DATE BETWEEN '{start}' AND '{end}'
+                                WHERE time_resolved::DATE BETWEEN '{start}' AND '{end}' {GetSubfilter(subfilter)}
                             ) AS total
                             FROM
                             (
@@ -123,7 +123,7 @@ namespace OMSWeb.Repositories
             return result;
         }
 
-        public Func<string, string, Task<dynamic[]>> BuildQueryDuration(string section, string start, string end)
+        public Func<string, string, Task<dynamic[]>> BuildQueryDuration(string section, string start, string end, object subfilter)
             => async (subsection, value) =>
             {
                 var filter = GetFilter(section, start, end);
@@ -142,14 +142,14 @@ namespace OMSWeb.Repositories
                                     FROM vehicle_alarms
                                     WHERE
                                         time_resolved::DATE BETWEEN days AND days
-                                        {SubFilter(subsection, value)}
+                                        {SubFilter(subsection, value)} {GetSubfilter(subfilter)}
                                 ) AS avg,
                                 (
                                     SELECT count(*)
                                     FROM vehicle_alarms
                                     WHERE
                                         time_resolved::DATE BETWEEN days AND days
-                                        {SubFilter(subsection, value)}
+                                        {SubFilter(subsection, value)} {GetSubfilter(subfilter)}
                                 )::int
                                 FROM GENERATE_SERIES('{startStr}'::DATE, '{endStr}'::DATE, '1 days') days
                                 ";
@@ -177,14 +177,15 @@ namespace OMSWeb.Repositories
                             from vehicle_alarms
                             where
                                 time_resolved::date between '{startStr}' and '{endStr}' and
-                                {_filter(subsection, value)}
+                                {_filter(subsection, value)} {GetSubfilter(subfilter)}
                         ";
                     }
 
                     var queryTaskList = durationList.Select(async (startEnd) =>
                     {
                         using var conn = ConnectTrack();
-                        return await conn.QueryFirstAsync(queryStr(startEnd));
+                        var query = queryStr(startEnd);
+                        return await conn.QueryFirstAsync(query);
                     });
 
                     return (await Task.WhenAll(queryTaskList)).ToArray();
@@ -201,7 +202,7 @@ namespace OMSWeb.Repositories
                 return await getDurationByMonth(subsection, value);
             };
 
-        public async Task<dynamic[]> QuerySections(string section, string selectedItem, string start, string end)
+        public async Task<dynamic[]> QuerySections(string section, string selectedItem, string start, string end, object subfilter)
         {
             var filter = GetFilter(section, start, end);
             var sectionList = GetSubsection(section, "alarm");
@@ -218,10 +219,9 @@ namespace OMSWeb.Repositories
                         count(*)::int,
                         {_avgEpochPerHour} as avg
                         from vehicle_alarms
-                        where {filter(subsection, value)} and {GetColumnFromDic(key)} is not null
+                        where {filter(subsection, value)} and {GetColumnFromDic(key)} is not null {GetSubfilter(subfilter)}
                         group by {GetColumnFromDic(key)}
                     ";
-
                     result = (await conn.QueryAsync(sql)).ToArray();
                 }
                 return result;
@@ -250,6 +250,28 @@ namespace OMSWeb.Repositories
                         ";
                 }
             };
+    
+
+        private string GetSubfilter(dynamic subfilter) {
+            string GetString(string section) {
+                var item = subfilter.GetValue(section);
+                var count = item.Count;
+                string value = item.ToString();
+                string cleanedValue = value.Replace(System.Environment.NewLine, String.Empty);
+                string arr = section != "vehicle" ? cleanedValue.Replace("\"", "'") : cleanedValue;
+                return count == 0 ? "in (null)": $@"= any (array{arr})";
+            };
+
+            if ( subfilter == null )
+            {
+                return "";
+            } else {
+                var sql = $@" and vehicle_id {GetString("vehicle")} 
+                and error_code {GetString("alarm")} 
+                and current {GetString("point")}";
+                return sql;
+            }
+        }
 
         private string SubFilter(string? key, string value) => key switch
         {
@@ -286,15 +308,8 @@ namespace OMSWeb.Repositories
                         where id = error_code
                     )
                     ";
-                case "segment":
-                    return $@"
-                    (
-                        select logical_id
-                        from segments
-                        where start_point = current::int
-                        limit 1
-                    )
-                    ";
+                case "point":
+                    return "current";
                 case "vehicle":
                     return $@"
                         (

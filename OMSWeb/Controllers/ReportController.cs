@@ -45,9 +45,9 @@ namespace OMSWeb.Controllers
 
             return requestBody.Variant switch
             {
-                "normaltr" => await _reportSvc.QueryNormaltrStatsBetween(firstDay, lastDay),
-                "alarm" => await _reportSvc.QueryAlarmStatsBetween(firstDay, lastDay),
-                "abnormaltr" => await _reportSvc.QueryAbnormaltrStatsBetween(firstDay, lastDay),
+                "normaltr" => await _reportSvc.QueryNormaltrStatsBetween(requestBody.Start, requestBody.End, requestBody.Subfilter),
+                "alarm" => await _reportSvc.QueryAlarmStatsBetween(firstDay, lastDay, requestBody.Subfilter),
+                "abnormaltr" => await _reportSvc.QueryAbnormaltrStatsBetween(firstDay, lastDay, requestBody.Subfilter, requestBody.BlacklistIds),
                 _ => BadRequest()
             };
         }
@@ -61,19 +61,22 @@ namespace OMSWeb.Controllers
                     requestBody.Section,
                     requestBody.Selected_Item,
                     requestBody.Start,
-                    requestBody.End
+                    requestBody.End, 
+                    requestBody.Subfilter 
                 ),
                 "alarm" => await _reportSvc.QueryAlarmChartsBetween(
                     requestBody.Section,
                     requestBody.Selected_Item,
                     requestBody.Start,
-                    requestBody.End
+                    requestBody.End,
+                    requestBody.Subfilter
                 ),
                 "abnormaltr" => await _reportSvc.QueryAbnormaltrChartsBetween(
                     requestBody.Section,
                     requestBody.Selected_Item,
                     requestBody.Start,
-                    requestBody.End
+                    requestBody.End,
+                    requestBody.Subfilter
                 ),
                 _ => BadRequest()
             };

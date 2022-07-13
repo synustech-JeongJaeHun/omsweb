@@ -64,14 +64,12 @@ const TrendWrapper: React.FC = () => {
 	)
 
 	return (
-		<>
-			<Trend
-				data={data}
-				utilization={utilData}
-				deliveryTime={dtData}
-				isPlaceholder={false}
-			/>
-		</>
+		<Trend
+			data={data}
+			utilization={utilData}
+			deliveryTime={dtData}
+			isPlaceholder={false}
+		/>
 	)
 }
 

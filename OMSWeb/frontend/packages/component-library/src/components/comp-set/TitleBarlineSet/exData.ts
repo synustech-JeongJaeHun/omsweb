@@ -30,7 +30,7 @@ const emptyData = {
 		source: [],
 		dest: [],
 		alarm: [],
-		segment: [],
+		point: [],
 	},
 }
 
@@ -63,7 +63,7 @@ export const exEmptyData = {
 			duration: [],
 			vehicle: [],
 			alarm: [],
-			segment: [],
+			point: [],
 		},
 	},
 }

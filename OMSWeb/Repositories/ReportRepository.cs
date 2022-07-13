@@ -22,25 +22,45 @@ namespace OMSWeb.Repositories
             using (var conn = ConnectTrack())
             {
                 var sql = @"
-                select *
-                from (
-                    select
-                    concat('b', id) as id,
-                    logical_id as label
-                    from buffers
-                    union
-                    select
-                    concat('s', id) as id,
-                    logical_id as label
-                    from stations
-                    union
-                    select
-                    id::text as id,
-                    logical_id as label
-                    from vehicles
-                    order by id asc
-                ) as temp
-                order by id
+                    select *
+                    from (
+                        select
+                            concat('b', id) as id,
+                            logical_id as label,
+                            'buffer' as section
+                        from buffers
+                        UNION
+                        select
+                            concat('s', id) as id,
+                            logical_id as label,
+                            'station' as section
+                        from stations
+                        union
+                        select
+                            id::text as id,
+                            logical_id as label,
+                            'vehicle' as section
+                        from vehicles
+                        union
+                        select 
+                            error_code::text as id, 
+                            description as label, 
+                            'alarm' as section 
+                        from (
+                            select distinct on (error_code) * from vehicle_alarms
+                        ) temp
+                        LEFT JOIN vehicle_errors as ve
+                        on temp.error_code = ve.id
+                        union
+                        select  
+                            current::text as id,
+                            current::text as label,
+                            'point' as section
+                        from (
+                            select distinct on (current) * from vehicle_alarms
+                        ) temp
+                    ) as temp
+                    order by id
                 ";
                 result = conn.Query<ReportLabel>(sql).AsQueryable();
             }

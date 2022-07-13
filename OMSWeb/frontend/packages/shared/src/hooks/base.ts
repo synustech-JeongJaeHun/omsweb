@@ -118,3 +118,12 @@ export const useSelfUpdatedData = (range, interval) => {
 
 	return [list, _updateList]
 }
+
+export const useCount = () => {
+	const [count, updateCount] = useState(0)
+	const inc = useCallback(() => {
+		updateCount(count + 1)
+	}, [count])
+
+	return [count, inc]
+}

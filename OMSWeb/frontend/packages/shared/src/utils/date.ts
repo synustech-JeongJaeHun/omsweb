@@ -20,6 +20,7 @@ const timeDic = {
 	seconds: 1,
 }
 
+const divide = R.flip(R.divide)
 export const beforeDay = (days) => moment().startOf('day').subtract(days, 'day')
 export const afterDay = (days) => moment().startOf('day').add(days, 'day')
 
@@ -180,6 +181,10 @@ export const convertEpochToStr: convertEpochToStr = (epoch, opt = {}) => {
 		seconds: 's',
 	}
 
+	if (epoch === 0) {
+		return epoch
+	}
+
 	const labels = { ...defaultLabels, ...opt }
 
 	const arr = []
@@ -217,4 +222,17 @@ export const convertEpochToStr: convertEpochToStr = (epoch, opt = {}) => {
 	}
 
 	return R.compose(R.join(' '), calc)(epoch)
+}
+
+type convertSimpleEpochToStr = (epoch: number) => string | number
+export const convertSimpleEpochToStr: convertSimpleEpochToStr = (epoch) => {
+	if (epoch === 0) {
+		return epoch
+	}
+
+	const m = R.compose(Math.floor, divide(timeDic.minutes))(epoch)
+	const s = epoch % timeDic.minutes
+	const minute = m === 0 ? '' : `${m}m `
+	const second = R.isEmpty(s) ? '' : `${s}s`
+	return `${minute}${second}`
 }

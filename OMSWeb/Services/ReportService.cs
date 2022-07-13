@@ -13,7 +13,7 @@ namespace OMSWeb.Services
         public static string[] GetSubsection(string? section, string? pageType = "normaltr")
         {
             if (pageType == "alarm") {
-                return new[] { "vehicle", "alarm", "segment" };
+                return new[] { "vehicle", "alarm", "point" };
             } else {
                 switch (section)
                 {
@@ -53,12 +53,12 @@ namespace OMSWeb.Services
 
         public object QueryLabels() => _reportRepo.QueryLabels();
 
-        public async Task<object> QueryNormaltrStatsBetween(string start, string end)
+        public async Task<object> QueryNormaltrStatsBetween(string start, string end, object subfilter)
         {
             var aggregatedByTotalTimeSpan =
-                _reportNormaltrRepository.QueryOrdersStatsAggregatedByTotalTimeSpan(start, end);
+                _reportNormaltrRepository.QueryOrdersStatsAggregatedByTotalTimeSpan(start, end, subfilter);
             var aggregatedByEachTimeSpans =
-                _reportNormaltrRepository.QueryOrdersStatsAggregatedByEachTimeSpans(start, end);
+                _reportNormaltrRepository.QueryOrdersStatsAggregatedByEachTimeSpans(start, end, subfilter);
 
             await Task.WhenAll(new Task[] { aggregatedByTotalTimeSpan, aggregatedByEachTimeSpans });
 
@@ -86,13 +86,13 @@ namespace OMSWeb.Services
             };
         }
 
-        public async Task<object> QueryNormaltrChartsBetween(string section, string selectedItem, string start, string end)
+        public async Task<object> QueryNormaltrChartsBetween(string section, string selectedItem, string start, string end, object subfilter)
         {
-            var queryDuration = _reportNormaltrRepository.BuildQueryDuration(section, start, end);
+            var queryDuration = _reportNormaltrRepository.BuildQueryDuration(section, start, end, subfilter);
             var sectionList = ReportServiceShared.GetSubsection(section);
 
             var duration = await queryDuration(section, selectedItem);
-            var others = await _reportNormaltrRepository.QuerySections(section, selectedItem, start, end);
+            var others = await _reportNormaltrRepository.QuerySections(section, selectedItem, start, end, subfilter);
 
             var data = new Dictionary<string, dynamic[]>();
             data.Add("duration", duration);
@@ -101,12 +101,12 @@ namespace OMSWeb.Services
             return data;
         }
 
-        public async Task<object> QueryAlarmStatsBetween(string start, string end)
+        public async Task<object> QueryAlarmStatsBetween(string start, string end, object subfilter)
         {
             var aggregatedByTotalTimeSpan =
-                _reportAlarmRepository.QueryAlarmsStatsAggregatedByTotalTimeSpan(start, end);
+                _reportAlarmRepository.QueryAlarmsStatsAggregatedByTotalTimeSpan(start, end, subfilter);
             var aggregatedByEachTimeSpans =
-                _reportAlarmRepository.QueryAlarmsStatsAggregatedByEachTimeSpans(start, end);
+                _reportAlarmRepository.QueryAlarmsStatsAggregatedByEachTimeSpans(start, end, subfilter);
 
             await Task.WhenAll(new Task[] { aggregatedByTotalTimeSpan, aggregatedByEachTimeSpans });
 
@@ -134,13 +134,13 @@ namespace OMSWeb.Services
             };
         }
 
-        public async Task<object> QueryAlarmChartsBetween(string section, string selectedItem, string start, string end)
+        public async Task<object> QueryAlarmChartsBetween(string section, string selectedItem, string start, string end, object subfilter)
         {
-            var queryDuration = _reportAlarmRepository.BuildQueryDuration(section, start, end);
+            var queryDuration = _reportAlarmRepository.BuildQueryDuration(section, start, end, subfilter);
             var sectionList = ReportServiceShared.GetSubsection(section, "alarm");
 
             var duration = await queryDuration(section, selectedItem);
-            var others = await _reportAlarmRepository.QuerySections(section, selectedItem, start, end);
+            var others = await _reportAlarmRepository.QuerySections(section, selectedItem, start, end, subfilter);
 
             var data = new Dictionary<string, dynamic[]>();
             data.Add("duration", duration);
@@ -149,18 +149,18 @@ namespace OMSWeb.Services
             return data;
         }
 
-        public async Task<object> QueryAbnormaltrStatsBetween(string start, string end)
+        public async Task<object> QueryAbnormaltrStatsBetween(string start, string end, object subfilter, string[] blacklistIds)
         {
-            return await _reportAbnormaltrRepository.QueryStatsAggregatedByTotalTimeSpan(start, end);
+            return await _reportAbnormaltrRepository.QueryStatsAggregatedByTotalTimeSpan(start, end, subfilter, blacklistIds);
         }
 
-        public async Task<object> QueryAbnormaltrChartsBetween(string section, string selectedItem, string start, string end)
+        public async Task<object> QueryAbnormaltrChartsBetween(string section, string selectedItem, string start, string end, object subfilter)
         {
-            var queryDuration = _reportAbnormaltrRepository.BuildQueryDuration(section, start, end);
+            var queryDuration = _reportAbnormaltrRepository.BuildQueryDuration(section, start, end, subfilter);
             var sectionList = ReportServiceShared.GetSubsection(section);
 
             var duration = await queryDuration(section, selectedItem);
-            var others = await _reportAbnormaltrRepository.QuerySections(section, selectedItem, start, end);
+            var others = await _reportAbnormaltrRepository.QuerySections(section, selectedItem, start, end, subfilter);
 
             var data = new Dictionary<string, dynamic[]>();
             data.Add("duration", duration);

@@ -47,7 +47,8 @@ const StackedBarTableV: React.FC<Props> = ({
 	subtext,
 	exportFilename,
 	data,
-	isPlaceholder
+	isPlaceholder,
+	colors,
 }: Props) => {
 	const qc = React.useContext(QueryContext)
 	const _isPlaceholder = qc.isPlaceholder || isPlaceholder
@@ -103,7 +104,13 @@ const StackedBarTableV: React.FC<Props> = ({
 					{renderButtons()}
 				</div>
 			)}
-			<StackedBar data={sortedData} showLegend labelRotation={0} isPlaceholder={_isPlaceholder} />
+			<StackedBar
+				data={sortedData}
+				showLegend
+				labelRotation={0}
+				isPlaceholder={_isPlaceholder}
+				colors={colors}
+			/>
 			<div className="table-wrapper">
 				<Table
 					data={data}
@@ -125,7 +132,7 @@ StackedBarTableV.defaultProps = {
 		header: [],
 		body: [],
 	},
-	isPlaceholder: false
+	isPlaceholder: false,
 }
 
 interface Props {
@@ -137,6 +144,7 @@ interface Props {
 		body: any[]
 	}
 	isPlaceholder?: boolean
+	colors?: any
 }
 
 export default StackedBarTableV

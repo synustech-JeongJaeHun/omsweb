@@ -44,12 +44,12 @@ const Wrapper = styled.div`
 `
 
 const dic = {
-	duration: '기간별',
-	vehicle: 'Vehicle별',
-	source: 'Source별',
-	dest: 'Dest별',
-	alarm: 'Alarm별',
-	segment: 'Segment별',
+	duration: 'By Duration',
+	vehicle: 'By Vehicle',
+	source: 'By Source',
+	dest: 'By Dest',
+	alarm: 'By Alarm',
+	point: 'By Point',
 }
 
 const pageDic = {
@@ -58,7 +58,7 @@ const pageDic = {
 }
 
 const keys = ['duration', 'vehicle', 'source', 'dest']
-const keys2 = ['duration', 'vehicle', 'alarm', 'segment']
+const keys2 = ['duration', 'vehicle', 'alarm', 'point']
 
 const getExData = (layoutKey) => {
 	return genNormaltr(layoutKey)
@@ -107,7 +107,7 @@ const genConfig = (variant, data, pageVariant) => {
 		case 'source':
 		case 'dest':
 		case 'alarm':
-		case 'segment':
+		case 'point':
 			temp = omitArray(['duration', variant], _keys, list)
 			break
 		default:
@@ -170,6 +170,7 @@ const TitleBarlineSet: React.FC<Props & any> & any = React.forwardRef(
 			isChartPlaceholder,
 			onClickItem,
 			onDateChange,
+			onClickConfig,
 			startDay,
 			endDay,
 			beforeRangeValue,
@@ -310,6 +311,7 @@ const TitleBarlineSet: React.FC<Props & any> & any = React.forwardRef(
 									onClick={handleClickBack}
 									stats={stats}
 									onDateChange={onDateChange}
+									onClickConfig={onClickConfig}
 									isPlaceholder={isStatPlaceholder}
 									startDay={startDay}
 									endDay={endDay}
@@ -357,6 +359,7 @@ TitleBarlineSet.defaultProps = {
 	stats: exStatData.alarm,
 	onClickItem: (values) => {},
 	onDateChange: (values) => {},
+	onClickConfig: (values) => {},
 	isStatPlaceholder: false,
 	isChartPlaceholder: false,
 	startDay: bdFormat(1),
@@ -371,6 +374,7 @@ interface Props
 		| 'startDay'
 		| 'endDay'
 		| 'onDateChange'
+		| 'onClickConfig'
 		| 'beforeRangeValue'
 		| 'beforeRangeUnit'
 	> {

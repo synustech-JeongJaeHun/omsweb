@@ -49,6 +49,7 @@ export const getAgt = () => {
 	return {
 		// systemSettingsClient: rgAuth('/systems/settings/client'),
 		// systemStates: rgAuth('/systems/states'),
+		appsettings: rgAuth('/settings/appsettings'),
 		stats: rpAuth('/report/stats'),
 		charts: rpAuth('/report/charts'),
 		labels: rgAuth('/report/labels'),
