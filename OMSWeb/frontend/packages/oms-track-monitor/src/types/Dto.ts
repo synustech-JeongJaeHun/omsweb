@@ -95,6 +95,15 @@ namespace UpdateDto {
 		segments: string
 		status: number
 	}
+
+	export type Mtl = {
+		id: number
+		logicalId: string
+		physicalId: string
+		pointId: number
+
+		unuse?: boolean
+	}
 }
 
 export { UpdateDto }

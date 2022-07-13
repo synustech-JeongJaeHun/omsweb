@@ -72,6 +72,9 @@ export class TrackStatusService {
 		this.hubService.homeChanged$.subscribe((e) => {
 			this.handleHomeChanged(e)
 		})
+		this.hubService.mtlChanged$.subscribe((e) => {
+			this.handleMtlChanged(e)
+		})
 
 		// this.hubService.segmentChanged$
 		//   .subscribe((e: IDataChangeEvent) => {
@@ -263,6 +266,10 @@ export class TrackStatusService {
 			default:
 				break
 		}
+	}
+
+	handleMtlChanged(e: IDataChangeEvent) {
+    this.trackData.mtls = e.data
 	}
 
 	getOverlapObjectOnPoint(pointId: number) {

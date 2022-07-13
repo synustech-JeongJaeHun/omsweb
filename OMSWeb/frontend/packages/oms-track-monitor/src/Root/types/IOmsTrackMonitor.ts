@@ -77,6 +77,7 @@ interface IOmsTrackMonitor {
 		operation: UpdateDto.Operation,
 		fireshutter: UpdateDto.Fireshutter
 	): void
+	updateMtl(operation: UpdateDto.Operation, mtls: UpdateDto.Mtl[]): void
 }
 
 export { IOmsTrackMonitor }

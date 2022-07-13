@@ -42,6 +42,7 @@ interface IOmsTrackMonitor {
 	): void
 	updateHome(operation: UpdateDto.Operation, home: any): void
 	updateFireshutter(operation: UpdateDto.Operation, fireshutter: any): void
+	updateMtl(operation: UpdateDto.Operation, mtls: any): void
 }
 
 export { IOmsTrackMonitor }
