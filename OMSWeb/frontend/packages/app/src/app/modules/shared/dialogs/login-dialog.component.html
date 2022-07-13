@@ -7,7 +7,7 @@
         </mat-error>
         <mat-form-field appearance="fill">
           <mat-label>{{ "names.userId" | translate }}</mat-label>
-          <input matInput formControlName="userId" (keydown)="onKeyDownEvent($event)" />
+          <input matInput autocomplete="username" formControlName="userId" (keydown)="onKeyDownEvent($event)" />
           <mat-error>
             Please enter a valid Id
           </mat-error>
@@ -15,7 +15,7 @@
         </mat-form-field>
         <mat-form-field appearance="fill">
           <mat-label>{{ "names.password" | translate }}</mat-label>
-          <input type="password" matInput formControlName="password" (keydown)="onKeyDownEvent($event)" />
+          <input type="password" autocomplete="current-password" matInput formControlName="password" (keydown)="onKeyDownEvent($event)" />
           <mat-error>
             Please enter a valid password
           </mat-error>
