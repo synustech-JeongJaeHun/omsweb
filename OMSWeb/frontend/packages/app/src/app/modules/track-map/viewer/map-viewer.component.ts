@@ -180,9 +180,9 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 	}
 	readonly permissionEnums: typeof PermissionEnums = PermissionEnums
 
-  isZcuWithFireshutter(id: number){
-    return this.systemStatusService.zcusWithFireshutter.includes(id)
-  }
+	isZcuWithFireshutter(id: number) {
+		return this.systemStatusService.zcusWithFireshutter.includes(id)
+	}
 
 	ngOnInit(): void {
 		// @ts-ignore
@@ -368,21 +368,9 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 				})
 			})
 
-			// if (this.auth.isAuthenticated) {
-			// this.hubSvc.vehiclePathChanged$
-			// 	.pipe(takeUntil(this.destroy$))
-			// 	.subscribe((e: IDataChangeEvent) => {
-			// 		// TODO what happened on event?
-			// 		console.log('vehicle path update', e)
-			// 	})
-
-			// this.hubSvc.mtlChanged$
-			// 	.pipe(takeUntil(this.destroy$))
-			// 	.subscribe((e) => {
-			// 		// TODO what happened on event?
-			// 		console.log('mtl update', e)
-			// 	})
-			// }
+			this.hubSvc.mtlChanged$.pipe(takeUntil(this.destroy$)).subscribe((e) => {
+				this.viewer.updateMtl(e.operation, e.data)
+			})
 		}
 	}
 

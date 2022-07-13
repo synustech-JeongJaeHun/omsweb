@@ -196,12 +196,12 @@ const exposed: IOmsTrackMonitor = {
 				if (mtl) {
 					setFocusedObject(mtl)
 				}
+				break;
 			case 'zcu':
 				const zcu = findZcuById(id)
 				if (zcu) {
 					setFocusedObject(zcu)
 				}
-
 				break
 			case 'fireshutter':
 				break
@@ -315,12 +315,27 @@ const exposed: IOmsTrackMonitor = {
 				break
 		}
 	},
+
 	updateFireshutter(op, f) {
 		switch (op) {
 			case 'INSERT':
 				break
 			case 'UPDATE':
 				updateFireshutter(f)
+				break
+			case 'DELETE':
+				break
+			default:
+				break
+		}
+	},
+
+	updateMtl(op, mtls) {
+		switch (op) {
+			case 'INSERT':
+				break
+			case 'UPDATE':
+				initMtls(mtls)
 				break
 			case 'DELETE':
 				break

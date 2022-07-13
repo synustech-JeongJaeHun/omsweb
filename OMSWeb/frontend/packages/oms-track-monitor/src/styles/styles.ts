@@ -29,13 +29,8 @@ const VisibleDefault: Record<VisibleProperty, boolean> = {
 	group: true, // applied in OmsTrackMonitor.ce.vue
 	cluster: true, // applied in OmsTrackMonitor.ce.vue
 	fireshutter: true, // applied in OmsTrackMonitor.ce.vue
+	mtl: true, // applied in OmsTrackMonitor.ce.vue
 	minimap: true, // applied in OmsTrackMonitor.ce.vue
-}
-const visibleStyles = reactive(deepCopy(VisibleDefault))
-const visibleStylesInfo = readonly(visibleStyles)
-
-function updateVisibleStyle(key: VisibleProperty, value: boolean) {
-	visibleStyles[key] = value
 }
 
 // All color configurations are applied in OmsTrackMonitor.ce.vue
@@ -58,13 +53,14 @@ const ColorDefault: Record<ColorProperty, string> = {
 	cargoUnloading: 'blue',
 	fireshutterOpened: 'rgb(50, 145, 236)',
 	fireshutterClosed: '#F04907',
+	mtlUnuse: '#f98080',
+	mtlUse: 'grey',
 }
 
 export {
 	ScaleDefault,
-	ColorDefault,
 	scaleStylesInfo,
-	visibleStylesInfo,
 	updateScaleStyle,
-	updateVisibleStyle,
+	VisibleDefault,
+	ColorDefault,
 }

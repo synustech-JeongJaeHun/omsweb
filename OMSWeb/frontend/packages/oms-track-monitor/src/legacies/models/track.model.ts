@@ -35,7 +35,7 @@ interface IMTL {
 	physicalId: string
 	pointId: number
 	group?: number
-	inUse?: boolean
+	unuse?: boolean
 	position?: any
 	mode?: any
 	errorList?: any
@@ -150,7 +150,22 @@ interface IVehicle {
 	historyChangeTime?: any
 }
 
-interface IFixedTrackData {
+interface IFireshutter {
+	id: number
+	x: number
+	y: number
+	logicalId: string
+	segments: string
+	status: number
+}
+
+interface ITrackData {
+	vehiclePath?: any[]
+
+	width?: number
+	height?: number
+	minimumSegmentLength?: number
+
 	buffers?: IBuffer[]
 	clusters?: ICluster[]
 	groups?: IGroup[]
@@ -160,26 +175,9 @@ interface IFixedTrackData {
 	stations?: IStation[]
 	zcus?: IZcu[]
 	fireShutters?: IFireshutter[]
-}
-interface IVariableTrackData {
 	segmentParts?: ISegmentPart[]
 	segmentDisabled?: any[]
 	vehicles?: IVehicle[]
-}
-interface ITrackData extends IFixedTrackData, IVariableTrackData {
-	vehiclePath?: any[]
-
-	width?: number
-	height?: number
-	minimumSegmentLength?: number
-}
-interface IFireshutter {
-	id: number
-	x: number
-	y: number
-	logicalId: string
-	segments: string
-	status: number
 }
 
 export { ITrackData, IVehicle, ISegmentPart, IGroup }

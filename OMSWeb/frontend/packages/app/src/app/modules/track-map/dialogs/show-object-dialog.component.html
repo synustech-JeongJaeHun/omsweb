@@ -113,6 +113,12 @@
             value: $event.checked
           })" color="primary">{{
           "names.showFireshutters" | translate }}</mat-slide-toggle>
+        <mat-slide-toggle [checked]="setting.isMtlVisible" (change)="update({
+            group: 'Visibility',
+            key: 'isMtlVisible',
+            value: $event.checked
+          })" color="primary">{{
+          "names.showMtls" | translate }}</mat-slide-toggle>
       </div>
     </fieldset>
   </ng-container>
