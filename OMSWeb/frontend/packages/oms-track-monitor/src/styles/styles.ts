@@ -32,12 +32,6 @@ const VisibleDefault: Record<VisibleProperty, boolean> = {
 	mtl: true, // applied in OmsTrackMonitor.ce.vue
 	minimap: true, // applied in OmsTrackMonitor.ce.vue
 }
-const visibleStyles = reactive(deepCopy(VisibleDefault))
-const visibleStylesInfo = readonly(visibleStyles)
-
-function updateVisibleStyle(key: VisibleProperty, value: boolean) {
-	visibleStyles[key] = value
-}
 
 // All color configurations are applied in OmsTrackMonitor.ce.vue
 const ColorDefault: Record<ColorProperty, string> = {
@@ -65,9 +59,8 @@ const ColorDefault: Record<ColorProperty, string> = {
 
 export {
 	ScaleDefault,
-	ColorDefault,
 	scaleStylesInfo,
-	visibleStylesInfo,
 	updateScaleStyle,
-	updateVisibleStyle,
+	VisibleDefault,
+	ColorDefault,
 }
