@@ -164,6 +164,7 @@
     "showGroups": "Groups",
     "showClusters": "Clusters",
     "showFireshutters": "Fireshutters",
+    "showMtls": "MTLs",
     "showOverlaps": "Overlapping Objects",
     "hostCommandEnable": "Host Command Enable",
     "hostCommandDisable": "Host Command Disable",

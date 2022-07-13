@@ -22,6 +22,7 @@ type VisibilityChangedEvent = {
 		| 'isGroupVisible'
 		| 'isClusterVisible'
 		| 'isFireshutterVisible'
+		| 'isMtlVisible'
 		| 'isOverlappingObjectsVisible'
 	value: boolean
 }
@@ -106,6 +107,7 @@ const DefaultTrackMonitorSetting: TrackMonitorSetting = {
 	isGroupVisible: true,
 	isClusterVisible: true,
 	isFireshutterVisible: true,
+	isMtlVisible: true,
 	isOverlappingObjectsVisible: true,
 
 	// color
