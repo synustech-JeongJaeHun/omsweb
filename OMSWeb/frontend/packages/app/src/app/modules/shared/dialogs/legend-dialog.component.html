@@ -1320,16 +1320,15 @@
 						<div class="legend-caption"></div>
 					</div>
 				</dd>
-				<!-- FireShutter  -->
-				<dt>{{ 'names.fireshutter' | translate }}</dt>
+				<!-- FireShutter (Opened) -->
+				<dt>{{ 'names.fireshutter' | translate }} (Opened)</dt>
 				<dd>
 					<div class="legend-item">
 						<div class="legend-icon">
 							<svg>
 								<g class="fireshutter" transform="translate(50,30)">
 									<path
-										level="level1"
-										d="M -3,0 h 10 m -10,8 h 10 m -8,-4 h 6 z"
+										d="M -3,0 h 10 m -10,8 h 10 m -8,-4 z"
 										[style]="{
 											stroke: setting.fireshutterOpenedColor,
 											fill: setting.fireshutterOpenedColor
@@ -1343,60 +1342,33 @@
 					<div class="legend-item">
 						<div class="legend-icon">
 							<svg>
-								<g class="fireshutter" transform="translate(50,30)">
-									<rect
-										width="35"
-										level="level2"
-										x="-17"
-										y="-15"
-										[style]="{
-											stroke: setting.fireshutterOpenedColor,
-											fill: setting.fireshutterOpenedColor
-										}"
-									/>
+								<g
+									class="fireshutter"
+									transform="translate(50,30)"
+									[style]="{
+										stroke: setting.fireshutterOpenedColor,
+										fill: setting.fireshutterOpenedColor
+									}"
+								>
+									<rect width="33" height="2" level="level2" x="-17" y="-15" />
 									<rect
 										class="fireshutter_rotate"
 										width="28"
+										height="2"
 										level="level2"
 										x="-15"
 										y="14"
-										[style]="{
-											stroke: setting.fireshutterOpenedColor,
-											fill: setting.fireshutterOpenedColor
-										}"
 									/>
-									<rect
-										width="21"
-										level="level2"
-										x="-10"
-										y="-10"
-										[style]="{
-											stroke: setting.fireshutterOpenedColor,
-											fill: setting.fireshutterOpenedColor
-										}"
-									/>
+									<rect width="21" height="1" x="-11" y="-10" />
 									<rect
 										class="fireshutter_rotate"
 										width="28"
+										height="2"
 										level="level2"
 										x="-15"
-										y="-17"
-										[style]="{
-											stroke: setting.fireshutterOpenedColor,
-											fill: setting.fireshutterOpenedColor
-										}"
+										y="-15"
 									/>
-									<rect
-										width="35"
-										level="level2"
-										x="-17"
-										y="12"
-										stroke-width="2"
-										[style]="{
-											stroke: setting.fireshutterOpenedColor,
-											fill: setting.fireshutterOpenedColor
-										}"
-									/>
+									<rect width="33" height="2" level="level2" x="-17" y="12" />
 								</g>
 							</svg>
 						</div>
@@ -1405,18 +1377,21 @@
 					<div class="legend-item">
 						<div class="legend-icon">
 							<svg>
-								<g class="fireshutter" transform="translate(25,28)">
+								<g
+									class="fireshutter"
+									transform="translate(30,28)"
+									[style]="{
+										stroke: setting.fireshutterOpenedColor,
+										fill: setting.fireshutterOpenedColor
+									}"
+								>
 									<rect
 										width="40"
 										height="3"
 										x="-17"
 										y="-20"
 										rx="1"
-										stroke-width="2"
-										[style]="{
-											stroke: setting.fireshutterOpenedColor,
-											fill: setting.fireshutterOpenedColor
-										}"
+										level="level3"
 									/>
 									<rect
 										class="fireshutter_rotate"
@@ -1425,25 +1400,9 @@
 										x="-20"
 										y="12"
 										rx="1"
-										stroke-width="2"
-										[style]="{
-											stroke: setting.fireshutterOpenedColor,
-											fill: setting.fireshutterOpenedColor
-										}"
+										level="level3"
 									/>
-									<rect
-										_ngcontent-ivy-c554=""
-										width="20"
-										height="3"
-										x="-7"
-										y="-10"
-										rx="1"
-										stroke-width="2"
-										[style]="{
-											stroke: setting.fireshutterOpenedColor,
-											fill: setting.fireshutterOpenedColor
-										}"
-									/>
+									<rect width="20" height="2" x="-7" y="-10" level="level3" />
 									<rect
 										class="fireshutter_rotate"
 										width="40"
@@ -1451,11 +1410,7 @@
 										x="-20"
 										y="-21"
 										rx="1"
-										stroke-width="2"
-										[style]="{
-											stroke: setting.fireshutterOpenedColor,
-											fill: setting.fireshutterOpenedColor
-										}"
+										level="level3"
 									/>
 									<rect
 										width="40"
@@ -1463,22 +1418,141 @@
 										x="-17"
 										y="13"
 										rx="1"
-										stroke-width="2"
-										[style]="{
-											stroke: setting.fireshutterOpenedColor,
-											fill: setting.fireshutterOpenedColor
-										}"
+										level="level3"
 									/>
-									<text
-										class="label"
-										font-size="11px"
-										x="30"
-										y="15"
-										text-anchor="start"
-									>
-										fs_id
-									</text>
 								</g>
+								<text
+									class="label"
+									font-size="11px"
+									x="30"
+									y="15"
+									transform="translate(30,28)"
+									text-anchor="start"
+								>
+									fs_id
+								</text>
+							</svg>
+						</div>
+						<div class="legend-caption"></div>
+					</div>
+				</dd>
+				<!-- fireshutter Closed -->
+				<dt>{{ 'names.fireshutter' | translate }} (Closed)</dt>
+				<dd>
+					<div class="legend-item">
+						<div class="legend-icon">
+							<svg>
+								<g class="fireshutter" transform="translate(50,30)">
+									<path
+										d="M -3,0 h 10 m -10,8 h 10 M -2 4 h 8 z"
+										[style]="{
+											stroke: setting.fireshutterClosedColor,
+											fill: setting.fireshutterClosedColor
+										}"
+									></path>
+								</g>
+							</svg>
+						</div>
+						<div class="legend-caption"></div>
+					</div>
+					<div class="legend-item">
+						<div class="legend-icon">
+							<svg>
+								<g
+									class="fireshutter"
+									transform="translate(50,30)"
+									[style]="{
+										stroke: setting.fireshutterClosedColor,
+										fill: setting.fireshutterClosedColor
+									}"
+								>
+									<rect width="33" height="2" level="level2" x="-17" y="-15" />
+									<rect
+										class="fireshutter_rotate"
+										width="28"
+										height="2"
+										level="level2"
+										x="-15"
+										y="14"
+									/>
+									<rect width="21" height="1" x="-11" y="-8" stroke-width="1" />
+									<rect width="21" height="1" x="-11" y="-3" stroke-width="1" />
+									<rect width="21" height="1" x="-11" y="2" stroke-width="1" />
+									<rect width="21" height="1" x="-11" y="7" stroke-width="1" />
+									<rect
+										class="fireshutter_rotate"
+										width="28"
+										height="2"
+										level="level2"
+										x="-15"
+										y="-15"
+									/>
+									<rect width="33" height="2" level="level2" x="-17" y="12" />
+								</g>
+							</svg>
+						</div>
+						<div class="legend-caption"></div>
+					</div>
+					<div class="legend-item">
+						<div class="legend-icon">
+							<svg>
+								<g
+									class="fireshutter"
+									transform="translate(30,28)"
+									[style]="{
+										stroke: setting.fireshutterClosedColor,
+										fill: setting.fireshutterClosedColor
+									}"
+								>
+									<rect
+										width="40"
+										height="3"
+										x="-17"
+										y="-20"
+										rx="1"
+										level="level3"
+									/>
+									<rect
+										class="fireshutter_rotate"
+										width="35"
+										height="3"
+										x="-20"
+										y="12"
+										rx="1"
+										level="level3"
+									/>
+									<rect width="23" height="2" x="-8" y="-10" stroke-width="1" />
+									<rect width="23" height="2" x="-8" y="-5" stroke-width="1" />
+									<rect width="23" height="2" x="-8" y="0" stroke-width="1" />
+									<rect width="23" height="2" x="-8" y="5" stroke-width="1" />
+									<rect
+										class="fireshutter_rotate"
+										width="35"
+										height="3"
+										x="-20"
+										y="-21"
+										rx="1"
+										level="level3"
+									/>
+									<rect
+										width="40"
+										height="3"
+										x="-17"
+										y="13"
+										rx="1"
+										level="level3"
+									/>
+								</g>
+								<text
+									class="label"
+									font-size="11px"
+									transform="translate(30,28)"
+									x="30"
+									y="15"
+									text-anchor="start"
+								>
+									fs_id
+								</text>
 							</svg>
 						</div>
 						<div class="legend-caption"></div>
