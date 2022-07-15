@@ -1049,19 +1049,6 @@
 							{{ 'names.disabled' | translate }}
 						</div>
 					</div>
-					<!-- <div class="legend-item">
-            <div class="legend-icon">
-              <svg>
-                <g class="segment">
-                  <path class="segment_path non_validate" d="M10 30 L90 30" stroke-width="2px" stroke-dasharray="0,0">
-                  </path>
-                </g>
-              </svg>
-            </div>
-            <div class="legend-caption">
-              {{ "names.validationError" | translate }}
-            </div>
-          </div> -->
 				</dd>
 
 				<dt>{{ 'names.point' | translate }}</dt>
@@ -1087,45 +1074,13 @@
 						<div class="legend-caption"></div>
 					</div>
 				</dd>
-
+				<!-- station -->
 				<dt>{{ 'names.station' | translate }}</dt>
-				<dd>
+				<dd class="--item-gap">
 					<div class="legend-item">
 						<div class="legend-icon">
-							<svg>
-								<g class="station" transform="translate(50,30)">
-									<rect
-										class="station_path"
-										level="level1"
-										[style]="{
-											fill: setting.stationColor,
-											stroke: setting.stationColor
-										}"
-									></rect>
-								</g>
-							</svg>
-						</div>
-						<div class="legend-caption"></div>
-					</div>
-					<div class="legend-item">
-						<div class="legend-icon">
-							<svg>
-								<g class="station" transform="translate(50,30)">
-									<path
-										class="station_path"
-										level="level2"
-										d="m-10 -10 l20 0 l0 20 l-20 0 l0 -20 l1 0"
-										[style]="{ stroke: setting.stationColor }"
-									></path>
-								</g>
-							</svg>
-						</div>
-						<div class="legend-caption"></div>
-					</div>
-					<div class="legend-item">
-						<div class="legend-icon">
-							<svg>
-								<g class="station" transform="translate(30,28)">
+							<svg class="long-vertical">
+								<g class="station" transform="translate(50,28)">
 									<path
 										class="station_path"
 										level="level3"
@@ -1135,8 +1090,8 @@
 									<text
 										class="label"
 										font-size="11px"
-										x="19"
-										y="15"
+										x="-25"
+										y="30"
 										text-anchor="start"
 									>
 										station_id
@@ -1144,45 +1099,40 @@
 								</g>
 							</svg>
 						</div>
-						<div class="legend-caption"></div>
+						<div class="legend-caption">Normal</div>
+					</div>
+					<div class="legend-item">
+						<div class="legend-icon">
+							<svg class="long-vertical">
+								<g class="station" transform="translate(50,28)">
+									<path
+										class="station_path"
+										level="level3"
+										d="m-14 -4.5 l0 -9 l9 0 m9 0 l9 0 l0 9 m0 9 l0 9 l-9 0 m-9 0 l-9 0 l0 -9 m0 -9z"
+										[style]="{ stroke: setting.stationDisabledColor }"
+									></path>
+									<text
+										class="label"
+										font-size="11px"
+										x="-25"
+										y="30"
+										text-anchor="start"
+									>
+										station_id
+									</text>
+								</g>
+							</svg>
+						</div>
+						<div class="legend-caption">Unused</div>
 					</div>
 				</dd>
 
 				<dt>{{ 'names.buffer' | translate }}</dt>
-				<dd>
+				<dd class="--item-gap">
 					<div class="legend-item">
 						<div class="legend-icon">
-							<svg>
-								<g class="buffer" transform="translate(50,30)">
-									<circle
-										class="buffer_path"
-										level="level1"
-										[style]="{ stroke: setting.bufferColor }"
-									></circle>
-								</g>
-							</svg>
-						</div>
-						<div class="legend-caption"></div>
-					</div>
-					<div class="legend-item">
-						<div class="legend-icon">
-							<svg>
-								<g class="buffer" transform="translate(50,30)">
-									<path
-										class="buffer_path"
-										level="level2"
-										d="m0 -10 a 10 10 0 0 1 0 20 a 10 10 0 0 1 0 -20"
-										[style]="{ stroke: setting.bufferColor }"
-									></path>
-								</g>
-							</svg>
-						</div>
-						<div class="legend-caption"></div>
-					</div>
-					<div class="legend-item">
-						<div class="legend-icon">
-							<svg>
-								<g class="buffer" transform="translate(30,28)">
+							<svg class="long-vertical">
+								<g class="buffer" transform="translate(50,28)">
 									<path
 										class="buffer_path"
 										level="level3"
@@ -1192,8 +1142,8 @@
 									<text
 										class="label"
 										font-size="11px"
-										x="19"
-										y="15"
+										x="-20"
+										y="30"
 										text-anchor="start"
 									>
 										buffer_id
@@ -1201,46 +1151,40 @@
 								</g>
 							</svg>
 						</div>
-						<div class="legend-caption"></div>
+						<div class="legend-caption">Normal</div>
+					</div>
+					<div class="legend-item">
+						<div class="legend-icon">
+							<svg class="long-vertical">
+								<g class="buffer" transform="translate(50,28)">
+									<path
+										class="buffer_path"
+										level="level3"
+										[style]="{ fill: setting.bufferDisabledColor }"
+										d="m-15 5 m5 -10 l-5 0 a10 10 0 0 1 10 -10 l0 5 a5 5 0 0 0 -5 5 l-5 0 m20 -5 l0 -5a 10 10 0 0 1 10 10 l-5 0 a5 5 0 0 0 -5 -5 l0 -5 m5 20 l5 0 a10 10 0 0 1 -10 10 l0 -5 a5 5 0 0 0 5 -5 l5 0 m-20 5 l0 5 a10 10 0 0 1 -10 -10 l5 0 a5 5 0 0 0 5 5 l0 5 z"
+									></path>
+									<text
+										class="label"
+										font-size="11px"
+										x="-20"
+										y="30"
+										text-anchor="start"
+									>
+										buffer_id
+									</text>
+								</g>
+							</svg>
+						</div>
+						<div class="legend-caption">Unused</div>
 					</div>
 				</dd>
 
 				<dt>{{ 'names.mtl' | translate }}</dt>
-				<dd>
+				<dd class="--item-gap">
 					<div class="legend-item">
 						<div class="legend-icon">
-							<svg>
-								<g class="mtl" transform="translate(50,30)">
-									<path
-										[style]="{ stroke: setting.mtlUseColor }"
-										class="mtl_path"
-										level="level1"
-										d="m -2.5 -2.5 l 5 0 l -5 5 l 5 0 l -5 -5 z"
-									></path>
-								</g>
-							</svg>
-						</div>
-						<div class="legend-caption"></div>
-					</div>
-					<div class="legend-item">
-						<div class="legend-icon">
-							<svg>
-								<g class="mtl" transform="translate(50,30)">
-									<path
-										[style]="{ stroke: setting.mtlUseColor }"
-										class="mtl_path"
-										level="level2"
-										d="m-10 10 l5 -10 l-5 -10 l20 0 l-5 10 l5 10"
-									></path>
-								</g>
-							</svg>
-						</div>
-						<div class="legend-caption"></div>
-					</div>
-					<div class="legend-item">
-						<div class="legend-icon">
-							<svg>
-								<g class="mtl" transform="translate(30,28)">
+							<svg class="long-vertical">
+								<g class="mtl" transform="translate(50,28)">
 									<path
 										[style]="{ stroke: setting.mtlUseColor }"
 										class="mtl_path"
@@ -1251,8 +1195,8 @@
 									<text
 										class="label"
 										font-size="11px"
-										x="19"
-										y="15"
+										x="-16"
+										y="-20"
 										text-anchor="start"
 									>
 										mtl_id
@@ -1260,51 +1204,55 @@
 								</g>
 							</svg>
 						</div>
-						<div class="legend-caption"></div>
+						<div class="legend-caption">Normal</div>
+					</div>
+					<div class="legend-item">
+						<div class="legend-icon">
+							<svg class="long-vertical">
+								<g class="mtl" transform="translate(50,28)">
+									<path
+										[style]="{ stroke: setting.mtlUnuseColor }"
+										class="mtl_path"
+										level="level3"
+										fill="black"
+										d="m-13.5 13.5 l4.5 -4.5 l-4.5 -4.5 l4.5 -4.5 l-4.5 -4.5 l4.5 -4.5 l-4.5 -4.5 l27 0 l-4.5 4.5 l4.5 4.5 l-4.5 4.5 l4.5 4.5 l-4.5 4.5 l4.5 4.5 m-22.5 -22.5 l18 0"
+									></path>
+									<text
+										class="label"
+										font-size="11px"
+										x="-16"
+										y="-20"
+										text-anchor="start"
+									>
+										mtl_id
+									</text>
+								</g>
+							</svg>
+						</div>
+						<div class="legend-caption">Unused</div>
 					</div>
 				</dd>
 				<dt>{{ 'names.zcu' | translate }}</dt>
-				<dd>
+				<dd class="--item-gap">
 					<div class="legend-item">
 						<div class="legend-icon">
-							<svg>
-								<g class="zcu" transform="translate(50,30)">
-									<path
-										class="zcu_path"
-										level="level1"
-										d="M-3,0 L0,-3 L3,0 L0,3 L-3,0 z"
-										fill="none"
-									></path>
-								</g>
-							</svg>
-						</div>
-						<div class="legend-caption"></div>
-					</div>
-					<div class="legend-item">
-						<div class="legend-icon">
-							<svg>
-								<g class="zcu" transform="translate(50,30)">
-									<path
-										class="zcu_path"
-										level="level2"
-										d="M-12,0 L0,-12 L12,0 L0,12 L-12,0 z"
-										fill="none"
-									></path>
-								</g>
-							</svg>
-						</div>
-						<div class="legend-caption"></div>
-					</div>
-					<div class="legend-item">
-						<div class="legend-icon">
-							<svg>
-								<g class="zcu" transform="translate(30,28)">
+							<svg class="long-vertical">
+								<g class="zcu" transform="translate(50,28)">
 									<path
 										class="zcu_path"
 										level="level3"
 										fill="none"
 										d="M-16,0 L0,-16 L16,0 L0,16 L-16,0 z"
 									></path>
+									<text
+										class="label"
+										font-size="11px"
+										x="-35"
+										y="-10"
+										text-anchor="start"
+									>
+										HW
+									</text>
 									<text
 										class="label"
 										font-size="11px"
@@ -1317,69 +1265,84 @@
 								</g>
 							</svg>
 						</div>
-						<div class="legend-caption"></div>
+						<div class="legend-caption">Hardware</div>
+					</div>
+					<div class="legend-item">
+						<div class="legend-icon">
+							<svg class="long-vertical">
+								<g class="zcu" transform="translate(50,28)">
+									<path
+										class="zcu_path"
+										level="level3"
+										fill="none"
+										d="M-16,0 L0,-16 L16,0 L0,16 L-16,0 z"
+									></path>
+									<text
+										class="label"
+										font-size="11px"
+										x="-35"
+										y="-10"
+										text-anchor="start"
+									>
+										SW
+									</text>
+									<text
+										class="label"
+										font-size="11px"
+										x="19"
+										y="15"
+										text-anchor="start"
+									>
+										zcu_id
+									</text>
+								</g>
+							</svg>
+						</div>
+						<div class="legend-caption">Software</div>
+					</div>
+					<div class="legend-item">
+						<div class="legend-icon">
+							<svg class="long-vertical">
+								<g class="zcu" transform="translate(50,28)">
+									<path
+										class="zcu_path"
+										level="level3"
+										fill="red"
+										d="M-16,0 L0,-16 L16,0 L0,16 L-16,0 z"
+									></path>
+									<text
+										class="label"
+										font-size="11px"
+										x="-35"
+										y="-10"
+										text-anchor="start"
+									>
+										HW
+									</text>
+									<text
+										class="label"
+										font-size="11px"
+										x="19"
+										y="15"
+										text-anchor="start"
+									>
+										zcu_id
+									</text>
+								</g>
+							</svg>
+						</div>
+						<div class="legend-caption">Hardware error</div>
 					</div>
 				</dd>
 				<!-- FireShutter (Opened) -->
-				<dt>{{ 'names.fireshutter' | translate }} (Opened)</dt>
-				<dd>
+				<dt>{{ 'names.fireshutter' | translate }}</dt>
+				<dd class="--item-gap">
 					<div class="legend-item">
 						<div class="legend-icon">
-							<svg>
-								<g class="fireshutter" transform="translate(50,30)">
-									<path
-										d="M -3,0 h 10 m -10,8 h 10 m -8,-4 z"
-										[style]="{
-											stroke: setting.fireshutterOpenedColor,
-											fill: setting.fireshutterOpenedColor
-										}"
-									></path>
-								</g>
-							</svg>
-						</div>
-						<div class="legend-caption"></div>
-					</div>
-					<div class="legend-item">
-						<div class="legend-icon">
-							<svg>
+							<svg class="long-vertical">
 								<g
 									class="fireshutter"
-									transform="translate(50,30)"
-									[style]="{
-										stroke: setting.fireshutterOpenedColor,
-										fill: setting.fireshutterOpenedColor
-									}"
-								>
-									<rect width="33" height="2" level="level2" x="-17" y="-15" />
-									<rect
-										class="fireshutter_rotate"
-										width="28"
-										height="2"
-										level="level2"
-										x="-15"
-										y="14"
-									/>
-									<rect width="21" height="1" x="-11" y="-10" />
-									<rect
-										class="fireshutter_rotate"
-										width="28"
-										height="2"
-										level="level2"
-										x="-15"
-										y="-15"
-									/>
-									<rect width="33" height="2" level="level2" x="-17" y="12" />
-								</g>
-							</svg>
-						</div>
-						<div class="legend-caption"></div>
-					</div>
-					<div class="legend-item">
-						<div class="legend-icon">
-							<svg>
-								<g
-									class="fireshutter"
-									transform="translate(30,28)"
+									transform="translate(48,30)"
 									[style]="{
 										stroke: setting.fireshutterOpenedColor,
 										fill: setting.fireshutterOpenedColor
@@ -1405,7 +1368,7 @@
 									<rect width="20" height="2" x="-7" y="-10" level="level3" />
 									<rect
 										class="fireshutter_rotate"
-										width="40"
+										width="35"
 										height="3"
 										x="-20"
 										y="-21"
@@ -1421,84 +1384,16 @@
 										level="level3"
 									/>
 								</g>
-								<text
-									class="label"
-									font-size="11px"
-									x="30"
-									y="15"
-									transform="translate(30,28)"
-									text-anchor="start"
-								>
-									fs_id
-								</text>
 							</svg>
 						</div>
-						<div class="legend-caption"></div>
-					</div>
-				</dd>
-				<!-- fireshutter Closed -->
-				<dt>{{ 'names.fireshutter' | translate }} (Closed)</dt>
-				<dd>
-					<div class="legend-item">
-						<div class="legend-icon">
-							<svg>
-								<g class="fireshutter" transform="translate(50,30)">
-									<path
-										d="M -3,0 h 10 m -10,8 h 10 M -2 4 h 8 z"
-										[style]="{
-											stroke: setting.fireshutterClosedColor,
-											fill: setting.fireshutterClosedColor
-										}"
-									></path>
-								</g>
-							</svg>
-						</div>
-						<div class="legend-caption"></div>
+						<div class="legend-caption">Open</div>
 					</div>
 					<div class="legend-item">
 						<div class="legend-icon">
-							<svg>
+							<svg class="long-vertical">
 								<g
 									class="fireshutter"
-									transform="translate(50,30)"
-									[style]="{
-										stroke: setting.fireshutterClosedColor,
-										fill: setting.fireshutterClosedColor
-									}"
-								>
-									<rect width="33" height="2" level="level2" x="-17" y="-15" />
-									<rect
-										class="fireshutter_rotate"
-										width="28"
-										height="2"
-										level="level2"
-										x="-15"
-										y="14"
-									/>
-									<rect width="21" height="1" x="-11" y="-8" stroke-width="1" />
-									<rect width="21" height="1" x="-11" y="-3" stroke-width="1" />
-									<rect width="21" height="1" x="-11" y="2" stroke-width="1" />
-									<rect width="21" height="1" x="-11" y="7" stroke-width="1" />
-									<rect
-										class="fireshutter_rotate"
-										width="28"
-										height="2"
-										level="level2"
-										x="-15"
-										y="-15"
-									/>
-									<rect width="33" height="2" level="level2" x="-17" y="12" />
-								</g>
-							</svg>
-						</div>
-						<div class="legend-caption"></div>
-					</div>
-					<div class="legend-item">
-						<div class="legend-icon">
-							<svg>
-								<g
-									class="fireshutter"
-									transform="translate(30,28)"
+									transform="translate(48,30)"
 									[style]="{
 										stroke: setting.fireshutterClosedColor,
 										fill: setting.fireshutterClosedColor
@@ -1543,19 +1438,9 @@
 										level="level3"
 									/>
 								</g>
-								<text
-									class="label"
-									font-size="11px"
-									transform="translate(30,28)"
-									x="30"
-									y="15"
-									text-anchor="start"
-								>
-									fs_id
-								</text>
 							</svg>
 						</div>
-						<div class="legend-caption"></div>
+						<div class="legend-caption">Closed</div>
 					</div>
 				</dd>
 			</dl>
