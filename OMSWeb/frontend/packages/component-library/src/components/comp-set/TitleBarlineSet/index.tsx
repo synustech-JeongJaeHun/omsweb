@@ -8,14 +8,19 @@ import * as R from 'ramda'
 import styled from '@emotion/styled'
 import { css } from '@emotion/react'
 import { color } from '@daimre/styles'
-import { numberWithCommas, isFullEmpty, omitArray } from '@daimre/shared'
+import {
+	numberWithCommas,
+	isFullEmpty,
+	omitArray,
+	bdFormat,
+} from '@daimre/shared'
 import Container from '../../layout/Container'
 import RCol from '../../layout/RCol'
 import Col from '../../layout/Col'
 import BarlineTableV from '../../chart-set/BarlineTableV'
 import BarlineTableH from '../../chart-set/BarlineTableH'
 import BarlineRangeTable from '../../chart-set/BarlineRangeTable'
-import TitleSet from '../TitleSet'
+import TitleSet, { Props as TitleSetProps } from '../TitleSet'
 import { genNormaltr } from '@daimre/shared'
 import { exStatData, exEmptyData } from './exData'
 import { useImmer } from 'use-immer'
@@ -39,10 +44,12 @@ const Wrapper = styled.div`
 `
 
 const dic = {
-	duration: '기간별',
-	vehicle: 'Vehicle별',
-	source: 'Source별',
-	dest: 'Dest별',
+	duration: 'By Duration',
+	vehicle: 'By Vehicle',
+	source: 'By Source',
+	dest: 'By Dest',
+	alarm: 'By Alarm',
+	point: 'By Point',
 }
 
 const pageDic = {
@@ -51,14 +58,18 @@ const pageDic = {
 }
 
 const keys = ['duration', 'vehicle', 'source', 'dest']
+const keys2 = ['duration', 'vehicle', 'alarm', 'point']
 
 const getExData = (layoutKey) => {
 	return genNormaltr(layoutKey)
 }
 
+const getKeys = (pageVariant) => (pageVariant === 'normaltr' ? keys : keys2)
+
 const makeTableData = (pageVariant, data) => {
 	const tc = tableConfig[pageVariant]
-	return keys.reduce((acc, key) => {
+	const _keys = getKeys(pageVariant)
+	return _keys.reduce((acc, key) => {
 		const { header, keys: hKeys } = tc[key]
 		const _data = data[key]
 		acc[key] = {
@@ -79,8 +90,8 @@ const makeTableData = (pageVariant, data) => {
 const genConfig = (variant, data, pageVariant) => {
 	let temp = []
 	const ret = makeTableData(pageVariant, data)
-
-	const list = keys.map((key) => {
+	const _keys = getKeys(pageVariant)
+	const list = _keys.map((key) => {
 		return {
 			variant: key,
 			title: `${dic[key]}`,
@@ -95,10 +106,12 @@ const genConfig = (variant, data, pageVariant) => {
 		case 'vehicle':
 		case 'source':
 		case 'dest':
-			temp = omitArray(['duration', variant], keys, list)
+		case 'alarm':
+		case 'point':
+			temp = omitArray(['duration', variant], _keys, list)
 			break
 		default:
-			temp = omitArray(['duration'], keys, list)
+			temp = omitArray(['duration'], _keys, list)
 			break
 	}
 
@@ -133,7 +146,6 @@ const Pane = ({ variant, data, onClick, onZoom, pageVariant }) => {
 }
 
 const DetailChart = ({ variant, data, onClickClose }) => {
-
 	return (
 		<div>
 			<div>
@@ -148,151 +160,230 @@ const DetailChart = ({ variant, data, onClickClose }) => {
 	)
 }
 
-const TitleBarlineSet: React.FC<Props> & any = ({
-	pageVariant,
-	data,
-	stats,
-	isPlaceholder
-}: Props) => {
-	const [state, updateState] = useImmer({
-		isZoomed: false,
-		isClicked: false,
-		layoutKey: 'overview', // overview, duration, vehicle, source, dest
-		layoutValue: null,
-		zoomedSection: null,
-		zoomedData: {
-			header: [],
-			body: [],
-		},
-		_data: data,
-	})
-
-	React.useEffect(() => {
-		updateState(draft => {
-			draft._data = data
+const TitleBarlineSet: React.FC<Props & any> & any = React.forwardRef(
+	(
+		{
+			pageVariant,
+			data,
+			stats,
+			isStatPlaceholder,
+			isChartPlaceholder,
+			onClickItem,
+			onDateChange,
+			onClickConfig,
+			startDay,
+			endDay,
+			beforeRangeValue,
+			beforeRangeUnit,
+		}: Props,
+		inRef: any,
+	) => {
+		const ref = React.useRef({
+			reset: () => {},
 		})
-	}, [data])
-
-	const {
-		isZoomed,
-		isClicked,
-		layoutKey,
-		layoutValue,
-		zoomedSection,
-		zoomedData,
-		_data,
-	} = state
-
-	const getSectionTitle = () => {
-		if (isZoomed) {
-			return layoutKey === 'overview'
-				? `${dic[zoomedSection]} 전체`
-				: `${dic[layoutKey]} - ${layoutValue} | ${dic[zoomedSection]}`
-		}
-
-		return layoutKey === 'overview' ? '' : `${dic[layoutKey]} - ${layoutValue}`
-	}
-
-	const handleClick = ({ key, value }) => {
-		const clickedData = getExData(key)
-
-		updateState((draft) => {
-			draft.isClicked = true
-			draft.layoutKey = key
-			draft.layoutValue = value
-			draft._data = clickedData
+		const [cnt, updateCnt] = React.useState(0)
+		const [state, updateState] = useImmer({
+			isZoomed: false,
+			isClicked: false,
+			layoutKey: 'overview', // overview, duration, vehicle, source, dest
+			layoutValue: null,
+			zoomedSection: null,
+			zoomedData: {
+				header: [],
+				body: [],
+			},
+			_data: data,
 		})
-	}
 
-	const handleClickBack = (e) => {
-		if (!isZoomed) {
+		React.useEffect(() => {
 			updateState((draft) => {
-				draft.isClicked = false
-				draft.layoutKey = 'overview'
-				draft.layoutValue = null
 				draft._data = data
 			})
-		} else {
+		}, [data])
+
+		React.useEffect(() => {
+			if (cnt !== 0) {
+				setTimeout(() => {
+					updateState((draft) => {
+						draft.isZoomed = false
+						draft.isClicked = false
+						draft.layoutKey = 'overview'
+						draft.layoutValue = null
+						draft.zoomedSection = null
+						draft.zoomedData = {
+							header: [],
+							body: [],
+						}
+					})
+				}, 500)
+			}
+		}, [cnt])
+
+		React.useImperativeHandle(
+			inRef,
+			() => {
+				const temp = () => updateCnt(cnt + 1)
+				if (ref.current) {
+					ref.current.reset = temp
+				}
+				return ref.current
+			},
+			[ref, cnt],
+		)
+
+		const {
+			isZoomed,
+			isClicked,
+			layoutKey,
+			layoutValue,
+			zoomedSection,
+			zoomedData,
+			_data,
+		} = state
+
+		const getSectionTitle = () => {
+			if (isZoomed) {
+				return layoutKey === 'overview'
+					? `${dic[zoomedSection]} 전체`
+					: `${dic[layoutKey]} - ${layoutValue} | ${dic[zoomedSection]}`
+			}
+
+			return layoutKey === 'overview'
+				? ''
+				: `${dic[layoutKey]} - ${layoutValue}`
+		}
+
+		const handleClick = async ({ key, value, detail }) => {
+			const isDay = R.test(/-/, value)
+			!isDay && onClickItem && onClickItem({ key, value })
+
+			!isDay &&
+				updateState((draft) => {
+					draft.isClicked = true
+					draft.layoutKey = key
+					draft.layoutValue = value
+				})
+		}
+
+		const handleClickBack = (e) => {
+			if (!isZoomed) {
+				updateState((draft) => {
+					draft.isClicked = false
+					draft.layoutKey = 'overview'
+					draft.layoutValue = null
+				})
+
+				onClickItem &&
+					onClickItem({
+						key: 'overview',
+						value: '',
+					})
+			} else {
+				updateState((draft) => {
+					draft.isZoomed = false
+				})
+			}
+		}
+
+		const handleZoom = ({ variant: chartType, data }) => {
+			updateState((draft) => {
+				draft.isZoomed = true
+				draft.zoomedSection = chartType
+				draft.zoomedData = data
+			})
+		}
+
+		const handleZoomout = () => {
 			updateState((draft) => {
 				draft.isZoomed = false
 			})
 		}
-	}
 
-	const handleZoom = ({ variant: chartType, data }) => {
-		updateState((draft) => {
-			draft.isZoomed = true
-			draft.zoomedSection = chartType
-			draft.zoomedData = data
-		})
-	}
-
-	const handleZoomout = () => {
-		updateState((draft) => {
-			draft.isZoomed = false
-		})
-	}
-
-	return (
-		<QueryContext.Provider value={{ isPlaceholder }}>
+		return (
 			<ContentPaneBody>
-				<Scrollable
-					scroll='y'
-					width='100%'
-					height='100%'
-				>
+				<Scrollable scroll="y" width="100%" height="100%">
 					<Wrapper>
-						<Container h='center'>
+						<Container h="center">
 							<RCol col={12} sm={12} md={12} lg={9}>
 								<TitleSet
 									title={pageDic[pageVariant]}
 									subtitle={getSectionTitle()}
 									onClick={handleClickBack}
 									stats={stats}
+									onDateChange={onDateChange}
+									onClickConfig={onClickConfig}
+									isPlaceholder={isStatPlaceholder}
+									startDay={startDay}
+									endDay={endDay}
+									beforeRangeValue={beforeRangeValue}
+									beforeRangeUnit={beforeRangeUnit}
 								/>
-								<div className="chart-container">
-									{!isZoomed ? (
-										<Pane
-											variant={layoutKey}
-											data={_data}
-											onClick={handleClick}
-											onZoom={handleZoom}
-											pageVariant={pageVariant}
-										/>
-									) : (
-										<DetailChart
-											variant={zoomedSection}
-											data={zoomedData}
-											onClickClose={handleZoomout}
-										/>
-									)}
-								</div>
-							</RCol >
-						</Container >
+								<QueryContext.Provider
+									value={{ isPlaceholder: isChartPlaceholder }}
+								>
+									<div className="chart-container">
+										{!isZoomed ? (
+											<Pane
+												variant={layoutKey}
+												data={_data}
+												onClick={handleClick}
+												onZoom={handleZoom}
+												pageVariant={pageVariant}
+											/>
+										) : (
+											<DetailChart
+												variant={zoomedSection}
+												data={zoomedData}
+												onClickClose={handleZoomout}
+											/>
+										)}
+									</div>
+								</QueryContext.Provider>
+							</RCol>
+						</Container>
 						<div className="space"></div>
 					</Wrapper>
 				</Scrollable>
 			</ContentPaneBody>
-		</ QueryContext.Provider>
-	)
-}
+		)
+	},
+)
 
 TitleBarlineSet.exEmptyData = exEmptyData
 TitleBarlineSet.exStatData = exStatData
 TitleBarlineSet.genNormaltr = genNormaltr
 
 TitleBarlineSet.defaultProps = {
-	data: getExData('overview'),
+	data: getExData({ variant: 'overview', pageType: 'alarm' }),
 	pageVariant: 'alarm',
 	stats: exStatData.alarm,
-	isPlaceholder: false
+	onClickItem: (values) => {},
+	onDateChange: (values) => {},
+	onClickConfig: (values) => {},
+	isStatPlaceholder: false,
+	isChartPlaceholder: false,
+	startDay: bdFormat(1),
+	endDay: bdFormat(0),
+	beforeRangeValue: 3,
+	beforeRangeUnit: 'months',
 }
 
-interface Props {
+interface Props
+	extends Pick<
+		TitleSetProps,
+		| 'startDay'
+		| 'endDay'
+		| 'onDateChange'
+		| 'onClickConfig'
+		| 'beforeRangeValue'
+		| 'beforeRangeUnit'
+	> {
 	data?: any
 	pageVariant?: 'normaltr' | 'alarm'
 	stats?: any
-	isPlaceholder?: boolean
+	isStatPlaceholder?: boolean
+	isChartPlaceholder?: boolean
+	onClickItem?: (any) => void
 }
 
 export default TitleBarlineSet

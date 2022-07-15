@@ -24,7 +24,7 @@ const genPlaceholder = ({ data, height, isH }) => {
 			visible: false
 		},
 		lang: {
-			noData: '데이타가 없습니다',
+			noData: 'no data',
 		},
 		yAxis: {
 			title: {
@@ -34,9 +34,9 @@ const genPlaceholder = ({ data, height, isH }) => {
 				enabled: false
 			}
 		},
-		tooltip: {
-			enabled: false
-		},
+		// tooltip: {
+		// 	enabled: false
+		// },
 		legend: {
 			enabled: false,
 		},

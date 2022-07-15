@@ -4,16 +4,16 @@ export const tableConfig = {
 			keys: ['duration', 'conveyance', 'avgConveyance'],
 			header: [
 				{
-					caption: '기간',
+					caption: 'duration',
 					dataField: 'duration',
 				},
 				{
-					caption: '반송량',
+					caption: 'TR count',
 					dataField: 'conveyance',
 					width: 80,
 				},
 				{
-					caption: '평균반송시간',
+					caption: 'avg TR time',
 					dataField: 'avgConveyance',
 					width: 115,
 				},
@@ -23,16 +23,16 @@ export const tableConfig = {
 			keys: ['name', 'conveyance', 'avgConveyance'],
 			header: [
 				{
-					caption: 'vehicle명',
+					caption: 'vehicle name',
 					dataField: 'name',
 				},
 				{
-					caption: '반송량',
+					caption: 'TR count',
 					dataField: 'conveyance',
 					width: 80,
 				},
 				{
-					caption: '평균반송시간',
+					caption: 'avg TR time',
 					dataField: 'avgConveyance',
 					width: 115,
 				},
@@ -42,16 +42,16 @@ export const tableConfig = {
 			keys: ['name', 'conveyance', 'avgConveyance'],
 			header: [
 				{
-					caption: 'source명',
+					caption: 'source name',
 					dataField: 'name',
 				},
 				{
-					caption: '반송량',
+					caption: 'TR count',
 					dataField: 'conveyance',
 					width: 80,
 				},
 				{
-					caption: '평균반송시간',
+					caption: 'avg TR time',
 					dataField: 'avgConveyance',
 					width: 115,
 				},
@@ -61,16 +61,16 @@ export const tableConfig = {
 			keys: ['name', 'conveyance', 'avgConveyance'],
 			header: [
 				{
-					caption: 'dest명',
+					caption: 'dest name',
 					dataField: 'name',
 				},
 				{
-					caption: '반송량',
+					caption: 'TR count',
 					dataField: 'conveyance',
 					width: 80,
 				},
 				{
-					caption: '평균반송시간',
+					caption: 'avg TR time',
 					dataField: 'avgConveyance',
 					width: 115,
 				},
@@ -82,11 +82,11 @@ export const tableConfig = {
 			keys: ['duration', 'fa'],
 			header: [
 				{
-					caption: '기간',
+					caption: 'duration',
 					dataField: 'duration',
 				},
 				{
-					caption: '실패량',
+					caption: 'abnormal TR',
 					dataField: 'fa',
 				},
 			],
@@ -95,11 +95,11 @@ export const tableConfig = {
 			keys: ['name', 'fa'],
 			header: [
 				{
-					caption: 'vehicle명',
+					caption: 'vehicle name',
 					dataField: 'name',
 				},
 				{
-					caption: '실패량',
+					caption: 'abnormal TR',
 					dataField: 'fa',
 				},
 			],
@@ -108,11 +108,11 @@ export const tableConfig = {
 			keys: ['name', 'fa'],
 			header: [
 				{
-					caption: 'source명',
+					caption: 'source name',
 					dataField: 'name',
 				},
 				{
-					caption: '실패량',
+					caption: 'abnormal TR',
 					dataField: 'fa',
 				},
 			],
@@ -121,11 +121,11 @@ export const tableConfig = {
 			keys: ['name', 'fa'],
 			header: [
 				{
-					caption: 'dest명',
+					caption: 'dest name',
 					dataField: 'name',
 				},
 				{
-					caption: '실패량',
+					caption: 'abnormal TR',
 					dataField: 'fa',
 				},
 			],
@@ -136,16 +136,16 @@ export const tableConfig = {
 			keys: ['duration', 'alarmNum', 'avgHour'],
 			header: [
 				{
-					caption: '기간',
+					caption: 'duration',
 					dataField: 'duration',
 				},
 				{
-					caption: '알람수',
+					caption: 'alarm count',
 					dataField: 'alarmNum',
 					width: 80,
 				},
 				{
-					caption: '평균시간',
+					caption: 'avg time under alarm',
 					dataField: 'avgHour',
 					width: 115,
 				},
@@ -155,16 +155,54 @@ export const tableConfig = {
 			keys: ['name', 'alarmNum', 'avgHour'],
 			header: [
 				{
-					caption: 'vehicle명',
+					caption: 'vehicle name',
 					dataField: 'name',
 				},
 				{
-					caption: '알람수',
+					caption: 'alarm count',
 					dataField: 'alarmNum',
 					width: 80,
 				},
 				{
-					caption: '평균시간',
+					caption: 'avg time under alarm',
+					dataField: 'avgHour',
+					width: 115,
+				},
+			],
+		},
+		alarm: {
+			keys: ['name', 'alarmNum', 'avgHour'],
+			header: [
+				{
+					caption: 'alarm name',
+					dataField: 'name',
+				},
+				{
+					caption: 'alarm count',
+					dataField: 'alarmNum',
+					width: 80,
+				},
+				{
+					caption: 'avg time under alarm',
+					dataField: 'avgHour',
+					width: 115,
+				},
+			],
+		},
+		point: {
+			keys: ['name', 'alarmNum', 'avgHour'],
+			header: [
+				{
+					caption: 'segment name',
+					dataField: 'name',
+				},
+				{
+					caption: 'alarm count',
+					dataField: 'alarmNum',
+					width: 80,
+				},
+				{
+					caption: 'avg time under alarm',
 					dataField: 'avgHour',
 					width: 115,
 				},
@@ -174,16 +212,16 @@ export const tableConfig = {
 			keys: ['name', 'alarmNum', 'avgHour'],
 			header: [
 				{
-					caption: 'source명',
+					caption: 'source name',
 					dataField: 'name',
 				},
 				{
-					caption: '알람수',
+					caption: 'alarm count',
 					dataField: 'alarmNum',
 					width: 80,
 				},
 				{
-					caption: '평균시간',
+					caption: 'avg time under alarm',
 					dataField: 'avgHour',
 					width: 115,
 				},
@@ -193,16 +231,16 @@ export const tableConfig = {
 			keys: ['name', 'alarmNum', 'avgHour'],
 			header: [
 				{
-					caption: 'dest명',
+					caption: 'dest name',
 					dataField: 'name',
 				},
 				{
-					caption: '알람수',
+					caption: 'alarm count',
 					dataField: 'alarmNum',
 					width: 80,
 				},
 				{
-					caption: '평균시간',
+					caption: 'avg time under alarm',
 					dataField: 'avgHour',
 					width: 115,
 				},

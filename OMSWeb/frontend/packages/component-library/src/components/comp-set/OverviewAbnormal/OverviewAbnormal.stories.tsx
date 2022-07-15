@@ -12,18 +12,19 @@ Basic.args = {}
 
 export const Empty = (args) => <OverviewAbnormal {...args} />
 Empty.args = {
-	...exEmptyData
+	...exEmptyData,
 }
 
 export const Placeholder = (args) => <OverviewAbnormal {...args} />
 Placeholder.args = {
 	...exEmptyData,
-	isPlaceholder: true
+	isStatPlaceholder: true,
+	isChartPlaceholder: true,
 }
 
 export const GetData = () => {
 	const [isPlaceholder, updateState] = React.useState(true)
-	const [ data, setData ] = React.useState(exEmptyData)
+	const [data, setData] = React.useState(exEmptyData)
 
 	React.useEffect(() => {
 		const id = setTimeout(() => {
@@ -34,6 +35,11 @@ export const GetData = () => {
 		return () => clearTimeout(id)
 	}, [])
 
-
-	return <OverviewAbnormal {...data} isPlaceholder={isPlaceholder}/>
+	return (
+		<OverviewAbnormal
+			{...data}
+			isStatPlaceholder={isPlaceholder}
+			isChartPlaceholder={isPlaceholder}
+		/>
+	)
 }

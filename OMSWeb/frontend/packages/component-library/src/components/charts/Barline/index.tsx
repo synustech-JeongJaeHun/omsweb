@@ -13,6 +13,7 @@ import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 import { dic } from '../shared'
 import { usePlaceholderData } from '@daimre/shared'
+import { useImmer } from 'use-immer'
 
 type StyleType = {}
 
@@ -82,7 +83,7 @@ const getOptions = ({
 			// zoomType: 'xy',
 			height,
 			marginBottom: isH ? 77 : undefined,
-			animation: false
+			animation: false,
 		},
 		title: {
 			text: null,
@@ -107,11 +108,12 @@ const getOptions = ({
 			},
 		],
 		lang: {
-			noData: '데이타가 없습니다',
+			noData: 'no data',
 		},
 		yAxis,
 		tooltip: {
 			shared: true,
+			enabled: true,
 		},
 		legend: {
 			enabled: false,
@@ -133,8 +135,8 @@ const getOptions = ({
 				},
 			},
 			series: {
-				animation: false
-			}
+				animation: false,
+			},
 		},
 		series,
 	}
@@ -159,15 +161,16 @@ const Barline: React.FC<Props> = ({
 		isH
 	})
 
+
 	React.useEffect(() => {
 		if (ref.current) {
 			setTimeout(() => {
 				ref.current.chart.reflow()
-				ref.current.chart.update({
-					chart: {
-						animation: true
-					}
-				})
+				// ref.current.chart.update({
+				// 	chart: {
+				// 		animation: true
+				// 	}
+				// })
 			})
 		}
 	}, [])
@@ -186,7 +189,7 @@ const Barline: React.FC<Props> = ({
 			<HighchartsReact
 				ref={ref}
 				highcharts={Highcharts}
-				options={currentOpt} />
+				options={R.clone(currentOpt)} />
 		</Wrapper>
 	)
 }
@@ -202,7 +205,7 @@ Barline.defaultProps = {
 	isH: false,
 	onClick: () => {},
 	variant: '',
-	isPlaceholder: false
+	isPlaceholder: false,
 }
 
 interface Props {

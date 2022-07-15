@@ -4,12 +4,12 @@ const dic = {
 	name: {},
 	conveyance: {
 		series: {
-			name: '반송량',
+			name: 'TR count',
 			type: 'column',
 			yAxis: 1,
 			color: '#4F96CC',
 			tooltip: {
-				valueSuffix: '개',
+				valueSuffix: 'ea',
 			},
 		},
 		yAxis: {
@@ -29,17 +29,17 @@ const dic = {
 	},
 	avgConveyance: {
 		series: {
-			name: '평균반송시간',
+			name: 'avg TR time',
 			type: 'spline',
 			color: '#FF0000',
 			tooltip: {
-				valueSuffix: '시간',
+				valueSuffix: 'hour',
 			},
 		},
 		yAxis: {
 			labels: {
 				enabled: true,
-				format: '{value}개',
+				format: '{value}ea',
 				style: {
 					color: Highcharts.getOptions().colors[1],
 				},
@@ -51,12 +51,12 @@ const dic = {
 	},
 	alarmNum: {
 		series: {
-			name: '알람수',
+			name: 'alarm count',
 			type: 'column',
 			yAxis: 1,
 			color: '#4F96CC',
 			tooltip: {
-				valueSuffix: '개',
+				valueSuffix: 'ea',
 			},
 		},
 		yAxis: {
@@ -76,17 +76,17 @@ const dic = {
 	},
 	avgHour: {
 		series: {
-			name: '평균시간',
+			name: 'avg time under alarm',
 			type: 'spline',
 			color: '#FF0000',
 			tooltip: {
-				valueSuffix: '시간',
+				valueSuffix: 'hour',
 			},
 		},
 		yAxis: {
 			labels: {
 				enabled: true,
-				format: '{value}개',
+				format: '{value}ea',
 				style: {
 					color: Highcharts.getOptions().colors[1],
 				},

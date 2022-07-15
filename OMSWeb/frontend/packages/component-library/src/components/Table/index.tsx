@@ -128,7 +128,7 @@ const Table: React.FC<Props & any> = React.forwardRef(
 				<DataGrid
 					height={height}
 					showBorders={true}
-					noDataText='데이타가 없습니다'
+					noDataText='no data'
 					dataSource={tableBody}
 					columnAutoWidth={true}
 					allowColumnReordering={true}

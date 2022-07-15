@@ -94,6 +94,6 @@ export const breakpoint = {}
 
 export const paneBodyBreakpoint = {
   sm: [0, 1000],
-  md: [1000, 1750],
-  lg: [1750, 3000],
+  md: [1000, 2060],
+  lg: [2060, 3000],
 }

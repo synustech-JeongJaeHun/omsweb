@@ -49,7 +49,7 @@ namespace OMSWeb
 
             // set MqttAppSettingsProvider
             MqttAppSettingsProvider.BrokerHostSettings = new BrokerHostSettings(
-                    AppConfig.GetFromOMSConfig("MessageManager", "host", "localhost"),
+                    AppConfig.GetFromOMSConfig("MessageManager", "host", "172.30.1.48"),
                     Convert.ToInt32(AppConfig.GetFromOMSConfig("MessageManager", "port", "1883")),
                     AppConfig.GetFromOMSConfig("MessageManager", "topic_root", "oms")
                 );
@@ -143,6 +143,10 @@ namespace OMSWeb
             services.AddScoped<SettingsRepository>();
             services.AddScoped<VehicleRepository>();
             services.AddScoped<ReportRepository>();
+            services.AddScoped<ReportNormaltrRepository>();
+            services.AddScoped<ReportAbnormaltrRepository>();
+            services.AddScoped<ReportAlarmRepository>();
+            services.AddScoped<ReportTrendReposity>();
             services.AddScoped<DbVersionRepository>();
 
             services.AddScoped<ModuleStatusService>();
@@ -166,6 +170,7 @@ namespace OMSWeb
             services.AddSingleton<TrackService>();
             services.AddSingleton<PushService>();
             services.AddSingleton<CacheService>();
+            services.AddSingleton<ComputerPerformanceService>();
 
             // services.AddTransient<ProblemDetailsFactory, OmsProblemDetailsFactory>();  // @TODO problem handler 작성 후 사용
             #endregion

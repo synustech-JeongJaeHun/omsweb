@@ -25,6 +25,16 @@ const dic = {
 		length: 10,
 		rand: [500, 1 / 3],
 	},
+  alarm: {
+		label: 'ALARM',
+		length: 10,
+		rand: [500, 1 / 3],
+	},
+  segment: {
+		label: 'SEG',
+		length: 10,
+		rand: [500, 1 / 3],
+	},
 }
 
 const getRandomRound = (rand, digit = 0) => {
@@ -55,22 +65,25 @@ const genItem = (variant, opt = {}) => {
 	return getBody(config)
 }
 
-const genList = () => {
+const genList = (pageType) => {
 	const keys = ['duration', 'vehicle', 'source', 'dest']
+	const keys2 = ['duration', 'vehicle', 'alarm', 'segment']
+	const _Keys = pageType === 'normaltr' ? keys : keys2
 
-	return keys.reduce((acc, key) => {
+	return _Keys.reduce((acc, key) => {
 		acc[key] = genItem(key)
 		return acc
 	}, {})
 }
 
-const getNormaltr = ({ variant }: Props) => {
-	const all = genList()
+const getNormaltr = ({ variant, pageType = 'normaltr' }: Props) => {
+	const all = genList(pageType)
 	return variant === 'duration' ? all : R.omit([variant], all)
 }
 
 interface Props {
-	variant: 'duration' | 'vehicle' | 'source' | 'dest'
+	variant: 'duration' | 'vehicle' | 'source' | 'dest' | 'alarm' | 'segment'
+	pageType?: string
 }
 
 export default getNormaltr

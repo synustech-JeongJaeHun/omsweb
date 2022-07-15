@@ -6,7 +6,6 @@ import {
 	abnormaltrBySource,
 } from '../../../exData'
 
-
 export const exData = {
 	stats: [
 		{
@@ -46,11 +45,11 @@ export const exData = {
 		},
 	],
 	data: {
-		duration: abnormaltrByDuration,
-		vehicle: abnormaltrByVehicle,
-		source: abnormaltrBySource,
-		dest: abnormaltrByDest,
-	}
+		duration: abnormaltrByDuration.body,
+		vehicle: abnormaltrByVehicle.body,
+		source: abnormaltrBySource.body,
+		dest: abnormaltrByDest.body,
+	},
 }
 
 export const exEmptyData = {
@@ -81,7 +80,7 @@ export const exEmptyData = {
 					width: 80,
 				},
 			],
-			body: []
+			body: [],
 		},
 		vehicle: {
 			header: [
@@ -95,7 +94,7 @@ export const exEmptyData = {
 					width: 80,
 				},
 			],
-			body: []
+			body: [],
 		},
 		source: {
 			header: [
@@ -109,7 +108,7 @@ export const exEmptyData = {
 					width: 80,
 				},
 			],
-			body: []
+			body: [],
 		},
 		dest: {
 			header: [
@@ -123,7 +122,7 @@ export const exEmptyData = {
 					width: 80,
 				},
 			],
-			body: []
+			body: [],
 		},
-	}
+	},
 }
