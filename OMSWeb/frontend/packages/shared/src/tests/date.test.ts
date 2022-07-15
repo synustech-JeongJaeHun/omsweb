@@ -4,6 +4,7 @@ import {
 	convertDurationLabel,
 	getEpoch,
 	convertEpochToStr,
+	getEnStrToStartEnd,
 } from '../utils/date'
 
 const obj = {
@@ -55,13 +56,28 @@ describe('date string and label', () => {
 		})
 	})
 
-	it('convert duration label 4월(16~25)', () => {
-		const ret = convertDurationLabel('4월(16~25)', '2022')
+	it('getEnStrToStartEnd Apr(16~25)', () => {
+		const ret = getEnStrToStartEnd('Apr(16~25)', '2022')
+		expect(ret).toEqual(['2022-4-16', '2022-4-25'])
+	})
+
+	// it('convert duration label 4월(16~25)', () => {
+	// 	const ret = convertDurationLabel('4월(16~25)', '2022')
+	// 	expect(ret).toEqual('2022-4-16_2022-4-25')
+	// })
+
+	// it('convert duration label 4월', () => {
+	// 	const ret = convertDurationLabel('4월', '2022')
+	// 	expect(ret).toEqual('2022-4-01_2022-04-30')
+	// })
+
+	it('convert duration label Apr(16~25)', () => {
+		const ret = convertDurationLabel('Apr(16~25)', '2022')
 		expect(ret).toEqual('2022-4-16_2022-4-25')
 	})
 
-	it('convert duration label 4월', () => {
-		const ret = convertDurationLabel('4월', '2022')
+	it('convert duration label Apr', () => {
+		const ret = convertDurationLabel('Apr', '2022')
 		expect(ret).toEqual('2022-4-01_2022-04-30')
 	})
 

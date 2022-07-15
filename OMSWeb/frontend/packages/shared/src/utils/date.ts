@@ -20,6 +20,24 @@ const timeDic = {
 	seconds: 1,
 }
 
+const getMonthNum = (monthAbbr) => {
+	const monthStr = R.toLower(monthAbbr)
+	const monthArr = [
+		'jan',
+		'feb',
+		'mar',
+		'apr',
+		'may',
+		'jun',
+		'jul',
+		'aug',
+		'sep',
+		'oct',
+		'nov',
+		'dec',
+	]
+	return R.indexOf(monthStr, monthArr) + 1
+}
 const divide = R.flip(R.divide)
 export const beforeDay = (days) => moment().startOf('day').subtract(days, 'day')
 export const afterDay = (days) => moment().startOf('day').add(days, 'day')
@@ -128,9 +146,31 @@ export const getStrToStartEnd: getStrToStartEnd = (label, year) => {
 	return [start, end]
 }
 
+// ('Apr(15~20)', '2022') => ['2022-4-15', '2022-4-20']
+type getEnStrToStartEnd = (label: string, year: string) => [string, string]
+export const getEnStrToStartEnd: getEnStrToStartEnd = (label, year) => {
+	const dateFormyyyyMMdd = format('yyyy-MM-dd')
+
+	if (R.test(/\(/, label)) {
+		const [monthEn, last] = R.split('(', label)
+		const month = getMonthNum(monthEn)
+		return R.compose(
+			R.map((day) => `${year}-${month}-${day}`),
+			R.split('~'),
+			R.replace(/(\(|\))/g, ''),
+		)(last)
+	}
+
+	const month = getMonthNum(label)
+	const start = `${year}-${month}-01`
+	const end = R.compose(dateFormyyyyMMdd, endOfMonth, Date.parse)(start)
+
+	return [start, end]
+}
+
 type convertDurationLabel = (label: string, year: string) => string
 export const convertDurationLabel: convertDurationLabel = (label, year) =>
-	R.join('_', getStrToStartEnd(label, year))
+	R.join('_', getEnStrToStartEnd(label, year))
 
 // ('2015-03-11', '2022-04-12') => 220406400
 type getEpoch = (start: string, end: string) => number
