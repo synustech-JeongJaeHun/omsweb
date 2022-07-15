@@ -25,6 +25,7 @@
     "buffer": "버퍼",
     "group": "그룹",
     "zcu": "ZCU",
+    "fireshutter": "Fireshutter",
     "zcu_label": "Zcu",
     "vehicleType": "비클 유형",
     "vehicleMode": "비클 모드",

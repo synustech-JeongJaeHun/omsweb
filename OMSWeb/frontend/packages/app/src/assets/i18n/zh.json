@@ -25,6 +25,7 @@
     "buffer": "缓冲区",
     "group": "组",
     "zcu": "ZCU",
+    "fireshutter": "Fireshutter",
     "vehicleType": "车辆类型",
     "vehicleMode": "车辆模式",
     "vehicleProperties": "车辆属性",
