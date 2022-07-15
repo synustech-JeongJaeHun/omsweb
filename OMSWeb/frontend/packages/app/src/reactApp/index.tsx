@@ -16,6 +16,7 @@ const DefaultApp = ({ location }) => {
   return (
     <QueryClientProvider client={queryClient}>
       <App location={location} />
+      {/* <ReactQueryDevtools initialIsOpen /> */}
     </QueryClientProvider>
   )
 }

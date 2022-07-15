@@ -1,0 +1,36 @@
+// @ts-ignore
+import express from 'express'
+import * as R from 'ramda'
+const authRouter = express.Router()
+
+const user = {
+  "username": "skkim",
+  "password": "skkim1234",
+  "email": "skkim@gmail.com",
+  "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJUMTZldWNvemNIdV80R1IwQ2dMWXVTbnZ2eE5TVVgyRkVxcWs3dlc1UXE0In0.eyJleHAiOjE2Mjk3MzM1MjAsImlhdCI6MTYyOTczMzQ2MCwianRpIjoiOTVhNTI1MTgtYWJjZi00NzJkLWJjMWItOWMwNmUyNTExMmM5IiwiaXNzIjoiaHR0cHM6Ly8xMDAuMC4wLjEwMDo4NDQzL2F1dGgvcmVhbG1zL3N5bXBob255LWJhY2tlbmQiLCJhdWQiOlsicmVhbG0tbWFuYWdlbWVudCIsImFjY291bnQiXSwic3ViIjoiZmEzMTI3MTktMTI3MS00OTM4LTgwMWUtNDNiMmY2ZGI0ZDYxIiwidHlwIjoiQmVhcmVyIiwiYXpwIjoibG9naW4tYXBwIiwic2Vzc2lvbl9zdGF0ZSI6IjRiZmQwYTRkLTJjZWItNDhmMS1iMTVhLTg5MTA4NjM0NjEwMiIsImFjciI6IjEiLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsiZGVmYXVsdC1yb2xlcy1zeW1waG9ueS1iYWNrZW5kIiwib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7InJlYWxtLW1hbmFnZW1lbnQiOnsicm9sZXMiOlsibWFuYWdlLXVzZXJzIl19LCJsb2dpbi1hcHAiOnsicm9sZXMiOlsidXNlciJdfSwiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJwcm9maWxlIGVtYWlsIiwic2lkIjoiNGJmZDBhNGQtMmNlYi00OGYxLWIxNWEtODkxMDg2MzQ2MTAyIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJtcy5raW0iLCJlbWFpbCI6Im1zLmtpbUBva2VzdHJvLmNvbSJ9.PBzjJOEXqiWjCvd0s3Mz_zEJPE0hDSS2_mVCNjaI1eiYwhGFWZnibZN2M0IhQVyzAXXfjGDVUzhUaKLg7GuCujPdgcS5y7XOj_0MuoXx9rlXj7sAnJsyhLYYlFcXCqavQO3ISarT0HPKjVJfTg88bIcDIeSNfh9FpVHRNYdLFFaLdyHr-fxktro4ci3XKyOn_Btctl2YIVu9oMXwJ4b9pk4mZtiK3Ag3LAShM3vx9q_X5aAAVOEYYpbIAneR9X4L3-EKT4muwS7k3Wa2dXkFmgqavjRUJujVygtPXsF63LzewLinouoAAVXjO5W5OBTsTJvSo4-t3tdfqsLEamxc2A",
+  "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICIwYjU5MDhmYS0yOWU4LTRiMjQtYjg3MC0xOGExZjdkMTZjOTcifQ.eyJleHAiOjE2Mjk3MzM3NjAsImlhdCI6MTYyOTczMzQ2MCwianRpIjoiYWJkMjNkYTItZmI3Yy00MWQ5LTk4ZmItOWY2MDYzZDg3OWE1IiwiaXNzIjoiaHR0cHM6Ly8xMDAuMC4wLjEwMDo4NDQzL2F1dGgvcmVhbG1zL3N5bXBob255LWJhY2tlbmQiLCJhdWQiOiJodHRwczovLzEwMC4wLjAuMTAwOjg0NDMvYXV0aC9yZWFsbXMvc3ltcGhvbnktYmFja2VuZCIsInN1YiI6ImZhMzEyNzE5LTEyNzEtNDkzOC04MDFlLTQzYjJmNmRiNGQ2MSIsInR5cCI6IlJlZnJlc2giLCJhenAiOiJsb2dpbi1hcHAiLCJzZXNzaW9uX3N0YXRlIjoiNGJmZDBhNGQtMmNlYi00OGYxLWIxNWEtODkxMDg2MzQ2MTAyIiwic2NvcGUiOiJwcm9maWxlIGVtYWlsIiwic2lkIjoiNGJmZDBhNGQtMmNlYi00OGYxLWIxNWEtODkxMDg2MzQ2MTAyIn0.9RjAknBPnmRgxaN5hiVa3QIBDKDpI7gQZQeV_PRCqtw"
+}
+
+// id, pw
+authRouter.post('/auth/check', (req, res) => {
+  const { username, password } = req.body
+  let ret = {}
+
+  if (username === user.username && password === user.password ) {
+    ret = R.omit(['password'], user)
+  } else {
+    ret = {
+      msg: '이메일 혹은 패스워드가 일치하지 않습니다'
+    }
+  }
+
+  res.json(ret)
+})
+
+authRouter.post('/auth/refresh', (req, res) => {
+
+  res.json(user)
+})
+
+export default authRouter
+

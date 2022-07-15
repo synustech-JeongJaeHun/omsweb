@@ -11,7 +11,7 @@ import { css } from '@emotion/react'
 import { color } from '@daimre/styles'
 import { isNotFullEmpty, isFullEmpty } from '@daimre/shared'
 import Loader from '../Loader'
-import Inline from '../charts/Inline'
+import Inline, { Props as InlineProps } from '../charts/Inline'
 
 type StyleType = {
 	isPlaceholder: boolean
@@ -55,33 +55,35 @@ const Wrapper = styled.div<StyleType>`
 		}
 	}
 
-	${({ isPlaceholder }) => isPlaceholder && css`
-		.box {
-			&-header {
-				&-title {
-					width: 60px;
-					height: 23px;
-					background-color: rgba(0, 0, 0, 0.05);
-				}
+	${({ isPlaceholder }) =>
+		isPlaceholder &&
+		css`
+			.box {
+				&-header {
+					&-title {
+						width: 60px;
+						height: 23px;
+						background-color: rgba(0, 0, 0, 0.05);
+					}
 
-				&-duration {
-					width: 37px;
-					height: 23px;
+					&-duration {
+						width: 37px;
+						height: 23px;
+						background-color: rgba(0, 0, 0, 0.05);
+					}
+				}
+				&-body {
+					width: 120px;
+					height: 40px;
 					background-color: rgba(0, 0, 0, 0.05);
 				}
 			}
-			&-body {
-				width: 120px;
-				height: 40px;
-				background-color: rgba(0, 0, 0, 0.05);
-			}
-		}
-	`}
+		`}
 `
 
 const DataListWrapper = styled.div`
 	font-size: 12px;
-	color: #72809F;
+	color: #72809f;
 	display: flex;
 	width: 100px;
 	height: 100%;
@@ -112,25 +114,22 @@ const DataListWrapper = styled.div`
 	}
 `
 
-const Datalist = ({
-	unit,
-	data
-}) => {
-
+const Datalist: React.FC<DatalistProps> = ({ unit, data }: DatalistProps) => {
 	return (
 		<DataListWrapper>
-			<div className='inner-wrapper'>
-				{
-					data.map((list, i) => {
-						const { label, value } = list
-						return (
-							<dl key={i.toString()}>
-								<dt>{label}</dt>
-								<dd>{value}{unit}</dd>
-							</dl>
-						)
-					})
-				}
+			<div className="inner-wrapper">
+				{data.map((list, i) => {
+					const { label, value } = list
+					return (
+						<dl key={i.toString()}>
+							<dt>{label}</dt>
+							<dd>
+								{value}
+								{unit}
+							</dd>
+						</dl>
+					)
+				})}
 			</div>
 		</DataListWrapper>
 	)
@@ -141,15 +140,23 @@ Datalist.defaultProps = {
 	data: [],
 }
 
+interface DatalistProps {
+	unit: string
+	data: any[]
+}
+
 const InlineLineChartWrapper = styled.div`
 	margin-left: 37px;
 `
 
-const InlineLineChart: React.FC = ({ data }) => {
-
+const InlineLineChart: React.FC<InlineProps> = ({
+	data,
+	name,
+	converter,
+}: InlineProps) => {
 	return (
 		<InlineLineChartWrapper>
-			<Inline data={data} />
+			<Inline data={data} name={name} converter={converter} />
 		</InlineLineChartWrapper>
 	)
 }
@@ -161,8 +168,25 @@ const SimpleStatBox: React.FC<Props> & any = ({
 	unit,
 	key,
 	isPlaceholder,
-	children
+	children,
 }: Props) => {
+	if (isPlaceholder) {
+		return (
+			<Wrapper isPlaceholder={isPlaceholder}>
+				<div className="left">
+					<div className="box-header">
+						<div className="box-header-title"></div>
+						<div className="box-header-duration"></div>
+					</div>
+					<div className="box-body">
+						<span className="box-body-value"></span>
+						<span className="box-body-unit"></span>
+					</div>
+				</div>
+				<div className="right"></div>
+			</Wrapper>
+		)
+	}
 
 	return (
 		<Wrapper isPlaceholder={isPlaceholder}>
@@ -176,9 +200,7 @@ const SimpleStatBox: React.FC<Props> & any = ({
 					{unit && <span className="box-body-unit">{unit}</span>}
 				</div>
 			</div>
-			<div className="right">
-				{children}
-			</div>
+			<div className="right">{children}</div>
 		</Wrapper>
 	)
 }
@@ -188,7 +210,7 @@ SimpleStatBox.defaultProps = {
 	duration: '',
 	value: '',
 	unit: '',
-	isPlaceholder: false
+	isPlaceholder: false,
 }
 
 SimpleStatBox.DataList = Datalist

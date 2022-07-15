@@ -40,6 +40,7 @@ export { default as TitleBarlineSet } from './comp-set/TitleBarlineSet'
 export { default as OverviewAbnormal } from './comp-set/OverviewAbnormal'
 export { default as TitleSet } from './comp-set/TitleSet'
 export { default as Trend } from './comp-set/Trend'
+export { default as MultipleSelectSet } from './comp-set/MultipleSelectSet'
 
 // layout
 export { default as Container } from './layout/Container'
@@ -50,3 +51,6 @@ export { default as RCol } from './layout/RCol'
 export { default as SimpleStatBox } from './SimpleStatBox'
 export { default as TimeRangePicker } from './TimeRangePicker'
 export { default as SimpleList } from './SimpleList'
+
+// types
+export { Props as MultipleSelectSetProps } from './comp-set/MultipleSelectSet'

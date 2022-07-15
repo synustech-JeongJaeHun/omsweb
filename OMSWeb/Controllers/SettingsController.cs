@@ -25,6 +25,12 @@ namespace OMSWeb.Controllers
             this._settingsSvc = settingsSvc;
         }
 
+        [HttpGet("appsettings")]
+        public ActionResult<string> GetAppSettings()
+        {
+            return System.IO.File.ReadAllText("./appsettings.json");
+        }
+
         [HttpGet("groups")]
         public IEnumerable<GroupEntity> GetSettingsGroups()
         {

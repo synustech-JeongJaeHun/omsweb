@@ -117,7 +117,7 @@ const getOptions = (data) => {
 			y: 20,
 		},
 		lang: {
-			noData: '데이타가 없습니다',
+			noData: 'no data',
 		},
 		exporting: {
 			enabled: false,
@@ -176,9 +176,7 @@ const getOptions = (data) => {
 	}
 }
 
-
 const getPlaceholderOpt = () => {
-
 	return {
 		chart: {
 			plotBackgroundColor: null,
@@ -205,7 +203,7 @@ const getPlaceholderOpt = () => {
 			y: 15,
 		},
 		lang: {
-			noData: '데이타가 없습니다',
+			noData: 'no data',
 		},
 		exporting: {
 			enabled: false,
@@ -214,7 +212,7 @@ const getPlaceholderOpt = () => {
 			enabled: false,
 		},
 		tooltip: {
-			enabled: false
+			enabled: false,
 		},
 		accessibility: {
 			point: {
@@ -222,7 +220,7 @@ const getPlaceholderOpt = () => {
 			},
 		},
 		legend: {
-			enabled: false
+			enabled: false,
 		},
 		plotOptions: {
 			pie: {
@@ -261,20 +259,18 @@ const getPlaceholderOpt = () => {
 
 NoDataToDisplay(Highcharts)
 const Donut: React.FC<Props> = ({ data, isPlaceholder }: Props) => {
-	const opt = isPlaceholder ? getPlaceholderOpt(): getOptions(data)
+	const opt = isPlaceholder ? getPlaceholderOpt() : getOptions(data)
 
 	return (
 		<Wrapper>
-			<HighchartsReact
-				highcharts={Highcharts}
-				options={opt} />
+			<HighchartsReact highcharts={Highcharts} options={opt} />
 		</Wrapper>
 	)
 }
 
 Donut.defaultProps = {
 	data: exData,
-	isPlaceholder: false
+	isPlaceholder: false,
 }
 
 interface Props {

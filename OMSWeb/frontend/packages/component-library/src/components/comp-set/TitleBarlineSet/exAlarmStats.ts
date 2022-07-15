@@ -4,33 +4,33 @@ const exStats = [
 	{
 		variant: 'simple',
 		data: {
-			title: '총 알람',
+			title: 'Total Alarm',
 			value: '100',
-			unit: '개',
+			unit: 'ea',
 		},
 	},
 	{
 		variant: 'detail',
 		data: {
-			title: '기간별 평균 발생',
-			subLabel: '시간당',
+			title: 'Avg Alarm by Duration',
+			subLabel: 'per hour',
 			value: 0.03,
-			unit: '개',
+			unit: 'ea',
 			details: [
 				{
-					label: '연간',
+					label: 'yearly',
 					value: numberWithCommas(100),
 				},
 				{
-					label: '월별',
+					label: 'monthly',
 					value: numberWithCommas(25),
 				},
 				{
-					label: '주간',
+					label: 'weekly',
 					value: numberWithCommas(6.25),
 				},
 				{
-					label: '일별',
+					label: 'daily',
 					value: numberWithCommas(0.89),
 				},
 			],
@@ -39,22 +39,22 @@ const exStats = [
 	{
 		variant: 'detail',
 		data: {
-			title: '발생시간',
-			subLabel: '평균',
-			value: '9분 30초',
+			title: 'Time Under Alarm',
+			subLabel: 'avg',
+			value: '112m 48s',
 			unit: '',
 			details: [
 				{
-					label: '최대',
-					value: '16분 49초',
+					label: 'max',
+					value: '1122m 29s',
 				},
 				{
-					label: '최소',
-					value: '3분 10초',
+					label: 'min',
+					value: '0',
 				},
 				{
-					label: '편차',
-					value: '5분 15초',
+					label: 'devn',
+					value: '1122m 29s',
 				},
 			],
 		},

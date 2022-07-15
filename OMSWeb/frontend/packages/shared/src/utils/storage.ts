@@ -2,8 +2,7 @@
 import * as R from 'ramda'
 import { isFullEmpty, isType } from './common'
 
-const ls = window.localStorage
-
+const ls = typeof window !== "undefined" ? window.localStorage : {}
 export const getStorage = (stg = ls) => ({
   set(key, value): void {
     if (!key || !value) {

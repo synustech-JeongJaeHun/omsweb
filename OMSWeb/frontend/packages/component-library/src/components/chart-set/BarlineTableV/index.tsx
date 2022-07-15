@@ -55,6 +55,7 @@ const BarlineTableV: React.FC<Props> = ({
 	const _isPlaceholder = qc.isPlaceholder || isPlaceholder
 	const [sortedData, updateSortedData] = React.useState(data)
 	const tableRef: any = React.useRef(null)
+	const dataLength = data.body.length
 
 	useEffectOnce(() => {
 		updateSortedData(data)
@@ -111,7 +112,7 @@ const BarlineTableV: React.FC<Props> = ({
 				</div>
 			)}
 			<Barline
-				labelRotation={0}
+				labelRotation={dataLength > 12 ? 45: 0}
 				data={sortedData}
 				onClick={onClick}
 				variant={variant}

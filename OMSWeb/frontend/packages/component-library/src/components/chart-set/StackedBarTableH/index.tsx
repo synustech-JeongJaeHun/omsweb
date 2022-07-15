@@ -50,6 +50,7 @@ const StackedBarTableH: React.FC<Props> = ({
 	limit,
 	data,
 	isPlaceholder,
+	colors,
 }: Props) => {
 	const qc = React.useContext(QueryContext)
 	const _isPlaceholder = qc.isPlaceholder || isPlaceholder
@@ -107,7 +108,13 @@ const StackedBarTableH: React.FC<Props> = ({
 			)}
 			<Container gutter={5}>
 				<Col col={6}>
-					<StackedBar height={266} limit={limit} data={sortedData} isPlaceholder={_isPlaceholder} />
+					<StackedBar
+						height={266}
+						limit={limit}
+						data={sortedData}
+						isPlaceholder={_isPlaceholder}
+						colors={colors}
+					/>
 				</Col>
 				<Col col={6}>
 					<div className="table-wrapper">
@@ -134,7 +141,7 @@ StackedBarTableH.defaultProps = {
 		header: [],
 		body: [],
 	},
-	isPlaceholder: false
+	isPlaceholder: false,
 }
 
 interface Props {
@@ -145,8 +152,9 @@ interface Props {
 	data?: {
 		header: any[]
 		body: any[]
-	},
+	}
 	isPlaceholder?: boolean
+	colors?: any
 }
 
 export default StackedBarTableH

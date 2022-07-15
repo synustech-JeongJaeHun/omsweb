@@ -71,7 +71,7 @@ const getOptions = (data, isTimeseries) => {
 					categories,
 					crosshair: true,
 					labels: {
-						rotation: 0,
+						rotation: 45,
 						formatter,
 					},
 				},
@@ -117,7 +117,7 @@ const getOptions = (data, isTimeseries) => {
 		},
 
 		scrollbar: {
-			enabled: maxLength === 20,
+			enabled: maxLength >= 20,
 		},
 		...timeObj,
 		series,

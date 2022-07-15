@@ -1,4 +1,6 @@
 import * as R from 'ramda'
+import { convertEpochToStr } from '@daimre/shared'
+import { format } from 'date-fns/fp'
 
 const exTableData = [
 	[
@@ -51,31 +53,13 @@ const exTableData = [
 	],
 ]
 
-const exStats = [
-	{
-		title: 'Utilization',
-		value: '67.78',
-		unit: '%'
-	},
-	{
-		title: 'Delivery Time',
-		value: '87.10',
-		unit: 'sec'
-	},
-	{
-		title: 'CPU',
-		value: '18',
-		unit: '%'
-	},
-	{
-		title: 'Memory',
-		value: '50',
-		unit: '%'
-	},
-]
+const exStats = {
+	cpu: {},
+	memory: {},
+}
 
 export const exData = {
-	stats: [...exStats],
+	stats: exStats,
 	table: [...exTableData],
 	donuts: [
 		[
@@ -87,25 +71,124 @@ export const exData = {
 		[
 			['unloading', 80],
 			['loading', 120],
-		]
-	]
+		],
+	],
 }
 
-
-const lens = R.lens(R.prop('value'), R.assoc('value'));
+const lens = R.lens(R.prop('value'), R.assoc('value'))
 const map = R.map(R.set(lens, ''))
 
 export const exEmptyData = {
-	stats: map(exStats),
+	stats: exStats,
 	table: R.map(map, exTableData),
-	donuts: [
-		[],
-		[]
-	]
+	donuts: [[], []],
 }
 
 export const exPlaceholderData = {
-	stats: R.repeat({value: ''}, 4),
+	stats: exStats,
 	table: [],
-	donuts: [[], []]
+	donuts: [[], []],
 }
+
+const dateForm = format('yyyy-MM-dd HH:mm:ss')
+
+const makeTable = (data) => {
+	const {
+		range,
+		utilization,
+		delivery_time,
+		wait_time,
+		transfer_time,
+		assign_time,
+		number_of_order_request,
+	} = data
+
+	return [
+		[
+			{
+				label: 'Range',
+				value: `${dateForm(range['before_time'])}~${dateForm(
+					range['current_time'],
+				)}(${range['count']})`,
+			},
+		],
+		[
+			{
+				label: 'Utilization',
+				value: `${utilization['value']}%`,
+			},
+		],
+		[
+			{
+				label: 'Delivery Time (created ~ completed)',
+				value: `${convertEpochToStr(delivery_time['value'])}, order count: ${
+					delivery_time['count']
+				}`,
+			},
+		],
+		[
+			{
+				label: 'Wait Time (created ~ loaded)',
+				value: `${convertEpochToStr(wait_time['value'])}, order count: ${
+					wait_time['count']
+				}`,
+			},
+		],
+		[
+			{
+				label: 'Transfer time (loaded ~ completed)',
+				value: `${convertEpochToStr(transfer_time['value'])}, order count: ${
+					transfer_time['count']
+				}`,
+			},
+		],
+		[
+			{
+				label: 'Assign time (created ~ assigned)',
+				value: `${convertEpochToStr(assign_time['value'])}, order count: ${
+					assign_time['count']
+				}`,
+			},
+		],
+		// [
+		//   {
+		//     label: 'Order Change',
+		//     value: '65.61% (6,792/10,368)',
+		//   },
+		// ],
+		[
+			{
+				label: 'Number of order requests',
+				value: `per second: ${number_of_order_request['value']}, estimated per day: ${number_of_order_request['count']}`,
+			},
+		],
+	]
+}
+
+const makeDonut = (data) => {
+	const { vehicles, loading_unloading: lu } = data
+
+	return [
+		[
+			['error', vehicles['error']],
+			['idle', vehicles['idle']],
+			['manual', vehicles['manual']],
+			['auto', vehicles['auto']],
+		],
+		[
+			['unloading', lu['unloading']],
+			['loading', lu['loading']],
+		],
+	]
+}
+
+const makeStats = (data) => {
+	const { cpu, memory } = data
+	return { cpu, memory }
+}
+
+export const makeData = (data) => ({
+	stats: makeStats(data),
+	table: makeTable(data),
+	donuts: makeDonut(data),
+})

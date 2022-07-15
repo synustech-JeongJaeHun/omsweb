@@ -8,7 +8,6 @@ type StyleType = {
 	isPlaceholder: boolean
 }
 
-
 const Wrapper = styled.div<StyleType>`
 	table {
 		width: 100%;
@@ -71,18 +70,20 @@ const Wrapper = styled.div<StyleType>`
 		}
 	}
 
-	${({isPlaceholder}) => isPlaceholder && css`
-		span.label {
-			width: 80px;
-			height: 15px;
-			background-color: rgba(0, 0, 0, 0.08);
-		}
-		span.empty {
-			width: 180px;
-			height: 15px;
-			background-color: rgba(0, 0, 0, 0.08);
-		}
-	`}
+	${({ isPlaceholder }) =>
+		isPlaceholder &&
+		css`
+			span.label {
+				width: 80px;
+				height: 12px;
+				background-color: rgba(0, 0, 0, 0.08);
+			}
+			span.empty {
+				width: 180px;
+				height: 12px;
+				background-color: rgba(0, 0, 0, 0.08);
+			}
+		`}
 `
 
 const makeTable = (data) =>
@@ -93,10 +94,12 @@ const makeTable = (data) =>
 				<tr key={i.toString()}>
 					<td className="full">
 						<dl>
-							<dt><span className="label">{item[0].label}</span></dt>
+							<dt>
+								<span className="label">{item[0].label}</span>
+							</dt>
 							<dd>
 								{item[0].value === '' ? (
-									<span className='empty' />
+									<span className="empty" />
 								) : (
 									item[0].value
 								)}
@@ -111,9 +114,11 @@ const makeTable = (data) =>
 				{item.map((cell, j) => (
 					<td key={j.toString()}>
 						<dl>
-							<dt><span className="label">{cell.label}</span></dt>
+							<dt>
+								<span className="label">{cell.label}</span>
+							</dt>
 							<dd>
-								{cell.value === '' ? <span className='empty' /> : cell.value}
+								{cell.value === '' ? <span className="empty" /> : cell.value}
 							</dd>
 						</dl>
 					</td>
@@ -123,10 +128,14 @@ const makeTable = (data) =>
 	})
 
 const InfoTable: React.FC<Props> = ({ data, isPlaceholder }: Props) => {
-	const tempData = isPlaceholder ? Array.from({ length: 8 }, () => [{
-		label: '',
-		value: ''
-	}]) : data
+	const tempData = isPlaceholder
+		? Array.from({ length: 8 }, () => [
+				{
+					label: '',
+					value: '',
+				},
+		  ])
+		: data
 
 	return (
 		<Wrapper isPlaceholder={isPlaceholder}>
@@ -139,7 +148,7 @@ const InfoTable: React.FC<Props> = ({ data, isPlaceholder }: Props) => {
 
 InfoTable.defaultProps = {
 	data: [],
-	isPlaceholder: false
+	isPlaceholder: false,
 }
 
 interface Props {

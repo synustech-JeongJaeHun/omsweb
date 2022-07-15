@@ -2,7 +2,7 @@
 import * as R from 'ramda'
 import { isFullEmpty, isType } from './common'
 
-const _ls = window.localStorage
+const _ls = typeof window !== "undefined" ? window.localStorage : {}
 
 export const ls = {
   set(key, value): void {

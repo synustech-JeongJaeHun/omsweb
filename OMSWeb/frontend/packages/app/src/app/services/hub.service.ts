@@ -3,6 +3,8 @@ import * as signalR from '@microsoft/signalr'
 
 import { IDataChangeEvent } from '../models/notification.model'
 
+const showLogger = false
+
 @Injectable({
 	providedIn: 'root',
 })
@@ -26,7 +28,7 @@ export class HubService {
 	alertChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter()
 	serverStatusChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter()
 	modeStateChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter()
-    settingModeChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter()
+	settingModeChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter()
 	zcuMapChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter()
 	zcuStatusTableChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter()
 	clusterStatusTableChanged$: EventEmitter<IDataChangeEvent> =
@@ -109,7 +111,7 @@ export class HubService {
 		this.hub.off('alert')
 		this.hub.off('serverStatus')
 		this.hub.off('modeState')
-        this.hub.off('settingMode')
+		this.hub.off('settingMode')
 		this.hub.off('zcuMapChanged')
 		this.hub.off('zcuStatusTableChanged')
 		this.hub.off('clusterStatusTableChanged')
