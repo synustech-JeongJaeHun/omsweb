@@ -1898,7 +1898,6 @@ path.cluster_mask {
 .mtl_path[level="level3"] {
   display: block;
   fill: none;
-  stroke: var(--mtl-color);
   stroke-width: 3px;
 }
 
