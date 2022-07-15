@@ -1938,13 +1938,6 @@ path.cluster_mask {
 
 /* fireshutter css */
 
-.fireshutter rect[level='level2'] {
-	stroke-width: 1px;
-}
-.fireshutter rect[level='level3'] {
-	stroke-width: 2px;
-}
-
 .fireshutter rect.fireshutter_rotate {
 	transform: rotate(90deg);
 }
