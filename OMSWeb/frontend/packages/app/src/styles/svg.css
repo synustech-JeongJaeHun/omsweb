@@ -1894,11 +1894,10 @@ path.cluster_mask {
 	stroke-width: 2px;
 }
 
-.mtl_path[level='level3'] {
-	display: block;
-	fill: none;
-	stroke: var(--mtl-color);
-	stroke-width: 3px;
+.mtl_path[level="level3"] {
+  display: block;
+  fill: none;
+  stroke-width: 3px;
 }
 
 .mtl path.highlight {

@@ -117,7 +117,7 @@ export namespace SvgDrawingUtil {
 					.select('.station_path')
 					.attr('d', dom_css.icon_level3)
 					.attr('level', 'level3')
-				mainUnit
+        mainUnit
 					.select('.station_mask')
 					.attr('d', dom_css.icon_level3)
 					.attr('level', 'level3')
@@ -816,7 +816,7 @@ export namespace SvgDrawingUtil {
 					.append('path')
 					// .attr('class', 'station_path')
 					.attr('fill', 'none')
-					.attr('stroke', trackMonitorSetting.stationColor)
+					.attr('stroke', layout_object.unuse ? trackMonitorSetting.stationDisabledColor : trackMonitorSetting.stationColor)
 					.attr('stroke-width', '5px')
 					.attr('level', `level${zoom_level}`)
 					.attr('d', main_css.station[`icon_level${zoom_level}`])
@@ -882,7 +882,7 @@ export namespace SvgDrawingUtil {
 						dom_object_group
 							.append('path')
 							// .attr('class', 'buffer_path')
-							.attr('fill', trackMonitorSetting.bufferColor)
+							.attr('fill', layout_object.unuse ? trackMonitorSetting.bufferDisabledColor : trackMonitorSetting.bufferColor)
 							.attr('stroke-width', '0px')
 							.attr('level', `level${zoom_level}`)
 							.attr('d', main_css.buffer[`icon_level${zoom_level}`])
@@ -899,7 +899,7 @@ export namespace SvgDrawingUtil {
 						dom_object_group
 							.append('path')
 							// .attr('class', 'buffer_path')
-							.attr('fill', trackMonitorSetting.bufferColor)
+							.attr('fill', layout_object.unuse ? trackMonitorSetting.bufferDisabledColor : trackMonitorSetting.bufferColor)
 							.attr('stroke-width', '0px')
 							.attr('level', `level${zoom_level}`)
 							.attr('d', main_css.buffer[`icon_level${zoom_level}`])
@@ -965,6 +965,7 @@ export namespace SvgDrawingUtil {
 					.attr('d', main_css.mtl[`icon_level${zoom_level}`])
 					.attr('class', 'mtl_path')
 					.attr('level', `level${zoom_level}`)
+          .attr('stroke', layout_object.unuse ? trackMonitorSetting.mtlUnuseColor : trackMonitorSetting.mtlUseColor)
 
 				if (overlap_adjustment) {
 					dom_object_group
