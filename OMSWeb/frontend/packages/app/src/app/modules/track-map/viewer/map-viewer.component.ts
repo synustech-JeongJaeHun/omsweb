@@ -550,10 +550,10 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 	}
 	onInstallCarrier(carrierId: string) {
 		this.tracksService
-			.getCarrierInfo(this.contextMenuObject.value.logicalId)
+          .getCarrierQuery(this.contextMenuObject.value.logicalId, carrierId)
 			.subscribe(
 				(res) => {
-					if (res.carrierId === '') {
+					if (res.carrierLoc === '' && res.carrierId === '') {
 						this.messageSvc
 							.sendCarrierCommand({
 								action: 'install_carrier',
@@ -561,13 +561,22 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 								logicalId: this.contextMenuObject.value.logicalId,
 							})
 							.subscribe()
-					} else {
-						this.dialogSvc.alert({
-							body: this.$t.instant(
-								'messages.confirmCarrierAlreadyExistAtBuffer',
-							),
-						})
-					}
+                    }
+                    else if (res.carrierLoc === '' && res.carrierId !== '') {
+                        this.dialogSvc.alert({
+                          body: this.$t.instant(
+                            'messages.confirmCarrierAlreadyExistAtBuffer',
+                          ),
+                        })
+                    }
+                    else if (res.carrierLoc !== '' && res.carrierLoc !== this.contextMenuObject.value.logicalId) {
+                        this.dialogSvc.alert({
+                          body: this.$t.instant(
+                            'messages.confirmCarrierAlreadyExistAtAnotherPos',
+                          ),
+                        })
+                    }
+
 				},
 				(error) => {
 					this.dialogSvc.alert({

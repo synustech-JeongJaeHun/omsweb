@@ -2,6 +2,7 @@ import { LayoutUtil } from '../modules/shared/utils/layout.util';
 import { ICoordinate } from './drawing.model';
 import { Dto } from './dto/track.model';
 import { IPoint } from './map.interface';
+import { Point } from './point.model';
 
 export class MTL {
   objectType = 'MTL';
@@ -19,7 +20,9 @@ export class MTL {
   errorList?: any;
   inDirection: 'R' | 'A'
   outDirection: 'R' | 'A'
-
+  inLockSegment: string;
+  outLockSegment: string;
+  
   isValidate?: boolean;
   updateState?: string;
   group?: number;
@@ -41,7 +44,9 @@ export class MTL {
       mode,
       errorList,
       inDirection,
-      outDirection
+      outDirection,
+      inLockSegment,
+      outLockSegment
     } = row;
     this.id = id;
     this.logicalId = logicalId;
@@ -59,8 +64,10 @@ export class MTL {
     this.unuse = unuse;
     this.mode = mode;
     this.errorList = errorList;
-    this.inDirection = inDirection
-    this.outDirection = outDirection
+    this.inDirection = inDirection;
+    this.outDirection = outDirection;
+    this.inLockSegment = inLockSegment;
+    this.outLockSegment = outLockSegment;
   }
 
   copy(newId) {
@@ -79,7 +86,9 @@ export class MTL {
       isValidate,
       updateState,
       inDirection,
-      outDirection
+      outDirection,
+      inLockSegment,
+      outLockSegment
     } = this;
 
     // Replace ID
@@ -99,8 +108,10 @@ export class MTL {
 
     isValidate = this.isValidate;
     updateState = this.updateState;
-    inDirection = this.inDirection
-    outDirection = this.outDirection
+    inDirection = this.inDirection;
+    outDirection = this.outDirection;
+    inLockSegment = this.inLockSegment;
+    outLockSegment = this.outLockSegment;
 
     // Object
     coord = { ...this.coord };
@@ -119,7 +130,9 @@ export class MTL {
         errorList,
         group,
         inDirection,
-        outDirection
+        outDirection,
+	inLockSegment,
+        outLockSegment
       },
       isValidate,
       updateState,

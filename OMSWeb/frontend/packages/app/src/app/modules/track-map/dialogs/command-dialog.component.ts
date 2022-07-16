@@ -198,7 +198,8 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 					// carrierid input must be same in current status
 					if (
 						((category === 'fromTo' || category === 'from') &&
-							source?.objectType?.toLowerCase() === 'buffer') ||
+                          (source?.objectType?.toLowerCase() === 'buffer' ||
+                            source?.objectType?.toLowerCase() === 'station')) ||
 						category === 'to'
 					) {
 						const logicalId =
@@ -206,17 +207,32 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 								? vehicle?.logicalId ?? ''
 								: source?.logicalId ?? ''
 
-						this.tracksService.getCarrierInfo(logicalId).subscribe((res) => {
-							// exit this function with alert
-							if (res.carrierId === carrier) {
-								this.messageSvc.sendOrderCommand(cmd).subscribe()
-							} else {
-								this.dialogSvc.alert({
-									title: this.t$.instant('names.blocked'),
-									body: this.t$.instant('messages.confirmCarrierNotSame'),
-								})
-							}
-						})
+                        if (source?.objectType?.toLowerCase() === 'buffer') {
+                            this.tracksService.getCarrierInfo(logicalId).subscribe((res) => {
+                              // exit this function with alert
+                              if (res.carrierId === carrier) {
+                                this.messageSvc.sendOrderCommand(cmd).subscribe()
+                              } else {
+                                this.dialogSvc.alert({
+                                  title: this.t$.instant('names.blocked'),
+                                  body: this.t$.instant('messages.confirmCarrierNotSame'),
+                                })
+                              }
+                            })
+                        }
+                        else if (source?.objectType?.toLowerCase() === 'station') {
+                          this.tracksService.getCarrierQuery(source?.logicalId, carrier).subscribe((res) => {
+                            // exit this function with alert
+                            if (res.carrierLoc === '' || res.carrierLoc === source?.logicalId) {
+                              this.messageSvc.sendOrderCommand(cmd).subscribe()
+                            } else {
+                              this.dialogSvc.alert({
+                                title: this.t$.instant('names.blocked'),
+                                body: this.t$.instant('messages.confirmCarrierAlreadyExistAtAnotherPos'),
+                              })
+                            }
+                          })
+                        }
 					} else {
 						this.messageSvc.sendOrderCommand(cmd).subscribe()
 					}

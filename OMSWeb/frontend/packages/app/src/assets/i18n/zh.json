@@ -531,6 +531,7 @@
     "confirmCarrierEmptyAtVehicle": "The vehicle has no carrier and cannot be deleted",
     "confirmCarrierAlreadyExistAtBuffer": "The buffer has a carrier already and cannot be Installed ",
     "confirmCarrierAlreadyExistAtVehicle": "The vehicle has a carrier already and cannot be Installed ",
+    "confirmCarrierAlreadyExistAtAnotherPos": "The carrier is installed at another position already",
     "confirmCarrierInvalid": "The carrier id is different and cannot be deleted",
     "confirmCarrierNotSame": "The carrier id is different.",
     "selectObjectType": "选择类型",

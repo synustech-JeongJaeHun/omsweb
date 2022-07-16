@@ -101,10 +101,10 @@ export class BufferStatusDialogComponent implements OnDestroy {
 
 	}
 	onInstallCarrier(carrierId: string) {
-		this.tracksService.getCarrierInfo(this.currentBuffer.logicalId)
+        this.tracksService.getCarrierQuery(this.currentBuffer.logicalId, carrierId)
 	      .subscribe(
 	        (res) => {
-	          if (res.carrierId === '') {
+	          if (res.carrierLoc === '' && res.carrierId === '') {
 	            this.messageSvc
 	              .sendCarrierCommand({
 	                action: 'install_carrier',
@@ -112,12 +112,17 @@ export class BufferStatusDialogComponent implements OnDestroy {
 	                logicalId: this.currentBuffer.logicalId
 	              })
 	              .subscribe()
-	          }
-	          else {
-	            this.dialogSvc.alert({
-	              body: this.$t.instant('messages.confirmCarrierAlreadyExistAtBuffer'),
-	            })
-	          }
+              }
+              else if (res.carrierLoc === '' && res.carrierId !== '') {
+                this.dialogSvc.alert({
+                  body: this.$t.instant('messages.confirmCarrierAlreadyExistAtBuffer'),
+                })
+              }
+              else if (res.carrierLoc !== '' && res.carrierLoc !== this.currentBuffer.logicalId) {
+                this.dialogSvc.alert({
+                  body: this.$t.instant('messages.confirmCarrierAlreadyExistAtAnotherPos'),
+                })
+              }
 	        },
 	        (error) => {
 	          this.dialogSvc.alert({

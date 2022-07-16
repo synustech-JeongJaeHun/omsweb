@@ -163,10 +163,10 @@ export class VehicleStatusDialogComponent implements OnInit, OnDestroy {
     }
 
   onInstallCarrier(carrierIdInput: string) {
-    this.trackSvc.getCarrierInfo(this.currentVehicle.logicalId)
+    this.trackSvc.getCarrierQuery(this.currentVehicle.logicalId, carrierIdInput)
       .subscribe(
         (res) => {
-          if (res.carrierId === '') {
+          if (res.carrierLoc === '' && res.carrierId === '') {
             this.messageSvc
               .sendCarrierCommand({
                 action: 'install_carrier',
@@ -175,9 +175,14 @@ export class VehicleStatusDialogComponent implements OnInit, OnDestroy {
               })
               .subscribe()
           }
-          else {
+          else if (res.carrierLoc === '' && res.carrierId !== '') {
             this.dialogSvc.alert({
               body: this.$t.instant('messages.confirmCarrierAlreadyExistAtVehicle'),
+            })
+          }
+          else if (res.carrierLoc !== '' && res.carrierLoc != this.currentVehicle.logicalId) {
+            this.dialogSvc.alert({
+              body: this.$t.instant('messages.confirmCarrierAlreadyExistAtAnotherPos'),
             })
           }
         },

@@ -10,5 +10,7 @@ namespace OMSWeb.Models.Tracks
     public bool? Unuse { get; set; }
     public string InDirection {get;set;}
     public string OutDirection {get;set;}
+    public string InLockSegment { get; set; }
+    public string OutLockSegment { get; set; }
   }
 }

@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
 import { Observable } from 'rxjs'
 import { ICarrier } from '@oms/models/carrier.model'
+import { ICarrierLoc } from '@oms/models/carrier.model'
+import { ICarrierQuery } from '@oms/models/carrier.model'
 import { Dto } from '@oms/models/dto/track.model'
 
 @Injectable({
@@ -18,9 +20,17 @@ export class TracksService {
 	// 	return this.http.get<string>(`${this.baseUrl}/carriers/${carrierLocation}`)
 	// }
 
-    getCarrierInfo(carrierLocation: string): Observable<ICarrier> {
-        return this.http.get<ICarrier>(`${this.baseUrl}/carrierinfo/${carrierLocation}`)
-    }
+    	getCarrierInfo(carrierLocation: string): Observable<ICarrier> {
+        	return this.http.get<ICarrier>(`${this.baseUrl}/carrierinfo/${carrierLocation}`)
+    	}
+
+    	getCarrierLoc(carrierId: string): Observable<ICarrierLoc> {
+        	return this.http.get<ICarrierLoc>(`${this.baseUrl}/carrierloc/${carrierId}`)
+    	}
+
+    	getCarrierQuery(carrierLoc: string, carrierId: string): Observable<ICarrierQuery> {
+        	return this.http.get<ICarrierQuery>(`${this.baseUrl}/carrierquery/${carrierLoc}&${carrierId}`)
+    	}
 
 	loadGroups(): Observable<Dto.IGroup[]> {
 		return this.http.get<Dto.IGroup[]>(`${this.baseUrl}/groups`)

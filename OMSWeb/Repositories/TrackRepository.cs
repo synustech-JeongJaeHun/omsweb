@@ -280,9 +280,11 @@ namespace OMSWeb.Repositories
                                     PhysicalId = dr["physical_id"].ToString(),
                                     LogicalId = dr["logical_id"].ToString(),
                                     PointId = dr["point_id"].TryIntegerOrNull(),
+                                    Unuse = dr["unuse"].TryBooleanOrNull(),
                                     InDirection = dr["in_direction"].ToString(),
                                     OutDirection = dr["out_direction"].ToString(),
-                                    Unuse = dr["unuse"].TryBooleanOrNull()
+                                    InLockSegment = dr["in_lock_segment"].ToString(),
+                                    OutLockSegment = dr["out_lock_segment"].ToString(),
                                 }
                                );
                             }
@@ -699,6 +701,23 @@ ORDER BY location_groups.id ASC
         ";
 
                 result = conn.Query<CarrierInfo>(sql).AsQueryable();
+            }
+            return result;
+        }
+
+
+        public IQueryable<CarrierLocation> QueryCarrierLoc(string carrierId)
+        {
+            IQueryable<CarrierLocation> result;
+            using (var conn = ConnectTrack())
+            {
+                var sql = $@"
+        SELECT carrier_location
+        FROM carriers 
+        WHERE carrier_id='{carrierId}' and installed=1
+        ";
+
+                result = conn.Query<CarrierLocation>(sql).AsQueryable();
             }
             return result;
         }

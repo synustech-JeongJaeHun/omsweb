@@ -45,6 +45,8 @@ export namespace Dto {
 		errorList?: any
 		inDirection: 'R' | 'A'
 		outDirection: 'R' | 'A'
+	        inLockSegment: string
+	        outLockSegment: string
 	}
 	export interface IZcu {
 		id: number

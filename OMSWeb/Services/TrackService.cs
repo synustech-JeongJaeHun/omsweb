@@ -142,6 +142,29 @@ namespace OMSWeb.Services
         }
 
 
+        public CarrierLocation GetCarrierLoc(string carrierId)
+        {
+            var carrierLocs = this._trackRepo.QueryCarrierLoc(carrierId);
+
+            if (carrierLocs.AsEnumerable().Count() == 1)
+                return carrierLocs.First();
+            else
+                return null;
+        }
+
+        public CarrierQuery GetCarrierQuery(string carrierLoc, string carrierId)
+        {
+            CarrierInfo carrierInfos = GetCarrierInfo(carrierLoc);
+            CarrierLocation carrierLocs = GetCarrierLoc(carrierId);
+
+            return new CarrierQuery
+            {
+                CarrierId = carrierInfos != null ? carrierInfos.CarrierId : string.Empty,
+                CarrierLoc = carrierLocs != null ? carrierLocs.CarrierLoc : string.Empty,
+            };
+        }
+
+
         public IList<LocationGroup> GetGroups()
         {
             return this._trackRepo.LoadGroups();

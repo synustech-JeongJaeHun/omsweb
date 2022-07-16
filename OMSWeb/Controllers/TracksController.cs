@@ -38,6 +38,36 @@ namespace OMSWeb.Controllers
                 return Ok(result);
         }
 
+        [HttpGet("carrierloc/{carrierId}")]
+        public ActionResult<CarrierLocation> GetCarrierLoc(string carrierId)
+        {
+            var result = this._svc.GetCarrierLoc(carrierId);
+
+            if (result == null)
+                return Ok(new CarrierLocation()
+                {
+                    CarrierLoc = string.Empty,
+                }); 
+            else
+                return Ok(result);
+        }
+
+        [HttpGet("carrierquery/{carrierLoc}&{carrierId}")]
+        public ActionResult<CarrierQuery> GetCarrierQuery(string carrierLoc, string carrierId)
+        {
+            var result = this._svc.GetCarrierQuery(carrierLoc, carrierId);
+
+            if (result == null)
+                return Ok(new CarrierQuery()
+                {
+                    CarrierLoc = string.Empty,
+                    CarrierId = String.Empty,
+                });
+            else
+                return Ok(result);
+        }
+
+
         [HttpGet("groups")]
         public IEnumerable<LocationGroup> GetGroups()
         {
