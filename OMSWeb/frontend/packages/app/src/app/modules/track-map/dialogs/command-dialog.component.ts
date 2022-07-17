@@ -194,48 +194,45 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 			.confirm({ body: this.t$.instant('messages.confirmCommand') })
 			.subscribe((ok) => {
 				if (ok) {
-					// fromto from to : carrier value validation
-					// carrierid input must be same in current status
-					if (
-						((category === 'fromTo' || category === 'from') &&
-                          (source?.objectType?.toLowerCase() === 'buffer' ||
-                            source?.objectType?.toLowerCase() === 'station')) ||
-						category === 'to'
-					) {
-						const logicalId =
-							category === 'to'
-								? vehicle?.logicalId ?? ''
-								: source?.logicalId ?? ''
+                    if (category === 'fromTo' || category === 'from' || category === 'to') {
 
-                        if (source?.objectType?.toLowerCase() === 'buffer') {
-                            this.tracksService.getCarrierInfo(logicalId).subscribe((res) => {
-                              // exit this function with alert
-                              if (res.carrierId === carrier) {
-                                this.messageSvc.sendOrderCommand(cmd).subscribe()
-                              } else {
-                                this.dialogSvc.alert({
-                                  title: this.t$.instant('names.blocked'),
-                                  body: this.t$.instant('messages.confirmCarrierNotSame'),
-                                })
-                              }
-                            })
-                        }
-                        else if (source?.objectType?.toLowerCase() === 'station') {
-                          this.tracksService.getCarrierQuery(source?.logicalId, carrier).subscribe((res) => {
-                            // exit this function with alert
-                            if (res.carrierLoc === '' || res.carrierLoc === source?.logicalId) {
-                              this.messageSvc.sendOrderCommand(cmd).subscribe()
-                            } else {
-                              this.dialogSvc.alert({
-                                title: this.t$.instant('names.blocked'),
-                                body: this.t$.instant('messages.confirmCarrierAlreadyExistAtAnotherPos'),
-                              })
+                      this.tracksService.getTransferHCACK(
+                        category,
+                        cmd?.vehicleId?.toString(),
+                        cmd?.locationPickup,
+                        cmd?.locationPickupType,
+                        cmd?.locationDropoff,
+                        cmd?.locationDropoffType,
+                        cmd?.carrierLabel
+                      )
+                        .subscribe((res) => {
+                          console.log(res);
+
+                          if (res.hcack === 0 || res.hcack === 4) {
+                            this.messageSvc.sendOrderCommand(cmd).subscribe()
+                          }
+                          else {
+                            var errorMessage = "";
+                            if (res.hcack === 2) errorMessage = 'messages.confirmNotAbleToExcute';
+                            else if (res.hcack === 3) {
+                              if (res.cpname === 'SOURCEPORT') errorMessage = 'messages.confirmParameterInvalidSource';
+                              else if (res.cpname === 'DESTPORT') errorMessage = 'messages.confirmParameterInvalidDest';
+                              else if (res.cpname === 'CARRIERID') errorMessage = 'messages.confirmParameterInvalidCarrierID';
+                              else errorMessage = 'messages.confirmParameterInvalid';
                             }
-                          })
-                        }
-					} else {
-						this.messageSvc.sendOrderCommand(cmd).subscribe()
-					}
+                            else if (res.hcack === 5) errorMessage = 'messages.confirmReject';
+                            else errorMessage = 'messages.confirmNotAbleToExcute';
+
+                            this.dialogSvc.alert({
+                              title: this.t$.instant('names.blocked'),
+                              body: this.t$.instant(errorMessage),
+                            })
+                          }
+                        })
+                    }
+                    else {
+                        this.messageSvc.sendOrderCommand(cmd).subscribe()
+                    }
 				}
 			})
 	}

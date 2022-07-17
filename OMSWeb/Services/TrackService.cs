@@ -164,7 +164,6 @@ namespace OMSWeb.Services
             };
         }
 
-
         public IList<LocationGroup> GetGroups()
         {
             return this._trackRepo.LoadGroups();
@@ -193,6 +192,242 @@ namespace OMSWeb.Services
         public Buffer GetBufferById(int id)
         {
             return this._trackRepo.LoadBufferById(id);
+        }
+
+
+        public TransferHCACK GetTransferHCACK(
+            string category,
+            string vehicleId,
+            string source,
+            string srctype,
+            string dest,
+            string dsttype,
+            string carrierId
+            )
+        {
+            TransferHCACK transferHCACK = new TransferHCACK
+            {
+                HCACK = (int)MCS_HCACK.AlreadyConfirmed,
+                CPNAME = string.Empty,
+                CPACK = (int)MCS_HCACK.AlreadyConfirmed,
+            };
+
+            MCS_HCACK HCACK = MCS_HCACK.AlreadyConfirmed;
+            string CPNAME = string.Empty;
+            int CPACK = 0;
+            int CPNackCount = 0;
+
+            string SourceName = string.Empty;
+            string DestName = string.Empty;
+            string CarrierID = carrierId;
+
+            if (category == "to")
+            {
+                source = vehicleId;
+                srctype = "vehicle";
+            }
+
+            SourceName = GetOnlineName(source, srctype);
+            DestName = GetOnlineName(dest, dsttype);
+
+            #region Check Source
+            SourceType sourceType = ORDER_VerifySource(SourceName);
+
+            if (sourceType == SourceType.NONE)
+            {
+                CPNAME = "SOURCEPORT";
+                CPACK = (int)MCS_HCACK.NotAbleToExcute;
+                CPNackCount++;
+            }
+            else if (sourceType == SourceType.STATION)
+            {
+                if (CARRIER_IsInstalled_AnotherPort(SourceName, CarrierID))
+                {
+                    CPNAME = "CARRIERID";
+                    CPACK = (int)MCS_HCACK.NotAbleToExcute;
+                    CPNackCount++;
+                }
+            }
+            else if (sourceType == SourceType.BUFFER)
+            {
+                if (!BUFFER_Available(SourceName))
+                {
+                    HCACK = MCS_HCACK.NotAbleToExcute;
+                }
+                else if (!BUFFER_Has_a_Carrier(SourceName))
+                {
+                    CPNAME = "CARRIERID";
+                    CPACK = (int)MCS_HCACK.NotAbleToExcute;
+                    CPNackCount++;
+                }
+                else if (!BUFFER_Has_Valid_Carrier(SourceName, CarrierID))
+                {
+                    CPNAME = "CARRIERID";
+                    CPACK = (int)MCS_HCACK.NotAbleToExcute;
+                    CPNackCount++;
+                }
+            }
+            else if (sourceType == SourceType.VEHICLE)
+            {
+                if (!VEHICLE_IsHostOrderEnable(SourceName))
+                {
+                    HCACK = MCS_HCACK.NotAbleToExcute;
+                }
+                else if (!VEHICLE_Has_a_Carrier(SourceName))
+                {
+                    CPNAME = "CARRIERID";
+                    CPACK = (int)MCS_HCACK.NotAbleToExcute;
+                    CPNackCount++;
+                }
+                else if (!VEHICLE_Has_Valid_Carrier(SourceName, CarrierID))
+                {
+                    CPNAME = "CARRIERID";
+                    CPACK = (int)MCS_HCACK.NotAbleToExcute;
+                    CPNackCount++;
+                }
+            }
+            #endregion
+
+            #region Check Dest
+
+            DestType destType = DestType.NONE;
+
+            if (category != "from") // from은 Dest 체크 없음
+            {
+                destType = ORDER_VerifyDest(DestName);
+
+                if (destType == DestType.NONE)
+                {
+                    CPNAME = "DESTPORT";
+                    CPACK = (int)MCS_HCACK.NotAbleToExcute;
+                    CPNackCount++;
+                }
+                else if (destType == DestType.BUFFER)
+                {
+                    if (ORDER_CheckInterlock_Dest_InOrder(DestName, DestType.BUFFER))
+                    {
+                        HCACK = MCS_HCACK.NotAbleToExcute;
+                    }
+                    else if (BUFFER_Has_a_Carrier(DestName))
+                    {
+                        HCACK = MCS_HCACK.NotAbleToExcute;
+                    }
+                }
+            }
+            #endregion
+
+            if (HCACK == MCS_HCACK.AlreadyConfirmed)
+            {
+                if (CPNackCount == 0)
+                {
+                    if (ORDER_CheckDuplicatedOrder("", CarrierID))
+                    {
+                        HCACK = MCS_HCACK.Reject;
+                    }
+                    else if (ORDER_CheckInterlock(sourceType, SourceName, destType, DestName, category))
+                    {
+                        HCACK = MCS_HCACK.NotAbleToExcute;
+                    }
+                    //else if (!CTRL.DB.IsReachablePath(CommandID, (isFromTo ? @"FROMTO" : @"TO"), SourceName, DestName))
+                    //{
+                    //    HCACK = MCS_HCACK.NotAbleToExcute;
+                    //}
+                    else
+                        HCACK = MCS_HCACK.Confirm;
+                }
+                else
+                {
+                    HCACK = MCS_HCACK.ParameterInvalid;
+                }
+            }
+
+            transferHCACK.HCACK = (int)HCACK;
+            transferHCACK.CPNAME = CPNAME;
+            transferHCACK.CPACK = CPACK;
+
+            return transferHCACK;
+        }
+
+        public string GetOnlineName(string id, string type)
+        {
+            return this._trackRepo.QueryOnlineName(id, type);
+        }
+
+        public SourceType ORDER_VerifySource(string onlineName)
+        {
+            return this._trackRepo.QuerySourceVerify(onlineName);
+        }
+
+        public Boolean CARRIER_IsInstalled_AnotherPort(string onlineName, string carrierId)
+        {
+            return this._trackRepo.QueryInstallAnotherPort(onlineName, carrierId);
+        }
+
+        public Boolean STATION_Available(string onlineName)
+        {
+            return this._trackRepo.QueryStationAvailable(onlineName);
+        }
+
+        public Boolean BUFFER_Available(string onlineName)
+        {
+            return this._trackRepo.QueryBufferAvailable(onlineName);
+        }
+
+        public Boolean BUFFER_Has_a_Carrier(string onlineName)
+        {
+            return this._trackRepo.QueryHasACarrier(onlineName);
+        }
+
+        public Boolean BUFFER_Has_Valid_Carrier(string onlineName, string carrierId)
+        {
+            return this._trackRepo.QueryHasValidCarrier(onlineName, carrierId);
+        }
+
+        public Boolean VEHICLE_IsHostOrderEnable(string onlineName)
+        {
+            return this._trackRepo.QueryVehicleHostOderEnable(onlineName);
+        }
+
+        public Boolean VEHICLE_Has_a_Carrier(string onlineName)
+        {
+            return this._trackRepo.QueryHasACarrier(onlineName);
+        }
+
+        public Boolean VEHICLE_Has_Valid_Carrier(string onlineName, string carrierId)
+        {
+            return this._trackRepo.QueryHasValidCarrier(onlineName, carrierId);
+        }
+
+        public DestType ORDER_VerifyDest(string onlineName)
+        {
+            return this._trackRepo.QueryDestVerify(onlineName);
+        }
+
+        public Boolean ORDER_CheckInterlock_Dest_InOrder(string onlineName, DestType destType)
+        {
+            string portName = this._trackRepo.QueryPortNameByOnlineName(onlineName, (int)destType);
+
+            return this._trackRepo.QueryInterlockDestInOrder(portName);
+        }
+
+        public Boolean ORDER_CheckDuplicatedOrder(string CommandID, string carrierId)
+        {
+            return this._trackRepo.QueryDuplicatedInOrder(CommandID, carrierId);
+        }
+
+        public Boolean ORDER_CheckInterlock(SourceType sourceType, string sourceName, DestType destType, string destName, string category)
+        {
+            if (category != "from") // from 제외
+            {
+                if (destType == DestType.STATION && !STATION_Available(destName)) return true;
+                if (destType == DestType.BUFFER && !BUFFER_Available(destName)) return true;
+            }
+
+            if (sourceType == SourceType.VEHICLE) return false;
+            if (sourceType == SourceType.STATION && !STATION_Available(sourceName)) return true;
+            if (sourceType == SourceType.BUFFER && !BUFFER_Available(sourceName)) return true;
+
+            return false;
         }
     }
 }

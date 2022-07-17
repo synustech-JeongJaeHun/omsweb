@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
+using OMSWeb.Models;
 using OMSWeb.Models.Tracks;
 using OMSWeb.Services;
 using Buffer = OMSWeb.Models.Tracks.Buffer;
@@ -66,6 +67,39 @@ namespace OMSWeb.Controllers
             else
                 return Ok(result);
         }
+
+
+        [HttpGet("transferhcack/{category}&{vehicleId}&{source}&{srctype}&{dest}&{dsttype}&{carrierId}")]
+        public ActionResult<TransferHCACK> GetTransferHCACK(
+            string category, 
+            string vehicleId, 
+            string source, 
+            string srctype, 
+            string dest, 
+            string dsttype, 
+            string carrierId
+            )
+        {
+            var result = this._svc.GetTransferHCACK(
+                category, 
+                vehicleId, 
+                source,
+                srctype,
+                dest, 
+                dsttype,
+                carrierId);
+
+            if (result == null)
+                return Ok(new TransferHCACK()
+                {
+                    HCACK = (int)MCS_HCACK.NotAbleToExcute,
+                    CPNAME = String.Empty,
+                    CPACK = (int)MCS_HCACK.AlreadyConfirmed,
+                });
+            else
+                return Ok(result);
+        }
+
 
 
         [HttpGet("groups")]
