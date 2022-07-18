@@ -17,7 +17,7 @@ export const convertLabelsToOptions = (labels) => {
 			R.map((item) => {
 				const { label, id } = R.omit(['section'], item)
 				return {
-					label,
+					label: R.defaultTo(id)(label),
 					value: id,
 				}
 			}),
@@ -97,7 +97,7 @@ export const convertR = (variant, label) => {
 			}
 
 			const keys = R.keys(subfilter)
-			return keys.reduce((acc, key) => {
+			const ret = keys.reduce((acc, key) => {
 				const values = subfilter[key]
 				if (key === 'source' || key === 'dest') {
 					const [vBuffer, vStation, oBuffer, oStation] = [
@@ -115,6 +115,11 @@ export const convertR = (variant, label) => {
 				}
 				return acc
 			}, {})
+
+			return R.map(
+				R.filter((item) => item !== undefined),
+				ret,
+			)
 		},
 		selectionToSubfilter(selection) {
 			// selection -> subfilter

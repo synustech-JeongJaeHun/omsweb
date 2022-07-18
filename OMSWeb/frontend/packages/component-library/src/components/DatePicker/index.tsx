@@ -50,6 +50,7 @@ const DatePicker: FC<Props> = ({
 			onDatesChange={onDateChange}
 			focusedInput={focusedInput}
 			onFocusChange={onFocusChange}
+			minimumNights={0}
 			// displayFormat='MM월 DD일'
 			isOutsideRange={isOutsideRange}
 			renderMonthElement={({ month: _moment }) => (

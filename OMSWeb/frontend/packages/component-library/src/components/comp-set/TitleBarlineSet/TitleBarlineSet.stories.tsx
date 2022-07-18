@@ -47,7 +47,7 @@ export const GetData = () => {
 			setData({
 				pageVariant: 'alarm',
 				stats: aStat,
-				data: genNormaltr({ variant: 'overview', pageType: 'alarm' }),
+				data: genNormaltr({ variant: 'duration', pageType: 'alarm' }),
 			})
 		}, 5000)
 

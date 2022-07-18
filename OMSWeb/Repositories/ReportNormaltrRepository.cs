@@ -61,14 +61,14 @@ namespace OMSWeb.Repositories
                 var sql = $@"
                     select 
                         hourly as hours,
-                        trunc(hourly * 24, 2) as daily,
-                        trunc(hourly * 24 * 7, 2) as weekly,
-                        trunc(hourly * 24 * 30, 2) as monthly,
-                        hourly as ph,
-                        trunc(hourly * 24 * 365, 2) as yearly
+                        trunc((hourly * 24), 2) as daily,
+                        trunc((hourly * 24 * 7), 2) as weekly,
+                        trunc((hourly * 24 * 30), 2) as monthly,
+                        trunc(hourly, 2) as ph,
+                        trunc((hourly * 24 * 365), 2) as yearly
                     from (
                         select 
-                        trunc(count(*) / (extract( EPOCH from ('{end}'::timestamp - '{start}'::timestamp))/3600), 2) as hourly
+                        (count(*) / (extract( EPOCH from ('{end}'::timestamp - '{start}'::timestamp))/3600))::decimal as hourly
                         from order_completed
                         where time_completed is not null and
                         time_completed::date between '{start}' and '{end}' {GetSubfilter(subfilter)}

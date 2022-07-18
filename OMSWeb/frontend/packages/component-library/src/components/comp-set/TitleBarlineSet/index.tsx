@@ -354,8 +354,8 @@ TitleBarlineSet.exStatData = exStatData
 TitleBarlineSet.genNormaltr = genNormaltr
 
 TitleBarlineSet.defaultProps = {
-	data: getExData({ variant: 'overview', pageType: 'alarm' }),
-	pageVariant: 'alarm',
+	data: getExData({ variant: 'overview', pageType: 'normaltr' }),
+	pageVariant: 'normaltr',
 	stats: exStatData.alarm,
 	onClickItem: (values) => {},
 	onDateChange: (values) => {},

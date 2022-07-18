@@ -226,11 +226,17 @@ namespace OMSWeb.Repositories
             {
                 var sql = @"
                     select 
-                        TRUNC((sum(time) / (600 * (
-                        select count(*)::int 
-                            from vehicles 
-                            where rail_in = true and mode = 'A'
-                        ))) * 100, 2) as value
+                        trunc(
+                            (
+                                sum(time)::decimal / (
+                                    600 * (
+                                        select count(*)::int 
+                                        from vehicles 
+                                        where rail_in = true and mode = 'A'
+                                    )::decimal
+                                )
+                            ) * 100, 
+                        2) as value
                     from (
                         select
                             extract(epoch from time) as time
@@ -288,11 +294,17 @@ namespace OMSWeb.Repositories
             {
                 var sql = @"
                     select 
-                        TRUNC((sum(time) / (600 * (
-                        select count(*)::int 
-                            from vehicles 
-                            where rail_in = true and mode = 'A'
-                        ))) * 100, 2) as value
+                        trunc(
+                            (
+                                sum(time)::decimal / (
+                                    600 * (
+                                            select count(*)::int 
+                                            from vehicles 
+                                            where rail_in = true and mode = 'A'
+                                        )::decimal
+                                    )
+                            ) * 100
+                        , 2) as value
                     from (
                         select
                             extract(epoch from time) as time

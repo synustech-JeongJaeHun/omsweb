@@ -218,7 +218,7 @@ namespace OMSWeb.Repositories
                         {this.GetName(key)} as label,
                         count(*)::int,
                         {_avgEpochPerHour} as avg
-                        from vehicle_alarms
+                        from vehicle_alarms va
                         where {filter(subsection, value)} and {GetColumnFromDic(key)} is not null {GetSubfilter(subfilter)}
                         group by {GetColumnFromDic(key)}
                     ";
@@ -303,9 +303,27 @@ namespace OMSWeb.Repositories
                 case "alarm":
                     return $@"
                     (
-                        select description
-                        from vehicle_errors
-                        where id = error_code
+                        select description 
+                        from (
+                            select 
+                            case 
+                                when description is null then error_code::text
+                                else description
+                            end as description,
+                            error_code
+                            from (
+                                select
+                                (
+                                    select description
+                                    from vehicle_errors
+                                    where id = error_code
+                                ),
+                                error_code::text
+                                from vehicle_alarms va
+                            ) temp
+                        ) temp
+                        where error_code = va.error_code::text
+                        limit 1
                     )
                     ";
                 case "point":
