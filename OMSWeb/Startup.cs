@@ -22,6 +22,7 @@ using OMSWeb.Extensions;
 using OMSWeb.OMSSettings;
 using System.IO;
 using System.Diagnostics;
+using OMSWeb.Logger;
 
 namespace OMSWeb
 {
@@ -32,6 +33,10 @@ namespace OMSWeb
             Configuration = configuration;
 
             OmsConfiguration();
+
+            Log.Initialize();
+
+            Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"OMSWeb Start at: {DateTimeOffset.Now}");
         }
 
         public IConfiguration Configuration { get; }

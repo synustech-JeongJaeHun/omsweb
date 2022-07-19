@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using OMSWeb.Logger;
 using OMSWeb.Models;
 using System;
 using System.Collections.Generic;
@@ -339,45 +340,60 @@ namespace OMSWeb.Services.MqttClient
             {
                 if (command.State != null)
                     data["state"] = command.State;
+
+                Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: {command.Action}");
             }
             else if (command.Action == ACTION_MAP_UPDATE)
             {
+                Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: {command.Action}");
             }
             else if (command.Action == ACTION_AI_MODE)
             {
                 if (command.State != null)
                     data["mode"] = command.Mode;
+
+                Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: {command.Action}");
             }
             else if (command.Action == ACTION_HOME_MODE)
             {
                 if (command.Mode != null)
                     data["mode"] = command.Mode;
+
+                Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: {command.Action}");
             }
             else if (command.Action == ACTION_CHAIN_MANUAL_COMMAND_DISABLED)
             {
                 if (command.Mode != null)
                     data["mode"] = command.Mode;
+
+                Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: {command.Action}");
             }
             else if (command.Action == ACTION_PAUSE ||
                      command.Action == ACTION_RESUME)
             {
-
+                Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: {command.Action}");
             }
             else if (command.Action == ACTION_ALARM_CLEAR)
             {
                 data["vehicle_id"] = GetVehicleId(command);
                 data["error_code"] = GetAlarmErrorCode(command);
+
+                Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: {command.Action}");
             }
             else if (command.Action == ACTION_WARNING_CLEAR)
             {
                 data["id"] = GetWarningId(command);
                 data["ack_by"] = GetWarningAckBy(command);
+
+                Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: {command.Action}");
             }
             else if (command.Action == ACTION_MTL_IN || command.Action == ACTION_MTL_OUT)
             {
                 data["vehicle_id"] = GetVehicleId(command);
                 if (command.MtlId != null)
                     data["mtl_id"] = command.MtlId;
+
+                Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: {command.Action}");
             }
             else if (command.Action == ACTION_RESET || command.Action == ACTION_STOP ||
                      command.Action == ACTION_RAIL_IN || command.Action == ACTION_RAIL_OUT ||
@@ -385,6 +401,8 @@ namespace OMSWeb.Services.MqttClient
                      command.Action == ACTION_GET_MAP_INFO)
             {
                 data["vehicle_id"] = GetVehicleId(command);
+
+                Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: {command.Action}");
             }
             else if (command.Action == ACTION_INITIALIZE)
             {
@@ -394,6 +412,8 @@ namespace OMSWeb.Services.MqttClient
                     data["direction"] = command.Direction;
                 else
                     data["direction"] = DEFAULT_DIRECTION;
+
+                Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: auto");
             }
             else if (command.Action == ACTION_SET_BEHAVIOR)
             {
@@ -401,11 +421,19 @@ namespace OMSWeb.Services.MqttClient
                     data["vehicle_id"] = GetVehicleId(command);
 
                 if (command.CanBePushed != null)
+                {
                     data["can_be_pushed"] = command.CanBePushed;
+
+                    Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: ACTION_PUSH_DISABLE");
+                }
                 else
                 {
                     if (command.OrderOrigin == null)
+                    {
                         data["order_origin"] = GetOrderOrigin(command);
+
+                        Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: ACTION_HOST_COMMAND_DISABLE");
+                    }
                 }
             }
             else if (command.Action == ACTION_CALCULATE_PATH ||
@@ -413,6 +441,8 @@ namespace OMSWeb.Services.MqttClient
             {
                 if (command.VehicleId != null || command.VehicleIds != null)
                     data["vehicle_id"] = GetVehicleId(command);
+
+                Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: {command.Action}");
             }
             else if (command.Action == ACTION_DISABLE_SEGMENT ||
                      command.Action == ACTION_ENABLE_SEGMENT)
@@ -423,6 +453,8 @@ namespace OMSWeb.Services.MqttClient
                     data["source"] = "uid-admin";
                     data["reason"] = "";
                 }
+
+                Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: {command.Action}");
             }
             else if (command.Action == ACTION_DISABLE_HOME ||
                      command.Action == ACTION_ENABLE_HOME)
@@ -432,13 +464,15 @@ namespace OMSWeb.Services.MqttClient
                     data["point_id"] = command.PointId;
                 }
                 if (command.GroupId != null)
-                { 
+                {
                     data["group_id"] = command.GroupId;
                 }
                 else if (command.GroupIds != null)
                 {
                     data["group_id"] = command.GroupIds;
                 }
+
+                Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: {command.Action}");
             }
             else if (command.Action == ACTION_GROUP_SETTING)
             {
@@ -454,9 +488,12 @@ namespace OMSWeb.Services.MqttClient
                     data["vehicle_id"] = command.VehicleIds;
                     data["vehicle_id_removed"] = command.VehicleIds_Removed;
                 }
-                catch (Exception ex) {
+                catch (Exception ex)
+                {
                     Console.WriteLine(ex.Message);
                 }
+
+                Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: {command.Action}");
             }
             else if (command.Action == ACTION_CLUSTER_SETTING)
             {
@@ -465,11 +502,14 @@ namespace OMSWeb.Services.MqttClient
                     data["cluster"] = command.ClusterId;
                     data["max_vehicle"] = command.MaxVehicles;
                 }
-                catch (Exception ex) {
+                catch (Exception ex)
+                {
                     Console.WriteLine(ex.Message);
                 }
+
+                Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: {command.Action}");
             }
-            else if (command.Action == ACTION_SEGMENT_SETTING) 
+            else if (command.Action == ACTION_SEGMENT_SETTING)
             {
                 try
                 {
@@ -484,48 +524,62 @@ namespace OMSWeb.Services.MqttClient
                         data["speed_ratio"] = command.SpeedRatios;
                     }
                 }
-                catch (Exception ex) {
+                catch (Exception ex)
+                {
                     Console.WriteLine(ex.Message);
                 }
+
+                Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: {command.Action}");
             }
-            else if (command.Action == ACTION_STATION_SETTING) 
+            else if (command.Action == ACTION_STATION_SETTING)
             {
                 try
                 {
                     data["id"] = command.StationIds;
                     data["unused"] = command.Unused;
                 }
-                catch (Exception ex) {
+                catch (Exception ex)
+                {
                     Console.WriteLine(ex.Message);
                 }
+
+                Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: {command.Action}");
             }
-            else if (command.Action == ACTION_BUFFER_SETTING) 
+            else if (command.Action == ACTION_BUFFER_SETTING)
             {
                 try
                 {
                     data["id"] = command.BufferIds;
                     data["unused"] = command.Unused;
                 }
-                catch (Exception ex) {
+                catch (Exception ex)
+                {
                     Console.WriteLine(ex.Message);
                 }
+
+                Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: {command.Action}");
             }
-            else if (command.Action == ACTION_VEHICLE_SETTING) 
+            else if (command.Action == ACTION_VEHICLE_SETTING)
             {
                 try
                 {
                     data["id"] = command.VehicleIds;
                     data["id_removed"] = command.VehicleIds_Removed;
                     data["online_name"] = command.LogicalIds;
-                 }
-                catch (Exception ex) {
+                }
+                catch (Exception ex)
+                {
                     Console.WriteLine(ex.Message);
                 }
+
+                Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: {command.Action}");
             }
             else if (command.Action == ACTION_ZCU_GO)
             {
                 if (command.VehicleId != null || command.VehicleIds != null)
                     data["vehicle_id"] = GetVehicleId(command);
+
+                Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: {command.Action}");
             }
             else if (command.Action == ACTION_ZCU_SETTING)
             {
@@ -537,6 +591,8 @@ namespace OMSWeb.Services.MqttClient
                     "sw" => 2,
                     _ => throw new NotImplementedException(),
                 };
+
+                Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: {command.Action}");
             }
             else if (command.Action == ACTION_ZCU_USING_TYPE)
             {
@@ -545,11 +601,15 @@ namespace OMSWeb.Services.MqttClient
 
                 if (command.ZcuUsingType != null)
                     data["zcu_using_type"] = command.ZcuUsingType;
+
+                Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: {command.Action}");
             }
             else if (command.Action == ACTION_ZCU_RESET)
             {
                 if (command.ZcuId != null || command.ZcuIds != null)
                     data["zcu_id"] = GetZcuId(command);
+
+                Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: {command.Action}");
             }
             else if (command.Action == ACTION_INSTALL_CARRIER ||
                      command.Action == ACTION_REMOVE_CARRIER)
@@ -581,6 +641,8 @@ namespace OMSWeb.Services.MqttClient
                     data["user_id"] = "admin";
                     data["note"] = "";
                 }
+
+                Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: {command.Action}");
             }
             else if (command.Action == ACTION_N)
             {
@@ -613,6 +675,15 @@ namespace OMSWeb.Services.MqttClient
                 }
 
                 data["origin"] = ORIGIN_OMS;    // oms
+
+                if (command.LocationPickup != null && command.LocationDropoff != null)
+                    Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: Manual Transfer - fromto");
+                else if (command.LocationPickup != null && command.LocationDropoff == null)
+                    Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: Manual Transfer - from");
+                else if (command.LocationPickup == null && command.LocationDropoff != null)
+                    Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: Manual Transfer - to");
+                else if (command.LocationPickup == null && command.LocationDropoff == null && command.LocationMove != null)
+                    Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: Manual Transfer - move");
             }
             else if (command.Action == ACTION_A ||
                      command.Action == ACTION_C)
@@ -621,6 +692,11 @@ namespace OMSWeb.Services.MqttClient
                     data["order_id"] = command.OrderId;
 
                 data["origin"] = ORIGIN_OMS;    // oms
+
+                if (command.Action == ACTION_A)
+                    Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: abort");
+                else if (command.Action == ACTION_C)
+                    Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: cancel");
             }
 
             // build JSON list

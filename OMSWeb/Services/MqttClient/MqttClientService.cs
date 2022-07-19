@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Text.Json;
+using OMSWeb.Logger;
 
 namespace OMSWeb.Services
 {
@@ -113,6 +114,8 @@ namespace OMSWeb.Services
 
         public async Task SendMessage(string topic, string payload)
         {
+            Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, "PACKET: topic={0}, payload={1}", topic, payload);
+
             Console.WriteLine("topic={0}, payload={1}", topic, payload);
             await mqttClient.PublishAsync(topic, payload, MqttQualityOfServiceLevel.AtMostOnce);
         }
