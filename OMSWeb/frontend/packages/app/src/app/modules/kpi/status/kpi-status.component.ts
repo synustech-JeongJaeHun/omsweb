@@ -6,6 +6,7 @@ import { ReportService } from '../../../services/report.service';
 import { AccountUtil } from '../../shared/utils/account.util';
 import { interval, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { numRound } from '@daimre/shared'
 
 @Component({
   selector: 'oms-kpi-status',
@@ -32,6 +33,8 @@ export class KpiStatusComponent implements OnDestroy {
   get activated(): boolean {
     return this.enabled && this.settingSvc.globalPreferences.toggles.showKpi;
   }
+
+  numRound2 = numRound(2, true)
 
   utilization = 0;
   deliveryTime = 0;
