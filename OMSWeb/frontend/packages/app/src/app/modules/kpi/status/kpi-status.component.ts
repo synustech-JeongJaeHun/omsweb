@@ -53,17 +53,24 @@ export class KpiStatusComponent implements OnDestroy {
     this.settingSvc.serviceConfig.subscribe(cfg => {
       this.enabled = cfg.kpiEnabled;
     })
+
+    this.updateKpiTrend()
+
     interval(5000)
       .pipe(takeUntil(this.destroy$))
-      .subscribe(e => this.reportService.loadTrend().subscribe(res => {
-        this.utilization = res.utilization.value;
-        this.deliveryTime = res.delivery_time.value;
-        this.cpuGhz = res.cpu.ghz;
-        this.cpuPercentage = res.cpu.usage;
-        this.memoryTotal = res.memory.total;
-        this.memoryUsed = res.memory.used;
-        this.memoryPercentage = res.memory.usedPercent;
-      }))
+      .subscribe(e => this.updateKpiTrend())
+  }
+
+  updateKpiTrend() {
+    this.reportService.loadTrend().subscribe(res => {
+      this.utilization = res.utilization.value;
+      this.deliveryTime = res.delivery_time.value;
+      this.cpuGhz = res.cpu.ghz;
+      this.cpuPercentage = res.cpu.usage;
+      this.memoryTotal = res.memory.total;
+      this.memoryUsed = res.memory.used;
+      this.memoryPercentage = res.memory.usedPercent;
+    })
   }
 
   ngOnDestroy(): void {
