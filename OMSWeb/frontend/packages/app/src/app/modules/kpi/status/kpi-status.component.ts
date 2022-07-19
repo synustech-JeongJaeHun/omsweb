@@ -34,7 +34,7 @@ export class KpiStatusComponent implements OnDestroy {
     return this.enabled && this.settingSvc.globalPreferences.toggles.showKpi;
   }
 
-  numRound2 = numRound(2, true)
+  numRound0 = numRound(0, true)
 
   utilization = 0;
   deliveryTime = 0;

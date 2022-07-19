@@ -20,7 +20,7 @@
 		</div>
 		<div class="gauge memory">
 			<div class="title" (click)="onClick('kpi')">
-				{{ 'names.mem' | translate }} ({{ numRound2(memoryUsed / 1024) }}/{{ numRound2(memoryTotal / 1024) }}GB)
+				{{ 'names.mem' | translate }} ({{ numRound0(memoryUsed / 1024) }}/{{ numRound0(memoryTotal / 1024) }}GB)
 			</div>
 			<div class="data" (click)="onClick('kpi')">{{ memoryPercentage }}%</div>
 		</div>
