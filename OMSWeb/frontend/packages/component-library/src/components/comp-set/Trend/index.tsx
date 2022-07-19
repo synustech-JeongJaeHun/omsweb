@@ -118,7 +118,7 @@ const Trend: React.FC<Props> & any = ({
 												title="CPU"
 												unit="%"
 												value={cpu.usage}
-												duration={cpu.model}
+												duration={`${cpu.ghz} GHZ`}
 											/>
 											<SimpleStatBox
 												title="Memory"
