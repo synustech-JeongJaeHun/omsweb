@@ -14,6 +14,7 @@ namespace OMSWeb.Services
     public class ComputerPerformanceService
     {
         private readonly string _processName;
+        private readonly int? _processMHZ;
         private readonly PerformanceCounter _cpuCounter;
 
         public ComputerPerformanceService()
@@ -29,9 +30,11 @@ namespace OMSWeb.Services
 
             var key = Registry.LocalMachine.OpenSubKey(@"HARDWARE\DESCRIPTION\System\CentralProcessor\0\");
             var processorName = key.GetValue("ProcessorNameString") as string;
+            var processorMHZ = key.GetValue("~MHZ") as int?;
 
             this._cpuCounter = cpuCounter;
             this._processName = processorName;
+            this._processMHZ = processorMHZ;
 #else
 #endif
         }
@@ -39,9 +42,19 @@ namespace OMSWeb.Services
         public object getCurrentCpuNameAndUsage()
         {
 #if Windows
-            return new { usage = _cpuCounter.NextValue(), model = _processName };
+            return new 
+            { 
+                usage = Math.Floor(_cpuCounter.NextValue()), 
+                model = _processName, 
+                ghz = Math.Truncate((decimal) (_processMHZ / 100)) / 10  
+            };
 #else
-            return new { usage = 0, model = "DUMMY" };
+            return new 
+            { 
+                usage = 24, 
+                model = "DUMMY", 
+                ghz = 3.1 
+            };
 #endif
         }
 
@@ -54,7 +67,7 @@ namespace OMSWeb.Services
             var total = m.ullTotalPhys;
             var free = m.ullAvailPhys;
             var used = total - free;
-            var usedPercent = ((float)used / (float)total) * 100;
+            var usedPercent = Math.Floor(((float)used / (float)total) * 100);
 
             return new
             {
