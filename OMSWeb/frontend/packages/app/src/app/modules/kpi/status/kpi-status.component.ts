@@ -1,19 +1,18 @@
-import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostBinding, OnDestroy } from '@angular/core';
 import { SettingsService } from '../../../services/settings.service';
 import { Router } from '@angular/router';
-import { HubService } from '../../../services/hub.service';
-import { IDataChangeEvent } from '../../../models/notification.model';
 import { AuthService } from '../../../services/auth.service';
+import { ReportService } from '../../../services/report.service';
 import { AccountUtil } from '../../shared/utils/account.util';
+import { interval, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs';
 
 @Component({
   selector: 'oms-kpi-status',
   templateUrl: './kpi-status.component.html',
   styleUrls: ['./kpi-status.component.scss'],
 })
-export class KpiStatusComponent implements OnInit, OnDestroy {
+export class KpiStatusComponent implements OnDestroy {
   @HostBinding('class.has-name-margin') get left() {
     return this.toolNameShown;
   }
@@ -34,24 +33,39 @@ export class KpiStatusComponent implements OnInit, OnDestroy {
     return this.enabled && this.settingSvc.globalPreferences.toggles.showKpi;
   }
 
+  utilization = 0;
+  deliveryTime = 0;
+  cpuGhz = 0;
+  cpuPercentage = 0;
+  memoryTotal = 0;
+  memoryUsed = 0;
+  memoryPercentage = 0;
+
   constructor(
     private auth: AuthService,
     private settingSvc: SettingsService,
     private router: Router,
-    private hubSvc: HubService
+    private reportService: ReportService
   ) {
     this.settingSvc.serviceConfig.subscribe(cfg => {
       this.enabled = cfg.kpiEnabled;
     })
+    interval(5000)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(e => this.reportService.loadTrend().subscribe(res => {
+        this.utilization = res.utilization.value;
+        this.deliveryTime = res.delivery_time.value;
+        this.cpuGhz = res.cpu.ghz;
+        this.cpuPercentage = res.cpu.usage;
+        this.memoryTotal = res.memory.total;
+        this.memoryUsed = res.memory.used;
+        this.memoryPercentage = res.memory.usedPercent;
+      }))
   }
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-  }
-
-  ngOnInit(): void {
-
   }
 
   onToggleExpand() {
