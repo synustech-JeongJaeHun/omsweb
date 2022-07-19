@@ -257,6 +257,13 @@ const getPlaceholderOpt = () => {
 	}
 }
 
+Highcharts.setOptions({
+	lang: {
+		thousandsSep: ',',
+	},
+})
+
+
 NoDataToDisplay(Highcharts)
 const Donut: React.FC<Props> = ({ data, isPlaceholder }: Props) => {
 	const opt = isPlaceholder ? getPlaceholderOpt() : getOptions(data)

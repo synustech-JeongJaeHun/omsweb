@@ -25,6 +25,8 @@ import MultipleSelectSet from '../MultipleSelectSet'
 type StyleType = {}
 
 const Wrapper = styled.div`
+	width: calc(100vw - 40px);
+	height: calc(100vh - 30px);
 	padding-top: 30px;
 	padding-left: 20px;
 	padding-right: 20px;

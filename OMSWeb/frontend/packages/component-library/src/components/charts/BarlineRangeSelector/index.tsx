@@ -124,6 +124,13 @@ const getOptions = (data, isTimeseries) => {
 	}
 }
 
+Highcharts.setOptions({
+	lang: {
+		thousandsSep: ',',
+	},
+})
+
+
 const BarlineRangeSelector: React.FC<Props> = ({
 	data,
 	isTimeseries,

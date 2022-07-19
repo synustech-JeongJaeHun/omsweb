@@ -9,7 +9,7 @@ const dic = {
 			yAxis: 1,
 			color: '#4F96CC',
 			tooltip: {
-				valueSuffix: 'ea',
+				valueSuffix: ' ea',
 			},
 		},
 		yAxis: {
@@ -33,7 +33,7 @@ const dic = {
 			type: 'spline',
 			color: '#FF0000',
 			tooltip: {
-				valueSuffix: 'seconds',
+				valueSuffix: ' sec',
 			},
 		},
 		yAxis: {
@@ -56,7 +56,7 @@ const dic = {
 			yAxis: 1,
 			color: '#4F96CC',
 			tooltip: {
-				valueSuffix: 'ea',
+				valueSuffix: ' ea',
 			},
 		},
 		yAxis: {
@@ -80,7 +80,7 @@ const dic = {
 			type: 'spline',
 			color: '#FF0000',
 			tooltip: {
-				valueSuffix: 'seconds',
+				valueSuffix: ' sec',
 			},
 		},
 		yAxis: {

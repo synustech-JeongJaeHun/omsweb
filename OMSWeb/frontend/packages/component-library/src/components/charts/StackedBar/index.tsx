@@ -145,6 +145,12 @@ const getOptions = ({
 	}
 }
 
+Highcharts.setOptions({
+	lang: {
+		thousandsSep: ',',
+	},
+})
+
 const StackedBar: React.FC<Props> = ({
 	height,
 	data,

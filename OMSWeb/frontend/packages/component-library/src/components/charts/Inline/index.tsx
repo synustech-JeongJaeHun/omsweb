@@ -27,6 +27,13 @@ const Wrapper = styled.div<Partial<Props>>`
 	}
 `
 
+Highcharts.setOptions({
+	lang: {
+		thousandsSep: ',',
+	},
+})
+
+
 const Inline: React.FC<Props> = ({ data, width, name, converter }: Props) => {
 	const ref = React.useRef<any>()
 	React.useEffect(() => {

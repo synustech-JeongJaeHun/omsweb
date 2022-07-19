@@ -32,8 +32,8 @@ import Scrollable from '../../Scrollable'
 type StyleType = {}
 
 const Wrapper = styled.div`
-	width: 100%;
-	height: 100%;
+	width: calc(100vw - 40px);
+	height: calc(100vh - 30px);
 	padding-top: 30px;
 	padding-left: 20px;
 	padding-right: 20px;

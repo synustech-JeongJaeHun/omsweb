@@ -142,6 +142,12 @@ const getOptions = ({
 	}
 }
 
+Highcharts.setOptions({
+	lang: {
+		thousandsSep: ',',
+	},
+})
+
 // prettier-ignore
 const Barline: React.FC<Props> = ({
 	height,

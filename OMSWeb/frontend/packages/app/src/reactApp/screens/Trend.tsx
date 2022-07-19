@@ -8,6 +8,7 @@ import { useQuery } from 'react-query'
 import { getAgt } from '../utils'
 
 const Wrapper = styled.div`
+	width: 100%;
 	height: 100%;
 `
 
@@ -64,12 +65,14 @@ const TrendWrapper: React.FC = () => {
 	)
 
 	return (
-		<Trend
-			data={data}
-			utilization={utilData}
-			deliveryTime={dtData}
-			isPlaceholder={false}
-		/>
+		<Wrapper>
+			<Trend
+				data={data}
+				utilization={utilData}
+				deliveryTime={dtData}
+				isPlaceholder={false}
+			/>
+		</Wrapper>
 	)
 }
 
