@@ -13,7 +13,7 @@ export const tableConfig = {
 					width: 80,
 				},
 				{
-					caption: 'avg TR time',
+					caption: 'avg TR time(s)',
 					dataField: 'avgConveyance',
 					width: 115,
 				},
@@ -32,7 +32,7 @@ export const tableConfig = {
 					width: 80,
 				},
 				{
-					caption: 'avg TR time',
+					caption: 'avg TR time(s)',
 					dataField: 'avgConveyance',
 					width: 115,
 				},
@@ -51,7 +51,7 @@ export const tableConfig = {
 					width: 80,
 				},
 				{
-					caption: 'avg TR time',
+					caption: 'avg TR time(s)',
 					dataField: 'avgConveyance',
 					width: 115,
 				},
@@ -70,7 +70,7 @@ export const tableConfig = {
 					width: 80,
 				},
 				{
-					caption: 'avg TR time',
+					caption: 'avg TR time(s)',
 					dataField: 'avgConveyance',
 					width: 115,
 				},

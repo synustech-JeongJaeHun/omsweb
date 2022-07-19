@@ -29,7 +29,7 @@ const dic = {
 	},
 	avgConveyance: {
 		series: {
-			name: 'avg TR time',
+			name: 'avg TR time(s)',
 			type: 'spline',
 			color: '#FF0000',
 			tooltip: {

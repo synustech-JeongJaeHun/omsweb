@@ -282,7 +282,7 @@ namespace OMSWeb.Repositories
                                 (
                                     select count(*) from cte where time_aborted is not null and abort_type = 'C' and {GetColumnFromDic(key)} = t.name
                                 )::int as cancel,
-                                0 as vehice_error
+                                0 as vehicle_error
                             FROM (
                                 select {GetColumnFromDic(key)} AS name, {GetName(key)} as label
                                 from cte

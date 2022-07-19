@@ -20,13 +20,7 @@ namespace OMSWeb.Repositories
     {
         public ReportNormaltrRepository(IConfiguration configuration) : base(configuration) { }
 
-        private readonly string _avgEpochPerHour = @"
-            COALESCE(
-                TRUNC(
-                    (extract(epoch from avg(time_completed - time_created)) / 3600)::numeric, 2
-                )::float,
-                0
-            )";
+        private readonly string _avgEpochPerHour = @"COALESCE(round(extract(epoch from avg(time_completed - time_created))), 0)";
 
         public async Task<(int Min, int Max, int Devn, int Avg, int Total)> QueryOrdersStatsAggregatedByTotalTimeSpan(string start, string end, object subfilter)
         {
@@ -55,6 +49,7 @@ namespace OMSWeb.Repositories
         public async Task<(float Hours, float Daily, float Weekly, float Monthly, float Ph, float Yearly)> QueryOrdersStatsAggregatedByEachTimeSpans(string start, string end, object subfilter)
         {
             (float Hours, float Daily, float Weekly, float Monthly, float Ph, float Yearly) result;
+            var _end = start == end ? getEndtime(end): end;
 
             using (var conn = ConnectTrack())
             {
@@ -68,10 +63,10 @@ namespace OMSWeb.Repositories
                         trunc((hourly * 24 * 365), 2) as yearly
                     from (
                         select 
-                        (count(*) / (extract( EPOCH from ('{end}'::timestamp - '{start}'::timestamp))/3600))::decimal as hourly
+                        (count(*) / (extract( EPOCH from ('{_end}'::timestamp - '{start}'::timestamp))/3600))::decimal as hourly
                         from order_completed
                         where time_completed is not null and
-                        time_completed::date between '{start}' and '{end}' {GetSubfilter(subfilter)}
+                        time_completed::date between '{start}' and '{_end}' {GetSubfilter(subfilter)}
                     ) temp
                 ";
 
@@ -229,5 +224,17 @@ namespace OMSWeb.Repositories
             "duration" => "",
             _ => !string.IsNullOrEmpty(value) ? $" AND {GetColumnFromDic(key)} = '{value}'" : ""
         };
+
+        private string getEndtime(string endDay) {
+            DateTime now = DateTime.Now;
+            string nowDay = now.ToString("yyyy-MM-dd");
+
+            if (endDay == nowDay) {
+                return now.ToString("yyyy-MM-dd hh:mm");
+            }
+
+            DateTime oDate = DateTime.Parse(endDay);
+            return oDate.ToString("yyyy-MM-dd 23:59");
+        }
     }
 }
