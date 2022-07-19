@@ -3,7 +3,7 @@
  * Table
  *
  */
-
+// @ts-nocheck
 import * as React from 'react'
 import * as R from 'ramda'
 import styled from '@emotion/styled'
@@ -61,7 +61,6 @@ const Wrapper = styled.div`
 			overflow-y: auto !important;
 		}
 	}
-
 `
 
 // prettier-ignore

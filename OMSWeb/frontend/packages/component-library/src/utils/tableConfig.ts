@@ -193,7 +193,7 @@ export const tableConfig = {
 			keys: ['name', 'alarmNum', 'avgHour'],
 			header: [
 				{
-					caption: 'segment name',
+					caption: 'point name',
 					dataField: 'name',
 				},
 				{
