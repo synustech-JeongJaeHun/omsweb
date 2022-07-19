@@ -145,7 +145,7 @@ export const tableConfig = {
 					width: 80,
 				},
 				{
-					caption: 'avg time under alarm',
+					caption: 'avg time under alarm(s)',
 					dataField: 'avgHour',
 					width: 115,
 				},
@@ -164,7 +164,7 @@ export const tableConfig = {
 					width: 80,
 				},
 				{
-					caption: 'avg time under alarm',
+					caption: 'avg time under alarm(s)',
 					dataField: 'avgHour',
 					width: 115,
 				},
@@ -183,7 +183,7 @@ export const tableConfig = {
 					width: 80,
 				},
 				{
-					caption: 'avg time under alarm',
+					caption: 'avg time under alarm(s)',
 					dataField: 'avgHour',
 					width: 115,
 				},
@@ -202,7 +202,7 @@ export const tableConfig = {
 					width: 80,
 				},
 				{
-					caption: 'avg time under alarm',
+					caption: 'avg time under alarm(s)',
 					dataField: 'avgHour',
 					width: 115,
 				},
@@ -221,7 +221,7 @@ export const tableConfig = {
 					width: 80,
 				},
 				{
-					caption: 'avg time under alarm',
+					caption: 'avg time under alarm(s)',
 					dataField: 'avgHour',
 					width: 115,
 				},
@@ -240,7 +240,7 @@ export const tableConfig = {
 					width: 80,
 				},
 				{
-					caption: 'avg time under alarm',
+					caption: 'avg time under alarm(s)',
 					dataField: 'avgHour',
 					width: 115,
 				},

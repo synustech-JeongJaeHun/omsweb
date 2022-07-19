@@ -19,7 +19,7 @@ const dic = {
 			},
 			labels: {
 				enabled: true,
-				format: '{value}h',
+				format: '{value}s',
 				style: {
 					color: Highcharts.getOptions().colors[1],
 				},
@@ -33,7 +33,7 @@ const dic = {
 			type: 'spline',
 			color: '#FF0000',
 			tooltip: {
-				valueSuffix: 'hour',
+				valueSuffix: 'seconds',
 			},
 		},
 		yAxis: {
@@ -66,7 +66,7 @@ const dic = {
 			},
 			labels: {
 				enabled: true,
-				format: '{value}h',
+				format: '{value}s',
 				style: {
 					color: Highcharts.getOptions().colors[1],
 				},
@@ -76,11 +76,11 @@ const dic = {
 	},
 	avgHour: {
 		series: {
-			name: 'avg time under alarm',
+			name: 'avg time under alarm(s)',
 			type: 'spline',
 			color: '#FF0000',
 			tooltip: {
-				valueSuffix: 'hour',
+				valueSuffix: 'seconds',
 			},
 		},
 		yAxis: {

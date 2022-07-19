@@ -18,14 +18,8 @@ namespace OMSWeb.Repositories
     {
         public ReportAlarmRepository(IConfiguration configuration) : base(configuration) { }
 
-        private readonly string _avgEpochPerHour = @"
-            COALESCE(
-                TRUNC(
-                    (extract(epoch from avg(time_resolved - time)) / 3600)::numeric, 2
-                )::float,
-                0
-            )
-            ";
+        private readonly string _avgEpochPerHour = @"COALESCE(round(extract(epoch from avg(time_resolved - time))), 0)";
+            
 
         public async Task<(int Min, int Max, int Devn, int Avg, int Total)> QueryAlarmsStatsAggregatedByTotalTimeSpan(string start, string end, object subfilter)
         {
