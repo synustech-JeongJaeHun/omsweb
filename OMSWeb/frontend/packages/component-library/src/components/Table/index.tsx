@@ -40,8 +40,8 @@ const Wrapper = styled.div`
 	}
 
 	.dx-scrollable-container {
-		overflow-x: hidden !important;
-		overflow-y: hidden !important;
+		/* overflow-x: hidden !important;
+		overflow-y: hidden !important; */
 
 		&::-webkit-scrollbar {
 			width: 5px;
@@ -56,11 +56,11 @@ const Wrapper = styled.div`
 		border: none;
 	}
 
-	.dx-widget:hover {
+	/* .dx-widget:hover {
 		.dx-scrollable-container {
 			overflow-y: auto !important;
 		}
-	}
+	} */
 `
 
 // prettier-ignore
@@ -141,7 +141,7 @@ const Table: React.FC<Props & any> = React.forwardRef(
 							return <Column {...header} key={i.toString()} />
 						})
 					}
-					{!hasPaging && <Scrolling mode="virtual" />}
+					<Scrolling mode="virtual" useNative={false} />
 				</DataGrid>
 			</Wrapper>
 		)
