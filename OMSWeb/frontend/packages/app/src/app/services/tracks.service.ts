@@ -33,8 +33,8 @@ export class TracksService {
         return this.http.get<ICarrierQuery>(`${this.baseUrl}/carrierquery/${carrierLoc}&${carrierId}`)
     }
 
-    getTransferHCACK(category: string, vehicleId: string, source: string, srctype: string, dest: string, dsttype: string, carrierId: string): Observable<ITransferHCACK> {
-        return this.http.get<ITransferHCACK>(`${this.baseUrl}/transferhcack/${category}&${vehicleId}&${source}&${srctype}&${dest}&${dsttype}&${carrierId}`)
+    checkTransfer(category: string, vehicleId: string, source: string, srctype: string, dest: string, dsttype: string, carrierId: string): Observable<ITransferHCACK> {
+        return this.http.get<ITransferHCACK>(`${this.baseUrl}/transfercheck/${category}&${vehicleId}&${source}&${srctype}&${dest}&${dsttype}&${carrierId}`)
     }
 
 	loadGroups(): Observable<Dto.IGroup[]> {

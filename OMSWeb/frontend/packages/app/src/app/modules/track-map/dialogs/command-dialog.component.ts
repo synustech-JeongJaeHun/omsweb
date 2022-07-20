@@ -196,7 +196,7 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 				if (ok) {
                     if (category === 'fromTo' || category === 'from' || category === 'to') {
 
-                      this.tracksService.getTransferHCACK(
+                      this.tracksService.checkTransfer(
                         category,
                         cmd?.vehicleId?.toString(),
                         cmd?.locationPickup,

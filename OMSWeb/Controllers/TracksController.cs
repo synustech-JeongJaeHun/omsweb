@@ -69,8 +69,8 @@ namespace OMSWeb.Controllers
         }
 
 
-        [HttpGet("transferhcack/{category}&{vehicleId}&{source}&{srctype}&{dest}&{dsttype}&{carrierId}")]
-        public ActionResult<TransferHCACK> GetTransferHCACK(
+        [HttpGet("transfercheck/{category}&{vehicleId}&{source}&{srctype}&{dest}&{dsttype}&{carrierId}")]
+        public ActionResult<TransferHCACK> CheckTransfer(
             string category, 
             string vehicleId, 
             string source, 
