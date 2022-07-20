@@ -15,7 +15,7 @@ import { MapStatesService } from '../map-states.service'
 import { TrackStatusService } from '@oms/root/services/track-status.service'
 import * as DateFns from 'date-fns'
 import { SystemStatusService } from '@oms/root/services/system-status.service'
-import { TracksService } from '@oms/root/services/tracks.service'
+import { TransfersService } from '@oms/root/services/transfers.service'
 
 @Component({
 	selector: 'oms-command-dialog',
@@ -57,7 +57,7 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 		private t$: TranslateService,
 		private trackStatusService: TrackStatusService,
 		private systemStatusService: SystemStatusService,
-		private tracksService: TracksService,
+        private transfersService: TransfersService,
 	) {}
 
 	ngOnInit(): void {
@@ -196,7 +196,7 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 				if (ok) {
                     if (category === 'fromTo' || category === 'from' || category === 'to') {
 
-                      this.tracksService.checkTransfer(
+                      this.transfersService.checkTransfer(
                         category,
                         cmd?.vehicleId?.toString(),
                         cmd?.locationPickup,

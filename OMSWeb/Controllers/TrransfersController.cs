@@ -1,10 +1,7 @@
 using System;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using OMSWeb.Models;
-using OMSWeb.Models.Tracks;
 using OMSWeb.Services;
-using Buffer = OMSWeb.Models.Tracks.Buffer;
 
 namespace OMSWeb.Controllers
 {
@@ -14,7 +11,7 @@ namespace OMSWeb.Controllers
     {
         private readonly TransferService _svc;
 
-        public TransfersController(TrackService transferService)
+        public TransfersController(TransferService transferService)
         {
             this._svc = transferService;
         }
