@@ -27,7 +27,7 @@ namespace OMSWeb.Controllers
             string carrierId
             )
         {
-            var result = this._svc.GetTransferHCACK(
+            var result = this._svc.CheckTransfer(
                 category, 
                 vehicleId, 
                 source,

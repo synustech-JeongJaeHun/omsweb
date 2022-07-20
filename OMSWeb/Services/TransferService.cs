@@ -14,7 +14,7 @@ namespace OMSWeb.Services
         }
 
 
-        public TransferHCACK GetTransferHCACK(
+        public TransferHCACK CheckTransfer(
             string category,
             string vehicleId,
             string source,
