@@ -171,6 +171,7 @@ namespace OMSWeb.Services
 
         public async Task<dynamic> QueryTrend()
         {
+            var createOrder10m = _reportTrendRepository.CreateOrder10m();
             var deliveryTimeTask = _reportTrendRepository.QueryDeliveryTime();
             var waitTimeTask = _reportTrendRepository.QueryWaitTime();
             var transferTimeTask = _reportTrendRepository.QueryTransferTime();
@@ -182,6 +183,7 @@ namespace OMSWeb.Services
             var utilizationTask = _reportTrendRepository.QueryUtilization();
 
             await Task.WhenAll(new Task[] {
+                createOrder10m,
                 deliveryTimeTask,
                 waitTimeTask,
                 transferTimeTask,

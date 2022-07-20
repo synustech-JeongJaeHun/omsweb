@@ -20,7 +20,7 @@ namespace OMSWeb.Repositories
     {
         public ReportNormaltrRepository(IConfiguration configuration) : base(configuration) { }
 
-        private readonly string _avgEpochPerHour = @"COALESCE(round(extract(epoch from avg(time_completed - time_created))), 0)";
+        private readonly string _avgEpochPerHour = @"COALESCE(round(extract(epoch from avg(time_completed - time_assigned))), 0)";
 
         public async Task<(int Min, int Max, int Devn, int Avg, int Total)> QueryOrdersStatsAggregatedByTotalTimeSpan(string start, string end, object subfilter)
         {
@@ -36,7 +36,7 @@ namespace OMSWeb.Repositories
                         count(*)::int as total
                     FROM (
                         SELECT
-                            time_completed - time_created as calctime
+                            time_completed - time_assigned as calctime
                         from order_completed
                         WHERE time_completed IS NOT NULL
                             AND time_completed::DATE BETWEEN '{start}' AND '{end}' {GetSubfilter(subfilter)}
@@ -168,7 +168,7 @@ namespace OMSWeb.Repositories
                         from order_completed
 			            WHERE time_completed is not null and {filter(subsection, value)} {GetSubfilter(subfilter)}
                         GROUP BY {GetColumnFromDic(key)}
-                        ORDER BY label asc
+                        ORDER BY count desc
                     ";
 
                     result = (await conn.QueryAsync(sql)).ToArray();

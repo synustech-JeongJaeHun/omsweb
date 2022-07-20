@@ -215,6 +215,7 @@ namespace OMSWeb.Repositories
                         from vehicle_alarms va
                         where {filter(subsection, value)} and {GetColumnFromDic(key)} is not null {GetSubfilter(subfilter)}
                         group by {GetColumnFromDic(key)}
+                        order by count desc
                     ";
                     result = (await conn.QueryAsync(sql)).ToArray();
                 }
