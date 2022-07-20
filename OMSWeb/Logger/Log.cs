@@ -25,7 +25,7 @@ namespace OMSWeb.Logger
             }
 
             string strMaxSize = AppConfig.GetFromOMSConfig("Log", "maximumFileSize", "20M");
-            string strMaxSizeApp = AppConfig.GetFromOMSConfig("Log", "maximumFileSize_web", "21M");
+            string strMaxSizeApp = AppConfig.GetFromOMSConfig("Log", "maximumFileSize_web", "20M");
             long maxSize = Convert.ToInt32(strMaxSize.ToUpper().Replace("M", "")) * 1000000;  // default 20000000
             long maxSizeApp = Convert.ToInt32(strMaxSizeApp.ToUpper().Replace("M", "")) * 1000000;
 
