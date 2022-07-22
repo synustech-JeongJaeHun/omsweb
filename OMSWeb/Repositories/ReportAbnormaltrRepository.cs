@@ -176,7 +176,7 @@ namespace OMSWeb.Repositories
                        var (label, startStr, endStr) = GetDurationLabel(arr);
 
                        return $@"
-                            with recursive cte as (
+                            with cte as (
                                 select *
                                 FROM order_completed
                                 where ((
@@ -245,7 +245,7 @@ namespace OMSWeb.Repositories
                 using (var conn = ConnectTrack())
                 {
                     var sql = $@"
-                        with recursive cte as (
+                        with cte as (
                             select *
                             from order_completed
                             where ((

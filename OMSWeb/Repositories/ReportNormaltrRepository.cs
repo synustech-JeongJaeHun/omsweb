@@ -38,8 +38,9 @@ namespace OMSWeb.Repositories
                         SELECT
                             time_completed - time_assigned as calctime
                         from order_completed
-                        WHERE time_completed IS NOT NULL
-                            AND time_completed::DATE BETWEEN '{start}' AND '{end}' {GetSubfilter(subfilter)}
+                        WHERE time_completed IS NOT NULL AND 
+                            time_completed > time_assigned AND 
+                            time_completed::DATE BETWEEN '{start}' AND '{end}' {GetSubfilter(subfilter)}
                     ) AS a
                 ";
                 result = await conn.QueryFirstAsync<(int Min, int Max, int Devn, int Avg, int Total)>(sql);
@@ -65,8 +66,9 @@ namespace OMSWeb.Repositories
                         select 
                         (count(*) / (extract( EPOCH from ('{_end}'::timestamp - '{start}'::timestamp))/3600))::decimal as hourly
                         from order_completed
-                        where time_completed is not null and
-                        time_completed::date between '{start}' and '{_end}' {GetSubfilter(subfilter)}
+                        where time_completed is not null AND
+                            time_completed > time_assigned AND
+                            time_completed::date between '{start}' and '{_end}' {GetSubfilter(subfilter)}
                     ) temp
                 ";
 
@@ -85,18 +87,21 @@ namespace OMSWeb.Repositories
                     using (var conn = ConnectTrack())
                     {
                         var sql = $@"
+                                with cte as (
+                                    SELECT
+                                    *
+                                    from order_completed
+                                    WHERE time_completed is not null and 
+                                        time_completed > time_assigned AND
+                                        time_completed::DATE BETWEEN days AND days {SubFilter(subsection, value)} {GetSubfilter(subfilter)}
+                                )
                                 SELECT
                                 TO_CHAR(days, 'YYYY-MM-DD') as label,
                                 (
-                                    SELECT
-                                    {_avgEpochPerHour}
-                                    from order_completed
-                                    WHERE time_completed is not null and time_completed::DATE BETWEEN days AND days {SubFilter(subsection, value)} {GetSubfilter(subfilter)}
+                                    SELECT {_avgEpochPerHour} from cte
                                 ) AS avg,
                                 (
-                                    SELECT count(*)
-                                    from order_completed
-                                    WHERE time_completed is not null and time_completed::DATE BETWEEN days AND days {SubFilter(subsection, value)} {GetSubfilter(subfilter)}
+                                    SELECT count(*) from cte
                                 )::int
                                 FROM GENERATE_SERIES('{startStr}'::DATE, '{endStr}'::DATE, '1 days') days
                                 ";

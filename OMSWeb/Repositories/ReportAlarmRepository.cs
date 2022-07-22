@@ -27,18 +27,22 @@ namespace OMSWeb.Repositories
             using (var conn = ConnectTrack())
             {
                 var sql = $@"
-               		SELECT
-                        EXTRACT(EPOCH FROM min(calctime))::int as min,
-                        EXTRACT(EPOCH FROM max(calctime))::int as max,
-                        EXTRACT(EPOCH FROM (max(calctime) - min(calctime)))::int as devn,
-                        EXTRACT(EPOCH FROM avg(calctime))::int as avg,
-                        count(*)::int as total
-                    FROM (
-                        SELECT
-                            time_resolved - time as calctime
-                        FROM vehicle_alarms
+                    with cte as (
+                        select extract(epoch from (time_resolved - time))::int as alarmtime 
+                        from vehicle_alarms
                         WHERE time::DATE BETWEEN '{start}' AND '{end}' {GetSubfilter(subfilter)}
-                    ) AS a
+                    )
+                    select 
+                        min(alarmtime), 
+                        max(alarmtime), 
+                        max(alarmtime) - min(alarmtime) as devn,
+                        (
+                            select avg(alarmtime)::int from cte
+                        ) as avg, 
+                        (
+                            select count(*)::int from cte
+                        ) 
+                    from cte where alarmtime > 0
                 ";
 
                 result = await conn.QueryFirstAsync<(int Min, int Max, int Devn, int Avg, int Total)>(sql);
@@ -46,10 +50,10 @@ namespace OMSWeb.Repositories
             return result;
         }
 
-        public async Task<(int Days, int Weeks, int Months, int Hours, int Daily, int Weekly, int Monthly, int Ph, int Yearly)> QueryAlarmsStatsAggregatedByEachTimeSpans(string start, string end, object subfilter)
+        public async Task<(int Days, int Weeks, int Months, int Hours, float Daily, int Weekly, int Monthly, float Ph, int Yearly)> QueryAlarmsStatsAggregatedByEachTimeSpans(string start, string end, object subfilter)
         {
             (int Days, int Weeks, int Months, int Hours,
-                           int Daily, int Weekly, int Monthly, int Ph, int Yearly) result;
+                           float Daily, int Weekly, int Monthly, float Ph, int Yearly) result;
 
             using (var conn = ConnectTrack())
             {
@@ -61,8 +65,8 @@ namespace OMSWeb.Repositories
                         hours,
                         CASE
                             WHEN days = 0 THEN total
-                            ELSE total / days
-                        END::int AS daily,
+                            ELSE trunc( total::numeric / days::numeric, 2 )
+                        END AS daily,
                         CASE
                             WHEN weeks = 0 THEN total
                             ELSE total / weeks
@@ -73,7 +77,7 @@ namespace OMSWeb.Repositories
                         END::int AS monthly,
                         CASE
                             WHEN hours = 0 THEN total
-                            ELSE round( total::numeric / hours::numeric, 2 )
+                            ELSE trunc( total::numeric / hours::numeric, 2 )
                         END::float AS ph,
                         total::int as yearly
                         FROM
@@ -112,7 +116,7 @@ namespace OMSWeb.Repositories
                         ) AS base
                 ";
 
-                result = await conn.QueryFirstAsync<(int Days, int Weeks, int Months, int Hours, int Daily, int Weekly, int Monthly, int Ph, int Yearly)>(sql);
+                result = await conn.QueryFirstAsync<(int Days, int Weeks, int Months, int Hours, float Daily, int Weekly, int Monthly, float Ph, int Yearly)>(sql);
             }
             return result;
         }
@@ -128,23 +132,17 @@ namespace OMSWeb.Repositories
                     using (var conn = ConnectTrack())
                     {
                         var sql = $@"
+                                with cte as (
+                                    SELECT *
+                                    FROM vehicle_alarms
+                                    WHERE
+                                        time_resolved::DATE BETWEEN days AND days
+                                        {SubFilter(subsection, value)} {GetSubfilter(subfilter)}
+                                )
                                 SELECT
                                 TO_CHAR(days, 'YYYY-MM-DD') as label,
-                                (
-                                    SELECT
-                                    {_avgEpochPerHour}
-                                    FROM vehicle_alarms
-                                    WHERE
-                                        time_resolved::DATE BETWEEN days AND days
-                                        {SubFilter(subsection, value)} {GetSubfilter(subfilter)}
-                                ) AS avg,
-                                (
-                                    SELECT count(*)
-                                    FROM vehicle_alarms
-                                    WHERE
-                                        time_resolved::DATE BETWEEN days AND days
-                                        {SubFilter(subsection, value)} {GetSubfilter(subfilter)}
-                                )::int
+                                ( SELECT {_avgEpochPerHour} FROM cte ) AS avg,
+                                ( SELECT count(*) FROM cte )::int
                                 FROM GENERATE_SERIES('{startStr}'::DATE, '{endStr}'::DATE, '1 days') days
                                 ";
                         result = (await conn.QueryAsync(sql)).ToArray();
