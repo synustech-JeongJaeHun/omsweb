@@ -539,6 +539,7 @@
     "confirmParameterInvalidSource": "NAK[3] Parameter Invalid [SOURCEPORT]",
     "confirmParameterInvalidDest": "NAK[3] Parameter Invalid [DESTPORT]",
     "confirmParameterInvalidCarrierID": "NAK[3] Parameter Invalid [CARRIERID]",
+    "confirmParameterInvalidCarrierLoc": "NAK[3] Parameter Invalid [CARRIERLOC]",
     "confirmReject": "NAK[5] Reject",
     "selectObjectType": "选择类型",
     "searchId": "搜索 ID",

@@ -6,6 +6,7 @@ import { HubService } from '@oms/root/services/hub.service'
 import { MessagesService } from '@oms/root/services/messages.service'
 import { TrackStatusService } from '@oms/root/services/track-status.service'
 import { TracksService } from '@oms/root/services/tracks.service'
+import { TransfersService } from '@oms/root/services/transfers.service'
 import { Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators'
 import { ILookupUnit } from '../../../models/map.interface'
@@ -25,7 +26,9 @@ export class BufferStatusDialogComponent implements OnDestroy {
 		private dialogSvc: DialogService,
 		private $t: TranslateService,
 		private messageSvc: MessagesService,
-		private tracksService: TracksService,
+        private tracksService: TracksService,
+        private transferSvc: TransfersService,
+        private t$: TranslateService,
 		hubSvc: HubService,
 	) {
 		if (this.trackStatusService.trackData.buffers.length > 0) {
@@ -68,67 +71,65 @@ export class BufferStatusDialogComponent implements OnDestroy {
 			})
 	}
 
-	onRemoveCarrier(carrierId: string) {
-		this.tracksService.getCarrierInfo(this.currentBuffer.logicalId)
-		      .subscribe(
-		        (res) => {
-              if (res.carrierId === carrierId) {
-		            this.messageSvc
-		              .sendCarrierCommand({
-		                action: 'remove_carrier',
-                        carrierLabel: carrierId,
-		                logicalId: this.currentBuffer.logicalId
-		              })
-		              .subscribe()
-		          }
-		          else if (res.carrierId === '') {
-		            this.dialogSvc.alert({
-		              body: this.$t.instant('messages.confirmCarrierEmptyAtBuffer'),
-		            })
-		          }
-		          else {
-		            this.dialogSvc.alert({
-		              body: this.$t.instant('messages.confirmCarrierInvalid'),
-		            })
-		          }
-		        },
-		        (error) => {
-		          this.dialogSvc.alert({
-		            body: this.$t.instant('messages.confirmCarrierInvalid'),
-		          })
-		        },
-		    );
+    onRemoveCarrier(carrierId: string) {
+      this.transferSvc.checkCarrierChange("remove", this.currentBuffer.logicalId, "buffer", carrierId)
+        .subscribe((res) => {
+          console.log(res);
 
-	}
-	onInstallCarrier(carrierId: string) {
-        this.tracksService.getCarrierQuery(this.currentBuffer.logicalId, carrierId)
-	      .subscribe(
-	        (res) => {
-	          if (res.carrierLoc === '' && res.carrierId === '') {
-	            this.messageSvc
-	              .sendCarrierCommand({
-	                action: 'install_carrier',
-                    carrierLabel: carrierId,
-	                logicalId: this.currentBuffer.logicalId
-	              })
-	              .subscribe()
-              }
-              else if (res.carrierLoc === '' && res.carrierId !== '') {
-                this.dialogSvc.alert({
-                  body: this.$t.instant('messages.confirmCarrierAlreadyExistAtBuffer'),
-                })
-              }
-              else if (res.carrierLoc !== '' && res.carrierLoc !== this.currentBuffer.logicalId) {
-                this.dialogSvc.alert({
-                  body: this.$t.instant('messages.confirmCarrierAlreadyExistAtAnotherPos'),
-                })
-              }
-	        },
-	        (error) => {
-	          this.dialogSvc.alert({
-	            body: this.$t.instant('messages.confirmCarrierAlreadyExistAtBuffer'),
-	          })
-	        },
-	    );
+          if (res.hcack === 0 || res.hcack === 4) {
+            this.messageSvc.sendCarrierCommand({
+              action: 'remove_carrier',
+              carrierLabel: carrierId,
+              logicalId: this.currentBuffer.logicalId
+            }).subscribe()
+          }
+          else {
+            var errorMessage = "";
+            if (res.hcack === 2) errorMessage = 'messages.confirmNotAbleToExcute';
+            else if (res.hcack === 3) {
+              if (res.cpname === 'CARRIERID') errorMessage = 'messages.confirmParameterInvalidCarrierID';
+              else if (res.cpname === 'CARRIERLOC') errorMessage = 'messages.confirmParameterInvalidCarrierLoc';
+              else errorMessage = 'messages.confirmParameterInvalid';
+            }
+            else if (res.hcack === 5) errorMessage = 'messages.confirmReject';
+            else errorMessage = 'messages.confirmNotAbleToExcute';
+
+            this.dialogSvc.alert({
+              title: this.t$.instant('names.blocked'),
+              body: this.t$.instant(errorMessage),
+            })
+          }
+        })
+    }
+
+    onInstallCarrier(carrierId: string) {
+      this.transferSvc.checkCarrierChange("install", this.currentBuffer.logicalId, "buffer", carrierId)
+        .subscribe((res) => {
+          console.log(res);
+
+          if (res.hcack === 0 || res.hcack === 4) {
+            this.messageSvc.sendCarrierCommand({
+              action: 'install_carrier',
+              carrierLabel: carrierId,
+              logicalId: this.currentBuffer.logicalId
+            }).subscribe()
+          }
+          else {
+            var errorMessage = "";
+            if (res.hcack === 2) errorMessage = 'messages.confirmNotAbleToExcute';
+            else if (res.hcack === 3) {
+              if (res.cpname === 'CARRIERID') errorMessage = 'messages.confirmParameterInvalidCarrierID';
+              else if (res.cpname === 'CARRIERLOC') errorMessage = 'messages.confirmParameterInvalidCarrierLoc';
+              else errorMessage = 'messages.confirmParameterInvalid';
+            }
+            else if (res.hcack === 5) errorMessage = 'messages.confirmReject';
+            else errorMessage = 'messages.confirmNotAbleToExcute';
+
+            this.dialogSvc.alert({
+              title: this.t$.instant('names.blocked'),
+              body: this.t$.instant(errorMessage),
+            })
+          }
+        })
 	}
 }

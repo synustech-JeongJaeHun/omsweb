@@ -3,8 +3,9 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog'
 import { TranslateService } from '@ngx-translate/core'
 import { TrackStatusService } from '@oms/root/services/track-status.service'
 import { DialogService } from '@oms/root/services/dialog.service'
-import { MessagesService } from '../../../services/messages.service'
-import { TracksService } from '../../../services/tracks.service';
+import { MessagesService } from '@oms/root/services/messages.service'
+import { TracksService } from '@oms/root/services/tracks.service';
+import { TransfersService } from '@oms/root/services/transfers.service';
 import { VehicleService } from '@oms/root/services/vehicle.service'
 import { Dto } from '@oms/root/models/dto/track.model'
 import { IVehicleDioCategory } from '@oms/root/models/vehicle-status.model'
@@ -68,12 +69,14 @@ export class VehicleStatusDialogComponent implements OnInit, OnDestroy {
 
   constructor(
     	private $t: TranslateService,
-    	private trackSvc: TracksService,
-	private dialogRef: MatDialogRef<VehicleStatusDialogComponent>,
-	private trackStatusService: TrackStatusService,
+        private trackSvc: TracksService,
+        private transferSvc: TransfersService,
+	    private dialogRef: MatDialogRef<VehicleStatusDialogComponent>,
+	    private trackStatusService: TrackStatusService,
     	private vehicleService: VehicleService,
     	private dialogSvc: DialogService,
-    	private messageSvc: MessagesService
+        private messageSvc: MessagesService,
+        private t$: TranslateService,
 	) {}
 
 	ngOnInit(): void {
@@ -130,68 +133,66 @@ export class VehicleStatusDialogComponent implements OnInit, OnDestroy {
 		clearInterval(this.intervalId)
 	}
 
-  onRemoveCarrier(carrierIdInput: string) {
-    this.trackSvc.getCarrierInfo(this.currentVehicle.logicalId)
-      .subscribe(
-        (res) => {
-          if (res.carrierId === carrierIdInput) {
-            this.messageSvc
-              .sendCarrierCommand({
-                action: 'remove_carrier',
-                carrierLabel: carrierIdInput,
-                logicalId: this.currentVehicle.logicalId
-              })
-              .subscribe()
-          }
-          else if (res.carrierId === '') {
-            this.dialogSvc.alert({
-              body: this.$t.instant('messages.confirmCarrierEmptyAtVehicle'),
-            })
+    onRemoveCarrier(carrierIdInput: string) {
+      this.transferSvc.checkCarrierChange("remove", this.currentVehicle.logicalId, "vehicle", carrierIdInput)
+        .subscribe((res) => {
+          console.log(res);
+
+          if (res.hcack === 0 || res.hcack === 4) {
+             this.messageSvc.sendCarrierCommand({
+                  action: 'remove_carrier',
+                  carrierLabel: carrierIdInput,
+                  logicalId: this.currentVehicle.logicalId
+                }).subscribe()
           }
           else {
+            var errorMessage = "";
+            if (res.hcack === 2) errorMessage = 'messages.confirmNotAbleToExcute';
+            else if (res.hcack === 3) {
+              if (res.cpname === 'CARRIERID') errorMessage = 'messages.confirmParameterInvalidCarrierID';
+              else if (res.cpname === 'CARRIERLOC') errorMessage = 'messages.confirmParameterInvalidCarrierLoc';
+              else errorMessage = 'messages.confirmParameterInvalid';
+            }
+            else if (res.hcack === 5) errorMessage = 'messages.confirmReject';
+            else errorMessage = 'messages.confirmNotAbleToExcute';
+
             this.dialogSvc.alert({
-              body: this.$t.instant('messages.confirmCarrierInvalid'),
+              title: this.t$.instant('names.blocked'),
+              body: this.t$.instant(errorMessage),
             })
           }
-        },
-        (error) => {
-          this.dialogSvc.alert({
-            body: this.$t.instant('messages.confirmCarrierInvalid'),
-          })
-        },
-      );
+        })
     }
 
-  onInstallCarrier(carrierIdInput: string) {
-    this.trackSvc.getCarrierQuery(this.currentVehicle.logicalId, carrierIdInput)
-      .subscribe(
-        (res) => {
-          if (res.carrierLoc === '' && res.carrierId === '') {
-            this.messageSvc
-              .sendCarrierCommand({
-                action: 'install_carrier',
-                carrierLabel: carrierIdInput,
-                logicalId: this.currentVehicle.logicalId
-              })
-              .subscribe()
+    onInstallCarrier(carrierIdInput: string) {
+      this.transferSvc.checkCarrierChange("install", this.currentVehicle.logicalId, "vehicle", carrierIdInput)
+        .subscribe((res) => {
+          console.log(res);
+
+          if (res.hcack === 0 || res.hcack === 4) {
+            this.messageSvc.sendCarrierCommand({
+              action: 'install_carrier',
+              carrierLabel: carrierIdInput,
+              logicalId: this.currentVehicle.logicalId
+            }).subscribe()
           }
-          else if (res.carrierLoc === '' && res.carrierId !== '') {
+          else {
+            var errorMessage = "";
+            if (res.hcack === 2) errorMessage = 'messages.confirmNotAbleToExcute';
+            else if (res.hcack === 3) {
+              if (res.cpname === 'CARRIERID') errorMessage = 'messages.confirmParameterInvalidCarrierID';
+              else if (res.cpname === 'CARRIERLOC') errorMessage = 'messages.confirmParameterInvalidCarrierLoc';
+              else errorMessage = 'messages.confirmParameterInvalid';
+            }
+            else if (res.hcack === 5) errorMessage = 'messages.confirmReject';
+            else errorMessage = 'messages.confirmNotAbleToExcute';
+
             this.dialogSvc.alert({
-              body: this.$t.instant('messages.confirmCarrierAlreadyExistAtVehicle'),
+              title: this.t$.instant('names.blocked'),
+              body: this.t$.instant(errorMessage),
             })
           }
-          else if (res.carrierLoc !== '' && res.carrierLoc != this.currentVehicle.logicalId) {
-            this.dialogSvc.alert({
-              body: this.$t.instant('messages.confirmCarrierAlreadyExistAtAnotherPos'),
-            })
-          }
-        },
-        (error) => {
-          this.dialogSvc.alert({
-            body: this.$t.instant('messages.confirmCarrierAlreadyExistAtVehicle'),
-          })
-        },
-      );
+        })
     }
 
 	onVehicleSelect({ selectedItem: value }) {

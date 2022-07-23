@@ -141,6 +141,7 @@ namespace OMSWeb
             services.AddScoped<PlaybackRepository>();
             services.AddScoped<StatusRepository>();
             services.AddScoped<TrackRepository>();
+            services.AddScoped<TransferRepository>();
             services.AddScoped<UserRepository>();
             services.AddScoped<ModeStateRepository>();
             services.AddScoped<ModuleStatusRepository>();
@@ -172,6 +173,8 @@ namespace OMSWeb
             services.AddSingleton<ModeStateRepository>();
             services.AddSingleton<SettingModeRepository>();
             services.AddSingleton<TrackRepository>();
+            services.AddSingleton<TransferRepository>();
+            services.AddSingleton<TransferService>();
             services.AddSingleton<TrackService>();
             services.AddSingleton<PushService>();
             services.AddSingleton<CacheService>();

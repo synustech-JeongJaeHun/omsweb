@@ -65,6 +65,7 @@
     <TypeScriptCompile Remove="frontend\packages\app\src\app\models\fireshutter-status.model.ts" />
     <TypeScriptCompile Remove="frontend\packages\app\src\app\models\fireshutter.model.ts" />
     <TypeScriptCompile Remove="frontend\packages\app\src\app\models\transfer.model.ts" />
+    <TypeScriptCompile Remove="frontend\packages\app\src\app\services\transfers.service.ts" />
   </ItemGroup>
 
   <ItemGroup>
