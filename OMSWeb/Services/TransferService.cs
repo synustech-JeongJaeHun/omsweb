@@ -213,6 +213,15 @@ namespace OMSWeb.Services
                     CPACK = (int)MCS_HCACK.NotAbleToExcute;
                     CPNackCount++;
                 }
+                else if (sourceType == SourceType.VEHICLE)
+                {
+                    if (!VEHICLE_Has_a_Carrier(carrierLoc))
+                    {
+                        CPNAME = "CARRIERLOC";    // CARRIERLOC
+                        CPACK = (int)MCS_HCACK.NotAbleToExcute;
+                        CPNackCount++;
+                    }
+                }
                 #endregion
 
 
