@@ -78,6 +78,57 @@ namespace OMSWeb.Repositories
             return result;
         }
 
+        public Boolean QueryInterlockPortInOrder(string portName)
+        {
+            Boolean result = false;
+            int count = 0;
+            using (var conn = ConnectTrack())
+            {
+                try
+                {
+                    var sql = $@"SELECT count(*) FROM orders WHERE 
+                                    (location_pickup='{portName}' or location_dropoff='{portName}') 
+                                    and time_completed is null and time_aborted is null and time_failed is null ";
+
+                    count = conn.QueryFirst<int>(sql);
+                }
+                catch (System.Exception)
+                {
+                    Console.WriteLine("[QueryInterlockPortInOrder] => null");
+                    count = 0;
+                }
+            }
+            if (count > 0)
+                result = true;
+
+            return result;
+        }
+
+        public Boolean QueryInterlockCarrierIDInOrder(string carrierId)
+        {
+            Boolean result = false;
+            int count = 0;
+            using (var conn = ConnectTrack())
+            {
+                try
+                {
+                    var sql = $@"SELECT count(*) FROM orders WHERE carrier_label='{carrierId}' 
+                               and time_completed is null and time_aborted is null and time_failed is null ";
+
+                    count = conn.QueryFirst<int>(sql);
+                }
+                catch (System.Exception)
+                {
+                    Console.WriteLine("[QueryInstallAnotherPort] => null");
+                    count = 0;
+                }
+            }
+            if (count > 0)
+                result = true;
+
+            return result;
+        }
+
         public Boolean QueryInstallAnotherPort(string onlineName, string carrierId)
         {
             Boolean result = false;
@@ -181,6 +232,53 @@ namespace OMSWeb.Repositories
                 {
                     Console.WriteLine("[QueryHasValidCarrier] => null");
                     count = 0;
+                }
+            }
+            if (count > 0)
+                result = true;
+
+            return result;
+        }
+
+        public Boolean QueryVehicleRailIn(string onlineName)
+        {
+            Boolean result = false;
+            int count = 0;
+            using (var conn = ConnectTrack())
+            {
+                try
+                {
+                    var sql = $@"SELECT count(*) FROM vehicles WHERE logical_id='{onlineName}' and rail_in=true";
+                    
+                    count = conn.QueryFirst<int>(sql);
+                }
+                catch (System.Exception)
+                {
+                    Console.WriteLine("[QueryVehicleRailIn] => null");
+                    result = false;
+                }
+            }
+            if (count > 0)
+                result = true;
+
+            return result;
+        }
+
+        public Boolean QueryVehicleManualMode(string onlineName)
+        {
+            Boolean result = false;
+            int count = 0;
+            using (var conn = ConnectTrack())
+            {
+                try
+                {
+                    var sql = $@"SELECT count(*) FROM vehicles WHERE logical_id='{onlineName}' and mode='M' ";
+                    count = conn.QueryFirst<int>(sql);
+                }
+                catch (System.Exception)
+                {
+                    Console.WriteLine("[QueryVehicleManualMode] => null");
+                    result = false;
                 }
             }
             if (count > 0)
