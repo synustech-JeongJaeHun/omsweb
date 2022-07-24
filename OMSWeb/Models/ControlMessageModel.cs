@@ -28,6 +28,7 @@ namespace OMSWeb.Models
         public string LocationMove { get; set; }
         public int? Priority { get; set; }
         public string CarrierLabel { get; set; }
+        public string NewCarrierId { get; set; }
         public string CommandID { get; set; }
         public bool? CanBePushed { get; set; }
         public string AcceptManualCommands { get; set; }

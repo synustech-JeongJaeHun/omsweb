@@ -72,7 +72,7 @@ export class BufferStatusDialogComponent implements OnDestroy {
 	}
 
     onRemoveCarrier(carrierId: string) {
-      this.transferSvc.checkCarrierChange("remove", this.currentBuffer.logicalId, "buffer", carrierId)
+      this.transferSvc.checkCarrierChange("remove", this.currentBuffer.logicalId, "buffer", carrierId, "none")
         .subscribe((res) => {
           console.log(res);
 
@@ -103,7 +103,7 @@ export class BufferStatusDialogComponent implements OnDestroy {
     }
 
     onInstallCarrier(carrierId: string) {
-      this.transferSvc.checkCarrierChange("install", this.currentBuffer.logicalId, "buffer", carrierId)
+      this.transferSvc.checkCarrierChange("install", this.currentBuffer.logicalId, "buffer", carrierId, "none")
         .subscribe((res) => {
           console.log(res);
 

@@ -134,7 +134,7 @@ export class VehicleStatusDialogComponent implements OnInit, OnDestroy {
 	}
 
     onRemoveCarrier(carrierIdInput: string) {
-      this.transferSvc.checkCarrierChange("remove", this.currentVehicle.logicalId, "vehicle", carrierIdInput)
+      this.transferSvc.checkCarrierChange("remove", this.currentVehicle.logicalId, "vehicle", carrierIdInput, "none")
         .subscribe((res) => {
           console.log(res);
 
@@ -142,6 +142,7 @@ export class VehicleStatusDialogComponent implements OnInit, OnDestroy {
              this.messageSvc.sendCarrierCommand({
                   action: 'remove_carrier',
                   carrierLabel: carrierIdInput,
+                  newCarrierId: "",
                   logicalId: this.currentVehicle.logicalId
                 }).subscribe()
           }
@@ -164,15 +165,16 @@ export class VehicleStatusDialogComponent implements OnInit, OnDestroy {
         })
     }
 
-    onInstallCarrier(carrierIdInput: string) {
-      this.transferSvc.checkCarrierChange("install", this.currentVehicle.logicalId, "vehicle", carrierIdInput)
+  onRenameCarrier(carrierIdInput: string, newCarrierIdInput: string) {
+    this.transferSvc.checkCarrierChange("rename", this.currentVehicle.logicalId, "vehicle", carrierIdInput, newCarrierIdInput)
         .subscribe((res) => {
           console.log(res);
 
           if (res.hcack === 0 || res.hcack === 4) {
             this.messageSvc.sendCarrierCommand({
-              action: 'install_carrier',
+              action: 'rename_carrier',
               carrierLabel: carrierIdInput,
+              newCarrierId: newCarrierIdInput,
               logicalId: this.currentVehicle.logicalId
             }).subscribe()
           }

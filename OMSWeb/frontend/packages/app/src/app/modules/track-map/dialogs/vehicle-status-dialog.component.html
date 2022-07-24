@@ -57,13 +57,16 @@
                 <mat-form-field class="dense" appearance="outline">
                   <input #carrierIdInput matInput [placeholder]="'names.carrierId' | translate" [value]="" />
                 </mat-form-field>
+                <mat-form-field class="dense" appearance="outline">
+                  <input #newCarrierIdInput matInput [placeholder]="'names.newCarrierId' | translate" [value]="" />
+                </mat-form-field>
                 <button mat-stroked-button [disabled]="!carrierIdInput.value" color="primary" class="dense accent"
-                  (click)="onRemoveCarrier(carrierIdInput.value)">
+                        (click)="onRemoveCarrier(carrierIdInput.value)">
                   Remove
                 </button>
-                <button mat-stroked-button [disabled]="!carrierIdInput.value" color="primary" class="dense accent"
-                  (click)="onInstallCarrier(carrierIdInput.value)">
-                  Install
+                <button mat-stroked-button [disabled]="!carrierIdInput.value||!newCarrierIdInput.value" color="primary" class="dense accent"
+                        (click)="onRenameCarrier(carrierIdInput.value, newCarrierIdInput.value)">
+                  Rename
                 </button>
               </div>
             </fieldset>

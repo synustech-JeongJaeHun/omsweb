@@ -39,14 +39,15 @@ namespace OMSWeb.Controllers
         }
 
 
-        [HttpGet("carriercheck/{rcmd}&{carrierloc}&{loctype}&{carrierId}")]
+        [HttpGet("carriercheck/{rcmd}&{carrierloc}&{loctype}&{carrierId}&{newCarrierId}")]
         public ActionResult<TransferHCACK> CheckCarrierChange(
             string rcmd, 
             string carrierLoc, 
             string loctype, 
-            string carrierId)
+            string carrierId, 
+            string newCarrierId)
         {
-            var result = this._svc.CheckCarrierChange(rcmd, carrierLoc, loctype, carrierId);
+            var result = this._svc.CheckCarrierChange(rcmd, carrierLoc, loctype, carrierId, newCarrierId);
             if (result == null)
                 return Ok(new TransferHCACK()
                 {

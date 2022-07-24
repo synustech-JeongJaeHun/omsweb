@@ -63,6 +63,7 @@ namespace OMSWeb.Services.MqttClient
         public const string ACTION_ZCU_RESET = "zcu_reset";
         public const string ACTION_INSTALL_CARRIER = "install_carrier";
         public const string ACTION_REMOVE_CARRIER = "remove_carrier";
+        public const string ACTION_RENAME_CARRIER = "rename_carrier";
         public const string ACTION_N = "N";                                 // fromto, from, to, move
         public const string ACTION_A = "A";                                 // abort order            
         public const string ACTION_C = "C";                                 // cancel order
@@ -128,6 +129,7 @@ namespace OMSWeb.Services.MqttClient
                 case ACTION_ZCU_RESET:
                 case ACTION_INSTALL_CARRIER:
                 case ACTION_REMOVE_CARRIER:
+                case ACTION_RENAME_CARRIER:
                 case ACTION_N:
                 case ACTION_A:
                 case ACTION_C:
@@ -145,6 +147,8 @@ namespace OMSWeb.Services.MqttClient
                     return "install";
                 case ACTION_REMOVE_CARRIER:
                     return "remove";
+                case ACTION_RENAME_CARRIER:
+                    return "rename";
                 case ACTION_ZCU_RESET:
                     return "reset";
                 default:
@@ -206,6 +210,7 @@ namespace OMSWeb.Services.MqttClient
 
                 case ACTION_INSTALL_CARRIER:
                 case ACTION_REMOVE_CARRIER:
+                case ACTION_RENAME_CARRIER:
                     return REQUEST_CARRIER;
 
                 case ACTION_N:
@@ -612,10 +617,14 @@ namespace OMSWeb.Services.MqttClient
                 Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: {command.Action}");
             }
             else if (command.Action == ACTION_INSTALL_CARRIER ||
-                     command.Action == ACTION_REMOVE_CARRIER)
+                     command.Action == ACTION_REMOVE_CARRIER ||
+                     command.Action == ACTION_RENAME_CARRIER)
             {
                 if (command.CarrierLabel != null)
                     data["carrier_id"] = command.CarrierLabel;
+
+                if (command.NewCarrierId != null)
+                    data["new_carrier_id"] = command.NewCarrierId;
 
                 if (command.LogicalId != null)
                 {

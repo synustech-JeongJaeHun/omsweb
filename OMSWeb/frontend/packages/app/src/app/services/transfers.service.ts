@@ -15,8 +15,8 @@ export class TransfersService {
         return this.http.get<ITransferHCACK>(`${this.baseUrl}/transfercheck/${category}&${vehicleId}&${source}&${srctype}&${dest}&${dsttype}&${carrierId}`)
     }
 
-    checkCarrierChange(rcmd: string, carrierLoc: string, loctype: string, carrierId: string): Observable<ITransferHCACK> {
-        return this.http.get<ITransferHCACK>(`${this.baseUrl}/carriercheck/${rcmd}&${carrierLoc}&${loctype}&${carrierId}`)
+    checkCarrierChange(rcmd: string, carrierLoc: string, loctype: string, carrierId: string, newCarrierId: string): Observable<ITransferHCACK> {
+        return this.http.get<ITransferHCACK>(`${this.baseUrl}/carriercheck/${rcmd}&${carrierLoc}&${loctype}&${carrierId}&${newCarrierId}`)
     }
 
 }

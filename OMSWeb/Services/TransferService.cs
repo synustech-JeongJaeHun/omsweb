@@ -173,7 +173,8 @@ namespace OMSWeb.Services
             string rcmd,
             string carrierLoc,
             string loctype,
-            string carrierId
+            string carrierId,
+            string newCarrierId
             )
         {
             TransferHCACK transferHCACK = new TransferHCACK
@@ -192,6 +193,52 @@ namespace OMSWeb.Services
             if (string.IsNullOrEmpty(rcmd))
             {
                 HCACK = MCS_HCACK.NotAbleToExcute;
+            }
+            else if (rcmd.Equals("rename", StringComparison.OrdinalIgnoreCase))
+            {
+                #region Check CarrierLoc
+                SourceType sourceType = ORDER_VerifySource(carrierLoc);
+
+                if (sourceType == SourceType.NONE)
+                {
+                    CPNAME = "CARRIERLOC";
+                    CPACK = (int)MCS_HCACK.NotAbleToExcute;
+                    CPNackCount++;
+                }
+                else if (sourceType == SourceType.VEHICLE)
+                {
+                    if (!VEHICLE_Contains_a_Carrier(carrierLoc))
+                    {
+                        CPNAME = "CARRIERLOC";    // CARRIERLOC
+                        CPACK = (int)MCS_HCACK.NotAbleToExcute;
+                        CPNackCount++;
+                    }
+                }
+                #endregion
+
+                if (HCACK == MCS_HCACK.AlreadyConfirmed)
+                {
+                    if (CPNackCount == 0)
+                    {
+                        if (!VEHICLE_IsRailIn(carrierLoc) ||
+                            !VEHICLE_IsManualMode(carrierLoc))
+                        {
+                            HCACK = MCS_HCACK.NotAbleToExcute;
+                        }
+                        else if (ORDER_CheckInterlock_CarrierID_InOrder(carrierId) ||
+                                ORDER_CheckInterlock_CarrierID_InOrder(newCarrierId) ||
+                                !CARRIERLOC_Has_Valid_Carrier(carrierLoc, carrierId))
+                        {
+                            HCACK = MCS_HCACK.NotAbleToExcute;
+                        }
+                        else
+                            HCACK = MCS_HCACK.Confirm;
+                    }
+                    else
+                        HCACK = MCS_HCACK.ParameterInvalid;
+                }
+                else
+                    HCACK = MCS_HCACK.NotAbleToExcute;
             }
             else if (rcmd.Equals("install", StringComparison.OrdinalIgnoreCase))
             {
@@ -215,7 +262,7 @@ namespace OMSWeb.Services
                 }
                 else if (sourceType == SourceType.VEHICLE)
                 {
-                    if (!VEHICLE_Has_a_Carrier(carrierLoc))
+                    if (!VEHICLE_Contains_a_Carrier(carrierLoc))
                     {
                         CPNAME = "CARRIERLOC";    // CARRIERLOC
                         CPACK = (int)MCS_HCACK.NotAbleToExcute;
@@ -230,7 +277,9 @@ namespace OMSWeb.Services
                     if (CPNackCount == 0)
                     {
                         if (sourceType == SourceType.STATION)
+                        {
                             HCACK = MCS_HCACK.NotAbleToExcute;
+                        }
                         else if (sourceType == SourceType.VEHICLE)
                         {
                             if (!VEHICLE_IsRailIn(carrierLoc) ||
@@ -238,7 +287,8 @@ namespace OMSWeb.Services
                             {
                                 HCACK = MCS_HCACK.NotAbleToExcute;
                             }
-                            else if (ORDER_CheckInterlock_Port_InOrder(carrierLoc, SourceType.VEHICLE) ||
+                            else if (CARRIERLOC_Has_a_Carrier(carrierLoc) ||
+                                     ORDER_CheckInterlock_Port_InOrder(carrierLoc, SourceType.VEHICLE) ||
                                      ORDER_CheckInterlock_CarrierID_InOrder(carrierId))
                             {
                                 HCACK = MCS_HCACK.Reject;
@@ -402,10 +452,14 @@ namespace OMSWeb.Services
             return this._transferRepo.QueryVehicleManualMode(onlineName);
         }
 
-
         public Boolean VEHICLE_IsHostOrderEnable(string onlineName)
         {
             return this._transferRepo.QueryVehicleHostOderEnable(onlineName);
+        }
+
+        public Boolean VEHICLE_Contains_a_Carrier(string onlineName)
+        {
+            return this._transferRepo.QueryVehicleContainsACarrier(onlineName);
         }
 
         public Boolean VEHICLE_Has_a_Carrier(string onlineName)

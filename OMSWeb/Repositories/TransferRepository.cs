@@ -192,6 +192,29 @@ namespace OMSWeb.Repositories
             }
             return result;
         }
+        
+        public Boolean QueryVehicleContainsACarrier(string onlineName)
+        {
+            Boolean result = false;
+            int count = 0;
+            using (var conn = ConnectTrack())
+            {
+                try
+                {
+                    var sql = $@"SELECT count(*) FROM vehicles WHERE logical_id='{onlineName}' AND cargo_state='F' ";
+                    count = conn.QueryFirst<int>(sql);
+                }
+                catch (System.Exception)
+                {
+                    Console.WriteLine("[QueryVehicleContainsACarrier] => null");
+                    count = 0;
+                }
+            }
+            if (count > 0)
+                result = true;
+
+            return result;
+        }
 
         public Boolean QueryHasACarrier(string onlineName)
         {
