@@ -489,7 +489,10 @@
 </ng-template>
 
 <ng-template #bufferContext>
-	<mat-card class="context-card">
+	<mat-card
+		class="context-card"
+		*ngIf="hasPermissions([permissionEnums.ViewBuffer])"
+	>
 		<mat-card-header>
 			<mat-card-title>
 				Buffer #{{ contextMenuObject?.value.id }}
