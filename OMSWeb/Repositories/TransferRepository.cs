@@ -137,8 +137,9 @@ namespace OMSWeb.Repositories
             {
                 try
                 {
-                    var sql = $@"SELECT count(*) FROM carriers WHERE carrier_location != '{onlineName}' 
-                                            AND carrier_id='{carrierId}' AND installed=1 ";
+                    var sql = $@"SELECT count(*) FROM carriers 
+                            WHERE carrier_location != '{onlineName}' AND carrier_id='{carrierId}' AND 
+                            location_type != 's' AND installed=1 ";
                     count = conn.QueryFirst<int>(sql);
                 }
                 catch (System.Exception)
