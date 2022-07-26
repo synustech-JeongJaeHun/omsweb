@@ -75,7 +75,7 @@ export class HubService {
 	}
 	public start() {
 		this.connect()
-		// setInterval(() => this.connect(), 5000);
+		// setInterval(() => this.connect(), 5000)
 	}
 	public stop() {
 		// this.detachEvents();
@@ -153,18 +153,21 @@ export class HubService {
 			this.mtlChanged$.emit({ ...meta, data: body })
 		})
 		this.hub.on('vehicleChanged', (meta, body) => {
-			// console.info('## hub message : vehicleChanged >>', meta.id, { meta, body });
+			console.info('## hub message : vehicleChanged >>', meta.id, {
+				meta,
+				body,
+			})
 			this.vehicleChanged$.emit({ ...meta, data: body })
 		})
 		this.hub.on('vehicleTableChanged', (meta, body) => {
-			// console.info('## hub message : vehicleTableChanged >>', { meta, body });
+			console.info('## hub message : vehicleTableChanged >>', { meta, body })
 			this.vehicleTableChanged$.emit({ ...meta, data: body })
 		})
 		this.hub.on('vehicleDioChanged', (meta, body) => {
 			this.vehicleDioChanged$.emit({ ...meta, data: body })
 		})
 		this.hub.on('orderTableChanged', (meta, body) => {
-			// console.info('## hub message : orderTableChanged >>', { meta, body });
+			console.info('## hub message : orderTableChanged >>', { meta, body })
 			this.orderTableChanged$.emit({ ...meta, data: body })
 		})
 		this.hub.on('vehiclePath', (meta, body) => {
@@ -172,7 +175,7 @@ export class HubService {
 			this.vehiclePathChanged$.emit({ ...meta, data: body })
 		})
 		this.hub.on('clusterChanged', (meta, body) => {
-			// console.info('## hub message : clusterChanged >>', { meta, body });
+			console.info('## hub message : clusterChanged >>', { meta, body })
 			this.clusterChanged$.emit({ ...meta, data: body })
 		})
 		this.hub.on('groupChanged', (meta, body) => {

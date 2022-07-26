@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core'
 import { CommonModule } from '@angular/common'
-
 import { HistoriesRoutingModule } from './histories-routing.module'
 import { HistoriesComponent } from './histories.component'
 import { TransferHistoryComponent } from './transfer/transfer-history.component'

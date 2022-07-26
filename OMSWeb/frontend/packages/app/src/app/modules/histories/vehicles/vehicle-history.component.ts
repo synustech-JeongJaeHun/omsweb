@@ -94,9 +94,10 @@ export class VehicleHistoryComponent implements OnInit, OnDestroy {
 
 	constructor(private svc: HistoriesService, private idSvc: TrackIdService) {
 		window.onresize = this.getGridSize.bind(this)
-		this.idSvc.loadIds().subscribe(() => {
-			this.dataSource = this.svc.vehiclesDataSource(this.start, this.end)
-		})
+		// this.idSvc.loadIds().subscribe(() => {
+		// 	this.dataSource = this.svc.vehiclesDataSource(this.start, this.end)
+		// })
+		this.idSvc.loadIds().subscribe()
 	}
 
 	ngOnDestroy(): void {
@@ -109,8 +110,9 @@ export class VehicleHistoryComponent implements OnInit, OnDestroy {
 	}
 
 	search(startTime: Date, endTime: Date) {
+		this.dataSource = this.svc.vehiclesDataSource(startTime, endTime)
 		this.applyFilter(startTime, endTime)
-		this.dataSource.reload()
+		// this.dataSource.reload()
 	}
 	private applyFilter(startTime: Date, endTime: Date) {
 		this.dataGrid.instance.filter([

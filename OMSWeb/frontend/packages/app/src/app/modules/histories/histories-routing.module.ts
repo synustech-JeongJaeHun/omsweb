@@ -1,12 +1,11 @@
 import { NgModule } from '@angular/core'
-import { Routes, RouterModule } from '@angular/router'
+import { Routes, RouterModule, RouteReuseStrategy } from '@angular/router'
 
 import { HistoriesComponent } from './histories.component'
 import { TransferHistoryComponent } from './transfer/transfer-history.component'
 import { VehicleHistoryComponent } from './vehicles/vehicle-history.component'
 import { AlarmHistoryComponent } from './alarms/alarm-history.component'
 import { WarningHistoryComponent } from './warnings/warning-history.component'
-
 const routes: Routes = [
 	{
 		path: '',

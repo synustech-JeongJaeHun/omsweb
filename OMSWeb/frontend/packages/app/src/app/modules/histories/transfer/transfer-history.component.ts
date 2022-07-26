@@ -4,6 +4,7 @@ import DataSource from 'devextreme/data/data_source'
 import { TrackIdService } from '../../../services/track-id.service'
 import { DateUtil } from '@oms/utils/date.util'
 import { DxDataGridComponent } from 'devextreme-angular'
+import { ActivatedRoute } from '@angular/router'
 
 @Component({
 	selector: 'oms-transfer-history',
@@ -94,9 +95,10 @@ export class TransferHistoryComponent implements OnInit, OnDestroy {
 
 	constructor(private svc: HistoriesService, private idSvc: TrackIdService) {
 		window.onresize = this.getGridSize.bind(this)
-		this.idSvc.loadIds().subscribe(() => {
-			this.dataSource = this.svc.ordersDataSource(this.start, this.end)
-		})
+		// this.idSvc.loadIds().subscribe(() => {
+		// 	this.dataSource = this.svc.ordersDataSource(this.start, this.end)
+		// })
+		this.idSvc.loadIds().subscribe()
 	}
 
 	ngOnDestroy(): void {
@@ -109,8 +111,9 @@ export class TransferHistoryComponent implements OnInit, OnDestroy {
 	}
 
 	search(startTime: Date, endTime: Date) {
+		this.dataSource = this.svc.ordersDataSource(startTime, endTime)
 		this.applyFilter(startTime, endTime)
-		this.dataSource.reload()
+		// this.dataSource.reload()
 	}
 	private applyFilter(startTime: Date, endTime: Date) {
 		this.dataGrid.instance.filter([

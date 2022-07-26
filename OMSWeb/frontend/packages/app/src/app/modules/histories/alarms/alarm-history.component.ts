@@ -94,9 +94,10 @@ export class AlarmHistoryComponent implements OnInit {
 
 	constructor(private svc: HistoriesService, private idSvc: TrackIdService) {
 		window.onresize = this.getGridSize.bind(this)
-		this.idSvc.loadIds().subscribe(() => {
-			this.dataSource = this.svc.alarmsDataSource(this.start, this.end)
-		})
+		// this.idSvc.loadIds().subscribe(() => {
+		// 	this.dataSource = this.svc.alarmsDataSource(this.start, this.end)
+		// })
+		this.idSvc.loadIds().subscribe()
 	}
 
 	ngOnDestroy(): void {
@@ -109,8 +110,9 @@ export class AlarmHistoryComponent implements OnInit {
 	}
 
 	search(startTime: Date, endTime: Date) {
+		this.dataSource = this.svc.alarmsDataSource(startTime, endTime)
 		this.applyFilter(startTime, endTime)
-		this.dataSource.reload()
+		// this.dataSource.reload()
 	}
 	private applyFilter(startTime: Date, endTime: Date) {
 		this.dataGrid.instance.filter([
