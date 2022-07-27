@@ -64,10 +64,16 @@
                         (click)="onRemoveCarrier(carrierIdInput.value)">
                   Remove
                 </button>
+                <button mat-stroked-button [disabled]="!carrierIdInput.value" color="primary" class="dense accent"
+                        (click)="onInstallCarrier(carrierIdInput.value)">
+                  Install
+                </button>
+                <!--
                 <button mat-stroked-button [disabled]="!carrierIdInput.value||!newCarrierIdInput.value" color="primary" class="dense accent"
-                        (click)="onRenameCarrier(carrierIdInput.value, newCarrierIdInput.value)">
+                        style="padding-left:0px; padding-right:0px" (click)="onRenameCarrier(carrierIdInput.value, newCarrierIdInput.value)">
                   Rename
                 </button>
+                  -->
               </div>
             </fieldset>
           </div>

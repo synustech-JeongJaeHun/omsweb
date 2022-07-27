@@ -164,9 +164,38 @@ export class VehicleStatusDialogComponent implements OnInit, OnDestroy {
           }
         })
     }
+    onInstallCarrier(carrierId: string) {
+      this.transferSvc.checkCarrierChange("install", this.currentVehicle.logicalId, "buffer", carrierId, "none")
+        .subscribe((res) => {
+          console.log(res);
 
-  onRenameCarrier(carrierIdInput: string, newCarrierIdInput: string) {
-    this.transferSvc.checkCarrierChange("rename", this.currentVehicle.logicalId, "vehicle", carrierIdInput, newCarrierIdInput)
+          if (res.hcack === 0 || res.hcack === 4) {
+            this.messageSvc.sendCarrierCommand({
+              action: 'install_carrier',
+              carrierLabel: carrierId,
+              logicalId: this.currentVehicle.logicalId
+            }).subscribe()
+          }
+          else {
+            var errorMessage = "";
+            if (res.hcack === 2) errorMessage = 'messages.confirmNotAbleToExcute';
+            else if (res.hcack === 3) {
+              if (res.cpname === 'CARRIERID') errorMessage = 'messages.confirmParameterInvalidCarrierID';
+              else if (res.cpname === 'CARRIERLOC') errorMessage = 'messages.confirmParameterInvalidCarrierLoc';
+              else errorMessage = 'messages.confirmParameterInvalid';
+            }
+            else if (res.hcack === 5) errorMessage = 'messages.confirmReject';
+            else errorMessage = 'messages.confirmNotAbleToExcute';
+
+            this.dialogSvc.alert({
+              title: this.t$.instant('names.blocked'),
+              body: this.t$.instant(errorMessage),
+            })
+          }
+        })
+    }
+    onRenameCarrier(carrierIdInput: string, newCarrierIdInput: string) {
+      this.transferSvc.checkCarrierChange("rename", this.currentVehicle.logicalId, "vehicle", carrierIdInput, newCarrierIdInput)
         .subscribe((res) => {
           console.log(res);
 
