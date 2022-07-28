@@ -169,6 +169,87 @@ namespace OMSWeb.Services
 
 
 
+        public TransferHCACK CheckUpdate(string commandId, string dest)
+        {
+            TransferHCACK transferHCACK = new TransferHCACK
+            {
+                HCACK = (int)MCS_HCACK.AlreadyConfirmed,
+                CPNAME = string.Empty,
+                CPACK = (int)MCS_HCACK.AlreadyConfirmed,
+            };
+
+            MCS_HCACK HCACK = MCS_HCACK.AlreadyConfirmed;
+            string CPNAME = string.Empty;
+            int CPACK = 0;
+            int CPNackCount = 0;
+
+            string CommandID = commandId;
+            string DestName = dest;
+
+            if (!string.IsNullOrWhiteSpace(CommandID) || CommandID == "undefined")
+            {
+                if (ORDER_ExistOrder(CommandID))
+                {
+                    if (ORDER_CanUpdateOrder(CommandID))
+                    {
+                        if (!DEST_EnableUpdateOrder(DestName))
+                        {
+                            CPNAME = "DESTPORT";
+                            CPACK = 2;
+                            CPNackCount++;
+                        }
+
+                        var destType = ORDER_VerifyDest(DestName);
+
+                        if (destType == DestType.NONE)
+                        {
+                            CPNAME = "DESTPORT";    // DESTPORT
+                            CPACK = 2;
+                            CPNackCount++;
+                        }
+                        else if (destType == DestType.STATION)
+                        {
+                        }
+                        else if (destType == DestType.BUFFER)
+                        {
+                            if (CARRIERLOC_Has_a_Carrier(DestName))
+                            {
+                                CPNAME = "DESTPORT";    // DESTPORT
+                                CPACK = 2;
+                                CPNackCount++;
+                            }
+                        }
+
+                        if (CPNackCount == 0)
+                        {
+                            //if (!CTRL.DB.IsReachablePath(CommandID, @"TO", string.Empty, recvDest))
+                            //{
+                            //    HCACK = MCS_HCACK.NotAbleToExcute;
+                            //}
+                            //else
+                            HCACK = MCS_HCACK.Confirm;
+                        }
+                        else
+                            HCACK = MCS_HCACK.ParameterInvalid;
+                    }
+                    else
+                        HCACK = MCS_HCACK.NotAbleToExcute;  // Command에 대해 Update불가 (depositing)
+                }
+                else
+                    HCACK = MCS_HCACK.CommandNotExist; // Command가 없음
+            }
+            else
+                HCACK = MCS_HCACK.NotAbleToExcute;
+
+            transferHCACK.HCACK = (int)HCACK;
+            transferHCACK.CPNAME = CPNAME;
+            transferHCACK.CPACK = CPACK;
+
+            return transferHCACK;
+        }
+
+
+
         public TransferHCACK CheckCarrierChange(
             string rcmd,
             string carrierLoc,
@@ -322,6 +403,7 @@ namespace OMSWeb.Services
             }
             else if (rcmd.Equals("remove", StringComparison.OrdinalIgnoreCase))
             {
+                /*
                 #region Check CarrierID
                 if (CARRIER_IsInstalled_AnotherPort(carrierLoc, carrierId))  // CarrierID 
                 {
@@ -330,6 +412,7 @@ namespace OMSWeb.Services
                     CPNackCount++;
                 }
                 #endregion
+                */
 
                 #region Check CarrierLoc
                 SourceType sourceType = ORDER_VerifySource(carrierLoc);
@@ -371,13 +454,14 @@ namespace OMSWeb.Services
                 {
                     if (sourceType == SourceType.VEHICLE)
                     {
-                        if (!VEHICLE_IsRailIn(carrierLoc) ||
-                            !VEHICLE_IsManualMode(carrierLoc))
+                        /*
+                        if (!VEHICLE_IsManualMode(carrierLoc))
                         {
                             HCACK = MCS_HCACK.NotAbleToExcute;
                         }
-                        else if (ORDER_CheckInterlock_Port_InOrder(carrierLoc, SourceType.VEHICLE) ||
-                                 ORDER_CheckInterlock_CarrierID_InOrder(carrierId))
+                        else */
+                        if (ORDER_CheckInterlock_Port_InOrder(carrierLoc, SourceType.VEHICLE) ||
+                            ORDER_CheckInterlock_CarrierID_InOrder(carrierId))
                         {
                             HCACK = MCS_HCACK.Reject;
                         }
@@ -532,6 +616,26 @@ namespace OMSWeb.Services
             if (sourceType == SourceType.VEHICLE) return false;
             if (sourceType == SourceType.STATION && !STATION_Available(sourceName)) return true;
             if (sourceType == SourceType.BUFFER && !BUFFER_Available(sourceName)) return true;
+
+            return false;
+        }
+
+        public Boolean ORDER_ExistOrder(string CommandID)
+        {
+            return this._transferRepo.QueryExistOrder(CommandID);
+        }
+
+        public Boolean ORDER_CanUpdateOrder(string CommandID)
+        {
+            return this._transferRepo.QueryCanUpdateOrder(CommandID);
+        }
+
+        public Boolean DEST_EnableUpdateOrder(string destName)
+        {
+            DestType destType = ORDER_VerifyDest(destName);
+
+            if (destType == DestType.STATION && STATION_Available(destName)) return true;
+            if (destType == DestType.BUFFER && BUFFER_Available(destName)) return true;
 
             return false;
         }

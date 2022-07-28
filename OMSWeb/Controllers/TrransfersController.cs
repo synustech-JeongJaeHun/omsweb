@@ -39,6 +39,24 @@ namespace OMSWeb.Controllers
         }
 
 
+        [HttpGet("updatecheck/{commandId}&{dest}")]
+        public ActionResult<TransferHCACK> CheckUpdate(
+            string commandId,
+            string dest)
+        {
+            var result = this._svc.CheckUpdate(commandId, dest);
+            if (result == null)
+                return Ok(new TransferHCACK()
+                {
+                    HCACK = (int)MCS_HCACK.NotAbleToExcute,
+                    CPNAME = String.Empty,
+                    CPACK = (int)MCS_HCACK.AlreadyConfirmed,
+                });
+            else
+                return Ok(result);
+        }
+
+
         [HttpGet("carriercheck/{rcmd}&{carrierloc}&{loctype}&{carrierId}&{newCarrierId}")]
         public ActionResult<TransferHCACK> CheckCarrierChange(
             string rcmd, 

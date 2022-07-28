@@ -22,6 +22,10 @@ import { DxDataGridComponent } from 'devextreme-angular'
 import { PermissionEnums } from '../../../models/enums'
 import { ClientPreferences } from '../../../models/settings.model'
 import { AuditTimeDuration } from './constants'
+import { TranslateService } from '@ngx-translate/core'
+import { DialogService } from '@oms/root/services/dialog.service'
+import { TransfersService } from '@oms/root/services/transfers.service'
+import { IOrderStatusRow } from '../../../models/order-status.model'
 
 @Component({
 	selector: 'oms-order-control-table',
@@ -35,9 +39,8 @@ export class OrderControlTableComponent implements OnInit, OnDestroy {
 
 	dataSource: DataSource
 	// dataSource: any;
-	selectedRows: number[] = []
-
-	preference: ClientPreferences
+    selectedRows: number[] = []
+    preference: ClientPreferences
 
 	//#region Subscriptions
 	private destroy$: Subject<void> = new Subject<void>()
@@ -56,7 +59,11 @@ export class OrderControlTableComponent implements OnInit, OnDestroy {
 
 	get canDelete(): boolean {
 		return this.selectedRows.length > 0
-	}
+    }
+
+    get canUpdate(): boolean {
+      return this.selectedRows.length == 1
+    }
 
 	transformVehicleId = ({ value = '' }): string => {
 		const text =
@@ -74,10 +81,14 @@ export class OrderControlTableComponent implements OnInit, OnDestroy {
 		private settingSvc: SettingsService,
 		private messageSvc: MessagesService,
 		private idSvc: TrackIdService,
-		private hubSvc: HubService,
+        private hubSvc: HubService,
+        private dialogSvc: DialogService,
+        private $t: TranslateService,
+        private transferSvc: TransfersService,
+        private t$: TranslateService,
 	) {
 		this.dataSource = this.statusSvc.orderStatusDataSource()
-		this.preference = this.settingSvc.globalPreferences
+        this.preference = this.settingSvc.globalPreferences
 	}
 
 	canDisplayTable(type: string): boolean {
@@ -102,7 +113,40 @@ export class OrderControlTableComponent implements OnInit, OnDestroy {
 		const items = this.dataGrid.instance.getSelectedRowsData()
 		const jobs = items.map((x) => this.messageSvc.sendDeleteOrder(x))
 		forkJoin(jobs).subscribe()
-	}
+    }
+
+    onUpdate(destInput: string) {
+      if (!this.canUpdate || !destInput) return
+
+      let orders: IOrderStatusRow[] = this.dataGrid.instance.getSelectedRowsData();
+      let commandID: string = orders[0].logicalId;
+
+      this.transferSvc.checkUpdate(commandID, destInput)
+        .subscribe((res) => {
+          console.log(res);
+
+          if (res.hcack === 0 || res.hcack === 4) {
+            const items = this.dataGrid.instance.getSelectedRowsData()
+            const jobs = items.map((x) => this.messageSvc.sendUpdateOrder(x, destInput))
+            forkJoin(jobs).subscribe()
+          }
+          else {
+            var errorMessage = "";
+            if (res.hcack === 2) errorMessage = 'messages.confirmNotAbleToExcute';
+            else if (res.hcack === 3) {
+              if (res.cpname === 'DESTPORT') errorMessage = 'messages.confirmParameterInvalidDest';
+              else errorMessage = 'messages.confirmParameterInvalid';
+            }
+            else if (res.hcack === 5) errorMessage = 'messages.confirmReject';
+            else errorMessage = 'messages.confirmNotAbleToExcute';
+
+            this.dialogSvc.alert({
+              title: this.t$.instant('names.blocked'),
+              body: this.t$.instant(errorMessage),
+            })
+          }
+        })
+    }
 
 	private onTableChanged(payload: IDataChangeEvent) {
 		this.dataSource.reload()

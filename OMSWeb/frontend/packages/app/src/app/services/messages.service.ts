@@ -62,7 +62,33 @@ export class MessagesService {
 			priority,
 			carrierLabel,
 		})
-	}
+    }
+
+    sendUpdateOrder(order: IOrderStatusRow, newDestName: string): Observable<void> {
+      const {
+        vehicleId,
+        id: orderId,
+        logicalId,
+        locationPickup,
+        locationDropoff,
+        locationMove,
+        priority,
+        carrierLabel,
+      } = order
+      return this.sendOrderCommand({
+        type: 'ORDER',
+        action: 'M',
+        orderId,
+        commandID: logicalId,
+        vehicleId,
+        orderOrigin: 'OMS',
+        locationPickup,
+        locationDropoff: newDestName,
+        locationMove,
+        priority,
+        carrierLabel,
+      })
+    }
 
 	sendControlStateCommand(
 		command: IControlStateCommandMessage,

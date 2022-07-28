@@ -7,7 +7,7 @@
   </div>
   <div style="margin-left: 5px;">
     <button mat-stroked-button color="primary" class="dense accent"
-            [disabled]="!canUpdate" (click)="onUpdate()">
+            [disabled]="!canUpdate || !destInput.value" (click)="onUpdate(destInput.value)">
       {{ "names.update" | translate }}
     </button>
   </div>

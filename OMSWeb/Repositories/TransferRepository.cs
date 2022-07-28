@@ -418,7 +418,54 @@ namespace OMSWeb.Repositories
 
             return result;
         }
-    }
 
+        public Boolean QueryExistOrder(string commandID)
+        {
+            Boolean result = false;
+            int count = 0;
+            using (var conn = ConnectTrack())
+            {
+                try
+                {
+                    var sql = $@"SELECT count(*) FROM orders WHERE logical_id='{commandID}' AND 
+                               time_completed is null AND time_aborted is null AND time_failed is null ";
+                    count = conn.QueryFirst<int>(sql);
+                }
+                catch (System.Exception)
+                {
+                    Console.WriteLine("[QueryExistOrder] => null");
+                    count = 0;
+                }
+            }
+            if (count > 0)
+                result = true;
+
+            return result;
+        }
+
+        public Boolean QueryCanUpdateOrder(string commandID)
+        {
+            Boolean result = false;
+            string us = string.Empty;
+            using (var conn = ConnectTrack())
+            {
+                try
+                {
+                    var sql = $@"SELECT time_unload_started FROM orders WHERE logical_id='{commandID}' AND 
+                                  time_completed is null AND time_aborted is null AND time_failed is null ";
+                    us = conn.QueryFirst<string>(sql);
+                }
+                catch (System.Exception)
+                {
+                    Console.WriteLine("[QueryCanUpdateOrder] => null");
+                    us = string.Empty;
+                }
+            }
+            if (string.IsNullOrWhiteSpace(us))
+                result = true;
+
+            return result;
+        }
+    }
 
 }

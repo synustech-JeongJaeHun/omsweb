@@ -67,6 +67,7 @@ namespace OMSWeb.Services.MqttClient
         public const string ACTION_N = "N";                                 // fromto, from, to, move
         public const string ACTION_A = "A";                                 // abort order            
         public const string ACTION_C = "C";                                 // cancel order
+        public const string ACTION_M = "M";                                 // update
 
         public const string ORIGIN_DEFAULT = "OMS";
         public const string ORIGIN_OMS = "OMS";
@@ -133,6 +134,7 @@ namespace OMSWeb.Services.MqttClient
                 case ACTION_N:
                 case ACTION_A:
                 case ACTION_C:
+                case ACTION_M:
                     return TOPIC_DEFAULT;   // "oms/vehicle-manager/request";
             }
 
@@ -216,6 +218,7 @@ namespace OMSWeb.Services.MqttClient
                 case ACTION_N:
                 case ACTION_A:
                 case ACTION_C:
+                case ACTION_M:
                     return REQUEST_ORDER;
             }
             return null;
@@ -657,25 +660,13 @@ namespace OMSWeb.Services.MqttClient
             {
                 data["logical_id"] = GenerateLogicalID("");
 
-                if (command.VehicleId != null || command.VehicleIds != null)
-                    data["vehicle_id"] = GetVehicleId(command);
-
-                if (command.LocationPickup != null)
-                    data["location_pickup"] = GetLocationPickup(command);
-
-                if (command.LocationDropoff != null)
-                    data["location_dropoff"] = GetLocationDropoff(command);
-
-                if (command.LocationMove != null)
-                    data["location_move"] = GetLocationMove(command);
-
-                if (command.CarrierLabel != null)
-                    data["carrier_id"] = command.CarrierLabel;
-
-                if (command.Priority != null)
-                    data["priority"] = command.Priority;
-                else
-                    data["priority"] = DEFAULT_PRIORITY;
+                if (command.VehicleId != null || command.VehicleIds != null) data["vehicle_id"] = GetVehicleId(command);
+                if (command.LocationPickup != null) data["location_pickup"] = GetLocationPickup(command);
+                if (command.LocationDropoff != null) data["location_dropoff"] = GetLocationDropoff(command);
+                if (command.LocationMove != null) data["location_move"] = GetLocationMove(command);
+                if (command.CarrierLabel != null) data["carrier_id"] = command.CarrierLabel;
+                
+                data["priority"] = command.Priority != null ? command.Priority : DEFAULT_PRIORITY;
 
                 if (command.CommandID != null)
                 {
@@ -694,18 +685,24 @@ namespace OMSWeb.Services.MqttClient
                 else if (command.LocationPickup == null && command.LocationDropoff == null && command.LocationMove != null)
                     Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: Manual Transfer - move");
             }
+            else if (command.Action == ACTION_M)
+            {
+                if (command.CommandID != null)          data["command_id"] = command.CommandID;
+                if (command.LocationDropoff != null)    data["dest_port"] = command.LocationDropoff;
+                if (command.Priority != null)           data["priority"] = command.Priority;
+                data["origin"] = ORIGIN_OMS;    // oms
+
+                Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: update");
+            }
             else if (command.Action == ACTION_A ||
                      command.Action == ACTION_C)
             {
-                if (command.OrderId != null)
-                    data["order_id"] = command.OrderId;
+                if (command.OrderId != null)          data["order_id"] = command.OrderId;
 
                 data["origin"] = ORIGIN_OMS;    // oms
 
-                if (command.Action == ACTION_A)
-                    Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: abort");
-                else if (command.Action == ACTION_C)
-                    Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: cancel");
+                if      (command.Action == ACTION_A) Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: abort");
+                else if (command.Action == ACTION_C) Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: cancel");
             }
 
             // build JSON list
