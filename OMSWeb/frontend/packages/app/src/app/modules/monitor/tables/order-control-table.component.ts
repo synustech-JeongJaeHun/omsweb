@@ -129,6 +129,11 @@ export class OrderControlTableComponent implements OnInit, OnDestroy {
             const items = this.dataGrid.instance.getSelectedRowsData()
             const jobs = items.map((x) => this.messageSvc.sendUpdateOrder(x, destInput))
             forkJoin(jobs).subscribe()
+
+            this.dialogSvc.success({
+              title: this.t$.instant('names.success'),
+              body: this.t$.instant(errorMessage),
+            })
           }
           else {
             var errorMessage = "";
@@ -141,7 +146,7 @@ export class OrderControlTableComponent implements OnInit, OnDestroy {
             else errorMessage = 'messages.confirmNotAbleToExcute';
 
             this.dialogSvc.alert({
-              title: this.t$.instant('names.blocked'),
+              title: this.t$.instant('names.failed'),
               body: this.t$.instant(errorMessage),
             })
           }
@@ -149,11 +154,17 @@ export class OrderControlTableComponent implements OnInit, OnDestroy {
     }
 
 	private onTableChanged(payload: IDataChangeEvent) {
-		this.dataSource.reload()
+        this.dataSource.reload().then((data) => {
+          this.dataGrid.instance.refresh();
+        })
 	}
 
 	@HostListener('document:visibilitychange', ['$event'])
 	private visibilitychange() {
-		if (!document.hidden) this.dataSource.reload()
+        if (!document.hidden) {
+          this.dataSource.reload().then((data) => {
+            this.dataGrid.instance.refresh();
+          })
+        }
 	}
 }
