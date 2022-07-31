@@ -301,14 +301,16 @@ namespace OMSWeb.Services
                 {
                     if (CPNackCount == 0)
                     {
+                        /*
                         if (!VEHICLE_IsRailIn(carrierLoc) ||
                             !VEHICLE_IsManualMode(carrierLoc))
                         {
                             HCACK = MCS_HCACK.NotAbleToExcute;
                         }
-                        else if (ORDER_CheckInterlock_CarrierID_InOrder(carrierId) ||
-                                ORDER_CheckInterlock_CarrierID_InOrder(newCarrierId) ||
-                                !CARRIERLOC_Has_Valid_Carrier(carrierLoc, carrierId))
+                        else */
+                        if (ORDER_CheckInterlock_CarrierID_InOrder(carrierId) ||
+                            ORDER_CheckInterlock_CarrierID_InOrder(newCarrierId) ||
+                            !CARRIERLOC_Has_Valid_Carrier(carrierLoc, carrierId))
                         {
                             HCACK = MCS_HCACK.NotAbleToExcute;
                         }
@@ -363,14 +365,16 @@ namespace OMSWeb.Services
                         }
                         else if (sourceType == SourceType.VEHICLE)
                         {
+                            /*
                             if (!VEHICLE_IsRailIn(carrierLoc) ||
                                 !VEHICLE_IsManualMode(carrierLoc))
                             {
                                 HCACK = MCS_HCACK.NotAbleToExcute;
                             }
-                            else if (CARRIERLOC_Has_a_Carrier(carrierLoc) ||
-                                     ORDER_CheckInterlock_Port_InOrder(carrierLoc, SourceType.VEHICLE) ||
-                                     ORDER_CheckInterlock_CarrierID_InOrder(carrierId))
+                            else */
+                            if (CARRIERLOC_Has_a_Carrier(carrierLoc) ||
+                                ORDER_CheckInterlock_Port_InOrder(carrierLoc, SourceType.VEHICLE) ||
+                                ORDER_CheckInterlock_CarrierID_InOrder(carrierId))
                             {
                                 HCACK = MCS_HCACK.Reject;
                             }
