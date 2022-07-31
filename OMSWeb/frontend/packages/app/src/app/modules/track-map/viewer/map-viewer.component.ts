@@ -531,6 +531,11 @@ export class MapViewerComponent implements OnInit, OnDestroy {
             carrierLabel: carrierId,
             logicalId: this.contextMenuObject.value.logicalId
           }).subscribe()
+
+          this.dialogSvc.success({
+            title: this.$t.instant('names.success'),
+            body: this.$t.instant('messages.confirmSuccessRemoveCarrier'),
+          })
         }
         else {
           var errorMessage = "";
@@ -544,7 +549,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
           else errorMessage = 'messages.confirmNotAbleToExcute';
 
           this.dialogSvc.alert({
-            title: this.$t.instant('names.blocked'),
+            title: this.$t.instant('names.failed'),
             body: this.$t.instant(errorMessage),
           })
         }
@@ -561,6 +566,11 @@ export class MapViewerComponent implements OnInit, OnDestroy {
             carrierLabel: carrierId,
             logicalId: this.contextMenuObject.value.logicalId
           }).subscribe()
+
+          this.dialogSvc.success({
+            title: this.$t.instant('names.success'),
+            body: this.$t.instant('messages.confirmSuccessInstallCarrier'),
+          })
         }
         else {
           var errorMessage = "";
@@ -574,7 +584,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
           else errorMessage = 'messages.confirmNotAbleToExcute';
 
           this.dialogSvc.alert({
-            title: this.$t.instant('names.blocked'),
+            title: this.$t.instant('names.failed'),
             body: this.$t.instant(errorMessage),
           })
         }

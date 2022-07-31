@@ -3,8 +3,9 @@ import { MatDialog } from '@angular/material/dialog'
 import { Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
 
-import { IConfirmMessage, IErrorMessage } from '../models/base.model'
+import { IConfirmMessage, IErrorMessage, ISuccessMessage } from '../models/base.model'
 import { ErrorDialogComponent } from '../modules/shared/dialogs/error-dialog.component'
+import { SuccessDialogComponent } from '../modules/shared/dialogs/success-dialog.component'
 import { ConfirmDialogComponent } from '../modules/shared/dialogs/confirm-dialog.component'
 
 @Injectable({
@@ -35,5 +36,17 @@ export class DialogService {
 			})
 			.afterClosed()
 			.pipe(map((res) => true))
-	}
+    }
+
+    success<T>(message: ISuccessMessage<T>) {
+      return this.dialog
+        .open(SuccessDialogComponent, {
+          disableClose: true,
+          autoFocus: false,
+          width: '400px',
+          data: message,
+        })
+        .afterClosed()
+        .pipe(map((res) => true))
+    }
 }

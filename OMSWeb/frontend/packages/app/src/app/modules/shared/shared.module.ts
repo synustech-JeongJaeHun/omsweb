@@ -14,6 +14,7 @@ import { GnbActionsComponent } from './navs/gnb-actions.component'
 import { GnbIndicatorsComponent } from './navs/gnb-indicators.component'
 import { SharedDevextremeModule } from './shared-devextreme.module'
 import { DialogBaseComponent } from './dialogs/dialog-base.component'
+import { SuccessDialogComponent } from './dialogs/success-dialog.component'
 import { ErrorDialogComponent } from './dialogs/error-dialog.component'
 import { ConfirmDialogComponent } from './dialogs/confirm-dialog.component'
 import { AlarmDialogComponent } from './dialogs/alarm-dialog.component'
@@ -37,7 +38,8 @@ const inOutModules = [FormsModule, ReactiveFormsModule]
 		GnbStatesComponent,
 		GnbActionsComponent,
 		GnbIndicatorsComponent,
-		DialogBaseComponent,
+        DialogBaseComponent,
+        SuccessDialogComponent,
 		ErrorDialogComponent,
 		ConfirmDialogComponent,
 		AlarmDialogComponent,
@@ -73,7 +75,8 @@ const inOutModules = [FormsModule, ReactiveFormsModule]
 		SharedDevextremeModule,
 		MdePopoverModule,
 		DialogBaseComponent,
-		TranslateModule,
+        TranslateModule,
+        SuccessDialogComponent,
 		ErrorDialogComponent,
 		ConfirmDialogComponent,
 		AlarmDialogComponent,

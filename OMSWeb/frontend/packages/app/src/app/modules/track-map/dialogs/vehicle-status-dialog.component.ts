@@ -144,7 +144,12 @@ export class VehicleStatusDialogComponent implements OnInit, OnDestroy {
                   carrierLabel: carrierIdInput,
                   newCarrierId: "",
                   logicalId: this.currentVehicle.logicalId
-                }).subscribe()
+             }).subscribe()
+
+            this.dialogSvc.success({
+              title: this.t$.instant('names.success'),
+              body: this.t$.instant('messages.confirmSuccessRemoveCarrier'),
+            })
           }
           else {
             var errorMessage = "";
@@ -158,7 +163,7 @@ export class VehicleStatusDialogComponent implements OnInit, OnDestroy {
             else errorMessage = 'messages.confirmNotAbleToExcute';
 
             this.dialogSvc.alert({
-              title: this.t$.instant('names.blocked'),
+              title: this.t$.instant('names.failed'),
               body: this.t$.instant(errorMessage),
             })
           }
@@ -175,6 +180,11 @@ export class VehicleStatusDialogComponent implements OnInit, OnDestroy {
               carrierLabel: carrierId,
               logicalId: this.currentVehicle.logicalId
             }).subscribe()
+
+            this.dialogSvc.success({
+              title: this.t$.instant('names.success'),
+              body: this.t$.instant('messages.confirmSuccessInstallCarrier'),
+            })
           }
           else {
             var errorMessage = "";
@@ -188,7 +198,7 @@ export class VehicleStatusDialogComponent implements OnInit, OnDestroy {
             else errorMessage = 'messages.confirmNotAbleToExcute';
 
             this.dialogSvc.alert({
-              title: this.t$.instant('names.blocked'),
+              title: this.t$.instant('names.failed'),
               body: this.t$.instant(errorMessage),
             })
           }
@@ -206,6 +216,11 @@ export class VehicleStatusDialogComponent implements OnInit, OnDestroy {
               newCarrierId: newCarrierIdInput,
               logicalId: this.currentVehicle.logicalId
             }).subscribe()
+
+            this.dialogSvc.success({
+              title: this.t$.instant('names.success'),
+              body: this.t$.instant('messages.confirmSuccessRenameCarrier'),
+            })
           }
           else {
             var errorMessage = "";
@@ -219,7 +234,7 @@ export class VehicleStatusDialogComponent implements OnInit, OnDestroy {
             else errorMessage = 'messages.confirmNotAbleToExcute';
 
             this.dialogSvc.alert({
-              title: this.t$.instant('names.blocked'),
+              title: this.t$.instant('names.failed'),
               body: this.t$.instant(errorMessage),
             })
           }

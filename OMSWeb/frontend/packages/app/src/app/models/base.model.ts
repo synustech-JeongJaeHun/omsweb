@@ -35,8 +35,13 @@ export interface IConfirmMessage<T> extends IDialogMessage<T> {
 	confirmText?: string
 	declineText?: string
 }
+
 export interface IErrorMessage<T> extends IDialogMessage<T> {
 	errorText?: string
+}
+
+export interface ISuccessMessage<T> extends IDialogMessage<T> {
+  successText?: string
 }
 
 export interface ITokenResult {

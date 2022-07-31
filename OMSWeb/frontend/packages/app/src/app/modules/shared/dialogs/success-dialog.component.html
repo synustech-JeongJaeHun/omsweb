@@ -1,0 +1,14 @@
+<oms-dialog-base [title]="title">
+  <ng-container class="dialog-layout">
+    <div mat-dialog-content class="pre-line">
+      {{ message.body }}
+    </div>
+
+    <div mat-dialog-actions>
+      <button mat-stroked-button color="primary" mat-dialog-close>
+        {{ message.successText || ("names.ok" | translate) }}
+      </button>
+    </div>
+  </ng-container>
+</oms-dialog-base>
+
