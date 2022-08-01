@@ -154,16 +154,16 @@ export class OrderControlTableComponent implements OnInit, OnDestroy {
     }
 
 	private onTableChanged(payload: IDataChangeEvent) {
-        this.dataSource.reload().then((data) => {
-          this.dataGrid.instance.refresh();
-        })
+      this.dataSource.reload().then((data) => {
+         this.dataGrid.instance.refresh();
+      })
 	}
 
 	@HostListener('document:visibilitychange', ['$event'])
 	private visibilitychange() {
         if (!document.hidden) {
           this.dataSource.reload().then((data) => {
-            this.dataGrid.instance.refresh();
+             this.dataGrid.instance.refresh();
           })
         }
 	}
