@@ -9,6 +9,8 @@ import * as DateFns from 'date-fns'
 export class PlaybackControlDialogComponent {
 	constructor(private playbackPlayService: PlaybackPlayService) {}
 
+	public isLoading = false
+
 	get playService() {
 		return this.playbackPlayService
 	}
@@ -87,9 +89,15 @@ export class PlaybackControlDialogComponent {
 			return
 
 		if (this.timeRangeEnd < event.end) {
-			this.playService.setClockByDate(this.getDateFromTimeRange(event.end))
+			this.isLoading = true
+			this.playService
+				.setClockByDate(this.getDateFromTimeRange(event.end))
+				.finally(() => (this.isLoading = false))
 		} else if (event.start < this.timeRangeStart) {
-			this.playService.setClockByDate(this.getDateFromTimeRange(event.start))
+			this.isLoading = true
+			this.playService
+				.setClockByDate(this.getDateFromTimeRange(event.start))
+				.finally(() => (this.isLoading = false))
 		}
 
 		this.disableTimeRangeSliderForMoment()
