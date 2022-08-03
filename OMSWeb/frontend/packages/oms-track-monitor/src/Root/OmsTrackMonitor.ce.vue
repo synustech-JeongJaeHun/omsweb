@@ -203,6 +203,11 @@ defineExpose(exposed)
     'parseStringProp(ColorDefault.bufferDisabled, props.bufferDisabledColor)'
   );
 }
+#buffer-layer .buffer .buffer-full {
+  fill: v-bind(
+    'parseStringProp(ColorDefault.cargoFull, props.cargoFullColor)'
+  );
+}
 #point-layer .point .point-path {
   stroke: v-bind('parseStringProp(ColorDefault.point, props.pointColor)');
   fill: v-bind('parseStringProp(ColorDefault.point, props.pointColor)');

@@ -223,7 +223,7 @@ export class TrackStatusService {
 		switch (e.operation) {
 			case 'UPDATE':
 				// @ts-ignore
-				if (finded) Object.assign(finded, { id: e.id, unuse: e.unuse })
+				if (finded) Object.assign(finded, { id: e.id, unuse: e.unuse, carrierId: e.carrierId })
 				break
 
 			default:
