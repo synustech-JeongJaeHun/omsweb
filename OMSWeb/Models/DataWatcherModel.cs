@@ -30,8 +30,12 @@ namespace OMSWeb.Models
         public int? VehicleId { get; set; }
         // public VehiclePosition Vehicle { get; set; }
 
-        #region Station
+        #region Station And Buffer
         public bool? Unuse { get; set; }
+        #endregion
+
+        #region Buffer
+        public string CarrierId  { get; set; }
         #endregion
 
         #region Home

@@ -208,6 +208,7 @@ namespace OMSWeb.Repositories
                                     NextPoint = dr["next_point"].TryIntegerOrNull(),
                                     Offset = dr["offset"].TryIntegerOrNull(),
                                     Unuse = dr["unuse"].TryBooleanOrNull(),
+                                    CarrierId = dr["carrier_id"].TryString(),
                                 }
                                );
                             }

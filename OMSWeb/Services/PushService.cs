@@ -242,7 +242,8 @@ namespace OMSWeb.Services
                 Level = payload.Level,
                 VehicleId = payload.VehicleId,
 
-                Unuse = payload.Unuse, // only for Station
+                Unuse = payload.Unuse, // only for Station And Buffer
+                CarrierId = payload.CarrierId, // only for Buffer
 
                 Point = payload.Point, // only for Home
 
