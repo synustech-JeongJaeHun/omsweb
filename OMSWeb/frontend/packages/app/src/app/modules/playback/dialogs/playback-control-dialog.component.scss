@@ -100,3 +100,24 @@ mat-select {
 mat-slider {
   width: 100%;
 }
+
+
+.dialog-loading {
+  position: absolute;
+  background-color: rgba(0,0,0,0.4);
+  top: 28px;
+  left: -8px;
+  height: calc(100% + 8px - 28px);
+  width: calc(100% + 16px);
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+  border-bottom-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  z-index: 1510;
+
+  display: flex;
+
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
