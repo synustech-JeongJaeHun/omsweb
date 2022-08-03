@@ -11,6 +11,8 @@ interface IBuffer {
 
 	// nullable
 	group?: number
+  unuse?: boolean
+  carrierId?: boolean
 }
 interface ICluster {
 	id: number

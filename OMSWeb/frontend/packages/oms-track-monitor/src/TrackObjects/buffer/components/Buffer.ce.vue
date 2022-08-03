@@ -53,6 +53,11 @@ const group = useGroup('buffer', toRef(props.buffer, 'id'))
         @mouseout="handleMouseleave"
         @mouseleave="handleMouseleave"
       />
+      <circle 
+        v-if="props.buffer.carrierId"
+        class="buffer-full"
+        r="8"
+      />
       <text
         class="invert label select-none"
         x="0"
