@@ -886,6 +886,12 @@ export namespace SvgDrawingUtil {
 							.attr('stroke-width', '0px')
 							.attr('level', `level${zoom_level}`)
 							.attr('d', main_css.buffer[`icon_level${zoom_level}`])
+            
+            if(layout_object.carrierId)
+              dom_object_group
+                .append('circle')
+                .attr('r', 9)
+                .attr('fill', trackMonitorSetting.cargoFullColor)
 
 						dom_object_group
 							.append('rect')
