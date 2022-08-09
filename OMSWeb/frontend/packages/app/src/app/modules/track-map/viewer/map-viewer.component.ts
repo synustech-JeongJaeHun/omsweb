@@ -345,7 +345,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 				.pipe(takeUntil(this.destroy$))
 				.subscribe((e) => {
 					// @ts-ignore
-					this.viewer.updateBuffer(e.operation, { id: e.id, unuse: e.unuse })
+					this.viewer.updateBuffer(e.operation, { id: e.id, unuse: e.unuse, carrierId: e.carrierId })
 				})
 
 			this.hubSvc.groupChanged$

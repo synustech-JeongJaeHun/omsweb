@@ -74,6 +74,7 @@ namespace UpdateDto {
 	export type Buffer = {
 		id: number
 		unuse?: boolean
+    carrierId?: string
 	}
 
 	export type GroupObject = {
