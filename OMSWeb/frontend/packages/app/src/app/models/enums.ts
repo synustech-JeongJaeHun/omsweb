@@ -114,6 +114,14 @@ export enum HostModeEnums {
   HOST
 }
 
+export enum OnOfflineEnums {
+  None = 0,
+  EqOffline = 1,
+  GoingOffline = 2,
+  HostOffline = 4,
+  Online = 5
+}
+
 export enum TscModeEnums {
   DEFAULT = 0,
   INIT,

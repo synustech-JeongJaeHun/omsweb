@@ -1,12 +1,14 @@
 import {
 	HostModeEnums,
 	HostSessionStatusEnums,
+	OnOfflineEnums,
 	TscModeEnums,
 } from '@oms/models/enums'
 
 export interface ISystemStates {
 	sessionStatus?: HostSessionStatusEnums
-	hostMode?: HostModeEnums
+    hostMode?: HostModeEnums
+    onOfflineStatus?: OnOfflineEnums
 	tscMode?: TscModeEnums
 	aiMode?: boolean
 }

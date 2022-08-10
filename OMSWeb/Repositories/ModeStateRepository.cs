@@ -21,7 +21,7 @@ namespace OMSWeb.Repositories
         {
             IQueryable<ModeStateEntity> result;
 
-            var sql = @"SELECT comm_state, control_state, tsc_state, pm_state, ai_mode FROM mode_state";
+            var sql = @"SELECT comm_state, control_state, pm_state as on_offline_state, tsc_state, pm_state, ai_mode FROM mode_state";
             
             using (var conn = ConnectTrack())
             {
@@ -37,6 +37,7 @@ namespace OMSWeb.Repositories
             {
                 comm_state = w.comm_state,
                 control_state = w.control_state,
+                on_offline_state = w.on_offline_state,
                 tsc_state = w.tsc_state,
                 pm_state = w.pm_state,
                 ai_mode = w.ai_mode

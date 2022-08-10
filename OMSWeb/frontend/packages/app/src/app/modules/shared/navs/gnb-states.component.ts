@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { HostModeEnums, HostSessionStatusEnums, TscModeEnums, } from '../../../models/enums';
+import { HostModeEnums, HostSessionStatusEnums, TscModeEnums, OnOfflineEnums, } from '../../../models/enums';
 import { ISystemStates } from '../../../models/system.model';
 import { AuthService } from '../../../services/auth.service';
 import { HubService } from '../../../services/hub.service';
@@ -55,7 +55,8 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
     return this.systemStates?.sessionStatus === HostSessionStatusEnums.CONNECTED;
   }
   get isActiveHostMode(): boolean {
-    return this.systemStates?.hostMode == HostModeEnums.HOST;
+    return this.systemStates?.hostMode == HostModeEnums.HOST &&
+      this.systemStates?.onOfflineStatus == OnOfflineEnums.Online;
   }
   get isActiveTscMode(): boolean {
     return this.systemStates?.tscMode === TscModeEnums.AUTO;

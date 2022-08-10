@@ -82,6 +82,7 @@ namespace OMSWeb.Services
                 {
                     SessionStatus = (HostSessionStatusEnums?)modeStateEntity.comm_state,
                     HostMode = (HostModeEnums?)modeStateEntity.control_state,
+                    OnOfflineStatus = (OnOfflineEnums?)modeStateEntity.on_offline_state,
                     TscMode = (TscModeEnums?)modeStateEntity.tsc_state,
                     AiMode = (modeStateEntity.ai_mode > 0) ? true : false,
                 };
@@ -92,6 +93,7 @@ namespace OMSWeb.Services
                 {
                     SessionStatus = HostSessionStatusEnums.Offline,
                     HostMode = HostModeEnums.LOCAL,
+                    OnOfflineStatus = OnOfflineEnums.None,
                     TscMode = TscModeEnums.PAUSED,
                     AiMode = true,
                 };
