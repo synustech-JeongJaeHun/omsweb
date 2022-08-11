@@ -464,8 +464,9 @@
       "1": "Connected"
     },
     "hostMode": {
-      "0": "Local",
-      "1": "Host"
+      "0": "Off-Line",
+      "1": "Local",
+      "2": "Host"
     },
     "tscMode": {
       "0": "Paused",
