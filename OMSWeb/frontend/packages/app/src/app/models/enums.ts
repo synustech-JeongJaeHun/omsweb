@@ -110,7 +110,8 @@ export enum HostSessionStatusEnums {
 }
 
 export enum HostModeEnums {
-  LOCAL = 0,
+  OFFLINE = 0,
+  LOCAL,
   HOST
 }
 
