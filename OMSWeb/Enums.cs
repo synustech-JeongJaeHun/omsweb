@@ -8,8 +8,7 @@ namespace OMSWeb
 
     public enum HostModeEnums
     {
-        OFFLINE = 0,
-        LOCAL,
+        LOCAL = 0,
         HOST,
     }
 

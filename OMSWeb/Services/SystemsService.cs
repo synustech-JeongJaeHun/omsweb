@@ -92,7 +92,7 @@ namespace OMSWeb.Services
                 this.HostStates = new SystemStatusModel
                 {
                     SessionStatus = HostSessionStatusEnums.Offline,
-                    HostMode = HostModeEnums.OFFLINE,
+                    HostMode = HostModeEnums.LOCAL,
                     OnOfflineStatus = OnOfflineEnums.None,
                     TscMode = TscModeEnums.PAUSED,
                     AiMode = true,

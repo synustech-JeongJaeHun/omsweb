@@ -12,7 +12,6 @@ import { AccountUtil } from '../utils/account.util';
 import { MessagesService } from '../../../services/messages.service';
 import { IDataChangeEvent } from '../../../models/notification.model';
 import { PermissionEnums } from '../../../models/enums';
-import { Console } from 'console';
 
 @Component({
   selector: 'oms-gnb-states',
@@ -35,14 +34,14 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
     return this.t$.instant(`enums.tscMode.${this.systemStates?.tscMode}`);
   }
   get hostParamTitle(): string {
-    if (this.isActiveHostMode) return this.t$.instant(`names.host`);
-    if (this.isActiveLocalMode) return this.t$.instant(`names.local`);
-    return this.t$.instant(`names.offline`);
+    if (this.isActiveHostMode)
+      return this.t$.instant(`names.host`);
+    return this.t$.instant(`names.local`);
   }
   get hostParamText(): string[] {
-    if (this.isActiveHostMode) return [this.t$.instant(`names.host`), this.t$.instant('names.local')];
-    if (this.isActiveLocalMode) return [this.t$.instant(`names.local`), this.t$.instant('names.offline')];
-    return [this.t$.instant(`names.offline`), this.t$.instant('names.host')];
+    if (this.isActiveHostMode)
+      return [this.t$.instant(`names.host`), this.t$.instant('names.local')];
+    return [this.t$.instant(`names.local`), this.t$.instant('names.host')];
   }
   get tscParamTitle(): string {
     return this.t$.instant(`names.tsc`);
@@ -56,10 +55,8 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
     return this.systemStates?.sessionStatus === HostSessionStatusEnums.CONNECTED;
   }
   get isActiveHostMode(): boolean {
-    return (this.systemStates?.hostMode === HostModeEnums.HOST) && (this.systemStates?.onOfflineStatus === OnOfflineEnums.Online);
-  }
-  get isActiveLocalMode(): boolean {
-    return (this.systemStates?.hostMode === HostModeEnums.LOCAL) && (this.systemStates?.onOfflineStatus === OnOfflineEnums.Online);
+    return this.systemStates?.hostMode == HostModeEnums.HOST &&
+      this.systemStates?.onOfflineStatus == OnOfflineEnums.Online;
   }
   get isActiveTscMode(): boolean {
     return this.systemStates?.tscMode === TscModeEnums.AUTO;
