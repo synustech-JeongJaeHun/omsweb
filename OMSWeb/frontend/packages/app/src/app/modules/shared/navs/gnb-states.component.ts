@@ -23,9 +23,13 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
   get hostStatusIcon(): string {
-    return this.systemStates?.sessionStatus === HostSessionStatusEnums.DISCONNECTED
-      ? 'cloud_off'
-      : 'cloud_queue';
+    //return this.systemStates?.sessionStatus === HostSessionStatusEnums.DISCONNECTED
+    //  ? 'cloud_off'
+    //  : 'cloud_queue';
+    if (this.systemStates?.sessionStatus === HostSessionStatusEnums.DISCONNECTED)
+      return 'cloud_off'
+    else
+      return this.systemStates?.hostMode === HostModeEnums.HOST ? 'cloud_done' : 'cloud_queue';
   }
   get hostModeText(): string {
     return this.t$.instant(`enums.hostMode.${this.systemStates?.hostMode}`);
