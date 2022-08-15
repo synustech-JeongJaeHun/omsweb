@@ -109,6 +109,14 @@ export enum HostSessionStatusEnums {
   CONNECTED,
 }
 
+export enum OnOfflineModeEnums {
+  None = 0,
+  EqOffline = 1,
+  GoingOffline = 2,
+  HostOffline = 4,
+  Online = 5
+}
+
 export enum HostModeEnums {
   LOCAL = 0,
   HOST

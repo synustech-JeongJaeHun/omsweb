@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { HostModeEnums, HostSessionStatusEnums, TscModeEnums, } from '../../../models/enums';
+import { HostModeEnums, HostSessionStatusEnums, OnOfflineModeEnums, TscModeEnums, } from '../../../models/enums';
 import { ISystemStates } from '../../../models/system.model';
 import { AuthService } from '../../../services/auth.service';
 import { HubService } from '../../../services/hub.service';
@@ -23,13 +23,11 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
   get hostStatusIcon(): string {
-    //return this.systemStates?.sessionStatus === HostSessionStatusEnums.DISCONNECTED
-    //  ? 'cloud_off'
-    //  : 'cloud_queue';
-    if (this.systemStates?.sessionStatus === HostSessionStatusEnums.DISCONNECTED)
+    if (!this.isActiveConnStatus)
       return 'cloud_off'
-    else
-      return this.systemStates?.hostMode === HostModeEnums.HOST ? 'cloud_done' : 'cloud_queue';
+    else if (this.isActiveOnlineMode)
+      return 'cloud_done';
+    return 'cloud_queue';
   }
   get hostModeText(): string {
     return this.t$.instant(`enums.hostMode.${this.systemStates?.hostMode}`);
@@ -55,11 +53,14 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
       return [this.t$.instant(`names.tscAuto`), this.t$.instant('names.tscPause')];
     return [this.t$.instant(`names.tscPause`), this.t$.instant('names.tscAuto')];
   }
-  get isActiveStatus(): boolean {
-    return this.systemStates?.sessionStatus === HostSessionStatusEnums.CONNECTED;
+  get isActiveConnStatus(): boolean {
+    return this.systemStates?.sessionStatus % 1000 == HostSessionStatusEnums.CONNECTED;
+  }
+  get isActiveOnlineMode(): boolean {
+    return this.systemStates?.sessionStatus == (HostSessionStatusEnums.CONNECTED + OnOfflineModeEnums.Online * 1000);
   }
   get isActiveHostMode(): boolean {
-    return this.systemStates?.hostMode == HostModeEnums.HOST;
+    return this.systemStates?.hostMode === HostModeEnums.HOST;
   }
   get isActiveTscMode(): boolean {
     return this.systemStates?.tscMode === TscModeEnums.AUTO;
