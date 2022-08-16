@@ -182,14 +182,14 @@ export const defaultControlTable: ControlTable = {
 	cps_sync: true,
 	cps_backup_id: true,
 	cps_error_code: true,
-	cps_voltage_rs: true,
-	cps_voltage_st: true,
-	cps_voltage_tr: true,
-	cps_current_r: true,
-	cps_current_s: true,
-	cps_current_t: true,
-	cps_total_kw: true,
-	cps_wh: true,
+    cps_voltage_rs: false,
+    cps_voltage_st: false,
+    cps_voltage_tr: false,
+    cps_current_r: false,
+    cps_current_s: false,
+    cps_current_t: false,
+    cps_total_kw: false,
+    cps_wh: false,
 }
 
 export class ClientPreferences implements IPreferences {
