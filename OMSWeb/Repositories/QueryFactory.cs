@@ -85,8 +85,8 @@ namespace OMSWeb.Repositories
             CONCAT( CAST(CS.current_igbt AS TEXT), ' [A]' ) AS current_igbt,
             CONCAT( CAST(CS.current_track AS TEXT), ' [A]' ) AS current_track, 
             CONCAT( CAST(TRUNC(CS.frequency::numeric / 10, 1) AS TEXT), ' [kHz]' ) AS frequency, 
-            CONCAT( CAST(TRUNC(CS.temp_radiator::numeric / 10, 1) AS TEXT), ' [��]' ) AS temp_radiator, 
-            CONCAT( CAST(TRUNC(CS.temp_internal::numeric / 10, 1) AS TEXT), ' [��]' ) AS temp_internal,  
+            CONCAT( CAST(TRUNC(CS.temp_radiator::numeric / 10, 1) AS TEXT), ' [℃]' ) AS temp_radiator, 
+            CONCAT( CAST(TRUNC(CS.temp_internal::numeric / 10, 1) AS TEXT), ' [℃]' ) AS temp_internal,  
             CASE 
                 WHEN CS.sync = 0 THEN 'N.G'
                 WHEN CS.sync = 11 THEN 'OK'
