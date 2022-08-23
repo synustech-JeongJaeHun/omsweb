@@ -29,9 +29,26 @@ export class VehicleStatusDialogService {
 		this.selectedVehicleChanged$.emit(this.selectedVehicle)
 	}
 
-	openVehicleStatusDialog = () => {
+	toggleVehicleStatusDialog = () => {
 		if (this._vhStatusDlg?.getState() === MatDialogState.OPEN)
 			return this._vhStatusDlg.close()
+
+		this._vhStatusDlg = this.dialog.open(VehicleStatusDialogComponent, {
+			width: '750px',
+			minWidth: '750px',
+			maxWidth: '750px',
+			height: '620px',
+			minHeight: '620px',
+			maxHeight: '620px',
+			autoFocus: false,
+			hasBackdrop: false,
+			disableClose: false,
+			closeOnNavigation: true,
+		})
+	}
+  
+	openVehicleStatusDialog = () => {
+		if (this._vhStatusDlg?.getState() === MatDialogState.OPEN) return
 
 		this._vhStatusDlg = this.dialog.open(VehicleStatusDialogComponent, {
 			width: '750px',

@@ -230,7 +230,8 @@ export class MapToolbarComponent implements OnDestroy {
 		this.stateSvc.commandToolbar(action)
 	}
 
-	onOpenVehicleStatus = this.vehicleStatusDialogService.openVehicleStatusDialog
+	onOpenVehicleStatus =
+		this.vehicleStatusDialogService.toggleVehicleStatusDialog
 
 	onOpenBufferStatus() {
 		if (

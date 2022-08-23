@@ -464,6 +464,7 @@
 			</button>
 		</mat-menu>
 		<button
+			*ngIf="hasPermissions([permissionEnums.ViewVehicleStatus])"
 			mat-button
 			(click)="onVehicleStatusDialogOpen()"
 			style="width: calc(100% - 4px); margin: 2px"
