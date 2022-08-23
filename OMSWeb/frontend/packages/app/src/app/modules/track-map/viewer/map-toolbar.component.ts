@@ -38,13 +38,14 @@ import { AccountUtil } from '../../shared/utils/account.util'
 import { SettingsService } from '../../../services/settings.service'
 import { PermissionEnums } from '../../../models/enums'
 import { TrackMonitorSettingService } from '@oms/root/services/track-monitor-setting.service'
+import { VehicleStatusDialogService } from '@oms/root/services/vehicle-status-dialog.service'
 
 @Component({
 	selector: 'oms-map-toolbar',
 	templateUrl: './map-toolbar.component.html',
 	styleUrls: ['map-toolbar.component.scss'],
 })
-export class MapToolbarComponent implements OnInit, OnDestroy {
+export class MapToolbarComponent implements OnDestroy {
 	@Input()
 	buttonState: ToggleOptionsType = defaultToggleOptions
 	readonly permissionEnums: typeof PermissionEnums = PermissionEnums
@@ -79,7 +80,6 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
 	private _trackDlg: MatDialogRef<TrackVehicleDialogComponent, any>
 	private _cmdDlg: MatDialogRef<CommandDialogComponent, any>
 	private _showObjDlg: MatDialogRef<ShowObjectDialogComponent, any>
-	private _vhStatusDlg: MatDialogRef<VehicleStatusDialogComponent, any>
 	private _bfStatusDlg: MatDialogRef<BufferStatusDialogComponent, any>
 
 	constructor(
@@ -91,13 +91,12 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
 		private dialog: MatDialog,
 		private $t: TranslateService,
 		public trackMonitorSettingService: TrackMonitorSettingService,
+		private vehicleStatusDialogService: VehicleStatusDialogService,
 	) {
 		settingSvc.serviceConfig.subscribe((config) => {
 			this.bufferEnabled = config.bufferEnabled
 		})
 	}
-
-	ngOnInit(): void {}
 
 	ngOnDestroy(): void {
 		this._searchDlg &&
@@ -116,9 +115,7 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
 			this._showObjDlg.getState() === MatDialogState.OPEN &&
 			this._showObjDlg.close()
 
-		this._vhStatusDlg &&
-			this._vhStatusDlg.getState() === MatDialogState.OPEN &&
-			this._vhStatusDlg.close()
+		this.vehicleStatusDialogService.closeVehicleStatusDialog()
 
 		this._bfStatusDlg &&
 			this._bfStatusDlg.getState() === MatDialogState.OPEN &&
@@ -233,28 +230,7 @@ export class MapToolbarComponent implements OnInit, OnDestroy {
 		this.stateSvc.commandToolbar(action)
 	}
 
-	onOpenVehicleStatus() {
-		if (
-			this._vhStatusDlg &&
-			this._vhStatusDlg.getState() === MatDialogState.OPEN
-		) {
-			this._vhStatusDlg.close()
-			return
-		}
-
-		this._vhStatusDlg = this.dialog.open(VehicleStatusDialogComponent, {
-			width: '750px',
-			minWidth: '750px',
-			maxWidth: '750px',
-			height: '620px',
-			minHeight: '620px',
-			maxHeight: '620px',
-			autoFocus: false,
-			hasBackdrop: false,
-			disableClose: false,
-			closeOnNavigation: true,
-		})
-	}
+	onOpenVehicleStatus = this.vehicleStatusDialogService.openVehicleStatusDialog
 
 	onOpenBufferStatus() {
 		if (

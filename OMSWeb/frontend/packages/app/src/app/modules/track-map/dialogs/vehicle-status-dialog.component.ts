@@ -4,9 +4,10 @@ import { TranslateService } from '@ngx-translate/core'
 import { TrackStatusService } from '@oms/root/services/track-status.service'
 import { DialogService } from '@oms/root/services/dialog.service'
 import { MessagesService } from '@oms/root/services/messages.service'
-import { TracksService } from '@oms/root/services/tracks.service';
-import { TransfersService } from '@oms/root/services/transfers.service';
+import { TracksService } from '@oms/root/services/tracks.service'
+import { TransfersService } from '@oms/root/services/transfers.service'
 import { VehicleService } from '@oms/root/services/vehicle.service'
+import { VehicleStatusDialogService } from '@oms/root/services/vehicle-status-dialog.service'
 import { Dto } from '@oms/root/models/dto/track.model'
 import { IVehicleDioCategory } from '@oms/root/models/vehicle-status.model'
 import { ICarrierCommandMessage } from '@oms/root/models/command.model'
@@ -21,8 +22,8 @@ import {
 	templateUrl: './vehicle-status-dialog.component.html',
 	styleUrls: ['./vehicle-status-dialog.component.scss'],
 })
-export class VehicleStatusDialogComponent implements OnInit, OnDestroy {
-    public carrierId: string
+export class VehicleStatusDialogComponent implements OnDestroy {
+	public carrierId: string
 
 	visiblePIOTrend = false
 
@@ -67,19 +68,18 @@ export class VehicleStatusDialogComponent implements OnInit, OnDestroy {
 		return parseInt
 	}
 
-  constructor(
-    	private $t: TranslateService,
-        private trackSvc: TracksService,
-        private transferSvc: TransfersService,
-	    private dialogRef: MatDialogRef<VehicleStatusDialogComponent>,
-	    private trackStatusService: TrackStatusService,
-    	private vehicleService: VehicleService,
-    	private dialogSvc: DialogService,
-        private messageSvc: MessagesService,
-        private t$: TranslateService,
-	) {}
-
-	ngOnInit(): void {
+	constructor(
+		private $t: TranslateService,
+		private trackSvc: TracksService,
+		private transferSvc: TransfersService,
+		private dialogRef: MatDialogRef<VehicleStatusDialogComponent>,
+		private trackStatusService: TrackStatusService,
+		private vehicleService: VehicleService,
+		private dialogSvc: DialogService,
+		private messageSvc: MessagesService,
+		private t$: TranslateService,
+		private vehicleStatusDialogService: VehicleStatusDialogService,
+	) {
 		this.vehicleService.getVehicleDioCategories().subscribe((dios) => {
 			this.dioInfos = dios
 
@@ -125,125 +125,160 @@ export class VehicleStatusDialogComponent implements OnInit, OnDestroy {
 			JSON.stringify(this.trackStatusService.trackData.vehicles),
 		)
 
-		if (this.vehicles.length > 0)
-			this.onVehicleSelect({ selectedItem: this.vehicles[0] })
+		if (this.vehicleStatusDialogService.selectedVehicle)
+			this.onVehicleSelect({
+				selectedItem: this.vehicleStatusDialogService.selectedVehicle,
+			})
+
+		this.vehicleStatusDialogService.selectedVehicleChanged$.subscribe(
+			(vhl: Dto.IVehicle) => {
+				this.onVehicleSelect({ selectedItem: vhl })
+			},
+		)
 	}
 
 	ngOnDestroy(): void {
 		clearInterval(this.intervalId)
 	}
 
-    onRemoveCarrier(carrierIdInput: string) {
-      this.transferSvc.checkCarrierChange("remove", this.currentVehicle.logicalId, "vehicle", carrierIdInput, "none")
-        .subscribe((res) => {
-          console.log(res);
+	onRemoveCarrier(carrierIdInput: string) {
+		this.transferSvc
+			.checkCarrierChange(
+				'remove',
+				this.currentVehicle.logicalId,
+				'vehicle',
+				carrierIdInput,
+				'none',
+			)
+			.subscribe((res) => {
+				console.log(res)
 
-          if (res.hcack === 0 || res.hcack === 4) {
-             this.messageSvc.sendCarrierCommand({
-                  action: 'remove_carrier',
-                  carrierLabel: carrierIdInput,
-                  newCarrierId: "",
-                  logicalId: this.currentVehicle.logicalId
-             }).subscribe()
+				if (res.hcack === 0 || res.hcack === 4) {
+					this.messageSvc
+						.sendCarrierCommand({
+							action: 'remove_carrier',
+							carrierLabel: carrierIdInput,
+							newCarrierId: '',
+							logicalId: this.currentVehicle.logicalId,
+						})
+						.subscribe()
 
-            this.dialogSvc.success({
-              title: this.t$.instant('names.success'),
-              body: this.t$.instant('messages.confirmSuccessRemoveCarrier'),
-            })
-          }
-          else {
-            var errorMessage = "";
-            if (res.hcack === 2) errorMessage = 'messages.confirmNotAbleToExcute';
-            else if (res.hcack === 3) {
-              if (res.cpname === 'CARRIERID') errorMessage = 'messages.confirmParameterInvalidCarrierID';
-              else if (res.cpname === 'CARRIERLOC') errorMessage = 'messages.confirmParameterInvalidCarrierLoc';
-              else errorMessage = 'messages.confirmParameterInvalid';
-            }
-            else if (res.hcack === 5) errorMessage = 'messages.confirmReject';
-            else errorMessage = 'messages.confirmNotAbleToExcute';
+					this.dialogSvc.success({
+						title: this.t$.instant('names.success'),
+						body: this.t$.instant('messages.confirmSuccessRemoveCarrier'),
+					})
+				} else {
+					var errorMessage = ''
+					if (res.hcack === 2) errorMessage = 'messages.confirmNotAbleToExcute'
+					else if (res.hcack === 3) {
+						if (res.cpname === 'CARRIERID')
+							errorMessage = 'messages.confirmParameterInvalidCarrierID'
+						else if (res.cpname === 'CARRIERLOC')
+							errorMessage = 'messages.confirmParameterInvalidCarrierLoc'
+						else errorMessage = 'messages.confirmParameterInvalid'
+					} else if (res.hcack === 5) errorMessage = 'messages.confirmReject'
+					else errorMessage = 'messages.confirmNotAbleToExcute'
 
-            this.dialogSvc.alert({
-              title: this.t$.instant('names.failed'),
-              body: this.t$.instant(errorMessage),
-            })
-          }
-        })
-    }
-    onInstallCarrier(carrierId: string) {
-      this.transferSvc.checkCarrierChange("install", this.currentVehicle.logicalId, "buffer", carrierId, "none")
-        .subscribe((res) => {
-          console.log(res);
+					this.dialogSvc.alert({
+						title: this.t$.instant('names.failed'),
+						body: this.t$.instant(errorMessage),
+					})
+				}
+			})
+	}
+	onInstallCarrier(carrierId: string) {
+		this.transferSvc
+			.checkCarrierChange(
+				'install',
+				this.currentVehicle.logicalId,
+				'buffer',
+				carrierId,
+				'none',
+			)
+			.subscribe((res) => {
+				console.log(res)
 
-          if (res.hcack === 0 || res.hcack === 4) {
-            this.messageSvc.sendCarrierCommand({
-              action: 'install_carrier',
-              carrierLabel: carrierId,
-              logicalId: this.currentVehicle.logicalId
-            }).subscribe()
+				if (res.hcack === 0 || res.hcack === 4) {
+					this.messageSvc
+						.sendCarrierCommand({
+							action: 'install_carrier',
+							carrierLabel: carrierId,
+							logicalId: this.currentVehicle.logicalId,
+						})
+						.subscribe()
 
-            this.dialogSvc.success({
-              title: this.t$.instant('names.success'),
-              body: this.t$.instant('messages.confirmSuccessInstallCarrier'),
-            })
-          }
-          else {
-            var errorMessage = "";
-            if (res.hcack === 2) errorMessage = 'messages.confirmNotAbleToExcute';
-            else if (res.hcack === 3) {
-              if (res.cpname === 'CARRIERID') errorMessage = 'messages.confirmParameterInvalidCarrierID';
-              else if (res.cpname === 'CARRIERLOC') errorMessage = 'messages.confirmParameterInvalidCarrierLoc';
-              else errorMessage = 'messages.confirmParameterInvalid';
-            }
-            else if (res.hcack === 5) errorMessage = 'messages.confirmReject';
-            else errorMessage = 'messages.confirmNotAbleToExcute';
+					this.dialogSvc.success({
+						title: this.t$.instant('names.success'),
+						body: this.t$.instant('messages.confirmSuccessInstallCarrier'),
+					})
+				} else {
+					var errorMessage = ''
+					if (res.hcack === 2) errorMessage = 'messages.confirmNotAbleToExcute'
+					else if (res.hcack === 3) {
+						if (res.cpname === 'CARRIERID')
+							errorMessage = 'messages.confirmParameterInvalidCarrierID'
+						else if (res.cpname === 'CARRIERLOC')
+							errorMessage = 'messages.confirmParameterInvalidCarrierLoc'
+						else errorMessage = 'messages.confirmParameterInvalid'
+					} else if (res.hcack === 5) errorMessage = 'messages.confirmReject'
+					else errorMessage = 'messages.confirmNotAbleToExcute'
 
-            this.dialogSvc.alert({
-              title: this.t$.instant('names.failed'),
-              body: this.t$.instant(errorMessage),
-            })
-          }
-        })
-    }
-    onRenameCarrier(carrierIdInput: string, newCarrierIdInput: string) {
-      this.transferSvc.checkCarrierChange("rename", this.currentVehicle.logicalId, "vehicle", carrierIdInput, newCarrierIdInput)
-        .subscribe((res) => {
-          console.log(res);
+					this.dialogSvc.alert({
+						title: this.t$.instant('names.failed'),
+						body: this.t$.instant(errorMessage),
+					})
+				}
+			})
+	}
+	onRenameCarrier(carrierIdInput: string, newCarrierIdInput: string) {
+		this.transferSvc
+			.checkCarrierChange(
+				'rename',
+				this.currentVehicle.logicalId,
+				'vehicle',
+				carrierIdInput,
+				newCarrierIdInput,
+			)
+			.subscribe((res) => {
+				console.log(res)
 
-          if (res.hcack === 0 || res.hcack === 4) {
-            this.messageSvc.sendCarrierCommand({
-              action: 'rename_carrier',
-              carrierLabel: carrierIdInput,
-              newCarrierId: newCarrierIdInput,
-              logicalId: this.currentVehicle.logicalId
-            }).subscribe()
+				if (res.hcack === 0 || res.hcack === 4) {
+					this.messageSvc
+						.sendCarrierCommand({
+							action: 'rename_carrier',
+							carrierLabel: carrierIdInput,
+							newCarrierId: newCarrierIdInput,
+							logicalId: this.currentVehicle.logicalId,
+						})
+						.subscribe()
 
-            this.dialogSvc.success({
-              title: this.t$.instant('names.success'),
-              body: this.t$.instant('messages.confirmSuccessRenameCarrier'),
-            })
-          }
-          else {
-            var errorMessage = "";
-            if (res.hcack === 2) errorMessage = 'messages.confirmNotAbleToExcute';
-            else if (res.hcack === 3) {
-              if (res.cpname === 'CARRIERID') errorMessage = 'messages.confirmParameterInvalidCarrierID';
-              else if (res.cpname === 'CARRIERLOC') errorMessage = 'messages.confirmParameterInvalidCarrierLoc';
-              else errorMessage = 'messages.confirmParameterInvalid';
-            }
-            else if (res.hcack === 5) errorMessage = 'messages.confirmReject';
-            else errorMessage = 'messages.confirmNotAbleToExcute';
+					this.dialogSvc.success({
+						title: this.t$.instant('names.success'),
+						body: this.t$.instant('messages.confirmSuccessRenameCarrier'),
+					})
+				} else {
+					var errorMessage = ''
+					if (res.hcack === 2) errorMessage = 'messages.confirmNotAbleToExcute'
+					else if (res.hcack === 3) {
+						if (res.cpname === 'CARRIERID')
+							errorMessage = 'messages.confirmParameterInvalidCarrierID'
+						else if (res.cpname === 'CARRIERLOC')
+							errorMessage = 'messages.confirmParameterInvalidCarrierLoc'
+						else errorMessage = 'messages.confirmParameterInvalid'
+					} else if (res.hcack === 5) errorMessage = 'messages.confirmReject'
+					else errorMessage = 'messages.confirmNotAbleToExcute'
 
-            this.dialogSvc.alert({
-              title: this.t$.instant('names.failed'),
-              body: this.t$.instant(errorMessage),
-            })
-          }
-        })
-    }
+					this.dialogSvc.alert({
+						title: this.t$.instant('names.failed'),
+						body: this.t$.instant(errorMessage),
+					})
+				}
+			})
+	}
 
 	onVehicleSelect({ selectedItem: value }) {
 		if (value) {
-			this.currentVehicle = value
+			this.currentVehicle = this.vehicles.find((v) => v.id === value.id)
 			if (this.intervalId) clearInterval(this.intervalId)
 
 			const update = () => {
