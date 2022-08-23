@@ -48,6 +48,7 @@ const props = defineProps<{
   height: Numberlish
   // scale
   vehicleSize: Numberlish
+  zcuSize: Numberlish
   segmentWidth: Numberlish
   segmentDirectionSize: Numberlish
   stationMargin: Numberlish
@@ -125,6 +126,12 @@ watch(propRefs.vehicleSize, (n) => {
     parseNumberProp(ScaleDefault.vehicleSize, n)
   )
 })
+watch(propRefs.zcuSize, (n) => {
+  updateScaleStyle(
+    'zcuSize',
+    parseNumberProp(ScaleDefault.zcuSize, n)
+  )
+})
 watch(propRefs.segmentWidth, (n) => {
   updateScaleStyle(
     'segmentWidth',
@@ -151,7 +158,7 @@ watch(propRefs.bufferMargin, (n) => {
 })
 // content
 watch([propRefs.vehicleSecondaryContent], () => {
-  const vehicleSecondaryContent = 
+  const vehicleSecondaryContent =
     props.vehicleSecondaryContent === 'carrier' ? 'carrier' : "order"
   updateVehicleSecondaryContent(vehicleSecondaryContent)
 })
@@ -447,6 +454,13 @@ defineExpose(exposed)
   /* transform */
   transform: scale(v-bind('scaleInfo.mmPerPixel * scaleStylesInfo.vehicleSize * 1/10')) rotate(var(--reverse-rotation-degree));
 }
+#zcu-layer .zcu .scale-and-reverse-rotate {
+  /* transform */
+  transform: scale(
+      v-bind('scaleInfo.mmPerPixel * scaleStylesInfo.zcuSize * 1/10')
+    )
+    rotate(var(--reverse-rotation-degree));
+}
 
 #segment-layer .segment-path,
 #disabled-segment-layer .segment-path {
@@ -569,8 +583,6 @@ defineExpose(exposed)
 <style src="src/TrackObjects/zcu/styles/hover.css">
 </style>
 <style src="src/TrackObjects/zcu/styles/visibility.css">
-</style>
-<style src="src/TrackObjects/zcu/styles/transform.css">
 </style>
 <!-- Track > Fireshutter -->
 <style src="src/TrackObjects/fireshutter/styles/focus.css">

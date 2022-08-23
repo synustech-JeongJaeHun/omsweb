@@ -62,7 +62,7 @@ type ColorChangedEvent = {
 	value: string
 }
 type ScaleChangedEvent = {
-	key: 'vehicleSize' | 'segmentWidth' | 'segmentDirectionSize'
+	key: 'vehicleSize' | 'zcuSize' | 'segmentWidth' | 'segmentDirectionSize'
 	value: number
 }
 type RotationChangedEvent = {
@@ -102,6 +102,7 @@ type TrackMonitorSetting = Record<
 const DefaultTrackMonitorSetting: TrackMonitorSetting = {
 	// scale
 	vehicleSize: 10,
+  zcuSize: 10,
 	segmentWidth: 5,
 	segmentDirectionSize: 10,
 
