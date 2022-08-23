@@ -56,6 +56,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		return this.trackMonitorSettingService.trackSetting
 	}
 
+	// no one used
 	get canSetSource() {
 		return !this.mapStatesService.transferCommandState.sourceDisabled
 	}
@@ -346,9 +347,12 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 
 			this.hubSvc.bufferChanged$
 				.pipe(takeUntil(this.destroy$))
-				.subscribe((e) => {
-					// @ts-ignore
-					this.viewer.updateBuffer(e.operation, { id: e.id, unuse: e.unuse, carrierId: e.carrierId })
+				.subscribe((e: any) => {
+					this.viewer.updateBuffer(e.operation, {
+						id: e.id,
+						unuse: e.unuse,
+						carrierId: e.carrierId,
+					})
 				})
 
 			this.hubSvc.groupChanged$
@@ -775,6 +779,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 	public onFocusFromOverlapped(object: any) {
 		this.selectedObject = object
 		this.focusOnTM({ type: object.objectType, id: object.id })
+		this.handleAfterFocus(object)
 	}
 	public onContextMenuOnFromOverlapped(event: { object: any; event: Event }) {
 		this.contextMenuObject = {
@@ -860,9 +865,106 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		// @ts-ignore
 		this.focusOnTM({ type: payload.type, id: payload.value.id })
 
-		if (this.selectedObject.objectType.toLowerCase() === 'vehicle') {
-			// @ts-ignore
-			this.vehicleStatusDialogService.setSelectedVehicle(payload.value)
+		// @ts-ignore
+		this.handleAfterFocus(payload.value)
+	}
+	private handleAfterFocus(object: any) {
+		const objectType = this.selectedObject.objectType.toLowerCase()
+
+		if (objectType === 'vehicle') {
+			const vhl = object
+
+			// for vehicle status dialog
+			this.vehicleStatusDialogService.setSelectedVehicle(vhl)
+
+			// for manual transfer dialog
+			const transferCommandState = this.mapStatesService.transferCommandState
+			if (transferCommandState.active) {
+				const isCategoryFromRelated =
+					transferCommandState.category === 'fromTo' ||
+					transferCommandState.category === 'from'
+
+				if (
+					(isCategoryFromRelated && transferCommandState.selectVehicle) ||
+					!isCategoryFromRelated
+				)
+					this.mapStatesService.transferCommandState.vehicle = {
+						objectType: 'Vehicle',
+						id: vhl.id,
+						logicalId: vhl.logicalId,
+						physicalId: vhl.physicalId,
+					}
+			}
+		} else if (objectType === 'buffer' || objectType === 'station') {
+			const port = { objectType, ...object }
+			const transferCommandState = this.mapStatesService.transferCommandState
+			if (transferCommandState.active === false) return
+
+			switch (transferCommandState.category) {
+				case 'fromTo':
+					{
+						if (transferCommandState.source == null)
+							this.mapStatesService.transferCommandState.source = port
+						else this.mapStatesService.transferCommandState.dest = port
+					}
+					break
+				case 'from':
+					{
+						this.mapStatesService.transferCommandState.source = port
+					}
+					break
+				case 'to':
+					{
+						this.mapStatesService.transferCommandState.dest = port
+					}
+					break
+				case 'move':
+					{
+						this.mapStatesService.transferCommandState.dest = port
+					}
+					break
+				case 'mtl':
+					{
+						// nothing
+					}
+					break
+				default:
+					break
+			}
+		} else if (objectType === 'point') {
+			const point = { objectType, ...object }
+			const transferCommandState = this.mapStatesService.transferCommandState
+			if (transferCommandState.active === false) return
+
+			switch (transferCommandState.category) {
+				case 'fromTo':
+					{
+						// nothing
+					}
+					break
+				case 'from':
+					{
+						// nothing
+					}
+					break
+				case 'to':
+					{
+						// nothing
+					}
+					break
+				case 'move':
+					{
+						this.mapStatesService.transferCommandState.dest = point
+					}
+					break
+				case 'mtl':
+					{
+						// nothing
+					}
+					break
+				default:
+					break
+			}
 		}
 	}
 	public async onContextMenuOn(event: CustomEvent) {

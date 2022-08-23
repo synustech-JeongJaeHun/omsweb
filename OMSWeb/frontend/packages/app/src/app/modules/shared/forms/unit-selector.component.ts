@@ -43,16 +43,20 @@ export class UnitSelectorComponent implements OnInit, OnChanges {
 
 	constructor(private trackStatusService: TrackStatusService) {}
 	ngOnChanges(changes: SimpleChanges): void {
-		const { disabled, selectedUnit } = changes
+		const { disabled } = changes
+
+		if (this.selectedUnit) {
+			this.inputControl.disable()
+			this.inputControl.setValue(this.selectedUnit)
+		} else {
+			this.inputControl.enable()
+			this.inputControl.reset()
+		}
+
 		if (disabled) {
 			disabled.currentValue
 				? this.inputControl.disable()
 				: this.inputControl.enable()
-		}
-
-		if (selectedUnit) {
-			selectedUnit.currentValue &&
-				this.inputControl.setValue(selectedUnit.currentValue)
 		}
 	}
 
@@ -158,14 +162,11 @@ export class UnitSelectorComponent implements OnInit, OnChanges {
 		return `${item.objectType} #${item.logicalId}`
 	}
 	onSelected(item: ILookupUnit) {
-		this.selectedUnit = item
 		this.selectedUnitChange.emit(item)
-		this.inputControl.disable()
+		this.inputControl.setValue('', { onlySelf: true })
 	}
 	onClear() {
-		this.selectedUnit = undefined
 		this.selectedUnitChange.emit(undefined)
 		this.inputControl.reset()
-		!this.disabled && this.inputControl.enable()
 	}
 }
