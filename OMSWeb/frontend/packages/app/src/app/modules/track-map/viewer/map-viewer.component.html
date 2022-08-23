@@ -463,6 +463,13 @@
 				{{ 'names.railOut' | translate }}
 			</button>
 		</mat-menu>
+		<button
+			mat-button
+			(click)="onVehicleStatusDialogOpen()"
+			style="width: calc(100% - 4px); margin: 2px"
+		>
+			{{ 'names.status' | translate }}
+		</button>
 	</mat-card>
 </ng-template>
 

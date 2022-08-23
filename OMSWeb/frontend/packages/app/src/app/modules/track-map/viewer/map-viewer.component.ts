@@ -34,6 +34,8 @@ import { IVehicleCommandMessage } from '@oms/root/models/command.model'
 import { SystemStatusService } from '@oms/root/services/system-status.service'
 import { TracksService } from '@oms/root/services/tracks.service'
 import { TransfersService } from '@oms/root/services/transfers.service'
+import { VehicleStatusDialogService } from '@oms/root/services/vehicle-status-dialog.service'
+
 @Component({
 	selector: 'oms-map-viewer',
 	templateUrl: './map-viewer.component.html',
@@ -163,12 +165,13 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		private settingSvc: SettingsService,
 		private tracksService: TracksService,
 		private trackStatusService: TrackStatusService,
-        private trackMonitorSettingService: TrackMonitorSettingService,
-        private transferSvc: TransfersService,
+		private trackMonitorSettingService: TrackMonitorSettingService,
+		private transferSvc: TransfersService,
 		private messageSvc: MessagesService,
 		private dialogSvc: DialogService,
 		private $t: TranslateService,
 		private systemStatusService: SystemStatusService,
+		private vehicleStatusDialogService: VehicleStatusDialogService,
 	) {
 		this.auth.certUpdated$.pipe(takeUntil(this.destroy$)).subscribe((cert) => {
 			this.router.navigateByUrl('/', { skipLocationChange: false }).then(() => {
@@ -414,6 +417,16 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 			})
 	}
 
+	onVehicleStatusDialogOpen() {
+		if (this.contextMenuObject == null) return
+
+		this.vehicleStatusDialogService.setSelectedVehicle(
+			this.contextMenuObject.value,
+		)
+		this.vehicleStatusDialogService.openVehicleStatusDialog()
+		this.showContextMenu = false
+	}
+
 	onVehicleCommand(name: string) {
 		let commandMessage: IVehicleCommandMessage
 		let needConfirm: boolean = false
@@ -520,75 +533,93 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 			physicalId,
 		}
 	}
-  onRemoveCarrier(carrierId: string) {
-    this.transferSvc.checkCarrierChange("remove", this.contextMenuObject.value.logicalId, "buffer", carrierId, "none")
-      .subscribe((res) => {
-        console.log(res);
+	onRemoveCarrier(carrierId: string) {
+		this.transferSvc
+			.checkCarrierChange(
+				'remove',
+				this.contextMenuObject.value.logicalId,
+				'buffer',
+				carrierId,
+				'none',
+			)
+			.subscribe((res) => {
+				console.log(res)
 
-        if (res.hcack === 0 || res.hcack === 4) {
-          this.messageSvc.sendCarrierCommand({
-            action: 'remove_carrier',
-            carrierLabel: carrierId,
-            logicalId: this.contextMenuObject.value.logicalId
-          }).subscribe()
+				if (res.hcack === 0 || res.hcack === 4) {
+					this.messageSvc
+						.sendCarrierCommand({
+							action: 'remove_carrier',
+							carrierLabel: carrierId,
+							logicalId: this.contextMenuObject.value.logicalId,
+						})
+						.subscribe()
 
-          this.dialogSvc.success({
-            title: this.$t.instant('names.success'),
-            body: this.$t.instant('messages.confirmSuccessRemoveCarrier'),
-          })
-        }
-        else {
-          var errorMessage = "";
-          if (res.hcack === 2) errorMessage = 'messages.confirmNotAbleToExcute';
-          else if (res.hcack === 3) {
-            if (res.cpname === 'CARRIERID') errorMessage = 'messages.confirmParameterInvalidCarrierID';
-            else if (res.cpname === 'CARRIERLOC') errorMessage = 'messages.confirmParameterInvalidCarrierLoc';
-            else errorMessage = 'messages.confirmParameterInvalid';
-          }
-          else if (res.hcack === 5) errorMessage = 'messages.confirmReject';
-          else errorMessage = 'messages.confirmNotAbleToExcute';
+					this.dialogSvc.success({
+						title: this.$t.instant('names.success'),
+						body: this.$t.instant('messages.confirmSuccessRemoveCarrier'),
+					})
+				} else {
+					var errorMessage = ''
+					if (res.hcack === 2) errorMessage = 'messages.confirmNotAbleToExcute'
+					else if (res.hcack === 3) {
+						if (res.cpname === 'CARRIERID')
+							errorMessage = 'messages.confirmParameterInvalidCarrierID'
+						else if (res.cpname === 'CARRIERLOC')
+							errorMessage = 'messages.confirmParameterInvalidCarrierLoc'
+						else errorMessage = 'messages.confirmParameterInvalid'
+					} else if (res.hcack === 5) errorMessage = 'messages.confirmReject'
+					else errorMessage = 'messages.confirmNotAbleToExcute'
 
-          this.dialogSvc.alert({
-            title: this.$t.instant('names.failed'),
-            body: this.$t.instant(errorMessage),
-          })
-        }
-      })
+					this.dialogSvc.alert({
+						title: this.$t.instant('names.failed'),
+						body: this.$t.instant(errorMessage),
+					})
+				}
+			})
 	}
-  onInstallCarrier(carrierId: string) {
-    this.transferSvc.checkCarrierChange("install", this.contextMenuObject.value.logicalId, "buffer", carrierId, "none")
-      .subscribe((res) => {
-        console.log(res);
+	onInstallCarrier(carrierId: string) {
+		this.transferSvc
+			.checkCarrierChange(
+				'install',
+				this.contextMenuObject.value.logicalId,
+				'buffer',
+				carrierId,
+				'none',
+			)
+			.subscribe((res) => {
+				console.log(res)
 
-        if (res.hcack === 0 || res.hcack === 4) {
-          this.messageSvc.sendCarrierCommand({
-            action: 'install_carrier',
-            carrierLabel: carrierId,
-            logicalId: this.contextMenuObject.value.logicalId
-          }).subscribe()
+				if (res.hcack === 0 || res.hcack === 4) {
+					this.messageSvc
+						.sendCarrierCommand({
+							action: 'install_carrier',
+							carrierLabel: carrierId,
+							logicalId: this.contextMenuObject.value.logicalId,
+						})
+						.subscribe()
 
-          this.dialogSvc.success({
-            title: this.$t.instant('names.success'),
-            body: this.$t.instant('messages.confirmSuccessInstallCarrier'),
-          })
-        }
-        else {
-          var errorMessage = "";
-          if (res.hcack === 2) errorMessage = 'messages.confirmNotAbleToExcute';
-          else if (res.hcack === 3) {
-            if (res.cpname === 'CARRIERID') errorMessage = 'messages.confirmParameterInvalidCarrierID';
-            else if (res.cpname === 'CARRIERLOC') errorMessage = 'messages.confirmParameterInvalidCarrierLoc';
-            else errorMessage = 'messages.confirmParameterInvalid';
-          }
-          else if (res.hcack === 5) errorMessage = 'messages.confirmReject';
-          else errorMessage = 'messages.confirmNotAbleToExcute';
+					this.dialogSvc.success({
+						title: this.$t.instant('names.success'),
+						body: this.$t.instant('messages.confirmSuccessInstallCarrier'),
+					})
+				} else {
+					var errorMessage = ''
+					if (res.hcack === 2) errorMessage = 'messages.confirmNotAbleToExcute'
+					else if (res.hcack === 3) {
+						if (res.cpname === 'CARRIERID')
+							errorMessage = 'messages.confirmParameterInvalidCarrierID'
+						else if (res.cpname === 'CARRIERLOC')
+							errorMessage = 'messages.confirmParameterInvalidCarrierLoc'
+						else errorMessage = 'messages.confirmParameterInvalid'
+					} else if (res.hcack === 5) errorMessage = 'messages.confirmReject'
+					else errorMessage = 'messages.confirmNotAbleToExcute'
 
-          this.dialogSvc.alert({
-            title: this.$t.instant('names.failed'),
-            body: this.$t.instant(errorMessage),
-          })
-        }
-      })
+					this.dialogSvc.alert({
+						title: this.$t.instant('names.failed'),
+						body: this.$t.instant(errorMessage),
+					})
+				}
+			})
 	}
 
 	onChangeSegmentProperty(isDisable: boolean) {
@@ -828,6 +859,11 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		this.selectedObject = { objectType: payload.type, ...payload.value }
 		// @ts-ignore
 		this.focusOnTM({ type: payload.type, id: payload.value.id })
+
+		if (this.selectedObject.objectType.toLowerCase() === 'vehicle') {
+			// @ts-ignore
+			this.vehicleStatusDialogService.setSelectedVehicle(payload.value)
+		}
 	}
 	public async onContextMenuOn(event: CustomEvent) {
 		const payload = getCustomEventPayload(event)
