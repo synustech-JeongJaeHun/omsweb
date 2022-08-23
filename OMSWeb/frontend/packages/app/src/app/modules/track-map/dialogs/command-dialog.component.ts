@@ -8,6 +8,7 @@ import {
 	IVehicleCommandMessage,
 } from '../../../models/command.model'
 import {
+	ILookupUnit,
 	TransferCommandCategoryType,
 	TransferCommandState,
 } from '../../../models/map.interface'
@@ -57,7 +58,7 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 		private t$: TranslateService,
 		private trackStatusService: TrackStatusService,
 		private systemStatusService: SystemStatusService,
-        private transfersService: TransfersService,
+		private transfersService: TransfersService,
 	) {}
 
 	ngOnInit(): void {
@@ -74,9 +75,32 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 	onTabChanged() {
 		this.statesSvc.transferCommandState.category = this.tabs[this.currentTab]
 
+		if (
+			(this.commandState.category === 'from' ||
+				this.commandState.category === 'fromTo') &&
+			this.commandState.selectVehicle === false
+		)
+			this.commandState.vehicle = undefined
+
 		this.commandState.source = undefined
 		this.commandState.dest = undefined
 		this.commandState.carrier = ''
+	}
+
+	onChangeVehicle(vhl: ILookupUnit) {
+		this.commandState.vehicle = vhl
+	}
+	onChangeSource(source: ILookupUnit) {
+		this.commandState.source = source
+	}
+	onChangeDest(dest: ILookupUnit) {
+		this.commandState.dest = dest
+	}
+	onChangeCarrier(value?: string) {
+		this.commandState.carrier = value ?? ''
+	}
+	onChangeMtl(mtl: ILookupUnit) {
+		this.commandState.mtl = mtl
 	}
 
 	onApply() {
@@ -194,45 +218,51 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 			.confirm({ body: this.t$.instant('messages.confirmCommand') })
 			.subscribe((ok) => {
 				if (ok) {
-                    if (category === 'fromTo' || category === 'from' || category === 'to') {
+					if (
+						category === 'fromTo' ||
+						category === 'from' ||
+						category === 'to'
+					) {
+						this.transfersService
+							.checkTransfer(
+								category,
+								cmd?.vehicleId?.toString(),
+								cmd?.locationPickup,
+								cmd?.locationPickupType,
+								cmd?.locationDropoff,
+								cmd?.locationDropoffType,
+								cmd?.carrierLabel,
+							)
+							.subscribe((res) => {
+								console.log(res)
 
-                      this.transfersService.checkTransfer(
-                        category,
-                        cmd?.vehicleId?.toString(),
-                        cmd?.locationPickup,
-                        cmd?.locationPickupType,
-                        cmd?.locationDropoff,
-                        cmd?.locationDropoffType,
-                        cmd?.carrierLabel
-                      )
-                        .subscribe((res) => {
-                          console.log(res);
+								if (res.hcack === 0 || res.hcack === 4) {
+									this.messageSvc.sendOrderCommand(cmd).subscribe()
+								} else {
+									var errorMessage = ''
+									if (res.hcack === 2)
+										errorMessage = 'messages.confirmNotAbleToExcute'
+									else if (res.hcack === 3) {
+										if (res.cpname === 'SOURCEPORT')
+											errorMessage = 'messages.confirmParameterInvalidSource'
+										else if (res.cpname === 'DESTPORT')
+											errorMessage = 'messages.confirmParameterInvalidDest'
+										else if (res.cpname === 'CARRIERID')
+											errorMessage = 'messages.confirmParameterInvalidCarrierID'
+										else errorMessage = 'messages.confirmParameterInvalid'
+									} else if (res.hcack === 5)
+										errorMessage = 'messages.confirmReject'
+									else errorMessage = 'messages.confirmNotAbleToExcute'
 
-                          if (res.hcack === 0 || res.hcack === 4) {
-                            this.messageSvc.sendOrderCommand(cmd).subscribe()
-                          }
-                          else {
-                            var errorMessage = "";
-                            if (res.hcack === 2) errorMessage = 'messages.confirmNotAbleToExcute';
-                            else if (res.hcack === 3) {
-                              if (res.cpname === 'SOURCEPORT') errorMessage = 'messages.confirmParameterInvalidSource';
-                              else if (res.cpname === 'DESTPORT') errorMessage = 'messages.confirmParameterInvalidDest';
-                              else if (res.cpname === 'CARRIERID') errorMessage = 'messages.confirmParameterInvalidCarrierID';
-                              else errorMessage = 'messages.confirmParameterInvalid';
-                            }
-                            else if (res.hcack === 5) errorMessage = 'messages.confirmReject';
-                            else errorMessage = 'messages.confirmNotAbleToExcute';
-
-                            this.dialogSvc.alert({
-                              title: this.t$.instant('names.blocked'),
-                              body: this.t$.instant(errorMessage),
-                            })
-                          }
-                        })
-                    }
-                    else {
-                        this.messageSvc.sendOrderCommand(cmd).subscribe()
-                    }
+									this.dialogSvc.alert({
+										title: this.t$.instant('names.blocked'),
+										body: this.t$.instant(errorMessage),
+									})
+								}
+							})
+					} else {
+						this.messageSvc.sendOrderCommand(cmd).subscribe()
+					}
 				}
 			})
 	}
@@ -276,6 +306,13 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 			const isCarrierEmpty = carrier == null || carrier.trim().length === 0
 			if (isCarrierEmpty)
 				return this.t$.instant('messages.required', { field: 'Carrier' })
+
+			if (
+				(category === 'fromTo' || category === 'from') &&
+				this.commandState.selectVehicle &&
+				this.commandState.vehicle == null
+			)
+				return this.t$.instant('messages.required', { field: 'Vehicle' })
 		}
 		if (category === 'mtl' && !mtl) {
 			return this.t$.instant('messages.required', { field: 'MTL' })

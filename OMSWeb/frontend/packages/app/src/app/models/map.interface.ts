@@ -107,7 +107,7 @@ export type TransferCommandCategoryType =
 export class TransferCommandState {
 	active: boolean = false
 	category: TransferCommandCategoryType = 'fromTo'
-	selectVehicle: boolean = false
+	#selectVehicle: boolean = false
 	#vehicle?: ILookupUnit
 	point?: ILookupUnit
 	#source?: ILookupUnit
@@ -140,18 +140,63 @@ export class TransferCommandState {
 		return !this.active || !this.pointDisabled
 	}
 
+	get selectVehicle() {
+		return this.#selectVehicle
+	}
+
+	set selectVehicle(value: boolean) {
+		if (value === false) this.vehicle = undefined
+		this.#selectVehicle = value
+	}
+
 	// for loading carrier default value
 	get vehicle() {
 		return this.#vehicle
 	}
 
 	set vehicle(v: ILookupUnit) {
-    if(this.category === 'to' && v?.logicalId)
-		  getCarrierId(v.logicalId)
-			  .then((carrierId) => (this.carrier = carrierId))
-			  .catch(() => (this.carrier = ''))
+		if (v == null) {
+			this.#vehicle = v
+			return
+		}
 
-		this.#vehicle = v
+		switch (this.category) {
+			case 'fromTo':
+			case 'from':
+				{
+					if (v?.logicalId) {
+						getCarrierId(v.logicalId)
+							.then((carrierId) => {
+								if (!carrierId) {
+									this.#vehicle = v
+								}
+							})
+							.catch(() => {})
+					}
+				}
+				break
+			case 'to':
+				{
+					if (v?.logicalId) {
+						getCarrierId(v.logicalId)
+							.then((carrierId) => {
+								if (carrierId) {
+									this.carrier = carrierId
+									this.#vehicle = v
+								}
+							})
+							.catch(() => {})
+					}
+				}
+				break
+			case 'move':
+			case 'mtl':
+				this.#vehicle = v
+				break
+
+			default:
+				break
+		}
 	}
 
 	get source() {
@@ -159,14 +204,41 @@ export class TransferCommandState {
 	}
 
 	set source(s: ILookupUnit) {
-    if((this.category === 'fromTo' || this.category === 'from') 
-      && ((s?.objectType?.toLowerCase() ?? '') === 'buffer') 
-      && s?.logicalId)
-      getCarrierId(s.logicalId)
-        .then((carrierId) => (this.carrier = carrierId))
-        .catch(() => (this.carrier = ''))
+		if (s == null) {
+			this.#source = s
+			return
+		}
 
-		this.#source = s
+		if (s.objectType.toLowerCase() === 'buffer' && s?.logicalId)
+			switch (this.category) {
+				case 'fromTo':
+				case 'from':
+					getCarrierId(s.logicalId)
+						.then((carrierId) => {
+							if (carrierId) {
+								this.carrier = carrierId
+								this.#source = s
+							}
+						})
+						.catch(() => {})
+					break
+
+				default:
+					this.#source = s
+					break
+			}
+
+		if (s.objectType.toLowerCase() === 'station')
+			switch (this.category) {
+				case 'fromTo':
+				case 'from':
+					this.#source = s
+					break
+
+				default:
+					this.#source = s
+					break
+			}
 	}
 }
 
