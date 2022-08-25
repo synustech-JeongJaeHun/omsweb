@@ -48,10 +48,10 @@
       <dxo-filter-row [visible]="true"></dxo-filter-row>
 
       <!--
-      <dxi-column [width]="80" dataType="string" dataField="id" [caption]="'names.id' | translate"></dxi-column>
-      <dxi-column [width]="120" dataType="string" dataField="physicalId" [caption]="'names.physicalId' | translate">
-      </dxi-column>
-        -->
+  <dxi-column [width]="80" dataType="string" dataField="id" [caption]="'names.id' | translate"></dxi-column>
+  <dxi-column [width]="120" dataType="string" dataField="physicalId" [caption]="'names.physicalId' | translate">
+  </dxi-column>
+    -->
       <dxi-column [width]="120" dataType="string" dataField="physicalId" [caption]="'names.id' | translate"></dxi-column>
       <dxi-column [width]="120" dataType="string" dataField="logicalId" [caption]="'names.logicalId' | translate">
       </dxi-column>
@@ -59,10 +59,12 @@
                   [caption]="'names.distanceTotal' | translate"></dxi-column>
       <dxi-column [allowFiltering]="true" [width]="120" dataType="number" dataField="runtimeTotal"
                   [caption]="'names.runtimeTotal' | translate"></dxi-column>
+      <!--
       <dxi-column [allowFiltering]="true" [width]="120" dataType="string" dataField="type"
                   [caption]="'names.type' | translate"></dxi-column>
       <dxi-column [allowFiltering]="true" [width]="120" dataType="string" dataField="mapDb"
                   [caption]="'names.mapDb' | translate"></dxi-column>
+        -->
     </dx-data-grid>
   </div>
 </div>
