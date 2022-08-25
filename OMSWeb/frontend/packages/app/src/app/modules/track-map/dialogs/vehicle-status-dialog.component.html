@@ -21,7 +21,7 @@
                 <label class="name">{{ "names.id" | translate }}</label>
                 <div class="value">{{ currentVehicle.id }}</div>
                 <label class="name">{{ "names.mode" | translate }}</label>
-                <div class="value">{{ currentVehicle.mode }}</div>
+                <div class="value">{{ currentVehicle.mode == 'A' ? 'Auto' : 'Manual' }}</div>
               </div>
             </fieldset>
             <fieldset>
