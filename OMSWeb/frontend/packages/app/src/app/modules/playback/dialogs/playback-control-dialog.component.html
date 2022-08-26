@@ -53,24 +53,14 @@
 			</div>
 			<div class="control-slider">
 				<div class="slider-name">{{ 'names.events' | translate }}</div>
-				<dx-slider
-					[min]="0"
+				<mat-slider
+					color="primary"
+					min="0"
 					[max]="timeSliderMax"
+					step="1"
 					[value]="timeSliderValue"
-					(onValueChanged)="onTimeSliderChanged($event)"
-				>
-					<dxo-label
-						[visible]="true"
-						[format]="timeSliderLabelFormat"
-						position="top"
-					></dxo-label>
-					<dxo-tooltip
-						[enabled]="true"
-						[format]="timeSliderLabelFormat"
-						showMode="always"
-						position="bottom"
-					></dxo-tooltip>
-				</dx-slider>
+					(valueChange)="onTimeSliderChanged($event)"
+				></mat-slider>
 				<div class="slider-value"></div>
 			</div>
 			<div class="control-play">
@@ -108,35 +98,19 @@
 						<mat-icon>skip_next</mat-icon>
 					</button>
 				</div>
-				<div>
-					<mat-form-field appearance="fill" class="form-speed">
-						<mat-label>{{ 'names.speed' | translate }}</mat-label>
-						<mat-select [(ngModel)]="playService.playSpeed">
-							<mat-option
-								*ngFor="let playSpeed of playService.playSpeeds"
-								[value]="playSpeed"
-								>{{ playSpeed }}x</mat-option
-							>
-						</mat-select>
-					</mat-form-field>
-
-					<mat-form-field appearance="fill" class="form-step">
-						<mat-label>{{ 'names.events' | translate }}</mat-label>
-						<mat-select
-							class="form-select"
-							[value]="playService.currentEvent?.eventId"
-							(valueChange)="changeTimeByEvent($event)"
+				<mat-form-field appearance="fill" class="form-speed">
+					<mat-label>{{ 'names.speed' | translate }}</mat-label>
+					<mat-select
+						[value]="playService.playSpeed"
+						(valueChange)="playService.changePlaySpeed($event)"
+					>
+						<mat-option
+							*ngFor="let playSpeed of playService.playSpeeds"
+							[value]="playSpeed"
+							>{{ playSpeed }}x</mat-option
 						>
-							<mat-option
-								*ngFor="let event of playService.timelineEvents"
-								[value]="event.eventId"
-							>
-								#{{ event.eventId }} |
-								{{ event.eventTime | date: 'HH:mm:ss' }} | {{ event.tableName }}
-							</mat-option>
-						</mat-select>
-					</mat-form-field>
-				</div>
+					</mat-select>
+				</mat-form-field>
 			</div>
 		</div>
 		<div *ngIf="isLoading" class="dialog-loading">

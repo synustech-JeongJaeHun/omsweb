@@ -7,13 +7,9 @@ import * as DateFns from 'date-fns'
 	styleUrls: ['./playback-control-dialog.component.scss'],
 })
 export class PlaybackControlDialogComponent {
-	constructor(private playbackPlayService: PlaybackPlayService) {}
+	constructor(public playService: PlaybackPlayService) {}
 
 	public isLoading = false
-
-	get playService() {
-		return this.playbackPlayService
-	}
 
 	get timeRangeMax() {
 		return (
@@ -49,16 +45,25 @@ export class PlaybackControlDialogComponent {
 		}
 	}
 
-	get timeRangeLabel() {
-		return {
-			visible: true,
-			format: (value) => {
-				const date = this.getDateFromTimeRange(value)
-				return DateFns.format(date, 'HH:mm:ss')
-			},
-			position: 'top',
-		}
+	timeRangeLabel = {
+		visible: true,
+		format: (value) => {
+			const date = this.getDateFromTimeRange(value)
+			return DateFns.format(date, 'HH:mm:ss')
+		},
+		position: 'top',
 	}
+
+	// get timeRangeLabel() {
+	// 	return {
+	// 		visible: true,
+	// 		format: (value) => {
+	// 			const date = this.getDateFromTimeRange(value)
+	// 			return DateFns.format(date, 'HH:mm:ss')
+	// 		},
+	// 		position: 'top',
+	// 	}
+	// }
 
 	timeRangeTooltip = {
 		enabled: true,
@@ -165,15 +170,9 @@ export class PlaybackControlDialogComponent {
 		)
 	}
 
-	onTimeSliderChanged(event: { event: unknown; value: number }) {
-		if (
-			event.event === undefined ||
-			this.isAvailableSnapshotSliderChange === false
-		)
-			return
-
+	onTimeSliderChanged(value: number) {
 		const date = DateFns.add(this.playService.currentSnapshot.timestamp, {
-			seconds: event.value,
+			seconds: value,
 		})
 		this.playService.setClockByDate(date)
 	}
