@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Layer from 'MapObjects/map/components/Layer.ce.vue';
-import Vehicle from './Vehicle.ce.vue';
+import ChjsVehicle from './ChjsVehicle.ce.vue';
 import { vehicles } from '../vehicles'
 </script>
 
@@ -21,6 +21,6 @@ import { vehicles } from '../vehicles'
         </filter>
       </defs>
     </defs>
-    <Vehicle v-for="vehicle of vehicles" :key="vehicle.id" :vehicle="vehicle" />
+    <ChjsVehicle v-for="vehicle of vehicles" :key="vehicle.id" :vehicle="vehicle" />
   </Layer>
 </template>

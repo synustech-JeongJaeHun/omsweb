@@ -1,11 +1,19 @@
-import { CanBeFocused } from "src/MapObjects/focus/types/CanBeFocused"
-import { CanBeTracked } from "src/MapObjects/track/types/CanBeTracked"
-import { IsHovered } from "./IsHovered"
+import { CanBeFocused } from 'src/MapObjects/focus/types/CanBeFocused'
+import { CanBeTracked } from 'src/MapObjects/track/types/CanBeTracked'
+import { IsHovered } from './IsHovered'
 
 type UpdateType =
-  | "NoAnimation"
-  | "AnimationIn1Segment"
-  | "AnimationIn2Segments"
+  | 'NoAnimation'
+  | 'AnimationIn1Segment'
+  | 'AnimationIn2Segments'
+
+type ComplicatedMode =
+  | 'DISCONNECT'
+  | 'ERROR'
+  | 'MAINTENANCE'
+  | 'MANUAL'
+  | 'IDLE'
+  | 'RUNNING'
 
 type Vehicle = {
   id: number
@@ -14,31 +22,29 @@ type Vehicle = {
 
   canBePushed: boolean // data for prevent push
   cargoState:
-  | "L" // Loading
-  | "F" // Full
-  | "U" // Unload
-  | "E" // Empty
+    | 'L' // Loading
+    | 'F' // Full
+    | 'U' // Unload
+    | 'E' // Empty
   curPoint: number
   nextPoint: number
   errorList: string
   isBlocked: boolean
   isSensorStopped: boolean
-  isMaint: boolean;
-  isConnected: boolean;
+  isMaint: boolean
+  isConnected: boolean
   lastContact: string
   mapDb: string
   mode?:
-  | "A" // Auto
-  | "M" // Manual
-  movingState:
-  | "M"
-  | "S"
+    | 'A' // Auto
+    | 'M' // Manual
+  movingState: 'M' | 'S'
   distancePoint: number
   hostOrder: boolean
   orderOrigin: string | string[] // data for prevent call
 
   // update
-  lastUpdated?: number, // always assigned with Date.now()
+  lastUpdated?: number // always assigned with Date.now()
   updateType?: UpdateType
 
   // nullable
@@ -51,10 +57,12 @@ type Vehicle = {
   orderLogicalId?: string
   priority?: any
   type?: // normal: nullish
-  | "CLEANING" // Vehicle type: Cleaning
-  | string
+  | 'CLEANING' // Vehicle type: Cleaning
+    | string
   group?: number
   historyChangeTime?: any
-} & CanBeFocused & CanBeTracked & IsHovered
+} & CanBeFocused &
+  CanBeTracked &
+  IsHovered
 
-export { Vehicle, UpdateType }
+export { Vehicle, UpdateType, ComplicatedMode }

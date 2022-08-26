@@ -23,7 +23,7 @@
 										cx="0"
 										cy="0"
 										fill="transparent"
-										[style]="{ stroke: setting.autoModeVehicleColor }"
+										[style]="{ stroke: setting.runningModeVehicleColor }"
 										stroke-width="3"
 									></circle>
 									<text
@@ -51,28 +51,6 @@
 							{{ 'names.normal' | translate }}
 						</div>
 					</div>
-					<div class="legend-item">
-						<div class="legend-icon">
-							<svg>
-								<g class="vehicle" transform="translate(50,30)">
-									<rect
-										class="vehicle_circle_clean"
-										width="16"
-										height="16"
-										x="-8"
-										y="-8"
-										fill="rgb(205,205,205)"
-										[style]="{ stroke: setting.autoModeVehicleColor }"
-										stroke-width="4"
-										transform="rotate(45)"
-									></rect>
-								</g>
-							</svg>
-						</div>
-						<div class="legend-caption">
-							{{ 'names.cleaning' | translate }}
-						</div>
-					</div>
 				</dd>
 
 				<dt>{{ 'names.vehicleMode' | translate }}</dt>
@@ -96,14 +74,14 @@
 										cx="0"
 										cy="0"
 										fill="transparent"
-										[style]="{ stroke: setting.autoModeVehicleColor }"
+										[style]="{ stroke: setting.runningModeVehicleColor }"
 										stroke-width="3"
 									></circle>
 								</g>
 							</svg>
 						</div>
 						<div class="legend-caption">
-							{{ 'names.auto' | translate }}
+							{{ 'names.running' | translate }}
 						</div>
 					</div>
 					<div class="legend-item">
@@ -116,7 +94,36 @@
 										cx="0"
 										cy="0"
 										fill="transparent"
-										stroke="rgb(20, 120, 55)"
+										stroke="rgb(65, 65, 65)"
+										stroke-width="5"
+									></circle>
+									<circle
+										class="vehicle_circle"
+										r="8"
+										cx="0"
+										cy="0"
+										fill="transparent"
+										[style]="{ stroke: setting.idleModeVehicleColor }"
+										stroke-width="3"
+									></circle>
+								</g>
+							</svg>
+						</div>
+						<div class="legend-caption">
+							{{ 'names.idle' | translate }}
+						</div>
+					</div>
+					<div class="legend-item">
+						<div class="legend-icon">
+							<svg>
+								<g class="vehicle" transform="translate(50,30)">
+									<circle
+										class="outline"
+										r="8"
+										cx="0"
+										cy="0"
+										fill="transparent"
+										stroke="rgb(65, 65, 65)"
 										stroke-width="5"
 									></circle>
 									<circle
@@ -135,6 +142,7 @@
 							{{ 'names.manual' | translate }}
 						</div>
 					</div>
+					<!-- Maintenance -->
 					<div class="legend-item">
 						<div class="legend-icon">
 							<svg>
@@ -145,7 +153,7 @@
 										cx="0"
 										cy="0"
 										fill="transparent"
-										stroke="rgb(0,0,0)"
+										stroke="rgb(65, 65, 65)"
 										stroke-width="5"
 									></circle>
 									<circle
@@ -154,14 +162,76 @@
 										cx="0"
 										cy="0"
 										fill="transparent"
-										[style]="{ stroke: setting.noneModeVehicleColor }"
+										[style]="{ stroke: setting.maintenanceModeVehicleColor }"
+										stroke-width="3"
+									></circle>
+									<path
+										style="fill: var(--highlight-select-color)"
+										d="M 21.910031,9.9058058 18.623202,4.6532395 C 19.293898,3.6712949 19.350918,2.3504581 18.66466,1.2537685 17.942279,0.09935804 16.57789,-0.41234238 15.333009,-0.15544309 L 16.886124,2.3265374 15.15451,3.4101062 13.554472,0.91732788 C 12.732217,1.9137925 12.642794,3.3753866 13.365173,4.5297964 c 0.686257,1.0966925 1.899089,1.622908 3.075449,1.449048 l 3.286829,5.2525656 c 0.144476,0.230878 0.425994,0.295685 0.656874,0.151212 L 21.7119,10.551886 c 0.277801,-0.133677 0.353407,-0.462113 0.198124,-0.6460751 z"
+									/>
+								</g>
+							</svg>
+						</div>
+						<div class="legend-caption">
+							{{ 'names.maintenance' | translate }}
+						</div>
+					</div>
+					<div class="legend-item">
+						<div class="legend-icon">
+							<svg>
+								<g class="vehicle" transform="translate(50,30)">
+									<circle
+										class="outline"
+										r="8"
+										cx="0"
+										cy="0"
+										fill="transparent"
+										stroke="rgb(65, 65, 65)"
+										stroke-width="5"
+									></circle>
+									<circle
+										class="vehicle_circle"
+										r="8"
+										cx="0"
+										cy="0"
+										fill="transparent"
+										[style]="{ stroke: setting.errorModeVehicleColor }"
 										stroke-width="3"
 									></circle>
 								</g>
 							</svg>
 						</div>
 						<div class="legend-caption">
-							{{ 'names.none' | translate }}
+							{{ 'names.error' | translate }}
+						</div>
+					</div>
+					<div class="legend-item">
+						<div class="legend-icon">
+							<svg>
+								<g class="vehicle" transform="translate(50,30)">
+									<circle
+										class="outline"
+										r="8"
+										cx="0"
+										cy="0"
+										fill="transparent"
+										stroke="rgb(65, 65, 65)"
+										stroke-width="5"
+									></circle>
+									<circle
+										class="vehicle_circle"
+										r="8"
+										cx="0"
+										cy="0"
+										fill="transparent"
+										[style]="{ stroke: setting.disconnectModeVehicleColor }"
+										stroke-width="3"
+									></circle>
+								</g>
+							</svg>
+						</div>
+						<div class="legend-caption">
+							{{ 'names.disconnected' | translate }}
 						</div>
 					</div>
 				</dd>
@@ -187,7 +257,7 @@
 										cx="0"
 										cy="0"
 										fill="transparent"
-										[style]="{ stroke: setting.autoModeVehicleColor }"
+										[style]="{ stroke: setting.runningModeVehicleColor }"
 										stroke-width="3"
 									></circle>
 									<circle
@@ -225,7 +295,7 @@
 										cx="0"
 										cy="0"
 										fill="transparent"
-										[style]="{ stroke: setting.autoModeVehicleColor }"
+										[style]="{ stroke: setting.runningModeVehicleColor }"
 										stroke-width="3"
 									></circle>
 									<circle
@@ -261,100 +331,42 @@
 										cx="0"
 										cy="0"
 										fill="transparent"
-										[style]="{ stroke: setting.autoModeVehicleColor }"
+										[style]="{ stroke: setting.runningModeVehicleColor }"
 										stroke-width="3"
 									></circle>
-									<path
-										d="M-12 10 l6 -10 l6 10 l-12 0 z"
-										fill="yellow"
-										stroke="orange"
-										stroke-width="1px"
-									></path>
-								</g>
-							</svg>
-						</div>
-						<div class="legend-caption">
-							{{ 'names.error' | translate }}
-						</div>
-					</div>
-					<div class="legend-item">
-						<div class="legend-icon">
-							<svg>
-								<g class="vehicle" transform="translate(50,30)">
-									<circle
-										class="outline"
-										r="8"
-										cx="0"
-										cy="0"
-										fill="transparent"
-										stroke="rgb(65, 65, 65)"
-										stroke-width="5"
-									></circle>
-									<circle
-										class="vehicle_circle"
-										r="8"
-										cx="0"
-										cy="0"
-										fill="transparent"
-										[style]="{ stroke: setting.autoModeVehicleColor }"
-										stroke-width="3"
-									></circle>
-									<g
-										class="stale-badge"
-										transform="rotate(0)translate(14,-7)scale(0.875)"
+									<svg
+										width="12"
+										height="12"
+										x="12"
+										y="1.3"
+										viewBox="0 0 100 100"
+										style="overflow: visible"
 									>
-										<circle cx="0" cy="0" r="5.5" fill="white"></circle>
-										<path
-											d="M500,10C229.8,10,10,229.8,10,500c0,270.2,219.8,490,490,490c270.2,0,490-219.8,490-490C990,229.8,770.2,10,500,10L500,10z M500,906.3C276,906.3,93.7,724,93.7,500C93.7,276,276,93.7,500,93.7C724,93.7,906.3,276,906.3,500C906.3,724,724,906.3,500,906.3L500,906.3z M325.3,500c-19.4,0-35.1,15.6-35.1,35s15.7,35,35.1,35h210c19.4,0,35-15.6,35-35V255.1c0-19.4-15.6-35.1-35-35.1c-19.4,0-35,15.7-35,35.1V500L325.3,500L325.3,500z"
-											fill="black"
-											transform="translate(-6.5,-6.5)scale(0.013)"
-										></path>
-									</g>
-								</g>
-							</svg>
-						</div>
-						<div class="legend-caption">
-							{{ 'names.stale' | translate }}
-						</div>
-					</div>
-					<div class="legend-item">
-						<div class="legend-icon">
-							<svg>
-								<g class="vehicle" transform="translate(50,30)">
-									<circle
-										class="outline"
-										r="8"
-										cx="0"
-										cy="0"
-										fill="transparent"
-										stroke="rgb(65, 65, 65)"
-										stroke-width="5"
-									></circle>
-									<circle
-										class="vehicle_circle"
-										r="8"
-										cx="0"
-										cy="0"
-										fill="transparent"
-										[style]="{ stroke: setting.autoModeVehicleColor }"
-										stroke-width="3"
-									></circle>
-									<g
-										class="prevent-call-badge"
-										transform="rotate(0)translate(14,7)scale(0.875)"
-									>
-										<circle cx="0" cy="0" r="5.5" fill="white"></circle>
-										<path
-											d="M500,10C229.8,10,10,229.8,10,500c0,270.2,219.8,490,490,490c270.2,0,490-219.8,490-490C990,229.8,770.2,10,500,10L500,10z M500,906.3C276,906.3,93.7,724,93.7,500C93.7,276,276,93.7,500,93.7C724,93.7,906.3,276,906.3,500C906.3,724,724,906.3,500,906.3L500,906.3z"
-											fill="#ff375f"
-											transform="translate(-6.5,-6.5)scale(0.013)"
-										></path>
-										<path
-											d="M144,494,c-44,-46,-45,-90,-5,-159,38,-66,163,-184,228,-214,62,-29,89,-24,141,24,l37,34,-34,35,c-40,41,-60,45,-86,16,-10,-11,-23,-20,-29,-20,-15,0,-126,100,-159,143,l-27,36,25,29,c14,17,25,34,25,40,0,10,-66,72,-77,72,-3,0,-21,-16,-39,-36z"
-											fill="black"
-											transform="translate(-4,-4)scale(0.013)"
-										></path>
-									</g>
+										<circle
+											r="45"
+											cx="50"
+											cy="50"
+											fill="white"
+											stroke="red"
+											stroke-width="20"
+										/>
+										<line
+											x1="25"
+											y1="30"
+											x2="75"
+											y2="30"
+											stroke="black"
+											stroke-width="2"
+										/>
+										<line
+											x1="50"
+											y1="30"
+											x2="50"
+											y2="85"
+											stroke="black"
+											stroke-width="2"
+										/>
+									</svg>
 								</g>
 							</svg>
 						</div>
@@ -381,117 +393,44 @@
 										cx="0"
 										cy="0"
 										fill="transparent"
-										[style]="{ stroke: setting.autoModeVehicleColor }"
+										[style]="{ stroke: setting.runningModeVehicleColor }"
 										stroke-width="3"
 									></circle>
-									<g
-										class="prevent-push-badge"
-										transform="rotate(0)translate(14,7)scale(0.875)"
+									<svg
+										width="12"
+										height="12"
+										x="12"
+										y="1.3"
+										viewBox="0 0 100 100"
 									>
-										<circle cx="0" cy="0" r="5.5" fill="white"></circle>
+										<circle
+											r="45"
+											cx="50"
+											cy="50"
+											fill="white"
+											stroke="red"
+											stroke-width="20"
+										/>
+										<line
+											x1="43"
+											y1="30"
+											x2="43"
+											y2="85"
+											stroke="black"
+											stroke-width="1.5"
+										/>
 										<path
-											d="M500,10C229.8,10,10,229.8,10,500c0,270.2,219.8,490,490,490c270.2,0,490-219.8,490-490C990,229.8,770.2,10,500,10L500,10z M500,906.3C276,906.3,93.7,724,93.7,500C93.7,276,276,93.7,500,93.7C724,93.7,906.3,276,906.3,500C906.3,724,724,906.3,500,906.3L500,906.3z"
-											fill="#ff375f"
-											transform="translate(-6.5,-6.5)scale(0.013)"
-										></path>
-										<path
-											d="M312,398,c-23,-23,-12,-54,33,-98,l46,-45,-182,-5,c-159,-4,-183,-7,-193,-22,-8,-13,-8,-23,0,-35,10,-16,34,-19,193,-23,l182,-5,-46,-45,c-45,-44,-56,-75,-33,-98,25,-25,53,-10,139,75,68,66,89,93,89,113,0,20,-21,47,-89,113,-86,85,-114,100,-139,75z"
-											fill="black"
-											transform="translate(-3.5,-3.5)scale(0.013)"
-										></path>
-									</g>
+											d="M 43 25 A 26 13 0 1 1 43 55 Z"
+											stroke="black"
+											stroke-width="15"
+											fill="none"
+										/>
+									</svg>
 								</g>
 							</svg>
 						</div>
 						<div class="legend-caption">
 							{{ 'names.preventPush' | translate }}
-						</div>
-					</div>
-
-					<!-- Disconnected -->
-					<div class="legend-item">
-						<div class="legend-icon">
-							<svg style="overflow: visible">
-								<g class="vehicle" transform="translate(50,30)">
-									<circle
-										class="outline"
-										r="8"
-										cx="0"
-										cy="0"
-										fill="transparent"
-										stroke="rgb(65, 65, 65)"
-										stroke-width="5"
-									></circle>
-									<circle
-										class="vehicle_circle"
-										r="8"
-										cx="0"
-										cy="0"
-										fill="transparent"
-										[style]="{ stroke: setting.autoModeVehicleColor }"
-										stroke-width="3"
-									></circle>
-									<g transform="scale(1 -1) translate(12 -10)">
-										<svg viewBox="60 -90 35 35" width="10" height="10">
-											<path
-												stroke="red"
-												stroke-width="5.5"
-												fill="none"
-												d="
-                        M 80 -70
-                        L 90 -60
-                        L 90 -85
-                        M 90 -90
-                        L 60 -90
-                        L 75 -75
-                        M 60 -60
-                        L 95 -95
-                        "
-											/>
-										</svg>
-									</g>
-									<!-- <path fill='red' stroke-width="50"
-                    d="m 18.483923,1.1062116 -3.582286,3.5822843 0.603991,0.6039908 2.145206,-2.174364 V 7.4335265 L 18.483923,8.266616 M 11.723401,2.5641182 11.194389,3.0931296 13.843615,5.7423544 10.153028,9.437106 h 7.385338 l 0.83309,0.83309 0.529012,-0.529011 M 14.455935,6.3546749 16.705276,8.604017 h -4.469524" /> -->
-								</g>
-							</svg>
-						</div>
-						<div class="legend-caption">
-							{{ 'names.disconnected' | translate }}
-						</div>
-					</div>
-
-					<!-- Maintenance -->
-					<div class="legend-item">
-						<div class="legend-icon">
-							<svg>
-								<g class="vehicle" transform="translate(50,30)">
-									<circle
-										class="outline"
-										r="8"
-										cx="0"
-										cy="0"
-										fill="transparent"
-										stroke="rgb(65, 65, 65)"
-										stroke-width="5"
-									></circle>
-									<circle
-										class="vehicle_circle"
-										r="8"
-										cx="0"
-										cy="0"
-										fill="transparent"
-										[style]="{ stroke: setting.autoModeVehicleColor }"
-										stroke-width="3"
-									></circle>
-									<path
-										style="fill: var(--highlight-select-color)"
-										d="M 21.910031,9.9058058 18.623202,4.6532395 C 19.293898,3.6712949 19.350918,2.3504581 18.66466,1.2537685 17.942279,0.09935804 16.57789,-0.41234238 15.333009,-0.15544309 L 16.886124,2.3265374 15.15451,3.4101062 13.554472,0.91732788 C 12.732217,1.9137925 12.642794,3.3753866 13.365173,4.5297964 c 0.686257,1.0966925 1.899089,1.622908 3.075449,1.449048 l 3.286829,5.2525656 c 0.144476,0.230878 0.425994,0.295685 0.656874,0.151212 L 21.7119,10.551886 c 0.277801,-0.133677 0.353407,-0.462113 0.198124,-0.6460751 z"
-									/>
-								</g>
-							</svg>
-						</div>
-						<div class="legend-caption">
-							{{ 'names.maintenance' | translate }}
 						</div>
 					</div>
 				</dd>
@@ -517,7 +456,7 @@
 										cx="0"
 										cy="0"
 										fill="transparent"
-										[style]="{ stroke: setting.autoModeVehicleColor }"
+										[style]="{ stroke: setting.runningModeVehicleColor }"
 										stroke-width="3"
 									></circle>
 									<circle
@@ -550,7 +489,7 @@
 										cx="0"
 										cy="0"
 										fill="transparent"
-										[style]="{ stroke: setting.autoModeVehicleColor }"
+										[style]="{ stroke: setting.runningModeVehicleColor }"
 										stroke-width="3"
 									></circle>
 									<circle
@@ -583,7 +522,7 @@
 										cx="0"
 										cy="0"
 										fill="transparent"
-										[style]="{ stroke: setting.autoModeVehicleColor }"
+										[style]="{ stroke: setting.runningModeVehicleColor }"
 										stroke-width="3"
 									></circle>
 									<circle
@@ -616,7 +555,7 @@
 										cx="0"
 										cy="0"
 										fill="transparent"
-										[style]="{ stroke: setting.autoModeVehicleColor }"
+										[style]="{ stroke: setting.runningModeVehicleColor }"
 										stroke-width="3"
 									></circle>
 								</g>
@@ -645,19 +584,18 @@
 										cx="0"
 										cy="0"
 										fill="transparent"
-										[style]="{ stroke: setting.autoModeVehicleColor }"
+										[style]="{ stroke: setting.runningModeVehicleColor }"
 										stroke-width="3"
 									></circle>
-									<text
-										class="xfer-status"
-										font-size="8px"
-										font-weight="bold"
-										x="3"
-										y="3"
-										text-anchor="end"
-									>
-										X
-									</text>
+									<path
+										stroke="red"
+										stroke-width="3"
+										d="
+                M -6 -6
+                L 6 6
+                M -6 6
+                L 6 -6"
+									/>
 								</g>
 							</svg>
 						</div>
@@ -684,23 +622,22 @@
 										cx="0"
 										cy="0"
 										fill="transparent"
-										[style]="{ stroke: setting.autoModeVehicleColor }"
+										[style]="{ stroke: setting.runningModeVehicleColor }"
 										stroke-width="3"
 									></circle>
 									<circle
 										class="foup loaded"
 										[style]="{ fill: setting.cargoFullColor }"
 									></circle>
-									<text
-										class="xfer-status"
-										font-size="8px"
-										font-weight="bold"
-										x="3"
-										y="3"
-										text-anchor="end"
-									>
-										X
-									</text>
+									<path
+										stroke="red"
+										stroke-width="3"
+										d="
+                  M -6 -6
+                  L 6 6
+                  M -6 6
+                  L 6 -6"
+									/>
 								</g>
 							</svg>
 						</div>
@@ -731,7 +668,7 @@
 										cx="0"
 										cy="0"
 										fill="transparent"
-										[style]="{ stroke: setting.autoModeVehicleColor }"
+										[style]="{ stroke: setting.runningModeVehicleColor }"
 										stroke-width="3"
 									></circle>
 									<text
@@ -778,7 +715,7 @@
 										cx="0"
 										cy="0"
 										fill="transparent"
-										[style]="{ stroke: setting.autoModeVehicleColor }"
+										[style]="{ stroke: setting.runningModeVehicleColor }"
 										stroke-width="3"
 									></circle>
 									<rect
@@ -819,7 +756,7 @@
 					</div>
 				</dd>
 
-				<dt>{{ 'names.directions' | translate }}</dt>
+				<dt>{{ 'names.target' | translate }}</dt>
 				<dd>
 					<div class="legend-item">
 						<div class="legend-icon">
@@ -827,7 +764,7 @@
 								<g class="vehicle" transform="translate(70,30)">
 									<line
 										class="next"
-										stroke="rgb(255, 220, 70)"
+										stroke="#91e079"
 										stroke-width="3"
 										x1="0"
 										y1="0"
@@ -849,7 +786,7 @@
 										cx="0"
 										cy="0"
 										fill="transparent"
-										[style]="{ stroke: setting.autoModeVehicleColor }"
+										[style]="{ stroke: setting.runningModeVehicleColor }"
 										stroke-width="3"
 									></circle>
 									<text
@@ -883,7 +820,7 @@
 								<g class="vehicle" transform="translate(70,30)">
 									<line
 										class="command"
-										stroke="rgba(40, 180, 115, 0.3)"
+										stroke="#87CEEB"
 										stroke-width="3"
 										x1="0"
 										y1="0"
@@ -905,7 +842,7 @@
 										cx="0"
 										cy="0"
 										fill="transparent"
-										[style]="{ stroke: setting.autoModeVehicleColor }"
+										[style]="{ stroke: setting.runningModeVehicleColor }"
 										stroke-width="3"
 									></circle>
 									<text
@@ -939,7 +876,7 @@
 								<g class="vehicle" transform="translate(70,30)">
 									<line
 										class="command"
-										stroke="rgba(65, 175, 250, 0.3)"
+										stroke="#FFCCFF"
 										stroke-width="3"
 										x1="0"
 										y1="0"
@@ -961,7 +898,7 @@
 										cx="0"
 										cy="0"
 										fill="transparent"
-										[style]="{ stroke: setting.autoModeVehicleColor }"
+										[style]="{ stroke: setting.runningModeVehicleColor }"
 										stroke-width="3"
 									></circle>
 									<text
@@ -989,6 +926,62 @@
 							{{ 'names.dropOff' | translate }}
 						</div>
 					</div>
+					<div class="legend-item">
+						<div class="legend-icon">
+							<svg>
+								<g class="vehicle" transform="translate(70,30)">
+									<line
+										class="command"
+										stroke="#FFFF00"
+										stroke-width="3"
+										x1="0"
+										y1="0"
+										x2="20"
+										y2="-20"
+									></line>
+									<circle
+										class="outline"
+										r="8"
+										cx="0"
+										cy="0"
+										fill="transparent"
+										stroke="rgb(65, 65, 65)"
+										stroke-width="5"
+									></circle>
+									<circle
+										class="vehicle_circle"
+										r="8"
+										cx="0"
+										cy="0"
+										fill="transparent"
+										[style]="{ stroke: setting.runningModeVehicleColor }"
+										stroke-width="3"
+									></circle>
+									<text
+										class="label"
+										font-size="11px"
+										x="-15"
+										y="-4"
+										text-anchor="end"
+									>
+										vehicle_id
+									</text>
+									<text
+										class="label_order"
+										font-size="11px"
+										x="-15"
+										y="12"
+										text-anchor="end"
+									>
+										order_id
+									</text>
+								</g>
+							</svg>
+						</div>
+						<div class="legend-caption">
+							{{ 'names.moving' | translate }}
+						</div>
+					</div>
 				</dd>
 
 				<dt>{{ 'names.segment' | translate }}</dt>
@@ -1000,7 +993,7 @@
 									<path
 										class="segment_path"
 										d="M10 30 L90 30"
-										stroke-width="2px"
+										stroke-width="5px"
 										stroke-dasharray="0,0"
 										[style]="{ stroke: setting.normalSegmentColor }"
 									></path>
@@ -1011,18 +1004,18 @@
 					</div>
 					<div class="legend-item">
 						<div class="legend-icon">
-							<svg>
+							<svg style="overflow: visible">
 								<g class="segment">
 									<path
 										class="segment_path"
 										d="M10 30 L90 30"
-										stroke-width="2px"
+										stroke-width="5px"
 										stroke-dasharray="0,0"
 										[style]="{ stroke: setting.normalSegmentColor }"
 									></path>
 									<path
 										class="dir_triangle"
-										d="M0 0 m -2 -4 l 0 8 l 10 -4 Z"
+										d="M0 0 m -4 -8 l 0 16 l 20 -8 Z"
 										transform="translate(50,30)"
 										[style]="{ fill: setting.segmentDirectionColor }"
 									></path>
@@ -1038,7 +1031,7 @@
 									<path
 										class="segment_path disabled"
 										d="M10 30 L90 30"
-										stroke-width="2px"
+										stroke-width="5px"
 										stroke-dasharray="0,0"
 										[style]="{ stroke: setting.disabledSegmentColor }"
 									></path>
