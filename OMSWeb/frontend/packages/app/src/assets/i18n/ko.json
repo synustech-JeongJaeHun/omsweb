@@ -179,6 +179,8 @@
     "reset": "리셋",
     "auto": "자동",
     "reverseAuto": "Reverse Auto",
+    "setHw": "Set HW",
+    "setSw": "Set SW",
     "zcuGo": "ZCU 이동",
     "option": "옵션",
     "ioList": "IO 목록",

@@ -2,6 +2,12 @@
   <button mat-stroked-button color="primary" class="dense accent" [disabled]="!canReset" (click)="onReset()">
     {{ "names.reset" | translate }}
   </button>
+  <button mat-stroked-button color="primary" class="dense accent" [disabled]="!canReset" (click)="onSetHw()">
+    {{ "names.setHw" | translate }}
+  </button>
+  <button mat-stroked-button color="primary" class="dense accent" [disabled]="!canReset" (click)="onSetSw()">
+    {{ "names.setSw" | translate }}
+  </button>
 </div>
 
 <dx-data-grid [dataSource]="dataSource" [remoteOperations]="true" [height]="tableHeight" [repaintChangesOnly]="true"
