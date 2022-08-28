@@ -81,22 +81,36 @@
           <mat-label>{{ "names.commandPoint" | translate }}</mat-label>
           <input matInput type="text" readonly [value]="data.commandPoint ? data.commandPoint : ''" />
         </mat-form-field>
-        <mat-form-field class="info-item readonly" floatLabel="always">
-          <mat-label>{{ "names.cargoState" | translate }}</mat-label>
-          <input matInput type="text" readonly [value]="data.cargoState" />
-        </mat-form-field>
+        <div [ngSwitch]="data.cargoState">
+          <mat-form-field class="info-item readonly" floatLabel="always">
+            <mat-label>{{ "names.cargoState" | translate }}</mat-label>
+            <input matInput type="text" readonly [value]="'Unloading'" *ngSwitchCase="'U'" />
+            <input matInput type="text" readonly [value]="'Loading'" *ngSwitchCase="'L'" />
+            <input matInput type="text" readonly [value]="'Empty'" *ngSwitchCase="'E'" />
+            <input matInput type="text" readonly [value]="'Full'" *ngSwitchCase="'F'" />
+            <input matInput type="text" readonly [value]="data.cargoState" *ngSwitchDefault />
+          </mat-form-field>
+        </div>
         <mat-form-field class="info-item readonly" floatLabel="always">
           <mat-label>{{ "names.orderId" | translate }}</mat-label>
           <input matInput type="text" readonly [value]="data.orderId || ''" />
         </mat-form-field>
-        <mat-form-field class="info-item readonly" floatLabel="always">
-          <mat-label>{{ "names.movingState" | translate }}</mat-label>
-          <input matInput type="text" readonly [value]="data.movingState" />
-        </mat-form-field>
-        <mat-form-field class="info-item readonly" floatLabel="always">
-          <mat-label>{{ "names.mode" | translate }}</mat-label>
-          <input matInput type="text" readonly [value]="data.mode" />
-        </mat-form-field>
+        <div [ngSwitch]="data.movingState">
+          <mat-form-field class="info-item readonly" floatLabel="always">
+            <mat-label>{{ "names.movingState" | translate }}</mat-label>
+            <input matInput type="text" readonly [value]="'Stop'" *ngSwitchCase="'S'" />
+            <input matInput type="text" readonly [value]="'Moving'" *ngSwitchCase="'M'" />
+            <input matInput type="text" readonly [value]="data.movingState" *ngSwitchDefault />
+          </mat-form-field>
+        </div>
+        <div [ngSwitch]="data.mode">
+          <mat-form-field class="info-item readonly" floatLabel="always">
+            <mat-label>{{ "names.mode" | translate }}</mat-label>
+            <input matInput type="text" readonly [value]="'Auto'" *ngSwitchCase="'A'" />
+            <input matInput type="text" readonly [value]="'Manual'" *ngSwitchCase="'M'" />
+            <input matInput type="text" readonly [value]="data.mode" *ngSwitchDefault />
+          </mat-form-field>
+         </div>
         <mat-form-field class="info-item readonly" floatLabel="always">
           <mat-label>{{ "names.errorList" | translate }}</mat-label>
           <input matInput type="text" readonly [value]="data.errorList" />
@@ -113,8 +127,8 @@
           <mat-label>{{ "names.mapDb" | translate }}</mat-label>
           <input matInput type="text" readonly [value]="data.mapDb" />
         </mat-form-field>
+        </div>
       </div>
-    </div>
   </mat-expansion-panel>
 </ng-template>
 
