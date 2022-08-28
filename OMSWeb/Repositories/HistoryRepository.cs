@@ -54,6 +54,12 @@ namespace OMSWeb.Repositories
     VR.logical_id As vehicle_id, 
     OD.carrier_label, OD.time_created, OD.time_assigned, OD.time_vehicle_arrived, OD.time_load_started, OD.time_load_completed, 
     OD.time_unload_started, OD.time_unload_completed, OD.time_completed, OD.time_aborted, OD.time_failed, 
+    CASE
+        WHEN OD.time_created IS NOT NULL AND OD.time_completed IS NOT NULL THEN extract('epoch' from OD.time_completed - OD.time_created) 
+        WHEN OD.time_created IS NOT NULL AND OD.time_aborted IS NOT NULL THEN extract('epoch' from OD.time_aborted - OD.time_created) 
+        WHEN OD.time_created IS NOT NULL AND OD.time_failed IS NOT NULL THEN extract('epoch' from OD.time_failed - OD.time_created) 
+        ELSE 0
+    END As age,
     OD.distance_pickup, OD.distance_deliver AS distance_dropoff, OD.distance_move, OD.assignment_type, OD.assignment_details,
     OD.load_retry_cnt, OD.unload_retry_cnt
     FROM order_history AS OD
