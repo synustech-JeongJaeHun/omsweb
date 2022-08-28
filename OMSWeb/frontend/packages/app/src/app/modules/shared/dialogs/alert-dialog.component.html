@@ -16,11 +16,11 @@
       -->
     <div class="alert-list">
       <dx-data-grid #grid [dataSource]="dataSource" [remoteOperations]="true" [height]="300" [width]="700"
-                    [hoverStateEnabled]="true" [(selectedRowKeys)]="selectedRows">
+                    [hoverStateEnabled]="true" [(selectedRowKeys)]="selectedRows" allowColumnResizing="true">
         <dxo-selection mode="single"></dxo-selection>
         <dxo-scrolling mode="standard"></dxo-scrolling>
         <dxo-header-filter [visible]="true"></dxo-header-filter>
-        <dxi-column [allowFiltering]="false" [width]="110" dataType="datetime" dataField="time"
+        <dxi-column [allowFiltering]="false" [width]="120" dataType="datetime" dataField="time"
                     [caption]="'names.time' | translate" cellTemplate="dateCell">
           <div *dxTemplate="let data of 'dateCell'">
             {{ data.value | date: "yyyy/MM/dd HH:mm:ss" }}
