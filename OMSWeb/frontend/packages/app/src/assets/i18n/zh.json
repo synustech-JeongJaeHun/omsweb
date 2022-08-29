@@ -270,6 +270,7 @@
     "vehicleList": "车辆列表",
     "bufferList": "缓冲区列表",
     "maxVehicles": "最大车辆",
+    "maxCount": "Max Count",
     "allSpeedRatio": "所有速度比",
     "length": "长度",
     "obsLow": "OBS 低",
@@ -449,6 +450,7 @@
     "csvSuccessMessage": "成功",
     "csvFailedMessage": "失败",
     "systemPreference": "系统设置",
+    "alternateTransfer": "Alternate Transfer",
     "themePreference": "主题设置",
     "vehicleModeTheme": "车辆模式主题",
     "vehicleCargoStatusTheme": "车辆货物状态主题",
@@ -565,6 +567,7 @@
     "duplicatedRoleName": "角色名称已被使用。",
     "invalidEmail": "无效的电子邮件地址。",
     "alarmNoteHint": "在这里输入操作员的额外信息...",
-    "confirmCommand": "你确定发送这个命令吗？"
+    "confirmCommand": "你确定发送这个命令吗？",
+    "alternateTransferToMode": "Alternate transfer to {{mode}} mode"
   }
 }
