@@ -271,6 +271,7 @@
     "vehicleList": "비클 목록",
     "bufferList": "버퍼 목록",
     "maxVehicles": "비클 최대",
+    "maxCount": "Max Count",
     "allSpeedRatio": "모든 속도 비율",
     "length": "길이",
     "obsLow": "OBS 낮음",
@@ -449,6 +450,7 @@
     "csvSuccessMessage": "성공",
     "csvFailedMessage": "실패",
     "systemPreference": "시스템 기본 설정",
+    "alternateTransfer": "Alternate Transfer",
     "themePreference": "테마 기본 설정",
     "vehicleModeTheme": "비클 모드 테마",
     "vehicleCargoStatusTheme": "비클 화물 상태 테마",
@@ -565,6 +567,7 @@
     "duplicatedRoleName": "역할 이름이 이미 사용 중입니다.",
     "invalidEmail": "잘못된 이메일 주소입니다.",
     "alarmNoteHint": "여기에 운영자의 추가 메시지를 입력하세요...",
-    "confirmCommand": "이 명령을 정말로 보내시겠습니까"
+    "confirmCommand": "이 명령을 정말로 보내시겠습니까",
+    "alternateTransferToMode": "Alternate transfer to {{mode}} mode"
   }
 }

@@ -1,0 +1,124 @@
+<div class="setting-header">
+	<h3 class="setting-title">{{ 'names.alternateTransfer' | translate }}</h3>
+	<div class="setting-actions">
+		<button mat-raised-button class="dense" color="primary" (click)="onSave()">
+			{{ 'names.save' | translate }}
+		</button>
+		<button mat-raised-button class="dense" (click)="onLoad()">
+			{{ 'names.revert' | translate }}
+		</button>
+	</div>
+</div>
+
+<div class="main-container">
+	<label>
+		<input type="radio" name="mode" value="stb" required [(ngModel)]="mode" />
+		{{ 'messages.alternateTransferToMode' | translate: { mode: 'STB' } }}
+	</label>
+
+	<div class="inner-container">
+		{{ 'names.maxCount' | translate }}:
+		<input
+			[disabled]="!isModeStb"
+			type="number"
+			name="stbCount"
+			min="1"
+			max="10"
+			step="1"
+			required
+			[(ngModel)]="stbCount"
+		/>
+		({{ 'names.range' | translate }}: 1 ~ 10)
+	</div>
+</div>
+
+<div class="main-container">
+	<label>
+		<input type="radio" name="mode" value="stk" required [(ngModel)]="mode" />
+		{{ 'messages.alternateTransferToMode' | translate: { mode: 'STK' } }}
+	</label>
+
+	<div class="inner-container two-grid">
+		<dx-data-grid
+			[disabled]="!isModeStk"
+			[dataSource]="candidateStks"
+			[showBorders]="true"
+			[keyExpr]="'id'"
+			[(selectedRowKeys)]="selectedCandidateStks"
+			height="350px"
+			width="10em"
+		>
+			<dxo-scrolling mode="virtual"></dxo-scrolling>
+			<dxo-selection
+				mode="multiple"
+				showCheckBoxesMode="always"
+			></dxo-selection>
+			<dxi-column dataField="logicalId" caption="Stoker"> </dxi-column>
+		</dx-data-grid>
+
+		<div class="actions">
+			<button
+				mat-icon-button
+				[disabled]="!isModeStk"
+				(click)="removeFromChosenStks()"
+			>
+				<mat-icon>arrow_left</mat-icon>
+			</button>
+			<button
+				mat-icon-button
+				[disabled]="!isModeStk"
+				(click)="addToChosenStks()"
+			>
+				<mat-icon>arrow_right</mat-icon>
+			</button>
+		</div>
+
+		<dx-data-grid
+			[disabled]="!isModeStk"
+			[dataSource]="chosenStks"
+			[showBorders]="true"
+			[keyExpr]="'id'"
+			[(selectedRowKeys)]="selectedChosenStks"
+			height="350px"
+			width="10em"
+		>
+			<dxo-scrolling mode="virtual"></dxo-scrolling>
+			<dxo-selection
+				mode="multiple"
+				showCheckBoxesMode="always"
+			></dxo-selection>
+			<dxi-column dataField="logicalId" caption="Stoker"> </dxi-column>
+		</dx-data-grid>
+
+		<div class="actions">
+			<button
+				mat-icon-button
+				[disabled]="!isModeStk || !isPriorityChangable"
+				(click)="setHighestPriority()"
+			>
+				<mat-icon>keyboard_double_arrow_up</mat-icon>
+			</button>
+			<button
+				mat-icon-button
+				[disabled]="!isModeStk || !isPriorityChangable"
+				(click)="setHighPriority()"
+			>
+				<mat-icon>expand_less</mat-icon>
+			</button>
+			<button
+				mat-icon-button
+				[disabled]="!isModeStk || !isPriorityChangable"
+				(click)="setLowPriority()"
+			>
+				<mat-icon>expand_more</mat-icon>
+			</button>
+			<button
+				mat-icon-button
+				[disabled]="!isModeStk || !isPriorityChangable"
+				(click)="setLowestPriority()"
+			>
+				<mat-icon>keyboard_double_arrow_down</mat-icon>
+			</button>
+		</div>
+	</div>
+</div>
