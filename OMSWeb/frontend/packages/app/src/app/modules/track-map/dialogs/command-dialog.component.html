@@ -78,6 +78,16 @@
 				</mat-form-field>
 			</div>
 			<div class="form-row">
+				<mat-form-field class="dense" appearance="outline">
+					<input
+						matInput
+						name="priority"
+						[placeholder]="'names.priority' | translate"
+						[(ngModel)]="commandState.priority"
+					/>
+				</mat-form-field>
+			</div>
+			<div class="form-row">
 				<mat-slide-toggle
 					[(ngModel)]="commandState.selectVehicle"
 					color="primary"
@@ -147,6 +157,16 @@
 				</mat-form-field>
 			</div>
 			<div class="form-row">
+				<mat-form-field class="dense" appearance="outline">
+					<input
+						matInput
+						name="priority"
+						[placeholder]="'names.priority' | translate"
+						[(ngModel)]="commandState.priority"
+					/>
+				</mat-form-field>
+			</div>
+			<div class="form-row">
 				<mat-slide-toggle
 					[(ngModel)]="commandState.selectVehicle"
 					color="primary"
@@ -212,6 +232,16 @@
 						[value]="commandState.carrier ? commandState.carrier : ''"
 						(input)="onChangeCarrier($event.target.value)"
 						[placeholder]="'names.carrier' | translate"
+					/>
+				</mat-form-field>
+			</div>
+			<div class="form-row">
+				<mat-form-field class="dense" appearance="outline">
+					<input
+						matInput
+						name="priority"
+						[placeholder]="'names.priority' | translate"
+						[(ngModel)]="commandState.priority"
 					/>
 				</mat-form-field>
 			</div>
