@@ -179,6 +179,8 @@
     "reset": "Reset",
     "auto": "Auto",
     "reverseAuto": "Reverse Auto",
+    "setHw": "Set HW",
+    "setSw": "Set SW",
     "zcuGo": "ZCU Go",
     "option": "Option",
     "ioList": "IO List",

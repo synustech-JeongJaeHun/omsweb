@@ -48,12 +48,12 @@
   <dxo-filter-row [visible]="true"></dxo-filter-row>
 
   <!--
-  <dxi-column [allowFiltering]="true" [width]="60" dataType="string" dataField="id" sortOrder="desc"
+  <dxi-column [allowFiltering]="true" [width]="60" dataType="string" dataField="id" sortOrder="asc"
               [caption]="'names.id' | translate" *ngIf="canDisplayTable('vehicles_id')"></dxi-column>
   <dxi-column [width]="80" dataType="string" dataField="physicalId"
               [caption]="'names.physicalId' | translate" *ngIf="canDisplayTable('vehicles_physicalId')"></dxi-column>
     -->
-  <dxi-column [allowFiltering]="true" [width]="60" dataType="string" dataField="physicalId" sortOrder="asc"
+  <dxi-column [allowFiltering]="true" [width]="60" dataType="string" dataField="id" sortOrder="asc"
               [caption]="'names.id' | translate" *ngIf="canDisplayTable('vehicles_id')"></dxi-column>
   <dxi-column [width]="90" dataType="string" dataField="logicalId"
               [caption]="'names.logicalId' | translate" *ngIf="canDisplayTable('vehicles_logicalId')"></dxi-column>
