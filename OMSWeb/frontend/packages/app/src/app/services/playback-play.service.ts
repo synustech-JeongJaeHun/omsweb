@@ -73,7 +73,7 @@ export class PlaybackPlayService {
 	public isPlaying = false
 
 	public playSpeed: PlaybackSpeed = 1
-	public readonly playSpeeds = [0.1, 0.5, 1, 2, 5, 10]
+	public readonly playSpeeds = [0.1, 0.5, 1, 2, 5]
 
 	constructor(private playbackService: PlaybackService) {
 		this.clockChanged.subscribe((event) => this.reduceCurrentState(event))
@@ -325,8 +325,6 @@ export class PlaybackPlayService {
 		this.isPlaying = true
 	}
 	private async proceedPlaying() {
-		console.timeEnd('PLAYBACK_TICK')
-		console.time('PLAYBACK_TICK')
 		const nextDate = DateFns.addMilliseconds(this.clock, this.DefaultTimeStep)
 
 		// exit(1/2) => when clock over window end

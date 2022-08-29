@@ -148,21 +148,20 @@ export class PlaybackControlDialogComponent {
 		}, 100)
 	}
 
-	get timeSliderLabelFormat() {
-		return (value: number) => {
-			const baseTime = this.playService.currentSnapshot.timestamp
-			const time = DateFns.add(baseTime, { seconds: value })
-			return DateFns.format(time, 'HH:mm:ss')
-		}
+	get timeSliderMinTime() {
+		return this.playService.currentSnapshot.timestamp
 	}
-
-	get timeSliderMax() {
-		const end =
+	get timeSliderMaxTime() {
+		return (
 			this.playService.nextSnapshot?.timestamp ?? this.playService.window.end
-		const start = this.playService.currentSnapshot.timestamp
-		return DateFns.differenceInSeconds(end, start)
+		)
 	}
-
+	get timeSliderMax() {
+		return DateFns.differenceInSeconds(
+			this.timeSliderMaxTime,
+			this.timeSliderMinTime,
+		)
+	}
 	get timeSliderValue() {
 		return DateFns.differenceInSeconds(
 			this.playService.clock,

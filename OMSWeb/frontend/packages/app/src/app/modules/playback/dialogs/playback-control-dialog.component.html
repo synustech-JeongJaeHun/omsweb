@@ -34,7 +34,7 @@
 				</dx-date-box>
 			</div>
 			<div class="control-slider">
-				<div class="slider-name">{{ 'names.time' | translate }}</div>
+				<div class="slider-name">{{ 'names.snapshots' | translate }}</div>
 
 				<dx-range-slider
 					[min]="0"
@@ -48,20 +48,39 @@
 					(onValueChanged)="onSnapshotRangeSliderChanged($event)"
 				>
 				</dx-range-slider>
-
-				<div class="slider-value"></div>
 			</div>
 			<div class="control-slider">
-				<div class="slider-name">{{ 'names.events' | translate }}</div>
-				<mat-slider
-					color="primary"
-					min="0"
-					[max]="timeSliderMax"
-					step="1"
-					[value]="timeSliderValue"
-					(valueChange)="onTimeSliderChanged($event)"
-				></mat-slider>
-				<div class="slider-value"></div>
+				<div class="slider-name">{{ 'names.time' | translate }}</div>
+				<div style="position: relative">
+					<time class="time" style="top: 0px; left: 0px">{{
+						timeSliderMinTime | date: 'HH:mm:ss'
+					}}</time>
+					<time class="time" style="top: 0px; right: 0px">{{
+						timeSliderMaxTime | date: 'HH:mm:ss'
+					}}</time>
+					<time
+						class="time"
+						style="
+							bottom: 0px;
+							left: 0;
+							right: 0;
+							width: 10em;
+							margin-left: auto;
+							margin-right: auto;
+						"
+					>
+						{{ playService.clock | date: 'HH:mm:ss' }}
+					</time>
+					<mat-slider
+						*ngIf="this.playService.currentSnapshot"
+						color="primary"
+						min="0"
+						[max]="timeSliderMax"
+						step="1"
+						[value]="timeSliderValue"
+						(valueChange)="onTimeSliderChanged($event)"
+					></mat-slider>
+				</div>
 			</div>
 			<div class="control-play">
 				<div>
