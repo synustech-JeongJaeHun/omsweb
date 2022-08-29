@@ -122,6 +122,7 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 			carrier,
 			mtl,
 			mtlInOut,
+			priority, // type priority = string | undefined
 		} = this.commandState
 
 		if (category === 'mtl') {
