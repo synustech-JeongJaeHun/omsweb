@@ -57,7 +57,7 @@
   margin-top: 5px;
   grid-column: span 2;
   display: grid;
-  grid-template-columns: 70px 1fr;
+  grid-template-columns: 80px 1fr;
   align-items: center;
 
   .slider-name {
@@ -68,6 +68,11 @@
     text-align: right;
     font-size: 11px;
   }
+
+  .time {
+    position: absolute;
+    font-size: x-small;
+  }
 }
 
 mat-select {
@@ -75,7 +80,7 @@ mat-select {
 }
 
 .control-play {
-  margin-top: 40px;
+  margin-top: 20px;
   $playIconSize: 40px;
   $playButtonSize: 50px;
 
@@ -98,6 +103,7 @@ mat-select {
 }
 
 mat-slider {
+  padding: 0px;
   width: 100%;
 }
 

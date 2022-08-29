@@ -73,7 +73,7 @@ export class PlaybackPlayService {
 	public isPlaying = false
 
 	public playSpeed: PlaybackSpeed = 1
-	public readonly playSpeeds = [0.1, 0.5, 1, 2, 5, 10]
+	public readonly playSpeeds = [0.1, 0.5, 1, 2, 5]
 
 	constructor(private playbackService: PlaybackService) {
 		this.clockChanged.subscribe((event) => this.reduceCurrentState(event))
@@ -308,7 +308,10 @@ export class PlaybackPlayService {
 	}
 
 	private intervalId = undefined
-	public readonly timeStep = 1000 // in milliseconds
+	public readonly DefaultTimeStep = 250 // in milliseconds
+	get timeStep() {
+		return this.DefaultTimeStep / this.playSpeed
+	}
 	private remainedFirstEventIndex = 0
 	get currentEvent() {
 		return this.remainedFirstEventIndex === 0
@@ -322,10 +325,7 @@ export class PlaybackPlayService {
 		this.isPlaying = true
 	}
 	private async proceedPlaying() {
-		const nextDate = DateFns.addMilliseconds(
-			this.clock,
-			this.timeStep * this.playSpeed,
-		)
+		const nextDate = DateFns.addMilliseconds(this.clock, this.DefaultTimeStep)
 
 		// exit(1/2) => when clock over window end
 		if (nextDate.getTime() >= this.window.end.getTime()) {
@@ -387,6 +387,12 @@ export class PlaybackPlayService {
 	public stop() {
 		if (this.intervalId) clearInterval(this.intervalId)
 		this.isPlaying = false
+	}
+
+	public changePlaySpeed(playSpeed: PlaybackSpeed) {
+		if (this.intervalId) clearInterval(this.intervalId)
+		this.playSpeed = playSpeed
+		if (this.isPlaying) this.resume()
 	}
 
 	// data discovering
