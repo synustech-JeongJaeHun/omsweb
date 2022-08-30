@@ -18,11 +18,19 @@
   </button>
     -->
   <button *ngIf="hasPermission(permissionEnums.HostOrderEnable)" mat-stroked-button color="primary" class="dense"
-          [disabled]="!canControl" (click)="onChangeHostOrderActivity()">
+          [disabled]="!canControl" (click)="onChangeHostOrderEnable(true)">
+    {{ "names.hostCommandEnable" | translate }}
+  </button>
+  <button *ngIf="hasPermission(permissionEnums.HostOrderEnable)" mat-stroked-button color="primary" class="dense"
+          [disabled]="!canControl" (click)="onChangeHostOrderEnable(false)">
     {{ "names.hostCommandDisable" | translate }}
   </button>
   <button *ngIf="hasPermission(permissionEnums.PushEnable)" mat-stroked-button color="primary" class="dense"
-          [disabled]="!canControl" (click)="onChangePushActivity()">
+          [disabled]="!canControl" (click)="onChangePushEnable(true)">
+    {{ "names.pushEnable" | translate }}
+  </button>
+  <button *ngIf="hasPermission(permissionEnums.PushEnable)" mat-stroked-button color="primary" class="dense"
+          [disabled]="!canControl" (click)="onChangePushEnable(false)">
     {{ "names.pushDisable" | translate }}
   </button>
   <button *ngIf="hasPermission(permissionEnums.RailIn)" mat-stroked-button color="primary" class="dense"
