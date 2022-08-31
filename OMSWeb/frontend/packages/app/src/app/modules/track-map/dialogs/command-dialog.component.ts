@@ -129,7 +129,7 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 			const mtlInfo = (this.trackStatusService.trackData?.mtls ?? []).find(
 				(m) => m.id === mtl.id,
 			)
-			if (mtlInfo.unuse) {
+            if (mtlInfo.unuse === null || mtlInfo.unuse) {
 				this.dialogSvc.alert({
 					title: this.t$.instant('messages.confirmCommand'),
 					body: this.t$.instant('errors.NotAvailiable', { name: 'MTL' }),
