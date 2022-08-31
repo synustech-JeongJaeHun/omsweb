@@ -129,50 +129,54 @@
                   [format]="dateTimeFormat"></dxi-column>
       <dxi-column [width]="120" dataType="datetime" dataField="timeFailed" [caption]="'names.timeFailed' | translate"
                   [format]="dateTimeFormat"></dxi-column>
-      <dxi-column [width]="120" dataType="number" dataField="age" [caption]="'names.age' | translate"
-                  cellTemplate="ageTemplate"></dxi-column>
-      <div *dxTemplate="let data of 'ageTemplate'">
-        {{ data.displayValue / 60 | number: "1.1-2" }}
-      </div>
       <!--
-      <dxi-column [width]="120" dataType="number" dataField="loadRetryCnt"
-        [caption]="'names.loadRetryCount' | translate">
-      </dxi-column>
-        -->
+  <dxi-column [width]="120" dataType="number" dataField="age" [caption]="'names.age' | translate"
+              cellTemplate="ageTemplate"></dxi-column>
+  <div *dxTemplate="let data of 'ageTemplate'">
+    {{ data.displayValue / 60 | number: "1.1-2" }}
+  </div>
+    -->
+      <dxi-column [width]="120" dataType="number" dataField="age" [caption]="'names.age' | translate"></dxi-column>
+
+      <!--
+  <dxi-column [width]="120" dataType="number" dataField="loadRetryCnt"
+    [caption]="'names.loadRetryCount' | translate">
+  </dxi-column>
+    -->
       <dxi-column [width]="120" dataType="number" dataField="unloadRetryCnt"
                   [caption]="'names.unloadRetryCount' | translate">
       </dxi-column>
       <!--
-      <dxi-column [width]="100" dataType="string" dataField="distancePickup"
-                  [caption]="'names.distancePickup' | translate" cellTemplate="distanceTemplate"></dxi-column>
-      <dxi-column [width]="100" dataType="string" dataField="distanceDropoff"
-                  [caption]="'names.distanceDropoff' | translate" cellTemplate="distanceTemplate"></dxi-column>
-      <dxi-column [width]="100" dataType="string" dataField="distanceMove" [caption]="'names.distanceMove' | translate"
-                  cellTemplate="distanceTemplate"></dxi-column>
-      <dxi-column [width]="100" dataType="string" dataField="assignmentType"
-                  [caption]="'names.assignmentType' | translate" cellTemplate="distanceTemplate"></dxi-column>
-      <dxi-column [width]="100" dataType="string" dataField="assignmentDetails"
-                  [caption]="'names.assignmentDetails' | translate" cellTemplate="distanceTemplate"></dxi-column>
-       -->
+  <dxi-column [width]="100" dataType="string" dataField="distancePickup"
+              [caption]="'names.distancePickup' | translate" cellTemplate="distanceTemplate"></dxi-column>
+  <dxi-column [width]="100" dataType="string" dataField="distanceDropoff"
+              [caption]="'names.distanceDropoff' | translate" cellTemplate="distanceTemplate"></dxi-column>
+  <dxi-column [width]="100" dataType="string" dataField="distanceMove" [caption]="'names.distanceMove' | translate"
+              cellTemplate="distanceTemplate"></dxi-column>
+  <dxi-column [width]="100" dataType="string" dataField="assignmentType"
+              [caption]="'names.assignmentType' | translate" cellTemplate="distanceTemplate"></dxi-column>
+  <dxi-column [width]="100" dataType="string" dataField="assignmentDetails"
+              [caption]="'names.assignmentDetails' | translate" cellTemplate="distanceTemplate"></dxi-column>
+   -->
 
       <div *dxTemplate="let data of 'distanceTemplate'">
         {{ data.displayValue / 1000 | number }}
       </div>
       <!-- <div *dxTemplate="let data of 'orderStatusTemplate'">
-      {{ data.displayValue | translate }}
-      </div>
-      <div *dxTemplate="let data of 'dateTimeTemplate'">
-        {{ data.displayValue | date: "yyyy/MM/dd hh:mm:ss" }}
+  {{ data.displayValue | translate }}
+  </div>
+  <div *dxTemplate="let data of 'dateTimeTemplate'">
+    {{ data.displayValue | date: "yyyy/MM/dd hh:mm:ss" }}
 
-        <div *ngIf="!data.displayValue.startsWith('0001'); else elseBlock">
-          {{ data.displayValue | date: "yyyy/MM/dd hh:mm:ss" }}
-        </div>
-        <ng-template #elseBlock>-</ng-template>
-      </div>
-      <div *dxTemplate="let data of 'booleanTemplate'">
-        {{ data.text }}
-      </div>
-      -->
+    <div *ngIf="!data.displayValue.startsWith('0001'); else elseBlock">
+      {{ data.displayValue | date: "yyyy/MM/dd hh:mm:ss" }}
+    </div>
+    <ng-template #elseBlock>-</ng-template>
+  </div>
+  <div *dxTemplate="let data of 'booleanTemplate'">
+    {{ data.text }}
+  </div>
+  -->
     </dx-data-grid>
   </div>
 </div>
