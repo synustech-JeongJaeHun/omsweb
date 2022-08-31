@@ -111,6 +111,7 @@
     "assignmentType": "Assignment Type",
     "assignmentDetails": "Assignment Details",
     "age": "Elapsed(min)",
+    "ageSecond": "Elapsed(sec)",
     "level": "Severity",
     "errorCode": "Error Code",
     "timeResolved": "Resolved",

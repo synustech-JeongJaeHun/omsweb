@@ -111,6 +111,7 @@
     "assignmentType": "할당 유형",
     "assignmentDetails": "할당 세부 정보",
     "age": "경과(분)",
+    "ageSecond": "Elapsed(sec)",
     "level": "심각도",
     "errorCode": "오류 코드",
     "timeResolved": "해결시간",

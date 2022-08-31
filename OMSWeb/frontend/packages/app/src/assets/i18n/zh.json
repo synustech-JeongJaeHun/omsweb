@@ -110,6 +110,7 @@
     "assignmentType": "作业类型",
     "assignmentDetails": "作业详情",
     "age": "经过(min)",
+    "ageSecond": "Elapsed(sec)",
     "level": "严重性",
     "errorCode": "错误代码",
     "timeResolved": "已解决",
