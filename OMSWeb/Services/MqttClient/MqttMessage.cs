@@ -624,10 +624,10 @@ namespace OMSWeb.Services.MqttClient
                      command.Action == ACTION_RENAME_CARRIER)
             {
                 if (command.CarrierLabel != null)
-                    data["carrier_id"] = command.CarrierLabel;
+                    data["carrier_id"] = command.CarrierLabel.Trim();
 
                 if (command.NewCarrierId != null)
-                    data["new_carrier_id"] = command.NewCarrierId;
+                    data["new_carrier_id"] = command.NewCarrierId.Trim();
 
                 if (command.LogicalId != null)
                 {
