@@ -560,6 +560,7 @@
     "existUserId": "유저 ID가 이미 있습니다.",
     "required": "{{field}} 이(가) 필요합니다.",
     "invalid": "{{field}} is invalid.",
+    "notSupport": "{{field}} is not supported.",
     "minLength": "최소 길이는 {{minLength}}입니다.",
     "maxLength": "최대 길이는 {{maxLength}}입니다.",
     "passwordMissMatch": "비밀번호가 일치하지 않습니다.",

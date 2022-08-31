@@ -560,6 +560,7 @@
     "existUserId": "User ID is already exist.",
     "required": "{{field}} is required.",
     "invalid": "{{field}} is invalid.",
+    "notSupport": "{{field}} is not supported.",
     "minLength": "Minimum length is {{minLength}}.",
     "maxLength": "Maximum length is {{maxLength}}.",
     "passwordMissMatch": "Password is miss match.",

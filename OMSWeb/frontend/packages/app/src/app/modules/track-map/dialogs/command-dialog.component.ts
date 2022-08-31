@@ -329,7 +329,18 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 		}
 		if (category === 'mtl' && !mtl) {
 			return this.t$.instant('messages.required', { field: 'MTL' })
-		}
+        }
+
+    if (category === 'mtl') {
+        const mtlInfo = (this.trackStatusService.trackData?.mtls ?? []).find(
+            (m) => m.id === mtl.id,
+        )
+        if (this.commandState.mtlInOut && mtlInfo.inDirection !== 'A') {
+            return this.t$.instant('messages.notSupport', { field: 'IN [Line -> MTL]' })
+        }
+        if (!this.commandState.mtlInOut && mtlInfo.outDirection !== 'A')
+            return this.t$.instant('messages.notSupport', { field: 'OUT[MTL -> Line]' })
+        }
 
 		return
 	}

@@ -560,6 +560,7 @@
     "existUserId": "用户 ID 已经存在 。",
     "required": "{{field}} 是必需的。",
     "invalid": "{{field}} is invalid.",
+    "notSupport": "{{field}} is not supported.",
     "minLength": "最小长度为 {{minLength}}。",
     "maxLength": "最大长度为 {{maxLength}}。",
     "passwordMissMatch": "密码不匹配。",
