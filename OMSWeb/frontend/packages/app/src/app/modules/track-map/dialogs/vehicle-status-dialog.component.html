@@ -21,7 +21,11 @@
                 <label class="name">{{ "names.id" | translate }}</label>
                 <div class="value">{{ currentVehicle.id }}</div>
                 <label class="name">{{ "names.mode" | translate }}</label>
-                <div class="value">{{ currentVehicle.mode == 'A' ? 'Auto' : 'Manual' }}</div>
+                <div [ngSwitch]="currentVehicle.mode">
+                  <div class="value" *ngSwitchCase="'A'">{{ 'Auto' }}</div>
+                  <div class="value" *ngSwitchCase="'M'">{{ 'Manual' }}</div>
+                  <div class="value" *ngSwitchDefault>{{ currentVehicle.mode }}</div>
+                </div>
               </div>
             </fieldset>
             <fieldset>
