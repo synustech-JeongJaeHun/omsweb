@@ -78,6 +78,7 @@ interface IOmsTrackMonitor {
 		fireshutter: UpdateDto.Fireshutter
 	): void
 	updateMtl(operation: UpdateDto.Operation, mtls: UpdateDto.Mtl[]): void
+  updateClusterState(operation: UpdateDto.Operation, clusterState: UpdateDto.ClusterState): void
 }
 
 export { IOmsTrackMonitor }

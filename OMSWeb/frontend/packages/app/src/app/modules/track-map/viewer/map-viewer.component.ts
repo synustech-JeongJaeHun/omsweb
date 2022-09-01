@@ -319,13 +319,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 							)
 					}
 				})
-			this.hubSvc.clusterChanged$
-				.pipe(takeUntil(this.destroy$))
-				.subscribe((e: IDataChangeEvent) => {
-					// TODO what happened on event?
-					console.log('cluster update', e)
-				})
-
 			this.hubSvc.zcuMapChanged$
 				.pipe(takeUntil(this.destroy$))
 				.subscribe((e) => {
@@ -379,6 +372,15 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 
 			this.hubSvc.mtlChanged$.pipe(takeUntil(this.destroy$)).subscribe((e) => {
 				this.viewer.updateMtl(e.operation, e.data)
+			})
+
+      this.hubSvc.clusterStatusChanged$.pipe(takeUntil(this.destroy$)).subscribe((e) => {
+				this.viewer.updateClusterState(e.operation, {
+          id: e.id, // server id
+          converterId: e.converterId,
+          status: e.status,
+          backupId: e.backupId,
+        })
 			})
 		}
 	}

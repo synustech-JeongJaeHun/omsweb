@@ -493,7 +493,7 @@ namespace OMSWeb.Repositories
                 IQueryable<ClusterState> result;
                 using (var conn = ConnectTrack())
                 {
-                    var sql = QueryFactory.GetSql("clusterStatus");
+                    var sql = QueryFactory.GetSql("clusterStatusMap");
                     result = conn.Query<ClusterState>(sql).AsQueryable();
                 }
                 data = result.ToList();

@@ -34,6 +34,7 @@ export class HubService {
 	fireShutterMapChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter()
 	fireShutterStatusTableChanged$: EventEmitter<IDataChangeEvent> =
 		new EventEmitter()
+  clusterStatusChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter()
 	clusterStatusTableChanged$: EventEmitter<IDataChangeEvent> =
 		new EventEmitter()
 	kpiChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter()
@@ -119,6 +120,7 @@ export class HubService {
 		this.hub.off('zcuStatusTableChanged')
 		this.hub.off('fireShutterMapChanged')
 		this.hub.off('fireShutterStatusTableChanged')
+    this.hub.off('clusterStatusChanged')
 		this.hub.off('clusterStatusTableChanged')
 		this.hub.off('kpiChanged')
 		this.hub.off('homeChanged')
@@ -221,6 +223,10 @@ export class HubService {
 			})
 			this.fireShutterStatusTableChanged$.emit({ ...meta, data: body })
 		})
+    this.hub.on('clusterStatusChanged', (meta, body) => {
+      console.info('## hub message : clusterStatusChanged >>', { meta, body })
+			this.clusterStatusChanged$.emit({ ...meta, data: body })
+    })
 		this.hub.on('clusterStatusTableChanged', (meta, body) => {
 			console.info('## hub message : clusterStatusTableChanged >>', {
 				meta,

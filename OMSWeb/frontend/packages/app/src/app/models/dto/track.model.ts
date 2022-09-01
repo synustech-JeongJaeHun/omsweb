@@ -22,6 +22,30 @@ export namespace Dto {
 		maxVehicles: number
 		points?: string
 	}
+  export interface IClusterState {
+    id: number
+    backup_id: string
+    server_id: number
+    status: string
+
+    current_igbt?: string
+    current_r?: string
+    current_s?: string
+    current_t?: string
+    current_track?: string
+    error_code?: string
+    frequency?: string
+    logicalId?: string
+    sync?: string
+    temp_internal?: string
+    temp_radiator?: string
+    total_kw?: string
+    voltage?: string
+    voltage_rs?: string
+    voltage_st?: string
+    voltage_tr?: string
+    wh?: string
+  }
 	export interface IGroup {
 		id: number
 		logicalId?: string
@@ -180,6 +204,7 @@ export namespace Dto {
 	export interface IFixedTrackData {
 		buffers?: IBuffer[]
 		clusters?: ICluster[]
+    clusterStates?: IClusterState[]
 		groups?: IGroup[]
 		mtls?: IMTL[]
 		points?: IPoint[]

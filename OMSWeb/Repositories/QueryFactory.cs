@@ -108,6 +108,35 @@ namespace OMSWeb.Repositories
         ORDER BY CT.id
         --*user_id_condition*--WHERE user_id =@userId
       "},
+       {"clusterStatusMap", @"
+         SELECT CT.id, CT.logical_id, CS.server_id, CS.status, 
+            CONCAT( CAST(CS.voltage AS TEXT),' [V]' ) AS voltage, 
+            CONCAT( CAST(CS.current_igbt AS TEXT), ' [A]' ) AS current_igbt,
+            CONCAT( CAST(CS.current_track AS TEXT), ' [A]' ) AS current_track, 
+            CONCAT( CAST(TRUNC(CS.frequency::numeric / 10, 1) AS TEXT), ' [kHz]' ) AS frequency, 
+            CONCAT( CAST(TRUNC(CS.temp_radiator::numeric / 10, 1) AS TEXT), ' [℃]' ) AS temp_radiator, 
+            CONCAT( CAST(TRUNC(CS.temp_internal::numeric / 10, 1) AS TEXT), ' [℃]' ) AS temp_internal,  
+            CASE 
+                WHEN CS.sync = 0 THEN 'N.G'
+                WHEN CS.sync = 11 THEN 'OK'
+                ELSE ' '
+            END AS sync, 
+            CS.backup_id,
+            CS.error_code, 
+            CONCAT( CAST(CS.voltage_rs AS TEXT), ' [V]' ) AS voltage_rs, 
+            CONCAT( CAST(CS.voltage_st AS TEXT), ' [V]' ) AS voltage_st,  
+            CONCAT( CAST(CS.voltage_tr AS TEXT), ' [V]' ) AS voltage_tr,  
+            CONCAT( CAST(CS.current_r AS TEXT), ' [A]' ) AS current_r, 
+            CONCAT( CAST(CS.current_s AS TEXT), ' [A]' ) AS current_s,  
+            CONCAT( CAST(CS.current_t AS TEXT), ' [A]' ) AS current_t, 
+            CONCAT( CAST(CS.total_kw AS TEXT), ' [kW]' ) AS total_kw, 
+            CONCAT( CAST(TRUNC(CS.wh::numeric / 1000, 3) AS TEXT), ' [kWh]' ) AS wh
+        FROM clusters AS CT
+        LEFT OUTER JOIN cluster_status AS CS
+        ON CT.id = CS.converter_id
+        ORDER BY CT.id
+        --*user_id_condition*--WHERE user_id =@userId
+      "},
       {"station", @"
         SELECT id AS id, physical_id AS physical_id, logical_id AS logical_id, point AS point_id,
           direction AS direction, carrier_type AS carrier_type, next_point, ""offset"" AS offset, unuse, carrier_id
