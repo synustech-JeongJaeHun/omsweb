@@ -29,7 +29,7 @@
   <dxi-column [width]="100" dataType="string" dataField="point" [caption]="'names.point' | translate"
               *ngIf="canDisplayTable('buffers_point')"></dxi-column>
   <dxi-column [width]="100" dataType="string" dataField="direction" [caption]="'names.direction' | translate"
-              *ngIf="canDisplayTable('buffers_direction')"></dxi-column>
+              cellTemplate="directionTemplate" *ngIf="canDisplayTable('buffers_direction')"></dxi-column>
   <dxi-column [width]="100" dataType="string" dataField="nextPoint" [caption]="'names.nextPoint' | translate"
               *ngIf="canDisplayTable('buffers_nextPoint')"></dxi-column>
   <dxi-column [width]="100" dataType="string" dataField="offset" [caption]="'names.offset' | translate"
@@ -38,4 +38,12 @@
               *ngIf="canDisplayTable('buffers_unuse')"></dxi-column>
   <dxi-column [width]="100" dataType="string" dataField="carrierId" [caption]="'names.carrierId' | translate"
               *ngIf="canDisplayTable('buffers_carrierId')"></dxi-column>
+  <div *dxTemplate="let data of 'directionTemplate'">
+    <div [ngSwitch]="data.displayValue">
+      <div class="value" *ngSwitchCase="'L'">{{ 'Left' }}</div>
+      <div class="value" *ngSwitchCase="'R'">{{ 'Right' }}</div>
+      <div class="value" *ngSwitchCase="'U'">{{ 'Under' }}</div>
+      <div class="value" *ngSwitchDefault>{{ data.displayValue }}</div>
+    </div>
+  </div>
 </dx-data-grid>

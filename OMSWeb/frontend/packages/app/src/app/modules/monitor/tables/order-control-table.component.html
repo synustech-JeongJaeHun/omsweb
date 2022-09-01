@@ -18,63 +18,70 @@
   </div>
 </div>
 
-  <dx-data-grid [dataSource]="dataSource" [remoteOperations]="true" [height]="tableHeight" [repaintChangesOnly]="true"
-                [columnAutoWidth]="false" [showBorders]="false" [highlightChanges]="true" [showColumnLines]="true"
-                [showRowLines]="true" [hoverStateEnabled]="true" [(selectedRowKeys)]="selectedRows" [headerFilter]="false" allowColumnResizing="true">
-    <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
-    <!--dxo-scrolling-- mode="virtual" rowRenderingMode="standard"></dxo-scrolling-->
-    <dxo-paging [pageSize]="50"></dxo-paging>
-    <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[50, 100, 200]" [showInfo]="true" visible="true">
-    </dxo-pager>
-    <dxo-search-panel [placeholder]="'names.search' | translate" [visible]="true"></dxo-search-panel>
-    <dxo-load-panel [enabled]="false"></dxo-load-panel>
-    <dxo-filter-row [visible]="true"></dxo-filter-row>
+<dx-data-grid [dataSource]="dataSource" [remoteOperations]="true" [height]="tableHeight" [repaintChangesOnly]="true"
+              [columnAutoWidth]="false" [showBorders]="false" [highlightChanges]="true" [showColumnLines]="true"
+              [showRowLines]="true" [hoverStateEnabled]="true" [(selectedRowKeys)]="selectedRows" [headerFilter]="false" allowColumnResizing="true">
+  <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
+  <!--dxo-scrolling-- mode="virtual" rowRenderingMode="standard"></dxo-scrolling-->
+  <dxo-paging [pageSize]="50"></dxo-paging>
+  <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[50, 100, 200]" [showInfo]="true" visible="true">
+  </dxo-pager>
+  <dxo-search-panel [placeholder]="'names.search' | translate" [visible]="true"></dxo-search-panel>
+  <dxo-load-panel [enabled]="false"></dxo-load-panel>
+  <dxo-filter-row [visible]="true"></dxo-filter-row>
 
-    <dxi-column [width]="50" dataType="string" dataField="id" [caption]="'names.id' | translate"
-                *ngIf="canDisplayTable('orders_id')"></dxi-column>
-    <dxi-column [allowFiltering]="true" [width]="70" dataType="string" dataField="origin" [allowSorting]="true"
-                [caption]="'names.origin' | translate" *ngIf="canDisplayTable('orders_origin')"></dxi-column>
-    <dxi-column [width]="240" dataType="string" dataField="logicalId" [caption]="'names.commandId' | translate"
-                *ngIf="canDisplayTable('orders_logicalId')"></dxi-column>
-    <dxi-column [width]="70" dataType="string" dataField="priority" [caption]="'names.priority' | translate"
-                *ngIf="canDisplayTable('orders_priority')"></dxi-column>
-    <dxi-column [width]="100" dataType="string" dataField="state" [caption]="'names.state' | translate"
-                *ngIf="canDisplayTable('orders_state')"></dxi-column>
-    <dxi-column [width]="110" dataType="string" dataField="vehicleId" [caption]="'names.vehicleId' | translate"
-                *ngIf="canDisplayTable('orders_vehicleId')"></dxi-column>
-    <dxi-column [width]="140" dataType="string" dataField="locationPickup" [caption]="'names.locationPickup' | translate"
-                [customizeText]="transformLocationId" *ngIf="canDisplayTable('orders_locationPickup')"></dxi-column>
-    <dxi-column [width]="140" dataType="string" dataField="locationDropoff" [caption]="'names.locationDropoff' | translate"
-                [customizeText]="transformLocationId" *ngIf="canDisplayTable('orders_locationDropoff')"></dxi-column>
-    <dxi-column [width]="140" dataType="string" dataField="locationMove" [allowFiltering]="true" [allowSorting]="false"
-                [caption]="'names.locationMove' | translate" *ngIf="canDisplayTable('orders_locationMove')"></dxi-column>
-    <dxi-column [width]="100" dataType="string" dataField="carrierLabel" [allowSorting]="false"
-                [caption]="'names.carrierLabel' | translate" *ngIf="canDisplayTable('orders_carrierLabel')"></dxi-column>
-    <dxi-column [width]="110" dataType="datetime" dataField="timeCreated" [caption]="'names.timeCreated' | translate"
-                sortOrder="desc" *ngIf="canDisplayTable('orders_timeCreated')"></dxi-column>
-    <dxi-column [width]="110" dataType="datetime" dataField="timeAssigned" [caption]="'names.timeAssigned' | translate"
-                sortOrder="desc" *ngIf="canDisplayTable('orders_timeAssigned')"></dxi-column>
-    <dxi-column [allowFiltering]="true" [width]="80" dataType="string" dataField="durationTotal" [allowSorting]="true"
-                [caption]="'names.durationTotal' | translate" *ngIf="canDisplayTable('orders_durationTotal')"></dxi-column>
-    <dxi-column [allowFiltering]="true" [width]="80" dataType="string" dataField="durationUnassigned"
-                [allowSorting]="true" [caption]="'names.durationUnassigned' | translate"
-                *ngIf="canDisplayTable('orders_durationUnassigned')"></dxi-column>
-    <dxi-column [allowFiltering]="true" [width]="80" dataType="string" dataField="durationPickup" [allowSorting]="true"
-                [caption]="'names.durationPickup' | translate" *ngIf="canDisplayTable('orders_durationPickup')"></dxi-column>
-    <dxi-column [allowFiltering]="true" [width]="80" dataType="string" dataField="durationLoad" [allowSorting]="true"
-                [caption]="'names.durationLoad' | translate" *ngIf="canDisplayTable('orders_durationLoad')"></dxi-column>
-    <dxi-column [allowFiltering]="true" [width]="80" dataType="string" dataField="durationDropoff" [allowSorting]="true"
-                [caption]="'names.durationDropoff' | translate" *ngIf="canDisplayTable('orders_durationDropoff')"></dxi-column>
-    <dxi-column [allowFiltering]="true" [width]="80" dataType="string" dataField="durationUnload" [allowSorting]="true"
-                [caption]="'names.durationUnload' | translate" *ngIf="canDisplayTable('orders_durationUnload')"></dxi-column>
-    <dxi-column [allowFiltering]="true" [width]="80" dataType="string" dataField="durationMove" [allowSorting]="true"
-                [caption]="'names.durationMove' | translate" *ngIf="canDisplayTable('orders_durationMove')"></dxi-column>
-    <dxi-column [allowFiltering]="true" [width]="80" dataType="string" dataField="distancePickup" [allowSorting]="true"
-                [caption]="'names.distancePickup' | translate" *ngIf="canDisplayTable('orders_distancePickup')"></dxi-column>
-    <dxi-column [allowFiltering]="true" [width]="80" dataType="string" dataField="distanceDropoff" [allowSorting]="true"
-                [caption]="'names.distanceDropoff' | translate" *ngIf="canDisplayTable('orders_distanceDropoff')"></dxi-column>
-    <dxi-column [allowFiltering]="true" [width]="80" dataType="string" dataField="distanceMove" [allowSorting]="true"
-                [caption]="'names.distanceMove' | translate" *ngIf="canDisplayTable('orders_distanceMove')"></dxi-column>
-    <dxi-column [allowFiltering]="true" [width]="80" dataType="string" dataField="assignmentType" [allowSorting]="true"
-                [caption]="'names.lastReassignType' | translate" *ngIf="canDisplayTable('orders_lastReassignType')"></dxi-column>
-  </dx-data-grid>
+  <dxi-column [width]="50" dataType="string" dataField="id" [caption]="'names.id' | translate"
+              *ngIf="canDisplayTable('orders_id')"></dxi-column>
+  <dxi-column [allowFiltering]="true" [width]="70" dataType="string" dataField="origin" [allowSorting]="true"
+              [caption]="'names.origin' | translate" *ngIf="canDisplayTable('orders_origin')"></dxi-column>
+  <dxi-column [width]="240" dataType="string" dataField="logicalId" [caption]="'names.commandId' | translate"
+              *ngIf="canDisplayTable('orders_logicalId')"></dxi-column>
+  <dxi-column [width]="70" dataType="string" dataField="priority" [caption]="'names.priority' | translate"
+              *ngIf="canDisplayTable('orders_priority')"></dxi-column>
+  <dxi-column [width]="100" dataType="string" dataField="state" [caption]="'names.state' | translate"
+              *ngIf="canDisplayTable('orders_state')"></dxi-column>
+  <dxi-column [width]="110" dataType="string" dataField="vehicleId" [caption]="'names.vehicleId' | translate"
+              *ngIf="canDisplayTable('orders_vehicleId')"></dxi-column>
+  <dxi-column [width]="140" dataType="string" dataField="locationPickup" [caption]="'names.locationPickup' | translate"
+              [customizeText]="transformLocationId" *ngIf="canDisplayTable('orders_locationPickup')"></dxi-column>
+  <dxi-column [width]="140" dataType="string" dataField="locationDropoff" [caption]="'names.locationDropoff' | translate"
+              [customizeText]="transformLocationId" *ngIf="canDisplayTable('orders_locationDropoff')"></dxi-column>
+  <dxi-column [width]="140" dataType="string" dataField="locationMove" [allowFiltering]="true" [allowSorting]="false"
+              [caption]="'names.locationMove' | translate" *ngIf="canDisplayTable('orders_locationMove')"></dxi-column>
+  <dxi-column [width]="100" dataType="string" dataField="carrierLabel" [allowSorting]="false"
+              [caption]="'names.carrierLabel' | translate" *ngIf="canDisplayTable('orders_carrierLabel')"></dxi-column>
+  <dxi-column [width]="110" dataType="datetime" dataField="timeCreated" [caption]="'names.timeCreated' | translate"
+              sortOrder="desc" *ngIf="canDisplayTable('orders_timeCreated')"></dxi-column>
+  <dxi-column [width]="110" dataType="datetime" dataField="timeAssigned" [caption]="'names.timeAssigned' | translate"
+              sortOrder="desc" *ngIf="canDisplayTable('orders_timeAssigned')"></dxi-column>
+  <dxi-column [allowFiltering]="true" [width]="80" dataType="string" dataField="durationTotal" [allowSorting]="true"
+              [caption]="'names.durationTotal' | translate" *ngIf="canDisplayTable('orders_durationTotal')"></dxi-column>
+  <dxi-column [allowFiltering]="true" [width]="80" dataType="string" dataField="durationUnassigned"
+              [allowSorting]="true" [caption]="'names.durationUnassigned' | translate"
+              *ngIf="canDisplayTable('orders_durationUnassigned')"></dxi-column>
+  <dxi-column [allowFiltering]="true" [width]="80" dataType="string" dataField="durationPickup" [allowSorting]="true"
+              [caption]="'names.durationPickup' | translate" *ngIf="canDisplayTable('orders_durationPickup')"></dxi-column>
+  <dxi-column [allowFiltering]="true" [width]="80" dataType="string" dataField="durationLoad" [allowSorting]="true"
+              [caption]="'names.durationLoad' | translate" *ngIf="canDisplayTable('orders_durationLoad')"></dxi-column>
+  <dxi-column [allowFiltering]="true" [width]="80" dataType="string" dataField="durationDropoff" [allowSorting]="true"
+              [caption]="'names.durationDropoff' | translate" *ngIf="canDisplayTable('orders_durationDropoff')"></dxi-column>
+  <dxi-column [allowFiltering]="true" [width]="80" dataType="string" dataField="durationUnload" [allowSorting]="true"
+              [caption]="'names.durationUnload' | translate" *ngIf="canDisplayTable('orders_durationUnload')"></dxi-column>
+  <dxi-column [allowFiltering]="true" [width]="80" dataType="string" dataField="durationMove" [allowSorting]="true"
+              [caption]="'names.durationMove' | translate" *ngIf="canDisplayTable('orders_durationMove')"></dxi-column>
+  <dxi-column [allowFiltering]="true" [width]="80" dataType="string" dataField="distancePickup" [allowSorting]="true"
+              [caption]="'names.distancePickup' | translate" *ngIf="canDisplayTable('orders_distancePickup')"></dxi-column>
+  <dxi-column [allowFiltering]="true" [width]="80" dataType="string" dataField="distanceDropoff" [allowSorting]="true"
+              [caption]="'names.distanceDropoff' | translate" *ngIf="canDisplayTable('orders_distanceDropoff')"></dxi-column>
+  <dxi-column [allowFiltering]="true" [width]="80" dataType="string" dataField="distanceMove" [allowSorting]="true"
+              [caption]="'names.distanceMove' | translate" *ngIf="canDisplayTable('orders_distanceMove')"></dxi-column>
+  <dxi-column [allowFiltering]="true" [width]="80" dataType="string" dataField="assignmentType" [allowSorting]="true"
+              [caption]="'names.lastReassignType' | translate" cellTemplate="lastReassignTypeTemplate"
+              *ngIf="canDisplayTable('orders_lastReassignType')"></dxi-column>
+  <div *dxTemplate="let data of 'lastReassignTypeTemplate'">
+    <div [ngSwitch]="data.displayValue">
+      <div class="value" *ngSwitchCase="'S'">{{ 'Swap' }}</div>
+      <div class="value" *ngSwitchDefault>{{ data.displayValue }}</div>
+    </div>
+  </div>
+</dx-data-grid>
