@@ -484,6 +484,24 @@ namespace OMSWeb.Repositories
             return data;
         }
 
+        public List<ClusterState> LoadClusterStates() 
+        {
+            var key = CacheKeys.ClusterStatus;
+            var data = _cache.GetValue<List<ClusterState>>(key);
+            if (data == null)
+            {
+                IQueryable<ClusterState> result;
+                using (var conn = ConnectTrack())
+                {
+                    var sql = QueryFactory.GetSql("clusterStatus");
+                    result = conn.Query<ClusterState>(sql).AsQueryable();
+                }
+                data = result.ToList();
+                _cache.SetValue<List<ClusterState>>(key, data, DateTimeOffset.Now.AddMinutes(CACHE_LIFE));
+            }
+            return data;
+        }
+
         public List<VehicleDio> LoadVehicleDio()
         {
             var key = CacheKeys.VehicleDio;

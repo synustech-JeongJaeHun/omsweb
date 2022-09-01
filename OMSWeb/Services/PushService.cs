@@ -54,7 +54,7 @@ namespace OMSWeb.Services
                 {"vehicle_dio", new DataChangeEventTarget(CacheKeys.VehicleDio, new[]{"vehicleDioChanged"}, true)},
                 {"clusters", new DataChangeEventTarget(CacheKeys.Clusters, new[]{"clusterChanged"})},
                 {"cluster_points", new DataChangeEventTarget(CacheKeys.Clusters, new[]{"clusterChanged"})},
-                {"cluster_status", new DataChangeEventTarget(CacheKeys.ClusterStatus, new[]{"clusterStatusTableChanged"}, true)},
+                {"cluster_status", new DataChangeEventTarget(CacheKeys.ClusterStatus, new[]{"clusterStatusChanged", "clusterStatusTableChanged"}, true)},
                 {"location_groups", new DataChangeEventTarget(CacheKeys.Groups, new[]{"groupChanged"})},
                 {"grouped_objects", new DataChangeEventTarget(CacheKeys.Groups, new[]{"groupChanged"})},
                 {"homes", new DataChangeEventTarget(CacheKeys.None, new[]{"homeChanged"}, true)},
@@ -82,7 +82,7 @@ namespace OMSWeb.Services
                 {CacheKeys.VehiclePaths, new[]{"vehiclePath"}},
                 {CacheKeys.VehicleDio, new[]{"vehicleDioChanged"}},
                 {CacheKeys.Clusters, new[]{"clusterChanged"}},
-                {CacheKeys.ClusterStatus, new[]{"clusterStatusTableChanged"}},
+                {CacheKeys.ClusterStatus, new[]{"clusterStatusChanged", "clusterStatusTableChanged"}},
                 {CacheKeys.Groups, new[]{"groupChanged"}},
             };
 
@@ -244,6 +244,10 @@ namespace OMSWeb.Services
 
                 Unuse = payload.Unuse, // only for Station And Buffer
                 CarrierId = payload.CarrierId, // only for Buffer
+
+                ConverterId = payload.ConverterId, // only for clusterstate
+                Status = payload.Status, // only for clusterstate
+                BackupId = payload.BackupId, // only for clusterstate
 
                 Point = payload.Point, // only for Home
 
