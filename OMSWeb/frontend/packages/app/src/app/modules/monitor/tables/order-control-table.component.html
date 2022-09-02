@@ -81,6 +81,7 @@
   <div *dxTemplate="let data of 'lastReassignTypeTemplate'">
     <div [ngSwitch]="data.displayValue">
       <div class="value" *ngSwitchCase="'S'">{{ 'Swap' }}</div>
+      <div class="value" *ngSwitchCase="'M'">{{ 'Manual' }}</div>
       <div class="value" *ngSwitchDefault>{{ data.displayValue }}</div>
     </div>
   </div>
