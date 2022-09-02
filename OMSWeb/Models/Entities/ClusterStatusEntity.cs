@@ -4,7 +4,7 @@ namespace OMSWeb.Models.Entities
 {
     public class ClusterStatusEntity
     {
-        public int id { get; set; }
+        public int Id { get; set; }
         public int server_id { get; set; }
         public string logicalId { get; set; }
         public string status { get; set; }

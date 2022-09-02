@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using OMSWeb.Models;
 using OMSWeb.Models.Tracks;
 using OMSWeb.Repositories;
 using Buffer = OMSWeb.Models.Tracks.Buffer;
@@ -12,7 +9,6 @@ namespace OMSWeb.Services
     public class TrackService
     {
         private readonly TrackRepository _trackRepo;
-
         public TrackService(TrackRepository trackRepo)
         {
             this._trackRepo = trackRepo;
@@ -30,6 +26,7 @@ namespace OMSWeb.Services
                 Buffers = this._trackRepo.LoadBuffers(),
                 Mtls = this._trackRepo.LoadMtls(),
                 Clusters = this._trackRepo.LoadClusters(),
+                ClusterStates = this._trackRepo.LoadClusterStates(),
                 VehicleDio = this._trackRepo.LoadVehicleDio(),
                 VehiclePaths = this._trackRepo.LoadVehiclePaths(),
                 Vehicles = this._trackRepo.LoadVehiclePositions(),
@@ -60,6 +57,8 @@ namespace OMSWeb.Services
                     return this._trackRepo.LoadMtls().ToArray() as dynamic[];
                 case CacheKeys.Clusters:
                     return this._trackRepo.LoadClusters().ToArray() as dynamic[];
+                case CacheKeys.ClusterStatus:
+                    return this._trackRepo.LoadClusterStates().ToArray() as dynamic[];
                 case CacheKeys.VehicleDio:
                     return this._trackRepo.LoadVehicleDio().ToArray() as dynamic[];
                 case CacheKeys.VehiclePaths:

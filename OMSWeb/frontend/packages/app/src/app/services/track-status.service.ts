@@ -75,6 +75,9 @@ export class TrackStatusService {
 		this.hubService.mtlChanged$.subscribe((e) => {
 			this.handleMtlChanged(e)
 		})
+    this.hubService.clusterStatusChanged$.subscribe((e) => {
+      this.handleClusterStateChanged(e)
+    })
 
 		// this.hubService.segmentChanged$
 		//   .subscribe((e: IDataChangeEvent) => {
@@ -271,6 +274,31 @@ export class TrackStatusService {
 	handleMtlChanged(e: IDataChangeEvent) {
     this.trackData.mtls = e.data
 	}
+
+  handleClusterStateChanged(e: IDataChangeEvent){
+    const row = { 
+      server_id: e.id!,
+      id: e.converterId!,
+      status: String(e.status ?? ''),
+      backup_id: String(e.backupId ?? ''),
+    }
+
+    switch (e.operation) {
+      case 'INSERT':
+        this.trackData?.clusterStates?.push(row)
+			case 'UPDATE':
+        const finded = this.trackData?.clusterStates?.find(cs => cs.id === row.id)
+				if (finded) Object.assign(finded, row)
+				break
+      case 'DELETE': 
+        const findedIndex = this.trackData?.clusterStates?.findIndex(cs => cs.id === row.id)
+        if(findedIndex) this.trackData?.clusterStates?.splice(findedIndex, 1)
+        break
+
+			default:
+				break
+		}
+  }
 
 	getOverlapObjectOnPoint(pointId: number) {
 		const points =

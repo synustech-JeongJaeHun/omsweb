@@ -9,6 +9,7 @@ namespace OMSWeb.Models.Tracks
         public IList<SegmentWithPart> Segments { get; set; }
         public IList<DisabledSegment> SegmentDisabled { get; set; }
         public IList<Cluster> Clusters { get; set; }
+        public IList<ClusterState> ClusterStates { get; set; }
         public IList<Station> Stations { get; set; }
         public IList<Buffer> Buffers { get; set; }
         public IList<Mtl> Mtls { get; set; }
