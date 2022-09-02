@@ -172,12 +172,14 @@ export namespace Dto {
 		id: number
 		canBePushed: boolean
 		cargoState: string
-		cargoTransferResult: string
+        cargoTransferResult: string
+        carrierId: string
 		curPoint?: number
 		nextPoint?: number
 		commandPoint?: any
 		errorList: string
-		isBlocked: boolean
+        isBlocked: boolean
+        isZcuBlocked: boolean
 		isSensorStopped?: boolean
 		lastContact?: string
 		locationDropoff?: string
@@ -204,7 +206,7 @@ export namespace Dto {
 	export interface IFixedTrackData {
 		buffers?: IBuffer[]
 		clusters?: ICluster[]
-    clusterStates?: IClusterState[]
+        clusterStates?: IClusterState[]
 		groups?: IGroup[]
 		mtls?: IMTL[]
 		points?: IPoint[]

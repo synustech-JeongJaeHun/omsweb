@@ -28,6 +28,7 @@ namespace OMSWeb.Models.Entities
         public string CargoState { get; set; }
         public string CarrierLabel { get; set; }
         public bool IsSensorStopped { get; set; }
+        public bool IsZcuBlocked { get; set; }
         public bool IsBlocked { get; set; }
         public string ErrorList { get; set; }
         public string CargoTransferResult { get; set; }
