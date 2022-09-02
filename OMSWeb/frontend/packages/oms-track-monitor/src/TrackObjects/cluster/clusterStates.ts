@@ -15,28 +15,27 @@ function initClusterStates(css: ITrackData['clusterStates']) {
   }))
 }
 
-function findIndexClusterState(converterId: ClusterState['converterId']) {
-  return clusterStates.value.findIndex(
-    (cs) => cs.converterId === converterId
-  )
+function findClusterStateByConverterId(converterId: ClusterState['converterId']){
+  return clusterStates.value.find((cs) => cs.converterId === converterId)
 }
 
 function insertClusterState(clusterState: UpdateDto.ClusterState) {
-  clusterStates.value.push(clusterState)
+  const finded = findClusterStateByConverterId(clusterState.converterId)
+
+  if(finded) updateClusterState(clusterState)
+  else clusterStates.value.push(clusterState)
 }
 
 function updateClusterState(clusterState: UpdateDto.ClusterState) {
-  const findedIndex = findIndexClusterState(clusterState.converterId)
-
-  if (findedIndex) {
-    const finded = clusterStates.value[findedIndex]
-    Object.assign(finded, clusterState)
-  }
+  const finded = findClusterStateByConverterId(clusterState.converterId)
+  if(finded) Object.assign(finded, clusterState)
 }
 
 function deleteClusterState(clusterState: UpdateDto.ClusterState) {
-  const findedIndex = findIndexClusterState(clusterState.converterId)
-  clusterStates.value.splice(findedIndex, 1)
+  const findedIndex = clusterStates.value.findIndex(
+    (cs) => cs.converterId === clusterState.converterId
+  )
+  if(findedIndex >= 0) clusterStates.value.splice(findedIndex, 1)
 }
 
 function useIsClusterAlertState(clusterId: Ref<Cluster['id']>) {
