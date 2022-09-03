@@ -22,6 +22,7 @@ type Vehicle = {
   nextPoint: number
   errorList: string
   isBlocked: boolean
+  isZcuBlocked: boolean
   isSensorStopped: boolean
   isMaint: boolean;
   isConnected: boolean;
@@ -43,6 +44,7 @@ type Vehicle = {
 
   // nullable
   cargoTransferResult?: string // if it is not nullish, then it means unload/load fail
+  carrierId?:string
   commandPoint?: string
   locationDropoff?: string
   locationMove?: string

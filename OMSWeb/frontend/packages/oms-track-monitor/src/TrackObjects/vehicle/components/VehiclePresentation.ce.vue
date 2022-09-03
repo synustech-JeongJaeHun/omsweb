@@ -11,6 +11,7 @@ import VehicleCargoUnloadingSvg from '../assets/VehicleCargoUnloading.svg?compon
 import VehicleCargoFullSvg from '../assets/VehicleCargoFull.svg?component'
 import VehicleCargoTransferFailSvg from '../assets/VehicleCargoTransferFail.svg?component'
 import VehicleStateBlockSvg from '../assets/VehicleStateBlock.svg?component'
+import VehicleStateZcuBlockSvg from '../assets/VehicleStateZcuBlock.svg?component'
 import VehicleStateSensorStopSvg from '../assets/VehicleStateSensorStop.svg?component'
 import VehicleStateStaleSvg from '../assets/VehicleStateStale.svg?component'
 import VehicleStateErrorSvg from '../assets/VehicleStateError.svg?component'
@@ -29,10 +30,12 @@ const props = defineProps<{
   mode: Vehicle['mode']
   cargoState: Vehicle['cargoState']
   cargoTransferResult: Vehicle['cargoTransferResult']
+  carrierId: Vehicle['carrierId']
   errorList: Vehicle['errorList']
   isMaint: Vehicle['isMaint']
   isConnected: Vehicle['isConnected']
   isSensorStopped: Vehicle['isSensorStopped']
+  isZcuBlocked: Vehicle['isZcuBlocked']
   isBlocked: Vehicle['isBlocked']
 
   // Derived attr
@@ -253,7 +256,15 @@ const emit = defineEmits<{
         width="10"
         height="10"
       />
-      <!-- 2. Sensor Stop -->
+      <!-- 2. Zcu Blocked -->
+      <VehicleStateZcuBlockSvg
+        v-if="props.isZcuBlocked"
+        x="-25"
+        y="15"
+        width="10"
+        height="10"
+      />
+      <!-- 3. Sensor Stop -->
       <VehicleStateSensorStopSvg
         v-else-if="props.isSensorStopped"
         x="-25"
