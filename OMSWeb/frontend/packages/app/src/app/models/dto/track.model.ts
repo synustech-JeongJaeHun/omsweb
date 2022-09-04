@@ -238,5 +238,5 @@ export namespace Dto {
 		id: number
 		logicalId?: string
 		physicalId?: string
-	}
+    }
 }

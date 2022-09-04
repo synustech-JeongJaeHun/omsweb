@@ -555,6 +555,7 @@
     "confirmParameterInvalidCarrierID": "NAK[3] Parameter Invalid [CARRIERID]",
     "confirmParameterInvalidCarrierLoc": "NAK[3] Parameter Invalid [CARRIERLOC]",
     "confirmReject": "NAK[5] Reject",
+    "confirmPointHomeInterlock": "This location cannot be set as Home.",
     "selectObjectType": "选择类型",
     "searchId": "搜索 ID",
     "noObjectSelected": "没有选择任何东西。",

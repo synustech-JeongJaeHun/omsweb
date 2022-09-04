@@ -664,15 +664,24 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		}
 	}
 
-	onApplyPointHomeChange(id: number, homeGroups: number[]) {
-		if (this.homeActive) {
-			this.messageSvc.sendEnableHome(id, homeGroups).subscribe()
-		} else {
-			this.messageSvc.sendDisableHome(id).subscribe()
-		}
+    onApplyPointHomeChange(id: number, homeGroups: number[]) {
+        if (this.homeActive) {
+          this.tracksService.checkPointHomeInterlock(id).subscribe((res) => {
+              if (res.retcode === 0) {
+                  this.messageSvc.sendEnableHome(id, homeGroups).subscribe()
+              } else {
+                this.dialogSvc.alert({
+                  title: this.$t.instant('names.failed'),
+                  body: this.$t.instant('messages.confirmPointHomeInterlock'),
+                })
+              }
+          })
+        } else {
+          this.messageSvc.sendDisableHome(id).subscribe()
+        }
 
-		this.showContextMenu = false
-		this.contextMenuObject = undefined
+        this.showContextMenu = false
+        this.contextMenuObject = undefined
 	}
 
 	// EPIC > OMS-TRACK-MONITOR

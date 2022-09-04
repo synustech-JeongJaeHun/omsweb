@@ -546,9 +546,8 @@ namespace OMSWeb.Repositories
             if (data == null)
             {
                 var models = new List<VehiclePath>();
-                string sql = @"
-SELECT vehicle_id AS id, expected_path AS path, calculate_path AS is_calculate_path
-FROM vehicle_paths
+                string sql = @"SELECT vehicle_id AS id, expected_path AS path, calculate_path AS is_calculate_path
+                               FROM vehicle_paths
 ";
                 using (var conn = ConnectTrack())
                 {
@@ -642,13 +641,12 @@ FROM vehicle_paths
             if (data == null)
             {
                 var models = new List<LocationGroup>();
-                string sql = @"
-SELECT location_groups.id, logical_id, color, ARRAY_AGG('{""type"":""'||reference_table||'"", ""id"":'||reference_id||'}') AS objects
-FROM location_groups
-LEFT JOIN grouped_objects ON location_groups.id = grouped_objects.group_id
-GROUP BY location_groups.id, logical_id, color
-ORDER BY location_groups.id ASC
-";
+                string sql = @"SELECT location_groups.id, logical_id, color, 
+                                ARRAY_AGG('{""type"":""'||reference_table||'"", ""id"":'||reference_id||'}') AS objects  
+                               FROM location_groups 
+                               LEFT JOIN grouped_objects ON location_groups.id = grouped_objects.group_id 
+                               GROUP BY location_groups.id, logical_id, color 
+                               ORDER BY location_groups.id ASC ";
                 using (var conn = ConnectTrack())
                 {
                     using (var cmd = new NpgsqlCommand(sql, conn))
@@ -682,21 +680,14 @@ ORDER BY location_groups.id ASC
 
         public string QueryCarrierId(string carrierLocation)
         {
-            var sql = $@"
-                    SELECT 
-                        carrier_id
-                    FROM 
-                        carriers
-                    WHERE 
-                        carrier_location='{carrierLocation}' and installed=1
-                ";
-
             string result = null;
-
             using (var conn = ConnectTrack())
             {
                 try
                 {
+                    var sql = $@"SELECT carrier_id FROM carriers 
+                                 WHERE carrier_location='{carrierLocation}' and installed=1 ";
+
                     result = conn.QueryFirst<string>(sql);
                 }
                 catch (System.Exception)
@@ -715,11 +706,8 @@ ORDER BY location_groups.id ASC
             IQueryable<CarrierInfo> result;
             using (var conn = ConnectTrack())
             {
-                var sql = $@"
-        SELECT carrier_id
-        FROM carriers 
-        WHERE carrier_location='{carrierLocation}' and installed=1
-        ";
+                var sql = $@"SELECT carrier_id FROM carriers 
+                             WHERE carrier_location='{carrierLocation}' and installed=1 ";
 
                 result = conn.Query<CarrierInfo>(sql).AsQueryable();
             }
@@ -732,14 +720,33 @@ ORDER BY location_groups.id ASC
             IQueryable<CarrierLocation> result;
             using (var conn = ConnectTrack())
             {
-                var sql = $@"
-        SELECT carrier_location
-        FROM carriers 
-        WHERE carrier_id='{carrierId}' and installed=1
-        ";
+                var sql = $@"SELECT carrier_location FROM carriers WHERE carrier_id='{carrierId}' and installed=1 ";
 
                 result = conn.Query<CarrierLocation>(sql).AsQueryable();
             }
+            return result;
+        }
+
+        public Boolean IsBranchPoint(int pointId)
+        {
+            Boolean result = false;
+            int count = 0;
+            using (var conn = ConnectTrack())
+            {
+                try
+                {
+                    var sql = $@"SELECT count(*) FROM segments WHERE start_point={pointId} ";
+                    count = conn.QueryFirst<int>(sql);
+                }
+                catch (System.Exception)
+                {
+                    Console.WriteLine("[QueryCanUpdateOrder] => null");
+                    count = 0;
+                }
+            }
+            if (count > 1)  // if 2, the point is branch start
+                result = true;
+
             return result;
         }
     }

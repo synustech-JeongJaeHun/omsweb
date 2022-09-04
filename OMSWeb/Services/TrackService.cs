@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using OMSWeb.Models;
 using OMSWeb.Models.Tracks;
 using OMSWeb.Repositories;
 using Buffer = OMSWeb.Models.Tracks.Buffer;
@@ -161,6 +162,21 @@ namespace OMSWeb.Services
                 CarrierId = carrierInfos != null ? carrierInfos.CarrierId : string.Empty,
                 CarrierLoc = carrierLocs != null ? carrierLocs.CarrierLoc : string.Empty,
             };
+        }
+
+        public QueryResult CheckPointHomeInterlock(int pointId)
+        {
+            QueryResult queryResult = new QueryResult
+            {
+                Retcode = (int)RET_CODE.Failed,
+                Message = string.Empty,
+            };
+
+            bool res = this._trackRepo.IsBranchPoint(pointId);
+
+            queryResult.Retcode = res ? 1 : 0;
+
+            return queryResult;
         }
 
         public IList<LocationGroup> GetGroups()
