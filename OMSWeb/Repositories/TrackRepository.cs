@@ -614,6 +614,7 @@ namespace OMSWeb.Repositories
                                     Type = dr["type"].ToString(),
                                     CargoTransferResult = dr["cargo_transfer_result"].ToString(),
                                     CarrierLabel = dr["carrier_id"].ToString(),
+                                    CarrierId = dr["carrier_id"].ToString(),
                                     MapDb = dr["map_db"].ToString(),
                                     OrderId = dr["order_id"].TryIntegerOrNull(),
                                     OrderLogicalId = dr["order_logical_id"].ToString(),
