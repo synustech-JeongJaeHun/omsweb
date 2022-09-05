@@ -137,4 +137,17 @@ namespace OMSWeb.Models.Entities
         public int PointId { get; set; }
         public int ClusterId { get; set; }
     }
+
+    public class AlternateTransferEntity
+    {
+        public string Mode { get; set; }
+        public int MaxRetryToBuffer { get; set; }
+        public AlternateStationEntity[] StationList { get; set; }
+    }
+
+    public class AlternateStationEntity
+    {
+        public string Id { get; set; }
+        public string logicalId { get; set; }
+    }
 }

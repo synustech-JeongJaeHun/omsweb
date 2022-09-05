@@ -1,10 +1,10 @@
 <div class="setting-header">
 	<h3 class="setting-title">{{ 'names.alternateTransfer' | translate }}</h3>
 	<div class="setting-actions">
-		<button mat-raised-button class="dense" color="primary" (click)="onSave()">
+		<button mat-raised-button class="dense" color="primary" [disabled]="!isUpdated" (click)="onSave()">
 			{{ 'names.save' | translate }}
 		</button>
-		<button mat-raised-button class="dense" (click)="onLoad()">
+		<button mat-raised-button class="dense" [disabled]="!isUpdated" (click)="onRevert()">
 			{{ 'names.revert' | translate }}
 		</button>
 	</div>
@@ -21,12 +21,12 @@
 		<input
 			[disabled]="!isModeStb"
 			type="number"
-			name="stbCount"
+			name="retryCntToSTB"
 			min="1"
 			max="10"
 			step="1"
 			required
-			[(ngModel)]="stbCount"
+			[(ngModel)]="retryCntToSTB"
 		/>
 		({{ 'names.range' | translate }}: 1 ~ 10)
 	</div>
@@ -39,21 +39,18 @@
 	</label>
 
 	<div class="inner-container two-grid">
-		<dx-data-grid
-			[disabled]="!isModeStk"
-			[dataSource]="candidateStks"
-			[showBorders]="true"
-			[keyExpr]="'id'"
-			[(selectedRowKeys)]="selectedCandidateStks"
-			height="350px"
-			width="10em"
-		>
+		<dx-data-grid [disabled]="!isModeStk"
+									[dataSource]="candidateStks"
+									[showBorders]="true"
+									[keyExpr]="'id'"
+									[(selectedRowKeys)]="selectedCandidateStks"
+									height="350px"
+									width="18em">
 			<dxo-scrolling mode="virtual"></dxo-scrolling>
-			<dxo-selection
-				mode="multiple"
-				showCheckBoxesMode="always"
-			></dxo-selection>
-			<dxi-column dataField="logicalId" caption="Stoker"> </dxi-column>
+			<dxo-selection mode="multiple"
+										 showCheckBoxesMode="always"></dxo-selection>
+			<dxi-column [width]="40" datyType="string" dataField="id" [caption]="'names.id' | translate"> </dxi-column>
+			<dxi-column [width]="120" datyType="string" dataField="logicalId" [caption]="'names.logicalId' | translate"> </dxi-column>
 		</dx-data-grid>
 
 		<div class="actions">
@@ -73,21 +70,18 @@
 			</button>
 		</div>
 
-		<dx-data-grid
-			[disabled]="!isModeStk"
-			[dataSource]="chosenStks"
-			[showBorders]="true"
-			[keyExpr]="'id'"
-			[(selectedRowKeys)]="selectedChosenStks"
-			height="350px"
-			width="10em"
-		>
+		<dx-data-grid [disabled]="!isModeStk"
+									[dataSource]="chosenStks"
+									[showBorders]="true"
+									[keyExpr]="'id'"
+									[(selectedRowKeys)]="selectedChosenStks"
+									height="350px"
+									width="18em">
 			<dxo-scrolling mode="virtual"></dxo-scrolling>
-			<dxo-selection
-				mode="multiple"
-				showCheckBoxesMode="always"
-			></dxo-selection>
-			<dxi-column dataField="logicalId" caption="Stoker"> </dxi-column>
+			<dxo-selection mode="multiple"
+										 showCheckBoxesMode="always"></dxo-selection>
+			<dxi-column [width]="40" datyType="string" dataField="id" [caption]="'names.id' | translate"> </dxi-column>
+			<dxi-column [width]="120" datyType="string" dataField="logicalId" [caption]="'names.logicalId' | translate"> </dxi-column>
 		</dx-data-grid>
 
 		<div class="actions">

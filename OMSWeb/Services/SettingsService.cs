@@ -6,113 +6,123 @@ using OMSWeb.Repositories;
 
 namespace OMSWeb.Services
 {
-  public class SettingsService
-  {
-    private readonly SettingsRepository _repo;
-
-    public SettingsService(SettingsRepository repo)
+    public class SettingsService
     {
-      _repo = repo;
-    }
+        private readonly SettingsRepository _repo;
 
-    public IQueryable<GroupEntity> GetSettingsGroups()
-    {
-      return _repo.QuerySettingsGroups();
-    }
+        public SettingsService(SettingsRepository repo)
+        {
+            _repo = repo;
+        }
 
-    public IQueryable<GroupedObjectEntity> GetSettingsGroupedObjects()
-    {
-      return _repo.QuerySettingsGroupedObjects();
-    }
+        public IQueryable<AlternateStationEntity> GetSettingsAlternateStations(string stationLikeKey)
+        {
+            return _repo.QuerySettingsAlternateStations(stationLikeKey);
+        }
 
-    public IQueryable<int> GetSettingsGroupIsAvailableHomes(int groupId)
-    {
-      return _repo.QuerySettingsGroupIsAvailableHomes(groupId);
-    }
+        public string GetSettingsOnlineName(string id, string tyype)
+        {
+            return _repo.QueryOnlineName(id, "station");
+        }
 
-    public IQueryable<int> GetSettingsGroupIsAvailableStations(int groupId)
-    {
-      return _repo.QuerySettingsGroupIsAvailableStations(groupId);
-    }
+        public IQueryable<GroupEntity> GetSettingsGroups()
+        {
+            return _repo.QuerySettingsGroups();
+        }
 
-    public IQueryable<int> GetSettingsGroupIsAvailableVehicles(int groupId)
-    {
-      return _repo.QuerySettingsGroupIsAvailableVehicles(groupId);
-    }
+        public IQueryable<GroupedObjectEntity> GetSettingsGroupedObjects()
+        {
+            return _repo.QuerySettingsGroupedObjects();
+        }
 
-    public IQueryable<int> GetSettingsGroupIsAvailableBuffers(int groupId)
-    {
-      return _repo.QuerySettingsGroupIsAvailableBuffers(groupId);
-    }
+        public IQueryable<int> GetSettingsGroupIsAvailableHomes(int groupId)
+        {
+            return _repo.QuerySettingsGroupIsAvailableHomes(groupId);
+        }
 
-    public IQueryable<ClusterEntity> GetSettingsClusters()
-    {
-      return _repo.QuerySettingsClusters();
-    }
+        public IQueryable<int> GetSettingsGroupIsAvailableStations(int groupId)
+        {
+            return _repo.QuerySettingsGroupIsAvailableStations(groupId);
+        }
 
-    public IQueryable<ClusterPointEntity> GetSettingsClusterPoints()
-    {
-      return _repo.QuerySettingsClusterPoints();
-    }
+        public IQueryable<int> GetSettingsGroupIsAvailableVehicles(int groupId)
+        {
+            return _repo.QuerySettingsGroupIsAvailableVehicles(groupId);
+        }
 
-    public IQueryable<int> GetSettingsClusterIsAvailablePoints(int clusterId)
-    {
-      return _repo.QuerySettingsClusterIsAvailablePoints(clusterId);
-    }
+        public IQueryable<int> GetSettingsGroupIsAvailableBuffers(int groupId)
+        {
+            return _repo.QuerySettingsGroupIsAvailableBuffers(groupId);
+        }
 
-    public IQueryable<int> GetSettingsClusterAssignedPoints(int clusterId)
-    {
-      return _repo.QuerySettingsClusterAssignedPoints(clusterId);
-    }
+        public IQueryable<ClusterEntity> GetSettingsClusters()
+        {
+            return _repo.QuerySettingsClusters();
+        }
 
-    public IQueryable<SegmentWithVPartsNBlockingEntity> GetSettingsSegements()
-    {
-      return _repo.QuerySettingsSegments();
-    }
+        public IQueryable<ClusterPointEntity> GetSettingsClusterPoints()
+        {
+            return _repo.QuerySettingsClusterPoints();
+        }
 
-    public int UpdateSettingsSegment(SegmentWithVPartsNBlockingEntity segment)
-    {
-      return _repo.UpdateSettingsSegment(segment);
-    }
+        public IQueryable<int> GetSettingsClusterIsAvailablePoints(int clusterId)
+        {
+            return _repo.QuerySettingsClusterIsAvailablePoints(clusterId);
+        }
 
-    public IQueryable<StationWithUnuseEntity> GetSettingsStations()
-    {
-      return _repo.QuerySettingsStations();
-    }
+        public IQueryable<int> GetSettingsClusterAssignedPoints(int clusterId)
+        {
+            return _repo.QuerySettingsClusterAssignedPoints(clusterId);
+        }
 
-    public IQueryable<BufferWithUnuseEntity> GetSettingsBuffers()
-    {
-      return _repo.QuerySettingsBuffers();
-    }
+        public IQueryable<SegmentWithVPartsNBlockingEntity> GetSettingsSegements()
+        {
+            return _repo.QuerySettingsSegments();
+        }
 
-    public IQueryable<PointWithAIVertexEntity> GetSettingsPoints()
-    {
-      return _repo.QuerySettingsPoints();
-    }
+        public int UpdateSettingsSegment(SegmentWithVPartsNBlockingEntity segment)
+        {
+            return _repo.UpdateSettingsSegment(segment);
+        }
 
-    public IQueryable<ZcuEntity> GetSettingsZcus()
-    {
-      return _repo.QuerySettingsZcus();
-    }
+        public IQueryable<StationWithUnuseEntity> GetSettingsStations()
+        {
+            return _repo.QuerySettingsStations();
+        }
 
-    public IQueryable<VehicleRegEntity> GetSettingsVehicleRegs()
-    {
-      return _repo.QuerySettingsVehicleRegs();
-    }
+        public IQueryable<BufferWithUnuseEntity> GetSettingsBuffers()
+        {
+            return _repo.QuerySettingsBuffers();
+        }
 
-    public int InsertSettingsVehicleRegs(VehicleRegEntity vehicleReg)
-    {
-      return _repo.InsertSettingsVehicleRegs(vehicleReg);
-    }
+        public IQueryable<PointWithAIVertexEntity> GetSettingsPoints()
+        {
+            return _repo.QuerySettingsPoints();
+        }
 
-    public int UpdateSettingsVehicleRegs(VehicleRegEntity vehicleReg)
-    {
-      return _repo.UpdateSettingsVehicleRegs(vehicleReg);
-    }
+        public IQueryable<ZcuEntity> GetSettingsZcus()
+        {
+            return _repo.QuerySettingsZcus();
+        }
 
-    public int DeleteSettingsVehicleRegs(VehicleRegEntity vehicleReg)
-    {
-      return _repo.DeleteSettingsVehicleRegs(vehicleReg);
+        public IQueryable<VehicleRegEntity> GetSettingsVehicleRegs()
+        {
+            return _repo.QuerySettingsVehicleRegs();
+        }
+
+        public int InsertSettingsVehicleRegs(VehicleRegEntity vehicleReg)
+        {
+            return _repo.InsertSettingsVehicleRegs(vehicleReg);
+        }
+
+        public int UpdateSettingsVehicleRegs(VehicleRegEntity vehicleReg)
+        {
+            return _repo.UpdateSettingsVehicleRegs(vehicleReg);
+        }
+
+        public int DeleteSettingsVehicleRegs(VehicleRegEntity vehicleReg)
+        {
+            return _repo.DeleteSettingsVehicleRegs(vehicleReg);
+        }
     }
-  }
 }

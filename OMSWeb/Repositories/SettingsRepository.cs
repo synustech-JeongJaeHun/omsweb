@@ -14,6 +14,44 @@ namespace OMSWeb.Repositories
         {
         }
 
+
+        public IQueryable<AlternateStationEntity> QuerySettingsAlternateStations(string stationLikeKey)
+        {
+            IQueryable<AlternateStationEntity> result;
+            using (var conn = ConnectTrack())
+            {
+                var sql = $@"SELECT id, logical_id FROM stations 
+                            WHERE logical_id LIKE '%{stationLikeKey}%' ORDER BY id";
+
+                result = conn.Query<AlternateStationEntity>(sql).AsQueryable();
+            }
+            return result;
+        }
+
+        
+        public string QueryOnlineName(string id, string type)
+        {
+            string result = null;
+            using (var conn = ConnectTrack())
+            {
+                try
+                {
+                    var sql = string.Empty;
+                    if (type.ToLower() == "buffer") sql = $@"SELECT logical_id FROM buffers WHERE id={id}";
+                    else if (type.ToLower() == "station") sql = $@"SELECT logical_id FROM stations WHERE id={id}";
+                    else if (type.ToLower() == "vehicle") sql = $@"SELECT logical_id FROM vehicle_reg WHERE id={id}";
+
+                    result = conn.QueryFirst<string>(sql);
+                }
+                catch (System.Exception)
+                {
+                    Console.WriteLine("[QueryOnlineName] => null");
+                    result = null;
+                }
+            }
+            return result;
+        }
+
         public IQueryable<GroupEntity> QuerySettingsGroups()
         {
             IQueryable<GroupEntity> result;

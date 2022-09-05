@@ -4,7 +4,9 @@ import DataSource from 'devextreme/data/data_source'
 import { Observable, of } from 'rxjs'
 import { map, tap } from 'rxjs/operators'
 import {
-	ClientPreferences,
+  ClientPreferences,
+    ISettingsAlternateTransfer,
+    ISettingsAlternateStation,
 	ISettingsBufferWithUnuse,
 	ISettingsGroup,
 	ISettingsGroupedObject,
@@ -173,5 +175,17 @@ export class SettingsService {
 
 	saveVehicleRegs(form: any[]): Observable<void> {
 		return this.http.post<void>(`${this.baseUrl}/vehicleRegs/save`, form)
-	}
+    }
+
+    saveAlternateTransfer(form: any[]): Observable<void> {
+        return this.http.post<void>(`${this.baseUrl}/alternateTransfer/save`, form)
+    }
+
+    settingsAlternateTransfer(): Observable<ISettingsAlternateTransfer> {
+        return this.http.get<ISettingsAlternateTransfer>(`${this.baseUrl}/alternateTransfer`)
+    }
+
+    settingsAlternateStations(): Observable<ISettingsAlternateStation[]> {
+        return this.http.get<ISettingsAlternateStation[]>(`${this.baseUrl}/alternateStations`)
+    }
 }

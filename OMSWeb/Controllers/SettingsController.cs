@@ -11,6 +11,8 @@ using OMSWeb.Models;
 using OMSWeb.Models.Entities;
 using OMSWeb.Repositories;
 using OMSWeb.Services;
+using System.Configuration;
+using OMSWeb.OMSSettings;
 
 namespace OMSWeb.Controllers
 {
@@ -29,6 +31,85 @@ namespace OMSWeb.Controllers
         public ActionResult<string> GetAppSettings()
         {
             return System.IO.File.ReadAllText("./appsettings.json");
+        }
+
+        [HttpPost("alternateTransfer/save")]
+        public IActionResult SetAlternateTransfer([FromBody] AlternateTransferEntity alternateTransfer)
+        {
+            if (alternateTransfer != null)
+            {
+                if (alternateTransfer.Mode != null)
+                {
+                    alternateTransfer.Mode = alternateTransfer.Mode.ToString();
+                    
+                }
+
+                if (alternateTransfer.MaxRetryToBuffer != null)
+                {
+
+                }
+
+                if (alternateTransfer.StationList != null)
+                {
+                    var stationList = alternateTransfer.StationList.ToList();
+                    foreach (AlternateStationEntity station in stationList)
+                    {
+                        // _settingsSvc.UpdateSettingsSegment(segment);
+                    }
+                }
+            }
+
+            return Ok();
+        }
+
+        [HttpGet("alternateTransfer")]
+        public ActionResult<AlternateTransferEntity> GetAlternateTransfer()
+        {
+            string strMode = AppConfig.GetFromOMSConfig("Transfer", "new_dest_of_timeout", "stk");
+            string retryToBuffer = AppConfig.GetFromOMSConfig("Dispatcher", "max_num_time_out_order", "3");
+            string stockList = AppConfig.GetFromOMSConfig("Map", "stocker_list", "");
+
+            string c = strMode.ToLower();
+            if (!string.IsNullOrWhiteSpace(c))
+            {
+                if (c.Contains("buffer") || c.Contains("stb"))  strMode = @"stb";
+                if (c.Contains("station") || c.Contains("stocker") || c.Contains("stk"))  strMode = @"stk";
+            }
+
+            List<AlternateStationEntity> alternateStationEntity = new List<AlternateStationEntity>();
+            string[] stations = stockList.Split(";");
+            if (stations != null)
+            {
+                foreach (string s in stations)
+                {
+                    if (!string.IsNullOrEmpty(s))
+                    {
+                        string sId = s.Replace('s', ' ').Trim();
+                        string sLogicalId = _settingsSvc.GetSettingsOnlineName(sId, "station");
+                        alternateStationEntity.Add(
+                            new AlternateStationEntity() {
+                                Id = sId,
+                                logicalId = sLogicalId
+                            });
+                    }
+                }
+            }
+
+            return Ok(new AlternateTransferEntity()
+            {
+                Mode = strMode,
+                MaxRetryToBuffer = Convert.ToInt32(retryToBuffer),
+                StationList = alternateStationEntity.ToArray(),
+            });
+        }
+
+
+        [HttpGet("alternateStations")]
+        public IEnumerable<AlternateStationEntity> GetAlternateStations()
+        {
+            string stationLikeKey = @"STK";
+
+            return _settingsSvc.GetSettingsAlternateStations(stationLikeKey).ToList();
         }
 
         [HttpGet("groups")]

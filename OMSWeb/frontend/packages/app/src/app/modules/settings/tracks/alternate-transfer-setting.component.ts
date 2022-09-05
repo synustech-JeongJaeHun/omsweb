@@ -1,8 +1,21 @@
-import { Component } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
+import { forkJoin, Observable } from 'rxjs'
+import { tap } from 'rxjs/operators'
+import { Subject } from 'rxjs'
+import { takeUntil } from 'rxjs/operators'
+import { ISettingsAlternateTransfer, ISettingsAlternateStation } from '../../../models/settings.model';
+import { ISettingsStationWithUnuse } from '../../../models/settings.model';
+import { SettingsService } from '../../../services/settings.service'
+import { SystemsService } from '../../../services/systems.service'
+import { MessagesService } from '../../../services/messages.service'
+import { DialogService } from '../../../services/dialog.service'
+import { TranslateService } from '@ngx-translate/core'
+import { TscModeEnums } from '@oms/models/enums'
+import { forEach } from 'lodash'
 
 type Stk = {
-	id: string
-	logicalId: string
+  id: string
+  logicalId: string
 }
 
 @Component({
@@ -11,11 +24,32 @@ type Stk = {
 	styleUrls: ['./alternate-transfer-setting.component.scss'],
 })
 export class AlternateTransferSettingComponent {
-	constructor() {
-		this.onLoad()
-	}
 
-	public mode: 'stb' | 'stk'
+    private destroy$ = new Subject<void>()
+
+    public mode: string = 'stk';
+    public retryCntToSTB: number
+
+    private settingAlternateTransfer: ISettingsAlternateTransfer;
+    private settingAlternateStations: ISettingsAlternateStation[];
+
+    // stk related
+    public candidateStks: ISettingsAlternateStation[] = []
+    public selectedCandidateStks: Stk['id'][] = []
+    public chosenStks: ISettingsAlternateStation[] = []
+    public selectedChosenStks: Stk['id'][] = []
+
+    private priorityChanged = false;
+
+    constructor(
+      private settingsSvc: SettingsService,
+      private messageSvc: MessagesService,
+      private systemSvc: SystemsService,
+      private dialogSvc: DialogService,
+      private $t: TranslateService,
+    ) {
+      this.init()
+	}
 
 	get isModeStb() {
 		return this.mode === 'stb'
@@ -25,124 +59,185 @@ export class AlternateTransferSettingComponent {
 	}
 	get isPriorityChangable() {
 		return this.selectedChosenStks.length === 1
-	}
+    }
 
-	// stb related
-	public stbCount: number
+    get isUpdated(): boolean {
+        if (this.settingAlternateTransfer?.mode !== this.mode) return true;
+        if (parseInt(this.settingAlternateTransfer?.maxRetryToBuffer.toString()) !== this.retryCntToSTB) return true;
+        if (this.settingAlternateTransfer?.stationList !== this.chosenStks) return true;
+        if (this.priorityChanged) return true;
+          
+        return false;
+    }
 
-	// stk related
-	public candidateStks: Stk[] = []
-	public selectedCandidateStks: Stk['id'][] = []
-	public chosenStks: Stk[] = []
-	public selectedChosenStks: Stk['id'][] = []
+    ngOnInit(): void { }
 
-	onLoad() {
-		// this.~~~~~service.subscribe(res => {.....})
+    ngOnDestroy(): void {
+      this.destroy$.next()
+      this.destroy$.complete()
+    }
 
-		// below is sample code for init
-		this.mode = 'stb'
-		this.stbCount = 5
-		this.candidateStks = [
-			{ id: '1', logicalId: 'l1' },
-			{ id: '2', logicalId: 'l2' },
-			{ id: '3', logicalId: 'l3' },
-			{ id: '4', logicalId: 'l4' },
-			{ id: '5', logicalId: 'l5' },
-			{ id: '6', logicalId: 'l6' },
-			{ id: '7', logicalId: 'l7' },
-			{ id: '8', logicalId: 'l8' },
-			{ id: '9', logicalId: 'l9' },
-			{ id: '10', logicalId: 'l10' },
-		]
-		this.chosenStks = [
-			{ id: '11', logicalId: 'l11' },
-			{ id: '22', logicalId: 'l22' },
-			{ id: '33', logicalId: 'l33' },
-			{ id: '44', logicalId: 'l44' },
-			{ id: '55', logicalId: 'l55' },
-			{ id: '66', logicalId: 'l66' },
-			{ id: '77', logicalId: 'l77' },
-			{ id: '88', logicalId: 'l88' },
-			{ id: '99', logicalId: 'l99' },
-			{ id: '100', logicalId: 'l100' },
-		]
-	}
+    private init() {
+        forkJoin(this.loadAlternateTransfer(), this.loadSettingStations()).subscribe(() => {
+           forkJoin(this.bindStationListData());
+        });
+    }
+
+    private loadAlternateTransfer() {
+        return this.settingsSvc.settingsAlternateTransfer().pipe(
+          tap((res) => {
+            this.settingAlternateTransfer = res;
+
+            this.mode = res.mode.toString();
+            this.retryCntToSTB = parseInt(res.maxRetryToBuffer.toString());
+            this.chosenStks = res.stationList;
+          }),
+        )
+    }
+
+    private loadSettingStations() {
+        return this.settingsSvc.settingsAlternateStations().pipe(
+          tap((res) => {
+            this.settingAlternateStations = res
+          }),
+        )
+    }
+
+    private bindStationListData() {
+      for (var s of this.settingAlternateStations) {
+          if (!this.isAssignedStation(s.id)) {
+            this.candidateStks.push(s);
+          }
+        }
+    }
+
+    private isAssignedStation(id: string) {
+        for (var s of this.chosenStks) {
+          if (id == s.id) return true;
+        }
+        return false;
+    }
 
 	onSave() {
-		if (this.mode === 'stb') {
-			// check is undefined
-			this.stbCount
-			// ...
-		}
-		if (this.mode === 'stk') {
-			// sorted
-			this.chosenStks
-			// ...
-		}
-	}
+        if (!this.chosenStks.length) return
 
-	addToChosenStks() {
-		const selecteds = this.selectedCandidateStks.map((id) =>
-			this.candidateStks.find((stk) => stk.id === id),
-		)
+        this.systemSvc.currentState$
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((states) => {
+            if (states.tscMode === TscModeEnums.PAUSED) {
+              this.SaveMessages()
 
-		this.chosenStks = [...this.chosenStks, ...selecteds]
-		this.candidateStks = this.candidateStks
-			.filter((stk) => selecteds.every((selected) => selected !== stk))
-			.sort((a, b) => a.logicalId.localeCompare(b.logicalId))
+              setTimeout(() => {
+                this.onRevert()
+              }, 500)
+            } else {
+              this.dialogSvc.alert({
+                body: this.$t.instant('messages.confirmTSCStateNotPaused'),
+              })
+            }
+          })
+    }
 
-		this.resetSelecteds()
-	}
-	removeFromChosenStks() {
-		const selecteds = this.selectedChosenStks.map((id) =>
-			this.chosenStks.find((stk) => stk.id === id),
-		)
+    onRevert() {
+        this.settingAlternateTransfer.mode = 'stk'
+        this.settingAlternateTransfer.maxRetryToBuffer = 0
+        this.settingAlternateTransfer.stationList = []
+        this.settingAlternateStations = []
 
-		this.candidateStks = [...this.candidateStks, ...selecteds].sort((a, b) =>
-			a.logicalId.localeCompare(b.logicalId),
-		)
-		this.chosenStks = this.chosenStks.filter((stk) =>
-			selecteds.every((selected) => selected !== stk),
-		)
+        this.mode = 'stk'
+        this.retryCntToSTB = 0
+        this.candidateStks = []
+        this.selectedCandidateStks = []
+        this.chosenStks = []
+        this.selectedChosenStks = []
 
-		this.resetSelecteds()
-	}
+        this.priorityChanged = false
 
-	private resetSelecteds() {
-		this.selectedCandidateStks = []
-		this.selectedChosenStks = []
-	}
+        this.init()
+    }
 
-	setHighestPriority() {
-		const { index, stk } = this.getSelectedChosenStk()
-		this.chosenStks.splice(index, 1)
-		this.chosenStks = [stk, ...this.chosenStks]
-	}
-	setHighPriority() {
-		const { index, stk } = this.getSelectedChosenStk()
-		if (index === 0) return
-		this.chosenStks.splice(index, 1)
-		this.chosenStks.splice(index - 1, 0, stk)
-	}
-	setLowPriority() {
-		const { index, stk } = this.getSelectedChosenStk()
-		if (index === this.chosenStks.length - 1) return
-		this.chosenStks.splice(index, 1)
-		this.chosenStks.splice(index + 1, 0, stk)
-	}
-	setLowestPriority() {
-		const { index, stk } = this.getSelectedChosenStk()
 
-		this.chosenStks.splice(index, 1)
-		this.chosenStks = [...this.chosenStks, stk]
-	}
+    SaveMessages() {
+      /*
+        this.messageSvc
+          .sendAssignAlternateTransferCommand({
+              type: 'ALTERNATE-TRANSFER',
+              action: 'alternate-transfer-setting',
+              mode: this.mode === 'stk' ? 1 : 0,
+              stb_retry_count: this.retryCntToSTB,
+              stk_list: this.chosenStks.map(id).,
+          })
+          .subscribe()
+          */
+    }
 
-	private getSelectedChosenStk() {
-		const index = this.chosenStks.findIndex((cs) =>
-			this.selectedChosenStks.some((scs) => scs === cs.id),
-		)
-		const stk = this.chosenStks[index]
 
-		return { index, stk }
-	}
+    addToChosenStks() {
+        const selecteds = this.selectedCandidateStks.map((id) =>
+            this.candidateStks.find((stk) => stk.id === id),
+        )
+
+        this.chosenStks = [...this.chosenStks, ...selecteds]
+        this.candidateStks = this.candidateStks
+          .filter((stk) => selecteds.every((selected) => selected !== stk))
+          .sort((a, b) => a.logicalId.localeCompare(b.logicalId))
+
+        this.resetSelecteds()
+    }
+    removeFromChosenStks() {
+        const selecteds = this.selectedChosenStks.map((id) =>
+            this.chosenStks.find((stk) => stk.id === id),
+        )
+
+        this.candidateStks = [...this.candidateStks, ...selecteds].sort((a, b) =>
+            a.logicalId.localeCompare(b.logicalId),
+        )
+        this.chosenStks = this.chosenStks.filter((stk) =>
+            selecteds.every((selected) => selected !== stk),
+        )
+
+        this.resetSelecteds()
+    }
+
+    private resetSelecteds() {
+        this.selectedCandidateStks = []
+        this.selectedChosenStks = []
+    }
+
+    setHighestPriority() {
+        const { index, stk } = this.getSelectedChosenStk()
+        this.chosenStks.splice(index, 1)
+        this.chosenStks = [stk, ...this.chosenStks]
+        this.priorityChanged = true;
+    }
+    setHighPriority() {
+        const { index, stk } = this.getSelectedChosenStk()
+        if (index === 0) return
+        this.chosenStks.splice(index, 1)
+        this.chosenStks.splice(index - 1, 0, stk)
+        this.priorityChanged = true;
+    }
+    setLowPriority() {
+        const { index, stk } = this.getSelectedChosenStk()
+        if (index === this.chosenStks.length - 1) return
+        this.chosenStks.splice(index, 1)
+        this.chosenStks.splice(index + 1, 0, stk)
+        this.priorityChanged = true;
+    }
+    setLowestPriority() {
+        const { index, stk } = this.getSelectedChosenStk()
+
+        this.chosenStks.splice(index, 1)
+        this.chosenStks = [...this.chosenStks, stk]
+        this.priorityChanged = true;
+    }
+
+    private getSelectedChosenStk() {
+        const index = this.chosenStks.findIndex((cs) =>
+            this.selectedChosenStks.some((scs) => scs === cs.id),
+        )
+        const stk = this.chosenStks[index]
+
+        return { index, stk }
+    }
 }
