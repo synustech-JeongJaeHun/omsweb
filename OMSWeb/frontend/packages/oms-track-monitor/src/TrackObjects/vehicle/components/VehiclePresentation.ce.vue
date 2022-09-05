@@ -228,9 +228,10 @@ const emit = defineEmits<{
       >
         <!-- 📐🛑 Be careful! logic is dependent on invert -->
         <text
-          v-if="props.orderId"
+          v-if="props.carrierId"
           class="select-none"
           text-rendering="optimizeSpeed"
+          font-size="xx-small"
           transform="scale(1 -1) translate(-25 2)"
           text-anchor="end"
           alignment-baseline="hanging"
@@ -240,7 +241,7 @@ const emit = defineEmits<{
               : undefined
           "
         >
-          {{ props.orderId }}
+          {{ props.carrierId }}
         </text>
       </g>
       <!-- Text fields END -->
