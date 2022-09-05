@@ -42,7 +42,7 @@
 										y="12"
 										text-anchor="end"
 									>
-										order_id
+										{{ vehicleSecondaryContent }}
 									</text>
 								</g>
 							</svg>
@@ -750,7 +750,7 @@
 										y="12"
 										text-anchor="end"
 									>
-										order_id
+										{{ vehicleSecondaryContent }}
 									</text>
 								</g>
 							</svg>
@@ -782,6 +782,19 @@
 										stroke-width="3"
 									></circle>
 									<rect
+                    *ngIf="setting.vehicleSecondaryContent === 'carrier'"
+										x="-63"
+										y="2"
+										width="50"
+										height="13"
+										rx="3"
+										ry="3"
+										fill="orange"
+										stroke="#ff8000"
+										stroke-width="1px"
+									></rect>
+									<rect
+                    *ngIf="setting.vehicleSecondaryContent === 'order'"
 										x="-58"
 										y="2"
 										width="45"
@@ -808,7 +821,7 @@
 										y="12"
 										text-anchor="end"
 									>
-										order_id
+										{{ vehicleSecondaryContent }}
 									</text>
 								</g>
 							</svg>
@@ -868,7 +881,7 @@
 										y="12"
 										text-anchor="end"
 									>
-										order_id
+										{{ vehicleSecondaryContent }}
 									</text>
 								</g>
 							</svg>
@@ -924,7 +937,7 @@
 										y="12"
 										text-anchor="end"
 									>
-										order_id
+										{{ vehicleSecondaryContent }}
 									</text>
 								</g>
 							</svg>
@@ -980,7 +993,7 @@
 										y="12"
 										text-anchor="end"
 									>
-										order_id
+										{{ vehicleSecondaryContent }}
 									</text>
 								</g>
 							</svg>
