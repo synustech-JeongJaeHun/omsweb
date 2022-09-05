@@ -55,6 +55,11 @@ namespace OMSWeb.Controllers
         {
             return this._systemSvc.GetDefaultColorSettings();
         }
+        [HttpGet("settings/vehicle-orderid-contents")]
+        public ActionResult<VehicleOrderIdContents> GetVehicleOrderIdContents()
+        {
+            return this._systemSvc.GetVehicleOrderIdContents();
+        }
         [HttpGet("settings/manual-transfer-filters")]
         public ActionResult<ManualTransferFilters> GetManualTransferFilters()
         {
