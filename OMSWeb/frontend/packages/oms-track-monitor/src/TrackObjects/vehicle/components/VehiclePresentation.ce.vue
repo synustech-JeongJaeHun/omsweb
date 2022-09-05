@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Vehicle } from '../types/Vehicle'
+import { readonlyVehicleSecondaryContent } from '../vehicleSecondaryContent'
 // svg component
 import VehicleStateMaintainedSvg from '../assets/VehicleStateMaintained.svg?component'
 import VehicleStatePreventPushSvg from '../assets/VehicleStatePreventPush.svg?component'
@@ -226,9 +227,28 @@ const emit = defineEmits<{
           isHotlot ? `url(#vehicle-order-hotlot-border)` : undefined
         "
       >
+         <!-- A: OrderId -->
+         <!-- 📐🛑 Be careful! logic is dependent on invert -->
+         <text
+          v-if="readonlyVehicleSecondaryContent === 'order' && props.orderId"
+          class="select-none"
+          text-rendering="optimizeSpeed"
+          transform="scale(1 -1) translate(-25 2)"
+          text-anchor="end"
+          alignment-baseline="hanging"
+          :filter="
+            props.isHotlot
+              ? `url(#vehicle-order-hotlot-background)`
+              : undefined
+          "
+        >
+          {{ props.orderId }}
+        </text>
+
+        <!-- B: CarrierId -->
         <!-- 📐🛑 Be careful! logic is dependent on invert -->
         <text
-          v-if="props.carrierId"
+          v-if="readonlyVehicleSecondaryContent === 'carrier'  && props.carrierId"
           class="select-none"
           text-rendering="optimizeSpeed"
           font-size="xx-small"

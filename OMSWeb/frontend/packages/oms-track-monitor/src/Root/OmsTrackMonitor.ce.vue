@@ -24,6 +24,9 @@ import {
   setElementRect,
   elementRectInfo,
 } from '../MapObjects/map/elementRect'
+import {
+  updateVehicleSecondaryContent
+} from '../TrackObjects/vehicle/vehicleSecondaryContent'
 import { scaleInfo } from '../MapObjects/scale/scale'
 import { rotationInfo } from '../MapObjects/rotate/rotate'
 import { exposed } from './exposed'
@@ -83,6 +86,8 @@ const props = defineProps<{
   fireshutterClosedColor: Stringlish
   mtlUnuseColor: Stringlish
   mtlUseColor: Stringlish
+  // content
+  vehicleSecondaryContent: Stringlish
 }>()
 const propRefs = toRefs(props)
 interface Emits extends RootEmits {}
@@ -128,6 +133,12 @@ watch(propRefs.bufferMargin, (n) => {
     'bufferMargin',
     parseNumberProp(ScaleDefault.bufferMargin, n)
   )
+})
+// content
+watch([propRefs.vehicleSecondaryContent], () => {
+  const vehicleSecondaryContent = 
+    props.vehicleSecondaryContent === 'carrier' ? 'carrier' : "order"
+  updateVehicleSecondaryContent(vehicleSecondaryContent)
 })
 const selfElement = ref<HTMLDivElement>()
 const shadowRoot = computed(
