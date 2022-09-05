@@ -82,7 +82,7 @@ type TrackMonitorSetting = Record<
 	Record<
 		CameraViewBoxWidthChangedEvent['key'],
 		CameraViewBoxWidthChangedEvent['value']
-	>
+	> & {vehicleSecondaryContent: "order" | "carrier"}
 
 const DefaultTrackMonitorSetting: TrackMonitorSetting = {
 	// scale
@@ -133,6 +133,9 @@ const DefaultTrackMonitorSetting: TrackMonitorSetting = {
 	fireshutterOpenedColor: 'rgb(50, 145, 236)',
 	mtlUnuseColor: '#f98080',
 	mtlUseColor: 'grey',
+
+  // vehicle contents
+  vehicleSecondaryContent: 'order'
 }
 
 @Injectable({
@@ -163,6 +166,22 @@ export class TrackMonitorSettingService {
 			writeTrackSettingOnLocalStorage(this.trackSetting)
 			writeFirstRunOnLocalStorage()
 		})
+
+		this.settingsService
+			.loadVehicleOrderIdContents()
+			.subscribe((response) => {
+        const isCarrierIdTrue = response?.carrierId === true
+        const isOrderIdTrue = response?.orderId === true
+        
+        if(isCarrierIdTrue && isOrderIdTrue)
+          this.trackSetting.vehicleSecondaryContent = 'order'
+        else if(isCarrierIdTrue)
+          this.trackSetting.vehicleSecondaryContent = 'carrier'
+        else if(isOrderIdTrue)
+          this.trackSetting.vehicleSecondaryContent = 'order'
+        else
+          this.trackSetting.vehicleSecondaryContent = 'order'
+      })
 	}
 
 	update = (event: ChangedEvent) => {

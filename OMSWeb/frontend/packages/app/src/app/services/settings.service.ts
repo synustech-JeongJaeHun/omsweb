@@ -55,6 +55,10 @@ export class SettingsService {
 		return this.http.get(`/api/systems/settings/default-colors`)
 	}
 
+	loadVehicleOrderIdContents() {
+		return this.http.get<{orderId?: boolean, carrierId?: boolean}>(`/api/systems/settings/vehicle-orderid-contents`)
+	}
+
 	loadManualTransferFiltersSetting() {
 		return this.http.get<ManualTransferFiltersSetting>(
 			`/api/systems/settings/manual-transfer-filters`,

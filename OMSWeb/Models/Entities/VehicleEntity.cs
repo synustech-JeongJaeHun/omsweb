@@ -26,6 +26,7 @@ namespace OMSWeb.Models.Entities
         public bool hostOrder { get; set; }
         public string OrderOrigin { get; set; }
         public string CargoState { get; set; }
+        public string CarrierId { get; set; }
         public string CarrierLabel { get; set; }
         public bool IsSensorStopped { get; set; }
         public bool IsZcuBlocked { get; set; }
