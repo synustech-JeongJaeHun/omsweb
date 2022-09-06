@@ -15,11 +15,12 @@ import {
 	ISettingsSegmentWithVPartsNBlocking,
 	ISettingsStationWithUnuse,
 	ISettingsVehicleReg,
-	ISettingsZcu,
+    ISettingsZcu,
 	ServiceConfig,
 	ManualTransferFiltersSetting,
 	NodeMarginSetting,
 } from '../models/settings.model'
+import { IQueryResult } from '@oms/models/query-result.model'
 import * as AspNetData from 'devextreme-aspnet-data-nojquery'
 
 @Injectable({
@@ -177,10 +178,6 @@ export class SettingsService {
 		return this.http.post<void>(`${this.baseUrl}/vehicleRegs/save`, form)
     }
 
-    saveAlternateTransfer(form: any[]): Observable<void> {
-        return this.http.post<void>(`${this.baseUrl}/alternateTransfer/save`, form)
-    }
-
     settingsAlternateTransfer(): Observable<ISettingsAlternateTransfer> {
         return this.http.get<ISettingsAlternateTransfer>(`${this.baseUrl}/alternateTransfer`)
     }
@@ -188,4 +185,9 @@ export class SettingsService {
     settingsAlternateStations(): Observable<ISettingsAlternateStation[]> {
         return this.http.get<ISettingsAlternateStation[]>(`${this.baseUrl}/alternateStations`)
     }
+
+    updateAlternateTransfer(mode: string, rertyTostb: string, stations: string): Observable<IQueryResult> {
+        return this.http.post<IQueryResult>(`${this.baseUrl}/updateAlternateTransfer/${mode}&${rertyTostb}&${stations}`, '')
+    }
+
 }

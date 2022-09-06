@@ -126,10 +126,6 @@ export class AlternateTransferSettingComponent {
           .subscribe((states) => {
             if (states.tscMode === TscModeEnums.PAUSED) {
               this.SaveMessages()
-
-              setTimeout(() => {
-                this.onRevert()
-              }, 500)
             } else {
               this.dialogSvc.alert({
                 body: this.$t.instant('messages.confirmTSCStateNotPaused'),
@@ -158,17 +154,22 @@ export class AlternateTransferSettingComponent {
 
 
     SaveMessages() {
-      /*
-        this.messageSvc
-          .sendAssignAlternateTransferCommand({
-              type: 'ALTERNATE-TRANSFER',
-              action: 'alternate-transfer-setting',
-              mode: this.mode === 'stk' ? 1 : 0,
-              stb_retry_count: this.retryCntToSTB,
-              stk_list: this.chosenStks.map(id).,
-          })
-          .subscribe()
-          */
+        let ids: string = '';
+        for (var s of this.chosenStks) { ids += s.id + ';' }
+  
+        this.settingsSvc
+            .updateAlternateTransfer(
+                this.mode,
+                this.retryCntToSTB.toString(),
+                ids,
+            )
+            .subscribe((res) => {
+                if (res.retcode == 1) {
+                  setTimeout(() => {
+                    this.onRevert()
+                  }, 500)
+                }
+            });
     }
 
 

@@ -32,42 +32,58 @@ namespace OMSWeb.Controllers
         {
             return System.IO.File.ReadAllText("./appsettings.json");
         }
-
-        [HttpPost("alternateTransfer/save")]
-        public IActionResult SetAlternateTransfer([FromBody] AlternateTransferEntity alternateTransfer)
+                   
+        [HttpPost("updateAlternateTransfer/{mode}&{retryTostb}&{stations}")]
+        public ActionResult<QueryResult> UpdateAlternateTransfer(string mode, string retryTostb, string stations)
         {
-            if (alternateTransfer != null)
+            if (!string.IsNullOrEmpty(mode))
             {
-                if (alternateTransfer.Mode != null)
-                {
-                    alternateTransfer.Mode = alternateTransfer.Mode.ToString();
-                    
-                }
+                string value = "station";
+                string s = mode.ToLower().Trim();
+                if (s.Contains("stb") || s.Contains("buffer")) value = "buffer";
+                if (s.Contains("stk") || s.Contains("stocker") || s.Contains("station")) value = "station";
 
-                if (alternateTransfer.MaxRetryToBuffer != null)
-                {
-
-                }
-
-                if (alternateTransfer.StationList != null)
-                {
-                    var stationList = alternateTransfer.StationList.ToList();
-                    foreach (AlternateStationEntity station in stationList)
-                    {
-                        // _settingsSvc.UpdateSettingsSegment(segment);
-                    }
-                }
+                AppConfig.UpdateToOMSConfig("TimeoutTransfer", "dest_type", value);
             }
 
-            return Ok();
+            {
+                int retryCnt = Convert.ToInt32(retryTostb);
+                if (retryCnt < 0) retryCnt = 0;
+                if (retryCnt > 10) retryCnt = 10;
+                string value = retryCnt.ToString();
+
+                AppConfig.UpdateToOMSConfig("TimeoutTransfer", "retry_cnt_to_buffer", value);
+            }
+
+            if (!string.IsNullOrEmpty(stations))
+            {
+                string value = string.Empty;
+                string[] Ids = stations.Split(";");
+                if (Ids != null)
+                {
+                    foreach (string Id in Ids)
+                    {
+                        if (!string.IsNullOrEmpty(Id))
+                            value += "s" + Id + ";";
+                    }
+                }
+
+                AppConfig.UpdateToOMSConfig("TimeoutTransfer", "stocker_list", value);
+            }
+
+            return Ok(new QueryResult()
+                {
+                    Retcode = (int)RET_CODE.Success,
+                    Message = String.Empty,
+                });
         }
 
         [HttpGet("alternateTransfer")]
         public ActionResult<AlternateTransferEntity> GetAlternateTransfer()
         {
-            string strMode = AppConfig.GetFromOMSConfig("Transfer", "new_dest_of_timeout", "stk");
-            string retryToBuffer = AppConfig.GetFromOMSConfig("Dispatcher", "max_num_time_out_order", "3");
-            string stockList = AppConfig.GetFromOMSConfig("Map", "stocker_list", "");
+            string strMode = AppConfig.GetFromOMSConfig("TimeoutTransfer", "dest_type", "stk");
+            string retryToBuffer = AppConfig.GetFromOMSConfig("TimeoutTransfer", "retry_cnt_to_buffer", "3");
+            string stockList = AppConfig.GetFromOMSConfig("TimeoutTransfer", "stocker_list", "");
 
             string c = strMode.ToLower();
             if (!string.IsNullOrWhiteSpace(c))
@@ -85,12 +101,16 @@ namespace OMSWeb.Controllers
                     if (!string.IsNullOrEmpty(s))
                     {
                         string sId = s.Replace('s', ' ').Trim();
-                        string sLogicalId = _settingsSvc.GetSettingsOnlineName(sId, "station");
-                        alternateStationEntity.Add(
-                            new AlternateStationEntity() {
-                                Id = sId,
-                                logicalId = sLogicalId
-                            });
+                        if (!string.IsNullOrEmpty(sId))
+                        {
+                            string sLogicalId = _settingsSvc.GetSettingsOnlineName(sId, "station");
+                            alternateStationEntity.Add(
+                                new AlternateStationEntity()
+                                {
+                                    Id = sId,
+                                    logicalId = sLogicalId
+                                });
+                        }
                     }
                 }
             }
