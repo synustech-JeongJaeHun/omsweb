@@ -455,10 +455,16 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 				break
 			case 'push:enable':
 				commandMessage = { action: 'set_behavior', canBePushed: true }
-				break
+                break
+            case 'push:disable':
+                commandMessage = { action: 'set_behavior', canBePushed: false }
+                break
 			case 'hostOrder:enable':
 				commandMessage = { action: 'set_behavior', hostOrder: true }
-				break
+                break
+            case 'hostOrder:disable':
+                commandMessage = { action: 'set_behavior', hostOrder: false }
+                break
 			case 'rail_out':
 				commandMessage = { action: 'rail_out' }
 				break
