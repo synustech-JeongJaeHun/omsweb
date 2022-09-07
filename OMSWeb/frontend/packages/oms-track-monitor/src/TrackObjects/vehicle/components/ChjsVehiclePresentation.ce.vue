@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ComplicatedMode, Vehicle } from '../types/Vehicle'
+import { readonlyVehicleSecondaryContent } from '../vehicleSecondaryContent'
 // svg component
 import VehicleStateMaintainedSvg from '../assets/VehicleStateMaintained.svg?component'
 import VehicleStatePushDisabledSvg from '../assets/VehicleStatePushDisabled.svg?component'
@@ -10,6 +11,7 @@ import VehicleCargoUnloadingSvg from '../assets/VehicleCargoUnloading.svg?compon
 import VehicleCargoFullSvg from '../assets/VehicleCargoFull.svg?component'
 import VehicleCargoTransferFailSvg from '../assets/VehicleCargoTransferFail.svg?component'
 import VehicleStateBlockSvg from '../assets/VehicleStateBlock.svg?component'
+import VehicleStateZcuBlockSvg from '../assets/VehicleStateZcuBlock.svg?component'
 import VehicleStateSensorStopSvg from '../assets/VehicleStateSensorStop.svg?component'
 import VehicleStateErrorSvg from '../assets/VehicleStateError.svg?component'
 import VehicleStateDisconnectedSvg from '../assets/VehicleStateDisconnected.svg?component'
@@ -26,10 +28,12 @@ const props = defineProps<{
   mode: Vehicle['mode']
   cargoState: Vehicle['cargoState']
   cargoTransferResult: Vehicle['cargoTransferResult']
+  carrierId: Vehicle['carrierId']
   errorList: Vehicle['errorList']
   isMaint: Vehicle['isMaint']
   isConnected: Vehicle['isConnected']
   isSensorStopped: Vehicle['isSensorStopped']
+  isZcuBlocked: Vehicle['isZcuBlocked']
   isBlocked: Vehicle['isBlocked']
 
   // Derived attr
@@ -113,14 +117,42 @@ const emit = defineEmits<{
       <g :filter="
         isHotlot ? `url(#vehicle-order-hotlot-border)` : undefined
       ">
-        <!-- 📐🛑 Be careful! logic is dependent on invert -->
-        <text v-if="props.orderId" class="select-none" text-rendering="optimizeSpeed"
-          transform="scale(1 -1) translate(-25 2)" text-anchor="end" alignment-baseline="hanging" :filter="
+
+         <!-- A: OrderId -->
+         <!-- 📐🛑 Be careful! logic is dependent on invert -->
+         <text
+          v-if="readonlyVehicleSecondaryContent === 'order' && props.orderId"
+          class="select-none"
+          text-rendering="optimizeSpeed"
+          transform="scale(1 -1) translate(-25 2)"
+          text-anchor="end"
+          alignment-baseline="hanging"
+          :filter="
             props.isHotlot
               ? `url(#vehicle-order-hotlot-background)`
               : undefined
-          ">
+          "
+        >
           {{ props.orderId }}
+        </text>
+
+        <!-- B: CarrierId -->
+        <!-- 📐🛑 Be careful! logic is dependent on invert -->
+        <text
+          v-if="readonlyVehicleSecondaryContent === 'carrier'  && props.carrierId"
+          class="select-none"
+          text-rendering="optimizeSpeed"
+          font-size="xx-small"
+          transform="scale(1 -1) translate(-25 2)"
+          text-anchor="end"
+          alignment-baseline="hanging"
+          :filter="
+            props.isHotlot
+              ? `url(#vehicle-order-hotlot-background)`
+              : undefined
+          "
+        >
+          {{ props.carrierId }}
         </text>
       </g>
       <!-- Text fields END -->
@@ -129,7 +161,21 @@ const emit = defineEmits<{
 
       <!-- top left (2) -->
       <!-- 1. Blocked -->
-      <VehicleStateBlockSvg v-if="props.isBlocked" x="-25" y="15" width="10" height="10" />
+      <VehicleStateBlockSvg 
+        v-if="props.isBlocked" 
+        x="-25" 
+        y="15" 
+        width="10" 
+        height="10" 
+      />
+      <!-- 2. Zcu Blocked -->
+      <VehicleStateZcuBlockSvg
+        v-else-if="props.isZcuBlocked"
+        x="-25"
+        y="15"
+        width="10"
+        height="10"
+      />
       <!-- 2. Sensor Stop -->
       <VehicleStateSensorStopSvg v-else-if="props.isSensorStopped" x="-25" y="15" width="10" height="10" />
       <template v-else />
