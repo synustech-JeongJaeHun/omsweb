@@ -21,6 +21,7 @@ import {
 	DxCheckBoxModule,
 	DxTagBoxModule,
 	DxSwitchModule,
+  DxButtonGroupModule
 } from 'devextreme-angular'
 import { DxSparklineModule } from 'devextreme-angular'
 import { DxPieChartModule } from 'devextreme-angular'
@@ -49,6 +50,7 @@ import { DxPieChartModule } from 'devextreme-angular'
 		DxCheckBoxModule,
 		DxTagBoxModule,
 		DxSwitchModule,
+    DxButtonGroupModule
 	],
 })
 export class SharedDevextremeModule {}

@@ -1,51 +1,62 @@
 <div class="setting-header">
-  <h3 class="setting-title">{{ "names.systemPreference" | translate }}</h3>
-  <div class="setting-actions"></div>
+	<h3 class="setting-title">{{ 'names.systemPreference' | translate }}</h3>
+	<div class="setting-actions"></div>
 </div>
 
 <div class="setting-container">
-  <fieldset>
-    <legend>
-      {{'names.homeMode' | translate}}
-    </legend>
-    <label>
-      {{"names.state" | translate}}{{": "}}
-      <ng-container *ngIf="isHomeMode === true">
-        {{"names.on" | translate}}
-        <button style="margin-left: 15px" mat-raised-button class="dense"
-          [disabled]="!hasPermissions([permissionEnums.SetHomePoint])" color="primary"
-          (click)="setHomeEditing()">{{"names.disable" |
-          translate}}</button>
-      </ng-container>
-      <ng-container *ngIf="isHomeMode === false">
-        {{"names.off" | translate}}
-        <button style="margin-left: 15px" mat-raised-button class="dense"
-          [disabled]="!hasPermissions([permissionEnums.SetHomePoint])" color="primary"
-          (click)="setHomeEditing()">{{"names.enable" |
-          translate}}</button>
-      </ng-container>
-    </label>
-  </fieldset>
-  <fieldset>
-    <legend>
-      {{'names.chainManualCommandDisabled' | translate}}
-    </legend>
-    <label>
-      {{"names.state" | translate}}{{": "}}
-      <ng-container *ngIf="isChainManualCommandDisabled === true">
-        {{"names.on" | translate}}
-        <button style="margin-left: 15px" mat-raised-button class="dense"
-          [disabled]="!hasPermissions([permissionEnums.HostOrderEnable])" color="primary"
-          (click)="setChainManualCommandDisabled()">{{"names.disable" |
-          translate}}</button>
-      </ng-container>
-      <ng-container *ngIf="isChainManualCommandDisabled === false">
-        {{"names.off" | translate}}
-        <button style="margin-left: 15px" mat-raised-button class="dense"
-          [disabled]="!hasPermissions([permissionEnums.HostOrderEnable])" color="primary"
-          (click)="setChainManualCommandDisabled()">{{"names.enable" |
-          translate}}</button>
-      </ng-container>
-    </label>
-  </fieldset>
+	<fieldset>
+		<legend>
+			{{ 'names.rebalance' | translate }} {{ 'names.mode' | translate }}
+		</legend>
+		<label>
+			{{ 'names.rebalance' | translate }} {{ 'names.mode' | translate }}{{ ': ' }}
+      <span style="color: blue">{{ translatedSelectedRebalancedMode }}</span>
+			<dx-button-group
+				[items]="rebalanceModes"
+				keyExpr="key"
+				[selectedItemKeys]="selectedRebalanceMode"
+				(onItemClick)="setRebalanceMode($event.itemData.key)"
+        buttonTemplate="buttonTemplate"
+        style="margin-left: 2em; height: 30px"
+			>
+        <div *dxTemplate="let buttonData of 'buttonTemplate'">
+            {{buttonData.label}}
+        </div>
+			</dx-button-group>
+		</label>
+	</fieldset>
+	<fieldset>
+		<legend>
+			{{ 'names.chainManualCommandDisabled' | translate }}
+		</legend>
+		<label>
+			{{ 'names.state' | translate }}{{ ': ' }}
+			<ng-container *ngIf="isChainManualCommandDisabled === true">
+				{{ 'names.on' | translate }}
+				<button
+					style="margin-left: 15px"
+					mat-raised-button
+					class="dense"
+					[disabled]="!hasPermissions([permissionEnums.HostOrderEnable])"
+					color="primary"
+					(click)="setChainManualCommandDisabled()"
+				>
+					{{ 'names.disable' | translate }}
+				</button>
+			</ng-container>
+			<ng-container *ngIf="isChainManualCommandDisabled === false">
+				{{ 'names.off' | translate }}
+				<button
+					style="margin-left: 15px"
+					mat-raised-button
+					class="dense"
+					[disabled]="!hasPermissions([permissionEnums.HostOrderEnable])"
+					color="primary"
+					(click)="setChainManualCommandDisabled()"
+				>
+					{{ 'names.enable' | translate }}
+				</button>
+			</ng-container>
+		</label>
+	</fieldset>
 </div>

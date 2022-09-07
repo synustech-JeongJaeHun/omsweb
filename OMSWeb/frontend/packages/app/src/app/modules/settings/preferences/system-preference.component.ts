@@ -22,9 +22,24 @@ export class SystemPreferenceComponent {
 
 	readonly permissionEnums = PermissionEnums
 
-	get isHomeMode() {
-		return this.systemStatusService.homeMode ?? false
+	readonly rebalanceModes = [
+		{ key: 'home', label: this.$t.instant('names.home') },
+		{ key: 'ivr', label: this.$t.instant('names.ivr') },
+		{ key: 'none', label: this.$t.instant('names.none') },
+	]
+
+  get console() {
+    return console
+  }
+
+	get selectedRebalanceMode() {
+		return ['none']
 	}
+
+  get translatedSelectedRebalancedMode() {
+    const name = `names.${this.selectedRebalanceMode[0]}`
+    return this.$t.instant(name)
+  }
 
 	get isChainManualCommandDisabled() {
 		return this.systemStatusService.chainManualCommandDisabled ?? false
@@ -34,7 +49,7 @@ export class SystemPreferenceComponent {
 		return this.auth.hasPermissions(permissions)
 	}
 
-	setHomeEditing() {
+	setRebalanceMode(value: "home" | "ivr" | "none") {
 		if (
 			!(
 				this.systemStatusService.systemStates.tscMode === 0 ||
@@ -49,20 +64,20 @@ export class SystemPreferenceComponent {
 			return
 		}
 
-		this.dialogSvc
-			.confirm(
-				this.getConfirmMessage(
-					this.$t.instant(`names.homeMode`),
-					this.isHomeMode
-						? [this.$t.instant(`names.on`), this.$t.instant('names.off')]
-						: [this.$t.instant(`names.off`), this.$t.instant('names.on')],
-				),
-			)
-			.subscribe((ok) => {
-				if (ok) {
-					this.messageSvc.sendHomeModeToggle().subscribe()
-				}
-			})
+		// this.dialogSvc
+		// 	.confirm(
+		// 		this.getConfirmMessage(
+		// 			this.$t.instant(`names.homeMode`),
+		// 			this.isHomeMode
+		// 				? [this.$t.instant(`names.on`), this.$t.instant('names.off')]
+		// 				: [this.$t.instant(`names.off`), this.$t.instant('names.on')],
+		// 		),
+		// 	)
+		// 	.subscribe((ok) => {
+		// 		if (ok) {
+		// 			this.messageSvc.sendHomeModeToggle().subscribe()
+		// 		}
+		// 	})
 	}
 
 	setChainManualCommandDisabled() {
