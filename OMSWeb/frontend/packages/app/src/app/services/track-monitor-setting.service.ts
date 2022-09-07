@@ -43,7 +43,10 @@ type ColorChangedEvent = {
 		| 'maintenanceModeVehicleColor'
 		| 'manualModeVehicleColor'
 		| 'idleModeVehicleColor'
-		| 'runningModeVehicleColor'
+    | 'homeModeVehicleColor'
+    | 'transferringModeVehicleColor'
+    | 'zcuBlockedVehicleColor'
+    | 'sensorStoppedVehicleColor'
 		| 'cargoLoadingColor'
 		| 'cargoFullColor'
 		| 'cargoUnloadingColor'
@@ -133,7 +136,10 @@ const DefaultTrackMonitorSetting: TrackMonitorSetting = {
 	maintenanceModeVehicleColor: '#000000',
 	manualModeVehicleColor: '#000000',
 	idleModeVehicleColor: '#00ffff',
-	runningModeVehicleColor: '#00ff00',
+	homeModeVehicleColor: '#ffa500',
+	transferringModeVehicleColor: '#00ff00',
+	zcuBlockedVehicleColor: '#ffff00',
+	sensorStoppedVehicleColor: '#ffff00',
 	// chjs visual end
 
 	cargoLoadingColor: 'rgba(0, 0, 205, 1)',

@@ -374,7 +374,7 @@ export namespace SvgDrawingUtil {
 							} else if (layout_object.mode == 'S') {
 								color = dom_css.color_mode_sloppy_manual
 							} else if (layout_object.mode == 'A') {
-								color = trackMonitorSetting.runningModeVehicleColor
+								color = trackMonitorSetting.transferringModeVehicleColor
 								// color = dom_css.color_mode_auto;
 							} else {
 								color = trackMonitorSetting.idleModeVehicleColor
@@ -390,27 +390,6 @@ export namespace SvgDrawingUtil {
 						})
 
 					// Add clean dashed line
-				} else if (layout_object.type === 'CLEANING') {
-					dom_object_group
-						.append('rect')
-						.attr('class', 'vehicle_circle_clean')
-						.attr('width', dom_css.radius * 2)
-						.attr('height', dom_css.radius * 2)
-						.attr('x', -dom_css.radius)
-						.attr('y', -dom_css.radius)
-						.attr('fill', function () {
-							return trackMonitorSetting.runningModeVehicleColor
-							// return dom_css.color_mode_auto;
-						})
-						.attr('stroke', function () {
-							return dom_css.color_mode_auto_outline
-						})
-						.attr('stroke-width', dom_css.clean_line_weight + 2)
-						.attr('transform', () => {
-							if (!overlap_adjustment)
-								return `rotate(${-mapRotation + 45})scale(${vehicleScale})`
-							else return 'rotate(45)'
-						})
 				}
 
 				if (layout_object.isStale) {

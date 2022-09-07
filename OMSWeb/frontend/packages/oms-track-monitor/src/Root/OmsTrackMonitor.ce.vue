@@ -83,7 +83,10 @@ const props = defineProps<{
   maintenanceModeVehicleColor: Stringlish
   manualModeVehicleColor: Stringlish
   idleModeVehicleColor: Stringlish
-  runningModeVehicleColor: Stringlish
+  homeModeVehicleColor: Stringlish
+  transferringModeVehicleColor: Stringlish
+  zcuBlockedVehicleColor: Stringlish
+  sensorStoppedVehicleColor: Stringlish
   // chjs visual end
 
   cargoLoadingColor: Stringlish
@@ -291,13 +294,22 @@ defineExpose(exposed)
     );
 }
 
-#vehicle-layer .vehicle-symbol[data-complicated-mode='RUNNING' i] .vehicle-mode-path {
-  fill: v-bind('parseStringProp(ColorDefault.runningModeVehicleColor, props.runningModeVehicleColor)'
+#vehicle-layer .vehicle-symbol[data-complicated-mode='HOME' i] .vehicle-mode-path {
+  fill: v-bind('parseStringProp(ColorDefault.homeModeVehicleColor, props.homeModeVehicleColor)'
     );
 }
 
-#vehicle-layer .vehicle-symbol .vehicle-mode-path {
-  fill: v-bind('parseStringProp(ColorDefault.runningModeVehicleColor, props.runningModeVehicleColor)'
+#vehicle-layer .vehicle-symbol[data-complicated-mode='TRANSFERRING' i] .vehicle-mode-path {
+  fill: v-bind('parseStringProp(ColorDefault.transferringModeVehicleColor, props.transferringModeVehicleColor)'
+    );
+}
+
+#vehicle-layer .vehicle-symbol[data-complicated-mode='ZCUBLOCKED' i] .vehicle-mode-path {
+  fill: v-bind('parseStringProp(ColorDefault.zcuBlockedVehicleColor, props.zcuBlockedVehicleColor)'
+    );
+}
+#vehicle-layer .vehicle-symbol[data-complicated-mode='SENSORSTOPPED' i] .vehicle-mode-path {
+  fill: v-bind('parseStringProp(ColorDefault.sensorStoppedVehicleColor, props.sensorStoppedVehicleColor)'
     );
 }
 
