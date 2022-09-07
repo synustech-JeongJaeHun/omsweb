@@ -139,6 +139,10 @@ namespace OMSWeb.Services
         {
             return this._appSettings.DefaultColor;
         }
+        public VehicleOrderIdContents GetVehicleOrderIdContents()
+        {
+            return this._appSettings.VehicleOrderIdContents;
+        }
         public ManualTransferFilters GetManualTransferFilters()
         {
             return this._appSettings.ManualTransferFilters;

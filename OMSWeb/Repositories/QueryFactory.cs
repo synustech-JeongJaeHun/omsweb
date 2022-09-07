@@ -108,6 +108,35 @@ namespace OMSWeb.Repositories
         ORDER BY CT.id
         --*user_id_condition*--WHERE user_id =@userId
       "},
+       {"clusterStatusMap", @"
+         SELECT CT.id, CT.logical_id, CS.server_id, CS.status, 
+            CONCAT( CAST(CS.voltage AS TEXT),' [V]' ) AS voltage, 
+            CONCAT( CAST(CS.current_igbt AS TEXT), ' [A]' ) AS current_igbt,
+            CONCAT( CAST(CS.current_track AS TEXT), ' [A]' ) AS current_track, 
+            CONCAT( CAST(TRUNC(CS.frequency::numeric / 10, 1) AS TEXT), ' [kHz]' ) AS frequency, 
+            CONCAT( CAST(TRUNC(CS.temp_radiator::numeric / 10, 1) AS TEXT), ' [℃]' ) AS temp_radiator, 
+            CONCAT( CAST(TRUNC(CS.temp_internal::numeric / 10, 1) AS TEXT), ' [℃]' ) AS temp_internal,  
+            CASE 
+                WHEN CS.sync = 0 THEN 'N.G'
+                WHEN CS.sync = 11 THEN 'OK'
+                ELSE ' '
+            END AS sync, 
+            CS.backup_id,
+            CS.error_code, 
+            CONCAT( CAST(CS.voltage_rs AS TEXT), ' [V]' ) AS voltage_rs, 
+            CONCAT( CAST(CS.voltage_st AS TEXT), ' [V]' ) AS voltage_st,  
+            CONCAT( CAST(CS.voltage_tr AS TEXT), ' [V]' ) AS voltage_tr,  
+            CONCAT( CAST(CS.current_r AS TEXT), ' [A]' ) AS current_r, 
+            CONCAT( CAST(CS.current_s AS TEXT), ' [A]' ) AS current_s,  
+            CONCAT( CAST(CS.current_t AS TEXT), ' [A]' ) AS current_t, 
+            CONCAT( CAST(CS.total_kw AS TEXT), ' [kW]' ) AS total_kw, 
+            CONCAT( CAST(TRUNC(CS.wh::numeric / 1000, 3) AS TEXT), ' [kWh]' ) AS wh
+        FROM clusters AS CT
+        LEFT OUTER JOIN cluster_status AS CS
+        ON CT.id = CS.converter_id
+        ORDER BY CT.id
+        --*user_id_condition*--WHERE user_id =@userId
+      "},
       {"station", @"
         SELECT id AS id, physical_id AS physical_id, logical_id AS logical_id, point AS point_id,
           direction AS direction, carrier_type AS carrier_type, next_point, ""offset"" AS offset, unuse, carrier_id
@@ -200,7 +229,8 @@ namespace OMSWeb.Repositories
                 WHEN VH.order_origin LIKE '%*%' THEN true 
                 ELSE false
             END As host_order, 
-            VH.order_origin, VH.moving_state, VH.cargo_state, VH.is_sensor_stopped, VH.is_blocked, VH.error_list, VH.type, VH.cargo_transfer_result, 
+            VH.order_origin, VH.moving_state, VH.cargo_state, VH.is_sensor_stopped, VH.is_zcu_blocked, VH.is_blocked, VH.error_list, 
+            VH.type, VH.cargo_transfer_result, VH.carrier_id,
             VH.map_db, 0 AS mapVersion,
             OD.id AS order_id, OD.logical_id AS order_logical_id, 
             --OD.location_pickup, 
@@ -284,20 +314,20 @@ namespace OMSWeb.Repositories
                 WHEN OD.location_pickup LIKE '%v%' THEN	(SELECT logical_Id FROM vehicles WHERE concat('v', cast(id as varchar)) = OD.location_pickup)
                 WHEN OD.location_pickup IS NULL AND OD.location_dropoff IS NOT NULL THEN VH.logical_id
 			    ELSE OD.location_pickup
-		    EnD AS location_pickup,
+		    END AS location_pickup,
 		    CASE
 			    WHEN OD.location_dropoff LIKE '%s%' THEN (SELECT logical_Id FROM stations WHERE concat('s', cast(id as varchar)) = OD.location_dropoff)
 			    WHEN OD.location_dropoff LIKE '%b%' THEN (SELECT logical_Id FROM buffers WHERE concat('b', cast(id as varchar)) = OD.location_dropoff)
 			    ELSE OD.location_dropoff
-		    EnD AS location_dropoff,
+		    END AS location_dropoff,
 		    CASE
 			    WHEN OD.location_move LIKE '%s%' THEN (SELECT logical_Id FROM stations WHERE concat('s', cast(id as varchar)) = OD.location_move)
 			    WHEN OD.location_move LIKE '%b%' THEN (SELECT logical_Id FROM buffers WHERE concat('b', cast(id as varchar)) = OD.location_move)
 			    ELSE OD.location_move
-		    EnD AS location_move,
+		    END AS location_move,
 
             VH.cargo_state, 
-            CR.carrier_id AS CarrierLabel,
+            VH.carrier_id AS CarrierLabel,
             VH.mode,
             CASE 
                 WHEN order_origin LIKE '%MCS%' THEN true 
@@ -305,9 +335,9 @@ namespace OMSWeb.Repositories
                 ELSE false
             END As host_order,  
             order_origin, can_be_pushed,
-            VH.is_sensor_stopped, VH.is_blocked,
+            VH.is_sensor_stopped, VH.is_zcu_blocked, VH.is_blocked,
             CASE
-            WHEN LENGTH(VH.error_list) = 0 THEN '0' ELSE VH.error_list
+                WHEN LENGTH(VH.error_list) = 0 THEN '0' ELSE VH.error_list
             END AS error_list,
             VH.distance_total, VH.runtime_total, VH.type, VH.rail_in, VH.is_maint, 
             CASE 
@@ -323,8 +353,6 @@ namespace OMSWeb.Repositories
                 ON VH.order_id = OD.id AND OD.time_completed IS NULL AND OD.time_aborted IS NULL
             LEFT JOIN grouped_objects AS GO 
 	            ON VH.id = GO.reference_id AND GO.reference_table = 'vehicle'
-            LEFT JOIN carriers AS CR 
-	            ON VH.logical_id = CR.carrier_location and installed=1
             ORDER BY VH.id
       "},
       {"orderStatus", @"

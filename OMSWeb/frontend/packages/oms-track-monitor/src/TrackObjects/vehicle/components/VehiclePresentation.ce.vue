@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Vehicle } from '../types/Vehicle'
+import { readonlyVehicleSecondaryContent } from '../vehicleSecondaryContent'
 // svg component
 import VehicleStateMaintainedSvg from '../assets/VehicleStateMaintained.svg?component'
 import VehicleStatePreventPushSvg from '../assets/VehicleStatePreventPush.svg?component'
@@ -11,6 +12,7 @@ import VehicleCargoUnloadingSvg from '../assets/VehicleCargoUnloading.svg?compon
 import VehicleCargoFullSvg from '../assets/VehicleCargoFull.svg?component'
 import VehicleCargoTransferFailSvg from '../assets/VehicleCargoTransferFail.svg?component'
 import VehicleStateBlockSvg from '../assets/VehicleStateBlock.svg?component'
+import VehicleStateZcuBlockSvg from '../assets/VehicleStateZcuBlock.svg?component'
 import VehicleStateSensorStopSvg from '../assets/VehicleStateSensorStop.svg?component'
 import VehicleStateStaleSvg from '../assets/VehicleStateStale.svg?component'
 import VehicleStateErrorSvg from '../assets/VehicleStateError.svg?component'
@@ -29,10 +31,12 @@ const props = defineProps<{
   mode: Vehicle['mode']
   cargoState: Vehicle['cargoState']
   cargoTransferResult: Vehicle['cargoTransferResult']
+  carrierId: Vehicle['carrierId']
   errorList: Vehicle['errorList']
   isMaint: Vehicle['isMaint']
   isConnected: Vehicle['isConnected']
   isSensorStopped: Vehicle['isSensorStopped']
+  isZcuBlocked: Vehicle['isZcuBlocked']
   isBlocked: Vehicle['isBlocked']
 
   // Derived attr
@@ -223,9 +227,10 @@ const emit = defineEmits<{
           isHotlot ? `url(#vehicle-order-hotlot-border)` : undefined
         "
       >
-        <!-- 📐🛑 Be careful! logic is dependent on invert -->
-        <text
-          v-if="props.orderId"
+         <!-- A: OrderId -->
+         <!-- 📐🛑 Be careful! logic is dependent on invert -->
+         <text
+          v-if="readonlyVehicleSecondaryContent === 'order' && props.orderId"
           class="select-none"
           text-rendering="optimizeSpeed"
           transform="scale(1 -1) translate(-25 2)"
@@ -238,6 +243,25 @@ const emit = defineEmits<{
           "
         >
           {{ props.orderId }}
+        </text>
+
+        <!-- B: CarrierId -->
+        <!-- 📐🛑 Be careful! logic is dependent on invert -->
+        <text
+          v-if="readonlyVehicleSecondaryContent === 'carrier'  && props.carrierId"
+          class="select-none"
+          text-rendering="optimizeSpeed"
+          font-size="xx-small"
+          transform="scale(1 -1) translate(-25 2)"
+          text-anchor="end"
+          alignment-baseline="hanging"
+          :filter="
+            props.isHotlot
+              ? `url(#vehicle-order-hotlot-background)`
+              : undefined
+          "
+        >
+          {{ props.carrierId }}
         </text>
       </g>
       <!-- Text fields END -->
@@ -253,7 +277,15 @@ const emit = defineEmits<{
         width="10"
         height="10"
       />
-      <!-- 2. Sensor Stop -->
+      <!-- 2. Zcu Blocked -->
+      <VehicleStateZcuBlockSvg
+        v-if="props.isZcuBlocked"
+        x="-25"
+        y="15"
+        width="10"
+        height="10"
+      />
+      <!-- 3. Sensor Stop -->
       <VehicleStateSensorStopSvg
         v-else-if="props.isSensorStopped"
         x="-25"

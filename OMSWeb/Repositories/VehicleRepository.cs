@@ -73,14 +73,18 @@ namespace OMSWeb.Repositories
     THEN OD.location_move		                                                -- display MOVETO
     END AS command_point,
     OD.location_pickup, OD.location_dropoff, OD.location_move,
-    VH.cargo_state, VH.mode,
+    VH.cargo_state, 
+    VH.carrier_id,
+    VH.mode,
     CASE 
         WHEN order_origin LIKE '%MCS%' THEN true 
         WHEN order_origin LIKE '%*%' THEN true 
         ELSE false
     END As host_order,  
     order_origin, can_be_pushed,
-    VH.is_sensor_stopped, VH.is_blocked,
+    VH.is_sensor_stopped, 
+    VH.is_zcu_blocked, 
+    VH.is_blocked,
     CASE
     WHEN LENGTH(VH.error_list) = 0 THEN '0' ELSE VH.error_list
     END AS error_list,

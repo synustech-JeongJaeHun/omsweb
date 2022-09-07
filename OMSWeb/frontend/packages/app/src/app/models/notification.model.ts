@@ -58,6 +58,9 @@ export interface IDataChangeEvent {
 	groupId?: number // only for groupedobject
 	referenceId?: number // only for groupedobject
 	referenceTable?: string // only for groupedobject
+    converterId?: number, // only for clusterstate
+    status?: number, // only for clusterstate
+    backupId?: number // only for clusterstate
 }
 
 export const alertSeverities = [

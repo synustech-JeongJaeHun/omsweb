@@ -281,33 +281,33 @@ namespace OMSWeb.Services.MqttClient
 
         public string GetLocationPickup(CommandMessageDto command)
         {
-            if (command.LocationPickupType == "Station")
+            if (string.Equals(command.LocationPickupType, "Station", StringComparison.OrdinalIgnoreCase))
                 return "s" + command.LocationPickup;
-            if (command.LocationPickupType == "Buffer")
+            if (string.Equals(command.LocationPickupType, "Buffer", StringComparison.OrdinalIgnoreCase))
                 return "b" + command.LocationPickup;
-            if (command.LocationPickupType == "Point")
+            if (string.Equals(command.LocationPickupType, "Point", StringComparison.OrdinalIgnoreCase))
                 return "p" + command.LocationPickup;
             return null;
         }
 
         public string GetLocationDropoff(CommandMessageDto command)
         {
-            if (command.LocationDropoffType == "Station")
+            if (string.Equals(command.LocationDropoffType, "Station", StringComparison.OrdinalIgnoreCase))
                 return "s" + command.LocationDropoff;
-            if (command.LocationDropoffType == "Buffer")
+            if (string.Equals(command.LocationDropoffType, "Buffer", StringComparison.OrdinalIgnoreCase))
                 return "b" + command.LocationDropoff;
-            if (command.LocationDropoffType == "Point")
+            if (string.Equals(command.LocationDropoffType, "Point", StringComparison.OrdinalIgnoreCase))
                 return "p" + command.LocationDropoff;
             return null;
         }
 
         public string GetLocationMove(CommandMessageDto command)
         {
-            if (command.LocationMoveType == "Station")
+            if (string.Equals(command.LocationMoveType, "Station", StringComparison.OrdinalIgnoreCase))
                 return "s" + command.LocationMove;
-            if (command.LocationMoveType == "Buffer")
+            if (string.Equals(command.LocationMoveType,"Buffer", StringComparison.OrdinalIgnoreCase))
                 return "b" + command.LocationMove;
-            if (command.LocationMoveType == "Point")
+            if (string.Equals(command.LocationMoveType, "Point", StringComparison.OrdinalIgnoreCase))
                 return "p" + command.LocationMove;
             return null;
         }
@@ -624,10 +624,10 @@ namespace OMSWeb.Services.MqttClient
                      command.Action == ACTION_RENAME_CARRIER)
             {
                 if (command.CarrierLabel != null)
-                    data["carrier_id"] = command.CarrierLabel;
+                    data["carrier_id"] = command.CarrierLabel.Trim();
 
                 if (command.NewCarrierId != null)
-                    data["new_carrier_id"] = command.NewCarrierId;
+                    data["new_carrier_id"] = command.NewCarrierId.Trim();
 
                 if (command.LogicalId != null)
                 {

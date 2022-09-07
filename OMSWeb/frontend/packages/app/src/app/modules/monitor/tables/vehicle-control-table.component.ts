@@ -169,7 +169,24 @@ export class VehicleControlTableComponent implements OnInit, OnDestroy {
 				)
 				.subscribe()
 		}
-	}
+    }
+    onChangeHostOrderEnable(enable:boolean) {
+      if (!this.canControl) return
+      if (enable === true) {
+        if (this.selectedItems.length > 0) {
+          this.messageSvc
+            .sendVehicleCommand({ action: 'set_behavior', hostOrder: true }, this.selectedItems,)
+            .subscribe()
+        }
+      }
+      else {
+        if (this.selectedItems.length > 0) {
+          this.messageSvc
+            .sendVehicleCommand({ action: 'set_behavior', hostOrder: false }, this.selectedItems,)
+            .subscribe()
+        }
+      }
+    }
 	onChangePushActivity() {
 		if (!this.canControl) return
 		this.enableRows = []
@@ -197,7 +214,24 @@ export class VehicleControlTableComponent implements OnInit, OnDestroy {
 				)
 				.subscribe()
 		}
-	}
+    }
+    onChangePushEnable(enable: boolean) {
+      if (!this.canControl) return
+      if (enable) {
+        if (this.selectedItems.length > 0) {
+          this.messageSvc
+            .sendVehicleCommand({ action: 'set_behavior', canBePushed: true }, this.selectedItems,)
+            .subscribe()
+        }
+      }
+      else {
+        if (this.selectedItems.length > 0) {
+          this.messageSvc
+            .sendVehicleCommand({ action: 'set_behavior', canBePushed: false }, this.selectedItems,)
+            .subscribe()
+        }
+      }
+    }
 	onRailIn() {
 		if (!this.canControl) return
 		this.messageSvc

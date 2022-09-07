@@ -4,7 +4,9 @@ import DataSource from 'devextreme/data/data_source'
 import { Observable, of } from 'rxjs'
 import { map, tap } from 'rxjs/operators'
 import {
-	ClientPreferences,
+  ClientPreferences,
+    ISettingsAlternateTransfer,
+    ISettingsAlternateStation,
 	ISettingsBufferWithUnuse,
 	ISettingsGroup,
 	ISettingsGroupedObject,
@@ -13,11 +15,12 @@ import {
 	ISettingsSegmentWithVPartsNBlocking,
 	ISettingsStationWithUnuse,
 	ISettingsVehicleReg,
-	ISettingsZcu,
+    ISettingsZcu,
 	ServiceConfig,
 	ManualTransferFiltersSetting,
 	NodeMarginSetting,
 } from '../models/settings.model'
+import { IQueryResult } from '@oms/models/query-result.model'
 import * as AspNetData from 'devextreme-aspnet-data-nojquery'
 
 @Injectable({
@@ -53,6 +56,10 @@ export class SettingsService {
 
 	loadDefaultColors() {
 		return this.http.get(`/api/systems/settings/default-colors`)
+	}
+
+	loadVehicleOrderIdContents() {
+		return this.http.get<{orderId?: boolean, carrierId?: boolean}>(`/api/systems/settings/vehicle-orderid-contents`)
 	}
 
 	loadManualTransferFiltersSetting() {
@@ -169,5 +176,18 @@ export class SettingsService {
 
 	saveVehicleRegs(form: any[]): Observable<void> {
 		return this.http.post<void>(`${this.baseUrl}/vehicleRegs/save`, form)
-	}
+    }
+
+    settingsAlternateTransfer(): Observable<ISettingsAlternateTransfer> {
+        return this.http.get<ISettingsAlternateTransfer>(`${this.baseUrl}/alternateTransfer`)
+    }
+
+    settingsAlternateStations(): Observable<ISettingsAlternateStation[]> {
+        return this.http.get<ISettingsAlternateStation[]>(`${this.baseUrl}/alternateStations`)
+    }
+
+    updateAlternateTransfer(mode: string, rertyTostb: string, stations: string): Observable<IQueryResult> {
+        return this.http.post<IQueryResult>(`${this.baseUrl}/updateAlternateTransfer/${mode}&${rertyTostb}&${stations}`, '')
+    }
+
 }

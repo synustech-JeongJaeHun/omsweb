@@ -47,6 +47,7 @@
 		[fireshutterClosedColor]="tmSetting.fireshutterClosedColor"
 		[mtlUnuseColor]="tmSetting.mtlUnuseColor"
 		[mtlUseColor]="tmSetting.mtlUseColor"
+    [vehicleSecondaryContent]="tmSetting.vehicleSecondaryContent"
 		(mouseoverOnObject)="onMouseoverTM($event)"
 		(mouseleaveOnObject)="onMouseleaveTM($event)"
 		(mainClickOnObject)="onFocus($event)"
@@ -444,25 +445,29 @@
       -->
 		</mat-menu>
 		<mat-menu #vehicleOptionMenu="matMenu">
-			<button
-				*ngIf="hasPermissions([permissionEnums.PushEnable])"
-				mat-menu-item
-				(click)="onVehicleCommand('push:enable')"
-			>
+			<button *ngIf="hasPermissions([permissionEnums.PushEnable])"
+							mat-menu-item
+							(click)="onVehicleCommand('push:enable')">
 				{{ 'names.pushEnable' | translate }}
 			</button>
-			<button
-				*ngIf="hasPermissions([permissionEnums.HostOrderEnable])"
-				mat-menu-item
-				(click)="onVehicleCommand('hostOrder:enable')"
-			>
+			<button *ngIf="hasPermissions([permissionEnums.PushEnable])"
+							mat-menu-item
+							(click)="onVehicleCommand('push:disable')">
+				{{ 'names.pushDisable' | translate }}
+			</button>
+			<button *ngIf="hasPermissions([permissionEnums.HostOrderEnable])"
+							mat-menu-item
+							(click)="onVehicleCommand('hostOrder:enable')">
 				{{ 'names.hostCommandEnable' | translate }}
 			</button>
-			<button
-				*ngIf="hasPermissions([permissionEnums.RailOut])"
-				mat-menu-item
-				(click)="onVehicleCommand('rail_out')"
-			>
+			<button *ngIf="hasPermissions([permissionEnums.HostOrderEnable])"
+							mat-menu-item
+							(click)="onVehicleCommand('hostOrder:disable')">
+				{{ 'names.hostCommandDisable' | translate }}
+			</button>
+			<button *ngIf="hasPermissions([permissionEnums.RailOut])"
+							mat-menu-item
+							(click)="onVehicleCommand('rail_out')">
 				{{ 'names.railOut' | translate }}
 			</button>
 		</mat-menu>

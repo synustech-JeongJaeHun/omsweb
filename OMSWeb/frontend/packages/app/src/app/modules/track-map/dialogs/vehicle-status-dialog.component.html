@@ -21,7 +21,11 @@
                 <label class="name">{{ "names.id" | translate }}</label>
                 <div class="value">{{ currentVehicle.id }}</div>
                 <label class="name">{{ "names.mode" | translate }}</label>
-                <div class="value">{{ currentVehicle.mode }}</div>
+                <div [ngSwitch]="currentVehicle.mode">
+                  <div class="value" *ngSwitchCase="'A'">{{ 'Auto' }}</div>
+                  <div class="value" *ngSwitchCase="'M'">{{ 'Manual' }}</div>
+                  <div class="value" *ngSwitchDefault>{{ currentVehicle.mode }}</div>
+                </div>
               </div>
             </fieldset>
             <fieldset>
@@ -113,10 +117,12 @@
             </div>
           </div>
         </div>
-        <div class="dio-toggle-section">
-          <mat-slide-toggle #toggleCategory color="primary" [(ngModel)]="category.show"
-            *ngFor="let category of categories">{{
-            category.name }}</mat-slide-toggle>
+        <div class="dio-toggle-section" *ngFor="let category of categories">
+          <div *ngIf="category.name != 'Disable'">
+            <mat-slide-toggle #toggleCategory color="primary" [(ngModel)]="category.show">
+              {{category.name}}
+            </mat-slide-toggle>
+          </div>
         </div>
       </div>
       <div *ngIf="visiblePIOTrend === true">

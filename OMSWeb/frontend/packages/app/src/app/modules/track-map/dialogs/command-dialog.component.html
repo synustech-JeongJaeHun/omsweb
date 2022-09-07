@@ -78,6 +78,19 @@
 				</mat-form-field>
 			</div>
 			<div class="form-row">
+				<mat-form-field class="dense" appearance="outline">
+					<input
+						matInput
+						name="priority"
+						[placeholder]="'names.priority' | translate"
+						[(ngModel)]="commandState.priority"
+						type="text"
+						pattern="[1-9]*"
+						maxlength="2"
+					/>
+				</mat-form-field>
+			</div>
+			<div class="form-row">
 				<mat-slide-toggle
 					[(ngModel)]="commandState.selectVehicle"
 					color="primary"
@@ -147,6 +160,19 @@
 				</mat-form-field>
 			</div>
 			<div class="form-row">
+				<mat-form-field class="dense" appearance="outline">
+					<input
+						matInput
+						name="priority"
+						[placeholder]="'names.priority' | translate"
+						[(ngModel)]="commandState.priority"
+						type="text"
+						pattern="[1-9]*"
+						maxlength="2"
+					/>
+				</mat-form-field>
+			</div>
+			<div class="form-row">
 				<mat-slide-toggle
 					[(ngModel)]="commandState.selectVehicle"
 					color="primary"
@@ -212,6 +238,19 @@
 						[value]="commandState.carrier ? commandState.carrier : ''"
 						(input)="onChangeCarrier($event.target.value)"
 						[placeholder]="'names.carrier' | translate"
+					/>
+				</mat-form-field>
+			</div>
+			<div class="form-row">
+				<mat-form-field class="dense" appearance="outline">
+					<input
+						matInput
+						name="priority"
+						[placeholder]="'names.priority' | translate"
+						[(ngModel)]="commandState.priority"
+						type="text"
+						pattern="[1-9]*"
+						maxlength="2"
 					/>
 				</mat-form-field>
 			</div>
@@ -316,10 +355,10 @@
 			</div>
 			<div class="form-row">
 				<mat-radio-group [(ngModel)]="commandState.mtlInOut" color="primary">
-					<mat-radio-button [value]="true" style="margin-left: 10px"
+					<mat-radio-button [value]="true" style="margin-left: 10px" [disabled]="commandState.mtlInDisabled"
 						>In [Line → MTL]</mat-radio-button
 					>
-					<mat-radio-button [value]="false" style="margin-left: 160px"
+					<mat-radio-button [value]="false" style="margin-left: 160px" [disabled]="commandState.mtlOutDisabled"
 						>Out [MTL→Line]</mat-radio-button
 					>
 				</mat-radio-group>

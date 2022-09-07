@@ -319,13 +319,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 							)
 					}
 				})
-			this.hubSvc.clusterChanged$
-				.pipe(takeUntil(this.destroy$))
-				.subscribe((e: IDataChangeEvent) => {
-					// TODO what happened on event?
-					console.log('cluster update', e)
-				})
-
 			this.hubSvc.zcuMapChanged$
 				.pipe(takeUntil(this.destroy$))
 				.subscribe((e) => {
@@ -379,6 +372,15 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 
 			this.hubSvc.mtlChanged$.pipe(takeUntil(this.destroy$)).subscribe((e) => {
 				this.viewer.updateMtl(e.operation, e.data)
+			})
+
+      this.hubSvc.clusterStatusChanged$.pipe(takeUntil(this.destroy$)).subscribe((e) => {
+				this.viewer.updateClusterState(e.operation, {
+          id: e.id, // server id
+          converterId: e.converterId,
+          status: e.status,
+          backupId: e.backupId,
+        })
 			})
 		}
 	}
@@ -453,10 +455,16 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 				break
 			case 'push:enable':
 				commandMessage = { action: 'set_behavior', canBePushed: true }
-				break
+                break
+            case 'push:disable':
+                commandMessage = { action: 'set_behavior', canBePushed: false }
+                break
 			case 'hostOrder:enable':
 				commandMessage = { action: 'set_behavior', hostOrder: true }
-				break
+                break
+            case 'hostOrder:disable':
+                commandMessage = { action: 'set_behavior', hostOrder: false }
+                break
 			case 'rail_out':
 				commandMessage = { action: 'rail_out' }
 				break
@@ -662,15 +670,24 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		}
 	}
 
-	onApplyPointHomeChange(id: number, homeGroups: number[]) {
-		if (this.homeActive) {
-			this.messageSvc.sendEnableHome(id, homeGroups).subscribe()
-		} else {
-			this.messageSvc.sendDisableHome(id).subscribe()
-		}
+    onApplyPointHomeChange(id: number, homeGroups: number[]) {
+        if (this.homeActive) {
+          this.tracksService.checkPointHomeInterlock(id).subscribe((res) => {
+              if (res.retcode === 0) {
+                  this.messageSvc.sendEnableHome(id, homeGroups).subscribe()
+              } else {
+                this.dialogSvc.alert({
+                  title: this.$t.instant('names.failed'),
+                  body: this.$t.instant('messages.confirmPointHomeInterlock'),
+                })
+              }
+          })
+        } else {
+          this.messageSvc.sendDisableHome(id).subscribe()
+        }
 
-		this.showContextMenu = false
-		this.contextMenuObject = undefined
+        this.showContextMenu = false
+        this.contextMenuObject = undefined
 	}
 
 	// EPIC > OMS-TRACK-MONITOR

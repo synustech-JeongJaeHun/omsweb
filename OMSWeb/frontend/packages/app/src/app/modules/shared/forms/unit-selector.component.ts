@@ -129,7 +129,7 @@ export class UnitSelectorComponent implements OnInit, OnChanges {
 					result.push(
 						...this.trackStatusService.trackData.mtls
 							.filter(
-								(m) => m.logicalId.includes(value) && m.inDirection !== 'R',
+								(m) => m.logicalId.includes(value) //permit all //&& m.inDirection !== 'R',
 							)
 							.map((m) => {
 								return {

@@ -18,5 +18,6 @@ namespace OMSWeb.Models
         public ManualTransferFilters ManualTransferFilters { get; set; }  
 
         public NodeMargins NodeMargins {get;set;}
+        public VehicleOrderIdContents VehicleOrderIdContents {get;set;} 
     }
 }

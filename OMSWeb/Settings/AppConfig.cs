@@ -2,11 +2,15 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace OMSWeb.OMSSettings
 {
     sealed class AppConfig
     {
+        [DllImport("kernel32")]
+        private static extern long WritePrivateProfileString(string name, string key, string val, string filePath);
+
         public static IConfiguration Configuration;
         public static string AppSettingsPath = string.Empty;
         public static string IniPath = string.Empty;
@@ -67,6 +71,21 @@ namespace OMSWeb.OMSSettings
             //"OMS-Track": "Server=127.0.0.1;Port=5432;Database=semioht;User Id=oms;Password=oms;"
             connectUiStr = string.Format("Server={0};Port={1};Database=oms_ui;User Id={2};Password={3};", host, port, user, pass);
             connectTrackStr = string.Format("Server={0};Port={1};Database={2};User Id={3};Password={4};", host, port, name, user, pass);
+        }
+
+        public static void UpdateToOMSConfig(string section, string key, string value)
+        {
+            if (File.Exists(IniPath))
+            {
+                try
+                {
+                    WritePrivateProfileString(section, key, value, IniPath);
+                }
+                catch (Exception)
+                {
+                    //Console.WriteLine("DataAccess() : " + e.Message);
+                }
+            }
         }
     }
 }

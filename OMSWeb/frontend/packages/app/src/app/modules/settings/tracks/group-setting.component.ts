@@ -4,19 +4,14 @@ import _ = require('lodash')
 import { tap } from 'rxjs/operators'
 import { Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators'
-import {
-	ISettingsGroup,
-	ISettingsGroupedObject,
-} from '../../../models/settings.model'
+import { ISettingsGroup, ISettingsGroupedObject} from '../../../models/settings.model'
 import { TranslateService } from '@ngx-translate/core'
 import { SettingsService } from '../../../services/settings.service'
 import { MessagesService } from '../../../services/messages.service'
 import { DialogService } from '../../../services/dialog.service'
 import { SystemsService } from '../../../services/systems.service'
 import { ISystemStates } from '../../../models/system.model'
-import {
-	TscModeEnums,
-} from '@oms/models/enums'
+import { TscModeEnums } from '@oms/models/enums'
 import { TrackStatusService } from '@oms/root/services/track-status.service'
 
 @Component({

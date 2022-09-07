@@ -5,6 +5,7 @@ import { SettingsRoutingModule } from './settings-routing.module'
 import { SettingsComponent } from './settings.component'
 import { SettingsDialogComponent } from './dialogs/settings-dialog.component'
 import { SharedModule } from '../shared/shared.module'
+import { AlternateTransferSettingComponent } from './tracks/alternate-transfer-setting.component'
 import { UserManagementComponent } from './preferences/user-management.component'
 import { GroupSettingComponent } from './tracks/group-setting.component'
 import { ClusterSettingComponent } from './tracks/cluster-setting.component'
@@ -31,6 +32,7 @@ import { BulkUserFormDialogComponent } from './dialogs/bulk-user-from-dialog.com
 	declarations: [
 		SettingsComponent,
 		SettingsDialogComponent,
+		AlternateTransferSettingComponent,
 		UserManagementComponent,
 		GroupSettingComponent,
 		ClusterSettingComponent,

@@ -14,5 +14,11 @@ export class LegendDialogComponent {
     return this.trackMonitorSettingService.trackSetting;
   }
 
+  get vehicleSecondaryContent() {
+    return this.trackMonitorSettingService.trackSetting.vehicleSecondaryContent === 'order' 
+      ? "order_id"
+      : "carrier_id"
+  }
+
   constructor(private trackMonitorSettingService: TrackMonitorSettingService) {}
 }

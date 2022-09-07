@@ -2,6 +2,12 @@
   <button mat-stroked-button color="primary" class="dense accent" [disabled]="!canReset" (click)="onReset()">
     {{ "names.reset" | translate }}
   </button>
+  <button mat-stroked-button color="primary" class="dense accent" [disabled]="!canReset" (click)="onSetHw()">
+    {{ "names.setHw" | translate }}
+  </button>
+  <button mat-stroked-button color="primary" class="dense accent" [disabled]="!canReset" (click)="onSetSw()">
+    {{ "names.setSw" | translate }}
+  </button>
 </div>
 
 <dx-data-grid [dataSource]="dataSource" [remoteOperations]="true" [height]="tableHeight" [repaintChangesOnly]="true"
@@ -18,8 +24,10 @@
 
   <dxi-column [width]="50" dataType="string" dataField="id" [caption]="'names.id' | translate"
               *ngIf="canDisplayTable('zcus_id')"></dxi-column>
+  <!--
   <dxi-column [width]="120" dataType="string" dataField="logicalId" [caption]="'names.logicalId' | translate"
               *ngIf="canDisplayTable('zcus_logicalId')"></dxi-column>
+    -->
   <dxi-column [width]="100" dataType="string" dataField="usingType" [caption]="'names.usingType' | translate"
               *ngIf="canDisplayTable('zcus_using_type')"></dxi-column>
   <dxi-column [width]="100" dataType="string" dataField="zcuType" [caption]="'names.zcuType' | translate"

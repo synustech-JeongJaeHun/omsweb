@@ -347,3 +347,15 @@ export interface ISettingsClusterPoint {
 	pointId: number
 	clusterId: number
 }
+
+export interface ISettingsAlternateTransfer {
+  mode: string
+  maxRetryToBuffer: number
+  stationList?: any[]
+}
+
+export interface ISettingsAlternateStation {
+  id: string
+  logicalId: string
+}
+

@@ -122,13 +122,14 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 			carrier,
 			mtl,
 			mtlInOut,
+			priority, // type priority = string | undefined
 		} = this.commandState
 
 		if (category === 'mtl') {
 			const mtlInfo = (this.trackStatusService.trackData?.mtls ?? []).find(
 				(m) => m.id === mtl.id,
 			)
-			if (mtlInfo.unuse) {
+            if (mtlInfo.unuse === null || mtlInfo.unuse) {
 				this.dialogSvc.alert({
 					title: this.t$.instant('messages.confirmCommand'),
 					body: this.t$.instant('errors.NotAvailiable', { name: 'MTL' }),
@@ -184,7 +185,7 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 			type: 'ORDER',
 			action: 'N',
 			orderOrigin: 'OMS',
-			priority: 1, // @TODO priority 기본값 확인
+			//priority: 1, // @TODO priority 기본값 확인
 			carrierLabel: carrier,
 		}
 
@@ -209,7 +210,9 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 			!pointDisabled && (cmd.locationMove = point.id.toString())
 			!destDisabled && (cmd.locationDropoff = dest.id.toString())
 		}
-		!sourceDisabled && (cmd.locationPickup = source.id.toString())
+        !sourceDisabled && (cmd.locationPickup = source.id.toString())
+
+        cmd.priority = parseInt(priority);
 
 		//this.dialog.close(cmd);
 		//this.messageSvc.sendOrderCommand(cmd).subscribe();
@@ -260,7 +263,7 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 									})
 								}
 							})
-					} else {
+                    } else {
 						this.messageSvc.sendOrderCommand(cmd).subscribe()
 					}
 				}
@@ -279,7 +282,8 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 			dest,
 			destDisabled,
 			carrier,
-			mtl,
+            mtl,
+            priority,
 		} = this.commandState
 
 		if (!vehicleDisabled && !vehicle)
@@ -302,7 +306,16 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 			} else return this.t$.instant('messages.required', { field: 'Dest' })
 		}
 
-		if (category === 'fromTo' || category === 'from' || category === 'to') {
+        if (category === 'fromTo' || category === 'from' || category === 'to') {
+            const isPriorityEmpty = priority == null || priority.trim().length === 0
+            if (isPriorityEmpty)
+                return this.t$.instant('messages.required', { field: 'Priority' })
+
+            let regExp = /[a-z]/i;
+            let isPriorityAlphabet = regExp.test(priority)
+            if (isPriorityAlphabet)
+                return this.t$.instant('messages.invalid', { field: 'Priority' })
+
 			const isCarrierEmpty = carrier == null || carrier.trim().length === 0
 			if (isCarrierEmpty)
 				return this.t$.instant('messages.required', { field: 'Carrier' })
@@ -316,7 +329,18 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 		}
 		if (category === 'mtl' && !mtl) {
 			return this.t$.instant('messages.required', { field: 'MTL' })
-		}
+        }
+
+    if (category === 'mtl') {
+        const mtlInfo = (this.trackStatusService.trackData?.mtls ?? []).find(
+            (m) => m.id === mtl.id,
+        )
+        if (this.commandState.mtlInOut && mtlInfo.inDirection !== 'A') {
+            return this.t$.instant('messages.notSupport', { field: 'IN [Line -> MTL]' })
+        }
+        if (!this.commandState.mtlInOut && mtlInfo.outDirection !== 'A')
+            return this.t$.instant('messages.notSupport', { field: 'OUT[MTL -> Line]' })
+        }
 
 		return
 	}

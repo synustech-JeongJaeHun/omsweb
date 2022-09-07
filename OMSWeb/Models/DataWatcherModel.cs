@@ -1,5 +1,3 @@
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using OMSWeb.Models.Tracks;
 using OMSWeb.Services;
 
@@ -23,6 +21,8 @@ namespace OMSWeb.Models
         public long? Timestamp { get; set; }
         public string Table { get; set; }
         public string Operation { get; set; }
+
+        // for cluster, id means server_id
         public int Id { get; set; }
         public int? Level { get; set; }
         public VehiclePosition Data { get; set; }
@@ -36,6 +36,12 @@ namespace OMSWeb.Models
 
         #region Buffer
         public string CarrierId  { get; set; }
+        #endregion
+
+        #region ClusterState
+        public int ConverterId { get; set; }
+        public int Status { get; set; }
+        public int BackupId { get; set; }
         #endregion
 
         #region Home

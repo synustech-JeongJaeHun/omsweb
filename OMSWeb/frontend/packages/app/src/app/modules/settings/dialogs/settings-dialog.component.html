@@ -20,6 +20,13 @@
             [class.active]="isActiveMenu('themePreference')" (click)="onChangeMenu('themePreference')" class="nav-link">
             {{ "names.themePreference" | translate }}
           </a>
+          <a 
+            *ngIf="auth.hasPermissions([permissionEnums.SettingPreference])" mat-list-item
+            [class.active]="isActiveMenu('alternateTransfer')" (click)="onChangeMenu('alternateTransfer')" class="nav-link">
+            {{
+            "names.alternateTransfer" | translate
+            }}
+          </a>
           <a *ngIf="auth.hasPermissions([permissionEnums.UserManagement])" mat-list-item
             [class.active]="isActiveMenu('users')" (click)="onChangeMenu('users')" class="nav-link">
             {{
@@ -132,6 +139,9 @@
           </ng-container>
           <ng-container *ngSwitchCase="'systemPreference'">
             <oms-system-preference></oms-system-preference>
+          </ng-container>
+          <ng-container *ngSwitchCase="'alternateTransfer'">
+            <oms-alternate-transfer-setting></oms-alternate-transfer-setting>
           </ng-container>
           <ng-container *ngSwitchCase="'themePreference'">
             <oms-theme-preference></oms-theme-preference>

@@ -103,7 +103,7 @@ export class ClusterSettingComponent implements OnInit {
     // 개별 Max Vehicle 설정
     for (let idx = 0; idx < items.length; idx++) {
       this.messageSvc
-        .sendMaxVehiclesClusterCommand({ type: 'CLUSTER', action: 'max-vehicles', clusterId: items[idx].id, maxVehicles: items[idx].maxVehicles })
+        .sendMaxVehiclesClusterCommand({ type: 'CLUSTER', action: 'cluster-setting', clusterId: items[idx].id, maxVehicles: items[idx].maxVehicles })
         .subscribe();
     }
     return;

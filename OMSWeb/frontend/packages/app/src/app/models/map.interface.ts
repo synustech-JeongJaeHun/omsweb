@@ -114,6 +114,7 @@ export class TransferCommandState {
 	dest?: ILookupUnit
 	mtl?: ILookupUnit
 	carrier?: string
+	priority?: string
 	mtlInOut: boolean = true
 
 	get autoDisabled(): boolean {

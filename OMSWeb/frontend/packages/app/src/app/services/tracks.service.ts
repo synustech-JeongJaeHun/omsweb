@@ -4,7 +4,7 @@ import { Observable } from 'rxjs'
 import { ICarrier } from '@oms/models/carrier.model'
 import { ICarrierLoc } from '@oms/models/carrier.model'
 import { ICarrierQuery } from '@oms/models/carrier.model'
-import { ITransferHCACK } from '@oms/models/transfer.model'
+import { IQueryResult } from '@oms/models/query-result.model'
 import { Dto } from '@oms/models/dto/track.model'
 
 @Injectable({
@@ -33,6 +33,10 @@ export class TracksService {
         return this.http.get<ICarrierQuery>(`${this.baseUrl}/carrierquery/${carrierLoc}&${carrierId}`)
     }
 
+    checkPointHomeInterlock(id: number): Observable<IQueryResult> {
+        return this.http.get<IQueryResult>(`${this.baseUrl}/pointHomeInterlock/${id}`)
+    }
+
 	loadGroups(): Observable<Dto.IGroup[]> {
 		return this.http.get<Dto.IGroup[]>(`${this.baseUrl}/groups`)
 	}
@@ -55,7 +59,7 @@ export class TracksService {
 
 	loadPoints(): Observable<Dto.IPoint[]> {
 		return this.http.get<Dto.IPoint[]>(`${this.baseUrl}/points`)
-	}
+    }
 
 	loadStations(): Observable<Dto.IStation[]> {
 		return this.http.get<Dto.IStation[]>(`${this.baseUrl}/stations`)

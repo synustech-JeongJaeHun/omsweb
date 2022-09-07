@@ -11,6 +11,8 @@ using OMSWeb.Models;
 using OMSWeb.Models.Entities;
 using OMSWeb.Repositories;
 using OMSWeb.Services;
+using System.Configuration;
+using OMSWeb.OMSSettings;
 
 namespace OMSWeb.Controllers
 {
@@ -29,6 +31,105 @@ namespace OMSWeb.Controllers
         public ActionResult<string> GetAppSettings()
         {
             return System.IO.File.ReadAllText("./appsettings.json");
+        }
+                   
+        [HttpPost("updateAlternateTransfer/{mode}&{retryTostb}&{stations}")]
+        public ActionResult<QueryResult> UpdateAlternateTransfer(string mode, string retryTostb, string stations)
+        {
+            if (!string.IsNullOrEmpty(mode))
+            {
+                string value = "station";
+                string s = mode.ToLower().Trim();
+                if (s.Contains("stb") || s.Contains("buffer")) value = "buffer";
+                if (s.Contains("stk") || s.Contains("stocker") || s.Contains("station")) value = "station";
+
+                AppConfig.UpdateToOMSConfig("TimeoutTransfer", "dest_type", value);
+            }
+
+            {
+                int retryCnt = Convert.ToInt32(retryTostb);
+                if (retryCnt < 0) retryCnt = 0;
+                if (retryCnt > 10) retryCnt = 10;
+                string value = retryCnt.ToString();
+
+                AppConfig.UpdateToOMSConfig("TimeoutTransfer", "retry_cnt_to_buffer", value);
+            }
+
+            if (!string.IsNullOrEmpty(stations))
+            {
+                string value = string.Empty;
+                string[] Ids = stations.Split(";");
+                if (Ids != null)
+                {
+                    foreach (string Id in Ids)
+                    {
+                        if (!string.IsNullOrEmpty(Id))
+                            value += "s" + Id + ";";
+                    }
+                }
+
+                AppConfig.UpdateToOMSConfig("TimeoutTransfer", "stocker_list", value);
+            }
+
+            return Ok(new QueryResult()
+                {
+                    Retcode = (int)RET_CODE.Success,
+                    Message = String.Empty,
+                });
+        }
+
+        [HttpGet("alternateTransfer")]
+        public ActionResult<AlternateTransferEntity> GetAlternateTransfer()
+        {
+            string strMode = AppConfig.GetFromOMSConfig("TimeoutTransfer", "dest_type", "stk");
+            string retryToBuffer = AppConfig.GetFromOMSConfig("TimeoutTransfer", "retry_cnt_to_buffer", "3");
+            string stockList = AppConfig.GetFromOMSConfig("TimeoutTransfer", "stocker_list", "");
+
+            string c = strMode.ToLower();
+            if (!string.IsNullOrWhiteSpace(c))
+            {
+                if (c.Contains("buffer") || c.Contains("stb"))  strMode = @"stb";
+                if (c.Contains("station") || c.Contains("stocker") || c.Contains("stk"))  strMode = @"stk";
+            }
+
+            List<AlternateStationEntity> alternateStationEntity = new List<AlternateStationEntity>();
+            string[] stations = stockList.Split(";");
+            if (stations != null)
+            {
+                foreach (string s in stations)
+                {
+                    if (!string.IsNullOrEmpty(s))
+                    {
+                        string sId = s.Replace('s', ' ').Trim();
+                        if (!string.IsNullOrEmpty(sId))
+                        {
+                            string sLogicalId = _settingsSvc.GetSettingsOnlineName(sId, "station");
+                            alternateStationEntity.Add(
+                                new AlternateStationEntity()
+                                {
+                                    Id = sId,
+                                    logicalId = sLogicalId
+                                });
+                        }
+                    }
+                }
+            }
+
+            return Ok(new AlternateTransferEntity()
+            {
+                Mode = strMode,
+                MaxRetryToBuffer = Convert.ToInt32(retryToBuffer),
+                StationList = alternateStationEntity.ToArray(),
+            });
+        }
+
+
+        [HttpGet("alternateStations")]
+        public IEnumerable<AlternateStationEntity> GetAlternateStations()
+        {
+            string stationLikeKey = @"STK";
+
+            return _settingsSvc.GetSettingsAlternateStations(stationLikeKey).ToList();
         }
 
         [HttpGet("groups")]

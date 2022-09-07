@@ -68,6 +68,19 @@ namespace OMSWeb.Controllers
                 return Ok(result);
         }
 
+        [HttpGet("pointHomeInterlock/{pointId}")]
+        public ActionResult<QueryResult> CheckPointHomeInterlock(int pointId)
+        {
+            var result = this._svc.CheckPointHomeInterlock(pointId);
+            if (result == null)
+                return Ok(new QueryResult()
+                {
+                    Retcode = (int)RET_CODE.Failed,
+                    Message = String.Empty,
+                });
+            else
+                return Ok(result);
+        }
 
         [HttpGet("groups")]
         public IEnumerable<LocationGroup> GetGroups()

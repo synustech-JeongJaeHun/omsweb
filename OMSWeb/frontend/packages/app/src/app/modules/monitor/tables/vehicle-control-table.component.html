@@ -18,11 +18,19 @@
   </button>
     -->
   <button *ngIf="hasPermission(permissionEnums.HostOrderEnable)" mat-stroked-button color="primary" class="dense"
-          [disabled]="!canControl" (click)="onChangeHostOrderActivity()">
+          [disabled]="!canControl" (click)="onChangeHostOrderEnable(true)">
+    {{ "names.hostCommandEnable" | translate }}
+  </button>
+  <button *ngIf="hasPermission(permissionEnums.HostOrderEnable)" mat-stroked-button color="primary" class="dense"
+          [disabled]="!canControl" (click)="onChangeHostOrderEnable(false)">
     {{ "names.hostCommandDisable" | translate }}
   </button>
   <button *ngIf="hasPermission(permissionEnums.PushEnable)" mat-stroked-button color="primary" class="dense"
-          [disabled]="!canControl" (click)="onChangePushActivity()">
+          [disabled]="!canControl" (click)="onChangePushEnable(true)">
+    {{ "names.pushEnable" | translate }}
+  </button>
+  <button *ngIf="hasPermission(permissionEnums.PushEnable)" mat-stroked-button color="primary" class="dense"
+          [disabled]="!canControl" (click)="onChangePushEnable(false)">
     {{ "names.pushDisable" | translate }}
   </button>
   <button *ngIf="hasPermission(permissionEnums.RailIn)" mat-stroked-button color="primary" class="dense"
@@ -47,17 +55,21 @@
   <dxo-load-panel [enabled]="false"></dxo-load-panel>
   <dxo-filter-row [visible]="true"></dxo-filter-row>
 
-  <dxi-column [allowFiltering]="true" [width]="60" dataType="string" dataField="id" sortOrder="desc"
+  <!--
+  <dxi-column [allowFiltering]="true" [width]="60" dataType="string" dataField="id" sortOrder="asc"
               [caption]="'names.id' | translate" *ngIf="canDisplayTable('vehicles_id')"></dxi-column>
   <dxi-column [width]="80" dataType="string" dataField="physicalId"
               [caption]="'names.physicalId' | translate" *ngIf="canDisplayTable('vehicles_physicalId')"></dxi-column>
+    -->
+  <dxi-column [allowFiltering]="true" [width]="60" dataType="string" dataField="id" sortOrder="asc"
+              [caption]="'names.id' | translate" *ngIf="canDisplayTable('vehicles_id')"></dxi-column>
   <dxi-column [width]="90" dataType="string" dataField="logicalId"
               [caption]="'names.logicalId' | translate" *ngIf="canDisplayTable('vehicles_logicalId')"></dxi-column>
   <dxi-column [allowFiltering]="false" [width]="60" dataType="boolean" dataField="isConnected"
               [caption]="'names.connected' | translate" *ngIf="canDisplayTable('vehicles_connection')"></dxi-column>
   <dxi-column [allowFiltering]="false" [width]="60" dataType="boolean" dataField="railIn"
               [caption]="'names.railIn' | translate" *ngIf="canDisplayTable('vehicles_railIn')"></dxi-column>
-  <dxi-column [width]="60" dataType="string" dataField="mode"
+  <dxi-column [width]="60" dataType="string" dataField="mode" cellTemplate="modeTemplate"
               [caption]="'names.mode' | translate" *ngIf="canDisplayTable('vehicles_mode')"></dxi-column>
   <dxi-column [allowFiltering]="false" [width]="80" dataType="boolean" dataField="isMaint"
               [caption]="'names.maintenance' | translate" *ngIf="canDisplayTable('vehicles_isMaint')"></dxi-column>
@@ -87,9 +99,9 @@
   <dxi-column [allowFiltering]="true" [width]="80" dataType="string" dataField="runtimeTotal" [allowSorting]="true"
               [caption]="'names.runtimeTotal' | translate" *ngIf="canDisplayTable('vehicles_runtimeTotal')"></dxi-column>
   <!-- Total Runtime 추가 -->
-  <dxi-column [width]="80" dataType="string" dataField="movingState" [allowSorting]="false"
+  <dxi-column [width]="80" dataType="string" dataField="movingState" [allowSorting]="false" cellTemplate="movingStateTemplate"
               [caption]="'names.movingState' | translate" *ngIf="canDisplayTable('vehicles_movingState')"></dxi-column>
-  <dxi-column [width]="80" dataType="string" dataField="cargoState" [allowSorting]="false"
+  <dxi-column [width]="80" dataType="string" dataField="cargoState" [allowSorting]="false" cellTemplate="cargoStateTemplate"
               [caption]="'names.cargoState' | translate" *ngIf="canDisplayTable('vehicles_cargoState')"></dxi-column>
   <dxi-column [width]="110" dataType="string" dataField="carrierLabel" [allowSorting]="false"
               [caption]="'names.carrierLabel' | translate" *ngIf="canDisplayTable('vehicles_carrierLabel')"></dxi-column>
@@ -116,4 +128,28 @@
   <dxi-column [allowFiltering]="true" [width]="90" dataType="string" dataField="mapVersion" [allowSorting]="true"
               [caption]="'names.mapVersion' | translate" *ngIf="canDisplayTable('vehicles_mapVersion')"></dxi-column>
   <!-- MapVersion 추가 -->
+  <div *dxTemplate="let data of 'modeTemplate'">
+    <div [ngSwitch]="data.displayValue">
+      <div class="value" *ngSwitchCase="'A'">{{ 'Auto' }}</div>
+      <div class="value" *ngSwitchCase="'M'">{{ 'Manual' }}</div>
+      <div class="value" *ngSwitchDefault>{{ data.displayValue }}</div>
+    </div>
+  </div>
+  <div *dxTemplate="let data of 'movingStateTemplate'">
+    <div [ngSwitch]="data.displayValue">
+      <div class="value" *ngSwitchCase="'S'">{{ 'Stop' }}</div>
+      <div class="value" *ngSwitchCase="'M'">{{ 'Moving' }}</div>
+      <div class="value" *ngSwitchDefault>{{ data.displayValue }}</div>
+    </div>
+  </div>
+  <div *dxTemplate="let data of 'cargoStateTemplate'">
+    <div [ngSwitch]="data.displayValue">
+      <div class="value" *ngSwitchCase="'E'">{{ 'Empty' }}</div>
+      <div class="value" *ngSwitchCase="'F'">{{ 'Full' }}</div>
+      <div class="value" *ngSwitchCase="'L'">{{ 'Loading' }}</div>
+      <div class="value" *ngSwitchCase="'U'">{{ 'Unloading' }}</div>
+      <div class="value" *ngSwitchDefault>{{ data.displayValue }}</div>
+    </div>
+  </div>
+
 </dx-data-grid>

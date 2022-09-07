@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import Layer from 'MapObjects/map/components/Layer.ce.vue'
-import { Color } from 'src/types/Color'
 import { RootEmitInjectionKey, RootEmits } from 'src/Root/types/RootEmits'
 import { deepCopy } from 'src/utils/deepCopy'
 import { inject } from 'vue'
 import { clusters, findClusterById } from '../clusters'
-import { getClusterColorWithAlpha } from '../utils/color'
+import Cluster from './Cluster.ce.vue'
 
 const emit = inject<RootEmits>(RootEmitInjectionKey)!
 
@@ -29,17 +28,12 @@ function onMouseleave() {
 
 <template>
   <Layer id="cluster-layer">
-    <path
-      v-for="cluster of clusters"
-      :key="cluster.id"
-      class="cluster fixed-scale-stroke"
-      fill="none"
-      :stroke="getClusterColorWithAlpha(cluster.color)"
-      :d="cluster.d"
-      :data-id="cluster.id"
-      @mouseover="onMouseover"
-      @mouseleave="onMouseleave"
-      @mouseout="onMouseleave"
+    <Cluster
+      v-for="cluster of clusters" 
+      :key="cluster.id" 
+      :cluster="cluster" 
+      :onMouseover="onMouseover"
+      :onMouseleave="onMouseleave" 
     />
   </Layer>
 </template>

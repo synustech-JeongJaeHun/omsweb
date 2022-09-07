@@ -63,6 +63,7 @@ import { getPositionForBufferOrStation } from 'src/TrackObjects/utils/locationSt
 import { setFocusedObject } from 'src/MapObjects/focus/focus'
 import { setTrackedObject } from 'src/MapObjects/track/track'
 import { scaleStylesInfo } from '../styles/styles'
+import { deleteClusterState, initClusterStates, insertClusterState, updateClusterState } from 'src/TrackObjects/cluster/clusterStates'
 
 const exposed: IOmsTrackMonitor = {
 	getCameraAndRotation,
@@ -75,6 +76,7 @@ const exposed: IOmsTrackMonitor = {
 		initVehicles([])
 		initZcus([])
 		initStations([])
+    initClusterStates([])
 		initClusters([])
 		initSegments([])
 		initMtls([])
@@ -94,6 +96,7 @@ const exposed: IOmsTrackMonitor = {
 		initBuffers(t.buffers)
 		initMtls(t.mtls)
 		initSegments(t.segmentParts)
+		initClusterStates(t.clusterStates)
 		initClusters(t.clusters)
 		initStations(t.stations)
 		initZcus(t.zcus)
@@ -343,6 +346,22 @@ const exposed: IOmsTrackMonitor = {
 				break
 		}
 	},
+
+  updateClusterState(op, clusterState) {
+    switch (op) {
+			case 'INSERT':
+        insertClusterState(clusterState)
+				break
+			case 'UPDATE':
+				updateClusterState(clusterState)
+				break
+			case 'DELETE':
+        deleteClusterState(clusterState)
+				break
+			default:
+				break
+    }
+  }
 }
 
 export { exposed }

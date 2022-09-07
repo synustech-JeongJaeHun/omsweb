@@ -18,6 +18,8 @@ export class Vehicle {
   push: boolean;
   call: string[];
   errorList: string;
+  isSensorStopped?: boolean;
+  isZcuBlocked: boolean;
   isBlocked: boolean;
   orderId: number;
   orderLogicalId: string;
@@ -27,12 +29,12 @@ export class Vehicle {
   type: string;
   group?: number;
   cargoTransferResult: string;
+  carrierId: string;
   mapDb: string;
 
   hostOrder?: boolean;
   orderOrigin?: string;
   canBePushed?: boolean;
-  isSensorStopped?: boolean;
   locationDropoff?: string;
   locationMove?: string;
   locationPickup?: string;
@@ -61,12 +63,14 @@ export class Vehicle {
       mode,
       errorList,
       isSensorStopped,
+      isZcuBlocked,
       isBlocked,
       orderId,
       orderLogicalId,
       type,
       group,
       cargoTransferResult,
+      carrierId,
       mapDb,
       canBePushed, // push
       hostOrder,
@@ -92,12 +96,14 @@ export class Vehicle {
     this.mode = mode;
     this.errorList = errorList;
     this.isSensorStopped = isSensorStopped;
+    this.isZcuBlocked = isZcuBlocked;
     this.isBlocked = isBlocked;
     this.orderId = orderId;
     this.orderLogicalId = orderLogicalId;
     this.type = type || 'STANDARD';
     this.group = group;
     this.cargoTransferResult = cargoTransferResult;
+    this.carrierId = carrierId;
     this.mapDb = mapDb;
 
     this.isMoved = false;
@@ -160,12 +166,14 @@ export class Vehicle {
         orderOrigin: this.call,
         errorList: this.errorList,
         isSensorStopped: this.isSensorStopped,
+        isZcuBlocked: this.isZcuBlocked,
         isBlocked: this.isBlocked,
         orderId: this.orderId,
         orderLogicalId: this.orderLogicalId,
         type: this.type,
         group: this.group,
         cargoTransferResult: this.cargoTransferResult,
+        carrierId: this.carrierId,
         mapDb: this.mapDb,
         locationDropoff: this.locationDropoff,
         locationMove: this.locationMove,
