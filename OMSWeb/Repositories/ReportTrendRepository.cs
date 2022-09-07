@@ -50,9 +50,10 @@ namespace OMSWeb.Repositories
             {
                 var sql = @"
                     select
-                    EXTRACT(EPOCH FROM avg(time_completed - time_created))::int as value,
-                    count(*)
+                        EXTRACT(EPOCH FROM avg(time_completed - time_created))::int as value,
+                        count(*)
                     from orders10m
+                    where time_completed >= now() - interval '10 minutes'
                 ";
 
                 result = await conn.QueryFirstAsync<(int Value, int Count)>(sql);
@@ -66,9 +67,10 @@ namespace OMSWeb.Repositories
             {
                 var sql = @"
                     select
-                    EXTRACT(EPOCH FROM avg(time_load_completed  - time_created))::int as value,
-                    count(*)
+                        EXTRACT(EPOCH FROM avg(time_load_completed  - time_created))::int as value,
+                        count(*)
                     from orders10m
+                    where time_load_completed >= now() - interval '10 minutes'
                 ";
 
                 result = await conn.QueryFirstAsync<(int Value, int Count)>(sql);
@@ -82,9 +84,10 @@ namespace OMSWeb.Repositories
             {
                 var sql = @"
                     select
-                    EXTRACT(EPOCH FROM avg(time_completed  - time_load_completed))::int as value,
-                    count(*)
+                        EXTRACT(EPOCH FROM avg(time_completed  - time_load_completed))::int as value,
+                        count(*)
                     from orders10m
+                    where time_completed >= now() - interval '10 minutes'
                 ";
 
                 result = await conn.QueryFirstAsync<(int Value, int Count)>(sql);
@@ -98,9 +101,10 @@ namespace OMSWeb.Repositories
             {
                 var sql = @"
                     select
-                    EXTRACT(EPOCH FROM avg(time_assigned  - time_created))::int as value,
-                    count(*)
+                        EXTRACT(EPOCH FROM avg(time_assigned  - time_created))::int as value,
+                        count(*)
                     from orders10m
+                    where time_assigned >= now() - interval '10 minutes'
                 ";
 
                 result = await conn.QueryFirstAsync<(int Value, int Count)>(sql);
@@ -114,9 +118,10 @@ namespace OMSWeb.Repositories
             {
                 var sql = @"
                     select
-                    trunc((CAST(count(*) AS DECIMAL(5,1))/600), 2) as value,
-                    trunc((CAST(count(*) AS DECIMAL(5,1)) * 6 * 24), 2) as count
+                        trunc((CAST(count(*) AS DECIMAL(5,1))/600), 2) as value,
+                        trunc((CAST(count(*) AS DECIMAL(5,1)) * 6 * 24), 2) as count
                     from orders10m
+                    where time_created >= now() - interval '10 minutes'
                 ";
 
                 result = await conn.QueryFirstAsync<(float Value, float Count)>(sql);
@@ -125,33 +130,33 @@ namespace OMSWeb.Repositories
         }
         public async Task<object> QueryVehicles()
         {
-            (int Auto, int Manual, int Error, int Idle) result;
+            (int Auto, int Manual, int Error, int Disconnected) result;
             using (var conn = ConnectTrack())
             {
                 var sql = @"
                 select
                 (
-                    select count(*) from vehicles where mode = 'A'
+                    select count(*) from vehicles where connection in (1, 2) and (error_list = '') IS true and mode = 'A'
                 ) as auto,
                 (
-                    select count(*) from vehicles where mode = 'M' and (error_list = '') IS true
+                    select count(*) from vehicles where connection in (1, 2) and (error_list = '') IS true and mode = 'M'
                 ) as manual,
                 (
-                    select count(*) from vehicles where (error_list = '') IS false
+                    select count(*) from vehicles where connection in (1, 2) and (error_list = '') IS false
                 ) as error,
                 (
-                    select count(*) from vehicles where order_id is null
-                ) as idle
+                    select count(*) from vehicles where connection in (0, 3, 4)
+                ) as disconnected
                 ";
 
-                result = await conn.QueryFirstAsync<(int Auto, int Manual, int Error, int Idle)>(sql);
+                result = await conn.QueryFirstAsync<(int Auto, int Manual, int Error, int Disconnected)>(sql);
             }
             return new
             {
                 Auto = result.Auto,
                 Manual = result.Manual,
                 Error = result.Error,
-                Idle = result.Idle,
+                Disconnected = result.Disconnected,
             };
         }
         public async Task<object> QueryLoadingUnLoading()
@@ -184,9 +189,9 @@ namespace OMSWeb.Repositories
             {
                 var sql = @"
                     select
-                    now() - interval '10 minutes' as before_time,
-                    now() as current_time,
-                    count(*)
+                        now() - interval '10 minutes' as before_time,
+                        now() as current_time,
+                        count(*)
                     from orders10m
                 ";
 
@@ -212,7 +217,7 @@ namespace OMSWeb.Repositories
                                     600 * (
                                             select count(*)::int 
                                             from vehicles 
-                                            where rail_in = true and mode = 'A'
+                                            where rail_in = true
                                         )::decimal
                                     )
                             ) * 100
@@ -232,18 +237,12 @@ namespace OMSWeb.Repositories
                             from ( 
                                 select
                                     time_assigned,
-                                    greatest (
-                                        time_vehicle_arrived,
-                                        time_load_started, time_load_completed,
-                                        time_unload_started, time_unload_completed,
-                                        time_completed
-                                    ) as max_field,
                                     time_completed
                                 from orders10m
-                                where time_aborted is null and vehicle_id is not null
-                            ) temp
-                        ) temp
-                    ) temp
+                                where (time_aborted is null or time_failed is null) and vehicle_id is not null
+                            ) fol
+                        ) ol
+                    ) times
                 ";
 
                 try
@@ -271,7 +270,7 @@ namespace OMSWeb.Repositories
                                     600 * (
                                             select count(*)::int 
                                             from vehicles 
-                                            where rail_in = true and mode = 'A'
+                                            where rail_in = true
                                         )::decimal
                                     )
                             ) * 100
@@ -291,18 +290,12 @@ namespace OMSWeb.Repositories
                             from ( 
                                 select
                                     time_assigned,
-                                    greatest (
-                                        time_vehicle_arrived,
-                                        time_load_started, time_load_completed,
-                                        time_unload_started, time_unload_completed,
-                                        time_completed
-                                    ) as max_field,
                                     time_completed
                                 from orders10m
-                                where time_aborted is null and vehicle_id is not null
-                            ) temp
-                        ) temp
-                    ) temp
+                                where (time_aborted is null or time_failed is null) and vehicle_id is not null
+                            ) fol
+                        ) ol
+                    ) times
                 ";
                 try
                 {
@@ -327,9 +320,10 @@ namespace OMSWeb.Repositories
             {
                 var sql = @"
                     select
-                    EXTRACT(EPOCH FROM avg(time_completed - time_created))::int as value,
-                    count(*)
+                        EXTRACT(EPOCH FROM avg(time_completed - time_created))::int as value,
+                        count(*)
                     from orders10m
+                    where time_completed >= now() - interval '10 minutes'
                 ";
 
                 try

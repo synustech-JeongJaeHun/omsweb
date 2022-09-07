@@ -65,7 +65,7 @@ export const exData = {
 		[
 			['error', 30],
 			['idle', 20],
-			['manual', 50],
+			['disconnected', 50],
 			['auto', 200],
 		],
 		[
@@ -171,7 +171,7 @@ const makeDonut = (data) => {
 	return [
 		[
 			['error', vehicles['error']],
-			['idle', vehicles['idle']],
+			['disconnected', vehicles['disconnected']],
 			['manual', vehicles['manual']],
 			['auto', vehicles['auto']],
 		],

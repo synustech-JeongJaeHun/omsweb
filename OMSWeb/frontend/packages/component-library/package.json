@@ -1,7 +1,7 @@
 {
   "name": "@daimre/component-library",
   "main": "dist/index.js",
-  "types": "dist/types/index.d.ts",
+  "types": "dist/index.d.ts",
   "files": [
     "dist/*"
   ],
