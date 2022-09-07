@@ -1,3 +1,4 @@
+import { Dto } from '@oms/root/models/dto/track.model'
 import { TrackMonitorSettingService } from '@oms/root/services/track-monitor-setting.service'
 import { main_css } from '../../shared/utils/css-loader'
 
@@ -1027,4 +1028,8 @@ export namespace SvgDrawingUtil {
 				break
 		}
 	}
+}
+
+export function getChjsVehicleState(vhl: Dto.IVehicle) {
+	// TODO
 }

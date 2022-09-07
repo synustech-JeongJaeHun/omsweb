@@ -12,8 +12,11 @@ type ComplicatedMode =
   | 'ERROR'
   | 'MAINTENANCE'
   | 'MANUAL'
+  | 'SENSORSTOPPED'
+  | 'ZCUBLOCKED'
+  | 'HOME'
+  | 'TRANSFERRING'
   | 'IDLE'
-  | 'RUNNING'
 
 type Vehicle = {
   id: number

@@ -40,10 +40,17 @@ const complicatedMode = computed<ComplicatedMode>(() => {
     return 'MAINTENANCE'
   if (props.vehicle.mode === 'M')
     return 'MANUAL'
-  if (props.vehicle.orderId == null)
+  if (props.vehicle.isSensorStopped)
+    return 'SENSORSTOPPED'
+  if (props.vehicle.isZcuBlocked)
+    return 'ZCUBLOCKED'
+  if (props.vehicle.orderId == null) // data needed
+    return 'HOME'
+  if (props.vehicle.orderId)
+    return 'TRANSFERRING'
+  
+  // if (props.vehicle.orderId == null)
     return 'IDLE'
-  // if ((props.vehicle as any).running === true)
-  return 'RUNNING'
 })
 
 const isHotlot = computed(() => Number(props.vehicle.priority) === 99),
