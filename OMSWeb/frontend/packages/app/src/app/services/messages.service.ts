@@ -26,7 +26,9 @@ import {
 	IZcuCommandMessage,
 	IDisableHomeCommandMessage,
 	IEnableHomeCommandMessage,
-	IToggleHomeModeCommandMessage,
+    IToggleHomeModeCommandMessage,
+    IChangeHomeModeCommandMessage,
+    IChangeIvrModeCommandMessage,
 	IToggleChainManualCommandDisabledCommandMessage,
 } from '../models/command.model'
 import { IOrderStatusRow } from '../models/order-status.model'
@@ -340,7 +342,21 @@ export class MessagesService {
 			action: 'home_mode',
 			mode: 'change',
 		})
-	}
+    }
+
+    sendHomeModeChange(enabled: string) {
+        return this.sendCommand<IChangeHomeModeCommandMessage>({
+            action: 'home_mode',
+            mode: enabled,
+        })
+    }
+
+    sendIvrModeChange(enabled: string) {
+        return this.sendCommand<IChangeIvrModeCommandMessage>({
+            action: 'ivr_mode',
+            mode: enabled,
+        })
+    }
 
 	sendChainManualCommandDisabled() {
 		return this.sendCommand<IToggleChainManualCommandDisabledCommandMessage>({

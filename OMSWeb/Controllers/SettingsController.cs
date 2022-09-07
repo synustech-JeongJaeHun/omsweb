@@ -32,7 +32,47 @@ namespace OMSWeb.Controllers
         {
             return System.IO.File.ReadAllText("./appsettings.json");
         }
-                   
+
+        [HttpPost("updateSettingsRebalanceCfg/{homeMode}&{ivrMode}")]
+        public ActionResult<QueryResult> UpdateSettingsRebalanceCfg(string homeMode, string ivrMode)
+        {
+            int home_mode = Convert.ToInt32(homeMode);  
+            int ivr_mode = Convert.ToInt32(ivrMode);
+
+            if (home_mode < 0 || home_mode > 1) home_mode = 0;
+            if (ivr_mode < 0 || ivr_mode > 1) ivr_mode = 0;
+
+            AppConfig.UpdateToOMSConfig("VehicleProcessor", "use_go_home", home_mode.ToString());
+            AppConfig.UpdateToOMSConfig("VehicleProcessor", "use_ivr", ivr_mode.ToString());
+
+            return Ok(new QueryResult()
+            {
+                Retcode = (int)RET_CODE.Success,
+                Message = String.Empty,
+            });
+        }
+
+        [HttpGet("settingsRebalance")]
+        public ActionResult<QueryResult> GetSettingsRebalance()
+        {
+            SettingModeEntity result = _settingsSvc.GetSettingsRebalance();
+
+            string message = "none";
+            if (result != null)
+            {
+                if (result.home_mode == 1) message = "home";
+                else if (result.home_mode == 0 && result.ivr_mode == 1) message = "ivr";
+                else if (result.home_mode == 0 && result.ivr_mode == 0) message = "none";
+                else message = "none";
+            }
+
+            return Ok(new QueryResult()
+            {
+                Retcode = (int)RET_CODE.Success,
+                Message = message,
+            });
+        }
+
         [HttpPost("updateAlternateTransfer/{mode}&{retryTostb}&{stations}")]
         public ActionResult<QueryResult> UpdateAlternateTransfer(string mode, string retryTostb, string stations)
         {

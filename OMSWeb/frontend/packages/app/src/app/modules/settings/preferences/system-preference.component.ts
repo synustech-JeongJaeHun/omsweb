@@ -5,6 +5,8 @@ import { AuthService } from '@oms/root/services/auth.service'
 import { DialogService } from '@oms/root/services/dialog.service'
 import { MessagesService } from '@oms/root/services/messages.service'
 import { SystemStatusService } from '@oms/services/system-status.service'
+import { SettingsService } from '../../../services/settings.service'
+import { Subject } from 'rxjs'
 
 @Component({
 	selector: 'oms-system-preference',
@@ -12,13 +14,18 @@ import { SystemStatusService } from '@oms/services/system-status.service'
 	styleUrls: ['./system-preference.component.scss'],
 })
 export class SystemPreferenceComponent {
+    private destroy$ = new Subject<void>()
+
 	constructor(
 		private $t: TranslateService,
 		private auth: AuthService,
 		private dialogSvc: DialogService,
 		private messageSvc: MessagesService,
-		private systemStatusService: SystemStatusService,
-	) {}
+        private systemStatusService: SystemStatusService,
+        private settingsSvc: SettingsService,
+    ) {
+      this.init()
+    }
 
 	readonly permissionEnums = PermissionEnums
 
@@ -26,20 +33,35 @@ export class SystemPreferenceComponent {
 		{ key: 'home', label: this.$t.instant('names.home') },
 		{ key: 'ivr', label: this.$t.instant('names.ivr') },
 		{ key: 'none', label: this.$t.instant('names.none') },
-	]
+    ]
 
-  get console() {
-    return console
-  }
+    readonly rebalanceTabInex = ['home', 'ivr', 'none' ]
+
+    public curselKey = 'none';
+    public tabIndex = 2;
+    public argumentKey = 'none';
+    private homeMode = 0;
+    private ivrMode = 0;
+    private updateToConfig = false;
+
+    get console() {
+      return console
+    }
 
 	get selectedRebalanceMode() {
-		return ['none']
-	}
+      return [this.curselKey]
+    }
 
-  get translatedSelectedRebalancedMode() {
-    const name = `names.${this.selectedRebalanceMode[0]}`
-    return this.$t.instant(name)
-  }
+    get selectedTabIndex() {
+      if (this.curselKey == 'home') return 0;
+      if (this.curselKey == 'ivr') return 1;
+      if (this.curselKey == 'none') return 2;
+    }
+
+    get translatedSelectedRebalancedMode() {
+      const name = `names.${this.selectedRebalanceMode[0]}`
+      return this.$t.instant(name)
+    }
 
 	get isChainManualCommandDisabled() {
 		return this.systemStatusService.chainManualCommandDisabled ?? false
@@ -48,6 +70,17 @@ export class SystemPreferenceComponent {
 	hasPermissions(permissions: number[]): boolean {
 		return this.auth.hasPermissions(permissions)
 	}
+
+    ngOnInit(): void { }
+
+    ngOnDestroy(): void {
+      this.destroy$.next()
+      this.destroy$.complete()
+    }
+
+    private init() {
+        this.loadSettingsRebalance();
+    }
 
 	setRebalanceMode(value: "home" | "ivr" | "none") {
 		if (
@@ -62,23 +95,76 @@ export class SystemPreferenceComponent {
 			})
 
 			return
-		}
+        }
 
-		// this.dialogSvc
-		// 	.confirm(
-		// 		this.getConfirmMessage(
-		// 			this.$t.instant(`names.homeMode`),
-		// 			this.isHomeMode
-		// 				? [this.$t.instant(`names.on`), this.$t.instant('names.off')]
-		// 				: [this.$t.instant(`names.off`), this.$t.instant('names.on')],
-		// 		),
-		// 	)
-		// 	.subscribe((ok) => {
-		// 		if (ok) {
-		// 			this.messageSvc.sendHomeModeToggle().subscribe()
-		// 		}
-		// 	})
-	}
+        this.updateToConfig = false;
+        this.argumentKey = value;
+
+        if (this.argumentKey === this.curselKey)
+            return;
+
+        let strAs: string = "";
+        if (this.argumentKey === 'home') strAs = this.$t.instant(`names.home`)
+        if (this.curselKey === 'ivr') strAs = this.$t.instant(`names.ivr`)
+        if (this.curselKey === 'none') strAs = this.$t.instant(`names.none`)
+
+        let strTo: string = "";
+        if (this.argumentKey === 'home') strTo = this.$t.instant(`names.home`)
+        if (this.argumentKey === 'ivr') strTo = this.$t.instant(`names.ivr`)
+        if (this.argumentKey === 'none') strTo = this.$t.instant(`names.none`)
+
+        this.dialogSvc.confirm(this.getConfirmMessage(this.$t.instant(`names.rebalance`), [strAs, strTo]))
+		 	.subscribe((ok) => {
+                if (ok) {
+                    if (this.argumentKey === 'home') {
+                        this.messageSvc.sendHomeModeChange('on').subscribe(); 
+                        this.messageSvc.sendIvrModeChange('off').subscribe(); 
+                    }
+                    else if (this.argumentKey === 'ivr') {
+                        this.messageSvc.sendHomeModeChange('off').subscribe();
+                        this.messageSvc.sendIvrModeChange('on').subscribe(); 
+                    }
+                    else if (this.argumentKey === 'none') {
+                        this.messageSvc.sendHomeModeChange('off').subscribe(); 
+                        this.messageSvc.sendIvrModeChange('off').subscribe(); 
+                    }
+
+                    this.updateToConfig = true;
+
+                    setTimeout(() => {
+                        this.loadSettingsRebalance()
+                    }, 500)
+                }
+		 	})
+    }
+
+    private loadSettingsRebalance() {
+        this.settingsSvc
+            .settingsRebalance()
+            .subscribe((res) => {
+              if (res.message == 'home' ||
+                  res.message == 'ivr' ||
+                  res.message == 'none')
+              {
+                  this.curselKey = res.message;
+                  this.tabIndex = this.selectedTabIndex;
+
+                  this.homeMode = res.message == 'home' ? 1 : 0;
+                  this.ivrMode = res.message == 'ivr' ? 1 : 0;
+
+                  if (this.updateToConfig)
+                      this.updateSettingsRebalanceToConfig();
+              }
+          });
+    }
+
+    private updateSettingsRebalanceToConfig() {
+        this.settingsSvc.updateSettingsRebalanceCfg(this.homeMode.toString(), this.ivrMode.toString())
+            .subscribe((res) => {
+                if (res.retcode == 1) {
+                }
+        });
+    }
 
 	setChainManualCommandDisabled() {
 		this.dialogSvc

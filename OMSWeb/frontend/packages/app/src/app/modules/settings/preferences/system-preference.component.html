@@ -10,22 +10,24 @@
 		</legend>
 		<label>
 			{{ 'names.rebalance' | translate }} {{ 'names.mode' | translate }}{{ ': ' }}
-      <span style="color: blue">{{ translatedSelectedRebalancedMode }}</span>
+			<span style="color: blue">{{ translatedSelectedRebalancedMode }}</span>
 			<dx-button-group
 				[items]="rebalanceModes"
 				keyExpr="key"
+				tabIndex="tabIndex"
+				focusStateEnabled="true"
 				[selectedItemKeys]="selectedRebalanceMode"
 				(onItemClick)="setRebalanceMode($event.itemData.key)"
-        buttonTemplate="buttonTemplate"
-        style="margin-left: 2em; height: 30px"
+				buttonTemplate="buttonTemplate"
+				style="margin-left: 2em; height: 30px"
 			>
-        <div *dxTemplate="let buttonData of 'buttonTemplate'">
-            {{buttonData.label}}
-        </div>
+			<span *dxTemplate="let buttonData of 'buttonTemplate'">
+					{{buttonData.label}}
+			</span>
 			</dx-button-group>
 		</label>
 	</fieldset>
-	<fieldset>
+	<fieldset style="margin-top: 1em">
 		<legend>
 			{{ 'names.chainManualCommandDisabled' | translate }}
 		</legend>
