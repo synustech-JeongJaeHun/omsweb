@@ -15,38 +15,42 @@ function initClusterStates(css: ITrackData['clusterStates']) {
   }))
 }
 
-function findClusterStateByConverterId(converterId: ClusterState['converterId']){
+function findClusterStateByConverterId(
+  converterId: ClusterState['converterId']
+) {
   return clusterStates.value.find((cs) => cs.converterId === converterId)
 }
 
 function insertClusterState(clusterState: UpdateDto.ClusterState) {
   const finded = findClusterStateByConverterId(clusterState.converterId)
 
-  if(finded) updateClusterState(clusterState)
+  if (finded) updateClusterState(clusterState)
   else clusterStates.value.push(clusterState)
 }
 
 function updateClusterState(clusterState: UpdateDto.ClusterState) {
   const finded = findClusterStateByConverterId(clusterState.converterId)
-  if(finded) Object.assign(finded, clusterState)
+  if (finded) Object.assign(finded, clusterState)
 }
 
 function deleteClusterState(clusterState: UpdateDto.ClusterState) {
   const findedIndex = clusterStates.value.findIndex(
     (cs) => cs.converterId === clusterState.converterId
   )
-  if(findedIndex >= 0) clusterStates.value.splice(findedIndex, 1)
+  if (findedIndex >= 0) clusterStates.value.splice(findedIndex, 1)
 }
 
-function useIsClusterAlertState(clusterId: Ref<Cluster['id']>) {
+function useClusterState(clusterId: Ref<Cluster['id']>) {
   return computed(() => {
-    return clusterStates.value.some((cs) => {
-      const isAlertState = cs.status === 4
-      const isClusterRelated =
-        cs.converterId === clusterId.value ||
-        cs.backupId === clusterId.value
-      return isAlertState && isClusterRelated
-    })
+    const clusterState = findClusterStateByConverterId(clusterId.value)
+    return clusterState?.status
+    // return clusterStates.value.some((cs) => {
+    //   const isAlertState = cs.status === 4
+    //   const isClusterRelated =
+    //     cs.converterId === clusterId.value ||
+    //     cs.backupId === clusterId.value
+    //   return isAlertState && isClusterRelated
+    // })
   })
 }
 
@@ -56,5 +60,5 @@ export {
   insertClusterState,
   updateClusterState,
   deleteClusterState,
-  useIsClusterAlertState,
+  useClusterState,
 }
