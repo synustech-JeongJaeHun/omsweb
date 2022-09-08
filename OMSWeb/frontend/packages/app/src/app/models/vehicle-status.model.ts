@@ -18,6 +18,7 @@ export interface IVehicleStatusRow extends IVehicleInfoRow {
   orderOrigin: string;
   canBePushed: boolean;
   isSensorStopped: boolean;
+  isZcuBlocked: boolean;
   isBlocked: boolean;
   errorList: string;
 
@@ -86,6 +87,7 @@ export interface IVehicleStatus {
   orderOrigin: string;
   cargoState: string;
   isSensorStopped: boolean;
+  isZcuBlocked: boolean;
   isBlocked: boolean;
   errorList: string;
   railIn: boolean;

@@ -20,6 +20,7 @@ namespace OMSWeb.Models.Entities
         public int? CurPoint { get; set; }
         public int? NextPoint { get; set; }
         public string CommandPoint { get; set; }
+        public string DestPoint { get; set; }
         public DateTime? LastContact { get; set; }
         public string Mode { get; set; }
         public bool CanBePushed { get; set; }

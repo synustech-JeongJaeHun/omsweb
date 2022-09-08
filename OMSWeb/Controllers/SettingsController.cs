@@ -42,8 +42,11 @@ namespace OMSWeb.Controllers
             if (home_mode < 0 || home_mode > 1) home_mode = 0;
             if (ivr_mode < 0 || ivr_mode > 1) ivr_mode = 0;
 
-            AppConfig.UpdateToOMSConfig("VehicleProcessor", "use_go_home", home_mode.ToString());
-            AppConfig.UpdateToOMSConfig("VehicleProcessor", "use_ivr", ivr_mode.ToString());
+            bool bHomeMode = home_mode == 1 ? true : false;
+            bool bIvrMode = ivr_mode == 1 ? true : false;
+
+            AppConfig.UpdateToOMSConfig("VehicleProcessor", "use_go_home", bHomeMode.ToString());
+            AppConfig.UpdateToOMSConfig("VehicleProcessor", "use_ivr", bIvrMode.ToString());
 
             return Ok(new QueryResult()
             {
