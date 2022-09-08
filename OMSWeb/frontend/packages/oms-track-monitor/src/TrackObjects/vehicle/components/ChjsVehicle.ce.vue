@@ -31,7 +31,7 @@ const emit = inject<RootEmits>(RootEmitInjectionKey)!
 
 const group = useGroup('vehicle', toRef(props.vehicle, 'id'))
 
-const complicatedMode = computed<ComplicatedMode>(() => {
+const complicatedMode = computed<ComplicatedMode | undefined>(() => {
   if (props.vehicle.isConnected !== true)
     return 'DISCONNECT'
   if (props.vehicle.errorList)
@@ -44,13 +44,19 @@ const complicatedMode = computed<ComplicatedMode>(() => {
     return 'SENSORSTOPPED'
   if (props.vehicle.isZcuBlocked)
     return 'ZCUBLOCKED'
-  if (props.vehicle.orderId == null) // data needed
-    return 'HOME'
-  if (props.vehicle.orderId)
-    return 'TRANSFERRING'
-  
-  // if (props.vehicle.orderId == null)
+
+  const isAnyLocationExist = props.vehicle.locationPickup || props.vehicle.locationDropoff || props.vehicle.locationMove
+
+  if (isAnyLocationExist)
+    return 'RUNNING'
+  // @ts-ignore
+  if (isAnyLocationExist == false && props.vehicle.destPoint && props.vehicle.curPoint !== props.vehicle.destPoint)
+    return 'HOMEIVR'
+  // @ts-ignore
+  if (isAnyLocationExist == false && props.vehicle.destPoint && props.vehicle.curPoint === props.vehicle.destPoint)
     return 'IDLE'
+  
+  return undefined
 })
 
 const isHotlot = computed(() => Number(props.vehicle.priority) === 99),
@@ -202,38 +208,18 @@ function onRightClick(event: MouseEvent) {
 
 <template>
   <!-- presentation component without logic -->
-  <ChjsVehiclePresentation 
-    v-if="realtimePosition" 
-    :x="realtimePosition.x" 
-    :y="realtimePosition.y"
-    :vid="props.vehicle.id" 
-    :logicalId="props.vehicle.logicalId" 
-    :orderId="props.vehicle.orderId"
-    :type="props.vehicle.type" 
-    :mode="props.vehicle.mode" 
-    :complicatedMode="complicatedMode"
-    :cargoState="props.vehicle.cargoState" 
-    :cargoTransferResult="props.vehicle.cargoTransferResult"
-    :carrierId="props.vehicle.carrierId"
-    :errorList="props.vehicle.errorList" 
-    :isMaint="props.vehicle.isMaint" 
-    :isConnected="props.vehicle.isConnected"
-    :isSensorStopped="props.vehicle.isSensorStopped" 
-    :isZcuBlocked="props.vehicle.isZcuBlocked"
-    :isBlocked="props.vehicle.isBlocked"
-    :groupColor="group ? getGroupColorWithAlpha(group.color) : undefined" 
-    :isHotlot="isHotlot"
-    :isTransferDisabled="isTransferDisabled" 
-    :isPushDisabled="isPushDisabled" 
-    :isFocused="props.vehicle.isFocused"
-    :isHovered="props.vehicle.isHovered" 
-    @dblclick="onDbClick()" 
-    @leftclick="onLeftClick()"
-    @rightclick="onRightClick($event)" 
-    @mouseover="onMouseover($event)" 
-    @mouseout="onMouseleave()"
-    @mouseleave="onMouseleave()" 
-  />
+  <ChjsVehiclePresentation v-if="realtimePosition" :x="realtimePosition.x" :y="realtimePosition.y"
+    :vid="props.vehicle.id" :logicalId="props.vehicle.logicalId" :orderId="props.vehicle.orderId"
+    :type="props.vehicle.type" :mode="props.vehicle.mode" :complicatedMode="complicatedMode"
+    :cargoState="props.vehicle.cargoState" :cargoTransferResult="props.vehicle.cargoTransferResult"
+    :carrierId="props.vehicle.carrierId" :errorList="props.vehicle.errorList" :isMaint="props.vehicle.isMaint"
+    :isConnected="props.vehicle.isConnected" :isSensorStopped="props.vehicle.isSensorStopped"
+    :isZcuBlocked="props.vehicle.isZcuBlocked" :isBlocked="props.vehicle.isBlocked"
+    :groupColor="group ? getGroupColorWithAlpha(group.color) : undefined" :isHotlot="isHotlot"
+    :isTransferDisabled="isTransferDisabled" :isPushDisabled="isPushDisabled" :isFocused="props.vehicle.isFocused"
+    :isHovered="props.vehicle.isHovered" @dblclick="onDbClick()" @leftclick="onLeftClick()"
+    @rightclick="onRightClick($event)" @mouseover="onMouseover($event)" @mouseout="onMouseleave()"
+    @mouseleave="onMouseleave()" />
 
   <!-- next point line -->
   <line v-if="
@@ -247,4 +233,5 @@ function onRightClick(event: MouseEvent) {
   <line v-if="commandPoint.position.value && realtimePosition" class="line fixed-scale-stroke"
     :stroke="commandLineColor" stroke-width="1" stroke-linecap="round" shape-rendering="auto" :x1="realtimePosition.x"
     :y1="realtimePosition.y" :x2="commandPoint.position.value.x" :y2="commandPoint.position.value.y" />
+
 </template>

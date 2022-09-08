@@ -83,8 +83,8 @@ const props = defineProps<{
   maintenanceModeVehicleColor: Stringlish
   manualModeVehicleColor: Stringlish
   idleModeVehicleColor: Stringlish
-  homeModeVehicleColor: Stringlish
-  transferringModeVehicleColor: Stringlish
+  homeIvrModeVehicleColor: Stringlish
+  runningModeVehicleColor: Stringlish
   zcuBlockedVehicleColor: Stringlish
   sensorStoppedVehicleColor: Stringlish
   // chjs visual end
@@ -294,13 +294,13 @@ defineExpose(exposed)
     );
 }
 
-#vehicle-layer .vehicle-symbol[data-complicated-mode='HOME' i] .vehicle-mode-path {
-  fill: v-bind('parseStringProp(ColorDefault.homeModeVehicleColor, props.homeModeVehicleColor)'
+#vehicle-layer .vehicle-symbol[data-complicated-mode='HOMEIVR' i] .vehicle-mode-path {
+  fill: v-bind('parseStringProp(ColorDefault.homeIvrModeVehicleColor, props.homeIvrModeVehicleColor)'
     );
 }
 
-#vehicle-layer .vehicle-symbol[data-complicated-mode='TRANSFERRING' i] .vehicle-mode-path {
-  fill: v-bind('parseStringProp(ColorDefault.transferringModeVehicleColor, props.transferringModeVehicleColor)'
+#vehicle-layer .vehicle-symbol[data-complicated-mode='RUNNING' i] .vehicle-mode-path {
+  fill: v-bind('parseStringProp(ColorDefault.runningModeVehicleColor, props.runningModeVehicleColor)'
     );
 }
 

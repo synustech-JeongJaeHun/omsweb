@@ -41,7 +41,7 @@ const props = defineProps<{
   isHotlot: boolean
   isTransferDisabled: boolean // before isPreventCall
   isPushDisabled: boolean // before isPreventPush
-  complicatedMode: ComplicatedMode // new in chjs
+  complicatedMode?: ComplicatedMode // new in chjs
 
   // TM attr,
   isFocused?: boolean
@@ -70,7 +70,7 @@ const emit = defineEmits<{
     w 50 h 50 r 25
   -->
   <svg class="overflow-visible cursor-pointer vehicle-symbol" :data-mode="props.mode"
-    :data-complicated-mode="props.complicatedMode">
+    :data-complicated-mode="props.complicatedMode ?? ''">
     <g class="scale-and-reverse-rotate">
       <circle v-show="groupColor" class="group-shadow" r="25" :fill="groupColor" />
 

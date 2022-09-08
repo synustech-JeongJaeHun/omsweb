@@ -21,8 +21,8 @@ namespace OMSWeb.Models
     public string? MaintenanceModeVehicleColor { get; set; }
     public string? ManualModeVehicleColor { get; set; }
     public string? IdleModeVehicleColor { get; set; }
-    public string? HomeModeVehicleColor { get; set; }
-    public string? TransferringModeVehicleColor { get; set; }
+    public string? HomeIvrModeVehicleColor { get; set; }
+    public string? RunningModeVehicleColor { get; set; }
     public string? ZcuBlockedVehicleColor { get; set; }
     public string? SensorStoppedVehicleColor { get; set; }
     #endregion

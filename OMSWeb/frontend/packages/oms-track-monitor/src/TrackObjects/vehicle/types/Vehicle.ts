@@ -14,8 +14,8 @@ type ComplicatedMode =
   | 'MANUAL'
   | 'SENSORSTOPPED'
   | 'ZCUBLOCKED'
-  | 'HOME'
-  | 'TRANSFERRING'
+  | 'HOMEIVR'
+  | 'RUNNING'
   | 'IDLE'
 
 type Vehicle = {
@@ -56,6 +56,11 @@ type Vehicle = {
   carrierId?: string
   commandPoint?: string
   locationDropoff?: string
+  /**
+   * - if station `s12` s and id
+   * - if buffer `b91` b and id
+   * - if point `p594` p and id
+   */
   locationMove?: string
   locationPickup?: string
   orderId?: number
@@ -63,7 +68,7 @@ type Vehicle = {
   priority?: any
   type?: // normal: nullish
   | 'CLEANING' // Vehicle type: Cleaning
-    | string
+  | string
   group?: number
   historyChangeTime?: any
 } & CanBeFocused &

@@ -375,7 +375,7 @@ export namespace SvgDrawingUtil {
 							} else if (layout_object.mode == 'S') {
 								color = dom_css.color_mode_sloppy_manual
 							} else if (layout_object.mode == 'A') {
-								color = trackMonitorSetting.transferringModeVehicleColor
+								color = trackMonitorSetting.runningModeVehicleColor
 								// color = dom_css.color_mode_auto;
 							} else {
 								color = trackMonitorSetting.idleModeVehicleColor
