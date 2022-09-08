@@ -58,20 +58,21 @@ namespace OMSWeb.Repositories
     VH.map_db, 0 AS mapVersion,
     OD.id AS order_id,
     CASE 
-    WHEN OD.location_pickup IS NOT NULL AND OD.location_dropoff IS NOT NULL        -- FROM-TO order
-    THEN
-        CASE 
-        WHEN OD.time_vehicle_arrived IS NULL
-        THEN OD.location_pickup		                                        -- display FROM
-        ELSE OD.location_dropoff		                                    -- display To
-        END
-    WHEN OD.location_pickup IS NOT NULL AND OD.location_dropoff IS NULL            -- FROM order
-    THEN OD.location_pickup		                                                -- display FROM
-    WHEN OD.location_pickup IS NULL AND OD.location_dropoff IS NOT NULL            -- TO order
-    THEN OD.location_dropoff		                                            -- display TO
-    WHEN OD.location_move IS NOT NULL                                              -- MOVE order
-    THEN OD.location_move		                                                -- display MOVETO
+        WHEN OD.location_pickup IS NOT NULL AND OD.location_dropoff IS NOT NULL        -- FROM-TO order
+            THEN
+                CASE 
+                    WHEN OD.time_vehicle_arrived IS NULL
+                        THEN OD.location_pickup		                                        -- display FROM
+                    ELSE OD.location_dropoff		                                    -- display To
+                END
+        WHEN OD.location_pickup IS NOT NULL AND OD.location_dropoff IS NULL            -- FROM order
+            THEN OD.location_pickup		                                                -- display FROM
+        WHEN OD.location_pickup IS NULL AND OD.location_dropoff IS NOT NULL            -- TO order
+            THEN OD.location_dropoff		                                            -- display TO
+        WHEN OD.location_move IS NOT NULL                                              -- MOVE order
+            THEN OD.location_move		                                                -- display MOVETO
     END AS command_point,
+    VH.dest_point,
     OD.location_pickup, OD.location_dropoff, OD.location_move,
     VH.cargo_state, 
     VH.carrier_id,

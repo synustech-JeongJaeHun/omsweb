@@ -222,7 +222,7 @@ namespace OMSWeb.Repositories
       "},
       {"vehiclePosition", @"
         SELECT 
-            VH.id, VH.physical_id, VH.logical_id, VH.last_point AS cur_point, VH.next_point, VH.distance_point, VH.last_contact,
+            VH.id, VH.physical_id, VH.logical_id, VH.last_point AS cur_point, VH.next_point, VH.dest_point, VH.distance_point, VH.last_contact,
             VH.mode, VH.can_be_pushed, 
             CASE 
                 WHEN VH.order_origin LIKE '%MCS%' THEN true 
@@ -263,19 +263,19 @@ namespace OMSWeb.Repositories
                 WHEN VH.connection IS NULL THEN FALSE
             END AS isConnected, 
             CASE 
-            WHEN OD.location_pickup IS NOT NULL AND OD.location_dropoff IS NOT NULL   -- FROM-TO order
+                WHEN OD.location_pickup IS NOT NULL AND OD.location_dropoff IS NOT NULL   -- FROM-TO order
                 THEN
                     CASE 
                         WHEN OD.time_vehicle_arrived IS NULL
                         THEN OD.location_pickup		                                          -- display FROM
                         ELSE OD.location_dropoff		                                      -- display To
                     END
-            WHEN OD.location_pickup IS NOT NULL AND OD.location_dropoff IS NULL       -- FROM order
-                THEN OD.location_pickup		                                          -- display FROM
-            WHEN OD.location_pickup IS NULL AND OD.location_dropoff IS NOT NULL       -- TO order
-                THEN OD.location_dropoff		                                      -- display TO
-            WHEN OD.location_move IS NOT NULL                                         -- MOVE order
-                THEN OD.location_move		                                          -- display MOVETO
+                WHEN OD.location_pickup IS NOT NULL AND OD.location_dropoff IS NULL       -- FROM order
+                    THEN OD.location_pickup		                                          -- display FROM
+                WHEN OD.location_pickup IS NULL AND OD.location_dropoff IS NOT NULL       -- TO order
+                    THEN OD.location_dropoff		                                      -- display TO
+                WHEN OD.location_move IS NOT NULL                                         -- MOVE order
+                    THEN OD.location_move		                                          -- display MOVETO
             END AS command_point
 
             FROM vehicles AS VH
@@ -293,17 +293,18 @@ namespace OMSWeb.Repositories
             CASE 
                 WHEN OD.location_pickup IS NOT NULL AND OD.location_dropoff IS NOT NULL        -- FROM-TO order
                     THEN
-                CASE 
-                    WHEN OD.time_vehicle_arrived IS NULL THEN OD.location_pickup		                                        -- display FROM
-                    ELSE OD.location_dropoff		                                    -- display To
-                END
-                WHEN OD.location_pickup IS NOT NULL AND OD.location_dropoff IS NULL            -- FROM order
-                    THEN OD.location_pickup		                                               -- display FROM
-                WHEN OD.location_pickup IS NULL AND OD.location_dropoff IS NOT NULL            -- TO order
-                    THEN OD.location_dropoff		                                           -- display TO
-                WHEN OD.location_move IS NOT NULL                                              -- MOVE order
-                    THEN OD.location_move		                                               -- display MOVETO
+                        CASE 
+                            WHEN OD.time_vehicle_arrived IS NULL THEN OD.location_pickup		                                        -- display FROM
+                                ELSE OD.location_dropoff		                                    -- display To
+                            END
+                            WHEN OD.location_pickup IS NOT NULL AND OD.location_dropoff IS NULL            -- FROM order
+                                THEN OD.location_pickup		                                               -- display FROM
+                            WHEN OD.location_pickup IS NULL AND OD.location_dropoff IS NOT NULL            -- TO order
+                                THEN OD.location_dropoff		                                           -- display TO
+                            WHEN OD.location_move IS NOT NULL                                              -- MOVE order
+                                THEN OD.location_move		                                               -- display MOVETO
             END AS command_point,
+            VH.dest_point,
 
             --OD.location_pickup, 
             --OD.location_dropoff, 

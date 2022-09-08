@@ -9,6 +9,7 @@ export class Vehicle {
   curPoint: any;
   nextPoint: any;
   commandPoint: any;
+  destPoint: any;
 
   cargoState: string;
   movingState: string;
@@ -50,6 +51,7 @@ export class Vehicle {
     currentPoint: any,
     nextPoint: any,
     commandPoint: any,
+    destPoint: any,
     lastContact: number,
     hotLot: boolean
   ) {
@@ -122,6 +124,7 @@ export class Vehicle {
     this.curPoint = currentPoint;
     this.nextPoint = nextPoint;
     this.commandPoint = commandPoint;
+    this.destPoint = destPoint;
 
     this.lastContact = lastContact;
     this.hotlot = hotLot;
@@ -150,6 +153,14 @@ export class Vehicle {
       commandPoint = { ...this.commandPoint };
       commandPoint.coord = { ...this.commandPoint.coord };
       commandPoint.invertedCoord = { ...this.commandPoint.invertedCoord };
+    }
+
+    let destPoint;
+    if (this.destPoint != undefined) {
+      destPoint = {};
+      destPoint = { ...this.destPoint };
+      destPoint.coord = { ...this.destPoint.coord };
+      destPoint.invertedCoord = { ...this.destPoint.invertedCoord };
     }
 
     let copied_vehicle = new Vehicle(
@@ -184,6 +195,7 @@ export class Vehicle {
       curPoint,
       nextPoint,
       commandPoint,
+      destPoint,
       this.lastContact,
       this.hotlot
     );
