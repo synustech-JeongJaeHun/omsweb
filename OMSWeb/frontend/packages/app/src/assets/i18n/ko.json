@@ -90,6 +90,7 @@
     "orderOrigin": "초기 명령",
     "curPoint": "현재",
     "commandPoint": "다음",
+    "destPoint": "Dest",
     "orderId": "명령",
     "movingState": "이동 상태",
     "cargoState": "화물 상태",

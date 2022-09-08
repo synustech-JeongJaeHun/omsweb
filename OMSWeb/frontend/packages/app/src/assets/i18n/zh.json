@@ -89,6 +89,7 @@
     "orderOrigin": "呼叫",
     "curPoint": "当前",
     "commandPoint": "下一个",
+    "destPoint": "Dest",
     "orderId": "订单",
     "movingState": "移动状态",
     "cargoState": "货物状态",
