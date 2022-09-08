@@ -20,6 +20,7 @@ import {
 	ManualTransferFiltersSetting,
 	NodeMarginSetting,
 } from '../models/settings.model'
+import { ISettingMode } from '../models/system.model'
 import { IQueryResult } from '@oms/models/query-result.model'
 import * as AspNetData from 'devextreme-aspnet-data-nojquery'
 
@@ -190,4 +191,11 @@ export class SettingsService {
         return this.http.post<IQueryResult>(`${this.baseUrl}/updateAlternateTransfer/${mode}&${rertyTostb}&${stations}`, '')
     }
 
+    settingsRebalance(): Observable<IQueryResult> {
+        return this.http.get<IQueryResult>(`${this.baseUrl}/settingsRebalance`)
+    }
+
+    updateSettingsRebalanceCfg(homeMode: string, ivrMode: string): Observable<IQueryResult> {
+        return this.http.post<IQueryResult>(`${this.baseUrl}/updateSettingsRebalanceCfg/${homeMode}&${ivrMode}`, '')
+    }
 }

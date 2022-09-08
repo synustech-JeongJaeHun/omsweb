@@ -70,6 +70,15 @@ const numRound2 = numRound(2, true)
 
 const convertUtilValue = R.compose(numRound2, getAvg)
 const convertDtValue = R.compose(convertEpochToStr, getAvg)
+const orderedList = (ul) => {
+  const list = ['auto', 'manual', 'error', 'disconnected']
+  const getValue = key =>
+    R.compose(
+      R.path([key, 1]),
+      R.indexBy(R.prop(0))
+    )(ul)
+  return list.map(key => [key, getValue(key)])
+}
 
 const Trend: React.FC<Props> & any = ({
 	data,
@@ -79,6 +88,7 @@ const Trend: React.FC<Props> & any = ({
 }: Props) => {
 	const { stats, table, donuts } = data
 	const { cpu, memory } = stats
+  donuts[0] = orderedList(donuts[0])
 
 	return (
 		<QueryContext.Provider value={{ isPlaceholder }}>

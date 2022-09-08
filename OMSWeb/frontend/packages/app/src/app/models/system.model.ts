@@ -13,6 +13,7 @@ export interface ISystemStates {
 
 export interface ISettingMode {
     homeMode?: boolean
+    ivrMode?: boolean
     chainManualCommandDisabled?: boolean
 }
 

@@ -22,32 +22,32 @@ const Wrapper = styled.div`
 const colorDic = {
 	error: {
 		label: 'Error',
-		color: '#49B2F5',
-	},
-	idle: {
-		label: 'Idle',
 		color: '#E85950',
+	},
+	disconnected: {
+		label: 'Disconnected',
+		color: '#000000',
 	},
 	manual: {
 		label: 'Manual',
-		color: '#000000',
+		color: '#49B2F5',
 	},
 	auto: {
 		label: 'Auto',
 		color: '#F8C63A',
 	},
 	loading: {
-		label: 'Loading',
+		label: 'From Moving',
 		color: '#6BA69D',
 	},
 	unloading: {
-		label: 'Unloading',
+		label: 'To Moving',
 		color: '#81B6DA',
 	},
 }
 
 const exData = [
-	['error', 30],
+	['disconnected', 30],
 	['idle', 20],
 	['manual', 50],
 	['auto', 200],

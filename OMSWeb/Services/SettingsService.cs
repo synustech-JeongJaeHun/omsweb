@@ -15,6 +15,11 @@ namespace OMSWeb.Services
             _repo = repo;
         }
 
+        public SettingModeEntity GetSettingsRebalance()
+        {
+            return _repo.QuerySettingsBalance();
+        }
+
         public IQueryable<AlternateStationEntity> GetSettingsAlternateStations(string stationLikeKey)
         {
             return _repo.QuerySettingsAlternateStations(stationLikeKey);

@@ -165,6 +165,16 @@ export interface IToggleHomeModeCommandMessage extends ICommandMessage {
 	mode: 'change'
 }
 
+export interface IChangeHomeModeCommandMessage extends ICommandMessage {
+  action: 'home_mode'
+  mode: string
+}
+
+export interface IChangeIvrModeCommandMessage extends ICommandMessage {
+  action: 'ivr_mode'
+  mode: string
+}
+
 export interface IToggleChainManualCommandDisabledCommandMessage
 	extends ICommandMessage {
 	action: 'chain_manual_command_disabled'

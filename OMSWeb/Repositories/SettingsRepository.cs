@@ -15,6 +15,20 @@ namespace OMSWeb.Repositories
         }
 
 
+        public SettingModeEntity QuerySettingsBalance()
+        {
+            SettingModeEntity result;
+
+            var sql = @"SELECT home_mode, ivr_mode, chain_manual_command_disabled FROM setting_mode";
+
+            using (var conn = ConnectTrack())
+            {
+                result = conn.QueryFirst<SettingModeEntity>(sql);
+            }
+            return result;
+        }
+
+
         public IQueryable<AlternateStationEntity> QuerySettingsAlternateStations(string stationLikeKey)
         {
             IQueryable<AlternateStationEntity> result;

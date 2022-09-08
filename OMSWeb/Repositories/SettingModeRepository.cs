@@ -15,7 +15,7 @@ namespace OMSWeb.Repositories
         {
             IQueryable<SettingModeEntity> result;
 
-            var sql = @"SELECT home_mode, chain_manual_command_disabled FROM setting_mode";
+            var sql = @"SELECT home_mode, ivr_mode, chain_manual_command_disabled FROM setting_mode";
             
             using (var conn = ConnectTrack())
             {

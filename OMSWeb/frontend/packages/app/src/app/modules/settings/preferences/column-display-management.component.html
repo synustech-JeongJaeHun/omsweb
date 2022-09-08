@@ -467,6 +467,18 @@
       <div class="table-columns-sub-container">
         <div class="table-columns-entries-container">
           <div>
+            <mat-label>{{ "names.destPoint" | translate }}</mat-label>
+          </div>
+          <div>
+            <input type="checkbox" color="primary" [title]="'names.destPoint' | translate"
+                   [checked]="getCheckedState('vehicles_destPoint')"
+                   (change)="onChangeControlTable('vehicles_destPoint', $event)" />
+          </div>
+        </div>
+      </div>
+      <div class="table-columns-sub-container">
+        <div class="table-columns-entries-container">
+          <div>
             <mat-label>{{ "names.orderId" | translate }}</mat-label>
           </div>
           <div>
