@@ -90,6 +90,7 @@
     "orderOrigin": "Call",
     "curPoint": "Current",
     "commandPoint": "Next",
+    "destPoint": "Dest",
     "orderId": "Order",
     "movingState": "Moving State",
     "cargoState": "Cargo State",
