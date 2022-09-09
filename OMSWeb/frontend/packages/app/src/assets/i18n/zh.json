@@ -187,6 +187,8 @@
     "ioList": "IO 列表",
     "vehicleStatus": "车辆状态",
     "bufferStatus": "缓冲区状态",
+    "referenceValue": "Reference Value",
+    "cpsReferenceValue": "Cps Reference Value",
     "confirm": "确认",
     "ok": "Ok",
     "cancel": "取消",

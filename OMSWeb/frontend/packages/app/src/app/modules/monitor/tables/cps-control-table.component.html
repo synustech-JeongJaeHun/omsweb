@@ -1,4 +1,8 @@
 <div class="grid-actions" *ngIf="hasControlAccess">
+  <button mat-stroked-button color="basic" class="dense accent"
+          (click)="onReferenceValue()">
+    {{ "names.referenceValue" | translate }}
+  </button>
 </div>
 
 <dx-data-grid [dataSource]="dataSource" [remoteOperations]="true" [height]="tableHeight" [repaintChangesOnly]="true"

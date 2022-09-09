@@ -188,6 +188,8 @@
     "ioList": "IO List",
     "vehicleStatus": "Vehicle Status",
     "bufferStatus": "Buffer Status",
+    "referenceValue": "Reference Value",
+    "cpsReferenceValue": "Cps Reference Value",
     "confirm": "Confirm",
     "ok": "Ok",
     "cancel": "Cancel",
