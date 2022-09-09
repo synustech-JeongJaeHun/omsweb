@@ -411,7 +411,7 @@ export namespace SvgDrawingUtil {
 				}
 
 				// Prevent push
-				if (!layout_object.canBePushed) {
+				if (!layout_object.isMaint && !layout_object.canBePushed) {
 					let push_svg = dom_object_group
 						.append('g')
 						.attr('class', 'push')
@@ -426,19 +426,33 @@ export namespace SvgDrawingUtil {
 								})`
 						})
 					push_svg
-						.append('path')
-						.attr('d', dom_css.prevent_push_path)
-						.attr('fill', dom_css.prevent_inner_color)
-						.attr('transform', 'translate(2,-3.5)scale(0.015)')
+						.append('circle')
+						.attr('r', 4.5)
+						.attr('cx', 6)
+						.attr('cy', 0)
+						.attr('fill', 'white')
+						.attr('stroke', 'red')
+						.attr('stroke-with', 20)
+					push_svg
+						.append('line')
+						.attr('x1', 5.3)
+						.attr('y1', -2.0)
+						.attr('x2', 5.3)
+						.attr('y2', 3.5)
+						.attr('stroke', 'black')
+						.attr('stroke-width', 1.5)
 					push_svg
 						.append('path')
-						.attr('d', dom_css.prevent_path)
-						.attr('fill', dom_css.prevent_outer_color)
-						.attr('transform', 'rotate(90)translate(-6.5,-12.5)scale(0.015)')
+						.attr('d', 'M 5.3 -2.0 A 1.9 1.3 0 1 1 5.3 0 Z')
+						.attr('stroke', 'black')
+						.attr('stroke-width', 1.5)
+						.attr('fill', 'none')
+				} else {
+					dom_object_group.select('.push').remove()
 				}
 
 				// Prevent call
-				if (layout_object.orderOrigin?.length === 0) {
+				if (!layout_object.isMaint && getIsVehicleTransferDisabled(layout_object.orderOrigin)) {
 					let push_svg = dom_object_group.select('.push')
 					let x_offset = (dom_css.radius * 4) / 3
 					if (push_svg.nodes().length > 0) {
@@ -454,16 +468,33 @@ export namespace SvgDrawingUtil {
 								},${dom_css.radius * vehicleScale})scale(${vehicleScale})`
 							else return `translate(${x_offset},${dom_css.radius})`
 						})
+
 					call_svg
-						.append('path')
-						.attr('d', dom_css.prevent_call_path)
-						.attr('fill', dom_css.prevent_inner_color)
-						.attr('transform', 'rotate(-90)translate(-4.5,1.5)scale(0.015)')
+						.append('circle')
+						.attr('r', 4.5)
+						.attr('cx', 6)
+						.attr('cy', 0)
+						.attr('fill', 'white')
+						.attr('stroke', 'red')
+						.attr('stroke-with', 20)
 					call_svg
-						.append('path')
-						.attr('d', dom_css.prevent_path)
-						.attr('fill', dom_css.prevent_outer_color)
-						.attr('transform', 'rotate(90)translate(-6.5,-12.5)scale(0.015)')
+						.append('line')
+						.attr('x1', 3.5)
+						.attr('y1', -2.0)
+						.attr('x2', 8.5)
+						.attr('y2', -2.0)
+						.attr('stroke', 'black')
+						.attr('stroke-width', 1.5)
+					call_svg
+						.append('line')
+						.attr('x1', 6.0)
+						.attr('y1', -2.0)
+						.attr('x2', 6.0)
+						.attr('y2', 3.5)
+						.attr('stroke', 'black')
+						.attr('stroke-width', 1.5)
+				} else {
+					dom_object_group.select('.call').remove()
 				}
 
 				dom_object_group
@@ -690,38 +721,48 @@ export namespace SvgDrawingUtil {
 					dom_object_group.select('.foup').remove()
 				}
 
+        if (layout_object.isMaint === true) {
+					dom_object_group
+						.append('path')
+            .attr('class', 'maint')
+						.attr('d', 'M 21.910031,9.9058058 18.623202,4.6532395 C 19.293898,3.6712949 19.350918,2.3504581 18.66466,1.2537685 17.942279,0.09935804 16.57789,-0.41234238 15.333009,-0.15544309 L 16.886124,2.3265374 15.15451,3.4101062 13.554472,0.91732788 C 12.732217,1.9137925 12.642794,3.3753866 13.365173,4.5297964 c 0.686257,1.0966925 1.899089,1.622908 3.075449,1.449048 l 3.286829,5.2525656 c 0.144476,0.230878 0.425994,0.295685 0.656874,0.151212 L 21.7119,10.551886 c 0.277801,-0.133677 0.353407,-0.462113 0.198124,-0.6460751 z')
+						.attr('fill', 'var(--highlight-select-color)')
+				} else {
+					dom_object_group.select('.maint').remove()
+				}
+
 				if (layout_object.isSensorStopped === true) {
 					dom_object_group
-						.append('circle')
+						.append('text')
 						.attr('class', 'corner')
-						.attr('r', dom_css.sensor_stop_radius)
-						.attr('cx', -13)
-						.attr('cy', -13)
-						.attr('fill', dom_css.color_sensor_stop)
-						.attr('stroke', dom_css.stroke_color_sensor_stop)
-						.attr('stroke-width', dom_css.stroke_width_sensor_stop)
+						.attr('x', 12)
+						.attr('y', -8)
+						.attr('font-weight', 'bold')
+						.attr('font-size', 'small')
 						.attr('transform', () => {
 							if (!overlap_adjustment)
 								return `rotate(${-mapRotation})scale(${vehicleScale})`
 							else return ''
 						})
+						.html('S')
 				} else {
 					dom_object_group.select('.corner').remove()
 				}
 
-				if (layout_object.isBlocked === true) {
+				if (layout_object.isZcuBlocked === true) {
 					dom_object_group
-						.append('circle')
-						.attr('class', 'block')
-						.attr('r', dom_css.blocked_radius)
-						.attr('cx', -(2 + dom_css.radius + dom_css.blocked_radius / 2))
-						.attr('cy', -(2 + dom_css.radius + dom_css.blocked_radius / 2))
-						.attr('fill', dom_css.color_blocked)
+						.append('text')
+						.attr('class', 'corner')
+						.attr('x', 12)
+						.attr('y', -8)
+						.attr('font-weight', 'bold')
+						.attr('font-size', 'small')
 						.attr('transform', () => {
 							if (!overlap_adjustment)
 								return `rotate(${-mapRotation})scale(${vehicleScale})`
 							else return ''
 						})
+						.html('Z')
 				} else {
 					dom_object_group.select('.block').remove()
 				}
@@ -1088,4 +1129,18 @@ function getVehicleColorFromComplicatedMode(
 		default:
 			return 'deeppink'
 	}
+}
+
+/**
+ * check frontend/packages/oms-track-monitor/src/TrackObjects/vehicle/components/ChjsVehicle.ce.vue
+ */
+function getIsVehicleTransferDisabled(orderOrigin?: string | string[]) {
+	const originInUpper = (
+		typeof orderOrigin === 'string' ? orderOrigin : (orderOrigin ?? []).join('')
+	).toUpperCase()
+
+	const hasMCS = originInUpper.includes('MCS')
+	const hasAsterisk = originInUpper.includes('*')
+
+	return hasMCS === false && hasAsterisk === false
 }
