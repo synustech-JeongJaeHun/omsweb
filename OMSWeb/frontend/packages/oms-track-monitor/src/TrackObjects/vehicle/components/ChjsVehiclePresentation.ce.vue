@@ -10,8 +10,6 @@ import VehicleCargoLoadingSvg from '../assets/VehicleCargoLoading.svg?component'
 import VehicleCargoUnloadingSvg from '../assets/VehicleCargoUnloading.svg?component'
 import VehicleCargoFullSvg from '../assets/VehicleCargoFull.svg?component'
 import VehicleCargoTransferFailSvg from '../assets/VehicleCargoTransferFail.svg?component'
-import VehicleStateErrorSvg from '../assets/VehicleStateError.svg?component'
-import VehicleStateDisconnectedSvg from '../assets/VehicleStateDisconnected.svg?component'
 import VehicleTypeNormalOutline from '../assets/VehicleTypeNormalOutline.svg?component'
 import VehicleFocusArrow from '../assets/VehicleFocusArrow.svg?component'
 
@@ -184,16 +182,14 @@ const emit = defineEmits<{
       <!-- bottom left (0) -->
       <!-- nothing -->
 
-      <!-- bottom right (4) -->
-      <!-- 1. Disconnected -->
-      <VehicleStateDisconnectedSvg v-if="props.isConnected === false" x="22" y="-18" width="15" height="15" />
-      <!-- 2. Maintained -->
-      <VehicleStateMaintainedSvg v-else-if="props.isMaint" x="22" y="-18" width="20" height="20" />
-      <!-- 3. Prevent Call or Prevent Push -->
+      <!-- bottom right (3) -->
+      <!-- 1. Maintained -->
+      <VehicleStateMaintainedSvg v-if="props.complicatedMode === 'MAINTENANCE'" x="22" y="-18" width="20" height="20" />
+      <!-- 2. Prevent Call or Prevent Push -->
       <template v-else-if="props.isTransferDisabled || props.isPushDisabled">
-        <!-- 3-A. Prevent Push -->
+        <!-- 2-A. Prevent Push -->
         <VehicleStatePushDisabledSvg v-if="props.isPushDisabled" width="15" height="15" x="22" y="-18" />
-        <!-- 3-B. Prevent Call -->
+        <!-- 2-B. Prevent Call -->
         <VehicleStateTransferDisabledSvg v-if="props.isTransferDisabled" width="15" height="15"
           :x="props.isPushDisabled ? 40 : 22" y="-18" />
       </template>
