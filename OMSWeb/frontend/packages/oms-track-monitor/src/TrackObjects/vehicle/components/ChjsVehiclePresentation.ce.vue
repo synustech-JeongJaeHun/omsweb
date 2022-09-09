@@ -10,9 +10,6 @@ import VehicleCargoLoadingSvg from '../assets/VehicleCargoLoading.svg?component'
 import VehicleCargoUnloadingSvg from '../assets/VehicleCargoUnloading.svg?component'
 import VehicleCargoFullSvg from '../assets/VehicleCargoFull.svg?component'
 import VehicleCargoTransferFailSvg from '../assets/VehicleCargoTransferFail.svg?component'
-import VehicleStateBlockSvg from '../assets/VehicleStateBlock.svg?component'
-import VehicleStateZcuBlockSvg from '../assets/VehicleStateZcuBlock.svg?component'
-import VehicleStateSensorStopSvg from '../assets/VehicleStateSensorStop.svg?component'
 import VehicleStateErrorSvg from '../assets/VehicleStateError.svg?component'
 import VehicleStateDisconnectedSvg from '../assets/VehicleStateDisconnected.svg?component'
 import VehicleTypeNormalOutline from '../assets/VehicleTypeNormalOutline.svg?component'
@@ -159,29 +156,30 @@ const emit = defineEmits<{
 
       <!-- vehicle properties ordered by priority ==== START -->
 
-      <!-- top left (2) -->
-      <!-- 1. Blocked -->
-      <VehicleStateBlockSvg 
-        v-if="props.isBlocked" 
-        x="-25" 
-        y="15" 
-        width="10" 
-        height="10" 
-      />
-      <!-- 2. Zcu Blocked -->
-      <VehicleStateZcuBlockSvg
-        v-else-if="props.isZcuBlocked"
-        x="-25"
-        y="15"
-        width="10"
-        height="10"
-      />
-      <!-- 2. Sensor Stop -->
-      <VehicleStateSensorStopSvg v-else-if="props.isSensorStopped" x="-25" y="15" width="10" height="10" />
-      <template v-else />
+      <!-- top left (0) -->
+      <!-- nothing -->
 
       <!-- top right (1) -->
-      <!-- nothing -->
+      <!-- 1. Zcu Blocked -->
+      <text 
+        v-if="props.isZcuBlocked"
+        x="20"
+        y="12"
+        font-weight="bold"
+        style="transform: rotate(180deg) scaleX(-1); transform-origin: 20px 12px;" >
+        Z
+      </text>
+      
+      <!-- 2. Sensor Stop -->
+      <text 
+        v-else-if="props.isSensorStopped" 
+        x="20"
+        y="12"
+        font-weight="bold"
+        style="transform: rotate(180deg) scaleX(-1); transform-origin: 20px 12px;" >
+        S
+      </text>
+      <template v-else />
 
       <!-- bottom left (1) -->
       <!-- 1. Error -->
