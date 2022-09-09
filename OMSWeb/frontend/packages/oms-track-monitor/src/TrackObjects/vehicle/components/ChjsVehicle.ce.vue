@@ -45,15 +45,13 @@ const complicatedMode = computed<ComplicatedMode | undefined>(() => {
   if (props.vehicle.isZcuBlocked)
     return 'ZCUBLOCKED'
 
-  const isAnyLocationExist = props.vehicle.locationPickup || props.vehicle.locationDropoff || props.vehicle.locationMove
+  const isAnyLocationExist = !!(props.vehicle.locationPickup || props.vehicle.locationDropoff || props.vehicle.locationMove)
 
   if (isAnyLocationExist)
     return 'RUNNING'
-  // @ts-ignore
-  if (isAnyLocationExist == false && props.vehicle.destPoint && props.vehicle.curPoint !== props.vehicle.destPoint)
+  if (isAnyLocationExist === false && props.vehicle.destPoint && props.vehicle.curPoint !== props.vehicle.destPoint)
     return 'HOMEIVR'
-  // @ts-ignore
-  if (isAnyLocationExist == false && props.vehicle.destPoint && props.vehicle.curPoint === props.vehicle.destPoint)
+  if (isAnyLocationExist === false && props.vehicle.destPoint && props.vehicle.curPoint === props.vehicle.destPoint)
     return 'IDLE'
   
   return undefined
@@ -173,6 +171,8 @@ const commandLineColor = computed(() => {
     return '#87CEEB'
   else if (commandPoint.type.value === 'dropoff') // in chjs `To Moving`
     return '#FFCCFF'
+  else if (commandPoint.type.value === 'move') // in chjs `Moving`
+    return '#ffff00'
   else return undefined
 })
 
