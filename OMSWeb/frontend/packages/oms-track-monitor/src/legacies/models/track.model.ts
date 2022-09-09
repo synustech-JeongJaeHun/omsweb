@@ -1,25 +1,25 @@
 import { ICoordinate, IMapSize } from './drawing.model'
 
 interface IBuffer {
-	id: number
-	logicalId: string
-	physicalId: string
-	direction: 'L' | 'R' | 'U'
-	pointId: number
-	nextPoint: number
-	offset: number
+  id: number
+  logicalId: string
+  physicalId: string
+  direction: 'L' | 'R' | 'U'
+  pointId: number
+  nextPoint: number
+  offset: number
 
-	// nullable
-	group?: number
+  // nullable
+  group?: number
   unuse?: boolean
   carrierId?: boolean
 }
 interface ICluster {
-	id: number
-	color: string
-	logicalId: string
-	maxVehicles: number
-	segments: number[]
+  id: number
+  color: string
+  logicalId: string
+  maxVehicles: number
+  segments: number[]
 }
 
 interface IClusterState {
@@ -46,167 +46,167 @@ interface IClusterState {
   wh: string
 }
 interface IGroup {
-	id: number
-	logicalId: string
-	color: string
-	objects: {
-		id: number
-		type: 'vehicle' | 'station' | 'buffer' | 'mtl' | 'home'
-	}[]
+  id: number
+  logicalId: string
+  color: string
+  objects: {
+    id: number
+    type: 'vehicle' | 'station' | 'buffer' | 'mtl' | 'home'
+  }[]
 }
 
 interface IMTL {
-	id: number
-	logicalId: string
-	physicalId: string
-	pointId: number
-	group?: number
-	unuse?: boolean
-	position?: any
-	mode?: any
-	errorList?: any
+  id: number
+  logicalId: string
+  physicalId: string
+  pointId: number
+  group?: number
+  unuse?: boolean
+  position?: any
+  mode?: any
+  errorList?: any
 }
 interface IZcu {
-	id: number
-	x: number
-	y: number
-	usingType: 0 | 1 | 2
-	error: boolean
-	zcuType: number
-	inputZones: IZcuInputZone[]
-	completePoints: IZcuCompletePoint[]
+  id: number
+  x: number
+  y: number
+  usingType: 0 | 1 | 2
+  error: boolean
+  zcuType: number
+  inputZones: IZcuInputZone[]
+  completePoints: IZcuCompletePoint[]
 }
 interface IZcuInputZone {
-	id: number
-	zcuId: number
-	priorityPoint: number
-	zonePoints: string
+  id: number
+  zcuId: number
+  priorityPoint: number
+  zonePoints: string
 }
 interface IZcuCompletePoint {
-	id: number
-	zcuId: number
-	completePointId: number
+  id: number
+  zcuId: number
+  completePointId: number
 }
 interface IPoint extends ICoordinate {
-	id: number
-	logicalId: string
-	physicalId: string
-	group?: number
-	isHome?: boolean
+  id: number
+  logicalId: string
+  physicalId: string
+  group?: number
+  isHome?: boolean
 }
 interface ISegPart {
-	type?: string
-	direction?: string
-	location?: string
-	x1?: number
-	y1?: number
-	x2?: number
-	y2?: number
+  type?: string
+  direction?: string
+  location?: string
+  x1?: number
+  y1?: number
+  x2?: number
+  y2?: number
 }
 interface ISegmentPart extends ISegPart {
-	id: number
-	logicalId: string
-	physicalId?: string
+  id: number
+  logicalId: string
+  physicalId?: string
 
-	startPoint: number
-	endPoint: number
-	length: number
-	speed: number
+  startPoint: number
+  endPoint: number
+  length: number
+  speed: number
 
-	segpartId: number
+  segpartId: number
 
-	// nullable
-	segparts?: ISegPart[]
-	candidates?: any[]
-	travelTime: any
-	isValidate?: boolean
+  // nullable
+  segparts?: ISegPart[]
+  candidates?: any[]
+  travelTime: any
+  isValidate?: boolean
 }
 interface IStation {
-	id: number
-	logicalId: string
-	physicalId: string
+  id: number
+  logicalId: string
+  physicalId: string
 
-	direction: string
-	pointId: number
-	nextPoint: number
-	offset: number
+  direction: string
+  pointId: number
+  nextPoint: number
+  offset: number
 
-	unuse?: boolean
+  unuse?: boolean
 
-	group?: number
-	carrierType?: string
+  group?: number
+  carrierType?: string
 }
 interface IVehicle {
-	id: number
-	logicalId: string
-	physicalId: string
+  id: number
+  logicalId: string
+  physicalId: string
 
-	canBePushed: boolean
-	cargoState:
-		| 'L' // Loading
-		| 'F' // Full
-		| 'U' // Unload
-		| 'E' // Empty
-	curPoint: number
-	nextPoint: number
-  destPoint?: number
-	errorList: string
-	isBlocked: boolean
+  canBePushed: boolean
+  cargoState:
+    | 'L' // Loading
+    | 'F' // Full
+    | 'U' // Unload
+    | 'E' // Empty
+  curPoint: number
+  nextPoint: number
+  destPoint?: string
+  errorList: string
+  isBlocked: boolean
   isZcuBlocked: boolean
-	isSensorStopped: boolean
-	isMaint: boolean
-	isConnected: boolean
-	lastContact: string
-	mapDb: string
-	mode: 'A' | 'M'
-	movingState: 'M' | 'S'
-	distancePoint: number
-	hostOrder: boolean
-	orderOrigin: string | string[]
+  isSensorStopped: boolean
+  isMaint: boolean
+  isConnected: boolean
+  lastContact: string
+  mapDb: string
+  mode: 'A' | 'M'
+  movingState: 'M' | 'S'
+  distancePoint: number
+  hostOrder: boolean
+  orderOrigin: string | string[]
 
-	// nullable
-	cargoTransferResult?: string
-	commandPoint?: any
-	locationDropoff?: string
-	locationMove?: string
-	locationPickup?: string
-	orderId?: number
-	orderLogicalId?: string
-	priority?: any
-	type?: string
-	group?: number
-	historyChangeTime?: any
+  // nullable
+  cargoTransferResult?: string
+  commandPoint?: any
+  locationDropoff?: string
+  locationMove?: string
+  locationPickup?: string
+  orderId?: number
+  orderLogicalId?: string
+  priority?: any
+  type?: string
+  group?: number
+  historyChangeTime?: any
 }
 
 interface IFireshutter {
-	id: number
-	x: number
-	y: number
-	logicalId: string
-	segments: string
-	status: number
+  id: number
+  x: number
+  y: number
+  logicalId: string
+  segments: string
+  status: number
 }
 
 interface ITrackData {
-	vehiclePath?: any[]
+  vehiclePath?: any[]
 
-	width?: number
-	height?: number
-	minimumSegmentLength?: number
+  width?: number
+  height?: number
+  minimumSegmentLength?: number
 
-	buffers?: IBuffer[]
-	clusters?: ICluster[]
+  buffers?: IBuffer[]
+  clusters?: ICluster[]
   clusterStates?: IClusterState[]
-	groups?: IGroup[]
-	mtls?: IMTL[]
-	points?: IPoint[]
-	size?: IMapSize
-	stations?: IStation[]
-	zcus?: IZcu[]
-	fireShutters?: IFireshutter[]
-	segmentParts?: ISegmentPart[]
-	segmentDisabled?: any[]
-	vehicles?: IVehicle[]
+  groups?: IGroup[]
+  mtls?: IMTL[]
+  points?: IPoint[]
+  size?: IMapSize
+  stations?: IStation[]
+  zcus?: IZcu[]
+  fireShutters?: IFireshutter[]
+  segmentParts?: ISegmentPart[]
+  segmentDisabled?: any[]
+  vehicles?: IVehicle[]
 }
 
 export { ITrackData, IVehicle, ISegmentPart, IGroup }

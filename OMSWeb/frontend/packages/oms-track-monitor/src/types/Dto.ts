@@ -13,6 +13,7 @@ namespace UpdateDto {
       | 'E' // Empty
     curPoint: number
     nextPoint: number
+    destPoint?: string
     errorList: string
     isBlocked: boolean
     isZcuBlocked: boolean

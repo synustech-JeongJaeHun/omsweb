@@ -980,6 +980,62 @@
 								<g class="vehicle" transform="translate(70,30)">
 									<line
 										class="command"
+										stroke="#ffa500"
+										stroke-width="3"
+										x1="0"
+										y1="0"
+										x2="20"
+										y2="-20"
+									></line>
+									<circle
+										class="outline"
+										r="8"
+										cx="0"
+										cy="0"
+										fill="transparent"
+										stroke="rgb(65, 65, 65)"
+										stroke-width="5"
+									></circle>
+									<circle
+										class="vehicle_circle"
+										r="8"
+										cx="0"
+										cy="0"
+										fill="transparent"
+										[style]="{ stroke: setting.homeIvrModeVehicleColor }"
+										stroke-width="3"
+									></circle>
+									<text
+										class="label"
+										font-size="11px"
+										x="-15"
+										y="-4"
+										text-anchor="end"
+									>
+										vehicle_id
+									</text>
+									<text
+										class="label_order"
+										font-size="11px"
+										x="-15"
+										y="12"
+										text-anchor="end"
+									>
+                    {{ vehicleSecondaryContent }}
+									</text>
+								</g>
+							</svg>
+						</div>
+						<div class="legend-caption">
+							{{ 'names.home' | translate }}/{{ 'names.ivr' | translate }}
+						</div>
+					</div>
+					<div class="legend-item">
+						<div class="legend-icon">
+							<svg>
+								<g class="vehicle" transform="translate(70,30)">
+									<line
+										class="command"
 										stroke="#FFFF00"
 										stroke-width="3"
 										x1="0"
@@ -1021,7 +1077,7 @@
 										y="12"
 										text-anchor="end"
 									>
-										order_id
+                    {{ vehicleSecondaryContent }}
 									</text>
 								</g>
 							</svg>

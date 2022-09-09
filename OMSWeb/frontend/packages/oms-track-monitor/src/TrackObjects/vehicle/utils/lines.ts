@@ -89,4 +89,19 @@ function useCommandPointPosition(vehicle: Ref<Vehicle>) {
   return { type, position }
 }
 
-export { useNextPointPosition, useCommandPointPosition }
+function useHomeIvrPointPosition(vehicle: Ref<Vehicle>) {
+  return computed(() => {
+    if(vehicle.value.destPoint == null) return undefined
+
+    const isAnyLocationExist = !!(vehicle.value.locationPickup || vehicle.value.locationDropoff || vehicle.value.locationMove)
+    const destPointId = Number.isInteger(Number(vehicle.value.destPoint)) ? Number(vehicle.value.destPoint) : undefined
+    const isVehicleModeHomeIvr = (isAnyLocationExist === false && destPointId && vehicle.value.curPoint !== destPointId)
+    if(isVehicleModeHomeIvr == false) return undefined
+
+    const pointId = Number(vehicle.value.destPoint)
+    const point = findPointById(pointId)
+    return point ? {x: point.x, y: point.y} : undefined
+  })
+}
+
+export { useNextPointPosition, useCommandPointPosition, useHomeIvrPointPosition }

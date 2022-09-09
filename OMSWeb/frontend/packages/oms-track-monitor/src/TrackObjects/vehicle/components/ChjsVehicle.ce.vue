@@ -9,6 +9,7 @@ import { useGroup } from '../../group/groups'
 import {
   useNextPointPosition,
   useCommandPointPosition,
+  useHomeIvrPointPosition
 } from '../utils/lines'
 import { RootEmitInjectionKey, RootEmits } from 'src/Root/types/RootEmits'
 import { createPathElement, getPositionFromD } from 'src/utils/svg/path'
@@ -46,12 +47,13 @@ const complicatedMode = computed<ComplicatedMode | undefined>(() => {
     return 'ZCUBLOCKED'
 
   const isAnyLocationExist = !!(props.vehicle.locationPickup || props.vehicle.locationDropoff || props.vehicle.locationMove)
+  const destPointId = Number.isInteger(Number(props.vehicle.destPoint)) ? Number(props.vehicle.destPoint) : undefined
 
   if (isAnyLocationExist)
     return 'RUNNING'
-  if (isAnyLocationExist === false && props.vehicle.destPoint && props.vehicle.curPoint !== props.vehicle.destPoint)
+  if (isAnyLocationExist === false && destPointId && props.vehicle.curPoint !== destPointId)
     return 'HOMEIVR'
-  if (isAnyLocationExist === false && props.vehicle.destPoint && props.vehicle.curPoint === props.vehicle.destPoint)
+  if (isAnyLocationExist === false && destPointId && props.vehicle.curPoint === destPointId)
     return 'IDLE'
   
   return undefined
@@ -167,14 +169,18 @@ function trackVehiclePosition(d: D, lastUpdated?: number) {
 const nextPointPosition = useNextPointPosition(vehicle)
 const commandPoint = useCommandPointPosition(vehicle)
 const commandLineColor = computed(() => {
-  if (commandPoint.type.value === 'pickup')// in chjs `From Moving`
-    return '#87CEEB'
-  else if (commandPoint.type.value === 'dropoff') // in chjs `To Moving`
-    return '#FFCCFF'
-  else if (commandPoint.type.value === 'move') // in chjs `Moving`
-    return '#ffff00'
-  else return undefined
+  switch (commandPoint.type.value) { 
+    case 'pickup': // in chjs `From Moving`
+      return '#87CEEB'
+    case 'dropoff': // in chjs `To Moving`
+      return '#FFCCFF'
+    case 'move': // in chjs `Moving`
+      return '#ffff00'
+    default:
+      return undefined
+  }
 })
+const homeIvrPoint = useHomeIvrPointPosition(vehicle)
 
 function onMouseover(event: MouseEvent) {
   setHoveredVehicle(props.vehicle)
@@ -229,9 +235,14 @@ function onRightClick(event: MouseEvent) {
   " class="line fixed-scale-stroke" stroke="#91e079" stroke-width="1" stroke-linecap="round" shape-rendering="auto"
     :x1="realtimePosition.x" :y1="realtimePosition.y" :x2="nextPointPosition.x" :y2="nextPointPosition.y" />
 
-  <!-- pickup or dropoff line -->
+  <!-- pickup or dropoff or move line -->
   <line v-if="commandPoint.position.value && realtimePosition" class="line fixed-scale-stroke"
     :stroke="commandLineColor" stroke-width="1" stroke-linecap="round" shape-rendering="auto" :x1="realtimePosition.x"
     :y1="realtimePosition.y" :x2="commandPoint.position.value.x" :y2="commandPoint.position.value.y" />
+
+  <!-- home/ivr line -->
+  <line v-else-if="homeIvrPoint && realtimePosition" class="line fixed-scale-stroke"
+    stroke="#ffa500" stroke-width="1" stroke-linecap="round" shape-rendering="auto" :x1="realtimePosition.x"
+    :y1="realtimePosition.y" :x2="homeIvrPoint.x" :y2="homeIvrPoint.y" />
 
 </template>
