@@ -241,7 +241,11 @@ function onRightClick(event: MouseEvent) {
     :y1="realtimePosition.y" :x2="commandPoint.position.value.x" :y2="commandPoint.position.value.y" />
 
   <!-- home/ivr line -->
-  <line v-else-if="homeIvrPoint && realtimePosition" class="line fixed-scale-stroke"
+  <line v-else-if="
+    props.vehicle.movingState === 'M' &&
+    homeIvrPoint && 
+    realtimePosition
+  " class="line fixed-scale-stroke"
     stroke="#ffa500" stroke-width="1" stroke-linecap="round" shape-rendering="auto" :x1="realtimePosition.x"
     :y1="realtimePosition.y" :x2="homeIvrPoint.x" :y2="homeIvrPoint.y" />
 
