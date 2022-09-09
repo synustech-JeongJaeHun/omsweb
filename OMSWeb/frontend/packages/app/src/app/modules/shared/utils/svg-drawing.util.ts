@@ -339,20 +339,7 @@ export namespace SvgDrawingUtil {
 						.attr('cx', 0)
 						.attr('cy', 0)
 						.attr('fill', 'none')
-						.attr('stroke', function () {
-							let color
-							if (layout_object.mode == 'M') {
-								color = dom_css.color_mode_manual_outline
-							} else if (layout_object.mode == 'S') {
-								color = dom_css.color_mode_sloppy_manual_outline
-							} else if (layout_object.mode == 'A') {
-								color = dom_css.color_mode_auto_outline
-							} else {
-								color = dom_css.color_mode_none_outline
-							}
-
-							return color
-						})
+						.attr('stroke', 'black')
 						.attr('stroke-width', dom_css.line_weight + 2)
 						.attr('transform', () => {
 							if (!overlap_adjustment) return `scale(${vehicleScale})`
@@ -368,19 +355,11 @@ export namespace SvgDrawingUtil {
 						.attr('cy', 0)
 						.attr('fill', 'none')
 						.attr('stroke', function () {
-							let color
-							if (layout_object.mode == 'M') {
-								color = trackMonitorSetting.manualModeVehicleColor
-								// color = dom_css.color_mode_manual;
-							} else if (layout_object.mode == 'S') {
-								color = dom_css.color_mode_sloppy_manual
-							} else if (layout_object.mode == 'A') {
-								color = trackMonitorSetting.runningModeVehicleColor
-								// color = dom_css.color_mode_auto;
-							} else {
-								color = trackMonitorSetting.idleModeVehicleColor
-								// color = dom_css.color_mode_none;
-							}
+							const vehicleMode = getVehicleComplicatedMode(layout_object)
+							const color = getVehicleColorFromComplicatedMode(
+								trackMonitorSetting,
+								vehicleMode,
+							)
 
 							return color
 						})
@@ -393,30 +372,30 @@ export namespace SvgDrawingUtil {
 					// Add clean dashed line
 				}
 
-				if (layout_object.isStale) {
-					dom_object_group
-						.append('g')
-						.attr('class', 'stale')
-						.attr('transform', () => {
-							if (!overlap_adjustment)
-								return `rotate(${-mapRotation})translate(${
-									dom_css.radius * 2 * vehicleScale
-								},-${dom_css.radius * vehicleScale})scale(${vehicleScale})`
-							else return `translate(${dom_css.radius * 2},-${dom_css.radius})`
-						})
-					let stale_element = dom_object_group.select('g.stale')
-					stale_element
-						.append('circle')
-						.attr('cx', 0)
-						.attr('cy', 0)
-						.attr('r', 5.5)
-						.attr('fill', 'white')
-					stale_element
-						.append('path')
-						.attr('d', dom_css.stale_path)
-						.attr('fill', 'black')
-						.attr('transform', 'translate(-6.5,-6.5)scale(0.013)')
-				}
+				// if (layout_object.isStale) {
+				// 	dom_object_group
+				// 		.append('g')
+				// 		.attr('class', 'stale')
+				// 		.attr('transform', () => {
+				// 			if (!overlap_adjustment)
+				// 				return `rotate(${-mapRotation})translate(${
+				// 					dom_css.radius * 2 * vehicleScale
+				// 				},-${dom_css.radius * vehicleScale})scale(${vehicleScale})`
+				// 			else return `translate(${dom_css.radius * 2},-${dom_css.radius})`
+				// 		})
+				// 	let stale_element = dom_object_group.select('g.stale')
+				// 	stale_element
+				// 		.append('circle')
+				// 		.attr('cx', 0)
+				// 		.attr('cy', 0)
+				// 		.attr('r', 5.5)
+				// 		.attr('fill', 'white')
+				// 	stale_element
+				// 		.append('path')
+				// 		.attr('d', dom_css.stale_path)
+				// 		.attr('fill', 'black')
+				// 		.attr('transform', 'translate(-6.5,-6.5)scale(0.013)')
+				// }
 
 				// Unload/load fail
 				if (layout_object.cargoTransferResult) {
@@ -424,12 +403,11 @@ export namespace SvgDrawingUtil {
 						.append('g')
 						.attr('class', 'fail')
 						.attr('transform', () => {
-							if (!overlap_adjustment) return `scale(${vehicleScale})`
-							else return ''
+							return 'translate(-6 -6)'
 						})
 						.append('path')
 						.attr('d', dom_css.fail_path)
-						.attr('transform', 'translate(-3.8,-3.8)scale(0.015)')
+						.attr('transform', 'scale(0.025)')
 				}
 
 				// Prevent push
@@ -1030,6 +1008,68 @@ export namespace SvgDrawingUtil {
 	}
 }
 
-export function getChjsVehicleState(vhl: Dto.IVehicle) {
-	// TODO
+/**
+ * check frontend/packages/oms-track-monitor/src/TrackObjects/vehicle/components/ChjsVehicle.ce.vue
+ */
+function getVehicleComplicatedMode(vehicle: Dto.IVehicle) {
+	if (vehicle.isConnected !== true) return 'DISCONNECT'
+	if (vehicle.errorList) return 'ERROR'
+	if (vehicle.isMaint) return 'MAINTENANCE'
+	if (vehicle.mode === 'M') return 'MANUAL'
+	if (vehicle.isSensorStopped) return 'SENSORSTOPPED'
+	if (vehicle.isZcuBlocked) return 'ZCUBLOCKED'
+
+	const isAnyLocationExist = !!(
+		vehicle.locationPickup ||
+		vehicle.locationDropoff ||
+		vehicle.locationMove
+	)
+	const destPointId = Number.isInteger(Number(vehicle.destPoint))
+		? Number(vehicle.destPoint)
+		: undefined
+
+	if (isAnyLocationExist) return 'RUNNING'
+	if (
+		isAnyLocationExist === false &&
+		destPointId &&
+		vehicle.curPoint !== destPointId
+	)
+		return 'HOMEIVR'
+	if (
+		isAnyLocationExist === false &&
+		destPointId &&
+		vehicle.curPoint === destPointId
+	)
+		return 'IDLE'
+
+	return undefined
+}
+
+function getVehicleColorFromComplicatedMode(
+	trackMonitorSetting: TrackMonitorSettingService['trackSetting'],
+	vehicleMode?: string,
+) {
+	switch (vehicleMode) {
+		case 'DISCONNECT':
+			return trackMonitorSetting.disconnectModeVehicleColor
+		case 'ERROR':
+			return trackMonitorSetting.errorModeVehicleColor
+		case 'MAINTENANCE':
+			return trackMonitorSetting.maintenanceModeVehicleColor
+		case 'MANUAL':
+			return trackMonitorSetting.manualModeVehicleColor
+		case 'SENSORSTOPPED':
+			return trackMonitorSetting.sensorStoppedVehicleColor
+		case 'ZCUBLOCKED':
+			return trackMonitorSetting.zcuBlockedVehicleColor
+		case 'RUNNING':
+			return trackMonitorSetting.runningModeVehicleColor
+		case 'HOMEIVR':
+			return trackMonitorSetting.homeIvrModeVehicleColor
+		case 'IDLE':
+			return trackMonitorSetting.idleModeVehicleColor
+
+		default:
+			return 'deeppink'
+	}
 }
