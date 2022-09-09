@@ -69,8 +69,8 @@ export namespace Dto {
 		errorList?: any
 		inDirection: 'R' | 'A'
 		outDirection: 'R' | 'A'
-	        inLockSegment: string
-	        outLockSegment: string
+    inLockSegment: string
+    outLockSegment: string
 	}
 	export interface IZcu {
 		id: number
@@ -172,14 +172,15 @@ export namespace Dto {
 		id: number
 		canBePushed: boolean
 		cargoState: string
-        cargoTransferResult: string
-        carrierId: string
+    cargoTransferResult: string
+    carrierId: string
 		curPoint?: number
 		nextPoint?: number
+    destPoint?: string
 		commandPoint?: any
 		errorList: string
-        isBlocked: boolean
-        isZcuBlocked: boolean
+    isBlocked: boolean
+    isZcuBlocked: boolean
 		isSensorStopped?: boolean
 		lastContact?: string
 		locationDropoff?: string

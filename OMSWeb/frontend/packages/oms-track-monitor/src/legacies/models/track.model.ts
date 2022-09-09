@@ -149,8 +149,10 @@ interface IVehicle {
 		| 'E' // Empty
 	curPoint: number
 	nextPoint: number
+  destPoint?: number
 	errorList: string
 	isBlocked: boolean
+  isZcuBlocked: boolean
 	isSensorStopped: boolean
 	isMaint: boolean
 	isConnected: boolean

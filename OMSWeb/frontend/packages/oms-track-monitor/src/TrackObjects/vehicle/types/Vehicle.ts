@@ -31,6 +31,7 @@ type Vehicle = {
     | 'E' // Empty
   curPoint: number
   nextPoint: number
+  destPoint?: number
   errorList: string
   isBlocked: boolean
   isZcuBlocked: boolean

@@ -196,6 +196,10 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		// @ts-ignore
 		this.viewer.setTrack({
 			...this.trackData,
+      vehicles: this.trackData.vehicles.map(v => ({
+        ...v,
+        destPoint: Number.isInteger(Number(v.destPoint) ? Number(v.destPoint) : undefined)
+      })),
 			segmentParts: this.trackData.segments,
 			clusters: this.trackData.clusters.map((c) => ({
 				...c,

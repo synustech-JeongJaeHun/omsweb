@@ -15,6 +15,7 @@ namespace UpdateDto {
     nextPoint: number
     errorList: string
     isBlocked: boolean
+    isZcuBlocked: boolean
     isSensorStopped: boolean
     isMaint: boolean
     isConnected: boolean
