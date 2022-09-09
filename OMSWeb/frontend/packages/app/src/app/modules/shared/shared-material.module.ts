@@ -26,6 +26,8 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatTableModule } from '@angular/material/table'
+
 @NgModule({
   exports: [
     MatButtonModule,
@@ -54,6 +56,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
     MatSidenavModule,
     OverlayModule,
     DragDropModule,
+    MatTableModule,
   ],
 })
 export class SharedMaterialModule { }

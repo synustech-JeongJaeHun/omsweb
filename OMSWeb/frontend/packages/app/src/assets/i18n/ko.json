@@ -190,6 +190,8 @@
     "ioList": "IO 목록",
     "vehicleStatus": "비클 상태",
     "bufferStatus": "버퍼 상태",
+    "referenceValue": "Reference Value",
+    "cpsReferenceValue": "Cps Reference Value",
     "confirm": "확인",
     "ok": "Ok",
     "cancel": "취소",

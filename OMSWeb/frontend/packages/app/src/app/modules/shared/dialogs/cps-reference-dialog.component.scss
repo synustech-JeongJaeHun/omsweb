@@ -1,0 +1,33 @@
+table {
+  width: 100%;
+}
+
+th.mat-header-cell {
+  height: 12px;
+  font-size: 12px;
+  text-align: center;
+}
+
+.th_no {
+}
+
+.th_name {
+}
+
+.th_normal {
+  background-color: rgba(255, 255, 255, 1.0);
+}
+
+.th_warning {
+  background-color: rgba(255, 210, 0, 0.5);
+}
+
+.th_fault {
+  background-color: rgba(255, 0, 0, 0.5);
+}
+
+td.mat-cell {
+  height: 12px;
+  font-size: 12px;
+  text-align: center;
+}

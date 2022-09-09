@@ -19,6 +19,12 @@ import { auditTime, takeUntil } from 'rxjs/operators'
 import { DxDataGridComponent } from 'devextreme-angular'
 import { ClientPreferences } from '../../../models/settings.model'
 import { AuditTimeDuration } from './constants'
+import { CpsReferenceDialogComponent } from '../../shared/dialogs/cps-reference-dialog.component'
+import {
+  MatDialog,
+  MatDialogRef,
+  MatDialogState,
+} from '@angular/material/dialog'
 
 @Component({
 	selector: 'oms-cps-control-table',
@@ -44,6 +50,8 @@ export class CpsControlTableComponent implements OnInit, OnDestroy {
     private color_fault: string = 'rgba(255, 0, 0, 0.5)';
     private color_failover: string = 'rgba(140, 140, 140, 0.5';
 
+  private _cpsRefDlg: MatDialogRef<CpsReferenceDialogComponent, any>
+
 	get hasControlAccess(): boolean {
 		return this.auth.isAuthenticated
 	}
@@ -60,7 +68,8 @@ export class CpsControlTableComponent implements OnInit, OnDestroy {
 		private auth: AuthService,
 		private statusSvc: StatusService,
 		private settingSvc: SettingsService,
-		private hubSvc: HubService,
+        private hubSvc: HubService,
+        private dialog: MatDialog,
 	) {
 		this.dataSource = this.statusSvc.clusterStatusDataSource()
 		this.preference = this.settingSvc.globalPreferences
@@ -126,18 +135,44 @@ export class CpsControlTableComponent implements OnInit, OnDestroy {
         return this.color_normal;
     }
 
-	ngOnDestroy(): void {
-		this.destroy$.next()
-		this.destroy$.complete()
-	}
-
 	ngOnInit(): void {
 		this.hubSvc.clusterStatusTableChanged$
 			.pipe(takeUntil(this.destroy$), auditTime(AuditTimeDuration))
 			.subscribe((e: IDataChangeEvent) => {
 				e && this.onTableChanged(e)
 			})
-	}
+    }
+
+    ngOnDestroy(): void {
+      if (this.isOpenedCpsRefDlg()) { // close before leave tab
+        this._cpsRefDlg.close()
+      }
+
+      this.destroy$.next()
+      this.destroy$.complete()
+    }
+
+    onReferenceValue() {
+      if (this.isOpenedCpsRefDlg()) { // toggle close
+          this._cpsRefDlg.close()
+          return
+      }
+
+      this._cpsRefDlg = this.dialog.open(CpsReferenceDialogComponent, { // toggle open
+          width: '450px',
+          autoFocus: false,
+          hasBackdrop: false,
+          disableClose: false,
+          closeOnNavigation: true,
+      })
+    }
+
+    private isOpenedCpsRefDlg(): boolean {
+      if (this._cpsRefDlg && this._cpsRefDlg.getState() === MatDialogState.OPEN) {
+        return true;
+      }
+      return false;
+    }
 
 	private onTableChanged(payload: IDataChangeEvent) {
 		this.dataSource.reload()

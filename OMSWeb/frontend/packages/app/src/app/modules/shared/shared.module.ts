@@ -24,6 +24,7 @@ import { LegendDialogComponent } from './dialogs/legend-dialog.component'
 import { LoginDialogComponent } from './dialogs/login-dialog.component'
 import { UnitSelectorComponent } from './forms/unit-selector.component'
 import { ProfileDialogComponent } from './dialogs/profile-dialog.component'
+import { CpsReferenceDialogComponent } from './dialogs/cps-reference-dialog.component'
 import { UserFormComponent } from './forms/user-form.component'
 import { SettingsModule } from '../settings/settings.module'
 import { ColorPickerComponent } from './forms/color-picker.component'
@@ -48,7 +49,8 @@ const inOutModules = [FormsModule, ReactiveFormsModule]
 		LegendDialogComponent,
 		LoginDialogComponent,
 		UnitSelectorComponent,
-		ProfileDialogComponent,
+        ProfileDialogComponent,
+        CpsReferenceDialogComponent,
 		UserFormComponent,
 		ColorPickerComponent,
 		UnitListSelectorComponent,
@@ -83,7 +85,8 @@ const inOutModules = [FormsModule, ReactiveFormsModule]
 		EnumStringPipe,
 		LoginDialogComponent,
 		UnitSelectorComponent,
-		ProfileDialogComponent,
+        ProfileDialogComponent,
+        CpsReferenceDialogComponent,
 		UserFormComponent,
 		ColorPickerComponent,
 		UnitListSelectorComponent,
