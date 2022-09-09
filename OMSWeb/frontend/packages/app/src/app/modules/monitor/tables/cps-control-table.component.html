@@ -22,19 +22,19 @@
   <dxi-column [width]="120" dataType="string" dataField="logicalId" [caption]="'names.logicalId' | translate"
               *ngIf="canDisplayTable('cps_logical_id')"></dxi-column>
   <dxi-column [width]="120" dataType="string" dataField="status" [caption]="'names.cps_status' | translate"
-              *ngIf="canDisplayTable('cps_status')"></dxi-column>
+              cellTemplate="statusTemplate" *ngIf="canDisplayTable('cps_status')"></dxi-column>
   <dxi-column [width]="60" dataType="string" dataField="voltage" [caption]="'names.cps_voltage' | translate"
-              *ngIf="canDisplayTable('cps_voltage')"></dxi-column>
+              cellTemplate="voltageTemplate" *ngIf="canDisplayTable('cps_voltage')"></dxi-column>
   <dxi-column [width]="60" dataType="string" dataField="current_igbt" [caption]="'names.cps_current_igbt' | translate"
-              *ngIf="canDisplayTable('cps_current_igbt')"></dxi-column>
+              cellTemplate="currentIgbtTemplate" *ngIf="canDisplayTable('cps_current_igbt')"></dxi-column>
   <dxi-column [width]="60" dataType="string" dataField="current_track" [caption]="'names.cps_current_track' | translate"
-              *ngIf="canDisplayTable('cps_current_track')"></dxi-column>
+              cellTemplate="currentTrackTemplate" *ngIf="canDisplayTable('cps_current_track')"></dxi-column>
   <dxi-column [width]="70" dataType="string" dataField="frequency" [caption]="'names.cps_frequency' | translate"
               *ngIf="canDisplayTable('cps_frequency')"></dxi-column>
   <dxi-column [width]="80" dataType="string" dataField="temp_radiator" [caption]="'names.cps_temp_radiator' | translate"
-              *ngIf="canDisplayTable('cps_temp_radiator')"></dxi-column>
+              cellTemplate="tempRadiatorTemplate" *ngIf="canDisplayTable('cps_temp_radiator')"></dxi-column>
   <dxi-column [width]="80" dataType="string" dataField="temp_internal" [caption]="'names.cps_temp_internal' | translate"
-              *ngIf="canDisplayTable('cps_temp_internal')"></dxi-column>
+              cellTemplate="tempInternalTemplate" *ngIf="canDisplayTable('cps_temp_internal')"></dxi-column>
   <dxi-column [width]="60" dataType="string" dataField="sync" [caption]="'names.cps_sync' | translate"
               *ngIf="canDisplayTable('cps_sync')"></dxi-column>
   <dxi-column [width]="60" dataType="string" dataField="backup_id" [caption]="'names.cps_backup_id' | translate"
@@ -59,4 +59,22 @@
   <dxi-column [width]="60" dataType="string" dataField="wh" [caption]="'names.cps_wh' | translate"
               *ngIf="canDisplayTable('cps_wh')"></dxi-column>
     -->
+  <div *dxTemplate="let data of 'statusTemplate'">
+    <div class="value" [ngStyle]="{'background-color': getBgColor(0, data.displayValue) }">{{ data.displayValue }}</div>
+  </div>
+  <div *dxTemplate="let data of 'voltageTemplate'">
+    <div class="value" [ngStyle]="{'background-color': getBgColor(1, data.displayValue) }">{{ data.displayValue }}</div>
+  </div>
+  <div *dxTemplate="let data of 'currentIgbtTemplate'">
+    <div class="value" [ngStyle]="{'background-color': getBgColor(2, data.displayValue) }">{{ data.displayValue }}</div>
+  </div>
+  <div *dxTemplate="let data of 'currentTrackTemplate'">
+    <div class="value" [ngStyle]="{'background-color': getBgColor(3, data.displayValue) }">{{ data.displayValue }}</div>
+  </div>
+  <div *dxTemplate="let data of 'tempRadiatorTemplate'">
+    <div class="value" [ngStyle]="{'background-color': getBgColor(4, data.displayValue) }">{{ data.displayValue }}</div>
+  </div>
+  <div *dxTemplate="let data of 'tempInternalTemplate'">
+    <div class="value" [ngStyle]="{'background-color': getBgColor(5, data.displayValue) }">{{ data.displayValue }}</div>
+  </div>
 </dx-data-grid>

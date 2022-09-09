@@ -39,6 +39,11 @@ export class CpsControlTableComponent implements OnInit, OnDestroy {
 	private destroy$: Subject<void> = new Subject<void>()
 	//#endregion
 
+    private color_normal: string = 'rgba(240, 255, 255, 1.0)';
+    private color_warning: string = 'rgba(255, 210, 0, 0.5)';
+    private color_fault: string = 'rgba(255, 0, 0, 0.5)';
+    private color_failover: string = 'rgba(140, 140, 140, 0.5';
+
 	get hasControlAccess(): boolean {
 		return this.auth.isAuthenticated
 	}
@@ -63,7 +68,63 @@ export class CpsControlTableComponent implements OnInit, OnDestroy {
 
 	canDisplayTable(type: string): boolean {
 		return this.preference.controlTables[type]
-	}
+    }
+
+    getBgColor(type: number, value: string): string {
+      if (type == 0) return this.getColor_Status(value); // Status
+      else if (type == 1) return this.getColor_Voltage(value);  // Voltage
+      else if (type == 2) return this.getColor_CurrentIgbt(value);  // current igbt
+      else if (type == 3) return this.getColor_CurrentTrack(value);  // current track
+      else if (type == 4) return this.getColor_TempRadiator(value);  // temp radiator
+      else if (type == 5) return this.getColor_TempInternal(value);  // temp internal
+    }
+
+    private getColor_Status(value: string): string {
+        if (value === 'RUN') return this.color_normal;
+        else if (value === 'STOP') return this.color_normal;
+        else if (value === 'Warning') return this.color_warning;
+        else if (value === 'Fault') return this.color_fault;
+        else if (value === 'Fail-Over') return this.color_failover;
+        else if (value === 'Comm-Fail') return this.color_normal;
+        return this.color_normal;
+    }
+    private getColor_Voltage(value: string): string {
+        let volt = parseInt(value);
+        if (volt < 265) return this.color_normal;
+        else if (265 <= volt && volt < 350) return this.color_normal;
+        else if (350 <= volt && volt < 430) return this.color_warning;
+        else if (430 <= volt) return this.color_fault;
+        return this.color_normal;
+    }
+    private getColor_CurrentIgbt(value: string): string {
+        let curr = parseInt(value);
+        if (0 <= curr && curr < 130) return this.color_normal;
+        else if (130 <= curr && curr < 140) return this.color_warning;
+        else if (140 <= curr) return this.color_fault;
+        return this.color_normal;
+    }
+    private getColor_CurrentTrack(value: string): string {
+        let curr = parseInt(value);
+        if (curr < 70) return this.color_normal;
+        else if (70 <= curr && curr < 85) return this.color_normal;
+        else if (85 <= curr && curr < 90) return this.color_warning;
+        else if (90 <= curr) return this.color_fault;
+        return this.color_normal;
+    }
+    private getColor_TempRadiator(value: string): string {
+        let temp = parseInt(value);
+        if (0 <= temp && temp < 60) return this.color_normal;
+        else if (60 <= temp && temp < 80) return this.color_warning;
+        else if (80 <= temp) return this.color_fault;
+        return this.color_normal;
+    }
+    private getColor_TempInternal(value: string): string {
+        let temp = parseInt(value);
+        if (0 <= temp && temp < 35) return this.color_normal;
+        else if (35 <= temp && temp < 40) return this.color_warning;
+        else if (40 <= temp) return this.color_fault;
+        return this.color_normal;
+    }
 
 	ngOnDestroy(): void {
 		this.destroy$.next()
