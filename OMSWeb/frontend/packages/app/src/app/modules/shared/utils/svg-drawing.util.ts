@@ -725,27 +725,43 @@ export namespace SvgDrawingUtil {
 				} else {
 					dom_object_group.select('.block').remove()
 				}
+				// if (layout_object.isBlocked === true) {
+				// 	dom_object_group
+				// 		.append('circle')
+				// 		.attr('class', 'block')
+				// 		.attr('r', dom_css.blocked_radius)
+				// 		.attr('cx', -(2 + dom_css.radius + dom_css.blocked_radius / 2))
+				// 		.attr('cy', -(2 + dom_css.radius + dom_css.blocked_radius / 2))
+				// 		.attr('fill', dom_css.color_blocked)
+				// 		.attr('transform', () => {
+				// 			if (!overlap_adjustment)
+				// 				return `rotate(${-mapRotation})scale(${vehicleScale})`
+				// 			else return ''
+				// 		})
+				// } else {
+				// 	dom_object_group.select('.block').remove()
+				// }
 
-				if (layout_object.errorList != 0) {
-					dom_object_group
-						.append('path')
-						.attr('class', 'error')
-						.attr('d', dom_css.icon_error)
-						.attr('fill', function () {
-							return dom_css.color_mode_error
-						})
-						.attr('stroke', function () {
-							return dom_css.color_mode_error_outline
-						})
-						.attr('stroke-width', `${dom_css.line_weight / 3}px`)
-						.attr('transform', () => {
-							if (!overlap_adjustment)
-								return `rotate(${-mapRotation})scale(${vehicleScale})`
-							else return ''
-						})
-				} else {
-					dom_object_group.select('.error').remove()
-				}
+				// if (layout_object.errorList != 0) {
+				// 	dom_object_group
+				// 		.append('path')
+				// 		.attr('class', 'error')
+				// 		.attr('d', dom_css.icon_error)
+				// 		.attr('fill', function () {
+				// 			return dom_css.color_mode_error
+				// 		})
+				// 		.attr('stroke', function () {
+				// 			return dom_css.color_mode_error_outline
+				// 		})
+				// 		.attr('stroke-width', `${dom_css.line_weight / 3}px`)
+				// 		.attr('transform', () => {
+				// 			if (!overlap_adjustment)
+				// 				return `rotate(${-mapRotation})scale(${vehicleScale})`
+				// 			else return ''
+				// 		})
+				// } else {
+				// 	dom_object_group.select('.error').remove()
+				// }
 
 				if (overlap_adjustment) {
 					dom_object_group

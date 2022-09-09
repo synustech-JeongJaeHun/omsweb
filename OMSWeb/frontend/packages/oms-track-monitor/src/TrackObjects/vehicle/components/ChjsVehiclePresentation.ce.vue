@@ -181,10 +181,8 @@ const emit = defineEmits<{
       </text>
       <template v-else />
 
-      <!-- bottom left (1) -->
-      <!-- 1. Error -->
-      <!-- triangle with width 40 and height 30 -->
-      <VehicleStateErrorSvg v-if="props.errorList" x="-20" y="-15" width="20" height="15" />
+      <!-- bottom left (0) -->
+      <!-- nothing -->
 
       <!-- bottom right (4) -->
       <!-- 1. Disconnected -->
