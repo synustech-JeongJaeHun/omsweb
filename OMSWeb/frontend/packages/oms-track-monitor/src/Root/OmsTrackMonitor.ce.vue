@@ -312,6 +312,9 @@ defineExpose(exposed)
   fill: v-bind('parseStringProp(ColorDefault.sensorStoppedVehicleColor, props.sensorStoppedVehicleColor)'
     );
 }
+#vehicle-layer .vehicle-symbol .vehicle-mode-path {
+  fill: deeppink;
+}
 
 #vehicle-layer .cargo-loading {
   fill: v-bind('parseStringProp(ColorDefault.cargoLoading, props.cargoLoadingColor)'
