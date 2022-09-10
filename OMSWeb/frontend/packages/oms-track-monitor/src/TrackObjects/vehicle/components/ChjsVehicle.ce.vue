@@ -175,7 +175,7 @@ const commandLineColor = computed(() => {
     case 'dropoff': // in chjs `To Moving`
       return '#FFCCFF'
     case 'move': // in chjs `Moving`
-      return '#ffff00'
+      return '#F4DD65'
     default:
       return undefined
   }
