@@ -4,6 +4,7 @@ namespace OMSWeb.Models
 {
   public class DefaultColorSettings
   {
+    public string? ColorSettingVersion { get; set; }
     public string? HomeBackgroundColor { get; set; }
     public string? PlaybackBackgroundColor { get; set; }
     public string? StationColor { get; set; }

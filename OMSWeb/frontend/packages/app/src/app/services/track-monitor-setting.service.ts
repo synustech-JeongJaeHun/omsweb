@@ -88,7 +88,11 @@ type TrackMonitorSetting = Record<
 	Record<
 		CameraViewBoxWidthChangedEvent['key'],
 		CameraViewBoxWidthChangedEvent['value']
-	> & {vehicleSecondaryContent: "order" | "carrier"}
+	> & {
+    vehicleSecondaryContent: "order" | "carrier"
+
+    colorSettingVersion?: string
+  }
 
 const DefaultTrackMonitorSetting: TrackMonitorSetting = {
 	// scale
@@ -174,13 +178,16 @@ export class TrackMonitorSettingService {
 		writeTrackSettingOnLocalStorage(this.trackSetting)
 
 		this.settingsService.loadDefaultColors().subscribe((defaultColors) => {
-			if (readFirstRunFromLocalStorage())
-				Object.assign(this.trackSetting, defaultColors)
+      const currentVersion = (defaultColors as any).colorSettingVersion as (string | undefined);
+			if (this.trackSetting.colorSettingVersion !== currentVersion){
+        const beforeVersion = this.trackSetting.colorSettingVersion
+        Object.assign(this.trackSetting, defaultColors)
+        console.log(`INFO: Color Default Setting Changed from ${beforeVersion} to ${currentVersion}`)
+      }
 
 			Object.assign(DefaultTrackMonitorSetting, defaultColors)
 
 			writeTrackSettingOnLocalStorage(this.trackSetting)
-			writeFirstRunOnLocalStorage()
 		})
 
 		this.settingsService
@@ -229,14 +236,4 @@ function writeTrackSettingOnLocalStorage(update: TrackMonitorSetting) {
 
 function deepCopy<T>(target: T) {
 	return JSON.parse(JSON.stringify(target)) as T
-}
-
-const FirstRunStorageKey = 'track-monitor-first-run'
-
-function readFirstRunFromLocalStorage() {
-	return localStorage.getItem(FirstRunStorageKey) == null
-}
-
-function writeFirstRunOnLocalStorage() {
-	localStorage.setItem(FirstRunStorageKey, 'false')
 }
