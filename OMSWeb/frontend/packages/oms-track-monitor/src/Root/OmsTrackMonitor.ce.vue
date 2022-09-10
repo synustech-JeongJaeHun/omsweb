@@ -316,8 +316,10 @@ defineExpose(exposed)
   fill: v-bind('parseStringProp(ColorDefault.sensorStoppedVehicleColor, props.sensorStoppedVehicleColor)'
     );
 }
+/* vehicle complicated fallback state is idle */
 #vehicle-layer .vehicle-symbol .vehicle-mode-path {
-  fill: deeppink;
+  fill: v-bind('parseStringProp(ColorDefault.idleModeVehicleColor, props.idleModeVehicleColor)'
+    );
 }
 
 #vehicle-layer .cargo-loading {
