@@ -55,7 +55,9 @@ const props = defineProps<{
   // visible
   isMinimapVisible: Boolish
   isVehicleNextLineVisible: Boolish
-  isVehicleOrderLineVisible: Boolish
+  isVehicleFromOrderLineVisible: Boolish
+  isVehicleToOrderLineVisible: Boolish
+  isVehicleMoveOrderLineVisible: Boolish
   isVehicleHomeivrLineVisible: Boolish
   isSegmentDirectionVisible: Boolish
   isPointLabelVisible: Boolish
@@ -359,8 +361,16 @@ defineExpose(exposed)
   visibility: v-bind("parseBooleanProp(VisibleDefault.vehicleNextLine, props.isVehicleNextLineVisible) ? 'initial' : 'hidden'"
     );
 }
-#vehicle-layer .order-line {
-  visibility: v-bind("parseBooleanProp(VisibleDefault.vehicleOrderLine, props.isVehicleOrderLineVisible) ? 'initial' : 'hidden'"
+#vehicle-layer .from-line {
+  visibility: v-bind("parseBooleanProp(VisibleDefault.vehicleFromOrderLine, props.isVehicleFromOrderLineVisible) ? 'initial' : 'hidden'"
+    );
+}
+#vehicle-layer .to-line {
+  visibility: v-bind("parseBooleanProp(VisibleDefault.vehicleToOrderLine, props.isVehicleToOrderLineVisible) ? 'initial' : 'hidden'"
+    );
+}
+#vehicle-layer .move-line {
+  visibility: v-bind("parseBooleanProp(VisibleDefault.vehicleMoveOrderLine, props.isVehicleMoveOrderLineVisible) ? 'initial' : 'hidden'"
     );
 }
 #vehicle-layer .homeivr-line {

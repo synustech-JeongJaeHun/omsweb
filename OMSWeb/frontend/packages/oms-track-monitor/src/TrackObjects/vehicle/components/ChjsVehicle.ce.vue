@@ -245,7 +245,13 @@ function onRightClick(event: MouseEvent) {
     <!-- pickup or dropoff or move line -->
     <line 
       v-if="commandPoint.position.value && realtimePosition" 
-      class="line order-line fixed-scale-stroke"
+      :class="{
+        'line': true,
+        'from-line': commandPoint.type.value === 'pickup',
+        'to-line': commandPoint.type.value === 'dropoff',
+        'move-line': commandPoint.type.value === 'move',
+        'fixed-scale-stroke': true
+      }"
       :stroke="commandLineColor" 
       stroke-width="1" 
       stroke-linecap="round" 

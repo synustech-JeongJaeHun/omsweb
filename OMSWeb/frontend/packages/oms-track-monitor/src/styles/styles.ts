@@ -20,7 +20,9 @@ function updateScaleStyle(key: ScaleProperty, value: number) {
 
 const VisibleDefault: Record<VisibleProperty, boolean> = {
   vehicleNextLine: true, // applied in OmsTrackMonitor.ce.vue
-  vehicleOrderLine: true, // applied in OmsTrackMonitor.ce.vue
+  vehicleFromOrderLine: true, // applied in OmsTrackMonitor.ce.vue
+  vehicleToOrderLine: true, // applied in OmsTrackMonitor.ce.vue
+  vehicleMoveOrderLine: true, // applied in OmsTrackMonitor.ce.vue
   vehicleHomeivrLine: true, // applied in OmsTrackMonitor.ce.vue
   segmentDirection: true, // applied in OmsTrackMonitor.ce.vue
   pointLabel: true, // applied in OmsTrackMonitor.ce.vue
