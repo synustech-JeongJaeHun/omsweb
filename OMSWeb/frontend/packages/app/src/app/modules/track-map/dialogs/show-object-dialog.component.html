@@ -48,13 +48,27 @@
         {{ "names.visibleOptions" | translate }}
       </legend>
       <div class="option-list">
-        <mat-slide-toggle [checked]="setting.isVehicleLineVisible" (change)="update({
+        <mat-slide-toggle [checked]="setting.isVehicleNextLineVisible" (change)="update({
             group: 'Visibility',
-            key: 'isVehicleLineVisible',
+            key: 'isVehicleNextLineVisible',
             value: $event.checked
-          })" color="primary">{{
-          "names.showVehicleLines" |
-          translate }}</mat-slide-toggle>
+          })" color="primary">
+          {{"names.vehicle" | translate }} {{"names.next" | translate }}  {{"names.line" | translate }} 
+        </mat-slide-toggle>
+        <mat-slide-toggle [checked]="setting.isVehicleOrderLineVisible" (change)="update({
+            group: 'Visibility',
+            key: 'isVehicleOrderLineVisible',
+            value: $event.checked
+          })" color="primary">
+          {{"names.vehicle" | translate }} {{"names.order" | translate }}  {{"names.line" | translate }} 
+        </mat-slide-toggle>
+        <mat-slide-toggle [checked]="setting.isVehicleHomeivrLineVisible" (change)="update({
+            group: 'Visibility',
+            key: 'isVehicleHomeivrLineVisible',
+            value: $event.checked
+          })" color="primary">
+          {{"names.vehicle" | translate }} {{"names.home" | translate }}/{{ "names.ivr" | translate }} {{"names.line" | translate }} 
+        </mat-slide-toggle>
         <mat-slide-toggle [checked]="setting.isSegmentDirectionVisible" (change)="update({
             group: 'Visibility',
             key: 'isSegmentDirectionVisible',

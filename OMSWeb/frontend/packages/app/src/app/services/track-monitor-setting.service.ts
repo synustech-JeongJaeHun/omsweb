@@ -12,7 +12,9 @@ type ChangedEvent =
 type VisibilityChangedEvent = {
 	key:
 		| 'isMinimapVisible'
-		| 'isVehicleLineVisible'
+		| 'isVehicleNextLineVisible'
+		| 'isVehicleOrderLineVisible'
+		| 'isVehicleHomeivrLineVisible'
 		| 'isSegmentDirectionVisible'
 		| 'isPointLabelVisible'
 		| 'isPointHomeVisible'
@@ -109,7 +111,9 @@ const DefaultTrackMonitorSetting: TrackMonitorSetting = {
 
 	// visibility
 	isMinimapVisible: true,
-	isVehicleLineVisible: true,
+	isVehicleNextLineVisible: true,
+	isVehicleOrderLineVisible: true,
+	isVehicleHomeivrLineVisible: true,
 	isSegmentDirectionVisible: true,
 	isPointLabelVisible: true,
 	isPointHomeVisible: true,

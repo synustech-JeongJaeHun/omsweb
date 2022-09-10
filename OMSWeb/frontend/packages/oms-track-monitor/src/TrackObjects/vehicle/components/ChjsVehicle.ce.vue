@@ -231,7 +231,7 @@ function onRightClick(event: MouseEvent) {
   <!-- next point line -->
     <line   
       v-if="props.vehicle.movingState === 'M' && nextPointPosition && realtimePosition" 
-      class="line fixed-scale-stroke" 
+      class="line next-line fixed-scale-stroke" 
       stroke="#91e079" 
       stroke-width="1" 
       stroke-linecap="round" 
@@ -245,7 +245,7 @@ function onRightClick(event: MouseEvent) {
     <!-- pickup or dropoff or move line -->
     <line 
       v-if="commandPoint.position.value && realtimePosition" 
-      class="line fixed-scale-stroke"
+      class="line order-line fixed-scale-stroke"
       :stroke="commandLineColor" 
       stroke-width="1" 
       stroke-linecap="round" 
@@ -259,7 +259,7 @@ function onRightClick(event: MouseEvent) {
     <!-- home/ivr line -->
     <line 
       v-else-if="props.vehicle.movingState === 'M' && homeIvrPoint && realtimePosition" 
-      class="line fixed-scale-stroke"
+      class="line homeivr-line fixed-scale-stroke"
       stroke="#ffa500" 
       stroke-width="1" 
       stroke-linecap="round" 

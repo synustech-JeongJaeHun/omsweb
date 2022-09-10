@@ -212,7 +212,7 @@ export class LegacyMapToolbarComponent implements OnInit, OnDestroy {
 
 		const rect = this.btnShowObj.nativeElement.getBoundingClientRect()
 		this._showObjDlg = this.dialog.open(ShowObjectDialogComponent, {
-			width: '350px',
+			width: '400px',
 			autoFocus: false,
 			hasBackdrop: false,
 			disableClose: false,
