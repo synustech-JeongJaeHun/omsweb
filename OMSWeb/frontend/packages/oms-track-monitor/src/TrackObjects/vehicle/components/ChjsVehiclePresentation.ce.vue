@@ -158,24 +158,26 @@ const emit = defineEmits<{
       <!-- nothing -->
 
       <!-- top right (1) -->
-      <!-- 1. Zcu Blocked -->
+      <!-- 1. Sensor Stop -->
       <text 
-        v-if="props.isZcuBlocked"
-        x="20"
-        y="12"
-        font-weight="bold"
-        style="transform: rotate(180deg) scaleX(-1); transform-origin: 20px 12px;" >
-        Z
-      </text>
-      
-      <!-- 2. Sensor Stop -->
-      <text 
-        v-else-if="props.isSensorStopped" 
+        v-if="props.isSensorStopped" 
+        class="select-none"
         x="20"
         y="12"
         font-weight="bold"
         style="transform: rotate(180deg) scaleX(-1); transform-origin: 20px 12px;" >
         S
+      </text>
+
+      <!-- 2. Zcu Blocked -->
+      <text 
+        v-else-if="props.isZcuBlocked"
+        class="select-none"
+        x="20"
+        y="12"
+        font-weight="bold"
+        style="transform: rotate(180deg) scaleX(-1); transform-origin: 20px 12px;" >
+        Z
       </text>
       <template v-else />
 

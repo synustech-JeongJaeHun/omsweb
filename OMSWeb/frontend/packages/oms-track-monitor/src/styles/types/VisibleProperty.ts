@@ -1,5 +1,9 @@
 type VisibleProperty =
-	| 'vehicleLine'
+	| 'vehicleNextLine'
+	| 'vehicleFromOrderLine'
+	| 'vehicleToOrderLine'
+	| 'vehicleMoveOrderLine'
+	| 'vehicleHomeivrLine'
 	| 'segmentDirection'
 	| 'pointLabel'
 	| 'pointHome'

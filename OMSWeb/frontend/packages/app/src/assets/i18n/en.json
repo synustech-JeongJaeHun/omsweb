@@ -245,6 +245,7 @@
     "rebalance": "Rebalance",
     "ivr": "IVR",
     "home": "Home",
+    "line": "Line",
     "homeMode": "Home Mode",
     "chainManualCommandDisabled": "Chain Manual Command Disabled",
     "hardware": "Hardware",

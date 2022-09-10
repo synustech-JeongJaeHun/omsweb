@@ -403,11 +403,11 @@ export namespace SvgDrawingUtil {
 						.append('g')
 						.attr('class', 'fail')
 						.attr('transform', () => {
-							return 'translate(-6 -6)'
+							return 'translate(-5 -5)'
 						})
 						.append('path')
 						.attr('d', dom_css.fail_path)
-						.attr('transform', 'scale(0.025)')
+						.attr('transform', 'scale(0.020)')
 				}
 
 				// Prevent push
