@@ -1127,7 +1127,7 @@ function getVehicleColorFromComplicatedMode(
 			return trackMonitorSetting.idleModeVehicleColor
 
 		default:
-			return 'deeppink'
+			return trackMonitorSetting.idleModeVehicleColor
 	}
 }
 
