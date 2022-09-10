@@ -32,7 +32,7 @@ const emit = inject<RootEmits>(RootEmitInjectionKey)!
 
 const group = useGroup('vehicle', toRef(props.vehicle, 'id'))
 
-const complicatedMode = computed<ComplicatedMode | undefined>(() => {
+const complicatedMode = computed<ComplicatedMode>(() => {
   if (props.vehicle.isConnected !== true)
     return 'DISCONNECT'
   if (props.vehicle.errorList)
@@ -53,10 +53,10 @@ const complicatedMode = computed<ComplicatedMode | undefined>(() => {
     return 'RUNNING'
   if (isAnyLocationExist === false && destPointId && props.vehicle.curPoint !== destPointId)
     return 'HOMEIVR'
-  if (isAnyLocationExist === false && destPointId && props.vehicle.curPoint === destPointId)
+  // if (isAnyLocationExist === false && destPointId && props.vehicle.curPoint === destPointId)
     return 'IDLE'
   
-  return undefined
+  // return undefined
 })
 
 const isHotlot = computed(() => Number(props.vehicle.priority) === 99),
