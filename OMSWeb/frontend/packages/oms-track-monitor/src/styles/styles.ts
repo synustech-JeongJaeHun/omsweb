@@ -51,15 +51,15 @@ const ColorDefault: Record<ColorProperty, string> = {
   segmentDirection: 'grey',
 
   // chjs visual start
-  disconnectModeVehicleColor: '#FFFFFF',
-  errorModeVehicleColor: '#FF0000',
-  maintenanceModeVehicleColor: '#000000',
-  manualModeVehicleColor: '#000000',
-  idleModeVehicleColor: '#00ffff',
-	homeIvrModeVehicleColor: '#ffa500',
-	runningModeVehicleColor: '#00ff00',
-	zcuBlockedVehicleColor: '#ffff00',
-	sensorStoppedVehicleColor: '#ffff00',
+  disconnectModeVehicleColor: '#E1D7C5',
+  errorModeVehicleColor: '#FF3838',
+  maintenanceModeVehicleColor: '#5C666D',
+  manualModeVehicleColor: '#5C666D',
+  idleModeVehicleColor: '#2DCCFF',
+  homeIvrModeVehicleColor: '#FFB302',
+  runningModeVehicleColor: '#51E400',
+  zcuBlockedVehicleColor: '#FCE83A',
+  sensorStoppedVehicleColor: '#FCE83A',
   // chjs visual end
 
   cargoLoading: 'rgb(0, 0, 205)',
