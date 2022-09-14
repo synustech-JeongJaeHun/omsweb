@@ -327,13 +327,13 @@ export class PlaybackPlayService {
 	private async proceedPlaying() {
 		const nextDate = DateFns.addMilliseconds(this.clock, this.DefaultTimeStep)
 
-		// exit(1/2) => when clock over window end
+		// exit(1/3) => when clock over window end
 		if (nextDate.getTime() >= this.window.end.getTime()) {
 			this.stop()
 			return
 		}
 
-		// exit(2/2) => when clock over next snapshot
+		// exit(2/3) => when clock over next snapshot
 		if (
 			this.nextSnapshot?.timestamp &&
 			nextDate.getTime() >= this.nextSnapshot.timestamp.getTime()
@@ -357,6 +357,17 @@ export class PlaybackPlayService {
 			return
 		}
 
+		// exit(3/3) => when timeline events are not ready
+		// it occurs when current snapshot move to future not past
+		const timelineLastEvent =
+			this.timelineEvents[this.timelineEvents.length - 1]
+		const isTimelineNotReady =
+			timelineLastEvent == null ||
+			new Date(timelineLastEvent.eventTime).getTime() <= nextDate.getTime()
+		if (isTimelineNotReady) {
+			return
+		}
+
 		const nextIndex = (() => {
 			const index = this.timelineEvents
 				.slice(this.remainedFirstEventIndex)
@@ -367,7 +378,6 @@ export class PlaybackPlayService {
 				? this.timelineEvents.length
 				: this.remainedFirstEventIndex + index
 		})()
-
 		// 🎉 event
 		this.clockChanged.emit({
 			type: 'NextFrameEvent',
