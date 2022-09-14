@@ -137,7 +137,7 @@ const emit = defineEmits<{
           v-if="readonlyVehicleSecondaryContent === 'carrier'  && props.carrierId"
           class="select-none"
           text-rendering="optimizeSpeed"
-          font-size="xx-small"
+          font-size="small"
           transform="scale(1 -1) translate(-25 2)"
           text-anchor="end"
           alignment-baseline="hanging"
