@@ -105,7 +105,7 @@ type PlaybackSnapshotOrder = {
 	distance_pickup: unknown
 	id: number
 	location_dropoff: string | null | undefined
-	location_move: unknown
+	location_move: string | null | undefined
 	location_pickup: string | null | undefined
 	logical_id: LogicalId
 	origin: string
@@ -136,6 +136,7 @@ type PlaybackSnapshotVehicle = {
 	can_be_pushed: boolean
 	cargo_state: string
 	cargo_transfer_result: null
+  carrier_id?: string
 	command: string
 	command_point: number
 	connection: number
@@ -147,6 +148,7 @@ type PlaybackSnapshotVehicle = {
 	is_blocked: boolean
 	is_maint: boolean
 	is_sensor_stopped: boolean
+  is_zcu_blocked: boolean
 	last_contact: string
 	last_point: number
 	logical_id: LogicalId
@@ -155,6 +157,7 @@ type PlaybackSnapshotVehicle = {
 	moving_state: string
 	next_end_point: number
 	next_point: number
+  dest_point?: number
 	nonce: number
 	order_id: number
 	order_origin: string
@@ -184,6 +187,7 @@ type VehicleHistoryEvent = { tableName: 'vehicle_history' } & Timeline &
 	History & {
 		canBePushed: boolean
 		cargoState: string
+    carrierId: string | undefined
 		command: string | null | undefined
 		commandPoint: string
 		distancePoint: number
@@ -199,10 +203,12 @@ type VehicleHistoryEvent = { tableName: 'vehicle_history' } & Timeline &
 		isBlocked: boolean
 		isMaint: boolean
 		isSensorStopped: boolean
+    isZcuBlocked: boolean
 		// isConnected: boolean
 		connection: number
 		lastContact: string
 		lastPoint: number
+    destPoint: string | null |undefined
 		logicalId: string
 		mapDb: string
 		mode: string
@@ -233,6 +239,7 @@ type OrderHistoryEvent = { tableName: 'order_history' } & Timeline &
 		id: number
 		locationDropoff: string | null | undefined
 		locationPickup: string | null | undefined
+    locationMove: string | null | undefined
 		logicalId: LogicalId
 		origin: string
 		priority: number
@@ -305,6 +312,7 @@ type CurrentVehicle = {
 	// new - with order
 	locationDropoff?: string
 	locationPickup?: string
+	locationMove?: string
 }
 type CurrentSegmentBlocking = {
 	id: number
@@ -319,6 +327,7 @@ type CurrentOrder = {
 	id: number
 	locationDropoff: string | null | undefined
 	locationPickup: string | null | undefined
+	locationMove: string | null | undefined
 	logicalId: LogicalId
 	origin: string
 	priority: string | number

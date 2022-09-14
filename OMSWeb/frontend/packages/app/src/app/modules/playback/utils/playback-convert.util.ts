@@ -87,7 +87,7 @@ function convertSnapshotVehicleToTmUpdateDtoVehicle(
 		commandPoint: getPortVehicleCommand(vehicle.command),
 		locationDropoff: order?.locationDropoff,
 		locationPickup: order?.locationPickup,
-		locationMove: undefined,
+		locationMove: order?.locationMove,
 
 		orderId: vehicle.order_id,
 		orderLogicalId: undefined,
@@ -106,6 +106,11 @@ function convertSnapshotVehicleToTmUpdateDtoVehicle(
 		// id: "push_point_list",
 		// id: "preassigned_order_id",
 		// id: "blocked_segment_pairs",
+
+		// added in chjs
+		carrierId: vehicle.carrier_id,
+		isZcuBlocked: vehicle.is_zcu_blocked,
+		destPoint: vehicle.dest_point == null ? '' : String(vehicle.dest_point),
 	}
 }
 
@@ -160,13 +165,18 @@ function convertVehicleHistoryEventToTmUpdateDtoVehicle(
 		commandPoint: getPortVehicleCommand(event.command),
 		locationDropoff: order?.locationDropoff,
 		locationPickup: order?.locationPickup,
-		locationMove: undefined,
+		locationMove: order?.locationMove,
 		// cargoTransferResult?: string
 		// orderLogicalId?: string
 		// priority?: any
 		// type?: string
 		// group?: number
 		// historyChangeTime?: any
+
+		// added in chjs
+		carrierId: event.carrierId,
+		isZcuBlocked: event.isZcuBlocked,
+		destPoint: event.destPoint,
 	}
 }
 
@@ -254,6 +264,7 @@ function convertSnapshotOrderToCurrentOrder(
 		id: order.id,
 		locationDropoff: order?.location_dropoff,
 		locationPickup: order?.location_pickup,
+    locationMove: order?.location_move,
 		logicalId: order.logical_id,
 		origin: order.origin,
 		priority: order.priority,
@@ -320,6 +331,7 @@ function convertOrderHistoryEventToCurrentOrder(
 		id: event.historySourceId,
 		locationDropoff: event?.locationDropoff,
 		locationPickup: event?.locationPickup,
+    locationMove: event?.locationMove,
 		logicalId: event.logicalId,
 		origin: event.origin,
 		priority: event.priority,
