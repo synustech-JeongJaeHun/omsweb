@@ -105,7 +105,7 @@ type PlaybackSnapshotOrder = {
 	distance_pickup: unknown
 	id: number
 	location_dropoff: string | null | undefined
-	location_move: unknown
+	location_move: string | null | undefined
 	location_pickup: string | null | undefined
 	logical_id: LogicalId
 	origin: string
@@ -239,6 +239,7 @@ type OrderHistoryEvent = { tableName: 'order_history' } & Timeline &
 		id: number
 		locationDropoff: string | null | undefined
 		locationPickup: string | null | undefined
+    locationMove: string | null | undefined
 		logicalId: LogicalId
 		origin: string
 		priority: number
@@ -311,6 +312,7 @@ type CurrentVehicle = {
 	// new - with order
 	locationDropoff?: string
 	locationPickup?: string
+	locationMove?: string
 }
 type CurrentSegmentBlocking = {
 	id: number
@@ -325,6 +327,7 @@ type CurrentOrder = {
 	id: number
 	locationDropoff: string | null | undefined
 	locationPickup: string | null | undefined
+	locationMove: string | null | undefined
 	logicalId: LogicalId
 	origin: string
 	priority: string | number

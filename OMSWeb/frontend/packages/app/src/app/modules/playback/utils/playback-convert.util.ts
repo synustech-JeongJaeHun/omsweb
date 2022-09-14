@@ -87,7 +87,7 @@ function convertSnapshotVehicleToTmUpdateDtoVehicle(
 		commandPoint: getPortVehicleCommand(vehicle.command),
 		locationDropoff: order?.locationDropoff,
 		locationPickup: order?.locationPickup,
-		locationMove: undefined,
+		locationMove: order?.locationMove,
 
 		orderId: vehicle.order_id,
 		orderLogicalId: undefined,
@@ -165,7 +165,7 @@ function convertVehicleHistoryEventToTmUpdateDtoVehicle(
 		commandPoint: getPortVehicleCommand(event.command),
 		locationDropoff: order?.locationDropoff,
 		locationPickup: order?.locationPickup,
-		locationMove: undefined,
+		locationMove: order?.locationMove,
 		// cargoTransferResult?: string
 		// orderLogicalId?: string
 		// priority?: any
@@ -264,6 +264,7 @@ function convertSnapshotOrderToCurrentOrder(
 		id: order.id,
 		locationDropoff: order?.location_dropoff,
 		locationPickup: order?.location_pickup,
+    locationMove: order?.location_move,
 		logicalId: order.logical_id,
 		origin: order.origin,
 		priority: order.priority,
@@ -330,6 +331,7 @@ function convertOrderHistoryEventToCurrentOrder(
 		id: event.historySourceId,
 		locationDropoff: event?.locationDropoff,
 		locationPickup: event?.locationPickup,
+    locationMove: event?.locationMove,
 		logicalId: event.logicalId,
 		origin: event.origin,
 		priority: event.priority,
