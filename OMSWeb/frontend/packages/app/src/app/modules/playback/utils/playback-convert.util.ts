@@ -106,6 +106,11 @@ function convertSnapshotVehicleToTmUpdateDtoVehicle(
 		// id: "push_point_list",
 		// id: "preassigned_order_id",
 		// id: "blocked_segment_pairs",
+
+		// added in chjs
+		carrierId: vehicle.carrier_id,
+		isZcuBlocked: vehicle.is_zcu_blocked,
+		destPoint: vehicle.dest_point == null ? '' : String(vehicle.dest_point),
 	}
 }
 
@@ -167,6 +172,11 @@ function convertVehicleHistoryEventToTmUpdateDtoVehicle(
 		// type?: string
 		// group?: number
 		// historyChangeTime?: any
+
+		// added in chjs
+		carrierId: event.carrierId,
+		isZcuBlocked: event.isZcuBlocked,
+		destPoint: event.destPoint,
 	}
 }
 
