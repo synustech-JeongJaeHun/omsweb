@@ -362,8 +362,11 @@ export class PlaybackPlayService {
 		const timelineLastEvent =
 			this.timelineEvents[this.timelineEvents.length - 1]
 		const isTimelineNotReady =
-			timelineLastEvent == null ||
+			timelineLastEvent 
+      &&
 			new Date(timelineLastEvent.eventTime).getTime() <= nextDate.getTime()
+      &&
+      new Date(timelineLastEvent.eventTime).getTime() < this.currentSnapshot.timestamp.getTime()
 		if (isTimelineNotReady) {
 			return
 		}
