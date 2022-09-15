@@ -132,19 +132,26 @@ namespace OMSWeb.Repositories
                     using (var conn = ConnectTrack())
                     {
                         var sql = $@"
-                                with cte as (
-                                    SELECT *
-                                    FROM vehicle_alarms
-                                    WHERE
-                                        time_resolved::DATE BETWEEN days AND days
-                                        {SubFilter(subsection, value)} {GetSubfilter(subfilter)}
-                                )
-                                SELECT
-                                TO_CHAR(days, 'YYYY-MM-DD') as label,
-                                ( SELECT {_avgEpochPerHour} FROM cte ) AS avg,
-                                ( SELECT count(*) FROM cte )::int
-                                FROM GENERATE_SERIES('{startStr}'::DATE, '{endStr}'::DATE, '1 days') days
-                                ";
+                            SELECT
+                            TO_CHAR(days, 'YYYY-MM-DD') as label,
+                            ( SELECT {_avgEpochPerHour} FROM (
+                                SELECT *
+                                FROM vehicle_alarms
+                                WHERE
+                                    time_resolved::DATE BETWEEN days AND days
+                                    {SubFilter(subsection, value)} {GetSubfilter(subfilter)}
+                                ) temp
+                            ) AS avg,
+                            ( SELECT count(*) FROM (
+                                SELECT *
+                                FROM vehicle_alarms
+                                WHERE
+                                    time_resolved::DATE BETWEEN days AND days
+                                    {SubFilter(subsection, value)} {GetSubfilter(subfilter)}
+                                ) temp
+                            )::int
+                            FROM GENERATE_SERIES('{startStr}'::DATE, '{endStr}'::DATE, '1 days') days
+                            ";
                         result = (await conn.QueryAsync(sql)).ToArray();
                     }
                     return result;

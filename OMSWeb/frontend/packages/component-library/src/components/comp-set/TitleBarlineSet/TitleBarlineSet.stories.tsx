@@ -4,6 +4,7 @@ import { exStatData, exEmptyData } from './exData'
 import { genNormaltr } from '@daimre/shared'
 const { normaltr: nStat, alarm: aStat } = exStatData
 const { normaltr: nEmpty, alarm: aEmpty } = exEmptyData
+console.log('nEmpty', nEmpty)
 
 export default {
 	title: '@daimre-ui/comp-set/TitleBarlineSet',

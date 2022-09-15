@@ -87,21 +87,27 @@ namespace OMSWeb.Repositories
                     using (var conn = ConnectTrack())
                     {
                         var sql = $@"
-                                with cte as (
-                                    SELECT
-                                    *
-                                    from order_completed
-                                    WHERE time_completed is not null and 
-                                        time_completed > time_assigned AND
-                                        time_completed::DATE BETWEEN days AND days {SubFilter(subsection, value)} {GetSubfilter(subfilter)}
-                                )
                                 SELECT
                                 TO_CHAR(days, 'YYYY-MM-DD') as label,
                                 (
-                                    SELECT {_avgEpochPerHour} from cte
+                                    SELECT {_avgEpochPerHour} from (
+                                        SELECT
+                                        *
+                                        from order_completed
+                                        WHERE time_completed is not null and 
+                                            time_completed > time_assigned AND
+                                            time_completed::DATE BETWEEN days AND days {SubFilter(subsection, value)} {GetSubfilter(subfilter)}
+                                    ) temp
                                 ) AS avg,
                                 (
-                                    SELECT count(*) from cte
+                                    SELECT count(*) from (
+                                        SELECT
+                                        *
+                                        from order_completed
+                                        WHERE time_completed is not null and 
+                                            time_completed > time_assigned AND
+                                            time_completed::DATE BETWEEN days AND days {SubFilter(subsection, value)} {GetSubfilter(subfilter)}
+                                    ) temp
                                 )::int
                                 FROM GENERATE_SERIES('{startStr}'::DATE, '{endStr}'::DATE, '1 days') days
                                 ";
