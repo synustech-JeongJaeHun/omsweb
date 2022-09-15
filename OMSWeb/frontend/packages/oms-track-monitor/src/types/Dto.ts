@@ -13,8 +13,10 @@ namespace UpdateDto {
       | 'E' // Empty
     curPoint: number
     nextPoint: number
+    destPoint?: string
     errorList: string
     isBlocked: boolean
+    isZcuBlocked: boolean
     isSensorStopped: boolean
     isMaint: boolean
     isConnected: boolean

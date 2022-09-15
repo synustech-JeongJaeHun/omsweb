@@ -1,181 +1,265 @@
 <div id="track-container" class="track-container">
-  <oms-track-monitor id="track-canvas" [width]="viewerSetting.rect.width" [height]="viewerSetting.rect.height"
-    [vehicleSize]="tmSetting.vehicleSize" [segmentDirectionSize]="tmSetting.segmentDirectionSize"
-    [segmentWidth]="tmSetting.segmentWidth" [rotation]="tmSetting.rotation"
-    [isMinimapVisible]="tmSetting.isMinimapVisible" [isVehicleLineVisible]="tmSetting.isVehicleLineVisible"
-    [isSegmentDirectionVisible]="tmSetting.isSegmentDirectionVisible"
-    [isPointLabelVisible]="tmSetting.isPointLabelVisible" [isStationVisible]="tmSetting.isStationVisible"
-    [isBufferVisible]="tmSetting.isBufferVisible" [isGroupVisible]="tmSetting.isGroupVisible"
-    [isClusterVisible]="tmSetting.isClusterVisible"
-    [isOverlappingObjectsVisible]="tmSetting.isOverlappingObjectsVisible"
-    [backgroundColor]="tmSetting.playbackBackgroundColor" [stationColor]="tmSetting.stationColor"
-    [bufferColor]="tmSetting.bufferColor" [pointColor]="tmSetting.pointColor"
-    [normalSegmentColor]="tmSetting.normalSegmentColor" [disabledSegmentColor]="tmSetting.disabledSegmentColor"
-    [segmentDirectionColor]="tmSetting.segmentDirectionColor" [autoModeVehicleColor]="tmSetting.autoModeVehicleColor"
-    [manualModeVehicleColor]="tmSetting.manualModeVehicleColor" [noneModeVehicleColor]="tmSetting.noneModeVehicleColor"
-    [cargoLoadingColor]="tmSetting.cargoLoadingColor" [cargoFullColor]="tmSetting.cargoFullColor"
-    [cargoUnloadingColor]="tmSetting.cargoUnloadingColor" (mouseoverOnObject)="onMouseoverTM($event)"
-    (mouseleaveOnObject)="onMouseleaveTM($event)" (mainClickOnObject)="onFocus($event)"
-    (secondaryClickOnObject)="onContectMenuOn($event)" (clickOutObject)="onBackdrop($event)">
-  </oms-track-monitor>
+	<oms-track-monitor
+		id="track-canvas"
+		[width]="viewerSetting.rect.width"
+		[height]="viewerSetting.rect.height"
+		[vehicleSize]="tmSetting.vehicleSize"
+		[segmentDirectionSize]="tmSetting.segmentDirectionSize"
+		[segmentWidth]="tmSetting.segmentWidth"
+		[rotation]="tmSetting.rotation"
+		[isMinimapVisible]="tmSetting.isMinimapVisible"
+		[isVehicleNextLineVisible]="tmSetting.isVehicleNextLineVisible"
+    [isVehicleFromOrderLineVisible]="tmSetting.isVehicleFromOrderLineVisible"
+		[isVehicleToOrderLineVisible]="tmSetting.isVehicleToOrderLineVisible"
+		[isVehicleMoveOrderLineVisible]="tmSetting.isVehicleMoveOrderLineVisible"
+		[isVehicleHomeivrLineVisible]="tmSetting.isVehicleHomeivrLineVisible"
+		[isSegmentDirectionVisible]="tmSetting.isSegmentDirectionVisible"
+		[isPointLabelVisible]="tmSetting.isPointLabelVisible"
+		[isStationVisible]="tmSetting.isStationVisible"
+		[isBufferVisible]="tmSetting.isBufferVisible"
+		[isGroupVisible]="tmSetting.isGroupVisible"
+		[isClusterVisible]="tmSetting.isClusterVisible"
+		[isOverlappingObjectsVisible]="tmSetting.isOverlappingObjectsVisible"
+		[backgroundColor]="tmSetting.playbackBackgroundColor"
+		[stationColor]="tmSetting.stationColor"
+		[bufferColor]="tmSetting.bufferColor"
+		[pointColor]="tmSetting.pointColor"
+		[normalSegmentColor]="tmSetting.normalSegmentColor"
+		[disabledSegmentColor]="tmSetting.disabledSegmentColor"
+		[segmentDirectionColor]="tmSetting.segmentDirectionColor"
+		[disconnectModeVehicleColor]="tmSetting.disconnectModeVehicleColor"
+		[errorModeVehicleColor]="tmSetting.errorModeVehicleColor"
+		[maintenanceModeVehicleColor]="tmSetting.maintenanceModeVehicleColor"
+		[manualModeVehicleColor]="tmSetting.manualModeVehicleColor"
+		[idleModeVehicleColor]="tmSetting.idleModeVehicleColor"
+    [homeIvrModeVehicleColor]="tmSetting.homeIvrModeVehicleColor"
+    [runningModeVehicleColor]="tmSetting.runningModeVehicleColor"
+    [zcuBlockedVehicleColor]="tmSetting.zcuBlockedVehicleColor"
+    [sensorStoppedVehicleColor]="tmSetting.sensorStoppedVehicleColor"
+		[cargoLoadingColor]="tmSetting.cargoLoadingColor"
+		[cargoFullColor]="tmSetting.cargoFullColor"
+		[cargoUnloadingColor]="tmSetting.cargoUnloadingColor"
+		(mouseoverOnObject)="onMouseoverTM($event)"
+		(mouseleaveOnObject)="onMouseleaveTM($event)"
+		(mainClickOnObject)="onFocus($event)"
+		(secondaryClickOnObject)="onContectMenuOn($event)"
+		(clickOutObject)="onBackdrop($event)"
+	>
+	</oms-track-monitor>
 
-  <div id="side_panel">
-    <!-- detail panel at right side -->
-    <oms-legacy-map-side-panel *ngIf="activeDetails" class="side_panel active" [selectedObject]="selectedObject"
-      (focus)="changeFocus($event)">
-    </oms-legacy-map-side-panel>
-  </div>
+	<div id="side_panel">
+		<!-- detail panel at right side -->
+		<oms-legacy-map-side-panel
+			*ngIf="activeDetails"
+			class="side_panel active"
+			[selectedObject]="selectedObject"
+			(focus)="changeFocus($event)"
+		>
+		</oms-legacy-map-side-panel>
+	</div>
 
+	<!-- maptoolbar at left side -->
+	<oms-legacy-map-toolbar
+		id="map-toolbar"
+		class="snb toolbar"
+		[class.show-name]="showToolbarText"
+		[buttonState]="preference.toggles"
+		(centerZoom)="onCenterZoom()"
+		(find)="findOnTM($event)"
+		(focus)="focusOnTM($event)"
+		(track)="trackOnTM($event)"
+	>
+	</oms-legacy-map-toolbar>
 
-  <!-- maptoolbar at left side -->
-  <oms-legacy-map-toolbar id="map-toolbar" class="snb toolbar" [class.show-name]="showToolbarText"
-    [buttonState]="preference.toggles" (centerZoom)="onCenterZoom()" (find)="findOnTM($event)"
-    (focus)="focusOnTM($event)" (track)="trackOnTM($event)">
-  </oms-legacy-map-toolbar>
+	<!-- co-located objects -->
+	<div id="colocatedView" (mouseleave)="onCoLocatedObjectPanelOff()">
+		<ng-container *ngIf="showColocatedView">
+			<oms-map-overlapped
+				[selectedObject]="mainColocatedObject"
+				[overlapList]="colocatedObjects"
+				(leftClick)="onFocusFromOverlapped($event)"
+				(rightClick)="onContextMenuOnFromOverlapped($event)"
+			>
+			</oms-map-overlapped>
+		</ng-container>
+	</div>
 
-  <!-- co-located objects -->
-  <div id="colocatedView" (mouseleave)="onCoLocatedObjectPanelOff()">
-    <ng-container *ngIf="showColocatedView">
-      <oms-map-overlapped [selectedObject]="mainColocatedObject" [overlapList]="colocatedObjects"
-        (leftClick)="onFocusFromOverlapped($event)" (rightClick)="onContextMenuOnFromOverlapped($event)">
-      </oms-map-overlapped>
-    </ng-container>
-  </div>
-
-
-  <!-- tooltip -->
-  <div id="tooltipView" class="tooltip-view"></div>
-  <ng-container [ngSwitch]="tooltipObject?.type?.toUpperCase()">
-    <ng-container *ngSwitchCase="'STATION'">
-      <ng-container *ngTemplateOutlet="stationTooltip"></ng-container>
-    </ng-container>
-    <ng-container *ngSwitchCase="'VEHICLE'">
-      <ng-container *ngTemplateOutlet="vehicleTooltip"></ng-container>
-    </ng-container>
-    <ng-container *ngSwitchCase="'CLUSTER'">
-      <ng-container *ngTemplateOutlet="clusterTooltip"></ng-container>
-    </ng-container>
-    <ng-container *ngSwitchCase="'SEGMENT'">
-      <ng-container *ngTemplateOutlet="segmentTooltip"></ng-container>
-    </ng-container>
-    <ng-container *ngSwitchCase="'BUFFER'">
-      <ng-container *ngTemplateOutlet="bufferTooltip"></ng-container>
-    </ng-container>
-    <ng-container *ngSwitchCase="'ZCU'">
-      <ng-container *ngTemplateOutlet="zcuTooltip"></ng-container>
-    </ng-container>
-    <ng-container *ngSwitchCase="'POINT'">
-      <ng-container *ngTemplateOutlet="pointTooltip"></ng-container>
-    </ng-container>
-    <ng-container *ngSwitchDefault> </ng-container>
-  </ng-container>
+	<!-- tooltip -->
+	<div id="tooltipView" class="tooltip-view"></div>
+	<ng-container [ngSwitch]="tooltipObject?.type?.toUpperCase()">
+		<ng-container *ngSwitchCase="'STATION'">
+			<ng-container *ngTemplateOutlet="stationTooltip"></ng-container>
+		</ng-container>
+		<ng-container *ngSwitchCase="'VEHICLE'">
+			<ng-container *ngTemplateOutlet="vehicleTooltip"></ng-container>
+		</ng-container>
+		<ng-container *ngSwitchCase="'CLUSTER'">
+			<ng-container *ngTemplateOutlet="clusterTooltip"></ng-container>
+		</ng-container>
+		<ng-container *ngSwitchCase="'SEGMENT'">
+			<ng-container *ngTemplateOutlet="segmentTooltip"></ng-container>
+		</ng-container>
+		<ng-container *ngSwitchCase="'BUFFER'">
+			<ng-container *ngTemplateOutlet="bufferTooltip"></ng-container>
+		</ng-container>
+		<ng-container *ngSwitchCase="'ZCU'">
+			<ng-container *ngTemplateOutlet="zcuTooltip"></ng-container>
+		</ng-container>
+		<ng-container *ngSwitchCase="'POINT'">
+			<ng-container *ngTemplateOutlet="pointTooltip"></ng-container>
+		</ng-container>
+		<ng-container *ngSwitchDefault> </ng-container>
+	</ng-container>
 </div>
 
 <!-- tooltips start -->
 <ng-template #stationTooltip>
-  <dx-tooltip class="tooltip-box" [visible]="showTooltip" target="#tooltipView" position="right">
-    <div class="tooltip-title">Station</div>
-    <div class="tooltip-content">
-      <div class="name">{{ "names.id" | translate }}</div>
-      <div class="value">{{ tooltipObject?.value.id }}</div>
-      <div class="name">{{ "names.logicalId" | translate }}</div>
-      <div class="value">{{ tooltipObject?.value.logicalId }}</div>
-      <div class="name">{{ "names.physicalId" | translate }}</div>
-      <div class="value">{{ tooltipObject?.value.physicalId }}</div>
-      <div class="name">{{ "names.point" | translate }}</div>
-      <div class="value">{{ tooltipObject?.value.pointId }}</div>
-    </div>
-  </dx-tooltip>
+	<dx-tooltip
+		class="tooltip-box"
+		[visible]="showTooltip"
+		target="#tooltipView"
+		position="right"
+	>
+		<div class="tooltip-title">Station</div>
+		<div class="tooltip-content">
+			<div class="name">{{ 'names.id' | translate }}</div>
+			<div class="value">{{ tooltipObject?.value.id }}</div>
+			<div class="name">{{ 'names.logicalId' | translate }}</div>
+			<div class="value">{{ tooltipObject?.value.logicalId }}</div>
+			<div class="name">{{ 'names.physicalId' | translate }}</div>
+			<div class="value">{{ tooltipObject?.value.physicalId }}</div>
+			<div class="name">{{ 'names.point' | translate }}</div>
+			<div class="value">{{ tooltipObject?.value.pointId }}</div>
+		</div>
+	</dx-tooltip>
 </ng-template>
 
 <ng-template #vehicleTooltip>
-  <dx-tooltip class="tooltip-box" [visible]="showTooltip" target="#tooltipView" position="right">
-    <div class="tooltip-title">Vehicle</div>
-    <div class="tooltip-content">
-      <div class="name">{{ "names.id" | translate }}</div>
-      <div class="value">{{ tooltipObject?.value.id }}</div>
-      <div class="name">{{ "names.logicalId" | translate }}</div>
-      <div class="value">{{ tooltipObject?.value.logicalId }}</div>
-      <div class="name">{{ "names.physicalId" | translate }}</div>
-      <div class="value">{{ tooltipObject?.value.physicalId }}</div>
-      <div class="name">{{ "names.point" | translate }}</div>
-      <div class="value">{{ tooltipObject?.value.curPoint }}</div>
-    </div>
-  </dx-tooltip>
+	<dx-tooltip
+		class="tooltip-box"
+		[visible]="showTooltip"
+		target="#tooltipView"
+		position="right"
+	>
+		<div class="tooltip-title">Vehicle</div>
+		<div class="tooltip-content">
+			<div class="name">{{ 'names.id' | translate }}</div>
+			<div class="value">{{ tooltipObject?.value.id }}</div>
+			<div class="name">{{ 'names.logicalId' | translate }}</div>
+			<div class="value">{{ tooltipObject?.value.logicalId }}</div>
+			<div class="name">{{ 'names.physicalId' | translate }}</div>
+			<div class="value">{{ tooltipObject?.value.physicalId }}</div>
+			<div class="name">{{ 'names.point' | translate }}</div>
+			<div class="value">{{ tooltipObject?.value.curPoint }}</div>
+		</div>
+	</dx-tooltip>
 </ng-template>
 
 <ng-template #clusterTooltip>
-  <dx-tooltip class="tooltip-box" [visible]="showTooltip" target="#tooltipView" position="right">
-    <div class="tooltip-title">Cluster</div>
-    <div class="tooltip-content">
-      <div class="name">{{ "names.id" | translate }}</div>
-      <div class="value">{{ tooltipObject?.value.id }}</div>
-      <div class="name">{{ "names.logicalId" | translate }}</div>
-      <div class="value">{{ tooltipObject?.value.logicalId }}</div>
-      <div class="name">{{ "names.maxVehicles" | translate }}</div>
-      <div class="value">{{ tooltipObject?.value.maxVehicles }}</div>
-    </div>
-  </dx-tooltip>
+	<dx-tooltip
+		class="tooltip-box"
+		[visible]="showTooltip"
+		target="#tooltipView"
+		position="right"
+	>
+		<div class="tooltip-title">Cluster</div>
+		<div class="tooltip-content">
+			<div class="name">{{ 'names.id' | translate }}</div>
+			<div class="value">{{ tooltipObject?.value.id }}</div>
+			<div class="name">{{ 'names.logicalId' | translate }}</div>
+			<div class="value">{{ tooltipObject?.value.logicalId }}</div>
+			<div class="name">{{ 'names.maxVehicles' | translate }}</div>
+			<div class="value">{{ tooltipObject?.value.maxVehicles }}</div>
+		</div>
+	</dx-tooltip>
 </ng-template>
 
 <ng-template #segmentTooltip>
-  <dx-tooltip class="tooltip-box" [visible]="showTooltip" target="#tooltipView" position="right">
-    <div class="tooltip-title">Segment</div>
-    <div class="tooltip-content">
-      <div class="name">{{ "names.id" | translate }}</div>
-      <div class="value">{{ tooltipObject?.value.id }}</div>
-      <div class="name">{{ "names.length" | translate }}</div>
-      <div class="value">{{ tooltipObject?.value.length }}</div>
-      <div class="name">{{ "names.point" | translate }}</div>
-      <div class="value">{{ tooltipObject?.value.point }}</div>
-    </div>
-  </dx-tooltip>
+	<dx-tooltip
+		class="tooltip-box"
+		[visible]="showTooltip"
+		target="#tooltipView"
+		position="right"
+	>
+		<div class="tooltip-title">Segment</div>
+		<div class="tooltip-content">
+			<div class="name">{{ 'names.id' | translate }}</div>
+			<div class="value">{{ tooltipObject?.value.id }}</div>
+			<div class="name">{{ 'names.length' | translate }}</div>
+			<div class="value">{{ tooltipObject?.value.length }}</div>
+			<div class="name">{{ 'names.point' | translate }}</div>
+			<div class="value">{{ tooltipObject?.value.point }}</div>
+		</div>
+	</dx-tooltip>
 </ng-template>
 
 <ng-template #bufferTooltip>
-  <dx-tooltip class="tooltip-box" [visible]="showTooltip" target="#tooltipView" position="right">
-    <div class="tooltip-title">Buffer</div>
-    <div class="tooltip-content">
-      <div class="name">{{ "names.id" | translate }}</div>
-      <div class="value">{{ tooltipObject?.value.id }}</div>
-      <div class="name">{{ "names.logicalId" | translate }}</div>
-      <div class="value">{{ tooltipObject?.value.logicalId }}</div>
-      <div class="name">{{ "names.physicalId" | translate }}</div>
-      <div class="value">{{ tooltipObject?.value.physicalId }}</div>
-      <div class="name">{{ "names.point" | translate }}</div>
-      <div class="value">{{ tooltipObject?.value.pointId }}</div>
-    </div>
-  </dx-tooltip>
+	<dx-tooltip
+		class="tooltip-box"
+		[visible]="showTooltip"
+		target="#tooltipView"
+		position="right"
+	>
+		<div class="tooltip-title">Buffer</div>
+		<div class="tooltip-content">
+			<div class="name">{{ 'names.id' | translate }}</div>
+			<div class="value">{{ tooltipObject?.value.id }}</div>
+			<div class="name">{{ 'names.logicalId' | translate }}</div>
+			<div class="value">{{ tooltipObject?.value.logicalId }}</div>
+			<div class="name">{{ 'names.physicalId' | translate }}</div>
+			<div class="value">{{ tooltipObject?.value.physicalId }}</div>
+			<div class="name">{{ 'names.point' | translate }}</div>
+			<div class="value">{{ tooltipObject?.value.pointId }}</div>
+		</div>
+	</dx-tooltip>
 </ng-template>
 
 <ng-template #zcuTooltip>
-  <dx-tooltip class="tooltip-box" [visible]="showTooltip" target="#tooltipView" position="right">
-    <div class="tooltip-title">Zcu</div>
-    <div class="tooltip-content">
-      <div class="name">{{ "names.id" | translate }}</div>
-      <div class="value">{{ tooltipObject?.value.id }}</div>
-      <!--
+	<dx-tooltip
+		class="tooltip-box"
+		[visible]="showTooltip"
+		target="#tooltipView"
+		position="right"
+	>
+		<div class="tooltip-title">Zcu</div>
+		<div class="tooltip-content">
+			<div class="name">{{ 'names.id' | translate }}</div>
+			<div class="value">{{ tooltipObject?.value.id }}</div>
+			<!--
       <div class="name">Type</div>
       <div class="value">{{ ((tooltipObject?.zcuType == 0) ? 'Standard' : ((tooltipObject?.zcuType == 1) ? 'NType' : '')) }}</div>
       -->
-      <div class="name">{{ "names.usingType" | translate }}</div>
-      <div class="value">{{ ((tooltipObject?.value.usingType == 0) ? 'Not Use' : ((tooltipObject?.value.usingType == 1)
-        ? 'Use HW' :
-        ((tooltipObject?.value.usingType == 2) ? 'Use SW' : '')))}}</div>
-    </div>
-  </dx-tooltip>
+			<div class="name">{{ 'names.usingType' | translate }}</div>
+			<div class="value">
+				{{
+					tooltipObject?.value.usingType == 0
+						? 'Not Use'
+						: tooltipObject?.value.usingType == 1
+						? 'Use HW'
+						: tooltipObject?.value.usingType == 2
+						? 'Use SW'
+						: ''
+				}}
+			</div>
+		</div>
+	</dx-tooltip>
 </ng-template>
 
 <ng-template #pointTooltip>
-  <dx-tooltip class="tooltip-box" [visible]="showTooltip" target="#tooltipView" position="right">
-    <div class="tooltip-title">Point</div>
-    <div class="tooltip-content">
-      <div class="name">{{ "names.id" | translate }}</div>
-      <div class="value">{{ tooltipObject?.value.id }}</div>
-      <div class="name">{{ "names.physicalId" | translate }}</div>
-      <div class="value">{{ tooltipObject?.value.physicalId }}</div>
-    </div>
-  </dx-tooltip>
+	<dx-tooltip
+		class="tooltip-box"
+		[visible]="showTooltip"
+		target="#tooltipView"
+		position="right"
+	>
+		<div class="tooltip-title">Point</div>
+		<div class="tooltip-content">
+			<div class="name">{{ 'names.id' | translate }}</div>
+			<div class="value">{{ tooltipObject?.value.id }}</div>
+			<div class="name">{{ 'names.physicalId' | translate }}</div>
+			<div class="value">{{ tooltipObject?.value.physicalId }}</div>
+		</div>
+	</dx-tooltip>
 </ng-template>
 
 <!-- tooltips end -->

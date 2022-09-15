@@ -12,7 +12,11 @@ type ChangedEvent =
 type VisibilityChangedEvent = {
 	key:
 		| 'isMinimapVisible'
-		| 'isVehicleLineVisible'
+		| 'isVehicleNextLineVisible'
+		| 'isVehicleFromOrderLineVisible'
+		| 'isVehicleToOrderLineVisible'
+		| 'isVehicleMoveOrderLineVisible'
+		| 'isVehicleHomeivrLineVisible'
 		| 'isSegmentDirectionVisible'
 		| 'isPointLabelVisible'
 		| 'isPointHomeVisible'
@@ -38,9 +42,15 @@ type ColorChangedEvent = {
 		| 'normalSegmentColor'
 		| 'disabledSegmentColor'
 		| 'segmentDirectionColor'
-		| 'autoModeVehicleColor'
+		| 'disconnectModeVehicleColor'
+		| 'errorModeVehicleColor'
+		| 'maintenanceModeVehicleColor'
 		| 'manualModeVehicleColor'
-		| 'noneModeVehicleColor'
+		| 'idleModeVehicleColor'
+    | 'homeIvrModeVehicleColor'
+    | 'runningModeVehicleColor'
+    | 'zcuBlockedVehicleColor'
+    | 'sensorStoppedVehicleColor'
 		| 'cargoLoadingColor'
 		| 'cargoFullColor'
 		| 'cargoUnloadingColor'
@@ -103,7 +113,11 @@ const DefaultTrackMonitorSetting: TrackMonitorSetting = {
 
 	// visibility
 	isMinimapVisible: true,
-	isVehicleLineVisible: true,
+	isVehicleNextLineVisible: true,
+	isVehicleFromOrderLineVisible: true,
+	isVehicleToOrderLineVisible: true,
+	isVehicleMoveOrderLineVisible: true,
+	isVehicleHomeivrLineVisible: true,
 	isSegmentDirectionVisible: true,
 	isPointLabelVisible: true,
 	isPointHomeVisible: true,
@@ -127,9 +141,19 @@ const DefaultTrackMonitorSetting: TrackMonitorSetting = {
 	normalSegmentColor: 'rgba(200, 200, 200, 1)',
 	disabledSegmentColor: 'rgba(165, 127, 184, 1)',
 	segmentDirectionColor: 'rgba(110, 110, 110, 1)',
-	autoModeVehicleColor: 'rgba(95, 95, 95, 1)',
-	manualModeVehicleColor: 'rgba(40, 180, 115, 1)',
-	noneModeVehicleColor: 'rgba(255, 255, 255, 1)',
+
+	// chjs visual start
+    disconnectModeVehicleColor: '#E1D7C5',
+    errorModeVehicleColor: '#FF3838',
+    maintenanceModeVehicleColor: '#5C666D',
+    manualModeVehicleColor: '#5C666D',
+    idleModeVehicleColor: '#2DCCFF',
+    homeIvrModeVehicleColor: '#FFB302',
+    runningModeVehicleColor: '#51E400',
+    zcuBlockedVehicleColor: '#FCE83A',
+    sensorStoppedVehicleColor: '#FCE83A',
+	// chjs visual end
+
 	cargoLoadingColor: 'rgba(0, 0, 205, 1)',
 	cargoFullColor: 'rgba(50, 50, 50, 1)',
 	cargoUnloadingColor: 'rgba(128, 0, 128, 1)',

@@ -104,7 +104,7 @@ export class SystemPreferenceComponent {
             return;
 
         let strAs: string = "";
-        if (this.argumentKey === 'home') strAs = this.$t.instant(`names.home`)
+        if (this.curselKey === 'home') strAs = this.$t.instant(`names.home`)
         if (this.curselKey === 'ivr') strAs = this.$t.instant(`names.ivr`)
         if (this.curselKey === 'none') strAs = this.$t.instant(`names.none`)
 

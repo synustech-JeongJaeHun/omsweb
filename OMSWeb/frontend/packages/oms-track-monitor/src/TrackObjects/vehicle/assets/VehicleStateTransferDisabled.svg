@@ -1,0 +1,5 @@
+<svg viewBox="0 0 100 100">
+  <circle r="45" cx="50" cy="50" fill="white" stroke="red" stroke-width="12" />
+  <line x1="25" y1="70" x2="75" y2="70" stroke="black" stroke-width="15" />
+  <line x1="50" y1="70" x2="50" y2="15" stroke="black" stroke-width="15" />
+</svg>

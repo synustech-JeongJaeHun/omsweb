@@ -54,7 +54,11 @@ const props = defineProps<{
   bufferMargin: Numberlish
   // visible
   isMinimapVisible: Boolish
-  isVehicleLineVisible: Boolish
+  isVehicleNextLineVisible: Boolish
+  isVehicleFromOrderLineVisible: Boolish
+  isVehicleToOrderLineVisible: Boolish
+  isVehicleMoveOrderLineVisible: Boolish
+  isVehicleHomeivrLineVisible: Boolish
   isSegmentDirectionVisible: Boolish
   isPointLabelVisible: Boolish
   isPointHomeVisible: Boolish
@@ -76,9 +80,19 @@ const props = defineProps<{
   normalSegmentColor: Stringlish
   disabledSegmentColor: Stringlish
   segmentDirectionColor: Stringlish
-  autoModeVehicleColor: Stringlish
+
+  // chjs visual start
+  disconnectModeVehicleColor: Stringlish
+  errorModeVehicleColor: Stringlish
+  maintenanceModeVehicleColor: Stringlish
   manualModeVehicleColor: Stringlish
-  noneModeVehicleColor: Stringlish
+  idleModeVehicleColor: Stringlish
+  homeIvrModeVehicleColor: Stringlish
+  runningModeVehicleColor: Stringlish
+  zcuBlockedVehicleColor: Stringlish
+  sensorStoppedVehicleColor: Stringlish
+  // chjs visual end
+
   cargoLoadingColor: Stringlish
   cargoFullColor: Stringlish
   cargoUnloadingColor: Stringlish
@@ -90,7 +104,7 @@ const props = defineProps<{
   vehicleSecondaryContent: Stringlish
 }>()
 const propRefs = toRefs(props)
-interface Emits extends RootEmits {}
+interface Emits extends RootEmits { }
 const emit = defineEmits<Emits>()
 provide(RootEmitInjectionKey, readonly(emit))
 // HOW TO USE
@@ -154,33 +168,23 @@ provide('shadowRoot', readonly(shadowRoot))
 defineExpose(exposed)
 </script>
 <template>
-  <div
-    ref="selfElement"
-    class="relative"
-    :style="{
+  <div ref="selfElement" class="relative" :style="{
+    width: `${elementRectInfo.width}px`,
+    height: `${elementRectInfo.height}px`,
+  }">
+    <Map class="absolute" :style="{
+      top: 0,
+      left: 0,
       width: `${elementRectInfo.width}px`,
       height: `${elementRectInfo.height}px`,
-    }"
-  >
-    <Map
-      class="absolute"
-      :style="{
-        top: 0,
-        left: 0,
-        width: `${elementRectInfo.width}px`,
-        height: `${elementRectInfo.height}px`,
-      }"
-    />
+    }" />
     <Minimap class="absolute" style="bottom: 45px; left: 45px" />
-    <div
-      class="absolute flex flex-row"
-      style="
+    <div class="absolute flex flex-row" style="
         padding: unset;
         bottom: 10px;
         right: 10px;
         align-items: center;
-      "
-    >
+      ">
       <ScaleBar />
       <ScreenDetail />
     </div>
@@ -190,210 +194,275 @@ defineExpose(exposed)
 /* dynamic css */
 /* Configurable Color Start */
 #layer-container {
-  background-color: v-bind(
-    'parseStringProp(ColorDefault.background, props.backgroundColor)'
-  );
+  background-color: v-bind('parseStringProp(ColorDefault.background, props.backgroundColor)'
+    );
 }
+
 #station-layer .station .station-path {
-  stroke: v-bind(
-    'parseStringProp(ColorDefault.station, props.stationColor)'
-  );
+  stroke: v-bind('parseStringProp(ColorDefault.station, props.stationColor)'
+    );
 }
+
 #station-layer .station[data-disabled='true' i] .station-path {
-  stroke: v-bind(
-    'parseStringProp(ColorDefault.stationDisabled, props.stationDisabledColor)'
-  );
+  stroke: v-bind('parseStringProp(ColorDefault.stationDisabled, props.stationDisabledColor)'
+    );
 }
+
 #buffer-layer .buffer .buffer-path {
-  stroke: v-bind(
-    'parseStringProp(ColorDefault.buffer, props.bufferColor)'
-  );
+  stroke: v-bind('parseStringProp(ColorDefault.buffer, props.bufferColor)'
+    );
 }
+
 #buffer-layer .buffer[data-disabled='true' i] .buffer-path {
-  stroke: v-bind(
-    'parseStringProp(ColorDefault.bufferDisabled, props.bufferDisabledColor)'
-  );
+  stroke: v-bind('parseStringProp(ColorDefault.bufferDisabled, props.bufferDisabledColor)'
+    );
 }
+
 #buffer-layer .buffer .buffer-full {
-  fill: v-bind(
-    'parseStringProp(ColorDefault.cargoFull, props.cargoFullColor)'
-  );
+  fill: v-bind('parseStringProp(ColorDefault.cargoFull, props.cargoFullColor)'
+    );
 }
+
 #point-layer .point .point-path {
   stroke: v-bind('parseStringProp(ColorDefault.point, props.pointColor)');
   fill: v-bind('parseStringProp(ColorDefault.point, props.pointColor)');
 }
+
 #point-layer .point .home .home-path {
   fill: v-bind('parseStringProp(ColorDefault.home, props.homeColor)');
 }
+
 #segment-layer .segment .segment-path {
-  stroke: v-bind(
-    'parseStringProp(ColorDefault.normalSegment, props.normalSegmentColor)'
-  );
+  stroke: v-bind('parseStringProp(ColorDefault.normalSegment, props.normalSegmentColor)'
+    );
 }
+
 #disabled-segment-layer .segment .segment-path {
-  stroke: v-bind(
-    'parseStringProp(ColorDefault.disabledSegment, props.disabledSegmentColor)'
-  );
+  stroke: v-bind('parseStringProp(ColorDefault.disabledSegment, props.disabledSegmentColor)'
+    );
 }
-#disabled-segment-layer
-  .segment[data-is-disabled-by-mtl='true' i]
-  .segment-path {
-  stroke: v-bind(
-    'parseStringProp(ColorDefault.disabledSegment, props.normalSegmentColor)'
-  );
+
+#disabled-segment-layer .segment[data-is-disabled-by-mtl='true' i] .segment-path {
+  stroke: v-bind('parseStringProp(ColorDefault.disabledSegment, props.normalSegmentColor)'
+    );
 }
+
 #segment-layer .segment .segment-direction,
 #disabled-segment-layer .segment .segment-direction {
-  stroke: v-bind(
-    'parseStringProp(ColorDefault.segmentDirection, props.segmentDirectionColor)'
-  );
-  fill: v-bind(
-    'parseStringProp(ColorDefault.segmentDirection, props.segmentDirectionColor)'
-  );
+  stroke: v-bind('parseStringProp(ColorDefault.segmentDirection, props.segmentDirectionColor)'
+    );
+  fill: v-bind('parseStringProp(ColorDefault.segmentDirection, props.segmentDirectionColor)'
+    );
 }
+
+/**
 #vehicle-layer .vehicle-symbol .vehicle-mode-path {
-  /* mode === none */
   fill: v-bind(
     'parseStringProp(ColorDefault.noneModeVehicle, props.noneModeVehicleColor)'
   );
 }
 #vehicle-layer .vehicle-symbol[data-mode='A' i] .vehicle-mode-path {
-  /* mode === auto */
   fill: v-bind(
     'parseStringProp(ColorDefault.autoModeVehicle, props.autoModeVehicleColor)'
   );
 }
 #vehicle-layer .vehicle-symbol[data-mode='M' i] .vehicle-mode-path {
-  /* mode === manual */
   fill: v-bind(
     'parseStringProp(ColorDefault.manualModeVehicle, props.manualModeVehicleColor)'
   );
 }
+*/
+
+#vehicle-layer .vehicle-symbol[data-complicated-mode='DISCONNECT' i] .vehicle-mode-path {
+  fill: v-bind('parseStringProp(ColorDefault.disconnectModeVehicleColor, props.disconnectModeVehicleColor)'
+    );
+}
+
+#vehicle-layer .vehicle-symbol[data-complicated-mode='ERROR' i] .vehicle-mode-path {
+  fill: v-bind('parseStringProp(ColorDefault.errorModeVehicleColor, props.errorModeVehicleColor)'
+    );
+}
+
+#vehicle-layer .vehicle-symbol[data-complicated-mode='MAINTENANCE' i] .vehicle-mode-path {
+  fill: v-bind('parseStringProp(ColorDefault.maintenanceModeVehicleColor, props.maintenanceModeVehicleColor)'
+    );
+}
+
+#vehicle-layer .vehicle-symbol[data-complicated-mode='MANUAL' i] .vehicle-mode-path {
+  fill: v-bind('parseStringProp(ColorDefault.manualModeVehicleColor, props.manualModeVehicleColor)'
+    );
+}
+
+#vehicle-layer .vehicle-symbol[data-complicated-mode='IDLE' i] .vehicle-mode-path {
+  fill: v-bind('parseStringProp(ColorDefault.idleModeVehicleColor, props.idleModeVehicleColor)'
+    );
+}
+
+#vehicle-layer .vehicle-symbol[data-complicated-mode='HOMEIVR' i] .vehicle-mode-path {
+  fill: v-bind('parseStringProp(ColorDefault.homeIvrModeVehicleColor, props.homeIvrModeVehicleColor)'
+    );
+}
+
+#vehicle-layer .vehicle-symbol[data-complicated-mode='RUNNING' i] .vehicle-mode-path {
+  fill: v-bind('parseStringProp(ColorDefault.runningModeVehicleColor, props.runningModeVehicleColor)'
+    );
+}
+
+#vehicle-layer .vehicle-symbol[data-complicated-mode='ZCUBLOCKED' i] .vehicle-mode-path {
+  fill: v-bind('parseStringProp(ColorDefault.zcuBlockedVehicleColor, props.zcuBlockedVehicleColor)'
+    );
+}
+#vehicle-layer .vehicle-symbol[data-complicated-mode='SENSORSTOPPED' i] .vehicle-mode-path {
+  fill: v-bind('parseStringProp(ColorDefault.sensorStoppedVehicleColor, props.sensorStoppedVehicleColor)'
+    );
+}
+/* vehicle complicated fallback state is idle */
+#vehicle-layer .vehicle-symbol .vehicle-mode-path {
+  fill: v-bind('parseStringProp(ColorDefault.idleModeVehicleColor, props.idleModeVehicleColor)'
+    );
+}
+
 #vehicle-layer .cargo-loading {
-  fill: v-bind(
-    'parseStringProp(ColorDefault.cargoLoading, props.cargoLoadingColor)'
-  );
+  fill: v-bind('parseStringProp(ColorDefault.cargoLoading, props.cargoLoadingColor)'
+    );
 }
+
 #vehicle-layer .cargo-full {
-  fill: v-bind(
-    'parseStringProp(ColorDefault.cargoFull, props.cargoFullColor)'
-  );
+  fill: v-bind('parseStringProp(ColorDefault.cargoFull, props.cargoFullColor)'
+    );
 }
+
 #vehicle-layer .cargo-unloading {
-  fill: v-bind(
-    'parseStringProp(ColorDefault.cargoUnloading, props.cargoUnloadingColor)'
-  );
+  fill: v-bind('parseStringProp(ColorDefault.cargoUnloading, props.cargoUnloadingColor)'
+    );
 }
+
 #fireshutter-layer .fireshutter.opened g {
-  fill: v-bind(
-    'parseStringProp(ColorDefault.fireshutterOpened, props.fireshutterOpenedColor)'
-  );
+  fill: v-bind('parseStringProp(ColorDefault.fireshutterOpened, props.fireshutterOpenedColor)'
+    );
 }
+
 #fireshutter-layer .fireshutter.closed g {
-  fill: v-bind(
-    'parseStringProp(ColorDefault.fireshutterClosed, props.fireshutterClosedColor)'
-  );
+  fill: v-bind('parseStringProp(ColorDefault.fireshutterClosed, props.fireshutterClosedColor)'
+    );
 }
+
 #mtl-layer .mtl[data-unuse='unuse' i] .mtl-path {
-  stroke: v-bind(
-    'parseStringProp(ColorDefault.mtlUnuse, props.mtlUnuseColor)'
-  );
+  stroke: v-bind('parseStringProp(ColorDefault.mtlUnuse, props.mtlUnuseColor)'
+    );
 }
+
 #mtl-layer .mtl[data-unuse='use' i] .mtl-path {
-  stroke: v-bind(
-    'parseStringProp(ColorDefault.mtlUse, props.mtlUseColor)'
-  );
+  stroke: v-bind('parseStringProp(ColorDefault.mtlUse, props.mtlUseColor)'
+    );
 }
 
 /* Configurable Color End */
 /* Configurable Visibility Start */
-#vehicle-layer .line {
-  visibility: v-bind(
-    "parseBooleanProp(VisibleDefault.vehicleLine, props.isVehicleLineVisible) ? 'initial' : 'hidden'"
-  );
+#vehicle-layer .next-line {
+  visibility: v-bind("parseBooleanProp(VisibleDefault.vehicleNextLine, props.isVehicleNextLineVisible) ? 'initial' : 'hidden'"
+    );
 }
+#vehicle-layer .from-line {
+  visibility: v-bind("parseBooleanProp(VisibleDefault.vehicleFromOrderLine, props.isVehicleFromOrderLineVisible) ? 'initial' : 'hidden'"
+    );
+}
+#vehicle-layer .to-line {
+  visibility: v-bind("parseBooleanProp(VisibleDefault.vehicleToOrderLine, props.isVehicleToOrderLineVisible) ? 'initial' : 'hidden'"
+    );
+}
+#vehicle-layer .move-line {
+  visibility: v-bind("parseBooleanProp(VisibleDefault.vehicleMoveOrderLine, props.isVehicleMoveOrderLineVisible) ? 'initial' : 'hidden'"
+    );
+}
+#vehicle-layer .homeivr-line {
+  visibility: v-bind("parseBooleanProp(VisibleDefault.vehicleHomeivrLine, props.isVehicleHomeivrLineVisible) ? 'initial' : 'hidden'"
+    );
+}
+
 #segment-layer .segment-direction,
 #disabled-segment-layer .segment-direction {
-  visibility: v-bind(
-    "parseBooleanProp(VisibleDefault.segmentDirection, props.isSegmentDirectionVisible) ? 'initial' : 'hidden'"
-  );
+  visibility: v-bind("parseBooleanProp(VisibleDefault.segmentDirection, props.isSegmentDirectionVisible) ? 'initial' : 'hidden'"
+    );
 }
+
 #station-layer {
-  visibility: v-bind(
-    "parseBooleanProp(VisibleDefault.station, props.isStationVisible) ? 'initial' : 'hidden'"
-  );
+  visibility: v-bind("parseBooleanProp(VisibleDefault.station, props.isStationVisible) ? 'initial' : 'hidden'"
+    );
 }
+
 #buffer-layer {
-  visibility: v-bind(
-    "parseBooleanProp(VisibleDefault.buffer, props.isBufferVisible) ? 'initial' : 'hidden'"
-  );
+  visibility: v-bind("parseBooleanProp(VisibleDefault.buffer, props.isBufferVisible) ? 'initial' : 'hidden'"
+    );
 }
+
 #zcu-layer {
-  visibility: v-bind(
-    "parseBooleanProp(VisibleDefault.zcu, props.isZcuVisible) ? 'initial' : 'hidden'"
-  );
+  visibility: v-bind("parseBooleanProp(VisibleDefault.zcu, props.isZcuVisible) ? 'initial' : 'hidden'"
+    );
 }
+
 #cluster-layer {
-  visibility: v-bind(
-    "parseBooleanProp(VisibleDefault.cluster, props.isClusterVisible) ? 'initial' : 'hidden'"
-  );
+  visibility: v-bind("parseBooleanProp(VisibleDefault.cluster, props.isClusterVisible) ? 'initial' : 'hidden'"
+    );
 }
+
 #fireshutter-layer {
-  visibility: v-bind(
-    "parseBooleanProp(VisibleDefault.fireshutter, props.isFireshutterVisible) ? 'initial' : 'hidden'"
-  );
+  visibility: v-bind("parseBooleanProp(VisibleDefault.fireshutter, props.isFireshutterVisible) ? 'initial' : 'hidden'"
+    );
 }
+
 #mtl-layer {
-  visibility: v-bind(
-    "parseBooleanProp(VisibleDefault.mtl, props.isMtlVisible) ? 'initial' : 'hidden'"
-  );
+  visibility: v-bind("parseBooleanProp(VisibleDefault.mtl, props.isMtlVisible) ? 'initial' : 'hidden'"
+    );
 }
+
 #minimap-container {
-  visibility: v-bind(
-    "parseBooleanProp(VisibleDefault.minimap, props.isMinimapVisible) ? 'initial' : 'hidden'"
-  );
+  visibility: v-bind("parseBooleanProp(VisibleDefault.minimap, props.isMinimapVisible) ? 'initial' : 'hidden'"
+    );
 }
+
 #point-layer .label {
-  visibility: v-bind(
-    "parseBooleanProp(VisibleDefault.pointLabel, props.isPointLabelVisible) ? 'initial' : 'hidden'"
-  );
+  visibility: v-bind("parseBooleanProp(VisibleDefault.pointLabel, props.isPointLabelVisible) ? 'initial' : 'hidden'"
+    );
 }
+
 #point-layer .home {
-  visibility: v-bind(
-    "parseBooleanProp(VisibleDefault.pointHome, props.isPointHomeVisible) ? 'initial' : 'hidden'"
-  );
+  visibility: v-bind("parseBooleanProp(VisibleDefault.pointHome, props.isPointHomeVisible) ? 'initial' : 'hidden'"
+    );
 }
+
 .group-shadow {
-  visibility: v-bind(
-    "parseBooleanProp(VisibleDefault.group, props.isGroupVisible) ? 'initial' : 'hidden'"
-  );
+  visibility: v-bind("parseBooleanProp(VisibleDefault.group, props.isGroupVisible) ? 'initial' : 'hidden'"
+    );
 }
+
 /* Configurable Visibility End */
 /* Configurable Scale Start */
 #vehicle-layer .vehicle-symbol .scale-and-reverse-rotate {
   /* transform */
-  transform: scale(
-      v-bind('scaleInfo.mmPerPixel * scaleStylesInfo.vehicleSize * 1/10')
-    )
-    rotate(var(--reverse-rotation-degree));
+  transform: scale(v-bind('scaleInfo.mmPerPixel * scaleStylesInfo.vehicleSize * 1/10')) rotate(var(--reverse-rotation-degree));
 }
+
 #segment-layer .segment-path,
 #disabled-segment-layer .segment-path {
   stroke-width: v-bind('scaleStylesInfo.segmentWidth');
 }
+
 #segment-layer .focus,
 #disabled-segment-layer .focus {
   stroke-width: v-bind('scaleStylesInfo.segmentWidth * 3');
 }
+
 #cluster-layer .cluster {
   stroke-width: v-bind('scaleStylesInfo.segmentWidth * 2.2');
 }
+
 /* Configurable Scale End */
 .scale-and-reverse-rotate {
   --reverse-rotation-degree: v-bind('`${rotationInfo * (-1)}deg`');
   --mm-per-pixel: v-bind('scaleInfo.mmPerPixel');
 }
+
 :hover {
   --filter-size: v-bind('`${scaleInfo.mmPerPixel * 10}px`');
 }
@@ -403,67 +472,113 @@ defineExpose(exposed)
 <!-- https://v3.vuejs.org/guide/web-components.html#sfc-as-custom-element -->
 <!-- MapObjects -->
 <!-- Map > common -->
-<style src="src/MapObjects/styles/pan.css"></style>
-<style src="src/MapObjects/styles/rotate.css"></style>
-<style src="src/MapObjects/styles/will-change.css"></style>
+<style src="src/MapObjects/styles/pan.css">
+</style>
+<style src="src/MapObjects/styles/rotate.css">
+</style>
+<style src="src/MapObjects/styles/will-change.css">
+</style>
 <!-- <style src="./MapObjects/styles/will-change.css"></style> -->
 <!-- Map > Scale -->
-<style src="src/MapObjects/scale/styles/transform.css"></style>
+<style src="src/MapObjects/scale/styles/transform.css">
+</style>
 <!-- TrackObjects -->
 <!-- Track > common -->
-<style src="src/TrackObjects/styles/focus.css"></style>
-<style src="src/TrackObjects/styles/hover.css"></style>
-<style src="src/TrackObjects/styles/visibility.css"></style>
+<style src="src/TrackObjects/styles/focus.css">
+</style>
+<style src="src/TrackObjects/styles/hover.css">
+</style>
+<style src="src/TrackObjects/styles/visibility.css">
+</style>
 <!-- Track > buffer -->
-<style src="src/TrackObjects/buffer/styles/focus.css"></style>
-<style src="src/TrackObjects/buffer/styles/hover.css"></style>
-<style src="src/TrackObjects/buffer/styles/visibility.css"></style>
-<style src="src/TrackObjects/buffer/styles/transform.css"></style>
+<style src="src/TrackObjects/buffer/styles/focus.css">
+</style>
+<style src="src/TrackObjects/buffer/styles/hover.css">
+</style>
+<style src="src/TrackObjects/buffer/styles/visibility.css">
+</style>
+<style src="src/TrackObjects/buffer/styles/transform.css">
+</style>
 <!-- Track > cluster -->
-<style src="src/TrackObjects/cluster/styles/focus.css"></style>
-<style src="src/TrackObjects/cluster/styles/hover.css"></style>
-<style src="src/TrackObjects/cluster/styles/visibility.css"></style>
+<style src="src/TrackObjects/cluster/styles/focus.css">
+</style>
+<style src="src/TrackObjects/cluster/styles/hover.css">
+</style>
+<style src="src/TrackObjects/cluster/styles/visibility.css">
+</style>
 <!-- Track > group -->
-<style src="src/TrackObjects/group/styles/focus.css"></style>
-<style src="src/TrackObjects/group/styles/hover.css"></style>
-<style src="src/TrackObjects/group/styles/visibility.css"></style>
+<style src="src/TrackObjects/group/styles/focus.css">
+</style>
+<style src="src/TrackObjects/group/styles/hover.css">
+</style>
+<style src="src/TrackObjects/group/styles/visibility.css">
+</style>
 <!-- Track > mtl -->
-<style src="src/TrackObjects/mtl/styles/focus.css"></style>
-<style src="src/TrackObjects/mtl/styles/hover.css"></style>
-<style src="src/TrackObjects/mtl/styles/visibility.css"></style>
-<style src="src/TrackObjects/mtl/styles/transform.css"></style>
+<style src="src/TrackObjects/mtl/styles/focus.css">
+</style>
+<style src="src/TrackObjects/mtl/styles/hover.css">
+</style>
+<style src="src/TrackObjects/mtl/styles/visibility.css">
+</style>
+<style src="src/TrackObjects/mtl/styles/transform.css">
+</style>
 <!-- Track > point -->
-<style src="src/TrackObjects/point/styles/focus.css"></style>
-<style src="src/TrackObjects/point/styles/hover.css"></style>
-<style src="src/TrackObjects/point/styles/visibility.css"></style>
-<style src="src/TrackObjects/point/styles/transform.css"></style>
+<style src="src/TrackObjects/point/styles/focus.css">
+</style>
+<style src="src/TrackObjects/point/styles/hover.css">
+</style>
+<style src="src/TrackObjects/point/styles/visibility.css">
+</style>
+<style src="src/TrackObjects/point/styles/transform.css">
+</style>
 <!-- Track > segment -->
-<style src="src/TrackObjects/segment/styles/focus.css"></style>
-<style src="src/TrackObjects/segment/styles/hover.css"></style>
-<style src="src/TrackObjects/segment/styles/visibility.css"></style>
+<style src="src/TrackObjects/segment/styles/focus.css">
+</style>
+<style src="src/TrackObjects/segment/styles/hover.css">
+</style>
+<style src="src/TrackObjects/segment/styles/visibility.css">
+</style>
 <!-- Track > station -->
-<style src="src/TrackObjects/station/styles/focus.css"></style>
-<style src="src/TrackObjects/station/styles/hover.css"></style>
-<style src="src/TrackObjects/station/styles/visibility.css"></style>
-<style src="src/TrackObjects/station/styles/transform.css"></style>
+<style src="src/TrackObjects/station/styles/focus.css">
+</style>
+<style src="src/TrackObjects/station/styles/hover.css">
+</style>
+<style src="src/TrackObjects/station/styles/visibility.css">
+</style>
+<style src="src/TrackObjects/station/styles/transform.css">
+</style>
 <!-- Track > vehicle -->
-<style src="src/TrackObjects/vehicle/styles/focus.css"></style>
-<style src="src/TrackObjects/vehicle/styles/hover.css"></style>
-<style src="src/TrackObjects/vehicle/styles/visibility.css"></style>
+<style src="src/TrackObjects/vehicle/styles/focus.css">
+</style>
+<style src="src/TrackObjects/vehicle/styles/hover.css">
+</style>
+<style src="src/TrackObjects/vehicle/styles/visibility.css">
+</style>
 <!-- Track > zcu -->
-<style src="src/TrackObjects/zcu/styles/focus.css"></style>
-<style src="src/TrackObjects/zcu/styles/hover.css"></style>
-<style src="src/TrackObjects/zcu/styles/visibility.css"></style>
-<style src="src/TrackObjects/zcu/styles/transform.css"></style>
+<style src="src/TrackObjects/zcu/styles/focus.css">
+</style>
+<style src="src/TrackObjects/zcu/styles/hover.css">
+</style>
+<style src="src/TrackObjects/zcu/styles/visibility.css">
+</style>
+<style src="src/TrackObjects/zcu/styles/transform.css">
+</style>
 <!-- Track > Fireshutter -->
-<style src="src/TrackObjects/fireshutter/styles/focus.css"></style>
-<style src="src/TrackObjects/fireshutter/styles/hover.css"></style>
-<style src="src/TrackObjects/fireshutter/styles/visibility.css"></style>
-<style src="src/TrackObjects/fireshutter/styles/transform.css"></style>
+<style src="src/TrackObjects/fireshutter/styles/focus.css">
+</style>
+<style src="src/TrackObjects/fireshutter/styles/hover.css">
+</style>
+<style src="src/TrackObjects/fireshutter/styles/visibility.css">
+</style>
+<style src="src/TrackObjects/fireshutter/styles/transform.css">
+</style>
 
 <!-- Common -->
-<style src="src/styles/sheets/utility.css"></style>
-<style src="src/styles/sheets/invert.css"></style>
-<style src="src/styles/sheets/fixed-scale.css"></style>
+<style src="src/styles/sheets/utility.css">
+</style>
+<style src="src/styles/sheets/invert.css">
+</style>
+<style src="src/styles/sheets/fixed-scale.css">
+</style>
 <!-- Plan B -->
 <!-- https://stackoverflow.com/questions/69797635/how-do-i-create-a-vue-3-custom-element-including-child-component-styles -->

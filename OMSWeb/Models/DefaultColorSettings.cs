@@ -15,9 +15,19 @@ namespace OMSWeb.Models
     public string? NormalSegmentColor { get; set; }
     public string? DisabledSegmentColor { get; set; }
     public string? SegmentDirectionColor { get; set; }
-    public string? AutoModeVehicleColor { get; set; }
+
+    #region chjs visual start
+    public string? DisconnectModeVehicleColor { get; set; }
+    public string? ErrorModeVehicleColor { get; set; }
+    public string? MaintenanceModeVehicleColor { get; set; }
     public string? ManualModeVehicleColor { get; set; }
-    public string? NoneModeVehicleColor { get; set; }
+    public string? IdleModeVehicleColor { get; set; }
+    public string? HomeIvrModeVehicleColor { get; set; }
+    public string? RunningModeVehicleColor { get; set; }
+    public string? ZcuBlockedVehicleColor { get; set; }
+    public string? SensorStoppedVehicleColor { get; set; }
+    #endregion
+
     public string? CargoLoadingColor { get; set; }
     public string? CargoFullColor { get; set; }
     public string? CargoUnloadingColor { get; set; }

@@ -8,6 +8,7 @@ function addOrderInfoToCurrenVehicle(
 	if (order) {
 		vehicle.locationPickup = order.locationPickup
 		vehicle.locationDropoff = order.locationDropoff
+    vehicle.locationMove = order.locationMove
 	}
 	return vehicle
 }
