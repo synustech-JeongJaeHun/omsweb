@@ -215,8 +215,15 @@ namespace OMSWeb.Repositories
         --*user_id_condition*--WHERE user_id =@userId
       "},
       {"mtl", @"
-        SELECT id, physical_id, logical_id AS logical_id, point AS point_id, in_direction, out_direction, 
-                '' AS in_lock_segment, '' AS out_lock_segment, unuse
+        SELECT id, 
+                CASE 
+                    WHEN physical_id is null THEN cast(id as varchar) ELSE physical_id 
+                END as physical_id, 
+                logical_id AS logical_id, point AS point_id, in_direction, out_direction, 
+                '' AS in_lock_segment, '' AS out_lock_segment, 
+                CASE 
+                    WHEN unuse is null THEN true ELSE unuse 
+                END as unuse 
         FROM mtls
         --*user_id_condition*--WHERE user_id =@userId
       "},
