@@ -129,14 +129,14 @@
                   [format]="dateTimeFormat"></dxi-column>
       <dxi-column [width]="120" dataType="datetime" dataField="timeFailed" [caption]="'names.timeFailed' | translate"
                   [format]="dateTimeFormat"></dxi-column>
-      <!--
-  <dxi-column [width]="120" dataType="number" dataField="age" [caption]="'names.age' | translate"
-              cellTemplate="ageTemplate"></dxi-column>
-  <div *dxTemplate="let data of 'ageTemplate'">
-    {{ data.displayValue / 60 | number: "1.1-2" }}
-  </div>
-    -->
-      <dxi-column [width]="120" dataType="number" dataField="age" [caption]="'names.ageSecond' | translate"></dxi-column>
+      <dxi-column [width]="120" dataType="number" dataField="age" [caption]="'names.age' | translate"
+                  cellTemplate="ageTemplate"></dxi-column>
+      <div *dxTemplate="let data of 'ageTemplate'">
+        {{ data.displayValue / 3600 | number: "2.0-0" }}:{{ (data.displayValue % 3600) / 60 | number: "2.0-0" }}:{{ data.displayValue % 60 | number: "2.0-0" }}
+      </div>
+      <!--div *dxTemplate="let data of 'ageTemplate'">
+        {{ data.displayValue / 60 | number: "1.1-2" }}
+      /div>-->
 
       <!--
   <dxi-column [width]="120" dataType="number" dataField="loadRetryCnt"

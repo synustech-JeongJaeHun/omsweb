@@ -61,12 +61,16 @@
   <dxi-column [width]="120" dataType="number" dataField="age" [caption]="'names.age' | translate"
     cellTemplate="ageTemplate"></dxi-column>
     -->
-      <dxi-column [width]="120" dataType="number" dataField="age" [caption]="'names.ageSecond' | translate"></dxi-column>
+      <dxi-column [width]="120" dataType="number" dataField="age" [caption]="'names.ageSecond' | translate"
+                 cellTemplate="ageTemplate"></dxi-column>
       <dxi-column [width]="120" dataType="number" dataField="current" [caption]="'names.current' | translate">
       </dxi-column>
       <div *dxTemplate="let data of 'ageTemplate'">
-        {{ data.displayValue / 60 | number: "1.1-2" }}
+        {{ data.displayValue / 3600 | number: "2.0-0" }}:{{ (data.displayValue % 3600) / 60 | number: "2.0-0" }}:{{ data.displayValue % 60 | number: "2.0-0" }}
       </div>
+      <!--div *dxTemplate="let data of 'ageTemplate'">
+        {{ data.displayValue / 60 | number: "1.1-2" }}
+      </div>-->
       <div *dxTemplate="let data of 'levelTemplate'">
         <ng-container [ngSwitch]="data.displayValue">
           <div class="level0" *ngSwitchCase="0">Low</div>
