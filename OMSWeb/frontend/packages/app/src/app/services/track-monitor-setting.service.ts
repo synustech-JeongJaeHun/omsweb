@@ -147,11 +147,11 @@ const DefaultTrackMonitorSetting: TrackMonitorSetting = {
     errorModeVehicleColor: '#FF3838',
     maintenanceModeVehicleColor: '#5C666D',
     manualModeVehicleColor: '#5C666D',
-    idleModeVehicleColor: '#2DCCFF',
+    idleModeVehicleColor: '#FCE83A',
     homeIvrModeVehicleColor: '#FFB302',
     runningModeVehicleColor: '#51E400',
-    zcuBlockedVehicleColor: '#FCE83A',
-    sensorStoppedVehicleColor: '#FCE83A',
+    zcuBlockedVehicleColor: '#2DCCFF',
+    sensorStoppedVehicleColor: '#2DCCFF',
 	// chjs visual end
 
 	cargoLoadingColor: 'rgba(0, 0, 205, 1)',

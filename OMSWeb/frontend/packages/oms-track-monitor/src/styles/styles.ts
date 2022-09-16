@@ -55,11 +55,11 @@ const ColorDefault: Record<ColorProperty, string> = {
   errorModeVehicleColor: '#FF3838',
   maintenanceModeVehicleColor: '#5C666D',
   manualModeVehicleColor: '#5C666D',
-  idleModeVehicleColor: '#2DCCFF',
+  idleModeVehicleColor: '#FCE83A',
   homeIvrModeVehicleColor: '#FFB302',
   runningModeVehicleColor: '#51E400',
-  zcuBlockedVehicleColor: '#FCE83A',
-  sensorStoppedVehicleColor: '#FCE83A',
+  zcuBlockedVehicleColor: '#2DCCFF',
+  sensorStoppedVehicleColor: '#2DCCFF',
   // chjs visual end
 
   cargoLoading: 'rgb(0, 0, 205)',
