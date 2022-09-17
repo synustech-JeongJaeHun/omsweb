@@ -55,16 +55,25 @@
       <dxi-column [width]="120" dataType="string" dataField="physicalId" [caption]="'names.id' | translate"></dxi-column>
       <dxi-column [width]="120" dataType="string" dataField="logicalId" [caption]="'names.logicalId' | translate">
       </dxi-column>
-      <dxi-column [allowFiltering]="true" [width]="120" dataType="number" dataField="distanceTotal"
-                  [caption]="'names.distanceTotal' | translate"></dxi-column>
-      <dxi-column [allowFiltering]="true" [width]="120" dataType="number" dataField="runtimeTotal"
-                  [caption]="'names.runtimeTotal' | translate"></dxi-column>
+      <dxi-column [allowFiltering]="true" [width]="180" dataType="number" dataField="distanceTotal" [caption]="'names.distanceTotal' | translate"
+                  cellTemplate="distanceTotalTemplate"></dxi-column>
+      <dxi-column [allowFiltering]="true" [width]="180" dataType="number" dataField="runtimeTotal" [caption]="'names.runtimeTotal' | translate"
+                  cellTemplate="runtimeTotalTemplate"></dxi-column>
+      <dxi-column [width]="120" dataType="string"
+                  [caption]=""></dxi-column>
+      <div *dxTemplate="let data of 'distanceTotalTemplate'">
+        {{ data.displayValue / 1000000 | number: "1.0-0" }}km
+      </div>
+      <div *dxTemplate="let data of 'runtimeTotalTemplate'">
+        {{ data.displayValue / (3600 * 24) | number: "1.0-0" }}d  
+        {{ (data.displayValue % (3600 * 24)) / 3600 | number: "2.0-1" }}h
+      </div>
       <!--
-      <dxi-column [allowFiltering]="true" [width]="120" dataType="string" dataField="type"
-                  [caption]="'names.type' | translate"></dxi-column>
-      <dxi-column [allowFiltering]="true" [width]="120" dataType="string" dataField="mapDb"
-                  [caption]="'names.mapDb' | translate"></dxi-column>
-        -->
+  <dxi-column [allowFiltering]="true" [width]="120" dataType="string" dataField="type"
+              [caption]="'names.type' | translate"></dxi-column>
+  <dxi-column [allowFiltering]="true" [width]="120" dataType="string" dataField="mapDb"
+              [caption]="'names.mapDb' | translate"></dxi-column>
+    -->
     </dx-data-grid>
   </div>
 </div>

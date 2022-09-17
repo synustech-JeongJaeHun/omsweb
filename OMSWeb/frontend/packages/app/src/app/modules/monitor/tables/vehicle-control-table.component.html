@@ -99,7 +99,7 @@
   <!-- LocationMove 추가 -->
   <!-- Total Runtime 추가 -->
   <dxi-column [allowFiltering]="true" [width]="80" dataType="string" dataField="runtimeTotal" [allowSorting]="true"
-              [caption]="'names.runtimeTotal' | translate" *ngIf="canDisplayTable('vehicles_runtimeTotal')"></dxi-column>
+              [caption]="'names.runtimeTotal' | translate" cellTemplate="runtimeTotalTemplate" *ngIf="canDisplayTable('vehicles_runtimeTotal')"></dxi-column>
   <!-- Total Runtime 추가 -->
   <dxi-column [width]="80" dataType="string" dataField="movingState" [allowSorting]="false" cellTemplate="movingStateTemplate"
               [caption]="'names.movingState' | translate" *ngIf="canDisplayTable('vehicles_movingState')"></dxi-column>
@@ -121,7 +121,7 @@
               [caption]="'names.blocked' | translate" *ngIf="canDisplayTable('vehicles_blocked')"></dxi-column>
   <!-- Blocked 추가 -->
   <dxi-column [allowFiltering]="true" [width]="80" dataType="number" dataField="distanceTotal" [allowSorting]="true"
-              [caption]="'names.distanceTotal' | translate" *ngIf="canDisplayTable('vehicles_distanceTotal')"></dxi-column>
+              [caption]="'names.distanceTotal' | translate" cellTemplate="distanceTotalTemplate" *ngIf="canDisplayTable('vehicles_distanceTotal')"></dxi-column>
   <!-- MapDB 추가 -->
   <dxi-column [allowFiltering]="true" [width]="90" dataType="string" dataField="mapDb" [allowSorting]="true"
               [caption]="'names.mapDb' | translate" *ngIf="canDisplayTable('vehicles_mapDb')"></dxi-column>
@@ -153,5 +153,11 @@
       <div class="value" *ngSwitchDefault>{{ data.displayValue }}</div>
     </div>
   </div>
-
+  <div *dxTemplate="let data of 'distanceTotalTemplate'">
+    {{ data.displayValue / 1000000 | number: "1.0-0" }}km
+  </div>
+  <div *dxTemplate="let data of 'runtimeTotalTemplate'">
+    {{ data.displayValue / (3600 * 24) | number: "1.0-0" }}d
+    {{ (data.displayValue % (3600 * 24)) / 3600 | number: "2.0-1" }}h
+  </div>
 </dx-data-grid>

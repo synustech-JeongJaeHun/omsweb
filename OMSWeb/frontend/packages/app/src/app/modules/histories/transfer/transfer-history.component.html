@@ -163,20 +163,20 @@
         {{ data.displayValue / 1000 | number }}
       </div>
       <!-- <div *dxTemplate="let data of 'orderStatusTemplate'">
-  {{ data.displayValue | translate }}
-  </div>
-  <div *dxTemplate="let data of 'dateTimeTemplate'">
-    {{ data.displayValue | date: "yyyy/MM/dd hh:mm:ss" }}
+        {{ data.displayValue | translate }}
+      </div>
+      <div *dxTemplate="let data of 'dateTimeTemplate'">
+        {{ data.displayValue | date: "yyyy/MM/dd hh:mm:ss" }}
 
-    <div *ngIf="!data.displayValue.startsWith('0001'); else elseBlock">
-      {{ data.displayValue | date: "yyyy/MM/dd hh:mm:ss" }}
-    </div>
-    <ng-template #elseBlock>-</ng-template>
-  </div>
-  <div *dxTemplate="let data of 'booleanTemplate'">
-    {{ data.text }}
-  </div>
-  -->
+        <div *ngIf="!data.displayValue.startsWith('0001'); else elseBlock">
+          {{ data.displayValue | date: "yyyy/MM/dd hh:mm:ss" }}
+        </div>
+        <ng-template #elseBlock>-</ng-template>
+      </div>
+      <div *dxTemplate="let data of 'booleanTemplate'">
+        {{ data.text }}
+      </div>
+      -->
     </dx-data-grid>
   </div>
 </div>
