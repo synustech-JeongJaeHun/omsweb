@@ -28,7 +28,8 @@ export class AlternateTransferSettingComponent {
     private destroy$ = new Subject<void>()
 
     public mode: string = 'stk';
-    public retryCntToSTB: number
+    public retryCntToSTB: number;
+    public retryToNearStocker: boolean;
 
     private settingAlternateTransfer: ISettingsAlternateTransfer;
     private settingAlternateStations: ISettingsAlternateStation[];
@@ -64,6 +65,7 @@ export class AlternateTransferSettingComponent {
     get isUpdated(): boolean {
         if (this.settingAlternateTransfer?.mode !== this.mode) return true;
         if (parseInt(this.settingAlternateTransfer?.maxRetryToBuffer.toString()) !== this.retryCntToSTB) return true;
+        if (this.settingAlternateTransfer?.retryToNearStocker !== this.retryToNearStocker) return true;
         if (this.settingAlternateTransfer?.stationList !== this.chosenStks) return true;
         if (this.priorityChanged) return true;
           
@@ -90,6 +92,7 @@ export class AlternateTransferSettingComponent {
 
             this.mode = res.mode.toString();
             this.retryCntToSTB = parseInt(res.maxRetryToBuffer.toString());
+            this.retryToNearStocker = res.retryToNearStocker;
             this.chosenStks = res.stationList;
           }),
         )
@@ -142,6 +145,7 @@ export class AlternateTransferSettingComponent {
 
         this.mode = 'stk'
         this.retryCntToSTB = 0
+        this.retryToNearStocker = false
         this.candidateStks = []
         this.selectedCandidateStks = []
         this.chosenStks = []
@@ -161,6 +165,7 @@ export class AlternateTransferSettingComponent {
             .updateAlternateTransfer(
                 this.mode,
                 this.retryCntToSTB.toString(),
+                this.retryToNearStocker.toString(),
                 ids,
             )
             .subscribe((res) => {

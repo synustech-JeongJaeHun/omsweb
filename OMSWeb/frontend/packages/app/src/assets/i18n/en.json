@@ -470,7 +470,8 @@
     "VehicleModeNoneBgColor": "None Background",
     "VehicleCargoStatusLoadingColor": "Loading Color",
     "VehicleCargoStatusFullColor": "Full Color",
-    "VehicleCargoStatusUnloadingColor": "Unloading Color"
+    "VehicleCargoStatusUnloadingColor": "Unloading Color",
+    "retryToNearStocker": "Retry To Near Stocker"
   },
   "enums": {
     "hostSessionStatus": {

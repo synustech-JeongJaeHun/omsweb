@@ -352,6 +352,7 @@ export interface ISettingsClusterPoint {
 export interface ISettingsAlternateTransfer {
   mode: string
   maxRetryToBuffer: number
+  retryToNearStocker: boolean
   stationList?: any[]
 }
 

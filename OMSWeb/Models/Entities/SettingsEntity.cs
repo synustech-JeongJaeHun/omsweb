@@ -142,6 +142,7 @@ namespace OMSWeb.Models.Entities
     {
         public string Mode { get; set; }
         public int MaxRetryToBuffer { get; set; }
+        public bool retryToNearStocker { get; set; }
         public AlternateStationEntity[] StationList { get; set; }
     }
 

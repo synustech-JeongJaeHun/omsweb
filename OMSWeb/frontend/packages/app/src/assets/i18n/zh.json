@@ -470,7 +470,8 @@
     "VehicleModeNoneBgColor": "无背景",
     "VehicleCargoStatusLoadingColor": "装载颜色",
     "VehicleCargoStatusFullColor": "全色",
-    "VehicleCargoStatusUnloadingColor": "卸载颜色"
+    "VehicleCargoStatusUnloadingColor": "卸载颜色",
+    "retryToNearStocker": "Retry To Near Stocker"
   },
   "enums": {
     "hostSessionStatus": {

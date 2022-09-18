@@ -470,7 +470,8 @@
     "VehicleModeNoneBgColor": "배경 없음",
     "VehicleCargoStatusLoadingColor": "로드중 색상",
     "VehicleCargoStatusFullColor": "풀 상태 색상",
-    "VehicleCargoStatusUnloadingColor": "언로드중 색상"
+    "VehicleCargoStatusUnloadingColor": "언로드중 색상",
+    "retryToNearStocker": "Retry To Near Stocker"
   },
   "enums": {
     "hostSessionStatus": {

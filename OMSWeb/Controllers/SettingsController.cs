@@ -13,6 +13,7 @@ using OMSWeb.Repositories;
 using OMSWeb.Services;
 using System.Configuration;
 using OMSWeb.OMSSettings;
+using OMSWeb.Logger;
 
 namespace OMSWeb.Controllers
 {
@@ -48,6 +49,9 @@ namespace OMSWeb.Controllers
             AppConfig.UpdateToOMSConfig("VehicleProcessor", "use_go_home", bHomeMode.ToString());
             AppConfig.UpdateToOMSConfig("VehicleProcessor", "use_ivr", bIvrMode.ToString());
 
+            Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: ACTION_SETTING_HOME_IVR_NONE");
+            Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, "PACKET: use_go_home={0}, use_ivr={1}", home_mode, ivr_mode);
+
             return Ok(new QueryResult()
             {
                 Retcode = (int)RET_CODE.Success,
@@ -76,43 +80,59 @@ namespace OMSWeb.Controllers
             });
         }
 
-        [HttpPost("updateAlternateTransfer/{mode}&{retryTostb}&{stations}")]
-        public ActionResult<QueryResult> UpdateAlternateTransfer(string mode, string retryTostb, string stations)
+        [HttpPost("updateAlternateTransfer/{mode}&{retryTostb}&{retryToNearStocker}&{stations}")]
+        public ActionResult<QueryResult> UpdateAlternateTransfer(string mode, string retryTostb, string retryToNearStocker, string stations)
         {
-            if (!string.IsNullOrEmpty(mode))
+            try
             {
-                string value = "station";
-                string s = mode.ToLower().Trim();
-                if (s.Contains("stb") || s.Contains("buffer")) value = "buffer";
-                if (s.Contains("stk") || s.Contains("stocker") || s.Contains("station")) value = "station";
-
-                AppConfig.UpdateToOMSConfig("TimeoutTransfer", "dest_type", value);
-            }
-
-            {
-                int retryCnt = Convert.ToInt32(retryTostb);
-                if (retryCnt < 0) retryCnt = 0;
-                if (retryCnt > 10) retryCnt = 10;
-                string value = retryCnt.ToString();
-
-                AppConfig.UpdateToOMSConfig("TimeoutTransfer", "retry_cnt_to_buffer", value);
-            }
-
-            if (!string.IsNullOrEmpty(stations))
-            {
-                string value = string.Empty;
-                string[] Ids = stations.Split(";");
-                if (Ids != null)
+                if (!string.IsNullOrEmpty(mode))
                 {
-                    foreach (string Id in Ids)
-                    {
-                        if (!string.IsNullOrEmpty(Id))
-                            value += "s" + Id + ";";
-                    }
+                    string value = "station";
+                    string s = mode.ToLower().Trim();
+                    if (s.Contains("stb") || s.Contains("buffer")) value = "buffer";
+                    if (s.Contains("stk") || s.Contains("stocker") || s.Contains("station")) value = "station";
+
+                    AppConfig.UpdateToOMSConfig("TimeoutTransfer", "dest_type", value);
                 }
 
-                AppConfig.UpdateToOMSConfig("TimeoutTransfer", "stocker_list", value);
+                {
+                    int retryCnt = Convert.ToInt32(retryTostb);
+                    if (retryCnt < 0) retryCnt = 0;
+                    if (retryCnt > 10) retryCnt = 10;
+                    string value = retryCnt.ToString();
+
+                    AppConfig.UpdateToOMSConfig("TimeoutTransfer", "retry_cnt_to_buffer", value);
+                }
+
+                {
+                    bool bUseNearOrderSTK = Convert.ToBoolean(retryToNearStocker);
+                    string value = bUseNearOrderSTK.ToString();
+
+                    AppConfig.UpdateToOMSConfig("TimeoutTransfer", "retry_to_near_stocker", value);
+                }
+
+                if (!string.IsNullOrEmpty(stations))
+                {
+                    string value = string.Empty;
+                    string[] Ids = stations.Split(";");
+                    if (Ids != null)
+                    {
+                        foreach (string Id in Ids)
+                        {
+                            if (!string.IsNullOrEmpty(Id))
+                                value += "s" + Id + ";";
+                        }
+                    }
+
+                    AppConfig.UpdateToOMSConfig("TimeoutTransfer", "stocker_list", value);
+                }
             }
+            catch (Exception e)
+            {
+            }
+
+            Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: ACTION_SETTING_ALTERNATE_TRANSFER");
+            Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, "PACKET: mode={0}, retryTostb={1}, retryToNearStocker={2}, stations={3}", mode, retryTostb, retryToNearStocker, stations);
 
             return Ok(new QueryResult()
                 {
@@ -126,42 +146,63 @@ namespace OMSWeb.Controllers
         {
             string strMode = AppConfig.GetFromOMSConfig("TimeoutTransfer", "dest_type", "stk");
             string retryToBuffer = AppConfig.GetFromOMSConfig("TimeoutTransfer", "retry_cnt_to_buffer", "3");
+            string retryToNearStocker = AppConfig.GetFromOMSConfig("TimeoutTransfer", "retry_to_near_stocker", "false");
             string stockList = AppConfig.GetFromOMSConfig("TimeoutTransfer", "stocker_list", "");
 
-            string c = strMode.ToLower();
-            if (!string.IsNullOrWhiteSpace(c))
-            {
-                if (c.Contains("buffer") || c.Contains("stb"))  strMode = @"stb";
-                if (c.Contains("station") || c.Contains("stocker") || c.Contains("stk"))  strMode = @"stk";
-            }
-
             List<AlternateStationEntity> alternateStationEntity = new List<AlternateStationEntity>();
-            string[] stations = stockList.Split(";");
-            if (stations != null)
+            try
             {
-                foreach (string s in stations)
+                string smode = strMode.ToLower();
+                if (!string.IsNullOrWhiteSpace(smode))
                 {
-                    if (!string.IsNullOrEmpty(s))
+                    if (smode.Contains("buffer") || smode.Contains("stb")) strMode = @"stb";
+                    if (smode.Contains("station") || smode.Contains("stocker") || smode.Contains("stk")) strMode = @"stk";
+                }
+
+                // retryToBuffer
+                int rtb = 0;
+                try { rtb = Convert.ToInt32(retryToBuffer); } catch (Exception e) { rtb = 0; }
+                if (rtb < 0) rtb = 0;
+                if (rtb > 10) rtb = 10;
+                retryToBuffer = rtb.ToString();
+
+                // retryToNearStocker
+                bool rts = false;
+                try { rts = Convert.ToBoolean(retryToNearStocker); } catch (Exception e) { rts = false; }
+                retryToNearStocker = rts.ToString();
+
+                // stocker list
+                string[] stations = stockList.Split(";");
+                if (stations != null)
+                {
+                    foreach (string s in stations)
                     {
-                        string sId = s.Replace('s', ' ').Trim();
-                        if (!string.IsNullOrEmpty(sId))
+                        if (!string.IsNullOrEmpty(s))
                         {
-                            string sLogicalId = _settingsSvc.GetSettingsOnlineName(sId, "station");
-                            alternateStationEntity.Add(
-                                new AlternateStationEntity()
-                                {
-                                    Id = sId,
-                                    logicalId = sLogicalId
-                                });
+                            string sId = s.Replace('s', ' ').Trim();
+                            if (!string.IsNullOrEmpty(sId))
+                            {
+                                string sLogicalId = _settingsSvc.GetSettingsOnlineName(sId, "station");
+                                alternateStationEntity.Add(
+                                    new AlternateStationEntity()
+                                    {
+                                        Id = sId,
+                                        logicalId = sLogicalId
+                                    });
+                            }
                         }
                     }
                 }
+            }
+            catch (Exception e)
+            {
             }
 
             return Ok(new AlternateTransferEntity()
             {
                 Mode = strMode,
                 MaxRetryToBuffer = Convert.ToInt32(retryToBuffer),
+                retryToNearStocker = Convert.ToBoolean(retryToNearStocker),
                 StationList = alternateStationEntity.ToArray(),
             });
         }
