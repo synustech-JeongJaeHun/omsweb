@@ -88,11 +88,13 @@ namespace OMSWeb.Services
             }
             else if (sourceType == SourceType.VEHICLE)
             {
+                /*
                 if (!VEHICLE_IsHostOrderEnable(SourceName))
                 {
                     HCACK = MCS_HCACK.NotAbleToExcute;
                 }
-                else if (!VEHICLE_Has_a_Carrier(SourceName))
+                else if (!VEHICLE_Has_a_Carrier(SourceName))*/
+                if (!VEHICLE_Has_a_Carrier(SourceName))
                 {
                     CPNAME = "CARRIERID";
                     CPACK = (int)MCS_HCACK.NotAbleToExcute;
