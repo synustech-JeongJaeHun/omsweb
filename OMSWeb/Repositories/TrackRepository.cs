@@ -741,11 +741,53 @@ namespace OMSWeb.Repositories
                 }
                 catch (System.Exception)
                 {
-                    Console.WriteLine("[QueryCanUpdateOrder] => null");
+                    Console.WriteLine("[IsBranchPoint] => null");
                     count = 0;
                 }
             }
             if (count > 1)  // if 2, the point is branch start
+                result = true;
+
+            return result;
+        }
+
+        public Boolean IsHomeInterlockPoint(int pointId)
+        {
+            Boolean result = false;
+            int count = 0;
+
+            using (var conn = ConnectTrack())
+            {
+                try
+                {
+                    // 1. get segment id
+                    string sql = $@"SELECT id FROM segments WHERE end_point={pointId}";
+                    int segment_id = conn.QueryFirst<int>(sql);
+
+                    // 2. get start_point on segment parts is 1, STRAIGHT segment)
+                    sql = $@"SELECT count(*) FROM segment_parts WHERE segment_id={segment_id}";
+                    int segparts_count = conn.QueryFirst<int>(sql);
+
+                    if (segparts_count == 1)
+                    {
+                        sql = $@"SELECT SG.start_point FROM segments as SG LEFT JOIN segment_parts as SP ON SG.id = SP.segment_id AND SP.type = 'D'
+                                 WHERE SG.end_point={pointId} ";
+                        int start_point = conn.QueryFirst<int>(sql);
+
+                        // 3. check if start_point is branch point --> means the pointId is on straiht branch segment's end
+                        sql = $@"SELECT count(*) FROM segments WHERE start_point={start_point}";
+                        count = conn.QueryFirst<int>(sql);
+                    }
+
+                }
+                catch (System.Exception)
+                {
+                    Console.WriteLine("[IsHomeInterlockPoint] => null");
+                    count = 0;
+                }
+            }
+
+            if (count > 1)  
                 result = true;
 
             return result;

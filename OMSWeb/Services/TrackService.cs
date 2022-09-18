@@ -172,7 +172,8 @@ namespace OMSWeb.Services
                 Message = string.Empty,
             };
 
-            bool res = this._trackRepo.IsBranchPoint(pointId);
+            bool res = this._trackRepo.IsHomeInterlockPoint(pointId);
+            //bool res = this._trackRepo.IsBranchPoint(pointId);
 
             queryResult.Retcode = res ? 1 : 0;
 
