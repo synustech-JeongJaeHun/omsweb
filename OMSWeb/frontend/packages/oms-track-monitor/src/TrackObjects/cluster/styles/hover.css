@@ -2,6 +2,6 @@
   filter: drop-shadow(0 0 var(--filter-size) var(--hover-color-solid));
 }
 
-#cluster-layer .cluster[data-focused='true'] {
+#cps-layer .cps:hover {
   filter: drop-shadow(0 0 var(--filter-size) var(--hover-color-solid));
 }

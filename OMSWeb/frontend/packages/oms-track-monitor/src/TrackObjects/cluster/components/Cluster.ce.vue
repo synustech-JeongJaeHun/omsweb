@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { computed, toRef } from 'vue';
+import { computed } from 'vue';
 import { Cluster } from '../types/Cluster';
 import { getClusterColorWithAlpha } from '../utils/color';
-import { useClusterState } from '../clusterStates'
 
 const props = defineProps<{
   cluster: Cluster
@@ -10,23 +9,7 @@ const props = defineProps<{
   onMouseleave: Function
 }>()
 
-const clusterState = useClusterState(toRef(props.cluster, 'id'))
-
-const color = computed(() => {
-  const clusterColor = getClusterColorWithAlpha(props.cluster.color)
-
-  switch (clusterState.value) {
-    case 2: // Fault
-      return 'red';
-    case 3: // Warning
-      return 'yellow';
-    case 4: // Fail-Over Opertaion
-      return 'grey'
-    default:
-      return clusterColor;
-  }
-})
-
+const color = computed(() => getClusterColorWithAlpha(props.cluster.color))
 </script>
 
 <template>

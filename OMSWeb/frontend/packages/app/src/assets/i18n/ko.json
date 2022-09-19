@@ -168,6 +168,7 @@
     "showZcus": "ZCU",
     "showGroups": "그룹",
     "showClusters": "클러스터",
+    "showCpss": "CPS",
     "showFireshutters": "방화벽",
     "showMtls": "MTL",
     "showOverlaps": "개체 겹침",

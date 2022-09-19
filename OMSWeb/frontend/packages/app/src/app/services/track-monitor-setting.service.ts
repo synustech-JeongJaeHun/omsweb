@@ -25,6 +25,7 @@ type VisibilityChangedEvent = {
 		| 'isZcuVisible'
 		| 'isGroupVisible'
 		| 'isClusterVisible'
+		| 'isCpsVisible'
 		| 'isFireshutterVisible'
 		| 'isMtlVisible'
 		| 'isOverlappingObjectsVisible'
@@ -47,10 +48,10 @@ type ColorChangedEvent = {
 		| 'maintenanceModeVehicleColor'
 		| 'manualModeVehicleColor'
 		| 'idleModeVehicleColor'
-    | 'homeIvrModeVehicleColor'
-    | 'runningModeVehicleColor'
-    | 'zcuBlockedVehicleColor'
-    | 'sensorStoppedVehicleColor'
+		| 'homeIvrModeVehicleColor'
+		| 'runningModeVehicleColor'
+		| 'zcuBlockedVehicleColor'
+		| 'sensorStoppedVehicleColor'
 		| 'cargoLoadingColor'
 		| 'cargoFullColor'
 		| 'cargoUnloadingColor'
@@ -93,10 +94,10 @@ type TrackMonitorSetting = Record<
 		CameraViewBoxWidthChangedEvent['key'],
 		CameraViewBoxWidthChangedEvent['value']
 	> & {
-    vehicleSecondaryContent: "order" | "carrier"
+		vehicleSecondaryContent: 'order' | 'carrier'
 
-    colorSettingVersion?: string
-  }
+		colorSettingVersion?: string
+	}
 
 const DefaultTrackMonitorSetting: TrackMonitorSetting = {
 	// scale
@@ -126,6 +127,7 @@ const DefaultTrackMonitorSetting: TrackMonitorSetting = {
 	isZcuVisible: true,
 	isGroupVisible: true,
 	isClusterVisible: true,
+  isCpsVisible: true,
 	isFireshutterVisible: true,
 	isMtlVisible: true,
 	isOverlappingObjectsVisible: true,
@@ -143,15 +145,15 @@ const DefaultTrackMonitorSetting: TrackMonitorSetting = {
 	segmentDirectionColor: 'rgba(110, 110, 110, 1)',
 
 	// chjs visual start
-    disconnectModeVehicleColor: '#E1D7C5',
-    errorModeVehicleColor: '#FF3838',
-    maintenanceModeVehicleColor: '#5C666D',
-    manualModeVehicleColor: '#5C666D',
-    idleModeVehicleColor: '#FCE83A',
-    homeIvrModeVehicleColor: '#FFB302',
-    runningModeVehicleColor: '#51E400',
-    zcuBlockedVehicleColor: '#2DCCFF',
-    sensorStoppedVehicleColor: '#2DCCFF',
+	disconnectModeVehicleColor: '#E1D7C5',
+	errorModeVehicleColor: '#FF3838',
+	maintenanceModeVehicleColor: '#5C666D',
+	manualModeVehicleColor: '#5C666D',
+	idleModeVehicleColor: '#FCE83A',
+	homeIvrModeVehicleColor: '#FFB302',
+	runningModeVehicleColor: '#51E400',
+	zcuBlockedVehicleColor: '#2DCCFF',
+	sensorStoppedVehicleColor: '#2DCCFF',
 	// chjs visual end
 
 	cargoLoadingColor: 'rgba(0, 0, 205, 1)',
@@ -162,8 +164,8 @@ const DefaultTrackMonitorSetting: TrackMonitorSetting = {
 	mtlUnuseColor: '#f98080',
 	mtlUseColor: 'grey',
 
-  // vehicle contents
-  vehicleSecondaryContent: 'order'
+	// vehicle contents
+	vehicleSecondaryContent: 'order',
 }
 
 @Injectable({
@@ -186,33 +188,34 @@ export class TrackMonitorSettingService {
 		writeTrackSettingOnLocalStorage(this.trackSetting)
 
 		this.settingsService.loadDefaultColors().subscribe((defaultColors) => {
-      const currentVersion = (defaultColors as any).colorSettingVersion as (string | undefined);
-			if (this.trackSetting.colorSettingVersion !== currentVersion){
-        const beforeVersion = this.trackSetting.colorSettingVersion
-        Object.assign(this.trackSetting, defaultColors)
-        console.log(`INFO: Color Default Setting Changed from ${beforeVersion} to ${currentVersion}`)
-      }
+			const currentVersion = (defaultColors as any).colorSettingVersion as
+				| string
+				| undefined
+			if (this.trackSetting.colorSettingVersion !== currentVersion) {
+				const beforeVersion = this.trackSetting.colorSettingVersion
+				Object.assign(this.trackSetting, defaultColors)
+				console.log(
+					`INFO: Color Default Setting Changed from ${beforeVersion} to ${currentVersion}`,
+				)
+			}
 
 			Object.assign(DefaultTrackMonitorSetting, defaultColors)
 
 			writeTrackSettingOnLocalStorage(this.trackSetting)
 		})
 
-		this.settingsService
-			.loadVehicleOrderIdContents()
-			.subscribe((response) => {
-        const isCarrierIdTrue = response?.carrierId === true
-        const isOrderIdTrue = response?.orderId === true
-        
-        if(isCarrierIdTrue && isOrderIdTrue)
-          this.trackSetting.vehicleSecondaryContent = 'order'
-        else if(isCarrierIdTrue)
-          this.trackSetting.vehicleSecondaryContent = 'carrier'
-        else if(isOrderIdTrue)
-          this.trackSetting.vehicleSecondaryContent = 'order'
-        else
-          this.trackSetting.vehicleSecondaryContent = 'order'
-      })
+		this.settingsService.loadVehicleOrderIdContents().subscribe((response) => {
+			const isCarrierIdTrue = response?.carrierId === true
+			const isOrderIdTrue = response?.orderId === true
+
+			if (isCarrierIdTrue && isOrderIdTrue)
+				this.trackSetting.vehicleSecondaryContent = 'order'
+			else if (isCarrierIdTrue)
+				this.trackSetting.vehicleSecondaryContent = 'carrier'
+			else if (isOrderIdTrue)
+				this.trackSetting.vehicleSecondaryContent = 'order'
+			else this.trackSetting.vehicleSecondaryContent = 'order'
+		})
 	}
 
 	update = (event: ChangedEvent) => {
