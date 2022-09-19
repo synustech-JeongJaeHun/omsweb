@@ -99,13 +99,13 @@ function centerZoom() {
 	})
 }
 
-function approachTo(position: Position) {
+function approachTo(position: Position, height: number = 3000) {
 	approachIterative({
 		position: getRotatedPosition(position),
 		rotation: rotationInfo.value,
 		viewBox: {
-			width: getWidthFromHeightAndRatio(3000),
-			height: 3000, //mm
+			width: getWidthFromHeightAndRatio(height),
+			height, //mm
 		},
 	})
 }

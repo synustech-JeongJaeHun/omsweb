@@ -31,7 +31,8 @@ const color = computed(() => {
 
 <template>
   <path
-    class="cluster fixed-scale-stroke" 
+    class="cluster fixed-scale-stroke"
+    :data-focused="props.cluster.isFocused"
     fill="none"
     :stroke="color" 
     :d="props.cluster.d" 

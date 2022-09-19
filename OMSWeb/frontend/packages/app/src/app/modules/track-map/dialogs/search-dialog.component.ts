@@ -26,6 +26,7 @@ export class SearchDialogComponent {
     { key: 'buffer', value: 'Buffer' },
     { key: 'mtl', value: 'MTL' },
     { key: 'zcu', value: 'ZCU' },
+    { key: 'cluster', value: 'Cluster' },
   ];
   targets: number[];
 
@@ -50,8 +51,9 @@ export class SearchDialogComponent {
       station: this.trackStatusService.trackData.stations.map((x) => ({ id: x.id, logicalId: x.logicalId })),
       mtl: this.trackStatusService.trackData.mtls.map((x) => ({ id: x.id, logicalId: x.logicalId })),
       // distinct element because segment data is mixed with segparts
+      segment: [...new Map(this.trackStatusService.trackData.segments.map((x) => [x.id, x.logicalId]))].map((x) => ({ id: x[0], logicalId: x[1] })),
       zcu: this.trackStatusService.trackData.zcus.map((x) => ({ id: x.id, logicalId: String(x.id) })),
-      segment: [...new Map(this.trackStatusService.trackData.segments.map((x) => [x.id, x.logicalId]))].map((x) => ({ id: x[0], logicalId: x[1] }))
+      cluster: this.trackStatusService.trackData.clusters.map((x) => ({id: x.id, logicalId: String(x.id)}))
     };
   }
 
