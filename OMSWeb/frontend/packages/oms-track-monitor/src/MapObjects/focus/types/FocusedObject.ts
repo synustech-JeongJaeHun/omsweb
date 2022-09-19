@@ -6,6 +6,7 @@ import { Buffer } from 'src/TrackObjects/buffer/types/Buffer'
 import { Vehicle } from 'src/TrackObjects/vehicle/types/Vehicle'
 import { Zcu } from 'src/TrackObjects/zcu/types/Zcu'
 import { Fireshutter } from 'src/TrackObjects/fireshutter/types/Fireshutter'
+import { Cluster } from 'src/TrackObjects/cluster/types/Cluster'
 type FocusedObject =
 	| Vehicle
 	| Point
@@ -15,5 +16,6 @@ type FocusedObject =
 	| Mtl
 	| Zcu
 	| Fireshutter
+  | Cluster
 
 export { FocusedObject }

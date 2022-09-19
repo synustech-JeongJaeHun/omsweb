@@ -8,6 +8,7 @@ import { Buffer } from '../../TrackObjects/buffer/types/Buffer'
 import { UpdateDto } from '../../types/Dto'
 import { Zcu } from 'src/TrackObjects/zcu/types/Zcu'
 import { Fireshutter } from 'src/TrackObjects/fireshutter/types/Fireshutter'
+import { Cluster } from 'src/TrackObjects/cluster/types/Cluster'
 
 // also update /export-types
 interface IOmsTrackMonitor {
@@ -33,6 +34,8 @@ interface IOmsTrackMonitor {
 	find(type: 'station', id: Station['id']): void
 	find(type: 'buffer', id: Buffer['id']): void
 	find(type: 'mtl', id: Mtl['id']): void
+	find(type: 'zcu', id: Zcu['id']): void
+  find(type: "cluster", id: Cluster['id']): void
 	find(type: 'fireshutter', id: Mtl['id']): void
 	// focus
 	focus(type: 'vehicle', id: Vehicle['id']): void
@@ -42,6 +45,7 @@ interface IOmsTrackMonitor {
 	focus(type: 'buffer', id: Buffer['id']): void
 	focus(type: 'mtl', id: Mtl['id']): void
 	focus(type: 'zcu', id: Zcu['id']): void
+	focus(type: 'cluster', id: Cluster['id']): void
 	focus(type: 'fireshutter', id: Fireshutter['id']): void
 	dropFocus(): void
 

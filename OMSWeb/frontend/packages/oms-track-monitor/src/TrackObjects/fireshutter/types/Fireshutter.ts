@@ -1,3 +1,5 @@
+import { CanBeFocused } from "src/MapObjects/focus/types/CanBeFocused"
+
 type Fireshutter = {
 	id: number
 	x: number
@@ -5,6 +7,6 @@ type Fireshutter = {
 	logicalId: string
 	segments: string
 	status: number
-}
+} & CanBeFocused
 
 export { Fireshutter }

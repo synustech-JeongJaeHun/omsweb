@@ -24,7 +24,7 @@ import {
 	findSegmentById,
 	initSegments,
 } from 'src/TrackObjects/segment/segments'
-import { initClusters } from 'src/TrackObjects/cluster/clusters'
+import { findClusterById, initClusters } from 'src/TrackObjects/cluster/clusters'
 import {
 	findStationById,
 	initStations,
@@ -154,6 +154,14 @@ const exposed: IOmsTrackMonitor = {
 				const mtl = findMtlById(id)
 				if (mtl) this.find('point', mtl.pointId)
 				break
+			case 'zcu':
+				const zcu = findZcuById(id)
+				if (zcu) approachTo(zcu)
+				break
+			case 'cluster':
+				const cluster = findClusterById(id)
+				if(cluster?.centerPosition) approachTo(cluster.centerPosition, 60000)
+        break
 			case 'fireshutter':
 				break
 
@@ -204,6 +212,12 @@ const exposed: IOmsTrackMonitor = {
 				const zcu = findZcuById(id)
 				if (zcu) {
 					setFocusedObject(zcu)
+				}
+				break
+			case 'cluster':
+				const cluster = findClusterById(id)
+				if (cluster) {
+					setFocusedObject(cluster)
 				}
 				break
 			case 'fireshutter':
