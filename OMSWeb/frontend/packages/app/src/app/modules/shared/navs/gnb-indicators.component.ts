@@ -83,89 +83,47 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
     this.updateAlertCount();
   }
 
-  toggleWarnsView() {
-    if (!AccountUtil.hasPermission(PermissionEnums.ViewWarning, this.auth.currentUser)) return;
-    // this.btnWarn.togglePopover();
-    if (this._alertDlg && this._alertDlg.getState() === MatDialogState.OPEN) {
-      this._alertDlg.close();
-      return;
-    }
-
-    this._alertDlg = this.dialog.open(AlertDialogComponent, {
-      autoFocus: false,
-      hasBackdrop: false,
-      disableClose: true,
-      closeOnNavigation: true,
-      panelClass: 'alerts-dialog',
-    });
-  }
-
-  toggleAlarmsView(enforce = false) {
-    if (!AccountUtil.hasPermission(PermissionEnums.ViewAlarm, this.auth.currentUser)) return;
-    if (this._alarmDlg && this._alarmDlg.getState() === MatDialogState.OPEN) {
-      this._alarmDlg.close();
-      if (!enforce) return;
-    }
-
-    const rect: DOMRect = this.btnAlarm.nativeElement.getBoundingClientRect();
-    this._alarmDlg = this.dialog.open(AlarmDialogComponent, {
-      // width: '700px',
-      autoFocus: false,
-      hasBackdrop: false,
-      disableClose: true,
-      closeOnNavigation: true,
-      panelClass: 'alarms-dialog',
-      position: {
-        top: `${rect.top + rect.height}px`,
-        left: `${rect.left - 600}px`,
-      },
-    });
-  }
-
   private countFormat(count: number): string {
     return count.toString();
-    // if (count > 1000000) {
-    //   return `${Math.floor(count / 1000000)}M`;
-    // }
-    // if (count > 1000) {
-    //   return `${Math.floor(count / 1000)}K`;
-    // }
-    // return count.toString();
   }
 
-  showAlarmsView() {
-    if (!AccountUtil.hasPermission(PermissionEnums.ViewAlarm, this.auth.currentUser)) return;
-    if (this._alarmDlg && this._alarmDlg.getState() === MatDialogState.OPEN) {
-      return;
-    }
-
-    const rect: DOMRect = this.btnAlarm.nativeElement.getBoundingClientRect();
-    this._alarmDlg = this.dialog.open(AlarmDialogComponent, {
-      // width: '700px',
-      autoFocus: false,
-      hasBackdrop: false,
-      disableClose: true,
-      closeOnNavigation: true,
-      panelClass: 'alarms-dialog',
-      position: {
-        top: `${rect.top + rect.height}px`,
-        left: `${rect.left - 600}px`,
-      },
-    });
+  toggleAlarmsView() {
+    if (this._alarmDlg && this._alarmDlg.getState() === MatDialogState.OPEN)
+      this.showAlarmsView(false);
+    else
+      this.showAlarmsView(true);
+  }
+  toggleWarnsView() {
+    if (this._alertDlg && this._alertDlg.getState() === MatDialogState.OPEN)
+      this.showAlertView(false);
+    else
+      this.showAlertView(true);
   }
 
-  showWarnsView() {
-    if (!AccountUtil.hasPermission(PermissionEnums.ViewWarning, this.auth.currentUser)) return;
-    if (this._alertDlg && this._alertDlg.getState() === MatDialogState.OPEN) {
-      return;
-    }
+  private onAlarmChanged(event: IDataChangeEvent) {
+    this.updateAlarmCount();
+  }
 
-    this._alertDlg = this.dialog.open(AlertDialogComponent, {
-      autoFocus: false,
-      hasBackdrop: false,
-      disableClose: true,
-      closeOnNavigation: true,
-      panelClass: 'alerts-dialog',
+  private onAlertChanged(event: IDataChangeEvent) {
+    this.updateAlertCount();
+  }
+
+  private updateAlarmCount() {
+    this.notifySvc.alarmCount().subscribe((alarm) => {
+      this.alarmCount = alarm.total;
+      this.isCriticalAlarm = alarm.critical > 0;
+
+      if (this.alarmCount > 0) {
+        this.showAlarmsView(true);  // show
+
+        if (this._alarmDlg?.componentInstance)
+          this._alarmDlg.componentInstance.dataSource = this.notifySvc.alarmsDataSource();
+      }
+      else {
+        setTimeout(() => {
+          this.showAlarmsView(false); // hide
+        }, 500);
+      }
     });
   }
 
@@ -174,43 +132,68 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
       this.warnCount = warn.total;
       this.isCriticalWarn = warn.critical > 0;
       this.isPopupWarn = warn.level2 > 0;
+
+      if (this.warnCount > 0) {
+        this.showAlertView(true); // show
+
+        if (this._alertDlg?.componentInstance)
+          this._alertDlg.componentInstance.dataSource = this.notifySvc.alertsDataSource();
+      }
+      else {
+        setTimeout(() => {
+          this.showAlertView(false); // hide
+        }, 500);
+      }
     });
   }
-  private updateAlarmCount() {
-    this.notifySvc.alarmCount().subscribe((alarm) => {
-      this.alarmCount = alarm.total;
-      this.isCriticalAlarm = alarm.critical > 0;
-    });
-  }
-  updateAlarmView(show = true) {
+
+
+  showAlarmsView(enable: boolean) {
     if (!AccountUtil.hasPermission(PermissionEnums.ViewAlarm, this.auth.currentUser)) return;
-    if (show) this.showAlarmsView();
+    if (enable == false) {
+      if (this._alarmDlg && this._alarmDlg.getState() === MatDialogState.OPEN)
+        this._alarmDlg.close();
+    }
+    else {
+      if (this._alarmDlg && this._alarmDlg.getState() === MatDialogState.OPEN) {
+        return;
+      }
 
-    if(this._alarmDlg?.componentInstance)
-      this._alarmDlg.componentInstance.dataSource = this.notifySvc.alarmsDataSource();
+      const rect: DOMRect = this.btnAlarm.nativeElement.getBoundingClientRect();
+      this._alarmDlg = this.dialog.open(AlarmDialogComponent, {
+        // width: '700px',
+        autoFocus: false,
+        hasBackdrop: false,
+        disableClose: true,
+        closeOnNavigation: true,
+        panelClass: 'alarms-dialog',
+        position: {
+          top: `${rect.top + rect.height}px`,
+          left: `${rect.left - 600}px`,
+        },
+      });
+    }
   }
 
-  updateAlertView(show = true) {
+  showAlertView(enable: boolean) {
     if (!AccountUtil.hasPermission(PermissionEnums.ViewWarning, this.auth.currentUser)) return;
-    if (show) this.showWarnsView();
+    if (enable == false) {
+      if (this._alertDlg && this._alertDlg.getState() === MatDialogState.OPEN)
+        this._alertDlg.close();
+    }
+    else {
+      if (this._alertDlg && this._alertDlg.getState() === MatDialogState.OPEN) {
+        return;
+      }
 
-    if(this._alertDlg?.componentInstance)
-      this._alertDlg.componentInstance.dataSource = this.notifySvc.alertsDataSource();
+      this._alertDlg = this.dialog.open(AlertDialogComponent, {
+        autoFocus: false,
+        hasBackdrop: false,
+        disableClose: true,
+        closeOnNavigation: true,
+        panelClass: 'alerts-dialog',
+      });
+    }
   }
 
-  private onAlertChanged(event: IDataChangeEvent) {
-    this.updateAlertCount();
-    //this.updateAlertView(this.isPopupWarn);
-    setTimeout(() => {
-      this.updateStateWarns();
-    }, 100);
-  }
-  private updateStateWarns() {
-    this.updateAlertView(this.isPopupWarn);
-  }
-
-  private onAlarmChanged(event: IDataChangeEvent) {
-    this.updateAlarmCount();
-    this.updateAlarmView(true);
-  }
 }
