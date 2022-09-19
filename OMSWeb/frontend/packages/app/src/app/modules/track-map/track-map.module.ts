@@ -15,8 +15,6 @@ import { BufferStatusDialogComponent } from './dialogs/buffer-status-dialog.comp
 import { MapOverlappedComponent } from './viewer/map-overlapped.component'
 import { LegacyMapToolbarComponent } from './viewer/legacy-map-toolbar.component'
 import { LegacyMapViewerComponent } from './viewer/legacy-map-viewer.component'
-import { LegacySearchDialogComponent } from './dialogs/legacy-search-dialog.component'
-import { LegacyShowObjectDialogComponent } from './dialogs/legacy-show-object-dialog.component'
 import { LegacyTrackVehicleDialogComponent } from './dialogs/legacy-track-vehicle-dialog.component'
 import { LegacyMapSidePanelComponent } from './side-panel/legacy-map-side-panel.component'
 import { PlaybackVehicleStatusDialogComponent } from './dialogs/playback-vehicle-status-dialog.component'
@@ -38,8 +36,6 @@ import { PlaybackVehicleStatusDialogComponent } from './dialogs/playback-vehicle
 		LegacyMapViewerComponent,
 		LegacyMapToolbarComponent,
 		LegacyMapSidePanelComponent,
-		LegacySearchDialogComponent,
-		LegacyShowObjectDialogComponent,
 		LegacyTrackVehicleDialogComponent,
 		// playback
 		PlaybackVehicleStatusDialogComponent,
