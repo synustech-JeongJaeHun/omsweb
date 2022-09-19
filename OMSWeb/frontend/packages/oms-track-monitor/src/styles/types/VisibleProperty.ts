@@ -12,6 +12,7 @@ type VisibleProperty =
 	| 'zcu'
 	| 'group'
 	| 'cluster'
+	| 'cps'
 	| 'fireshutter'
 	| 'mtl'
 	| 'minimap'

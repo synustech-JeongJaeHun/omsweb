@@ -67,6 +67,7 @@ const props = defineProps<{
   isZcuVisible: Boolish
   isGroupVisible: Boolish
   isClusterVisible: Boolish
+  isCpsVisible: Boolish
   isFireshutterVisible: Boolish
   isMtlVisible: Boolish
   // color
@@ -405,6 +406,10 @@ defineExpose(exposed)
   visibility: v-bind("parseBooleanProp(VisibleDefault.cluster, props.isClusterVisible) ? 'initial' : 'hidden'"
     );
 }
+#cps-layer {
+  visibility: v-bind("parseBooleanProp(VisibleDefault.cps, props.isCpsVisible) ? 'initial' : 'hidden'"
+    );
+}
 
 #fireshutter-layer {
   visibility: v-bind("parseBooleanProp(VisibleDefault.fireshutter, props.isFireshutterVisible) ? 'initial' : 'hidden'"
@@ -454,6 +459,10 @@ defineExpose(exposed)
 }
 
 #cluster-layer .cluster {
+  stroke-width: v-bind('scaleStylesInfo.segmentWidth * 2.2');
+}
+
+#cps-layer .cps {
   stroke-width: v-bind('scaleStylesInfo.segmentWidth * 2.2');
 }
 

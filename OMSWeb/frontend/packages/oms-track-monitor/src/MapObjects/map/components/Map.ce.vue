@@ -9,6 +9,7 @@ import MtlLayer from 'TrackObjects/mtl/components/MtlLayer.ce.vue'
 import VehicleLayer from 'TrackObjects/vehicle/components/VehicleLayer.ce.vue'
 import SegmentLayer from 'TrackObjects/segment/components/SegmentLayer.ce.vue'
 import ClusterLayer from 'TrackObjects/cluster/components/ClusterLayer.ce.vue'
+import CpsLayer from 'TrackObjects/cluster/components/CpsLayer.ce.vue'
 import DisabledSegmentLayer from 'src/TrackObjects/segment/components/DisabledSegmentLayer.ce.vue'
 import FireshutterLayer from 'src/TrackObjects/fireshutter/components/FireshutterLayer.ce.vue'
 
@@ -59,6 +60,7 @@ const emit = inject<RootEmits>(RootEmitInjectionKey)!
   >
     <GridLayer />
     <ClusterLayer />
+    <CpsLayer />
     <SegmentLayer />
     <DisabledSegmentLayer />
     <PointLayer />
