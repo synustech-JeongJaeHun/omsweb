@@ -33,6 +33,7 @@ interface IOmsTrackMonitor {
 	find(type: 'station', id: Station['id']): void
 	find(type: 'buffer', id: Buffer['id']): void
 	find(type: 'mtl', id: Mtl['id']): void
+	find(type: 'zcu', id: Zcu['id']): void
 	find(type: 'fireshutter', id: Mtl['id']): void
 	// focus
 	focus(type: 'vehicle', id: Vehicle['id']): void

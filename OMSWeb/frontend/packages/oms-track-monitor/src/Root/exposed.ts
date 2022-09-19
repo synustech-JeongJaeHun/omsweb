@@ -154,6 +154,10 @@ const exposed: IOmsTrackMonitor = {
 				const mtl = findMtlById(id)
 				if (mtl) this.find('point', mtl.pointId)
 				break
+			case 'zcu':
+				const zcu = findZcuById(id)
+				if (zcu) approachTo(zcu)
+				break
 			case 'fireshutter':
 				break
 
