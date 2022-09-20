@@ -122,7 +122,7 @@ export class AlternateTransferSettingComponent {
     }
 
 	onSave() {
-        if (!this.chosenStks.length) return
+        //if (!this.chosenStks.length) return
 
         this.systemSvc.currentState$
           .pipe(takeUntil(this.destroy$))
@@ -160,6 +160,7 @@ export class AlternateTransferSettingComponent {
     SaveMessages() {
         let ids: string = '';
         for (var s of this.chosenStks) { ids += s.id + ';' }
+        if (ids.length == 0) ids = ';'  // prevent null
   
         this.settingsSvc
             .updateAlternateTransfer(
