@@ -10,6 +10,7 @@ import { TransfersService } from '@oms/root/services/transfers.service'
 import { Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators'
 import { ILookupUnit } from '../../../models/map.interface'
+import { BufferStatusDialogService } from '../../../services/buffer-status-dialog.service'
 
 @Component({
 	selector: 'oms-buffer-status-dialog',
@@ -24,23 +25,25 @@ export class BufferStatusDialogComponent implements OnDestroy {
 	constructor(
 		private trackStatusService: TrackStatusService,
 		private dialogSvc: DialogService,
-		private $t: TranslateService,
 		private messageSvc: MessagesService,
-        private tracksService: TracksService,
-        private transferSvc: TransfersService,
-        private t$: TranslateService,
+		private tracksService: TracksService,
+		private transferSvc: TransfersService,
+		private t$: TranslateService,
+		private bufferStatusDialogService: BufferStatusDialogService,
 		hubSvc: HubService,
 	) {
-		if (this.trackStatusService.trackData.buffers.length > 0) {
-			this.currentBuffer = this.trackStatusService.trackData.buffers[0]
-			this.selectedUnit = this.currentBuffer
-
-			this.refreshBuffer()
-		}
+		if (this.bufferStatusDialogService.selectedBuffer)
+			this.onBufferChange(this.bufferStatusDialogService.selectedBuffer)
 
 		hubSvc.bufferChanged$
 			.pipe(takeUntil(this.destroy$))
 			.subscribe((res) => this.handleBufferChangedEvent(res.id))
+
+		this.bufferStatusDialogService.selectedBufferChanged$.subscribe(
+			(buffer: Dto.IBuffer) => {
+				this.onBufferChange(buffer)
+			},
+		)
 	}
 
 	ngOnDestroy(): void {
@@ -54,6 +57,15 @@ export class BufferStatusDialogComponent implements OnDestroy {
 				(b) => b.id === data.id,
 			)
 			this.refreshBuffer()
+		}
+	}
+
+	onBufferChangedBySelector(data: ILookupUnit) {
+		if (data) {
+			const buffer = this.trackStatusService.trackData.buffers.find(
+				(b) => b.id === data.id,
+			)
+			this.bufferStatusDialogService.setSelectedBuffer(buffer)
 		}
 	}
 
@@ -71,27 +83,27 @@ export class BufferStatusDialogComponent implements OnDestroy {
 			})
 	}
 
-    onRemoveCarrier(carrierId: string) {
+	onRemoveCarrier(carrierId: string) {
       this.transferSvc.checkCarrierChange("remove", this.currentBuffer.logicalId, "buffer", carrierId, "none")
-        .subscribe((res) => {
+			.subscribe((res) => {
           console.log(res);
 
-          if (res.hcack === 0 || res.hcack === 4) {
+				if (res.hcack === 0 || res.hcack === 4) {
             this.messageSvc.sendCarrierCommand({
-              action: 'remove_carrier',
-              carrierLabel: carrierId,
+							action: 'remove_carrier',
+							carrierLabel: carrierId,
               logicalId: this.currentBuffer.logicalId
             }).subscribe()
 
-            this.dialogSvc.success({
-              title: this.t$.instant('names.success'),
-              body: this.t$.instant('messages.confirmSuccessRemoveCarrier'),
-            })
+					this.dialogSvc.success({
+						title: this.t$.instant('names.success'),
+						body: this.t$.instant('messages.confirmSuccessRemoveCarrier'),
+					})
           }
           else {
             var errorMessage = "";
             if (res.hcack === 2) errorMessage = 'messages.confirmNotAbleToExcute';
-            else if (res.hcack === 3) {
+					else if (res.hcack === 3) {
               if (res.cpname === 'CARRIERID') errorMessage = 'messages.confirmParameterInvalidCarrierID';
               else if (res.cpname === 'CARRIERLOC') errorMessage = 'messages.confirmParameterInvalidCarrierLoc';
               else errorMessage = 'messages.confirmParameterInvalid';
@@ -99,35 +111,35 @@ export class BufferStatusDialogComponent implements OnDestroy {
             else if (res.hcack === 5) errorMessage = 'messages.confirmReject';
             else errorMessage = 'messages.confirmNotAbleToExcute';
 
-            this.dialogSvc.alert({
-              title: this.t$.instant('names.failed'),
-              body: this.t$.instant(errorMessage),
-            })
-          }
-        })
-    }
+					this.dialogSvc.alert({
+						title: this.t$.instant('names.failed'),
+						body: this.t$.instant(errorMessage),
+					})
+				}
+			})
+	}
 
-    onInstallCarrier(carrierId: string) {
+	onInstallCarrier(carrierId: string) {
       this.transferSvc.checkCarrierChange("install", this.currentBuffer.logicalId, "buffer", carrierId, "none")
-        .subscribe((res) => {
+			.subscribe((res) => {
           console.log(res);
 
-          if (res.hcack === 0 || res.hcack === 4) {
+				if (res.hcack === 0 || res.hcack === 4) {
             this.messageSvc.sendCarrierCommand({
-              action: 'install_carrier',
-              carrierLabel: carrierId,
+							action: 'install_carrier',
+							carrierLabel: carrierId,
               logicalId: this.currentBuffer.logicalId
             }).subscribe()
 
-            this.dialogSvc.success({
-              title: this.t$.instant('names.success'),
-              body: this.t$.instant('messages.confirmSuccessInstallCarrier'),
-            })
+					this.dialogSvc.success({
+						title: this.t$.instant('names.success'),
+						body: this.t$.instant('messages.confirmSuccessInstallCarrier'),
+					})
           }
           else {
             var errorMessage = "";
             if (res.hcack === 2) errorMessage = 'messages.confirmNotAbleToExcute';
-            else if (res.hcack === 3) {
+					else if (res.hcack === 3) {
               if (res.cpname === 'CARRIERID') errorMessage = 'messages.confirmParameterInvalidCarrierID';
               else if (res.cpname === 'CARRIERLOC') errorMessage = 'messages.confirmParameterInvalidCarrierLoc';
               else errorMessage = 'messages.confirmParameterInvalid';
@@ -135,11 +147,11 @@ export class BufferStatusDialogComponent implements OnDestroy {
             else if (res.hcack === 5) errorMessage = 'messages.confirmReject';
             else errorMessage = 'messages.confirmNotAbleToExcute';
 
-            this.dialogSvc.alert({
-              title: this.t$.instant('names.failed'),
-              body: this.t$.instant(errorMessage),
-            })
-          }
-        })
+					this.dialogSvc.alert({
+						title: this.t$.instant('names.failed'),
+						body: this.t$.instant(errorMessage),
+					})
+				}
+			})
 	}
 }

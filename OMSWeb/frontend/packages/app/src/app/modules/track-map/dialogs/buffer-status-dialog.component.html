@@ -6,7 +6,7 @@
 					class="full-span-col"
 					[findScopes]="['buffers']"
 					[selectedUnit]="selectedUnit"
-					(selectedUnitChange)="onBufferChange($event)"
+					(selectedUnitChange)="onBufferChangedBySelector($event)"
 					[placeholder]="'names.searchBuffer' | translate"
 				>
 				</oms-unit-list-selector>
