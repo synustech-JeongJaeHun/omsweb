@@ -35,6 +35,7 @@ import { SystemStatusService } from '@oms/root/services/system-status.service'
 import { TracksService } from '@oms/root/services/tracks.service'
 import { TransfersService } from '@oms/root/services/transfers.service'
 import { VehicleStatusDialogService } from '@oms/root/services/vehicle-status-dialog.service'
+import { BufferStatusDialogService } from '@oms/root/services/buffer-status-dialog.service'
 
 @Component({
 	selector: 'oms-map-viewer',
@@ -173,6 +174,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		private $t: TranslateService,
 		private systemStatusService: SystemStatusService,
 		private vehicleStatusDialogService: VehicleStatusDialogService,
+		private bufferStatusDialogService: BufferStatusDialogService,
 	) {
 		this.auth.certUpdated$.pipe(takeUntil(this.destroy$)).subscribe((cert) => {
 			this.router.navigateByUrl('/', { skipLocationChange: false }).then(() => {
@@ -374,14 +376,16 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 				this.viewer.updateMtl(e.operation, e.data)
 			})
 
-      this.hubSvc.clusterStatusChanged$.pipe(takeUntil(this.destroy$)).subscribe((e) => {
-				this.viewer.updateClusterState(e.operation, {
-          id: e.id, // server id
-          converterId: e.converterId,
-          status: e.status,
-          backupId: e.backupId,
-        })
-			})
+			this.hubSvc.clusterStatusChanged$
+				.pipe(takeUntil(this.destroy$))
+				.subscribe((e) => {
+					this.viewer.updateClusterState(e.operation, {
+						id: e.id, // server id
+						converterId: e.converterId,
+						status: e.status,
+						backupId: e.backupId,
+					})
+				})
 		}
 	}
 
@@ -455,16 +459,16 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 				break
 			case 'push:enable':
 				commandMessage = { action: 'set_behavior', canBePushed: true }
-                break
-            case 'push:disable':
-                commandMessage = { action: 'set_behavior', canBePushed: false }
-                break
+				break
+			case 'push:disable':
+				commandMessage = { action: 'set_behavior', canBePushed: false }
+				break
 			case 'hostOrder:enable':
 				commandMessage = { action: 'set_behavior', hostOrder: true }
-                break
-            case 'hostOrder:disable':
-                commandMessage = { action: 'set_behavior', hostOrder: false }
-                break
+				break
+			case 'hostOrder:disable':
+				commandMessage = { action: 'set_behavior', hostOrder: false }
+				break
 			case 'rail_out':
 				commandMessage = { action: 'rail_out' }
 				break
@@ -670,24 +674,24 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		}
 	}
 
-    onApplyPointHomeChange(id: number, homeGroups: number[]) {
-        if (this.homeActive) {
-          this.tracksService.checkPointHomeInterlock(id).subscribe((res) => {
-              if (res.retcode === 0) {
-                  this.messageSvc.sendEnableHome(id, homeGroups).subscribe()
-              } else {
-                this.dialogSvc.alert({
-                  title: this.$t.instant('names.failed'),
-                  body: this.$t.instant('messages.confirmPointHomeInterlock'),
-                })
-              }
-          })
-        } else {
-          this.messageSvc.sendDisableHome(id).subscribe()
-        }
+	onApplyPointHomeChange(id: number, homeGroups: number[]) {
+		if (this.homeActive) {
+			this.tracksService.checkPointHomeInterlock(id).subscribe((res) => {
+				if (res.retcode === 0) {
+					this.messageSvc.sendEnableHome(id, homeGroups).subscribe()
+				} else {
+					this.dialogSvc.alert({
+						title: this.$t.instant('names.failed'),
+						body: this.$t.instant('messages.confirmPointHomeInterlock'),
+					})
+				}
+			})
+		} else {
+			this.messageSvc.sendDisableHome(id).subscribe()
+		}
 
-        this.showContextMenu = false
-        this.contextMenuObject = undefined
+		this.showContextMenu = false
+		this.contextMenuObject = undefined
 	}
 
 	// EPIC > OMS-TRACK-MONITOR
@@ -913,6 +917,11 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 					}
 			}
 		} else if (objectType === 'buffer' || objectType === 'station') {
+      // buffer status dialog section start
+			if (objectType === 'buffer') 
+        this.bufferStatusDialogService.setSelectedBuffer(object)
+			// buffer status dialog section end
+			// manual transfer section start
 			const port = { objectType, ...object }
 			const transferCommandState = this.mapStatesService.transferCommandState
 			if (transferCommandState.active === false) return
@@ -948,6 +957,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 				default:
 					break
 			}
+			// manual transfer section end
 		} else if (objectType === 'point') {
 			const point = { objectType, ...object }
 			const transferCommandState = this.mapStatesService.transferCommandState
