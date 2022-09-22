@@ -10,8 +10,6 @@ import {
 import ScaleBar from 'src/MapObjects/scale/component/ScaleBar.ce.vue'
 import { RootEmitInjectionKey, RootEmits } from './types/RootEmits'
 import ScreenDetail from 'MapObjects/map/components/ScreenDetail.ce.vue'
-import { ViewMode } from './types/ViewMode'
-import { MapType } from './types/MapType'
 import {
   ColorDefault,
   ScaleDefault,
@@ -40,9 +38,6 @@ import { exposed } from './exposed'
  *    A reference to an interface or a type literal in the same file
  */
 const props = defineProps<{
-  // enums
-  viewMode: ViewMode // not implemented
-  mapType: MapType // not implemented
   // rect
   width: Numberlish
   height: Numberlish
@@ -111,8 +106,7 @@ const emit = defineEmits<Emits>()
 provide(RootEmitInjectionKey, readonly(emit))
 // HOW TO USE
 // const emit = inject<RootEmits>(RootEmitInjectionKey)!
-// const viewMode = ref<ViewMode>('PUBLIC')
-// const mapType = ref<MapType>('DB');
+  
 // rect
 watch([propRefs.width, propRefs.height], () => {
   const width = parseNumberProp(0, props.width)

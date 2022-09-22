@@ -6,8 +6,6 @@ Attribute는 DOM에 컴포넌트를 삽입한 후 언제든지 변경 가능하�
 
 | 속성 이름                 | 타입         | 기본값             | 역할                                          |
 | ------------------------- | ------------ | ------------------ | --------------------------------------------- |
-| viewMode                  | `ViewMode`   | `undefined`        | // Not Impletmented                           |
-| mapType                   | `MapType`    | `undefined`        | // Not Impletmented                           |
 | **width**                 | `Numberlish` | `1000`             | 본 엘리먼트의 폭                              |
 | **height**                | `Numberlish` | `1000`             | 본 엘리먼트의 높이                            |
 | rotation                  | `Numberlish` | `0`                | Track의 Rotation 값                           |

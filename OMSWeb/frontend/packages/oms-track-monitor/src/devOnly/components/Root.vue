@@ -56,8 +56,6 @@ watchEffect(async () => {
 <template>
   <oms-track-monitor
     ref="omsTrackMonitorRef"
-    :viewMode="'VIEWER'"
-    :mapType="'DB'"
     :width="windowRect.width"
     :height="windowRect.height"
     :rotation="0"
