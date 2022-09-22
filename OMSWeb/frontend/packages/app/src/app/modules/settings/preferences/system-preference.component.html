@@ -11,23 +11,21 @@
 		<label>
 			{{ 'names.rebalance' | translate }} {{ 'names.mode' | translate }}{{ ': ' }}
 			<span style="color: blue">{{ translatedSelectedRebalancedMode }}</span>
-			<dx-button-group
-				[items]="rebalanceModes"
-				keyExpr="key"
-				tabIndex="tabIndex"
-				focusStateEnabled="true"
-				[selectedItemKeys]="selectedRebalanceMode"
-				(onItemClick)="setRebalanceMode($event.itemData.key)"
-				buttonTemplate="buttonTemplate"
-				style="margin-left: 2em; height: 30px"
-			>
-			<span *dxTemplate="let buttonData of 'buttonTemplate'">
+			<dx-button-group [items]="rebalanceModes"
+											 keyExpr="key"
+											 tabIndex="tabIndex"
+											 focusStateEnabled="true"
+											 [selectedItemKeys]="selectedRebalanceMode"
+											 (onItemClick)="setRebalanceMode($event.itemData.key)"
+											 buttonTemplate="buttonTemplate"
+											 style="margin-left: 2em; height: 30px">
+				<span *dxTemplate="let buttonData of 'buttonTemplate'">
 					{{buttonData.label}}
-			</span>
+				</span>
 			</dx-button-group>
 		</label>
 	</fieldset>
-	<fieldset style="margin-top: 1em">
+	<fieldset class="chain-button">
 		<legend>
 			{{ 'names.chainManualCommandDisabled' | translate }}
 		</legend>
@@ -35,30 +33,63 @@
 			{{ 'names.state' | translate }}{{ ': ' }}
 			<ng-container *ngIf="isChainManualCommandDisabled === true">
 				{{ 'names.on' | translate }}
-				<button
-					style="margin-left: 15px"
-					mat-raised-button
-					class="dense"
-					[disabled]="!hasPermissions([permissionEnums.HostOrderEnable])"
-					color="primary"
-					(click)="setChainManualCommandDisabled()"
-				>
+				<button style="margin-left: 15px"
+								mat-raised-button
+								class="dense"
+								[disabled]="!hasPermissions([permissionEnums.HostOrderEnable])"
+								color="primary"
+								(click)="setChainManualCommandDisabled()">
 					{{ 'names.disable' | translate }}
 				</button>
 			</ng-container>
 			<ng-container *ngIf="isChainManualCommandDisabled === false">
 				{{ 'names.off' | translate }}
-				<button
-					style="margin-left: 15px"
-					mat-raised-button
-					class="dense"
-					[disabled]="!hasPermissions([permissionEnums.HostOrderEnable])"
-					color="primary"
-					(click)="setChainManualCommandDisabled()"
-				>
+				<button style="margin-left: 15px"
+								mat-raised-button
+								class="dense"
+								[disabled]="!hasPermissions([permissionEnums.HostOrderEnable])"
+								color="primary"
+								(click)="setChainManualCommandDisabled()">
 					{{ 'names.enable' | translate }}
 				</button>
 			</ng-container>
 		</label>
+	</fieldset>
+	<fieldset class="mileage-reset-button">
+		<legend>
+			{{ 'names.resetVehicleTotalDistanceRunTime' | translate }}
+		</legend>
+		<label>
+			<ng-container>
+				<button style="margin-left: 2em" mat-raised-button	class="dense" color="primary"
+					[disabled]="!canResetMileage" (click)="resetVehicleMileageTotal('distance')">
+					{{ 'names.resetVehicleTotalDistance' | translate }}
+				</button>
+			</ng-container>
+			<ng-container>
+				<button style="margin-left: 2em" mat-raised-button	class="dense" color="primary"
+					[disabled]="!canResetMileage" (click)="resetVehicleMileageTotal('runtime')">
+					{{ 'names.resetVehicleTotalRuntime' | translate }}
+				</button>
+			</ng-container>
+		</label>
+
+		<div class="vehicle-list-grid">
+			<dx-data-grid #gridVehicles [dataSource]="dataSource" [keyExpr]="'id'" [repaintChangesOnly]="true"
+										[showBorders]="true" [width]="315" [height]="240" [allowColumnResizing]="false"
+										[(selectedRowKeys)]="selectedIds" (onSelectionChanged)="onSelectionChanged($event)">
+
+				<dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>
+				<dxo-paging [pageSize]="100"></dxo-paging>
+				<dxo-editing mode="cell" refreshMode="reshape" [allowUpdating]="true" [allowDeleting]="false"
+										 [allowAdding]="false" [confirmDelete]="false" [useIcons]="true">
+				</dxo-editing>
+				<dxo-selection mode="multiple" selectAllMode="allPages" showCheckBoxesMode="always"></dxo-selection>
+
+				<dxi-column dataType="number" dataField="id" [allowEditing]="false" [width]="60" alignment="center"></dxi-column>
+				<dxi-column dataType="string" dataField="logicalId" [caption]="'names.onlineName' | translate"
+										[allowEditing]="false" alignment="center"></dxi-column>
+			</dx-data-grid>
+		</div>
 	</fieldset>
 </div>

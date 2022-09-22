@@ -7,6 +7,7 @@ import { MessagesService } from '@oms/root/services/messages.service'
 import { SystemStatusService } from '@oms/services/system-status.service'
 import { SettingsService } from '../../../services/settings.service'
 import { Subject } from 'rxjs'
+import { ISettingsVehicleReg } from '../../../models/settings.model';
 
 @Component({
 	selector: 'oms-system-preference',
@@ -44,6 +45,10 @@ export class SystemPreferenceComponent {
     private ivrMode = 0;
     private updateToConfig = false;
 
+    // vehicle mileage
+    dataSource: ISettingsVehicleReg[];
+    selectedIds: number[] = [];
+
     get console() {
       return console
     }
@@ -67,11 +72,17 @@ export class SystemPreferenceComponent {
 		return this.systemStatusService.chainManualCommandDisabled ?? false
 	}
 
+    get canResetMileage(): boolean {
+        return this.selectedIds.length > 0;
+    }
+
 	hasPermissions(permissions: number[]): boolean {
 		return this.auth.hasPermissions(permissions)
 	}
 
-    ngOnInit(): void { }
+    ngOnInit(): void {
+
+    }
 
     ngOnDestroy(): void {
       this.destroy$.next()
@@ -79,9 +90,27 @@ export class SystemPreferenceComponent {
     }
 
     private init() {
-        this.loadSettingsRebalance();
+      this.loadSettingsRebalance();
+
+      this.loadVehicleMileageSetting();
     }
 
+    private getConfirmMessage(displayName: string, param: string[]) {
+      const transParam = { name: displayName, from: param[0], to: param[1] }
+      return {
+        title: this.$t.instant('names.changeConfirm', transParam),
+        body: this.$t.instant('messages.changeStateConfirm', transParam),
+      }
+    }
+
+    loadVehicleMileageSetting() {
+      this.settingsSvc.settingsVehicles().subscribe((res) => {
+        this.dataSource = res;
+      });
+    }
+
+
+    // rebalance
 	setRebalanceMode(value: "home" | "ivr" | "none") {
 		if (
 			!(
@@ -166,6 +195,8 @@ export class SystemPreferenceComponent {
         });
     }
 
+
+    // chain manual disabled 
 	setChainManualCommandDisabled() {
 		this.dialogSvc
 			.confirm(
@@ -183,11 +214,21 @@ export class SystemPreferenceComponent {
 			})
 	}
 
-	private getConfirmMessage(displayName: string, param: string[]) {
-		const transParam = { name: displayName, from: param[0], to: param[1] }
-		return {
-			title: this.$t.instant('names.changeConfirm', transParam),
-			body: this.$t.instant('messages.changeStateConfirm', transParam),
-		}
-	}
+
+    // reset mileage
+    onSelectionChanged(e) {
+      this.selectedIds = this.selectedIds.filter((x) => x !== undefined);
+    }
+
+    resetVehicleMileageTotal(type: string) {
+      this.dialogSvc
+          .confirm({ body: this.$t.instant('messages.confirmCommand') })
+          .subscribe((ok) => {
+                if (ok) {
+                  this.messageSvc.sendResetVehicleMileageTotal(type, this.selectedIds)
+                    .subscribe()
+                }
+            })
+    }
+
 }

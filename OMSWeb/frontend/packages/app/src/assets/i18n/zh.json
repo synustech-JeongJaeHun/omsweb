@@ -472,7 +472,10 @@
     "VehicleCargoStatusLoadingColor": "装载颜色",
     "VehicleCargoStatusFullColor": "全色",
     "VehicleCargoStatusUnloadingColor": "卸载颜色",
-    "retryToNearStocker": "Retry To Near Stocker"
+    "retryToNearStocker": "Retry To Near Stocker",
+    "resetVehicleTotalDistanceRunTime": "Reset Vehicle Total Distance / Runtime",
+    "resetVehicleTotalDistance": "Reset Total Distance",
+    "resetVehicleTotalRuntime": "Reset Total Runtime"
   },
   "enums": {
     "hostSessionStatus": {

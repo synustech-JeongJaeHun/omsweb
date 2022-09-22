@@ -30,6 +30,7 @@ namespace OMSWeb.Services.MqttClient
         public const string ACTION_HOME_MODE = "home_mode";
         public const string ACTION_IVR_MODE = "ivr_mode";
         public const string ACTION_CHAIN_MANUAL_COMMAND_DISABLED = "chain_manual_command_disabled";
+        public const string ACTION_RESET_VEHICLE_MILEAGE_TOTAL = "reset_vehicle_mileage_total";
         public const string ACTION_PAUSE = "pause";
         public const string ACTION_RESUME = "resume";
         public const string ACTION_ALARM_CLEAR = "alarm_clear";
@@ -98,6 +99,7 @@ namespace OMSWeb.Services.MqttClient
                 case ACTION_HOME_MODE:
                 case ACTION_IVR_MODE:
                 case ACTION_CHAIN_MANUAL_COMMAND_DISABLED:
+                case ACTION_RESET_VEHICLE_MILEAGE_TOTAL:
                 case ACTION_PAUSE:
                 case ACTION_RESUME:
                 case ACTION_ALARM_CLEAR:
@@ -173,6 +175,7 @@ namespace OMSWeb.Services.MqttClient
                 case ACTION_HOME_MODE:
                 case ACTION_IVR_MODE:
                 case ACTION_CHAIN_MANUAL_COMMAND_DISABLED:
+                case ACTION_RESET_VEHICLE_MILEAGE_TOTAL:
                 case ACTION_PAUSE:
                 case ACTION_RESUME:
                 case ACTION_ALARM_CLEAR:
@@ -381,6 +384,14 @@ namespace OMSWeb.Services.MqttClient
             }
             else if (command.Action == ACTION_CHAIN_MANUAL_COMMAND_DISABLED)
             {
+                if (command.Mode != null)
+                    data["mode"] = command.Mode;
+
+                Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: {command.Action}");
+            }
+            else if (command.Action == ACTION_RESET_VEHICLE_MILEAGE_TOTAL)
+            {
+                data["vehicle_id"] = GetVehicleId(command);
                 if (command.Mode != null)
                     data["mode"] = command.Mode;
 

@@ -29,7 +29,8 @@ import {
     IToggleHomeModeCommandMessage,
     IChangeHomeModeCommandMessage,
     IChangeIvrModeCommandMessage,
-	IToggleChainManualCommandDisabledCommandMessage,
+    IToggleChainManualCommandDisabledCommandMessage,
+    IResetVehicleMileageTotalCommandMessage,
 } from '../models/command.model'
 import { IOrderStatusRow } from '../models/order-status.model'
 import { IVehicleStatusRow } from '../models/vehicle-status.model'
@@ -363,8 +364,16 @@ export class MessagesService {
 			action: 'chain_manual_command_disabled',
 			mode: 'change',
 		})
-	}
+    }
 
+    sendResetVehicleMileageTotal(type: string, vids: number[]) {
+        return this.sendCommand<IResetVehicleMileageTotalCommandMessage>({
+            action: 'reset_vehicle_mileage_total',
+            vehicleIds: vids,
+            mode: type,
+        })
+    }
+  
 	private sendCommand<T extends ICommandMessage>(command: T): Observable<void> {
 		return this.http.post<void>(`${this.baseUrl}/command`, command)
 	}

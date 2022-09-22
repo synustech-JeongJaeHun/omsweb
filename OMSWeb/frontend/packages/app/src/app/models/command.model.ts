@@ -180,3 +180,13 @@ export interface IToggleChainManualCommandDisabledCommandMessage
 	action: 'chain_manual_command_disabled'
 	mode: 'change'
 }
+
+export interface IResetVehicleMileageTotalCommandMessage
+    extends ICommandMessage {
+    action: 'reset_vehicle_mileage_total'
+    mode: string
+    vehicleId?: number
+    vehicleIds?: number[]
+}
+
+

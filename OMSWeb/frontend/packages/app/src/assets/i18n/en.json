@@ -472,7 +472,10 @@
     "VehicleCargoStatusLoadingColor": "Loading Color",
     "VehicleCargoStatusFullColor": "Full Color",
     "VehicleCargoStatusUnloadingColor": "Unloading Color",
-    "retryToNearStocker": "Retry To Near Stocker"
+    "retryToNearStocker": "Retry To Near Stocker",
+    "resetVehicleTotalDistanceRunTime": "Reset Vehicle Total Distance / Runtime",
+    "resetVehicleTotalDistance": "Reset Total Distance",
+    "resetVehicleTotalRuntime": "Reset Total Runtime"
   },
   "enums": {
     "hostSessionStatus": {
