@@ -90,7 +90,20 @@ export class AlarmHistoryComponent implements OnInit {
 
 	transformLocationId = ({ value = '' }): string => {
 		return this.idSvc.guessLocationId(value)
-	}
+    }
+
+    transform(value: number): string {
+      if (value == undefined) {
+        return "";
+      } else {
+        const hour: number = Math.floor(value / 3600);
+        const minutes: number = Math.floor((value % 3600) / 60);
+        const seconds: number = Math.floor(value % 60);
+
+        //return `${hour}:${minutes}:${seconds}`;
+        return hour.toString().padStart(2, '0') + ':' + minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0');
+      }
+    }
 
 	constructor(private svc: HistoriesService, private idSvc: TrackIdService) {
 		window.onresize = this.getGridSize.bind(this)

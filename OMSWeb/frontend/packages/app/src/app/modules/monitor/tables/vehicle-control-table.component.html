@@ -154,10 +154,9 @@
     </div>
   </div>
   <div *dxTemplate="let data of 'distanceTotalTemplate'">
-    {{ data.displayValue / 1000000 | number: "1.0-0" }}km
+    {{ transform_distance(data.displayValue) }}
   </div>
   <div *dxTemplate="let data of 'runtimeTotalTemplate'">
-    {{ data.displayValue / (3600 * 24) | number: "1.0-0" }}d
-    {{ (data.displayValue % (3600 * 24)) / 3600 | number: "2.0-1" }}h
+    {{ transform_runtime(data.displayValue) }}
   </div>
 </dx-data-grid>

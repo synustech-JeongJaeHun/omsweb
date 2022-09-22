@@ -59,7 +59,28 @@ export class VehicleControlTableComponent implements OnInit, OnDestroy {
 
 	get selectedItems(): IVehicleStatusRow[] {
 		return this.dataGrid.instance.getSelectedRowsData()
-	}
+    }
+
+    transform_distance(value: number): string {
+      if (value == undefined) {
+        return "";
+      } else {
+        const distance: number = Math.floor(value / 1000000);
+
+        return `${distance}km`;
+      }
+    }
+
+    transform_runtime(value: number): string {
+      if (value == undefined) {
+        return "";
+      } else {
+        const day: number = Math.floor(value / 86400);  //3600 * 24
+        const hour: string = ((value % 86400) / 3600).toFixed(1);
+
+        return `${day}d ` + hour.toString().padStart(2, '0') + 'h';
+      }
+    }
 
 	constructor(
 		private auth: AuthService,

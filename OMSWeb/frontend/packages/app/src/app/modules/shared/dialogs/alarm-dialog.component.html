@@ -11,10 +11,13 @@
             [caption]="'names.time' | translate" format="yyyy/MM/dd HH:mm:ss">
           </dxi-column>
           <dxi-column [allowFiltering]="false" [width]="90" dataType="number" dataField="age"
-            [caption]="'names.elapsedMin' | translate" cellTemplate="minuteCell">
-            <div *dxTemplate="let d of 'minuteCell'">
-              {{ (d.value / 60).toFixed(1) }}
+                      [caption]="'names.elapsedMin' | translate" cellTemplate="ageTemplate">
+            <div *dxTemplate="let d of 'ageTemplate'">
+              {{ transform(d.value) }}
             </div>
+            <!--div *dxTemplate="let d of 'ageTemplate'">
+              {{ (d.value / 60).toFixed(1) }}
+            </div>-->
           </dxi-column>
           <dxi-column [allowFiltering]="true" [width]="110" dataType="string" dataField="vehicleId"
             [caption]="'names.vehicle' | translate"></dxi-column>
