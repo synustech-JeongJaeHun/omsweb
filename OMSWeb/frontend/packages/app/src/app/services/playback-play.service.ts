@@ -347,7 +347,7 @@ export class PlaybackPlayService {
 
 			await this.fetchEvents(
 				this.currentSnapshot.timestamp,
-				this.nextSnapshot.timestamp ?? new Date(9999, 1, 1),
+				this.nextSnapshot?.timestamp ?? new Date(9999, 1, 1),
 			)
 
 			this.clock = this.currentSnapshot.timestamp
