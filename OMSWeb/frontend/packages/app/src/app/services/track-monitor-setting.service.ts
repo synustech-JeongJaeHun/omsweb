@@ -102,7 +102,7 @@ type TrackMonitorSetting = Record<
 const DefaultTrackMonitorSetting: TrackMonitorSetting = {
 	// scale
 	vehicleSize: 10,
-  zcuSize: 10,
+    zcuSize: 7,
 	segmentWidth: 5,
 	segmentDirectionSize: 10,
 

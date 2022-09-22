@@ -51,7 +51,7 @@ const complicatedMode = computed<ComplicatedMode>(() => {
 
   if (isAnyLocationExist)
     return 'RUNNING'
-  if (isAnyLocationExist === false && destPointId && props.vehicle.curPoint !== destPointId)
+  if (isAnyLocationExist === false && destPointId && props.vehicle.curPoint !== destPointId && props.vehicle.movingState === 'M')
     return 'HOMEIVR'
   // if (isAnyLocationExist === false && destPointId && props.vehicle.curPoint === destPointId)
     return 'IDLE'
