@@ -45,26 +45,6 @@ export class PlaybackControlDialogComponent {
 		}
 	}
 
-	timeRangeLabel = {
-		visible: true,
-		format: (value) => {
-			const date = this.getDateFromTimeRange(value)
-			return DateFns.format(date, 'HH:mm:ss')
-		},
-		position: 'top',
-	}
-
-	// get timeRangeLabel() {
-	// 	return {
-	// 		visible: true,
-	// 		format: (value) => {
-	// 			const date = this.getDateFromTimeRange(value)
-	// 			return DateFns.format(date, 'HH:mm:ss')
-	// 		},
-	// 		position: 'top',
-	// 	}
-	// }
-
 	timeRangeTooltip = {
 		enabled: true,
 		format: (value) => {
