@@ -153,7 +153,7 @@
     "resetAllVehicle": "重置所有车辆",
     "estopAllVehicle": "紧急停止所有车辆",
     "autoAllVehicle": "汽车所有车辆",
-    "vehicleScale": "车辆规模",
+    "scale": "规模",
     "mapRotation": "地图旋转",
     "segmentWidth": "段宽度",
     "visibleOptions": "可见选项",

@@ -154,7 +154,7 @@
     "resetAllVehicle": "모든 비클 리셋",
     "estopAllVehicle": "모든 비클 긴급 멈춤",
     "autoAllVehicle": "모든 비클 자동 모드",
-    "vehicleScale": "비클 스케일",
+    "scale": "스케일",
     "mapRotation": "지도 회전",
     "segmentWidth": "세그먼트 너비",
     "visibleOptions": "보여지기 옵션",

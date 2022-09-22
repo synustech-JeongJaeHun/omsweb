@@ -1,7 +1,7 @@
 <oms-dialog-base [title]="'names.showObjects' | translate">
   <ng-container class="dialog-layout">
     <fieldset class="option-form">
-      <legend class="form-title">{{ "names.vehicleScale" | translate }}</legend>
+      <legend class="form-title">{{ "names.vehicle" | translate }} {{ "names.scale" | translate }}</legend>
       <div class="slider-form">
         <mat-slider #vehicleSize color="primary" min="3" max="20" [value]="setting.vehicleSize" (change)="update({
           group: 'Scale',
@@ -13,7 +13,7 @@
       </div>
     </fieldset>
     <fieldset class="option-form">
-      <legend class="form-title">{{ "names.zcuScale" | translate }}</legend>
+      <legend class="form-title">{{ "names.zcu" | translate }} {{ "names.scale" | translate }}</legend>
       <div class="slider-form">
         <mat-slider #zcuSize color="primary" min="3" max="20" [value]="setting.zcuSize" (change)="update({
           group: 'Scale',
