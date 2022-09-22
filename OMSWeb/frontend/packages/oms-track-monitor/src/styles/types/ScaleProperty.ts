@@ -1,8 +1,9 @@
 type ScaleProperty =
-  | "vehicleSize"
-  | "segmentDirection"
-  | "segmentWidth"
-  | "stationMargin"
-  | "bufferMargin"
+  | 'vehicleSize'
+  | 'zcuSize'
+  | 'segmentDirection'
+  | 'segmentWidth'
+  | 'stationMargin'
+  | 'bufferMargin'
 
 export { ScaleProperty }

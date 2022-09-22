@@ -3,10 +3,6 @@
 ## Attribute Types
 
 ```ts
-type ViewMode = 'MINIMAL' | 'EDITOR' | 'VIEWER' | 'PUBLIC' | 'PLAYBACK'
-
-type MapType = 'MIN_MAX' | 'MAIN' | 'MINIMAP' | 'FILE' | 'DB'
-
 type Boolish = boolean | string | undefined | null
 type Numberlish = number | string | undefined | null
 type Stringlish = string | undefined | null

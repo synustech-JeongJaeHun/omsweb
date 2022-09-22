@@ -6,6 +6,7 @@ import { VisibleProperty } from './types/VisibleProperty'
 
 const ScaleDefault: Record<ScaleProperty, number> = {
   vehicleSize: 10, // applied in OmsTrackMonitor.ce.vue
+  zcuSize: 10, // applied in OmsTrackMonitor.ce.vue
   segmentDirection: 6, // applied in SegmentLayer.ce.vue
   segmentWidth: 3, // applied in OmsTrackMonitor.ce.vue
   stationMargin: 300, // applied in OmsTrackMonitor.ce.vue

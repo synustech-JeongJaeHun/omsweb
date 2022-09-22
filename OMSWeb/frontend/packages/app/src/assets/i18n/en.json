@@ -154,7 +154,7 @@
     "resetAllVehicle": "Reset All Vehicles",
     "estopAllVehicle": "EStop All Vehicles",
     "autoAllVehicle": "Auto All Vehicles",
-    "vehicleScale": "Vehicle Scale",
+    "scale": "Scale",
     "mapRotation": "Map Rotation",
     "segmentWidth": "Segment Width",
     "visibleOptions": "Visible Options",

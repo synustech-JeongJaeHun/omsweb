@@ -1,9 +1,0 @@
-#zcu-layer .zcu .scale-and-reverse-rotate {
-  transform: scale(calc(var(--mm-per-pixel) / 4))
-    rotate(var(--reverse-rotation-degree));
-}
-
-#zcu-layer[data-scale-level~='BELOW15' i] .zcu .scale-and-reverse-rotate {
-  transform: scale(var(--mm-per-pixel))
-    rotate(var(--reverse-rotation-degree));
-}

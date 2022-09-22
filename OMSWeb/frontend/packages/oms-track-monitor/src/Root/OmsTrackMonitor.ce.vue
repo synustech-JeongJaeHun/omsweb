@@ -10,8 +10,6 @@ import {
 import ScaleBar from 'src/MapObjects/scale/component/ScaleBar.ce.vue'
 import { RootEmitInjectionKey, RootEmits } from './types/RootEmits'
 import ScreenDetail from 'MapObjects/map/components/ScreenDetail.ce.vue'
-import { ViewMode } from './types/ViewMode'
-import { MapType } from './types/MapType'
 import {
   ColorDefault,
   ScaleDefault,
@@ -40,14 +38,12 @@ import { exposed } from './exposed'
  *    A reference to an interface or a type literal in the same file
  */
 const props = defineProps<{
-  // enums
-  viewMode: ViewMode // not implemented
-  mapType: MapType // not implemented
   // rect
   width: Numberlish
   height: Numberlish
   // scale
   vehicleSize: Numberlish
+  zcuSize: Numberlish
   segmentWidth: Numberlish
   segmentDirectionSize: Numberlish
   stationMargin: Numberlish
@@ -110,8 +106,7 @@ const emit = defineEmits<Emits>()
 provide(RootEmitInjectionKey, readonly(emit))
 // HOW TO USE
 // const emit = inject<RootEmits>(RootEmitInjectionKey)!
-// const viewMode = ref<ViewMode>('PUBLIC')
-// const mapType = ref<MapType>('DB');
+  
 // rect
 watch([propRefs.width, propRefs.height], () => {
   const width = parseNumberProp(0, props.width)
@@ -123,6 +118,12 @@ watch(propRefs.vehicleSize, (n) => {
   updateScaleStyle(
     'vehicleSize',
     parseNumberProp(ScaleDefault.vehicleSize, n)
+  )
+})
+watch(propRefs.zcuSize, (n) => {
+  updateScaleStyle(
+    'zcuSize',
+    parseNumberProp(ScaleDefault.zcuSize, n)
   )
 })
 watch(propRefs.segmentWidth, (n) => {
@@ -151,7 +152,7 @@ watch(propRefs.bufferMargin, (n) => {
 })
 // content
 watch([propRefs.vehicleSecondaryContent], () => {
-  const vehicleSecondaryContent = 
+  const vehicleSecondaryContent =
     props.vehicleSecondaryContent === 'carrier' ? 'carrier' : "order"
   updateVehicleSecondaryContent(vehicleSecondaryContent)
 })
@@ -447,6 +448,13 @@ defineExpose(exposed)
   /* transform */
   transform: scale(v-bind('scaleInfo.mmPerPixel * scaleStylesInfo.vehicleSize * 1/10')) rotate(var(--reverse-rotation-degree));
 }
+#zcu-layer .zcu .scale-and-reverse-rotate {
+  /* transform */
+  transform: scale(
+      v-bind('scaleInfo.mmPerPixel * scaleStylesInfo.zcuSize * 1/10')
+    )
+    rotate(var(--reverse-rotation-degree));
+}
 
 #segment-layer .segment-path,
 #disabled-segment-layer .segment-path {
@@ -569,8 +577,6 @@ defineExpose(exposed)
 <style src="src/TrackObjects/zcu/styles/hover.css">
 </style>
 <style src="src/TrackObjects/zcu/styles/visibility.css">
-</style>
-<style src="src/TrackObjects/zcu/styles/transform.css">
 </style>
 <!-- Track > Fireshutter -->
 <style src="src/TrackObjects/fireshutter/styles/focus.css">

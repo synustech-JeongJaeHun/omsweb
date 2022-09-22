@@ -14,18 +14,12 @@ import { IPreferences } from '../../../models/settings.model'
 import { AuthService } from '../../../services/auth.service'
 
 import '@daimre/oms-track-monitor'
-import {
-	OmsTrackMonitorElement,
-	IOmsTrackMonitor,
-} from '@daimre/oms-track-monitor'
+import { IOmsTrackMonitor } from '@daimre/oms-track-monitor'
 import { MapStatesService } from '../map-states.service'
 import { SettingsService } from '@oms/root/services/settings.service'
 import { TrackMonitorSettingService } from '../../../services/track-monitor-setting.service'
 import d3 = require('d3')
-import { TranslateService } from '@ngx-translate/core'
-import { DialogService } from '@oms/root/services/dialog.service'
 import { PlaybackPlayService } from '@oms/root/services/playback-play.service'
-import { MatDialog, MatDialogRef } from '@angular/material/dialog'
 import {
 	ClockChangedEvent,
 	SegmentBlockingHistoryEvent,
@@ -42,6 +36,7 @@ import {
 	convertTrackStationToTmStation,
 	convertVehicleHistoryEventToTmUpdateDtoVehicle,
 } from '../../playback/utils/playback-convert.util'
+import { SystemStatusService } from '@oms/root/services/system-status.service'
 
 @Component({
 	selector: 'oms-legacy-map-viewer',
@@ -93,6 +88,18 @@ export class LegacyMapViewerComponent implements OnInit, OnDestroy {
 		return this.settingSvc.globalPreferences.toggles.showToolName
 	}
 
+  get homeColor() {
+		const isHomeMode = this.systemStatusService.homeMode ?? false
+		return isHomeMode ? '#ff510080' : undefined
+	}
+
+	get stationMargin() {
+		return this.systemStatusService.nodeMarginSetting?.stationMargin
+	}
+	get bufferMargin() {
+		return this.systemStatusService.nodeMarginSetting?.bufferMargin
+	}
+
 	constructor(
 		private router: Router,
 		private auth: AuthService,
@@ -100,9 +107,7 @@ export class LegacyMapViewerComponent implements OnInit, OnDestroy {
 		private playService: PlaybackPlayService,
 		private settingSvc: SettingsService,
 		private trackMonitorSettingService: TrackMonitorSettingService,
-		private dialogSvc: DialogService,
-		private $t: TranslateService,
-		private dialog: MatDialog,
+		private systemStatusService: SystemStatusService,
 	) {}
 
 	hasPermissions(permissions: number[]): boolean {
@@ -485,7 +490,7 @@ export class LegacyMapViewerComponent implements OnInit, OnDestroy {
 		// @ts-ignore
 		this.focusOnTM({ type: payload.type, id: payload.value.id })
 	}
-	public onContectMenuOn(event: CustomEvent) {}
+	public onContextMenuOn(event: CustomEvent) {}
 	public onBackdrop(event: CustomEvent) {
 		this.showContextMenu = false
 		this.contextMenuObject = undefined
