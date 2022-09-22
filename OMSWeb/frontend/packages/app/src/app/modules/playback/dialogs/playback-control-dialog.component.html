@@ -35,19 +35,25 @@
 			</div>
 			<div class="control-slider">
 				<div class="slider-name">{{ 'names.snapshots' | translate }}</div>
-
-				<dx-range-slider
-					[min]="0"
-					[max]="timeRangeMax"
-					[step]="0.5"
-					[tooltip]="timeRangeTooltip"
-					[start]="timeRangeStart"
-					[end]="timeRangeEnd"
-					[label]="timeRangeLabel"
-					[disabled]="!isAvailableSnapshotSliderChange"
-					(onValueChanged)="onSnapshotRangeSliderChanged($event)"
-				>
-				</dx-range-slider>
+				<div style="position: relative; padding-top: 15px; margin-bottom: 5px;">
+					<time class="time" style="top: 0px; left: 0px">{{
+						playService.window.start | date: 'HH:mm:ss'
+					}}</time>
+					<time class="time" style="top: 0px; right: 0px">{{
+						playService.window.end | date: 'HH:mm:ss'
+					}}</time>
+					<dx-range-slider
+						[min]="0"
+						[max]="timeRangeMax"
+						[step]="0.5"
+						[tooltip]="timeRangeTooltip"
+						[start]="timeRangeStart"
+						[end]="timeRangeEnd"
+						[disabled]="!isAvailableSnapshotSliderChange"
+						(onValueChanged)="onSnapshotRangeSliderChanged($event)"
+					>
+					</dx-range-slider>
+				</div>
 			</div>
 			<div class="control-slider">
 				<div class="slider-name">{{ 'names.time' | translate }}</div>

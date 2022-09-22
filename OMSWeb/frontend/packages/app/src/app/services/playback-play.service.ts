@@ -328,7 +328,11 @@ export class PlaybackPlayService {
 		const nextDate = DateFns.addMilliseconds(this.clock, this.DefaultTimeStep)
 
 		// exit(1/3) => when clock over window end
-		if (nextDate.getTime() >= this.window.end.getTime()) {
+		if (
+      nextDate.getTime() >= this.window.end.getTime() 
+      &&
+      (this.nextSnapshot ? nextDate.getTime() >= this.nextSnapshot.timestamp.getTime() : true)
+    ) {
 			this.stop()
 			return
 		}
