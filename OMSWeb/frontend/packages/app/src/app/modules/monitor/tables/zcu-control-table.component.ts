@@ -38,6 +38,9 @@ export class ZcuControlTableComponent implements OnInit, OnDestroy {
 
   preference: ClientPreferences
 
+  private color_normal: string = 'rgba(240, 255, 255, 1.0)';
+  private color_error: string = 'rgba(255, 0, 0, 0.5)';
+
   //#region Subscriptions
   private destroy$: Subject<void> = new Subject<void>()
   //#endregion
@@ -82,6 +85,16 @@ export class ZcuControlTableComponent implements OnInit, OnDestroy {
       .subscribe((e: IDataChangeEvent) => {
         e && this.onTableChanged(e)
       })
+  }
+
+  getBgColor(type: number, value: string): string {
+    return this.getColor_Status(value); // Status
+  }
+
+  private getColor_Status(value: string): string {
+    if (value === 'Normal') return this.color_normal;
+    else if (value === 'Error') return this.color_error;
+    return this.color_normal;
   }
 
   onReset() {

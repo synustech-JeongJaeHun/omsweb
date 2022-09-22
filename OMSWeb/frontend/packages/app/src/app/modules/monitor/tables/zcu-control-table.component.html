@@ -33,7 +33,7 @@
   <dxi-column [width]="100" dataType="string" dataField="zcuType" [caption]="'names.zcuType' | translate"
               *ngIf="canDisplayTable('zcus_type')"></dxi-column>
   <dxi-column [width]="100" dataType="string" dataField="status" [caption]="'names.status' | translate"
-              *ngIf="canDisplayTable('zcus_status')"></dxi-column>
+              cellTemplate="statusTemplate" *ngIf="canDisplayTable('zcus_status')"></dxi-column>
   <dxi-column [width]="100" dataType="string" dataField="errorCode" [caption]="'names.errorCode' | translate"
               *ngIf="canDisplayTable('zcus_errorCode')"></dxi-column>
   <!--
@@ -44,4 +44,7 @@
   <dxi-column [width]="100" dataType="string" dataField="vehicleInfo" [caption]="'names.vehicleInfo' | translate"
               *ngIf="canDisplayTable('zcus_vehicleInfo')"></dxi-column>
     -->
+  <div *dxTemplate="let data of 'statusTemplate'">
+    <div class="value" [ngStyle]="{'background-color': getBgColor(0, data.displayValue) }">{{ data.displayValue }}</div>
+  </div>
 </dx-data-grid>

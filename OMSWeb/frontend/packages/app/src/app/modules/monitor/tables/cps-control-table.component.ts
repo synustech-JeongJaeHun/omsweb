@@ -50,7 +50,7 @@ export class CpsControlTableComponent implements OnInit, OnDestroy {
     private color_fault: string = 'rgba(255, 0, 0, 0.5)';
     private color_failover: string = 'rgba(140, 140, 140, 0.5';
 
-  private _cpsRefDlg: MatDialogRef<CpsReferenceDialogComponent, any>
+    private _cpsRefDlg: MatDialogRef<CpsReferenceDialogComponent, any>
 
 	get hasControlAccess(): boolean {
 		return this.auth.isAuthenticated
