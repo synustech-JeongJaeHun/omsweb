@@ -63,6 +63,7 @@ namespace OMSWeb.Repositories
                                 FROM order_completed
                                 WHERE (time_aborted IS NOT NULL or time_failed is not null)
                                     AND time_modified::DATE BETWEEN '{start}' AND '{end}' {GetSubfilter(subfilter)}
+                                    AND location_pickup is not null AND location_dropoff is not null
                                 except
                                 select 
                                     id
@@ -86,6 +87,7 @@ namespace OMSWeb.Repositories
                                 time_modified
                                 FROM order_completed
                                 WHERE time_modified::DATE BETWEEN '{start}' AND '{end}'
+                                    AND location_pickup is not null AND location_dropoff is not null
                                 ORDER BY time_modified DESC
                                 LIMIT 1
                             ) AS last
@@ -153,6 +155,7 @@ namespace OMSWeb.Repositories
                                     0 as cancel
                                 FROM order_completed
                                 where id is not null {GetSubfilter(subfilter)}
+                                    AND location_pickup is not null AND location_dropoff is not null
                                 ) oh
                                 WHERE (
                                     time_aborted is not null and time_aborted::DATE BETWEEN days AND days
@@ -179,11 +182,13 @@ namespace OMSWeb.Repositories
                             with cte as (
                                 select *
                                 FROM order_completed
-                                where ((
-                                    time_aborted is not null and time_aborted::DATE BETWEEN '{startStr}' AND '{endStr}'
-                                ) or (
-                                    time_failed is not null and time_failed::DATE BETWEEN '{startStr}' AND '{endStr}'
-                                )) {GetSubfilter(subfilter)}
+                                where (((
+                                        time_aborted is not null and time_aborted::DATE BETWEEN '{startStr}' AND '{endStr}'
+                                    ) or (
+                                        time_failed is not null and time_failed::DATE BETWEEN '{startStr}' AND '{endStr}'
+                                    )) {GetSubfilter(subfilter)}
+                                ) AND location_pickup is not null AND location_dropoff is not null
+                                
                             )
                             select 
                                 '{label}' as label,
@@ -248,11 +253,12 @@ namespace OMSWeb.Repositories
                         with cte as (
                             select *
                             from order_completed
-                            where ((
-                                time_aborted is not null and time_aborted::DATE BETWEEN '{start}' AND '{end}'
-                            ) or (
-                                time_failed is not null and time_failed::DATE BETWEEN '{start}' AND '{end}'
-                            )) {GetSubfilter(subfilter)}
+                            where (((
+                                    time_aborted is not null and time_aborted::DATE BETWEEN '{start}' AND '{end}'
+                                ) or (
+                                    time_failed is not null and time_failed::DATE BETWEEN '{start}' AND '{end}'
+                                )) {GetSubfilter(subfilter)}
+                            ) AND location_pickup is not null AND location_dropoff is not null
                         )
                         select * 
                         from (                        

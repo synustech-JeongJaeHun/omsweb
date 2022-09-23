@@ -40,7 +40,8 @@ namespace OMSWeb.Repositories
                         from order_completed
                         WHERE time_completed IS NOT NULL AND 
                             time_completed > time_assigned AND 
-                            time_completed::DATE BETWEEN '{start}' AND '{end}' {GetSubfilter(subfilter)}
+                            time_completed::DATE BETWEEN '{start}' AND '{end}' {GetSubfilter(subfilter)} AND
+                            location_pickup is not null AND location_dropoff is not null
                     ) AS a
                 ";
                 result = await conn.QueryFirstAsync<(int Min, int Max, int Devn, int Avg, int Total)>(sql);
@@ -68,7 +69,8 @@ namespace OMSWeb.Repositories
                         from order_completed
                         where time_completed is not null AND
                             time_completed > time_assigned AND
-                            time_completed::date between '{start}' and '{_end}' {GetSubfilter(subfilter)}
+                            time_completed::date between '{start}' and '{_end}' {GetSubfilter(subfilter)} AND 
+                            location_pickup is not null AND location_dropoff is not null
                     ) temp
                 ";
 
@@ -133,7 +135,9 @@ namespace OMSWeb.Repositories
                             '{startStr}' as start_day,
                             '{endStr}' as end_day
                             from order_completed
-                            where time_completed is not null and {_filter(subsection, value)} {GetSubfilter(subfilter)}
+                            where time_completed is not null and {_filter(subsection, value)} {GetSubfilter(subfilter)} AND 
+                                location_pickup is not null AND location_dropoff is not null
+
                         ";
                     }
 
@@ -177,7 +181,8 @@ namespace OMSWeb.Repositories
                         COUNT(*)::int AS count,
                         {_avgEpochPerHour} as avg
                         from order_completed
-			            WHERE time_completed is not null and {filter(subsection, value)} {GetSubfilter(subfilter)}
+			            WHERE time_completed is not null and {filter(subsection, value)} {GetSubfilter(subfilter)} AND 
+                            location_pickup is not null AND location_dropoff is not null
                         GROUP BY {GetColumnFromDic(key)}
                         ORDER BY count desc
                     ";

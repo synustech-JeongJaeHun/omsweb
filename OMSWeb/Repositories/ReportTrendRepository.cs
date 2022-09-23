@@ -27,13 +27,17 @@ namespace OMSWeb.Repositories
                                 select 
                                 * 
                                 from orders
-                                where time_modified >= now() - interval '10 minutes'
+                                where time_modified >= now() - interval '10 minutes' 
+                                    and location_pickup is not null
+                                    and location_dropoff is not null
                             )
                             union (
                                 select 
                                 * 
                                 from order_completed oc
                                 where time_modified >= now() - interval '10 minutes'
+                                    and location_pickup is not null
+                                    and location_dropoff is not null
                             )
                         ) temp
                     )
