@@ -37,7 +37,6 @@ import {
 	setZcu,
 } from 'src/TrackObjects/zcu/zcus'
 import {
-	findFireshutterById,
 	initFireshutters,
 	updateFireshutter,
 } from 'src/TrackObjects/fireshutter/fireshutters'
@@ -64,6 +63,7 @@ import { setFocusedObject } from 'src/MapObjects/focus/focus'
 import { setTrackedObject } from 'src/MapObjects/track/track'
 import { scaleStylesInfo } from '../styles/styles'
 import { deleteClusterState, initClusterStates, insertClusterState, updateClusterState } from 'src/TrackObjects/cluster/clusterStates'
+import { cameraViewBoxInfo } from 'src/MapObjects/map/camera'
 
 const exposed: IOmsTrackMonitor = {
 	getCameraAndRotation,
@@ -110,9 +110,14 @@ const exposed: IOmsTrackMonitor = {
 	find(type, id) {
 		switch (type.trim().toLowerCase()) {
 			case 'vehicle':
-				const vehicle = findVehicleById(id)
-				if (vehicle) this.find('point', vehicle.curPoint)
-				break
+        {
+          const vehicle = findVehicleById(id)
+          if(!vehicle) return
+          const point = findPointById(vehicle.curPoint)
+          if(!point) return
+          approachTo({ x: point.x, y: point.y }, cameraViewBoxInfo.height)
+        }
+        break
 			case 'point':
 				const point = findPointById(id)
 				if (point) {
