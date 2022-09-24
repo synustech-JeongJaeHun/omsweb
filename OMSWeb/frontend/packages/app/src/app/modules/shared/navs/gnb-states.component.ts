@@ -19,6 +19,7 @@ import { PermissionEnums } from '../../../models/enums';
   styleUrls: ['./gnb-states.component.scss'],
 })
 export class GnbStatesComponent implements OnInit, OnDestroy {
+  private timerId: any;
   private systemStates: ISystemStates;
   private destroy$ = new Subject<void>();
 
@@ -80,13 +81,24 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
     private dialogSvc: DialogService,
     private t$: TranslateService,
     private messageSvc: MessagesService
-  ) { }
+  ) {
+    this.getState();
+
+    this.timerId = setInterval(() => this.getState(), 5000);
+  }
+
+  ngOnInit(): void {
+
+  }
+
   ngOnDestroy(): void {
+    clearInterval(this.timerId);
+
     this.destroy$.next();
     this.destroy$.complete();
   }
 
-  ngOnInit(): void {
+  private getState() {
     this.hubSvc.modeStateChanged$
       .pipe(takeUntil(this.destroy$))
       .subscribe((e) => this.onModeStateChanged(e));
