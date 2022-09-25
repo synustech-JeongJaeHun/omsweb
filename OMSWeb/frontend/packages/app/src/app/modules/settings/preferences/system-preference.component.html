@@ -60,7 +60,7 @@
 			{{ 'names.setDelayedTransferTimeout' | translate }}
 		</legend>
 		<div class="field-row">
-			<label>{{ 'names.time' | translate }} {{ ': ' }}</label>
+			<label>{{ 'names.time' | translate }} {{ '(sec): ' }}</label>
 			<mat-form-field class="dense" appearance="outline">
 				<input matInput #delayedTranferTimeoutId type="number" [value]="delayedTranferTimeoutValue" min="0" max="2147483"
 								(change)="onChangeDelayedTransferTimeout(delayedTranferTimeoutId.value)" />
