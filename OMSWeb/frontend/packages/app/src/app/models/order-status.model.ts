@@ -32,4 +32,5 @@ export interface IOrderStatusRow extends IOrderInfoRow {
   durationLoad: number;
   durationUnload: number;
   durationMove: number;
+  statusDetails: string;
 }

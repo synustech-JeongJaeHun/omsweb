@@ -408,6 +408,7 @@
     "durationUnload": "Duration Unload",
     "durationMove": "Duration Move",
     "lastReassignType": "Last Reassign Type",
+    "statusDetails": "Status Details",
     "zcuType": "ZCU Type",
     "invertedCoord-x": "Inverted Coordinate:X",
     "invertedCoord-y": "Inverted Coordinate:Y",

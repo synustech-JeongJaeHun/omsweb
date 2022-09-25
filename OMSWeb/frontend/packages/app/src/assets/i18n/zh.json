@@ -408,6 +408,7 @@
     "durationUnload": "持续时间卸载",
     "durationMove": "持续时间移动",
     "lastReassignType": "上次重新分配类型",
+    "statusDetails": "Status Details",
     "zcuType": "ZCU 类型",
     "invertedCoord-x": "倒坐标：X",
     "invertedCoord-y": "倒坐标：Y",

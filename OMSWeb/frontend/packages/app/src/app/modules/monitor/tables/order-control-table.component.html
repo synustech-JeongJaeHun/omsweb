@@ -20,7 +20,8 @@
 
 <dx-data-grid [dataSource]="dataSource" [remoteOperations]="true" [height]="tableHeight" [repaintChangesOnly]="true"
               [columnAutoWidth]="false" [showBorders]="false" [highlightChanges]="true" [showColumnLines]="true"
-              [showRowLines]="true" [hoverStateEnabled]="true" [(selectedRowKeys)]="selectedRows" [headerFilter]="false" allowColumnResizing="true">
+              [showRowLines]="true" [hoverStateEnabled]="true" [(selectedRowKeys)]="selectedRows" [headerFilter]="false"
+              allowColumnResizing="true" >
   <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
   <!--dxo-scrolling-- mode="virtual" rowRenderingMode="standard"></dxo-scrolling-->
   <dxo-paging [pageSize]="50"></dxo-paging>
@@ -31,11 +32,11 @@
   <dxo-filter-row [visible]="true"></dxo-filter-row>
 
   <dxi-column [width]="50" dataType="string" dataField="id" [caption]="'names.id' | translate"
-              *ngIf="canDisplayTable('orders_id')"></dxi-column>
+              cellTemplate="statusDetailsTemplate" *ngIf="canDisplayTable('orders_id')"></dxi-column>
   <dxi-column [allowFiltering]="true" [width]="70" dataType="string" dataField="origin" [allowSorting]="true"
-              [caption]="'names.origin' | translate" *ngIf="canDisplayTable('orders_origin')"></dxi-column>
+              [caption]="'names.origin' | translate" cellTemplate="statusDetailsTemplate" *ngIf="canDisplayTable('orders_origin')"></dxi-column>
   <dxi-column [width]="240" dataType="string" dataField="logicalId" [caption]="'names.commandId' | translate"
-              *ngIf="canDisplayTable('orders_logicalId')"></dxi-column>
+              cellTemplate="statusDetailsTemplate" *ngIf="canDisplayTable('orders_logicalId')"></dxi-column>
   <dxi-column [width]="70" dataType="string" dataField="priority" [caption]="'names.priority' | translate"
               *ngIf="canDisplayTable('orders_priority')"></dxi-column>
   <dxi-column [width]="100" dataType="string" dataField="state" [caption]="'names.state' | translate"
@@ -78,6 +79,8 @@
   <dxi-column [allowFiltering]="true" [width]="80" dataType="string" dataField="assignmentType" [allowSorting]="true"
               [caption]="'names.lastReassignType' | translate" cellTemplate="lastReassignTypeTemplate"
               *ngIf="canDisplayTable('orders_lastReassignType')"></dxi-column>
+  <dxi-column [allowFiltering]="false" [width]="0" [visible]="false" dataType="string" dataField="statusDetails" [allowSorting]="false"
+              [caption]="'names.statusDetails' | translate"></dxi-column>
   <div *dxTemplate="let data of 'lastReassignTypeTemplate'">
     <div [ngSwitch]="data.displayValue">
       <div class="value" *ngSwitchCase="'S'">{{ 'Swap' }}</div>
@@ -85,4 +88,7 @@
       <div class="value" *ngSwitchDefault>{{ data.displayValue }}</div>
     </div>
   </div>
-</dx-data-grid>
+  <div *dxTemplate="let data of 'statusDetailsTemplate'">
+    <div class="value" [ngStyle]="{'background-color': getBgColor(0, data.data.statusDetails) }">{{ data.displayValue }}</div>
+  </div>
+ </dx-data-grid>

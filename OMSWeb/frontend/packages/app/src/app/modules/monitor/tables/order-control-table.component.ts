@@ -37,10 +37,13 @@ export class OrderControlTableComponent implements OnInit, OnDestroy {
 	@ViewChild(DxDataGridComponent, { static: false })
 	dataGrid: DxDataGridComponent
 
-	dataSource: DataSource
+    dataSource: DataSource;
 	// dataSource: any;
     selectedRows: number[] = []
     preference: ClientPreferences
+
+    private color_normal: string = 'rgba(255, 255, 255, 1.0)';
+    private color_warning: string = 'rgba(255, 210, 0, 0.5)';
 
 	//#region Subscriptions
 	private destroy$: Subject<void> = new Subject<void>()
@@ -74,6 +77,18 @@ export class OrderControlTableComponent implements OnInit, OnDestroy {
 	transformLocationId = ({ value = '' }): string => {
 		return this.idSvc.guessLocationId(value)
 	}
+
+    getBgColor(type: number, value: string): string {
+      return this.getColor_Status(value); // Status
+    }
+
+  private getColor_Status(value: string): string {
+      if (value != null && value !== undefined) {
+        if (value?.includes('order') && value?.includes('delayed'))
+          return this.color_warning;
+      }
+      return this.color_normal;
+    }
 
 	constructor(
 		private auth: AuthService,

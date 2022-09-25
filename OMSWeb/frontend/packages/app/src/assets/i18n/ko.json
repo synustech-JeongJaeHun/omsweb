@@ -408,6 +408,7 @@
     "durationUnload": "언로드 소요 시간",
     "durationMove": "이동 소요 시간",
     "lastReassignType": "마지막 재할당 유형",
+    "statusDetails": "Status Details",
     "zcuType": "ZCU 유형",
     "invertedCoord-x": "역좌표:X",
     "invertedCoord-y": "역좌표: Y",

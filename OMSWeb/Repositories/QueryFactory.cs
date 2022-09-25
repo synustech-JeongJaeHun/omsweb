@@ -428,6 +428,7 @@ namespace OMSWeb.Repositories
         OD.distance_pickup AS distance_pickup,
         OD.distance_deliver AS distance_dropoff,
         OD.distance_move AS distance_move,
+        OD.status_details,
         OD.assignment_type, 
         OD.assignment_details
         FROM orders AS OD

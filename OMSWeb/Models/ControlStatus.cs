@@ -13,6 +13,7 @@ namespace OMSWeb.Models
         public int? DurationLoad { get; set; }
         public int? DurationUnload { get; set; }
         public int? DurationMove { get; set; }
+        public string statusDetails { get; set; }
     }
 
     public class VehicleState : VehicleEntity
