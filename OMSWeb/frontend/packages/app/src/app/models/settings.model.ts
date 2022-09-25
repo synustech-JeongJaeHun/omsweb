@@ -361,3 +361,8 @@ export interface ISettingsAlternateStation {
   logicalId: string
 }
 
+export interface ISettingsDelayedTransferTimeout {
+  timeout: number,
+  warningNotify: boolean,
+  tableNotify: boolean,
+}

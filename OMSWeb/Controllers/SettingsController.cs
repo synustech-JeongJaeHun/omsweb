@@ -34,6 +34,70 @@ namespace OMSWeb.Controllers
             return System.IO.File.ReadAllText("./appsettings.json");
         }
 
+        [HttpPost("updateSettingsDelayedTransferTimeout/{timeout}&{warningNotify}&{tableNotify}")]
+        public ActionResult<QueryResult> UpdateSettingsDelayedTransferTimeout(string timeout, string warningNotify, string tableNotify)
+        {
+            int ntimeout = 3600;
+            try { ntimeout = Convert.ToInt32(timeout); } catch (Exception e) { ntimeout = 3600; }
+            if (ntimeout < 0) ntimeout = 0;
+
+            bool bwarningNotify = false;
+            if (string.IsNullOrWhiteSpace(warningNotify) == false)
+            {
+                string w = warningNotify.ToLower();
+                if (w.Contains("t") || w.Contains("y") || w.Contains("1"))
+                    bwarningNotify = true;
+            }
+            bool btableNotify = false;
+            if (string.IsNullOrWhiteSpace(tableNotify) == false)
+            {
+                string w = tableNotify.ToLower();
+                if (w.Contains("t") || w.Contains("y") || w.Contains("1"))
+                    btableNotify = true;
+            }
+
+            AppConfig.UpdateToOMSConfig("Dispatcher", "delayed_order_timeout", ntimeout.ToString());
+            AppConfig.UpdateToOMSConfig("Dispatcher", "use_delayed_order_warning_notify", bwarningNotify.ToString());
+            AppConfig.UpdateToOMSConfig("Dispatcher", "use_delayed_order_table_notify", btableNotify.ToString());
+
+            Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: ACTION_SETTING_DELAYED_ORDER_TIMEOUT");
+            Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, "PACKET: delayed_order_timeout={0}, warning_notify={1}, table_notify={2}", ntimeout, bwarningNotify, btableNotify);
+
+            return Ok(new QueryResult()
+            {
+                Retcode = (int)RET_CODE.Success,
+                Message = String.Empty,
+            });
+        }
+
+        [HttpGet("settingsDelayedTransferTimeout")]
+        public ActionResult<QueryResult> GetSettingsDelayedTransferTimeout()
+        {
+            string strTimeout = AppConfig.GetFromOMSConfig("Dispatcher", "delayed_order_timeout", "3600");
+            string strWarningNotify = AppConfig.GetFromOMSConfig("Dispatcher", "use_delayed_order_warning_notify", "true");
+            string strTableNotify = AppConfig.GetFromOMSConfig("Dispatcher", "use_delayed_order_table_notify", "true");
+
+            // timeout
+            int timeout = 3600;
+            try { timeout = Convert.ToInt32(strTimeout); } catch (Exception e) { timeout = 3600; }
+            if (timeout < 0) timeout = 0;
+
+            // warningNotify
+            bool warningNotify = false;
+            try { warningNotify = Convert.ToBoolean(strWarningNotify); } catch (Exception e) { warningNotify = false; }
+
+            // tableNotify
+            bool tableNotify = false;
+            try { tableNotify = Convert.ToBoolean(strTableNotify); } catch (Exception e) { tableNotify = false; }
+
+            return Ok(new DelayedTransferTimeoutEntity()
+            {
+                timeout = timeout,
+                WarningNotify = warningNotify,
+                TableNotify = tableNotify
+            });
+        }
+
         [HttpPost("updateSettingsRebalanceCfg/{homeMode}&{ivrMode}")]
         public ActionResult<QueryResult> UpdateSettingsRebalanceCfg(string homeMode, string ivrMode)
         {

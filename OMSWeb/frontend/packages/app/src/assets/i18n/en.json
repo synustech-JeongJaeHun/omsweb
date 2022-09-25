@@ -476,7 +476,10 @@
     "retryToNearStocker": "Retry To Near Stocker",
     "resetVehicleTotalDistanceRunTime": "Reset Vehicle Total Distance / Runtime",
     "resetVehicleTotalDistance": "Reset Total Distance",
-    "resetVehicleTotalRuntime": "Reset Total Runtime"
+    "resetVehicleTotalRuntime": "Reset Total Runtime",
+    "setDelayedTransferTimeout": "Set Delayed Transfer Timeout",
+    "warningNotify": "Warning Notify",
+    "tableNotify": "Table Notify"
   },
   "enums": {
     "hostSessionStatus": {

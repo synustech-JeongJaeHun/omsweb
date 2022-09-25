@@ -55,20 +55,44 @@
 			</ng-container>
 		</label>
 	</fieldset>
+	<fieldset class="set-delay-timeout-button">
+		<legend>
+			{{ 'names.setDelayedTransferTimeout' | translate }}
+		</legend>
+		<div class="field-row">
+			<label>{{ 'names.time' | translate }} {{ ': ' }}</label>
+			<mat-form-field class="dense" appearance="outline">
+				<input matInput #delayedTranferTimeoutId type="number" [value]="delayedTranferTimeoutValue" min="0"
+								(change)="onChangeDelayedTransferTimeout(delayedTranferTimeoutId.value)" />
+			</mat-form-field>
+			<ng-container>
+				<input type="checkbox" #warningNotifyId color="primary" value="0" [(ngModel)]="warningNotifyValue" />
+				<label for="warningNotifyId">{{ "names.warningNotify" | translate }}</label>
+			</ng-container>
+			<ng-container>
+				<input type="checkbox" #tableNotifyId color="primary" value="0" [(ngModel)]="tableNotifyValue" />
+				<label for="tableNotifyId">{{ "names.tableNotify" | translate }}</label>
+			</ng-container>
+			<button style="margin-left: 15px" mat-raised-button class="dense" [disabled]="!hasPermissions([permissionEnums.HostOrderEnable])" color="primary"
+							(click)="setDelayedTransferTimeout()">
+				{{ 'names.apply' | translate }}
+			</button>
+		</div>
+	</fieldset>
 	<fieldset class="mileage-reset-button">
 		<legend>
 			{{ 'names.resetVehicleTotalDistanceRunTime' | translate }}
 		</legend>
 		<label>
 			<ng-container>
-				<button style="margin-left: 2em" mat-raised-button	class="dense" color="primary"
-					[disabled]="!canResetMileage" (click)="resetVehicleMileageTotal('distance')">
+				<button style="margin-left: 2em" mat-raised-button class="dense" color="primary"
+								[disabled]="!canResetMileage" (click)="resetVehicleMileageTotal('distance')">
 					{{ 'names.resetVehicleTotalDistance' | translate }}
 				</button>
 			</ng-container>
 			<ng-container>
-				<button style="margin-left: 2em" mat-raised-button	class="dense" color="primary"
-					[disabled]="!canResetMileage" (click)="resetVehicleMileageTotal('runtime')">
+				<button style="margin-left: 2em" mat-raised-button class="dense" color="primary"
+								[disabled]="!canResetMileage" (click)="resetVehicleMileageTotal('runtime')">
 					{{ 'names.resetVehicleTotalRuntime' | translate }}
 				</button>
 			</ng-container>
@@ -76,7 +100,7 @@
 
 		<div class="vehicle-list-grid">
 			<dx-data-grid #gridVehicles [dataSource]="dataSource" [keyExpr]="'id'" [repaintChangesOnly]="true"
-										[showBorders]="true" [width]="315" [height]="240" [allowColumnResizing]="false"
+										[showBorders]="true" [width]="315" [height]="140" [allowColumnResizing]="false"
 										[(selectedRowKeys)]="selectedIds" (onSelectionChanged)="onSelectionChanged($event)">
 
 				<dxo-scrolling columnRenderingMode="virtual"></dxo-scrolling>

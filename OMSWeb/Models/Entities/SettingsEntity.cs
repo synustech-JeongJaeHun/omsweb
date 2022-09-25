@@ -151,4 +151,11 @@ namespace OMSWeb.Models.Entities
         public string Id { get; set; }
         public string logicalId { get; set; }
     }
+
+    public class DelayedTransferTimeoutEntity
+    {
+        public int timeout { get; set; }
+        public bool WarningNotify { get; set; }
+        public bool TableNotify { get; set; }
+    }
 }

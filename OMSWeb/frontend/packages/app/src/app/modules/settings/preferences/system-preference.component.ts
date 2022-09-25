@@ -49,6 +49,10 @@ export class SystemPreferenceComponent {
     dataSource: ISettingsVehicleReg[];
     selectedIds: number[] = [];
 
+    delayedTranferTimeoutValue: number = 3600;
+    warningNotifyValue: boolean = true;
+    tableNotifyValue: boolean = true;
+
     get console() {
       return console
     }
@@ -91,7 +95,7 @@ export class SystemPreferenceComponent {
 
     private init() {
       this.loadSettingsRebalance();
-
+      this.loadDelayedTransferTimeout();
       this.loadVehicleMileageSetting();
     }
 
@@ -101,6 +105,15 @@ export class SystemPreferenceComponent {
         title: this.$t.instant('names.changeConfirm', transParam),
         body: this.$t.instant('messages.changeStateConfirm', transParam),
       }
+    }
+
+    loadDelayedTransferTimeout() {
+      this.settingsSvc.settingsDelayedTransferTimeout()
+        .subscribe((res) => {
+            this.delayedTranferTimeoutValue = res.timeout;
+            this.warningNotifyValue = res.warningNotify;
+            this.tableNotifyValue = res.tableNotify;
+        });
     }
 
     loadVehicleMileageSetting() {
@@ -213,6 +226,31 @@ export class SystemPreferenceComponent {
 				}
 			})
 	}
+
+
+    // set Delayted Transfer Timeout
+    onChangeDelayedTransferTimeout(value?: number) {
+      this.delayedTranferTimeoutValue = value ?? 3600
+    }
+
+    setDelayedTransferTimeout() {
+      this.dialogSvc
+        .confirm({ body: this.$t.instant('messages.confirmCommand') })
+        .subscribe((ok) => {
+          if (ok) {
+            this.settingsSvc.updateSettingsDelayedTransferTimeout(
+                  this.delayedTranferTimeoutValue.toString(),
+                  this.warningNotifyValue.toString(),
+                  this.tableNotifyValue.toString()
+              )
+              .subscribe((res) => {
+                  if (res.retcode == 1) {
+                     this.loadDelayedTransferTimeout();
+                  }
+              });
+          }
+        })
+    }
 
 
     // reset mileage

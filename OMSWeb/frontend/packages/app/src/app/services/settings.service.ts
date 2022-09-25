@@ -4,7 +4,8 @@ import DataSource from 'devextreme/data/data_source'
 import { Observable, of } from 'rxjs'
 import { map, tap } from 'rxjs/operators'
 import {
-  ClientPreferences,
+    ClientPreferences,
+    ISettingsDelayedTransferTimeout,
     ISettingsAlternateTransfer,
     ISettingsAlternateStation,
 	ISettingsBufferWithUnuse,
@@ -169,7 +170,7 @@ export class SettingsService {
 
 	settingsVehicles(): Observable<ISettingsVehicleReg[]> {
 		return this.http.get<ISettingsVehicleReg[]>(`${this.baseUrl}/vehicleRegs`)
-	}
+    }
 
 	deleteVehicleRegs(form: any[]): Observable<void> {
 		return this.http.post<void>(`${this.baseUrl}/vehicleRegs/remove`, form)
@@ -197,5 +198,13 @@ export class SettingsService {
 
     updateSettingsRebalanceCfg(homeMode: string, ivrMode: string): Observable<IQueryResult> {
         return this.http.post<IQueryResult>(`${this.baseUrl}/updateSettingsRebalanceCfg/${homeMode}&${ivrMode}`, '')
+    }
+
+    settingsDelayedTransferTimeout(): Observable<ISettingsDelayedTransferTimeout> {
+        return this.http.get<ISettingsDelayedTransferTimeout>(`${this.baseUrl}/settingsDelayedTransferTimeout`)
+    }
+
+    updateSettingsDelayedTransferTimeout(timeout: string, warningNotify: string, tableNotify: string): Observable<IQueryResult> {
+        return this.http.post<IQueryResult>(`${this.baseUrl}/updateSettingsDelayedTransferTimeout/${timeout}&${warningNotify}&${tableNotify}`, '')
     }
 }
