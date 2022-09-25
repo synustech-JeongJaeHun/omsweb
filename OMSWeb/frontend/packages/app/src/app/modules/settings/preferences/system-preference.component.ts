@@ -234,6 +234,15 @@ export class SystemPreferenceComponent {
     }
 
     setDelayedTransferTimeout() {
+      if (this.delayedTranferTimeoutValue == null || this.delayedTranferTimeoutValue === undefined ||
+        this.delayedTranferTimeoutValue < 0 || this.delayedTranferTimeoutValue > 2147483) {
+        this.dialogSvc.alert({
+            title: this.$t.instant('names.setDelayedTransferTimeout'),
+            body: this.$t.instant('messages.confirmDelayTransferTimeoutValue'),
+        })
+        return;
+      }
+
       this.dialogSvc
         .confirm({ body: this.$t.instant('messages.confirmCommand') })
         .subscribe((ok) => {

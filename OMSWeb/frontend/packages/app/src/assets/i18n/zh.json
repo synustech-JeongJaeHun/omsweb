@@ -575,6 +575,8 @@
     "confirmParameterInvalidCarrierLoc": "NAK[3] Parameter Invalid [CARRIERLOC]",
     "confirmReject": "NAK[5] Reject",
     "confirmPointHomeInterlock": "This location cannot be set as Home.",
+    "confirmInvalidInput": "The input is not valid",
+    "confirmDelayTransferTimeoutValue": "The input is not valid, recommend (0 - 2147483)",
     "selectObjectType": "选择类型",
     "searchId": "搜索 ID",
     "noObjectSelected": "没有选择任何东西。",

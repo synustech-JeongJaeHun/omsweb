@@ -575,6 +575,8 @@
     "confirmParameterInvalidCarrierLoc": "NAK[3] Parameter Invalid [CARRIERLOC]",
     "confirmReject": "NAK[5] Reject",
     "confirmPointHomeInterlock": "This location cannot be set as Home.",
+    "confirmInvalidInput": "The input is not valid",
+    "confirmDelayTransferTimeoutValue": "The input is not valid, recommend (0 - 2147483)",
     "selectObjectType": "유형 선택",
     "searchId": "검색 ID",
     "noObjectSelected": "선택된 항목이 없습니다.",

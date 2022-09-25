@@ -40,6 +40,7 @@ namespace OMSWeb.Controllers
             int ntimeout = 3600;
             try { ntimeout = Convert.ToInt32(timeout); } catch (Exception e) { ntimeout = 3600; }
             if (ntimeout < 0) ntimeout = 0;
+            if (ntimeout > 2147483) ntimeout = 2147483; // to max positive int regarding as * 1000
 
             bool bwarningNotify = false;
             if (string.IsNullOrWhiteSpace(warningNotify) == false)
@@ -81,6 +82,7 @@ namespace OMSWeb.Controllers
             int timeout = 3600;
             try { timeout = Convert.ToInt32(strTimeout); } catch (Exception e) { timeout = 3600; }
             if (timeout < 0) timeout = 0;
+            if (timeout > 2147483) timeout = 2147483; // to max positive int regarding as * 1000
 
             // warningNotify
             bool warningNotify = false;

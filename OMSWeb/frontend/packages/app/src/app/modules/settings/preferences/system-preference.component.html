@@ -62,7 +62,7 @@
 		<div class="field-row">
 			<label>{{ 'names.time' | translate }} {{ ': ' }}</label>
 			<mat-form-field class="dense" appearance="outline">
-				<input matInput #delayedTranferTimeoutId type="number" [value]="delayedTranferTimeoutValue" min="0"
+				<input matInput #delayedTranferTimeoutId type="number" [value]="delayedTranferTimeoutValue" min="0" max="2147483"
 								(change)="onChangeDelayedTransferTimeout(delayedTranferTimeoutId.value)" />
 			</mat-form-field>
 			<ng-container>
