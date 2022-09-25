@@ -84,7 +84,7 @@ export class OrderControlTableComponent implements OnInit, OnDestroy {
 
   private getColor_Status(value: string): string {
       if (value != null && value !== undefined) {
-        if (value?.includes('order') && value?.includes('delayed'))
+        if (value?.includes('transfer') && value?.includes('delayed'))
           return this.color_warning;
       }
       return this.color_normal;
