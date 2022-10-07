@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import DataSource from 'devextreme/data/data_source'
 import { Observable, of } from 'rxjs'
-import { map, tap } from 'rxjs/operators'
+import { tap } from 'rxjs/operators'
 import {
     ClientPreferences,
     ISettingsDelayedTransferTimeout,
@@ -21,7 +21,6 @@ import {
 	ManualTransferFiltersSetting,
 	NodeMarginSetting,
 } from '../models/settings.model'
-import { ISettingMode } from '../models/system.model'
 import { IQueryResult } from '@oms/models/query-result.model'
 import * as AspNetData from 'devextreme-aspnet-data-nojquery'
 

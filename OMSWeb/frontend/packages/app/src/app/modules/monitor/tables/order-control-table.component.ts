@@ -37,13 +37,13 @@ export class OrderControlTableComponent implements OnInit, OnDestroy {
 	@ViewChild(DxDataGridComponent, { static: false })
 	dataGrid: DxDataGridComponent
 
-    dataSource: DataSource;
+	dataSource: DataSource
 	// dataSource: any;
-    selectedRows: number[] = []
-    preference: ClientPreferences
+	selectedRows: number[] = []
+	preference: ClientPreferences
 
-    private color_normal: string = 'rgba(255, 255, 255, 1.0)';
-    private color_warning: string = 'rgba(255, 210, 0, 0.5)';
+	private color_normal: string = 'rgba(255, 255, 255, 1.0)'
+	private color_warning: string = 'rgba(255, 210, 0, 0.5)'
 
 	//#region Subscriptions
 	private destroy$: Subject<void> = new Subject<void>()
@@ -62,11 +62,11 @@ export class OrderControlTableComponent implements OnInit, OnDestroy {
 
 	get canDelete(): boolean {
 		return this.selectedRows.length > 0
-    }
+	}
 
-    get canUpdate(): boolean {
-      return this.selectedRows.length == 1
-    }
+	get canUpdate(): boolean {
+		return this.selectedRows.length == 1
+	}
 
 	transformVehicleId = ({ value = '' }): string => {
 		const text =
@@ -78,17 +78,17 @@ export class OrderControlTableComponent implements OnInit, OnDestroy {
 		return this.idSvc.guessLocationId(value)
 	}
 
-    getBgColor(type: number, value: string): string {
-      return this.getColor_Status(value); // Status
-    }
+	getBgColor(type: number, value: string): string {
+		return this.getColor_Status(value) // Status
+	}
 
-  private getColor_Status(value: string): string {
-      if (value != null && value !== undefined) {
-        if (value?.includes('transfer') && value?.includes('delayed'))
-          return this.color_warning;
-      }
-      return this.color_normal;
-    }
+	private getColor_Status(value: string): string {
+		if (value != null && value !== undefined) {
+			if (value?.includes('transfer') && value?.includes('delayed'))
+				return this.color_warning
+		}
+		return this.color_normal
+	}
 
 	constructor(
 		private auth: AuthService,
@@ -96,18 +96,51 @@ export class OrderControlTableComponent implements OnInit, OnDestroy {
 		private settingSvc: SettingsService,
 		private messageSvc: MessagesService,
 		private idSvc: TrackIdService,
-        private hubSvc: HubService,
-        private dialogSvc: DialogService,
-        private $t: TranslateService,
-        private transferSvc: TransfersService,
-        private t$: TranslateService,
+		private hubSvc: HubService,
+		private dialogSvc: DialogService,
+		private transferSvc: TransfersService,
+		private t$: TranslateService,
 	) {
 		this.dataSource = this.statusSvc.orderStatusDataSource()
-        this.preference = this.settingSvc.globalPreferences
+		this.preference = this.settingSvc.globalPreferences
 	}
 
 	canDisplayTable(type: string): boolean {
 		return this.preference.controlTables[type]
+	}
+	getDisplayTableColumnIndex(type: string): number {
+		return this.preference.controlTables.orders_order.findIndex(
+			(column) => column.name === type,
+		)
+	}
+
+	getDisplayTableColumnWidth(type: string) {
+		return this.preference.controlTables.orders_order.find(
+			(column) => column.name === type,
+		).width
+	}
+
+	stateStoring = {
+		enabled: true,
+		type: 'custom',
+		customSave: (configuration: {
+			columns: {
+				dataField: string
+				dataType: string
+				name: string
+				visible: boolean
+				visibleIndex: number
+				width: number
+			}[]
+		}) => {
+			configuration.columns.forEach((c) => {
+				const column =
+					this.preference.controlTables.orders_order[c.visibleIndex]
+				if (column) column.width = c.width
+			})
+
+			this.preference.save()
+		},
 	}
 
 	ngOnDestroy(): void {
@@ -128,58 +161,58 @@ export class OrderControlTableComponent implements OnInit, OnDestroy {
 		const items = this.dataGrid.instance.getSelectedRowsData()
 		const jobs = items.map((x) => this.messageSvc.sendDeleteOrder(x))
 		forkJoin(jobs).subscribe()
-    }
+	}
 
-    onUpdate(destInput: string) {
-      if (!this.canUpdate || !destInput) return
+	onUpdate(destInput: string) {
+		if (!this.canUpdate || !destInput) return
 
-      let orders: IOrderStatusRow[] = this.dataGrid.instance.getSelectedRowsData();
-      let commandID: string = orders[0].logicalId;
+		let orders: IOrderStatusRow[] = this.dataGrid.instance.getSelectedRowsData()
+		let commandID: string = orders[0].logicalId
 
-      this.transferSvc.checkUpdate(commandID, destInput)
-        .subscribe((res) => {
-          console.log(res);
+		this.transferSvc.checkUpdate(commandID, destInput).subscribe((res) => {
+			console.log(res)
 
-          if (res.hcack === 0 || res.hcack === 4) {
-            const items = this.dataGrid.instance.getSelectedRowsData()
-            const jobs = items.map((x) => this.messageSvc.sendUpdateOrder(x, destInput))
-            forkJoin(jobs).subscribe()
+			if (res.hcack === 0 || res.hcack === 4) {
+				const items = this.dataGrid.instance.getSelectedRowsData()
+				const jobs = items.map((x) =>
+					this.messageSvc.sendUpdateOrder(x, destInput),
+				)
+				forkJoin(jobs).subscribe()
 
-            this.dialogSvc.success({
-              title: this.t$.instant('names.success'),
-              body: this.t$.instant(errorMessage),
-            })
-          }
-          else {
-            var errorMessage = "";
-            if (res.hcack === 2) errorMessage = 'messages.confirmNotAbleToExcute';
-            else if (res.hcack === 3) {
-              if (res.cpname === 'DESTPORT') errorMessage = 'messages.confirmParameterInvalidDest';
-              else errorMessage = 'messages.confirmParameterInvalid';
-            }
-            else if (res.hcack === 5) errorMessage = 'messages.confirmReject';
-            else errorMessage = 'messages.confirmNotAbleToExcute';
+				this.dialogSvc.success({
+					title: this.t$.instant('names.success'),
+					body: this.t$.instant(errorMessage),
+				})
+			} else {
+				var errorMessage = ''
+				if (res.hcack === 2) errorMessage = 'messages.confirmNotAbleToExcute'
+				else if (res.hcack === 3) {
+					if (res.cpname === 'DESTPORT')
+						errorMessage = 'messages.confirmParameterInvalidDest'
+					else errorMessage = 'messages.confirmParameterInvalid'
+				} else if (res.hcack === 5) errorMessage = 'messages.confirmReject'
+				else errorMessage = 'messages.confirmNotAbleToExcute'
 
-            this.dialogSvc.alert({
-              title: this.t$.instant('names.failed'),
-              body: this.t$.instant(errorMessage),
-            })
-          }
-        })
-    }
+				this.dialogSvc.alert({
+					title: this.t$.instant('names.failed'),
+					body: this.t$.instant(errorMessage),
+				})
+			}
+		})
+	}
 
 	private onTableChanged(payload: IDataChangeEvent) {
-      this.dataSource.reload().then((data) => {
-         this.dataGrid.instance.refresh();
-      })
+		this.dataSource.reload().then((data) => {
+			this.dataGrid.instance.refresh()
+		})
 	}
 
 	@HostListener('document:visibilitychange', ['$event'])
 	private visibilitychange() {
-        if (!document.hidden) {
-          this.dataSource.reload().then((data) => {
-             this.dataGrid.instance.refresh();
-          })
-        }
+		if (!document.hidden) {
+			this.dataSource.reload().then((data) => {
+				this.dataGrid.instance.refresh()
+			})
+		}
 	}
 }
