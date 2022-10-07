@@ -128,9 +128,10 @@ export const defaultControlTable = {
 		{ name: 'orders_distanceMove', i18nLabel: 'names.distanceMove', width: 80 },
 	],
 
+  // vehicle table
 	vehicles: true,
+
 	vehicles_id: true,
-	vehicles_physicalId: true,
 	vehicles_logicalId: true,
 	vehicles_connection: true,
 	vehicles_railIn: true,
@@ -158,20 +159,66 @@ export const defaultControlTable = {
 	vehicles_mapDb: true,
 	vehicles_mapVersion: true,
 
+  vehicles_order: [
+    {name: 'vehicles_id', i18nLabel: 'names.id', width: 60},
+    {name: 'vehicles_logicalId', i18nLabel: 'names.logicalId', width: 90},
+    {name: 'vehicles_connection', i18nLabel: 'names.connected', width: 60},
+    {name: 'vehicles_railIn', i18nLabel: 'names.railIn', width: 60},
+    {name: 'vehicles_mode', i18nLabel: 'names.mode', width: 60},
+    {name: 'vehicles_isMaint', i18nLabel: 'names.maintenance', width: 80},
+    {name: 'vehicles_canBePushed', i18nLabel: 'names.canBePushed', width: 60},
+    {name: 'vehicles_hostOrder', i18nLabel: 'names.hostCommand', width: 90},
+    {name: 'vehicles_orderOrigin', i18nLabel: 'names.orderOrigin', width: 60},
+    {name: 'vehicles_group', i18nLabel: 'names.group', width: 60},
+    {name: 'vehicles_curPoint', i18nLabel: 'names.curPoint', width: 60},
+    {name: 'vehicles_commandPoint', i18nLabel: 'names.commandPoint', width: 60},
+    {name: 'vehicles_destPoint', i18nLabel: 'names.destPoint', width: 60},
+    {name: 'vehicles_orderId', i18nLabel: 'names.orderId', width: 60},
+    {name: 'vehicles_locationPickup', i18nLabel: 'names.locationPickup', width: 140},
+    {name: 'vehicles_locationDropoff', i18nLabel: 'names.locationDropoff', width: 140},
+    {name: 'vehicles_locationMove', i18nLabel: 'names.locationMove', width: 140},
+    {name: 'vehicles_runtimeTotal', i18nLabel: 'names.runtimeTotal', width: 80},
+    {name: 'vehicles_movingState', i18nLabel: 'names.movingState', width: 80},
+    {name: 'vehicles_cargoState', i18nLabel: 'names.cargoState', width: 80},
+    {name: 'vehicles_carrierLabel', i18nLabel: 'names.carrierLabel', width: 110},
+    {name: 'vehicles_error', i18nLabel: 'names.errorList', width: 70},
+    {name: 'vehicles_sensorStopped', i18nLabel: 'names.sensorStopped', width: 80},
+    {name: 'vehicles_blocked', i18nLabel: 'names.blocked', width: 80},
+    {name: 'vehicles_distanceTotal', i18nLabel: 'names.distanceTotal', width: 80},
+    {name: 'vehicles_mapDb', i18nLabel: 'names.mapDb', width: 90},
+    {name: 'vehicles_mapVersion', i18nLabel: 'names.mapVersion', width: 90},
+  ],
+
+  // stations table
 	stations: true,
+
 	stations_id: true,
 	stations_physicalId: true,
 	stations_logicalId: true,
 	stations_group: true,
 	stations_point: true,
 	stations_direction: true,
-	stations_carrierType: true,
 	stations_nextPoint: true,
 	stations_offset: true,
 	stations_unuse: true,
 	stations_carrierId: true,
 
+  stations_order: [
+    {name: 'stations_id', i18nLabel: 'names.id', width: 50},
+    {name: 'stations_physicalId', i18nLabel: 'names.physicalId', width: 120},
+    {name: 'stations_logicalId', i18nLabel: 'names.logicalId', width: 120},
+    {name: 'stations_group', i18nLabel: 'names.group', width: 60},
+    {name: 'stations_point', i18nLabel: 'names.point', width: 100},
+    {name: 'stations_direction', i18nLabel: 'names.direction', width: 100},
+    {name: 'stations_nextPoint', i18nLabel: 'names.nextPoint', width: 100},
+    {name: 'stations_offset', i18nLabel: 'names.offset', width: 100},
+    {name: 'stations_unuse', i18nLabel: 'names.unuse', width: 100},
+    {name: 'stations_carrierId', i18nLabel: 'names.carrierId', width: 100},
+  ],
+
+  // buffers table
 	buffers: true,
+
 	buffers_id: true,
 	buffers_physicalId: true,
 	buffers_logicalId: true,
@@ -183,19 +230,39 @@ export const defaultControlTable = {
 	buffers_unuse: true,
 	buffers_carrierId: true,
 
+  buffers_order: [
+    {name: 'buffers_id', i18nLabel: 'names.id', width: 50},
+    {name: 'buffers_physicalId', i18nLabel: 'names.physicalId', width: 120},
+    {name: 'buffers_logicalId', i18nLabel: 'names.logicalId', width: 120},
+    {name: 'buffers_group', i18nLabel: 'names.group', width: 60},
+    {name: 'buffers_point', i18nLabel: 'names.point', width: 100},
+    {name: 'buffers_direction', i18nLabel: 'names.direction', width: 100},
+    {name: 'buffers_nextPoint', i18nLabel: 'names.nextPoint', width: 100},
+    {name: 'buffers_offset', i18nLabel: 'names.offset', width: 100},
+    {name: 'buffers_unuse', i18nLabel: 'names.unuse', width: 100},
+    {name: 'buffers_carrierId', i18nLabel: 'names.carrierId', width: 100},
+  ],
+
+  // zcus table
 	zcus: true,
+
 	zcus_id: true,
-	zcus_logicalId: true,
 	zcus_using_type: true,
 	zcus_type: true,
 	zcus_status: true,
 	zcus_errorCode: true,
-	zcus_passVehicle: false,
-	zcus_vehicleCount: false,
-	zcus_vehicleInfo: false,
 
+  zcus_order: [
+    {name: 'zcus_id', i18nLabel: 'names.id', width: 50},
+    {name: 'zcus_using_type', i18nLabel: 'names.usingType', width: 100},
+    {name: 'zcus_type', i18nLabel: 'names.zcuType', width: 100},
+    {name: 'zcus_status', i18nLabel: 'names.status', width: 100},
+    {name: 'zcus_errorCode', i18nLabel: 'names.errorCode', width: 100},
+  ],
+
+  // cps table
 	cps: true,
-	cps_server_id: true,
+
 	cps_logical_id: true,
 	cps_converter_id: true,
 	cps_status: true,
@@ -208,14 +275,21 @@ export const defaultControlTable = {
 	cps_sync: true,
 	cps_backup_id: true,
 	cps_error_code: true,
-	cps_voltage_rs: false,
-	cps_voltage_st: false,
-	cps_voltage_tr: false,
-	cps_current_r: false,
-	cps_current_s: false,
-	cps_current_t: false,
-	cps_total_kw: false,
-	cps_wh: false,
+
+  cps_order: [
+    {name: 'cps_converter_id', i18nLabel: 'names.cps_converter_id', width: 70},
+    {name: 'cps_logical_id', i18nLabel: 'names.logicalId', width: 120},
+    {name: 'cps_status', i18nLabel: 'names.cps_status', width: 120},
+    {name: 'cps_voltage', i18nLabel: 'names.cps_voltage', width: 60},
+    {name: 'cps_current_igbt', i18nLabel: 'names.cps_current_igbt', width: 60},
+    {name: 'cps_current_track', i18nLabel: 'names.cps_current_track', width: 60},
+    {name: 'cps_frequency', i18nLabel: 'names.cps_frequency', width: 70},
+    {name: 'cps_temp_radiator', i18nLabel: 'names.cps_temp_radiator', width: 80},
+    {name: 'cps_temp_internal', i18nLabel: 'names.cps_temp_internal', width: 80},
+    {name: 'cps_sync', i18nLabel: 'names.cps_sync', width: 60},
+    {name: 'cps_backup_id', i18nLabel: 'names.cps_backup_id', width: 60},
+    {name: 'cps_error_code', i18nLabel: 'names.cps_error_code', width: 60},
+  ]
 }
 
 export class ClientPreferences implements IPreferences {

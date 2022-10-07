@@ -32,34 +32,37 @@ export class ColumnDisplayManagementComponent {
 	}
 
 	changeTableColumnOrder(
-		target: 'orders_order',
+		target: string,
 		columnName: string,
 		direction: 'up' | 'down',
 	) {
-    const orders = {
-      'orders_order': this.preference.controlTables.orders_order
-    }
-    const order = orders[target]
+		const orders = {
+			orders_order: this.preference.controlTables.orders_order,
+			vehicles_order: this.preference.controlTables.vehicles_order,
+			stations_order: this.preference.controlTables.stations_order,
+			buffers_order: this.preference.controlTables.buffers_order,
+			zcus_order: this.preference.controlTables.zcus_order,
+			cps_order: this.preference.controlTables.cps_order,
+		}
+		const order = orders[target]
 
-    const fromIndex = order.findIndex(c => c.name === columnName)
-    const toIndex = (()=>{
-      if(direction === 'up' && fromIndex === 0)
-        return fromIndex
-      else if (direction === 'up')
-        return fromIndex - 1
-      else if (direction === "down" && fromIndex === order.length - 1)
-        return fromIndex
-      else // direction === 'down'
-        return fromIndex + 1
-    })()
+		const fromIndex = order.findIndex((c) => c.name === columnName)
+		const toIndex = (() => {
+			if (direction === 'up' && fromIndex === 0) return fromIndex
+			else if (direction === 'up') return fromIndex - 1
+			else if (direction === 'down' && fromIndex === order.length - 1)
+				return fromIndex
+			// direction === 'down'
+			else return fromIndex + 1
+		})()
 
-    const selected = {...order[fromIndex]}
-    const affected = {...order[toIndex]}
-    order[fromIndex] = affected
-    order[toIndex] = selected
+		const selected = { ...order[fromIndex] }
+		const affected = { ...order[toIndex] }
+		order[fromIndex] = affected
+		order[toIndex] = selected
 
 		this.preference.save()
-  }
+	}
 
 	private changeControlTableState(type: string, value: any) {
 		const pref = this.preference

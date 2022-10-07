@@ -1,51 +1,154 @@
 <div class="grid-actions" *ngIf="hasControlAccess">
-  <button mat-stroked-button color="basic" class="dense accent"
-          (click)="onReferenceValue()">
-    {{ "names.referenceValue" | translate }}
-  </button>
+	<button
+		mat-stroked-button
+		color="basic"
+		class="dense accent"
+		(click)="onReferenceValue()"
+	>
+		{{ 'names.referenceValue' | translate }}
+	</button>
 </div>
 
-<dx-data-grid [dataSource]="dataSource" [remoteOperations]="true" [height]="tableHeight" [repaintChangesOnly]="true"
-              [columnAutoWidth]="false" [showBorders]="false" [highlightChanges]="true" [showColumnLines]="true"
-              [showRowLines]="true" [headerFilter]="false" [(selectedRowKeys)]="selectedRows" allowColumnResizing="true">
-  <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
-  <!--dxo-scrolling mode="virtual" rowRenderingMode="standard"></dxo-scrolling-->
-  <dxo-paging [pageSize]="50"></dxo-paging>
-  <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[50, 100, 200]" [showInfo]="true" visible="true">
-  </dxo-pager>
-  <dxo-search-panel [placeholder]="'names.search' | translate" [visible]="true"></dxo-search-panel>
-  <dxo-load-panel [enabled]="false"></dxo-load-panel>
-  <dxo-filter-row [visible]="true"></dxo-filter-row>
+<dx-data-grid
+	[dataSource]="dataSource"
+	[remoteOperations]="true"
+	[height]="tableHeight"
+	[repaintChangesOnly]="true"
+	[columnAutoWidth]="false"
+	[showBorders]="false"
+	[highlightChanges]="true"
+	[showColumnLines]="true"
+	[showRowLines]="true"
+	[headerFilter]="false"
+	[(selectedRowKeys)]="selectedRows"
+	allowColumnResizing="true"
+	[stateStoring]="stateStoring"
+>
+	<dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
+	<!--dxo-scrolling mode="virtual" rowRenderingMode="standard"></dxo-scrolling-->
+	<dxo-paging [pageSize]="50"></dxo-paging>
+	<dxo-pager
+		[showPageSizeSelector]="true"
+		[allowedPageSizes]="[50, 100, 200]"
+		[showInfo]="true"
+		visible="true"
+	>
+	</dxo-pager>
+	<dxo-search-panel
+		[placeholder]="'names.search' | translate"
+		[visible]="true"
+	></dxo-search-panel>
+	<dxo-load-panel [enabled]="false"></dxo-load-panel>
+	<dxo-filter-row [visible]="true"></dxo-filter-row>
 
-  <dxi-column [width]="70" dataType="string" dataField="id" [caption]="'names.cps_converter_id' | translate"
-              *ngIf="canDisplayTable('cps_converter_id')"></dxi-column>
-  <!--
+	<dxi-column
+		dataType="string"
+		dataField="id"
+		[caption]="'names.cps_converter_id' | translate"
+		[visible]="canDisplayTable('cps_converter_id')"
+		[visibleIndex]="getDisplayTableColumnIndex('cps_converter_id')"
+		[width]="getDisplayTableColumnWidth('cps_converter_id')"
+	></dxi-column>
+
+	<dxi-column
+		dataType="string"
+		dataField="logicalId"
+		[caption]="'names.logicalId' | translate"
+		[visible]="canDisplayTable('cps_logical_id')"
+		[visibleIndex]="getDisplayTableColumnIndex('cps_logical_id')"
+		[width]="getDisplayTableColumnWidth('cps_logical_id')"
+	></dxi-column>
+	<dxi-column
+		dataType="string"
+		dataField="status"
+		[caption]="'names.cps_status' | translate"
+		cellTemplate="statusTemplate"
+		[visible]="canDisplayTable('cps_status')"
+		[visibleIndex]="getDisplayTableColumnIndex('cps_status')"
+		[width]="getDisplayTableColumnWidth('cps_status')"
+	></dxi-column>
+	<dxi-column
+		dataType="string"
+		dataField="voltage"
+		[caption]="'names.cps_voltage' | translate"
+		cellTemplate="voltageTemplate"
+		[visible]="canDisplayTable('cps_voltage')"
+		[visibleIndex]="getDisplayTableColumnIndex('cps_voltage')"
+		[width]="getDisplayTableColumnWidth('cps_voltage')"
+	></dxi-column>
+	<dxi-column
+		dataType="string"
+		dataField="current_igbt"
+		[caption]="'names.cps_current_igbt' | translate"
+		cellTemplate="currentIgbtTemplate"
+		[visible]="canDisplayTable('cps_current_igbt')"
+		[visibleIndex]="getDisplayTableColumnIndex('cps_current_igbt')"
+		[width]="getDisplayTableColumnWidth('cps_current_igbt')"
+	></dxi-column>
+	<dxi-column
+		dataType="string"
+		dataField="current_track"
+		[caption]="'names.cps_current_track' | translate"
+		cellTemplate="currentTrackTemplate"
+		[visible]="canDisplayTable('cps_current_track')"
+		[visibleIndex]="getDisplayTableColumnIndex('cps_current_track')"
+		[width]="getDisplayTableColumnWidth('cps_current_track')"
+	></dxi-column>
+	<dxi-column
+		dataType="string"
+		dataField="frequency"
+		[caption]="'names.cps_frequency' | translate"
+		[visible]="canDisplayTable('cps_frequency')"
+		[visibleIndex]="getDisplayTableColumnIndex('cps_frequency')"
+		[width]="getDisplayTableColumnWidth('cps_frequency')"
+	></dxi-column>
+	<dxi-column
+		dataType="string"
+		dataField="temp_radiator"
+		[caption]="'names.cps_temp_radiator' | translate"
+		cellTemplate="tempRadiatorTemplate"
+		[visible]="canDisplayTable('cps_temp_radiator')"
+		[visibleIndex]="getDisplayTableColumnIndex('cps_temp_radiator')"
+		[width]="getDisplayTableColumnWidth('cps_temp_radiator')"
+	></dxi-column>
+	<dxi-column
+		dataType="string"
+		dataField="temp_internal"
+		[caption]="'names.cps_temp_internal' | translate"
+		cellTemplate="tempInternalTemplate"
+		[visible]="canDisplayTable('cps_temp_internal')"
+		[visibleIndex]="getDisplayTableColumnIndex('cps_temp_internal')"
+		[width]="getDisplayTableColumnWidth('cps_temp_internal')"
+	></dxi-column>
+	<dxi-column
+		dataType="string"
+		dataField="sync"
+		[caption]="'names.cps_sync' | translate"
+		[visible]="canDisplayTable('cps_sync')"
+		[visibleIndex]="getDisplayTableColumnIndex('cps_sync')"
+		[width]="getDisplayTableColumnWidth('cps_sync')"
+	></dxi-column>
+	<dxi-column
+		dataType="string"
+		dataField="backup_id"
+		[caption]="'names.cps_backup_id' | translate"
+		[visible]="canDisplayTable('cps_backup_id')"
+		[visibleIndex]="getDisplayTableColumnIndex('cps_backup_id')"
+		[width]="getDisplayTableColumnWidth('cps_backup_id')"
+	></dxi-column>
+	<dxi-column
+		dataType="string"
+		dataField="error_code"
+		[caption]="'names.cps_error_code' | translate"
+		[visible]="canDisplayTable('cps_error_code')"
+		[visibleIndex]="getDisplayTableColumnIndex('cps_error_code')"
+		[width]="getDisplayTableColumnWidth('cps_error_code')"
+	></dxi-column>
+	<!--
   <dxi-column [width]="70" dataType="string" dataField="server_id" [caption]="'names.cps_server_id' | translate"
               *ngIf="canDisplayTable('cps_server_id')"></dxi-column>
   -->
-  <dxi-column [width]="120" dataType="string" dataField="logicalId" [caption]="'names.logicalId' | translate"
-              *ngIf="canDisplayTable('cps_logical_id')"></dxi-column>
-  <dxi-column [width]="120" dataType="string" dataField="status" [caption]="'names.cps_status' | translate"
-              cellTemplate="statusTemplate" *ngIf="canDisplayTable('cps_status')"></dxi-column>
-  <dxi-column [width]="60" dataType="string" dataField="voltage" [caption]="'names.cps_voltage' | translate"
-              cellTemplate="voltageTemplate" *ngIf="canDisplayTable('cps_voltage')"></dxi-column>
-  <dxi-column [width]="60" dataType="string" dataField="current_igbt" [caption]="'names.cps_current_igbt' | translate"
-              cellTemplate="currentIgbtTemplate" *ngIf="canDisplayTable('cps_current_igbt')"></dxi-column>
-  <dxi-column [width]="60" dataType="string" dataField="current_track" [caption]="'names.cps_current_track' | translate"
-              cellTemplate="currentTrackTemplate" *ngIf="canDisplayTable('cps_current_track')"></dxi-column>
-  <dxi-column [width]="70" dataType="string" dataField="frequency" [caption]="'names.cps_frequency' | translate"
-              *ngIf="canDisplayTable('cps_frequency')"></dxi-column>
-  <dxi-column [width]="80" dataType="string" dataField="temp_radiator" [caption]="'names.cps_temp_radiator' | translate"
-              cellTemplate="tempRadiatorTemplate" *ngIf="canDisplayTable('cps_temp_radiator')"></dxi-column>
-  <dxi-column [width]="80" dataType="string" dataField="temp_internal" [caption]="'names.cps_temp_internal' | translate"
-              cellTemplate="tempInternalTemplate" *ngIf="canDisplayTable('cps_temp_internal')"></dxi-column>
-  <dxi-column [width]="60" dataType="string" dataField="sync" [caption]="'names.cps_sync' | translate"
-              *ngIf="canDisplayTable('cps_sync')"></dxi-column>
-  <dxi-column [width]="60" dataType="string" dataField="backup_id" [caption]="'names.cps_backup_id' | translate"
-              *ngIf="canDisplayTable('cps_backup_id')"></dxi-column>
-  <dxi-column [width]="60" dataType="string" dataField="error_code" [caption]="'names.cps_error_code' | translate"
-              *ngIf="canDisplayTable('cps_error_code')"></dxi-column>
-  <!--
+	<!--
   <dxi-column [width]="60" dataType="string" dataField="voltage_rs" [caption]="'names.cps_voltage_rs' | translate"
               *ngIf="canDisplayTable('cps_voltage_rs')"></dxi-column>
   <dxi-column [width]="60" dataType="string" dataField="voltage_st" [caption]="'names.cps_voltage_st' | translate"
@@ -63,22 +166,52 @@
   <dxi-column [width]="60" dataType="string" dataField="wh" [caption]="'names.cps_wh' | translate"
               *ngIf="canDisplayTable('cps_wh')"></dxi-column>
     -->
-  <div *dxTemplate="let data of 'statusTemplate'">
-    <div class="value" [ngStyle]="{'background-color': getBgColor(0, data.displayValue) }">{{ data.displayValue }}</div>
-  </div>
-  <div *dxTemplate="let data of 'voltageTemplate'">
-    <div class="value" [ngStyle]="{'background-color': getBgColor(1, data.displayValue) }">{{ data.displayValue }}</div>
-  </div>
-  <div *dxTemplate="let data of 'currentIgbtTemplate'">
-    <div class="value" [ngStyle]="{'background-color': getBgColor(2, data.displayValue) }">{{ data.displayValue }}</div>
-  </div>
-  <div *dxTemplate="let data of 'currentTrackTemplate'">
-    <div class="value" [ngStyle]="{'background-color': getBgColor(3, data.displayValue) }">{{ data.displayValue }}</div>
-  </div>
-  <div *dxTemplate="let data of 'tempRadiatorTemplate'">
-    <div class="value" [ngStyle]="{'background-color': getBgColor(4, data.displayValue) }">{{ data.displayValue }}</div>
-  </div>
-  <div *dxTemplate="let data of 'tempInternalTemplate'">
-    <div class="value" [ngStyle]="{'background-color': getBgColor(5, data.displayValue) }">{{ data.displayValue }}</div>
-  </div>
+	<div *dxTemplate="let data of 'statusTemplate'">
+		<div
+			class="value"
+			[ngStyle]="{ 'background-color': getBgColor(0, data.displayValue) }"
+		>
+			{{ data.displayValue }}
+		</div>
+	</div>
+	<div *dxTemplate="let data of 'voltageTemplate'">
+		<div
+			class="value"
+			[ngStyle]="{ 'background-color': getBgColor(1, data.displayValue) }"
+		>
+			{{ data.displayValue }}
+		</div>
+	</div>
+	<div *dxTemplate="let data of 'currentIgbtTemplate'">
+		<div
+			class="value"
+			[ngStyle]="{ 'background-color': getBgColor(2, data.displayValue) }"
+		>
+			{{ data.displayValue }}
+		</div>
+	</div>
+	<div *dxTemplate="let data of 'currentTrackTemplate'">
+		<div
+			class="value"
+			[ngStyle]="{ 'background-color': getBgColor(3, data.displayValue) }"
+		>
+			{{ data.displayValue }}
+		</div>
+	</div>
+	<div *dxTemplate="let data of 'tempRadiatorTemplate'">
+		<div
+			class="value"
+			[ngStyle]="{ 'background-color': getBgColor(4, data.displayValue) }"
+		>
+			{{ data.displayValue }}
+		</div>
+	</div>
+	<div *dxTemplate="let data of 'tempInternalTemplate'">
+		<div
+			class="value"
+			[ngStyle]="{ 'background-color': getBgColor(5, data.displayValue) }"
+		>
+			{{ data.displayValue }}
+		</div>
+	</div>
 </dx-data-grid>
