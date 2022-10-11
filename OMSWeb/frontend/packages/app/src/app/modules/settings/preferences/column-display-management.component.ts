@@ -1,6 +1,4 @@
 import { Component } from '@angular/core'
-import { Subject } from 'rxjs'
-import { IControlTableEvent } from '../../../models/drawing.model'
 import { ClientPreferences } from '../../../models/settings.model'
 import { SettingsService } from '../../../services/settings.service'
 
@@ -13,13 +11,6 @@ export class ColumnDisplayManagementComponent {
 	preference: ClientPreferences
 	bufferEnabled: boolean
 
-	controlTableCommandEvent$ = new Subject<IControlTableEvent>()
-
-	getCheckedState(target: string): boolean {
-		const pref = this.preference
-		return pref.controlTables[target]
-	}
-
 	constructor(private settingSvc: SettingsService) {
 		this.preference = this.settingSvc.globalPreferences
 		settingSvc.serviceConfig.subscribe(
@@ -27,23 +18,47 @@ export class ColumnDisplayManagementComponent {
 		)
 	}
 
-	onChangeControlTable(target: string, value: any) {
-		this.changeControlTableState(target, value.currentTarget.checked)
+	getCheckedState(category: 'monitor' | 'history', target: string): boolean {
+		const tables =
+			category === 'monitor'
+				? this.preference.controlTables
+				: this.preference.historyTables
+
+		return tables[target]
+	}
+
+	onChangeTable(category: 'monitor' | 'history', target: string, value: any) {
+		const tables =
+			category === 'monitor'
+				? this.preference.controlTables
+				: this.preference.historyTables
+
+		tables[target] = value.currentTarget.checked
+		this.preference.save()
 	}
 
 	changeTableColumnOrder(
+		category: 'monitor' | 'history',
 		target: string,
 		columnName: string,
 		direction: 'up' | 'down',
 	) {
-		const orders = {
-			orders_order: this.preference.controlTables.orders_order,
-			vehicles_order: this.preference.controlTables.vehicles_order,
-			stations_order: this.preference.controlTables.stations_order,
-			buffers_order: this.preference.controlTables.buffers_order,
-			zcus_order: this.preference.controlTables.zcus_order,
-			cps_order: this.preference.controlTables.cps_order,
-		}
+		const orders =
+			category === 'monitor'
+				? {
+						orders_order: this.preference.controlTables.orders_order,
+						vehicles_order: this.preference.controlTables.vehicles_order,
+						stations_order: this.preference.controlTables.stations_order,
+						buffers_order: this.preference.controlTables.buffers_order,
+						zcus_order: this.preference.controlTables.zcus_order,
+						cps_order: this.preference.controlTables.cps_order,
+				  }
+				: {
+						transfers_order: this.preference.historyTables.transfers_order,
+						vehicles_order: this.preference.historyTables.vehicles_order,
+            alarms_order: this.preference.historyTables.alarms_order
+				  }
+
 		const order = orders[target]
 
 		const fromIndex = order.findIndex((c) => c.name === columnName)
@@ -62,12 +77,5 @@ export class ColumnDisplayManagementComponent {
 		order[toIndex] = selected
 
 		this.preference.save()
-	}
-
-	private changeControlTableState(type: string, value: any) {
-		const pref = this.preference
-		pref.controlTables[type] = value
-		pref.save()
-		this.controlTableCommandEvent$.next({ type, value })
 	}
 }

@@ -1,4 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core'
+import { ClientPreferences } from '@oms/root/models/settings.model'
+import { SettingsService } from '@oms/root/services/settings.service'
 import { DxDataGridComponent } from 'devextreme-angular'
 import DataSource from 'devextreme/data/data_source'
 import { HistoriesService } from '../../../services/histories.service'
@@ -90,27 +92,38 @@ export class AlarmHistoryComponent implements OnInit {
 
 	transformLocationId = ({ value = '' }): string => {
 		return this.idSvc.guessLocationId(value)
-    }
+	}
 
-    transform(value: number): string {
-      if (value == undefined) {
-        return "";
-      } else {
-        const hour: number = Math.floor(value / 3600);
-        const minutes: number = Math.floor((value % 3600) / 60);
-        const seconds: number = Math.floor(value % 60);
+	transform(value: number): string {
+		if (value == undefined) {
+			return ''
+		} else {
+			const hour: number = Math.floor(value / 3600)
+			const minutes: number = Math.floor((value % 3600) / 60)
+			const seconds: number = Math.floor(value % 60)
 
-        //return `${hour}:${minutes}:${seconds}`;
-        return hour.toString().padStart(2, '0') + ':' + minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0');
-      }
-    }
+			//return `${hour}:${minutes}:${seconds}`;
+			return (
+				hour.toString().padStart(2, '0') +
+				':' +
+				minutes.toString().padStart(2, '0') +
+				':' +
+				seconds.toString().padStart(2, '0')
+			)
+		}
+	}
 
-	constructor(private svc: HistoriesService, private idSvc: TrackIdService) {
+	constructor(
+		private svc: HistoriesService,
+		private idSvc: TrackIdService,
+		private settingSvc: SettingsService,
+	) {
 		window.onresize = this.getGridSize.bind(this)
 		// this.idSvc.loadIds().subscribe(() => {
 		// 	this.dataSource = this.svc.alarmsDataSource(this.start, this.end)
 		// })
 		this.idSvc.loadIds().subscribe()
+		this.preference = settingSvc.globalPreferences
 	}
 
 	ngOnDestroy(): void {
@@ -120,6 +133,43 @@ export class AlarmHistoryComponent implements OnInit {
 	ngOnInit(): void {
 		this.getGridSize()
 		this.getFileName()
+	}
+
+	preference: ClientPreferences
+	canDisplayTable(type: string): boolean {
+		return this.preference.historyTables[type]
+	}
+	getDisplayTableColumnIndex(type: string): number {
+		return this.preference.historyTables.alarms_order.findIndex(
+			(column) => column.name === type,
+		)
+	}
+	getDisplayTableColumnWidth(type: string) {
+		return this.preference.historyTables.alarms_order.find(
+			(column) => column.name === type,
+		).width
+	}
+	stateStoring = {
+		enabled: true,
+		type: 'custom',
+		customSave: (configuration: {
+			columns: {
+				dataField: string
+				dataType: string
+				name: string
+				visible: boolean
+				visibleIndex: number
+				width: number
+			}[]
+		}) => {
+			configuration.columns.forEach((c) => {
+				const column =
+					this.preference.historyTables.alarms_order[c.visibleIndex]
+				if (column) column.width = c.width
+			})
+
+			this.preference.save()
+		},
 	}
 
 	search(startTime: Date, endTime: Date) {
