@@ -59,28 +59,28 @@ export class VehicleControlTableComponent implements OnInit, OnDestroy {
 
 	get selectedItems(): IVehicleStatusRow[] {
 		return this.dataGrid.instance.getSelectedRowsData()
-    }
+	}
 
-    transform_distance(value: number): string {
-      if (value == undefined) {
-        return "";
-      } else {
-        const distance: number = Math.floor(value / 1000000);
+	transform_distance(value: number): string {
+		if (value == undefined) {
+			return ''
+		} else {
+			const distance: number = Math.floor(value / 1000000)
 
-        return `${distance}km`;
-      }
-    }
+			return `${distance}km`
+		}
+	}
 
-    transform_runtime(value: number): string {
-      if (value == undefined) {
-        return "";
-      } else {
-        const day: number = Math.floor(value / 86400);  //3600 * 24
-        const hour: string = ((value % 86400) / 3600).toFixed(1);
+	transform_runtime(value: number): string {
+		if (value == undefined) {
+			return ''
+		} else {
+			const day: number = Math.floor(value / 86400) //3600 * 24
+			const hour: string = ((value % 86400) / 3600).toFixed(1)
 
-        return `${day}d ` + hour.toString().padStart(2, '0') + 'h';
-      }
-    }
+			return `${day}d ` + hour.toString().padStart(2, '0') + 'h'
+		}
+	}
 
 	constructor(
 		private auth: AuthService,
@@ -97,6 +97,40 @@ export class VehicleControlTableComponent implements OnInit, OnDestroy {
 
 	canDisplayTable(type: string): boolean {
 		return this.preference.controlTables[type]
+	}
+	getDisplayTableColumnIndex(type: string): number {
+		return this.preference.controlTables.vehicles_order.findIndex(
+			(column) => column.name === type,
+		)
+	}
+
+	getDisplayTableColumnWidth(type: string) {
+		return this.preference.controlTables.vehicles_order.find(
+			(column) => column.name === type,
+		).width
+	}
+
+	stateStoring = {
+		enabled: true,
+		type: 'custom',
+		customSave: (configuration: {
+			columns: {
+				dataField: string
+				dataType: string
+				name: string
+				visible: boolean
+				visibleIndex: number
+				width: number
+			}[]
+		}) => {
+			configuration.columns.forEach((c) => {
+				const column =
+					this.preference.controlTables.vehicles_order[c.visibleIndex]
+				if (column) column.width = c.width
+			})
+
+			this.preference.save()
+		},
 	}
 
 	ngOnInit(): void {
@@ -190,24 +224,29 @@ export class VehicleControlTableComponent implements OnInit, OnDestroy {
 				)
 				.subscribe()
 		}
-    }
-    onChangeHostOrderEnable(enable:boolean) {
-      if (!this.canControl) return
-      if (enable === true) {
-        if (this.selectedItems.length > 0) {
-          this.messageSvc
-            .sendVehicleCommand({ action: 'set_behavior', hostOrder: true }, this.selectedItems,)
-            .subscribe()
-        }
-      }
-      else {
-        if (this.selectedItems.length > 0) {
-          this.messageSvc
-            .sendVehicleCommand({ action: 'set_behavior', hostOrder: false }, this.selectedItems,)
-            .subscribe()
-        }
-      }
-    }
+	}
+	onChangeHostOrderEnable(enable: boolean) {
+		if (!this.canControl) return
+		if (enable === true) {
+			if (this.selectedItems.length > 0) {
+				this.messageSvc
+					.sendVehicleCommand(
+						{ action: 'set_behavior', hostOrder: true },
+						this.selectedItems,
+					)
+					.subscribe()
+			}
+		} else {
+			if (this.selectedItems.length > 0) {
+				this.messageSvc
+					.sendVehicleCommand(
+						{ action: 'set_behavior', hostOrder: false },
+						this.selectedItems,
+					)
+					.subscribe()
+			}
+		}
+	}
 	onChangePushActivity() {
 		if (!this.canControl) return
 		this.enableRows = []
@@ -235,24 +274,29 @@ export class VehicleControlTableComponent implements OnInit, OnDestroy {
 				)
 				.subscribe()
 		}
-    }
-    onChangePushEnable(enable: boolean) {
-      if (!this.canControl) return
-      if (enable) {
-        if (this.selectedItems.length > 0) {
-          this.messageSvc
-            .sendVehicleCommand({ action: 'set_behavior', canBePushed: true }, this.selectedItems,)
-            .subscribe()
-        }
-      }
-      else {
-        if (this.selectedItems.length > 0) {
-          this.messageSvc
-            .sendVehicleCommand({ action: 'set_behavior', canBePushed: false }, this.selectedItems,)
-            .subscribe()
-        }
-      }
-    }
+	}
+	onChangePushEnable(enable: boolean) {
+		if (!this.canControl) return
+		if (enable) {
+			if (this.selectedItems.length > 0) {
+				this.messageSvc
+					.sendVehicleCommand(
+						{ action: 'set_behavior', canBePushed: true },
+						this.selectedItems,
+					)
+					.subscribe()
+			}
+		} else {
+			if (this.selectedItems.length > 0) {
+				this.messageSvc
+					.sendVehicleCommand(
+						{ action: 'set_behavior', canBePushed: false },
+						this.selectedItems,
+					)
+					.subscribe()
+			}
+		}
+	}
 	onRailIn() {
 		if (!this.canControl) return
 		this.messageSvc

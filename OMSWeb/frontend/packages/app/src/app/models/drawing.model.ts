@@ -1,5 +1,4 @@
 import { CommandKeyType, MapConfigType, ToggleOptionKeyType } from './enums';
-import { ControlTable } from './settings.model';
 
 export interface ISize {
   width?: number;

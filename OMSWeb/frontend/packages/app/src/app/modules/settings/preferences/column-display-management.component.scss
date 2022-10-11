@@ -6,7 +6,7 @@
 }
 
 .table-columns-sub-entries-container {
-  margin: 2px 0px 2px 25px;
+  margin: 2px 0px 2px 20px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -28,11 +28,27 @@
   margin-right: 25px;
 
   mat-label {
+    padding-left: 5px;
     font-size: 12px;
     font-weight: normal;
     margin-right: 8px;
     vertical-align: baseline;
     width: 25%;
   }
+
+  svg {
+    visibility: hidden;
+    margin-right: 5px;
+    border-radius: 3px;
+  }
 }
 
+.table-columns-sub-container:hover {
+  background-color: rgba(98, 98, 98, 0.25);
+}
+.table-columns-sub-container:hover svg {
+  visibility: visible;
+}
+.table-columns-sub-container:hover svg:hover {
+  background-color: rgba(98, 98, 98, 0.5);
+}

@@ -65,6 +65,40 @@ export class StationControlTableComponent implements OnInit, OnDestroy {
 	canDisplayTable(type: string): boolean {
 		return this.preference.controlTables[type]
 	}
+	getDisplayTableColumnIndex(type: string): number {
+		return this.preference.controlTables.stations_order.findIndex(
+			(column) => column.name === type,
+		)
+	}
+
+	getDisplayTableColumnWidth(type: string) {
+		return this.preference.controlTables.stations_order.find(
+			(column) => column.name === type,
+		).width
+	}
+
+	stateStoring = {
+		enabled: true,
+		type: 'custom',
+		customSave: (configuration: {
+			columns: {
+				dataField: string
+				dataType: string
+				name: string
+				visible: boolean
+				visibleIndex: number
+				width: number
+			}[]
+		}) => {
+			configuration.columns.forEach((c) => {
+				const column =
+					this.preference.controlTables.stations_order[c.visibleIndex]
+				if (column) column.width = c.width
+			})
+
+			this.preference.save()
+		},
+	}
 
 	ngOnDestroy(): void {
 		this.destroy$.next()

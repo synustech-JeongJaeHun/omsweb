@@ -66,6 +66,41 @@ export class BufferControlTableComponent implements OnInit, OnDestroy {
 		return this.preference.controlTables[type]
 	}
 
+	getDisplayTableColumnIndex(type: string): number {
+		return this.preference.controlTables.buffers_order.findIndex(
+			(column) => column.name === type,
+		)
+	}
+
+	getDisplayTableColumnWidth(type: string) {
+		return this.preference.controlTables.buffers_order.find(
+			(column) => column.name === type,
+		).width
+	}
+
+	stateStoring = {
+		enabled: true,
+		type: 'custom',
+		customSave: (configuration: {
+			columns: {
+				dataField: string
+				dataType: string
+				name: string
+				visible: boolean
+				visibleIndex: number
+				width: number
+			}[]
+		}) => {
+			configuration.columns.forEach((c) => {
+				const column =
+					this.preference.controlTables.buffers_order[c.visibleIndex]
+				if (column) column.width = c.width
+			})
+
+			this.preference.save()
+		},
+	}
+
 	ngOnDestroy(): void {
 		this.destroy$.next()
 		this.destroy$.complete()
