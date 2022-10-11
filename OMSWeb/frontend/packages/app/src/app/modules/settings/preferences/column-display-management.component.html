@@ -747,18 +747,12 @@
 			<div>
 				<mat-label>{{ 'names.vehicle' | translate }}</mat-label>
 			</div>
-			<div>
-				<input
-					type="checkbox"
-					color="primary"
-					[title]="'names.orders' | translate"
-					[checked]="getCheckedState('monitor', 'orders')"
-					(change)="onChangeTable('monitor', 'orders', $event)"
-				/>
-			</div>
 		</div>
 		<div class="table-columns-sub-entries-container">
-			<div *ngFor="let column of []" class="table-columns-sub-container">
+			<div
+				*ngFor="let column of preference.historyTables.vehicles_order"
+				class="table-columns-sub-container"
+			>
 				<div class="table-columns-entries-container">
 					<div>
 						<mat-label>{{ column.i18nLabel | translate }}</mat-label>
@@ -769,8 +763,8 @@
 							viewBox="0 0 20 20"
 							(click)="
 								changeTableColumnOrder(
-									'monitor',
-									'orders_order',
+									'history',
+									'vehicles_order',
 									column.name,
 									'up'
 								)
@@ -800,8 +794,8 @@
 							viewBox="0 0 20 20"
 							(click)="
 								changeTableColumnOrder(
-									'monitor',
-									'orders_order',
+									'history',
+									'vehicles_order',
 									column.name,
 									'down'
 								)
@@ -830,8 +824,8 @@
 							type="checkbox"
 							color="primary"
 							[title]="column.i18nLabel | translate"
-							[checked]="getCheckedState('monitor', column.name)"
-							(change)="onChangeTable('monitor', column.name, $event)"
+							[checked]="getCheckedState('history', column.name)"
+							(change)="onChangeTable('history', column.name, $event)"
 						/>
 					</div>
 				</div>
@@ -843,18 +837,12 @@
 			<div>
 				<mat-label>{{ 'names.alarms' | translate }}</mat-label>
 			</div>
-			<div>
-				<input
-					type="checkbox"
-					color="primary"
-					[title]="'names.orders' | translate"
-					[checked]="getCheckedState('monitor', 'orders')"
-					(change)="onChangeTable('monitor', 'orders', $event)"
-				/>
-			</div>
 		</div>
 		<div class="table-columns-sub-entries-container">
-			<div *ngFor="let column of []" class="table-columns-sub-container">
+			<div
+				*ngFor="let column of preference.historyTables.alarms_order"
+				class="table-columns-sub-container"
+			>
 				<div class="table-columns-entries-container">
 					<div>
 						<mat-label>{{ column.i18nLabel | translate }}</mat-label>
@@ -865,8 +853,8 @@
 							viewBox="0 0 20 20"
 							(click)="
 								changeTableColumnOrder(
-									'monitor',
-									'orders_order',
+									'history',
+									'alarms_order',
 									column.name,
 									'up'
 								)
@@ -896,8 +884,8 @@
 							viewBox="0 0 20 20"
 							(click)="
 								changeTableColumnOrder(
-									'monitor',
-									'orders_order',
+									'history',
+									'alarms_order',
 									column.name,
 									'down'
 								)
@@ -926,8 +914,8 @@
 							type="checkbox"
 							color="primary"
 							[title]="column.i18nLabel | translate"
-							[checked]="getCheckedState('monitor', column.name)"
-							(change)="onChangeTable('monitor', column.name, $event)"
+							[checked]="getCheckedState('history', column.name)"
+							(change)="onChangeTable('history', column.name, $event)"
 						/>
 					</div>
 				</div>

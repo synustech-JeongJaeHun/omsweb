@@ -339,19 +339,45 @@ const defaultHistoryTable = {
   // vehicles table
 	vehicles: true,
 
-  vehicle_id: true,
+  vehicles_physical_id: true,
+  vehicles_logical_id: true,
+  vehicles_distance_total: true,
+  vehicles_runtime_total: true,
+  vehicles_empty: true,
 
   vehicles_order: [
-    {name: 'cps_converter_id', i18nLabel: 'names.cps_converter_id', width: 70},
+    {name: 'vehicles_physical_id', i18nLabel: 'names.id', width: 120},
+    {name: 'vehicles_logical_id', i18nLabel: 'names.logicalId', width: 120},
+    {name: 'vehicles_distance_total', i18nLabel: 'names.distanceTotal', width: 180},
+    {name: 'vehicles_runtime_total', i18nLabel: 'names.runtimeTotal', width: 180},
+    {name: 'vehicles_empty', i18nLabel: '', width: 120},
   ],
 
   // alarms table
 	alarms: true,
 
-  alarm_id: true,
+  alarms_vehicle_logical_id: true,
+  alarms_description: true,
+  alarms_level: true,
+  alarms_error_code: true,
+  alarms_cause: true,
+  alarms_cleared: true,
+  alarms_time: true,
+  alarms_time_resolved: true,
+  alarms_age: true,
+  alarms_current  : true,
 
   alarms_order: [
-    {name: 'cps_converter_id', i18nLabel: 'names.cps_converter_id', width: 70},
+    {name: 'alarms_vehicle_logical_id', i18nLabel: 'names.vehicle', width: 160},
+    {name: 'alarms_description', i18nLabel: 'names.alarmName', width: 320},
+    {name: 'alarms_level', i18nLabel: 'names.level', width: 120},
+    {name: 'alarms_error_code', i18nLabel: 'names.errorCode', width: 120},
+    {name: 'alarms_cause', i18nLabel: 'names.cause', width: 320},
+    {name: 'alarms_cleared', i18nLabel: 'names.cleared', width: 100},
+    {name: 'alarms_time', i18nLabel: 'names.time', width: 120},
+    {name: 'alarms_time_resolved', i18nLabel: 'names.timeResolved', width: 120},
+    {name: 'alarms_age', i18nLabel: 'names.ageSecond', width: 120},
+    {name: 'alarms_current', i18nLabel: 'names.current', width: 120},
   ]
 }
 

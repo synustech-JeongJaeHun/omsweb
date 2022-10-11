@@ -55,6 +55,8 @@ export class ColumnDisplayManagementComponent {
 				  }
 				: {
 						transfers_order: this.preference.historyTables.transfers_order,
+						vehicles_order: this.preference.historyTables.vehicles_order,
+            alarms_order: this.preference.historyTables.alarms_order
 				  }
 
 		const order = orders[target]

@@ -1,4 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
+import { ClientPreferences } from '@oms/root/models/settings.model'
+import { SettingsService } from '@oms/root/services/settings.service'
 import { DxDataGridComponent } from 'devextreme-angular'
 import DataSource from 'devextreme/data/data_source'
 import { HistoriesService } from '../../../services/histories.service'
@@ -92,12 +94,17 @@ export class VehicleHistoryComponent implements OnInit, OnDestroy {
 		return this.idSvc.guessLocationId(value)
 	}
 
-	constructor(private svc: HistoriesService, private idSvc: TrackIdService) {
+	constructor(
+    private svc: HistoriesService, 
+    private idSvc: TrackIdService,
+		private settingSvc: SettingsService,
+  ) {
 		window.onresize = this.getGridSize.bind(this)
 		// this.idSvc.loadIds().subscribe(() => {
 		// 	this.dataSource = this.svc.vehiclesDataSource(this.start, this.end)
 		// })
 		this.idSvc.loadIds().subscribe()
+    this.preference = settingSvc.globalPreferences
 	}
 
 	ngOnDestroy(): void {
@@ -107,6 +114,43 @@ export class VehicleHistoryComponent implements OnInit, OnDestroy {
 	ngOnInit(): void {
 		this.getGridSize()
 		this.getFileName()
+	}
+
+  preference: ClientPreferences
+	canDisplayTable(type: string): boolean {
+		return this.preference.historyTables[type]
+	}
+	getDisplayTableColumnIndex(type: string): number {
+		return this.preference.historyTables.vehicles_order.findIndex(
+			(column) => column.name === type,
+		)
+	}
+	getDisplayTableColumnWidth(type: string) {
+		return this.preference.historyTables.vehicles_order.find(
+			(column) => column.name === type,
+		).width
+	}
+	stateStoring = {
+		enabled: true,
+		type: 'custom',
+		customSave: (configuration: {
+			columns: {
+				dataField: string
+				dataType: string
+				name: string
+				visible: boolean
+				visibleIndex: number
+				width: number
+			}[]
+		}) => {
+			configuration.columns.forEach((c) => {
+				const column =
+					this.preference.historyTables.vehicles_order[c.visibleIndex]
+				if (column) column.width = c.width
+			})
+
+			this.preference.save()
+		},
 	}
 
 	search(startTime: Date, endTime: Date) {
