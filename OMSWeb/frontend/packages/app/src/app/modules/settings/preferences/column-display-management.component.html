@@ -4,8 +4,11 @@
 	</h3>
 </div>
 
-<div class="table-columns-entries-container">
-	<div>&nbsp;</div>
+<div class="setting-subheader">
+	<h4 class="setting-title">
+		{{ 'names.monitor' | translate }}
+		{{ 'names.columnDisplayManagement' | translate }}
+	</h4>
 </div>
 
 <div class="table-columns-sub-entries-container">
@@ -569,3 +572,273 @@
 		<div>&nbsp;</div>
 	</div>
 </div>
+
+<div class="setting-subheader">
+	<h4 class="setting-title">
+		{{ 'names.history' | translate }}
+		{{ 'names.columnDisplayManagement' | translate }}
+	</h4>
+</div>
+
+<div class="table-columns-sub-entries-container">
+	<div class="table-format">
+		<div class="table-columns-entries-container">
+			<div>
+				<mat-label>{{ 'names.transfer' | translate }}</mat-label>
+			</div>
+			<div>
+				<input
+					type="checkbox"
+					color="primary"
+					[title]="'names.orders' | translate"
+					[checked]="getCheckedState('orders')"
+					(change)="onChangeControlTable('orders', $event)"
+				/>
+			</div>
+		</div>
+		<div class="table-columns-sub-entries-container">
+			<div *ngFor="let column of []" class="table-columns-sub-container">
+				<div class="table-columns-entries-container">
+					<div>
+						<mat-label>{{ column.i18nLabel | translate }}</mat-label>
+					</div>
+					<div>
+						<svg
+							height="13px"
+							viewBox="0 0 20 20"
+							(click)="
+								changeTableColumnOrder('orders_order', column.name, 'up')
+							"
+						>
+							<line
+								x1="3"
+								y1="17"
+								x2="10"
+								y2="5"
+								stroke="black"
+								stroke-width="2.5"
+								shape-rendering="geometricPrecision"
+							/>
+							<line
+								x1="10"
+								y1="5"
+								x2="17"
+								y2="17"
+								stroke="black"
+								stroke-width="2.5"
+								shape-rendering="geometricPrecision"
+							/>
+						</svg>
+						<svg
+							height="13px"
+							viewBox="0 0 20 20"
+							(click)="
+								changeTableColumnOrder('orders_order', column.name, 'down')
+							"
+						>
+							<line
+								x1="3"
+								y1="5"
+								x2="10"
+								y2="17"
+								stroke="black"
+								stroke-width="2.5"
+								shape-rendering="geometricPrecision"
+							/>
+							<line
+								x1="10"
+								y1="17"
+								x2="17"
+								y2="5"
+								stroke="black"
+								stroke-width="2.5"
+								shape-rendering="geometricPrecision"
+							/>
+						</svg>
+						<input
+							type="checkbox"
+							color="primary"
+							[title]="column.i18nLabel | translate"
+							[checked]="getCheckedState(column.name)"
+							(change)="onChangeControlTable(column.name, $event)"
+						/>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="table-format">
+		<div class="table-columns-entries-container">
+			<div>
+				<mat-label>{{ 'names.vehicle' | translate }}</mat-label>
+			</div>
+			<div>
+				<input
+					type="checkbox"
+					color="primary"
+					[title]="'names.orders' | translate"
+					[checked]="getCheckedState('orders')"
+					(change)="onChangeControlTable('orders', $event)"
+				/>
+			</div>
+		</div>
+		<div class="table-columns-sub-entries-container">
+			<div *ngFor="let column of []" class="table-columns-sub-container">
+				<div class="table-columns-entries-container">
+					<div>
+						<mat-label>{{ column.i18nLabel | translate }}</mat-label>
+					</div>
+					<div>
+						<svg
+							height="13px"
+							viewBox="0 0 20 20"
+							(click)="
+								changeTableColumnOrder('orders_order', column.name, 'up')
+							"
+						>
+							<line
+								x1="3"
+								y1="17"
+								x2="10"
+								y2="5"
+								stroke="black"
+								stroke-width="2.5"
+								shape-rendering="geometricPrecision"
+							/>
+							<line
+								x1="10"
+								y1="5"
+								x2="17"
+								y2="17"
+								stroke="black"
+								stroke-width="2.5"
+								shape-rendering="geometricPrecision"
+							/>
+						</svg>
+						<svg
+							height="13px"
+							viewBox="0 0 20 20"
+							(click)="
+								changeTableColumnOrder('orders_order', column.name, 'down')
+							"
+						>
+							<line
+								x1="3"
+								y1="5"
+								x2="10"
+								y2="17"
+								stroke="black"
+								stroke-width="2.5"
+								shape-rendering="geometricPrecision"
+							/>
+							<line
+								x1="10"
+								y1="17"
+								x2="17"
+								y2="5"
+								stroke="black"
+								stroke-width="2.5"
+								shape-rendering="geometricPrecision"
+							/>
+						</svg>
+						<input
+							type="checkbox"
+							color="primary"
+							[title]="column.i18nLabel | translate"
+							[checked]="getCheckedState(column.name)"
+							(change)="onChangeControlTable(column.name, $event)"
+						/>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="table-format">
+		<div class="table-columns-entries-container">
+			<div>
+				<mat-label>{{ 'names.alarms' | translate }}</mat-label>
+			</div>
+			<div>
+				<input
+					type="checkbox"
+					color="primary"
+					[title]="'names.orders' | translate"
+					[checked]="getCheckedState('orders')"
+					(change)="onChangeControlTable('orders', $event)"
+				/>
+			</div>
+		</div>
+		<div class="table-columns-sub-entries-container">
+			<div *ngFor="let column of []" class="table-columns-sub-container">
+				<div class="table-columns-entries-container">
+					<div>
+						<mat-label>{{ column.i18nLabel | translate }}</mat-label>
+					</div>
+					<div>
+						<svg
+							height="13px"
+							viewBox="0 0 20 20"
+							(click)="
+								changeTableColumnOrder('orders_order', column.name, 'up')
+							"
+						>
+							<line
+								x1="3"
+								y1="17"
+								x2="10"
+								y2="5"
+								stroke="black"
+								stroke-width="2.5"
+								shape-rendering="geometricPrecision"
+							/>
+							<line
+								x1="10"
+								y1="5"
+								x2="17"
+								y2="17"
+								stroke="black"
+								stroke-width="2.5"
+								shape-rendering="geometricPrecision"
+							/>
+						</svg>
+						<svg
+							height="13px"
+							viewBox="0 0 20 20"
+							(click)="
+								changeTableColumnOrder('orders_order', column.name, 'down')
+							"
+						>
+							<line
+								x1="3"
+								y1="5"
+								x2="10"
+								y2="17"
+								stroke="black"
+								stroke-width="2.5"
+								shape-rendering="geometricPrecision"
+							/>
+							<line
+								x1="10"
+								y1="17"
+								x2="17"
+								y2="5"
+								stroke="black"
+								stroke-width="2.5"
+								shape-rendering="geometricPrecision"
+							/>
+						</svg>
+						<input
+							type="checkbox"
+							color="primary"
+							[title]="column.i18nLabel | translate"
+							[checked]="getCheckedState(column.name)"
+							(change)="onChangeControlTable(column.name, $event)"
+						/>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div>&nbsp;</div>
