@@ -23,8 +23,8 @@
 					type="checkbox"
 					color="primary"
 					[title]="'names.orders' | translate"
-					[checked]="getCheckedState('orders')"
-					(change)="onChangeControlTable('orders', $event)"
+					[checked]="getCheckedState('monitor', 'orders')"
+					(change)="onChangeTable('monitor', 'orders', $event)"
 				/>
 			</div>
 		</div>
@@ -42,7 +42,12 @@
 							height="13px"
 							viewBox="0 0 20 20"
 							(click)="
-								changeTableColumnOrder('orders_order', column.name, 'up')
+								changeTableColumnOrder(
+									'monitor',
+									'orders_order',
+									column.name,
+									'up'
+								)
 							"
 						>
 							<line
@@ -68,7 +73,12 @@
 							height="13px"
 							viewBox="0 0 20 20"
 							(click)="
-								changeTableColumnOrder('orders_order', column.name, 'down')
+								changeTableColumnOrder(
+									'monitor',
+									'orders_order',
+									column.name,
+									'down'
+								)
 							"
 						>
 							<line
@@ -94,8 +104,8 @@
 							type="checkbox"
 							color="primary"
 							[title]="column.i18nLabel | translate"
-							[checked]="getCheckedState(column.name)"
-							(change)="onChangeControlTable(column.name, $event)"
+							[checked]="getCheckedState('monitor', column.name)"
+							(change)="onChangeTable('monitor', column.name, $event)"
 						/>
 					</div>
 				</div>
@@ -118,8 +128,8 @@
 					type="checkbox"
 					color="primary"
 					[title]="'names.vehicles' | translate"
-					[checked]="getCheckedState('vehicles')"
-					(change)="onChangeControlTable('vehicles', $event)"
+					[checked]="getCheckedState('monitor', 'vehicles')"
+					(change)="onChangeTable('monitor', 'vehicles', $event)"
 				/>
 			</div>
 		</div>
@@ -137,7 +147,12 @@
 							height="13px"
 							viewBox="0 0 20 20"
 							(click)="
-								changeTableColumnOrder('vehicles_order', column.name, 'up')
+								changeTableColumnOrder(
+									'monitor',
+									'vehicles_order',
+									column.name,
+									'up'
+								)
 							"
 						>
 							<line
@@ -163,7 +178,12 @@
 							height="13px"
 							viewBox="0 0 20 20"
 							(click)="
-								changeTableColumnOrder('vehicles_order', column.name, 'down')
+								changeTableColumnOrder(
+									'monitor',
+									'vehicles_order',
+									column.name,
+									'down'
+								)
 							"
 						>
 							<line
@@ -189,8 +209,8 @@
 							type="checkbox"
 							color="primary"
 							[title]="column.i18nLabel | translate"
-							[checked]="getCheckedState(column.name)"
-							(change)="onChangeControlTable(column.name, $event)"
+							[checked]="getCheckedState('monitor', column.name)"
+							(change)="onChangeTable('monitor', column.name, $event)"
 						/>
 					</div>
 				</div>
@@ -213,8 +233,8 @@
 					type="checkbox"
 					color="primary"
 					[title]="'names.stations' | translate"
-					[checked]="getCheckedState('stations')"
-					(change)="onChangeControlTable('stations', $event)"
+					[checked]="getCheckedState('monitor', 'stations')"
+					(change)="onChangeTable('monitor', 'stations', $event)"
 				/>
 			</div>
 		</div>
@@ -232,7 +252,12 @@
 							height="13px"
 							viewBox="0 0 20 20"
 							(click)="
-								changeTableColumnOrder('stations_order', column.name, 'up')
+								changeTableColumnOrder(
+									'monitor',
+									'stations_order',
+									column.name,
+									'up'
+								)
 							"
 						>
 							<line
@@ -258,7 +283,12 @@
 							height="13px"
 							viewBox="0 0 20 20"
 							(click)="
-								changeTableColumnOrder('stations_order', column.name, 'down')
+								changeTableColumnOrder(
+									'monitor',
+									'stations_order',
+									column.name,
+									'down'
+								)
 							"
 						>
 							<line
@@ -284,8 +314,8 @@
 							type="checkbox"
 							color="primary"
 							[title]="column.i18nLabel | translate"
-							[checked]="getCheckedState(column.name)"
-							(change)="onChangeControlTable(column.name, $event)"
+							[checked]="getCheckedState('monitor', column.name)"
+							(change)="onChangeTable('monitor', column.name, $event)"
 						/>
 					</div>
 				</div>
@@ -308,8 +338,8 @@
 					type="checkbox"
 					color="primary"
 					[title]="'names.buffers' | translate"
-					[checked]="getCheckedState('buffers')"
-					(change)="onChangeControlTable('buffers', $event)"
+					[checked]="getCheckedState('monitor', 'buffers')"
+					(change)="onChangeTable('monitor', 'buffers', $event)"
 				/>
 			</div>
 		</div>
@@ -327,7 +357,12 @@
 							height="13px"
 							viewBox="0 0 20 20"
 							(click)="
-								changeTableColumnOrder('buffers_order', column.name, 'up')
+								changeTableColumnOrder(
+									'monitor',
+									'buffers_order',
+									column.name,
+									'up'
+								)
 							"
 						>
 							<line
@@ -353,7 +388,12 @@
 							height="13px"
 							viewBox="0 0 20 20"
 							(click)="
-								changeTableColumnOrder('buffers_order', column.name, 'down')
+								changeTableColumnOrder(
+									'monitor',
+									'buffers_order',
+									column.name,
+									'down'
+								)
 							"
 						>
 							<line
@@ -379,8 +419,8 @@
 							type="checkbox"
 							color="primary"
 							[title]="column.i18nLabel | translate"
-							[checked]="getCheckedState(column.name)"
-							(change)="onChangeControlTable(column.name, $event)"
+							[checked]="getCheckedState('monitor', column.name)"
+							(change)="onChangeTable('monitor', column.name, $event)"
 						/>
 					</div>
 				</div>
@@ -403,8 +443,8 @@
 					type="checkbox"
 					color="primary"
 					[title]="'names.zcus' | translate"
-					[checked]="getCheckedState('zcus')"
-					(change)="onChangeControlTable('zcus', $event)"
+					[checked]="getCheckedState('monitor', 'zcus')"
+					(change)="onChangeTable('monitor', 'zcus', $event)"
 				/>
 			</div>
 		</div>
@@ -421,7 +461,14 @@
 						<svg
 							height="13px"
 							viewBox="0 0 20 20"
-							(click)="changeTableColumnOrder('zcus_order', column.name, 'up')"
+							(click)="
+								changeTableColumnOrder(
+									'monitor',
+									'zcus_order',
+									column.name,
+									'up'
+								)
+							"
 						>
 							<line
 								x1="3"
@@ -446,7 +493,12 @@
 							height="13px"
 							viewBox="0 0 20 20"
 							(click)="
-								changeTableColumnOrder('zcus_order', column.name, 'down')
+								changeTableColumnOrder(
+									'monitor',
+									'zcus_order',
+									column.name,
+									'down'
+								)
 							"
 						>
 							<line
@@ -472,8 +524,8 @@
 							type="checkbox"
 							color="primary"
 							[title]="column.i18nLabel | translate"
-							[checked]="getCheckedState(column.name)"
-							(change)="onChangeControlTable(column.name, $event)"
+							[checked]="getCheckedState('monitor', column.name)"
+							(change)="onChangeTable('monitor', column.name, $event)"
 						/>
 					</div>
 				</div>
@@ -492,8 +544,8 @@
 					type="checkbox"
 					color="primary"
 					[title]="'names.cps' | translate"
-					[checked]="getCheckedState('cps')"
-					(change)="onChangeControlTable('cps', $event)"
+					[checked]="getCheckedState('monitor', 'cps')"
+					(change)="onChangeTable('monitor', 'cps', $event)"
 				/>
 			</div>
 		</div>
@@ -510,7 +562,14 @@
 						<svg
 							height="13px"
 							viewBox="0 0 20 20"
-							(click)="changeTableColumnOrder('cps_order', column.name, 'up')"
+							(click)="
+								changeTableColumnOrder(
+									'monitor',
+									'cps_order',
+									column.name,
+									'up'
+								)
+							"
 						>
 							<line
 								x1="3"
@@ -534,7 +593,14 @@
 						<svg
 							height="13px"
 							viewBox="0 0 20 20"
-							(click)="changeTableColumnOrder('cps_order', column.name, 'down')"
+							(click)="
+								changeTableColumnOrder(
+									'monitor',
+									'cps_order',
+									column.name,
+									'down'
+								)
+							"
 						>
 							<line
 								x1="3"
@@ -559,8 +625,8 @@
 							type="checkbox"
 							color="primary"
 							[title]="column.i18nLabel | translate"
-							[checked]="getCheckedState(column.name)"
-							(change)="onChangeControlTable(column.name, $event)"
+							[checked]="getCheckedState('monitor', column.name)"
+							(change)="onChangeTable('monitor', column.name, $event)"
 						/>
 					</div>
 				</div>
@@ -586,28 +652,31 @@
 			<div>
 				<mat-label>{{ 'names.transfer' | translate }}</mat-label>
 			</div>
-			<div>
-				<input
-					type="checkbox"
-					color="primary"
-					[title]="'names.orders' | translate"
-					[checked]="getCheckedState('orders')"
-					(change)="onChangeControlTable('orders', $event)"
-				/>
-			</div>
 		</div>
 		<div class="table-columns-sub-entries-container">
-			<div *ngFor="let column of []" class="table-columns-sub-container">
+			<div
+				*ngFor="
+					let column of preference.historyTables.transfers_order;
+					index as i
+				"
+				class="table-columns-sub-container"
+			>
 				<div class="table-columns-entries-container">
 					<div>
 						<mat-label>{{ column.i18nLabel | translate }}</mat-label>
 					</div>
 					<div>
 						<svg
+							*ngIf="i > 1"
 							height="13px"
 							viewBox="0 0 20 20"
 							(click)="
-								changeTableColumnOrder('orders_order', column.name, 'up')
+								changeTableColumnOrder(
+									'history',
+									'transfers_order',
+									column.name,
+									'up'
+								)
 							"
 						>
 							<line
@@ -630,10 +699,16 @@
 							/>
 						</svg>
 						<svg
+							*ngIf="i > 0"
 							height="13px"
 							viewBox="0 0 20 20"
 							(click)="
-								changeTableColumnOrder('orders_order', column.name, 'down')
+								changeTableColumnOrder(
+									'history',
+									'transfers_order',
+									column.name,
+									'down'
+								)
 							"
 						>
 							<line
@@ -659,8 +734,8 @@
 							type="checkbox"
 							color="primary"
 							[title]="column.i18nLabel | translate"
-							[checked]="getCheckedState(column.name)"
-							(change)="onChangeControlTable(column.name, $event)"
+							[checked]="getCheckedState('history', column.name)"
+							(change)="onChangeTable('history', column.name, $event)"
 						/>
 					</div>
 				</div>
@@ -677,8 +752,8 @@
 					type="checkbox"
 					color="primary"
 					[title]="'names.orders' | translate"
-					[checked]="getCheckedState('orders')"
-					(change)="onChangeControlTable('orders', $event)"
+					[checked]="getCheckedState('monitor', 'orders')"
+					(change)="onChangeTable('monitor', 'orders', $event)"
 				/>
 			</div>
 		</div>
@@ -693,7 +768,12 @@
 							height="13px"
 							viewBox="0 0 20 20"
 							(click)="
-								changeTableColumnOrder('orders_order', column.name, 'up')
+								changeTableColumnOrder(
+									'monitor',
+									'orders_order',
+									column.name,
+									'up'
+								)
 							"
 						>
 							<line
@@ -719,7 +799,12 @@
 							height="13px"
 							viewBox="0 0 20 20"
 							(click)="
-								changeTableColumnOrder('orders_order', column.name, 'down')
+								changeTableColumnOrder(
+									'monitor',
+									'orders_order',
+									column.name,
+									'down'
+								)
 							"
 						>
 							<line
@@ -745,8 +830,8 @@
 							type="checkbox"
 							color="primary"
 							[title]="column.i18nLabel | translate"
-							[checked]="getCheckedState(column.name)"
-							(change)="onChangeControlTable(column.name, $event)"
+							[checked]="getCheckedState('monitor', column.name)"
+							(change)="onChangeTable('monitor', column.name, $event)"
 						/>
 					</div>
 				</div>
@@ -763,8 +848,8 @@
 					type="checkbox"
 					color="primary"
 					[title]="'names.orders' | translate"
-					[checked]="getCheckedState('orders')"
-					(change)="onChangeControlTable('orders', $event)"
+					[checked]="getCheckedState('monitor', 'orders')"
+					(change)="onChangeTable('monitor', 'orders', $event)"
 				/>
 			</div>
 		</div>
@@ -779,7 +864,12 @@
 							height="13px"
 							viewBox="0 0 20 20"
 							(click)="
-								changeTableColumnOrder('orders_order', column.name, 'up')
+								changeTableColumnOrder(
+									'monitor',
+									'orders_order',
+									column.name,
+									'up'
+								)
 							"
 						>
 							<line
@@ -805,7 +895,12 @@
 							height="13px"
 							viewBox="0 0 20 20"
 							(click)="
-								changeTableColumnOrder('orders_order', column.name, 'down')
+								changeTableColumnOrder(
+									'monitor',
+									'orders_order',
+									column.name,
+									'down'
+								)
 							"
 						>
 							<line
@@ -831,8 +926,8 @@
 							type="checkbox"
 							color="primary"
 							[title]="column.i18nLabel | translate"
-							[checked]="getCheckedState(column.name)"
-							(change)="onChangeControlTable(column.name, $event)"
+							[checked]="getCheckedState('monitor', column.name)"
+							(change)="onChangeTable('monitor', column.name, $event)"
 						/>
 					</div>
 				</div>

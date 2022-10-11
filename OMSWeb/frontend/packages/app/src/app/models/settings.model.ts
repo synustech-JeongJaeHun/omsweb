@@ -44,7 +44,8 @@ export interface IPreferences {
 	map: MapConfig
 	uiStates?: UiStates
 	theme?: ThemeConfig
-	controlTables?: ControlTable
+	controlTables?: MonitorControlTable
+	historyTables?: HistoryTable
 }
 
 export class UiStates {
@@ -73,8 +74,8 @@ export const defaultToggleOptions: ToggleOptionsType = {
 	showKpi: true,
 }
 
-export type ControlTable = typeof defaultControlTable
-export const defaultControlTable = {
+type MonitorControlTable = typeof defaultControlTable
+const defaultControlTable = {
 	// order table
 	orders: true,
 
@@ -292,12 +293,75 @@ export const defaultControlTable = {
   ]
 }
 
+type HistoryTable = typeof defaultHistoryTable
+const defaultHistoryTable = {
+  // transfers table
+	transfers: true,
+
+  transfers_logical_id: true,
+  transfers_id: true,
+  transfers_origin: true,
+  transfers_priority: true,
+  transfers_state: true,
+  transfers_vehicle_id: true,
+  transfers_location_pickup: true,
+  transfers_location_dropoff: true,
+  transfers_location_move: true,
+  transfers_carrier_label: true,
+  transfers_time_created: true,
+  transfers_time_assigned: true,
+  transfers_time_completed: true,
+  transfers_time_aborted: true,
+  transfers_time_failed: true,
+  transfers_age: true,
+  transfers_unload_retry_cnt: true,
+
+  transfers_order: [
+    {name: 'transfers_logical_id', i18nLabel: 'names.commandId', width: 240},
+    {name: 'transfers_id', i18nLabel: 'names.id', width: 80},
+    {name: 'transfers_origin', i18nLabel: 'names.origin', width: 100},
+    {name: 'transfers_priority', i18nLabel: 'names.priority', width: 65},
+    {name: 'transfers_state', i18nLabel: 'names.state', width: 100},
+    {name: 'transfers_vehicle_id', i18nLabel: 'names.vehicleId', width: 95},
+    {name: 'transfers_location_pickup', i18nLabel: 'names.locationPickup', width: 120},
+    {name: 'transfers_location_dropoff', i18nLabel: 'names.locationDropoff', width: 120},
+    {name: 'transfers_location_move', i18nLabel: 'names.locationMove', width: 120},
+    {name: 'transfers_carrier_label', i18nLabel: 'names.carrierLabel', width: 70},
+    {name: 'transfers_time_created', i18nLabel: 'names.timeCreated', width: 120},
+    {name: 'transfers_time_assigned', i18nLabel: 'names.timeAssigned', width: 120},
+    {name: 'transfers_time_completed', i18nLabel: 'names.timeCompleted', width: 120},
+    {name: 'transfers_time_aborted', i18nLabel: 'names.timeAborted', width: 120},
+    {name: 'transfers_time_failed', i18nLabel: 'names.timeFailed', width: 120},
+    {name: 'transfers_age', i18nLabel: 'names.age', width: 120},
+    {name: 'transfers_unload_retry_cnt', i18nLabel: 'names.unloadRetryCount', width: 120},
+  ],
+
+  // vehicles table
+	vehicles: true,
+
+  vehicle_id: true,
+
+  vehicles_order: [
+    {name: 'cps_converter_id', i18nLabel: 'names.cps_converter_id', width: 70},
+  ],
+
+  // alarms table
+	alarms: true,
+
+  alarm_id: true,
+
+  alarms_order: [
+    {name: 'cps_converter_id', i18nLabel: 'names.cps_converter_id', width: 70},
+  ]
+}
+
 export class ClientPreferences implements IPreferences {
 	toggles: ToggleOptionsType
 	map: MapConfig
 	uiStates?: UiStates
 	theme?: ThemeConfig
-	controlTables?: ControlTable
+	controlTables?: MonitorControlTable
+  historyTables?: HistoryTable
 
 	constructor(private storeKey: string, private base?: IPreferences) {
 		this.load()
@@ -313,11 +377,13 @@ export class ClientPreferences implements IPreferences {
 			uiStates = {},
 			theme = {},
 			controlTables = {},
+      historyTables = {}
 		} = JSON.parse(value)
 		const {
 			toggles: baseToggle = {},
 			map: baseMap = {},
 			controlTables: baseControlTable = {},
+      historyTables: baseHistoryTable = {}
 		} = this.base || {}
 		this.toggles = { ...defaultToggleOptions, ...baseToggle, ...toggles }
 		this.map = { ...new MapConfig(), ...baseMap, ...map }
@@ -328,6 +394,11 @@ export class ClientPreferences implements IPreferences {
 			...baseControlTable,
 			...controlTables,
 		}
+    this.historyTables = {
+      ...defaultHistoryTable,
+      ...baseHistoryTable,
+      ...historyTables,
+    }
 	}
 
 	save() {
@@ -337,6 +408,7 @@ export class ClientPreferences implements IPreferences {
 			uiStates: { ...this.uiStates },
 			theme: { ...this.theme },
 			controlTables: { ...this.controlTables },
+      historyTables: { ...this.historyTables,}
 		}
 		StorageUtil.setLocal(this.storeKey, JSON.stringify(pref))
 	}
