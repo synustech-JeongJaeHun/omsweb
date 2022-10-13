@@ -92,7 +92,8 @@ function convertSignedIntegerToBitString(
 	value: number,
 	bitLength: number,
 ): string {
-	const absoluteValue = Math.abs(value)
+    const absoluteValue = value
+	//const absoluteValue = Math.abs(value)
 
 	const data = [...Array(bitLength).keys()].map((index) => {
 		const bit = (absoluteValue >> index) & 1
