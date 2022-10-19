@@ -15,6 +15,9 @@ type Buffer = {
 
   // nullable
   group?: number
+
+  user?: string
+  note?: string
 } & CanBeFocused
 
 export { Buffer }

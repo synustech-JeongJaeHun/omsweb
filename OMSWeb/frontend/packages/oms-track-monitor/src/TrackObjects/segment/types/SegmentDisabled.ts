@@ -3,6 +3,9 @@ type SegmentDisabled = {
   segmentId: number
   disabledBy: string
   disabledReason: string
+
+  user?: string
+  note?: string
 }
 
 export { SegmentDisabled }

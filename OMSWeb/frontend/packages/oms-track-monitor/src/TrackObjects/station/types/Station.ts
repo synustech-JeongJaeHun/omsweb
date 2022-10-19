@@ -1,19 +1,22 @@
 import { CanBeFocused } from 'src/MapObjects/focus/types/CanBeFocused'
 
 type Station = {
-	id: number
-	logicalId: string
-	physicalId: string
+  id: number
+  logicalId: string
+  physicalId: string
 
-	direction: string
-	pointId: number
-	nextPoint: number
-	offset: number
+  direction: string
+  pointId: number
+  nextPoint: number
+  offset: number
 
-	unuse?: boolean
+  unuse?: boolean
 
-	group?: number
-	carrierType?: string
+  group?: number
+  carrierType?: string
+
+  user?: string
+  note?: string
 } & CanBeFocused
 
 export { Station }

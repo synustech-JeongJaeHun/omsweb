@@ -69,9 +69,12 @@ type Vehicle = {
   priority?: any
   type?: // normal: nullish
   | 'CLEANING' // Vehicle type: Cleaning
-  | string
+    | string
   group?: number
   historyChangeTime?: any
+
+  user?: string
+  note?: string
 } & CanBeFocused &
   CanBeTracked &
   IsHovered
