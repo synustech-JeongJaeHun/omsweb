@@ -2,6 +2,7 @@
 import Layer from 'MapObjects/map/components/Layer.ce.vue'
 import Segment from './Segment.ce.vue'
 import { findSegmentById, segments } from '../segments'
+import { findSegmentDisabledsBySegmentId } from '../segmentDisableds'
 import { scaleStylesInfo } from 'src/styles/styles'
 import { inject } from 'vue'
 import { RootEmitInjectionKey, RootEmits } from 'src/Root/types/RootEmits'
@@ -12,7 +13,8 @@ const emit = inject<RootEmits>(RootEmitInjectionKey)!
 function getDeepCopiedSegment(event: MouseEvent) {
   const segmentId = parseInt((event.target as SVGElement).dataset.id!)
   const segment = findSegmentById(segmentId)!
-  return deepCopy(segment)
+  const segmentDisableds = findSegmentDisabledsBySegmentId(segmentId)
+  return deepCopy({...segment, disableds: segmentDisableds })
 }
 
 function handleMouseover(event: MouseEvent) {
