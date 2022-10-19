@@ -7,6 +7,8 @@ namespace OMSWeb.Models.Entities
         public int SegmentId { get; set; }
         public string DisabledBy { get; set; }
         public string Reason { get; set; }
+        public string User { get; set; }
+        public string Note { get; set; }
     }
 
     public class SegmentBlockingHistoryEntity : SegmentBlockingEntity
