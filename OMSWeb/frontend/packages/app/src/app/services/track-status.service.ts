@@ -4,22 +4,6 @@ import { HubService } from './hub.service'
 import { Dto } from '../models/dto/track.model'
 import { IDataChangeEvent } from '../models/notification.model'
 
-/**
- * # What we need
- *
- * ## realtime data
- *
- * - point x
- * - segment o|x
- * - station x
- * - buffer x
- * - mtl x
- * - vhl o
- * - home o
- * - group o
- *
- */
-
 @Injectable({
 	providedIn: 'root',
 })
@@ -78,54 +62,6 @@ export class TrackStatusService {
     this.hubService.clusterStatusChanged$.subscribe((e) => {
       this.handleClusterStateChanged(e)
     })
-
-		// this.hubService.segmentChanged$
-		//   .subscribe((e: IDataChangeEvent) => {
-		//     // what happened on event?
-		//     console.log("segment update", e)
-		//   });
-		// this.hubService.clusterChanged$
-		//   .subscribe((e: IDataChangeEvent) => {
-		//     // what happened on event?
-		//     console.log("cluster update", e)
-		//   });
-
-		// if (this.authService.isAuthenticated) {
-		// this.hubService.vehiclePathChanged$
-		//   .subscribe((e: IDataChangeEvent) => {
-		//     // what happened on event?
-		//     console.log("vehicle path update", e)
-		//   });
-
-		// this.hubService.stationChanged$
-		//   .subscribe((e) => {
-		//     //  what happened on event?
-		//     console.log("station update", e)
-		//   })
-
-		// this.hubService.groupChanged$
-		//   .subscribe((e) => {
-		//     // what happened on event?
-		//     console.log("group update", e)
-		//   });
-
-		// this.hubService.bufferChanged$
-		//   .subscribe((e) => {
-		//     // what happened on event?
-		//     console.log("buffer update", e)
-		//   });
-
-		// this.hubService.mtlChanged$
-		//   .subscribe((e) => {
-		//     // what happened on event?
-		//     console.log("mtl update", e)
-		//   });
-
-		// this.hubService.groupChanged$
-		//   .subscribe((e) => {
-		//     console.log("group update", e)
-		//   });
-		// }
 	}
 
 	handleConnectionChanged(connection) {
@@ -213,7 +149,7 @@ export class TrackStatusService {
 		switch (e.operation) {
 			case 'UPDATE':
 				// @ts-ignore
-				if (finded) Object.assign(finded, { id: e.id, unuse: e.unuse })
+				if (finded) Object.assign(finded, { id: e.id, unuse: e.unuse, user: e?.user, note: e?.note })
 				break
 
 			default:
@@ -226,7 +162,7 @@ export class TrackStatusService {
 		switch (e.operation) {
 			case 'UPDATE':
 				// @ts-ignore
-				if (finded) Object.assign(finded, { id: e.id, unuse: e.unuse, carrierId: e.carrierId })
+				if (finded) Object.assign(finded, { id: e.id, unuse: e.unuse, carrierId: e.carrierId, user: e?.user, note: e?.note })
 				break
 
 			default:
