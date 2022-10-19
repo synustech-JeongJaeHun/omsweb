@@ -1,5 +1,3 @@
-using System;
-
 namespace OMSWeb.Models.Tracks
 {
   public class Vehicle { }

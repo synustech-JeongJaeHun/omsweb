@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace OMSWeb.Models.Entities
+﻿namespace OMSWeb.Models.Entities
 {
   public class BufferEntity
   {
@@ -26,5 +21,9 @@ namespace OMSWeb.Models.Entities
     public string CarrierId { get; set; }
 
     public int? GroupId { get; set; }
+
+    public string User { get; set; }
+
+    public string Note { get; set; }
   }
 }

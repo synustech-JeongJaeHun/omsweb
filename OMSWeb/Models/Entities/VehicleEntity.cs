@@ -39,6 +39,8 @@ namespace OMSWeb.Models.Entities
         public bool IsMaint { get; set; }
         public bool isConnected { get; set; }
         public int? GroupId { get; set; }
+        public string User { get; set; }
+        public string Note { get; set; }
     }
 
     public class VehicleHistoryEntity : VehicleEntity
