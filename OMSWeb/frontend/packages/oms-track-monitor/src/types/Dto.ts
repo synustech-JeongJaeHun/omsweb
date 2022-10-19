@@ -40,6 +40,8 @@ namespace UpdateDto {
     type?: string
     group?: number
     historyChangeTime?: any
+    user?: string
+    note?: string
   }
 
   export type Segment = {}
@@ -55,6 +57,8 @@ namespace UpdateDto {
           segmentId: number
           disabledBy: string
           disabledReason: string
+          user?: string
+          note?: string
         }
       }
     | { operation: 'DELETE' }
@@ -72,11 +76,15 @@ namespace UpdateDto {
   export type Station = {
     id: number
     unuse?: boolean
+    user?: string
+    note?: string
   }
   export type Buffer = {
     id: number
     unuse?: boolean
     carrierId?: string
+    user?: string
+    note?: string
   }
 
   export type GroupObject = {

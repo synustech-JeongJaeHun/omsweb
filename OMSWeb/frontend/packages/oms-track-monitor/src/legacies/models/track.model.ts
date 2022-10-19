@@ -13,6 +13,8 @@ interface IBuffer {
   group?: number
   unuse?: boolean
   carrierId?: boolean
+  user?: string
+  note?: string
 }
 interface ICluster {
   id: number
@@ -135,6 +137,9 @@ interface IStation {
 
   group?: number
   carrierType?: string
+
+  user?: string
+  note?: string
 }
 interface IVehicle {
   id: number
@@ -176,6 +181,8 @@ interface IVehicle {
   type?: string
   group?: number
   historyChangeTime?: any
+  user?: string
+  note?: string
 }
 
 interface IFireshutter {
