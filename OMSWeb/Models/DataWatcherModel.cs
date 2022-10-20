@@ -30,6 +30,11 @@ namespace OMSWeb.Models
         public int? VehicleId { get; set; }
         // public VehiclePosition Vehicle { get; set; }
 
+        #region Buffer, Station, Vehicle, SegmentBlocking
+        public string User { get; set; }
+        public string Note { get; set; }
+        #endregion
+
         #region Station And Buffer
         public bool? Unuse { get; set; }
         #endregion
