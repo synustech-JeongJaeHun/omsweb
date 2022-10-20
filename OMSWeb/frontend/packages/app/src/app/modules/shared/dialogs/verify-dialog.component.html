@@ -1,0 +1,29 @@
+<oms-dialog-base [title]="'Verify'">
+	<ng-container class="dialog-layout">
+		<div>
+			{{ message.body }}
+		</div>
+		<br />
+		<form [formGroup]="form" class="verify-form" (ngSubmit)="onSubmit()">
+			<div mat-dialog-content>
+				<mat-error *ngIf="!isValid">Verify Failed</mat-error>
+				<mat-form-field appearance="fill">
+					<mat-label>User</mat-label>
+					<input matInput formControlName="operator" />
+					<mat-error> user name must be provided </mat-error>
+					<mat-icon matSuffix>person</mat-icon>
+				</mat-form-field>
+				<mat-form-field appearance="fill">
+					<mat-label>Reason</mat-label>
+					<!-- autocomplete="current-password" -->
+					<input type="text" matInput formControlName="reason" />
+					<mat-error> reason must be provided </mat-error>
+					<mat-icon matSuffix>insert_comment</mat-icon>
+				</mat-form-field>
+			</div>
+			<div mat-dialog-actions>
+				<button type="submit" mat-raised-button color="primary">Submit</button>
+			</div>
+		</form>
+	</ng-container>
+</oms-dialog-base>

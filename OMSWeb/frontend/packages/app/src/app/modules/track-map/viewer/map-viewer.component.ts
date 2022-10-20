@@ -336,11 +336,11 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 				.pipe(takeUntil(this.destroy$))
 				.subscribe((e: any) => {
 					this.viewer.updateStation(e.operation, { 
-            id: e.id, 
-            unuse: e.unuse, 
-            user: e?.user, 
-            note: e?.note 
-          })
+                      id: e.id, 
+                      unuse: e.unuse, 
+                      user: e?.user, 
+                      note: e?.note 
+                    })
 				})
 
 			this.hubSvc.bufferChanged$
@@ -350,8 +350,8 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 						id: e.id,
 						unuse: e.unuse,
 						carrierId: e.carrierId,
-            user: e?.user, 
-            note: e?.note
+                        user: e?.user, 
+                        note: e?.note
 					})
 				})
 
@@ -401,35 +401,55 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 	}
 
 	onToggleStationUnuse(id: number, toState: 'UNUSE' | 'USE') {
-		const message =
-			toState === 'USE'
-				? { type: 'USE', action: 'station-setting', unused: 0 }
-				: { type: 'UNUSE', action: 'station-setting', unused: 1 }
-
-		this.dialogSvc
-			.confirm({ body: this.$t.instant('messages.confirmCommand') })
-			.subscribe((ok) => {
-				if (ok) {
-					this.messageSvc.sendStationSettingCommand(message, [id]).subscribe()
-					this.showContextMenu = false
-				}
-			})
+        if (toState === 'UNUSE') {
+          this.dialogSvc
+            .verify({ body: this.$t.instant('messages.confirmCommand') })
+            .subscribe((ok) => {
+              if (ok) {
+                const { operator, reason } = ok
+                const message = { type: 'UNUSE', action: 'station-setting', unused: 1, user: operator, note: reason }
+                this.messageSvc.sendStationSettingCommand(message, [id]).subscribe()
+                this.showContextMenu = false
+              }
+            })
+        }
+        else if (toState === 'USE') {
+          this.dialogSvc
+            .confirm({ body: this.$t.instant('messages.confirmCommand') })
+            .subscribe((ok) => {
+              if (ok) {
+                const message = { type: 'USE', action: 'station-setting', unused: 0 }
+                this.messageSvc.sendStationSettingCommand(message, [id]).subscribe()
+                this.showContextMenu = false
+              }
+            })
+        }
 	}
 
 	onToggleBufferUnuse(id: number, toState: 'UNUSE' | 'USE') {
-		const message =
-			toState === 'USE'
-				? { type: 'USE', action: 'buffer-setting', unused: 0 }
-				: { type: 'UNUSE', action: 'buffer-setting', unused: 1 }
-
-		this.dialogSvc
-			.confirm({ body: this.$t.instant('messages.confirmCommand') })
-			.subscribe((ok) => {
-				if (ok) {
-					this.messageSvc.sendBufferSettingCommand(message, [id]).subscribe()
-					this.showContextMenu = false
-				}
-			})
+        if (toState === 'UNUSE') {
+          this.dialogSvc
+            .verify({ body: this.$t.instant('messages.confirmCommand') })
+            .subscribe((ok) => {
+              if (ok) {
+                const { operator, reason } = ok
+                const message = { type: 'UNUSE', action: 'buffer-setting', unused: 1, user: operator, note: reason }
+                this.messageSvc.sendBufferSettingCommand(message, [id]).subscribe()
+                this.showContextMenu = false
+              }
+            })
+        }
+        else if (toState === 'USE') {
+          this.dialogSvc
+            .confirm({ body: this.$t.instant('messages.confirmCommand') })
+            .subscribe((ok) => {
+              if (ok) {
+                const message = { type: 'USE', action: 'buffer-setting', unused: 0 }
+                this.messageSvc.sendBufferSettingCommand(message, [id]).subscribe()
+                this.showContextMenu = false
+              }
+            })
+        }
 	}
 
 	onVehicleStatusDialogOpen() {
@@ -444,7 +464,8 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 
 	onVehicleCommand(name: string) {
 		let commandMessage: IVehicleCommandMessage
-		let needConfirm: boolean = false
+        let needConfirm: boolean = false
+        let needVerify: boolean = false
 
 		switch (name) {
 			case 'initialize':
@@ -472,7 +493,8 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 				commandMessage = { action: 'set_behavior', hostOrder: true }
 				break
 			case 'hostOrder:disable':
-				commandMessage = { action: 'set_behavior', hostOrder: false }
+                commandMessage = { action: 'set_behavior', hostOrder: false }
+                needVerify = true
 				break
 			case 'rail_out':
 				commandMessage = { action: 'rail_out' }
@@ -482,17 +504,33 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 				break
 		}
 
-		if (needConfirm) {
-			this.dialogSvc
-				.confirm({ body: this.$t.instant('messages.confirmCommand') })
-				.subscribe((ok) => {
-					ok &&
-						this.messageSvc
-							.sendVehicleCommand(commandMessage, [
-								this.contextMenuObject.value,
-							])
-							.subscribe()
-				})
+        if (needConfirm) {
+            this.dialogSvc
+              .confirm({ body: this.$t.instant('messages.confirmCommand') })
+              .subscribe((ok) => {
+                ok &&
+                  this.messageSvc
+                    .sendVehicleCommand(commandMessage, [
+                      this.contextMenuObject.value,
+                    ])
+                    .subscribe()
+              })
+        } else if (needVerify) {
+            this.dialogSvc
+              .verify({ body: this.$t.instant('messages.confirmCommand') })
+              .subscribe((ok) => {
+                if (ok) {
+                  const { operator, reason } = ok
+                  commandMessage.user = operator
+                  commandMessage.note = reason
+
+                  this.messageSvc
+                    .sendVehicleCommand(commandMessage, [
+                      this.contextMenuObject.value,
+                    ])
+                    .subscribe()
+                }
+              })
 		} else {
 			this.messageSvc
 				.sendVehicleCommand(commandMessage, [this.contextMenuObject.value])
@@ -644,13 +682,20 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 	}
 
 	onChangeSegmentProperty(isDisable: boolean) {
-		if (isDisable) {
-			this.messageSvc
-				.sendDisableSegmentCommand(
-					{ action: 'disable-segment' },
-					this.contextMenuObject.value.id,
-				)
-				.subscribe()
+        if (isDisable) {
+            this.dialogSvc
+                .verify({ body: this.$t.instant('messages.confirmCommand') })
+                .subscribe((ok) => {
+                    if (ok) {
+                      const { operator, reason } = ok
+                      this.messageSvc
+                        .sendDisableSegmentCommand(
+                          { action: 'disable-segment', user: operator, note: reason },
+                          this.contextMenuObject.value.id,
+                        )
+                        .subscribe()
+                    }
+                  })
 		} else {
 			this.messageSvc
 				.sendDisableSegmentCommand(

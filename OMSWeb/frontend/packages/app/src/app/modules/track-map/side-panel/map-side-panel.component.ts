@@ -13,6 +13,8 @@ import { MapStatesService } from '../map-states.service'
 import { MessagesService } from '../../../services/messages.service'
 import { PermissionEnums } from '../../../models/enums'
 import { TrackStatusService } from '@oms/root/services/track-status.service'
+import { DialogService } from '@oms/root/services/dialog.service'
+import { TranslateService } from '@ngx-translate/core'
 
 @Component({
 	selector: 'oms-map-side-panel',
@@ -42,7 +44,9 @@ export class MapSidePanelComponent implements OnChanges, OnDestroy {
 		private statesSvc: MapStatesService,
 		private messageSvc: MessagesService,
 		private trackStatusService: TrackStatusService,
-		private auth: AuthService,
+        private auth: AuthService,
+        private dialogSvc: DialogService,
+        private $t: TranslateService,
 	) {}
 
 	ngOnChanges(changes: SimpleChanges): void {
@@ -211,14 +215,21 @@ export class MapSidePanelComponent implements OnChanges, OnDestroy {
 	}
 
 	changeSegmentDisabled(value: boolean) {
-		if (value) {
-			this.messageSvc
-				.sendDisableSegmentCommand({ action: 'disable-segment' }, this.data.id)
-				.subscribe()
-		} else {
-			this.messageSvc
-				.sendDisableSegmentCommand({ action: 'enable-segment' }, this.data.id)
-				.subscribe()
+        if (value) {
+            this.dialogSvc
+                .verify({ body: this.$t.instant('messages.confirmCommand') })
+                .subscribe((ok) => {
+                    if (ok) {
+                      const { operator, reason } = ok
+			          this.messageSvc
+				          .sendDisableSegmentCommand({ action: 'disable-segment', user: operator, note: reason }, this.data.id)
+                          .subscribe()
+                    }
+              })
+        } else {
+            this.messageSvc
+              .sendDisableSegmentCommand({ action: 'enable-segment' }, this.data.id)
+              .subscribe()
 		}
 	}
 

@@ -230,6 +230,20 @@ namespace OMSWeb.Services.MqttClient
             return null;
         }
 
+        public string GetUser(CommandMessageDto command)
+        {
+            if (string.IsNullOrWhiteSpace(command.User) == false)
+                return command.User;
+            return string.Empty;
+        }
+
+        public string GetNote(CommandMessageDto command)
+        {
+            if (string.IsNullOrWhiteSpace(command.Note) == false)
+                return command.Note;
+            return string.Empty;
+        }
+
         public object GetVehicleId(CommandMessageDto command)
         {
             if (command.VehicleId != null && (command.VehicleIds == null || command.VehicleIds.Length == 0))
@@ -461,6 +475,9 @@ namespace OMSWeb.Services.MqttClient
                     {
                         data["order_origin"] = GetOrderOrigin(command);
 
+                        data["user"] = GetUser(command);
+                        data["note"] = GetNote(command);
+
                         Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: ACTION_HOST_COMMAND_DISABLE");
                     }
                 }
@@ -482,6 +499,9 @@ namespace OMSWeb.Services.MqttClient
                     data["source"] = "uid-admin";
                     data["reason"] = "";
                 }
+
+                data["user"] = GetUser(command);
+                data["note"] = GetNote(command);
 
                 Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: {command.Action}");
             }
@@ -566,6 +586,9 @@ namespace OMSWeb.Services.MqttClient
                 {
                     data["id"] = command.StationIds;
                     data["unused"] = command.Unused;
+
+                    data["user"] = GetUser(command);
+                    data["note"] = GetNote(command);
                 }
                 catch (Exception ex)
                 {
@@ -580,6 +603,9 @@ namespace OMSWeb.Services.MqttClient
                 {
                     data["id"] = command.BufferIds;
                     data["unused"] = command.Unused;
+
+                    data["user"] = GetUser(command);
+                    data["note"] = GetNote(command);
                 }
                 catch (Exception ex)
                 {

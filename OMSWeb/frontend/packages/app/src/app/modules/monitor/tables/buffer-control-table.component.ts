@@ -125,15 +125,17 @@ export class BufferControlTableComponent implements OnInit, OnDestroy {
 
 		if (bufferIds.length > 0) {
 			this.dialogSvc
-				.confirm({ body: this.$t.instant('messages.confirmCommand') })
-				.subscribe((ok) => {
-					ok &&
-						this.messageSvc
-							.sendBufferSettingCommand(
-								{ type: 'UNUSE', action: 'buffer-setting', unused: 1 },
-								bufferIds,
-							)
-							.subscribe()
+                .verify({ body: this.$t.instant('messages.confirmCommand') })
+				.subscribe((res) => {
+                    if (res) {
+                      const { operator, reason } = res
+                      this.messageSvc
+                        .sendBufferSettingCommand(
+                          { type: 'UNUSE', action: 'buffer-setting', unused: 1, user: operator, note: reason  },
+                          bufferIds,
+                        )
+                        .subscribe()
+                    }
 				})
 		}
 	}

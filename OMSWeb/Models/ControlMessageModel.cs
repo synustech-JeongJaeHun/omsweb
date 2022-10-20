@@ -57,5 +57,7 @@ namespace OMSWeb.Models
         public int? Unused { get; set; }
         public string map_db_name { get; set; }
         public string map_source_file { get; set; }
+        public string User { get; set; }
+        public string Note { get; set; }
     }
 }

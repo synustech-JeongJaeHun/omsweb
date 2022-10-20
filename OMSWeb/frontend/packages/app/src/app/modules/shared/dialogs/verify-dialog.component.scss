@@ -1,0 +1,21 @@
+.verify-form {
+	mat-form-field {
+		width: 100%;
+	}
+	::ng-deep {
+		.mat-form-field-flex {
+			padding: 4px 1rem;
+		}
+		.mat-form-field-infix {
+			padding: 4px 0;
+		}
+	}
+	mat-icon {
+		color: var(--theme-text-color);
+	}
+}
+
+.mat-dialog-actions {
+	display: flex;
+	justify-content: flex-end;
+}

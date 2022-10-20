@@ -46,7 +46,10 @@ export interface IVehicleCommandMessage extends ICommandMessage {
 	mode?: string
 	direction?: string
 
-	mtlId?: string
+    mtlId?: string
+
+    user?: string
+    note?: string
 }
 
 export interface ITrackCommandMessage extends ICommandMessage {
@@ -58,7 +61,10 @@ export interface ITrackCommandMessage extends ICommandMessage {
 	groupId?: number
 	objects?: string
 	color?: string
-	logicalId?: string
+    logicalId?: string
+
+    user?: string
+    note?: string
 }
 
 export interface IOrderCommandMessage extends ICommandMessage {
@@ -78,12 +84,16 @@ export interface IOrderCommandMessage extends ICommandMessage {
 
 export interface IStationCommandMessage extends ICommandMessage {
 	stationIds?: number[]
-	unused: number
+    unused: number
+    user?: string
+    note?: string
 }
 
 export interface IBufferCommandMessage extends ICommandMessage {
 	bufferIds?: number[]
-	unused: number
+    unused: number
+    user?: string
+    note?: string
 }
 
 export interface ICarrierCommandMessage extends ICommandMessage {

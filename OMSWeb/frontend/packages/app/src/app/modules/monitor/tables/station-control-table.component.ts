@@ -124,15 +124,17 @@ export class StationControlTableComponent implements OnInit, OnDestroy {
 
 		if (stationIds.length > 0) {
 			this.dialogSvc
-				.confirm({ body: this.$t.instant('messages.confirmCommand') })
-				.subscribe((ok) => {
-					ok &&
-						this.messageSvc
-							.sendStationSettingCommand(
-								{ type: 'UNUSE', action: 'station-setting', unused: 1 },
-								stationIds,
-							)
-							.subscribe()
+                .verify({ body: this.$t.instant('messages.confirmCommand') })
+				.subscribe((res) => {
+                    if (res) {
+                      const { operator, reason } = res
+                      this.messageSvc
+                        .sendStationSettingCommand(
+                          { type: 'UNUSE', action: 'station-setting', unused: 1, user: operator, note: reason },
+                          stationIds,
+                        )
+                        .subscribe()
+                    }
 				})
 		}
 	}
