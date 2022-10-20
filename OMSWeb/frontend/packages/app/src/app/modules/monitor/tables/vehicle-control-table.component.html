@@ -399,6 +399,26 @@
 		[visibleIndex]="getDisplayTableColumnIndex('vehicles_mapVersion')"
 		[width]="getDisplayTableColumnWidth('vehicles_mapVersion')"
 	></dxi-column>
+	<dxi-column
+		[allowFiltering]="true"
+		dataType="string"
+		dataField="user"
+		[allowSorting]="true"
+		[caption]="'names.user' | translate"
+		[visible]="canDisplayTable('vehicles_user')"
+		[visibleIndex]="getDisplayTableColumnIndex('vehicles_user')"
+		[width]="getDisplayTableColumnWidth('vehicles_user')"
+	></dxi-column>
+	<dxi-column
+		[allowFiltering]="true"
+		dataType="string"
+		dataField="note"
+		[allowSorting]="true"
+		[caption]="'names.note' | translate"
+		[visible]="canDisplayTable('vehicles_note')"
+		[visibleIndex]="getDisplayTableColumnIndex('vehicles_note')"
+		[width]="getDisplayTableColumnWidth('vehicles_note')"
+	></dxi-column>
 	<!-- MapVersion 추가 -->
 	<div *dxTemplate="let data of 'modeTemplate'">
 		<div [ngSwitch]="data.displayValue">

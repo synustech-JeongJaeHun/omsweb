@@ -159,6 +159,8 @@ const defaultControlTable = {
 	vehicles_distanceTotal: true,
 	vehicles_mapDb: true,
 	vehicles_mapVersion: true,
+  vehicles_user: true,
+  vehicles_note: true,
 
   vehicles_order: [
     {name: 'vehicles_id', i18nLabel: 'names.id', width: 60},
@@ -188,6 +190,8 @@ const defaultControlTable = {
     {name: 'vehicles_distanceTotal', i18nLabel: 'names.distanceTotal', width: 80},
     {name: 'vehicles_mapDb', i18nLabel: 'names.mapDb', width: 90},
     {name: 'vehicles_mapVersion', i18nLabel: 'names.mapVersion', width: 90},
+    {name: 'vehicles_user', i18nLabel: 'names.user', width: 80},
+    {name: 'vehicles_note', i18nLabel: 'names.note', width: 150},
   ],
 
   // stations table
@@ -203,6 +207,8 @@ const defaultControlTable = {
 	stations_offset: true,
 	stations_unuse: true,
 	stations_carrierId: true,
+  stations_user: true,
+  stations_note: true,
 
   stations_order: [
     {name: 'stations_id', i18nLabel: 'names.id', width: 50},
@@ -215,6 +221,8 @@ const defaultControlTable = {
     {name: 'stations_offset', i18nLabel: 'names.offset', width: 100},
     {name: 'stations_unuse', i18nLabel: 'names.unuse', width: 100},
     {name: 'stations_carrierId', i18nLabel: 'names.carrierId', width: 100},
+    {name: 'stations_user', i18nLabel: 'names.user', width: 80},
+    {name: 'stations_note', i18nLabel: 'names.note', width: 150},
   ],
 
   // buffers table
@@ -230,6 +238,8 @@ const defaultControlTable = {
 	buffers_offset: true,
 	buffers_unuse: true,
 	buffers_carrierId: true,
+  buffers_user: true,
+  buffers_note: true,
 
   buffers_order: [
     {name: 'buffers_id', i18nLabel: 'names.id', width: 50},
@@ -242,6 +252,8 @@ const defaultControlTable = {
     {name: 'buffers_offset', i18nLabel: 'names.offset', width: 100},
     {name: 'buffers_unuse', i18nLabel: 'names.unuse', width: 100},
     {name: 'buffers_carrierId', i18nLabel: 'names.carrierId', width: 100},
+    {name: 'buffers_user', i18nLabel: 'names.user', width: 80},
+    {name: 'buffers_note', i18nLabel: 'names.note', width: 150},
   ],
 
   // zcus table
@@ -425,6 +437,9 @@ export class ClientPreferences implements IPreferences {
       ...baseHistoryTable,
       ...historyTables,
     }
+
+    this.mergeOrders()
+    this.save()
 	}
 
 	save() {
@@ -438,6 +453,46 @@ export class ClientPreferences implements IPreferences {
 		}
 		StorageUtil.setLocal(this.storeKey, JSON.stringify(pref))
 	}
+
+  /**
+   * ## merge orders 1. local 2. default(new values)
+   * 
+   * ### monitor orders
+   * 
+   * - orders_order
+   * - vehicles_order
+   * - stations_order
+   * - buffers_order
+   * - zcus_order
+   * - cps_order
+   * 
+   * ### history orders
+   * 
+   * - transfers_order
+   * - vehicles_order
+   * - alarms_order
+   * 
+   */
+  private mergeOrders() {
+    [ 
+      // monitor tables
+      [defaultControlTable.orders_order, this.controlTables.orders_order],
+      [defaultControlTable.vehicles_order, this.controlTables.vehicles_order],
+      [defaultControlTable.stations_order, this.controlTables.stations_order],
+      [defaultControlTable.buffers_order, this.controlTables.buffers_order],
+      [defaultControlTable.zcus_order, this.controlTables.zcus_order],
+      [defaultControlTable.cps_order, this.controlTables.cps_order],
+      
+      // history tables
+      [defaultHistoryTable.transfers_order, this.historyTables.transfers_order],
+      [defaultHistoryTable.vehicles_order, this.historyTables.vehicles_order],
+      [defaultHistoryTable.alarms_order, this.historyTables.alarms_order],
+    ].forEach(([defaultOrder, currentOrder]) => {
+      defaultOrder
+        .filter(di => currentOrder.every(ci => ci.name !== di.name))
+        .forEach(di => currentOrder.push(di))
+    }) 
+  }
 }
 
 export interface ISettingsSegment {
