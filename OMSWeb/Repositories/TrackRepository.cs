@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Dapper;
@@ -126,6 +125,8 @@ namespace OMSWeb.Repositories
                                     DisabledBy = dr["disabled_by"].ToString(),
                                     DisabledReason = dr["disabled_reason"].ToString(),
                                     SegmentId = Convert.ToInt32(dr["segment_id"]),
+                                    User = dr["user"].TryString(),
+                                    Note = dr["note"].TryString()
                                 }
                                );
                             }
@@ -167,7 +168,9 @@ namespace OMSWeb.Repositories
                                 CarrierType = dr["carrier_type"].TryIntegerOrNull(),
                                 NextPoint = dr["next_point"].TryIntegerOrNull(),
                                 Offset = dr["offset"].TryIntegerOrNull(),
-                                Unuse = dr["unuse"].TryBooleanOrNull()
+                                Unuse = dr["unuse"].TryBooleanOrNull(),
+                                User = dr["user"].TryString(),
+                                Note = dr["note"].TryString()
                             }
                            );
                         }
@@ -209,6 +212,8 @@ namespace OMSWeb.Repositories
                                     Offset = dr["offset"].TryIntegerOrNull(),
                                     Unuse = dr["unuse"].TryBooleanOrNull(),
                                     CarrierId = dr["carrier_id"].TryString(),
+                                    User = dr["user"].TryString(),
+                                    Note = dr["note"].TryString()
                                 }
                                );
                             }
@@ -624,6 +629,8 @@ namespace OMSWeb.Repositories
                                     Priority = dr["priority"].TryIntegerOrNull(),
                                     IsMaint = dr["is_maint"].TryBoolean(),
                                     isConnected = dr["isConnected"].TryBoolean(),
+                                    User = dr["user"].TryString(),
+                                    Note = dr["note"].TryString()
                                 }
                                );
                             }

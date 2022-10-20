@@ -42,7 +42,7 @@ namespace OMSWeb.Repositories
         ORDER BY SP.segment_id, SP.id
       "},
       {"segmentDisable", @"
-        SELECT id, segment_id, disabled_by AS disabled_by, reason AS disabled_reason
+        SELECT id, segment_id, disabled_by AS disabled_by, reason AS disabled_reason, segment_blocking.user, segment_blocking.note
         FROM segment_blocking
         --*user_id_condition*--WHERE user_id =@userId
         ORDER BY segment_id
@@ -138,13 +138,15 @@ namespace OMSWeb.Repositories
       "},
       {"station", @"
         SELECT id AS id, physical_id AS physical_id, logical_id AS logical_id, point AS point_id,
-          direction AS direction, carrier_type AS carrier_type, next_point, ""offset"" AS offset, unuse, carrier_id
+          direction AS direction, carrier_type AS carrier_type, next_point, ""offset"" AS offset, unuse, carrier_id,
+          stations.user, stations.note
         FROM stations
         --*user_id_condition*--WHERE user_id =@userId
       "},
       {"buffer", @"
         SELECT id, physical_id, logical_id AS logical_id, point AS point_id,
-          direction AS direction, next_point, ""offset"" AS offset, unuse, carrier_id
+          direction AS direction, next_point, ""offset"" AS offset, unuse, carrier_id,
+          buffers.user, buffers.note
         FROM buffers
         --*user_id_condition*--WHERE user_id =@userId
       "},
@@ -229,7 +231,7 @@ namespace OMSWeb.Repositories
       {"vehiclePosition", @"
         SELECT 
             VH.id, VH.physical_id, VH.logical_id, VH.last_point AS cur_point, VH.next_point, VH.dest_point, VH.distance_point, VH.last_contact,
-            VH.mode, VH.can_be_pushed, 
+            VH.mode, VH.can_be_pushed, VH.user, VH.note,
             CASE 
                 WHEN VH.order_origin LIKE '%MCS%' THEN true 
                 WHEN VH.order_origin LIKE '%*%' THEN true 
