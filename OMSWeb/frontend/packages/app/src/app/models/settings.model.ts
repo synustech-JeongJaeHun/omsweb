@@ -190,8 +190,8 @@ const defaultControlTable = {
     {name: 'vehicles_distanceTotal', i18nLabel: 'names.distanceTotal', width: 80},
     {name: 'vehicles_mapDb', i18nLabel: 'names.mapDb', width: 90},
     {name: 'vehicles_mapVersion', i18nLabel: 'names.mapVersion', width: 90},
-    {name: 'vehicles_user', i18nLabel: 'names.user', width: 50},
-    {name: 'vehicles_note', i18nLabel: 'names.note', width: 100},
+    {name: 'vehicles_user', i18nLabel: 'names.user', width: 80},
+    {name: 'vehicles_note', i18nLabel: 'names.note', width: 150},
   ],
 
   // stations table
@@ -221,8 +221,8 @@ const defaultControlTable = {
     {name: 'stations_offset', i18nLabel: 'names.offset', width: 100},
     {name: 'stations_unuse', i18nLabel: 'names.unuse', width: 100},
     {name: 'stations_carrierId', i18nLabel: 'names.carrierId', width: 100},
-    {name: 'stations_user', i18nLabel: 'names.user', width: 50},
-    {name: 'stations_note', i18nLabel: 'names.note', width: 100},
+    {name: 'stations_user', i18nLabel: 'names.user', width: 80},
+    {name: 'stations_note', i18nLabel: 'names.note', width: 150},
   ],
 
   // buffers table
@@ -252,8 +252,8 @@ const defaultControlTable = {
     {name: 'buffers_offset', i18nLabel: 'names.offset', width: 100},
     {name: 'buffers_unuse', i18nLabel: 'names.unuse', width: 100},
     {name: 'buffers_carrierId', i18nLabel: 'names.carrierId', width: 100},
-    {name: 'buffers_user', i18nLabel: 'names.user', width: 50},
-    {name: 'buffers_note', i18nLabel: 'names.note', width: 100},
+    {name: 'buffers_user', i18nLabel: 'names.user', width: 80},
+    {name: 'buffers_note', i18nLabel: 'names.note', width: 150},
   ],
 
   // zcus table

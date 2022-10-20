@@ -131,6 +131,26 @@
     [visibleIndex]="getDisplayTableColumnIndex('buffers_carrierId')"
     [width]="getDisplayTableColumnWidth('buffers_carrierId')"
 	></dxi-column>
+  <dxi-column
+    [allowFiltering]="true"
+    dataType="string"
+    dataField="user"
+    [allowSorting]="true"
+    [caption]="'names.user' | translate"
+    [visible]="canDisplayTable('buffers_user')"
+    [visibleIndex]="getDisplayTableColumnIndex('buffers_user')"
+    [width]="getDisplayTableColumnWidth('buffers_user')"
+  ></dxi-column>
+  <dxi-column
+    [allowFiltering]="true"
+    dataType="string"
+    dataField="note"
+    [allowSorting]="true"
+    [caption]="'names.note' | translate"
+    [visible]="canDisplayTable('buffers_note')"
+    [visibleIndex]="getDisplayTableColumnIndex('buffers_note')"
+    [width]="getDisplayTableColumnWidth('buffers_note')"
+  ></dxi-column>
 	<div *dxTemplate="let data of 'directionTemplate'">
 		<div [ngSwitch]="data.displayValue">
 			<div class="value" *ngSwitchCase="'L'">{{ 'Left' }}</div>
