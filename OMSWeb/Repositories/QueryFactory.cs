@@ -1,11 +1,10 @@
-using System;
 using System.Collections.Generic;
 
 namespace OMSWeb.Repositories
 {
-    public class QueryFactory
-    {
-        private static IDictionary<string, string> sqlMap = new Dictionary<string, string> {
+  public class QueryFactory
+  {
+    private static IDictionary<string, string> sqlMap = new Dictionary<string, string> {
       {"size", @"
         SELECT min(x) AS min_x,
           min(y) AS min_y,
@@ -296,6 +295,8 @@ namespace OMSWeb.Repositories
             SELECT
             VH.id, VH.physical_id, VH.logical_id, VH.last_point AS cur_point, 
             VH.moving_state, VH.map_db,
+            VH.user as user, 
+            VH.note as note,
             OD.id AS order_id,
             CASE 
                 WHEN OD.location_pickup IS NOT NULL AND OD.location_dropoff IS NOT NULL        -- FROM-TO order
@@ -439,65 +440,24 @@ namespace OMSWeb.Repositories
       ) AS WRAPPED_TABLE
       "},
       {"stationStatus", @"
-        SELECT SS.id, SS.physical_id, SS.logical_id, SS.point, SS.direction, SS.next_point, SS.""offset"", SS.unuse, SS.carrier_id, GO.group_id
+        SELECT SS.id, SS.physical_id, SS.logical_id, SS.point, SS.direction, SS.next_point, SS.""offset"", SS.unuse, SS.carrier_id, SS.user, SS.note, GO.group_id
         FROM stations AS SS
             LEFT JOIN grouped_objects AS GO
         ON SS.id = GO.reference_id AND GO.reference_table = 'station'
         --*user_id_condition*-- AND user_id = @userId
       "},
       {"bufferStatus", @"
-        SELECT BS.id, BS.physical_id, BS.logical_id, BS.point, BS.direction, BS.next_point, BS.""offset"", BS.unuse, BS.carrier_id, GO.group_id
+        SELECT BS.id, BS.physical_id, BS.logical_id, BS.point, BS.direction, BS.next_point, BS.""offset"", BS.unuse, BS.carrier_id, BS.user, BS.note, GO.group_id
         FROM buffers AS BS
             LEFT JOIN grouped_objects AS GO
         ON BS.id = GO.reference_id AND GO.reference_table = 'buffer'
         --*user_id_condition*--WHERE user_id =@userId
       "}
     };
-        public static string GetSql(string name)
-        {
-            sqlMap.TryGetValue(name, out var sql);
-            return sql;
-        }
-
-        public static string GetSql(string name, string userId)
-        {
-            var sql = GetSql(name);
-            sql = sql.Replace("from points", "from playback_points", StringComparison.OrdinalIgnoreCase);
-            sql = sql.Replace("join points", "join playback_points", StringComparison.OrdinalIgnoreCase);
-
-            sql = sql.Replace("from segments", "from playback_segments", StringComparison.OrdinalIgnoreCase);
-            sql = sql.Replace("join segments", "join playback_segments", StringComparison.OrdinalIgnoreCase);
-
-            sql = sql.Replace("from segment_parts", "from playback_segment_parts", StringComparison.OrdinalIgnoreCase);
-            sql = sql.Replace("join segment_parts", "join playback_segment_parts", StringComparison.OrdinalIgnoreCase);
-
-            sql = sql.Replace("from segment_blocking", "from playback_segment_blocking", StringComparison.OrdinalIgnoreCase);
-            sql = sql.Replace("join segment_blocking", "join playback_segment_blocking", StringComparison.OrdinalIgnoreCase);
-
-            sql = sql.Replace("from stations", "from playback_stations", StringComparison.OrdinalIgnoreCase);
-            sql = sql.Replace("join stations", "join playback_stations", StringComparison.OrdinalIgnoreCase);
-
-            sql = sql.Replace("from buffers", "from playback_buffers", StringComparison.OrdinalIgnoreCase);
-            sql = sql.Replace("join buffers", "join playback_buffers", StringComparison.OrdinalIgnoreCase);
-
-            sql = sql.Replace("from mtls", "from playback_mtls", StringComparison.OrdinalIgnoreCase);
-            sql = sql.Replace("join mtls", "join playback_mtls", StringComparison.OrdinalIgnoreCase);
-
-            sql = sql.Replace("from clusters", "from playback_clusters", StringComparison.OrdinalIgnoreCase);
-            sql = sql.Replace("join clusters", "join playback_clusters", StringComparison.OrdinalIgnoreCase);
-
-            sql = sql.Replace("from cluster_points", "from playback_cluster_points", StringComparison.OrdinalIgnoreCase);
-            sql = sql.Replace("join cluster_points", "join playback_cluster_points", StringComparison.OrdinalIgnoreCase);
-
-            sql = sql.Replace("from vehicles", "from playback_vehicles", StringComparison.OrdinalIgnoreCase);
-            sql = sql.Replace("join vehicles", "join playback_vehicles", StringComparison.OrdinalIgnoreCase);
-
-            sql = sql.Replace("from orders", "from playback_orders", StringComparison.OrdinalIgnoreCase);
-            sql = sql.Replace("join orders", "join playback_orders", StringComparison.OrdinalIgnoreCase);
-
-            sql = sql.Replace("--*user_id_condition*--", "", StringComparison.OrdinalIgnoreCase);
-
-            return sql;
-        }
+    public static string GetSql(string name)
+    {
+      sqlMap.TryGetValue(name, out var sql);
+      return sql;
     }
+  }
 }
