@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Layer from 'MapObjects/map/components/Layer.ce.vue'
-import { segmentDisableds } from '../segmentDisableds'
+import { segmentDisableds, findSegmentDisabledsBySegmentId } from '../segmentDisableds'
 import { scaleStylesInfo } from 'src/styles/styles'
 import DisabledSegment from './DisabledSegment.ce.vue'
 import { findSegmentById } from '../segments'
@@ -15,7 +15,8 @@ function getDeepCopiedSegment(event: MouseEvent) {
     (event.target as SVGElement).dataset.segmentId!
   )
   const segment = findSegmentById(segmentId)!
-  return deepCopy(segment)
+  const segmentDisableds = findSegmentDisabledsBySegmentId(segmentId)
+  return deepCopy({...segment, disableds: segmentDisableds})
 }
 
 function handleMouseover(event: MouseEvent) {

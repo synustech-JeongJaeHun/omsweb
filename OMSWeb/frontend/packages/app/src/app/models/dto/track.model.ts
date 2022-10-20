@@ -202,6 +202,8 @@ export namespace Dto {
 		historyChangeTime?: any
 		isMaint: boolean
 		isConnected: boolean
+    user?: string
+    note?: string
 	}
 
 	export interface IFixedTrackData {

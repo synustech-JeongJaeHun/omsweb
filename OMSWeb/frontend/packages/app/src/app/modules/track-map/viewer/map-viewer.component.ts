@@ -290,7 +290,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 			this.hubSvc.vehicleChanged$
 				.pipe(takeUntil(this.destroy$))
 				.subscribe((e: IDataChangeEvent) => {
-					// @ts-ignore
 					this.viewer.updateVehicle(e.operation, e.data)
 				})
 			this.hubSvc.segmentChanged$
@@ -335,9 +334,13 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 
 			this.hubSvc.stationChanged$
 				.pipe(takeUntil(this.destroy$))
-				.subscribe((e) => {
-					// @ts-ignore
-					this.viewer.updateStation(e.operation, { id: e.id, unuse: e.unuse })
+				.subscribe((e: any) => {
+					this.viewer.updateStation(e.operation, { 
+            id: e.id, 
+            unuse: e.unuse, 
+            user: e?.user, 
+            note: e?.note 
+          })
 				})
 
 			this.hubSvc.bufferChanged$
@@ -347,6 +350,8 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 						id: e.id,
 						unuse: e.unuse,
 						carrierId: e.carrierId,
+            user: e?.user, 
+            note: e?.note
 					})
 				})
 

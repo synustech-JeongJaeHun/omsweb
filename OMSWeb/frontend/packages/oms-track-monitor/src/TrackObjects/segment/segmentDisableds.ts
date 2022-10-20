@@ -28,8 +28,7 @@ function insertSegmentDisabled(segmentDisabled: SegmentDisabled) {
 	segmentDisableds.value.push(segmentDisabled)
 	segmentDisabledMap.set(segmentDisabled.id, segmentDisabled)
 	segmentDisabledMapBySegmentId.set(segmentDisabled.segmentId, [
-		...(segmentDisabledMapBySegmentId.get(segmentDisabled.segmentId) ??
-			[]),
+		...findSegmentDisabledsBySegmentId(segmentDisabled.segmentId),
 		segmentDisabled,
 	])
 
@@ -42,8 +41,7 @@ function deleteSegmentDisabled(id: SegmentDisabled['id']) {
 	if (segmentDisabled === undefined) return
 
 	//segmentdisabledbysegmentid
-	const sds =
-		segmentDisabledMapBySegmentId.get(segmentDisabled.segmentId) ?? []
+	const sds = findSegmentDisabledsBySegmentId(segmentDisabled.segmentId)
 	const nextSds = sds.filter((sd) => sd.id !== segmentDisabled.id)
 	segmentDisabledMapBySegmentId.set(segmentDisabled.segmentId, nextSds)
 
@@ -57,7 +55,7 @@ function deleteSegmentDisabled(id: SegmentDisabled['id']) {
 }
 
 function setSegmentDisabledWithMap(segmentId: Segment['id']) {
-	const sds = segmentDisabledMapBySegmentId.get(segmentId) ?? []
+  const sds = findSegmentDisabledsBySegmentId(segmentId)
 
 	const isDisabled = sds.length > 0
 	const isDisabledByMtl = sds.some((sd) =>
@@ -71,9 +69,15 @@ function findSegmentDisabledById(id: SegmentDisabled['id']) {
 	return segmentDisabledMap.get(id)
 }
 
+
+function findSegmentDisabledsBySegmentId(id: Segment['id']) {
+  return segmentDisabledMapBySegmentId.get(id) ?? []
+}
+
 export {
 	segmentDisableds,
 	initSegmentDisableds,
 	insertSegmentDisabled,
 	deleteSegmentDisabled,
+  findSegmentDisabledsBySegmentId
 }
