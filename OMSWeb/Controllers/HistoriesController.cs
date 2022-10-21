@@ -25,9 +25,7 @@ namespace OMSWeb.Controllers
         [HttpGet("orders")]
         public object GetOrders(DataSourceLoadOptions loadOptions)
         {
-            string s = loadOptions.Filter.ToString();
             Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: history-transfers");
-            Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"PACKET: {loadOptions.Filter}");
 
             return DataSourceLoader.Load(_historySvc.QueryOrders(loadOptions), loadOptions);
         }
@@ -36,7 +34,6 @@ namespace OMSWeb.Controllers
         public object GetVehicles(DataSourceLoadOptions loadOptions)
         {
             Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: history-vehicles");
-            Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"PACKET: {loadOptions.Filter}");
 
             return DataSourceLoader.Load(_historySvc.QueryVehicles(loadOptions), loadOptions);
         }
@@ -45,7 +42,6 @@ namespace OMSWeb.Controllers
         public object GetAlarms(DataSourceLoadOptions loadOptions)
         {
             Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: history-alarms");
-            Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"PACKET: {loadOptions.Filter}");
 
             return DataSourceLoader.Load(_historySvc.QueryAlarms(loadOptions), loadOptions);
         }
@@ -54,7 +50,6 @@ namespace OMSWeb.Controllers
         public object GetAlerts(DataSourceLoadOptions loadOptions)
         {
             Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: history-warnings");
-            Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"PACKET: {loadOptions.Filter}");
 
             return DataSourceLoader.Load(_historySvc.QueryAlerts(loadOptions), loadOptions);
         }

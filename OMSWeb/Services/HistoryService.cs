@@ -21,24 +21,28 @@ namespace OMSWeb.Services
         public IQueryable<OrderEntity> QueryOrders(DataSourceLoadOptions loadOptions)
         {
             (DateTimeOffset from, DateTimeOffset to) = GetTimeFilters(loadOptions);
+            Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"PACKET: from={from} to={to}");
 
             return this._repo.QueryOrders(from, to);
         }
         public IQueryable<VehicleHistoryEntity> QueryVehicles(DataSourceLoadOptions loadOptions)
         {
             (DateTimeOffset from, DateTimeOffset to) = GetTimeFilters(loadOptions);
+            Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"PACKET: from={from} to={to}");
 
             return this._repo.QueryVehicles(from, to);
         }
         public IQueryable<AlarmHistory> QueryAlarms(DataSourceLoadOptions loadOptions)
         {
             (DateTimeOffset from, DateTimeOffset to) = GetTimeFilters(loadOptions);
+            Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"PACKET: from={from} to={to}");
 
             return this._repo.QueryAlarms(from, to);
         }
         public IQueryable<AlertEntity> QueryAlerts(DataSourceLoadOptions loadOptions)
         {
             (DateTimeOffset from, DateTimeOffset to) = GetTimeFilters(loadOptions);
+            Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"PACKET: from={from} to={to}");
 
             return this._repo.QueryAlerts(from, to);
         }
