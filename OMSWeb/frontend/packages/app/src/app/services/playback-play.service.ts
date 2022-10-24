@@ -9,7 +9,7 @@ import {
 	PlaybackSnapshot,
 	PlaybackSpeed,
 	PlaybackTrack,
-	TimelineEvent,
+	HistoryEvent,
 } from '../models/playback.model'
 import {
 	convertOrderHistoryEventToCurrentOrder,
@@ -28,7 +28,7 @@ export class PlaybackPlayService {
 	@Output() clockChanged = new EventEmitter<ClockChangedEvent>()
 
 	public firstSnapshotTime: Date
-	public lastTimelineEventTime: Date
+	public lastHistoryTime: Date
 
 	public trackTimes: Date[]
 	#track: PlaybackTrack
@@ -67,7 +67,7 @@ export class PlaybackPlayService {
 	public currentSegmentBlockings: CurrentSegmentBlocking[] = []
 	public currentOrders: CurrentOrder[] = []
 
-	public timelineEvents: TimelineEvent[]
+	public historyEvents: HistoryEvent[]
 
 	public clock: Date
 	public isPlaying = false
@@ -95,8 +95,8 @@ export class PlaybackPlayService {
 		this.nextSnapshot = beforeNextSnapshots.next
 	}
 	private async fetchEvents(from: Date, to: Date = new Date(9999, 1, 1)) {
-		this.timelineEvents = await this.playbackService
-			.getTimelineEvents(from, to)
+		this.historyEvents = await this.playbackService
+			.getHistoryEvents(from, to)
 			.toPromise()
 	}
 
@@ -109,8 +109,8 @@ export class PlaybackPlayService {
 			const diff = DateFns.differenceInMinutes(this.window.end, start)
 			if (diff < 0 || diff > 30) {
 				const after30Mins = DateFns.add(start, { minutes: 30 })
-				if (after30Mins.getTime() > this.lastTimelineEventTime.getTime())
-					return this.lastTimelineEventTime
+				if (after30Mins.getTime() > this.lastHistoryTime.getTime())
+					return this.lastHistoryTime
 				else return after30Mins
 			} else {
 				return this.window.end
@@ -178,10 +178,10 @@ export class PlaybackPlayService {
 		} else {
 			const time = date.getTime()
 			const index = findIndexDefault(
-				this.timelineEvents.findIndex(
-					(event) => new Date(event.eventTime).getTime() > time,
+				this.historyEvents.findIndex(
+					(event) => new Date(event.historyChangeTime).getTime() > time,
 				),
-				this.timelineEvents.length,
+				this.historyEvents.length,
 			)
 
 			this.clock = date
@@ -190,24 +190,11 @@ export class PlaybackPlayService {
 			this.clockChanged.emit({
 				type: 'EventsChanged',
 				clock: this.clock,
-				events: this.timelineEvents.slice(0, index),
+				events: this.historyEvents.slice(0, index),
 			})
 
 			// if current snapshot, goto date in arts
 		}
-	}
-
-	// browse by eventid is always inside current snapshot times
-	public setClockByEventId(id: TimelineEvent['id']) {
-		const index = this.timelineEvents.findIndex((event) => event.eventId === id)
-		this.clock = new Date(this.timelineEvents[index].eventTime)
-		this.remainedFirstEventIndex = index + 1
-		// 🎉 event
-		this.clockChanged.emit({
-			type: 'EventsChanged',
-			clock: this.clock,
-			events: this.timelineEvents.slice(0, index + 1),
-		})
 	}
 
 	private reduceCurrentState(event: ClockChangedEvent) {
@@ -316,7 +303,7 @@ export class PlaybackPlayService {
 	get currentEvent() {
 		return this.remainedFirstEventIndex === 0
 			? undefined
-			: this.timelineEvents[this.remainedFirstEventIndex - 1]
+			: this.historyEvents[this.remainedFirstEventIndex - 1]
 	}
 
 	public resume() {
@@ -329,10 +316,11 @@ export class PlaybackPlayService {
 
 		// exit(1/3) => when clock over window end
 		if (
-      nextDate.getTime() >= this.window.end.getTime() 
-      &&
-      (this.nextSnapshot ? nextDate.getTime() >= this.nextSnapshot.timestamp.getTime() : true)
-    ) {
+			nextDate.getTime() >= this.window.end.getTime() &&
+			(this.nextSnapshot
+				? nextDate.getTime() >= this.nextSnapshot.timestamp.getTime()
+				: true)
+		) {
 			this.stop()
 			return
 		}
@@ -361,38 +349,35 @@ export class PlaybackPlayService {
 			return
 		}
 
-		// exit(3/3) => when timeline events are not ready
+		// exit(3/3) => when history events are not ready
 		// it occurs when current snapshot move to future not past
-		const timelineLastEvent =
-			this.timelineEvents[this.timelineEvents.length - 1]
-		const isTimelineNotReady =
-			timelineLastEvent 
-      &&
-			new Date(timelineLastEvent.eventTime).getTime() <= nextDate.getTime()
-      &&
-      new Date(timelineLastEvent.eventTime).getTime() < this.currentSnapshot.timestamp.getTime()
-		if (isTimelineNotReady) {
+		const lastHistoryEvent = this.historyEvents[this.historyEvents.length - 1]
+		const isHistoryNotReady =
+			lastHistoryEvent &&
+			new Date(lastHistoryEvent.historyChangeTime).getTime() <=
+				nextDate.getTime() &&
+			new Date(lastHistoryEvent.historyChangeTime).getTime() <
+				this.currentSnapshot.timestamp.getTime()
+		if (isHistoryNotReady) {
 			return
 		}
 
 		const nextIndex = (() => {
-			const index = this.timelineEvents
+			const index = this.historyEvents
 				.slice(this.remainedFirstEventIndex)
 				.findIndex(
-					(event) => new Date(event.eventTime).getTime() > nextDate.getTime(),
+					(event) =>
+						new Date(event.historyChangeTime).getTime() > nextDate.getTime(),
 				)
 			return index === -1
-				? this.timelineEvents.length
+				? this.historyEvents.length
 				: this.remainedFirstEventIndex + index
 		})()
 		// 🎉 event
 		this.clockChanged.emit({
 			type: 'NextFrameEvent',
 			clock: this.clock,
-			events: this.timelineEvents.slice(
-				this.remainedFirstEventIndex,
-				nextIndex,
-			),
+			events: this.historyEvents.slice(this.remainedFirstEventIndex, nextIndex),
 		})
 
 		// change state after event emit

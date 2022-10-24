@@ -136,7 +136,7 @@ type PlaybackSnapshotVehicle = {
 	can_be_pushed: boolean
 	cargo_state: string
 	cargo_transfer_result: null
-  carrier_id?: string
+	carrier_id?: string
 	command: string
 	command_point: number
 	connection: number
@@ -148,7 +148,7 @@ type PlaybackSnapshotVehicle = {
 	is_blocked: boolean
 	is_maint: boolean
 	is_sensor_stopped: boolean
-  is_zcu_blocked: boolean
+	is_zcu_blocked: boolean
 	last_contact: string
 	last_point: number
 	logical_id: LogicalId
@@ -157,7 +157,7 @@ type PlaybackSnapshotVehicle = {
 	moving_state: string
 	next_end_point: number
 	next_point: number
-  dest_point?: number
+	dest_point?: number
 	nonce: number
 	order_id: number
 	order_origin: string
@@ -171,30 +171,32 @@ type PlaybackSnapshotVehicle = {
 	type: unknown
 }
 
-type TimelineEvent =
+type HistoryEvent =
 	| VehicleHistoryEvent
 	| SegmentBlockingHistoryEvent
 	| OrderHistoryEvent
 
-type Timeline = { eventId: number; eventTime: string; tableName: string }
+interface ITableName {
+	tableName: string
+}
+
 type History = {
 	historySourceId: number
 	historyChangeTime: string
 	historyChangeType: string
 }
 
-type VehicleHistoryEvent = { tableName: 'vehicle_history' } & Timeline &
+type VehicleHistoryEvent = { tableName: 'vehicle_history' } & ITableName &
 	History & {
 		canBePushed: boolean
 		cargoState: string
-    carrierId: string | undefined
+		carrierId: string | undefined
 		command: string | null | undefined
 		commandPoint: string
 		distancePoint: number
 		distanceTotal: number
 		errorList: string
 		eventId: number
-		eventTime: string
 		historyChangeTime: string
 		historyChangeType: string
 		historySourceId: number
@@ -203,12 +205,12 @@ type VehicleHistoryEvent = { tableName: 'vehicle_history' } & Timeline &
 		isBlocked: boolean
 		isMaint: boolean
 		isSensorStopped: boolean
-    isZcuBlocked: boolean
+		isZcuBlocked: boolean
 		// isConnected: boolean
 		connection: number
 		lastContact: string
 		lastPoint: number
-    destPoint: string | null |undefined
+		destPoint: string | null | undefined
 		logicalId: string
 		mapDb: string
 		mode: string
@@ -223,7 +225,7 @@ type VehicleHistoryEvent = { tableName: 'vehicle_history' } & Timeline &
 
 type SegmentBlockingHistoryEvent = {
 	tableName: 'segment_blocking_history'
-} & Timeline &
+} & ITableName &
 	History & {
 		id: number
 		segmentId: number
@@ -231,7 +233,7 @@ type SegmentBlockingHistoryEvent = {
 		reason: string
 	}
 
-type OrderHistoryEvent = { tableName: 'order_history' } & Timeline &
+type OrderHistoryEvent = { tableName: 'order_history' } & ITableName &
 	History & {
 		assignmentDetails: string
 		assignmentType: string
@@ -239,7 +241,7 @@ type OrderHistoryEvent = { tableName: 'order_history' } & Timeline &
 		id: number
 		locationDropoff: string | null | undefined
 		locationPickup: string | null | undefined
-    locationMove: string | null | undefined
+		locationMove: string | null | undefined
 		logicalId: LogicalId
 		origin: string
 		priority: number
@@ -272,7 +274,7 @@ type SnapshotChangedEvent = {
 type EventsChangedEvent = {
 	type: 'EventsChanged'
 	clock: Date
-	events: TimelineEvent[]
+	events: HistoryEvent[]
 }
 /**
  * Event when need to accumulate events
@@ -280,7 +282,7 @@ type EventsChangedEvent = {
 type NextFrameEvent = {
 	type: 'NextFrameEvent'
 	clock: Date
-	events: TimelineEvent[]
+	events: HistoryEvent[]
 }
 
 type CurrentVehicle = {
@@ -357,7 +359,7 @@ export {
 	VehicleHistoryEvent,
 	OrderHistoryEvent,
 	SegmentBlockingHistoryEvent,
-	TimelineEvent,
+	HistoryEvent,
 	PlaybackSpeed,
 	ClockChangedEvent,
 	CurrentVehicle,

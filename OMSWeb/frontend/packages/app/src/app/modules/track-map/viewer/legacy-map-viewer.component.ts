@@ -23,7 +23,7 @@ import { PlaybackPlayService } from '@oms/root/services/playback-play.service'
 import {
 	ClockChangedEvent,
 	SegmentBlockingHistoryEvent,
-	TimelineEvent,
+	HistoryEvent,
 	VehicleHistoryEvent,
 } from '@oms/root/models/playback.model'
 import {
@@ -88,7 +88,7 @@ export class LegacyMapViewerComponent implements OnInit, OnDestroy {
 		return this.settingSvc.globalPreferences.toggles.showToolName
 	}
 
-  get homeColor() {
+	get homeColor() {
 		const isHomeMode = this.systemStatusService.homeMode ?? false
 		return isHomeMode ? '#ff510080' : undefined
 	}
@@ -215,14 +215,14 @@ export class LegacyMapViewerComponent implements OnInit, OnDestroy {
 		}, 1)
 	}
 
-	private applyEvents(events: TimelineEvent[]) {
+	private applyEvents(events: HistoryEvent[]) {
 		this.setToCurrentSnapshot()
 		setTimeout(() => this.consumeEvents(events), 2)
 	}
 
-	private consumeEvents(events: TimelineEvent[]) {
+	private consumeEvents(events: HistoryEvent[]) {
 		const vehicleReduceMap = new Map<
-			TimelineEvent['historySourceId'],
+			HistoryEvent['historySourceId'],
 			VehicleHistoryEvent
 		>()
 		events

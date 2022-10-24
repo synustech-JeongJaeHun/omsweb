@@ -5,7 +5,7 @@ import * as DateFns from 'date-fns'
 import {
 	PlaybackSnapshotData,
 	PlaybackTrackData,
-	TimelineEvent,
+	HistoryEvent,
 } from '../models/playback.model'
 
 @Injectable({
@@ -19,12 +19,12 @@ export class PlaybackService {
 	getPlaybackInfo() {
 		type Response = {
 			firstSnapshotTime: string
-			lastTimelineEventTime: string
+			lastHistoryTime: string
 		}
 		return this.http.get<Response>(`${this.baseUrl}/info`).pipe(
 			map((res) => ({
 				firstSnapshotTime: new Date(res.firstSnapshotTime),
-				lastTimelineEventTime: new Date(res.lastTimelineEventTime),
+				lastHistoryTime: new Date(res.lastHistoryTime),
 			})),
 		)
 	}
@@ -81,11 +81,11 @@ export class PlaybackService {
 			)
 	}
 
-	getTimelineEvents(from: Date, to: Date) {
-		return this.http.get<TimelineEvent[]>(
+	getHistoryEvents(from: Date, to: Date) {
+		return this.http.get<HistoryEvent[]>(
 			`${
 				this.baseUrl
-			}/timeline-events?from=${from.toISOString()}&to=${to.toISOString()}`,
+			}/history-events?from=${from.toISOString()}&to=${to.toISOString()}`,
 		)
 	}
 }
