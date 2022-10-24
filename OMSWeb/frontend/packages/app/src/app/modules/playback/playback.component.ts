@@ -36,8 +36,7 @@ export class PlaybackComponent implements OnInit, OnDestroy {
 		try {
 			this.playbackService.getPlaybackInfo().subscribe((res) => {
 				this.playbackPlayService.firstSnapshotTime = res.firstSnapshotTime
-				this.playbackPlayService.lastTimelineEventTime =
-					res.lastTimelineEventTime
+				this.playbackPlayService.lastHistoryTime = res.lastHistoryTime
 
 				this.playbackPlayService.setPlaySpeed(1)
 
@@ -46,7 +45,7 @@ export class PlaybackComponent implements OnInit, OnDestroy {
 
 					const start = (() => {
 						const before30Minute = DateFns.sub(
-							this.playbackPlayService.lastTimelineEventTime,
+							this.playbackPlayService.lastHistoryTime,
 							{ minutes: 30 },
 						)
 						return this.playbackPlayService.firstSnapshotTime.getTime() >
@@ -56,7 +55,7 @@ export class PlaybackComponent implements OnInit, OnDestroy {
 					})()
 					this.playbackPlayService.window = {
 						start,
-						end: this.playbackPlayService.lastTimelineEventTime,
+						end: this.playbackPlayService.lastHistoryTime,
 					}
 					this.playbackPlayService.clock = start
 
@@ -87,13 +86,13 @@ export class PlaybackComponent implements OnInit, OnDestroy {
 
 							if (this.playbackPlayService.currentSnapshot?.timestamp)
 								this.playbackService
-									.getTimelineEvents(
+									.getHistoryEvents(
 										this.playbackPlayService.currentSnapshot.timestamp,
 										this.playbackPlayService.nextSnapshot?.timestamp ??
 											new Date(9999, 1, 1),
 									)
 									.subscribe((res) => {
-										this.playbackPlayService.timelineEvents = res
+										this.playbackPlayService.historyEvents = res
 										this.playbackPlayService.goToStartOfCurrentSnapshot()
 										this.isFirstSnapshotLoaded = true
 									})

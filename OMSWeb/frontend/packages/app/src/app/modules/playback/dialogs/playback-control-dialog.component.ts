@@ -155,8 +155,4 @@ export class PlaybackControlDialogComponent {
 		})
 		this.playService.setClockByDate(date)
 	}
-
-	changeTimeByEvent(event: number) {
-		this.playService.setClockByEventId(event)
-	}
 }
