@@ -14,11 +14,11 @@ import { PlaybackPlayService } from '@oms/root/services/playback-play.service'
 import { Subscription } from 'rxjs'
 
 @Component({
-	selector: 'oms-legacy-map-side-panel',
-	templateUrl: './legacy-map-side-panel.component.html',
-	styleUrls: ['./legacy-map-side-panel.component.scss'],
+	selector: 'oms-playback-map-side-panel',
+	templateUrl: './playback-map-side-panel.component.html',
+	styleUrls: ['./playback-map-side-panel.component.scss'],
 })
-export class LegacyMapSidePanelComponent implements OnChanges, OnDestroy {
+export class PlaybackMapSidePanelComponent implements OnChanges, OnDestroy {
 	@Input('selectedObject') data: any
 	@Output() focus = new EventEmitter<any>()
 

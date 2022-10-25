@@ -7,12 +7,12 @@
 		[zcuSize]="tmSetting.zcuSize"
 		[segmentDirectionSize]="tmSetting.segmentDirectionSize"
 		[segmentWidth]="tmSetting.segmentWidth"
-    [stationMargin]="stationMargin"
+		[stationMargin]="stationMargin"
 		[bufferMargin]="bufferMargin"
 		[rotation]="tmSetting.rotation"
 		[isMinimapVisible]="tmSetting.isMinimapVisible"
 		[isVehicleNextLineVisible]="tmSetting.isVehicleNextLineVisible"
-    [isVehicleFromOrderLineVisible]="tmSetting.isVehicleFromOrderLineVisible"
+		[isVehicleFromOrderLineVisible]="tmSetting.isVehicleFromOrderLineVisible"
 		[isVehicleToOrderLineVisible]="tmSetting.isVehicleToOrderLineVisible"
 		[isVehicleMoveOrderLineVisible]="tmSetting.isVehicleMoveOrderLineVisible"
 		[isVehicleHomeivrLineVisible]="tmSetting.isVehicleHomeivrLineVisible"
@@ -24,7 +24,7 @@
 		[isZcuVisible]="tmSetting.isZcuVisible"
 		[isGroupVisible]="tmSetting.isGroupVisible"
 		[isClusterVisible]="tmSetting.isClusterVisible"
-    [isCpsVisible]="tmSetting.isCpsVisible"
+		[isCpsVisible]="tmSetting.isCpsVisible"
 		[isFireshutterVisible]="tmSetting.isFireshutterVisible"
 		[isMtlVisible]="tmSetting.isMtlVisible"
 		[isOverlappingObjectsVisible]="tmSetting.isOverlappingObjectsVisible"
@@ -43,10 +43,10 @@
 		[maintenanceModeVehicleColor]="tmSetting.maintenanceModeVehicleColor"
 		[manualModeVehicleColor]="tmSetting.manualModeVehicleColor"
 		[idleModeVehicleColor]="tmSetting.idleModeVehicleColor"
-    [homeIvrModeVehicleColor]="tmSetting.homeIvrModeVehicleColor"
-    [runningModeVehicleColor]="tmSetting.runningModeVehicleColor"
-    [zcuBlockedVehicleColor]="tmSetting.zcuBlockedVehicleColor"
-    [sensorStoppedVehicleColor]="tmSetting.sensorStoppedVehicleColor"
+		[homeIvrModeVehicleColor]="tmSetting.homeIvrModeVehicleColor"
+		[runningModeVehicleColor]="tmSetting.runningModeVehicleColor"
+		[zcuBlockedVehicleColor]="tmSetting.zcuBlockedVehicleColor"
+		[sensorStoppedVehicleColor]="tmSetting.sensorStoppedVehicleColor"
 		[cargoLoadingColor]="tmSetting.cargoLoadingColor"
 		[cargoFullColor]="tmSetting.cargoFullColor"
 		[cargoUnloadingColor]="tmSetting.cargoUnloadingColor"
@@ -54,7 +54,7 @@
 		[fireshutterClosedColor]="tmSetting.fireshutterClosedColor"
 		[mtlUnuseColor]="tmSetting.mtlUnuseColor"
 		[mtlUseColor]="tmSetting.mtlUseColor"
-    [vehicleSecondaryContent]="tmSetting.vehicleSecondaryContent"
+		[vehicleSecondaryContent]="tmSetting.vehicleSecondaryContent"
 		(mouseoverOnObject)="onMouseoverTM($event)"
 		(mouseleaveOnObject)="onMouseleaveTM($event)"
 		(mainClickOnObject)="onFocus($event)"
@@ -65,17 +65,17 @@
 
 	<div id="side_panel">
 		<!-- detail panel at right side -->
-		<oms-legacy-map-side-panel
+		<oms-playback-map-side-panel
 			*ngIf="activeDetails"
 			class="side_panel active"
 			[selectedObject]="selectedObject"
 			(focus)="changeFocus($event)"
 		>
-		</oms-legacy-map-side-panel>
+		</oms-playback-map-side-panel>
 	</div>
 
 	<!-- maptoolbar at left side -->
-	<oms-legacy-map-toolbar
+	<oms-playback-map-toolbar
 		id="map-toolbar"
 		class="snb toolbar"
 		[class.show-name]="showToolbarText"
@@ -85,7 +85,7 @@
 		(focus)="focusOnTM($event)"
 		(track)="trackOnTM($event)"
 	>
-	</oms-legacy-map-toolbar>
+	</oms-playback-map-toolbar>
 
 	<!-- co-located objects -->
 	<div id="colocatedView" (mouseleave)="onCoLocatedObjectPanelOff()">

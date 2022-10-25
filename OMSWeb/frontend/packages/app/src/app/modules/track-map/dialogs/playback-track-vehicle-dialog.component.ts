@@ -1,17 +1,16 @@
-import { Component, OnInit } from '@angular/core'
+import { Component } from '@angular/core'
 import { MatDialogRef } from '@angular/material/dialog'
 import { PlaybackPlayService } from '@oms/root/services/playback-play.service'
-import { abort } from 'process'
 import { Observable, of } from 'rxjs'
 import { ILookupUnit } from '../../../models/map.interface'
 import { Vehicle } from '../../../models/vehicle.model'
 
 @Component({
-	selector: 'oms-legacy-track-vehicle-dialog',
-	templateUrl: './legacy-track-vehicle-dialog.component.html',
-	styleUrls: ['./legacy-track-vehicle-dialog.component.scss'],
+	selector: 'oms-playback-track-vehicle-dialog',
+	templateUrl: './playback-track-vehicle-dialog.component.html',
+	styleUrls: ['./playback-track-vehicle-dialog.component.scss'],
 })
-export class LegacyTrackVehicleDialogComponent {
+export class PlaybackTrackVehicleDialogComponent {
 	dataSource: Observable<ILookupUnit[]>
 	vehicles: Vehicle[] = []
 	selectedVehicle: number[] = []
@@ -22,7 +21,7 @@ export class LegacyTrackVehicleDialogComponent {
 
 	constructor(
 		private playbackPlayService: PlaybackPlayService,
-		private dialog: MatDialogRef<LegacyTrackVehicleDialogComponent>,
+		private dialog: MatDialogRef<PlaybackTrackVehicleDialogComponent>,
 	) {
 		this.dataSource = of(
 			Object.values(

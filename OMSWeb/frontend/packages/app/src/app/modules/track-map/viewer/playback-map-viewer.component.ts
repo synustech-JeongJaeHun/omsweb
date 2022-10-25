@@ -39,11 +39,11 @@ import {
 import { SystemStatusService } from '@oms/root/services/system-status.service'
 
 @Component({
-	selector: 'oms-legacy-map-viewer',
-	templateUrl: './legacy-map-viewer.component.html',
-	styleUrls: ['./legacy-map-viewer.component.scss'],
+	selector: 'oms-playback-map-viewer',
+	templateUrl: './playback-map-viewer.component.html',
+	styleUrls: ['./playback-map-viewer.component.scss'],
 })
-export class LegacyMapViewerComponent implements OnInit, OnDestroy {
+export class PlaybackMapViewerComponent implements OnInit, OnDestroy {
 	@Input() preference: IPreferences
 
 	private viewer: IOmsTrackMonitor

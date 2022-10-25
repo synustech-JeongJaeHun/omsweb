@@ -12,11 +12,7 @@ import {
 	defaultToggleOptions,
 	ToggleOptionsType,
 } from '@oms/models/settings.model'
-import {
-	CommandKeyType,
-	ToggleOptionKeyType,
-	UserPermissions,
-} from '../../../models/enums'
+import { ToggleOptionKeyType } from '../../../models/enums'
 
 import { MapStatesService } from '../map-states.service'
 import { MessagesService } from '@oms/services/messages.service'
@@ -28,7 +24,6 @@ import {
 	MatDialogRef,
 	MatDialogState,
 } from '@angular/material/dialog'
-import { TrackVehicleDialogComponent } from '../dialogs/track-vehicle-dialog.component'
 import { CommandDialogComponent } from '../dialogs/command-dialog.component'
 import { ShowObjectDialogComponent } from '../dialogs/show-object-dialog.component'
 import { AuthService } from '../../../services/auth.service'
@@ -38,14 +33,14 @@ import { PermissionEnums } from '../../../models/enums'
 import { TrackMonitorSettingService } from '@oms/root/services/track-monitor-setting.service'
 import { PlaybackVehicleStatusDialogComponent } from '../dialogs/playback-vehicle-status-dialog.component'
 import { PlaybackControlDialogComponent } from '../../playback/dialogs/playback-control-dialog.component'
-import { LegacyTrackVehicleDialogComponent } from '../dialogs/legacy-track-vehicle-dialog.component'
+import { PlaybackTrackVehicleDialogComponent } from '../dialogs/playback-track-vehicle-dialog.component'
 
 @Component({
-	selector: 'oms-legacy-map-toolbar',
-	templateUrl: './legacy-map-toolbar.component.html',
-	styleUrls: ['legacy-map-toolbar.component.scss'],
+	selector: 'oms-playback-map-toolbar',
+	templateUrl: './playback-map-toolbar.component.html',
+	styleUrls: ['playback-map-toolbar.component.scss'],
 })
-export class LegacyMapToolbarComponent implements OnInit, OnDestroy {
+export class PlaybackMapToolbarComponent implements OnInit, OnDestroy {
 	@Input()
 	buttonState: ToggleOptionsType = defaultToggleOptions
 	readonly permissionEnums: typeof PermissionEnums = PermissionEnums
@@ -77,7 +72,7 @@ export class LegacyMapToolbarComponent implements OnInit, OnDestroy {
 	}
 
 	private _searchDlg: MatDialogRef<SearchDialogComponent, any>
-	private _trackDlg: MatDialogRef<LegacyTrackVehicleDialogComponent, any>
+	private _trackDlg: MatDialogRef<PlaybackTrackVehicleDialogComponent, any>
 	private _cmdDlg: MatDialogRef<CommandDialogComponent, any>
 	private _showObjDlg: MatDialogRef<ShowObjectDialogComponent, any>
 	private _vhStatusDlg: MatDialogRef<PlaybackVehicleStatusDialogComponent, any>
@@ -184,7 +179,7 @@ export class LegacyMapToolbarComponent implements OnInit, OnDestroy {
 		}
 
 		const rect: DOMRect = this.btnTrack.nativeElement.getBoundingClientRect()
-		this._trackDlg = this.dialog.open(LegacyTrackVehicleDialogComponent, {
+		this._trackDlg = this.dialog.open(PlaybackTrackVehicleDialogComponent, {
 			width: '350px',
 			autoFocus: false,
 			hasBackdrop: false,
