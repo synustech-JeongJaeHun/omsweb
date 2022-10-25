@@ -331,6 +331,18 @@ export class PlaybackPlayService {
 			nextDate.getTime() >= this.nextSnapshot.timestamp.getTime()
 		) {
 			clearInterval(this.intervalId)
+
+			const isTrackDifference =
+				isAlmostSameDate(
+					this.track.timestamp,
+					this.getRecentTrackTimeBy(nextDate),
+				) === false
+			console.log('checking track', isTrackDifference)
+			if (isTrackDifference) {
+				console.log('checked track', isTrackDifference)
+				await this.fetchTrack(nextDate)
+			}
+
 			await this.fetchSnapshot(nextDate)
 
 			await this.fetchEvents(
