@@ -48,6 +48,18 @@ namespace OMSWeb.Controllers
       return _svc.GetBeforeNextSnapshots(from);
     }
 
+    [HttpGet("vehicle-alarms")]
+    public ActionResult<object> GetVehicleAlarms([FromQuery] DateTimeOffset from, [FromQuery] DateTimeOffset to)
+    {
+      var remainedAlarms = _svc.GetRemainedAlarmsAt(at: from);
+      var alarmChanges = _svc.GetAlarmChangesInTime(from, to);
+      return new
+      {
+        remainedAlarms,
+        alarmChanges
+      };
+    }
+
     [HttpGet("history-events")]
     public ActionResult<object> GetHistoriesBetween([FromQuery] DateTimeOffset from, [FromQuery] DateTimeOffset to)
     {

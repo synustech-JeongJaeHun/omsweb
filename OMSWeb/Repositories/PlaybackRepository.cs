@@ -185,6 +185,98 @@ namespace OMSWeb.Repositories
       return result;
     }
 
+    public IList<RemainedAlarm> GetRemainedAlarmsAt(DateTimeOffset at)
+    {
+      var sql = @"
+          select 
+            va.id, va.time, va.error_code, va.vehicle_id, va.time_resolved, va.current, 
+            ve.level, ve.description, ve.cause, ve.action
+          from 
+            vehicle_alarms va 
+            left outer join 
+            vehicle_errors ve 
+            on va.error_code = ve.id
+          where 
+            va.time < @at
+            and 
+            va.time_resolved is null
+      ";
+
+      var result = new List<RemainedAlarm>();
+      using (var conn = ConnectTrack())
+      {
+        try
+        {
+          result = conn.Query<RemainedAlarm>(sql, new
+          {
+            at
+          }).ToList();
+        }
+        catch (System.Exception)
+        {
+          Console.WriteLine("[GetRemainedAlarmsAt] => null");
+        }
+      }
+      return result;
+    }
+
+    public IList<AlarmChange> GetAlarmChangesInTime(DateTimeOffset from, DateTimeOffset to)
+    {
+      var sql = @"
+         select *
+         from ((
+          select 
+            va.id, va.time, va.error_code, va.vehicle_id, va.time_resolved, va.current, 
+            ve.level, ve.description, ve.cause, ve.action,
+            va.time as history_change_time,
+            'INSERT' as history_change_type
+          from 
+            vehicle_alarms va 
+            left outer join 
+            vehicle_errors ve 
+            on va.error_code = ve.id
+          where 
+            va.time between @from and @to
+          )
+
+          union all 
+
+          (
+          select 
+            va.id, va.time, va.error_code, va.vehicle_id, va.time_resolved, va.current, 
+            ve.level, ve.description, ve.cause, ve.action,
+            va.time_resolved as history_change_time,
+            'UPDATE' as history_change_type
+          from 
+            vehicle_alarms va 
+            left outer join 
+            vehicle_errors ve 
+            on va.error_code = ve.id
+          where 
+            va.time_resolved between @from and @to
+          )) change
+          order by change.history_change_time
+      ";
+
+      var result = new List<AlarmChange>();
+      using (var conn = ConnectTrack())
+      {
+        try
+        {
+          result = conn.Query<AlarmChange>(sql, new
+          {
+            from,
+            to
+          }).ToList();
+        }
+        catch (System.Exception)
+        {
+          Console.WriteLine("[GetAlarmChangesInTime] => null");
+        }
+      }
+      return result;
+    }
+
     public IList<VehicleHistoryWithTableName> GetVehicleHistoriesBetween(DateTimeOffset from, DateTimeOffset to)
     {
       var sql = @"

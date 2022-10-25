@@ -28,7 +28,12 @@ namespace OMSWeb.Services
       => this._repo.GetRecentTrackBefore(before);
 
     public BeforeNextSnapshots GetBeforeNextSnapshots(DateTimeOffset from)
-    => this._repo.GetBeforeNextSnapshots(from);
+      => this._repo.GetBeforeNextSnapshots(from);
+
+    public IList<RemainedAlarm> GetRemainedAlarmsAt(DateTimeOffset at)
+      => this._repo.GetRemainedAlarmsAt(at);
+    public IList<AlarmChange> GetAlarmChangesInTime(DateTimeOffset from, DateTimeOffset to)
+      => this._repo.GetAlarmChangesInTime(from, to);
 
     public IList<VehicleHistoryWithTableName> GetVehicleHistoriesBetween(DateTimeOffset from, DateTimeOffset to)
       => this._repo.GetVehicleHistoriesBetween(from, to);

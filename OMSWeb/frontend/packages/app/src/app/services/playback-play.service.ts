@@ -337,9 +337,7 @@ export class PlaybackPlayService {
 					this.track.timestamp,
 					this.getRecentTrackTimeBy(nextDate),
 				) === false
-			console.log('checking track', isTrackDifference)
 			if (isTrackDifference) {
-				console.log('checked track', isTrackDifference)
 				await this.fetchTrack(nextDate)
 			}
 

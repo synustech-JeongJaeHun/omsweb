@@ -1,5 +1,7 @@
 using System;
-namespace OMSWeb.Models.Entities
+using OMSWeb.Models.Entities;
+
+namespace OMSWeb.Models
 {
   public interface ITableName
   {

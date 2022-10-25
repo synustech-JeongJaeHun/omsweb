@@ -6,6 +6,8 @@ import {
 	PlaybackSnapshotData,
 	PlaybackTrackData,
 	HistoryEvent,
+	RemainedAlarm,
+	AlarmChange,
 } from '../models/playback.model'
 
 @Injectable({
@@ -79,6 +81,15 @@ export class PlaybackService {
 						: undefined,
 				})),
 			)
+	}
+
+	getVehicleAlarms(from: Date, to: Date = new Date(9999, 1, 1)) {
+		return this.http.get<{
+			remainedAlarms: RemainedAlarm[]
+			alarmChanges: AlarmChange[]
+		}>(`${this.baseUrl}/vehicle-alarms`, {
+			params: { from: from.toISOString(), to: to.toISOString() },
+		})
 	}
 
 	getHistoryEvents(from: Date, to: Date) {

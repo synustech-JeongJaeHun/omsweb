@@ -254,6 +254,24 @@ type OrderHistoryEvent = { tableName: 'order_history' } & ITableName &
 		state: string | undefined
 	}
 
+type RemainedAlarm = {
+	id: number
+	time: string
+	errorCode: number
+	vehicleId: number
+	timeResolved?: string
+	current?: string
+	level: number
+	description?: string
+	cause?: string
+	action?: string
+}
+
+type AlarmChange = RemainedAlarm & {
+	historyChangeTime: string
+	historyChangeType: 'INSERT' | 'UPDATE'
+}
+
 type PlaybackSpeed = 0.1 | 0.5 | 1 | 2 | 5 | 10
 type ClockChangedEvent =
 	| SnapshotChangedEvent
@@ -360,6 +378,8 @@ export {
 	OrderHistoryEvent,
 	SegmentBlockingHistoryEvent,
 	HistoryEvent,
+	RemainedAlarm,
+	AlarmChange,
 	PlaybackSpeed,
 	ClockChangedEvent,
 	CurrentVehicle,
