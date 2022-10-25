@@ -480,7 +480,8 @@
     "resetVehicleTotalRuntime": "Reset Total Runtime",
     "setDelayedTransferTimeout": "Set Delayed Transfer Timeout",
     "warningNotify": "Warning Notify",
-    "tableNotify": "Table Notify"
+    "tableNotify": "Table Notify",
+    "nack": "Nack"
   },
   "enums": {
     "hostSessionStatus": {

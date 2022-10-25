@@ -390,6 +390,22 @@ const defaultHistoryTable = {
     {name: 'alarms_time_resolved', i18nLabel: 'names.timeResolved', width: 120},
     {name: 'alarms_age', i18nLabel: 'names.ageSecond', width: 120},
     {name: 'alarms_current', i18nLabel: 'names.current', width: 120},
+  ],
+  // nack_column 내용 정해지면 디테일 살리기
+
+  nacks:true,
+  nack_id:true,
+  nack_lorem:true,
+  nack_lorem2:true,
+  nack_slice:true,
+  nack_slice2:true,
+
+  nacks_order:[
+	{name:'nack_id',i18nLabel:'names.nackId',width:120},
+	{name:'nack_lorem',i18nLabel:'names.nackLorem',width:160},
+	{name:'nack_lorem2',i18nLabel:'names.nackLorem2',width:320},
+	{name:'nack_slice',i18nLabel:'names.nackSlice',width:180},
+	{name:'nack_slice2',i18nLabel:'names.nackSlice2',width:180}
   ]
 }
 
@@ -482,11 +498,13 @@ export class ClientPreferences implements IPreferences {
       [defaultControlTable.buffers_order, this.controlTables.buffers_order],
       [defaultControlTable.zcus_order, this.controlTables.zcus_order],
       [defaultControlTable.cps_order, this.controlTables.cps_order],
+
       
       // history tables
       [defaultHistoryTable.transfers_order, this.historyTables.transfers_order],
       [defaultHistoryTable.vehicles_order, this.historyTables.vehicles_order],
       [defaultHistoryTable.alarms_order, this.historyTables.alarms_order],
+	  [defaultHistoryTable.nacks_order,this.historyTables.nacks_order],
     ].forEach(([defaultOrder, currentOrder]) => {
       defaultOrder
         .filter(di => currentOrder.every(ci => ci.name !== di.name))

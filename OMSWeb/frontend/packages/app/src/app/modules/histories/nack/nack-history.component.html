@@ -1,0 +1,119 @@
+<div id="history-page">
+	<div id="filter-area">
+		<dx-date-box
+			[placeholder]="'_START_DATE' | translate"
+			type="datetime"
+			[(value)]="start"
+			[min]="base"
+			[max]="end"
+			[acceptCustomValue]="false"
+			[showClearButton]="true"
+			[displayFormat]="dateTimeFormat"
+			#startDate
+		></dx-date-box>
+		<div>~</div>
+		<dx-date-box
+			[placeholder]="'_END_DATE' | translate"
+			type="datetime"
+			[(value)]="now"
+			[min]="base"
+			[max]="end"
+			[acceptCustomValue]="false"
+			[showClearButton]="true"
+			(validationErrorChange)="setDateWithMaxLimit()"
+			[displayFormat]="dateTimeFormat"
+			#endDate
+		></dx-date-box>
+		<button
+			mat-raised-button
+			color="primary"
+			(click)="search(startDate.value, endDate.value)"
+		>
+			{{ 'names.search' | translate }}
+		</button>
+	</div>
+	<div id="grid-container">
+		<dx-data-grid
+			[dataSource]="dataSource"
+			[columnAutoWidth]="true"
+			[remoteOperations]="true"
+			[height]="gridHeight"
+			[width]="gridWidth"
+			[showBorders]="true"
+			[hoverStateEnabled]="true"
+			allowColumnResizing="true"
+			[stateStoring]="stateStoring"
+		>
+			<dxo-export [enabled]="true" [fileName]="fileName"></dxo-export>
+			<dxo-paging [pageSize]="50"></dxo-paging>
+			<dxo-pager
+				[showPageSizeSelector]="true"
+				[allowedPageSizes]="[50, 100, 200]"
+				[showInfo]="true"
+				visible="true"
+			>
+			</dxo-pager>
+			<dxo-scrolling
+				mode="standard"
+				rowRenderingMode="standard"
+				showScrollbar="always"
+			></dxo-scrolling>
+			<dxo-search-panel
+				[placeholder]="'names.search' | translate"
+				[visible]="true"
+			></dxo-search-panel>
+			<dxo-header-filter [visible]="true"></dxo-header-filter>
+			<dxo-filter-row [visible]="true"></dxo-filter-row>
+			<dxi-column
+				[width]="getDisplayTableColumnWidth('nack_id')"
+				[visible]="canDisplayTable('vehicles_physical_id')"
+				[visibleIndex]="getDisplayTableColumnIndex('nack_id')"
+				dataType="string"
+				dataField="physicalId"
+				[caption]="'names.nack_id' | translate"
+			></dxi-column>
+			<dxi-column
+				[width]="getDisplayTableColumnWidth('nack_lorem')"
+				[visible]="canDisplayTable('nack_lorem')"
+				[visibleIndex]="getDisplayTableColumnIndex('nack_lorem')"
+				dataType="string"
+				dataField="logicalId"
+				[caption]="'names.nack_lorem' | translate"
+			></dxi-column>
+			<dxi-column
+				[width]="getDisplayTableColumnWidth('nack_lorem2')"
+				[visible]="canDisplayTable('nack_lorem2')"
+				[visibleIndex]="getDisplayTableColumnIndex('nack_lorem2')"
+				[allowFiltering]="true"
+				dataType="number"
+				dataField="distanceTotal"
+				[caption]="'names.nack_lorem2' | translate"
+				cellTemplate="distanceTotalTemplate"
+			></dxi-column>
+			<dxi-column
+				[width]="getDisplayTableColumnWidth('nack_slice')"
+				[visible]="canDisplayTable('nack_slice')"
+				[visibleIndex]="getDisplayTableColumnIndex('nack_slice')"
+				[allowFiltering]="true"
+				dataType="number"
+				dataField="runtimeTotal"
+				[caption]="'names.nack_slice' | translate"
+				cellTemplate="runtimeTotalTemplate"
+			></dxi-column>
+			<dxi-column
+				[width]="getDisplayTableColumnWidth('nack_slice2')"
+				[visible]="canDisplayTable('nack_slice2')"
+				[visibleIndex]="getDisplayTableColumnIndex('nack_slice2')"
+				dataType="string"
+				[caption]="'names.nack_slice2' | translate"
+			></dxi-column>
+			<div *dxTemplate="let data of 'distanceTotalTemplate'">
+				{{ data.displayValue / 1000000 | number: '1.0-0' }}km
+			</div>
+			<div *dxTemplate="let data of 'runtimeTotalTemplate'">
+				{{ data.displayValue / (3600 * 24) | number: '1.0-0' }}d
+				{{ (data.displayValue % (3600 * 24)) / 3600 | number: '2.0-1' }}h
+			</div>
+		</dx-data-grid>
+	</div>
+</div>

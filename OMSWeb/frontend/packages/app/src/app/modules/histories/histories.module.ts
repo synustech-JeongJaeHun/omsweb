@@ -7,6 +7,7 @@ import { VehicleHistoryComponent } from './vehicles/vehicle-history.component'
 import { AlarmHistoryComponent } from './alarms/alarm-history.component'
 import { SharedModule } from '../shared/shared.module'
 import { WarningHistoryComponent } from './warnings/warning-history.component'
+import { NackHistoryComponent } from './nack/nack-history.component'
 
 @NgModule({
 	declarations: [
@@ -15,6 +16,7 @@ import { WarningHistoryComponent } from './warnings/warning-history.component'
 		VehicleHistoryComponent,
 		AlarmHistoryComponent,
 		WarningHistoryComponent,
+		NackHistoryComponent,
 	],
 	imports: [CommonModule, HistoriesRoutingModule, SharedModule],
 })
