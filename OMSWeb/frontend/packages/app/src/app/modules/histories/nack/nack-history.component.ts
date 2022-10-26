@@ -149,14 +149,14 @@ export class NackHistoryComponent implements OnInit, OnDestroy {
 	private getFileName() {
 		var offset = new Date().getTimezoneOffset() * 60000
 		var today = new Date(Date.now() - offset)
-		this.fileName = today.toISOString() + '-vehicle_history'
+		this.fileName = today.toISOString() + '-nack_history'
 	}
 	private applyFilter(startTime: Date, endTime: Date) {
         console.log('implement applyFilter method')
         this.dataGrid.instance.filter([
-            ['timeCreated', '>=', startTime],
+            ['ModifiedTime', '>=', startTime],
             'and',
-            ['timeCreated', '<=', endTime],
+            ['ModifiedTime', '<=', endTime],
         ])
 	}
 

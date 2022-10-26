@@ -189,9 +189,9 @@ namespace OMSWeb.Repositories
                     data::json->'nack' as Nack,
                     data::json->'nackReason' as NackReason,
 	                data::json->'nackParam' as NackParam
-                FROM rcmd_history;
+                FROM rcmd_history
                 WHERE 
-                    @from <= time and time <= @to
+                    @from <= time_modified and time_modified <= @to
                 ORDER BY id desc
                 ";
 

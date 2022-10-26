@@ -66,9 +66,9 @@ export class HistoriesService {
                 loadUrl: `${this.baseUrl}/nacks`,
             }),
             filter: [
-                ['timeCreated', '>=', startTime],
+                ['ModifiedTime', '>=', startTime],
                 'and',
-                ['timeCreated', '<=', endTime],
+                ['ModifiedTime', '<=', endTime],
             ],
         })
     }
