@@ -39,12 +39,21 @@ namespace OMSWeb.Services
 
             return this._repo.QueryAlarms(from, to);
         }
+
         public IQueryable<AlertEntity> QueryAlerts(DataSourceLoadOptions loadOptions)
         {
             (DateTimeOffset from, DateTimeOffset to) = GetTimeFilters(loadOptions);
             Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"PACKET: from={from} to={to}");
 
             return this._repo.QueryAlerts(from, to);
+        }
+
+        public IQueryable<NackHistoryEntity> QueryNacks(DataSourceLoadOptions loadOptions)
+        {
+            (DateTimeOffset from, DateTimeOffset to) = GetTimeFilters(loadOptions);
+            Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"PACKET: from={from} to={to}");
+
+            return this._repo.QueryNacks(from, to);
         }
 
         public IQueryable<VehicleDioHistoryEntity> QueryVehicleDios(int vehicleId, DateTimeOffset from, DateTimeOffset to)

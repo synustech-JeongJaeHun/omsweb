@@ -99,8 +99,8 @@ export class NackHistoryComponent implements OnInit, OnDestroy {
 	}
 
 	search(startTime: Date, endTime: Date) {
-		// this.dataSource = this.svc.
-		console.log('bind Nack Data in component')
+        console.log('bind Nack Data in component')
+        this.dataSource = this.svc.nacksDataSource(startTime, endTime)
 		this.applyFilter(startTime, endTime)
 	}
 
@@ -152,7 +152,12 @@ export class NackHistoryComponent implements OnInit, OnDestroy {
 		this.fileName = today.toISOString() + '-vehicle_history'
 	}
 	private applyFilter(startTime: Date, endTime: Date) {
-		console.log('implement applyFilter method')
+        console.log('implement applyFilter method')
+        this.dataGrid.instance.filter([
+            ['timeCreated', '>=', startTime],
+            'and',
+            ['timeCreated', '<=', endTime],
+        ])
 	}
 
 	ngOnInit(): void {

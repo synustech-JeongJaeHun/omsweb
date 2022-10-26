@@ -57,5 +57,19 @@ export class HistoriesService {
 			}),
 			filter: [['time', '>=', startTime], 'and', ['time', '<=', endTime]],
 		})
-	}
+    }
+
+    nacksDataSource(startTime: Date, endTime: Date): DataSource {
+        return new DataSource({
+            store: AspNetData.createStore({
+                key: 'id',
+                loadUrl: `${this.baseUrl}/nacks`,
+            }),
+            filter: [
+                ['timeCreated', '>=', startTime],
+                'and',
+                ['timeCreated', '<=', endTime],
+            ],
+        })
+    }
 }
