@@ -6,7 +6,10 @@ namespace OMSWeb.Models.Entities
     {
         public int Id { get; set; }
         public string Rcmd { get; set; }
+        public string Request { get; set; }
         public string CommandID { get; set; }
+        public DateTime ModifiedTime { get; set; }
+        public string Origin { get; set; }
         public string SourceName { get; set; }
         public string DestName { get; set; }
         public string CarrierID { get; set; }
@@ -19,11 +22,11 @@ namespace OMSWeb.Models.Entities
 
     public class RcmdHistoryEntity : RcmdEntity
     {
-        public DateTime ModifiedTime { get; set; }
+
     }
 
     public class NackHistoryEntity : RcmdEntity
     {
-        public DateTime ModifiedTime { get; set; }
+        
     }
 }

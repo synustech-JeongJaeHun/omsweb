@@ -410,21 +410,30 @@ const defaultHistoryTable = {
     {name: 'alarms_age', i18nLabel: 'names.ageSecond', width: 120},
     {name: 'alarms_current', i18nLabel: 'names.current', width: 120},
   ],
-  // nack_column 내용 정해지면 디테일 살리기
 
-  nacks:true,
-  nack_id:true,
-  nack_lorem:true,
-  nack_lorem2:true,
-  nack_slice:true,
-  nack_slice2:true,
+  // nack_column 
+  nacks_command_id:true,
+  nacks_time:true,
+  nacks_origin:true,
+  nacks_source:true,
+  nacks_dest:true,
+  nacks_carrier_id: true,
+  nacks_carrier_loc: true,
+  nacks_code: true,
+  nacks_reason: true,
+  nacks_param: true,
 
   nacks_order:[
-	{name:'nack_id',i18nLabel:'names.nackId',width:120},
-	{name:'nack_lorem',i18nLabel:'names.nackLorem',width:160},
-	{name:'nack_lorem2',i18nLabel:'names.nackLorem2',width:320},
-	{name:'nack_slice',i18nLabel:'names.nackSlice',width:180},
-	{name:'nack_slice2',i18nLabel:'names.nackSlice2',width:180}
+    { name: 'nacks_command_id', i18nLabel:'names.commandId',width:240},
+    { name: 'nacks_time', i18nLabel:'names.time',width:120},
+    { name: 'nacks_origin', i18nLabel:'names.origin',width:100},
+    { name: 'nacks_source', i18nLabel:'names.source',width:120},
+    { name: 'nacks_dest', i18nLabel: 'names.dest', width: 120 },
+    { name: 'nacks_carrier_id', i18nLabel: 'names.carrierId', width: 240 },
+    { name: 'nacks_carrier_loc', i18nLabel: 'names.carrierLoc', width: 120 },
+    { name: 'nacks_code', i18nLabel: 'names.nackcode', width: 100 },
+    { name: 'nacks_reason', i18nLabel: 'names.nackReason', width: 120 },
+    { name: 'nacks_param', i18nLabel: 'names.nackParam', width: 180 }
   ]
 }
 

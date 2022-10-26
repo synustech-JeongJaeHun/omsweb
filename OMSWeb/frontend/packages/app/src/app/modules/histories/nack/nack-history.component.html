@@ -33,87 +33,97 @@
 		</button>
 	</div>
 	<div id="grid-container">
-		<dx-data-grid
-			[dataSource]="dataSource"
-			[columnAutoWidth]="true"
-			[remoteOperations]="true"
-			[height]="gridHeight"
-			[width]="gridWidth"
-			[showBorders]="true"
-			[hoverStateEnabled]="true"
-			allowColumnResizing="true"
-			[stateStoring]="stateStoring"
-		>
+		<dx-data-grid [dataSource]="dataSource"
+									[columnAutoWidth]="true"
+									[remoteOperations]="true"
+									[height]="gridHeight"
+									[width]="gridWidth"
+									[showBorders]="true"
+									[hoverStateEnabled]="true"
+									allowColumnResizing="true"
+									[stateStoring]="stateStoring">
 			<dxo-export [enabled]="true" [fileName]="fileName"></dxo-export>
 			<dxo-paging [pageSize]="50"></dxo-paging>
-			<dxo-pager
-				[showPageSizeSelector]="true"
-				[allowedPageSizes]="[50, 100, 200]"
-				[showInfo]="true"
-				visible="true"
-			>
+			<dxo-pager [showPageSizeSelector]="true"
+								 [allowedPageSizes]="[50, 100, 200]"
+								 [showInfo]="true"
+								 visible="true">
 			</dxo-pager>
-			<dxo-scrolling
-				mode="standard"
-				rowRenderingMode="standard"
-				showScrollbar="always"
-			></dxo-scrolling>
-			<dxo-search-panel
-				[placeholder]="'names.search' | translate"
-				[visible]="true"
-			></dxo-search-panel>
+			<dxo-scrolling mode="standard"
+										 rowRenderingMode="standard"
+										 showScrollbar="always"></dxo-scrolling>
+			<dxo-search-panel [placeholder]="'names.search' | translate"
+												[visible]="true"></dxo-search-panel>
 			<dxo-header-filter [visible]="true"></dxo-header-filter>
 			<dxo-filter-row [visible]="true"></dxo-filter-row>
-			<dxi-column
-				[width]="getDisplayTableColumnWidth('nack_id')"
-				[visible]="canDisplayTable('vehicles_physical_id')"
-				[visibleIndex]="getDisplayTableColumnIndex('nack_id')"
-				dataType="string"
-				dataField="physicalId"
-				[caption]="'names.nack_id' | translate"
-			></dxi-column>
-			<dxi-column
-				[width]="getDisplayTableColumnWidth('nack_lorem')"
-				[visible]="canDisplayTable('nack_lorem')"
-				[visibleIndex]="getDisplayTableColumnIndex('nack_lorem')"
-				dataType="string"
-				dataField="logicalId"
-				[caption]="'names.nack_lorem' | translate"
-			></dxi-column>
-			<dxi-column
-				[width]="getDisplayTableColumnWidth('nack_lorem2')"
-				[visible]="canDisplayTable('nack_lorem2')"
-				[visibleIndex]="getDisplayTableColumnIndex('nack_lorem2')"
-				[allowFiltering]="true"
-				dataType="number"
-				dataField="distanceTotal"
-				[caption]="'names.nack_lorem2' | translate"
-				cellTemplate="distanceTotalTemplate"
-			></dxi-column>
-			<dxi-column
-				[width]="getDisplayTableColumnWidth('nack_slice')"
-				[visible]="canDisplayTable('nack_slice')"
-				[visibleIndex]="getDisplayTableColumnIndex('nack_slice')"
-				[allowFiltering]="true"
-				dataType="number"
-				dataField="runtimeTotal"
-				[caption]="'names.nack_slice' | translate"
-				cellTemplate="runtimeTotalTemplate"
-			></dxi-column>
-			<dxi-column
-				[width]="getDisplayTableColumnWidth('nack_slice2')"
-				[visible]="canDisplayTable('nack_slice2')"
-				[visibleIndex]="getDisplayTableColumnIndex('nack_slice2')"
-				dataType="string"
-				[caption]="'names.nack_slice2' | translate"
-			></dxi-column>
-			<div *dxTemplate="let data of 'distanceTotalTemplate'">
-				{{ data.displayValue / 1000000 | number: '1.0-0' }}km
-			</div>
-			<div *dxTemplate="let data of 'runtimeTotalTemplate'">
-				{{ data.displayValue / (3600 * 24) | number: '1.0-0' }}d
-				{{ (data.displayValue % (3600 * 24)) / 3600 | number: '2.0-1' }}h
-			</div>
+			<dxi-column [visible]="canDisplayTable('nacks_command_id')"
+									[visibleIndex]="getDisplayTableColumnIndex('nacks_command_id')"
+									[width]="getDisplayTableColumnWidth('nacks_command_id')"
+									dataType="string"
+									dataField="CommandID"
+									[caption]="'names.commandId' | translate"></dxi-column>
+			<dxi-column [visible]="canDisplayTable('nacks_time')"
+									[visibleIndex]="getDisplayTableColumnIndex('nacks_time')"
+									[width]="getDisplayTableColumnWidth('nacks_time')"
+									dataType="datetime"
+									dataField="ModifiedTime"
+									[caption]="'names.time' | translate"
+									[format]="dateTimeFormat"></dxi-column>
+			<dxi-column [visible]="canDisplayTable('nakcs_origin')"
+									[visibleIndex]="getDisplayTableColumnIndex('nacks_origin')"
+									[width]="getDisplayTableColumnWidth('nacks_origin')"
+									dataType="string"
+									dataField="Origin"
+									[caption]="'names.origin' | translate"></dxi-column>
+			<dxi-column [visible]="canDisplayTable('nackss_source')"
+									[visibleIndex]="getDisplayTableColumnIndex('nacks_source')"
+									[width]="getDisplayTableColumnWidth('nacks_source')"
+									dataType="string"
+									dataField="SourceName"
+									[allowSorting]="false"
+									[caption]="'names.source' | translate"></dxi-column>
+			<dxi-column [visible]="canDisplayTable('nackss_dest')"
+									[visibleIndex]="getDisplayTableColumnIndex('nacks_dest')"
+									[width]="getDisplayTableColumnWidth('nacks_dest')"
+									dataType="string"
+									dataField="DestName"
+									[allowSorting]="false"
+									[caption]="'names.dest' | translate"></dxi-column>
+			<dxi-column [visible]="canDisplayTable('nacks_carrier_id')"
+									[visibleIndex]="getDisplayTableColumnIndex('nacks_carrier_id')"
+									[width]="getDisplayTableColumnWidth('nacks_carrier_id')"
+									dataType="string"
+									dataField="CarrierID"
+									[allowSorting]="false"
+									[caption]="'names.carrierId' | translate"></dxi-column>
+			<dxi-column [visible]="canDisplayTable('nacks_carrier_loc')"
+									[visibleIndex]="getDisplayTableColumnIndex('nacks_carrier_loc')"
+									[width]="getDisplayTableColumnWidth('nacks_carrier_loc')"
+									dataType="string"
+									dataField="CarrierLoc"
+									[allowSorting]="false"
+									[caption]="'names.carrierLoc' | translate"></dxi-column>
+			<dxi-column [visible]="canDisplayTable('nacks_code')"
+									[visibleIndex]="getDisplayTableColumnIndex('nacks_code')"
+									[width]="getDisplayTableColumnWidth('nacks_code')"
+									dataType="string"
+									dataField="Nack"
+									[allowSorting]="false"
+									[caption]="'names.nackCode' | translate"></dxi-column>
+			<dxi-column [visible]="canDisplayTable('nacks_reason')"
+									[visibleIndex]="getDisplayTableColumnIndex('nacks_reason')"
+									[width]="getDisplayTableColumnWidth('nacks_reason')"
+									dataType="string"
+									dataField="NackReason"
+									[allowSorting]="false"
+									[caption]="'names.nackReason' | translate"></dxi-column>
+			<dxi-column [visible]="canDisplayTable('nacks_param')"
+									[visibleIndex]="getDisplayTableColumnIndex('nacks_param')"
+									[width]="getDisplayTableColumnWidth('nacks_param')"
+									dataType="string"
+									dataField="NackParam"
+									[allowSorting]="false"
+									[caption]="'names.nackParam' | translate"></dxi-column>
 		</dx-data-grid>
 	</div>
 </div>

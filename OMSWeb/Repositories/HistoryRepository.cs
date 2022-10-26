@@ -176,15 +176,19 @@ namespace OMSWeb.Repositories
         {
             var sql = @"
                 SELECT 
-                  id, time_modified, cmd_id, origin,
-                  data::json->'rcmd' as rcmd,
-                  data::json->'request' as request,
-                  data::json->'sourceName' as sourceName,
-                  data::json->'destName' as destName,
-                  data::json->'carrierID' as carrierID,
-                  data::json->'nack' as nack,
-                  data::json->'nackReason' as nackReason,
-	              data::json->'nackParam' as nackParam
+                    cmd_id as CommandID, 
+                    time_modified as ModifiedTime, 
+                    origin as Origin,
+                    data::json->'rcmd' as Rcmd,
+                    data::json->'request' as Request,
+                    data::json->'origin' as Origin,
+                    data::json->'sourceName' as SourceName,
+                    data::json->'destName' as DestName,
+                    data::json->'carrierID' as CarrierID,
+                    data::json->'newCarrierID' as NewCarrierID,
+                    data::json->'nack' as Nack,
+                    data::json->'nackReason' as NackReason,
+	                data::json->'nackParam' as NackParam
                 FROM rcmd_history;
                 WHERE 
                     @from <= time and time <= @to
