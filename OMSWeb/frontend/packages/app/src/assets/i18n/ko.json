@@ -76,6 +76,7 @@
     "priority": "우선순위",
     "carrierLabel": "캐리어 아이디",
     "timeCreated": "생성시간",
+    "timeUnused": "Unused Time",
     "timeAssigned": "할당시간",
     "timeVehicleArrived": "도착시간",
     "timeLoadStarted": "로딩 시작 시간",
@@ -480,7 +481,8 @@
     "resetVehicleTotalRuntime": "Reset Total Runtime",
     "setDelayedTransferTimeout": "Set Delayed Transfer Timeout",
     "warningNotify": "Warning Notify",
-    "tableNotify": "Table Notify"
+    "tableNotify": "Table Notify",
+    "view": "View"
   },
   "enums": {
     "hostSessionStatus": {
