@@ -302,6 +302,25 @@ const defaultControlTable = {
     {name: 'cps_sync', i18nLabel: 'names.cps_sync', width: 60},
     {name: 'cps_backup_id', i18nLabel: 'names.cps_backup_id', width: 60},
     {name: 'cps_error_code', i18nLabel: 'names.cps_error_code', width: 60},
+  ],
+
+  // unuse table
+  unuse: true,
+
+  unuse_type: true,
+  unuse_logical_id: true,
+  unuse_user: true,
+  unuse_note: true,
+  unuse_unused_time: true,
+  unuse_location: true,
+
+  unuse_order: [
+    {name: 'unuse_type', i18nLabel: 'names.type', width: 100},
+    {name: 'unuse_logical_id', i18nLabel: 'names.logicalId', width: 200},
+    {name: 'unuse_user', i18nLabel: 'names.user', width: 100},
+    {name: 'unuse_note', i18nLabel: 'names.note', width: 400},
+    {name: 'unuse_unused_time', i18nLabel: 'names.timeUnused', width: 150},
+    {name: 'unuse_location', i18nLabel: 'names.location', width: 100},
   ]
 }
 
