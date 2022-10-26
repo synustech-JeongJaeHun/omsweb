@@ -52,11 +52,12 @@ export class ColumnDisplayManagementComponent {
 						buffers_order: this.preference.controlTables.buffers_order,
 						zcus_order: this.preference.controlTables.zcus_order,
 						cps_order: this.preference.controlTables.cps_order,
+						unuse_order: this.preference.controlTables.unuse_order,
 				  }
 				: {
 						transfers_order: this.preference.historyTables.transfers_order,
 						vehicles_order: this.preference.historyTables.vehicles_order,
-            alarms_order: this.preference.historyTables.alarms_order
+						alarms_order: this.preference.historyTables.alarms_order,
 				  }
 
 		const order = orders[target]

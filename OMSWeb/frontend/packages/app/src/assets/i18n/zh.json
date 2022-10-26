@@ -75,6 +75,7 @@
     "priority": "优先级",
     "carrierLabel": "载波ID",
     "timeCreated": "创建时间",
+    "timeUnused": "Unused Time",
     "timeAssigned": "已分配",
     "timeVehicleArrived": "到达",
     "timeLoadStarted": "加载开始",
@@ -481,7 +482,8 @@
     "setDelayedTransferTimeout": "Set Delayed Transfer Timeout",
     "warningNotify": "Warning Notify",
     "tableNotify": "Table Notify",
-    "nack": "Nack"
+    "nack": "Nack",
+    "view": "View"
   },
   "enums": {
     "hostSessionStatus": {

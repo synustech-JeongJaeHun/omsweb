@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, EventEmitter, OnInit } from '@angular/core'
 import { SystemStatusService } from '@oms/root/services/system-status.service'
 import { TrackStatusService } from '@oms/root/services/track-status.service'
 
@@ -56,6 +56,9 @@ export class MonitorStatusComponent implements OnInit {
 	viewMode: ViewModes
 	trackData: Dto.ITrackData
 
+	findEvent = new EventEmitter<{ type: string; id: number }>()
+	focusEvent = new EventEmitter<{ type: string; id: number }>()
+
 	get showControlTable(): boolean {
 		return this.mapPreference.toggles.controlTable
 	}
@@ -87,5 +90,10 @@ export class MonitorStatusComponent implements OnInit {
 
 	ngOnInit() {
 		this.mapPreference = this.settingSvc.globalPreferences
+	}
+
+	handleFindAndFocus = (event: { type: string; id: number }) => {
+		this.findEvent.emit(event)
+		this.focusEvent.emit(event)
 	}
 }
