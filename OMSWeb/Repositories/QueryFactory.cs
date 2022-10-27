@@ -454,6 +454,11 @@ namespace OMSWeb.Repositories
             LEFT JOIN grouped_objects AS GO
         ON BS.id = GO.reference_id AND GO.reference_table = 'buffer'
         --*user_id_condition*--WHERE user_id =@userId
+      "},
+      {"unuseListStatus", @"
+         SELECT b.Type, b.OnlineName, b.User, b.Comments, b.UnusedTime, b.Location 
+         FROM  (select 'Buffer' as Type, 'buffer_01' as OnlineName, 'kim' as User, 'note' as Comments, now() as UnusedTime, '1' as Location) as B
+         ORDER BY b.UnusedTime
       "}
     };
     public static string GetSql(string name)

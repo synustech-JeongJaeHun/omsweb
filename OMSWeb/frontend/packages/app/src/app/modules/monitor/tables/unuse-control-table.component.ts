@@ -51,8 +51,7 @@ export class UnuseControlTableComponent implements OnInit, OnDestroy {
 		private settingSvc: SettingsService,
 		private hubSvc: HubService,
 	) {
-		// TODO
-		this.dataSource = this.statusSvc.clusterStatusDataSource()
+        this.dataSource = this.statusSvc.unuseStatusDataSource()
 		this.preference = this.settingSvc.globalPreferences
 	}
 

@@ -41,6 +41,10 @@ namespace OMSWeb.Services
         {
             return _repo.QueryClusterStates();
         }
+        public IQueryable<UnuseListState> QueryUnuseListStates()
+        {
+            return _repo.QueryUnuseListStates();
+        }
         public IQueryable<DioState> QueryDioStates()
         {
             return _repo.QueryDioStates();
