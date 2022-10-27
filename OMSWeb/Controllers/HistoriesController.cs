@@ -53,5 +53,13 @@ namespace OMSWeb.Controllers
 
             return DataSourceLoader.Load(_historySvc.QueryAlerts(loadOptions), loadOptions);
         }
+
+        [HttpGet("nacks")]
+        public object GetNacks(DataSourceLoadOptions loadOptions)
+        {
+            Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: history-nacks");
+
+            return DataSourceLoader.Load(_historySvc.QueryNacks(loadOptions), loadOptions);
+        }
     }
 }

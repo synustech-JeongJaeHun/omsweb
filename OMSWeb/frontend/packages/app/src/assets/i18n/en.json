@@ -76,6 +76,7 @@
     "priority": "Priority",
     "carrierLabel": "Carrier ID",
     "timeCreated": "Created Time",
+    "timeUnused": "Unused Time",
     "timeAssigned": "Assigned",
     "timeVehicleArrived": "Arrived",
     "timeLoadStarted": "Load Begin",
@@ -323,8 +324,14 @@
     "contain": "Contain",
     "updated": "Updated",
     "updateFailed": "Update Failed",
+    "source": "Source",
+    "dest": "Dest",
     "carrierId": "Carrier ID",
     "newCarrierId": "New Carrier ID",
+    "carrierLoc": "Carrier Loc",
+    "nackCode": "Nack Code",
+    "nackReason": "Nack Reason",
+    "nackParam": "Nack Param",
     "clean": "Clean",
     "user": "User",
     "note": "Note",
@@ -483,9 +490,8 @@
     "tableNotify": "Table Notify",
     "nack": "Nack",
     "RCMD": "RCMD",
-    "source": "source",
-    "dest": "dest",
-    "param": "param"
+    "param": "param",
+    "view": "View"
   },
   "enums": {
     "hostSessionStatus": {

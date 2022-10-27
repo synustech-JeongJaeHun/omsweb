@@ -172,6 +172,41 @@ namespace OMSWeb.Repositories
             return result;
         }
 
+        public IQueryable<NackHistoryEntity> QueryNacks(DateTimeOffset from, DateTimeOffset to)
+        {
+            var sql = @"
+                SELECT 
+                    cmd_id as CommandID, 
+                    time_modified as ModifiedTime, 
+                    origin as Origin,
+                    data::json->'rcmd' as Rcmd,
+                    data::json->'request' as Request,
+                    data::json->'origin' as Origin,
+                    data::json->'sourceName' as SourceName,
+                    data::json->'destName' as DestName,
+                    data::json->'carrierID' as CarrierID,
+                    data::json->'newCarrierID' as NewCarrierID,
+                    data::json->'nack' as Nack,
+                    data::json->'nackReason' as NackReason,
+	                data::json->'nackParam' as NackParam
+                FROM rcmd_history
+                WHERE 
+                    @from <= time_modified and time_modified <= @to
+                ORDER BY id desc
+                ";
+
+            IQueryable<NackHistoryEntity> result;
+            using (var conn = ConnectTrack())
+            {
+                result = conn.Query<NackHistoryEntity>(sql, new
+                {
+                    from = from,
+                    to = to
+                }).AsQueryable();
+            }
+            return result;
+        }
+
         public IQueryable<VehicleDioHistoryEntity> QueryVehicleDios(int vehicleId, DateTimeOffset from, DateTimeOffset to)
         {
             var sql = @"

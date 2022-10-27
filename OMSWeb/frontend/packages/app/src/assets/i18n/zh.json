@@ -75,6 +75,7 @@
     "priority": "优先级",
     "carrierLabel": "载波ID",
     "timeCreated": "创建时间",
+    "timeUnused": "Unused Time",
     "timeAssigned": "已分配",
     "timeVehicleArrived": "到达",
     "timeLoadStarted": "加载开始",
@@ -323,8 +324,14 @@
     "contain": "包含",
     "updated": "更新",
     "updateFailed": "Update Failed",
+    "source": "Source",
+    "dest": "Dest",
     "carrierId": "运营商 ID",
     "newCarrierId": "New Carrier ID",
+    "carrierLoc": "Carrier Loc",
+    "nackCode": "Nack Code",
+    "nackReason": "Nack Reason",
+    "nackParam": "Nack Param",
     "clean": "干净",
     "user": "User",
     "note": "注意",
@@ -483,9 +490,8 @@
     "tableNotify": "Table Notify",
     "nack": "Nack",
     "RCMD": "RCMD",
-    "source": "source",
-    "dest": "dest",
-    "param": "param"
+    "param": "param",
+    "view": "View"
   },
   "enums": {
     "hostSessionStatus": {
