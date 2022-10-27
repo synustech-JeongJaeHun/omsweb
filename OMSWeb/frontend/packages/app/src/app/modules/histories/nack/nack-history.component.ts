@@ -80,7 +80,7 @@ export class NackHistoryComponent implements OnInit, OnDestroy {
 	dataSource: DataSource
 
 	setDateWithMaxLimit() {
-		console.log('setDate')
+		this.now = new Date()
 	}
 	transformLocationId = ({ value = '' }): string => {
 		return this.idSvc.guessLocationId(value)
@@ -152,7 +152,6 @@ export class NackHistoryComponent implements OnInit, OnDestroy {
 		this.fileName = today.toISOString() + '-nack_history'
 	}
 	private applyFilter(startTime: Date, endTime: Date) {
-		console.log('implement applyFilter method')
 		this.dataGrid.instance.filter([
 			['ModifiedTime', '>=', startTime],
 			'and',

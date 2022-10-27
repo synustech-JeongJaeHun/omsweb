@@ -591,7 +591,7 @@ const defaultHistoryTable = {
 		{ name: 'nacks_dest', i18nLabel: 'names.dest', width: 120 },
 		{ name: 'nacks_carrier_id', i18nLabel: 'names.carrierId', width: 240 },
 		{ name: 'nacks_carrier_loc', i18nLabel: 'names.carrierLoc', width: 120 },
-		{ name: 'nacks_code', i18nLabel: 'names.nackcode', width: 100 },
+		{ name: 'nacks_code', i18nLabel: 'names.nackCode', width: 100 },
 		{ name: 'nacks_reason', i18nLabel: 'names.nackReason', width: 120 },
 		{ name: 'nacks_param', i18nLabel: 'names.nackParam', width: 180 },
 	],
