@@ -394,18 +394,24 @@ const defaultHistoryTable = {
   // nack_column 내용 정해지면 디테일 살리기
 
   nacks:true,
-  nack_id:true,
-  nack_lorem:true,
-  nack_lorem2:true,
-  nack_slice:true,
-  nack_slice2:true,
+  nack_RCMD:true,
+  nack_command_id:true,
+  nack_source:true,
+  nack_dest:true,
+  nack_carrier_id:true,
+  nack_nak_code:true,
+  nack_nak_reason:true,
+  nack_nak_param:true,
 
   nacks_order:[
-	{name:'nack_id',i18nLabel:'names.nackId',width:120},
-	{name:'nack_lorem',i18nLabel:'names.nackLorem',width:160},
-	{name:'nack_lorem2',i18nLabel:'names.nackLorem2',width:320},
-	{name:'nack_slice',i18nLabel:'names.nackSlice',width:180},
-	{name:'nack_slice2',i18nLabel:'names.nackSlice2',width:180}
+	{name:'nack_RCMD',i18nLabel:'names.RCMD',width:120},
+	{name:'nack_command_id',i18nLabel:'names.commandId',width:160},
+	{name:'nack_source',i18nLabel:'names.source',width:320},
+	{name:'nack_dest',i18nLabel:'names.dest',width:180},
+	{name:'nack_carrier_id',i18nLabel:'names.carrierId',width:180},
+	{name:'nack_nak_code',i18nLabel:'names.code',width:180},
+	{name:'nack_nak_reason',i18nLabel:'names.reason',width:180},
+	{name:'nack_nak_param',i18nLabel:'names.param',width:180},
   ]
 }
 

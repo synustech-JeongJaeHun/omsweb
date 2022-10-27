@@ -99,7 +99,7 @@ export class NackHistoryComponent implements OnInit, OnDestroy {
 	}
 
 	search(startTime: Date, endTime: Date) {
-		// this.dataSource = this.svc.
+		// TOBE: this.dataSource = this.svc.nackDataSource(startTime,endTime)
 		console.log('bind Nack Data in component')
 		this.applyFilter(startTime, endTime)
 	}
@@ -153,6 +153,12 @@ export class NackHistoryComponent implements OnInit, OnDestroy {
 	}
 	private applyFilter(startTime: Date, endTime: Date) {
 		console.log('implement applyFilter method')
+		// TOBE:
+		// this.dataGrid.instance.filter([
+		// 	['historyChangeTime', '>=', startTime],
+		// 	'and',
+		// 	['historyChangeTime', '<=', endTime],
+		// ])
 	}
 
 	ngOnInit(): void {

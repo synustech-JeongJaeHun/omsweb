@@ -64,56 +64,83 @@
 			></dxo-search-panel>
 			<dxo-header-filter [visible]="true"></dxo-header-filter>
 			<dxo-filter-row [visible]="true"></dxo-filter-row>
+			<!-- dataField json에 맞게 수정필요 -->
 			<dxi-column
-				[width]="getDisplayTableColumnWidth('nack_id')"
-				[visible]="canDisplayTable('vehicles_physical_id')"
-				[visibleIndex]="getDisplayTableColumnIndex('nack_id')"
+				[width]="getDisplayTableColumnWidth('nack_RCMD')"
+				[visible]="canDisplayTable('nack_RCMD')"
+				[visibleIndex]="getDisplayTableColumnIndex('nack_RCMD')"
 				dataType="string"
-				dataField="physicalId"
-				[caption]="'names.nack_id' | translate"
+				dataField="RCMD"
+				[caption]="'names.RCMD' | translate"
 			></dxi-column>
 			<dxi-column
-				[width]="getDisplayTableColumnWidth('nack_lorem')"
-				[visible]="canDisplayTable('nack_lorem')"
-				[visibleIndex]="getDisplayTableColumnIndex('nack_lorem')"
+				[width]="getDisplayTableColumnWidth('nack_command_id')"
+				[visible]="canDisplayTable('nack_command_id')"
+				[visibleIndex]="getDisplayTableColumnIndex('nack_command_id')"
 				dataType="string"
 				dataField="logicalId"
-				[caption]="'names.nack_lorem' | translate"
+				[caption]="'names.commandId' | translate"
 			></dxi-column>
 			<dxi-column
-				[width]="getDisplayTableColumnWidth('nack_lorem2')"
-				[visible]="canDisplayTable('nack_lorem2')"
-				[visibleIndex]="getDisplayTableColumnIndex('nack_lorem2')"
+				[width]="getDisplayTableColumnWidth('nack_source')"
+				[visible]="canDisplayTable('nack_source')"
+				[visibleIndex]="getDisplayTableColumnIndex('nack_source')"
 				[allowFiltering]="true"
-				dataType="number"
-				dataField="distanceTotal"
-				[caption]="'names.nack_lorem2' | translate"
-				cellTemplate="distanceTotalTemplate"
-			></dxi-column>
-			<dxi-column
-				[width]="getDisplayTableColumnWidth('nack_slice')"
-				[visible]="canDisplayTable('nack_slice')"
-				[visibleIndex]="getDisplayTableColumnIndex('nack_slice')"
-				[allowFiltering]="true"
-				dataType="number"
-				dataField="runtimeTotal"
-				[caption]="'names.nack_slice' | translate"
-				cellTemplate="runtimeTotalTemplate"
-			></dxi-column>
-			<dxi-column
-				[width]="getDisplayTableColumnWidth('nack_slice2')"
-				[visible]="canDisplayTable('nack_slice2')"
-				[visibleIndex]="getDisplayTableColumnIndex('nack_slice2')"
 				dataType="string"
-				[caption]="'names.nack_slice2' | translate"
+				dataField="source"
+				[caption]="'names.source' | translate"
 			></dxi-column>
-			<div *dxTemplate="let data of 'distanceTotalTemplate'">
+			<!-- cellTemplate="distanceTotalTemplate" -->
+			<dxi-column
+				[width]="getDisplayTableColumnWidth('nack_dest')"
+				[visible]="canDisplayTable('nack_dest')"
+				[visibleIndex]="getDisplayTableColumnIndex('nack_dest')"
+				[allowFiltering]="true"
+				dataType="string"
+				dataField="dest"
+				[caption]="'names.dest' | translate"
+			></dxi-column>
+			<!-- cellTemplate="runtimeTotalTemplate" -->
+			<dxi-column
+				[width]="getDisplayTableColumnWidth('nack_carrier_id')"
+				[visible]="canDisplayTable('nack_carrier_id')"
+				[visibleIndex]="getDisplayTableColumnIndex('nack_carrier_id')"
+				dataType="string"
+				dataField="carrierId"
+				[caption]="'names.carrierId' | translate"
+			></dxi-column>
+			<dxi-column
+				[width]="getDisplayTableColumnWidth('nack_nak_code')"
+				[visible]="canDisplayTable('nack_nak_code')"
+				[visibleIndex]="getDisplayTableColumnIndex('nack_nak_code')"
+				dataType="string"
+				dataField="nakCode"
+				[caption]="'names.code' | translate"
+			></dxi-column>
+			<dxi-column
+				[width]="getDisplayTableColumnWidth('nack_nak_reason')"
+				[visible]="canDisplayTable('nack_nak_reason')"
+				[visibleIndex]="getDisplayTableColumnIndex('nack_nak_reason')"
+				dataType="string"
+				dataField="reason"
+				[caption]="'names.reason' | translate"
+			></dxi-column>
+			<dxi-column
+				[width]="getDisplayTableColumnWidth('nack_nak_param')"
+				[visible]="canDisplayTable('nack_nak_param')"
+				[visibleIndex]="getDisplayTableColumnIndex('nack_nak_param')"
+				dataType="string"
+				dataField="param"
+				[caption]="'names.param' | translate"
+			></dxi-column>
+			<!-- dataField="commandId" -->
+			<!-- <div *dxTemplate="let data of 'distanceTotalTemplate'">
 				{{ data.displayValue / 1000000 | number: '1.0-0' }}km
 			</div>
 			<div *dxTemplate="let data of 'runtimeTotalTemplate'">
 				{{ data.displayValue / (3600 * 24) | number: '1.0-0' }}d
 				{{ (data.displayValue % (3600 * 24)) / 3600 | number: '2.0-1' }}h
-			</div>
+			</div> -->
 		</dx-data-grid>
 	</div>
 </div>

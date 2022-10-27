@@ -481,7 +481,11 @@
     "setDelayedTransferTimeout": "Set Delayed Transfer Timeout",
     "warningNotify": "Warning Notify",
     "tableNotify": "Table Notify",
-    "nack": "Nack"
+    "nack": "Nack",
+    "RCMD": "RCMD",
+    "source": "source",
+    "dest": "dest",
+    "param": "param"
   },
   "enums": {
     "hostSessionStatus": {
