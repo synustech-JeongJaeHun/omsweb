@@ -41,7 +41,7 @@
 	></dxi-column>
 	<dxi-column
 		dataType="string"
-		dataField="logicalId"
+		dataField="onlineName"
 		sortOrder="desc"
 		[caption]="'names.logicalId' | translate"
 		[visible]="canDisplayTable('unuse_logical_id')"
@@ -58,15 +58,16 @@
 	></dxi-column>
 	<dxi-column
 		dataType="string"
-		dataField="note"
+		dataField="comments"
 		[caption]="'names.note' | translate"
 		[visible]="canDisplayTable('unuse_note')"
 		[visibleIndex]="getDisplayTableColumnIndex('unuse_note')"
 		[width]="getDisplayTableColumnWidth('unuse_note')"
 	></dxi-column>
 	<dxi-column
-		dataType="string"
-		dataField="unusedTime"
+		dataType="datetime"
+		dataField="unuseTime"
+		[format]="dateTimeFormat"
 		[caption]="'names.timeUnused' | translate"
 		[visible]="canDisplayTable('unuse_unused_time')"
 		[visibleIndex]="getDisplayTableColumnIndex('unuse_unused_time')"

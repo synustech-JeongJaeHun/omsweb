@@ -10,7 +10,6 @@ import {
 } from '@angular/core'
 import DataSource from 'devextreme/data/data_source'
 
-import { IClusterStatusRow } from '../../../models/cluster-status.model'
 import { StatusService } from '../../../services/status.service'
 import { SettingsService } from '../../../services/settings.service'
 import { merge, Subject } from 'rxjs'
@@ -21,6 +20,8 @@ import { auditTime, takeUntil } from 'rxjs/operators'
 import { DxDataGridComponent } from 'devextreme-angular'
 import { ClientPreferences } from '../../../models/settings.model'
 import { AuditTimeDuration } from './constants'
+import { DateUtil } from '../../shared/utils/date.util'
+import { TrackStatusService } from '@oms/root/services/track-status.service'
 
 @Component({
 	selector: 'oms-unuse-control-table',
@@ -34,6 +35,8 @@ export class UnuseControlTableComponent implements OnInit, OnDestroy {
 	@ViewChild(DxDataGridComponent, { static: false })
 	dataGrid: DxDataGridComponent
 	dataSource: DataSource
+
+	dateTimeFormat = DateUtil.DateTimeFormat
 
 	preference: ClientPreferences
 
@@ -50,8 +53,9 @@ export class UnuseControlTableComponent implements OnInit, OnDestroy {
 		private statusSvc: StatusService,
 		private settingSvc: SettingsService,
 		private hubSvc: HubService,
+		private trackStatusService: TrackStatusService,
 	) {
-        this.dataSource = this.statusSvc.unuseStatusDataSource()
+		this.dataSource = this.statusSvc.unuseStatusDataSource()
 		this.preference = this.settingSvc.globalPreferences
 	}
 
@@ -110,8 +114,11 @@ export class UnuseControlTableComponent implements OnInit, OnDestroy {
 		this.destroy$.complete()
 	}
 
-	handleClickView = (event: { row: { data: any } }) => {
-		this.findAndFocus.emit({ type: 'station', id: 1 })
+	handleClickView = (event: {
+		row: { data: { type: string; objectId: number } }
+	}) => {
+		const typeInLowerCase = event.row.data.type.toLowerCase()
+		this.findAndFocus.emit({ type: typeInLowerCase, id: event.row.data.objectId })
 	}
 
 	private onTableChanged(payload: IDataChangeEvent) {

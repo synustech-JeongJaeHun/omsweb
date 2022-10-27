@@ -456,8 +456,8 @@ namespace OMSWeb.Repositories
         --*user_id_condition*--WHERE user_id =@userId
       "},
       {"unuseListStatus", @"
-         SELECT b.id, b.Type, b.OnlineName, b.User, b.Comments, b.UnusedTime, b.Location 
-         FROM  (select 1 as id, 'Buffer' as Type, 'buffer_01' as OnlineName, 'kim' as User, 'note' as Comments, now() as UnusedTime, '1' as Location) as B
+         SELECT b.id, b.Type, b.OnlineName, b.User, b.Comments, b.UnusedTime, b.Location, b.ObjectId
+         FROM  (select 1 as id, 'Buffer' as Type, 'STB01-502002' as OnlineName, 'misty' as User, 'malfunctioning on interaction with vehicle' as Comments, now() as UnusedTime, '1' as Location, 6 as ObjectId) as B
          ORDER BY b.UnusedTime
       "}
     };
