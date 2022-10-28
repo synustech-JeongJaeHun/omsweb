@@ -20,7 +20,7 @@
 					[max]="playService.lastHistoryTime"
 					[value]="playService.window.start"
 					(valueChange)="handleSetWindow('start', $event)"
-					[disabled]="isWindowLoading"
+					[disabled]="isLoading"
 				>
 				</dx-date-box>
 				<div class="date-divider">~</div>
@@ -31,7 +31,7 @@
 					[max]="playService.lastHistoryTime"
 					[value]="playService.window.end"
 					(valueChange)="handleSetWindow('end', $event)"
-					[disabled]="isWindowLoading"
+					[disabled]="isLoading"
 				>
 				</dx-date-box>
 			</div>
