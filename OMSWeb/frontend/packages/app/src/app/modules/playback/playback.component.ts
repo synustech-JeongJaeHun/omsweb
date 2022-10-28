@@ -86,19 +86,31 @@ export class PlaybackComponent implements OnInit, OnDestroy {
 							})
 
 							if (this.playbackPlayService.currentSnapshot?.timestamp) {
+								this.playbackPlayService.setLoaded({
+									from: this.playbackPlayService.currentSnapshot?.timestamp,
+									to: this.playbackPlayService.currentSnapshot?.timestamp,
+								})
+								// 1. when current snaphot is last snapshot
+								//    request with last time at once
 								if (this.playbackPlayService.nextSnapshot?.timestamp == null) {
 									this.playbackService
 										.getHistoryEvents(
 											this.playbackPlayService.currentSnapshot.timestamp,
-											this.playbackPlayService.nextSnapshot?.timestamp ??
-												new Date(9999, 1, 1),
+											new Date(9999, 1, 1),
 										)
 										.subscribe((res) => {
 											this.playbackPlayService.historyEvents = res
 											this.playbackPlayService.goToStartOfCurrentSnapshot()
+											this.playbackPlayService.setLoaded({
+												from: this.playbackPlayService.currentSnapshot
+													.timestamp,
+												to: this.playbackPlayService.lastHistoryTime,
+											})
 											this.isFirstSnapshotLoaded = true
 										})
 								} else {
+									// 2. when current snaphot is not last snapshot
+									//    split request by 15 seconds
 									const timeRanges = getTimeRangeChunks(
 										this.playbackPlayService.currentSnapshot.timestamp,
 										this.playbackPlayService.nextSnapshot.timestamp,
@@ -115,10 +127,11 @@ export class PlaybackComponent implements OnInit, OnDestroy {
 										const events = await this.playbackService
 											.getHistoryEvents(firstRange[0], firstRange[1])
 											.toPromise()
+
 										events.forEach((event) =>
 											this.playbackPlayService.historyEvents.push(event),
 										)
-
+										this.playbackPlayService.setLoaded({ to: firstRange[1] })
 										getSlicedHistoryEvents(ranges)
 									}
 
@@ -127,6 +140,10 @@ export class PlaybackComponent implements OnInit, OnDestroy {
 										.subscribe((res) => {
 											this.playbackPlayService.historyEvents = res
 											this.playbackPlayService.goToStartOfCurrentSnapshot()
+											this.playbackPlayService.setLoaded({
+												from: firstRange[0],
+												to: firstRange[1],
+											})
 											this.isFirstSnapshotLoaded = true
 											getSlicedHistoryEvents(ranges)
 										})

@@ -155,4 +155,17 @@ export class PlaybackControlDialogComponent {
 		})
 		this.playService.setClockByDate(date)
 	}
+
+	get loadedPercent() {
+		const full = DateFns.differenceInSeconds(
+			this.timeSliderMaxTime,
+			this.timeSliderMinTime,
+		)
+		const loaded = DateFns.differenceInSeconds(
+			this.playService.loaded.to,
+			this.playService.loaded.from,
+		)
+
+		return (loaded / full) * 100
+	}
 }

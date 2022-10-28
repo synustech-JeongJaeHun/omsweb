@@ -62,7 +62,7 @@ export class PlaybackPlayService {
 	public window: { start: Date; end: Date }
 
 	public currentSnapshot: PlaybackSnapshot
-	public nextSnapshot: Pick<PlaybackSnapshot, "timestamp">
+	public nextSnapshot: Pick<PlaybackSnapshot, 'timestamp'>
 
 	public currentVehicles: CurrentVehicle[] = []
 	public currentSegmentBlockings: CurrentSegmentBlocking[] = []
@@ -72,6 +72,8 @@ export class PlaybackPlayService {
 
 	public clock: Date
 	public isPlaying = false
+
+	public loaded: { from: Date; to: Date }
 
 	public playSpeed: PlaybackSpeed = 1
 	public readonly playSpeeds = [0.1, 0.5, 1, 2, 5]
@@ -96,10 +98,13 @@ export class PlaybackPlayService {
 		this.nextSnapshot = beforeNextSnapshots.next
 	}
 	private async fetchEvents(from: Date, to?: Date) {
+		this.setLoaded({ from: from, to: from })
 		if (to == null) {
 			this.historyEvents = await this.playbackService
 				.getHistoryEvents(from, new Date(9999, 1, 1))
 				.toPromise()
+
+			this.setLoaded({ from: from, to: this.lastHistoryTime })
 		} else {
 			const timeRanges = getTimeRangeChunks(from, to, 15)
 			const [firstRange, ...ranges] = timeRanges
@@ -113,12 +118,15 @@ export class PlaybackPlayService {
 					.toPromise()
 				events.forEach((event) => this.historyEvents.push(event))
 
+				this.setLoaded({ to: firstRange[1] })
 				getSlicedHistoryEvents(ranges)
 			}
 
 			this.historyEvents = await this.playbackService
 				.getHistoryEvents(firstRange[0], firstRange[1])
 				.toPromise()
+			this.setLoaded({ from: firstRange[0], to: firstRange[1] })
+
 			getSlicedHistoryEvents(ranges)
 		}
 	}
@@ -161,6 +169,11 @@ export class PlaybackPlayService {
 	public setWindow(start: Date, end: Date) {
 		this.window = { start, end }
 		this.setClockByDate(start)
+	}
+
+	public setLoaded(loaded?: { from?: Date; to?: Date }) {
+		if (this.loaded == null) this.loaded = { from: undefined, to: undefined }
+		for (const field in loaded) this.loaded[field] = loaded[field]
 	}
 
 	public async setClockByDate(date: Date) {
