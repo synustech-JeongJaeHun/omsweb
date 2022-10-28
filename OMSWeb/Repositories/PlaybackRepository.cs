@@ -158,7 +158,7 @@ namespace OMSWeb.Repositories
       }
 
       var nextSql = @"
-                select *
+                select timestamp
                 from snapshots
                 where timestamp > @from
                 order by timestamp ASC 

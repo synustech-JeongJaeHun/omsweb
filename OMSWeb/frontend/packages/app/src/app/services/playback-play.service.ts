@@ -62,7 +62,7 @@ export class PlaybackPlayService {
 	public window: { start: Date; end: Date }
 
 	public currentSnapshot: PlaybackSnapshot
-	public nextSnapshot: PlaybackSnapshot
+	public nextSnapshot: Pick<PlaybackSnapshot, "timestamp">
 
 	public currentVehicles: CurrentVehicle[] = []
 	public currentSegmentBlockings: CurrentSegmentBlocking[] = []
