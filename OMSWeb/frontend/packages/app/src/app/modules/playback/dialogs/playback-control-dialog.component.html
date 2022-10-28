@@ -19,7 +19,8 @@
 					[min]="playService.firstSnapshotTime"
 					[max]="playService.lastHistoryTime"
 					[value]="playService.window.start"
-					(valueChange)="playService.setWindowStart($event)"
+					(valueChange)="handleSetWindow('start', $event)"
+					[disabled]="isWindowLoading"
 				>
 				</dx-date-box>
 				<div class="date-divider">~</div>
@@ -29,7 +30,8 @@
 					[min]="playService.firstSnapshotTime"
 					[max]="playService.lastHistoryTime"
 					[value]="playService.window.end"
-					(valueChange)="playService.setWindowEnd($event)"
+					(valueChange)="handleSetWindow('end', $event)"
+					[disabled]="isWindowLoading"
 				>
 				</dx-date-box>
 			</div>

@@ -10,6 +10,7 @@ export class PlaybackControlDialogComponent {
 	constructor(public playService: PlaybackPlayService) {}
 
 	public isLoading = false
+  public isWindowLoading = false
 
 	get timeRangeMax() {
 		return (
@@ -59,6 +60,16 @@ export class PlaybackControlDialogComponent {
 		return DateFns.add(this.playService.window.start, {
 			seconds: value * DateFns.secondsInMinute,
 		})
+	}
+
+	handleSetWindow(startOrEnd: 'start' | 'end', date: Date) {
+    if(this.isWindowLoading) return
+
+		if (startOrEnd === 'start') this.playService.setWindowStart(date)
+		else this.playService.setWindowEnd(date)
+
+		this.isWindowLoading = true
+    setTimeout(() => this.isWindowLoading = false, 400)
 	}
 
 	isAvailableSnapshotSliderChange = true
