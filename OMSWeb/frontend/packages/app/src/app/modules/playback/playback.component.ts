@@ -120,6 +120,7 @@ export class PlaybackComponent implements OnInit, OnDestroy {
 
 									const getSlicedHistoryEvents = async (
 										timeRanges: [Date, Date][],
+										snapshotTimestmap: Date,
 									) => {
 										if (timeRanges.length === 0) return
 
@@ -128,11 +129,19 @@ export class PlaybackComponent implements OnInit, OnDestroy {
 											.getHistoryEvents(firstRange[0], firstRange[1])
 											.toPromise()
 
+										if (
+											this.playbackPlayService.currentSnapshot.timestamp !==
+											snapshotTimestmap
+										) {
+											return console.log('loading events conflict occured')
+										}
+
 										events.forEach((event) =>
 											this.playbackPlayService.historyEvents.push(event),
 										)
+
 										this.playbackPlayService.setLoaded({ to: firstRange[1] })
-										getSlicedHistoryEvents(ranges)
+										getSlicedHistoryEvents(ranges, snapshotTimestmap)
 									}
 
 									this.playbackService
@@ -145,7 +154,10 @@ export class PlaybackComponent implements OnInit, OnDestroy {
 												to: firstRange[1],
 											})
 											this.isFirstSnapshotLoaded = true
-											getSlicedHistoryEvents(ranges)
+											getSlicedHistoryEvents(
+												ranges,
+												this.playbackPlayService.currentSnapshot.timestamp,
+											)
 										})
 								}
 							}

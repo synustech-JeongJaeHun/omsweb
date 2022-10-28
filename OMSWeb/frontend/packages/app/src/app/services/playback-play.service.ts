@@ -109,17 +109,25 @@ export class PlaybackPlayService {
 			const timeRanges = getTimeRangeChunks(from, to, 15)
 			const [firstRange, ...ranges] = timeRanges
 
-			const getSlicedHistoryEvents = async (timeRanges: [Date, Date][]) => {
+			const getSlicedHistoryEvents = async (
+				timeRanges: [Date, Date][],
+				snapshotTimestmap: Date,
+			) => {
 				if (timeRanges.length === 0) return
 
 				const [firstRange, ...ranges] = timeRanges
 				const events = await this.playbackService
 					.getHistoryEvents(firstRange[0], firstRange[1])
 					.toPromise()
+
+				if (this.currentSnapshot.timestamp !== snapshotTimestmap) {
+					return console.log('loading events conflict occured')
+				}
+
 				events.forEach((event) => this.historyEvents.push(event))
 
 				this.setLoaded({ to: firstRange[1] })
-				getSlicedHistoryEvents(ranges)
+				getSlicedHistoryEvents(ranges, snapshotTimestmap)
 			}
 
 			this.historyEvents = await this.playbackService
@@ -127,7 +135,7 @@ export class PlaybackPlayService {
 				.toPromise()
 			this.setLoaded({ from: firstRange[0], to: firstRange[1] })
 
-			getSlicedHistoryEvents(ranges)
+			getSlicedHistoryEvents(ranges, this.currentSnapshot.timestamp)
 		}
 	}
 
@@ -135,7 +143,7 @@ export class PlaybackPlayService {
 		this.playSpeed = playSpeed
 	}
 
-	public setWindowStart(start: Date) {
+	public async setWindowStart(start: Date) {
 		const end = (() => {
 			const diff = DateFns.differenceInMinutes(this.window.end, start)
 			if (diff < 0 || diff > 30) {
@@ -148,9 +156,9 @@ export class PlaybackPlayService {
 			}
 		})()
 
-		this.setWindow(start, end)
+		await this.setWindow(start, end)
 	}
-	public setWindowEnd(end: Date) {
+	public async setWindowEnd(end: Date) {
 		const start = (() => {
 			const diff = DateFns.differenceInMinutes(end, this.window.start)
 			if (diff < 0 || diff > 30) {
@@ -163,12 +171,12 @@ export class PlaybackPlayService {
 			}
 		})()
 
-		this.setWindow(start, end)
+		await this.setWindow(start, end)
 	}
 
-	public setWindow(start: Date, end: Date) {
+	public async setWindow(start: Date, end: Date) {
 		this.window = { start, end }
-		this.setClockByDate(start)
+		await this.setClockByDate(start)
 	}
 
 	public setLoaded(loaded?: { from?: Date; to?: Date }) {
