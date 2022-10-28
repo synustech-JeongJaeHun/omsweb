@@ -20,6 +20,7 @@ import {
 	convertVehicleHistoryEventToCurrentVehicle,
 } from '../modules/playback/utils/playback-convert.util'
 import { addOrderInfoToCurrenVehicle } from '../modules/playback/utils/playback-join.util'
+import { getTimeRangeChunks } from '../modules/playback/utils/date.util'
 
 @Injectable({
 	providedIn: 'root',
@@ -94,10 +95,32 @@ export class PlaybackPlayService {
 		this.currentSnapshot = beforeNextSnapshots.before
 		this.nextSnapshot = beforeNextSnapshots.next
 	}
-	private async fetchEvents(from: Date, to: Date = new Date(9999, 1, 1)) {
-		this.historyEvents = await this.playbackService
-			.getHistoryEvents(from, to)
-			.toPromise()
+	private async fetchEvents(from: Date, to?: Date) {
+		if (to == null) {
+			this.historyEvents = await this.playbackService
+				.getHistoryEvents(from, new Date(9999, 1, 1))
+				.toPromise()
+		} else {
+			const timeRanges = getTimeRangeChunks(from, to, 15)
+			const [firstRange, ...ranges] = timeRanges
+
+			const getSlicedHistoryEvents = async (timeRanges: [Date, Date][]) => {
+				if (timeRanges.length === 0) return
+
+				const [firstRange, ...ranges] = timeRanges
+				const events = await this.playbackService
+					.getHistoryEvents(firstRange[0], firstRange[1])
+					.toPromise()
+				events.forEach((event) => this.historyEvents.push(event))
+
+				getSlicedHistoryEvents(ranges)
+			}
+
+			this.historyEvents = await this.playbackService
+				.getHistoryEvents(firstRange[0], firstRange[1])
+				.toPromise()
+			getSlicedHistoryEvents(ranges)
+		}
 	}
 
 	public setPlaySpeed(playSpeed: PlaybackSpeed) {
