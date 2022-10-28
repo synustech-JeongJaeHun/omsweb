@@ -350,7 +350,7 @@ export class PlaybackPlayService {
 	private async proceedPlaying() {
 		const nextDate = DateFns.addMilliseconds(this.clock, this.DefaultTimeStep)
 
-		// exit(1/3) => when clock over window end
+		// exit(1/4) => when clock over window end
 		if (
 			nextDate.getTime() >= this.window.end.getTime() &&
 			(this.nextSnapshot
@@ -361,7 +361,7 @@ export class PlaybackPlayService {
 			return
 		}
 
-		// exit(2/3) => when clock over next snapshot
+		// exit(2/4) => when clock over next snapshot
 		if (
 			this.nextSnapshot?.timestamp &&
 			nextDate.getTime() >= this.nextSnapshot.timestamp.getTime()
@@ -373,9 +373,7 @@ export class PlaybackPlayService {
 					this.track.timestamp,
 					this.getRecentTrackTimeBy(nextDate),
 				) === false
-			console.log('checking track', isTrackDifference)
 			if (isTrackDifference) {
-				console.log('checked track', isTrackDifference)
 				await this.fetchTrack(nextDate)
 			}
 
@@ -397,7 +395,13 @@ export class PlaybackPlayService {
 			return
 		}
 
-		// exit(3/3) => when history events are not ready
+		// exit(3/4) => when clock over current loaded last event
+		// condition check order is important
+		if (this.loaded.to.getTime() < nextDate.getTime()) {
+			return
+		}
+
+		// exit(4/4) => when history events are not ready
 		// it occurs when current snapshot move to future not past
 		const lastHistoryEvent = this.historyEvents[this.historyEvents.length - 1]
 		const isHistoryNotReady =
