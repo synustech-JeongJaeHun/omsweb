@@ -457,7 +457,8 @@ namespace OMSWeb.Repositories
       "},
       {"unuseListStatus", @"
          SELECT b.id, b.Type, b.OnlineName, b.User, b.Comments, b.UnusedTime, b.Location, b.ObjectId
-         FROM  (select 1 as id, 'Buffer' as Type, 'STB01-502002' as OnlineName, 'misty' as User, 'malfunctioning on interaction with vehicle' as Comments, now() as UnusedTime, '1' as Location, 6 as ObjectId) as B
+         FROM  
+            (select 1 as id, 'Buffer' as Type, 'STB01-502002' as OnlineName, 'misty' as User, 'malfunctioning on interaction with vehicle' as Comments, now() as UnusedTime, '1' as Location, 6 as ObjectId) as B
          ORDER BY b.UnusedTime
       "}
     };

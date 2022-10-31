@@ -176,23 +176,22 @@ namespace OMSWeb.Repositories
         {
             var sql = @"
                 SELECT 
-                    cmd_id as CommandID, 
-                    time_modified as ModifiedTime, 
-                    origin as Origin,
-                    data::json->'rcmd' as Rcmd,
-                    data::json->'request' as Request,
-                    data::json->'origin' as Origin,
-                    data::json->'sourceName' as SourceName,
-                    data::json->'destName' as DestName,
-                    data::json->'carrierID' as CarrierID,
-                    data::json->'newCarrierID' as NewCarrierID,
-                    data::json->'nack' as Nack,
-                    data::json->'nackReason' as NackReason,
-	                data::json->'nackParam' as NackParam
+                    CASE WHEN cmd_id is null THEN '' ELSE cmd_id END as CommandID, 
+                    CASE WHEN time_modified is null THEN now() ELSE time_modified END as ModifiedTime, 
+                    CASE WHEN origin is null THEN '' ELSE origin END as Origin,
+                    CASE WHEN data::json->>'rcmd' is null THEN data::json->>'' ELSE data::json->>'rcmd' END as Rcmd,
+                    CASE WHEN data::json->>'request' is null THEN data::json->>'' ELSE data::json->>'request' END as Request,
+                    CASE WHEN data::json->>'sourceName' is null THEN data::json->>'' ELSE data::json->>'sourceName' END as SourceName,
+                    CASE WHEN data::json->>'destName' is null THEN data::json->>'' ELSE data::json->>'destName' END as DestName,
+                    CASE WHEN data::json->>'carrierID' is null THEN data::json->>'' ELSE data::json->>'carrierID' END as CarrierID,
+                    CASE WHEN data::json->>'newCarrierID' is null THEN data::json->>'' ELSE data::json->>'newCarrierID' END as NewCarrierID,
+                    CASE WHEN data::json->>'nack' is null THEN data::json->>'' ELSE data::json->>'nack' END as Nack,
+                    CASE WHEN data::json->>'nackReason' is null THEN data::json->>'' ELSE data::json->>'nackReason' END as NackReason,
+	                CASE WHEN data::json->>'nackParam' is null THEN data::json->>'' ELSE data::json->>'nackParam' END as NackParam
                 FROM rcmd_history
                 WHERE 
                     @from <= time_modified and time_modified <= @to
-                ORDER BY id desc
+                ORDER BY ModifiedTime desc
                 ";
 
             IQueryable<NackHistoryEntity> result;
