@@ -174,7 +174,8 @@ export class TransferHistoryComponent implements OnInit, OnDestroy {
 
 	search(startTime: Date, endTime: Date) {
 		this.dataSource = this.svc.ordersDataSource(startTime, endTime)
-		this.applyFilter(startTime, endTime)
+        this.applyFilter(startTime, endTime)
+        this.applyPage()
 		// this.dataSource.reload()
 	}
 	private applyFilter(startTime: Date, endTime: Date) {
@@ -183,7 +184,11 @@ export class TransferHistoryComponent implements OnInit, OnDestroy {
 			'and',
 			['timeCreated', '<=', endTime],
 		])
-	}
+    }
+
+    private applyPage() {
+      
+    }
 
 	private getGridSize(): void {
 		const container = document.body

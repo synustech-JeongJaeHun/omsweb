@@ -553,6 +553,8 @@ const defaultHistoryTable = {
 	],
 
 	// nack_column
+    nacks_stream_function: true,
+    nacks_rcmd: true,
 	nacks_command_id: true,
 	nacks_time: true,
 	nacks_origin: true,
@@ -564,7 +566,9 @@ const defaultHistoryTable = {
 	nacks_reason: true,
 	nacks_param: true,
 
-	nacks_order: [
+    nacks_order: [
+        { name: 'nacks_stream_function', i18nLabel: 'names.streamFunction', width: 120 },
+        { name: 'nacks_rcmd', i18nLabel: 'names.rcmd', width: 120 },
 		{ name: 'nacks_command_id', i18nLabel: 'names.commandId', width: 240 },
 		{ name: 'nacks_time', i18nLabel: 'names.time', width: 120 },
 		{ name: 'nacks_origin', i18nLabel: 'names.origin', width: 100 },

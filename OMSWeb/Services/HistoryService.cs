@@ -20,40 +20,40 @@ namespace OMSWeb.Services
 
         public IQueryable<OrderEntity> QueryOrders(DataSourceLoadOptions loadOptions)
         {
-            (DateTimeOffset from, DateTimeOffset to) = GetTimeFilters(loadOptions);
-            Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"PACKET: from={from} to={to}");
+            (DateTimeOffset from, DateTimeOffset to, int skip, int take) = GetLoadFilters(loadOptions);
+            Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"PACKET: from={from} to={to} skip={skip} take={take}");
 
-            return this._repo.QueryOrders(from, to);
+            return this._repo.QueryOrders(from, to, skip, take);
         }
         public IQueryable<VehicleHistoryEntity> QueryVehicles(DataSourceLoadOptions loadOptions)
         {
-            (DateTimeOffset from, DateTimeOffset to) = GetTimeFilters(loadOptions);
-            Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"PACKET: from={from} to={to}");
+            (DateTimeOffset from, DateTimeOffset to, int skip, int take) = GetLoadFilters(loadOptions);
+            Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"PACKET: from={from} to={to} skip={skip} take={take}");
 
-            return this._repo.QueryVehicles(from, to);
+            return this._repo.QueryVehicles(from, to, skip, take);
         }
         public IQueryable<AlarmHistory> QueryAlarms(DataSourceLoadOptions loadOptions)
         {
-            (DateTimeOffset from, DateTimeOffset to) = GetTimeFilters(loadOptions);
-            Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"PACKET: from={from} to={to}");
+            (DateTimeOffset from, DateTimeOffset to, int skip, int take) = GetLoadFilters(loadOptions);
+            Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"PACKET: from={from} to={to} skip={skip} take={take}");
 
-            return this._repo.QueryAlarms(from, to);
+            return this._repo.QueryAlarms(from, to, skip, take);
         }
 
         public IQueryable<AlertEntity> QueryAlerts(DataSourceLoadOptions loadOptions)
         {
-            (DateTimeOffset from, DateTimeOffset to) = GetTimeFilters(loadOptions);
-            Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"PACKET: from={from} to={to}");
+            (DateTimeOffset from, DateTimeOffset to, int skip, int take) = GetLoadFilters(loadOptions);
+            Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"PACKET: from={from} to={to} skip={skip} take={take}");
 
-            return this._repo.QueryAlerts(from, to);
+            return this._repo.QueryAlerts(from, to, skip, take);
         }
 
         public IQueryable<NackHistoryEntity> QueryNacks(DataSourceLoadOptions loadOptions)
         {
-            (DateTimeOffset from, DateTimeOffset to) = GetTimeFilters(loadOptions);
-            Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"PACKET: from={from} to={to}");
+            (DateTimeOffset from, DateTimeOffset to, int skip, int take) = GetLoadFilters(loadOptions);
+            Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"PACKET: from={from} to={to} skip={skip} take={take}");
 
-            return this._repo.QueryNacks(from, to);
+            return this._repo.QueryNacks(from, to, skip, take);
         }
 
         public IQueryable<VehicleDioHistoryEntity> QueryVehicleDios(int vehicleId, DateTimeOffset from, DateTimeOffset to)
@@ -71,10 +71,12 @@ namespace OMSWeb.Services
                 return null;
         }
 
-        private (DateTimeOffset from, DateTimeOffset to) GetTimeFilters(DataSourceLoadOptions loadOptions)
+        private (DateTimeOffset from, DateTimeOffset to, int skip, int take) GetLoadFilters(DataSourceLoadOptions loadOptions)
         {
             DateTimeOffset from = new DateTimeOffset();
             DateTimeOffset to = new DateTimeOffset();
+            int skip = 0;
+            int take = 0;
 
             try
             {
@@ -94,13 +96,16 @@ namespace OMSWeb.Services
 
                     if (ar0.Length == 3) from = DateTimeOffset.Parse(ar0[2].Trim());
                     if (ar2.Length == 3) to = DateTimeOffset.Parse(ar2[2].Trim());
+
+                    skip = loadOptions.Skip;
+                    take = loadOptions.Take;
                 }
             }
             catch (Exception e)
             {
             }
 
-            return (from, to);
+            return (from, to, skip, take);
         }
     }
 }

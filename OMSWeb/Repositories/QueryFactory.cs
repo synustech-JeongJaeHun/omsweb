@@ -455,15 +455,9 @@ namespace OMSWeb.Repositories
         ON BS.id = GO.reference_id AND GO.reference_table = 'buffer'
         --*user_id_condition*--WHERE user_id =@userId
       "},
-      {"unuseListStatus1", @"
-         SELECT b.id, b.Type, b.OnlineName, b.User, b.Comments, b.UnusedTime, b.Location, b.ObjectId
-         FROM  
-            (select 1 as id, 'Buffer' as Type, 'STB01-502002' as OnlineName, 'misty' as User, 'malfunctioning on interaction with vehicle' as Comments, now() as UnusedTime, '1' as Location, 6 as ObjectId) as B
-         ORDER BY b.UnusedTime
-      "},
       {"unuseListStatus", @"
         SELECT 
-	        ROW_NUMBER() OVER (ORDER BY UnusedTime ASC) AS ROW_NUMBER, Type, OnlineName, User, Comments, UnusedTime, Location, ObjectId
+	        ROW_NUMBER() OVER (ORDER BY UnusedTime DESC) AS ROW_NUMBER, Type, OnlineName, User, Comments, UnusedTime, Location, ObjectId
         FROM  ((
 			        SELECT 'Segment' as Type, seg.segment_id::text as OnlineName, seg.user as User, seg.note as Comments, 
 				        seg.unused_time as UnusedTime, seg.id as Location, seg.id as ObjectId
@@ -489,6 +483,7 @@ namespace OMSWeb.Repositories
 			        WHERE v.user <> '' or v.note <> ''
 		        )
 	        ) as UnuseList
+        ORDER BY UnusedTime DESC
       "}
     };
     public static string GetSql(string name)

@@ -6,7 +6,7 @@ namespace OMSWeb.Models.Entities
     {
         public int Id { get; set; }
         public string Rcmd { get; set; }
-        public string Reques { get; set; }
+        public string Request { get; set; }
         public string CommandID { get; set; }
         public DateTime ModifiedTime { get; set; }
         public string Origin { get; set; }

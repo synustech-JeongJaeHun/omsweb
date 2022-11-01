@@ -330,6 +330,8 @@
     "carrierId": "캐리어 아이디",
     "newCarrierId": "New Carrier ID",
     "carrierLoc": "Carrier Loc",
+    "streamFunction": "Stream Func",
+    "rcmd": "RCMD",
     "nackCode": "Nack Code",
     "nackReason": "Nack Reason",
     "nackParam": "Nack Param",
