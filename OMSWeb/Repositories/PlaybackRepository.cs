@@ -44,18 +44,24 @@ namespace OMSWeb.Repositories
                 SELECT history.history_change_time as data
                 FROM 
                 (
-                SELECT history_change_time
+                (SELECT history_change_time
                 FROM vehicle_history vh 
+                ORDER BY history_change_time desc
+                LIMIT 1)
                 
                 UNION
 
-                SELECT history_change_time
+                (SELECT history_change_time
                 FROM segment_blocking_history sbh
+                ORDER BY history_change_time desc
+                LIMIT 1)
 
                 UNION
 
-                SELECT history_change_time
+                (SELECT history_change_time
                 FROM order_history oh
+                ORDER BY history_change_time desc
+                LIMIT 1)
                 ) AS history
                 ORDER BY history_change_time DESC
                 LIMIT 1
