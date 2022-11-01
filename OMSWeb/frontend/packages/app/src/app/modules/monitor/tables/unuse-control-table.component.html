@@ -12,7 +12,6 @@
 	[showRowLines]="true"
 	[headerFilter]="false"
 	allowColumnResizing="true"
-	[stateStoring]="stateStoring"
 	[sorting]="true"
 >
 	<dxo-sorting mode="single"></dxo-sorting>
@@ -35,33 +34,25 @@
 		dataType="string"
 		dataField="type"
 		[caption]="'names.type' | translate"
-		[visible]="canDisplayTable('unuse_type')"
-		[visibleIndex]="getDisplayTableColumnIndex('unuse_type')"
-		[width]="getDisplayTableColumnWidth('unuse_type')"
+		width="100"
 	></dxi-column>
 	<dxi-column
 		dataType="string"
 		dataField="onlineName"
 		[caption]="'names.logicalId' | translate"
-		[visible]="canDisplayTable('unuse_logical_id')"
-		[visibleIndex]="getDisplayTableColumnIndex('unuse_logical_id')"
-		[width]="getDisplayTableColumnWidth('unuse_logical_id')"
+		width="200"
 	></dxi-column>
 	<dxi-column
 		dataType="string"
 		dataField="user"
 		[caption]="'names.user' | translate"
-		[visible]="canDisplayTable('unuse_user')"
-		[visibleIndex]="getDisplayTableColumnIndex('unuse_user')"
-		[width]="getDisplayTableColumnWidth('unuse_user')"
+		width="100"
 	></dxi-column>
 	<dxi-column
 		dataType="string"
 		dataField="comments"
 		[caption]="'names.note' | translate"
-		[visible]="canDisplayTable('unuse_note')"
-		[visibleIndex]="getDisplayTableColumnIndex('unuse_note')"
-		[width]="getDisplayTableColumnWidth('unuse_note')"
+		width="400"
 	></dxi-column>
 	<dxi-column
 		dataType="datetime"
@@ -69,16 +60,12 @@
 		sortOrder="desc"
 		[format]="dateTimeFormat"
 		[caption]="'names.timeUnused' | translate"
-		[visible]="canDisplayTable('unuse_unused_time')"
-		[visibleIndex]="getDisplayTableColumnIndex('unuse_unused_time')"
-		[width]="getDisplayTableColumnWidth('unuse_unused_time')"
+		width="150"
 	></dxi-column>
 	<dxi-column
 		type="buttons"
 		[caption]="'names.location' | translate"
-		[visible]="canDisplayTable('unuse_location')"
-		[visibleIndex]="getDisplayTableColumnIndex('unuse_location')"
-		[width]="getDisplayTableColumnWidth('unuse_location')"
+		width="100"
 	>
 		<dxi-button [text]="'names.view' | translate" [onClick]="handleClickView">
 		</dxi-button>

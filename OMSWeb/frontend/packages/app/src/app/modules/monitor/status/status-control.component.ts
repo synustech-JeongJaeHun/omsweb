@@ -44,7 +44,6 @@ export class StatusControlComponent implements OnInit, OnDestroy {
 		{ id: 4, title: 'Buffers' },
 		{ id: 5, title: 'Zcus' },
 		{ id: 6, title: 'Cps' },
-		{ id: 7, title: 'Unuse' },
 	]
 	currentTab: number = 0
 

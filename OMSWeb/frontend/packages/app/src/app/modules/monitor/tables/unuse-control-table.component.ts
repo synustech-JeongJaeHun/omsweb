@@ -59,43 +59,6 @@ export class UnuseControlTableComponent implements OnInit, OnDestroy {
 		this.preference = this.settingSvc.globalPreferences
 	}
 
-	canDisplayTable(type: string): boolean {
-		return this.preference.controlTables[type]
-	}
-	getDisplayTableColumnIndex(type: string): number {
-		return this.preference.controlTables.unuse_order.findIndex(
-			(column) => column.name === type,
-		)
-	}
-
-	getDisplayTableColumnWidth(type: string) {
-		return this.preference.controlTables.unuse_order.find(
-			(column) => column.name === type,
-		).width
-	}
-
-	stateStoring = {
-		enabled: true,
-		type: 'custom',
-		customSave: (configuration: {
-			columns: {
-				dataField: string
-				dataType: string
-				name: string
-				visible: boolean
-				visibleIndex: number
-				width: number
-			}[]
-		}) => {
-			configuration.columns.forEach((c) => {
-				const column = this.preference.controlTables.unuse_order[c.visibleIndex]
-				if (column) column.width = c.width
-			})
-
-			this.preference.save()
-		},
-	}
-
 	ngOnInit() {
 		merge(
 			this.hubSvc.vehicleTableChanged$,
@@ -118,7 +81,10 @@ export class UnuseControlTableComponent implements OnInit, OnDestroy {
 		row: { data: { type: string; objectId: number } }
 	}) => {
 		const typeInLowerCase = event.row.data.type.toLowerCase()
-		this.findAndFocus.emit({ type: typeInLowerCase, id: event.row.data.objectId })
+		this.findAndFocus.emit({
+			type: typeInLowerCase,
+			id: event.row.data.objectId,
+		})
 	}
 
 	private onTableChanged(payload: IDataChangeEvent) {

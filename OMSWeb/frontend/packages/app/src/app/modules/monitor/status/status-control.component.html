@@ -123,18 +123,5 @@
 			</oms-cps-control-table>
 		</mat-tab>
 		<!-- cps 추가 -->
-		<!-- unuse 추가 -->
-		<mat-tab
-			[label]="'names.unuse' | translate"
-			*ngIf="canControl && canDisplayTable('unuse')"
-		>
-			<oms-unuse-control-table
-				*ngIf="bufferEnabled ? currentTab === 6 : currentTab === 5"
-				(findAndFocus)="findAndFocus.emit($event)"
-				[tableHeight]="tableHeight"
-			>
-			</oms-unuse-control-table>
-		</mat-tab>
-		<!-- unuse 추가 -->
 	</mat-tab-group>
 </div>
