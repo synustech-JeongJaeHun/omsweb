@@ -28,6 +28,22 @@
 	<div id="status-toolbar" *ngIf="canControl">
 		<button
 			*ngIf="
+				hasPermissions([
+					permissionEnums.SettingSegment,
+					permissionEnums.SettingStation,
+					permissionEnums.SettingBuffer,
+					permissionEnums.SettingVehicle
+				])
+			"
+			mat-stroked-button
+			class="dense"
+			(click)="onViewUnusedList()"
+		>
+			<mat-icon>disabled_by_default</mat-icon>
+			<span>{{ 'names.unusedList' | translate }}</span>
+		</button>
+		<button
+			*ngIf="
 				hasPermissions([permissionEnums.ResetAllVehicle]) &&
 				canDisplayTable('vehicles')
 			"
@@ -123,18 +139,5 @@
 			</oms-cps-control-table>
 		</mat-tab>
 		<!-- cps 추가 -->
-		<!-- unuse 추가 -->
-		<mat-tab
-			[label]="'names.unuse' | translate"
-			*ngIf="canControl && canDisplayTable('unuse')"
-		>
-			<oms-unuse-control-table
-				*ngIf="bufferEnabled ? currentTab === 6 : currentTab === 5"
-				(findAndFocus)="findAndFocus.emit($event)"
-				[tableHeight]="tableHeight"
-			>
-			</oms-unuse-control-table>
-		</mat-tab>
-		<!-- unuse 추가 -->
 	</mat-tab-group>
 </div>

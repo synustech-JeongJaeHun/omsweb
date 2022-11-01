@@ -279,6 +279,7 @@
     "homePointList": "返航点列表",
     "stationList": "电台列表",
     "vehicleList": "车辆列表",
+    "unusedList": "Unused List",
     "bufferList": "缓冲区列表",
     "maxVehicles": "最大车辆",
     "maxCount": "Max Count",

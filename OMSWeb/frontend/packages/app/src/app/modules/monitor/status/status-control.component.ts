@@ -13,6 +13,8 @@ import { SettingsService } from '../../../services/settings.service'
 import { MapStatesService } from '../../track-map/map-states.service'
 import { PermissionEnums } from '../../../models/enums'
 import { ClientPreferences } from '../../../models/settings.model'
+import { MatDialog } from '@angular/material/dialog'
+import { UnusedListDialogComponent } from '../../shared/dialogs/unused-list-dialog.component'
 
 @Component({
 	selector: 'oms-status-control',
@@ -44,7 +46,6 @@ export class StatusControlComponent implements OnInit, OnDestroy {
 		{ id: 4, title: 'Buffers' },
 		{ id: 5, title: 'Zcus' },
 		{ id: 6, title: 'Cps' },
-		{ id: 7, title: 'Unuse' },
 	]
 	currentTab: number = 0
 
@@ -55,6 +56,7 @@ export class StatusControlComponent implements OnInit, OnDestroy {
 		private settingSvc: SettingsService,
 		private dialogSvc: DialogService,
 		private $t: TranslateService,
+		private dialog: MatDialog,
 	) {
 		this.preference = this.settingSvc.globalPreferences
 		settingSvc.serviceConfig.subscribe(
@@ -87,6 +89,19 @@ export class StatusControlComponent implements OnInit, OnDestroy {
 
 	canDisplayTable(type: string): boolean {
 		return this.preference.controlTables[type]
+	}
+
+	onViewUnusedList() {
+		const dialog = this.dialog.open(UnusedListDialogComponent, {
+			minWidth: '600px',
+			maxWidth: '1000px',
+			hasBackdrop: false,
+		})
+
+		const eventEmitter = new EventEmitter<{ type: string; id: number }>()
+		eventEmitter.subscribe((event) => this.findAndFocus.emit(event))
+
+		dialog.componentInstance.findAndFocus = eventEmitter
 	}
 
 	onVehicleReset() {

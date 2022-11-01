@@ -280,6 +280,7 @@
     "homePointList": "홈 목록",
     "stationList": "스테이션 목록",
     "vehicleList": "비클 목록",
+    "unusedList": "Unused List",
     "bufferList": "버퍼 목록",
     "maxVehicles": "비클 최대",
     "maxCount": "Max Count",

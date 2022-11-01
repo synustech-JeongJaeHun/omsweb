@@ -1,7 +1,6 @@
 import {
 	Component,
 	EventEmitter,
-	HostListener,
 	Input,
 	OnDestroy,
 	OnInit,
@@ -19,18 +18,18 @@ import { AuthService } from '../../../services/auth.service'
 import { auditTime, takeUntil } from 'rxjs/operators'
 import { DxDataGridComponent } from 'devextreme-angular'
 import { ClientPreferences } from '../../../models/settings.model'
-import { AuditTimeDuration } from './constants'
-import { DateUtil } from '../../shared/utils/date.util'
+import { AuditTimeDuration } from '../../monitor/tables/constants'
+import { DateUtil } from '../utils/date.util'
 import { TrackStatusService } from '@oms/root/services/track-status.service'
 
 @Component({
-	selector: 'oms-unuse-control-table',
-	templateUrl: './unuse-control-table.component.html',
-	styleUrls: ['./unuse-control-table.component.scss'],
+	selector: 'oms-unused-list-dialog',
+	templateUrl: './unused-list-dialog.component.html',
+	styleUrls: ['./unused-list-dialog.component.scss'],
 })
-export class UnuseControlTableComponent implements OnInit, OnDestroy {
+export class UnusedListDialogComponent implements OnInit, OnDestroy {
 	@Input() tableHeight: number
-	@Output() findAndFocus = new EventEmitter<{ type: string; id: number }>()
+	@Input() findAndFocus: EventEmitter<{ type: string; id: number }>
 
 	@ViewChild(DxDataGridComponent, { static: false })
 	dataGrid: DxDataGridComponent
@@ -59,43 +58,6 @@ export class UnuseControlTableComponent implements OnInit, OnDestroy {
 		this.preference = this.settingSvc.globalPreferences
 	}
 
-	canDisplayTable(type: string): boolean {
-		return this.preference.controlTables[type]
-	}
-	getDisplayTableColumnIndex(type: string): number {
-		return this.preference.controlTables.unuse_order.findIndex(
-			(column) => column.name === type,
-		)
-	}
-
-	getDisplayTableColumnWidth(type: string) {
-		return this.preference.controlTables.unuse_order.find(
-			(column) => column.name === type,
-		).width
-	}
-
-	stateStoring = {
-		enabled: true,
-		type: 'custom',
-		customSave: (configuration: {
-			columns: {
-				dataField: string
-				dataType: string
-				name: string
-				visible: boolean
-				visibleIndex: number
-				width: number
-			}[]
-		}) => {
-			configuration.columns.forEach((c) => {
-				const column = this.preference.controlTables.unuse_order[c.visibleIndex]
-				if (column) column.width = c.width
-			})
-
-			this.preference.save()
-		},
-	}
-
 	ngOnInit() {
 		merge(
 			this.hubSvc.vehicleTableChanged$,
@@ -118,15 +80,13 @@ export class UnuseControlTableComponent implements OnInit, OnDestroy {
 		row: { data: { type: string; objectId: number } }
 	}) => {
 		const typeInLowerCase = event.row.data.type.toLowerCase()
-		this.findAndFocus.emit({ type: typeInLowerCase, id: event.row.data.objectId })
+		this.findAndFocus.emit({
+			type: typeInLowerCase,
+			id: event.row.data.objectId,
+		})
 	}
 
 	private onTableChanged(payload: IDataChangeEvent) {
 		this.dataSource.reload()
-	}
-
-	@HostListener('document:visibilitychange', ['$event'])
-	private visibilitychange() {
-		if (!document.hidden) this.dataSource.reload()
 	}
 }
