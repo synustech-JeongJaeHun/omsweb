@@ -59,7 +59,7 @@ export class PlaybackService {
 		return this.http
 			.get<{
 				before?: { timestamp: string; data: string }
-				next?: { timestamp: string; data: string }
+				next?: { timestamp: string }
 			}>(
 				`${this.baseUrl}/before-next-snapshots/${DateFns.add(from, {
 					seconds: 1,
@@ -76,7 +76,6 @@ export class PlaybackService {
 					next: res.next
 						? {
 								timestamp: new Date(res.next.timestamp),
-								data: JSON.parse(res.next.data) as PlaybackSnapshotData,
 						  }
 						: undefined,
 				})),
