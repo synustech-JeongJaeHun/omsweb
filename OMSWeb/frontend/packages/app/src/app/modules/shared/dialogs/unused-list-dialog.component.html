@@ -6,7 +6,6 @@
 			<dx-data-grid
 				[dataSource]="dataSource"
 				[remoteOperations]="true"
-				[height]="tableHeight"
 				[repaintChangesOnly]="true"
 				[columnAutoWidth]="false"
 				[showBorders]="false"
@@ -14,8 +13,9 @@
 				[showColumnLines]="true"
 				[showRowLines]="true"
 				[headerFilter]="false"
-				allowColumnResizing="true"
 				[sorting]="true"
+				height="250"
+				allowColumnResizing="true"
 			>
 				<dxo-sorting mode="single"></dxo-sorting>
 				<dxo-paging [pageSize]="50"></dxo-paging>
@@ -51,6 +51,7 @@
 					dataType="string"
 					dataField="comments"
 					[caption]="'names.note' | translate"
+					width="120"
 				></dxi-column>
 				<dxi-column
 					dataType="datetime"

@@ -4,7 +4,6 @@ import {
 	Input,
 	OnDestroy,
 	OnInit,
-	Output,
 	ViewChild,
 } from '@angular/core'
 import DataSource from 'devextreme/data/data_source'
@@ -28,7 +27,6 @@ import { TrackStatusService } from '@oms/root/services/track-status.service'
 	styleUrls: ['./unused-list-dialog.component.scss'],
 })
 export class UnusedListDialogComponent implements OnInit, OnDestroy {
-	@Input() tableHeight: number
 	@Input() findAndFocus: EventEmitter<{ type: string; id: number }>
 
 	@ViewChild(DxDataGridComponent, { static: false })

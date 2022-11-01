@@ -13,7 +13,7 @@ import { SettingsService } from '../../../services/settings.service'
 import { MapStatesService } from '../../track-map/map-states.service'
 import { PermissionEnums } from '../../../models/enums'
 import { ClientPreferences } from '../../../models/settings.model'
-import { MatDialog } from '@angular/material/dialog'
+import { MatDialog, MatDialogRef } from '@angular/material/dialog'
 import { UnusedListDialogComponent } from '../../shared/dialogs/unused-list-dialog.component'
 
 @Component({
@@ -48,6 +48,8 @@ export class StatusControlComponent implements OnInit, OnDestroy {
 		{ id: 6, title: 'Cps' },
 	]
 	currentTab: number = 0
+
+	_unusedListDialog: MatDialogRef<UnusedListDialogComponent, any> = null
 
 	constructor(
 		private auth: AuthService,
@@ -92,16 +94,23 @@ export class StatusControlComponent implements OnInit, OnDestroy {
 	}
 
 	onViewUnusedList() {
-		const dialog = this.dialog.open(UnusedListDialogComponent, {
-			minWidth: '600px',
-			maxWidth: '1000px',
+		if (this._unusedListDialog) {
+			this._unusedListDialog.close()
+			return
+		}
+
+		this._unusedListDialog = this.dialog.open(UnusedListDialogComponent, {
+			width: '590px',
 			hasBackdrop: false,
 		})
 
 		const eventEmitter = new EventEmitter<{ type: string; id: number }>()
 		eventEmitter.subscribe((event) => this.findAndFocus.emit(event))
 
-		dialog.componentInstance.findAndFocus = eventEmitter
+		this._unusedListDialog.componentInstance.findAndFocus = eventEmitter
+		this._unusedListDialog
+			.afterClosed()
+			.subscribe(() => (this._unusedListDialog = null))
 	}
 
 	onVehicleReset() {
