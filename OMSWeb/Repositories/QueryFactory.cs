@@ -455,11 +455,40 @@ namespace OMSWeb.Repositories
         ON BS.id = GO.reference_id AND GO.reference_table = 'buffer'
         --*user_id_condition*--WHERE user_id =@userId
       "},
-      {"unuseListStatus", @"
+      {"unuseListStatus1", @"
          SELECT b.id, b.Type, b.OnlineName, b.User, b.Comments, b.UnusedTime, b.Location, b.ObjectId
          FROM  
             (select 1 as id, 'Buffer' as Type, 'STB01-502002' as OnlineName, 'misty' as User, 'malfunctioning on interaction with vehicle' as Comments, now() as UnusedTime, '1' as Location, 6 as ObjectId) as B
          ORDER BY b.UnusedTime
+      "},
+      {"unuseListStatus", @"
+        SELECT 
+	        ROW_NUMBER() OVER (ORDER BY UnusedTime ASC) AS ROW_NUMBER, Type, OnlineName, User, Comments, UnusedTime, Location, ObjectId
+        FROM  ((
+			        SELECT 'Segment' as Type, seg.segment_id::text as OnlineName, seg.user as User, seg.note as Comments, 
+				        seg.unused_time as UnusedTime, seg.id as Location, seg.id as ObjectId
+			        FROM segment_blocking seg 
+			        WHERE seg.user <> '' or seg.note <> '' 
+		        ) 
+		         UNION (
+			        SELECT 'Buffer' as Type, b.logical_id as OnlineName, b.user as User, b.note as Comments,
+				        b.unused_time as UnusedTime, b.id as Location, b.id as ObjectId
+			        FROM buffers b
+			        WHERE b.user <> '' or b.note <> ''
+		        )
+		        UNION (
+			        SELECT 'Station' as Type, st.logical_id as OnlineName, st.user as User, st.note as Comments,
+				        st.unused_time as UnusedTime, st.id as Location, st.id as ObjectId
+			        FROM stations st
+			        WHERE st.user <> '' or st.note <> ''
+		        )
+		        UNION (
+			        SELECT 'Vehicle' as Type, v.logical_id as OnlineName, v.user as User, v.note as Comments,
+				        v.unused_time as UnusedTime, v.id as Location, v.id as ObjectId
+			        FROM vehicles v
+			        WHERE v.user <> '' or v.note <> ''
+		        )
+	        ) as UnuseList
       "}
     };
     public static string GetSql(string name)
