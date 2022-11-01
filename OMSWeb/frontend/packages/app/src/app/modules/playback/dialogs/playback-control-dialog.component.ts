@@ -1,4 +1,5 @@
-import { Component } from '@angular/core'
+import { Component, ViewChild } from '@angular/core'
+import { MatSlider } from '@angular/material/slider'
 import { PlaybackPlayService } from '@oms/root/services/playback-play.service'
 import * as DateFns from 'date-fns'
 @Component({
@@ -61,6 +62,15 @@ export class PlaybackControlDialogComponent {
 		})
 	}
 
+	async handleSetWindow(startOrEnd: 'start' | 'end', date: Date) {
+		if (this.isLoading) return
+
+		this.isLoading = true
+		if (startOrEnd === 'start') await this.playService.setWindowStart(date)
+		else await this.playService.setWindowEnd(date)
+		this.isLoading = false
+	}
+
 	isAvailableSnapshotSliderChange = true
 	onSnapshotRangeSliderChanged(event: {
 		event: unknown
@@ -95,12 +105,16 @@ export class PlaybackControlDialogComponent {
 		)
 	}
 
-	onBeforeSnapshot() {
+	async onBeforeSnapshot() {
 		if (this.isAvailableSnapshotSliderChange === false) return
 
 		if (this.isAvailableToBeforeSnapshot) {
+			this.isLoading = true
+
 			this.disableTimeRangeSliderForMoment()
-			this.playService.goToStartOfSnapshot('previous')
+			await this.playService.goToStartOfSnapshot('previous')
+
+			this.isLoading = false
 		}
 	}
 
@@ -112,12 +126,16 @@ export class PlaybackControlDialogComponent {
 		)
 	}
 
-	onNextSnapshot() {
+	async onNextSnapshot() {
 		if (this.isAvailableSnapshotSliderChange === false) return
 
 		if (this.isAvailableToNextSnapshot) {
+			this.isLoading = true
+
 			this.disableTimeRangeSliderForMoment()
-			this.playService.goToStartOfSnapshot('next')
+			await this.playService.goToStartOfSnapshot('next')
+
+			this.isLoading = false
 		}
 	}
 
@@ -149,10 +167,31 @@ export class PlaybackControlDialogComponent {
 		)
 	}
 
+	@ViewChild(MatSlider)
+	matSlider: MatSlider
+
 	onTimeSliderChanged(value: number) {
 		const date = DateFns.add(this.playService.currentSnapshot.timestamp, {
 			seconds: value,
 		})
-		this.playService.setClockByDate(date)
+
+		if (this.playService.loaded.to.getTime() > date.getTime()) {
+			this.playService.setClockByDate(date)
+		} else {
+			this.matSlider.value = this.timeSliderValue
+		}
+	}
+
+	get loadedPercent() {
+		const full = DateFns.differenceInSeconds(
+			this.timeSliderMaxTime,
+			this.timeSliderMinTime,
+		)
+		const loaded = DateFns.differenceInSeconds(
+			this.playService.loaded.to,
+			this.playService.loaded.from,
+		)
+
+		return (loaded / full) * 100
 	}
 }

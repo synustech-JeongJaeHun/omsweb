@@ -73,6 +73,14 @@
     position: absolute;
     font-size: x-small;
   }
+
+  .loaded {
+    position: absolute;
+    top: 20px;
+    left: 0px;
+    background-color: rgba(140, 140, 140, 0.30);
+    height: 8px;
+  }
 }
 
 mat-select {
