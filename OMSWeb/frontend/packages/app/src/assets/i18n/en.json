@@ -280,6 +280,7 @@
     "homePointList": "Home Point List",
     "stationList": "Station List",
     "vehicleList": "Vehicle List",
+    "unusedList": "Unused List",
     "bufferList": "Buffer List",
     "maxVehicles": "Max Vehicles",
     "maxCount": "Max Count",

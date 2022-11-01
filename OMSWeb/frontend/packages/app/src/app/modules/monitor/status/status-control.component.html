@@ -28,6 +28,22 @@
 	<div id="status-toolbar" *ngIf="canControl">
 		<button
 			*ngIf="
+				hasPermissions([
+					permissionEnums.SettingSegment,
+					permissionEnums.SettingStation,
+					permissionEnums.SettingBuffer,
+					permissionEnums.SettingVehicle
+				])
+			"
+			mat-stroked-button
+			class="dense"
+			(click)="onViewUnusedList()"
+		>
+			<mat-icon>disabled_by_default</mat-icon>
+			<span>{{ 'names.unusedList' | translate }}</span>
+		</button>
+		<button
+			*ngIf="
 				hasPermissions([permissionEnums.ResetAllVehicle]) &&
 				canDisplayTable('vehicles')
 			"

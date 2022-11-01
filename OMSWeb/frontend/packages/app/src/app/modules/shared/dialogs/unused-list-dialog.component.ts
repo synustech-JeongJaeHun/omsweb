@@ -1,7 +1,6 @@
 import {
 	Component,
 	EventEmitter,
-	HostListener,
 	Input,
 	OnDestroy,
 	OnInit,
@@ -19,18 +18,18 @@ import { AuthService } from '../../../services/auth.service'
 import { auditTime, takeUntil } from 'rxjs/operators'
 import { DxDataGridComponent } from 'devextreme-angular'
 import { ClientPreferences } from '../../../models/settings.model'
-import { AuditTimeDuration } from './constants'
-import { DateUtil } from '../../shared/utils/date.util'
+import { AuditTimeDuration } from '../../monitor/tables/constants'
+import { DateUtil } from '../utils/date.util'
 import { TrackStatusService } from '@oms/root/services/track-status.service'
 
 @Component({
-	selector: 'oms-unuse-control-table',
-	templateUrl: './unuse-control-table.component.html',
-	styleUrls: ['./unuse-control-table.component.scss'],
+	selector: 'oms-unused-list-dialog',
+	templateUrl: './unused-list-dialog.component.html',
+	styleUrls: ['./unused-list-dialog.component.scss'],
 })
-export class UnuseControlTableComponent implements OnInit, OnDestroy {
+export class UnusedListDialogComponent implements OnInit, OnDestroy {
 	@Input() tableHeight: number
-	@Output() findAndFocus = new EventEmitter<{ type: string; id: number }>()
+	@Input() findAndFocus: EventEmitter<{ type: string; id: number }>
 
 	@ViewChild(DxDataGridComponent, { static: false })
 	dataGrid: DxDataGridComponent
@@ -89,10 +88,5 @@ export class UnuseControlTableComponent implements OnInit, OnDestroy {
 
 	private onTableChanged(payload: IDataChangeEvent) {
 		this.dataSource.reload()
-	}
-
-	@HostListener('document:visibilitychange', ['$event'])
-	private visibilitychange() {
-		if (!document.hidden) this.dataSource.reload()
 	}
 }
