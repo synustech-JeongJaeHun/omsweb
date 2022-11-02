@@ -33,7 +33,7 @@ const group = useGroup('vehicle', toRef(props.vehicle, 'id'))
 
 const isHotlot = computed(() => Number(props.vehicle.priority) === 99),
   isStale = computed(() => {
-    // TODO: stale 상태는 db에서 받아올 수 있을 때 작업을 시작하도록 하자
+    // stale 상태는 db에서 받아올 수 있을 때 작업을 시작하도록 하자
     return false
   }),
   isPreventCall = computed(() => {

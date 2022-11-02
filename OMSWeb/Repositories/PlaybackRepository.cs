@@ -210,6 +210,7 @@ namespace OMSWeb.Repositories
               or
               va.time_resolved > @at
             )
+          order by va.time desc
       ";
 
       var result = new List<RemainedAlarm>();
@@ -265,7 +266,7 @@ namespace OMSWeb.Repositories
           where 
             va.time_resolved between @from and @to
           )) change
-          order by change.history_change_time
+          order by change.history_change_time asc
       ";
 
       var result = new List<AlarmChange>();
