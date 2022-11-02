@@ -457,33 +457,33 @@ namespace OMSWeb.Repositories
       "},
       {"unuseListStatus", @"
         SELECT 
-	        ROW_NUMBER() OVER (ORDER BY UnusedTime DESC) AS ROW_NUMBER, Type, OnlineName, User, Comments, UnusedTime, Location, ObjectId
+	        ROW_NUMBER() OVER (ORDER BY UnuseTime DESC) AS ROW_NUMBER, Type, OnlineName, User, Comments, UnuseTime, ObjectId
         FROM  ((
 			        SELECT 'Segment' as Type, seg.segment_id::text as OnlineName, seg.user as User, seg.note as Comments, 
-				        seg.unused_time as UnusedTime, seg.id as Location, seg.id as ObjectId
+				        seg.unused_time as UnuseTime, seg.id as ObjectId
 			        FROM segment_blocking seg 
 			        WHERE seg.user <> '' or seg.note <> '' 
 		        ) 
 		         UNION (
-			        SELECT 'Buffer' as Type, b.logical_id as OnlineName, b.user as User, b.note as Comments,
-				        b.unused_time as UnusedTime, b.id as Location, b.id as ObjectId
+			        SELECT 'Buffer' as Type, b.logical_id as OnlineName, b.user as User, b.note as Comments, 
+                        b.unused_time as UnuseTime, b.id as ObjectId
 			        FROM buffers b
 			        WHERE b.user <> '' or b.note <> ''
 		        )
 		        UNION (
 			        SELECT 'Station' as Type, st.logical_id as OnlineName, st.user as User, st.note as Comments,
-				        st.unused_time as UnusedTime, st.id as Location, st.id as ObjectId
+				        st.unused_time as UnuseTime, st.id as ObjectId
 			        FROM stations st
 			        WHERE st.user <> '' or st.note <> ''
 		        )
 		        UNION (
 			        SELECT 'Vehicle' as Type, v.logical_id as OnlineName, v.user as User, v.note as Comments,
-				        v.unused_time as UnusedTime, v.id as Location, v.id as ObjectId
+				        v.unused_time as UnuseTime, v.id as ObjectId
 			        FROM vehicles v
 			        WHERE v.user <> '' or v.note <> ''
 		        )
 	        ) as UnuseList
-        ORDER BY UnusedTime DESC
+        ORDER BY UnuseTime DESC
       "}
     };
     public static string GetSql(string name)

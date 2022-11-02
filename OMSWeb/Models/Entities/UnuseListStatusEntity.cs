@@ -9,8 +9,7 @@ namespace OMSWeb.Models.Entities
     public string OnlineName { get; set; }
     public string User { get; set; }
     public string Comments { get; set; }
-    public DateTime UnuseTime { get; set; }
-    public string Location { get; set; }
+    public DateTime? UnuseTime { get; set; }
     public int ObjectId { get; set; }
   }
 }

@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using Dapper;
 using Microsoft.Extensions.Configuration;
-using OMSWeb.Models;
 using OMSWeb.Models.Entities;
 
 namespace OMSWeb.Repositories
@@ -11,6 +10,36 @@ namespace OMSWeb.Repositories
     {
         public HistoryRepository(IConfiguration configuration) : base(configuration)
         {
+        }
+
+
+        public int QueryOrdersCount(DateTimeOffset from, DateTimeOffset to)
+        {
+            var sql2 = @"
+                SELECT 
+                    count(*)
+                FROM order_history AS OD
+                INNER JOIN (
+                    SELECT history_source_id AS order_id, max(history_change_time) AS last_updated
+                    FROM order_history
+                    WHERE @from <= time_created and time_created <= @to
+                    GROUP BY history_source_id
+                ) AS LAST_OD
+                ON OD.history_source_id = LAST_OD.order_id AND OD.history_change_time = LAST_OD.last_updated
+                    ";
+            var sql = @"
+                SELECT 
+                    count(DISTINCT history_source_id)
+                FROM order_history AS OD
+                WHERE @from <= time_created and time_created <= @to
+                    ";
+
+            int result = 0;
+            using (var conn = ConnectTrack())
+            {
+                result = conn.QueryFirst<int>(sql, new { from, to });
+            }
+            return result;
         }
 
         public IQueryable<OrderHistoryEntity> QueryOrders(DateTimeOffset from, DateTimeOffset to, int skip, int take)
@@ -83,6 +112,31 @@ namespace OMSWeb.Repositories
             return result;
         }
 
+
+        public int QueryVehiclesCount(DateTimeOffset from, DateTimeOffset to)
+        {
+            var sql = @"
+                SELECT 
+                    count(*)
+                FROM vehicle_history AS VH
+                INNER JOIN (
+                    SELECT history_source_id, max(id) AS max_id
+                    FROM vehicle_history
+                    --*where_condition*
+                    WHERE @from <= history_change_time and history_change_time <= @to
+                    GROUP BY history_source_id
+                ) AS LVH
+                ON VH.id = LVH.max_id   
+                    ";
+
+            int result = 0;
+            using (var conn = ConnectTrack())
+            {
+                result = conn.QueryFirst<int>(sql, new { from, to });
+            }
+            return result;
+        }
+
         public IQueryable<VehicleHistoryEntity> QueryVehicles(DateTimeOffset from, DateTimeOffset to, int skip, int take)
         {
             var sql = @"
@@ -108,6 +162,31 @@ namespace OMSWeb.Repositories
             using (var conn = ConnectTrack())
             {
                 result = conn.Query<VehicleHistoryEntity>(sql, new { from, to, skip, take }).AsQueryable();
+            }
+            return result;
+        }
+
+
+        public int QueryAlarmsCount(DateTimeOffset from, DateTimeOffset to)
+        {
+            var sql = @"
+                SELECT 
+                    count(*)
+                FROM vehicle_alarms AS VA
+                LEFT OUTER JOIN vehicle_reg VR
+                    ON VA.vehicle_id = VR.id
+                LEFT OUTER JOIN vehicle_errors VE
+                    ON VA.error_code = VE.id
+                LEFT OUTER JOIN annotations AN
+                    ON VA.error_code = AN.reference_id and AN.reference_table = 'vehicle_errors'
+                WHERE 
+                    @from <= VA.time and VA.time <= @to
+                    ";
+
+            int result = 0;
+            using (var conn = ConnectTrack())
+            {
+                result = conn.QueryFirst<int>(sql, new { from, to });
             }
             return result;
         }
@@ -140,6 +219,24 @@ namespace OMSWeb.Repositories
             return result;
         }
 
+        public int QueryAlertsCount(DateTimeOffset from, DateTimeOffset to)
+        {
+            var sql = @"
+                SELECT 
+                    count(*)
+                FROM alerts
+                WHERE 
+                    @from <= time AND time <= @to
+                    ";
+
+            int result = 0;
+            using (var conn = ConnectTrack())
+            {
+                result = conn.QueryFirst<int>(sql, new { from, to });
+            }
+            return result;
+        }
+
         public IQueryable<AlertEntity> QueryAlerts(DateTimeOffset from, DateTimeOffset to, int skip, int take)
         {
             var sql = @"
@@ -156,6 +253,24 @@ namespace OMSWeb.Repositories
             using (var conn = ConnectTrack())
             {
                 result = conn.Query<AlertEntity>(sql, new { from, to, skip, take }).AsQueryable();
+            }
+            return result;
+        }
+
+        public int QueryNacksCount(DateTimeOffset from, DateTimeOffset to)
+        {
+            var sql = @"
+                SELECT 
+                    count(*)
+                FROM rcmd_history
+                WHERE 
+                    @from <= time_modified AND time_modified <= @to
+                    ";
+
+            int result = 0;
+            using (var conn = ConnectTrack())
+            {
+                result = conn.QueryFirst<int>(sql, new { from, to });
             }
             return result;
         }
