@@ -205,7 +205,11 @@ namespace OMSWeb.Repositories
           where 
             va.time < @at
             and 
-            va.time_resolved is null
+            (
+              va.time_resolved is null
+              or
+              va.time_resolved > @at
+            )
       ";
 
       var result = new List<RemainedAlarm>();
