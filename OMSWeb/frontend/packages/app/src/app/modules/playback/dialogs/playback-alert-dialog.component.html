@@ -85,9 +85,8 @@
 						<mat-label>{{ 'names.note' | translate }}</mat-label>
 						<textarea
 							matInput
-							[placeholder]="'messages.alarmNoteHint' | translate"
-							[(ngModel)]="alaram_note"
 							readonly
+							[value]="currentItem?.annotation || ''"
 						></textarea>
 					</mat-form-field>
 				</div>
