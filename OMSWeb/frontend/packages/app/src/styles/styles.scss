@@ -42,7 +42,8 @@
 	--highlighted-text: white;
 	--highlighted-row: #0095ff;
 	--notification-color: rgb(255, 180, 0);
-	--notification-critical-color: rgb(255, 80, 0);
+	--notification-critical-color: rgb(243, 100, 34);
+	--notification-critical-color-darken: rgb(187, 60, 2);
 	--invalid-color: rgb(255, 100, 100);
 	--monitor-background-color: #fff;
 	/* Cluster color palette */
@@ -526,6 +527,15 @@ table.table-details {
 
 	[mat-dialog-title] {
 		background-color: var(--notification-color);
+	}
+}
+
+.playback-alarms-dialog {
+	.mat-dialog-container {
+		border: 2px solid var(--notification-critical-color-darken);
+	}
+	[mat-dialog-title] {
+		background-color: var(--notification-critical-color-darken);
 	}
 }
 

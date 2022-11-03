@@ -293,6 +293,7 @@ type EventsChangedEvent = {
 	type: 'EventsChanged'
 	clock: Date
 	events: HistoryEvent[]
+	alarms: AlarmChange[]
 }
 /**
  * Event when need to accumulate events
@@ -301,6 +302,7 @@ type NextFrameEvent = {
 	type: 'NextFrameEvent'
 	clock: Date
 	events: HistoryEvent[]
+	alarms: AlarmChange[]
 }
 
 type CurrentVehicle = {

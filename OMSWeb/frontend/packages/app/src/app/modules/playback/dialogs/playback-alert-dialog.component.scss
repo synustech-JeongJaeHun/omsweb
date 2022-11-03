@@ -1,0 +1,48 @@
+.dialog-container {
+	position: relative;
+	cursor: move;
+}
+
+.playback-alarms-dialog {
+	// ::ng-deep [mat-dialog-title] {
+	// 	// background-color: darken(rgb(255, 80, 0), 10%);
+	// 	background-color: var(--notification-critical-color-darken);
+	// }
+	#solutionContainer {
+		padding: 8px;
+
+		.grid-form {
+			display: grid;
+			grid-template-columns: repeat(2, 1fr);
+			grid-template-rows: 1fr;
+			gap: 4px;
+
+			button {
+				align-self: flex-start;
+				justify-self: flex-start;
+			}
+
+			textarea::placeholder {
+				font-size: 11px;
+			}
+
+			.primary-actions {
+				text-align: right;
+
+				button {
+					margin-left: 4px;
+				}
+			}
+
+			::ng-deep {
+				.mat-form-field-wrapper {
+					margin: 0;
+					padding-bottom: 4px;
+				}
+			}
+		}
+	}
+	// ::ng-deep .mat-dialog-container {
+	// 	border: 2px solid var(--notification-critical-color-darken);
+	// }
+}
