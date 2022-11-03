@@ -27,6 +27,7 @@ import {
 import { CommandDialogComponent } from '../dialogs/command-dialog.component'
 import { ShowObjectDialogComponent } from '../dialogs/show-object-dialog.component'
 import { AuthService } from '../../../services/auth.service'
+import { PlaybackPlayService } from '@oms/root/services/playback-play.service'
 import { AccountUtil } from '../../shared/utils/account.util'
 import { SettingsService } from '../../../services/settings.service'
 import { PermissionEnums } from '../../../models/enums'
@@ -34,6 +35,8 @@ import { TrackMonitorSettingService } from '@oms/root/services/track-monitor-set
 import { PlaybackVehicleStatusDialogComponent } from '../dialogs/playback-vehicle-status-dialog.component'
 import { PlaybackControlDialogComponent } from '../../playback/dialogs/playback-control-dialog.component'
 import { PlaybackTrackVehicleDialogComponent } from '../dialogs/playback-track-vehicle-dialog.component'
+import { PlaybackAlertDialogComponent } from '../../playback/dialogs/playback-alert-dialog.component'
+import { NotificationsService } from '@oms/root/services/notifications.service'
 
 @Component({
 	selector: 'oms-playback-map-toolbar',
@@ -70,6 +73,11 @@ export class PlaybackMapToolbarComponent implements OnInit, OnDestroy {
 	get tooltipOffset(): string {
 		return this.showToolName ? '164px' : '36px'
 	}
+	get badgeCount(): string {
+		const alerts = this.notifySvc.alarmsDataSource().items().length
+		if (alerts) return String(alerts)
+		return ''
+	}
 
 	private _searchDlg: MatDialogRef<SearchDialogComponent, any>
 	private _trackDlg: MatDialogRef<PlaybackTrackVehicleDialogComponent, any>
@@ -77,7 +85,8 @@ export class PlaybackMapToolbarComponent implements OnInit, OnDestroy {
 	private _showObjDlg: MatDialogRef<ShowObjectDialogComponent, any>
 	private _vhStatusDlg: MatDialogRef<PlaybackVehicleStatusDialogComponent, any>
 	private _controlDlg: MatDialogRef<PlaybackControlDialogComponent, any>
-	// private _bfStatusDlg: MatDialogRef<BufferStatusDialogComponent, any>;
+	private _alertDlg: MatDialogRef<PlaybackAlertDialogComponent, any>
+	// private _bfStatusDlg: MatDialogRef<BufferStatusDialogComponent, any>
 
 	constructor(
 		private auth: AuthService,
@@ -87,6 +96,8 @@ export class PlaybackMapToolbarComponent implements OnInit, OnDestroy {
 		private dialogSvc: DialogService,
 		private dialog: MatDialog,
 		private $t: TranslateService,
+		private playbackSvc: PlaybackPlayService,
+		private notifySvc: NotificationsService,
 		public trackMonitorSettingService: TrackMonitorSettingService,
 	) {
 		// settingSvc.serviceConfig.subscribe((config) => {
@@ -110,6 +121,21 @@ export class PlaybackMapToolbarComponent implements OnInit, OnDestroy {
 			hasBackdrop: false,
 			disableClose: true,
 			closeOnNavigation: true,
+		})
+	}
+
+	onAlertDialog() {
+		if (this._alertDlg && this._alertDlg.getState() === MatDialogState.OPEN) {
+			this._alertDlg.close()
+			return
+		}
+		this._alertDlg = this.dialog.open(PlaybackAlertDialogComponent, {
+			maxWidth: '800px',
+			maxHeight: '50vh',
+			hasBackdrop: false,
+			disableClose: true,
+			closeOnNavigation: true,
+			panelClass: 'playback-alarms-dialog',
 		})
 	}
 

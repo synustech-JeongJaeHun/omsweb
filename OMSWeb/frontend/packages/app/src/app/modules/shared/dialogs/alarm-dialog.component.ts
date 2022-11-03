@@ -26,6 +26,7 @@ export class AlarmDialogComponent {
     private t$: TranslateService
   ) { 
     this.dataSource = this.notifySvc.alarmsDataSource();
+    console.log('this D', this.notifySvc.alarmsDataSource())
   }
 
   transform(value: number): string {

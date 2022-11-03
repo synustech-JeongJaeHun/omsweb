@@ -3,6 +3,13 @@
     matTooltipPosition="right" [matTooltip]="'names.playback' | translate" (click)="onPlaybackDialog()">
     <mat-icon>play_circle_outline</mat-icon>
     <span class="tool-name" *ngIf="showToolName">{{
+      "names.playback" | translate
+      }}</span>
+  </button>
+  <button matListItem mat-button class="tool-item"[matTooltipDisabled]="showToolName" matTooltipClass="snb-tooltip"
+    matTooltipPosition="right" [matTooltip]="'names.playback' | translate" (click)="onAlertDialog()" >
+    	<mat-icon [matBadge]="badgeCount" matBadgeColor="warn"  matBadgeSize="small" id="mat-noti-icon">notifications</mat-icon>
+      <span class="tool-name" *ngIf="showToolName">{{
       "names.centerZoom" | translate
       }}</span>
   </button>
