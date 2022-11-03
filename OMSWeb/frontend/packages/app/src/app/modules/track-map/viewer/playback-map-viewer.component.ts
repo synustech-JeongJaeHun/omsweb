@@ -288,7 +288,6 @@ export class PlaybackMapViewerComponent implements OnInit, OnDestroy {
 		})
 
 		this.playService.clockChanged.subscribe((event: ClockChangedEvent) => {
-			console.log('clockchanged', event)
 			switch (event.type) {
 				case 'SnapshotChanged':
 					this.setToCurrentSnapshot()
