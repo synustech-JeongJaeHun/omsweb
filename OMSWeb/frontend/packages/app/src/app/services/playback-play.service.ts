@@ -66,8 +66,8 @@ export class PlaybackPlayService {
 	public currentSnapshot: PlaybackSnapshot
 	public nextSnapshot: Pick<PlaybackSnapshot, 'timestamp'>
 
-	public currentRemainedAlarms: RemainedAlarm[]
-	public alarmChanges: AlarmChange[]
+	public currentRemainedAlarms: RemainedAlarm[] = []
+	public alarmChanges: AlarmChange[] = []
 
 	public currentAlarms: RemainedAlarm[] = []
 	public currentVehicles: CurrentVehicle[] = []
@@ -113,6 +113,7 @@ export class PlaybackPlayService {
 
 		this.currentRemainedAlarms = alarms.remainedAlarms
 		this.alarmChanges = alarms.alarmChanges
+		this.currentAlarms = [...alarms.remainedAlarms]
 	}
 
 	private async fetchEvents(from: Date, to?: Date) {
@@ -275,7 +276,7 @@ export class PlaybackPlayService {
 
 	private reduceCurrentState(event: ClockChangedEvent) {
 		if (event.type === 'SnapshotChanged' || event.type === 'EventsChanged') {
-			this.currentAlarms = this.currentRemainedAlarms ?? []
+			this.currentAlarms = [...this.currentRemainedAlarms] ?? []
 
 			this.currentOrders = (this.currentSnapshot.data.orders ?? [])
 				.filter((event) => event.time_completed?.length > 0 === false)
@@ -297,11 +298,7 @@ export class PlaybackPlayService {
 					const targetIndex = this.currentAlarms.findIndex(
 						(ca) => ca.id === alarm.id,
 					)
-					if (targetIndex) {
-						if (new Date(alarm.timeResolved).getTime() < this.clock.getTime())
-							this.currentAlarms.splice(targetIndex, 1)
-						else Object.assign(this.currentAlarms[targetIndex], alarm)
-					}
+					if (targetIndex) this.currentAlarms.splice(targetIndex, 1)
 				}
 			})
 

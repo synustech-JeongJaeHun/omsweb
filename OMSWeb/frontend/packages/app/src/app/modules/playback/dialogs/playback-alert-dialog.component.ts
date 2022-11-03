@@ -1,12 +1,8 @@
-import { Component, ViewChild } from '@angular/core'
-import { TranslateService } from '@ngx-translate/core'
+import { Component } from '@angular/core'
 import { IVehicleAlarm } from '@oms/root/models/notification.model'
 import { RemainedAlarm } from '@oms/root/models/playback.model'
-import { AuthService } from '@oms/root/services/auth.service'
-import { MessagesService } from '@oms/root/services/messages.service'
-import { NotificationsService } from '@oms/root/services/notifications.service'
 import { PlaybackPlayService } from '@oms/root/services/playback-play.service'
-import DataSource from 'devextreme/data/data_source'
+import { ClockChangedEvent } from '../../../models/playback.model'
 
 @Component({
 	selector: 'oms-playback-alert-dialog',
@@ -18,14 +14,11 @@ export class PlaybackAlertDialogComponent {
 	currentItem: IVehicleAlarm
 	selectedIds: number[] = []
 	dataSource: RemainedAlarm[] = []
-	constructor(
-		public playbackSvc: PlaybackPlayService,
-		private auth: AuthService,
-		private messageSvc: MessagesService,
-		private notifySvc: NotificationsService,
-		private t$: TranslateService,
-	) {
-		this.dataSource = this.playbackSvc.currentAlarms
+	constructor(playService: PlaybackPlayService) {
+		this.dataSource = playService.currentAlarms
+		playService.clockChanged.subscribe((event: ClockChangedEvent) => {
+			this.dataSource = playService.currentAlarms
+		})
 	}
 	transform(value: number): string {
 		if (value === undefined) return ''
