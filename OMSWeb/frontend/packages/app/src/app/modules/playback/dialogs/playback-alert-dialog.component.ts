@@ -14,10 +14,10 @@ export class PlaybackAlertDialogComponent {
 	currentItem: IVehicleAlarm
 	selectedIds: number[] = []
 	dataSource: RemainedAlarm[] = []
-	constructor(playbackSvc: PlaybackPlayService) {
-		this.dataSource = playbackSvc.currentAlarms
-		playbackSvc.clockChanged.subscribe((event: ClockChangedEvent) => {
-			this.dataSource = playbackSvc.currentAlarms
+	constructor(playService: PlaybackPlayService) {
+		this.dataSource = playService.currentAlarms
+		playService.clockChanged.subscribe((event: ClockChangedEvent) => {
+			this.dataSource = playService.currentAlarms
 		})
 	}
 	transform(value: number): string {
@@ -43,6 +43,5 @@ export class PlaybackAlertDialogComponent {
 			return
 		}
 		this.currentItem = row.data
-		// this.alaram_note = row.data.note
 	}
 }
