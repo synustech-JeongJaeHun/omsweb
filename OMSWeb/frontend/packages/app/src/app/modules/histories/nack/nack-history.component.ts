@@ -1,15 +1,15 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { HistoriesService } from '@oms/services/histories.service'
 import DataSource from 'devextreme/data/data_source'
-import { TrackIdService } from '../../../services/track-id.service'
+import { TrackIdService } from '@oms/root/services/track-id.service'
 import { DateUtil } from '@oms/utils/date.util'
 import { DxDataGridComponent } from 'devextreme-angular'
 import { SettingsService } from '@oms/root/services/settings.service'
 import { ClientPreferences } from '@oms/root/models/settings.model'
 
 @Component({
-	selector: 'oms-transfer-history',
-	templateUrl: './transfer-history.component.html',
+	selector: 'oms-nack-history',
+	templateUrl: './nack-history.component.html',
 	styles: [
 		`
 			#history-page {
@@ -47,7 +47,7 @@ import { ClientPreferences } from '@oms/root/models/settings.model'
 		`,
 	],
 })
-export class TransferHistoryComponent implements OnInit, OnDestroy {
+export class NackHistoryComponent implements OnInit, OnDestroy {
 	@ViewChild(DxDataGridComponent, { static: false })
 	dataGrid: DxDataGridComponent
 
@@ -56,7 +56,6 @@ export class TransferHistoryComponent implements OnInit, OnDestroy {
 	gridHeight = 0
 	creatorList = []
 	searchTypeList = []
-
 	now: Date = new Date()
 	start: Date = new Date(
 		this.now.getFullYear(),
@@ -83,35 +82,10 @@ export class TransferHistoryComponent implements OnInit, OnDestroy {
 	setDateWithMaxLimit() {
 		this.now = new Date()
 	}
-
-	transformVehicleId = ({ value = '' }): string => {
-		const text =
-			this.idSvc.get_alternative_id('vehicle', 'logicalId', value) || value
-		return text.toString()
-	}
-
 	transformLocationId = ({ value = '' }): string => {
 		return this.idSvc.guessLocationId(value)
 	}
-
-	transform(value: number): string {
-		if (value == undefined) {
-			return ''
-		} else {
-			const hour: number = Math.floor(value / 3600)
-			const minutes: number = Math.floor((value % 3600) / 60)
-			const seconds: number = Math.floor(value % 60)
-
-			//return `${hour}:${minutes}:${seconds}`;
-			return (
-				hour.toString().padStart(2, '0') +
-				':' +
-				minutes.toString().padStart(2, '0') +
-				':' +
-				seconds.toString().padStart(2, '0')
-			)
-		}
-	}
+	preference: ClientPreferences
 
 	constructor(
 		private svc: HistoriesService,
@@ -119,33 +93,28 @@ export class TransferHistoryComponent implements OnInit, OnDestroy {
 		private settingSvc: SettingsService,
 	) {
 		window.onresize = this.getGridSize.bind(this)
-		// this.idSvc.loadIds().subscribe(() => {
-		// 	this.dataSource = this.svc.ordersDataSource(this.start, this.end)
-		// })
+
 		this.idSvc.loadIds().subscribe()
-		this.preference = this.settingSvc.globalPreferences
+		this.preference = settingSvc.globalPreferences
 	}
 
-	ngOnDestroy(): void {
-		window.onresize = null
+	search(startTime: Date, endTime: Date) {
+		console.log('bind Nack Data in component')
+		this.dataSource = this.svc.nacksDataSource(startTime, endTime)
+		this.applyFilter(startTime, endTime)
 	}
 
-	ngOnInit(): void {
-		this.getGridSize()
-		this.getFileName()
-	}
-
-	preference: ClientPreferences
 	canDisplayTable(type: string): boolean {
 		return this.preference.historyTables[type]
 	}
+
 	getDisplayTableColumnIndex(type: string): number {
-		return this.preference.historyTables.transfers_order.findIndex(
+		return this.preference.historyTables.nacks_order.findIndex(
 			(column) => column.name === type,
 		)
 	}
 	getDisplayTableColumnWidth(type: string) {
-		return this.preference.historyTables.transfers_order.find(
+		return this.preference.historyTables.nacks_order.find(
 			(column) => column.name === type,
 		).width
 	}
@@ -163,8 +132,7 @@ export class TransferHistoryComponent implements OnInit, OnDestroy {
 			}[]
 		}) => {
 			configuration.columns.forEach((c) => {
-				const column =
-					this.preference.historyTables.transfers_order[c.visibleIndex]
+				const column = this.preference.historyTables.nacks_order[c.visibleIndex]
 				if (column) column.width = c.width
 			})
 
@@ -172,27 +140,8 @@ export class TransferHistoryComponent implements OnInit, OnDestroy {
 		},
 	}
 
-	search(startTime: Date, endTime: Date) {
-		this.dataSource = this.svc.ordersDataSource(startTime, endTime)
-        this.applyFilter(startTime, endTime)
-        this.applyPage()
-		// this.dataSource.reload()
-	}
-	private applyFilter(startTime: Date, endTime: Date) {
-		this.dataGrid.instance.filter([
-			['timeCreated', '>=', startTime],
-			'and',
-			['timeCreated', '<=', endTime],
-		])
-    }
-
-    private applyPage() {
-      
-    }
-
 	private getGridSize(): void {
 		const container = document.body
-		// const container = document.getElementById('grid-container');
 		const { offsetHeight, offsetWidth } = container
 		this.gridWidth = offsetWidth - 20
 		this.gridHeight = offsetHeight - 94
@@ -200,6 +149,21 @@ export class TransferHistoryComponent implements OnInit, OnDestroy {
 	private getFileName() {
 		var offset = new Date().getTimezoneOffset() * 60000
 		var today = new Date(Date.now() - offset)
-		this.fileName = today.toISOString() + '-order_history'
+		this.fileName = today.toISOString() + '-nack_history'
+	}
+	private applyFilter(startTime: Date, endTime: Date) {
+		this.dataGrid.instance.filter([
+			['ModifiedTime', '>=', startTime],
+			'and',
+			['ModifiedTime', '<=', endTime],
+		])
+	}
+
+	ngOnInit(): void {
+		this.getGridSize()
+		this.getFileName()
+	}
+	ngOnDestroy(): void {
+		window.onresize = null
 	}
 }

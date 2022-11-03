@@ -26,6 +26,7 @@ import { LoginDialogComponent } from './dialogs/login-dialog.component'
 import { UnitSelectorComponent } from './forms/unit-selector.component'
 import { ProfileDialogComponent } from './dialogs/profile-dialog.component'
 import { CpsReferenceDialogComponent } from './dialogs/cps-reference-dialog.component'
+import { UnusedListDialogComponent } from './dialogs/unused-list-dialog.component'
 import { UserFormComponent } from './forms/user-form.component'
 import { SettingsModule } from '../settings/settings.module'
 import { ColorPickerComponent } from './forms/color-picker.component'
@@ -40,9 +41,9 @@ const inOutModules = [FormsModule, ReactiveFormsModule]
 		GnbStatesComponent,
 		GnbActionsComponent,
 		GnbIndicatorsComponent,
-        DialogBaseComponent,
-        SuccessDialogComponent,
-        VerifyDialogComponent,
+		DialogBaseComponent,
+		SuccessDialogComponent,
+		VerifyDialogComponent,
 		ErrorDialogComponent,
 		ConfirmDialogComponent,
 		AlarmDialogComponent,
@@ -51,8 +52,9 @@ const inOutModules = [FormsModule, ReactiveFormsModule]
 		LegendDialogComponent,
 		LoginDialogComponent,
 		UnitSelectorComponent,
-        ProfileDialogComponent,
-        CpsReferenceDialogComponent,
+		ProfileDialogComponent,
+		CpsReferenceDialogComponent,
+		UnusedListDialogComponent,
 		UserFormComponent,
 		ColorPickerComponent,
 		UnitListSelectorComponent,
@@ -79,17 +81,17 @@ const inOutModules = [FormsModule, ReactiveFormsModule]
 		SharedDevextremeModule,
 		MdePopoverModule,
 		DialogBaseComponent,
-        TranslateModule,
-        SuccessDialogComponent,
-        VerifyDialogComponent,
+		TranslateModule,
+		SuccessDialogComponent,
+		VerifyDialogComponent,
 		ErrorDialogComponent,
 		ConfirmDialogComponent,
 		AlarmDialogComponent,
 		EnumStringPipe,
 		LoginDialogComponent,
 		UnitSelectorComponent,
-        ProfileDialogComponent,
-        CpsReferenceDialogComponent,
+		ProfileDialogComponent,
+		CpsReferenceDialogComponent,
 		UserFormComponent,
 		ColorPickerComponent,
 		UnitListSelectorComponent,

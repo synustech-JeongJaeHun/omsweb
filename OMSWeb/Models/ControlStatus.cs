@@ -46,6 +46,11 @@ namespace OMSWeb.Models
 
     }
 
+    public class UnuseListState : UnuseListStatusEntity
+    {
+
+    }
+
     public class DioState : DioEntity
     {
     }

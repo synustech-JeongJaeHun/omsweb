@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using Dapper;
 using Microsoft.Extensions.Configuration;
-using OMSWeb.Models;
 using OMSWeb.Models.Entities;
 
 namespace OMSWeb.Repositories
@@ -13,88 +12,112 @@ namespace OMSWeb.Repositories
         {
         }
 
-        public IQueryable<OrderHistoryEntity> QueryOrders(DateTimeOffset from, DateTimeOffset to)
-        {
-            string sql = @"
-                SELECT OD.id, OD.origin, OD.history_source_id, OD.logical_id, 
-                CASE
-                  WHEN OD.time_failed IS NOT NULL THEN 'FAILED'
-                  WHEN OD.time_aborted IS NOT NULL THEN 'ABORTED'
-                  WHEN OD.time_completed IS NOT NULL THEN 'COMPLETED'
-                  WHEN OD.time_unload_completed IS NOT NULL THEN 'UNLOADED'
-                  WHEN OD.time_unload_started IS NOT NULL THEN 'UNLOADING'
-                  WHEN OD.time_load_completed IS NOT NULL THEN 'LOADED'
-                  WHEN OD.time_load_started IS NOT NULL THEN 'LOADING'
-                  WHEN OD.time_vehicle_arrived IS NOT NULL THEN 'ARRIVED'
-                  WHEN OD.time_assigned IS NOT NULL THEN 'ASSIGNED'
-                  WHEN OD.time_assigned IS NULL THEN 'UNASSIGNED'
-                END AS state,
-                --OD.location_pickup, 
-                --OD.location_dropoff, 
-                --OD.location_move, 
-                CASE
-		            WHEN OD.location_pickup LIKE '%s%' THEN	(SELECT logical_Id FROM stations WHERE concat('s', cast(id as varchar)) = OD.location_pickup)
-		            WHEN OD.location_pickup LIKE '%b%' THEN	(SELECT logical_Id FROM buffers WHERE concat('b', cast(id as varchar)) = OD.location_pickup)
-                    WHEN OD.location_pickup LIKE '%v%' THEN	(SELECT logical_Id FROM vehicles WHERE concat('v', cast(id as varchar)) = OD.location_pickup)
-                    WHEN OD.location_pickup IS NULL AND OD.location_dropoff IS NOT NULL THEN VR.logical_id
-		            ELSE OD.location_pickup
-	            EnD AS location_pickup,
-	            CASE
-		            WHEN OD.location_dropoff LIKE '%s%' THEN (SELECT logical_Id FROM stations WHERE concat('s', cast(id as varchar)) = OD.location_dropoff)
-		            WHEN OD.location_dropoff LIKE '%b%' THEN (SELECT logical_Id FROM buffers WHERE concat('b', cast(id as varchar)) = OD.location_dropoff)
-		            ELSE OD.location_dropoff
-	            EnD AS location_dropoff,
-	            CASE
-		            WHEN OD.location_move LIKE '%s%' THEN (SELECT logical_Id FROM stations WHERE concat('s', cast(id as varchar)) = OD.location_move)
-		            WHEN OD.location_move LIKE '%b%' THEN (SELECT logical_Id FROM buffers WHERE concat('b', cast(id as varchar)) = OD.location_move)
-		            ELSE OD.location_move
-	            EnD AS location_move,
 
-                OD.priority, 
-                VR.logical_id As vehicle_id, 
-                OD.carrier_label, OD.time_created, OD.time_assigned, OD.time_vehicle_arrived, OD.time_load_started, OD.time_load_completed, 
-                OD.time_unload_started, OD.time_unload_completed, OD.time_completed, OD.time_aborted, OD.time_failed, 
-                CASE
-                    WHEN OD.time_created IS NOT NULL AND OD.time_completed IS NOT NULL THEN extract('epoch' from OD.time_completed - OD.time_created) 
-                    WHEN OD.time_created IS NOT NULL AND OD.time_aborted IS NOT NULL THEN extract('epoch' from OD.time_aborted - OD.time_created) 
-                    WHEN OD.time_created IS NOT NULL AND OD.time_failed IS NOT NULL THEN extract('epoch' from OD.time_failed - OD.time_created) 
-                    ELSE 0
-                END As age,
-                OD.distance_pickup, OD.distance_deliver AS distance_dropoff, OD.distance_move, OD.assignment_type, OD.assignment_details,
-                OD.load_retry_cnt, OD.unload_retry_cnt
+        public int QueryOrdersCount(DateTimeOffset from, DateTimeOffset to)
+        {
+            var sql2 = @"
+                SELECT 
+                    count(*)
                 FROM order_history AS OD
                 INNER JOIN (
                     SELECT history_source_id AS order_id, max(history_change_time) AS last_updated
                     FROM order_history
-                    WHERE @from <= time_created and time_created <= @to  
+                    WHERE @from <= time_created and time_created <= @to
                     GROUP BY history_source_id
                 ) AS LAST_OD
                 ON OD.history_source_id = LAST_OD.order_id AND OD.history_change_time = LAST_OD.last_updated
-                LEFT OUTER JOIN vehicle_reg AS VR
-                    ON OD.vehicle_id = VR.id
-                  ";
+                    ";
+            var sql = @"
+                SELECT 
+                    count(DISTINCT history_source_id)
+                FROM order_history AS OD
+                WHERE @from <= time_created and time_created <= @to
+                    ";
 
-            IQueryable<OrderHistoryEntity> result;
+            int result = 0;
             using (var conn = ConnectTrack())
             {
-                result = conn.Query<OrderHistoryEntity>(sql, new
-                {
-                    from = from,
-                    to = to
-                }).AsQueryable();
+                result = conn.QueryFirst<int>(sql, new { from, to });
             }
             return result;
         }
 
-        public IQueryable<VehicleHistoryEntity> QueryVehicles(DateTimeOffset from, DateTimeOffset to)
+        public IQueryable<OrderHistoryEntity> QueryOrders(DateTimeOffset from, DateTimeOffset to, int skip, int take)
+        {
+            string sql = @"
+                SELECT OD.id, OD.origin, OD.history_source_id, OD.logical_id, 
+                    CASE
+                      WHEN OD.time_failed IS NOT NULL THEN 'FAILED'
+                      WHEN OD.time_aborted IS NOT NULL THEN 'ABORTED'
+                      WHEN OD.time_completed IS NOT NULL THEN 'COMPLETED'
+                      WHEN OD.time_unload_completed IS NOT NULL THEN 'UNLOADED'
+                      WHEN OD.time_unload_started IS NOT NULL THEN 'UNLOADING'
+                      WHEN OD.time_load_completed IS NOT NULL THEN 'LOADED'
+                      WHEN OD.time_load_started IS NOT NULL THEN 'LOADING'
+                      WHEN OD.time_vehicle_arrived IS NOT NULL THEN 'ARRIVED'
+                      WHEN OD.time_assigned IS NOT NULL THEN 'ASSIGNED'
+                      WHEN OD.time_assigned IS NULL THEN 'UNASSIGNED'
+                    END AS state,
+                    --OD.location_pickup, 
+                    --OD.location_dropoff, 
+                    --OD.location_move, 
+                    CASE
+		                WHEN OD.location_pickup LIKE '%s%' THEN	(SELECT logical_Id FROM stations WHERE concat('s', cast(id as varchar)) = OD.location_pickup)
+		                WHEN OD.location_pickup LIKE '%b%' THEN	(SELECT logical_Id FROM buffers WHERE concat('b', cast(id as varchar)) = OD.location_pickup)
+                        WHEN OD.location_pickup LIKE '%v%' THEN	(SELECT logical_Id FROM vehicles WHERE concat('v', cast(id as varchar)) = OD.location_pickup)
+                        WHEN OD.location_pickup IS NULL AND OD.location_dropoff IS NOT NULL THEN VR.logical_id
+		                ELSE OD.location_pickup
+	                EnD AS location_pickup,
+	                CASE
+		                WHEN OD.location_dropoff LIKE '%s%' THEN (SELECT logical_Id FROM stations WHERE concat('s', cast(id as varchar)) = OD.location_dropoff)
+		                WHEN OD.location_dropoff LIKE '%b%' THEN (SELECT logical_Id FROM buffers WHERE concat('b', cast(id as varchar)) = OD.location_dropoff)
+		                ELSE OD.location_dropoff
+	                EnD AS location_dropoff,
+	                CASE
+		                WHEN OD.location_move LIKE '%s%' THEN (SELECT logical_Id FROM stations WHERE concat('s', cast(id as varchar)) = OD.location_move)
+		                WHEN OD.location_move LIKE '%b%' THEN (SELECT logical_Id FROM buffers WHERE concat('b', cast(id as varchar)) = OD.location_move)
+		                ELSE OD.location_move
+	                EnD AS location_move,
+
+                    OD.priority, 
+                    VR.logical_id As vehicle_id, 
+                    OD.carrier_label, OD.time_created, OD.time_assigned, OD.time_vehicle_arrived, OD.time_load_started, OD.time_load_completed, 
+                    OD.time_unload_started, OD.time_unload_completed, OD.time_completed, OD.time_aborted, OD.time_failed, 
+                    CASE
+                        WHEN OD.time_created IS NOT NULL AND OD.time_completed IS NOT NULL THEN extract('epoch' from OD.time_completed - OD.time_created) 
+                        WHEN OD.time_created IS NOT NULL AND OD.time_aborted IS NOT NULL THEN extract('epoch' from OD.time_aborted - OD.time_created) 
+                        WHEN OD.time_created IS NOT NULL AND OD.time_failed IS NOT NULL THEN extract('epoch' from OD.time_failed - OD.time_created) 
+                        ELSE 0
+                    END As age,
+                    OD.distance_pickup, OD.distance_deliver AS distance_dropoff, OD.distance_move, OD.assignment_type, OD.assignment_details,
+                    OD.load_retry_cnt, OD.unload_retry_cnt
+                FROM order_history AS OD
+                INNER JOIN (
+                    SELECT history_source_id AS order_id, max(history_change_time) AS last_updated
+                    FROM order_history
+                    WHERE @from <= time_created and time_created <= @to
+                    GROUP BY history_source_id
+                    LIMIT @take OFFSET @skip
+                ) AS LAST_OD
+                ON OD.history_source_id = LAST_OD.order_id AND OD.history_change_time = LAST_OD.last_updated
+                LEFT OUTER JOIN vehicle_reg AS VR
+                    ON OD.vehicle_id = VR.id
+                    ";
+
+            IQueryable<OrderHistoryEntity> result;
+            using (var conn = ConnectTrack())
+            {
+                result = conn.Query<OrderHistoryEntity>(sql, new { from, to, skip, take }).AsQueryable();
+            }
+            return result;
+        }
+
+
+        public int QueryVehiclesCount(DateTimeOffset from, DateTimeOffset to)
         {
             var sql = @"
-                SELECT
-                VH.history_change_time, VH.id, VH.history_source_id,
-                VH.physical_id, VH.logical_id, 
-                VH.moving_state, 
-                VH.distance_total, VH.runtime_total, 
-                VH.type, VH.map_db
+                SELECT 
+                    count(*)
                 FROM vehicle_history AS VH
                 INNER JOIN (
                     SELECT history_source_id, max(id) AS max_id
@@ -103,22 +126,72 @@ namespace OMSWeb.Repositories
                     WHERE @from <= history_change_time and history_change_time <= @to
                     GROUP BY history_source_id
                 ) AS LVH
-                ON VH.id = LVH.max_id    
-                ORDER BY VH.id        
-                  ";
-            IQueryable<VehicleHistoryEntity> result;
+                ON VH.id = LVH.max_id   
+                    ";
+
+            int result = 0;
             using (var conn = ConnectTrack())
             {
-                result = conn.Query<VehicleHistoryEntity>(sql, new
-                {
-                    from = from,
-                    to = to
-                }).AsQueryable();
+                result = conn.QueryFirst<int>(sql, new { from, to });
             }
             return result;
         }
 
-        public IQueryable<AlarmHistory> QueryAlarms(DateTimeOffset from, DateTimeOffset to)
+        public IQueryable<VehicleHistoryEntity> QueryVehicles(DateTimeOffset from, DateTimeOffset to, int skip, int take)
+        {
+            var sql = @"
+                SELECT
+                    VH.history_change_time, VH.id, VH.history_source_id,
+                    VH.physical_id, VH.logical_id, 
+                    VH.moving_state, 
+                    VH.distance_total, VH.runtime_total, 
+                    VH.type, VH.map_db
+                FROM vehicle_history AS VH
+                INNER JOIN (
+                    SELECT history_source_id, max(id) AS max_id
+                    FROM vehicle_history
+                    --*where_condition*
+                    WHERE @from <= history_change_time and history_change_time <= @to
+                    GROUP BY history_source_id
+                    LIMIT @take OFFSET @skip
+                ) AS LVH
+                ON VH.id = LVH.max_id    
+                ORDER BY VH.id     
+                    ";
+            IQueryable<VehicleHistoryEntity> result;
+            using (var conn = ConnectTrack())
+            {
+                result = conn.Query<VehicleHistoryEntity>(sql, new { from, to, skip, take }).AsQueryable();
+            }
+            return result;
+        }
+
+
+        public int QueryAlarmsCount(DateTimeOffset from, DateTimeOffset to)
+        {
+            var sql = @"
+                SELECT 
+                    count(*)
+                FROM vehicle_alarms AS VA
+                LEFT OUTER JOIN vehicle_reg VR
+                    ON VA.vehicle_id = VR.id
+                LEFT OUTER JOIN vehicle_errors VE
+                    ON VA.error_code = VE.id
+                LEFT OUTER JOIN annotations AN
+                    ON VA.error_code = AN.reference_id and AN.reference_table = 'vehicle_errors'
+                WHERE 
+                    @from <= VA.time and VA.time <= @to
+                    ";
+
+            int result = 0;
+            using (var conn = ConnectTrack())
+            {
+                result = conn.QueryFirst<int>(sql, new { from, to });
+            }
+            return result;
+        }
+
+        public IQueryable<AlarmHistory> QueryAlarms(DateTimeOffset from, DateTimeOffset to, int skip, int take)
         {
             var sql = @"
                 SELECT VA.id, VA.time, VA.error_code, VA.vehicle_id, VR.logical_id AS vehicle_logical_id,
@@ -136,20 +209,35 @@ namespace OMSWeb.Repositories
                 WHERE 
                     @from <= VA.time and VA.time <= @to
                 ORDER BY VA.id desc
-                  ";
+                LIMIT @take OFFSET @skip
+                    ";
             IQueryable<AlarmHistory> result;
             using (var conn = ConnectTrack())
             {
-                result = conn.Query<AlarmHistory>(sql, new
-                {
-                    from = from,
-                    to = to
-                }).AsQueryable();
+                result = conn.Query<AlarmHistory>(sql, new { from, to, skip, take }).AsQueryable();
             }
             return result;
         }
 
-        public IQueryable<AlertEntity> QueryAlerts(DateTimeOffset from, DateTimeOffset to)
+        public int QueryAlertsCount(DateTimeOffset from, DateTimeOffset to)
+        {
+            var sql = @"
+                SELECT 
+                    count(*)
+                FROM alerts
+                WHERE 
+                    @from <= time AND time <= @to
+                    ";
+
+            int result = 0;
+            using (var conn = ConnectTrack())
+            {
+                result = conn.QueryFirst<int>(sql, new { from, to });
+            }
+            return result;
+        }
+
+        public IQueryable<AlertEntity> QueryAlerts(DateTimeOffset from, DateTimeOffset to, int skip, int take)
         {
             var sql = @"
                 SELECT 
@@ -158,16 +246,62 @@ namespace OMSWeb.Repositories
                 WHERE 
                     @from <= ALT.time and ALT.time <= @to
                 ORDER BY ALT.id desc
-                ";
+                LIMIT @take OFFSET @skip
+                    ";
 
             IQueryable<AlertEntity> result;
             using (var conn = ConnectTrack())
             {
-                result = conn.Query<AlertEntity>(sql, new
-                {
-                    from = from,
-                    to = to
-                }).AsQueryable();
+                result = conn.Query<AlertEntity>(sql, new { from, to, skip, take }).AsQueryable();
+            }
+            return result;
+        }
+
+        public int QueryNacksCount(DateTimeOffset from, DateTimeOffset to)
+        {
+            var sql = @"
+                SELECT 
+                    count(*)
+                FROM rcmd_history
+                WHERE 
+                    @from <= time_modified AND time_modified <= @to
+                    ";
+
+            int result = 0;
+            using (var conn = ConnectTrack())
+            {
+                result = conn.QueryFirst<int>(sql, new { from, to });
+            }
+            return result;
+        }
+
+        public IQueryable<NackHistoryEntity> QueryNacks(DateTimeOffset from, DateTimeOffset to, int skip, int take)
+        {
+            var sql = @"
+                SELECT 
+                    CASE WHEN cmd_id is null THEN '' ELSE cmd_id END as CommandID, 
+                    CASE WHEN time_modified is null THEN now() ELSE time_modified END as ModifiedTime, 
+                    CASE WHEN origin is null THEN '' ELSE origin END as Origin,
+                    CASE WHEN data::json->>'rcmd' is null THEN data::json->>'' ELSE data::json->>'rcmd' END as Rcmd,
+                    CASE WHEN data::json->>'request' is null THEN data::json->>'' ELSE data::json->>'request' END as Request,
+                    CASE WHEN data::json->>'sourceName' is null THEN data::json->>'' ELSE data::json->>'sourceName' END as SourceName,
+                    CASE WHEN data::json->>'destName' is null THEN data::json->>'' ELSE data::json->>'destName' END as DestName,
+                    CASE WHEN data::json->>'carrierID' is null THEN data::json->>'' ELSE data::json->>'carrierID' END as CarrierID,
+                    CASE WHEN data::json->>'newCarrierID' is null THEN data::json->>'' ELSE data::json->>'newCarrierID' END as NewCarrierID,
+                    CASE WHEN data::json->>'nack' is null THEN data::json->>'' ELSE data::json->>'nack' END as Nack,
+                    CASE WHEN data::json->>'nackReason' is null THEN data::json->>'' ELSE data::json->>'nackReason' END as NackReason,
+	                CASE WHEN data::json->>'nackParam' is null THEN data::json->>'' ELSE data::json->>'nackParam' END as NackParam
+                FROM rcmd_history
+                WHERE 
+                    @from <= time_modified AND time_modified <= @to
+                ORDER BY ModifiedTime desc
+                LIMIT @take OFFSET @skip
+                    ";
+
+            IQueryable<NackHistoryEntity> result;
+            using (var conn = ConnectTrack())
+            {
+                result = conn.Query<NackHistoryEntity>(sql, new { from, to, skip, take }).AsQueryable();
             }
             return result;
         }

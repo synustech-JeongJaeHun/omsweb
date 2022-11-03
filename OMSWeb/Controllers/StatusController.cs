@@ -106,6 +106,12 @@ namespace OMSWeb.Controllers
             return DataSourceLoader.Load(_statusSvc.QueryClusterStates(), loadOptions);
         }
 
+        [HttpGet("unuseLists")]
+        public object GetUnuseListStatus(DataSourceLoadOptions loadOptions)
+        {
+            return DataSourceLoader.Load(_statusSvc.QueryUnuseListStates(), loadOptions);
+        }
+
         [HttpGet("dio")]
         public object GetVehicleDio(DataSourceLoadOptions loadOptions)
         {

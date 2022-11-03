@@ -6,6 +6,7 @@ import { TransferHistoryComponent } from './transfer/transfer-history.component'
 import { VehicleHistoryComponent } from './vehicles/vehicle-history.component'
 import { AlarmHistoryComponent } from './alarms/alarm-history.component'
 import { WarningHistoryComponent } from './warnings/warning-history.component'
+import { NackHistoryComponent } from './nack/nack-history.component'
 const routes: Routes = [
 	{
 		path: '',
@@ -15,6 +16,7 @@ const routes: Routes = [
 			{ path: 'vehicles', component: VehicleHistoryComponent },
 			{ path: 'alarms', component: AlarmHistoryComponent },
 			{ path: 'warnings', component: WarningHistoryComponent },
+			{ path: 'nack', component: NackHistoryComponent },
 			{ path: '', redirectTo: 'transfer', pathMatch: 'full' },
 		],
 	},

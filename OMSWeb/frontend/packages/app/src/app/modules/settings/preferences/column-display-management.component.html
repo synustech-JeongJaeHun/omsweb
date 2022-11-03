@@ -533,6 +533,10 @@
 		</div>
 	</div>
 
+	<div class="table-columns-entries-container">
+		<div>&nbsp;</div>
+	</div>
+
 	<!-- Cps -->
 	<div class="table-format">
 		<div class="table-columns-entries-container">
@@ -742,6 +746,9 @@
 			</div>
 		</div>
 	</div>
+	<div class="table-columns-entries-container">
+		<div>&nbsp;</div>
+	</div>
 	<div class="table-format">
 		<div class="table-columns-entries-container">
 			<div>
@@ -832,6 +839,9 @@
 			</div>
 		</div>
 	</div>
+	<div class="table-columns-entries-container">
+		<div>&nbsp;</div>
+	</div>
 	<div class="table-format">
 		<div class="table-columns-entries-container">
 			<div>
@@ -886,6 +896,99 @@
 								changeTableColumnOrder(
 									'history',
 									'alarms_order',
+									column.name,
+									'down'
+								)
+							"
+						>
+							<line
+								x1="3"
+								y1="5"
+								x2="10"
+								y2="17"
+								stroke="black"
+								stroke-width="2.5"
+								shape-rendering="geometricPrecision"
+							/>
+							<line
+								x1="10"
+								y1="17"
+								x2="17"
+								y2="5"
+								stroke="black"
+								stroke-width="2.5"
+								shape-rendering="geometricPrecision"
+							/>
+						</svg>
+						<input
+							type="checkbox"
+							color="primary"
+							[title]="column.i18nLabel | translate"
+							[checked]="getCheckedState('history', column.name)"
+							(change)="onChangeTable('history', column.name, $event)"
+						/>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="table-columns-entries-container">
+		<div>&nbsp;</div>
+	</div>
+	<div class="table-format">
+		<div class="table-columns-entries-container">
+			<div>
+				<mat-label>{{ 'names.nack' | translate }}</mat-label>
+			</div>
+		</div>
+		<div class="table-columns-sub-entries-container">
+			<div
+				*ngFor="let column of preference.historyTables.nacks_order"
+				class="table-columns-sub-container"
+			>
+				<div class="table-columns-entries-container">
+					<div>
+						<mat-label>{{ column.i18nLabel | translate }}</mat-label>
+					</div>
+					<div>
+						<svg
+							height="13px"
+							viewBox="0 0 20 20"
+							(click)="
+								changeTableColumnOrder(
+									'history',
+									'nacks_order',
+									column.name,
+									'up'
+								)
+							"
+						>
+							<line
+								x1="3"
+								y1="17"
+								x2="10"
+								y2="5"
+								stroke="black"
+								stroke-width="2.5"
+								shape-rendering="geometricPrecision"
+							/>
+							<line
+								x1="10"
+								y1="5"
+								x2="17"
+								y2="17"
+								stroke="black"
+								stroke-width="2.5"
+								shape-rendering="geometricPrecision"
+							/>
+						</svg>
+						<svg
+							height="13px"
+							viewBox="0 0 20 20"
+							(click)="
+								changeTableColumnOrder(
+									'history',
+									'nacks_order',
 									column.name,
 									'down'
 								)
