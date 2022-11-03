@@ -130,7 +130,12 @@ export class PlaybackMapToolbarComponent implements OnInit, OnDestroy {
 		})
 	}
 
-	onAlertDialog(closable = true) {
+	/**
+	 * @summary alertDlg를 open 하게 해주는 메서드
+	 * @param closable - default: true, false일 경우 이미 창이 켜져 있으면 close 하지 않고 open 상태 유지
+	 * @returns void
+	 */
+	onAlertDialog(closable = true): void {
 		if (this._alertDlg && this._alertDlg.getState() === MatDialogState.OPEN) {
 			if (closable) this._alertDlg.close()
 			return
@@ -175,6 +180,9 @@ export class PlaybackMapToolbarComponent implements OnInit, OnDestroy {
 		// this._bfStatusDlg &&
 		//   this._bfStatusDlg.getState() === MatDialogState.OPEN &&
 		//   this._bfStatusDlg.close();
+		this._alertDlg &&
+			this._alertDlg.getState() === MatDialogState.OPEN &&
+			this._alertDlg.close()
 	}
 
 	hasPermission(permission: number): boolean {
