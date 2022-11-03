@@ -113,7 +113,6 @@ export class PlaybackPlayService {
 
 		this.currentRemainedAlarms = alarms.remainedAlarms
 		this.alarmChanges = alarms.alarmChanges
-		this.currentAlarms = [...alarms.remainedAlarms]
 	}
 
 	private async fetchEvents(from: Date, to?: Date) {

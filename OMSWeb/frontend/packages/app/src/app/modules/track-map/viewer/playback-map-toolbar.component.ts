@@ -74,7 +74,9 @@ export class PlaybackMapToolbarComponent implements OnInit, OnDestroy {
 		return this.showToolName ? '164px' : '36px'
 	}
 	get badgeCount(): string {
-		const alerts = this.notifySvc.alarmsDataSource().items().length
+		// console.log('testing', this.playbackSvc.alarmChanges)
+		// const alerts = this.notifySvc.alarmsDataSource().items().length
+		const alerts = this.playbackSvc.currentAlarms.length
 		if (alerts) return String(alerts)
 		return ''
 	}

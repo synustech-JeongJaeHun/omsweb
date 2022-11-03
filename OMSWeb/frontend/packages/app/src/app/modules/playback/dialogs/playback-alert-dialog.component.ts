@@ -1,6 +1,7 @@
 import { Component, ViewChild } from '@angular/core'
 import { TranslateService } from '@ngx-translate/core'
 import { IVehicleAlarm } from '@oms/root/models/notification.model'
+import { RemainedAlarm } from '@oms/root/models/playback.model'
 import { AuthService } from '@oms/root/services/auth.service'
 import { MessagesService } from '@oms/root/services/messages.service'
 import { NotificationsService } from '@oms/root/services/notifications.service'
@@ -14,18 +15,17 @@ import DataSource from 'devextreme/data/data_source'
 })
 export class PlaybackAlertDialogComponent {
 	public isLoading = false
-	dataSource: DataSource
 	currentItem: IVehicleAlarm
 	selectedIds: number[] = []
+	dataSource: RemainedAlarm[] = []
 	constructor(
-		public playService: PlaybackPlayService,
+		public playbackSvc: PlaybackPlayService,
 		private auth: AuthService,
 		private messageSvc: MessagesService,
 		private notifySvc: NotificationsService,
 		private t$: TranslateService,
 	) {
-		// TOBE: dataSource를 플레이백 플레이 서비스의 것으로 연결
-		this.dataSource = this.notifySvc.alarmsDataSource()
+		this.dataSource = this.playbackSvc.currentAlarms
 	}
 	transform(value: number): string {
 		if (value === undefined) return ''
