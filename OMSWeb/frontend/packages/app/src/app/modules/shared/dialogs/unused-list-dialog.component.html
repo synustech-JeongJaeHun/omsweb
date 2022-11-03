@@ -1,0 +1,78 @@
+<oms-dialog-base [title]="'names.unusedList' | translate">
+	<ng-container class="dialog-layout">
+		<div mat-dialog-content>
+			<div class="grid-actions" *ngIf="hasControlAccess"></div>
+
+			<dx-data-grid
+				[dataSource]="dataSource"
+				[remoteOperations]="true"
+				[repaintChangesOnly]="true"
+				[columnAutoWidth]="false"
+				[showBorders]="false"
+				[highlightChanges]="true"
+				[showColumnLines]="true"
+				[showRowLines]="true"
+				[headerFilter]="false"
+				[sorting]="true"
+				height="250"
+				allowColumnResizing="true"
+			>
+				<dxo-sorting mode="single"></dxo-sorting>
+				<dxo-paging [pageSize]="50"></dxo-paging>
+				<dxo-pager
+					[showPageSizeSelector]="true"
+					[allowedPageSizes]="[50, 100, 200]"
+					[showInfo]="true"
+					visible="true"
+				>
+				</dxo-pager>
+				<dxo-load-panel [enabled]="false"></dxo-load-panel>
+				<dxo-filter-row [visible]="true"></dxo-filter-row>
+
+				<dxi-column
+					dataType="string"
+					dataField="type"
+					[caption]="'names.type' | translate"
+					width="70"
+				></dxi-column>
+				<dxi-column
+					dataType="string"
+					dataField="onlineName"
+					[caption]="'names.logicalId' | translate"
+					width="100"
+				></dxi-column>
+				<dxi-column
+					dataType="string"
+					dataField="user"
+					[caption]="'names.user' | translate"
+					width="80"
+				></dxi-column>
+				<dxi-column
+					dataType="string"
+					dataField="comments"
+					[caption]="'names.note' | translate"
+					width="120"
+				></dxi-column>
+				<dxi-column
+					dataType="datetime"
+					dataField="unuseTime"
+					sortOrder="desc"
+					[format]="dateTimeFormat"
+					[caption]="'names.timeUnused' | translate"
+					width="120"
+				></dxi-column>
+				<dxi-column
+					type="buttons"
+					[caption]="'names.location' | translate"
+					width="80"
+				>
+					<dxi-button
+						[text]="'names.view' | translate"
+						[onClick]="handleClickView"
+					>
+					</dxi-button>
+				</dxi-column>
+			</dx-data-grid>
+		</div>
+	</ng-container>
+</oms-dialog-base>

@@ -77,5 +77,14 @@ export class StatusService {
 			}),
 			reshapeOnPush: true,
 		})
-	}
+    }
+    unuseStatusDataSource(): DataSource {
+      return new DataSource({
+        store: AspNetData.createStore({
+          key: 'id',
+          loadUrl: `${this.baseUrl}/unuseLists`,
+        }),
+        reshapeOnPush: true,
+      })
+    }
 }

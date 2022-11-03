@@ -1,12 +1,8 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using DevExtreme.AspNet.Data;
+using DevExtreme.AspNet.Data.ResponseModel;
 using DevExtreme.AspNet.Mvc;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Linq;
 using OMSWeb.Logger;
 using OMSWeb.Services;
 
@@ -27,7 +23,16 @@ namespace OMSWeb.Controllers
         {
             Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: history-transfers");
 
-            return DataSourceLoader.Load(_historySvc.QueryOrders(loadOptions), loadOptions);
+            (DateTimeOffset from, DateTimeOffset to, int skip, int take) = _historySvc.GetLoadFilters(loadOptions);
+            Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"PACKET: from={from} to={to} skip={skip} take={take}");
+
+            int totalCount = _historySvc.QueryOrdersCount(from, to, skip, take);
+            loadOptions.Skip = 0;
+
+            LoadResult loadResult = DataSourceLoader.Load(_historySvc.QueryOrders(from, to, skip, take), loadOptions);
+            loadResult.totalCount = totalCount;
+
+            return loadResult;
         }
 
         [HttpGet("vehicles")]
@@ -35,7 +40,16 @@ namespace OMSWeb.Controllers
         {
             Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: history-vehicles");
 
-            return DataSourceLoader.Load(_historySvc.QueryVehicles(loadOptions), loadOptions);
+            (DateTimeOffset from, DateTimeOffset to, int skip, int take) = _historySvc.GetLoadFilters(loadOptions);
+            Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"PACKET: from={from} to={to} skip={skip} take={take}");
+
+            int totalCount = _historySvc.QueryVehiclesCount(from, to, skip, take);
+            loadOptions.Skip = 0;
+
+            LoadResult loadResult = DataSourceLoader.Load(_historySvc.QueryVehicles(from, to, skip, take), loadOptions);
+            loadResult.totalCount = totalCount;
+
+            return loadResult;
         }
 
         [HttpGet("alarms")]
@@ -43,7 +57,16 @@ namespace OMSWeb.Controllers
         {
             Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: history-alarms");
 
-            return DataSourceLoader.Load(_historySvc.QueryAlarms(loadOptions), loadOptions);
+            (DateTimeOffset from, DateTimeOffset to, int skip, int take) = _historySvc.GetLoadFilters(loadOptions);
+            Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"PACKET: from={from} to={to} skip={skip} take={take}");
+
+            int totalCount = _historySvc.QueryAlarmsCount(from, to, skip, take);
+            loadOptions.Skip = 0;
+
+            LoadResult loadResult = DataSourceLoader.Load(_historySvc.QueryAlarms(from, to, skip, take), loadOptions);
+            loadResult.totalCount = totalCount;
+
+            return loadResult;
         }
 
         [HttpGet("alerts")]
@@ -51,7 +74,33 @@ namespace OMSWeb.Controllers
         {
             Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: history-warnings");
 
-            return DataSourceLoader.Load(_historySvc.QueryAlerts(loadOptions), loadOptions);
+            (DateTimeOffset from, DateTimeOffset to, int skip, int take) = _historySvc.GetLoadFilters(loadOptions);
+            Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"PACKET: from={from} to={to} skip={skip} take={take}");
+
+            int totalCount = _historySvc.QueryAlertsCount(from, to, skip, take);
+            loadOptions.Skip = 0;
+
+            LoadResult loadResult = DataSourceLoader.Load(_historySvc.QueryAlerts(from, to, skip, take), loadOptions);
+            loadResult.totalCount = totalCount;
+
+            return loadResult;
+        }
+
+        [HttpGet("nacks")]
+        public object GetNacks(DataSourceLoadOptions loadOptions)
+        {
+            Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: history-nacks");
+
+            (DateTimeOffset from, DateTimeOffset to, int skip, int take) = _historySvc.GetLoadFilters(loadOptions);
+            Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"PACKET: from={from} to={to} skip={skip} take={take}");
+
+            int totalCount = _historySvc.QueryNacksCount(from, to, skip, take);
+            loadOptions.Skip = 0;
+
+            LoadResult loadResult = DataSourceLoader.Load(_historySvc.QueryNacks(from, to, skip, take), loadOptions);
+            loadResult.totalCount = totalCount;
+
+            return loadResult;
         }
     }
 }

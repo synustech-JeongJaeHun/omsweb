@@ -43,10 +43,10 @@
 		[maintenanceModeVehicleColor]="tmSetting.maintenanceModeVehicleColor"
 		[manualModeVehicleColor]="tmSetting.manualModeVehicleColor"
 		[idleModeVehicleColor]="tmSetting.idleModeVehicleColor"
-    [homeIvrModeVehicleColor]="tmSetting.homeIvrModeVehicleColor"
-    [runningModeVehicleColor]="tmSetting.runningModeVehicleColor"
-    [zcuBlockedVehicleColor]="tmSetting.zcuBlockedVehicleColor"
-    [sensorStoppedVehicleColor]="tmSetting.sensorStoppedVehicleColor"
+		[homeIvrModeVehicleColor]="tmSetting.homeIvrModeVehicleColor"
+		[runningModeVehicleColor]="tmSetting.runningModeVehicleColor"
+		[zcuBlockedVehicleColor]="tmSetting.zcuBlockedVehicleColor"
+		[sensorStoppedVehicleColor]="tmSetting.sensorStoppedVehicleColor"
 		[cargoLoadingColor]="tmSetting.cargoLoadingColor"
 		[cargoFullColor]="tmSetting.cargoFullColor"
 		[cargoUnloadingColor]="tmSetting.cargoUnloadingColor"
@@ -54,7 +54,7 @@
 		[fireshutterClosedColor]="tmSetting.fireshutterClosedColor"
 		[mtlUnuseColor]="tmSetting.mtlUnuseColor"
 		[mtlUseColor]="tmSetting.mtlUseColor"
-    [vehicleSecondaryContent]="tmSetting.vehicleSecondaryContent"
+		[vehicleSecondaryContent]="tmSetting.vehicleSecondaryContent"
 		(mouseoverOnObject)="onMouseoverTM($event)"
 		(mouseleaveOnObject)="onMouseleaveTM($event)"
 		(mainClickOnObject)="onFocus($event)"
@@ -184,10 +184,10 @@
 			<div class="value">{{ tooltipObject?.value.pointId }}</div>
 			<div class="name">{{ 'names.group' | translate }}</div>
 			<div class="value">{{ tooltipObject?.value.groups.join(', ') }}</div>
-      <ng-container *ngIf="tooltipObject?.value?.note">
-        <div class="name">{{ 'names.note' | translate }}</div>
-        <div class="value">{{ tooltipObject?.value?.note }}</div>
-      </ng-container>
+			<ng-container *ngIf="tooltipObject?.value?.note">
+				<div class="name">{{ 'names.note' | translate }}</div>
+				<div class="value">{{ tooltipObject?.value?.note }}</div>
+			</ng-container>
 		</div>
 	</dx-tooltip>
 </ng-template>
@@ -211,10 +211,10 @@
 			<div class="value">{{ tooltipObject?.value.curPoint }}</div>
 			<div class="name">{{ 'names.group' | translate }}</div>
 			<div class="value">{{ tooltipObject?.value.groups.join(', ') }}</div>
-      <ng-container *ngIf="tooltipObject?.value?.note">
-        <div class="name">{{ 'names.note' | translate }}</div>
-        <div class="value">{{ tooltipObject?.value?.note }}</div>
-      </ng-container>
+			<ng-container *ngIf="tooltipObject?.value?.note">
+				<div class="name">{{ 'names.note' | translate }}</div>
+				<div class="value">{{ tooltipObject?.value?.note }}</div>
+			</ng-container>
 		</div>
 	</dx-tooltip>
 </ng-template>
@@ -253,14 +253,14 @@
 			<div class="value">{{ tooltipObject?.value.length }}</div>
 			<div class="name">{{ 'names.point' | translate }}</div>
 			<div class="value">{{ tooltipObject?.value.point }}</div>
-      <ng-container *ngIf="tooltipObject?.value?.disableds?.length > 0">
-        <div class="name">{{ 'names.note' | translate }}</div>
-        <div class="value">
-          <div *ngFor="let disabled of tooltipObject?.value?.disableds" >
-            {{disabled.note}}
-          </div>
-        </div>
-      </ng-container>
+			<ng-container *ngIf="tooltipObject?.value?.disableds?.length > 0">
+				<div class="name">{{ 'names.note' | translate }}</div>
+				<div class="value">
+					<div *ngFor="let disabled of tooltipObject?.value?.disableds">
+						{{ disabled.note }}
+					</div>
+				</div>
+			</ng-container>
 		</div>
 	</dx-tooltip>
 </ng-template>
@@ -284,10 +284,14 @@
 			<div class="value">{{ tooltipObject?.value.pointId }}</div>
 			<div class="name">{{ 'names.group' | translate }}</div>
 			<div class="value">{{ tooltipObject?.value.groups.join(', ') }}</div>
-      <ng-container *ngIf="tooltipObject?.value?.note">
-        <div class="name">{{ 'names.note' | translate }}</div>
-        <div class="value">{{ tooltipObject?.value?.note }}</div>
-      </ng-container>
+			<ng-container *ngIf="tooltipObject?.value?.carrierId">
+				<div class="name">{{ 'names.carrierId' | translate }}</div>
+				<div class="value">{{ tooltipObject?.value?.carrierId }}</div>
+			</ng-container>
+			<ng-container *ngIf="tooltipObject?.value?.note">
+				<div class="name">{{ 'names.note' | translate }}</div>
+				<div class="value">{{ tooltipObject?.value?.note }}</div>
+			</ng-container>
 		</div>
 	</dx-tooltip>
 </ng-template>
@@ -472,29 +476,39 @@
       -->
 		</mat-menu>
 		<mat-menu #vehicleOptionMenu="matMenu">
-			<button *ngIf="hasPermissions([permissionEnums.PushEnable])"
-							mat-menu-item
-							(click)="onVehicleCommand('push:enable')">
+			<button
+				*ngIf="hasPermissions([permissionEnums.PushEnable])"
+				mat-menu-item
+				(click)="onVehicleCommand('push:enable')"
+			>
 				{{ 'names.pushEnable' | translate }}
 			</button>
-			<button *ngIf="hasPermissions([permissionEnums.PushEnable])"
-							mat-menu-item
-							(click)="onVehicleCommand('push:disable')">
+			<button
+				*ngIf="hasPermissions([permissionEnums.PushEnable])"
+				mat-menu-item
+				(click)="onVehicleCommand('push:disable')"
+			>
 				{{ 'names.pushDisable' | translate }}
 			</button>
-			<button *ngIf="hasPermissions([permissionEnums.HostOrderEnable])"
-							mat-menu-item
-							(click)="onVehicleCommand('hostOrder:enable')">
+			<button
+				*ngIf="hasPermissions([permissionEnums.HostOrderEnable])"
+				mat-menu-item
+				(click)="onVehicleCommand('hostOrder:enable')"
+			>
 				{{ 'names.hostCommandEnable' | translate }}
 			</button>
-			<button *ngIf="hasPermissions([permissionEnums.HostOrderEnable])"
-							mat-menu-item
-							(click)="onVehicleCommand('hostOrder:disable')">
+			<button
+				*ngIf="hasPermissions([permissionEnums.HostOrderEnable])"
+				mat-menu-item
+				(click)="onVehicleCommand('hostOrder:disable')"
+			>
 				{{ 'names.hostCommandDisable' | translate }}
 			</button>
-			<button *ngIf="hasPermissions([permissionEnums.RailOut])"
-							mat-menu-item
-							(click)="onVehicleCommand('rail_out')">
+			<button
+				*ngIf="hasPermissions([permissionEnums.RailOut])"
+				mat-menu-item
+				(click)="onVehicleCommand('rail_out')"
+			>
 				{{ 'names.railOut' | translate }}
 			</button>
 		</mat-menu>

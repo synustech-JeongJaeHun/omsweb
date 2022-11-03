@@ -89,6 +89,17 @@ namespace OMSWeb.Repositories
             return result;
         }
 
+        public IQueryable<UnuseListState> QueryUnuseListStates()
+        {
+            IQueryable<UnuseListState> result;
+            using (var conn = ConnectTrack())
+            {
+                var sql = QueryFactory.GetSql("unuseListStatus");
+                result = conn.Query<UnuseListState>(sql).AsQueryable();
+            }
+            return result;
+        }
+
         public IQueryable<DioState> QueryDioStates()
         {
             IQueryable<DioState> result;

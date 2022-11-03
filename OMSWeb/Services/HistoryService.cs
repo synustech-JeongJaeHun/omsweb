@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using DevExtreme.AspNet.Mvc;
-using OMSWeb.Logger;
 using OMSWeb.Models.Entities;
 using OMSWeb.Repositories;
 
@@ -18,33 +17,54 @@ namespace OMSWeb.Services
             this._repo = historyRepo;
         }
 
-        public IQueryable<OrderEntity> QueryOrders(DataSourceLoadOptions loadOptions)
+        public int QueryOrdersCount(DateTimeOffset from, DateTimeOffset to, int skip, int take)
         {
-            (DateTimeOffset from, DateTimeOffset to) = GetTimeFilters(loadOptions);
-            Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"PACKET: from={from} to={to}");
-
-            return this._repo.QueryOrders(from, to);
+            return this._repo.QueryOrdersCount(from, to);
         }
-        public IQueryable<VehicleHistoryEntity> QueryVehicles(DataSourceLoadOptions loadOptions)
-        {
-            (DateTimeOffset from, DateTimeOffset to) = GetTimeFilters(loadOptions);
-            Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"PACKET: from={from} to={to}");
 
-            return this._repo.QueryVehicles(from, to);
+        public IQueryable<OrderEntity> QueryOrders(DateTimeOffset from, DateTimeOffset to, int skip, int take)
+        {
+            return this._repo.QueryOrders(from, to, skip, take);
         }
-        public IQueryable<AlarmHistory> QueryAlarms(DataSourceLoadOptions loadOptions)
-        {
-            (DateTimeOffset from, DateTimeOffset to) = GetTimeFilters(loadOptions);
-            Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"PACKET: from={from} to={to}");
 
-            return this._repo.QueryAlarms(from, to);
+        public int QueryVehiclesCount(DateTimeOffset from, DateTimeOffset to, int skip, int take)
+        {
+            return this._repo.QueryVehiclesCount(from, to);
         }
-        public IQueryable<AlertEntity> QueryAlerts(DataSourceLoadOptions loadOptions)
-        {
-            (DateTimeOffset from, DateTimeOffset to) = GetTimeFilters(loadOptions);
-            Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"PACKET: from={from} to={to}");
 
-            return this._repo.QueryAlerts(from, to);
+        public IQueryable<VehicleHistoryEntity> QueryVehicles(DateTimeOffset from, DateTimeOffset to, int skip, int take)
+        {
+            return this._repo.QueryVehicles(from, to, skip, take);
+        }
+
+        public int QueryAlarmsCount(DateTimeOffset from, DateTimeOffset to, int skip, int take)
+        {
+            return this._repo.QueryAlarmsCount(from, to);
+        }
+
+        public IQueryable<AlarmHistory> QueryAlarms(DateTimeOffset from, DateTimeOffset to, int skip, int take)
+        {
+            return this._repo.QueryAlarms(from, to, skip, take);
+        }
+
+        public int QueryAlertsCount(DateTimeOffset from, DateTimeOffset to, int skip, int take)
+        {
+             return this._repo.QueryAlertsCount(from, to);
+        }
+
+        public IQueryable<AlertEntity> QueryAlerts(DateTimeOffset from, DateTimeOffset to, int skip, int take)
+        {
+             return this._repo.QueryAlerts(from, to, skip, take);
+        }
+
+        public int QueryNacksCount(DateTimeOffset from, DateTimeOffset to, int skip, int take)
+        {
+            return this._repo.QueryNacksCount(from, to);
+        }
+
+        public IQueryable<NackHistoryEntity> QueryNacks(DateTimeOffset from, DateTimeOffset to, int skip, int take)
+        {
+            return this._repo.QueryNacks(from, to, skip, take);
         }
 
         public IQueryable<VehicleDioHistoryEntity> QueryVehicleDios(int vehicleId, DateTimeOffset from, DateTimeOffset to)
@@ -62,10 +82,12 @@ namespace OMSWeb.Services
                 return null;
         }
 
-        private (DateTimeOffset from, DateTimeOffset to) GetTimeFilters(DataSourceLoadOptions loadOptions)
+        public (DateTimeOffset from, DateTimeOffset to, int skip, int take) GetLoadFilters(DataSourceLoadOptions loadOptions)
         {
             DateTimeOffset from = new DateTimeOffset();
             DateTimeOffset to = new DateTimeOffset();
+            int skip = 0;
+            int take = 0;
 
             try
             {
@@ -85,13 +107,16 @@ namespace OMSWeb.Services
 
                     if (ar0.Length == 3) from = DateTimeOffset.Parse(ar0[2].Trim());
                     if (ar2.Length == 3) to = DateTimeOffset.Parse(ar2[2].Trim());
+
+                    skip = loadOptions.Skip;
+                    take = loadOptions.Take;
                 }
             }
             catch (Exception e)
             {
             }
 
-            return (from, to);
+            return (from, to, skip, take);
         }
     }
 }
