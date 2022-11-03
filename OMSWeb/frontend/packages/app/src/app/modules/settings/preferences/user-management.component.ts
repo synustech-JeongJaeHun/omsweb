@@ -70,7 +70,6 @@ export class UserManagementComponent implements OnInit, OnDestroy {
 			disableClose: true,
 			closeOnNavigation: true,
 		})
-		// TODO : add code role settings
 	}
 
 	onBulkAddUser(grid) {
