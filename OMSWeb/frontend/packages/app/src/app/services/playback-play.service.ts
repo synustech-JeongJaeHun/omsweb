@@ -298,7 +298,7 @@ export class PlaybackPlayService {
 					const targetIndex = this.currentAlarms.findIndex(
 						(ca) => ca.id === alarm.id,
 					)
-					if (targetIndex) this.currentAlarms.splice(targetIndex, 1)
+					if (targetIndex != null) this.currentAlarms.splice(targetIndex, 1)
 				}
 			})
 
