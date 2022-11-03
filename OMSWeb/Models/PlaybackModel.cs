@@ -23,6 +23,7 @@ namespace OMSWeb.Models
     public string? Description { get; set; }
     public string? Cause { get; set; }
     public string? Action { get; set; }
+    public string? Annotation { get; set; }
   }
 
   public class AlarmChange : RemainedAlarm

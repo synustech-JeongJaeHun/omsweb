@@ -265,6 +265,7 @@ type RemainedAlarm = {
 	description?: string
 	cause?: string
 	action?: string
+	annotation?: string
 }
 
 type AlarmChange = RemainedAlarm & {

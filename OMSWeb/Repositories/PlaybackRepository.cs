@@ -196,12 +196,16 @@ namespace OMSWeb.Repositories
       var sql = @"
           select 
             va.id, va.time, va.error_code, va.vehicle_id, va.time_resolved, va.current, 
-            ve.level, ve.description, ve.cause, ve.action
+            ve.level, ve.description, ve.cause, ve.action,
+            ann.modified_by, ann.annotation
           from 
             vehicle_alarms va 
             left outer join 
             vehicle_errors ve 
             on va.error_code = ve.id
+            left outer join 
+            annotations ann
+            on va.error_code = ann.reference_id and ann.reference_table = 'vehicle_errors'
           where 
             va.time < @at
             and 
@@ -246,6 +250,9 @@ namespace OMSWeb.Repositories
             left outer join 
             vehicle_errors ve 
             on va.error_code = ve.id
+            left outer join
+            annotations ann
+            on va.error_code = ann.reference_id and ann.reference_table = 'vehicle_errors'
           where 
             va.time between @from and @to
           )
@@ -263,6 +270,9 @@ namespace OMSWeb.Repositories
             left outer join 
             vehicle_errors ve 
             on va.error_code = ve.id
+            left outer join
+            annotations ann
+            on va.error_code = ann.reference_id and ann.reference_table = 'vehicle_errors'
           where 
             va.time_resolved between @from and @to
           )) change

@@ -4,10 +4,6 @@
 }
 
 .playback-alarms-dialog {
-	// ::ng-deep [mat-dialog-title] {
-	// 	// background-color: darken(rgb(255, 80, 0), 10%);
-	// 	background-color: var(--notification-critical-color-darken);
-	// }
 	#solutionContainer {
 		padding: 8px;
 
@@ -42,7 +38,4 @@
 			}
 		}
 	}
-	// ::ng-deep .mat-dialog-container {
-	// 	border: 2px solid var(--notification-critical-color-darken);
-	// }
 }
