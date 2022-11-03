@@ -27,14 +27,12 @@
 		height: 20px;
 		width: 20px;
 	}
-	#mat-noti-icon {
-		::ng-deep .mat-badge-content {
-			color: transparent;
-			width: 7px;
-			height: 7px;
-			top: 0px;
-			right: -4px;
-		}
+
+	.-active {
+		color: #f44366;
+	}
+	.-inactive {
+		color: inherit;
 	}
 
 	&:hover {

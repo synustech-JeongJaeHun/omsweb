@@ -8,13 +8,13 @@
   </button>
   <button matListItem mat-button class="tool-item"[matTooltipDisabled]="showToolName" matTooltipClass="snb-tooltip"
     matTooltipPosition="right" [matTooltip]="'names.playback' | translate" (click)="onAlertDialog()" >
-    	<mat-icon [matBadge]="badgeCount" matBadgeColor="warn"  matBadgeSize="small" id="mat-noti-icon">notifications</mat-icon>
+    	<mat-icon  matBadgeSize="small"  [class]="getAlarmStatus()">notifications</mat-icon>
       <span class="tool-name" *ngIf="showToolName">{{
       "names.centerZoom" | translate
       }}</span>
   </button>
 
-  <mat-divider></mat-divider>
+  <mat-divider></mat-divider>                      
 
   <button matListItem mat-button class="tool-item" [matTooltipDisabled]="showToolName" matTooltipClass="snb-tooltip"
     matTooltipPosition="right" [matTooltip]="'names.centerZoom' | translate" (click)="centerZoom.emit()">

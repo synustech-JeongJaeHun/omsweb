@@ -37,6 +37,7 @@ import { PlaybackControlDialogComponent } from '../../playback/dialogs/playback-
 import { PlaybackTrackVehicleDialogComponent } from '../dialogs/playback-track-vehicle-dialog.component'
 import { PlaybackAlertDialogComponent } from '../../playback/dialogs/playback-alert-dialog.component'
 import { NotificationsService } from '@oms/root/services/notifications.service'
+import { ClockChangedEvent } from '@oms/root/models/playback.model'
 
 @Component({
 	selector: 'oms-playback-map-toolbar',
@@ -73,12 +74,9 @@ export class PlaybackMapToolbarComponent implements OnInit, OnDestroy {
 	get tooltipOffset(): string {
 		return this.showToolName ? '164px' : '36px'
 	}
-	get badgeCount(): string {
-		// console.log('testing', this.playbackSvc.alarmChanges)
-		// const alerts = this.notifySvc.alarmsDataSource().items().length
-		const alerts = this.playbackSvc.currentAlarms.length
-		if (alerts) return String(alerts)
-		return ''
+
+	getAlarmStatus(): any {
+		return this.playbackSvc.currentAlarms.length > 0 ? '-active' : '-inactive'
 	}
 
 	private _searchDlg: MatDialogRef<SearchDialogComponent, any>
@@ -106,6 +104,12 @@ export class PlaybackMapToolbarComponent implements OnInit, OnDestroy {
 		//   this.bufferEnabled = config.bufferEnabled;
 		// });
 		this.onPlaybackDialog()
+		// 🎉 subscribe every emited Event from playbackSvc
+		playbackSvc.clockChanged.subscribe((e: ClockChangedEvent) => {
+			if (e.type === 'NextFrameEvent' && e.alarms.length > 0) {
+				this.onAlertDialog(false)
+			}
+		})
 	}
 
 	onPlaybackDialog() {
@@ -126,9 +130,9 @@ export class PlaybackMapToolbarComponent implements OnInit, OnDestroy {
 		})
 	}
 
-	onAlertDialog() {
+	onAlertDialog(closable = true) {
 		if (this._alertDlg && this._alertDlg.getState() === MatDialogState.OPEN) {
-			this._alertDlg.close()
+			if (closable) this._alertDlg.close()
 			return
 		}
 		this._alertDlg = this.dialog.open(PlaybackAlertDialogComponent, {
