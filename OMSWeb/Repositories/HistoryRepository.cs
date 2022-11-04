@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Dapper;
 using Microsoft.Extensions.Configuration;
@@ -44,7 +45,10 @@ namespace OMSWeb.Repositories
 
         public IQueryable<OrderHistoryEntity> QueryOrders(DateTimeOffset from, DateTimeOffset to, int skip, int take)
         {
-            string sql = @"
+            string LimitConditions = @"LIMIT @take OFFSET @skip";
+            if (skip <= 0 && take <= 0) LimitConditions = string.Empty;
+
+            string sql = $@"
                 SELECT OD.id, OD.origin, OD.history_source_id, OD.logical_id, 
                     CASE
                       WHEN OD.time_failed IS NOT NULL THEN 'FAILED'
@@ -97,7 +101,8 @@ namespace OMSWeb.Repositories
                     FROM order_history
                     WHERE @from <= time_created and time_created <= @to
                     GROUP BY history_source_id
-                    LIMIT @take OFFSET @skip
+                    --LIMIT @take OFFSET @skip
+                    {LimitConditions}
                 ) AS LAST_OD
                 ON OD.history_source_id = LAST_OD.order_id AND OD.history_change_time = LAST_OD.last_updated
                 LEFT OUTER JOIN vehicle_reg AS VR
@@ -139,7 +144,10 @@ namespace OMSWeb.Repositories
 
         public IQueryable<VehicleHistoryEntity> QueryVehicles(DateTimeOffset from, DateTimeOffset to, int skip, int take)
         {
-            var sql = @"
+            string LimitConditions = @"LIMIT @take OFFSET @skip";
+            if (skip <= 0 && take <= 0) LimitConditions = string.Empty;
+
+            string sql = $@"
                 SELECT
                     VH.history_change_time, VH.id, VH.history_source_id,
                     VH.physical_id, VH.logical_id, 
@@ -153,7 +161,8 @@ namespace OMSWeb.Repositories
                     --*where_condition*
                     WHERE @from <= history_change_time and history_change_time <= @to
                     GROUP BY history_source_id
-                    LIMIT @take OFFSET @skip
+                    --LIMIT @take OFFSET @skip
+                    {LimitConditions}
                 ) AS LVH
                 ON VH.id = LVH.max_id    
                 ORDER BY VH.id     
@@ -193,7 +202,10 @@ namespace OMSWeb.Repositories
 
         public IQueryable<AlarmHistory> QueryAlarms(DateTimeOffset from, DateTimeOffset to, int skip, int take)
         {
-            var sql = @"
+            string LimitConditions = @"LIMIT @take OFFSET @skip";
+            if (skip <= 0 && take <= 0) LimitConditions = string.Empty;
+
+            string sql = $@"
                 SELECT VA.id, VA.time, VA.error_code, VA.vehicle_id, VR.logical_id AS vehicle_logical_id,
                     VA.time_resolved, 
                     CASE WHEN VA.time_resolved IS NULL THEN  extract('epoch' from now()-VA.time) ELSE  extract('epoch' from VA.time_resolved-VA.time) END AS age,
@@ -209,7 +221,8 @@ namespace OMSWeb.Repositories
                 WHERE 
                     @from <= VA.time and VA.time <= @to
                 ORDER BY VA.id desc
-                LIMIT @take OFFSET @skip
+                --LIMIT @take OFFSET @skip
+                {LimitConditions}
                     ";
             IQueryable<AlarmHistory> result;
             using (var conn = ConnectTrack())
@@ -239,14 +252,18 @@ namespace OMSWeb.Repositories
 
         public IQueryable<AlertEntity> QueryAlerts(DateTimeOffset from, DateTimeOffset to, int skip, int take)
         {
-            var sql = @"
+            string LimitConditions = @"LIMIT @take OFFSET @skip";
+            if (skip <= 0 && take <= 0) LimitConditions = string.Empty;
+
+            string sql = $@"
                 SELECT 
                     ALT.id, ALT.time, ALT.level, ALT.tag, ALT.message, ALT.ack_time, ALT.ack_by 
                 FROM alerts AS ALT
                 WHERE 
                     @from <= ALT.time and ALT.time <= @to
                 ORDER BY ALT.id desc
-                LIMIT @take OFFSET @skip
+                --LIMIT @take OFFSET @skip
+                {LimitConditions}
                     ";
 
             IQueryable<AlertEntity> result;
@@ -277,7 +294,10 @@ namespace OMSWeb.Repositories
 
         public IQueryable<NackHistoryEntity> QueryNacks(DateTimeOffset from, DateTimeOffset to, int skip, int take)
         {
-            var sql = @"
+            string LimitConditions = @"LIMIT @take OFFSET @skip";
+            if (skip <= 0 && take <= 0) LimitConditions = string.Empty;
+
+            string sql = $@"
                 SELECT 
                     CASE WHEN cmd_id is null THEN '' ELSE cmd_id END as CommandID, 
                     CASE WHEN time_modified is null THEN now() ELSE time_modified END as ModifiedTime, 
@@ -295,7 +315,8 @@ namespace OMSWeb.Repositories
                 WHERE 
                     @from <= time_modified AND time_modified <= @to
                 ORDER BY ModifiedTime desc
-                LIMIT @take OFFSET @skip
+                --LIMIT @take OFFSET @skip
+                {LimitConditions}
                     ";
 
             IQueryable<NackHistoryEntity> result;
