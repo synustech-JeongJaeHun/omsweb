@@ -12,13 +12,19 @@ import {
 	HistoryEvent,
 	RemainedAlarm,
 	AlarmChange,
+	CurrentBuffer,
+	CurrentStation,
 } from '../models/playback.model'
 import {
+	convertBufferHistoryEventToCurrentBuffer,
 	convertOrderHistoryEventToCurrentOrder,
 	convertSegmentBlockingHistoryEventToCurrentSegmentBlocking,
+	convertSnapshotBufferToCurrentBuffer,
 	convertSnapshotOrderToCurrentOrder,
 	convertSnapshotSegmentBlockingToCurrentSegmentBlocking,
+	convertSnapshotStationToCurrentStation,
 	convertSnapshotVehicleToCurrentVehicle,
+	convertStationHistoryEventToCurrentStation,
 	convertVehicleHistoryEventToCurrentVehicle,
 } from '../modules/playback/utils/playback-convert.util'
 import { addOrderInfoToCurrenVehicle } from '../modules/playback/utils/playback-join.util'
@@ -73,6 +79,8 @@ export class PlaybackPlayService {
 	public currentVehicles: CurrentVehicle[] = []
 	public currentSegmentBlockings: CurrentSegmentBlocking[] = []
 	public currentOrders: CurrentOrder[] = []
+	public currentBuffers: CurrentBuffer[] = []
+	public currentStations: CurrentStation[] = []
 
 	public historyEvents: HistoryEvent[]
 
@@ -288,6 +296,12 @@ export class PlaybackPlayService {
 				.map(convertSnapshotVehicleToCurrentVehicle)
 				.map((cv) => addOrderInfoToCurrenVehicle(cv, this.currentOrders))
 				.sort((a, b) => a.id - b.id)
+			this.currentBuffers = (this.currentSnapshot.data.buffers ?? []).map(
+				convertSnapshotBufferToCurrentBuffer,
+			)
+			this.currentStations = (this.currentSnapshot.data.stations ?? []).map(
+				convertSnapshotStationToCurrentStation,
+			)
 		}
 
 		if (event.type === 'EventsChanged' || event.type === 'NextFrameEvent') {
@@ -356,6 +370,24 @@ export class PlaybackPlayService {
 						)
 						this.currentOrders.splice(index, 1)
 					}
+				} else if (event.tableName === 'buffer_history') {
+					const buffer = this.currentBuffers.find(
+						(cb) => cb.id === event.historySourceId,
+					)
+					if (buffer)
+						Object.assign(
+							buffer,
+							convertBufferHistoryEventToCurrentBuffer(buffer, event),
+						)
+				} else if (event.tableName === 'station_history') {
+					const station = this.currentStations.find(
+						(cs) => cs.id === event.historySourceId,
+					)
+					if (station)
+						Object.assign(
+							station,
+							convertStationHistoryEventToCurrentStation(station, event),
+						)
 				}
 			})
 		}
