@@ -26,6 +26,11 @@ import { ILookupUnit } from '../../../models/map.interface'
 				color: #999;
 				padding-left: 30px;
 			}
+
+			::ng-deep input:disabled {
+				color: black !important;
+				font-weight: bold;
+			}
 		`,
 	],
 })
@@ -129,7 +134,7 @@ export class UnitSelectorComponent implements OnInit, OnChanges {
 					result.push(
 						...this.trackStatusService.trackData.mtls
 							.filter(
-								(m) => m.logicalId.includes(value) //permit all //&& m.inDirection !== 'R',
+								(m) => m.logicalId.includes(value), //permit all //&& m.inDirection !== 'R',
 							)
 							.map((m) => {
 								return {
