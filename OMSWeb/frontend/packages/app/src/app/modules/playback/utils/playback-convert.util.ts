@@ -1,16 +1,22 @@
 import {
+	BufferHistoryEvent,
+	CurrentBuffer,
 	CurrentOrder,
 	CurrentSegmentBlocking,
+	CurrentStation,
 	CurrentVehicle,
 	OrderHistoryEvent,
 	PlaybackBuffer,
 	PlaybackMtl,
 	PlaybackPoint,
+	PlaybackSnapshotBuffer,
 	PlaybackSnapshotOrder,
 	PlaybackSnapshotSegmentBlocking,
+	PlaybackSnapshotStation,
 	PlaybackSnapshotVehicle,
 	PlaybackStation,
 	SegmentBlockingHistoryEvent,
+	StationHistoryEvent,
 	VehicleHistoryEvent,
 } from '../../../models/playback.model'
 import { getPortVehicleCommand, isConnected } from './playback-parse.util'
@@ -130,6 +136,42 @@ function convertSnapshotSegmentBlockingToTmUpdateDtoSegmentDisabled(
 	}
 }
 
+function convertSnapshotBufferToTmBuffer(buffer: PlaybackSnapshotBuffer) {
+	return {
+		id: buffer.id,
+		logicalId: buffer.logical_id,
+		physicalId: buffer.physical_id,
+		direction: buffer.direction,
+		pointId: buffer.point,
+		nextPoint: buffer.next_point,
+		offset: buffer.offset,
+
+		unuse: buffer.unuse,
+		carrierId: buffer.carrier_id,
+		user: buffer.user,
+		note: buffer.note,
+	}
+}
+function convertSnapshotStationToTmStation(station: PlaybackSnapshotStation) {
+	return {
+		id: station.id,
+		logicalId: station.logical_id,
+		physicalId: station.physical_id,
+
+		direction: station.direction,
+		pointId: station.point,
+		nextPoint: station.next_point,
+		offset: station.offset,
+
+		unuse: station.unuse,
+
+		carrierType: station.carrier_type,
+
+		user: station.user,
+		note: station.note,
+	}
+}
+
 function convertVehicleHistoryEventToTmUpdateDtoVehicle(
 	event: VehicleHistoryEvent,
 	orders: CurrentOrder[],
@@ -195,6 +237,29 @@ function convertSegmentBlockingHistoryEventToTmUpdateDtoSegmentDisabled(
 						disabledReason: event.reason,
 				  }
 				: {},
+	}
+}
+
+function convertBufferHistoryEventToTmUpdateDtoBuffer(
+	event: BufferHistoryEvent,
+) {
+	return {
+		id: event.historySourceId,
+		unuse: event.unuse,
+		carrierId: event.carrierId,
+		user: event.user,
+		note: event.note,
+	}
+}
+
+function convertStationHistoryEventToTmUpdateDtoStation(
+	event: StationHistoryEvent,
+) {
+	return {
+		id: event.historySourceId,
+		unuse: event.unuse,
+		user: event.user,
+		note: event.note,
 	}
 }
 
@@ -264,7 +329,7 @@ function convertSnapshotOrderToCurrentOrder(
 		id: order.id,
 		locationDropoff: order?.location_dropoff,
 		locationPickup: order?.location_pickup,
-    locationMove: order?.location_move,
+		locationMove: order?.location_move,
 		logicalId: order.logical_id,
 		origin: order.origin,
 		priority: order.priority,
@@ -275,6 +340,44 @@ function convertSnapshotOrderToCurrentOrder(
 		timeCompleted: order.time_completed,
 		vehicleId: order.vehicle_id,
 		state,
+	}
+}
+
+function convertSnapshotBufferToCurrentBuffer(
+	buffer: PlaybackSnapshotBuffer,
+): CurrentBuffer {
+	return {
+		id: buffer.id,
+		note: buffer.note,
+		user: buffer.user,
+		point: buffer.point,
+		unuse: buffer.unuse,
+		offset: buffer.offset,
+		direction: buffer.direction,
+		carrierId: buffer.carrier_id,
+		logicalId: buffer.logical_id,
+		nextPoint: buffer.next_point,
+		physicalId: buffer.physical_id,
+		unusedTime: buffer.unused_time,
+	}
+}
+function convertSnapshotStationToCurrentStation(
+	station: PlaybackSnapshotStation,
+): CurrentStation {
+	return {
+		id: station.id,
+		note: station.note,
+		user: station.user,
+		point: station.point,
+		unuse: station.unuse,
+		offset: station.offset,
+		direction: station.direction,
+		carrierId: station.carrier_id,
+		logicalId: station.logical_id,
+		nextPoint: station.next_point,
+		physicalId: station.physical_id,
+		unusedTime: station.unused_time, //(date)
+		carrierType: station.carrier_type,
 	}
 }
 
@@ -331,7 +434,7 @@ function convertOrderHistoryEventToCurrentOrder(
 		id: event.historySourceId,
 		locationDropoff: event?.locationDropoff,
 		locationPickup: event?.locationPickup,
-    locationMove: event?.locationMove,
+		locationMove: event?.locationMove,
 		logicalId: event.logicalId,
 		origin: event.origin,
 		priority: event.priority,
@@ -345,6 +448,47 @@ function convertOrderHistoryEventToCurrentOrder(
 	}
 }
 
+function convertBufferHistoryEventToCurrentBuffer(
+	buffer: CurrentBuffer,
+	event: BufferHistoryEvent,
+): CurrentBuffer {
+	return {
+		id: event.historySourceId,
+		note: event.note,
+		user: event.user,
+		unuse: event.unuse,
+		carrierId: event.carrierId,
+		logicalId: event.logicalId,
+		physicalId: event.physicalId,
+		unusedTime: event.unusedTime,
+		point: buffer.point,
+		offset: buffer.offset,
+		direction: buffer.direction,
+		nextPoint: buffer.nextPoint,
+	}
+}
+
+function convertStationHistoryEventToCurrentStation(
+	station: CurrentStation,
+	event: StationHistoryEvent,
+): CurrentStation {
+	return {
+		id: event.historySourceId,
+		note: event.note,
+		user: event.user,
+		unuse: event.unuse,
+		carrierId: event.carrierId,
+		logicalId: event.logicalId,
+		physicalId: event.physicalId,
+		unusedTime: event.unusedTime, //(date)
+		point: station.point,
+		offset: station.offset,
+		direction: station.direction,
+		carrierType: station.carrierType,
+		nextPoint: station.nextPoint,
+	}
+}
+
 export {
 	// ===============================TM=======================================
 	// For TM - Track
@@ -355,16 +499,24 @@ export {
 	// For TM - Snapshot
 	convertSnapshotVehicleToTmUpdateDtoVehicle,
 	convertSnapshotSegmentBlockingToTmUpdateDtoSegmentDisabled,
+	convertSnapshotBufferToTmBuffer,
+	convertSnapshotStationToTmStation,
 	// For TM - Events
 	convertVehicleHistoryEventToTmUpdateDtoVehicle,
 	convertSegmentBlockingHistoryEventToTmUpdateDtoSegmentDisabled,
+	convertBufferHistoryEventToTmUpdateDtoBuffer,
+	convertStationHistoryEventToTmUpdateDtoStation,
 	// =========================Current State=================================
 	// For CurrentState from Snapshot
 	convertSnapshotVehicleToCurrentVehicle,
 	convertSnapshotSegmentBlockingToCurrentSegmentBlocking,
 	convertSnapshotOrderToCurrentOrder,
+	convertSnapshotBufferToCurrentBuffer,
+	convertSnapshotStationToCurrentStation,
 	// For CurrentState from Events
 	convertVehicleHistoryEventToCurrentVehicle,
 	convertSegmentBlockingHistoryEventToCurrentSegmentBlocking,
 	convertOrderHistoryEventToCurrentOrder,
+	convertBufferHistoryEventToCurrentBuffer,
+	convertStationHistoryEventToCurrentStation,
 }
