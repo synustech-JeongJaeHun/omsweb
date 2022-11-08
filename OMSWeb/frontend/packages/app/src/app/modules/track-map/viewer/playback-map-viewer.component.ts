@@ -80,6 +80,8 @@ export class PlaybackMapViewerComponent implements OnInit, OnDestroy {
 	public colocatedObjects = []
 	public mainColocatedObject: any
 	public showColocatedView = false
+	//history Panel
+	public showHistoryPanel = true
 
 	get activeDetails(): boolean {
 		return this.detailsVisible && this.auth.isAuthenticated
@@ -331,6 +333,13 @@ export class PlaybackMapViewerComponent implements OnInit, OnDestroy {
 
 	public trackOnTM(event: { type: string; id: any }) {
 		this.viewer.track(event.type, event.id)
+	}
+	public stateOnTM(event: boolean) {
+		console.log(event)
+		if (event === true) {
+			this.showHistoryPanel = !this.showHistoryPanel
+		}
+		console.log(this.playService.currentAlarms)
 	}
 
 	public onMouseoverTM(event: CustomEvent) {
