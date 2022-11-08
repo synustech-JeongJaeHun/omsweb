@@ -134,6 +134,8 @@ type PlaybackSnapshotSegmentBlocking = {
 	id: number
 	reason: string
 	segment_id: number
+	user?: string
+	note?: string
 }
 type PlaybackSnapshotVehicle = {
 	blocked_segment_pairs: string
@@ -173,6 +175,8 @@ type PlaybackSnapshotVehicle = {
 	runtime_total: number
 	soon_arrive: boolean
 	type: unknown
+	user?: string
+	note?: string
 }
 
 type PlaybackSnapshotBuffer = {
@@ -282,6 +286,8 @@ type VehicleHistoryEvent = { tableName: 'vehicle_history' } & ITableName &
 		physicalId: string
 		railIn: boolean
 		runtimeTotal: number
+		user?: string
+		note?: string
 	}
 
 type SegmentBlockingHistoryEvent = {
@@ -292,6 +298,8 @@ type SegmentBlockingHistoryEvent = {
 		segmentId: number
 		disabledBy: string
 		reason: string
+		user?: string
+		note?: string
 	}
 
 type OrderHistoryEvent = { tableName: 'order_history' } & ITableName &
@@ -428,12 +436,16 @@ type CurrentVehicle = {
 	locationDropoff?: string
 	locationPickup?: string
 	locationMove?: string
+	user?: string
+	note?: string
 }
 type CurrentSegmentBlocking = {
 	id: number
 	segmentId: number
 	disabledBy: string
 	reason: string
+	user?: string
+	note?: string
 }
 type CurrentOrder = {
 	assignmentDetails: string | null

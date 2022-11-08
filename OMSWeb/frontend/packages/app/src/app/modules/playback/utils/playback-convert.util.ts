@@ -94,6 +94,8 @@ function convertSnapshotVehicleToTmUpdateDtoVehicle(
 		locationDropoff: order?.locationDropoff,
 		locationPickup: order?.locationPickup,
 		locationMove: order?.locationMove,
+		user: vehicle.user,
+		note: vehicle.note,
 
 		orderId: vehicle.order_id,
 		orderLogicalId: undefined,
@@ -132,6 +134,8 @@ function convertSnapshotSegmentBlockingToTmUpdateDtoSegmentDisabled(
 			segmentId: segmentBlocking.segment_id,
 			disabledBy: segmentBlocking.disabled_by,
 			disabledReason: segmentBlocking.reason,
+			user: segmentBlocking.user,
+			note: segmentBlocking.note,
 		},
 	}
 }
@@ -208,6 +212,8 @@ function convertVehicleHistoryEventToTmUpdateDtoVehicle(
 		locationDropoff: order?.locationDropoff,
 		locationPickup: order?.locationPickup,
 		locationMove: order?.locationMove,
+		user: event.user,
+		note: event.note,
 		// cargoTransferResult?: string
 		// orderLogicalId?: string
 		// priority?: any
@@ -235,6 +241,8 @@ function convertSegmentBlockingHistoryEventToTmUpdateDtoSegmentDisabled(
 						segmentId: event.segmentId,
 						disabledBy: event.disabledBy,
 						disabledReason: event.reason,
+						user: event.user,
+						note: event.note,
 				  }
 				: {},
 	}
@@ -288,6 +296,8 @@ function convertSnapshotVehicleToCurrentVehicle(
 		physicalId: vehicle.physical_id,
 		railIn: vehicle.rail_in,
 		runtimeTotal: vehicle.runtime_total,
+		user: vehicle.user,
+		note: vehicle.note,
 
 		command: vehicle.command,
 		commandPoint: getPortVehicleCommand(vehicle.command),
@@ -303,6 +313,8 @@ function convertSnapshotSegmentBlockingToCurrentSegmentBlocking(
 		segmentId: sb.segment_id,
 		disabledBy: sb.disabled_by,
 		reason: sb.reason,
+		user: sb.user,
+		note: sb.note,
 	}
 }
 function convertSnapshotOrderToCurrentOrder(
@@ -406,6 +418,8 @@ function convertVehicleHistoryEventToCurrentVehicle(
 		physicalId: event.physicalId,
 		railIn: event.railIn,
 		runtimeTotal: event.runtimeTotal,
+		user: event.user,
+		note: event.note,
 
 		command: event.command,
 		commandPoint: getPortVehicleCommand(event.command),
@@ -421,6 +435,8 @@ function convertSegmentBlockingHistoryEventToCurrentSegmentBlocking(
 		segmentId: event.segmentId,
 		disabledBy: event.disabledBy,
 		reason: event.reason,
+		user: event.user,
+		note: event.note,
 	}
 }
 
