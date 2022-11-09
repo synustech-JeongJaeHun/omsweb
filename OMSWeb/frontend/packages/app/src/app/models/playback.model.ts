@@ -239,6 +239,7 @@ type HistoryEvent =
 	| OrderHistoryEvent
 	| BufferHistoryEvent
 	| StationHistoryEvent
+	| ZcuHistoryEvent
 	| ModeStateHistoryEvent
 
 interface ITableName {
@@ -344,6 +345,17 @@ type StationHistoryEvent = { tableName: 'station_history' } & ITableName &
 		user: string
 		note: string
 		unusedTime?: string
+	}
+type ZcuHistoryEvent = { tableName: 'zcu_history' } & ITableName &
+	History & {
+		x: number
+		y: number
+		id: number
+		note: string
+		user: string
+		status: number
+		zcuType: number
+		usingType: number
 	}
 type ModeStateHistoryEvent = { tableName: 'mode_state_history' } & ITableName &
 	History & {
