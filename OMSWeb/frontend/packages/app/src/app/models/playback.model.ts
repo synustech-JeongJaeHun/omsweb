@@ -497,6 +497,14 @@ type CurrentStation = {
 	carrierType?: number
 }
 
+type CurrentModeState = {
+	ai_mode: number
+	pm_state: number
+	tsc_state: number
+	comm_state: number
+	control_state: number
+}
+
 export {
 	LogicalId,
 	PhysicalId,
@@ -529,4 +537,5 @@ export {
 	CurrentOrder,
 	CurrentBuffer,
 	CurrentStation,
+	CurrentModeState,
 }

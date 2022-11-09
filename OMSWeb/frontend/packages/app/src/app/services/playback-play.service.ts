@@ -14,6 +14,7 @@ import {
 	AlarmChange,
 	CurrentBuffer,
 	CurrentStation,
+	CurrentModeState,
 } from '../models/playback.model'
 import {
 	convertBufferHistoryEventToCurrentBuffer,
@@ -81,6 +82,7 @@ export class PlaybackPlayService {
 	public currentOrders: CurrentOrder[] = []
 	public currentBuffers: CurrentBuffer[] = []
 	public currentStations: CurrentStation[] = []
+	public currentModeState?: CurrentModeState = null
 
 	public historyEvents: HistoryEvent[]
 
@@ -302,6 +304,7 @@ export class PlaybackPlayService {
 			this.currentStations = (this.currentSnapshot.data.stations ?? []).map(
 				convertSnapshotStationToCurrentStation,
 			)
+			this.currentModeState = this.currentSnapshot.data.state ?? null
 		}
 
 		if (event.type === 'EventsChanged' || event.type === 'NextFrameEvent') {
@@ -388,6 +391,14 @@ export class PlaybackPlayService {
 							station,
 							convertStationHistoryEventToCurrentStation(station, event),
 						)
+				} else if (event.tableName === 'mode_state_history') {
+					this.currentModeState = {
+						ai_mode: event.ai_mode,
+						comm_state: event.comm_state,
+						control_state: event.control_state,
+						pm_state: event.pm_state,
+						tsc_state: event.tsc_state,
+					}
 				}
 			})
 		}
