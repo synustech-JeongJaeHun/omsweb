@@ -146,6 +146,10 @@
 			<div class="value">{{ tooltipObject?.value.physicalId }}</div>
 			<div class="name">{{ 'names.point' | translate }}</div>
 			<div class="value">{{ tooltipObject?.value.pointId }}</div>
+			<ng-container *ngIf="tooltipObject?.value?.note">
+				<div class="name">{{ 'names.note' | translate }}</div>
+				<div class="value">{{ tooltipObject?.value?.note }}</div>
+			</ng-container>
 		</div>
 	</dx-tooltip>
 </ng-template>
@@ -167,6 +171,10 @@
 			<div class="value">{{ tooltipObject?.value.physicalId }}</div>
 			<div class="name">{{ 'names.point' | translate }}</div>
 			<div class="value">{{ tooltipObject?.value.curPoint }}</div>
+			<ng-container *ngIf="tooltipObject?.value?.note">
+				<div class="name">{{ 'names.note' | translate }}</div>
+				<div class="value">{{ tooltipObject?.value?.note }}</div>
+			</ng-container>
 		</div>
 	</dx-tooltip>
 </ng-template>
@@ -205,6 +213,14 @@
 			<div class="value">{{ tooltipObject?.value.length }}</div>
 			<div class="name">{{ 'names.point' | translate }}</div>
 			<div class="value">{{ tooltipObject?.value.point }}</div>
+			<ng-container *ngIf="tooltipObject?.value?.disableds?.length > 0">
+				<div class="name">{{ 'names.note' | translate }}</div>
+				<div class="value">
+					<div *ngFor="let disabled of tooltipObject?.value?.disableds">
+						{{ disabled.note }}
+					</div>
+				</div>
+			</ng-container>
 		</div>
 	</dx-tooltip>
 </ng-template>
@@ -226,6 +242,14 @@
 			<div class="value">{{ tooltipObject?.value.physicalId }}</div>
 			<div class="name">{{ 'names.point' | translate }}</div>
 			<div class="value">{{ tooltipObject?.value.pointId }}</div>
+			<ng-container *ngIf="tooltipObject?.value?.carrierId">
+				<div class="name">{{ 'names.carrierId' | translate }}</div>
+				<div class="value">{{ tooltipObject?.value?.carrierId }}</div>
+			</ng-container>
+			<ng-container *ngIf="tooltipObject?.value?.note">
+				<div class="name">{{ 'names.note' | translate }}</div>
+				<div class="value">{{ tooltipObject?.value?.note }}</div>
+			</ng-container>
 		</div>
 	</dx-tooltip>
 </ng-template>

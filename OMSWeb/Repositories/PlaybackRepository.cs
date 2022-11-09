@@ -392,6 +392,87 @@ namespace OMSWeb.Repositories
       }
       return result;
     }
+    public IList<BufferHistoryWithTableName> GetBufferHistoriesBetween(DateTimeOffset from, DateTimeOffset to)
+    {
+      var sql = @"
+            SELECT *
+            FROM buffer_history bh
+            WHERE bh.history_change_time between @from AND @to
+            ORDER BY bh.history_change_time ASC
+            ";
+
+      var result = new List<BufferHistoryWithTableName>();
+      using (var conn = ConnectTrack())
+      {
+        try
+        {
+          result = conn.Query<BufferHistoryWithTableName>(sql, new
+          {
+            from = from,
+            to = to
+          }).ToList();
+        }
+        catch (System.Exception)
+        {
+          Console.WriteLine("[GetHistoriesBetween] => null");
+        }
+      }
+      return result;
+    }
+    public IList<StationHistoryWithTableName> GetStationHistoriesBetween(DateTimeOffset from, DateTimeOffset to)
+    {
+      var sql = @"
+            SELECT *
+            FROM station_history sh
+            WHERE sh.history_change_time between @from AND @to
+            ORDER BY sh.history_change_time ASC
+            ";
+
+      var result = new List<StationHistoryWithTableName>();
+      using (var conn = ConnectTrack())
+      {
+        try
+        {
+          result = conn.Query<StationHistoryWithTableName>(sql, new
+          {
+            from = from,
+            to = to
+          }).ToList();
+        }
+        catch (System.Exception)
+        {
+          Console.WriteLine("[GetHistoriesBetween] => null");
+        }
+      }
+      return result;
+    }
+    public IList<ModeStateHistoryWithTableName> GetModeStateHistoriesBetween(DateTimeOffset from, DateTimeOffset to)
+    {
+      var sql = @"
+            SELECT *
+            FROM mode_state_history msh
+            WHERE msh.history_change_time between @from AND @to
+            ORDER BY msh.history_change_time ASC
+            ";
+
+      var result = new List<ModeStateHistoryWithTableName>();
+      using (var conn = ConnectTrack())
+      {
+        try
+        {
+          result = conn.Query<ModeStateHistoryWithTableName>(sql, new
+          {
+            from = from,
+            to = to
+          }).ToList();
+        }
+        catch (System.Exception)
+        {
+          Console.WriteLine("[GetHistoriesBetween] => null");
+        }
+      }
+      return result;
+    }
   }
 }
 

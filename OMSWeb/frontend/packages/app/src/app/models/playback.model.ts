@@ -91,9 +91,13 @@ type PlaybackSnapshot = {
 }
 
 type PlaybackSnapshotData = {
+	state: PlaybackSnapshotState
 	orders: PlaybackSnapshotOrder[]
 	segment_blocking: PlaybackSnapshotSegmentBlocking[]
 	vehicles: PlaybackSnapshotVehicle[]
+	buffers: PlaybackSnapshotBuffer[]
+	stations: PlaybackSnapshotStation[]
+	zcus: PlaybackSnapshotZcu[]
 }
 type PlaybackSnapshotOrder = {
 	assignment_details: string | null
@@ -130,6 +134,8 @@ type PlaybackSnapshotSegmentBlocking = {
 	id: number
 	reason: string
 	segment_id: number
+	user?: string
+	note?: string
 }
 type PlaybackSnapshotVehicle = {
 	blocked_segment_pairs: string
@@ -169,12 +175,71 @@ type PlaybackSnapshotVehicle = {
 	runtime_total: number
 	soon_arrive: boolean
 	type: unknown
+	user?: string
+	note?: string
+}
+
+type PlaybackSnapshotBuffer = {
+	x: unknown
+	y: unknown
+	id: number
+	note: string
+	user: string
+	point: number
+	unuse: boolean
+	offset: number
+	direction: string
+	carrier_id?: string
+	logical_id: string
+	next_point: number
+	physical_id: string
+	unused_time?: string //(date)
+}
+
+type PlaybackSnapshotStation = {
+	x: unknown
+	y: unknown
+	id: number
+	note: string
+	user: string
+	point: number
+	unuse: boolean
+	offset: number
+	direction: string
+	carrier_id?: string
+	logical_id: string
+	next_point: number
+	physical_id: string
+	unused_time?: string //(date)
+	carrier_type?: number
+}
+
+type PlaybackSnapshotZcu = {
+	x: number
+	y: number
+	id: number
+	note: string
+	user: string
+	status: number
+	zcu_type: number
+	using_type: number
+}
+
+type PlaybackSnapshotState = {
+	ai_mode: number
+	pm_state: number
+	tsc_state: number
+	comm_state: number
+	control_state: number
 }
 
 type HistoryEvent =
 	| VehicleHistoryEvent
 	| SegmentBlockingHistoryEvent
 	| OrderHistoryEvent
+	| BufferHistoryEvent
+	| StationHistoryEvent
+	| ModeStateHistoryEvent
 
 interface ITableName {
 	tableName: string
@@ -221,6 +286,8 @@ type VehicleHistoryEvent = { tableName: 'vehicle_history' } & ITableName &
 		physicalId: string
 		railIn: boolean
 		runtimeTotal: number
+		user?: string
+		note?: string
 	}
 
 type SegmentBlockingHistoryEvent = {
@@ -231,6 +298,8 @@ type SegmentBlockingHistoryEvent = {
 		segmentId: number
 		disabledBy: string
 		reason: string
+		user?: string
+		note?: string
 	}
 
 type OrderHistoryEvent = { tableName: 'order_history' } & ITableName &
@@ -252,6 +321,37 @@ type OrderHistoryEvent = { tableName: 'order_history' } & ITableName &
 		timeFailed: string | undefined
 		vehicleId: string // parse to int
 		state: string | undefined
+	}
+
+type BufferHistoryEvent = { tableName: 'buffer_history' } & ITableName &
+	History & {
+		id: number
+		physicalId: string
+		logicalId: string
+		unuse?: boolean
+		carrierId: string
+		user: string
+		note: string
+		unusedTime?: string
+	}
+type StationHistoryEvent = { tableName: 'station_history' } & ITableName &
+	History & {
+		id: number
+		physicalId: string
+		logicalId: string
+		unuse: boolean
+		carrierId: string
+		user: string
+		note: string
+		unusedTime?: string
+	}
+type ModeStateHistoryEvent = { tableName: 'mode_state_history' } & ITableName &
+	History & {
+		comm_state: number
+		control_state: number
+		tsc_state: number
+		pm_state: number
+		ai_mode: number
 	}
 
 type RemainedAlarm = {
@@ -336,12 +436,16 @@ type CurrentVehicle = {
 	locationDropoff?: string
 	locationPickup?: string
 	locationMove?: string
+	user?: string
+	note?: string
 }
 type CurrentSegmentBlocking = {
 	id: number
 	segmentId: number
 	disabledBy: string
 	reason: string
+	user?: string
+	note?: string
 }
 type CurrentOrder = {
 	assignmentDetails: string | null
@@ -363,6 +467,36 @@ type CurrentOrder = {
 	state: string
 }
 
+type CurrentBuffer = {
+	id: number
+	note: string
+	user: string
+	point: number
+	unuse: boolean
+	offset: number
+	direction: string
+	carrierId?: string
+	logicalId: string
+	nextPoint: number
+	physicalId: string
+	unusedTime?: string
+}
+type CurrentStation = {
+	id: number
+	note: string
+	user: string
+	point: number
+	unuse: boolean
+	offset: number
+	direction: string
+	carrierId?: string
+	logicalId: string
+	nextPoint: number
+	physicalId: string
+	unusedTime?: string //(date)
+	carrierType?: number
+}
+
 export {
 	LogicalId,
 	PhysicalId,
@@ -374,12 +508,17 @@ export {
 	PlaybackMtl,
 	PlaybackSnapshot,
 	PlaybackSnapshotData,
+	PlaybackSnapshotState,
 	PlaybackSnapshotVehicle,
 	PlaybackSnapshotSegmentBlocking,
 	PlaybackSnapshotOrder,
+	PlaybackSnapshotBuffer,
+	PlaybackSnapshotStation,
 	VehicleHistoryEvent,
 	OrderHistoryEvent,
 	SegmentBlockingHistoryEvent,
+	BufferHistoryEvent,
+	StationHistoryEvent,
 	HistoryEvent,
 	RemainedAlarm,
 	AlarmChange,
@@ -388,4 +527,6 @@ export {
 	CurrentVehicle,
 	CurrentSegmentBlocking,
 	CurrentOrder,
+	CurrentBuffer,
+	CurrentStation,
 }

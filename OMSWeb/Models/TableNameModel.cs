@@ -20,4 +20,17 @@ namespace OMSWeb.Models
   {
     public string TableName { get; set; } = "segment_blocking_history";
   }
+  public class BufferHistoryWithTableName : BufferHistoryEntity, ITableName
+  {
+    public string TableName { get; set; } = "buffer_history";
+  }
+  public class StationHistoryWithTableName : StationHistoryEntity, ITableName
+  {
+    public string TableName { get; set; } = "station_history";
+  }
+
+  public class ModeStateHistoryWithTableName : ModeStateHistoryEntity, ITableName
+  {
+    public string TableName { get; set; } = "mode_state_history";
+  }
 }
