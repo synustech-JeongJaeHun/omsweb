@@ -460,7 +460,7 @@ namespace OMSWeb.Repositories
 	        ROW_NUMBER() OVER (ORDER BY UnuseTime DESC) AS ROW_NUMBER, Type, OnlineName, User, Comments, UnuseTime, ObjectId
         FROM  ((
 			        SELECT 'Segment' as Type, seg.segment_id::text as OnlineName, seg.user as User, seg.note as Comments, 
-				        seg.unused_time as UnuseTime, seg.id as ObjectId
+				        seg.unused_time as UnuseTime, seg.segment_id as ObjectId
 			        FROM segment_blocking seg 
 			        WHERE seg.user <> '' or seg.note <> '' 
 		        ) 
