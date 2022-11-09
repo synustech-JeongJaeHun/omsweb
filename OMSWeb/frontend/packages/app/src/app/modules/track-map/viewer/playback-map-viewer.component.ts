@@ -108,6 +108,10 @@ export class PlaybackMapViewerComponent implements OnInit, OnDestroy {
 		return this.systemStatusService.nodeMarginSetting?.bufferMargin
 	}
 
+	get currentModeState() {
+		return this.playService.currentModeState
+	}
+
 	constructor(
 		private router: Router,
 		private auth: AuthService,

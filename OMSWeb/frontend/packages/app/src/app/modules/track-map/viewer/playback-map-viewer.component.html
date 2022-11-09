@@ -74,22 +74,20 @@
 		</oms-playback-map-side-panel>
 	</div>
 
-
 	<!-- state-panel -->
 	<div
+		*ngIf="currentModeState"
 		id="state-panel"
 		class="{{ showHistoryPanel ? '--active' : '--deactive' }}"
 	>
 		<table>
-			<th colspan="3">
-				State History Demo
-			</th>
+			<th colspan="3">State History Demo</th>
 			<tr>
 				<td>
-					<mat-icon>cloud</mat-icon>
+					{{ currentModeState.tsc_state }}
 				</td>
-				<td>Host</td>
-				<td>Auto</td>
+				<td>{{ currentModeState.comm_state }}</td>
+				<td>{{ currentModeState.control_state }}</td>
 			</tr>
 		</table>
 	</div>
