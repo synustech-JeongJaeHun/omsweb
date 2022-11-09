@@ -346,7 +346,7 @@ type StationHistoryEvent = { tableName: 'station_history' } & ITableName &
 		unusedTime?: string
 	}
 type ModeStateHistoryEvent = { tableName: 'mode_state_history' } & ITableName &
-	History & {
+	Omit<History, 'historySourceId'> & {
 		comm_state: number
 		control_state: number
 		tsc_state: number

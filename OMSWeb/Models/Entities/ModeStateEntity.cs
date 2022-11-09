@@ -13,7 +13,6 @@ namespace OMSWeb.Models.Entities
 
   public class ModeStateHistoryEntity : ModeStateEntity
   {
-    public int HistorySourceId { get; set; }
     public DateTime HistoryChangeTime { get; set; }
     public string HistoryChangeType { get; set; }
   }
