@@ -25,11 +25,17 @@ import {
 	SegmentBlockingHistoryEvent,
 	HistoryEvent,
 	VehicleHistoryEvent,
+	BufferHistoryEvent,
+	StationHistoryEvent,
 } from '@oms/root/models/playback.model'
 import {
+	convertBufferHistoryEventToTmUpdateDtoBuffer,
 	convertSegmentBlockingHistoryEventToTmUpdateDtoSegmentDisabled,
+	convertSnapshotBufferToTmBuffer,
 	convertSnapshotSegmentBlockingToTmUpdateDtoSegmentDisabled,
+	convertSnapshotStationToTmStation,
 	convertSnapshotVehicleToTmUpdateDtoVehicle,
+	convertStationHistoryEventToTmUpdateDtoStation,
 	convertTrackBufferToTmBuffer,
 	convertTrackMtlToTmMtl,
 	convertTrackPointToTmPoint,
@@ -149,45 +155,60 @@ export class PlaybackMapViewerComponent implements OnInit, OnDestroy {
 	}
 
 	private setToCurrentSnapshot() {
+		const points = (this.playService.track.data.points ?? []).map(
+			convertTrackPointToTmPoint,
+		)
+		const segmentParts = (this.playService.track.data.segment_parts ?? []).map(
+			(sp) => {
+				const segment = (this.playService.track.data.segments ?? []).find(
+					(s) => s.id === sp.segment_id,
+				)
+
+				return {
+					id: segment.id,
+					logicalId: segment.logical_id,
+					physicalId: segment.physical_id,
+					startPoint: segment.start_point,
+					endPoint: segment.end_point,
+					length: segment.length,
+					speed: segment.speed,
+
+					segpartId: sp.id,
+					type: sp.type,
+					location: sp.location,
+					direction: sp.direction,
+				}
+			},
+		)
+		const buffers = this.playService.currentSnapshot.data.buffers
+			? this.playService.currentSnapshot.data.buffers.map(
+					convertSnapshotBufferToTmBuffer,
+			  )
+			: this.playService.track.data.buffers
+			? this.playService.track.data.buffers.map(convertTrackBufferToTmBuffer)
+			: []
+		const stations = this.playService.currentSnapshot.data.stations
+			? this.playService.currentSnapshot.data.stations.map(
+					convertSnapshotStationToTmStation,
+			  )
+			: this.playService.track.data.stations
+			? this.playService.track.data.stations.map(convertTrackStationToTmStation)
+			: []
+		const mtls = (this.playService.track.data.mtls ?? []).map(
+			convertTrackMtlToTmMtl,
+		)
+		const vehicles = []
+		const segmentDisabled = []
+
 		// @ts-ignore
 		this.viewer.setTrack({
-			points: (this.playService.track.data.points ?? []).map(
-				convertTrackPointToTmPoint,
-			),
-
-			segmentParts: (this.playService.track.data.segment_parts ?? []).map(
-				(sp) => {
-					const segment = (this.playService.track.data.segments ?? []).find(
-						(s) => s.id === sp.segment_id,
-					)
-
-					return {
-						id: segment.id,
-						logicalId: segment.logical_id,
-						physicalId: segment.physical_id,
-						startPoint: segment.start_point,
-						endPoint: segment.end_point,
-						length: segment.length,
-						speed: segment.speed,
-
-						segpartId: sp.id,
-						type: sp.type,
-						location: sp.location,
-						direction: sp.direction,
-					}
-				},
-			),
-			buffers: (this.playService.track.data.buffers ?? []).map(
-				convertTrackBufferToTmBuffer,
-			),
-			stations: (this.playService.track.data.stations ?? []).map(
-				convertTrackStationToTmStation,
-			),
-			mtls: (this.playService.track.data.mtls ?? []).map(
-				convertTrackMtlToTmMtl,
-			),
-			vehicles: [],
-			segmentDisabled: [],
+			points,
+			segmentParts,
+			buffers,
+			stations,
+			mtls,
+			vehicles,
+			segmentDisabled,
 		})
 
 		// make other task
@@ -223,25 +244,26 @@ export class PlaybackMapViewerComponent implements OnInit, OnDestroy {
 	}
 
 	private consumeEvents(events: HistoryEvent[]) {
-		const vehicleReduceMap = new Map<
-			HistoryEvent['historySourceId'],
-			VehicleHistoryEvent
-		>()
-		events
-			.filter((e) => e.tableName === 'vehicle_history')
-			.forEach((event) => {
-				const id = event.historySourceId
-				const eventInMap = vehicleReduceMap.get(id)
-				// @ts-ignore
-				vehicleReduceMap.set(id, { ...eventInMap, ...event })
-			})
-		const segmentBlockingEvents = events.filter(
-			(e) => e.tableName === 'segment_blocking_history',
-		) as SegmentBlockingHistoryEvent[]
-		vehicleReduceMap.forEach((event) => this.applyVehicleHistoryEvent(event))
-		segmentBlockingEvents.forEach((event) =>
-			this.applySegmentBlockingHistoryEvent(event),
-		)
+		console.log('clockchanged', events)
+		events.forEach((event) => {
+			switch (event.tableName) {
+				case 'vehicle_history':
+					this.applyVehicleHistoryEvent(event)
+					break
+				case 'segment_blocking_history':
+					this.applySegmentBlockingHistoryEvent(event)
+					break
+				case 'buffer_history':
+					this.applyBufferHistoryEvent(event)
+					break
+				case 'station_history':
+					this.applyStationHistoryEvent(event)
+					break
+
+				default:
+					break
+			}
+		})
 	}
 	private applyVehicleHistoryEvent(event: VehicleHistoryEvent) {
 		this.viewer.updateVehicle(
@@ -256,6 +278,18 @@ export class PlaybackMapViewerComponent implements OnInit, OnDestroy {
 		this.viewer.updateSegmentDisabled(
 			event.historyChangeType,
 			convertSegmentBlockingHistoryEventToTmUpdateDtoSegmentDisabled(event),
+		)
+	}
+	private applyBufferHistoryEvent(event: BufferHistoryEvent) {
+		this.viewer.updateBuffer(
+			event.historyChangeType,
+			convertBufferHistoryEventToTmUpdateDtoBuffer(event),
+		)
+	}
+	private applyStationHistoryEvent(event: StationHistoryEvent) {
+		this.viewer.updateStation(
+			event.historyChangeType,
+			convertStationHistoryEventToTmUpdateDtoStation(event),
 		)
 	}
 

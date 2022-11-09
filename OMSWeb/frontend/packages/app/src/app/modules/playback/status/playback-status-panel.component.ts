@@ -10,6 +10,8 @@ export class PlaybackStatusPanelComponent implements OnInit, OnDestroy {
 	resizeHandler: any
 	tableHeightNum = 300
 
+	bufferEnabled: boolean = true
+
 	get tableHeight(): string {
 		return this.tableHeightNum.toString()
 	}
@@ -23,7 +25,11 @@ export class PlaybackStatusPanelComponent implements OnInit, OnDestroy {
 	constructor(
 		private mapStateSvc: MapStatesService,
 		private settingSvc: SettingsService,
-	) {}
+	) {
+		settingSvc.serviceConfig.subscribe(
+			(config) => (this.bufferEnabled = config.bufferEnabled),
+		)
+	}
 
 	ngOnInit(): void {
 		this.resizeHandler = this.onMouseMove.bind(this)

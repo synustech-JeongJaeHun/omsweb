@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -61,12 +62,25 @@ namespace OMSWeb.Controllers
     }
 
     [HttpGet("history-events")]
-    public ActionResult<object> GetHistoriesBetween([FromQuery] DateTimeOffset from, [FromQuery] DateTimeOffset to)
+    public async Task<ActionResult<object>> GetHistoriesBetween([FromQuery] DateTimeOffset from, [FromQuery] DateTimeOffset to)
     {
-      var vehicleEvents = _svc.GetVehicleHistoriesBetween(from, to).ToList<ITableName>();
-      var orderEvents = _svc.GetOrderHistoriesBetween(from, to).ToList<ITableName>();
-      var segmentBlockingEvents = _svc.GetSegmentBlockingHistoriesBetween(from, to).ToList<ITableName>();
-      return vehicleEvents.Concat(orderEvents).Concat(segmentBlockingEvents).OrderBy(e => e.HistoryChangeTime).ToList();
+
+      var vehicleEventsTask = Task.Run(() => _svc.GetVehicleHistoriesBetween(from, to).ToList<ITableName>());
+      var orderEventsTask = Task.Run(() => _svc.GetOrderHistoriesBetween(from, to).ToList<ITableName>());
+      var segmentBlockingEventsTask = Task.Run(() => _svc.GetSegmentBlockingHistoriesBetween(from, to).ToList<ITableName>());
+      var bufferEventsTask = Task.Run(() => _svc.GetBufferHistoriesBetween(from, to).ToList<ITableName>());
+      var stationEventsTask = Task.Run(() => _svc.GetStationHistoriesBetween(from, to).ToList<ITableName>());
+      var modeStateEventsTask = Task.Run(() => _svc.GetModeStateHistoriesBetween(from, to).ToList<ITableName>());
+
+      await Task.WhenAll(new[] { vehicleEventsTask, orderEventsTask, segmentBlockingEventsTask, bufferEventsTask, stationEventsTask, modeStateEventsTask });
+
+      return vehicleEventsTask.Result
+        .Concat(orderEventsTask.Result)
+        .Concat(segmentBlockingEventsTask.Result)
+        .Concat(bufferEventsTask.Result)
+        .Concat(stationEventsTask.Result)
+        .Concat(modeStateEventsTask.Result)
+        .OrderBy(e => e.HistoryChangeTime).ToList();
     }
   }
 }

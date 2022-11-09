@@ -41,6 +41,12 @@ namespace OMSWeb.Services
       => this._repo.GetOrderHistoriesBetween(from, to);
     public IList<SegmentBlockingHistoryWithTableName> GetSegmentBlockingHistoriesBetween(DateTimeOffset from, DateTimeOffset to)
       => this._repo.GetSegmentBlockingHistoriesBetween(from, to);
+    public IList<BufferHistoryWithTableName> GetBufferHistoriesBetween(DateTimeOffset from, DateTimeOffset to)
+      => this._repo.GetBufferHistoriesBetween(from, to);
+    public IList<StationHistoryWithTableName> GetStationHistoriesBetween(DateTimeOffset from, DateTimeOffset to)
+      => this._repo.GetStationHistoriesBetween(from, to);
+    public IList<ModeStateHistoryWithTableName> GetModeStateHistoriesBetween(DateTimeOffset from, DateTimeOffset to)
+      => this._repo.GetModeStateHistoriesBetween(from, to);
   }
 }
 

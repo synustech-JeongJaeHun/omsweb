@@ -10,6 +10,8 @@ import { TrackMapModule } from '../track-map/track-map.module'
 import { MonitorModule } from '../monitor/monitor.module'
 import { PlaybackOrderStatusComponent } from './status/playback-order-status.component'
 import { PlaybackVehicleStatusComponent } from './status/playback-vehicle-status.component'
+import { PlaybackBufferStatusComponent } from './status/playback-buffer-status.component'
+import { PlaybackStationStatusComponent } from './status/playback-station-status.component'
 import { PlaybackStatusPanelComponent } from './status/playback-status-panel.component'
 
 @NgModule({
@@ -18,6 +20,8 @@ import { PlaybackStatusPanelComponent } from './status/playback-status-panel.com
 		PlaybackControlDialogComponent,
 		PlaybackOrderStatusComponent,
 		PlaybackVehicleStatusComponent,
+		PlaybackBufferStatusComponent,
+		PlaybackStationStatusComponent,
 		PlaybackStatusPanelComponent,
 		PlaybackAlertDialogComponent,
 	],

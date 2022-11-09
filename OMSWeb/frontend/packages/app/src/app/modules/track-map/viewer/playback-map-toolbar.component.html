@@ -10,7 +10,7 @@
     matTooltipPosition="right" [matTooltip]="'names.playback' | translate" (click)="onAlertDialog()" >
     	<mat-icon  matBadgeSize="small"  [class]="getAlarmStatus()">notifications</mat-icon>
       <span class="tool-name" *ngIf="showToolName">{{
-      "names.centerZoom" | translate
+      "names.alarms" | translate
       }}</span>
   </button>
   <button matListItem mat-button class="tool-item" (click)="state.emit(true)">
