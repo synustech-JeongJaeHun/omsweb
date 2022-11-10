@@ -13,7 +13,7 @@ function getTimeRangeChunks(start: Date, end: Date, step: number) {
 
 	let cStart = start
 	let cEnd = addSeconds(cStart, step)
-	const result: Date[][] = []
+	const result: [Date, Date][] = []
 
 	while (isBefore(cStart, end)) {
 		if (isAfter(cEnd, end) || cEnd.getTime() === end.getTime()) {
