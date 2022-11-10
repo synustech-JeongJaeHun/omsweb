@@ -509,6 +509,17 @@ type CurrentStation = {
 	carrierType?: number
 }
 
+type CurrentZcu = {
+	id: number
+	x: number
+	y: number
+	status: number
+	zcuType: number
+	usingType: number
+	user: string
+	note: string
+}
+
 export {
 	LogicalId,
 	PhysicalId,
@@ -543,4 +554,5 @@ export {
 	CurrentOrder,
 	CurrentBuffer,
 	CurrentStation,
+	CurrentZcu,
 }

@@ -1,0 +1,77 @@
+<dx-data-grid
+	[dataSource]="dataSource"
+	[remoteOperations]="true"
+	[height]="tableHeight"
+	[repaintChangesOnly]="true"
+	[columnAutoWidth]="true"
+	[showBorders]="false"
+	[highlightChanges]="false"
+	[showColumnLines]="true"
+	[showRowLines]="true"
+	[headerFilter]="false"
+	[(selectedRowKeys)]="selectedRows"
+	allowColumnResizing="true"
+>
+	<dxo-scrolling mode="virtual"></dxo-scrolling>
+	<dxo-paging [pageSize]="50"></dxo-paging>
+	<dxo-pager
+		[showPageSizeSelector]="true"
+		[allowedPageSizes]="[50, 100, 200]"
+		[showInfo]="true"
+		visible="true"
+	>
+	</dxo-pager>
+
+	<dxo-selection [mode]="'none'" showCheckBoxesMode="always"></dxo-selection>
+	<dxo-search-panel
+		[placeholder]="'names.search' | translate"
+		[visible]="true"
+	></dxo-search-panel>
+	<dxo-load-panel [enabled]="false"></dxo-load-panel>
+
+	<dxi-column
+		dataType="string"
+		dataField="id"
+		sortOrder="desc"
+		[caption]="'names.id' | translate"
+		[width]="50"
+	></dxi-column>
+
+	<dxi-column
+		dataType="string"
+		dataField="usingType"
+		[caption]="'names.usingType' | translate"
+		cellTemplate="usingTypeTemplate"
+		[width]="100"
+	></dxi-column>
+	<div *dxTemplate="let data of 'usingTypeTemplate'">
+		{{ makeUsingTypeReadable(data.displayValue) }}
+	</div>
+
+	<dxi-column
+		dataType="string"
+		dataField="zcuType"
+		[caption]="'names.zcuType' | translate"
+		cellTemplate="zcuTypeTemplate"
+		[width]="100"
+	></dxi-column>
+	<div *dxTemplate="let data of 'zcuTypeTemplate'">
+		{{ makeZcuTypeReadable(data.displayValue) }}
+	</div>
+
+	<dxi-column
+		dataType="string"
+		dataField="status"
+		[caption]="'names.status' | translate"
+		cellTemplate="statusTemplate"
+		[width]="100"
+	></dxi-column>
+	<div *dxTemplate="let data of 'statusTemplate'">
+		<div
+			class="value"
+			[ngStyle]="{ 'background-color': getBgColor(0, data.displayValue) }"
+		>
+			{{ makeStatusReadable(data.displayValue) }}
+		</div>
+	</div>
+</dx-data-grid>

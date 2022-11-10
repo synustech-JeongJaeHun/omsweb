@@ -14,6 +14,7 @@ import {
 	AlarmChange,
 	CurrentBuffer,
 	CurrentStation,
+	CurrentZcu,
 } from '../models/playback.model'
 import {
 	convertBufferHistoryEventToCurrentBuffer,
@@ -24,8 +25,10 @@ import {
 	convertSnapshotSegmentBlockingToCurrentSegmentBlocking,
 	convertSnapshotStationToCurrentStation,
 	convertSnapshotVehicleToCurrentVehicle,
+	convertSnapshotZcuToCurrentZcu,
 	convertStationHistoryEventToCurrentStation,
 	convertVehicleHistoryEventToCurrentVehicle,
+	convertZcuHistoryEventToCurrentZcu,
 } from '../modules/playback/utils/playback-convert.util'
 import { addOrderInfoToCurrenVehicle } from '../modules/playback/utils/playback-join.util'
 import { getTimeRangeChunks } from '../modules/playback/utils/date.util'
@@ -81,6 +84,7 @@ export class PlaybackPlayService {
 	public currentOrders: CurrentOrder[] = []
 	public currentBuffers: CurrentBuffer[] = []
 	public currentStations: CurrentStation[] = []
+	public currentZcus: CurrentZcu[] = []
 
 	public historyEvents: HistoryEvent[]
 
@@ -302,6 +306,9 @@ export class PlaybackPlayService {
 			this.currentStations = (this.currentSnapshot.data.stations ?? []).map(
 				convertSnapshotStationToCurrentStation,
 			)
+			this.currentZcus = (this.currentSnapshot.data.zcus ?? []).map(
+				convertSnapshotZcuToCurrentZcu,
+			)
 		}
 
 		if (event.type === 'EventsChanged' || event.type === 'NextFrameEvent') {
@@ -388,6 +395,11 @@ export class PlaybackPlayService {
 							station,
 							convertStationHistoryEventToCurrentStation(station, event),
 						)
+				} else if (event.tableName === 'zcu_history') {
+					const zcu = this.currentZcus.find(
+						(cz) => cz.id === event.historySourceId,
+					)
+					if (zcu) Object.assign(zcu, convertZcuHistoryEventToCurrentZcu(event))
 				}
 			})
 		}

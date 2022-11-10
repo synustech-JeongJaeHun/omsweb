@@ -46,5 +46,11 @@
 				[tableHeight]="tableHeight"
 			></oms-playback-buffer-status>
 		</mat-tab>
+		<mat-tab [label]="'names.zcus' | translate">
+			<oms-playback-zcu-status
+				*ngIf="bufferEnabled ? currentTab === 4 : currentTab === 3"
+				[tableHeight]="tableHeight"
+			></oms-playback-zcu-status>
+		</mat-tab>
 	</mat-tab-group>
 </div>

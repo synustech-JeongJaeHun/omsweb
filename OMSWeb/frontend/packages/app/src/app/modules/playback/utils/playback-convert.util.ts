@@ -5,6 +5,7 @@ import {
 	CurrentSegmentBlocking,
 	CurrentStation,
 	CurrentVehicle,
+	CurrentZcu,
 	OrderHistoryEvent,
 	PlaybackBuffer,
 	PlaybackMtl,
@@ -416,6 +417,19 @@ function convertSnapshotStationToCurrentStation(
 	}
 }
 
+function convertSnapshotZcuToCurrentZcu(zcu: PlaybackSnapshotZcu): CurrentZcu {
+	return {
+		id: zcu.id,
+		x: zcu.x,
+		y: zcu.y,
+		status: zcu.status,
+		zcuType: zcu.zcu_type,
+		usingType: zcu.using_type,
+		user: zcu.user,
+		note: zcu.note,
+	}
+}
+
 function convertVehicleHistoryEventToCurrentVehicle(
 	event: VehicleHistoryEvent,
 ): CurrentVehicle {
@@ -528,6 +542,21 @@ function convertStationHistoryEventToCurrentStation(
 	}
 }
 
+function convertZcuHistoryEventToCurrentZcu(
+	event: ZcuHistoryEvent,
+): CurrentZcu {
+	return {
+		id: event.id,
+		x: event.x,
+		y: event.y,
+		status: event.status,
+		zcuType: event.zcuType,
+		usingType: event.usingType,
+		user: event.user,
+		note: event.note,
+	}
+}
+
 export {
 	// ===============================TM=======================================
 	// For TM - Track
@@ -554,10 +583,12 @@ export {
 	convertSnapshotOrderToCurrentOrder,
 	convertSnapshotBufferToCurrentBuffer,
 	convertSnapshotStationToCurrentStation,
+	convertSnapshotZcuToCurrentZcu,
 	// For CurrentState from Events
 	convertVehicleHistoryEventToCurrentVehicle,
 	convertSegmentBlockingHistoryEventToCurrentSegmentBlocking,
 	convertOrderHistoryEventToCurrentOrder,
 	convertBufferHistoryEventToCurrentBuffer,
 	convertStationHistoryEventToCurrentStation,
+	convertZcuHistoryEventToCurrentZcu,
 }
