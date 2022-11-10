@@ -81,13 +81,12 @@
 		class="{{ showHistoryPanel ? '--active' : '--deactive' }}"
 	>
 		<table>
-			<th colspan="3">State History Demo</th>
 			<tr>
 				<td>
-					{{ currentModeState.tsc_state }}
+					<mat-icon>{{ hostStatusIcon }}</mat-icon>
 				</td>
-				<td>{{ currentModeState.comm_state }}</td>
-				<td>{{ currentModeState.control_state }}</td>
+				<td>{{ hostModeText }}</td>
+				<td>{{ tscModeText }}</td>
 			</tr>
 		</table>
 	</div>
