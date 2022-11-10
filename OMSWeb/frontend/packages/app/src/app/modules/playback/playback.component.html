@@ -1,9 +1,16 @@
 <div id="loading-bar" *ngIf="loading === 'loading'">
-  <mat-progress-bar mode="indeterminate" aria-label="Loading"></mat-progress-bar>
+	<mat-progress-bar
+		mode="indeterminate"
+		aria-label="Loading"
+	></mat-progress-bar>
 </div>
 
-<oms-legacy-map-viewer *ngIf="loading === 'done'" class="map-viewer" [preference]="mapPreference"></oms-legacy-map-viewer>
+<oms-playback-map-viewer
+	*ngIf="loading === 'done'"
+	class="map-viewer"
+	[preference]="mapPreference"
+></oms-playback-map-viewer>
 
 <div id="map-status" *ngIf="showControlTable">
-  <oms-playback-status-panel></oms-playback-status-panel>
+	<oms-playback-status-panel></oms-playback-status-panel>
 </div>

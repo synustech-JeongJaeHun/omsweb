@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core'
 import { PlaybackService } from '@oms/root/services/playback.service'
 import { PlaybackPlayService } from '@oms/root/services/playback-play.service'
 import * as DateFns from 'date-fns'
+import { getTimeRangeChunks } from './utils/date.util'
 import { SettingsService } from '@oms/root/services/settings.service'
 
 @Component({
@@ -36,8 +37,7 @@ export class PlaybackComponent implements OnInit, OnDestroy {
 		try {
 			this.playbackService.getPlaybackInfo().subscribe((res) => {
 				this.playbackPlayService.firstSnapshotTime = res.firstSnapshotTime
-				this.playbackPlayService.lastTimelineEventTime =
-					res.lastTimelineEventTime
+				this.playbackPlayService.lastHistoryTime = res.lastHistoryTime
 
 				this.playbackPlayService.setPlaySpeed(1)
 
@@ -46,7 +46,7 @@ export class PlaybackComponent implements OnInit, OnDestroy {
 
 					const start = (() => {
 						const before30Minute = DateFns.sub(
-							this.playbackPlayService.lastTimelineEventTime,
+							this.playbackPlayService.lastHistoryTime,
 							{ minutes: 30 },
 						)
 						return this.playbackPlayService.firstSnapshotTime.getTime() >
@@ -56,7 +56,7 @@ export class PlaybackComponent implements OnInit, OnDestroy {
 					})()
 					this.playbackPlayService.window = {
 						start,
-						end: this.playbackPlayService.lastTimelineEventTime,
+						end: this.playbackPlayService.lastHistoryTime,
 					}
 					this.playbackPlayService.clock = start
 
@@ -85,18 +85,82 @@ export class PlaybackComponent implements OnInit, OnDestroy {
 								snapshot: this.playbackPlayService.currentSnapshot.data,
 							})
 
-							if (this.playbackPlayService.currentSnapshot?.timestamp)
-								this.playbackService
-									.getTimelineEvents(
-										this.playbackPlayService.currentSnapshot.timestamp,
-										this.playbackPlayService.nextSnapshot?.timestamp ??
+							if (this.playbackPlayService.currentSnapshot?.timestamp) {
+								this.playbackPlayService.setLoaded({
+									from: this.playbackPlayService.currentSnapshot?.timestamp,
+									to: this.playbackPlayService.currentSnapshot?.timestamp,
+								})
+								// 1. when current snaphot is last snapshot
+								//    request with last time at once
+								if (this.playbackPlayService.nextSnapshot?.timestamp == null) {
+									this.playbackService
+										.getHistoryEvents(
+											this.playbackPlayService.currentSnapshot.timestamp,
 											new Date(9999, 1, 1),
+										)
+										.subscribe((res) => {
+											this.playbackPlayService.historyEvents = res
+											this.playbackPlayService.goToStartOfCurrentSnapshot()
+											this.playbackPlayService.setLoaded({
+												from: this.playbackPlayService.currentSnapshot
+													.timestamp,
+												to: this.playbackPlayService.lastHistoryTime,
+											})
+											this.isFirstSnapshotLoaded = true
+										})
+								} else {
+									// 2. when current snaphot is not last snapshot
+									//    split request by 15 seconds
+									const timeRanges = getTimeRangeChunks(
+										this.playbackPlayService.currentSnapshot.timestamp,
+										this.playbackPlayService.nextSnapshot.timestamp,
+										15,
 									)
-									.subscribe((res) => {
-										this.playbackPlayService.timelineEvents = res
-										this.playbackPlayService.goToStartOfCurrentSnapshot()
-										this.isFirstSnapshotLoaded = true
-									})
+									const [firstRange, ...ranges] = timeRanges
+
+									const getSlicedHistoryEvents = async (
+										timeRanges: [Date, Date][],
+										snapshotTimestmap: Date,
+									) => {
+										if (timeRanges.length === 0) return
+
+										const [firstRange, ...ranges] = timeRanges
+										const events = await this.playbackService
+											.getHistoryEvents(firstRange[0], firstRange[1])
+											.toPromise()
+
+										if (
+											this.playbackPlayService.currentSnapshot.timestamp !==
+											snapshotTimestmap
+										) {
+											return console.log('loading events conflict occured')
+										}
+
+										events.forEach((event) =>
+											this.playbackPlayService.historyEvents.push(event),
+										)
+
+										this.playbackPlayService.setLoaded({ to: firstRange[1] })
+										getSlicedHistoryEvents(ranges, snapshotTimestmap)
+									}
+
+									this.playbackService
+										.getHistoryEvents(firstRange[0], firstRange[1])
+										.subscribe((res) => {
+											this.playbackPlayService.historyEvents = res
+											this.playbackPlayService.goToStartOfCurrentSnapshot()
+											this.playbackPlayService.setLoaded({
+												from: firstRange[0],
+												to: firstRange[1],
+											})
+											this.isFirstSnapshotLoaded = true
+											getSlicedHistoryEvents(
+												ranges,
+												this.playbackPlayService.currentSnapshot.timestamp,
+											)
+										})
+								}
+							}
 						})
 				})
 			})

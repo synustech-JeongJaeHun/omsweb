@@ -9,7 +9,7 @@
 				>
 				<span>{{ '  ' }}</span>
 				<span>{{
-					playService.lastTimelineEventTime | date: 'yyyy-MM-dd HH:mm:ss'
+					playService.lastHistoryTime | date: 'yyyy-MM-dd HH:mm:ss'
 				}}</span>
 			</div>
 			<div class="form-period">
@@ -17,9 +17,10 @@
 					displayFormat="yyyy-MM-dd HH:mm"
 					type="datetime"
 					[min]="playService.firstSnapshotTime"
-					[max]="playService.lastTimelineEventTime"
+					[max]="playService.lastHistoryTime"
 					[value]="playService.window.start"
-					(valueChange)="playService.setWindowStart($event)"
+					(valueChange)="handleSetWindow('start', $event)"
+					[disabled]="isLoading"
 				>
 				</dx-date-box>
 				<div class="date-divider">~</div>
@@ -27,15 +28,16 @@
 					displayFormat="yyyy-MM-dd HH:mm"
 					type="datetime"
 					[min]="playService.firstSnapshotTime"
-					[max]="playService.lastTimelineEventTime"
+					[max]="playService.lastHistoryTime"
 					[value]="playService.window.end"
-					(valueChange)="playService.setWindowEnd($event)"
+					(valueChange)="handleSetWindow('end', $event)"
+					[disabled]="isLoading"
 				>
 				</dx-date-box>
 			</div>
 			<div class="control-slider">
 				<div class="slider-name">{{ 'names.snapshots' | translate }}</div>
-				<div style="position: relative; padding-top: 15px; margin-bottom: 5px;">
+				<div style="position: relative; padding-top: 15px; margin-bottom: 5px">
 					<time class="time" style="top: 0px; left: 0px">{{
 						playService.window.start | date: 'HH:mm:ss'
 					}}</time>
@@ -77,6 +79,7 @@
 					>
 						{{ playService.clock | date: 'HH:mm:ss' }}
 					</time>
+					<div class="loaded" [style.width.%]="loadedPercent"></div>
 					<mat-slider
 						*ngIf="this.playService.currentSnapshot"
 						color="primary"

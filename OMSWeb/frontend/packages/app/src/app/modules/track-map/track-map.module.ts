@@ -13,10 +13,10 @@ import { OverlapListComponent } from './side-panel/overlap-list.component'
 import { VehicleStatusDialogComponent } from './dialogs/vehicle-status-dialog.component'
 import { BufferStatusDialogComponent } from './dialogs/buffer-status-dialog.component'
 import { MapOverlappedComponent } from './viewer/map-overlapped.component'
-import { LegacyMapToolbarComponent } from './viewer/legacy-map-toolbar.component'
-import { LegacyMapViewerComponent } from './viewer/legacy-map-viewer.component'
-import { LegacyTrackVehicleDialogComponent } from './dialogs/legacy-track-vehicle-dialog.component'
-import { LegacyMapSidePanelComponent } from './side-panel/legacy-map-side-panel.component'
+import { PlaybackMapToolbarComponent } from './viewer/playback-map-toolbar.component'
+import { PlaybackMapViewerComponent } from './viewer/playback-map-viewer.component'
+import { PlaybackTrackVehicleDialogComponent } from './dialogs/playback-track-vehicle-dialog.component'
+import { PlaybackMapSidePanelComponent } from './side-panel/playback-map-side-panel.component'
 import { PlaybackVehicleStatusDialogComponent } from './dialogs/playback-vehicle-status-dialog.component'
 
 @NgModule({
@@ -32,21 +32,20 @@ import { PlaybackVehicleStatusDialogComponent } from './dialogs/playback-vehicle
 		OverlapListComponent,
 		VehicleStatusDialogComponent,
 		BufferStatusDialogComponent,
-		// legacy
-		LegacyMapViewerComponent,
-		LegacyMapToolbarComponent,
-		LegacyMapSidePanelComponent,
-		LegacyTrackVehicleDialogComponent,
 		// playback
+		PlaybackMapViewerComponent,
+		PlaybackMapToolbarComponent,
+		PlaybackMapSidePanelComponent,
+		PlaybackTrackVehicleDialogComponent,
 		PlaybackVehicleStatusDialogComponent,
 	],
 	imports: [CommonModule, SharedModule],
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 	exports: [
 		MapViewerComponent,
-		LegacyMapViewerComponent,
+		PlaybackMapViewerComponent,
 		MapToolbarComponent,
-		LegacyMapToolbarComponent,
+		PlaybackMapToolbarComponent,
 	],
 })
 export class TrackMapModule {}
