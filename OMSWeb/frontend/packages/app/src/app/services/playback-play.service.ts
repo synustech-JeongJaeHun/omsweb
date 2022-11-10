@@ -15,6 +15,7 @@ import {
 	CurrentBuffer,
 	CurrentStation,
 	CurrentZcu,
+	CurrentModeState,
 } from '../models/playback.model'
 import {
 	convertBufferHistoryEventToCurrentBuffer,
@@ -85,6 +86,7 @@ export class PlaybackPlayService {
 	public currentBuffers: CurrentBuffer[] = []
 	public currentStations: CurrentStation[] = []
 	public currentZcus: CurrentZcu[] = []
+	public currentModeState?: CurrentModeState = null
 
 	public historyEvents: HistoryEvent[]
 
@@ -309,6 +311,7 @@ export class PlaybackPlayService {
 			this.currentZcus = (this.currentSnapshot.data.zcus ?? []).map(
 				convertSnapshotZcuToCurrentZcu,
 			)
+			this.currentModeState = this.currentSnapshot.data.state ?? null
 		}
 
 		if (event.type === 'EventsChanged' || event.type === 'NextFrameEvent') {
@@ -400,6 +403,14 @@ export class PlaybackPlayService {
 						(cz) => cz.id === event.historySourceId,
 					)
 					if (zcu) Object.assign(zcu, convertZcuHistoryEventToCurrentZcu(event))
+				} else if (event.tableName === 'mode_state_history') {
+					this.currentModeState = {
+						ai_mode: event.ai_mode,
+						comm_state: event.comm_state,
+						control_state: event.control_state,
+						pm_state: event.pm_state,
+						tsc_state: event.tsc_state,
+					}
 				}
 			})
 		}

@@ -74,6 +74,23 @@
 		</oms-playback-map-side-panel>
 	</div>
 
+	<!-- state-panel -->
+	<div
+		*ngIf="currentModeState"
+		id="state-panel"
+		class="{{ showHistoryPanel ? '--active' : '--deactive' }}"
+	>
+		<table>
+			<tr>
+				<td>
+					<mat-icon>{{ hostStatusIcon }}</mat-icon>
+				</td>
+				<td>{{ hostModeText }}</td>
+				<td>{{ tscModeText }}</td>
+			</tr>
+		</table>
+	</div>
+
 	<!-- maptoolbar at left side -->
 	<oms-playback-map-toolbar
 		id="map-toolbar"
@@ -84,6 +101,7 @@
 		(find)="findOnTM($event)"
 		(focus)="focusOnTM($event)"
 		(track)="trackOnTM($event)"
+		(state)="stateOnTM($event)"
 	>
 	</oms-playback-map-toolbar>
 

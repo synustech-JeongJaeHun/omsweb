@@ -46,6 +46,11 @@ import {
 	convertZcuHistoryEventToTmUpdateDtoZcu,
 } from '../../playback/utils/playback-convert.util'
 import { SystemStatusService } from '@oms/root/services/system-status.service'
+import { TranslateService } from '@ngx-translate/core'
+import {
+	HostSessionStatusEnums,
+	OnOfflineModeEnums,
+} from '../../../models/enums'
 
 @Component({
 	selector: 'oms-playback-map-viewer',
@@ -89,6 +94,8 @@ export class PlaybackMapViewerComponent implements OnInit, OnDestroy {
 	public colocatedObjects = []
 	public mainColocatedObject: any
 	public showColocatedView = false
+	//history Panel
+	public showHistoryPanel = true
 
 	get activeDetails(): boolean {
 		return this.detailsVisible && this.auth.isAuthenticated
@@ -109,6 +116,29 @@ export class PlaybackMapViewerComponent implements OnInit, OnDestroy {
 		return this.systemStatusService.nodeMarginSetting?.bufferMargin
 	}
 
+	get currentModeState() {
+		return this.playService.currentModeState
+	}
+	get tscModeText(): string {
+		const tscParam = this.playService.currentModeState.tsc_state
+		return this.t$.instant(`enums.tscMode.${tscParam}`)
+	}
+	get hostModeText(): string {
+		const hostParam = this.playService.currentModeState.control_state
+		return this.t$.instant(`enums.hostMode.${hostParam}`)
+	}
+	get hostStatusIcon(): string {
+		const { comm_state } = this.playService.currentModeState
+		if (!(comm_state % 1000 === HostSessionStatusEnums.CONNECTED))
+			return 'cloud_off'
+		else if (
+			comm_state ===
+			HostSessionStatusEnums.CONNECTED + OnOfflineModeEnums.Online * 1000
+		)
+			return 'cloud_done'
+		return 'cloud_queue'
+	}
+
 	constructor(
 		private router: Router,
 		private auth: AuthService,
@@ -117,6 +147,7 @@ export class PlaybackMapViewerComponent implements OnInit, OnDestroy {
 		private settingSvc: SettingsService,
 		private trackMonitorSettingService: TrackMonitorSettingService,
 		private systemStatusService: SystemStatusService,
+		private t$: TranslateService,
 	) {}
 
 	hasPermissions(permissions: number[]): boolean {
@@ -252,7 +283,6 @@ export class PlaybackMapViewerComponent implements OnInit, OnDestroy {
 	}
 
 	private consumeEvents(events: HistoryEvent[]) {
-		console.log('clockchanged', events)
 		events.forEach((event) => {
 			switch (event.tableName) {
 				case 'vehicle_history':
@@ -384,6 +414,11 @@ export class PlaybackMapViewerComponent implements OnInit, OnDestroy {
 
 	public trackOnTM(event: { type: string; id: any }) {
 		this.viewer.track(event.type, event.id)
+	}
+	public stateOnTM(event: boolean) {
+		if (event === true) {
+			this.showHistoryPanel = !this.showHistoryPanel
+		}
 	}
 
 	public onMouseoverTM(event: CustomEvent) {

@@ -50,6 +50,7 @@ export class PlaybackMapToolbarComponent implements OnInit, OnDestroy {
 	@Output() find = new EventEmitter<{ type: string; id: any }>()
 	@Output() focus = new EventEmitter<{ type: string; id: any }>()
 	@Output() track = new EventEmitter<{ type: string; id: any }>()
+	@Output() state = new EventEmitter<boolean>()
 
 	@ViewChild('btnSearch', { read: ElementRef }) btnSearch: ElementRef
 	@ViewChild('btnTrack', { read: ElementRef }) btnTrack: ElementRef

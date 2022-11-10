@@ -358,7 +358,7 @@ type ZcuHistoryEvent = { tableName: 'zcu_history' } & ITableName &
 		usingType: number
 	}
 type ModeStateHistoryEvent = { tableName: 'mode_state_history' } & ITableName &
-	History & {
+	Omit<History, 'historySourceId'> & {
 		comm_state: number
 		control_state: number
 		tsc_state: number
@@ -519,6 +519,13 @@ type CurrentZcu = {
 	user: string
 	note: string
 }
+type CurrentModeState = {
+	ai_mode: number
+	pm_state: number
+	tsc_state: number
+	comm_state: number
+	control_state: number
+}
 
 export {
 	LogicalId,
@@ -555,4 +562,5 @@ export {
 	CurrentBuffer,
 	CurrentStation,
 	CurrentZcu,
+	CurrentModeState,
 }
