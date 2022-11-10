@@ -7,16 +7,25 @@ import { isAfter, addSeconds, isBefore } from 'date-fns'
  * @param step in second
  * @returns
  */
+
 function getTimeRangeChunks(start: Date, end: Date, step: number) {
 	if (isAfter(start, end)) throw new Error('Input Error')
 
-	function recursive(start: Date, end: Date, step: number, result: [Date,Date][]): [Date,Date][] {
-    return isBefore(addSeconds(start, step), end) 
-      ? recursive(addSeconds(start, step), end, step, [...result, [start, addSeconds(start, step)]])
-      : [...result, [start, end]]
-	}
+	let cStart = start
+	let cEnd = addSeconds(cStart, step)
+	const result: Date[][] = []
 
-	return recursive(start, end, step, [])
+	while (isBefore(cStart, end)) {
+		if (isAfter(cEnd, end) || cEnd.getTime() === end.getTime()) {
+			result.push([cStart, end])
+			break
+		}
+		result.push([cStart, cEnd])
+
+		cStart = cEnd
+		cEnd = addSeconds(cEnd, step)
+	}
+	return result
 }
 
 export { getTimeRangeChunks }
