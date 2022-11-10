@@ -45,6 +45,8 @@ namespace OMSWeb.Services
       => this._repo.GetBufferHistoriesBetween(from, to);
     public IList<StationHistoryWithTableName> GetStationHistoriesBetween(DateTimeOffset from, DateTimeOffset to)
       => this._repo.GetStationHistoriesBetween(from, to);
+    public IList<ZcuHistoryWithTableName> GetZcuHistoriesBetween(DateTimeOffset from, DateTimeOffset to)
+      => this._repo.GetZcuHistoriesBetween(from, to);
     public IList<ModeStateHistoryWithTableName> GetModeStateHistoriesBetween(DateTimeOffset from, DateTimeOffset to)
       => this._repo.GetModeStateHistoriesBetween(from, to);
   }

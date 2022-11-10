@@ -446,6 +446,33 @@ namespace OMSWeb.Repositories
       }
       return result;
     }
+    public IList<ZcuHistoryWithTableName> GetZcuHistoriesBetween(DateTimeOffset from, DateTimeOffset to)
+    {
+      var sql = @"
+            SELECT *
+            FROM zcu_history zh
+            WHERE zh.history_change_time between @from AND @to
+            ORDER BY zh.history_change_time ASC
+            ";
+
+      var result = new List<ZcuHistoryWithTableName>();
+      using (var conn = ConnectTrack())
+      {
+        try
+        {
+          result = conn.Query<ZcuHistoryWithTableName>(sql, new
+          {
+            from = from,
+            to = to
+          }).ToList();
+        }
+        catch (System.Exception)
+        {
+          Console.WriteLine("[GetHistoriesBetween] => null");
+        }
+      }
+      return result;
+    }
     public IList<ModeStateHistoryWithTableName> GetModeStateHistoriesBetween(DateTimeOffset from, DateTimeOffset to)
     {
       var sql = @"

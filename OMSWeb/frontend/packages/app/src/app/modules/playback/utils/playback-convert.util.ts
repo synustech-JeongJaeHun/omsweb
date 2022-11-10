@@ -5,6 +5,7 @@ import {
 	CurrentSegmentBlocking,
 	CurrentStation,
 	CurrentVehicle,
+	CurrentZcu,
 	OrderHistoryEvent,
 	PlaybackBuffer,
 	PlaybackMtl,
@@ -14,10 +15,12 @@ import {
 	PlaybackSnapshotSegmentBlocking,
 	PlaybackSnapshotStation,
 	PlaybackSnapshotVehicle,
+	PlaybackSnapshotZcu,
 	PlaybackStation,
 	SegmentBlockingHistoryEvent,
 	StationHistoryEvent,
 	VehicleHistoryEvent,
+	ZcuHistoryEvent,
 } from '../../../models/playback.model'
 import { getPortVehicleCommand, isConnected } from './playback-parse.util'
 
@@ -175,6 +178,16 @@ function convertSnapshotStationToTmStation(station: PlaybackSnapshotStation) {
 		note: station.note,
 	}
 }
+function convertSnapshotZcuToTmZcu(zcu: PlaybackSnapshotZcu) {
+	return {
+		id: zcu.id,
+		x: zcu.x,
+		y: zcu.y,
+		usingType: zcu.using_type,
+		error: zcu.status === 5,
+		zcuType: zcu.zcu_type,
+	}
+}
 
 function convertVehicleHistoryEventToTmUpdateDtoVehicle(
 	event: VehicleHistoryEvent,
@@ -268,6 +281,17 @@ function convertStationHistoryEventToTmUpdateDtoStation(
 		unuse: event.unuse,
 		user: event.user,
 		note: event.note,
+	}
+}
+
+function convertZcuHistoryEventToTmUpdateDtoZcu(event: ZcuHistoryEvent) {
+	return {
+		id: event.historySourceId,
+		x: event.x,
+		y: event.y,
+		usingType: event.usingType,
+		error: event.status === 5,
+		zcuType: event.zcuType,
 	}
 }
 
@@ -393,6 +417,19 @@ function convertSnapshotStationToCurrentStation(
 	}
 }
 
+function convertSnapshotZcuToCurrentZcu(zcu: PlaybackSnapshotZcu): CurrentZcu {
+	return {
+		id: zcu.id,
+		x: zcu.x,
+		y: zcu.y,
+		status: zcu.status,
+		zcuType: zcu.zcu_type,
+		usingType: zcu.using_type,
+		user: zcu.user,
+		note: zcu.note,
+	}
+}
+
 function convertVehicleHistoryEventToCurrentVehicle(
 	event: VehicleHistoryEvent,
 ): CurrentVehicle {
@@ -505,6 +542,21 @@ function convertStationHistoryEventToCurrentStation(
 	}
 }
 
+function convertZcuHistoryEventToCurrentZcu(
+	event: ZcuHistoryEvent,
+): CurrentZcu {
+	return {
+		id: event.historySourceId,
+		x: event.x,
+		y: event.y,
+		status: event.status,
+		zcuType: event.zcuType,
+		usingType: event.usingType,
+		user: event.user,
+		note: event.note,
+	}
+}
+
 export {
 	// ===============================TM=======================================
 	// For TM - Track
@@ -517,11 +569,13 @@ export {
 	convertSnapshotSegmentBlockingToTmUpdateDtoSegmentDisabled,
 	convertSnapshotBufferToTmBuffer,
 	convertSnapshotStationToTmStation,
+	convertSnapshotZcuToTmZcu,
 	// For TM - Events
 	convertVehicleHistoryEventToTmUpdateDtoVehicle,
 	convertSegmentBlockingHistoryEventToTmUpdateDtoSegmentDisabled,
 	convertBufferHistoryEventToTmUpdateDtoBuffer,
 	convertStationHistoryEventToTmUpdateDtoStation,
+	convertZcuHistoryEventToTmUpdateDtoZcu,
 	// =========================Current State=================================
 	// For CurrentState from Snapshot
 	convertSnapshotVehicleToCurrentVehicle,
@@ -529,10 +583,12 @@ export {
 	convertSnapshotOrderToCurrentOrder,
 	convertSnapshotBufferToCurrentBuffer,
 	convertSnapshotStationToCurrentStation,
+	convertSnapshotZcuToCurrentZcu,
 	// For CurrentState from Events
 	convertVehicleHistoryEventToCurrentVehicle,
 	convertSegmentBlockingHistoryEventToCurrentSegmentBlocking,
 	convertOrderHistoryEventToCurrentOrder,
 	convertBufferHistoryEventToCurrentBuffer,
 	convertStationHistoryEventToCurrentStation,
+	convertZcuHistoryEventToCurrentZcu,
 }

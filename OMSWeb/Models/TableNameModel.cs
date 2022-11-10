@@ -28,6 +28,10 @@ namespace OMSWeb.Models
   {
     public string TableName { get; set; } = "station_history";
   }
+  public class ZcuHistoryWithTableName : ZcuHistoryEntity, ITableName
+  {
+    public string TableName { get; set; } = "zcu_history";
+  }
 
   public class ModeStateHistoryWithTableName : ModeStateHistoryEntity, ITableName
   {

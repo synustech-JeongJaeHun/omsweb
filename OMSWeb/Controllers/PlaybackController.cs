@@ -70,15 +70,17 @@ namespace OMSWeb.Controllers
       var segmentBlockingEventsTask = Task.Run(() => _svc.GetSegmentBlockingHistoriesBetween(from, to).ToList<ITableName>());
       var bufferEventsTask = Task.Run(() => _svc.GetBufferHistoriesBetween(from, to).ToList<ITableName>());
       var stationEventsTask = Task.Run(() => _svc.GetStationHistoriesBetween(from, to).ToList<ITableName>());
+      var zcuEventsTask = Task.Run(() => _svc.GetZcuHistoriesBetween(from, to).ToList<ITableName>());
       var modeStateEventsTask = Task.Run(() => _svc.GetModeStateHistoriesBetween(from, to).ToList<ITableName>());
 
-      await Task.WhenAll(new[] { vehicleEventsTask, orderEventsTask, segmentBlockingEventsTask, bufferEventsTask, stationEventsTask, modeStateEventsTask });
+      await Task.WhenAll(new[] { vehicleEventsTask, orderEventsTask, segmentBlockingEventsTask, bufferEventsTask, stationEventsTask, zcuEventsTask, modeStateEventsTask });
 
       return vehicleEventsTask.Result
         .Concat(orderEventsTask.Result)
         .Concat(segmentBlockingEventsTask.Result)
         .Concat(bufferEventsTask.Result)
         .Concat(stationEventsTask.Result)
+        .Concat(zcuEventsTask.Result)
         .Concat(modeStateEventsTask.Result)
         .OrderBy(e => e.HistoryChangeTime).ToList();
     }

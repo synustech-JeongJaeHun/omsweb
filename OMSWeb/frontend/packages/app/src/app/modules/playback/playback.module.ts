@@ -12,6 +12,7 @@ import { PlaybackOrderStatusComponent } from './status/playback-order-status.com
 import { PlaybackVehicleStatusComponent } from './status/playback-vehicle-status.component'
 import { PlaybackBufferStatusComponent } from './status/playback-buffer-status.component'
 import { PlaybackStationStatusComponent } from './status/playback-station-status.component'
+import { PlaybackZcuStatusComponent } from './status/playback-zcu-status.component'
 import { PlaybackStatusPanelComponent } from './status/playback-status-panel.component'
 
 @NgModule({
@@ -22,6 +23,7 @@ import { PlaybackStatusPanelComponent } from './status/playback-status-panel.com
 		PlaybackVehicleStatusComponent,
 		PlaybackBufferStatusComponent,
 		PlaybackStationStatusComponent,
+		PlaybackZcuStatusComponent,
 		PlaybackStatusPanelComponent,
 		PlaybackAlertDialogComponent,
 	],
