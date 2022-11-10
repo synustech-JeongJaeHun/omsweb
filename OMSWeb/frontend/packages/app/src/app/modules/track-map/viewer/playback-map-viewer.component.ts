@@ -269,6 +269,7 @@ export class PlaybackMapViewerComponent implements OnInit, OnDestroy {
 					break
 				case 'zcu_history':
 					this.applyZcuHistoryEvent(event)
+					break
 
 				default:
 					break
@@ -303,7 +304,7 @@ export class PlaybackMapViewerComponent implements OnInit, OnDestroy {
 		)
 	}
 	private applyZcuHistoryEvent(event: ZcuHistoryEvent) {
-		this.viewer.updateStation(
+		this.viewer.updateZcu(
 			event.historyChangeType,
 			convertZcuHistoryEventToTmUpdateDtoZcu(event),
 		)

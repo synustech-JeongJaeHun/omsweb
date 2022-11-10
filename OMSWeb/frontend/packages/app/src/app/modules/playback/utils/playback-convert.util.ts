@@ -546,7 +546,7 @@ function convertZcuHistoryEventToCurrentZcu(
 	event: ZcuHistoryEvent,
 ): CurrentZcu {
 	return {
-		id: event.id,
+		id: event.historySourceId,
 		x: event.x,
 		y: event.y,
 		status: event.status,
