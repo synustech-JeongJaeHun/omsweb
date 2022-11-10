@@ -27,6 +27,7 @@ import {
 	VehicleHistoryEvent,
 	BufferHistoryEvent,
 	StationHistoryEvent,
+	ZcuHistoryEvent,
 } from '@oms/root/models/playback.model'
 import {
 	convertBufferHistoryEventToTmUpdateDtoBuffer,
@@ -35,12 +36,14 @@ import {
 	convertSnapshotSegmentBlockingToTmUpdateDtoSegmentDisabled,
 	convertSnapshotStationToTmStation,
 	convertSnapshotVehicleToTmUpdateDtoVehicle,
+	convertSnapshotZcuToTmZcu,
 	convertStationHistoryEventToTmUpdateDtoStation,
 	convertTrackBufferToTmBuffer,
 	convertTrackMtlToTmMtl,
 	convertTrackPointToTmPoint,
 	convertTrackStationToTmStation,
 	convertVehicleHistoryEventToTmUpdateDtoVehicle,
+	convertZcuHistoryEventToTmUpdateDtoZcu,
 } from '../../playback/utils/playback-convert.util'
 import { SystemStatusService } from '@oms/root/services/system-status.service'
 
@@ -192,6 +195,12 @@ export class PlaybackMapViewerComponent implements OnInit, OnDestroy {
 			: this.playService.track.data.stations
 			? this.playService.track.data.stations.map(convertTrackStationToTmStation)
 			: []
+		const zcus = this.playService.currentSnapshot.data.zcus
+			? this.playService.currentSnapshot.data.zcus.map(
+					convertSnapshotZcuToTmZcu,
+			  )
+			: []
+
 		const mtls = (this.playService.track.data.mtls ?? []).map(
 			convertTrackMtlToTmMtl,
 		)
@@ -207,6 +216,7 @@ export class PlaybackMapViewerComponent implements OnInit, OnDestroy {
 			mtls,
 			vehicles,
 			segmentDisabled,
+			zcus,
 		})
 
 		// make other task
@@ -257,6 +267,8 @@ export class PlaybackMapViewerComponent implements OnInit, OnDestroy {
 				case 'station_history':
 					this.applyStationHistoryEvent(event)
 					break
+				case 'zcu_history':
+					this.applyZcuHistoryEvent(event)
 
 				default:
 					break
@@ -288,6 +300,12 @@ export class PlaybackMapViewerComponent implements OnInit, OnDestroy {
 		this.viewer.updateStation(
 			event.historyChangeType,
 			convertStationHistoryEventToTmUpdateDtoStation(event),
+		)
+	}
+	private applyZcuHistoryEvent(event: ZcuHistoryEvent) {
+		this.viewer.updateStation(
+			event.historyChangeType,
+			convertZcuHistoryEventToTmUpdateDtoZcu(event),
 		)
 	}
 
