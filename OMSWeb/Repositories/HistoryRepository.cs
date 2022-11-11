@@ -43,9 +43,15 @@ namespace OMSWeb.Repositories
             return result;
         }
 
-        public IQueryable<OrderHistoryEntity> QueryOrders(DateTimeOffset from, DateTimeOffset to, int skip, int take)
+        public IQueryable<OrderHistoryEntity> QueryOrders(
+            DateTimeOffset from, DateTimeOffset to, int skip, int take, string condition, string sort)
         {
+            string WhereConditions = string.Empty;
+            string SortConditions = string.Empty;
             string LimitConditions = @"LIMIT @take OFFSET @skip";
+
+            if (string.IsNullOrWhiteSpace(condition) == false) WhereConditions = $" and {condition}";
+            if (string.IsNullOrWhiteSpace(sort) == false) SortConditions = $"ORDER BY OD.{sort}";
             if (skip <= 0 && take <= 0) LimitConditions = string.Empty;
 
             string sql = $@"
@@ -99,14 +105,20 @@ namespace OMSWeb.Repositories
                 INNER JOIN (
                     SELECT history_source_id AS order_id, max(history_change_time) AS last_updated
                     FROM order_history
-                    WHERE @from <= time_created and time_created <= @to
+                    WHERE 
+                        @from <= time_created and time_created <= @to
+                        {WhereConditions}
                     GROUP BY history_source_id
-                    --LIMIT @take OFFSET @skip
-                    {LimitConditions}
                 ) AS LAST_OD
                 ON OD.history_source_id = LAST_OD.order_id AND OD.history_change_time = LAST_OD.last_updated
                 LEFT OUTER JOIN vehicle_reg AS VR
                     ON OD.vehicle_id = VR.id
+
+                --ORDER BY history_source_id
+                {SortConditions}
+
+                --LIMIT @take OFFSET @skip
+                {LimitConditions}
                     ";
 
             IQueryable<OrderHistoryEntity> result;
@@ -142,9 +154,15 @@ namespace OMSWeb.Repositories
             return result;
         }
 
-        public IQueryable<VehicleHistoryEntity> QueryVehicles(DateTimeOffset from, DateTimeOffset to, int skip, int take)
+        public IQueryable<VehicleHistoryEntity> QueryVehicles(
+            DateTimeOffset from, DateTimeOffset to, int skip, int take, string condition, string sort)
         {
+            string WhereConditions = string.Empty;
+            string SortConditions = @"VH.id";
             string LimitConditions = @"LIMIT @take OFFSET @skip";
+
+            if (string.IsNullOrWhiteSpace(condition) == false) WhereConditions = $" and {condition}";
+            if (string.IsNullOrWhiteSpace(sort) == false) SortConditions = $"{sort}";
             if (skip <= 0 && take <= 0) LimitConditions = string.Empty;
 
             string sql = $@"
@@ -159,13 +177,16 @@ namespace OMSWeb.Repositories
                     SELECT history_source_id, max(id) AS max_id
                     FROM vehicle_history
                     --*where_condition*
-                    WHERE @from <= history_change_time and history_change_time <= @to
+                    WHERE 
+                        @from <= history_change_time and history_change_time <= @to
+                        {WhereConditions}
                     GROUP BY history_source_id
                     --LIMIT @take OFFSET @skip
                     {LimitConditions}
                 ) AS LVH
                 ON VH.id = LVH.max_id    
-                ORDER BY VH.id     
+                --ORDER BY VH.id 
+                ORDER BY {SortConditions}
                     ";
             IQueryable<VehicleHistoryEntity> result;
             using (var conn = ConnectTrack())
@@ -200,9 +221,15 @@ namespace OMSWeb.Repositories
             return result;
         }
 
-        public IQueryable<AlarmHistory> QueryAlarms(DateTimeOffset from, DateTimeOffset to, int skip, int take)
+        public IQueryable<AlarmHistory> QueryAlarms(
+            DateTimeOffset from, DateTimeOffset to, int skip, int take, string condition, string sort)
         {
+            string WhereConditions = string.Empty;
+            string SortConditions = @"VA.id desc";
             string LimitConditions = @"LIMIT @take OFFSET @skip";
+
+            if (string.IsNullOrWhiteSpace(condition) == false) WhereConditions = $" and {condition}";
+            if (string.IsNullOrWhiteSpace(sort) == false) SortConditions = $"{sort}";
             if (skip <= 0 && take <= 0) LimitConditions = string.Empty;
 
             string sql = $@"
@@ -220,7 +247,9 @@ namespace OMSWeb.Repositories
                     ON VA.error_code = AN.reference_id and AN.reference_table = 'vehicle_errors'
                 WHERE 
                     @from <= VA.time and VA.time <= @to
-                ORDER BY VA.id desc
+                    {WhereConditions}
+                --ORDER BY VA.id desc
+                ORDER BY {SortConditions}
                 --LIMIT @take OFFSET @skip
                 {LimitConditions}
                     ";
@@ -250,9 +279,15 @@ namespace OMSWeb.Repositories
             return result;
         }
 
-        public IQueryable<AlertEntity> QueryAlerts(DateTimeOffset from, DateTimeOffset to, int skip, int take)
+        public IQueryable<AlertEntity> QueryAlerts(
+            DateTimeOffset from, DateTimeOffset to, int skip, int take, string condition, string sort)
         {
+            string WhereConditions = string.Empty;
+            string SortConditions = @"ALT.id desc";
             string LimitConditions = @"LIMIT @take OFFSET @skip";
+
+            if (string.IsNullOrWhiteSpace(condition) == false) WhereConditions = $" and {condition}";
+            if (string.IsNullOrWhiteSpace(sort) == false) SortConditions = $"{sort}";
             if (skip <= 0 && take <= 0) LimitConditions = string.Empty;
 
             string sql = $@"
@@ -261,7 +296,9 @@ namespace OMSWeb.Repositories
                 FROM alerts AS ALT
                 WHERE 
                     @from <= ALT.time and ALT.time <= @to
-                ORDER BY ALT.id desc
+                    {WhereConditions}
+                --ORDER BY ALT.id desc
+                ORDER BY {SortConditions}
                 --LIMIT @take OFFSET @skip
                 {LimitConditions}
                     ";
@@ -292,10 +329,16 @@ namespace OMSWeb.Repositories
             return result;
         }
 
-        public IQueryable<NackHistoryEntity> QueryNacks(DateTimeOffset from, DateTimeOffset to, int skip, int take)
+        public IQueryable<NackHistoryEntity> QueryNacks(
+            DateTimeOffset from, DateTimeOffset to, int skip, int take, string condition, string sort)
         {
+            string WhereConditions = string.Empty;
+            string SortConditions = @"ModifiedTime desc";
             string LimitConditions = @"LIMIT @take OFFSET @skip";
-            if (skip <= 0 && take <= 0) LimitConditions = string.Empty;
+
+            if (string.IsNullOrWhiteSpace(condition) == false)  WhereConditions = $" and {condition}";
+            if (string.IsNullOrWhiteSpace(sort) == false)       SortConditions = $"{sort}";
+            if (skip <= 0 && take <= 0)                         LimitConditions = string.Empty;
 
             string sql = $@"
                 SELECT 
@@ -308,13 +351,16 @@ namespace OMSWeb.Repositories
                     CASE WHEN data::json->>'destName' is null THEN data::json->>'' ELSE data::json->>'destName' END as DestName,
                     CASE WHEN data::json->>'carrierID' is null THEN data::json->>'' ELSE data::json->>'carrierID' END as CarrierID,
                     CASE WHEN data::json->>'newCarrierID' is null THEN data::json->>'' ELSE data::json->>'newCarrierID' END as NewCarrierID,
+                    CASE WHEN data::json->>'carrierLoc' is null THEN data::json->>'' ELSE data::json->>'carrierLoc' END as CarrierLoc,
                     CASE WHEN data::json->>'nack' is null THEN data::json->>'' ELSE data::json->>'nack' END as Nack,
                     CASE WHEN data::json->>'nackReason' is null THEN data::json->>'' ELSE data::json->>'nackReason' END as NackReason,
 	                CASE WHEN data::json->>'nackParam' is null THEN data::json->>'' ELSE data::json->>'nackParam' END as NackParam
                 FROM rcmd_history
                 WHERE 
-                    @from <= time_modified AND time_modified <= @to
-                ORDER BY ModifiedTime desc
+                    @from <= time_modified AND time_modified <= @to 
+                    {WhereConditions}
+                --ORDER BY ModifiedTime desc
+                ORDER BY {SortConditions}
                 --LIMIT @take OFFSET @skip
                 {LimitConditions}
                     ";
