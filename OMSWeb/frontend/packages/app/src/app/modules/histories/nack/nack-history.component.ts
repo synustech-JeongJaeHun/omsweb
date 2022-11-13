@@ -77,7 +77,9 @@ export class NackHistoryComponent implements OnInit, OnDestroy {
 	)
 	fileName: string
 
-	dataSource: DataSource
+    dataSource: DataSource
+
+    executeTime: string
 
 	setDateWithMaxLimit() {
 		this.now = new Date()
@@ -98,10 +100,28 @@ export class NackHistoryComponent implements OnInit, OnDestroy {
 		this.preference = settingSvc.globalPreferences
 	}
 
-	search(startTime: Date, endTime: Date) {
-		console.log('bind Nack Data in component')
+  search(startTime: Date, endTime: Date) {
+        
+        this.executeTime = ''
+    const start = Date.now();
+    console.log(start.toString());
+
+  		console.log('bind Nack Data in component')
 		this.dataSource = this.svc.nacksDataSource(startTime, endTime)
-		this.applyFilter(startTime, endTime)
+        this.applyFilter(startTime, endTime)
+
+        const end = Date.now();
+        console.log(end.toString());
+
+        var gap = end - start;
+
+        const days = Math.floor(gap / (1000 * 60 * 60 * 24)); // 일
+        const hour = String(Math.floor((gap / (1000 * 60 * 60)) % 24)).padStart(2, "0"); // 시
+        const minutes = String(Math.floor((gap / (1000 * 60)) % 60)).padStart(2, "0"); // 분
+        const second = String(Math.floor((gap / 1000) % 60)).padStart(2, "0"); // 초
+
+        this.executeTime = hour + ':' + minutes + ':' + second;
+        console.log('time Nack history: ' + this.executeTime)
 	}
 
 	canDisplayTable(type: string): boolean {

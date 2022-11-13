@@ -1,4 +1,5 @@
 using System;
+using System.Data;
 using System.Globalization;
 using System.Linq;
 using System.Xml.Linq;
@@ -22,9 +23,9 @@ namespace OMSWeb.Services
             this._repo = historyRepo;
         }
 
-        public int QueryOrdersCount(DateTimeOffset from, DateTimeOffset to, int skip, int take)
+        public int QueryOrdersCount(DateTimeOffset from, DateTimeOffset to, int skip, int take, string condition)
         {
-            return this._repo.QueryOrdersCount(from, to);
+            return this._repo.QueryOrdersCount(from, to, condition);
         }
 
         public IQueryable<OrderEntity> QueryOrders(DateTimeOffset from, DateTimeOffset to, int skip, int take, string condition, string sort)
@@ -32,9 +33,9 @@ namespace OMSWeb.Services
             return this._repo.QueryOrders(from, to, skip, take, condition, sort);
         }
 
-        public int QueryVehiclesCount(DateTimeOffset from, DateTimeOffset to, int skip, int take)
+        public int QueryVehiclesCount(DateTimeOffset from, DateTimeOffset to, int skip, int take, string condition)
         {
-            return this._repo.QueryVehiclesCount(from, to);
+            return this._repo.QueryVehiclesCount(from, to, condition);
         }
 
         public IQueryable<VehicleHistoryEntity> QueryVehicles(DateTimeOffset from, DateTimeOffset to, int skip, int take, string condition, string sort)
@@ -42,9 +43,9 @@ namespace OMSWeb.Services
             return this._repo.QueryVehicles(from, to, skip, take, condition, sort);
         }
 
-        public int QueryAlarmsCount(DateTimeOffset from, DateTimeOffset to, int skip, int take)
+        public int QueryAlarmsCount(DateTimeOffset from, DateTimeOffset to, int skip, int take, string condition)
         {
-            return this._repo.QueryAlarmsCount(from, to);
+            return this._repo.QueryAlarmsCount(from, to, condition);
         }
 
         public IQueryable<AlarmHistory> QueryAlarms(DateTimeOffset from, DateTimeOffset to, int skip, int take, string condition, string sort)
@@ -52,19 +53,19 @@ namespace OMSWeb.Services
             return this._repo.QueryAlarms(from, to, skip, take, condition, sort);
         }
 
-        public int QueryAlertsCount(DateTimeOffset from, DateTimeOffset to, int skip, int take)
+        public int QueryAlertsCount(DateTimeOffset from, DateTimeOffset to, int skip, int take, string condition)
         {
-             return this._repo.QueryAlertsCount(from, to);
+            return this._repo.QueryAlertsCount(from, to, condition);
         }
 
         public IQueryable<AlertEntity> QueryAlerts(DateTimeOffset from, DateTimeOffset to, int skip, int take, string condition, string sort)
         {
-             return this._repo.QueryAlerts(from, to, skip, take, condition, sort);
+            return this._repo.QueryAlerts(from, to, skip, take, condition, sort);
         }
 
-        public int QueryNacksCount(DateTimeOffset from, DateTimeOffset to, int skip, int take)
+        public int QueryNacksCount(DateTimeOffset from, DateTimeOffset to, int skip, int take, string condition)
         {
-            return this._repo.QueryNacksCount(from, to);
+            return this._repo.QueryNacksCount(from, to, condition);
         }
 
         public IQueryable<NackHistoryEntity> QueryNacks(DateTimeOffset from, DateTimeOffset to, int skip, int take, string condition, string sort)
@@ -87,7 +88,9 @@ namespace OMSWeb.Services
                 return null;
         }
 
-        public (DateTimeOffset from, DateTimeOffset to, int skip, int take, string condition, string sort) GetLoadFilters2(DataSourceLoadOptions loadOptions)
+
+        public (DateTimeOffset from, DateTimeOffset to, int skip, int take, string condition, string sort) GetLoadFilters(
+            DataSourceLoadOptions loadOptions, string tableName)
         {
             DateTimeOffset from = new DateTimeOffset();
             DateTimeOffset to = new DateTimeOffset();
@@ -98,114 +101,59 @@ namespace OMSWeb.Services
 
             try
             {
-                if (loadOptions.Filter?.Count == 3)
-                {
-                    JToken token0 = JToken.FromObject(loadOptions.Filter[0]);
-                    JToken token2 = JToken.FromObject(loadOptions.Filter[2]);
-
-                    if (token0.Children().Count() == 1 && token2.Children().Count() == 1)
-                    {
-                        //return GetLoadFilters(loadOptions);
-                    }
-                    else
-                    {
-                        foreach (var child0 in token0.Children())
-                        {
-                        }
-
-
-                        //return GetLoadFilters(loadOptions);
-                    }
-                }
-
-
-                    foreach (var filter in loadOptions.Filter)  
-                {
-                    JToken token = JToken.FromObject(filter);
-                    if (token == null || token.Type != JTokenType.Array) continue;
-                    
-                    foreach (var child in token.Children())
-                    {
-                        if (child == null) continue;
-
-                        int idx = 0;
-                        if (token.Type == JTokenType.Array)
-                        {
-                            foreach (var child2 in child.Children())
-                            {
-                                switch (idx)
-                                {
-                                    case 0: child.ToString(); break;
-                                    case 1: child.ToString(); break;
-                                    case 2: child.ToString(); break;
-                                }
-                                idx++;
-                            }
-                        }
-                    }
-                    
-                }
- 
-            }
-            catch (Exception e)
-            {
-            }
-
-            return (from, to, skip, take, condition, sort);
-        }
-
-
-        public (DateTimeOffset from, DateTimeOffset to, int skip, int take, string condition, string sort) 
-            GetLoadFilters(DataSourceLoadOptions loadOptions, string tableName)
-        {
-            DateTimeOffset from = new DateTimeOffset();
-            DateTimeOffset to = new DateTimeOffset();
-            int skip = 0;
-            int take = 0;
-            string condition = string.Empty;
-            string sort = string.Empty;
-
-            //GetLoadFilters2(loadOptions);
-
-            try
-            {
-                if (loadOptions.Filter?.Count == 3)
-                {
-
-                    //String s = loadOptions.Filter[0].TryString();
-                    //JToken token = JToken.Parse(s);
-                    //Traverse("", token);
-                    
-                    string s0 = loadOptions.Filter[0].TryString();
-                    string s2 = loadOptions.Filter[2].TryString();
-
-                    if (string.IsNullOrEmpty(s0) == false)
-                        s0 = s0.Replace("\"", "").Replace("\r\n", "").Replace("[", "").Replace("]", "").Trim();
-
-                    if (string.IsNullOrEmpty(s2) == false)
-                        s2 = s2.Replace("\"", "").Replace("\r\n", "").Replace("[", "").Replace("]", "").Trim();
-
-                    string[] ar0 = s0.Split(',');
-                    string[] ar2 = s2.Split(',');
-
-                    if (ar0.Length == 3) from = DateTimeOffset.Parse(ar0[2].Trim());
-                    if (ar2.Length == 3) to = DateTimeOffset.Parse(ar2[2].Trim());
-                }
-
+                // pagination
                 skip = loadOptions.Skip;
                 take = loadOptions.Take;
 
+                // sort
                 if (loadOptions.Sort != null && loadOptions.Sort?.Count() > 0)
                 {
                     SortingInfo sortingInfo = loadOptions.Sort[0];
 
-                    string selector = TryORM(tableName, sortingInfo.Selector);
+                    string selector = TryORM(tableName, "", sortingInfo.Selector);
                     if (string.IsNullOrWhiteSpace(selector) == false)
                     {
                         sort += $" {selector} ";
                         sort += sortingInfo.Desc ? "DESC" : "ASC";
                     }
                 }
+
+                // from, to, conditions
+                if (loadOptions.Filter?.Count == 3)
+                {
+                    JToken token0 = JToken.FromObject(loadOptions.Filter[0]);
+                    JToken token2 = JToken.FromObject(loadOptions.Filter[2]);
+
+                    bool existExtraConditions = HasExtraConditions(tableName, token0, token2);
+
+                    if (existExtraConditions == false)   // no extra condition
+                    {
+                        if (token0.Count() == 3 && token2.Count() == 3)
+                        {
+                            from = DateTimeOffset.Parse(token0[2].TryString());
+                            to = DateTimeOffset.Parse(token2[2].TryString());
+                        }
+                    }
+                    else  // has extra conditions
+                    {
+                        condition = GetConditions(tableName, token0);
+
+                        if (token2.Children().Count() == 3)
+                        {
+                            foreach (var child in token2.Children().Select((value, index) => (value, index)))
+                            {
+                                var v = child.value;
+                                var i = child.index;
+
+                                if (v != null && v.Type == JTokenType.Array && v.Count() == 3)
+                                {
+                                    if (i == 0) from = DateTimeOffset.Parse(v[2].TryString());
+                                    if (i == 2) to = DateTimeOffset.Parse(v[2].TryString());
+                                }
+                            }
+                        }
+                    }
+                }
             }
             catch (Exception e)
             {
@@ -214,13 +162,169 @@ namespace OMSWeb.Services
             return (from, to, skip, take, condition, sort);
         }
 
-        public string TryORM(string tableName, string s)
+        public bool HasExtraConditions(string tableName, JToken token0, JToken token2)
+        {
+            bool bRet = true;
+            try
+            {
+                foreach (var child in token2.Children().Select((value, index) => (value, index)))
+                {
+                    var v = child.value;
+                    var i = child.index;
+
+                    if (i == 0 || i == 2)
+                    {
+                        if (v == null || v.Type != JTokenType.Array)
+                        {
+                            bRet = false;
+                            break;
+                        }
+                    }
+                }
+            }
+            catch (Exception e) { }
+
+            return bRet;
+        }
+
+        public string GetConditions(string tableName, JToken token)
+        {
+            string conditions = string.Empty;
+            if (token == null || token.Type != JTokenType.Array) return conditions;
+
+            try
+            {
+                int count = CountOfConditions(token);
+                if (count == 0)
+                {
+                    return conditions;
+                }
+                else if (count == 1)
+                {
+                    if (token.Type == JTokenType.Array)
+                    {
+                        string selector = token[0].TryString();
+                        string sOperator = token[1].TryString();
+                        string value = token[2].TryString();
+                        JTokenType jType = token[2].Type;
+
+                        conditions = BuildConditions(tableName, selector, sOperator, value, jType);
+                    }
+                }
+                else
+                {
+                    foreach (var child in token.Children())
+                    {
+                        if (child.Type == JTokenType.Array)
+                        {
+                            string selector = child[0].TryString();
+                            string sOperator = child[1].TryString();
+                            string value = child[2].TryString();
+                            JTokenType jType = child[2].Type;
+
+                            conditions += BuildConditions(tableName, selector, sOperator, value, jType);
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+
+            // build conditions 
+            string[] ar = conditions.Split("###");
+            conditions = string.Empty;
+
+            for (int i = 0; i < ar.Length; i++)
+            {
+                if (string.IsNullOrWhiteSpace(ar[i]) == false)
+                {
+                    if (i != 0) conditions += " and ";
+                    conditions += ar[i];
+                }
+            }
+
+            return conditions;
+        }
+
+        public int CountOfConditions(JToken token)
+        {
+            int count = 0;
+            try
+            {
+                foreach (var child in token.Children().Select((value, index) => (value, index)))
+                {
+                    var v = child.value;
+                    var i = child.index;
+
+                    if (v.Type == JTokenType.Array)
+                    {
+                        count++;
+                    }
+                    else if (v.Type == JTokenType.String && string.Compare("and", v.TryString(), StringComparison.CurrentCultureIgnoreCase) != 0)
+                    {
+                        count = 1;
+                        break;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+            }
+
+            return count;
+        }
+
+        public string BuildConditions(string tableName, string selector, string sOperator, string value, JTokenType jType)
+        {
+            string conditions = string.Empty;
+
+            if (string.IsNullOrWhiteSpace(selector) ||
+                            string.IsNullOrWhiteSpace(sOperator) ||
+                            string.IsNullOrWhiteSpace(value)) return conditions;
+
+            if (jType == JTokenType.String)    // value is string
+            {
+                selector = TryORM(tableName, sOperator, selector);
+                if (string.Compare(sOperator, "contains", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} LIKE '%{value}%' ###";
+                if (string.Compare(sOperator, "notcontains", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} NOT LIKE '%{value}%' ###";
+                if (string.Compare(sOperator, "startswith", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} LIKE '{value}%' ###";
+                if (string.Compare(sOperator, "endswith", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} LIKE '%{value}' ###";
+                if (string.Compare(sOperator, "=", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} = '{value}' ###";
+                if (string.Compare(sOperator, "<>", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} <> '{value}' ###";
+            }
+            else if (jType == JTokenType.Integer) // value is number
+            {
+                selector = TryORM(tableName, sOperator, selector);
+                if (string.Compare(sOperator, "=", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} = {value} ###";
+                if (string.Compare(sOperator, "<>", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} <> {value} ###";
+                if (string.Compare(sOperator, ">", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} > {value} ###";
+                if (string.Compare(sOperator, "<", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} < {value} ###";
+                if (string.Compare(sOperator, ">=", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} >= {value} ###";
+                if (string.Compare(sOperator, "<=", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} <= {value} ###";
+            }
+            return conditions;
+        }
+
+        public string TryORM(string tableName, string sOperator, string s)
         {
             if (string.Compare(tableName, "order_history", StringComparison.CurrentCultureIgnoreCase) == 0)
             {
                 if (string.Compare(s, "logicalId", StringComparison.CurrentCultureIgnoreCase) == 0) return "logical_id";
-                if (string.Compare(s, "historySourceId", StringComparison.CurrentCultureIgnoreCase) == 0) return "history_source_id";
-                if (string.Compare(s, "origin", StringComparison.CurrentCultureIgnoreCase) == 0) return "order_origin";
+                if (string.Compare(s, "historySourceId", StringComparison.CurrentCultureIgnoreCase) == 0)
+                {
+                    if (string.Compare(sOperator, "contains", StringComparison.CurrentCultureIgnoreCase) == 0 ||
+                        string.Compare(sOperator, "notcontains", StringComparison.CurrentCultureIgnoreCase) == 0 ||
+                        string.Compare(sOperator, "startswith", StringComparison.CurrentCultureIgnoreCase) == 0 ||
+                        string.Compare(sOperator, "endswith", StringComparison.CurrentCultureIgnoreCase) == 0)
+                    {
+                        return "CAST(history_source_id AS TEXT) ";
+                    }
+
+                    return "history_source_id";
+                }
+                if (string.Compare(s, "origin", StringComparison.CurrentCultureIgnoreCase) == 0) return "origin";
                 if (string.Compare(s, "priority", StringComparison.CurrentCultureIgnoreCase) == 0) return "priority";
                 if (string.Compare(s, "state", StringComparison.CurrentCultureIgnoreCase) == 0) return "state";
                 if (string.Compare(s, "vehicleId", StringComparison.CurrentCultureIgnoreCase) == 0) return "vehicle_id";
@@ -238,14 +342,25 @@ namespace OMSWeb.Services
             }
             else if (string.Compare(tableName, "vehicle_history", StringComparison.CurrentCultureIgnoreCase) == 0)
             {
-                if (string.Compare(s, "historySourceId", StringComparison.CurrentCultureIgnoreCase) == 0) return "history_source_id";
+                if (string.Compare(s, "historySourceId", StringComparison.CurrentCultureIgnoreCase) == 0)
+                {
+                    if (string.Compare(sOperator, "contains", StringComparison.CurrentCultureIgnoreCase) == 0 ||
+                        string.Compare(sOperator, "notcontains", StringComparison.CurrentCultureIgnoreCase) == 0 ||
+                        string.Compare(sOperator, "startswith", StringComparison.CurrentCultureIgnoreCase) == 0 ||
+                        string.Compare(sOperator, "endswith", StringComparison.CurrentCultureIgnoreCase) == 0)
+                    {
+                        return "CAST(history_source_id AS TEXT) ";
+                    }
+
+                    return "history_source_id";
+                }
                 if (string.Compare(s, "logicalId", StringComparison.CurrentCultureIgnoreCase) == 0) return "logical_id";
                 if (string.Compare(s, "distanceTotal", StringComparison.CurrentCultureIgnoreCase) == 0) return "distance_total";
                 if (string.Compare(s, "runtimeTotal", StringComparison.CurrentCultureIgnoreCase) == 0) return "runtime_total";
             }
-            if (string.Compare(tableName, "alarm_history", StringComparison.CurrentCultureIgnoreCase) == 0)
+            else if (string.Compare(tableName, "alarm_history", StringComparison.CurrentCultureIgnoreCase) == 0)
             {
-                if (string.Compare(s, "vehicleLogicalId", StringComparison.CurrentCultureIgnoreCase) == 0) return "logical_id";
+                if (string.Compare(s, "vehicleLogicalId", StringComparison.CurrentCultureIgnoreCase) == 0) return "vehicle_logical_id";
                 if (string.Compare(s, "description", StringComparison.CurrentCultureIgnoreCase) == 0) return "description";
                 if (string.Compare(s, "level", StringComparison.CurrentCultureIgnoreCase) == 0) return "level";
                 if (string.Compare(s, "errorCode", StringComparison.CurrentCultureIgnoreCase) == 0) return "error_code";
@@ -260,7 +375,7 @@ namespace OMSWeb.Services
             {
  
             }
-            else if (string.Compare(tableName, "nak_history", StringComparison.CurrentCultureIgnoreCase) == 0)
+            else if (string.Compare(tableName, "nack_history", StringComparison.CurrentCultureIgnoreCase) == 0)
             {
                 if (string.Compare(s, "request", StringComparison.CurrentCultureIgnoreCase) == 0) return "Request";
                 if (string.Compare(s, "rcmd", StringComparison.CurrentCultureIgnoreCase) == 0) return "Rcmd";
@@ -277,42 +392,6 @@ namespace OMSWeb.Services
             }
             return s;
         }
-
-        public void Traverse(string name, JToken j)
-        {
-            foreach (JToken token in j.AsJEnumerable())
-            {
-                if (token.Type == JTokenType.Object)
-                {
-                    foreach (var pair in token as JObject)
-                    {
-                        string name_ = pair.Key;
-                        JToken child = pair.Value;
-                        Traverse(name, child);
-                    }
-                }
-                else if (token.Type == JTokenType.Array) //an array property found 
-                {
-                    foreach (var child in token.Children())
-                        Traverse(((JProperty)j).Name, child);
-                }
-                else if (token.Type == JTokenType.Property)
-                {
-                    var property = token as JProperty; //current level property
-                    Traverse(name, (JContainer)token);
-                }
-                else //current level property name & value
-                {
-                    var nm = "";
-                    var t = "";
-                    if (j is JProperty)
-                    {
-                        nm = ((JProperty)j).Name;
-                        t = Convert.ToString(((JProperty)j).Value);
-                    }
-                    t = Convert.ToString(token);
-                }
-            }
-        }
+        
     }
 }
