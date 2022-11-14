@@ -1,102 +1,99 @@
 <div id="history-page">
 	<div id="filter-area">
 		<!-- <dx-select-box
-      [items]="creatorList"
-      [placeholder]="'_CREATOR' | translate"
-      [showClearButton]="true"
-      #creator
-    ></dx-select-box>
-    <dx-select-box
-      [items]="searchTypeList"
-      displayExpr="key"
-      valueExpr="value"
-      [placeholder]="'_SEARCH_TYPE' | translate"
-      [showClearButton]="true"
-      #searchtype
-    >
-    </dx-select-box>
-    <dx-select-box
-      [items]="VehicleListAll"
-      [placeholder]="'_VEHICLE' | translate"
-      [dataSource]="VehicleListAll"
-      displayExpr="OnlineName"
-      valueExpr="Id"
-      [searchEnabled]="true"
-      [showClearButton]="true"
-      #vehicle
-    ></dx-select-box>
-    <dx-select-box
-      [items]="StationBufferListAll"
-      [placeholder]="'_SOURCE' | translate"
-      [dataSource]="StationBufferListAll"
-      displayExpr="OnlineName"
-      valueExpr="OnlineName"
-      [searchEnabled]="true"
-      [showClearButton]="true"
-      #source
-    ></dx-select-box>
-    <dx-select-box
-      [items]="StationBufferListAll"
-      [placeholder]="'_DEST' | translate"
-      [dataSource]="StationBufferListAll"
-      displayExpr="OnlineName"
-      valueExpr="OnlineName"
-      [searchEnabled]="true"
-      [showClearButton]="true"
-      #dest
-    ></dx-select-box>
-    <dx-text-box
-      [placeholder]="'_CARRIERID' | translate"
-      #carrier
-    ></dx-text-box> -->
-		<dx-date-box
-			[placeholder]="'_START_DATE' | translate"
-			type="datetime"
-			[(value)]="start"
-			[min]="base"
-			[max]="end"
-			[acceptCustomValue]="false"
-			[showClearButton]="true"
-			[displayFormat]="dateTimeFormat"
-			#startDate
-		></dx-date-box>
+		[items]="creatorList"
+		[placeholder]="'_CREATOR' | translate"
+		[showClearButton]="true"
+		#creator
+	></dx-select-box>
+	<dx-select-box
+		[items]="searchTypeList"
+		displayExpr="key"
+		valueExpr="value"
+		[placeholder]="'_SEARCH_TYPE' | translate"
+		[showClearButton]="true"
+		#searchtype
+	>
+	</dx-select-box>
+	<dx-select-box
+		[items]="VehicleListAll"
+		[placeholder]="'_VEHICLE' | translate"
+		[dataSource]="VehicleListAll"
+		displayExpr="OnlineName"
+		valueExpr="Id"
+		[searchEnabled]="true"
+		[showClearButton]="true"
+		#vehicle
+	></dx-select-box>
+	<dx-select-box
+		[items]="StationBufferListAll"
+		[placeholder]="'_SOURCE' | translate"
+		[dataSource]="StationBufferListAll"
+		displayExpr="OnlineName"
+		valueExpr="OnlineName"
+		[searchEnabled]="true"
+		[showClearButton]="true"
+		#source
+	></dx-select-box>
+	<dx-select-box
+		[items]="StationBufferListAll"
+		[placeholder]="'_DEST' | translate"
+		[dataSource]="StationBufferListAll"
+		displayExpr="OnlineName"
+		valueExpr="OnlineName"
+		[searchEnabled]="true"
+		[showClearButton]="true"
+		#dest
+	></dx-select-box>
+	<dx-text-box
+		[placeholder]="'_CARRIERID' | translate"
+		#carrier
+	></dx-text-box> -->
+		<dx-date-box [placeholder]="'_START_DATE' | translate"
+								 type="datetime"
+								 [(value)]="start"
+								 [min]="base"
+								 [max]="end"
+								 [acceptCustomValue]="false"
+								 [showClearButton]="true"
+								 [displayFormat]="dateTimeFormat"
+								 #startDate></dx-date-box>
 		<div>~</div>
-		<dx-date-box
-			[placeholder]="'_END_DATE' | translate"
-			type="datetime"
-			[(value)]="now"
-			[min]="base"
-			[max]="end"
-			[acceptCustomValue]="false"
-			[showClearButton]="true"
-			(validationErrorChange)="setDateWithMaxLimit()"
-			[displayFormat]="dateTimeFormat"
-			#endDate
-		></dx-date-box>
-		<button
-			mat-raised-button
-			color="primary"
-			(click)="search(startDate.value, endDate.value)"
-		>
-			{{ 'names.search' | translate }}
-		</button>
+		<dx-date-box [placeholder]="'_END_DATE' | translate"
+								 type="datetime"
+								 [(value)]="now"
+								 [min]="base"
+								 [max]="end"
+								 [acceptCustomValue]="false"
+								 [showClearButton]="true"
+								 (validationErrorChange)="setDateWithMaxLimit()"
+								 [displayFormat]="dateTimeFormat"
+								 #endDate></dx-date-box>
+		<div>
+			<button mat-raised-button 
+							color="primary"
+							(click)="search(startDate.value, endDate.value)">
+				{{ 'names.search' | translate }}
+			</button>
+			<label style="display:inline-block; font-size:12px"> {{ searchTime }}</label>
+		</div>
 		<!-- <dx-button
-      [text]="'_SEARCH' | translate"
-      type="default"
-      (onClick)="
-        search(
-          creator.value,
-          searchtype.value,
-          vehicle.value,
-          source.value,
-          dest.value,
-          carrier.value,
-          startdate.value,
-          enddate.value
-        )
-      "
-    >
-    </dx-button> -->
+		[text]="'_SEARCH' | translate"
+		type="default"
+		(onClick)="
+			search(
+				creator.value,
+				searchtype.value,
+				vehicle.value,
+				source.value,
+				dest.value,
+				carrier.value,
+				startdate.value,
+				enddate.value
+			)
+		"
+	>
+	</dx-button> -->
 	</div>
 	<div id="grid-container">
 		<dx-data-grid

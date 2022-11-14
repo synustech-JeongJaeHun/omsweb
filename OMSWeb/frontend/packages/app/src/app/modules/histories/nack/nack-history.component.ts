@@ -79,7 +79,9 @@ export class NackHistoryComponent implements OnInit, OnDestroy {
 
     dataSource: DataSource
 
-    executeTime: string
+    searchTime: string
+    startSearch: number
+    endSearch: number
 
 	setDateWithMaxLimit() {
 		this.now = new Date()
@@ -101,27 +103,12 @@ export class NackHistoryComponent implements OnInit, OnDestroy {
 	}
 
   search(startTime: Date, endTime: Date) {
-        
-        this.executeTime = ''
-    const start = Date.now();
-    console.log(start.toString());
+        this.searchTime = ''
+        this.startSearch = Date.now();
 
   		console.log('bind Nack Data in component')
-		this.dataSource = this.svc.nacksDataSource(startTime, endTime)
+		this.dataSource = this.svc.nacksDataSource(this, startTime, endTime)
         this.applyFilter(startTime, endTime)
-
-        const end = Date.now();
-        console.log(end.toString());
-
-        var gap = end - start;
-
-        const days = Math.floor(gap / (1000 * 60 * 60 * 24)); // 일
-        const hour = String(Math.floor((gap / (1000 * 60 * 60)) % 24)).padStart(2, "0"); // 시
-        const minutes = String(Math.floor((gap / (1000 * 60)) % 60)).padStart(2, "0"); // 분
-        const second = String(Math.floor((gap / 1000) % 60)).padStart(2, "0"); // 초
-
-        this.executeTime = hour + ':' + minutes + ':' + second;
-        console.log('time Nack history: ' + this.executeTime)
 	}
 
 	canDisplayTable(type: string): boolean {
@@ -185,5 +172,19 @@ export class NackHistoryComponent implements OnInit, OnDestroy {
 	}
 	ngOnDestroy(): void {
 		window.onresize = null
-	}
+    }
+
+    public onDataSourceChanged() {
+        this.endSearch = Date.now();
+        var gap = this.endSearch - this.startSearch;
+
+        const days = Math.floor(gap / (1000 * 60 * 60 * 24)); // 일
+        const hour = String(Math.floor((gap / (1000 * 60 * 60)) % 24)).padStart(2, "0"); // 시
+        const minutes = String(Math.floor((gap / (1000 * 60)) % 60)).padStart(2, "0"); // 분
+        const second = String(Math.floor((gap / 1000) % 60)).padStart(2, "0"); // 초
+        const milisec = String(Math.floor(gap % 1000)).padStart(3, "0"); // 밀리
+
+        this.searchTime = hour + ':' + minutes + ':' + second + "." + milisec;
+        console.log('time Transfer history: ' + this.searchTime)
+    }
 }

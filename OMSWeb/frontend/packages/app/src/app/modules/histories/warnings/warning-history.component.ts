@@ -78,6 +78,10 @@ export class WarningHistoryComponent implements OnInit {
 
   dataSource: DataSource;
 
+  searchTime: string
+  startSearch: number
+  endSearch: number
+
   transformVehicleId = ({ value = '' }): string => {
     const text =
       this.idSvc.get_alternative_id('vehicle', 'logicalId', value) || value;
@@ -91,7 +95,7 @@ export class WarningHistoryComponent implements OnInit {
   constructor(private svc: HistoriesService, private idSvc: TrackIdService) {
     window.onresize = this.getGridSize.bind(this);
     this.idSvc.loadIds().subscribe(() => {
-      this.dataSource = this.svc.alertsDataSource(this.start, this.end);
+      this.dataSource = this.svc.alertsDataSource(this, this.start, this.end);
     });
   }
 
@@ -105,8 +109,13 @@ export class WarningHistoryComponent implements OnInit {
   }
 
   search(startTime: Date, endTime: Date) {
+    this.searchTime = ''
+    this.startSearch = Date.now();
+
     this.applyFilter(startTime, endTime);
-    this.dataSource.reload();
+    this.dataSource.reload().then(function (data) {
+      this.onDataSourceChanged();
+    })
   }
   private applyFilter(startTime: Date, endTime: Date) {
     this.dataGrid.instance.filter([
@@ -127,5 +136,19 @@ export class WarningHistoryComponent implements OnInit {
     var offset = new Date().getTimezoneOffset() * 60000;
     var today = new Date(Date.now() - offset);
     this.fileName = today.toISOString() + '-warning_history';
+  }
+
+  public onDataSourceChanged() {
+    this.endSearch = Date.now();
+    var gap = this.endSearch - this.startSearch;
+
+    const days = Math.floor(gap / (1000 * 60 * 60 * 24)); // 일
+    const hour = String(Math.floor((gap / (1000 * 60 * 60)) % 24)).padStart(2, "0"); // 시
+    const minutes = String(Math.floor((gap / (1000 * 60)) % 60)).padStart(2, "0"); // 분
+    const second = String(Math.floor((gap / 1000) % 60)).padStart(2, "0"); // 초
+    const milisec = String(Math.floor(gap % 1000)).padStart(3, "0"); // 밀리
+
+    this.searchTime = hour + ':' + minutes + ':' + second + "." + milisec;
+    console.log('time Warning history: ' + this.searchTime)
   }
 }

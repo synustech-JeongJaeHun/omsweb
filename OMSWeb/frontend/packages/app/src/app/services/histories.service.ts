@@ -10,7 +10,7 @@ export class HistoriesService {
 	private baseUrl = '/api/histories'
 	constructor(private http: HttpClient) {}
 
-	ordersDataSource(startTime: Date, endTime: Date): DataSource {
+	ordersDataSource(source: any, startTime: Date, endTime: Date): DataSource {
 		return new DataSource({
 			store: AspNetData.createStore({
 				key: 'id',
@@ -20,11 +20,14 @@ export class HistoriesService {
 				['timeCreated', '>=', startTime],
 				'and',
 				['timeCreated', '<=', endTime],
-			],
+            ],
+            onChanged: () => {
+                source.onDataSourceChanged();
+            }
 		})
 	}
 
-	vehiclesDataSource(startTime: Date, endTime: Date): DataSource {
+	vehiclesDataSource(source: any, startTime: Date, endTime: Date): DataSource {
 		return new DataSource({
 			store: AspNetData.createStore({
 				key: 'id',
@@ -34,32 +37,41 @@ export class HistoriesService {
 				['historyChangeTime', '>=', startTime],
 				'and',
 				['historyChangeTime', '<=', endTime],
-			],
+            ],
+            onChanged: () => {
+                source.onDataSourceChanged();
+            },
 		})
 	}
 
-	alarmsDataSource(startTime: Date, endTime: Date): DataSource {
+	alarmsDataSource(source: any, startTime: Date, endTime: Date): DataSource {
 		return new DataSource({
 			store: AspNetData.createStore({
 				key: 'id',
 				loadUrl: `${this.baseUrl}/alarms`,
 			}),
-			filter: [['time', '>=', startTime], 'and', ['time', '<=', endTime]],
+            filter: [['time', '>=', startTime], 'and', ['time', '<=', endTime]],
+            onChanged: () => {
+                source.onDataSourceChanged();
+            },
 		})
 	}
 
-	alertsDataSource(startTime: Date, endTime: Date): DataSource {
+	alertsDataSource(source: any, startTime: Date, endTime: Date): DataSource {
 		return new DataSource({
 			store: AspNetData.createStore({
 				key: 'id',
 				//loadUrl: `/assets/json/get-alerts.json`,
 				loadUrl: `${this.baseUrl}/alerts`,
 			}),
-			filter: [['time', '>=', startTime], 'and', ['time', '<=', endTime]],
+            filter: [['time', '>=', startTime], 'and', ['time', '<=', endTime]],
+            onChanged: () => {
+                source.onDataSourceChanged();
+            },
 		})
     }
 
-    nacksDataSource(startTime: Date, endTime: Date): DataSource {
+    nacksDataSource(source: any, startTime: Date, endTime: Date): DataSource {
         return new DataSource({
             store: AspNetData.createStore({
                 key: 'id',
@@ -70,6 +82,9 @@ export class HistoriesService {
                 'and',
                 ['ModifiedTime', '<=', endTime],
             ],
+            onChanged: () => {
+                source.onDataSourceChanged();
+            },
         })
     }
 }

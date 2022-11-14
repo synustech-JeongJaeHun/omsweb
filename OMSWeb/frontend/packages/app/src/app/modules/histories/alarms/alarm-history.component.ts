@@ -78,7 +78,11 @@ export class AlarmHistoryComponent implements OnInit {
 	)
 	fileName: string
 
-	dataSource: DataSource
+    dataSource: DataSource
+
+    searchTime: string
+    startSearch: number
+    endSearch: number
 
 	setDateWithMaxLimit() {
 		this.now = new Date()
@@ -172,8 +176,11 @@ export class AlarmHistoryComponent implements OnInit {
 		},
 	}
 
-	search(startTime: Date, endTime: Date) {
-		this.dataSource = this.svc.alarmsDataSource(startTime, endTime)
+  search(startTime: Date, endTime: Date) {
+        this.searchTime = ''
+        this.startSearch = Date.now();
+
+		this.dataSource = this.svc.alarmsDataSource(this, startTime, endTime)
 		this.applyFilter(startTime, endTime)
 		// this.dataSource.reload()
 	}
@@ -184,6 +191,20 @@ export class AlarmHistoryComponent implements OnInit {
 			['time', '<=', endTime],
 		])
 	}
+
+    public onDataSourceChanged() {
+        this.endSearch = Date.now();
+        var gap = this.endSearch - this.startSearch;
+
+        const days = Math.floor(gap / (1000 * 60 * 60 * 24)); // 일
+        const hour = String(Math.floor((gap / (1000 * 60 * 60)) % 24)).padStart(2, "0"); // 시
+        const minutes = String(Math.floor((gap / (1000 * 60)) % 60)).padStart(2, "0"); // 분
+        const second = String(Math.floor((gap / 1000) % 60)).padStart(2, "0"); // 초
+        const milisec = String(Math.floor(gap % 1000)).padStart(3, "0"); // 밀리
+
+        this.searchTime = hour + ':' + minutes + ':' + second + "." + milisec;
+        console.log('time Alarm history: ' + this.searchTime)
+    }
 
 	private getGridSize(): void {
 		const container = document.body
