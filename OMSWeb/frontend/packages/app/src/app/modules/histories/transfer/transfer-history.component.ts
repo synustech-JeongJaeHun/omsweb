@@ -27,10 +27,21 @@ import { ClientPreferences } from '@oms/root/models/settings.model'
 			#filter-area {
 				padding: 4px 10px;
 				display: grid;
-				grid-template-columns: 210px 10px 210px 120px;
-				justify-items: center;
+				grid-template-columns: 210px 10px 210px 170px;
+				justify-items: flex-start;
 				align-items: center;
 				gap: 4px;
+			}
+
+			#search-area {
+				display: flex;
+				align-items: center;
+				gap: 10px;
+			}
+
+			#search-area label {
+				margin-left: 10px;
+				font-size: 12px;
 			}
 
 			#filter-area button {
@@ -78,11 +89,11 @@ export class TransferHistoryComponent implements OnInit, OnDestroy {
 	)
 	fileName: string
 
-    dataSource: DataSource
+	dataSource: DataSource
 
-    searchTime: string
-    startSearch: number
-    endSearch: number
+	searchTime: string
+	startSearch: number
+	endSearch: number
 
 	setDateWithMaxLimit() {
 		this.now = new Date()
@@ -176,14 +187,14 @@ export class TransferHistoryComponent implements OnInit, OnDestroy {
 		},
 	}
 
-  search(startTime: Date, endTime: Date) {
-        this.searchTime = ''
-        this.startSearch = null
-        this.startSearch = Date.now();
+	search(startTime: Date, endTime: Date) {
+		this.searchTime = ''
+		this.startSearch = null
+		this.startSearch = Date.now()
 
 		this.dataSource = this.svc.ordersDataSource(this, startTime, endTime)
-        this.applyFilter(startTime, endTime)
-        this.applyPage()
+		this.applyFilter(startTime, endTime)
+		this.applyPage()
 		// this.dataSource.reload()
 	}
 	private applyFilter(startTime: Date, endTime: Date) {
@@ -192,26 +203,30 @@ export class TransferHistoryComponent implements OnInit, OnDestroy {
 			'and',
 			['timeCreated', '<=', endTime],
 		])
-    }
+	}
 
-    private applyPage() {
-      
-    }
+	private applyPage() {}
 
-  public onDataSourceChanged() {
-        this.endSearch = null;
-        this.endSearch = Date.now();
-        var gap = this.endSearch - this.startSearch;
+	public onDataSourceChanged() {
+		this.endSearch = null
+		this.endSearch = Date.now()
+		var gap = this.endSearch - this.startSearch
 
-        const days = Math.floor(gap / (1000 * 60 * 60 * 24)); // 일
-        const hour = String(Math.floor((gap / (1000 * 60 * 60)) % 24)).padStart(2, "0"); // 시
-        const minutes = String(Math.floor((gap / (1000 * 60)) % 60)).padStart(2, "0"); // 분
-        const second = String(Math.floor((gap / 1000) % 60)).padStart(2, "0"); // 초
-        const milisec = String(Math.floor(gap % 1000)).padStart(3, "0"); // 밀리
+		const days = Math.floor(gap / (1000 * 60 * 60 * 24)) // 일
+		const hour = String(Math.floor((gap / (1000 * 60 * 60)) % 24)).padStart(
+			2,
+			'0',
+		) // 시
+		const minutes = String(Math.floor((gap / (1000 * 60)) % 60)).padStart(
+			2,
+			'0',
+		) // 분
+		const second = String(Math.floor((gap / 1000) % 60)).padStart(2, '0') // 초
+		const milisec = String(Math.floor(gap % 1000)).padStart(3, '0') // 밀리
 
-        this.searchTime = hour + ':' + minutes + ':' + second + "." + milisec;
-        console.log('time Transfer history: ' + this.searchTime)
-    }
+		this.searchTime = hour + ':' + minutes + ':' + second + '.' + milisec
+		console.log('time Transfer history: ' + this.searchTime)
+	}
 
 	private getGridSize(): void {
 		const container = document.body

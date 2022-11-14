@@ -25,11 +25,11 @@
     <div>~</div>
     <dx-date-box [placeholder]="'_END_DATE' | translate" type="datetime" [value]="now" [min]="base" [max]="end"
                  [acceptCustomValue]="false" [showClearButton]="true" [displayFormat]="dateTimeFormat" #endDate></dx-date-box>
-    <div>
+    <div id="search-area">
       <button mat-raised-button color="primary" (click)="search(startDate.value, endDate.value)">
         {{ "names.search" | translate }}
       </button>
-      <label style="display:inline-block; font-size:12px"> {{ searchTime }}</label>
+      <label> {{ searchTime }}</label>
     </div>
   </div>
   <div id="grid-container">

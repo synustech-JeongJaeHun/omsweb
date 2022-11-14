@@ -69,13 +69,13 @@
 								 (validationErrorChange)="setDateWithMaxLimit()"
 								 [displayFormat]="dateTimeFormat"
 								 #endDate></dx-date-box>
-		<div>
+		<div id="search-area">
 			<button mat-raised-button 
 							color="primary"
 							(click)="search(startDate.value, endDate.value)">
 				{{ 'names.search' | translate }}
 			</button>
-			<label style="display:inline-block; font-size:12px"> {{ searchTime }}</label>
+			<label> {{ searchTime }}</label>
 		</div>
 		<!-- <dx-button
 		[text]="'_SEARCH' | translate"
