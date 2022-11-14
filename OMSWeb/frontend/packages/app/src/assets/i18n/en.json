@@ -26,6 +26,7 @@
     "group": "Group",
     "zcu": "ZCU",
     "fireshutter": "Fireshutter",
+    "slide_offset": "SlideOffset",
     "zcu_label": "Zcu",
     "vehicleType": "Vehicle Type",
     "vehicleMode": "Vehicle Mode",

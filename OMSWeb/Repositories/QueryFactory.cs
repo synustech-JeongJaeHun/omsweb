@@ -139,6 +139,7 @@ namespace OMSWeb.Repositories
       {"station", @"
         SELECT id AS id, physical_id AS physical_id, logical_id AS logical_id, point AS point_id,
           direction AS direction, carrier_type AS carrier_type, next_point, ""offset"" AS offset, unuse, carrier_id,
+          stations.slide_offset, 
           stations.user, stations.note
         FROM stations
         --*user_id_condition*--WHERE user_id =@userId
@@ -146,6 +147,7 @@ namespace OMSWeb.Repositories
       {"buffer", @"
         SELECT id, physical_id, logical_id AS logical_id, point AS point_id,
           direction AS direction, next_point, ""offset"" AS offset, unuse, carrier_id,
+          buffers.slide_offset, 
           buffers.user, buffers.note
         FROM buffers
         --*user_id_condition*--WHERE user_id =@userId
