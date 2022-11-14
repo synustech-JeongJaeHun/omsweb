@@ -93,7 +93,8 @@ export class VehicleHistoryComponent implements OnInit, OnDestroy {
 
 	searchTime: string
 	startSearch: number
-	endSearch: number
+    endSearch: number
+    bySearch: boolean = false;
 
 	setDateWithMaxLimit() {
 		this.now = new Date()
@@ -169,8 +170,8 @@ export class VehicleHistoryComponent implements OnInit, OnDestroy {
 	}
 
 	search(startTime: Date, endTime: Date) {
-		this.searchTime = ''
-		this.startSearch = Date.now()
+        this.bySearch = true;
+        this.onDataSourceStarted();
 
 		this.dataSource = this.svc.vehiclesDataSource(this, startTime, endTime)
 		this.applyFilter(startTime, endTime)
@@ -197,7 +198,14 @@ export class VehicleHistoryComponent implements OnInit, OnDestroy {
 		this.fileName = today.toISOString() + '-vehicle_history'
 	}
 
-	public onDataSourceChanged() {
+    public onDataSourceStarted() {
+        this.searchTime = ''
+        this.startSearch = null
+        this.startSearch = Date.now()
+    }
+
+    public onDataSourceChanged() {
+        this.endSearch = null
 		this.endSearch = Date.now()
 		var gap = this.endSearch - this.startSearch
 
@@ -214,6 +222,8 @@ export class VehicleHistoryComponent implements OnInit, OnDestroy {
 		const milisec = String(Math.floor(gap % 1000)).padStart(3, '0') // 밀리
 
 		this.searchTime = hour + ':' + minutes + ':' + second + '.' + milisec
-		console.log('time Vehicle history: ' + this.searchTime)
+        console.log('time Vehicle history: ' + this.searchTime)
+
+        this.bySearch = false
 	}
 }

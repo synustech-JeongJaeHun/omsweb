@@ -91,7 +91,8 @@ export class WarningHistoryComponent implements OnInit {
 
 	searchTime: string
 	startSearch: number
-	endSearch: number
+    endSearch: number
+    bySearch: boolean = false;
 
 	transformVehicleId = ({ value = '' }): string => {
 		const text =
@@ -120,8 +121,8 @@ export class WarningHistoryComponent implements OnInit {
 	}
 
 	search(startTime: Date, endTime: Date) {
-		this.searchTime = ''
-		this.startSearch = Date.now()
+        this.bySearch = true;
+        this.onDataSourceStarted();
 
 		this.applyFilter(startTime, endTime)
 		this.dataSource.reload().then(function (data) {
@@ -149,7 +150,14 @@ export class WarningHistoryComponent implements OnInit {
 		this.fileName = today.toISOString() + '-warning_history'
 	}
 
-	public onDataSourceChanged() {
+    public onDataSourceStarted() {
+        this.searchTime = ''
+        this.startSearch = null
+        this.startSearch = Date.now()
+    }
+
+    public onDataSourceChanged() {
+        this.endSearch = null
 		this.endSearch = Date.now()
 		var gap = this.endSearch - this.startSearch
 
@@ -166,6 +174,8 @@ export class WarningHistoryComponent implements OnInit {
 		const milisec = String(Math.floor(gap % 1000)).padStart(3, '0') // 밀리
 
 		this.searchTime = hour + ':' + minutes + ':' + second + '.' + milisec
-		console.log('time Warning history: ' + this.searchTime)
+        console.log('time Warning history: ' + this.searchTime)
+
+        this.bySearch = false
 	}
 }

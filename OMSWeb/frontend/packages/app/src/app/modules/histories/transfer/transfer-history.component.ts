@@ -93,7 +93,8 @@ export class TransferHistoryComponent implements OnInit, OnDestroy {
 
 	searchTime: string
 	startSearch: number
-	endSearch: number
+    endSearch: number
+    bySearch: boolean = false;
 
 	setDateWithMaxLimit() {
 		this.now = new Date()
@@ -187,10 +188,9 @@ export class TransferHistoryComponent implements OnInit, OnDestroy {
 		},
 	}
 
-	search(startTime: Date, endTime: Date) {
-		this.searchTime = ''
-		this.startSearch = null
-		this.startSearch = Date.now()
+    search(startTime: Date, endTime: Date) {
+        this.bySearch = true;
+        this.onDataSourceStarted();
 
 		this.dataSource = this.svc.ordersDataSource(this, startTime, endTime)
 		this.applyFilter(startTime, endTime)
@@ -205,7 +205,13 @@ export class TransferHistoryComponent implements OnInit, OnDestroy {
 		])
 	}
 
-	private applyPage() {}
+    private applyPage() { }
+
+    public onDataSourceStarted() {
+        this.searchTime = ''
+        this.startSearch = null
+        this.startSearch = Date.now()
+    }
 
 	public onDataSourceChanged() {
 		this.endSearch = null
@@ -225,7 +231,9 @@ export class TransferHistoryComponent implements OnInit, OnDestroy {
 		const milisec = String(Math.floor(gap % 1000)).padStart(3, '0') // 밀리
 
 		this.searchTime = hour + ':' + minutes + ':' + second + '.' + milisec
-		console.log('time Transfer history: ' + this.searchTime)
+        console.log('time Transfer history: ' + this.searchTime)
+
+        this.bySearch = false
 	}
 
 	private getGridSize(): void {

@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import DataSource from 'devextreme/data/data_source'
 import * as AspNetData from 'devextreme-aspnet-data-nojquery'
+import { Console } from 'console'
 
 @Injectable({
 	providedIn: 'root',
@@ -10,8 +11,8 @@ export class HistoriesService {
 	private baseUrl = '/api/histories'
 	constructor(private http: HttpClient) {}
 
-	ordersDataSource(source: any, startTime: Date, endTime: Date): DataSource {
-		return new DataSource({
+    ordersDataSource(source: any, startTime: Date, endTime: Date): DataSource {
+ 		return new DataSource({
 			store: AspNetData.createStore({
 				key: 'id',
 				loadUrl: `${this.baseUrl}/orders`,
@@ -21,9 +22,15 @@ export class HistoriesService {
 				'and',
 				['timeCreated', '<=', endTime],
             ],
+            onLoadingChanged: (isLoading) => {
+              if (source.bySearch === false) {
+                  if (isLoading === true)
+                      source.onDataSourceStarted();
+              }
+            },
             onChanged: () => {
                 source.onDataSourceChanged();
-            }
+            },
 		})
 	}
 
@@ -38,6 +45,12 @@ export class HistoriesService {
 				'and',
 				['historyChangeTime', '<=', endTime],
             ],
+            onLoadingChanged: (isLoading) => {
+              if (source.bySearch === false) {
+                if (isLoading === true)
+                  source.onDataSourceStarted();
+              }
+            },
             onChanged: () => {
                 source.onDataSourceChanged();
             },
@@ -51,6 +64,12 @@ export class HistoriesService {
 				loadUrl: `${this.baseUrl}/alarms`,
 			}),
             filter: [['time', '>=', startTime], 'and', ['time', '<=', endTime]],
+            onLoadingChanged: (isLoading) => {
+              if (source.bySearch === false) {
+                if (isLoading === true)
+                  source.onDataSourceStarted();
+              }
+            },
             onChanged: () => {
                 source.onDataSourceChanged();
             },
@@ -65,6 +84,12 @@ export class HistoriesService {
 				loadUrl: `${this.baseUrl}/alerts`,
 			}),
             filter: [['time', '>=', startTime], 'and', ['time', '<=', endTime]],
+            onLoadingChanged: (isLoading) => {
+              if (source.bySearch === false) {
+                if (isLoading === true)
+                  source.onDataSourceStarted();
+              }
+            },
             onChanged: () => {
                 source.onDataSourceChanged();
             },
@@ -82,6 +107,12 @@ export class HistoriesService {
                 'and',
                 ['ModifiedTime', '<=', endTime],
             ],
+            onLoadingChanged: (isLoading) => {
+              if (source.bySearch === false) {
+                if (isLoading === true)
+                  source.onDataSourceStarted();
+              }
+            },
             onChanged: () => {
                 source.onDataSourceChanged();
             },

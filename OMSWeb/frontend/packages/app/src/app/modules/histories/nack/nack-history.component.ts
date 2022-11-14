@@ -92,7 +92,8 @@ export class NackHistoryComponent implements OnInit, OnDestroy {
 
 	searchTime: string
 	startSearch: number
-	endSearch: number
+    endSearch: number
+    bySearch: boolean = false;
 
 	setDateWithMaxLimit() {
 		this.now = new Date()
@@ -114,8 +115,8 @@ export class NackHistoryComponent implements OnInit, OnDestroy {
 	}
 
 	search(startTime: Date, endTime: Date) {
-		this.searchTime = ''
-		this.startSearch = Date.now()
+        this.bySearch = true;
+        this.onDataSourceStarted();
 
 		console.log('bind Nack Data in component')
 		this.dataSource = this.svc.nacksDataSource(this, startTime, endTime)
@@ -185,7 +186,14 @@ export class NackHistoryComponent implements OnInit, OnDestroy {
 		window.onresize = null
 	}
 
-	public onDataSourceChanged() {
+    public onDataSourceStarted() {
+        this.searchTime = ''
+        this.startSearch = null
+        this.startSearch = Date.now()
+    }
+
+    public onDataSourceChanged() {
+        this.endSearch = null
 		this.endSearch = Date.now()
 		var gap = this.endSearch - this.startSearch
 
@@ -202,6 +210,8 @@ export class NackHistoryComponent implements OnInit, OnDestroy {
 		const milisec = String(Math.floor(gap % 1000)).padStart(3, '0') // 밀리
 
 		this.searchTime = hour + ':' + minutes + ':' + second + '.' + milisec
-		console.log('time Transfer history: ' + this.searchTime)
+        console.log('time Transfer history: ' + this.searchTime)
+
+        this.bySearch = false
 	}
 }
