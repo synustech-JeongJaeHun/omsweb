@@ -26,7 +26,7 @@
     "group": "组",
     "zcu": "ZCU",
     "fireshutter": "Fireshutter",
-    "slide_offset": "SlideOffset",
+    "slideOffset": "SlideOffset",
     "zcu_label": "Zcu",
     "vehicleType": "车辆类型",
     "vehicleMode": "车辆模式",
