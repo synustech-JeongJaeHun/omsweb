@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import DataSource from 'devextreme/data/data_source'
 import * as AspNetData from 'devextreme-aspnet-data-nojquery'
+import { Console } from 'console'
 
 @Injectable({
 	providedIn: 'root',
@@ -10,8 +11,8 @@ export class HistoriesService {
 	private baseUrl = '/api/histories'
 	constructor(private http: HttpClient) {}
 
-	ordersDataSource(startTime: Date, endTime: Date): DataSource {
-		return new DataSource({
+    ordersDataSource(source: any, startTime: Date, endTime: Date): DataSource {
+ 		return new DataSource({
 			store: AspNetData.createStore({
 				key: 'id',
 				loadUrl: `${this.baseUrl}/orders`,
@@ -20,11 +21,20 @@ export class HistoriesService {
 				['timeCreated', '>=', startTime],
 				'and',
 				['timeCreated', '<=', endTime],
-			],
+            ],
+            onLoadingChanged: (isLoading) => {
+              if (source.bySearch === false) {
+                  if (isLoading === true)
+                      source.onDataSourceStarted();
+              }
+            },
+            onChanged: () => {
+                source.onDataSourceChanged();
+            },
 		})
 	}
 
-	vehiclesDataSource(startTime: Date, endTime: Date): DataSource {
+	vehiclesDataSource(source: any, startTime: Date, endTime: Date): DataSource {
 		return new DataSource({
 			store: AspNetData.createStore({
 				key: 'id',
@@ -34,32 +44,59 @@ export class HistoriesService {
 				['historyChangeTime', '>=', startTime],
 				'and',
 				['historyChangeTime', '<=', endTime],
-			],
+            ],
+            onLoadingChanged: (isLoading) => {
+              if (source.bySearch === false) {
+                if (isLoading === true)
+                  source.onDataSourceStarted();
+              }
+            },
+            onChanged: () => {
+                source.onDataSourceChanged();
+            },
 		})
 	}
 
-	alarmsDataSource(startTime: Date, endTime: Date): DataSource {
+	alarmsDataSource(source: any, startTime: Date, endTime: Date): DataSource {
 		return new DataSource({
 			store: AspNetData.createStore({
 				key: 'id',
 				loadUrl: `${this.baseUrl}/alarms`,
 			}),
-			filter: [['time', '>=', startTime], 'and', ['time', '<=', endTime]],
+            filter: [['time', '>=', startTime], 'and', ['time', '<=', endTime]],
+            onLoadingChanged: (isLoading) => {
+              if (source.bySearch === false) {
+                if (isLoading === true)
+                  source.onDataSourceStarted();
+              }
+            },
+            onChanged: () => {
+                source.onDataSourceChanged();
+            },
 		})
 	}
 
-	alertsDataSource(startTime: Date, endTime: Date): DataSource {
+	alertsDataSource(source: any, startTime: Date, endTime: Date): DataSource {
 		return new DataSource({
 			store: AspNetData.createStore({
 				key: 'id',
 				//loadUrl: `/assets/json/get-alerts.json`,
 				loadUrl: `${this.baseUrl}/alerts`,
 			}),
-			filter: [['time', '>=', startTime], 'and', ['time', '<=', endTime]],
+            filter: [['time', '>=', startTime], 'and', ['time', '<=', endTime]],
+            onLoadingChanged: (isLoading) => {
+              if (source.bySearch === false) {
+                if (isLoading === true)
+                  source.onDataSourceStarted();
+              }
+            },
+            onChanged: () => {
+                source.onDataSourceChanged();
+            },
 		})
     }
 
-    nacksDataSource(startTime: Date, endTime: Date): DataSource {
+    nacksDataSource(source: any, startTime: Date, endTime: Date): DataSource {
         return new DataSource({
             store: AspNetData.createStore({
                 key: 'id',
@@ -70,6 +107,15 @@ export class HistoriesService {
                 'and',
                 ['ModifiedTime', '<=', endTime],
             ],
+            onLoadingChanged: (isLoading) => {
+              if (source.bySearch === false) {
+                if (isLoading === true)
+                  source.onDataSourceStarted();
+              }
+            },
+            onChanged: () => {
+                source.onDataSourceChanged();
+            },
         })
     }
 }

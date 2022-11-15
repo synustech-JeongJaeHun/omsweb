@@ -1,61 +1,58 @@
 <div id="history-page">
 	<div id="filter-area">
 		<!-- <dx-select-box
-      [items]="creatorList"
-      [placeholder]="'names.vehicleId' | translate"
-      [showClearButton]="true"
-      #creator
-    ></dx-select-box>
-    <dx-select-box
-      [items]="searchTypeList"
-      displayExpr="key"
-      valueExpr="value"
-      [placeholder]="'names.physicalId' | translate"
-      [showClearButton]="true"
-      #searchtype
-    >
-    </dx-select-box>
-    <dx-select-box
-      [items]="VehicleListAll"
-      [placeholder]="'names.logicalId' | translate"
-      [dataSource]="VehicleListAll"
-      displayExpr="OnlineName"
-      valueExpr="Id"
-      [searchEnabled]="true"
-      [showClearButton]="true"
-      #vehicle
-    ></dx-select-box> -->
-		<dx-date-box
-			[placeholder]="'_START_DATE' | translate"
-			type="datetime"
-			[(value)]="start"
-			[min]="base"
-			[max]="end"
-			[acceptCustomValue]="false"
-			[showClearButton]="true"
-			[displayFormat]="dateTimeFormat"
-			#startDate
-		></dx-date-box>
+		[items]="creatorList"
+		[placeholder]="'names.vehicleId' | translate"
+		[showClearButton]="true"
+		#creator
+	></dx-select-box>
+	<dx-select-box
+		[items]="searchTypeList"
+		displayExpr="key"
+		valueExpr="value"
+		[placeholder]="'names.physicalId' | translate"
+		[showClearButton]="true"
+		#searchtype
+	>
+	</dx-select-box>
+	<dx-select-box
+		[items]="VehicleListAll"
+		[placeholder]="'names.logicalId' | translate"
+		[dataSource]="VehicleListAll"
+		displayExpr="OnlineName"
+		valueExpr="Id"
+		[searchEnabled]="true"
+		[showClearButton]="true"
+		#vehicle
+	></dx-select-box> -->
+		<dx-date-box [placeholder]="'_START_DATE' | translate"
+								 type="datetime"
+								 [(value)]="start"
+								 [min]="base"
+								 [max]="end"
+								 [acceptCustomValue]="false"
+								 [showClearButton]="true"
+								 [displayFormat]="dateTimeFormat"
+								 #startDate></dx-date-box>
 		<div>~</div>
-		<dx-date-box
-			[placeholder]="'_END_DATE' | translate"
-			type="datetime"
-			[(value)]="now"
-			[min]="base"
-			[max]="end"
-			[acceptCustomValue]="false"
-			[showClearButton]="true"
-			(validationErrorChange)="setDateWithMaxLimit()"
-			[displayFormat]="dateTimeFormat"
-			#endDate
-		></dx-date-box>
-		<button
-			mat-raised-button
-			color="primary"
-			(click)="search(startDate.value, endDate.value)"
-		>
-			{{ 'names.search' | translate }}
-		</button>
+		<dx-date-box [placeholder]="'_END_DATE' | translate"
+								 type="datetime"
+								 [(value)]="now"
+								 [min]="base"
+								 [max]="end"
+								 [acceptCustomValue]="false"
+								 [showClearButton]="true"
+								 (validationErrorChange)="setDateWithMaxLimit()"
+								 [displayFormat]="dateTimeFormat"
+								 #endDate></dx-date-box>
+		<div id="search-area">
+			<button mat-raised-button
+							color="primary"
+							(click)="search(startDate.value, endDate.value)">
+				{{ 'names.search' | translate }}
+			</button>
+			<label> {{ searchTime }}</label>
+		</div>
 	</div>
 	<div id="grid-container">
 		<dx-data-grid
@@ -100,7 +97,7 @@
 				[visible]="canDisplayTable('vehicles_physical_id')"
 				[visibleIndex]="getDisplayTableColumnIndex('vehicles_physical_id')"
 				dataType="string"
-				dataField="physicalId"
+				dataField="historySourceId"
 				[caption]="'names.id' | translate"
 			></dxi-column>
 			<dxi-column

@@ -44,13 +44,14 @@
 			[displayFormat]="dateTimeFormat"
 			#endDate
 		></dx-date-box>
-		<button
-			mat-raised-button
-			color="primary"
-			(click)="search(startDate.value, endDate.value)"
-		>
-			{{ 'names.search' | translate }}
-		</button>
+		<div id="search-area">
+			<button mat-raised-button
+							color="primary"
+							(click)="search(startDate.value, endDate.value)">
+				{{ 'names.search' | translate }}
+			</button>
+			<label> {{ searchTime }}</label>
+		</div>
 	</div>
 	<div id="grid-container">
 		<dx-data-grid

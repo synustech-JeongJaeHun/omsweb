@@ -27,10 +27,21 @@ import { DateUtil } from '../../shared/utils/date.util'
 			#filter-area {
 				padding: 4px 10px;
 				display: grid;
-				grid-template-columns: 210px 10px 210px 120px;
-				justify-items: center;
+				grid-template-columns: 210px 10px 210px 170px;
+				justify-items: flex-start;
 				align-items: center;
 				gap: 4px;
+			}
+
+			#search-area {
+				display: flex;
+				align-items: center;
+				gap: 10px;
+			}
+
+			#search-area label {
+				margin-left: 10px;
+				font-size: 12px;
 			}
 
 			#filter-area button {
@@ -79,6 +90,11 @@ export class AlarmHistoryComponent implements OnInit {
 	fileName: string
 
 	dataSource: DataSource
+
+	searchTime: string
+	startSearch: number
+    endSearch: number
+    bySearch: boolean = false;
 
 	setDateWithMaxLimit() {
 		this.now = new Date()
@@ -173,7 +189,10 @@ export class AlarmHistoryComponent implements OnInit {
 	}
 
 	search(startTime: Date, endTime: Date) {
-		this.dataSource = this.svc.alarmsDataSource(startTime, endTime)
+        this.bySearch = true;
+        this.onDataSourceStarted();
+
+		this.dataSource = this.svc.alarmsDataSource(this, startTime, endTime)
 		this.applyFilter(startTime, endTime)
 		// this.dataSource.reload()
 	}
@@ -183,6 +202,35 @@ export class AlarmHistoryComponent implements OnInit {
 			'and',
 			['time', '<=', endTime],
 		])
+	}
+
+    public onDataSourceStarted() {
+      this.searchTime = ''
+      this.startSearch = null
+      this.startSearch = Date.now()
+    }
+
+    public onDataSourceChanged() {
+        this.endSearch = null
+		this.endSearch = Date.now()
+		var gap = this.endSearch - this.startSearch
+
+		const days = Math.floor(gap / (1000 * 60 * 60 * 24)) // 일
+		const hour = String(Math.floor((gap / (1000 * 60 * 60)) % 24)).padStart(
+			2,
+			'0',
+		) // 시
+		const minutes = String(Math.floor((gap / (1000 * 60)) % 60)).padStart(
+			2,
+			'0',
+		) // 분
+		const second = String(Math.floor((gap / 1000) % 60)).padStart(2, '0') // 초
+		const milisec = String(Math.floor(gap % 1000)).padStart(3, '0') // 밀리
+
+		this.searchTime = hour + ':' + minutes + ':' + second + '.' + milisec
+        console.log('time Alarm history: ' + this.searchTime)
+
+        this.bySearch = false
 	}
 
 	private getGridSize(): void {

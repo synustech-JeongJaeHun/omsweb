@@ -1,33 +1,36 @@
 <div id="history-page">
   <div id="filter-area">
     <!-- <dx-select-box
-      [items]="VehicleListAll"
-      [placeholder]="'_VEHICLE' | translate"
-      [dataSource]="VehicleListAll"
-      displayExpr="OnlineName"
-      valueExpr="Id"
-      [searchEnabled]="true"
-      [showClearButton]="true"
-      #vehicle
-    ></dx-select-box>
-    <dx-select-box
-      [items]="AlarmcodeListAll"
-      [placeholder]="'_ALARMCODE' | translate"
-      [dataSource]="AlarmcodeListAll"
-      displayExpr="_id"
-      valueExpr="_id"
-      [searchEnabled]="true"
-      [showClearButton]="true"
-      #alarmcode
-    ></dx-select-box> -->
+    [items]="VehicleListAll"
+    [placeholder]="'_VEHICLE' | translate"
+    [dataSource]="VehicleListAll"
+    displayExpr="OnlineName"
+    valueExpr="Id"
+    [searchEnabled]="true"
+    [showClearButton]="true"
+    #vehicle
+  ></dx-select-box>
+  <dx-select-box
+    [items]="AlarmcodeListAll"
+    [placeholder]="'_ALARMCODE' | translate"
+    [dataSource]="AlarmcodeListAll"
+    displayExpr="_id"
+    valueExpr="_id"
+    [searchEnabled]="true"
+    [showClearButton]="true"
+    #alarmcode
+  ></dx-select-box> -->
     <dx-date-box [placeholder]="'_START_DATE' | translate" type="datetime" [value]="start" [min]="base" [max]="end"
-      [acceptCustomValue]="false" [showClearButton]="true" [displayFormat]="dateTimeFormat" #startDate></dx-date-box>
+                 [acceptCustomValue]="false" [showClearButton]="true" [displayFormat]="dateTimeFormat" #startDate></dx-date-box>
     <div>~</div>
     <dx-date-box [placeholder]="'_END_DATE' | translate" type="datetime" [value]="now" [min]="base" [max]="end"
-      [acceptCustomValue]="false" [showClearButton]="true" [displayFormat]="dateTimeFormat" #endDate></dx-date-box>
-    <button mat-raised-button color="primary" (click)="search(startDate.value, endDate.value)">
-      {{ "names.search" | translate }}
-    </button>
+                 [acceptCustomValue]="false" [showClearButton]="true" [displayFormat]="dateTimeFormat" #endDate></dx-date-box>
+    <div id="search-area">
+      <button mat-raised-button color="primary" (click)="search(startDate.value, endDate.value)">
+        {{ "names.search" | translate }}
+      </button>
+      <label> {{ searchTime }}</label>
+    </div>
   </div>
   <div id="grid-container">
     <dx-data-grid [dataSource]="dataSource" [columnAutoWidth]="true" [remoteOperations]="true" [height]="gridHeight"
