@@ -97,9 +97,6 @@ export class PlaybackMapViewerComponent implements OnInit, OnDestroy {
 	//history Panel
 	public showHistoryPanel = true
 
-	get activeDetails(): boolean {
-		return this.detailsVisible && this.auth.isAuthenticated
-	}
 	get showToolbarText(): boolean {
 		return this.settingSvc.globalPreferences.toggles.showToolName
 	}
@@ -386,12 +383,6 @@ export class PlaybackMapViewerComponent implements OnInit, OnDestroy {
 					break
 			}
 		})
-	}
-
-	changeFocus(event: any) {
-		this.selectedObject = event
-		// @ts-ignore
-		this.focusOnTM({ type: event.objectType, id: event.id })
 	}
 
 	// EPIC > OMS-TRACK-MONITOR

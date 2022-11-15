@@ -63,17 +63,6 @@
 	>
 	</oms-track-monitor>
 
-	<div id="side_panel">
-		<!-- detail panel at right side -->
-		<oms-playback-map-side-panel
-			*ngIf="activeDetails"
-			class="side_panel active"
-			[selectedObject]="selectedObject"
-			(focus)="changeFocus($event)"
-		>
-		</oms-playback-map-side-panel>
-	</div>
-
 	<!-- state-panel -->
 	<div
 		*ngIf="currentModeState"
