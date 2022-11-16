@@ -1,23 +1,15 @@
 <script setup lang="ts">
-import { Vehicle } from '../types/Vehicle'
+import { ComplicatedMode, Vehicle } from '../types/Vehicle'
 import { readonlyVehicleSecondaryContent } from '../vehicleSecondaryContent'
 // svg component
 import VehicleStateMaintainedSvg from '../assets/VehicleStateMaintained.svg?component'
-import VehicleStatePreventPushSvg from '../assets/VehicleStatePreventPush.svg?component'
-import VehicleStatePreventCallSvg from '../assets/VehicleStatePreventCall.svg?component'
+import VehicleStatePushDisabledSvg from '../assets/VehicleStatePushDisabled.svg?component'
+import VehicleStateTransferDisabledSvg from '../assets/VehicleStateTransferDisabled.svg?component'
 import VehicleTypeNormal from '../assets/VehicleTypeNormal.svg?component'
-import VehicleTypeCleaning from '../assets/VehicleTypeCleaning.svg?component'
 import VehicleCargoLoadingSvg from '../assets/VehicleCargoLoading.svg?component'
 import VehicleCargoUnloadingSvg from '../assets/VehicleCargoUnloading.svg?component'
 import VehicleCargoFullSvg from '../assets/VehicleCargoFull.svg?component'
 import VehicleCargoTransferFailSvg from '../assets/VehicleCargoTransferFail.svg?component'
-import VehicleStateBlockSvg from '../assets/VehicleStateBlock.svg?component'
-import VehicleStateZcuBlockSvg from '../assets/VehicleStateZcuBlock.svg?component'
-import VehicleStateSensorStopSvg from '../assets/VehicleStateSensorStop.svg?component'
-import VehicleStateStaleSvg from '../assets/VehicleStateStale.svg?component'
-import VehicleStateErrorSvg from '../assets/VehicleStateError.svg?component'
-import VehicleStateDisconnectedSvg from '../assets/VehicleStateDisconnected.svg?component'
-import VehicleTypeCleaningOutline from '../assets/VehicleTypeCleaningOutline.svg?component'
 import VehicleTypeNormalOutline from '../assets/VehicleTypeNormalOutline.svg?component'
 import VehicleFocusArrow from '../assets/VehicleFocusArrow.svg?component'
 
@@ -42,12 +34,13 @@ const props = defineProps<{
   // Derived attr
   groupColor?: string
   isHotlot: boolean
-  isStale: boolean
-  isPreventCall: boolean
-  isPreventPush: boolean
+  isTransferDisabled: boolean // before isPreventCall
+  isPushDisabled: boolean // before isPreventPush
+  complicatedMode: ComplicatedMode // new in chjs
 
   // TM attr,
   isFocused?: boolean
+  isCarrierFocused?: boolean
   isHovered?: boolean
 }>()
 
@@ -72,133 +65,37 @@ const emit = defineEmits<{
     Group Circle size
     w 50 h 50 r 25
   -->
-  <svg
-    class="overflow-visible cursor-pointer vehicle-symbol"
-    :data-mode="props.mode"
-  >
+  <svg class="overflow-visible cursor-pointer vehicle-symbol" :data-mode="props.mode"
+    :data-complicated-mode="props.complicatedMode" :data-carrier-focused="props.isCarrierFocused">
     <g class="scale-and-reverse-rotate">
-      <circle
-        v-show="groupColor"
-        class="group-shadow"
-        r="25"
-        :fill="groupColor"
-      />
+      <circle v-show="groupColor" class="group-shadow" r="25" :fill="groupColor" />
 
-      <!-- vehicle type && vehicle mode start -->
-      <template v-if="props.type === 'CLEANING'">
-        <!-- using discrete svg element to overlap effects -->
-        <VehicleTypeCleaningOutline
-          v-if="props.isFocused"
-          class="type focus"
-          width="40"
-          height="40"
-          x="-20"
-          y="-20"
-        />
-        <VehicleTypeCleaningOutline
-          v-if="props.isHovered"
-          class="type hover"
-          width="40"
-          height="40"
-          x="-20"
-          y="-20"
-        />
-        <VehicleTypeCleaning
-          width="40"
-          height="40"
-          x="-20"
-          y="-20"
-          @dblclick="emit('dblclick')"
-          @click.left="emit('leftclick')"
-          @click.right="emit('rightclick', $event)"
-          @mouseover="emit('mouseover', $event)"
-          @mouseout="emit('mouseout')"
-          @mouseleave="emit('mouseleave')"
-        />
-      </template>
+      <!-- using discrete svg element to overlap effects -->
+      <VehicleTypeNormalOutline v-if="props.isFocused" class="type focus" width="40" height="40" x="-20" y="-20" />
+      <VehicleTypeNormalOutline v-if="props.isHovered" class="type hover" width="40" height="40" x="-20" y="-20" />
+      <VehicleTypeNormal width="40" height="40" x="-20" y="-20" @dblclick="emit('dblclick')"
+        @click.left="emit('leftclick')" @click.right="emit('rightclick', $event)" @mouseover="emit('mouseover', $event)"
+        @mouseout="emit('mouseout')" @mouseleave="emit('mouseleave')" />
 
-      <template v-else>
-        <!-- using discrete svg element to overlap effects -->
-        <VehicleTypeNormalOutline
-          v-if="props.isFocused"
-          class="type focus"
-          width="40"
-          height="40"
-          x="-20"
-          y="-20"
-        />
-        <VehicleTypeNormalOutline
-          v-if="props.isHovered"
-          class="type hover"
-          width="40"
-          height="40"
-          x="-20"
-          y="-20"
-        />
-        <VehicleTypeNormal
-          width="40"
-          height="40"
-          x="-20"
-          y="-20"
-          @dblclick="emit('dblclick')"
-          @click.left="emit('leftclick')"
-          @click.right="emit('rightclick', $event)"
-          @mouseover="emit('mouseover', $event)"
-          @mouseout="emit('mouseout')"
-          @mouseleave="emit('mouseleave')"
-        />
-      </template>
-
-      <VehicleFocusArrow
-        v-if="props.isHovered || props.isFocused"
-        :class="[
-          'arrow',
-          props.isHovered && 'hover',
-          props.isFocused && 'focus',
-        ]"
-        width="40"
-        height="40"
-        x="20"
-        y="20"
-      />
+      <VehicleFocusArrow v-if="props.isHovered || props.isFocused" :class="[
+        'arrow',
+        props.isHovered && 'hover',
+        props.isFocused && 'focus',
+      ]" width="40" height="40" x="20" y="20" />
 
       <!-- vehicle type && vehicle mode end -->
 
       <!-- cargo state start -->
       <!-- 1. Loading  -->
-      <VehicleCargoLoadingSvg
-        v-if="props.cargoState === 'L'"
-        width="15"
-        height="15"
-        x="-7.5"
-        y="-7.5"
-      />
+      <VehicleCargoLoadingSvg v-if="props.cargoState === 'L'" width="15" height="15" x="-7.5" y="-7.5" />
       <!-- 2. Full  -->
-      <VehicleCargoFullSvg
-        v-else-if="props.cargoState === 'F'"
-        width="15"
-        height="15"
-        x="-7.5"
-        y="-7.5"
-      />
+      <VehicleCargoFullSvg v-else-if="props.cargoState === 'F'" width="15" height="15" x="-7.5" y="-7.5" />
       <!-- 3. Unloading -->
-      <VehicleCargoUnloadingSvg
-        v-else-if="props.cargoState === 'U'"
-        width="15"
-        height="15"
-        x="-7.5"
-        y="-7.5"
-      />
+      <VehicleCargoUnloadingSvg v-else-if="props.cargoState === 'U'" width="15" height="15" x="-7.5" y="-7.5" />
       <!-- 4. Empty: Empty is Empty! -->
       <template v-else />
       <!-- 5. Load/Unload Failed -->
-      <VehicleCargoTransferFailSvg
-        v-if="props.cargoTransferResult"
-        width="20"
-        height="20"
-        x="-10"
-        y="-10"
-      />
+      <VehicleCargoTransferFailSvg v-if="props.cargoTransferResult" width="20" height="20" x="-10" y="-10" />
       <!-- cargo state end -->
 
       <!-- Text fields START -->
@@ -207,26 +104,16 @@ const emit = defineEmits<{
       <!-- 📐🛑 Be careful! logic is dependent on invert -->
 
       <!-- font-weight="bold" -->
-      <text
-        class="select-none"
-        text-rendering="optimizeSpeed"
-        transform="scale(1 -1) translate(-25 -2)"
-        text-anchor="end"
-        alignment-baseline="baseline"
-        font-size="0.8em"
-        stroke="white"
-        stroke-width="1px"
-        fill="black"
-        paint-order="stroke"
-      >
+      <text class="select-none" text-rendering="optimizeSpeed" transform="scale(1 -1) translate(-25 -2)"
+        text-anchor="end" alignment-baseline="baseline" font-size="0.8em" stroke="white" stroke-width="1px" fill="black"
+        paint-order="stroke">
         {{ props.logicalId }}
       </text>
       <!-- vehicle order with priority(hotlot) -->
-      <g
-        :filter="
-          isHotlot ? `url(#vehicle-order-hotlot-border)` : undefined
-        "
-      >
+      <g :filter="
+        isHotlot ? `url(#vehicle-order-hotlot-border)` : undefined
+      ">
+
          <!-- A: OrderId -->
          <!-- 📐🛑 Be careful! logic is dependent on invert -->
          <text
@@ -251,7 +138,7 @@ const emit = defineEmits<{
           v-if="readonlyVehicleSecondaryContent === 'carrier'  && props.carrierId"
           class="select-none"
           text-rendering="optimizeSpeed"
-          font-size="xx-small"
+          font-size="small"
           transform="scale(1 -1) translate(-25 2)"
           text-anchor="end"
           alignment-baseline="hanging"
@@ -268,90 +155,46 @@ const emit = defineEmits<{
 
       <!-- vehicle properties ordered by priority ==== START -->
 
-      <!-- top left (2) -->
-      <!-- 1. Blocked -->
-      <VehicleStateBlockSvg
-        v-if="props.isBlocked"
-        x="-25"
-        y="15"
-        width="10"
-        height="10"
-      />
-      <!-- 2. Zcu Blocked -->
-      <VehicleStateZcuBlockSvg
-        v-if="props.isZcuBlocked"
-        x="-25"
-        y="15"
-        width="10"
-        height="10"
-      />
-      <!-- 3. Sensor Stop -->
-      <VehicleStateSensorStopSvg
-        v-else-if="props.isSensorStopped"
-        x="-25"
-        y="15"
-        width="10"
-        height="10"
-      />
-      <template v-else />
+      <!-- top left (0) -->
+      <!-- nothing -->
 
       <!-- top right (1) -->
-      <!-- 1. Stale -->
-      <!-- where is staled -->
-      <VehicleStateStaleSvg
-        v-if="props.isStale"
-        x="15"
-        y="15"
-        width="10"
-        height="10"
-      />
+      <!-- 1. Sensor Stop -->
+      <text 
+        v-if="props.isSensorStopped" 
+        class="select-none"
+        x="20"
+        y="12"
+        font-weight="bold"
+        style="transform: rotate(180deg) scaleX(-1); transform-origin: 20px 12px;" >
+        S
+      </text>
 
-      <!-- bottom left (1) -->
-      <!-- 1. Error -->
-      <!-- triangle with width 40 and height 30 -->
-      <VehicleStateErrorSvg
-        v-if="props.errorList"
-        x="-20"
-        y="-15"
-        width="20"
-        height="15"
-      />
+      <!-- 2. Zcu Blocked -->
+      <text 
+        v-else-if="props.isZcuBlocked"
+        class="select-none"
+        x="20"
+        y="12"
+        font-weight="bold"
+        style="transform: rotate(180deg) scaleX(-1); transform-origin: 20px 12px;" >
+        Z
+      </text>
+      <template v-else />
 
-      <!-- bottom right (4) -->
-      <!-- 1. Disconnected -->
-      <VehicleStateDisconnectedSvg
-        v-if="props.isConnected === false"
-        x="22"
-        y="-18"
-        width="15"
-        height="15"
-      />
-      <!-- 2. Maintained -->
-      <VehicleStateMaintainedSvg
-        v-else-if="props.isMaint"
-        x="22"
-        y="-18"
-        width="20"
-        height="20"
-      />
-      <!-- 3. Prevent Call or Prevent Push -->
-      <template v-else-if="props.isPreventCall || props.isPreventPush">
-        <!-- 3-A. Prevent Push -->
-        <VehicleStatePreventPushSvg
-          v-if="props.isPreventPush"
-          width="15"
-          height="15"
-          x="22"
-          y="-18"
-        />
-        <!-- 3-B. Prevent Call -->
-        <VehicleStatePreventCallSvg
-          v-if="props.isPreventCall"
-          width="15"
-          height="15"
-          :x="props.isPreventPush ? 40 : 22"
-          y="-18"
-        />
+      <!-- bottom left (0) -->
+      <!-- nothing -->
+
+      <!-- bottom right (3) -->
+      <!-- 1. Maintained -->
+      <VehicleStateMaintainedSvg v-if="props.complicatedMode === 'MAINTENANCE'" x="22" y="-18" width="20" height="20" />
+      <!-- 2. Prevent Call or Prevent Push -->
+      <template v-else-if="props.isTransferDisabled || props.isPushDisabled">
+        <!-- 2-A. Prevent Push -->
+        <VehicleStatePushDisabledSvg v-if="props.isPushDisabled" width="15" height="15" x="22" y="-18" />
+        <!-- 2-B. Prevent Call -->
+        <VehicleStateTransferDisabledSvg v-if="props.isTransferDisabled" width="15" height="15"
+          :x="props.isPushDisabled ? 40 : 22" y="-18" />
       </template>
       <template v-else />
 
