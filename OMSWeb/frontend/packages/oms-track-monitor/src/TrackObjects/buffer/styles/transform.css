@@ -11,6 +11,13 @@
     rotate(var(--reverse-rotation-degree));
 }
 
+#buffer-layer
+  .buffer[data-carrier-focused~='true' i]
+  .scale-and-reverse-rotate {
+  transform: scale(calc(var(--mm-per-pixel) * 2.5))
+    rotate(var(--reverse-rotation-degree));
+}
+
 /* Text Scale */
 #buffer-layer[data-scale-level~='BELOW15' i]
  .buffer .label {

@@ -22,7 +22,7 @@ interface IOmsTrackMonitor {
 
 	// focus
 	focus(type: string, id: number, focusType?: string): void
-	dropFocus(): void
+  dropFocus(focusType?: string): void
 
 	// track
 	track(type: string, id: number): void

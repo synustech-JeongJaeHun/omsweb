@@ -47,7 +47,7 @@ interface IOmsTrackMonitor {
 	focus(type: 'zcu', id: Zcu['id']): void
 	focus(type: 'cluster', id: Cluster['id']): void
 	focus(type: 'fireshutter', id: Fireshutter['id']): void
-	dropFocus(): void
+	dropFocus(focusType?:  "PRIMARY" | "CARRIER" ): void
 
 	track(type: 'vehicle', id: Vehicle['id']): void
 	stopTrack(): void

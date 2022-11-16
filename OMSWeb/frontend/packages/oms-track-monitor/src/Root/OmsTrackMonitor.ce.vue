@@ -448,6 +448,10 @@ defineExpose(exposed)
   /* transform */
   transform: scale(v-bind('scaleInfo.mmPerPixel * scaleStylesInfo.vehicleSize * 1/10')) rotate(var(--reverse-rotation-degree));
 }
+#vehicle-layer .vehicle-symbol[data-carrier-focused~='true' i] .scale-and-reverse-rotate {
+  /* transform */
+  transform: scale(v-bind('scaleInfo.mmPerPixel * scaleStylesInfo.vehicleSize * 1/4')) rotate(var(--reverse-rotation-degree));
+}
 #zcu-layer .zcu .scale-and-reverse-rotate {
   /* transform */
   transform: scale(

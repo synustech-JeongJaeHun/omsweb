@@ -40,6 +40,7 @@ const props = defineProps<{
 
   // TM attr,
   isFocused?: boolean
+  isCarrierFocused?: boolean
   isHovered?: boolean
 }>()
 
@@ -65,7 +66,7 @@ const emit = defineEmits<{
     w 50 h 50 r 25
   -->
   <svg class="overflow-visible cursor-pointer vehicle-symbol" :data-mode="props.mode"
-    :data-complicated-mode="props.complicatedMode">
+    :data-complicated-mode="props.complicatedMode" :data-carrier-focused="props.isCarrierFocused">
     <g class="scale-and-reverse-rotate">
       <circle v-show="groupColor" class="group-shadow" r="25" :fill="groupColor" />
 

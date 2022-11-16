@@ -4,11 +4,12 @@ let carrierFocusedObject: CarrierFocusedObject | undefined = undefined
 
 function setCarrierFocusedObject(cfo?: CarrierFocusedObject) {
   // prev
-  if (carrierFocusedObject) carrierFocusedObject.isFocused = undefined
+  if (carrierFocusedObject)
+    carrierFocusedObject.isCarrierFocused = undefined
 
   // now
   if (cfo) {
-    cfo.isFocused = true
+    cfo.isCarrierFocused = true
     carrierFocusedObject = cfo
   }
 }

@@ -254,8 +254,9 @@ const exposed: IOmsTrackMonitor = {
     }
 
 	},
-	dropFocus() {
-		setFocusedObject(undefined)
+	dropFocus(focusType:  "PRIMARY" | "CARRIER" = "PRIMARY") {
+    if(focusType === 'PRIMARY') setFocusedObject(undefined)
+    else if(focusType === 'CARRIER') setCarrierFocusedObject(undefined)
 	},
 
 	track(type, id) {
