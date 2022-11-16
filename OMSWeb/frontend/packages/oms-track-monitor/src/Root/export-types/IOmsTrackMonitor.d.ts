@@ -21,7 +21,7 @@ interface IOmsTrackMonitor {
 	find(type: string, id: number): void
 
 	// focus
-	focus(type: string, id: number): void
+	focus(type: string, id: number, focusType?: string): void
 	dropFocus(): void
 
 	// track

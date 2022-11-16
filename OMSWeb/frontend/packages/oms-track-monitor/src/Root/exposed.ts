@@ -64,6 +64,7 @@ import { setTrackedObject } from 'src/MapObjects/track/track'
 import { scaleStylesInfo } from '../styles/styles'
 import { deleteClusterState, initClusterStates, insertClusterState, updateClusterState } from 'src/TrackObjects/cluster/clusterStates'
 import { cameraViewBoxInfo } from 'src/MapObjects/map/camera'
+import { setCarrierFocusedObject } from 'src/MapObjects/focus/carrierFocus'
 
 const exposed: IOmsTrackMonitor = {
 	getCameraAndRotation,
@@ -175,62 +176,83 @@ const exposed: IOmsTrackMonitor = {
 		}
 	},
 
-	focus(type, id) {
-		switch (type.trim().toLowerCase()) {
-			case 'vehicle':
-				const vehicle = findVehicleById(id)
-				if (vehicle) {
-					setFocusedObject(vehicle)
-				}
-				break
-			case 'point':
-				const point = findPointById(id)
-				if (point) {
-					setFocusedObject(point)
-				}
-				break
-			case 'segment':
-				const segment = findSegmentById(id)
-				if (segment) {
-					setFocusedObject(segment)
-				}
-				break
-			case 'station':
-				const station = findStationById(id)
-				if (station) {
-					setFocusedObject(station)
-				}
-				break
-			case 'buffer':
-				const buffer = findBufferById(id)
-				if (buffer) {
-					setFocusedObject(buffer)
-				}
-				break
-			case 'mtl':
-				const mtl = findMtlById(id)
-				if (mtl) {
-					setFocusedObject(mtl)
-				}
-				break;
-			case 'zcu':
-				const zcu = findZcuById(id)
-				if (zcu) {
-					setFocusedObject(zcu)
-				}
-				break
-			case 'cluster':
-				const cluster = findClusterById(id)
-				if (cluster) {
-					setFocusedObject(cluster)
-				}
-				break
-			case 'fireshutter':
-				break
+	focus(type, id, focusType:  "PRIMARY" | "CARRIER" = "PRIMARY") {
+    if (focusType === 'PRIMARY'){
+      switch (type.trim().toLowerCase()) {
+        case 'vehicle':
+          const vehicle = findVehicleById(id)
+          if (vehicle) {
+            setFocusedObject(vehicle)
+          }
+          break
+        case 'point':
+          const point = findPointById(id)
+          if (point) {
+            setFocusedObject(point)
+          }
+          break
+        case 'segment':
+          const segment = findSegmentById(id)
+          if (segment) {
+            setFocusedObject(segment)
+          }
+          break
+        case 'station':
+          const station = findStationById(id)
+          if (station) {
+            setFocusedObject(station)
+          }
+          break
+        case 'buffer':
+          const buffer = findBufferById(id)
+          if (buffer) {
+            setFocusedObject(buffer)
+          }
+          break
+        case 'mtl':
+          const mtl = findMtlById(id)
+          if (mtl) {
+            setFocusedObject(mtl)
+          }
+          break;
+        case 'zcu':
+          const zcu = findZcuById(id)
+          if (zcu) {
+            setFocusedObject(zcu)
+          }
+          break
+        case 'cluster':
+          const cluster = findClusterById(id)
+          if (cluster) {
+            setFocusedObject(cluster)
+          }
+          break
+        case 'fireshutter':
+          break
 
-			default:
-				break
-		}
+        default:
+          break
+      }
+    }else if(focusType === 'CARRIER'){
+      switch (type) {
+        case 'vehicle':
+          const vehicle = findVehicleById(id)
+          if (vehicle) {
+            setCarrierFocusedObject(vehicle)
+          }
+          break
+        case 'buffer':
+          const buffer = findBufferById(id)
+          if (buffer) {
+            setCarrierFocusedObject(buffer)
+          }
+          break
+      
+        default:
+          break;
+      }
+    }
+
 	},
 	dropFocus() {
 		setFocusedObject(undefined)

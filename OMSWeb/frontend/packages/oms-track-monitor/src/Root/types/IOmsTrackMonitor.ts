@@ -38,11 +38,11 @@ interface IOmsTrackMonitor {
   find(type: "cluster", id: Cluster['id']): void
 	find(type: 'fireshutter', id: Mtl['id']): void
 	// focus
-	focus(type: 'vehicle', id: Vehicle['id']): void
+	focus(type: 'vehicle', id: Vehicle['id'], focusType?: "PRIMARY" | "CARRIER"): void
 	focus(type: 'point', id: Point['id']): void
 	focus(type: 'segment', id: Segment['id']): void
 	focus(type: 'station', id: Station['id']): void
-	focus(type: 'buffer', id: Buffer['id']): void
+	focus(type: 'buffer', id: Buffer['id'], focusType?: "PRIMARY" | "CARRIER"): void
 	focus(type: 'mtl', id: Mtl['id']): void
 	focus(type: 'zcu', id: Zcu['id']): void
 	focus(type: 'cluster', id: Cluster['id']): void
