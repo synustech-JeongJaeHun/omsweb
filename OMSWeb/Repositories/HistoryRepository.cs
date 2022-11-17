@@ -188,7 +188,7 @@ namespace OMSWeb.Repositories
                     ";
 
             IQueryable<OrderHistoryEntity> result;
-            using (var conn = ConnectTrack())
+            using (var conn = ConnectTrack(300))
             {
                 result = conn.Query<OrderHistoryEntity>(sql, new { from, to, skip, take }).AsQueryable();
             }
