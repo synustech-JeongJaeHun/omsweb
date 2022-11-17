@@ -39,7 +39,9 @@
 			class="dense"
 			(click)="onViewUnusedList()"
 		>
-			<mat-icon style="visibility: hidden; width: 0px">disabled_by_default</mat-icon>
+			<mat-icon style="visibility: hidden; width: 0px"
+				>disabled_by_default</mat-icon
+			>
 			<span>{{ 'names.unusedList' | translate }}</span>
 		</button>
 		<button
@@ -80,6 +82,8 @@
 			<oms-order-control-table
 				*ngIf="currentTab === 0"
 				[tableHeight]="tableHeight"
+				(focus)="focus.emit($event)"
+				(dropFocus)="dropFocus.emit($event)"
 			>
 			</oms-order-control-table>
 		</mat-tab>

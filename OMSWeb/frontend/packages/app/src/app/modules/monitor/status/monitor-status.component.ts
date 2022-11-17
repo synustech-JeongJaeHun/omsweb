@@ -57,7 +57,12 @@ export class MonitorStatusComponent implements OnInit {
 	trackData: Dto.ITrackData
 
 	findEvent = new EventEmitter<{ type: string; id: number }>()
-	focusEvent = new EventEmitter<{ type: string; id: number }>()
+	focusEvent = new EventEmitter<{
+		type: string
+		id: number
+		focusType?: string
+	}>()
+	dropFocusEvent = new EventEmitter<{ focusType?: string }>()
 
 	get showControlTable(): boolean {
 		return this.mapPreference.toggles.controlTable
@@ -95,5 +100,12 @@ export class MonitorStatusComponent implements OnInit {
 	handleFindAndFocus = (event: { type: string; id: number }) => {
 		this.findEvent.emit(event)
 		this.focusEvent.emit(event)
+	}
+
+	handleFocus = (event: { type: string; id: number; focusType?: string }) => {
+		this.focusEvent.emit(event)
+	}
+	handleDropFocus = (event: { focusType?: string }) => {
+		this.dropFocusEvent.emit(event)
 	}
 }
