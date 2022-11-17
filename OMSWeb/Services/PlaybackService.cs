@@ -28,7 +28,12 @@ namespace OMSWeb.Services
       => this._repo.GetRecentTrackBefore(before);
 
     public BeforeNextSnapshots GetBeforeNextSnapshots(DateTimeOffset from)
-    => this._repo.GetBeforeNextSnapshots(from);
+      => this._repo.GetBeforeNextSnapshots(from);
+
+    public IList<RemainedAlarm> GetRemainedAlarmsAt(DateTimeOffset at)
+      => this._repo.GetRemainedAlarmsAt(at);
+    public IList<AlarmChange> GetAlarmChangesInTime(DateTimeOffset from, DateTimeOffset to)
+      => this._repo.GetAlarmChangesInTime(from, to);
 
     public IList<VehicleHistoryWithTableName> GetVehicleHistoriesBetween(DateTimeOffset from, DateTimeOffset to)
       => this._repo.GetVehicleHistoriesBetween(from, to);
@@ -36,6 +41,14 @@ namespace OMSWeb.Services
       => this._repo.GetOrderHistoriesBetween(from, to);
     public IList<SegmentBlockingHistoryWithTableName> GetSegmentBlockingHistoriesBetween(DateTimeOffset from, DateTimeOffset to)
       => this._repo.GetSegmentBlockingHistoriesBetween(from, to);
+    public IList<BufferHistoryWithTableName> GetBufferHistoriesBetween(DateTimeOffset from, DateTimeOffset to)
+      => this._repo.GetBufferHistoriesBetween(from, to);
+    public IList<StationHistoryWithTableName> GetStationHistoriesBetween(DateTimeOffset from, DateTimeOffset to)
+      => this._repo.GetStationHistoriesBetween(from, to);
+    public IList<ZcuHistoryWithTableName> GetZcuHistoriesBetween(DateTimeOffset from, DateTimeOffset to)
+      => this._repo.GetZcuHistoriesBetween(from, to);
+    public IList<ModeStateHistoryWithTableName> GetModeStateHistoriesBetween(DateTimeOffset from, DateTimeOffset to)
+      => this._repo.GetModeStateHistoriesBetween(from, to);
   }
 }
 

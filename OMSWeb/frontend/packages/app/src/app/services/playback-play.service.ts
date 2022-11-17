@@ -1,4 +1,4 @@
-import { EventEmitter, Injectable, Output } from '@angular/core'
+import { EventEmitter, Injectable } from '@angular/core'
 import { PlaybackService } from './playback.service'
 import * as DateFns from 'date-fns'
 import {
@@ -10,14 +10,26 @@ import {
 	PlaybackSpeed,
 	PlaybackTrack,
 	HistoryEvent,
+	RemainedAlarm,
+	AlarmChange,
+	CurrentBuffer,
+	CurrentStation,
+	CurrentZcu,
+	CurrentModeState,
 } from '../models/playback.model'
 import {
+	convertBufferHistoryEventToCurrentBuffer,
 	convertOrderHistoryEventToCurrentOrder,
 	convertSegmentBlockingHistoryEventToCurrentSegmentBlocking,
+	convertSnapshotBufferToCurrentBuffer,
 	convertSnapshotOrderToCurrentOrder,
 	convertSnapshotSegmentBlockingToCurrentSegmentBlocking,
+	convertSnapshotStationToCurrentStation,
 	convertSnapshotVehicleToCurrentVehicle,
+	convertSnapshotZcuToCurrentZcu,
+	convertStationHistoryEventToCurrentStation,
 	convertVehicleHistoryEventToCurrentVehicle,
+	convertZcuHistoryEventToCurrentZcu,
 } from '../modules/playback/utils/playback-convert.util'
 import { addOrderInfoToCurrenVehicle } from '../modules/playback/utils/playback-join.util'
 import { getTimeRangeChunks } from '../modules/playback/utils/date.util'
@@ -26,7 +38,7 @@ import { getTimeRangeChunks } from '../modules/playback/utils/date.util'
 	providedIn: 'root',
 })
 export class PlaybackPlayService {
-	@Output() clockChanged = new EventEmitter<ClockChangedEvent>()
+	clockChanged = new EventEmitter<ClockChangedEvent>()
 
 	public firstSnapshotTime: Date
 	public lastHistoryTime: Date
@@ -64,9 +76,17 @@ export class PlaybackPlayService {
 	public currentSnapshot: PlaybackSnapshot
 	public nextSnapshot: Pick<PlaybackSnapshot, 'timestamp'>
 
+	public currentRemainedAlarms: RemainedAlarm[] = []
+	public alarmChanges: AlarmChange[] = []
+
+	public currentAlarms: RemainedAlarm[] = []
 	public currentVehicles: CurrentVehicle[] = []
 	public currentSegmentBlockings: CurrentSegmentBlocking[] = []
 	public currentOrders: CurrentOrder[] = []
+	public currentBuffers: CurrentBuffer[] = []
+	public currentStations: CurrentStation[] = []
+	public currentZcus: CurrentZcu[] = []
+	public currentModeState?: CurrentModeState = null
 
 	public historyEvents: HistoryEvent[]
 
@@ -97,6 +117,19 @@ export class PlaybackPlayService {
 		this.currentSnapshot = beforeNextSnapshots.before
 		this.nextSnapshot = beforeNextSnapshots.next
 	}
+	private async fetchVehicleAlarms(
+		from: Date,
+		to: Date = new Date(9999, 1, 1),
+	) {
+		const alarms = await this.playbackService
+			.getVehicleAlarms(from, to)
+			.toPromise()
+
+		this.currentRemainedAlarms = alarms.remainedAlarms
+		this.alarmChanges = alarms.alarmChanges
+		this.currentAlarms = [...alarms.remainedAlarms]
+	}
+
 	private async fetchEvents(from: Date, to?: Date) {
 		this.setLoaded({ from: from, to: from })
 		if (to == null) {
@@ -202,9 +235,14 @@ export class PlaybackPlayService {
 
 			if (isTrackDifference) await this.fetchTrack(date)
 			await this.fetchSnapshot(date)
+			await this.fetchVehicleAlarms(
+				this.currentSnapshot.timestamp,
+				this.nextSnapshot?.timestamp,
+			)
 
 			// if other snapshot, goto very first time of snapshot
 			this.clock = this.currentSnapshot.timestamp
+			this.remainedFirstAlarmIndex = 0
 			this.remainedFirstEventIndex = 0
 
 			// 🎉 event
@@ -214,27 +252,36 @@ export class PlaybackPlayService {
 				snapshot: this.currentSnapshot.data,
 			})
 
-			if (this.currentSnapshot?.timestamp)
+			if (this.currentSnapshot?.timestamp) {
 				await this.fetchEvents(
 					this.currentSnapshot.timestamp,
 					this.nextSnapshot?.timestamp,
 				)
+			}
 		} else {
 			const time = date.getTime()
-			const index = findIndexDefault(
+			const remainedFirstEventIndex = findIndexDefault(
 				this.historyEvents.findIndex(
 					(event) => new Date(event.historyChangeTime).getTime() > time,
 				),
 				this.historyEvents.length,
 			)
+			const remainedFirstAlarmIndex = findIndexDefault(
+				this.alarmChanges.findIndex(
+					(event) => new Date(event.historyChangeTime).getTime() > time,
+				),
+				this.alarmChanges.length,
+			)
 
 			this.clock = date
-			this.remainedFirstEventIndex = index
+			this.remainedFirstAlarmIndex = remainedFirstAlarmIndex
+			this.remainedFirstEventIndex = remainedFirstEventIndex
 
 			this.clockChanged.emit({
 				type: 'EventsChanged',
 				clock: this.clock,
-				events: this.historyEvents.slice(0, index),
+				events: this.historyEvents.slice(0, remainedFirstEventIndex),
+				alarms: this.alarmChanges.slice(0, remainedFirstAlarmIndex),
 			})
 
 			// if current snapshot, goto date in arts
@@ -243,20 +290,42 @@ export class PlaybackPlayService {
 
 	private reduceCurrentState(event: ClockChangedEvent) {
 		if (event.type === 'SnapshotChanged' || event.type === 'EventsChanged') {
+			this.currentAlarms = [...this.currentRemainedAlarms] ?? []
+
 			this.currentOrders = (this.currentSnapshot.data.orders ?? [])
 				.filter((event) => event.time_completed?.length > 0 === false)
 				.map(convertSnapshotOrderToCurrentOrder)
 			this.currentSegmentBlockings = (
 				this.currentSnapshot.data.segment_blocking ?? []
 			).map(convertSnapshotSegmentBlockingToCurrentSegmentBlocking)
-
 			this.currentVehicles = (this.currentSnapshot.data.vehicles ?? [])
 				.map(convertSnapshotVehicleToCurrentVehicle)
 				.map((cv) => addOrderInfoToCurrenVehicle(cv, this.currentOrders))
 				.sort((a, b) => a.id - b.id)
+			this.currentBuffers = (this.currentSnapshot.data.buffers ?? []).map(
+				convertSnapshotBufferToCurrentBuffer,
+			)
+			this.currentStations = (this.currentSnapshot.data.stations ?? []).map(
+				convertSnapshotStationToCurrentStation,
+			)
+			this.currentZcus = (this.currentSnapshot.data.zcus ?? []).map(
+				convertSnapshotZcuToCurrentZcu,
+			)
+			this.currentModeState = this.currentSnapshot.data.state ?? null
 		}
 
 		if (event.type === 'EventsChanged' || event.type === 'NextFrameEvent') {
+			event.alarms.forEach((alarm) => {
+				if (alarm.historyChangeType === 'INSERT') {
+					this.currentAlarms.unshift(alarm)
+				} else if (alarm.historyChangeType === 'UPDATE') {
+					const targetIndex = this.currentAlarms.findIndex(
+						(ca) => ca.id === alarm.id,
+					)
+					if (targetIndex != null) this.currentAlarms.splice(targetIndex, 1)
+				}
+			})
+
 			event.events.forEach((event) => {
 				if (event.tableName === 'vehicle_history') {
 					const vehicle = this.currentVehicles.find(
@@ -311,6 +380,37 @@ export class PlaybackPlayService {
 						)
 						this.currentOrders.splice(index, 1)
 					}
+				} else if (event.tableName === 'buffer_history') {
+					const buffer = this.currentBuffers.find(
+						(cb) => cb.id === event.historySourceId,
+					)
+					if (buffer)
+						Object.assign(
+							buffer,
+							convertBufferHistoryEventToCurrentBuffer(buffer, event),
+						)
+				} else if (event.tableName === 'station_history') {
+					const station = this.currentStations.find(
+						(cs) => cs.id === event.historySourceId,
+					)
+					if (station)
+						Object.assign(
+							station,
+							convertStationHistoryEventToCurrentStation(station, event),
+						)
+				} else if (event.tableName === 'zcu_history') {
+					const zcu = this.currentZcus.find(
+						(cz) => cz.id === event.historySourceId,
+					)
+					if (zcu) Object.assign(zcu, convertZcuHistoryEventToCurrentZcu(event))
+				} else if (event.tableName === 'mode_state_history') {
+					this.currentModeState = {
+						ai_mode: event.ai_mode,
+						comm_state: event.comm_state,
+						control_state: event.control_state,
+						pm_state: event.pm_state,
+						tsc_state: event.tsc_state,
+					}
 				}
 			})
 		}
@@ -329,12 +429,14 @@ export class PlaybackPlayService {
 	}
 	public goToStartOfCurrentSnapshot() {
 		this.clock = this.currentSnapshot.timestamp
+		this.remainedFirstAlarmIndex = 0
 		this.remainedFirstEventIndex = 0
 		// 🎉 event
 		this.clockChanged.emit({
 			type: 'EventsChanged',
 			clock: this.clock,
 			events: [],
+			alarms: [],
 		})
 	}
 
@@ -343,12 +445,8 @@ export class PlaybackPlayService {
 	get timeStep() {
 		return this.DefaultTimeStep / this.playSpeed
 	}
+	private remainedFirstAlarmIndex = 0
 	private remainedFirstEventIndex = 0
-	get currentEvent() {
-		return this.remainedFirstEventIndex === 0
-			? undefined
-			: this.historyEvents[this.remainedFirstEventIndex - 1]
-	}
 
 	public resume() {
 		if (this.intervalId) clearInterval(this.intervalId)
@@ -387,12 +485,18 @@ export class PlaybackPlayService {
 
 			await this.fetchSnapshot(nextDate)
 
+			await this.fetchVehicleAlarms(
+				this.currentSnapshot.timestamp,
+				this.nextSnapshot?.timestamp ?? new Date(9999, 1, 1),
+			)
+
 			await this.fetchEvents(
 				this.currentSnapshot.timestamp,
 				this.nextSnapshot?.timestamp ?? new Date(9999, 1, 1),
 			)
 
 			this.clock = this.currentSnapshot.timestamp
+			this.remainedFirstAlarmIndex = 0
 			this.remainedFirstEventIndex = 0
 			this.clockChanged.emit({
 				type: 'SnapshotChanged',
@@ -422,7 +526,7 @@ export class PlaybackPlayService {
 			return
 		}
 
-		const nextIndex = (() => {
+		const nextRemainedFirstEventIndex = (() => {
 			const index = this.historyEvents
 				.slice(this.remainedFirstEventIndex)
 				.findIndex(
@@ -433,17 +537,37 @@ export class PlaybackPlayService {
 				? this.historyEvents.length
 				: this.remainedFirstEventIndex + index
 		})()
+		const nextRemainedFirstAlarmIndex = (() => {
+			const index = this.alarmChanges
+				.slice(this.remainedFirstAlarmIndex)
+				.findIndex(
+					(event) =>
+						new Date(event.historyChangeTime).getTime() > nextDate.getTime(),
+				)
+			return index === -1
+				? this.alarmChanges.length
+				: this.remainedFirstAlarmIndex + index
+		})()
+
 		// 🎉 event
 		this.clockChanged.emit({
 			type: 'NextFrameEvent',
 			clock: this.clock,
-			events: this.historyEvents.slice(this.remainedFirstEventIndex, nextIndex),
+			events: this.historyEvents.slice(
+				this.remainedFirstEventIndex,
+				nextRemainedFirstEventIndex,
+			),
+			alarms: this.alarmChanges.slice(
+				this.remainedFirstAlarmIndex,
+				nextRemainedFirstAlarmIndex,
+			),
 		})
 
 		// change state after event emit
 		// because this state before and after are used for event emit
 		this.clock = nextDate
-		this.remainedFirstEventIndex = nextIndex
+		this.remainedFirstAlarmIndex = nextRemainedFirstAlarmIndex
+		this.remainedFirstEventIndex = nextRemainedFirstEventIndex
 	}
 
 	public stop() {

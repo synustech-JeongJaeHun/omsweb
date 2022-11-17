@@ -191,6 +191,113 @@ namespace OMSWeb.Repositories
       return result;
     }
 
+    public IList<RemainedAlarm> GetRemainedAlarmsAt(DateTimeOffset at)
+    {
+      var sql = @"
+          select 
+            va.id, va.time, va.error_code, va.vehicle_id, va.time_resolved, va.current, 
+            ve.level, ve.description, ve.cause, ve.action,
+            ann.modified_by, ann.annotation
+          from 
+            vehicle_alarms va 
+            left outer join 
+            vehicle_errors ve 
+            on va.error_code = ve.id
+            left outer join 
+            annotations ann
+            on va.error_code = ann.reference_id and ann.reference_table = 'vehicle_errors'
+          where 
+            va.time < @at
+            and 
+            (
+              va.time_resolved is null
+              or
+              va.time_resolved > @at
+            )
+          order by va.time desc
+      ";
+
+      var result = new List<RemainedAlarm>();
+      using (var conn = ConnectTrack())
+      {
+        try
+        {
+          result = conn.Query<RemainedAlarm>(sql, new
+          {
+            at
+          }).ToList();
+        }
+        catch (System.Exception)
+        {
+          Console.WriteLine("[GetRemainedAlarmsAt] => null");
+        }
+      }
+      return result;
+    }
+
+    public IList<AlarmChange> GetAlarmChangesInTime(DateTimeOffset from, DateTimeOffset to)
+    {
+      var sql = @"
+         select *
+         from ((
+          select 
+            va.id, va.time, va.error_code, va.vehicle_id, va.time_resolved, va.current, 
+            ve.level, ve.description, ve.cause, ve.action,
+            va.time as history_change_time,
+            'INSERT' as history_change_type
+          from 
+            vehicle_alarms va 
+            left outer join 
+            vehicle_errors ve 
+            on va.error_code = ve.id
+            left outer join
+            annotations ann
+            on va.error_code = ann.reference_id and ann.reference_table = 'vehicle_errors'
+          where 
+            va.time between @from and @to
+          )
+
+          union all 
+
+          (
+          select 
+            va.id, va.time, va.error_code, va.vehicle_id, va.time_resolved, va.current, 
+            ve.level, ve.description, ve.cause, ve.action,
+            va.time_resolved as history_change_time,
+            'UPDATE' as history_change_type
+          from 
+            vehicle_alarms va 
+            left outer join 
+            vehicle_errors ve 
+            on va.error_code = ve.id
+            left outer join
+            annotations ann
+            on va.error_code = ann.reference_id and ann.reference_table = 'vehicle_errors'
+          where 
+            va.time_resolved between @from and @to
+          )) change
+          order by change.history_change_time asc
+      ";
+
+      var result = new List<AlarmChange>();
+      using (var conn = ConnectTrack())
+      {
+        try
+        {
+          result = conn.Query<AlarmChange>(sql, new
+          {
+            from,
+            to
+          }).ToList();
+        }
+        catch (System.Exception)
+        {
+          Console.WriteLine("[GetAlarmChangesInTime] => null");
+        }
+      }
+      return result;
+    }
+
     public IList<VehicleHistoryWithTableName> GetVehicleHistoriesBetween(DateTimeOffset from, DateTimeOffset to)
     {
       var sql = @"
@@ -273,6 +380,114 @@ namespace OMSWeb.Repositories
         try
         {
           result = conn.Query<SegmentBlockingHistoryWithTableName>(sql, new
+          {
+            from = from,
+            to = to
+          }).ToList();
+        }
+        catch (System.Exception)
+        {
+          Console.WriteLine("[GetHistoriesBetween] => null");
+        }
+      }
+      return result;
+    }
+    public IList<BufferHistoryWithTableName> GetBufferHistoriesBetween(DateTimeOffset from, DateTimeOffset to)
+    {
+      var sql = @"
+            SELECT *
+            FROM buffer_history bh
+            WHERE bh.history_change_time between @from AND @to
+            ORDER BY bh.history_change_time ASC
+            ";
+
+      var result = new List<BufferHistoryWithTableName>();
+      using (var conn = ConnectTrack())
+      {
+        try
+        {
+          result = conn.Query<BufferHistoryWithTableName>(sql, new
+          {
+            from = from,
+            to = to
+          }).ToList();
+        }
+        catch (System.Exception)
+        {
+          Console.WriteLine("[GetHistoriesBetween] => null");
+        }
+      }
+      return result;
+    }
+    public IList<StationHistoryWithTableName> GetStationHistoriesBetween(DateTimeOffset from, DateTimeOffset to)
+    {
+      var sql = @"
+            SELECT *
+            FROM station_history sh
+            WHERE sh.history_change_time between @from AND @to
+            ORDER BY sh.history_change_time ASC
+            ";
+
+      var result = new List<StationHistoryWithTableName>();
+      using (var conn = ConnectTrack())
+      {
+        try
+        {
+          result = conn.Query<StationHistoryWithTableName>(sql, new
+          {
+            from = from,
+            to = to
+          }).ToList();
+        }
+        catch (System.Exception)
+        {
+          Console.WriteLine("[GetHistoriesBetween] => null");
+        }
+      }
+      return result;
+    }
+    public IList<ZcuHistoryWithTableName> GetZcuHistoriesBetween(DateTimeOffset from, DateTimeOffset to)
+    {
+      var sql = @"
+            SELECT *
+            FROM zcu_history zh
+            WHERE zh.history_change_time between @from AND @to
+            ORDER BY zh.history_change_time ASC
+            ";
+
+      var result = new List<ZcuHistoryWithTableName>();
+      using (var conn = ConnectTrack())
+      {
+        try
+        {
+          result = conn.Query<ZcuHistoryWithTableName>(sql, new
+          {
+            from = from,
+            to = to
+          }).ToList();
+        }
+        catch (System.Exception)
+        {
+          Console.WriteLine("[GetHistoriesBetween] => null");
+        }
+      }
+      return result;
+    }
+    public IList<ModeStateHistoryWithTableName> GetModeStateHistoriesBetween(DateTimeOffset from, DateTimeOffset to)
+    {
+      var sql = @"
+            SELECT *
+            FROM mode_state_history msh
+            WHERE msh.history_change_time between @from AND @to
+            ORDER BY msh.history_change_time ASC
+            ";
+
+      var result = new List<ModeStateHistoryWithTableName>();
+      using (var conn = ConnectTrack())
+      {
+        try
+        {
+          result = conn.Query<ModeStateHistoryWithTableName>(sql, new
           {
             from = from,
             to = to

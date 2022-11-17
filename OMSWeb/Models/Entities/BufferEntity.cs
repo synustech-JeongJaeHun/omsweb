@@ -1,4 +1,6 @@
-﻿namespace OMSWeb.Models.Entities
+﻿using System;
+
+namespace OMSWeb.Models.Entities
 {
     public class BufferEntity
     {
@@ -26,6 +28,6 @@
 
         public string User { get; set; }
 
-        public string Note { get; set; }
-    }
+    public string Note { get; set; }
+  }
 }

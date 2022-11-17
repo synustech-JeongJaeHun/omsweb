@@ -1,0 +1,83 @@
+<dx-data-grid
+	[dataSource]="dataSource"
+	[remoteOperations]="true"
+	[height]="tableHeight"
+	[repaintChangesOnly]="true"
+	[columnAutoWidth]="true"
+	[showBorders]="false"
+	[highlightChanges]="false"
+	[showColumnLines]="true"
+	[showRowLines]="true"
+	[headerFilter]="false"
+	[(selectedRowKeys)]="selectedRows"
+	allowColumnResizing="true"
+>
+	<dxo-scrolling mode="virtual"></dxo-scrolling>
+	<dxo-paging [pageSize]="50"></dxo-paging>
+	<dxo-pager
+		[showPageSizeSelector]="true"
+		[allowedPageSizes]="[50, 100, 200]"
+		[showInfo]="true"
+		visible="true"
+	>
+	</dxo-pager>
+
+	<dxo-selection [mode]="'none'" showCheckBoxesMode="always"></dxo-selection>
+	<dxo-search-panel
+		[placeholder]="'names.search' | translate"
+		[visible]="true"
+	></dxo-search-panel>
+	<dxo-load-panel [enabled]="false"></dxo-load-panel>
+
+	<dxi-column
+		[allowFiltering]="false"
+		[width]="50"
+		dataType="string"
+		dataField="id"
+		sortOrder="desc"
+		[caption]="'names.id' | translate"
+	></dxi-column>
+	<dxi-column
+		[width]="85"
+		dataType="string"
+		dataField="physicalId"
+		[caption]="'names.physicalId' | translate"
+	>
+	</dxi-column>
+	<dxi-column
+		[width]="130"
+		dataType="string"
+		dataField="logicalId"
+		[caption]="'names.logicalId' | translate"
+	>
+	</dxi-column>
+	<dxi-column
+		[width]="110"
+		dataType="string"
+		dataField="carrierId"
+		[caption]="'names.carrierLabel' | translate"
+	>
+	</dxi-column>
+	<dxi-column
+		[width]="80"
+		dataType="boolean"
+		dataField="unuse"
+		[caption]="'names.unuse' | translate"
+	></dxi-column>
+	<dxi-column
+		[width]="80"
+		[allowFiltering]="true"
+		dataType="string"
+		dataField="user"
+		[allowSorting]="true"
+		[caption]="'names.user' | translate"
+	></dxi-column>
+	<dxi-column
+		[width]="150"
+		[allowFiltering]="true"
+		dataType="string"
+		dataField="note"
+		[allowSorting]="true"
+		[caption]="'names.note' | translate"
+	></dxi-column>
+</dx-data-grid>

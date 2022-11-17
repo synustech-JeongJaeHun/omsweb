@@ -25,18 +25,32 @@ import {
 	SegmentBlockingHistoryEvent,
 	HistoryEvent,
 	VehicleHistoryEvent,
+	BufferHistoryEvent,
+	StationHistoryEvent,
+	ZcuHistoryEvent,
 } from '@oms/root/models/playback.model'
 import {
+	convertBufferHistoryEventToTmUpdateDtoBuffer,
 	convertSegmentBlockingHistoryEventToTmUpdateDtoSegmentDisabled,
+	convertSnapshotBufferToTmBuffer,
 	convertSnapshotSegmentBlockingToTmUpdateDtoSegmentDisabled,
+	convertSnapshotStationToTmStation,
 	convertSnapshotVehicleToTmUpdateDtoVehicle,
+	convertSnapshotZcuToTmZcu,
+	convertStationHistoryEventToTmUpdateDtoStation,
 	convertTrackBufferToTmBuffer,
 	convertTrackMtlToTmMtl,
 	convertTrackPointToTmPoint,
 	convertTrackStationToTmStation,
 	convertVehicleHistoryEventToTmUpdateDtoVehicle,
+	convertZcuHistoryEventToTmUpdateDtoZcu,
 } from '../../playback/utils/playback-convert.util'
 import { SystemStatusService } from '@oms/root/services/system-status.service'
+import { TranslateService } from '@ngx-translate/core'
+import {
+	HostSessionStatusEnums,
+	OnOfflineModeEnums,
+} from '../../../models/enums'
 
 @Component({
 	selector: 'oms-playback-map-viewer',
@@ -80,10 +94,9 @@ export class PlaybackMapViewerComponent implements OnInit, OnDestroy {
 	public colocatedObjects = []
 	public mainColocatedObject: any
 	public showColocatedView = false
+	//history Panel
+	public showHistoryPanel = true
 
-	get activeDetails(): boolean {
-		return this.detailsVisible && this.auth.isAuthenticated
-	}
 	get showToolbarText(): boolean {
 		return this.settingSvc.globalPreferences.toggles.showToolName
 	}
@@ -100,6 +113,29 @@ export class PlaybackMapViewerComponent implements OnInit, OnDestroy {
 		return this.systemStatusService.nodeMarginSetting?.bufferMargin
 	}
 
+	get currentModeState() {
+		return this.playService.currentModeState
+	}
+	get tscModeText(): string {
+		const tscParam = this.playService.currentModeState.tsc_state
+		return this.t$.instant(`enums.tscMode.${tscParam}`)
+	}
+	get hostModeText(): string {
+		const hostParam = this.playService.currentModeState.control_state
+		return this.t$.instant(`enums.hostMode.${hostParam}`)
+	}
+	get hostStatusIcon(): string {
+		const { comm_state } = this.playService.currentModeState
+		if (!(comm_state % 1000 === HostSessionStatusEnums.CONNECTED))
+			return 'cloud_off'
+		else if (
+			comm_state ===
+			HostSessionStatusEnums.CONNECTED + OnOfflineModeEnums.Online * 1000
+		)
+			return 'cloud_done'
+		return 'cloud_queue'
+	}
+
 	constructor(
 		private router: Router,
 		private auth: AuthService,
@@ -108,6 +144,7 @@ export class PlaybackMapViewerComponent implements OnInit, OnDestroy {
 		private settingSvc: SettingsService,
 		private trackMonitorSettingService: TrackMonitorSettingService,
 		private systemStatusService: SystemStatusService,
+		private t$: TranslateService,
 	) {}
 
 	hasPermissions(permissions: number[]): boolean {
@@ -147,45 +184,67 @@ export class PlaybackMapViewerComponent implements OnInit, OnDestroy {
 	}
 
 	private setToCurrentSnapshot() {
+		const points = (this.playService.track.data.points ?? []).map(
+			convertTrackPointToTmPoint,
+		)
+		const segmentParts = (this.playService.track.data.segment_parts ?? []).map(
+			(sp) => {
+				const segment = (this.playService.track.data.segments ?? []).find(
+					(s) => s.id === sp.segment_id,
+				)
+
+				return {
+					id: segment.id,
+					logicalId: segment.logical_id,
+					physicalId: segment.physical_id,
+					startPoint: segment.start_point,
+					endPoint: segment.end_point,
+					length: segment.length,
+					speed: segment.speed,
+
+					segpartId: sp.id,
+					type: sp.type,
+					location: sp.location,
+					direction: sp.direction,
+				}
+			},
+		)
+		const buffers = this.playService.currentSnapshot.data.buffers
+			? this.playService.currentSnapshot.data.buffers.map(
+					convertSnapshotBufferToTmBuffer,
+			  )
+			: this.playService.track.data.buffers
+			? this.playService.track.data.buffers.map(convertTrackBufferToTmBuffer)
+			: []
+		const stations = this.playService.currentSnapshot.data.stations
+			? this.playService.currentSnapshot.data.stations.map(
+					convertSnapshotStationToTmStation,
+			  )
+			: this.playService.track.data.stations
+			? this.playService.track.data.stations.map(convertTrackStationToTmStation)
+			: []
+		const zcus = this.playService.currentSnapshot.data.zcus
+			? this.playService.currentSnapshot.data.zcus.map(
+					convertSnapshotZcuToTmZcu,
+			  )
+			: []
+
+		const mtls = (this.playService.track.data.mtls ?? []).map(
+			convertTrackMtlToTmMtl,
+		)
+		const vehicles = []
+		const segmentDisabled = []
+
 		// @ts-ignore
 		this.viewer.setTrack({
-			points: (this.playService.track.data.points ?? []).map(
-				convertTrackPointToTmPoint,
-			),
-
-			segmentParts: (this.playService.track.data.segment_parts ?? []).map(
-				(sp) => {
-					const segment = (this.playService.track.data.segments ?? []).find(
-						(s) => s.id === sp.segment_id,
-					)
-
-					return {
-						id: segment.id,
-						logicalId: segment.logical_id,
-						physicalId: segment.physical_id,
-						startPoint: segment.start_point,
-						endPoint: segment.end_point,
-						length: segment.length,
-						speed: segment.speed,
-
-						segpartId: sp.id,
-						type: sp.type,
-						location: sp.location,
-						direction: sp.direction,
-					}
-				},
-			),
-			buffers: (this.playService.track.data.buffers ?? []).map(
-				convertTrackBufferToTmBuffer,
-			),
-			stations: (this.playService.track.data.stations ?? []).map(
-				convertTrackStationToTmStation,
-			),
-			mtls: (this.playService.track.data.mtls ?? []).map(
-				convertTrackMtlToTmMtl,
-			),
-			vehicles: [],
-			segmentDisabled: [],
+			points,
+			segmentParts,
+			buffers,
+			stations,
+			mtls,
+			vehicles,
+			segmentDisabled,
+			zcus,
 		})
 
 		// make other task
@@ -221,25 +280,28 @@ export class PlaybackMapViewerComponent implements OnInit, OnDestroy {
 	}
 
 	private consumeEvents(events: HistoryEvent[]) {
-		const vehicleReduceMap = new Map<
-			HistoryEvent['historySourceId'],
-			VehicleHistoryEvent
-		>()
-		events
-			.filter((e) => e.tableName === 'vehicle_history')
-			.forEach((event) => {
-				const id = event.historySourceId
-				const eventInMap = vehicleReduceMap.get(id)
-				// @ts-ignore
-				vehicleReduceMap.set(id, { ...eventInMap, ...event })
-			})
-		const segmentBlockingEvents = events.filter(
-			(e) => e.tableName === 'segment_blocking_history',
-		) as SegmentBlockingHistoryEvent[]
-		vehicleReduceMap.forEach((event) => this.applyVehicleHistoryEvent(event))
-		segmentBlockingEvents.forEach((event) =>
-			this.applySegmentBlockingHistoryEvent(event),
-		)
+		events.forEach((event) => {
+			switch (event.tableName) {
+				case 'vehicle_history':
+					this.applyVehicleHistoryEvent(event)
+					break
+				case 'segment_blocking_history':
+					this.applySegmentBlockingHistoryEvent(event)
+					break
+				case 'buffer_history':
+					this.applyBufferHistoryEvent(event)
+					break
+				case 'station_history':
+					this.applyStationHistoryEvent(event)
+					break
+				case 'zcu_history':
+					this.applyZcuHistoryEvent(event)
+					break
+
+				default:
+					break
+			}
+		})
 	}
 	private applyVehicleHistoryEvent(event: VehicleHistoryEvent) {
 		this.viewer.updateVehicle(
@@ -254,6 +316,24 @@ export class PlaybackMapViewerComponent implements OnInit, OnDestroy {
 		this.viewer.updateSegmentDisabled(
 			event.historyChangeType,
 			convertSegmentBlockingHistoryEventToTmUpdateDtoSegmentDisabled(event),
+		)
+	}
+	private applyBufferHistoryEvent(event: BufferHistoryEvent) {
+		this.viewer.updateBuffer(
+			event.historyChangeType,
+			convertBufferHistoryEventToTmUpdateDtoBuffer(event),
+		)
+	}
+	private applyStationHistoryEvent(event: StationHistoryEvent) {
+		this.viewer.updateStation(
+			event.historyChangeType,
+			convertStationHistoryEventToTmUpdateDtoStation(event),
+		)
+	}
+	private applyZcuHistoryEvent(event: ZcuHistoryEvent) {
+		this.viewer.updateZcu(
+			event.historyChangeType,
+			convertZcuHistoryEventToTmUpdateDtoZcu(event),
 		)
 	}
 
@@ -288,7 +368,6 @@ export class PlaybackMapViewerComponent implements OnInit, OnDestroy {
 		})
 
 		this.playService.clockChanged.subscribe((event: ClockChangedEvent) => {
-			console.log('clockchanged', event)
 			switch (event.type) {
 				case 'SnapshotChanged':
 					this.setToCurrentSnapshot()
@@ -304,12 +383,6 @@ export class PlaybackMapViewerComponent implements OnInit, OnDestroy {
 					break
 			}
 		})
-	}
-
-	changeFocus(event: any) {
-		this.selectedObject = event
-		// @ts-ignore
-		this.focusOnTM({ type: event.objectType, id: event.id })
 	}
 
 	// EPIC > OMS-TRACK-MONITOR
@@ -332,6 +405,11 @@ export class PlaybackMapViewerComponent implements OnInit, OnDestroy {
 
 	public trackOnTM(event: { type: string; id: any }) {
 		this.viewer.track(event.type, event.id)
+	}
+	public stateOnTM(event: boolean) {
+		if (event === true) {
+			this.showHistoryPanel = !this.showHistoryPanel
+		}
 	}
 
 	public onMouseoverTM(event: CustomEvent) {

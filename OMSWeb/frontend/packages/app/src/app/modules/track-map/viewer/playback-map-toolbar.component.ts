@@ -15,9 +15,6 @@ import {
 import { ToggleOptionKeyType } from '../../../models/enums'
 
 import { MapStatesService } from '../map-states.service'
-import { MessagesService } from '@oms/services/messages.service'
-import { DialogService } from '@oms/services/dialog.service'
-import { TranslateService } from '@ngx-translate/core'
 import { SearchDialogComponent } from '../dialogs/search-dialog.component'
 import {
 	MatDialog,
@@ -27,6 +24,7 @@ import {
 import { CommandDialogComponent } from '../dialogs/command-dialog.component'
 import { ShowObjectDialogComponent } from '../dialogs/show-object-dialog.component'
 import { AuthService } from '../../../services/auth.service'
+import { PlaybackPlayService } from '@oms/root/services/playback-play.service'
 import { AccountUtil } from '../../shared/utils/account.util'
 import { SettingsService } from '../../../services/settings.service'
 import { PermissionEnums } from '../../../models/enums'
@@ -34,6 +32,8 @@ import { TrackMonitorSettingService } from '@oms/root/services/track-monitor-set
 import { PlaybackVehicleStatusDialogComponent } from '../dialogs/playback-vehicle-status-dialog.component'
 import { PlaybackControlDialogComponent } from '../../playback/dialogs/playback-control-dialog.component'
 import { PlaybackTrackVehicleDialogComponent } from '../dialogs/playback-track-vehicle-dialog.component'
+import { PlaybackAlertDialogComponent } from '../../playback/dialogs/playback-alert-dialog.component'
+import { ClockChangedEvent } from '@oms/root/models/playback.model'
 
 @Component({
 	selector: 'oms-playback-map-toolbar',
@@ -50,6 +50,7 @@ export class PlaybackMapToolbarComponent implements OnInit, OnDestroy {
 	@Output() find = new EventEmitter<{ type: string; id: any }>()
 	@Output() focus = new EventEmitter<{ type: string; id: any }>()
 	@Output() track = new EventEmitter<{ type: string; id: any }>()
+	@Output() state = new EventEmitter<boolean>()
 
 	@ViewChild('btnSearch', { read: ElementRef }) btnSearch: ElementRef
 	@ViewChild('btnTrack', { read: ElementRef }) btnTrack: ElementRef
@@ -71,28 +72,35 @@ export class PlaybackMapToolbarComponent implements OnInit, OnDestroy {
 		return this.showToolName ? '164px' : '36px'
 	}
 
+	getAlarmStatus(): any {
+		return this.playbackSvc.currentAlarms.length > 0 ? '-active' : '-inactive'
+	}
+
 	private _searchDlg: MatDialogRef<SearchDialogComponent, any>
 	private _trackDlg: MatDialogRef<PlaybackTrackVehicleDialogComponent, any>
 	private _cmdDlg: MatDialogRef<CommandDialogComponent, any>
 	private _showObjDlg: MatDialogRef<ShowObjectDialogComponent, any>
 	private _vhStatusDlg: MatDialogRef<PlaybackVehicleStatusDialogComponent, any>
 	private _controlDlg: MatDialogRef<PlaybackControlDialogComponent, any>
-	// private _bfStatusDlg: MatDialogRef<BufferStatusDialogComponent, any>;
+	private _alertDlg: MatDialogRef<PlaybackAlertDialogComponent, any>
 
 	constructor(
 		private auth: AuthService,
 		private stateSvc: MapStatesService,
-		private messageSvc: MessagesService,
 		private settingSvc: SettingsService,
-		private dialogSvc: DialogService,
 		private dialog: MatDialog,
-		private $t: TranslateService,
+		private playbackSvc: PlaybackPlayService,
 		public trackMonitorSettingService: TrackMonitorSettingService,
 	) {
-		// settingSvc.serviceConfig.subscribe((config) => {
-		//   this.bufferEnabled = config.bufferEnabled;
-		// });
 		this.onPlaybackDialog()
+		// 🎉 subscribe every emited Event from playbackSvc
+		playbackSvc.clockChanged.subscribe((e: ClockChangedEvent) => {
+			if (
+				e.type === 'NextFrameEvent' &&
+				e.alarms.some((a) => a.historyChangeType === 'INSERT')
+			)
+				this.onAlertDialog(false)
+		})
 	}
 
 	onPlaybackDialog() {
@@ -110,6 +118,26 @@ export class PlaybackMapToolbarComponent implements OnInit, OnDestroy {
 			hasBackdrop: false,
 			disableClose: true,
 			closeOnNavigation: true,
+		})
+	}
+
+	/**
+	 * @summary alertDlg를 open 하게 해주는 메서드
+	 * @param closable - default: true, false일 경우 이미 창이 켜져 있으면 close 하지 않고 open 상태 유지
+	 * @returns void
+	 */
+	onAlertDialog(closable = true): void {
+		if (this._alertDlg && this._alertDlg.getState() === MatDialogState.OPEN) {
+			if (closable) this._alertDlg.close()
+			return
+		}
+		this._alertDlg = this.dialog.open(PlaybackAlertDialogComponent, {
+			maxWidth: '800px',
+			maxHeight: '50vh',
+			hasBackdrop: false,
+			disableClose: true,
+			closeOnNavigation: true,
+			panelClass: 'playback-alarms-dialog',
 		})
 	}
 
@@ -143,6 +171,9 @@ export class PlaybackMapToolbarComponent implements OnInit, OnDestroy {
 		// this._bfStatusDlg &&
 		//   this._bfStatusDlg.getState() === MatDialogState.OPEN &&
 		//   this._bfStatusDlg.close();
+		this._alertDlg &&
+			this._alertDlg.getState() === MatDialogState.OPEN &&
+			this._alertDlg.close()
 	}
 
 	hasPermission(permission: number): boolean {

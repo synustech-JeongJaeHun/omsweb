@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace OMSWeb.Models.Entities
 {
@@ -13,5 +9,11 @@ namespace OMSWeb.Models.Entities
     public int tsc_state { get; set; }
     public int pm_state { get; set; }
     public int ai_mode { get; set; }
+  }
+
+  public class ModeStateHistoryEntity : ModeStateEntity
+  {
+    public DateTime HistoryChangeTime { get; set; }
+    public string HistoryChangeType { get; set; }
   }
 }

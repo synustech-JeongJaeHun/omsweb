@@ -91,9 +91,13 @@ type PlaybackSnapshot = {
 }
 
 type PlaybackSnapshotData = {
+	state: PlaybackSnapshotState
 	orders: PlaybackSnapshotOrder[]
 	segment_blocking: PlaybackSnapshotSegmentBlocking[]
 	vehicles: PlaybackSnapshotVehicle[]
+	buffers: PlaybackSnapshotBuffer[]
+	stations: PlaybackSnapshotStation[]
+	zcus: PlaybackSnapshotZcu[]
 }
 type PlaybackSnapshotOrder = {
 	assignment_details: string | null
@@ -130,6 +134,8 @@ type PlaybackSnapshotSegmentBlocking = {
 	id: number
 	reason: string
 	segment_id: number
+	user?: string
+	note?: string
 }
 type PlaybackSnapshotVehicle = {
 	blocked_segment_pairs: string
@@ -169,12 +175,72 @@ type PlaybackSnapshotVehicle = {
 	runtime_total: number
 	soon_arrive: boolean
 	type: unknown
+	user?: string
+	note?: string
+}
+
+type PlaybackSnapshotBuffer = {
+	x: unknown
+	y: unknown
+	id: number
+	note: string
+	user: string
+	point: number
+	unuse: boolean
+	offset: number
+	direction: string
+	carrier_id?: string
+	logical_id: string
+	next_point: number
+	physical_id: string
+	unused_time?: string //(date)
+}
+
+type PlaybackSnapshotStation = {
+	x: unknown
+	y: unknown
+	id: number
+	note: string
+	user: string
+	point: number
+	unuse: boolean
+	offset: number
+	direction: string
+	carrier_id?: string
+	logical_id: string
+	next_point: number
+	physical_id: string
+	unused_time?: string //(date)
+	carrier_type?: number
+}
+
+type PlaybackSnapshotZcu = {
+	x: number
+	y: number
+	id: number
+	note: string
+	user: string
+	status: number
+	zcu_type: number
+	using_type: number
+}
+
+type PlaybackSnapshotState = {
+	ai_mode: number
+	pm_state: number
+	tsc_state: number
+	comm_state: number
+	control_state: number
 }
 
 type HistoryEvent =
 	| VehicleHistoryEvent
 	| SegmentBlockingHistoryEvent
 	| OrderHistoryEvent
+	| BufferHistoryEvent
+	| StationHistoryEvent
+	| ZcuHistoryEvent
+	| ModeStateHistoryEvent
 
 interface ITableName {
 	tableName: string
@@ -221,6 +287,8 @@ type VehicleHistoryEvent = { tableName: 'vehicle_history' } & ITableName &
 		physicalId: string
 		railIn: boolean
 		runtimeTotal: number
+		user?: string
+		note?: string
 	}
 
 type SegmentBlockingHistoryEvent = {
@@ -231,6 +299,8 @@ type SegmentBlockingHistoryEvent = {
 		segmentId: number
 		disabledBy: string
 		reason: string
+		user?: string
+		note?: string
 	}
 
 type OrderHistoryEvent = { tableName: 'order_history' } & ITableName &
@@ -254,6 +324,67 @@ type OrderHistoryEvent = { tableName: 'order_history' } & ITableName &
 		state: string | undefined
 	}
 
+type BufferHistoryEvent = { tableName: 'buffer_history' } & ITableName &
+	History & {
+		id: number
+		physicalId: string
+		logicalId: string
+		unuse?: boolean
+		carrierId: string
+		user: string
+		note: string
+		unusedTime?: string
+	}
+type StationHistoryEvent = { tableName: 'station_history' } & ITableName &
+	History & {
+		id: number
+		physicalId: string
+		logicalId: string
+		unuse: boolean
+		carrierId: string
+		user: string
+		note: string
+		unusedTime?: string
+	}
+type ZcuHistoryEvent = { tableName: 'zcu_history' } & ITableName &
+	History & {
+		x: number
+		y: number
+		id: number
+		note: string
+		user: string
+		status: number
+		zcuType: number
+		usingType: number
+	}
+type ModeStateHistoryEvent = { tableName: 'mode_state_history' } & ITableName &
+	Omit<History, 'historySourceId'> & {
+		comm_state: number
+		control_state: number
+		tsc_state: number
+		pm_state: number
+		ai_mode: number
+	}
+
+type RemainedAlarm = {
+	id: number
+	time: string
+	errorCode: number
+	vehicleId: number
+	timeResolved?: string
+	current?: string
+	level: number
+	description?: string
+	cause?: string
+	action?: string
+	annotation?: string
+}
+
+type AlarmChange = RemainedAlarm & {
+	historyChangeTime: string
+	historyChangeType: 'INSERT' | 'UPDATE'
+}
+
 type PlaybackSpeed = 0.1 | 0.5 | 1 | 2 | 5 | 10
 type ClockChangedEvent =
 	| SnapshotChangedEvent
@@ -275,6 +406,7 @@ type EventsChangedEvent = {
 	type: 'EventsChanged'
 	clock: Date
 	events: HistoryEvent[]
+	alarms: AlarmChange[]
 }
 /**
  * Event when need to accumulate events
@@ -283,6 +415,7 @@ type NextFrameEvent = {
 	type: 'NextFrameEvent'
 	clock: Date
 	events: HistoryEvent[]
+	alarms: AlarmChange[]
 }
 
 type CurrentVehicle = {
@@ -315,12 +448,16 @@ type CurrentVehicle = {
 	locationDropoff?: string
 	locationPickup?: string
 	locationMove?: string
+	user?: string
+	note?: string
 }
 type CurrentSegmentBlocking = {
 	id: number
 	segmentId: number
 	disabledBy: string
 	reason: string
+	user?: string
+	note?: string
 }
 type CurrentOrder = {
 	assignmentDetails: string | null
@@ -342,6 +479,54 @@ type CurrentOrder = {
 	state: string
 }
 
+type CurrentBuffer = {
+	id: number
+	note: string
+	user: string
+	point: number
+	unuse: boolean
+	offset: number
+	direction: string
+	carrierId?: string
+	logicalId: string
+	nextPoint: number
+	physicalId: string
+	unusedTime?: string
+}
+type CurrentStation = {
+	id: number
+	note: string
+	user: string
+	point: number
+	unuse: boolean
+	offset: number
+	direction: string
+	carrierId?: string
+	logicalId: string
+	nextPoint: number
+	physicalId: string
+	unusedTime?: string //(date)
+	carrierType?: number
+}
+
+type CurrentZcu = {
+	id: number
+	x: number
+	y: number
+	status: number
+	zcuType: number
+	usingType: number
+	user: string
+	note: string
+}
+type CurrentModeState = {
+	ai_mode: number
+	pm_state: number
+	tsc_state: number
+	comm_state: number
+	control_state: number
+}
+
 export {
 	LogicalId,
 	PhysicalId,
@@ -353,16 +538,29 @@ export {
 	PlaybackMtl,
 	PlaybackSnapshot,
 	PlaybackSnapshotData,
+	PlaybackSnapshotState,
 	PlaybackSnapshotVehicle,
 	PlaybackSnapshotSegmentBlocking,
 	PlaybackSnapshotOrder,
+	PlaybackSnapshotBuffer,
+	PlaybackSnapshotStation,
+	PlaybackSnapshotZcu,
 	VehicleHistoryEvent,
 	OrderHistoryEvent,
 	SegmentBlockingHistoryEvent,
+	BufferHistoryEvent,
+	StationHistoryEvent,
+	ZcuHistoryEvent,
 	HistoryEvent,
+	RemainedAlarm,
+	AlarmChange,
 	PlaybackSpeed,
 	ClockChangedEvent,
 	CurrentVehicle,
 	CurrentSegmentBlocking,
 	CurrentOrder,
+	CurrentBuffer,
+	CurrentStation,
+	CurrentZcu,
+	CurrentModeState,
 }

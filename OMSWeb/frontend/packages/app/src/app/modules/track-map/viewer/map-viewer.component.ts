@@ -306,7 +306,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 			this.hubSvc.segmentChanged$
 				.pipe(takeUntil(this.destroy$))
 				.subscribe((e: IDataChangeEvent) => {
-					// TODO what happened on event?
 					console.log('segment update', e)
 				})
 			this.hubSvc.segmentDisabledChanged$
