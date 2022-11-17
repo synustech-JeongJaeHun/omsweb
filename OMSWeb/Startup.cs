@@ -137,7 +137,6 @@ namespace OMSWeb
             services.AddScoped<AlertRepository>();
             services.AddScoped<HistoryRepository>();
             services.AddScoped<MessageRepository>();
-            services.AddScoped<OrderRepository>();
             services.AddScoped<PlaybackRepository>();
             services.AddScoped<StatusRepository>();
             services.AddScoped<TrackRepository>();
@@ -157,7 +156,6 @@ namespace OMSWeb
 
             services.AddScoped<ModuleStatusService>();
             services.AddScoped<StatusService>();
-            services.AddScoped<OrderService>();
             services.AddScoped<NotificationsService>();
             services.AddScoped<MessageService>();
             services.AddScoped<HistoryService>();
