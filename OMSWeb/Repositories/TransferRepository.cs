@@ -9,6 +9,7 @@ using Npgsql;
 using OMSWeb.Models;
 using OMSWeb.Models.Tracks;
 using OMSWeb.Services;
+using OMSWeb.Models.Entities;
 using Buffer = OMSWeb.Models.Tracks.Buffer;
 
 namespace OMSWeb.Repositories
@@ -465,6 +466,30 @@ namespace OMSWeb.Repositories
                 result = true;
 
             return result;
+        }
+
+        public OrderEntity QueryTransfer(int id) 
+        {
+            var sql = @"
+                SELECT *
+                FROM orders
+                WHERE orders.id = @id
+                ";
+            
+            OrderEntity result;
+            using (var conn = ConnectTrack())
+            {
+                try
+                {
+                    result = conn.QueryFirst<OrderEntity>(sql, new {id});
+                }
+                catch (System.Exception)
+                {
+                    Console.WriteLine("[QueryTransfer] => null");
+                    result = null;
+                }
+            }
+            return result ?? null;
         }
     }
 

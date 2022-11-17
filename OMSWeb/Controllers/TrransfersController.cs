@@ -76,5 +76,12 @@ namespace OMSWeb.Controllers
             else
                 return Ok(result);
         }
+        
+        [HttpGet("{id:int}")]
+        public ActionResult GetTransfer(int id)
+        {
+            var result = _svc.GetTransfer(id);
+            return result == null ? NotFound() : Ok(result);
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using OMSWeb.Models;
 using OMSWeb.Repositories;
+using OMSWeb.Models.Entities;
 
 namespace OMSWeb.Services
 {
@@ -644,6 +645,11 @@ namespace OMSWeb.Services
             if (destType == DestType.BUFFER && BUFFER_Available(destName)) return true;
 
             return false;
+        }
+
+        public OrderEntity GetTransfer(int id)
+        {
+            return _transferRepo.QueryTransfer(id);
         }
     }
 }
