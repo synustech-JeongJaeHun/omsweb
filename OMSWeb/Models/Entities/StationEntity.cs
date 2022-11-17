@@ -28,10 +28,10 @@ namespace OMSWeb.Models.Entities
 
         public int? GroupId { get; set; }
 
-    public string User { get; set; }
-    
-    public string Note { get; set; }
-  }
+        public string User { get; set; }
+
+        public string Note { get; set; }
+    }
 
 
     // no point, direction
