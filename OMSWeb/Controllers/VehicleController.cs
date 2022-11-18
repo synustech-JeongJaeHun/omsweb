@@ -1,17 +1,8 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using OMSWeb.Models;
-using OMSWeb.Models.Tracks;
-using OMSWeb.Repositories;
 using OMSWeb.Services;
-using DevExtreme.AspNet.Data;
-using DevExtreme.AspNet.Mvc;
-using OMSWeb.Filters;
+using OMSWeb.Models.Entities;
 
 namespace OMSWeb.Controllers
 {
@@ -47,13 +38,13 @@ namespace OMSWeb.Controllers
             if (result == null)
                 return Ok(new VehicleDio()
                 {
-                    Id = vehicleId,
-                    di_1 = 0,
-                    di_2 = 0,
-                    di_3 = 0,
-                    do_1 = 0,
-                    do_2 = 0,
-                    do_3 = 0
+                    VehicleId = vehicleId,
+                    Di1 = 0,
+                    Di2 = 0,
+                    Di3 = 0,
+                    Do1 = 0,
+                    Do2 = 0,
+                    Do3 = 0
                 });
             else
                 return Ok(result);
@@ -61,20 +52,23 @@ namespace OMSWeb.Controllers
 
 
         [HttpGet("{vehicleId}/recent-dio-before/{before}")]
-        public ActionResult<VehicleDio> GetRecentVehicleDioBefore(int vehicleId, DateTimeOffset before)
+        public ActionResult GetRecentVehicleDioBefore(int vehicleId, DateTimeOffset before)
         {
             var result = _historySvc.QueryRecentDioBefore(vehicleId, before);
 
             if (result == null)
-                return Ok(new VehicleDio()
+                return Ok(new VehicleDioHistoryEntity()
                 {
-                    Id = vehicleId,
-                    di_1 = 0,
-                    di_2 = 0,
-                    di_3 = 0,
-                    do_1 = 0,
-                    do_2 = 0,
-                    do_3 = 0
+                    VehicleId = vehicleId,
+                    HistorySourceId = vehicleId,
+                    HistoryChangeTime = before.AddSeconds(-1),
+                    HistoryChangeType = "",
+                    Di1 = 0,
+                    Di2 = 0,
+                    Di3 = 0,
+                    Do1 = 0,
+                    Do2 = 0,
+                    Do3 = 0,
                 });
             else
                 return Ok(result);
