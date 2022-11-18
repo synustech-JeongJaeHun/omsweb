@@ -251,7 +251,7 @@ export class OrderControlTableComponent implements OnInit, OnDestroy {
 		}
 
 		this.trackingCarrierOrderSubscription = this.hubSvc.orderTableChanged$
-			.pipe(takeUntil(this.destroy$), auditTime(AuditTimeDuration))
+			.pipe(takeUntil(this.destroy$))
 			.subscribe((e) => {
 				const orderId = e.id
 				if (this.trackingCarrierInfo.orderId !== orderId) return
