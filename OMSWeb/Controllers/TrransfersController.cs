@@ -18,12 +18,12 @@ namespace OMSWeb.Controllers
 
         [HttpGet("transfercheck/{category}&{vehicleId}&{source}&{srctype}&{dest}&{dsttype}&{carrierId}")]
         public ActionResult<TransferHCACK> CheckTransfer(
-            string category, 
+            string category,
             string vehicleId,
-            string source, 
-            string srctype, 
-            string dest, 
-            string dsttype, 
+            string source,
+            string srctype,
+            string dest,
+            string dsttype,
             string carrierId)
         {
             var result = this._svc.CheckTransfer(category, vehicleId, source, srctype, dest, dsttype, carrierId);
@@ -59,10 +59,10 @@ namespace OMSWeb.Controllers
 
         [HttpGet("carriercheck/{rcmd}&{carrierloc}&{loctype}&{carrierId}&{newCarrierId}")]
         public ActionResult<TransferHCACK> CheckCarrierChange(
-            string rcmd, 
-            string carrierLoc, 
-            string loctype, 
-            string carrierId, 
+            string rcmd,
+            string carrierLoc,
+            string loctype,
+            string carrierId,
             string newCarrierId)
         {
             var result = this._svc.CheckCarrierChange(rcmd, carrierLoc, loctype, carrierId, newCarrierId);
@@ -76,12 +76,13 @@ namespace OMSWeb.Controllers
             else
                 return Ok(result);
         }
-        
+
         [HttpGet("{id:int}")]
         public ActionResult GetTransfer(int id)
         {
             var result = _svc.GetTransfer(id);
-            return result == null ? NotFound() : Ok(result);
+            if (result == null) return NotFound();
+            return Ok(result);
         }
     }
 }
