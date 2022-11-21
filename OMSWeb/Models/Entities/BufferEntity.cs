@@ -24,6 +24,8 @@ namespace OMSWeb.Models.Entities
 
     public int? GroupId { get; set; }
 
+    public int? SlideOffset { get; set; }
+
     public string User { get; set; }
 
     public string Note { get; set; }
