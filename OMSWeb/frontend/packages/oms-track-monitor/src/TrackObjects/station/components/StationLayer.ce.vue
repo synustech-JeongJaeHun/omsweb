@@ -2,11 +2,12 @@
 import Layer from 'MapObjects/map/components/Layer.ce.vue'
 import Station from './Station.ce.vue'
 import { findStationById, stations } from '../stations'
-import { inject } from 'vue'
+import { inject, ref } from 'vue'
 import { RootEmitInjectionKey, RootEmits } from 'src/Root/types/RootEmits'
 import { scaleStylesInfo } from '../../../styles/styles'
 
 const emit = inject<RootEmits>(RootEmitInjectionKey)!
+const teleportRef = ref<SVGGElement>()
 
 function getDeepCopiedStation(event: MouseEvent) {
   const stationId = parseInt((event.target as SVGElement).dataset.id!)
@@ -77,11 +78,14 @@ function handleRightClick(event: MouseEvent) {
       v-for="station of stations"
       :key="station.id"
       :station="station"
+      :teleportRef="teleportRef"
       :margin="scaleStylesInfo.stationMargin"
       :handleMouseover="handleMouseover"
       :handleMouseleave="handleMouseleave"
       :handleLeftClick="handleLeftClick"
       :handleRightClick="handleRightClick"
     />
+
+    <g ref="teleportRef"></g>
   </Layer>
 </template>

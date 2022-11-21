@@ -11,6 +11,23 @@
     rotate(var(--reverse-rotation-degree));
 }
 
+#station-layer
+  .station[data-carrier-focused~='true' i]
+  .scale-and-reverse-rotate {
+    animation: station-carrier-focused-scale-grow 1s ease-in-out forwards;
+}
+
+@keyframes station-carrier-focused-scale-grow {
+  0% {
+    transform: scale(var(--mm-per-pixel)) rotate(var(--reverse-rotation-degree));  
+  }
+
+  100%{
+    transform: scale(calc(var(--mm-per-pixel) * 2.5)) rotate(var(--reverse-rotation-degree));
+  }
+}
+
+
 /* Text Scale */
 #station-layer[data-scale-level~='BELOW15' i] .station .label {
   font-size: 0.1em;

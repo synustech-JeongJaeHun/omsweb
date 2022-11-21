@@ -247,6 +247,12 @@ const exposed: IOmsTrackMonitor = {
             setCarrierFocusedObject(buffer)
           }
           break
+        case 'station':
+          const station = findStationById(id)
+          if (station) {
+            setCarrierFocusedObject(station)
+          }
+          break
       
         default:
           break;

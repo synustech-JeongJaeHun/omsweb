@@ -14,18 +14,17 @@
 #buffer-layer
   .buffer[data-carrier-focused~='true' i]
   .scale-and-reverse-rotate {
-    animation: scale-grow 1s ease-in-out forwards;
-
+    animation: buffer-carrier-focused-scale-grow 1s ease-in-out forwards;
 }
-@keyframes scale-grow {
-  0%{
-  transform: scale(var(--mm-per-pixel))
-    rotate(var(--reverse-rotation-degree));  }
-  100%{
-  transform: scale(calc(var(--mm-per-pixel) * 2.5))
-    rotate(var(--reverse-rotation-degree));
-    }
 
+@keyframes buffer-carrier-focused-scale-grow {
+  0% {
+    transform: scale(var(--mm-per-pixel)) rotate(var(--reverse-rotation-degree));  
+  }
+
+  100%{
+    transform: scale(calc(var(--mm-per-pixel) * 2.5)) rotate(var(--reverse-rotation-degree));
+  }
 }
 
 

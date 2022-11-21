@@ -450,10 +450,10 @@ defineExpose(exposed)
 }
 #vehicle-layer .vehicle-symbol[data-carrier-focused~='true' i] .scale-and-reverse-rotate {
   /* transform */
-  animation: scale-grow 1s ease-in-out forwards;
+  animation: vehicle-carrier-focused-scale-grow 1s ease-in-out forwards;
 }
 
-@keyframes scale-grow {
+@keyframes vehicle-carrier-focused-scale-grow {
   0%{
     transform:scale(v-bind('scaleInfo.mmPerPixel * scaleStylesInfo.vehicleSize * 1/10')) rotate(var(--reverse-rotation-degree))
   }
