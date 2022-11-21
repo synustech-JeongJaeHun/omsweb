@@ -37,45 +37,29 @@
 			[checked]="isTrackingCarrier"
 			(change)="onChangeIsTrackingCarrier($event)"
 		>
-			<div style="display: flex; flex-direction: row; align-items: center">
-				<div>
-					{{ 'names.track' | translate }}
-					{{ ' ' }}
-					{{ 'names.carrier' | translate }}
-				</div>
+			<div>
+				{{ 'names.track' | translate }}
+				{{ ' ' }}
+				{{ 'names.carrier' | translate }}
 
-				<div style="font-size: smaller; margin-left: 4px">
-					<div
-						*ngIf="
-							trackingCarrierInfo?.orderId && trackingCarrierInfo?.carrierId
-						"
-					>
-						{{ 'names.order' | translate }}:
-						<strong> {{ trackingCarrierInfo.orderId }} </strong>
-						|
-						{{ 'names.carrier' | translate }}:
-						<strong> {{ trackingCarrierInfo?.carrierId }} </strong>
-					</div>
-					<div
-						*ngIf="
-							trackingCarrierInfo?.orderId && trackingCarrierInfo?.carrierId
-						"
-					>
-						{{ 'names.type' | translate }}:
-						<strong>
-							{{ trackingCarrierInfo.type ? trackingCarrierInfo.type : '_' }}
-						</strong>
-						|
-						{{ 'names.logicalId' | translate }}:
-						<strong>
-							{{
-								trackingCarrierInfo.logicalId
-									? trackingCarrierInfo.logicalId
-									: '_'
-							}}
-						</strong>
-					</div>
-				</div>
+				<ng-container
+					*ngIf="trackingCarrierInfo?.orderId && trackingCarrierInfo?.carrierId"
+				>
+					:
+					{{ 'names.order' | translate }}:
+					<strong> {{ trackingCarrierInfo.orderId }} </strong>
+					|
+					{{ 'names.carrier' | translate }}:
+					<strong> {{ trackingCarrierInfo?.carrierId }} </strong>
+					|
+					<strong>
+						{{
+							trackingCarrierInfo.logicalId
+								? trackingCarrierInfo.logicalId
+								: '_'
+						}}
+					</strong>
+				</ng-container>
 			</div>
 		</mat-slide-toggle>
 	</div>
