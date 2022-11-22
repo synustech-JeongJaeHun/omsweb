@@ -38,6 +38,7 @@ const direction = computed(() => {
     v-if="segment"
     class="overflow-visible cursor-pointer segment"
     :data-is-disabled-by-mtl="segment.disabledByMtl"
+    :data-is-disabled-by-vehicle="segment.disabledByOnlyVehicle"
   >
     <path
       v-if="segment.isFocused"

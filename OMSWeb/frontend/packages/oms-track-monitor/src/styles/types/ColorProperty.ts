@@ -8,6 +8,7 @@ type ColorProperty =
   | 'home'
   | 'normalSegment'
   | 'disabledSegment'
+  | 'disabledByVehicleSegment'
   | 'segmentDirection'
   | 'disconnectModeVehicleColor'
   | 'errorModeVehicleColor'

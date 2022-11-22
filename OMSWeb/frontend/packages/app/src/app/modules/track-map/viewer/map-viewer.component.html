@@ -37,6 +37,7 @@
 		[homeColor]="homeColor"
 		[normalSegmentColor]="tmSetting.normalSegmentColor"
 		[disabledSegmentColor]="tmSetting.disabledSegmentColor"
+		[disabledByVehicleSegmentColor]="tmSetting.disabledByVehicleSegmentColor"
 		[segmentDirectionColor]="tmSetting.segmentDirectionColor"
 		[disconnectModeVehicleColor]="tmSetting.disconnectModeVehicleColor"
 		[errorModeVehicleColor]="tmSetting.errorModeVehicleColor"
@@ -535,7 +536,7 @@
 		</mat-card-header>
 		<mat-card-content class="context-form">
 			<mat-slide-toggle
-				[disabled]="contextMenuObject?.value.disabledByMtl"
+				[disabled]="contextMenuObject?.value.disabledByMtl || contextMenuObject?.value.disabledByOnlyVehicle"
 				[checked]="contextMenuObject?.value.disabled"
 				color="primary"
 				(change)="onChangeSegmentProperty($event.checked)"
