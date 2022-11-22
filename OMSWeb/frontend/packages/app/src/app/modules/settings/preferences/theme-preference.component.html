@@ -60,6 +60,10 @@
         (changed)="update({key: 'disabledSegmentColor', value: $event})"
         [value]="setting.disabledSegmentColor">
       </oms-color-picker>
+      <oms-color-picker [name]="'names.segmentDisabledByVehicle' | translate"
+        (changed)="update({key: 'disabledByVehicleSegmentColor', value: $event})"
+        [value]="setting.disabledByVehicleSegmentColor">
+      </oms-color-picker>
       <oms-color-picker [name]="'names.segmentDirection' | translate"
         (changed)="update({key: 'segmentDirectionColor', value: $event})"
         [value]="setting.segmentDirectionColor">
@@ -83,6 +87,7 @@
           <mat-option [value]="'pointColor'">{{'names.point'| translate}}</mat-option>
           <mat-option [value]="'normalSegmentColor'">{{'names.segmentNormal'| translate}}</mat-option>
           <mat-option [value]="'disabledSegmentColor'">{{'names.segmentDisabled'| translate}}</mat-option>
+          <mat-option [value]="'disabledByVehicleSegmentColor'">{{'names.segmentDisabledByVehicle'| translate}}</mat-option>
           <mat-option [value]="'segmentDirectionColor'">{{'names.segmentDirection'| translate}}</mat-option>
         </mat-select>
       </mat-form-field>

@@ -42,6 +42,7 @@ type ColorChangedEvent = {
 		| 'pointColor'
 		| 'normalSegmentColor'
 		| 'disabledSegmentColor'
+		| 'disabledByVehicleSegmentColor'
 		| 'segmentDirectionColor'
 		| 'disconnectModeVehicleColor'
 		| 'errorModeVehicleColor'
@@ -143,6 +144,7 @@ const DefaultTrackMonitorSetting: TrackMonitorSetting = {
 	pointColor: 'rgba(80, 80, 80, 1)',
 	normalSegmentColor: 'rgba(200, 200, 200, 1)',
 	disabledSegmentColor: 'rgba(165, 127, 184, 1)',
+	disabledByVehicleSegmentColor: '#ffa500',
 	segmentDirectionColor: 'rgba(110, 110, 110, 1)',
 
 	// chjs visual start

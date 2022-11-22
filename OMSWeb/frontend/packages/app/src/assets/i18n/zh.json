@@ -363,6 +363,7 @@
     "showOmsVersion": "显示 OMS 版本",
     "segmentNormal": "段 - 正常",
     "segmentDisabled": "段 - 禁用",
+    "segmentDisabledByVehicle": "Segment - disabled by vehicle",
     "stationNormal": "站 - 正常",
     "stationUnuse": "站 - 禁用",
     "bufferNormal": "Buffer - 正常",

@@ -41,13 +41,15 @@ function findSegmentById(id: number) {
 function setSegmentDisabled(
 	id: Segment['id'],
 	disabled: boolean,
-	disabledByMtl: boolean
+	disabledByMtl: boolean,
+  disabledByOnlyVehicle: boolean,
 ) {
 	const segment = findSegmentById(id)
 	if (segment === undefined) return
 
 	segment.disabled = disabled
 	segment.disabledByMtl = disabledByMtl
+  segment.disabledByOnlyVehicle = disabledByOnlyVehicle
 }
 
 function findSegmentByPoints(startPointId: number, endPointId: number) {
