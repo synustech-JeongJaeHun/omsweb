@@ -363,6 +363,7 @@
     "showOmsVersion": "OMS 버전 표시",
     "segmentNormal": "세그먼트 - 일반",
     "segmentDisabled": "세그먼트 - 비활성화",
+    "segmentDisabledByVehicle": "Segment - disabled by vehicle",
     "stationNormal": "스테이션 - 일반",
     "stationUnuse": "스테이션 - 미사용",
     "bufferNormal": "Buffer - 일반",

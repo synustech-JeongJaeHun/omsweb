@@ -21,6 +21,7 @@ type Segment = {
   d: D
 
   disabledByMtl?: boolean
+  disabledByOnlyVehicle?: boolean
 } & CanBeFocused
 
 export { Segment }

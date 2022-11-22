@@ -14,6 +14,7 @@ namespace OMSWeb.Models
     public string? PointColor { get; set; }
     public string? NormalSegmentColor { get; set; }
     public string? DisabledSegmentColor { get; set; }
+    public string? DisabledByVehicleSegmentColor { get; set; }
     public string? SegmentDirectionColor { get; set; }
 
     #region chjs visual start
