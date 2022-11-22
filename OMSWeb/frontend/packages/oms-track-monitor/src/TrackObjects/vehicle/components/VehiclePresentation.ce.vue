@@ -151,6 +151,9 @@ const emit = defineEmits<{
               : undefined
           "
         >
+          <template v-if="props.isSuperHotlot">
+            ★
+          </template>
           {{ props.carrierId }}
         </text>
       </g>
