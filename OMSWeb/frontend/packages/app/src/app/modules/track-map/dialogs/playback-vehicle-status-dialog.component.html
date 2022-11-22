@@ -6,7 +6,7 @@
           [value]="currentVehicle" (onSelectionChanged)="onVehicleSelect($event)">
         </dx-select-box>
         <button id="btnToggleVehicleStatusNPIOTrend" mat-raised-button class="dense" color="primary" [disabled]="false"
-          (click)="onToggleVehicleStatusNPIOTrend($event.target)">
+          (click)="onToggleVehicleStatusNPIOTrend()">
           {{ "names.pioTrend" | translate }}
         </button>
       </div>

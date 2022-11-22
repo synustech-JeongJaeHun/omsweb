@@ -24,6 +24,8 @@ namespace OMSWeb.Models.Entities
 
     public string CarrierId { get; set; }
 
+    public int SlideOffset { get; set; }
+
     public int? GroupId { get; set; }
 
     public string User { get; set; }

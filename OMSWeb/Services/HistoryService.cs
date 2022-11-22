@@ -1,11 +1,8 @@
 using System;
 using System.Data;
-using System.Globalization;
 using System.Linq;
-using System.Xml.Linq;
 using DevExtreme.AspNet.Data;
 using DevExtreme.AspNet.Mvc;
-using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json.Linq;
 using OMSWeb.Models.Entities;
 using OMSWeb.Repositories;
@@ -78,7 +75,7 @@ namespace OMSWeb.Services
             return this._repo.QueryVehicleDios(vehicleId, from, to);
         }
 
-        public VehicleDio? QueryRecentDioBefore(int vehicleId, DateTimeOffset before)
+        public VehicleDioHistoryEntity? QueryRecentDioBefore(int vehicleId, DateTimeOffset before)
         {
             var vehicleDios = this._repo.QueryRecentDioBefore(vehicleId, before);
 

@@ -60,20 +60,25 @@ const complicatedMode = computed<ComplicatedMode>(() => {
   // return undefined
 })
 
-const isHotlot = computed(() => Number(props.vehicle.priority) === 99),
-  isTransferDisabled = computed(() => {
-    const originInUpper = (
-      typeof props.vehicle.orderOrigin === 'string'
-        ? props.vehicle.orderOrigin
-        : (props.vehicle.orderOrigin ?? []).join('')
-    ).toUpperCase()
+const isHotlot = computed(() => {
+  const priority = Number(props.vehicle.priority)
+  return priority === 97 || priority === 98 || priority === 99
+})
+const isSuperHotlot = computed(() => Number(props.vehicle.priority) === 99)
 
-    const hasMCS = originInUpper.includes('MCS')
-    const hasAsterisk = originInUpper.includes('*')
+const isTransferDisabled = computed(() => {
+  const originInUpper = (
+    typeof props.vehicle.orderOrigin === 'string'
+      ? props.vehicle.orderOrigin
+      : (props.vehicle.orderOrigin ?? []).join('')
+  ).toUpperCase()
 
-    return hasMCS === false && hasAsterisk === false
-  }),
-  isPushDisabled = computed(() => props.vehicle.canBePushed === false)
+  const hasMCS = originInUpper.includes('MCS')
+  const hasAsterisk = originInUpper.includes('*')
+
+  return hasMCS === false && hasAsterisk === false
+})
+const isPushDisabled = computed(() => props.vehicle.canBePushed === false)
 
 const currentPosition = ref<Position | undefined>(
   getVehiclePosition(props.vehicle)
@@ -223,11 +228,11 @@ function onRightClick(event: MouseEvent) {
       :errorList="props.vehicle.errorList" :isMaint="props.vehicle.isMaint" :isConnected="props.vehicle.isConnected"
       :isSensorStopped="props.vehicle.isSensorStopped" :isZcuBlocked="props.vehicle.isZcuBlocked"
       :isBlocked="props.vehicle.isBlocked" :groupColor="group ? getGroupColorWithAlpha(group.color) : undefined"
-      :isHotlot="isHotlot" :isTransferDisabled="isTransferDisabled" :isPushDisabled="isPushDisabled"
-      :isFocused="props.vehicle.isFocused" :isCarrierFocused="props.vehicle.isCarrierFocused"
-      :isHovered="props.vehicle.isHovered" @dblclick="onDbClick()" @leftclick="onLeftClick()"
-      @rightclick="onRightClick($event)" @mouseover="onMouseover($event)" @mouseout="onMouseleave()"
-      @mouseleave="onMouseleave()" />
+      :isHotlot="isHotlot" :isSuperHotlot="isSuperHotlot" :isTransferDisabled="isTransferDisabled"
+      :isPushDisabled="isPushDisabled" :isFocused="props.vehicle.isFocused"
+      :isCarrierFocused="props.vehicle.isCarrierFocused" :isHovered="props.vehicle.isHovered" @dblclick="onDbClick()"
+      @leftclick="onLeftClick()" @rightclick="onRightClick($event)" @mouseover="onMouseover($event)"
+      @mouseout="onMouseleave()" @mouseleave="onMouseleave()" />
 
     <template v-if="props.vehicle.isConnected">
       <!-- next point line -->

@@ -76,6 +76,7 @@ const props = defineProps<{
   homeColor: Stringlish
   normalSegmentColor: Stringlish
   disabledSegmentColor: Stringlish
+  disabledByVehicleSegmentColor: Stringlish
   segmentDirectionColor: Stringlish
 
   // chjs visual start
@@ -244,8 +245,15 @@ defineExpose(exposed)
     );
 }
 
-#disabled-segment-layer .segment[data-is-disabled-by-mtl='true' i] .segment-path {
-  stroke: v-bind('parseStringProp(ColorDefault.disabledSegment, props.normalSegmentColor)'
+#disabled-segment-layer .segment[data-is-disabled-by-vehicle='true' i] .segment-path {
+  stroke: v-bind('parseStringProp(ColorDefault.disabledByVehicleSegment, props.disabledByVehicleSegmentColor)'
+    );
+}
+
+
+#disabled-segment-layer .segment[data-is-disabled-by-mtl='true' i] .segment-path,
+#disabled-segment-layer .segment[data-is-disabled-by-mtl='true' i][data-is-disabled-by-vehicle='true' i] .segment-path {
+  stroke: v-bind('parseStringProp(ColorDefault.normalSegment, props.normalSegmentColor)'
     );
 }
 

@@ -728,6 +728,9 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 								this.contextMenuObject.value.id,
 							)
 							.subscribe()
+
+						this.showContextMenu = false
+						this.contextMenuObject = undefined
 					}
 				})
 		} else {
@@ -737,6 +740,9 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 					this.contextMenuObject.value.id,
 				)
 				.subscribe()
+
+			this.showContextMenu = false
+			this.contextMenuObject = undefined
 		}
 	}
 
