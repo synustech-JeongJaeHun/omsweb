@@ -162,7 +162,7 @@ export class OrderControlTableComponent implements OnInit, OnDestroy {
 
 	ngOnInit(): void {
 		this.hubSvc.orderTableChanged$
-			.pipe(takeUntil(this.destroy$), auditTime(AuditTimeDuration))
+			.pipe(auditTime(AuditTimeDuration), takeUntil(this.destroy$))
 			.subscribe((e: IDataChangeEvent) => {
 				e && this.onTableChanged(e)
 			})
