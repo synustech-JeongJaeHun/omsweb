@@ -34,6 +34,7 @@ import { PlaybackControlDialogComponent } from '../../playback/dialogs/playback-
 import { PlaybackTrackVehicleDialogComponent } from '../dialogs/playback-track-vehicle-dialog.component'
 import { PlaybackAlertDialogComponent } from '../../playback/dialogs/playback-alert-dialog.component'
 import { ClockChangedEvent } from '@oms/root/models/playback.model'
+import { Subscription } from 'rxjs'
 
 @Component({
 	selector: 'oms-playback-map-toolbar',
@@ -83,6 +84,7 @@ export class PlaybackMapToolbarComponent implements OnInit, OnDestroy {
 	private _vhStatusDlg: MatDialogRef<PlaybackVehicleStatusDialogComponent, any>
 	private _controlDlg: MatDialogRef<PlaybackControlDialogComponent, any>
 	private _alertDlg: MatDialogRef<PlaybackAlertDialogComponent, any>
+	private _serviceSubscription: Subscription
 
 	constructor(
 		private auth: AuthService,
@@ -94,13 +96,16 @@ export class PlaybackMapToolbarComponent implements OnInit, OnDestroy {
 	) {
 		this.onPlaybackDialog()
 		// 🎉 subscribe every emited Event from playbackSvc
-		playbackSvc.clockChanged.subscribe((e: ClockChangedEvent) => {
-			if (
-				e.type === 'NextFrameEvent' &&
-				e.alarms.some((a) => a.historyChangeType === 'INSERT')
-			)
-				this.onAlertDialog(false)
-		})
+		this._serviceSubscription = playbackSvc.clockChanged.subscribe(
+			(e: ClockChangedEvent) => {
+				if (
+					e.type === 'NextFrameEvent' &&
+					e.alarms.some((a) => a.historyChangeType === 'INSERT')
+				) {
+					this.onAlertDialog(false)
+				}
+			},
+		)
 	}
 
 	onPlaybackDialog() {
@@ -131,6 +136,7 @@ export class PlaybackMapToolbarComponent implements OnInit, OnDestroy {
 			if (closable) this._alertDlg.close()
 			return
 		}
+
 		this._alertDlg = this.dialog.open(PlaybackAlertDialogComponent, {
 			maxWidth: '800px',
 			maxHeight: '50vh',
@@ -174,6 +180,8 @@ export class PlaybackMapToolbarComponent implements OnInit, OnDestroy {
 		this._alertDlg &&
 			this._alertDlg.getState() === MatDialogState.OPEN &&
 			this._alertDlg.close()
+
+		this._serviceSubscription.unsubscribe()
 	}
 
 	hasPermission(permission: number): boolean {

@@ -139,6 +139,9 @@ const emit = defineEmits<{
               ? `url(#vehicle-order-hotlot-background)`
               : undefined
           ">
+          <template v-if="props.isSuperHotlot">
+            ★
+          </template>
           {{ props.carrierId }}
         </text>
       </g>

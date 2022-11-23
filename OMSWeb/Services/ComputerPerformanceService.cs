@@ -44,7 +44,7 @@ namespace OMSWeb.Services
 #if Windows
             return new 
             { 
-                usage = Math.Floor(_cpuCounter.NextValue()), 
+                usage = Math.Truncate(_cpuCounter.NextValue()), 
                 model = _processName, 
                 ghz = Math.Truncate((decimal) (_processMHZ / 100)) / 10  
             };
