@@ -63,7 +63,7 @@ export class UnusedListDialogComponent implements OnInit, OnDestroy {
 			this.hubSvc.stationChanged$,
 			this.hubSvc.bufferChanged$,
 		)
-			.pipe(takeUntil(this.destroy$), auditTime(AuditTimeDuration))
+			.pipe(auditTime(AuditTimeDuration), takeUntil(this.destroy$))
 			.subscribe((e: IDataChangeEvent) => {
 				e && this.onTableChanged(e)
 			})

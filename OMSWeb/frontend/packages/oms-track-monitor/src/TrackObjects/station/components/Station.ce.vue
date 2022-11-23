@@ -8,6 +8,7 @@ import { getGroupColorWithAlpha } from 'TrackObjects/group/utils/color'
 const props = defineProps<{
   station: Station
   margin: number
+  teleportRef?: SVGGElement
   handleLeftClick: (event: MouseEvent) => void
   handleRightClick: (event: MouseEvent) => void
   handleMouseover: (event: MouseEvent) => void
@@ -22,48 +23,51 @@ const group = useGroup('station', toRef(props.station, 'id'))
 </script>
 
 <template>
-  <svg
-    v-if="position"
-    class="overflow-visible cursor-pointer station"
-    :x="position.x"
-    :y="position.y"
-    :data-disabled="props.station.unuse"
-  >
-    <g class="scale-and-reverse-rotate">
-      <use
-        v-if="group"
-        href="#station-group-shadow"
-        class="group-shadow"
-        :fill="getGroupColorWithAlpha(group.color)"
-      />
-      <use
-        v-if="props.station.isFocused"
-        href="#station"
-        class="focus"
-        stroke-width="10"
-      />
-      <use
-        href="#station"
-        class="station-path"
-        stroke-width="4"
-        :data-id="props.station.id"
-        @click.left="handleLeftClick"
-        @click.right="handleRightClick"
-        @mouseover="handleMouseover"
-        @mouseout="handleMouseleave"
-        @mouseleave="handleMouseleave"
-      />
-      <text
-        class="invert label select-none"
-        x="0"
-        y="20"
-        alignment-baseline="hanging"
-        text-anchor="middle"
-        text-rendering="optimizeSpeed"
-        pointer-events="none"
-      >
-        {{ props.station.logicalId }}
-      </text>
-    </g>
-  </svg>
+  <Teleport :to="teleportRef" :disabled="props.station.isCarrierFocused !== true">
+    <svg
+      v-if="position"
+      class="overflow-visible cursor-pointer station"
+      :x="position.x"
+      :y="position.y"
+      :data-disabled="props.station.unuse"
+      :data-carrier-focused="props.station.isCarrierFocused"
+    >
+      <g class="scale-and-reverse-rotate">
+        <use
+          v-if="group"
+          href="#station-group-shadow"
+          class="group-shadow"
+          :fill="getGroupColorWithAlpha(group.color)"
+        />
+        <use
+          v-if="props.station.isFocused"
+          href="#station"
+          class="focus"
+          stroke-width="10"
+        />
+        <use
+          href="#station"
+          class="station-path"
+          stroke-width="4"
+          :data-id="props.station.id"
+          @click.left="handleLeftClick"
+          @click.right="handleRightClick"
+          @mouseover="handleMouseover"
+          @mouseout="handleMouseleave"
+          @mouseleave="handleMouseleave"
+        />
+        <text
+          class="invert label select-none"
+          x="0"
+          y="20"
+          alignment-baseline="hanging"
+          text-anchor="middle"
+          text-rendering="optimizeSpeed"
+          pointer-events="none"
+        >
+          {{ props.station.logicalId }}
+        </text>
+      </g>
+    </svg>
+  </Teleport>
 </template>

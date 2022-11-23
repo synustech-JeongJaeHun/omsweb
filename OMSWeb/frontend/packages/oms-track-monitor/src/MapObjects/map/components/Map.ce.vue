@@ -68,7 +68,7 @@ const emit = inject<RootEmits>(RootEmitInjectionKey)!
     <StationLayer />
     <ZcuLayer />
     <MtlLayer />
-    <VehicleLayer />
     <FireshutterLayer />
+    <VehicleLayer />
   </svg>
 </template>

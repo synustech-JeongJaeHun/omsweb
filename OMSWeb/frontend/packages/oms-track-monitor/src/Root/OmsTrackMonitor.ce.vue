@@ -456,6 +456,21 @@ defineExpose(exposed)
   /* transform */
   transform: scale(v-bind('scaleInfo.mmPerPixel * scaleStylesInfo.vehicleSize * 1/10')) rotate(var(--reverse-rotation-degree));
 }
+#vehicle-layer .vehicle-symbol[data-carrier-focused~='true' i] .scale-and-reverse-rotate {
+  /* transform */
+  animation: vehicle-carrier-focused-scale-grow 1s ease-in-out forwards;
+}
+
+@keyframes vehicle-carrier-focused-scale-grow {
+  0%{
+    transform:scale(v-bind('scaleInfo.mmPerPixel * scaleStylesInfo.vehicleSize * 1/10')) rotate(var(--reverse-rotation-degree))
+  }
+  100%{
+    transform: scale(v-bind('scaleInfo.mmPerPixel * scaleStylesInfo.vehicleSize * 1/4')) rotate(var(--reverse-rotation-degree));
+  }
+
+}
+
 #zcu-layer .zcu .scale-and-reverse-rotate {
   /* transform */
   transform: scale(

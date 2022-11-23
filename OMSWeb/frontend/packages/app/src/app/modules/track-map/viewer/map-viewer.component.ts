@@ -48,7 +48,12 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 	@Input() viewMode: ViewModes
 	@Input() trackData: Dto.ITrackData
 	@Input() findEvent: EventEmitter<{ type: string; id: number }>
-	@Input() focusEvent: EventEmitter<{ type: string; id: number }>
+	@Input() focusEvent: EventEmitter<{
+		type: string
+		id: number
+		focusType?: string
+	}>
+	@Input() dropFocusEvent: EventEmitter<{ focusType?: string }>
 
 	private viewer: IOmsTrackMonitor
 	private destroy$: Subject<void> = new Subject<void>()
@@ -279,8 +284,13 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 			this.findOnTM(event)
 		})
 
-		this.focusEvent.subscribe((event: { type: string; id: number }) => {
-			this.focusOnTM(event)
+		this.focusEvent.subscribe(
+			(event: { type: string; id: number; focusType?: string }) => {
+				this.focusOnTM(event)
+			},
+		)
+		this.dropFocusEvent.subscribe((event: { focusType?: string }) => {
+			this.dropFocusOnTM(event)
 		})
 	}
 	private attachHubEvents() {
@@ -788,8 +798,11 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 	public findOnTM(event: { type: string; id: any }) {
 		this.viewer.find(event.type, event.id)
 	}
-	public focusOnTM(event: { type: string; id: any }) {
-		this.viewer.focus(event.type, event.id)
+	public focusOnTM(event: { type: string; id: any; focusType?: string }) {
+		this.viewer.focus(event.type, event.id, event.focusType)
+	}
+	public dropFocusOnTM(event: { focusType?: string }) {
+		this.viewer.dropFocus(event.focusType)
 	}
 
 	public trackOnTM(event: { type: string; id: any }) {

@@ -108,7 +108,7 @@ export class BufferControlTableComponent implements OnInit, OnDestroy {
 
 	ngOnInit(): void {
 		this.hubSvc.bufferChanged$
-			.pipe(takeUntil(this.destroy$), auditTime(AuditTimeDuration))
+			.pipe(auditTime(AuditTimeDuration), takeUntil(this.destroy$))
 			.subscribe((e: IDataChangeEvent) => {
 				e && this.onTableChanged(e)
 			})
@@ -125,17 +125,23 @@ export class BufferControlTableComponent implements OnInit, OnDestroy {
 
 		if (bufferIds.length > 0) {
 			this.dialogSvc
-                .verify({ body: this.$t.instant('messages.confirmCommand') })
+				.verify({ body: this.$t.instant('messages.confirmCommand') })
 				.subscribe((res) => {
-                    if (res) {
-                      const { operator, reason } = res
-                      this.messageSvc
-                        .sendBufferSettingCommand(
-                          { type: 'UNUSE', action: 'buffer-setting', unused: 1, user: operator, note: reason  },
-                          bufferIds,
-                        )
-                        .subscribe()
-                    }
+					if (res) {
+						const { operator, reason } = res
+						this.messageSvc
+							.sendBufferSettingCommand(
+								{
+									type: 'UNUSE',
+									action: 'buffer-setting',
+									unused: 1,
+									user: operator,
+									note: reason,
+								},
+								bufferIds,
+							)
+							.subscribe()
+					}
 				})
 		}
 	}

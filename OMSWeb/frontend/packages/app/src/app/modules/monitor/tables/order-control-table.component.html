@@ -31,6 +31,38 @@
 			/>
 		</mat-form-field>
 	</div>
+	<div style="margin-left: 8px; margin-top: 2px">
+		<mat-slide-toggle
+			color="primary"
+			[checked]="isTrackingCarrier"
+			(change)="onChangeIsTrackingCarrier($event)"
+		>
+			<div>
+				{{ 'names.track' | translate }}
+				{{ ' ' }}
+				{{ 'names.carrier' | translate }}
+
+				<ng-container
+					*ngIf="trackingCarrierInfo?.orderId && trackingCarrierInfo?.carrierId"
+				>
+					:
+					{{ 'names.order' | translate }}:
+					<strong> {{ trackingCarrierInfo.orderId }} </strong>
+					|
+					{{ 'names.carrier' | translate }}:
+					<strong> {{ trackingCarrierInfo?.carrierId }} </strong>
+					|
+					<strong>
+						{{
+							trackingCarrierInfo.logicalId
+								? trackingCarrierInfo.logicalId
+								: '_'
+						}}
+					</strong>
+				</ng-container>
+			</div>
+		</mat-slide-toggle>
+	</div>
 </div>
 
 <dx-data-grid
@@ -48,6 +80,7 @@
 	[headerFilter]="false"
 	allowColumnResizing="true"
 	[stateStoring]="stateStoring"
+	(onRowClick)="onClickTransferRow($event)"
 >
 	<dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
 	<!--dxo-scrolling-- mode="virtual" rowRenderingMode="standard"></dxo-scrolling-->
