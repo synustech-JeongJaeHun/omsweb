@@ -11,7 +11,7 @@
             [caption]="'names.time' | translate" format="yyyy/MM/dd HH:mm:ss">
           </dxi-column>
           <dxi-column [allowFiltering]="false" [width]="90" dataType="number" dataField="age"
-                      [caption]="'names.elapsedMin' | translate" cellTemplate="ageTemplate">
+                      [caption]="'names.elapsed' | translate" cellTemplate="ageTemplate">
             <div *dxTemplate="let d of 'ageTemplate'">
               {{ transform(d.value) }}
             </div>

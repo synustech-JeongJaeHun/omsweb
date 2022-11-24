@@ -382,6 +382,7 @@
     "cleared": "已清除",
     "notCleared": "未清除",
     "elapsedMin": "经过 (min)",
+    "elapsed": "Elapsed",
     "solution": "解决方案",
     "modifySolution": "修改解决方案",
     "resetVehicle": "重置车辆",

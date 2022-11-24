@@ -382,6 +382,7 @@
     "cleared": "Cleared",
     "notCleared": "Not Cleared",
     "elapsedMin": "Elapsed(min)",
+    "elapsed":  "Elapsed",
     "solution": "Solution",
     "modifySolution": "Modify Solution",
     "resetVehicle": "Reset Vehicle",
