@@ -99,6 +99,16 @@ export class PlaybackMapToolbarComponent implements OnInit, OnDestroy {
 		this._serviceSubscription = playbackSvc.clockChanged.subscribe(
 			(e: ClockChangedEvent) => {
 				if (
+					this._alertDlg &&
+					this._alertDlg.getState() === MatDialogState.OPEN &&
+					e.type === 'NextFrameEvent' &&
+					e.alarms.length > 0 &&
+					playbackSvc.currentAlarms.length === 0
+				) {
+					this._alertDlg.close()
+				}
+
+				if (
 					e.type === 'NextFrameEvent' &&
 					e.alarms.some((a) => a.historyChangeType === 'INSERT')
 				) {
