@@ -174,7 +174,7 @@ export class VehicleHistoryComponent implements OnInit, OnDestroy {
         this.onDataSourceStarted();
 
 		this.dataSource = this.svc.vehiclesDataSource(this, startTime, endTime)
-		this.applyFilter(startTime, endTime)
+		//this.applyFilter(startTime, endTime)
 		// this.dataSource.reload()
 	}
 	private applyFilter(startTime: Date, endTime: Date) {

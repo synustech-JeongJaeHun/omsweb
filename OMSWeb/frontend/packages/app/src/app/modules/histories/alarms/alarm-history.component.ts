@@ -193,7 +193,7 @@ export class AlarmHistoryComponent implements OnInit {
         this.onDataSourceStarted();
 
 		this.dataSource = this.svc.alarmsDataSource(this, startTime, endTime)
-		this.applyFilter(startTime, endTime)
+		//this.applyFilter(startTime, endTime)
 		// this.dataSource.reload()
 	}
 	private applyFilter(startTime: Date, endTime: Date) {

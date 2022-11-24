@@ -193,8 +193,8 @@ export class TransferHistoryComponent implements OnInit, OnDestroy {
         this.onDataSourceStarted();
 
 		this.dataSource = this.svc.ordersDataSource(this, startTime, endTime)
-		this.applyFilter(startTime, endTime)
-		this.applyPage()
+		//this.applyFilter(startTime, endTime)
+		//this.applyPage()
 		// this.dataSource.reload()
 	}
 	private applyFilter(startTime: Date, endTime: Date) {

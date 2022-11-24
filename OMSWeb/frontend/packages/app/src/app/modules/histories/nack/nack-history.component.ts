@@ -120,7 +120,7 @@ export class NackHistoryComponent implements OnInit, OnDestroy {
 
 		console.log('bind Nack Data in component')
 		this.dataSource = this.svc.nacksDataSource(this, startTime, endTime)
-		this.applyFilter(startTime, endTime)
+		//this.applyFilter(startTime, endTime)
 	}
 
 	canDisplayTable(type: string): boolean {

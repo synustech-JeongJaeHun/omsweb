@@ -287,10 +287,10 @@ namespace OMSWeb.Services
             if (jType == JTokenType.String)    // value is string
             {
                 selector = TryORM(tableName, sOperator, selector);
-                if (string.Compare(sOperator, "contains", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} LIKE '%{value}%' ###";
-                if (string.Compare(sOperator, "notcontains", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} NOT LIKE '%{value}%' ###";
-                if (string.Compare(sOperator, "startswith", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} LIKE '{value}%' ###";
-                if (string.Compare(sOperator, "endswith", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} LIKE '%{value}' ###";
+                if (string.Compare(sOperator, "contains", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} ILIKE '%{value}%' ###";
+                if (string.Compare(sOperator, "notcontains", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} NOT ILIKE '%{value}%' ###";
+                if (string.Compare(sOperator, "startswith", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} ILIKE '{value}%' ###";
+                if (string.Compare(sOperator, "endswith", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} ILIKE '%{value}' ###";
                 if (string.Compare(sOperator, "=", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} = '{value}' ###";
                 if (string.Compare(sOperator, "<>", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} <> '{value}' ###";
             }
