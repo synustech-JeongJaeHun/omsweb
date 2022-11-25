@@ -14,7 +14,7 @@ namespace OMSWeb.Models.Entities
 
   public class AlarmHistory : AlarmEntity
   {
-    public int Age { get; set; }
+    public TimeSpan? Age { get; set; }
     public int Level { get; set; }
     public string Description { get; set; }
     public string Action { get; set; }

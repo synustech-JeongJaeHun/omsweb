@@ -267,10 +267,9 @@
 				[visible]="canDisplayTable('transfers_age')"
 				[visibleIndex]="getDisplayTableColumnIndex('transfers_age')"
 				[width]="getDisplayTableColumnWidth('transfers_age')"
-				dataType="number"
+				dataType="string"
 				dataField="age"
 				[caption]="'names.elapsed' | translate"
-				cellTemplate="ageTemplate"
 			></dxi-column>
 			<div *dxTemplate="let data of 'ageTemplate'">
 				{{ transform(data.displayValue) }}

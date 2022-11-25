@@ -21,7 +21,7 @@ namespace OMSWeb.Models.Entities
     public DateTime? TimeCompleted { get; set; }
     public DateTime? TimeAborted { get; set; }
     public DateTime? TimeFailed { get; set; }
-    public int Age { get; set; }
+    public TimeSpan? Age { get; set; }
     public float? DistancePickup { get; set; }
     public float? DistanceDropoff { get; set; }
     public float? DistanceMove { get; set; }

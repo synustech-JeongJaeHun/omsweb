@@ -157,10 +157,13 @@ namespace OMSWeb.Repositories
                             OD.time_unload_started, OD.time_unload_completed, OD.time_completed as time_completed, OD.time_aborted as time_aborted, 
                             OD.time_failed as time_failed, 
                             CASE
-                                WHEN OD.time_created IS NOT NULL AND OD.time_completed IS NOT NULL THEN extract('epoch' from OD.time_completed - OD.time_created) 
-                                WHEN OD.time_created IS NOT NULL AND OD.time_aborted IS NOT NULL THEN extract('epoch' from OD.time_aborted - OD.time_created) 
-                                WHEN OD.time_created IS NOT NULL AND OD.time_failed IS NOT NULL THEN extract('epoch' from OD.time_failed - OD.time_created) 
-                                ELSE 0
+                                WHEN OD.time_created IS NOT NULL AND OD.time_completed IS NOT NULL 
+                                    THEN extract('epoch' from date_trunc('second', OD.time_completed) - date_trunc('second', OD.time_created)) * interval '1 sec' 
+                                WHEN OD.time_created IS NOT NULL AND OD.time_aborted IS NOT NULL 
+                                    THEN extract('epoch' from date_trunc('second', OD.time_aborted) - date_trunc('second', OD.time_created)) * interval '1 sec'
+                                WHEN OD.time_created IS NOT NULL AND OD.time_failed IS NOT NULL 
+                                    THEN extract('epoch' from date_trunc('second', OD.time_failed) - date_trunc('second', OD.time_created)) * interval '1 sec'
+                                ELSE 0 * interval '1 sec'
                             END As age,
                             OD.distance_pickup, OD.distance_deliver AS distance_dropoff, OD.distance_move, OD.assignment_type, OD.assignment_details,
                             OD.load_retry_cnt, OD.unload_retry_cnt as unload_retry_cnt
@@ -331,7 +334,11 @@ namespace OMSWeb.Repositories
                 SELECT * FROM (
                         SELECT VA.id, VA.time, VA.error_code, VA.vehicle_id, VR.logical_id AS vehicle_logical_id,
                             VA.time_resolved, 
-                            CASE WHEN VA.time_resolved IS NULL THEN  extract('epoch' from now()-VA.time) ELSE  extract('epoch' from VA.time_resolved-VA.time) END AS age,
+                            CASE 
+                                WHEN VA.time_resolved IS NULL 
+                                    THEN  extract('epoch' from date_trunc('second', now()) - date_trunc('second', VA.time)) * interval '1 sec'
+                                    ELSE  extract('epoch' from date_trunc('second', VA.time_resolved) - date_trunc('second', VA.time)) * interval '1 sec'
+                            END AS age,
                             VE.level, VE.cause, VE.description, VE.action, AN.annotation AS note, 
                             CASE WHEN VA.time_resolved IS NULL THEN  false ELSE true END AS cleared, VA.current
                         FROM vehicle_alarms AS VA
