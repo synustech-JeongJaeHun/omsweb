@@ -38,9 +38,5 @@ namespace OMSWeb.Repositories
         {
             return new NpgsqlConnection(this.connectionStringTrack);
         }
-        protected NpgsqlConnection ConnectTrack(int timeoutSecond)
-        {
-            return new NpgsqlConnection(this.connectionStringTrack + $" CommandTimeout={timeoutSecond}");
-        }
     }
 }

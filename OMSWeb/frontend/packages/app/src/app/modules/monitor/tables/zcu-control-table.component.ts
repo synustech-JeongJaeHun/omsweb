@@ -100,8 +100,7 @@ export class ZcuControlTableComponent implements OnInit, OnDestroy {
 			}[]
 		}) => {
 			configuration.columns.forEach((c) => {
-				const column =
-					this.preference.controlTables.zcus_order[c.visibleIndex]
+				const column = this.preference.controlTables.zcus_order[c.visibleIndex]
 				if (column) column.width = c.width
 			})
 
@@ -116,7 +115,7 @@ export class ZcuControlTableComponent implements OnInit, OnDestroy {
 
 	ngOnInit(): void {
 		this.hubSvc.zcuStatusTableChanged$
-			.pipe(takeUntil(this.destroy$), auditTime(AuditTimeDuration))
+			.pipe(auditTime(AuditTimeDuration), takeUntil(this.destroy$))
 			.subscribe((e: IDataChangeEvent) => {
 				e && this.onTableChanged(e)
 			})

@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core'
-import { MatDialog, MatDialogRef } from '@angular/material/dialog'
-import { TranslateService } from '@ngx-translate/core'
+import { Component, OnDestroy } from '@angular/core'
 import { VehicleService } from '@oms/root/services/vehicle.service'
-import { IVehicleDioCategory } from '@oms/root/models/vehicle-status.model'
+import {
+	IVehicleDioCategory,
+	IVehicleDioHistory,
+} from '@oms/root/models/vehicle-status.model'
 import { PlaybackPlayService } from '@oms/root/services/playback-play.service'
 import {
 	ClockChangedEvent,
@@ -15,24 +16,51 @@ import {
 } from '../../shared/utils/dio.util'
 import * as DateFns from 'date-fns'
 import { isHostOrder } from '../../playback/utils/playback-parse.util'
+import { takeUntil } from 'rxjs/operators'
+import { Subject } from 'rxjs'
+
+type DioHistory = Omit<IVehicleDioHistory, 'historyChangeTime'> & {
+	historyChangeTime: Date
+	dis: ('0' | '1')[]
+	dos: ('0' | '1')[]
+	trend: {
+		po_valid: number
+		po_cs_0: number
+		po_cs_1: number
+		po_tr_req: number
+		po_busy: number
+		po_compt: number
+		po_cont: number
+		pi_l_req: number
+		pi_u_req: number
+		pi_ready: number
+		pi_ho_avbl: number
+		pi_es: number
+		pattern: string
+	}
+}
 
 @Component({
 	selector: 'oms-playback-vehicle-status-dialog',
 	templateUrl: './playback-vehicle-status-dialog.component.html',
 	styleUrls: ['./playback-vehicle-status-dialog.component.scss'],
 })
-export class PlaybackVehicleStatusDialogComponent implements OnInit {
+export class PlaybackVehicleStatusDialogComponent implements OnDestroy {
+	private destroy$ = new Subject<void>()
+
 	visiblePIOTrend = false
 
 	get vehicles() {
 		return this.playService.currentVehicles
 	}
 	currentVehicle: CurrentVehicle | undefined
+	histories: DioHistory[] = []
 
 	get currentVehicleIsHostOrder() {
 		return isHostOrder(this.currentVehicle.orderOrigin)
 	}
 
+	pioIndice = [64, 65, 66, 67, 68, 69, 70, 71] as const
 	categories: {
 		name: string
 		dis: { label: string; index: number }[]
@@ -42,7 +70,6 @@ export class PlaybackVehicleStatusDialogComponent implements OnInit {
 	dioInfos: IVehicleDioCategory[] = []
 	dis: ('0' | '1')[] = []
 	dos: ('0' | '1')[] = []
-	pioIndice = [64, 65, 66, 67, 68, 69, 70, 71] as const
 
 	dioHistoriesIn30Seconds: {
 		historyChangeTimeFrom30SecondsBefore: number
@@ -69,13 +96,9 @@ export class PlaybackVehicleStatusDialogComponent implements OnInit {
 	patternColor = convertPatternToColor
 
 	constructor(
-		private dialogRef: MatDialogRef<PlaybackVehicleStatusDialogComponent>,
-		private t$: TranslateService,
 		private vehicleService: VehicleService,
 		private playService: PlaybackPlayService,
-	) {}
-
-	ngOnInit(): void {
+	) {
 		this.vehicleService.getVehicleDioCategories().subscribe((dios) => {
 			this.dioInfos = dios
 
@@ -121,199 +144,174 @@ export class PlaybackVehicleStatusDialogComponent implements OnInit {
 			this.onVehicleSelect({ selectedItem: this.vehicles[0] })
 		else this.currentVehicle = undefined
 
-		this.playService.clockChanged.subscribe((event: ClockChangedEvent) =>
-			this.update(event.clock),
-		)
+		this.playService.clockChanged
+			.pipe(takeUntil(this.destroy$))
+			.subscribe(this.consumeEvent)
 	}
 
-	onVehicleSelect({ selectedItem: value }) {
-		if (value) {
+	ngOnDestroy(): void {
+		this.destroy$.next()
+		this.destroy$.complete()
+	}
+
+	private consumeEvent = async (event: ClockChangedEvent) => {
+		if (this.currentVehicle == null) return
+
+		if (event.type === 'SnapshotChanged') {
+			this.currentVehicle = this.playService.currentVehicles.find(
+				(cv) => cv.id === this.currentVehicle.id,
+			)
+
+			await this.loadDatum(
+				this.currentVehicle.id,
+				this.playService.currentSnapshot.timestamp,
+				this.playService.nextSnapshot.timestamp,
+			)
+		}
+
+		this.update(event.clock)
+	}
+
+	async onVehicleSelect({ selectedItem: value }) {
+		if (value && value.id !== this.currentVehicle?.id) {
 			this.currentVehicle = value
+
+			await this.loadDatum(
+				this.currentVehicle.id,
+				this.playService.currentSnapshot.timestamp,
+				this.playService.nextSnapshot.timestamp,
+			)
 			this.update(this.playService.clock)
 		}
 	}
 
-	private update(playbackClock: Date) {
-		if (this.vehicles.length === 0) this.currentVehicle = undefined
-		else if (this.currentVehicle == null) this.currentVehicle = this.vehicles[0]
-		else
-			this.currentVehicle = this.vehicles.find(
-				(v) => v.id === this.currentVehicle.id,
-			)
+	private async loadDatum(
+		vehicleId: number,
+		from: Date,
+		to: Date = new Date(9999, 1, 1),
+	): Promise<void> {
+		const twoMinutesBeforefrom = DateFns.subSeconds(from, 40)
 
-		if (this.currentVehicle == null) return
-
-		// currentVehicle is automatically updated, so no need to write sync
-		// because it takes reference from playService
-		this.vehicleService
-			.getRecentVehicleDioBefore(this.currentVehicle.id, playbackClock)
-			.subscribe(
-				(res) => {
-					this.dis = (
-						convertSignedIntegerToBitString(res.di1, 32) +
-						convertSignedIntegerToBitString(res.di2, 32) +
-						convertSignedIntegerToBitString(res.di3, 32)
-					).split('') as ('0' | '1')[]
-
-					this.dos = (
-						convertSignedIntegerToBitString(res.do1, 32) +
-						convertSignedIntegerToBitString(res.do2, 32) +
-						convertSignedIntegerToBitString(res.do3, 32)
-					).split('') as ('0' | '1')[]
-				},
-				(error) => {
-					this.dis = Array(96).fill('0')
-					this.dos = Array(96).fill('0')
-				},
-			)
-
-		this.vehicleService
-			.getVehicleDioHistories(
-				this.currentVehicle.id,
-				DateFns.sub(playbackClock, { seconds: 30 }),
-				playbackClock,
-			)
-			.subscribe((res) => {
-				// if no data, use last
-				if (res.length === 0) {
-					this.vehicleService
-						.getRecentVehicleDioBefore(this.currentVehicle.id, playbackClock)
-						.subscribe((res) => {
-							const di3Binary = convertSignedIntegerToBitString(
-								res.di3,
-								32,
-							).split('') as ('0' | '1')[]
-
-							const do3Binary = convertSignedIntegerToBitString(
-								res.do3,
-								32,
-							).split('') as ('0' | '1')[]
-
-							// this!
-							this.dioHistoriesIn30Seconds = [
-								{
-									historyChangeTimeFrom30SecondsBefore: 0,
-									po_valid: parseInt(do3Binary[8]),
-									po_cs_0: parseInt(do3Binary[9]),
-									po_cs_1: parseInt(do3Binary[10]),
-									po_tr_req: parseInt(do3Binary[12]),
-									po_busy: parseInt(do3Binary[13]),
-									po_compt: parseInt(do3Binary[14]),
-									po_cont: parseInt(do3Binary[16]),
-									pi_l_req: parseInt(di3Binary[0]),
-									pi_u_req: parseInt(di3Binary[1]),
-									pi_ready: parseInt(di3Binary[3]),
-									pi_ho_avbl: parseInt(di3Binary[6]),
-									pi_es: parseInt(di3Binary[7]),
-									pattern: parsePIO(
-										{
-											L_REQ: di3Binary[0],
-											U_REQ: di3Binary[1],
-											READY: di3Binary[3],
-											HO_AVBL: di3Binary[6],
-											ES: di3Binary[7],
-										},
-										{
-											VALID: do3Binary[8],
-											CS_0: do3Binary[9],
-											CS_1: do3Binary[10],
-											TR_REQ: do3Binary[12],
-											BUSY: do3Binary[13],
-											COMPT: do3Binary[14],
-										},
-									),
-								},
-								{
-									historyChangeTimeFrom30SecondsBefore: 30,
-									po_valid: parseInt(do3Binary[8]),
-									po_cs_0: parseInt(do3Binary[9]),
-									po_cs_1: parseInt(do3Binary[10]),
-									po_tr_req: parseInt(do3Binary[12]),
-									po_busy: parseInt(do3Binary[13]),
-									po_compt: parseInt(do3Binary[14]),
-									po_cont: parseInt(do3Binary[16]),
-									pi_l_req: parseInt(di3Binary[0]),
-									pi_u_req: parseInt(di3Binary[1]),
-									pi_ready: parseInt(di3Binary[3]),
-									pi_ho_avbl: parseInt(di3Binary[6]),
-									pi_es: parseInt(di3Binary[7]),
-									pattern: '',
-								},
-							]
-						})
-					return
+		try {
+			const firstHistory = await this.vehicleService
+				.getRecentVehicleDioBefore(vehicleId, twoMinutesBeforefrom)
+				.toPromise()
+			const historiesBetweenFromAndTo = await this.vehicleService
+				.getVehicleDioHistories(vehicleId, twoMinutesBeforefrom, to)
+				.toPromise()
+			const histories = (
+				firstHistory
+					? [firstHistory, ...historiesBetweenFromAndTo]
+					: historiesBetweenFromAndTo
+			).map((history) => {
+				const di1 = convertSignedIntegerToBitString(history.di1, 32)
+				const di2 = convertSignedIntegerToBitString(history.di2, 32)
+				const di3 = convertSignedIntegerToBitString(history.di3, 32)
+				const do1 = convertSignedIntegerToBitString(history.do1, 32)
+				const do2 = convertSignedIntegerToBitString(history.do2, 32)
+				const do3 = convertSignedIntegerToBitString(history.do3, 32)
+				const trend = {
+					po_valid: parseInt(do3[8]),
+					po_cs_0: parseInt(do3[9]),
+					po_cs_1: parseInt(do3[10]),
+					po_tr_req: parseInt(do3[12]),
+					po_busy: parseInt(do3[13]),
+					po_compt: parseInt(do3[14]),
+					po_cont: parseInt(do3[16]),
+					pi_l_req: parseInt(di3[0]),
+					pi_u_req: parseInt(di3[1]),
+					pi_ready: parseInt(di3[3]),
+					pi_ho_avbl: parseInt(di3[6]),
+					pi_es: parseInt(di3[7]),
+					pattern: parsePIO(
+						{
+							L_REQ: di3[0] as '0' | '1',
+							U_REQ: di3[1] as '0' | '1',
+							READY: di3[3] as '0' | '1',
+							HO_AVBL: di3[6] as '0' | '1',
+							ES: di3[7] as '0' | '1',
+						},
+						{
+							VALID: do3[8] as '0' | '1',
+							CS_0: do3[9] as '0' | '1',
+							CS_1: do3[10] as '0' | '1',
+							TR_REQ: do3[12] as '0' | '1',
+							BUSY: do3[13] as '0' | '1',
+							COMPT: do3[14] as '0' | '1',
+						},
+					),
 				}
 
-				// if histories exists
-
-				const data = res.map((moment) => {
-					const di3Binary = convertSignedIntegerToBitString(
-						moment.di3,
-						32,
-					).split('') as ('0' | '1')[]
-
-					const do3Binary = convertSignedIntegerToBitString(
-						moment.do3,
-						32,
-					).split('') as ('0' | '1')[]
-
-					return {
-						historyChangeTimeFrom30SecondsBefore:
-							(new Date(moment.historyChangeTime).getTime() -
-								(Date.now() - 30000)) /
-							1000,
-						po_valid: parseInt(do3Binary[8]),
-						po_cs_0: parseInt(do3Binary[9]),
-						po_cs_1: parseInt(do3Binary[10]),
-						po_tr_req: parseInt(do3Binary[12]),
-						po_busy: parseInt(do3Binary[13]),
-						po_compt: parseInt(do3Binary[14]),
-						po_cont: parseInt(do3Binary[16]),
-						pi_l_req: parseInt(di3Binary[0]),
-						pi_u_req: parseInt(di3Binary[1]),
-						pi_ready: parseInt(di3Binary[3]),
-						pi_ho_avbl: parseInt(di3Binary[6]),
-						pi_es: parseInt(di3Binary[7]),
-						pattern: parsePIO(
-							{
-								L_REQ: di3Binary[0],
-								U_REQ: di3Binary[1],
-								READY: di3Binary[3],
-								HO_AVBL: di3Binary[6],
-								ES: di3Binary[7],
-							},
-							{
-								VALID: do3Binary[8],
-								CS_0: do3Binary[9],
-								CS_1: do3Binary[10],
-								TR_REQ: do3Binary[12],
-								BUSY: do3Binary[13],
-								COMPT: do3Binary[14],
-							},
-						),
-					}
-				})
-
-				const startCorrection = data[0]
-				const endCorrection = data[data.length - 1]
-
-				this.dioHistoriesIn30Seconds = [
-					{
-						...startCorrection,
-						historyChangeTimeFrom30SecondsBefore: 0,
-						pattern: '',
-					},
-					...data,
-					{
-						...endCorrection,
-						historyChangeTimeFrom30SecondsBefore: 30,
-						pattern: '',
-					},
-				]
+				return {
+					...history,
+					historyChangeTime: new Date(history.historyChangeTime),
+					dis: (di1 + di2 + di3).split('') as ('0' | '1')[],
+					dos: (do1 + do2 + do3).split('') as ('0' | '1')[],
+					trend,
+				}
 			})
+			this.histories = histories
+		} catch {
+			this.histories = []
+		}
 	}
 
-	onToggleVehicleStatusNPIOTrend(element) {
+	private update(playbackClock: Date) {
+		const baseTime = playbackClock
+
+		// (1/2) set this.dis & this.dos
+		{
+			const currentTimeHistoryIndex =
+				this.histories.findIndex((h) =>
+					DateFns.isAfter(h.historyChangeTime, baseTime),
+				) - 1
+			const currentTimeHistory = this.histories[currentTimeHistoryIndex]
+
+			this.dis = currentTimeHistoryIndex >= 0 ? currentTimeHistory.dis : []
+			this.dos = currentTimeHistoryIndex >= 0 ? currentTimeHistory.dos : []
+		}
+
+		// (2/2) set diohistoriesin30seconds
+		{
+			const startTime = DateFns.subSeconds(baseTime, 30)
+			const endTime = baseTime
+
+			const startIndex = this.histories.findIndex((h) =>
+				DateFns.isAfter(h.historyChangeTime, startTime),
+			)
+			const endIndex = this.histories.findIndex((h) =>
+				DateFns.isAfter(h.historyChangeTime, endTime),
+			)
+
+			const time0Correction =
+				startIndex <= 0 ? this.histories[0] : this.histories[startIndex - 1]
+			const time30Correction =
+				endIndex >= this.histories.length - 1 || endIndex < 0
+					? this.histories[this.histories.length - 1]
+					: this.histories[endIndex]
+
+			const historiesIn30Seconds = this.histories.slice(startIndex, endIndex)
+			this.dioHistoriesIn30Seconds = [
+				{
+					...time0Correction.trend,
+					historyChangeTimeFrom30SecondsBefore: 0,
+				},
+				...historiesIn30Seconds.map((h) => ({
+					...h.trend,
+					historyChangeTimeFrom30SecondsBefore:
+						(new Date(h.historyChangeTime).getTime() -
+							(baseTime.getTime() - 30000)) /
+						1000,
+				})),
+				{
+					...time30Correction.trend,
+					historyChangeTimeFrom30SecondsBefore: 30,
+				},
+			]
+		}
+	}
+
+	onToggleVehicleStatusNPIOTrend() {
 		this.visiblePIOTrend = !this.visiblePIOTrend
 	}
 }

@@ -26,6 +26,7 @@ import { makeVehicleAnimationPath } from '../utils/vehilcleAnimationPath'
 
 const props = defineProps<{
   vehicle: Vehicle
+  teleportRef?: SVGGElement
 }>()
 const vehicle = toRef(props, 'vehicle')
 const emit = inject<RootEmits>(RootEmitInjectionKey)!
@@ -218,41 +219,44 @@ function onRightClick(event: MouseEvent) {
 </script>
 
 <template>
-  <!-- presentation component without logic -->
-  <VehiclePresentation v-if="realtimePosition" :x="realtimePosition.x" :y="realtimePosition.y" :vid="props.vehicle.id"
-    :logicalId="props.vehicle.logicalId" :orderId="props.vehicle.orderId" :type="props.vehicle.type"
-    :mode="props.vehicle.mode" :complicatedMode="complicatedMode" :cargoState="props.vehicle.cargoState"
-    :cargoTransferResult="props.vehicle.cargoTransferResult" :carrierId="props.vehicle.carrierId"
-    :errorList="props.vehicle.errorList" :isMaint="props.vehicle.isMaint" :isConnected="props.vehicle.isConnected"
-    :isSensorStopped="props.vehicle.isSensorStopped" :isZcuBlocked="props.vehicle.isZcuBlocked"
-    :isBlocked="props.vehicle.isBlocked" :groupColor="group ? getGroupColorWithAlpha(group.color) : undefined"
-    :isHotlot="isHotlot" :isSuperHotlot="isSuperHotlot" :isTransferDisabled="isTransferDisabled"
-    :isPushDisabled="isPushDisabled" :isFocused="props.vehicle.isFocused" :isHovered="props.vehicle.isHovered"
-    @dblclick="onDbClick()" @leftclick="onLeftClick()" @rightclick="onRightClick($event)"
-    @mouseover="onMouseover($event)" @mouseout="onMouseleave()" @mouseleave="onMouseleave()" />
+  <Teleport :to="teleportRef" :disabled="props.vehicle.isCarrierFocused !== true">
+    <!-- presentation component without logic -->
+    <VehiclePresentation v-if="realtimePosition" :x="realtimePosition.x" :y="realtimePosition.y" :vid="props.vehicle.id"
+      :logicalId="props.vehicle.logicalId" :orderId="props.vehicle.orderId" :type="props.vehicle.type"
+      :mode="props.vehicle.mode" :complicatedMode="complicatedMode" :cargoState="props.vehicle.cargoState"
+      :cargoTransferResult="props.vehicle.cargoTransferResult" :carrierId="props.vehicle.carrierId"
+      :errorList="props.vehicle.errorList" :isMaint="props.vehicle.isMaint" :isConnected="props.vehicle.isConnected"
+      :isSensorStopped="props.vehicle.isSensorStopped" :isZcuBlocked="props.vehicle.isZcuBlocked"
+      :isBlocked="props.vehicle.isBlocked" :groupColor="group ? getGroupColorWithAlpha(group.color) : undefined"
+      :isHotlot="isHotlot" :isSuperHotlot="isSuperHotlot" :isTransferDisabled="isTransferDisabled"
+      :isPushDisabled="isPushDisabled" :isFocused="props.vehicle.isFocused"
+      :isCarrierFocused="props.vehicle.isCarrierFocused" :isHovered="props.vehicle.isHovered" @dblclick="onDbClick()"
+      @leftclick="onLeftClick()" @rightclick="onRightClick($event)" @mouseover="onMouseover($event)"
+      @mouseout="onMouseleave()" @mouseleave="onMouseleave()" />
 
-  <template v-if="props.vehicle.isConnected">
-    <!-- next point line -->
-    <line v-if="props.vehicle.movingState === 'M' && nextPointPosition && realtimePosition"
-      class="line next-line fixed-scale-stroke" stroke="#91e079" stroke-width="1" stroke-linecap="round"
-      shape-rendering="auto" :x1="realtimePosition.x" :y1="realtimePosition.y" :x2="nextPointPosition.x"
-      :y2="nextPointPosition.y" />
+    <template v-if="props.vehicle.isConnected">
+      <!-- next point line -->
+      <line v-if="props.vehicle.movingState === 'M' && nextPointPosition && realtimePosition"
+        class="line next-line fixed-scale-stroke" stroke="#91e079" stroke-width="1" stroke-linecap="round"
+        shape-rendering="auto" :x1="realtimePosition.x" :y1="realtimePosition.y" :x2="nextPointPosition.x"
+        :y2="nextPointPosition.y" />
 
-    <!-- pickup or dropoff or move line -->
-    <line v-if="commandPoint.position.value && realtimePosition" :class="{
-      'line': true,
-      'from-line': commandPoint.type.value === 'pickup',
-      'to-line': commandPoint.type.value === 'dropoff',
-      'move-line': commandPoint.type.value === 'move',
-      'fixed-scale-stroke': true
-    }" :stroke="commandLineColor" stroke-width="1" stroke-linecap="round" shape-rendering="auto"
-      :x1="realtimePosition.x" :y1="realtimePosition.y" :x2="commandPoint.position.value.x"
-      :y2="commandPoint.position.value.y" />
+      <!-- pickup or dropoff or move line -->
+      <line v-if="commandPoint.position.value && realtimePosition" :class="{
+        'line': true,
+        'from-line': commandPoint.type.value === 'pickup',
+        'to-line': commandPoint.type.value === 'dropoff',
+        'move-line': commandPoint.type.value === 'move',
+        'fixed-scale-stroke': true
+      }" :stroke="commandLineColor" stroke-width="1" stroke-linecap="round" shape-rendering="auto"
+        :x1="realtimePosition.x" :y1="realtimePosition.y" :x2="commandPoint.position.value.x"
+        :y2="commandPoint.position.value.y" />
 
-    <!-- home/ivr line -->
-    <line v-else-if="props.vehicle.movingState === 'M' && homeIvrPoint && realtimePosition"
-      class="line homeivr-line fixed-scale-stroke" stroke="#ffa500" stroke-width="1" stroke-linecap="round"
-      shape-rendering="auto" :x1="realtimePosition.x" :y1="realtimePosition.y" :x2="homeIvrPoint.x"
-      :y2="homeIvrPoint.y" />
-  </template>
+      <!-- home/ivr line -->
+      <line v-else-if="props.vehicle.movingState === 'M' && homeIvrPoint && realtimePosition"
+        class="line homeivr-line fixed-scale-stroke" stroke="#ffa500" stroke-width="1" stroke-linecap="round"
+        shape-rendering="auto" :x1="realtimePosition.x" :y1="realtimePosition.y" :x2="homeIvrPoint.x"
+        :y2="homeIvrPoint.y" />
+    </template>
+  </Teleport>
 </template>

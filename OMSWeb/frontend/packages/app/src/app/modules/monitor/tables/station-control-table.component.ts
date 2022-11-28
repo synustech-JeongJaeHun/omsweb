@@ -107,7 +107,7 @@ export class StationControlTableComponent implements OnInit, OnDestroy {
 
 	ngOnInit(): void {
 		this.hubSvc.stationChanged$
-			.pipe(takeUntil(this.destroy$), auditTime(AuditTimeDuration))
+			.pipe(auditTime(AuditTimeDuration), takeUntil(this.destroy$))
 			.subscribe((e: IDataChangeEvent) => {
 				e && this.onTableChanged(e)
 			})
@@ -124,17 +124,23 @@ export class StationControlTableComponent implements OnInit, OnDestroy {
 
 		if (stationIds.length > 0) {
 			this.dialogSvc
-                .verify({ body: this.$t.instant('messages.confirmCommand') })
+				.verify({ body: this.$t.instant('messages.confirmCommand') })
 				.subscribe((res) => {
-                    if (res) {
-                      const { operator, reason } = res
-                      this.messageSvc
-                        .sendStationSettingCommand(
-                          { type: 'UNUSE', action: 'station-setting', unused: 1, user: operator, note: reason },
-                          stationIds,
-                        )
-                        .subscribe()
-                    }
+					if (res) {
+						const { operator, reason } = res
+						this.messageSvc
+							.sendStationSettingCommand(
+								{
+									type: 'UNUSE',
+									action: 'station-setting',
+									unused: 1,
+									user: operator,
+									note: reason,
+								},
+								stationIds,
+							)
+							.subscribe()
+					}
 				})
 		}
 	}

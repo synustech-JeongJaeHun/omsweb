@@ -18,115 +18,139 @@
 		{{ 'names.use' | translate }}
 	</button>
 </div>
-<dx-data-grid [dataSource]="dataSource"
-							[remoteOperations]="true"
-							[height]="tableHeight"
-							[repaintChangesOnly]="true"
-							[columnAutoWidth]="false"
-							[showBorders]="false"
-							[highlightChanges]="true"
-							[showColumnLines]="true"
-							[showRowLines]="true"
-							[headerFilter]="false"
-							[(selectedRowKeys)]="selectedRows"
-							allowColumnResizing="true"
-							[stateStoring]="stateStoring">
+<dx-data-grid
+	[dataSource]="dataSource"
+	[remoteOperations]="true"
+	[height]="tableHeight"
+	[repaintChangesOnly]="true"
+	[columnAutoWidth]="false"
+	[showBorders]="false"
+	[highlightChanges]="true"
+	[showColumnLines]="true"
+	[showRowLines]="true"
+	[headerFilter]="false"
+	[(selectedRowKeys)]="selectedRows"
+	allowColumnResizing="true"
+	[stateStoring]="stateStoring"
+>
 	<dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
 	<!--dxo-scrolling-- mode="virtual" rowRenderingMode="standard"></dxo-scrolling-->
 	<dxo-paging [pageSize]="50"></dxo-paging>
-	<dxo-pager [showPageSizeSelector]="true"
-						 [allowedPageSizes]="[50, 100, 200]"
-						 [showInfo]="true"
-						 visible="true">
+	<dxo-pager
+		[showPageSizeSelector]="true"
+		[allowedPageSizes]="[50, 100, 200]"
+		[showInfo]="true"
+		visible="true"
+	>
 	</dxo-pager>
-	<dxo-search-panel [placeholder]="'names.search' | translate"
-										[visible]="true"></dxo-search-panel>
+	<dxo-search-panel
+		[placeholder]="'names.search' | translate"
+		[visible]="true"
+	></dxo-search-panel>
 	<dxo-load-panel [enabled]="false"></dxo-load-panel>
 	<dxo-filter-row [visible]="true"></dxo-filter-row>
 
-	<dxi-column dataType="int"
-							dataField="id"
-							[caption]="'names.id' | translate"
-							[visible]="canDisplayTable('stations_id')"
-							[visibleIndex]="getDisplayTableColumnIndex('stations_id')"
-							[width]="getDisplayTableColumnWidth('stations_id')"></dxi-column>
-	<dxi-column dataType="string"
-							dataField="physicalId"
-							[caption]="'names.physicalId' | translate"
-							[visible]="canDisplayTable('stations_physicalId')"
-							[visibleIndex]="getDisplayTableColumnIndex('stations_physicalId')"
-							[width]="getDisplayTableColumnWidth('stations_physicalId')"></dxi-column>
-	<dxi-column dataType="string"
-							dataField="logicalId"
-							[caption]="'names.logicalId' | translate"
-							[visible]="canDisplayTable('stations_logicalId')"
-							[visibleIndex]="getDisplayTableColumnIndex('stations_logicalId')"
-							[width]="getDisplayTableColumnWidth('stations_logicalId')"></dxi-column>
-	<dxi-column dataType="string"
-							dataField="groupId"
-							[caption]="'names.group' | translate"
-							[visible]="canDisplayTable('stations_group')"
-							[visibleIndex]="getDisplayTableColumnIndex('stations_group')"
-							[width]="getDisplayTableColumnWidth('stations_group')"></dxi-column>
-	<dxi-column dataType="string"
-							dataField="point"
-							[caption]="'names.point' | translate"
-							[visible]="canDisplayTable('stations_point')"
-							[visibleIndex]="getDisplayTableColumnIndex('stations_point')"
-							[width]="getDisplayTableColumnWidth('stations_point')"></dxi-column>
-	<dxi-column dataType="string"
-							dataField="direction"
-							[caption]="'names.direction' | translate"
-							cellTemplate="directionTemplate"
-							[visible]="canDisplayTable('stations_direction')"
-							[visibleIndex]="getDisplayTableColumnIndex('stations_direction')"
-							[width]="getDisplayTableColumnWidth('stations_direction')"></dxi-column>
-	<dxi-column dataType="string"
-							dataField="nextPoint"
-							[caption]="'names.nextPoint' | translate"
-							[visible]="canDisplayTable('stations_nextPoint')"
-							[visibleIndex]="getDisplayTableColumnIndex('stations_nextPoint')"
-							[width]="getDisplayTableColumnWidth('stations_nextPoint')"></dxi-column>
-	<dxi-column dataType="string"
-							dataField="offset"
-							[caption]="'names.offset' | translate"
-							[visible]="canDisplayTable('stations_offset')"
-							[visibleIndex]="getDisplayTableColumnIndex('stations_offset')"
-							[width]="getDisplayTableColumnWidth('stations_offset')"></dxi-column>
-	<dxi-column dataType="boolean"
-							dataField="unuse"
-							[caption]="'names.unuse' | translate"
-							[visible]="canDisplayTable('stations_unuse')"
-							[visibleIndex]="getDisplayTableColumnIndex('stations_unuse')"
-							[width]="getDisplayTableColumnWidth('stations_unuse')"></dxi-column>
-	<dxi-column dataType="string"
-							dataField="carrierId"
-							[caption]="'names.carrierId' | translate"
-							[visible]="canDisplayTable('stations_carrierId')"
-							[visibleIndex]="getDisplayTableColumnIndex('stations_carrierId')"
-							[width]="getDisplayTableColumnWidth('stations_carrierId')"></dxi-column>
-	<dxi-column dataType="string"
-							dataField="slideOffset"
-							[caption]="'names.slideOffset' | translate"
-							[visible]="canDisplayTable('stations_slideOffset')"
-							[visibleIndex]="getDisplayTableColumnIndex('stations_slideOffset')"
-							[width]="getDisplayTableColumnWidth('stations_slideOffset')"></dxi-column>
-	<dxi-column [allowFiltering]="true"
-							dataType="string"
-							dataField="user"
-							[allowSorting]="true"
-							[caption]="'names.user' | translate"
-							[visible]="canDisplayTable('stations_user')"
-							[visibleIndex]="getDisplayTableColumnIndex('stations_user')"
-							[width]="getDisplayTableColumnWidth('stations_user')"></dxi-column>
-	<dxi-column [allowFiltering]="true"
-							dataType="string"
-							dataField="note"
-							[allowSorting]="true"
-							[caption]="'names.note' | translate"
-							[visible]="canDisplayTable('stations_note')"
-							[visibleIndex]="getDisplayTableColumnIndex('stations_note')"
-							[width]="getDisplayTableColumnWidth('stations_note')"></dxi-column>
+	<dxi-column
+		dataType="int"
+		dataField="id"
+		[caption]="'names.id' | translate"
+		[visible]="canDisplayTable('stations_id')"
+		[visibleIndex]="getDisplayTableColumnIndex('stations_id')"
+		[width]="getDisplayTableColumnWidth('stations_id')"
+	></dxi-column>
+	<dxi-column
+		dataType="string"
+		dataField="physicalId"
+		[caption]="'names.physicalId' | translate"
+		[visible]="canDisplayTable('stations_physicalId')"
+		[visibleIndex]="getDisplayTableColumnIndex('stations_physicalId')"
+		[width]="getDisplayTableColumnWidth('stations_physicalId')"
+	></dxi-column>
+	<dxi-column
+		dataType="string"
+		dataField="logicalId"
+		[caption]="'names.logicalId' | translate"
+		[visible]="canDisplayTable('stations_logicalId')"
+		[visibleIndex]="getDisplayTableColumnIndex('stations_logicalId')"
+		[width]="getDisplayTableColumnWidth('stations_logicalId')"
+	></dxi-column>
+	<dxi-column
+		dataType="string"
+		dataField="groupId"
+		[caption]="'names.group' | translate"
+		[visible]="canDisplayTable('stations_group')"
+		[visibleIndex]="getDisplayTableColumnIndex('stations_group')"
+		[width]="getDisplayTableColumnWidth('stations_group')"
+	></dxi-column>
+	<dxi-column
+		dataType="string"
+		dataField="point"
+		[caption]="'names.point' | translate"
+		[visible]="canDisplayTable('stations_point')"
+		[visibleIndex]="getDisplayTableColumnIndex('stations_point')"
+		[width]="getDisplayTableColumnWidth('stations_point')"
+	></dxi-column>
+	<dxi-column
+		dataType="string"
+		dataField="direction"
+		[caption]="'names.direction' | translate"
+		cellTemplate="directionTemplate"
+		[visible]="canDisplayTable('stations_direction')"
+		[visibleIndex]="getDisplayTableColumnIndex('stations_direction')"
+		[width]="getDisplayTableColumnWidth('stations_direction')"
+	></dxi-column>
+	<dxi-column
+		dataType="string"
+		dataField="nextPoint"
+		[caption]="'names.nextPoint' | translate"
+		[visible]="canDisplayTable('stations_nextPoint')"
+		[visibleIndex]="getDisplayTableColumnIndex('stations_nextPoint')"
+		[width]="getDisplayTableColumnWidth('stations_nextPoint')"
+	></dxi-column>
+	<dxi-column
+		dataType="string"
+		dataField="offset"
+		[caption]="'names.offset' | translate"
+		[visible]="canDisplayTable('stations_offset')"
+		[visibleIndex]="getDisplayTableColumnIndex('stations_offset')"
+		[width]="getDisplayTableColumnWidth('stations_offset')"
+	></dxi-column>
+	<dxi-column
+		dataType="boolean"
+		dataField="unuse"
+		[caption]="'names.unuse' | translate"
+		[visible]="canDisplayTable('stations_unuse')"
+		[visibleIndex]="getDisplayTableColumnIndex('stations_unuse')"
+		[width]="getDisplayTableColumnWidth('stations_unuse')"
+	></dxi-column>
+	<dxi-column
+		dataType="string"
+		dataField="carrierId"
+		[caption]="'names.carrierId' | translate"
+		[visible]="canDisplayTable('stations_carrierId')"
+		[visibleIndex]="getDisplayTableColumnIndex('stations_carrierId')"
+		[width]="getDisplayTableColumnWidth('stations_carrierId')"
+	></dxi-column>
+  <dxi-column
+    [allowFiltering]="true"
+    dataType="string"
+    dataField="user"
+    [allowSorting]="true"
+    [caption]="'names.user' | translate"
+    [visible]="canDisplayTable('stations_user')"
+    [visibleIndex]="getDisplayTableColumnIndex('stations_user')"
+    [width]="getDisplayTableColumnWidth('stations_user')"
+  ></dxi-column>
+  <dxi-column
+    [allowFiltering]="true"
+    dataType="string"
+    dataField="note"
+    [allowSorting]="true"
+    [caption]="'names.note' | translate"
+    [visible]="canDisplayTable('stations_note')"
+    [visibleIndex]="getDisplayTableColumnIndex('stations_note')"
+    [width]="getDisplayTableColumnWidth('stations_note')"
+  ></dxi-column>
 	<div *dxTemplate="let data of 'directionTemplate'">
 		<div [ngSwitch]="data.displayValue">
 			<div class="value" *ngSwitchCase="'L'">{{ 'Left' }}</div>

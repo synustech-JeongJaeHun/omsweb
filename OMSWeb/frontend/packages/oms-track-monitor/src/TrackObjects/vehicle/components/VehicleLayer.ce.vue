@@ -2,6 +2,9 @@
 import Layer from 'MapObjects/map/components/Layer.ce.vue';
 import Vehicle from './Vehicle.ce.vue';
 import { vehicles } from '../vehicles'
+import { ref } from 'vue';
+
+const teleportRef = ref<SVGGElement>()
 </script>
 
 <template>
@@ -21,6 +24,9 @@ import { vehicles } from '../vehicles'
         </filter>
       </defs>
     </defs>
-    <Vehicle v-for="vehicle of vehicles" :key="vehicle.id" :vehicle="vehicle" />
+
+    <Vehicle v-for="vehicle of vehicles" :key="vehicle.id" :vehicle="vehicle" :teleportRef="teleportRef" />
+
+    <g ref="teleportRef"></g>
   </Layer>
 </template>

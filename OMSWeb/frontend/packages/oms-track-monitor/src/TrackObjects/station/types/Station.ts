@@ -1,3 +1,4 @@
+import { CanBeCarrierFocused } from 'src/MapObjects/focus/types/CanBeCarrierFocused'
 import { CanBeFocused } from 'src/MapObjects/focus/types/CanBeFocused'
 
 type Station = {
@@ -17,6 +18,7 @@ type Station = {
 
   user?: string
   note?: string
-} & CanBeFocused
+} & CanBeFocused &
+  CanBeCarrierFocused
 
 export { Station }

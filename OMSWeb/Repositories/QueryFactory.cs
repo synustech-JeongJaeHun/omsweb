@@ -139,7 +139,6 @@ namespace OMSWeb.Repositories
       {"station", @"
         SELECT id AS id, physical_id AS physical_id, logical_id AS logical_id, point AS point_id,
           direction AS direction, carrier_type AS carrier_type, next_point, ""offset"" AS offset, unuse, carrier_id,
-          stations.slide_offset, 
           stations.user, stations.note
         FROM stations
         --*user_id_condition*--WHERE user_id =@userId
@@ -147,7 +146,6 @@ namespace OMSWeb.Repositories
       {"buffer", @"
         SELECT id, physical_id, logical_id AS logical_id, point AS point_id,
           direction AS direction, next_point, ""offset"" AS offset, unuse, carrier_id,
-          buffers.slide_offset, 
           buffers.user, buffers.note
         FROM buffers
         --*user_id_condition*--WHERE user_id =@userId
@@ -444,16 +442,14 @@ namespace OMSWeb.Repositories
       ) AS WRAPPED_TABLE
       "},
       {"stationStatus", @"
-        SELECT SS.id, SS.physical_id, SS.logical_id, SS.point, SS.direction, SS.next_point, SS.""offset"", SS.unuse, SS.carrier_id, 
-                SS.slide_offset, SS.user, SS.note, GO.group_id
+        SELECT SS.id, SS.physical_id, SS.logical_id, SS.point, SS.direction, SS.next_point, SS.""offset"", SS.unuse, SS.carrier_id, SS.user, SS.note, GO.group_id
         FROM stations AS SS
             LEFT JOIN grouped_objects AS GO
         ON SS.id = GO.reference_id AND GO.reference_table = 'station'
         --*user_id_condition*-- AND user_id = @userId
       "},
       {"bufferStatus", @"
-        SELECT BS.id, BS.physical_id, BS.logical_id, BS.point, BS.direction, BS.next_point, BS.""offset"", BS.unuse, BS.carrier_id, 
-        BS.slide_offset, BS.user, BS.note, GO.group_id
+        SELECT BS.id, BS.physical_id, BS.logical_id, BS.point, BS.direction, BS.next_point, BS.""offset"", BS.unuse, BS.carrier_id, BS.user, BS.note, GO.group_id
         FROM buffers AS BS
             LEFT JOIN grouped_objects AS GO
         ON BS.id = GO.reference_id AND GO.reference_table = 'buffer'

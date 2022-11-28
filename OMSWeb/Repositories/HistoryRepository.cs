@@ -191,7 +191,7 @@ namespace OMSWeb.Repositories
                     ";
 
             IQueryable<OrderHistoryEntity> result;
-            using (var conn = ConnectTrack(500))
+            using (var conn = ConnectTrack())
             {
                 result = conn.Query<OrderHistoryEntity>(sql, new { from, to, skip, take }).AsQueryable();
             }
@@ -549,12 +549,13 @@ namespace OMSWeb.Repositories
             }
             return result;
         }
-        public IQueryable<VehicleDio> QueryRecentDioBefore(int vehicleId, DateTimeOffset before)
+        public IQueryable<VehicleDioHistoryEntity> QueryRecentDioBefore(int vehicleId, DateTimeOffset before)
         {
             var sql = @"
               SELECT 
-                DIO.vehicle_id, 
-                DIO.di_1, DIO.di_2, DIO.di_3, DIO.do_1, DIO.do_2, DIO.do_3
+                DIO.id, DIO.vehicle_id, 
+                DIO.di_1, DIO.di_2, DIO.di_3, DIO.do_1, DIO.do_2, DIO.do_3, 
+                DIO.history_change_time, DIO.history_change_type, DIO.history_source_id
               FROM vehicle_dio_history AS DIO
               WHERE
                 DIO.vehicle_id = @vehicle_id 
@@ -564,10 +565,10 @@ namespace OMSWeb.Repositories
               LIMIT 1
               ";
 
-            IQueryable<VehicleDio> result;
+            IQueryable<VehicleDioHistoryEntity> result;
             using (var conn = ConnectTrack())
             {
-                result = conn.Query<VehicleDio>(sql, new
+                result = conn.Query<VehicleDioHistoryEntity>(sql, new
                 {
                     vehicle_id = vehicleId,
                     before = before

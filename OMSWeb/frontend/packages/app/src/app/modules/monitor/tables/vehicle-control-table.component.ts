@@ -135,7 +135,7 @@ export class VehicleControlTableComponent implements OnInit, OnDestroy {
 
 	ngOnInit(): void {
 		this.hubSvc.vehicleTableChanged$
-			.pipe(takeUntil(this.destroy$), auditTime(AuditTimeDuration))
+			.pipe(auditTime(AuditTimeDuration), takeUntil(this.destroy$))
 			.subscribe((e: IDataChangeEvent) => {
 				e && this.onTableChanged(e)
 			})
@@ -227,33 +227,38 @@ export class VehicleControlTableComponent implements OnInit, OnDestroy {
 	}
 	onChangeHostOrderEnable(enable: boolean) {
 		if (!this.canControl) return
-        if (enable === true) {
-          if (this.selectedItems.length > 0) {
-            this.messageSvc
-              .sendVehicleCommand(
-                { action: 'set_behavior', hostOrder: true },
-                this.selectedItems,
-              )
-              .subscribe()
-          }
-        } else {
-          this.dialogSvc
-            .verify({ body: this.$t.instant('messages.confirmCommand') })
-            .subscribe((res) => {
-              if (res) {
-                const { operator, reason } = res
-                if (this.selectedItems.length > 0) {
-                  this.messageSvc
-                    .sendVehicleCommand(
-                      { action: 'set_behavior', hostOrder: false, user: operator, note: reason },
-                      this.selectedItems,
-                    )
-                    .subscribe()
-                }
-              }
-            })
-        }
-    }
+		if (enable === true) {
+			if (this.selectedItems.length > 0) {
+				this.messageSvc
+					.sendVehicleCommand(
+						{ action: 'set_behavior', hostOrder: true },
+						this.selectedItems,
+					)
+					.subscribe()
+			}
+		} else {
+			this.dialogSvc
+				.verify({ body: this.$t.instant('messages.confirmCommand') })
+				.subscribe((res) => {
+					if (res) {
+						const { operator, reason } = res
+						if (this.selectedItems.length > 0) {
+							this.messageSvc
+								.sendVehicleCommand(
+									{
+										action: 'set_behavior',
+										hostOrder: false,
+										user: operator,
+										note: reason,
+									},
+									this.selectedItems,
+								)
+								.subscribe()
+						}
+					}
+				})
+		}
+	}
 	onChangePushActivity() {
 		if (!this.canControl) return
 		this.enableRows = []

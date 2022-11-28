@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
 import { Observable } from 'rxjs'
-import { ITransferHCACK } from '@oms/models/transfer.model'
+import { ITransferHCACK, Transfer } from '@oms/models/transfer.model'
 
 @Injectable({
 	providedIn: 'root',
@@ -23,4 +23,7 @@ export class TransfersService {
         return this.http.get<ITransferHCACK>(`${this.baseUrl}/carriercheck/${rcmd}&${carrierLoc}&${loctype}&${carrierId}&${newCarrierId}`)
     }
 
+    getTransferById(id: number) {
+        return this.http.get<Transfer>(`${this.baseUrl}/${id}`)
+    }
 }

@@ -23,6 +23,12 @@ import { UnusedListDialogComponent } from '../../shared/dialogs/unused-list-dial
 })
 export class StatusControlComponent implements OnInit, OnDestroy {
 	@Output() findAndFocus = new EventEmitter<{ type: string; id: number }>()
+	@Output() focus = new EventEmitter<{
+		type: string
+		id: number
+		focusType?: string
+	}>()
+	@Output() dropFocus = new EventEmitter<{ focusType?: string }>()
 
 	resizeHandler: any
 	tableHeightNum = 300

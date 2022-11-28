@@ -1,12 +1,14 @@
 import {
 	Component,
+	EventEmitter,
 	HostListener,
 	Input,
 	OnDestroy,
 	OnInit,
+	Output,
 	ViewChild,
 } from '@angular/core'
-import { forkJoin, Subject } from 'rxjs'
+import { forkJoin, merge, Subject, Subscription } from 'rxjs'
 import DataSource from 'devextreme/data/data_source'
 
 import { StatusService } from '../../../services/status.service'
@@ -26,6 +28,7 @@ import { TranslateService } from '@ngx-translate/core'
 import { DialogService } from '@oms/root/services/dialog.service'
 import { TransfersService } from '@oms/root/services/transfers.service'
 import { IOrderStatusRow } from '../../../models/order-status.model'
+import { TrackStatusService } from '@oms/root/services/track-status.service'
 
 @Component({
 	selector: 'oms-order-control-table',
@@ -33,6 +36,13 @@ import { IOrderStatusRow } from '../../../models/order-status.model'
 	styleUrls: ['./order-control-table.component.scss'],
 })
 export class OrderControlTableComponent implements OnInit, OnDestroy {
+	@Output() focus = new EventEmitter<{
+		type: string
+		id: number
+		focusType?: string
+	}>()
+	@Output() dropFocus = new EventEmitter<{ focusType?: string }>()
+
 	@Input() tableHeight: number
 	@ViewChild(DxDataGridComponent, { static: false })
 	dataGrid: DxDataGridComponent
@@ -100,6 +110,7 @@ export class OrderControlTableComponent implements OnInit, OnDestroy {
 		private dialogSvc: DialogService,
 		private transferSvc: TransfersService,
 		private t$: TranslateService,
+		private trackStatusService: TrackStatusService,
 	) {
 		this.dataSource = this.statusSvc.orderStatusDataSource()
 		this.preference = this.settingSvc.globalPreferences
@@ -144,13 +155,14 @@ export class OrderControlTableComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnDestroy(): void {
+		this.dropFocus.emit({ focusType: 'CARRIER' })
 		this.destroy$.next()
 		this.destroy$.complete()
 	}
 
 	ngOnInit(): void {
 		this.hubSvc.orderTableChanged$
-			.pipe(takeUntil(this.destroy$), auditTime(AuditTimeDuration))
+			.pipe(auditTime(AuditTimeDuration), takeUntil(this.destroy$))
 			.subscribe((e: IDataChangeEvent) => {
 				e && this.onTableChanged(e)
 			})
@@ -199,6 +211,251 @@ export class OrderControlTableComponent implements OnInit, OnDestroy {
 				})
 			}
 		})
+	}
+
+	isTrackingCarrier = false
+	trackingCarrierInfo = {
+		orderId: null,
+		carrierId: null,
+		type: null,
+		logicalId: null,
+	}
+	trackingCarrierOrderSubscription: Subscription | null = null
+	trackingCarrierVehicleAndBufferSubscription: Subscription | null = null
+	onChangeIsTrackingCarrier(event: { checked: boolean }) {
+		this.isTrackingCarrier = event.checked
+		if (this.isTrackingCarrier === false) this.clearTrackCarrier()
+	}
+	onClickTransferRow(event: {
+		data: { id: number; carrierLabel?: string; locationPickup?: string }
+	}) {
+		if (this.isTrackingCarrier === false) return
+
+		const carrierId = event.data.carrierLabel
+		const orderId = event.data.id
+
+		const isCarrierNullish = carrierId == null || carrierId.length === 0
+		const isOrderSame = this.trackingCarrierInfo.orderId === orderId
+
+		if (isOrderSame) {
+			this.clearTrackCarrier()
+		} else if (isCarrierNullish) {
+			this.trackingCarrierInfo.orderId = orderId
+			this.trackingCarrierInfo.carrierId = 'No Carrier'
+		} else {
+			this.clearTrackCarrier()
+			this.trackCarrier(orderId, carrierId, event.data?.locationPickup)
+		}
+	}
+	private trackCarrier(
+		orderId: number,
+		carrierId: string,
+		locationPickupLogicalId?: string,
+	) {
+		this.trackingCarrierInfo = {
+			orderId,
+			carrierId,
+			type: null,
+			logicalId: null,
+		}
+
+		this.trackingCarrierOrderSubscription = this.hubSvc.orderTableChanged$
+			.pipe(takeUntil(this.destroy$))
+			.subscribe((e) => {
+				const orderId = e.id
+				if (this.trackingCarrierInfo.orderId !== orderId) return
+
+				this.transferSvc
+					.getTransferById(this.trackingCarrierInfo.orderId)
+					.subscribe(
+						// on success
+						(data) => {
+							if (data?.timeCompleted) {
+								this.completeTrackCarrier(data?.locationDropoff)
+							} else if (data?.timeAborted || data?.timeFailed) {
+								this.stopTrackCarrier()
+							}
+						},
+						// on fail
+						() => this.stopTrackCarrier(),
+					)
+			})
+
+		const searchCarrierInVehiclesAndBuffers = () => {
+			const vehicle = (this.trackStatusService?.trackData?.vehicles ?? []).find(
+				(v) => v.carrierId === this.trackingCarrierInfo.carrierId,
+			)
+			if (vehicle) {
+				this.focus.emit({
+					type: 'vehicle',
+					id: vehicle.id,
+					focusType: 'CARRIER',
+				})
+				this.trackingCarrierInfo.type = 'Vehicle'
+				this.trackingCarrierInfo.logicalId = vehicle.logicalId
+				return
+			}
+
+			const buffer = (this.trackStatusService?.trackData?.buffers ?? []).find(
+				(b) => b.carrierId === this.trackingCarrierInfo.carrierId,
+			)
+			if (buffer) {
+				this.focus.emit({
+					type: 'buffer',
+					id: buffer.id,
+					focusType: 'CARRIER',
+				})
+				this.trackingCarrierInfo.type = 'Buffer'
+				this.trackingCarrierInfo.logicalId = buffer.logicalId
+				return
+			}
+		}
+		const searchCarrierAtFirst = (
+			carrierId: string,
+			locationPickupLogicalId?: string,
+		) => {
+			if (locationPickupLogicalId) {
+				// TODO : 시작할 때는 별도의 로직으로 포커스하기
+				const vehicle = (
+					this.trackStatusService.trackData?.vehicles ?? []
+				).find((v) => v.carrierId === carrierId)
+				if (vehicle) {
+					this.focus.emit({
+						type: 'vehicle',
+						id: vehicle.id,
+						focusType: 'CARRIER',
+					})
+					this.trackingCarrierInfo.type = 'Vehicle'
+					this.trackingCarrierInfo.logicalId = vehicle.logicalId
+					return
+				}
+
+				const buffer = (this.trackStatusService.trackData?.buffers ?? []).find(
+					(b) => b.logicalId === locationPickupLogicalId,
+				)
+				if (buffer) {
+					this.focus.emit({
+						type: 'buffer',
+						id: buffer.id,
+						focusType: 'CARRIER',
+					})
+					this.trackingCarrierInfo.type = 'Buffer'
+					this.trackingCarrierInfo.logicalId = buffer.logicalId
+					return
+				}
+
+				const station = (
+					this.trackStatusService.trackData?.stations ?? []
+				).find((s) => s.logicalId === locationPickupLogicalId)
+				if (station) {
+					this.focus.emit({
+						type: 'station',
+						id: station.id,
+						focusType: 'CARRIER',
+					})
+					this.trackingCarrierInfo.type = 'Station'
+					this.trackingCarrierInfo.logicalId = station.logicalId
+					return
+				}
+			} else {
+				searchCarrierInVehiclesAndBuffers()
+			}
+		}
+
+		this.trackingCarrierVehicleAndBufferSubscription = merge(
+			this.hubSvc.vehicleTableChanged$,
+			this.hubSvc.bufferChanged$,
+		)
+			.pipe(auditTime(AuditTimeDuration), takeUntil(this.destroy$))
+			.subscribe(searchCarrierInVehiclesAndBuffers)
+
+		searchCarrierAtFirst(carrierId, locationPickupLogicalId)
+	}
+	private stopTrackCarrier() {
+		this.trackingCarrierOrderSubscription?.unsubscribe()
+		this.trackingCarrierOrderSubscription = null
+		this.trackingCarrierVehicleAndBufferSubscription?.unsubscribe()
+		this.trackingCarrierVehicleAndBufferSubscription = null
+	}
+	private clearTrackCarrier() {
+		this.stopTrackCarrier()
+
+		this.trackingCarrierInfo = {
+			orderId: null,
+			carrierId: null,
+			type: null,
+			logicalId: null,
+		}
+
+		this.dropFocus.emit({ focusType: 'CARRIER' })
+	}
+	private completeTrackCarrier(locationDropoff?: string) {
+		this.stopTrackCarrier()
+
+		if (locationDropoff) {
+			// TODO : 끝날때 알아서 끝나는곳 포커스해주고 끝나기
+			const parseOrderLocation = (location: string) => {
+				const typeString = location[0].toLowerCase()
+				const idNumber = Number.parseInt(location.slice(1))
+
+				switch (typeString) {
+					case 'b':
+						return {
+							type: 'buffer',
+							trackingCarrierInfoType: 'Buffer',
+							id: idNumber,
+							logicalId: (
+								this.trackStatusService.trackData?.buffers ?? []
+							).find((b) => b.id === idNumber)?.logicalId,
+						}
+					case 's':
+						return {
+							type: 'station',
+							trackingCarrierInfoType: 'Station',
+							id: idNumber,
+							logicalId: (
+								this.trackStatusService.trackData?.stations ?? []
+							).find((s) => s.id === idNumber)?.logicalId,
+						}
+					case 'p':
+						return {
+							type: 'point',
+							trackingCarrierInfoType: 'Point',
+							id: idNumber,
+							logicalId: (this.trackStatusService.trackData?.points ?? []).find(
+								(p) => p.id === idNumber,
+							)?.logicalId,
+						}
+
+					default:
+						return null
+				}
+			}
+			const parsed = parseOrderLocation(locationDropoff)
+			if (parsed) {
+				this.focus.emit({
+					type: parsed.type,
+					id: parsed.id,
+					focusType: 'CARRIER',
+				})
+				this.trackingCarrierInfo.type = parsed.trackingCarrierInfoType
+				this.trackingCarrierInfo.logicalId = parsed.logicalId
+			}
+		} else {
+			const vehicle = (this.trackStatusService?.trackData?.vehicles ?? []).find(
+				(v) => v.carrierId === this.trackingCarrierInfo.carrierId,
+			)
+			if (vehicle) {
+				this.focus.emit({
+					type: 'vehicle',
+					id: vehicle.id,
+					focusType: 'CARRIER',
+				})
+				this.trackingCarrierInfo.type = 'Vehicle'
+				this.trackingCarrierInfo.logicalId = vehicle.logicalId
+				return
+			}
+		}
 	}
 
 	private onTableChanged(payload: IDataChangeEvent) {

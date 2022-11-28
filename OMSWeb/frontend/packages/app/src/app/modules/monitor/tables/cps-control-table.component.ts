@@ -172,7 +172,7 @@ export class CpsControlTableComponent implements OnInit, OnDestroy {
 
 	ngOnInit(): void {
 		this.hubSvc.clusterStatusTableChanged$
-			.pipe(takeUntil(this.destroy$), auditTime(AuditTimeDuration))
+			.pipe(auditTime(AuditTimeDuration), takeUntil(this.destroy$))
 			.subscribe((e: IDataChangeEvent) => {
 				e && this.onTableChanged(e)
 			})

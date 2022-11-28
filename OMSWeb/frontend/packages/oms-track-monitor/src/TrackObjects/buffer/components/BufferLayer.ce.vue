@@ -2,11 +2,12 @@
 import Layer from 'MapObjects/map/components/Layer.ce.vue'
 import Buffer from './Buffer.ce.vue'
 import { buffers, findBufferById } from '../buffers'
-import { inject } from 'vue'
+import { inject, ref } from 'vue'
 import { RootEmitInjectionKey, RootEmits } from 'src/Root/types/RootEmits'
 import { scaleStylesInfo } from '../../../styles/styles'
 
 const emit = inject<RootEmits>(RootEmitInjectionKey)!
+const teleportRef = ref<SVGGElement>()
 
 function getDeepCopiedBuffer(event: MouseEvent) {
   const bufferId = parseInt((event.target as SVGElement).dataset.id!)
@@ -73,10 +74,13 @@ function handleRightClick(event: MouseEvent) {
       :key="buffer.id"
       :buffer="buffer"
       :margin="scaleStylesInfo.bufferMargin"
+      :teleportRef="teleportRef"
       :handleMouseover="handleMouseover"
       :handleMouseleave="handleMouseleave"
       :handleLeftClick="handleLeftClick"
       :handleRightClick="handleRightClick"
     />
+    
+    <g ref="teleportRef"></g>
   </Layer>
 </template>

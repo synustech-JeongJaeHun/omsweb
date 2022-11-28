@@ -41,6 +41,7 @@ const props = defineProps<{
 
   // TM attr,
   isFocused?: boolean
+  isCarrierFocused?: boolean
   isHovered?: boolean
 }>()
 
@@ -66,7 +67,7 @@ const emit = defineEmits<{
     w 50 h 50 r 25
   -->
   <svg class="overflow-visible cursor-pointer vehicle-symbol" :data-mode="props.mode"
-    :data-complicated-mode="props.complicatedMode">
+    :data-complicated-mode="props.complicatedMode" :data-carrier-focused="props.isCarrierFocused">
     <g class="scale-and-reverse-rotate">
       <circle v-show="groupColor" class="group-shadow" r="25" :fill="groupColor" />
 
@@ -114,21 +115,15 @@ const emit = defineEmits<{
         isHotlot ? `url(#vehicle-order-hotlot-border)` : undefined
       ">
 
-         <!-- A: OrderId -->
-         <!-- 📐🛑 Be careful! logic is dependent on invert -->
-         <text
-          v-if="readonlyVehicleSecondaryContent === 'order' && props.orderId"
-          class="select-none"
-          text-rendering="optimizeSpeed"
-          transform="scale(1 -1) translate(-25 2)"
-          text-anchor="end"
-          alignment-baseline="hanging"
-          :filter="
+        <!-- A: OrderId -->
+        <!-- 📐🛑 Be careful! logic is dependent on invert -->
+        <text v-if="readonlyVehicleSecondaryContent === 'order' && props.orderId" class="select-none"
+          text-rendering="optimizeSpeed" transform="scale(1 -1) translate(-25 2)" text-anchor="end"
+          alignment-baseline="hanging" :filter="
             props.isHotlot
               ? `url(#vehicle-order-hotlot-background)`
               : undefined
-          "
-        >
+          ">
           <template v-if="props.isSuperHotlot">
             ★
           </template>
@@ -137,20 +132,13 @@ const emit = defineEmits<{
 
         <!-- B: CarrierId -->
         <!-- 📐🛑 Be careful! logic is dependent on invert -->
-        <text
-          v-if="readonlyVehicleSecondaryContent === 'carrier'  && props.carrierId"
-          class="select-none"
-          text-rendering="optimizeSpeed"
-          font-size="small"
-          transform="scale(1 -1) translate(-25 2)"
-          text-anchor="end"
-          alignment-baseline="hanging"
-          :filter="
+        <text v-if="readonlyVehicleSecondaryContent === 'carrier' && props.carrierId" class="select-none"
+          text-rendering="optimizeSpeed" font-size="small" transform="scale(1 -1) translate(-25 2)" text-anchor="end"
+          alignment-baseline="hanging" :filter="
             props.isHotlot
               ? `url(#vehicle-order-hotlot-background)`
               : undefined
-          "
-        >
+          ">
           <template v-if="props.isSuperHotlot">
             ★
           </template>
@@ -166,24 +154,14 @@ const emit = defineEmits<{
 
       <!-- top right (1) -->
       <!-- 1. Sensor Stop -->
-      <text 
-        v-if="props.isSensorStopped" 
-        class="select-none"
-        x="20"
-        y="12"
-        font-weight="bold"
-        style="transform: rotate(180deg) scaleX(-1); transform-origin: 20px 12px;" >
+      <text v-if="props.isSensorStopped" class="select-none" x="20" y="12" font-weight="bold"
+        style="transform: rotate(180deg) scaleX(-1); transform-origin: 20px 12px;">
         S
       </text>
 
       <!-- 2. Zcu Blocked -->
-      <text 
-        v-else-if="props.isZcuBlocked"
-        class="select-none"
-        x="20"
-        y="12"
-        font-weight="bold"
-        style="transform: rotate(180deg) scaleX(-1); transform-origin: 20px 12px;" >
+      <text v-else-if="props.isZcuBlocked" class="select-none" x="20" y="12" font-weight="bold"
+        style="transform: rotate(180deg) scaleX(-1); transform-origin: 20px 12px;">
         Z
       </text>
       <template v-else />

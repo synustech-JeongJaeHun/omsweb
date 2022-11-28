@@ -1,57 +1,52 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http'
+import { Injectable } from '@angular/core'
+import { Observable } from 'rxjs'
 
 import {
-  IRecentVehicleDio,
-  IVehicleDioCategory,
-  IVehicleDioHistory,
-  IVehicleStatus,
-} from '../models/vehicle-status.model';
+	IRecentVehicleDio,
+	IVehicleDioCategory,
+	IVehicleDioHistory,
+	IVehicleStatus,
+} from '../models/vehicle-status.model'
 
 @Injectable({
-  providedIn: 'root',
+	providedIn: 'root',
 })
 export class VehicleService {
-  private baseUrl = '/api/vehicle';
-  constructor(private http: HttpClient) {}
+	private baseUrl = '/api/vehicle'
+	constructor(private http: HttpClient) {}
 
-  getRecentVehicleDio(vehicleId: number): Observable<IRecentVehicleDio> {
-    return this.http.get<IRecentVehicleDio>(
-      `${this.baseUrl}/${vehicleId}/recent-dio`
-    );
-  }
-  getRecentVehicleDioBefore(
-    vehicleId: number,
-    before: Date
-  ): Observable<IRecentVehicleDio> {
-    return this.http.get<IRecentVehicleDio>(
-      `${this.baseUrl}/${vehicleId}/recent-dio-before/${before.toISOString()}`
-    );
-  }
-  getVehicleStatus(vehicleId: number): Observable<IVehicleStatus> {
-    return this.http.get<IVehicleStatus>(`${this.baseUrl}/${vehicleId}/status`);
-  }
+	getRecentVehicleDio(vehicleId: number): Observable<IRecentVehicleDio> {
+		return this.http.get<IRecentVehicleDio>(
+			`${this.baseUrl}/${vehicleId}/recent-dio`,
+		)
+	}
 
-  getVehicleDioHistories(
-    vehicleId: number,
-    from: Date,
-    to: Date
-  ): Observable<IVehicleDioHistory[]> {
-    return this.http.get<IVehicleDioHistory[]>(
-      `${this.baseUrl}/${vehicleId}/dio`,
-      {
-        params: {
-          from: from.toISOString(),
-          to: to.toISOString(),
-        },
-      }
-    );
-  }
+	getRecentVehicleDioBefore(vehicleId: number, before: Date) {
+		return this.http.get<IVehicleDioHistory>(
+			`${this.baseUrl}/${vehicleId}/recent-dio-before/${before.toISOString()}`,
+		)
+	}
 
-  getVehicleDioCategories() {
-    return this.http.get<IVehicleDioCategory[]>(
-      `${this.baseUrl}/dio-categories`
-    );
-  }
+	getVehicleStatus(vehicleId: number): Observable<IVehicleStatus> {
+		return this.http.get<IVehicleStatus>(`${this.baseUrl}/${vehicleId}/status`)
+	}
+
+	getVehicleDioHistories(vehicleId: number, from: Date, to: Date) {
+		return this.http.get<IVehicleDioHistory[]>(
+			`${this.baseUrl}/${vehicleId}/dio`,
+			{
+				params: {
+					from: from.toISOString(),
+					to: to.toISOString(),
+				},
+			},
+		)
+	}
+
+	getVehicleDioCategories() {
+		return this.http.get<IVehicleDioCategory[]>(
+			`${this.baseUrl}/dio-categories`,
+		)
+	}
 }

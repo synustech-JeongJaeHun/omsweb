@@ -1,3 +1,4 @@
+import { CanBeCarrierFocused } from 'src/MapObjects/focus/types/CanBeCarrierFocused'
 import { CanBeFocused } from 'src/MapObjects/focus/types/CanBeFocused'
 import { CanBeTracked } from 'src/MapObjects/track/types/CanBeTracked'
 import { IsHovered } from './IsHovered'
@@ -77,6 +78,7 @@ type Vehicle = {
   note?: string
 } & CanBeFocused &
   CanBeTracked &
-  IsHovered
+  IsHovered &
+  CanBeCarrierFocused
 
 export { Vehicle, UpdateType, ComplicatedMode }
