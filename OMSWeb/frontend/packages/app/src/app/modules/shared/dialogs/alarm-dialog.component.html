@@ -10,8 +10,8 @@
           <dxi-column [allowFiltering]="false" [width]="120" dataType="datetime" dataField="time"
             [caption]="'names.time' | translate" format="yyyy/MM/dd HH:mm:ss">
           </dxi-column>
-          <dxi-column [allowFiltering]="false" [width]="90" dataType="number" dataField="age"
-                      [caption]="'names.elapsed' | translate" cellTemplate="ageTemplate">
+          <dxi-column [allowFiltering]="false" [width]="90" dataType="string" dataField="age"
+                      [caption]="'names.elapsed' | translate">
             <div *dxTemplate="let d of 'ageTemplate'">
               {{ transform(d.value) }}
             </div>
