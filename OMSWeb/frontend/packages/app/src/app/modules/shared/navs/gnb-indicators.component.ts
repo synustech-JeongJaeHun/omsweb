@@ -44,6 +44,7 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
   private _alarmDlg: MatDialogRef<AlarmDialogComponent, any>;
   private _alertDlg: MatDialogRef<AlertDialogComponent, any>;
   private destroy$: Subject<void> = new Subject<void>();
+  private timerId: any;
 
   get warnValue(): string {
     return this.countFormat(this.warnCount);
@@ -65,22 +66,41 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
     private hubSvc: HubService,
     private dialog: MatDialog,
     private auth: AuthService
-  ) { }
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+  ) {
+    this.timerId = setInterval(() => this.getState(), 5000);
   }
 
   ngOnInit(): void {
     this.hubSvc.alarmChanged$
       .pipe(takeUntil(this.destroy$))
       .subscribe((e) => this.onAlarmChanged(e));
+
     this.hubSvc.alertChanged$
       .pipe(takeUntil(this.destroy$))
       .subscribe((e) => this.onAlertChanged(e));
 
     this.updateAlarmCount();
     this.updateAlertCount();
+  }
+
+  ngOnDestroy(): void {
+    clearInterval(this.timerId);
+
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  private getState() {
+    this.notifySvc.alarmCount().subscribe((alarm) => {
+      this.alarmCount = alarm.total;
+      this.isCriticalAlarm = alarm.critical > 0;
+    });
+
+    this.notifySvc.alertCount().subscribe((warn) => {
+      this.warnCount = warn.total;
+      this.isCriticalWarn = warn.critical > 0;
+      this.isPopupWarn = warn.level2 > 0;
+    });
   }
 
   private countFormat(count: number): string {
@@ -93,6 +113,7 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
     else
       this.showAlarmsView(true);
   }
+
   toggleWarnsView() {
     if (this._alertDlg && this._alertDlg.getState() === MatDialogState.OPEN)
       this.showAlertView(false);
