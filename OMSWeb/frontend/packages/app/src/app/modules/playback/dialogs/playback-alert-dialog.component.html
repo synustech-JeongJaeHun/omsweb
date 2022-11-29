@@ -26,13 +26,13 @@
 				<dxi-column
 					[allowFiltering]="false"
 					[width]="90"
-					dataType="number"
-					dataField="age"
-					[caption]="'names.elapsedMin' | translate"
+					dataType="string"
+					dataField="time"
+					[caption]="'names.elapsed' | translate"
 					cellTemplate="ageTemplate"
 				>
-					<div *dxTemplate="let d of 'ageTemplate'">
-						{{ transform(d.value) }}
+					<div *dxTemplate="let data of 'ageTemplate'">
+						{{ transform(data.value) }}
 					</div>
 				</dxi-column>
 				<dxi-column

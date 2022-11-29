@@ -3,6 +3,7 @@ import { IVehicleAlarm } from '@oms/root/models/notification.model'
 import { RemainedAlarm } from '@oms/root/models/playback.model'
 import { PlaybackPlayService } from '@oms/root/services/playback-play.service'
 import { ClockChangedEvent } from '../../../models/playback.model'
+import * as DateFns from 'date-fns'
 
 @Component({
 	selector: 'oms-playback-alert-dialog',
@@ -14,17 +15,22 @@ export class PlaybackAlertDialogComponent {
 	currentItem: IVehicleAlarm
 	selectedIds: number[] = []
 	dataSource: RemainedAlarm[] = []
-	constructor(playService: PlaybackPlayService) {
+	constructor(private playService: PlaybackPlayService) {
 		this.dataSource = playService.currentAlarms
 		playService.clockChanged.subscribe((event: ClockChangedEvent) => {
 			this.dataSource = playService.currentAlarms
 		})
 	}
-	transform(value: number): string {
-		if (value === undefined) return ''
-		const hour: number = Math.floor(value / 3600)
-		const minutes: number = Math.floor((value % 3600) / 60)
-		const seconds: number = Math.floor(value % 60)
+	transform(time: string): string {
+		if (time === undefined) return ''
+
+		const difference = DateFns.differenceInSeconds(
+			this.playService.clock,
+			new Date(time),
+		)
+		const hour: number = Math.floor(difference / 3600)
+		const minutes: number = Math.floor((difference % 3600) / 60)
+		const seconds: number = Math.floor(difference % 60)
 		return (
 			hour.toString().padStart(2, '0') +
 			':' +
