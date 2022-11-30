@@ -2,12 +2,7 @@ using System.Runtime.InteropServices;
 using System.Diagnostics;
 using Microsoft.Win32;
 using System;
-using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 
 namespace OMSWeb.Services
 {
@@ -16,6 +11,9 @@ namespace OMSWeb.Services
         private readonly string _processName;
         private readonly int? _processMHZ;
         private readonly PerformanceCounter _cpuCounter;
+        private readonly Timer timer;
+
+        private double usageOfCpu = 0;
 
         public ComputerPerformanceService()
         {
@@ -35,8 +33,20 @@ namespace OMSWeb.Services
             this._cpuCounter = cpuCounter;
             this._processName = processorName;
             this._processMHZ = processorMHZ;
+
+            timer = new Timer(timerCallback);
+            timer.Change(0, 2000);
 #else
 #endif
+        }
+
+        private void timerCallback(Object state)
+        {
+            if (_cpuCounter != null)
+            {
+                usageOfCpu = Math.Truncate(_cpuCounter.NextValue());
+                if (usageOfCpu > 100) usageOfCpu = 99;
+            }
         }
 
         public object getCurrentCpuNameAndUsage()
@@ -44,7 +54,7 @@ namespace OMSWeb.Services
 #if Windows
             return new 
             { 
-                usage = Math.Truncate(_cpuCounter.NextValue()), 
+                usage = usageOfCpu,
                 model = _processName, 
                 ghz = Math.Truncate((decimal) (_processMHZ / 100)) / 10  
             };
