@@ -11,7 +11,7 @@ namespace OMSWeb.Services
         private readonly string _processName;
         private readonly int? _processMHZ;
         private readonly PerformanceCounter _cpuCounter;
-        private readonly Timer timer;
+        private readonly Timer timer_cpu_usage;
 
         private double usageOfCpu = 0;
 
@@ -34,8 +34,8 @@ namespace OMSWeb.Services
             this._processName = processorName;
             this._processMHZ = processorMHZ;
 
-            timer = new Timer(timerCallback);
-            timer.Change(0, 2000);
+            timer_cpu_usage = new Timer(timerCallback);
+            timer_cpu_usage.Change(0, 2000);
 #else
 #endif
         }
