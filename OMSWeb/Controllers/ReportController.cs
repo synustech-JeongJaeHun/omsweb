@@ -109,6 +109,7 @@ namespace OMSWeb.Controllers
         {
             return await _reportSvc.QueryTrendUtilization();
         }
+
         [HttpGet("trend/delivery-time")]
         public async Task<object> GetTrendDeliveryTime()
         {
