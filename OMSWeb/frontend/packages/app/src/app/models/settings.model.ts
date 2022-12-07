@@ -429,6 +429,7 @@ const defaultHistoryTable = {
 	transfers_time_completed: true,
 	transfers_time_aborted: true,
 	transfers_time_failed: true,
+    transfers_result_code: true,
 	transfers_age: true,
 	transfers_unload_retry_cnt: true,
 
@@ -483,7 +484,12 @@ const defaultHistoryTable = {
 			name: 'transfers_time_failed',
 			i18nLabel: 'names.timeFailed',
 			width: 120,
-		},
+        },
+        {
+          name: 'transfers_result_code',
+          i18nLabel: 'names.resultCode',
+          width: 120,
+        },
 		{ name: 'transfers_age', i18nLabel: 'names.age', width: 120 },
 		{
 			name: 'transfers_unload_retry_cnt',

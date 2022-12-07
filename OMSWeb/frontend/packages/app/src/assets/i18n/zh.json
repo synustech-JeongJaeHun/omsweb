@@ -130,6 +130,7 @@
     "unloadHint": "工作站或缓冲区 ID",
     "loadRetryCount": "负载重试次数",
     "unloadRetryCount": "卸载重试次数",
+    "resultCode": "Result Code",
     "sideOverlapModule": "共同定位的对象",
     "coord-x": "坐标：X",
     "coord-y": "坐标：Y",
