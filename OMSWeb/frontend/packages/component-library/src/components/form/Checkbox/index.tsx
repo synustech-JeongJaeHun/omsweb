@@ -79,7 +79,7 @@ const Wrapper = styled.div<Pick<Props, 'disabled' | 'block'>>`
 			border-bottom: 2px solid ${color.inputLine};
 			border-left: 2px solid ${color.inputLine};
 			transform: rotate(-45deg) scale(0);
-			transition: transform ease 0.25s;
+			/* transition: transform ease 0.25s; */
 			position: absolute;
 			top: 10px;
 			left: 8px;

@@ -17,6 +17,7 @@ import {
 	DataGrid,
 	Column,
 	RequiredRule,
+  Sorting,
 	Scrolling,
 } from 'devextreme-react/data-grid'
 import { Button } from 'devextreme-react/button'
@@ -63,6 +64,26 @@ const Wrapper = styled.div`
 	} */
 `
 
+const getCompAction = (comp, length) => {
+  const list = R.times(R.identity, length)
+  const visibleList = list.map(idx => comp.columnOption(idx, 'visible'))
+
+  return {
+    setCompVisible() {
+      comp.beginUpdate()
+      list.forEach((idx) => {
+        comp.columnOption(idx, 'visible', true)
+      })
+    },
+    setCompInvisible() {
+      list.forEach((idx) => {
+        comp.columnOption(idx, 'visible', visibleList[idx])
+      })
+      comp.endUpdate()
+    }
+  }
+}
+
 // prettier-ignore
 const Table: React.FC<Props & any> = React.forwardRef(
 (
@@ -76,7 +97,8 @@ const Table: React.FC<Props & any> = React.forwardRef(
 	inRef: any
 ) => {
 		const ref = React.useRef(null)
-		const {
+
+    const {
 			header: tableHeader,
 			body: tableBody
 		} = data
@@ -84,6 +106,8 @@ const Table: React.FC<Props & any> = React.forwardRef(
 
 		const exportGrid = (e) => {
 			const workbook = new Workbook()
+      const { setCompVisible, setCompInvisible } = getCompAction(e.component, tableHeader.length)
+      setCompVisible()
 			const worksheet = workbook.addWorksheet('Sales')
 			exportDataGrid({
 				worksheet,
@@ -95,7 +119,9 @@ const Table: React.FC<Props & any> = React.forwardRef(
 						`${exportFilename}.xlsx`,
 					)
 				})
-			})
+			}).then(() => {
+        setCompInvisible()
+      })
 			e.cancel = true
 		}
 

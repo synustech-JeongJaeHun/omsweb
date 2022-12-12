@@ -35,6 +35,46 @@ const dic2 = {
 				dataField: 'failureamount',
 				width: 120,
 			},
+      {
+				dataField: 'id_mismatch',
+        visible: false
+			},
+      {
+				dataField: 'id_read_fail',
+        visible: false
+			},
+      {
+				dataField: 'id_duplicate',
+        visible: false
+			},
+      {
+				dataField: 'source_pio_timeout',
+        visible: false
+			},
+      {
+				dataField: 'dest_pio_timeout',
+        visible: false
+			},
+      {
+				dataField: 'source_empty',
+        visible: false
+			},
+      {
+				dataField: 'double_storage',
+        visible: false
+			},
+      {
+				dataField: 'abort',
+        visible: false
+			},
+      {
+				dataField: 'cancel',
+        visible: false
+			},
+      {
+				dataField: 'vehicle_error',
+        visible: false
+			},
 		],
 		body: [],
 	},
@@ -48,6 +88,47 @@ const dic2 = {
 				caption: 'abnormal TR count',
 				dataField: 'failureamount',
 				width: 120,
+        sortOrder: 'desc'
+			},
+      {
+				dataField: 'id_mismatch',
+        visible: false
+			},
+      {
+				dataField: 'id_read_fail',
+        visible: false
+			},
+      {
+				dataField: 'id_duplicate',
+        visible: false
+			},
+      {
+				dataField: 'source_pio_timeout',
+        visible: false
+			},
+      {
+				dataField: 'dest_pio_timeout',
+        visible: false
+			},
+      {
+				dataField: 'source_empty',
+        visible: false
+			},
+      {
+				dataField: 'double_storage',
+        visible: false
+			},
+      {
+				dataField: 'abort',
+        visible: false
+			},
+      {
+				dataField: 'cancel',
+        visible: false
+			},
+      {
+				dataField: 'vehicle_error',
+        visible: false
 			},
 		],
 		body: [],
@@ -62,6 +143,47 @@ const dic2 = {
 				caption: 'abnormal TR count',
 				dataField: 'failureamount',
 				width: 120,
+        sortOrder: 'desc'
+			},
+      {
+				dataField: 'id_mismatch',
+        visible: false
+			},
+      {
+				dataField: 'id_read_fail',
+        visible: false
+			},
+      {
+				dataField: 'id_duplicate',
+        visible: false
+			},
+      {
+				dataField: 'source_pio_timeout',
+        visible: false
+			},
+      {
+				dataField: 'dest_pio_timeout',
+        visible: false
+			},
+      {
+				dataField: 'source_empty',
+        visible: false
+			},
+      {
+				dataField: 'double_storage',
+        visible: false
+			},
+      {
+				dataField: 'abort',
+        visible: false
+			},
+      {
+				dataField: 'cancel',
+        visible: false
+			},
+      {
+				dataField: 'vehicle_error',
+        visible: false
 			},
 		],
 		body: [],
@@ -76,6 +198,47 @@ const dic2 = {
 				caption: 'abnormal TR count',
 				dataField: 'failureamount',
 				width: 120,
+        sortOrder: 'desc'
+			},
+      {
+				dataField: 'id_mismatch',
+        visible: false
+			},
+      {
+				dataField: 'id_read_fail',
+        visible: false
+			},
+      {
+				dataField: 'id_duplicate',
+        visible: false
+			},
+      {
+				dataField: 'source_pio_timeout',
+        visible: false
+			},
+      {
+				dataField: 'dest_pio_timeout',
+        visible: false
+			},
+      {
+				dataField: 'source_empty',
+        visible: false
+			},
+      {
+				dataField: 'double_storage',
+        visible: false
+			},
+      {
+				dataField: 'abort',
+        visible: false
+			},
+      {
+				dataField: 'cancel',
+        visible: false
+			},
+      {
+				dataField: 'vehicle_error',
+        visible: false
 			},
 		],
 		body: [],

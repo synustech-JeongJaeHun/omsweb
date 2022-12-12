@@ -11,7 +11,7 @@ import { css } from '@emotion/react'
 import { color } from '@daimre/styles'
 import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
-import { usePlaceholderData } from '@daimre/shared'
+import { usePlaceholderData, isNotFullEmpty } from '@daimre/shared'
 
 type StyleType = {}
 
@@ -30,10 +30,11 @@ const defaultColors = {
 	vehicle_error: '#fff',
 }
 
-const getList = (data, limit, colors) => {
+const getList = (data, limit, colors, onClickLegend) => {
 	let { header: theader, body: tbody } = data
 	tbody = limit !== null ? R.take(limit, tbody) : tbody
-	const keys = R.pluck<string, any>('dataField', theader)
+  const colorKeys = R.keys(defaultColors)
+  const keys = R.compose(R.pluck('dataField'), R.filter(R.propEq('visible', undefined)))(theader)
 	const otherKeys = R.compose(R.keys, R.omit(keys), R.head)(tbody)
 	const xKey = R.head(keys)
 
@@ -48,13 +49,26 @@ const getList = (data, limit, colors) => {
 			const data = values[y]
 
 			acc['series'].push({
+        id: y,
 				name: y,
 				animation: false,
-				data: data.map((v, idx) => ({
-					y: v,
-					color: colors[y],
-				})),
+				data: data.map((v, idx) => {
+          return {
+            y: v === 0 ? undefined : v,
+            color: colors[y],
+          }
+				}),
 				color: colors[y],
+        legendIndex: R.indexOf(y, colorKeys),
+        events: {
+          legendItemClick: function() {
+            onClickLegend && onClickLegend({
+              name: this.name,
+              visible: !this.visible,
+            }, y)
+            // return this.visible ? 'visible' : 'hidden';
+          }
+        }
 			})
 
 			return acc
@@ -74,8 +88,9 @@ const getOptions = ({
 	limit = null,
 	showLegend,
 	colors,
+  onClickLegend
 }) => {
-	const { categories, series, tbody, xKey } = getList(data, limit, colors)
+	const { categories, series, tbody, xKey } = getList(data, limit, colors, onClickLegend)
 
 	return {
 		chart: {
@@ -159,6 +174,7 @@ const StackedBar: React.FC<Props> = ({
 	labelRotation,
 	isPlaceholder,
 	colors,
+  onClickLegend,
 }: Props) => {
 	const ref = React.useRef<any>()
 	const [placeholderOpt, updatePlaceholderState] = usePlaceholderData({
@@ -175,6 +191,21 @@ const StackedBar: React.FC<Props> = ({
 		}
 	}, [])
 
+  React.useEffect(() => {
+    if (data.body.length > 0) {
+      // @ts-ignore
+      updatePlaceholderState(false)
+    }
+  }, [data])
+
+  const handleClickLegend = (values, id) => {
+    onClickLegend && onClickLegend(values)
+
+    if (ref.current) {
+      ref.current.chart.redraw()
+		}
+  }
+
 	const currentOpt = isPlaceholder
 		? placeholderOpt
 		: getOptions({
@@ -184,11 +215,15 @@ const StackedBar: React.FC<Props> = ({
 				showLegend,
 				rotation: labelRotation,
 				colors,
+        onClickLegend: handleClickLegend
 		  })
 
 	return (
 		<Wrapper>
-			<HighchartsReact ref={ref} highcharts={Highcharts} options={currentOpt} />
+			<HighchartsReact
+        ref={ref}
+        highcharts={Highcharts}
+        options={currentOpt} />
 		</Wrapper>
 	)
 }
@@ -204,6 +239,7 @@ StackedBar.defaultProps = {
 	},
 	isPlaceholder: false,
 	colors: defaultColors,
+  onClickLegend: () => {}
 }
 
 export interface Props {
@@ -217,6 +253,7 @@ export interface Props {
 	}
 	isPlaceholder?: boolean
 	colors?: any
+  onClickLegend?: (data: any) => void
 }
 
 export default StackedBar

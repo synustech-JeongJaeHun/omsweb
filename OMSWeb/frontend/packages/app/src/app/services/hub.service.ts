@@ -4,6 +4,7 @@ import * as signalR from '@microsoft/signalr'
 import { IDataChangeEvent } from '../models/notification.model'
 
 const showLogger = false
+const showInfo = false
 
 @Injectable({
 	providedIn: 'root',
@@ -128,118 +129,118 @@ export class HubService {
 
 	private attachEvents() {
 		this.hub.on('pointChanged', (meta, body) => {
-			console.info('## hub message : pointChanged >>', { meta, body })
+			showInfo && console.info('## hub message : pointChanged >>', { meta, body })
 			this.pointChanged$.emit({ ...meta, data: body })
 		})
 		this.hub.on('segmentChanged', (meta, body) => {
-			console.info('## hub message : segmentChanged >>', { meta, body })
+			showInfo && console.info('## hub message : segmentChanged >>', { meta, body })
 			this.segmentChanged$.emit({ ...meta, data: body })
 		})
 		this.hub.on('segmentDisabledChanged', (meta, body) => {
-			console.info('## hub message : segmentDisabledChanged >>', {
+			showInfo && console.info('## hub message : segmentDisabledChanged >>', {
 				meta,
 				body,
 			})
 			this.segmentDisabledChanged$.emit({ ...meta, data: body })
 		})
 		this.hub.on('stationChanged', (meta, body) => {
-			console.info('## hub message : stationChanged >>', { meta, body })
+			showInfo && console.info('## hub message : stationChanged >>', { meta, body })
 			this.stationChanged$.emit({ ...meta, data: body })
 		})
 		this.hub.on('bufferChanged', (meta, body) => {
-			console.info('## hub message : bufferChanged >>', { meta, body })
+			showInfo && console.info('## hub message : bufferChanged >>', { meta, body })
 			this.bufferChanged$.emit({ ...meta, data: body })
 		})
 		this.hub.on('mtlChanged', (meta, body) => {
-			console.info('## hub message : mtlChanged >>', { meta, body })
+			showInfo && console.info('## hub message : mtlChanged >>', { meta, body })
 			this.mtlChanged$.emit({ ...meta, data: body })
 		})
 		this.hub.on('vehicleChanged', (meta, body) => {
-			console.info('## hub message : vehicleChanged >>', meta.id, {
+			showInfo && console.info('## hub message : vehicleChanged >>', meta.id, {
 				meta,
 				body,
 			})
 			this.vehicleChanged$.emit({ ...meta, data: body })
 		})
 		this.hub.on('vehicleTableChanged', (meta, body) => {
-			console.info('## hub message : vehicleTableChanged >>', { meta, body })
+			showInfo && console.info('## hub message : vehicleTableChanged >>', { meta, body })
 			this.vehicleTableChanged$.emit({ ...meta, data: body })
 		})
 		this.hub.on('vehicleDioChanged', (meta, body) => {
 			this.vehicleDioChanged$.emit({ ...meta, data: body })
 		})
 		this.hub.on('orderTableChanged', (meta, body) => {
-			console.info('## hub message : orderTableChanged >>', { meta, body })
+			showInfo && console.info('## hub message : orderTableChanged >>', { meta, body })
 			this.orderTableChanged$.emit({ ...meta, data: body })
 		})
 		this.hub.on('vehiclePath', (meta, body) => {
-			console.info('## hub message : vehiclePath >>', { meta, body })
+			showInfo && console.info('## hub message : vehiclePath >>', { meta, body })
 			this.vehiclePathChanged$.emit({ ...meta, data: body })
 		})
 		this.hub.on('clusterChanged', (meta, body) => {
-			//console.info('## hub message : clusterChanged >>', { meta, body })
+			// showInfo && console.info('## hub message : clusterChanged >>', { meta, body })
 			this.clusterChanged$.emit({ ...meta, data: body })
 		})
 		this.hub.on('groupChanged', (meta, body) => {
-			console.info('## hub message : groupChanged >>', { meta, body })
+			showInfo && console.info('## hub message : groupChanged >>', { meta, body })
 			this.groupChanged$.emit({ ...meta, data: body })
 		})
 		this.hub.on('alarm', (meta, body) => {
-			console.info('## hub message : alarm >>', { meta, body })
+			showInfo && console.info('## hub message : alarm >>', { meta, body })
 			this.alarmChanged$.emit({ ...meta, data: body })
 		})
 		this.hub.on('alert', (meta, body) => {
-			console.info('## hub message : alert >>', { meta, body })
+			showInfo && console.info('## hub message : alert >>', { meta, body })
 			this.alertChanged$.emit({ ...meta, data: body })
 		})
 		this.hub.on('serverStatus', (meta, body) => {
-			console.info('## hub message : serverStatus >>', { meta, body })
+			showInfo && console.info('## hub message : serverStatus >>', { meta, body })
 			this.serverStatusChanged$.emit({ ...meta, data: body })
 		})
 		this.hub.on('modeState', (meta, body) => {
-			console.info('## hub message : modeState >>', { meta, body })
+			showInfo && console.info('## hub message : modeState >>', { meta, body })
 			this.modeStateChanged$.emit({ ...meta, data: body })
 		})
 		this.hub.on('settingMode', (meta, body) => {
-			console.info('## hub message : settingMode >>', { meta, body })
+			showInfo && console.info('## hub message : settingMode >>', { meta, body })
 			this.settingModeChanged$.emit({ ...meta, data: body })
 		})
 		this.hub.on('zcuMapChanged', (meta, body) => {
-			//console.info('## hub message : zcuMapChanged >>', { meta, body })
+			// showInfo && console.info('## hub message : zcuMapChanged >>', { meta, body })
 			this.zcuMapChanged$.emit({ ...meta, data: body })
 		})
 		this.hub.on('zcuStatusTableChanged', (meta, body) => {
-			//console.info('## hub message : zcuStatusTableChanged >>', { meta, body })
+			// showInfo && console.info('## hub message : zcuStatusTableChanged >>', { meta, body })
 			this.zcuStatusTableChanged$.emit({ ...meta, data: body })
 		})
 		this.hub.on('fireShutterMapChanged', (meta, body) => {
-			console.info('## hub message : fireShutterMapChanged >>', { meta, body })
+			showInfo && console.info('## hub message : fireShutterMapChanged >>', { meta, body })
 			this.fireShutterMapChanged$.emit({ ...meta, data: body })
 		})
 		this.hub.on('fireShutterStatusTableChanged', (meta, body) => {
-			console.info('## hub message : fireShutterStatusTableChanged >>', {
+			showInfo && console.info('## hub message : fireShutterStatusTableChanged >>', {
 				meta,
 				body,
 			})
 			this.fireShutterStatusTableChanged$.emit({ ...meta, data: body })
 		})
-        this.hub.on('clusterStatusChanged', (meta, body) => {
-            //console.info('## hub message : clusterStatusChanged >>', { meta, body })
-			this.clusterStatusChanged$.emit({ ...meta, data: body })
-        })
+    this.hub.on('clusterStatusChanged', (meta, body) => {
+      //console.info('## hub message : clusterStatusChanged >>', { meta, body })
+      this.clusterStatusChanged$.emit({ ...meta, data: body })
+    })
 		this.hub.on('clusterStatusTableChanged', (meta, body) => {
-			console.info('## hub message : clusterStatusTableChanged >>', {
+			showInfo && console.info('## hub message : clusterStatusTableChanged >>', {
 				meta,
 				body,
 			})
 			this.clusterStatusTableChanged$.emit({ ...meta, data: body })
 		})
 		this.hub.on('kpiChanged', (meta, body) => {
-			console.info('## hub message : kpiChanged >>', { meta, body })
+			showInfo && console.info('## hub message : kpiChanged >>', { meta, body })
 			this.kpiChanged$.emit({ ...meta, data: body })
 		})
 		this.hub.on('homeChanged', (meta, body) => {
-			console.info('## hub message : homeChanged >>', { meta, body })
+			showInfo && console.info('## hub message : homeChanged >>', { meta, body })
 			this.homeChanged$.emit({ ...meta, data: body })
 		})
 	}

@@ -119,6 +119,11 @@ export const Wrapper = styled.div`
 		flex: 0 0 50px;
 
 		button {
+      margin-right: 5px;
+
+      &:last-of-type {
+        margin-right: 0;
+      }
 		}
 	}
 `

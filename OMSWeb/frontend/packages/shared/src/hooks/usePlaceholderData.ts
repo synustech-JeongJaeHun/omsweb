@@ -59,7 +59,18 @@ const genPlaceholder = ({ data, height, isH }) => {
 	}
 }
 
-export const usePlaceholderData = ({ currentState = true, height, isH }) => {
+interface usePlaceholderDataProps {
+  currentState?: boolean
+  height: number & string
+  isH?: boolean
+}
+
+
+export const usePlaceholderData = ({
+  currentState = true,
+  height,
+  isH
+}: usePlaceholderDataProps) => {
 	const arr = [
 		[9, 12, 5, 7, 10, 11, 7, 9, 12, 5],
 		[5, 3, 12, 4, 2, 4, 3, 2, 4, 1]
@@ -70,7 +81,7 @@ export const usePlaceholderData = ({ currentState = true, height, isH }) => {
 
 	const cntRef = useRef(0)
 	const [opt, updateOpt] = useState(defaultOpt)
-	const [state, updateState] = useState(currentState)
+	const [state, updateState] = useState<boolean>(currentState)
 
 	useInterval(() => {
 		cntRef.current += 1
@@ -79,5 +90,5 @@ export const usePlaceholderData = ({ currentState = true, height, isH }) => {
 		updateOpt(_opt)
 	}, 800, state)
 
-	return [opt, updateState]
+	return [opt, updateState] as const
 }

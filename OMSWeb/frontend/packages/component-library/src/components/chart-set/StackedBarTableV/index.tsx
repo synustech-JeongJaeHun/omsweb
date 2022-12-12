@@ -13,6 +13,8 @@ import StackedBar from '../../charts/StackedBar'
 import Table from '../../Table'
 import { useEffectOnce, isFullEmpty } from '@daimre/shared'
 import { QueryContext } from '../../../context'
+import { getSortedValues } from '../../../utils'
+import { useImmer } from 'use-immer'
 
 type StyleType = {}
 
@@ -47,17 +49,33 @@ const StackedBarTableV: React.FC<Props> = ({
 	subtext,
 	exportFilename,
 	data,
+  tableData,
 	isPlaceholder,
 	colors,
+  onClickLegend,
 }: Props) => {
 	const qc = React.useContext(QueryContext)
 	const _isPlaceholder = qc.isPlaceholder || isPlaceholder
-	const [sortedData, updateSortedData] = React.useState(data)
+  const [state, updateState] = useImmer({
+    sortedData: data,
+    sortingOpt: null
+  })
 	const tableRef: any = React.useRef(null)
 
 	useEffectOnce(() => {
-		updateSortedData(data)
-	}, [data])
+    const { sortingOpt } = state
+    if (sortingOpt === null) {
+      updateState(draft => {
+        draft.sortedData = data
+      })
+    } else {
+      const sortedValues = getSortedValues(sortingOpt, data)
+      updateState(draft => {
+        draft.sortedData = sortedValues
+      })
+    }
+
+	}, [data, state.sortingOpt])
 
 	const handleExport = (e) => {
 		if (tableRef.current) {
@@ -66,17 +84,11 @@ const StackedBarTableV: React.FC<Props> = ({
 	}
 
 	const handleSorted = (sortedOpt) => {
-		const { header, body: tbody } = data
-		const { name, value } = sortedOpt
-		const sortingOpt =
-			value === 'asc'
-				? R.ascend<any>(R.prop(name))
-				: R.descend<any>(R.prop(name))
-		const ret = R.sortWith([sortingOpt], tbody)
-		updateSortedData({
-			header,
-			body: ret,
-		})
+    const sortedValues = getSortedValues(sortedOpt, data)
+    updateState(draft => {
+      draft.sortedData = sortedValues
+      draft.sortingOpt = sortedOpt
+    })
 	}
 
 	const renderButtons = () => {
@@ -93,6 +105,10 @@ const StackedBarTableV: React.FC<Props> = ({
 		)
 	}
 
+  const handleClickLegend= (legendData) => {
+    onClickLegend && onClickLegend(legendData)
+  }
+
 	return (
 		<Wrapper>
 			{title && (
@@ -105,15 +121,16 @@ const StackedBarTableV: React.FC<Props> = ({
 				</div>
 			)}
 			<StackedBar
-				data={sortedData}
+				data={state.sortedData}
 				showLegend
 				labelRotation={0}
 				isPlaceholder={_isPlaceholder}
 				colors={colors}
+        onClickLegend={handleClickLegend}
 			/>
 			<div className="table-wrapper">
 				<Table
-					data={data}
+					data={tableData}
 					ref={tableRef}
 					exportFilename={exportFilename}
 					hasPaging
@@ -132,7 +149,12 @@ StackedBarTableV.defaultProps = {
 		header: [],
 		body: [],
 	},
+  tableData: {
+		header: [],
+		body: [],
+	},
 	isPlaceholder: false,
+  onClickLegend: () => {},
 }
 
 interface Props {
@@ -143,8 +165,13 @@ interface Props {
 		header: any[]
 		body: any[]
 	}
+  tableData?: {
+		header: any[]
+		body: any[]
+	}
 	isPlaceholder?: boolean
 	colors?: any
+  onClickLegend?: (legendData: any) => void
 }
 
 export default StackedBarTableV
