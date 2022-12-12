@@ -192,30 +192,38 @@ namespace OMSWeb.Repositories
                             )
                             select 
                                 '{label}' as label,
-                                count(*)::int as failureamount,
+                                (source_pio_timeout + dest_pio_timeout + source_empty + double_storage + abort + cancel) as failureamount,
                                 0 as id_mismatch,
                                 0 as id_read_fail,
                                 0 as id_duplicate,
-                                (
-                                    select count(*) from cte where time_failed is not null and err_result_code = 'SourceInterlockError'
-                                )::int as source_pio_timeout,
-                                (
-                                    select count(*) from cte where time_failed is not null and err_result_code = 'DestInterlockError'
-                                )::int as dest_pio_timeout,
-                                (
-                                    select count(*) from cte where time_failed is not null and err_result_code = 'SourceEmptyError'
-                                )::int as source_empty,
-                                (
-                                    select count(*) from cte where time_failed is not null and err_result_code = 'DoubleStorage'
-                                )::int as double_storage,
-                                (
-                                    select count(*) from cte where time_aborted is not null and abort_type = 'A'
-                                )::int as abort,
-                                (
-                                    select count(*) from cte where time_aborted is not null and abort_type = 'C'
-                                )::int as cancel,
+                                source_pio_timeout,
+                                dest_pio_timeout,
+                                source_empty,
+                                double_storage,
+                                abort,
+                                cancel,
                                 0 as vehicle_error
-                            from cte
+                            from (
+                                select 
+                                    (
+                                        select count(*) from cte where time_failed is not null and err_result_code = 'SourceInterlockError'
+                                    )::int as source_pio_timeout,
+                                    (
+                                        select count(*) from cte where time_failed is not null and err_result_code = 'DestInterlockError'
+                                    )::int as dest_pio_timeout,
+                                    (
+                                        select count(*) from cte where time_failed is not null and err_result_code = 'SourceEmptyError'
+                                    )::int as source_empty,
+                                    (
+                                        select count(*) from cte where time_failed is not null and err_result_code = 'DoubleStorage'
+                                    )::int as double_storage,
+                                    (
+                                        select count(*) from cte where time_aborted is not null and abort_type = 'A'
+                                    )::int as abort,
+                                    (
+                                        select count(*) from cte where time_aborted is not null and abort_type = 'C'
+                                    )::int as cancel
+                            ) as temp
                         ";
                    }
 
@@ -264,40 +272,50 @@ namespace OMSWeb.Repositories
                         from (                        
                             SELECT
                                 label,
-                                (
-                                    select count(*) from cte where {GetColumnFromDic(key)} = t.name
-                                )::int as failureamount,
+                                (source_pio_timeout + dest_pio_timeout + source_empty + double_storage + abort + cancel) as failureamount,
                                 0 as id_mismatch,
                                 0 as id_read_fail,
                                 0 as id_duplicate,
-                                (
-                                    select count(*) from cte where time_failed is not null and err_result_code = 'SourceInterlockError' and {GetColumnFromDic(key)} = t.name
-                                )::int as source_pio_timeout,
-                                (
-                                    select count(*) from cte where time_failed is not null and err_result_code = 'DestInterlockError' and {GetColumnFromDic(key)} = t.name
-                                )::int as dest_pio_timeout,
-                                (
-                                    select count(*) from cte where time_failed is not null and err_result_code = 'SourceEmptyError' and {GetColumnFromDic(key)} = t.name
-                                )::int as source_empty,
-                                (
-                                    select count(*) from cte where time_failed is not null and err_result_code = 'DoubleStorage' and {GetColumnFromDic(key)} = t.name
-                                )::int as double_storage,
-                                (
-                                    select count(*) from cte where time_aborted is not null and abort_type = 'A' and {GetColumnFromDic(key)} = t.name
-                                )::int as abort,
-                                (
-                                    select count(*) from cte where time_aborted is not null and abort_type = 'C' and {GetColumnFromDic(key)} = t.name
-                                )::int as cancel,
+                                source_pio_timeout,
+                                dest_pio_timeout,
+                                source_empty,
+                                double_storage,
+                                abort,
+                                cancel,
                                 0 as vehicle_error
                             FROM (
-                                select {GetColumnFromDic(key)} AS name, {GetName(key)} as label
-                                from cte
-                                group by {GetColumnFromDic(key)}
-                            ) t
+                                SELECT
+                                    label,
+                                    (
+                                        select count(*) from cte where time_failed is not null and err_result_code = 'SourceInterlockError' and {GetColumnFromDic(key)} = t.name
+                                    )::int as source_pio_timeout,
+                                    (
+                                        select count(*) from cte where time_failed is not null and err_result_code = 'DestInterlockError' and {GetColumnFromDic(key)} = t.name
+                                    )::int as dest_pio_timeout,
+                                    (
+                                        select count(*) from cte where time_failed is not null and err_result_code = 'SourceEmptyError' and {GetColumnFromDic(key)} = t.name
+                                    )::int as source_empty,
+                                    (
+                                        select count(*) from cte where time_failed is not null and err_result_code = 'DoubleStorage' and {GetColumnFromDic(key)} = t.name
+                                    )::int as double_storage,
+                                    (
+                                        select count(*) from cte where time_aborted is not null and abort_type = 'A' and {GetColumnFromDic(key)} = t.name
+                                    )::int as abort,
+                                    (
+                                        select count(*) from cte where time_aborted is not null and abort_type = 'C' and {GetColumnFromDic(key)} = t.name
+                                    )::int as cancel
+                                FROM (
+                                    select 
+                                        {GetColumnFromDic(key)} AS name, 
+                                        {GetName(key)} as label
+                                    from cte
+                                    group by {GetColumnFromDic(key)}
+                                ) t
+                            ) temp
                         ) temp
                         where failureamount != 0
+                        order by failureamount desc
                     ";
-
                     result = (await conn.QueryAsync(sql)).ToArray();
                 }
                 return result;

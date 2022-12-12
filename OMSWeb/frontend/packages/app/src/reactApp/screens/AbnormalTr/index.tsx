@@ -149,11 +149,11 @@ const Abnormaltr = () => {
 	)
 
 	const filteredChartData = React.useCallback(() => {
-		const _chartData = state['initialChartData']
-		const initialLegends = R.defaultTo([])(state['initialLegends'])
+    const { initialLegends, initialChartData } = state
 		const blacklist = R.compose(
 			R.pluck('id'),
 			R.filter(R.propEq('isChecked', false)),
+      R.defaultTo([])
 		)(initialLegends)
 		const ret = R.map(
 			R.map((item) => {
@@ -162,7 +162,7 @@ const Abnormaltr = () => {
 				const _item = { ...item, failureamount }
 				return R.omit(blacklist, _item)
 			}),
-			_chartData,
+			initialChartData,
 		)
 
 		return ret

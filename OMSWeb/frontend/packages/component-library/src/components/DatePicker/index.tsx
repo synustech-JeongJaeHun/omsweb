@@ -5,7 +5,7 @@ import React, { FC, useState, useEffect } from 'react'
 import moment from 'moment'
 import 'react-dates/initialize'
 import { DateRangePicker } from 'react-dates'
-import { beforeDay, afterDay } from '@daimre/shared'
+import { beforeDay, afterDay, isNotFullEmpty } from '@daimre/shared'
 
 const defaultStart = beforeDay(1).format('YYYY-MM-DD')
 const defaultEnd = moment().format('YYYY-MM-DD')
@@ -27,9 +27,11 @@ const DatePicker: FC<Props> = ({
 	}, [startDay])
 
 	const onDateChange = ({ startDate: start, endDate: end }) => {
-		setStartDate(start)
-		setEndDate(end)
-		onDateChangeCB && onDateChangeCB({ start, end })
+    if (isNotFullEmpty(start) && isNotFullEmpty(end)) {
+      setStartDate(start)
+      setEndDate(end)
+      onDateChangeCB && onDateChangeCB({ start, end })
+    }
 	}
 
 	const onFocusChange = (input) => {

@@ -3,14 +3,14 @@ import faker from 'faker'
 import * as R from 'ramda'
 import moment from 'moment'
 import 'moment/locale/ko'
-import { 
-  convertDatestrToDate, 
-  convertForecastTs, 
-  parseDuration 
+import {
+  convertDatestrToDate,
+  convertForecastTs,
+  parseDuration
 } from '../utils/duration'
 
 const asc = (a, b) => a - b
-const desc = (a, b) => b - a 
+const desc = (a, b) => b - a
 
 export const getTimestampDuration = (from: number, to: number, totalLength: number) => {
   const diff = to - from
@@ -121,7 +121,7 @@ export const genBaseline: genBaselineType = (props) => {
   const { totalLength, ranges, unit, uunit, forecast, randNum } = { ...defaultOpt, ...props }
   const midpoint = totalLength - forecast
   const gentleRandomArr = gentleRandom(totalLength, ranges, randNum)
-  
+
   return [...Array(totalLength)].map((_, i) => {
     const cnt = i + 1
     let timestamp
@@ -161,28 +161,28 @@ export const genAreaLineData: genDataType = (props) => {
   const baseline = genBaseline({ totalLength, ranges, unit, forecast, randNum, uunit })
   const range = baseline.map(genRangeItem(baseGap, gap))
 
-  return { 
+  return {
     workload: R.compose(
-      R.map(genWorkloadItem(gap)), 
+      R.map(genWorkloadItem(gap)),
       R.slice(0, midpoint)
-    )(baseline), 
-    forecast: baseline.slice(midpoint), 
-    anomaly: range.slice(0, midpoint), 
-    baseline 
+    )(baseline),
+    forecast: baseline.slice(midpoint),
+    anomaly: range.slice(0, midpoint),
+    baseline
   }
 }
 
 export const genTimeseries = (props = {}) => {
-  const defaultProps = { 
+  const defaultProps = {
     timespan: '1h', // 1h, 2h, 4h, 1d
     interval: '20s', // 20s, 40s, 1m, 5m, 20m
     range: [0, 100],
   }
 
-  const { 
-    timespan, 
-    interval, 
-    range  
+  const {
+    timespan,
+    interval,
+    range
   } = {...defaultProps, ...props}
 
   const { beforeList: tsArr } = getForecastTsArr(timespan, interval)
@@ -198,28 +198,28 @@ export const genTimeseries = (props = {}) => {
   const rangeArr = baseline.map(genRangeItem(baseGap, gap))
 
   return {
-    workload: R.map(genWorkloadItem(gap), baseline), 
-    anomaly: rangeArr, 
-    baseline 
+    workload: R.map(genWorkloadItem(gap), baseline),
+    anomaly: rangeArr,
+    baseline
   }
 }
 
 export const genForecastTimeseries = (props = {}) => {
-  const defaultProps = { 
+  const defaultProps = {
     timespan: '1w', // 1h, 2h, 4h, 1d
     interval: '40m', // 20s, 40s, 1m, 5m, 20m
     range: [0, 100],
   }
 
-  const { 
-    timespan, 
-    interval, 
-    range  
+  const {
+    timespan,
+    interval,
+    range
   } = {...defaultProps, ...props}
 
-  const {  
-    mergedList: tsArr, 
-    current 
+  const {
+    mergedList: tsArr,
+    current
   } = getForecastTsArr(timespan, interval)
 
   const totalLength = tsArr.length
@@ -234,11 +234,11 @@ export const genForecastTimeseries = (props = {}) => {
 
   return {
     workload: R.compose(
-      R.map(genWorkloadItem(gap)), 
+      R.map(genWorkloadItem(gap)),
       R.slice(0, currentIdx)
-    )(baseline), 
-    forecast: baseline.slice(currentIdx), 
-    baseline 
+    )(baseline),
+    forecast: baseline.slice(currentIdx),
+    baseline
   }
 }
 
@@ -296,8 +296,7 @@ export const genUpdatableAreaLineData = (props) => {
     workload = [...getTimeSnap(workload), workloadItem]
     anomaly = [...getTimeSnap(anomaly), rangeItem]
 
-    console.log('workload', workload)
-    console.log('anomaly', anomaly)
+
   }, 5000)
 
 }

@@ -181,6 +181,13 @@ const Barline: React.FC<Props> = ({
 		}
 	}, [])
 
+  React.useEffect(() => {
+    if (data.body.length > 0) {
+      // @ts-ignore
+      updatePlaceholderState(false)
+    }
+  }, [data])
+
 	const currentOpt = isPlaceholder ? placeholderOpt : getOptions({
 		height,
 		rotation: labelRotation,

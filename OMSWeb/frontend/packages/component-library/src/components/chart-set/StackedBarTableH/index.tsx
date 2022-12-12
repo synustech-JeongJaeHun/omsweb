@@ -15,6 +15,8 @@ import Container from '../../layout/Container'
 import Col from '../../layout/Col'
 import { useEffectOnce, isFullEmpty } from '@daimre/shared'
 import { QueryContext } from '../../../context'
+import { getSortedValues } from '../../../utils'
+import { useImmer } from 'use-immer'
 
 type StyleType = {}
 
@@ -54,12 +56,29 @@ const StackedBarTableH: React.FC<Props> = ({
 }: Props) => {
 	const qc = React.useContext(QueryContext)
 	const _isPlaceholder = qc.isPlaceholder || isPlaceholder
-	const [sortedData, updateSortedData] = React.useState(data)
+  const [state, updateState] = useImmer({
+    sortedData: data,
+    sortingOpt: {
+      name: 'failureamount',
+      value: 'desc'
+    }
+  })
 	const tableRef: any = React.useRef(null)
 
 	useEffectOnce(() => {
-		updateSortedData(data)
-	}, [data])
+    const { sortingOpt } = state
+    if (sortingOpt === null) {
+      updateState(draft => {
+        draft.sortedData = data
+      })
+    } else {
+      const sortedValues = getSortedValues(sortingOpt, data)
+      updateState(draft => {
+        draft.sortedData = sortedValues
+      })
+    }
+
+	}, [data, state.sortingOpt])
 
 	const handleExport = (e) => {
 		if (tableRef.current) {
@@ -68,17 +87,11 @@ const StackedBarTableH: React.FC<Props> = ({
 	}
 
 	const handleSorted = (sortedOpt) => {
-		const { header, body: tbody } = data
-		const { name, value } = sortedOpt
-		const sortingOpt =
-			value === 'asc'
-				? R.ascend<any>(R.prop(name))
-				: R.descend<any>(R.prop(name))
-		const ret = R.sortWith([sortingOpt], tbody)
-		updateSortedData({
-			header,
-			body: ret,
-		})
+    const sortedValues = getSortedValues(sortedOpt, data)
+    updateState(draft => {
+      draft.sortedData = sortedValues
+      draft.sortingOpt = sortedOpt
+    })
 	}
 
 	const renderButtons = () => {
@@ -94,6 +107,11 @@ const StackedBarTableH: React.FC<Props> = ({
 			</div>
 		)
 	}
+
+  // const handleClickLegend= (legendData) => {
+  //   console.log('legendData', legendData)
+  // }
+
 
 	return (
 		<Wrapper>
@@ -111,9 +129,10 @@ const StackedBarTableH: React.FC<Props> = ({
 					<StackedBar
 						height={266}
 						limit={limit}
-						data={sortedData}
+						data={state.sortedData}
 						isPlaceholder={_isPlaceholder}
 						colors={colors}
+            // onClickLegend={handleClickLegend}
 					/>
 				</Col>
 				<Col col={6}>

@@ -15,6 +15,8 @@ import Container from '../../layout/Container'
 import Col from '../../layout/Col'
 import { useEffectOnce, isFullEmpty } from '@daimre/shared'
 import { QueryContext } from '../../../context'
+import { getSortedValues } from '../../../utils'
+import { useImmer } from 'use-immer'
 
 type StyleType = {}
 
@@ -36,6 +38,17 @@ const Wrapper = styled.div`
 				padding-left: 4px;
 			}
 		}
+
+    .buttons {
+      button {
+        margin-right: 5px;
+
+
+        &:last-of-type {
+          margin-right: 0;
+        }
+      }
+    }
 	}
 
 	& > .table-wrapper {
@@ -56,12 +69,26 @@ const BarlineTableH: React.FC<Props> = ({
 }: Props) => {
 	const qc = React.useContext(QueryContext)
 	const _isPlaceholder = qc.isPlaceholder || isPlaceholder
-	const [sortedData, updateSortedData] = React.useState(data)
+  const [state, updateState] = useImmer({
+    sortedData: data,
+    sortingOpt: null
+  })
 	const tableRef: any = React.useRef(null)
 
 	useEffectOnce(() => {
-		updateSortedData(data)
-	}, [data])
+    const { sortingOpt } = state
+    if (sortingOpt === null) {
+      updateState(draft => {
+        draft.sortedData = data
+      })
+    } else {
+      const sortedValues = getSortedValues(sortingOpt, data)
+      updateState(draft => {
+        draft.sortedData = sortedValues
+      })
+    }
+
+	}, [data, state.sortingOpt])
 
 	const handleExport = (e) => {
 		if (tableRef.current) {
@@ -70,17 +97,11 @@ const BarlineTableH: React.FC<Props> = ({
 	}
 
 	const handleSorted = (sortedOpt) => {
-		const { header, body: tbody } = data
-		const { name, value } = sortedOpt
-		const sortingOpt =
-			value === 'asc'
-				? R.ascend<any>(R.prop(name))
-				: R.descend<any>(R.prop(name))
-		const ret = R.sortWith([sortingOpt], tbody)
-		updateSortedData({
-			header,
-			body: R.clone(ret),
-		})
+    const sortedValues = getSortedValues(sortedOpt, data)
+    updateState(draft => {
+      draft.sortedData = sortedValues
+      draft.sortingOpt = sortedOpt
+    })
 	}
 
 	const handleZoom = (e) => {
@@ -119,7 +140,7 @@ const BarlineTableH: React.FC<Props> = ({
 						height={266}
 						isH
 						limit={limit}
-						data={sortedData}
+						data={state.sortedData}
 						onClick={onClick}
 						variant={variant}
 						isPlaceholder={_isPlaceholder}
