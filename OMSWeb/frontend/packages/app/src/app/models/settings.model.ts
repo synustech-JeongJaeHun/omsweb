@@ -487,10 +487,10 @@ const defaultHistoryTable = {
         },
         {
           name: 'transfers_result_code',
-          i18nLabel: 'names.resultCode',
+          i18nLabel: 'names.reason',
           width: 120,
         },
-		{ name: 'transfers_age', i18nLabel: 'names.age', width: 120 },
+        { name: 'transfers_age', i18nLabel: 'names.elapsed', width: 120 },
 		{
 			name: 'transfers_unload_retry_cnt',
 			i18nLabel: 'names.unloadRetryCount',
@@ -554,7 +554,7 @@ const defaultHistoryTable = {
 			i18nLabel: 'names.timeResolved',
 			width: 120,
 		},
-		{ name: 'alarms_age', i18nLabel: 'names.ageSecond', width: 120 },
+        { name: 'alarms_age', i18nLabel: 'names.elapsed', width: 120 },
 		{ name: 'alarms_current', i18nLabel: 'names.current', width: 120 },
 	],
 
