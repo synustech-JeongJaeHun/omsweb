@@ -6,6 +6,8 @@ import { NotificationsService } from '../../../services/notifications.service';
 import { MessagesService } from '../../../services/messages.service';
 import { AuthService } from '../../../services/auth.service';
 import { IAnnotation } from '../../../models/annotation.model';
+import { AccountUtil } from '../utils/account.util';
+import { PermissionEnums } from '../../../models/enums';
 
 @Component({
   selector: 'oms-alarm-dialog',
@@ -65,6 +67,10 @@ export class AlarmDialogComponent {
       .subscribe((res) => {
         this.dataSource = this.notifySvc.alarmsDataSource();
       });
+  }
+
+  get hasControlAccess() {
+    return this.auth.isAuthenticated;
   }
 
   onReset() {

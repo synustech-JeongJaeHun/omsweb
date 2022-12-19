@@ -8,6 +8,8 @@ import { AuthService } from '../../../services/auth.service';
 import { HubService } from '../../../services/hub.service';
 import { MessagesService } from '../../../services/messages.service';
 import { NotificationsService } from '../../../services/notifications.service';
+import { AccountUtil } from '../utils/account.util';
+import { PermissionEnums } from '../../../models/enums';
 
 @Component({
   selector: 'oms-alert-dialog',
@@ -62,6 +64,10 @@ export class AlertDialogComponent implements OnDestroy {
       console.log('remove filter');
       this.dataGrid.instance.clearFilter();
     }
+  }
+
+  get hasControlAccess() {
+    return this.auth.isAuthenticated;
   }
 
   onClear() {

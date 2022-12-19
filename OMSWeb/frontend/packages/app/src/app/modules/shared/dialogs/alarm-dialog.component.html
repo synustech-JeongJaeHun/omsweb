@@ -35,7 +35,7 @@
       <fieldset id="solutionContainer" *ngIf="currentItem">
         <legend>Vehicle #{{currentItem.vehicleId}} ({{currentItem.time | date: 'yyyy-MM-dd HH:mm:ss'}})</legend>
 
-        <div class="grid-form">
+        <div class="grid-form" [ngSwitch]="hasControlAccess">
           <mat-form-field class="dense" appearance="outline">
             <mat-label>{{'names.solution' | translate}}</mat-label>
             <textarea matInput readonly>{{currentItem.action}}</textarea>
@@ -45,11 +45,11 @@
             <textarea matInput [placeholder]="'messages.alarmNoteHint'|translate" id="alaram_note"
               [(ngModel)]="alaram_note"></textarea>
           </mat-form-field>
-          <button mat-raised-button color="primary" (click)="onModifySolution()">{{'names.modifySolution'|
+          <button mat-raised-button color="primary" (click)="onModifySolution()" *ngSwitchCase="true">{{'names.modifySolution'|
             translate}}</button>
           <div class="primary-actions">
-            <button mat-raised-button color="primary" (click)="onReset()">{{'names.resetVehicle'| translate}}</button>
-            <button mat-raised-button (click)="onClear()">{{'names.clear'| translate}}</button>
+            <button mat-raised-button color="primary" (click)="onReset()" *ngSwitchCase="true">{{'names.resetVehicle'| translate}}</button>
+            <button mat-raised-button (click)="onClear()" *ngSwitchCase="true">{{'names.clear'| translate}}</button>
           </div>
         </div>
       </fieldset>

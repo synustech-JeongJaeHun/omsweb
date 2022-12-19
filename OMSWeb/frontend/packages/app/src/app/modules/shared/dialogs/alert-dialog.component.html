@@ -46,11 +46,11 @@
           -->
       </dx-data-grid>
     </div>
-    <div mat-dialog-actions class="actions">
-      <button mat-raised-button [disabled]="!canClear" (click)="onClear()">
+    <div mat-dialog-actions class="actions" [ngSwitch]="hasControlAccess">
+      <button mat-raised-button [disabled]="!canClear" (click)="onClear()" *ngSwitchCase="true">
         {{ "names.clear" | translate }}
       </button>
-      <button mat-raised-button [disabled]="!canClearAll" (click)="onClearAll()">
+      <button mat-raised-button [disabled]="!canClearAll" (click)="onClearAll()" *ngSwitchCase="true">
         {{ "names.clearAll" | translate }}
       </button>
     </div>

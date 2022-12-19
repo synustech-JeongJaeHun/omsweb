@@ -170,7 +170,7 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
 
 
   showAlarmsView(enable: boolean) {
-    if (!AccountUtil.hasPermission(PermissionEnums.ViewAlarm, this.auth.currentUser)) return;
+    //if (!AccountUtil.hasPermission(PermissionEnums.ViewAlarm, this.auth.currentUser)) return;
     if (enable == false) {
       if (this._alarmDlg && this._alarmDlg.getState() === MatDialogState.OPEN)
         this._alarmDlg.close();
@@ -197,7 +197,7 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
   }
 
   showAlertView(enable: boolean) {
-    if (!AccountUtil.hasPermission(PermissionEnums.ViewWarning, this.auth.currentUser)) return;
+    //if (!AccountUtil.hasPermission(PermissionEnums.ViewWarning, this.auth.currentUser)) return;
     if (enable == false) {
       if (this._alertDlg && this._alertDlg.getState() === MatDialogState.OPEN)
         this._alertDlg.close();
