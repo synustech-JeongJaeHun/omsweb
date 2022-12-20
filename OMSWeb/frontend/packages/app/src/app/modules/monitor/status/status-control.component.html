@@ -80,7 +80,6 @@
 			*ngIf="canDisplayTable('orders')"
 		>
 			<oms-order-control-table
-				*ngIf="currentTab === 0"
 				[tableHeight]="tableHeight"
 				(focus)="focus.emit($event)"
 				(dropFocus)="dropFocus.emit($event)"
@@ -92,7 +91,6 @@
 			*ngIf="canDisplayTable('vehicles')"
 		>
 			<oms-vehicle-control-table
-				*ngIf="currentTab === 1"
 				[tableHeight]="tableHeight"
 			>
 			</oms-vehicle-control-table>
@@ -103,7 +101,6 @@
 			*ngIf="canControl && canDisplayTable('stations')"
 		>
 			<oms-station-control-table
-				*ngIf="currentTab === 2"
 				[tableHeight]="tableHeight"
 			>
 			</oms-station-control-table>
@@ -113,7 +110,7 @@
 			*ngIf="bufferEnabled && canControl && canDisplayTable('buffers')"
 		>
 			<oms-buffer-control-table
-				*ngIf="bufferEnabled ? currentTab === 3 : currentTab === 2"
+				*ngIf="bufferEnabled"
 				[tableHeight]="tableHeight"
 			>
 			</oms-buffer-control-table>
@@ -125,7 +122,6 @@
 			*ngIf="canControl && canDisplayTable('zcus')"
 		>
 			<oms-zcu-control-table
-				*ngIf="bufferEnabled ? currentTab === 4 : currentTab === 3"
 				[tableHeight]="tableHeight"
 			>
 			</oms-zcu-control-table>
@@ -137,7 +133,6 @@
 			*ngIf="canControl && canDisplayTable('cps')"
 		>
 			<oms-cps-control-table
-				*ngIf="bufferEnabled ? currentTab === 5 : currentTab === 4"
 				[tableHeight]="tableHeight"
 			>
 			</oms-cps-control-table>
