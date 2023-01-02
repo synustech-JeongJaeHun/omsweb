@@ -129,10 +129,14 @@
 		[caption]="'names.carrierId' | translate"
 		[visible]="canDisplayTable('buffers_carrierId')"
     [visibleIndex]="getDisplayTableColumnIndex('buffers_carrierId')"
-    [width]="getDisplayTableColumnWidth('buffers_carrierId')"
-	></dxi-column>
-  <dxi-column
-    [allowFiltering]="true"
+							[width]="getDisplayTableColumnWidth('buffers_carrierId')"></dxi-column>
+	<dxi-column dataType="string"
+							dataField="slideOffset"
+							[caption]="'names.slideOffset' | translate"
+							[visible]="canDisplayTable('buffers_slideOffset')"
+							[visibleIndex]="getDisplayTableColumnIndex('buffers_slideOffset')"
+							[width]="getDisplayTableColumnWidth('buffers_slideOffset')"></dxi-column>
+	<dxi-column [allowFiltering]="true"
     dataType="string"
     dataField="user"
     [allowSorting]="true"

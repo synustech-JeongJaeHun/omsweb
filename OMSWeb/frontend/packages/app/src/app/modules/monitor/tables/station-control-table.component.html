@@ -129,10 +129,14 @@
 		[caption]="'names.carrierId' | translate"
 		[visible]="canDisplayTable('stations_carrierId')"
 		[visibleIndex]="getDisplayTableColumnIndex('stations_carrierId')"
-		[width]="getDisplayTableColumnWidth('stations_carrierId')"
-	></dxi-column>
-  <dxi-column
-    [allowFiltering]="true"
+							[width]="getDisplayTableColumnWidth('stations_carrierId')"></dxi-column>
+	<dxi-column dataType="string"
+							dataField="slideOffset"
+							[caption]="'names.slideOffset' | translate"
+							[visible]="canDisplayTable('stations_slideOffset')"
+							[visibleIndex]="getDisplayTableColumnIndex('stations_slideOffset')"
+							[width]="getDisplayTableColumnWidth('stations_slideOffset')"></dxi-column>
+	<dxi-column [allowFiltering]="true"
     dataType="string"
     dataField="user"
     [allowSorting]="true"
