@@ -334,6 +334,7 @@ namespace OMSWeb.Services
                 if (string.Compare(s, "timeCompleted", StringComparison.CurrentCultureIgnoreCase) == 0) return "time_completed";
                 if (string.Compare(s, "timeAborted", StringComparison.CurrentCultureIgnoreCase) == 0) return "time_aborted";
                 if (string.Compare(s, "timeFailed", StringComparison.CurrentCultureIgnoreCase) == 0) return "time_failed";
+                if (string.Compare(s, "resultCode", StringComparison.CurrentCultureIgnoreCase) == 0) return "err_result_code";
                 if (string.Compare(s, "age", StringComparison.CurrentCultureIgnoreCase) == 0) return "age";
                 if (string.Compare(s, "unloadRetryCnt", StringComparison.CurrentCultureIgnoreCase) == 0) return "unload_retry_cnt";
             }
