@@ -178,7 +178,7 @@ const defaultControlTable = {
 			i18nLabel: 'names.distanceDropoff',
 			width: 80,
 		},
-		{ name: 'orders_distanceMove', i18nLabel: 'names.distanceMove', width: 80 },
+		{ name: 'orders_distanceMove', i18nLabel: 'names.distanceMove', width: 'auto' },
 	],
 
 	// vehicle table
@@ -275,7 +275,7 @@ const defaultControlTable = {
 		{ name: 'vehicles_mapDb', i18nLabel: 'names.mapDb', width: 90 },
 		{ name: 'vehicles_mapVersion', i18nLabel: 'names.mapVersion', width: 90 },
 		{ name: 'vehicles_user', i18nLabel: 'names.user', width: 80 },
-		{ name: 'vehicles_note', i18nLabel: 'names.note', width: 150 },
+		{ name: 'vehicles_note', i18nLabel: 'names.note', width: 'auto' },
 	],
 
 	// stations table
@@ -308,7 +308,7 @@ const defaultControlTable = {
 		{ name: 'stations_carrierId', i18nLabel: 'names.carrierId', width: 100 },
         { name: 'stations_slideOffset', i18nLabel: 'names.slideOffset', width: 100 },
 		{ name: 'stations_user', i18nLabel: 'names.user', width: 80 },
-		{ name: 'stations_note', i18nLabel: 'names.note', width: 150 },
+		{ name: 'stations_note', i18nLabel: 'names.note', width: 'auto' },
 	],
 
 	// buffers table
@@ -341,7 +341,7 @@ const defaultControlTable = {
 		{ name: 'buffers_carrierId', i18nLabel: 'names.carrierId', width: 100 },
         { name: 'buffers_slideOffset', i18nLabel: 'names.slideOffset', width: 100 },
 		{ name: 'buffers_user', i18nLabel: 'names.user', width: 80 },
-		{ name: 'buffers_note', i18nLabel: 'names.note', width: 150 },
+		{ name: 'buffers_note', i18nLabel: 'names.note', width: 'auto' },
 	],
 
 	// zcus table
@@ -358,7 +358,7 @@ const defaultControlTable = {
 		{ name: 'zcus_using_type', i18nLabel: 'names.usingType', width: 100 },
 		{ name: 'zcus_type', i18nLabel: 'names.zcuType', width: 100 },
 		{ name: 'zcus_status', i18nLabel: 'names.status', width: 100 },
-		{ name: 'zcus_errorCode', i18nLabel: 'names.errorCode', width: 100 },
+		{ name: 'zcus_errorCode', i18nLabel: 'names.errorCode', width: 'auto' },
 	],
 
 	// cps table
@@ -409,7 +409,7 @@ const defaultControlTable = {
 		},
 		{ name: 'cps_sync', i18nLabel: 'names.cps_sync', width: 60 },
 		{ name: 'cps_backup_id', i18nLabel: 'names.cps_backup_id', width: 60 },
-		{ name: 'cps_error_code', i18nLabel: 'names.cps_error_code', width: 60 },
+		{ name: 'cps_error_code', i18nLabel: 'names.cps_error_code', width: 'auto' },
 	],
 }
 
