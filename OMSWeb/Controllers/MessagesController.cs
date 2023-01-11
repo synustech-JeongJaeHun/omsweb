@@ -14,16 +14,25 @@ namespace OMSWeb.Controllers
     public class MessagesController : ControllerBase
     {
         private readonly MessageService _msgSvc;
+        private readonly UserService _userSvc;
 
-        public MessagesController(MessageService messageService)
+        private const String USER_ID = "userId";
+
+        public MessagesController(MessageService messageService, UserService userService)
         {
             this._msgSvc = messageService;
+            this._userSvc = userService;
         }
 
         [HttpPost("command")]
         public async Task SendCommand(CommandMessageDto command)
         {
-            await this._msgSvc.SendMessage(command);
+            String loginId = "unknown";
+            if (Request.Headers.TryGetValue("Authorization", out var jwt))
+            {
+                loginId = _userSvc.DecodeJwt(jwt, USER_ID);
+            }
+            await this._msgSvc.SendMessage(command, loginId);
             return;
         }
 

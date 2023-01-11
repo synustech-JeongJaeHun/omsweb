@@ -22,10 +22,13 @@ namespace OMSWeb.Controllers
     public class SettingsController : ControllerBase
     {
         private readonly SettingsService _settingsSvc;
+        private readonly UserService _userSvc;
 
-        public SettingsController(SettingsService settingsSvc)
+        private const String USER_ID = "userId";
+        public SettingsController(SettingsService settingsSvc, UserService userService)
         {
             this._settingsSvc = settingsSvc;
+            this._userSvc = userService;
         }
 
         [HttpGet("appsettings")]
@@ -61,8 +64,14 @@ namespace OMSWeb.Controllers
             AppConfig.UpdateToOMSConfig("Dispatcher", "use_delayed_order_warning_notify", bwarningNotify.ToString());
             AppConfig.UpdateToOMSConfig("Dispatcher", "use_delayed_order_table_notify", btableNotify.ToString());
 
+            String loginId = "unknown";
+            if (Request.Headers.TryGetValue("Authorization", out var jwt))
+            {
+                loginId = _userSvc.DecodeJwt(jwt, USER_ID);
+            }
+
             Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: ACTION_SETTING_DELAYED_ORDER_TIMEOUT");
-            Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, "PACKET: delayed_order_timeout={0}, warning_notify={1}, table_notify={2}", ntimeout, bwarningNotify, btableNotify);
+            Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, "PACKET: delayed_order_timeout={0}, warning_notify={1}, table_notify={2}, login_id={3}", ntimeout, bwarningNotify, btableNotify, loginId);
 
             return Ok(new QueryResult()
             {
@@ -115,8 +124,14 @@ namespace OMSWeb.Controllers
             AppConfig.UpdateToOMSConfig("VehicleProcessor", "use_go_home", bHomeMode.ToString());
             AppConfig.UpdateToOMSConfig("VehicleProcessor", "use_ivr", bIvrMode.ToString());
 
+            String loginId = "unknown";
+            if (Request.Headers.TryGetValue("Authorization", out var jwt))
+            {
+                loginId = _userSvc.DecodeJwt(jwt, USER_ID);
+            }
+
             Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: ACTION_SETTING_HOME_IVR_NONE");
-            Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, "PACKET: use_go_home={0}, use_ivr={1}", home_mode, ivr_mode);
+            Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, "PACKET: use_go_home={0}, use_ivr={1}, login_id={2}", home_mode, ivr_mode, loginId);
 
             return Ok(new QueryResult()
             {
@@ -197,8 +212,14 @@ namespace OMSWeb.Controllers
             {
             }
 
+            String loginId = "unknown";
+            if (Request.Headers.TryGetValue("Authorization", out var jwt))
+            {
+                loginId = _userSvc.DecodeJwt(jwt, USER_ID);
+            }
+
             Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: ACTION_SETTING_ALTERNATE_TRANSFER");
-            Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, "PACKET: mode={0}, retryTostb={1}, retryToNearStocker={2}, stations={3}", mode, retryTostb, retryToNearStocker, stations);
+            Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, "PACKET: mode={0}, retryTostb={1}, retryToNearStocker={2}, stations={3}, login_id={4}", mode, retryTostb, retryToNearStocker, stations, loginId);
 
             return Ok(new QueryResult()
                 {

@@ -3,19 +3,26 @@ import { Injectable } from '@angular/core'
 import DataSource from 'devextreme/data/data_source'
 import * as AspNetData from 'devextreme-aspnet-data-nojquery'
 import { Console } from 'console'
+import { AuthService } from './auth.service'
 
 @Injectable({
 	providedIn: 'root',
 })
 export class HistoriesService {
 	private baseUrl = '/api/histories'
-	constructor(private http: HttpClient) {}
+	constructor(private http: HttpClient, private auth: AuthService) {}
 
     ordersDataSource(source: any, startTime: Date, endTime: Date): DataSource {
+      const token =this.auth.token;
  		return new DataSource({
 			store: AspNetData.createStore({
 				key: 'id',
 				loadUrl: `${this.baseUrl}/orders`,
+        onBeforeSend: function(operation, ajaxSettings){
+            ajaxSettings.headers = {  
+                "Authorization": 'Bearer ' + token
+            } 
+        },
 			}),
 			filter: [
 				['timeCreated', '>=', startTime],

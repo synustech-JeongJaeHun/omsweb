@@ -12,6 +12,7 @@ namespace OMSWeb.Services
                                           IMqttApplicationMessageReceivedHandler
     {
         public Task SendMessage(string topic, string payload);
+        public Task SendMessage(string topic, string payload, string loginId);
 
     }
 }

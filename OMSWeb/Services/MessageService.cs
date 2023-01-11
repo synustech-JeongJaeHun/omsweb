@@ -17,7 +17,7 @@ namespace OMSWeb.Services
             _mqttClientService = provider.MqttClientService;
         }
 
-        public Task SendMessage(CommandMessageDto command)
+        public Task SendMessage(CommandMessageDto command, String loginId)
         {
             // Console.WriteLine($"# SendMessage -> {command.Type}, {command.Action}, {command.OrderId}");
             MqttMessage m = new MqttMessage();
@@ -31,7 +31,7 @@ namespace OMSWeb.Services
 
             foreach (string payload in payloads)
             {
-                _mqttClientService.SendMessage(topic, payload);
+                _mqttClientService.SendMessage(topic, payload, loginId);
             }
 
             return Task.CompletedTask;

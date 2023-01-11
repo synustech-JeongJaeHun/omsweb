@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Reflection.PortableExecutable;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Http;
@@ -205,6 +206,20 @@ namespace OMSWeb.Services
     public int DeleteRole(int roleId)
     {
       return this._repo.DeleteRole(roleId);
+        }
+
+    public String DecodeJwt(String jwtString, String type)
+    {
+        var handler = new JwtSecurityTokenHandler();
+        String jwt = jwtString.Split("Bearer ")[1];
+        if (!string.IsNullOrEmpty(jwt))
+        {
+            var decode = handler.ReadJwtToken(jwt);
+            var claims = decode as JwtSecurityToken;
+
+            return claims.Claims.First(claim => claim.Type == type).Value;
+        }
+        return "unknown";
     }
   }
 }

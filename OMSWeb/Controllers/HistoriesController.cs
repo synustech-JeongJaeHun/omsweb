@@ -13,9 +13,13 @@ namespace OMSWeb.Controllers
     public class HistoriesController : ControllerBase
     {
         private readonly HistoryService _historySvc;
-        public HistoriesController(HistoryService historyService)
+        private readonly UserService _userSvc;
+
+        private const String USER_ID = "userId";
+        public HistoriesController(HistoryService historyService, UserService userService)
         {
             this._historySvc = historyService;
+            this._userSvc = userService;
         }
 
         [HttpGet("orders")]
@@ -23,8 +27,14 @@ namespace OMSWeb.Controllers
         {
             (DateTimeOffset from, DateTimeOffset to, int skip, int take, string condition, string sort) = _historySvc.GetLoadFilters(loadOptions, @"order_history");
 
+            String loginId = "unknown";
+            if (Request.Headers.TryGetValue("Authorization", out var jwt))
+            {
+                loginId = _userSvc.DecodeJwt(jwt, USER_ID);
+            }
+
             Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: history-transfers");
-            Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"PACKET: from={from} to={to} skip={skip} take={take}");
+            Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"PACKET: from={from} to={to} skip={skip} take={take}, login_id={loginId}");
 
             int totalCount = _historySvc.QueryOrdersCount(from, to, skip, take, condition);
             loadOptions.Skip = 0;
@@ -40,8 +50,14 @@ namespace OMSWeb.Controllers
         {
             (DateTimeOffset from, DateTimeOffset to, int skip, int take, string condition, string sort) = _historySvc.GetLoadFilters(loadOptions, @"vehicle_history");
 
+            String loginId = "unknown";
+            if (Request.Headers.TryGetValue("Authorization", out var jwt))
+            {
+                loginId = _userSvc.DecodeJwt(jwt, USER_ID);
+            }
+
             Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: history-vehicles");
-            Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"PACKET: from={from} to={to} skip={skip} take={take}");
+            Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"PACKET: from={from} to={to} skip={skip} take={take}, login_id={loginId} ");
 
             int totalCount = _historySvc.QueryVehiclesCount(from, to, skip, take, condition);
             loadOptions.Skip = 0;
@@ -58,8 +74,14 @@ namespace OMSWeb.Controllers
         {
             (DateTimeOffset from, DateTimeOffset to, int skip, int take, string condition, string sort) = _historySvc.GetLoadFilters(loadOptions, @"alarm_history");
 
+            String loginId = "unknown";
+            if (Request.Headers.TryGetValue("Authorization", out var jwt))
+            {
+                loginId = _userSvc.DecodeJwt(jwt, USER_ID);
+            }
+
             Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: history-alarms");
-            Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"PACKET: from={from} to={to} skip={skip} take={take}");
+            Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"PACKET: from={from} to={to} skip={skip} take={take}, login_id={loginId}");
 
             int totalCount = _historySvc.QueryAlarmsCount(from, to, skip, take, condition);
             loadOptions.Skip = 0;
@@ -76,8 +98,14 @@ namespace OMSWeb.Controllers
         {
             (DateTimeOffset from, DateTimeOffset to, int skip, int take, string condition, string sort) = _historySvc.GetLoadFilters(loadOptions, @"alert_history");
 
+            String loginId = "unknown";
+            if (Request.Headers.TryGetValue("Authorization", out var jwt))
+            {
+                loginId = _userSvc.DecodeJwt(jwt, USER_ID);
+            }
+
             Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: history-warnings");
-            Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"PACKET: from={from} to={to} skip={skip} take={take}");
+            Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"PACKET: from={from} to={to} skip={skip} take={take}, login_id={loginId}");
 
             int totalCount = _historySvc.QueryAlertsCount(from, to, skip, take, condition);
             loadOptions.Skip = 0;
@@ -94,8 +122,14 @@ namespace OMSWeb.Controllers
         {
             (DateTimeOffset from, DateTimeOffset to, int skip, int take, string condition, string sort) = _historySvc.GetLoadFilters(loadOptions, @"nack_history");
 
+            String loginId = "unknown";
+            if (Request.Headers.TryGetValue("Authorization", out var jwt))
+            {
+                loginId = _userSvc.DecodeJwt(jwt, USER_ID);
+            }
+
             Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: history-nacks");
-            Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"PACKET: from={from} to={to} skip={skip} take={take}");
+            Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"PACKET: from={from} to={to} skip={skip} take={take}, login_id={loginId}");
 
             int totalCount = _historySvc.QueryNacksCount(from, to, skip, take, condition );
             loadOptions.Skip = 0;

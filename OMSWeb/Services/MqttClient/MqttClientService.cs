@@ -119,5 +119,13 @@ namespace OMSWeb.Services
             Console.WriteLine("topic={0}, payload={1}", topic, payload);
             await mqttClient.PublishAsync(topic, payload, MqttQualityOfServiceLevel.AtMostOnce);
         }
+
+        public async Task SendMessage(string topic, string payload, String loginId)
+        {
+            Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, "PACKET: topic={0}, payload={1}, login_id={2}", topic, payload, loginId);
+
+            Console.WriteLine("topic={0}, payload={1}, login_id={2}", topic, payload, loginId);
+            await mqttClient.PublishAsync(topic, payload, MqttQualityOfServiceLevel.AtMostOnce);
+        }
     }
 }
