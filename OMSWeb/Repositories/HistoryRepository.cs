@@ -76,8 +76,8 @@ namespace OMSWeb.Repositories
                                 WHEN OD.time_created IS NOT NULL AND OD.time_failed IS NOT NULL THEN extract('epoch' from OD.time_failed - OD.time_created) 
                                 ELSE 0
                             END As age,
-                            OD.distance_pickup, OD.distance_deliver AS distance_dropoff, OD.distance_move, OD.assignment_type, OD.assignment_details,
-                            OD.load_retry_cnt, OD.unload_retry_cnt as unload_retry_cnt
+                            OD.distance_pickup, OD.distance_deliver AS distance_dropoff, OD.distance_move, OD.assignment_type, OD.assignment_details, 
+                            OD.load_retry_cnt, OD.unload_retry_cnt as unload_retry_cnt, OD.err_result_code as result_code
                         FROM order_history AS OD
                         INNER JOIN (
                             SELECT history_source_id AS order_id, max(history_change_time) AS last_updated
@@ -166,7 +166,13 @@ namespace OMSWeb.Repositories
                                 ELSE 0 * interval '1 sec'
                             END As age,
                             OD.distance_pickup, OD.distance_deliver AS distance_dropoff, OD.distance_move, OD.assignment_type, OD.assignment_details,
-                            OD.load_retry_cnt, OD.unload_retry_cnt as unload_retry_cnt, OD.err_result_code as result_code
+                            OD.load_retry_cnt, OD.unload_retry_cnt as unload_retry_cnt, 
+                            CASE 
+                                WHEN OD.err_result_code LIKE '%SourceInterlock%' THEN 'Source PIO Timeout'
+                                WHEN OD.err_result_code LIKE '%DestInterlock%' THEN 'Dest PIO Timeout'
+                                ELSE OD.err_result_code
+                            END as result_code
+
                         FROM order_history AS OD
                         INNER JOIN (
                             SELECT history_source_id AS order_id, max(history_change_time) AS last_updated
