@@ -42,10 +42,16 @@ export class HistoriesService {
 	}
 
 	vehiclesDataSource(source: any, startTime: Date, endTime: Date): DataSource {
+    const token =this.auth.token;
 		return new DataSource({
 			store: AspNetData.createStore({
 				key: 'id',
 				loadUrl: `${this.baseUrl}/vehicles`,
+        onBeforeSend: function(operation, ajaxSettings){
+          ajaxSettings.headers = {  
+              "Authorization": 'Bearer ' + token
+          } 
+      },
 			}),
 			filter: [
 				['historyChangeTime', '>=', startTime],
@@ -65,10 +71,16 @@ export class HistoriesService {
 	}
 
 	alarmsDataSource(source: any, startTime: Date, endTime: Date): DataSource {
+    const token =this.auth.token;
 		return new DataSource({
 			store: AspNetData.createStore({
 				key: 'id',
 				loadUrl: `${this.baseUrl}/alarms`,
+        onBeforeSend: function(operation, ajaxSettings){
+          ajaxSettings.headers = {  
+              "Authorization": 'Bearer ' + token
+          } 
+      },
 			}),
             filter: [['time', '>=', startTime], 'and', ['time', '<=', endTime]],
             onLoadingChanged: (isLoading) => {
@@ -84,11 +96,17 @@ export class HistoriesService {
 	}
 
 	alertsDataSource(source: any, startTime: Date, endTime: Date): DataSource {
+    const token =this.auth.token;
 		return new DataSource({
 			store: AspNetData.createStore({
 				key: 'id',
 				//loadUrl: `/assets/json/get-alerts.json`,
 				loadUrl: `${this.baseUrl}/alerts`,
+        onBeforeSend: function(operation, ajaxSettings){
+          ajaxSettings.headers = {  
+              "Authorization": 'Bearer ' + token
+          } 
+      },
 			}),
             filter: [['time', '>=', startTime], 'and', ['time', '<=', endTime]],
             onLoadingChanged: (isLoading) => {
@@ -104,10 +122,16 @@ export class HistoriesService {
     }
 
     nacksDataSource(source: any, startTime: Date, endTime: Date): DataSource {
+      const token =this.auth.token;
         return new DataSource({
             store: AspNetData.createStore({
                 key: 'id',
                 loadUrl: `${this.baseUrl}/nacks`,
+                onBeforeSend: function(operation, ajaxSettings){
+                  ajaxSettings.headers = {  
+                      "Authorization": 'Bearer ' + token
+                  } 
+              },
             }),
             filter: [
                 ['ModifiedTime', '>=', startTime],
