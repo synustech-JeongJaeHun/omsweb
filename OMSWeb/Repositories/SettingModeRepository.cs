@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Dapper;
 using Microsoft.Extensions.Configuration;
@@ -19,7 +20,14 @@ namespace OMSWeb.Repositories
             
             using (var conn = ConnectTrack())
             {
-                result = conn.Query<SettingModeEntity>(sql).AsQueryable();
+                try
+                {
+                    result = conn.Query<SettingModeEntity>(sql).AsQueryable();
+                }
+                catch (Exception e)
+                {
+                    result = null;
+                }
             }
             return result;
         }
@@ -27,6 +35,8 @@ namespace OMSWeb.Repositories
         public SettingModeEntity GetSettingMode()
         {
             IQueryable<SettingModeEntity> settingModeEntity = this.QuerySettingMode();
+            if (settingModeEntity == null) return null;
+
             var list = settingModeEntity.Select(w => new SettingModeEntity
             {
                 home_mode = w.home_mode,

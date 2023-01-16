@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Dapper;
 using Microsoft.Extensions.Configuration;
@@ -27,7 +28,15 @@ SELECT sum(level1) AS level1, sum(level2) AS level2, sum(level3) AS level3
     FROM alerts
       WHERE ack_time IS NULL
     ) AS COUNT_TABLE";
-                result = conn.Query<NotificationCountModel>(sql).FirstOrDefault();
+
+                try 
+                { 
+                    result = conn.Query<NotificationCountModel>(sql).FirstOrDefault();
+                }
+                catch (Exception e)
+                {
+                    result = null;
+                }
             }
             return result;
         }
@@ -48,7 +57,14 @@ SELECT sum(level1) AS level1, sum(level2) AS level2, sum(level3) AS level3
     FROM alerts AL
     ORDER BY AL.id desc
         ";
-                result = conn.Query<AlertHistory>(sql).AsQueryable();
+                try
+                { 
+                    result = conn.Query<AlertHistory>(sql).AsQueryable();
+                }
+                catch (Exception e)
+                {
+                    result = null;
+                }
             }
             return result;
         }

@@ -98,7 +98,14 @@ namespace OMSWeb.Repositories
             int result = 0;
             using (var conn = ConnectTrack())
             {
-                result = conn.QueryFirst<int>(sql, new { from, to });
+                try
+                {
+                    result = conn.QueryFirst<int>(sql, new { from, to });
+                }
+                catch (Exception e)
+                {
+                    result = 0;
+                }
             }
             return result;
         }
@@ -199,7 +206,14 @@ namespace OMSWeb.Repositories
             IQueryable<OrderHistoryEntity> result;
             using (var conn = ConnectTrack(500))
             {
-                result = conn.Query<OrderHistoryEntity>(sql, new { from, to, skip, take }).AsQueryable();
+                try
+                { 
+                    result = conn.Query<OrderHistoryEntity>(sql, new { from, to, skip, take }).AsQueryable();
+                }
+                catch (Exception e)
+                {
+                    result = null;
+                }
             }
             return result;
         }
@@ -237,7 +251,14 @@ namespace OMSWeb.Repositories
             int result = 0;
             using (var conn = ConnectTrack())
             {
-                result = conn.QueryFirst<int>(sql, new { from, to });
+                try
+                { 
+                    result = conn.QueryFirst<int>(sql, new { from, to });
+                }
+                catch (Exception e)
+                {
+                    result = 0;
+                }
             }
             return result;
         }
@@ -285,7 +306,14 @@ namespace OMSWeb.Repositories
             IQueryable<VehicleHistoryEntity> result;
             using (var conn = ConnectTrack())
             {
-                result = conn.Query<VehicleHistoryEntity>(sql, new { from, to, skip, take }).AsQueryable();
+                try
+                { 
+                    result = conn.Query<VehicleHistoryEntity>(sql, new { from, to, skip, take }).AsQueryable();
+                }
+                catch (Exception e)
+                {
+                    result = null;
+                }
             }
             return result;
         }
@@ -320,7 +348,14 @@ namespace OMSWeb.Repositories
             int result = 0;
             using (var conn = ConnectTrack())
             {
-                result = conn.QueryFirst<int>(sql, new { from, to });
+                try
+                { 
+                    result = conn.QueryFirst<int>(sql, new { from, to });
+                }
+                catch (Exception e)
+                {
+                    result = 0;
+                }
             }
             return result;
         }
@@ -370,7 +405,14 @@ namespace OMSWeb.Repositories
             IQueryable<AlarmHistory> result;
             using (var conn = ConnectTrack())
             {
-                result = conn.Query<AlarmHistory>(sql, new { from, to, skip, take }).AsQueryable();
+                try
+                { 
+                    result = conn.Query<AlarmHistory>(sql, new { from, to, skip, take }).AsQueryable();
+                }
+                catch (Exception e)
+                {
+                    result = null;
+                }
             }
             return result;
         }
@@ -396,7 +438,14 @@ namespace OMSWeb.Repositories
             int result = 0;
             using (var conn = ConnectTrack())
             {
-                result = conn.QueryFirst<int>(sql, new { from, to });
+                try 
+                { 
+                    result = conn.QueryFirst<int>(sql, new { from, to });
+                }
+                catch (Exception e)
+                {
+                    result = 0;
+                }
             }
             return result;
         }
@@ -434,7 +483,14 @@ namespace OMSWeb.Repositories
             IQueryable<AlertEntity> result;
             using (var conn = ConnectTrack())
             {
-                result = conn.Query<AlertEntity>(sql, new { from, to, skip, take }).AsQueryable();
+                try
+                { 
+                    result = conn.Query<AlertEntity>(sql, new { from, to, skip, take }).AsQueryable();
+                }
+                catch (Exception e)
+                {
+                    result = null;
+                }
             }
             return result;
         }
@@ -472,7 +528,14 @@ namespace OMSWeb.Repositories
             int result = 0;
             using (var conn = ConnectTrack())
             {
-                result = conn.QueryFirst<int>(sql, new { from, to });
+                try 
+                { 
+                    result = conn.QueryFirst<int>(sql, new { from, to });
+                }
+                catch (Exception e)
+                {
+                    result = 0;
+                }
             }
             return result;
         }
@@ -522,7 +585,14 @@ namespace OMSWeb.Repositories
             IQueryable<NackHistoryEntity> result;
             using (var conn = ConnectTrack())
             {
-                result = conn.Query<NackHistoryEntity>(sql, new { from, to, skip, take }).AsQueryable();
+                try
+                { 
+                    result = conn.Query<NackHistoryEntity>(sql, new { from, to, skip, take }).AsQueryable();
+                }
+                catch (Exception e)
+                {
+                    result = null;
+                }
             }
             return result;
         }
@@ -546,12 +616,19 @@ namespace OMSWeb.Repositories
             IQueryable<VehicleDioHistoryEntity> result;
             using (var conn = ConnectTrack())
             {
-                result = conn.Query<VehicleDioHistoryEntity>(sql, new
+                try 
+                { 
+                    result = conn.Query<VehicleDioHistoryEntity>(sql, new
+                    {
+                        vehicle_id = vehicleId,
+                        from = from,
+                        to = to
+                    }).AsQueryable();
+                }
+                catch (Exception e)
                 {
-                    vehicle_id = vehicleId,
-                    from = from,
-                    to = to
-                }).AsQueryable();
+                    result = null;
+                }
             }
             return result;
         }
@@ -574,11 +651,18 @@ namespace OMSWeb.Repositories
             IQueryable<VehicleDioHistoryEntity> result;
             using (var conn = ConnectTrack())
             {
-                result = conn.Query<VehicleDioHistoryEntity>(sql, new
+                try 
+                { 
+                    result = conn.Query<VehicleDioHistoryEntity>(sql, new
+                    {
+                        vehicle_id = vehicleId,
+                        before = before
+                    }).AsQueryable();
+                }
+                catch (Exception e)
                 {
-                    vehicle_id = vehicleId,
-                    before = before
-                }).AsQueryable();
+                    result = null;
+                }
             }
             return result;
         }

@@ -23,7 +23,14 @@ namespace OMSWeb.Repositories
 
             using (var conn = ConnectTrack())
             {
-                result = conn.QueryFirst<SettingModeEntity>(sql);
+                try
+                {
+                    result = conn.QueryFirst<SettingModeEntity>(sql);
+                }
+                catch (Exception e)
+                {
+                    result = null;
+                }
             }
             return result;
         }
@@ -37,7 +44,14 @@ namespace OMSWeb.Repositories
                 var sql = $@"SELECT id, logical_id FROM stations 
                             WHERE logical_id LIKE '%{stationLikeKey}%' ORDER BY id";
 
-                result = conn.Query<AlternateStationEntity>(sql).AsQueryable();
+                try
+                {
+                    result = conn.Query<AlternateStationEntity>(sql).AsQueryable();
+                }
+                catch (Exception e)
+                {
+                    result = null;
+                }
             }
             return result;
         }
@@ -77,7 +91,14 @@ namespace OMSWeb.Repositories
         ORDER BY GOS.group_id;
         ";
 
-                result = conn.Query<GroupEntity>(sql).AsQueryable();
+                try
+                {
+                    result = conn.Query<GroupEntity>(sql).AsQueryable();
+                }
+                catch (Exception e)
+                {
+                    result = null;
+                }
             }
             return result;
         }
@@ -93,7 +114,14 @@ namespace OMSWeb.Repositories
         ORDER BY GOS.id; 
         ";
 
-                result = conn.Query<GroupedObjectEntity>(sql).AsQueryable();
+                try
+                {
+                    result = conn.Query<GroupedObjectEntity>(sql).AsQueryable();
+                }
+                catch (Exception e)
+                {
+                    result = null;
+                }
             }
             return result;
         }
@@ -132,7 +160,14 @@ namespace OMSWeb.Repositories
                 ";
                 */
 
-                result = conn.Query<int>(sql).AsQueryable();
+                try
+                { 
+                    result = conn.Query<int>(sql).AsQueryable();
+                }
+                catch (Exception e)
+                {
+                    result = null;
+                }
             }
             return result;
         }
@@ -171,7 +206,14 @@ namespace OMSWeb.Repositories
                 ";
                 */
 
-                result = conn.Query<int>(sql).AsQueryable();
+                try
+                {
+                    result = conn.Query<int>(sql).AsQueryable();
+                }
+                catch (Exception e)
+                {
+                    result = null;
+                }
             }
             return result;
         }
@@ -210,7 +252,14 @@ namespace OMSWeb.Repositories
                 ";
                 */
 
-                result = conn.Query<int>(sql).AsQueryable();
+                try
+                {
+                    result = conn.Query<int>(sql).AsQueryable();
+                }
+                catch (Exception e)
+                {
+                    result = null;
+                }
             }
             return result;
         }
@@ -250,7 +299,14 @@ namespace OMSWeb.Repositories
                 ";
                 */
 
-                result = conn.Query<int>(sql).AsQueryable();
+                try
+                {
+                    result = conn.Query<int>(sql).AsQueryable();
+                }
+                catch (Exception e)
+                {
+                    result = null;
+                }
             }
             return result;
         }
@@ -266,7 +322,14 @@ namespace OMSWeb.Repositories
         ORDER BY CS.id;
         ";
 
-                result = conn.Query<ClusterEntity>(sql).AsQueryable();
+                try
+                { 
+                    result = conn.Query<ClusterEntity>(sql).AsQueryable();
+                }
+                catch (Exception e)
+                {
+                    result = null;
+                }
             }
             return result;
         }
@@ -281,8 +344,14 @@ namespace OMSWeb.Repositories
         FROM cluster_points CPS 
         ORDER BY CPS.cluster_id, CPS.point_id; 
         ";
-
-                result = conn.Query<ClusterPointEntity>(sql).AsQueryable();
+                try
+                {
+                    result = conn.Query<ClusterPointEntity>(sql).AsQueryable();
+                }
+                catch (Exception e)
+                {
+                    result = null;
+                }
             }
             return result;
         }
@@ -313,8 +382,15 @@ namespace OMSWeb.Repositories
         ORDER BY PS.id;
         ", clusterId);
 
-                result = conn.Query<int>(sql).AsQueryable();
-            }
+                try
+                { 
+                    result = conn.Query<int>(sql).AsQueryable();
+                }
+                    catch (Exception e)
+                {
+                    result = null;
+                }
+        }
             return result;
         }
 
@@ -344,7 +420,14 @@ namespace OMSWeb.Repositories
         ORDER BY PS.id;        
         ", clusterId);
 
-                result = conn.Query<int>(sql).AsQueryable();
+                try
+                { 
+                    result = conn.Query<int>(sql).AsQueryable();
+                }
+                catch (Exception e)
+                {
+                    result = null;
+                }
             }
             return result;
         }
@@ -367,8 +450,14 @@ namespace OMSWeb.Repositories
 	        LEFT JOIN segment_blocking AS SGBL on SG.id = SGBL.segment_id
         ORDER BY SG.id;
         ";
-
-                result = conn.Query<SegmentWithVPartsNBlockingEntity>(sql).AsQueryable();
+                try
+                { 
+                    result = conn.Query<SegmentWithVPartsNBlockingEntity>(sql).AsQueryable();
+                }
+                catch (Exception e)
+                {
+                    result = null;
+                }
             }
             return result;
         }
@@ -444,8 +533,14 @@ namespace OMSWeb.Repositories
         FROM stations ST
         ORDER BY ST.id;
         ";
-
-                result = conn.Query<StationWithUnuseEntity>(sql).AsQueryable();
+                try
+                { 
+                    result = conn.Query<StationWithUnuseEntity>(sql).AsQueryable();
+                }
+                catch (Exception e)
+                {
+                    result = null;
+                }
             }
             return result;
         }
@@ -460,8 +555,14 @@ namespace OMSWeb.Repositories
         FROM buffers BF
         ORDER BY BF.id;
         ";
-
-                result = conn.Query<BufferWithUnuseEntity>(sql).AsQueryable();
+                try
+                { 
+                    result = conn.Query<BufferWithUnuseEntity>(sql).AsQueryable();
+                }
+                catch (Exception e)
+                {
+                    result = null;
+                }
             }
             return result;
         }
@@ -483,7 +584,14 @@ namespace OMSWeb.Repositories
         ORDER BY PS.id;
         ";
 
-                result = conn.Query<PointWithAIVertexEntity>(sql).AsQueryable();
+                try
+                { 
+                    result = conn.Query<PointWithAIVertexEntity>(sql).AsQueryable();
+                }
+                catch (Exception e)
+                {
+                    result = null;
+                }
             }
             return result;
         }
@@ -499,38 +607,45 @@ namespace OMSWeb.Repositories
         ORDER BY ZS.id;
         ";
 
-                result = conn.Query<ZcuEntity>(sql).AsQueryable();
+                try 
+                { 
+                    result = conn.Query<ZcuEntity>(sql).AsQueryable();
 
-                foreach (ZcuEntity zcu in result)
-                {
-                    var completePointSql = string.Format(@"
-          SELECT ZCP.id, ZCP.zcu_id, ZCP.complete_point_id
-          FROM zcu_complete_points ZCP
-          WHERE ZCP.zcu_id = {0}
-          ", zcu.Id);
-
-                    IQueryable<ZcuCompletePointEntity> resultCompletePoints = conn.Query<ZcuCompletePointEntity>(completePointSql).AsQueryable();
-
-                    int idx = 0;
-
-                    foreach (ZcuCompletePointEntity completePointEntity in resultCompletePoints)
+                    foreach (ZcuEntity zcu in result)
                     {
-                        if (idx == 0)
-                            zcu.CompletePoints = completePointEntity.CompletePointId.ToString();
-                        else
-                            zcu.CompletePoints += string.Format(",{0}", completePointEntity.CompletePointId);
+                        var completePointSql = string.Format(@"
+              SELECT ZCP.id, ZCP.zcu_id, ZCP.complete_point_id
+              FROM zcu_complete_points ZCP
+              WHERE ZCP.zcu_id = {0}
+              ", zcu.Id);
 
-                        idx++;
+                        IQueryable<ZcuCompletePointEntity> resultCompletePoints = conn.Query<ZcuCompletePointEntity>(completePointSql).AsQueryable();
+
+                        int idx = 0;
+
+                        foreach (ZcuCompletePointEntity completePointEntity in resultCompletePoints)
+                        {
+                            if (idx == 0)
+                                zcu.CompletePoints = completePointEntity.CompletePointId.ToString();
+                            else
+                                zcu.CompletePoints += string.Format(",{0}", completePointEntity.CompletePointId);
+
+                            idx++;
+                        }
+
+                        var inputZonesSql = string.Format(@"
+              SELECT ZIP.id, ZIP.zcu_id, ZIP.priority_point, ZIP.zone_points
+              FROM zcu_input_zones ZIP
+              WHERE ZIP.zcu_id = {0}
+              ", zcu.Id);
+
+                        IQueryable<ZcuInputZoneEntity> resultInputZones = conn.Query<ZcuInputZoneEntity>(inputZonesSql).AsQueryable();
+                        zcu.InputZones = resultInputZones.ToArray();
                     }
-
-                    var inputZonesSql = string.Format(@"
-          SELECT ZIP.id, ZIP.zcu_id, ZIP.priority_point, ZIP.zone_points
-          FROM zcu_input_zones ZIP
-          WHERE ZIP.zcu_id = {0}
-          ", zcu.Id);
-
-                    IQueryable<ZcuInputZoneEntity> resultInputZones = conn.Query<ZcuInputZoneEntity>(inputZonesSql).AsQueryable();
-                    zcu.InputZones = resultInputZones.ToArray();
+                }
+                catch (Exception e)
+                {
+                    result = null;
                 }
             }
             return result;
@@ -552,8 +667,14 @@ namespace OMSWeb.Repositories
         LEFT JOIN vehicles AS VH on CAST(VH.physical_id AS INTEGER) = VR.id 
         ORDER BY VR.id;
         ";
-
-                result = conn.Query<VehicleRegEntity>(sql).AsQueryable();
+                try
+                { 
+                    result = conn.Query<VehicleRegEntity>(sql).AsQueryable();
+                }
+                catch (Exception e)
+                {
+                    result = null;
+                }
             }
             return result;
         }

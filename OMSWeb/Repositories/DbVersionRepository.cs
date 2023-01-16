@@ -23,7 +23,14 @@ namespace OMSWeb.Repositories
 
             using (var conn = ConnectTrack())
             {
-                result = conn.QueryFirst<DbVersionEntity>(sql);
+                try
+                { 
+                    result = conn.QueryFirst<DbVersionEntity>(sql);
+                }
+                catch (Exception e)
+                {
+                    result = null;
+                }
             }
 
             return result;

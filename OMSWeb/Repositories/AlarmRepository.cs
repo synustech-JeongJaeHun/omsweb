@@ -33,7 +33,15 @@ FROM (
         ON VA.error_code = VE.id
     WHERE VA.time_resolved IS NULL
 ) AS COUNT_TABLE";
-                result = conn.Query<NotificationCountModel>(sql).FirstOrDefault();
+
+                try
+                { 
+                    result = conn.Query<NotificationCountModel>(sql).FirstOrDefault();
+                }
+                catch (Exception e)
+                {
+                    result = null;
+                }
             }
             return result;
         }
@@ -70,7 +78,15 @@ FROM (
     WHERE VA.time_resolved is NULL
     ORDER BY VA.id desc
         ";
-                result = conn.Query<AlarmHistory>(sql).AsQueryable();
+
+                try
+                { 
+                    result = conn.Query<AlarmHistory>(sql).AsQueryable();
+                }
+                catch (Exception e)
+                {
+                    result = null;
+                }
             }
             return result;
         }
@@ -147,7 +163,14 @@ FROM (
         FROM vehicle_errors;
         ";
 
-                result = conn.Query<VehicleError>(sql).AsQueryable();
+                try
+                { 
+                    result = conn.Query<VehicleError>(sql).AsQueryable();
+                }
+                catch (Exception e)
+                {
+                    result = null;
+                }
             }
             return result;
         }

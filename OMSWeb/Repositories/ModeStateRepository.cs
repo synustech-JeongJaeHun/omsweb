@@ -25,7 +25,14 @@ namespace OMSWeb.Repositories
             
             using (var conn = ConnectTrack())
             {
-                result = conn.Query<ModeStateEntity>(sql).AsQueryable();
+                try
+                {
+                    result = conn.Query<ModeStateEntity>(sql).AsQueryable();
+                }
+                catch (Exception e)
+                {
+                    result = null;
+                }
             }
             return result;
         }
@@ -33,6 +40,8 @@ namespace OMSWeb.Repositories
         public ModeStateEntity GetModeState()
         {
             IQueryable<ModeStateEntity> modeStateEntity = this.QueryModeState();
+            if (modeStateEntity == null) return null;
+
             var list = modeStateEntity.Select(w => new ModeStateEntity
             {
                 comm_state = w.comm_state,

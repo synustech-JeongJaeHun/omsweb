@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Dapper;
 using Microsoft.Extensions.Configuration;
@@ -18,7 +19,15 @@ namespace OMSWeb.Repositories
             using (var conn = ConnectTrack())
             {
                 var sql = QueryFactory.GetSql("orderStatus");
-                result = conn.Query<OrderState>(sql).AsQueryable();
+
+                try
+                {
+                    result = conn.Query<OrderState>(sql).AsQueryable();
+                }
+                catch (Exception e)
+                {
+                    result = null;
+                }
             }
             return result;
         }
@@ -29,7 +38,15 @@ namespace OMSWeb.Repositories
             using (var conn = ConnectTrack())
             {
                 var sql = QueryFactory.GetSql("vehicleStates");
-                result = conn.Query<VehicleState>(sql).AsQueryable();
+
+                try
+                { 
+                    result = conn.Query<VehicleState>(sql).AsQueryable();
+                }
+                catch (Exception e)
+                {
+                    result = null;
+                }
             }
             return result;
         }
@@ -40,7 +57,15 @@ namespace OMSWeb.Repositories
             using (var conn = ConnectTrack())
             {
                 var sql = QueryFactory.GetSql("stationStatus");
-                result = conn.Query<StationState>(sql).AsQueryable();
+
+                try
+                { 
+                    result = conn.Query<StationState>(sql).AsQueryable();
+                }
+                catch (Exception e)
+                {
+                    result = null;
+                }
             }
             return result;
         }
@@ -51,7 +76,15 @@ namespace OMSWeb.Repositories
             using (var conn = ConnectTrack())
             {
                 var sql = QueryFactory.GetSql("bufferStatus");
-                result = conn.Query<BufferState>(sql).AsQueryable();
+
+                try
+                { 
+                    result = conn.Query<BufferState>(sql).AsQueryable();
+                }
+                catch (Exception e)
+                {
+                    result = null;
+                }
             }
             return result;
         }
@@ -62,7 +95,15 @@ namespace OMSWeb.Repositories
             using (var conn = ConnectTrack())
             {
                 var sql = QueryFactory.GetSql("zcuStatus");
-                result = conn.Query<ZcuState>(sql).AsQueryable();
+
+                try
+                { 
+                    result = conn.Query<ZcuState>(sql).AsQueryable();
+                }
+                catch (Exception e)
+                {
+                    result = null;
+                }
             }
             return result;
         }
@@ -73,7 +114,15 @@ namespace OMSWeb.Repositories
             using (var conn = ConnectTrack())
             {
                 var sql = QueryFactory.GetSql("fireShutterStatus");
-                result = conn.Query<FireShutterState>(sql).AsQueryable();
+
+                try
+                { 
+                    result = conn.Query<FireShutterState>(sql).AsQueryable();
+                }
+                catch (Exception e)
+                {
+                    result = null;
+                }
             }
             return result;
         }
@@ -84,7 +133,15 @@ namespace OMSWeb.Repositories
             using (var conn = ConnectTrack())
             {
                 var sql = QueryFactory.GetSql("clusterStatus");
-                result = conn.Query<ClusterState>(sql).AsQueryable();
+
+                try
+                { 
+                    result = conn.Query<ClusterState>(sql).AsQueryable();
+                }
+                catch (Exception e)
+                {
+                    result = null;
+                }
             }
             return result;
         }
@@ -95,7 +152,15 @@ namespace OMSWeb.Repositories
             using (var conn = ConnectTrack())
             {
                 var sql = QueryFactory.GetSql("unuseListStatus");
-                result = conn.Query<UnuseListState>(sql).AsQueryable();
+
+                try
+                { 
+                    result = conn.Query<UnuseListState>(sql).AsQueryable();
+                }
+                catch (Exception e)
+                {
+                    result = null;
+                }
             }
             return result;
         }
@@ -106,7 +171,15 @@ namespace OMSWeb.Repositories
             using (var conn = ConnectTrack())
             {
                 var sql = QueryFactory.GetSql("dioState");
-                result = conn.Query<DioState>(sql).AsQueryable();
+
+                try
+                { 
+                    result = conn.Query<DioState>(sql).AsQueryable();
+                }
+                catch (Exception e)
+                {
+                    result = null;
+                }
             }
             return result;
         }

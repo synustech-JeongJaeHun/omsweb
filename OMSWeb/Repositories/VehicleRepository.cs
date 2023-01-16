@@ -26,10 +26,17 @@ namespace OMSWeb.Repositories
             IQueryable<VehicleDio> result;
             using (var conn = ConnectTrack())
             {
-                result = conn.Query<VehicleDio>(sql, new
+                try
+                { 
+                    result = conn.Query<VehicleDio>(sql, new
+                    {
+                        vehicle_id = vehicleId
+                    }).AsQueryable();
+                }
+                catch (Exception e)
                 {
-                    vehicle_id = vehicleId
-                }).AsQueryable();
+                    result = null;
+                }
             }
             return result;
         }
@@ -44,7 +51,14 @@ namespace OMSWeb.Repositories
             IQueryable<VehicleDioCategory> result;
             using (var conn = ConnectTrack())
             {
-                result = conn.Query<VehicleDioCategory>(sql).AsQueryable();
+                try
+                { 
+                    result = conn.Query<VehicleDioCategory>(sql).AsQueryable();
+                }
+                catch (Exception e)
+                {
+                    result = null;
+                }
             }
             return result;
         }
@@ -109,10 +123,17 @@ namespace OMSWeb.Repositories
             IQueryable<VehicleState> result;
             using (var conn = ConnectTrack())
             {
-                result = conn.Query<VehicleState>(sql, new
+                try
                 {
-                    id = vehicleId
-                }).AsQueryable();
+                    result = conn.Query<VehicleState>(sql, new
+                    {
+                        id = vehicleId
+                    }).AsQueryable();
+                }
+                catch (Exception e)
+                {
+                    result = null;
+                }
             }
             return result;
         }

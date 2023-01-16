@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using OMSWeb.Models.Entities;
 using Npgsql;
 using System.IO;
+using Microsoft.AspNetCore.Mvc;
 
 namespace OMSWeb.Repositories
 {
@@ -118,7 +119,14 @@ namespace OMSWeb.Repositories
 
             using (var conn = ConnectTrack())
             {
-                result = conn.Query<ModuleStatusEntity>(sql).AsQueryable();
+                try
+                {
+                    result = conn.Query<ModuleStatusEntity>(sql).AsQueryable();
+                }
+                catch (Exception e)
+                {
+                    result = null;
+                }
             }
             return result;
         }
@@ -129,12 +137,19 @@ namespace OMSWeb.Repositories
             string sql = string.Format(@"SELECT version FROM module_status WHERE id={0}", ID_OMS_SRV);
             using (var conn = ConnectTrack())
             {
-                List<string> data = conn.Query<string>(sql).AsList();
-                if (data != null)
+                try
                 {
-                    version = (data.Count > 0) ? version = data[0] : "";
+                    List<string> data = conn.Query<string>(sql).AsList();
+                    if (data != null)
+                    {
+                        version = (data.Count > 0) ? version = data[0] : "";
+                    }
                 }
-            }
+                catch (Exception e)
+                {
+                    version = null;
+                }
+        }
             return version;
         }
     }
