@@ -495,7 +495,7 @@ namespace OMSWeb.Repositories
                     catch (Exception ex)
                     {
                         trans.Rollback();
-                        throw ex;
+                        //throw ex;
                     }
                 }
 
@@ -514,7 +514,7 @@ namespace OMSWeb.Repositories
                     catch (Exception ex)
                     {
                         trans.Rollback();
-                        throw ex;
+                        //throw ex;
                     }
                 }
             }
@@ -703,7 +703,7 @@ namespace OMSWeb.Repositories
                     }
                     catch (Exception ex)
                     {
-                        throw ex;
+                        //throw ex;
                     }
                 }
             }
@@ -735,7 +735,7 @@ namespace OMSWeb.Repositories
                     }
                     catch (Exception ex)
                     {
-                        throw ex;
+                        //throw ex;
                     }
                 }
             }
@@ -764,7 +764,7 @@ namespace OMSWeb.Repositories
                     }
                     catch (Exception ex)
                     {
-                        throw ex;
+                        //throw ex;
                     }
                 }
             }

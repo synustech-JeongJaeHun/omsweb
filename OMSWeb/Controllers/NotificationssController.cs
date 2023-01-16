@@ -38,13 +38,27 @@ namespace OMSWeb.Controllers
         [HttpGet("alerts")]
         public object GetAlerts(DataSourceLoadOptions loadOptions)
         {
-            return DataSourceLoader.Load(_notificationSvc.GetAlerts(), loadOptions);
+            try
+            {
+                return DataSourceLoader.Load(_notificationSvc.GetAlerts(), loadOptions);
+            }
+            catch (Exception e)
+            { }
+
+            return null;
         }
 
         [HttpGet("alarms")]
         public object GetAlarms(DataSourceLoadOptions loadOptions)
         {
-            return DataSourceLoader.Load(_notificationSvc.GetAlarms(), loadOptions);
+            try
+            {
+                return DataSourceLoader.Load(_notificationSvc.GetAlarms(), loadOptions);
+            }
+            catch (Exception e)
+            { }
+
+            return null;
         }
 
         [HttpPost("addannotation")]
@@ -56,7 +70,14 @@ namespace OMSWeb.Controllers
         [HttpGet("vehicle-errors")]
         public object GetVehicleErrors(DataSourceLoadOptions loadOptions)
         {
-            return DataSourceLoader.Load(_notificationSvc.GetVehicleErrors(), loadOptions);
+            try
+            {
+                return DataSourceLoader.Load(_notificationSvc.GetVehicleErrors(), loadOptions);
+            }
+            catch (Exception e)
+            { }
+
+            return null;
         }
     }
 }

@@ -119,35 +119,51 @@ FROM (
             string sql;
             using (var conn = ConnectTrack())
             {
-                conn.Open();
-                var trans = conn.BeginTransaction();
-
-                int resultCount = conn.QuerySingle<int>(sqlSelect, new
+                try
                 {
-                    reference_id = annotation.ReferenceID
-                });
+                    conn.Open();
+                    var trans = conn.BeginTransaction();
 
-                if (resultCount > 0)
-                    sql = sqlUpdate;
-                else
-                    sql = sqlInsert;
+                    int resultCount = 0;
 
-                using (var cmd = new NpgsqlCommand(sql, conn))
-                {
                     try
                     {
-                        cmd.Parameters.AddWithValue("reference_id", annotation.ReferenceID);
-                        cmd.Parameters.AddWithValue("reference_table", annotation.ReferenceTable);
-                        cmd.Parameters.AddWithValue("modified_by", annotation.ModifiedBy);
-                        cmd.Parameters.AddWithValue("annotation", annotation.Annotation);
-                        result = cmd.ExecuteNonQuery();
-                        trans.Commit();
+                        resultCount = conn.QuerySingle<int>(sqlSelect, new
+                        {
+                            reference_id = annotation.ReferenceID
+                        });
                     }
-                    catch (Exception ex)
+                    catch (Exception e)
                     {
-                        trans.Rollback();
-                        throw ex;
+                        resultCount = 0;
                     }
+
+                    if (resultCount > 0)
+                        sql = sqlUpdate;
+                    else
+                        sql = sqlInsert;
+
+                    using (var cmd = new NpgsqlCommand(sql, conn))
+                    {
+                        try
+                        {
+                            cmd.Parameters.AddWithValue("reference_id", annotation.ReferenceID);
+                            cmd.Parameters.AddWithValue("reference_table", annotation.ReferenceTable);
+                            cmd.Parameters.AddWithValue("modified_by", annotation.ModifiedBy);
+                            cmd.Parameters.AddWithValue("annotation", annotation.Annotation);
+                            result = cmd.ExecuteNonQuery();
+                            trans.Commit();
+                        }
+                        catch (Exception ex)
+                        {
+                            trans.Rollback();
+                            //throw ex;
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+
                 }
             }
             return result;

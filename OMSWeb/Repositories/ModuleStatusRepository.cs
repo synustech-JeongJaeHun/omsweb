@@ -48,37 +48,44 @@ namespace OMSWeb.Repositories
             string sql;
             using (var conn = ConnectTrack())
             {
-                conn.Open();
-                var trans = conn.BeginTransaction();
-
-                int resultCount = conn.QuerySingle<int>(sqlSelect, new
+                try
                 {
-                    ref_id = id
-                });
+                    conn.Open();
+                    var trans = conn.BeginTransaction();
 
-                if (resultCount > 0)
-                    sql = sqlUpdate;
-                else
-                    sql = sqlInsert;
+                    int resultCount = conn.QuerySingle<int>(sqlSelect, new
+                    {
+                        ref_id = id
+                    });
 
-                using (var cmd = new NpgsqlCommand(sql, conn))
+                    if (resultCount > 0)
+                        sql = sqlUpdate;
+                    else
+                        sql = sqlInsert;
+
+                    using (var cmd = new NpgsqlCommand(sql, conn))
+                    {
+                        try
+                        {
+                            cmd.Parameters.AddWithValue("ref_id", id);
+                            cmd.Parameters.AddWithValue("ref_name", name);
+                            cmd.Parameters.AddWithValue("ref_version", version);
+                            if (!string.IsNullOrEmpty(release_time))
+                                cmd.Parameters.AddWithValue("ref_release_time", Convert.ToDateTime(release_time));
+                            cmd.Parameters.AddWithValue("ref_pid", pid);
+                            result = cmd.ExecuteNonQuery();
+                            trans.Commit();
+                        }
+                        catch (Exception ex)
+                        {
+                            trans.Rollback();
+                            //throw ex;
+                        }
+                    }
+                }
+                catch (Exception e)
                 {
-                    try
-                    {
-                        cmd.Parameters.AddWithValue("ref_id", id);
-                        cmd.Parameters.AddWithValue("ref_name", name);
-                        cmd.Parameters.AddWithValue("ref_version", version);
-                        if (!string.IsNullOrEmpty(release_time))
-                            cmd.Parameters.AddWithValue("ref_release_time", Convert.ToDateTime(release_time));
-                        cmd.Parameters.AddWithValue("ref_pid", pid);
-                        result = cmd.ExecuteNonQuery();
-                        trans.Commit();
-                    }
-                    catch (Exception ex)
-                    {
-                        trans.Rollback();
-                        throw ex;
-                    }
+
                 }
             }
             return result;

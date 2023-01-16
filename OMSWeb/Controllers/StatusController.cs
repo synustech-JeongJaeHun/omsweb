@@ -12,6 +12,8 @@ using DevExtreme.AspNet.Data;
 using DevExtreme.AspNet.Mvc;
 using OMSWeb.Filters;
 using OMSWeb.Models;
+using DevExtreme.AspNet.Data.ResponseModel;
+using System.Xml.Linq;
 
 namespace OMSWeb.Controllers
 {
@@ -73,55 +75,134 @@ namespace OMSWeb.Controllers
         [HttpGet("orders")]
         public object GetOrderStatus(DataSourceLoadOptions loadOptions)
         {
-            return DataSourceLoader.Load(_statusSvc.QueryOrderStates(), loadOptions);
+            LoadResult loadResult;
+            try
+            {
+                loadResult = DataSourceLoader.Load(_statusSvc.QueryOrderStates(), loadOptions);
+            }
+            catch (Exception e)
+            {
+                loadResult = null;
+            }
+            return loadResult;
         }
 
         [HttpGet("vehicles")]
         public object GetVehicleStatus(DataSourceLoadOptions loadOptions)
         {
-            return DataSourceLoader.Load(_statusSvc.QueryVehicleStates(), loadOptions);
+            LoadResult loadResult;
+            try
+            {
+                loadResult = DataSourceLoader.Load(_statusSvc.QueryVehicleStates(), loadOptions);
+            }
+            catch (Exception e)
+            {
+                loadResult = null;
+            }
+            return loadResult;
         }
 
         [HttpGet("stations")]
         public object GetStationStatus(DataSourceLoadOptions loadOptions)
         {
-            return DataSourceLoader.Load(_statusSvc.QueryStationStates(), loadOptions);
+            LoadResult loadResult;
+            try
+            {
+                loadResult = DataSourceLoader.Load(_statusSvc.QueryStationStates(), loadOptions);
+            }
+            catch (Exception e)
+            {
+                loadResult = null;
+            }
+            return loadResult;
         }
 
         [HttpGet("buffers")]
         public object GetBufferStatus(DataSourceLoadOptions loadOptions)
         {
-            return DataSourceLoader.Load(_statusSvc.QueryBufferStates(), loadOptions);
+            LoadResult loadResult;
+            try
+            {
+                loadResult = DataSourceLoader.Load(_statusSvc.QueryBufferStates(), loadOptions);
+            }
+            catch (Exception e)
+            {
+                loadResult = null;
+            }
+            return loadResult;
         }
 
         [HttpGet("zcus")]
         public object GetZcuStatus(DataSourceLoadOptions loadOptions)
         {
-            return DataSourceLoader.Load(_statusSvc.QueryZcuStates(), loadOptions);
+            LoadResult loadResult;
+            try
+            {
+                loadResult = DataSourceLoader.Load(_statusSvc.QueryZcuStates(), loadOptions);
+            }
+            catch (Exception e)
+            {
+                loadResult = null;
+            }
+            return loadResult;
         }
 
         [HttpGet("clusters")]
         public object GetClusterStatus(DataSourceLoadOptions loadOptions)
         {
-            return DataSourceLoader.Load(_statusSvc.QueryClusterStates(), loadOptions);
+            LoadResult loadResult;
+            try
+            {
+                loadResult = DataSourceLoader.Load(_statusSvc.QueryClusterStates(), loadOptions);
+            }
+            catch (Exception e)
+            {
+                loadResult = null;
+            }
+            return loadResult;
         }
 
         [HttpGet("unuseLists")]
         public object GetUnuseListStatus(DataSourceLoadOptions loadOptions)
         {
-            return DataSourceLoader.Load(_statusSvc.QueryUnuseListStates(), loadOptions);
+            LoadResult loadResult;
+            try
+            {
+                loadResult = DataSourceLoader.Load(_statusSvc.QueryUnuseListStates(), loadOptions);
+            }
+            catch (Exception e)
+            {
+                loadResult = null;
+            }
+            return loadResult;
         }
 
         [HttpGet("dio")]
         public object GetVehicleDio(DataSourceLoadOptions loadOptions)
         {
-            return DataSourceLoader.Load(_statusSvc.QueryDioStates(), loadOptions);
+            LoadResult loadResult;
+            try
+            {
+                loadResult = DataSourceLoader.Load(_statusSvc.QueryDioStates(), loadOptions);
+            }
+            catch (Exception e)
+            {
+                loadResult = null;
+            }
+            return loadResult;
         }
 
         [HttpGet("id-list/{type}")]
         public IEnumerable<NodeInfo> GetIdList(string type)
         {
-            return this._trackSvc.GetIdList(type.ToUpper());
+            try
+            {
+                return this._trackSvc.GetIdList(type.ToUpper());
+            }
+            catch (Exception e)
+            {
+            }
+            return null;
         }
     }
 }

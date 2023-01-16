@@ -47,6 +47,7 @@ namespace OMSWeb.Repositories
             }
         }
 
+        //public async Task<(int Value, int Count)> QueryDeliveryTime()
         public async Task<object> QueryDeliveryTime()
         {
             (int Value, int Count) result;
@@ -63,7 +64,9 @@ namespace OMSWeb.Repositories
                 result = await conn.QueryFirstAsync<(int Value, int Count)>(sql);
             }
             return new { Value = result.Value, Count = result.Count };
+            //return result;
         }
+        //ublic async Task<(int Value, int Count)> QueryWaitTime()
         public async Task<object> QueryWaitTime()
         {
             (int Value, int Count) result;
@@ -80,7 +83,9 @@ namespace OMSWeb.Repositories
                 result = await conn.QueryFirstAsync<(int Value, int Count)>(sql);
             }
             return new { Value = result.Value, Count = result.Count };
+            //return result;
         }
+        //public async Task<(int Value, int Count)> QueryTransferTime()
         public async Task<object> QueryTransferTime()
         {
             (int Value, int Count) result;
@@ -97,7 +102,9 @@ namespace OMSWeb.Repositories
                 result = await conn.QueryFirstAsync<(int Value, int Count)>(sql);
             }
             return new { Value = result.Value, Count = result.Count };
+            //return result;
         }
+        //public async Task<(int Value, int Count)> QueryAssignTime()
         public async Task<object> QueryAssignTime()
         {
             (int Value, int Count) result;
@@ -114,7 +121,10 @@ namespace OMSWeb.Repositories
                 result = await conn.QueryFirstAsync<(int Value, int Count)>(sql);
             }
             return new { Value = result.Value, Count = result.Count };
+            //return result;
         }
+
+        //public async Task<(float Value, float Count)> QueryNumberOfOrderRequest()
         public async Task<object> QueryNumberOfOrderRequest()
         {
             (float Value, float Count) result;
@@ -131,7 +141,10 @@ namespace OMSWeb.Repositories
                 result = await conn.QueryFirstAsync<(float Value, float Count)>(sql);
             }
             return new { Value = result.Value, Count = result.Count };
+            //return result;
         }
+        
+        //public async Task<(int Auto, int Manual, int Error, int Disconnected)> QueryVehicles()
         public async Task<object> QueryVehicles()
         {
             (int Auto, int Manual, int Error, int Disconnected) result;
@@ -155,6 +168,7 @@ namespace OMSWeb.Repositories
 
                 result = await conn.QueryFirstAsync<(int Auto, int Manual, int Error, int Disconnected)>(sql);
             }
+            
             return new
             {
                 Auto = result.Auto,
@@ -162,7 +176,11 @@ namespace OMSWeb.Repositories
                 Error = result.Error,
                 Disconnected = result.Disconnected,
             };
+            
+            //return result;
         }
+        
+        //public async Task<(int Unloading, int Loading)> QueryLoadingUnLoading()
         public async Task<object> QueryLoadingUnLoading()
         {
             (int Unloading, int Loading) result;
@@ -185,7 +203,10 @@ namespace OMSWeb.Repositories
                 result = await conn.QueryFirstAsync<(int Unloading, int Loading)>(sql);
             }
             return new { Unloading = result.Unloading, Loading = result.Loading };
+            //return result;
         }
+        
+        //public async Task<(DateTimeOffset BeforeTime, DateTimeOffset CurrentTime, int Count)> QueryRange()
         public async Task<object> QueryRange()
         {
             (DateTimeOffset BeforeTime, DateTimeOffset CurrentTime, int Count) result;
@@ -201,13 +222,18 @@ namespace OMSWeb.Repositories
 
                 result = await conn.QueryFirstAsync<(DateTimeOffset BeforeTime, DateTimeOffset CurrentTime, int Count)>(sql);
             }
+            
             return new
             {
                 before_time = result.BeforeTime.ToUnixTimeMilliseconds(),
                 current_time = result.CurrentTime.ToUnixTimeMilliseconds(),
                 Count = result.Count
             };
+            
+            //return result;
         }
+        
+        //public async Task<float> QueryUtilization()
         public async Task<object> QueryUtilization()
         {
             float result;
@@ -259,6 +285,7 @@ namespace OMSWeb.Repositories
                 }
             }
             return new { Value = result };
+            //return result;
         }
 
         public async Task<object> QueryTrendUtilization()
