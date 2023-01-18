@@ -1146,6 +1146,126 @@
 							{{ 'names.disabled' | translate }}
 						</div>
 					</div>
+					<div class="legend-item">
+						<div class="legend-icon">
+							<svg>
+								<g class="segment">
+									<path
+										class="segment_path"
+										d="M50 60 L50 10"
+										stroke-width="16px"
+										stroke-dasharray="0,0"
+										[style]="{ stroke: '#0006' }"
+									></path>
+									<path
+										class="segment_path"
+										d="M50 60 L50 10"
+										stroke-width="10px"
+										stroke-dasharray="0,0"
+										[style]="{ stroke: '#fff' }"
+									></path>
+									<path
+										class="segment_path"
+										d="M50 60 L50 10"
+										stroke-width="6px"
+										stroke-dasharray="0,0"
+										[style]="{ stroke: setting.normalSegmentColor }"
+									></path>
+									<path
+										class="segment_path"
+										d="M10 30 L90 30"
+										stroke-width="6px"
+										stroke-dasharray="0,0"
+										[style]="{ stroke: setting.normalSegmentColor }"
+									></path>
+								</g>
+							</svg>
+						</div>
+						<div class="legend-caption">
+							{{ 'names.underWay' | translate }}
+						</div>
+					</div>
+
+					<div class="legend-item">
+						<div class="legend-icon">
+							<svg>
+								<g class="segment">
+									<path
+										class="segment_path"
+										d="M10 30 L90 30"
+										stroke-width="6px"
+										stroke-dasharray="0,0"
+										[style]="{ stroke: setting.normalSegmentColor }"
+									></path>
+
+									<path
+										class="segment_path"
+										d="M50 60 L50 10"
+										stroke-width="16px"
+										stroke-dasharray="16,4,16,4"
+										[style]="{ stroke: '#0006' }"
+									></path>
+									<path
+										class="segment_path"
+										d="M50 60 L50 10"
+										stroke-width="10px"
+										stroke-dasharray="16,4,16,4"
+										[style]="{ stroke: '#fff' }"
+									></path>
+									<path
+										class="segment_path"
+										d="M50 60 L50 10"
+										stroke-width="6px"
+										stroke-dasharray="0,0"
+										[style]="{ stroke: setting.normalSegmentColor }"
+									></path>
+									
+								</g>
+							</svg>
+						</div>
+						<div class="legend-caption">
+							{{ 'names.highWay' | translate }}
+						</div>
+					</div>
+
+					<div class="legend-item">
+						<div class="legend-icon">
+							<svg>
+								<g class="segment">
+									<path
+										class="segment_path"
+										d="M10 30 L90 30"
+										stroke-width="16px"
+										stroke-dasharray="4,2,8,2,16,2,32,2,64"
+										[style]="{ stroke: '#0006' }"
+									></path>
+									<path
+										class="segment_path"
+										d="M10 30 L90 30"
+										stroke-width="10px"
+										stroke-dasharray="4,2,8,2,16,2,32,2,64"
+										[style]="{ stroke: '#fff' }"
+									></path>
+									<path
+										class="segment_path"
+										d="M10 30 L90 30"
+										stroke-width="6px"
+										stroke-dasharray="0,0"
+										[style]="{ stroke: setting.normalSegmentColor }"
+									></path>
+									<path
+										class="dir_triangle"
+										d="M0 0 m -4 -8 l 0 16 l 20 -8 Z"
+										transform="translate(50,30)"
+										[style]="{ fill: setting.segmentDirectionColor }"
+									></path>
+								</g>
+							</svg>
+						</div>
+						<div class="legend-caption">
+							{{ 'names.slope' | translate }}
+						</div>
+					</div>
 				</dd>
 
 				<dt>{{ 'names.point' | translate }}</dt>

@@ -498,7 +498,10 @@
     "nack": "Nack",
     "RCMD": "RCMD",
     "param": "param",
-    "view": "View"
+    "view": "View",
+    "underWay": "Under Way",
+    "highWay": "High Way",
+    "slope": "Slope Way"
   },
   "enums": {
     "hostSessionStatus": {
