@@ -489,6 +489,24 @@ defineExpose(exposed)
   stroke-width: v-bind('scaleStylesInfo.segmentWidth * 3');
 }
 
+#segment-layer .line,
+#disabled-segment-layer .line  {
+  stroke: rgba(0, 0, 0, 0.4);
+  stroke-width: v-bind('scaleStylesInfo.segmentWidth * 1.4+2');
+}
+
+#segment-layer .line-2,
+#disabled-segment-layer .line-2  {
+  stroke: rgba(255, 255, 255);
+  stroke-width: v-bind('scaleStylesInfo.segmentWidth * 1.6+2');
+  
+}
+#segment-layer .line-3,
+#disabled-segment-layer .line-3  {
+  stroke: rgba(0, 0, 0, 0.4);
+  stroke-width: v-bind('scaleStylesInfo.segmentWidth * 1.6+8');
+}
+
 #cluster-layer .cluster {
   stroke-width: v-bind('scaleStylesInfo.segmentWidth * 2.2');
 }

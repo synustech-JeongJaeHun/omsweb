@@ -3,6 +3,7 @@ import { Segment } from '../types/Segment'
 import { computed } from 'vue'
 import { getAngleFromTwoPoints } from 'src/utils/angle'
 import { createPathElement } from 'src/utils/svg/path'
+import { existence, getDashArray } from '../segments'
 
 const props = defineProps<{
   segment: Segment
@@ -34,6 +35,63 @@ const direction = computed(() => {
       :d="props.segment.d"
       fill="none"
     />
+    <g v-if="existence(props.segment.startPoint, props.segment.endPoint)==='OVER' ">
+      <path
+        class="line-3 fixed-scale-stroke"
+        v-bind:stroke-dasharray="getDashArray(5)"
+        :d="props.segment.d"
+        fill="none"
+      />
+      <path
+        class="line-2 fixed-scale-stroke"
+        :d="props.segment.d"
+        fill="none"
+      />
+      <path
+        class="line fixed-scale-stroke"
+        v-bind:stroke-dasharray="getDashArray(5)"
+        :d="props.segment.d"
+        fill="none"
+      />
+    </g>
+    <g v-if="existence(props.segment.startPoint, props.segment.endPoint)==='UNDER'">
+      <path
+        class="line-3 fixed-scale-stroke"
+        :d="props.segment.d"
+        fill="none"
+      />
+      <path
+        class="line-2 fixed-scale-stroke"
+        :d="props.segment.d"
+        fill="none"
+      />
+      <path
+        class="line fixed-scale-stroke"
+        :d="props.segment.d"
+        fill="none"
+      />
+    </g>
+    <g v-if="existence(props.segment.startPoint, props.segment.endPoint)==='SLOPE'">
+      <path
+        class="line-3 fixed-scale-stroke"
+        :d="props.segment.d"
+        v-bind:stroke-dasharray="getDashArray(props.segment.z)"
+        fill="none"
+      />
+      <path
+        class="line-2 fixed-scale-stroke"
+        :d="props.segment.d"
+        v-bind:stroke-dasharray="getDashArray(props.segment.z)"
+        fill="none"
+      />
+      <path
+        class="line fixed-scale-stroke"
+        :d="props.segment.d"
+        v-bind:stroke-dasharray="getDashArray(props.segment.z)"
+        fill="none"
+      />
+    </g>
+    
     <path
       ref="pathElement"
       class="segment-path fixed-scale-stroke"

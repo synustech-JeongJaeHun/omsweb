@@ -20,6 +20,7 @@ namespace OMSWeb.Repositories
           points.id AS id, 
           points.x AS x, 
           points.y AS y, 
+          points.z AS z, 
           points.physical_id AS physical_id, 
           points.logical_id AS logical_id,
           homes.id as home_id
