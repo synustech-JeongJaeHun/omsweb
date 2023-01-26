@@ -3,7 +3,6 @@ import { Segment } from '../types/Segment'
 import { computed } from 'vue'
 import { getAngleFromTwoPoints } from 'src/utils/angle'
 import { createPathElement } from 'src/utils/svg/path'
-import { existence, getDashArray } from '../segments'
 
 const props = defineProps<{
   segment: Segment
@@ -28,6 +27,7 @@ const direction = computed(() => {
 </script>
 
 <template>
+  
   <svg class="overflow-visible cursor-pointer segment">
     <path
       v-if="props.segment.isFocused"
@@ -35,64 +35,15 @@ const direction = computed(() => {
       :d="props.segment.d"
       fill="none"
     />
-    <g v-if="existence(props.segment.startPoint, props.segment.endPoint)==='OVER' ">
+    <g v-if="props.segment.type==='CROSS'">
       <path
-        class="line-3 fixed-scale-stroke"
-        v-bind:stroke-dasharray="getDashArray(5)"
+        class="flr fixed-scale-stroke"
         :d="props.segment.d"
-        fill="none"
-      />
-      <path
-        class="line-2 fixed-scale-stroke"
-        :d="props.segment.d"
-        fill="none"
-      />
-      <path
-        class="line fixed-scale-stroke"
-        v-bind:stroke-dasharray="getDashArray(5)"
-        :d="props.segment.d"
-        fill="none"
-      />
-    </g>
-    <g v-if="existence(props.segment.startPoint, props.segment.endPoint)==='UNDER'">
-      <path
-        class="line-3 fixed-scale-stroke"
-        :d="props.segment.d"
-        fill="none"
-      />
-      <path
-        class="line-2 fixed-scale-stroke"
-        :d="props.segment.d"
-        fill="none"
-      />
-      <path
-        class="line fixed-scale-stroke"
-        :d="props.segment.d"
-        fill="none"
-      />
-    </g>
-    <g v-if="existence(props.segment.startPoint, props.segment.endPoint)==='SLOPE'">
-      <path
-        class="line-3 fixed-scale-stroke"
-        :d="props.segment.d"
-        v-bind:stroke-dasharray="getDashArray(props.segment.z)"
-        fill="none"
-      />
-      <path
-        class="line-2 fixed-scale-stroke"
-        :d="props.segment.d"
-        v-bind:stroke-dasharray="getDashArray(props.segment.z)"
-        fill="none"
-      />
-      <path
-        class="line fixed-scale-stroke"
-        :d="props.segment.d"
-        v-bind:stroke-dasharray="getDashArray(props.segment.z)"
         fill="none"
       />
     </g>
     
-    <path
+    <path v-if="props.segment.type==='NORMAL' || props.segment.type==='CROSS'"
       ref="pathElement"
       class="segment-path fixed-scale-stroke"
       :d="props.segment.d"
@@ -104,6 +55,29 @@ const direction = computed(() => {
       @mouseout="handleMouseleave"
       @mouseleave="handleMouseleave"
     />
+    
+    <g v-if="props.segment.type==='SLOPE'">
+      <defs>
+        <linearGradient class="linear" 
+          v-bind:gradientTransform="'rotate('+props.segment.degree+')'" 
+          v-bind:id="props.segment.id+''" >
+          <stop v-bind:stop-opacity="props.segment.opacity"/>
+        </linearGradient>
+      </defs>
+      <path 
+        class="line fixed-scale-stroke"
+        :d="props.segment.d"
+        fill="none"
+        v-bind:stroke="'url(#'+props.segment.id+')'"
+        :data-id="props.segment.id"
+        @click.left="handleLeftClick"
+        @click.right="handleRightClick"
+        @mouseover="handleMouseover"
+        @mouseout="handleMouseleave"
+        @mouseleave="handleMouseleave"
+      />
+    </g>
+    
     <use
       class="segment-direction"
       href="#segment-direction-triangle"
@@ -117,5 +91,7 @@ const direction = computed(() => {
       @mouseout="handleMouseleave"
       @mouseleave="handleMouseleave"
     />
+
+    
   </svg>
 </template>

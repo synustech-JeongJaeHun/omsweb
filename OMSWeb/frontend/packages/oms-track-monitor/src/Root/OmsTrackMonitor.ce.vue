@@ -491,20 +491,20 @@ defineExpose(exposed)
 
 #segment-layer .line,
 #disabled-segment-layer .line  {
-  stroke: rgba(0, 0, 0, 0.4);
-  stroke-width: v-bind('scaleStylesInfo.segmentWidth * 1.4+2');
+  stroke-width: v-bind('scaleStylesInfo.segmentWidth')
 }
 
-#segment-layer .line-2,
-#disabled-segment-layer .line-2  {
-  stroke: rgba(255, 255, 255);
-  stroke-width: v-bind('scaleStylesInfo.segmentWidth * 1.6+2');
-  
+.linear :first-child{
+  /* stop-color: white */
 }
-#segment-layer .line-3,
-#disabled-segment-layer .line-3  {
-  stroke: rgba(0, 0, 0, 0.4);
-  stroke-width: v-bind('scaleStylesInfo.segmentWidth * 1.6+8');
+.linear :last-child{
+  stop-color: v-bind('parseStringProp(ColorDefault.normalSegment, props.normalSegmentColor)');
+}
+
+#segment-layer .flr,
+#disabled-segment-layer .flr  {
+  stroke: rgba(0, 0, 0, 0.5);
+  stroke-width: v-bind('scaleStylesInfo.segmentWidth +2.4');
 }
 
 #cluster-layer .cluster {

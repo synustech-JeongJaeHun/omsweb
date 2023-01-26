@@ -6,6 +6,7 @@ import { Segment } from './types/Segment'
 import { SegmentPart } from './types/SegmentPart'
 import { makeDFromSegment, most } from './utils/d'
 import { makeSegmentsFromParts } from './utils/segment'
+import { PathCommand } from 'src/utils/svg/pathSegment'
 
 const segments = ref<Segment[]>([])
 /**
@@ -15,16 +16,17 @@ const segments = ref<Segment[]>([])
 const segmentMap = new Map<Segment['id'], Segment>()
 const segmentMapByStartPointId = new Map<Point['id'], Segment[]>()
 
-let overLines:Points[] =[]
-let underLines:Points[] =[]
 let slopeLines:Points[] =[]
+let flrLines:Points[] =[]
 let flr = 0;
+const slp = [[156, 157, 158, 159, 160, 161, 162, 163], [138, 137, 136, 135, 134], [49, 50, 51]]
 
 function initSegments(segparts: ITrackData['segmentParts']) {
 	// clean
 	segments.value = []
 	segmentMap.clear()
 	segmentMapByStartPointId.clear()
+		
 	// set
 	segments.value = makeSegmentsFromParts(segparts ?? [])
 	segments.value.forEach((s) => {
@@ -38,26 +40,63 @@ function initSegments(segparts: ITrackData['segmentParts']) {
 	})
 
 	flr = most(segments.value.map(it=>it.z ?? 0))[0]
-	const bottom = most(segments.value.map(it=>it.z ?? 0), 3).sort((a, b)=>a-b)[0];
-	const top = most(segments.value.map(it=>it.z ?? 0), 3).sort((a, b)=>a-b)[2];
-
+	// const bottom = most(segments.value.map(it=>it.z ?? 0), 3).sort((a, b)=>a-b)[0];
+	// const top = most(segments.value.map(it=>it.z ?? 0), 3).sort((a, b)=>a-b)[2];
 	segments.value.sort((a, b) => (a.z || 0) - (b.z || 0))
 
 	const line:{startPoint: Point, endPoint: Point}[] = classfyLine(segparts);
 	containLines(line,flr);
-	slopeLines = findSlope(line, flr, top).concat(findSlope(line, bottom, flr))
+	
+	const slope = slp.flat();
+	slope.forEach((item, index)=>{
+		if(index+1 < slope.length){
+			const seg = findSegmentByPoints(item, slope[index+1])
+			seg && slopeLines.push({startPoint: seg?.startPoint, endPoint: seg?.endPoint, z: seg?.z})
+		}
+	})
+	
+	segments.value.forEach((s) => {
+		s.type= existence(s.startPoint, s.endPoint);
+		s.degree = getDegree(s.pathCommands)
+		s.opacity =  (getOpacity(s.startPoint)+getOpacity(s.endPoint))/2+0.08 
+	})
 }
 
 function existence(start: number, end: number){
-	if(overLines.find(item=>(item.startPoint===start && item.endPoint===end))) {return 'OVER'}
-	else if(underLines.find(item=>(item.startPoint===start && item.endPoint===end))) {return 'UNDER'}
-	else if(slopeLines.find(item=>(item.startPoint===start && item.endPoint===end))) {return 'SLOPE'}
-	return 'FLOOR'
+	if(slopeLines.find(item=>(item.startPoint===start && item.endPoint===end))) {return 'SLOPE'}
+	else if(flrLines.find(item=>(item.startPoint===start && item.endPoint===end))) {return 'CROSS'}
+	return 'NORMAL';
 }
 
-function getDashArray(z=0): string {
-	const height =(flr-Math.abs(z % flr))*10+4
-	return [height, 4, height, 4].toString()
+function getDegree(p: PathCommand[]): number{
+	const m = p.find(it=>it.type==='MoveTo'), 
+				l = p.find(it=>it.type==='LineTo')
+	const xGap = Math.floor((l?.x || 0) - (m?.x || 0))
+	const yGap = Math.floor((l?.y || 0) - (m?.y || 0))
+
+	if(xGap===0 && yGap>0) return 90
+	else if(xGap>0 && yGap===0) return 0
+	else if(xGap===0 && yGap<0) return 90
+	else if(xGap<0 && yGap===0) return 0
+	return 90;
+}
+
+function getOpacity_(dot:number): string {
+	const z = findPointById(dot)?.z || 1;
+	return z%flr/(flr)+'';
+}
+
+function getOpacity(dot:number):number {
+	let length =0, index=-1;
+	slp.forEach(slope=>{
+		slope.sort((a, b)=> a-b)
+		const lt = slope.findIndex(it=>it === dot)
+		if(lt!=-1){
+			length = slope.length;
+			index = lt;
+		}
+	})
+	return index/length;
 }
 
 function findSegmentById(id: number) {
@@ -162,10 +201,10 @@ function containLines(line:{startPoint: Point, endPoint: Point}[], flr: number){
 		for(let j=1; j<line.length-1; j++){
 			if(checkIntersection(line[i].startPoint, line[i].endPoint, line[j].startPoint, line[j].endPoint)){
 				if(line[i].startPoint.z as number >flr){
-					overLines.push({startPoint: line[i].startPoint.id, endPoint: line[i].endPoint.id})
+					flrLines.push({startPoint: line[i].startPoint.id, endPoint: line[i].endPoint.id})
 				}
 				if(line[i].startPoint.z as number <flr){
-					underLines.push({startPoint: line[i].startPoint.id, endPoint: line[i].endPoint.id})
+					flrLines.push({startPoint: line[j].startPoint.id, endPoint: line[j].endPoint.id})
 				}
 			}
 		}
@@ -188,9 +227,7 @@ export {
 	findSegmentById,
 	findSegmentByPoints,
 	setSegmentDisabled,
-	makeD,
-	existence,
-	getDashArray,
+	makeD
 }
 
 
