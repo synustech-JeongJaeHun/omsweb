@@ -35,15 +35,14 @@ const direction = computed(() => {
       :d="props.segment.d"
       fill="none"
     />
-    <g v-if="props.segment.type==='CROSS'">
-      <path
-        class="flr fixed-scale-stroke"
-        :d="props.segment.d"
-        fill="none"
-      />
-    </g>
+
+    <path v-if="props.segment.type==='CROSS'"
+      class="flr fixed-scale-stroke"
+      :d="props.segment.d"
+      fill="none"
+    />
     
-    <path v-if="props.segment.type==='NORMAL' || props.segment.type==='CROSS'"
+    <path
       ref="pathElement"
       class="segment-path fixed-scale-stroke"
       :d="props.segment.d"
@@ -56,29 +55,22 @@ const direction = computed(() => {
       @mouseleave="handleMouseleave"
     />
     
-    <g v-if="props.segment.type==='SLOPE'">
-      <defs>
-        <linearGradient class="linear" 
-          v-bind:gradientTransform="'rotate('+props.segment.degree+')'" 
-          v-bind:id="props.segment.id+''" >
-          <stop v-bind:stop-opacity="props.segment.opacity"/>
-        </linearGradient>
-      </defs>
-      <path 
-        class="line fixed-scale-stroke"
-        :d="props.segment.d"
-        fill="none"
-        v-bind:stroke="'url(#'+props.segment.id+')'"
-        :data-id="props.segment.id"
-        @click.left="handleLeftClick"
-        @click.right="handleRightClick"
-        @mouseover="handleMouseover"
-        @mouseout="handleMouseleave"
-        @mouseleave="handleMouseleave"
-      />
-    </g>
+    <use v-if="props.segment.type==='SLOPE'"
+       v-bind:stroke="props.segment.color"
+       v-bind:fill="props.segment.color"
+       href="#segment-slope-triangle"
+       :x="direction.position.x"
+       :y="direction.position.y"
+       :transform="`rotate(${direction.angle} ${direction.position.x} ${direction.position.y})`"
+       :data-id="props.segment.id"
+       @click.left="handleLeftClick"
+       @click.right="handleRightClick"
+       @mouseover="handleMouseover"
+       @mouseout="handleMouseleave"
+       @mouseleave="handleMouseleave"
+    />
     
-    <use
+    <use v-if="props.segment.type!=='CROSS' && props.segment.type!=='FLOOR'"
       class="segment-direction"
       href="#segment-direction-triangle"
       :x="direction.position.x"

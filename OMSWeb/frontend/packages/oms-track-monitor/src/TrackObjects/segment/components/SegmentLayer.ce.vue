@@ -46,6 +46,12 @@ function handleRightClick(event: MouseEvent) {
   <Layer id="segment-layer">
     <defs>
       <path
+        id="segment-slope-triangle"
+        class="fixed-scale-stroke"
+        :stroke-width="scaleStylesInfo.segmentDirection+5"
+        :d="`M 0 5` + `L -5 -5` + `L 5 -5` + `Z`"
+      />
+      <path
         id="segment-direction-triangle"
         class="fixed-scale-stroke"
         :stroke-width="scaleStylesInfo.segmentDirection"

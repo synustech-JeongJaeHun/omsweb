@@ -499,9 +499,9 @@
     "RCMD": "RCMD",
     "param": "param",
     "view": "View",
-    "underWay": "Under Way",
     "highWay": "High Way",
-    "slope": "Slope Way"
+    "slopeUp": "Slope Up",
+    "slopeDown": "Slope Down"
   },
   "enums": {
     "hostSessionStatus": {

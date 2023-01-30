@@ -489,18 +489,6 @@ defineExpose(exposed)
   stroke-width: v-bind('scaleStylesInfo.segmentWidth * 3');
 }
 
-#segment-layer .line,
-#disabled-segment-layer .line  {
-  stroke-width: v-bind('scaleStylesInfo.segmentWidth')
-}
-
-.linear :first-child{
-  /* stop-color: white */
-}
-.linear :last-child{
-  stop-color: v-bind('parseStringProp(ColorDefault.normalSegment, props.normalSegmentColor)');
-}
-
 #segment-layer .flr,
 #disabled-segment-layer .flr  {
   stroke: rgba(0, 0, 0, 0.5);

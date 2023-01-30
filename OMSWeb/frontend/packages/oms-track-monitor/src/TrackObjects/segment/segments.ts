@@ -17,16 +17,15 @@ const segmentMap = new Map<Segment['id'], Segment>()
 const segmentMapByStartPointId = new Map<Point['id'], Segment[]>()
 
 let slopeLines:Points[] =[]
+let crossLines:Points[] =[]
 let flrLines:Points[] =[]
-let flr = 0;
-const slp = [[156, 157, 158, 159, 160, 161, 162, 163], [138, 137, 136, 135, 134], [49, 50, 51]]
 
 function initSegments(segparts: ITrackData['segmentParts']) {
 	// clean
 	segments.value = []
 	segmentMap.clear()
 	segmentMapByStartPointId.clear()
-		
+
 	// set
 	segments.value = makeSegmentsFromParts(segparts ?? [])
 	segments.value.forEach((s) => {
@@ -36,67 +35,33 @@ function initSegments(segparts: ITrackData['segmentParts']) {
 		const key = s.startPoint
 		const value = segmentMapByStartPointId.get(key) ?? []
 		segmentMapByStartPointId.set(key, [...value, s])
-		s.z= findPointById(key)?.z
+		s.z= findPointById(key)?.z || 0
+
+    const endZ= findPointById(s.endPoint)?.z || 0;
+    s.color = (s.z !== endZ)&&s.z - endZ > 0 ?
+      '#80C6FF'
+      :'#ff7f7f'
 	})
 
-	flr = most(segments.value.map(it=>it.z ?? 0))[0]
-	// const bottom = most(segments.value.map(it=>it.z ?? 0), 3).sort((a, b)=>a-b)[0];
-	// const top = most(segments.value.map(it=>it.z ?? 0), 3).sort((a, b)=>a-b)[2];
+	const flr = most(segments.value.map(it=>it.z ?? 0))[0] || 0;
+	const bottom = most(segments.value.map(it=>it.z ?? 0), 3).sort((a, b)=>a-b)[0];
+	const top = most(segments.value.map(it=>it.z ?? 0), 3).sort((a, b)=>a-b)[2];
 	segments.value.sort((a, b) => (a.z || 0) - (b.z || 0))
 
-	const line:{startPoint: Point, endPoint: Point}[] = classfyLine(segparts);
+	const line:{startPoint: Point, endPoint: Point}[] = classifyLine(segparts)
 	containLines(line,flr);
-	
-	const slope = slp.flat();
-	slope.forEach((item, index)=>{
-		if(index+1 < slope.length){
-			const seg = findSegmentByPoints(item, slope[index+1])
-			seg && slopeLines.push({startPoint: seg?.startPoint, endPoint: seg?.endPoint, z: seg?.z})
-		}
-	})
-	
+  slopeLines = findSlope(line, flr, top).concat(findSlope(line, bottom, flr))
+
 	segments.value.forEach((s) => {
-		s.type= existence(s.startPoint, s.endPoint);
-		s.degree = getDegree(s.pathCommands)
-		s.opacity =  (getOpacity(s.startPoint)+getOpacity(s.endPoint))/2+0.08 
+		s.type= existence(s.startPoint, s.endPoint)
 	})
 }
 
 function existence(start: number, end: number){
-	if(slopeLines.find(item=>(item.startPoint===start && item.endPoint===end))) {return 'SLOPE'}
-	else if(flrLines.find(item=>(item.startPoint===start && item.endPoint===end))) {return 'CROSS'}
-	return 'NORMAL';
-}
-
-function getDegree(p: PathCommand[]): number{
-	const m = p.find(it=>it.type==='MoveTo'), 
-				l = p.find(it=>it.type==='LineTo')
-	const xGap = Math.floor((l?.x || 0) - (m?.x || 0))
-	const yGap = Math.floor((l?.y || 0) - (m?.y || 0))
-
-	if(xGap===0 && yGap>0) return 90
-	else if(xGap>0 && yGap===0) return 0
-	else if(xGap===0 && yGap<0) return 90
-	else if(xGap<0 && yGap===0) return 0
-	return 90;
-}
-
-function getOpacity_(dot:number): string {
-	const z = findPointById(dot)?.z || 1;
-	return z%flr/(flr)+'';
-}
-
-function getOpacity(dot:number):number {
-	let length =0, index=-1;
-	slp.forEach(slope=>{
-		slope.sort((a, b)=> a-b)
-		const lt = slope.findIndex(it=>it === dot)
-		if(lt!=-1){
-			length = slope.length;
-			index = lt;
-		}
-	})
-	return index/length;
+  if(crossLines.find(item=>(item.startPoint===start && item.endPoint===end))) {return 'CROSS'}
+  else if(flrLines.find(item=>(item.startPoint===start && item.endPoint===end))) {return 'FLOOR'}
+	else if(slopeLines.find(item=>(item.startPoint===start && item.endPoint===end))) {return 'SLOPE'}
+	return 'OTHER';
 }
 
 function findSegmentById(id: number) {
@@ -173,7 +138,7 @@ function checkIntersection(s1: Point, e1: Point, s2: Point, e2: Point): boolean{
 	return (result.onLine1 && result.onLine2);
 }
 
-function classfyLine(segparts: ITrackData['segmentParts']):{startPoint: Point, endPoint: Point}[] {
+function classifyLine(segparts: ITrackData['segmentParts']):{startPoint: Point, endPoint: Point}[] {
 	let line:{startPoint: Point, endPoint: Point}[] = []
 
 	if(segparts){
@@ -201,10 +166,12 @@ function containLines(line:{startPoint: Point, endPoint: Point}[], flr: number){
 		for(let j=1; j<line.length-1; j++){
 			if(checkIntersection(line[i].startPoint, line[i].endPoint, line[j].startPoint, line[j].endPoint)){
 				if(line[i].startPoint.z as number >flr){
-					flrLines.push({startPoint: line[i].startPoint.id, endPoint: line[i].endPoint.id})
+					crossLines.push({startPoint: line[i].startPoint.id, endPoint: line[i].endPoint.id})
+          flrLines.push({startPoint: line[j].startPoint.id, endPoint: line[j].endPoint.id})
 				}
 				if(line[i].startPoint.z as number <flr){
-					flrLines.push({startPoint: line[j].startPoint.id, endPoint: line[j].endPoint.id})
+					crossLines.push({startPoint: line[j].startPoint.id, endPoint: line[j].endPoint.id})
+          flrLines.push({startPoint: line[i].startPoint.id, endPoint: line[i].endPoint.id})
 				}
 			}
 		}
@@ -214,8 +181,8 @@ function containLines(line:{startPoint: Point, endPoint: Point}[], flr: number){
 function findSlope(line:{startPoint: Point, endPoint: Point}[], b: number, t: number ):Points[] {
 	let result : Points[] = [];
 	line.forEach(item=> {
-		if(item.startPoint.z && item.endPoint.z && 
-			item.startPoint.z>b && item.startPoint.z<t && item.endPoint.z>b && item.endPoint.z<t)
+    const startZ = item.startPoint.z, endZ = item.endPoint.z;
+		if(startZ && endZ&& (endZ - startZ!==0) && startZ>b && startZ<t && endZ>b && endZ<t)
 			result.push({startPoint: item.startPoint.id, endPoint: item.endPoint.id, z: item.startPoint.z});
 	})
 	return result;
