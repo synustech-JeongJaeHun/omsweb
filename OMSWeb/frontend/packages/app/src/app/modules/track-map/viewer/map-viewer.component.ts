@@ -548,6 +548,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 								this.contextMenuObject.value,
 							])
 							.subscribe()
+          this.showContextMenu =false;
 				})
 		} else if (needVerify) {
 			this.dialogSvc
@@ -563,12 +564,14 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 								this.contextMenuObject.value,
 							])
 							.subscribe()
+            this.showContextMenu =false;
 					}
 				})
 		} else {
 			this.messageSvc
 				.sendVehicleCommand(commandMessage, [this.contextMenuObject.value])
 				.subscribe()
+      this.showContextMenu =false;
 		}
 	}
 
