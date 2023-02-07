@@ -1,6 +1,11 @@
 <ng-container [ngSwitch]="isReady">
   <ng-container *ngSwitchCase="true">
+    <span [class.active]="false">{{ connectStateText }}</span>
     <mat-icon class="status-item host-status" [class.active]="isActiveConnStatus">{{ hostStatusIcon }}</mat-icon>
+    <span [class.active]="false">{{ controlStateText }}</span>
+    <button mat-button class="status-item status-action host-mode" (click)="changeOnlineMode()" [disabled]="!canControl">
+      <span [class.active]="true">{{ onofflineModeText }}</span>
+    </button>
     <button mat-button class="status-item status-action host-mode" (click)="changeHostMode()" [disabled]="!canControl">
       <span [class.active]="isActiveHostMode && isActiveOnlineMode">{{ hostModeText }}</span>
     </button>

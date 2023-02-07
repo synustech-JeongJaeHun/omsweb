@@ -8,6 +8,10 @@ export interface IMapUpdateCommandMessage extends ICommandMessage {
 	map_source_file?: string
 }
 
+export interface IOnlineStateCommandMessage extends ICommandMessage {
+  state?: string
+}
+
 export interface IControlStateCommandMessage extends ICommandMessage {
 	state?: string
 }

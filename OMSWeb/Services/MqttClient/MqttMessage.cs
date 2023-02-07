@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Newtonsoft.Json;
 using OMSWeb.Logger;
 using OMSWeb.Models;
 using System;
@@ -24,6 +25,7 @@ namespace OMSWeb.Services.MqttClient
         public const string REQUEST_ORDER = "order";
 
         public const string ACTION_MAP_UPDATE = "map_update";
+        public const string ACTION_ONLINE_STATE = "online_state";
         public const string ACTION_CONTROL_STATE = "control_state";
         public const string ACTION_TSC_STATE = "tsc_state";
         public const string ACTION_AI_MODE = "ai_mode";
@@ -93,6 +95,7 @@ namespace OMSWeb.Services.MqttClient
             switch (command.Action)
             {
                 case ACTION_MAP_UPDATE:
+                case ACTION_ONLINE_STATE:
                 case ACTION_CONTROL_STATE:
                 case ACTION_TSC_STATE:
                 case ACTION_AI_MODE:
@@ -166,6 +169,7 @@ namespace OMSWeb.Services.MqttClient
         {
             switch (action)
             {
+                case ACTION_ONLINE_STATE:
                 case ACTION_CONTROL_STATE:
                 case ACTION_TSC_STATE:
                     return REQUEST_HAS;
@@ -363,7 +367,8 @@ namespace OMSWeb.Services.MqttClient
                 data["action"] = GetAction(command.Action);
             }
 
-            if (command.Action == ACTION_CONTROL_STATE ||
+            if (command.Action == ACTION_ONLINE_STATE ||
+                command.Action == ACTION_CONTROL_STATE ||
                 command.Action == ACTION_TSC_STATE)
             {
                 if (command.State != null)
