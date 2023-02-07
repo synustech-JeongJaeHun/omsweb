@@ -12,7 +12,7 @@ import { AccountUtil } from '../utils/account.util';
 import { MessagesService } from '../../../services/messages.service';
 import { IDataChangeEvent } from '../../../models/notification.model';
 import { PermissionEnums } from '../../../models/enums';
-import { connect } from 'net';
+import {SettingsService} from "@oms/services/settings.service";
 
 @Component({
   selector: 'oms-gnb-states',
@@ -23,11 +23,19 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
   private timerId: any;
   private systemStates: ISystemStates;
   private destroy$ = new Subject<void>();
+  onOffLine: boolean = false
 
   get hostStatusIcon(): string {
+    if(!this.onOffLine){
+      if (!this.isActiveConnStatus)
+        return 'cloud_off'
+      else if (this.isActiveOnlineMode)
+        return 'cloud_done';
+      return 'cloud_queue';
+    }
     if (!this.isActiveConnStatus)
       return 'cloud_off'
-    else if (this.isActiveOnlineMode)
+    else if (this.isActiveHostMode)
       return 'cloud_done';
     return 'cloud_queue';
   }
@@ -45,19 +53,24 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
     let onlineStatus: number = this.systemStates?.sessionStatus - connected;
 
     if (onlineStatus == (OnOfflineModeEnums.AttemptOnline * 1000)) return this.t$.instant(`names.online`);
-    else if (onlineStatus == (OnOfflineModeEnums.HostOffline * 1000)) return this.t$.instant(`names.online`);  
+    else if (onlineStatus == (OnOfflineModeEnums.HostOffline * 1000)) return this.t$.instant(`names.online`);
     else if (onlineStatus == (OnOfflineModeEnums.HostOffline * 1000)) return this.t$.instant(`names.online`);
     else if (onlineStatus == (OnOfflineModeEnums.HostOffline * 1000)) return this.t$.instant(`names.online`);
     else if (onlineStatus == (OnOfflineModeEnums.HostOffline * 1000)) return this.t$.instant(`names.online`);
     else
       return this.t$.instant(`names.offline`);
   }
+
   get onofflineModeText(): string {
-    return this.t$.instant(`names.onoffline`);
+    return this.isActiveOnlineMode ? this.t$.instant(`names.online`) : this.t$.instant(`names.offline`)
   }
+
   get hostModeText(): string {
-    return this.t$.instant(`enums.hostMode.${this.systemStates?.hostMode}`);
+    if(!this.onOffLine)
+      return this.t$.instant(`enums.hostMode.${this.systemStates?.hostMode}`);
+    return this.t$.instant(`enums.hostModeRemote.${this.systemStates?.hostMode}`);
   }
+
   get tscModeText(): string {
     return this.t$.instant(`enums.tscMode.${this.systemStates?.tscMode}`);
   }
@@ -75,9 +88,14 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
     return this.t$.instant(`names.local`);
   }
   get hostParamText(): string[] {
+    if(!this.onOffLine){
+      if (this.isActiveHostMode)
+        return [this.t$.instant(`names.host`), this.t$.instant('names.local')];
+      return [this.t$.instant(`names.local`), this.t$.instant('names.host')];
+    }
     if (this.isActiveHostMode)
-      return [this.t$.instant(`names.host`), this.t$.instant('names.local')];
-    return [this.t$.instant(`names.local`), this.t$.instant('names.host')];
+      return [this.t$.instant(`names.remote`), this.t$.instant('names.local')];
+    return [this.t$.instant(`names.local`), this.t$.instant('names.remote')];
   }
   get tscParamTitle(): string {
     return this.t$.instant(`names.tsc`);
@@ -93,6 +111,11 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
   get isActiveOnlineMode(): boolean {
     return this.systemStates?.sessionStatus == (HostSessionStatusEnums.CONNECTED + OnOfflineModeEnums.Online * 1000);
   }
+
+  get isActiveStatus(): boolean {
+    return this.systemStates?.sessionStatus === HostSessionStatusEnums.CONNECTED;
+  }
+
   get isActiveHostMode(): boolean {
     return this.systemStates?.hostMode === HostModeEnums.HOST;
   }
@@ -113,11 +136,16 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
     private systemSvc: SystemsService,
     private dialogSvc: DialogService,
     private t$: TranslateService,
-    private messageSvc: MessagesService
+    private messageSvc: MessagesService,
+    private settingSvc: SettingsService,
   ) {
     this.getState();
 
     this.timerId = setInterval(() => this.getState(), 5000);
+
+    settingSvc.serviceConfig.subscribe(
+      (config) => (this.onOffLine = config.onOffLine),
+    )
   }
 
   ngOnInit(): void {

@@ -14,6 +14,8 @@ export class ServiceConfig {
 	kpiEnabled: boolean
 	bufferEnabled: boolean
 	i18nEnabled: boolean
+
+  onOffLine: boolean
 }
 
 export interface ManualTransferFiltersSetting {
