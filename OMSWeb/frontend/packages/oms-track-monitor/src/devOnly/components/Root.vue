@@ -83,5 +83,6 @@ watchEffect(async () => {
     :cargoLoadingColor="undefined"
     :cargoFullColor="undefined"
     :cargoUnloadingColor="undefined"
+    :zoomButtonVisible="false"
   ></oms-track-monitor>
 </template>
