@@ -38,7 +38,6 @@ export type ToggleOptionKeyType =
   | 'controlTable'
   | 'vehicleLines'
   | 'expectedPaths'
-  | 'vehicleLines'
   | 'pointLabels'
   | 'segmentDirections'
   | 'stations'
@@ -51,7 +50,9 @@ export type ToggleOptionKeyType =
   | 'showToolName'
   | 'showOmsVersion'
   | 'showKpi'
-  | 'overlaps';
+  | 'overlaps'
+  | 'zoomButton'
+  ;
 
 export type CommandKeyType =
   | 'centerZoom'

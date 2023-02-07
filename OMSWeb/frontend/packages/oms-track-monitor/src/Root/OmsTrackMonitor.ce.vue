@@ -28,6 +28,8 @@ import {
 import { scaleInfo } from '../MapObjects/scale/scale'
 import { rotationInfo } from '../MapObjects/rotate/rotate'
 import { exposed } from './exposed'
+import ZoomLayer from 'MapObjects/zoomButton/ZoomLayer.ce.vue'
+import {convertStringToImageDataUrl} from "src/utils/textToImage";
 /**
  *  https://v3.vuejs.org/api/sfc-script-setup.html#typescript-only-features
  *
@@ -66,6 +68,7 @@ const props = defineProps<{
   isCpsVisible: Boolish
   isFireshutterVisible: Boolish
   isMtlVisible: Boolish
+  zoomButtonVisible: Boolish
   // color
   backgroundColor: Stringlish
   stationColor: Stringlish
@@ -157,10 +160,22 @@ watch([propRefs.vehicleSecondaryContent], () => {
     props.vehicleSecondaryContent === 'carrier' ? 'carrier' : "order"
   updateVehicleSecondaryContent(vehicleSecondaryContent)
 })
+let zoomVisible =false
+watch([propRefs.zoomButtonVisible], () => {
+  if(props.zoomButtonVisible === true){
+    zoomVisible = true
+  }
+  if(props.zoomButtonVisible === false){
+    zoomVisible = false
+  } 
+  console.log(zoomVisible)
+})
+
 const selfElement = ref<HTMLDivElement>()
 const shadowRoot = computed(
   () => selfElement.value?.parentNode as ShadowRoot | null | undefined
 )
+
 provide('shadowRoot', readonly(shadowRoot))
 // HOW TO USE
 // const shadowRoot = inject<Ref<ShadowRoot>>('shadowRoot')
@@ -191,6 +206,12 @@ defineExpose(exposed)
       <ScaleBar />
       <ScreenDetail />
     </div>
+    <ZoomLayer v-show="zoomVisible" class="absolute flex flex-row" style="
+        padding: unset;
+        top: 10px;
+        right: 10px;
+        align-items: center;
+      "/>
   </div>
 </template>
 <style>

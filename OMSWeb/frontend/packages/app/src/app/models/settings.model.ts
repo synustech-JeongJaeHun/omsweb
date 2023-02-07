@@ -72,6 +72,7 @@ export const defaultToggleOptions: ToggleOptionsType = {
 	showToolName: false,
 	showOmsVersion: true,
 	showKpi: true,
+  zoomButton: false
 }
 
 type MonitorControlTable = typeof defaultControlTable

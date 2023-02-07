@@ -87,6 +87,13 @@ function zoomIn1Time(event: MouseEvent) {
   zoom('In', { x: event.offsetX, y: event.offsetY }, 1)
 }
 
+function zoomByButton(type :'In' | 'Out' ='In') {
+  const x =elementRectInfo.width/2,
+        y= elementRectInfo.height/2
+
+  zoom(type, { x, y }, 1)
+}
+
 const MaximumZoomCount = 3
 let zoomCount = 0
 let zoomAction: 'Out' | 'In' | undefined = undefined
@@ -157,4 +164,5 @@ export {
   exitPanning,
   panByMouse,
   handleMouseUp,
+  zoomByButton,
 }
