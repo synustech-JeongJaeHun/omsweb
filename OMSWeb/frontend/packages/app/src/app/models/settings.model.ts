@@ -14,6 +14,8 @@ export class ServiceConfig {
 	kpiEnabled: boolean
 	bufferEnabled: boolean
 	i18nEnabled: boolean
+  resetSWZCU: boolean
+  zcuDetail: boolean
 }
 
 export interface ManualTransferFiltersSetting {
@@ -352,6 +354,10 @@ const defaultControlTable = {
 	zcus_using_type: true,
 	zcus_type: true,
 	zcus_status: true,
+  zcus_logicalId: false,
+  zcus_passVehicle: false,
+  zcus_vehicleCount: false,
+  zcus_vehicleInfo: false,
 	zcus_errorCode: true,
 
 	zcus_order: [
@@ -359,7 +365,11 @@ const defaultControlTable = {
 		{ name: 'zcus_using_type', i18nLabel: 'names.usingType', width: 100 },
 		{ name: 'zcus_type', i18nLabel: 'names.zcuType', width: 100 },
 		{ name: 'zcus_status', i18nLabel: 'names.status', width: 100 },
-		{ name: 'zcus_errorCode', i18nLabel: 'names.errorCode', width: 'auto' },
+    { name: 'zcus_logicalId', i18nLabel: 'names.logicalId', width: 120 },
+    { name: 'zcus_passVehicle', i18nLabel: 'names.passVehicle', width: 100 },
+    { name: 'zcus_vehicleCount', i18nLabel: 'names.vehicleCount', width: 100 },
+    { name: 'zcus_vehicleInfo', i18nLabel: 'names.vehicleInfo', width: 100 },
+		{ name: 'zcus_errorCode', i18nLabel: 'names.errorCode', width: 'auto' }
 	],
 
 	// cps table

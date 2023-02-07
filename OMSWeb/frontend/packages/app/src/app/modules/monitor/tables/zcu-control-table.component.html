@@ -8,6 +8,15 @@
 	>
 		{{ 'names.reset' | translate }}
 	</button>
+  <button *ngIf="resetSWZCU"
+    mat-stroked-button
+    color="primary"
+    class="dense accent"
+    [disabled]="!canReset"
+    (click)="onReset('zcu_sw_reset')"
+  >
+    {{ 'names.SWReset' | translate }}
+  </button>
 	<button
 		mat-stroked-button
 		color="primary"
@@ -93,26 +102,51 @@
 		[visibleIndex]="getDisplayTableColumnIndex('zcus_status')"
 		[width]="getDisplayTableColumnWidth('zcus_status')"
 	></dxi-column>
-	<dxi-column
-		dataType="string"
-		dataField="errorCode"
-		[caption]="'names.errorCode' | translate"
-		[visible]="canDisplayTable('zcus_errorCode')"
-		[visibleIndex]="getDisplayTableColumnIndex('zcus_errorCode')"
-		[width]="getDisplayTableColumnWidth('zcus_errorCode')"
-	></dxi-column>
-	<!--
-  <dxi-column [width]="120" dataType="string" dataField="logicalId" [caption]="'names.logicalId' | translate"
-              *ngIf="canDisplayTable('zcus_logicalId')"></dxi-column>
-    -->
-	<!--
-  <dxi-column [width]="100" dataType="string" dataField="passVehicle" [caption]="'names.passVehicle' | translate"
-              *ngIf="canDisplayTable('zcus_passVehicle')"></dxi-column>
-  <dxi-column [width]="100" dataType="string" dataField="vehicleCount" [caption]="'names.vehicleCount' | translate"
-              *ngIf="canDisplayTable('zcus_vehicleCount')"></dxi-column>
-  <dxi-column [width]="100" dataType="string" dataField="vehicleInfo" [caption]="'names.vehicleInfo' | translate"
-              *ngIf="canDisplayTable('zcus_vehicleInfo')"></dxi-column>
-    -->
+
+  <ng-container *ngIf="zcuDetail">
+    <dxi-column
+      dataType="string"
+      dataField="logicalId"
+      [caption]="'names.logicalId' | translate"
+      [visible]="canDisplayTable('zcus_logicalId')"
+      [visibleIndex]="getDisplayTableColumnIndex('zcus_logicalId')"
+      [width]="getDisplayTableColumnWidth('zcus_logicalId')"
+    ></dxi-column>
+    <dxi-column
+      dataType="string"
+      dataField="passVehicle"
+      [caption]="'names.passVehicle' | translate"
+      [visible]="canDisplayTable('zcus_passVehicle')"
+      [visibleIndex]="getDisplayTableColumnIndex('zcus_passVehicle')"
+      [width]="getDisplayTableColumnWidth('zcus_passVehicle')"
+    ></dxi-column>
+    <dxi-column
+      dataType="string"
+      dataField="vehicleCount"
+      [caption]="'names.vehicleCount' | translate"
+      [visible]="canDisplayTable('zcus_vehicleCount')"
+      [visibleIndex]="getDisplayTableColumnIndex('zcus_vehicleCount')"
+      [width]="getDisplayTableColumnWidth('zcus_vehicleCount')"
+    ></dxi-column>
+    <dxi-column
+      dataType="string"
+      dataField="vehicleInfo"
+      [caption]="'names.vehicleInfo' | translate"
+      [visible]="canDisplayTable('zcus_vehicleInfo')"
+      [visibleIndex]="getDisplayTableColumnIndex('zcus_vehicleInfo')"
+      [width]="getDisplayTableColumnWidth('zcus_vehicleInfo')"
+    ></dxi-column>
+  </ng-container>
+
+  <dxi-column
+    dataType="string"
+    dataField="errorCode"
+    [caption]="'names.errorCode' | translate"
+    [visible]="canDisplayTable('zcus_errorCode')"
+    [visibleIndex]="getDisplayTableColumnIndex('zcus_errorCode')"
+    [width]="getDisplayTableColumnWidth('zcus_errorCode')"
+  ></dxi-column>
+
 	<div *dxTemplate="let data of 'statusTemplate'">
 		<div
 			class="value"

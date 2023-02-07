@@ -10,6 +10,10 @@ namespace OMSWeb.Models
         public bool KpiEnabled { get; set; }
         public bool BufferEnabled { get; set; }
         public bool i18nEnabled { get; set; }
+        
+        public bool ResetSWZCU { get; set; }
+        public bool ZCUDetail { get; set; }
+        
 
         public ClientSettings Client { get; set; }
 

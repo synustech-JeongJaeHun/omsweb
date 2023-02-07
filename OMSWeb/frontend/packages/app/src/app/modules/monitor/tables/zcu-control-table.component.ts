@@ -38,6 +38,10 @@ export class ZcuControlTableComponent implements OnInit, OnDestroy {
 
 	preference: ClientPreferences
 
+  resetSWZCU: boolean =false
+
+  zcuDetail:boolean =false
+
 	private color_normal: string = 'rgba(240, 255, 255, 1.0)'
 	private color_error: string = 'rgba(255, 0, 0, 0.5)'
 
@@ -68,6 +72,13 @@ export class ZcuControlTableComponent implements OnInit, OnDestroy {
 	) {
 		this.dataSource = this.statusSvc.zcuStatusDataSource()
 		this.preference = this.settingSvc.globalPreferences
+    settingSvc.serviceConfig.subscribe(
+      (config) => (
+        this.resetSWZCU = config.resetSWZCU,
+        this.zcuDetail = config.zcuDetail,
+        console.log(config.zcuDetail)
+      ),
+    )
 	}
 
 	canDisplayTable(type: string): boolean {
@@ -131,7 +142,7 @@ export class ZcuControlTableComponent implements OnInit, OnDestroy {
 		return this.color_normal
 	}
 
-	onReset() {
+	onReset(action: 'zcu_reset'| 'zcu_sw_reset' ='zcu_reset') {
 		if (!this.canReset) return
 
 		this.dialogSvc
@@ -140,7 +151,7 @@ export class ZcuControlTableComponent implements OnInit, OnDestroy {
 				if (confirm) {
 					this.messageSvc
 						.sendZcuCommand({
-							action: 'zcu_reset',
+							action,
 							zcuIds: this.selectedRows,
 						})
 						.subscribe()
