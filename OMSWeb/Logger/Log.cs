@@ -121,7 +121,7 @@ namespace OMSWeb.Logger
             if (!initialized) return;
             string logText = string.Format(format, args);
             string message = $"[{GetSequence()}][{GetModuleName(type)}][{GetLevel(level)}][{GetOrderID(string.Empty)}] {logText}";
-            logger.ForContext("mapInfo", $"{Convert.ToInt32(type)};{DateTime.Now.ToString(DATE_SPLITTER)}").Write(level, message);
+            logger.ForContext("mapInfo", $"{Convert.ToInt32(type)};{DateTime.Now.ToString(DATE_SPLITTER)}").Write((Serilog.Events.LogEventLevel)level, message);
         }
 
         public static void Dispose() 
