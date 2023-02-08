@@ -233,8 +233,8 @@ function onRightClick(event: MouseEvent) {
       :isCarrierFocused="props.vehicle.isCarrierFocused" :isHovered="props.vehicle.isHovered" @dblclick="onDbClick()"
       @leftclick="onLeftClick()" @rightclick="onRightClick($event)" @mouseover="onMouseover($event)"
       @mouseout="onMouseleave()" @mouseleave="onMouseleave()" />
-
-    <template v-if="props.vehicle.isConnected">
+    
+    <template v-if="props.vehicle.isConnected && !props.vehicle.errorList && props.vehicle.mode !== 'M'"  >
       <!-- next point line -->
       <line v-if="props.vehicle.movingState === 'M' && nextPointPosition && realtimePosition"
         class="line next-line fixed-scale-stroke" stroke="#91e079" stroke-width="1" stroke-linecap="round"
