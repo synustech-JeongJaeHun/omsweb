@@ -26,17 +26,10 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
   onOffLine: boolean = false
 
   get hostStatusIcon(): string {
-    if(!this.onOffLine){
-      if (!this.isActiveConnStatus)
-        return 'cloud_off'
-      else if (this.isActiveOnlineMode)
-        return 'cloud_done';
-      return 'cloud_queue';
-    }
     if (!this.isActiveConnStatus)
       return 'cloud_off'
-    else if (this.isActiveHostMode)
-      return 'cloud_done';
+    else if (this.isActiveOnlineMode)
+      return this.onOffLine ? 'cloud' : 'cloud_done';
     return 'cloud_queue';
   }
   get connectStateText(): string {
@@ -62,13 +55,11 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
   }
 
   get onofflineModeText(): string {
-    return this.isActiveOnlineMode ? this.t$.instant(`names.online`) : this.t$.instant(`names.offline`)
+    return this.t$.instant(this.isActiveOnlineMode ? `names.online` : `names.offline`)
   }
 
   get hostModeText(): string {
-    if(!this.onOffLine)
-      return this.t$.instant(`enums.hostMode.${this.systemStates?.hostMode}`);
-    return this.t$.instant(`enums.hostModeRemote.${this.systemStates?.hostMode}`);
+    return this.t$.instant((this.onOffLine? 'enums.hostModeRemote.' : 'enums.hostMode.')+`${this.systemStates?.hostMode}`);
   }
 
   get tscModeText(): string {
@@ -88,14 +79,10 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
     return this.t$.instant(`names.local`);
   }
   get hostParamText(): string[] {
-    if(!this.onOffLine){
-      if (this.isActiveHostMode)
-        return [this.t$.instant(`names.host`), this.t$.instant('names.local')];
-      return [this.t$.instant(`names.local`), this.t$.instant('names.host')];
-    }
+    const key = this.onOffLine? `names.remote` :`names.host`
     if (this.isActiveHostMode)
-      return [this.t$.instant(`names.remote`), this.t$.instant('names.local')];
-    return [this.t$.instant(`names.local`), this.t$.instant('names.remote')];
+      return [this.t$.instant(key), this.t$.instant('names.local')];
+    return [this.t$.instant(`names.local`), this.t$.instant(key)];
   }
   get tscParamTitle(): string {
     return this.t$.instant(`names.tsc`);
