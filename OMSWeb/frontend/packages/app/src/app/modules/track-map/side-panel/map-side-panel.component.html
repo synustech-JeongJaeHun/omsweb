@@ -272,11 +272,11 @@
         </mat-form-field>
         <mat-form-field class="info-item readonly" floatLabel="always">
           <mat-label>{{ "names.pointFrom" | translate }}</mat-label>
-          <input matInput type="text" readonly [value]="data.startPoint" />
+          <input matInput type="text" readonly [value]="data.startPointDto? data.startPoint+'('+data.startPointDto.physicalId+')' : data.startPoint" />
         </mat-form-field>
         <mat-form-field class="info-item readonly" floatLabel="always">
           <mat-label>{{ "names.pointTo" | translate }}</mat-label>
-          <input matInput type="text" readonly [value]="data.endPoint" />
+          <input matInput type="text" readonly [value]="data.endPointDto? data.endPoint+'('+data.endPointDto.physicalId+')' : data.endPoint" />
         </mat-form-field>
         <mat-form-field class=" info-item readonly" floatLabel="always">
           <mat-label>{{ "names.speed" | translate }}</mat-label>

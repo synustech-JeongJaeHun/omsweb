@@ -389,6 +389,7 @@
     "resetVehicle": "重置车辆",
     "showKpi": "显示 KPI",
     "zoomButton": "显示 Zoom",
+    "pointDisplayType": "显示 点条码",
     "summary": "总结",
     "systemInfo": "系统信息",
     "utilization": "利用率",

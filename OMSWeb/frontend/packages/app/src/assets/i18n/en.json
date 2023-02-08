@@ -389,6 +389,7 @@
     "resetVehicle": "Reset Vehicle",
     "showKpi": "Show KPI",
     "zoomButton": "Show Zoom Button",
+    "pointDisplayType": "Show Point Barcode",
     "summary": "Summary",
     "systemInfo": "System Info",
     "utilization": "Utilization",

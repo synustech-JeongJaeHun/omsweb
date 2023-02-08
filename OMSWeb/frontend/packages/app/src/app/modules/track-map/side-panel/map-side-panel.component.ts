@@ -15,6 +15,8 @@ import { PermissionEnums } from '../../../models/enums'
 import { TrackStatusService } from '@oms/root/services/track-status.service'
 import { DialogService } from '@oms/root/services/dialog.service'
 import { TranslateService } from '@ngx-translate/core'
+import { SettingsService } from "@oms/services/settings.service";
+import {ClientPreferences, IPreferences, ToggleOptionsType} from "@oms/models/settings.model";
 
 @Component({
 	selector: 'oms-map-side-panel',
@@ -24,6 +26,8 @@ import { TranslateService } from '@ngx-translate/core'
 export class MapSidePanelComponent implements OnChanges, OnDestroy {
 	@Input('selectedObject') data: any
 	@Output() focus = new EventEmitter<any>()
+
+  preference:IPreferences
 
 	hasOverlap = true
 	private selfUpdateIntervalId
@@ -40,6 +44,8 @@ export class MapSidePanelComponent implements OnChanges, OnDestroy {
 		)
 	}
 
+  private pointDisplayType = false;
+
 	constructor(
 		private statesSvc: MapStatesService,
 		private messageSvc: MessagesService,
@@ -47,9 +53,14 @@ export class MapSidePanelComponent implements OnChanges, OnDestroy {
         private auth: AuthService,
         private dialogSvc: DialogService,
         private $t: TranslateService,
-	) {}
+    private settingSvc: SettingsService
+	) {
+
+  }
 
 	ngOnChanges(changes: SimpleChanges): void {
+    this.preference = this.settingSvc.globalPreferences
+
 		this.disableds = []
 		if (this.selfUpdateIntervalId) clearInterval(this.selfUpdateIntervalId)
 		if (this.overlapObjectsUpdateIntervalId)
@@ -118,6 +129,15 @@ export class MapSidePanelComponent implements OnChanges, OnDestroy {
 							.filter((sd) => sd.segmentId === id)
 							.sort((a, b) => a.id - b.id)
 
+
+            if(this.preference.toggles.pointDisplayType){
+              this.trackStatusService.trackData.points.forEach(item=>{
+                if(current.startPoint===item.id) current.startPointDto=item;
+                if(current.endPoint===item.id) current.endPointDto=item;
+              })
+            }
+
+
 						this.data = { ...current, objectType: 'SEGMENT' }
 						this.disableds = disableds
 					}
@@ -137,7 +157,7 @@ export class MapSidePanelComponent implements OnChanges, OnDestroy {
 							(p) => p.id === id,
 						)
 						this.data = { ...current, objectType: 'POINT' }
-            this.data.groups = current.homeId 
+            this.data.groups = current.homeId
               ? this.trackStatusService.getGroupsFromObject('home', this.data.homeId)
               : []
 					}

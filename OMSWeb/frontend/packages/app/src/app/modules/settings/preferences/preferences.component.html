@@ -15,6 +15,9 @@
         (change)="onChangedToggle('showKpi')">{{ "names.showKpi" | translate }}</mat-slide-toggle>
       <mat-slide-toggle [(ngModel)]="preference.toggles.zoomButton" color="primary"
         (change)="onChangedToggle('zoomButton')">{{ "names.zoomButton" | translate }}</mat-slide-toggle>
+
+      <mat-slide-toggle [(ngModel)]="preference.toggles.pointDisplayType" color="primary"
+        (change)="onChangedToggle('pointDisplayType')">{{ "names.pointDisplayType" | translate }}</mat-slide-toggle>
     </div>
   </fieldset>
 </div>

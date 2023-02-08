@@ -52,6 +52,7 @@ export type ToggleOptionKeyType =
   | 'showKpi'
   | 'overlaps'
   | 'zoomButton'
+  | 'pointDisplayType'
   ;
 
 export type CommandKeyType =

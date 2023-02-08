@@ -154,6 +154,9 @@ export namespace Dto {
 		candidates?: any[]
 		travelTime: any
 		isValidate?: boolean
+
+    startPointDto?: IPoint
+    endPointDto?: IPoint
 	}
 	export interface IStation {
 		id: number

@@ -30,6 +30,7 @@ import { rotationInfo } from '../MapObjects/rotate/rotate'
 import { exposed } from './exposed'
 import ZoomLayer from 'MapObjects/zoomButton/ZoomLayer.ce.vue'
 import {convertStringToImageDataUrl} from "src/utils/textToImage";
+import {updatePointType} from "TrackObjects/point/pointType";
 /**
  *  https://v3.vuejs.org/api/sfc-script-setup.html#typescript-only-features
  *
@@ -69,6 +70,7 @@ const props = defineProps<{
   isFireshutterVisible: Boolish
   isMtlVisible: Boolish
   zoomButtonVisible: Boolish
+  pointDisplayType: Boolish
   // color
   backgroundColor: Stringlish
   stationColor: Stringlish
@@ -167,9 +169,18 @@ watch([propRefs.zoomButtonVisible], () => {
   }
   if(props.zoomButtonVisible === false){
     zoomVisible = false
-  } 
-  console.log(zoomVisible)
+  }
 })
+
+watch([propRefs.pointDisplayType], () => {
+  if(props.pointDisplayType === true){
+    updatePointType(true)
+  }
+  if(props.pointDisplayType === false){
+    updatePointType(false)
+  }
+})
+
 
 const selfElement = ref<HTMLDivElement>()
 const shadowRoot = computed(
