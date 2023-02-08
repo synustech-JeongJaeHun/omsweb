@@ -664,6 +664,9 @@ namespace OMSWeb.Services.MqttClient
                 if (command.ZcuId != null || command.ZcuIds != null)
                     data["zcu_id"] = GetZcuId(command);
 
+                if (command.ZcuUsingType != null)
+                    data["type"] = command.ZcuUsingType;
+
                 Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: {command.Action}");
             }
             else if (command.Action == ACTION_INSTALL_CARRIER ||
