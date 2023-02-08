@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IKeyValuePair } from '@oms/models/base.model';
 import { MatDialogRef } from '@angular/material/dialog';
 import { TrackStatusService } from '@oms/root/services/track-status.service';
+import {SettingsService} from "@oms/services/settings.service";
 
 type Ids = { id: number, logicalId: string }
 type ObjectTypeKey = "point" | "segment" | "station" | "mtl" | "buffer" | "zcu" | "cluster" | "vehicle"
@@ -44,22 +45,10 @@ export class SearchDialogComponent {
 
   constructor(
     private trackStatusService: TrackStatusService,
-    private dialog: MatDialogRef<SearchDialogComponent>
+    private dialog: MatDialogRef<SearchDialogComponent>,
+    private settingSvc: SettingsService
   ) {
-    this.dataSourceMap = {
-      vehicle: this.trackStatusService.trackData.vehicles.map((x) => ({id: x.id, logicalId: x.logicalId})),
-      point: this.trackStatusService.trackData.points.map((x) => ({ id: x.id, logicalId: x.logicalId })),
-      // distinct element because segment data is mixed with segparts
-      segment: [...new Map(this.trackStatusService.trackData.segments.map((x) => [x.id, x.logicalId]))].map((x) => ({ id: x[0], logicalId: x[1] })),
-      station: this.trackStatusService.trackData.stations.map((x) => ({ id: x.id, logicalId: x.logicalId })),
-      buffer: this.trackStatusService.trackData.buffers.map((x) => ({ id: x.id, logicalId: x.logicalId })),
-      mtl: this.trackStatusService.trackData.mtls.map((x) => ({ id: x.id, logicalId: x.logicalId })),
-      zcu: this.trackStatusService.trackData.zcus.map((x) => ({ id: x.id, logicalId: String(x.id) })),
-      cluster: this.trackStatusService.trackData.clusters.map((x) => ({id: x.id, logicalId: String(x.id)})),
-    };
-
-    this.selectedType = this.objectTypes[0]
-    this.targets = this.dataSourceMap.vehicle
+    this.onLoad()
   }
 
   onSearch(type: string, value: string) {
@@ -71,5 +60,27 @@ export class SearchDialogComponent {
     if (!item) return;
     this.selectedType = item;
     this.targets = this.dataSourceMap[item.key];
+  }
+
+  onLoad(){
+    const pointDisplayType = this.settingSvc.globalPreferences.toggles.pointDisplayType
+
+    this.dataSourceMap = {
+      vehicle: this.trackStatusService.trackData.vehicles.map((x) => ({id: x.id, logicalId: x.logicalId})),
+      point: !pointDisplayType?
+        this.trackStatusService.trackData.points.map((x) => ({ id: x.id, logicalId: x.logicalId }))
+        : this.trackStatusService.trackData.points.map((x) => ({ id: x.id, logicalId: x.physicalId }))
+      ,
+      // distinct element because segment data is mixed with segparts
+      segment: [...new Map(this.trackStatusService.trackData.segments.map((x) => [x.id, x.logicalId]))].map((x) => ({ id: x[0], logicalId: x[1] })),
+      station: this.trackStatusService.trackData.stations.map((x) => ({ id: x.id, logicalId: x.logicalId })),
+      buffer: this.trackStatusService.trackData.buffers.map((x) => ({ id: x.id, logicalId: x.logicalId })),
+      mtl: this.trackStatusService.trackData.mtls.map((x) => ({ id: x.id, logicalId: x.logicalId })),
+      zcu: this.trackStatusService.trackData.zcus.map((x) => ({ id: x.id, logicalId: String(x.id) })),
+      cluster: this.trackStatusService.trackData.clusters.map((x) => ({id: x.id, logicalId: String(x.id)})),
+    };
+
+    this.selectedType = this.objectTypes[0]
+    this.targets = this.dataSourceMap.vehicle
   }
 }

@@ -24,6 +24,8 @@ function initSegments(segparts: ITrackData['segmentParts']) {
 	// set
 	segments.value = makeSegmentsFromParts(segparts ?? [])
 	segments.value.forEach((s) => {
+    s.startPointDto = findPointById(s.startPoint)
+    s.endPointDto= findPointById(s.endPoint)
 		// segmentMap
 		segmentMap.set(s.id, s)
 
