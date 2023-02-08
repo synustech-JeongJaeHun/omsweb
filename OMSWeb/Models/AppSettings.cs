@@ -11,7 +11,6 @@ namespace OMSWeb.Models
         public bool BufferEnabled { get; set; }
         public bool i18nEnabled { get; set; }
         
-        public bool ResetSWZCU { get; set; }
         public bool ZCUDetail { get; set; }
         
 

@@ -130,6 +130,8 @@ export interface ISettingZcuCommandMessage extends ICommandMessage {
 export interface IZcuCommandMessage extends ICommandMessage {
 	zcuId?: number
 	zcuIds?: number[]
+
+  zcuUsingType?: string
 }
 
 export interface IVehicleRegCommandMessage extends ICommandMessage {

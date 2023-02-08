@@ -597,7 +597,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 				}
 			})
 	}
-	onResetHWZcu() {
+  onResetZcu(type :'hw'|'sw' = 'hw') {
 		this.dialogSvc
 			.confirm({ body: this.$t.instant('messages.confirmZcuReset') })
 			.subscribe((confirm) => {
@@ -606,6 +606,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 						.sendZcuCommand({
 							action: 'zcu_reset',
 							zcuId: this.contextMenuObject.value.id,
+              zcuUsingType: type
 						})
 						.subscribe()
 				}

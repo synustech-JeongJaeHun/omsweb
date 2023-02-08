@@ -132,7 +132,6 @@ namespace OMSWeb.Services
             client.KpiEnabled = this._appSettings.KpiEnabled;
             client.BufferEnabled = this._appSettings.BufferEnabled;
             client.i18nEnabled = this._appSettings.i18nEnabled;
-            client.ResetSWZCU =  this._appSettings.ResetSWZCU;
             client.ZCUDetail = this._appSettings.ZCUDetail;
             return this._appSettings.Client;
         }

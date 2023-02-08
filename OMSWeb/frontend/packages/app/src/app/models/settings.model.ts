@@ -14,7 +14,6 @@ export class ServiceConfig {
 	kpiEnabled: boolean
 	bufferEnabled: boolean
 	i18nEnabled: boolean
-  resetSWZCU: boolean
   zcuDetail: boolean
 }
 

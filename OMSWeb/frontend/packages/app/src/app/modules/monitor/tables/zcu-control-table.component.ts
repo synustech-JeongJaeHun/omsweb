@@ -38,8 +38,6 @@ export class ZcuControlTableComponent implements OnInit, OnDestroy {
 
 	preference: ClientPreferences
 
-  resetSWZCU: boolean =false
-
   zcuDetail:boolean =false
 
 	private color_normal: string = 'rgba(240, 255, 255, 1.0)'
@@ -74,11 +72,8 @@ export class ZcuControlTableComponent implements OnInit, OnDestroy {
 		this.preference = this.settingSvc.globalPreferences
     settingSvc.serviceConfig.subscribe(
       (config) => (
-        this.resetSWZCU = config.resetSWZCU,
-        this.zcuDetail = config.zcuDetail,
-        console.log(config.zcuDetail)
-      ),
-    )
+          this.zcuDetail = config.zcuDetail
+      ))
 	}
 
 	canDisplayTable(type: string): boolean {
@@ -142,7 +137,7 @@ export class ZcuControlTableComponent implements OnInit, OnDestroy {
 		return this.color_normal
 	}
 
-	onReset(action: 'zcu_reset'| 'zcu_sw_reset' ='zcu_reset') {
+	onReset(type :'hw'|'sw' = 'hw') {
 		if (!this.canReset) return
 
 		this.dialogSvc
@@ -151,8 +146,9 @@ export class ZcuControlTableComponent implements OnInit, OnDestroy {
 				if (confirm) {
 					this.messageSvc
 						.sendZcuCommand({
-							action,
+              action: 'zcu_reset',
 							zcuIds: this.selectedRows,
+              zcuUsingType: type
 						})
 						.subscribe()
 				}
@@ -203,4 +199,17 @@ export class ZcuControlTableComponent implements OnInit, OnDestroy {
 	private visibilitychange() {
 		if (!document.hidden) this.dataSource.reload()
 	}
+
+  private setVHLInfoOnHW(){
+    this.dataSource.store().load().done(list=>{
+      list.forEach(item=>{
+        if(item.usingType==='HW'){
+          item.logicalId=''
+          item.passVehicle=''
+          item.vehicleCount=''
+          item.vehicleInfo=''
+        }
+      })
+    })
+  }
 }

@@ -8,12 +8,12 @@
 	>
 		{{ 'names.reset' | translate }}
 	</button>
-  <button *ngIf="resetSWZCU"
+  <button
     mat-stroked-button
     color="primary"
     class="dense accent"
     [disabled]="!canReset"
-    (click)="onReset('zcu_sw_reset')"
+    (click)="onReset('sw')"
   >
     {{ 'names.SWReset' | translate }}
   </button>
