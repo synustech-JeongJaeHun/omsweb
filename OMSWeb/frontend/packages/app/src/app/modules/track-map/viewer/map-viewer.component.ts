@@ -945,9 +945,17 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		this.tooltipObject.value.groups = groups
 
 		if (this.tooltipObject.type === 'SEGMENT') {
-			const { startPoint, endPoint } = this.tooltipObject.value
-			this.tooltipObject.value.point =
-				startPoint && endPoint ? `${startPoint} → ${endPoint}` : null
+
+      if(this.preference.toggles.pointDisplayType){
+        const { startPointDto, endPointDto } = this.tooltipObject.value
+        this.tooltipObject.value.point =
+          startPointDto && endPointDto ? `${startPointDto.physicalId} → ${endPointDto.physicalId}` : null
+      }
+      else{
+        const { startPoint, endPoint } = this.tooltipObject.value
+        this.tooltipObject.value.point =
+          startPoint && endPoint ? `${startPoint} → ${endPoint}` : null
+      }
 		}
 
 		// @ts-ignore
