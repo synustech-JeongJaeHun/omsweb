@@ -4,7 +4,7 @@
     <ng-container *ngIf="onOffLine">
       <button mat-button class="status-item status-action host-mode" (click)="changeOnlineMode()"
               [disabled]="!canControl">
-        <span [class.active]="isActiveOnlineMode">{{ onofflineModeText }}</span>
+        <span [class.active]="isActiveConnStatus">{{ onofflineModeText }}</span>
       </button>
     </ng-container>
     <button mat-button class="status-item status-action host-mode" (click)="changeHostMode()"

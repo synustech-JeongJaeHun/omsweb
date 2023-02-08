@@ -28,9 +28,19 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
   get hostStatusIcon(): string {
     if (!this.isActiveConnStatus)
       return 'cloud_off'
-    else if (this.isActiveOnlineMode)
-      return this.onOffLine ? 'cloud' : 'cloud_done';
-    return 'cloud_queue';
+    if(this.onOffLine){
+      if (this.isActiveOnlineMode){
+        if (this.isActiveHostMode) return 'cloud_done'
+        return 'cloud'
+      }
+      return 'cloud_queue';
+    }
+    else {
+      if (this.isActiveOnlineMode){
+        return 'cloud_done'
+      }
+      return 'cloud_queue';
+    }
   }
   get connectStateText(): string {
     let connected: number = (this.systemStates?.sessionStatus % 1000);
