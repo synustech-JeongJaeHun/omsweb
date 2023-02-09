@@ -62,6 +62,12 @@ type ColorChangedEvent = {
 		| 'mtlUseColor'
 	value: string
 }
+
+type ClustersColorChangedEvent = {
+  key: number
+  value: string
+}
+
 type ScaleChangedEvent = {
 	key: 'vehicleSize' | 'zcuSize' | 'segmentWidth' | 'segmentDirectionSize'
 	value: number
@@ -94,11 +100,16 @@ type TrackMonitorSetting = Record<
 	Record<
 		CameraViewBoxWidthChangedEvent['key'],
 		CameraViewBoxWidthChangedEvent['value']
-	> & {
+	> &
+  {
 		vehicleSecondaryContent: 'order' | 'carrier'
 
 		colorSettingVersion?: string
 	}
+  &
+  {
+    clusterColors?: string[]
+  }
 
 const DefaultTrackMonitorSetting: TrackMonitorSetting = {
 	// scale
@@ -169,6 +180,33 @@ const DefaultTrackMonitorSetting: TrackMonitorSetting = {
 
 	// vehicle contents
 	vehicleSecondaryContent: 'order',
+
+  clusterColors: [
+    "rgba(54, 56, 46,0.45)",
+    "rgba(115, 95, 61, 0.45)",
+    "rgba(150, 2, 0, 0.45)",
+    "rgba(255, 0, 0, 0.45)",
+    "rgba(239, 111, 108, 0.45)",
+    "rgba(255, 165, 165, 0.45)",
+    "rgba(246, 202, 131, 0.45)",
+    "rgba(255, 208, 70, 0.45)",
+    "rgba(255, 136, 0, 0.45)",
+    "rgba(198, 161, 91, 0.45)",
+    "rgba(148, 157, 106, 0.45)",
+    "rgba(173, 255, 187, 0.45)",
+    "rgba(128, 181, 167, 0.45)",
+    "rgba(145, 220, 247, 0.45)",
+    "rgba(87, 184, 255, 0.45)",
+    "rgba(0, 153, 255, 0.45)",
+    "rgba(255, 63, 165, 0.45)",
+    "rgba(79, 53, 155, 0.45)",
+    "rgba(36, 30, 78, 0.45)",
+    "rgba(140, 33, 85, 0.45)",
+    "rgba(255, 0, 106, 0.45)",
+    "rgba(211, 76, 211, 0.45)",
+    "rgba(226, 161, 220, 0.45)",
+    "rgba(92, 26, 27, 0.45)"
+  ]
 }
 
 @Injectable({
@@ -230,6 +268,12 @@ export class TrackMonitorSettingService {
 		// @ts-ignore
 		this.update({ key, value: DefaultTrackMonitorSetting[key] })
 	}
+
+  updateCluster = (event: ChangedEvent) => {
+    // @ts-ignore
+    this.trackSetting.clusterColors[event.key] = event.value
+    writeTrackSettingOnLocalStorage(this.trackSetting)
+  }
 }
 
 const TrackSettingLocalStorageKey = 'track-monitor-setting'

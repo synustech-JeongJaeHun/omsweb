@@ -58,6 +58,7 @@
 		[vehicleSecondaryContent]="tmSetting.vehicleSecondaryContent"
     [zoomButtonVisible]="preference.toggles.zoomButton"
     [pointDisplayType]="preference.toggles.pointDisplayType"
+    [clusterColors]="tmSetting.clusterColors.join('|')"
 		(mouseoverOnObject)="onMouseoverTM($event)"
 		(mouseleaveOnObject)="onMouseleaveTM($event)"
 		(mainClickOnObject)="onFocus($event)"

@@ -31,6 +31,7 @@ import { exposed } from './exposed'
 import ZoomLayer from 'MapObjects/zoomButton/ZoomLayer.ce.vue'
 import {convertStringToImageDataUrl} from "src/utils/textToImage";
 import {updatePointType} from "TrackObjects/point/pointType";
+import {updateColors} from "TrackObjects/cluster/types/clusterColors";
 /**
  *  https://v3.vuejs.org/api/sfc-script-setup.html#typescript-only-features
  *
@@ -83,6 +84,8 @@ const props = defineProps<{
   disabledSegmentColor: Stringlish
   disabledByVehicleSegmentColor: Stringlish
   segmentDirectionColor: Stringlish
+
+  clusterColors: Stringlish
 
   // chjs visual start
   disconnectModeVehicleColor: Stringlish
@@ -181,6 +184,11 @@ watch([propRefs.pointDisplayType], () => {
   }
 })
 
+watch(propRefs.clusterColors, (n) => {
+  if(props.clusterColors){
+    updateColors(props.clusterColors.split('|'))
+  }
+}, {deep : true})
 
 const selfElement = ref<HTMLDivElement>()
 const shadowRoot = computed(

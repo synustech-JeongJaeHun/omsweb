@@ -2,6 +2,7 @@
 import { computed } from 'vue';
 import { Cluster } from '../types/Cluster';
 import { getClusterColorWithAlpha } from '../utils/color';
+import {readonlyColors} from "TrackObjects/cluster/types/clusterColors";
 
 const props = defineProps<{
   cluster: Cluster
@@ -9,7 +10,9 @@ const props = defineProps<{
   onMouseleave: Function
 }>()
 
-const color = computed(() => getClusterColorWithAlpha(props.cluster.color))
+//const color = computed(() => getClusterColorWithAlpha(props.cluster.color))
+/*const color = readonlyColors[props.cluster.id]
+console.log(color)*/
 </script>
 
 <template>
@@ -17,7 +20,7 @@ const color = computed(() => getClusterColorWithAlpha(props.cluster.color))
     class="cluster fixed-scale-stroke"
     :data-focused="props.cluster.isFocused"
     fill="none"
-    :stroke="color" 
+    v-bind:stroke="readonlyColors[props.cluster.id-1]" 
     :d="props.cluster.d" 
     :data-id="props.cluster.id" 
     @mouseover="props.onMouseover"

@@ -73,6 +73,7 @@
     <TypeScriptCompile Remove="frontend\packages\app\src\app\modules\shared\dialogs\success-dialog.component.ts" />
     <TypeScriptCompile Remove="frontend\packages\app\src\app\modules\shared\dialogs\verify-dialog.component.ts" />
     <TypeScriptCompile Remove="frontend\packages\app\src\app\services\transfers.service.ts" />
+    <TypeScriptCompile Include="frontend\packages\oms-track-monitor\src\TrackObjects\cluster\types\clusterColors.ts" />
     <TypeScriptCompile Include="frontend\packages\oms-track-monitor\src\TrackObjects\point\pointType.ts" />
   </ItemGroup>
 
