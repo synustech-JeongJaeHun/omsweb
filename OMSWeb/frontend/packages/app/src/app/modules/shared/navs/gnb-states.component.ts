@@ -65,7 +65,9 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
   }
 
   get onofflineModeText(): string {
-    return this.t$.instant((this.isActiveOnlineMode || this.isAttemptOnlineMode) ? `names.online` : `names.offline`)
+    return this.t$.instant(
+      (this.isActiveOnlineMode || this.isAttemptOnlineMode || this.isHostOfflineMode) ?
+        `names.online` : `names.offline`)
   }
 
   get hostModeText(): string {
@@ -106,11 +108,22 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
     return this.systemStates?.sessionStatus % 1000 == HostSessionStatusEnums.CONNECTED;
   }
   get isActiveOnlineMode(): boolean {
-    return this.systemStates?.sessionStatus == (HostSessionStatusEnums.CONNECTED + OnOfflineModeEnums.Online * 1000);
+    return (this.systemStates?.sessionStatus == (HostSessionStatusEnums.CONNECTED + OnOfflineModeEnums.Online * 1000)) ||
+      (this.systemStates?.sessionStatus == ( OnOfflineModeEnums.Online * 1000));
+  }
+
+  get isActiveOnlineModeAndConn(): boolean {
+    return (this.systemStates?.sessionStatus == (HostSessionStatusEnums.CONNECTED + OnOfflineModeEnums.Online * 1000))
+  }
+
+  get isHostOfflineMode(): boolean {
+    return this.systemStates?.sessionStatus == (HostSessionStatusEnums.CONNECTED + OnOfflineModeEnums.HostOffline * 1000) ||
+      (this.systemStates?.sessionStatus == (OnOfflineModeEnums.HostOffline * 1000));
   }
 
   get isAttemptOnlineMode(): boolean {
-    return this.systemStates?.sessionStatus == (HostSessionStatusEnums.CONNECTED + OnOfflineModeEnums.AttemptOnline * 1000);
+    return this.systemStates?.sessionStatus == (HostSessionStatusEnums.CONNECTED +OnOfflineModeEnums.AttemptOnline * 1000) ||
+      this.systemStates?.sessionStatus == (OnOfflineModeEnums.AttemptOnline * 1000);
   }
 
   get isActiveStatus(): boolean {
