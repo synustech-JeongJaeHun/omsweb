@@ -65,7 +65,7 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
   }
 
   get onofflineModeText(): string {
-    return this.t$.instant(this.isActiveOnlineMode ? `names.online` : `names.offline`)
+    return this.t$.instant((this.isActiveOnlineMode || this.isAttemptOnlineMode) ? `names.online` : `names.offline`)
   }
 
   get hostModeText(): string {
@@ -107,6 +107,10 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
   }
   get isActiveOnlineMode(): boolean {
     return this.systemStates?.sessionStatus == (HostSessionStatusEnums.CONNECTED + OnOfflineModeEnums.Online * 1000);
+  }
+
+  get isAttemptOnlineMode(): boolean {
+    return this.systemStates?.sessionStatus == (HostSessionStatusEnums.CONNECTED + OnOfflineModeEnums.AttemptOnline * 1000);
   }
 
   get isActiveStatus(): boolean {
