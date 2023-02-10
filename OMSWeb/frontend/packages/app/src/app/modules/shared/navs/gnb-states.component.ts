@@ -142,7 +142,7 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
   ) {
     this.getState();
 
-    this.timerId = setInterval(() => this.getState(), 5000);
+    this.timerId = setInterval(() => this.updateState(), 5000);
 
     settingSvc.serviceConfig.subscribe(
       (config) => (this.onOffLine = config.onOffLine),
