@@ -137,10 +137,14 @@ function slicePathCommands(commands: readonly PathCommand[], from: Position, to:
     return isPointIn(command.type === 'ArcTo' ? 'Curve' : 'Straight', commands[index - 1], command, to)
   })
 
+  // bug fix : toIndex === -1 case
+  // -> change -1 to commands.length-1
+  const toIdx= toIndex===-1?commands.length-1:toIndex;
+
   return [
     moveTo(from),
-    ...commands.slice(fromIndex, toIndex),
-    { ...commands[toIndex], x: to.x, y: to.y }
+    ...commands.slice(fromIndex, toIdx),
+    { ...commands[toIdx], x: to.x, y: to.y }
   ]
 }
 
