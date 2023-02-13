@@ -6,11 +6,16 @@
               [disabled]="!canControl">
         <span [class.active]="isActiveOnlineModeAndConn">{{ onofflineModeText }}</span>
       </button>
+      <button mat-button class="status-item status-action host-mode" (click)="changeHostMode()"
+              [disabled]="!canControl">
+        <span [class.active]="isActiveOnlineModeAndConn">{{ hostModeText }}</span>
+      </button>
     </ng-container>
-    <button mat-button class="status-item status-action host-mode" (click)="changeHostMode()"
-            [disabled]="!canControl">
-      <span [class.active]="isActiveOnlineModeAndConn">{{ hostModeText }}</span>
-    </button>
+    <ng-container *ngIf="!onOffLine">
+      <button mat-button class="status-item status-action host-mode" (click)="changeHostMode()" [disabled]="!canControl">
+        <span [class.active]="isActiveHostMode && isActiveOnlineMode">{{ hostModeText }}</span>
+      </button>
+    </ng-container>
     <button mat-button class="status-item status-action tcs-mode" [disabled]="!canControl" (click)="changeTscMode()">
       <span [class.active]="isActiveTscMode">{{ tscModeText }}</span>
     </button>
