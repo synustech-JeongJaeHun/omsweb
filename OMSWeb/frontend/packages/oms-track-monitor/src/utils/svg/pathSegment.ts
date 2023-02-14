@@ -138,12 +138,13 @@ function slicePathCommands(commands: readonly PathCommand[], from: Position, to:
   })
 
   // bug fix : toIndex === -1 case
-  // -> change -1 to commands.length-1
+  // -> change -1 to commands.length-1 or 0
+  const fromIdx= fromIndex===-1? 0:fromIndex;
   const toIdx= toIndex===-1?commands.length-1:toIndex;
 
   return [
     moveTo(from),
-    ...commands.slice(fromIndex, toIdx),
+    ...commands.slice(fromIdx, toIdx),
     { ...commands[toIdx], x: to.x, y: to.y }
   ]
 }
