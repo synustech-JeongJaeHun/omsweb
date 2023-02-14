@@ -65,35 +65,35 @@
             key: 'isVehicleNextLineVisible',
             value: $event.checked
           })" color="primary">
-          {{"names.vehicle" | translate }} {{"names.next" | translate }}  {{"names.line" | translate }} 
+          {{"names.vehicle" | translate }} {{"names.next" | translate }}  {{"names.line" | translate }}
         </mat-slide-toggle>
         <mat-slide-toggle [checked]="setting.isVehicleFromOrderLineVisible" (change)="update({
             group: 'Visibility',
             key: 'isVehicleFromOrderLineVisible',
             value: $event.checked
           })" color="primary">
-          {{"names.vehicle" | translate }} {{"names.command-from" | translate }}  {{"names.line" | translate }} 
+          {{"names.vehicle" | translate }} {{"names.command-from" | translate }}  {{"names.line" | translate }}
         </mat-slide-toggle>
         <mat-slide-toggle [checked]="setting.isVehicleToOrderLineVisible" (change)="update({
             group: 'Visibility',
             key: 'isVehicleToOrderLineVisible',
             value: $event.checked
           })" color="primary">
-          {{"names.vehicle" | translate }} {{"names.command-to" | translate }}  {{"names.line" | translate }} 
+          {{"names.vehicle" | translate }} {{"names.command-to" | translate }}  {{"names.line" | translate }}
         </mat-slide-toggle>
         <mat-slide-toggle [checked]="setting.isVehicleMoveOrderLineVisible" (change)="update({
             group: 'Visibility',
             key: 'isVehicleMoveOrderLineVisible',
             value: $event.checked
           })" color="primary">
-          {{"names.vehicle" | translate }} {{"names.command-move" | translate }}  {{"names.line" | translate }} 
+          {{"names.vehicle" | translate }} {{"names.command-move" | translate }}  {{"names.line" | translate }}
         </mat-slide-toggle>
         <mat-slide-toggle [checked]="setting.isVehicleHomeivrLineVisible" (change)="update({
             group: 'Visibility',
             key: 'isVehicleHomeivrLineVisible',
             value: $event.checked
           })" color="primary">
-          {{"names.vehicle" | translate }} {{"names.home" | translate }}/{{ "names.ivr" | translate }} {{"names.line" | translate }} 
+          {{"names.vehicle" | translate }} {{"names.home" | translate }}/{{ "names.ivr" | translate }} {{"names.line" | translate }}
         </mat-slide-toggle>
         <mat-slide-toggle [checked]="setting.isSegmentDirectionVisible" (change)="update({
             group: 'Visibility',
@@ -165,6 +165,13 @@
             value: $event.checked
           })" color="primary">{{
           "names.showMtls" | translate }}</mat-slide-toggle>
+
+        <mat-slide-toggle [checked]="setting.isVHLArrowVisible" (change)="update({
+            group: 'Visibility',
+            key: 'isVHLArrowVisible',
+            value: $event.checked
+          })" color="primary">{{
+          "names.showVHLArrow" | translate}}</mat-slide-toggle>
       </div>
     </fieldset>
   </ng-container>

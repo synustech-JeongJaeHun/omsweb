@@ -12,6 +12,7 @@ import VehicleCargoFullSvg from '../assets/VehicleCargoFull.svg?component'
 import VehicleCargoTransferFailSvg from '../assets/VehicleCargoTransferFail.svg?component'
 import VehicleTypeNormalOutline from '../assets/VehicleTypeNormalOutline.svg?component'
 import VehicleFocusArrow from '../assets/VehicleFocusArrow.svg?component'
+import {readonlyVhlPosition} from "TrackObjects/vehicle/vehicles";
 
 const props = defineProps<{
   // Vehicle attr
@@ -105,11 +106,22 @@ const emit = defineEmits<{
       <!-- 📐🛑 Be careful! logic is dependent on invert -->
 
       <!-- font-weight="bold" -->
-      <text class="select-none" text-rendering="optimizeSpeed" transform="scale(1 -1) translate(-25 -2)"
-        text-anchor="end" alignment-baseline="baseline" font-size="0.8em" stroke="white" stroke-width="1px" fill="black"
-        paint-order="stroke">
+      <text v-if="readonlyVhlPosition==='LeftTop'" 
+            class="select-none" text-rendering="optimizeSpeed" transform="scale(1 -1) translate(-25 -2)"
+            text-anchor="end" alignment-baseline="baseline" 
+            font-size="0.8em" stroke="white" stroke-width="1px" fill="black"
+            paint-order="stroke">
         {{ props.logicalId }}
       </text>
+
+      <text v-if="readonlyVhlPosition==='Top'" 
+            class="select-none" text-rendering="optimizeSpeed" transform="scale(1 -1) translate(-25 -2)"
+            text-anchor="middle" x="24" y="-30" alignment-baseline="hanging"
+            font-size="0.8em" stroke="white" stroke-width="1px" fill="black" font-weight="bold"
+            paint-order="stroke">
+        {{ props.logicalId }}
+      </text>
+      
       <!-- vehicle order with priority(hotlot) -->
       <g :filter="
         isHotlot ? `url(#vehicle-order-hotlot-border)` : undefined

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, inject, ref, toRef, watch } from 'vue'
 import { Vehicle, ComplicatedMode } from '../types/Vehicle'
-import { getVehiclePosition } from '../vehicles'
+import {getVehiclePosition, readonlyVhlArrow} from '../vehicles'
 import { findPointById } from '../../point/points'
 import { findSegmentByPoints } from '../../segment/segments'
 import { Segment } from '../../segment/types/Segment'
@@ -23,6 +23,8 @@ import { setTrackedObject } from 'src/MapObjects/track/track'
 import { getGroupColorWithAlpha } from 'TrackObjects/group/utils/color'
 import { getRotatedPosition } from 'src/MapObjects/cameraAndRotation'
 import { makeVehicleAnimationPath } from '../utils/vehilcleAnimationPath'
+import Arrow from './Arrow.ce.vue'
+
 
 const props = defineProps<{
   vehicle: Vehicle
@@ -216,11 +218,19 @@ function onRightClick(event: MouseEvent) {
     event,
   })
 }
+
+
 </script>
 
 <template>
   <Teleport :to="teleportRef" :disabled="props.vehicle.isCarrierFocused !== true">
+    <template v-if="props.vehicle.isConnected && !props.vehicle.errorList && props.vehicle.mode !== 'M'">
+      <Arrow v-if="props.vehicle.movingState === 'M' && nextPointPosition.x && realtimePosition && readonlyVhlArrow"
+             :source="realtimePosition" :dest="nextPointPosition" :complicatedMode="complicatedMode"/>
+    </template>
+    
     <!-- presentation component without logic -->
+    
     <VehiclePresentation v-if="realtimePosition" :x="realtimePosition.x" :y="realtimePosition.y" :vid="props.vehicle.id"
       :logicalId="props.vehicle.logicalId" :orderId="props.vehicle.orderId" :type="props.vehicle.type"
       :mode="props.vehicle.mode" :complicatedMode="complicatedMode" :cargoState="props.vehicle.cargoState"
@@ -240,7 +250,7 @@ function onRightClick(event: MouseEvent) {
         class="line next-line fixed-scale-stroke" stroke="#91e079" stroke-width="1" stroke-linecap="round"
         shape-rendering="auto" :x1="realtimePosition.x" :y1="realtimePosition.y" :x2="nextPointPosition.x"
         :y2="nextPointPosition.y" />
-
+      
       <!-- pickup or dropoff or move line -->
       <line v-if="commandPoint.position.value && realtimePosition" :class="{
         'line': true,
@@ -251,12 +261,13 @@ function onRightClick(event: MouseEvent) {
       }" :stroke="commandLineColor" stroke-width="1" stroke-linecap="round" shape-rendering="auto"
         :x1="realtimePosition.x" :y1="realtimePosition.y" :x2="commandPoint.position.value.x"
         :y2="commandPoint.position.value.y" />
-
+      
       <!-- home/ivr line -->
       <line v-else-if="props.vehicle.movingState === 'M' && homeIvrPoint && realtimePosition"
         class="line homeivr-line fixed-scale-stroke" stroke="#ffa500" stroke-width="1" stroke-linecap="round"
         shape-rendering="auto" :x1="realtimePosition.x" :y1="realtimePosition.y" :x2="homeIvrPoint.x"
         :y2="homeIvrPoint.y" />
     </template>
+    
   </Teleport>
 </template>

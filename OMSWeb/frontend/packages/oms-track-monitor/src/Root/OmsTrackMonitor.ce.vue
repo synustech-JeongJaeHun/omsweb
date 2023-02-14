@@ -31,6 +31,7 @@ import { exposed } from './exposed'
 import ZoomLayer from 'MapObjects/zoomButton/ZoomLayer.ce.vue'
 import {convertStringToImageDataUrl} from "src/utils/textToImage";
 import {updatePointType} from "TrackObjects/point/pointType";
+import {updateVHLArrow, updateVHLPosition} from "TrackObjects/vehicle/vehicles";
 /**
  *  https://v3.vuejs.org/api/sfc-script-setup.html#typescript-only-features
  *
@@ -71,6 +72,8 @@ const props = defineProps<{
   isMtlVisible: Boolish
   zoomButtonVisible: Boolish
   pointDisplayType: Boolish
+
+  isVHLArrowVisible: Boolish
   // color
   backgroundColor: Stringlish
   stationColor: Stringlish
@@ -105,6 +108,8 @@ const props = defineProps<{
   mtlUseColor: Stringlish
   // content
   vehicleSecondaryContent: Stringlish
+
+  vhlDisplay: Stringlish
 }>()
 const propRefs = toRefs(props)
 interface Emits extends RootEmits { }
@@ -181,6 +186,17 @@ watch([propRefs.pointDisplayType], () => {
   }
 })
 
+
+watch(propRefs.vhlDisplay, () => {
+  if(props.vhlDisplay){
+    updateVHLPosition(props.vhlDisplay)
+  }
+})
+watch(propRefs.isVHLArrowVisible, () => {
+  if(typeof props.isVHLArrowVisible === 'boolean'){
+    updateVHLArrow(props.isVHLArrowVisible)
+  }
+})
 
 const selfElement = ref<HTMLDivElement>()
 const shadowRoot = computed(
@@ -488,7 +504,15 @@ defineExpose(exposed)
   /* transform */
   transform: scale(v-bind('scaleInfo.mmPerPixel * scaleStylesInfo.vehicleSize * 1/10')) rotate(var(--reverse-rotation-degree));
 }
+
+#vehicle-layer .vehicle-symbol .scale-arrow {
+  transform: scale(v-bind('scaleInfo.mmPerPixel * scaleStylesInfo.vehicleSize * 1/6'))
+}
 #vehicle-layer .vehicle-symbol[data-carrier-focused~='true' i] .scale-and-reverse-rotate {
+  /* transform */
+  animation: vehicle-carrier-focused-scale-grow 1s ease-in-out forwards;
+}
+#vehicle-layer .vehicle-symbol[data-carrier-focused~='true' i] .scale-arrow {
   /* transform */
   animation: vehicle-carrier-focused-scale-grow 1s ease-in-out forwards;
 }
@@ -534,6 +558,11 @@ defineExpose(exposed)
   --reverse-rotation-degree: v-bind('`${rotationInfo * (-1)}deg`');
   --mm-per-pixel: v-bind('scaleInfo.mmPerPixel');
 }
+
+.scale-arrow {
+  --mm-per-pixel: v-bind('scaleInfo.mmPerPixel');
+}
+
 
 :hover {
   --filter-size: v-bind('`${scaleInfo.mmPerPixel * 10}px`');

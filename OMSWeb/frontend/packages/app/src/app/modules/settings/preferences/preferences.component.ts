@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ToggleOptionKeyType } from '../../../models/enums';
+import {ToggleOptionKeyType, VHLIdPosition} from '../../../models/enums';
 import { ClientPreferences } from '../../../models/settings.model';
 import { SettingsService } from '../../../services/settings.service';
 
@@ -13,12 +13,17 @@ export class PreferencesComponent {
   canUseKpi = false;
 
   constructor(private settingSvc: SettingsService) {
+
     this.preference = this.settingSvc.globalPreferences;
     this.settingSvc.serviceConfig.subscribe((cfg) => {
       this.canUseKpi = cfg.kpiEnabled;
     });
   }
-  onChangedToggle(action: ToggleOptionKeyType) {
+  onChangedToggle(action: ToggleOptionKeyType=null) {
     this.preference.save();
+  }
+
+  get VHLIdPositionKeys(): string[]{
+    return Object.values(VHLIdPosition);
   }
 }

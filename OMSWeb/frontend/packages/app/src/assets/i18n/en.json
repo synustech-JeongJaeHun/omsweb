@@ -502,7 +502,10 @@
     "nack": "Nack",
     "RCMD": "RCMD",
     "param": "param",
-    "view": "View"
+    "view": "View",
+    "VHLIDPosition": "Vehicle ID Position",
+    "showVHLArrow": "Vehicle Directions",
+    "display" : "display"
   },
   "enums": {
     "hostSessionStatus": {

@@ -20,4 +20,18 @@
         (change)="onChangedToggle('pointDisplayType')">{{ "names.pointDisplayType" | translate }}</mat-slide-toggle>
     </div>
   </fieldset>
+
+
+  <fieldset>
+    <legend>{{"names.display" | translate}}</legend>
+    <div class="form-grid">
+      <div class="form-grid mat-select-div">
+        <mat-label >{{'names.VHLIDPosition' | translate}}</mat-label>
+        <mat-select [(value)]="preference.trackDisplay.vehicleIdDisplay" (selectionChange)="onChangedToggle()">
+          <mat-option *ngFor="let item of VHLIdPositionKeys" [value]="item">{{item}}</mat-option>
+        </mat-select>
+      </div>
+      <div></div>
+    </div>
+  </fieldset>
 </div>
