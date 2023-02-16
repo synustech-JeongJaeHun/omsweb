@@ -52,17 +52,21 @@ export class KpiStatusComponent implements OnDestroy {
   ) {
     this.settingSvc.serviceConfig.subscribe(cfg => {
       this.enabled = cfg.kpiEnabled;
+
+      if(this.enabled){
+        interval(5000)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe(e => this.updateKpiTrend())
+      }
     })
 
     this.updateKpiTrend()
-
-    interval(5000)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(e => this.updateKpiTrend())
   }
 
   updateKpiTrend() {
-    this.reportService.loadTrend().subscribe(res => {
+    this.reportService.loadTrend()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(res => {
       this.utilization = res.utilization.value;
       this.deliveryTime = res.delivery_time.value;
       this.cpuGhz = res.cpu.ghz;
