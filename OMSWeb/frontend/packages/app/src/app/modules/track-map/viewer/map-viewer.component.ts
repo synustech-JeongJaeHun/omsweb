@@ -189,6 +189,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 				this.router.navigate([cert ? '/monitor/status' : '/'])
 			})
 		})
+
 	}
 
 	hasPermissions(permissions: number[]): boolean {
@@ -836,7 +837,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 			case 'BUFFER':
 			case 'VEHICLE':
 				// @ts-ignore
-				if ((payload.event as MouseEvent).ctrlKey) {
+				if ((payload.event as MouseEvent).ctrlKey || !this.preference.toggles.ctrlKey) {
 					const pointId = (() => {
 						switch (type.toUpperCase()) {
 							case 'POINT':

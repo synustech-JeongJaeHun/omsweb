@@ -53,6 +53,7 @@ export type ToggleOptionKeyType =
   | 'overlaps'
   | 'zoomButton'
   | 'pointDisplayType'
+  | 'ctrlKey'
   ;
 
 export type CommandKeyType =

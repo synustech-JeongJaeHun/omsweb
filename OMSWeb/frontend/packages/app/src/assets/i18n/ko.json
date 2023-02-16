@@ -392,6 +392,7 @@
     "showKpi": "KPI 표시",
     "zoomButton": "Zoom 버튼 표시",
     "pointDisplayType": "Point Barcode 표시",
+    "ctrlKey": "Ctrl Key Filter(Overlapped)",
     "summary": "요약",
     "systemInfo": "시스템 정보",
     "utilization": "활용",

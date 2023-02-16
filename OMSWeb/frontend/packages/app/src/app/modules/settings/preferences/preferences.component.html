@@ -18,6 +18,9 @@
 
       <mat-slide-toggle [(ngModel)]="preference.toggles.pointDisplayType" color="primary"
         (change)="onChangedToggle('pointDisplayType')">{{ "names.pointDisplayType" | translate }}</mat-slide-toggle>
+
+      <mat-slide-toggle [(ngModel)]="preference.toggles.ctrlKey" color="primary"
+                        (change)="onChangedToggle('ctrlKey')">{{ "names.ctrlKey" | translate }}</mat-slide-toggle>
     </div>
   </fieldset>
 
