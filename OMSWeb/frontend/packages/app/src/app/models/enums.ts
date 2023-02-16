@@ -191,3 +191,8 @@ export enum PermissionEnums {
   SettingZcu = 41,
   SettingVehicle = 42
 }
+
+export enum VHLIdPosition {
+  LT = 'LeftTop',
+  T = 'Top'
+}

@@ -511,7 +511,10 @@
     "nack": "Nack",
     "RCMD": "RCMD",
     "param": "param",
-    "view": "View"
+    "view": "View",
+    "VHLIDPosition": "Vehicle ID 위치",
+    "showVHLArrow": "Vehicle 방향",
+    "display" : "display"
   },
   "enums": {
     "hostSessionStatus": {

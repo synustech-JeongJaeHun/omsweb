@@ -1,4 +1,4 @@
-import { ToggleOptionKeyType } from './enums'
+import {ToggleOptionKeyType, VHLIdPosition} from './enums'
 import { StorageUtil } from '@oms/utils/storage.util'
 import { main_css } from '../modules/shared/utils/css-loader'
 import { IZoom } from './drawing.model'
@@ -51,6 +51,8 @@ export interface IPreferences {
 	theme?: ThemeConfig
 	controlTables?: MonitorControlTable
 	historyTables?: HistoryTable
+
+  trackDisplay?: TrackObjectConfig
 }
 
 export class UiStates {
@@ -607,6 +609,12 @@ const defaultHistoryTable = {
 	],
 }
 
+
+type TrackObjectConfig = typeof trackObjectDefaultConfig
+const trackObjectDefaultConfig ={
+  vehicleIdDisplay: 'LeftTop'
+}
+
 export class ClientPreferences implements IPreferences {
 	toggles: ToggleOptionsType
 	map: MapConfig
@@ -614,6 +622,8 @@ export class ClientPreferences implements IPreferences {
 	theme?: ThemeConfig
 	controlTables?: MonitorControlTable
 	historyTables?: HistoryTable
+
+  trackDisplay?: TrackObjectConfig
 
 	constructor(private storeKey: string, private base?: IPreferences) {
 		this.load()
@@ -630,12 +640,14 @@ export class ClientPreferences implements IPreferences {
 			theme = {},
 			controlTables = {},
 			historyTables = {},
+      trackDisplay ={},
 		} = JSON.parse(value)
 		const {
 			toggles: baseToggle = {},
 			map: baseMap = {},
 			controlTables: baseControlTable = {},
 			historyTables: baseHistoryTable = {},
+      trackDisplay: baseDisplay = {}
 		} = this.base || {}
 		this.toggles = { ...defaultToggleOptions, ...baseToggle, ...toggles }
 		this.map = { ...new MapConfig(), ...baseMap, ...map }
@@ -651,6 +663,10 @@ export class ClientPreferences implements IPreferences {
 			...baseHistoryTable,
 			...historyTables,
 		}
+    this.trackDisplay = {
+      ...trackObjectDefaultConfig,
+      ...trackDisplay
+    }
 
 		this.mergeOrders()
 		this.save()
@@ -664,6 +680,7 @@ export class ClientPreferences implements IPreferences {
 			theme: { ...this.theme },
 			controlTables: { ...this.controlTables },
 			historyTables: { ...this.historyTables },
+      trackDisplay: {...this.trackDisplay}
 		}
 		StorageUtil.setLocal(this.storeKey, JSON.stringify(pref))
 	}

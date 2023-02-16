@@ -1,13 +1,18 @@
 import { IVehicle } from 'src/legacies/models/track.model'
 import { UpdateDto } from 'src/types/Dto'
 import { getPositionFromD } from 'src/utils/svg/path'
-import { ref } from 'vue'
+import {readonly, ref} from 'vue'
 import { findPointById } from '../point/points'
 import { findSegmentByPoints } from '../segment/segments'
 import { UpdateType, Vehicle } from './types/Vehicle'
 
 const vehicles = ref<Vehicle[]>([])
 const vehicleMap = new Map<Vehicle['id'], Vehicle>()
+
+const vhlIdPosition = ref<string>('')
+const isVHLArrow = ref<boolean>(false)
+const readonlyVhlPosition = readonly(vhlIdPosition)
+const readonlyVhlArrow = readonly(isVHLArrow)
 
 function findVehicleById(id: number) {
   return vehicles.value.find((v) => v.id === id)
@@ -160,6 +165,14 @@ function updateExistVehicle(
   vehicle.lastUpdated = count++
 }
 
+function updateVHLPosition(value: string) {
+  vhlIdPosition.value = value
+}
+
+function updateVHLArrow(value: boolean) {
+  isVHLArrow.value = value
+}
+
 export {
   vehicles,
   initVehicles,
@@ -167,4 +180,8 @@ export {
   deleteVehicle,
   getVehiclePosition,
   findVehicleById,
+  readonlyVhlPosition,
+  updateVHLPosition,
+  updateVHLArrow,
+  readonlyVhlArrow
 }

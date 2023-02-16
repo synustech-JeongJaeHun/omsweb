@@ -29,6 +29,7 @@ type VisibilityChangedEvent = {
 		| 'isFireshutterVisible'
 		| 'isMtlVisible'
 		| 'isOverlappingObjectsVisible'
+    | 'isVHLArrowVisible'
 	value: boolean
 }
 type ColorChangedEvent = {
@@ -133,6 +134,7 @@ const DefaultTrackMonitorSetting: TrackMonitorSetting = {
 	isFireshutterVisible: true,
 	isMtlVisible: true,
 	isOverlappingObjectsVisible: true,
+  isVHLArrowVisible: false,
 
 	// color
 	homeBackgroundColor: 'rgba(255, 255, 255, 1)',
