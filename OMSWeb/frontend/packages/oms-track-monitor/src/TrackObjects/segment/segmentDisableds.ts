@@ -61,7 +61,7 @@ function setSegmentDisabledWithMap(segmentId: Segment['id']) {
 	const isDisabledByMtl = sds.some((sd) =>
 		sd.disabledBy.toUpperCase().includes('MTL')
 	)
-	const isDisabledByOnlyVehicle = sds.length === 1 && sds.some((sd) =>
+	const isDisabledByOnlyVehicle = isDisabled && sds.some((sd) =>
 		sd.disabledBy.toUpperCase().includes('VID')
 	)
 
