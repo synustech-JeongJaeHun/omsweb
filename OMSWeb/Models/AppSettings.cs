@@ -13,6 +13,7 @@ namespace OMSWeb.Models
         
         public bool ZCUDetail { get; set; }
         
+        public string TitleText { get; set; }
 
         
         
