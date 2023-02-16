@@ -133,6 +133,8 @@ namespace OMSWeb.Services
             client.BufferEnabled = this._appSettings.BufferEnabled;
             client.i18nEnabled = this._appSettings.i18nEnabled;
             client.ZCUDetail = this._appSettings.ZCUDetail;
+            
+            client.OnOffLine = this._appSettings.OnOffLine;
             return this._appSettings.Client;
         }
         

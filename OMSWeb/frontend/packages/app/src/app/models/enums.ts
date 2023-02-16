@@ -115,8 +115,14 @@ export enum OnOfflineModeEnums {
   None = 0,
   EqOffline = 1,
   GoingOffline = 2,
+  AttemptOnline = 3,
   HostOffline = 4,
   Online = 5
+}
+
+export enum OnlineModeEnums {
+  OFFLINE = 0,
+  ONLINE
 }
 
 export enum HostModeEnums {

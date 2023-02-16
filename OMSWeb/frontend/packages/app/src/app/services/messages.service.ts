@@ -10,7 +10,8 @@ import {
 	IAllCommandMessage,
 	IAiModeCommandMessage,
 	ITscStateCommandMessage,
-	IMapUpdateCommandMessage,
+    IMapUpdateCommandMessage,
+    IOnlineStateCommandMessage,
 	IControlStateCommandMessage,
 	IAlarmClearCommandMessage,
 	IWarningClearCommandMessage,
@@ -91,6 +92,12 @@ export class MessagesService {
         priority,
         carrierLabel,
       })
+    }
+
+    sendOnlineStateCommand(
+      command: IControlStateCommandMessage,
+    ): Observable<void> {
+      return this.sendCommand<IOnlineStateCommandMessage>(command)
     }
 
 	sendControlStateCommand(

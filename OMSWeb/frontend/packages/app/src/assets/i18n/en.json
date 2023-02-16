@@ -385,7 +385,7 @@
     "cleared": "Cleared",
     "notCleared": "Not Cleared",
     "elapsedMin": "Elapsed(min)",
-    "elapsed":  "Elapsed",
+    "elapsed": "Elapsed",
     "solution": "Solution",
     "modifySolution": "Modify Solution",
     "resetVehicle": "Reset Vehicle",
@@ -445,6 +445,14 @@
     "vehicleSetting": "Vehicle Setting",
     "addVehicle": "Add Vehicle",
     "columnDisplayManagement": "Tables Column",
+    "cimOffline": "CIM Offline",
+    "readyToOline": "Ready to Online",
+    "host Offline": "Host Offline",
+    "remote": "Remote",
+    "onoffline": "ON-OFFLINE",
+    "onlineMode": "Online",
+    "online": "Online",
+    "offline": "Offline",
     "host": "Host",
     "local": "Local",
     "tsc": "TSC",
@@ -512,6 +520,10 @@
     "hostMode": {
       "0": "Local",
       "1": "Host"
+    },
+    "hostModeRemote": {
+      "0": "Local",
+      "1": "Remote"
     },
     "tscMode": {
       "0": "Paused",

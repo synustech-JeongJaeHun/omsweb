@@ -445,6 +445,15 @@
     "vehicleSetting": "비클 설정",
     "addVehicle": "비클 추가",
     "columnDisplayManagement": "테이블 컬럼",
+    "cimOffline": "CIM Offline",
+    "readyToOline": "Ready to Online",
+    "host Offline": "Host Offline",
+    "local": "Local",
+    "remote": "Remote",
+    "onoffline": "ON-OFFLINE",
+    "onlineMode": "Online",
+    "online": "Online",
+    "offline": "Offline",
     "host": "Host",
     "local": "Local",
     "tsc": "TSC",
@@ -512,6 +521,10 @@
     "hostMode": {
       "0": "로컬",
       "1": "호스트"
+    },
+    "hostModeRemote": {
+      "0": "로컬",
+      "1": "리모트"
     },
     "tscMode": {
       "0": "일시 중지됨",

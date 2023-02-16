@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { HostModeEnums, HostSessionStatusEnums, OnOfflineModeEnums, TscModeEnums, } from '../../../models/enums';
+import { HostModeEnums, HostSessionStatusEnums, OnOfflineModeEnums, OnlineModeEnums, TscModeEnums, } from '../../../models/enums';
 import { ISystemStates } from '../../../models/system.model';
 import { AuthService } from '../../../services/auth.service';
 import { HubService } from '../../../services/hub.service';
@@ -12,6 +12,7 @@ import { AccountUtil } from '../utils/account.util';
 import { MessagesService } from '../../../services/messages.service';
 import { IDataChangeEvent } from '../../../models/notification.model';
 import { PermissionEnums } from '../../../models/enums';
+import {SettingsService} from "@oms/services/settings.service";
 
 @Component({
   selector: 'oms-gnb-states',
@@ -22,19 +23,67 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
   private timerId: any;
   private systemStates: ISystemStates;
   private destroy$ = new Subject<void>();
+  onOffLine: boolean = false
 
   get hostStatusIcon(): string {
     if (!this.isActiveConnStatus)
       return 'cloud_off'
-    else if (this.isActiveOnlineMode)
-      return 'cloud_done';
-    return 'cloud_queue';
+    if(this.onOffLine){
+      if (this.isActiveOnlineMode){
+        if (this.isActiveHostMode) return 'cloud_done'
+        return 'cloud'
+      }
+      return 'cloud_queue';
+    }
+    else {
+      if (this.isActiveOnlineMode){
+        return 'cloud_done'
+      }
+      return 'cloud_queue';
+    }
   }
+  get connectStateText(): string {
+    let connected: number = (this.systemStates?.sessionStatus % 1000);
+    let onlineStatus: number = this.systemStates?.sessionStatus - connected;
+
+    if (connected == HostSessionStatusEnums.DISCONNECTED) return this.t$.instant(`names.disconnected`);
+    else if (connected == HostSessionStatusEnums.CONNECTED) return this.t$.instant(`names.connected`);
+
+    return this.t$.instant(`names.disconnected`);
+  }
+  get controlStateText(): string {
+    let connected: number = (this.systemStates?.sessionStatus % 1000);
+    let onlineStatus: number = this.systemStates?.sessionStatus - connected;
+
+    if (onlineStatus == (OnOfflineModeEnums.AttemptOnline * 1000)) return this.t$.instant(`names.online`);
+    else if (onlineStatus == (OnOfflineModeEnums.HostOffline * 1000)) return this.t$.instant(`names.online`);
+    else if (onlineStatus == (OnOfflineModeEnums.HostOffline * 1000)) return this.t$.instant(`names.online`);
+    else if (onlineStatus == (OnOfflineModeEnums.HostOffline * 1000)) return this.t$.instant(`names.online`);
+    else if (onlineStatus == (OnOfflineModeEnums.HostOffline * 1000)) return this.t$.instant(`names.online`);
+    else
+      return this.t$.instant(`names.offline`);
+  }
+
+  get onofflineModeText(): string {
+    return this.t$.instant(
+      (this.isActiveOnlineMode || this.isAttemptOnlineMode || this.isHostOfflineMode) ?
+        `names.online` : `names.offline`)
+  }
+
   get hostModeText(): string {
-    return this.t$.instant(`enums.hostMode.${this.systemStates?.hostMode}`);
+    return this.t$.instant((this.onOffLine? 'enums.hostModeRemote.' : 'enums.hostMode.')+`${this.systemStates?.hostMode}`);
   }
+
   get tscModeText(): string {
     return this.t$.instant(`enums.tscMode.${this.systemStates?.tscMode}`);
+  }
+  get onlineParamTitle(): string {
+    return this.t$.instant(`names.onlineMode`);
+  }
+  get onlineParamText(): string[] {
+    if (this.isActiveOnlineMode)
+      return [this.t$.instant(`names.online`), this.t$.instant('names.offline')];
+    return [this.t$.instant(`names.offline`), this.t$.instant('names.online')];
   }
   get hostParamTitle(): string {
     if (this.isActiveHostMode)
@@ -42,9 +91,10 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
     return this.t$.instant(`names.local`);
   }
   get hostParamText(): string[] {
+    const key = this.onOffLine? `names.remote` :`names.host`
     if (this.isActiveHostMode)
-      return [this.t$.instant(`names.host`), this.t$.instant('names.local')];
-    return [this.t$.instant(`names.local`), this.t$.instant('names.host')];
+      return [this.t$.instant(key), this.t$.instant('names.local')];
+    return [this.t$.instant(`names.local`), this.t$.instant(key)];
   }
   get tscParamTitle(): string {
     return this.t$.instant(`names.tsc`);
@@ -58,8 +108,28 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
     return this.systemStates?.sessionStatus % 1000 == HostSessionStatusEnums.CONNECTED;
   }
   get isActiveOnlineMode(): boolean {
-    return this.systemStates?.sessionStatus == (HostSessionStatusEnums.CONNECTED + OnOfflineModeEnums.Online * 1000);
+    return (this.systemStates?.sessionStatus == (HostSessionStatusEnums.CONNECTED + OnOfflineModeEnums.Online * 1000)) ||
+      (this.systemStates?.sessionStatus == ( OnOfflineModeEnums.Online * 1000));
   }
+
+  get isActiveOnlineModeAndConn(): boolean {
+    return (this.systemStates?.sessionStatus == (HostSessionStatusEnums.CONNECTED + OnOfflineModeEnums.Online * 1000))
+  }
+
+  get isHostOfflineMode(): boolean {
+    return this.systemStates?.sessionStatus == (HostSessionStatusEnums.CONNECTED + OnOfflineModeEnums.HostOffline * 1000) ||
+      (this.systemStates?.sessionStatus == (OnOfflineModeEnums.HostOffline * 1000));
+  }
+
+  get isAttemptOnlineMode(): boolean {
+    return this.systemStates?.sessionStatus == (HostSessionStatusEnums.CONNECTED +OnOfflineModeEnums.AttemptOnline * 1000) ||
+      this.systemStates?.sessionStatus == (OnOfflineModeEnums.AttemptOnline * 1000);
+  }
+
+  get isActiveStatus(): boolean {
+    return this.systemStates?.sessionStatus === HostSessionStatusEnums.CONNECTED;
+  }
+
   get isActiveHostMode(): boolean {
     return this.systemStates?.hostMode === HostModeEnums.HOST;
   }
@@ -80,11 +150,16 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
     private systemSvc: SystemsService,
     private dialogSvc: DialogService,
     private t$: TranslateService,
-    private messageSvc: MessagesService
+    private messageSvc: MessagesService,
+    private settingSvc: SettingsService,
   ) {
     this.getState();
 
-    this.timerId = setInterval(() => this.getState(), 5000);
+    this.timerId = setInterval(() => this.updateState(), 5000);
+
+    settingSvc.serviceConfig.subscribe(
+      (config) => (this.onOffLine = config.onOffLine),
+    )
   }
 
   ngOnInit(): void {
@@ -108,6 +183,14 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
       .subscribe((states) => (this.systemStates = states));
   }
 
+  changeOnlineMode() {
+    if (!AccountUtil.hasPermission(PermissionEnums.HostMode, this.auth.currentUser)) return;
+    this.dialogSvc.confirm(this.getConfirmMessage(this.onlineParamTitle, this.onlineParamText)).subscribe((ok) => {
+      if (ok) {
+        this.messageSvc.sendOnlineStateCommand({ action: 'online_state', state: 'change' }).subscribe();
+      }
+    });
+  }
   changeHostMode() {
     if (!AccountUtil.hasPermission(PermissionEnums.HostMode, this.auth.currentUser)) return;
     this.dialogSvc.confirm(this.getConfirmMessage(this.hostParamTitle, this.hostParamText)).subscribe((ok) => {

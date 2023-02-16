@@ -14,6 +14,9 @@ namespace OMSWeb.Models
         public bool ZCUDetail { get; set; }
         
 
+        
+        
+        public bool OnOffLine { get; set; }
         public ClientSettings Client { get; set; }
 
         public DefaultColorSettings DefaultColor { get; set; }
