@@ -9,5 +9,7 @@ namespace OMSWeb.Models
         public bool i18nEnabled { get; set; }
         public bool ZCUDetail { get; set; }
         public string Version { get; set; }
+        
+        public string TitleText { get; set; }
     }
 }

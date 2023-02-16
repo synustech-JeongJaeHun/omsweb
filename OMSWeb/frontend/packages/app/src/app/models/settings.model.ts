@@ -15,6 +15,8 @@ export class ServiceConfig {
 	bufferEnabled: boolean
 	i18nEnabled: boolean
   zcuDetail: boolean
+
+  titleText: string
 }
 
 export interface ManualTransferFiltersSetting {
