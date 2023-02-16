@@ -86,7 +86,7 @@ function toD(c: PathCommand): D {
     case "ArcTo":
       return `A ${c.rx} ${c.ry} ${c.xAxisRotation} ${c.largeArcFlag} ${c.sweepFlag} ${c.x} ${c.y}`;
     default:
-      throw new Error(JSON.stringify(c))
+      //throw new Error(JSON.stringify(c))
   }
 }
 
@@ -138,13 +138,12 @@ function slicePathCommands(commands: readonly PathCommand[], from: Position, to:
   })
 
   // bug fix : toIndex === -1 case
-  // -> change -1 to commands.length-1 or 0
-  const fromIdx= fromIndex===-1? 0:fromIndex;
+  // -> change -1 to commands.length-1
   const toIdx= toIndex===-1?commands.length-1:toIndex;
 
   return [
     moveTo(from),
-    ...commands.slice(fromIdx, toIdx),
+    ...commands.slice(fromIndex, toIdx),
     { ...commands[toIdx], x: to.x, y: to.y }
   ]
 }
