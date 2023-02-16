@@ -11,7 +11,7 @@ const props = defineProps<{
 </script>
 
 <template>
-  <svg class="overflow-visible vehicle-symbol" v-if="getAngleFromTwoPoints(props.source, props.dest)"
+  <svg class="overflow-visible vehicle-symbol" 
        :data-complicated-mode="props.complicatedMode"
        :x="`${props.source.x}`" :y="`${props.source.y}`" >
     <g class="scale-arrow">

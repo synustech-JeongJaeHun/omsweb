@@ -218,14 +218,13 @@ function onRightClick(event: MouseEvent) {
     event,
   })
 }
-
-
 </script>
 
 <template>
   <Teleport :to="teleportRef" :disabled="props.vehicle.isCarrierFocused !== true">
     <template v-if="props.vehicle.isConnected && !props.vehicle.errorList && props.vehicle.mode !== 'M'">
-      <Arrow v-if="props.vehicle.movingState === 'M' && nextPointPosition.x && realtimePosition && readonlyVhlArrow"
+      <Arrow v-if="props.vehicle.movingState === 'M' && nextPointPosition && realtimePosition && readonlyVhlArrow &&
+                    props.vehicle.nextPoint !== props.vehicle.curPoint"
              :source="realtimePosition" :dest="nextPointPosition" :complicatedMode="complicatedMode"/>
     </template>
     
