@@ -70,6 +70,12 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
         `names.online` : `names.offline`)
   }
 
+  get onofflineParamText(): string[] {
+    if (this.isActiveOnlineMode || this.isAttemptOnlineMode || this.isHostOfflineMode)
+      return [this.t$.instant(`names.online`), this.t$.instant('names.offline')];
+    return [this.t$.instant(`names.offline`), this.t$.instant('names.online')];
+  }
+
   get hostModeText(): string {
     return this.t$.instant((this.onOffLine? 'enums.hostModeRemote.' : 'enums.hostMode.')+`${this.systemStates?.hostMode}`);
   }
@@ -85,6 +91,7 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
       return [this.t$.instant(`names.online`), this.t$.instant('names.offline')];
     return [this.t$.instant(`names.offline`), this.t$.instant('names.online')];
   }
+
   get hostParamTitle(): string {
     if (this.isActiveHostMode)
       return this.t$.instant(`names.host`);
@@ -185,11 +192,23 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
 
   changeOnlineMode() {
     if (!AccountUtil.hasPermission(PermissionEnums.HostMode, this.auth.currentUser)) return;
-    this.dialogSvc.confirm(this.getConfirmMessage(this.onlineParamTitle, this.onlineParamText)).subscribe((ok) => {
-      if (ok) {
-        this.messageSvc.sendOnlineStateCommand({ action: 'online_state', state: 'change' }).subscribe();
-      }
-    });
+    if(!this.onOffLine){
+      this.dialogSvc.confirm(this.getConfirmMessage(this.onlineParamTitle, this.onlineParamText)).subscribe((ok) => {
+        if (ok) {
+          this.messageSvc.sendOnlineStateCommand({ action: 'online_state', state: 'change' }).subscribe();
+        }
+      });
+    }
+    else{
+      const title = this.onofflineModeText,
+        targetState = this.isActiveOnlineMode || this.isAttemptOnlineMode || this.isHostOfflineMode? OnOfflineModeEnums.EqOffline : OnOfflineModeEnums.AttemptOnline,
+        text = this.onofflineParamText
+      this.dialogSvc.confirm(this.getConfirmMessage(title, text)).subscribe((ok) => {
+        if (ok) {
+          this.messageSvc.sendOnlineStateCommand({ action: 'online_state', state: targetState+'' }).subscribe();
+        }
+      });
+    }
   }
   changeHostMode() {
     if (!AccountUtil.hasPermission(PermissionEnums.HostMode, this.auth.currentUser)) return;
