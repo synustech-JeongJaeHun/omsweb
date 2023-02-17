@@ -73,13 +73,14 @@
 		class="tab-group"
 		[(selectedIndex)]="currentTab"
 		(selectedIndexChange)="onChangeTab($event)"
-		animationDuration="0ms"
+		animationDuration="0ms" #tabGroup
 	>
 		<mat-tab
 			[label]="'names.transfer' | translate"
 			*ngIf="canDisplayTable('orders')"
 		>
 			<oms-order-control-table
+        *ngIf="onTabIndex('orders')"
 				[tableHeight]="tableHeight"
 				(focus)="focus.emit($event)"
 				(dropFocus)="dropFocus.emit($event)"
@@ -91,6 +92,7 @@
 			*ngIf="canDisplayTable('vehicles')"
 		>
 			<oms-vehicle-control-table
+        *ngIf="onTabIndex('vehicles')"
 				[tableHeight]="tableHeight"
 			>
 			</oms-vehicle-control-table>
@@ -101,6 +103,7 @@
 			*ngIf="canControl && canDisplayTable('stations')"
 		>
 			<oms-station-control-table
+        *ngIf="onTabIndex('stations')"
 				[tableHeight]="tableHeight"
 			>
 			</oms-station-control-table>
@@ -110,7 +113,7 @@
 			*ngIf="bufferEnabled && canControl && canDisplayTable('buffers')"
 		>
 			<oms-buffer-control-table
-				*ngIf="bufferEnabled"
+				*ngIf="bufferEnabled && onTabIndex('buffers')"
 				[tableHeight]="tableHeight"
 			>
 			</oms-buffer-control-table>
@@ -122,6 +125,7 @@
 			*ngIf="canControl && canDisplayTable('zcus')"
 		>
 			<oms-zcu-control-table
+        *ngIf="onTabIndex('zcus')"
 				[tableHeight]="tableHeight"
 			>
 			</oms-zcu-control-table>
@@ -133,6 +137,7 @@
 			*ngIf="canControl && canDisplayTable('cps')"
 		>
 			<oms-cps-control-table
+        *ngIf="onTabIndex('cps')"
 				[tableHeight]="tableHeight"
 			>
 			</oms-cps-control-table>

@@ -57,6 +57,8 @@ export class StatusControlComponent implements OnInit, OnDestroy {
 
 	_unusedListDialog: MatDialogRef<UnusedListDialogComponent, any> = null
 
+  tableKeys:string[] = []
+
 	constructor(
 		private auth: AuthService,
 		private mapStateSvc: MapStatesService,
@@ -70,6 +72,7 @@ export class StatusControlComponent implements OnInit, OnDestroy {
 		settingSvc.serviceConfig.subscribe(
 			(config) => (this.bufferEnabled = config.bufferEnabled),
 		)
+    this.tableKeys = Object.keys(this.settingSvc.globalPreferences.controlTables).filter(key=>!key.includes('_'))
 	}
 
 	ngOnInit(): void {
@@ -172,6 +175,11 @@ export class StatusControlComponent implements OnInit, OnDestroy {
 		pref.uiStates.controlTab = selectedIndex
 		this.settingSvc.globalPreferences.save()
 	}
+
+  onTabIndex(type: string):boolean{
+    const index = this.tableKeys.findIndex(key=>key===type);
+    return this.currentTab===index;
+  }
 
 	resizeViewerStart() {
 		window.addEventListener('mousemove', this.resizeHandler)
