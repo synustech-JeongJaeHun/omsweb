@@ -739,15 +739,35 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 					}
 				})
 		} else {
-			this.messageSvc
-				.sendDisableSegmentCommand(
-					{ action: 'enable-segment' },
-					this.contextMenuObject.value.id,
-				)
-				.subscribe()
+      if(this.contextMenuObject.value.disabledByOnlyVehicle){
+        this.dialogSvc
+          .verify({ body: this.$t.instant('messages.confirmCommand') })
+          .subscribe((ok) => {
+            if (ok) {
+              const { operator, reason } = ok
+              this.messageSvc
+                .sendDisableSegmentCommand(
+                  { action: 'enable-segment', user: operator, note: reason },
+                  this.contextMenuObject.value.id,
+                )
+                .subscribe()
 
-			this.showContextMenu = false
-			this.contextMenuObject = undefined
+              this.showContextMenu = false
+              this.contextMenuObject = undefined
+            }
+          })
+      }
+      else{
+        this.messageSvc
+          .sendDisableSegmentCommand(
+            { action: 'enable-segment' },
+            this.contextMenuObject.value.id,
+          )
+          .subscribe()
+
+        this.showContextMenu = false
+        this.contextMenuObject = undefined
+      }
 		}
 	}
 
