@@ -14,7 +14,7 @@ import { MdePopoverTrigger } from '@material-extended/mde';
 
 import { NotificationsService } from '@oms/services/notifications.service';
 import { Subject, Subscription } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import {finalize, takeUntil} from 'rxjs/operators';
 import { IAlert, IDataChangeEvent } from '../../../models/notification.model';
 import { AuthService } from '../../../services/auth.service';
 import { HubService } from '../../../services/hub.service';
@@ -22,6 +22,7 @@ import { AlarmDialogComponent } from '../dialogs/alarm-dialog.component';
 import { AlertDialogComponent } from '../dialogs/alert-dialog.component';
 import { AccountUtil } from '../utils/account.util';
 import { PermissionEnums } from '../../../models/enums';
+import {TTSService} from "@oms/services/tts.service";
 
 @Component({
   selector: 'oms-gnb-indicators',
@@ -65,7 +66,9 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
     private notifySvc: NotificationsService,
     private hubSvc: HubService,
     private dialog: MatDialog,
-    private auth: AuthService
+    private auth: AuthService,
+
+    private tts: TTSService
   ) {
     this.timerId = setInterval(() => this.getState(), 5000);
   }
@@ -94,6 +97,9 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
     this.notifySvc.alarmCount().subscribe((alarm) => {
       this.alarmCount = alarm.total;
       this.isCriticalAlarm = alarm.critical > 0;
+      if(this.alarmCount>0){
+        this.tts.start(this.alarmCount)
+      }
     });
 
     this.notifySvc.alertCount().subscribe((warn) => {
@@ -130,15 +136,16 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
   }
 
   private updateAlarmCount() {
-    this.notifySvc.alarmCount().subscribe((alarm) => {
+    this.notifySvc.alarmCount()
+      .subscribe((alarm) => {
       this.alarmCount = alarm.total;
       this.isCriticalAlarm = alarm.critical > 0;
-
       if (this.alarmCount > 0) {
         this.showAlarmsView(true);  // show
 
         if (this._alarmDlg?.componentInstance)
           this._alarmDlg.componentInstance.dataSource = this.notifySvc.alarmsDataSource();
+
       }
       else {
         setTimeout(() => {
@@ -176,6 +183,7 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
         this._alarmDlg.close();
     }
     else {
+
       if (this._alarmDlg && this._alarmDlg.getState() === MatDialogState.OPEN) {
         return;
       }

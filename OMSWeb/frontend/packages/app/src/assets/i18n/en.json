@@ -514,7 +514,12 @@
     "view": "View",
     "VHLIDPosition": "Vehicle ID Position",
     "showVHLArrow": "Vehicle Directions",
-    "display" : "display"
+    "display" : "display",
+    "tts" : "Text to Sound",
+    "en-US": "English",
+    "ko-KR": "Korean",
+    "zh-CN": "Chinese",
+    "not-used": "Not Used"
   },
   "enums": {
     "hostSessionStatus": {

@@ -3,6 +3,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { HubService } from '../../services/hub.service';
 import { SettingsService } from '../../services/settings.service';
 import { setCssValue } from '../shared/utils/css-loader';
+import {TTSService} from "@oms/services/tts.service";
 
 @Component({
   selector: 'oms-root',
@@ -15,7 +16,9 @@ export class AppComponent {
   constructor(
     $t: TranslateService,
     private hubSvc: HubService,
-    private settingSvc: SettingsService
+    private settingSvc: SettingsService,
+
+    private ttsSvc: TTSService
   ) {
     this.translate = $t;
 
@@ -37,6 +40,8 @@ export class AppComponent {
     //this.translate.use('zh');
 
     this.setTheme();
+
+    this.ttsSvc.init();
   }
 
   private setTheme() {

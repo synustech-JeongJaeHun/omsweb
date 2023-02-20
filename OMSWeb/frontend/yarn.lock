@@ -11875,6 +11875,7 @@ __metadata:
     npkill: ^0.8.3
     npm-run-all: ^4.1.5
     prettier: ^2.5.1
+    speak-tts: ^2.0.8
     ts-node: ^10.7.0
     typescript: ~3.9.5
   languageName: unknown
@@ -23877,7 +23878,7 @@ __metadata:
   peerDependencies:
     react: ^16 || ^17 || ^18
     react-dom: ^16 || ^17 || ^18
-  checksum: 0896f05edc9835c8c3c5e244ca8a8c7c594721734e958b9f3b2a103dcb03fded2fac8334a9b11918b87aaaa4622666c369f3abac281fa24d8313e4f91a2b137d
+  checksum: f5755e440e0616f537ca02223cd78f93cadf570a5360d4d7183baa34c28a3ec86e51e0e16748637a7d5d33c5d2cb1e517ff52516a1cff9542140b9b11379fc7b
   languageName: node
   linkType: hard
 
@@ -25963,6 +25964,13 @@ __metadata:
     select-hose: ^2.0.0
     spdy-transport: ^3.0.0
   checksum: 2c739d0ff6f56ad36d2d754d0261d5ec358457bea7cbf77b1b05b0c6464f2ce65b85f196305f50b7bd9120723eb94bae9933466f28e67e5cd8cde4e27f1d75f8
+  languageName: node
+  linkType: hard
+
+"speak-tts@npm:^2.0.8":
+  version: 2.0.8
+  resolution: "speak-tts@npm:2.0.8"
+  checksum: d0cba5ff6ef9c0e980a00b1e3de7d27cb9072f8ba66f3ac2b292db1dc093e7a8b95d994a279ce189642ba7326e508ee58650ca9326d909d66b0b8d8f8aef677b
   languageName: node
   linkType: hard
 

@@ -2,6 +2,7 @@ import {ToggleOptionKeyType, VHLIdPosition} from './enums'
 import { StorageUtil } from '@oms/utils/storage.util'
 import { main_css } from '../modules/shared/utils/css-loader'
 import { IZoom } from './drawing.model'
+import { LangCode } from './tts.model'
 
 export type ToggleOptionsType = {
 	[key in ToggleOptionKeyType]: boolean
@@ -51,8 +52,8 @@ export interface IPreferences {
 	theme?: ThemeConfig
 	controlTables?: MonitorControlTable
 	historyTables?: HistoryTable
-
   trackDisplay?: TrackObjectConfig
+  tts?: TTSConfig
 }
 
 export class UiStates {
@@ -616,6 +617,11 @@ const trackObjectDefaultConfig ={
   vehicleIdDisplay: 'LeftTop'
 }
 
+type TTSConfig = typeof TTSDefaultConfig
+const TTSDefaultConfig ={
+  language: LangCode.none
+}
+
 export class ClientPreferences implements IPreferences {
 	toggles: ToggleOptionsType
 	map: MapConfig
@@ -625,6 +631,8 @@ export class ClientPreferences implements IPreferences {
 	historyTables?: HistoryTable
 
   trackDisplay?: TrackObjectConfig
+
+  tts?: TTSConfig
 
 	constructor(private storeKey: string, private base?: IPreferences) {
 		this.load()
@@ -642,13 +650,15 @@ export class ClientPreferences implements IPreferences {
 			controlTables = {},
 			historyTables = {},
       trackDisplay ={},
+      tts= {},
 		} = JSON.parse(value)
 		const {
 			toggles: baseToggle = {},
 			map: baseMap = {},
 			controlTables: baseControlTable = {},
 			historyTables: baseHistoryTable = {},
-      trackDisplay: baseDisplay = {}
+      trackDisplay: baseDisplay = {},
+      tts: baseTTs = {}
 		} = this.base || {}
 		this.toggles = { ...defaultToggleOptions, ...baseToggle, ...toggles }
 		this.map = { ...new MapConfig(), ...baseMap, ...map }
@@ -668,6 +678,10 @@ export class ClientPreferences implements IPreferences {
       ...trackObjectDefaultConfig,
       ...trackDisplay
     }
+    this.tts = {
+      ...TTSDefaultConfig,
+      ...tts
+    }
 
 		this.mergeOrders()
 		this.save()
@@ -681,7 +695,8 @@ export class ClientPreferences implements IPreferences {
 			theme: { ...this.theme },
 			controlTables: { ...this.controlTables },
 			historyTables: { ...this.historyTables },
-      trackDisplay: {...this.trackDisplay}
+      trackDisplay: {...this.trackDisplay},
+      tts: this.tts
 		}
 		StorageUtil.setLocal(this.storeKey, JSON.stringify(pref))
 	}
