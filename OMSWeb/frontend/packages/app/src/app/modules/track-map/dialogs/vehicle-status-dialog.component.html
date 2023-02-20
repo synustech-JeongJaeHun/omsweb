@@ -59,7 +59,7 @@
               <legend>{{ "names.carrier" | translate }}</legend>
               <div class="field-row">
                 <mat-form-field class="dense" appearance="outline">
-                  <input #carrierIdInput matInput [placeholder]="'names.carrierId' | translate" [value]="" />
+                  <input #carrierIdInput matInput [placeholder]="'names.carrierId' | translate" [value]="currentVehicle.carrierId" />
                 </mat-form-field>
                 <!--
                 <mat-form-field class="dense" appearance="outline">
