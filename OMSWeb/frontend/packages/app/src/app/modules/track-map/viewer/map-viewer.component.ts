@@ -1,42 +1,32 @@
-import {
-	Component,
-	EventEmitter,
-	HostListener,
-	Input,
-	OnDestroy,
-	OnInit,
-} from '@angular/core'
-import { Router } from '@angular/router'
-import { Subject } from 'rxjs'
-import { takeUntil } from 'rxjs/operators'
+import {Component, EventEmitter, HostListener, Input, OnDestroy, OnInit,} from '@angular/core'
+import {Router} from '@angular/router'
+import {Subject} from 'rxjs'
+import {takeUntil} from 'rxjs/operators'
 
-import { PermissionEnums, ViewModes } from '../../../models/enums'
-import { Dto } from '../../../models/dto/track.model'
-import { IPreferences } from '../../../models/settings.model'
-import { HubService } from '../../../services/hub.service'
-import { IDataChangeEvent } from '../../../models/notification.model'
-import { AuthService } from '../../../services/auth.service'
+import {PermissionEnums, PointType, ViewModes} from '../../../models/enums'
+import {Dto} from '../../../models/dto/track.model'
+import {IPreferences} from '../../../models/settings.model'
+import {HubService} from '../../../services/hub.service'
+import {IDataChangeEvent} from '../../../models/notification.model'
+import {AuthService} from '../../../services/auth.service'
 
 import '@daimre/oms-track-monitor'
-import {
-	OmsTrackMonitorElement,
-	IOmsTrackMonitor,
-} from '@daimre/oms-track-monitor'
-import { StatusService } from '@oms/root/services/status.service'
-import { MapStatesService } from '../map-states.service'
-import { SettingsService } from '@oms/root/services/settings.service'
-import { TrackStatusService } from '../../../services/track-status.service'
-import { TrackMonitorSettingService } from '../../../services/track-monitor-setting.service'
-import d3 = require('d3')
-import { TranslateService } from '@ngx-translate/core'
-import { MessagesService } from '@oms/root/services/messages.service'
-import { DialogService } from '@oms/root/services/dialog.service'
-import { IVehicleCommandMessage } from '@oms/root/models/command.model'
-import { SystemStatusService } from '@oms/root/services/system-status.service'
-import { TracksService } from '@oms/root/services/tracks.service'
-import { TransfersService } from '@oms/root/services/transfers.service'
-import { VehicleStatusDialogService } from '@oms/root/services/vehicle-status-dialog.service'
-import { BufferStatusDialogService } from '@oms/root/services/buffer-status-dialog.service'
+import {IOmsTrackMonitor,} from '@daimre/oms-track-monitor'
+import {StatusService} from '@oms/root/services/status.service'
+import {MapStatesService} from '../map-states.service'
+import {SettingsService} from '@oms/root/services/settings.service'
+import {TrackStatusService} from '../../../services/track-status.service'
+import {TrackMonitorSettingService} from '../../../services/track-monitor-setting.service'
+import {TranslateService} from '@ngx-translate/core'
+import {MessagesService} from '@oms/root/services/messages.service'
+import {DialogService} from '@oms/root/services/dialog.service'
+import {IVehicleCommandMessage} from '@oms/root/models/command.model'
+import {SystemStatusService} from '@oms/root/services/system-status.service'
+import {TracksService} from '@oms/root/services/tracks.service'
+import {TransfersService} from '@oms/root/services/transfers.service'
+import {VehicleStatusDialogService} from '@oms/root/services/vehicle-status-dialog.service'
+import {BufferStatusDialogService} from '@oms/root/services/buffer-status-dialog.service'
+import d3 = require('d3');
 
 @Component({
 	selector: 'oms-map-viewer',
@@ -948,13 +938,20 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 
 		if (this.tooltipObject.type === 'SEGMENT') {
 
-      if(this.preference.toggles.pointDisplayType){
-        const { startPointDto, endPointDto } = this.tooltipObject.value
+      const { startPointDto, endPointDto } = this.tooltipObject.value
+      const { startPoint, endPoint } = this.tooltipObject.value
+
+      const pd =this.preference.trackDisplay.pointDisplay;
+      if(pd === PointType.BCR){
         this.tooltipObject.value.point =
           startPointDto && endPointDto ? `${startPointDto.physicalId} → ${endPointDto.physicalId}` : null
       }
+      else if(pd === PointType.ID_BCR){
+        this.tooltipObject.value.point =
+          startPointDto && endPointDto && startPoint && endPoint ?
+            `${startPoint}(${startPointDto.physicalId}) → ${endPoint}(${endPointDto.physicalId})` : null
+      }
       else{
-        const { startPoint, endPoint } = this.tooltipObject.value
         this.tooltipObject.value.point =
           startPoint && endPoint ? `${startPoint} → ${endPoint}` : null
       }

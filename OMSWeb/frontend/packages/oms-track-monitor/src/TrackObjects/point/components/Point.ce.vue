@@ -4,7 +4,7 @@ import PointHome from '../assets/PointHome.svg?component'
 import { useGroup } from 'src/TrackObjects/group/groups'
 import { computed } from 'vue'
 import { getGroupColorWithAlpha } from 'TrackObjects/group/utils/color'
-import { readonlyPointType } from "TrackObjects/point/pointType";
+import { readonlyPointType, PointType } from "TrackObjects/point/pointType";
 
 const props = defineProps<{
   point: Point
@@ -67,10 +67,18 @@ const group = useGroup(
         alignment-baseline="hanging"
         text-anchor="middle"
         text-rendering="optimizeSpeed"
+        font-size="0.9em"
         pointer-events="none"
-        :style="{ 'font-size':readonlyPointType? '0.7em':'0.9em'}"
       >
-        {{ readonlyPointType ? props.point.physicalId : props.point.logicalId}}
+        <template v-if="readonlyPointType===PointType.ID">
+          {{props.point.logicalId}}
+        </template>
+        <template v-if="readonlyPointType===PointType.BCR">
+          {{props.point.physicalId}}
+        </template>
+        <template v-if="readonlyPointType===PointType.ID_BCR">
+          {{`${props.point.logicalId}(${props.point.physicalId})`}}
+        </template>
         
       </text>
     </g>

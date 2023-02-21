@@ -1,4 +1,4 @@
-import {ToggleOptionKeyType, VHLIdPosition} from './enums'
+import {ToggleOptionKeyType, VHLIdPosition, PointType} from './enums'
 import { StorageUtil } from '@oms/utils/storage.util'
 import { main_css } from '../modules/shared/utils/css-loader'
 import { IZoom } from './drawing.model'
@@ -80,7 +80,6 @@ export const defaultToggleOptions: ToggleOptionsType = {
 	showOmsVersion: true,
 	showKpi: true,
   zoomButton: false,
-  pointDisplayType: false,
   ctrlKey: true
 }
 
@@ -613,7 +612,8 @@ const defaultHistoryTable = {
 
 type TrackObjectConfig = typeof trackObjectDefaultConfig
 const trackObjectDefaultConfig ={
-  vehicleIdDisplay: 'LeftTop'
+  vehicleIdDisplay: VHLIdPosition.LT,
+  pointDisplay: PointType.ID,
 }
 
 export class ClientPreferences implements IPreferences {

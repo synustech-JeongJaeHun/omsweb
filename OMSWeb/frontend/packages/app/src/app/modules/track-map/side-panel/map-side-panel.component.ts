@@ -11,7 +11,7 @@ import { AuthService } from '../../../services/auth.service'
 import { AccountUtil } from '../../shared/utils/account.util'
 import { MapStatesService } from '../map-states.service'
 import { MessagesService } from '../../../services/messages.service'
-import { PermissionEnums } from '../../../models/enums'
+import {PermissionEnums, PointType} from '../../../models/enums'
 import { TrackStatusService } from '@oms/root/services/track-status.service'
 import { DialogService } from '@oms/root/services/dialog.service'
 import { TranslateService } from '@ngx-translate/core'
@@ -129,14 +129,13 @@ export class MapSidePanelComponent implements OnChanges, OnDestroy {
 							.filter((sd) => sd.segmentId === id)
 							.sort((a, b) => a.id - b.id)
 
-
-            if(this.preference.toggles.pointDisplayType){
+            const pd =this.preference.trackDisplay.pointDisplay;
+            if(pd !== PointType.ID){
               this.trackStatusService.trackData.points.forEach(item=>{
                 if(current.startPoint===item.id) current.startPointDto=item;
                 if(current.endPoint===item.id) current.endPointDto=item;
               })
             }
-
 
 						this.data = { ...current, objectType: 'SEGMENT' }
 						this.disableds = disableds

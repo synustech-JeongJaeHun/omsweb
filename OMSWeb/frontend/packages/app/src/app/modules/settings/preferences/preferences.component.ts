@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {ToggleOptionKeyType, VHLIdPosition} from '../../../models/enums';
+import {ToggleOptionKeyType, VHLIdPosition, PointType} from '../../../models/enums';
 import { ClientPreferences } from '../../../models/settings.model';
 import { SettingsService } from '../../../services/settings.service';
 
@@ -12,6 +12,9 @@ export class PreferencesComponent {
   preference: ClientPreferences;
   canUseKpi = false;
 
+  public VHLIdPosition = VHLIdPosition;
+  public PointType = PointType;
+
   constructor(private settingSvc: SettingsService) {
 
     this.preference = this.settingSvc.globalPreferences;
@@ -23,7 +26,7 @@ export class PreferencesComponent {
     this.preference.save();
   }
 
-  get VHLIdPositionKeys(): string[]{
-    return Object.values(VHLIdPosition);
+  objectValues(obj: any): string[]{
+    return Object.values(obj);
   }
 }
