@@ -52,7 +52,6 @@ export type ToggleOptionKeyType =
   | 'showKpi'
   | 'overlaps'
   | 'zoomButton'
-  | 'pointDisplayType'
   | 'ctrlKey'
   ;
 
@@ -196,4 +195,10 @@ export enum PermissionEnums {
 export enum VHLIdPosition {
   LT = 'LeftTop',
   T = 'Top'
+}
+
+export enum PointType {
+  ID = 'ID',
+  BCR = 'Barcode',
+  ID_BCR = 'ID(Barcode)'
 }

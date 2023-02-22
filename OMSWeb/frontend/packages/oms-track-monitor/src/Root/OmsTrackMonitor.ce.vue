@@ -177,12 +177,9 @@ watch([propRefs.zoomButtonVisible], () => {
   }
 })
 
-watch([propRefs.pointDisplayType], () => {
-  if(props.pointDisplayType === true){
-    updatePointType(true)
-  }
-  if(props.pointDisplayType === false){
-    updatePointType(false)
+watch(propRefs.pointDisplayType, () => {
+  if(typeof props.pointDisplayType === 'string'){
+    updatePointType(props.pointDisplayType)
   }
 })
 

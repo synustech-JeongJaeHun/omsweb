@@ -16,8 +16,8 @@
       <mat-slide-toggle [(ngModel)]="preference.toggles.zoomButton" color="primary"
         (change)="onChangedToggle('zoomButton')">{{ "names.zoomButton" | translate }}</mat-slide-toggle>
 
-      <mat-slide-toggle [(ngModel)]="preference.toggles.pointDisplayType" color="primary"
-        (change)="onChangedToggle('pointDisplayType')">{{ "names.pointDisplayType" | translate }}</mat-slide-toggle>
+      <!--<mat-slide-toggle [(ngModel)]="preference.toggles.pointDisplayType" color="primary"
+        (change)="onChangedToggle('pointDisplayType')">{{ "names.pointDisplayType" | translate }}</mat-slide-toggle>-->
 
       <mat-slide-toggle [(ngModel)]="preference.toggles.ctrlKey" color="primary"
                         (change)="onChangedToggle('ctrlKey')">{{ "names.ctrlKey" | translate }}</mat-slide-toggle>
@@ -31,10 +31,16 @@
       <div class="form-grid mat-select-div">
         <mat-label >{{'names.VHLIDPosition' | translate}}</mat-label>
         <mat-select [(value)]="preference.trackDisplay.vehicleIdDisplay" (selectionChange)="onChangedToggle()">
-          <mat-option *ngFor="let item of VHLIdPositionKeys" [value]="item">{{item}}</mat-option>
+          <mat-option *ngFor="let item of objectValues(VHLIdPosition)" [value]="item">{{item}}</mat-option>
         </mat-select>
       </div>
-      <div></div>
+
+      <div class="form-grid mat-select-div">
+        <mat-label >{{'names.pointDisplayType' | translate}}</mat-label>
+        <mat-select [(value)]="preference.trackDisplay.pointDisplay" (selectionChange)="onChangedToggle()">
+          <mat-option *ngFor="let item of objectValues(PointType)" [value]="item">{{item}}</mat-option>
+        </mat-select>
+      </div>
     </div>
   </fieldset>
 </div>

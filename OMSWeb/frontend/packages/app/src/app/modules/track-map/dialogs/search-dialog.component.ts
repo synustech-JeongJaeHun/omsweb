@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
-import { IKeyValuePair } from '@oms/models/base.model';
-import { MatDialogRef } from '@angular/material/dialog';
-import { TrackStatusService } from '@oms/root/services/track-status.service';
+import {Component} from '@angular/core';
+import {IKeyValuePair} from '@oms/models/base.model';
+import {MatDialogRef} from '@angular/material/dialog';
+import {TrackStatusService} from '@oms/root/services/track-status.service';
 import {SettingsService} from "@oms/services/settings.service";
+import {PointType} from "../../../models/enums"
 
 type Ids = { id: number, logicalId: string }
 type ObjectTypeKey = "point" | "segment" | "station" | "mtl" | "buffer" | "zcu" | "cluster" | "vehicle"
@@ -63,14 +64,20 @@ export class SearchDialogComponent {
   }
 
   onLoad(){
-    const pointDisplayType = this.settingSvc.globalPreferences.toggles.pointDisplayType
+    const pointDisplayType = this.settingSvc.globalPreferences.trackDisplay.pointDisplay
+    let points = null
+
+    if(pointDisplayType===PointType.BCR)
+      points = this.trackStatusService.trackData.points.map((x) => ({id: x.id, logicalId: x.physicalId}))
+    else if(pointDisplayType===PointType.ID_BCR)
+      points = this.trackStatusService.trackData.points.map((x) => ({id: x.id, logicalId: `${x.logicalId}(${x.physicalId})`}))
+    else
+      points = this.trackStatusService.trackData.points.map((x) => ({id: x.id, logicalId: x.logicalId}))
+
 
     this.dataSourceMap = {
       vehicle: this.trackStatusService.trackData.vehicles.map((x) => ({id: x.id, logicalId: x.logicalId})),
-      point: !pointDisplayType?
-        this.trackStatusService.trackData.points.map((x) => ({ id: x.id, logicalId: x.logicalId }))
-        : this.trackStatusService.trackData.points.map((x) => ({ id: x.id, logicalId: x.physicalId }))
-      ,
+      point: points,
       // distinct element because segment data is mixed with segparts
       segment: [...new Map(this.trackStatusService.trackData.segments.map((x) => [x.id, x.logicalId]))].map((x) => ({ id: x[0], logicalId: x[1] })),
       station: this.trackStatusService.trackData.stations.map((x) => ({ id: x.id, logicalId: x.logicalId })),
