@@ -582,7 +582,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 							zcuIds: [this.contextMenuObject.value.id],
 							zcuUsingType: change === 1 ? 'hw' : 'sw',
 						})
-						.subscribe()
+						.subscribe(()=>this.showContextMenu =false)
 				} else {
 					this.contextMenuObject.value.usingType = origin
 				}
@@ -599,7 +599,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 							zcuId: this.contextMenuObject.value.id,
               zcuUsingType: type
 						})
-						.subscribe()
+						.subscribe(()=>this.showContextMenu =false)
 				}
 			})
 	}
@@ -611,6 +611,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 			logicalId,
 			physicalId,
 		}
+    this.showContextMenu =false
 	}
 	onSetDest(objectType) {
 		const { id, logicalId, physicalId } = this.contextMenuObject.value
@@ -620,6 +621,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 			logicalId,
 			physicalId,
 		}
+    this.showContextMenu =false
 	}
 	onRemoveCarrier(carrierId: string) {
 		this.transferSvc
@@ -645,7 +647,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 					this.dialogSvc.success({
 						title: this.$t.instant('names.success'),
 						body: this.$t.instant('messages.confirmSuccessRemoveCarrier'),
-					})
+					}).subscribe(()=>this.showContextMenu =false)
 				} else {
 					var errorMessage = ''
 					if (res.hcack === 2) errorMessage = 'messages.confirmNotAbleToExcute'
@@ -689,7 +691,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 					this.dialogSvc.success({
 						title: this.$t.instant('names.success'),
 						body: this.$t.instant('messages.confirmSuccessInstallCarrier'),
-					})
+					}).subscribe(()=>this.showContextMenu =false)
 				} else {
 					var errorMessage = ''
 					if (res.hcack === 2) errorMessage = 'messages.confirmNotAbleToExcute'
@@ -770,12 +772,14 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 
 	onHomeValueChanged(event: { value: Number[] }) {
 		this.contextMenuObject.value.home = event.value
+    this.showContextMenu =false
 	}
 	onHomeSettingChanged(event: { value: boolean }) {
 		this.homeActive = event.value
 		// clear Point Context home when Home feature turns 'off'
 		if (event.value === false && this.contextMenuObject.value.home.length > 0) {
 			this.contextMenuObject.value.home = []
+      this.showContextMenu =false
 		}
 	}
 
