@@ -57,9 +57,15 @@
 
             <fieldset>
               <legend>{{ "names.carrier" | translate }}</legend>
+
+              <span style="font-size: xx-small; margin-left: 4px">
+                Carrier : {{ currentVehicle.carrierId || 'None' }}
+              </span>
+
+
               <div class="field-row">
                 <mat-form-field class="dense" appearance="outline">
-                  <input #carrierIdInput matInput [placeholder]="'names.carrierId' | translate" [value]="currentVehicle.carrierId" />
+                  <input #carrierIdInput matInput [placeholder]="'names.carrierId' | translate" [value]="" />
                 </mat-form-field>
                 <!--
                 <mat-form-field class="dense" appearance="outline">
