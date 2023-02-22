@@ -64,6 +64,10 @@
         (changed)="update({key: 'disabledByVehicleSegmentColor', value: $event})"
         [value]="setting.disabledByVehicleSegmentColor">
       </oms-color-picker>
+      <oms-color-picker [name]="'names.segmentDisabledByMTL' | translate"
+        (changed)="update({key: 'disabledByMTLSegmentColor', value: $event})"
+        [value]="setting.disabledByMTLSegmentColor">
+      </oms-color-picker>
       <oms-color-picker [name]="'names.segmentDirection' | translate"
         (changed)="update({key: 'segmentDirectionColor', value: $event})"
         [value]="setting.segmentDirectionColor">

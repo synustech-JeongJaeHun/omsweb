@@ -51,6 +51,7 @@ const ColorDefault: Record<ColorProperty, string> = {
   normalSegment: 'grey',
   disabledSegment: 'purple',
   disabledByVehicleSegment: 'orange',
+  disabledByMTLSegment: 'rgba(112,168,113,0.56)',
   segmentDirection: 'grey',
 
   // chjs visual start

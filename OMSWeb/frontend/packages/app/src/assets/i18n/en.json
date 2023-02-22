@@ -367,6 +367,7 @@
     "segmentNormal": "Segment - normal",
     "segmentDisabled": "Segment - disabled",
     "segmentDisabledByVehicle": "Segment - disabled by vehicle",
+    "segmentDisabledByMTL" : "Segment - disabled by MTL",
     "stationNormal": "Station - normal",
     "stationUnuse": "Station - unuse",
     "bufferNormal": "Buffer - normal",
