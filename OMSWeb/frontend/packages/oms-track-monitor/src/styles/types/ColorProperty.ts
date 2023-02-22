@@ -26,5 +26,6 @@ type ColorProperty =
   | 'fireshutterClosed'
   | 'mtlUnuse'
   | 'mtlUse'
+  | 'disabledByMTLSegment'
 
 export { ColorProperty }
