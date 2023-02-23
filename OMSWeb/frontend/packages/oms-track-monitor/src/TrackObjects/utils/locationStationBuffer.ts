@@ -21,15 +21,16 @@ function getPositionForBufferOrStation(
 
 	if (segment === undefined) return undefined
 
-  const gap = segment.length < bufferOrStation.offset ? bufferOrStation.offset-segment.length : 0
-
 	const segmentPath = createPathElement(segment.d)
+
+  const leng =segmentPath.getTotalLength();
+  const gap = leng < bufferOrStation.offset ? bufferOrStation.offset-leng : 0
 
 	const backwardPosition = segmentPath.getPointAtLength(
 		bufferOrStation.offset - 40 - gap
 	)
 	const forwardPosition = segmentPath.getPointAtLength(
-		bufferOrStation.offset + 40 - gap
+		bufferOrStation.offset + 40 + gap
 	)
 
 	const offsetPosition = segmentPath.getPointAtLength(
@@ -51,11 +52,10 @@ function getPositionForBufferOrStation(
 	const directionTransformVector = multipleVector(orthogonalVector, margin)
   const position = addVectors(offsetPosition, directionTransformVector)
 
-  if(gap!==0){
+  if(gap>0){
     if(offsetVector.x!==0) position.x+=gap
     if(offsetVector.y!==0) position.y+=gap
   }
-
 	return { x: Math.ceil(position.x), y: Math.ceil(position.y) }
 }
 
