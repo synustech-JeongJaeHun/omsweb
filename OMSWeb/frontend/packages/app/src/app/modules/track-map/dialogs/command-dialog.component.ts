@@ -27,7 +27,9 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 	currentTab = 0
 	isAuto = true
 
-	tabs: TransferCommandCategoryType[] = ['fromTo', 'from', 'to', 'move', 'mtl']
+	tabs: TransferCommandCategoryType[] = ['fromTo', 'from', 'to', 'move', 'scan', 'mtl']
+
+  displayedColumns: string[] = ['id', 'logicalId', 'physicalId'];
 
 	get canApply(): boolean {
 		return this.validate() === undefined
@@ -93,6 +95,15 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 	onChangeSource(source: ILookupUnit) {
 		this.commandState.source = source
 	}
+
+  onChangeBuffer(source: ILookupUnit) {
+    this.commandState.buffers.push(source)
+  }
+
+  bufferSplice(index: number) {
+    this.commandState.buffers.splice(index,1)
+  }
+
 	onChangeDest(dest: ILookupUnit) {
 		this.commandState.dest = dest
 	}
@@ -123,6 +134,7 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 			mtl,
 			mtlInOut,
 			priority, // type priority = string | undefined
+      buffers,
 		} = this.commandState
 
 		if (category === 'mtl') {
@@ -206,7 +218,11 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 				!pointDisabled && (cmd.locationMove = point.id.toString())
 			else if (!destDisabled && dest)
 				!destDisabled && (cmd.locationMove = dest.id.toString())
-		} else {
+		}
+    if( category === 'scan'){
+      console.log(source)
+    }
+    else {
 			!pointDisabled && (cmd.locationMove = point.id.toString())
 			!destDisabled && (cmd.locationDropoff = dest.id.toString())
 		}
@@ -284,22 +300,23 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 			carrier,
             mtl,
             priority,
+      buffers,
 		} = this.commandState
 
 		if (!vehicleDisabled && !vehicle)
 			return this.t$.instant('messages.required', { field: 'Vehicle' })
 
-		if (!pointDisabled && !point) {
+		if (!pointDisabled && !point && !buffers) {
 			if (category == 'move') {
 				if (!destDisabled && !dest)
 					return this.t$.instant('messages.required', { field: 'Point' })
 			} else return this.t$.instant('messages.required', { field: 'Point' })
 		}
 
-		if (!sourceDisabled && !source)
+		if (!sourceDisabled && !source  && !buffers)
 			return this.t$.instant('messages.required', { field: 'Source' })
 
-		if (!destDisabled && !dest) {
+		if (!destDisabled && !dest  && !buffers) {
 			if (category == 'move') {
 				if (!pointDisabled && !point)
 					return this.t$.instant('messages.required', { field: 'Dest' })
@@ -327,11 +344,11 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 			)
 				return this.t$.instant('messages.required', { field: 'Vehicle' })
 		}
-		if (category === 'mtl' && !mtl) {
+		if (category === 'mtl' && !mtl  && !buffers) {
 			return this.t$.instant('messages.required', { field: 'MTL' })
         }
 
-    if (category === 'mtl') {
+    if (category === 'mtl'  && !buffers) {
         const mtlInfo = (this.trackStatusService.trackData?.mtls ?? []).find(
             (m) => m.id === mtl.id,
         )
@@ -341,6 +358,15 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
         if (!this.commandState.mtlInOut && mtlInfo.outDirection !== 'A')
             return this.t$.instant('messages.notSupport', { field: 'OUT[MTL -> Line]' })
         }
+
+    if(category === 'scan'){
+      if(this.commandState.selectVehicle &&this.commandState.vehicle == null){
+        return this.t$.instant('messages.required', { field: 'Vehicle' })
+      }
+      if(buffers.length===0){
+        return this.t$.instant('messages.required', { field: 'Buffers' })
+      }
+    }
 
 		return
 	}

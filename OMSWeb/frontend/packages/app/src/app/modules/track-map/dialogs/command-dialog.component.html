@@ -13,7 +13,10 @@
 			<ng-container *ngSwitchCase="3">
 				<ng-container *ngTemplateOutlet="moveForm"></ng-container>
 			</ng-container>
-			<ng-container *ngSwitchCase="4">
+      <ng-container *ngSwitchCase="4">
+        <ng-container *ngTemplateOutlet="scanForm"></ng-container>
+      </ng-container>
+			<ng-container *ngSwitchCase="5">
 				<ng-container *ngTemplateOutlet="mtlForm"></ng-container>
 			</ng-container>
 			<ng-container *ngSwitchDefault> </ng-container>
@@ -25,6 +28,7 @@
 	<div mat-dialog-content>
 		<mat-tab-group
 			class="tab-group"
+      [ngClass]="'mat-tab-group-'+tabs.length"
 			[(selectedIndex)]="currentTab"
 			(selectedIndexChange)="onTabChanged()"
 			animationDuration="0ms"
@@ -378,4 +382,87 @@
 			{{ 'names.cancel' | translate }}
 		</button>
 	</div>
+</ng-template>
+
+
+<ng-template #scanForm>
+  <div mat-dialog-content>
+    <mat-tab-group
+      class="tab-group"
+      [(selectedIndex)]="currentTab"
+      (selectedIndexChange)="onTabChanged()"
+      animationDuration="0ms"
+    >
+      <mat-tab
+        *ngFor="let tab of tabs"
+        [label]="'names.command-' + tab | translate"
+      ></mat-tab>
+    </mat-tab-group>
+    <div class="form">
+      <div class="form-row">
+        <oms-unit-selector
+          [findScopes]="['vehicles']"
+          [disabled]="commandState.vehicleDisabled"
+          [selectedUnit]="commandState.vehicle"
+          (selectedUnitChange)="onChangeVehicle($event)"
+          [placeholder]="'names.selectVehicle' | translate"
+        >
+        </oms-unit-selector>
+      </div>
+      <div class="form-row">
+        <oms-unit-selector
+          [findScopes]="['buffers']"
+          [filterWords]="sourceFilterWords"
+          [disabled]="commandState.sourceDisabled"
+          [selectedUnit]="commandState.source"
+          (selectedUnitChange)="onChangeBuffer($event)"
+          [placeholder]="'names.selectSource' | translate"
+        ></oms-unit-selector>
+      </div>
+      <div class="form-row table-div">
+        <table *ngIf="this.commandState?.buffers.length===0" style="color: gray; height: 100%">
+          <div class="empty-div">
+            empty
+          </div>
+        </table>
+        <table *ngIf="this.commandState?.buffers.length>0">
+          <tr>
+            <td>no.</td>
+            <td>Logical Id</td>
+            <td>Physical Id</td>
+            <td></td>
+          </tr>
+          <tr *ngFor="let buffer of this.commandState?.buffers; let i=index">
+            <td>{{i+1}}</td>
+            <td>{{buffer.logicalId}}</td>
+            <td>{{buffer.physicalId}}</td>
+            <td style="text-align: right">
+              <mat-icon (click)="bufferSplice(i)">close</mat-icon>
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="form-row">
+        <mat-slide-toggle
+          [(ngModel)]="commandState.selectVehicle"
+          color="primary"
+        >{{ 'names.selectVehicle' | translate }}</mat-slide-toggle
+        >
+      </div>
+    </div>
+  </div>
+  <div mat-dialog-actions>
+    <button
+      mat-raised-button
+      [disabled]="!canApply"
+      color="primary"
+      (click)="onApply()"
+    >
+      {{ 'names.apply' | translate }}
+    </button>
+    <button mat-raised-button mat-dialog-close>
+      {{ 'names.cancel' | translate }}
+    </button>
+  </div>
 </ng-template>

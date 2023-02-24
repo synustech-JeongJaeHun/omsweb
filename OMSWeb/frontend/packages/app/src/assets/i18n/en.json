@@ -222,6 +222,7 @@
     "command-fromTo": "FromTo",
     "command-from": "From",
     "command-to": "To",
+    "command-scan": "Scan",
     "command-mtl": "MTL",
     "selectBuffer": "Select Buffer",
     "selectVehicle": "Select Vehicle",

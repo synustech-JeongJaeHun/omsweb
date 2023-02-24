@@ -1,4 +1,4 @@
-mat-tab-group {
+.mat-tab-group-5 {
   height: 38px;
   // background-color: #eee;
   margin: 0 -8px;
@@ -8,16 +8,18 @@ mat-tab-group {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
   }
-  // ::ng-deep.mat-tab-label {
-  //   height: 36px;
-  //   min-width: 70px;
-  //   padding: 0 8px;
-  //   font-weight: bold;
+}
 
-  //   &.mat-tab-label-active {
-  //     background-color: white;
-  //   }
-  // }
+.mat-tab-group-6 {
+  height: 38px;
+  // background-color: #eee;
+  margin: 0 -8px;
+  padding: 4px 2px 0 2px;
+
+  ::ng-deep.mat-tab-labels {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+  }
 }
 
 .form-row {
@@ -26,4 +28,32 @@ mat-tab-group {
 
 .mat-dialog-content {
   overflow: inherit;
+}
+table{
+  border: none !important;
+  width: 100%;
+}
+
+.table-div{
+  max-height: 200px;
+  overflow-y: scroll;
+  padding-left: 8px;
+  padding-right: 8px;
+  height: 200px;
+  background: rgba(237, 237, 237, 0.49);
+}
+
+table th,
+table td {
+  text-align: center;
+  border-top: 0 !important;
+  border-left: 0 !important;
+  border-right: 0 !important;
+}
+
+.empty-div{
+  display: table-cell; vertical-align: middle; text-align: center
+}
+mat-icon{
+  cursor: pointer;
 }

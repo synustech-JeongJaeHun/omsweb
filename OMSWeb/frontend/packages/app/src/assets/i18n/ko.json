@@ -222,6 +222,7 @@
     "command-fromTo": "시작점/종점",
     "command-from": "시작점",
     "command-to": "종점",
+    "command-scan": "Scan",
     "command-mtl": "MTL",
     "selectBuffer": "버퍼 선택",
     "selectVehicle": "비클 선택",

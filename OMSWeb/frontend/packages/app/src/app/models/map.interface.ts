@@ -102,6 +102,7 @@ export type TransferCommandCategoryType =
 	| 'from'
 	| 'to'
 	| 'move'
+  | 'scan'
 	| 'mtl'
 
 export class TransferCommandState {
@@ -116,14 +117,15 @@ export class TransferCommandState {
 	carrier?: string
 	priority?: string
 	mtlInOut: boolean = true
+  buffers?: ILookupUnit[] = []
 
 	get autoDisabled(): boolean {
-		return !this.active || ['fromTo', 'from'].includes(this.category)
+		return !this.active || ['fromTo', 'from', 'scan'].includes(this.category)
 	}
 	get vehicleDisabled(): boolean {
 		return (
 			!this.active ||
-			(!this.selectVehicle && ['fromTo', 'from'].includes(this.category))
+			(!this.selectVehicle && ['fromTo', 'from', 'scan'].includes(this.category))
 		)
 	}
 	get pointDisabled(): boolean {
@@ -164,6 +166,7 @@ export class TransferCommandState {
 		switch (this.category) {
 			case 'fromTo':
 			case 'from':
+      case 'scan':
 				{
 					if (v?.logicalId) {
 						getCarrierId(v.logicalId)
