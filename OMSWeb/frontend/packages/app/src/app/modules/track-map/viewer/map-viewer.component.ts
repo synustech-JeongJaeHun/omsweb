@@ -1081,6 +1081,11 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 						// nothing
 					}
 					break
+        case 'scan':
+        {
+          this.mapStatesService.transferCommandState.buffers.push(port)
+        }
+          break
 				default:
 					break
 			}

@@ -15,9 +15,9 @@ namespace OMSWeb.Models
         
         public string TitleText { get; set; }
 
-        
-        
         public bool OnOffLine { get; set; }
+        
+        public bool ActionScan { get; set; }
         public ClientSettings Client { get; set; }
 
         public DefaultColorSettings DefaultColor { get; set; }

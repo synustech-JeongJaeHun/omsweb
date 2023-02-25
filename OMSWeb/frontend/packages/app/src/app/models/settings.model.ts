@@ -17,8 +17,9 @@ export class ServiceConfig {
 
   onOffLine: boolean
   zcuDetail: boolean
-
   titleText: string
+
+  actionScan: boolean
 }
 
 export interface ManualTransferFiltersSetting {

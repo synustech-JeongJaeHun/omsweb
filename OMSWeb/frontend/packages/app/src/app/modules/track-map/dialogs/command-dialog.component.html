@@ -416,13 +416,13 @@
           [disabled]="commandState.sourceDisabled"
           [selectedUnit]="commandState.source"
           (selectedUnitChange)="onChangeBuffer($event)"
-          [placeholder]="'names.selectSource' | translate"
+          [placeholder]="'names.searchBuffer' | translate"
         ></oms-unit-selector>
       </div>
       <div class="form-row table-div">
         <table *ngIf="this.commandState?.buffers.length===0" style="color: gray; height: 100%">
           <div class="empty-div">
-            empty
+            {{'names.empty' | translate}}
           </div>
         </table>
         <table *ngIf="this.commandState?.buffers.length>0">
@@ -443,11 +443,12 @@
         </table>
       </div>
 
-      <div class="form-row">
-        <mat-slide-toggle
-          [(ngModel)]="commandState.selectVehicle"
-          color="primary"
-        >{{ 'names.selectVehicle' | translate }}</mat-slide-toggle
+      <div class="form-row" style="display: flex">
+        <mat-label class="mat-slide-toggle">{{'names.selectVehicle' | translate}}</mat-label>
+        <mat-slide-toggle (ngModelChange)="changeVHLFlag()"
+                          [(ngModel)]="commandState.vehicleFlag"
+                          color="primary"
+        >{{'names.multiVehicle' | translate}}</mat-slide-toggle
         >
       </div>
     </div>

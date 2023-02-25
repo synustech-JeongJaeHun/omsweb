@@ -118,6 +118,7 @@ export class TransferCommandState {
 	priority?: string
 	mtlInOut: boolean = true
   buffers?: ILookupUnit[] = []
+  vehicleFlag?: boolean = true
 
 	get autoDisabled(): boolean {
 		return !this.active || ['fromTo', 'from', 'scan'].includes(this.category)

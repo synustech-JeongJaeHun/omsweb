@@ -13,5 +13,7 @@ namespace OMSWeb.Models
         public string Version { get; set; }
         
         public string TitleText { get; set; }
+        
+        public bool ActionScan { get; set; }
     }
 }

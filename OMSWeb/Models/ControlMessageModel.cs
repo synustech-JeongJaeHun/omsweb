@@ -59,5 +59,10 @@ namespace OMSWeb.Models
         public string map_source_file { get; set; }
         public string User { get; set; }
         public string Note { get; set; }
+        
+        public int[] CarrierLoc { get; set; }
+        
+        public int VehicleFlag { get; set; }
+        
     }
 }

@@ -135,6 +135,7 @@ namespace OMSWeb.Services
             client.ZCUDetail = this._appSettings.ZCUDetail;
             client.OnOffLine = this._appSettings.OnOffLine;
             client.TitleText = this._appSettings.TitleText;
+            client.ActionScan = this._appSettings.ActionScan;
             return this._appSettings.Client;
         }
         

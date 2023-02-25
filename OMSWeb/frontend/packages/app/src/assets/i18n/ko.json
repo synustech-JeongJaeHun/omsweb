@@ -226,6 +226,7 @@
     "command-mtl": "MTL",
     "selectBuffer": "버퍼 선택",
     "selectVehicle": "비클 선택",
+    "multiVehicle": "다중 임의입력",
     "selectPoint": "포인트 선택",
     "selectMTL": "MTL 선택",
     "selectSource": "소스 선택",

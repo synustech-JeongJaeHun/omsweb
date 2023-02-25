@@ -81,6 +81,8 @@ namespace OMSWeb.Services.MqttClient
         public const int DEFAULT_PRIORITY = 30;
 
         public const string DEFAULT_DIRECTION = "forward";
+        
+        public const string ACTION_SCAN = "scan";                                 // update
 
         public MqttMessage()
         {
@@ -142,6 +144,7 @@ namespace OMSWeb.Services.MqttClient
                 case ACTION_A:
                 case ACTION_C:
                 case ACTION_M:
+                case ACTION_SCAN:
                     return TOPIC_DEFAULT;   // "oms/vehicle-manager/request";
             }
 
@@ -229,6 +232,7 @@ namespace OMSWeb.Services.MqttClient
                 case ACTION_A:
                 case ACTION_C:
                 case ACTION_M:
+                case ACTION_SCAN:
                     return REQUEST_ORDER;
             }
             return null;
@@ -758,6 +762,17 @@ namespace OMSWeb.Services.MqttClient
 
                 if      (command.Action == ACTION_A) Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: abort");
                 else if (command.Action == ACTION_C) Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: cancel");
+            }
+            else if (command.Action == ACTION_SCAN)
+            {
+                data["logical_id"] = GenerateLogicalID("");
+                if (command.VehicleId != null || command.VehicleIds != null) data["vehicle_id"] = GetVehicleId(command);
+                data["origin"] = ORIGIN_OMS;    // oms
+                
+                Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: Manual Transfer - scan");
+
+                data["carrier_loc"] = command.CarrierLoc;
+                data["vehicle_flag"] = command.VehicleFlag;
             }
 
             // build JSON list

@@ -17,6 +17,7 @@ import { TrackStatusService } from '@oms/root/services/track-status.service'
 import * as DateFns from 'date-fns'
 import { SystemStatusService } from '@oms/root/services/system-status.service'
 import { TransfersService } from '@oms/root/services/transfers.service'
+import {SettingsService} from "@oms/services/settings.service";
 
 @Component({
 	selector: 'oms-command-dialog',
@@ -61,7 +62,13 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 		private trackStatusService: TrackStatusService,
 		private systemStatusService: SystemStatusService,
 		private transfersService: TransfersService,
-	) {}
+
+    private settingSvc: SettingsService,
+	) {
+    this.settingSvc.serviceConfig.subscribe((config) => {
+      this.tabs = config.actionScan ? ['fromTo', 'from', 'to', 'move', 'scan', 'mtl'] : ['fromTo', 'from', 'to', 'move', 'mtl']
+    });
+  }
 
 	ngOnInit(): void {
 		this.statesSvc.transferCommandState.active = true
@@ -199,9 +206,11 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 			orderOrigin: 'OMS',
 			//priority: 1, // @TODO priority 기본값 확인
 			carrierLabel: carrier,
+      VehicleFlag: 0,
+      CarrierLoc: [],
 		}
 
-		if (category == 'move') {
+		if (category == 'move' || category === 'scan') {
 			if (!pointDisabled && point)
 				!pointDisabled && (cmd.locationMoveType = point.objectType)
 			else if (!destDisabled && dest)
@@ -210,7 +219,7 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 			!pointDisabled && (cmd.locationMoveType = point.objectType)
 			!destDisabled && (cmd.locationDropoffType = dest.objectType)
 		}
-		!sourceDisabled && (cmd.locationPickupType = source.objectType)
+		!sourceDisabled && category !== 'scan'&& (cmd.locationPickupType = source.objectType)
 
 		!vehicleDisabled && (cmd.vehicleId = vehicle.id)
 		if (category == 'move') {
@@ -220,15 +229,19 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 				!destDisabled && (cmd.locationMove = dest.id.toString())
 		}
     if( category === 'scan'){
-      console.log(source)
+      cmd.action = 'scan'
+      cmd.VehicleFlag = this.commandState.vehicleFlag ? 1:0
+      cmd.CarrierLoc = this.commandState.buffers.map(b=>b.id)
     }
     else {
 			!pointDisabled && (cmd.locationMove = point.id.toString())
 			!destDisabled && (cmd.locationDropoff = dest.id.toString())
 		}
+      if(category !== 'scan'){
         !sourceDisabled && (cmd.locationPickup = source.id.toString())
 
         cmd.priority = parseInt(priority);
+      }
 
 		//this.dialog.close(cmd);
 		//this.messageSvc.sendOrderCommand(cmd).subscribe();
@@ -370,4 +383,8 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 
 		return
 	}
+
+  changeVHLFlag(){
+    this.commandState.selectVehicle = this.commandState.vehicleFlag
+  }
 }
