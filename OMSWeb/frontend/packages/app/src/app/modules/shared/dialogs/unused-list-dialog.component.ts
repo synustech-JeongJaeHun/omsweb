@@ -37,6 +37,7 @@ export class UnusedListDialogComponent implements OnInit, OnDestroy {
 
 	preference: ClientPreferences
 
+
 	//#region Subscriptions
 	private destroy$: Subject<void> = new Subject<void>()
 	//#endregion
@@ -75,16 +76,22 @@ export class UnusedListDialogComponent implements OnInit, OnDestroy {
 	}
 
 	handleClickView = (event: {
-		row: { data: { type: string; objectId: number } }
+		row: { data: { type: string; objectId: number }, rowIndex: number }
 	}) => {
 		const typeInLowerCase = event.row.data.type.toLowerCase()
 		this.findAndFocus.emit({
 			type: typeInLowerCase,
 			id: event.row.data.objectId,
 		})
+
 	}
 
 	private onTableChanged(payload: IDataChangeEvent) {
 		this.dataSource.reload()
 	}
+
+  onFocusedChanging($event){
+    console.log($event)
+    $event.cancel =true
+  }
 }
