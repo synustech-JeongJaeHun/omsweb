@@ -170,6 +170,15 @@
 				dataField="current"
 				[caption]="'names.current' | translate"
 			></dxi-column>
+      <dxi-column
+        [width]="getDisplayTableColumnWidth('physical_id')"
+        [visible]="canDisplayTable('physical_id')"
+        [visibleIndex]="getDisplayTableColumnIndex('physical_id')"
+        dataType="string"
+        dataField="physicalId"
+        [caption]="'names.physicalId' | translate"
+      ></dxi-column>
+
 			transform
 			<div *dxTemplate="let data of 'ageTemplate'">
 				{{ transform(data.displayValue) }}

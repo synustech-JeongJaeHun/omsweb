@@ -578,6 +578,7 @@ const defaultHistoryTable = {
 		},
         { name: 'alarms_age', i18nLabel: 'names.elapsed', width: 120 },
 		{ name: 'alarms_current', i18nLabel: 'names.current', width: 120 },
+    { name: 'physical_id', i18nLabel: 'names.physicalId', width: 'auto' },
 	],
 
 	// nack_column
