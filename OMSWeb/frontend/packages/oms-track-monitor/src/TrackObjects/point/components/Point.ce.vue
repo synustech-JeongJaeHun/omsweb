@@ -77,7 +77,8 @@ const group = useGroup(
           {{props.point.physicalId}}
         </template>
         <template v-if="readonlyPointType===PointType.ID_BCR">
-          {{`${props.point.logicalId}(${props.point.physicalId})`}}
+          <tspan x="0" dy="1.2em">{{ props.point.logicalId }}</tspan>
+          <tspan x="0" dy="1.2em">{{'('+props.point.physicalId+')'}}</tspan>
         </template>
         
       </text>
