@@ -229,7 +229,7 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 			else if (!destDisabled && dest)
 				!destDisabled && (cmd.locationMove = dest.id.toString())
 		}
-    if( category === 'scan'){
+    else if( category === 'scan'){
       cmd.action = 'scan'
       cmd.VehicleFlag = this.commandState.vehicleFlag
       cmd.CarrierLoc = this.commandState.buffers.map(b=>b.id)
@@ -238,11 +238,11 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 			!pointDisabled && (cmd.locationMove = point.id.toString())
 			!destDisabled && (cmd.locationDropoff = dest.id.toString())
 		}
-      if(category !== 'scan'){
-        !sourceDisabled && (cmd.locationPickup = source.id.toString())
+    if(category !== 'scan'){
+      !sourceDisabled && (cmd.locationPickup = source.id.toString())
 
-        cmd.priority = parseInt(priority);
-      }
+      cmd.priority = parseInt(priority);
+    }
 
 		//this.dialog.close(cmd);
 		//this.messageSvc.sendOrderCommand(cmd).subscribe();
