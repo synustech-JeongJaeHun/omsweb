@@ -1035,6 +1035,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 				if (
 					(isCategoryFromRelated && transferCommandState.selectVehicle) ||
 					!isCategoryFromRelated
+          && (transferCommandState.category==='scan' && transferCommandState.selectVehicle)
 				)
 					this.mapStatesService.transferCommandState.vehicle = {
 						objectType: 'Vehicle',
@@ -1042,6 +1043,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 						logicalId: vhl.logicalId,
 						physicalId: vhl.physicalId,
 					}
+
 			}
 		} else if (objectType === 'buffer' || objectType === 'station') {
 			// buffer status dialog section start
@@ -1083,7 +1085,10 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 					break
         case 'scan':
         {
-          this.mapStatesService.transferCommandState.buffers.push(port)
+          if (objectType === 'buffer'){
+            const i = this.mapStatesService.transferCommandState.buffers.findIndex(item=>item.id===port.id)
+            i===-1 && this.mapStatesService.transferCommandState.buffers.push(port)
+          }
         }
           break
 				default:

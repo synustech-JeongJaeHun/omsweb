@@ -444,12 +444,21 @@
       </div>
 
       <div class="form-row" style="display: flex">
-        <mat-label class="mat-slide-toggle">{{'names.selectVehicle' | translate}}</mat-label>
-        <mat-slide-toggle (ngModelChange)="changeVHLFlag()"
-                          [(ngModel)]="commandState.vehicleFlag"
-                          color="primary"
-        >{{'names.multiVehicle' | translate}}</mat-slide-toggle
-        >
+        <div class="section">
+          <mat-slide-toggle
+            [disabled]="commandState.vehicleFlag===1"
+            [(ngModel)]="commandState.selectVehicle"
+            color="primary"
+          >{{ 'names.selectVehicle' | translate }}</mat-slide-toggle
+          >
+        </div>
+
+        <div class="section flex-end">
+          <mat-radio-group color="primary" [(ngModel)]="commandState.vehicleFlag" (change)="VHLFlagChange()">
+            <mat-radio-button [value]=0>single</mat-radio-button>
+            <mat-radio-button [value]=1>multi</mat-radio-button>
+          </mat-radio-group>
+        </div>
       </div>
     </div>
   </div>

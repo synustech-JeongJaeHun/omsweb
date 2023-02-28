@@ -104,7 +104,8 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 	}
 
   onChangeBuffer(source: ILookupUnit) {
-    this.commandState.buffers.push(source)
+    const i = this.commandState.buffers.findIndex(item=>item.id===source.id)
+    i===-1 && this.commandState.buffers.push(source)
   }
 
   bufferSplice(index: number) {
@@ -230,7 +231,7 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 		}
     if( category === 'scan'){
       cmd.action = 'scan'
-      cmd.VehicleFlag = this.commandState.vehicleFlag ? 1:0
+      cmd.VehicleFlag = this.commandState.vehicleFlag
       cmd.CarrierLoc = this.commandState.buffers.map(b=>b.id)
     }
     else {
@@ -384,7 +385,8 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 		return
 	}
 
-  changeVHLFlag(){
-    this.commandState.selectVehicle = this.commandState.vehicleFlag
+  VHLFlagChange(){
+    console.log(this.commandState.vehicleFlag)
+    if(this.commandState.vehicleFlag===1) this.commandState.selectVehicle = false
   }
 }
