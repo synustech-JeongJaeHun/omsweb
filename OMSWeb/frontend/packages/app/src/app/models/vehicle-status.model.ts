@@ -94,4 +94,5 @@ export interface IVehicleStatus {
   isMaint: boolean;
   isConnected: boolean;
   groupId: number;
+  fireSensor: boolean;
 }

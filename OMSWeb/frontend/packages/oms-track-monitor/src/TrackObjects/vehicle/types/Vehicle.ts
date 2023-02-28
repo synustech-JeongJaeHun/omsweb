@@ -66,6 +66,7 @@ type Vehicle = {
   locationMove?: string
   locationPickup?: string
   orderId?: number
+  fireSensor: boolean
   orderLogicalId?: string
   priority?: any
   type?: // normal: nullish

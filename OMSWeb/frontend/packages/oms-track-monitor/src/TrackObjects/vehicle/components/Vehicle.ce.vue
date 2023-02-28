@@ -238,7 +238,7 @@ function onRightClick(event: MouseEvent) {
       :isSensorStopped="props.vehicle.isSensorStopped" :isZcuBlocked="props.vehicle.isZcuBlocked"
       :isBlocked="props.vehicle.isBlocked" :groupColor="group ? getGroupColorWithAlpha(group.color) : undefined"
       :isHotlot="isHotlot" :isSuperHotlot="isSuperHotlot" :isTransferDisabled="isTransferDisabled"
-      :isPushDisabled="isPushDisabled" :isFocused="props.vehicle.isFocused"
+      :isPushDisabled="isPushDisabled" :isFocused="props.vehicle.isFocused" :fire-sensor="props.vehicle.fireSensor"
       :isCarrierFocused="props.vehicle.isCarrierFocused" :isHovered="props.vehicle.isHovered" @dblclick="onDbClick()"
       @leftclick="onLeftClick()" @rightclick="onRightClick($event)" @mouseover="onMouseover($event)"
       @mouseout="onMouseleave()" @mouseleave="onMouseleave()" />

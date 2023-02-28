@@ -569,6 +569,28 @@ defineExpose(exposed)
 :hover {
   --filter-size: v-bind('`${scaleInfo.mmPerPixel * 10}px`');
 }
+
+.fire-legend {
+	fill: #ff0000;
+	animation: fire-legend 1s infinite;
+}
+
+@keyframes fire-legend {
+	0% {
+		transform: scale(0);
+		opacity: 1;
+	}
+
+	90% {
+		transform: scale(1);
+		opacity: 1;
+	}
+
+	100% {
+		transform: scale(1);
+		opacity: 1;
+	}
+}
 </style>
 <!-- https://v3.vuejs.org/api/sfc-spec.html#src-imports -->
 <!-- https://github.com/vuejs/vue-next/issues/4662 -->

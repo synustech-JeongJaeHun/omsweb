@@ -34,7 +34,7 @@ export class StatusControlComponent implements OnInit, OnDestroy {
 	tableHeightNum = 300
 
 	readonly permissionEnums: typeof PermissionEnums = PermissionEnums
-	bufferEnabled: boolean = true
+	bufferEnabled: boolean = false
 
 	preference: ClientPreferences
 

@@ -13,6 +13,9 @@ import VehicleCargoTransferFailSvg from '../assets/VehicleCargoTransferFail.svg?
 import VehicleTypeNormalOutline from '../assets/VehicleTypeNormalOutline.svg?component'
 import VehicleFocusArrow from '../assets/VehicleFocusArrow.svg?component'
 import {readonlyVhlPosition} from "TrackObjects/vehicle/vehicles";
+import VehicleStateFire from '../assets/VehicleStateFire.svg?component'
+import VehicleStateFireDot from '../assets/VehicleStateFireDot.svg?component'
+
 
 const props = defineProps<{
   // Vehicle attr
@@ -31,6 +34,7 @@ const props = defineProps<{
   isSensorStopped: Vehicle['isSensorStopped']
   isZcuBlocked: Vehicle['isZcuBlocked']
   isBlocked: Vehicle['isBlocked']
+  fireSensor: Vehicle['fireSensor']
 
   // Derived attr
   groupColor?: string
@@ -72,6 +76,8 @@ const emit = defineEmits<{
     <g class="scale-and-reverse-rotate">
       <circle v-show="groupColor" class="group-shadow" r="25" :fill="groupColor" />
 
+      <VehicleStateFire v-if="props.fireSensor" width="80" height="80" x="-40" y="-40"/>
+
       <!-- using discrete svg element to overlap effects -->
       <VehicleTypeNormalOutline v-if="props.isFocused" class="type focus" width="40" height="40" x="-20" y="-20" />
       <VehicleTypeNormalOutline v-if="props.isHovered" class="type hover" width="40" height="40" x="-20" y="-20" />
@@ -98,6 +104,8 @@ const emit = defineEmits<{
       <template v-else />
       <!-- 5. Load/Unload Failed -->
       <VehicleCargoTransferFailSvg v-if="props.cargoTransferResult" width="20" height="20" x="-10" y="-10" />
+      <!-- 6. Fire Emergency-->
+      <VehicleStateFireDot v-if="props.fireSensor" width="15" height="15" x="-7.5" y="-7.5" />
       <!-- cargo state end -->
 
       <!-- Text fields START -->

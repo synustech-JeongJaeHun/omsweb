@@ -494,6 +494,7 @@
 										[style]="{ stroke: setting.runningModeVehicleColor }"
 										stroke-width="3"
 									></circle>
+									
 									<circle
 										class="foup loading-legend"
 										[style]="{ fill: setting.cargoLoadingColor }"
@@ -678,6 +679,42 @@
 						</div>
 						<div class="legend-caption">
 							{{ 'names.unloadFailed' | translate }}
+						</div>
+					</div>
+					
+					<div *ngIf="fireSensor" class="legend-item">
+						<div class="legend-icon">
+							<svg>
+								<g class="vehicle" transform="translate(50,30)">
+									<circle class="fire-legend"
+										fill-opacity="0.5" r="24"  cy="0" cx="0" />
+									<circle
+										class="outline"
+										r="8"
+										cx="0"
+										cy="0"
+										fill="transparent"
+										stroke="rgb(65, 65, 65)"
+										stroke-width="5"
+									></circle>
+									<circle
+										class="vehicle_circle"
+										r="8"
+										cx="0"
+										cy="0"
+										fill="transparent"
+										[style]="{ stroke: setting.runningModeVehicleColor }"
+										stroke-width="3"
+									></circle>
+									<circle
+										class="foup loaded"
+										[style]="{ fill: '#ff0000' }"
+									></circle>
+								</g>
+							</svg>
+						</div>
+						<div class="legend-caption">
+							fire
 						</div>
 					</div>
 				</dd>

@@ -194,6 +194,7 @@ export namespace Dto {
 		mode: string
 		movingState: string
 		distancePoint: number
+		fireSensor: boolean
 		orderId: number
 		orderLogicalId: string
 		hostOrder: boolean

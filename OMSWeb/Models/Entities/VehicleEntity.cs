@@ -34,6 +34,7 @@ namespace OMSWeb.Models.Entities
         public bool IsBlocked { get; set; }
         public string ErrorList { get; set; }
         public string CargoTransferResult { get; set; }
+        public bool FireSensor { get; set; }
         public int? OrderId { get; set; }
         public bool RailIn { get; set; }
         public bool IsMaint { get; set; }

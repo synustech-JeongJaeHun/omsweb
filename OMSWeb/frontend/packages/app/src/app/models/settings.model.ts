@@ -14,12 +14,11 @@ export class ServiceConfig {
 	kpiEnabled: boolean
 	bufferEnabled: boolean
 	i18nEnabled: boolean
-
   onOffLine: boolean
   zcuDetail: boolean
   titleText: string
-
   actionScan: boolean
+	fireSensor: boolean
 }
 
 export interface ManualTransferFiltersSetting {

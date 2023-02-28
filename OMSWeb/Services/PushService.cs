@@ -27,15 +27,18 @@ namespace OMSWeb.Services
         private IDictionary<string, NotificationSendingState> sendingMap;
         private CacheService _cache;
         private TrackService _trackSvc;
+        private SystemsService _systemSvc;
 
         // private lastSentTable;
         private Newtonsoft.Json.JsonSerializerSettings jsonSerializerSettings;
 
-        public PushService(IHubContext<OMSHub> hub, CacheService cacheSvc, TrackService trackSvc)
+
+        public PushService(IHubContext<OMSHub> hub, CacheService cacheSvc, TrackService trackSvc, SystemsService systemSvc)
         {
             this._hub = hub;
             this._cache = cacheSvc;
             this._trackSvc = trackSvc;
+            this._systemSvc = systemSvc;
 
             this.tableEventMap = new Dictionary<string, DataChangeEventTarget>
             {
@@ -214,6 +217,14 @@ namespace OMSWeb.Services
                             vehicles[matchIdx] = payload.Data;
                             needUpdate = true;
                         }
+                    }
+
+                    if (!_systemSvc.GetClientSettings().FireSensor)
+                    {
+                        vehicles.ForEach(v =>
+                        {
+                            v.FireSensor = false;
+                        });
                     }
                 }
                 else

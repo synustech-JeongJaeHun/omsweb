@@ -22,6 +22,7 @@ export class Vehicle {
   isSensorStopped?: boolean;
   isZcuBlocked: boolean;
   isBlocked: boolean;
+  fireSensor: boolean;
   orderId: number;
   orderLogicalId: string;
   lastContact: number;
@@ -82,6 +83,7 @@ export class Vehicle {
       locationPickup,
       isConnected,
       isMaint,
+      fireSensor
     } = row;
 
     this.id = id;
@@ -112,6 +114,7 @@ export class Vehicle {
     this.isStale = false;
     this.isConnected = isConnected;
     this.isMaint = isMaint;
+    this.fireSensor = fireSensor;
 
     this.hostOrder = hostOrder;
     this.call = orderOrigin
@@ -191,6 +194,7 @@ export class Vehicle {
         locationPickup: this.locationPickup,
         isConnected: this.isConnected,
         isMaint: this.isMaint,
+        fireSensor: this.fireSensor
       },
       curPoint,
       nextPoint,
