@@ -518,7 +518,8 @@
     "view": "View",
     "VHLIDPosition": "Vehicle ID 위치",
     "showVHLArrow": "Vehicle 방향",
-    "display" : "display"
+    "display" : "display",
+    "noItem": "No Selected Items"
   },
   "enums": {
     "hostSessionStatus": {

@@ -518,7 +518,8 @@
     "view": "View",
     "VHLIDPosition": "Vehicle ID 地点",
     "showVHLArrow": "Vehicle 箭",
-    "display" : "显示"
+    "display" : "显示",
+    "noItem": "没有选择的项目"
   },
   "enums": {
     "hostSessionStatus": {

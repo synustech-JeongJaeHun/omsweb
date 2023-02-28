@@ -422,14 +422,14 @@
       <div class="form-row table-div">
         <table *ngIf="this.commandState?.buffers.length===0" style="color: gray; height: 100%">
           <div class="empty-div">
-            {{'names.empty' | translate}}
+            {{'names.noItem' | translate}}
           </div>
         </table>
         <table *ngIf="this.commandState?.buffers.length>0">
           <tr>
             <td>no.</td>
             <td>Logical Id</td>
-            <td>Physical Id</td>
+            <td>{{ 'names.barcode' | translate}}</td>
             <td></td>
           </tr>
           <tr *ngFor="let buffer of this.commandState?.buffers; let i=index">

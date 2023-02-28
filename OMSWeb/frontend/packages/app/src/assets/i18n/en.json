@@ -517,7 +517,8 @@
     "view": "View",
     "VHLIDPosition": "Vehicle ID Position",
     "showVHLArrow": "Vehicle Directions",
-    "display" : "display"
+    "display" : "display",
+    "noItem": "No Selected Items"
   },
   "enums": {
     "hostSessionStatus": {
