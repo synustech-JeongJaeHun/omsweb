@@ -115,7 +115,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 	public selectedObject: any
 	public tooltipObject: { type: string; value: any } | undefined
 	public showTooltip = false
-	public contextMenuObject: { type: string; value: any } | undefined
+	public contextMenuObject: { type: string; value: any; controlKey?: false } | undefined
 	public showContextMenu = false
 	public homeActive = false
 
@@ -731,37 +731,31 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 					}
 				})
 		} else {
-      if(this.contextMenuObject.value.disabledByOnlyVehicle){
-        this.dialogSvc
-          .verify({ body: this.$t.instant('messages.confirmCommand') })
-          .subscribe((ok) => {
-            if (ok) {
-              const { operator, reason } = ok
-              this.messageSvc
-                .sendDisableSegmentCommand(
-                  { action: 'enable-segment', user: operator, note: reason },
-                  this.contextMenuObject.value.id,
-                )
-                .subscribe()
+			this.messageSvc
+				.sendDisableSegmentCommand(
+					{ action: 'enable-segment' },
+					this.contextMenuObject.value.id,
+				)
+				.subscribe()
 
-              this.showContextMenu = false
-              this.contextMenuObject = undefined
-            }
-          })
-      }
-      else{
-        this.messageSvc
-          .sendDisableSegmentCommand(
-            { action: 'enable-segment' },
-            this.contextMenuObject.value.id,
-          )
-          .subscribe()
-
-        this.showContextMenu = false
-        this.contextMenuObject = undefined
-      }
-		}
+      this.showContextMenu = false
+      this.contextMenuObject = undefined
+    }
 	}
+
+  onChangeSegmentByVHL(isDisable: boolean) {
+    if (!isDisable) {
+      this.messageSvc
+        .sendEnableSegmentCommand(
+          { action: 'enable-segment'},
+          this.contextMenuObject.value.id,
+        )
+        .subscribe()
+
+      this.showContextMenu = false
+      this.contextMenuObject = undefined
+    }
+  }
 
 	// point > home
 
@@ -1132,7 +1126,12 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		if (!(payload.type && payload.value && payload.event)) return
 
 		// @ts-ignore
-		this.contextMenuObject = { type: payload.type, value: payload.value }
+		this.contextMenuObject = { type: payload.type, value: payload.value, controlKey: false }
+
+    // @ts-ignore
+    if((payload.event as MouseEvent).ctrlKey){
+      this.contextMenuObject.controlKey = true
+    }
 
 		if (this.contextMenuObject.type === 'POINT') {
 			const homeId = (payload as any).value.homeId
