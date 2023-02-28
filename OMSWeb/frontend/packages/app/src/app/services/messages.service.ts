@@ -199,7 +199,7 @@ export class MessagesService {
   ): Observable<void> {
     command.type = command.type
     command.segmentId = targets
-    command.source = 'v-master'
+    command.source = 'vmaster-admin'
 
     return this.sendCommand<ITrackCommandMessage>(command)
   }

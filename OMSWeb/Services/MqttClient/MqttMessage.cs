@@ -505,7 +505,7 @@ namespace OMSWeb.Services.MqttClient
                 if (command.SegmentId != null)
                 {
                     data["segment_id"] = command.SegmentId;
-                    data["source"] = "uid-admin";
+                    data["source"] = command.Source.Equals("") || command.Source.Equals(null)?  "uid-admin" : command.Source;
                     data["reason"] = "";
                 }
 

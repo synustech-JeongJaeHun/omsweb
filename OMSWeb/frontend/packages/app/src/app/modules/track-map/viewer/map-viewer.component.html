@@ -546,8 +546,8 @@
 		</mat-card-header>
 		<mat-card-content class="context-form">
 			<mat-slide-toggle
-				[disabled]="contextMenuObject?.value.disabledByMtl || (!contextMenuObject?.value.disabledByUser && contextMenuObject?.value.disabledByOnlyVehicle)"
-				[checked]="contextMenuObject?.value.disabled"
+				[disabled]="contextMenuObject?.value.disabledByMtl"
+				[checked]="contextMenuObject?.value.disabledByUser"
 				color="primary"
 				(change)="onChangeSegmentProperty($event.checked)"
 				>{{ 'names.unuse' | translate }}</mat-slide-toggle
