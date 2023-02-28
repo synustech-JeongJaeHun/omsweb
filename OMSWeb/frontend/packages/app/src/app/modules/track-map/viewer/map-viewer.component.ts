@@ -115,7 +115,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 	public selectedObject: any
 	public tooltipObject: { type: string; value: any } | undefined
 	public showTooltip = false
-	public contextMenuObject: { type: string; value: any; controlKey?: false } | undefined
+	public contextMenuObject: { type: string; value: any; controlKey?: boolean } | undefined
 	public showContextMenu = false
 	public homeActive = false
 
