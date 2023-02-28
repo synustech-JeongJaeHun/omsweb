@@ -1,0 +1,5 @@
+<svg viewBox="0 0 80 80">
+  <circle cx="40" cy="40" fill="#f80000" fill-opacity="0.5" >
+    <animate attributeName="r" values="0;40" dur="1s" repeatCount="indefinite" />
+  </circle>
+</svg>
