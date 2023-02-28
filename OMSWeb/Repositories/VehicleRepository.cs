@@ -114,7 +114,7 @@ namespace OMSWeb.Repositories
     GO.group_id
     FROM vehicles AS VH
         LEFT OUTER JOIN orders AS OD
-    ON VH.order_id = OD.id AND OD.time_completed IS NULL AND OD.time_aborted IS NULL
+    ON VH.order_id = OD.id AND OD.time_completed IS NULL AND OD.time_aborted IS NULL AND OD.time_failed IS NULL
         LEFT JOIN grouped_objects AS GO 
 	  ON VH.id = GO.reference_id AND GO.reference_table = 'vehicle'
     WHERE VH.id = @id
