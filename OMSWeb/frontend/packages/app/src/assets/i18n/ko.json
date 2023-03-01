@@ -519,7 +519,12 @@
     "VHLIDPosition": "Vehicle ID 위치",
     "showVHLArrow": "Vehicle 방향",
     "display" : "display",
-    "noItem": "No Selected Items"
+    "noItem": "No Selected Items",
+    "tts" : "Text to Sound",
+    "en-US": "영어",
+    "ko-KR": "한국어",
+    "zh-CN": "중국어",
+    "not-used": "사용안함"
   },
   "enums": {
     "hostSessionStatus": {

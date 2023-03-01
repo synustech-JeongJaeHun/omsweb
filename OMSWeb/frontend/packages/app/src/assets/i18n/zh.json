@@ -519,7 +519,12 @@
     "VHLIDPosition": "Vehicle ID 地点",
     "showVHLArrow": "Vehicle 箭",
     "display" : "显示",
-    "noItem": "没有选择的项目"
+    "noItem": "没有选择的项目",
+    "tts" : "文本到声音",
+    "en-US": "英语",
+    "ko-KR": "韩国人",
+    "zh-CN": "中国人",
+    "not-used": "不曾用过"
   },
   "enums": {
     "hostSessionStatus": {

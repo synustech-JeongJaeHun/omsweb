@@ -43,4 +43,17 @@
       </div>
     </div>
   </fieldset>
+
+  <fieldset>
+    <legend>{{"names.alarms" | translate}}</legend>
+    <div class="form-grid">
+      <div class="form-grid mat-select-div">
+        <mat-label >{{'names.tts' | translate}}</mat-label>
+        <mat-select [(value)]="preference.tts.language" (selectionChange)="saveTTS()">
+          <mat-option *ngFor="let item of LangCodeKeys" [value]="item">{{'names.'+item | translate}}</mat-option>
+        </mat-select>
+      </div>
+      <div></div>
+    </div>
+  </fieldset>
 </div>
