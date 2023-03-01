@@ -15,14 +15,10 @@ export class PreferencesComponent {
   preference: ClientPreferences;
   canUseKpi = false;
 
-<<<<<<< HEAD
   public VHLIdPosition = VHLIdPosition;
   public PointType = PointType;
 
-  constructor(private settingSvc: SettingsService) {
-=======
   constructor(private settingSvc: SettingsService, private ttsSvc: TTSService, private t$: TranslateService) {
->>>>>>> feature/OSA-36-alarm-message-sound
 
     this.preference = this.settingSvc.globalPreferences;
     this.settingSvc.serviceConfig.subscribe((cfg) => {
