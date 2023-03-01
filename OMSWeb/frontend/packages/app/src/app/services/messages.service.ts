@@ -193,6 +193,17 @@ export class MessagesService {
 		return this.sendCommand<ITrackCommandMessage>(command)
 	}
 
+  sendEnableSegmentCommand(
+    command: ITrackCommandMessage,
+    targets: number,
+  ): Observable<void> {
+    command.type = command.type
+    command.segmentId = targets
+    command.source = 'vmaster-admin'
+
+    return this.sendCommand<ITrackCommandMessage>(command)
+  }
+
 	sendDisableSegmentsCommand(
 		command: ITrackCommandMessage,
 		targets: number[] = [],
@@ -380,7 +391,7 @@ export class MessagesService {
             mode: type,
         })
     }
-  
+
 	private sendCommand<T extends ICommandMessage>(command: T): Observable<void> {
 		return this.http.post<void>(`${this.baseUrl}/command`, command)
 	}

@@ -102,7 +102,12 @@
 	>
 		<div [ngSwitch]="contextMenuObject?.type?.toUpperCase()">
 			<ng-container *ngSwitchCase="'SEGMENT'">
-				<ng-container *ngTemplateOutlet="segmentContext"></ng-container>
+        <ng-container *ngIf="!contextMenuObject?.controlKey">
+          <ng-container *ngTemplateOutlet="segmentContext"></ng-container>
+        </ng-container>
+        <ng-container *ngIf="contextMenuObject?.controlKey">
+          <ng-container *ngTemplateOutlet="segmentContextCtrl"></ng-container>
+        </ng-container>
 			</ng-container>
 			<ng-container *ngSwitchCase="'VEHICLE'">
 				<ng-container *ngTemplateOutlet="vehicleContext"></ng-container>
@@ -542,13 +547,35 @@
 		<mat-card-content class="context-form">
 			<mat-slide-toggle
 				[disabled]="contextMenuObject?.value.disabledByMtl"
-				[checked]="contextMenuObject?.value.disabled"
+				[checked]="contextMenuObject?.value.disabledByUser"
 				color="primary"
 				(change)="onChangeSegmentProperty($event.checked)"
 				>{{ 'names.unuse' | translate }}</mat-slide-toggle
 			>
 		</mat-card-content>
 	</mat-card>
+</ng-template>
+
+<ng-template #segmentContextCtrl>
+  <mat-card
+    class="context-card"
+    *ngIf="hasPermissions([permissionEnums.SegmentUnuse])"
+  >
+    <mat-card-header style="background-color: rgba(250,115,60,0.79)">
+      <mat-card-title>
+        Segment #{{ contextMenuObject?.value.id }}
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="context-form">
+      <mat-slide-toggle
+        [checked]="contextMenuObject?.value.disabledByOnlyVehicle"
+        [disabled]="!contextMenuObject?.value.disabledByOnlyVehicle"
+        color="primary"
+        (change)="onChangeSegmentByVHL($event.checked)"
+      >{{ 'names.unuse' | translate }}</mat-slide-toggle
+      >
+    </mat-card-content>
+  </mat-card>
 </ng-template>
 
 <ng-template #bufferContext>
@@ -617,9 +644,8 @@
 				</mat-form-field>
 				<button
 					mat-stroked-button
-          [disabled]="!carrierIdInput.value"
-          color="primary"
-          class="dense accent"
+					color="primary"
+					class="dense accent"
 					(click)="onRemoveCarrier(carrierIdInput.value)"
 				>
 					Remove

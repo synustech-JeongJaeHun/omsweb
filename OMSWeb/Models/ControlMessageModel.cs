@@ -64,5 +64,7 @@ namespace OMSWeb.Models
         
         public int VehicleFlag { get; set; }
         
+        public string Source  { get; set; }
+        
     }
 }

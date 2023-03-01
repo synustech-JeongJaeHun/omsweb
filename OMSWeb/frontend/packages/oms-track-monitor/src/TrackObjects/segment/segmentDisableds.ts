@@ -58,14 +58,18 @@ function setSegmentDisabledWithMap(segmentId: Segment['id']) {
   const sds = findSegmentDisabledsBySegmentId(segmentId)
 
 	const isDisabled = sds.length > 0
-	const isDisabledByMtl = sds.some((sd) =>
+  const isDisabledByUser = isDisabled && sds.some((sd) =>
+    sd.disabledBy.toUpperCase().includes('UID')
+  )
+
+	const isDisabledByMtl = isDisabled && sds.some((sd) =>
 		sd.disabledBy.toUpperCase().includes('MTL')
 	)
 	const isDisabledByOnlyVehicle = isDisabled && sds.some((sd) =>
 		sd.disabledBy.toUpperCase().includes('VID')
 	)
 
-	setSegmentDisabled(segmentId, isDisabled, isDisabledByMtl, isDisabledByOnlyVehicle)
+	setSegmentDisabled(segmentId, isDisabled, isDisabledByMtl, isDisabledByOnlyVehicle, isDisabledByUser)
 }
 
 function findSegmentDisabledById(id: SegmentDisabled['id']) {
