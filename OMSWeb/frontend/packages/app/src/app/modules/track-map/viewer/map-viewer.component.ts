@@ -351,6 +351,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 						unuse: e.unuse,
 						user: e?.user,
 						note: e?.note,
+            cAlias: e?.data.cAlias
 					})
 				})
 
@@ -363,6 +364,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 						carrierId: e.carrierId,
 						user: e?.user,
 						note: e?.note,
+            cAlias: e?.data.cAlias
 					})
 				})
 

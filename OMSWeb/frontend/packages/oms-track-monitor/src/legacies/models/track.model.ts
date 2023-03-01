@@ -15,6 +15,8 @@ interface IBuffer {
   carrierId?: boolean
   user?: string
   note?: string
+
+  cAlias?: string
 }
 interface ICluster {
   id: number
@@ -140,6 +142,8 @@ interface IStation {
 
   user?: string
   note?: string
+
+  cAlias?: string
 }
 interface IVehicle {
   id: number

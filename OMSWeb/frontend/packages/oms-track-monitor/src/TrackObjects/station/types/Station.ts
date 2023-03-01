@@ -18,6 +18,8 @@ type Station = {
 
   user?: string
   note?: string
+
+  cAlias?: string
 } & CanBeFocused &
   CanBeCarrierFocused
 
