@@ -22,6 +22,7 @@ namespace OMSWeb.Models.Entities
         public string Cause { get; set; }
         public bool Cleared { get; set; }
         public string Current { get; set; }
+        public string PhysicalId { get; set; }
     }
 
     public class VehicleError
