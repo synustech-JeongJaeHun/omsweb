@@ -232,7 +232,7 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
     else if( category === 'scan'){
       cmd.action = 'scan'
       cmd.VehicleFlag = this.commandState.vehicleFlag
-      cmd.CarrierLoc = this.commandState.buffers.map(b=>b.id)
+      cmd.CarrierLoc = this.commandState.buffers.map(b=>b.logicalId).join(';')
     }
     else {
 			!pointDisabled && (cmd.locationMove = point.id.toString())

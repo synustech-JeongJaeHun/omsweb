@@ -86,7 +86,7 @@ export interface IOrderCommandMessage extends ICommandMessage {
 	commandID?: string
 
   VehicleFlag?: number
-  CarrierLoc?: number[]
+  CarrierLoc?: String
 }
 
 export interface IStationCommandMessage extends ICommandMessage {

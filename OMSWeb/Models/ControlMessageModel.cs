@@ -60,7 +60,7 @@ namespace OMSWeb.Models
         public string User { get; set; }
         public string Note { get; set; }
         
-        public int[] CarrierLoc { get; set; }
+        public string CarrierLoc { get; set; }
         
         public int VehicleFlag { get; set; }
         

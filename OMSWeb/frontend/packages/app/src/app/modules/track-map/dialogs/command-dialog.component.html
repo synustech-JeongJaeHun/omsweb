@@ -444,7 +444,7 @@
       </div>
 
       <div class="form-row" style="display: flex">
-        <div class="section">
+        <div style="width: 33%">
           <mat-slide-toggle
             [disabled]="commandState.vehicleFlag===1"
             [(ngModel)]="commandState.selectVehicle"
@@ -453,10 +453,10 @@
           >
         </div>
 
-        <div class="section flex-end">
+        <div class="flex-end" style="width: 66%">
           <mat-radio-group color="primary" [(ngModel)]="commandState.vehicleFlag" (change)="VHLFlagChange()">
-            <mat-radio-button [value]=0>single</mat-radio-button>
-            <mat-radio-button [value]=1>multi</mat-radio-button>
+            <mat-radio-button [value]=0>Single Vehicle</mat-radio-button>
+            <mat-radio-button [value]=1>Multi Vehicle</mat-radio-button>
           </mat-radio-group>
         </div>
       </div>
