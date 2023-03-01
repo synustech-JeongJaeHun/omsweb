@@ -1,22 +1,22 @@
 <oms-dialog-base [title]="'names.manualTransfer' | translate">
 	<ng-container class="dialog-layout">
 		<ng-container [ngSwitch]="currentTab">
-			<ng-container *ngSwitchCase="0">
+			<ng-container *ngSwitchCase="tabsIndex('fromTo')">
 				<ng-container *ngTemplateOutlet="fromtoForm"></ng-container>
 			</ng-container>
-			<ng-container *ngSwitchCase="1">
+			<ng-container *ngSwitchCase="tabsIndex('from')">
 				<ng-container *ngTemplateOutlet="fromForm"></ng-container>
 			</ng-container>
-			<ng-container *ngSwitchCase="2">
+			<ng-container *ngSwitchCase="tabsIndex('to')">
 				<ng-container *ngTemplateOutlet="toForm"></ng-container>
 			</ng-container>
-			<ng-container *ngSwitchCase="3">
+			<ng-container *ngSwitchCase="tabsIndex('move')">
 				<ng-container *ngTemplateOutlet="moveForm"></ng-container>
 			</ng-container>
-      <ng-container *ngSwitchCase="4">
+      <ng-container *ngSwitchCase="tabsIndex('scan')">
         <ng-container *ngTemplateOutlet="scanForm"></ng-container>
       </ng-container>
-			<ng-container *ngSwitchCase="5">
+			<ng-container *ngSwitchCase="tabsIndex('mtl')">
 				<ng-container *ngTemplateOutlet="mtlForm"></ng-container>
 			</ng-container>
 			<ng-container *ngSwitchDefault> </ng-container>
@@ -26,9 +26,7 @@
 
 <ng-template #fromtoForm>
 	<div mat-dialog-content>
-		<mat-tab-group
-			class="tab-group"
-      [ngClass]="'mat-tab-group-'+tabs.length"
+		<mat-tab-group mat-stretch-tabs
 			[(selectedIndex)]="currentTab"
 			(selectedIndexChange)="onTabChanged()"
 			animationDuration="0ms"

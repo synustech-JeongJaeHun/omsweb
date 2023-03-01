@@ -389,4 +389,8 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
     console.log(this.commandState.vehicleFlag)
     if(this.commandState.vehicleFlag===1) this.commandState.selectVehicle = false
   }
+
+  tabsIndex(name: string ='fromTo'){
+    return this.tabs.findIndex(t=>t===name);
+  }
 }
