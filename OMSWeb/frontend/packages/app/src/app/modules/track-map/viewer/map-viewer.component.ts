@@ -1029,7 +1029,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 				if (
 					(isCategoryFromRelated && transferCommandState.selectVehicle) ||
 					!isCategoryFromRelated
-          && (transferCommandState.category==='scan' && transferCommandState.selectVehicle)
+          || (transferCommandState.category==='scan' && transferCommandState.selectVehicle)
 				)
 					this.mapStatesService.transferCommandState.vehicle = {
 						objectType: 'Vehicle',
@@ -1037,7 +1037,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 						logicalId: vhl.logicalId,
 						physicalId: vhl.physicalId,
 					}
-
 			}
 		} else if (objectType === 'buffer' || objectType === 'station') {
 			// buffer status dialog section start
