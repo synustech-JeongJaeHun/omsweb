@@ -765,7 +765,6 @@ namespace OMSWeb.Services.MqttClient
             }
             else if (command.Action == ACTION_SCAN)
             {
-                data["logical_id"] = GenerateLogicalID("");
                 if (command.VehicleId != null || command.VehicleIds != null) data["vehicle_id"] = GetVehicleId(command);
                 data["origin"] = ORIGIN_OMS;    // oms
                 
