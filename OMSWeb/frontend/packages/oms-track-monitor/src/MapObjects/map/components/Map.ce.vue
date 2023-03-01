@@ -53,7 +53,7 @@ const emit = inject<RootEmits>(RootEmitInjectionKey)!
         isRotating && rotateToByMouse($event)
     "
     @mouseleave="exitPanning(), exitRotating()"
-    @mouseup="exitPanning(), exitRotating()"
+    @mouseup="exitPanning(), exitRotating(), handleMouseUp(() => emit('clickOutObject'))"
     @click.left.self="handleMouseUp(() => emit('clickOutObject'))"
     @click.middle.prevent="centerZoom()"
     @click.right.prevent
