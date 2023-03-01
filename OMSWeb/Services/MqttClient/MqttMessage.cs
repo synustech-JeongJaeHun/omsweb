@@ -765,13 +765,15 @@ namespace OMSWeb.Services.MqttClient
             }
             else if (command.Action == ACTION_SCAN)
             {
-                if (command.VehicleId != null || command.VehicleIds != null) data["vehicle_id"] = GetVehicleId(command);
+                data["vehicle_flag"] = command.VehicleFlag;
+
+                if (command.VehicleId != null || command.VehicleIds != null) 
+                    data["vehicle_id"] = GetVehicleId(command);
+
+                data["carrier_loc"] = command.CarrierLoc == null ? string.Empty : command.CarrierLoc;
                 data["origin"] = ORIGIN_OMS;    // oms
                 
                 Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: Manual Transfer - scan");
-
-                data["carrier_loc"] = command.CarrierLoc;
-                data["vehicle_flag"] = command.VehicleFlag;
             }
 
             // build JSON list
