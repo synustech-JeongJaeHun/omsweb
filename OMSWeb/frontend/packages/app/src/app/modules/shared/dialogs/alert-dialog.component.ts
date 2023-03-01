@@ -25,6 +25,8 @@ export class AlertDialogComponent implements OnDestroy {
   severityLookup = alertSeverities;
   dataSource: DataSource;
 
+  dataSourceClear: DataSource;
+
   private destroy$: Subject<void> = new Subject<void>();
 
   selectedFilter= '='
@@ -44,6 +46,7 @@ export class AlertDialogComponent implements OnDestroy {
     private notifySvc: NotificationsService
   ) {
     this.dataSource = this.notifySvc.alertsDataSource();
+    this.dataSourceClear =this.notifySvc.alertsDataSourceClear();
     this.hubSvc.alertChanged$
       .pipe(takeUntil(this.destroy$))
       .subscribe((e) => this.onAlertChanged(e));
@@ -56,16 +59,10 @@ export class AlertDialogComponent implements OnDestroy {
 
   private onAlertChanged(event: IDataChangeEvent) {
     this.dataSource.reload();
+    this.dataSourceClear.reload();
   }
 
   onChangeFilter(value: any) {
-    console.log('## filter changed >>', value);
-    if (value) {
-      this.dataGrid.instance.filter([['ackTime', value, null]]);
-    } else {
-      console.log('remove filter');
-      this.dataGrid.instance.clearFilter();
-    }
   }
 
   get hasControlAccess() {

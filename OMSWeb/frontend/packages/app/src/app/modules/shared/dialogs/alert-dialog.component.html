@@ -1,7 +1,7 @@
 <oms-dialog-base [title]="'names.alerts' | translate">
   <ng-container class="dialog-layout">
     <div class="alert-list">
-      <dx-data-grid #grid [dataSource]="dataSource" [remoteOperations]="true" [height]="300" [width]="700"
+      <dx-data-grid #grid [dataSource]="selectedFilter==='<>' ? dataSourceClear :dataSource" [remoteOperations]="true" [height]="300" [width]="700"
                     [hoverStateEnabled]="true" [(selectedRowKeys)]="selectedRows" allowColumnResizing="true">
         <dxo-selection mode="single"></dxo-selection>
 
@@ -33,7 +33,7 @@
                     [caption]="'names.tag' | translate"></dxi-column>
         <dxi-column [allowFiltering]="true" dataType="string" dataField="message"
                     [caption]="'names.message' | translate"></dxi-column>
-        <dxi-column *ngIf="selectedFilter==='<>'"
+        <dxi-column [visible]="selectedFilter==='<>'"
                     [allowFiltering]="true" [width]="110" dataType="datetime" dataField="ackTime"
                     [caption]="'names.ackTime' | translate" cellTemplate="dateCell">
           <div *dxTemplate="let data of 'dateCell'">

@@ -62,8 +62,20 @@ export class NotificationsService {
         key: 'id',
         loadUrl: `${this.baseUrl}/alerts`,
       }),
+      filter: [['ackTime', '=', null]]
     });
   }
+
+  alertsDataSourceClear(): DataSource {
+    return new DataSource({
+      store: AspNetData.createStore({
+        key: 'id',
+        loadUrl: `${this.baseUrl}/alerts`,
+      }),
+      filter: [['ackTime', '<>', null]]
+    });
+  }
+
 
   alarmsDataSource(): DataSource {
     return new DataSource({
