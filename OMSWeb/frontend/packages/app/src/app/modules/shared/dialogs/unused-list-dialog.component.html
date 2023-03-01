@@ -16,7 +16,9 @@
 				[sorting]="true"
 				height="250"
 				allowColumnResizing="true"
-        [scrolling]="{showScrollbar: 'never'}"
+        (onFocusedCellChanging)="onFocusedChanging($event)"
+        (onFocusedRowChanged)="onFocusedChanging($event)"
+
 			>
 				<dxo-sorting mode="single"></dxo-sorting>
 				<dxo-paging [pageSize]="50"></dxo-paging>
