@@ -35,7 +35,7 @@ const props = defineProps<{
         stroke="black"
         stroke-width="3"
         :fill="
-          props.zcu.error && props.zcu.usingType !== 2
+          props.zcu.error
             ? 'red'
             : 'transparent'
         "
