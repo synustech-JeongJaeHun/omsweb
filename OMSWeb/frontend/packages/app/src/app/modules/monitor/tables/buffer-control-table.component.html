@@ -58,6 +58,14 @@
     [visibleIndex]="getDisplayTableColumnIndex('buffers_id')"
     [width]="getDisplayTableColumnWidth('buffers_id')"
 	></dxi-column>
+  <dxi-column
+    dataType="string"
+    dataField="cAlias"
+    [caption]="'names.alias' | translate"
+    [visible]="canDisplayTable('buffers_alias')"
+    [visibleIndex]="getDisplayTableColumnIndex('buffers_alias')"
+    [width]="getDisplayTableColumnWidth('buffers_alias')"
+  ></dxi-column>
 	<dxi-column
 		dataType="string"
 		dataField="physicalId"

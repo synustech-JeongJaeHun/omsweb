@@ -73,6 +73,8 @@
     "vehicleId": "비클",
     "locationPickup": "시작",
     "locationDropoff": "종점",
+    "locationPickupAlias": "시작(별칭)",
+    "locationDropoffAlias": "종점(별칭)",
     "locationMove": "이동",
     "priority": "우선순위",
     "carrierLabel": "캐리어 아이디",
@@ -524,7 +526,8 @@
     "en-US": "영어",
     "ko-KR": "한국어",
     "zh-CN": "중국어",
-    "not-used": "사용안함"
+    "not-used": "사용안함",
+    "alias" : "별명"
   },
   "enums": {
     "hostSessionStatus": {

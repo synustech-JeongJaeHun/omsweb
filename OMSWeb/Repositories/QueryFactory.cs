@@ -138,7 +138,7 @@ namespace OMSWeb.Repositories
       "},
       {"station", @"
         SELECT id AS id, physical_id AS physical_id, logical_id AS logical_id, point AS point_id,
-          direction AS direction, carrier_type AS carrier_type, next_point, ""offset"" AS offset, unuse, carrier_id,
+          direction AS direction, carrier_type AS carrier_type, next_point, ""offset"" AS offset, unuse, carrier_id, c_alias,
           stations.slide_offset, 
           stations.user, stations.note
         FROM stations
@@ -146,7 +146,7 @@ namespace OMSWeb.Repositories
       "},
       {"buffer", @"
         SELECT id, physical_id, logical_id AS logical_id, point AS point_id,
-          direction AS direction, next_point, ""offset"" AS offset, unuse, carrier_id,
+          direction AS direction, next_point, ""offset"" AS offset, unuse, carrier_id, c_alias,
           buffers.slide_offset, 
           buffers.user, buffers.note
         FROM buffers
@@ -384,10 +384,22 @@ namespace OMSWeb.Repositories
 			ELSE OD.location_pickup
 		EnD AS location_pickup,
 		CASE
+			WHEN OD.location_pickup LIKE '%s%' THEN	(SELECT c_alias FROM stations WHERE concat('s', cast(id as varchar)) = OD.location_pickup)
+			WHEN OD.location_pickup LIKE '%b%' THEN	(SELECT c_alias FROM buffers WHERE concat('b', cast(id as varchar)) = OD.location_pickup)
+		    WHEN OD.location_pickup LIKE '%v%' THEN	(SELECT logical_Id FROM vehicles WHERE concat('v', cast(id as varchar)) = OD.location_pickup)
+            WHEN OD.location_pickup IS NULL AND OD.location_dropoff IS NOT NULL THEN VR.logical_id
+			ELSE OD.location_pickup
+		EnD AS location_pickup_alias,
+		CASE
 			WHEN OD.location_dropoff LIKE '%s%' THEN	(SELECT logical_Id FROM stations WHERE concat('s', cast(id as varchar)) = OD.location_dropoff)
 			WHEN OD.location_dropoff LIKE '%b%' THEN	(SELECT logical_Id FROM buffers WHERE concat('b', cast(id as varchar)) = OD.location_dropoff)
 			ELSE OD.location_dropoff
 		EnD AS location_dropoff,
+		CASE
+			WHEN OD.location_dropoff LIKE '%s%' THEN	(SELECT c_alias  FROM stations WHERE concat('s', cast(id as varchar)) = OD.location_dropoff)
+			WHEN OD.location_dropoff LIKE '%b%' THEN	(SELECT c_alias FROM buffers WHERE concat('b', cast(id as varchar)) = OD.location_dropoff)
+			ELSE OD.location_dropoff
+		EnD AS location_dropoff_alias,
 		CASE
 			WHEN OD.location_move LIKE '%s%' THEN	(SELECT logical_Id FROM stations WHERE concat('s', cast(id as varchar)) = OD.location_move)
 			WHEN OD.location_move LIKE '%b%' THEN	(SELECT logical_Id FROM buffers WHERE concat('b', cast(id as varchar)) = OD.location_move)
@@ -445,7 +457,7 @@ namespace OMSWeb.Repositories
       "},
       {"stationStatus", @"
         SELECT SS.id, SS.physical_id, SS.logical_id, SS.point, SS.direction, SS.next_point, SS.""offset"", SS.unuse, SS.carrier_id, 
-                SS.slide_offset, SS.user, SS.note, GO.group_id
+                SS.slide_offset, SS.user, SS.note, GO.group_id, SS.C_Alias
         FROM stations AS SS
             LEFT JOIN grouped_objects AS GO
         ON SS.id = GO.reference_id AND GO.reference_table = 'station'
@@ -453,7 +465,7 @@ namespace OMSWeb.Repositories
       "},
       {"bufferStatus", @"
         SELECT BS.id, BS.physical_id, BS.logical_id, BS.point, BS.direction, BS.next_point, BS.""offset"", BS.unuse, BS.carrier_id, 
-        BS.slide_offset, BS.user, BS.note, GO.group_id
+        BS.slide_offset, BS.user, BS.note, GO.group_id, BS.C_Alias
         FROM buffers AS BS
             LEFT JOIN grouped_objects AS GO
         ON BS.id = GO.reference_id AND GO.reference_table = 'buffer'

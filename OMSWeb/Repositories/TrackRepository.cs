@@ -170,7 +170,8 @@ namespace OMSWeb.Repositories
                                 Offset = dr["offset"].TryIntegerOrNull(),
                                 Unuse = dr["unuse"].TryBooleanOrNull(),
                                 User = dr["user"].TryString(),
-                                Note = dr["note"].TryString()
+                                Note = dr["note"].TryString(),
+                                CAlias = dr["c_alias"].TryString()
                             }
                            );
                         }
@@ -213,7 +214,8 @@ namespace OMSWeb.Repositories
                                     Unuse = dr["unuse"].TryBooleanOrNull(),
                                     CarrierId = dr["carrier_id"].TryString(),
                                     User = dr["user"].TryString(),
-                                    Note = dr["note"].TryString()
+                                    Note = dr["note"].TryString(),
+                                    CAlias = dr["c_alias"].TryString()
                                 }
                                );
                             }

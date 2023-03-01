@@ -161,6 +161,15 @@
 		[visible]="canDisplayTable('orders_locationPickup')"
 		[visibleIndex]="getDisplayTableColumnIndex('orders_locationPickup')"
 	></dxi-column>
+  <dxi-column
+    [width]="getDisplayTableColumnWidth('orders_locationPickupAlias')"
+    dataType="string"
+    dataField="locationPickupAlias"
+    [caption]="'names.locationPickupAlias' | translate"
+    [customizeText]="transformLocationId"
+    [visible]="canDisplayTable('orders_locationPickupAlias')"
+    [visibleIndex]="getDisplayTableColumnIndex('orders_locationPickupAlias')"
+  ></dxi-column>
 	<dxi-column
 		[width]="getDisplayTableColumnWidth('orders_locationDropoff')"
 		dataType="string"
@@ -170,6 +179,15 @@
 		[visible]="canDisplayTable('orders_locationDropoff')"
 		[visibleIndex]="getDisplayTableColumnIndex('orders_locationDropoff')"
 	></dxi-column>
+  <dxi-column
+    [width]="getDisplayTableColumnWidth('orders_locationDropoffAlias')"
+    dataType="string"
+    dataField="locationDropoffAlias"
+    [caption]="'names.locationDropoffAlias' | translate"
+    [customizeText]="transformLocationId"
+    [visible]="canDisplayTable('orders_locationDropoffAlias')"
+    [visibleIndex]="getDisplayTableColumnIndex('orders_locationDropoffAlias')"
+  ></dxi-column>
 	<dxi-column
 		[width]="getDisplayTableColumnWidth('orders_locationMove')"
 		dataType="string"

@@ -58,6 +58,14 @@
 		[visibleIndex]="getDisplayTableColumnIndex('stations_id')"
 		[width]="getDisplayTableColumnWidth('stations_id')"
 	></dxi-column>
+  <dxi-column
+    dataType="string"
+    dataField="cAlias"
+    [caption]="'names.alias' | translate"
+    [visible]="canDisplayTable('stations_alias')"
+    [visibleIndex]="getDisplayTableColumnIndex('stations_alias')"
+    [width]="getDisplayTableColumnWidth('stations_alias')"
+  ></dxi-column>
 	<dxi-column
 		dataType="string"
 		dataField="physicalId"

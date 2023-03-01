@@ -73,6 +73,8 @@
     "vehicleId": "车辆",
     "locationPickup": "来自",
     "locationDropoff": "到",
+    "locationPickupAlias": "来自(别名)",
+    "locationDropoffAlias": "到(别名)",
     "locationMove": "移动",
     "priority": "优先级",
     "carrierLabel": "载波ID",
@@ -524,7 +526,8 @@
     "en-US": "英语",
     "ko-KR": "韩国人",
     "zh-CN": "中国人",
-    "not-used": "不曾用过"
+    "not-used": "不曾用过",
+    "alias" : "别名"
   },
   "enums": {
     "hostSessionStatus": {

@@ -28,6 +28,8 @@ namespace OMSWeb.Models.Entities
         public int? LoadRetryCnt { get; set; }
         public int? UnloadRetryCnt { get; set; }
         public string ResultCode { get; set; }
+        public string? locationPickupAlias { get; set; }
+        public string? locationDropoffAlias { get; set; }
     }
     public class OrderHistoryEntity : OrderEntity
     {

@@ -96,7 +96,9 @@ const defaultControlTable = {
 	orders_state: true,
 	orders_vehicleId: true,
 	orders_locationPickup: true,
+  orders_locationPickupAlias: false,
 	orders_locationDropoff: true,
+  orders_locationDropoffAlias: false,
 	orders_locationMove: true,
 	orders_carrierLabel: true,
 	orders_timeCreated: true,
@@ -125,11 +127,21 @@ const defaultControlTable = {
 			i18nLabel: 'names.locationPickup',
 			width: 140,
 		},
+    {
+      name: 'orders_locationPickupAlias',
+      i18nLabel: 'names.locationPickupAlias',
+      width: 140,
+    },
 		{
 			name: 'orders_locationDropoff',
 			i18nLabel: 'names.locationDropoff',
 			width: 140,
 		},
+    {
+      name: 'orders_locationDropoffAlias',
+      i18nLabel: 'names.locationDropoffAlias',
+      width: 140,
+    },
 		{
 			name: 'orders_locationMove',
 			i18nLabel: 'names.locationMove',
@@ -292,6 +304,7 @@ const defaultControlTable = {
 	stations: true,
 
 	stations_id: true,
+  stations_alias: false,
 	stations_physicalId: true,
 	stations_logicalId: true,
 	stations_group: true,
@@ -305,8 +318,10 @@ const defaultControlTable = {
 	stations_user: true,
 	stations_note: true,
 
+
 	stations_order: [
 		{ name: 'stations_id', i18nLabel: 'names.id', width: 50 },
+    { name: 'stations_alias', i18nLabel: 'names.alias', width: 120 },
 		{ name: 'stations_physicalId', i18nLabel: 'names.physicalId', width: 120 },
 		{ name: 'stations_logicalId', i18nLabel: 'names.logicalId', width: 120 },
 		{ name: 'stations_group', i18nLabel: 'names.group', width: 60 },
@@ -325,6 +340,7 @@ const defaultControlTable = {
 	buffers: true,
 
 	buffers_id: true,
+  buffers_alias: false,
 	buffers_physicalId: true,
 	buffers_logicalId: true,
 	buffers_group: true,
@@ -340,6 +356,7 @@ const defaultControlTable = {
 
 	buffers_order: [
 		{ name: 'buffers_id', i18nLabel: 'names.id', width: 50 },
+    { name: 'buffers_alias', i18nLabel: 'names.alias', width: 120 },
 		{ name: 'buffers_physicalId', i18nLabel: 'names.physicalId', width: 120 },
 		{ name: 'buffers_logicalId', i18nLabel: 'names.logicalId', width: 120 },
 		{ name: 'buffers_group', i18nLabel: 'names.group', width: 60 },

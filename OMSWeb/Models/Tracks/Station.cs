@@ -14,5 +14,7 @@ namespace OMSWeb.Models.Tracks
     public string CarrierId { get; set; }
     public string User { get; set; }
     public string Note { get; set; }
+    
+    public string? CAlias { get; set; }
   }
 }

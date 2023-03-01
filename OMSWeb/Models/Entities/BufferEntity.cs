@@ -29,6 +29,8 @@ namespace OMSWeb.Models.Entities
     public string User { get; set; }
 
     public string Note { get; set; }
+    
+    public string? CAlias { get; set; }
   }
 
   public class BufferHistoryEntity
