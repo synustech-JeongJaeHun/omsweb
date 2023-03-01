@@ -1,26 +1,25 @@
 <oms-dialog-base [title]="'names.alerts' | translate">
   <ng-container class="dialog-layout">
-    <!--
-    <div class="filters">
-      <mat-label>{{ "names.cleared" | translate }}</mat-label>
-      <mat-form-field class="dense" appearance="outline">
-        <mat-select (selectionChange)="onChangeFilter($event.value)" value="">
-          <mat-option value="">{{ "names.all" | translate }}</mat-option>
-          <mat-option value="=">{{
-            "names.notCleared" | translate
-            }}</mat-option>
-          <mat-option value="<>">{{ "names.cleared" | translate }}</mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-      -->
     <div class="alert-list">
       <dx-data-grid #grid [dataSource]="dataSource" [remoteOperations]="true" [height]="300" [width]="700"
                     [hoverStateEnabled]="true" [(selectedRowKeys)]="selectedRows" allowColumnResizing="true">
         <dxo-selection mode="single"></dxo-selection>
+
+        <dxo-paging [pageSize]="50"></dxo-paging>
+        <dxo-pager
+          [showPageSizeSelector]="true"
+          [allowedPageSizes]="[50, 100, 200]"
+          [showInfo]="true"
+          [visible]="selectedFilter==='<>'"
+        >
+        </dxo-pager>
+
         <dxo-scrolling mode="standard"></dxo-scrolling>
         <dxo-header-filter [visible]="true"></dxo-header-filter>
-        <dxi-column [allowFiltering]="false" [width]="120" dataType="datetime" dataField="time"
+
+        <dxo-filter-row [visible]="selectedFilter==='<>'"></dxo-filter-row>
+
+        <dxi-column [allowFiltering]="true" [width]="120" dataType="datetime" dataField="time"
                     [caption]="'names.time' | translate" cellTemplate="dateCell">
           <div *dxTemplate="let data of 'dateCell'">
             {{ data.value | date: "yyyy/MM/dd HH:mm:ss" }}
@@ -32,27 +31,42 @@
         </dxi-column>
         <dxi-column [allowFiltering]="true" [width]="120" dataType="string" dataField="tag"
                     [caption]="'names.tag' | translate"></dxi-column>
-        <dxi-column [allowFiltering]="false" dataType="string" dataField="message"
+        <dxi-column [allowFiltering]="true" dataType="string" dataField="message"
                     [caption]="'names.message' | translate"></dxi-column>
-        <!--
-        <dxi-column [allowFiltering]="false" [width]="110" dataType="datetime" dataField="ackTime"
+        <dxi-column *ngIf="selectedFilter==='<>'"
+                    [allowFiltering]="true" [width]="110" dataType="datetime" dataField="ackTime"
                     [caption]="'names.ackTime' | translate" cellTemplate="dateCell">
           <div *dxTemplate="let data of 'dateCell'">
             {{ data.value | date: "yyyy/MM/dd HH:mm:ss" }}
           </div>
         </dxi-column>
-        <dxi-column [allowFiltering]="false" [width]="80" dataType="string" dataField="ackBy"
-                    [caption]="'names.ackBy' | translate"></dxi-column>
-          -->
       </dx-data-grid>
     </div>
-    <div mat-dialog-actions class="actions" [ngSwitch]="hasControlAccess">
-      <button mat-raised-button [disabled]="!canClear" (click)="onClear()" *ngSwitchCase="true">
-        {{ "names.clear" | translate }}
-      </button>
-      <button mat-raised-button [disabled]="!canClearAll" (click)="onClearAll()" *ngSwitchCase="true">
-        {{ "names.clearAll" | translate }}
-      </button>
+    <div mat-dialog-actions class="actions" [ngSwitch]="hasControlAccess" >
+
+      <div style="width: 75%">
+        <div class="filters">
+          <mat-label>{{ "names.cleared" | translate }}</mat-label>
+          <mat-form-field class="dense" appearance="outline">
+            <mat-select (selectionChange)="onChangeFilter($event.value)" [(value)]="selectedFilter">
+              <!--<mat-option value="">{{ "names.all" | translate }}</mat-option>-->
+              <mat-option value="=">{{
+                "names.notCleared" | translate
+                }}</mat-option>
+              <mat-option value="<>">{{ "names.cleared" | translate }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div style="width: 25%">
+        <button mat-raised-button [disabled]="!canClear" (click)="onClear()" *ngSwitchCase="true">
+          {{ "names.clear" | translate }}
+        </button>
+        <button mat-raised-button [disabled]="!canClearAll" (click)="onClearAll()" *ngSwitchCase="true">
+          {{ "names.clearAll" | translate }}
+        </button>
+      </div>
     </div>
   </ng-container>
 </oms-dialog-base>

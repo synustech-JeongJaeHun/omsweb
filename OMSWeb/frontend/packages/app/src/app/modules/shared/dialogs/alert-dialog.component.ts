@@ -27,12 +27,14 @@ export class AlertDialogComponent implements OnDestroy {
 
   private destroy$: Subject<void> = new Subject<void>();
 
+  selectedFilter= '='
+
   get canClearAll(): boolean {
-    return this.dataGrid?.instance && this.dataGrid.instance?.totalCount() > 0;
+    return this.dataGrid?.instance && this.dataGrid.instance?.totalCount() > 0 && this.selectedFilter==='=';
   }
 
   get canClear(): boolean {
-    return this.selectedRows.length > 0;
+    return this.selectedRows.length > 0 && this.selectedFilter==='=';
   }
 
   constructor(
@@ -40,7 +42,7 @@ export class AlertDialogComponent implements OnDestroy {
     private hubSvc: HubService,
     private messageSvc: MessagesService,
     private notifySvc: NotificationsService
-  ) { 
+  ) {
     this.dataSource = this.notifySvc.alertsDataSource();
     this.hubSvc.alertChanged$
       .pipe(takeUntil(this.destroy$))
