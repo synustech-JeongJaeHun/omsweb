@@ -208,7 +208,7 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 			//priority: 1, // @TODO priority 기본값 확인
 			carrierLabel: carrier,
       VehicleFlag: 0,
-      CarrierLoc: [],
+      CarrierLoc: '',
 		}
 
 		if (category == 'move' || category === 'scan') {
