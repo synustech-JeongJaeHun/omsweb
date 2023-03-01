@@ -561,14 +561,15 @@
     class="context-card"
     *ngIf="hasPermissions([permissionEnums.SegmentUnuse])"
   >
-    <mat-card-header>
+    <mat-card-header style="background-color: rgba(250,115,60,0.79)">
       <mat-card-title>
-        *Segment #{{ contextMenuObject?.value.id }}
+        Segment #{{ contextMenuObject?.value.id }}
       </mat-card-title>
     </mat-card-header>
     <mat-card-content class="context-form">
       <mat-slide-toggle
-        [checked]="contextMenuObject?.value.disabled"
+        [checked]="contextMenuObject?.value.disabledByOnlyVehicle"
+        [disabled]="!contextMenuObject?.value.disabledByOnlyVehicle"
         color="primary"
         (change)="onChangeSegmentByVHL($event.checked)"
       >{{ 'names.unuse' | translate }}</mat-slide-toggle
