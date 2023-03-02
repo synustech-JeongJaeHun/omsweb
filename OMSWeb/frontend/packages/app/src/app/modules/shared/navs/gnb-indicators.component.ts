@@ -228,8 +228,8 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
         closeOnNavigation: true,
         panelClass: 'alerts-dialog',
       });
-      this._alertDlg.backdropClick().subscribe(result=>{
-        this.warnClicked = !!result
+      this._alertDlg.afterClosed().subscribe(result=>{
+        this.warnClicked = false
       })
     }
   }
