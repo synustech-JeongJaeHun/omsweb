@@ -40,6 +40,8 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
   target: any;
   isPopupWarn: boolean = false;
 
+  warnClicked = false;
+
   warnList: IAlert[] = [];
 
   private _alarmDlg: MatDialogRef<AlarmDialogComponent, any>;
@@ -121,10 +123,14 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
   }
 
   toggleWarnsView() {
-    if (this._alertDlg && this._alertDlg.getState() === MatDialogState.OPEN)
+    if (this._alertDlg && this._alertDlg.getState() === MatDialogState.OPEN){
       this.showAlertView(false);
-    else
+      this.warnClicked = false;
+    }
+    else{
       this.showAlertView(true);
+      this.warnClicked = true;
+    }
   }
 
   private onAlarmChanged(event: IDataChangeEvent) {
@@ -206,7 +212,7 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
 
   showAlertView(enable: boolean) {
     //if (!AccountUtil.hasPermission(PermissionEnums.ViewWarning, this.auth.currentUser)) return;
-    if (enable == false) {
+    if (enable == false && !this.warnClicked) {
       if (this._alertDlg && this._alertDlg.getState() === MatDialogState.OPEN)
         this._alertDlg.close();
     }
@@ -222,6 +228,9 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
         closeOnNavigation: true,
         panelClass: 'alerts-dialog',
       });
+      this._alertDlg.backdropClick().subscribe(result=>{
+        this.warnClicked = !!result
+      })
     }
   }
 

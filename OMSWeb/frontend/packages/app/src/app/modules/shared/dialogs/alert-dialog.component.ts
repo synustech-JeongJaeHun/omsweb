@@ -58,8 +58,7 @@ export class AlertDialogComponent implements OnDestroy {
   }
 
   private onAlertChanged(event: IDataChangeEvent) {
-    this.dataSource.reload();
-    this.dataSourceClear.reload();
+    this.selectedFilter==='=' ?  this.dataSource.reload() : this.dataSourceClear.reload()
   }
 
   onChangeFilter(value: any) {
