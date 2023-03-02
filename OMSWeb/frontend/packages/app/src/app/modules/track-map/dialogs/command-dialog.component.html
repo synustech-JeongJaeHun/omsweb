@@ -117,7 +117,7 @@
 </ng-template>
 <ng-template #fromForm>
 	<div mat-dialog-content>
-		<mat-tab-group
+		<mat-tab-group mat-stretch-tabs
 			class="tab-group"
 			[(selectedIndex)]="currentTab"
 			(selectedIndexChange)="onTabChanged()"
@@ -199,7 +199,7 @@
 </ng-template>
 <ng-template #toForm>
 	<div mat-dialog-content>
-		<mat-tab-group
+		<mat-tab-group mat-stretch-tabs
 			class="tab-group"
 			[(selectedIndex)]="currentTab"
 			(selectedIndexChange)="onTabChanged()"
@@ -274,7 +274,7 @@
 </ng-template>
 <ng-template #moveForm>
 	<div mat-dialog-content>
-		<mat-tab-group
+		<mat-tab-group mat-stretch-tabs
 			class="tab-group"
 			[(selectedIndex)]="currentTab"
 			(selectedIndexChange)="onTabChanged()"
@@ -325,7 +325,7 @@
 </ng-template>
 <ng-template #mtlForm>
 	<div mat-dialog-content>
-		<mat-tab-group
+		<mat-tab-group mat-stretch-tabs
 			class="tab-group"
 			[(selectedIndex)]="currentTab"
 			(selectedIndexChange)="onTabChanged()"
@@ -385,7 +385,7 @@
 
 <ng-template #scanForm>
   <div mat-dialog-content>
-    <mat-tab-group
+    <mat-tab-group mat-stretch-tabs
       class="tab-group"
       [(selectedIndex)]="currentTab"
       (selectedIndexChange)="onTabChanged()"
