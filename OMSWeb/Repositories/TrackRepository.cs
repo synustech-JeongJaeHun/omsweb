@@ -632,7 +632,8 @@ namespace OMSWeb.Repositories
                                     IsMaint = dr["is_maint"].TryBoolean(),
                                     isConnected = dr["isConnected"].TryBoolean(),
                                     User = dr["user"].TryString(),
-                                    Note = dr["note"].TryString()
+                                    Note = dr["note"].TryString(),
+                                    RailIn = dr["rail_in"].TryBoolean()
                                 }
                                );
                             }

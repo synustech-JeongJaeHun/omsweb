@@ -233,7 +233,7 @@ namespace OMSWeb.Repositories
       {"vehiclePosition", @"
         SELECT 
             VH.id, VH.physical_id, VH.logical_id, VH.last_point AS cur_point, VH.next_point, VH.dest_point, VH.distance_point, VH.last_contact,
-            VH.mode, VH.can_be_pushed, VH.user, VH.note,
+            VH.mode, VH.can_be_pushed, VH.user, VH.note, VH.rail_in,
             CASE 
                 WHEN VH.order_origin LIKE '%MCS%' THEN true 
                 WHEN VH.order_origin LIKE '%*%' THEN true 
