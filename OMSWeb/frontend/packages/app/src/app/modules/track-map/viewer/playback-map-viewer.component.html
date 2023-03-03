@@ -71,11 +71,24 @@
 	>
 		<table>
 			<tr>
-				<td>
-					<mat-icon>{{ hostStatusIcon }}</mat-icon>
-				</td>
-				<td>{{ hostModeText }}</td>
-				<td>{{ tscModeText }}</td>
+        <mat-icon class="status-item host-status" [ngStyle]="{'color' : isActiveConnStatus? '#0095ff' : ''}"
+        >{{ hostStatusIcon }}</mat-icon>
+        <ng-container *ngIf="onOffLine">
+          <td class="status-item status-action host-mode">
+            <span [ngStyle]="{'color' : isActiveOnlineModeAndConn? '#0095ff' : ''}">{{ onofflineModeText }}</span>
+          </td>
+          <td class="status-item status-action host-mode" >
+            <span [ngStyle]="{'color' : isActiveOnlineModeAndConn? '#0095ff' : ''}">{{ hostModeText }}</span>
+          </td>
+        </ng-container>
+        <ng-container *ngIf="!onOffLine">
+          <td class="status-item status-action host-mode" >
+            <span [ngStyle]="{'color' : isActiveHostMode && isActiveOnlineMode? '#0095ff' : ''}">{{ hostModeText }}</span>
+          </td>
+        </ng-container>
+        <td class="status-item status-action tcs-mode">
+          <span [ngStyle]="{'color' : isActiveTscMode? '#0095ff' : ''}">{{ tscModeText }}</span>
+        </td>
 			</tr>
 		</table>
 	</div>
