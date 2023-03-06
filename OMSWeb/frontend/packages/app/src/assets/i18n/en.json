@@ -599,7 +599,8 @@
   "errors": {
     "NotAvailiable": "{{name}} is not availiable",
     "TrackSnapshotNotExists": "track snapshot does not exist for selected day",
-    "DaySnapshotNotExists": "event snapshot does not exist for the selected day"
+    "DaySnapshotNotExists": "event snapshot does not exist for the selected day",
+    "Disconnected" : "The connection to the web server has been terminated."
   },
   "messages": {
     "confirmTitle": "Confirm",
@@ -646,6 +647,7 @@
     "invalidEmail": "Invalid email address.",
     "alarmNoteHint": "Input operator's extra message at here...",
     "confirmCommand": "Are you sure send this command?",
-    "alternateTransferToMode": "Alternate transfer to {{mode}} mode"
+    "alternateTransferToMode": "Alternate transfer to {{mode}} mode",
+    "reload": "Map information has changed. Do you want to refresh?"
   }
 }

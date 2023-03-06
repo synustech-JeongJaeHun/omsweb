@@ -600,7 +600,8 @@
   "errors": {
     "NotAvailiable": "{{name}} is not availiable",
     "TrackSnapshotNotExists": "所选日期的轨道快照不存在",
-    "DaySnapshotNotExists": "所选日期的事件快照不存在"
+    "DaySnapshotNotExists": "所选日期的事件快照不存在",
+    "Disconnected" : "与网络服务器的连接已终止。"
   },
   "messages": {
     "confirmTitle": "确认",
@@ -648,6 +649,7 @@
     "invalidEmail": "无效的电子邮件地址。",
     "alarmNoteHint": "在这里输入操作员的额外信息...",
     "confirmCommand": "你确定发送这个命令吗？",
-    "alternateTransferToMode": "Alternate transfer to {{mode}} mode"
+    "alternateTransferToMode": "Alternate transfer to {{mode}} mode",
+    "reload": "地图信息发生变化，是否刷新？"
   }
 }

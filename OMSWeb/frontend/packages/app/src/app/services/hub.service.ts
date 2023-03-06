@@ -40,6 +40,8 @@ export class HubService {
 		new EventEmitter()
 	kpiChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter()
 	homeChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter()
+
+  mapUpdateStatus$: EventEmitter<IDataChangeEvent> = new EventEmitter()
 	//#endregion
 
 	public isConnected = false
@@ -125,6 +127,7 @@ export class HubService {
 		this.hub.off('clusterStatusTableChanged')
 		this.hub.off('kpiChanged')
 		this.hub.off('homeChanged')
+    this.hub.off('mapUpdateStatus')
 	}
 
 	private attachEvents() {
@@ -243,5 +246,10 @@ export class HubService {
 			showInfo && console.info('## hub message : homeChanged >>', { meta, body })
 			this.homeChanged$.emit({ ...meta, data: body })
 		})
+
+    this.hub.on('mapUpdateStatus', (meta, body) => {
+      showInfo && console.info('## hub message : mapUpdateStatus >>', { meta, body })
+      this.mapUpdateStatus$.emit({ ...meta, data: body })
+    })
 	}
 }

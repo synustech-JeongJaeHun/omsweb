@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable, Injector} from '@angular/core';
 import {
   HttpRequest,
   HttpHandler,
@@ -9,10 +9,13 @@ import { Observable, throwError } from 'rxjs';
 
 import { AuthService } from '../services/auth.service';
 import { tap } from 'rxjs/operators';
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {HttpResponseStatus} from "@oms/models/enums";
+import {TranslateService} from "@ngx-translate/core";
 
 @Injectable()
 export class CustomHttpInterceptor implements HttpInterceptor {
-  constructor(private auth: AuthService) { }
+  constructor(private auth: AuthService, private snackBar: MatSnackBar, private injector: Injector) { }
 
   intercept(
     request: HttpRequest<any>,
@@ -36,8 +39,14 @@ export class CustomHttpInterceptor implements HttpInterceptor {
       tap(
         (_) => { },
         (err) => {
-          if (err.status == 401) {
+          if (err.status == HttpResponseStatus.Unauthorized) {
             this.handleUnauthorized();
+          }
+          else if(err.status == HttpResponseStatus.Disconnect) {
+            const $t = this.injector.get<TranslateService>(TranslateService);
+            this.snackBar.open($t.instant('errors.Disconnected'), null, {
+              panelClass: ['error', 'server'],
+            });
           }
           return throwError(err);
         }

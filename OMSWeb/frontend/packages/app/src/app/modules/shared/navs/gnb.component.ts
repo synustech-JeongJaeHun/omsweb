@@ -4,6 +4,11 @@ import { AccountUtil } from '@oms/utils/account.util';
 import { UserPermissions } from '../../../models/enums';
 import { SettingsService } from '../../../services/settings.service';
 import { BrowserModule, Title } from '@angular/platform-browser';
+import {DialogService} from "@oms/services/dialog.service";
+import {TranslateService} from "@ngx-translate/core";
+import {Subject} from "rxjs";
+import {takeUntil} from "rxjs/operators";
+import {HubService} from "@oms/services/hub.service";
 
 @Component({
   selector: 'oms-gnb',
@@ -13,12 +18,19 @@ import { BrowserModule, Title } from '@angular/platform-browser';
 export class GnbComponent implements OnInit {
   version: string;
   titleText: string = 'OMS';
+  private destroy$: Subject<void> = new Subject<void>()
+
   get showVersion(): boolean {
     return this.settingSvc.globalPreferences.toggles.showOmsVersion;
   }
 
-  constructor(private auth: AuthService, private settingSvc: SettingsService,
-              private title:Title) { }
+  constructor(private auth: AuthService,
+              private settingSvc: SettingsService,
+              private title:Title,
+              private dialogSvc: DialogService,
+              private $t: TranslateService,
+              private hubSvc: HubService,
+              ) { }
 
   ngOnInit(): void {
     this.settingSvc.serviceConfig.subscribe((config) => {
@@ -31,5 +43,22 @@ export class GnbComponent implements OnInit {
         this.auth.logout();
       }
     });
+
+    this.hubSvc.mapUpdateStatus$.pipe(takeUntil(this.destroy$)).subscribe((e) => {
+      if(e.operation==='complete'){
+        this.dialogSvc
+          .confirm({ body: this.$t.instant('messages.reload') })
+          .subscribe((ok) => {
+            if (ok) {
+              window.location.reload()
+            }
+          });
+      }
+    })
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next()
+    this.destroy$.complete()
   }
 }

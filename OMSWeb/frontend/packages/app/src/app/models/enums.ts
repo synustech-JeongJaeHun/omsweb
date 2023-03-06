@@ -196,9 +196,12 @@ export enum VHLIdPosition {
   LT = 'LeftTop',
   T = 'Top'
 }
-
 export enum PointType {
   ID = 'ID',
   BCR = 'Barcode',
   ID_BCR = 'ID(Barcode)'
+}
+export enum HttpResponseStatus{
+  Unauthorized=401,
+  Disconnect =0
 }
