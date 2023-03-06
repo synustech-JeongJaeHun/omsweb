@@ -247,6 +247,7 @@ namespace OMSWeb.Repositories
                                     600 * (
                                             select count(*)::int 
                                             from vehicles 
+                                            where rail_in = true
                                         )::decimal
                                     )
                             ) * 100
@@ -268,7 +269,7 @@ namespace OMSWeb.Repositories
                                     time_assigned,
                                     time_completed
                                 from orders10m
-                                where (time_aborted is null or time_failed is null) and vehicle_id is not null
+                                where (time_aborted is null and time_failed is null) and vehicle_id is not null
                             ) fol
                         ) ol
                     ) times
