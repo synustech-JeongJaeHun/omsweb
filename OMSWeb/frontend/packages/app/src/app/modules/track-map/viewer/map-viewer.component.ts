@@ -768,7 +768,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 
 	onHomeValueChanged(event: { value: Number[] }) {
 		this.contextMenuObject.value.home = event.value
-    this.showContextMenu =false
 	}
 	onHomeSettingChanged(event: { value: boolean }) {
 		this.homeActive = event.value
