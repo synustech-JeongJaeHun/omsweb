@@ -419,6 +419,17 @@
 		[visibleIndex]="getDisplayTableColumnIndex('vehicles_note')"
 		[width]="getDisplayTableColumnWidth('vehicles_note')"
 	></dxi-column>
+  <dxi-column
+    [allowFiltering]="true"
+    dataType="number"
+    dataField="pauseState"
+    cellTemplate="pauseStateTemplate"
+    [allowSorting]="true"
+    [caption]="'names.pauseState' | translate"
+    [visible]="canDisplayTable('vehicles_pauseState')"
+    [visibleIndex]="getDisplayTableColumnIndex('vehicles_pauseState')"
+    [width]="getDisplayTableColumnWidth('vehicles_pauseState')"
+  ></dxi-column>
 	<!-- MapVersion 추가 -->
 	<div *dxTemplate="let data of 'modeTemplate'">
 		<div [ngSwitch]="data.displayValue">
@@ -449,4 +460,12 @@
 	<div *dxTemplate="let data of 'runtimeTotalTemplate'">
 		{{ transform_runtime(data.displayValue) }}
 	</div>
+  <div *dxTemplate="let data of 'pauseStateTemplate'">
+    <div [ngSwitch]="data.displayValue">
+      <div class="value" *ngSwitchCase="1">{{ 'names.pausing' | translate}}</div>
+      <div class="value" *ngSwitchCase="2">{{ 'names.paused'  | translate}}</div>
+      <div class="value" *ngSwitchCase="0">{{ 'names.auto' | translate }}</div>
+      <div class="value" *ngSwitchDefault>{{ 'names.auto'  | translate}}</div>
+    </div>
+  </div>
 </dx-data-grid>

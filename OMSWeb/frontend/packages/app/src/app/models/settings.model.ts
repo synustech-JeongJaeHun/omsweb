@@ -235,6 +235,7 @@ const defaultControlTable = {
 	vehicles_mapVersion: true,
 	vehicles_user: true,
 	vehicles_note: true,
+  vehicles_pauseState: true,
 
 	vehicles_order: [
 		{ name: 'vehicles_id', i18nLabel: 'names.id', width: 60 },
@@ -296,8 +297,10 @@ const defaultControlTable = {
 		},
 		{ name: 'vehicles_mapDb', i18nLabel: 'names.mapDb', width: 90 },
 		{ name: 'vehicles_mapVersion', i18nLabel: 'names.mapVersion', width: 90 },
+    { name: 'vehicles_pauseState', i18nLabel: 'names.pauseState', width: '80' },
 		{ name: 'vehicles_user', i18nLabel: 'names.user', width: 80 },
 		{ name: 'vehicles_note', i18nLabel: 'names.note', width: 'auto' },
+
 	],
 
 	// stations table

@@ -301,6 +301,7 @@ namespace OMSWeb.Repositories
             VH.moving_state, VH.map_db,
             VH.user as user, 
             VH.note as note,
+            VH.pause_state,
             OD.id AS order_id,
             CASE 
                 WHEN OD.location_pickup IS NOT NULL AND OD.location_dropoff IS NOT NULL        -- FROM-TO order
