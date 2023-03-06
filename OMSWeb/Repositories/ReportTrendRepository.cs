@@ -247,7 +247,6 @@ namespace OMSWeb.Repositories
                                     600 * (
                                             select count(*)::int 
                                             from vehicles 
-                                            where rail_in = true
                                         )::decimal
                                     )
                             ) * 100
