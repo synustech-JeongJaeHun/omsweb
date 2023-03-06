@@ -235,7 +235,7 @@ const defaultControlTable = {
 	vehicles_mapVersion: true,
 	vehicles_user: true,
 	vehicles_note: true,
-  vehicles_pauseState: true,
+  vehicles_pauseState: false,
 
 	vehicles_order: [
 		{ name: 'vehicles_id', i18nLabel: 'names.id', width: 60 },
