@@ -45,7 +45,7 @@ export class GnbComponent implements OnInit {
     });
 
     this.hubSvc.mapUpdateStatus$.pipe(takeUntil(this.destroy$)).subscribe((e) => {
-      if(e.operation==='complete'){
+      if (e.operation === 'INSERT' || e.operation === 'UPDATE'){
         this.dialogSvc
           .confirm({ body: this.$t.instant('messages.reload') })
           .subscribe((ok) => {
