@@ -66,6 +66,8 @@
     "disabled": "비활성화",
     "validationError": "검증 오류",
     "id": "아이디",
+    "QR": "QR",
+    "transOrQR": "Trans or QR",
     "physicalId": "물리적 아이디",
     "logicalId": "Online Name",
     "commandId": "Command ID",
@@ -122,6 +124,7 @@
     "level": "심각도",
     "errorCode": "오류 코드",
     "timeResolved": "해결시간",
+    "timeReset": "Reset Time",
     "errorList": "오류 코드",
     "cargoTransferResult": "화물 이송 결과",
     "lastContact": "최종 연결",
@@ -371,7 +374,7 @@
     "segmentNormal": "세그먼트 - 일반",
     "segmentDisabled": "세그먼트 - 비활성화",
     "segmentDisabledByVehicle": "Segment - disabled by vehicle",
-    "segmentDisabledByMTL" : "Segment - disabled by MTL",
+    "segmentDisabledByMTL": "Segment - disabled by MTL",
     "stationNormal": "스테이션 - 일반",
     "stationUnuse": "스테이션 - 미사용",
     "bufferNormal": "Buffer - 일반",
@@ -520,14 +523,14 @@
     "view": "View",
     "VHLIDPosition": "Vehicle ID 위치",
     "showVHLArrow": "Vehicle 방향",
-    "display" : "display",
+    "display": "display",
     "noItem": "No Selected Items",
-    "tts" : "Text to Sound",
+    "tts": "Text to Sound",
     "en-US": "영어",
     "ko-KR": "한국어",
     "zh-CN": "중국어",
     "not-used": "사용안함",
-    "alias" : "별명"
+    "alias": "별명"
   },
   "enums": {
     "hostSessionStatus": {

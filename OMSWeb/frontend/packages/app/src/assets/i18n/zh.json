@@ -66,6 +66,8 @@
     "disabled": "已禁用",
     "validationError": "验证错误",
     "id": "身份证",
+    "QR": "QR",
+    "transOrQR": "Trans or QR",
     "physicalId": "物理ID",
     "logicalId": "Online Name",
     "commandId": "Command ID",
@@ -122,6 +124,7 @@
     "level": "严重性",
     "errorCode": "错误代码",
     "timeResolved": "已解决",
+    "timeReset": "Reset Time",
     "errorList": "错误代码",
     "cargoTransferResult": "Carrier Transfer Result",
     "lastContact": "最后一次联系",
@@ -371,7 +374,7 @@
     "segmentNormal": "段 - 正常",
     "segmentDisabled": "段 - 禁用",
     "segmentDisabledByVehicle": "Segment - disabled by vehicle",
-    "segmentDisabledByMTL" : "Segment - disabled by MTL",
+    "segmentDisabledByMTL": "Segment - disabled by MTL",
     "stationNormal": "站 - 正常",
     "stationUnuse": "站 - 禁用",
     "bufferNormal": "Buffer - 正常",
@@ -520,14 +523,14 @@
     "view": "View",
     "VHLIDPosition": "Vehicle ID 地点",
     "showVHLArrow": "Vehicle 箭",
-    "display" : "显示",
+    "display": "显示",
     "noItem": "没有选择的项目",
-    "tts" : "文本到声音",
+    "tts": "文本到声音",
     "en-US": "英语",
     "ko-KR": "韩国人",
     "zh-CN": "中国人",
     "not-used": "不曾用过",
-    "alias" : "别名"
+    "alias": "别名"
   },
   "enums": {
     "hostSessionStatus": {

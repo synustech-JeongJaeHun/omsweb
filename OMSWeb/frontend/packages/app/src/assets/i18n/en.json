@@ -66,6 +66,8 @@
     "disabled": "Disabled",
     "validationError": "Validation Error",
     "id": "ID",
+    "QR": "QR",
+    "transOrQR": "Trans or QR",
     "physicalId": "Physical ID",
     "logicalId": "Online Name",
     "commandId": "Command ID",
@@ -122,6 +124,7 @@
     "level": "Severity",
     "errorCode": "Error Code",
     "timeResolved": "Resolved",
+    "timeReset": "Reset Time",
     "errorList": "Error Code",
     "cargoTransferResult": "Carrier Transfer Result",
     "lastContact": "Last Contact",
@@ -371,7 +374,7 @@
     "segmentNormal": "Segment - normal",
     "segmentDisabled": "Segment - disabled",
     "segmentDisabledByVehicle": "Segment - disabled by vehicle",
-    "segmentDisabledByMTL" : "Segment - disabled by MTL",
+    "segmentDisabledByMTL": "Segment - disabled by MTL",
     "stationNormal": "Station - normal",
     "stationUnuse": "Station - unuse",
     "bufferNormal": "Buffer - normal",
@@ -519,14 +522,14 @@
     "view": "View",
     "VHLIDPosition": "Vehicle ID Position",
     "showVHLArrow": "Vehicle Directions",
-    "display" : "display",
+    "display": "display",
     "noItem": "No Selected Items",
-    "tts" : "Text to Sound",
+    "tts": "Text to Sound",
     "en-US": "English",
     "ko-KR": "Korean",
     "zh-CN": "Chinese",
     "not-used": "Not Used",
-    "alias" : "Alias"
+    "alias": "Alias"
   },
   "enums": {
     "hostSessionStatus": {
