@@ -106,4 +106,13 @@ export class SystemsService {
 			{ mapFile, overWrite },
 		)
 	}
+
+  dbHistory(): DataSource {
+    return new DataSource({
+      store: AspNetData.createStore({
+        key: 'id',
+        loadUrl: `${this.baseUrl}/db-history`,
+      }),
+    });
+  }
 }

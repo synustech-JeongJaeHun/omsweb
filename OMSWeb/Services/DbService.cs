@@ -22,5 +22,10 @@ namespace OMSWeb.Services
         {
             return _dbVersionRepository.QueryCurrentMap();
         }
+        
+        public IQueryable<DbVersionHistoryEntity> QueryDbVersionHistory()
+        {
+            return this._dbVersionRepository.QueryDbVersionHistory();
+        }
     }
 }
