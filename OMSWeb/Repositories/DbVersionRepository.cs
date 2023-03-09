@@ -35,5 +35,23 @@ namespace OMSWeb.Repositories
 
             return result;
         }
+        
+        public IQueryable<DbVersionHistoryEntity> QueryDbVersionHistory()
+        {
+            var sql = @"SELECT * FROM db_version_history";
+            IQueryable<DbVersionHistoryEntity> result;
+            using (var conn = ConnectTrack())
+            {
+                try
+                {
+                    result = conn.Query<DbVersionHistoryEntity>(sql).AsQueryable();
+                }
+                catch (Exception e)
+                {
+                    result = null;
+                }
+            }
+            return result;
+        }
     }
 }

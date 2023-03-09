@@ -5,6 +5,7 @@ import { ControlsComponent } from './controls.component'
 import { ServerControlComponent } from './server/server-control.component'
 import { VehicleControlComponent } from './vehicles/vehicle-control.component'
 import { TokenHistoryControlComponent } from './token-history/token-history-control.component'
+import {MapComponent} from "./map/map.component";
 
 const routes: Routes = [
 	{
@@ -21,6 +22,11 @@ const routes: Routes = [
 				component: ServerControlComponent,
 				canActivate: [AuthGuard],
 			},
+      {
+        path: 'map',
+        component: MapComponent,
+        canActivate: [AuthGuard],
+      },
 			{
 				path: 'token-history',
 				component: TokenHistoryControlComponent,

@@ -1,0 +1,69 @@
+<div id="history-page">
+  <div id="grid-container">
+    <dx-data-grid [dataSource]="dataSource"
+                  [columnAutoWidth]="true"
+                  [remoteOperations]="true"
+                  [showBorders]="true"
+                  [hoverStateEnabled]="true"
+                  height="72vh"
+                  sorting="id desc"
+                  allowColumnResizing="true">
+      <dxo-paging [pageSize]="50"></dxo-paging>
+      <dxo-pager [showPageSizeSelector]="true"
+                 [allowedPageSizes]="[50]"
+                 [showInfo]="true"
+                 visible="true">
+      </dxo-pager>
+      <dxo-scrolling mode="standard"
+                     rowRenderingMode="standard"
+                     showScrollbar="always"></dxo-scrolling>
+      <dxo-search-panel [placeholder]="'names.search' | translate"
+                        [visible]="true"></dxo-search-panel>
+      <dxo-header-filter [visible]="true"></dxo-header-filter>
+      <dxo-filter-row [visible]="true"></dxo-filter-row>
+
+      <dxi-column dataType="string"
+                  dataField="dbName"
+                  [caption]="'names.mapName' | translate"
+                  [fixed]="true"></dxi-column>
+      <dxi-column dataType="number"
+                  dataField="dbVersion"
+                  [caption]="'names.mapVersion' | translate"
+                  [fixed]="true"></dxi-column>
+      <dxi-column dataType="string"
+                  dataField="srcMapFile"
+                  [caption]="'names.fileName' | translate"
+                  [fixed]="true"></dxi-column>
+      <dxi-column dataType="datetime"
+                  dataField="timeModified"
+                  [caption]="'names.timeModified' | translate"
+                  [format]="dateTimeFormat"
+                  [fixed]="true"></dxi-column>
+      <dxi-column dataType="string"
+                  dataField="contents"
+                  [caption]="'names.contents' | translate"
+                  [fixed]="true"></dxi-column>
+      <dxi-column dataType="number"
+                  dataField="id"
+                  [caption]="'names.id' | translate"
+                  [fixed]="true"></dxi-column>
+
+      <dxi-column dataType="datetime"
+                  dataField="historyChangeTime"
+                  [caption]="'names.historyChangeTime' | translate"
+                  [format]="dateTimeFormat"
+                  [fixed]="true"></dxi-column>
+
+      <dxi-column dataType="string"
+                  dataField="historyChangeType"
+                  [caption]="'names.historyChangeType' | translate"
+                  [fixed]="true"></dxi-column>
+
+      <dxi-column dataType="number"
+                  dataField="historySourceId"
+                  [caption]="'names.historySourceId' | translate"
+                  [fixed]="true"></dxi-column>
+
+    </dx-data-grid>
+  </div>
+</div>

@@ -6,9 +6,10 @@ import { TokenHistoryControlComponent } from './token-history/token-history-cont
 import { ControlsComponent } from './controls.component';
 import { ControlsRoutingModule } from './controls-routing.module';
 import { SharedModule } from '../shared/shared.module';
+import { MapComponent } from './map/map.component';
 
 @NgModule({
-  declarations: [VehicleControlComponent, ServerControlComponent, TokenHistoryControlComponent, ControlsComponent],
+  declarations: [VehicleControlComponent, ServerControlComponent, TokenHistoryControlComponent, ControlsComponent, MapComponent],
   imports: [CommonModule, SharedModule, ControlsRoutingModule],
 })
 export class ControlsModule { }

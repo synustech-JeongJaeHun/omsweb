@@ -12,6 +12,8 @@ using Newtonsoft.Json;
 using OMSWeb.Services.MqttClient;
 using System.Diagnostics;
 using System.Threading;
+using DevExtreme.AspNet.Data;
+using DevExtreme.AspNet.Mvc;
 
 namespace OMSWeb.Controllers
 {
@@ -445,6 +447,19 @@ namespace OMSWeb.Controllers
                 Message = string.Format("Map update {0}", bResult ? "complete" : "failed"),
                 bResult = bResult
             };
+        }
+        
+        [HttpGet("db-history")]
+        public object GetDBHistory(DataSourceLoadOptions loadOptions)
+        {
+            try
+            {
+                return DataSourceLoader.Load(_dbSvc.QueryDbVersionHistory(), loadOptions);
+            }
+            catch (Exception e)
+            { }
+
+            return null;
         }
     }
 }

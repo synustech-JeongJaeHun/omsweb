@@ -532,7 +532,12 @@
     "ko-KR": "Korean",
     "zh-CN": "Chinese",
     "not-used": "Not Used",
-    "alias": "Alias"
+    "alias": "Alias",
+    "timeModified": "Modified Time",
+    "contents" : "Contents",
+    "historyChangeTime" : "Changed Time",
+    "historyChangeType" : "Changed Type",
+    "historySourceId" : "Source Id"
   },
   "enums": {
     "hostSessionStatus": {
