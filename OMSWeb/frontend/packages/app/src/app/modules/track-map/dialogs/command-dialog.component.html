@@ -357,10 +357,17 @@
 			</div>
 			<div class="form-row">
 				<mat-radio-group [(ngModel)]="commandState.mtlInOut" color="primary">
-					<mat-radio-button [value]="true" style="margin-left: 10px" [disabled]="commandState.mtlInDisabled"
+					<mat-radio-button [value]="true" style="margin-left: 10px"
 						>In [Line → MTL]</mat-radio-button
 					>
-					<mat-radio-button [value]="false" style="margin-left: 160px" [disabled]="commandState.mtlOutDisabled"
+          <!--
+          enable case
+          a. direction !== R
+          b. direction === A || exist out-disabled-segment
+          -->
+					<mat-radio-button [value]="false" style="margin-left: 160px"
+                            [disabled]="!(commandState.mtl?.outDirection==='R' ||
+                            (commandState.mtl?.outDirection==='A' && commandState.mtl?.outDisabledSegment))"
 						>Out [MTL→Line]</mat-radio-button
 					>
 				</mat-radio-group>

@@ -22,10 +22,15 @@ export class MTL {
   outDirection: 'R' | 'A'
   inLockSegment: string;
   outLockSegment: string;
-  
+
   isValidate?: boolean;
   updateState?: string;
   group?: number;
+
+  inNode?: number
+  outNode?: number
+  inDisabledSegment?: number
+  outDisabledSegment?: number
 
   constructor(
     row: Dto.IMTL,
@@ -46,7 +51,11 @@ export class MTL {
       inDirection,
       outDirection,
       inLockSegment,
-      outLockSegment
+      outLockSegment,
+      inNode,
+      outNode,
+      inDisabledSegment,
+      outDisabledSegment,
     } = row;
     this.id = id;
     this.logicalId = logicalId;
@@ -68,6 +77,10 @@ export class MTL {
     this.outDirection = outDirection;
     this.inLockSegment = inLockSegment;
     this.outLockSegment = outLockSegment;
+    this.inNode = inNode;
+    this.outNode = outNode;
+    this.inDisabledSegment = inDisabledSegment;
+    this.outDisabledSegment = outDisabledSegment;
   }
 
   copy(newId) {
@@ -88,7 +101,11 @@ export class MTL {
       inDirection,
       outDirection,
       inLockSegment,
-      outLockSegment
+      outLockSegment,
+      inNode,
+      outNode,
+      inDisabledSegment,
+      outDisabledSegment,
     } = this;
 
     // Replace ID
@@ -113,6 +130,11 @@ export class MTL {
     inLockSegment = this.inLockSegment;
     outLockSegment = this.outLockSegment;
 
+    inNode = this.inNode
+    outNode = this.outNode
+    inDisabledSegment = this.inDisabledSegment
+    outDisabledSegment = this.outDisabledSegment
+
     // Object
     coord = { ...this.coord };
     invertedCoord = { ...this.invertedCoord };
@@ -131,8 +153,12 @@ export class MTL {
         group,
         inDirection,
         outDirection,
-	inLockSegment,
-        outLockSegment
+	      inLockSegment,
+        outLockSegment,
+        inNode,
+        outNode,
+        inDisabledSegment,
+        outDisabledSegment,
       },
       isValidate,
       updateState,

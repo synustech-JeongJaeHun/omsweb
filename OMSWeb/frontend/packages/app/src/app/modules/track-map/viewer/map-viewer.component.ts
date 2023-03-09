@@ -173,6 +173,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		private systemStatusService: SystemStatusService,
 		private vehicleStatusDialogService: VehicleStatusDialogService,
 		private bufferStatusDialogService: BufferStatusDialogService,
+    private transfersService: TransfersService,
 	) {
 		this.auth.certUpdated$.pipe(takeUntil(this.destroy$)).subscribe((cert) => {
 			this.router.navigateByUrl('/', { skipLocationChange: false }).then(() => {
@@ -1123,7 +1124,52 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 				default:
 					break
 			}
-		}
+		} else if (objectType === 'mtl'){
+      const point = { objectType, ...object }
+      const transferCommandState = this.mapStatesService.transferCommandState
+      if (transferCommandState.active === false) return
+
+      switch (transferCommandState.category) {
+        case 'fromTo':
+        {
+          // nothing
+        }
+          break
+        case 'from':
+        {
+          // nothing
+        }
+          break
+        case 'to':
+        {
+          // nothing
+        }
+          break
+        case 'move':
+        {
+          // nothing
+        }
+          break
+        case 'mtl':
+        {
+          // nothing
+          this.mapStatesService.transferCommandState.mtl = point
+          if(!point) return;
+          this.transfersService.getTargetMTL(point.id).subscribe((res)=>{
+            if(res){
+              this.mapStatesService.transferCommandState.mtl.inNode = res.inNode
+              this.mapStatesService.transferCommandState.mtl.outNode = res.outNode
+              this.mapStatesService.transferCommandState.mtl.inDisabledSegment = res.inDisabledSegment
+              this.mapStatesService.transferCommandState.mtl.outDisabledSegment = res.outDisabledSegment
+              console.log(this.mapStatesService.transferCommandState.mtl)
+            }
+          })
+        }
+          break
+        default:
+          break
+      }
+    }
 	}
 	public async onContextMenuOn(event: CustomEvent) {
 		const payload = getCustomEventPayload(event)

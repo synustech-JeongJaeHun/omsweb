@@ -2,6 +2,7 @@
 using OMSWeb.Models;
 using OMSWeb.Repositories;
 using OMSWeb.Models.Entities;
+using OMSWeb.Models.Tracks;
 
 namespace OMSWeb.Services
 {
@@ -650,6 +651,11 @@ namespace OMSWeb.Services
         public OrderEntity GetTransfer(int id)
         {
             return _transferRepo.QueryTransfer(id);
+        }
+        
+        public Mtl GetTargetMTl(int id)
+        {
+            return _transferRepo.QueryMTL(id);
         }
     }
 }

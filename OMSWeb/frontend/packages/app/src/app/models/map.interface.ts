@@ -113,7 +113,7 @@ export class TransferCommandState {
 	point?: ILookupUnit
 	#source?: ILookupUnit
 	dest?: ILookupUnit
-	mtl?: ILookupUnit
+	mtl?: ILookupMTLUnit
 	carrier?: string
 	priority?: string
 	mtlInOut: boolean = true
@@ -266,4 +266,16 @@ export type TrackIdMapType = { [key: string]: ILookupUnit }
 export class VehicleTrackingState {
 	status: boolean = false
 	id?: number
+}
+
+export interface ILookupMTLUnit {
+  id?: number
+  objectType?: string
+  logicalId?: string
+  physicalId?: string
+  inNode?: number
+  outNode?: number
+  inDisabledSegment?: number
+  outDisabledSegment?: number
+  outDirection?: string
 }

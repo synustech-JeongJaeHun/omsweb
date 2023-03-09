@@ -491,6 +491,31 @@ namespace OMSWeb.Repositories
             }
             return result ?? null;
         }
+        
+        
+        public Mtl QueryMTL(int id) 
+        {
+            var sql = @"
+                SELECT *
+                FROM mtls
+                WHERE mtls.id = @id
+                ";
+            
+            Mtl result;
+            using (var conn = ConnectTrack())
+            {
+                try
+                {
+                    result = conn.QueryFirst<Mtl>(sql, new {id});
+                }
+                catch (System.Exception)
+                {
+                    Console.WriteLine("[QueryTransfer] => null");
+                    result = null;
+                }
+            }
+            return result ?? null;
+        }
     }
 
 }

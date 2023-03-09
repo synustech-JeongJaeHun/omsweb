@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
 import { Observable } from 'rxjs'
 import { ITransferHCACK, Transfer } from '@oms/models/transfer.model'
+import {MTL} from "@oms/models/mtl.model";
 
 @Injectable({
 	providedIn: 'root',
@@ -25,5 +26,9 @@ export class TransfersService {
 
     getTransferById(id: number) {
         return this.http.get<Transfer>(`${this.baseUrl}/${id}`)
+    }
+
+    getTargetMTL(id: number): Observable<MTL> {
+      return this.http.get<MTL>(`${this.baseUrl}/getMtl/${id}`)
     }
 }

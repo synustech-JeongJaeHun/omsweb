@@ -12,5 +12,10 @@ namespace OMSWeb.Models.Tracks
     public string OutDirection {get;set;}
     public string InLockSegment { get; set; }
     public string OutLockSegment { get; set; }
+    public int InNode { get; set; }
+    public int OutNode { get; set; }
+    public int InDisabledSegment { get; set; }
+    public int OutDisabledSegment { get; set; }
+    
   }
 }

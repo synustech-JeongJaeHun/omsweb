@@ -8,9 +8,10 @@ import {
 	IVehicleCommandMessage,
 } from '../../../models/command.model'
 import {
-	ILookupUnit,
-	TransferCommandCategoryType,
-	TransferCommandState,
+  ILookupMTLUnit,
+  ILookupUnit,
+  TransferCommandCategoryType,
+  TransferCommandState,
 } from '../../../models/map.interface'
 import { MapStatesService } from '../map-states.service'
 import { TrackStatusService } from '@oms/root/services/track-status.service'
@@ -118,8 +119,19 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 	onChangeCarrier(value?: string) {
 		this.commandState.carrier = value ?? ''
 	}
-	onChangeMtl(mtl: ILookupUnit) {
-		this.commandState.mtl = mtl
+	onChangeMtl(mtl: ILookupMTLUnit) {
+    this.commandState.mtl = mtl
+    if(!mtl) return;
+    this.transfersService.getTargetMTL(mtl.id).subscribe((res)=>{
+      if(res){
+        this.commandState.mtl.inNode = res.inNode
+        this.commandState.mtl.outNode = res.outNode
+        this.commandState.mtl.inDisabledSegment = res.inDisabledSegment
+        this.commandState.mtl.outDisabledSegment = res.outDisabledSegment
+        this.commandState.mtl.outDirection= res.outDirection
+        console.log(this.commandState.mtl)
+      }
+    })
 	}
 
 	onApply() {
@@ -149,7 +161,8 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 			const mtlInfo = (this.trackStatusService.trackData?.mtls ?? []).find(
 				(m) => m.id === mtl.id,
 			)
-            if (mtlInfo.unuse === null || mtlInfo.unuse) {
+      console.log(mtlInfo)
+      if (mtlInfo.unuse === null || mtlInfo.unuse) {
 				this.dialogSvc.alert({
 					title: this.t$.instant('messages.confirmCommand'),
 					body: this.t$.instant('errors.NotAvailiable', { name: 'MTL' }),
@@ -175,11 +188,14 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 					)}`,
 				}
 
+        if(this.commandState.mtl.inNode) cmd.locationMove = this.commandState.mtl.inNode.toString()
+
 				this.dialogSvc
 					.confirm({ body: this.t$.instant('messages.confirmCommand') })
 					.subscribe((ok) => {
 						if (ok) {
 							this.messageSvc.sendOrderCommand(cmd).subscribe()
+              this.commandState.vehicle = undefined
 						}
 					})
 			} else {
@@ -194,6 +210,7 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 					.subscribe((ok) => {
 						if (ok) {
 							this.messageSvc.sendVehicleCommand(cmd).subscribe()
+              this.commandState.vehicle = undefined
 						}
 					})
 			}
@@ -393,4 +410,6 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
   tabsIndex(name: string ='fromTo'){
     return this.tabs.findIndex(t=>t===name);
   }
+
+
 }

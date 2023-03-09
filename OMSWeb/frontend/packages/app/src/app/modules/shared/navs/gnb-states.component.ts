@@ -109,7 +109,7 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
   get tscParamText(): string[] {
     if (this.isActiveTscMode)
       return [this.t$.instant(`names.tscAuto`), this.t$.instant('names.tscPause')];
-    return [this.t$.instant(`names.tscPause`), this.t$.instant('names.tscAuto')];
+    return [this.tscModeText, this.t$.instant('names.tscAuto')];
   }
   get isActiveConnStatus(): boolean {
     return this.systemStates?.sessionStatus % 1000 == HostSessionStatusEnums.CONNECTED;

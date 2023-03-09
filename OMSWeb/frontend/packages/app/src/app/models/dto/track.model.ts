@@ -71,6 +71,10 @@ export namespace Dto {
 		outDirection: 'R' | 'A'
     inLockSegment: string
     outLockSegment: string
+    inNode: number
+    outNode: number
+    inDisabledSegment: number
+    outDisabledSegment: number
 	}
 	export interface IZcu {
 		id: number

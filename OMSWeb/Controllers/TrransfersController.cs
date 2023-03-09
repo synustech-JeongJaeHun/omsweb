@@ -84,5 +84,13 @@ namespace OMSWeb.Controllers
             if (result == null) return NotFound();
             return Ok(result);
         }
+        
+        [HttpGet("getMtl/{id:int}")]
+        public ActionResult GetTargetMTl(int id)
+        {
+            var result = _svc.GetTargetMTl(id);
+            if (result == null) return NotFound();
+            return Ok(result);
+        }
     }
 }
