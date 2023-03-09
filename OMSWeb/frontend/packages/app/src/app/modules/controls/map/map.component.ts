@@ -84,11 +84,7 @@ export class MapComponent implements OnInit {
   }
 
   downloadJsonUri(cell: any) {
-    console.log(cell)
-    if(cell.data.contents && cell.columnIndex===4){
-      /*const theJSON = JSON.stringify(cell.data.contents);
-      const uri = this.sanitizer.bypassSecurityTrustUrl("data:text/json;charset=UTF-8," + encodeURIComponent(theJSON));*/
-
+    if(cell.data&& cell.data.contents && cell.columnIndex===4){
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(cell.data.contents));
       const downloadAnchorNode = document.createElement('a');
       downloadAnchorNode.setAttribute("href",     dataStr);

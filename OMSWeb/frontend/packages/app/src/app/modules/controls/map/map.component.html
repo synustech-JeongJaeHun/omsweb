@@ -42,6 +42,7 @@
                   [fixed]="true"></dxi-column>
       <dxi-column dataType="string"
                   dataField="contents"
+                  cellTemplate="down"
                   [caption]="'names.contents' | translate"
                   [width]="80"
                   [fixed]="true">
@@ -68,6 +69,12 @@
                   [caption]="'names.historySourceId' | translate"
                   [fixed]="true"></dxi-column>
 
+
+      <div *dxTemplate="let data of 'down'">
+        <button mat-stroked-button>
+          <mat-icon>download</mat-icon>
+        </button>
+      </div>
     </dx-data-grid>
   </div>
 </div>
