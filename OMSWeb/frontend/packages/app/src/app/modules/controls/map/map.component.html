@@ -7,6 +7,7 @@
                   [hoverStateEnabled]="true"
                   height="72vh"
                   sorting="id desc"
+                  (onCellClick)="downloadJsonUri($event)">
                   allowColumnResizing="true">
       <dxo-paging [pageSize]="50"></dxo-paging>
       <dxo-pager [showPageSizeSelector]="true"
@@ -42,7 +43,10 @@
       <dxi-column dataType="string"
                   dataField="contents"
                   [caption]="'names.contents' | translate"
-                  [fixed]="true"></dxi-column>
+                  [width]="80"
+                  [fixed]="true">
+        <!--<a class="btn btn-clear" title="Download JSON" [href]="downloadJsonUri" download="download.json"></a>-->
+      </dxi-column>
       <dxi-column dataType="number"
                   dataField="id"
                   [caption]="'names.id' | translate"

@@ -12,6 +12,7 @@ import {NotificationsService} from "../../../services/notifications.service";
 import {TranslateService} from "@ngx-translate/core";
 import {IAnnotation} from "../../../models/annotation.model";
 import {SystemsService} from "../../../services/systems.service";
+import {DomSanitizer} from "@angular/platform-browser";
 
 @Component({
   selector: 'oms-map',
@@ -73,11 +74,29 @@ export class MapComponent implements OnInit {
   dateTimeFormat = DateUtil.DateTimeFormat
   constructor(
     private t$: TranslateService,
-    private systemSvc: SystemsService
+    private systemSvc: SystemsService,
+    private sanitizer: DomSanitizer
   ) {
   }
 
   ngOnInit() {
     this.dataSource = this.systemSvc.dbHistory();
   }
+
+  downloadJsonUri(cell: any) {
+    console.log(cell)
+    if(cell.data.contents && cell.columnIndex===4){
+      /*const theJSON = JSON.stringify(cell.data.contents);
+      const uri = this.sanitizer.bypassSecurityTrustUrl("data:text/json;charset=UTF-8," + encodeURIComponent(theJSON));*/
+
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(cell.data.contents));
+      const downloadAnchorNode = document.createElement('a');
+      downloadAnchorNode.setAttribute("href",     dataStr);
+      downloadAnchorNode.setAttribute("download", cell.data.dbName+'_'+cell.data.dbVersion+ ".json");
+      document.body.appendChild(downloadAnchorNode); // required for firefox
+      downloadAnchorNode.click();
+      downloadAnchorNode.remove();
+    }
+  }
+
 }
