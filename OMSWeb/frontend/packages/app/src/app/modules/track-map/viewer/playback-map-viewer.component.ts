@@ -9,7 +9,7 @@ import { Router } from '@angular/router'
 import { Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators'
 
-import { PermissionEnums } from '../../../models/enums'
+import {HostModeEnums, PermissionEnums, TscModeEnums} from '../../../models/enums'
 import { IPreferences } from '../../../models/settings.model'
 import { AuthService } from '../../../services/auth.service'
 
@@ -51,6 +51,7 @@ import {
 	HostSessionStatusEnums,
 	OnOfflineModeEnums,
 } from '../../../models/enums'
+import {ISystemStates} from "@oms/models/system.model";
 
 @Component({
 	selector: 'oms-playback-map-viewer',
@@ -62,10 +63,9 @@ export class PlaybackMapViewerComponent implements OnInit, OnDestroy {
 
 	private viewer: IOmsTrackMonitor
 	private destroy$: Subject<void> = new Subject<void>()
-
 	public detailsVisible = false
-
 	private cameraAndRotationSyncId
+  onOffLine: boolean = false
 
 	get tmSetting() {
 		return this.trackMonitorSettingService.trackSetting
@@ -120,21 +120,33 @@ export class PlaybackMapViewerComponent implements OnInit, OnDestroy {
 		const tscParam = this.playService.currentModeState.tsc_state
 		return this.t$.instant(`enums.tscMode.${tscParam}`)
 	}
-	get hostModeText(): string {
-		const hostParam = this.playService.currentModeState.control_state
-		return this.t$.instant(`enums.hostMode.${hostParam}`)
-	}
+
+  get hostModeText(): string {
+    const hostMode = this.playService.currentModeState.control_state;
+    return this.t$.instant((this.onOffLine? 'enums.hostModeRemote.' : 'enums.hostMode.')+`${hostMode}`);
+  }
 	get hostStatusIcon(): string {
-		const { comm_state } = this.playService.currentModeState
-		if (!(comm_state % 1000 === HostSessionStatusEnums.CONNECTED))
-			return 'cloud_off'
-		else if (
-			comm_state ===
-			HostSessionStatusEnums.CONNECTED + OnOfflineModeEnums.Online * 1000
-		)
-			return 'cloud_done'
-		return 'cloud_queue'
+    if (!this.isActiveConnStatus)
+      return 'cloud_off'
+    if(this.onOffLine){
+      if (this.isActiveOnlineMode){
+        if (this.isActiveHostMode) return 'cloud_done'
+        return 'cloud'
+      }
+      return 'cloud_queue';
+    }
+    else {
+      if (this.isActiveOnlineMode){
+        return 'cloud_done'
+      }
+      return 'cloud_queue';
+    }
 	}
+
+  get isActiveConnStatus(): boolean {
+    const sessionStatus = this.playService.currentModeState.comm_state
+    return sessionStatus % 1000 == HostSessionStatusEnums.CONNECTED;
+  }
 
 	constructor(
 		private router: Router,
@@ -145,7 +157,11 @@ export class PlaybackMapViewerComponent implements OnInit, OnDestroy {
 		private trackMonitorSettingService: TrackMonitorSettingService,
 		private systemStatusService: SystemStatusService,
 		private t$: TranslateService,
-	) {}
+	) {
+    settingSvc.serviceConfig.subscribe(
+      (config) => (this.onOffLine = config.onOffLine),
+    )
+  }
 
 	hasPermissions(permissions: number[]): boolean {
 		return this.auth.hasPermissions(permissions)
@@ -182,6 +198,45 @@ export class PlaybackMapViewerComponent implements OnInit, OnDestroy {
 
 		clearInterval(this.cameraAndRotationSyncId)
 	}
+
+  get isHostOfflineMode(): boolean {
+    const sessionStatus = this.playService.currentModeState.comm_state
+    return sessionStatus == (HostSessionStatusEnums.CONNECTED + OnOfflineModeEnums.HostOffline * 1000) ||
+      (sessionStatus == (OnOfflineModeEnums.HostOffline * 1000));
+  }
+
+  get isAttemptOnlineMode(): boolean {
+    const sessionStatus = this.playService.currentModeState.comm_state
+    return sessionStatus == (HostSessionStatusEnums.CONNECTED +OnOfflineModeEnums.AttemptOnline * 1000) ||
+      sessionStatus == (OnOfflineModeEnums.AttemptOnline * 1000);
+  }
+
+  get onofflineModeText(): string {
+    return this.t$.instant(
+      (this.isActiveOnlineMode || this.isAttemptOnlineMode || this.isHostOfflineMode) ?
+        `names.online` : `names.offline`)
+  }
+
+  get isActiveOnlineModeAndConn(): boolean {
+    const sessionStatus = this.playService.currentModeState.comm_state
+    return (sessionStatus == (HostSessionStatusEnums.CONNECTED + OnOfflineModeEnums.Online * 1000))
+  }
+
+  get isActiveHostMode(): boolean {
+    const hostMode = this.playService.currentModeState.control_state
+    return hostMode === HostModeEnums.HOST;
+  }
+
+  get isActiveOnlineMode(): boolean {
+    const sessionStatus = this.playService.currentModeState.comm_state
+    return (sessionStatus == (HostSessionStatusEnums.CONNECTED + OnOfflineModeEnums.Online * 1000)) ||
+      (sessionStatus == ( OnOfflineModeEnums.Online * 1000));
+  }
+
+  get isActiveTscMode(): boolean {
+    const tscMode = this.playService.currentModeState.tsc_state
+    return tscMode === TscModeEnums.AUTO;
+  }
 
 	private setToCurrentSnapshot() {
 		const points = (this.playService.track.data.points ?? []).map(
