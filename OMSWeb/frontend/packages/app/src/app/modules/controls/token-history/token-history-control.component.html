@@ -1,6 +1,7 @@
 <h1>{{ "names.auditTrail" | translate }}</h1>
 
-<dx-data-grid [dataSource]="dataSource" [remoteOperations]="true" height="72vh" [showBorders]="true" sorting="id desc">
+<dx-data-grid [dataSource]="dataSource" [remoteOperations]="true" height="72vh"
+              [showBorders]="true" sorting="id desc" [loadPanel]="{enabled: false}">
   <dxo-filter-row [visible]="true"></dxo-filter-row>
   <dxo-paging [pageSize]="50"> </dxo-paging>
   <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[50]" [showInfo]="true" visible="true">
