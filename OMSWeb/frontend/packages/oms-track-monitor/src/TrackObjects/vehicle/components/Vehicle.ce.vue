@@ -148,7 +148,6 @@ function nextLineBuilder(){
   const curPoint = vehicle.value.curPoint
   const nextPosition = findPointById(props.vehicle.nextPoint)
   const nextSegments = findSegmentByPoints(curPoint, nextPoint)
-
   if(nextSegments && nextPosition){
     vehicle.value.line = makeVehicleAnimationPath(
         props.vehicle.updateType,
@@ -157,6 +156,9 @@ function nextLineBuilder(){
         currentPosition.value,
         {x: nextPosition.x, y: nextPosition.y }
     )
+  }
+  else{
+    vehicle.value.line = null
   }
 }
 
@@ -248,9 +250,6 @@ function onRightClick(event: MouseEvent) {
                     props.vehicle.nextPoint !== props.vehicle.curPoint"
              :source="realtimePosition" :dest="nextPointPosition" :complicatedMode="complicatedMode"/>
       
-      <path class="path-ment" v-if="props.vehicle.line" fill="none" stroke="red" 
-            :d="props.vehicle.line"></path>
-      
     </template>
     
     <!-- presentation component without logic -->
@@ -292,7 +291,9 @@ function onRightClick(event: MouseEvent) {
         shape-rendering="auto" :x1="realtimePosition.x" :y1="realtimePosition.y" :x2="homeIvrPoint.x"
         :y2="homeIvrPoint.y" />
 
-      <path v-if="readonlyNextLine && props.vehicle.movingState === 'M' && props.vehicle.line" fill="none" stroke="red"
+      <path v-if="readonlyNextLine && props.vehicle.movingState === 'M'
+                  && props.vehicle.nextPoint !== props.vehicle.curPoint 
+                  && props.vehicle.line" fill="none" stroke="red"
             :d="props.vehicle.line" stroke-width="100"></path>
     </template>
     
