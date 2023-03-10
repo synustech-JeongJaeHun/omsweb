@@ -15,5 +15,7 @@ namespace OMSWeb.Models
         public string TitleText { get; set; }
         
         public bool ActionScan { get; set; }
+        
+        public bool NextLine { get; set; }
     }
 }

@@ -143,8 +143,8 @@ function slicePathCommands(commands: readonly PathCommand[], from: Position, to:
 
   return [
     moveTo(from),
-    ...commands.slice(fromIndex, toIdx),
-    { ...commands[toIdx], x: to.x, y: to.y }
+    ...commands.slice(fromIndex, toIndex),
+    { ...commands[toIndex], x: to.x, y: to.y }
   ]
 }
 

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, inject, ref, toRef, watch } from 'vue'
 import { Vehicle, ComplicatedMode } from '../types/Vehicle'
-import {getVehiclePosition, readonlyVhlArrow} from '../vehicles'
+import {getVehiclePosition, readonlyVhlArrow, readonlyNextLine} from '../vehicles'
 import { findPointById } from '../../point/points'
 import { findSegmentByPoints } from '../../segment/segments'
 import { Segment } from '../../segment/types/Segment'
@@ -133,11 +133,32 @@ watch(
       )
 
       trackVehiclePosition(d, props.vehicle.lastUpdated)
+
+      
+      // make next line
+      readonlyNextLine && nextLineBuilder()
     } else {
       realtimePosition.value = newPosition
     }
   }
 )
+
+function nextLineBuilder(){
+  const nextPoint = vehicle.value.nextPoint
+  const curPoint = vehicle.value.curPoint
+  const nextPosition = findPointById(props.vehicle.nextPoint)
+  const nextSegments = findSegmentByPoints(curPoint, nextPoint)
+
+  if(nextSegments && nextPosition){
+    vehicle.value.line = makeVehicleAnimationPath(
+        props.vehicle.updateType,
+        currentSegment.value,
+        nextSegments,
+        currentPosition.value,
+        {x: nextPosition.x, y: nextPosition.y }
+    )
+  }
+}
 
 // time with microsecond
 // animation duration 0.3s with linear
@@ -147,7 +168,6 @@ function trackVehiclePosition(d: D, lastUpdated?: number) {
   const totalLength = pathElement.getTotalLength()
   // https://developer.mozilla.org/ko/docs/Web/API/Performance/now
   const startTime = performance.now()
-
   function step(now: DOMHighResTimeStamp) {
     if (props.vehicle.lastUpdated !== lastUpdated) return
 
@@ -223,9 +243,14 @@ function onRightClick(event: MouseEvent) {
 <template>
   <Teleport :to="teleportRef" :disabled="props.vehicle.isCarrierFocused !== true">
     <template v-if="props.vehicle.isConnected && !props.vehicle.errorList && props.vehicle.mode !== 'M'">
+      
       <Arrow v-if="props.vehicle.movingState === 'M' && nextPointPosition && realtimePosition && readonlyVhlArrow &&
                     props.vehicle.nextPoint !== props.vehicle.curPoint"
              :source="realtimePosition" :dest="nextPointPosition" :complicatedMode="complicatedMode"/>
+      
+      <path class="path-ment" v-if="props.vehicle.line" fill="none" stroke="red" 
+            :d="props.vehicle.line"></path>
+      
     </template>
     
     <!-- presentation component without logic -->
@@ -266,6 +291,9 @@ function onRightClick(event: MouseEvent) {
         class="line homeivr-line fixed-scale-stroke" stroke="#ffa500" stroke-width="1" stroke-linecap="round"
         shape-rendering="auto" :x1="realtimePosition.x" :y1="realtimePosition.y" :x2="homeIvrPoint.x"
         :y2="homeIvrPoint.y" />
+
+      <path v-if="readonlyNextLine && props.vehicle.movingState === 'M' && props.vehicle.line" fill="none" stroke="red"
+            :d="props.vehicle.line" stroke-width="100"></path>
     </template>
     
   </Teleport>

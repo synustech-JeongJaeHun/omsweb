@@ -137,6 +137,7 @@ namespace OMSWeb.Services
             client.TitleText = this._appSettings.TitleText;
             client.ActionScan = this._appSettings.ActionScan;
             client.FireSensor = this._appSettings.FireSensor;
+            client.NextLine = this._appSettings.NextLine;
             return this._appSettings.Client;
         }
         

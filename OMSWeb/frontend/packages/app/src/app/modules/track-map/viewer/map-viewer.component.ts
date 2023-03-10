@@ -118,6 +118,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 	public contextMenuObject: { type: string; value: any; controlKey?: boolean } | undefined
 	public showContextMenu = false
 	public homeActive = false
+  public nextLine = false
 
 	public colocatedViewPosition:
 		| { top: string; left: string; right: string }
@@ -224,6 +225,10 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		this.trackMonitorSettingService.rotationChanged.subscribe((rotation) =>
 			this.viewer.setCameraAndRotation({ rotation }),
 		)
+
+    this.settingSvc.serviceConfig.subscribe(
+      (config) => (this.nextLine = config.nextLine),
+    )
 	}
 	ngOnDestroy(): void {
 		this.destroy$.next()

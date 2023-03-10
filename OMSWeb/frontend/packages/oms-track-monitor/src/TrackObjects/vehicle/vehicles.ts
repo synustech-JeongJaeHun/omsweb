@@ -11,8 +11,11 @@ const vehicleMap = new Map<Vehicle['id'], Vehicle>()
 
 const vhlIdPosition = ref<string>('')
 const isVHLArrow = ref<boolean>(false)
+const nextLine = ref<boolean>(false)
 const readonlyVhlPosition = readonly(vhlIdPosition)
 const readonlyVhlArrow = readonly(isVHLArrow)
+
+const readonlyNextLine = readonly(nextLine)
 
 function findVehicleById(id: number) {
   return vehicles.value.find((v) => v.id === id)
@@ -173,6 +176,10 @@ function updateVHLArrow(value: boolean) {
   isVHLArrow.value = value
 }
 
+function updateNextLine(value: boolean) {
+  nextLine.value = value
+}
+
 export {
   vehicles,
   initVehicles,
@@ -183,5 +190,7 @@ export {
   readonlyVhlPosition,
   updateVHLPosition,
   updateVHLArrow,
-  readonlyVhlArrow
+  readonlyVhlArrow,
+  updateNextLine,
+  readonlyNextLine
 }

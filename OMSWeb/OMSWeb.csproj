@@ -61,6 +61,7 @@
     <None Remove="$(SpaRoot)**" />
     <None Remove="ClientApp-bak\**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
+    <None Include="frontend\packages\app\test-playwright\data.json" />
   </ItemGroup>
 
   <ItemGroup>
@@ -74,6 +75,7 @@
     <TypeScriptCompile Remove="frontend\packages\app\src\app\modules\shared\dialogs\verify-dialog.component.ts" />
     <TypeScriptCompile Remove="frontend\packages\app\src\app\services\transfers.service.ts" />
     <TypeScriptCompile Include="frontend\packages\oms-track-monitor\src\TrackObjects\point\pointType.ts" />
+    <TypeScriptCompile Remove="frontend\packages\app\test-playwright\test.ts" />
   </ItemGroup>
 
   <ItemGroup>

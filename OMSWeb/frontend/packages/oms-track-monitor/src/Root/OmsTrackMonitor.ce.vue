@@ -31,7 +31,7 @@ import { exposed } from './exposed'
 import ZoomLayer from 'MapObjects/zoomButton/ZoomLayer.ce.vue'
 import {convertStringToImageDataUrl} from "src/utils/textToImage";
 import {updatePointType} from "TrackObjects/point/pointType";
-import {updateVHLArrow, updateVHLPosition} from "TrackObjects/vehicle/vehicles";
+import {updateNextLine, updateVHLArrow, updateVHLPosition} from "TrackObjects/vehicle/vehicles";
 /**
  *  https://v3.vuejs.org/api/sfc-script-setup.html#typescript-only-features
  *
@@ -74,6 +74,7 @@ const props = defineProps<{
   pointDisplayType: Boolish
 
   isVHLArrowVisible: Boolish
+  nextLine: Boolish
   // color
   backgroundColor: Stringlish
   stationColor: Stringlish
@@ -193,6 +194,11 @@ watch(propRefs.vhlDisplay, () => {
 watch(propRefs.isVHLArrowVisible, () => {
   if(typeof props.isVHLArrowVisible === 'boolean'){
     updateVHLArrow(props.isVHLArrowVisible)
+  }
+})
+watch(propRefs.nextLine, ()=>{
+  if(typeof props.nextLine === 'boolean'){
+    updateNextLine(props.nextLine)
   }
 })
 
@@ -542,9 +548,9 @@ defineExpose(exposed)
   stroke-width: v-bind('scaleStylesInfo.segmentWidth');
 }
 
-#segment-layer .focus,
-#disabled-segment-layer .focus {
-  stroke-width: v-bind('scaleStylesInfo.segmentWidth * 3');
+#segment-layer .segment-path,
+#disabled-segment-layer .segment-path {
+  stroke-width: v-bind('scaleStylesInfo.segmentWidth');
 }
 
 #cluster-layer .cluster {

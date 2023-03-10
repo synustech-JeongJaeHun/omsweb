@@ -20,6 +20,7 @@ export class ServiceConfig {
   titleText: string
   actionScan: boolean
 	fireSensor: boolean
+  nextLine: boolean
 }
 
 export interface ManualTransferFiltersSetting {

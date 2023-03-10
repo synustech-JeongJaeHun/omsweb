@@ -95,6 +95,12 @@
           })" color="primary">
           {{"names.vehicle" | translate }} {{"names.home" | translate }}/{{ "names.ivr" | translate }} {{"names.line" | translate }}
         </mat-slide-toggle>
+        <mat-slide-toggle [checked]="setting.isVHLArrowVisible" (change)="update({
+            group: 'Visibility',
+            key: 'isVHLArrowVisible',
+            value: $event.checked
+          })" color="primary">{{
+          "names.showVHLArrow" | translate}}</mat-slide-toggle>
         <mat-slide-toggle [checked]="setting.isSegmentDirectionVisible" (change)="update({
             group: 'Visibility',
             key: 'isSegmentDirectionVisible',
@@ -165,13 +171,6 @@
             value: $event.checked
           })" color="primary">{{
           "names.showMtls" | translate }}</mat-slide-toggle>
-
-        <mat-slide-toggle [checked]="setting.isVHLArrowVisible" (change)="update({
-            group: 'Visibility',
-            key: 'isVHLArrowVisible',
-            value: $event.checked
-          })" color="primary">{{
-          "names.showVHLArrow" | translate}}</mat-slide-toggle>
       </div>
     </fieldset>
   </ng-container>
