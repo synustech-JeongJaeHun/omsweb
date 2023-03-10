@@ -23,6 +23,11 @@
       <dxo-header-filter [visible]="true"></dxo-header-filter>
       <dxo-filter-row [visible]="true"></dxo-filter-row>
 
+      <dxi-column dataType="number"
+                  dataField="id"
+                  [caption]="'names.id' | translate"
+                  [fixed]="true"></dxi-column>
+
       <dxi-column dataType="string"
                   dataField="dbName"
                   [caption]="'names.mapName' | translate"
@@ -46,29 +51,7 @@
                   [caption]="'names.contents' | translate"
                   [width]="80"
                   [fixed]="true">
-        <!--<a class="btn btn-clear" title="Download JSON" [href]="downloadJsonUri" download="download.json"></a>-->
       </dxi-column>
-      <dxi-column dataType="number"
-                  dataField="id"
-                  [caption]="'names.id' | translate"
-                  [fixed]="true"></dxi-column>
-
-      <dxi-column dataType="datetime"
-                  dataField="historyChangeTime"
-                  [caption]="'names.historyChangeTime' | translate"
-                  [format]="dateTimeFormat"
-                  [fixed]="true"></dxi-column>
-
-      <dxi-column dataType="string"
-                  dataField="historyChangeType"
-                  [caption]="'names.historyChangeType' | translate"
-                  [fixed]="true"></dxi-column>
-
-      <dxi-column dataType="number"
-                  dataField="historySourceId"
-                  [caption]="'names.historySourceId' | translate"
-                  [fixed]="true"></dxi-column>
-
 
       <div *dxTemplate="let data of 'down'">
         <button mat-stroked-button>
