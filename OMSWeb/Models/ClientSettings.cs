@@ -3,6 +3,7 @@ namespace OMSWeb.Models
     public class ClientSettings
     {
         public string SID { get; set; }
+        public string SyncId { get; set; }
         public bool AllowPublicMonitor { get; set; }
         public bool KpiEnabled { get; set; }
         public bool BufferEnabled { get; set; }

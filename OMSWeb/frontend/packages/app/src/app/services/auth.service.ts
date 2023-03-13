@@ -24,6 +24,7 @@ export class AuthService {
   private baseUrl = '/api/auth';
   private _token: string;
   private _sid: string;
+  private _syncId: string;
   private _currentUser: ISessionUser;
   private _expiresAt: number;
   private jwtHelper: JwtHelperService;
@@ -42,6 +43,11 @@ export class AuthService {
   get sid(): string {
     !this._sid && this.readSID();
     return this._sid;
+  }
+
+  get syncId(): string {
+    !this._syncId && this.readSyncId();
+    return this._syncId;
   }
 
   get isAuthenticated(): boolean {
@@ -98,8 +104,17 @@ export class AuthService {
     return this._sid;
   }
 
+  getSyncId() {
+    this.readSyncId();
+    return this._syncId;
+  }
+
   updateSID(sid: string) {
     this.writeSID(sid);
+  }
+
+  updateSyncId(sid: string) {
+    this.writeSyncId(sid);
   }
 
   private parseToken(checkCurrentTime = false): ISessionUser {
@@ -129,8 +144,16 @@ export class AuthService {
     this._sid = StorageUtil.getLocal('sid');
   }
 
+  private readSyncId() {
+    this._syncId = StorageUtil.getLocal('sync_id');
+  }
+
   private writeSID(sid: string) {
     StorageUtil.setLocal('sid', sid);
+  }
+
+  private writeSyncId(sid: string) {
+    StorageUtil.setLocal('sync_id', sid);
   }
 
   private readSession(checkExpired = false) {

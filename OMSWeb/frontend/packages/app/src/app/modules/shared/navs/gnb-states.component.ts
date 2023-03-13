@@ -13,6 +13,9 @@ import { MessagesService } from '../../../services/messages.service';
 import { IDataChangeEvent } from '../../../models/notification.model';
 import { PermissionEnums } from '../../../models/enums';
 import {SettingsService} from "@oms/services/settings.service";
+import {Router} from "@angular/router";
+import {LoginDialogComponent} from "@oms/shared/dialogs/login-dialog.component";
+import {MatDialog} from "@angular/material/dialog";
 
 @Component({
   selector: 'oms-gnb-states',
@@ -159,10 +162,17 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
     private t$: TranslateService,
     private messageSvc: MessagesService,
     private settingSvc: SettingsService,
+
+    private dialog: MatDialog,
+
+    private router: Router
   ) {
     this.getState();
 
-    this.timerId = setInterval(() => this.updateState(), 5000);
+    this.timerId = setInterval(() => {
+      this.updateState()
+      this.updateAuth()
+    }, 5000);
 
     settingSvc.serviceConfig.subscribe(
       (config) => (this.onOffLine = config.onOffLine),
@@ -170,7 +180,7 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-
+    this.updateAuth()
   }
 
   ngOnDestroy(): void {
@@ -245,5 +255,44 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.updateState();
     }, 80);
+  }
+
+  private moveDefaultPage(url: string) {
+    this.router.navigate([url]);
+  }
+
+  private openLogin() {
+    return this.dialog
+      .open(LoginDialogComponent, {
+        width: '350px',
+        hasBackdrop: true,
+        disableClose: true,
+      })
+      .afterClosed()
+      .subscribe((res) => {
+        if (res) {
+          this.moveDefaultPage('/monitor/status');
+        }
+      });
+  }
+
+  private updateAuth(){
+    this.settingSvc.loadConfig().subscribe((x) => {
+      const { sid, syncId, allowPublicMonitor } = x;
+
+      if (sid != this.auth.sid) {
+        this.auth.updateSID(sid);
+        this.auth.logout();
+      }
+
+      if (syncId != this.auth.syncId) {
+        this.auth.updateSyncId(syncId);
+        window.location.reload()
+      }
+
+      if (allowPublicMonitor || this.auth.isAuthenticated) {
+        this.moveDefaultPage('/monitor/public');
+      } else this.openLogin();
+    });
   }
 }

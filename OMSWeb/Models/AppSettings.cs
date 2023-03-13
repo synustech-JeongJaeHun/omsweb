@@ -5,6 +5,7 @@ namespace OMSWeb.Models
         public string JwtSecret { get; set; }
         public uint JwtLifeMinutes { get; set; }
         public string SID { get; set; }
+        public string SyncId { get; set; }
         public string Version { get; set; }
         public bool KpiEnabled { get; set; }
         public bool BufferEnabled { get; set; }
@@ -25,5 +26,7 @@ namespace OMSWeb.Models
 
         public NodeMargins NodeMargins {get;set;}
         public VehicleOrderIdContents VehicleOrderIdContents {get;set;} 
+        
+        public bool IsSync { get; set; }
     }
 }

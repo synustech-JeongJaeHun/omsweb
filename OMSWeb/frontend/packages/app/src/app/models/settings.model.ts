@@ -10,6 +10,7 @@ export type ToggleOptionsType = {
 
 export class ServiceConfig {
 	sid: string
+  syncId: string
 	allowPublicMonitor = false
 	version: string
 	kpiEnabled: boolean

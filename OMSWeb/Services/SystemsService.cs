@@ -49,6 +49,11 @@ namespace OMSWeb.Services
         {
             this._appSettings = appSettings.Value;
             this._appSettings.SID = GenerateSID(8);
+            this._appSettings.SyncId = "-";
+            if (this._appSettings.IsSync)
+            {
+                this._appSettings.SyncId = GenerateSID(8);
+            }
 
             string version = _modeStatusRepo.GetOmsServerVersion();
             if (!string.IsNullOrEmpty(version))
@@ -128,6 +133,7 @@ namespace OMSWeb.Services
         {
             var client = this._appSettings.Client;
             client.SID = this._appSettings.SID;
+            client.SyncId = this._appSettings.SyncId;
             client.Version = this._appSettings.Version;
             client.KpiEnabled = this._appSettings.KpiEnabled;
             client.BufferEnabled = this._appSettings.BufferEnabled;

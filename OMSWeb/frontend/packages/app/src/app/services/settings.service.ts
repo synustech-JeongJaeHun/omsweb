@@ -46,13 +46,12 @@ export class SettingsService {
 		this.loadPreferences()
 	}
 
-	private loadConfig(): Observable<ServiceConfig> {
+	public loadConfig(): Observable<ServiceConfig> {
 		return this.http.get<ServiceConfig>(`/api/systems/settings/client`).pipe(
 			tap((x) => {
 				this._serviceConfig = x
 			}),
 		)
-		// return this.http.get<ServiceConfig>(`/api/systems/config`);
 	}
 
 	loadDefaultColors() {
