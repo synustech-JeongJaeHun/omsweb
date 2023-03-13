@@ -92,5 +92,22 @@ namespace OMSWeb.Controllers
             if (result == null) return NotFound();
             return Ok(result);
         }
+        
+        
+        [HttpGet("checkMtl/{id}")]
+        public ActionResult<TransferHCACK> CheckMtl(string id)
+        {
+            var result = _svc.isUseMtl(id);
+            
+            if (result)
+                return Ok(new TransferHCACK()
+                {
+                    HCACK = (int)MCS_HCACK.NotAbleToExcute,
+                    CPNAME = String.Empty,
+                    CPACK = (int)MCS_HCACK.Reject,
+                });
+            else
+                return Ok();
+        }
     }
 }

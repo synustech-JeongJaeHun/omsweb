@@ -61,3 +61,17 @@ mat-icon{
   display: flex;
   justify-content: flex-end;
 }
+
+mat-option {
+  font-size: 12px;
+}
+.option-type {
+  font-weight: bold;
+  color: #999;
+  padding-left: 30px;
+}
+
+::ng-deep input:disabled {
+  color: black !important;
+  font-weight: bold;
+}

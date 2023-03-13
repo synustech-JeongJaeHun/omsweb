@@ -516,6 +516,32 @@ namespace OMSWeb.Repositories
             }
             return result ?? null;
         }
+        
+        public int CountInUseMTL(String id) 
+        {
+            var sql = @"
+                select count(*) from orders
+                where location_move = @id 
+                AND time_completed is null
+                AND time_failed is null 
+                AND time_aborted is null
+                ";
+            
+            int result;
+            using (var conn = ConnectTrack())
+            {
+                try
+                {
+                    result = conn.QueryFirst<int>(sql, new {id});
+                }
+                catch (System.Exception)
+                {
+                    Console.WriteLine("[QueryTransfer] => null");
+                    result = -1;
+                }
+            }
+            return result;
+        }
     }
 
 }

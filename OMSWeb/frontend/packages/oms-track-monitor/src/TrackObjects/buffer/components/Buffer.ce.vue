@@ -56,10 +56,16 @@ const group = useGroup('buffer', toRef(props.buffer, 'id'))
           @mouseout="handleMouseleave"
           @mouseleave="handleMouseleave"
         />
-        <circle 
+        <circle
           v-if="props.buffer.carrierId"
+          :data-id="props.buffer.id"
           class="buffer-full"
           r="8"
+          @click.left="handleLeftClick"
+          @click.right="handleRightClick"
+          @mouseover="handleMouseover"
+          @mouseout="handleMouseleave"
+          @mouseleave="handleMouseleave"
         />
         <text
           class="invert label select-none"

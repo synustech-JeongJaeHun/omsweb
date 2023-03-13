@@ -1066,6 +1066,15 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 				case 'from':
 					{
 						this.mapStatesService.transferCommandState.source = port
+            setTimeout(()=>{
+              const { carrier } = this.mapStatesService.transferCommandState
+              if(!carrier){
+                this.dialogSvc.alert({
+                  title: this.$t.instant('names.blocked'),
+                  body: this.$t.instant('messages.confirmParameterInvalid'),
+                })
+              }
+            }, 500)
 					}
 					break
 				case 'to':
@@ -1158,7 +1167,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
         case 'mtl':
         {
           // nothing
-          this.mapStatesService.transferCommandState.mtl = point
+          /*this.mapStatesService.transferCommandState.mtl = point
           if(!point) return;
           this.transfersService.getTargetMTL(point.id).subscribe((res)=>{
             if(res){
@@ -1166,9 +1175,8 @@ export class MapViewerComponent implements OnInit, OnDestroy {
               this.mapStatesService.transferCommandState.mtl.outNode = res.outNode
               this.mapStatesService.transferCommandState.mtl.inDisabledSegment = res.inDisabledSegment
               this.mapStatesService.transferCommandState.mtl.outDisabledSegment = res.outDisabledSegment
-              console.log(this.mapStatesService.transferCommandState.mtl)
             }
-          })
+          })*/
         }
           break
         default:

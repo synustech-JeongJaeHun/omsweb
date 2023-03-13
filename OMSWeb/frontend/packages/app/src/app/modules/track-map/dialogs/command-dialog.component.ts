@@ -19,6 +19,7 @@ import * as DateFns from 'date-fns'
 import { SystemStatusService } from '@oms/root/services/system-status.service'
 import { TransfersService } from '@oms/root/services/transfers.service'
 import {SettingsService} from "@oms/services/settings.service";
+import { IMTL } from "@oms/models/dto/track.model";
 
 @Component({
 	selector: 'oms-command-dialog',
@@ -102,6 +103,19 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 	}
 	onChangeSource(source: ILookupUnit) {
 		this.commandState.source = source
+
+    setTimeout(()=>{
+      const { category, carrier } = this.commandState
+      if(category==='from'
+        && source?.objectType.toLowerCase()==='buffer'
+        && !carrier){
+        this.dialogSvc.alert({
+          title: this.t$.instant('names.blocked'),
+          body: this.t$.instant('messages.confirmParameterInvalid'),
+        })
+      }
+    }, 500)
+
 	}
 
   onChangeBuffer(source: ILookupUnit) {
@@ -129,7 +143,6 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
         this.commandState.mtl.inDisabledSegment = res.inDisabledSegment
         this.commandState.mtl.outDisabledSegment = res.outDisabledSegment
         this.commandState.mtl.outDirection= res.outDirection
-        console.log(this.commandState.mtl)
       }
     })
 	}
@@ -152,7 +165,6 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 			destDisabled,
 			carrier,
 			mtl,
-			mtlInOut,
 			priority, // type priority = string | undefined
       buffers,
 		} = this.commandState
@@ -162,60 +174,8 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 				(m) => m.id === mtl.id,
 			)
       console.log(mtlInfo)
-      if (mtlInfo.unuse === null || mtlInfo.unuse) {
-				this.dialogSvc.alert({
-					title: this.t$.instant('messages.confirmCommand'),
-					body: this.t$.instant('errors.NotAvailiable', { name: 'MTL' }),
-				})
-				return
-			}
-
-			if (mtlInOut) {
-				const now = new Date()
-				const cmd: IOrderCommandMessage = {
-					type: 'ORDER',
-					action: 'N',
-					orderOrigin: 'OMS',
-					priority: 1, // @TODO priority 기본값 확인
-					vehicleId: vehicle.id,
-					locationMoveType: 'Point',
-					locationMove: mtlInfo.pointId.toString(),
-					// 2022_05_31_11_09_52.94
-					// @ts-ignore
-					commandID: `MTL_IN-OC_OHTC_01-${DateFns.format(
-						now,
-						'yyyyMMddHHmmssSS',
-					)}`,
-				}
-
-        if(this.commandState.mtl.inNode) cmd.locationMove = this.commandState.mtl.inNode.toString()
-
-				this.dialogSvc
-					.confirm({ body: this.t$.instant('messages.confirmCommand') })
-					.subscribe((ok) => {
-						if (ok) {
-							this.messageSvc.sendOrderCommand(cmd).subscribe()
-              this.commandState.vehicle = undefined
-						}
-					})
-			} else {
-				const cmd: IVehicleCommandMessage = {
-					action: 'mtl_out',
-					vehicleId: String(vehicle.id),
-					mtlId: String(mtl.id),
-				}
-
-				this.dialogSvc
-					.confirm({ body: this.t$.instant('messages.confirmMtloutCommand') })
-					.subscribe((ok) => {
-						if (ok) {
-							this.messageSvc.sendVehicleCommand(cmd).subscribe()
-              this.commandState.vehicle = undefined
-						}
-					})
-			}
-
-			return
+      this.sendMtl(mtlInfo)
+      return
 		}
 
 		const cmd: IOrderCommandMessage = {
@@ -310,7 +270,8 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 									})
 								}
 							})
-                    } else {
+                    }
+          else {
 						this.messageSvc.sendOrderCommand(cmd).subscribe()
 					}
 				}
@@ -355,7 +316,7 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 		}
 
         if (category === 'fromTo' || category === 'from' || category === 'to') {
-            const isPriorityEmpty = priority == null || priority.trim().length === 0
+            const isPriorityEmpty = priority == null  || priority.trim().length === 0 || Number.isNaN(priority) ||Number.parseInt(priority) <1
             if (isPriorityEmpty)
                 return this.t$.instant('messages.required', { field: 'Priority' })
 
@@ -411,5 +372,86 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
     return this.tabs.findIndex(t=>t===name);
   }
 
+  sendMtl(mtlInfo){
+    const {
+      vehicle,
+      mtl,
+      mtlInOut,
+    } = this.commandState
 
+    if (mtlInOut) {
+      const now = new Date()
+      const cmd: IOrderCommandMessage = {
+        type: 'ORDER',
+        action: 'N',
+        orderOrigin: 'OMS',
+        priority: 1, // @TODO priority 기본값 확인
+        vehicleId: vehicle.id,
+        locationMoveType: 'Point',
+        locationMove: mtlInfo.pointId.toString(),
+        // 2022_05_31_11_09_52.94
+        // @ts-ignore
+        commandID: `MTL_IN-OC_OHTC_01-${DateFns.format(
+          now,
+          'yyyyMMddHHmmssSS',
+        )}`,
+      }
+
+      if(this.commandState.mtl.inNode) cmd.locationMove = this.commandState.mtl.inNode.toString()
+
+      this.dialogSvc
+        .confirm({ body: this.t$.instant('messages.confirmCommand') })
+        .subscribe((ok) => {
+          if (ok) {
+            this.transfersService.checkTargetMTL('p'+this.commandState.mtl.id).subscribe((res)=>{
+              if (!res) {
+                // unuse check
+                if (mtlInfo.unuse === null || mtlInfo.unuse) {
+                  this.dialogSvc
+                    .confirm({ body: this.t$.instant('errors.NotAvailiable', { name: 'MTL' }) })
+                    .subscribe((ok) => {
+                      this.messageSvc.sendOrderCommand(cmd).subscribe()
+                      this.commandState.vehicle = undefined
+                    })
+
+                  return
+                }
+                this.messageSvc.sendOrderCommand(cmd).subscribe()
+                this.commandState.vehicle = undefined
+
+              } else {
+                let errorMessage = ''
+                if (res.hcack === 2 && res.cpack===5){
+                  errorMessage = 'messages.confirmNotAbleToExcute'
+                }
+                else errorMessage = 'messages.confirmNotAbleToExcute'
+
+                this.dialogSvc.alert({
+                  title: this.t$.instant('names.blocked'),
+                  body: this.t$.instant(errorMessage),
+                })
+              }
+            })
+          }
+        })
+    } else {
+      const cmd: IVehicleCommandMessage = {
+        action: 'mtl_out',
+        vehicleId: String(vehicle.id),
+        mtlId: String(mtl.id),
+      }
+
+      this.dialogSvc
+        .confirm({ body: this.t$.instant('messages.confirmMtloutCommand') })
+        .subscribe((ok) => {
+          if (ok) {
+            this.messageSvc.sendVehicleCommand(cmd).subscribe()
+            this.commandState.vehicle = undefined
+          }
+        })
+    }
+  }
+  get MTls(): IMTL[]{
+    return this.trackStatusService.trackData.mtls
+  }
 }

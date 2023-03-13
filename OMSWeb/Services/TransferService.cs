@@ -657,5 +657,10 @@ namespace OMSWeb.Services
         {
             return _transferRepo.QueryMTL(id);
         }
+        
+        public Boolean isUseMtl(string id)
+        {
+            return _transferRepo.CountInUseMTL(id)>0;
+        }
     }
 }
