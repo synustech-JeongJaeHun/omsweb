@@ -19,7 +19,7 @@ import * as DateFns from 'date-fns'
 import { SystemStatusService } from '@oms/root/services/system-status.service'
 import { TransfersService } from '@oms/root/services/transfers.service'
 import {SettingsService} from "@oms/services/settings.service";
-import { IMTL } from "@oms/models/dto/track.model";
+import { Dto } from "@oms/models/dto/track.model";
 
 @Component({
 	selector: 'oms-command-dialog',
@@ -451,7 +451,7 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
         })
     }
   }
-  get MTls(): IMTL[]{
+  get MTls(): Dto.IMTL[]{
     return this.trackStatusService.trackData.mtls
   }
 }
