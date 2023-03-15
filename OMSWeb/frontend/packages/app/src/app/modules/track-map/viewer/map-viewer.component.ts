@@ -1066,15 +1066,17 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 				case 'from':
 					{
 						this.mapStatesService.transferCommandState.source = port
-            setTimeout(()=>{
-              const { carrier } = this.mapStatesService.transferCommandState
-              if(!carrier){
-                this.dialogSvc.alert({
-                  title: this.$t.instant('names.blocked'),
-                  body: this.$t.instant('messages.confirmParameterInvalid'),
-                })
-              }
-            }, 500)
+            if(objectType === 'buffer'){
+              setTimeout(()=>{
+                const { carrier } = this.mapStatesService.transferCommandState
+                if(!carrier){
+                  this.dialogSvc.alert({
+                    title: this.$t.instant('names.blocked'),
+                    body: this.$t.instant('messages.confirmParameterInvalid'),
+                  })
+                }
+              }, 500)
+            }
 					}
 					break
 				case 'to':
