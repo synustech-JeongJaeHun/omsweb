@@ -6,6 +6,9 @@ namespace OMSWeb.Models
         public uint JwtLifeMinutes { get; set; }
         public string SID { get; set; }
         public string SyncId { get; set; }
+        public bool RefreshPopup { get; set; }
+        
+        public bool RetainLogon { get; set; }
         public string Version { get; set; }
         public bool KpiEnabled { get; set; }
         public bool BufferEnabled { get; set; }

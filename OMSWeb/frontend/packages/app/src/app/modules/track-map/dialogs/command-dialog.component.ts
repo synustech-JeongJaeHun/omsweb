@@ -34,6 +34,8 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 
   displayedColumns: string[] = ['id', 'logicalId', 'physicalId'];
 
+  pattern = '[1-9](([0-8](\\.[0-9]*)?)|[0-9])?'
+
 	get canApply(): boolean {
 		return this.validate() === undefined
 	}
@@ -316,7 +318,7 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 		}
 
         if (category === 'fromTo' || category === 'from' || category === 'to') {
-            const isPriorityEmpty = priority == null  || priority.trim().length === 0 || Number.isNaN(priority) ||Number.parseInt(priority) <1
+            const isPriorityEmpty = Number.isNaN(priority) ||Number.parseInt(priority) <1
             if (isPriorityEmpty)
                 return this.t$.instant('messages.required', { field: 'Priority' })
 

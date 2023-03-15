@@ -15,7 +15,7 @@ import { PermissionEnums } from '../../../models/enums';
 import {SettingsService} from "@oms/services/settings.service";
 import {Router} from "@angular/router";
 import {LoginDialogComponent} from "@oms/shared/dialogs/login-dialog.component";
-import {MatDialog} from "@angular/material/dialog";
+import {MatDialog, MatDialogState} from "@angular/material/dialog";
 
 @Component({
   selector: 'oms-gnb-states',
@@ -27,6 +27,8 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
   private systemStates: ISystemStates;
   private destroy$ = new Subject<void>();
   onOffLine: boolean = false
+
+  isOpenDialog: boolean = false
 
   get hostStatusIcon(): string {
     if (!this.isActiveConnStatus)
@@ -165,7 +167,7 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
 
     private dialog: MatDialog,
 
-    private router: Router
+    private router: Router,
   ) {
     this.getState();
 
@@ -257,42 +259,34 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
     }, 80);
   }
 
-  private moveDefaultPage(url: string) {
-    this.router.navigate([url]);
-  }
-
-  private openLogin() {
-    return this.dialog
-      .open(LoginDialogComponent, {
-        width: '350px',
-        hasBackdrop: true,
-        disableClose: true,
-      })
-      .afterClosed()
-      .subscribe((res) => {
-        if (res) {
-          this.moveDefaultPage('/monitor/status');
-        }
-      });
-  }
-
   private updateAuth(){
     this.settingSvc.loadConfig().subscribe((x) => {
-      const { sid, syncId, allowPublicMonitor } = x;
+      const { sid, syncId, refreshPopup, retainLogon } = x;
 
       if (sid != this.auth.sid) {
         this.auth.updateSID(sid);
-        this.auth.logout();
+        retainLogon && this.auth.logout();
       }
 
       if (syncId != this.auth.syncId) {
         this.auth.updateSyncId(syncId);
-        window.location.reload()
+        if(refreshPopup){
+          if(!this.isOpenDialog){
+            this.isOpenDialog = true
+            this.dialogSvc
+              .confirm({body: this.t$.instant('messages.reload-serve')})
+              .subscribe((ok) => {
+                if (ok) {
+                  window.location.reload()
+                }
+                this.isOpenDialog = false
+              });
+          }
+        }
+        else {
+          window.location.reload()
+        }
       }
-
-      if (allowPublicMonitor || this.auth.isAuthenticated) {
-        this.moveDefaultPage('/monitor/public');
-      } else this.openLogin();
     });
   }
 }

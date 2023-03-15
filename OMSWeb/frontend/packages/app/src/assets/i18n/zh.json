@@ -658,6 +658,7 @@
     "alarmNoteHint": "在这里输入操作员的额外信息...",
     "confirmCommand": "你确定发送这个命令吗？",
     "alternateTransferToMode": "Alternate transfer to {{mode}} mode",
-    "reload": "地图信息发生变化，是否刷新？"
+    "reload": "地图信息发生变化，是否刷新？",
+    "reload-serve": "数据已更改。你想续订吗？"
   }
 }

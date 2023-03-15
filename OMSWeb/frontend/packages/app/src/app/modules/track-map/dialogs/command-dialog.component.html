@@ -87,7 +87,7 @@
 						[placeholder]="'names.priority' | translate"
 						[(ngModel)]="commandState.priority"
 						type="text"
-						pattern="[1-9]*"
+						[pattern]="pattern"
 						maxlength="2"
 					/>
 				</mat-form-field>
@@ -169,7 +169,7 @@
 						[placeholder]="'names.priority' | translate"
 						[(ngModel)]="commandState.priority"
 						type="text"
-						pattern="[1-9]*"
+            [pattern]="pattern"
 						maxlength="2"
 					/>
 				</mat-form-field>
@@ -251,7 +251,7 @@
 						[placeholder]="'names.priority' | translate"
 						[(ngModel)]="commandState.priority"
 						type="text"
-						pattern="[1-9]*"
+            [pattern]="pattern"
 						maxlength="2"
 					/>
 				</mat-form-field>

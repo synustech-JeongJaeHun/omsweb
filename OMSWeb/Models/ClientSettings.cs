@@ -4,6 +4,8 @@ namespace OMSWeb.Models
     {
         public string SID { get; set; }
         public string SyncId { get; set; }
+        public bool RefreshPopup { get; set; }
+        public bool RetainLogon { get; set; }
         public bool AllowPublicMonitor { get; set; }
         public bool KpiEnabled { get; set; }
         public bool BufferEnabled { get; set; }

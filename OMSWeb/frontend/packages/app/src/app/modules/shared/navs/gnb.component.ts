@@ -28,7 +28,7 @@ export class GnbComponent implements OnInit {
               private settingSvc: SettingsService,
               private title:Title,
               private dialogSvc: DialogService,
-              private $t: TranslateService,
+              private t$: TranslateService,
               private hubSvc: HubService,
               ) { }
 
@@ -47,7 +47,7 @@ export class GnbComponent implements OnInit {
     this.hubSvc.mapUpdateStatus$.pipe(takeUntil(this.destroy$)).subscribe((e) => {
       if (e.operation === 'INSERT' || e.operation === 'UPDATE'){
         this.dialogSvc
-          .confirm({ body: this.$t.instant('messages.reload') })
+          .confirm({ body: this.t$.instant('messages.reload') })
           .subscribe((ok) => {
             if (ok) {
               window.location.reload()

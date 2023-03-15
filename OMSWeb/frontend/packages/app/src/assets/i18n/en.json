@@ -656,6 +656,8 @@
     "alarmNoteHint": "Input operator's extra message at here...",
     "confirmCommand": "Are you sure send this command?",
     "alternateTransferToMode": "Alternate transfer to {{mode}} mode",
-    "reload": "Map information has changed. Do you want to refresh?"
+    "reload": "Map information has changed. Do you want to refresh?",
+    "reload-serve": "Data has been changed. Would you like to renew?"
+
   }
 }

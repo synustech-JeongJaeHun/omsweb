@@ -49,11 +49,7 @@ namespace OMSWeb.Services
         {
             this._appSettings = appSettings.Value;
             this._appSettings.SID = GenerateSID(8);
-            this._appSettings.SyncId = "-";
-            if (this._appSettings.IsSync)
-            {
-                this._appSettings.SyncId = GenerateSID(8);
-            }
+            this._appSettings.SyncId = GenerateSID(8);
 
             string version = _modeStatusRepo.GetOmsServerVersion();
             if (!string.IsNullOrEmpty(version))
@@ -144,6 +140,8 @@ namespace OMSWeb.Services
             client.ActionScan = this._appSettings.ActionScan;
             client.FireSensor = this._appSettings.FireSensor;
             client.NextLine = this._appSettings.NextLine;
+            client.RefreshPopup = this._appSettings.RefreshPopup;
+            client.RetainLogon = this._appSettings.RetainLogon;
             return this._appSettings.Client;
         }
         

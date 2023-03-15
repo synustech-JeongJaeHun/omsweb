@@ -21,18 +21,13 @@ export class StartupComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    /*this.settings.serviceConfig.subscribe((x) => {
-      const { sid, allowPublicMonitor } = x;
-
-      if (sid != this.auth.sid) {
-        this.auth.updateSID(sid);
-        this.auth.logout();
-      }
+    this.settings.serviceConfig.subscribe((x) => {
+      const { allowPublicMonitor } = x;
 
       if (allowPublicMonitor || this.auth.isAuthenticated) {
         this.moveDefaultPage('/monitor/public');
       } else this.openLogin();
-    });*/
+    });
   }
 
   private openLogin() {
