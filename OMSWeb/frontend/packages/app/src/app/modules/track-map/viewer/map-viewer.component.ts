@@ -66,7 +66,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 	get canSetSourceWithFilter() {
 		const logicalId = this.contextMenuObject.value.logicalId
 		if (logicalId == null) return false
-    console.log(this.mapStatesService.transferCommandState)
 		if (this.mapStatesService.transferCommandState.sourceDisabled === true)
 			return false
 		if (
