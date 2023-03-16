@@ -255,7 +255,7 @@ function onRightClick(event: MouseEvent) {
     <!-- presentation component without logic -->
     
     <VehiclePresentation v-if="realtimePosition" :x="realtimePosition.x" :y="realtimePosition.y" :vid="props.vehicle.id"
-      :logicalId="props.vehicle.logicalId" :orderId="props.vehicle.orderId" :type="props.vehicle.type"
+      :logicalId="props.vehicle.logicalId" :physicalId="props.vehicle.physicalId" :orderId="props.vehicle.orderId" :type="props.vehicle.type"
       :mode="props.vehicle.mode" :complicatedMode="complicatedMode" :cargoState="props.vehicle.cargoState"
       :cargoTransferResult="props.vehicle.cargoTransferResult" :carrierId="props.vehicle.carrierId"
       :errorList="props.vehicle.errorList" :isMaint="props.vehicle.isMaint" :isConnected="props.vehicle.isConnected"

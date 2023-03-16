@@ -120,6 +120,8 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 	public homeActive = false
   public nextLine = false
 
+  public vhlAlias = null
+
 	public colocatedViewPosition:
 		| { top: string; left: string; right: string }
 		| undefined
@@ -227,7 +229,10 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		)
 
     this.settingSvc.serviceConfig.subscribe(
-      (config) => (this.nextLine = config.nextLine),
+      (config) => {
+        this.nextLine = config.nextLine
+        this.vhlAlias = config.vhlAlias
+      },
     )
 	}
 	ngOnDestroy(): void {

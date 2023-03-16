@@ -31,7 +31,7 @@ import { exposed } from './exposed'
 import ZoomLayer from 'MapObjects/zoomButton/ZoomLayer.ce.vue'
 import {convertStringToImageDataUrl} from "src/utils/textToImage";
 import {updatePointType} from "TrackObjects/point/pointType";
-import {updateNextLine, updateVHLArrow, updateVHLPosition} from "TrackObjects/vehicle/vehicles";
+import {updateNextLine, updateVHLArrow, updateVHLPosition, updateVHLAlias} from "TrackObjects/vehicle/vehicles";
 /**
  *  https://v3.vuejs.org/api/sfc-script-setup.html#typescript-only-features
  *
@@ -76,6 +76,7 @@ const props = defineProps<{
 
   isVHLArrowVisible: Boolish
   nextLine: Boolish
+  vhlAlias: Stringlish
   // color
   backgroundColor: Stringlish
   stationColor: Stringlish
@@ -207,6 +208,11 @@ watch(propRefs.isVHLArrowVisible, () => {
 watch(propRefs.nextLine, ()=>{
   if(typeof props.nextLine === 'boolean'){
     updateNextLine(props.nextLine)
+  }
+})
+watch(propRefs.vhlAlias, ()=>{
+  if(typeof props.vhlAlias === 'string'){
+    updateVHLAlias(props.vhlAlias)
   }
 })
 

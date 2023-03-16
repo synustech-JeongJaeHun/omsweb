@@ -25,6 +25,8 @@ export class ServiceConfig {
 	fireSensor: boolean
   nextLine: boolean
 
+  vhlAlias: string
+
   customSet: boolean
 }
 

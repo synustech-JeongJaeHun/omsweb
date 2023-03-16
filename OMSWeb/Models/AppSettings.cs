@@ -30,8 +30,8 @@ namespace OMSWeb.Models
         public NodeMargins NodeMargins {get;set;}
         public VehicleOrderIdContents VehicleOrderIdContents {get;set;} 
         
-        public bool IsSync { get; set; }
-        
+        public string VHLAlias { get; set; }
+            
         public bool CustomSet { get; set; }
     }
 }

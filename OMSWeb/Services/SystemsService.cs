@@ -144,6 +144,7 @@ namespace OMSWeb.Services
             client.RefreshPopup = this._appSettings.RefreshPopup;
             client.RetainLogon = this._appSettings.RetainLogon;
             client.CustomSet = this._appSettings.CustomSet;
+            client.VHLAlias = this._appSettings.VHLAlias;
             return this._appSettings.Client;
         }
         

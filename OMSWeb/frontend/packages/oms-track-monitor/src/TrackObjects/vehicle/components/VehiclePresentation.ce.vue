@@ -12,7 +12,7 @@ import VehicleCargoFullSvg from '../assets/VehicleCargoFull.svg?component'
 import VehicleCargoTransferFailSvg from '../assets/VehicleCargoTransferFail.svg?component'
 import VehicleTypeNormalOutline from '../assets/VehicleTypeNormalOutline.svg?component'
 import VehicleFocusArrow from '../assets/VehicleFocusArrow.svg?component'
-import {readonlyVhlPosition} from "TrackObjects/vehicle/vehicles";
+import {readonlyVhlPosition, readonlyVHLAlias} from "TrackObjects/vehicle/vehicles";
 import VehicleStateFire from '../assets/VehicleStateFire.svg?component'
 import VehicleStateFireDot from '../assets/VehicleStateFireDot.svg?component'
 
@@ -22,6 +22,7 @@ const props = defineProps<{
   // vid for avoid keyword conflict with vue
   vid: Vehicle['id']
   logicalId: Vehicle['logicalId']
+  physicalId: Vehicle['physicalId']
   orderId: Vehicle['orderId']
   type: Vehicle['type']
   mode: Vehicle['mode']
@@ -119,7 +120,7 @@ const emit = defineEmits<{
             text-anchor="end" alignment-baseline="baseline" 
             font-size="0.8em" stroke="white" stroke-width="1px" fill="black"
             paint-order="stroke">
-        {{ props.logicalId }}
+        {{ readonlyVHLAlias ? readonlyVHLAlias+props.physicalId : props.logicalId }}
       </text>
 
       <text v-if="readonlyVhlPosition==='Top'" 
@@ -127,7 +128,7 @@ const emit = defineEmits<{
             text-anchor="middle" x="24" y="-30" alignment-baseline="hanging"
             font-size="0.8em" stroke="white" stroke-width="1px" fill="black" font-weight="bold"
             paint-order="stroke">
-        {{ props.logicalId }}
+        {{ readonlyVHLAlias ? readonlyVHLAlias+props.physicalId : props.logicalId }}
       </text>
       
       <!-- vehicle order with priority(hotlot) -->
