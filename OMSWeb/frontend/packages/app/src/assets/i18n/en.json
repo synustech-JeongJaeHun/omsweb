@@ -165,6 +165,7 @@
     "scale": "Scale",
     "mapRotation": "Map Rotation",
     "segmentWidth": "Segment Width",
+    "lineWidth": "Line Width",
     "visibleOptions": "Visible Options",
     "showVehicleLines": "Vehicle Lines",
     "showExpectedPaths": "Expected Paths",

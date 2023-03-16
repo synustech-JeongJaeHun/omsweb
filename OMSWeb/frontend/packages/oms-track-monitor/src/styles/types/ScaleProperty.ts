@@ -3,6 +3,7 @@ type ScaleProperty =
   | 'zcuSize'
   | 'segmentDirection'
   | 'segmentWidth'
+  | 'lineWidth'
   | 'stationMargin'
   | 'bufferMargin'
 

@@ -270,7 +270,7 @@ function onRightClick(event: MouseEvent) {
     <template v-if="props.vehicle.isConnected && !props.vehicle.errorList && props.vehicle.mode !== 'M'"  >
       <!-- next point line -->
       <line v-if="props.vehicle.movingState === 'M' && nextPointPosition && realtimePosition"
-        class="line next-line fixed-scale-stroke" stroke="#91e079" stroke-width="1" stroke-linecap="round"
+        class="line next-line fixed-scale-stroke" stroke="#91e079"  stroke-linecap="round"
         shape-rendering="auto" :x1="realtimePosition.x" :y1="realtimePosition.y" :x2="nextPointPosition.x"
         :y2="nextPointPosition.y" />
       
@@ -281,13 +281,13 @@ function onRightClick(event: MouseEvent) {
         'to-line': commandPoint.type.value === 'dropoff',
         'move-line': commandPoint.type.value === 'move',
         'fixed-scale-stroke': true
-      }" :stroke="commandLineColor" stroke-width="1" stroke-linecap="round" shape-rendering="auto"
+      }" :stroke="commandLineColor" stroke-linecap="round" shape-rendering="auto"
         :x1="realtimePosition.x" :y1="realtimePosition.y" :x2="commandPoint.position.value.x"
         :y2="commandPoint.position.value.y" />
       
       <!-- home/ivr line -->
       <line v-else-if="props.vehicle.movingState === 'M' && homeIvrPoint && realtimePosition"
-        class="line homeivr-line fixed-scale-stroke" stroke="#ffa500" stroke-width="1" stroke-linecap="round"
+        class="line homeivr-line fixed-scale-stroke" stroke="#ffa500"  stroke-linecap="round"
         shape-rendering="auto" :x1="realtimePosition.x" :y1="realtimePosition.y" :x2="homeIvrPoint.x"
         :y2="homeIvrPoint.y" />
 

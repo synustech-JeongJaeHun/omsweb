@@ -49,6 +49,7 @@ const props = defineProps<{
   vehicleSize: Numberlish
   zcuSize: Numberlish
   segmentWidth: Numberlish
+  lineWidth: Numberlish
   segmentDirectionSize: Numberlish
   stationMargin: Numberlish
   bufferMargin: Numberlish
@@ -143,6 +144,13 @@ watch(propRefs.segmentWidth, (n) => {
   updateScaleStyle(
     'segmentWidth',
     parseNumberProp(ScaleDefault.segmentWidth, n)
+  )
+})
+
+watch(propRefs.lineWidth, (n) => {
+  updateScaleStyle(
+      'lineWidth',
+      parseNumberProp(ScaleDefault.lineWidth, n)
   )
 })
 watch(propRefs.segmentDirectionSize, (n) => {
@@ -546,6 +554,10 @@ defineExpose(exposed)
 #segment-layer .segment-path,
 #disabled-segment-layer .segment-path {
   stroke-width: v-bind('scaleStylesInfo.segmentWidth');
+}
+
+#vehicle-layer .line {
+  stroke-width: v-bind('scaleStylesInfo.lineWidth');
 }
 
 #segment-layer .segment-path,
