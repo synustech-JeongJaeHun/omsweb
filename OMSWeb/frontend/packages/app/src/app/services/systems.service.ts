@@ -12,6 +12,7 @@ import {
 	IFileItem,
 	ISettingMode,
 } from '@oms/models/system.model'
+import {IPreferences} from "@oms/models/settings.model";
 @Injectable({
 	providedIn: 'root',
 })
@@ -61,6 +62,10 @@ export class SystemsService {
 	fileItems(): Observable<IFileItem[]> {
 		return this.http.get<IFileItem[]>(`${this.baseUrl}/logs`)
 	}
+
+  controlTables(): Observable<IPreferences['controlTables']> {
+    return this.http.get<IPreferences['controlTables']>(`${this.baseUrl}/controlTables`)
+  }
 
 	maps() {
 		return this.http.get<string[]>(`${this.baseUrl}/maps`)

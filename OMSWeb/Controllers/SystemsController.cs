@@ -95,6 +95,12 @@ namespace OMSWeb.Controllers
         {
             return this._systemSvc.GetLogs();
         }
+        
+        [HttpGet("controlTables")]
+        public ControlTables GetControlTables()
+        {
+            return this._systemSvc.GetControlTables();
+        }
 
         [HttpGet(template: "zcus-with-fireshutter")]
         public int[] GetZcusWithFireshutter()

@@ -20,5 +20,6 @@ namespace OMSWeb.Models
         public bool ActionScan { get; set; }
         
         public bool NextLine { get; set; }
+        
     }
 }

@@ -31,5 +31,8 @@ namespace OMSWeb.Models
         public VehicleOrderIdContents VehicleOrderIdContents {get;set;} 
         
         public bool IsSync { get; set; }
+        
+        public ControlTables ControlTables { get; set; }
+        
     }
 }

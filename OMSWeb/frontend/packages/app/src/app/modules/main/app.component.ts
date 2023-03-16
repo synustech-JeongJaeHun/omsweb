@@ -4,6 +4,7 @@ import { HubService } from '../../services/hub.service';
 import { SettingsService } from '../../services/settings.service';
 import { setCssValue } from '../shared/utils/css-loader';
 import {TTSService} from "@oms/services/tts.service";
+import {SystemsService} from "@oms/services/systems.service";
 
 @Component({
   selector: 'oms-root',
@@ -17,8 +18,9 @@ export class AppComponent {
     $t: TranslateService,
     private hubSvc: HubService,
     private settingSvc: SettingsService,
+    private ttsSvc: TTSService,
 
-    private ttsSvc: TTSService
+    private system:SystemsService,
   ) {
     this.translate = $t;
 
@@ -42,6 +44,20 @@ export class AppComponent {
     this.setTheme();
 
     this.ttsSvc.init();
+
+    const pref = this.settingSvc.globalPreferences;
+    system.controlTables().subscribe((res)=>{
+      if(res){
+        Object.keys(pref.controlTables).forEach((key) => {
+          if(typeof res[key] === 'boolean')
+            pref.controlTables[key] = res[key]
+          else if(Array.isArray(res[key])){
+
+          }
+        });
+        settingSvc.globalPreferences.save()
+      }
+    })
   }
 
   private setTheme() {
@@ -55,5 +71,6 @@ export class AppComponent {
     this.translate.use(lang);
   }
 
-  public ngOnInit(): void { }
+  public ngOnInit(): void {
+  }
 }

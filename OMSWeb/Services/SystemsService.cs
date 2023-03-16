@@ -9,6 +9,7 @@ using System.Security.Cryptography;
 using System;
 using OMSWeb.OMSSettings;
 using System.Diagnostics;
+using Newtonsoft.Json.Serialization;
 
 namespace OMSWeb.Services
 {
@@ -161,6 +162,12 @@ namespace OMSWeb.Services
         {
             return this._appSettings.NodeMargins;
         }
+        
+        public ControlTables GetControlTables()
+        {
+            return this._appSettings.ControlTables;
+        }
+        
 
         public List<LogModel> GetLogs()
         {
