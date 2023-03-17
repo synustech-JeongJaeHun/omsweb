@@ -143,7 +143,7 @@ namespace OMSWeb.Services
             client.NextLine = this._appSettings.NextLine;
             client.RefreshPopup = this._appSettings.RefreshPopup;
             client.RetainLogon = this._appSettings.RetainLogon;
-            client.CustomSet = this._appSettings.CustomSet;
+            client.CustomSetting = this._appSettings.CustomSetting;
             client.VHLAlias = this._appSettings.VHLAlias;
             return this._appSettings.Client;
         }

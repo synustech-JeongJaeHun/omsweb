@@ -27,7 +27,7 @@ export class ServiceConfig {
 
   vhlAlias: string
 
-  customSet: boolean
+  customSetting: boolean
 }
 
 export interface ManualTransferFiltersSetting {

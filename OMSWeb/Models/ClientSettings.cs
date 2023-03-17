@@ -23,6 +23,6 @@ namespace OMSWeb.Models
         
         public string VHLAlias { get; set; }
         
-        public bool CustomSet { get; set; }
+        public bool CustomSetting { get; set; }
     }
 }

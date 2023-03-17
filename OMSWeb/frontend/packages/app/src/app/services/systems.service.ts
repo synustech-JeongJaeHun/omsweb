@@ -70,7 +70,7 @@ export class SystemsService {
 
   loadControlTables(){
     this.settingSvc.serviceConfig.subscribe((config) => {
-      if(!config.customSet) return
+      if(!config.customSetting) return
 
       const pref = this.settingSvc.globalPreferences;
       this.controlTables().subscribe((res)=>{
