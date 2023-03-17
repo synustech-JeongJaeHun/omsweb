@@ -97,9 +97,9 @@ namespace OMSWeb.Controllers
         }
         
         [HttpGet("controlTables")]
-        public ControlTables GetControlTables()
+        public ActionResult<string> GetAppSettings()
         {
-            return this._systemSvc.GetControlTables();
+            return System.IO.File.ReadAllText("./customSettings.json");
         }
 
         [HttpGet(template: "zcus-with-fireshutter")]

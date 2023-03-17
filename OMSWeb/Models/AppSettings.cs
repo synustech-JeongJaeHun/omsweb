@@ -32,7 +32,6 @@ namespace OMSWeb.Models
         
         public bool IsSync { get; set; }
         
-        public ControlTables ControlTables { get; set; }
-        
+        public bool CustomSet { get; set; }
     }
 }

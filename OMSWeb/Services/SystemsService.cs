@@ -9,7 +9,7 @@ using System.Security.Cryptography;
 using System;
 using OMSWeb.OMSSettings;
 using System.Diagnostics;
-using Newtonsoft.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace OMSWeb.Services
 {
@@ -143,6 +143,7 @@ namespace OMSWeb.Services
             client.NextLine = this._appSettings.NextLine;
             client.RefreshPopup = this._appSettings.RefreshPopup;
             client.RetainLogon = this._appSettings.RetainLogon;
+            client.CustomSet = this._appSettings.CustomSet;
             return this._appSettings.Client;
         }
         
@@ -161,11 +162,6 @@ namespace OMSWeb.Services
         public NodeMargins GetNodeMargins()
         {
             return this._appSettings.NodeMargins;
-        }
-        
-        public ControlTables GetControlTables()
-        {
-            return this._appSettings.ControlTables;
         }
         
 

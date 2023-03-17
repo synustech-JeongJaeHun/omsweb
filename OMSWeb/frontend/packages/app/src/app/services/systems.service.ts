@@ -13,6 +13,7 @@ import {
 	ISettingMode,
 } from '@oms/models/system.model'
 import {IPreferences} from "@oms/models/settings.model";
+import {SettingsService} from "@oms/services/settings.service";
 @Injectable({
 	providedIn: 'root',
 })
@@ -24,7 +25,7 @@ export class SystemsService {
 		return this.states()
 	}
 
-	constructor(private http: HttpClient) {}
+	constructor(private http: HttpClient, private settingSvc: SettingsService,) {}
 
 	states(): Observable<ISystemStates> {
 		return this.http.get<ISystemStates>(`${this.baseUrl}/states`).pipe(
@@ -65,6 +66,28 @@ export class SystemsService {
 
   controlTables(): Observable<IPreferences['controlTables']> {
     return this.http.get<IPreferences['controlTables']>(`${this.baseUrl}/controlTables`)
+  }
+
+  loadControlTables(){
+    this.settingSvc.serviceConfig.subscribe((config) => {
+      if(!config.customSet) return
+
+      const pref = this.settingSvc.globalPreferences;
+      this.controlTables().subscribe((res)=>{
+        if(res && res['ControlTables']){
+          const r = res['ControlTables']
+          Object.keys(pref.controlTables).forEach((key) => {
+            if(typeof r[key] === 'boolean')
+              pref.controlTables[key] = r[key]
+            else if(Array.isArray(r[key])
+              && pref.controlTables[key].length === r[key].length){
+              pref.controlTables[key] = r[key]
+            }
+          });
+          this.settingSvc.globalPreferences.save()
+        }
+      })
+    });
   }
 
 	maps() {

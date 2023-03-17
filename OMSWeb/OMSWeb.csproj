@@ -62,6 +62,9 @@
     <None Remove="ClientApp-bak\**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
     <None Include="frontend\packages\app\test-playwright\data.json" />
+    <Content Update="customSettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>

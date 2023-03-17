@@ -131,6 +131,12 @@ export class OrderControlTableComponent implements OnInit, OnDestroy {
 		).width
 	}
 
+  getDisplayTableLabel(type: string) {
+    return this.preference.controlTables.orders_order.find(
+      (column) => column.name === type,
+    ).i18nLabel
+  }
+
 	stateStoring = {
 		enabled: true,
 		type: 'custom',

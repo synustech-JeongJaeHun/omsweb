@@ -21,5 +21,6 @@ namespace OMSWeb.Models
         
         public bool NextLine { get; set; }
         
+        public bool CustomSet { get; set; }
     }
 }

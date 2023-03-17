@@ -45,19 +45,7 @@ export class AppComponent {
 
     this.ttsSvc.init();
 
-    const pref = this.settingSvc.globalPreferences;
-    system.controlTables().subscribe((res)=>{
-      if(res){
-        Object.keys(pref.controlTables).forEach((key) => {
-          if(typeof res[key] === 'boolean')
-            pref.controlTables[key] = res[key]
-          else if(Array.isArray(res[key])){
-
-          }
-        });
-        settingSvc.globalPreferences.save()
-      }
-    })
+    this.system.loadControlTables();
   }
 
   private setTheme() {

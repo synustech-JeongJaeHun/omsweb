@@ -24,6 +24,8 @@ export class ServiceConfig {
   actionScan: boolean
 	fireSensor: boolean
   nextLine: boolean
+
+  customSet: boolean
 }
 
 export interface ManualTransferFiltersSetting {
