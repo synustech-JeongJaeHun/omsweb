@@ -100,7 +100,7 @@ export class HubService {
 			.catch((err) => console.error(err))
 	}
 
-	private detachEvents() {
+	public detachEvents() {
 		// this.hub.off('pointChanged');
 		this.hub.off('segmentChanged')
 		this.hub.off('segmentDisabledChanged')
