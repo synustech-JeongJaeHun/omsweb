@@ -3,6 +3,8 @@ import {
 	HostSessionStatusEnums,
 	TscModeEnums,
 } from '@oms/models/enums'
+import DevExpress from "devextreme";
+import RemoteFileSystemProvider = DevExpress.fileManagement.RemoteFileSystemProvider;
 
 export interface ISystemStates {
 	sessionStatus?: HostSessionStatusEnums
@@ -32,7 +34,7 @@ export interface IModuleStatus {
 	startTime: Date
 }
 
-export interface IFileItem {
+export interface IFileItem extends RemoteFileSystemProvider{
 	name: string
 	isDirectory: boolean
 	dateModified: Date
