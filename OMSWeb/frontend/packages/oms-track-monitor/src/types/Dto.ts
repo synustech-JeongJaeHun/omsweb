@@ -42,6 +42,8 @@ namespace UpdateDto {
     historyChangeTime?: any
     user?: string
     note?: string
+
+    railIn?: boolean
   }
 
   export type Segment = {}

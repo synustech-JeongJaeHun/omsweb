@@ -77,6 +77,7 @@ type Vehicle = {
 
   user?: string
   note?: string
+  railIn?: boolean
 } & CanBeFocused &
   CanBeTracked &
   IsHovered &

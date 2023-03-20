@@ -244,8 +244,8 @@ function onRightClick(event: MouseEvent) {
 
 <template>
   <Teleport :to="teleportRef" :disabled="props.vehicle.isCarrierFocused !== true">
-    <template v-if="props.vehicle.isConnected && !props.vehicle.errorList && props.vehicle.mode !== 'M'">
-      
+
+    <template v-if="props.vehicle.isConnected && !props.vehicle.errorList && props.vehicle.mode !== 'M' && props.vehicle.railIn">
       <Arrow v-if="props.vehicle.movingState === 'M' && nextPointPosition && realtimePosition && readonlyVhlArrow &&
                     props.vehicle.nextPoint !== props.vehicle.curPoint"
              :source="realtimePosition" :dest="nextPointPosition" :complicatedMode="complicatedMode"/>
@@ -254,8 +254,9 @@ function onRightClick(event: MouseEvent) {
     
     <!-- presentation component without logic -->
     
-    <VehiclePresentation v-if="realtimePosition" :x="realtimePosition.x" :y="realtimePosition.y" :vid="props.vehicle.id"
+    <VehiclePresentation v-if="realtimePosition&&props.vehicle.railIn" :x="realtimePosition.x" :y="realtimePosition.y" :vid="props.vehicle.id"
       :logicalId="props.vehicle.logicalId" :physicalId="props.vehicle.physicalId" :orderId="props.vehicle.orderId" :type="props.vehicle.type"
+
       :mode="props.vehicle.mode" :complicatedMode="complicatedMode" :cargoState="props.vehicle.cargoState"
       :cargoTransferResult="props.vehicle.cargoTransferResult" :carrierId="props.vehicle.carrierId"
       :errorList="props.vehicle.errorList" :isMaint="props.vehicle.isMaint" :isConnected="props.vehicle.isConnected"
@@ -267,7 +268,7 @@ function onRightClick(event: MouseEvent) {
       @leftclick="onLeftClick()" @rightclick="onRightClick($event)" @mouseover="onMouseover($event)"
       @mouseout="onMouseleave()" @mouseleave="onMouseleave()" />
     
-    <template v-if="props.vehicle.isConnected && !props.vehicle.errorList && props.vehicle.mode !== 'M'"  >
+    <template v-if="props.vehicle.isConnected && !props.vehicle.errorList && props.vehicle.mode !== 'M' && props.vehicle.railIn"  >
       <!-- next point line -->
       <line v-if="props.vehicle.movingState === 'M' && nextPointPosition && realtimePosition"
         class="line next-line fixed-scale-stroke" stroke="#91e079"  stroke-linecap="round"

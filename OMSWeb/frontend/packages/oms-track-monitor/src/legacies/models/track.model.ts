@@ -187,6 +187,8 @@ interface IVehicle {
   historyChangeTime?: any
   user?: string
   note?: string
+
+  railIn?: boolean
 }
 
 interface IFireshutter {
