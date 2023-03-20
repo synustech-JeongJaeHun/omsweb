@@ -163,11 +163,7 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
     private dialogSvc: DialogService,
     private t$: TranslateService,
     private messageSvc: MessagesService,
-    private settingSvc: SettingsService,
-
-    private dialog: MatDialog,
-
-    private router: Router,
+    private settingSvc: SettingsService
   ) {
     this.getState();
 

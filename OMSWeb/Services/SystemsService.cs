@@ -145,6 +145,8 @@ namespace OMSWeb.Services
             client.RetainLogon = this._appSettings.RetainLogon;
             client.CustomSetting = this._appSettings.CustomSetting;
             client.VHLAlias = this._appSettings.VHLAlias;
+            client.IsSync = this._appSettings.IsSync;
+            
             return this._appSettings.Client;
         }
         

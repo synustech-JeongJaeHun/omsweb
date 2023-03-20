@@ -33,5 +33,7 @@ namespace OMSWeb.Models
         public string VHLAlias { get; set; }
             
         public bool CustomSetting { get; set; }
+        
+        public bool IsSync { get; set; }
     }
 }

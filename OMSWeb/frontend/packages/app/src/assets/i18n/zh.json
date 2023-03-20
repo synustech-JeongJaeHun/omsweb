@@ -660,6 +660,7 @@
     "confirmCommand": "你确定发送这个命令吗？",
     "alternateTransferToMode": "Alternate transfer to {{mode}} mode",
     "reload": "地图信息发生变化，是否刷新？",
-    "reload-serve": "数据已更改。你想续订吗？"
+    "reload-serve": "数据已更改。你想续订吗？",
+    "reload-page": "由于数据已更改，页面将在 {{sec}} 秒后重新加载。"
   }
 }

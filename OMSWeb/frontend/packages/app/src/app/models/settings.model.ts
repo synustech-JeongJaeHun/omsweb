@@ -28,6 +28,8 @@ export class ServiceConfig {
   vhlAlias: string
 
   customSetting: boolean
+
+  isSync: boolean
 }
 
 export interface ManualTransferFiltersSetting {
