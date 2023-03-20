@@ -11,7 +11,7 @@ export interface PeriodicElement {
 
 const ELEMENT_DATA: PeriodicElement[] = [
   { position: 1, name: 'Voltage', normal: '265 ~ 350 V', warning: '350 ~ 430 V', fault: '> 430 V' },
-  { position: 2, name: 'Current IGBT', normal: '0 ~ 130 A', warning: '130 ~ 140 V', fault: '> 140 A' },
+  { position: 2, name: 'Current IGBT', normal: '0 ~ 130 A', warning: '130 ~ 140 A', fault: '> 140 A' },
   { position: 3, name: 'Current Track', normal: '70 ~ 85 A', warning: '85 ~ 95 A', fault: '> 95 A' },
   { position: 4, name: 'Temp Radiator', normal: '0 ~ 60 ℃', warning: '60 ~ 80 ℃', fault: '> 80 ℃' },
   { position: 5, name: 'Temp Internal', normal: '0 ~ 35 ℃', warning: '35 ~ 40 ℃', fault: '> 40 ℃' },
