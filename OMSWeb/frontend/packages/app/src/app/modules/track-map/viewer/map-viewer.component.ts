@@ -440,6 +440,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 						}
 						this.messageSvc.sendStationSettingCommand(message, [id]).subscribe()
 						this.showContextMenu = false
+            this.contextMenuObject = undefined
 					}
 				})
 		} else if (toState === 'USE') {
@@ -454,6 +455,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 						}
 						this.messageSvc.sendStationSettingCommand(message, [id]).subscribe()
 						this.showContextMenu = false
+            this.contextMenuObject = undefined
 					}
 				})
 		}
@@ -475,6 +477,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 						}
 						this.messageSvc.sendBufferSettingCommand(message, [id]).subscribe()
 						this.showContextMenu = false
+            this.contextMenuObject = undefined
 					}
 				})
 		} else if (toState === 'USE') {
@@ -485,6 +488,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 						const message = { type: 'USE', action: 'buffer-setting', unused: 0 }
 						this.messageSvc.sendBufferSettingCommand(message, [id]).subscribe()
 						this.showContextMenu = false
+            this.contextMenuObject = undefined
 					}
 				})
 		}
@@ -498,6 +502,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		)
 		this.vehicleStatusDialogService.openVehicleStatusDialog()
 		this.showContextMenu = false
+    this.contextMenuObject = undefined
 	}
 
 	onVehicleCommand(name: string) {
@@ -704,7 +709,10 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 					this.dialogSvc.success({
 						title: this.$t.instant('names.success'),
 						body: this.$t.instant('messages.confirmSuccessInstallCarrier'),
-					}).subscribe(()=>this.showContextMenu =false)
+					}).subscribe(()=> {
+            this.showContextMenu = false
+            this.contextMenuObject =undefined
+          })
 				} else {
 					var errorMessage = ''
 					if (res.hcack === 2) errorMessage = 'messages.confirmNotAbleToExcute'
