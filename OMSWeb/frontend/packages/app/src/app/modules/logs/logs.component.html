@@ -1,17 +1,31 @@
-<dx-file-manager id="fileManager" [fileSystemProvider]="fileItems" (onSelectedFileOpened)="openLog($event)"
+<div class="form" *ngIf="isLoading">
+  <div class="indicators">
+    <dx-load-indicator
+      id="large-indicator"
+      height="60"
+      width="60"
+    ></dx-load-indicator>
+  </div>
+</div>
+<dx-file-manager id="fileManager" [fileSystemProvider]="fileItems"
+                 (onSelectedFileOpened)="openLog($event)"
+                 (onContextMenuItemClick)="load()"
                  (onToolbarItemClick)="onToolbarItemClick($event)" height="600">
-  <dxo-permissions download="true" refresh ="true"></dxo-permissions>
+  <dxo-permissions [download]="true" refresh ="true"></dxo-permissions>
   <dxo-toolbar>
     <dxi-item name="showNavPane" visible="true"></dxi-item>
     <dxi-item name="separator"></dxi-item>
     <dxi-item name="customDownload" widget="dxButton" [options]="{ text: 'Download', icon: 'download' }"></dxi-item>
     <dxi-item name="separator"></dxi-item>
-    <dxi-item name="refresh"></dxi-item>
-    <dxi-item name="separator"></dxi-item>
+
+    <dxi-item style="cursor: pointer">
+      <mat-icon (click)="load()">refresh</mat-icon>
+    </dxi-item>
     <dxi-item name="switchView"></dxi-item>
-    <dxi-file-selection-item name="clearSelection" visible="false"></dxi-file-selection-item>
+    <dxi-file-selection-item name="clearSelection" [visible]="true"></dxi-file-selection-item>
   </dxo-toolbar>
   <dxo-context-menu>
-    <dxi-item name="refresh"></dxi-item>
+    <dxi-item name="refresh" ></dxi-item>
   </dxo-context-menu>
+
 </dx-file-manager>

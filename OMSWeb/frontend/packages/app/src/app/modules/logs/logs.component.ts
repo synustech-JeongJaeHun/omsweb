@@ -1,13 +1,11 @@
-import { NgModule, ViewChild, Component, OnInit } from '@angular/core';
-import RemoteFileSystemProvider from 'devextreme/file_management/remote_provider';
-import { DxFileManagerModule, DxFileManagerComponent } from 'devextreme-angular';
-import FileManager from 'devextreme/ui/file_manager';
+import {ViewChild, Component, OnInit} from '@angular/core';
+import { DxFileManagerComponent } from 'devextreme-angular';
 import { ILogInfo } from '@oms/models/log.model';
 import { SystemsService } from '../../services/systems.service';
 import { IFileItem } from '../../models/system.model';
-import { Observable } from 'rxjs';
-import { DirectiveResolver } from '@angular/compiler';
-import { blob } from 'd3-fetch';
+import {finalize} from "rxjs/operators";
+import {DialogService} from "../../services/dialog.service";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'oms-logs',
@@ -21,15 +19,36 @@ export class LogsComponent implements OnInit {
   selectedItems: any[] = [];
   logList: ILogInfo[] = [];
 
+  isLoading = false
+
   constructor(
-    private systemSvc: SystemsService
+    private systemSvc: SystemsService,
+    private dialogSvc: DialogService,
+    private t$: TranslateService,
   ) {
   }
 
   ngOnInit(): void {
-    this.systemSvc.fileItems().subscribe((res) => {
-      this.fileItems = res;
-    });
+    this.load()
+  }
+
+  buttonOptions = {
+    text: "",
+    type: "",
+    useSubmitBehavior: true,
+    onClick: ()=>{
+      this.load()
+    }
+  };
+
+  load(){
+    this.systemSvc.fileItems()
+      .subscribe((res) => {
+        this.fileItems = res;
+        setTimeout(()=>{
+          this.fileManager.instance.refresh()
+        }, 300)
+      })
   }
 
   onTabChanged() {
@@ -53,10 +72,11 @@ export class LogsComponent implements OnInit {
   onToolbarItemClick(e) {
     if (e.itemData.name == "customDownload") {
       //alert('Selected Item : [' + this.fileManager.instance.getSelectedItems() + ']' + this.fileManager.instance.getCurrentDirectory().name + ' - ' + this.fileManager.instance.getCurrentDirectory().fullPath + ' - ' + this.fileManager.instance.getCurrentDirectory().key);
+      this.isLoading = true
       if (this.fileManager.instance.getSelectedItems() == undefined || this.fileManager.instance.getSelectedItems().length == 0) {
-        var directory = e.fileSystemItem || this.fileManager.instance.getCurrentDirectory();
-
+        let directory = e.fileSystemItem || this.fileManager.instance.getCurrentDirectory();
         //alert(directory.name + ' - ' + directory.key);
+        if(!directory.name || !directory.key) return
         this.systemSvc.downloadFolder(directory.name, directory.key).subscribe(blob => {
           const a = document.createElement('a')
           const objectUrl = URL.createObjectURL(blob)
@@ -64,12 +84,14 @@ export class LogsComponent implements OnInit {
           a.download = directory.name + '.zip';
           a.click();
           URL.revokeObjectURL(objectUrl);
+
+          this.isLoading = false
         });
       } else {
         //alert('selected : ' + this.fileManager.instance.getSelectedItems());
-        var items = null;
-        var paths: string[] = new Array();
-        var directory = e.fileSystemItem || this.fileManager.instance.getCurrentDirectory();
+        let items = null;
+        let paths: string[] = new Array();
+        let directory = e.fileSystemItem || this.fileManager.instance.getCurrentDirectory();
 
         items = this.fileManager.instance.getSelectedItems();
 
@@ -82,25 +104,44 @@ export class LogsComponent implements OnInit {
 
         //alert('items = (' + items + ') count = (' + items.length + ') : ' + items[0].dataItem.isDirectory);
         if (items != undefined && items.length == 1 && !items[0].dataItem.isDirectory && items[0].dataItem.size < 10485760) {    // 10MB = 10 * 1024 * 1024
-          this.systemSvc.downloadFile(items[0].dataItem.name, items[0].dataItem.key).subscribe(blob => {
+          this.systemSvc.downloadFile(items[0].dataItem.name, items[0].dataItem.key)
+            .pipe(
+              finalize(() => this.isLoading = false),
+            )
+            .subscribe(blob => {
             const a = document.createElement('a')
             const objectUrl = URL.createObjectURL(blob)
             a.href = objectUrl
             a.download = items[0].dataItem.name;
             a.click();
             URL.revokeObjectURL(objectUrl);
-          });
+          }, error => {
+              this.dialogSvc.alert({
+                title: this.t$.instant('alerts'),
+                body: 'Download failed!'
+              })
+            });
         } else if (items != undefined && items.length >= 1) {
-          this.systemSvc.downloadFoldersNFiles(directory.name, paths).subscribe(blob => {
+          this.systemSvc.downloadFoldersNFiles(directory.name, paths)
+            .pipe(
+              finalize(() => this.isLoading = false),
+            )
+            .subscribe(blob => {
             const a = document.createElement('a')
             const objectUrl = URL.createObjectURL(blob)
             a.href = objectUrl
             a.download = directory.name + '.zip';
             a.click();
             URL.revokeObjectURL(objectUrl);
-          });
+          }, error => {
+              this.dialogSvc.alert({
+                title: this.t$.instant('alerts'),
+                body: 'Download failed!'
+              })
+            });
         } else {
           alert('Need to select folder or file');
+          this.isLoading = false
         }
       }
     }
