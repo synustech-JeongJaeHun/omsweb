@@ -220,9 +220,16 @@ function onMouseover(event: MouseEvent) {
     event,
   })
 }
-function onMouseleave() {
-  setHoveredVehicle(undefined)
-  emit('mouseleaveOnObject')
+
+let clientX: number
+let clientY: number
+function onMouseleave(event: MouseEvent) {
+  if(clientX !== event.clientX || clientY !== event.clientY){
+    setHoveredVehicle(undefined)
+    emit('mouseleaveOnObject')
+    clientX = event.clientX
+    clientY = event.clientY
+  }
 }
 function onDbClick() {
   setTrackedObject(props.vehicle)
@@ -266,7 +273,7 @@ function onRightClick(event: MouseEvent) {
       :isPushDisabled="isPushDisabled" :isFocused="props.vehicle.isFocused" :fire-sensor="props.vehicle.fireSensor"
       :isCarrierFocused="props.vehicle.isCarrierFocused" :isHovered="props.vehicle.isHovered" @dblclick="onDbClick()"
       @leftclick="onLeftClick()" @rightclick="onRightClick($event)" @mouseover="onMouseover($event)"
-      @mouseout="onMouseleave()" @mouseleave="onMouseleave()" />
+      @mouseout="onMouseleave" @mouseleave="onMouseleave" />
     
     <template v-if="props.vehicle.isConnected && !props.vehicle.errorList && props.vehicle.mode !== 'M' "  >
       <!-- next point line -->

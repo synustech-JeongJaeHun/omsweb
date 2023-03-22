@@ -49,6 +49,9 @@ const props = defineProps<{
   isFocused?: boolean
   isCarrierFocused?: boolean
   isHovered?: boolean
+
+  mouseout: (event: MouseEvent) => void
+  mouseleave: (event: MouseEvent) => void
 }>()
 
 const emit = defineEmits<{
@@ -56,8 +59,8 @@ const emit = defineEmits<{
   (event: 'leftclick'): void
   (event: 'rightclick', mouseEvent: MouseEvent): void
   (event: 'mouseover', mouseEvent: MouseEvent): void
-  (event: 'mouseout'): void
-  (event: 'mouseleave'): void
+  /*(event: 'mouseout'): void
+  (event: 'mouseleave'): void*/
 }>()
 </script>
 
@@ -84,7 +87,7 @@ const emit = defineEmits<{
       <VehicleTypeNormalOutline v-if="props.isHovered" class="type hover" width="40" height="40" x="-20" y="-20" />
       <VehicleTypeNormal width="40" height="40" x="-20" y="-20" @dblclick="emit('dblclick')"
         @click.left="emit('leftclick')" @click.right="emit('rightclick', $event)" @mouseover="emit('mouseover', $event)"
-        @mouseout="emit('mouseout')" @mouseleave="emit('mouseleave')" />
+        @mouseout=mouseleave @mouseleave=mouseleave />
 
       <VehicleFocusArrow v-if="props.isHovered || props.isFocused" :class="[
         'arrow',
