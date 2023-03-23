@@ -83,6 +83,8 @@ interface IOmsTrackMonitor {
 	): void
 	updateMtl(operation: UpdateDto.Operation, mtls: UpdateDto.Mtl[]): void
   updateClusterState(operation: UpdateDto.Operation, clusterState: UpdateDto.ClusterState): void
+
+  updateClusters(operation: UpdateDto.Operation, clusterState: UpdateDto.Clusters): void
 }
 
 export { IOmsTrackMonitor }

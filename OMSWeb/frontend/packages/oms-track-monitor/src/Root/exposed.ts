@@ -24,7 +24,7 @@ import {
 	findSegmentById,
 	initSegments,
 } from 'src/TrackObjects/segment/segments'
-import { findClusterById, initClusters } from 'src/TrackObjects/cluster/clusters'
+import { findClusterById, initClusters, updateClusters, insertClusters } from 'src/TrackObjects/cluster/clusters'
 import {
 	findStationById,
 	initStations,
@@ -253,7 +253,7 @@ const exposed: IOmsTrackMonitor = {
             setCarrierFocusedObject(station)
           }
           break
-      
+
         default:
           break;
       }
@@ -408,6 +408,19 @@ const exposed: IOmsTrackMonitor = {
 				break
 			default:
 				break
+    }
+  },
+
+  updateClusters(op, clusters) {
+    switch (op) {
+      case 'INSERT':
+        insertClusters(clusters)
+        break
+      case 'UPDATE':
+        updateClusters(clusters)
+        break
+      default:
+        break
     }
   }
 }

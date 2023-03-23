@@ -61,6 +61,9 @@ export interface IDataChangeEvent {
     converterId?: number, // only for clusterstate
     status?: number, // only for clusterstate
     backupId?: number // only for clusterstate
+  color?: string
+  logicalId?: string
+  maxVehicles?: number
 }
 
 export const alertSeverities = [

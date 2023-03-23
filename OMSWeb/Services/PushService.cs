@@ -263,6 +263,7 @@ namespace OMSWeb.Services
                 ConverterId = payload.ConverterId, // only for clusterstate
                 Status = payload.Status, // only for clusterstate
                 BackupId = payload.BackupId, // only for clusterstate
+                MaxVehicles = payload.MaxVehicles,
 
                 Point = payload.Point, // only for Home
 

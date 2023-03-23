@@ -415,6 +415,17 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 						backupId: e.backupId,
 					})
 				})
+
+      this.hubSvc.clusterChanged$
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((e) => {
+          this.viewer.updateClusters(e.operation, {
+            id: e.id, // server id
+            color: e.color,
+            logicalId: e.logicalId,
+            maxVehicles: e.maxVehicles
+          })
+        })
 		}
 	}
 
