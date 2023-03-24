@@ -117,9 +117,15 @@ export class PlaybackPlayService {
 		this.currentSnapshot = beforeNextSnapshots.before
 		this.nextSnapshot = beforeNextSnapshots.next
 	}
+
+  private tomorrow = function (date) {
+    date.setDate(date.getDate() + 1);
+    return date;
+  }(new Date)
+
 	private async fetchVehicleAlarms(
 		from: Date,
-		to: Date = new Date(9999, 1, 1),
+		to: Date = this.tomorrow
 	) {
 		const alarms = await this.playbackService
 			.getVehicleAlarms(from, to)
@@ -134,7 +140,7 @@ export class PlaybackPlayService {
 		this.setLoaded({ from: from, to: from })
 		if (to == null) {
 			this.historyEvents = await this.playbackService
-				.getHistoryEvents(from, new Date(9999, 1, 1))
+				.getHistoryEvents(from, this.tomorrow)
 				.toPromise()
 
 			this.setLoaded({ from: from, to: this.lastHistoryTime })
@@ -487,12 +493,12 @@ export class PlaybackPlayService {
 
 			await this.fetchVehicleAlarms(
 				this.currentSnapshot.timestamp,
-				this.nextSnapshot?.timestamp ?? new Date(9999, 1, 1),
+				this.nextSnapshot?.timestamp ?? this.tomorrow,
 			)
 
 			await this.fetchEvents(
 				this.currentSnapshot.timestamp,
-				this.nextSnapshot?.timestamp ?? new Date(9999, 1, 1),
+				this.nextSnapshot?.timestamp ?? this.tomorrow,
 			)
 
 			this.clock = this.currentSnapshot.timestamp
