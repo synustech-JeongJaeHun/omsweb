@@ -29,7 +29,12 @@ export class LogsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.load()
+    this.load().then(()=>{
+      setTimeout(()=>{
+          this.fileManager.instance.refresh()
+        }, 300)
+    })
+
   }
 
   buttonOptions = {
@@ -41,13 +46,16 @@ export class LogsComponent implements OnInit {
     }
   };
 
-  load(){
-    this.systemSvc.fileItems()
+  async load(){
+    this.isLoading = true
+    await this.systemSvc.fileItems()
+      .pipe(
+        finalize(()=>{
+          this.isLoading = false
+        })
+      )
       .subscribe((res) => {
-        this.fileItems = res;
-        setTimeout(()=>{
-          this.fileManager.instance.refresh()
-        }, 300)
+         this.fileItems = res;
       })
   }
 

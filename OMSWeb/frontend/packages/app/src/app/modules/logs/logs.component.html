@@ -10,6 +10,7 @@
 <dx-file-manager id="fileManager" [fileSystemProvider]="fileItems"
                  (onSelectedFileOpened)="openLog($event)"
                  (onContextMenuItemClick)="load()"
+                 (currentPathChange)="load()"
                  (onToolbarItemClick)="onToolbarItemClick($event)" height="600">
   <dxo-permissions [download]="true" refresh ="true"></dxo-permissions>
   <dxo-toolbar>
