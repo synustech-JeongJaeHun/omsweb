@@ -294,8 +294,8 @@ function onRightClick(event: MouseEvent) {
 
       <path v-if="readonlyNextLine && props.vehicle.movingState === 'M'
                   && props.vehicle.nextPoint !== props.vehicle.curPoint 
-                  && props.vehicle.line" fill="none" stroke="red"
-            :d="props.vehicle.line" stroke-width="100"></path>
+                  && props.vehicle.line" fill="none" stroke="red" class="line fixed-scale-stroke" 
+            :d="props.vehicle.line"></path>
     </template>
     
   </Teleport>
