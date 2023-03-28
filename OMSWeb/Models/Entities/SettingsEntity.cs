@@ -144,6 +144,8 @@ namespace OMSWeb.Models.Entities
         public int MaxRetryToBuffer { get; set; }
         public bool retryToNearStocker { get; set; }
         public AlternateStationEntity[] StationList { get; set; }
+        
+        public int TimeoutForAlternate { get; set; }
     }
 
     public class AlternateStationEntity

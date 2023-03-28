@@ -161,8 +161,8 @@ namespace OMSWeb.Controllers
             });
         }
 
-        [HttpPost("updateAlternateTransfer/{mode}&{retryTostb}&{retryToNearStocker}&{stations}")]
-        public ActionResult<QueryResult> UpdateAlternateTransfer(string mode, string retryTostb, string retryToNearStocker, string stations)
+        [HttpPost("updateAlternateTransfer/{mode}&{retryTostb}&{retryToNearStocker}&{stations}&{timeoutForAlternate}")]
+        public ActionResult<QueryResult> UpdateAlternateTransfer(string mode, string retryTostb, string retryToNearStocker, string stations, string timeoutForAlternate)
         {
             try
             {
@@ -207,6 +207,11 @@ namespace OMSWeb.Controllers
 
                     AppConfig.UpdateToOMSConfig("TimeoutTransfer", "stocker_list", value);
                 }
+
+                if (!string.IsNullOrEmpty(timeoutForAlternate))
+                {
+                    AppConfig.UpdateToOMSConfig("TimeoutTransfer", "timeout_for_alternate", timeoutForAlternate);
+                }
             }
             catch (Exception e)
             {
@@ -235,6 +240,7 @@ namespace OMSWeb.Controllers
             string retryToBuffer = AppConfig.GetFromOMSConfig("TimeoutTransfer", "retry_cnt_to_buffer", "3");
             string retryToNearStocker = AppConfig.GetFromOMSConfig("TimeoutTransfer", "retry_to_near_stocker", "false");
             string stockList = AppConfig.GetFromOMSConfig("TimeoutTransfer", "stocker_list", "");
+            string timeoutForAlternate = AppConfig.GetFromOMSConfig("TimeoutTransfer", "timeout_for_alternate", "30");
 
             List<AlternateStationEntity> alternateStationEntity = new List<AlternateStationEntity>();
             try
@@ -291,6 +297,7 @@ namespace OMSWeb.Controllers
                 MaxRetryToBuffer = Convert.ToInt32(retryToBuffer),
                 retryToNearStocker = Convert.ToBoolean(retryToNearStocker),
                 StationList = alternateStationEntity.ToArray(),
+                TimeoutForAlternate = Convert.ToInt32(timeoutForAlternate),
             });
         }
 

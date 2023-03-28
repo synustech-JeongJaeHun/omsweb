@@ -659,6 +659,7 @@
     "alternateTransferToMode": "Alternate transfer to {{mode}} mode",
     "reload": "Map information has changed. Do you want to refresh?",
     "reload-serve": "Data has been changed. Would you like to renew?",
-    "reload-page": "The page will reload after {{sec}} seconds because the data has changed."
+    "reload-page": "The page will reload after {{sec}} seconds because the data has changed.",
+    "timeoutForAlternate" : "Timeout for Alternate"
   }
 }

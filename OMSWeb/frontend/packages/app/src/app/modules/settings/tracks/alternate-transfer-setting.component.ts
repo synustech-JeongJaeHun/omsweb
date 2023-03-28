@@ -39,6 +39,7 @@ export class AlternateTransferSettingComponent {
     public selectedCandidateStks: Stk['id'][] = []
     public chosenStks: ISettingsAlternateStation[] = []
     public selectedChosenStks: Stk['id'][] = []
+    public timeoutForAlternate: number =0;
 
     private priorityChanged = false;
 
@@ -68,7 +69,8 @@ export class AlternateTransferSettingComponent {
         if (this.settingAlternateTransfer?.retryToNearStocker !== this.retryToNearStocker) return true;
         if (this.settingAlternateTransfer?.stationList !== this.chosenStks) return true;
         if (this.priorityChanged) return true;
-          
+        if (this.settingAlternateTransfer?.timeoutForAlternate !== this.timeoutForAlternate) return true
+
         return false;
     }
 
@@ -94,6 +96,7 @@ export class AlternateTransferSettingComponent {
             this.retryCntToSTB = parseInt(res.maxRetryToBuffer.toString());
             this.retryToNearStocker = res.retryToNearStocker;
             this.chosenStks = res.stationList;
+            this.timeoutForAlternate = res.timeoutForAlternate
           }),
         )
     }
@@ -161,13 +164,14 @@ export class AlternateTransferSettingComponent {
         let ids: string = '';
         for (var s of this.chosenStks) { ids += s.id + ';' }
         if (ids.length == 0) ids = ';'  // prevent null
-  
+
         this.settingsSvc
             .updateAlternateTransfer(
                 this.mode,
                 this.retryCntToSTB.toString(),
                 this.retryToNearStocker.toString(),
                 ids,
+                this.timeoutForAlternate.toString()
             )
             .subscribe((res) => {
                 if (res.retcode == 1) {

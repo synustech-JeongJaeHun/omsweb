@@ -186,8 +186,8 @@ export class SettingsService {
         return this.http.get<ISettingsAlternateStation[]>(`${this.baseUrl}/alternateStations`)
     }
 
-    updateAlternateTransfer(mode: string, rertyTostb: string, retryToNearStocker: string, stations: string): Observable<IQueryResult> {
-        return this.http.post<IQueryResult>(`${this.baseUrl}/updateAlternateTransfer/${mode}&${rertyTostb}&${retryToNearStocker}&${stations}`, '')
+    updateAlternateTransfer(mode: string, rertyTostb: string, retryToNearStocker: string, stations: string, timeoutForAlternate: string): Observable<IQueryResult> {
+        return this.http.post<IQueryResult>(`${this.baseUrl}/updateAlternateTransfer/${mode}&${rertyTostb}&${retryToNearStocker}&${stations}&${timeoutForAlternate}`, '')
     }
 
     settingsRebalance(): Observable<IQueryResult> {

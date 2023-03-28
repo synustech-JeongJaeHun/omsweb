@@ -10,6 +10,7 @@
 	</div>
 </div>
 
+
 <div class="main-container">
 	<label>
 		<input type="radio" name="mode" value="stb" required [(ngModel)]="mode" />
@@ -108,4 +109,21 @@
 			</button>
 		</div>
 	</div>
+</div>
+
+<div class="main-container">
+  <label>
+    <input type="radio" disabled checked/>
+    {{ 'messages.timeoutForAlternate' | translate}}
+  </label>
+  <input
+    type="number"
+    name="timeoutForAlternate"
+    min="1"
+    max="180"
+    step="1"
+    required
+    [(ngModel)]="timeoutForAlternate"
+  />
+  ({{ 'names.range' | translate }}: 1 ~ 180)
 </div>

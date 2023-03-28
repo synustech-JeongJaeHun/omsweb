@@ -885,6 +885,7 @@ export interface ISettingsAlternateTransfer {
 	maxRetryToBuffer: number
 	retryToNearStocker: boolean
 	stationList?: any[]
+  timeoutForAlternate: number
 }
 
 export interface ISettingsAlternateStation {
