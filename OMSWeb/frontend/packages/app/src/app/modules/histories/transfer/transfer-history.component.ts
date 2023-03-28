@@ -192,29 +192,20 @@ export class TransferHistoryComponent implements OnInit, OnDestroy {
         this.bySearch = true;
         this.onDataSourceStarted();
 
-		this.dataSource = this.svc.ordersDataSource(this, startTime, endTime)
+		this.svc.ordersDataSource(this, startTime, endTime).subscribe((res)=>{
+      if(res) this.dataSource = res
+    })
 		//this.applyFilter(startTime, endTime)
 		//this.applyPage()
 		// this.dataSource.reload()
 	}
-	private applyFilter(startTime: Date, endTime: Date) {
-		this.dataGrid.instance.filter([
-			['timeCreated', '>=', startTime],
-			'and',
-			['timeCreated', '<=', endTime],
-		])
-	}
-
-    private applyPage() { }
 
     public onDataSourceStarted() {
         this.searchTime = ''
-        this.startSearch = null
         this.startSearch = Date.now()
     }
 
 	public onDataSourceChanged() {
-		this.endSearch = null
 		this.endSearch = Date.now()
 		var gap = this.endSearch - this.startSearch
 
@@ -233,7 +224,7 @@ export class TransferHistoryComponent implements OnInit, OnDestroy {
 		this.searchTime = hour + ':' + minutes + ':' + second + '.' + milisec
         console.log('time Transfer history: ' + this.searchTime)
 
-        this.bySearch = false
+    this.bySearch = false
 	}
 
 	private getGridSize(): void {
