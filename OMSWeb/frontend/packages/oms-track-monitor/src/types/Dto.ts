@@ -1,3 +1,5 @@
+import {Color} from "src/types/Color";
+
 namespace UpdateDto {
   export type Operation = 'INSERT' | 'UPDATE' | 'DELETE'
   export type Vehicle = {
@@ -123,6 +125,13 @@ namespace UpdateDto {
     converterId: number
     status: number
     backupId: number
+  }
+
+  export type Clusters = {
+    id: number
+    color: keyof typeof Color
+    logicalId: string
+    maxVehicles: number
   }
 }
 

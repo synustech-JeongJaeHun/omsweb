@@ -47,6 +47,8 @@ namespace OMSWeb.Models
         public int ConverterId { get; set; }
         public int Status { get; set; }
         public int BackupId { get; set; }
+        
+        public int MaxVehicles  { get; set; }
         #endregion
 
         #region Home

@@ -62,6 +62,9 @@ export class TrackStatusService {
     this.hubService.clusterStatusChanged$.subscribe((e) => {
       this.handleClusterStateChanged(e)
     })
+    this.hubService.clusterChanged$.subscribe((e) => {
+      this.handleClusterChanged(e)
+    })
 	}
 
 	handleConnectionChanged(connection) {
@@ -212,7 +215,7 @@ export class TrackStatusService {
 	}
 
   handleClusterStateChanged(e: IDataChangeEvent){
-    const row = { 
+    const row = {
       server_id: e.id!,
       id: e.converterId!,
       status: String(e.status ?? ''),
@@ -226,7 +229,7 @@ export class TrackStatusService {
         const finded = this.trackData?.clusterStates?.find(cs => cs.id === row.id)
 				if (finded) Object.assign(finded, row)
 				break
-      case 'DELETE': 
+      case 'DELETE':
         const findedIndex = this.trackData?.clusterStates?.findIndex(cs => cs.id === row.id)
         if(findedIndex) this.trackData?.clusterStates?.splice(findedIndex, 1)
         break
@@ -234,6 +237,27 @@ export class TrackStatusService {
 			default:
 				break
 		}
+  }
+
+  handleClusterChanged(e: IDataChangeEvent){
+    const row = e.data.find(d=> d.id === e.id)
+    if(row<0) return
+
+    switch (e.operation) {
+      case 'INSERT':
+        this.trackData?.clusters?.push(row)
+      case 'UPDATE':
+        const finded = this.trackData?.clusters?.find(cs => cs.id === row.id)
+        if (finded) Object.assign(finded, row)
+        break
+      case 'DELETE':
+        const findedIndex = this.trackData?.clusters?.findIndex(cs => cs.id === row.id)
+        if(findedIndex) this.trackData?.clusters?.splice(findedIndex, 1)
+        break
+
+      default:
+        break
+    }
   }
 
 	getOverlapObjectOnPoint(pointId: number) {
