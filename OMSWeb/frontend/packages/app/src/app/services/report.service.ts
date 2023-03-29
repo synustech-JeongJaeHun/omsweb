@@ -1,21 +1,33 @@
 import { Injectable } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
+import {interval, Subject} from "rxjs";
+import {takeUntil} from "rxjs/operators";
 
 @Injectable({
 	providedIn: 'root',
 })
 export class ReportService {
 	private baseUrl = '/api/report'
+  private destroy$: Subject<void> = new Subject<void>();
 
-	constructor(private http: HttpClient) {}
+  public trendSubject$ = new Subject<TrendResponse>();
+	constructor(private http: HttpClient) {
+    interval(5000)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(e => this.loadTrend())
+  }
 
   // only for map-viewer kpi trend
 	loadTrend() {
-		return this.http.get<TrendResponse>(`${this.baseUrl}/trend`)
+		this.http.get<TrendResponse>(`${this.baseUrl}/trend`).subscribe(res=>{
+      if(res){
+        this.trendSubject$.next(res)
+      }
+    })
 	}
 }
 
-type TrendResponse = {
+export type TrendResponse = {
 	cpu: {
 		usage: number
 		model: string
@@ -31,5 +43,12 @@ type TrendResponse = {
   }
   delivery_time: {
     value: number,
+  }
+  vehicles : {
+    auto?: number
+    disconnected?: number
+    error?: number
+    manual?: number
+    railOut?: number
   }
 }

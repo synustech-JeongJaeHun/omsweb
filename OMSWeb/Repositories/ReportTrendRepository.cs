@@ -147,7 +147,7 @@ namespace OMSWeb.Repositories
         //public async Task<(int Auto, int Manual, int Error, int Disconnected)> QueryVehicles()
         public async Task<object> QueryVehicles()
         {
-            (int Auto, int Manual, int Error, int Disconnected) result;
+            (int Auto, int Manual, int Error, int Disconnected, int RailOut) result;
             using (var conn = ConnectTrack())
             {
                 var sql = @"
@@ -163,10 +163,13 @@ namespace OMSWeb.Repositories
                 ) as error,
                 (
                     select count(*) from vehicles where connection in (0, 3, 4)
-                ) as disconnected
+                ) as disconnected,
+                (
+                    select count(*) from vehicles where rail_in is null or rail_in is false 
+                ) as rail_out 
                 ";
 
-                result = await conn.QueryFirstAsync<(int Auto, int Manual, int Error, int Disconnected)>(sql);
+                result = await conn.QueryFirstAsync<(int Auto, int Manual, int Error, int Disconnected, int RailOut)>(sql);
             }
             
             return new
@@ -175,6 +178,7 @@ namespace OMSWeb.Repositories
                 Manual = result.Manual,
                 Error = result.Error,
                 Disconnected = result.Disconnected,
+                RailOut = result.RailOut,
             };
             
             //return result;

@@ -306,6 +306,10 @@
 	/* KPI Status */
 	--kpi-status-position-x: 0px;
 	--kpi-status-position-y: 32px;
+
+  /* vhl Status */
+  --vhl-status-position-x: 8px;
+  --vhl-status-position-y: 40px;
 }
 
 html,
@@ -363,6 +367,16 @@ oms-kpi-status {
 	&.has-name-margin {
 		left: var(--toolbar-named-width);
 	}
+}
+
+oms-vhl-status {
+  position: absolute;
+  right: var(--vhl-status-position-x);
+  top: var(--vhl-status-position-y);
+
+  &.has-name-margin {
+    left: var(--toolbar-named-width);
+  }
 }
 
 .side_panel_header {

@@ -1,0 +1,12 @@
+<div id="vhl-stauts-container" *ngIf="vehicles?.auto>0">
+  <div class="area summary">
+    <div class="gauge util">
+      <div class="data">auto: {{ vehicles?.auto || 0}}</div>
+      <div class="data">disconnected: {{ vehicles?.disconnected || 0 }}</div>
+      <div class="data">error: {{ vehicles?.error || 0 }}</div>
+      <div class="data">manual: {{ vehicles?.manual || 0 }}</div>
+      <div class="data">rail out: {{ vehicles?.railOut || 0 }}</div>
+
+    </div>
+  </div>
+</div>
