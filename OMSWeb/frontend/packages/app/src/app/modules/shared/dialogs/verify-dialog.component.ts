@@ -37,21 +37,24 @@ export class VerifyDialogComponent implements OnInit {
 	private initForm() {
 		this.form = new FormGroup({
 			operator: new FormControl('', {
-				validators: [Validators.required, this.blankValidator],
+				validators: [Validators.required, this.blankValidator, Validators.pattern(/^(\s+\S+\s*)*(?!\s).*$/)],
 				updateOn: 'blur',
 			}),
 
 			reason: new FormControl('', {
-				validators: [Validators.required, this.blankValidator],
+				validators: [Validators.required, this.blankValidator, Validators.pattern(/^(\s+\S+\s*)*(?!\s).*$/)],
 				updateOn: 'blur',
 			}),
 		})
 	}
 	onSubmit() {
 		if (this.form.invalid) return
+
 		this.isValid = true
 		// No planned certification process
 		const { operator, reason }: Record<string, string> = this.form.value
+    if(!operator.trim() || !reason.trim()) return
+
 		this.dialog.close({ operator: operator.trim(), reason: reason.trim() })
 		return true
 	}
