@@ -122,7 +122,7 @@ function convertSnapshotVehicleToTmUpdateDtoVehicle(
 		carrierId: vehicle.carrier_id,
 		isZcuBlocked: vehicle.is_zcu_blocked,
 		destPoint: vehicle.dest_point == null ? '' : String(vehicle.dest_point),
-    rail_in: vehicle.rail_in
+    railIn: vehicle.rail_in
 	}
 }
 
