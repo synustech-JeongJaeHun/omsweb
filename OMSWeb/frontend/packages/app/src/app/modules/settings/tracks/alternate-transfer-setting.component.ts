@@ -69,7 +69,7 @@ export class AlternateTransferSettingComponent {
         if (this.settingAlternateTransfer?.retryToNearStocker !== this.retryToNearStocker) return true;
         if (this.settingAlternateTransfer?.stationList !== this.chosenStks) return true;
         if (this.priorityChanged) return true;
-        if (this.settingAlternateTransfer?.timeoutForAlternate !== this.timeoutForAlternate) return true
+        if (this.settingAlternateTransfer?.timeoutForAlternate !== this.timeoutForAlternate && this.timeoutForAlternate <=300) return true
 
         return false;
     }
