@@ -30,6 +30,7 @@
 			[(ngModel)]="retryCntToSTB"
 		/>
 		({{ 'names.range' | translate }}: 1 ~ 10)
+    <br/><span style="font-size: 8px; color: red" *ngIf="invalidCheck.retryCntToSTB"> {{'messages.invalid' | translate:{field: 'range'} }}</span>
 	</div>
 </div>
 
@@ -126,4 +127,5 @@
     [(ngModel)]="timeoutForAlternate"
   />
   ({{ 'names.range' | translate }}: 1 ~ 300)
+  <br><span style="font-size: 8px; color: red; margin: 0 3em" *ngIf="invalidCheck.timeoutForAlternate"> {{'messages.invalid' | translate:{field: 'range'} }}</span>
 </div>

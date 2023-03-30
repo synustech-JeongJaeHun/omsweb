@@ -43,6 +43,11 @@ export class AlternateTransferSettingComponent {
 
     private priorityChanged = false;
 
+    invalidCheck = {
+      retryCntToSTB: false,
+      timeoutForAlternate: false
+    }
+
     constructor(
       private settingsSvc: SettingsService,
       private messageSvc: MessagesService,
@@ -64,14 +69,25 @@ export class AlternateTransferSettingComponent {
     }
 
     get isUpdated(): boolean {
-        if (this.settingAlternateTransfer?.mode !== this.mode) return true;
-        if (parseInt(this.settingAlternateTransfer?.maxRetryToBuffer.toString()) !== this.retryCntToSTB) return true;
-        if (this.settingAlternateTransfer?.retryToNearStocker !== this.retryToNearStocker) return true;
-        if (this.settingAlternateTransfer?.stationList !== this.chosenStks) return true;
-        if (this.priorityChanged) return true;
-        if (this.settingAlternateTransfer?.timeoutForAlternate !== this.timeoutForAlternate && this.timeoutForAlternate <=300) return true
+      this.invalidCheck.timeoutForAlternate =false
+      this.invalidCheck.retryCntToSTB= false
+      if(!(this.timeoutForAlternate <=300 && this.timeoutForAlternate >0)) {
+        this.invalidCheck.timeoutForAlternate =true
+        return false
+      }
+      if(!(this.retryCntToSTB<=10 && this.retryCntToSTB>0)) {
+        this.invalidCheck.retryCntToSTB= true
+        return false
+      }
 
-        return false;
+      if (this.settingAlternateTransfer?.mode !== this.mode) return true;
+      if (parseInt(this.settingAlternateTransfer?.maxRetryToBuffer.toString()) !== this.retryCntToSTB) return true;
+      if (this.settingAlternateTransfer?.retryToNearStocker !== this.retryToNearStocker) return true;
+      if (this.settingAlternateTransfer?.stationList !== this.chosenStks) return true;
+      if (this.priorityChanged) return true;
+      if (this.settingAlternateTransfer?.timeoutForAlternate !== this.timeoutForAlternate) return true
+
+      return false;
     }
 
     ngOnInit(): void { }
