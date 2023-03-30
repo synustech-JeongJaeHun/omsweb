@@ -18,7 +18,6 @@ function getDeepCopiedSegment(event: MouseEvent) {
   const segmentDisableds = findSegmentDisabledsBySegmentId(segmentId)
   return deepCopy({...segment, disableds: segmentDisableds})
 }
-
 function handleMouseover(event: MouseEvent) {
   emit('mouseoverOnObject', {
     type: 'SEGMENT',
@@ -26,8 +25,14 @@ function handleMouseover(event: MouseEvent) {
     event,
   })
 }
+let clientX: number
+let clientY: number
 function handleMouseleave(event: MouseEvent) {
-  emit('mouseleaveOnObject')
+  if(clientX !== event.clientX || clientY !== event.clientY){
+    emit('mouseleaveOnObject')
+    clientX = event.clientX
+    clientY = event.clientY
+  }
 }
 function handleLeftClick(event: MouseEvent) {
   emit('mainClickOnObject', {
