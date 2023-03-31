@@ -51,6 +51,8 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 
 	private cameraAndRotationSyncId
 
+  public firstLoad = true;
+
 	get tmSetting() {
 		return this.trackMonitorSettingService.trackSetting
 	}
@@ -196,6 +198,17 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnInit(): void {
+    if(this.firstLoad){
+      this.statusService.getVehicles().subscribe((res) => {
+        if (res?.vehicles) {
+          res.vehicles.forEach((v) =>
+            this.viewer.updateVehicle('UPDATE', v),
+          )
+        }
+      })
+      this.firstLoad =false
+    }
+
 		// @ts-ignore
 		this.viewer = document.getElementById('track-canvas')._instance.exposed
 		// @ts-ignore
