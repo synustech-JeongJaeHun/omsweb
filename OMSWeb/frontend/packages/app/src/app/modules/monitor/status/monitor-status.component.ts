@@ -7,6 +7,7 @@ import { Dto } from '../../../models/dto/track.model'
 import { ViewModes } from '../../../models/enums'
 import { IPreferences } from '../../../models/settings.model'
 import { AuthService } from '../../../services/auth.service'
+import {CdkDragEnd} from "@angular/cdk/drag-drop";
 
 @Component({
 	selector: 'oms-monitor-status',
@@ -56,6 +57,7 @@ export class MonitorStatusComponent implements OnInit {
 	viewMode: ViewModes
 	trackData: Dto.ITrackData
 
+  enabled = false
 	findEvent = new EventEmitter<{ type: string; id: number }>()
 	focusEvent = new EventEmitter<{
 		type: string
@@ -91,10 +93,15 @@ export class MonitorStatusComponent implements OnInit {
 		else this.trackStatusService.isTrackReadyChanged.subscribe(pullTrackData)
 
 		systemStatusService.updateNodeMarginsSetting()
+
+    this.settingSvc.serviceConfig.subscribe(cfg => {
+      this.enabled = cfg.kpiEnabled;
+    })
 	}
 
 	ngOnInit() {
 		this.mapPreference = this.settingSvc.globalPreferences
+    this.dragPosition = this.settingSvc.globalPreferences.map.vhlStatusPos || {x: 0, y: 0}
 	}
 
 	handleFindAndFocus = (event: { type: string; id: number }) => {
@@ -108,4 +115,12 @@ export class MonitorStatusComponent implements OnInit {
 	handleDropFocus = (event: { focusType?: string }) => {
 		this.dropFocusEvent.emit(event)
 	}
+
+  dragPosition = {x: 0, y: 0}
+
+  dragEnded($event: CdkDragEnd) {
+    const { x, y } = $event.distance;
+    this.settingSvc.globalPreferences.map.vhlStatusPos = {x, y}
+    this.settingSvc.globalPreferences.save()
+  }
 }

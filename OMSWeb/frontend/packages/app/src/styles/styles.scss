@@ -308,8 +308,10 @@
 	--kpi-status-position-y: 32px;
 
   /* vhl Status */
-  --vhl-status-position-x: 8px;
-  --vhl-status-position-y: 40px;
+  --vhl-status-position-x: 8px;     //right
+  --vhl-status-position-y: 24px;    //top
+
+  --vhl-button-position-y: 36px;    //top
 }
 
 html,
@@ -373,10 +375,12 @@ oms-vhl-status {
   position: absolute;
   right: var(--vhl-status-position-x);
   top: var(--vhl-status-position-y);
+}
 
-  &.has-name-margin {
-    left: var(--toolbar-named-width);
-  }
+.vhl-status-button{
+  position: absolute;
+  right: var(--vhl-status-position-x);
+  top: var(--vhl-button-position-y);
 }
 
 .side_panel_header {

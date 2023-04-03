@@ -15,7 +15,9 @@
 	[findEvent]="findEvent"
 	[focusEvent]="focusEvent"
 	[dropFocusEvent]="dropFocusEvent"
-></oms-map-viewer>
+  id="map-viewer"
+>
+</oms-map-viewer>
 
 <div id="status-control" *ngIf="showControlTable">
 	<oms-status-control
@@ -26,4 +28,11 @@
 </div>
 
 <oms-kpi-status></oms-kpi-status>
-<oms-vhl-status></oms-vhl-status>
+<oms-vhl-status *ngIf="enabled" cdkDrag
+></oms-vhl-status>
+<!--<oms-vhl-status cdkDrag
+                (cdkDragEnded)="dragEnded($event)"
+                [ngStyle]="{
+                  transform: 'translate3d('+dragPosition.x+'px, '+dragPosition.y+'px, 0px)'
+                }"
+></oms-vhl-status>-->

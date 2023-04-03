@@ -1,21 +1,58 @@
 #vhl-stauts-container {
   position: relative;
   display: grid;
-  grid-template-columns: 100px;
+  grid-template-columns: 132px;
   min-height: 44px;
   grid-template-rows: 1fr auto;
   gap: 4px;
   margin: 4px;
   padding: 4px;
-  background-color: rgba(161, 161, 161, 0.2);
+  cursor: move;
 
+  .title{
+    position: relative;
+    font-weight: 750;
+    top: 14px;
+    left: 16px;
+    width: fit-content;
+    padding: 0 4px 0;
+    font-size: 14px;
+  }
+
+  .white-space{
+    position: relative;
+    height: 4px;
+    top: 28px;
+    left: 14px;
+    width: 44px;
+    background: #eaeaea;
+  }
+  .area{
+    border: rgba(154, 154, 154, 0.8) 2px solid;
+    border-radius: 4px;
+    padding: 8px;
+    background: #eaeaea;
+  }
   .data {
-    font-size: 11px;
-    font-weight: normal;
-    color: #0095FF;
+    font-size: 12px;
+    font-weight: 650;
+    color: #3d3d3d;
     text-align: left;
     margin-left: 12px;
-    cursor: pointer;
+  }
+
+  .semi-data {
+    font-size: 10px;
+    font-weight: 400;
+    color: #3d3d3d;
+    text-align: left;
+    margin-left: 12px;
+  }
+  .mb-4{
+    margin-bottom: 4px;
+  }
+  .mt-4{
+    margin-top: 4px;
   }
 }
 
