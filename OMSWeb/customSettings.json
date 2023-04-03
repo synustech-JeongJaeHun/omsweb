@@ -461,6 +461,7 @@
     "isMtlVisible": true,
     "isOverlappingObjectsVisible": true,
     "isVHLArrowVisible": false,
+    "isVhlStatusVisible": false,
     
     "homeBackgroundColor": "rgba(255, 255, 255, 1)",
     "playbackBackgroundColor": "rgba(214, 64, 109, 0.1)",
