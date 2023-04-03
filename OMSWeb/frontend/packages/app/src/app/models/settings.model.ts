@@ -94,7 +94,7 @@ export const defaultToggleOptions: ToggleOptionsType = {
   ctrlKey: true
 }
 
-type MonitorControlTable = typeof defaultControlTable
+export type MonitorControlTable = typeof defaultControlTable
 const defaultControlTable = {
 	// order table
 	orders: true,
@@ -642,13 +642,13 @@ const defaultHistoryTable = {
 }
 
 
-type TrackObjectConfig = typeof trackObjectDefaultConfig
+export type TrackObjectConfig = typeof trackObjectDefaultConfig
 const trackObjectDefaultConfig ={
   vehicleIdDisplay: VHLIdPosition.LT,
   pointDisplay: PointType.ID,
 }
 
-type TTSConfig = typeof TTSDefaultConfig
+export type TTSConfig = typeof TTSDefaultConfig
 const TTSDefaultConfig ={
   language: LangCode.none
 }

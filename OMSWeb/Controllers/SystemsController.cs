@@ -96,7 +96,7 @@ namespace OMSWeb.Controllers
             return this._systemSvc.GetLogs();
         }
         
-        [HttpGet("controlTables")]
+        [HttpGet("customSettings")]
         public ActionResult<string> GetAppSettings()
         {
             return System.IO.File.ReadAllText("./customSettings.json");

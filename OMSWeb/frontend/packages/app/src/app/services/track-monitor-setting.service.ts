@@ -82,7 +82,7 @@ type CameraViewBoxWidthChangedEvent = {
 	value?: number
 }
 
-type TrackMonitorSetting = Record<
+export type TrackMonitorSetting = Record<
 	ColorChangedEvent['key'],
 	ColorChangedEvent['value']
 > &
@@ -231,6 +231,10 @@ export class TrackMonitorSettingService {
 		this.trackSetting[event.key] = event.value
 		writeTrackSettingOnLocalStorage(this.trackSetting)
 	}
+
+  updateCustom(trackSetting:TrackMonitorSetting){
+    writeTrackSettingOnLocalStorage(trackSetting)
+  }
 	reset = (key: keyof TrackMonitorSetting) => {
 		// @ts-ignore
 		this.update({ key, value: DefaultTrackMonitorSetting[key] })

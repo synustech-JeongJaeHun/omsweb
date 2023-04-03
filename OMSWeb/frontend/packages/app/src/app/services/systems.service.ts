@@ -12,8 +12,16 @@ import {
 	IFileItem,
 	ISettingMode,
 } from '@oms/models/system.model'
-import {IPreferences} from "@oms/models/settings.model";
+import {
+  ClientPreferences,
+  MonitorControlTable,
+  ToggleOptionsType,
+  TrackObjectConfig,
+  TTSConfig
+} from "@oms/models/settings.model";
 import {SettingsService} from "@oms/services/settings.service";
+import {TrackMonitorSetting, TrackMonitorSettingService} from "@oms/services/track-monitor-setting.service";
+import {JsonObject} from "@angular/compiler-cli/ngcc/src/packages/entry_point";
 @Injectable({
 	providedIn: 'root',
 })
@@ -25,7 +33,9 @@ export class SystemsService {
 		return this.states()
 	}
 
-	constructor(private http: HttpClient, private settingSvc: SettingsService,) {}
+	constructor(private http: HttpClient,
+              private settingSvc: SettingsService,
+              private trackMonitorSettingSvc: TrackMonitorSettingService) {}
 
 	states(): Observable<ISystemStates> {
 		return this.http.get<ISystemStates>(`${this.baseUrl}/states`).pipe(
@@ -64,30 +74,42 @@ export class SystemsService {
 		return this.http.get<IFileItem[]>(`${this.baseUrl}/logs`)
 	}
 
-  controlTables(): Observable<IPreferences['controlTables']> {
-    return this.http.get<IPreferences['controlTables']>(`${this.baseUrl}/controlTables`)
+  controlTables(): Observable<JsonObject> {
+    return this.http.get<JsonObject>(`${this.baseUrl}/customSettings`)
   }
+  /*controlTables(): Observable<IPreferences['controlTables']> {
+    return this.http.get<IPreferences['controlTables']>(`${this.baseUrl}/customSettings`)
+  }*/
 
   loadControlTables(){
     this.settingSvc.serviceConfig.subscribe((config) => {
       if(!config.customSetting) return
 
-      const pref = this.settingSvc.globalPreferences;
       this.controlTables().subscribe((res)=>{
-        if(res && res['ControlTables']){
-          const r = res['ControlTables']
-          Object.keys(pref.controlTables).forEach((key) => {
-            if(typeof r[key] === 'boolean')
-              pref.controlTables[key] = r[key]
-            else if(Array.isArray(r[key])
-              && pref.controlTables[key].length === r[key].length){
-              pref.controlTables[key] = r[key]
-            }
-          });
+        if(res){
+          let globalPreferences = this.settingSvc.globalPreferences;
+          let trackSetting = this.trackMonitorSettingSvc.trackSetting;
+
+          this.jsonToSetting(res['ControlTables'] as MonitorControlTable, globalPreferences.controlTables)
+          this.jsonToSetting(res['ToggleOptionsType'] as ToggleOptionsType, globalPreferences.toggles)
+          this.jsonToSetting(res['TrackObjectConfig'] as TrackObjectConfig, globalPreferences.trackDisplay)
+          this.jsonToSetting(res['TTSConfig'] as TTSConfig, globalPreferences.tts)
+          this.jsonToSetting(res['TrackMonitorSetting'] as TrackMonitorSetting, trackSetting )
+
           this.settingSvc.globalPreferences.save()
+          this.trackMonitorSettingSvc.updateCustom(trackSetting)
         }
       })
     });
+  }
+
+  jsonToSetting(obj: MonitorControlTable | ToggleOptionsType | TrackObjectConfig | TTSConfig | TrackMonitorSetting,
+                pref: MonitorControlTable | ToggleOptionsType | TrackObjectConfig | TTSConfig | TrackMonitorSetting){
+    if(obj){
+      Object.keys(pref).forEach((key) => {
+        if(obj[key]!==undefined && obj[key]!==null) pref[key] = obj[key]
+      });
+    }
   }
 
 	maps() {
