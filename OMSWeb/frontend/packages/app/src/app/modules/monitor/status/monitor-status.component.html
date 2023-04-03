@@ -28,11 +28,8 @@
 </div>
 
 <oms-kpi-status></oms-kpi-status>
-<oms-vhl-status *ngIf="enabled" cdkDrag
-></oms-vhl-status>
-<!--<oms-vhl-status cdkDrag
+
+<oms-vhl-status *ngIf="enabled && vhlDisplay" cdkDrag
+                [cdkDragFreeDragPosition]="dragPosition"
                 (cdkDragEnded)="dragEnded($event)"
-                [ngStyle]="{
-                  transform: 'translate3d('+dragPosition.x+'px, '+dragPosition.y+'px, 0px)'
-                }"
-></oms-vhl-status>-->
+></oms-vhl-status>

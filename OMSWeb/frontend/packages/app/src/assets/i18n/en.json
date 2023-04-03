@@ -180,6 +180,7 @@
     "showCpss": "CPSs",
     "showFireshutters": "Fireshutters",
     "showMtls": "MTLs",
+    "showVhlStatus": "VHL Status",
     "showOverlaps": "Overlapping Objects",
     "hostCommandEnable": "Host Command Enable",
     "hostCommandDisable": "Host Command Disable",

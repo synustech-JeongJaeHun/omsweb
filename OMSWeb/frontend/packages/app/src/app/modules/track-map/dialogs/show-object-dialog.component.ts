@@ -31,4 +31,12 @@ export class ShowObjectDialogComponent {
     this.trackSettingService.rotationChanged.emit(event.value);
     this.update({ key: 'rotation', value: event.value });
   }
+
+  public changeVhlStatusVisible(event) {
+    this.trackSettingService.vhlStatusChanged.emit(event.checked);
+    this.update({
+      key: 'isVhlStatusVisible',
+      value: event.checked
+    });
+  }
 }

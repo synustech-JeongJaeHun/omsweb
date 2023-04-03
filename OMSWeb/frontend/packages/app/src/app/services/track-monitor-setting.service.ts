@@ -30,6 +30,7 @@ type VisibilityChangedEvent = {
 		| 'isMtlVisible'
 		| 'isOverlappingObjectsVisible'
     | 'isVHLArrowVisible'
+    | 'isVhlStatusVisible'
 	value: boolean
 }
 type ColorChangedEvent = {
@@ -137,6 +138,7 @@ const DefaultTrackMonitorSetting: TrackMonitorSetting = {
 	isMtlVisible: true,
 	isOverlappingObjectsVisible: true,
   isVHLArrowVisible: false,
+  isVhlStatusVisible: false,
 
 	// color
 	homeBackgroundColor: 'rgba(255, 255, 255, 1)',
@@ -182,6 +184,7 @@ const DefaultTrackMonitorSetting: TrackMonitorSetting = {
 // use arrow function for prevent dynamic context changing
 export class TrackMonitorSettingService {
 	@Output() rotationChanged = new EventEmitter<number>()
+  @Output() vhlStatusChanged = new EventEmitter<boolean>()
 
 	public trackSetting: TrackMonitorSetting = deepCopy(
 		DefaultTrackMonitorSetting,

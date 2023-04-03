@@ -7,7 +7,8 @@ import { Dto } from '../../../models/dto/track.model'
 import { ViewModes } from '../../../models/enums'
 import { IPreferences } from '../../../models/settings.model'
 import { AuthService } from '../../../services/auth.service'
-import {CdkDragEnd} from "@angular/cdk/drag-drop";
+import {CdkDragEnd, CdkDragMove} from "@angular/cdk/drag-drop";
+import {TrackMonitorSettingService} from "@oms/services/track-monitor-setting.service";
 
 @Component({
 	selector: 'oms-monitor-status',
@@ -58,6 +59,8 @@ export class MonitorStatusComponent implements OnInit {
 	trackData: Dto.ITrackData
 
   enabled = false
+  vhlDisplay = true
+
 	findEvent = new EventEmitter<{ type: string; id: number }>()
 	focusEvent = new EventEmitter<{
 		type: string
@@ -75,6 +78,7 @@ export class MonitorStatusComponent implements OnInit {
 		private settingSvc: SettingsService,
 		private trackStatusService: TrackStatusService,
 		systemStatusService: SystemStatusService,
+    private trackMonitorSettingService: TrackMonitorSettingService,
 	) {
 		this.viewMode = this.auth.isAuthenticated
 			? ViewModes.viewer
@@ -97,6 +101,12 @@ export class MonitorStatusComponent implements OnInit {
     this.settingSvc.serviceConfig.subscribe(cfg => {
       this.enabled = cfg.kpiEnabled;
     })
+
+    this.vhlDisplay = this.trackMonitorSettingService.trackSetting.isVhlStatusVisible
+    this.trackMonitorSettingService.vhlStatusChanged.subscribe((checked) =>{
+      this.vhlDisplay = checked
+      this.resetVhlStatus()
+    })
 	}
 
 	ngOnInit() {
@@ -115,12 +125,17 @@ export class MonitorStatusComponent implements OnInit {
 	handleDropFocus = (event: { focusType?: string }) => {
 		this.dropFocusEvent.emit(event)
 	}
-
   dragPosition = {x: 0, y: 0}
 
   dragEnded($event: CdkDragEnd) {
-    const { x, y } = $event.distance;
-    this.settingSvc.globalPreferences.map.vhlStatusPos = {x, y}
+    this.settingSvc.globalPreferences.map.vhlStatusPos = $event.source.getFreeDragPosition()
     this.settingSvc.globalPreferences.save()
   }
+
+  resetVhlStatus(){
+    this.dragPosition = {x: 0, y: 0}
+    this.settingSvc.globalPreferences.map.vhlStatusPos =this.dragPosition
+    this.settingSvc.globalPreferences.save()
+  }
+
 }

@@ -180,6 +180,7 @@
     "showCpss": "CPSs",
     "showFireshutters": "Fireshutters",
     "showMtls": "MTLs",
+    "showVhlStatus": "VHL 地位",
     "showOverlaps": "重叠对象",
     "hostCommandEnable": "主机订单启用",
     "hostCommandDisable": "主机订单禁用",

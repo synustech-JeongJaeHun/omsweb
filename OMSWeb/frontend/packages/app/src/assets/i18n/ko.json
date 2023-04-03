@@ -180,6 +180,7 @@
     "showCpss": "CPS",
     "showFireshutters": "방화벽",
     "showMtls": "MTL",
+    "showVhlStatus": "VHL 상태창",
     "showOverlaps": "개체 겹침",
     "hostCommandEnable": "호스트 명령 활성화",
     "hostCommandDisable": "호스트 명령 비활성화",
