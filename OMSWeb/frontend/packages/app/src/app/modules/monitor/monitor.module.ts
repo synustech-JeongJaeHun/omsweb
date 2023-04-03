@@ -29,12 +29,12 @@ import { KpiModule } from '../kpi/kpi.module'
 		ZcuControlTableComponent,
 		CpsControlTableComponent,
 	],
-	imports: [
-		CommonModule,
-		MonitorRoutingModule,
-		SharedModule,
-		TrackMapModule,
-		KpiModule,
-	],
+    imports: [
+        CommonModule,
+        MonitorRoutingModule,
+        SharedModule,
+        TrackMapModule,
+        KpiModule,
+    ],
 })
 export class MonitorModule {}

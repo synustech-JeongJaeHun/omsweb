@@ -48,6 +48,8 @@ export class MapConfig {
 	mapRotation?: number = 0
 	segmentWidth?: number = 2
 	segmentDirectionSize? = 5
+
+  vhlStatusPos? = {x:0, y:0}
 }
 
 export class ThemeConfig {
