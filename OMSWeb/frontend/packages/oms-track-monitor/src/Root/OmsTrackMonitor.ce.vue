@@ -272,6 +272,12 @@ defineExpose(exposed)
     );
 }
 
+#station-layer .station[data-state='1' i] .station-path {
+  stroke: #87CEEB
+}
+#station-layer .station[data-state='2' i] .station-path {
+  stroke: #FFB2FF
+}
 #station-layer .station[data-disabled='true' i] .station-path {
   stroke: v-bind('parseStringProp(ColorDefault.stationDisabled, props.stationDisabledColor)'
     );
@@ -280,6 +286,13 @@ defineExpose(exposed)
 #buffer-layer .buffer .buffer-path {
   stroke: v-bind('parseStringProp(ColorDefault.buffer, props.bufferColor)'
     );
+}
+
+#buffer-layer .buffer[data-state='1' i] .buffer-path {
+  stroke: #87CEEB
+}
+#buffer-layer .buffer[data-state='2' i] .buffer-path {
+  stroke: #FFB2FF
 }
 
 #buffer-layer .buffer[data-disabled='true' i] .buffer-path {

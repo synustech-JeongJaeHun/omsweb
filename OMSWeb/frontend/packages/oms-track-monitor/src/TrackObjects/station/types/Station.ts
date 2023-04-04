@@ -12,6 +12,7 @@ type Station = {
   offset: number
 
   unuse?: boolean
+  state?: number
 
   group?: number
   carrierType?: string

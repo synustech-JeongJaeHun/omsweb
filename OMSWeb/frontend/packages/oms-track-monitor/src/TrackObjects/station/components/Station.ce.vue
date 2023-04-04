@@ -30,6 +30,7 @@ const group = useGroup('station', toRef(props.station, 'id'))
       :x="position.x"
       :y="position.y"
       :data-disabled="props.station.unuse"
+      :data-state="props.station.state"
       :data-carrier-focused="props.station.isCarrierFocused"
     >
       <g class="scale-and-reverse-rotate">
