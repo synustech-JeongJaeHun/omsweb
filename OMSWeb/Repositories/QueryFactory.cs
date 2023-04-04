@@ -138,7 +138,7 @@ namespace OMSWeb.Repositories
       "},
       {"station", @"
         SELECT id AS id, physical_id AS physical_id, logical_id AS logical_id, point AS point_id,
-          direction AS direction, carrier_type AS carrier_type, next_point, ""offset"" AS offset, unuse, carrier_id, c_alias,
+          direction AS direction, carrier_type AS carrier_type, next_point, ""offset"" AS offset, unuse, state, carrier_id, c_alias,
           stations.slide_offset, 
           stations.user, stations.note
         FROM stations
@@ -146,7 +146,7 @@ namespace OMSWeb.Repositories
       "},
       {"buffer", @"
         SELECT id, physical_id, logical_id AS logical_id, point AS point_id,
-          direction AS direction, next_point, ""offset"" AS offset, unuse, carrier_id, c_alias,
+          direction AS direction, next_point, ""offset"" AS offset, unuse, state, carrier_id, c_alias,
           buffers.slide_offset, 
           buffers.user, buffers.note
         FROM buffers
@@ -457,7 +457,7 @@ namespace OMSWeb.Repositories
       ) AS WRAPPED_TABLE
       "},
       {"stationStatus", @"
-        SELECT SS.id, SS.physical_id, SS.logical_id, SS.point, SS.direction, SS.next_point, SS.""offset"", SS.unuse, SS.carrier_id, 
+        SELECT SS.id, SS.physical_id, SS.logical_id, SS.point, SS.direction, SS.next_point, SS.""offset"", SS.unuse, SS.state, SS.carrier_id, 
                 SS.slide_offset, SS.user, SS.note, GO.group_id, SS.c_alias
         FROM stations AS SS
             LEFT JOIN grouped_objects AS GO
@@ -465,7 +465,7 @@ namespace OMSWeb.Repositories
         --*user_id_condition*-- AND user_id = @userId
       "},
       {"bufferStatus", @"
-        SELECT BS.id, BS.physical_id, BS.logical_id, BS.point, BS.direction, BS.next_point, BS.""offset"", BS.unuse, BS.carrier_id, 
+        SELECT BS.id, BS.physical_id, BS.logical_id, BS.point, BS.direction, BS.next_point, BS.""offset"", BS.unuse, BS.state, BS.carrier_id, 
         BS.slide_offset, BS.user, BS.note, GO.group_id, BS.c_alias
         FROM buffers AS BS
             LEFT JOIN grouped_objects AS GO

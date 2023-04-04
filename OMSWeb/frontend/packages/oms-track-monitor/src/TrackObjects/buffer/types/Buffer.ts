@@ -12,6 +12,7 @@ type Buffer = {
   offset: number
 
   unuse?: boolean
+  state?: number
   carrierId?: boolean
 
   // nullable

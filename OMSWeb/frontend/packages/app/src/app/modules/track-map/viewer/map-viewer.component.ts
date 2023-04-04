@@ -373,6 +373,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 					this.viewer.updateStation(e.operation, {
 						id: e.id,
 						unuse: e.unuse,
+            state: e?.data.state,
 						user: e?.user,
 						note: e?.note,
             cAlias: e?.data.cAlias
@@ -385,6 +386,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 					this.viewer.updateBuffer(e.operation, {
 						id: e.id,
 						unuse: e.unuse,
+            state: e?.data.state,
 						carrierId: e.carrierId,
 						user: e?.user,
 						note: e?.note,

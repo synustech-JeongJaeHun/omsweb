@@ -169,6 +169,7 @@ namespace OMSWeb.Repositories
                                 NextPoint = dr["next_point"].TryIntegerOrNull(),
                                 Offset = dr["offset"].TryIntegerOrNull(),
                                 Unuse = dr["unuse"].TryBooleanOrNull(),
+                                State = dr["state"].TryIntegerOrNull(),
                                 User = dr["user"].TryString(),
                                 Note = dr["note"].TryString(),
                                 CAlias = dr["c_alias"].TryString()
@@ -212,6 +213,7 @@ namespace OMSWeb.Repositories
                                     NextPoint = dr["next_point"].TryIntegerOrNull(),
                                     Offset = dr["offset"].TryIntegerOrNull(),
                                     Unuse = dr["unuse"].TryBooleanOrNull(),
+                                    State = dr["state"].TryIntegerOrNull(),
                                     CarrierId = dr["carrier_id"].TryString(),
                                     User = dr["user"].TryString(),
                                     Note = dr["note"].TryString(),

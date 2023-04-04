@@ -30,6 +30,7 @@ const group = useGroup('buffer', toRef(props.buffer, 'id'))
       :x="position.x"
       :y="position.y"
       :data-disabled="props.buffer.unuse"
+      :data-state="props.buffer.state"
       :data-carrier-focused="props.buffer.isCarrierFocused"
     >
       <g class="scale-and-reverse-rotate">
