@@ -150,8 +150,7 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
         this.showAlarmsView(true);  // show
 
         if (this._alarmDlg?.componentInstance)
-          this._alarmDlg.componentInstance.dataSource = this.notifySvc.alarmsDataSource();
-
+          this._alarmDlg.componentInstance.dataSource.reload()
       }
       else {
         setTimeout(() => {
@@ -171,7 +170,7 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
         this.showAlertView(true); // show
 
         if (this._alertDlg?.componentInstance)
-          this._alertDlg.componentInstance.dataSource = this.notifySvc.alertsDataSource();
+          this._alertDlg.componentInstance.dataSource.reload()
       }
       else {
         setTimeout(() => {
