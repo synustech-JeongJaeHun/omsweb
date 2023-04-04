@@ -21,8 +21,14 @@ function onMouseover(event: MouseEvent) {
     event,
   })
 }
-function onMouseleave() {
-  emit('mouseleaveOnObject')
+let clientX: number
+let clientY: number
+function onMouseleave(event: MouseEvent) {
+  if(clientX !== event.clientX || clientY !== event.clientY){
+    emit('mouseleaveOnObject')
+    clientX = event.clientX
+    clientY = event.clientY
+  }
 }
 </script>
 
