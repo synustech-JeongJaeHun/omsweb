@@ -125,8 +125,7 @@ function getUpdateType(
 ): UpdateType {
   if (
     isInitialize(vehicle) ||
-    isNotConnected(vehicle, updateData) ||
-    isNoDiff(vehicle, updateData)
+    isNotConnected(vehicle, updateData)
   )
     return 'NoAnimation'
   else if (isDiffInSameSegment(vehicle, updateData))
@@ -137,10 +136,8 @@ function isInitialize(vehicle: Vehicle) {
   return vehicle.lastUpdated === undefined
 }
 function isNotConnected(vehicle: Vehicle, updateData: UpdateDto.Vehicle) {
-  return (
-    (vehicle.curPoint === updateData.curPoint ||
-      vehicle.nextPoint === updateData.curPoint) === false
-  )
+  return !(vehicle.curPoint === updateData.curPoint ||
+    vehicle.nextPoint === updateData.curPoint)
 }
 function isNoDiff(vehicle: Vehicle, updateData: UpdateDto.Vehicle) {
   return (

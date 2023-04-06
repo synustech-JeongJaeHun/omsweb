@@ -9,6 +9,7 @@ import {TranslateService} from "@ngx-translate/core";
 import {Subject} from "rxjs";
 import {takeUntil} from "rxjs/operators";
 import {HubService} from "@oms/services/hub.service";
+import {SystemsService} from "@oms/services/systems.service";
 
 @Component({
   selector: 'oms-gnb',
@@ -20,6 +21,8 @@ export class GnbComponent implements OnInit {
   titleText: string = 'OMS';
   private destroy$: Subject<void> = new Subject<void>()
 
+  isOpen =false;
+
   get showVersion(): boolean {
     return this.settingSvc.globalPreferences.toggles.showOmsVersion;
   }
@@ -30,6 +33,8 @@ export class GnbComponent implements OnInit {
               private dialogSvc: DialogService,
               private t$: TranslateService,
               private hubSvc: HubService,
+
+              private systemSvc: SystemsService
               ) { }
 
   ngOnInit(): void {
@@ -46,19 +51,34 @@ export class GnbComponent implements OnInit {
 
     this.hubSvc.mapUpdateStatus$.pipe(takeUntil(this.destroy$)).subscribe((e) => {
       if (e.operation === 'INSERT' || e.operation === 'UPDATE'){
-        this.dialogSvc
-          .confirm({ body: this.t$.instant('messages.reload') })
-          .subscribe((ok) => {
-            if (ok) {
-              window.location.reload()
-            }
-          });
+        if(!this.isOpen){
+          this.isOpen = true
+          this.dialogSvc
+            .confirm({ body: this.t$.instant('messages.reload') })
+            .subscribe((ok) => {
+              if (ok) {
+                window.location.reload()
+              }
+              this.isOpen =false
+            });
+        }
+
       }
     })
+
+    this.getVersion()
   }
 
   ngOnDestroy(): void {
     this.destroy$.next()
     this.destroy$.complete()
   }
+
+  getVersion() {
+    this.systemSvc.moduleStatus().subscribe((res) => {
+      const omsSrv = res.find(v=>v.id===1);
+      if(omsSrv) this.version = omsSrv.version
+    });
+  }
+
 }

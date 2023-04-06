@@ -60,7 +60,8 @@ const group = useGroup('buffer', toRef(props.buffer, 'id'))
         <circle
           v-if="props.buffer.carrierId"
           :data-id="props.buffer.id"
-          class="buffer-full"
+          :class="props.buffer.carrierId && 'buffer-full'"
+          :fill="!props.buffer.carrierId &&'transparent'"
           r="8"
           @click.left="handleLeftClick"
           @click.right="handleRightClick"
