@@ -26,7 +26,7 @@ export class LegendDialogComponent {
     private trackMonitorSettingService: TrackMonitorSettingService,
     private settingSvc: SettingsService) {
     settingSvc.serviceConfig.subscribe(
-      (config) => (this.fireSensor = config.fireSensor, console.log(this.fireSensor))
+      (config) => (this.fireSensor = config.fireSensor)
     )
   }
 }

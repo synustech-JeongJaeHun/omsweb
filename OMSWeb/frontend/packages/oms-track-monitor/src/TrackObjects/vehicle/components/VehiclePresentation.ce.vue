@@ -99,7 +99,8 @@ const emit = defineEmits<{
 
       <!-- cargo state start -->
       <!-- 1. Loading  -->
-      <VehicleCargoLoadingSvg v-if="props.cargoState === 'L'" width="15" height="15" x="-7.5" y="-7.5" />
+      <VehicleCargoLoadingSvg v-if="props.cargoState === 'L'" width="15" height="15" x="-7.5" y="-7.5" 
+      />
       <!-- 2. Full  -->
       <VehicleCargoFullSvg v-else-if="props.cargoState === 'F'" width="15" height="15" x="-7.5" y="-7.5" />
       <!-- 3. Unloading -->
@@ -111,6 +112,11 @@ const emit = defineEmits<{
       <!-- 6. Fire Emergency-->
       <VehicleStateFireDot v-if="props.fireSensor" width="15" height="15" x="-7.5" y="-7.5" />
       <!-- cargo state end -->
+
+      <circle r="8" fill="transparent"
+              @click.left="emit('leftclick')" @click.right="emit('rightclick', $event)" @mouseover="emit('mouseover', $event)"
+              @mouseout=mouseleave @mouseleave=mouseleave
+      />
 
       <!-- Text fields START -->
       <!-- https://stackoverflow.com/questions/442164/how-to-get-an-outline-effect-on-text-in-svg -->

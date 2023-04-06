@@ -260,6 +260,7 @@
     "rebalance": "Rebalance",
     "ivr": "IVR",
     "home": "Home",
+    "push": "Push",
     "line": "Line",
     "homeMode": "Home Mode",
     "chainManualCommandDisabled": "Chain Manual Command Disabled",
