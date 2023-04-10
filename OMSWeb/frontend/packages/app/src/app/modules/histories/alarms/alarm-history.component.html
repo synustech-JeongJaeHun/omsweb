@@ -1,25 +1,5 @@
 <div id="history-page">
 	<div id="filter-area">
-		<!-- <dx-select-box
-      [items]="VehicleListAll"
-      [placeholder]="'_VEHICLE' | translate"
-      [dataSource]="VehicleListAll"
-      displayExpr="OnlineName"
-      valueExpr="Id"
-      [searchEnabled]="true"
-      [showClearButton]="true"
-      #vehicle
-    ></dx-select-box>
-    <dx-select-box
-      [items]="AlarmcodeListAll"
-      [placeholder]="'_ALARMCODE' | translate"
-      [dataSource]="AlarmcodeListAll"
-      displayExpr="_id"
-      valueExpr="_id"
-      [searchEnabled]="true"
-      [showClearButton]="true"
-      #alarmcode
-    ></dx-select-box> -->
 		<dx-date-box
 			[placeholder]="'_START_DATE' | translate"
 			type="datetime"
@@ -52,6 +32,10 @@
 			</button>
 			<label> {{ searchTime }}</label>
 		</div>
+    <div id="playback-area">
+      <dx-button icon="video" text="Play Back" (onClick)="playBack()"
+      ></dx-button>
+    </div>
 	</div>
 	<div id="grid-container">
 		<dx-data-grid
@@ -63,8 +47,15 @@
 			[showBorders]="true"
 			[hoverStateEnabled]="true"
 			allowColumnResizing="true"
+      (onContextMenuPreparing)="onContextMenuPreparing($event)"
+      (onCellClick)="cellSelected($event)"
 			[stateStoring]="stateStoring"
 		>
+      <dxo-selection
+        selectAllMode="allPages"
+        [allowSelectAll]="false"
+        showCheckBoxesMode="onClick"
+        mode="multiple"></dxo-selection>
 			<dxo-export [enabled]="true" [fileName]="fileName"></dxo-export>
 			<dxo-paging [pageSize]="50"></dxo-paging>
 			<dxo-pager

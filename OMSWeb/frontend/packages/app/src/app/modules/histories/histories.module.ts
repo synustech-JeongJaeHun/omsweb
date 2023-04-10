@@ -8,6 +8,7 @@ import { AlarmHistoryComponent } from './alarms/alarm-history.component'
 import { SharedModule } from '../shared/shared.module'
 import { WarningHistoryComponent } from './warnings/warning-history.component'
 import { NackHistoryComponent } from './nack/nack-history.component'
+import {DxContextMenuModule} from "devextreme-angular";
 
 @NgModule({
 	declarations: [
@@ -18,6 +19,6 @@ import { NackHistoryComponent } from './nack/nack-history.component'
 		WarningHistoryComponent,
 		NackHistoryComponent,
 	],
-	imports: [CommonModule, HistoriesRoutingModule, SharedModule],
+    imports: [CommonModule, HistoriesRoutingModule, SharedModule, DxContextMenuModule],
 })
 export class HistoriesModule {}

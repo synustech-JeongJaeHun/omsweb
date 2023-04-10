@@ -6,6 +6,7 @@ import DataSource from 'devextreme/data/data_source'
 import { HistoriesService } from '../../../services/histories.service'
 import { TrackIdService } from '../../../services/track-id.service'
 import { DateUtil } from '../../shared/utils/date.util'
+import {Router} from "@angular/router";
 
 @Component({
 	selector: 'oms-alarm-history',
@@ -27,7 +28,7 @@ import { DateUtil } from '../../shared/utils/date.util'
 			#filter-area {
 				padding: 4px 10px;
 				display: grid;
-				grid-template-columns: 210px 10px 210px 170px;
+        grid-template-columns: 210px 10px 210px 1fr 1fr;
 				justify-items: flex-start;
 				align-items: center;
 				gap: 4px;
@@ -55,6 +56,18 @@ import { DateUtil } from '../../shared/utils/date.util'
 
 			#filter-area .dx-datebox {
 			}
+
+      #playback-area {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-direction: row-reverse;
+        width: 100%;
+      }
+      #playback-area button {
+        justify-self: normal;
+        align-self: normal;
+      }
 		`,
 	],
 })
@@ -133,6 +146,8 @@ export class AlarmHistoryComponent implements OnInit {
 		private svc: HistoriesService,
 		private idSvc: TrackIdService,
 		private settingSvc: SettingsService,
+
+    private router: Router
 	) {
 		window.onresize = this.getGridSize.bind(this)
 		// this.idSvc.loadIds().subscribe(() => {
@@ -245,4 +260,35 @@ export class AlarmHistoryComponent implements OnInit {
 		var today = new Date(Date.now() - offset)
 		this.fileName = today.toISOString() + '-alarm_history'
 	}
+
+  cellSelected(e){
+    this.dataGrid.instance.deselectAll()
+    this.dataGrid.instance.selectRowsByIndexes(e.rowIndex)
+  }
+
+  onContextMenuPreparing(e) {
+    let items = [];
+    const selectedItems = e.component.getSelectedRowKeys();
+
+    if (selectedItems.length === 0) {
+      return ;
+    } else {
+      items = [
+        {
+          text: "Play Back",
+          icon: 'video',
+          onClick: () => {
+            this.playBack();
+          }
+        }
+      ];
+    }
+    e.items = items;
+  }
+
+  playBack(){
+    const data = this.dataGrid.instance.getSelectedRowsData()[0];
+    if(!data.time) return;
+    this.router.navigate(['/playback'],{queryParams: {selected: JSON.stringify(data.time)}}).then()
+  }
 }
