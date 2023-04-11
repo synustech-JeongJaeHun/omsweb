@@ -276,11 +276,6 @@ namespace OMSWeb.Services.MqttClient
             return ORIGIN_LOCAL_ORDER;
         }
 
-        public object GetOrderOriginDetails(CommandMessageDto command)
-        {
-            return ORIGIN_DETAILS;
-        }
-
         public object GetAlarmErrorCode(CommandMessageDto command)
         {
             return command.AlarmCode;
@@ -489,7 +484,6 @@ namespace OMSWeb.Services.MqttClient
                     if (command.OrderOrigin == null)
                     {
                         data["order_origin"] = GetOrderOrigin(command);
-                        data["order_origin_details"] = GetOrderOriginDetails(command);
 
                         data["user"] = GetUser(command);
                         data["note"] = GetNote(command);
@@ -741,6 +735,7 @@ namespace OMSWeb.Services.MqttClient
                 }
 
                 data["origin"] = ORIGIN_OMS;    // oms
+                data["origin_details"] = ORIGIN_DETAILS;    // UI
 
                 if (command.LocationPickup != null && command.LocationDropoff != null)
                     Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: Manual Transfer - fromto");
@@ -757,6 +752,7 @@ namespace OMSWeb.Services.MqttClient
                 if (command.LocationDropoff != null)    data["dest_port"] = command.LocationDropoff;
                 if (command.Priority != null)           data["priority"] = command.Priority;
                 data["origin"] = ORIGIN_OMS;    // oms
+                data["origin_details"] = ORIGIN_DETAILS;    // UI
 
                 Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: update");
             }
@@ -766,6 +762,7 @@ namespace OMSWeb.Services.MqttClient
                 if (command.OrderId != null)          data["order_id"] = command.OrderId;
 
                 data["origin"] = ORIGIN_OMS;    // oms
+                data["origin_details"] = ORIGIN_DETAILS;    // UI
 
                 if      (command.Action == ACTION_A) Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: abort");
                 else if (command.Action == ACTION_C) Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: cancel");
@@ -779,7 +776,8 @@ namespace OMSWeb.Services.MqttClient
 
                 data["carrier_loc"] = command.CarrierLoc == null ? string.Empty : command.CarrierLoc;
                 data["origin"] = ORIGIN_OMS;    // oms
-                
+                data["origin_details"] = ORIGIN_DETAILS;    // UI
+
                 Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: Manual Transfer - scan");
             }
 
