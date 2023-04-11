@@ -70,7 +70,7 @@
 								 [displayFormat]="dateTimeFormat"
 								 #endDate></dx-date-box>
 		<div id="search-area">
-			<button mat-raised-button 
+			<button mat-raised-button
 							color="primary"
 							(click)="search(startDate.value, endDate.value)">
 				{{ 'names.search' | translate }}
@@ -183,6 +183,20 @@
 									dataField="locationMove"
 									[caption]="'names.locationMove' | translate"
 									[customizeText]="transformLocationId"></dxi-column>
+      <dxi-column [visible]="canDisplayTable('transfers_from_distance')"
+                  [visibleIndex]="getDisplayTableColumnIndex('transfers_from_distance')"
+                  [width]="getDisplayTableColumnWidth('transfers_from_distance')"
+                  dataType="number"
+                  dataField="fromDistance"
+                  cellTemplate="distanceTemplate"
+                  [caption]="'names.fromDistance' | translate"></dxi-column>
+      <dxi-column [visible]="canDisplayTable('transfers_to_distance')"
+                  [visibleIndex]="getDisplayTableColumnIndex('transfers_to_distance')"
+                  [width]="getDisplayTableColumnWidth('transfers_to_distance')"
+                  dataType="number"
+                  dataField="toDistance"
+                  cellTemplate="distanceTemplate"
+                  [caption]="'names.toDistance' | translate"></dxi-column>
 			<dxi-column [visible]="canDisplayTable('transfers_carrier_label')"
 									[visibleIndex]="getDisplayTableColumnIndex('transfers_carrier_label')"
 									[width]="getDisplayTableColumnWidth('transfers_carrier_label')"
@@ -258,7 +272,7 @@
 									[caption]="'names.unloadRetryCount' | translate">
 			</dxi-column>
 			<div *dxTemplate="let data of 'distanceTemplate'">
-				{{ data.displayValue / 1000 | number }}
+				{{ transform_distance(data.displayValue) }}
 			</div>
 		</dx-data-grid>
 	</div>

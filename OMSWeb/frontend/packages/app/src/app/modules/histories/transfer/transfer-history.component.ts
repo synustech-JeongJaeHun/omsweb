@@ -239,4 +239,14 @@ export class TransferHistoryComponent implements OnInit, OnDestroy {
 		var today = new Date(Date.now() - offset)
 		this.fileName = today.toISOString() + '-order_history'
 	}
+
+  transform_distance(value: number): string {
+    if (value == undefined) {
+      return ''
+    } else {
+      const distance: number = Math.floor(value / 1000)
+
+      return `${distance}m`
+    }
+  }
 }

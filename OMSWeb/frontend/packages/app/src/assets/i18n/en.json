@@ -540,7 +540,9 @@
     "contents" : "Contents",
     "historyChangeTime" : "Changed Time",
     "historyChangeType" : "Changed Type",
-    "historySourceId" : "Source Id"
+    "historySourceId" : "Source Id",
+    "fromDistance" : "From Distance",
+    "toDistance" : "To Distance"
   },
   "enums": {
     "hostSessionStatus": {
