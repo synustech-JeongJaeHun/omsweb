@@ -375,7 +375,10 @@ namespace OMSWeb.Repositories
       FROM (
         SELECT
         OD.id, 
-        OD.origin,
+        CASE
+            WHEN OD.origin_details IS NOT NULL THEN OD.origin_details
+            ELSE OD.origin 
+        END AS origin,
         OD.logical_id, 
 		CASE
 			WHEN OD.location_pickup LIKE '%s%' THEN	(SELECT logical_Id FROM stations WHERE concat('s', cast(id as varchar)) = OD.location_pickup)
