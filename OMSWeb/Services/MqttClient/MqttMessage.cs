@@ -77,6 +77,7 @@ namespace OMSWeb.Services.MqttClient
         public const string ORIGIN_OMS = "OMS";
         public const string ORIGIN_LOCAL_ORDER = "OMS";
         public const string ORIGIN_HOST_ORDER = "OMS,MCS";
+        public const string ORIGIN_DETAILS = "UI";
 
         public const int DEFAULT_PRIORITY = 30;
 
@@ -273,6 +274,11 @@ namespace OMSWeb.Services.MqttClient
                 return ORIGIN_HOST_ORDER;
 
             return ORIGIN_LOCAL_ORDER;
+        }
+
+        public object GetOrderOriginDetails(CommandMessageDto command)
+        {
+            return ORIGIN_DETAILS;
         }
 
         public object GetAlarmErrorCode(CommandMessageDto command)
@@ -483,6 +489,7 @@ namespace OMSWeb.Services.MqttClient
                     if (command.OrderOrigin == null)
                     {
                         data["order_origin"] = GetOrderOrigin(command);
+                        data["order_origin_details"] = GetOrderOriginDetails(command);
 
                         data["user"] = GetUser(command);
                         data["note"] = GetNote(command);
