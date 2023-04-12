@@ -542,8 +542,8 @@
     "historyChangeTime" : "Changed Time",
     "historyChangeType" : "Changed Type",
     "historySourceId" : "Source Id",
-    "fromDistance" : "From Distance",
-    "toDistance" : "To Distance"
+    "fromDistance" : "From(Distance)",
+    "toDistance" : "To(Distance)"
   },
   "enums": {
     "hostSessionStatus": {

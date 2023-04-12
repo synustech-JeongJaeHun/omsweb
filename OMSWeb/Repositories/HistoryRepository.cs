@@ -183,15 +183,15 @@ namespace OMSWeb.Repositories
                                 select max(vh.distance_total)-min(vh.distance_total)
 	                            from vehicle_history vh 
 	                            where vh.history_source_id  = OD.vehicle_id
-	                            and history_change_time > OD.time_assigned 
-	                            and history_change_time < OD.time_vehicle_arrived 
+	                            and history_change_time >= OD.time_assigned
+		                        and history_change_time <= OD.time_load_started 
 	                        ) as fromDistance 
                             ,(
                                 select max(vh.distance_total)-min(vh.distance_total)
 	                            from vehicle_history vh 
 	                            where vh.history_source_id  = OD.vehicle_id
-	                            and history_change_time > OD.time_load_completed
-	                            and history_change_time < OD.time_unload_started 
+	                            and history_change_time >= OD.time_load_completed
+		                        and history_change_time <= OD.time_unload_started 
 	                        ) as toDistance 
                             
 

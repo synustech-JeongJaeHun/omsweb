@@ -506,13 +506,13 @@ const defaultHistoryTable = {
 			i18nLabel: 'names.locationDropoff',
 			width: 120,
 		},
+    { name: 'transfers_from_distance', i18nLabel: 'names.fromDistance', width: 100 },
+    { name: 'transfers_to_distance', i18nLabel: 'names.toDistance', width: 100 },
 		{
 			name: 'transfers_location_move',
 			i18nLabel: 'names.locationMove',
 			width: 120,
 		},
-    { name: 'transfers_from_distance', i18nLabel: 'names.fromDistance', width: 100 },
-    { name: 'transfers_to_distance', i18nLabel: 'names.toDistance', width: 100 },
 		{
 			name: 'transfers_carrier_label',
 			i18nLabel: 'names.carrierLabel',
