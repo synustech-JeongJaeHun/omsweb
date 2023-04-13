@@ -537,9 +537,9 @@ defineExpose(exposed)
 #vehicle-layer .vehicle-symbol .scale-arrow {
   transform: scale(v-bind('scaleInfo.mmPerPixel * scaleStylesInfo.vehicleSize * 1/6'))
 }
-#vehicle-layer .vehicle-symbol .text {
+/*#vehicle-layer .vehicle-symbol .text {
   font-size: scale(v-bind('scaleStylesInfo.vehicleTextSize'))
-}
+}*/
 
 #vehicle-layer .vehicle-symbol[data-carrier-focused~='true' i] .scale-and-reverse-rotate {
   /* transform */

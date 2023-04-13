@@ -15,7 +15,9 @@ import VehicleFocusArrow from '../assets/VehicleFocusArrow.svg?component'
 import {readonlyVhlPosition, readonlyVHLAlias} from "TrackObjects/vehicle/vehicles";
 import VehicleStateFire from '../assets/VehicleStateFire.svg?component'
 import VehicleStateFireDot from '../assets/VehicleStateFireDot.svg?component'
-
+import {
+    scaleStylesInfo,
+  } from '../../../styles/styles'
 
 const props = defineProps<{
   // Vehicle attr
@@ -122,7 +124,7 @@ const emit = defineEmits<{
             class="select-none text" text-rendering="optimizeSpeed" transform="scale(1 -1) translate(-25 -2)"
             text-anchor="end" alignment-baseline="baseline" 
             stroke="white" stroke-width="1px" fill="black"
-            paint-order="stroke">
+            paint-order="stroke" :font-size="scaleStylesInfo.vehicleTextSize">
         {{ readonlyVHLAlias ? readonlyVHLAlias+props.physicalId : props.logicalId }}
       </text>
 
@@ -130,7 +132,7 @@ const emit = defineEmits<{
             class="select-none text" text-rendering="optimizeSpeed" transform="scale(1 -1) translate(-25 -2)"
             text-anchor="middle" x="24" y="-30" alignment-baseline="hanging"
             stroke="white" stroke-width="1px" fill="black" font-weight="bold"
-            paint-order="stroke">
+            paint-order="stroke" :font-size="scaleStylesInfo.vehicleTextSize">
         {{ readonlyVHLAlias ? readonlyVHLAlias+props.physicalId : props.logicalId }}
       </text>
       
