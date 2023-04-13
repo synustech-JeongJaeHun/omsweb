@@ -6,6 +6,7 @@ import { DateUtil } from '@oms/utils/date.util'
 import { DxDataGridComponent } from 'devextreme-angular'
 import { SettingsService } from '@oms/root/services/settings.service'
 import { ClientPreferences } from '@oms/root/models/settings.model'
+import {Router} from "@angular/router";
 
 @Component({
 	selector: 'oms-transfer-history',
@@ -27,7 +28,7 @@ import { ClientPreferences } from '@oms/root/models/settings.model'
 			#filter-area {
 				padding: 4px 10px;
 				display: grid;
-				grid-template-columns: 210px 10px 210px 170px;
+				grid-template-columns: 210px 10px 210px 1fr 1fr;
 				justify-items: flex-start;
 				align-items: center;
 				gap: 4px;
@@ -55,6 +56,18 @@ import { ClientPreferences } from '@oms/root/models/settings.model'
 
 			#filter-area .dx-datebox {
 			}
+
+      #playback-area {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-direction: row-reverse;
+        width: 100%;
+       }
+      #playback-area button {
+        justify-self: normal;
+        align-self: normal;
+      }
 		`,
 	],
 })
@@ -133,6 +146,7 @@ export class TransferHistoryComponent implements OnInit, OnDestroy {
 		private svc: HistoriesService,
 		private idSvc: TrackIdService,
 		private settingSvc: SettingsService,
+    private router: Router
 	) {
 		window.onresize = this.getGridSize.bind(this)
 		// this.idSvc.loadIds().subscribe(() => {
@@ -222,7 +236,7 @@ export class TransferHistoryComponent implements OnInit, OnDestroy {
 		const milisec = String(Math.floor(gap % 1000)).padStart(3, '0') // 밀리
 
 		this.searchTime = hour + ':' + minutes + ':' + second + '.' + milisec
-        console.log('time Transfer history: ' + this.searchTime)
+        //console.log('time Transfer history: ' + this.searchTime)
 
     this.bySearch = false
 	}
@@ -239,4 +253,35 @@ export class TransferHistoryComponent implements OnInit, OnDestroy {
 		var today = new Date(Date.now() - offset)
 		this.fileName = today.toISOString() + '-order_history'
 	}
+
+  cellSelected(e){
+    this.dataGrid.instance.deselectAll()
+    this.dataGrid.instance.selectRowsByIndexes(e.rowIndex)
+  }
+
+  onContextMenuPreparing(e) {
+    let items = [];
+    const selectedItems = e.component.getSelectedRowKeys();
+
+    if (selectedItems.length === 0) {
+      return ;
+    } else {
+      items = [
+        {
+          text: "Play Back",
+          icon: 'video',
+          onClick: () => {
+            this.playBack();
+          }
+        }
+      ];
+    }
+    e.items = items;
+  }
+
+  playBack(){
+    const data = this.dataGrid.instance.getSelectedRowsData()[0];
+    if(!data.timeCreated) return;
+    this.router.navigate(['/playback'],{queryParams: {selected: JSON.stringify(data.timeCreated)}}).then()
+  }
 }

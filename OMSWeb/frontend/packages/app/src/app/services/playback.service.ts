@@ -37,6 +37,11 @@ export class PlaybackService {
 			.pipe(map((res) => res.map((dateAsString) => new Date(dateAsString))))
 	}
 
+  private tomorrow = function (date) {
+    date.setDate(date.getDate() + 1);
+    return date;
+  }(new Date)
+
 	getRecentTrack(before: Date) {
 		return this.http
 			.get<{
@@ -82,7 +87,7 @@ export class PlaybackService {
 			)
 	}
 
-	getVehicleAlarms(from: Date, to: Date = new Date(9999, 1, 1)) {
+	getVehicleAlarms(from: Date, to: Date = this.tomorrow) {
 		return this.http.get<{
 			remainedAlarms: RemainedAlarm[]
 			alarmChanges: AlarmChange[]
@@ -91,7 +96,7 @@ export class PlaybackService {
 		})
 	}
 
-	getHistoryEvents(from: Date, to: Date) {
+	getHistoryEvents(from: Date, to: Date = this.tomorrow) {
 		return this.http.get<HistoryEvent[]>(
 			`${
 				this.baseUrl
