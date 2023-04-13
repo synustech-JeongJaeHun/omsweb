@@ -35,6 +35,11 @@ const dic = {
 		length: 10,
 		rand: [500, 1 / 3],
 	},
+  hours: {
+    label: '',
+    length: 24,
+    rand: [1000, 1]
+  }
 }
 
 const getRandomRound = (rand, digit = 0) => {
@@ -66,7 +71,7 @@ const genItem = (variant, opt = {}) => {
 }
 
 const genList = (pageType) => {
-	const keys = ['duration', 'vehicle', 'source', 'dest']
+	const keys = ['duration', 'vehicle', 'source', 'dest', 'hours']
 	const keys2 = ['duration', 'vehicle', 'alarm', 'point']
 	const _Keys = pageType === 'normaltr' ? keys : keys2
 
@@ -82,7 +87,7 @@ const getNormaltr = ({ variant, pageType = 'normaltr' }: Props) => {
 }
 
 interface Props {
-	variant: 'duration' | 'vehicle' | 'source' | 'dest' | 'alarm' | 'point'
+	variant: 'duration' | 'vehicle' | 'source' | 'dest' | 'alarm' | 'point' | 'hours'
 	pageType?: string
 }
 
