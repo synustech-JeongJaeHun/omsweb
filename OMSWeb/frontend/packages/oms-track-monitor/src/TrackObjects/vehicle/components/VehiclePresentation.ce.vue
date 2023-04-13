@@ -15,7 +15,9 @@ import VehicleFocusArrow from '../assets/VehicleFocusArrow.svg?component'
 import {readonlyVhlPosition, readonlyVHLAlias} from "TrackObjects/vehicle/vehicles";
 import VehicleStateFire from '../assets/VehicleStateFire.svg?component'
 import VehicleStateFireDot from '../assets/VehicleStateFireDot.svg?component'
-
+import {
+    scaleStylesInfo,
+  } from '../../../styles/styles'
 
 const props = defineProps<{
   // Vehicle attr
@@ -125,18 +127,18 @@ const emit = defineEmits<{
 
       <!-- font-weight="bold" -->
       <text v-if="readonlyVhlPosition==='LeftTop'" 
-            class="select-none" text-rendering="optimizeSpeed" transform="scale(1 -1) translate(-25 -2)"
+            class="select-none text" text-rendering="optimizeSpeed" transform="scale(1 -1) translate(-25 -2)"
             text-anchor="end" alignment-baseline="baseline" 
-            font-size="0.8em" stroke="white" stroke-width="1px" fill="black"
-            paint-order="stroke">
+            stroke="white" stroke-width="1px" fill="black"
+            paint-order="stroke" :font-size="scaleStylesInfo.vehicleTextSize">
         {{ readonlyVHLAlias ? readonlyVHLAlias+props.physicalId : props.logicalId }}
       </text>
 
       <text v-if="readonlyVhlPosition==='Top'" 
-            class="select-none" text-rendering="optimizeSpeed" transform="scale(1 -1) translate(-25 -2)"
+            class="select-none text" text-rendering="optimizeSpeed" transform="scale(1 -1) translate(-25 -2)"
             text-anchor="middle" x="24" y="-30" alignment-baseline="hanging"
-            font-size="0.8em" stroke="white" stroke-width="1px" fill="black" font-weight="bold"
-            paint-order="stroke">
+            stroke="white" stroke-width="1px" fill="black" font-weight="bold"
+            paint-order="stroke" :font-size="scaleStylesInfo.vehicleTextSize">
         {{ readonlyVHLAlias ? readonlyVHLAlias+props.physicalId : props.logicalId }}
       </text>
       
@@ -147,7 +149,7 @@ const emit = defineEmits<{
 
         <!-- A: OrderId -->
         <!-- 📐🛑 Be careful! logic is dependent on invert -->
-        <text v-if="readonlyVehicleSecondaryContent === 'order' && props.orderId" class="select-none"
+        <text v-if="readonlyVehicleSecondaryContent === 'order' && props.orderId" class="select-none text"
           text-rendering="optimizeSpeed" transform="scale(1 -1) translate(-25 2)" text-anchor="end"
           alignment-baseline="hanging" :filter="
             props.isHotlot
@@ -162,7 +164,7 @@ const emit = defineEmits<{
 
         <!-- B: CarrierId -->
         <!-- 📐🛑 Be careful! logic is dependent on invert -->
-        <text v-if="readonlyVehicleSecondaryContent === 'carrier' && props.carrierId" class="select-none"
+        <text v-if="readonlyVehicleSecondaryContent === 'carrier' && props.carrierId" class="select-none text"
           text-rendering="optimizeSpeed" font-size="small" transform="scale(1 -1) translate(-25 2)" text-anchor="end"
           alignment-baseline="hanging" :filter="
             props.isHotlot
@@ -184,13 +186,13 @@ const emit = defineEmits<{
 
       <!-- top right (1) -->
       <!-- 1. Sensor Stop -->
-      <text v-if="props.isSensorStopped" class="select-none" x="20" y="12" font-weight="bold"
+      <text v-if="props.isSensorStopped" class="select-none text" x="20" y="12" font-weight="bold"
         style="transform: rotate(180deg) scaleX(-1); transform-origin: 20px 12px;">
         S
       </text>
 
       <!-- 2. Zcu Blocked -->
-      <text v-else-if="props.isZcuBlocked" class="select-none" x="20" y="12" font-weight="bold"
+      <text v-else-if="props.isZcuBlocked" class="select-none text" x="20" y="12" font-weight="bold"
         style="transform: rotate(180deg) scaleX(-1); transform-origin: 20px 12px;">
         Z
       </text>
