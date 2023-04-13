@@ -22,6 +22,7 @@ namespace OMSWeb.Services
                     case "vehicle":
                     case "source":
                     case "dest":
+                    case "slot":
                         return new[] { "vehicle", "source", "dest" };
                     default:
                         return new[] { "vehicle", "source", "dest" };
@@ -111,9 +112,12 @@ namespace OMSWeb.Services
 
             var duration = await queryDuration(section, selectedItem);
             var others = await _reportNormaltrRepository.QuerySections(section, selectedItem, start, end, subfilter);
+            
+            var hours = await _reportNormaltrRepository.QueryHours(section, selectedItem, start, end, subfilter);
 
             var data = new Dictionary<string, dynamic[]>();
             data.Add("duration", duration);
+            data.Add("hours", hours);
             sectionList.Zip(others).ToList().ForEach(tuple => data.Add(tuple.First, tuple.Second));
 
             return data;

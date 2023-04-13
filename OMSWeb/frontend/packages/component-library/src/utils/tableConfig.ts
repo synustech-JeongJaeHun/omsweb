@@ -76,6 +76,25 @@ export const tableConfig = {
 				},
 			],
 		},
+    hours: {
+      keys: ['hours', 'conveyance', 'avgConveyance'],
+      header: [
+        {
+          caption: 'hours',
+          dataField: 'hours',
+        },
+        {
+          caption: 'TR count',
+          dataField: 'conveyance',
+          width: 80,
+        },
+        {
+          caption: 'avg TR time(s)',
+          dataField: 'avgConveyance',
+          width: 115,
+        },
+      ],
+    }
 	},
 	abnormaltr: {
 		duration: {

@@ -9,10 +9,10 @@ import styled from '@emotion/styled'
 import { css } from '@emotion/react'
 import { color } from '@daimre/styles'
 import {
-	numberWithCommas,
-	isFullEmpty,
-	omitArray,
-	bdFormat,
+  numberWithCommas,
+  isFullEmpty,
+  omitArray,
+  bdFormat, beforeDay,
 } from '@daimre/shared'
 import Container from '../../layout/Container'
 import RCol from '../../layout/RCol'
@@ -28,6 +28,9 @@ import { tableConfig } from '../../../utils'
 import { QueryContext } from '../../../context'
 import ContentPaneBody from '../../ContentPaneBody'
 import Scrollable from '../../Scrollable'
+import Barline from "../../charts/Barline";
+import DatePicker from "../../DatePicker";
+import moment from "moment/moment";
 
 type StyleType = {}
 
@@ -50,6 +53,7 @@ const dic = {
 	dest: 'By Dest',
 	alarm: 'By Alarm',
 	point: 'By Point',
+  hours: 'By Times'
 }
 
 const pageDic = {
@@ -72,7 +76,7 @@ const makeTableData = (pageVariant, data) => {
 	return _keys.reduce((acc, key) => {
 		const { header, keys: hKeys } = tc[key]
 		const _data = data[key]
-		acc[key] = {
+    acc[key] = {
 			header,
 			body: _data.map((item) => {
 				return item.reduce((_acc, value, i) => {
@@ -95,7 +99,7 @@ const genConfig = (variant, data, pageVariant) => {
 		return {
 			variant: key,
 			title: `${dic[key]}`,
-			subtext: key !== 'duration' ? '(TOP 6)' : '',
+			subtext: key !== 'duration' || 'hours' ? '(TOP 6)' : '',
 			exportFilename: `${pageVariant}_${key}별`,
 			data: ret[key],
 			limit: 6,
@@ -115,15 +119,36 @@ const genConfig = (variant, data, pageVariant) => {
 			break
 	}
 
+
+  const hourData = data.hours? data.hours.map(h=>{return {vehicleName: h[0], conveyance: h[1], avgConveyance: h[0],}}) : []
+  const hours = {
+    variant: 'hours',
+    title: 'By Times',
+    subtext: '',
+    exportFilename: ``,
+    data: {
+      header: [
+        {caption: '',dataField: 'vehicleName', width: 80},
+        {caption: '', dataField: 'conveyance', width: 80},
+        {caption: '', dataField: 'avgConveyance', width: 115}
+      ],
+      body: hourData
+    },
+    limit: 24,
+  }
+
+
 	return {
 		main: R.head(list),
 		sides: temp,
+    hours,
 	}
 }
 
-const Pane = ({ variant, data, onClick, onZoom, pageVariant }) => {
+const Pane = ({ variant, data, onClick, onZoom, pageVariant, endDay}) => {
 	const config = genConfig(variant, data, pageVariant)
-	const { main, sides } = config
+	const { main, sides, hours } = config
+
 
 	return (
 		<Container gutter={20}>
@@ -141,6 +166,10 @@ const Pane = ({ variant, data, onClick, onZoom, pageVariant }) => {
 					})}
 				</Container>
 			</RCol>
+      <RCol col={10} sm={12} md={12} lg={12}>
+        <h3>{endDay}</h3>
+        <Barline {...hours}/>
+      </RCol>
 		</Container>
 	)
 }
@@ -329,6 +358,7 @@ const TitleBarlineSet: React.FC<Props & any> & any = React.forwardRef(
 												onClick={handleClick}
 												onZoom={handleZoom}
 												pageVariant={pageVariant}
+                        endDay={endDay}
 											/>
 										) : (
 											<DetailChart

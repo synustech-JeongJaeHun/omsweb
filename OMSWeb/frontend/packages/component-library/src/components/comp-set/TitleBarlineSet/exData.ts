@@ -31,6 +31,7 @@ const emptyData = {
 		dest: [],
 		alarm: [],
 		point: [],
+    hours: [],
 	},
 }
 
@@ -64,6 +65,7 @@ export const exEmptyData = {
 			vehicle: [],
 			alarm: [],
 			point: [],
+      hours: []
 		},
 	},
 }
