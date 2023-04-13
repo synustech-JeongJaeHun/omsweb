@@ -6,7 +6,7 @@
     "orders_logicalId": true,
     "orders_priority": true,
     "orders_state": true,
-    "orders_vehicleId": false,
+    "orders_vehicleId": true,
     "orders_locationPickup": false,
     "orders_locationPickupAlias": true,
     "orders_locationDropoff": false,
@@ -435,6 +435,7 @@
   },
   "TrackMonitorSetting" : {
     "vehicleSize": 8,
+    "vehicleTextSize": 12,
     "zcuSize": 4,
     "segmentWidth": 5,
     "lineWidth": 2,
@@ -461,7 +462,7 @@
     "isMtlVisible": true,
     "isOverlappingObjectsVisible": true,
     "isVHLArrowVisible": false,
-    "isVhlStatusVisible": false,
+    "isVhlStatusVisible": true,
     
     "homeBackgroundColor": "rgba(255, 255, 255, 1)",
     "playbackBackgroundColor": "rgba(214, 64, 109, 0.1)",
@@ -484,6 +485,6 @@
     "mtlUnuseColor": "#f98080",
     "mtlUseColor": "grey",
 
-    "vehicleSecondaryContent": "order"
+    "vehicleSecondaryContent": "carrier"
   }
 }
