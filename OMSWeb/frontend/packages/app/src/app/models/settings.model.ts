@@ -29,7 +29,7 @@ export class ServiceConfig {
 
   customSetting: boolean
 
-  isSync: boolean
+  isSilentSync: boolean
 }
 
 export interface ManualTransferFiltersSetting {

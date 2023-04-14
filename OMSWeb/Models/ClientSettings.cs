@@ -25,7 +25,7 @@ namespace OMSWeb.Models
         
         public bool CustomSetting { get; set; }
         
-        public bool IsSync { get; set; }
+        public bool IsSilentSync { get; set; }
         
     }
 }

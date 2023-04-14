@@ -11,11 +11,11 @@ import {SettingsService} from "@oms/services/settings.service";
 })
 export class CustomErrorHandler implements ErrorHandler {
   isOpenDialog: boolean = false
-  isSync: boolean = false
+  isSilentSync: boolean = false
   constructor(private injector: Injector) {
     const settingSvc = this.injector.get<SettingsService>(SettingsService)
     settingSvc.serviceConfig.subscribe((x)=>{
-      this.isSync= x.isSync
+      this.isSilentSync= x.isSilentSync
     })
   }
 
@@ -41,7 +41,7 @@ export class CustomErrorHandler implements ErrorHandler {
         const dialogSvc = this.injector.get<DialogService>(DialogService);
         const hubSvc = this.injector.get<HubService>(HubService);
 
-        if(!this.isSync){
+        if(!this.isSilentSync){
           hubSvc.detachEvents();
           dialogSvc.success({
             title: $t.instant('messages.confirmTitle'),
