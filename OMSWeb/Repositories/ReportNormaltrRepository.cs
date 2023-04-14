@@ -40,7 +40,8 @@ namespace OMSWeb.Repositories
                         from order_completed
                         WHERE time_completed IS NOT NULL AND 
                             time_completed > time_assigned AND 
-                            time_completed::DATE BETWEEN '{start}' AND '{end}' {GetSubfilter(subfilter)} 
+                            time_completed::DATE BETWEEN '{start}' AND '{end}' {GetSubfilter(subfilter)} AND
+                            location_pickup is not null AND location_dropoff is not null
                     ) AS a
                 ";
                 result = await conn.QueryFirstAsync<(int Min, int Max, int Devn, int Avg, int Total)>(sql);
@@ -216,7 +217,7 @@ namespace OMSWeb.Repositories
                                 WHERE time_completed is not null and 
                                     time_completed > time_assigned AND
                                     time_completed::timestamp BETWEEN hours AND (hours+interval '1 hour')
-                                
+                                    AND location_pickup is not null AND location_dropoff is not null
                             ) temp
                         )::int
                         from
