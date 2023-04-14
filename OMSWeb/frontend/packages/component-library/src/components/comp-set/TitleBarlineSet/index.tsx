@@ -149,7 +149,6 @@ const Pane = ({ variant, data, onClick, onZoom, pageVariant, endDay}) => {
 	const config = genConfig(variant, data, pageVariant)
 	const { main, sides, hours } = config
 
-
 	return (
 		<Container gutter={20}>
 			<RCol col={6} sm={12} md={6} lg={6}>
@@ -166,10 +165,13 @@ const Pane = ({ variant, data, onClick, onZoom, pageVariant, endDay}) => {
 					})}
 				</Container>
 			</RCol>
-      <RCol col={10} sm={12} md={12} lg={12}>
-        <h3>{endDay}</h3>
-        <Barline {...hours}/>
-      </RCol>
+      {pageVariant==='normaltr'&&(
+        <RCol col={10} sm={12} md={12} lg={12}>
+          <h3>{endDay}</h3>
+          <Barline {...hours}/>
+        </RCol>)
+      }
+
 		</Container>
 	)
 }
