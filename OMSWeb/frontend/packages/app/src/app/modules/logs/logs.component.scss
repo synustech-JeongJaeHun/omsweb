@@ -1,4 +1,4 @@
-::ng-deep #tabback {
+ #tabback {
   .dx-button {
     margin-left: 10px;
   }
@@ -12,7 +12,7 @@
   }
 }
 
-::ng-deep .form {
+ .form {
   padding: 10px 0 0 10px;
   z-index: 10;
   position: absolute;
@@ -21,12 +21,12 @@
   background: rgba(119, 119, 119, 0.3);
 }
 
-::ng-deep .label {
+ .label {
   margin-bottom: 10px;
   font-size: 16px;
 }
 
-::ng-deep .label:not(:first-child) {
+ .label:not(:first-child) {
   margin-top: 30px;
 }
 
@@ -38,7 +38,7 @@
   left: 60vw;
 }
 
-::ng-deep .indicators {
+ .indicators {
   display: flex;
   align-items: center;
 }
