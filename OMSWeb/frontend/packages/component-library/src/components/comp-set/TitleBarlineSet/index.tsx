@@ -135,6 +135,7 @@ const genConfig = (variant, data, pageVariant) => {
       body: hourData
     },
     limit: 24,
+    labelRotation: 0
   }
 
 
@@ -165,11 +166,11 @@ const Pane = ({ variant, data, onClick, onZoom, pageVariant, endDay}) => {
 					})}
 				</Container>
 			</RCol>
-      {pageVariant==='normaltr'&&(
+      {pageVariant==='normaltr'&&
         <RCol col={10} sm={12} md={12} lg={12}>
           <h3>{endDay}</h3>
           <Barline {...hours}/>
-        </RCol>)
+        </RCol>
       }
 
 		</Container>
