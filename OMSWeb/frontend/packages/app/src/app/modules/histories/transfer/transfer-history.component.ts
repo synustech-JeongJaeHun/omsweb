@@ -281,7 +281,7 @@ export class TransferHistoryComponent implements OnInit, OnDestroy {
 
   playBack(){
     const data = this.dataGrid.instance.getSelectedRowsData()[0];
-    if(!data.timeCreated) return;
+    if(!data?.timeCreated) return;
     this.router.navigate(['/playback'],{queryParams: {selected: JSON.stringify(data.timeCreated)}}).then()
   }
 }
