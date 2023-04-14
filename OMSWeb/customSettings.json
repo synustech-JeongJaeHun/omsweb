@@ -7,9 +7,9 @@
     "orders_priority": true,
     "orders_state": true,
     "orders_vehicleId": true,
-    "orders_locationPickup": false,
+    "orders_locationPickup": true,
     "orders_locationPickupAlias": true,
-    "orders_locationDropoff": false,
+    "orders_locationDropoff": true,
     "orders_locationDropoffAlias": true,
     "orders_locationMove": false,
     "orders_carrierLabel": true,
@@ -42,7 +42,7 @@
       },
       {
         "name": "orders_locationPickupAlias",
-        "i18nLabel": "names.locationPickup",
+        "i18nLabel": "names.locationPickupAlias",
         "width": 140
       },
       {
@@ -52,7 +52,7 @@
       },
       {
         "name": "orders_locationDropoffAlias",
-        "i18nLabel": "names.locationDropoff",
+        "i18nLabel": "names.locationDropoffAlias",
         "width": 140
       },
       {
@@ -269,7 +269,7 @@
     "stations_id": true,
     "stations_alias": true,
     "stations_physicalId": true,
-    "stations_logicalId": false,
+    "stations_logicalId": true,
     "stations_group": true,
     "stations_point": true,
     "stations_direction": true,
@@ -284,9 +284,9 @@
 
     "stations_order": [
       { "name": "stations_id", "i18nLabel": "names.id", "width": 50 },
+      { "name": "stations_logicalId", "i18nLabel": "names.logicalId", "width": 120 },
       { "name": "stations_alias", "i18nLabel": "names.alias", "width": 120 },
       { "name": "stations_physicalId", "i18nLabel": "names.physicalId", "width": 120 },
-      { "name": "stations_logicalId", "i18nLabel": "names.logicalId", "width": 120 },
       { "name": "stations_group", "i18nLabel": "names.group", "width": 60 },
       { "name": "stations_point", "i18nLabel": "names.point", "width": 100 },
       { "name": "stations_direction", "i18nLabel": "names.direction", "width": 100 },
@@ -303,7 +303,7 @@
     "buffers_id": true,
     "buffers_alias": true,
     "buffers_physicalId": true,
-    "buffers_logicalId": false,
+    "buffers_logicalId": true,
     "buffers_group": true,
     "buffers_point": true,
     "buffers_direction": true,
@@ -317,9 +317,9 @@
 
     "buffers_order": [
       { "name": "buffers_id", "i18nLabel": "names.id", "width": 50 },
+      { "name": "buffers_logicalId", "i18nLabel": "names.logicalId", "width": 120 },
       { "name": "buffers_alias", "i18nLabel": "names.alias", "width": 120 },
       { "name": "buffers_physicalId", "i18nLabel": "names.physicalId", "width": 120 },
-      { "name": "buffers_logicalId", "i18nLabel": "names.logicalId", "width": 120 },
       { "name": "buffers_group", "i18nLabel": "names.group", "width": 60 },
       { "name": "buffers_point", "i18nLabel": "names.point", "width": 100 },
       { "name": "buffers_direction", "i18nLabel": "names.direction", "width": 100 },
