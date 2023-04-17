@@ -84,12 +84,12 @@ export const tableConfig = {
           dataField: 'hours',
         },
         {
-          caption: 'TR count',
+          caption: 'count',
           dataField: 'conveyance',
           width: 80,
         },
         {
-          caption: 'avg TR time(s)',
+          caption: 'avg time(s)',
           dataField: 'avgConveyance',
           width: 115,
         },
@@ -265,5 +265,24 @@ export const tableConfig = {
 				},
 			],
 		},
+    hours: {
+      keys: ['hours', 'conveyance', 'avgConveyance'],
+      header: [
+        {
+          caption: 'alarm name',
+          dataField: 'name',
+        },
+        {
+          caption: 'alarm count',
+          dataField: 'alarmNum',
+          width: 80,
+        },
+        {
+          caption: 'avg time(s)',
+          dataField: 'avgConveyance',
+          width: 115,
+        },
+      ],
+    }
 	},
 }
