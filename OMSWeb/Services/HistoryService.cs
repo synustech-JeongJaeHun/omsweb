@@ -368,6 +368,7 @@ namespace OMSWeb.Services
                 if (string.Compare(s, "timeResolved", StringComparison.CurrentCultureIgnoreCase) == 0) return "time_resolved";
                 if (string.Compare(s, "age", StringComparison.CurrentCultureIgnoreCase) == 0) return "age";
                 if (string.Compare(s, "current", StringComparison.CurrentCultureIgnoreCase) == 0) return "current";
+                if (string.Compare(s, "physicalId", StringComparison.CurrentCultureIgnoreCase) == 0) return "physical_id";
             }
             else if (string.Compare(tableName, "warning_history", StringComparison.CurrentCultureIgnoreCase) == 0)
             {
