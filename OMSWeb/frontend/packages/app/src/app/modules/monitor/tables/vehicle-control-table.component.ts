@@ -335,4 +335,42 @@ export class VehicleControlTableComponent implements OnInit, OnDestroy {
 	private visibilitychange() {
 		if (!document.hidden) this.dataSource.reload()
 	}
+
+  onPmClick() {
+    if (!this.canControl) return
+
+    if (this.selectedItems.length > 0) {
+      this.dialogSvc
+        .verify({ body: this.$t.instant('messages.confirmCommand') })
+        .subscribe((res) => {
+          if (res) {
+            const { operator, reason } = res
+            if (this.selectedItems.length > 0) {
+              this.messageSvc
+                .sendVehicleCommand(
+                  {
+                    action: 'set_behavior',
+                    hostOrder: false,
+                    user: operator,
+                    note: reason,
+                  },
+                  this.selectedItems,
+                )
+                .subscribe()
+            }
+          }
+        })
+    }
+  }
+
+  /*resetVehicleMileageTotal(type: string) {
+    this.dialogSvc
+      .confirm({ body: this.$t.instant('messages.confirmCommand') })
+      .subscribe((ok) => {
+        if (ok) {
+          this.messageSvc.sendResetVehicleMileageTotal(type, this.selectedIds)
+            .subscribe()
+        }
+      })
+  }*/
 }

@@ -163,6 +163,8 @@
     "vehicles_user": true,
     "vehicles_note": true,
     "vehicles_pauseState": false,
+    "vehicles_distance": true,
+    "vehicles_runtime": true,
 
     "vehicles_order": [
       { "name": "vehicles_id", "i18nLabel": "names.id", "width": 60 },
@@ -251,6 +253,16 @@
       {
         "name": "vehicles_pauseState",
         "i18nLabel": "names.pauseState",
+        "width": 80
+      },
+      {
+        "name": "vehicles_distance",
+        "i18nLabel": "names.distance",
+        "width": 80
+      },
+      {
+        "name": "vehicles_runtime",
+        "i18nLabel": "names.runtime",
         "width": 80
       },
       {

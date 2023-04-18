@@ -95,6 +95,17 @@
 	>
 		{{ 'names.railOut' | translate }}
 	</button>
+
+  <button
+    *ngIf="hasPermission(permissionEnums.SettingVehicle)"
+    mat-stroked-button
+    color="primary"
+    class="dense"
+    [disabled]="!canControl"
+    (click)="onPmClick()"
+  >
+    PM
+  </button>
 </div>
 
 <dx-data-grid
@@ -430,6 +441,30 @@
     [visible]="canDisplayTable('vehicles_pauseState')"
     [visibleIndex]="getDisplayTableColumnIndex('vehicles_pauseState')"
     [width]="getDisplayTableColumnWidth('vehicles_pauseState')"
+  ></dxi-column>
+  <dxi-column
+    [allowFiltering]="true"
+    dataType="number"
+    dataField="distance"
+    cellTemplate="distanceTotalTemplate"
+    [alignment]="'left'"
+    [allowSorting]="true"
+    [caption]="'names.distance' | translate"
+    [visible]="canDisplayTable('vehicles_distance')"
+    [visibleIndex]="getDisplayTableColumnIndex('vehicles_distance')"
+    [width]="getDisplayTableColumnWidth('vehicles_distance')"
+  ></dxi-column>
+  <dxi-column
+    [allowFiltering]="true"
+    dataType="number"
+    dataField="runtime"
+    cellTemplate="runtimeTotalTemplate"
+    [alignment]="'left'"
+    [allowSorting]="true"
+    [caption]="'names.runtime' | translate"
+    [visible]="canDisplayTable('vehicles_runtime')"
+    [visibleIndex]="getDisplayTableColumnIndex('vehicles_runtime')"
+    [width]="getDisplayTableColumnWidth('vehicles_runtime')"
   ></dxi-column>
 	<!-- MapVersion 추가 -->
 	<div *dxTemplate="let data of 'modeTemplate'">

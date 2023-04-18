@@ -108,6 +108,32 @@
 				dataField="logicalId"
 				[caption]="'names.logicalId' | translate"
 			></dxi-column>
+      <dxi-column
+        [width]="getDisplayTableColumnWidth('vehicles_last_pm_time')"
+        [visible]="canDisplayTable('vehicles_last_pm_time')"
+        [visibleIndex]="getDisplayTableColumnIndex('vehicles_last_pm_time')"
+        [allowFiltering]="true"
+        dataType="datetime"
+        dataField="lastPmTime"
+      ></dxi-column>
+      <dxi-column
+        [width]="getDisplayTableColumnWidth('vehicles_distance')"
+        [visible]="canDisplayTable('vehicles_distance')"
+        [visibleIndex]="getDisplayTableColumnIndex('vehicles_distance')"
+        [allowFiltering]="true"
+        dataType="number"
+        dataField="distance"
+        cellTemplate="distanceTotalTemplate"
+      ></dxi-column>
+      <dxi-column
+        [width]="getDisplayTableColumnWidth('vehicles_runtime')"
+        [visible]="canDisplayTable('vehicles_runtime')"
+        [visibleIndex]="getDisplayTableColumnIndex('vehicles_runtime')"
+        [allowFiltering]="true"
+        dataType="number"
+        dataField="runtime"
+        cellTemplate="runtimeTotalTemplate"
+      ></dxi-column>
 			<dxi-column
 				[width]="getDisplayTableColumnWidth('vehicles_distance_total')"
 				[visible]="canDisplayTable('vehicles_distance_total')"
@@ -128,6 +154,14 @@
 				[caption]="'names.runtimeTotal' | translate"
 				cellTemplate="runtimeTotalTemplate"
 			></dxi-column>
+      <dxi-column
+        [width]="getDisplayTableColumnWidth('vehicles_user')"
+        [visible]="canDisplayTable('vehicles_user')"
+        [visibleIndex]="getDisplayTableColumnIndex('vehicles_user')"
+        [allowFiltering]="true"
+        dataType="string"
+        dataField="user"
+      ></dxi-column>
 			<dxi-column
 				[width]="getDisplayTableColumnWidth('vehicles_empty')"
 				[visible]="canDisplayTable('vehicles_empty')"

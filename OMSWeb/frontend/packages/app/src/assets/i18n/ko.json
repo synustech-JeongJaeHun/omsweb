@@ -541,7 +541,9 @@
     "contents" : "Contents",
     "historyChangeTime" : "Changed Time",
     "historyChangeType" : "Changed Type",
-    "historySourceId" : "Source Id"
+    "historySourceId" : "Source Id",
+    "distance": "거리",
+    "runtime": "실행 시간"
   },
   "enums": {
     "hostSessionStatus": {
