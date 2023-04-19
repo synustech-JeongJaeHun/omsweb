@@ -230,6 +230,41 @@ namespace OMSWeb.Repositories
             var queryTaskList = sectionList.Select(async (key) => await Query(key, section, selectedItem));
             return await Task.WhenAll(queryTaskList);
         }
+        
+        public async Task<dynamic[]> QueryHours(string section, string selectedItem, string start, string end, object subfilter)
+        {
+            var filter = GetFilter(section, start, end);
+            var sectionList = GetSubsection(section);
+
+            async Task<dynamic[]> Query(string subsection = "", string value = "")
+            {
+                dynamic[] result;
+                using (var conn = ConnectTrack())
+                {
+                    var sql = $@"
+                        SELECT
+                        TO_CHAR(hours, 'HH24') as label,
+                        (
+                            SELECT count(*) from (
+                                SELECT
+                                *
+                                from vehicle_alarms
+                                WHERE time::timestamp BETWEEN hours AND (hours+interval '1 hour')
+                                {SubFilter(subsection, value)} {GetSubfilter(subfilter)}
+                            ) temp
+                        )::int
+                        from
+                        generate_series('{end}'::timestamp,('{end}'::timestamp+interval '1 DAY') , '1 HOUR') hours
+                    
+                    ";
+
+                    result = (await conn.QueryAsync(sql)).ToArray();
+                }
+                return result;
+            }
+            
+            return await Query(section, selectedItem);
+        }
 
         private Func<string, string, string> GetFilter(string? section, string start, string end) =>
             (key, value) =>
@@ -327,7 +362,7 @@ namespace OMSWeb.Repositories
                     )
                     ";
                 case "point":
-                    return "current";
+                    return "(SELECT p.physical_id  from points p where p.logical_id = current)";
                 case "vehicle":
                     return $@"
                         (

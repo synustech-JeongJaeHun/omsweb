@@ -187,17 +187,16 @@ const SimpleStatBox: React.FC<Props> & any = ({
 			</Wrapper>
 		)
 	}
-
 	return (
 		<Wrapper isPlaceholder={isPlaceholder}>
 			<div className="left">
-				<div className="box-header">
-					<div className="box-header-title">{title}</div>
-					<div className="box-header-duration">{duration}</div>
-				</div>
+        <div className="box-header" >
+          <div className="box-header-title">{title}</div>
+          <div className="box-header-duration">{duration}</div>
+        </div>
 				<div className="box-body">
-					{value && <span className="box-body-value">{value}</span>}
-					{unit && <span className="box-body-unit">{unit}</span>}
+					{value && <span className="box-body-value" style={title==='Total Alarm' ? {"color": "red"} : {}}>{value}</span>}
+					{unit && <span className="box-body-unit" style={title==='Total Alarm' ? {"color": "red"} : {}}>{unit}</span>}
 				</div>
 			</div>
 			<div className="right">{children}</div>

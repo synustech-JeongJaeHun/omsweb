@@ -218,6 +218,7 @@ namespace OMSWeb.Repositories
                                     time_completed > time_assigned AND
                                     time_completed::timestamp BETWEEN hours AND (hours+interval '1 hour')
                                     AND location_pickup is not null AND location_dropoff is not null
+                                    {SubFilter(subsection, value)} {GetSubfilter(subfilter)}
                             ) temp
                         )::int
                         from
