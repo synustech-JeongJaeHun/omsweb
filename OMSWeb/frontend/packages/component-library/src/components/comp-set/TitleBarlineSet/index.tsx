@@ -31,6 +31,9 @@ import Scrollable from '../../Scrollable'
 import Barline from "../../charts/Barline";
 import DatePicker from "../../DatePicker";
 import moment from "moment/moment";
+import {SingleDatePicker} from "react-dates";
+import exports from "webpack";
+import ABSOLUTE_RESOURCE_PATH = exports.ModuleFilenameHelpers.ABSOLUTE_RESOURCE_PATH;
 
 type StyleType = {}
 
@@ -119,17 +122,29 @@ const genConfig = (variant, data, pageVariant) => {
 			break
 	}
 
+  let field = ''
+  switch (pageVariant){
+    case 'normaltr':
+      field = 'conveyance'
+      break
+    case 'alarm':
+      field = 'alarmNum'
+      break
+    default :
+      field = ''
+  }
 
-  const hourData = data.hours? data.hours.map(h=>{return {vehicleName: h[0], conveyance: h[1], avgConveyance: h[0],}}) : []
+
+  const hourData = data.hours? data.hours.map(h=>{return {vehicleName: h[0], [field]: h[1], avgConveyance: h[0],}}) : []
   const hours = {
     variant: 'hours',
     title: 'By Times',
-    subtext: '',
-    exportFilename: ``,
+    subtext: variant,
+    exportFilename: variant,
     data: {
       header: [
         {caption: '',dataField: 'vehicleName', width: 80},
-        {caption: '', dataField: 'conveyance', width: 80},
+        {caption: '', dataField: field, width: 80},
         {caption: '', dataField: 'avgConveyance', width: 115}
       ],
       body: hourData
@@ -146,7 +161,7 @@ const genConfig = (variant, data, pageVariant) => {
 	}
 }
 
-const Pane = ({ variant, data, onClick, onZoom, pageVariant, endDay}) => {
+const Pane = ({ variant, data, onClick, onZoom, pageVariant, selectDate}) => {
 	const config = genConfig(variant, data, pageVariant)
 	const { main, sides, hours } = config
 
@@ -166,9 +181,10 @@ const Pane = ({ variant, data, onClick, onZoom, pageVariant, endDay}) => {
 					})}
 				</Container>
 			</RCol>
-      {pageVariant==='normaltr'&&
+      {(pageVariant==='normaltr' || pageVariant==='alarm')&&
         <RCol col={10} sm={12} md={12} lg={12}>
-          <h3>{endDay}</h3>
+
+          <h3>{selectDate}</h3>
           <Barline {...hours}/>
         </RCol>
       }
@@ -205,6 +221,7 @@ const TitleBarlineSet: React.FC<Props & any> & any = React.forwardRef(
 			onClickConfig,
 			startDay,
 			endDay,
+      selectDate,
 			beforeRangeValue,
 			beforeRangeUnit,
 		}: Props,
@@ -361,7 +378,7 @@ const TitleBarlineSet: React.FC<Props & any> & any = React.forwardRef(
 												onClick={handleClick}
 												onZoom={handleZoom}
 												pageVariant={pageVariant}
-                        endDay={endDay}
+                        selectDate={selectDate}
 											/>
 										) : (
 											<DetailChart
@@ -397,6 +414,7 @@ TitleBarlineSet.defaultProps = {
 	isChartPlaceholder: false,
 	startDay: bdFormat(1),
 	endDay: bdFormat(0),
+  selectDate: bdFormat(0),
 	beforeRangeValue: 3,
 	beforeRangeUnit: 'months',
 }
@@ -406,6 +424,7 @@ interface Props
 		TitleSetProps,
 		| 'startDay'
 		| 'endDay'
+    | 'selectDate'
 		| 'onDateChange'
 		| 'onClickConfig'
 		| 'beforeRangeValue'

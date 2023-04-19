@@ -61,6 +61,7 @@ const NormalTr: React.FC = () => {
 		layoutValue: '',
 		startStr: bdFormat(7),
 		endStr: bdFormat(0),
+    select: bdFormat(0),
 		beforeRangeValue: 3,
 		...savedValues,
 	})
@@ -134,15 +135,17 @@ const NormalTr: React.FC = () => {
 			state['layoutKey'],
 			state['layoutValue'],
 			state['subfilter'],
+      state['select']
 		],
 		async () => {
-			const { layoutKey, layoutValue, startStr, endStr, subfilter } = state
+			const { layoutKey, layoutValue, startStr, endStr, subfilter, select } = state
 			const ret = await agt.charts({
 				variant: 'normaltr',
 				section: layoutKey,
 				selected_item: layoutValue,
 				start: startStr,
 				end: endStr,
+        select: select,
 				subfilter,
 			})
 			return da.charts(ret.data)
@@ -203,6 +206,7 @@ const NormalTr: React.FC = () => {
 				pageVariant="normaltr"
 				startDay={state['startStr']}
 				endDay={state['endStr']}
+        selectDate={state['select']}
 				stats={stats}
 				data={chartData}
 				onClickItem={handleClickItem}

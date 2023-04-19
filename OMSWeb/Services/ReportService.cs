@@ -163,9 +163,12 @@ namespace OMSWeb.Services
 
             var duration = await queryDuration(section, selectedItem);
             var others = await _reportAlarmRepository.QuerySections(section, selectedItem, start, end, subfilter);
+            
+            var hours = await _reportAlarmRepository.QueryHours(section, selectedItem, start, end, subfilter);
 
             var data = new Dictionary<string, dynamic[]>();
             data.Add("duration", duration);
+            data.Add("hours", hours);
             sectionList.Zip(others).ToList().ForEach(tuple => data.Add(tuple.First, tuple.Second));
 
             return data;

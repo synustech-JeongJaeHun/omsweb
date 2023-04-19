@@ -84,6 +84,8 @@ DatePicker.defaultProps = {
 export interface Props {
 	startDay?: string
 	endDay?: string
+
+  selectDate?: string
 	beforeRangeValue?: number
 	beforeRangeUnit?: 'months' | 'days' | 'years'
 	onDateChangeCB?: (data: any) => void
