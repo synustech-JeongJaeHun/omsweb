@@ -362,7 +362,7 @@ namespace OMSWeb.Repositories
                     )
                     ";
                 case "point":
-                    return "(SELECT p.physical_id  from points p where p.logical_id = current)";
+                    return "(SELECT concat(current::text, ' (', p.physical_id ::text, ')')  from points p where p.logical_id = current)";
                 case "vehicle":
                     return $@"
                         (

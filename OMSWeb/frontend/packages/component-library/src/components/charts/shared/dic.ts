@@ -25,6 +25,7 @@ const dic = {
 				},
 			},
 			opposite: true,
+      allowDecimals: false,
 		},
 	},
 	avgConveyance: {
@@ -47,6 +48,7 @@ const dic = {
 			title: {
 				text: null,
 			},
+      allowDecimals: false,
 		},
 	},
 	alarmNum: {
@@ -72,6 +74,7 @@ const dic = {
 				},
 			},
 			opposite: true,
+      allowDecimals: false,
 		},
 	},
 	avgHour: {
@@ -94,6 +97,7 @@ const dic = {
 			title: {
 				text: null,
 			},
+      allowDecimals: false,
 		},
 	},
 }

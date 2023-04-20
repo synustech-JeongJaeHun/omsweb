@@ -54,11 +54,12 @@ namespace OMSWeb.Repositories
                         union
                         select  
                             current::text as id,
-                            current::text as label,
+                            concat(current::text, ' (', p.physical_id ::text, ')') as label,
                             'point' as section
                         from (
                             select distinct on (current) * from vehicle_alarms
                         ) temp
+                        left join points p on p.logical_id = current
                     ) as temp
                     order by id
                 ";

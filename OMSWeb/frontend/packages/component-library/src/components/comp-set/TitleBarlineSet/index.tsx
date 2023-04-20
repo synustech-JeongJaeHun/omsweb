@@ -378,7 +378,7 @@ const TitleBarlineSet: React.FC<Props & any> & any = React.forwardRef(
 												onClick={handleClick}
 												onZoom={handleZoom}
 												pageVariant={pageVariant}
-                        selectDate={selectDate}
+                        selectDate={endDay}
 											/>
 										) : (
 											<DetailChart
