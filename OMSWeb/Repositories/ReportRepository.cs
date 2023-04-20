@@ -44,7 +44,10 @@ namespace OMSWeb.Repositories
                         union
                         select 
                             error_code::text as id, 
-                            description as label, 
+                            CASE WHEN description IS NOT NULL 
+    	                        THEN description
+    	                        ELSE error_code::text
+	                        END AS label,
                             'alarm' as section 
                         from (
                             select distinct on (error_code) * from vehicle_alarms
