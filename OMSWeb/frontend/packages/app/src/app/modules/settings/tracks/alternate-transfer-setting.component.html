@@ -121,11 +121,11 @@
     type="number"
     name="timeoutForAlternate"
     min="1"
-    max="300"
+    max="3600"
     step="1"
     required
     [(ngModel)]="timeoutForAlternate"
   />
-  ({{ 'names.range' | translate }}: 1 ~ 300)
+  ({{ 'names.range' | translate }}: 1 ~ 3600)
   <br><span style="font-size: 8px; color: red; margin: 0 3em" *ngIf="invalidCheck.timeoutForAlternate"> {{'messages.invalid' | translate:{field: 'range'} }}</span>
 </div>

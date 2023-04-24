@@ -71,7 +71,7 @@ export class AlternateTransferSettingComponent {
     get isUpdated(): boolean {
       this.invalidCheck.timeoutForAlternate =false
       this.invalidCheck.retryCntToSTB= false
-      if(!(this.timeoutForAlternate <=300 && this.timeoutForAlternate >0)) {
+      if(!(this.timeoutForAlternate <=3600 && this.timeoutForAlternate >0)) {
         this.invalidCheck.timeoutForAlternate =true
         return false
       }
