@@ -71,6 +71,8 @@ export const exData = {
 		[
 			['unloading', 80],
 			['loading', 120],
+      ['moving', 80],
+      ['idle', 120],
 		],
 	],
 }
@@ -178,6 +180,8 @@ const makeDonut = (data) => {
 		[
 			['unloading', lu['unloading']],
 			['loading', lu['loading']],
+      ['moving', lu['moving']],
+      ['idle', lu['idle']]
 		],
 	]
 }

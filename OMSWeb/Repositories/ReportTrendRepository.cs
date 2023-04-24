@@ -187,7 +187,7 @@ namespace OMSWeb.Repositories
         //public async Task<(int Unloading, int Loading)> QueryLoadingUnLoading()
         public async Task<object> QueryLoadingUnLoading()
         {
-            (int Unloading, int Loading) result;
+            (int Unloading, int Loading, int moving, int idle) result;
             using (var conn = ConnectTrack())
             {
                 var sql = @"
@@ -195,18 +195,30 @@ namespace OMSWeb.Repositories
                 (
                     select count(*)
                     from vehicles
-                    where cargo_state = 'U' or cargo_state = 'E'
+                    where order_id > 0 and cargo_state = 'U' or order_id > 0 and cargo_state = 'E' and moving_state = 'M' 
+                    and connection in (1, 2) and (error_list = '') IS true and mode = 'A'
                 ) as unloading,
                 (
                     select count(*)
                     from vehicles
-                    where cargo_state = 'L' or cargo_state = 'F'
-                ) as loading
+                    where order_id > 0 and cargo_state = 'L' or order_id > 0 and cargo_state = 'F' and moving_state = 'M'  
+                    and connection in (1, 2) and (error_list = '') IS true and mode = 'A'
+                ) as loading,
+                (
+                    select count(*)
+                    from vehicles
+                    where order_id = 0 and cargo_state = 'E' and moving_state ='M' and connection in (1, 2) and (error_list = '') IS true and mode = 'A'
+                ) as moving,
+                (
+                    select count(*)
+                    from vehicles
+                    where order_id = 0 and moving_state ='S' and connection in (1, 2) and (error_list = '') IS true and mode = 'A'
+                ) as idle
                 ";
 
-                result = await conn.QueryFirstAsync<(int Unloading, int Loading)>(sql);
+                result = await conn.QueryFirstAsync<(int Unloading, int Loading, int moving, int idle)>(sql);
             }
-            return new { Unloading = result.Unloading, Loading = result.Loading };
+            return new { Unloading = result.Unloading, Loading = result.Loading, moving = result.moving, idle=result.idle };
             //return result;
         }
         
