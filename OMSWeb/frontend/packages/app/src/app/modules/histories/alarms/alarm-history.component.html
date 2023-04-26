@@ -122,7 +122,7 @@
 				[width]="getDisplayTableColumnWidth('alarms_cleared')"
 				[visible]="canDisplayTable('alarms_cleared')"
 				[visibleIndex]="getDisplayTableColumnIndex('alarms_cleared')"
-				dataType="string"
+				dataType="boolean"
 				dataField="cleared"
 				[caption]="'names.cleared' | translate"
 			></dxi-column>
@@ -149,7 +149,7 @@
 				[width]="getDisplayTableColumnWidth('alarms_age')"
 				[visible]="canDisplayTable('alarms_age')"
 				[visibleIndex]="getDisplayTableColumnIndex('alarms_age')"
-				dataType="string"
+				dataType="int"
 				dataField="age"
 				[caption]="'names.elapsed' | translate"
 			></dxi-column>
@@ -157,7 +157,7 @@
 				[width]="getDisplayTableColumnWidth('alarms_current')"
 				[visible]="canDisplayTable('alarms_current')"
 				[visibleIndex]="getDisplayTableColumnIndex('alarms_current')"
-				dataType="number"
+				dataType="string"
 				dataField="current"
 				[caption]="'names.point' | translate"
 			></dxi-column>
