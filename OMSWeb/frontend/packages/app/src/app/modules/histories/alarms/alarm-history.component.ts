@@ -288,7 +288,7 @@ export class AlarmHistoryComponent implements OnInit {
 
   playBack(){
     const data = this.dataGrid.instance.getSelectedRowsData()[0];
-    if(!data.time) return;
+    if(!data?.time) return;
     this.router.navigate(['/playback'],{queryParams: {selected: JSON.stringify(data.time)}}).then()
   }
 }
