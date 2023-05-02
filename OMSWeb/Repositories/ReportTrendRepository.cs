@@ -195,13 +195,13 @@ namespace OMSWeb.Repositories
                 (
                     select count(*)
                     from vehicles
-                    where order_id > 0 and cargo_state = 'U' or order_id > 0 and cargo_state = 'E' and moving_state = 'M' 
+                    where (order_id > 0 and cargo_state = 'U' or order_id > 0 and cargo_state = 'E' and moving_state = 'M') 
                     and connection in (1, 2) and (error_list = '') IS true and mode = 'A'
                 ) as unloading,
                 (
                     select count(*)
                     from vehicles
-                    where order_id > 0 and cargo_state = 'L' or order_id > 0 and cargo_state = 'F' and moving_state = 'M'  
+                    where (order_id > 0 and cargo_state = 'L' or order_id > 0 and cargo_state = 'F' and moving_state = 'M')  
                     and connection in (1, 2) and (error_list = '') IS true and mode = 'A'
                 ) as loading
                 ";
@@ -388,12 +388,14 @@ namespace OMSWeb.Repositories
                 (
                     select count(*)
                     from vehicles
-                    where order_id = 0 and cargo_state = 'E' and moving_state ='M' and connection in (1, 2) and (error_list = '') IS true and mode = 'A'
+                    where (order_id = 0 and cargo_state = 'E' and moving_state ='M') 
+                    and connection in (1, 2) and (error_list = '') IS true and mode = 'A'
                 ) as moving,
                 (
                     select count(*)
                     from vehicles
-                    where order_id = 0 and moving_state ='S' and connection in (1, 2) and (error_list = '') IS true and mode = 'A'
+                    where (order_id = 0 and moving_state ='S') 
+                    and connection in (1, 2) and (error_list = '') IS true and mode = 'A'
                 ) as idle
                 ";
 
