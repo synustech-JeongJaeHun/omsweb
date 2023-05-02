@@ -71,9 +71,11 @@ export const exData = {
 		[
 			['unloading', 80],
 			['loading', 120],
-      ['moving', 80],
-      ['idle', 120],
 		],
+    [
+      ['idle', 80],
+      ['moving', 120],
+    ],
 	],
 }
 
@@ -83,13 +85,13 @@ const map = R.map(R.set(lens, ''))
 export const exEmptyData = {
 	stats: exStats,
 	table: R.map(map, exTableData),
-	donuts: [[], []],
+	donuts: [[], [], []],
 }
 
 export const exPlaceholderData = {
 	stats: exStats,
 	table: [],
-	donuts: [[], []],
+	donuts: [[], [], []],
 }
 
 const dateForm = format('yyyy-MM-dd HH:mm:ss')
@@ -168,7 +170,7 @@ const makeTable = (data) => {
 }
 
 const makeDonut = (data) => {
-	const { vehicles, loading_unloading: lu } = data
+	const { vehicles, loading_unloading: lu, idle } = data
 
 	return [
 		[
@@ -180,9 +182,11 @@ const makeDonut = (data) => {
 		[
 			['unloading', lu['unloading']],
 			['loading', lu['loading']],
-      ['moving', lu['moving']],
-      ['idle', lu['idle']]
 		],
+    [
+      ['idle', idle['idle']],
+      ['moving', idle['moving']],
+    ],
 	]
 }
 
