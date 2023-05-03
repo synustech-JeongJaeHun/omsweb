@@ -472,6 +472,8 @@ const defaultHistoryTable = {
 	transfers_id: true,
 	transfers_origin: true,
 	transfers_priority: true,
+  transfers_from_distance: true,
+  transfers_to_distance: true,
 	transfers_state: true,
 	transfers_vehicle_id: true,
 	transfers_location_pickup: true,
@@ -504,6 +506,8 @@ const defaultHistoryTable = {
 			i18nLabel: 'names.locationDropoff',
 			width: 120,
 		},
+    { name: 'transfers_from_distance', i18nLabel: 'names.fromDistance', width: 100 },
+    { name: 'transfers_to_distance', i18nLabel: 'names.toDistance', width: 100 },
 		{
 			name: 'transfers_location_move',
 			i18nLabel: 'names.locationMove',

@@ -279,9 +279,19 @@ export class TransferHistoryComponent implements OnInit, OnDestroy {
     e.items = items;
   }
 
-  playBack(){
+
+  transform_distance(value: number): string {
+    if (value == undefined) {
+      return ''
+    } else {
+      const distance: number = Math.floor(value / 1000)
+      return `${distance}m`
+    }
+  }
+
+  playBack() {
     const data = this.dataGrid.instance.getSelectedRowsData()[0];
-    if(!data?.timeCreated) return;
-    this.router.navigate(['/playback'],{queryParams: {selected: JSON.stringify(data.timeCreated)}}).then()
+    if (!data?.timeCreated) return;
+    this.router.navigate(['/playback'], {queryParams: {selected: JSON.stringify(data.timeCreated)}}).then()
   }
 }

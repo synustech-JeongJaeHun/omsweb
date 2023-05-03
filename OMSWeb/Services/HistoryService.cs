@@ -337,6 +337,8 @@ namespace OMSWeb.Services
                 if (string.Compare(s, "resultCode", StringComparison.CurrentCultureIgnoreCase) == 0) return "result_code";
                 if (string.Compare(s, "age", StringComparison.CurrentCultureIgnoreCase) == 0) return "age";
                 if (string.Compare(s, "unloadRetryCnt", StringComparison.CurrentCultureIgnoreCase) == 0) return "unload_retry_cnt";
+                if (string.Compare(s, "fromDistance", StringComparison.CurrentCultureIgnoreCase) == 0) return "from_distance";
+                if (string.Compare(s, "toDistance", StringComparison.CurrentCultureIgnoreCase) == 0) return "to_distance";
             }
             else if (string.Compare(tableName, "vehicle_history", StringComparison.CurrentCultureIgnoreCase) == 0)
             {

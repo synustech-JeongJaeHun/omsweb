@@ -184,6 +184,21 @@ namespace OMSWeb.Repositories
                                 WHEN OD.err_result_code LIKE '%DestInterlock%' THEN 'Dest PIO Timeout'
                                 ELSE OD.err_result_code
                             END as result_code
+                            ,(
+                                select max(vh.distance_total)-min(vh.distance_total)
+	                            from vehicle_history vh 
+	                            where vh.history_source_id  = OD.vehicle_id
+	                            and history_change_time >= OD.time_assigned
+		                        and history_change_time <= OD.time_load_started 
+	                        ) as fromDistance 
+                            ,(
+                                select max(vh.distance_total)-min(vh.distance_total)
+	                            from vehicle_history vh 
+	                            where vh.history_source_id  = OD.vehicle_id
+	                            and history_change_time >= OD.time_load_completed
+		                        and history_change_time <= OD.time_unload_started 
+	                        ) as toDistance 
+                            
 
                         FROM order_history AS OD
                         INNER JOIN (
