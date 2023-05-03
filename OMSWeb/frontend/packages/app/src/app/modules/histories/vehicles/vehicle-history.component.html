@@ -114,7 +114,8 @@
         [visibleIndex]="getDisplayTableColumnIndex('vehicles_last_pm_time')"
         [allowFiltering]="true"
         dataType="datetime"
-        dataField="lastPmTime"
+        dataField="pmTime"
+        [caption]="'names.lastPmTime' | translate"
       ></dxi-column>
       <dxi-column
         [width]="getDisplayTableColumnWidth('vehicles_distance')"
@@ -160,7 +161,17 @@
         [visibleIndex]="getDisplayTableColumnIndex('vehicles_user')"
         [allowFiltering]="true"
         dataType="string"
-        dataField="user"
+        dataField="pmUser"
+        [caption]="'names.user' | translate"
+      ></dxi-column>
+      <dxi-column
+        [width]="getDisplayTableColumnWidth('vehicles_note')"
+        [visible]="canDisplayTable('vehicles_note')"
+        [visibleIndex]="getDisplayTableColumnIndex('vehicles_note')"
+        [allowFiltering]="true"
+        dataType="string"
+        dataField="pmNote"
+        [caption]="'names.note' | translate"
       ></dxi-column>
 			<dxi-column
 				[width]="getDisplayTableColumnWidth('vehicles_empty')"

@@ -47,7 +47,9 @@ namespace OMSWeb.Models.Entities
         
         public int? PauseState { get; set; }
         
-        public DateTime? LastPmTime { get; set; }
+        public DateTime? PmTime { get; set; }
+        public string PmUser { get; set; }
+        public string PmNote { get; set; }
         
         
     }

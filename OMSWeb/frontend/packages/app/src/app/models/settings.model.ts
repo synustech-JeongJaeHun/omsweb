@@ -588,9 +588,9 @@ const defaultHistoryTable = {
 		},
     { name: 'vehicles_distance', i18nLabel: 'names.distance', width: 180 },
     { name: 'vehicles_runtime', i18nLabel: 'names.runtime', width: 180 },
-    { name: 'vehicles_user', i18nLabel: 'names.user', width: 120 },
-		{ name: 'vehicles_empty', i18nLabel: '', width: 120 },
-
+    { name: 'vehicles_user', i18nLabel: 'names.user', width: 80 },
+    { name: 'vehicles_note', i18nLabel: 'names.note', width: 80 },
+    { name: 'vehicles_empty', i18nLabel: '', width: 120 },
 	],
 
 	// alarms table

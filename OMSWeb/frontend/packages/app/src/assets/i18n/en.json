@@ -544,7 +544,8 @@
     "fromDistance" : "From(Distance)",
     "toDistance" : "To(Distance)",
     "distance": "Distance",
-    "runtime": "Runtime"
+    "runtime": "Runtime",
+    "lastPmTime" : "Last Pm Time"
   },
   "enums": {
     "hostSessionStatus": {

@@ -301,8 +301,8 @@ namespace OMSWeb.Repositories
                             VH.physical_id, VH.logical_id, 
                             VH.moving_state, 
                             VH.distance_total, VH.runtime_total,
-                            VH.distance, VH.runtime, VH.last_pm_time, VH.user,
-                            VH.type, VH.map_db
+                            VH.distance, VH.runtime, VH.pm_time, VH.user,
+                            VH.type, VH.map_db, VH.pm_user, VH.pm_note
                         FROM vehicle_history AS VH
                         INNER JOIN (
                             SELECT history_source_id, max(id) AS max_id
