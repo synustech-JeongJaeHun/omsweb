@@ -170,6 +170,7 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
     this.timerId = setInterval(() => {
       this.updateState()
       this.updateAuth()
+      this.memoryCheck()
     }, 5000);
 
     settingSvc.serviceConfig.subscribe(
@@ -285,4 +286,22 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
       }
     });
   }
+
+  private memoryCheck(){
+
+    // @ts-ignore
+    if(performance.memory){
+      // @ts-ignore
+      const memory =performance.memory
+      if(memory.jsHeapSizeLimit*0.9 < memory.usedJSHeapSize){
+        localStorage.setItem('memory_load', JSON.stringify({
+          time: new Date(),
+          // @ts-ignore
+          memory
+        }))
+        window.location.reload()
+      }
+    }
+  }
+
 }
