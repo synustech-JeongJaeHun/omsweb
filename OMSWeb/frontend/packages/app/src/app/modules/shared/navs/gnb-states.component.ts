@@ -294,11 +294,6 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
       // @ts-ignore
       const memory =performance.memory
       if(memory.jsHeapSizeLimit*0.9 < memory.usedJSHeapSize){
-        localStorage.setItem('memory_load', JSON.stringify({
-          time: new Date(),
-          // @ts-ignore
-          memory
-        }))
         window.location.reload()
       }
     }
