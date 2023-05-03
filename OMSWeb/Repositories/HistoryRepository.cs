@@ -300,7 +300,8 @@ namespace OMSWeb.Repositories
                             VH.history_change_time, VH.id, VH.history_source_id,
                             VH.physical_id, VH.logical_id, 
                             VH.moving_state, 
-                            VH.distance_total, VH.runtime_total, 
+                            VH.distance_total, VH.runtime_total,
+                            VH.distance, VH.runtime, VH.last_pm_time, VH.user,
                             VH.type, VH.map_db
                         FROM vehicle_history AS VH
                         INNER JOIN (

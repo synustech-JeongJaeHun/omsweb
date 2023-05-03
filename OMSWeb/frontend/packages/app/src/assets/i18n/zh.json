@@ -543,7 +543,9 @@
     "historyChangeType" : "Changed Type",
     "historySourceId" : "Source Id",
     "fromDistance" : "从(距离)",
-    "toDistance" : "到(距离)"
+    "toDistance" : "到(距离)",
+    "distance": "距离",
+    "runtime": "运行时"
   },
   "enums": {
     "hostSessionStatus": {

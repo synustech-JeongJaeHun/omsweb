@@ -335,4 +335,30 @@ export class VehicleControlTableComponent implements OnInit, OnDestroy {
 	private visibilitychange() {
 		if (!document.hidden) this.dataSource.reload()
 	}
+
+  onPmClick() {
+    if (!this.canControl) return
+
+    if (this.selectedItems.length > 0) {
+      this.dialogSvc
+        .verify({ body: this.$t.instant('messages.confirmCommand') })
+        .subscribe((res) => {
+          if (res) {
+            const { operator, reason } = res
+            if (this.selectedItems.length > 0) {
+              this.messageSvc
+                .sendVehicleCommand(
+                  {
+                    action: 'pm',
+                    user: operator,
+                    note: reason,
+                  },
+                  this.selectedItems,
+                )
+                .subscribe()
+            }
+          }
+        })
+    }
+  }
 }

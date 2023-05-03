@@ -248,6 +248,8 @@ const defaultControlTable = {
 	vehicles_user: true,
 	vehicles_note: true,
   vehicles_pauseState: false,
+  vehicles_distance: true,
+  vehicles_runtime: true,
 
 	vehicles_order: [
 		{ name: 'vehicles_id', i18nLabel: 'names.id', width: 60 },
@@ -310,8 +312,10 @@ const defaultControlTable = {
 		{ name: 'vehicles_mapDb', i18nLabel: 'names.mapDb', width: 90 },
 		{ name: 'vehicles_mapVersion', i18nLabel: 'names.mapVersion', width: 90 },
     { name: 'vehicles_pauseState', i18nLabel: 'names.pauseState', width: '80' },
-		{ name: 'vehicles_user', i18nLabel: 'names.user', width: 80 },
-		{ name: 'vehicles_note', i18nLabel: 'names.note', width: 'auto' },
+    { name: 'vehicles_distance', i18nLabel: 'names.distance', width: 80 },
+    { name: 'vehicles_runtime', i18nLabel: 'names.runtime', width: 80 },
+    { name: 'vehicles_user', i18nLabel: 'names.user', width: 80 },
+    { name: 'vehicles_note', i18nLabel: 'names.note', width: 'auto' },
 
 	],
 
@@ -563,11 +567,15 @@ const defaultHistoryTable = {
 	vehicles_logical_id: true,
 	vehicles_distance_total: true,
 	vehicles_runtime_total: true,
+  vehicles_distance: true,
+  vehicles_runtime: true,
 	vehicles_empty: true,
+
 
 	vehicles_order: [
 		{ name: 'vehicles_physical_id', i18nLabel: 'names.id', width: 120 },
 		{ name: 'vehicles_logical_id', i18nLabel: 'names.logicalId', width: 120 },
+    { name: 'vehicles_last_pm_time', i18nLabel: 'names.lastPmTime', width: 120 },
 		{
 			name: 'vehicles_distance_total',
 			i18nLabel: 'names.distanceTotal',
@@ -578,7 +586,11 @@ const defaultHistoryTable = {
 			i18nLabel: 'names.runtimeTotal',
 			width: 180,
 		},
+    { name: 'vehicles_distance', i18nLabel: 'names.distance', width: 180 },
+    { name: 'vehicles_runtime', i18nLabel: 'names.runtime', width: 180 },
+    { name: 'vehicles_user', i18nLabel: 'names.user', width: 120 },
 		{ name: 'vehicles_empty', i18nLabel: '', width: 120 },
+
 	],
 
 	// alarms table

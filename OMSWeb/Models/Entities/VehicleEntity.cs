@@ -9,8 +9,10 @@ namespace OMSWeb.Models.Entities
         public string LogicalId { get; set; }
         public string MovingState { get; set; }
         public int? DistancePoint { get; set; }
-        public int DistanceTotal { get; set; }
-        public int RuntimeTotal { get; set; }
+        public int? DistanceTotal { get; set; }
+        public int? RuntimeTotal { get; set; }
+        public int? Distance { get; set; }
+        public int? Runtime { get; set; }
         public string Type { get; set; }
         public string MapDb { get; set; }
         public string MapVersion { get; set; }
@@ -44,6 +46,9 @@ namespace OMSWeb.Models.Entities
         public string Note { get; set; }
         
         public int? PauseState { get; set; }
+        
+        public DateTime? LastPmTime { get; set; }
+        
         
     }
 

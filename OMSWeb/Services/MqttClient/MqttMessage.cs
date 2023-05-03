@@ -83,7 +83,8 @@ namespace OMSWeb.Services.MqttClient
 
         public const string DEFAULT_DIRECTION = "forward";
         
-        public const string ACTION_SCAN = "scan";                                 // update
+        public const string ACTION_SCAN = "scan";                                 
+        public const string ACTION_PM = "pm";                                 
 
         public MqttMessage()
         {
@@ -146,6 +147,7 @@ namespace OMSWeb.Services.MqttClient
                 case ACTION_C:
                 case ACTION_M:
                 case ACTION_SCAN:
+                case ACTION_PM:
                     return TOPIC_DEFAULT;   // "oms/vehicle-manager/request";
             }
 
@@ -211,6 +213,7 @@ namespace OMSWeb.Services.MqttClient
                 case ACTION_SET_BEHAVIOR:
                 case ACTION_CALCULATE_PATH:
                 case ACTION_CLEAR_PATH:
+                case ACTION_PM:
                     return REQUEST_VEHICLE;
 
                 case ACTION_DISABLE_SEGMENT:
@@ -779,6 +782,13 @@ namespace OMSWeb.Services.MqttClient
                 data["origin_details"] = ORIGIN_DETAILS;    // UI
 
                 Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: Manual Transfer - scan");
+            }
+            else if (command.Action == ACTION_PM)
+            {
+                data["vehicle_id"] = GetVehicleId(command);
+                data["user"] = GetUser(command);
+                data["note"] = GetNote(command);
+                Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: {command.Action}");
             }
 
             // build JSON list
