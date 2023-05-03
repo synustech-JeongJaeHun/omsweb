@@ -195,12 +195,14 @@ namespace OMSWeb.Repositories
                 (
                     select count(*)
                     from vehicles
-                    where cargo_state = 'U' or cargo_state = 'E'
+                    where (order_id > 0 and cargo_state = 'U' or order_id > 0 and cargo_state = 'E' and moving_state = 'M') 
+                    and connection in (1, 2) and (error_list = '') IS true and mode = 'A'
                 ) as unloading,
                 (
                     select count(*)
                     from vehicles
-                    where cargo_state = 'L' or cargo_state = 'F'
+                    where (order_id > 0 and cargo_state = 'L' or order_id > 0 and cargo_state = 'F' and moving_state = 'M')  
+                    and connection in (1, 2) and (error_list = '') IS true and mode = 'A'
                 ) as loading
                 ";
 
@@ -374,6 +376,32 @@ namespace OMSWeb.Repositories
             ret.Add("Count", result.Count.ToString());
 
             return ret;
+        }
+        
+        public async Task<object> QueryIdle()
+        {
+            (int moving, int idle) result;
+            using (var conn = ConnectTrack())
+            {
+                var sql = @"
+                select
+                (
+                    select count(*)
+                    from vehicles
+                    where (order_id = 0 and cargo_state = 'E' and moving_state ='M') 
+                    and connection in (1, 2) and (error_list = '') IS true and mode = 'A'
+                ) as moving,
+                (
+                    select count(*)
+                    from vehicles
+                    where (order_id = 0 and moving_state ='S') 
+                    and connection in (1, 2) and (error_list = '') IS true and mode = 'A'
+                ) as idle
+                ";
+
+                result = await conn.QueryFirstAsync<(int moving, int idle)>(sql);
+            }
+            return new {moving = result.moving, idle=result.idle };
         }
     }
 }

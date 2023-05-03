@@ -100,7 +100,8 @@ namespace OMSWeb.Controllers
                 range = trend.range,
                 utilization = trend.utilization,
                 cpu,
-                memory
+                memory,
+                idle = trend.idle,
             };
         }
 

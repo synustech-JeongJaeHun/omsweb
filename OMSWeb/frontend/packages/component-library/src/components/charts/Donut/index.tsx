@@ -44,6 +44,14 @@ const colorDic = {
 		label: 'To Moving',
 		color: '#81B6DA',
 	},
+  idle: {
+    label: 'Idle',
+    color: '#fae63a',
+  },
+  moving: {
+    label: 'Home/IVR/Push',
+    color: '#fdb202',
+  },
 }
 
 const exData = [
@@ -96,7 +104,7 @@ const getOptions = (data) => {
 			plotBackgroundColor: null,
 			plotBorderWidth: 0,
 			plotShadow: false,
-			width: 320,
+			width: 360,
 			height: 200,
 			marginBottom: 0,
 			marginTop: 0,
@@ -113,7 +121,7 @@ const getOptions = (data) => {
 				fontFamily: 'NS',
 				fontWeight: 'bold',
 			},
-			x: -60,
+			x: -80,
 			y: 20,
 		},
 		lang: {

@@ -157,7 +157,7 @@ const Trend: React.FC<Props> & any = ({
 										<Container>
 											{donuts.map((donut, i) => {
 												return (
-													<Col col={6} key={i.toString()}>
+													<Col col={4} key={i.toString()}>
 														<Donut data={donut} isPlaceholder={isPlaceholder} />
 													</Col>
 												)

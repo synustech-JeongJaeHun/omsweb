@@ -294,6 +294,7 @@ namespace OMSWeb.Services
             var loadingUnLoadingTask = _reportTrendRepository.QueryLoadingUnLoading();
             var rangeTask = _reportTrendRepository.QueryRange();
             var utilizationTask = _reportTrendRepository.QueryUtilization();
+            var idleTask = _reportTrendRepository.QueryIdle();
 
             await Task.WhenAll(new Task[] {
                 createOrder10m,
@@ -306,6 +307,7 @@ namespace OMSWeb.Services
                 loadingUnLoadingTask,
                 rangeTask,
                 utilizationTask,
+                idleTask,
             });
 
             var delivery_time = await deliveryTimeTask;
@@ -317,6 +319,7 @@ namespace OMSWeb.Services
             var loading_unloading = await loadingUnLoadingTask;
             var range = await rangeTask;
             var utilization = await utilizationTask;
+            var idle = await idleTask;
 
             return new
             {
@@ -328,7 +331,8 @@ namespace OMSWeb.Services
                 vehicles,
                 loading_unloading,
                 range,
-                utilization
+                utilization,
+                idle
             };
         }
         
