@@ -349,8 +349,7 @@ export class VehicleControlTableComponent implements OnInit, OnDestroy {
               this.messageSvc
                 .sendVehicleCommand(
                   {
-                    action: 'set_behavior',
-                    hostOrder: false,
+                    action: 'pm',
                     user: operator,
                     note: reason,
                   },
@@ -362,15 +361,4 @@ export class VehicleControlTableComponent implements OnInit, OnDestroy {
         })
     }
   }
-
-  /*resetVehicleMileageTotal(type: string) {
-    this.dialogSvc
-      .confirm({ body: this.$t.instant('messages.confirmCommand') })
-      .subscribe((ok) => {
-        if (ok) {
-          this.messageSvc.sendResetVehicleMileageTotal(type, this.selectedIds)
-            .subscribe()
-        }
-      })
-  }*/
 }
