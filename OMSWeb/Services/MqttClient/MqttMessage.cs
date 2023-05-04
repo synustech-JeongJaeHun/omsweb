@@ -197,6 +197,7 @@ namespace OMSWeb.Services.MqttClient
                 case ACTION_BUFFER_SETTING:
                 case ACTION_VEHICLE_SETTING:
                 case ACTION_ZCU_SETTING:
+                case ACTION_PM:
                     return REQUEST_VEHICLE_MANAGER;
 
                 case ACTION_RESET:
@@ -213,7 +214,6 @@ namespace OMSWeb.Services.MqttClient
                 case ACTION_SET_BEHAVIOR:
                 case ACTION_CALCULATE_PATH:
                 case ACTION_CLEAR_PATH:
-                case ACTION_PM:
                     return REQUEST_VEHICLE;
 
                 case ACTION_DISABLE_SEGMENT:
