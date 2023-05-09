@@ -819,7 +819,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		// clear Point Context home when Home feature turns 'off'
 		if (event.value === false && this.contextMenuObject.value.home.length > 0) {
 			this.contextMenuObject.value.home = []
-      this.showContextMenu =false
 		}
 	}
 
