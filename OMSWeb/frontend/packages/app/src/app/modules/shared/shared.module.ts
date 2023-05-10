@@ -31,7 +31,8 @@ import { UserFormComponent } from './forms/user-form.component'
 import { SettingsModule } from '../settings/settings.module'
 import { ColorPickerComponent } from './forms/color-picker.component'
 import { UnitListSelectorComponent } from './forms/unit-list-selector.component'
-import { VehicleFormComponent } from './forms/vehicle-form.component'
+import { VehicleFormComponent } from './forms/vehicle-form.component';
+import { FireStationDialogComponent } from './dialogs/fire-station-dialog/fire-station-dialog.component'
 
 const inOutModules = [FormsModule, ReactiveFormsModule]
 @NgModule({
@@ -59,6 +60,7 @@ const inOutModules = [FormsModule, ReactiveFormsModule]
 		ColorPickerComponent,
 		UnitListSelectorComponent,
 		VehicleFormComponent,
+		FireStationDialogComponent,
 	],
 	imports: [
 		CommonModule,

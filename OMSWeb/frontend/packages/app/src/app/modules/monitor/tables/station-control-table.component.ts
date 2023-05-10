@@ -1,10 +1,10 @@
 import {
-	Component,
-	HostListener,
-	Input,
-	OnDestroy,
-	OnInit,
-	ViewChild,
+  Component, EventEmitter,
+  HostListener,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewChild,
 } from '@angular/core'
 import DataSource from 'devextreme/data/data_source'
 
@@ -21,6 +21,7 @@ import { MessagesService } from '../../../services/messages.service'
 import { DxDataGridComponent } from 'devextreme-angular'
 import { ClientPreferences } from '../../../models/settings.model'
 import { AuditTimeDuration } from './constants'
+import {UnusedListDialogComponent} from "@oms/shared/dialogs/unused-list-dialog.component";
 
 @Component({
 	selector: 'oms-station-control-table',
@@ -34,8 +35,8 @@ export class StationControlTableComponent implements OnInit, OnDestroy {
 
 	dataSource: DataSource
 	selectedRows: number[] = []
-
 	preference: ClientPreferences
+  firePrefix: string = null
 
 	//#region Subscriptions
 	private destroy$: Subject<void> = new Subject<void>()
@@ -58,8 +59,13 @@ export class StationControlTableComponent implements OnInit, OnDestroy {
 		private messageSvc: MessagesService,
 		private hubSvc: HubService,
 	) {
-		this.dataSource = this.statusSvc.stationStatusDataSource()
 		this.preference = this.settingSvc.globalPreferences
+    settingSvc.serviceConfig.subscribe(
+      (config) => {
+        this.firePrefix = config.fireStationPrefix
+        this.dataSource = this.statusSvc.stationStatusDataSource(this.firePrefix)
+      },
+    )
 	}
 
 	canDisplayTable(type: string): boolean {
@@ -177,4 +183,24 @@ export class StationControlTableComponent implements OnInit, OnDestroy {
 	private visibilitychange() {
 		if (!document.hidden) this.dataSource.reload()
 	}
+
+  /*onViewUnusedList() {
+    if (this._unusedListDialog) {
+      this._unusedListDialog.close()
+      return
+    }
+
+    this._unusedListDialog = this.dialog.open(UnusedListDialogComponent, {
+      width: '590px',
+      hasBackdrop: false,
+    })
+
+    const eventEmitter = new EventEmitter<{ type: string; id: number }>()
+    eventEmitter.subscribe((event) => this.findAndFocus.emit(event))
+
+    this._unusedListDialog.componentInstance.findAndFocus = eventEmitter
+    this._unusedListDialog
+      .afterClosed()
+      .subscribe(() => (this._unusedListDialog = null))
+  }*/
 }

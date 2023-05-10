@@ -24,12 +24,10 @@ export class ServiceConfig {
   actionScan: boolean
 	fireSensor: boolean
   nextLine: boolean
-
   vhlAlias: string
-
   customSetting: boolean
-
   isSilentSync: boolean
+  fireStationPrefix: string
 }
 
 export interface ManualTransferFiltersSetting {

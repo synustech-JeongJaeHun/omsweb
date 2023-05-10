@@ -42,15 +42,26 @@ export class StatusService {
 			reshapeOnPush: true,
 		})
 	}
-	stationStatusDataSource(): DataSource {
+	stationStatusDataSource(firePrefix= null): DataSource {
 		return new DataSource({
 			store: AspNetData.createStore({
 				key: 'id',
 				loadUrl: `${this.baseUrl}/stations`,
 			}),
-			reshapeOnPush: true,
+      reshapeOnPush: true,
+      filter:firePrefix ? [ "!", [ "logicalId", "contains", firePrefix ] ] : [],
 		})
 	}
+  fireStationStatusDataSource(firePrefix= null): DataSource {
+    return new DataSource({
+      store: AspNetData.createStore({
+        key: 'id',
+        loadUrl: `${this.baseUrl}/stations`,
+      }),
+      reshapeOnPush: true,
+      filter: [ "logicalId", "contains", firePrefix ],
+    })
+  }
 	bufferStatusDataSource(): DataSource {
 		return new DataSource({
 			store: AspNetData.createStore({

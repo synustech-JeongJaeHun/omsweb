@@ -17,6 +17,17 @@
 	>
 		{{ 'names.use' | translate }}
 	</button>
+
+  <button
+    mat-stroked-button
+    color="primary"
+    class="dense accent"
+    [hidden]="!firePrefix"
+    [disabled]="!canControl"
+    (click)="onUse()"
+  >
+    {{ 'names.use' | translate }}
+  </button>
 </div>
 <dx-data-grid
 	[dataSource]="dataSource"
