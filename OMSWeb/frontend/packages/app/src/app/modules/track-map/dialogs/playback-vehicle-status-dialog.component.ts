@@ -293,7 +293,7 @@ export class PlaybackVehicleStatusDialogComponent implements OnDestroy {
 			const historiesIn30Seconds = this.histories.slice(startIndex, endIndex)
 			this.dioHistoriesIn30Seconds = [
 				{
-					...time0Correction.trend,
+					...time0Correction?.trend,
 					historyChangeTimeFrom30SecondsBefore: 0,
 				},
 				...historiesIn30Seconds.map((h) => ({
@@ -304,7 +304,7 @@ export class PlaybackVehicleStatusDialogComponent implements OnDestroy {
 						1000,
 				})),
 				{
-					...time30Correction.trend,
+					...time30Correction?.trend,
 					historyChangeTimeFrom30SecondsBefore: 30,
 				},
 			]

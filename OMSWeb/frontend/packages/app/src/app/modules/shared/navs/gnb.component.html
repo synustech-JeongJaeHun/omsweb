@@ -4,13 +4,13 @@
       <h1>{{titleText}}</h1>
       <div *ngIf="showVersion" class="version">{{ version }}</div>
     </div>
-    <oms-gnb-menus class="menus"></oms-gnb-menus>
+    <oms-gnb-menus class="menus" id="menus"></oms-gnb-menus>
   </div>
   <div class="gnb-center">
-    <oms-gnb-states class="states"></oms-gnb-states>
+    <oms-gnb-states class="states" id="states"></oms-gnb-states>
   </div>
   <div class="gnb-right">
-    <oms-gnb-indicators class="indicators"></oms-gnb-indicators>
-    <oms-gnb-actions class="actions"></oms-gnb-actions>
+    <oms-gnb-indicators class="indicators" id="indicators"></oms-gnb-indicators>
+    <oms-gnb-actions class="actions" id="actions"></oms-gnb-actions>
   </div>
 </mat-toolbar>
