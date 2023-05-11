@@ -716,6 +716,16 @@
 			>
 				{{ 'names.unuse' | translate }}
 			</button>
+      <button
+        *ngIf="includeCheck(contextMenuObject?.value?.logicalId)"
+        mat-stroked-button
+        class="dense accent"
+        color="primary"
+        (click)="onToggleFireOff(contextMenuObject.value.id)"
+      >
+        {{ 'names.off' | translate }}
+      </button>
+
 		</mat-card-content>
 	</mat-card>
 </ng-template>

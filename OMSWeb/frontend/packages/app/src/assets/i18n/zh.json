@@ -546,7 +546,8 @@
     "toDistance" : "到(距离)",
     "distance": "距离",
     "runtime": "运行时",
-    "lastPmTime" : "Last Pm Time"
+    "lastPmTime" : "Last Pm Time",
+    "fireStation" : "Fire Station"
   },
   "enums": {
     "hostSessionStatus": {

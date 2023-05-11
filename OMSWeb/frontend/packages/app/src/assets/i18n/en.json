@@ -545,7 +545,8 @@
     "toDistance" : "To(Distance)",
     "distance": "Distance",
     "runtime": "Runtime",
-    "lastPmTime" : "Last Pm Time"
+    "lastPmTime" : "Last Pm Time",
+    "fireStation" : "Fire Station"
   },
   "enums": {
     "hostSessionStatus": {

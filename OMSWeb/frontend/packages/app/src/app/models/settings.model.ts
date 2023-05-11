@@ -27,7 +27,7 @@ export class ServiceConfig {
   vhlAlias: string
   customSetting: boolean
   isSilentSync: boolean
-  fireStationPrefix: string
+  fireStationFilters: FireStationFilters
 }
 
 export interface ManualTransferFiltersSetting {
@@ -913,4 +913,11 @@ export interface ISettingsDelayedTransferTimeout {
 	timeout: number
 	warningNotify: boolean
 	tableNotify: boolean
+}
+
+export interface FireStationFilters{
+  enabled: boolean,
+  startWords: string[],
+  endWords: string[],
+  includeWords: string[]
 }

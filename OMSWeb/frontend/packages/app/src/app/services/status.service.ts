@@ -42,26 +42,34 @@ export class StatusService {
 			reshapeOnPush: true,
 		})
 	}
-	stationStatusDataSource(firePrefix= null): DataSource {
+	stationStatusDataSource(words: string[]= null): DataSource {
 		return new DataSource({
 			store: AspNetData.createStore({
 				key: 'id',
 				loadUrl: `${this.baseUrl}/stations`,
 			}),
       reshapeOnPush: true,
-      filter:firePrefix ? [ "!", [ "logicalId", "contains", firePrefix ] ] : [],
+      filter:[ "!", this.containBuilder(words) ],
 		})
 	}
-  fireStationStatusDataSource(firePrefix= null): DataSource {
+  fireStationStatusDataSource(words: string[]= null): DataSource {
     return new DataSource({
       store: AspNetData.createStore({
         key: 'id',
         loadUrl: `${this.baseUrl}/stations`,
       }),
       reshapeOnPush: true,
-      filter: [ "logicalId", "contains", firePrefix ],
+      filter: this.containBuilder(words),
     })
   }
+
+  containBuilder(words: string[]){
+    if(!words) return []
+    return words.map(w=> {
+      if(w) return ["logicalId", "contains", w]
+    })
+  }
+
 	bufferStatusDataSource(): DataSource {
 		return new DataSource({
 			store: AspNetData.createStore({

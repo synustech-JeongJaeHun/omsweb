@@ -22,11 +22,10 @@
     mat-stroked-button
     color="primary"
     class="dense accent"
-    [hidden]="!firePrefix"
-    [disabled]="!canControl"
-    (click)="onUse()"
+    [hidden]="!fireStationFilters?.enabled"
+    (click)="fireStationList()"
   >
-    {{ 'names.use' | translate }}
+    {{ 'names.fireStation' | translate }}
   </button>
 </div>
 <dx-data-grid

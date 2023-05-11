@@ -139,15 +139,21 @@ namespace OMSWeb.Services
             client.OnOffLine = this._appSettings.OnOffLine;
             client.TitleText = this._appSettings.TitleText;
             client.ActionScan = this._appSettings.ActionScan;
-            client.FireSensor = this._appSettings.FireSensor;
             client.NextLine = this._appSettings.NextLine;
             client.RefreshPopup = this._appSettings.RefreshPopup;
             client.RetainLogon = this._appSettings.RetainLogon;
             client.CustomSetting = this._appSettings.CustomSetting;
             client.VHLAlias = this._appSettings.VHLAlias;
-            client.FireStationPrefix = this._appSettings.FireStationPrefix;
             client.IsSilentSync = this._appSettings.IsSilentSync;
             
+            client.FireSensor = this._appSettings.FireSensor;
+            if (this._appSettings.FireStationFilters == null)
+            {
+                this._appSettings.FireStationFilters = new FireStationFilters();
+                this._appSettings.FireStationFilters.InitializeValues();
+            }
+            client.FireStationFilters = this._appSettings.FireStationFilters;
+
             return this._appSettings.Client;
         }
         

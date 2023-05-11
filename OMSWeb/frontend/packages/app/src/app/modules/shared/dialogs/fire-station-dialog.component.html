@@ -1,8 +1,18 @@
-<oms-dialog-base [title]="'names.unusedList' | translate">
+<oms-dialog-base [title]="'names.fireStation' | translate">
   <ng-container class="dialog-layout">
     <div mat-dialog-content>
-      <div class="grid-actions" *ngIf="hasControlAccess"></div>
-
+      <div class="grid-actions" *ngIf="hasControlAccess" style="display: flex; flex-direction: row-reverse">
+        <button
+          mat-stroked-button
+          color="primary"
+          class="dense accent"
+          style="margin-bottom: 4px"
+          [disabled]="!canControl"
+          (click)="onUse()"
+        >
+          {{ 'names.off' | translate }}
+        </button>
+      </div>
       <dx-data-grid
         [dataSource]="dataSource"
         [remoteOperations]="true"
@@ -12,15 +22,12 @@
         [highlightChanges]="true"
         [showColumnLines]="true"
         [showRowLines]="true"
+        [(selectedRowKeys)]="selectedRows"
         [headerFilter]="false"
-        [sorting]="true"
-        height="250"
         allowColumnResizing="true"
-        (onFocusedCellChanging)="onFocusedChanging($event)"
-        (onFocusedRowChanged)="onFocusedChanging($event)"
-
       >
-        <dxo-sorting mode="single"></dxo-sorting>
+        <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
+        <!--dxo-scrolling-- mode="virtual" rowRenderingMode="standard"></dxo-scrolling-->
         <dxo-paging [pageSize]="50"></dxo-paging>
         <dxo-pager
           [showPageSizeSelector]="true"
@@ -33,48 +40,126 @@
         <dxo-filter-row [visible]="true"></dxo-filter-row>
 
         <dxi-column
-          dataType="string"
-          dataField="type"
-          [caption]="'names.type' | translate"
-          width="70"
+          dataType="int"
+          dataField="id"
+          [caption]="'names.id' | translate"
+          [visible]="canDisplayTable('stations_id')"
+          [visibleIndex]="getDisplayTableColumnIndex('stations_id')"
+          [width]="getDisplayTableColumnWidth('stations_id')"
         ></dxi-column>
         <dxi-column
           dataType="string"
-          dataField="onlineName"
+          dataField="cAlias"
+          [caption]="'names.alias' | translate"
+          [visible]="canDisplayTable('stations_alias')"
+          [visibleIndex]="getDisplayTableColumnIndex('stations_alias')"
+          [width]="getDisplayTableColumnWidth('stations_alias')"
+        ></dxi-column>
+        <dxi-column
+          dataType="string"
+          dataField="physicalId"
+          [caption]="'names.transOrQR' | translate"
+          [visible]="canDisplayTable('stations_physicalId')"
+          [visibleIndex]="getDisplayTableColumnIndex('stations_physicalId')"
+          [width]="getDisplayTableColumnWidth('stations_physicalId')"
+        ></dxi-column>
+        <dxi-column
+          dataType="string"
+          dataField="logicalId"
           [caption]="'names.logicalId' | translate"
-          width="100"
+          [visible]="canDisplayTable('stations_logicalId')"
+          [visibleIndex]="getDisplayTableColumnIndex('stations_logicalId')"
+          [width]="getDisplayTableColumnWidth('stations_logicalId')"
         ></dxi-column>
         <dxi-column
           dataType="string"
-          dataField="user"
-          [caption]="'names.user' | translate"
-          width="80"
+          dataField="groupId"
+          [caption]="'names.group' | translate"
+          [visible]="canDisplayTable('stations_group')"
+          [visibleIndex]="getDisplayTableColumnIndex('stations_group')"
+          [width]="getDisplayTableColumnWidth('stations_group')"
         ></dxi-column>
         <dxi-column
           dataType="string"
-          dataField="comments"
+          dataField="point"
+          [caption]="'names.point' | translate"
+          [visible]="canDisplayTable('stations_point')"
+          [visibleIndex]="getDisplayTableColumnIndex('stations_point')"
+          [width]="getDisplayTableColumnWidth('stations_point')"
+        ></dxi-column>
+        <dxi-column
+          dataType="string"
+          dataField="direction"
+          [caption]="'names.direction' | translate"
+          cellTemplate="directionTemplate"
+          [visible]="canDisplayTable('stations_direction')"
+          [visibleIndex]="getDisplayTableColumnIndex('stations_direction')"
+          [width]="getDisplayTableColumnWidth('stations_direction')"
+        ></dxi-column>
+        <dxi-column
+          dataType="string"
+          dataField="nextPoint"
+          [caption]="'names.nextPoint' | translate"
+          [visible]="canDisplayTable('stations_nextPoint')"
+          [visibleIndex]="getDisplayTableColumnIndex('stations_nextPoint')"
+          [width]="getDisplayTableColumnWidth('stations_nextPoint')"
+        ></dxi-column>
+        <dxi-column
+          dataType="string"
+          dataField="offset"
+          [caption]="'names.offset' | translate"
+          [visible]="canDisplayTable('stations_offset')"
+          [visibleIndex]="getDisplayTableColumnIndex('stations_offset')"
+          [width]="getDisplayTableColumnWidth('stations_offset')"
+        ></dxi-column>
+        <dxi-column
+          dataType="boolean"
+          dataField="unuse"
+          [caption]="'names.unuse' | translate"
+          [visible]="canDisplayTable('stations_unuse')"
+          [visibleIndex]="getDisplayTableColumnIndex('stations_unuse')"
+          [width]="getDisplayTableColumnWidth('stations_unuse')"
+        ></dxi-column>
+        <dxi-column
+          dataType="string"
+          dataField="carrierId"
+          [caption]="'names.carrierId' | translate"
+          [visible]="canDisplayTable('stations_carrierId')"
+          [visibleIndex]="getDisplayTableColumnIndex('stations_carrierId')"
+          [width]="getDisplayTableColumnWidth('stations_carrierId')"></dxi-column>
+        <dxi-column dataType="string"
+                    dataField="slideOffset"
+                    [caption]="'names.slideOffset' | translate"
+                    [visible]="canDisplayTable('stations_slideOffset')"
+                    [visibleIndex]="getDisplayTableColumnIndex('stations_slideOffset')"
+                    [width]="getDisplayTableColumnWidth('stations_slideOffset')"></dxi-column>
+        <dxi-column [allowFiltering]="true"
+                    dataType="string"
+                    dataField="user"
+                    [allowSorting]="true"
+                    [caption]="'names.user' | translate"
+                    [visible]="canDisplayTable('stations_user')"
+                    [visibleIndex]="getDisplayTableColumnIndex('stations_user')"
+                    [width]="getDisplayTableColumnWidth('stations_user')"
+        ></dxi-column>
+        <dxi-column
+          [allowFiltering]="true"
+          dataType="string"
+          dataField="note"
+          [allowSorting]="true"
           [caption]="'names.note' | translate"
-          width="120"
+          [visible]="canDisplayTable('stations_note')"
+          [visibleIndex]="getDisplayTableColumnIndex('stations_note')"
+          [width]="getDisplayTableColumnWidth('stations_note')"
         ></dxi-column>
-        <dxi-column
-          dataType="datetime"
-          dataField="unuseTime"
-          sortOrder="desc"
-          [format]="dateTimeFormat"
-          [caption]="'names.timeUnused' | translate"
-          width="120"
-        ></dxi-column>
-        <dxi-column
-          type="buttons"
-          [caption]="'names.location' | translate"
-          width="80"
-        >
-          <dxi-button
-            [text]="'names.view' | translate"
-            [onClick]="handleClickView"
-          >
-          </dxi-button>
-        </dxi-column>
+        <div *dxTemplate="let data of 'directionTemplate'">
+          <div [ngSwitch]="data.displayValue">
+            <div class="value" *ngSwitchCase="'L'">{{ 'Left' }}</div>
+            <div class="value" *ngSwitchCase="'R'">{{ 'Right' }}</div>
+            <div class="value" *ngSwitchCase="'U'">{{ 'Under' }}</div>
+            <div class="value" *ngSwitchDefault>{{ data.displayValue }}</div>
+          </div>
+        </div>
       </dx-data-grid>
     </div>
   </ng-container>

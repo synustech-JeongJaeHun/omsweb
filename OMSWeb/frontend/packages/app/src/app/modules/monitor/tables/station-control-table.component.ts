@@ -3,7 +3,7 @@ import {
   HostListener,
   Input,
   OnDestroy,
-  OnInit,
+  OnInit, Output,
   ViewChild,
 } from '@angular/core'
 import DataSource from 'devextreme/data/data_source'
@@ -21,6 +21,9 @@ import { MessagesService } from '../../../services/messages.service'
 import { DxDataGridComponent } from 'devextreme-angular'
 import { ClientPreferences } from '../../../models/settings.model'
 import { AuditTimeDuration } from './constants'
+import { FireStationFilters } from '../../../models/settings.model'
+import {FireStationDialogComponent} from "@oms/shared/dialogs/fire-station-dialog.component";
+import {MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {UnusedListDialogComponent} from "@oms/shared/dialogs/unused-list-dialog.component";
 
 @Component({
@@ -36,7 +39,11 @@ export class StationControlTableComponent implements OnInit, OnDestroy {
 	dataSource: DataSource
 	selectedRows: number[] = []
 	preference: ClientPreferences
-  firePrefix: string = null
+  fireStationFilters: FireStationFilters
+  fireSensor : boolean
+
+  fireStationDialog: MatDialogRef<FireStationDialogComponent, any> = null
+
 
 	//#region Subscriptions
 	private destroy$: Subject<void> = new Subject<void>()
@@ -58,12 +65,21 @@ export class StationControlTableComponent implements OnInit, OnDestroy {
 		private $t: TranslateService,
 		private messageSvc: MessagesService,
 		private hubSvc: HubService,
+    private dialog: MatDialog,
 	) {
 		this.preference = this.settingSvc.globalPreferences
     settingSvc.serviceConfig.subscribe(
       (config) => {
-        this.firePrefix = config.fireStationPrefix
-        this.dataSource = this.statusSvc.stationStatusDataSource(this.firePrefix)
+        this.fireSensor = config.fireSensor
+        let words = null
+        this.fireStationFilters = config?.fireStationFilters
+        if(this.fireSensor){
+          words = [
+            ...this.fireStationFilters?.startWords,
+            ...this.fireStationFilters?.endWords,
+            ...this.fireStationFilters?.includeWords]
+        }
+        this.dataSource = this.statusSvc.stationStatusDataSource(words)
       },
     )
 	}
@@ -184,23 +200,19 @@ export class StationControlTableComponent implements OnInit, OnDestroy {
 		if (!document.hidden) this.dataSource.reload()
 	}
 
-  /*onViewUnusedList() {
-    if (this._unusedListDialog) {
-      this._unusedListDialog.close()
+  fireStationList() {
+    if (this.fireStationDialog) {
+      this.fireStationDialog.close()
       return
     }
 
-    this._unusedListDialog = this.dialog.open(UnusedListDialogComponent, {
+    this.fireStationDialog = this.dialog.open(FireStationDialogComponent, {
       width: '590px',
       hasBackdrop: false,
     })
 
-    const eventEmitter = new EventEmitter<{ type: string; id: number }>()
-    eventEmitter.subscribe((event) => this.findAndFocus.emit(event))
-
-    this._unusedListDialog.componentInstance.findAndFocus = eventEmitter
-    this._unusedListDialog
+    this.fireStationDialog
       .afterClosed()
-      .subscribe(() => (this._unusedListDialog = null))
-  }*/
+      .subscribe(() => (this.fireStationDialog = null))
+  }
 }

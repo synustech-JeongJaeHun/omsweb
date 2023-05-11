@@ -130,6 +130,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 	public colocatedObjects = []
 	public mainColocatedObject: any
 	public showColocatedView = false
+  private includesWords  = []
 
 	get activeDetails(): boolean {
 		return this.detailsVisible && this.auth.isAuthenticated
@@ -186,6 +187,15 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 			})
 		})
 
+    settingSvc.serviceConfig.subscribe(
+      (config) => {
+        const fireStationFilters = config?.fireStationFilters
+        this.includesWords = [
+          ...fireStationFilters?.startWords,
+          ...fireStationFilters?.endWords,
+          ...fireStationFilters?.includeWords].filter(i=>i&&i)
+      },
+    )
 	}
 
 	hasPermissions(permissions: number[]): boolean {
@@ -1298,6 +1308,26 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 			value: data.position,
 		})
 	}
+
+  includeCheck(word: string){
+    return this.includesWords.some(i=>word.includes(i))
+  }
+
+  onToggleFireOff(id: number) {
+    this.dialogSvc
+      .confirm({ body: this.$t.instant('messages.confirmCommand') })
+      .subscribe((ok) => {
+        ok &&
+        this.messageSvc
+          .sendStationSettingCommand(
+            { type: 'USE', action: 'station-setting', unused: 0 },
+            [id],
+          )
+          .subscribe()
+        this.showContextMenu = false
+        this.contextMenuObject = undefined
+      })
+  }
 }
 
 function getCustomEventPayload<T>(event: CustomEvent<T[]>) {

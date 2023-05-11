@@ -12,6 +12,9 @@ import {TrackStatusService} from "../../../services/track-status.service";
 import {auditTime, takeUntil} from "rxjs/operators";
 import {AuditTimeDuration} from "../../monitor/tables/constants";
 import {IDataChangeEvent} from "../../../models/notification.model";
+import {MessagesService} from "@oms/services/messages.service";
+import {DialogService} from "@oms/services/dialog.service";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'oms-fire-station-dialog',
@@ -31,6 +34,7 @@ export class FireStationDialogComponent implements OnInit, OnDestroy {
 
   preference: ClientPreferences
 
+  selectedRows: number[] = []
 
   //#region Subscriptions
   private destroy$: Subject<void> = new Subject<void>()
@@ -45,18 +49,28 @@ export class FireStationDialogComponent implements OnInit, OnDestroy {
     private settingSvc: SettingsService,
     private hubSvc: HubService,
     private trackStatusService: TrackStatusService,
+    private messageSvc: MessagesService,
+    private dialogSvc: DialogService,
+    private $t: TranslateService,
   ) {
-    this.dataSource = this.statusSvc.unuseStatusDataSource()
+
     this.preference = this.settingSvc.globalPreferences
+    settingSvc.serviceConfig.subscribe(
+      (config) => {
+
+        const fireStationFilters = config.fireStationFilters
+        const words = [
+          ...fireStationFilters?.startWords,
+          ...fireStationFilters?.endWords,
+          ...fireStationFilters?.includeWords]
+
+        this.dataSource = this.statusSvc.fireStationStatusDataSource(words)
+      },
+    )
   }
 
   ngOnInit() {
-    merge(
-      this.hubSvc.vehicleTableChanged$,
-      this.hubSvc.segmentDisabledChanged$,
-      this.hubSvc.stationChanged$,
-      this.hubSvc.bufferChanged$,
-    )
+    this.hubSvc.stationChanged$
       .pipe(auditTime(AuditTimeDuration), takeUntil(this.destroy$))
       .subscribe((e: IDataChangeEvent) => {
         e && this.onTableChanged(e)
@@ -68,17 +82,6 @@ export class FireStationDialogComponent implements OnInit, OnDestroy {
     this.destroy$.complete()
   }
 
-  handleClickView = (event: {
-    row: { data: { type: string; objectId: number }, rowIndex: number }
-  }) => {
-    const typeInLowerCase = event.row.data.type.toLowerCase()
-    this.findAndFocus.emit({
-      type: typeInLowerCase,
-      id: event.row.data.objectId,
-    })
-
-  }
-
   private onTableChanged(payload: IDataChangeEvent) {
     this.dataSource.reload()
   }
@@ -88,4 +91,46 @@ export class FireStationDialogComponent implements OnInit, OnDestroy {
     $event.cancel =true
   }
 
+  canDisplayTable(type: string): boolean {
+    return this.preference.controlTables[type]
+  }
+  getDisplayTableColumnIndex(type: string): number {
+    return this.preference.controlTables.stations_order.findIndex(
+      (column) => column.name === type,
+    )
+  }
+
+  getDisplayTableColumnWidth(type: string) {
+    return this.preference.controlTables.stations_order.find(
+      (column) => column.name === type,
+    ).width
+  }
+
+  get canControl(): boolean {
+    return this.selectedRows.length > 0
+  }
+
+  onUse() {
+    if (!this.canControl) return
+
+    let stationIds: number[] = []
+    const items = this.dataGrid.instance.getSelectedRowsData()
+    for (let idx = 0; idx < items.length; idx++) {
+      stationIds.push(items[idx].id)
+    }
+
+    if (stationIds.length > 0) {
+      this.dialogSvc
+        .confirm({ body: this.$t.instant('messages.confirmCommand') })
+        .subscribe((ok) => {
+          ok &&
+          this.messageSvc
+            .sendStationSettingCommand(
+              { type: 'USE', action: 'station-setting', unused: 0 },
+              stationIds,
+            )
+            .subscribe()
+        })
+    }
+  }
 }
