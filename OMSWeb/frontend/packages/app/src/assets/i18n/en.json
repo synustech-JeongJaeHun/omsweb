@@ -545,7 +545,10 @@
     "toDistance" : "To(Distance)",
     "distance": "Distance",
     "runtime": "Runtime",
-    "lastPmTime" : "Last Pm Time"
+    "lastPmTime" : "Last Pm Time",
+    "highWay": "High Way",
+    "slopeUp": "Slope Up",
+    "slopeDown": "Slope Down"
   },
   "enums": {
     "hostSessionStatus": {

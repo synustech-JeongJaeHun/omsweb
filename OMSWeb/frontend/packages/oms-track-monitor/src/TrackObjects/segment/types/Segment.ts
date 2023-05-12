@@ -23,6 +23,9 @@ type Segment = {
   disabledByMtl?: boolean
   disabledByOnlyVehicle?: boolean
   disabledByUser?: boolean
+  z?: number
+  type?: string
+  color?: string|undefined
 } & CanBeFocused
 
 export { Segment }

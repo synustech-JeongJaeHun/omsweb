@@ -6,6 +6,7 @@ type Point = {
 	physicalId: string
 	x: number
 	y: number
+	z?: number
 
 	homeId?: number
 } & CanBeFocused

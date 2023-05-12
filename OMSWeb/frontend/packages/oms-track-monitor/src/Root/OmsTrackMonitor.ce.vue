@@ -595,6 +595,12 @@ defineExpose(exposed)
   stroke-width: v-bind('scaleStylesInfo.segmentWidth');
 }
 
+#segment-layer .flr,
+#disabled-segment-layer .flr  {
+  stroke: rgba(0, 0, 0, 0.5);
+  stroke-width: v-bind('scaleStylesInfo.segmentWidth +2.4');
+}
+
 #cluster-layer .cluster {
   stroke-width: v-bind('scaleStylesInfo.segmentWidth * 2.2');
 }

@@ -27,6 +27,7 @@ const direction = computed(() => {
 </script>
 
 <template>
+  
   <svg class="overflow-visible cursor-pointer segment">
     <path
       v-if="props.segment.isFocused"
@@ -34,6 +35,13 @@ const direction = computed(() => {
       :d="props.segment.d"
       fill="none"
     />
+
+    <path v-if="props.segment.type==='CROSS'"
+      class="flr fixed-scale-stroke"
+      :d="props.segment.d"
+      fill="none"
+    />
+    
     <path
       ref="pathElement"
       class="segment-path fixed-scale-stroke"
@@ -46,7 +54,23 @@ const direction = computed(() => {
       @mouseout="handleMouseleave"
       @mouseleave="handleMouseleave"
     />
-    <use
+    
+    <use v-if="props.segment.type==='SLOPE'"
+       v-bind:stroke="props.segment.color"
+       v-bind:fill="props.segment.color"
+       href="#segment-slope-triangle"
+       :x="direction.position.x"
+       :y="direction.position.y"
+       :transform="`rotate(${direction.angle} ${direction.position.x} ${direction.position.y})`"
+       :data-id="props.segment.id"
+       @click.left="handleLeftClick"
+       @click.right="handleRightClick"
+       @mouseover="handleMouseover"
+       @mouseout="handleMouseleave"
+       @mouseleave="handleMouseleave"
+    />
+    
+    <use v-if="props.segment.type!=='CROSS' && props.segment.type!=='FLOOR'"
       class="segment-direction"
       href="#segment-direction-triangle"
       :x="direction.position.x"
@@ -59,5 +83,7 @@ const direction = computed(() => {
       @mouseout="handleMouseleave"
       @mouseleave="handleMouseleave"
     />
+
+    
   </svg>
 </template>

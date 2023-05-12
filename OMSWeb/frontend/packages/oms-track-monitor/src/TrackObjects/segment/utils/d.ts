@@ -583,4 +583,23 @@ function getBaseLength(
   return (length - 2 * quarterRoundLength - middleLength - deepDiff) / 2
 }
 
-export { makeDFromSegment }
+function most(nums: any[], k=1):number[] {
+	let obj:any = {};
+	let arr = [];
+	
+	nums.forEach(el => {
+			if (obj[el]) {
+					obj[el]++;
+			} else {
+					obj[el] = 1;
+			}
+	});
+	
+	for (let properyName in obj) {
+			arr.push([properyName, obj[properyName]]);
+	}
+	
+	return arr.sort((a, b) => (b[1] - a[1])).slice(0,k).map(el => Number(el[0]));
+}
+
+export { makeDFromSegment, most}
