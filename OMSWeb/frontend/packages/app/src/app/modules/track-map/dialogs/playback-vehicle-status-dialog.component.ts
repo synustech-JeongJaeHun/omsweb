@@ -164,8 +164,8 @@ export class PlaybackVehicleStatusDialogComponent implements OnDestroy {
 
 			await this.loadDatum(
 				this.currentVehicle.id,
-				this.playService.currentSnapshot.timestamp,
-				this.playService.nextSnapshot.timestamp,
+				this.playService.currentSnapshot?.timestamp,
+				this.playService.nextSnapshot?.timestamp,
 			)
 		}
 
@@ -178,8 +178,8 @@ export class PlaybackVehicleStatusDialogComponent implements OnDestroy {
 
 			await this.loadDatum(
 				this.currentVehicle.id,
-				this.playService.currentSnapshot.timestamp,
-				this.playService.nextSnapshot.timestamp,
+				this.playService.currentSnapshot?.timestamp,
+				this.playService.nextSnapshot?.timestamp,
 			)
 			this.update(this.playService.clock)
 		}

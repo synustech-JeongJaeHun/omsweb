@@ -817,7 +817,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 	onHomeSettingChanged(event: { value: boolean }) {
 		this.homeActive = event.value
 		// clear Point Context home when Home feature turns 'off'
-		if (event.value === false && this.contextMenuObject.value.home.length > 0) {
+		if (event.value === false && this.contextMenuObject.value.home?.length > 0) {
 			this.contextMenuObject.value.home = []
 		}
 	}
@@ -1245,7 +1245,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 			)
 
 			this.contextMenuObject.value.home = homeGroups
-			this.homeActive = homeGroups.length > 0 && true
+			this.homeActive = homeGroups?.length > 0 && true
 		}
 		if (this.contextMenuObject.type === 'BUFFER') {
 			const result = await this.tracksService

@@ -186,7 +186,7 @@ function findSlope(line:{startPoint: Point, endPoint: Point}[], b: number, t: nu
 	let result : Points[] = [];
 	line.forEach(item=> {
     const startZ = item.startPoint.z, endZ = item.endPoint.z;
-		if(startZ && endZ&& (endZ - startZ!==0) && startZ>b && startZ<t && endZ>b && endZ<t)
+		if(startZ && endZ&& (endZ - startZ!==0) && startZ>=b && startZ<=t && endZ>=b && endZ<=t)
 			result.push({startPoint: item.startPoint.id, endPoint: item.endPoint.id, z: item.startPoint.z});
 	})
 	return result;
