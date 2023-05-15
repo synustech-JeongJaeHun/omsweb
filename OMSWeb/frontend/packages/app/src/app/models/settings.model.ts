@@ -24,12 +24,10 @@ export class ServiceConfig {
   actionScan: boolean
 	fireSensor: boolean
   nextLine: boolean
-
   vhlAlias: string
-
   customSetting: boolean
-
   isSilentSync: boolean
+  fireStationFilters: FireStationFilters
 }
 
 export interface ManualTransferFiltersSetting {
@@ -915,4 +913,11 @@ export interface ISettingsDelayedTransferTimeout {
 	timeout: number
 	warningNotify: boolean
 	tableNotify: boolean
+}
+
+export interface FireStationFilters{
+  enabled: boolean,
+  startWords: string[],
+  endWords: string[],
+  includeWords: string[]
 }

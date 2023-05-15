@@ -82,6 +82,8 @@ namespace UpdateDto {
     unuse?: boolean
     user?: string
     note?: string
+
+    carrierId?: string
   }
   export type Buffer = {
     id: number

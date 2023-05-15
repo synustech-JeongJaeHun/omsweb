@@ -42,15 +42,34 @@ export class StatusService {
 			reshapeOnPush: true,
 		})
 	}
-	stationStatusDataSource(): DataSource {
+	stationStatusDataSource(words: string[]= null): DataSource {
 		return new DataSource({
 			store: AspNetData.createStore({
 				key: 'id',
 				loadUrl: `${this.baseUrl}/stations`,
 			}),
-			reshapeOnPush: true,
+      reshapeOnPush: true,
+      filter:[ "!", this.containBuilder(words) ],
 		})
 	}
+  fireStationStatusDataSource(words: string[]= null): DataSource {
+    return new DataSource({
+      store: AspNetData.createStore({
+        key: 'id',
+        loadUrl: `${this.baseUrl}/stations`,
+      }),
+      reshapeOnPush: true,
+      filter: this.containBuilder(words),
+    })
+  }
+
+  containBuilder(words: string[]){
+    if(!words) return []
+    return words.map(w=> {
+      if(w) return ["logicalId", "contains", w]
+    })
+  }
+
 	bufferStatusDataSource(): DataSource {
 		return new DataSource({
 			store: AspNetData.createStore({

@@ -1,0 +1,101 @@
+<oms-dialog-base [title]="'names.fireStation' | translate">
+  <ng-container class="dialog-layout">
+    <div mat-dialog-content>
+      <div class="grid-actions" *ngIf="hasControlAccess" style="display: flex;">
+        <div style="width: 50%">
+          <button
+            mat-stroked-button
+            color="primary"
+            class="dense accent"
+            style="margin: 4px 4px 4px 0"
+            [disabled]="!canControl"
+            (click)="onUnuse()"
+          >
+            {{ 'names.unuse' | translate }}
+          </button>
+          <button
+            mat-stroked-button
+            color="primary"
+            class="dense accent"
+            style="margin: 4px"
+            [disabled]="!canControl"
+            (click)="onUse()"
+          >
+            {{ 'names.use' | translate }}
+          </button>
+        </div>
+        <div style="margin:4px; width: 50%; display: contents" >
+          <mat-form-field class="dense" appearance="outline">
+            <input
+              #carrierIdInput
+              matInput
+              [placeholder]="'names.carrierId' | translate"
+            />
+          </mat-form-field>
+        </div>
+        <div style="width: 25%; display: flex; flex-direction: row-reverse;">
+          <button
+            mat-stroked-button
+            color="primary"
+            class="dense accent"
+            style="margin: 4px 0 4px 4px"
+            [disabled]="!canControl || !carrierIdInput.value"
+            (click)="onRemoveCarrierStation(carrierIdInput.value)"
+          >
+            remove
+          </button>
+        </div>
+      </div>
+      <dx-data-grid
+        [dataSource]="dataSource"
+        [remoteOperations]="true"
+        [repaintChangesOnly]="true"
+        [columnAutoWidth]="false"
+        [showBorders]="false"
+        [highlightChanges]="true"
+        [showColumnLines]="true"
+        [showRowLines]="true"
+        [(selectedRowKeys)]="selectedRows"
+        [headerFilter]="false"
+        allowColumnResizing="true"
+        (onCellClick)="cellSelected($event)"
+      >
+        <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
+        <dxo-paging [pageSize]="50"></dxo-paging>
+        <dxo-pager
+          [showPageSizeSelector]="true"
+          [allowedPageSizes]="[50, 100, 200]"
+          [showInfo]="true"
+          visible="true"
+        >
+        </dxo-pager>
+        <dxo-load-panel [enabled]="false"></dxo-load-panel>
+        <dxo-filter-row [visible]="true"></dxo-filter-row>
+
+        <dxi-column
+          dataType="int"
+          dataField="id"
+          [caption]="'names.id' | translate"
+          [width]="100"
+        ></dxi-column>
+        <dxi-column
+          dataType="string"
+          dataField="logicalId"
+          [caption]="'names.logicalId' | translate"
+          [width]="150"
+        ></dxi-column>
+        <dxi-column
+          dataType="boolean"
+          dataField="unuse"
+          [caption]="'names.unuse' | translate"
+          [width]="100"
+        ></dxi-column>
+        <dxi-column
+          dataType="string"
+          dataField="carrierId"
+          [caption]="'names.carrierId' | translate"
+          [width]="150"></dxi-column>
+      </dx-data-grid>
+    </div>
+  </ng-container>
+</oms-dialog-base>

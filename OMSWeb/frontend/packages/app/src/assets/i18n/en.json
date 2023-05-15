@@ -548,7 +548,8 @@
     "lastPmTime" : "Last Pm Time",
     "highWay": "High Way",
     "slopeUp": "Slope Up",
-    "slopeDown": "Slope Down"
+    "slopeDown": "Slope Down",
+    "fireStation" : "Fire Station"
   },
   "enums": {
     "hostSessionStatus": {

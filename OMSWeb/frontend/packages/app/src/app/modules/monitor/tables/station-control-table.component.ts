@@ -1,10 +1,10 @@
 import {
-	Component,
-	HostListener,
-	Input,
-	OnDestroy,
-	OnInit,
-	ViewChild,
+  Component, EventEmitter,
+  HostListener,
+  Input,
+  OnDestroy,
+  OnInit, Output,
+  ViewChild,
 } from '@angular/core'
 import DataSource from 'devextreme/data/data_source'
 
@@ -21,6 +21,10 @@ import { MessagesService } from '../../../services/messages.service'
 import { DxDataGridComponent } from 'devextreme-angular'
 import { ClientPreferences } from '../../../models/settings.model'
 import { AuditTimeDuration } from './constants'
+import { FireStationFilters } from '../../../models/settings.model'
+import {FireStationDialogComponent} from "@oms/shared/dialogs/fire-station-dialog.component";
+import {MatDialog, MatDialogRef} from "@angular/material/dialog";
+import {UnusedListDialogComponent} from "@oms/shared/dialogs/unused-list-dialog.component";
 
 @Component({
 	selector: 'oms-station-control-table',
@@ -34,8 +38,12 @@ export class StationControlTableComponent implements OnInit, OnDestroy {
 
 	dataSource: DataSource
 	selectedRows: number[] = []
-
 	preference: ClientPreferences
+  fireStationFilters: FireStationFilters
+  fireSensor : boolean
+
+  fireStationDialog: MatDialogRef<FireStationDialogComponent, any> = null
+
 
 	//#region Subscriptions
 	private destroy$: Subject<void> = new Subject<void>()
@@ -57,9 +65,23 @@ export class StationControlTableComponent implements OnInit, OnDestroy {
 		private $t: TranslateService,
 		private messageSvc: MessagesService,
 		private hubSvc: HubService,
+    private dialog: MatDialog,
 	) {
-		this.dataSource = this.statusSvc.stationStatusDataSource()
 		this.preference = this.settingSvc.globalPreferences
+    settingSvc.serviceConfig.subscribe(
+      (config) => {
+        this.fireSensor = config.fireSensor
+        let words = null
+        this.fireStationFilters = config?.fireStationFilters
+        if(this.fireSensor){
+          words = [
+            ...this.fireStationFilters?.startWords,
+            ...this.fireStationFilters?.endWords,
+            ...this.fireStationFilters?.includeWords]
+        }
+        this.dataSource = this.statusSvc.stationStatusDataSource(words)
+      },
+    )
 	}
 
 	canDisplayTable(type: string): boolean {
@@ -177,4 +199,20 @@ export class StationControlTableComponent implements OnInit, OnDestroy {
 	private visibilitychange() {
 		if (!document.hidden) this.dataSource.reload()
 	}
+
+  fireStationList() {
+    if (this.fireStationDialog) {
+      this.fireStationDialog.close()
+      return
+    }
+
+    this.fireStationDialog = this.dialog.open(FireStationDialogComponent, {
+      width: '590px',
+      hasBackdrop: false,
+    })
+
+    this.fireStationDialog
+      .afterClosed()
+      .subscribe(() => (this.fireStationDialog = null))
+  }
 }

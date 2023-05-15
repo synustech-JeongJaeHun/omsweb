@@ -17,6 +17,16 @@
 	>
 		{{ 'names.use' | translate }}
 	</button>
+
+  <button
+    mat-stroked-button
+    color="primary"
+    class="dense accent"
+    [hidden]="!fireStationFilters?.enabled"
+    (click)="fireStationList()"
+  >
+    {{ 'names.fireStation' | translate }}
+  </button>
 </div>
 <dx-data-grid
 	[dataSource]="dataSource"

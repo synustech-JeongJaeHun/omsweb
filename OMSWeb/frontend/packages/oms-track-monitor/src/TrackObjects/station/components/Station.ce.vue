@@ -57,6 +57,18 @@ const group = useGroup('station', toRef(props.station, 'id'))
           @mouseout="handleMouseleave"
           @mouseleave="handleMouseleave"
         />
+        <circle
+            v-if="props.station.carrierId"
+            :data-id="props.station.id"
+            :class="props.station.carrierId && 'buffer-full'"
+            :fill="!props.station.carrierId &&'transparent'"
+            r="8"
+            @click.left="handleLeftClick"
+            @click.right="handleRightClick"
+            @mouseover="handleMouseover"
+            @mouseout="handleMouseleave"
+            @mouseleave="handleMouseleave"
+        />
         <text
           class="invert label select-none"
           x="0"

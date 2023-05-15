@@ -35,5 +35,7 @@ namespace OMSWeb.Models
         public bool CustomSetting { get; set; }
         
         public bool IsSilentSync { get; set; }
+        
+        public FireStationFilters FireStationFilters { get; set; }
     }
 }

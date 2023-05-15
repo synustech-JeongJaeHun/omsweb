@@ -12,7 +12,7 @@ namespace OMSWeb.Models.Tracks
     public int? Offset { get; set; }
     public bool? Unuse { get; set; }
     public int? State { get; set; }
-    public string CarrierId { get; set; }
+    public string? CarrierId { get; set; }
     public string User { get; set; }
     public string Note { get; set; }
     
