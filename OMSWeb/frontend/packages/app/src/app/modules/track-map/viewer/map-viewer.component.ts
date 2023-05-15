@@ -970,6 +970,17 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 			value: event.object,
 		}
 
+    if (this.contextMenuObject.type.toUpperCase() === 'POINT') {
+      const homeId = this.contextMenuObject.value.homeId
+      const homeGroups = this.trackStatusService.getGroupsFromObject(
+        'HOME',
+        homeId,
+      )
+
+      this.contextMenuObject.value.home = homeGroups
+      this.homeActive = homeGroups?.length > 0 && true
+    }
+
 		const leftThreshold = window.innerWidth - 200
 		const popupOffsetX = 10
 		const popupOffsetY = 40
