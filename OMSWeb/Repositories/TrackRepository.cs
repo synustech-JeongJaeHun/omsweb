@@ -172,7 +172,8 @@ namespace OMSWeb.Repositories
                                 State = dr["state"].TryIntegerOrNull(),
                                 User = dr["user"].TryString(),
                                 Note = dr["note"].TryString(),
-                                CAlias = dr["c_alias"].TryString()
+                                CAlias = dr["c_alias"].TryString(),
+                                CarrierId = dr["carrier_id"].TryString()
                             }
                            );
                         }

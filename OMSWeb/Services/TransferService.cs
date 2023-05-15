@@ -433,9 +433,12 @@ namespace OMSWeb.Services
                 }
                 else if (sourceType == SourceType.STATION)
                 {
-                    CPNAME = "CARRIERLOC";
-                    CPACK = (int)MCS_HCACK.NotAbleToExcute;
-                    CPNackCount++;
+                    if (!CARRIERLOC_Has_Valid_Carrier(carrierLoc, carrierId))
+                    {
+                        CPNAME = "CARRIERLOC";
+                        CPACK = (int)MCS_HCACK.NotAbleToExcute;
+                        CPNackCount++;
+                    }
                 }
                 else if (sourceType == SourceType.VEHICLE)
                 {
@@ -483,6 +486,20 @@ namespace OMSWeb.Services
                             HCACK = MCS_HCACK.NotAbleToExcute;
                         }
                         else if (ORDER_CheckInterlock_Port_InOrder(carrierLoc, SourceType.BUFFER) ||
+                                 ORDER_CheckInterlock_CarrierID_InOrder(carrierId))
+                        {
+                            HCACK = MCS_HCACK.Reject;
+                        }
+                        else
+                            HCACK = MCS_HCACK.Confirm;
+                    }
+                    else if (sourceType == SourceType.STATION)
+                    {
+                        if (!STATION_Available(carrierLoc))
+                        {
+                            HCACK = MCS_HCACK.NotAbleToExcute;
+                        }
+                        else if (ORDER_CheckInterlock_Port_InOrder(carrierLoc, SourceType.STATION) ||
                                  ORDER_CheckInterlock_CarrierID_InOrder(carrierId))
                         {
                             HCACK = MCS_HCACK.Reject;

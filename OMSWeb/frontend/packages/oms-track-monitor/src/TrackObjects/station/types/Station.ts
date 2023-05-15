@@ -16,6 +16,7 @@ type Station = {
 
   group?: number
   carrierType?: string
+  carrierId? : string
 
   user?: string
   note?: string

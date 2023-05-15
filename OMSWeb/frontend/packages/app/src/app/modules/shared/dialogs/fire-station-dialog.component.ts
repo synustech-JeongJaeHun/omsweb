@@ -3,7 +3,7 @@ import {DxDataGridComponent} from "devextreme-angular";
 import DataSource from "devextreme/data/data_source";
 import {DateUtil} from "../utils/date.util";
 import {ClientPreferences} from "../../../models/settings.model";
-import {merge, Subject} from "rxjs";
+import {forkJoin, merge, Subject} from "rxjs";
 import {AuthService} from "../../../services/auth.service";
 import {StatusService} from "../../../services/status.service";
 import {SettingsService} from "../../../services/settings.service";
@@ -15,6 +15,8 @@ import {IDataChangeEvent} from "../../../models/notification.model";
 import {MessagesService} from "@oms/services/messages.service";
 import {DialogService} from "@oms/services/dialog.service";
 import {TranslateService} from "@ngx-translate/core";
+import {IOrderStatusRow} from "@oms/models/order-status.model";
+import {TransfersService} from "@oms/services/transfers.service";
 
 @Component({
   selector: 'oms-fire-station-dialog',
@@ -52,6 +54,7 @@ export class FireStationDialogComponent implements OnInit, OnDestroy {
     private messageSvc: MessagesService,
     private dialogSvc: DialogService,
     private $t: TranslateService,
+    private transferSvc: TransfersService,
   ) {
 
     this.preference = this.settingSvc.globalPreferences
@@ -110,6 +113,38 @@ export class FireStationDialogComponent implements OnInit, OnDestroy {
     return this.selectedRows.length > 0
   }
 
+  onUnuse() {
+    if (!this.canControl) return
+
+    let stationIds: number[] = []
+    const items = this.dataGrid.instance.getSelectedRowsData()
+    for (let idx = 0; idx < items.length; idx++) {
+      stationIds.push(items[idx].id)
+    }
+
+    if (stationIds.length > 0) {
+      this.dialogSvc
+        .verify({ body: this.$t.instant('messages.confirmCommand') })
+        .subscribe((res) => {
+          if (res) {
+            const { operator, reason } = res
+            this.messageSvc
+              .sendStationSettingCommand(
+                {
+                  type: 'UNUSE',
+                  action: 'station-setting',
+                  unused: 1,
+                  user: operator,
+                  note: reason,
+                },
+                stationIds,
+              )
+              .subscribe()
+          }
+        })
+    }
+  }
+
   onUse() {
     if (!this.canControl) return
 
@@ -132,5 +167,55 @@ export class FireStationDialogComponent implements OnInit, OnDestroy {
             .subscribe()
         })
     }
+  }
+
+  onRemoveCarrierStation(carrierId: string) {
+    const data = this.dataGrid.instance.getSelectedRowsData()[0];
+    if (!data?.logicalId) return;
+    this.transferSvc
+      .checkCarrierChange(
+        'remove',
+        data.logicalId,
+        'station',
+        carrierId,
+        'none',
+      )
+      .subscribe((res) => {
+        if (res.hcack === 0 || res.hcack === 4) {
+          this.messageSvc
+            .sendCarrierCommand({
+              action: 'remove_carrier',
+              carrierLabel: carrierId,
+              logicalId: data.logicalId,
+            })
+            .subscribe()
+
+          this.dialogSvc.success({
+            title: this.$t.instant('names.success'),
+            body: this.$t.instant('messages.confirmSuccessRemoveCarrier'),
+          }).subscribe()
+        } else {
+          let errorMessage = ''
+          if (res.hcack === 2) errorMessage = 'messages.confirmNotAbleToExcute'
+          else if (res.hcack === 3) {
+            if (res.cpname === 'CARRIERID')
+              errorMessage = 'messages.confirmParameterInvalidCarrierID'
+            else if (res.cpname === 'CARRIERLOC')
+              errorMessage = 'messages.confirmParameterInvalidCarrierLoc'
+            else errorMessage = 'messages.confirmParameterInvalid'
+          } else if (res.hcack === 5) errorMessage = 'messages.confirmReject'
+          else errorMessage = 'messages.confirmNotAbleToExcute'
+
+          this.dialogSvc.alert({
+            title: this.$t.instant('names.failed'),
+            body: this.$t.instant(errorMessage),
+          })
+        }
+      })
+  }
+
+  cellSelected(e){
+    this.dataGrid.instance.deselectAll()
+    this.dataGrid.instance.selectRowsByIndexes(e.rowIndex)
   }
 }

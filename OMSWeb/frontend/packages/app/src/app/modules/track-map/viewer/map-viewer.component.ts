@@ -130,7 +130,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 	public colocatedObjects = []
 	public mainColocatedObject: any
 	public showColocatedView = false
-  private includesWords  = []
+  public includesWords  = []
 
 	get activeDetails(): boolean {
 		return this.detailsVisible && this.auth.isAuthenticated
@@ -386,6 +386,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
             state: e?.data.state,
 						user: e?.user,
 						note: e?.note,
+            carrierId: e?.carrierId,
             cAlias: e?.data.cAlias
 					})
 				})
@@ -1310,22 +1311,50 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 	}
 
   includeCheck(word: string){
+    console.log(this.includesWords)
     return this.includesWords.some(i=>word.includes(i))
   }
 
-  onToggleFireOff(id: number) {
-    this.dialogSvc
-      .confirm({ body: this.$t.instant('messages.confirmCommand') })
-      .subscribe((ok) => {
-        ok &&
-        this.messageSvc
-          .sendStationSettingCommand(
-            { type: 'USE', action: 'station-setting', unused: 0 },
-            [id],
-          )
-          .subscribe()
-        this.showContextMenu = false
-        this.contextMenuObject = undefined
+  onRemoveCarrierStation(carrierId: string) {
+    this.transferSvc
+      .checkCarrierChange(
+        'remove',
+        this.contextMenuObject.value.logicalId,
+        'station',
+        carrierId,
+        'none',
+      )
+      .subscribe((res) => {
+        if (res.hcack === 0 || res.hcack === 4) {
+          this.messageSvc
+            .sendCarrierCommand({
+              action: 'remove_carrier',
+              carrierLabel: carrierId,
+              logicalId: this.contextMenuObject.value.logicalId,
+            })
+            .subscribe()
+
+          this.dialogSvc.success({
+            title: this.$t.instant('names.success'),
+            body: this.$t.instant('messages.confirmSuccessRemoveCarrier'),
+          }).subscribe(()=>this.showContextMenu =false)
+        } else {
+          let errorMessage = ''
+          if (res.hcack === 2) errorMessage = 'messages.confirmNotAbleToExcute'
+          else if (res.hcack === 3) {
+            if (res.cpname === 'CARRIERID')
+              errorMessage = 'messages.confirmParameterInvalidCarrierID'
+            else if (res.cpname === 'CARRIERLOC')
+              errorMessage = 'messages.confirmParameterInvalidCarrierLoc'
+            else errorMessage = 'messages.confirmParameterInvalid'
+          } else if (res.hcack === 5) errorMessage = 'messages.confirmReject'
+          else errorMessage = 'messages.confirmNotAbleToExcute'
+
+          this.dialogSvc.alert({
+            title: this.$t.instant('names.failed'),
+            body: this.$t.instant(errorMessage),
+          })
+        }
       })
   }
 }

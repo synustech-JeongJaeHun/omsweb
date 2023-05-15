@@ -64,6 +64,7 @@
     [vhlDisplay]="preference.trackDisplay.vehicleIdDisplay"
     [nextLine]="nextLine"
     [vhlAlias]="vhlAlias"
+    [includesWords]="includesWords"
     [isVHLArrowVisible]="tmSetting.isVHLArrowVisible"
     (mouseoverOnObject)="onMouseoverTM($event)"
 		(mouseleaveOnObject)="onMouseleaveTM($event)"
@@ -716,15 +717,34 @@
 			>
 				{{ 'names.unuse' | translate }}
 			</button>
-      <button
-        *ngIf="includeCheck(contextMenuObject?.value?.logicalId)"
-        mat-stroked-button
-        class="dense accent"
-        color="primary"
-        (click)="onToggleFireOff(contextMenuObject.value.id)"
-      >
-        {{ 'names.off' | translate }}
-      </button>
+      <ng-container *ngIf="includeCheck(contextMenuObject?.value?.logicalId)
+                            && contextMenuObject?.value?.carrierId">
+        <span style="font-size: xx-small">
+				Carrier :
+          {{
+          contextMenuObject?.value.carrierId
+            ? contextMenuObject?.value.carrierId
+            : 'None'
+          }}
+			</span>
+        <div class="carrier-form">
+          <mat-form-field class="dense full-span-col" appearance="outline">
+            <input
+              #carrierIdInput
+              matInput
+              [placeholder]="'names.carrierId' | translate"
+            />
+          </mat-form-field>
+          <button
+            mat-stroked-button
+            color="primary"
+            class="dense accent"
+            (click)="onRemoveCarrierStation(carrierIdInput.value)"
+          >
+            Remove
+          </button>
+        </div>
+      </ng-container>
 
 		</mat-card-content>
 	</mat-card>

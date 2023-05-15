@@ -32,6 +32,7 @@ import ZoomLayer from 'MapObjects/zoomButton/ZoomLayer.ce.vue'
 import {convertStringToImageDataUrl} from "src/utils/textToImage";
 import {updatePointType} from "TrackObjects/point/pointType";
 import {updateNextLine, updateVHLArrow, updateVHLPosition, updateVHLAlias} from "TrackObjects/vehicle/vehicles";
+import {updateIncludesWords} from "TrackObjects/station/stations";
 /**
  *  https://v3.vuejs.org/api/sfc-script-setup.html#typescript-only-features
  *
@@ -115,6 +116,7 @@ const props = defineProps<{
   vehicleSecondaryContent: Stringlish
 
   vhlDisplay: Stringlish
+  includesWords: Stringlish[]
 }>()
 const propRefs = toRefs(props)
 interface Emits extends RootEmits { }
@@ -220,6 +222,11 @@ watch(propRefs.nextLine, ()=>{
 watch(propRefs.vhlAlias, ()=>{
   if(typeof props.vhlAlias === 'string'){
     updateVHLAlias(props.vhlAlias)
+  }
+})
+watch(propRefs.includesWords, () => {
+  if(props.includesWords?.length>0){
+    updateIncludesWords(props.includesWords)
   }
 })
 
