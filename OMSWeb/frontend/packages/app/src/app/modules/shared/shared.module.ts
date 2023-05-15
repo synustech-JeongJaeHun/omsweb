@@ -32,7 +32,7 @@ import { SettingsModule } from '../settings/settings.module'
 import { ColorPickerComponent } from './forms/color-picker.component'
 import { UnitListSelectorComponent } from './forms/unit-list-selector.component'
 import { VehicleFormComponent } from './forms/vehicle-form.component';
-import {FireStationDialogComponent} from "./dialogs/fire-station-dialog.component";
+import {FireStationDialogComponent} from './dialogs/fire-station-dialog.component';
 
 const inOutModules = [FormsModule, ReactiveFormsModule]
 @NgModule({
