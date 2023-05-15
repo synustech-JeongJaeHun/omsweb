@@ -70,9 +70,17 @@ export class StatusControlComponent implements OnInit, OnDestroy {
 	) {
 		this.preference = this.settingSvc.globalPreferences
 		settingSvc.serviceConfig.subscribe(
-			(config) => (this.bufferEnabled = config.bufferEnabled),
+			(config) => {
+        this.bufferEnabled = config.bufferEnabled
+        if(!this.bufferEnabled){
+          settingSvc.globalPreferences.controlTables.buffers =false
+        }
+      },
 		)
-    this.tableKeys = Object.keys(this.settingSvc.globalPreferences.controlTables).filter(key=>!key.includes('_'))
+    const keys = Object.keys(this.settingSvc.globalPreferences.controlTables).filter(key=>!key.includes('_'))
+    this.tableKeys = keys.filter(k=>{
+      if(this.settingSvc.globalPreferences.controlTables[k]) return k
+    })
 	}
 
 	ngOnInit(): void {
