@@ -33,7 +33,7 @@ export class PlaybackStatusPanelComponent implements OnInit, OnDestroy {
 
 	ngOnInit(): void {
 		this.resizeHandler = this.onMouseMove.bind(this)
-		this.currentTab = this.settingSvc.globalPreferences.uiStates.controlTab
+		this.currentTab = this.settingSvc.globalPreferences.uiStates.playbackTab
 
 		this.resizeTableHeight(this.tableHeightNum)
 	}
@@ -64,7 +64,7 @@ export class PlaybackStatusPanelComponent implements OnInit, OnDestroy {
 	}
 	onChangeTab(selectedIndex: number) {
 		const pref = this.settingSvc.globalPreferences
-		pref.uiStates.controlTab = selectedIndex
+		pref.uiStates.playbackTab = selectedIndex
 		this.settingSvc.globalPreferences.save()
 	}
 

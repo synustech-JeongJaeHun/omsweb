@@ -1322,7 +1322,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 	}
 
   includeCheck(word: string){
-    console.log(this.includesWords)
     return this.includesWords.some(i=>word.includes(i))
   }
 

@@ -46,7 +46,6 @@ function updateExistStation(
 }
 
 function updateIncludesWords(value: string[]) {
-  console.log(value)
   includeWords.value = value
 }
 

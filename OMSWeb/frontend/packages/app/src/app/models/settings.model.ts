@@ -68,6 +68,7 @@ export interface IPreferences {
 
 export class UiStates {
 	controlTab?: number = 0
+  playbackTab?: number = 0
 	zoom?: IZoom
 }
 

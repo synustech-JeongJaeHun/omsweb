@@ -39,7 +39,6 @@ export class PlaybackComponent implements OnInit, OnDestroy {
 
 	ngOnInit() {
     const param =JSON.parse(this.route.snapshot.queryParamMap.get("selected"))
-    console.log(param)
     if(param){
       const changTime = new Date(param)
       this.callPlayback(changTime)

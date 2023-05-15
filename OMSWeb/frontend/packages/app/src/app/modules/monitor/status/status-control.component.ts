@@ -77,7 +77,16 @@ export class StatusControlComponent implements OnInit, OnDestroy {
         }
       },
 		)
-    const keys = Object.keys(this.settingSvc.globalPreferences.controlTables).filter(key=>!key.includes('_'))
+    const keys = Object
+      .keys(this.settingSvc.globalPreferences.controlTables)
+      .filter(key=> {
+        if(this.canControl){
+          if(!key.includes('_')) return key
+        }
+        else{
+          if(key.endsWith('orders') || key.endsWith('vehicles')) return key
+        }
+      })
     this.tableKeys = keys.filter(k=>{
       if(this.settingSvc.globalPreferences.controlTables[k]) return k
     })
@@ -85,8 +94,8 @@ export class StatusControlComponent implements OnInit, OnDestroy {
 
 	ngOnInit(): void {
 		this.resizeHandler = this.onMouseMove.bind(this)
-		this.currentTab = this.settingSvc.globalPreferences.uiStates.controlTab
-
+    const tab =this.settingSvc.globalPreferences.uiStates.controlTab
+		this.currentTab = tab < this.tableKeys.length ? tab : 0
 		this.resizeTableHeight(this.tableHeightNum)
 	}
 
