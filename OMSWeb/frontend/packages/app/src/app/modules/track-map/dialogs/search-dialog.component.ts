@@ -74,13 +74,18 @@ export class SearchDialogComponent {
     else
       points = this.trackStatusService.trackData.points.map((x) => ({id: x.id, logicalId: x.logicalId}))
 
+    let stations = [...this.trackStatusService.trackData.stations.map((x) => ({ id: x.id, logicalId: x.logicalId })),
+      ...this.trackStatusService.trackData.stations.map((x) => ({ id: x.id, logicalId: String(x.id) })),
+      ...this.trackStatusService.trackData.stations.map((x) => ({ id: x.id, logicalId: x.physicalId }))]
+
+
 
     this.dataSourceMap = {
       vehicle: this.trackStatusService.trackData.vehicles.map((x) => ({id: x.id, logicalId: x.logicalId})),
       point: points,
       // distinct element because segment data is mixed with segparts
       segment: [...new Map(this.trackStatusService.trackData.segments.map((x) => [x.id, x.logicalId]))].map((x) => ({ id: x[0], logicalId: x[1] })),
-      station: this.trackStatusService.trackData.stations.map((x) => ({ id: x.id, logicalId: x.logicalId })),
+      station: stations,
       buffer: this.trackStatusService.trackData.buffers.map((x) => ({ id: x.id, logicalId: x.logicalId })),
       mtl: this.trackStatusService.trackData.mtls.map((x) => ({ id: x.id, logicalId: x.logicalId })),
       zcu: this.trackStatusService.trackData.zcus.map((x) => ({ id: x.id, logicalId: String(x.id) })),
