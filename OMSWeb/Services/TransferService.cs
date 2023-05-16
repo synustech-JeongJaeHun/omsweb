@@ -499,11 +499,6 @@ namespace OMSWeb.Services
                         {
                             HCACK = MCS_HCACK.NotAbleToExcute;
                         }
-                        else if (ORDER_CheckInterlock_Port_InOrder(carrierLoc, SourceType.STATION) ||
-                                 ORDER_CheckInterlock_CarrierID_InOrder(carrierId))
-                        {
-                            HCACK = MCS_HCACK.Reject;
-                        }
                         else
                             HCACK = MCS_HCACK.Confirm;
                     }
