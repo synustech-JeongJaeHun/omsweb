@@ -46,16 +46,13 @@ function initSegments(segparts: ITrackData['segmentParts']) {
 	})
 
 	const flr = most(segments.value.map(it=>it.z ?? 0))[0] || 0;
-	const bottom = segments.value.map(it=>it.z ?? 0).sort((a, b)=>a-b)[0];
-	const top = segments.value.map(it=>it.z ?? 0).sort((a, b)=>b-a)[0];
 	segments.value.sort((a, b) => (a.z || 0) - (b.z || 0))
-
-  console.log('bottom', bottom)
-  console.log('bottom', top)
 
 	const line:{startPoint: Point, endPoint: Point}[] = classifyLine(segparts)
 	containLines(line,flr);
-  slopeLines = findSlope(line, flr, top).concat(findSlope(line, bottom, flr))
+  slopeLines = findSlope(line)
+
+  console.log(slopeLines)
 
 	segments.value.forEach((s) => {
 		s.type= existence(s.startPoint, s.endPoint)
@@ -185,11 +182,11 @@ function containLines(line:{startPoint: Point, endPoint: Point}[], flr: number){
 	}
 }
 
-function findSlope(line:{startPoint: Point, endPoint: Point}[], b: number, t: number ):Points[] {
+function findSlope(line:{startPoint: Point, endPoint: Point}[]):Points[] {
 	let result : Points[] = [];
 	line.forEach(item=> {
     const startZ = item.startPoint.z, endZ = item.endPoint.z;
-		if(startZ && endZ&& (endZ - startZ!==0) && startZ>=b && startZ<=t && endZ>=b && endZ<=t)
+		if(endZ && endZ!==startZ)
 			result.push({startPoint: item.startPoint.id, endPoint: item.endPoint.id, z: item.startPoint.z});
 	})
 	return result;

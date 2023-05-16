@@ -1326,6 +1326,13 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   }
 
   onRemoveCarrierStation(carrierId: string) {
+    if(!this.includeCheck(this.contextMenuObject?.value?.logicalId)){
+      this.dialogSvc.alert({
+        title: this.$t.instant('names.failed'),
+        body: this.$t.instant('messages.confirmNotAbleToExcute'),
+      })
+    }
+
     this.transferSvc
       .checkCarrierChange(
         'remove',

@@ -38,6 +38,8 @@ export class FireStationDialogComponent implements OnInit, OnDestroy {
 
   selectedRows: number[] = []
 
+  includesWords  = []
+
   //#region Subscriptions
   private destroy$: Subject<void> = new Subject<void>()
   //#endregion
@@ -62,12 +64,12 @@ export class FireStationDialogComponent implements OnInit, OnDestroy {
       (config) => {
 
         const fireStationFilters = config.fireStationFilters
-        const words = [
+        this.includesWords = [
           ...fireStationFilters?.startWords,
           ...fireStationFilters?.endWords,
           ...fireStationFilters?.includeWords]
 
-        this.dataSource = this.statusSvc.fireStationStatusDataSource(words)
+        this.dataSource = this.statusSvc.fireStationStatusDataSource(this.includesWords)
       },
     )
   }
@@ -78,6 +80,7 @@ export class FireStationDialogComponent implements OnInit, OnDestroy {
       .subscribe((e: IDataChangeEvent) => {
         e && this.onTableChanged(e)
       })
+
   }
 
   ngOnDestroy() {
@@ -169,9 +172,21 @@ export class FireStationDialogComponent implements OnInit, OnDestroy {
     }
   }
 
+  includeCheck(word: string){
+    return this.includesWords.some(i=>word.includes(i))
+  }
+
   onRemoveCarrierStation(carrierId: string) {
     const data = this.dataGrid.instance.getSelectedRowsData()[0];
     if (!data?.logicalId) return;
+
+    if(!this.includeCheck(data?.logicalId)){
+      this.dialogSvc.alert({
+        title: this.$t.instant('names.failed'),
+        body: this.$t.instant('messages.confirmNotAbleToExcute'),
+      })
+    }
+
     this.transferSvc
       .checkCarrierChange(
         'remove',
