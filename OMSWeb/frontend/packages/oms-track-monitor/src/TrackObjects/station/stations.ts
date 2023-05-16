@@ -19,7 +19,6 @@ function initStations(ss: ITrackData['stations']) {
 
 	// set
 	stations.value = (ss ?? []).map((s) => {
-    s.carrierId = includeCheck(s.logicalId) ? s?.carrierId : ''
     return { ...s }
   })
 	stations.value.forEach((s) => stationMap.set(s.id, s))

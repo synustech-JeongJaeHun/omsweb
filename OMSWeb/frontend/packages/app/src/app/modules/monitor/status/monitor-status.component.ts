@@ -61,6 +61,8 @@ export class MonitorStatusComponent implements OnInit {
   enabled = false
   vhlDisplay = true
 
+  includesWords  = []
+
 	findEvent = new EventEmitter<{ type: string; id: number }>()
 	focusEvent = new EventEmitter<{
 		type: string
@@ -84,17 +86,34 @@ export class MonitorStatusComponent implements OnInit {
 			? ViewModes.viewer
 			: ViewModes.public
 
-		const pullTrackData = (isTrackReady: boolean) => {
-			if (isTrackReady) {
-				this.trackData = this.trackStatusService.trackData
-				this.loadingState = false
-				this.ready = true
-			}
-		}
+    settingSvc.serviceConfig.subscribe(
+      (config) => {
+        const fireStationFilters = config?.fireStationFilters
+        this.includesWords = [
+          ...fireStationFilters?.startWords,
+          ...fireStationFilters?.endWords,
+          ...fireStationFilters?.includeWords].filter(i=>i&&i)
 
-		if (this.trackStatusService.isTrackReady)
-			pullTrackData(this.trackStatusService.isTrackReady)
-		else this.trackStatusService.isTrackReadyChanged.subscribe(pullTrackData)
+        const pullTrackData = (isTrackReady: boolean) => {
+          if (isTrackReady) {
+            this.trackData = this.trackStatusService.trackData
+            this.loadingState = false
+            this.ready = true
+            this.trackData.stations.map(s=>{
+              if(!this.includeCheck(s.logicalId)) s.carrierId =null
+            })
+          }
+        }
+
+        if (this.trackStatusService.isTrackReady)
+          pullTrackData(this.trackStatusService.isTrackReady)
+        else this.trackStatusService.isTrackReadyChanged.subscribe(pullTrackData)
+      },
+    )
+
+
+
+
 
 		systemStatusService.updateNodeMarginsSetting()
 
@@ -136,6 +155,10 @@ export class MonitorStatusComponent implements OnInit {
     this.dragPosition = {x: 0, y: 0}
     this.settingSvc.globalPreferences.map.vhlStatusPos =this.dragPosition
     this.settingSvc.globalPreferences.save()
+  }
+
+  includeCheck(word: string){
+    return this.includesWords.some(i=>word.includes(i))
   }
 
 }

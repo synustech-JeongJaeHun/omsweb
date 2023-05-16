@@ -51,9 +51,6 @@ function initSegments(segparts: ITrackData['segmentParts']) {
 	const line:{startPoint: Point, endPoint: Point}[] = classifyLine(segparts)
 	containLines(line,flr);
   slopeLines = findSlope(line)
-
-  console.log(slopeLines)
-
 	segments.value.forEach((s) => {
 		s.type= existence(s.startPoint, s.endPoint)
 	})
