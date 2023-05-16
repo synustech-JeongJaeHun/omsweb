@@ -46,9 +46,12 @@ function initSegments(segparts: ITrackData['segmentParts']) {
 	})
 
 	const flr = most(segments.value.map(it=>it.z ?? 0))[0] || 0;
-	const bottom = most(segments.value.map(it=>it.z ?? 0), 3).sort((a, b)=>a-b)[0];
-	const top = most(segments.value.map(it=>it.z ?? 0), 3).sort((a, b)=>a-b)[2];
+	const bottom = segments.value.map(it=>it.z ?? 0).sort((a, b)=>a-b)[0];
+	const top = segments.value.map(it=>it.z ?? 0).sort((a, b)=>b-a)[0];
 	segments.value.sort((a, b) => (a.z || 0) - (b.z || 0))
+
+  console.log('bottom', bottom)
+  console.log('bottom', top)
 
 	const line:{startPoint: Point, endPoint: Point}[] = classifyLine(segparts)
 	containLines(line,flr);
