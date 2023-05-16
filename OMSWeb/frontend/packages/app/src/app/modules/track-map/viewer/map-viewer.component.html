@@ -781,6 +781,7 @@
 				[value]="contextMenuObject?.value.usingType"
 			>
 				<mat-button-toggle [value]="1"
+                           [disabled]="contextMenuObject?.value?.inputZones.length===1"
 					>{{ 'names.hw' | translate }}
 				</mat-button-toggle>
 				<mat-button-toggle [value]="2"
