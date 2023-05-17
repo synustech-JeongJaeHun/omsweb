@@ -77,6 +77,9 @@ export class SearchDialogComponent {
     let stations = [...this.trackStatusService.trackData.stations.map((x) => ({ id: x.id, logicalId: x.logicalId })),
       ...this.trackStatusService.trackData.stations.map((x) => ({ id: x.id, logicalId: String(x.id) })),
       ...this.trackStatusService.trackData.stations.map((x) => ({ id: x.id, logicalId: x.physicalId }))]
+    stations.sort((a,b)=> {
+      return a.logicalId.length - b.logicalId.length
+    })
 
 
 
