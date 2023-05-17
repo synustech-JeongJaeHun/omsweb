@@ -40,6 +40,8 @@ export class FireStationDialogComponent implements OnInit, OnDestroy {
 
   includesWords  = []
 
+  selectRowData = null;
+
   //#region Subscriptions
   private destroy$: Subject<void> = new Subject<void>()
   //#endregion
@@ -232,5 +234,7 @@ export class FireStationDialogComponent implements OnInit, OnDestroy {
   cellSelected(e){
     this.dataGrid.instance.deselectAll()
     this.dataGrid.instance.selectRowsByIndexes(e.rowIndex)
+    this.selectRowData = this.dataGrid.instance.getSelectedRowsData()[0];
+
   }
 }

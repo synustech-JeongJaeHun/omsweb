@@ -29,6 +29,7 @@
             <input
               #carrierIdInput
               matInput
+              [value]="selectRowData?.carrierId"
               [placeholder]="'names.carrierId' | translate"
             />
           </mat-form-field>
@@ -94,7 +95,7 @@
           dataType="string"
           dataField="carrierId"
           [caption]="'names.carrierId' | translate"
-          [width]="150"></dxi-column>
+          [width]="183"></dxi-column>
       </dx-data-grid>
     </div>
   </ng-container>
