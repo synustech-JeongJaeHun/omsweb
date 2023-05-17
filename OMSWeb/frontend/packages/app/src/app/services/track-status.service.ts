@@ -20,7 +20,7 @@ export class TrackStatusService {
 		this.fetchTrack().then(() => this.attachHubEvents())
 	}
 
-	private async fetchTrack() {
+	public async fetchTrack() {
 		const trackData = await this.statusService.getTrack().toPromise()
 
 		this.trackData = trackData
