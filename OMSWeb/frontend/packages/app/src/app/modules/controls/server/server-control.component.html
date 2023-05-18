@@ -1,12 +1,12 @@
 <fieldset>
   <legend>{{ "names.serverModule" | translate }}</legend>
   <div style="display: flex; flex-direction: row-reverse;">
-    <button
+    <button (click)="load()"
       mat-stroked-button
       class="dense accent"
       style="margin-bottom: 4px; ">
       refresh
-      <mat-icon (click)="load()">refresh</mat-icon>
+      <mat-icon >refresh</mat-icon>
     </button>
 
   </div>

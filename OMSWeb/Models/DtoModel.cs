@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace OMSWeb.Models
@@ -78,5 +79,13 @@ namespace OMSWeb.Models
     public string ModifiedBy { get; set; }
     public string Annotation { get; set; }
     public int VehicleAlaramID { get; set; }
+  }
+
+  public class ModuleStatusDto
+  {
+    public int ID { get; set; }
+    public int PID { get; set; }
+    public DateTime StartTime { get; set; }
+    
   }
 }

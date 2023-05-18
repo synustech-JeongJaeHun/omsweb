@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-
+using OMSWeb.Models;
 using OMSWeb.Models.Entities;
 using OMSWeb.Repositories;
 
@@ -44,6 +44,12 @@ namespace OMSWeb.Services
         {
           module.PID = -1;
           module.StartTime = null;
+          ModuleStatusDto dto = new ModuleStatusDto();
+          dto.PID = module.PID;
+          dto.ID = module.ID;
+          dto.StartTime = module.StartTime ?? module.ReleaseTime;
+
+          this._moduleStatusRepo.UpdateModuleStatus(dto);
         }
       }
 

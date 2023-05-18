@@ -9,6 +9,7 @@ using OMSWeb.Models.Entities;
 using Npgsql;
 using System.IO;
 using Microsoft.AspNetCore.Mvc;
+using OMSWeb.Models;
 
 namespace OMSWeb.Repositories
 {
@@ -134,6 +135,39 @@ namespace OMSWeb.Repositories
                 {
                     result = null;
                 }
+            }
+            return result;
+        }
+        
+        public int UpdateModuleStatus(ModuleStatusDto dto)
+        {
+            int result = -1;
+            var sql = @"UPDATE module_status 
+                        SET pid=@pid, start_time = @start_time
+                        WHERE id = @id;";
+
+            using (var conn = ConnectTrack())
+            {
+                conn.Open();
+                var trans = conn.BeginTransaction();
+
+                using (var cmd = new NpgsqlCommand(sql, conn))
+                {
+                    try
+                    {
+                        cmd.Parameters.AddWithValue("id", dto.ID);
+                        cmd.Parameters.AddWithValue("pid", dto.PID);
+                        cmd.Parameters.AddWithValue("start_time", dto.StartTime);
+
+                        result = cmd.ExecuteNonQuery();
+                    }
+                    catch (Exception ex)
+                    {
+                        trans.Rollback();
+                        //throw ex;
+                    }
+                }
+                trans.Commit();
             }
             return result;
         }
