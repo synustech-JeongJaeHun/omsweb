@@ -13,6 +13,6 @@ namespace OMSWeb.Models.Entities
     public string Version { get; set; }
     public DateTime ReleaseTime { get; set; }
     public int PID { get; set; }
-    public DateTime StartTime { get; set; }
+    public DateTime? StartTime { get; set; }
   }
 }

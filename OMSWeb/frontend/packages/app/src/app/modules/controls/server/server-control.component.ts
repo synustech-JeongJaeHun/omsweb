@@ -23,14 +23,7 @@ export class ServerControlComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.systemSvc.processes().subscribe((res) => {
-      this.dataSource2 = res;
-    });
-
-    this.systemSvc.moduleStatus().subscribe((res) => {
-      //alert(res);
-      this.dataSource = res;
-    });
+    this.load();
   }
 
   onCommand(action: string, module: IModuleStatus) {
@@ -49,5 +42,12 @@ export class ServerControlComponent implements OnInit {
           }
         }
       });
+  }
+
+  load(){
+    this.systemSvc.moduleStatus().subscribe((res) => {
+      //alert(res);
+      this.dataSource = res;
+    });
   }
 }

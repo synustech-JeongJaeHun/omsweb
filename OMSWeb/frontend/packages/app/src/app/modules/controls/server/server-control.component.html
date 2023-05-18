@@ -1,6 +1,15 @@
 <fieldset>
   <legend>{{ "names.serverModule" | translate }}</legend>
+  <div style="display: flex; flex-direction: row-reverse;">
+    <button
+      mat-stroked-button
+      class="dense accent"
+      style="margin-bottom: 4px; ">
+      refresh
+      <mat-icon (click)="load()">refresh</mat-icon>
+    </button>
 
+  </div>
   <table id="process-list">
     <tr>
       <th>{{ "names.id" | translate }}</th>
@@ -16,30 +25,11 @@
       <td>{{ item.name }}</td>
       <td>v.{{ item.version }}</td>
       <td>{{ item.releaseTime }}</td>
-      <td>{{ item.pid }}</td>
+      <td>{{ item.pid > -1 ? item.pid: '-' }}</td>
       <td><img
-          src="{{ (item.startTime == null || item.startTime == undefined || item.startTime == '') ? '/assets/images/module_stopped.gif' : '/assets/images/module_executed.gif' }}"
-          width="15" height="15" /> {{ (item.startTime == null || item.startTime == undefined || item.startTime == '') ?
+          src="{{ (!item.startTime) || item.pid<0 ? '/assets/images/module_stopped.gif' : '/assets/images/module_executed.gif' }}"
+          width="15" height="15" /> {{ (!item.startTime)|| item.pid<-1 ?
         'Stopped' : 'Running' }}</td>
-      <!--
-      <td>
-        <button mat-raised-button class="dense" color="primary"
-          [disabled]="!(item.startTime == null || item.startTime == undefined || item.startTime == '')"
-          (click)="onCommand('start', item)" *ngIf="!(item.id == 2 || item.id == 3)">
-          {{ "names.start" | translate }}
-        </button>
-        <button mat-raised-button class="dense" color="primary"
-          [disabled]="(item.startTime == null || item.startTime == undefined || item.startTime == '')"
-          (click)="onCommand('stop', item)" *ngIf="!(item.id == 2 || item.id == 3)">
-          {{ "names.stop" | translate }}
-        </button>
-        <button mat-raised-button class="dense" color="primary"
-          [disabled]="(item.startTime == null || item.startTime == undefined || item.startTime == '')"
-          (click)="onCommand('restart', item)" *ngIf="!(item.id == 2 || item.id == 3)">
-          {{ "names.restart" | translate }}
-        </button>
-      </td>
-      -->
     </tr>
   </table>
 </fieldset>
