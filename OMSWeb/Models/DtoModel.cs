@@ -85,7 +85,6 @@ namespace OMSWeb.Models
   {
     public int ID { get; set; }
     public int PID { get; set; }
-    public DateTime StartTime { get; set; }
-    
+
   }
 }

@@ -143,7 +143,7 @@ namespace OMSWeb.Repositories
         {
             int result = -1;
             var sql = @"UPDATE module_status 
-                        SET pid=@pid, start_time = @start_time
+                        SET pid=@pid, start_time = null
                         WHERE id = @id;";
 
             using (var conn = ConnectTrack())
@@ -157,7 +157,6 @@ namespace OMSWeb.Repositories
                     {
                         cmd.Parameters.AddWithValue("id", dto.ID);
                         cmd.Parameters.AddWithValue("pid", dto.PID);
-                        cmd.Parameters.AddWithValue("start_time", dto.StartTime);
 
                         result = cmd.ExecuteNonQuery();
                     }

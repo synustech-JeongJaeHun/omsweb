@@ -47,7 +47,6 @@ namespace OMSWeb.Services
           ModuleStatusDto dto = new ModuleStatusDto();
           dto.PID = module.PID;
           dto.ID = module.ID;
-          dto.StartTime = module.StartTime ?? module.ReleaseTime;
 
           this._moduleStatusRepo.UpdateModuleStatus(dto);
         }
