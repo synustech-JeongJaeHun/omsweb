@@ -27,6 +27,8 @@ namespace OMSWeb.Services
         {"ZCU",       "zcu_mgr" },
         {"CPS",       "cps_mgr" },
         {"MTL",       "mtl_mgr" },
+        {"FCU",       "fcu_mgr" },
+        {"FDC",       "fdc_mgr" },
         {"RDS",       "RDS" },
       };
     }
