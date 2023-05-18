@@ -805,5 +805,31 @@ namespace OMSWeb.Repositories
 
             return result;
         }
+        
+        public List<Backdrop> LoadBackdrops()
+        {
+            var key = CacheKeys.Points;
+            var data = new List<Backdrop>();
+            var models = new List<Backdrop>();
+            string sql = QueryFactory.GetSql("backdrop");
+            using (var conn = ConnectTrack())
+            {
+                using (var cmd = new NpgsqlCommand(sql, conn))
+                {
+                    try
+                    {
+                        models = conn.Query<Backdrop>(sql).ToList();
+                    }
+                    catch (System.Exception)
+                    {
+                        Console.WriteLine("[LoadPoints] => null");
+                    }
+                }
+            }
+            data = models.ToList();
+            _cache.SetValue<List<Backdrop>>(key, data, DateTimeOffset.Now.AddMinutes(CACHE_LIFE));
+            // }
+            return data;
+        }
     }
 }

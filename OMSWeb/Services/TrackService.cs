@@ -36,6 +36,7 @@ namespace OMSWeb.Services
                 ZcuStatus = this._trackRepo.LoadZcuStatus(),
                 FireShutters = this._trackRepo.LoadFireShutters(),
                 FireShutterStatus = this._trackRepo.LoadFireShutterStatus(),
+                Backdrops = this._trackRepo.LoadBackdrops() 
             };
             return map;
         }

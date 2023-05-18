@@ -12,6 +12,8 @@ import ClusterLayer from 'TrackObjects/cluster/components/ClusterLayer.ce.vue'
 import CpsLayer from 'TrackObjects/cluster/components/CpsLayer.ce.vue'
 import DisabledSegmentLayer from 'src/TrackObjects/segment/components/DisabledSegmentLayer.ce.vue'
 import FireshutterLayer from 'src/TrackObjects/fireshutter/components/FireshutterLayer.ce.vue'
+import BackdropLayer from 'src/TrackObjects/backdrop/components/BackdropLayer.ce.vue'
+
 
 import {
   panByMouse,
@@ -61,6 +63,7 @@ const emit = inject<RootEmits>(RootEmitInjectionKey)!
     <GridLayer />
     <ClusterLayer />
     <CpsLayer />
+    <BackdropLayer />
     <SegmentLayer />
     <DisabledSegmentLayer />
     <PointLayer />
