@@ -808,7 +808,6 @@ namespace OMSWeb.Repositories
         
         public List<Backdrop> LoadBackdrops()
         {
-            var key = CacheKeys.Points;
             var data = new List<Backdrop>();
             var models = new List<Backdrop>();
             string sql = QueryFactory.GetSql("backdrop");
@@ -827,7 +826,6 @@ namespace OMSWeb.Repositories
                 }
             }
             data = models.ToList();
-            _cache.SetValue<List<Backdrop>>(key, data, DateTimeOffset.Now.AddMinutes(CACHE_LIFE));
             // }
             return data;
         }

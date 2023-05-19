@@ -22,5 +22,7 @@ namespace OMSWeb.Models.Tracks
         public int Bold { get; set; }
         public bool Italic { get; set; }
         public int FontSize { get; set; }
+        public string TextColor { get; set; }
+        
     }
 }

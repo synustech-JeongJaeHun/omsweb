@@ -221,6 +221,7 @@ interface IBackdrop {
   bold: number
   italic: boolean
   fontSize: number
+  textColor?: string
 }
 
 interface ITrackData {

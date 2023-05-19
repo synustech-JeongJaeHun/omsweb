@@ -272,5 +272,6 @@ export namespace Dto {
     bold: number
     italic: boolean
     fontSize: number
+    textColor?: string
   }
 }

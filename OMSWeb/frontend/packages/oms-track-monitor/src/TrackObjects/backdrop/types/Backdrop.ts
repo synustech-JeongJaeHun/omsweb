@@ -4,10 +4,10 @@ import { CanBeFocused } from 'src/MapObjects/focus/types/CanBeFocused'
 type Backdrop = {
   id: number
   logicalId: string
-  x?: number
-  y?: number
-  width?: number
-  height?: number
+  x: number
+  y: number
+  width: number
+  height: number
   backgroundColor?: string
   outlineThickness?: number
   outlineColor?: string
@@ -20,6 +20,7 @@ type Backdrop = {
   bold: number
   italic: boolean
   fontSize: number
+  textColor?: string
 } & CanBeFocused &
   CanBeCarrierFocused
 

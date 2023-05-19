@@ -1,55 +1,107 @@
 <script setup lang="ts">
-import { Backdrop } from '../types/Backdrop'
-import {computed} from "vue";
+import { Backdrop} from '../types/Backdrop'
 
 const props = defineProps<{
   backdrop: Backdrop
 }>()
 
-console.log(props.backdrop.contents)
-const position = computed(() =>
-    getPositionAlign(props.backdrop)
-)
+function getAnchor(hAlign:number = 0): 'start' | 'middle' | 'end'{
+  switch (hAlign){
+    case 1:
+      return 'middle'
+    case 2:
+      return 'end'
+    default :
+      return 'start' 
+  }
+}
+function getX(hAlign:number = 0): number{
+  switch (hAlign){
+    case 1:
+      return props.backdrop.width/2
+    case 2:
+      return props.backdrop.width
+    default :
+      return 0
+  }
+}
 
-function getPositionAlign(
-    backdrop: Backdrop    
-) {
-  let position = {
-    x: 0,
-    y: 0,
-    anchor: ''
+function getBaseLine(vAlign:number = 0): 'before-edge' | 'middle' | 'after-edge'{
+  switch (vAlign){
+    case 1:
+      return 'middle'
+    case 2:
+      return 'after-edge'
+    default :
+      return 'before-edge'
   }
-  switch (backdrop.hAlign){
-    case 1: // align center
-      position.x = 0;
-      position.anchor = 'middle'
-          break;
-    case 2: // align right
-      position.x = backdrop.width || 0;
-      position.anchor = 'end'
-          break;
-    default: // align left
-      position.x = 0;
-      position.anchor = 'start'
-          break;
+}
+function getY(vAlign:number = 0): number{
+  switch (vAlign){
+    case 1:
+      return -props.backdrop.height/2
+    case 2:
+      return 0
+    default :
+      return -props.backdrop.height
   }
+}
 
-  switch (backdrop.vAlign){
-    case 1: // align middle
-      position.y = 0;
-      position.anchor = 'middle'
+// 0: horizontal, 1: vertical90, 2: vertical270, 
+// 3: stack -> todo 
+function getRotate(direction:number =0, vAlign:number = 0, hAlign:number = 0): string{
+
+  let x =0, y=0, d=0;
+  const h =props.backdrop.height, w=props.backdrop.width
+  
+  switch (direction){
+    case 1:
+      d=270
+      switch (vAlign){
+        case 1:
+          y=-(w-h)/2
+          break;
+        case 2:
+          break;
+        default :
+          y=-(w-h);
+      }
+      switch (hAlign){
+        case 1:
+          x=-(w+h)/2
+          break;
+        case 2:
+          x=-w
+          break;
+        default :
+          x=-h
+          break;
+      }
       break;
-    case 2: // align bottom
-      position.y = backdrop.width || 0;
-      position.anchor = 'end'
-      break;
-    default: // align top
-      position.y = 0;
-      position.anchor = 'start'
-      break;
+    case 2:
+      d=90
+      switch (vAlign){
+        case 1:
+          y=(w+h)/2
+          break;
+        case 2:
+          y=(w)
+          break;
+        default :
+          y=h
+      }
+      switch (hAlign){
+        case 1:
+          x=-(w-h)/2
+          break;
+        case 2:
+          x=-(w-h);
+          break;
+        default :
+      }
   }
-    
-  return position
+  
+  return `transform: rotate(${d}deg) scaleY(-1) translate(${x}px, ${y}px)`
 }
 </script>
 
@@ -68,15 +120,18 @@ function getPositionAlign(
             :rx="props.backdrop.outlineRadius"
       >
       </rect>
-      <text :x="position.x"
-            :y="-props.backdrop.y"
-            :text-anchor="position.anchor"
-            fill="black"
-            class="invert label select-none"
-            alignment-baseline="hanging"
-            text-rendering="optimizeSpeed"
-            pointer-events="none"
-            :font-size="props.backdrop?.fontSize">
+      <text 
+            :x="getX(props.backdrop.hAlign)"
+            :y="getY(props.backdrop.vAlign)"
+            :text-anchor="getAnchor(props.backdrop.hAlign)"
+            :alignment-baseline="getBaseLine(props.backdrop.vAlign)"
+            class="label select-none"
+            :font-weight="props.backdrop?.bold ? 'bold' : 'normal'"
+            :font-style="props.backdrop?.italic ? 'italic' : 'normal'"
+            :style="getRotate(props.backdrop?.direction, props.backdrop.vAlign, props.backdrop.hAlign)"
+            :font-size="props.backdrop?.fontSize"
+            :fill="props.backdrop?.textColor"
+      >
         {{ props.backdrop.contents }}
       </text>
     </g>

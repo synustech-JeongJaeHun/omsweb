@@ -98,20 +98,18 @@ export class MonitorStatusComponent implements OnInit {
 
         const pullTrackData = (isTrackReady: boolean) => {
           if (isTrackReady) {
-            this.trackStatusService.fetchTrack().then(()=>{
-              this.trackData = this.trackStatusService.trackData
-              this.loadingState = false
-              this.ready = true
-              this.trackData.stations.map(s=>{
-                if(!this.includeCheck(s.logicalId)) s.carrierId =null
-              })
+            this.trackData = this.trackStatusService.trackData
+            this.loadingState = false
+            this.ready = true
+            this.trackData.stations.map(s=>{
+              if(!this.includeCheck(s.logicalId)) s.carrierId =null
             })
           }
         }
 
-        if (this.trackStatusService.isTrackReady)
+        this.trackStatusService.fetchTrack().then(()=>{
           pullTrackData(this.trackStatusService.isTrackReady)
-        else this.trackStatusService.isTrackReadyChanged.subscribe(pullTrackData)
+        })
       },
     )
 
