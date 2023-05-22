@@ -210,7 +210,7 @@ export class MapToolbarComponent implements OnDestroy {
 
 		const rect = this.btnShowObj.nativeElement.getBoundingClientRect()
 		this._showObjDlg = this.dialog.open(ShowObjectDialogComponent, {
-			width: '400px',
+			width: '420px',
 			autoFocus: false,
 			hasBackdrop: false,
 			disableClose: false,

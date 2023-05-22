@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Layer from 'MapObjects/map/components/Layer.ce.vue'
-import { backdrops, findBackdropById } from '../backdrops'
+import { backdrops, findBackdropById, readonlyIsBackdrop } from '../backdrops'
 import { inject, ref } from 'vue'
 import { RootEmitInjectionKey, RootEmits } from 'src/Root/types/RootEmits'
 import Backdrop from './Backdrop.ce.vue'
@@ -16,7 +16,7 @@ function getDeepCopiedBuffer(event: MouseEvent) {
 </script>
 
 <template>
-  <Layer id="backdrop-layer">
+  <Layer id="backdrop-layer" v-if="readonlyIsBackdrop">
     <Backdrop
       v-for="backdrop of backdrops"
       :backdrop="backdrop"

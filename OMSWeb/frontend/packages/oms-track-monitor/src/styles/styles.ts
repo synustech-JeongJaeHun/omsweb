@@ -37,6 +37,7 @@ const VisibleDefault: Record<VisibleProperty, boolean> = {
   cps: true, // applied in OmsTrackMonitor.ce.vue
   fireshutter: true, // applied in OmsTrackMonitor.ce.vue
   mtl: true, // applied in OmsTrackMonitor.ce.vue
+  backdrop: false, // applied in OmsTrackMonitor.ce.vue
   minimap: true, // applied in OmsTrackMonitor.ce.vue
 }
 
