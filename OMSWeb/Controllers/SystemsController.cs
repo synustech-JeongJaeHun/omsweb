@@ -101,6 +101,12 @@ namespace OMSWeb.Controllers
         {
             return System.IO.File.ReadAllText("./customSettings.json");
         }
+        
+        [HttpGet("reference")]
+        public ActionResult<string> GetRef()
+        {
+            return System.IO.File.ReadAllText("./reference.json");
+        }
 
         [HttpGet(template: "zcus-with-fireshutter")]
         public int[] GetZcusWithFireshutter()

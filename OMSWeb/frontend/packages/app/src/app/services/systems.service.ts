@@ -77,10 +77,10 @@ export class SystemsService {
   controlTables(): Observable<JsonObject> {
     return this.http.get<JsonObject>(`${this.baseUrl}/customSettings`)
   }
-  /*controlTables(): Observable<IPreferences['controlTables']> {
-    return this.http.get<IPreferences['controlTables']>(`${this.baseUrl}/customSettings`)
-  }*/
 
+  reference(): Observable<JsonObject> {
+    return this.http.get<JsonObject>(`${this.baseUrl}/reference`)
+  }
   loadControlTables(){
     this.settingSvc.serviceConfig.subscribe((config) => {
       if(!config.customSetting) return
