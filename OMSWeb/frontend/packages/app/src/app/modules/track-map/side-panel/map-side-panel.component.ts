@@ -255,4 +255,17 @@ export class MapSidePanelComponent implements OnChanges, OnDestroy {
 	closePanel() {
 		this.statesSvc.changeToolbarState('itemDetails', false)
 	}
+
+  getSteer(value: number){
+    switch (value){
+      case 1:
+        return 'Left'
+      case 2:
+        return 'Right'
+      case 3:
+        return 'Keep'
+      default :
+        return 'None'
+    }
+  }
 }

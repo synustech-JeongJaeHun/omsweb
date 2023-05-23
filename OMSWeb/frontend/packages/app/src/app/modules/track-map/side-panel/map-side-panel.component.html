@@ -268,7 +268,7 @@
         </mat-form-field>
         <mat-form-field class="info-item readonly">
           <mat-label>{{ "names.physicalId" | translate }}</mat-label>
-          <input matInput type="text" readonly [value]="data.physicalId" />
+          <input matInput type="text" readonly [value]="data?.physicalId || ''" />
         </mat-form-field>
         <mat-form-field class="info-item readonly" floatLabel="always">
           <mat-label>{{ "names.pointFrom" | translate }}</mat-label>
@@ -292,6 +292,23 @@
           <mat-label>{{ "names.travelTime" | translate }}</mat-label>
           <input matInput type="text" readonly [value]="(data.length / data.speed) | number: '1.0-2'" />
           <span matSuffix>sec</span>
+        </mat-form-field>
+        <mat-form-field class="info-item readonly" floatLabel="always">
+          <mat-label>{{ "names.steer" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="getSteer(data?.steerDir)" />
+        </mat-form-field>
+        <mat-form-field class="info-item readonly" floatLabel="always">
+          <mat-label>{{ "names.speedRatio" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data?.speedRatio" />
+          <span matSuffix>%</span>
+        </mat-form-field>
+        <mat-form-field class="info-item readonly" floatLabel="always">
+          <mat-label>{{ "names.oblow" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data?.oblow" />
+        </mat-form-field>
+        <mat-form-field class="info-item readonly" floatLabel="always">
+          <mat-label>{{ "names.obhigh" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data?.obhigh" />
         </mat-form-field>
       </div>
 

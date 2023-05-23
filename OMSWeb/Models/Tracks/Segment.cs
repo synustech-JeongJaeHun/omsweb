@@ -28,6 +28,11 @@ namespace OMSWeb.Models.Tracks
     public int EndPoint { get; set; }
     public float Speed { get; set; }
     public float Length { get; set; }
+    
+    public int SteerDir { get; set; }
+    public int SpeedRatio { get; set; }
+    public int Oblow { get; set; }
+    public int Obhigh { get; set; }
   }
   public class SegmentWithPart : Segment, ISegmentPart
   {

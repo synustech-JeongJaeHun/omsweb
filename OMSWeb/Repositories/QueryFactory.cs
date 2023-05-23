@@ -35,10 +35,12 @@ namespace OMSWeb.Repositories
           type,
           location,
           direction,
-          SG.speed, SG.length
+          SG.speed, SG.length,
+          SV.steer_dir, SV.speed_ratio, SV.oblow, SV.obhigh
         FROM segment_parts AS SP
         INNER JOIN segments AS SG
           ON SP.segment_id = SG.id
+        LEFT JOIN segment_vparts as SV on SG.id = SV.id 
         --*user_id_condition*--WHERE SP.user_id = @userId
         ORDER BY SP.segment_id, SP.id
       "},

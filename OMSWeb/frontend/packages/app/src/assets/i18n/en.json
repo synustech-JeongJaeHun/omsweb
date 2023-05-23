@@ -549,7 +549,10 @@
     "highWay": "High Way",
     "slopeUp": "Slope Up",
     "slopeDown": "Slope Down",
-    "fireStation" : "Fire Station"
+    "fireStation" : "Fire Station",
+    "steer" : "Steer",
+    "oblow" : "OBS Low",
+    "obhigh" : "OBS High"
   },
   "enums": {
     "hostSessionStatus": {

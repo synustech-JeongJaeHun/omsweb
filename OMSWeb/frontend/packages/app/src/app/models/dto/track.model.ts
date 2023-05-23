@@ -161,6 +161,11 @@ export namespace Dto {
 
     startPointDto?: IPoint
     endPointDto?: IPoint
+
+    steerDir?: number
+    speedRatio?: number
+    oblow?: number
+    obhigh?: number
 	}
 	export interface IStation {
 		id: number
