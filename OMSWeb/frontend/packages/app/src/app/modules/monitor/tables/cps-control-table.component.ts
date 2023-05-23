@@ -134,11 +134,11 @@ export class CpsControlTableComponent implements OnInit, OnDestroy {
 	}
 	private getColor_Voltage(value: string): string {
 		let volt = parseInt(value)
-		if (510 <= volt && volt < 650) return this.color_normal
-		else if (430 <= volt && volt < 510) return this.color_warning
+		if (510 < volt && volt < 650) return this.color_normal
+		else if (430 < volt && volt <= 510) return this.color_warning
     else if (650 <= volt && volt < 675) return this.color_warning
-		else if (430 > volt) return this.color_fault
-    else if (675 < volt) return this.color_fault
+		else if (430 >= volt) return this.color_fault
+    else if (675 <= volt) return this.color_fault
 		return this.color_normal
 	}
 	private getColor_CurrentIgbt(value: string): string {
@@ -150,8 +150,8 @@ export class CpsControlTableComponent implements OnInit, OnDestroy {
 	}
 	private getColor_CurrentTrack(value: string): string {
 		let curr = parseInt(value)
-		if (curr < 70) return this.color_warning
-		else if (70 <= curr && curr < 85) return this.color_normal
+		if (curr <= 70) return this.color_warning
+		else if (70 < curr && curr < 85) return this.color_normal
 		else if (85 <= curr && curr < 90) return this.color_warning
 		else if (90 <= curr) return this.color_fault
 		return this.color_normal
