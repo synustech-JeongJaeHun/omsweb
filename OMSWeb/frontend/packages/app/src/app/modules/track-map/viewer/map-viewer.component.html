@@ -700,7 +700,7 @@
 				{{ 'names.setDest' | translate }}
 			</button>
 			<button
-				*ngIf="contextMenuObject?.value.unuse === true"
+				*ngIf="contextMenuObject?.value.unuse === true && !includeCheck(contextMenuObject?.value?.logicalId)"
 				mat-stroked-button
 				class="dense accent"
 				color="primary"
@@ -709,7 +709,7 @@
 				{{ 'names.use' | translate }}
 			</button>
 			<button
-				*ngIf="contextMenuObject?.value.unuse !== true"
+				*ngIf="contextMenuObject?.value.unuse !== true && !includeCheck(contextMenuObject?.value?.logicalId)"
 				mat-stroked-button
 				class="dense accent"
 				color="primary"
