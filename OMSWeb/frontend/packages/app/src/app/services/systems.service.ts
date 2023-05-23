@@ -13,7 +13,7 @@ import {
 	ISettingMode,
 } from '@oms/models/system.model'
 import {
-  ClientPreferences,
+  ClientPreferences, HistoryTable,
   MonitorControlTable,
   ToggleOptionsType,
   TrackObjectConfig,
@@ -95,6 +95,7 @@ export class SystemsService {
           this.jsonToSetting(res['TrackObjectConfig'] as TrackObjectConfig, globalPreferences.trackDisplay)
           this.jsonToSetting(res['TTSConfig'] as TTSConfig, globalPreferences.tts)
           this.jsonToSetting(res['TrackMonitorSetting'] as TrackMonitorSetting, trackSetting )
+          this.jsonToSetting(res['HistoryTables'] as HistoryTable, globalPreferences.historyTables )
 
           this.settingSvc.globalPreferences.save()
           this.trackMonitorSettingSvc.updateCustom(trackSetting)

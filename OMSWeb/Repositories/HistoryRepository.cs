@@ -151,11 +151,23 @@ namespace OMSWeb.Repositories
                                 WHEN OD.location_pickup IS NULL AND OD.location_dropoff IS NOT NULL THEN VR.logical_id
 		                        ELSE OD.location_pickup
 	                        EnD AS location_pickup,
+                            CASE
+			                    WHEN OD.location_pickup LIKE '%s%' THEN	(SELECT c_alias FROM stations WHERE concat('s', cast(id as varchar)) = OD.location_pickup)
+			                    WHEN OD.location_pickup LIKE '%b%' THEN	(SELECT c_alias FROM buffers WHERE concat('b', cast(id as varchar)) = OD.location_pickup)
+		                        WHEN OD.location_pickup LIKE '%v%' THEN	(SELECT logical_Id FROM vehicles WHERE concat('v', cast(id as varchar)) = OD.location_pickup)
+                                WHEN OD.location_pickup IS NULL AND OD.location_dropoff IS NOT NULL THEN VR.logical_id
+			                    ELSE OD.location_pickup
+		                    EnD AS location_pickup_alias,
 	                        CASE
 		                        WHEN OD.location_dropoff LIKE '%s%' THEN (SELECT logical_Id FROM stations WHERE concat('s', cast(id as varchar)) = OD.location_dropoff)
 		                        WHEN OD.location_dropoff LIKE '%b%' THEN (SELECT logical_Id FROM buffers WHERE concat('b', cast(id as varchar)) = OD.location_dropoff)
 		                        ELSE OD.location_dropoff
 	                        EnD AS location_dropoff,
+                            CASE
+			                    WHEN OD.location_dropoff LIKE '%s%' THEN	(SELECT c_alias  FROM stations WHERE concat('s', cast(id as varchar)) = OD.location_dropoff)
+			                    WHEN OD.location_dropoff LIKE '%b%' THEN	(SELECT c_alias FROM buffers WHERE concat('b', cast(id as varchar)) = OD.location_dropoff)
+			                    ELSE OD.location_dropoff
+		                    EnD AS location_dropoff_alias,
 	                        CASE
 		                        WHEN OD.location_move LIKE '%s%' THEN (SELECT logical_Id FROM stations WHERE concat('s', cast(id as varchar)) = OD.location_move)
 		                        WHEN OD.location_move LIKE '%b%' THEN (SELECT logical_Id FROM buffers WHERE concat('b', cast(id as varchar)) = OD.location_move)
