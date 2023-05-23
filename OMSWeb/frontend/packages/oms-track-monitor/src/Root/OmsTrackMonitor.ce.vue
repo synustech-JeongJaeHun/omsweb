@@ -33,6 +33,7 @@ import {convertStringToImageDataUrl} from "src/utils/textToImage";
 import {updatePointType} from "TrackObjects/point/pointType";
 import {updateNextLine, updateVHLArrow, updateVHLPosition, updateVHLAlias} from "TrackObjects/vehicle/vehicles";
 import {updateIncludesWords} from "TrackObjects/station/stations";
+import {updateIdType} from "TrackObjects/common/alias";
 /**
  *  https://v3.vuejs.org/api/sfc-script-setup.html#typescript-only-features
  *
@@ -74,7 +75,8 @@ const props = defineProps<{
   isFireshutterVisible: Boolish
   isMtlVisible: Boolish
   zoomButtonVisible: Boolish
-  pointDisplayType: Boolish
+  pointDisplayType: Stringlish
+  idDisplayType: Stringlish
 
   isVHLArrowVisible: Boolish
   nextLine: Boolish
@@ -202,7 +204,11 @@ watch(propRefs.pointDisplayType, () => {
     updatePointType(props.pointDisplayType)
   }
 })
-
+watch(propRefs.idDisplayType, () => {
+  if(typeof props.idDisplayType === 'string'){
+    updateIdType(props.idDisplayType)
+  }
+})
 
 watch(propRefs.vhlDisplay, () => {
   if(props.vhlDisplay){

@@ -41,6 +41,13 @@
           <mat-option *ngFor="let item of objectValues(PointType)" [value]="item">{{item}}</mat-option>
         </mat-select>
       </div>
+
+      <div class="form-grid mat-select-div">
+        <mat-label >{{'names.idDisplayType' | translate}}</mat-label>
+        <mat-select [(value)]="preference.trackDisplay.IdDisplay" (selectionChange)="onChangedToggle()">
+          <mat-option *ngFor="let item of objectValues(IdType)" [value]="item">{{item}}</mat-option>
+        </mat-select>
+      </div>
     </div>
   </fieldset>
 

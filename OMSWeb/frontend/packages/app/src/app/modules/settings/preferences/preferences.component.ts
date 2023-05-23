@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {ToggleOptionKeyType, VHLIdPosition, PointType} from '../../../models/enums';
+import {ToggleOptionKeyType, VHLIdPosition, PointType, IdType} from '../../../models/enums';
 import { ClientPreferences } from '../../../models/settings.model';
 import { SettingsService } from '../../../services/settings.service';
 import {LangCode} from "@oms/models/tts.model";
@@ -17,6 +17,7 @@ export class PreferencesComponent {
 
   public VHLIdPosition = VHLIdPosition;
   public PointType = PointType;
+  public IdType = IdType;
 
   constructor(private settingSvc: SettingsService, private ttsSvc: TTSService, private t$: TranslateService) {
 

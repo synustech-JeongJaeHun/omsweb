@@ -1,4 +1,4 @@
-import {ToggleOptionKeyType, VHLIdPosition, PointType} from './enums'
+import {ToggleOptionKeyType, VHLIdPosition, PointType, IdType} from './enums'
 import { StorageUtil } from '@oms/utils/storage.util'
 import { main_css } from '../modules/shared/utils/css-loader'
 import { IZoom } from './drawing.model'
@@ -663,6 +663,7 @@ export type TrackObjectConfig = typeof trackObjectDefaultConfig
 const trackObjectDefaultConfig ={
   vehicleIdDisplay: VHLIdPosition.LT,
   pointDisplay: PointType.ID,
+  IdDisplay: IdType.ID,
 }
 
 export type TTSConfig = typeof TTSDefaultConfig
@@ -677,7 +678,6 @@ export class ClientPreferences implements IPreferences {
 	theme?: ThemeConfig
 	controlTables?: MonitorControlTable
 	historyTables?: HistoryTable
-
   trackDisplay?: TrackObjectConfig
 
   tts?: TTSConfig

@@ -4,6 +4,7 @@ import { Station } from '../types/Station'
 import { useGroup } from '../../group/groups'
 import { getPositionForBufferOrStation } from 'src/TrackObjects/utils/locationStationBuffer'
 import { getGroupColorWithAlpha } from 'TrackObjects/group/utils/color'
+import { readonlyIdType, IdType } from 'TrackObjects/common/alias'
 
 const props = defineProps<{
   station: Station
@@ -78,7 +79,7 @@ const group = useGroup('station', toRef(props.station, 'id'))
           text-rendering="optimizeSpeed"
           pointer-events="none"
         >
-          {{ props.station.logicalId }}
+          {{ readonlyIdType===IdType.ID ? props.station.logicalId : props.station?.cAlias }}
         </text>
       </g>
     </svg>

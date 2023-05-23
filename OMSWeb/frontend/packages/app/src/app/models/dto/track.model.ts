@@ -14,6 +14,8 @@ export namespace Dto {
 		offset?: number
 		unuse?: boolean
 		carrierId?: string
+
+    cAlias?: string
 	}
 	export interface ICluster {
 		id: number
@@ -179,6 +181,8 @@ export namespace Dto {
 		offset?: number
 		unuse?: boolean
 		carrierId?: string
+
+    cAlias?: string
 	}
 	export interface IVehicle {
 		id: number
