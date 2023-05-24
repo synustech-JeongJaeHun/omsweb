@@ -31,20 +31,14 @@ export class FireStationDialogComponent implements OnInit, OnDestroy {
 
   dataGrid: DxDataGridComponent
   dataSource: DataSource
-
   dateTimeFormat = DateUtil.DateTimeFormat
-
   preference: ClientPreferences
-
   selectedRows: number[] = []
-
   includesWords  = []
-
   selectRowData = null;
+  isRemoved= false
 
-  //#region Subscriptions
   private destroy$: Subject<void> = new Subject<void>()
-  //#endregion
 
   get hasControlAccess(): boolean {
     return this.auth.isAuthenticated
@@ -92,10 +86,13 @@ export class FireStationDialogComponent implements OnInit, OnDestroy {
 
   private onTableChanged(payload: IDataChangeEvent) {
     this.dataSource.reload()
+    if(this.isRemoved) {
+      this.selectRowData = null
+      this.isRemoved=false
+    }
   }
 
   onFocusedChanging($event){
-    console.log($event)
     $event.cancel =true
   }
 
@@ -205,7 +202,7 @@ export class FireStationDialogComponent implements OnInit, OnDestroy {
               carrierLabel: carrierId,
               logicalId: data.logicalId,
             })
-            .subscribe()
+            .subscribe(()=>this.isRemoved = true)
 
           this.dialogSvc.success({
             title: this.$t.instant('names.success'),
