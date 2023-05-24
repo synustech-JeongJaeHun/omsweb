@@ -1,5 +1,7 @@
 import { Component, OnDestroy } from '@angular/core'
 import { Subject } from 'rxjs'
+import {SystemsService} from "@oms/services/systems.service";
+import {rangeToRef} from "@oms/models/cps-status.model";
 
 export interface PeriodicElement {
   position: number,
@@ -9,13 +11,7 @@ export interface PeriodicElement {
   fault: string;
 }
 
-const ELEMENT_DATA: PeriodicElement[] = [
-  { position: 1, name: 'Voltage', normal: '265 ~ 350 V', warning: '350 ~ 430 V', fault: '> 430 V' },
-  { position: 2, name: 'Current IGBT', normal: '0 ~ 130 A', warning: '130 ~ 140 A', fault: '> 140 A' },
-  { position: 3, name: 'Current Track', normal: '70 ~ 85 A', warning: '85 ~ 95 A', fault: '> 95 A' },
-  { position: 4, name: 'Temp Radiator', normal: '0 ~ 60 ℃', warning: '60 ~ 80 ℃', fault: '> 80 ℃' },
-  { position: 5, name: 'Temp Internal', normal: '0 ~ 35 ℃', warning: '35 ~ 40 ℃', fault: '> 40 ℃' },
-];
+
 
 @Component({
 	selector: 'oms-cps-reference-dialog',
@@ -25,12 +21,22 @@ const ELEMENT_DATA: PeriodicElement[] = [
 export class CpsReferenceDialogComponent implements OnDestroy {
 
     displayedColumns: string[] = ['position', 'name', 'normal', 'warning', 'fault'];
-    cpsDataSource = ELEMENT_DATA;
+    cpsDataSource:PeriodicElement[]
 
     private destroy$: Subject<void> = new Subject<void>()
 
 	constructor(
+    private systemSvc: SystemsService
 	) {
+      this.cpsDataSource = systemSvc.reference.map((item)=>{
+        return {
+          position: item.position,
+          name: item.name,
+          normal: item.normal.map(m=>rangeToRef(m)).toString().replace(',', '\n'),
+          warning: item.warning.map(m=>rangeToRef(m)).toString().replace(',', '\n'),
+          fault: item.fault.map(m=>rangeToRef(m)).toString().replace(',', '\n')
+        }
+      }) as unknown as PeriodicElement[]
 	}
 
 	ngOnDestroy(): void {

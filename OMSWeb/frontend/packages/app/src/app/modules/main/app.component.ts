@@ -46,6 +46,7 @@ export class AppComponent {
     this.ttsSvc.init();
 
     this.system.loadControlTables();
+    this.system.reference
   }
 
   private setTheme() {

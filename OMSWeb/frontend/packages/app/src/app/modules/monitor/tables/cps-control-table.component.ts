@@ -25,6 +25,8 @@ import {
 	MatDialogRef,
 	MatDialogState,
 } from '@angular/material/dialog'
+import {SystemsService} from "../../..//services/systems.service";
+import {PeriodicElement, rangeCheck} from "../../../models/cps-status.model";
 
 @Component({
 	selector: 'oms-cps-control-table',
@@ -40,6 +42,8 @@ export class CpsControlTableComponent implements OnInit, OnDestroy {
 	selectedRows: number[] = []
 
 	preference: ClientPreferences
+
+  cpsDataSource:PeriodicElement[]
 
 	//#region Subscriptions
 	private destroy$: Subject<void> = new Subject<void>()
@@ -70,6 +74,8 @@ export class CpsControlTableComponent implements OnInit, OnDestroy {
 		private settingSvc: SettingsService,
 		private hubSvc: HubService,
 		private dialog: MatDialog,
+
+    private systemSvc: SystemsService
 	) {
 		this.dataSource = this.statusSvc.clusterStatusDataSource()
 		this.preference = this.settingSvc.globalPreferences
@@ -113,6 +119,10 @@ export class CpsControlTableComponent implements OnInit, OnDestroy {
 	}
 
 	getBgColor(type: number, value: string): string {
+    if(!this.cpsDataSource) {
+      this.cpsDataSource = this.systemSvc.reference
+    }
+
 		if (type == 0) return this.getColor_Status(value) // Status
 		else if (type == 1) return this.getColor_Voltage(value) // Voltage
 		else if (type == 2) return this.getColor_CurrentIgbt(value) // current igbt
@@ -134,40 +144,72 @@ export class CpsControlTableComponent implements OnInit, OnDestroy {
 	}
 	private getColor_Voltage(value: string): string {
 		let volt = parseInt(value)
-		if (volt < 265) return this.color_normal
-		else if (265 <= volt && volt < 350) return this.color_normal
-		else if (350 <= volt && volt < 430) return this.color_warning
-		else if (430 <= volt) return this.color_fault
-		return this.color_normal
+		/*if (volt<=0) return this.color_normal
+    else if (510 < volt && volt < 650) return this.color_normal
+		else if (430 < volt && volt <= 510) return this.color_warning
+    else if (650 <= volt && volt < 675) return this.color_warning
+		else if (430 >= volt) return this.color_fault
+    else if (675 <= volt) return this.color_fault
+		return this.color_normal*/
+    if(volt<=0) return this.color_normal
+    if(this.cpsDataSource[0]?.normal.some(c=>rangeCheck(c, volt))) return this.color_normal
+    if(this.cpsDataSource[0]?.warning.some(c=>rangeCheck(c, volt))) return this.color_warning
+    if(this.cpsDataSource[0]?.fault.some(c=>rangeCheck(c, volt))) return this.color_fault
+    return this.color_normal
 	}
 	private getColor_CurrentIgbt(value: string): string {
 		let curr = parseInt(value)
-		if (0 <= curr && curr < 130) return this.color_normal
-		else if (130 <= curr && curr < 140) return this.color_warning
-		else if (140 <= curr) return this.color_fault
-		return this.color_normal
+		/*if (0 <= curr && curr < 130) return this.color_normal
+		else if (130 <= curr && curr < 145) return this.color_warning
+		else if (145 <= curr) return this.color_fault
+		return this.color_normal*/
+
+    if(curr<=0) return this.color_normal
+    if(this.cpsDataSource[1]?.normal.some(c=>rangeCheck(c, curr))) return this.color_normal
+    if(this.cpsDataSource[1]?.warning.some(c=>rangeCheck(c, curr))) return this.color_warning
+    if(this.cpsDataSource[1]?.fault.some(c=>rangeCheck(c, curr))) return this.color_fault
+    return this.color_normal
 	}
 	private getColor_CurrentTrack(value: string): string {
 		let curr = parseInt(value)
-		if (curr < 70) return this.color_normal
-		else if (70 <= curr && curr < 85) return this.color_normal
+    /*if (curr <= 0) return this.color_normal
+		else if (0 < curr &&curr <= 70) return this.color_warning
+		else if (70 < curr && curr < 85) return this.color_normal
 		else if (85 <= curr && curr < 90) return this.color_warning
 		else if (90 <= curr) return this.color_fault
-		return this.color_normal
+		return this.color_normal*/
+
+    if(curr<=0) return this.color_normal
+    if(this.cpsDataSource[2]?.normal.some(c=>rangeCheck(c, curr))) return this.color_normal
+    if(this.cpsDataSource[2]?.warning.some(c=>rangeCheck(c, curr))) return this.color_warning
+    if(this.cpsDataSource[2]?.fault.some(c=>rangeCheck(c, curr))) return this.color_fault
+    return this.color_normal
 	}
 	private getColor_TempRadiator(value: string): string {
 		let temp = parseInt(value)
-		if (0 <= temp && temp < 60) return this.color_normal
+		/*if (0 <= temp && temp < 60) return this.color_normal
 		else if (60 <= temp && temp < 80) return this.color_warning
 		else if (80 <= temp) return this.color_fault
-		return this.color_normal
+		return this.color_normal*/
+
+    if(temp<=0) return this.color_normal
+    if(this.cpsDataSource[3]?.normal.some(c=>rangeCheck(c, temp))) return this.color_normal
+    if(this.cpsDataSource[3]?.warning.some(c=>rangeCheck(c, temp))) return this.color_warning
+    if(this.cpsDataSource[3]?.fault.some(c=>rangeCheck(c, temp))) return this.color_fault
+    return this.color_normal
 	}
 	private getColor_TempInternal(value: string): string {
 		let temp = parseInt(value)
-		if (0 <= temp && temp < 35) return this.color_normal
+		/*if (0 <= temp && temp < 35) return this.color_normal
 		else if (35 <= temp && temp < 40) return this.color_warning
 		else if (40 <= temp) return this.color_fault
-		return this.color_normal
+		return this.color_normal*/
+
+    if(temp<=0) return this.color_normal
+    if(this.cpsDataSource[4]?.normal.some(c=>rangeCheck(c, temp))) return this.color_normal
+    if(this.cpsDataSource[4]?.warning.some(c=>rangeCheck(c, temp))) return this.color_warning
+    if(this.cpsDataSource[4]?.fault.some(c=>rangeCheck(c, temp))) return this.color_fault
+    return this.color_normal
 	}
 
 	ngOnInit(): void {
@@ -176,6 +218,8 @@ export class CpsControlTableComponent implements OnInit, OnDestroy {
 			.subscribe((e: IDataChangeEvent) => {
 				e && this.onTableChanged(e)
 			})
+
+    this.cpsDataSource = this.systemSvc.reference
 	}
 
 	ngOnDestroy(): void {

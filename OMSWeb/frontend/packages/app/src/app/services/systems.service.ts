@@ -22,20 +22,34 @@ import {
 import {SettingsService} from "@oms/services/settings.service";
 import {TrackMonitorSetting, TrackMonitorSettingService} from "@oms/services/track-monitor-setting.service";
 import {JsonObject} from "@angular/compiler-cli/ngcc/src/packages/entry_point";
+import {DEFAULT_ELEMENT_DATA, PeriodicElement} from "@oms/models/cps-status.model";
 @Injectable({
 	providedIn: 'root',
 })
 export class SystemsService {
 	private baseUrl = '/api/systems'
 	private _states: ISystemStates
-
+  private cpsDataSource:PeriodicElement[]
 	get currentState$(): Observable<ISystemStates> {
 		return this.states()
 	}
 
+  get reference(): PeriodicElement[] {
+    if(this.cpsDataSource) return this.cpsDataSource;
+    this.loadReference().subscribe(res=> {
+      if(res){
+        this.cpsDataSource = res['cps'] as any as PeriodicElement[]
+      }else{
+        this.cpsDataSource = DEFAULT_ELEMENT_DATA
+      }
+      return this.cpsDataSource;
+    }, error => this.cpsDataSource=DEFAULT_ELEMENT_DATA)
+  }
+
 	constructor(private http: HttpClient,
               private settingSvc: SettingsService,
-              private trackMonitorSettingSvc: TrackMonitorSettingService) {}
+              private trackMonitorSettingSvc: TrackMonitorSettingService) {
+  }
 
 	states(): Observable<ISystemStates> {
 		return this.http.get<ISystemStates>(`${this.baseUrl}/states`).pipe(
@@ -77,10 +91,10 @@ export class SystemsService {
   controlTables(): Observable<JsonObject> {
     return this.http.get<JsonObject>(`${this.baseUrl}/customSettings`)
   }
-  /*controlTables(): Observable<IPreferences['controlTables']> {
-    return this.http.get<IPreferences['controlTables']>(`${this.baseUrl}/customSettings`)
-  }*/
 
+  loadReference(): Observable<JsonObject> {
+    return this.http.get<JsonObject>(`${this.baseUrl}/reference`)
+  }
   loadControlTables(){
     this.settingSvc.serviceConfig.subscribe((config) => {
       if(!config.customSetting) return
