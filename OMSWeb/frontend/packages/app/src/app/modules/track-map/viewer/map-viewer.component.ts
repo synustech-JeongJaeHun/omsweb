@@ -66,6 +66,13 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 	}
 
 	get canSetSourceWithFilter() {
+    console.log(this.mapStatesService.transferCommandState.active)
+    if(this.mapStatesService.transferCommandState.active){
+      this.contextMenuObject = null;
+      this.showContextMenu = false;
+      return ;
+    }
+
 		const logicalId = this.contextMenuObject.value.logicalId
 		if (logicalId == null) return false
 		if (this.mapStatesService.transferCommandState.sourceDisabled === true)
@@ -81,6 +88,12 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		)
 	}
 	get canSetDestWithFilter() {
+    if(this.mapStatesService.transferCommandState.active){
+      this.contextMenuObject = null;
+      this.showContextMenu = false;
+      return ;
+    }
+
 		const logicalId = this.contextMenuObject.value.logicalId
 		if (logicalId == null) return false
 		if (this.mapStatesService.transferCommandState.destDisabled === true)
@@ -1322,6 +1335,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 	}
 
   includeCheck(word: string){
+    if(!this.showContextMenu) return false;
     return this.includesWords.some(i=>word.includes(i))
   }
 
