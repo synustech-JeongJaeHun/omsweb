@@ -31,6 +31,7 @@ type VisibilityChangedEvent = {
 		| 'isOverlappingObjectsVisible'
     | 'isVHLArrowVisible'
     | 'isVhlStatusVisible'
+    | 'isBackdropVisible'
 	value: boolean
 }
 type ColorChangedEvent = {
@@ -140,6 +141,7 @@ const DefaultTrackMonitorSetting: TrackMonitorSetting = {
 	isOverlappingObjectsVisible: true,
   isVHLArrowVisible: false,
   isVhlStatusVisible: false,
+  isBackdropVisible: false,
 
 	// color
 	homeBackgroundColor: 'rgba(255, 255, 255, 1)',

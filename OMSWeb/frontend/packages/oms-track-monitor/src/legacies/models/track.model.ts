@@ -202,6 +202,28 @@ interface IFireshutter {
   status: number
 }
 
+interface IBackdrop {
+  id: number
+  logicalId: string
+  x?: number
+  y?: number
+  width?: number
+  height?: number
+  backgroundColor?: string
+  outlineThickness?: number
+  outlineColor?: string
+  outlineRadius?: number
+  outlineType?: number
+  contents: string
+  direction?: number
+  vAlign?: number
+  hAlign?: number
+  bold: number
+  italic: boolean
+  fontSize: number
+  textColor?: string
+}
+
 interface ITrackData {
   vehiclePath?: any[]
 
@@ -222,6 +244,8 @@ interface ITrackData {
   segmentParts?: ISegmentPart[]
   segmentDisabled?: any[]
   vehicles?: IVehicle[]
+
+  backdrops?: IBackdrop[]
 }
 
 export { ITrackData, IVehicle, ISegmentPart, IGroup }

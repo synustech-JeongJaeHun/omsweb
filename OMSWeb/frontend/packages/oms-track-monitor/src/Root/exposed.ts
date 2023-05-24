@@ -65,6 +65,7 @@ import { scaleStylesInfo } from '../styles/styles'
 import { deleteClusterState, initClusterStates, insertClusterState, updateClusterState } from 'src/TrackObjects/cluster/clusterStates'
 import { cameraViewBoxInfo } from 'src/MapObjects/map/camera'
 import { setCarrierFocusedObject } from 'src/MapObjects/focus/carrierFocus'
+import {initBackdrops} from "TrackObjects/backdrop/backdrops";
 
 const exposed: IOmsTrackMonitor = {
 	getCameraAndRotation,
@@ -84,6 +85,7 @@ const exposed: IOmsTrackMonitor = {
 		initBuffers([])
 		initPoints([])
 		initFireshutters([])
+    initBackdrops([])
 
 		// setup
 		const { minX, minY, maxX, maxY } = calculateMinMaxXYFromPoints(
@@ -105,6 +107,7 @@ const exposed: IOmsTrackMonitor = {
 		initSegmentDisableds(t.segmentDisabled ?? [])
 		initGroups(t.groups)
 		initFireshutters(t.fireShutters)
+    initBackdrops(t.backdrops)
 	},
 	centerZoom,
 
@@ -170,6 +173,8 @@ const exposed: IOmsTrackMonitor = {
         break
 			case 'fireshutter':
 				break
+      case 'backdrop':
+        break
 
 			default:
 				break
@@ -228,6 +233,8 @@ const exposed: IOmsTrackMonitor = {
           }
           break
         case 'fireshutter':
+          break
+        case 'backdrop':
           break
 
         default:
@@ -422,7 +429,7 @@ const exposed: IOmsTrackMonitor = {
       default:
         break
     }
-  }
+  },
 }
 
 export { exposed }

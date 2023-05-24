@@ -16,5 +16,6 @@ type VisibleProperty =
 	| 'fireshutter'
 	| 'mtl'
 	| 'minimap'
+  | 'backdrop'
 
 export { VisibleProperty }

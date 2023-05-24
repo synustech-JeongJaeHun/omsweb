@@ -230,6 +230,8 @@ export namespace Dto {
 		stations?: IStation[]
 		zcus?: IZcu[]
 		fireShutters?: IFireShutter[]
+
+    backdrops?: IBackdrop[]
 	}
 	export interface IVariableTrackData {
 		segments?: ISegment[]
@@ -255,4 +257,26 @@ export namespace Dto {
 		logicalId?: string
 		physicalId?: string
     }
+
+  export interface IBackdrop {
+    id: number
+    logicalId: string
+    x?: number
+    y?: number
+    width?: number
+    height?: number
+    backgroundColor?: string
+    outlineThickness?: number
+    outlineColor?: string
+    outlineRadius?: number
+    outlineType?: number
+    contents: string
+    direction?: number
+    vAlign?: number
+    hAlign?: number
+    bold: number
+    italic: boolean
+    fontSize: number
+    textColor?: string
+  }
 }

@@ -1,79 +1,82 @@
 <oms-dialog-base [title]="'names.showObjects' | translate">
   <ng-container class="dialog-layout">
-    <fieldset class="option-form">
-      <legend class="form-title">{{ "names.vehicle" | translate }} {{ "names.scale" | translate }}</legend>
-      <div class="slider-form">
-        <mat-slider #vehicleSize color="primary" min="3" max="20" [value]="setting.vehicleSize" (change)="update({
+    <div class="option-list">
+      <fieldset class="option-form">
+        <legend class="form-title">{{ "names.vehicle" | translate }} {{ "names.scale" | translate }}</legend>
+        <div class="slider-form">
+          <mat-slider #vehicleSize color="primary" min="3" max="20" [value]="setting.vehicleSize" (change)="update({
           key: 'vehicleSize',
           value: $event.value
         })">
-        </mat-slider>
-        <div class="slider-value">{{ vehicleSize.value }}px</div>
-      </div>
-    </fieldset>
-    <fieldset class="option-form">
-      <legend class="form-title">{{ "names.vehicle" | translate }} Text {{ "names.scale" | translate }}</legend>
-      <div class="slider-form">
-        <mat-slider #vehicleTextSize color="primary" min="8" max="20" [value]="setting.vehicleTextSize" (change)="update({
+          </mat-slider>
+          <div class="slider-value">{{ vehicleSize.value }}px</div>
+        </div>
+      </fieldset>
+      <fieldset class="option-form">
+        <legend class="form-title">{{ "names.vehicle" | translate }} Text {{ "names.scale" | translate }}</legend>
+        <div class="slider-form">
+          <mat-slider #vehicleTextSize color="primary" min="8" max="20" [value]="setting.vehicleTextSize" (change)="update({
           key: 'vehicleTextSize',
           value: $event.value
         })">
-        </mat-slider>
-        <div class="slider-value">{{ vehicleTextSize.value }}px</div>
-      </div>
-    </fieldset>
-    <fieldset class="option-form">
-      <legend class="form-title">{{ "names.zcu" | translate }} {{ "names.scale" | translate }}</legend>
-      <div class="slider-form">
-        <mat-slider #zcuSize color="primary" min="3" max="20" [value]="setting.zcuSize" (change)="update({
+          </mat-slider>
+          <div class="slider-value">{{ vehicleTextSize.value }}px</div>
+        </div>
+      </fieldset>
+      <fieldset class="option-form">
+        <legend class="form-title">{{ "names.zcu" | translate }} {{ "names.scale" | translate }}</legend>
+        <div class="slider-form">
+          <mat-slider #zcuSize color="primary" min="3" max="20" [value]="setting.zcuSize" (change)="update({
           key: 'zcuSize',
           value: $event.value
         })">
-        </mat-slider>
-        <div class="slider-value">{{ zcuSize.value }}px</div>
-      </div>
-    </fieldset>
-    <fieldset class="option-form">
-      <legend class="form-title">{{ "names.mapRotation" | translate }}</legend>
-      <div class="slider-form">
-        <mat-slider #rotation color="primary" [step]="45" min="0" max="315" [value]="setting.rotation"
-          (change)="changeRotation($event)"></mat-slider>
-        <div class="slider-value">{{ Math.ceil(rotation.value) }}&deg;</div>
-      </div>
-    </fieldset>
-    <fieldset class="option-form">
-      <legend class="form-title">{{ "names.segmentWidth" | translate }}</legend>
-      <div class="slider-form">
-        <mat-slider #segmentWidth color="primary" min="1" max="20" step="1" [value]="setting.segmentWidth" (change)="update({
+          </mat-slider>
+          <div class="slider-value">{{ zcuSize.value }}px</div>
+        </div>
+      </fieldset>
+      <fieldset class="option-form">
+        <legend class="form-title">{{ "names.mapRotation" | translate }}</legend>
+        <div class="slider-form">
+          <mat-slider #rotation color="primary" [step]="45" min="0" max="315" [value]="setting.rotation"
+                      (change)="changeRotation($event)"></mat-slider>
+          <div class="slider-value">{{ Math.ceil(rotation.value) }}&deg;</div>
+        </div>
+      </fieldset>
+      <fieldset class="option-form">
+        <legend class="form-title">{{ "names.segmentWidth" | translate }}</legend>
+        <div class="slider-form">
+          <mat-slider #segmentWidth color="primary" min="1" max="20" step="1" [value]="setting.segmentWidth" (change)="update({
             key: 'segmentWidth',
             value: $event.value
           })"></mat-slider>
-        <div class="slider-value">{{ segmentWidth.value }}px</div>
-      </div>
-    </fieldset>
+          <div class="slider-value">{{ segmentWidth.value }}px</div>
+        </div>
+      </fieldset>
 
-    <fieldset class="option-form">
-      <legend class="form-title">{{ "names.lineWidth" | translate }}</legend>
-      <div class="slider-form">
-        <mat-slider #lineWidth color="primary" min="1" max="10" step="1" [value]="setting.lineWidth" (change)="update({
+      <fieldset class="option-form">
+        <legend class="form-title">{{ "names.lineWidth" | translate }}</legend>
+        <div class="slider-form">
+          <mat-slider #lineWidth color="primary" min="1" max="10" step="1" [value]="setting.lineWidth" (change)="update({
             key: 'lineWidth',
             value: $event.value
           })"></mat-slider>
-        <div class="slider-value">{{ lineWidth.value }}px</div>
-      </div>
-    </fieldset>
+          <div class="slider-value">{{ lineWidth.value }}px</div>
+        </div>
+      </fieldset>
 
-    <fieldset class="option-form">
-      <legend class="form-title">{{ "names.segmentDirection" | translate }}</legend>
-      <div class="slider-form">
-        <mat-slider #segmentDirectionSize color="primary" min="2" max="13" [value]="setting.segmentDirectionSize"
-          (change)="update({
+      <fieldset class="option-form">
+        <legend class="form-title">{{ "names.segmentDirection" | translate }}</legend>
+        <div class="slider-form">
+          <mat-slider #segmentDirectionSize color="primary" min="2" max="13" [value]="setting.segmentDirectionSize"
+                      (change)="update({
             key: 'segmentDirectionSize',
             value: $event.value
           })"></mat-slider>
-        <div class="slider-value">{{ segmentDirectionSize.value }}px</div>
-      </div>
-    </fieldset>
+          <div class="slider-value">{{ segmentDirectionSize.value }}px</div>
+        </div>
+      </fieldset>
+    </div>
+
     <fieldset class="option-form">
       <legend class="form-title">
         {{ "names.visibleOptions" | translate }}
@@ -176,6 +179,13 @@
 
         <mat-slide-toggle [checked]="setting.isVhlStatusVisible" (change)="changeVhlStatusVisible($event)" color="primary">
           {{"names.showVhlStatus" | translate }}
+        </mat-slide-toggle>
+
+        <mat-slide-toggle [checked]="setting.isBackdropVisible" (change)="update({
+            key: 'isBackdropVisible',
+            value: $event.checked
+          })" color="primary">
+          {{"names.isBackdropVisible" | translate }}
         </mat-slide-toggle>
       </div>
     </fieldset>

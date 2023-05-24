@@ -22,6 +22,7 @@ namespace OMSWeb.Models.Tracks
         public IList<VehicleDio> VehicleDio { get; set; }
         public IList<LocationGroup> Groups { get; set; }
         public MapDimension Size { get; set; }
+        public IList<Backdrop> Backdrops { get; set; }
     }
 
     public class MapDimension

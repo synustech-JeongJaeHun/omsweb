@@ -29,10 +29,11 @@ import { scaleInfo } from '../MapObjects/scale/scale'
 import { rotationInfo } from '../MapObjects/rotate/rotate'
 import { exposed } from './exposed'
 import ZoomLayer from 'MapObjects/zoomButton/ZoomLayer.ce.vue'
-import {convertStringToImageDataUrl} from "src/utils/textToImage";
 import {updatePointType} from "TrackObjects/point/pointType";
 import {updateNextLine, updateVHLArrow, updateVHLPosition, updateVHLAlias} from "TrackObjects/vehicle/vehicles";
 import {updateIncludesWords} from "TrackObjects/station/stations";
+import {updateIsBackdrop} from "TrackObjects/backdrop/backdrops"
+
 /**
  *  https://v3.vuejs.org/api/sfc-script-setup.html#typescript-only-features
  *
@@ -73,6 +74,7 @@ const props = defineProps<{
   isCpsVisible: Boolish
   isFireshutterVisible: Boolish
   isMtlVisible: Boolish
+  isBackdropVisible: Boolish
   zoomButtonVisible: Boolish
   pointDisplayType: Boolish
 
@@ -227,6 +229,11 @@ watch(propRefs.vhlAlias, ()=>{
 watch(propRefs.includesWords, () => {
   if(props.includesWords?.length>0){
     updateIncludesWords(props.includesWords)
+  }
+})
+watch(propRefs.isBackdropVisible, ()=>{
+  if(typeof props.isBackdropVisible === 'boolean'){
+    updateIsBackdrop(props.isBackdropVisible)
   }
 })
 

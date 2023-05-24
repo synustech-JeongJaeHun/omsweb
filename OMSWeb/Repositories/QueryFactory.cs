@@ -507,7 +507,13 @@ namespace OMSWeb.Repositories
 		        )
 	        ) as UnuseList
         ORDER BY UnuseTime DESC
-      "}
+      "},
+      {"backdrop", @"
+        SELECT id, logical_id, x, y, width, height, background_color, outline_thickness, outline_color, outline_radius,
+               outline_type, contents, direction, v_align, h_align, bold,
+               italic, font_size, text_color
+        FROM backdrops
+      "},
     };
     public static string GetSql(string name)
     {

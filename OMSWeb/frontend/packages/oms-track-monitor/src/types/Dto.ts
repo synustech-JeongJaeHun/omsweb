@@ -135,6 +135,25 @@ namespace UpdateDto {
     logicalId: string
     maxVehicles: number
   }
+
+  export type Backdrop = {
+    id: number
+    logicalId: string
+    x?: number
+    y?: number
+    width?: number
+    height?: number
+    color: string
+    outlineThickness?: number
+    outlineType?: number
+    contents: string
+    direction?: number
+    vAlign?: number
+    hAlign?: number
+    bold: number
+    italic: boolean
+    fontSize: number
+  }
 }
 
 export { UpdateDto }
