@@ -15,8 +15,15 @@
     [customizeText]="transformVehicleId"></dxi-column>
   <dxi-column [width]="140" dataType="string" dataField="locationPickup" [caption]="'names.locationPickup' | translate"
     [customizeText]="transformLocationId"></dxi-column>
+  <dxi-column
+    [width]="140" dataType="string" dataField="locationPickupAlias" [caption]="'names.locationPickupAlias' | translate"
+    [customizeText]="transformLocationId"></dxi-column>
   <dxi-column [width]="140" dataType="string" dataField="locationDropoff"
     [caption]="'names.locationDropoff' | translate" [customizeText]="transformLocationId"></dxi-column>
+  <dxi-column
+    [width]="140" dataType="string" dataField="locationDropoffAlias" [caption]="'names.locationDropoffAlias' | translate"
+    [customizeText]="transformLocationId"></dxi-column>
+
   <dxi-column [width]="120" dataType="string" dataField="carrierLabel" [allowSorting]="false"
     [caption]="'names.carrierLabel' | translate"></dxi-column>
   <dxi-column [width]="150" dataType="datetime" dataField="timeCreated" [format]="dateTimeFormat" [caption]="'names.timeCreated' | translate">
