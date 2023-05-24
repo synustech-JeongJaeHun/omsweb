@@ -29,7 +29,7 @@
             <input
               #carrierIdInput
               matInput
-              [value]="selectRowData?.carrierId"
+              [value]="selectRowData?.carrierId || ''"
               [placeholder]="'names.carrierId' | translate"
             />
           </mat-form-field>
