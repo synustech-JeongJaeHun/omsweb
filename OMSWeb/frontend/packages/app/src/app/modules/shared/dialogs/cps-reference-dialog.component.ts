@@ -1,7 +1,7 @@
 import { Component, OnDestroy } from '@angular/core'
 import { Subject } from 'rxjs'
-import {SystemsService} from "@oms/services/systems.service";
-import {rangeToRef} from "@oms/models/cps-status.model";
+import {SystemsService} from "../../../services/systems.service";
+import {rangeToRef} from "../../../models/cps-status.model";
 
 export interface PeriodicElement {
   position: number,

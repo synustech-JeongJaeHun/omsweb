@@ -99,13 +99,28 @@ namespace OMSWeb.Controllers
         [HttpGet("customSettings")]
         public ActionResult<string> GetAppSettings()
         {
-            return System.IO.File.ReadAllText("./customSettings.json");
+            try
+            {
+                return System.IO.File.ReadAllText("./customSettings.json");
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
         }
         
         [HttpGet("reference")]
         public ActionResult<string> GetRef()
         {
-            return System.IO.File.ReadAllText("./reference.json");
+            try
+            {
+                return System.IO.File.ReadAllText("./reference.json");
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+            
         }
 
         [HttpGet(template: "zcus-with-fireshutter")]

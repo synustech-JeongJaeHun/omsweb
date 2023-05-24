@@ -22,7 +22,7 @@ import {
 import {SettingsService} from "@oms/services/settings.service";
 import {TrackMonitorSetting, TrackMonitorSettingService} from "@oms/services/track-monitor-setting.service";
 import {JsonObject} from "@angular/compiler-cli/ngcc/src/packages/entry_point";
-import {DEFAULT_ELEMENT_DATA, PeriodicElement} from "@oms/models/cps-status.model";
+import {DEFAULT_ELEMENT_DATA, PeriodicElement} from "../models/cps-status.model";
 @Injectable({
 	providedIn: 'root',
 })
@@ -37,7 +37,7 @@ export class SystemsService {
   get reference(): PeriodicElement[] {
     if(this.cpsDataSource) return this.cpsDataSource;
     this.loadReference().subscribe(res=> {
-      if(res){
+      if(res&&res['cps']){
         this.cpsDataSource = res['cps'] as any as PeriodicElement[]
       }else{
         this.cpsDataSource = DEFAULT_ELEMENT_DATA
