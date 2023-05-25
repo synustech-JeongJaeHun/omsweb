@@ -406,6 +406,7 @@
     "showKpi": "显示 KPI",
     "zoomButton": "显示 Zoom",
     "pointDisplayType": "显示 点条码",
+    "idDisplayType": "ID/Alias 显示",
     "ctrlKey": "控制过滤器",
     "summary": "总结",
     "systemInfo": "系统信息",

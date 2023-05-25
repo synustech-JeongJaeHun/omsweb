@@ -74,14 +74,21 @@ export class SearchDialogComponent {
     else
       points = this.trackStatusService.trackData.points.map((x) => ({id: x.id, logicalId: x.logicalId}))
 
-    let stations = [...this.trackStatusService.trackData.stations.map((x) => ({ id: x.id, logicalId: x.logicalId })),
+    const stations = [
+      ...this.trackStatusService.trackData.stations.map((x) => ({ id: x.id, logicalId: x.logicalId })),
       ...this.trackStatusService.trackData.stations.map((x) => ({ id: x.id, logicalId: String(x.id) })),
-      ...this.trackStatusService.trackData.stations.map((x) => ({ id: x.id, logicalId: x.physicalId }))]
-    stations.sort((a,b)=> {
+      ...this.trackStatusService.trackData.stations.map((x) => ({ id: x.id, logicalId: x.physicalId })),
+      ...this.trackStatusService.trackData.stations.map((x) => ({ id: x.id, logicalId: x.cAlias }))
+    ].sort((a,b)=> {
       return a.logicalId.length - b.logicalId.length
     })
 
-
+    const buffers = [
+      ...this.trackStatusService.trackData.buffers.map((x) => ({ id: x.id, logicalId: x.logicalId })),
+      ...this.trackStatusService.trackData.buffers.map((x) => ({ id: x.id, logicalId: x.cAlias })),
+    ].sort((a,b)=> {
+      return a.logicalId.length - b.logicalId.length
+    })
 
     this.dataSourceMap = {
       vehicle: this.trackStatusService.trackData.vehicles.map((x) => ({id: x.id, logicalId: x.logicalId})),
@@ -89,7 +96,7 @@ export class SearchDialogComponent {
       // distinct element because segment data is mixed with segparts
       segment: [...new Map(this.trackStatusService.trackData.segments.map((x) => [x.id, x.logicalId]))].map((x) => ({ id: x[0], logicalId: x[1] })),
       station: stations,
-      buffer: this.trackStatusService.trackData.buffers.map((x) => ({ id: x.id, logicalId: x.logicalId })),
+      buffer: buffers,
       mtl: this.trackStatusService.trackData.mtls.map((x) => ({ id: x.id, logicalId: x.logicalId })),
       zcu: this.trackStatusService.trackData.zcus.map((x) => ({ id: x.id, logicalId: String(x.id) })),
       cluster: this.trackStatusService.trackData.clusters.map((x) => ({id: x.id, logicalId: String(x.id)})),

@@ -61,6 +61,59 @@ namespace OMSWeb.Repositories
                     return null;
             }
         }
+        
+        public static string? GetAlias(string? key)
+        {
+            switch (key)
+            {
+                case "source":
+                    return $@"
+                        (
+                            CASE
+                                WHEN SUBSTRING({GetColumnFromDic(key)}, 1, 1) = 's'
+                                THEN (
+                                    SELECT c_alias FROM stations WHERE id = CAST(substring({GetColumnFromDic(key)}, 2) AS numeric)
+                                )
+                                WHEN SUBSTRING({GetColumnFromDic(key)}, 1, 1) = 'b'
+                                THEN (
+                                    SELECT c_alias FROM buffers WHERE id = CAST(substring({GetColumnFromDic(key)}, 2) AS numeric)
+                                )
+                                WHEN SUBSTRING(location_pickup, 1, 1) = 'v'
+                                THEN (
+                                    SELECT physical_id  FROM vehicles WHERE id = CAST(substring({GetColumnFromDic(key)}, 2) AS numeric)
+                                )
+                                ELSE {GetColumnFromDic(key)}
+                            END
+                        )
+                       ";
+                case "dest":
+                    return $@"
+                       (
+                            CASE
+                                WHEN SUBSTRING({GetColumnFromDic(key)}, 1, 1) = 's'
+                                THEN (
+                                    SELECT c_alias FROM stations WHERE id = CAST(substring({GetColumnFromDic(key)}, 2) AS numeric)
+                                )
+                                WHEN SUBSTRING({GetColumnFromDic(key)}, 1, 1) = 'b'
+                                THEN (
+                                    SELECT c_alias FROM buffers WHERE id = CAST(substring({GetColumnFromDic(key)}, 2) AS numeric)
+                                )
+                                ELSE {GetColumnFromDic(key)}
+                            END
+                        )
+                       ";
+                case "vehicle":
+                    return @"
+                        (
+                            SELECT physical_id
+                            FROM vehicles
+                            WHERE id = vehicle_id
+                        )
+                        ";
+                default:
+                    return null;
+            }
+        }
 
         public static DateTime EndOfMonth(DateTime dateTime)
             => new DateTime(dateTime.Year, dateTime.Month, DateTime.DaysInMonth(dateTime.Year, dateTime.Month));

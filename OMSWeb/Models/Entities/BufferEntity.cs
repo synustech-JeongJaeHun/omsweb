@@ -48,5 +48,6 @@ namespace OMSWeb.Models.Entities
     public int HistorySourceId { get; set; }
     public DateTime HistoryChangeTime { get; set; }
     public string HistoryChangeType { get; set; }
+    public string CAlias { get; set; }
   }
 }

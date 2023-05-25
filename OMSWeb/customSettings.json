@@ -498,5 +498,197 @@
     "mtlUseColor": "grey",
 
     "vehicleSecondaryContent": "carrier"
+  },
+  "HistoryTables" : {
+    "transfers": true,
+    "transfers_logical_id": true,
+    "transfers_id": true,
+    "transfers_origin": true,
+    "transfers_priority": true,
+    "transfers_from_distance": false,
+    "transfers_to_distance": false,
+    "transfers_state": true,
+    "transfers_vehicle_id": true,
+    "transfers_location_pickup": true,
+    "transfers_location_pickup_alias" : true,
+    "transfers_location_dropoff": true,
+    "transfers_location_dropoff_alias" : true,
+    "transfers_location_move": true,
+    "transfers_carrier_label": true,
+    "transfers_time_created": true,
+    "transfers_time_assigned": true,
+    "transfers_time_completed": true,
+    "transfers_time_aborted": true,
+    "transfers_time_failed": true,
+    "transfers_result_code": true,
+    "transfers_age": true,
+    "transfers_unload_retry_cnt": true,
+
+    "transfers_order": [
+      { "name": "transfers_logical_id", "i18nLabel": "names.commandId", "width": 240 },
+      { "name": "transfers_id", "i18nLabel": "names.id", "width": 80 },
+      { "name": "transfers_origin", "i18nLabel": "names.origin", "width": 100 },
+      { "name": "transfers_priority", "i18nLabel": "names.priority", "width": 65 },
+      { "name": "transfers_state", "i18nLabel": "names.state", "width": 100 },
+      { "name": "transfers_vehicle_id", "i18nLabel": "names.vehicleId", "width": 95 },
+      {
+        "name": "transfers_location_pickup",
+        "i18nLabel": "names.locationPickup",
+        "width": 120
+      },
+      {
+        "name": "transfers_location_pickup_alias",
+        "i18nLabel": "names.locationPickupAlias",
+        "width": 120
+      },
+      {
+        "name": "transfers_location_dropoff",
+        "i18nLabel": "names.locationDropoff",
+        "width": 120
+      },
+      {
+        "name": "transfers_location_dropoff_alias",
+        "i18nLabel": "names.locationDropoffAlias",
+        "width": 120
+      },
+      { "name": "transfers_from_distance", "i18nLabel": "names.fromDistance", "width": 100 },
+      { "name": "transfers_to_distance", "i18nLabel": "names.toDistance", "width": 100 },
+      {
+        "name": "transfers_location_move",
+        "i18nLabel": "names.locationMove",
+        "width": 120
+      },
+      {
+        "name": "transfers_carrier_label",
+        "i18nLabel": "names.carrierLabel",
+        "width": 70
+      },
+      {
+        "name": "transfers_time_created",
+        "i18nLabel": "names.timeCreated",
+        "width": 120
+      },
+      {
+        "name": "transfers_time_assigned",
+        "i18nLabel": "names.timeAssigned",
+        "width": 120
+      },
+      {
+        "name": "transfers_time_completed",
+        "i18nLabel": "names.timeCompleted",
+        "width": 120
+      },
+      {
+        "name": "transfers_time_aborted",
+        "i18nLabel": "names.timeAborted",
+        "width": 120
+      },
+      {
+        "name": "transfers_time_failed",
+        "i18nLabel": "names.timeFailed",
+        "width": 120
+      },
+      {
+        "name": "transfers_result_code",
+        "i18nLabel": "names.reason",
+        "width": 120
+      },
+      { "name": "transfers_age", "i18nLabel": "names.elapsed", "width": 120 },
+      {
+        "name": "transfers_unload_retry_cnt",
+        "i18nLabel": "names.unloadRetryCount",
+        "width": 120
+      }
+    ],
+
+    "vehicles": true,
+    "vehicles_physical_id": true,
+    "vehicles_logical_id": true,
+    "vehicles_distance_total": true,
+    "vehicles_runtime_total": true,
+    "vehicles_distance": true,
+    "vehicles_runtime": true,
+    "vehicles_empty": true,
+    "vehicles_order": [
+      { "name": "vehicles_physical_id", "i18nLabel": "names.id", "width": 120 },
+      { "name": "vehicles_logical_id", "i18nLabel": "names.logicalId", "width": 120 },
+      { "name": "vehicles_last_pm_time", "i18nLabel": "names.lastPmTime", "width": 120 },
+      {
+        "name": "vehicles_distance_total",
+        "i18nLabel": "names.distanceTotal",
+        "width": 180
+      },
+      {
+        "name": "vehicles_runtime_total",
+        "i18nLabel": "names.runtimeTotal",
+        "width": 180
+      },
+      { "name": "vehicles_distance", "i18nLabel": "names.distance", "width": 180 },
+      { "name": "vehicles_runtime", "i18nLabel": "names.runtime", "width": 180 },
+      { "name": "vehicles_user", "i18nLabel": "names.user", "width": 80 },
+      { "name": "vehicles_note", "i18nLabel": "names.note", "width": 80 },
+      { "name": "vehicles_empty", "i18nLabel": "", "width": 120 }
+    ],
+    
+    "alarms": true,
+    "alarms_vehicle_logical_id": true,
+    "alarms_description": true,
+    "alarms_level": true,
+    "alarms_error_code": true,
+    "alarms_cause": true,
+    "alarms_cleared": true,
+    "alarms_time": true,
+    "alarms_time_resolved": true,
+    "alarms_age": true,
+    "alarms_current": true,
+    "alarms_order": [
+      {
+        "name": "alarms_vehicle_logical_id",
+        "i18nLabel": "names.vehicle",
+        "width": 160
+      },
+      { "name": "alarms_description", "i18nLabel": "names.alarmName", "width": 320 },
+      { "name": "alarms_level", "i18nLabel": "names.level", "width": 120 },
+      { "name": "alarms_error_code", "i18nLabel": "names.errorCode", "width": 120 },
+      { "name": "alarms_cause", "i18nLabel": "names.cause", "width": 320 },
+      { "name": "alarms_cleared", "i18nLabel": "names.cleared", "width": 100 },
+      { "name": "alarms_time", "i18nLabel": "names.time", "width": 120 },
+      {
+        "name": "alarms_time_resolved",
+        "i18nLabel": "names.timeResolved",
+        "width": 120
+      },
+      { "name": "alarms_age", "i18nLabel": "names.elapsed", "width": 120 },
+      { "name": "alarms_current", "i18nLabel": "names.current", "width": 120 },
+      { "name": "physical_id", "i18nLabel": "names.barcode", "width": "auto" }
+    ],
+    
+    "nacks_stream_function": true,
+    "nacks_rcmd": true,
+    "nacks_command_id": true,
+    "nacks_time": true,
+    "nacks_origin": true,
+    "nacks_source": true,
+    "nacks_dest": true,
+    "nacks_carrier_id": true,
+    "nacks_carrier_loc": true,
+    "nacks_code": true,
+    "nacks_reason": true,
+    "nacks_param": true,
+
+    "nacks_order": [
+      { "name": "nacks_stream_function", "i18nLabel": "names.streamFunction", "width": 120 },
+      { "name": "nacks_rcmd", "i18nLabel": "names.rcmd", "width": 120 },
+      { "name": "nacks_command_id", "i18nLabel": "names.commandId", "width": 240 },
+      { "name": "nacks_time", "i18nLabel": "names.time", "width": 120 },
+      { "name": "nacks_origin", "i18nLabel": "names.origin", "width": 100 },
+      { "name": "nacks_source", "i18nLabel": "names.source", "width": 120 },
+      { "name": "nacks_dest", "i18nLabel": "names.dest", "width": 120 },
+      { "name": "nacks_carrier_id", "i18nLabel": "names.carrierId", "width": 240 },
+      { "name": "nacks_carrier_loc", "i18nLabel": "names.carrierLoc", "width": 120 },
+      { "name": "nacks_code", "i18nLabel": "names.nackCode", "width": 100 },
+      { "name": "nacks_reason", "i18nLabel": "names.nackReason", "width": 120 },
+      { "name": "nacks_param", "i18nLabel": "names.nackParam", "width": 180 }
+    ]
   }
 }

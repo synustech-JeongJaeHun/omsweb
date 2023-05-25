@@ -341,7 +341,19 @@ namespace OMSWeb.Repositories
                     WHEN oh.time_vehicle_arrived IS NOT NULL THEN 'ARRIVED'
                     WHEN oh.time_assigned IS NOT NULL THEN 'ASSIGNED'
                     WHEN oh.time_assigned IS NULL THEN 'UNASSIGNED'    
-                END AS state
+                END AS state,
+                CASE
+                    WHEN oh.location_pickup LIKE '%s%' THEN	(SELECT c_alias FROM stations WHERE concat('s', cast(id as varchar)) = oh.location_pickup)
+                    WHEN oh.location_pickup LIKE '%b%' THEN	(SELECT c_alias FROM buffers WHERE concat('b', cast(id as varchar)) = oh.location_pickup)
+                    WHEN oh.location_pickup LIKE '%v%' THEN	(SELECT logical_Id FROM vehicles WHERE concat('v', cast(id as varchar)) = oh.location_pickup)
+                    WHEN oh.location_pickup IS NULL AND oh.location_dropoff IS NOT NULL THEN oh.logical_id
+                    ELSE oh.location_pickup
+                EnD AS location_pickup_alias,
+                CASE
+                    WHEN oh.location_dropoff LIKE '%s%' THEN	(SELECT c_alias  FROM stations WHERE concat('s', cast(id as varchar)) = oh.location_dropoff)
+                    WHEN oh.location_dropoff LIKE '%b%' THEN	(SELECT c_alias FROM buffers WHERE concat('b', cast(id as varchar)) = oh.location_dropoff)
+                    ELSE oh.location_dropoff
+                EnD AS location_dropoff_alias
             FROM order_history oh
             WHERE oh.history_change_time between @from AND @to
             ORDER BY oh.history_change_time ASC

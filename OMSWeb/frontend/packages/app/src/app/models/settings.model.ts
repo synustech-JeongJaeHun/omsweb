@@ -1,4 +1,4 @@
-import {ToggleOptionKeyType, VHLIdPosition, PointType} from './enums'
+import {ToggleOptionKeyType, VHLIdPosition, PointType, IdType} from './enums'
 import { StorageUtil } from '@oms/utils/storage.util'
 import { main_css } from '../modules/shared/utils/css-loader'
 import { IZoom } from './drawing.model'
@@ -466,7 +466,7 @@ const defaultControlTable = {
 	],
 }
 
-type HistoryTable = typeof defaultHistoryTable
+export type HistoryTable = typeof defaultHistoryTable
 const defaultHistoryTable = {
 	// transfers table
 	transfers: true,
@@ -480,7 +480,9 @@ const defaultHistoryTable = {
 	transfers_state: true,
 	transfers_vehicle_id: true,
 	transfers_location_pickup: true,
+  transfers_location_pickup_alias: false,
 	transfers_location_dropoff: true,
+  transfers_location_dropoff_alias: false,
 	transfers_location_move: true,
 	transfers_carrier_label: true,
 	transfers_time_created: true,
@@ -504,11 +506,21 @@ const defaultHistoryTable = {
 			i18nLabel: 'names.locationPickup',
 			width: 120,
 		},
+    {
+      name: 'transfers_location_pickup_alias',
+      i18nLabel: 'names.locationPickupAlias',
+      width: 120,
+    },
 		{
 			name: 'transfers_location_dropoff',
 			i18nLabel: 'names.locationDropoff',
 			width: 120,
 		},
+    {
+      name: 'transfers_location_dropoff_alias',
+      i18nLabel: 'names.locationDropoffAlias',
+      width: 120,
+    },
     { name: 'transfers_from_distance', i18nLabel: 'names.fromDistance', width: 100 },
     { name: 'transfers_to_distance', i18nLabel: 'names.toDistance', width: 100 },
 		{
@@ -663,6 +675,7 @@ export type TrackObjectConfig = typeof trackObjectDefaultConfig
 const trackObjectDefaultConfig ={
   vehicleIdDisplay: VHLIdPosition.LT,
   pointDisplay: PointType.ID,
+  IdDisplay: IdType.ID,
 }
 
 export type TTSConfig = typeof TTSDefaultConfig
@@ -677,7 +690,6 @@ export class ClientPreferences implements IPreferences {
 	theme?: ThemeConfig
 	controlTables?: MonitorControlTable
 	historyTables?: HistoryTable
-
   trackDisplay?: TrackObjectConfig
 
   tts?: TTSConfig

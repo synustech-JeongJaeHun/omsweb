@@ -406,6 +406,7 @@
     "showKpi": "Show KPI",
     "zoomButton": "Show Zoom Button",
     "pointDisplayType": "Show Point Barcode",
+    "idDisplayType": "Show ID/Alias",
     "ctrlKey": "Ctrl Key Filter(Overlapped)",
     "summary": "Summary",
     "systemInfo": "System Info",

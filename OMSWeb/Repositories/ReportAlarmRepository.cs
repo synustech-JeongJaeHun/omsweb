@@ -215,6 +215,7 @@ namespace OMSWeb.Repositories
                     var sql = $@"
                         select
                         {this.GetName(key)} as label,
+                        {this.GetAlias(key)} as alias,
                         count(*)::int,
                         {_avgEpochPerHour} as avg
                         from vehicle_alarms va
@@ -373,6 +374,23 @@ namespace OMSWeb.Repositories
                         ";
                 default:
                     return null;
+            }
+        }
+        
+        private string? GetAlias(string? key)
+        {
+            switch (key)
+            {
+                case "vehicle":
+                    return $@"
+                        (
+                            SELECT physical_id
+                            FROM vehicles
+                            WHERE id = vehicle_id
+                        )
+                        ";
+                default:
+                    return $@"''";
             }
         }
     }

@@ -13,7 +13,7 @@ import {
 	ISettingMode,
 } from '@oms/models/system.model'
 import {
-  ClientPreferences,
+  ClientPreferences, HistoryTable,
   MonitorControlTable,
   ToggleOptionsType,
   TrackObjectConfig,
@@ -109,6 +109,7 @@ export class SystemsService {
           this.jsonToSetting(res['TrackObjectConfig'] as TrackObjectConfig, globalPreferences.trackDisplay)
           this.jsonToSetting(res['TTSConfig'] as TTSConfig, globalPreferences.tts)
           this.jsonToSetting(res['TrackMonitorSetting'] as TrackMonitorSetting, trackSetting )
+          this.jsonToSetting(res['HistoryTables'] as HistoryTable, globalPreferences.historyTables )
 
           this.settingSvc.globalPreferences.save()
           this.trackMonitorSettingSvc.updateCustom(trackSetting)
@@ -117,8 +118,8 @@ export class SystemsService {
     });
   }
 
-  jsonToSetting(obj: MonitorControlTable | ToggleOptionsType | TrackObjectConfig | TTSConfig | TrackMonitorSetting,
-                pref: MonitorControlTable | ToggleOptionsType | TrackObjectConfig | TTSConfig | TrackMonitorSetting){
+  jsonToSetting(obj: MonitorControlTable | ToggleOptionsType | TrackObjectConfig | TTSConfig | TrackMonitorSetting | HistoryTable,
+                pref: MonitorControlTable | ToggleOptionsType | TrackObjectConfig | TTSConfig | TrackMonitorSetting| HistoryTable){
     if(obj){
       Object.keys(pref).forEach((key) => {
         if(obj[key]!==undefined && obj[key]!==null) pref[key] = obj[key]

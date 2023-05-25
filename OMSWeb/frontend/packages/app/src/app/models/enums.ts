@@ -201,6 +201,11 @@ export enum PointType {
   BCR = 'Barcode',
   ID_BCR = 'ID(Barcode)'
 }
+
+export enum IdType {
+  ID = 'ID',
+  ALIAS = 'Alias'
+}
 export enum HttpResponseStatus{
   Unauthorized=401,
   Disconnect =0

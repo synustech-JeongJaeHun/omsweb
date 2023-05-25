@@ -1,54 +1,5 @@
 <div id="history-page">
 	<div id="filter-area">
-		<!-- <dx-select-box
-		[items]="creatorList"
-		[placeholder]="'_CREATOR' | translate"
-		[showClearButton]="true"
-		#creator
-	></dx-select-box>
-	<dx-select-box
-		[items]="searchTypeList"
-		displayExpr="key"
-		valueExpr="value"
-		[placeholder]="'_SEARCH_TYPE' | translate"
-		[showClearButton]="true"
-		#searchtype
-	>
-	</dx-select-box>
-	<dx-select-box
-		[items]="VehicleListAll"
-		[placeholder]="'_VEHICLE' | translate"
-		[dataSource]="VehicleListAll"
-		displayExpr="OnlineName"
-		valueExpr="Id"
-		[searchEnabled]="true"
-		[showClearButton]="true"
-		#vehicle
-	></dx-select-box>
-	<dx-select-box
-		[items]="StationBufferListAll"
-		[placeholder]="'_SOURCE' | translate"
-		[dataSource]="StationBufferListAll"
-		displayExpr="OnlineName"
-		valueExpr="OnlineName"
-		[searchEnabled]="true"
-		[showClearButton]="true"
-		#source
-	></dx-select-box>
-	<dx-select-box
-		[items]="StationBufferListAll"
-		[placeholder]="'_DEST' | translate"
-		[dataSource]="StationBufferListAll"
-		displayExpr="OnlineName"
-		valueExpr="OnlineName"
-		[searchEnabled]="true"
-		[showClearButton]="true"
-		#dest
-	></dx-select-box>
-	<dx-text-box
-		[placeholder]="'_CARRIERID' | translate"
-		#carrier
-	></dx-text-box> -->
 		<dx-date-box [placeholder]="'_START_DATE' | translate"
 								 type="datetime"
 								 [(value)]="start"
@@ -162,6 +113,17 @@
 									dataField="locationPickup"
 									[caption]="'names.locationPickup' | translate"
 									[customizeText]="transformLocationId"></dxi-column>
+
+      <dxi-column
+                  [width]="getDisplayTableColumnWidth('transfers_location_pickup_alias')"
+                  dataType="string"
+                  dataField="locationPickupAlias"
+                  [caption]="'names.locationPickupAlias' | translate"
+                  [customizeText]="transformLocationId"
+                  [visible]="canDisplayTable('transfers_location_pickup_alias')"
+                  [visibleIndex]="getDisplayTableColumnIndex('transfers_location_pickup_alias')"
+      ></dxi-column>
+
 			<dxi-column [visible]="canDisplayTable('transfers_location_dropoff')"
 									[visibleIndex]="
 					getDisplayTableColumnIndex('transfers_location_dropoff')
@@ -171,6 +133,16 @@
 									dataField="locationDropoff"
 									[caption]="'names.locationDropoff' | translate"
 									[customizeText]="transformLocationId"></dxi-column>
+      <dxi-column
+                  [width]="getDisplayTableColumnWidth('transfers_location_dropoff_alias')"
+                  dataType="string"
+                  dataField="locationDropoffAlias"
+                  [caption]="'names.locationDropoffAlias' | translate"
+                  [customizeText]="transformLocationId"
+                  [visible]="canDisplayTable('transfers_location_dropoff_alias')"
+                  [visibleIndex]="getDisplayTableColumnIndex('transfers_location_dropoff_alias')"
+      ></dxi-column>
+
 			<dxi-column [visible]="canDisplayTable('transfers_location_move')"
 									[visibleIndex]="getDisplayTableColumnIndex('transfers_location_move')"
 									[width]="getDisplayTableColumnWidth('transfers_location_move')"
