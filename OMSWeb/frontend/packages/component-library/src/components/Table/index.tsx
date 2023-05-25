@@ -142,11 +142,11 @@ const Table: React.FC<Props & any> = React.forwardRef(
 					name: columnNames[index],
 					value
 				}
-
 				onSorting && onSorting(sortedOpt)
 			}
-
 		}
+
+    const tableHeaders = tableHeader.filter(t=>t.caption)
 
 		return (
 			<Wrapper>
@@ -163,7 +163,7 @@ const Table: React.FC<Props & any> = React.forwardRef(
 					onOptionChanged={handleOptionChanged}
 				>
 					{
-						tableHeader.map((header, i) => {
+						tableHeaders.map((header, i) => {
 							return <Column {...header} key={i.toString()} />
 						})
 					}

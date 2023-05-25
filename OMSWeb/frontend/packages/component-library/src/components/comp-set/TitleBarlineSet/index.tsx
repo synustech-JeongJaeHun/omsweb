@@ -28,12 +28,6 @@ import { tableConfig } from '../../../utils'
 import { QueryContext } from '../../../context'
 import ContentPaneBody from '../../ContentPaneBody'
 import Scrollable from '../../Scrollable'
-import Barline from "../../charts/Barline";
-import DatePicker from "../../DatePicker";
-import moment from "moment/moment";
-import {SingleDatePicker} from "react-dates";
-import exports from "webpack";
-import ABSOLUTE_RESOURCE_PATH = exports.ModuleFilenameHelpers.ABSOLUTE_RESOURCE_PATH;
 
 type StyleType = {}
 
@@ -135,7 +129,7 @@ const genConfig = (variant, data, pageVariant) => {
   }
 
 
-  const hourData = data.hours? data.hours.map(h=>{return {vehicleName: h[0], [field]: h[1], avgConveyance: h[0],}}) : []
+  const hourData = data.hours? data.hours.map(h=>{return {name: h[0], [field]: h[1]}}) : []
   const hours = {
     variant: 'hours',
     title: 'By Times',
@@ -143,9 +137,9 @@ const genConfig = (variant, data, pageVariant) => {
     exportFilename: variant,
     data: {
       header: [
-        {caption: '',dataField: 'vehicleName', width: 80},
-        {caption: '', dataField: field, width: 80},
-        {caption: '', dataField: 'avgConveyance', width: 115}
+        {caption: 'hours',dataField: 'name'},
+        {caption: 'count', dataField: field},
+        {caption: '', dataField: 'avgConveyance'}
       ],
       body: hourData
     },
@@ -185,10 +179,9 @@ const Pane = ({ variant, data, onClick, onZoom, pageVariant, selectDate}) => {
         <RCol col={10} sm={12} md={12} lg={12}>
 
           <h3>{selectDate}</h3>
-          <Barline {...hours}/>
+          <BarlineTableV {...hours} onClick={onClick} onZoom={onZoom}/>
         </RCol>
       }
-
 		</Container>
 	)
 }
