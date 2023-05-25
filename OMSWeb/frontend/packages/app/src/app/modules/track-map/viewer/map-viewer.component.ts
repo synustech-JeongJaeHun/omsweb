@@ -66,7 +66,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 	}
 
 	get canSetSourceWithFilter() {
-    console.log(this.mapStatesService.transferCommandState.active)
     if(this.mapStatesService.transferCommandState.active){
       this.showContextMenu = false;
       return ;
@@ -1260,6 +1259,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     }
 	}
 	public async onContextMenuOn(event: CustomEvent) {
+    if(this.mapStatesService.transferCommandState.active) return
 		const payload = getCustomEventPayload(event)
 		// @ts-ignore
 		if (!(payload.type && payload.value && payload.event)) return
