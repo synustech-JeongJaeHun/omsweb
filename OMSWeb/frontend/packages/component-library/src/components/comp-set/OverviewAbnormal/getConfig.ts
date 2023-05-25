@@ -91,6 +91,10 @@ const dic2 = {
         sortOrder: 'desc'
 			},
       {
+        caption: 'alias',
+        dataField: 'alias',
+      },
+      {
 				dataField: 'id_mismatch',
         visible: false
 			},
@@ -146,6 +150,10 @@ const dic2 = {
         sortOrder: 'desc'
 			},
       {
+        caption: 'alias',
+        dataField: 'alias',
+      },
+      {
 				dataField: 'id_mismatch',
         visible: false
 			},
@@ -200,6 +208,10 @@ const dic2 = {
 				width: 120,
         sortOrder: 'desc'
 			},
+      {
+        caption: 'alias',
+        dataField: 'alias',
+      },
       {
 				dataField: 'id_mismatch',
         visible: false

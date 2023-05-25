@@ -100,6 +100,14 @@ const dic = {
       allowDecimals: false,
 		},
 	},
+  alias: {
+    series: {
+
+    },
+    yAxis: {
+
+    },
+  },
 }
 
 export default dic

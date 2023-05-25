@@ -79,8 +79,8 @@ const charts = (data) => {
 	}
 	const convertB = (list) => {
 		return list.map((item) => {
-			const { label, count, avg } = item
-			return [label, count, R.defaultTo(0)(avg)]
+			const { label, count, avg, alias } = item
+			return [label, count, R.defaultTo(0)(avg), alias]
 		})
 	}
 

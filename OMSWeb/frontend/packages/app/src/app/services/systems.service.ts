@@ -104,8 +104,8 @@ export class SystemsService {
     });
   }
 
-  jsonToSetting(obj: MonitorControlTable | ToggleOptionsType | TrackObjectConfig | TTSConfig | TrackMonitorSetting,
-                pref: MonitorControlTable | ToggleOptionsType | TrackObjectConfig | TTSConfig | TrackMonitorSetting){
+  jsonToSetting(obj: MonitorControlTable | ToggleOptionsType | TrackObjectConfig | TTSConfig | TrackMonitorSetting | HistoryTable,
+                pref: MonitorControlTable | ToggleOptionsType | TrackObjectConfig | TTSConfig | TrackMonitorSetting| HistoryTable){
     if(obj){
       Object.keys(pref).forEach((key) => {
         if(obj[key]!==undefined && obj[key]!==null) pref[key] = obj[key]

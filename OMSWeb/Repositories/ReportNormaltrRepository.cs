@@ -178,6 +178,7 @@ namespace OMSWeb.Repositories
                         SELECT
                         {GetColumnFromDic(key)} AS id,
                         {GetName(key)} as label,
+                        {GetAlias(key)} as alias,
                         COUNT(*)::int AS count,
                         {_avgEpochPerHour} as avg
                         from order_completed

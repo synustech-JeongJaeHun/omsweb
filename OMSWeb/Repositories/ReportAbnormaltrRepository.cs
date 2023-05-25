@@ -271,7 +271,7 @@ namespace OMSWeb.Repositories
                         select * 
                         from (                        
                             SELECT
-                                label,
+                                label, alias,
                                 (source_pio_timeout + dest_pio_timeout + source_empty + double_storage + abort + cancel) as failureamount,
                                 0 as id_mismatch,
                                 0 as id_read_fail,
@@ -285,7 +285,7 @@ namespace OMSWeb.Repositories
                                 0 as vehicle_error
                             FROM (
                                 SELECT
-                                    label,
+                                    label, alias,
                                     (
                                         select count(*) from cte where time_failed is not null and err_result_code = 'SourceInterlockError' and {GetColumnFromDic(key)} = t.name
                                     )::int as source_pio_timeout,
@@ -307,7 +307,8 @@ namespace OMSWeb.Repositories
                                 FROM (
                                     select 
                                         {GetColumnFromDic(key)} AS name, 
-                                        {GetName(key)} as label
+                                        {GetName(key)} as label,
+                                        {GetAlias(key)} as alias
                                     from cte
                                     group by {GetColumnFromDic(key)}
                                 ) t
