@@ -40,17 +40,18 @@
 	<dxi-column
 		[width]="85"
 		dataType="string"
-		dataField="physicalId"
-		[caption]="'names.physicalId' | translate"
-	>
-	</dxi-column>
-	<dxi-column
-		[width]="85"
-		dataType="string"
 		dataField="logicalId"
 		[caption]="'names.logicalId' | translate"
 	>
 	</dxi-column>
+  <dxi-column
+    [width]="85"
+    dataType="string"
+    dataField="physicalId"
+    cellTemplate="aliasTemplate"
+    [caption]="'names.alias' | translate"
+  >
+  </dxi-column>
 	<dxi-column
 		[width]="40"
 		dataType="string"
@@ -150,4 +151,7 @@
 		[allowSorting]="true"
 		[caption]="'names.note' | translate"
 	></dxi-column>
+  <div *dxTemplate="let data of 'aliasTemplate'">
+    {{ vhlAlias+data.displayValue }}
+  </div>
 </dx-data-grid>

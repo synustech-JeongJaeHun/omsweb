@@ -2,6 +2,7 @@ import { Component, Input, ViewChild } from '@angular/core'
 import { PlaybackPlayService } from '@oms/root/services/playback-play.service'
 import { DxDataGridComponent } from 'devextreme-angular'
 import { DateUtil } from '../../shared/utils/date.util'
+import {PlaybackBuffer, PlaybackStation} from "../../../models/playback.model";
 
 @Component({
 	selector: 'oms-playback-order-status',
@@ -47,4 +48,22 @@ export class PlaybackOrderStatusComponent {
 
 		return location?.logical_id ?? ''
 	}
+
+  transformAlias= ({ value }: { value: string | undefined | null }) => {
+    if (value == null) return ''
+
+    const locationType = value[0]
+    const id = parseInt(value.substring(1))
+
+    const list =
+      locationType === 's'
+        ? this.playService.track.data.stations ?? []
+        : locationType === 'b'
+          ? this.playService.track.data.buffers
+          : []
+
+    const location : PlaybackStation| PlaybackBuffer  = list.find((e) => e.id === id)
+
+    return location?.c_alias ?? ''
+  }
 }

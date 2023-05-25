@@ -85,6 +85,8 @@ export class SearchDialogComponent {
 
     const buffers = [
       ...this.trackStatusService.trackData.buffers.map((x) => ({ id: x.id, logicalId: x.logicalId })),
+      ...this.trackStatusService.trackData.buffers.map((x) => ({ id: x.id, logicalId: String(x.id) })),
+      ...this.trackStatusService.trackData.buffers.map((x) => ({ id: x.id, logicalId: x.physicalId })),
       ...this.trackStatusService.trackData.buffers.map((x) => ({ id: x.id, logicalId: x.cAlias })),
     ].sort((a,b)=> {
       return a.logicalId.length - b.logicalId.length

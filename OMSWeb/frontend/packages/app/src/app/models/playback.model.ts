@@ -29,6 +29,7 @@ type PlaybackBuffer = {
 	carrier_id: null
 	x: null
 	y: null
+  c_alias?: string
 }
 type PlaybackClusterPoint = {
 	id: number
@@ -83,6 +84,8 @@ type PlaybackStation = {
 	unuse: boolean
 	x: null
 	y: null
+
+  c_alias?: string
 }
 
 type PlaybackSnapshot = {
@@ -109,8 +112,10 @@ type PlaybackSnapshotOrder = {
 	distance_pickup: unknown
 	id: number
 	location_dropoff: string | null | undefined
+  location_dropoff_alias: string | null | undefined
 	location_move: string | null | undefined
 	location_pickup: string | null | undefined
+  location_pickup_alias: string | null | undefined
 	logical_id: LogicalId
 	origin: string
 	priority: number | string | null
@@ -194,6 +199,7 @@ type PlaybackSnapshotBuffer = {
 	next_point: number
 	physical_id: string
 	unused_time?: string //(date)
+  c_alias?: string
 }
 
 type PlaybackSnapshotStation = {
@@ -212,6 +218,7 @@ type PlaybackSnapshotStation = {
 	physical_id: string
 	unused_time?: string //(date)
 	carrier_type?: number
+  c_alias?: string
 }
 
 type PlaybackSnapshotZcu = {
@@ -311,6 +318,8 @@ type OrderHistoryEvent = { tableName: 'order_history' } & ITableName &
 		id: number
 		locationDropoff: string | null | undefined
 		locationPickup: string | null | undefined
+    locationDropoffAlias: string | null | undefined
+    locationPickupAlias: string | null | undefined
 		locationMove: string | null | undefined
 		logicalId: LogicalId
 		origin: string
@@ -465,7 +474,9 @@ type CurrentOrder = {
 	carrierLabel: string | null
 	id: number
 	locationDropoff: string | null | undefined
+  locationDropoffAlias: string | null | undefined
 	locationPickup: string | null | undefined
+  locationPickupAlias: string | null | undefined
 	locationMove: string | null | undefined
 	logicalId: LogicalId
 	origin: string
@@ -492,6 +503,7 @@ type CurrentBuffer = {
 	nextPoint: number
 	physicalId: string
 	unusedTime?: string
+  cAlias?: string
 }
 type CurrentStation = {
 	id: number
@@ -507,6 +519,7 @@ type CurrentStation = {
 	physicalId: string
 	unusedTime?: string //(date)
 	carrierType?: number
+  cAlias?: string
 }
 
 type CurrentZcu = {

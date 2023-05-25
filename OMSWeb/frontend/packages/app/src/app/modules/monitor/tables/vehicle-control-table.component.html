@@ -164,6 +164,15 @@
 		[visibleIndex]="getDisplayTableColumnIndex('vehicles_logicalId')"
 		[width]="getDisplayTableColumnWidth('vehicles_logicalId')"
 	></dxi-column>
+  <dxi-column
+    dataType="string"
+    dataField="physicalId"
+    [caption]="'names.alias' | translate"
+    cellTemplate="aliasTemplate"
+    [visible]="canDisplayTable('vehicles_alias')"
+    [visibleIndex]="getDisplayTableColumnIndex('vehicles_alias')"
+    [width]="getDisplayTableColumnWidth('vehicles_alias')"
+  ></dxi-column>
 	<dxi-column
 		[allowFiltering]="false"
 		dataType="boolean"
@@ -503,5 +512,8 @@
       <div class="value" *ngSwitchCase="0">{{ 'names.auto' | translate }}</div>
       <div class="value" *ngSwitchDefault>{{ 'names.auto'  | translate}}</div>
     </div>
+  </div>
+  <div *dxTemplate="let data of 'aliasTemplate'">
+    {{ vhlAlias+data.displayValue }}
   </div>
 </dx-data-grid>

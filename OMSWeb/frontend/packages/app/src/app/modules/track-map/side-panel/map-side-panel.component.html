@@ -186,6 +186,11 @@
         </mat-form-field>
 
         <mat-form-field class="info-item readonly" floatLabel="always">
+          <mat-label>{{ "names.alias" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.cAlias" />
+        </mat-form-field>
+
+        <mat-form-field class="info-item readonly" floatLabel="always">
           <mat-label>{{ "names.group" | translate }}</mat-label>
           <input matInput type="text" readonly [value]="data.groups.join(', ')" />
         </mat-form-field>
@@ -226,6 +231,11 @@
         <mat-form-field class="info-item readonly">
           <mat-label>{{ "names.physicalId" | translate }}</mat-label>
           <input matInput type="text" readonly [value]="data.physicalId" />
+        </mat-form-field>
+
+        <mat-form-field class="info-item readonly" floatLabel="always">
+          <mat-label>{{ "names.alias" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.cAlias" />
         </mat-form-field>
 
         <mat-form-field class="info-item readonly" floatLabel="always">

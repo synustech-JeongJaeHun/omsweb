@@ -96,6 +96,8 @@ function convertSnapshotVehicleToTmUpdateDtoVehicle(
 		commandPoint: getPortVehicleCommand(vehicle.command),
 		locationDropoff: order?.locationDropoff,
 		locationPickup: order?.locationPickup,
+    locationDropoffAlias: order?.locationDropoffAlias,
+    locationPickupAlias: order?.locationPickupAlias,
 		locationMove: order?.locationMove,
 		user: vehicle.user,
 		note: vehicle.note,
@@ -366,6 +368,8 @@ function convertSnapshotOrderToCurrentOrder(
 		id: order.id,
 		locationDropoff: order?.location_dropoff,
 		locationPickup: order?.location_pickup,
+    locationDropoffAlias: order?.location_dropoff_alias,
+    locationPickupAlias: order?.location_pickup_alias,
 		locationMove: order?.location_move,
 		logicalId: order.logical_id,
 		origin: order.origin,
@@ -396,6 +400,7 @@ function convertSnapshotBufferToCurrentBuffer(
 		nextPoint: buffer.next_point,
 		physicalId: buffer.physical_id,
 		unusedTime: buffer.unused_time,
+    cAlias: buffer.c_alias,
 	}
 }
 function convertSnapshotStationToCurrentStation(
@@ -415,6 +420,7 @@ function convertSnapshotStationToCurrentStation(
 		physicalId: station.physical_id,
 		unusedTime: station.unused_time, //(date)
 		carrierType: station.carrier_type,
+    cAlias: station.c_alias,
 	}
 }
 
@@ -488,6 +494,8 @@ function convertOrderHistoryEventToCurrentOrder(
 		id: event.historySourceId,
 		locationDropoff: event?.locationDropoff,
 		locationPickup: event?.locationPickup,
+    locationDropoffAlias: event?.locationDropoffAlias,
+    locationPickupAlias: event?.locationPickupAlias,
 		locationMove: event?.locationMove,
 		logicalId: event.logicalId,
 		origin: event.origin,

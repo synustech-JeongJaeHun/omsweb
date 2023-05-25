@@ -219,6 +219,7 @@ const defaultControlTable = {
 
 	vehicles_id: true,
 	vehicles_logicalId: true,
+  vehicles_alias: true,
 	vehicles_connection: true,
 	vehicles_railIn: true,
 	vehicles_mode: true,
@@ -253,6 +254,7 @@ const defaultControlTable = {
 	vehicles_order: [
 		{ name: 'vehicles_id', i18nLabel: 'names.id', width: 60 },
 		{ name: 'vehicles_logicalId', i18nLabel: 'names.logicalId', width: 90 },
+    { name: 'vehicles_alias', i18nLabel: 'names.alias', width: 90 },
 		{ name: 'vehicles_connection', i18nLabel: 'names.connected', width: 60 },
 		{ name: 'vehicles_railIn', i18nLabel: 'names.railIn', width: 60 },
 		{ name: 'vehicles_mode', i18nLabel: 'names.mode', width: 60 },

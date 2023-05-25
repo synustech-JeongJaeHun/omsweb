@@ -68,7 +68,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 	get canSetSourceWithFilter() {
     console.log(this.mapStatesService.transferCommandState.active)
     if(this.mapStatesService.transferCommandState.active){
-      this.contextMenuObject = null;
       this.showContextMenu = false;
       return ;
     }
@@ -692,6 +691,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     this.showContextMenu =false
 	}
 	onRemoveCarrier(carrierId: string) {
+    if(!carrierId) return;
 		this.transferSvc
 			.checkCarrierChange(
 				'remove',
@@ -1282,11 +1282,12 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 			this.contextMenuObject.value.home = homeGroups
 			this.homeActive = homeGroups?.length > 0 && true
 		}
-		if (this.contextMenuObject.type === 'BUFFER') {
+		if (this.contextMenuObject.type === 'BUFFER' ) {
 			const result = await this.tracksService
 				.loadBufferById(this.contextMenuObject.value.id)
 				.toPromise()
-			Object.assign(this.contextMenuObject.value, result)
+
+      this.contextMenuObject?.value && Object.assign(this.contextMenuObject.value, result)
 		}
 
 		const leftThreshold = window.innerWidth - 200
@@ -1340,6 +1341,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   }
 
   onRemoveCarrierStation(carrierId: string) {
+    if(!carrierId) return;
     if(!this.includeCheck(this.contextMenuObject?.value?.logicalId)){
       this.dialogSvc.alert({
         title: this.$t.instant('names.failed'),

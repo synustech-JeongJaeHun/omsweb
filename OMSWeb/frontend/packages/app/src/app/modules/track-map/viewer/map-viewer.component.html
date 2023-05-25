@@ -657,6 +657,7 @@
 					mat-stroked-button
 					color="primary"
 					class="dense accent"
+          [disabled]="!carrierIdInput.value"
 					(click)="onRemoveCarrier(carrierIdInput.value)"
 				>
 					Remove

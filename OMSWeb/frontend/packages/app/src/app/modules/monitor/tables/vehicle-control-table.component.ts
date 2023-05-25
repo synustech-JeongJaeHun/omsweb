@@ -43,6 +43,8 @@ export class VehicleControlTableComponent implements OnInit, OnDestroy {
 
 	preference: ClientPreferences
 
+  vhlAlias: string
+
 	//#region Subscriptions
 	private destroy$: Subject<void> = new Subject<void>()
 	//#endregion
@@ -93,6 +95,12 @@ export class VehicleControlTableComponent implements OnInit, OnDestroy {
 	) {
 		this.dataSource = this.statusSvc.vehicleStatusDataSource()
 		this.preference = this.settingSvc.globalPreferences
+
+    this.settingSvc.serviceConfig.subscribe(
+      (config) => {
+        this.vhlAlias = config.vhlAlias
+      },
+    )
 	}
 
 	canDisplayTable(type: string): boolean {
