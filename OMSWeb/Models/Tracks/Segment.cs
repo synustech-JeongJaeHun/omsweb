@@ -31,8 +31,8 @@ namespace OMSWeb.Models.Tracks
     
     public int SteerDir { get; set; }
     public int SpeedRatio { get; set; }
-    public int Oblow { get; set; }
-    public int Obhigh { get; set; }
+    public string Oblow { get; set; }
+    public string Obhigh { get; set; }
   }
   public class SegmentWithPart : Segment, ISegmentPart
   {

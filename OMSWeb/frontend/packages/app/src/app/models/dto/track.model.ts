@@ -166,8 +166,8 @@ export namespace Dto {
 
     steerDir?: number
     speedRatio?: number
-    oblow?: number
-    obhigh?: number
+    oblow?: string
+    obhigh?: string
 	}
 	export interface IStation {
 		id: number
