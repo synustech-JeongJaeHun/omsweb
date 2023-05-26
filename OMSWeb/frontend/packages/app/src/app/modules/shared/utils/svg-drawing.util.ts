@@ -46,6 +46,7 @@ export namespace SvgDrawingUtil {
 		is_zoom_only: boolean,
 		options: any = {},
 		trackMonitorSetting: TrackMonitorSettingService['trackSetting'],
+    isAlias:boolean
 	) => {
 		let mainUnit: any
 		switch (object_type) {
@@ -133,6 +134,7 @@ export namespace SvgDrawingUtil {
 					null,
 					options,
 					trackMonitorSetting,
+          isAlias
 				)
 
 				break
@@ -174,6 +176,7 @@ export namespace SvgDrawingUtil {
 					null,
 					options,
 					trackMonitorSetting,
+          isAlias
 				)
 				break
 			case 'MTL':
@@ -231,6 +234,7 @@ export namespace SvgDrawingUtil {
 		group_colors: any,
 		options: any = {},
 		trackMonitorSetting: TrackMonitorSettingService['trackSetting'],
+    isAlias=false
 	) => {
 		const overlap_adjustment = true
 		const offset_multiplier = zoom_level / 3
@@ -872,10 +876,13 @@ export namespace SvgDrawingUtil {
 					.text(function () {
 						let id = layout_object.logicalId
 							? layout_object.logicalId
-							: layout_object.id
+							: layout_object.logical_id
+            if(isAlias && layout_object.cAlias) id = layout_object.cAlias
+            if(isAlias && layout_object.c_alias) id = layout_object.c_alias
 						if (overlap_adjustment) {
 							return `Station ${id}`
-						} else {
+						}
+            else {
 							return id
 						}
 					})
@@ -985,7 +992,9 @@ export namespace SvgDrawingUtil {
 					.text(function () {
 						let id = layout_object.logicalId
 							? layout_object.logicalId
-							: layout_object.id
+							: layout_object.logical_id
+            if(isAlias && layout_object.cAlias) id = layout_object.cAlias
+            if(isAlias && layout_object.c_alias) id = layout_object.c_alias
 						if (overlap_adjustment) {
 							return `Buffer ${id}`
 						} else {

@@ -9,6 +9,8 @@ import { TrackMonitorSettingService } from '@oms/root/services/track-monitor-set
 import d3 = require('d3');
 import { main_css } from '../../shared/utils/css-loader';
 import { SvgDrawingUtil } from '../../shared/utils/svg-drawing.util';
+import {SettingsService} from "@oms/services/settings.service";
+import {IdType} from "@oms/models/enums";
 
 @Component({
   selector: 'oms-map-overlapped',
@@ -21,9 +23,18 @@ export class MapOverlappedComponent {
   @Output() leftClick = new EventEmitter<any>();
   @Output() rightClick = new EventEmitter<{ object: any; event: Event }>();
 
+  vhlAlias: string
+
   listContainer: d3.Selection<d3.BaseType, unknown, HTMLElement, any>;
 
-  constructor(private tmSettingService: TrackMonitorSettingService) {}
+  constructor(private tmSettingService: TrackMonitorSettingService,
+              private settingSvc: SettingsService,) {
+    settingSvc.serviceConfig.subscribe(
+      (config) => {
+        this.vhlAlias = config.vhlAlias
+      },
+    )
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     const { data } = changes;
@@ -78,6 +89,8 @@ export class MapOverlappedComponent {
           .append('svg')
           .attr('class', `overlap-item ${className} ${currentClass}`);
         const { objectType } = overlap;
+
+        const isAlias = this.settingSvc.globalPreferences.trackDisplay.IdDisplay===IdType.ALIAS
         if (objectType.toLowerCase() === 'vehicle') {
           // update_vehicle_dom(x, main_css.vehicle, 3, 'OVERLAP_MODULE',false)
           SvgDrawingUtil.buildVehicleUnit(
@@ -103,7 +116,8 @@ export class MapOverlappedComponent {
             'OVERLAP_MODULE',
             false,
             { mapRotation: 0 },
-            this.tmSettingService.trackSetting
+            this.tmSettingService.trackSetting,
+            isAlias
           );
         }
 
