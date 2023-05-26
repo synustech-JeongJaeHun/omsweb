@@ -73,7 +73,7 @@ export class StationControlTableComponent implements OnInit, OnDestroy {
         this.fireSensor = config.fireSensor
         let words = null
         this.fireStationFilters = config?.fireStationFilters
-        if(this.fireSensor){
+        if(this.fireSensor && this.fireStationFilters.enabled){
           words = [
             ...this.fireStationFilters?.startWords,
             ...this.fireStationFilters?.endWords,

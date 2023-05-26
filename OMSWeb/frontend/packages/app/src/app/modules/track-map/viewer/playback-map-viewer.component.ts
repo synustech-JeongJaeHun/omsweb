@@ -67,6 +67,10 @@ export class PlaybackMapViewerComponent implements OnInit, OnDestroy {
 	private cameraAndRotationSyncId
   onOffLine: boolean = false
 
+  public nextLine = false
+  public vhlAlias = null
+  public includesWords  = []
+
 	get tmSetting() {
 		return this.trackMonitorSettingService.trackSetting
 	}
@@ -159,7 +163,17 @@ export class PlaybackMapViewerComponent implements OnInit, OnDestroy {
 		private t$: TranslateService,
 	) {
     settingSvc.serviceConfig.subscribe(
-      (config) => (this.onOffLine = config.onOffLine),
+      (config) => {
+        this.onOffLine = config.onOffLine
+        const fireStationFilters = config?.fireStationFilters
+        this.includesWords = [
+          ...fireStationFilters?.startWords,
+          ...fireStationFilters?.endWords,
+          ...fireStationFilters?.includeWords].filter(i=>i&&i)
+
+        this.nextLine = config.nextLine
+        this.vhlAlias = config.vhlAlias
+      },
     )
   }
 
@@ -271,6 +285,8 @@ export class PlaybackMapViewerComponent implements OnInit, OnDestroy {
 			: this.playService.track.data.buffers
 			? this.playService.track.data.buffers.map(convertTrackBufferToTmBuffer)
 			: []
+
+    console.log(buffers)
 		const stations = this.playService.currentSnapshot.data.stations
 			? this.playService.currentSnapshot.data.stations.map(
 					convertSnapshotStationToTmStation,

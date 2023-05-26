@@ -155,14 +155,16 @@ const genConfig = (variant, data, pageVariant) => {
 	}
 }
 
-const Pane = ({ variant, data, onClick, onZoom, pageVariant, selectDate}) => {
+const Pane = ({ variant, data, onClick, onZoom, pageVariant, selectDate, exportFilename}) => {
 	const config = genConfig(variant, data, pageVariant)
 	const { main, sides, hours } = config
 
 	return (
 		<Container gutter={20}>
 			<RCol col={6} sm={12} md={6} lg={6}>
-				<BarlineTableV {...main} onClick={onClick} onZoom={onZoom} />
+				<BarlineTableV {...main} onClick={onClick} onZoom={onZoom}
+                       exportFilename={exportFilename}
+        />
 			</RCol>
 			<RCol col={6} sm={12} md={6} lg={6}>
 				<Container bottomGutter={4}>
@@ -179,14 +181,16 @@ const Pane = ({ variant, data, onClick, onZoom, pageVariant, selectDate}) => {
         <RCol col={10} sm={12} md={12} lg={12}>
 
           <h3>{selectDate}</h3>
-          <BarlineTableV {...hours} onClick={onClick} onZoom={onZoom}/>
+          <BarlineTableV {...hours} onClick={onClick} onZoom={onZoom}
+                         exportFilename={selectDate}
+          />
         </RCol>
       }
 		</Container>
 	)
 }
 
-const DetailChart = ({ variant, data, onClickClose }) => {
+const DetailChart = ({ variant, data, onClickClose, exportFilename }) => {
 	return (
 		<div>
 			<div>
@@ -195,6 +199,7 @@ const DetailChart = ({ variant, data, onClickClose }) => {
 					data={data}
 					onClickClose={onClickClose}
 					isTimeseries={variant === 'duration'}
+          exportFilename={exportFilename}
 				/>
 			</div>
 		</div>
@@ -372,12 +377,14 @@ const TitleBarlineSet: React.FC<Props & any> & any = React.forwardRef(
 												onZoom={handleZoom}
 												pageVariant={pageVariant}
                         selectDate={endDay}
+                        exportFilename={getSectionTitle()}
 											/>
 										) : (
 											<DetailChart
 												variant={zoomedSection}
 												data={zoomedData}
 												onClickClose={handleZoomout}
+                        exportFilename={getSectionTitle()}
 											/>
 										)}
 									</div>

@@ -41,6 +41,7 @@ function convertTrackBufferToTmBuffer(buffer: PlaybackBuffer) {
 		pointId: buffer.point,
 		nextPoint: buffer.next_point,
 		offset: buffer.offset,
+    cAlias: buffer.c_alias
 	}
 }
 
@@ -53,6 +54,7 @@ function convertTrackStationToTmStation(station: PlaybackStation) {
 		physicalId: station.physical_id,
 		pointId: station.point,
 		nextPoint: station.next_point,
+    cAlias: station.c_alias
 	}
 }
 
@@ -160,6 +162,7 @@ function convertSnapshotBufferToTmBuffer(buffer: PlaybackSnapshotBuffer) {
 		carrierId: buffer.carrier_id,
 		user: buffer.user,
 		note: buffer.note,
+    cAlias: buffer.c_alias
 	}
 }
 function convertSnapshotStationToTmStation(station: PlaybackSnapshotStation) {
@@ -179,6 +182,7 @@ function convertSnapshotStationToTmStation(station: PlaybackSnapshotStation) {
 
 		user: station.user,
 		note: station.note,
+    cAlias: station.c_alias
 	}
 }
 function convertSnapshotZcuToTmZcu(zcu: PlaybackSnapshotZcu) {

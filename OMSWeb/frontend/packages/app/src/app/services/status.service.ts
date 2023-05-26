@@ -49,7 +49,7 @@ export class StatusService {
 				loadUrl: `${this.baseUrl}/stations`,
 			}),
       reshapeOnPush: true,
-      filter:[ "!", this.containBuilder(words) ],
+      filter: words&&[ "!", this.containBuilder(words) ],
 		})
 	}
   fireStationStatusDataSource(words: string[]= null): DataSource {

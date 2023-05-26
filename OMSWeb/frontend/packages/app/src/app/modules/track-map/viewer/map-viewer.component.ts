@@ -3,7 +3,7 @@ import {Router} from '@angular/router'
 import {Subject} from 'rxjs'
 import {takeUntil} from 'rxjs/operators'
 
-import {PermissionEnums, PointType, ViewModes} from '../../../models/enums'
+import {IdType, PermissionEnums, PointType, ViewModes} from '../../../models/enums'
 import {Dto} from '../../../models/dto/track.model'
 import {IPreferences} from '../../../models/settings.model'
 import {HubService} from '../../../services/hub.service'
@@ -132,7 +132,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 	public showContextMenu = false
 	public homeActive = false
   public nextLine = false
-
   public vhlAlias = null
 
 	public colocatedViewPosition:

@@ -22,7 +22,7 @@
     mat-stroked-button
     color="primary"
     class="dense accent"
-    [hidden]="!fireStationFilters?.enabled"
+    *ngIf="this.fireSensor && fireStationFilters?.enabled"
     (click)="fireStationList()"
   >
     {{ 'names.fireStation' | translate }}
