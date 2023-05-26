@@ -655,6 +655,7 @@
 				</mat-form-field>
 				<button
 					mat-stroked-button
+          [disabled]="!carrierIdInput.value || !contextMenuObject?.value.carrierId"
 					color="primary"
 					class="dense accent"
           [disabled]="!carrierIdInput.value"

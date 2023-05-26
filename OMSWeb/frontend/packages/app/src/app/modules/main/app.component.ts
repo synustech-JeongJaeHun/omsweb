@@ -5,6 +5,7 @@ import { SettingsService } from '../../services/settings.service';
 import { setCssValue } from '../shared/utils/css-loader';
 import {TTSService} from "@oms/services/tts.service";
 import {SystemsService} from "@oms/services/systems.service";
+import { MobileService } from '../../services/mobile.service';
 
 @Component({
   selector: 'oms-root',
@@ -21,6 +22,7 @@ export class AppComponent {
     private ttsSvc: TTSService,
 
     private system:SystemsService,
+    private mobile: MobileService
   ) {
     this.translate = $t;
 
@@ -61,5 +63,6 @@ export class AppComponent {
   }
 
   public ngOnInit(): void {
+    this.mobile.checkMobile(true)
   }
 }

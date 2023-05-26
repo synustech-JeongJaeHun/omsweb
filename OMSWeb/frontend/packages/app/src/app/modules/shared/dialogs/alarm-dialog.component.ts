@@ -8,6 +8,7 @@ import { AuthService } from '../../../services/auth.service';
 import { IAnnotation } from '../../../models/annotation.model';
 import { AccountUtil } from '../utils/account.util';
 import { PermissionEnums } from '../../../models/enums';
+import {MobileService} from "@oms/services/mobile.service";
 
 @Component({
   selector: 'oms-alarm-dialog',
@@ -25,8 +26,10 @@ export class AlarmDialogComponent {
     private auth: AuthService,
     private messageSvc: MessagesService,
     private notifySvc: NotificationsService,
-    private t$: TranslateService
-  ) { 
+    private t$: TranslateService,
+
+    private mobileSvc: MobileService
+  ) {
     this.dataSource = this.notifySvc.alarmsDataSource();
   }
 
@@ -83,5 +86,9 @@ export class AlarmDialogComponent {
     this.messageSvc
       .sendAlarmClearCommand({ action: 'alarm_clear' }, [this.currentItem.vehicleId], this.currentItem.errorCode)
       .subscribe();
+  }
+
+  get isMobile() {
+    return this.mobileSvc.isMobile
   }
 }

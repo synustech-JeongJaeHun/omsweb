@@ -29,6 +29,7 @@ import { DialogService } from '@oms/root/services/dialog.service'
 import { TransfersService } from '@oms/root/services/transfers.service'
 import { IOrderStatusRow } from '../../../models/order-status.model'
 import { TrackStatusService } from '@oms/root/services/track-status.service'
+import {MobileService} from "@oms/services/mobile.service";
 
 @Component({
 	selector: 'oms-order-control-table',
@@ -111,6 +112,8 @@ export class OrderControlTableComponent implements OnInit, OnDestroy {
 		private transferSvc: TransfersService,
 		private t$: TranslateService,
 		private trackStatusService: TrackStatusService,
+
+    private mobileSvc: MobileService
 	) {
 		this.dataSource = this.statusSvc.orderStatusDataSource()
 		this.preference = this.settingSvc.globalPreferences
@@ -478,4 +481,8 @@ export class OrderControlTableComponent implements OnInit, OnDestroy {
 			})
 		}
 	}
+
+  get isMobile(){
+    return this.mobileSvc.isMobile
+  }
 }

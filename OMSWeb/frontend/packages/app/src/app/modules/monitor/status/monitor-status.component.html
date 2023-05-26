@@ -27,9 +27,9 @@
 	></oms-status-control>
 </div>
 
-<oms-kpi-status></oms-kpi-status>
+<oms-kpi-status *ngIf="!isMobile"></oms-kpi-status>
 
-<oms-vhl-status *ngIf="enabled && vhlDisplay" cdkDrag
+<oms-vhl-status *ngIf="enabled && vhlDisplay && !isMobile" cdkDrag
                 [cdkDragFreeDragPosition]="dragPosition"
                 (cdkDragEnded)="dragEnded($event)"
 ></oms-vhl-status>

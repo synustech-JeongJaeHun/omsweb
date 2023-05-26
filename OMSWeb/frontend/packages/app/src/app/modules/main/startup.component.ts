@@ -6,6 +6,7 @@ import { map } from 'rxjs/operators';
 import { AuthService } from '../../services/auth.service';
 import { SettingsService } from '../../services/settings.service';
 import { LoginDialogComponent } from '../shared/dialogs/login-dialog.component';
+import {MobileService} from "@oms/services/mobile.service";
 
 @Component({
   selector: 'oms-startup',
@@ -17,7 +18,9 @@ export class StartupComponent implements OnInit {
     private auth: AuthService,
     private settings: SettingsService,
     private dialog: MatDialog,
-    private router: Router
+    private router: Router,
+
+    private mobileSvc: MobileService
   ) { }
 
   ngOnInit(): void {
@@ -25,7 +28,8 @@ export class StartupComponent implements OnInit {
       const { allowPublicMonitor } = x;
 
       if (allowPublicMonitor || this.auth.isAuthenticated) {
-        this.moveDefaultPage('/monitor/public');
+        const url = this.mobileSvc.isMobile ? '/mobile/public' : '/monitor/public'
+        this.moveDefaultPage(url);
       } else this.openLogin();
     });
   }
@@ -40,7 +44,8 @@ export class StartupComponent implements OnInit {
       .afterClosed()
       .subscribe((res) => {
         if (res) {
-          this.moveDefaultPage('/monitor/status');
+          const url = this.mobileSvc.isMobile ? '/mobile/status' : '/monitor/status'
+          this.moveDefaultPage(url);
         }
       });
   }

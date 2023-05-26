@@ -27,6 +27,7 @@ import {TransfersService} from '@oms/root/services/transfers.service'
 import {VehicleStatusDialogService} from '@oms/root/services/vehicle-status-dialog.service'
 import {BufferStatusDialogService} from '@oms/root/services/buffer-status-dialog.service'
 import d3 = require('d3');
+import {MobileService} from "@oms/services/mobile.service";
 
 @Component({
 	selector: 'oms-map-viewer',
@@ -146,7 +147,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		return this.detailsVisible && this.auth.isAuthenticated
 	}
 	get showToolbarText(): boolean {
-		return this.settingSvc.globalPreferences.toggles.showToolName
+		return this.settingSvc.globalPreferences.toggles.showToolName || this.mobileSvc.isMobile
 	}
 
 	get isHomeModeAndTscPaused() {
@@ -190,10 +191,12 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		private vehicleStatusDialogService: VehicleStatusDialogService,
 		private bufferStatusDialogService: BufferStatusDialogService,
     private transfersService: TransfersService,
+    private mobileSvc: MobileService,
 	) {
 		this.auth.certUpdated$.pipe(takeUntil(this.destroy$)).subscribe((cert) => {
 			this.router.navigateByUrl('/', { skipLocationChange: false }).then(() => {
-				this.router.navigate([cert ? '/monitor/status' : '/'])
+        const url =  mobileSvc.isMobile ? '/mobile/status' : '/monitor/status'
+				this.router.navigate([cert ? url : '/'])
 			})
 		})
 

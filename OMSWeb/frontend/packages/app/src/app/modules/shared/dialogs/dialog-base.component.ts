@@ -1,5 +1,6 @@
 import { Component, HostBinding, Input, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
+import {MobileService} from "@oms/services/mobile.service";
 
 @Component({
   selector: 'oms-dialog-base',
@@ -9,11 +10,15 @@ import { MatDialogRef } from '@angular/material/dialog';
 export class DialogBaseComponent implements OnInit {
   @Input() title: string;
 
-  constructor(private dialogRef: MatDialogRef<DialogBaseComponent>) { }
+  constructor(private dialogRef: MatDialogRef<DialogBaseComponent>, private mobileSvc: MobileService) { }
 
   ngOnInit(): void { }
 
   close() {
     this.dialogRef.close(false);
+  }
+
+  get isMobile() {
+    return this.mobileSvc.isMobile
   }
 }

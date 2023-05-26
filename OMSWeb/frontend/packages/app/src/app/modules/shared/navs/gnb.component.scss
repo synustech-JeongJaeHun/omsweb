@@ -10,6 +10,18 @@
   font-size: 1.1rem;
   color: var(--theme-text-color);
 }
+
+.gnb-container-mobile {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  border-bottom: 1px solid var(--theme-border-color);
+  height: var(--header-height);
+  font-family: Mulish;
+  font-weight: normal;
+  font-size: 1rem;
+  color: var(--theme-text-color);
+  padding-right: 0 !important;
+}
 .gnb-left,
 .gnb-center,
 .gnb-right {
@@ -56,4 +68,14 @@
   display: flex;
   align-items: center;
   justify-self: end;
+}
+.gnb-container-mobile .indicators {
+  margin-right: 0 !important;
+}
+.mobile-state{
+  z-index: 13;
+  background: #f5f5f5;
+  border-radius: 8px;
+  border: 1px solid #d4d4d4;
+  opacity: 0.8;
 }

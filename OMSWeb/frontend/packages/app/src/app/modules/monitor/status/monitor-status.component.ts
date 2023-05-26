@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit } from '@angular/core'
+import {Component, EventEmitter, OnDestroy, OnInit} from '@angular/core'
 import { SystemStatusService } from '@oms/root/services/system-status.service'
 import { TrackStatusService } from '@oms/root/services/track-status.service'
 
@@ -9,6 +9,7 @@ import { IPreferences } from '../../../models/settings.model'
 import { AuthService } from '../../../services/auth.service'
 import {CdkDragEnd, CdkDragMove} from "@angular/cdk/drag-drop";
 import {TrackMonitorSettingService} from "@oms/services/track-monitor-setting.service";
+import {MobileService} from "@oms/services/mobile.service";
 
 @Component({
 	selector: 'oms-monitor-status',
@@ -51,7 +52,7 @@ import {TrackMonitorSettingService} from "@oms/services/track-monitor-setting.se
 		`,
 	],
 })
-export class MonitorStatusComponent implements OnInit {
+export class MonitorStatusComponent implements OnInit,OnDestroy {
 	loadingState = true
 	ready = false
 	mapPreference: IPreferences
@@ -81,6 +82,8 @@ export class MonitorStatusComponent implements OnInit {
 		private trackStatusService: TrackStatusService,
 		systemStatusService: SystemStatusService,
     private trackMonitorSettingService: TrackMonitorSettingService,
+
+    private mobileSvc: MobileService,
 	) {
 		this.viewMode = this.auth.isAuthenticated
 			? ViewModes.viewer
@@ -135,7 +138,11 @@ export class MonitorStatusComponent implements OnInit {
     this.dragPosition = this.settingSvc.globalPreferences.map.vhlStatusPos || {x: 0, y: 0}
 	}
 
-	handleFindAndFocus = (event: { type: string; id: number }) => {
+  ngOnDestroy() {
+
+  }
+
+  handleFindAndFocus = (event: { type: string; id: number }) => {
 		this.findEvent.emit(event)
 		this.focusEvent.emit(event)
 	}
@@ -163,4 +170,7 @@ export class MonitorStatusComponent implements OnInit {
     return this.includesWords.some(i=>word.includes(i))
   }
 
+  get isMobile(){
+    return this.mobileSvc.isMobile
+  }
 }

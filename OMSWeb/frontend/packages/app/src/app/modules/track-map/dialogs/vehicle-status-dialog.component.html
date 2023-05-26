@@ -1,5 +1,5 @@
 <oms-dialog-base [title]="'names.vehicleStatus' | translate">
-  <ng-container class="dialog-layout">
+  <div class="dialog-layout">
     <div mat-dialog-content class="container">
       <div class="dialog-header">
         <dx-select-box width="calc(100% - 10em - 30px)" [items]="vehicles" displayExpr="logicalId"
@@ -366,5 +366,5 @@
         </div>
       </div>
     </div>
-  </ng-container>
+  </div>
 </oms-dialog-base>

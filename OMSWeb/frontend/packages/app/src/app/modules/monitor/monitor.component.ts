@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {MobileService} from "@oms/services/mobile.service";
 
 @Component({
   selector: 'oms-monitor',
@@ -14,9 +15,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MonitorComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private mobileSvc: MobileService
+  ) { }
 
   ngOnInit(): void {
+    this.mobileSvc.isMobile =false
   }
 
 }

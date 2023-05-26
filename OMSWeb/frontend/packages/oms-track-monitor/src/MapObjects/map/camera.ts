@@ -34,6 +34,10 @@ const cameraTotalInfo = readonly(
   }))
 )
 
+// todo merge
+let previousTouch: Touch | null =({} as any) as Touch;
+let previousTouchList: TouchList | null;
+
 function resizeViewBox(width: number, height: number) {
   cameraPosition.x = cameraTotalInfo.value.centerX - width / 2
   cameraPosition.y = cameraTotalInfo.value.centerY - height / 2
@@ -66,8 +70,16 @@ function zoom(
     y: cameraPositionInfo.y + invertedOffsetY * scaleInfo.value.mmPerPixel,
   }
 
-  const width = cameraViewBoxInfo.width * getZoomRatio(action) ** count,
-    height = getHeightFromWidthAndRatio(width)
+  let w = cameraViewBoxInfo.width * getZoomRatio(action) ** count
+  if(w > 150000){
+    w = 150000
+  }
+  if(w < 1000){
+    w= 1000
+  }
+
+  const width = w,
+    height = getHeightFromWidthAndRatio(w)
 
   const centerX =
       cursorPosition.x -
@@ -135,6 +147,8 @@ function enterPanning() {
 
 function exitPanning() {
   isPanning.value = false
+  previousTouch = null;
+  previousTouchList = null;
 }
 
 function handleMouseUp(emitBackdrop: () => void) {
@@ -151,6 +165,70 @@ function panByMouse(event: MouseEvent) {
   hasPanned.value = true
 }
 
+function touchByMouse(event: TouchEvent){
+  event.preventDefault();
+  event.touches.length < 2 ?  singleTouch(event) : zoomInTouch(event);
+}
+
+function singleTouch(event: TouchEvent){
+  const touch = event.touches[0];
+    if (previousTouch?.pageX || previousTouch?.pageY) {
+        moveCamera({
+          x : cameraTotalInfo.value.centerX - (touch.pageX - previousTouch.pageX)* mmPerPixel,
+          y : cameraTotalInfo.value.centerY - -1 * (touch.pageY - previousTouch.pageY)* mmPerPixel
+        })
+    };
+
+    previousTouch = touch;
+    hasPanned.value = true
+}
+
+function startTouch(event: TouchEvent){
+  if (event.touches.length === 2) {
+    previousTouchList = event.touches;
+  }
+}
+
+const TouchMaximumZoomCount = 2
+function zoomInTouch(event: TouchEvent){
+  const x = event.touches[0].clientX;
+  const y = event.touches[0].clientY;
+
+  if(previousTouchList){
+    const prevDist = Math.hypot(
+      previousTouchList[1].pageX - previousTouchList[0].pageX,
+      previousTouchList[1].pageY - previousTouchList[0].pageY);
+    const dist = Math.hypot(
+      event.touches[1].pageX - event.touches[0].pageX,
+      event.touches[1].pageY - event.touches[0].pageY);
+
+    const action = prevDist > dist ? 'Out' : 'In'
+
+    if (zoomCount === 0) zoomAction = action
+
+    if (zoomAction === action) {
+      if (zoomCount > TouchMaximumZoomCount && zoomDebounceTimeoutId) return
+
+      clearTimeout(zoomDebounceTimeoutId)
+      zoomCount += 0.3
+
+      // @ts-ignore
+      zoomDebounceTimeoutId = setTimeout(() => {
+        zoom(
+          action,
+          { x, y },
+          zoomCount > TouchMaximumZoomCount ? TouchMaximumZoomCount : zoomCount
+        )
+        zoomCount = 0
+        zoomAction = undefined
+        zoomDebounceTimeoutId = undefined
+        previousTouchList = event.touches
+      }, 10)
+    }
+  }
+
+}
+
 export {
   cameraPositionInfo,
   cameraViewBoxInfo,
@@ -165,4 +243,6 @@ export {
   panByMouse,
   handleMouseUp,
   zoomByButton,
+  touchByMouse,
+  startTouch
 }

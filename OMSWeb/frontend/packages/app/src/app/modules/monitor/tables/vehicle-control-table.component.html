@@ -1,4 +1,4 @@
-<div class="grid-actions" *ngIf="hasControlAccess">
+<div class="grid-actions" *ngIf="hasControlAccess && !isMobile">
 	<button
 		*ngIf="hasPermission(permissionEnums.EstopVehicle)"
 		mat-stroked-button

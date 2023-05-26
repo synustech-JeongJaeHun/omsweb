@@ -13,6 +13,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from '../services/auth.service';
 import { SettingsService } from '../services/settings.service';
 import { LoginDialogComponent } from '../modules/shared/dialogs/login-dialog.component';
+import {MobileService} from "@oms/services/mobile.service";
 
 @Injectable({
   providedIn: 'root',
@@ -22,7 +23,8 @@ export class MonitorAuthGuard implements CanActivate {
     private auth: AuthService,
     private settings: SettingsService,
     private dialog: MatDialog,
-    private router: Router
+    private router: Router,
+    private mobile: MobileService,
   ) { }
 
   canActivate(
@@ -54,7 +56,8 @@ export class MonitorAuthGuard implements CanActivate {
       .pipe(
         map((res) => {
           if (res) {
-            this.router.navigate(['/monitor/status']);
+            const url = this.mobile.isMobile ? '/mobile/status' : '/monitor/status'
+            this.router.navigate([url]);
             return true;
           } else return false;
         })

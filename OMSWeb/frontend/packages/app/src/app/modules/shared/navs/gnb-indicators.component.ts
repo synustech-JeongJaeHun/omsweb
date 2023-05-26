@@ -23,6 +23,7 @@ import { AlertDialogComponent } from '../dialogs/alert-dialog.component';
 import { AccountUtil } from '../utils/account.util';
 import { PermissionEnums } from '../../../models/enums';
 import {TTSService} from "@oms/services/tts.service";
+import {MobileService} from "@oms/services/mobile.service";
 
 @Component({
   selector: 'oms-gnb-indicators',
@@ -69,8 +70,8 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
     private hubSvc: HubService,
     private dialog: MatDialog,
     private auth: AuthService,
-
-    private tts: TTSService
+    private tts: TTSService,
+    private mobileSvc: MobileService
   ) {
     this.timerId = setInterval(() => this.getState(), 5000);
   }
@@ -195,16 +196,21 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
 
       const rect: DOMRect = this.btnAlarm.nativeElement.getBoundingClientRect();
       this._alarmDlg = this.dialog.open(AlarmDialogComponent, {
-        // width: '700px',
         autoFocus: false,
         hasBackdrop: false,
         disableClose: true,
         closeOnNavigation: true,
         panelClass: 'alarms-dialog',
-        position: {
-          top: `${rect.top + rect.height}px`,
-          left: `${rect.left - 600}px`,
-        },
+        minWidth: !this.mobileSvc.isMobile ?'auto': '100%',
+        position: !this.mobileSvc.isMobile ?
+          {
+            top: `${rect.top + rect.height}px`,
+            left: `${rect.left - 600}px`,
+          } :
+          {
+            bottom: '0px',
+            left: '0px'
+          },
       });
     }
   }
@@ -226,6 +232,12 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
         disableClose: true,
         closeOnNavigation: true,
         panelClass: 'alerts-dialog',
+        minWidth: !this.mobileSvc.isMobile ?'auto': '100%',
+        minHeight: !this.mobileSvc.isMobile ?'auto': '60%',
+        position: this.mobileSvc.isMobile &&
+          {
+            bottom: '0px'
+          },
       });
       this._alertDlg.afterClosed().subscribe(result=>{
         this.warnClicked = false

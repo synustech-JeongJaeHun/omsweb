@@ -15,6 +15,7 @@ import { PermissionEnums } from '../../../models/enums'
 import { ClientPreferences } from '../../../models/settings.model'
 import { MatDialog, MatDialogRef } from '@angular/material/dialog'
 import { UnusedListDialogComponent } from '../../shared/dialogs/unused-list-dialog.component'
+import {MobileService} from "@oms/services/mobile.service";
 
 @Component({
 	selector: 'oms-status-control',
@@ -31,6 +32,7 @@ export class StatusControlComponent implements OnInit, OnDestroy {
 	@Output() dropFocus = new EventEmitter<{ focusType?: string }>()
 
 	resizeHandler: any
+  resizeHandlerTouch: any
 	tableHeightNum = 300
 
 	readonly permissionEnums: typeof PermissionEnums = PermissionEnums
@@ -67,6 +69,8 @@ export class StatusControlComponent implements OnInit, OnDestroy {
 		private dialogSvc: DialogService,
 		private $t: TranslateService,
 		private dialog: MatDialog,
+
+    private mobileSvc: MobileService
 	) {
 		this.preference = this.settingSvc.globalPreferences
 		settingSvc.serviceConfig.subscribe(
@@ -94,6 +98,7 @@ export class StatusControlComponent implements OnInit, OnDestroy {
 
 	ngOnInit(): void {
 		this.resizeHandler = this.onMouseMove.bind(this)
+    this.resizeHandlerTouch = this.onTouchMove.bind(this)
     const tab =this.settingSvc.globalPreferences.uiStates.controlTab
 		this.currentTab = tab < this.tableKeys.length ? tab : 0
 		this.resizeTableHeight(this.tableHeightNum)
@@ -187,6 +192,21 @@ export class StatusControlComponent implements OnInit, OnDestroy {
 
 		this.resizeTableHeight(resizedH - 37)
 	}
+
+  onTouchMove(event) {
+    let resizedH = window.innerHeight - event.changedTouches[0].clientY
+    if (resizedH < 40) {
+      resizedH = 40
+      this.resizeViewerTouchStop(event)
+    } else if (resizedH > window.innerHeight) {
+      resizedH = window.innerHeight
+      window.removeEventListener('touchmove', this.resizeHandlerTouch)
+    }
+    document.getElementById('status-control-container').style.height =
+      resizedH + 'px'
+
+    this.resizeTableHeight(resizedH - 37)
+  }
 	onChangeTab(selectedIndex: number) {
 		const pref = this.settingSvc.globalPreferences
 		pref.uiStates.controlTab = selectedIndex
@@ -200,7 +220,12 @@ export class StatusControlComponent implements OnInit, OnDestroy {
 
 	resizeViewerStart() {
 		window.addEventListener('mousemove', this.resizeHandler)
+    window.addEventListener('touchmove', this.resizeHandler)
 	}
+
+  resizeViewerTouchStart() {
+    window.addEventListener('touchmove', this.resizeHandlerTouch)
+  }
 
 	resizeViewerStop(event) {
 		if (event.type === 'mouseleave') {
@@ -211,9 +236,13 @@ export class StatusControlComponent implements OnInit, OnDestroy {
 		if (event.type === 'mouseup') {
 			window.removeEventListener('mousemove', this.resizeHandler)
 		}
-
-		// this.mapStateSvc.statusTableResizeEvent$.next();
 	}
+
+  resizeViewerTouchStop(event) {
+    if (event.type === 'touchend') {
+      window.removeEventListener('touchmove', this.resizeHandlerTouch)
+    }
+  }
 
 	viewerHide() {
 		this.mapStateSvc.changeToolbarState('controlTable', false)
@@ -230,4 +259,8 @@ export class StatusControlComponent implements OnInit, OnDestroy {
 			this.resizeTableHeight(0)
 		}
 	}
+
+  get isMobile(){
+    return this.mobileSvc.isMobile
+  }
 }
