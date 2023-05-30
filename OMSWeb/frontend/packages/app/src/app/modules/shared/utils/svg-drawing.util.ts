@@ -13,7 +13,7 @@ export namespace SvgDrawingUtil {
 		is_zoom_only: boolean,
 		options: any = {},
 		trackMonitorSetting: TrackMonitorSettingService['trackSetting'],
-    vhlAlias: string
+    vhlAlias: string = null
 	) => {
 		const mainUnit = svg
 			.append('g')
