@@ -102,7 +102,8 @@ export class MapOverlappedComponent {
             'OVERLAP_MODULE',
             false,
             { mapRotation: 0 },
-            this.tmSettingService.trackSetting
+            this.tmSettingService.trackSetting,
+            this.vhlAlias
           );
         } else {
           // update_dom(objectType, x, main_css[objectType.toLowerCase()], 3, 'OVERLAP_MODULE',false)

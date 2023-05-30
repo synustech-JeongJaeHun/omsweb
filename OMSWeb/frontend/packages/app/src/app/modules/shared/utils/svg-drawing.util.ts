@@ -13,6 +13,7 @@ export namespace SvgDrawingUtil {
 		is_zoom_only: boolean,
 		options: any = {},
 		trackMonitorSetting: TrackMonitorSettingService['trackSetting'],
+    vhlAlias: string
 	) => {
 		const mainUnit = svg
 			.append('g')
@@ -32,6 +33,7 @@ export namespace SvgDrawingUtil {
 			null,
 			options,
 			trackMonitorSetting,
+      vhlAlias
 		)
 	}
 
@@ -46,7 +48,7 @@ export namespace SvgDrawingUtil {
 		is_zoom_only: boolean,
 		options: any = {},
 		trackMonitorSetting: TrackMonitorSettingService['trackSetting'],
-    isAlias:boolean
+    isAlias = false
 	) => {
 		let mainUnit: any
 		switch (object_type) {
@@ -234,7 +236,7 @@ export namespace SvgDrawingUtil {
 		group_colors: any,
 		options: any = {},
 		trackMonitorSetting: TrackMonitorSettingService['trackSetting'],
-    isAlias=false
+    alias: boolean|string=false
 	) => {
 		const overlap_adjustment = true
 		const offset_multiplier = zoom_level / 3
@@ -541,7 +543,10 @@ export namespace SvgDrawingUtil {
 					.html(function () {
 						let id = layout_object.logicalId
 							? layout_object.logicalId
-							: layout_object.id
+              : layout_object.logical_id
+
+            if(alias && layout_object.physicalId) id = alias+layout_object.physicalId
+            if(alias && layout_object.physical_id) id = alias+layout_object.physical_id
 						if (overlap_adjustment) {
 							return `Vehicle ${id}`
 						} else {
@@ -877,8 +882,8 @@ export namespace SvgDrawingUtil {
 						let id = layout_object.logicalId
 							? layout_object.logicalId
 							: layout_object.logical_id
-            if(isAlias && layout_object.cAlias) id = layout_object.cAlias
-            if(isAlias && layout_object.c_alias) id = layout_object.c_alias
+            if(alias && layout_object.cAlias) id = layout_object.cAlias
+            if(alias && layout_object.c_alias) id = layout_object.c_alias
 						if (overlap_adjustment) {
 							return `Station ${id}`
 						}
@@ -993,8 +998,8 @@ export namespace SvgDrawingUtil {
 						let id = layout_object.logicalId
 							? layout_object.logicalId
 							: layout_object.logical_id
-            if(isAlias && layout_object.cAlias) id = layout_object.cAlias
-            if(isAlias && layout_object.c_alias) id = layout_object.c_alias
+            if(alias && layout_object.cAlias) id = layout_object.cAlias
+            if(alias && layout_object.c_alias) id = layout_object.c_alias
 						if (overlap_adjustment) {
 							return `Buffer ${id}`
 						} else {
