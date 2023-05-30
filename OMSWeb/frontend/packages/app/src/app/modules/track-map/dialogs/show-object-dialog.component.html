@@ -181,7 +181,8 @@
           {{"names.showVhlStatus" | translate }}
         </mat-slide-toggle>
 
-        <mat-slide-toggle [checked]="setting.isBackdropVisible" (change)="update({
+        <mat-slide-toggle *ngIf="showBackdrop"
+          [checked]="setting.isBackdropVisible" (change)="update({
             key: 'isBackdropVisible',
             value: $event.checked
           })" color="primary">

@@ -2,6 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TrackMonitorSettingService } from '@oms/root/services/track-monitor-setting.service';
 import { ToggleOptionsType } from '../../../models/settings.model';
+import {SettingsService} from "@oms/services/settings.service";
 
 @Component({
   selector: 'oms-show-object-dialog',
@@ -9,11 +10,18 @@ import { ToggleOptionsType } from '../../../models/settings.model';
   styleUrls: ['./show-object-dialog.component.scss'],
 })
 export class ShowObjectDialogComponent {
+  showBackdrop =true
   constructor(
     public dialogRef: MatDialogRef<ShowObjectDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public buttonState: ToggleOptionsType,
-    public trackSettingService: TrackMonitorSettingService
-  ) {}
+    public trackSettingService: TrackMonitorSettingService,
+    private settingSvc: SettingsService
+  ) {
+
+    this.settingSvc.serviceConfig.subscribe((config) => {
+      this.showBackdrop = config.backdrop
+    })
+  }
 
   public get Math() {
     return Math;
