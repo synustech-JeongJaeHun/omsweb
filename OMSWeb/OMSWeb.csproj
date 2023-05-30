@@ -83,6 +83,7 @@
     <TypeScriptCompile Include="frontend\packages\oms-track-monitor\src\TrackObjects\backdrop\backdrops.ts" />
     <TypeScriptCompile Include="frontend\packages\oms-track-monitor\src\TrackObjects\backdrop\types\Backdrop.ts" />
     <TypeScriptCompile Include="frontend\packages\oms-track-monitor\src\TrackObjects\common\alias.ts" />
+    <TypeScriptCompile Include="frontend\packages\oms-track-monitor\src\TrackObjects\cluster\types\clusterColors.ts" />
     <TypeScriptCompile Include="frontend\packages\oms-track-monitor\src\TrackObjects\point\pointType.ts" />
     <TypeScriptCompile Remove="frontend\packages\app\test-playwright\test.ts" />
   </ItemGroup>

@@ -34,6 +34,7 @@ import {updateNextLine, updateVHLArrow, updateVHLPosition, updateVHLAlias} from 
 import {updateIncludesWords} from "TrackObjects/station/stations";
 import {updateIsBackdrop} from "TrackObjects/backdrop/backdrops"
 import {updateIdType} from "TrackObjects/common/alias";
+import {updateColors} from "TrackObjects/cluster/types/clusterColors";
 /**
  *  https://v3.vuejs.org/api/sfc-script-setup.html#typescript-only-features
  *
@@ -95,6 +96,8 @@ const props = defineProps<{
   disabledByVehicleSegmentColor: Stringlish
   disabledByMTLSegmentColor: Stringlish
   segmentDirectionColor: Stringlish
+
+  clusterColors: Stringlish
 
   // chjs visual start
   disconnectModeVehicleColor: Stringlish
@@ -241,6 +244,11 @@ watch(propRefs.isBackdropVisible, ()=>{
     updateIsBackdrop(props.isBackdropVisible)
   }
 })
+watch(propRefs.clusterColors, (n) => {
+  if(props.clusterColors){
+    updateColors(props.clusterColors.split('|'))
+  }
+}, {deep : true})
 
 const selfElement = ref<HTMLDivElement>()
 const shadowRoot = computed(

@@ -1,5 +1,9 @@
 import { Component } from '@angular/core';
 import { TrackMonitorSettingService } from '@oms/root/services/track-monitor-setting.service';
+import {ISettingsCluster} from "@oms/models/settings.model";
+import {forkJoin} from "rxjs";
+import {tap} from "rxjs/operators";
+import {SettingsService} from "@oms/services/settings.service";
 
 @Component({
   selector: 'oms-theme-preference',
@@ -7,10 +11,17 @@ import { TrackMonitorSettingService } from '@oms/root/services/track-monitor-set
   styleUrls: ['./theme-preference.component.scss'],
 })
 export class ThemePreferenceComponent {
-  constructor(private trackMonitorSettingService: TrackMonitorSettingService) { }
+
+  clusters: ISettingsCluster[] = [];
+  constructor(private trackMonitorSettingService: TrackMonitorSettingService,
+              private settingsSvc: SettingsService,) {
+    this.loadClusters();
+  }
 
   get setting() { return this.trackMonitorSettingService.trackSetting }
   get update() {return this.trackMonitorSettingService.update }
+
+  get updateCluster() {return this.trackMonitorSettingService.updateCluster }
 
   resetBasicThemeTargets: string[] = [];
   resetVehicleModeThemeTargets: string[] = [];
@@ -27,5 +38,11 @@ export class ThemePreferenceComponent {
   onResetVehicleCargoStatusTheme() {
     this.resetVehicleCargoStatusItemsTargets.forEach(this.trackMonitorSettingService.reset);
     this.resetVehicleCargoStatusItemsTargets = [];
+  }
+
+  private loadClusters() {
+    return this.settingsSvc.settingsClusters().subscribe(res=>{
+      this.clusters =res;
+    });
   }
 }

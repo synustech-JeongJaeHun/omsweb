@@ -68,6 +68,7 @@
     [vhlAlias]="vhlAlias"
     [includesWords]="includesWords"
     [isVHLArrowVisible]="tmSetting.isVHLArrowVisible"
+    [clusterColors]="tmSetting.clusterColors?.join('|')"
     (mouseoverOnObject)="onMouseoverTM($event)"
 		(mouseleaveOnObject)="onMouseleaveTM($event)"
 		(mainClickOnObject)="onFocus($event)"

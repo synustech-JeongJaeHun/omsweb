@@ -167,4 +167,17 @@
     </div>
   </fieldset>
 
+  <fieldset>
+    <legend>clusters color</legend>
+
+    <div class="form-grid">
+      <ng-container *ngFor="let cluster of clusters; let i = index">
+        <oms-color-picker [name]="'cluster_'+(i+1)"
+                          (changed)="updateCluster({key: i, value: $event})"
+                          [value]="setting.clusterColors[i]">
+        </oms-color-picker>
+      </ng-container>
+    </div>
+  </fieldset>
+
 </div>
