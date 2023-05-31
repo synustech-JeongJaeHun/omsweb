@@ -1,0 +1,86 @@
+<div class="grid-actions" *ngIf="hasControlAccess">
+
+</div>
+
+<dx-data-grid
+  [dataSource]="dataSource"
+  [remoteOperations]="true"
+  [height]="tableHeight"
+  [repaintChangesOnly]="true"
+  [columnAutoWidth]="false"
+  [showBorders]="false"
+  [highlightChanges]="true"
+  [showColumnLines]="true"
+  [showRowLines]="true"
+  [headerFilter]="false"
+  [(selectedRowKeys)]="selectedRows"
+  allowColumnResizing="true"
+  [stateStoring]="stateStoring"
+>
+  <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
+  <!--dxo-scrolling-- mode="virtual" rowRenderingMode="standard"></dxo-scrolling-->
+  <dxo-paging [pageSize]="50"></dxo-paging>
+  <dxo-pager
+    [showPageSizeSelector]="true"
+    [allowedPageSizes]="[50, 100, 200]"
+    [showInfo]="true"
+    visible="true"
+  >
+  </dxo-pager>
+  <dxo-search-panel
+    [placeholder]="'names.search' | translate"
+    [visible]="true"
+  ></dxo-search-panel>
+  <dxo-load-panel [enabled]="false"></dxo-load-panel>
+  <dxo-filter-row [visible]="true"></dxo-filter-row>
+
+  <dxi-column
+    dataType="string"
+    dataField="id"
+    [caption]="'names.id' | translate"
+    [visible]="canDisplayTable('fcus_id')"
+    [visibleIndex]="getDisplayTableColumnIndex('fcus_id')"
+    [width]="getDisplayTableColumnWidth('fcus_id')"
+  ></dxi-column>
+  <dxi-column
+    dataType="string"
+    dataField="logicalId"
+    [caption]="'names.logicalId' | translate"
+    [visible]="canDisplayTable('fcus_logicalId')"
+    [visibleIndex]="getDisplayTableColumnIndex('fcus_logicalId')"
+    [width]="getDisplayTableColumnWidth('fcus_logicalId')"
+  ></dxi-column>
+  <dxi-column
+    dataType="string"
+    dataField="statusMsg"
+    [caption]="'names.status' | translate"
+    [visible]="canDisplayTable('fcus_status')"
+    [visibleIndex]="getDisplayTableColumnIndex('fcus_status')"
+    [width]="getDisplayTableColumnWidth('fcus_status')"
+  ></dxi-column>
+  <dxi-column
+    dataType="string"
+    dataField="segments"
+    [caption]="'names.segment' | translate"
+    [visible]="canDisplayTable('fcus_segments')"
+    [visibleIndex]="getDisplayTableColumnIndex('fcus_segments')"
+    [width]="getDisplayTableColumnWidth('fcus_segments')"
+  ></dxi-column>
+
+  <dxi-column
+    dataType="string"
+    dataField="user"
+    [caption]="'names.user' | translate"
+    [visible]="canDisplayTable('fcus_user')"
+    [visibleIndex]="getDisplayTableColumnIndex('fcus_user')"
+    [width]="getDisplayTableColumnWidth('fcus_user')"
+  ></dxi-column>
+  <dxi-column
+    dataType="string"
+    dataField="note"
+    [caption]="'names.note' | translate"
+    [visible]="canDisplayTable('fcus_note')"
+    [visibleIndex]="getDisplayTableColumnIndex('fcus_note')"
+    [width]="getDisplayTableColumnWidth('fcus_note')"
+  ></dxi-column>
+</dx-data-grid>

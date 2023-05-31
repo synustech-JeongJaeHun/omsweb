@@ -444,7 +444,7 @@ namespace OMSWeb.Repositories
                                     logicalId = dr["logical_id"].ToString(),
                                     segments = dr["segments"].ToString(),
                                     status = dr["status"].TryInteger(),
-                                    statusMsg = dr["logical_id"].ToString()
+                                    statusMsg = dr["status_msg"].ToString()
                                 }
                                );
                             }

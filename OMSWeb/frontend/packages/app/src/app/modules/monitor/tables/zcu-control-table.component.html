@@ -35,6 +35,27 @@
 	>
 		{{ 'names.setSw' | translate }}
 	</button>
+
+  <button
+    mat-stroked-button
+    *ngIf="holdEnabled"
+    color="primary"
+    class="dense accent"
+    [disabled]="!canReset"
+    (click)="onResetHold()"
+  >
+    {{ 'names.reset-hold' | translate }}
+  </button>
+  <button
+    mat-stroked-button
+    *ngIf="holdEnabled"
+    color="primary"
+    class="dense accent"
+    [disabled]="!canReset"
+    (click)="onRelease()"
+  >
+    {{ 'names.hold-release' | translate }}
+  </button>
 </div>
 
 <dx-data-grid

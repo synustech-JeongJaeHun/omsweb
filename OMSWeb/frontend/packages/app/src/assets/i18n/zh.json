@@ -555,7 +555,9 @@
     "steer" : "Steer",
     "oblow" : "OBS Low",
     "obhigh" : "OBS High",
-    "isBackdropVisible" : "Show Backdrop"
+    "isBackdropVisible" : "Show Backdrop",
+    "reset-hold": "重置并保持",
+    "hold-release": "暂停释放"
   },
   "enums": {
     "hostSessionStatus": {
@@ -678,6 +680,8 @@
     "reload": "地图信息发生变化，是否刷新？",
     "reload-serve": "数据已更改。你想续订吗？",
     "reload-page": "由于数据已更改，页面将在 {{sec}} 秒后重新加载。",
-    "timeoutForAlternate" : "备用超时"
+    "timeoutForAlternate" : "备用超时",
+    "reset-hold": "您确定防火卷帘重置并保持吗？",
+    "hold-release": "您确定防火卷帘保持释放吗？"
   }
 }

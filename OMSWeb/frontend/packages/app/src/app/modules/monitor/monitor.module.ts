@@ -14,7 +14,8 @@ import { StationControlTableComponent } from './tables/station-control-table.com
 import { BufferControlTableComponent } from './tables/buffer-control-table.component'
 import { ZcuControlTableComponent } from './tables/zcu-control-table.component'
 import { CpsControlTableComponent } from './tables/cps-control-table.component'
-import { KpiModule } from '../kpi/kpi.module'
+import { KpiModule } from '../kpi/kpi.module';
+import { FcuControlTableComponent } from './tables/fcu-control-table.component'
 
 @NgModule({
 	declarations: [
@@ -28,6 +29,7 @@ import { KpiModule } from '../kpi/kpi.module'
 		BufferControlTableComponent,
 		ZcuControlTableComponent,
 		CpsControlTableComponent,
+		FcuControlTableComponent,
 	],
     imports: [
         CommonModule,

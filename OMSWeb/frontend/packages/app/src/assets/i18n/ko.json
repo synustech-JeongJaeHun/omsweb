@@ -555,7 +555,9 @@
     "steer" : "Steer",
     "oblow" : "OBS Low",
     "obhigh" : "OBS High",
-    "isBackdropVisible" : "Show Backdrop"
+    "isBackdropVisible" : "Show Backdrop",
+    "reset-hold": "Reset And Hold",
+    "hold-release": "Hold Release"
   },
   "enums": {
     "hostSessionStatus": {
@@ -678,6 +680,8 @@
     "reload": "맵정보가 변경되었습니다. 새로고침하시겠습니까?",
     "reload-serve": "데이터가 변경되었습니다. 갱신하시겠습니까?",
     "reload-page": "데이터가 변경되었기 때문에 {{sec}}초 후에 페이지가 다시 로드됩니다.",
-    "timeoutForAlternate" : "Timeout for Alternate"
+    "timeoutForAlternate" : "Timeout for Alternate",
+    "reset-hold": "Are you sure Fire Shutter Reset And Hold?",
+    "hold-release": "Are you sure Fire Shutter Hold Release?"
   }
 }

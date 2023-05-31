@@ -30,6 +30,8 @@ export class ServiceConfig {
   fireStationFilters: FireStationFilters
 
   backdrop: boolean
+
+  holdEnabled: boolean
 }
 
 export interface ManualTransferFiltersSetting {
@@ -468,6 +470,22 @@ const defaultControlTable = {
 		{ name: 'cps_backup_id', i18nLabel: 'names.cps_backup_id', width: 60 },
 		{ name: 'cps_error_code', i18nLabel: 'names.cps_error_code', width: 'auto' },
 	],
+
+  fcus: false,
+  fcus_id: true,
+  fcus_status: true,
+  fcus_logicalId: true,
+  fcus_segments: true,
+  fcus_user: false,
+  fcus_note: false,
+  fcus_order: [
+    { name: 'fcus_id', i18nLabel: 'names.id', width: 50 },
+    { name: 'fcus_logicalId', i18nLabel: 'names.logicalId', width: 120 },
+    { name: 'fcus_status', i18nLabel: 'names.status', width: 120 },
+    { name: 'fcus_segments', i18nLabel: 'names.segment', width: 120 },
+    { name: 'fcus_user', i18nLabel: 'names.user', width: 120 },
+    { name: 'fcus_note', i18nLabel: 'names.note', width: 120 }
+  ],
 }
 
 export type HistoryTable = typeof defaultHistoryTable

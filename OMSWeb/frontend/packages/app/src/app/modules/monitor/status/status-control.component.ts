@@ -38,8 +38,8 @@ export class StatusControlComponent implements OnInit, OnDestroy {
 
 	preference: ClientPreferences
 
-	get tableHeight(): string {
-		return this.tableHeightNum.toString()
+	get tableHeight(): number {
+		return this.tableHeightNum
 	}
 	get canControl(): boolean {
 		return this.auth.isAuthenticated
@@ -52,6 +52,7 @@ export class StatusControlComponent implements OnInit, OnDestroy {
 		{ id: 4, title: 'Buffers' },
 		{ id: 5, title: 'Zcus' },
 		{ id: 6, title: 'Cps' },
+    { id: 7, title: 'Fcus' },
 	]
 	currentTab: number = 0
 

@@ -29,6 +29,8 @@ namespace OMSWeb.Models
         
         public bool Backdrop { get; set; }
         
+        public bool HoldEnabled { get; set; }
+
         public FireStationFilters FireStationFilters { get; set; }
         
     }

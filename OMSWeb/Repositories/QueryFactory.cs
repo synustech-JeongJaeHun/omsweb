@@ -211,7 +211,7 @@ namespace OMSWeb.Repositories
         --*user_id_condition*--WHERE user_id =@userId
       "},
       {"fireShutterStatus", @"
-        SELECT F.id, F.logical_id, F.segments, F.status, 
+        SELECT F.id, F.logical_id, F.segments, F.status, F.user, F.note,
             CASE 
                 WHEN F.status = 0 THEN 'Door closed'
                 WHEN F.status = 1 THEN 'Door opened'
