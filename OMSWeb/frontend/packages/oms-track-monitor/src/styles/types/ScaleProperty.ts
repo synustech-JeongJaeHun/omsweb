@@ -1,6 +1,7 @@
 type ScaleProperty =
   | 'vehicleSize'
   | 'vehicleTextSize'
+  | 'vehiclePropSize'
   | 'zcuSize'
   | 'segmentDirection'
   | 'segmentWidth'

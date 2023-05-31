@@ -79,7 +79,7 @@ const group = useGroup('buffer', toRef(props.buffer, 'id'))
           text-rendering="optimizeSpeed"
           pointer-events="none"
         >
-          {{ readonlyIdType===IdType.ID ? props.buffer.logicalId : props.buffer?.cAlias}}
+          {{ readonlyIdType===IdType.ID ? props.buffer.logicalId : (props.buffer?.cAlias || props.buffer.logicalId)}}
         </text>
       </g>
     </svg>

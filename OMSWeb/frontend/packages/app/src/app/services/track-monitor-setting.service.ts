@@ -73,7 +73,7 @@ type ClustersColorChangedEvent = {
 }
 
 type ScaleChangedEvent = {
-	key: 'vehicleSize' | 'vehicleTextSize' | 'zcuSize' | 'segmentWidth' | 'segmentDirectionSize' | 'lineWidth'
+	key: 'vehicleSize' | 'vehicleTextSize' | 'vehiclePropSize' | 'zcuSize' | 'segmentWidth' | 'segmentDirectionSize' | 'lineWidth'
 	value: number
 }
 type RotationChangedEvent = {
@@ -119,6 +119,7 @@ const DefaultTrackMonitorSetting: TrackMonitorSetting = {
 	// scale
 	vehicleSize: 10,
   vehicleTextSize: 12,
+  vehiclePropSize: 12,
     zcuSize: 7,
 	segmentWidth: 5,
   lineWidth: 1,

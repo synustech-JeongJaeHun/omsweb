@@ -51,6 +51,7 @@ const props = defineProps<{
   // scale
   vehicleSize: Numberlish
   vehicleTextSize: Numberlish
+  vehiclePropSize: Numberlish
   zcuSize: Numberlish
   segmentWidth: Numberlish
   lineWidth: Numberlish
@@ -148,6 +149,12 @@ watch(propRefs.vehicleTextSize, (n) => {
   updateScaleStyle(
       'vehicleTextSize',
       parseNumberProp(ScaleDefault.vehicleTextSize, n)
+  )
+})
+watch(propRefs.vehiclePropSize, (n) => {
+  updateScaleStyle(
+      'vehiclePropSize',
+      parseNumberProp(ScaleDefault.vehiclePropSize, n)
   )
 })
 watch(propRefs.zcuSize, (n) => {
@@ -577,10 +584,6 @@ defineExpose(exposed)
 #vehicle-layer .vehicle-symbol .scale-arrow {
   transform: scale(v-bind('scaleInfo.mmPerPixel * scaleStylesInfo.vehicleSize * 1/6'))
 }
-/*#vehicle-layer .vehicle-symbol .text {
-  font-size: scale(v-bind('scaleStylesInfo.vehicleTextSize'))
-}*/
-
 #vehicle-layer .vehicle-symbol[data-carrier-focused~='true' i] .scale-and-reverse-rotate {
   /* transform */
   animation: vehicle-carrier-focused-scale-grow 1s ease-in-out forwards;

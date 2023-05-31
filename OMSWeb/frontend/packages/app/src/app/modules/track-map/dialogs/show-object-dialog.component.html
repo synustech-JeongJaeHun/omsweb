@@ -24,6 +24,17 @@
         </div>
       </fieldset>
       <fieldset class="option-form">
+        <legend class="form-title">{{ "names.vehicle" | translate }} Property {{ "names.scale" | translate }}</legend>
+        <div class="slider-form">
+          <mat-slider #vehiclePropSize color="primary" min="8" max="20" [value]="setting.vehiclePropSize" (change)="update({
+          key: 'vehiclePropSize',
+          value: $event.value
+        })">
+          </mat-slider>
+          <div class="slider-value">{{ vehiclePropSize.value }}px</div>
+        </div>
+      </fieldset>
+      <fieldset class="option-form">
         <legend class="form-title">{{ "names.zcu" | translate }} {{ "names.scale" | translate }}</legend>
         <div class="slider-form">
           <mat-slider #zcuSize color="primary" min="3" max="20" [value]="setting.zcuSize" (change)="update({

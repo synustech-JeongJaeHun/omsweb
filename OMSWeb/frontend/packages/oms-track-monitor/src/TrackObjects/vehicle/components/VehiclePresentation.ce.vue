@@ -187,12 +187,14 @@ const emit = defineEmits<{
       <!-- top right (1) -->
       <!-- 1. Sensor Stop -->
       <text v-if="props.isSensorStopped" class="select-none text" x="20" y="12" font-weight="bold"
-        style="transform: rotate(180deg) scaleX(-1); transform-origin: 20px 12px;">
+            :font-size="scaleStylesInfo.vehiclePropSize"
+        style="transform: rotate(180deg) scaleX(-1); transform-origin: 20px 12px;" >
         S
       </text>
 
       <!-- 2. Zcu Blocked -->
       <text v-else-if="props.isZcuBlocked" class="select-none text" x="20" y="12" font-weight="bold"
+            :font-size="scaleStylesInfo.vehiclePropSize"
         style="transform: rotate(180deg) scaleX(-1); transform-origin: 20px 12px;">
         Z
       </text>
@@ -203,13 +205,19 @@ const emit = defineEmits<{
 
       <!-- bottom right (3) -->
       <!-- 1. Maintained -->
-      <VehicleStateMaintainedSvg v-if="props.complicatedMode === 'MAINTENANCE'" x="22" y="-18" width="20" height="20" />
+      <VehicleStateMaintainedSvg v-if="props.complicatedMode === 'MAINTENANCE'"
+                                 :font-size="scaleStylesInfo.vehiclePropSize"
+                                 x="22" y="-18" width="20" height="20" />
       <!-- 2. Prevent Call or Prevent Push -->
       <template v-else-if="props.isTransferDisabled || props.isPushDisabled">
         <!-- 2-A. Prevent Push -->
-        <VehicleStatePushDisabledSvg v-if="props.isPushDisabled" width="15" height="15" x="22" y="-18" />
+        <VehicleStatePushDisabledSvg v-if="props.isPushDisabled"
+                                     :font-size="scaleStylesInfo.vehiclePropSize"
+                                     width="15" height="15" x="22" y="-18" />
         <!-- 2-B. Prevent Call -->
-        <VehicleStateTransferDisabledSvg v-if="props.isTransferDisabled" width="15" height="15"
+        <VehicleStateTransferDisabledSvg v-if="props.isTransferDisabled"
+                                         :font-size="scaleStylesInfo.vehiclePropSize"
+                                         width="15" height="15"
           :x="props.isPushDisabled ? 40 : 22" y="-18" />
       </template>
       <template v-else />

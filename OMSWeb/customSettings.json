@@ -450,6 +450,7 @@
   "TrackMonitorSetting" : {
     "vehicleSize": 8,
     "vehicleTextSize": 12,
+    "vehiclePropSize": 12,
     "zcuSize": 4,
     "segmentWidth": 5,
     "lineWidth": 2,
