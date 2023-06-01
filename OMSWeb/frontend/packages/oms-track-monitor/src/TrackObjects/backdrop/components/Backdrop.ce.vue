@@ -103,6 +103,11 @@ function getRotate(direction:number =0, vAlign:number = 0, hAlign:number = 0): s
   
   return `transform: rotate(${d}deg) scaleY(-1) translate(${x}px, ${y}px)`
 }
+
+function getRadius(): number{
+  const h =props.backdrop.height, w=props.backdrop.width
+  return Math.min(w, h)/2 < props.backdrop.outlineRadius ? Math.min(w, h)/2: props.backdrop.outlineRadius  
+}
 </script>
 
 <template>
@@ -117,7 +122,7 @@ function getRotate(direction:number =0, vAlign:number = 0, hAlign:number = 0): s
             :stroke="props.backdrop.outlineColor"
             :stroke-width="props.backdrop?.outlineThickness"
             :stroke-dasharray="!props.backdrop?.outlineType ? false : '20 4'"
-            :rx="props.backdrop.outlineRadius"
+            :rx="getRadius()"
       >
       </rect>
       <text 
