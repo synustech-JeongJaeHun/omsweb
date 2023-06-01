@@ -206,18 +206,20 @@ const emit = defineEmits<{
       <!-- bottom right (3) -->
       <!-- 1. Maintained -->
       <VehicleStateMaintainedSvg v-if="props.complicatedMode === 'MAINTENANCE'"
-                                 :font-size="scaleStylesInfo.vehiclePropSize"
-                                 x="22" y="-18" width="20" height="20" />
+                                 :width="scaleStylesInfo.vehiclePropSize"
+                                 :height="scaleStylesInfo.vehiclePropSize"
+                                 x="22" y="-18"/>
       <!-- 2. Prevent Call or Prevent Push -->
       <template v-else-if="props.isTransferDisabled || props.isPushDisabled">
         <!-- 2-A. Prevent Push -->
         <VehicleStatePushDisabledSvg v-if="props.isPushDisabled"
-                                     :font-size="scaleStylesInfo.vehiclePropSize"
-                                     width="15" height="15" x="22" y="-18" />
+                                     :width="scaleStylesInfo.vehiclePropSize"
+                                     :height="scaleStylesInfo.vehiclePropSize"
+                                     x="22" y="-18" />
         <!-- 2-B. Prevent Call -->
         <VehicleStateTransferDisabledSvg v-if="props.isTransferDisabled"
-                                         :font-size="scaleStylesInfo.vehiclePropSize"
-                                         width="15" height="15"
+                                         :width="scaleStylesInfo.vehiclePropSize"
+                                         :height="scaleStylesInfo.vehiclePropSize"
           :x="props.isPushDisabled ? 40 : 22" y="-18" />
       </template>
       <template v-else />
