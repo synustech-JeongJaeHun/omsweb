@@ -15,15 +15,15 @@
           "unit": "V",
           "low": 430,
           "high": 510,
-          "lowEqual": true,
-          "highEqual": false
+          "lowEqual": false,
+          "highEqual": true
         },
         {
           "unit": "V",
           "low": 650,
           "high": 675,
           "lowEqual": true,
-          "highEqual": false
+          "highEqual": true
         }
       ],
       "fault":[
@@ -72,28 +72,28 @@
         "unit": "A",
         "low": 70,
         "high": 85,
-        "lowEqual": false,
-        "highEqual": true
+        "lowEqual": true,
+        "highEqual": false
       }],
       "warning": [{
           "unit": "A",
           "low": 85,
           "high": 90,
-          "lowEqual": false,
-          "highEqual": true
+          "lowEqual": true,
+          "highEqual": false
         },
         {
           "unit": "A",
           "high": 70,
           "lowEqual": false,
-          "highEqual": true
+          "highEqual": false
         }
       ],
       "fault": [{
         "unit": "A",
         "low": 90,
-        "lowEqual": false,
-        "highEqual": true
+        "lowEqual": true,
+        "highEqual": false
       }]
     },
     { "position": 4, 
@@ -103,13 +103,13 @@
         "low": 0,
         "high": 60,
         "lowEqual": false,
-        "highEqual": true
+        "highEqual": false
       }],
       "warning": [{
         "unit": "℃",
         "low": 60,
         "high": 80,
-        "lowEqual": false,
+        "lowEqual": true,
         "highEqual": true
       }],
       "fault": [{
@@ -126,14 +126,14 @@
         "low": 0,
         "high": 35,
         "lowEqual": false,
-        "highEqual": true
+        "highEqual": false
       }],
       "warning": [{
         "unit": "℃",
         "low": 35,
         "high": 40,
-        "lowEqual": false,
-        "highEqual": true
+        "lowEqual": true,
+        "highEqual": false
       }],
       "fault": [{
         "unit": "℃",

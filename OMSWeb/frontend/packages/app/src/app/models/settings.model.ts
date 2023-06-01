@@ -28,8 +28,8 @@ export class ServiceConfig {
   customSetting: boolean
   isSilentSync: boolean
   fireStationFilters: FireStationFilters
-
   backdrop: boolean
+  reference: boolean
 }
 
 export interface ManualTransferFiltersSetting {

@@ -120,7 +120,10 @@ export class CpsControlTableComponent implements OnInit, OnDestroy {
 
 	getBgColor(type: number, value: string): string {
     if(!this.cpsDataSource) {
-      this.cpsDataSource = this.systemSvc.reference
+      this.systemSvc.reference.subscribe(res=>{
+        this.cpsDataSource = res
+      })
+      return this.color_normal;
     }
 
 		if (type == 0) return this.getColor_Status(value) // Status
@@ -218,8 +221,6 @@ export class CpsControlTableComponent implements OnInit, OnDestroy {
 			.subscribe((e: IDataChangeEvent) => {
 				e && this.onTableChanged(e)
 			})
-
-    this.cpsDataSource = this.systemSvc.reference
 	}
 
 	ngOnDestroy(): void {

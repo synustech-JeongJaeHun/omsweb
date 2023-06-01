@@ -100,20 +100,20 @@ export const DEFAULT_ELEMENT_DATA: PeriodicElement[] = [
       low: 70,
       high: 85,
       lowEqual: false,
-      highEqual: true
+      highEqual: false
     }],
     warning: [{
       unit: 'A',
       low: 85,
       high: 95,
-      lowEqual: false,
-      highEqual: true
+      lowEqual: true,
+      highEqual: false
     }],
     fault: [{
       unit: 'A',
       low: 95,
-      lowEqual: false,
-      highEqual: true
+      lowEqual: true,
+      highEqual: false
     }]
   },
   { position: 4, name: 'Temp Radiator',
@@ -122,20 +122,20 @@ export const DEFAULT_ELEMENT_DATA: PeriodicElement[] = [
       low: 0,
       high: 60,
       lowEqual: false,
-      highEqual: true
+      highEqual: false
     }],
     warning: [{
       unit: '℃',
       low: 60,
       high: 80,
-      lowEqual: false,
-      highEqual: true
+      lowEqual: true,
+      highEqual: false
     }],
     fault: [{
       unit: '℃',
       low: 80,
-      lowEqual: false,
-      highEqual: true
+      lowEqual: true,
+      highEqual: false
     }]
   },
   { position: 5, name: 'Temp Internal',
@@ -144,20 +144,20 @@ export const DEFAULT_ELEMENT_DATA: PeriodicElement[] = [
       low: 0,
       high: 35,
       lowEqual: false,
-      highEqual: true
+      highEqual: false
     }],
     warning: [{
       unit: '℃',
       low: 35,
       high: 40,
-      lowEqual: false,
-      highEqual: true
+      lowEqual: true,
+      highEqual: false
     }],
     fault: [{
       unit: '℃',
       low: 40,
-      lowEqual: false,
-      highEqual: true
+      lowEqual: true,
+      highEqual: false
     }]
   },
 ];

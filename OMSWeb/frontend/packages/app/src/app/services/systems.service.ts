@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import DataSource from 'devextreme/data/data_source'
 import * as AspNetData from 'devextreme-aspnet-data-nojquery'
-import { Observable } from 'rxjs'
+import {Observable, of} from 'rxjs'
 import { tap } from 'rxjs/operators'
 
 import {
@@ -30,20 +30,29 @@ export class SystemsService {
 	private baseUrl = '/api/systems'
 	private _states: ISystemStates
   private cpsDataSource:PeriodicElement[]
+  private isReference = false
 	get currentState$(): Observable<ISystemStates> {
 		return this.states()
 	}
 
-  get reference(): PeriodicElement[] {
-    if(this.cpsDataSource) return this.cpsDataSource;
-    this.loadReference().subscribe(res=> {
-      if(res&&res['cps']){
-        this.cpsDataSource = res['cps'] as any as PeriodicElement[]
-      }else{
+  get reference(): Observable<PeriodicElement[]> {
+    if(this.cpsDataSource) return of(this.cpsDataSource);
+    this.settingSvc.serviceConfig.subscribe((config) => {
+      if(!config.reference) {
         this.cpsDataSource = DEFAULT_ELEMENT_DATA
+        return of(this.cpsDataSource)
       }
-      return this.cpsDataSource;
-    }, error => this.cpsDataSource=DEFAULT_ELEMENT_DATA)
+      this.loadReference()
+        .subscribe(res=>{
+          if(res&&res['cps']){
+            this.cpsDataSource = res['cps'] as any as PeriodicElement[]
+          }else{
+            this.cpsDataSource = DEFAULT_ELEMENT_DATA
+          }
+          return of(this.cpsDataSource);
+        })
+    });
+
   }
 
 	constructor(private http: HttpClient,

@@ -146,6 +146,7 @@ namespace OMSWeb.Services
             client.VHLAlias = this._appSettings.VHLAlias;
             client.IsSilentSync = this._appSettings.IsSilentSync;
             client.Backdrop = this._appSettings.Backdrop;
+            client.Reference = this._appSettings.Reference;
             
             client.FireSensor = this._appSettings.FireSensor;
             if (this._appSettings.FireStationFilters == null)

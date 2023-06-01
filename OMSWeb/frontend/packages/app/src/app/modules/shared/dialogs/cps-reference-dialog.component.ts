@@ -28,7 +28,8 @@ export class CpsReferenceDialogComponent implements OnDestroy {
 	constructor(
     private systemSvc: SystemsService
 	) {
-      this.cpsDataSource = systemSvc.reference.map((item)=>{
+    systemSvc.reference.subscribe(res=>{
+      this.cpsDataSource = res.map((item)=>{
         return {
           position: item.position,
           name: item.name,
@@ -37,6 +38,8 @@ export class CpsReferenceDialogComponent implements OnDestroy {
           fault: item.fault.map(m=>rangeToRef(m)).toString().replace(',', '\n')
         }
       }) as unknown as PeriodicElement[]
+    })
+
 	}
 
 	ngOnDestroy(): void {
