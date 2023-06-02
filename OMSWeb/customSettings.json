@@ -442,7 +442,8 @@
   },
   "TrackObjectConfig" : {
     "vehicleIdDisplay": "Top",
-    "pointDisplay": "ID"
+    "pointDisplay": "ID",
+    "IdDisplay": "Alias"
   },
   "TTSConfig" : {
     "language" : "not-used"
@@ -476,7 +477,7 @@
     "isFireshutterVisible": true,
     "isMtlVisible": true,
     "isOverlappingObjectsVisible": true,
-    "isVHLArrowVisible": false,
+    "isVHLArrowVisible": true,
     "isVhlStatusVisible": true,
     
     "homeBackgroundColor": "rgba(255, 255, 255, 1)",
@@ -500,7 +501,40 @@
     "mtlUnuseColor": "#f98080",
     "mtlUseColor": "grey",
 
-    "vehicleSecondaryContent": "carrier"
+    "vehicleSecondaryContent": "carrier",
+
+    "clusterColors": [
+      "rgba(139, 141, 253, 1)",
+      "rgba(222, 237, 147, 1)",
+      "rgba(208, 139, 139, 1)",
+      "rgba(253, 139, 140, 1)",
+      "rgba(247, 190, 188, 1)",
+      "rgba(252, 212, 212, 1)",
+      "rgba(54, 56, 46,0.45)",
+      "rgba(115, 95, 61, 0.45)",
+      "rgba(150, 2, 0, 0.45)",
+      "rgba(255, 0, 0, 0.45)",
+      "rgba(239, 111, 108, 0.45)",
+      "rgba(255, 165, 165, 0.45)",
+      "rgba(246, 202, 131, 0.45)",
+      "rgba(255, 208, 70, 0.45)",
+      "rgba(255, 136, 0, 0.45)",
+      "rgba(198, 161, 91, 0.45)",
+      "rgba(148, 157, 106, 0.45)",
+      "rgba(173, 255, 187, 0.45)",
+      "rgba(128, 181, 167, 0.45)",
+      "rgba(145, 220, 247, 0.45)",
+      "rgba(87, 184, 255, 0.45)",
+      "rgba(0, 153, 255, 0.45)",
+      "rgba(255, 63, 165, 0.45)",
+      "rgba(79, 53, 155, 0.45)",
+      "rgba(36, 30, 78, 0.45)",
+      "rgba(140, 33, 85, 0.45)",
+      "rgba(255, 0, 106, 0.45)",
+      "rgba(211, 76, 211, 0.45)",
+      "rgba(226, 161, 220, 0.45)",
+      "rgba(92, 26, 27, 0.45)"
+    ]
   },
   "HistoryTables" : {
     "transfers": true,

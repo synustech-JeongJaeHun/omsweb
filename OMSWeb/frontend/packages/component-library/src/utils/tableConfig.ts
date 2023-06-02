@@ -20,12 +20,17 @@ export const tableConfig = {
 			],
 		},
 		vehicle: {
-			keys: ['name', 'conveyance', 'avgConveyance', 'alias'],
+			keys: ['name', 'alias', 'conveyance', 'avgConveyance'],
 			header: [
 				{
 					caption: 'vehicle name',
 					dataField: 'name',
 				},
+        {
+          caption: 'alias',
+          dataField: 'alias',
+          width: 80,
+        },
 				{
 					caption: 'TR count',
 					dataField: 'conveyance',
@@ -36,20 +41,21 @@ export const tableConfig = {
 					dataField: 'avgConveyance',
 					width: 115,
 				},
-        {
-          caption: 'alias',
-          dataField: 'alias',
-          width: 80,
-        },
+
 			],
 		},
 		source: {
-			keys: ['name', 'conveyance', 'avgConveyance', 'alias'],
+			keys: ['name', 'alias', 'conveyance', 'avgConveyance'],
 			header: [
 				{
 					caption: 'source name',
 					dataField: 'name',
 				},
+        {
+          caption: 'alias',
+          dataField: 'alias',
+          width: 80,
+        },
 				{
 					caption: 'TR count',
 					dataField: 'conveyance',
@@ -60,20 +66,21 @@ export const tableConfig = {
 					dataField: 'avgConveyance',
 					width: 115,
 				},
-        {
-          caption: 'alias',
-          dataField: 'alias',
-          width: 80,
-        },
+
 			],
 		},
 		dest: {
-			keys: ['name', 'conveyance', 'avgConveyance', 'alias'],
+			keys: ['name', 'alias', 'conveyance', 'avgConveyance'],
 			header: [
 				{
 					caption: 'dest name',
 					dataField: 'name',
 				},
+        {
+          caption: 'alias',
+          dataField: 'alias',
+          width: 80,
+        },
 				{
 					caption: 'TR count',
 					dataField: 'conveyance',
@@ -84,11 +91,6 @@ export const tableConfig = {
 					dataField: 'avgConveyance',
 					width: 115,
 				},
-        {
-          caption: 'alias',
-          dataField: 'alias',
-          width: 80,
-        },
 			],
 		},
     hours: {
@@ -186,12 +188,17 @@ export const tableConfig = {
 			],
 		},
 		vehicle: {
-			keys: ['name', 'alarmNum', 'avgHour', 'alias'],
+			keys: ['name', 'alias', 'alarmNum', 'avgHour'],
 			header: [
 				{
 					caption: 'vehicle name',
 					dataField: 'name',
 				},
+        {
+          caption: 'alias',
+          dataField: 'alias',
+          width: 80,
+        },
 				{
 					caption: 'alarm count',
 					dataField: 'alarmNum',
@@ -202,11 +209,6 @@ export const tableConfig = {
 					dataField: 'avgHour',
 					width: 115,
 				},
-        {
-          caption: 'alias',
-          dataField: 'alias',
-          width: 80,
-        },
 			],
 		},
 		alarm: {
@@ -248,12 +250,17 @@ export const tableConfig = {
 			],
 		},
 		source: {
-			keys: ['name', 'alarmNum', 'avgHour', 'alias'],
+			keys: ['name', 'alias', 'alarmNum', 'avgHour'],
 			header: [
 				{
 					caption: 'source name',
 					dataField: 'name',
 				},
+        {
+          caption: 'alias',
+          dataField: 'alias',
+          width: 80,
+        },
 				{
 					caption: 'alarm count',
 					dataField: 'alarmNum',
@@ -264,20 +271,21 @@ export const tableConfig = {
 					dataField: 'avgHour',
 					width: 115,
 				},
-        {
-          caption: 'alias',
-          dataField: 'alias',
-          width: 80,
-        },
+
 			],
 		},
 		dest: {
-			keys: ['name', 'alarmNum', 'avgHour', 'alias'],
+			keys: ['name', 'alias', 'alarmNum', 'avgHour'],
 			header: [
 				{
 					caption: 'dest name',
 					dataField: 'name',
 				},
+        {
+          caption: 'alias',
+          dataField: 'alias',
+          width: 80,
+        },
 				{
 					caption: 'alarm count',
 					dataField: 'alarmNum',
@@ -288,11 +296,7 @@ export const tableConfig = {
 					dataField: 'avgHour',
 					width: 115,
 				},
-        {
-          caption: 'alias',
-          dataField: 'alias',
-          width: 80,
-        },
+
 			],
 		},
     hours: {

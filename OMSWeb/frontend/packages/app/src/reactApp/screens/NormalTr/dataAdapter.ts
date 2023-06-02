@@ -103,16 +103,26 @@ const charts = (data) => {
 	}
 	const convertB = (list) => {
 		return list.map((item) => {
-			const { label, count, avg, alias } = item
-			return [label, count, R.defaultTo(0)(avg), alias]
+			const { label, count, avg } = item
+			return [label, count, R.defaultTo(0)(avg)]
 		})
 	}
+
+  const convertC = (list) => {
+    return list.map((item) => {
+      const { label, alias, count, avg } = item
+      return [label, alias || '-', count, R.defaultTo(0)(avg)]
+    })
+  }
 
 	return keys.reduce((acc, item) => {
 		const arr = data[item]
 		if (item === 'duration') {
 			acc[item] = convertA(arr)
-		} else {
+		} else if(item === 'vehicle' || item === 'source' || item === 'dest'){
+      acc[item] = convertC(arr)
+    }
+    else {
 			acc[item] = convertB(arr)
 		}
 
