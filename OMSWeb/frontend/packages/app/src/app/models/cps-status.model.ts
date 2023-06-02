@@ -190,7 +190,7 @@ export function rangeCheck(input: Range, value: number): boolean{
 export function rangeToRef(input: Range): string{
   if(!input) return ''
 
-  const lowSign = input.lowEqual? '≤' : '<'
+  const lowSign = input.lowEqual? '<' : '≤'
   const highSign = input.highEqual? '>' : '≥'
   let ref= ''
   if(input?.low < input?.high){

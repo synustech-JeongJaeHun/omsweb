@@ -30,7 +30,6 @@ export class SystemsService {
 	private baseUrl = '/api/systems'
 	private _states: ISystemStates
   private cpsDataSource:PeriodicElement[]
-  private isReference = false
 	get currentState$(): Observable<ISystemStates> {
 		return this.states()
 	}

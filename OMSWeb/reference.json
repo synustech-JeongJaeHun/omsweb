@@ -30,14 +30,14 @@
         {
           "unit": "V",
           "low": 675,
-          "lowEqual": false,
-          "highEqual": true
+          "lowEqual": true,
+          "highEqual": false
         },
         {
           "unit": "V",
           "high": 430,
-          "lowEqual": true,
-          "highEqual": false
+          "lowEqual": false,
+          "highEqual": true
         }
       ]
     },
@@ -86,7 +86,7 @@
           "unit": "A",
           "high": 70,
           "lowEqual": false,
-          "highEqual": false
+          "highEqual": true
         }
       ],
       "fault": [{
