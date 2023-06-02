@@ -15,6 +15,9 @@ import { PermissionEnums } from '../../../models/enums'
 import { ClientPreferences } from '../../../models/settings.model'
 import { MatDialog, MatDialogRef } from '@angular/material/dialog'
 import { UnusedListDialogComponent } from '../../shared/dialogs/unused-list-dialog.component'
+import {Subject} from "rxjs";
+import {auditTime, takeUntil} from "rxjs/operators";
+import {AuditTimeDuration} from "@oms/root/modules/monitor/tables/constants";
 
 @Component({
 	selector: 'oms-status-control',
@@ -38,6 +41,8 @@ export class StatusControlComponent implements OnInit, OnDestroy {
 
 	preference: ClientPreferences
 
+  private destroy$: Subject<void> = new Subject<void>()
+
 	get tableHeight(): number {
 		return this.tableHeightNum
 	}
@@ -45,16 +50,8 @@ export class StatusControlComponent implements OnInit, OnDestroy {
 		return this.auth.isAuthenticated
 	}
 
-	tabNames = [
-		{ id: 1, title: 'Orders' },
-		{ id: 2, title: 'Vehicles' },
-		{ id: 3, title: 'Stations' },
-		{ id: 4, title: 'Buffers' },
-		{ id: 5, title: 'Zcus' },
-		{ id: 6, title: 'Cps' },
-    { id: 7, title: 'Fcus' },
-	]
 	currentTab: number = 0
+  currentTabName: string = 'orders'
 
 	_unusedListDialog: MatDialogRef<UnusedListDialogComponent, any> = null
 
@@ -69,15 +66,25 @@ export class StatusControlComponent implements OnInit, OnDestroy {
 		private $t: TranslateService,
 		private dialog: MatDialog,
 	) {
-		this.preference = this.settingSvc.globalPreferences
-		settingSvc.serviceConfig.subscribe(
-			(config) => {
+    this.currentTab = this.settingSvc.globalPreferences.uiStates.controlTab
+    this.initLoad()
+    settingSvc.tableChanged$
+      .pipe(auditTime(AuditTimeDuration), takeUntil(this.destroy$))
+      .subscribe(()=>{
+        this.initLoad()
+    })
+	}
+
+  initLoad(){
+    this.preference = this.settingSvc.globalPreferences
+    this.settingSvc.serviceConfig.subscribe(
+      (config) => {
         this.bufferEnabled = config.bufferEnabled
         if(!this.bufferEnabled){
-          settingSvc.globalPreferences.controlTables.buffers =false
+          this.settingSvc.globalPreferences.controlTables.buffers =false
         }
       },
-		)
+    )
     const keys = Object
       .keys(this.settingSvc.globalPreferences.controlTables)
       .filter(key=> {
@@ -91,17 +98,22 @@ export class StatusControlComponent implements OnInit, OnDestroy {
     this.tableKeys = keys.filter(k=>{
       if(this.settingSvc.globalPreferences.controlTables[k]) return k
     })
-	}
+
+    this.resizeHandler = this.onMouseMove.bind(this)
+    this.resizeTableHeight(this.tableHeightNum)
+
+
+    this.currentTab = this.tableKeys.findIndex(t=>t===this.currentTabName)
+  }
 
 	ngOnInit(): void {
-		this.resizeHandler = this.onMouseMove.bind(this)
-    const tab =this.settingSvc.globalPreferences.uiStates.controlTab
-		this.currentTab = tab < this.tableKeys.length ? tab : 0
-		this.resizeTableHeight(this.tableHeightNum)
+
 	}
 
 	ngOnDestroy(): void {
 		this.resizeTableHeight(0)
+    this.destroy$.next()
+    this.destroy$.complete()
 	}
 
 	resizeTableHeight(height: number) {
@@ -192,10 +204,11 @@ export class StatusControlComponent implements OnInit, OnDestroy {
 		const pref = this.settingSvc.globalPreferences
 		pref.uiStates.controlTab = selectedIndex
 		this.settingSvc.globalPreferences.save()
+    this.currentTabName=this.tableKeys[selectedIndex]
 	}
 
   onTabIndex(type: string):boolean{
-    const index = this.tableKeys.findIndex(key=>key===type);
+    const index = this.tableKeys.findIndex(key=>key.toLowerCase()===type);
     return this.currentTab===index;
   }
 
