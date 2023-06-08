@@ -98,7 +98,7 @@
             [allowFiltering]="true"
             dataType="number"
             dataField="distance"
-            cellTemplate="distanceTotalTemplate"
+            [customizeText]="transform_distance"
           ></dxi-column>
           <dxi-column
             [width]="getDisplayTableColumnWidth('vehicles_runtime')"
@@ -107,7 +107,7 @@
             [allowFiltering]="true"
             dataType="number"
             dataField="runtime"
-            cellTemplate="runtimeTotalTemplate"
+            [customizeText]="transform_runtime"
           ></dxi-column>
           <dxi-column
             [width]="getDisplayTableColumnWidth('vehicles_distance_total')"
@@ -117,7 +117,7 @@
             dataType="number"
             dataField="distanceTotal"
             [caption]="'names.distanceTotal' | translate"
-            cellTemplate="distanceTotalTemplate"
+            [customizeText]="transform_distance"
           ></dxi-column>
           <dxi-column
             [width]="getDisplayTableColumnWidth('vehicles_runtime_total')"
@@ -127,7 +127,7 @@
             dataType="number"
             dataField="runtimeTotal"
             [caption]="'names.runtimeTotal' | translate"
-            cellTemplate="runtimeTotalTemplate"
+            [customizeText]="transform_runtime"
           ></dxi-column>
           <dxi-column
             [width]="getDisplayTableColumnWidth('vehicles_user')"
@@ -149,10 +149,6 @@
           ></dxi-column>
           <div *dxTemplate="let data of 'distanceTotalTemplate'">
             {{ data.displayValue / 1000000 | number: '1.0-0' }}km
-          </div>
-          <div *dxTemplate="let data of 'runtimeTotalTemplate'">
-            {{ data.displayValue / (3600 * 24) | number: '1.0-0' }}d
-            {{ (data.displayValue % (3600 * 24)) / 3600 | number: '2.0-1' }}h
           </div>
         </dx-data-grid>
       </div>
@@ -250,7 +246,7 @@
           dataType="number"
           dataField="distanceRange"
           [caption]="'names.distance' | translate"
-          cellTemplate="distanceTotalTemplate"
+          [customizeText]="transform_distance"
         ></dxi-column>
         <dxi-column
           [width]="getDisplayTableColumnWidth('vehicles_runtime')"
@@ -260,15 +256,8 @@
           dataType="number"
           dataField="runtimeRange"
           [caption]="'names.runtime' | translate"
-          cellTemplate="runtimeTotalTemplate"
+          [customizeText]="transform_runtime"
         ></dxi-column>
-        <div *dxTemplate="let data of 'distanceTotalTemplate'">
-          {{ data.displayValue / 1000000 | number: '1.0-0' }}km
-        </div>
-        <div *dxTemplate="let data of 'runtimeTotalTemplate'">
-          {{ data.displayValue / (3600 * 24) | number: '1.0-0' }}d
-          {{ (data.displayValue % (3600 * 24)) / 3600 | number: '2.0-1' }}h
-        </div>
       </dx-data-grid>
     </div>
     </fieldset>

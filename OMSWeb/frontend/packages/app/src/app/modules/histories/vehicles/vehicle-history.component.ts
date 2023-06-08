@@ -235,4 +235,28 @@ export class VehicleHistoryComponent implements OnInit, OnDestroy {
 
     return  hour + ':' + minutes + ':' + second + '.' + milisec
   }
+
+
+  transform_runtime(cellInfo: any): string {
+    const value = cellInfo?.value
+    if (value == undefined) {
+      return ''
+    } else {
+      const day: number = Math.floor(value / 86400) //3600 * 24
+      const hour: string = ((value % 86400) / 3600).toFixed(1)
+
+      return `${day}d ` + hour.toString().padStart(2, '0') + 'h'
+    }
+  }
+
+  transform_distance(cellInfo: any): string {
+    const value = cellInfo?.value
+    if (value == undefined) {
+      return ''
+    } else {
+      const distance: number = Math.floor(value / 1000000)
+
+      return `${distance}km`
+    }
+  }
 }
