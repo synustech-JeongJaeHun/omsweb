@@ -1,198 +1,277 @@
-<div id="history-page">
-	<div id="filter-area">
-		<!-- <dx-select-box
-		[items]="creatorList"
-		[placeholder]="'names.vehicleId' | translate"
-		[showClearButton]="true"
-		#creator
-	></dx-select-box>
-	<dx-select-box
-		[items]="searchTypeList"
-		displayExpr="key"
-		valueExpr="value"
-		[placeholder]="'names.physicalId' | translate"
-		[showClearButton]="true"
-		#searchtype
-	>
-	</dx-select-box>
-	<dx-select-box
-		[items]="VehicleListAll"
-		[placeholder]="'names.logicalId' | translate"
-		[dataSource]="VehicleListAll"
-		displayExpr="OnlineName"
-		valueExpr="Id"
-		[searchEnabled]="true"
-		[showClearButton]="true"
-		#vehicle
-	></dx-select-box> -->
-		<dx-date-box [placeholder]="'_START_DATE' | translate"
-								 type="datetime"
-								 [(value)]="start"
-								 [min]="base"
-								 [max]="end"
-								 [acceptCustomValue]="false"
-								 [showClearButton]="true"
-								 [displayFormat]="dateTimeFormat"
-								 #startDate></dx-date-box>
-		<div>~</div>
-		<dx-date-box [placeholder]="'_END_DATE' | translate"
-								 type="datetime"
-								 [(value)]="now"
-								 [min]="base"
-								 [max]="end"
-								 [acceptCustomValue]="false"
-								 [showClearButton]="true"
-								 (validationErrorChange)="setDateWithMaxLimit()"
-								 [displayFormat]="dateTimeFormat"
-								 #endDate></dx-date-box>
-		<div id="search-area">
-			<button mat-raised-button
-							color="primary"
-							(click)="search(startDate.value, endDate.value)">
-				{{ 'names.search' | translate }}
-			</button>
-			<label> {{ searchTime }}</label>
-		</div>
-	</div>
-	<div id="grid-container">
-		<dx-data-grid
-			[dataSource]="dataSource"
-			[columnAutoWidth]="true"
-			[remoteOperations]="true"
-			[height]="gridHeight"
-			[width]="gridWidth"
-			[showBorders]="true"
-			[hoverStateEnabled]="true"
-			allowColumnResizing="true"
-			[stateStoring]="stateStoring"
-		>
-			<dxo-export [enabled]="true" [fileName]="fileName"></dxo-export>
-			<dxo-paging [pageSize]="50"></dxo-paging>
-			<dxo-pager
-				[showPageSizeSelector]="true"
-				[allowedPageSizes]="[50, 100, 200]"
-				[showInfo]="true"
-				visible="true"
-			>
-			</dxo-pager>
-			<dxo-scrolling
-				mode="standard"
-				rowRenderingMode="standard"
-				showScrollbar="always"
-			></dxo-scrolling>
-			<dxo-search-panel
-				[placeholder]="'names.search' | translate"
-				[visible]="true"
-			></dxo-search-panel>
-			<dxo-header-filter [visible]="true"></dxo-header-filter>
-			<dxo-filter-row [visible]="true"></dxo-filter-row>
+<div style="display: flex">
+  <div class="history-page">
+    <div class="filter-area">
+      <!--<dx-date-box [placeholder]="'_START_DATE' | translate"
+                   type="datetime"
+                   [(value)]="start"
+                   [min]="base"
+                   [max]="end"
+                   [acceptCustomValue]="false"
+                   [showClearButton]="true"
+                   [displayFormat]="dateTimeFormat"
+                   #startDate></dx-date-box>
+      <div>~</div>
+      <dx-date-box [placeholder]="'_END_DATE' | translate"
+                   type="datetime"
+                   [(value)]="now"
+                   [min]="base"
+                   [max]="end"
+                   [acceptCustomValue]="false"
+                   [showClearButton]="true"
+                   (validationErrorChange)="setDateWithMaxLimit()"
+                   [displayFormat]="dateTimeFormat"
+                   #endDate></dx-date-box>-->
+      <div class="search-area">
+        <button mat-raised-button
+                color="primary"
+                (click)="search()">
+          {{ 'names.search' | translate }}
+        </button>
+        <label> {{ searchTime }}</label>
+      </div>
+    </div>
+    <fieldset>
+      <legend>{{ "names.all" | translate }}</legend>
+      <div class="grid-container">
+        <dx-data-grid
+          [dataSource]="dataSource"
+          [columnAutoWidth]="true"
+          [remoteOperations]="true"
+          [height]="gridHeight"
+          [width]="gridWidth"
+          [showBorders]="true"
+          [hoverStateEnabled]="true"
+          allowColumnResizing="true"
+          [stateStoring]="stateStoring"
+        >
+          <dxo-export [enabled]="true" [fileName]="fileName"></dxo-export>
+          <dxo-paging [pageSize]="50"></dxo-paging>
+          <dxo-pager
+            [showPageSizeSelector]="true"
+            [allowedPageSizes]="[50, 100, 200]"
+            [showInfo]="true"
+            visible="true"
+          >
+          </dxo-pager>
+          <dxo-scrolling
+            mode="standard"
+            rowRenderingMode="standard"
+            showScrollbar="always"
+          ></dxo-scrolling>
+          <dxo-search-panel
+            [placeholder]="'names.search' | translate"
+            [visible]="true"
+          ></dxo-search-panel>
+          <dxo-header-filter [visible]="true"></dxo-header-filter>
+          <dxo-filter-row [visible]="true"></dxo-filter-row>
 
-			<!--
-  <dxi-column [width]="80" dataType="string" dataField="id" [caption]="'names.id' | translate"></dxi-column>
-  <dxi-column [width]="120" dataType="string" dataField="physicalId" [caption]="'names.physicalId' | translate">
-  </dxi-column>
-    -->
-			<dxi-column
-				[width]="getDisplayTableColumnWidth('vehicles_physical_id')"
-				[visible]="canDisplayTable('vehicles_physical_id')"
-				[visibleIndex]="getDisplayTableColumnIndex('vehicles_physical_id')"
-				dataType="string"
-				dataField="historySourceId"
-				[caption]="'names.id' | translate"
-			></dxi-column>
-			<dxi-column
-				[width]="getDisplayTableColumnWidth('vehicles_logical_id')"
-				[visible]="canDisplayTable('vehicles_logical_id')"
-				[visibleIndex]="getDisplayTableColumnIndex('vehicles_logical_id')"
-				dataType="string"
-				dataField="logicalId"
-				[caption]="'names.logicalId' | translate"
-			></dxi-column>
-      <dxi-column
-        [width]="getDisplayTableColumnWidth('vehicles_last_pm_time')"
-        [visible]="canDisplayTable('vehicles_last_pm_time')"
-        [visibleIndex]="getDisplayTableColumnIndex('vehicles_last_pm_time')"
-        [allowFiltering]="true"
-        dataType="datetime"
-        dataField="pmTime"
-        [caption]="'names.lastPmTime' | translate"
-      ></dxi-column>
-      <dxi-column
-        [width]="getDisplayTableColumnWidth('vehicles_distance')"
-        [visible]="canDisplayTable('vehicles_distance')"
-        [visibleIndex]="getDisplayTableColumnIndex('vehicles_distance')"
-        [allowFiltering]="true"
-        dataType="number"
-        dataField="distance"
-        cellTemplate="distanceTotalTemplate"
-      ></dxi-column>
-      <dxi-column
-        [width]="getDisplayTableColumnWidth('vehicles_runtime')"
-        [visible]="canDisplayTable('vehicles_runtime')"
-        [visibleIndex]="getDisplayTableColumnIndex('vehicles_runtime')"
-        [allowFiltering]="true"
-        dataType="number"
-        dataField="runtime"
-        cellTemplate="runtimeTotalTemplate"
-      ></dxi-column>
-			<dxi-column
-				[width]="getDisplayTableColumnWidth('vehicles_distance_total')"
-				[visible]="canDisplayTable('vehicles_distance_total')"
-				[visibleIndex]="getDisplayTableColumnIndex('vehicles_distance_total')"
-				[allowFiltering]="true"
-				dataType="number"
-				dataField="distanceTotal"
-				[caption]="'names.distanceTotal' | translate"
-				cellTemplate="distanceTotalTemplate"
-			></dxi-column>
-			<dxi-column
-				[width]="getDisplayTableColumnWidth('vehicles_runtime_total')"
-				[visible]="canDisplayTable('vehicles_runtime_total')"
-				[visibleIndex]="getDisplayTableColumnIndex('vehicles_runtime_total')"
-				[allowFiltering]="true"
-				dataType="number"
-				dataField="runtimeTotal"
-				[caption]="'names.runtimeTotal' | translate"
-				cellTemplate="runtimeTotalTemplate"
-			></dxi-column>
-      <dxi-column
-        [width]="getDisplayTableColumnWidth('vehicles_user')"
-        [visible]="canDisplayTable('vehicles_user')"
-        [visibleIndex]="getDisplayTableColumnIndex('vehicles_user')"
-        [allowFiltering]="true"
-        dataType="string"
-        dataField="pmUser"
-        [caption]="'names.user' | translate"
-      ></dxi-column>
-      <dxi-column
-        [width]="getDisplayTableColumnWidth('vehicles_note')"
-        [visible]="canDisplayTable('vehicles_note')"
-        [visibleIndex]="getDisplayTableColumnIndex('vehicles_note')"
-        [allowFiltering]="true"
-        dataType="string"
-        dataField="pmNote"
-        [caption]="'names.note' | translate"
-      ></dxi-column>
-			<dxi-column
-				[width]="getDisplayTableColumnWidth('vehicles_empty')"
-				[visible]="canDisplayTable('vehicles_empty')"
-				[visibleIndex]="getDisplayTableColumnIndex('vehicles_empty')"
-				dataType="string"
-				[caption]=""
-			></dxi-column>
-			<div *dxTemplate="let data of 'distanceTotalTemplate'">
-				{{ data.displayValue / 1000000 | number: '1.0-0' }}km
-			</div>
-			<div *dxTemplate="let data of 'runtimeTotalTemplate'">
-				{{ data.displayValue / (3600 * 24) | number: '1.0-0' }}d
-				{{ (data.displayValue % (3600 * 24)) / 3600 | number: '2.0-1' }}h
-			</div>
-			<!--
-  <dxi-column [allowFiltering]="true" [width]="120" dataType="string" dataField="type"
-              [caption]="'names.type' | translate"></dxi-column>
-  <dxi-column [allowFiltering]="true" [width]="120" dataType="string" dataField="mapDb"
-              [caption]="'names.mapDb' | translate"></dxi-column>
-    -->
-		</dx-data-grid>
-	</div>
+          <dxi-column
+            [width]="getDisplayTableColumnWidth('vehicles_physical_id')"
+            [visible]="canDisplayTable('vehicles_physical_id')"
+            [visibleIndex]="getDisplayTableColumnIndex('vehicles_physical_id')"
+            dataType="string"
+            dataField="historySourceId"
+            [caption]="'names.id' | translate"
+            [fixed]="true"
+          ></dxi-column>
+          <dxi-column
+            [width]="getDisplayTableColumnWidth('vehicles_logical_id')"
+            [visible]="canDisplayTable('vehicles_logical_id')"
+            [visibleIndex]="getDisplayTableColumnIndex('vehicles_logical_id')"
+            dataType="string"
+            dataField="logicalId"
+            [caption]="'names.logicalId' | translate"
+          ></dxi-column>
+          <dxi-column
+            [width]="getDisplayTableColumnWidth('vehicles_last_pm_time')"
+            [visible]="canDisplayTable('vehicles_last_pm_time')"
+            [visibleIndex]="getDisplayTableColumnIndex('vehicles_last_pm_time')"
+            [allowFiltering]="true"
+            dataType="datetime"
+            dataField="pmTime"
+            [caption]="'names.lastPmTime' | translate"
+          ></dxi-column>
+          <dxi-column
+            [width]="getDisplayTableColumnWidth('vehicles_distance')"
+            [visible]="canDisplayTable('vehicles_distance')"
+            [visibleIndex]="getDisplayTableColumnIndex('vehicles_distance')"
+            [allowFiltering]="true"
+            dataType="number"
+            dataField="distance"
+            cellTemplate="distanceTotalTemplate"
+          ></dxi-column>
+          <dxi-column
+            [width]="getDisplayTableColumnWidth('vehicles_runtime')"
+            [visible]="canDisplayTable('vehicles_runtime')"
+            [visibleIndex]="getDisplayTableColumnIndex('vehicles_runtime')"
+            [allowFiltering]="true"
+            dataType="number"
+            dataField="runtime"
+            cellTemplate="runtimeTotalTemplate"
+          ></dxi-column>
+          <dxi-column
+            [width]="getDisplayTableColumnWidth('vehicles_distance_total')"
+            [visible]="canDisplayTable('vehicles_distance_total')"
+            [visibleIndex]="getDisplayTableColumnIndex('vehicles_distance_total')"
+            [allowFiltering]="true"
+            dataType="number"
+            dataField="distanceTotal"
+            [caption]="'names.distanceTotal' | translate"
+            cellTemplate="distanceTotalTemplate"
+          ></dxi-column>
+          <dxi-column
+            [width]="getDisplayTableColumnWidth('vehicles_runtime_total')"
+            [visible]="canDisplayTable('vehicles_runtime_total')"
+            [visibleIndex]="getDisplayTableColumnIndex('vehicles_runtime_total')"
+            [allowFiltering]="true"
+            dataType="number"
+            dataField="runtimeTotal"
+            [caption]="'names.runtimeTotal' | translate"
+            cellTemplate="runtimeTotalTemplate"
+          ></dxi-column>
+          <dxi-column
+            [width]="getDisplayTableColumnWidth('vehicles_user')"
+            [visible]="canDisplayTable('vehicles_user')"
+            [visibleIndex]="getDisplayTableColumnIndex('vehicles_user')"
+            [allowFiltering]="true"
+            dataType="string"
+            dataField="pmUser"
+            [caption]="'names.user' | translate"
+          ></dxi-column>
+          <dxi-column
+            [width]="getDisplayTableColumnWidth('vehicles_note')"
+            [visible]="canDisplayTable('vehicles_note')"
+            [visibleIndex]="getDisplayTableColumnIndex('vehicles_note')"
+            [allowFiltering]="true"
+            dataType="string"
+            dataField="pmNote"
+            [caption]="'names.note' | translate"
+          ></dxi-column>
+          <div *dxTemplate="let data of 'distanceTotalTemplate'">
+            {{ data.displayValue / 1000000 | number: '1.0-0' }}km
+          </div>
+          <div *dxTemplate="let data of 'runtimeTotalTemplate'">
+            {{ data.displayValue / (3600 * 24) | number: '1.0-0' }}d
+            {{ (data.displayValue % (3600 * 24)) / 3600 | number: '2.0-1' }}h
+          </div>
+        </dx-data-grid>
+      </div>
+    </fieldset>
+
+  </div>
+
+  <div class="history-page">
+    <div class="filter-area">
+      <dx-date-box [placeholder]="'_START_DATE' | translate"
+                   type="datetime"
+                   [(value)]="start"
+                   [min]="base"
+                   [max]="end"
+                   [acceptCustomValue]="false"
+                   [showClearButton]="true"
+                   [displayFormat]="dateTimeFormat"
+                   #startDate></dx-date-box>
+      <div>~</div>
+      <dx-date-box [placeholder]="'_END_DATE' | translate"
+                   type="datetime"
+                   [(value)]="now"
+                   [min]="base"
+                   [max]="end"
+                   [acceptCustomValue]="false"
+                   [showClearButton]="true"
+                   (validationErrorChange)="setDateWithMaxLimit()"
+                   [displayFormat]="dateTimeFormat"
+                   #endDate></dx-date-box>
+      <div class="search-area">
+        <button mat-raised-button
+                color="primary"
+                (click)="searchRange(startDate.value, endDate.value)">
+          {{ 'names.search' | translate }}
+        </button>
+        <label> {{ searchRangeTime }}</label>
+      </div>
+    </div>
+    <fieldset>
+      <legend>{{ "names.period" | translate }}</legend>
+      <div class="grid-container">
+      <dx-data-grid
+        [dataSource]="dataSourceRange"
+        [columnAutoWidth]="true"
+        [remoteOperations]="true"
+        [height]="gridHeight"
+        [width]="gridWidth"
+        [showBorders]="true"
+        [hoverStateEnabled]="true"
+        allowColumnResizing="true"
+        [stateStoring]="stateStoring"
+      >
+        <dxo-export [enabled]="true" [fileName]="fileName"></dxo-export>
+        <dxo-paging [pageSize]="50"></dxo-paging>
+        <dxo-pager
+          [showPageSizeSelector]="true"
+          [allowedPageSizes]="[50, 100, 200]"
+          [showInfo]="true"
+          visible="true"
+        >
+        </dxo-pager>
+        <dxo-scrolling
+          mode="standard"
+          rowRenderingMode="standard"
+          showScrollbar="always"
+        ></dxo-scrolling>
+        <dxo-search-panel
+          [placeholder]="'names.search' | translate"
+          [visible]="true"
+        ></dxo-search-panel>
+        <dxo-header-filter [visible]="true"></dxo-header-filter>
+        <dxo-filter-row [visible]="true"></dxo-filter-row>
+        <dxi-column
+          [width]="getDisplayTableColumnWidth('vehicles_physical_id')"
+          [visible]="canDisplayTable('vehicles_physical_id')"
+          [visibleIndex]="getDisplayTableColumnIndex('vehicles_physical_id')"
+          dataType="string"
+          dataField="historySourceId"
+          [caption]="'names.id' | translate"
+          [fixed]="true"
+        ></dxi-column>
+        <dxi-column
+          [width]="getDisplayTableColumnWidth('vehicles_logical_id')"
+          [visible]="canDisplayTable('vehicles_logical_id')"
+          [visibleIndex]="getDisplayTableColumnIndex('vehicles_logical_id')"
+          dataType="string"
+          dataField="logicalId"
+          [caption]="'names.logicalId' | translate"
+        ></dxi-column>
+        <dxi-column
+          [width]="getDisplayTableColumnWidth('vehicles_distance')"
+          [visible]="canDisplayTable('vehicles_distance')"
+          [visibleIndex]="getDisplayTableColumnIndex('vehicles_distance')"
+          [allowFiltering]="true"
+          dataType="number"
+          dataField="distanceRange"
+          [caption]="'names.distance' | translate"
+          cellTemplate="distanceTotalTemplate"
+        ></dxi-column>
+        <dxi-column
+          [width]="getDisplayTableColumnWidth('vehicles_runtime')"
+          [visible]="canDisplayTable('vehicles_runtime')"
+          [visibleIndex]="getDisplayTableColumnIndex('vehicles_runtime')"
+          [allowFiltering]="true"
+          dataType="number"
+          dataField="runtimeRange"
+          [caption]="'names.runtime' | translate"
+          cellTemplate="runtimeTotalTemplate"
+        ></dxi-column>
+        <div *dxTemplate="let data of 'distanceTotalTemplate'">
+          {{ data.displayValue / 1000000 | number: '1.0-0' }}km
+        </div>
+        <div *dxTemplate="let data of 'runtimeTotalTemplate'">
+          {{ data.displayValue / (3600 * 24) | number: '1.0-0' }}d
+          {{ (data.displayValue % (3600 * 24)) / 3600 | number: '2.0-1' }}h
+        </div>
+      </dx-data-grid>
+    </div>
+    </fieldset>
+  </div>
 </div>
+

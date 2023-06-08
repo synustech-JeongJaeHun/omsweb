@@ -71,7 +71,7 @@ export class HistoriesService {
 		})*/
 	}
 
-	vehiclesDataSource(source: any, startTime: Date, endTime: Date): DataSource {
+	vehiclesDataSource(source: any, startTime: Date, endTime: Date, startSearch): DataSource {
     const token =this.auth.token;
 		return new DataSource({
 			store: AspNetData.createStore({
@@ -87,18 +87,35 @@ export class HistoriesService {
 				['historyChangeTime', '>=', startTime],
 				'and',
 				['historyChangeTime', '<=', endTime],
-            ],
-            onLoadingChanged: (isLoading) => {
-              if (source.bySearch === false) {
-                if (isLoading === true)
-                  source.onDataSourceStarted();
-              }
-            },
-            onChanged: () => {
-                source.onDataSourceChanged();
-            },
+      ],
+      onChanged: () => {
+          source.onDataSourceChanged(startSearch);
+      },
 		})
 	}
+
+  vehiclesDataSourceRange(source: any, startTime: Date, endTime: Date, startSearch): DataSource {
+    const token =this.auth.token;
+    return new DataSource({
+      store: AspNetData.createStore({
+        key: 'id',
+        loadUrl: `${this.baseUrl}/vehicles`,
+        onBeforeSend: function(operation, ajaxSettings){
+          ajaxSettings.headers = {
+            "Authorization": 'Bearer ' + token
+          }
+        },
+      }),
+      filter: [
+        ['historyChangeTime', '>=', startTime],
+        'and',
+        ['historyChangeTime', '<=', endTime],
+      ],
+      onChanged: () => {
+        source.onDataSourceRangeChanged(startSearch);
+      },
+    })
+  }
 
 	alarmsDataSource(source: any, startTime: Date, endTime: Date): DataSource {
     const token =this.auth.token;
@@ -112,16 +129,10 @@ export class HistoriesService {
           }
       },
 			}),
-            filter: [['time', '>=', startTime], 'and', ['time', '<=', endTime]],
-            onLoadingChanged: (isLoading) => {
-              if (source.bySearch === false) {
-                if (isLoading === true)
-                  source.onDataSourceStarted();
-              }
-            },
-            onChanged: () => {
-                source.onDataSourceChanged();
-            },
+      filter: [['time', '>=', startTime], 'and', ['time', '<=', endTime]],
+      onChanged: () => {
+          source.onDataSourceChanged();
+      },
 		})
 	}
 

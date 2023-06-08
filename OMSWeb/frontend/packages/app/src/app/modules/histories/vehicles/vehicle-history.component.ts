@@ -12,7 +12,7 @@ import { DateUtil } from '../../shared/utils/date.util'
 	templateUrl: './vehicle-history.component.html',
 	styles: [
 		`
-			#history-page {
+			.history-page {
 				background-color: var(--panel-background-color);
 				display: grid;
 				grid-template-rows: 40px auto;
@@ -24,7 +24,7 @@ import { DateUtil } from '../../shared/utils/date.util'
 				height: 100%;
 			}
 
-			#filter-area {
+			.filter-area {
 				padding: 4px 10px;
 				display: grid;
 				grid-template-columns: 210px 10px 210px 170px;
@@ -33,27 +33,27 @@ import { DateUtil } from '../../shared/utils/date.util'
 				gap: 4px;
 			}
 
-			#search-area {
+			.search-area {
 				display: flex;
 				align-items: center;
 				gap: 10px;
 			}
 
-			#search-area label {
+			.search-area label {
 				margin-left: 10px;
 				font-size: 12px;
 			}
 
-			#filter-area button {
+			.filter-area button {
 				justify-self: normal;
 				align-self: normal;
 			}
 
-			#grid-container {
+			.grid-container {
 				padding: 0 10px;
 			}
 
-			#filter-area .dx-datebox {
+			.filter-area .dx-datebox {
 			}
 		`,
 	],
@@ -91,10 +91,12 @@ export class VehicleHistoryComponent implements OnInit, OnDestroy {
 
 	dataSource: DataSource
 
+  dataSourceRange: DataSource
+
 	searchTime: string
-	startSearch: number
-    endSearch: number
-    bySearch: boolean = false;
+  searchRangeTime: string
+  endSearch: number
+  bySearch: boolean = false;
 
 	setDateWithMaxLimit() {
 		this.now = new Date()
@@ -169,13 +171,20 @@ export class VehicleHistoryComponent implements OnInit, OnDestroy {
 		},
 	}
 
-	search(startTime: Date, endTime: Date) {
-        this.bySearch = true;
-        this.onDataSourceStarted();
+  private tomorrow = function (date) {
+    date.setDate(date.getDate() + 1);
+    return date;
+  }(new Date)
 
-		this.dataSource = this.svc.vehiclesDataSource(this, startTime, endTime)
-		//this.applyFilter(startTime, endTime)
-		// this.dataSource.reload()
+  search() {
+    this.bySearch = true;
+
+    this.dataSource = this.svc.vehiclesDataSource(this, new Date(0), this.tomorrow, Date.now())
+  }
+	searchRange(startTime: Date, endTime: Date) {
+    this.bySearch = true;
+
+		this.dataSourceRange = this.svc.vehiclesDataSourceRange(this, startTime, endTime, Date.now())
 	}
 	private applyFilter(startTime: Date, endTime: Date) {
 		this.dataGrid.instance.filter([
@@ -189,7 +198,7 @@ export class VehicleHistoryComponent implements OnInit, OnDestroy {
 		const container = document.body
 		// const container = document.getElementById('grid-container');
 		const { offsetHeight, offsetWidth } = container
-		this.gridWidth = offsetWidth - 20
+		this.gridWidth = offsetWidth/2 - 30
 		this.gridHeight = offsetHeight - 94
 	}
 	private getFileName() {
@@ -198,32 +207,32 @@ export class VehicleHistoryComponent implements OnInit, OnDestroy {
 		this.fileName = today.toISOString() + '-vehicle_history'
 	}
 
-    public onDataSourceStarted() {
-        this.searchTime = ''
-        this.startSearch = null
-        this.startSearch = Date.now()
-    }
+  public onDataSourceChanged(startSearch:number) {
+    this.searchTime = this.getSearchTime(startSearch);
+    this.bySearch = false
+  }
 
-    public onDataSourceChanged() {
-        this.endSearch = null
-		this.endSearch = Date.now()
-		var gap = this.endSearch - this.startSearch
+  public onDataSourceRangeChanged(startSearch:number) {
+    this.searchRangeTime = this.getSearchTime(startSearch);
+    this.bySearch = false
+  }
 
-		const days = Math.floor(gap / (1000 * 60 * 60 * 24)) // 일
-		const hour = String(Math.floor((gap / (1000 * 60 * 60)) % 24)).padStart(
-			2,
-			'0',
-		) // 시
-		const minutes = String(Math.floor((gap / (1000 * 60)) % 60)).padStart(
-			2,
-			'0',
-		) // 분
-		const second = String(Math.floor((gap / 1000) % 60)).padStart(2, '0') // 초
-		const milisec = String(Math.floor(gap % 1000)).padStart(3, '0') // 밀리
+  private getSearchTime(startSearch: number): string{
+    this.endSearch = Date.now()
+    const gap = this.endSearch - startSearch
 
-		this.searchTime = hour + ':' + minutes + ':' + second + '.' + milisec
-        console.log('time Vehicle history: ' + this.searchTime)
+    const days = Math.floor(gap / (1000 * 60 * 60 * 24)) // 일
+    const hour = String(Math.floor((gap / (1000 * 60 * 60)) % 24)).padStart(
+      2,
+      '0',
+    ) // 시
+    const minutes = String(Math.floor((gap / (1000 * 60)) % 60)).padStart(
+      2,
+      '0',
+    ) // 분
+    const second = String(Math.floor((gap / 1000) % 60)).padStart(2, '0') // 초
+    const milisec = String(Math.floor(gap % 1000)).padStart(3, '0') // 밀리
 
-        this.bySearch = false
-	}
+    return  hour + ':' + minutes + ':' + second + '.' + milisec
+  }
 }

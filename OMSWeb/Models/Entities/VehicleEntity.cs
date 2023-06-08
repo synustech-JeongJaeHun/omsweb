@@ -63,6 +63,8 @@ namespace OMSWeb.Models.Entities
         // not in vehicle entity
         public string Command { get; set; }
         public int Connection { get; set; }
+        public int DistanceRange { get; set; }
+        public int RuntimeRange { get; set; }
     }
 
     public class VehicleDioHistoryEntity

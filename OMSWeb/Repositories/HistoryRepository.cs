@@ -314,10 +314,13 @@ namespace OMSWeb.Repositories
                             VH.moving_state, 
                             VH.distance_total, VH.runtime_total,
                             VH.distance, VH.runtime, VH.pm_time, VH.user,
-                            VH.type, VH.map_db, VH.pm_user, VH.pm_note
+                            VH.type, VH.map_db, VH.pm_user, VH.pm_note,
+                            LVH.distance_range, LVH.runtime_range
                         FROM vehicle_history AS VH
                         INNER JOIN (
-                            SELECT history_source_id, max(id) AS max_id
+                            SELECT history_source_id, max(id) AS max_id,
+                                   max(distance_total)-min(distance_total) as distance_range,
+            	                   max(runtime_total)-min(runtime_total) as runtime_range
                             FROM vehicle_history
                             --*where_condition*
                             WHERE 

@@ -359,6 +359,8 @@ namespace OMSWeb.Services
                 if (string.Compare(s, "runtimeTotal", StringComparison.CurrentCultureIgnoreCase) == 0) return "runtime_total";
                 if (string.Compare(s, "distance", StringComparison.CurrentCultureIgnoreCase) == 0) return "distance";
                 if (string.Compare(s, "runtime", StringComparison.CurrentCultureIgnoreCase) == 0) return "runtime";
+                if (string.Compare(s, "distanceRange", StringComparison.CurrentCultureIgnoreCase) == 0) return "distance_range";
+                if (string.Compare(s, "runtimeRange", StringComparison.CurrentCultureIgnoreCase) == 0) return "runtime_range";
                 if (string.Compare(s, "pmTime", StringComparison.CurrentCultureIgnoreCase) == 0) return "pm_time";
                 if (string.Compare(s, "pmUser", StringComparison.CurrentCultureIgnoreCase) == 0) return "pm_user";
                 if (string.Compare(s, "pmNote", StringComparison.CurrentCultureIgnoreCase) == 0) return "pm_note";
