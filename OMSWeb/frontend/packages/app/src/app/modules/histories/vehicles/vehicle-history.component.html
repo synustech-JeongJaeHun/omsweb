@@ -105,9 +105,8 @@
             [visible]="canDisplayTable('vehicles_runtime')"
             [visibleIndex]="getDisplayTableColumnIndex('vehicles_runtime')"
             [allowFiltering]="true"
-            dataType="number"
+            dataType="string"
             dataField="runtime"
-            [customizeText]="transform_runtime"
           ></dxi-column>
           <dxi-column
             [width]="getDisplayTableColumnWidth('vehicles_distance_total')"
@@ -124,10 +123,9 @@
             [visible]="canDisplayTable('vehicles_runtime_total')"
             [visibleIndex]="getDisplayTableColumnIndex('vehicles_runtime_total')"
             [allowFiltering]="true"
-            dataType="number"
+            dataType="string"
             dataField="runtimeTotal"
             [caption]="'names.runtimeTotal' | translate"
-            [customizeText]="transform_runtime"
           ></dxi-column>
           <dxi-column
             [width]="getDisplayTableColumnWidth('vehicles_user')"
@@ -253,10 +251,9 @@
           [visible]="canDisplayTable('vehicles_runtime')"
           [visibleIndex]="getDisplayTableColumnIndex('vehicles_runtime')"
           [allowFiltering]="true"
-          dataType="number"
+          dataType="string"
           dataField="runtimeRange"
           [caption]="'names.runtime' | translate"
-          [customizeText]="transform_runtime"
         ></dxi-column>
       </dx-data-grid>
     </div>

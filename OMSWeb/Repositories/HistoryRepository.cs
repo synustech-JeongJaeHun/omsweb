@@ -312,10 +312,11 @@ namespace OMSWeb.Repositories
                             VH.history_change_time, VH.id, VH.history_source_id,
                             VH.physical_id, VH.logical_id, 
                             VH.moving_state, 
-                            VH.distance_total, VH.runtime_total,
-                            VH.distance, VH.runtime, VH.pm_time, VH.user,
+                            VH.distance_total, TO_CHAR((VH.runtime_total * interval '1 sec'), 'DD') || 'd ' || TO_CHAR((VH.runtime_total * interval '1 sec'), 'HH24') as runtime_total,
+                            VH.distance, TO_CHAR((VH.runtime * interval '1 sec'), 'DD') || 'd ' || TO_CHAR((VH.runtime * interval '1 sec'), 'HH24') as runtime, 
+                            VH.pm_time, VH.user,
                             VH.type, VH.map_db, VH.pm_user, VH.pm_note,
-                            LVH.distance_range, LVH.runtime_range
+                            LVH.distance_range, TO_CHAR((LVH.runtime_range * interval '1 sec'), 'DD') || 'd ' || TO_CHAR((LVH.runtime_range * interval '1 sec'), 'HH24') as runtime_range 
                         FROM vehicle_history AS VH
                         INNER JOIN (
                             SELECT history_source_id, max(id) AS max_id,
