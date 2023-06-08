@@ -35,37 +35,38 @@ export class CustomErrorHandler implements ErrorHandler {
         );
       }
     } else {
+      if(!resError.message.includes('ExpressionChangedAfterItHasBeenCheckedError')){
+        if(!this.isOpenDialog){
+          this.isOpenDialog = true
+          const dialogSvc = this.injector.get<DialogService>(DialogService);
+          const hubSvc = this.injector.get<HubService>(HubService);
 
-      if(!this.isOpenDialog){
-        this.isOpenDialog = true
-        const dialogSvc = this.injector.get<DialogService>(DialogService);
-        const hubSvc = this.injector.get<HubService>(HubService);
-
-        if(!this.isSilentSync){
-          hubSvc.detachEvents();
-          dialogSvc.success({
-            title: $t.instant('messages.confirmTitle'),
-            body: $t.instant('messages.reload-serve')})
-            .subscribe((ok) => {
-              if (ok) {
-                window.location.reload()
-              }
+          if(!this.isSilentSync){
+            hubSvc.detachEvents();
+            dialogSvc.success({
+              title: $t.instant('messages.confirmTitle'),
+              body: $t.instant('messages.reload-serve')})
+              .subscribe((ok) => {
+                if (ok) {
+                  window.location.reload()
+                }
+                this.isOpenDialog = false
+              });
+          }
+          else{
+            const sec = 3000;
+            this.showSnackbar(
+              $t.instant('messages.reload-page', {sec: sec/1000}),
+              'client',
+              sec
+            )
+            setTimeout(()=>{
+              window.location.reload()
               this.isOpenDialog = false
-            });
-        }
-        else{
-          const sec = 3000;
-          this.showSnackbar(
-            $t.instant('messages.reload-page', {sec: sec/1000}),
-            'client',
-            sec
-          )
-          setTimeout(()=>{
-            window.location.reload()
-            this.isOpenDialog = false
-          }, sec)
-        }
+            }, sec)
+          }
 
+        }
       }
     }
     console.warn(resError);

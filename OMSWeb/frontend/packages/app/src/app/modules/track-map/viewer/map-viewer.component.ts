@@ -66,10 +66,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 	}
 
 	get canSetSourceWithFilter() {
-    if(this.mapStatesService.transferCommandState.active){
-      this.showContextMenu = false;
-      return ;
-    }
 
 		const logicalId = this.contextMenuObject.value.logicalId
 		if (logicalId == null) return false
@@ -86,11 +82,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		)
 	}
 	get canSetDestWithFilter() {
-    if(this.mapStatesService.transferCommandState.active){
-      this.contextMenuObject = null;
-      this.showContextMenu = false;
-      return ;
-    }
 
 		const logicalId = this.contextMenuObject.value.logicalId
 		if (logicalId == null) return false
@@ -1258,7 +1249,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     }
 	}
 	public async onContextMenuOn(event: CustomEvent) {
-    if(this.mapStatesService.transferCommandState.active) return
+    //if(this.mapStatesService.transferCommandState.active) return
 		const payload = getCustomEventPayload(event)
 		// @ts-ignore
 		if (!(payload.type && payload.value && payload.event)) return
