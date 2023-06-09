@@ -16,6 +16,7 @@ import {SettingsService} from "@oms/services/settings.service";
 import {Router} from "@angular/router";
 import {LoginDialogComponent} from "@oms/shared/dialogs/login-dialog.component";
 import {MatDialog, MatDialogState} from "@angular/material/dialog";
+import {MobileService} from "@oms/services/mobile.service";
 
 @Component({
   selector: 'oms-gnb-states',
@@ -163,7 +164,9 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
     private dialogSvc: DialogService,
     private t$: TranslateService,
     private messageSvc: MessagesService,
-    private settingSvc: SettingsService
+    private settingSvc: SettingsService,
+
+    private mobileSvc: MobileService
   ) {
     this.getState();
 
@@ -200,6 +203,7 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
   }
 
   changeOnlineMode() {
+    if(this.mobileSvc.isMobile) return;
     if (!AccountUtil.hasPermission(PermissionEnums.HostMode, this.auth.currentUser)) return;
     if(!this.onOffLine){
       this.dialogSvc.confirm(this.getConfirmMessage(this.onlineParamTitle, this.onlineParamText)).subscribe((ok) => {
@@ -220,6 +224,7 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
     }
   }
   changeHostMode() {
+    if(this.mobileSvc.isMobile) return;
     if (!AccountUtil.hasPermission(PermissionEnums.HostMode, this.auth.currentUser)) return;
     this.dialogSvc.confirm(this.getConfirmMessage(this.hostParamTitle, this.hostParamText)).subscribe((ok) => {
       if (ok) {
@@ -228,6 +233,7 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
     });
   }
   changeTscMode() {
+    if(this.mobileSvc.isMobile) return;
     if (!AccountUtil.hasPermission(PermissionEnums.TscMode, this.auth.currentUser)) return;
     this.dialogSvc.confirm(this.getConfirmMessage(this.tscParamTitle, this.tscParamText)).subscribe((ok) => {
       if (ok) {

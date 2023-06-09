@@ -1,4 +1,4 @@
-<mat-toolbar class="gnb-container">
+<mat-toolbar class="gnb-container" *ngIf="!isMobile">
   <div class="gnb-left">
     <div class="logo">
       <h1>{{titleText}}</h1>
@@ -14,3 +14,29 @@
     <oms-gnb-actions class="actions" id="actions"></oms-gnb-actions>
   </div>
 </mat-toolbar>
+
+<mat-toolbar class="gnb-container-mobile" *ngIf="isMobile">
+  <div class="gnb-left mobile-icon">
+    <mat-icon (click)="clickToolbox()" style="cursor: pointer">menu</mat-icon>
+  </div>
+  <div class="gnb-center">
+    <div class="logo">
+      <h1>{{titleText}}</h1>
+      <div *ngIf="showVersion" class="version">{{ version }}</div>
+    </div>
+  </div>
+  <div class="gnb-right">
+    <oms-gnb-indicators class="indicators mobile-icon"></oms-gnb-indicators>
+    <oms-gnb-actions class="actions"></oms-gnb-actions>
+  </div>
+</mat-toolbar>
+<mat-toolbar class="gnb-container-mobile" *ngIf="isMobile">
+  <div class="gnb-left">
+  </div>
+  <div class="gnb-center mobile-state">
+    <oms-gnb-states class="states"></oms-gnb-states>
+  </div>
+  <div class="gnb-right">
+  </div>
+</mat-toolbar>
+

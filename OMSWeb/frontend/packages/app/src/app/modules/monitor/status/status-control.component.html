@@ -2,19 +2,22 @@
 	id="status-control-container"
 	(mouseup)="resizeViewerStop($event)"
 	(mouseleave)="resizeViewerStop($event)"
+  (touchend)="resizeViewerTouchStop($event)"
 >
 	<div
 		id="resize-handle"
 		(mousedown)="resizeViewerStart()"
 		(dblclick)="viewerHide()"
-	></div>
+    (touchstart)="resizeViewerTouchStart()"
+  ></div>
 	<button
 		mat-flat-button
 		id="resize-button"
 		class="dense"
 		(mousedown)="resizeViewerStart()"
 		(dblclick)="viewerHide()"
-	>
+    (touchstart)="resizeViewerTouchStart()"
+  >
 		<mat-icon>height</mat-icon>
 	</button>
 	<button
@@ -25,7 +28,7 @@
 	>
 		<mat-icon>expand_more</mat-icon>
 	</button>
-	<div id="status-toolbar" *ngIf="canControl">
+	<div id="status-toolbar" *ngIf="canControl && !isMobile">
 		<button
 			*ngIf="
 				hasPermissions([
@@ -70,6 +73,7 @@
 		</button>
 	</div>
 	<mat-tab-group
+    style="overscroll-behavior-y: contain"
 		class="tab-group"
 		[(selectedIndex)]="currentTab"
 		(selectedIndexChange)="onChangeTab($event)"
@@ -100,7 +104,7 @@
 		<!-- Stations / Buffers 추가 -->
 		<mat-tab
 			[label]="'names.stations' | translate"
-			*ngIf="canControl && canDisplayTable('stations')"
+			*ngIf="canControl && canDisplayTable('stations') && !isMobile"
 		>
 			<oms-station-control-table
         *ngIf="onTabIndex('stations')"
@@ -110,7 +114,7 @@
 		</mat-tab>
 		<mat-tab
 			[label]="'names.buffers' | translate"
-			*ngIf="bufferEnabled && canControl && canDisplayTable('buffers')"
+			*ngIf="bufferEnabled && canControl && canDisplayTable('buffers') && !isMobile"
 		>
 			<oms-buffer-control-table
 				*ngIf="bufferEnabled && onTabIndex('buffers')"
@@ -122,10 +126,10 @@
 		<!-- Zcu 추가 -->
 		<mat-tab
 			[label]="'names.zcu_label' | translate"
-			*ngIf="canControl && canDisplayTable('zcus')"
+			*ngIf="canControl && canDisplayTable('zcus') && !isMobile"
 		>
 			<oms-zcu-control-table
-        *ngIf="onTabIndex('zcus')"
+        *ngIf="onTabIndex('zcus') || !isMobile"
 				[tableHeight]="tableHeight"
 			>
 			</oms-zcu-control-table>
@@ -134,7 +138,7 @@
 		<!-- cps 추가 -->
 		<mat-tab
 			[label]="'names.cps' | translate"
-			*ngIf="canControl && canDisplayTable('cps')"
+			*ngIf="canControl && canDisplayTable('cps') && !isMobile"
 		>
 			<oms-cps-control-table
         *ngIf="onTabIndex('cps')"

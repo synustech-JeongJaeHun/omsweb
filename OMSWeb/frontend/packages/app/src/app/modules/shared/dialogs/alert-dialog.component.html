@@ -42,11 +42,10 @@
         </dxi-column>
       </dx-data-grid>
     </div>
-    <div mat-dialog-actions class="actions" [ngSwitch]="hasControlAccess" >
+    <div mat-dialog-actions class="actions" [ngSwitch]="hasControlAccess" [ngClass]="{'mobile-alert' : isMobile}">
 
-      <div style="width: 75%">
+      <div class="alert-btn-1">
         <div class="filters">
-          <mat-label>{{ "names.cleared" | translate }}</mat-label>
           <mat-form-field class="dense" appearance="outline">
             <mat-select (selectionChange)="onChangeFilter($event.value)" [(value)]="selectedFilter">
               <!--<mat-option value="">{{ "names.all" | translate }}</mat-option>-->
@@ -59,7 +58,7 @@
         </div>
       </div>
 
-      <div style="width: 25%">
+      <div class="alert-btn-2">
         <button mat-raised-button [disabled]="!canClear" (click)="onClear()" *ngSwitchCase="true">
           {{ "names.clear" | translate }}
         </button>

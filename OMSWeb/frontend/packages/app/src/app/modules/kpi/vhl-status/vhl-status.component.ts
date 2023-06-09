@@ -23,7 +23,6 @@ export class VhlStatusComponent implements OnInit, OnDestroy {
     const { x, y } = $event.distance;
     this.dragPosition.x = offsetLeft + x;
     this.dragPosition.y = offsetTop + y;
-    console.log(this.dragPosition);
   }
   constructor(private settingSvc: SettingsService,
               private reportService: ReportService) {

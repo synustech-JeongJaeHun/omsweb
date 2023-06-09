@@ -1,4 +1,5 @@
-<mat-list [class.show-name]="showToolName" mdePopoverTarget #popoverTarget="mdePopoverTarget">
+<mat-list [class.show-name]="showToolName" mdePopoverTarget #popoverTarget="mdePopoverTarget"
+          *ngIf="showToolbox" [ngClass]="{isMobile : isMobile} ">
   <button matListItem mat-button class="tool-item" [matTooltipDisabled]="showToolName" matTooltipClass="snb-tooltip"
     matTooltipPosition="right" [matTooltip]="'names.centerZoom' | translate" (click)="centerZoom.emit()">
     <mat-icon>center_focus_strong</mat-icon>
@@ -33,9 +34,8 @@
       "names.showObjects" | translate
       }}</span>
   </button>
-  <button matListItem mat-button class="tool-item"
+  <button matListItem mat-button class="tool-item" *ngIf="!isMobile"
     [class.active]="trackMonitorSettingService.trackSetting.isMinimapVisible" (click)="trackMonitorSettingService.update({
-    group: 'Visibility',
     key: 'isMinimapVisible',
     value: !trackMonitorSettingService.trackSetting.isMinimapVisible
   })" [matTooltipDisabled]="showToolName" matTooltipClass="snb-tooltip" matTooltipPosition="right"
@@ -92,55 +92,6 @@
       }}</span>
   </button>
 
-  <!-- <mat-divider></mat-divider>
-
-  <button
-    matListItem
-    mat-button
-    class="tool-item"
-    matTooltipClass="snb-tooltip"
-    matTooltipPosition="right"
-    [matTooltip]="'names.getStatusAllVehicle' | translate"
-    (click)="onPing()"
-  >
-    <mat-icon>motion_photos_on</mat-icon>
-  </button>
-  <ng-container *ngIf="canControl">
-    <button
-      matListItem
-      mat-button
-      class="tool-item"
-      matTooltipClass="snb-tooltip"
-      matTooltipPosition="right"
-      [matTooltip]="'names.setAutoAllVehicle' | translate"
-      (click)="onSetAuto()"
-    >
-      <mat-icon>brightness_auto</mat-icon>
-    </button>
-    <button
-      matListItem
-      mat-button
-      class="tool-item"
-      matTooltipClass="snb-tooltip"
-      matTooltipPosition="right"
-      [matTooltip]="'names.resetAllVehicle' | translate"
-      matTooltip="Reset All Vehicle"
-      (click)="onVehicleReset()"
-    >
-      <mat-icon>settings_backup_restore</mat-icon>
-    </button>
-    <button
-      matListItem
-      mat-button
-      class="tool-item"
-      matTooltipClass="snb-tooltip"
-      matTooltipPosition="right"
-      [matTooltip]="'names.estopAllVehicle' | translate"
-      (click)="onEStop()"
-    >
-      <mat-icon fontSet="material-icons-outlined">stop_circle</mat-icon>
-    </button>
-  </ng-container> -->
 </mat-list>
 
 <mde-popover #visibilityPopover="mdePopover" [mdePopoverOverlapTrigger]="false" mdePopoverArrowWidth="0"

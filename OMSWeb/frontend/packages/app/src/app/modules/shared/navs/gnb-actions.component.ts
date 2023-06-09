@@ -21,6 +21,7 @@ import { MessagesService } from '../../../services/messages.service';
 import { IDataChangeEvent } from '../../../models/notification.model';
 import { HubService } from '../../../services/hub.service';
 import { PermissionEnums } from '../../../models/enums';
+import {MobileService} from "@oms/services/mobile.service";
 
 @Component({
   selector: 'oms-gnb-actions',
@@ -69,7 +70,9 @@ export class GnbActionsComponent implements OnInit, OnDestroy {
     private systemSvc: SystemsService,
     private userSvc: UsersService,
     private messageSvc: MessagesService,
-    private settingsService: SettingsService
+    private settingsService: SettingsService,
+
+    private mobileSvc: MobileService
   ) {
 
   }
@@ -166,5 +169,9 @@ export class GnbActionsComponent implements OnInit, OnDestroy {
       this.currentLanguage = "English";//this.t$.translations[lang].names.english;
     else if (lang == 'zh')
       this.currentLanguage = "中文";//this.t$.translations[lang].names.chinese;
+  }
+
+  get isMobile(){
+    return this.mobileSvc.isMobile
   }
 }

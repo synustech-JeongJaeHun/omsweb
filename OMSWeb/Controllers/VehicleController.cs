@@ -25,7 +25,7 @@ namespace OMSWeb.Controllers
             var result = _vehicleSvc.QueryVehicleStatus(vehicleId);
 
             if (result == null)
-                return NotFound();
+                return Ok(null);
             else
                 return Ok(result);
         }

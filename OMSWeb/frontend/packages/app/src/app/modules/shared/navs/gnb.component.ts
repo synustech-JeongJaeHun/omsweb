@@ -1,7 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
-import { AccountUtil } from '@oms/utils/account.util';
-import { UserPermissions } from '../../../models/enums';
 import { SettingsService } from '../../../services/settings.service';
 import { BrowserModule, Title } from '@angular/platform-browser';
 import {DialogService} from "@oms/services/dialog.service";
@@ -10,18 +8,20 @@ import {Subject} from "rxjs";
 import {takeUntil} from "rxjs/operators";
 import {HubService} from "@oms/services/hub.service";
 import {SystemsService} from "@oms/services/systems.service";
+import { MobileService } from '../../../services/mobile.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'oms-gnb',
   templateUrl: './gnb.component.html',
   styleUrls: ['gnb.component.scss'],
 })
-export class GnbComponent implements OnInit {
+export class GnbComponent implements OnInit, OnDestroy {
   version: string;
   titleText: string = 'OMS';
   private destroy$: Subject<void> = new Subject<void>()
-
   isOpen =false;
+  private subscribe = new Subscription();
 
   get showVersion(): boolean {
     return this.settingSvc.globalPreferences.toggles.showOmsVersion;
@@ -33,9 +33,11 @@ export class GnbComponent implements OnInit {
               private dialogSvc: DialogService,
               private t$: TranslateService,
               private hubSvc: HubService,
+              private systemSvc: SystemsService,
+              private mobile: MobileService)
+  {
 
-              private systemSvc: SystemsService
-              ) { }
+  }
 
   ngOnInit(): void {
     this.settingSvc.serviceConfig.subscribe((config) => {
@@ -69,11 +71,6 @@ export class GnbComponent implements OnInit {
     this.getVersion()
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next()
-    this.destroy$.complete()
-  }
-
   getVersion() {
     this.systemSvc.moduleStatus().subscribe((res) => {
       const omsSrv = res.find(v=>v.id===1);
@@ -81,4 +78,17 @@ export class GnbComponent implements OnInit {
     });
   }
 
+  ngOnDestroy() {
+    this.subscribe.unsubscribe();
+    this.destroy$.next()
+    this.destroy$.complete()
+  }
+
+  get isMobile(){
+    return this.mobile.isMobile
+  }
+
+  clickToolbox(){
+    this.mobile.showToolbox = !this.mobile.showToolbox
+  }
 }

@@ -8,9 +8,21 @@
 
   .grid-form {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns:  repeat(2, 1fr);
     grid-template-rows: 1fr 32px;
     gap: 4px;
+
+    .grid-item{
+      display: flex;
+      grid-column: span 2;
+      grid-column-start: span 2;
+      grid-column-end: auto;
+
+      .primary-actions-1{
+        text-align: left;
+        width: 40%;
+      }
+    }
 
     button {
       align-self: flex-start;
@@ -23,6 +35,7 @@
 
     .primary-actions {
       text-align: right;
+      width: 60%;
 
       button {
         margin-left: 4px;
@@ -35,5 +48,12 @@
         padding-bottom: 4px;
       }
     }
+  }
+}
+.mobile {
+  display: block !important;
+  .primary-actions-1 button,
+  .primary-actions button{
+    font-size: 3.2vw !important;
   }
 }

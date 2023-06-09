@@ -23,6 +23,8 @@ import {
   zoomIn1Time,
   zoomInOutByWheel,
   handleMouseUp,
+  touchByMouse,
+  startTouch
 } from '../camera'
 import { centerZoom } from '../../cameraAndRotation'
 import { elementRectInfo } from '../elementRect'
@@ -59,6 +61,10 @@ const emit = inject<RootEmits>(RootEmitInjectionKey)!
     @click.left.self="handleMouseUp(() => emit('clickOutObject'))"
     @click.middle.prevent="centerZoom()"
     @click.right.prevent
+
+    @touchstart="startTouch($event), enterPanning()"
+    @touchmove="touchByMouse($event)"
+    @touchend="exitPanning()"
   >
     <GridLayer />
     <ClusterLayer />
@@ -70,6 +76,7 @@ const emit = inject<RootEmits>(RootEmitInjectionKey)!
     <BufferLayer />
     <StationLayer />
     <ZcuLayer />
+
     <MtlLayer />
     <FireshutterLayer />
     <VehicleLayer />

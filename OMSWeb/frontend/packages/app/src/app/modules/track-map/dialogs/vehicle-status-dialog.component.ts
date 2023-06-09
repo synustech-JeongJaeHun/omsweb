@@ -316,7 +316,6 @@ export class VehicleStatusDialogComponent implements OnDestroy {
 						new Date(),
 					)
 					.subscribe((res) => {
-						console.log('dio res', res)
 						// if no data, use last
 						if (res.length === 0) {
 							this.vehicleService

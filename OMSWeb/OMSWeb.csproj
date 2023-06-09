@@ -86,6 +86,17 @@
     <TypeScriptCompile Include="frontend\packages\oms-track-monitor\src\TrackObjects\cluster\types\clusterColors.ts" />
     <TypeScriptCompile Include="frontend\packages\oms-track-monitor\src\TrackObjects\point\pointType.ts" />
     <TypeScriptCompile Remove="frontend\packages\app\test-playwright\test.ts" />
+    <TypeScriptCompile Remove="frontend\packages\app\src\app\modules\mobile-frame\mobile-frame.module.ts" />
+    <TypeScriptCompile Remove="frontend\packages\app\src\app\modules\mobile-frame\mobile-frame-routing.module.ts" />
+    <TypeScriptCompile Remove="frontend\packages\app\src\app\modules\mobile-frame\tables\buffer-control-table.component.ts" />
+    <TypeScriptCompile Remove="frontend\packages\app\src\app\modules\mobile-frame\tables\constants.ts" />
+    <TypeScriptCompile Remove="frontend\packages\app\src\app\modules\mobile-frame\tables\cps-control-table.component.ts" />
+    <TypeScriptCompile Remove="frontend\packages\app\src\app\modules\mobile-frame\tables\order-control-table.component.ts" />
+    <TypeScriptCompile Remove="frontend\packages\app\src\app\modules\mobile-frame\tables\station-control-table.component.ts" />
+    <TypeScriptCompile Remove="frontend\packages\app\src\app\modules\mobile-frame\tables\vehicle-control-table.component.ts" />
+    <TypeScriptCompile Remove="frontend\packages\app\src\app\modules\mobile-frame\tables\zcu-control-table.component.ts" />
+    <TypeScriptCompile Remove="frontend\packages\app\src\app\modules\mobile-frame\status\status-control.component.ts" />
+    <TypeScriptCompile Remove="frontend\packages\app\src\app\modules\mobile-frame\status\mobile-status.component.ts" />
   </ItemGroup>
 
   <ItemGroup>

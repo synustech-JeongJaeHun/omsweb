@@ -39,6 +39,7 @@ import { SettingsService } from '../../../services/settings.service'
 import { PermissionEnums } from '../../../models/enums'
 import { TrackMonitorSettingService } from '@oms/root/services/track-monitor-setting.service'
 import { VehicleStatusDialogService } from '@oms/root/services/vehicle-status-dialog.service'
+import {MobileService} from "@oms/services/mobile.service";
 
 @Component({
 	selector: 'oms-map-toolbar',
@@ -70,10 +71,10 @@ export class MapToolbarComponent implements OnDestroy {
 		return this.stateSvc.vehicleTrackingState.status
 	}
 	get showToolName(): boolean {
-		return this.settingSvc.globalPreferences.toggles.showToolName
+		return this.settingSvc.globalPreferences.toggles.showToolName || this.isMobile
 	}
 	get tooltipOffset(): string {
-		return this.showToolName ? '164px' : '36px'
+		return this.showToolName || this.showToolbox ? '164px' : '36px'
 	}
 
 	private _searchDlg: MatDialogRef<SearchDialogComponent, any>
@@ -92,6 +93,8 @@ export class MapToolbarComponent implements OnDestroy {
 		private $t: TranslateService,
 		public trackMonitorSettingService: TrackMonitorSettingService,
 		private vehicleStatusDialogService: VehicleStatusDialogService,
+
+    private mobileSvc: MobileService,
 	) {
 		settingSvc.serviceConfig.subscribe((config) => {
 			this.bufferEnabled = config.bufferEnabled
@@ -133,11 +136,12 @@ export class MapToolbarComponent implements OnDestroy {
 		}
 		const rect: DOMRect = this.btnSearch.nativeElement.getBoundingClientRect()
 		this._searchDlg = this.dialog.open(SearchDialogComponent, {
-			width: '350px',
 			hasBackdrop: false,
 			disableClose: true,
 			closeOnNavigation: true,
-			position: { left: this.tooltipOffset, top: `${rect.top}px` },
+      width: !this.isMobile? '350px' : '100%',
+      maxWidth: !this.isMobile? '80vh' : '100%',
+      position: !this.isMobile? { left: this.tooltipOffset, top: `${rect.top}px` } : {left:'0px', bottom:'0px'},
 		})
 
 		this._searchDlg
@@ -157,12 +161,13 @@ export class MapToolbarComponent implements OnDestroy {
 
 		const rect: DOMRect = this.btnTrack.nativeElement.getBoundingClientRect()
 		this._trackDlg = this.dialog.open(TrackVehicleDialogComponent, {
-			width: '350px',
 			autoFocus: false,
 			hasBackdrop: false,
 			disableClose: true,
 			closeOnNavigation: true,
-			position: { left: this.tooltipOffset, top: `${rect.top}px` },
+      width: !this.isMobile? '350px' : '100%',
+      maxWidth: !this.isMobile? '80vh' : '100%',
+      position: !this.isMobile? { left: this.tooltipOffset, top: `${rect.top}px` } : {left:'0px', bottom:'0px'},
 		})
 
 		this._trackDlg.afterClosed().subscribe((payload?: number) => {
@@ -181,12 +186,13 @@ export class MapToolbarComponent implements OnDestroy {
 
 		const rect: DOMRect = this.btnCommand.nativeElement.getBoundingClientRect()
 		this._cmdDlg = this.dialog.open(CommandDialogComponent, {
-			width: '440px',
 			autoFocus: false,
 			hasBackdrop: false,
 			disableClose: true,
 			closeOnNavigation: true,
-			position: { left: this.tooltipOffset, top: `${rect.top}px` },
+      width: !this.isMobile? '440px' : '100%',
+      maxWidth: !this.isMobile? '80vh' : '100%',
+      position: !this.isMobile? { left: this.tooltipOffset, top: `${rect.top}px` } : {left:'0px', bottom:'0px'},
 		})
 
 		this._cmdDlg.afterClosed().subscribe((payload: any) => {
@@ -210,15 +216,24 @@ export class MapToolbarComponent implements OnDestroy {
 
 		const rect = this.btnShowObj.nativeElement.getBoundingClientRect()
 		this._showObjDlg = this.dialog.open(ShowObjectDialogComponent, {
-			width: '420px',
 			autoFocus: false,
-			hasBackdrop: false,
-			disableClose: false,
-			closeOnNavigation: true,
-			position: { left: this.tooltipOffset, top: `${rect.top}px` },
+      hasBackdrop: false,
+      disableClose: false,
+      closeOnNavigation: true,
+      width: !this.isMobile? '420px' : '100%',
+      maxWidth: !this.isMobile? '80vh' : '100%',
+      position: !this.isMobile?{ left: this.tooltipOffset, top: `${rect.top}px` } :{left:'0px', bottom:'0px'},
 			data: this.buttonState,
 		})
 	}
+
+  get isMobile(){
+    return this.mobileSvc.isMobile
+  }
+
+  get showToolbox(){
+    return this.mobileSvc.showToolbox
+  }
 
 	onToggleTool(action: ToggleOptionKeyType) {
 		const value = !this.buttonState[action]
@@ -243,11 +258,13 @@ export class MapToolbarComponent implements OnDestroy {
 		}
 
 		this._bfStatusDlg = this.dialog.open(BufferStatusDialogComponent, {
-			width: '450px',
 			autoFocus: false,
 			hasBackdrop: false,
 			disableClose: false,
 			closeOnNavigation: true,
+      width: !this.isMobile? '450px' : '100%',
+      maxWidth: !this.isMobile? '80vh' : '100%',
+      position: this.isMobile&&{left:'0px', bottom:'0px'},
 		})
 	}
 

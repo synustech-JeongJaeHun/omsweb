@@ -75,3 +75,9 @@ mat-divider {
   @include tooltip;
   margin-left: 4px;
 }
+.isMobile{
+  z-index: 15;
+}
+.isMobile button {
+  height: 7.6vh;
+}

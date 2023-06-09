@@ -1,13 +1,22 @@
 import { NgModule } from '@angular/core'
 import { Routes, RouterModule, RouteReuseStrategy } from '@angular/router'
 import { HistoriesRouterStrategy } from '../histories/histories-router-strategy'
+import { MobileFrameComponent } from '../mobile-frame/mobile-frame.component'
 import { MonitorModule } from '../monitor/monitor.module'
 import { StartupComponent } from './startup.component'
+import { MobileGuard } from '../../guards/mobile.guard'
 
 const routes: Routes = [
 	{
 		path: '',
+    canActivate: [MobileGuard],
 		component: StartupComponent,
+	},
+	{
+		path: 'mobile',
+		component: MobileFrameComponent,
+    loadChildren: () =>
+      import('../mobile-frame/mobile-frame.module').then((m) => m.MobileFrameModule),
 	},
 	{
 		path: 'monitor',

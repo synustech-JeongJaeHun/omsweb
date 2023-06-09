@@ -3,6 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TrackMonitorSettingService } from '@oms/root/services/track-monitor-setting.service';
 import { ToggleOptionsType } from '../../../models/settings.model';
 import {SettingsService} from "@oms/services/settings.service";
+import {MobileService} from "@oms/services/mobile.service";
 
 @Component({
   selector: 'oms-show-object-dialog',
@@ -15,9 +16,9 @@ export class ShowObjectDialogComponent {
     public dialogRef: MatDialogRef<ShowObjectDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public buttonState: ToggleOptionsType,
     public trackSettingService: TrackMonitorSettingService,
-    private settingSvc: SettingsService
+    private settingSvc: SettingsService,
+    private mobileSvc: MobileService
   ) {
-
     this.settingSvc.serviceConfig.subscribe((config) => {
       this.showBackdrop = config.backdrop
     })
@@ -46,5 +47,9 @@ export class ShowObjectDialogComponent {
       key: 'isVhlStatusVisible',
       value: event.checked
     });
+  }
+
+  get isMobile(){
+    return this.mobileSvc.isMobile
   }
 }

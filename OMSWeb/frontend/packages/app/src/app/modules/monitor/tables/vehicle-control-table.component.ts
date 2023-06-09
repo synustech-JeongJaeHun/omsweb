@@ -24,6 +24,7 @@ import { MessagesService } from '../../../services/messages.service'
 import { PermissionEnums } from '../../../models/enums'
 import { ClientPreferences } from '../../../models/settings.model'
 import { AuditTimeDuration } from './constants'
+import {MobileService} from "@oms/services/mobile.service";
 
 @Component({
 	selector: 'oms-vehicle-control-table',
@@ -92,6 +93,8 @@ export class VehicleControlTableComponent implements OnInit, OnDestroy {
 		private $t: TranslateService,
 		private messageSvc: MessagesService,
 		private hubSvc: HubService,
+
+    private mobileSvc: MobileService
 	) {
 		this.dataSource = this.statusSvc.vehicleStatusDataSource()
 		this.preference = this.settingSvc.globalPreferences
@@ -368,5 +371,9 @@ export class VehicleControlTableComponent implements OnInit, OnDestroy {
           }
         })
     }
+  }
+
+  get isMobile(){
+    return this.mobileSvc.isMobile
   }
 }
