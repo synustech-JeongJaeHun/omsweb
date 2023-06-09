@@ -71,8 +71,8 @@ function zoom(
   }
 
   let w = cameraViewBoxInfo.width * getZoomRatio(action) ** count
-  if(w > 150000){
-    w = 150000
+  if(w > 300000){
+    w = 300000
   }
   if(w < 1000){
     w= 1000
