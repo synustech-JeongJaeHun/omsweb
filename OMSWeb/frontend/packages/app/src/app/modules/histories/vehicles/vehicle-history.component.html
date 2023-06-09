@@ -44,7 +44,7 @@
           allowColumnResizing="true"
           [stateStoring]="stateStoring"
         >
-          <dxo-export [enabled]="true" [fileName]="fileName"></dxo-export>
+          <dxo-export [enabled]="true" [fileName]="fileName+'_All'"></dxo-export>
           <dxo-paging [pageSize]="50"></dxo-paging>
           <dxo-pager
             [showPageSizeSelector]="true"
@@ -199,7 +199,7 @@
         allowColumnResizing="true"
         [stateStoring]="stateStoring"
       >
-        <dxo-export [enabled]="true" [fileName]="fileName"></dxo-export>
+        <dxo-export [enabled]="true" [fileName]="fileName+'_Period'"></dxo-export>
         <dxo-paging [pageSize]="50"></dxo-paging>
         <dxo-pager
           [showPageSizeSelector]="true"

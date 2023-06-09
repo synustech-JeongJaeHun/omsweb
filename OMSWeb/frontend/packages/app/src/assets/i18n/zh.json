@@ -680,5 +680,7 @@
     "reload-serve": "数据已更改。你想续订吗？",
     "reload-page": "由于数据已更改，页面将在 {{sec}} 秒后重新加载。",
     "timeoutForAlternate" : "备用超时"
-  }
+  },
+  "_START_DATE" : "Please enter a start date",
+  "_END_DATE":  "Please enter a end date"
 }

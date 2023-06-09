@@ -678,5 +678,7 @@
     "reload-serve": "Data has been changed. Would you like to renew?",
     "reload-page": "The page will reload after {{sec}} seconds because the data has changed.",
     "timeoutForAlternate" : "Timeout for Alternate"
-  }
+  },
+  "_START_DATE" : "Please enter a start date",
+  "_END_DATE":  "Please enter a end date"
 }
