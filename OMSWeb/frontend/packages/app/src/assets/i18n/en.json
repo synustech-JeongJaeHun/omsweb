@@ -554,7 +554,8 @@
     "steer" : "Steer",
     "oblow" : "OBS Low",
     "obhigh" : "OBS High",
-    "isBackdropVisible" : "Show Backdrop"
+    "isBackdropVisible" : "Show Backdrop",
+    "vehicleAlias": "Vehicle(alias)"
   },
   "enums": {
     "hostSessionStatus": {

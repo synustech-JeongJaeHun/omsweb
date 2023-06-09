@@ -51,6 +51,7 @@ export class OrderControlTableComponent implements OnInit, OnDestroy {
 	// dataSource: any;
 	selectedRows: number[] = []
 	preference: ClientPreferences
+  vhlAlias: string
 
 	private color_normal: string = 'rgba(255, 255, 255, 1.0)'
 	private color_warning: string = 'rgba(255, 210, 0, 0.5)'
@@ -114,6 +115,12 @@ export class OrderControlTableComponent implements OnInit, OnDestroy {
 	) {
 		this.dataSource = this.statusSvc.orderStatusDataSource()
 		this.preference = this.settingSvc.globalPreferences
+
+    this.settingSvc.serviceConfig.subscribe(
+      (config) => {
+        this.vhlAlias = config.vhlAlias
+      },
+    )
 	}
 
 	canDisplayTable(type: string): boolean {

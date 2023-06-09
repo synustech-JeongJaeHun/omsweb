@@ -195,23 +195,22 @@ namespace OMSWeb.Repositories
                                 WHEN OD.err_result_code LIKE '%SourceInterlock%' THEN 'Source PIO Timeout'
                                 WHEN OD.err_result_code LIKE '%DestInterlock%' THEN 'Dest PIO Timeout'
                                 ELSE OD.err_result_code
-                            END as result_code
-                            ,(
+                            END as result_code,
+                            (
                                 select max(vh.distance_total)-min(vh.distance_total)
 	                            from vehicle_history vh 
 	                            where vh.history_source_id  = OD.vehicle_id
 	                            and history_change_time >= OD.time_assigned
 		                        and history_change_time <= OD.time_load_started 
-	                        ) as fromDistance 
-                            ,(
+	                        ) as fromDistance, 
+                            (
                                 select max(vh.distance_total)-min(vh.distance_total)
 	                            from vehicle_history vh 
 	                            where vh.history_source_id  = OD.vehicle_id
 	                            and history_change_time >= OD.time_load_completed
 		                        and history_change_time <= OD.time_unload_started 
-	                        ) as toDistance 
-                            
-
+	                        ) as toDistance,
+                            VS.physical_id as vehicle_alias
                         FROM order_history AS OD
                         INNER JOIN (
                             SELECT history_source_id AS order_id, max(history_change_time) AS last_updated
@@ -223,7 +222,8 @@ namespace OMSWeb.Repositories
                         ON OD.history_source_id = LAST_OD.order_id AND OD.history_change_time = LAST_OD.last_updated
                         LEFT OUTER JOIN vehicle_reg AS VR
                             ON OD.vehicle_id = VR.id
-
+                        LEFT JOIN vehicles AS VS
+    		                ON OD.vehicle_id = VS.id
                         --ORDER BY history_source_id
                         {SortConditions}
 

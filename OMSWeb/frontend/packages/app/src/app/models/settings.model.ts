@@ -108,6 +108,7 @@ const defaultControlTable = {
 	orders_priority: true,
 	orders_state: true,
 	orders_vehicleId: true,
+  orders_vehicleAlias: false,
 	orders_locationPickup: true,
   orders_locationPickupAlias: false,
 	orders_locationDropoff: true,
@@ -135,6 +136,7 @@ const defaultControlTable = {
 		{ name: 'orders_priority', i18nLabel: 'names.priority', width: 70 },
 		{ name: 'orders_state', i18nLabel: 'names.state', width: 100 },
 		{ name: 'orders_vehicleId', i18nLabel: 'names.vehicleId', width: 110 },
+    { name: 'orders_vehicleAlias', i18nLabel: 'names.vehicleAlias', width: 110 },
 		{
 			name: 'orders_locationPickup',
 			i18nLabel: 'names.locationPickup',
@@ -483,6 +485,7 @@ const defaultHistoryTable = {
   transfers_to_distance: true,
 	transfers_state: true,
 	transfers_vehicle_id: true,
+  transfers_vehicle_alias: false,
 	transfers_location_pickup: true,
   transfers_location_pickup_alias: false,
 	transfers_location_dropoff: true,
@@ -505,6 +508,7 @@ const defaultHistoryTable = {
 		{ name: 'transfers_priority', i18nLabel: 'names.priority', width: 65 },
 		{ name: 'transfers_state', i18nLabel: 'names.state', width: 100 },
 		{ name: 'transfers_vehicle_id', i18nLabel: 'names.vehicleId', width: 95 },
+    { name: 'transfers_vehicle_alias', i18nLabel: 'names.vehicleAlias', width: 95 },
 		{
 			name: 'transfers_location_pickup',
 			i18nLabel: 'names.locationPickup',

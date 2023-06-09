@@ -108,6 +108,7 @@ export class TransferHistoryComponent implements OnInit, OnDestroy {
 	startSearch: number
     endSearch: number
     bySearch: boolean = false;
+  vhlAlias: string
 
 	setDateWithMaxLimit() {
 		this.now = new Date()
@@ -154,6 +155,12 @@ export class TransferHistoryComponent implements OnInit, OnDestroy {
 		// })
 		this.idSvc.loadIds().subscribe()
 		this.preference = this.settingSvc.globalPreferences
+
+    this.settingSvc.serviceConfig.subscribe(
+      (config) => {
+        this.vhlAlias = config.vhlAlias
+      },
+    )
 	}
 
 	ngOnDestroy(): void {

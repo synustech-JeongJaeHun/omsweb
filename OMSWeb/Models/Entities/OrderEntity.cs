@@ -32,6 +32,7 @@ namespace OMSWeb.Models.Entities
         public string LocationDropoffAlias { get; set; }
         public int? FromDistance { get; set; }
         public int? ToDistance { get; set; }
+        public string vehicleAlias { get; set; }
     }
     public class OrderHistoryEntity : OrderEntity
     {

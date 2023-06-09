@@ -454,10 +454,13 @@ namespace OMSWeb.Repositories
         OD.distance_move AS distance_move,
         OD.status_details,
         OD.assignment_type, 
-        OD.assignment_details
+        OD.assignment_details,
+        VS.physical_id as vehicle_alias
         FROM orders AS OD
         LEFT OUTER JOIN vehicle_reg AS VR
             ON OD.vehicle_id = VR.id
+        left join vehicles as VS
+    		on OD.vehicle_id = VS.id
         WHERE OD.time_completed IS NULL AND OD.time_aborted IS NULL AND OD.time_failed IS NULL
         --*user_id_condition*-- AND user_id = @userId
       ) AS WRAPPED_TABLE

@@ -152,6 +152,15 @@
 		[visible]="canDisplayTable('orders_vehicleId')"
 		[visibleIndex]="getDisplayTableColumnIndex('orders_vehicleId')"
 	></dxi-column>
+  <dxi-column
+    [width]="getDisplayTableColumnWidth('orders_vehicleAlias')"
+    dataType="string"
+    dataField="vehicleAlias"
+    cellTemplate="aliasTemplate"
+    [caption]="getDisplayTableLabel('orders_vehicleAlias') | translate"
+    [visible]="canDisplayTable('orders_vehicleAlias')"
+    [visibleIndex]="getDisplayTableColumnIndex('orders_vehicleAlias')"
+  ></dxi-column>
 	<dxi-column
 		[width]="getDisplayTableColumnWidth('orders_locationPickup')"
 		dataType="string"
@@ -360,4 +369,7 @@
 			{{ data.displayValue }}
 		</div>
 	</div>
+  <div *dxTemplate="let data of 'aliasTemplate'">
+    {{ vhlAlias+data.displayValue }}
+  </div>
 </dx-data-grid>

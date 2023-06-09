@@ -106,6 +106,14 @@
 									dataField="vehicleId"
 									[caption]="'names.vehicleId' | translate">
 			</dxi-column>
+      <dxi-column [visible]="canDisplayTable('transfers_vehicle_alias')"
+                  [visibleIndex]="getDisplayTableColumnIndex('transfers_vehicle_alias')"
+                  [width]="getDisplayTableColumnWidth('transfers_vehicle_alias')"
+                  dataType="string"
+                  dataField="vehicleAlias"
+                  cellTemplate="aliasTemplate"
+                  [caption]="'names.vehicleAlias' | translate">
+      </dxi-column>
 			<dxi-column [visible]="canDisplayTable('transfers_location_pickup')"
 									[visibleIndex]="getDisplayTableColumnIndex('transfers_location_pickup')"
 									[width]="getDisplayTableColumnWidth('transfers_location_pickup')"
@@ -113,7 +121,6 @@
 									dataField="locationPickup"
 									[caption]="'names.locationPickup' | translate"
 									[customizeText]="transformLocationId"></dxi-column>
-
       <dxi-column
                   [width]="getDisplayTableColumnWidth('transfers_location_pickup_alias')"
                   dataType="string"
@@ -241,6 +248,9 @@
 			<div *dxTemplate="let data of 'distanceTemplate'">
 				{{ transform_distance(data.displayValue) }}
 			</div>
+      <div *dxTemplate="let data of 'aliasTemplate'">
+        {{ vhlAlias+data.displayValue }}
+      </div>
 		</dx-data-grid>
 	</div>
 </div>
