@@ -476,6 +476,8 @@ const defaultControlTable = {
   fcus_status: true,
   fcus_logicalId: true,
   fcus_segments: true,
+  fcus_fireDetect: true,
+  fcus_open: true,
   fcus_user: false,
   fcus_note: false,
   fcus_order: [
@@ -483,8 +485,10 @@ const defaultControlTable = {
     { name: 'fcus_logicalId', i18nLabel: 'names.logicalId', width: 120 },
     { name: 'fcus_status', i18nLabel: 'names.status', width: 120 },
     { name: 'fcus_segments', i18nLabel: 'names.segment', width: 120 },
+    { name: 'fcus_fireDetect', i18nLabel: 'names.fireDetect', width: 120 },
+    { name: 'fcus_open', i18nLabel: 'names.open', width: 120 },
     { name: 'fcus_user', i18nLabel: 'names.user', width: 120 },
-    { name: 'fcus_note', i18nLabel: 'names.note', width: 120 }
+    { name: 'fcus_note', i18nLabel: 'names.note', width: 'auto' }
   ],
 }
 

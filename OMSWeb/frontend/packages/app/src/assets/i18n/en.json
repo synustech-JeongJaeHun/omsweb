@@ -556,7 +556,9 @@
     "obhigh" : "OBS High",
     "isBackdropVisible" : "Show Backdrop",
     "reset-hold": "Reset And Hold",
-    "hold-release": "Hold Release"
+    "hold-release": "Hold Release",
+    "fireDetect" : "Fire Detect",
+    "open" : "Open"
   },
   "enums": {
     "hostSessionStatus": {

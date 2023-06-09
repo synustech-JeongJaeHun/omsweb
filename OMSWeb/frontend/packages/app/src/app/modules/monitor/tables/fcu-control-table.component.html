@@ -66,6 +66,22 @@
     [visibleIndex]="getDisplayTableColumnIndex('fcus_segments')"
     [width]="getDisplayTableColumnWidth('fcus_segments')"
   ></dxi-column>
+  <dxi-column
+    dataType="boolean"
+    dataField="fireDetect"
+    [caption]="'names.fireDetect' | translate"
+    [visible]="canDisplayTable('fcus_fireDetect')"
+    [visibleIndex]="getDisplayTableColumnIndex('fcus_fireDetect')"
+    [width]="getDisplayTableColumnWidth('fcus_fireDetect')"
+  ></dxi-column>
+  <dxi-column
+    dataType="boolean"
+    dataField="open"
+    [caption]="'names.open' | translate"
+    [visible]="canDisplayTable('fcus_open')"
+    [visibleIndex]="getDisplayTableColumnIndex('fcus_open')"
+    [width]="getDisplayTableColumnWidth('fcus_open')"
+  ></dxi-column>
 
   <dxi-column
     dataType="string"
@@ -82,5 +98,11 @@
     [visible]="canDisplayTable('fcus_note')"
     [visibleIndex]="getDisplayTableColumnIndex('fcus_note')"
     [width]="getDisplayTableColumnWidth('fcus_note')"
+  ></dxi-column>
+
+  <dxi-column
+    dataType="string"
+    dataField=""
+    width="auto"
   ></dxi-column>
 </dx-data-grid>
