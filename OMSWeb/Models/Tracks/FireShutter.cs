@@ -8,7 +8,8 @@ namespace OMSWeb.Models.Tracks
         public string LogicalId { get; set; }
         public string Segments { get; set; }
         public int Status { get; set; }
-
+        public int fireDetect { get; set; }
+        public int open { get; set; }
     }
 
 

@@ -114,6 +114,10 @@ export namespace Dto {
 		logicalId: string
 		segments: string
 		status: number
+    user: string
+    memo: string
+    fireDetect: number
+    open:number
 	}
 	export interface IFireShutterStatus {
 		id: number

@@ -205,16 +205,16 @@ namespace OMSWeb.Repositories
         --*user_id_condition*--WHERE user_id =@userId
       "},
       {"fireShutter", @"
-        SELECT F.id, F.x, F.y, F.logical_id, F.segments, F.status 
+        SELECT F.id, F.x, F.y, F.logical_id, F.segments, F.status, F.fire_detect, F.open
         FROM fireshutters AS F
         ORDER BY F.id
         --*user_id_condition*--WHERE user_id =@userId
       "},
       {"fireShutterStatus", @"
-        SELECT F.id, F.logical_id, F.segments, F.status, F.user, F.note,
+        SELECT F.id, F.logical_id, F.segments, F.status, F.user, F.note, F.fire_detect, F.open,
             CASE 
-                WHEN F.status = 0 THEN 'Door closed'
-                WHEN F.status = 1 THEN 'Door opened'
+                WHEN F.open = 0 THEN 'Door closed'
+                WHEN F.open = 1 THEN 'Door opened'
                 ELSE 'Door opened'
             END AS status_msg
         FROM fireshutters AS F
