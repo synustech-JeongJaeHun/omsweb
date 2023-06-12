@@ -39,6 +39,7 @@ export class ZcuControlTableComponent implements OnInit, OnDestroy {
 	preference: ClientPreferences
 
   zcuDetail:boolean =false
+  holdEnabled=false
 
 	private color_normal: string = 'rgba(240, 255, 255, 1.0)'
 	private color_error: string = 'rgba(255, 0, 0, 0.5)'
@@ -71,9 +72,10 @@ export class ZcuControlTableComponent implements OnInit, OnDestroy {
 		this.dataSource = this.statusSvc.zcuStatusDataSource()
 		this.preference = this.settingSvc.globalPreferences
     settingSvc.serviceConfig.subscribe(
-      (config) => (
-          this.zcuDetail = config.zcuDetail
-      ))
+      (config) => {
+        this.zcuDetail = config.zcuDetail
+        this.holdEnabled = config.holdEnabled
+      })
 	}
 
 	canDisplayTable(type: string): boolean {
@@ -211,5 +213,38 @@ export class ZcuControlTableComponent implements OnInit, OnDestroy {
         }
       })
     })
+  }
+
+  onResetHold() {
+    if (!this.canReset) return
+
+    this.dialogSvc
+      .confirm({ body: this.$t.instant('messages.reset-hold') })
+      .subscribe((confirm) => {
+        if (confirm) {
+          this.messageSvc
+            .sendZcuCommand({
+              action: 'reset_hold',
+              zcuIds: this.selectedRows
+            })
+            .subscribe()
+        }
+      })
+  }
+  onRelease() {
+    if (!this.canReset) return
+
+    this.dialogSvc
+      .confirm({ body: this.$t.instant('messages.hold-release') })
+      .subscribe((confirm) => {
+        if (confirm) {
+          this.messageSvc
+            .sendZcuCommand({
+              action: 'hold_release',
+              zcuIds: this.selectedRows
+            })
+            .subscribe()
+        }
+      })
   }
 }

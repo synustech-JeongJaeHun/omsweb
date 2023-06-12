@@ -147,7 +147,7 @@ namespace OMSWeb.Services
             client.IsSilentSync = this._appSettings.IsSilentSync;
             client.Backdrop = this._appSettings.Backdrop;
             client.Reference = this._appSettings.Reference;
-            
+            client.HoldEnabled = this._appSettings.HoldEnabled;
             client.FireSensor = this._appSettings.FireSensor;
             if (this._appSettings.FireStationFilters == null)
             {

@@ -409,8 +409,8 @@
 			<div class="name">{{ 'names.id' | translate }}</div>
 			<div class="value">{{ tooltipObject?.value.id }}</div>
 			<div class="name">{{ 'status' }}</div>
-			<div class="value" *ngIf="tooltipObject?.value.status === 0">OPEN</div>
-			<div class="value" *ngIf="tooltipObject?.value.status === 1">CLOSED</div>
+			<div class="value" *ngIf="!tooltipObject?.value.open">OPEN</div>
+			<div class="value" *ngIf="tooltipObject?.value.open">CLOSED</div>
 		</div>
 	</dx-tooltip>
 </ng-template>

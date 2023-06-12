@@ -111,6 +111,8 @@ namespace UpdateDto {
     logicalId: string
     segments: string
     status: number
+    fireDetect: number
+    open:number
   }
 
   export type Mtl = {

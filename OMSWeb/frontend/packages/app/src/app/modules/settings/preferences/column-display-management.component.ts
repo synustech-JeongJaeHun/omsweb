@@ -35,6 +35,7 @@ export class ColumnDisplayManagementComponent {
 
 		tables[target] = value.currentTarget.checked
 		this.preference.save()
+    this.settingSvc.tableChanged$.emit(true)
 	}
 
 	changeTableColumnOrder(

@@ -556,7 +556,12 @@
     "oblow" : "OBS Low",
     "obhigh" : "OBS High",
     "isBackdropVisible" : "Show Backdrop",
-    "vehicleAlias": "Vehicle(alias)"
+    "vehicleAlias": "Vehicle(alias)",
+    "reset-hold": "重置并保持",
+    "hold-release": "暂停释放",
+    "fireDetect" : "火警侦测",
+    "open" : "打开",
+    "fcu" : "Fcu"
   },
   "enums": {
     "hostSessionStatus": {

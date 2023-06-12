@@ -147,5 +147,16 @@
 			</oms-cps-control-table>
 		</mat-tab>
 		<!-- cps 추가 -->
+
+    <mat-tab
+      [label]="'names.fcu' | translate"
+      *ngIf="canControl && canDisplayTable('fcus')"
+    >
+      <oms-fcu-control-table
+        *ngIf="onTabIndex('fcus')"
+        [tableHeight]="tableHeight"
+      >
+      </oms-fcu-control-table>
+    </mat-tab>
 	</mat-tab-group>
 </div>

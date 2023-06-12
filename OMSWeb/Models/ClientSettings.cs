@@ -31,6 +31,8 @@ namespace OMSWeb.Models
         
         public bool Reference { get; set; }
         
+        public bool HoldEnabled { get; set; }
+
         public FireStationFilters FireStationFilters { get; set; }
         
     }
