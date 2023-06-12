@@ -53,6 +53,9 @@ export class AlertDialogComponent implements OnDestroy {
     this.hubSvc.alertChanged$
       .pipe(takeUntil(this.destroy$))
       .subscribe((e) => this.onAlertChanged(e));
+    setTimeout(()=>{
+      this.selectedFilter==='=' ?  this.dataSource.reload() : this.dataSourceClear.reload()
+    },100)
   }
 
   ngOnDestroy(): void {
