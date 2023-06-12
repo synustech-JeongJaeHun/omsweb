@@ -69,6 +69,7 @@
   <dxi-column
     dataType="boolean"
     dataField="fireDetect"
+    cellTemplate="fireDetect"
     [caption]="'names.fireDetect' | translate"
     [visible]="canDisplayTable('fcus_fireDetect')"
     [visibleIndex]="getDisplayTableColumnIndex('fcus_fireDetect')"
@@ -77,6 +78,7 @@
   <dxi-column
     dataType="boolean"
     dataField="open"
+    cellTemplate="open"
     [caption]="'names.open' | translate"
     [visible]="canDisplayTable('fcus_open')"
     [visibleIndex]="getDisplayTableColumnIndex('fcus_open')"
@@ -105,4 +107,12 @@
     dataField=""
     width="auto"
   ></dxi-column>
+
+  <div *dxTemplate="let data of 'fireDetect'">
+    {{ data.displayValue ? '-' : 'Detected'}}
+  </div>
+  <div *dxTemplate="let data of 'open'">
+      {{ data.displayValue ? 'Open' : 'Close' }}
+  </div>
+
 </dx-data-grid>

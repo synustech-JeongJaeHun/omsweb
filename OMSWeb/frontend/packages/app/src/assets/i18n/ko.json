@@ -559,7 +559,8 @@
     "reset-hold": "Reset And Hold",
     "hold-release": "Hold Release",
     "fireDetect" : "Fire Detect",
-    "open" : "Open"
+    "open" : "Open",
+    "fcu" : "Fcu"
   },
   "enums": {
     "hostSessionStatus": {
