@@ -11,6 +11,7 @@ namespace OMSWeb
     {
         public static void Main(string[] args)
         {
+
 #if DEBUG
             string module_name = Process.GetCurrentProcess().MainModule.FileName;
             string path = Path.GetDirectoryName(module_name);
