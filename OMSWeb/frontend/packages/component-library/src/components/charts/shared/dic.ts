@@ -104,7 +104,7 @@ const dic = {
     series: {
       name: 'alias',
       type: 'column',
-      yAxis: 1,
+      visible: false
     },
     yAxis: {
 

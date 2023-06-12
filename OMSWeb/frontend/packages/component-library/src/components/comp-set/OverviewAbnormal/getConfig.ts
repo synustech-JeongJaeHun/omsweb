@@ -84,16 +84,16 @@ const dic2 = {
 				caption: 'vehicle name',
 				dataField: 'label',
 			},
-			{
+      {
+        caption: 'alias',
+        dataField: 'alias',
+      },
+      {
 				caption: 'abnormal TR count',
 				dataField: 'failureamount',
 				width: 120,
         sortOrder: 'desc'
 			},
-      {
-        caption: 'alias',
-        dataField: 'alias',
-      },
       {
 				dataField: 'id_mismatch',
         visible: false
@@ -143,16 +143,16 @@ const dic2 = {
 				caption: 'source name',
 				dataField: 'label',
 			},
-			{
+      {
+        caption: 'alias',
+        dataField: 'alias',
+      },
+      {
 				caption: 'abnormal TR count',
 				dataField: 'failureamount',
 				width: 120,
         sortOrder: 'desc'
 			},
-      {
-        caption: 'alias',
-        dataField: 'alias',
-      },
       {
 				dataField: 'id_mismatch',
         visible: false
@@ -202,16 +202,16 @@ const dic2 = {
 				caption: 'dest name',
 				dataField: 'label',
 			},
-			{
+      {
+        caption: 'alias',
+        dataField: 'alias',
+      },
+      {
 				caption: 'abnormal TR count',
 				dataField: 'failureamount',
 				width: 120,
         sortOrder: 'desc'
 			},
-      {
-        caption: 'alias',
-        dataField: 'alias',
-      },
       {
 				dataField: 'id_mismatch',
         visible: false

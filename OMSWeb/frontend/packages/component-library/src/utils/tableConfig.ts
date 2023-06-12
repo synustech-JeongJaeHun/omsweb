@@ -128,12 +128,17 @@ export const tableConfig = {
 			],
 		},
 		vehicle: {
-			keys: ['name', 'fa'],
+			keys: ['name', 'alias', 'fa'],
 			header: [
 				{
 					caption: 'vehicle name',
 					dataField: 'name',
 				},
+        {
+          caption: 'alias',
+          dataField: 'alias',
+          width: 80,
+        },
 				{
 					caption: 'abnormal TR',
 					dataField: 'fa',
@@ -141,12 +146,17 @@ export const tableConfig = {
 			],
 		},
 		source: {
-			keys: ['name', 'fa'],
+			keys: ['name', 'alias', 'fa'],
 			header: [
 				{
 					caption: 'source name',
 					dataField: 'name',
 				},
+        {
+          caption: 'alias',
+          dataField: 'alias',
+          width: 80,
+        },
 				{
 					caption: 'abnormal TR',
 					dataField: 'fa',
@@ -154,12 +164,17 @@ export const tableConfig = {
 			],
 		},
 		dest: {
-			keys: ['name', 'fa'],
+			keys: ['name', 'alias', 'fa'],
 			header: [
 				{
 					caption: 'dest name',
 					dataField: 'name',
 				},
+        {
+          caption: 'alias',
+          dataField: 'alias',
+          width: 80,
+        },
 				{
 					caption: 'abnormal TR',
 					dataField: 'fa',
