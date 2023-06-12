@@ -1,0 +1,32 @@
+<fieldset>
+
+  <div style="display: flex; flex-direction: row-reverse;">
+    <button (click)="load()"
+            mat-stroked-button
+            class="dense accent"
+            style="margin-bottom: 4px; ">
+      refresh
+      <mat-icon >refresh</mat-icon>
+    </button>
+
+  </div>
+  <table id="process-list">
+    <tr>
+      <th>{{ "names.id" | translate }}</th>
+      <th>{{ "names.vehicleId" | translate }}</th>
+      <th>{{ "names.verChangeTime" | translate }}</th>
+      <th>{{ "names.vcpSwVer" | translate }}</th>
+      <th>{{ "names.motionFwVer" | translate }}</th>
+      <th>{{ "names.motionLibVer" | translate }}</th>
+      <!--<th>{{ "names.control" | translate }}</th>-->
+    </tr>
+    <tr *ngFor="let item of dataSource">
+      <td>{{ item.id }}</td>
+      <td>{{ item.vehicleId }}</td>
+      <td>{{ item.verChangeTime }}</td>
+      <td>v.{{ item.vcpSwVer }}</td>
+      <td>v.{{ item.motionFwVer }}</td>
+      <td>v.{{ item.motionLibVer }}</td>
+    </tr>
+  </table>
+</fieldset>

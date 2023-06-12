@@ -139,6 +139,48 @@ namespace OMSWeb.Repositories
             return result;
         }
         
+        public IQueryable<VhlStatusEntity> GetVhlStatus()
+        {
+            IQueryable<VhlStatusEntity> result;
+
+            var sql = @"SELECT id, vehicle_id, ver_change_time, vcp_sw_ver, motion_fw_ver, motion_lib_ver 
+                FROM vehicle_version ORDER BY id";
+
+            using (var conn = ConnectTrack())
+            {
+                try
+                {
+                    result = conn.Query<VhlStatusEntity>(sql).AsQueryable();
+                }
+                catch (Exception e)
+                {
+                    result = null;
+                }
+            }
+            return result;
+        }
+        
+        public IQueryable<CdmStatusEntity> GetCdmStatus()
+        {
+            IQueryable<CdmStatusEntity> result;
+
+            var sql = @"SELECT id, zcu_id, ver_change_time, cdm_module_sw_ver, cdm_nf_module_sw_ver 
+                FROM zcu_version ORDER BY id";
+
+            using (var conn = ConnectTrack())
+            {
+                try
+                {
+                    result = conn.Query<CdmStatusEntity>(sql).AsQueryable();
+                }
+                catch (Exception e)
+                {
+                    result = null;
+                }
+            }
+            return result;
+        }
+        
         public int UpdateModuleStatus(ModuleStatusDto dto)
         {
             int result = -1;

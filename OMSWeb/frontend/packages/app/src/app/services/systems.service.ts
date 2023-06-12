@@ -6,11 +6,11 @@ import {Observable, of} from 'rxjs'
 import { tap } from 'rxjs/operators'
 
 import {
-	IModuleStatus,
-	IServiceProcessStates,
-	ISystemStates,
-	IFileItem,
-	ISettingMode,
+  IModuleStatus,
+  IServiceProcessStates,
+  ISystemStates,
+  IFileItem,
+  ISettingMode, ICdmStatus, IVhlStatus,
 } from '@oms/models/system.model'
 import {
   ClientPreferences, HistoryTable,
@@ -91,6 +91,14 @@ export class SystemsService {
 	moduleStatus(): Observable<IModuleStatus[]> {
 		return this.http.get<IModuleStatus[]>(`${this.baseUrl}/module-status`)
 	}
+
+  vhlStatus(): Observable<IVhlStatus[]> {
+    return this.http.get<IVhlStatus[]>(`${this.baseUrl}/vhl-status`)
+  }
+
+  cdmStatus(): Observable<ICdmStatus[]> {
+    return this.http.get<ICdmStatus[]>(`${this.baseUrl}/cdm-status`)
+  }
 
 	fileItems(): Observable<IFileItem[]> {
 		return this.http.get<IFileItem[]>(`${this.baseUrl}/logs`)

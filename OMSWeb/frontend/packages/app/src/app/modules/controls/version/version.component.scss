@@ -1,0 +1,15 @@
+@import "variables";
+
+.nav-item {
+  @include inactiveButton;
+
+  &.active {
+    font-weight: bold;
+    background-color: inherit;
+    color: var(--theme-color-active);
+  }
+
+  &:hover {
+    @include hoverButton;
+  }
+}

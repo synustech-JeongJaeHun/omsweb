@@ -78,6 +78,18 @@ namespace OMSWeb.Controllers
         {
             return this._moduleStatusSvc.GetModuleStatus();
         }
+        
+        [HttpGet("vhl-status")]
+        public IQueryable<VhlStatusEntity> GetVhlStatus()
+        {
+            return this._moduleStatusSvc.GetVhlStatus();
+        }
+        
+        [HttpGet("cdm-status")]
+        public IQueryable<CdmStatusEntity> GetCdmStatus()
+        {
+            return this._moduleStatusSvc.GetCdmStatus();
+        }
 
         [HttpGet("maps")]
         public object GetMaps()

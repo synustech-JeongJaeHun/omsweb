@@ -556,7 +556,15 @@
     "oblow" : "OBS Low",
     "obhigh" : "OBS High",
     "isBackdropVisible" : "Show Backdrop",
-    "vehicleAlias": "Vehicle(alias)"
+    "vehicleAlias": "Vehicle(alias)",
+    "cdm": "CDM",
+    "verChangeTime": "Change Time",
+    "vcpSwVer": "VCP S/W",
+    "motionFwVer": "Motion F/W",
+    "motionLibVer":  "Motion Lib",
+    "zcuId" : "Zcu",
+    "cdmModuleSwVer" : "CDM F/W",
+    "cdmNfModuleSwVer" :  "CDM_NF F/W"
   },
   "enums": {
     "hostSessionStatus": {

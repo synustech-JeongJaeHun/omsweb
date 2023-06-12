@@ -34,6 +34,23 @@ export interface IModuleStatus {
 	startTime: Date
 }
 
+export interface IVhlStatus {
+  id: number
+  vehicleId: number
+  verChangeTime: Date
+  vcpSwVer: string
+  motionFwVer: string
+  motionLibVer: string
+}
+
+export interface ICdmStatus {
+  id: number
+  zcuId: number
+  verChangeTime: Date
+  cdmModuleSwVer: string
+  cdmNfModuleSwVer: string
+}
+
 export interface IFileItem extends RemoteFileSystemProvider{
 	name: string
 	isDirectory: boolean

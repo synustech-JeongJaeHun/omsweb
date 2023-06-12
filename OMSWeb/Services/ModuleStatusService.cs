@@ -60,6 +60,18 @@ namespace OMSWeb.Services
       Process[] processlist = Process.GetProcesses();
       return processlist.FirstOrDefault(pr => pr.ProcessName == name);
     }
+    
+    public IQueryable<VhlStatusEntity> GetVhlStatus()
+    {
+      IQueryable<VhlStatusEntity> vhlStatusEntity = this._moduleStatusRepo.GetVhlStatus();
+      return vhlStatusEntity;
+    }
+    
+    public IQueryable<CdmStatusEntity> GetCdmStatus()
+    {
+      IQueryable<CdmStatusEntity> cdmStatusEntity = this._moduleStatusRepo.GetCdmStatus();
+      return cdmStatusEntity;
+    }
   }
   
 }
