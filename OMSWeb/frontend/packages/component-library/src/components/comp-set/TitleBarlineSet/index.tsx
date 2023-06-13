@@ -181,7 +181,7 @@ const Pane = ({ variant, data, onClick, onZoom, pageVariant, selectDate, exportF
         <RCol col={10} sm={12} md={12} lg={12}>
 
           <h3>{selectDate}</h3>
-          <BarlineTableV {...hours} onClick={onClick} onZoom={onZoom}
+          <BarlineTableV {...hours} onZoom={onZoom}
                          exportFilename={selectDate}
           />
         </RCol>

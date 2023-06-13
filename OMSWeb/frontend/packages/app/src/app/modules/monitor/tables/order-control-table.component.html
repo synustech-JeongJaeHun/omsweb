@@ -370,6 +370,6 @@
 		</div>
 	</div>
   <div *dxTemplate="let data of 'aliasTemplate'">
-    {{ vhlAlias+data.displayValue }}
+    {{ data?.displayValue? vhlAlias+data?.displayValue : '' }}
   </div>
 </dx-data-grid>

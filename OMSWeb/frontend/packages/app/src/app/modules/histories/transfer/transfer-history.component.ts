@@ -158,7 +158,7 @@ export class TransferHistoryComponent implements OnInit, OnDestroy {
 
     this.settingSvc.serviceConfig.subscribe(
       (config) => {
-        this.vhlAlias = config.vhlAlias
+        this.vhlAlias = config?.vhlAlias || ''
       },
     )
 	}
