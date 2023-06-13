@@ -25,7 +25,7 @@ namespace OMSWeb.Services
             return this._repo.QueryOrdersCount(from, to, condition);
         }
 
-        public IQueryable<OrderEntity> QueryOrders(DateTimeOffset from, DateTimeOffset to, int skip, int take, string condition, string sort)
+        public IQueryable<OrderHistoryEntity> QueryOrders(DateTimeOffset from, DateTimeOffset to, int skip, int take, string condition, string sort)
         {
             return this._repo.QueryOrders(from, to, skip, take, condition, sort);
         }
