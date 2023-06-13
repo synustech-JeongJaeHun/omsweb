@@ -24,7 +24,7 @@ const props = defineProps<{
       v-if="props.fireshutter.open === 1"
       :x="50"
       :y="100"
-      :data-fireDetect="props.fireshutter.fireDetect"
+      :data-id="props.fireshutter.id"
       class="overflow-visible"
       @click.left="handleLeftClick"
       @mouseover="handleMouseover"
@@ -42,7 +42,7 @@ const props = defineProps<{
       @click.left="handleLeftClick"
       @mouseover="handleMouseover"
       @mouseleave="handleMouseleave"
-      :data-fireDetect="props.fireshutter.fireDetect"
+      :data-id="props.fireshutter.id"
       width="35"
       height="35"
       :fill="props.fireshutter.fireDetect ? parseStringProp(ColorDefault.fireshutterOpened, props.fireshutterOpenedColor)
