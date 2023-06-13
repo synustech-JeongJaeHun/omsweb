@@ -471,16 +471,6 @@ defineExpose(exposed)
     );
 }
 
-#fireshutter-layer .fireshutter.opened g {
-  fill: v-bind('parseStringProp(ColorDefault.fireshutterOpened, props.fireshutterOpenedColor)'
-    );
-}
-
-#fireshutter-layer .fireshutter.closed g {
-  fill: v-bind('parseStringProp(ColorDefault.fireshutterClosed, props.fireshutterClosedColor)'
-    );
-}
-
 #mtl-layer .mtl[data-unuse='unuse' i] .mtl-path {
   stroke: v-bind('parseStringProp(ColorDefault.mtlUnuse, props.mtlUnuseColor)'
     );

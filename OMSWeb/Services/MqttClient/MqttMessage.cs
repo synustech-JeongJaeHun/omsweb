@@ -23,6 +23,7 @@ namespace OMSWeb.Services.MqttClient
         public const string REQUEST_CARRIER = "carrier";
         public const string REQUEST_ZCU = "zcu";
         public const string REQUEST_ORDER = "order";
+        public const string REQUEST_FCU = "fcu";
 
         public const string ACTION_MAP_UPDATE = "map_update";
         public const string ACTION_ONLINE_STATE = "online_state";
@@ -84,7 +85,10 @@ namespace OMSWeb.Services.MqttClient
         public const string DEFAULT_DIRECTION = "forward";
         
         public const string ACTION_SCAN = "scan";                                 
-        public const string ACTION_PM = "pm";                                 
+        public const string ACTION_PM = "pm";
+        
+        public const string ACTION_RESET_HOLD = "reset_hold";
+        public const string ACTION_HOLD_RELEASE = "hold_release";
 
         public MqttMessage()
         {
@@ -148,6 +152,8 @@ namespace OMSWeb.Services.MqttClient
                 case ACTION_M:
                 case ACTION_SCAN:
                 case ACTION_PM:
+                case ACTION_RESET_HOLD:
+                case ACTION_HOLD_RELEASE:
                     return TOPIC_DEFAULT;   // "oms/vehicle-manager/request";
             }
 
@@ -225,6 +231,8 @@ namespace OMSWeb.Services.MqttClient
                 case ACTION_ZCU_GO:
                 case ACTION_ZCU_USING_TYPE:
                 case ACTION_ZCU_RESET:
+                case ACTION_RESET_HOLD:
+                case ACTION_HOLD_RELEASE:
                     return REQUEST_ZCU;
 
                 case ACTION_INSTALL_CARRIER:
@@ -238,6 +246,7 @@ namespace OMSWeb.Services.MqttClient
                 case ACTION_M:
                 case ACTION_SCAN:
                     return REQUEST_ORDER;
+                
             }
             return null;
         }
@@ -454,7 +463,8 @@ namespace OMSWeb.Services.MqttClient
             else if (command.Action == ACTION_RESET || command.Action == ACTION_STOP ||
                      command.Action == ACTION_RAIL_IN || command.Action == ACTION_RAIL_OUT ||
                      command.Action == ACTION_REMOVE || command.Action == ACTION_UPDATE_MAP ||
-                     command.Action == ACTION_GET_MAP_INFO)
+                     command.Action == ACTION_GET_MAP_INFO 
+                     )
             {
                 data["vehicle_id"] = GetVehicleId(command);
 
@@ -672,7 +682,9 @@ namespace OMSWeb.Services.MqttClient
 
                 Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: {command.Action}");
             }
-            else if (command.Action == ACTION_ZCU_RESET)
+            else if (command.Action == ACTION_ZCU_RESET||
+                     command.Action == ACTION_RESET_HOLD ||
+                     command.Action == ACTION_HOLD_RELEASE)
             {
                 if (command.ZcuId != null || command.ZcuIds != null)
                     data["zcu_id"] = GetZcuId(command);

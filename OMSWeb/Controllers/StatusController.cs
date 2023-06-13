@@ -204,5 +204,20 @@ namespace OMSWeb.Controllers
             }
             return null;
         }
+        
+        [HttpGet("fcus")]
+        public object GetFcuStatus(DataSourceLoadOptions loadOptions)
+        {
+            LoadResult loadResult;
+            try
+            {
+                loadResult = DataSourceLoader.Load(_statusSvc.QueryFireShutterStates(), loadOptions);
+            }
+            catch (Exception e)
+            {
+                loadResult = null;
+            }
+            return loadResult;
+        }
     }
 }

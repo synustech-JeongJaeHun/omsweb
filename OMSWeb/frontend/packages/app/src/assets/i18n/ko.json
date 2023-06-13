@@ -564,7 +564,12 @@
     "motionLibVer":  "Motion Lib",
     "zcuId" : "Zcu",
     "cdmModuleSwVer" : "CDM F/W",
-    "cdmNfModuleSwVer" :  "CDM_NF F/W"
+    "cdmNfModuleSwVer" :  "CDM_NF F/W",
+    "reset-hold": "Reset And Hold",
+    "hold-release": "Hold Release",
+    "fireDetect" : "Fire Detect",
+    "open" : "Open",
+    "fcu" : "Fcu"
   },
   "enums": {
     "hostSessionStatus": {
@@ -693,4 +698,5 @@
   },
   "_START_DATE" : "Please enter a start date",
   "_END_DATE":  "Please enter a end date"
+
 }

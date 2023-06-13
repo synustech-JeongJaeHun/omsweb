@@ -200,6 +200,8 @@ interface IFireshutter {
   logicalId: string
   segments: string
   status: number
+  fireDetect: number
+  open:number
 }
 
 interface IBackdrop {

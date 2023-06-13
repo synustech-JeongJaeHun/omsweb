@@ -410,6 +410,8 @@ namespace OMSWeb.Repositories
                                     LogicalId = dr["logical_id"].ToString(),
                                     Segments = dr["segments"].ToString(),
                                     Status = dr["status"].TryInteger(),
+                                    fireDetect = dr["fire_detect"].TryInteger(),
+                                    open = dr["open"].TryInteger()
                                 }
                                );
                             }
@@ -444,7 +446,11 @@ namespace OMSWeb.Repositories
                                     logicalId = dr["logical_id"].ToString(),
                                     segments = dr["segments"].ToString(),
                                     status = dr["status"].TryInteger(),
-                                    statusMsg = dr["logical_id"].ToString()
+                                    statusMsg = dr["status_msg"].ToString(),
+                                    user = dr["user"].ToString(),
+                                    note = dr["note"].ToString(),
+                                    fireDetect = dr["fire_detect"].TryInteger(),
+                                    open = dr["open"].TryInteger()
                                 }
                                );
                             }

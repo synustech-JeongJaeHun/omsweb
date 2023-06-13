@@ -13,6 +13,10 @@ namespace OMSWeb.Models.Entities
         public int status { get; set; }
 
         public string statusMsg { get; set; }
-
+        
+        public string user { get; set; }
+        public string note { get; set; }
+        public int fireDetect { get; set; }
+        public int open { get; set; }
     }
 }

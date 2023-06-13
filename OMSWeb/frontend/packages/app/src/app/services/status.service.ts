@@ -106,4 +106,14 @@ export class StatusService {
         reshapeOnPush: true,
       })
     }
+
+  fcuStatusDataSource(): DataSource {
+    return new DataSource({
+      store: AspNetData.createStore({
+        key: 'id',
+        loadUrl: `${this.baseUrl}/fcus`,
+      }),
+      reshapeOnPush: true,
+    })
+  }
 }
