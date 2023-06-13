@@ -143,8 +143,13 @@ namespace OMSWeb.Repositories
         {
             IQueryable<VhlStatusEntity> result;
 
-            var sql = @"SELECT id, vehicle_id, ver_change_time, vcp_sw_ver, motion_fw_ver, motion_lib_ver 
-                FROM vehicle_version ORDER BY id";
+            var sql = @"
+                        SELECT vv.id, vv.vehicle_id, v.logical_id, vv.ver_change_time, vv.vcp_sw_ver, vv.motion_fw_ver, vv.motion_lib_ver 
+                        FROM vehicle_version AS vv
+                        LEFT JOIN vehicles v ON vv.id = v.id
+                        GROUP BY vv.id, v.logical_id
+                        ORDER BY v.logical_id 
+                ";
 
             using (var conn = ConnectTrack())
             {
@@ -164,8 +169,11 @@ namespace OMSWeb.Repositories
         {
             IQueryable<CdmStatusEntity> result;
 
-            var sql = @"SELECT id, zcu_id, ver_change_time, cdm_module_sw_ver, cdm_nf_module_sw_ver 
-                FROM zcu_version ORDER BY id";
+            var sql = @"
+                        SELECT id, zcu_id, ver_change_time, cdm_module_sw_ver, cdm_nf_module_sw_ver 
+                        FROM zcu_version
+                        GROUP BY id, zcu_id
+                        ORDER BY zcu_id";
 
             using (var conn = ConnectTrack())
             {

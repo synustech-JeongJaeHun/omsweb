@@ -37,6 +37,8 @@ export interface IModuleStatus {
 export interface IVhlStatus {
   id: number
   vehicleId: number
+
+  logicalId: string
   verChangeTime: Date
   vcpSwVer: string
   motionFwVer: string

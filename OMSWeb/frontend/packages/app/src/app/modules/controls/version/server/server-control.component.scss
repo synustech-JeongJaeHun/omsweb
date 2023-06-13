@@ -7,6 +7,9 @@
 
 fieldset {
   padding: 16px;
+  max-height: 80vh;
+  overflow: auto;
+  margin-right: 16px;
 }
 #process-list {
   width: 100%;

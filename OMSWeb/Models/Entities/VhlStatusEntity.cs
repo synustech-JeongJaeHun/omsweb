@@ -10,6 +10,7 @@ namespace OMSWeb.Models.Entities
   {
     public int ID { get; set; }
     public int VehicleId { get; set; }
+    public string LogicalId { get; set; }
     public DateTime VerChangeTime { get; set; }
     public string VcpSwVer { get; set; }
     public string MotionFwVer { get; set; }
