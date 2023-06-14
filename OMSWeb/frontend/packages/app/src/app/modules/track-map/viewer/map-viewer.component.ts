@@ -983,7 +983,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
       )
 
       this.contextMenuObject.value.home = homeGroups
-      this.homeActive = homeGroups?.length > 0 && true
+      this.homeActive = !!homeId
     }
 
 		const leftThreshold = window.innerWidth - 200
@@ -1273,7 +1273,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 			)
 
 			this.contextMenuObject.value.home = homeGroups
-			this.homeActive = homeGroups?.length > 0 && true
+			this.homeActive = !!homeId
 		}
 		if (this.contextMenuObject.type === 'BUFFER' ) {
 			const result = await this.tracksService
