@@ -11,6 +11,7 @@ export class MobileService {
   public isMobileChanged$= new Subject<boolean>();
   private _isMobile = false
   private _showToolbox = false
+  private _isInit = true
 
   keys = ['isMinimapVisible', 'isVhlStatusVisible']
   constructor(
@@ -31,12 +32,15 @@ export class MobileService {
     this.isMobileChanged$.next(this._isMobile);
 
 
-    if(!this._isMobile){
-      this.showToolbox = true
-      this.reset()
-    }
-    else{
-      this.mobileSet()
+    if(this._isInit){
+      if(!this._isMobile){
+        this.showToolbox = true
+        this.reset()
+      }
+      else{
+        this.mobileSet()
+      }
+      this._isInit=false
     }
   }
 
