@@ -339,6 +339,10 @@ namespace OMSWeb.Services
                 if (string.Compare(s, "unloadRetryCnt", StringComparison.CurrentCultureIgnoreCase) == 0) return "unload_retry_cnt";
                 if (string.Compare(s, "fromDistance", StringComparison.CurrentCultureIgnoreCase) == 0) return "from_distance";
                 if (string.Compare(s, "toDistance", StringComparison.CurrentCultureIgnoreCase) == 0) return "to_distance";
+                if (string.Compare(s, "vehicleAlias", StringComparison.CurrentCultureIgnoreCase) == 0) return "vehicle_alias";
+                if (string.Compare(s, "locationPickupAlias", StringComparison.CurrentCultureIgnoreCase) == 0) return "location_pickup_alias";
+                if (string.Compare(s, "locationDropoffAlias", StringComparison.CurrentCultureIgnoreCase) == 0) return "location_dropoff_alias";
+                
             }
             else if (string.Compare(tableName, "vehicle_history", StringComparison.CurrentCultureIgnoreCase) == 0)
             {

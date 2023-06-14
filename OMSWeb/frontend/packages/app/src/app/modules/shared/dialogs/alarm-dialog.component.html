@@ -21,14 +21,23 @@
           </dxi-column>
           <dxi-column [allowFiltering]="true" [width]="110" dataType="string" dataField="vehicleId"
             [caption]="'names.vehicle' | translate"></dxi-column>
-          <dxi-column [allowFiltering]="true" [width]="80" dataType="string" dataField="severity"
+          <dxi-column [allowFiltering]="true" [width]="80" dataType="string" dataField="level" cellTemplate="levelTemplate"
             [caption]="'names.severity' | translate">
-            <dxo-lookup [dataSource]="severityLookup" displayExpr="name" valueExpr="value"></dxo-lookup>
           </dxi-column>
           <dxi-column [allowFiltering]="true" [width]="80" dataType="string" dataField="errorCode"
             [caption]="'names.code' | translate"></dxi-column>
           <dxi-column [allowFiltering]="false" dataType="string" dataField="description"
             [caption]="'names.desc' | translate"></dxi-column>
+
+          <div *dxTemplate="let data of 'levelTemplate'">
+            <ng-container [ngSwitch]="data.displayValue">
+              <div class="level0" *ngSwitchCase="0">Low</div>
+              <div class="level1" *ngSwitchCase="1">Warning</div>
+              <div class="level2" *ngSwitchCase="2">Critical</div>
+              <div *ngSwitchDefault></div>
+            </ng-container>
+            {{ data.text }}
+          </div>
         </dx-data-grid>
       </div>
 
