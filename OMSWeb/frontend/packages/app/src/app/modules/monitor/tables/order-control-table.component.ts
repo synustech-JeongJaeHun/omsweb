@@ -29,7 +29,7 @@ import { DialogService } from '@oms/root/services/dialog.service'
 import { TransfersService } from '@oms/root/services/transfers.service'
 import { IOrderStatusRow } from '../../../models/order-status.model'
 import { TrackStatusService } from '@oms/root/services/track-status.service'
-import {MobileService} from "@oms/services/mobile.service";
+import {MobileService} from "../../../services/mobile.service";
 
 @Component({
 	selector: 'oms-order-control-table',
@@ -209,7 +209,7 @@ export class OrderControlTableComponent implements OnInit, OnDestroy {
 
 				this.dialogSvc.success({
 					title: this.t$.instant('names.success'),
-					body: this.t$.instant(errorMessage),
+					body: this.t$.instant('messages.dest-success'),
 				})
 			} else {
 				var errorMessage = ''
