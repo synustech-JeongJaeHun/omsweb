@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using OMSWeb.Models;
@@ -58,7 +59,7 @@ namespace OMSWeb.Services
     public Process GetProcByID(string name)
     {
       Process[] processlist = Process.GetProcesses();
-      return processlist.FirstOrDefault(pr => pr.ProcessName == name);
+      return processlist.FirstOrDefault(pr => string.Compare(pr.ProcessName, name, StringComparison.CurrentCultureIgnoreCase) == 0);
     }
     
     public IQueryable<VhlStatusEntity> GetVhlStatus()
