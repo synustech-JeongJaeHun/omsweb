@@ -605,6 +605,7 @@ const defaultHistoryTable = {
 
 	vehicles_physical_id: true,
 	vehicles_logical_id: true,
+  vehicles_last_pm_time: true,
 	vehicles_distance_total: true,
 	vehicles_runtime_total: true,
   vehicles_distance: true,
