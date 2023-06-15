@@ -609,7 +609,8 @@ const defaultHistoryTable = {
 	vehicles_runtime_total: true,
   vehicles_distance: true,
   vehicles_runtime: true,
-	vehicles_empty: true,
+  vehicles_user: true,
+  vehicles_note: true,
 
 
 	vehicles_order: [
@@ -630,7 +631,6 @@ const defaultHistoryTable = {
     { name: 'vehicles_runtime', i18nLabel: 'names.runtime', width: 180 },
     { name: 'vehicles_user', i18nLabel: 'names.user', width: 80 },
     { name: 'vehicles_note', i18nLabel: 'names.note', width: 80 },
-    { name: 'vehicles_empty', i18nLabel: '', width: 120 },
 	],
 
 	// alarms table
