@@ -209,9 +209,8 @@ namespace OMSWeb.Repositories
 	                            where vh.history_source_id  = OD.vehicle_id
 	                            and history_change_time >= OD.time_load_completed
 		                        and history_change_time <= OD.time_unload_started 
-	                        ) as to_distance 
-                            
-
+	                        ) as to_distance,
+                            VS.physical_id as vehicle_alias
                         FROM order_history AS OD
                         INNER JOIN (
                             SELECT history_source_id AS order_id, max(history_change_time) AS last_updated
