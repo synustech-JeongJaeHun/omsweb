@@ -22,7 +22,6 @@ namespace OMSWeb
 #endif
 
             CreateHostBuilder(args).Build().Run();
-
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
