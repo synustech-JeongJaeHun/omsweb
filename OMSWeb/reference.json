@@ -23,21 +23,21 @@
           "low": 650,
           "high": 675,
           "lowEqual": true,
-          "highEqual": true
+          "highEqual": false
         }
       ],
       "fault":[
         {
           "unit": "V",
-          "low": 675,
-          "lowEqual": true,
-          "highEqual": false
-        },
-        {
-          "unit": "V",
           "high": 430,
           "lowEqual": false,
           "highEqual": true
+        },
+        {
+          "unit": "V",
+          "low": 675,
+          "lowEqual": true,
+          "highEqual": false
         }
       ]
     },
@@ -65,23 +65,23 @@
         "highEqual": false
       }]
     },
-    { 
-      "position": 3, 
+    {
+      "position": 3,
       "name": "Current Track",
       "normal": [{
         "unit": "A",
         "low": 70,
         "high": 85,
-        "lowEqual": true,
+        "lowEqual": false,
         "highEqual": false
       }],
       "warning": [{
-          "unit": "A",
-          "low": 85,
-          "high": 90,
-          "lowEqual": true,
-          "highEqual": false
-        },
+        "unit": "A",
+        "low": 85,
+        "high": 90,
+        "lowEqual": true,
+        "highEqual": false
+      },
         {
           "unit": "A",
           "high": 70,
@@ -96,7 +96,7 @@
         "highEqual": false
       }]
     },
-    { "position": 4, 
+    { "position": 4,
       "name": "Temp Radiator",
       "normal": [{
         "unit": "℃",
@@ -110,7 +110,7 @@
         "low": 60,
         "high": 80,
         "lowEqual": true,
-        "highEqual": true
+        "highEqual": false
       }],
       "fault": [{
         "unit": "℃",
@@ -119,7 +119,7 @@
         "highEqual": false
       }]
     },
-    { "position": 5, 
+    { "position": 5,
       "name": "Temp Internal",
       "normal": [{
         "unit": "℃",
