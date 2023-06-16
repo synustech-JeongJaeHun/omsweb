@@ -272,7 +272,7 @@ namespace OMSWeb.Controllers
             if (zipResult == null || !zipResult.Any())
                 throw new Exception(String.Format("No Files found."));
 
-            return File(zipResult, "application/zip", fileName);
+            return File(zipResult, "application/octect-stream", fileName);
         }
 
         [HttpGet("logs/downloadFolder/{folderName}")]
@@ -344,7 +344,7 @@ namespace OMSWeb.Controllers
             if (zipResult == null || !zipResult.Any())
                 throw new Exception(String.Format("No Files found."));
 
-            return File(zipResult, "application/zip", fileName);
+            return File(zipResult, "application/octect-stream", fileName);
         }
 
         public class MapFileDto
