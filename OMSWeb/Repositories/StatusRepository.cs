@@ -4,25 +4,33 @@ using Dapper;
 using Microsoft.Extensions.Configuration;
 using Npgsql;
 using OMSWeb.Models;
+using OMSWeb.Services;
 
 namespace OMSWeb.Repositories
 {
     public class StatusRepository : DataAccess
     {
-        public StatusRepository(IConfiguration configuration) : base(configuration)
+        private SystemsService _systemSvc;
+        public StatusRepository(IConfiguration configuration, SystemsService systemSvc) : base(configuration)
         {
+            this._systemSvc = systemSvc;
         }
 
         public IQueryable<OrderState> QueryOrderStates()
         {
             IQueryable<OrderState> result;
+            string prefix = "";
+            if (_systemSvc.GetClientSettings().VHLAlias!=null)
+            {
+                prefix = _systemSvc.GetClientSettings().VHLAlias;
+            }
             using (var conn = ConnectTrack())
             {
                 var sql = QueryFactory.GetSql("orderStatus");
 
                 try
                 {
-                    result = conn.Query<OrderState>(sql).AsQueryable();
+                    result = conn.Query<OrderState>(sql, new {prefix}).AsQueryable();
                 }
                 catch (Exception e)
                 {
@@ -35,13 +43,18 @@ namespace OMSWeb.Repositories
         public IQueryable<VehicleState> QueryVehicleStates()
         {
             IQueryable<VehicleState> result;
+            string prefix = "";
+            if (_systemSvc.GetClientSettings().VHLAlias!=null)
+            {
+                prefix = _systemSvc.GetClientSettings().VHLAlias;
+            }
             using (var conn = ConnectTrack())
             {
                 var sql = QueryFactory.GetSql("vehicleStates");
 
                 try
                 { 
-                    result = conn.Query<VehicleState>(sql).AsQueryable();
+                    result = conn.Query<VehicleState>(sql, new {prefix}).AsQueryable();
                 }
                 catch (Exception e)
                 {

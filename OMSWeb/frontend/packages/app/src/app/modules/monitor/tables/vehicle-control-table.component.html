@@ -166,9 +166,8 @@
 	></dxi-column>
   <dxi-column
     dataType="string"
-    dataField="physicalId"
+    dataField="vehicleAlias"
     [caption]="'names.alias' | translate"
-    cellTemplate="aliasTemplate"
     [visible]="canDisplayTable('vehicles_alias')"
     [visibleIndex]="getDisplayTableColumnIndex('vehicles_alias')"
     [width]="getDisplayTableColumnWidth('vehicles_alias')"
@@ -314,7 +313,6 @@
 		dataField="runtimeTotal"
 		[allowSorting]="true"
 		[caption]="'names.runtimeTotal' | translate"
-		cellTemplate="runtimeTotalTemplate"
 		[visible]="canDisplayTable('vehicles_runtimeTotal')"
 		[visibleIndex]="getDisplayTableColumnIndex('vehicles_runtimeTotal')"
 		[width]="getDisplayTableColumnWidth('vehicles_runtimeTotal')"
@@ -387,11 +385,10 @@
 	<!-- Blocked 추가 -->
 	<dxi-column
 		[allowFiltering]="true"
-		dataType="number"
+		dataType="string"
 		dataField="distanceTotal"
 		[allowSorting]="true"
 		[caption]="'names.distanceTotal' | translate"
-		cellTemplate="distanceTotalTemplate"
 		[visible]="canDisplayTable('vehicles_distanceTotal')"
 		[visibleIndex]="getDisplayTableColumnIndex('vehicles_distanceTotal')"
 		[width]="getDisplayTableColumnWidth('vehicles_distanceTotal')"
@@ -453,9 +450,8 @@
   ></dxi-column>
   <dxi-column
     [allowFiltering]="true"
-    dataType="number"
+    dataType="string"
     dataField="distance"
-    cellTemplate="distanceTotalTemplate"
     [alignment]="'left'"
     [allowSorting]="true"
     [caption]="'names.distance' | translate"
@@ -465,9 +461,8 @@
   ></dxi-column>
   <dxi-column
     [allowFiltering]="true"
-    dataType="number"
+    dataType="string"
     dataField="runtime"
-    cellTemplate="runtimeTotalTemplate"
     [alignment]="'left'"
     [allowSorting]="true"
     [caption]="'names.runtime' | translate"
@@ -499,12 +494,6 @@
 			<div class="value" *ngSwitchDefault>{{ data.displayValue }}</div>
 		</div>
 	</div>
-	<div *dxTemplate="let data of 'distanceTotalTemplate'">
-		{{ transform_distance(data.displayValue) }}
-	</div>
-	<div *dxTemplate="let data of 'runtimeTotalTemplate'">
-		{{ transform_runtime(data.displayValue) }}
-	</div>
   <div *dxTemplate="let data of 'pauseStateTemplate'">
     <div [ngSwitch]="data.displayValue">
       <div class="value" *ngSwitchCase="1">{{ 'names.pausing' | translate}}</div>
@@ -512,8 +501,5 @@
       <div class="value" *ngSwitchCase="0">{{ 'names.auto' | translate }}</div>
       <div class="value" *ngSwitchDefault>{{ 'names.auto'  | translate}}</div>
     </div>
-  </div>
-  <div *dxTemplate="let data of 'aliasTemplate'">
-    {{ vhlAlias+data.displayValue }}
   </div>
 </dx-data-grid>

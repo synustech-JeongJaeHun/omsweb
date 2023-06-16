@@ -4,13 +4,17 @@ using System.Linq;
 using Dapper;
 using Microsoft.Extensions.Configuration;
 using OMSWeb.Models.Entities;
+using OMSWeb.Services;
 
 namespace OMSWeb.Repositories
 {
     public class HistoryRepository : DataAccess
     {
-        public HistoryRepository(IConfiguration configuration) : base(configuration)
+        
+        private SystemsService _systemSvc;
+        public HistoryRepository(IConfiguration configuration, SystemsService systemSvc) : base(configuration)
         {
+            this._systemSvc = systemSvc;
         }
 
 
@@ -120,6 +124,12 @@ namespace OMSWeb.Repositories
             if (string.IsNullOrWhiteSpace(condition) == false) WhereConditions = $" WHERE {condition}";
             if (string.IsNullOrWhiteSpace(sort) == false) SortConditions = $"ORDER BY {sort}";
             if (skip <= 0 && take <= 0) LimitConditions = string.Empty;
+            
+            string prefix = "";
+            if (_systemSvc.GetClientSettings().VHLAlias!=null)
+            {
+                prefix = _systemSvc.GetClientSettings().VHLAlias;
+            }
 
             string sql = $@"
                 SELECT * FROM (
@@ -195,22 +205,28 @@ namespace OMSWeb.Repositories
                                 WHEN OD.err_result_code LIKE '%SourceInterlock%' THEN 'Source PIO Timeout'
                                 WHEN OD.err_result_code LIKE '%DestInterlock%' THEN 'Dest PIO Timeout'
                                 ELSE OD.err_result_code
-                            END as result_code
-                            ,(
+                            END as result_code,
+                            (FLOOR(
+                            (
                                 select max(vh.distance_total)-min(vh.distance_total)
 	                            from vehicle_history vh 
 	                            where vh.history_source_id  = OD.vehicle_id
 	                            and history_change_time >= OD.time_assigned
 		                        and history_change_time <= OD.time_load_started 
-	                        ) as from_distance 
-                            ,(
+	                        )
+                            / 1000) || 'm' )
+                             as from_distance,
+                            (FLOOR(
+                            (
                                 select max(vh.distance_total)-min(vh.distance_total)
 	                            from vehicle_history vh 
 	                            where vh.history_source_id  = OD.vehicle_id
 	                            and history_change_time >= OD.time_load_completed
 		                        and history_change_time <= OD.time_unload_started 
-	                        ) as to_distance,
-                            VS.physical_id as vehicle_alias
+	                        )
+                            / 1000) || 'm' )
+                             as to_distance,
+                            (@prefix || VS.physical_id) as vehicle_alias
                         FROM order_history AS OD
                         INNER JOIN (
                             SELECT history_source_id AS order_id, max(history_change_time) AS last_updated
@@ -240,7 +256,7 @@ namespace OMSWeb.Repositories
             {
                 try
                 { 
-                    result = conn.Query<OrderHistoryEntity>(sql, new { from, to, skip, take }).AsQueryable();
+                    result = conn.Query<OrderHistoryEntity>(sql, new { from, to, skip, take, prefix }).AsQueryable();
                 }
                 catch (Exception e)
                 {
@@ -312,11 +328,14 @@ namespace OMSWeb.Repositories
                             VH.history_change_time, VH.id, VH.history_source_id,
                             VH.physical_id, VH.logical_id, 
                             VH.moving_state, 
-                            VH.distance_total, TO_CHAR((VH.runtime_total * interval '1 sec'), 'DD') || 'd ' || TO_CHAR((VH.runtime_total * interval '1 sec'), 'HH24') || 'h '  as runtime_total,
-                            VH.distance, TO_CHAR((VH.runtime * interval '1 sec'), 'DD') || 'd ' || TO_CHAR((VH.runtime * interval '1 sec'), 'HH24') || 'h ' as runtime, 
+                            (FLOOR(VH.distance_total / 1000000) || 'km')  as distance_total,
+                            TO_CHAR((VH.runtime_total/86400 * interval '1 day'), 'DD') || 'd ' || TO_CHAR((VH.runtime_total%86400 * interval '1 sec'), 'HH24') || 'h '  as runtime_total,
+                            (FLOOR(VH.distance / 1000000) || 'km' ) as distance,
+                            TO_CHAR((VH.runtime/86400 * interval '1 day'), 'DD') || 'd ' || TO_CHAR((VH.runtime%86400 * interval '1 sec'), 'HH24') || 'h ' as runtime, 
                             VH.pm_time, VH.user,
                             VH.type, VH.map_db, VH.pm_user, VH.pm_note,
-                            LVH.distance_range, TO_CHAR((LVH.runtime_range * interval '1 sec'), 'DD') || 'd ' || TO_CHAR((LVH.runtime_range * interval '1 sec'), 'HH24') || 'h ' as runtime_range 
+                            (FLOOR(LVH.distance_range / 1000000) || 'km' ) as distance_range, 
+                            TO_CHAR((LVH.runtime_range/86400 * interval '1 day'), 'DD') || 'd ' || TO_CHAR((LVH.runtime_range%86400* interval '1 sec'), 'HH24') || 'h ' as runtime_range 
                         FROM vehicle_history AS VH
                         INNER JOIN (
                             SELECT history_source_id, max(id) AS max_id,

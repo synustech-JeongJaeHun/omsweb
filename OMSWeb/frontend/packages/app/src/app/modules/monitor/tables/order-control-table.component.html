@@ -156,7 +156,6 @@
     [width]="getDisplayTableColumnWidth('orders_vehicleAlias')"
     dataType="string"
     dataField="vehicleAlias"
-    cellTemplate="aliasTemplate"
     [caption]="getDisplayTableLabel('orders_vehicleAlias') | translate"
     [visible]="canDisplayTable('orders_vehicleAlias')"
     [visibleIndex]="getDisplayTableColumnIndex('orders_vehicleAlias')"
@@ -369,7 +368,4 @@
 			{{ data.displayValue }}
 		</div>
 	</div>
-  <div *dxTemplate="let data of 'aliasTemplate'">
-    {{ data?.displayValue? vhlAlias+data?.displayValue : '' }}
-  </div>
 </dx-data-grid>
