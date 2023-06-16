@@ -304,7 +304,11 @@ namespace OMSWeb.Repositories
             SELECT
             VH.id, VH.physical_id, VH.logical_id, VH.last_point AS cur_point, 
             VH.moving_state, VH.map_db, 
-            VH.distance as distance_number,
+            CASE 
+                WHEN VH.distance < 0 
+                THEN (FLOOR(VH.distance/1000000+4294) || 'km')
+                ELSE (FLOOR(VH.distance/1000000) || 'km')
+            END AS distance,
             TO_CHAR((VH.runtime/86400 * interval '1 day'), 'DD') || 'd ' || TO_CHAR((VH.runtime%86400 * interval '1 sec'), 'HH24') || 'h ' as runtime,
             VH.user as user, 
             VH.note as note,
@@ -364,7 +368,11 @@ namespace OMSWeb.Repositories
             CASE
                 WHEN LENGTH(VH.error_list) = 0 THEN '0' ELSE VH.error_list
             END AS error_list,
-            VH.distance_total as distance_total_number,
+            CASE 
+                WHEN VH.distance_total < 0 
+                THEN (FLOOR(VH.distance_total/1000000+4294)|| 'km')
+                ELSE (FLOOR(VH.distance_total/1000000) || 'km')
+            END AS distance_total,
             TO_CHAR((VH.runtime_total/86400 * interval '1 day'), 'DD') || 'd ' || TO_CHAR((VH.runtime_total%86400 * interval '1 sec'), 'HH24') || 'h '  as runtime_total, 
             VH.type, VH.rail_in, VH.is_maint, 
             CASE 
