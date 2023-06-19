@@ -81,6 +81,8 @@ export class PlaybackStatusPanelComponent implements OnInit, OnDestroy {
 
 
     this.currentTab = this.tableKeys.findIndex(t=>t===this.currentTabName)
+    this.currentTab = this.currentTab<0 ? 0 : this.currentTab
+    this.currentTabName=this.tableKeys[this.currentTab]
   }
 
 	ngOnInit(): void {
