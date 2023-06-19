@@ -168,7 +168,7 @@ type PlaybackSnapshotVehicle = {
 	moving_state: string
 	next_end_point: number
 	next_point: number
-	dest_point?: number
+	dest_point?: string | null | undefined
 	nonce: number
 	order_id: number
 	order_origin: string
@@ -200,6 +200,7 @@ type PlaybackSnapshotBuffer = {
 	physical_id: string
 	unused_time?: string //(date)
   c_alias?: string
+  slide_offset?: number
 }
 
 type PlaybackSnapshotStation = {
@@ -219,6 +220,7 @@ type PlaybackSnapshotStation = {
 	unused_time?: string //(date)
 	carrier_type?: number
   c_alias?: string
+  slide_offset?: number
 }
 
 type PlaybackSnapshotZcu = {
@@ -439,6 +441,7 @@ type CurrentVehicle = {
 	isSensorStopped: boolean
 	lastContact: string
 	lastPoint: number
+  destPoint: string | null | undefined
 	logicalId: string
 	mapDb: string
 	mode: string
@@ -504,6 +507,7 @@ type CurrentBuffer = {
 	physicalId: string
 	unusedTime?: string
   cAlias?: string
+  slideOffset?: number
 }
 type CurrentStation = {
 	id: number
@@ -520,6 +524,7 @@ type CurrentStation = {
 	unusedTime?: string //(date)
 	carrierType?: number
   cAlias?: string
+  slideOffset?: number
 }
 
 type CurrentZcu = {

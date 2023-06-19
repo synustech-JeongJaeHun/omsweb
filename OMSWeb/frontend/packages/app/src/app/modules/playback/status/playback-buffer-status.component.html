@@ -29,61 +29,117 @@
 	></dxo-search-panel>
 	<dxo-load-panel [enabled]="false"></dxo-load-panel>
 
-	<dxi-column
-		[allowFiltering]="false"
-		[width]="50"
-		dataType="string"
-		dataField="id"
-		sortOrder="desc"
-		[caption]="'names.id' | translate"
-	></dxi-column>
-	<dxi-column
-		[width]="85"
-		dataType="string"
-		dataField="physicalId"
-		[caption]="'names.physicalId' | translate"
-	>
-	</dxi-column>
-	<dxi-column
-		[width]="130"
-		dataType="string"
-		dataField="logicalId"
-		[caption]="'names.logicalId' | translate"
-	>
-	</dxi-column>
   <dxi-column
-    [width]="130"
+    dataType="string"
+    dataField="id"
+    [caption]="'names.id' | translate"
+    [visible]="canDisplayTable('buffers_id')"
+    [visibleIndex]="getDisplayTableColumnIndex('buffers_id')"
+    [width]="getDisplayTableColumnWidth('buffers_id')"
+  ></dxi-column>
+  <dxi-column
     dataType="string"
     dataField="cAlias"
     [caption]="'names.alias' | translate"
+    [visible]="canDisplayTable('buffers_alias')"
+    [visibleIndex]="getDisplayTableColumnIndex('buffers_alias')"
+    [width]="getDisplayTableColumnWidth('buffers_alias')"
   ></dxi-column>
-	<dxi-column
-		[width]="110"
-		dataType="string"
-		dataField="carrierId"
-		[caption]="'names.carrierLabel' | translate"
-	>
-	</dxi-column>
-	<dxi-column
-		[width]="80"
-		dataType="boolean"
-		dataField="unuse"
-		[caption]="'names.unuse' | translate"
-	></dxi-column>
-	<dxi-column
-		[width]="80"
-		[allowFiltering]="true"
-		dataType="string"
-		dataField="user"
-		[allowSorting]="true"
-		[caption]="'names.user' | translate"
-	></dxi-column>
-	<dxi-column
-		[width]="150"
-		[allowFiltering]="true"
-		dataType="string"
-		dataField="note"
-		[allowSorting]="true"
-		[caption]="'names.note' | translate"
-	></dxi-column>
+  <dxi-column
+    dataType="string"
+    dataField="physicalId"
+    [caption]="'names.QR' | translate"
+    [visible]="canDisplayTable('buffers_physicalId')"
+    [visibleIndex]="getDisplayTableColumnIndex('buffers_physicalId')"
+    [width]="getDisplayTableColumnWidth('buffers_physicalId')"
+  ></dxi-column>
+  <dxi-column
+    dataType="string"
+    dataField="logicalId"
+    [caption]="'names.logicalId' | translate"
+    [visible]="canDisplayTable('buffers_logicalId')"
+    [visibleIndex]="getDisplayTableColumnIndex('buffers_logicalId')"
+    [width]="getDisplayTableColumnWidth('buffers_logicalId')"
+  ></dxi-column>
+  <dxi-column
+    dataType="string"
+    dataField="point"
+    [caption]="'names.point' | translate"
+    [visible]="canDisplayTable('buffers_point')"
+    [visibleIndex]="getDisplayTableColumnIndex('buffers_point')"
+    [width]="getDisplayTableColumnWidth('buffers_point')"
+  ></dxi-column>
+  <dxi-column
+    dataType="string"
+    dataField="direction"
+    [caption]="'names.direction' | translate"
+    cellTemplate="directionTemplate"
+    [visible]="canDisplayTable('buffers_direction')"
+    [visibleIndex]="getDisplayTableColumnIndex('buffers_direction')"
+    [width]="getDisplayTableColumnWidth('buffers_direction')"
+  ></dxi-column>
+  <dxi-column
+    dataType="string"
+    dataField="nextPoint"
+    [caption]="'names.nextPoint' | translate"
+    [visible]="canDisplayTable('buffers_nextPoint')"
+    [visibleIndex]="getDisplayTableColumnIndex('buffers_nextPoint')"
+    [width]="getDisplayTableColumnWidth('buffers_nextPoint')"
+  ></dxi-column>
+  <dxi-column
+    dataType="string"
+    dataField="offset"
+    [caption]="'names.offset' | translate"
+    [visible]="canDisplayTable('buffers_offset')"
+    [visibleIndex]="getDisplayTableColumnIndex('buffers_offset')"
+    [width]="getDisplayTableColumnWidth('buffers_offset')"
+  ></dxi-column>
+  <dxi-column
+    dataType="boolean"
+    dataField="unuse"
+    [caption]="'names.unuse' | translate"
+    [visible]="canDisplayTable('buffers_unuse')"
+    [visibleIndex]="getDisplayTableColumnIndex('buffers_unuse')"
+    [width]="getDisplayTableColumnWidth('buffers_unuse')"
+  ></dxi-column>
+  <dxi-column
+    dataType="string"
+    dataField="carrierId"
+    [caption]="'names.carrierId' | translate"
+    [visible]="canDisplayTable('buffers_carrierId')"
+    [visibleIndex]="getDisplayTableColumnIndex('buffers_carrierId')"
+    [width]="getDisplayTableColumnWidth('buffers_carrierId')"></dxi-column>
+  <dxi-column dataType="string"
+              dataField="slideOffset"
+              [caption]="'names.slideOffset' | translate"
+              [visible]="canDisplayTable('buffers_slideOffset')"
+              [visibleIndex]="getDisplayTableColumnIndex('buffers_slideOffset')"
+              [width]="getDisplayTableColumnWidth('buffers_slideOffset')"></dxi-column>
+  <dxi-column [allowFiltering]="true"
+              dataType="string"
+              dataField="user"
+              [allowSorting]="true"
+              [caption]="'names.user' | translate"
+              [visible]="canDisplayTable('buffers_user')"
+              [visibleIndex]="getDisplayTableColumnIndex('buffers_user')"
+              [width]="getDisplayTableColumnWidth('buffers_user')"
+  ></dxi-column>
+  <dxi-column
+    [allowFiltering]="true"
+    dataType="string"
+    dataField="note"
+    [allowSorting]="true"
+    [caption]="'names.note' | translate"
+    [visible]="canDisplayTable('buffers_note')"
+    [visibleIndex]="getDisplayTableColumnIndex('buffers_note')"
+    [width]="getDisplayTableColumnWidth('buffers_note')"
+  ></dxi-column>
+  <div *dxTemplate="let data of 'directionTemplate'">
+    <div [ngSwitch]="data.displayValue">
+      <div class="value" *ngSwitchCase="'L'">{{ 'Left' }}</div>
+      <div class="value" *ngSwitchCase="'R'">{{ 'Right' }}</div>
+      <div class="value" *ngSwitchCase="'U'">{{ 'Under' }}</div>
+      <div class="value" *ngSwitchDefault>{{ data.displayValue }}</div>
+    </div>
+  </div>
 </dx-data-grid>

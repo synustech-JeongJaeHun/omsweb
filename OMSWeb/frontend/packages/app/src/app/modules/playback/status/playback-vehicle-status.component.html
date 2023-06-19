@@ -29,128 +29,353 @@
 	></dxo-search-panel>
 	<dxo-load-panel [enabled]="false"></dxo-load-panel>
 
-	<dxi-column
-		[allowFiltering]="false"
-		[width]="50"
-		dataType="string"
-		dataField="id"
-		sortOrder="desc"
-		[caption]="'names.id' | translate"
-	></dxi-column>
-	<dxi-column
-		[width]="85"
-		dataType="string"
-		dataField="logicalId"
-		[caption]="'names.logicalId' | translate"
-	>
-	</dxi-column>
   <dxi-column
-    [width]="85"
+    [allowFiltering]="true"
+    dataType="string"
+    dataField="id"
+    sortOrder="asc"
+    [caption]="'names.id' | translate"
+    [visible]="canDisplayTable('vehicles_id')"
+    [visibleIndex]="getDisplayTableColumnIndex('vehicles_id')"
+    [width]="getDisplayTableColumnWidth('vehicles_id')"
+  ></dxi-column>
+  <dxi-column
+    dataType="string"
+    dataField="logicalId"
+    [caption]="'names.logicalId' | translate"
+    [visible]="canDisplayTable('vehicles_logicalId')"
+    [visibleIndex]="getDisplayTableColumnIndex('vehicles_logicalId')"
+    [width]="getDisplayTableColumnWidth('vehicles_logicalId')"
+  ></dxi-column>
+  <dxi-column
     dataType="string"
     dataField="physicalId"
-    cellTemplate="aliasTemplate"
     [caption]="'names.alias' | translate"
-  >
-  </dxi-column>
-	<dxi-column
-		[width]="40"
-		dataType="string"
-		dataField="mode"
-		[caption]="'names.mode' | translate"
-	></dxi-column>
-	<dxi-column
-		[allowFiltering]="false"
-		[width]="40"
-		dataType="boolean"
-		dataField="canBePushed"
-		[caption]="'names.canBePushed' | translate"
-	></dxi-column>
-	<dxi-column
-		[allowFiltering]="false"
-		[width]="90"
-		dataType="boolean"
-		[calculateCellValue]="calculateHostOrder"
-		[caption]="'names.hostCommand' | translate"
-	></dxi-column>
-	<dxi-column
-		[allowFiltering]="false"
-		[width]="80"
-		dataType="string"
-		dataField="orderOrigin"
-		[caption]="'names.orderOrigin' | translate"
-	></dxi-column>
-	<dxi-column
-		[width]="60"
-		dataType="string"
-		dataField="lastPoint"
-		[caption]="'names.curPoint' | translate"
-	>
-	</dxi-column>
-	<dxi-column
-		[width]="60"
-		dataType="string"
-		dataField="commandPoint"
-		[allowSorting]="false"
-		[caption]="'names.commandPoint' | translate"
-	></dxi-column>
-	<dxi-column
-		[width]="50"
-		dataType="string"
-		dataField="orderId"
-		[allowSorting]="false"
-		[caption]="'names.orderId' | translate"
-	></dxi-column>
-	<dxi-column
-		[width]="50"
-		dataType="string"
-		dataField="locationPickup"
-		[caption]="'names.locationPickup' | translate"
-	>
-	</dxi-column>
-	<dxi-column
-		[width]="50"
-		dataType="string"
-		dataField="locationDropoff"
-		[caption]="'names.locationDropoff' | translate"
-	></dxi-column>
-	<dxi-column
-		[width]="80"
-		dataType="string"
-		dataField="movingState"
-		[allowSorting]="false"
-		[caption]="'names.movingState' | translate"
-	></dxi-column>
-	<dxi-column
-		[width]="80"
-		dataType="string"
-		dataField="cargoState"
-		[allowSorting]="false"
-		[caption]="'names.cargoState' | translate"
-	></dxi-column>
-	<dxi-column
-		[allowFiltering]="false"
-		[width]="120"
-		dataType="number"
-		dataField="distanceTotal"
-		[allowSorting]="false"
-		[caption]="'names.distanceTotal' | translate"
-	></dxi-column>
-	<dxi-column
-		[width]="80"
-		[allowFiltering]="true"
-		dataType="string"
-		dataField="user"
-		[allowSorting]="true"
-		[caption]="'names.user' | translate"
-	></dxi-column>
-	<dxi-column
-		[width]="150"
-		[allowFiltering]="true"
-		dataType="string"
-		dataField="note"
-		[allowSorting]="true"
-		[caption]="'names.note' | translate"
-	></dxi-column>
+    cellTemplate="aliasTemplate"
+    [visible]="canDisplayTable('vehicles_alias')"
+    [visibleIndex]="getDisplayTableColumnIndex('vehicles_alias')"
+    [width]="getDisplayTableColumnWidth('vehicles_alias')"
+  ></dxi-column>
+  <dxi-column
+    [allowFiltering]="false"
+    dataType="boolean"
+    dataField="isConnected"
+    [caption]="'names.connected' | translate"
+    [visible]="canDisplayTable('vehicles_connection')"
+    [visibleIndex]="getDisplayTableColumnIndex('vehicles_connection')"
+    [width]="getDisplayTableColumnWidth('vehicles_connection')"
+  ></dxi-column>
+  <dxi-column
+    [allowFiltering]="false"
+    dataType="boolean"
+    dataField="railIn"
+    [caption]="'names.railIn' | translate"
+    [visible]="canDisplayTable('vehicles_railIn')"
+    [visibleIndex]="getDisplayTableColumnIndex('vehicles_railIn')"
+    [width]="getDisplayTableColumnWidth('vehicles_railIn')"
+  ></dxi-column>
+  <dxi-column
+    dataType="string"
+    dataField="mode"
+    cellTemplate="modeTemplate"
+    [caption]="'names.mode' | translate"
+    [visible]="canDisplayTable('vehicles_mode')"
+    [visibleIndex]="getDisplayTableColumnIndex('vehicles_mode')"
+    [width]="getDisplayTableColumnWidth('vehicles_mode')"
+  ></dxi-column>
+  <dxi-column
+    [allowFiltering]="false"
+    dataType="boolean"
+    dataField="isMaint"
+    [caption]="'names.maintenance' | translate"
+    [visible]="canDisplayTable('vehicles_isMaint')"
+    [visibleIndex]="getDisplayTableColumnIndex('vehicles_isMaint')"
+    [width]="getDisplayTableColumnWidth('vehicles_isMaint')"
+  ></dxi-column>
+  <dxi-column
+    [allowFiltering]="false"
+    dataType="boolean"
+    dataField="canBePushed"
+    [caption]="'names.canBePushed' | translate"
+    [visible]="canDisplayTable('vehicles_canBePushed')"
+    [visibleIndex]="getDisplayTableColumnIndex('vehicles_canBePushed')"
+    [width]="getDisplayTableColumnWidth('vehicles_canBePushed')"
+  ></dxi-column>
+  <dxi-column
+    [allowFiltering]="false"
+    dataType="boolean"
+    dataField="hostOrder"
+    [caption]="'names.hostCommand' | translate"
+    [visible]="canDisplayTable('vehicles_hostOrder')"
+    [visibleIndex]="getDisplayTableColumnIndex('vehicles_hostOrder')"
+    [width]="getDisplayTableColumnWidth('vehicles_hostOrder')"
+  ></dxi-column>
+  <dxi-column
+    [allowFiltering]="false"
+    dataType="string"
+    dataField="orderOrigin"
+    [caption]="'names.orderOrigin' | translate"
+    [visible]="canDisplayTable('vehicles_orderOrigin')"
+    [visibleIndex]="getDisplayTableColumnIndex('vehicles_orderOrigin')"
+    [width]="getDisplayTableColumnWidth('vehicles_orderOrigin')"
+  ></dxi-column>
+  <dxi-column
+    dataType="string"
+    dataField="lastPoint"
+    [caption]="'names.curPoint' | translate"
+    [visible]="canDisplayTable('vehicles_curPoint')"
+    [visibleIndex]="getDisplayTableColumnIndex('vehicles_curPoint')"
+    [width]="getDisplayTableColumnWidth('vehicles_curPoint')"
+  ></dxi-column>
+  <dxi-column
+    dataType="string"
+    dataField="commandPoint"
+    [allowSorting]="false"
+    [caption]="'names.commandPoint' | translate"
+    [visible]="canDisplayTable('vehicles_commandPoint')"
+    [visibleIndex]="getDisplayTableColumnIndex('vehicles_commandPoint')"
+    [width]="getDisplayTableColumnWidth('vehicles_commandPoint')"
+  ></dxi-column>
+  <dxi-column
+    dataType="string"
+    dataField="destPoint"
+    [allowSorting]="false"
+    [caption]="'names.destPoint' | translate"
+    [visible]="canDisplayTable('vehicles_destPoint')"
+    [visibleIndex]="getDisplayTableColumnIndex('vehicles_destPoint')"
+    [width]="getDisplayTableColumnWidth('vehicles_destPoint')"
+  ></dxi-column>
+  <dxi-column
+    dataType="string"
+    dataField="orderId"
+    [allowSorting]="false"
+    [caption]="'names.orderId' | translate"
+    [visible]="canDisplayTable('vehicles_orderId')"
+    [visibleIndex]="getDisplayTableColumnIndex('vehicles_orderId')"
+    [width]="getDisplayTableColumnWidth('vehicles_orderId')"
+  ></dxi-column>
+  <dxi-column
+    dataType="string"
+    dataField="locationPickup"
+    [caption]="'names.locationPickup' | translate"
+    [visible]="canDisplayTable('vehicles_locationPickup')"
+    [visibleIndex]="getDisplayTableColumnIndex('vehicles_locationPickup')"
+    [width]="getDisplayTableColumnWidth('vehicles_locationPickup')"
+  ></dxi-column>
+  <dxi-column
+    dataType="string"
+    dataField="locationDropoff"
+    [caption]="'names.locationDropoff' | translate"
+    [visible]="canDisplayTable('vehicles_locationDropoff')"
+    [visibleIndex]="getDisplayTableColumnIndex('vehicles_locationDropoff')"
+    [width]="getDisplayTableColumnWidth('vehicles_locationDropoff')"
+  ></dxi-column>
+  <!-- Total Runtime 추가 -->
+  <dxi-column
+    [allowFiltering]="true"
+    dataType="string"
+    dataField="runtimeTotal"
+    [allowSorting]="true"
+    [caption]="'names.runtimeTotal' | translate"
+    cellTemplate="runtimeTotalTemplate"
+    [visible]="canDisplayTable('vehicles_runtimeTotal')"
+    [visibleIndex]="getDisplayTableColumnIndex('vehicles_runtimeTotal')"
+    [width]="getDisplayTableColumnWidth('vehicles_runtimeTotal')"
+  ></dxi-column>
+  <!-- Total Runtime 추가 -->
+  <dxi-column
+    dataType="string"
+    dataField="movingState"
+    [allowSorting]="false"
+    cellTemplate="movingStateTemplate"
+    [caption]="'names.movingState' | translate"
+    [visible]="canDisplayTable('vehicles_movingState')"
+    [visibleIndex]="getDisplayTableColumnIndex('vehicles_movingState')"
+    [width]="getDisplayTableColumnWidth('vehicles_movingState')"
+  ></dxi-column>
+  <dxi-column
+    dataType="string"
+    dataField="cargoState"
+    [allowSorting]="false"
+    cellTemplate="cargoStateTemplate"
+    [caption]="'names.cargoState' | translate"
+    [visible]="canDisplayTable('vehicles_cargoState')"
+    [visibleIndex]="getDisplayTableColumnIndex('vehicles_cargoState')"
+    [width]="getDisplayTableColumnWidth('vehicles_cargoState')"
+  ></dxi-column>
+  <dxi-column
+    dataType="string"
+    dataField="carrierLabel"
+    [allowSorting]="false"
+    [caption]="'names.carrierLabel' | translate"
+    [visible]="canDisplayTable('vehicles_carrierLabel')"
+    [visibleIndex]="getDisplayTableColumnIndex('vehicles_carrierLabel')"
+    [width]="getDisplayTableColumnWidth('vehicles_carrierLabel')"
+  ></dxi-column>
+  <!-- Error 추가 -->
+  <dxi-column
+    [allowFiltering]="true"
+    dataType="string"
+    dataField="errorList"
+    [allowSorting]="true"
+    [caption]="'names.errorList' | translate"
+    [visible]="canDisplayTable('vehicles_error')"
+    [visibleIndex]="getDisplayTableColumnIndex('vehicles_error')"
+    [width]="getDisplayTableColumnWidth('vehicles_error')"
+  ></dxi-column>
+  <!-- Error  추가 -->
+  <!-- Sensor Stop 추가 -->
+  <dxi-column
+    [allowFiltering]="false"
+    dataType="boolean"
+    dataField="isSensorStopped"
+    [allowSorting]="false"
+    [caption]="'names.sensorStopped' | translate"
+    [visible]="canDisplayTable('vehicles_sensorStopped')"
+    [visibleIndex]="getDisplayTableColumnIndex('vehicles_sensorStopped')"
+    [width]="getDisplayTableColumnWidth('vehicles_sensorStopped')"
+  ></dxi-column>
+  <!-- Sensor Stop  추가 -->
+  <!-- Blocked 추가 -->
+  <dxi-column
+    [allowFiltering]="false"
+    dataType="boolean"
+    dataField="isBlocked"
+    [allowSorting]="false"
+    [caption]="'names.blocked' | translate"
+    [visible]="canDisplayTable('vehicles_blocked')"
+    [visibleIndex]="getDisplayTableColumnIndex('vehicles_blocked')"
+    [width]="getDisplayTableColumnWidth('vehicles_blocked')"
+  ></dxi-column>
+  <!-- Blocked 추가 -->
+  <dxi-column
+    [allowFiltering]="true"
+    dataType="number"
+    dataField="distanceTotal"
+    [allowSorting]="true"
+    [caption]="'names.distanceTotal' | translate"
+    cellTemplate="distanceTotalTemplate"
+    [visible]="canDisplayTable('vehicles_distanceTotal')"
+    [visibleIndex]="getDisplayTableColumnIndex('vehicles_distanceTotal')"
+    [width]="getDisplayTableColumnWidth('vehicles_distanceTotal')"
+  ></dxi-column>
+  <!-- MapDB 추가 -->
+  <dxi-column
+    [allowFiltering]="true"
+    dataType="string"
+    dataField="mapDb"
+    [allowSorting]="true"
+    [caption]="'names.mapDb' | translate"
+    [visible]="canDisplayTable('vehicles_mapDb')"
+    [visibleIndex]="getDisplayTableColumnIndex('vehicles_mapDb')"
+    [width]="getDisplayTableColumnWidth('vehicles_mapDb')"
+  ></dxi-column>
+  <!-- MapDB 추가 -->
+  <!-- MapVersion 추가 -->
+  <dxi-column
+    [allowFiltering]="true"
+    dataType="string"
+    dataField="mapVersion"
+    [allowSorting]="true"
+    [caption]="'names.mapVersion' | translate"
+    [visible]="canDisplayTable('vehicles_mapVersion')"
+    [visibleIndex]="getDisplayTableColumnIndex('vehicles_mapVersion')"
+    [width]="getDisplayTableColumnWidth('vehicles_mapVersion')"
+  ></dxi-column>
+  <dxi-column
+    [allowFiltering]="true"
+    dataType="string"
+    dataField="user"
+    [allowSorting]="true"
+    [caption]="'names.user' | translate"
+    [visible]="canDisplayTable('vehicles_user')"
+    [visibleIndex]="getDisplayTableColumnIndex('vehicles_user')"
+    [width]="getDisplayTableColumnWidth('vehicles_user')"
+  ></dxi-column>
+  <dxi-column
+    [allowFiltering]="true"
+    dataType="string"
+    dataField="note"
+    [allowSorting]="true"
+    [caption]="'names.note' | translate"
+    [visible]="canDisplayTable('vehicles_note')"
+    [visibleIndex]="getDisplayTableColumnIndex('vehicles_note')"
+    [width]="getDisplayTableColumnWidth('vehicles_note')"
+  ></dxi-column>
+  <dxi-column
+    [allowFiltering]="true"
+    dataType="number"
+    dataField="pauseState"
+    cellTemplate="pauseStateTemplate"
+    [alignment]="'left'"
+    [allowSorting]="true"
+    [caption]="'names.pauseState' | translate"
+    [visible]="canDisplayTable('vehicles_pauseState')"
+    [visibleIndex]="getDisplayTableColumnIndex('vehicles_pauseState')"
+    [width]="getDisplayTableColumnWidth('vehicles_pauseState')"
+  ></dxi-column>
+  <dxi-column
+    [allowFiltering]="true"
+    dataType="number"
+    dataField="distance"
+    cellTemplate="distanceTotalTemplate"
+    [alignment]="'left'"
+    [allowSorting]="true"
+    [caption]="'names.distance' | translate"
+    [visible]="canDisplayTable('vehicles_distance')"
+    [visibleIndex]="getDisplayTableColumnIndex('vehicles_distance')"
+    [width]="getDisplayTableColumnWidth('vehicles_distance')"
+  ></dxi-column>
+  <dxi-column
+    [allowFiltering]="true"
+    dataType="number"
+    dataField="runtime"
+    cellTemplate="runtimeTotalTemplate"
+    [alignment]="'left'"
+    [allowSorting]="true"
+    [caption]="'names.runtime' | translate"
+    [visible]="canDisplayTable('vehicles_runtime')"
+    [visibleIndex]="getDisplayTableColumnIndex('vehicles_runtime')"
+    [width]="getDisplayTableColumnWidth('vehicles_runtime')"
+  ></dxi-column>
+  <!-- MapVersion 추가 -->
+  <div *dxTemplate="let data of 'modeTemplate'">
+    <div [ngSwitch]="data.displayValue">
+      <div class="value" *ngSwitchCase="'A'">{{ 'Auto' }}</div>
+      <div class="value" *ngSwitchCase="'M'">{{ 'Manual' }}</div>
+      <div class="value" *ngSwitchDefault>{{ data.displayValue }}</div>
+    </div>
+  </div>
+  <div *dxTemplate="let data of 'movingStateTemplate'">
+    <div [ngSwitch]="data.displayValue">
+      <div class="value" *ngSwitchCase="'S'">{{ 'Stop' }}</div>
+      <div class="value" *ngSwitchCase="'M'">{{ 'Moving' }}</div>
+      <div class="value" *ngSwitchDefault>{{ data.displayValue }}</div>
+    </div>
+  </div>
+  <div *dxTemplate="let data of 'cargoStateTemplate'">
+    <div [ngSwitch]="data.displayValue">
+      <div class="value" *ngSwitchCase="'E'">{{ 'Empty' }}</div>
+      <div class="value" *ngSwitchCase="'F'">{{ 'Full' }}</div>
+      <div class="value" *ngSwitchCase="'L'">{{ 'Loading' }}</div>
+      <div class="value" *ngSwitchCase="'U'">{{ 'Unloading' }}</div>
+      <div class="value" *ngSwitchDefault>{{ data.displayValue }}</div>
+    </div>
+  </div>
+  <div *dxTemplate="let data of 'distanceTotalTemplate'">
+    {{ transform_distance(data.displayValue) }}
+  </div>
+  <div *dxTemplate="let data of 'runtimeTotalTemplate'">
+    {{ transform_runtime(data.displayValue) }}
+  </div>
+  <div *dxTemplate="let data of 'pauseStateTemplate'">
+    <div [ngSwitch]="data.displayValue">
+      <div class="value" *ngSwitchCase="1">{{ 'names.pausing' | translate}}</div>
+      <div class="value" *ngSwitchCase="2">{{ 'names.paused'  | translate}}</div>
+      <div class="value" *ngSwitchCase="0">{{ 'names.auto' | translate }}</div>
+      <div class="value" *ngSwitchDefault>{{ 'names.auto'  | translate}}</div>
+    </div>
+  </div>
   <div *dxTemplate="let data of 'aliasTemplate'">
     {{ vhlAlias+data.displayValue }}
   </div>

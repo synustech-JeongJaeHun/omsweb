@@ -29,6 +29,9 @@ import {IDataChangeEvent} from "../../../models/notification.model";
     button {
       margin-right: 5px;
     }
+    dx-data-grid{
+      max-width: 100vw !important;
+    }
   `]
 })
 export class FcuControlTableComponent implements OnInit, OnDestroy {

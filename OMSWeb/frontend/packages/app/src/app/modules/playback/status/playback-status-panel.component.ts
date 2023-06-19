@@ -1,6 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { SettingsService } from '@oms/root/services/settings.service'
 import { MapStatesService } from '../../track-map/map-states.service'
+import {ClientPreferences} from "../../../models/settings.model";
+import {AuthService} from "../../../services/auth.service";
+import {auditTime, takeUntil} from "rxjs/operators";
+import {AuditTimeDuration} from "../../monitor/tables/constants";
+import {Subject} from "rxjs";
 @Component({
 	selector: 'oms-playback-status-panel',
 	templateUrl: './playback-status-panel.component.html',
@@ -12,33 +17,81 @@ export class PlaybackStatusPanelComponent implements OnInit, OnDestroy {
 
 	bufferEnabled: boolean = true
 
-	get tableHeight(): string {
-		return this.tableHeightNum.toString()
+	get tableHeight(): number {
+		return this.tableHeightNum
 	}
 
-	tabNames = [
-		{ id: 1, title: 'Orders' },
-		{ id: 2, title: 'Vehicles' },
-	]
 	currentTab: number = 0
 
+  currentTabName: string = 'orders'
+
+  tableKeys:string[] = []
+  preference: ClientPreferences
+
+  private destroy$: Subject<void> = new Subject<void>()
+
+  get canControl(): boolean {
+    return this.auth.isAuthenticated
+  }
 	constructor(
+    private auth: AuthService,
 		private mapStateSvc: MapStatesService,
 		private settingSvc: SettingsService,
 	) {
+    this.preference = this.settingSvc.globalPreferences
 		settingSvc.serviceConfig.subscribe(
 			(config) => (this.bufferEnabled = config.bufferEnabled),
 		)
+
+    this.currentTab = this.settingSvc.globalPreferences.uiStates.playbackTab
+    this.initLoad()
+    settingSvc.tableChanged$
+      .pipe(auditTime(AuditTimeDuration), takeUntil(this.destroy$))
+      .subscribe(()=>{
+        this.initLoad()
+      })
 	}
+
+  initLoad(){
+    this.preference = this.settingSvc.globalPreferences
+    this.settingSvc.serviceConfig.subscribe(
+      (config) => {
+        this.bufferEnabled = config.bufferEnabled
+        if(!this.bufferEnabled){
+          this.settingSvc.globalPreferences.controlTables.buffers =false
+        }
+      },
+    )
+    const keys = Object
+      .keys(this.settingSvc.globalPreferences.controlTables)
+      .filter(key=> {
+        if(this.canControl){
+          if(!key.includes('_')) return key
+        }
+        else{
+          if(key.endsWith('orders') || key.endsWith('vehicles')) return key
+        }
+      })
+    this.tableKeys = keys.filter(k=>{
+      if(this.settingSvc.globalPreferences.controlTables[k]) return k
+    })
+
+    this.resizeHandler = this.onMouseMove.bind(this)
+    this.resizeTableHeight(this.tableHeightNum)
+
+
+    this.currentTab = this.tableKeys.findIndex(t=>t===this.currentTabName)
+  }
 
 	ngOnInit(): void {
 		this.resizeHandler = this.onMouseMove.bind(this)
-		this.currentTab = this.settingSvc.globalPreferences.uiStates.playbackTab
 
 		this.resizeTableHeight(this.tableHeightNum)
 	}
 	ngOnDestroy(): void {
 		this.resizeTableHeight(0)
+    this.destroy$.next()
+    this.destroy$.complete()
 	}
 	resizeTableHeight(height: number) {
 		this.tableHeightNum = height
@@ -66,6 +119,7 @@ export class PlaybackStatusPanelComponent implements OnInit, OnDestroy {
 		const pref = this.settingSvc.globalPreferences
 		pref.uiStates.playbackTab = selectedIndex
 		this.settingSvc.globalPreferences.save()
+    this.currentTabName=this.tableKeys[selectedIndex]
 	}
 
 	resizeViewerStart() {
@@ -98,4 +152,13 @@ export class PlaybackStatusPanelComponent implements OnInit, OnDestroy {
 			this.resizeTableHeight(0)
 		}
 	}
+
+  canDisplayTable(type: string): boolean {
+    return this.preference.controlTables[type]
+  }
+
+  onTabIndex(type: string):boolean{
+    const index = this.tableKeys.findIndex(key=>key.toLowerCase()===type);
+    return this.currentTab===index;
+  }
 }
