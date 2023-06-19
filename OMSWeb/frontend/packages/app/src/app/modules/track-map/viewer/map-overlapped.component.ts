@@ -55,19 +55,6 @@ export class MapOverlappedComponent {
 
     const overlaps = this.overlapList;
 
-    // put_selected_on_top
-    for (let i = overlaps.length - 1; i > -1; i--) {
-      let obj = overlaps[i];
-      if (
-        obj.id === this.data.id &&
-        obj.constructor === this.data.constructor
-      ) {
-        obj = overlaps.splice(i, 1)[0];
-        overlaps.unshift(obj);
-        break;
-      }
-    }
-
     // init_overlap_module_panel
     if (overlaps.length > 0) {
       const length = main_css.station.width * 2;
@@ -103,7 +90,7 @@ export class MapOverlappedComponent {
             false,
             { mapRotation: 0 },
             this.tmSettingService.trackSetting,
-            this.vhlAlias
+            isAlias? this.vhlAlias : null
           );
         } else {
           // update_dom(objectType, x, main_css[objectType.toLowerCase()], 3, 'OVERLAP_MODULE',false)
