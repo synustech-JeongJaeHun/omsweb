@@ -31,12 +31,11 @@
 
           <div *dxTemplate="let data of 'levelTemplate'">
             <ng-container [ngSwitch]="data.displayValue">
-              <div class="level0" *ngSwitchCase="0">Low</div>
-              <div class="level1" *ngSwitchCase="1">Warning</div>
-              <div class="level2" *ngSwitchCase="2">Critical</div>
+              <div class="level0" *ngSwitchCase="0">Low ({{ data.text }})</div>
+              <div class="level1" *ngSwitchCase="1">Warning ({{ data.text }})</div>
+              <div class="level2" *ngSwitchCase="2">Critical ({{ data.text }})</div>
               <div *ngSwitchDefault></div>
             </ng-container>
-            {{ data.text }}
           </div>
         </dx-data-grid>
       </div>
