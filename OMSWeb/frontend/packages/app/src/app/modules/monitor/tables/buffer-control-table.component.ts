@@ -29,6 +29,7 @@ import { AuditTimeDuration } from './constants'
 })
 export class BufferControlTableComponent implements OnInit, OnDestroy {
 	@Input() tableHeight: number
+  @Input() isOpen: boolean
 	@ViewChild(DxDataGridComponent, { static: false })
 	dataGrid: DxDataGridComponent
 
@@ -110,7 +111,7 @@ export class BufferControlTableComponent implements OnInit, OnDestroy {
 		this.hubSvc.bufferChanged$
 			.pipe(auditTime(AuditTimeDuration), takeUntil(this.destroy$))
 			.subscribe((e: IDataChangeEvent) => {
-				e && this.onTableChanged(e)
+        this.isOpen &&e && this.onTableChanged(e)
 			})
 	}
 

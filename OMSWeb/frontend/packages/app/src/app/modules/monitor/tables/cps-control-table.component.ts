@@ -35,6 +35,7 @@ import {PeriodicElement, rangeCheck} from "../../../models/cps-status.model";
 })
 export class CpsControlTableComponent implements OnInit, OnDestroy {
 	@Input() tableHeight: number
+  @Input() isOpen: boolean
 	@ViewChild(DxDataGridComponent, { static: false })
 	dataGrid: DxDataGridComponent
 
@@ -219,7 +220,7 @@ export class CpsControlTableComponent implements OnInit, OnDestroy {
 		this.hubSvc.clusterStatusTableChanged$
 			.pipe(auditTime(AuditTimeDuration), takeUntil(this.destroy$))
 			.subscribe((e: IDataChangeEvent) => {
-				e && this.onTableChanged(e)
+        this.isOpen &&e && this.onTableChanged(e)
 			})
 	}
 

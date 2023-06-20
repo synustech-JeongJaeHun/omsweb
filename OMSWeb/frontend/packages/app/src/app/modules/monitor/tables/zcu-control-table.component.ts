@@ -30,6 +30,7 @@ import { AuditTimeDuration } from './constants'
 })
 export class ZcuControlTableComponent implements OnInit, OnDestroy {
 	@Input() tableHeight: number
+  @Input() isOpen: boolean
 	@ViewChild(DxDataGridComponent, { static: false })
 	dataGrid: DxDataGridComponent
 
@@ -125,7 +126,7 @@ export class ZcuControlTableComponent implements OnInit, OnDestroy {
 		this.hubSvc.zcuStatusTableChanged$
 			.pipe(auditTime(AuditTimeDuration), takeUntil(this.destroy$))
 			.subscribe((e: IDataChangeEvent) => {
-				e && this.onTableChanged(e)
+        this.isOpen &&e &&  this.onTableChanged(e)
 			})
 	}
 

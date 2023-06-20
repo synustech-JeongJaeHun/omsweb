@@ -33,6 +33,7 @@ import {MobileService} from "@oms/services/mobile.service";
 })
 export class VehicleControlTableComponent implements OnInit, OnDestroy {
 	@Input() tableHeight: number
+  @Input() isOpen: boolean
 	@ViewChild(DxDataGridComponent, { static: false })
 	dataGrid: DxDataGridComponent
 
@@ -140,7 +141,7 @@ export class VehicleControlTableComponent implements OnInit, OnDestroy {
 		this.hubSvc.vehicleTableChanged$
 			.pipe(auditTime(AuditTimeDuration), takeUntil(this.destroy$))
 			.subscribe((e: IDataChangeEvent) => {
-				e && this.onTableChanged(e)
+        this.isOpen &&e && this.onTableChanged(e)
 			})
 	}
 

@@ -33,6 +33,7 @@ import {UnusedListDialogComponent} from "@oms/shared/dialogs/unused-list-dialog.
 })
 export class StationControlTableComponent implements OnInit, OnDestroy {
 	@Input() tableHeight: number
+  @Input() isOpen: boolean
 	@ViewChild(DxDataGridComponent, { static: false })
 	dataGrid: DxDataGridComponent
 
@@ -131,7 +132,7 @@ export class StationControlTableComponent implements OnInit, OnDestroy {
 		this.hubSvc.stationChanged$
 			.pipe(auditTime(AuditTimeDuration), takeUntil(this.destroy$))
 			.subscribe((e: IDataChangeEvent) => {
-				e && this.onTableChanged(e)
+        this.isOpen &&e && this.onTableChanged(e)
 			})
 	}
 
