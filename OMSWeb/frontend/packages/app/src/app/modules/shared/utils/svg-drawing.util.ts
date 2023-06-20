@@ -1110,6 +1110,7 @@ function getVehicleComplicatedMode(vehicle: Dto.IVehicle) {
 		isAnyLocationExist === false &&
 		destPointId &&
 		vehicle.curPoint === destPointId
+    && vehicle.movingState.toUpperCase()==='S'
 	)
 		return 'IDLE'
 
