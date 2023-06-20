@@ -647,7 +647,8 @@ const defaultHistoryTable = {
 	alarms_time_resolved: true,
 	alarms_age: true,
 	alarms_current: true,
-
+  ack_time: true,
+  ack_by: true,
 	alarms_order: [
 		{
 			name: 'alarms_vehicle_logical_id',
@@ -667,7 +668,9 @@ const defaultHistoryTable = {
 		},
         { name: 'alarms_age', i18nLabel: 'names.elapsed', width: 120 },
 		{ name: 'alarms_current', i18nLabel: 'names.current', width: 120 },
-    { name: 'physical_id', i18nLabel: 'names.barcode', width: 'auto' },
+    { name: 'physical_id', i18nLabel: 'names.barcode', width: 120 },
+    { name: 'ack_time', i18nLabel: 'names.ackTime', width: 120 },
+    { name: 'ack_by', i18nLabel: 'names.ackBy', width: 'auto' },
 	],
 
 	// nack_column

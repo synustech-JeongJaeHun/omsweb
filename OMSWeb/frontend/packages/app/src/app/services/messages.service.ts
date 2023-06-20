@@ -118,9 +118,11 @@ export class MessagesService {
 		command: IAlarmClearCommandMessage,
 		targets: number[] = [],
 		error_code: number,
+    ackBy: string
 	): Observable<void> {
 		command.vehicleIds = targets
 		command.alarmCode = error_code
+    command.alarmAckBy = ackBy
 		return this.sendCommand<IAlarmClearCommandMessage>(command)
 	}
 

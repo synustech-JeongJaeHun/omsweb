@@ -59,6 +59,8 @@ FROM (
             VA.vehicle_id, 
             VR.logical_id AS vehicle_logical_id, 
             VA.time_resolved,
+            VA.ack_time,
+            VA.ack_by,
             --extract('epoch' from now()-VA.time) AS age, 
             extract('epoch' from date_trunc('second', now()) - date_trunc('second', VA.time)) * interval '1 sec' AS age,
             VE.level, 

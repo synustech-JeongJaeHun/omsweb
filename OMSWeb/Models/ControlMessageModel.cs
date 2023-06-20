@@ -10,6 +10,8 @@ namespace OMSWeb.Models
         public string VehicleId { get; set; }
         public string Direction { get; set; }
         public int AlarmCode { get; set; }
+        
+        public string AlarmAckBy { get; set; }
         public int WarningId { get; set; }
         public int[] WarningIds { get; set; }
         public string WarningAckBy { get; set; }

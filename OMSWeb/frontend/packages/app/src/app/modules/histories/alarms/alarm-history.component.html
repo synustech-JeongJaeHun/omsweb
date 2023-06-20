@@ -169,8 +169,22 @@
         dataField="physicalId"
         [caption]="'names.barcode' | translate"
       ></dxi-column>
-
-			transform
+      <dxi-column
+        [width]="getDisplayTableColumnWidth('ack_time')"
+        [visible]="canDisplayTable('ack_time')"
+        [visibleIndex]="getDisplayTableColumnIndex('ack_time')"
+        dataType="datetime"
+        dataField="ackTime"
+        [caption]="'names.ackTime' | translate"
+      ></dxi-column>
+      <dxi-column
+        [width]="getDisplayTableColumnWidth('ack_by')"
+        [visible]="canDisplayTable('ack_by')"
+        [visibleIndex]="getDisplayTableColumnIndex('ack_by')"
+        dataType="string"
+        dataField="ackBy"
+        [caption]="'names.ackBy' | translate"
+      ></dxi-column>
 			<div *dxTemplate="let data of 'ageTemplate'">
 				{{ transform(data.displayValue) }}
 			</div>

@@ -382,6 +382,8 @@ namespace OMSWeb.Services
                 if (string.Compare(s, "age", StringComparison.CurrentCultureIgnoreCase) == 0) return "age";
                 if (string.Compare(s, "current", StringComparison.CurrentCultureIgnoreCase) == 0) return "current";
                 if (string.Compare(s, "physicalId", StringComparison.CurrentCultureIgnoreCase) == 0) return "physical_id";
+                if (string.Compare(s, "ackTime", StringComparison.CurrentCultureIgnoreCase) == 0) return "ack_time";
+                if (string.Compare(s, "ackBy", StringComparison.CurrentCultureIgnoreCase) == 0) return "ack_by";
             }
             else if (string.Compare(tableName, "warning_history", StringComparison.CurrentCultureIgnoreCase) == 0)
             {

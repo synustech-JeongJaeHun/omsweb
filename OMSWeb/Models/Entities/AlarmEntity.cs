@@ -23,6 +23,8 @@ namespace OMSWeb.Models.Entities
         public bool Cleared { get; set; }
         public string Current { get; set; }
         public string PhysicalId { get; set; }
+        public DateTime? AckTime { get; set; }
+        public string AckBy { get; set; }
     }
 
     public class VehicleError
