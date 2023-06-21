@@ -4,6 +4,7 @@ import { HubService } from './hub.service'
 import { Dto } from '../models/dto/track.model'
 import { IDataChangeEvent } from '../models/notification.model'
 
+
 @Injectable({
 	providedIn: 'root',
 })
@@ -285,9 +286,41 @@ export class TrackStatusService {
 					objectType: 'vehicle',
 					type: v.type ?? 'STANDARD',
 				})) ?? []
+    // sort by
+    // 1)Disconnected 2) error 3) Manual 4) Maintenance 5) Idle
+    vehicles.sort((a, b)=>
+      this.compareDisconnect(a,b) ||
+      this.compareError(a,b) ||
+      this.compareManual(a,b) ||
+      this.compareMaint(a,b)
+    )
 
-		return [...points, ...stations, ...buffers, ...vehicles, ...mtls]
+		return [ ...vehicles, ...stations, ...buffers, ...points, ...mtls]
 	}
+
+  compareDisconnect(a:Dto.IVehicle, b:Dto.IVehicle ): number{
+    if(a.isConnected && !b.isConnected) return 1
+    else if(!a.isConnected && b.isConnected) return -1
+    return 0
+  }
+
+  compareError(a:Dto.IVehicle, b:Dto.IVehicle ): number{
+    if(a.errorList && !b.errorList) return -1
+    else if(!a.errorList && b.errorList) return 1
+    return 0
+  }
+
+  compareManual(a:Dto.IVehicle, b:Dto.IVehicle ): number{
+    if(a.mode.toUpperCase()==='M' && b.mode.toUpperCase()!=='M') return -1
+    else if(a.mode.toUpperCase()!=='M' && b.mode.toUpperCase()==='M') return 1
+    return 0
+  }
+
+  compareMaint(a:Dto.IVehicle, b:Dto.IVehicle ): number{
+    if(a.isMaint && !b.isMaint) return 1
+    else if(!a.isMaint && b.isMaint) return -1
+    return 0
+  }
 
 	getGroupsFromObject(type: string, id: number) {
 		const typeInLowerCase = type.toLowerCase()

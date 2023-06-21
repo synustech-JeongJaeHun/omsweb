@@ -85,6 +85,7 @@
 		>
 			<oms-order-control-table
         *ngIf="onTabIndex('orders')"
+        [isOpen]="onTabIndex('orders')"
 				[tableHeight]="tableHeight"
 				(focus)="focus.emit($event)"
 				(dropFocus)="dropFocus.emit($event)"
@@ -97,6 +98,7 @@
 		>
 			<oms-vehicle-control-table
         *ngIf="onTabIndex('vehicles')"
+        [isOpen]="onTabIndex('vehicles')"
 				[tableHeight]="tableHeight"
 			>
 			</oms-vehicle-control-table>
@@ -108,6 +110,7 @@
 		>
 			<oms-station-control-table
         *ngIf="onTabIndex('stations')"
+        [isOpen]="onTabIndex('stations')"
 				[tableHeight]="tableHeight"
 			>
 			</oms-station-control-table>
@@ -118,6 +121,7 @@
 		>
 			<oms-buffer-control-table
 				*ngIf="bufferEnabled && onTabIndex('buffers')"
+        [isOpen]="onTabIndex('buffers')"
 				[tableHeight]="tableHeight"
 			>
 			</oms-buffer-control-table>
@@ -130,7 +134,8 @@
 		>
 			<oms-zcu-control-table
         *ngIf="onTabIndex('zcus') || !isMobile"
-				[tableHeight]="tableHeight"
+        [isOpen]="onTabIndex('zcus')"
+        [tableHeight]="tableHeight"
 			>
 			</oms-zcu-control-table>
 		</mat-tab>
@@ -142,6 +147,7 @@
 		>
 			<oms-cps-control-table
         *ngIf="onTabIndex('cps')"
+        [isOpen]="onTabIndex('cps')"
 				[tableHeight]="tableHeight"
 			>
 			</oms-cps-control-table>
@@ -150,10 +156,11 @@
 
     <mat-tab
       [label]="'names.fcu' | translate"
-      *ngIf="canControl && canDisplayTable('fcus')"
+      *ngIf="canControl && canDisplayTable('fcus') && !isMobile"
     >
       <oms-fcu-control-table
         *ngIf="onTabIndex('fcus')"
+        [isOpen]="onTabIndex('fcus')"
         [tableHeight]="tableHeight"
       >
       </oms-fcu-control-table>

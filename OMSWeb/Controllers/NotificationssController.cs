@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DevExtreme.AspNet.Data;
+using DevExtreme.AspNet.Data.ResponseModel;
 using DevExtreme.AspNet.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,10 +18,12 @@ namespace OMSWeb.Controllers
     public class NotificationsController : ControllerBase
     {
         private readonly NotificationsService _notificationSvc;
+        private readonly HistoryService _historySvc;
 
-        public NotificationsController(NotificationsService notificationsService)
+        public NotificationsController(NotificationsService notificationsService, HistoryService historyService)
         {
             this._notificationSvc = notificationsService;
+            this._historySvc = historyService;
         }
 
         [HttpGet("alert-count")]
@@ -40,7 +43,16 @@ namespace OMSWeb.Controllers
         {
             try
             {
-                return DataSourceLoader.Load(_notificationSvc.GetAlerts(), loadOptions);
+                (int skip, int take, string condition, string sort) = _notificationSvc.GetLoadFilters(loadOptions, @"alerts");
+                int totalCount = _notificationSvc.QueryAlertsCount(condition);
+                loadOptions.Skip = 0;
+                //loadOptions.Filter = null;
+
+                LoadResult loadResult = DataSourceLoader.Load(_notificationSvc.QueryAlerts(skip, take, condition, sort), loadOptions);
+                loadResult.totalCount = totalCount;
+
+                return loadResult;
+                //return DataSourceLoader.Load(_notificationSvc.GetAlerts(), loadOptions);
             }
             catch (Exception e)
             { }

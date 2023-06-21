@@ -13,7 +13,6 @@
   <table id="process-list">
     <tr>
       <th>No.</th>
-      <th>{{ "names.vehicleId" | translate }}</th>
       <th>{{ "names.logicalId" | translate }}</th>
       <th>{{ "names.vcpSwVer" | translate }}</th>
       <th>{{ "names.motionFwVer" | translate }}</th>
@@ -23,7 +22,6 @@
     </tr>
     <tr *ngFor="let item of dataSource; let i = index">
       <td>{{ i+1 }}</td>
-      <td>{{ item.vehicleId }}</td>
       <td>{{ item.logicalId }}</td>
       <td>{{ item.vcpSwVer }}</td>
       <td>{{ item.motionFwVer }}</td>

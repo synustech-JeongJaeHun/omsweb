@@ -111,7 +111,6 @@
                   [width]="getDisplayTableColumnWidth('transfers_vehicle_alias')"
                   dataType="string"
                   dataField="vehicleAlias"
-                  cellTemplate="aliasTemplate"
                   [caption]="'names.vehicleAlias' | translate">
       </dxi-column>
 			<dxi-column [visible]="canDisplayTable('transfers_location_pickup')"
@@ -160,16 +159,14 @@
       <dxi-column [visible]="canDisplayTable('transfers_from_distance')"
                   [visibleIndex]="getDisplayTableColumnIndex('transfers_from_distance')"
                   [width]="getDisplayTableColumnWidth('transfers_from_distance')"
-                  dataType="number"
+                  dataType="string"
                   dataField="fromDistance"
-                  cellTemplate="distanceTemplate"
                   [caption]="'names.fromDistance' | translate"></dxi-column>
       <dxi-column [visible]="canDisplayTable('transfers_to_distance')"
                   [visibleIndex]="getDisplayTableColumnIndex('transfers_to_distance')"
                   [width]="getDisplayTableColumnWidth('transfers_to_distance')"
-                  dataType="number"
+                  dataType="string"
                   dataField="toDistance"
-                  cellTemplate="distanceTemplate"
                   [caption]="'names.toDistance' | translate"></dxi-column>
 			<dxi-column [visible]="canDisplayTable('transfers_carrier_label')"
 									[visibleIndex]="getDisplayTableColumnIndex('transfers_carrier_label')"
@@ -248,9 +245,6 @@
 			<div *dxTemplate="let data of 'distanceTemplate'">
 				{{ transform_distance(data.displayValue) }}
 			</div>
-      <div *dxTemplate="let data of 'aliasTemplate'">
-        {{ data?.displayValue? vhlAlias+data?.displayValue : '' }}
-      </div>
 		</dx-data-grid>
 	</div>
 </div>

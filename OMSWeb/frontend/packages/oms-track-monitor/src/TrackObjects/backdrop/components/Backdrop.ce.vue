@@ -114,6 +114,7 @@ function getRadius(): number{
   <svg
       :x="props.backdrop.x"
       :y="props.backdrop.y"
+      class="overflow-visible"
   >
     <g class="scale-and-reverse-rotate">
       <rect :width="props.backdrop.width"

@@ -45,6 +45,7 @@ export class OrderControlTableComponent implements OnInit, OnDestroy {
 	@Output() dropFocus = new EventEmitter<{ focusType?: string }>()
 
 	@Input() tableHeight: number
+  @Input() isOpen: boolean
 	@ViewChild(DxDataGridComponent, { static: false })
 	dataGrid: DxDataGridComponent
 
@@ -52,8 +53,6 @@ export class OrderControlTableComponent implements OnInit, OnDestroy {
 	// dataSource: any;
 	selectedRows: number[] = []
 	preference: ClientPreferences
-  vhlAlias: string
-
 	private color_normal: string = 'rgba(255, 255, 255, 1.0)'
 	private color_warning: string = 'rgba(255, 210, 0, 0.5)'
 
@@ -118,12 +117,6 @@ export class OrderControlTableComponent implements OnInit, OnDestroy {
 	) {
 		this.dataSource = this.statusSvc.orderStatusDataSource()
 		this.preference = this.settingSvc.globalPreferences
-
-    this.settingSvc.serviceConfig.subscribe(
-      (config) => {
-        this.vhlAlias = config?.vhlAlias || ''
-      },
-    )
 	}
 
 	canDisplayTable(type: string): boolean {
@@ -180,7 +173,7 @@ export class OrderControlTableComponent implements OnInit, OnDestroy {
 		this.hubSvc.orderTableChanged$
 			.pipe(auditTime(AuditTimeDuration), takeUntil(this.destroy$))
 			.subscribe((e: IDataChangeEvent) => {
-				e && this.onTableChanged(e)
+        this.isOpen &&e && this.onTableChanged(e)
 			})
 	}
 

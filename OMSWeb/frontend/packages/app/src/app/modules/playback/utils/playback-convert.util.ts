@@ -329,7 +329,7 @@ function convertSnapshotVehicleToCurrentVehicle(
 		runtimeTotal: vehicle.runtime_total,
 		user: vehicle.user,
 		note: vehicle.note,
-
+    destPoint: vehicle.dest_point,
 		command: vehicle.command,
 		commandPoint: getPortVehicleCommand(vehicle.command),
 		isConnected: isConnected(vehicle.connection),
@@ -404,6 +404,7 @@ function convertSnapshotBufferToCurrentBuffer(
 		nextPoint: buffer.next_point,
 		physicalId: buffer.physical_id,
 		unusedTime: buffer.unused_time,
+    slideOffset: buffer.slide_offset,
     cAlias: buffer.c_alias,
 	}
 }
@@ -424,6 +425,7 @@ function convertSnapshotStationToCurrentStation(
 		physicalId: station.physical_id,
 		unusedTime: station.unused_time, //(date)
 		carrierType: station.carrier_type,
+    slideOffset: station.slide_offset,
     cAlias: station.c_alias,
 	}
 }
@@ -468,7 +470,7 @@ function convertVehicleHistoryEventToCurrentVehicle(
 		runtimeTotal: event.runtimeTotal,
 		user: event.user,
 		note: event.note,
-
+    destPoint: event.destPoint,
 		command: event.command,
 		commandPoint: getPortVehicleCommand(event.command),
 		isConnected: isConnected(event.connection),

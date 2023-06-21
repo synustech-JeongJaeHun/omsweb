@@ -37,7 +37,7 @@ const direction = computed(() => {
     />
 
     <path v-if="props.segment.type==='CROSS'"
-      class="flr fixed-scale-stroke"
+      class="flr fixed-scale-stroke overflow-visible"
       :d="props.segment.d"
       fill="none"
     />

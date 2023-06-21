@@ -68,5 +68,77 @@ SELECT sum(level1) AS level1, sum(level2) AS level2, sum(level3) AS level3
             }
             return result;
         }
+        
+        public int QueryAlertsCount(string condition)
+        {
+            string WhereConditions = string.Empty;
+            if (string.IsNullOrWhiteSpace(condition) == false) WhereConditions = $" WHERE {condition}";
+
+            string sql = $@"
+                SELECT count(*) FROM (
+                        SELECT 
+                            ALT.id, ALT.time, ALT.level, ALT.tag, ALT.message, ALT.ack_time, ALT.ack_by 
+                        FROM alerts AS ALT
+                    ) alertHistory
+
+                    {WhereConditions}
+                    ";
+
+            int result = 0;
+            using (var conn = ConnectTrack())
+            {
+                try 
+                { 
+                    result = conn.QueryFirst<int>(sql);
+                }
+                catch (Exception e)
+                {
+                    result = 0;
+                }
+            }
+            return result;
+        }
+
+        public IQueryable<AlertEntity> QueryAlerts(int skip, int take, string condition, string sort)
+        {
+            string WhereConditions = string.Empty;
+            string SortConditions = @"ALT.id desc";
+            string LimitConditions = @"LIMIT @take OFFSET @skip";
+
+            if (string.IsNullOrWhiteSpace(condition) == false) WhereConditions = $" WHERE {condition}";
+            if (string.IsNullOrWhiteSpace(sort) == false) SortConditions = $"{sort}";
+            if (skip <= 0 && take <= 0) LimitConditions = string.Empty;
+
+            string sql = $@"
+                SELECT * FROM (
+                        SELECT 
+                            ALT.id, ALT.time, ALT.level, ALT.tag, ALT.message, ALT.ack_time, ALT.ack_by 
+                        FROM alerts AS ALT
+                        --ORDER BY ALT.id desc
+                        ORDER BY {SortConditions}
+ 
+                    ) alertHistory
+
+                    {WhereConditions}
+
+                    --LIMIT @take OFFSET @skip
+                    {LimitConditions}
+                    ";
+
+            IQueryable<AlertEntity> result;
+            using (var conn = ConnectTrack())
+            {
+                try
+                { 
+                    result = conn.Query<AlertEntity>(sql, new {skip, take }).AsQueryable();
+                }
+                catch (Exception e)
+                {
+                    result = null;
+                }
+            }
+            return result;
+        }
+
     }
 }

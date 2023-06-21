@@ -5,6 +5,7 @@ import { DxDataGridComponent } from 'devextreme-angular'
 import { IVehicleStatusRow } from '../../../models/vehicle-status.model'
 import { isHostOrder } from '../utils/playback-parse.util'
 import {SettingsService} from "../../../services/settings.service";
+import {ClientPreferences} from "../../../models/settings.model";
 @Component({
 	selector: 'oms-playback-vehicle-status',
 	templateUrl: './playback-vehicle-status.component.html',
@@ -20,7 +21,7 @@ export class PlaybackVehicleStatusComponent {
 		return this.playService.currentVehicles
 	}
 	selectedRows: number[] = []
-
+  preference: ClientPreferences
 	get selectedItems(): IVehicleStatusRow[] {
 		return this.dataGrid.instance.getSelectedRowsData()
 	}
@@ -32,9 +33,45 @@ export class PlaybackVehicleStatusComponent {
         this.vhlAlias = config.vhlAlias
       },
     )
+    this.preference = this.settingSvc.globalPreferences
   }
 
 	calculateHostOrder(rowData: CurrentVehicle) {
 		return isHostOrder(rowData.orderOrigin)
 	}
+
+  canDisplayTable(type: string): boolean {
+    return this.preference.controlTables[type]
+  }
+  getDisplayTableColumnIndex(type: string): number {
+    return this.preference.controlTables.vehicles_order.findIndex(
+      (column) => column.name === type,
+    )
+  }
+  getDisplayTableColumnWidth(type: string) {
+    return this.preference.controlTables.vehicles_order.find(
+      (column) => column.name === type,
+    ).width
+  }
+
+  transform_distance(value: number): string {
+    if (value == undefined) {
+      return ''
+    } else {
+      const distance: number = Math.floor(value / 1000000)
+
+      return `${distance}km`
+    }
+  }
+
+  transform_runtime(value: number): string {
+    if (value == undefined) {
+      return ''
+    } else {
+      const day: number = Math.floor(value / 86400) //3600 * 24
+      const hour: string = ((value % 86400) / 3600).toFixed(1)
+
+      return `${day}d ` + hour.toString().padStart(2, '0') + 'h'
+    }
+  }
 }

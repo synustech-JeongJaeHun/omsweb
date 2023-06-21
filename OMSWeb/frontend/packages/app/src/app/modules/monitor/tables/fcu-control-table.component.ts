@@ -29,11 +29,15 @@ import {IDataChangeEvent} from "../../../models/notification.model";
     button {
       margin-right: 5px;
     }
+    dx-data-grid{
+      max-width: 100vw !important;
+    }
   `]
 })
 export class FcuControlTableComponent implements OnInit, OnDestroy {
 
   @Input() tableHeight: number
+  @Input() isOpen: boolean
   @ViewChild(DxDataGridComponent, { static: false })
   dataGrid: DxDataGridComponent
 
@@ -121,7 +125,7 @@ export class FcuControlTableComponent implements OnInit, OnDestroy {
     this.hubSvc.fireShutterMapChanged$
       .pipe(auditTime(AuditTimeDuration), takeUntil(this.destroy$))
       .subscribe((e: IDataChangeEvent) => {
-        e && this.onTableChanged(e)
+        this.isOpen &&e && this.onTableChanged(e)
       })
   }
 

@@ -15,7 +15,7 @@ import { PermissionEnums } from '../../../models/enums'
 import { ClientPreferences } from '../../../models/settings.model'
 import { MatDialog, MatDialogRef } from '@angular/material/dialog'
 import { UnusedListDialogComponent } from '../../shared/dialogs/unused-list-dialog.component'
-import {MobileService} from "@oms/services/mobile.service";
+import {MobileService} from "../../../services/mobile.service";
 import {Subject} from "rxjs";
 import {auditTime, takeUntil} from "rxjs/operators";
 import {AuditTimeDuration} from "@oms/root/modules/monitor/tables/constants";
@@ -104,20 +104,20 @@ export class StatusControlComponent implements OnInit, OnDestroy {
       if(this.settingSvc.globalPreferences.controlTables[k]) return k
     })
 
+
     this.resizeHandler = this.onMouseMove.bind(this)
     this.resizeTableHeight(this.tableHeightNum)
 
 
     this.currentTab = this.tableKeys.findIndex(t=>t===this.currentTabName)
+    this.currentTab = this.currentTab<0 ? 0 : this.currentTab
+    this.currentTabName=this.tableKeys[this.currentTab]
   }
 
 	ngOnInit(): void {
 		this.resizeHandler = this.onMouseMove.bind(this)
     this.resizeHandlerTouch = this.onTouchMove.bind(this)
-    const tab =this.settingSvc.globalPreferences.uiStates.controlTab
-		this.currentTab = tab < this.tableKeys.length ? tab : 0
 		this.resizeTableHeight(this.tableHeightNum)
-
 	}
 
 	ngOnDestroy(): void {

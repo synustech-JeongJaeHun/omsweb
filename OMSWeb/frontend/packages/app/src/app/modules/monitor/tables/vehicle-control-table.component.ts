@@ -33,6 +33,7 @@ import {MobileService} from "@oms/services/mobile.service";
 })
 export class VehicleControlTableComponent implements OnInit, OnDestroy {
 	@Input() tableHeight: number
+  @Input() isOpen: boolean
 	@ViewChild(DxDataGridComponent, { static: false })
 	dataGrid: DxDataGridComponent
 
@@ -43,8 +44,6 @@ export class VehicleControlTableComponent implements OnInit, OnDestroy {
 	disableRows: IVehicleStatusRow[] = []
 
 	preference: ClientPreferences
-
-  vhlAlias: string
 
 	//#region Subscriptions
 	private destroy$: Subject<void> = new Subject<void>()
@@ -98,12 +97,6 @@ export class VehicleControlTableComponent implements OnInit, OnDestroy {
 	) {
 		this.dataSource = this.statusSvc.vehicleStatusDataSource()
 		this.preference = this.settingSvc.globalPreferences
-
-    this.settingSvc.serviceConfig.subscribe(
-      (config) => {
-        this.vhlAlias = config.vhlAlias
-      },
-    )
 	}
 
 	canDisplayTable(type: string): boolean {
@@ -148,7 +141,7 @@ export class VehicleControlTableComponent implements OnInit, OnDestroy {
 		this.hubSvc.vehicleTableChanged$
 			.pipe(auditTime(AuditTimeDuration), takeUntil(this.destroy$))
 			.subscribe((e: IDataChangeEvent) => {
-				e && this.onTableChanged(e)
+        this.isOpen &&e && this.onTableChanged(e)
 			})
 	}
 

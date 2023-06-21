@@ -301,11 +301,14 @@ namespace OMSWeb.Repositories
        {"vehicleStates",  @"
             SELECT
             VH.id, VH.physical_id, VH.logical_id, VH.last_point AS cur_point, 
-            VH.moving_state, VH.map_db, VH.distance, VH.runtime,
+            VH.moving_state, VH.map_db, 
+            (FLOOR(VH.distance / 1000000) || 'km' ) as distance,
+            TO_CHAR((VH.runtime/86400 * interval '1 day'), 'DD') || 'd ' || TO_CHAR((VH.runtime%86400 * interval '1 sec'), 'HH24') || 'h ' as runtime,
             VH.user as user, 
             VH.note as note,
             VH.pause_state,
             OD.id AS order_id,
+            (@prefix || VH.physical_id) as vehicle_alias,
             CASE 
                 WHEN OD.location_pickup IS NOT NULL AND OD.location_dropoff IS NOT NULL        -- FROM-TO order
                     THEN
@@ -356,7 +359,9 @@ namespace OMSWeb.Repositories
             CASE
                 WHEN LENGTH(VH.error_list) = 0 THEN '0' ELSE VH.error_list
             END AS error_list,
-            VH.distance_total, VH.runtime_total, VH.type, VH.rail_in, VH.is_maint, 
+            (FLOOR(VH.distance_total / 1000000) || 'km')  as distance_total,
+            TO_CHAR((VH.runtime_total/86400 * interval '1 day'), 'DD') || 'd ' || TO_CHAR((VH.runtime_total%86400 * interval '1 sec'), 'HH24') || 'h '  as runtime_total, 
+            VH.type, VH.rail_in, VH.is_maint, 
             CASE 
                 WHEN VH.connection = 0 THEN FALSE
                 WHEN VH.connection = 1 THEN TRUE
@@ -455,7 +460,7 @@ namespace OMSWeb.Repositories
         OD.status_details,
         OD.assignment_type, 
         OD.assignment_details,
-        VS.physical_id as vehicle_alias
+        (@prefix || VS.physical_id) as vehicle_alias
         FROM orders AS OD
         LEFT OUTER JOIN vehicle_reg AS VR
             ON OD.vehicle_id = VR.id
