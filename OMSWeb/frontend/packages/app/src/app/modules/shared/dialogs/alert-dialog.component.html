@@ -1,8 +1,13 @@
 <oms-dialog-base [title]="'names.alerts' | translate">
   <ng-container class="dialog-layout">
     <div class="alert-list">
-      <dx-data-grid #grid [dataSource]="selectedFilter==='<>' ? dataSourceClear :dataSource" [remoteOperations]="true" [height]="300" [width]="700"
-                    [hoverStateEnabled]="true" [(selectedRowKeys)]="selectedRows" allowColumnResizing="true">
+      <dx-data-grid #grid
+                    [dataSource]="selectedFilter==='<>' ? dataSourceClear :dataSource"
+                    [remoteOperations]="true"
+                    [height]="300" [width]="700"
+                    [hoverStateEnabled]="true"
+                    [(selectedRowKeys)]="selectedRows"
+                    allowColumnResizing="true">
         <dxo-selection mode="single"></dxo-selection>
 
         <dxo-paging [pageSize]="50"></dxo-paging>

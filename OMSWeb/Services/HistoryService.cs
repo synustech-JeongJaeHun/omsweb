@@ -276,6 +276,15 @@ namespace OMSWeb.Services
         public string BuildConditions(string tableName, string selector, string sOperator, string value, JTokenType jType)
         {
             string conditions = string.Empty;
+            
+            if (!string.IsNullOrWhiteSpace(selector) &&
+                !string.IsNullOrWhiteSpace(sOperator) && jType == JTokenType.Null) // value is Null
+            {
+                selector = TryORM(tableName, sOperator, selector);
+                if (string.Compare(sOperator, "=", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} is Null";
+                if (string.Compare(sOperator, "<>", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} is Not Null";
+                return conditions;
+            }
 
             if (string.IsNullOrWhiteSpace(selector) ||
                             string.IsNullOrWhiteSpace(sOperator) ||
@@ -301,6 +310,7 @@ namespace OMSWeb.Services
                 if (string.Compare(sOperator, ">=", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} >= {value} ###";
                 if (string.Compare(sOperator, "<=", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} <= {value} ###";
             }
+            
             return conditions;
         }
 
@@ -401,6 +411,16 @@ namespace OMSWeb.Services
                 if (string.Compare(s, "nack", StringComparison.CurrentCultureIgnoreCase) == 0) return "Nack";
                 if (string.Compare(s, "nackReason", StringComparison.CurrentCultureIgnoreCase) == 0) return "NackReason";
                 if (string.Compare(s, "nackParam", StringComparison.CurrentCultureIgnoreCase) == 0) return "NackParam";
+            }
+            else if (string.Compare(tableName, "alerts", StringComparison.CurrentCultureIgnoreCase) == 0)
+            {
+                if (string.Compare(s, "id", StringComparison.CurrentCultureIgnoreCase) == 0) return "id";
+                if (string.Compare(s, "time", StringComparison.CurrentCultureIgnoreCase) == 0) return "time";
+                if (string.Compare(s, "level", StringComparison.CurrentCultureIgnoreCase) == 0) return "level";
+                if (string.Compare(s, "tag", StringComparison.CurrentCultureIgnoreCase) == 0) return "tag";
+                if (string.Compare(s, "message", StringComparison.CurrentCultureIgnoreCase) == 0) return "message";
+                if (string.Compare(s, "ackTime", StringComparison.CurrentCultureIgnoreCase) == 0) return "ack_time";
+                if (string.Compare(s, "ackBy", StringComparison.CurrentCultureIgnoreCase) == 0) return "ack_by";
             }
             return s;
         }
