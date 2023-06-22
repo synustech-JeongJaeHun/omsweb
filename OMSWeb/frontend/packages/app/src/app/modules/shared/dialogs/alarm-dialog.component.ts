@@ -84,7 +84,7 @@ export class AlarmDialogComponent {
 
   onClear() {
     this.messageSvc
-      .sendAlarmClearCommand({ action: 'alarm_clear' }, [this.currentItem.vehicleId], this.currentItem.errorCode)
+      .sendAlarmClearCommand({ action: 'alarm_clear' }, [this.currentItem.vehicleId], this.currentItem.errorCode, this.auth.currentUser.userId)
       .subscribe();
   }
 

@@ -430,7 +430,7 @@ namespace OMSWeb.Repositories
             string sql = $@"
                 SELECT * FROM (
                         SELECT VA.id, VA.time, VA.error_code, VA.vehicle_id, VR.logical_id AS vehicle_logical_id,
-                            VA.time_resolved, 
+                            VA.time_resolved, VA.ack_time, VA.ack_by,
                             CASE 
                                 WHEN VA.time_resolved IS NULL 
                                     THEN  extract('epoch' from date_trunc('second', now()) - date_trunc('second', VA.time)) * interval '1 sec'

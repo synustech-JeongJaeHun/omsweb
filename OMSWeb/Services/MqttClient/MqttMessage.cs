@@ -442,6 +442,7 @@ namespace OMSWeb.Services.MqttClient
             {
                 data["vehicle_id"] = GetVehicleId(command);
                 data["error_code"] = GetAlarmErrorCode(command);
+                data["ack_by"] = command.AlarmAckBy;
 
                 Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: {command.Action}");
             }

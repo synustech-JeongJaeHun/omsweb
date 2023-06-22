@@ -27,6 +27,7 @@ export interface IAiModeCommandMessage extends ICommandMessage {
 export interface IAlarmClearCommandMessage extends ICommandMessage {
 	vehicleIds?: number[]
 	alarmCode?: number
+  alarmAckBy?: string
 }
 
 export interface IWarningClearCommandMessage extends ICommandMessage {
