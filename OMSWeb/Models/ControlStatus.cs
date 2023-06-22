@@ -38,9 +38,6 @@ namespace OMSWeb.Models
 
     public class FireShutterState : FireShutterStatusEntity
     {
-        public string User { get; set; }
-        public string Note { get; set; }
-
     }
 
     public class ClusterState : ClusterStatusEntity
