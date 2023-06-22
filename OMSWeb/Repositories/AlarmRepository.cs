@@ -77,7 +77,7 @@ FROM (
         ON VA.error_code = VE.id
     LEFT OUTER JOIN annotations AN
         ON VA.error_code = AN.reference_id and AN.reference_table = 'vehicle_errors'
-    WHERE VA.time_resolved is NULL
+    WHERE VA.time_resolved is NULL AND VA.ack_time is NULL
     ORDER BY VA.id desc
         ";
 
