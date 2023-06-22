@@ -182,6 +182,8 @@ type PlaybackSnapshotVehicle = {
 	type: unknown
 	user?: string
 	note?: string
+  pm_user?: string
+  pm_note?: string
 }
 
 type PlaybackSnapshotBuffer = {
@@ -298,6 +300,10 @@ type VehicleHistoryEvent = { tableName: 'vehicle_history' } & ITableName &
 		runtimeTotal: number
 		user?: string
 		note?: string
+    distance: number
+    runtime: number
+    pmUser?: string
+    pmNote?: string
 	}
 
 type SegmentBlockingHistoryEvent = {
@@ -462,6 +468,11 @@ type CurrentVehicle = {
 	locationMove?: string
 	user?: string
 	note?: string
+  carrierId?: string
+  distance: number
+  runtime: number
+  pmUser?: string
+  pmNote?: string
 }
 type CurrentSegmentBlocking = {
 	id: number

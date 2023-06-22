@@ -333,6 +333,9 @@ function convertSnapshotVehicleToCurrentVehicle(
 		command: vehicle.command,
 		commandPoint: getPortVehicleCommand(vehicle.command),
 		isConnected: isConnected(vehicle.connection),
+    carrierId: vehicle.carrier_id,
+    distance: vehicle.distance,
+    runtime: vehicle.runtime,
 	}
 }
 
@@ -474,6 +477,9 @@ function convertVehicleHistoryEventToCurrentVehicle(
 		command: event.command,
 		commandPoint: getPortVehicleCommand(event.command),
 		isConnected: isConnected(event.connection),
+    carrierId: event.carrierId,
+    distance: event.distance,
+    runtime: event.runtime
 	}
 }
 
