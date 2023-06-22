@@ -155,6 +155,8 @@ namespace OMSWeb.Services
                 this._appSettings.FireStationFilters.InitializeValues();
             }
             client.FireStationFilters = this._appSettings.FireStationFilters;
+            client.IndicatorFireEmergency = this._appSettings.IndicatorFireEmergency;
+            
 
             return this._appSettings.Client;
         }

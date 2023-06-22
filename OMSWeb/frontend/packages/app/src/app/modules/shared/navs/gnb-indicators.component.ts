@@ -24,6 +24,7 @@ import { AccountUtil } from '../utils/account.util';
 import { PermissionEnums } from '../../../models/enums';
 import {TTSService} from "@oms/services/tts.service";
 import {MobileService} from "@oms/services/mobile.service";
+import {SettingsService} from "@oms/services/settings.service";
 
 @Component({
   selector: 'oms-gnb-indicators',
@@ -42,8 +43,8 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
   isPopupWarn: boolean = false;
 
   warnClicked = false;
-
   warnList: IAlert[] = [];
+  indicatorFireEmergency = false
 
   private _alarmDlg: MatDialogRef<AlarmDialogComponent, any>;
   private _alertDlg: MatDialogRef<AlertDialogComponent, any>;
@@ -71,9 +72,13 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private auth: AuthService,
     private tts: TTSService,
-    private mobileSvc: MobileService
+    private mobileSvc: MobileService,
+    private settingSvc: SettingsService,
   ) {
     this.timerId = setInterval(() => this.getState(), 5000);
+    settingSvc.serviceConfig.subscribe(config=>{
+      this.indicatorFireEmergency = config?.indicatorFireEmergency
+    })
   }
 
   ngOnInit(): void {

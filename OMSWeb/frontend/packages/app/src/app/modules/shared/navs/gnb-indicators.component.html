@@ -10,3 +10,12 @@
   <mat-icon [fontSet]="hasAlarm ? '' : 'material-icons-outlined'" [matBadge]="alarmValue" matBadgeColor="warn"
     matBadgeSize="medium" [matBadgeHidden]="!hasAlarm">notifications</mat-icon>
 </button>
+<button mat-icon-button class="primary" *ngIf="indicatorFireEmergency"
+        matTooltipClass="gnb-tooltip" matTooltipPosition="below"
+        matTooltip='{{ "names.fireDetect" | translate }}'>
+  <div>
+    <span class="material-icons-outlined">
+      local_fire_department
+    </span>
+  </div>
+</button>

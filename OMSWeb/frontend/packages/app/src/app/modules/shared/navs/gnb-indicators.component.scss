@@ -20,6 +20,15 @@ button.warn.is-critical {
 button.alarm.is-critical {
   color: rgba(rgb(255, 80, 0), 0.6);
 }
+button.primary div{
+  animation: box-ani 2s infinite;
+  display: inline-flex;
+  margin: 0 0 2px;
+}
+button.primary div .material-icons-outlined{
+  color: rgb(253, 41, 41);
+}
+
 mat-icon ::ng-deep.mat-badge-content {
   font-size: 11px;
   line-height: 16px;
@@ -40,4 +49,9 @@ mat-icon ::ng-deep.mat-badge-content {
   border: 2px solid red;
   border-radius: 4px;
   box-shadow: 3px 3px 15px #7f7f7f;
+}
+@keyframes box-ani {
+  0% {opacity:0;}
+  50% {opacity:1;}
+  100% {opacity:0;}
 }
