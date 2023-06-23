@@ -1,12 +1,12 @@
 import {
-	Component,
-	EventEmitter,
-	HostListener,
-	Input,
-	OnDestroy,
-	OnInit,
-	Output,
-	ViewChild,
+  Component,
+  EventEmitter,
+  HostListener,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild,
 } from '@angular/core'
 import { forkJoin, merge, Subject, Subscription } from 'rxjs'
 import DataSource from 'devextreme/data/data_source'
@@ -22,7 +22,7 @@ import { auditTime, takeUntil } from 'rxjs/operators'
 import { MessagesService } from '../../../services/messages.service'
 import { DxDataGridComponent } from 'devextreme-angular'
 import { PermissionEnums } from '../../../models/enums'
-import { ClientPreferences } from '../../../models/settings.model'
+import { ClientPreferences, FireStationFilters } from '../../../models/settings.model'
 import { AuditTimeDuration } from './constants'
 import { TranslateService } from '@ngx-translate/core'
 import { DialogService } from '@oms/root/services/dialog.service'
@@ -32,107 +32,113 @@ import { TrackStatusService } from '@oms/root/services/track-status.service'
 import {MobileService} from "../../../services/mobile.service";
 
 @Component({
-	selector: 'oms-order-control-table',
-	templateUrl: './order-control-table.component.html',
-	styleUrls: ['./order-control-table.component.scss'],
+  selector: 'oms-order-control-table',
+  templateUrl: './order-control-table.component.html',
+  styleUrls: ['./order-control-table.component.scss'],
 })
 export class OrderControlTableComponent implements OnInit, OnDestroy {
-	@Output() focus = new EventEmitter<{
-		type: string
-		id: number
-		focusType?: string
-	}>()
-	@Output() dropFocus = new EventEmitter<{ focusType?: string }>()
+  @Output() focus = new EventEmitter<{
+    type: string
+    id: number
+    focusType?: string
+  }>()
+  @Output() dropFocus = new EventEmitter<{ focusType?: string }>()
 
-	@Input() tableHeight: number
+  @Input() tableHeight: number
   @Input() isOpen: boolean
-	@ViewChild(DxDataGridComponent, { static: false })
-	dataGrid: DxDataGridComponent
+  @ViewChild(DxDataGridComponent, { static: false })
+  dataGrid: DxDataGridComponent
 
-	dataSource: DataSource
-	// dataSource: any;
-	selectedRows: number[] = []
-	preference: ClientPreferences
-	private color_normal: string = 'rgba(255, 255, 255, 1.0)'
-	private color_warning: string = 'rgba(255, 210, 0, 0.5)'
+  dataSource: DataSource
+  // dataSource: any;
+  selectedRows: number[] = []
+  preference: ClientPreferences
+  private color_normal: string = 'rgba(255, 255, 255, 1.0)'
+  private color_warning: string = 'rgba(255, 210, 0, 0.5)'
+  fireStationFilters: FireStationFilters
 
-	//#region Subscriptions
-	private destroy$: Subject<void> = new Subject<void>()
-	//#endregion
+  //#region Subscriptions
+  private destroy$: Subject<void> = new Subject<void>()
+  //#endregion
 
-	get hasControlAccess(): boolean {
-		return (
-			this.auth.isAuthenticated &&
-			//AccountUtil.hasPermission(11, this.auth.currentUser)
-			AccountUtil.hasPermission(
-				PermissionEnums.DeleteOrder,
-				this.auth.currentUser,
-			)
-		)
-	}
+  get hasControlAccess(): boolean {
+    return (
+      this.auth.isAuthenticated &&
+      //AccountUtil.hasPermission(11, this.auth.currentUser)
+      AccountUtil.hasPermission(
+        PermissionEnums.DeleteOrder,
+        this.auth.currentUser,
+      )
+    )
+  }
 
-	get canDelete(): boolean {
-		return this.selectedRows.length > 0
-	}
+  get canDelete(): boolean {
+    return this.selectedRows.length > 0
+  }
 
-	get canUpdate(): boolean {
-		return this.selectedRows.length == 1
-	}
+  get canUpdate(): boolean {
+    return this.selectedRows.length == 1
+  }
 
-	transformVehicleId = ({ value = '' }): string => {
-		const text =
-			this.idSvc.get_alternative_id('vehicle', 'logicalId', value) || value
-		return text.toString()
-	}
+  transformVehicleId = ({ value = '' }): string => {
+    const text =
+      this.idSvc.get_alternative_id('vehicle', 'logicalId', value) || value
+    return text.toString()
+  }
 
-	transformLocationId = ({ value = '' }): string => {
-		return this.idSvc.guessLocationId(value)
-	}
+  transformLocationId = ({ value = '' }): string => {
+    return this.idSvc.guessLocationId(value)
+  }
 
-	getBgColor(type: number, value: string): string {
-		return this.getColor_Status(value) // Status
-	}
+  getBgColor(type: number, value: string): string {
+    return this.getColor_Status(value) // Status
+  }
 
-	private getColor_Status(value: string): string {
-		if (value != null && value !== undefined) {
-			if (value?.includes('transfer') && value?.includes('delayed'))
-				return this.color_warning
-		}
-		return this.color_normal
-	}
+  private getColor_Status(value: string): string {
+    if (value != null && value !== undefined) {
+      if (value?.includes('transfer') && value?.includes('delayed'))
+        return this.color_warning
+    }
+    return this.color_normal
+  }
 
-	constructor(
-		private auth: AuthService,
-		private statusSvc: StatusService,
-		private settingSvc: SettingsService,
-		private messageSvc: MessagesService,
-		private idSvc: TrackIdService,
-		private hubSvc: HubService,
-		private dialogSvc: DialogService,
-		private transferSvc: TransfersService,
-		private t$: TranslateService,
-		private trackStatusService: TrackStatusService,
+  constructor(
+    private auth: AuthService,
+    private statusSvc: StatusService,
+    private settingSvc: SettingsService,
+    private messageSvc: MessagesService,
+    private idSvc: TrackIdService,
+    private hubSvc: HubService,
+    private dialogSvc: DialogService,
+    private transferSvc: TransfersService,
+    private t$: TranslateService,
+    private trackStatusService: TrackStatusService,
 
     private mobileSvc: MobileService
-	) {
-		this.dataSource = this.statusSvc.orderStatusDataSource()
-		this.preference = this.settingSvc.globalPreferences
-	}
+  ) {
+    this.dataSource = this.statusSvc.orderStatusDataSource()
+    this.preference = this.settingSvc.globalPreferences
+    settingSvc.serviceConfig.subscribe(
+      (config) => {
+        this.fireStationFilters = config?.fireStationFilters
+      },
+    )
+  }
 
-	canDisplayTable(type: string): boolean {
-		return this.preference.controlTables[type]
-	}
-	getDisplayTableColumnIndex(type: string): number {
-		return this.preference.controlTables.orders_order.findIndex(
-			(column) => column.name === type,
-		)
-	}
+  canDisplayTable(type: string): boolean {
+    return this.preference.controlTables[type]
+  }
+  getDisplayTableColumnIndex(type: string): number {
+    return this.preference.controlTables.orders_order.findIndex(
+      (column) => column.name === type,
+    )
+  }
 
-	getDisplayTableColumnWidth(type: string) {
-		return this.preference.controlTables.orders_order.find(
-			(column) => column.name === type,
-		).width
-	}
+  getDisplayTableColumnWidth(type: string) {
+    return this.preference.controlTables.orders_order.find(
+      (column) => column.name === type,
+    ).width
+  }
 
   getDisplayTableLabel(type: string) {
     return this.preference.controlTables.orders_order.find(
@@ -140,347 +146,376 @@ export class OrderControlTableComponent implements OnInit, OnDestroy {
     ).i18nLabel
   }
 
-	stateStoring = {
-		enabled: true,
-		type: 'custom',
-		customSave: (configuration: {
-			columns: {
-				dataField: string
-				dataType: string
-				name: string
-				visible: boolean
-				visibleIndex: number
-				width: number
-			}[]
-		}) => {
-			configuration.columns.forEach((c) => {
-				const column =
-					this.preference.controlTables.orders_order[c.visibleIndex]
-				if (column) column.width = c.width
-			})
+  stateStoring = {
+    enabled: true,
+    type: 'custom',
+    customSave: (configuration: {
+      columns: {
+        dataField: string
+        dataType: string
+        name: string
+        visible: boolean
+        visibleIndex: number
+        width: number
+      }[]
+    }) => {
+      configuration.columns.forEach((c) => {
+        const column =
+          this.preference.controlTables.orders_order[c.visibleIndex]
+        if (column) column.width = c.width
+      })
 
-			this.preference.save()
-		},
-	}
+      this.preference.save()
+    },
+  }
 
-	ngOnDestroy(): void {
-		this.dropFocus.emit({ focusType: 'CARRIER' })
-		this.destroy$.next()
-		this.destroy$.complete()
-	}
+  ngOnDestroy(): void {
+    this.dropFocus.emit({ focusType: 'CARRIER' })
+    this.destroy$.next()
+    this.destroy$.complete()
+  }
 
-	ngOnInit(): void {
-		this.hubSvc.orderTableChanged$
-			.pipe(auditTime(AuditTimeDuration), takeUntil(this.destroy$))
-			.subscribe((e: IDataChangeEvent) => {
+  ngOnInit(): void {
+    this.hubSvc.orderTableChanged$
+      .pipe(auditTime(AuditTimeDuration), takeUntil(this.destroy$))
+      .subscribe((e: IDataChangeEvent) => {
         this.isOpen &&e && this.onTableChanged(e)
-			})
-	}
+      })
+  }
 
-	onDelete() {
-		if (!this.canDelete) return
-		const items = this.dataGrid.instance.getSelectedRowsData()
-		const jobs = items.map((x) => this.messageSvc.sendDeleteOrder(x))
-		forkJoin(jobs).subscribe()
-	}
+  onDelete() {
+    if (!this.canDelete) return
+    const items = this.dataGrid.instance.getSelectedRowsData()
+    const jobs = items.map((x) => this.messageSvc.sendDeleteOrder(x))
+    forkJoin(jobs).subscribe()
+  }
 
-	onUpdate(destInput: string) {
-		if (!this.canUpdate || !destInput) return
+  onUpdate(destInput: string) {
+    if (!this.canUpdate || !destInput) return
 
-		let orders: IOrderStatusRow[] = this.dataGrid.instance.getSelectedRowsData()
-		let commandID: string = orders[0].logicalId
+    let orders: IOrderStatusRow[] = this.dataGrid.instance.getSelectedRowsData()
+    let commandID: string = orders[0].logicalId
 
-		this.transferSvc.checkUpdate(commandID, destInput).subscribe((res) => {
-			console.log(res)
+    if (!this.checkDestUpdateVerify(orders[0])) {
+      var errorMessage = 'messages.confirmNotAbleToExcute'
+      this.dialogSvc.alert({
+        title: this.t$.instant('names.failed'),
+        body: this.t$.instant(errorMessage),
+      })
+      return
+    }
 
-			if (res.hcack === 0 || res.hcack === 4) {
-				const items = this.dataGrid.instance.getSelectedRowsData()
-				const jobs = items.map((x) =>
-					this.messageSvc.sendUpdateOrder(x, destInput),
-				)
-				forkJoin(jobs).subscribe()
+    this.transferSvc.checkUpdate(commandID, destInput).subscribe((res) => {
+      console.log(res)
 
-				this.dialogSvc.success({
-					title: this.t$.instant('names.success'),
-					body: this.t$.instant('messages.dest-success'),
-				})
-			} else {
-				var errorMessage = ''
-				if (res.hcack === 2) errorMessage = 'messages.confirmNotAbleToExcute'
-				else if (res.hcack === 3) {
-					if (res.cpname === 'DESTPORT')
-						errorMessage = 'messages.confirmParameterInvalidDest'
-					else errorMessage = 'messages.confirmParameterInvalid'
-				} else if (res.hcack === 5) errorMessage = 'messages.confirmReject'
-				else errorMessage = 'messages.confirmNotAbleToExcute'
+      if (res.hcack === 0 || res.hcack === 4) {
+        const items = this.dataGrid.instance.getSelectedRowsData()
+        const jobs = items.map((x) =>
+          this.messageSvc.sendUpdateOrder(x, destInput),
+        )
+        forkJoin(jobs).subscribe()
 
-				this.dialogSvc.alert({
-					title: this.t$.instant('names.failed'),
-					body: this.t$.instant(errorMessage),
-				})
-			}
-		})
-	}
+        this.dialogSvc.success({
+          title: this.t$.instant('names.success'),
+          body: this.t$.instant('messages.dest-success'),
+        })
+      } else {
+        var errorMessage = ''
+        if (res.hcack === 2) errorMessage = 'messages.confirmNotAbleToExcute'
+        else if (res.hcack === 3) {
+          if (res.cpname === 'DESTPORT')
+            errorMessage = 'messages.confirmParameterInvalidDest'
+          else errorMessage = 'messages.confirmParameterInvalid'
+        } else if (res.hcack === 5) errorMessage = 'messages.confirmReject'
+        else errorMessage = 'messages.confirmNotAbleToExcute'
 
-	isTrackingCarrier = false
-	trackingCarrierInfo = {
-		orderId: null,
-		carrierId: null,
-		type: null,
-		logicalId: null,
-	}
-	trackingCarrierOrderSubscription: Subscription | null = null
-	trackingCarrierVehicleAndBufferSubscription: Subscription | null = null
-	onChangeIsTrackingCarrier(event: { checked: boolean }) {
-		this.isTrackingCarrier = event.checked
-		if (this.isTrackingCarrier === false) this.clearTrackCarrier()
-	}
-	onClickTransferRow(event: {
-		data: { id: number; carrierLabel?: string; locationPickup?: string }
-	}) {
-		if (this.isTrackingCarrier === false) return
+        this.dialogSvc.alert({
+          title: this.t$.instant('names.failed'),
+          body: this.t$.instant(errorMessage),
+        })
+      }
+    })
+  }
 
-		const carrierId = event.data.carrierLabel
-		const orderId = event.data.id
+  isTrackingCarrier = false
+  trackingCarrierInfo = {
+    orderId: null,
+    carrierId: null,
+    type: null,
+    logicalId: null,
+  }
+  trackingCarrierOrderSubscription: Subscription | null = null
+  trackingCarrierVehicleAndBufferSubscription: Subscription | null = null
+  onChangeIsTrackingCarrier(event: { checked: boolean }) {
+    this.isTrackingCarrier = event.checked
+    if (this.isTrackingCarrier === false) this.clearTrackCarrier()
+  }
+  onClickTransferRow(event: {
+    data: { id: number; carrierLabel?: string; locationPickup?: string }
+  }) {
+    if (this.isTrackingCarrier === false) return
 
-		const isCarrierNullish = carrierId == null || carrierId.length === 0
-		const isOrderSame = this.trackingCarrierInfo.orderId === orderId
+    const carrierId = event.data.carrierLabel
+    const orderId = event.data.id
 
-		if (isOrderSame) {
-			this.clearTrackCarrier()
-		} else if (isCarrierNullish) {
-			this.trackingCarrierInfo.orderId = orderId
-			this.trackingCarrierInfo.carrierId = 'No Carrier'
-		} else {
-			this.clearTrackCarrier()
-			this.trackCarrier(orderId, carrierId, event.data?.locationPickup)
-		}
-	}
-	private trackCarrier(
-		orderId: number,
-		carrierId: string,
-		locationPickupLogicalId?: string,
-	) {
-		this.trackingCarrierInfo = {
-			orderId,
-			carrierId,
-			type: null,
-			logicalId: null,
-		}
+    const isCarrierNullish = carrierId == null || carrierId.length === 0
+    const isOrderSame = this.trackingCarrierInfo.orderId === orderId
 
-		this.trackingCarrierOrderSubscription = this.hubSvc.orderTableChanged$
-			.pipe(takeUntil(this.destroy$))
-			.subscribe((e) => {
-				const orderId = e.id
-				if (this.trackingCarrierInfo.orderId !== orderId) return
+    if (isOrderSame) {
+      this.clearTrackCarrier()
+    } else if (isCarrierNullish) {
+      this.trackingCarrierInfo.orderId = orderId
+      this.trackingCarrierInfo.carrierId = 'No Carrier'
+    } else {
+      this.clearTrackCarrier()
+      this.trackCarrier(orderId, carrierId, event.data?.locationPickup)
+    }
+  }
+  private trackCarrier(
+    orderId: number,
+    carrierId: string,
+    locationPickupLogicalId?: string,
+  ) {
+    this.trackingCarrierInfo = {
+      orderId,
+      carrierId,
+      type: null,
+      logicalId: null,
+    }
 
-				this.transferSvc
-					.getTransferById(this.trackingCarrierInfo.orderId)
-					.subscribe(
-						// on success
-						(data) => {
-							if (data?.timeCompleted) {
-								this.completeTrackCarrier(data?.locationDropoff)
-							} else if (data?.timeAborted || data?.timeFailed) {
-								this.stopTrackCarrier()
-							}
-						},
-						// on fail
-						() => this.stopTrackCarrier(),
-					)
-			})
+    this.trackingCarrierOrderSubscription = this.hubSvc.orderTableChanged$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((e) => {
+        const orderId = e.id
+        if (this.trackingCarrierInfo.orderId !== orderId) return
 
-		const searchCarrierInVehiclesAndBuffers = () => {
-			const vehicle = (this.trackStatusService?.trackData?.vehicles ?? []).find(
-				(v) => v.carrierId === this.trackingCarrierInfo.carrierId,
-			)
-			if (vehicle) {
-				this.focus.emit({
-					type: 'vehicle',
-					id: vehicle.id,
-					focusType: 'CARRIER',
-				})
-				this.trackingCarrierInfo.type = 'Vehicle'
-				this.trackingCarrierInfo.logicalId = vehicle.logicalId
-				return
-			}
+        this.transferSvc
+          .getTransferById(this.trackingCarrierInfo.orderId)
+          .subscribe(
+            // on success
+            (data) => {
+              if (data?.timeCompleted) {
+                this.completeTrackCarrier(data?.locationDropoff)
+              } else if (data?.timeAborted || data?.timeFailed) {
+                this.stopTrackCarrier()
+              }
+            },
+            // on fail
+            () => this.stopTrackCarrier(),
+          )
+      })
 
-			const buffer = (this.trackStatusService?.trackData?.buffers ?? []).find(
-				(b) => b.carrierId === this.trackingCarrierInfo.carrierId,
-			)
-			if (buffer) {
-				this.focus.emit({
-					type: 'buffer',
-					id: buffer.id,
-					focusType: 'CARRIER',
-				})
-				this.trackingCarrierInfo.type = 'Buffer'
-				this.trackingCarrierInfo.logicalId = buffer.logicalId
-				return
-			}
-		}
-		const searchCarrierAtFirst = (
-			carrierId: string,
-			locationPickupLogicalId?: string,
-		) => {
-			if (locationPickupLogicalId) {
-				// TODO : 시작할 때는 별도의 로직으로 포커스하기
-				const vehicle = (
-					this.trackStatusService.trackData?.vehicles ?? []
-				).find((v) => v.carrierId === carrierId)
-				if (vehicle) {
-					this.focus.emit({
-						type: 'vehicle',
-						id: vehicle.id,
-						focusType: 'CARRIER',
-					})
-					this.trackingCarrierInfo.type = 'Vehicle'
-					this.trackingCarrierInfo.logicalId = vehicle.logicalId
-					return
-				}
+    const searchCarrierInVehiclesAndBuffers = () => {
+      const vehicle = (this.trackStatusService?.trackData?.vehicles ?? []).find(
+        (v) => v.carrierId === this.trackingCarrierInfo.carrierId,
+      )
+      if (vehicle) {
+        this.focus.emit({
+          type: 'vehicle',
+          id: vehicle.id,
+          focusType: 'CARRIER',
+        })
+        this.trackingCarrierInfo.type = 'Vehicle'
+        this.trackingCarrierInfo.logicalId = vehicle.logicalId
+        return
+      }
 
-				const buffer = (this.trackStatusService.trackData?.buffers ?? []).find(
-					(b) => b.logicalId === locationPickupLogicalId,
-				)
-				if (buffer) {
-					this.focus.emit({
-						type: 'buffer',
-						id: buffer.id,
-						focusType: 'CARRIER',
-					})
-					this.trackingCarrierInfo.type = 'Buffer'
-					this.trackingCarrierInfo.logicalId = buffer.logicalId
-					return
-				}
+      const buffer = (this.trackStatusService?.trackData?.buffers ?? []).find(
+        (b) => b.carrierId === this.trackingCarrierInfo.carrierId,
+      )
+      if (buffer) {
+        this.focus.emit({
+          type: 'buffer',
+          id: buffer.id,
+          focusType: 'CARRIER',
+        })
+        this.trackingCarrierInfo.type = 'Buffer'
+        this.trackingCarrierInfo.logicalId = buffer.logicalId
+        return
+      }
+    }
+    const searchCarrierAtFirst = (
+      carrierId: string,
+      locationPickupLogicalId?: string,
+    ) => {
+      if (locationPickupLogicalId) {
+        // TODO : 시작할 때는 별도의 로직으로 포커스하기
+        const vehicle = (
+          this.trackStatusService.trackData?.vehicles ?? []
+        ).find((v) => v.carrierId === carrierId)
+        if (vehicle) {
+          this.focus.emit({
+            type: 'vehicle',
+            id: vehicle.id,
+            focusType: 'CARRIER',
+          })
+          this.trackingCarrierInfo.type = 'Vehicle'
+          this.trackingCarrierInfo.logicalId = vehicle.logicalId
+          return
+        }
 
-				const station = (
-					this.trackStatusService.trackData?.stations ?? []
-				).find((s) => s.logicalId === locationPickupLogicalId)
-				if (station) {
-					this.focus.emit({
-						type: 'station',
-						id: station.id,
-						focusType: 'CARRIER',
-					})
-					this.trackingCarrierInfo.type = 'Station'
-					this.trackingCarrierInfo.logicalId = station.logicalId
-					return
-				}
-			} else {
-				searchCarrierInVehiclesAndBuffers()
-			}
-		}
+        const buffer = (this.trackStatusService.trackData?.buffers ?? []).find(
+          (b) => b.logicalId === locationPickupLogicalId,
+        )
+        if (buffer) {
+          this.focus.emit({
+            type: 'buffer',
+            id: buffer.id,
+            focusType: 'CARRIER',
+          })
+          this.trackingCarrierInfo.type = 'Buffer'
+          this.trackingCarrierInfo.logicalId = buffer.logicalId
+          return
+        }
 
-		this.trackingCarrierVehicleAndBufferSubscription = merge(
-			this.hubSvc.vehicleTableChanged$,
-			this.hubSvc.bufferChanged$,
-		)
-			.pipe(auditTime(AuditTimeDuration), takeUntil(this.destroy$))
-			.subscribe(searchCarrierInVehiclesAndBuffers)
+        const station = (
+          this.trackStatusService.trackData?.stations ?? []
+        ).find((s) => s.logicalId === locationPickupLogicalId)
+        if (station) {
+          this.focus.emit({
+            type: 'station',
+            id: station.id,
+            focusType: 'CARRIER',
+          })
+          this.trackingCarrierInfo.type = 'Station'
+          this.trackingCarrierInfo.logicalId = station.logicalId
+          return
+        }
+      } else {
+        searchCarrierInVehiclesAndBuffers()
+      }
+    }
 
-		searchCarrierAtFirst(carrierId, locationPickupLogicalId)
-	}
-	private stopTrackCarrier() {
-		this.trackingCarrierOrderSubscription?.unsubscribe()
-		this.trackingCarrierOrderSubscription = null
-		this.trackingCarrierVehicleAndBufferSubscription?.unsubscribe()
-		this.trackingCarrierVehicleAndBufferSubscription = null
-	}
-	private clearTrackCarrier() {
-		this.stopTrackCarrier()
+    this.trackingCarrierVehicleAndBufferSubscription = merge(
+      this.hubSvc.vehicleTableChanged$,
+      this.hubSvc.bufferChanged$,
+    )
+      .pipe(auditTime(AuditTimeDuration), takeUntil(this.destroy$))
+      .subscribe(searchCarrierInVehiclesAndBuffers)
 
-		this.trackingCarrierInfo = {
-			orderId: null,
-			carrierId: null,
-			type: null,
-			logicalId: null,
-		}
+    searchCarrierAtFirst(carrierId, locationPickupLogicalId)
+  }
+  private stopTrackCarrier() {
+    this.trackingCarrierOrderSubscription?.unsubscribe()
+    this.trackingCarrierOrderSubscription = null
+    this.trackingCarrierVehicleAndBufferSubscription?.unsubscribe()
+    this.trackingCarrierVehicleAndBufferSubscription = null
+  }
+  private clearTrackCarrier() {
+    this.stopTrackCarrier()
 
-		this.dropFocus.emit({ focusType: 'CARRIER' })
-	}
-	private completeTrackCarrier(locationDropoff?: string) {
-		this.stopTrackCarrier()
+    this.trackingCarrierInfo = {
+      orderId: null,
+      carrierId: null,
+      type: null,
+      logicalId: null,
+    }
 
-		if (locationDropoff) {
-			// TODO : 끝날때 알아서 끝나는곳 포커스해주고 끝나기
-			const parseOrderLocation = (location: string) => {
-				const typeString = location[0].toLowerCase()
-				const idNumber = Number.parseInt(location.slice(1))
+    this.dropFocus.emit({ focusType: 'CARRIER' })
+  }
+  private completeTrackCarrier(locationDropoff?: string) {
+    this.stopTrackCarrier()
 
-				switch (typeString) {
-					case 'b':
-						return {
-							type: 'buffer',
-							trackingCarrierInfoType: 'Buffer',
-							id: idNumber,
-							logicalId: (
-								this.trackStatusService.trackData?.buffers ?? []
-							).find((b) => b.id === idNumber)?.logicalId,
-						}
-					case 's':
-						return {
-							type: 'station',
-							trackingCarrierInfoType: 'Station',
-							id: idNumber,
-							logicalId: (
-								this.trackStatusService.trackData?.stations ?? []
-							).find((s) => s.id === idNumber)?.logicalId,
-						}
-					case 'p':
-						return {
-							type: 'point',
-							trackingCarrierInfoType: 'Point',
-							id: idNumber,
-							logicalId: (this.trackStatusService.trackData?.points ?? []).find(
-								(p) => p.id === idNumber,
-							)?.logicalId,
-						}
+    if (locationDropoff) {
+      // TODO : 끝날때 알아서 끝나는곳 포커스해주고 끝나기
+      const parseOrderLocation = (location: string) => {
+        const typeString = location[0].toLowerCase()
+        const idNumber = Number.parseInt(location.slice(1))
 
-					default:
-						return null
-				}
-			}
-			const parsed = parseOrderLocation(locationDropoff)
-			if (parsed) {
-				this.focus.emit({
-					type: parsed.type,
-					id: parsed.id,
-					focusType: 'CARRIER',
-				})
-				this.trackingCarrierInfo.type = parsed.trackingCarrierInfoType
-				this.trackingCarrierInfo.logicalId = parsed.logicalId
-			}
-		} else {
-			const vehicle = (this.trackStatusService?.trackData?.vehicles ?? []).find(
-				(v) => v.carrierId === this.trackingCarrierInfo.carrierId,
-			)
-			if (vehicle) {
-				this.focus.emit({
-					type: 'vehicle',
-					id: vehicle.id,
-					focusType: 'CARRIER',
-				})
-				this.trackingCarrierInfo.type = 'Vehicle'
-				this.trackingCarrierInfo.logicalId = vehicle.logicalId
-				return
-			}
-		}
-	}
+        switch (typeString) {
+          case 'b':
+            return {
+              type: 'buffer',
+              trackingCarrierInfoType: 'Buffer',
+              id: idNumber,
+              logicalId: (
+                this.trackStatusService.trackData?.buffers ?? []
+              ).find((b) => b.id === idNumber)?.logicalId,
+            }
+          case 's':
+            return {
+              type: 'station',
+              trackingCarrierInfoType: 'Station',
+              id: idNumber,
+              logicalId: (
+                this.trackStatusService.trackData?.stations ?? []
+              ).find((s) => s.id === idNumber)?.logicalId,
+            }
+          case 'p':
+            return {
+              type: 'point',
+              trackingCarrierInfoType: 'Point',
+              id: idNumber,
+              logicalId: (this.trackStatusService.trackData?.points ?? []).find(
+                (p) => p.id === idNumber,
+              )?.logicalId,
+            }
 
-	private onTableChanged(payload: IDataChangeEvent) {
-		this.dataSource.reload().then((data) => {
-			this.dataGrid.instance.refresh()
-		})
-	}
+          default:
+            return null
+        }
+      }
+      const parsed = parseOrderLocation(locationDropoff)
+      if (parsed) {
+        this.focus.emit({
+          type: parsed.type,
+          id: parsed.id,
+          focusType: 'CARRIER',
+        })
+        this.trackingCarrierInfo.type = parsed.trackingCarrierInfoType
+        this.trackingCarrierInfo.logicalId = parsed.logicalId
+      }
+    } else {
+      const vehicle = (this.trackStatusService?.trackData?.vehicles ?? []).find(
+        (v) => v.carrierId === this.trackingCarrierInfo.carrierId,
+      )
+      if (vehicle) {
+        this.focus.emit({
+          type: 'vehicle',
+          id: vehicle.id,
+          focusType: 'CARRIER',
+        })
+        this.trackingCarrierInfo.type = 'Vehicle'
+        this.trackingCarrierInfo.logicalId = vehicle.logicalId
+        return
+      }
+    }
+  }
 
-	@HostListener('document:visibilitychange', ['$event'])
-	private visibilitychange() {
-		if (!document.hidden) {
-			this.dataSource.reload().then((data) => {
-				this.dataGrid.instance.refresh()
-			})
-		}
-	}
+  private onTableChanged(payload: IDataChangeEvent) {
+    this.dataSource.reload().then((data) => {
+      this.dataGrid.instance.refresh()
+    })
+  }
+
+  private checkDestUpdateVerify(order: IOrderStatusRow): boolean {
+    let canUpdate: boolean = true
+    const commandID: string = order.logicalId
+    const locationPickup: string = order.locationPickup
+    const locationDropoff: string = order.locationDropoff
+
+    if (locationPickup && locationDropoff) {
+      if (commandID.startsWith('SCAN') && locationPickup === locationDropoff) {
+        canUpdate = false
+      } else if (this.fireStationFilters.enabled) {
+        const fireStationPrefix = this.fireStationFilters?.startWords[0]
+        if (locationDropoff.startsWith(fireStationPrefix)) {
+          canUpdate = false
+        }
+      }
+    }
+
+    return canUpdate
+  }
+
+  @HostListener('document:visibilitychange', ['$event'])
+  private visibilitychange() {
+    if (!document.hidden) {
+      this.dataSource.reload().then((data) => {
+        this.dataGrid.instance.refresh()
+      })
+    }
+  }
 
   get isMobile(){
     return this.mobileSvc.isMobile
