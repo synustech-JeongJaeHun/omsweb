@@ -222,30 +222,35 @@ export class MapViewerComponent implements OnInit, OnDestroy {
       })
       this.firstLoad =false
     }
-
 		// @ts-ignore
 		this.viewer = document.getElementById('track-canvas')._instance.exposed
-		// @ts-ignore
-		this.viewer.setTrack({
-			...this.trackData,
-			segmentParts: this.trackData.segments,
-			clusters: this.trackData.clusters.map((c) => ({
-				...c,
-				// @ts-ignore
-				segments: c.segments.split(',').map((id) => parseInt(id.trim())),
-			})),
-		})
-		this.attachEvents()
-		this.attachHubEvents()
 
-		this.viewer.setCameraAndRotation({
-			position: this.tmSetting.position ?? {
-				x: (this.trackData.size.minX + this.trackData.size.maxX) / 2,
-				y: (this.trackData.size.minY + this.trackData.size.maxY) / 2,
-			},
-			viewBoxWidth: this.tmSetting.viewBoxWidth,
-			rotation: this.tmSetting.rotation,
-		})
+    this.trackStatusService.isTrackReadyChanged.subscribe(res=>{
+      if(res){
+        // @ts-ignore
+        this.viewer.setTrack({
+          ...this.trackData,
+          segmentParts: this.trackData.segments,
+          clusters: this.trackData.clusters.map((c) => ({
+            ...c,
+            // @ts-ignore
+            segments: c.segments.split(',').map((id) => parseInt(id.trim())),
+          })),
+        })
+      }
+    })
+
+    this.attachEvents()
+    this.attachHubEvents()
+
+    this.viewer.setCameraAndRotation({
+      position: this.tmSetting.position ?? {
+        x: (this.trackData.size.minX + this.trackData.size.maxX) / 2,
+        y: (this.trackData.size.minY + this.trackData.size.maxY) / 2,
+      },
+      viewBoxWidth: this.tmSetting.viewBoxWidth,
+      rotation: this.tmSetting.rotation,
+    })
 
 		this.cameraAndRotationSyncId = setInterval(() => {
 			this.getCameraAndRotation()

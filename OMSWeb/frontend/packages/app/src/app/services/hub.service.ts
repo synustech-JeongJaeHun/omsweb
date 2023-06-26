@@ -79,12 +79,14 @@ export class HubService {
 	}
 	public start() {
 		this.connect()
+    this.attachEvents()
 		// setInterval(() => this.connect(), 5000)
 	}
 	public stop() {
 		// this.detachEvents();
 		this.hub.stop().then(() => {
 			console.info('## Hub stopped. ##')
+      this.detachEvents()
 		})
 	}
 

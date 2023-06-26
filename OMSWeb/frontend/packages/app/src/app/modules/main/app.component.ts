@@ -6,6 +6,7 @@ import { setCssValue } from '../shared/utils/css-loader';
 import {TTSService} from "@oms/services/tts.service";
 import {SystemsService} from "@oms/services/systems.service";
 import { MobileService } from '../../services/mobile.service';
+import {TrackStatusService} from "@oms/services/track-status.service";
 
 @Component({
   selector: 'oms-root',
@@ -14,7 +15,6 @@ import { MobileService } from '../../services/mobile.service';
 })
 export class AppComponent {
   private translate: TranslateService;
-
   constructor(
     $t: TranslateService,
     private hubSvc: HubService,
@@ -22,7 +22,8 @@ export class AppComponent {
     private ttsSvc: TTSService,
 
     private system:SystemsService,
-    private mobile: MobileService
+    private mobile: MobileService,
+    private trackStatusService: TrackStatusService
   ) {
     this.translate = $t;
 
@@ -64,5 +65,22 @@ export class AppComponent {
 
   public ngOnInit(): void {
     this.mobile.checkMobile(true)
+  }
+
+  @HostListener('document:visibilitychange', ['$event'])
+  private visibilitychange() {
+    if(document.hidden){
+      this.hubSvc.stop()
+      this.trackStatusService.isTrackReady =false
+      this.trackStatusService.isTrackReadyChanged.emit(false)
+    }
+    else{
+      this.trackStatusService.fetchTrack().then(()=>{
+      })
+      this.trackStatusService.fetchTrack().then(()=>{
+        this.trackStatusService.attachHubEvents()
+        this.hubSvc.start();
+      })
+    }
   }
 }

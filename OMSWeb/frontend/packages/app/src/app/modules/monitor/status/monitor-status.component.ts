@@ -89,6 +89,16 @@ export class MonitorStatusComponent implements OnInit,OnDestroy {
 			? ViewModes.viewer
 			: ViewModes.public
 
+    trackStatusService.isTrackReadyChanged.subscribe(isReady=>{
+      if(isReady){
+        this.trackData = this.trackStatusService.trackData
+        this.loadingState = false
+        this.ready = true
+        this.trackData.stations.map(s=>{
+          if(!this.includeCheck(s.logicalId)) s.carrierId =null
+        })
+      }
+    })
 
 
     settingSvc.serviceConfig.subscribe(
@@ -98,27 +108,10 @@ export class MonitorStatusComponent implements OnInit,OnDestroy {
           ...fireStationFilters?.startWords,
           ...fireStationFilters?.endWords,
           ...fireStationFilters?.includeWords].filter(i=>i&&i)
-
-        const pullTrackData = (isTrackReady: boolean) => {
-          if (isTrackReady) {
-            this.trackData = this.trackStatusService.trackData
-            this.loadingState = false
-            this.ready = true
-            this.trackData.stations.map(s=>{
-              if(!this.includeCheck(s.logicalId)) s.carrierId =null
-            })
-          }
-        }
-
         this.trackStatusService.fetchTrack().then(()=>{
-          pullTrackData(this.trackStatusService.isTrackReady)
         })
       },
     )
-
-
-
-
 
 		systemStatusService.updateNodeMarginsSetting()
 

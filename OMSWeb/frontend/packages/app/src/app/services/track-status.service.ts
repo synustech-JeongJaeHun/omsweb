@@ -1,8 +1,8 @@
-import { EventEmitter, Injectable, Output } from '@angular/core'
-import { StatusService } from './status.service'
-import { HubService } from './hub.service'
-import { Dto } from '../models/dto/track.model'
-import { IDataChangeEvent } from '../models/notification.model'
+import {EventEmitter, Injectable, Output} from '@angular/core'
+import {StatusService} from './status.service'
+import {HubService} from './hub.service'
+import {Dto} from '../models/dto/track.model'
+import {IDataChangeEvent} from '../models/notification.model'
 
 
 @Injectable({
@@ -22,14 +22,12 @@ export class TrackStatusService {
 	}
 
 	public async fetchTrack() {
-		const trackData = await this.statusService.getTrack().toPromise()
-
-		this.trackData = trackData
+    this.trackData = await this.statusService.getTrack().toPromise()
 		this.isTrackReady = true
 		this.isTrackReadyChanged.emit(this.isTrackReady)
 	}
 
-	private attachHubEvents() {
+	public attachHubEvents() {
 		this.hubService.connectionChanged$.subscribe((conn) => {
 			this.handleConnectionChanged(conn)
 		})
