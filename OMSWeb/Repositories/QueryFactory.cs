@@ -345,10 +345,13 @@ namespace OMSWeb.Repositories
 			    WHEN OD.location_move LIKE '%b%' THEN (SELECT logical_Id FROM buffers WHERE concat('b', cast(id as varchar)) = OD.location_move)
 			    ELSE OD.location_move
 		    END AS location_move,
-
             VH.cargo_state, 
             VH.carrier_id AS CarrierLabel,
-            VH.mode,
+            CASE 
+                WHEN VH.mode = 'A' THEN 'Auto'
+                WHEN VH.mode = 'M' THEN 'Manual'
+		        ELSE VH.mode
+            END AS mode, 
             CASE 
                 WHEN order_origin LIKE '%MCS%' THEN true 
                 WHEN order_origin LIKE '%*%' THEN true 
