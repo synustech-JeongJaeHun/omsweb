@@ -98,6 +98,10 @@ export class MonitorStatusComponent implements OnInit,OnDestroy {
           if(!this.includeCheck(s.logicalId)) s.carrierId =null
         })
       }
+      else{
+        this.loadingState = true
+        this.ready = false
+      }
     })
 
 
