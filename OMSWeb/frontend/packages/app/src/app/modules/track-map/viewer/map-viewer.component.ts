@@ -225,19 +225,14 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		// @ts-ignore
 		this.viewer = document.getElementById('track-canvas')._instance.exposed
 
-    this.trackStatusService.isTrackReadyChanged.subscribe(res=>{
-      if(res){
+    this.viewer.setTrack({
+      ...this.trackData,
+      segmentParts: this.trackData.segments,
+      clusters: this.trackData.clusters.map((c) => ({
+        ...c,
         // @ts-ignore
-        this.viewer.setTrack({
-          ...this.trackData,
-          segmentParts: this.trackData.segments,
-          clusters: this.trackData.clusters.map((c) => ({
-            ...c,
-            // @ts-ignore
-            segments: c.segments.split(',').map((id) => parseInt(id.trim())),
-          })),
-        })
-      }
+        segments: c.segments.split(',').map((id) => parseInt(id.trim())),
+      })),
     })
 
     this.attachEvents()

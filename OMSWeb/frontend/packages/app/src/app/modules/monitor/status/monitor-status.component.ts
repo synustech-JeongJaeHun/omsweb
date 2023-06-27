@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnDestroy, OnInit} from '@angular/core'
+import {Component, EventEmitter, HostListener, OnDestroy, OnInit} from '@angular/core'
 import { SystemStatusService } from '@oms/root/services/system-status.service'
 import { TrackStatusService } from '@oms/root/services/track-status.service'
 
@@ -10,6 +10,7 @@ import { AuthService } from '../../../services/auth.service'
 import {CdkDragEnd, CdkDragMove} from "@angular/cdk/drag-drop";
 import {TrackMonitorSettingService} from "@oms/services/track-monitor-setting.service";
 import {MobileService} from "@oms/services/mobile.service";
+import {HubService} from "@oms/services/hub.service";
 
 @Component({
 	selector: 'oms-monitor-status',
@@ -82,8 +83,8 @@ export class MonitorStatusComponent implements OnInit,OnDestroy {
 		private trackStatusService: TrackStatusService,
 		systemStatusService: SystemStatusService,
     private trackMonitorSettingService: TrackMonitorSettingService,
-
     private mobileSvc: MobileService,
+    private hubSvc: HubService
 	) {
 		this.viewMode = this.auth.isAuthenticated
 			? ViewModes.viewer
@@ -91,19 +92,13 @@ export class MonitorStatusComponent implements OnInit,OnDestroy {
 
     trackStatusService.isTrackReadyChanged.subscribe(isReady=>{
       if(isReady){
-        this.trackData = this.trackStatusService.trackData
-        this.loadingState = false
-        this.ready = true
-        this.trackData.stations.map(s=>{
-          if(!this.includeCheck(s.logicalId)) s.carrierId =null
-        })
+        this.loadedTrack()
       }
       else{
         this.loadingState = true
         this.ready = false
       }
     })
-
 
     settingSvc.serviceConfig.subscribe(
       (config) => {
@@ -113,6 +108,7 @@ export class MonitorStatusComponent implements OnInit,OnDestroy {
           ...fireStationFilters?.endWords,
           ...fireStationFilters?.includeWords].filter(i=>i&&i)
         this.trackStatusService.fetchTrack().then(()=>{
+          this.loadedTrack()
         })
       },
     )
@@ -169,5 +165,29 @@ export class MonitorStatusComponent implements OnInit,OnDestroy {
 
   get isMobile(){
     return this.mobileSvc.isMobile
+  }
+
+  @HostListener('document:visibilitychange', ['$event'])
+  private visibilitychange() {
+    if(document.hidden){
+      this.hubSvc.stop()
+      this.trackStatusService.isTrackReady =false
+      this.trackStatusService.isTrackReadyChanged.emit(false)
+    }
+    else{
+      this.trackStatusService.fetchTrack().then(()=>{
+        this.trackStatusService.attachHubEvents()
+        this.hubSvc.start();
+      })
+    }
+  }
+
+  private loadedTrack(){
+    this.trackData = this.trackStatusService.trackData
+    this.loadingState = false
+    this.ready = true
+    this.trackData.stations.map(s=>{
+      if(!this.includeCheck(s.logicalId)) s.carrierId =null
+    })
   }
 }

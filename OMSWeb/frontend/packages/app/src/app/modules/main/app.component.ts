@@ -66,21 +66,4 @@ export class AppComponent {
   public ngOnInit(): void {
     this.mobile.checkMobile(true)
   }
-
-  @HostListener('document:visibilitychange', ['$event'])
-  private visibilitychange() {
-    if(document.hidden){
-      this.hubSvc.stop()
-      this.trackStatusService.isTrackReady =false
-      this.trackStatusService.isTrackReadyChanged.emit(false)
-    }
-    else{
-      this.trackStatusService.fetchTrack().then(()=>{
-      })
-      this.trackStatusService.fetchTrack().then(()=>{
-        this.trackStatusService.attachHubEvents()
-        this.hubSvc.start();
-      })
-    }
-  }
 }
