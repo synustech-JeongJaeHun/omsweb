@@ -11,6 +11,8 @@ using OMSWeb.Services;
 using Newtonsoft.Json;
 using OMSWeb.Services.MqttClient;
 using System.Diagnostics;
+using System.Net;
+using System.Net.Http;
 using System.Threading;
 using DevExtreme.AspNet.Data;
 using DevExtreme.AspNet.Mvc;
@@ -207,12 +209,14 @@ namespace OMSWeb.Controllers
 
             if (!Directory.Exists(logTempCopyDir))
                 Directory.CreateDirectory(logTempCopyDir);
-
+            
+            long zipSize = 0;
             foreach (string path in folderFullPaths.Split(','))
             {
                 if ((System.IO.File.GetAttributes(path) & FileAttributes.Directory) == FileAttributes.Directory)
                 {
                     DirectoryInfo directoryInfo = new DirectoryInfo(path);
+                    zipSize += CalculateDirectorySize(path);
                     if (!Directory.Exists(logTempCopyDir + "\\" + directoryInfo.Name))
                         Directory.CreateDirectory(logTempCopyDir + "\\" + directoryInfo.Name);
 
@@ -222,13 +226,21 @@ namespace OMSWeb.Controllers
                 {
                     FileInfo fileInfo = new FileInfo(path);
                     System.IO.File.Copy(path, logTempCopyDir + "\\" + fileInfo.Name);
+                    zipSize += fileInfo.Length;
                 }
+            }
+            
+            if (zipSize > Math.Pow(1024,3))  // 1GB = 1024^3
+            {
+                Directory.Delete(logTempCopyDir, true);
+
+                Response.StatusCode = 400;
+                return new Exception(String.Format("The size of the selected folder is large."));
             }
 
             try
             {
                 System.IO.Compression.ZipFile.CreateFromDirectory(folderPath, logZipFilePath, CompressionLevel.Optimal, true);
-
                 Directory.Delete(logTempCopyDir, true);
             }
             catch
@@ -253,7 +265,6 @@ namespace OMSWeb.Controllers
                 }
 
                 System.IO.Compression.ZipFile.CreateFromDirectory(logTempCopyDir, logZipFilePath, CompressionLevel.Optimal, true);
-
                 Directory.Delete(logTempCopyDir, true);
             }
 
@@ -499,6 +510,34 @@ namespace OMSWeb.Controllers
             { }
 
             return null;
+        }
+        
+        
+        public static long CalculateDirectorySize(string directoryPath)
+        {
+            DirectoryInfo directoryInfo = new DirectoryInfo(directoryPath);
+            return CalculateDirectorySize(directoryInfo);
+        }
+        
+        private static long CalculateDirectorySize(DirectoryInfo directoryInfo)
+        {
+            long size = 0;
+
+            // 파일 크기 계산
+            FileInfo[] files = directoryInfo.GetFiles();
+            foreach (FileInfo file in files)
+            {
+                size += file.Length;
+            }
+
+            // 서브 디렉토리 크기 계산
+            DirectoryInfo[] subDirectories = directoryInfo.GetDirectories();
+            foreach (DirectoryInfo subDirectory in subDirectories)
+            {
+                size += CalculateDirectorySize(subDirectory);
+            }
+
+            return size;
         }
     }
 }

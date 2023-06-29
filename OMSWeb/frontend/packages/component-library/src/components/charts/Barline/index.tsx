@@ -198,7 +198,6 @@ const Barline: React.FC<Props> = ({
 		onClick,
 		variant
 	})
-  console.log(currentOpt)
 	return (
 		<Wrapper>
 			<HighchartsReact

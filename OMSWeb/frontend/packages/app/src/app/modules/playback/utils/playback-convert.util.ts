@@ -41,7 +41,8 @@ function convertTrackBufferToTmBuffer(buffer: PlaybackBuffer) {
 		pointId: buffer.point,
 		nextPoint: buffer.next_point,
 		offset: buffer.offset,
-    cAlias: buffer.c_alias
+    cAlias: buffer.c_alias,
+    state: buffer.state
 	}
 }
 
@@ -54,7 +55,8 @@ function convertTrackStationToTmStation(station: PlaybackStation) {
 		physicalId: station.physical_id,
 		pointId: station.point,
 		nextPoint: station.next_point,
-    cAlias: station.c_alias
+    cAlias: station.c_alias,
+    state: station.state
 	}
 }
 
@@ -162,7 +164,8 @@ function convertSnapshotBufferToTmBuffer(buffer: PlaybackSnapshotBuffer) {
 		carrierId: buffer.carrier_id,
 		user: buffer.user,
 		note: buffer.note,
-    cAlias: buffer.c_alias
+    cAlias: buffer.c_alias,
+    state: buffer.state
 	}
 }
 function convertSnapshotStationToTmStation(station: PlaybackSnapshotStation) {
@@ -182,7 +185,8 @@ function convertSnapshotStationToTmStation(station: PlaybackSnapshotStation) {
 
 		user: station.user,
 		note: station.note,
-    cAlias: station.c_alias
+    cAlias: station.c_alias,
+    state: station.state
 	}
 }
 function convertSnapshotZcuToTmZcu(zcu: PlaybackSnapshotZcu) {
@@ -277,6 +281,7 @@ function convertBufferHistoryEventToTmUpdateDtoBuffer(
 		carrierId: event.carrierId,
 		user: event.user,
 		note: event.note,
+    state: event.state
 	}
 }
 
@@ -288,6 +293,7 @@ function convertStationHistoryEventToTmUpdateDtoStation(
 		unuse: event.unuse,
 		user: event.user,
 		note: event.note,
+    state: event.state
 	}
 }
 
@@ -409,6 +415,7 @@ function convertSnapshotBufferToCurrentBuffer(
 		unusedTime: buffer.unused_time,
     slideOffset: buffer.slide_offset,
     cAlias: buffer.c_alias,
+    state: buffer.state,
 	}
 }
 function convertSnapshotStationToCurrentStation(
@@ -430,6 +437,7 @@ function convertSnapshotStationToCurrentStation(
 		carrierType: station.carrier_type,
     slideOffset: station.slide_offset,
     cAlias: station.c_alias,
+    state: station.state,
 	}
 }
 
@@ -539,6 +547,7 @@ function convertBufferHistoryEventToCurrentBuffer(
 		offset: buffer.offset,
 		direction: buffer.direction,
 		nextPoint: buffer.nextPoint,
+    state: buffer.state
 	}
 }
 
@@ -560,6 +569,7 @@ function convertStationHistoryEventToCurrentStation(
 		direction: station.direction,
 		carrierType: station.carrierType,
 		nextPoint: station.nextPoint,
+    state: station.state
 	}
 }
 

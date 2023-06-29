@@ -64,9 +64,9 @@ export class PlaybackOrderStatusComponent {
 
 		const list =
 			locationType === 's'
-				? this.playService.track.data?.stations ?? []
+				? this.playService.track?.data?.stations ?? []
 				: locationType === 'b'
-				? this.playService.track.data?.buffers
+				? this.playService.track?.data?.buffers
 				: []
 
 		const location = list.find((e) => e.id === id)

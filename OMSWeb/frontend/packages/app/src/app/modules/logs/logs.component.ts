@@ -84,7 +84,10 @@ export class LogsComponent implements OnInit {
       if (this.fileManager.instance.getSelectedItems() == undefined || this.fileManager.instance.getSelectedItems().length == 0) {
         let directory = e.fileSystemItem || this.fileManager.instance.getCurrentDirectory();
         //alert(directory.name + ' - ' + directory.key);
-        if(!directory.name || !directory.key) return
+        if(!directory.name || !directory.key) {
+          this.isLoading = false
+          return
+        }
         this.systemSvc.downloadFolder(directory.name, directory.key).subscribe(blob => {
           const a = document.createElement('a')
           const objectUrl = URL.createObjectURL(blob)
@@ -98,7 +101,7 @@ export class LogsComponent implements OnInit {
       } else {
         //alert('selected : ' + this.fileManager.instance.getSelectedItems());
         let items = null;
-        let paths: string[] = new Array();
+        let paths: string[] = [];
         let directory = e.fileSystemItem || this.fileManager.instance.getCurrentDirectory();
 
         items = this.fileManager.instance.getSelectedItems();
@@ -111,7 +114,7 @@ export class LogsComponent implements OnInit {
         });
 
         //alert('items = (' + items + ') count = (' + items.length + ') : ' + items[0].dataItem.isDirectory);
-        if (items != undefined && items.length == 1 && !items[0].dataItem.isDirectory && items[0].dataItem.size < 10485760) {    // 10MB = 10 * 1024 * 1024
+        if (items.length == 1 && !items[0].dataItem.isDirectory && items[0].dataItem.size < 10485760) {    // 10MB = 10 * 1024 * 1024
           this.systemSvc.downloadFile(items[0].dataItem.name, items[0].dataItem.key)
             .pipe(
               finalize(() => this.isLoading = false),
@@ -129,22 +132,28 @@ export class LogsComponent implements OnInit {
                 body: 'Download failed!'
               })
             });
-        } else if (items != undefined && items.length >= 1) {
+        } else if (items.length >= 1) {
           this.systemSvc.downloadFoldersNFiles(directory.name, paths)
             .pipe(
               finalize(() => this.isLoading = false),
             )
             .subscribe(blob => {
-            const a = document.createElement('a')
-            const objectUrl = URL.createObjectURL(blob)
-            a.href = objectUrl
-            a.download = directory.name + '.zip';
-            a.click();
-            URL.revokeObjectURL(objectUrl);
-          }, error => {
+              const a = document.createElement('a')
+              const objectUrl = URL.createObjectURL(blob)
+              a.href = objectUrl
+              a.download = directory.name + '.zip';
+              a.click();
+              URL.revokeObjectURL(objectUrl);
+            }, error => {
+              let body= 'Download failed!'
+
+              if(error.status===400){
+                body= 'The size of the selected folder is large!'
+              }
+
               this.dialogSvc.alert({
                 title: this.t$.instant('alerts'),
-                body: 'Download failed!'
+                body
               })
             });
         } else {

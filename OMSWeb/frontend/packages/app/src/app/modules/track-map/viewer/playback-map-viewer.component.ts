@@ -286,7 +286,7 @@ export class PlaybackMapViewerComponent implements OnInit, OnDestroy {
 			? this.playService.track.data.buffers.map(convertTrackBufferToTmBuffer)
 			: []
 
-    console.log(buffers)
+
 		const stations = this.playService.currentSnapshot.data.stations
 			? this.playService.currentSnapshot.data.stations.map(
 					convertSnapshotStationToTmStation,
@@ -294,6 +294,7 @@ export class PlaybackMapViewerComponent implements OnInit, OnDestroy {
 			: this.playService.track.data.stations
 			? this.playService.track.data.stations.map(convertTrackStationToTmStation)
 			: []
+    console.log(stations)
 		const zcus = this.playService.currentSnapshot.data.zcus
 			? this.playService.currentSnapshot.data.zcus.map(
 					convertSnapshotZcuToTmZcu,
