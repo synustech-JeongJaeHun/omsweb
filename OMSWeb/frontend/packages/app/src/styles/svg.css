@@ -2122,7 +2122,7 @@ path.cluster_mask {
 	text-align: center;
 }
 
-.legend-item svg {
+.legend-dlg-item svg {
 	width: 100px;
 	height: 45px;
 }

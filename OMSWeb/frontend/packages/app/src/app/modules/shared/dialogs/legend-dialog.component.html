@@ -6,7 +6,7 @@
 			<dl>
 				<dt>{{ 'names.vehicleType' | translate }}</dt>
 				<dd>
-					<div class="legend-item">
+					<div class="legend-dlg-item">
 						<div class="legend-icon">
 							<svg>
 								<g class="vehicle" transform="translate(70,30)">
@@ -33,6 +33,7 @@
 										font-size="11px"
 										x="-15"
 										y="-4"
+                    fill="black"
 										text-anchor="end"
 									>
 										vehicle_id
@@ -42,6 +43,7 @@
 										font-size="11px"
 										x="-15"
 										y="12"
+                    fill="black"
 										text-anchor="end"
 									>
 										{{ vehicleSecondaryContent }}
@@ -57,7 +59,7 @@
 
 				<dt>{{ 'names.vehicleMode' | translate }}</dt>
 				<dd>
-					<div class="legend-item">
+					<div class="legend-dlg-item">
 						<div class="legend-icon">
 							<svg>
 								<g class="vehicle" transform="translate(50,30)">
@@ -86,7 +88,7 @@
 							{{ 'names.running' | translate }}
 						</div>
 					</div>
-					<div class="legend-item">
+					<div class="legend-dlg-item">
 						<div class="legend-icon">
 							<svg>
 								<g class="vehicle" transform="translate(50,30)">
@@ -115,7 +117,7 @@
 							{{ 'names.home' | translate }}/{{'names.ivr' | translate }}
 						</div>
 					</div>
-					<div class="legend-item">
+					<div class="legend-dlg-item">
 						<div class="legend-icon">
 							<svg>
 								<g class="vehicle" transform="translate(50,30)">
@@ -144,7 +146,7 @@
 							{{ 'names.idle' | translate }}
 						</div>
 					</div>
-					<div class="legend-item">
+					<div class="legend-dlg-item">
 						<div class="legend-icon">
 							<svg>
 								<g class="vehicle" transform="translate(50,30)">
@@ -174,7 +176,7 @@
 						</div>
 					</div>
 					<!-- Maintenance -->
-					<div class="legend-item">
+					<div class="legend-dlg-item">
 						<div class="legend-icon">
 							<svg>
 								<g class="vehicle" transform="translate(50,30)">
@@ -207,7 +209,7 @@
 							{{ 'names.maintenance' | translate }}
 						</div>
 					</div>
-					<div class="legend-item">
+					<div class="legend-dlg-item">
 						<div class="legend-icon">
 							<svg>
 								<g class="vehicle" transform="translate(50,30)">
@@ -236,7 +238,7 @@
 							{{ 'names.error' | translate }}
 						</div>
 					</div>
-					<div class="legend-item">
+					<div class="legend-dlg-item">
 						<div class="legend-icon">
 							<svg>
 								<g class="vehicle" transform="translate(50,30)">
@@ -269,7 +271,7 @@
 
 				<dt>{{ 'names.vehicleProperties' | translate }}</dt>
 				<dd>
-					<div class="legend-item">
+					<div class="legend-dlg-item">
 						<div class="legend-icon">
 							<svg>
 								<g class="vehicle" transform="translate(50,30)">
@@ -310,7 +312,7 @@
 							{{ 'names.sensorStopped' | translate }}
 						</div>
 					</div>
-					<div class="legend-item">
+					<div class="legend-dlg-item">
 						<div class="legend-icon">
 							<svg>
 								<g class="vehicle" transform="translate(50,30)">
@@ -349,7 +351,7 @@
 							{{ 'names.zcuBlocked' | translate }}
 						</div>
 					</div>
-					<div class="legend-item">
+					<div class="legend-dlg-item">
 						<div class="legend-icon">
 							<svg>
 								<g class="vehicle" transform="translate(50,30)">
@@ -411,7 +413,7 @@
 							{{ 'names.preventCall' | translate }}
 						</div>
 					</div>
-					<div class="legend-item">
+					<div class="legend-dlg-item">
 						<div class="legend-icon">
 							<svg>
 								<g class="vehicle" transform="translate(50,30)">
@@ -474,7 +476,7 @@
 
 				<dt>{{ 'names.cargoState' | translate }}</dt>
 				<dd>
-					<div class="legend-item">
+					<div class="legend-dlg-item">
 						<div class="legend-icon">
 							<svg>
 								<g class="vehicle" transform="translate(50,30)">
@@ -508,7 +510,7 @@
 							{{ 'names.loading' | translate }}
 						</div>
 					</div>
-					<div class="legend-item">
+					<div class="legend-dlg-item">
 						<div class="legend-icon">
 							<svg>
 								<g class="vehicle" transform="translate(50,30)">
@@ -541,7 +543,7 @@
 							{{ 'names.full' | translate }}
 						</div>
 					</div>
-					<div class="legend-item">
+					<div class="legend-dlg-item">
 						<div class="legend-icon">
 							<svg>
 								<g class="vehicle" transform="translate(50,30)">
@@ -574,7 +576,7 @@
 							{{ 'names.unloading' | translate }}
 						</div>
 					</div>
-					<div class="legend-item">
+					<div class="legend-dlg-item">
 						<div class="legend-icon">
 							<svg>
 								<g class="vehicle" transform="translate(50,30)">
@@ -603,7 +605,7 @@
 							{{ 'names.empty' | translate }}
 						</div>
 					</div>
-					<div class="legend-item">
+					<div class="legend-dlg-item">
 						<div class="legend-icon">
 							<svg>
 								<g class="vehicle" transform="translate(50,30)">
@@ -641,7 +643,7 @@
 							{{ 'names.loadFailed' | translate }}
 						</div>
 					</div>
-					<div class="legend-item">
+					<div class="legend-dlg-item">
 						<div class="legend-icon">
 							<svg>
 								<g class="vehicle" transform="translate(50,30)">
@@ -684,7 +686,7 @@
 						</div>
 					</div>
 
-					<div *ngIf="fireSensor" class="legend-item">
+					<div *ngIf="fireSensor" class="legend-dlg-item">
 						<div class="legend-icon">
 							<svg>
 								<g class="vehicle" transform="translate(50,30)">
@@ -723,7 +725,7 @@
 
 				<dt>{{ 'names.orderPriority' | translate }}</dt>
 				<dd>
-					<div class="legend-item">
+					<div class="legend-dlg-item">
 						<div class="legend-icon">
 							<svg>
 								<g class="vehicle" transform="translate(70,30)">
@@ -770,7 +772,7 @@
 							{{ 'names.normal' | translate }}
 						</div>
 					</div>
-					<div class="legend-item">
+					<div class="legend-dlg-item">
 						<div class="legend-icon">
 							<svg>
 								<g class="vehicle" transform="translate(70,30)">
@@ -845,7 +847,7 @@
 
 				<dt>{{ 'names.target' | translate }}</dt>
 				<dd>
-					<div class="legend-item">
+					<div class="legend-dlg-item">
 						<div class="legend-icon">
 							<svg>
 								<g class="vehicle" transform="translate(70,30)">
@@ -901,7 +903,7 @@
 							{{ 'names.next' | translate }}
 						</div>
 					</div>
-					<div class="legend-item">
+					<div class="legend-dlg-item">
 						<div class="legend-icon">
 							<svg>
 								<g class="vehicle" transform="translate(70,30)">
@@ -957,7 +959,7 @@
 							{{ 'names.pickUp' | translate }}
 						</div>
 					</div>
-					<div class="legend-item">
+					<div class="legend-dlg-item">
 						<div class="legend-icon">
 							<svg>
 								<g class="vehicle" transform="translate(70,30)">
@@ -1013,7 +1015,7 @@
 							{{ 'names.dropOff' | translate }}
 						</div>
 					</div>
-					<div class="legend-item">
+					<div class="legend-dlg-item">
 						<div class="legend-icon">
 							<svg>
 								<g class="vehicle" transform="translate(70,30)">
@@ -1069,7 +1071,7 @@
 							{{ 'names.home' | translate }}/{{ 'names.ivr' | translate }}/{{'names.push' | translate }}
 						</div>
 					</div>
-					<div class="legend-item">
+					<div class="legend-dlg-item">
 						<div class="legend-icon">
 							<svg>
 								<g class="vehicle" transform="translate(70,30)">
@@ -1129,7 +1131,7 @@
 
 				<dt>{{ 'names.segment' | translate }}</dt>
 				<dd>
-					<div class="legend-item">
+					<div class="legend-dlg-item">
 						<div class="legend-icon">
 							<svg>
 								<g class="segment">
@@ -1145,7 +1147,7 @@
 						</div>
 						<div class="legend-caption"></div>
 					</div>
-					<div class="legend-item">
+					<div class="legend-dlg-item">
 						<div class="legend-icon">
 							<svg style="overflow: visible">
 								<g class="segment">
@@ -1167,7 +1169,7 @@
 						</div>
 						<div class="legend-caption"></div>
 					</div>
-					<div class="legend-item">
+					<div class="legend-dlg-item">
 						<div class="legend-icon">
 							<svg>
 								<g class="segment">
@@ -1185,7 +1187,7 @@
 							{{ 'names.disabled' | translate }}
 						</div>
 					</div>
-					<div class="legend-item">
+					<div class="legend-dlg-item">
 						<div class="legend-icon">
 							<svg>
 								<g class="segment">
@@ -1217,7 +1219,7 @@
 						</div>
 					</div>
 
-          <div class="legend-item">
+          <div class="legend-dlg-item">
             <div class="legend-icon">
               <svg style="overflow: visible">
                 <g class="segment">
@@ -1247,7 +1249,7 @@
             </div>
           </div>
 
-          <div class="legend-item">
+          <div class="legend-dlg-item">
             <div class="legend-icon">
               <svg style="overflow: visible">
                 <g class="segment">
@@ -1280,7 +1282,7 @@
 
 				<dt>{{ 'names.point' | translate }}</dt>
 				<dd>
-					<div class="legend-item">
+					<div class="legend-dlg-item">
 						<div class="legend-icon">
 							<svg>
 								<g class="point" transform="translate(30,30)">
@@ -1304,7 +1306,7 @@
 				<!-- station -->
 				<dt>{{ 'names.station' | translate }}</dt>
 				<dd class="--item-gap">
-					<div class="legend-item">
+					<div class="legend-dlg-item">
 						<div class="legend-icon">
 							<svg class="long-vertical">
 								<g class="station" transform="translate(50,28)">
@@ -1328,7 +1330,7 @@
 						</div>
 						<div class="legend-caption">Normal</div>
 					</div>
-					<div class="legend-item">
+					<div class="legend-dlg-item">
 						<div class="legend-icon">
 							<svg class="long-vertical">
 								<g class="station" transform="translate(50,28)">
@@ -1356,7 +1358,7 @@
 
 				<dt>{{ 'names.buffer' | translate }}</dt>
 				<dd class="--item-gap">
-					<div class="legend-item">
+					<div class="legend-dlg-item">
 						<div class="legend-icon">
 							<svg class="long-vertical">
 								<g class="buffer" transform="translate(50,28)">
@@ -1380,7 +1382,7 @@
 						</div>
 						<div class="legend-caption">Normal</div>
 					</div>
-					<div class="legend-item">
+					<div class="legend-dlg-item">
 						<div class="legend-icon">
 							<svg class="long-vertical">
 								<g class="buffer" transform="translate(50,28)">
@@ -1405,7 +1407,7 @@
 						</div>
 						<div class="legend-caption">Full</div>
 					</div>
-					<div class="legend-item">
+					<div class="legend-dlg-item">
 						<div class="legend-icon">
 							<svg class="long-vertical">
 								<g class="buffer" transform="translate(50,28)">
@@ -1433,7 +1435,7 @@
 
 				<dt>{{ 'names.mtl' | translate }}</dt>
 				<dd class="--item-gap">
-					<div class="legend-item">
+					<div class="legend-dlg-item">
 						<div class="legend-icon">
 							<svg class="long-vertical">
 								<g class="mtl" transform="translate(50,28)">
@@ -1458,7 +1460,7 @@
 						</div>
 						<div class="legend-caption">Normal</div>
 					</div>
-					<div class="legend-item">
+					<div class="legend-dlg-item">
 						<div class="legend-icon">
 							<svg class="long-vertical">
 								<g class="mtl" transform="translate(50,28)">
@@ -1486,7 +1488,7 @@
 				</dd>
 				<dt>{{ 'names.zcu' | translate }}</dt>
 				<dd class="--item-gap">
-					<div class="legend-item">
+					<div class="legend-dlg-item">
 						<div class="legend-icon">
 							<svg class="long-vertical">
 								<g class="zcu" transform="translate(50,28)">
@@ -1519,7 +1521,7 @@
 						</div>
 						<div class="legend-caption">Hardware</div>
 					</div>
-					<div class="legend-item">
+					<div class="legend-dlg-item">
 						<div class="legend-icon">
 							<svg class="long-vertical">
 								<g class="zcu" transform="translate(50,28)">
@@ -1552,7 +1554,7 @@
 						</div>
 						<div class="legend-caption">Software</div>
 					</div>
-					<div class="legend-item">
+					<div class="legend-dlg-item">
 						<div class="legend-icon">
 							<svg class="long-vertical">
 								<g class="zcu" transform="translate(50,28)">
@@ -1589,7 +1591,7 @@
 				<!-- FireShutter (Opened) -->
 				<dt>{{ 'names.fireshutter' | translate }}</dt>
 				<dd class="--item-gap">
-					<div class="legend-item">
+					<div class="legend-dlg-item">
 						<div class="legend-icon">
 							<svg class="long-vertical">
 								<g
@@ -1640,7 +1642,7 @@
 						</div>
 						<div class="legend-caption">Open</div>
 					</div>
-					<div class="legend-item">
+					<div class="legend-dlg-item">
 						<div class="legend-icon">
 							<svg class="long-vertical">
 								<g
