@@ -301,7 +301,7 @@ const TitleBarlineSet: React.FC<Props & any> & any = React.forwardRef(
 		}
 
 		const handleClick = async ({ key, value, detail }) => {
-			const isDay = R.test(/-/, value)
+			const isDay = key==='duration'&& R.test(/-/, value)
 			!isDay && onClickItem && onClickItem({ key, value })
 
 			!isDay &&
