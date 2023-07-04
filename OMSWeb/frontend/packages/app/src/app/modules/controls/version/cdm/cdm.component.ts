@@ -17,6 +17,7 @@ export class CdmComponent implements OnInit {
 
   ngOnInit(): void {
     this.load();
+    setInterval(()=>this.load(),60000*5)
   }
 
 

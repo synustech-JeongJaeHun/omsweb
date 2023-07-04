@@ -17,6 +17,7 @@ export class VehicleComponent implements OnInit {
 
   ngOnInit(): void {
     this.load();
+    setInterval(()=>this.load(),60000*5)
   }
 
 

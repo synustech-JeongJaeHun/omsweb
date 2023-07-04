@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using OMSWeb.Models;
 using OMSWeb.Models.Entities;
 using OMSWeb.Repositories;
@@ -14,7 +15,12 @@ namespace OMSWeb.Services
     private readonly ModuleStatusRepository _moduleStatusRepo;
 
     private Dictionary<string, string> _processSets;
+    
+    private Timer _timer;
 
+    private IQueryable<ModuleStatusEntity> moduleStatusEntity;
+    private IQueryable<VhlStatusEntity> vhlStatusEntity;
+    private IQueryable<CdmStatusEntity> cdmStatusEntity;
     public ModuleStatusService(ModuleStatusRepository moduleStatus)
     {
       this._moduleStatusRepo = moduleStatus;
@@ -32,11 +38,18 @@ namespace OMSWeb.Services
         {"FDC",       "fdc_mgr" },
         {"RDS",       "RDS" },
       };
+
+      timerCallback(null);
+      _timer = new Timer(timerCallback);
+      _timer.Change(0, 60000 * 5);
     }
 
-    public IQueryable<ModuleStatusEntity> GetModuleStatus()
+    private void timerCallback(Object state)
     {
-      IQueryable<ModuleStatusEntity> moduleStatusEntity = this._moduleStatusRepo.GetModuleStatus();
+      Console.WriteLine($"### timer callback >> {DateTime.Now}");
+      moduleStatusEntity = this._moduleStatusRepo.GetModuleStatus();
+      vhlStatusEntity = this._moduleStatusRepo.GetVhlStatus();
+      cdmStatusEntity = this._moduleStatusRepo.GetCdmStatus();
       
       foreach (var module in moduleStatusEntity)
       {
@@ -52,25 +65,26 @@ namespace OMSWeb.Services
           this._moduleStatusRepo.UpdateModuleStatus(dto);
         }
       }
-
-      return moduleStatusEntity;
     }
-    
+
     public Process GetProcByID(string name)
     {
       Process[] processlist = Process.GetProcesses();
       return processlist.FirstOrDefault(pr => string.Compare(pr.ProcessName, name, StringComparison.CurrentCultureIgnoreCase) == 0);
     }
-    
+
+    public IQueryable<ModuleStatusEntity> GetModuleStatus()
+    {
+      return moduleStatusEntity;
+    }
+
     public IQueryable<VhlStatusEntity> GetVhlStatus()
     {
-      IQueryable<VhlStatusEntity> vhlStatusEntity = this._moduleStatusRepo.GetVhlStatus();
       return vhlStatusEntity;
     }
-    
+
     public IQueryable<CdmStatusEntity> GetCdmStatus()
     {
-      IQueryable<CdmStatusEntity> cdmStatusEntity = this._moduleStatusRepo.GetCdmStatus();
       return cdmStatusEntity;
     }
   }

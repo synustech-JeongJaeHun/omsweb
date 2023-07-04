@@ -154,7 +154,7 @@ namespace OMSWeb
             services.AddScoped<ReportTrendReposity>();
             services.AddScoped<DbVersionRepository>();
 
-            services.AddScoped<ModuleStatusService>();
+            //services.AddScoped<ModuleStatusService>();
             services.AddScoped<StatusService>();
             services.AddScoped<NotificationsService>();
             services.AddScoped<MessageService>();
@@ -163,9 +163,10 @@ namespace OMSWeb
             services.AddScoped<PlaybackService>();
             services.AddScoped<SettingsService>();
             services.AddScoped<VehicleService>();
-            services.AddScoped<ReportService>();
             services.AddScoped<DbService>();
+            services.AddScoped<ReportService>();
 
+            services.AddSingleton<ModuleStatusService>();
             services.AddSingleton<SystemsService>();
             services.AddSingleton<ModuleStatusRepository>();
             services.AddSingleton<ModeStateRepository>();

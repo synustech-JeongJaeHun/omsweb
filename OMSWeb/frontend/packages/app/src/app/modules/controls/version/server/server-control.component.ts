@@ -15,7 +15,8 @@ export class ServerControlComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.load();
+    this.load()
+    setInterval(()=>this.load(),60000*5)
   }
 
   load(){
