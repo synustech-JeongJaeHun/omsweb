@@ -39,18 +39,17 @@ namespace OMSWeb.Services
         private readonly ReportAlarmRepository _reportAlarmRepository;
         private readonly ReportTrendReposity _reportTrendRepository;
 
-        /*
         private readonly Timer timer_trend_update;
-        private (int Value, int Count) g_delivery_time = (0, 0);
-        private (int Value, int Count) g_wait_time = (0, 0);
-        private (int Value, int Count) g_transfer_time = (0, 0);
-        private (int Value, int Count) g_assign_time = (0, 0);
-        private (float Value, float Count) g_number_of_order_request = (0, 0);
-        private (int Auto, int Manual, int Error, int Disconnected) g_vehicles = (0, 0, 0, 0);
-        private (int Unloading, int Loading) g_loading_unloading = (0, 0);
-        private (DateTimeOffset BeforeTime, DateTimeOffset CurrentTime, int Count) g_range = (new DateTimeOffset(DateTime.Now), new DateTimeOffset(DateTime.Now), 0);
-        private float g_utilization = 0;
-        */
+        private object g_delivery_time;
+        private object g_wait_time;
+        private object g_transfer_time;
+        private object g_assign_time;
+        private object g_number_of_order_request;
+        private object g_loading_unloading;
+        private object g_vehicles;
+        private object g_range;
+        private object g_utilization = 0;
+        private object g_idle;
 
         public ReportService(
                 ReportRepository reportRepository,
@@ -66,8 +65,9 @@ namespace OMSWeb.Services
             _reportAlarmRepository = reportAlarmRepository;
             _reportTrendRepository = reportTrendReposity;
 
-            //timer_trend_update = new Timer(timerCallback);
-            //timer_trend_update.Change(0, 5000);
+            timerCallback(null);
+            timer_trend_update = new Timer(timerCallback);
+            timer_trend_update.Change(0, 5000);
         }
 
         public object QueryLabels() => _reportRepo.QueryLabels();
@@ -194,7 +194,6 @@ namespace OMSWeb.Services
             return data;
         }
 
-        /*
         private async void timerCallback(Object state)
         {
             await PrepareTrend();
@@ -214,6 +213,7 @@ namespace OMSWeb.Services
                 var loadingUnLoadingTask = _reportTrendRepository.QueryLoadingUnLoading();
                 var rangeTask = _reportTrendRepository.QueryRange();
                 var utilizationTask = _reportTrendRepository.QueryUtilization();
+                var idleTask = _reportTrendRepository.QueryIdle();
 
                 await Task.WhenAll(new Task[] {
                     createOrder10m,
@@ -237,6 +237,7 @@ namespace OMSWeb.Services
                 var loading_unloading = await loadingUnLoadingTask;
                 var range = await rangeTask;
                 var utilization = await utilizationTask;
+                var idle = await idleTask;
 
 
                 g_delivery_time = delivery_time;
@@ -248,7 +249,8 @@ namespace OMSWeb.Services
                 g_loading_unloading = loading_unloading;
                 g_range = range;
                 g_utilization = utilization;
-            
+                g_idle = idle;
+
             }
             catch (Exception e)
             {
@@ -266,60 +268,7 @@ namespace OMSWeb.Services
             var loading_unloading = g_loading_unloading;
             var range = g_range;
             var utilization = g_utilization;
-
-            return new
-            {
-                delivery_time,
-                wait_time,
-                transfer_time,
-                assign_time,
-                number_of_order_request,
-                vehicles,
-                loading_unloading,
-                range,
-                utilization
-            };
-        }
-        */
-        
-        public async Task<dynamic> QueryTrend()
-        {
-            var createOrder10m = _reportTrendRepository.CreateOrder10m();
-            var deliveryTimeTask = _reportTrendRepository.QueryDeliveryTime();
-            var waitTimeTask = _reportTrendRepository.QueryWaitTime();
-            var transferTimeTask = _reportTrendRepository.QueryTransferTime();
-            var assignTimeTask = _reportTrendRepository.QueryAssignTime();
-            var numberOfOrderRequestTask = _reportTrendRepository.QueryNumberOfOrderRequest();
-            var vehiclesTask = _reportTrendRepository.QueryVehicles();
-            var loadingUnLoadingTask = _reportTrendRepository.QueryLoadingUnLoading();
-            var rangeTask = _reportTrendRepository.QueryRange();
-            var utilizationTask = _reportTrendRepository.QueryUtilization();
-            var idleTask = _reportTrendRepository.QueryIdle();
-
-            await Task.WhenAll(new Task[] {
-                createOrder10m,
-                deliveryTimeTask,
-                waitTimeTask,
-                transferTimeTask,
-                assignTimeTask,
-                numberOfOrderRequestTask,
-                vehiclesTask,
-                loadingUnLoadingTask,
-                rangeTask,
-                utilizationTask,
-                idleTask,
-            });
-
-            var delivery_time = await deliveryTimeTask;
-            var wait_time = await waitTimeTask;
-            var transfer_time = await transferTimeTask;
-            var assign_time = await assignTimeTask;
-            var number_of_order_request = await numberOfOrderRequestTask;
-            var vehicles = await vehiclesTask;
-            var loading_unloading = await loadingUnLoadingTask;
-            var range = await rangeTask;
-            var utilization = await utilizationTask;
-            var idle = await idleTask;
+            var idle = g_idle;
 
             return new
             {
@@ -335,7 +284,6 @@ namespace OMSWeb.Services
                 idle
             };
         }
-        
 
         public async Task<object> QueryTrendUtilization()
          => await _reportTrendRepository.QueryTrendUtilization();
