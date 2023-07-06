@@ -67,6 +67,14 @@
 		[visibleIndex]="getDisplayTableColumnIndex('cps_status')"
 		[width]="getDisplayTableColumnWidth('cps_status')"
 	></dxi-column>
+  <dxi-column
+    dataType="string"
+    dataField="speedRatio"
+    [caption]="'names.speedRatio' | translate"
+    [visible]="canDisplayTable('cps_speed_ratio')"
+    [visibleIndex]="getDisplayTableColumnIndex('cps_speed_ratio')"
+    [width]="getDisplayTableColumnWidth('cps_speed_ratio')"
+  ></dxi-column>
 	<dxi-column
 		dataType="string"
 		dataField="voltage"

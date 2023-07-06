@@ -437,7 +437,15 @@ namespace OMSWeb.Repositories
                                     ELSE  extract('epoch' from date_trunc('second', VA.time_resolved) - date_trunc('second', VA.time)) * interval '1 sec'
                             END AS age,
                             VE.level, VE.cause, VE.description, VE.action, AN.annotation AS note, 
-                            CASE WHEN VA.time_resolved IS NULL THEN  false ELSE true END AS cleared, VA.current, P.physical_id 
+                            CASE WHEN VA.time_resolved IS NULL THEN  false ELSE true END AS cleared, VA.current,
+                            
+                            CASE
+		                        WHEN VA.current LIKE '%s%' THEN	(SELECT physical_id FROM stations WHERE concat('s', cast(id as varchar)) = VA.current)
+		                        WHEN VA.current LIKE '%b%' THEN	(SELECT physical_id FROM buffers WHERE concat('b', cast(id as varchar)) = VA.current)
+                                WHEN VA.current LIKE '%p%' THEN	(SELECT physical_id FROM points WHERE concat('p', cast(id as varchar)) = VA.current)
+		                        ELSE VA.current
+	                        EnD AS physical_id
+                        
                         FROM vehicle_alarms AS VA
                         LEFT OUTER JOIN vehicle_reg VR
                             ON VA.vehicle_id = VR.id
@@ -445,8 +453,6 @@ namespace OMSWeb.Repositories
                             ON VA.error_code = VE.id
                         LEFT OUTER JOIN annotations AN
                             ON VA.error_code = AN.reference_id and AN.reference_table = 'vehicle_errors'
-                        LEFT OUTER JOIN  points P 
-                        	on VA.current = P.logical_id 
                         WHERE 
                             @from <= VA.time and VA.time <= @to
                             

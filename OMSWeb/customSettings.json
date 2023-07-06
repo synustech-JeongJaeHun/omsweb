@@ -375,6 +375,7 @@
     "cps_logical_id": true,
     "cps_converter_id": true,
     "cps_status": true,
+    "cps_speed_ratio": true,
     "cps_voltage": true,
     "cps_current_igbt": true,
     "cps_current_track": true,
@@ -393,6 +394,7 @@
       },
       { "name": "cps_logical_id", "i18nLabel": "names.logicalId", "width": 120 },
       { "name": "cps_status", "i18nLabel": "names.cps_status", "width": 120 },
+      { "name": "cps_speed_ratio", "i18nLabel": "names.speedRatio", "width": 120 },
       { "name": "cps_voltage", "i18nLabel": "names.cps_voltage", "width": 60 },
       {
         "name": "cps_current_igbt",
@@ -720,8 +722,8 @@
         "width": 120
       },
       { "name": "alarms_age", "i18nLabel": "names.elapsed", "width": 120 },
-      { "name": "alarms_current", "i18nLabel": "names.current", "width": 120 },
-      { "name": "physical_id", "i18nLabel": "names.barcode", "width": "auto" }
+      { "name": "alarms_current", "i18nLabel": "names.location", "width": 120 },
+      { "name": "physical_id", "i18nLabel": "names.transOrQR", "width": "auto" }
     ],
     
     "nacks_stream_function": true,

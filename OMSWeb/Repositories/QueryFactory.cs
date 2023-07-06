@@ -73,7 +73,7 @@ namespace OMSWeb.Repositories
         GROUP BY id, logical_id, max_vehicles, color
       "},
        {"clusterStatus", @"
-         SELECT CT.id, CT.logical_id, CS.server_id, 
+         SELECT CT.id, CT.logical_id, CS.server_id,CV.speed_ratio,
             CASE 
                 WHEN CS.status = 0 THEN 'RUN'
                 WHEN CS.status = 1 THEN 'STOP'
@@ -107,6 +107,8 @@ namespace OMSWeb.Repositories
         FROM clusters AS CT
         LEFT OUTER JOIN cluster_status AS CS
         ON CT.id = CS.converter_id
+        LEFT OUTER JOIN cluster_vparts AS CV
+		ON CT.id = CV.id
         ORDER BY CT.id
         --*user_id_condition*--WHERE user_id =@userId
       "},

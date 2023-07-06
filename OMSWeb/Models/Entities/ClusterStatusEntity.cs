@@ -25,5 +25,6 @@ namespace OMSWeb.Models.Entities
         public string current_t { get; set; }
         public string total_kw { get; set; }
         public string wh { get; set; }
+        public string speedRatio { get; set; }
     }
 }

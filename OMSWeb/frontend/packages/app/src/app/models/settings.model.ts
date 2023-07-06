@@ -427,6 +427,7 @@ const defaultControlTable = {
 	cps_logical_id: true,
 	cps_converter_id: true,
 	cps_status: true,
+  cps_speed_ratio: true,
 	cps_voltage: true,
 	cps_current_igbt: true,
 	cps_current_track: true,
@@ -437,6 +438,7 @@ const defaultControlTable = {
 	cps_backup_id: true,
 	cps_error_code: true,
 
+
 	cps_order: [
 		{
 			name: 'cps_converter_id',
@@ -445,6 +447,7 @@ const defaultControlTable = {
 		},
 		{ name: 'cps_logical_id', i18nLabel: 'names.logicalId', width: 120 },
 		{ name: 'cps_status', i18nLabel: 'names.cps_status', width: 120 },
+    { name: 'cps_speed_ratio', i18nLabel: 'names.speedRatio', width: 120 },
 		{ name: 'cps_voltage', i18nLabel: 'names.cps_voltage', width: 60 },
 		{
 			name: 'cps_current_igbt',
@@ -667,8 +670,8 @@ const defaultHistoryTable = {
 			width: 120,
 		},
         { name: 'alarms_age', i18nLabel: 'names.elapsed', width: 120 },
-		{ name: 'alarms_current', i18nLabel: 'names.current', width: 120 },
-    { name: 'physical_id', i18nLabel: 'names.barcode', width: 120 },
+		{ name: 'alarms_current', i18nLabel: 'names.location', width: 120 },
+    { name: 'physical_id', i18nLabel: 'names.transOrQR', width: 120 },
     { name: 'ack_time', i18nLabel: 'names.ackTime', width: 120 },
     { name: 'ack_by', i18nLabel: 'names.ackBy', width: 'auto' },
 	],
