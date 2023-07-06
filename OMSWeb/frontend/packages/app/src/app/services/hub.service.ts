@@ -74,7 +74,7 @@ export class HubService {
 			console.info('## Hub re-connected. ##')
 		})
 
-		this.attachEvents()
+		//this.attachEvents()
 		this.start()
 	}
 	public start() {
