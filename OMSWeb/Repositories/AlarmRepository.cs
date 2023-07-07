@@ -31,7 +31,7 @@ FROM (
     FROM vehicle_alarms AS VA
     LEFT OUTER JOIN vehicle_errors VE
         ON VA.error_code = VE.id
-    WHERE VA.time_resolved IS NULL
+    WHERE VA.time_resolved IS NULL AND VA.ack_time is NULL
 ) AS COUNT_TABLE";
 
                 try
