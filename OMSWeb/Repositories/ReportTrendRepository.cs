@@ -21,25 +21,12 @@ namespace OMSWeb.Repositories
             {
                 var sql = $@"
                     CREATE or REPLACE VIEW orders10m as (
-                        select distinct on (logical_id) * 
-                        from (
-                            (
-                                select 
-                                * 
-                                from orders
-                                where time_modified >= now() - interval '10 minutes' 
-                                    and location_pickup is not null
-                                    and location_dropoff is not null
-                            )
-                            union (
-                                select 
-                                * 
-                                from order_completed oc
-                                where time_modified >= now() - interval '10 minutes'
-                                    and location_pickup is not null
-                                    and location_dropoff is not null
-                            )
-                        ) temp
+                        select 
+                            * 
+                        from orders
+                        where time_modified >= now() - interval '10 minutes' 
+                            and location_pickup is not null
+                            and location_dropoff is not null
                     )
                 ";
 
