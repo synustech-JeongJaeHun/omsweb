@@ -78,7 +78,11 @@ namespace OMSWeb.Controllers
             LoadResult loadResult;
             try
             {
-                loadResult = DataSourceLoader.Load(_statusSvc.QueryOrderStates(), loadOptions);
+                (int skip, int take, string condition, string sort) = _statusSvc.GetLoadFilters(loadOptions, @"orders");
+                int totalCount = _statusSvc.QueryOrderStatesCount(condition);
+                loadOptions.Skip = 0;
+                loadResult = DataSourceLoader.Load(_statusSvc.QueryOrderStates(skip, take, condition, sort), loadOptions);
+                loadResult.totalCount = totalCount;
             }
             catch (Exception e)
             {
