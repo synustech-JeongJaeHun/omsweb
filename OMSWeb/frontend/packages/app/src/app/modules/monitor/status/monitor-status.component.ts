@@ -10,6 +10,9 @@ import { AuthService } from '../../../services/auth.service'
 import {CdkDragEnd, CdkDragMove} from "@angular/cdk/drag-drop";
 import {TrackMonitorSettingService} from "@oms/services/track-monitor-setting.service";
 import {MobileService} from "../../../services/mobile.service";
+import {HubService} from "@oms/services/hub.service";
+import { takeUntil } from 'rxjs/operators'
+import {Subject} from "rxjs";
 
 @Component({
 	selector: 'oms-monitor-status',
@@ -88,6 +91,8 @@ export class MonitorStatusComponent implements OnInit,OnDestroy {
 	}>()
 	dropFocusEvent = new EventEmitter<{ focusType?: string }>()
 
+  private destroy$: Subject<void> = new Subject<void>();
+
 	get showControlTable(): boolean {
 		return this.mapPreference.toggles.controlTable
 	}
@@ -100,6 +105,8 @@ export class MonitorStatusComponent implements OnInit,OnDestroy {
     private trackMonitorSettingService: TrackMonitorSettingService,
 
     private mobileSvc: MobileService,
+
+    private hubSvc: HubService
 	) {
 		this.viewMode = this.auth.isAuthenticated
 			? ViewModes.viewer
@@ -153,10 +160,17 @@ export class MonitorStatusComponent implements OnInit,OnDestroy {
 	ngOnInit() {
 		this.mapPreference = this.settingSvc.globalPreferences
     this.dragPosition = this.settingSvc.globalPreferences.map.vhlStatusPos || {x: 0, y: 0}
+
+    this.hubSvc.systemState$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((e) => {
+        this.indicatorFireEmergency = e.fireEmergency
+      });
 	}
 
   ngOnDestroy() {
-
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   handleFindAndFocus = (event: { type: string; id: number }) => {

@@ -90,6 +90,12 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe((e) => this.onAlertChanged(e));
 
+    this.hubSvc.systemState$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((e) => {
+        this.indicatorFireEmergency = e.fireEmergency
+      });
+
     this.updateAlarmCount();
     this.updateAlertCount();
   }

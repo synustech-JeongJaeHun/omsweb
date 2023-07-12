@@ -62,5 +62,8 @@ namespace OMSWeb.Models
         public string? ReferenceTable { get; set; }
 #nullable disable
         #endregion
+        
+        public bool FireEmergency { get; set; }
+        public bool FireDetect { get; set; }
     }
 }
