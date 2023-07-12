@@ -41,15 +41,8 @@ namespace OMSWeb.Services
 
         private readonly Timer timer_trend_update;
         private object g_delivery_time;
-        private object g_wait_time;
-        private object g_transfer_time;
-        private object g_assign_time;
-        private object g_number_of_order_request;
-        private object g_loading_unloading;
         private object g_vehicles;
-        private object g_range;
         private object g_utilization = 0;
-        private object g_idle;
 
         public ReportService(
                 ReportRepository reportRepository,
@@ -67,7 +60,7 @@ namespace OMSWeb.Services
 
             timerCallback(null);
             timer_trend_update = new Timer(timerCallback);
-            timer_trend_update.Change(0, 5000);
+            timer_trend_update.Change(0, 8000);
         }
 
         public object QueryLabels() => _reportRepo.QueryLabels();
@@ -205,51 +198,24 @@ namespace OMSWeb.Services
             {
                 var createOrder10m = _reportTrendRepository.CreateOrder10m();
                 var deliveryTimeTask = _reportTrendRepository.QueryDeliveryTime();
-                var waitTimeTask = _reportTrendRepository.QueryWaitTime();
-                var transferTimeTask = _reportTrendRepository.QueryTransferTime();
-                var assignTimeTask = _reportTrendRepository.QueryAssignTime();
-                var numberOfOrderRequestTask = _reportTrendRepository.QueryNumberOfOrderRequest();
                 var vehiclesTask = _reportTrendRepository.QueryVehicles();
-                var loadingUnLoadingTask = _reportTrendRepository.QueryLoadingUnLoading();
-                var rangeTask = _reportTrendRepository.QueryRange();
                 var utilizationTask = _reportTrendRepository.QueryUtilization();
-                var idleTask = _reportTrendRepository.QueryIdle();
 
                 await Task.WhenAll(new Task[] {
                     createOrder10m,
                     deliveryTimeTask,
-                    waitTimeTask,
-                    transferTimeTask,
-                    assignTimeTask,
-                    numberOfOrderRequestTask,
                     vehiclesTask,
-                    loadingUnLoadingTask,
-                    rangeTask,
                     utilizationTask,
                 });
 
                 var delivery_time = await deliveryTimeTask;
-                var wait_time = await waitTimeTask;
-                var transfer_time = await transferTimeTask;
-                var assign_time = await assignTimeTask;
-                var number_of_order_request = await numberOfOrderRequestTask;
                 var vehicles = await vehiclesTask;
-                var loading_unloading = await loadingUnLoadingTask;
-                var range = await rangeTask;
                 var utilization = await utilizationTask;
-                var idle = await idleTask;
 
 
                 g_delivery_time = delivery_time;
-                g_wait_time = wait_time;
-                g_transfer_time = transfer_time;
-                g_assign_time = assign_time;
-                g_number_of_order_request = number_of_order_request;
                 g_vehicles = vehicles;
-                g_loading_unloading = loading_unloading;
-                g_range = range;
                 g_utilization = utilization;
-                g_idle = idle;
 
             }
             catch (Exception e)
@@ -259,16 +225,34 @@ namespace OMSWeb.Services
    
         public async Task<dynamic> QueryTrend()
         {
+            var waitTimeTask = _reportTrendRepository.QueryWaitTime();
+            var transferTimeTask = _reportTrendRepository.QueryTransferTime();
+            var assignTimeTask = _reportTrendRepository.QueryAssignTime();
+            var numberOfOrderRequestTask = _reportTrendRepository.QueryNumberOfOrderRequest();
+            var loadingUnLoadingTask = _reportTrendRepository.QueryLoadingUnLoading();
+            var rangeTask = _reportTrendRepository.QueryRange();
+            var idleTask = _reportTrendRepository.QueryIdle();
+
+            await Task.WhenAll(new Task[] {
+                waitTimeTask,
+                transferTimeTask,
+                assignTimeTask,
+                numberOfOrderRequestTask,
+                loadingUnLoadingTask,
+                rangeTask,
+                idleTask
+            });
+
             var delivery_time = g_delivery_time;
-            var wait_time = g_wait_time;
-            var transfer_time = g_transfer_time;
-            var assign_time = g_assign_time;
-            var number_of_order_request = g_number_of_order_request;
+            var wait_time = await waitTimeTask;
+            var transfer_time = await transferTimeTask;
+            var assign_time = await assignTimeTask;
+            var number_of_order_request = await numberOfOrderRequestTask;
             var vehicles = g_vehicles;
-            var loading_unloading = g_loading_unloading;
-            var range = g_range;
+            var loading_unloading = await loadingUnLoadingTask;
+            var range = await rangeTask;
             var utilization = g_utilization;
-            var idle = g_idle;
+            var idle = await idleTask;
 
             return new
             {
@@ -282,6 +266,20 @@ namespace OMSWeb.Services
                 range,
                 utilization,
                 idle
+            };
+        }
+        
+        public async Task<dynamic> QueryKpi()
+        {
+            var delivery_time = g_delivery_time;
+            var vehicles = g_vehicles;
+            var utilization = g_utilization;
+
+            return new
+            {
+                delivery_time,
+                vehicles,
+                utilization,
             };
         }
 

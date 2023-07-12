@@ -104,6 +104,22 @@ namespace OMSWeb.Controllers
                 idle = trend.idle,
             };
         }
+        
+        [HttpGet("kpi")]
+        public async Task<object> GetKpi()
+        {
+            var trend = await _reportSvc.QueryKpi();
+            var cpu = _computerPerformanceService.getCurrentCpuNameAndUsage();
+            var memory = _computerPerformanceService.getRAMInformation();
+            return new
+            {
+                delivery_time = trend.delivery_time,
+                vehicles = trend.vehicles,
+                utilization = trend.utilization,
+                cpu,
+                memory,
+            };
+        }
 
         [HttpGet("trend/utilization")]
         public async Task<object> GetTrendUtilization()

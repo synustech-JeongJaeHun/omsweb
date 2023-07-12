@@ -26,7 +26,7 @@ export class ReportService {
   // only for map-viewer kpi trend
 	loadTrend() {
     if(!this.enabled) return
-		this.http.get<TrendResponse>(`${this.baseUrl}/trend`).subscribe(res=>{
+		this.http.get<TrendResponse>(`${this.baseUrl}/kpi`).subscribe(res=>{
       if(res){
         this.trendSubject$.next(res)
       }
