@@ -45,6 +45,7 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
   warnClicked = false;
   warnList: IAlert[] = [];
   indicatorFireEmergency = false
+  fireEmergency = false
 
   private _alarmDlg: MatDialogRef<AlarmDialogComponent, any>;
   private _alertDlg: MatDialogRef<AlertDialogComponent, any>;
@@ -93,7 +94,7 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
     this.hubSvc.systemState$
       .pipe(takeUntil(this.destroy$))
       .subscribe((e) => {
-        this.indicatorFireEmergency = e.fireEmergency
+        this.fireEmergency = e.fireEmergency
       });
 
     this.updateAlarmCount();

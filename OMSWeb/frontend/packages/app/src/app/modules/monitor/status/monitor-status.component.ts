@@ -82,6 +82,7 @@ export class MonitorStatusComponent implements OnInit,OnDestroy {
 
   includesWords  = []
   indicatorFireEmergency = false
+  fireEmergency = false
 
 	findEvent = new EventEmitter<{ type: string; id: number }>()
 	focusEvent = new EventEmitter<{
@@ -164,7 +165,7 @@ export class MonitorStatusComponent implements OnInit,OnDestroy {
     this.hubSvc.systemState$
       .pipe(takeUntil(this.destroy$))
       .subscribe((e) => {
-        this.indicatorFireEmergency = e.fireEmergency
+        this.fireEmergency = e.fireEmergency
       });
 	}
 
