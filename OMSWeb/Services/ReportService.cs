@@ -43,15 +43,20 @@ namespace OMSWeb.Services
         private object g_delivery_time;
         private object g_vehicles;
         private object g_utilization = 0;
+        
+        private SystemsService _systemSvc;
 
         public ReportService(
                 ReportRepository reportRepository,
                 ReportNormaltrRepository reportNormaltrRepository,
                 ReportAbnormaltrRepository reportAbnormaltrRepository,
                 ReportAlarmRepository reportAlarmRepository,
-                ReportTrendReposity reportTrendReposity
+                ReportTrendReposity reportTrendReposity,
+                SystemsService systemSvc
         )
         {
+            this._systemSvc = systemSvc;
+            
             _reportRepo = reportRepository;
             _reportNormaltrRepository = reportNormaltrRepository;
             _reportAbnormaltrRepository = reportAbnormaltrRepository;
@@ -189,10 +194,11 @@ namespace OMSWeb.Services
 
         private async void timerCallback(Object state)
         {
-            await PrepareTrend();
+            if(this._systemSvc.GetClientSettings().KpiEnabled)
+                await PrepareKpi();
         }
 
-        public async Task PrepareTrend()
+        public async Task PrepareKpi()
         {
             try
             {
@@ -225,6 +231,10 @@ namespace OMSWeb.Services
    
         public async Task<dynamic> QueryTrend()
         {
+            if (!this._systemSvc.GetClientSettings().KpiEnabled)
+            {
+                await PrepareKpi();
+            }
             var waitTimeTask = _reportTrendRepository.QueryWaitTime();
             var transferTimeTask = _reportTrendRepository.QueryTransferTime();
             var assignTimeTask = _reportTrendRepository.QueryAssignTime();

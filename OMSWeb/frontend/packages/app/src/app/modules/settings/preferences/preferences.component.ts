@@ -13,7 +13,7 @@ import {TranslateService} from "@ngx-translate/core";
 })
 export class PreferencesComponent {
   preference: ClientPreferences;
-  canUseKpi = false;
+  //canUseKpi = false;
 
   public VHLIdPosition = VHLIdPosition;
   public PointType = PointType;
@@ -22,12 +22,22 @@ export class PreferencesComponent {
   constructor(private settingSvc: SettingsService, private ttsSvc: TTSService, private t$: TranslateService) {
 
     this.preference = this.settingSvc.globalPreferences;
-    this.settingSvc.serviceConfig.subscribe((cfg) => {
-      this.canUseKpi = cfg.kpiEnabled;
-    });
+    this.loadKpiEnabled();
   }
   onChangedToggle(action: ToggleOptionKeyType=null) {
     this.preference.save();
+    if(action==='showKpi'){
+      this.settingSvc.saveKpiEnabled(this.preference.toggles.showKpi).subscribe(res=>{
+        this.loadKpiEnabled();
+      })
+    }
+  }
+
+  loadKpiEnabled(){
+    this.settingSvc.getKpiEnabled().subscribe((cfg) => {
+      this.preference.toggles.showKpi = cfg;
+      this.preference.save();
+    });
   }
 
   objectValues(obj: any): string[]{

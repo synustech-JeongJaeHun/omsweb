@@ -11,7 +11,7 @@
         (change)="onChangedToggle('showToolName')">{{ "names.showToolName" | translate }}</mat-slide-toggle>
       <mat-slide-toggle [(ngModel)]="preference.toggles.showOmsVersion" color="primary"
         (change)="onChangedToggle('showOmsVersion')">{{ "names.showOmsVersion" | translate }}</mat-slide-toggle>
-      <mat-slide-toggle *ngIf="canUseKpi" [(ngModel)]="preference.toggles.showKpi" color="primary"
+      <mat-slide-toggle [(ngModel)]="preference.toggles.showKpi" color="primary"
         (change)="onChangedToggle('showKpi')">{{ "names.showKpi" | translate }}</mat-slide-toggle>
       <mat-slide-toggle [(ngModel)]="preference.toggles.zoomButton" color="primary"
         (change)="onChangedToggle('zoomButton')">{{ "names.zoomButton" | translate }}</mat-slide-toggle>

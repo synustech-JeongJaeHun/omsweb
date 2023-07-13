@@ -539,5 +539,18 @@ namespace OMSWeb.Controllers
 
             return size;
         }
+        
+        [HttpGet("KpiEnabled")]
+        public ActionResult<bool> GetKpiEnabled()
+        {
+            return this._systemSvc.GetClientSettings().KpiEnabled;
+        }
+        
+        [HttpPost("KpiEnabled/{enable}")]
+        public IActionResult setKpiEnabled(bool enable)
+        {
+            this._systemSvc.setEnableKpi(enable);
+            return Ok();
+        }
     }
 }

@@ -224,5 +224,11 @@ namespace OMSWeb.Services
                 }
             }
         }
+
+        public void setEnableKpi(bool KpiEnabled)
+        {
+            this._appSettings.KpiEnabled = KpiEnabled;
+            this._appSettings.Client.KpiEnabled = KpiEnabled;
+        }
     }
 }

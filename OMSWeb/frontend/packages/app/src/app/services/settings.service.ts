@@ -209,4 +209,12 @@ export class SettingsService {
     updateSettingsDelayedTransferTimeout(timeout: string, warningNotify: string, tableNotify: string): Observable<IQueryResult> {
         return this.http.post<IQueryResult>(`${this.baseUrl}/updateSettingsDelayedTransferTimeout/${timeout}&${warningNotify}&${tableNotify}`, '')
     }
+
+  public saveKpiEnabled(enabled: boolean): Observable<any> {
+    return this.http.post<any>(`/api/systems/KpiEnabled/${enabled}`)
+  }
+
+  public getKpiEnabled(): Observable<boolean> {
+    return this.http.get<boolean>(`/api/systems/KpiEnabled`)
+  }
 }

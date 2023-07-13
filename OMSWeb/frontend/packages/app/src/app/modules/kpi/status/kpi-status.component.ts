@@ -31,7 +31,7 @@ export class KpiStatusComponent implements OnDestroy {
   }
 
   get activated(): boolean {
-    return this.enabled && this.settingSvc.globalPreferences.toggles.showKpi;
+    return this.settingSvc.globalPreferences.toggles.showKpi;
   }
 
   numRound0 = numRound(0, true)
@@ -51,8 +51,6 @@ export class KpiStatusComponent implements OnDestroy {
     private reportService: ReportService
   ) {
     this.settingSvc.serviceConfig.subscribe(cfg => {
-      this.enabled = cfg.kpiEnabled;
-
       this.reportService.trendSubject$.subscribe(res=>{
         this.utilization = res.utilization.value;
         this.deliveryTime = res.delivery_time.value;
