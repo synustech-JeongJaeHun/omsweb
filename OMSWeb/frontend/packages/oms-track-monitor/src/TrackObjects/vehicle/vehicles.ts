@@ -5,6 +5,7 @@ import {readonly, ref} from 'vue'
 import { findPointById } from '../point/points'
 import { findSegmentByPoints } from '../segment/segments'
 import { UpdateType, Vehicle } from './types/Vehicle'
+import {Dto} from "@daimre/app/src/app/models/dto/track.model";
 
 const vehicles = ref<Vehicle[]>([])
 const vehicleMap = new Map<Vehicle['id'], Vehicle>()
@@ -33,6 +34,15 @@ function initVehicles(vs: IVehicle[]) {
   // set
   vehicles.value = vs.map((v) => ({ ...v }))
   vehicles.value.forEach((v) => vehicleMap.set(v.id, v))
+
+  // sort by
+  // 1)Disconnected 2) error 3) Manual 4) Maintenance 5) Idle
+  vehicles.value.sort((a, b)=>
+    compareDisconnect(b,a) ||
+    compareError(b,a) ||
+    compareManual(b,a) ||
+    compareMaint(b,a)
+  )
 }
 
 function setVehicle(v: UpdateDto.Vehicle) {
@@ -166,6 +176,17 @@ function updateExistVehicle(
   Object.assign(vehicle, updateData)
   vehicle.updateType = updateType
   vehicle.lastUpdated = count++
+
+  // sort by
+  // 1)Disconnected 2) error 3) Manual 4) Maintenance 5) Idle
+  if(vehicle.isMaint || !vehicle.isConnected || vehicle.errorList || vehicle.mode?.toUpperCase()==='M'){
+    vehicles.value.sort((a, b)=>
+      compareDisconnect(b,a) ||
+      compareError(b,a) ||
+      compareManual(b,a) ||
+      compareMaint(b,a)
+    )
+  }
 }
 
 function updateVHLPosition(value: string) {
@@ -182,6 +203,30 @@ function updateNextLine(value: boolean) {
 
 function updateVHLAlias(value: string) {
   vhlAlias.value = value
+}
+
+function compareDisconnect(a:Dto.IVehicle, b:Dto.IVehicle ): number{
+  if(a.isConnected && !b.isConnected) return 1
+  else if(!a.isConnected && b.isConnected) return -1
+  return 0
+}
+
+function compareError(a:Dto.IVehicle, b:Dto.IVehicle ): number{
+  if(a.errorList && !b.errorList) return -1
+  else if(!a.errorList && b.errorList) return 1
+  return 0
+}
+
+function compareManual(a:Dto.IVehicle, b:Dto.IVehicle ): number{
+  if(a.mode.toUpperCase()==='M' && b.mode.toUpperCase()!=='M') return -1
+  else if(a.mode.toUpperCase()!=='M' && b.mode.toUpperCase()==='M') return 1
+  return 0
+}
+
+function compareMaint(a:Dto.IVehicle, b:Dto.IVehicle ): number{
+  if(a.isMaint && !b.isMaint) return 1
+  else if(!a.isMaint && b.isMaint) return -1
+  return 0
 }
 
 export {

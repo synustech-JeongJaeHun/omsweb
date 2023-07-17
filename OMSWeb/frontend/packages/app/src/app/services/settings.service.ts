@@ -211,7 +211,7 @@ export class SettingsService {
     }
 
   public saveKpiEnabled(enabled: boolean): Observable<any> {
-    return this.http.post<any>(`/api/systems/KpiEnabled/${enabled}`)
+    return this.http.post<any>(`/api/systems/KpiEnabled/${enabled}`, null)
   }
 
   public getKpiEnabled(): Observable<boolean> {
