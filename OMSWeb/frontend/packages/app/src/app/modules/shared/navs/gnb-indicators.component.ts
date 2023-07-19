@@ -25,6 +25,9 @@ import { PermissionEnums } from '../../../models/enums';
 import {TTSService} from "@oms/services/tts.service";
 import {MobileService} from "@oms/services/mobile.service";
 import {SettingsService} from "@oms/services/settings.service";
+import {MessagesService} from "@oms/services/messages.service";
+import {DialogService} from "@oms/services/dialog.service";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'oms-gnb-indicators',
@@ -75,6 +78,9 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
     private tts: TTSService,
     private mobileSvc: MobileService,
     private settingSvc: SettingsService,
+    private dialogSvc: DialogService,
+    private $t: TranslateService,
+    private messageSvc: MessagesService,
   ) {
     this.timerId = setInterval(() => this.getState(), 5000);
     settingSvc.serviceConfig.subscribe(config=>{
@@ -255,6 +261,21 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
         this.warnClicked = false
       })
     }
+  }
+
+  get hasControlAccess(): boolean {
+    return this.auth.isAuthenticated
+  }
+  sendRelease() {
+    if (!this.hasControlAccess) return
+    this.dialogSvc
+      .confirm({ body: this.$t.instant('messages.confirmCommand') })
+      .subscribe((ok) => {
+        ok &&
+        this.messageSvc
+          .sendRelease()
+          .subscribe()
+      })
   }
 
 }

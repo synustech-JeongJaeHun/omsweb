@@ -89,6 +89,7 @@ namespace OMSWeb.Services.MqttClient
         
         public const string ACTION_RESET_HOLD = "reset_hold";
         public const string ACTION_HOLD_RELEASE = "hold_release";
+        public const string ACTION_RELEASE = "release";
 
         public MqttMessage()
         {
@@ -154,6 +155,7 @@ namespace OMSWeb.Services.MqttClient
                 case ACTION_PM:
                 case ACTION_RESET_HOLD:
                 case ACTION_HOLD_RELEASE:
+                case ACTION_RELEASE:
                     return TOPIC_DEFAULT;   // "oms/vehicle-manager/request";
             }
 
@@ -204,6 +206,7 @@ namespace OMSWeb.Services.MqttClient
                 case ACTION_VEHICLE_SETTING:
                 case ACTION_ZCU_SETTING:
                 case ACTION_PM:
+                case ACTION_RELEASE:
                     return REQUEST_VEHICLE_MANAGER;
 
                 case ACTION_RESET:
@@ -370,6 +373,22 @@ namespace OMSWeb.Services.MqttClient
                 return string.Format("OMS_{0}", NowUTCString());
             }
             return base_id.Replace('-', '_');
+        }
+        public object GetReleaseId(CommandMessageDto command)
+        {
+            if (command.Id != null)
+            {
+                return command.Id;
+            }
+            return "fire-emergency";
+        }
+        public object GetAckBy(CommandMessageDto command)
+        {
+            return command.AckBy;
+        }
+        public object GetAckTime()
+        {
+            return new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds();
         }
 
         public List<string> GetPayload(CommandMessageDto command)
@@ -801,6 +820,14 @@ namespace OMSWeb.Services.MqttClient
                 data["user"] = GetUser(command);
                 data["note"] = GetNote(command);
                 Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: {command.Action}");
+            }
+            else if (command.Action == ACTION_RELEASE)
+            {
+                data["id"] = GetReleaseId(command);
+                data["ack_time"] = GetAckTime();
+                data["ack_by"] = GetAckBy(command);
+
+                Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: {command.Action}, ID: {data["id"]}, Ack Time: {data["ack_time"]} Ack By: {data["ack_by"]}");
             }
 
             // build JSON list

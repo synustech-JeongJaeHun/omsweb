@@ -208,4 +208,8 @@ export interface IResetVehicleMileageTotalCommandMessage
     vehicleIds?: number[]
 }
 
+export interface IReleaseCommandMessage extends ICommandMessage {
+  id:string
+}
+
 

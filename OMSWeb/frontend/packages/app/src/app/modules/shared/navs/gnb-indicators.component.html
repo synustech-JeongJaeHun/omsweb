@@ -11,7 +11,7 @@
     matBadgeSize="medium" [matBadgeHidden]="!hasAlarm">notifications</mat-icon>
 </button>
 <ng-container *ngIf="indicatorFireEmergency">
-  <button mat-icon-button class="primary" *ngIf="fireEmergency"
+  <button mat-icon-button class="primary" *ngIf="fireEmergency" (click)="sendRelease()"
           matTooltipClass="gnb-tooltip" matTooltipPosition="below"
           matTooltip='{{ "names.fireDetect" | translate }}'>
     <div>

@@ -3,35 +3,35 @@ import { Injectable } from '@angular/core'
 import { Observable } from 'rxjs'
 
 import {
-	ICommandMessage,
-	ITrackCommandMessage,
-	IOrderCommandMessage,
-	IVehicleCommandMessage,
-	IAllCommandMessage,
-	IAiModeCommandMessage,
-	ITscStateCommandMessage,
-    IMapUpdateCommandMessage,
-    IOnlineStateCommandMessage,
-	IControlStateCommandMessage,
-	IAlarmClearCommandMessage,
-	IWarningClearCommandMessage,
-	IStationCommandMessage,
-	IBufferCommandMessage,
-	ICarrierCommandMessage,
-	IAllSegmentCommandMessage,
-	IVehicleRegCommandMessage,
-	ISegmentCommandMessage,
-	IClusterCommandMessage,
-	IGroupCommandMessage,
-	ISettingZcuCommandMessage,
-	IZcuCommandMessage,
-	IDisableHomeCommandMessage,
-	IEnableHomeCommandMessage,
-    IToggleHomeModeCommandMessage,
-    IChangeHomeModeCommandMessage,
-    IChangeIvrModeCommandMessage,
-    IToggleChainManualCommandDisabledCommandMessage,
-    IResetVehicleMileageTotalCommandMessage,
+  ICommandMessage,
+  ITrackCommandMessage,
+  IOrderCommandMessage,
+  IVehicleCommandMessage,
+  IAllCommandMessage,
+  IAiModeCommandMessage,
+  ITscStateCommandMessage,
+  IMapUpdateCommandMessage,
+  IOnlineStateCommandMessage,
+  IControlStateCommandMessage,
+  IAlarmClearCommandMessage,
+  IWarningClearCommandMessage,
+  IStationCommandMessage,
+  IBufferCommandMessage,
+  ICarrierCommandMessage,
+  IAllSegmentCommandMessage,
+  IVehicleRegCommandMessage,
+  ISegmentCommandMessage,
+  IClusterCommandMessage,
+  IGroupCommandMessage,
+  ISettingZcuCommandMessage,
+  IZcuCommandMessage,
+  IDisableHomeCommandMessage,
+  IEnableHomeCommandMessage,
+  IToggleHomeModeCommandMessage,
+  IChangeHomeModeCommandMessage,
+  IChangeIvrModeCommandMessage,
+  IToggleChainManualCommandDisabledCommandMessage,
+  IResetVehicleMileageTotalCommandMessage, IReleaseCommandMessage,
 } from '../models/command.model'
 import { IOrderStatusRow } from '../models/order-status.model'
 import { IVehicleStatusRow } from '../models/vehicle-status.model'
@@ -391,6 +391,13 @@ export class MessagesService {
             mode: type,
         })
     }
+
+  sendRelease(id='fire-emergency') {
+    return this.sendCommand<IReleaseCommandMessage>({
+      action: 'release',
+      id,
+    })
+  }
 
 	private sendCommand<T extends ICommandMessage>(command: T): Observable<void> {
 		return this.http.post<void>(`${this.baseUrl}/command`, command)
