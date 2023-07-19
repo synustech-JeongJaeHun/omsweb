@@ -31,6 +31,8 @@ export class ServiceConfig {
   backdrop: boolean
   reference: boolean
   holdEnabled: boolean
+
+  indicatorFireEmergency: boolean
 }
 
 export interface ManualTransferFiltersSetting {

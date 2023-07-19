@@ -68,6 +68,7 @@ namespace OMSWeb.Services
                 {"mode_state", new DataChangeEventTarget(CacheKeys.None, new[]{"modeState"})},
                 {"setting_mode", new DataChangeEventTarget(CacheKeys.None, new[]{"settingMode"})},
                 {"db_version", new DataChangeEventTarget(CacheKeys.None, new[]{"mapUpdateStatus"})},
+                {"system_state", new DataChangeEventTarget(CacheKeys.None, new[]{"systemState"})},
             };
 
             this.cacheEventMap = new Dictionary<CacheKeys, string[]>
@@ -270,6 +271,9 @@ namespace OMSWeb.Services
                 GroupId = payload.GroupId, // only for GroupedObject
                 ReferenceId = payload.ReferenceId, // only for GroupedObject
                 ReferenceTable = payload.ReferenceTable, // only for GroupedObject
+                
+                FireEmergency = payload.FireEmergency,
+                FireDetect = payload.FireDetect,
             };
             if (!pushName.Contains("table", StringComparison.OrdinalIgnoreCase))
             {

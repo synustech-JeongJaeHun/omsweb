@@ -82,11 +82,9 @@ function toD(c: PathCommand): D {
     case "MoveTo":
       return `M ${c.x} ${c.y}`;
     case "LineTo":
-      return `L ${c.x+0.001} ${c.y+0.002}`;
-    case "ArcTo":
-      return `A ${c.rx} ${c.ry} ${c.xAxisRotation} ${c.largeArcFlag} ${c.sweepFlag} ${c.x} ${c.y}`;
+      return `L ${c.x} ${c.y}`;
     default:
-      //throw new Error(JSON.stringify(c))
+      return `A ${c.rx} ${c.ry} ${c.xAxisRotation} ${c.largeArcFlag} ${c.sweepFlag} ${c.x} ${c.y}`;
   }
 }
 
@@ -126,21 +124,19 @@ function isPointIn(type: "Straight" | "Curve", from: Position, to: Position, poi
 
 function slicePathCommands(commands: readonly PathCommand[], from: Position, to: Position): PathCommand[] {
   // from ~
-  const fromIndex = commands.findIndex((command, index, commands) => {
+  let fromIndex = commands.findIndex((command, index, commands) => {
     if (index === 0) return false
     return isPointIn(command.type === 'ArcTo' ? 'Curve' : 'Straight', commands[index - 1], command, from)
   })
 
   // to ~
-  const toIndex = commands.findIndex((command, index, commands) => {
+  let toIndex = commands.findIndex((command, index, commands) => {
     if (index === 0) return false
     return isPointIn(command.type === 'ArcTo' ? 'Curve' : 'Straight', commands[index - 1], command, to)
   })
 
-  // bug fix : toIndex === -1 case
-  // -> change -1 to commands.length-1
-  const toIdx= toIndex===-1?commands.length-1:toIndex;
-
+  if(fromIndex===-1) fromIndex=toIndex
+  if(toIndex===-1) toIndex=fromIndex
   return [
     moveTo(from),
     ...commands.slice(fromIndex, toIndex),

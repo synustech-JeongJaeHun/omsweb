@@ -21,6 +21,7 @@ namespace OMSWeb.Services
         {
             // Console.WriteLine($"# SendMessage -> {command.Type}, {command.Action}, {command.OrderId}");
             MqttMessage m = new MqttMessage();
+            command.AckBy = loginId;
             string topic = m.GetTopic(command);
             List<string> payloads = m.GetPayload(command);
 

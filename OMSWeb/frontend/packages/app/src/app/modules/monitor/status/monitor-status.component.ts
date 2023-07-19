@@ -9,48 +9,66 @@ import { IPreferences } from '../../../models/settings.model'
 import { AuthService } from '../../../services/auth.service'
 import {CdkDragEnd, CdkDragMove} from "@angular/cdk/drag-drop";
 import {TrackMonitorSettingService} from "@oms/services/track-monitor-setting.service";
-import {MobileService} from "@oms/services/mobile.service";
+import {MobileService} from "../../../services/mobile.service";
 import {HubService} from "@oms/services/hub.service";
+import { takeUntil } from 'rxjs/operators'
+import {Subject} from "rxjs";
+
 
 @Component({
 	selector: 'oms-monitor-status',
 	templateUrl: './monitor-status.component.html',
 	styles: [
 		`
-			:host {
-				background-color: var(--monitor-background-color);
-				display: block;
-				position: relative;
-				z-index: 3;
-				width: 100%;
-				height: 100%;
-			}
+      :host {
+        background-color: var(--monitor-background-color);
+        display: block;
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        height: 100%;
+      }
 
-			#status-control {
-				position: absolute;
-				/* border-radius: 5px; */
-				box-shadow: 0px 0px 5px #aaa;
-				display: inline-block;
-				flex-direction: column;
-				bottom: 0px;
-				left: 0px;
-				z-index: 10;
-				width: 100%;
-			}
-			#loading-bar {
-				position: absolute;
-				top: 40%;
-				left: 25%;
-				width: 50%;
-				text-align: center;
-				background-color: white;
-				padding: 20px;
-				z-index: 5;
-			}
-			.mat-progress-bar {
-				margin-top: 10px;
-			}
-		`,
+      #status-control {
+        position: absolute;
+        /* border-radius: 5px; */
+        box-shadow: 0px 0px 5px #aaa;
+        display: inline-block;
+        flex-direction: column;
+        bottom: 0px;
+        left: 0px;
+        z-index: 10;
+        width: 100%;
+      }
+
+      #loading-bar {
+        position: absolute;
+        top: 40%;
+        left: 25%;
+        width: 50%;
+        text-align: center;
+        background-color: white;
+        padding: 20px;
+        z-index: 5;
+      }
+
+      .mat-progress-bar {
+        margin-top: 10px;
+      }
+
+      @keyframes box-ani {
+        0% {opacity:0;}
+        50% {opacity:1;}
+        100% {opacity:0;}
+      }
+
+      .bound {
+        position: absolute;
+        background-color: rgb(251, 41, 41);
+        z-index: 16;
+        animation: box-ani 2s infinite;
+      }
+    `,
 	],
 })
 export class MonitorStatusComponent implements OnInit,OnDestroy {
@@ -64,6 +82,8 @@ export class MonitorStatusComponent implements OnInit,OnDestroy {
   vhlDisplay = true
 
   includesWords  = []
+  indicatorFireEmergency = false
+  fireEmergency = false
 
 	findEvent = new EventEmitter<{ type: string; id: number }>()
 	focusEvent = new EventEmitter<{
@@ -72,6 +92,8 @@ export class MonitorStatusComponent implements OnInit,OnDestroy {
 		focusType?: string
 	}>()
 	dropFocusEvent = new EventEmitter<{ focusType?: string }>()
+
+  private destroy$: Subject<void> = new Subject<void>();
 
 	get showControlTable(): boolean {
 		return this.mapPreference.toggles.controlTable
@@ -110,6 +132,7 @@ export class MonitorStatusComponent implements OnInit,OnDestroy {
         this.trackStatusService.fetchTrack().then(()=>{
           this.loadedTrack()
         })
+        this.indicatorFireEmergency = config?.indicatorFireEmergency
       },
     )
 
@@ -129,10 +152,17 @@ export class MonitorStatusComponent implements OnInit,OnDestroy {
 	ngOnInit() {
 		this.mapPreference = this.settingSvc.globalPreferences
     this.dragPosition = this.settingSvc.globalPreferences.map.vhlStatusPos || {x: 0, y: 0}
+
+    this.hubSvc.systemState$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((e) => {
+        this.fireEmergency = e.fireEmergency
+      });
 	}
 
   ngOnDestroy() {
-
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   handleFindAndFocus = (event: { type: string; id: number }) => {

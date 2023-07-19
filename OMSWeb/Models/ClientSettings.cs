@@ -35,5 +35,7 @@ namespace OMSWeb.Models
 
         public FireStationFilters FireStationFilters { get; set; }
         
+        public bool IndicatorFireEmergency { get; set; } 
+        
     }
 }

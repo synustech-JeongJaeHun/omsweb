@@ -64,6 +64,9 @@ export interface IDataChangeEvent {
   color?: string
   logicalId?: string
   maxVehicles?: number
+
+  fireEmergency: boolean
+  fireDetect: boolean
 }
 
 export const alertSeverities = [

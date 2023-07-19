@@ -24,6 +24,10 @@ import { AccountUtil } from '../utils/account.util';
 import { PermissionEnums } from '../../../models/enums';
 import {TTSService} from "@oms/services/tts.service";
 import {MobileService} from "@oms/services/mobile.service";
+import {SettingsService} from "@oms/services/settings.service";
+import {MessagesService} from "@oms/services/messages.service";
+import {DialogService} from "@oms/services/dialog.service";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'oms-gnb-indicators',
@@ -42,8 +46,9 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
   isPopupWarn: boolean = false;
 
   warnClicked = false;
-
   warnList: IAlert[] = [];
+  indicatorFireEmergency = false
+  fireEmergency = false
 
   private _alarmDlg: MatDialogRef<AlarmDialogComponent, any>;
   private _alertDlg: MatDialogRef<AlertDialogComponent, any>;
@@ -71,9 +76,16 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private auth: AuthService,
     private tts: TTSService,
-    private mobileSvc: MobileService
+    private mobileSvc: MobileService,
+    private settingSvc: SettingsService,
+    private dialogSvc: DialogService,
+    private $t: TranslateService,
+    private messageSvc: MessagesService,
   ) {
     this.timerId = setInterval(() => this.getState(), 5000);
+    settingSvc.serviceConfig.subscribe(config=>{
+      this.indicatorFireEmergency = config?.indicatorFireEmergency
+    })
   }
 
   ngOnInit(): void {
@@ -84,6 +96,12 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
     this.hubSvc.alertChanged$
       .pipe(takeUntil(this.destroy$))
       .subscribe((e) => this.onAlertChanged(e));
+
+    this.hubSvc.systemState$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((e) => {
+        this.fireEmergency = e.fireEmergency
+      });
 
     this.updateAlarmCount();
     this.updateAlertCount();
@@ -243,6 +261,21 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
         this.warnClicked = false
       })
     }
+  }
+
+  get hasControlAccess(): boolean {
+    return this.auth.isAuthenticated
+  }
+  sendRelease() {
+    if (!this.hasControlAccess) return
+    this.dialogSvc
+      .confirm({ body: this.$t.instant('messages.confirmCommand') })
+      .subscribe((ok) => {
+        ok &&
+        this.messageSvc
+          .sendRelease()
+          .subscribe()
+      })
   }
 
 }
