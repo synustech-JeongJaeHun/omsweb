@@ -218,8 +218,8 @@ function compareError(a:Dto.IVehicle, b:Dto.IVehicle ): number{
 }
 
 function compareManual(a:Dto.IVehicle, b:Dto.IVehicle ): number{
-  if(a.mode.toUpperCase()==='M' && b.mode.toUpperCase()!=='M') return -1
-  else if(a.mode.toUpperCase()!=='M' && b.mode.toUpperCase()==='M') return 1
+  if(a.mode?.toUpperCase()==='M' && b.mode?.toUpperCase()!=='M') return -1
+  else if(a.mode?.toUpperCase()!=='M' && b.mode?.toUpperCase()==='M') return 1
   return 0
 }
 
