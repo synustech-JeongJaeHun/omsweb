@@ -39,5 +39,10 @@ namespace OMSWeb.Models.Entities
         public int HistorySourceId { get; set; }
         public DateTime HistoryChangeTime { get; set; }
         public string HistoryChangeType { get; set; }
+        
+        public DateTime? TimeLoadStarted { get; set; }
+        public DateTime? TimeLoadCompleted { get; set; }
+        public DateTime? TimeUnloadStarted { get; set; }
+        public DateTime? TimeUnloadCompleted { get; set; }
     }
 }

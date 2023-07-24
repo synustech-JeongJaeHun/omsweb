@@ -341,6 +341,12 @@ namespace OMSWeb.Services
                 if (string.Compare(s, "carrierLabel", StringComparison.CurrentCultureIgnoreCase) == 0) return "carrier_label";
                 if (string.Compare(s, "timeCreated", StringComparison.CurrentCultureIgnoreCase) == 0) return "time_created";
                 if (string.Compare(s, "timeAssigned", StringComparison.CurrentCultureIgnoreCase) == 0) return "time_assigned";
+                
+                if (string.Compare(s, "timeLoadStarted", StringComparison.CurrentCultureIgnoreCase) == 0) return "time_load_started";
+                if (string.Compare(s, "timeLoadCompleted", StringComparison.CurrentCultureIgnoreCase) == 0) return "time_load_completed";
+                if (string.Compare(s, "timeUnloadStarted", StringComparison.CurrentCultureIgnoreCase) == 0) return "time_unload_started";
+                if (string.Compare(s, "timeUnloadCompleted", StringComparison.CurrentCultureIgnoreCase) == 0) return "time_unload_completed";
+                
                 if (string.Compare(s, "timeCompleted", StringComparison.CurrentCultureIgnoreCase) == 0) return "time_completed";
                 if (string.Compare(s, "timeAborted", StringComparison.CurrentCultureIgnoreCase) == 0) return "time_aborted";
                 if (string.Compare(s, "timeFailed", StringComparison.CurrentCultureIgnoreCase) == 0) return "time_failed";
