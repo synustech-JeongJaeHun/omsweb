@@ -34,7 +34,12 @@ namespace OMSWeb.Repositories
 
             string sql = $@"
                 SELECT count(*) FROM (
-                                   SELECT OD.id, OD.origin As origin, OD.history_source_id, OD.logical_id, 
+                                   SELECT OD.id, 
+                                          CASE
+                                              WHEN OD.origin_details IS NOT NULL THEN OD.origin_details
+                                              ELSE OD.origin 
+                                          END AS origin,
+                                          OD.history_source_id, OD.logical_id, 
                             CASE
                               WHEN OD.time_failed IS NOT NULL THEN 'FAILED'
                               WHEN OD.time_aborted IS NOT NULL THEN 'ABORTED'
