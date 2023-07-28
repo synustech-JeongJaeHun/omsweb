@@ -33,7 +33,8 @@
 </ng-container>
 
 <oms-map-viewer
-	*ngIf="ready"
+  *ngIf="!isInit"
+	[hidden]="!ready"
 	[preference]="mapPreference"
 	[viewMode]="viewMode"
 	class="map-viewer"

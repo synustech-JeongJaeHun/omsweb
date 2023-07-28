@@ -13,7 +13,7 @@ export class TrackStatusService {
 
 	public isTrackReady = false
 	public trackData?: Dto.ITrackData = undefined
-
+  public isInit = true
 	constructor(
 		private statusService: StatusService,
 		private hubService: HubService, // private authService: AuthService,
@@ -22,10 +22,116 @@ export class TrackStatusService {
 	}
 
 	public async fetchTrack() {
+    console.log('fetchTrack')
     this.trackData = await this.statusService.getTrack().toPromise()
 		this.isTrackReady = true
 		this.isTrackReadyChanged.emit(this.isTrackReady)
 	}
+
+  // soft reload
+  public reloadMap(){
+    this.statusService.getTrack().subscribe(res=>{
+      //segmentDisabled
+      this.added(this.trackData.segmentDisabled, res.segmentDisabled).forEach(d=>{
+        this.hubService.segmentDisabledChanged$.emit({operation: 'INSERT', table: '', data: d})
+      })
+      this.removed(this.trackData.segmentDisabled, res.segmentDisabled).forEach(d=>{
+        this.hubService.segmentDisabledChanged$.emit({operation: 'DELETE', table: '', id: d.id})
+      })
+      //buffers
+      this.different(this.trackData.buffers, res.buffers).forEach(d=>{
+        this.hubService.bufferChanged$.emit({
+          operation: 'UPDATE',
+          table: '',
+          data: d,
+          id: d.id,
+          unuse: d.unuse,
+          state: d?.state,
+          carrierId: d.carrierId,
+          user: d?.user,
+          note: d?.note,
+          cAlias: d?.cAlias})
+      })
+
+      //stations
+      this.different(this.trackData.stations, res.stations).forEach(d=>{
+        this.hubService.stationChanged$.emit({
+          operation: 'UPDATE',
+          table: '',
+          data: d,
+          id: d.id,
+          unuse: d.unuse,
+          state: d?.state,
+          carrierId: d.carrierId,
+          user: d?.user,
+          note: d?.note,
+          cAlias: d?.cAlias})
+      })
+
+      //clusterStatus
+      this.added(this.trackData.clusterStates, res.clusterStates).forEach(d=>{
+        this.hubService.clusterStatusChanged$.emit({
+          operation: 'INSERT',
+          table: '',
+          converterId: d.converterId,
+          status: d.status,
+          backupId: d.backupId,
+        })
+      })
+      this.removed(this.trackData.clusterStates, res.clusterStates).forEach(d=>{
+        this.hubService.clusterStatusChanged$.emit({
+          operation: 'DELETE',
+          table: '',
+          converterId: d.converterId,
+          status: d.status,
+          backupId: d.backupId,
+        })
+      })
+      this.different(this.trackData.clusterStates, res.clusterStates).forEach(d=>{
+        this.hubService.clusterStatusChanged$.emit({
+          operation: 'UPDATE',
+          table: '',
+          converterId: d.converterId,
+          status: d.status,
+          backupId: d.backupId,
+        })
+      })
+      //clusters
+      this.added(this.trackData.clusters, res.clusters).forEach(d=>{
+        this.hubService.clusterChanged$.emit({
+          operation: 'INSERT',
+          table: '',
+          color: d.color,
+          logicalId: d.logicalId,
+          maxVehicles: d.maxVehicles
+        })
+      })
+      this.different(this.trackData.clusters, res.clusters).forEach(d=>{
+        this.hubService.clusterChanged$.emit({
+          operation: 'UPDATE',
+          table: '-',
+          data: [d],
+          id: d.id,
+          color: d.color,
+          logicalId: d.logicalId,
+          maxVehicles: d.maxVehicles
+        })
+      })
+
+      //mtls
+      this.hubService.mtlChanged$.emit({
+        operation: 'UPDATE',
+        table: '',
+        data: res.mtls,
+      })
+
+      this.isTrackReady = true
+      this.isTrackReadyChanged.emit(this.isTrackReady)
+      this.trackData = res;
+    })
+  }
+
+
 
 	public attachHubEvents() {
 		this.hubService.connectionChanged$.subscribe((conn) => {
@@ -333,4 +439,49 @@ export class TrackStatusService {
 
 		return objectRelatedGroups.map((g) => g.id)
 	}
+
+  private different(prev:any[], current:any[]):any{
+    let result =[]
+    current.forEach(c => {
+      const matchingObject = prev.find(p => this.objCompare(c, p));
+      if (!matchingObject) {
+        result.push(c);
+      }
+    });
+    console.log(result)
+    return result
+  }
+
+  private objCompare(obj1: any, obj2: any): boolean{
+    let result = true
+    Object.keys(obj1).forEach(i=>{
+      if(!obj1[i] && !obj2[i]){
+
+      }
+      else if(obj1[i]!==obj2[i]) {
+        result = false
+      }
+    })
+    return result
+  }
+
+  private added(prev:any[], current:any[]):any{
+    let result = []
+    current.forEach(c => {
+      if (!prev.some(p => p.id === c.id)) {
+        result.push(c);
+      }
+    });
+    return result
+  }
+
+  private removed(prev:any[], current:any[]):any{
+    let result = []
+    prev.forEach(p => {
+      if (!current.some(c => c.id === p.id)) {
+        result.push(p);
+      }
+    });
+    return result
+  }
 }

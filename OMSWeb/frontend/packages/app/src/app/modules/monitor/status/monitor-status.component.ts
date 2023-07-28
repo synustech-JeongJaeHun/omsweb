@@ -85,6 +85,8 @@ export class MonitorStatusComponent implements OnInit,OnDestroy {
   indicatorFireEmergency = false
   fireEmergency = false
 
+  isInit = true
+
 	findEvent = new EventEmitter<{ type: string; id: number }>()
 	focusEvent = new EventEmitter<{
 		type: string
@@ -113,12 +115,10 @@ export class MonitorStatusComponent implements OnInit,OnDestroy {
 			: ViewModes.public
 
     trackStatusService.isTrackReadyChanged.subscribe(isReady=>{
+      this.loadingState = !isReady
+      this.ready = isReady
       if(isReady){
-        this.loadedTrack()
-      }
-      else{
-        this.loadingState = true
-        this.ready = false
+        this.isInit && this.loadedTrack()
       }
     })
 
@@ -205,19 +205,19 @@ export class MonitorStatusComponent implements OnInit,OnDestroy {
       this.trackStatusService.isTrackReadyChanged.emit(false)
     }
     else{
-      this.trackStatusService.fetchTrack().then(()=>{
-        this.trackStatusService.attachHubEvents()
-        this.hubSvc.start();
-      })
+      /*this.trackStatusService.fetchTrack().then(()=>{
+        this.hubSvc.resume();
+      })*/
+      this.trackStatusService.reloadMap()
+      this.hubSvc.start();
     }
   }
 
   private loadedTrack(){
     this.trackData = this.trackStatusService.trackData
-    this.loadingState = false
-    this.ready = true
     this.trackData.stations.map(s=>{
       if(!this.includeCheck(s.logicalId)) s.carrierId =null
     })
+    this.isInit =false
   }
 }

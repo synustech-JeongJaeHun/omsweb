@@ -186,7 +186,7 @@ export class HubService {
 			this.vehiclePathChanged$.emit({ ...meta, data: body })
 		})
 		this.hub.on('clusterChanged', (meta, body) => {
-			// showInfo && console.info('## hub message : clusterChanged >>', { meta, body })
+			showInfo && console.info('## hub message : clusterChanged >>', { meta, body })
 			this.clusterChanged$.emit({ ...meta, data: body })
 		})
 		this.hub.on('groupChanged', (meta, body) => {
@@ -214,11 +214,11 @@ export class HubService {
 			this.settingModeChanged$.emit({ ...meta, data: body })
 		})
 		this.hub.on('zcuMapChanged', (meta, body) => {
-			// showInfo && console.info('## hub message : zcuMapChanged >>', { meta, body })
+			showInfo && console.info('## hub message : zcuMapChanged >>', { meta, body })
 			this.zcuMapChanged$.emit({ ...meta, data: body })
 		})
 		this.hub.on('zcuStatusTableChanged', (meta, body) => {
-			// showInfo && console.info('## hub message : zcuStatusTableChanged >>', { meta, body })
+			showInfo && console.info('## hub message : zcuStatusTableChanged >>', { meta, body })
 			this.zcuStatusTableChanged$.emit({ ...meta, data: body })
 		})
 		this.hub.on('fireShutterMapChanged', (meta, body) => {
@@ -258,7 +258,7 @@ export class HubService {
     })
 
     this.hub.on('systemState', (meta, body) => {
-      console.info('## hub message : systemState >>', { meta, body })
+      showInfo && console.info('## hub message : systemState >>', { meta, body })
       this.systemState$.emit({ ...meta, data: body })
     })
 	}
