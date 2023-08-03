@@ -11,6 +11,7 @@ namespace OMSWeb.OMSSettings
         [DllImport("kernel32")]
         private static extern long WritePrivateProfileString(string name, string key, string val, string filePath);
 
+        public static bool lock_of_map_update = false;
         public static IConfiguration Configuration;
         public static string AppSettingsPath = string.Empty;
         public static string IniPath = string.Empty;
@@ -86,6 +87,21 @@ namespace OMSWeb.OMSSettings
                     //Console.WriteLine("DataAccess() : " + e.Message);
                 }
             }
+        }
+
+        public static bool Islock_of_Manpupdate()
+        {
+            return lock_of_map_update;
+        }
+
+        public static void Lock_of_Mapupdate()
+        {
+            lock_of_map_update = true;
+        }
+
+        public static void Unlock_of_Mapupdate()
+        {
+            lock_of_map_update = false;
         }
     }
 }

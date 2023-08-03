@@ -11,6 +11,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Text.Json;
 using OMSWeb.Logger;
+using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
+using OMSWeb.OMSSettings;
 
 namespace OMSWeb.Services
 {
@@ -18,13 +21,25 @@ namespace OMSWeb.Services
     {
         private IMqttClient mqttClient;
         private IMqttClientOptions options;
+        private List<string> subTopicList;
 
         public MqttClientService(IMqttClientOptions options)
         {
             this.options = options;
+            this.subTopicList = GetSubTopicList();
+
             mqttClient = new MqttFactory().CreateMqttClient();
             ConfigureMqttClient();
         }
+
+        public List<string> GetSubTopicList()
+        {
+            List<string> subTopicList = new List<string>();
+            subTopicList.Add("oms/map-update/status");
+
+            return subTopicList;
+        }
+
 
         private void ConfigureMqttClient()
         {
@@ -33,17 +48,81 @@ namespace OMSWeb.Services
             mqttClient.ApplicationMessageReceivedHandler = this;
         }
 
+        public bool IsMapUpdateStatus(string topic)
+        {
+            if (topic.StartsWith("oms/map-update"))
+                return true;
+            return false;
+        }
+
+        public void GetNotifyParam(JObject json, string key, out string value)
+        {
+            value = (json.ContainsKey(key)) ? json[key].ToString() : null;
+            if (value == null) value = string.Empty;
+        }
+        public void GetNotifyParam(JObject json, string key, out int value)
+        {
+            GetNotifyParam(json, key, out string v);
+            if (v == null || string.Empty.Equals(v)) v = "0";
+            value = Convert.ToInt32(v);
+        }
+        public void GetNotifyParam(JObject json, string key, out uint value)
+        {
+            GetNotifyParam(json, key, out string v);
+            value = Convert.ToUInt32(v);
+        }
+        public void GetNotifyParam(JObject json, string key, out byte value)
+        {
+            GetNotifyParam(json, key, out string v);
+            value = Convert.ToByte(v);
+        }
+        public void GetNotifyParam(JObject json, string key, out bool value)
+        {
+            GetNotifyParam(json, key, out string v);
+            value = Convert.ToBoolean(v);
+        }
+
+        public void NotifyMapUpdateProc(string payload)
+        {
+            JObject json = JObject.Parse(payload);
+
+            GetNotifyParam(json, "action", out string action);
+            GetNotifyParam(json, "status", out string status);
+            GetNotifyParam(json, "worker", out string worker);
+
+            if (string.Equals(worker, "map-editor", StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(worker, "omsweb", StringComparison.OrdinalIgnoreCase))
+            {
+                if (string.Equals(status, "start", StringComparison.OrdinalIgnoreCase))
+                {
+                    AppConfig.Lock_of_Mapupdate();
+                    
+                    Log.FilePrint(LogType.HOST, LogEventLevel.Information, $"map-update -> {status}");
+                }
+                else if (string.Equals(status, "failed", StringComparison.OrdinalIgnoreCase) ||
+                         string.Equals(status, "complete", StringComparison.OrdinalIgnoreCase))
+                {
+                    AppConfig.Unlock_of_Mapupdate();
+
+                    Log.FilePrint(LogType.HOST, LogEventLevel.Information, $"map-update -> {status}");
+                }
+            }
+        }
+
+
         public Task HandleApplicationMessageReceivedAsync(MqttApplicationMessageReceivedEventArgs eventArgs)
         {
             try
             {
                 string topic = eventArgs.ApplicationMessage.Topic;
-                if (string.IsNullOrWhiteSpace(topic) == false)
+                string payload = Encoding.UTF8.GetString(eventArgs.ApplicationMessage.Payload);
+
+                if (IsMapUpdateStatus(topic))
                 {
-                    string payload = Encoding.UTF8.GetString(eventArgs.ApplicationMessage.Payload);
-                    //System.Console.WriteLine($"Topic: {topic}. Message Received: {payload}");
-                    // process msg                    
+                    NotifyMapUpdateProc(payload);
                 }
+
+                // System.Console.WriteLine($"Topic: {topic}. Message Received: {payload}");
             }
             catch (Exception ex)
             {
@@ -58,7 +137,13 @@ namespace OMSWeb.Services
             try
             {
                 System.Console.WriteLine("connected to mqtt broker");
-                await mqttClient.SubscribeAsync("oms/track", MqttQualityOfServiceLevel.AtMostOnce);
+                if (this.subTopicList != null)
+                {
+                    foreach (string topic in this.subTopicList)
+                    {
+                        await mqttClient.SubscribeAsync(topic, MqttQualityOfServiceLevel.AtMostOnce);
+                    }
+                }
             }
             catch (Exception ex)
             {
