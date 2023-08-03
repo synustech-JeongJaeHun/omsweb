@@ -13,7 +13,6 @@ export class TrackStatusService {
 
 	public isTrackReady = false
 	public trackData?: Dto.ITrackData = undefined
-  public isInit = true
 	constructor(
 		private statusService: StatusService,
 		private hubService: HubService, // private authService: AuthService,
@@ -22,7 +21,6 @@ export class TrackStatusService {
 	}
 
 	public async fetchTrack() {
-    console.log('fetchTrack')
     this.trackData = await this.statusService.getTrack().toPromise()
 		this.isTrackReady = true
 		this.isTrackReadyChanged.emit(this.isTrackReady)
@@ -30,7 +28,16 @@ export class TrackStatusService {
 
   // soft reload
   public reloadMap(){
+    this.isTrackReadyChanged.emit(false)
     this.statusService.getTrack().subscribe(res=>{
+      //vhl
+      this.different(this.trackData.vehicles, res.vehicles).forEach(d=>{
+        this.hubService.vehicleChanged$.emit({
+          operation: 'UPDATE',
+          table: '',
+          data: d,
+          })
+      })
       //segmentDisabled
       this.added(this.trackData.segmentDisabled, res.segmentDisabled).forEach(d=>{
         this.hubService.segmentDisabledChanged$.emit({operation: 'INSERT', table: '', data: d})
@@ -125,13 +132,29 @@ export class TrackStatusService {
         data: res.mtls,
       })
 
+      //zcus
+      this.different(this.trackData.zcus, res.zcus).forEach(d=>{
+        this.hubService.zcuMapChanged$.emit({
+          operation: 'UPDATE',
+          table: '',
+          data: d,
+        })
+      })
+
+      //fireShutter
+      this.different(this.trackData.fireShutters, res.fireShutters).forEach(d=>{
+        this.hubService.fireShutterMapChanged$.emit({
+          operation: 'UPDATE',
+          table: '',
+          data: d,
+        })
+      })
+
       this.isTrackReady = true
       this.isTrackReadyChanged.emit(this.isTrackReady)
       this.trackData = res;
     })
   }
-
-
 
 	public attachHubEvents() {
 		this.hubService.connectionChanged$.subscribe((conn) => {
@@ -448,7 +471,6 @@ export class TrackStatusService {
         result.push(c);
       }
     });
-    console.log(result)
     return result
   }
 

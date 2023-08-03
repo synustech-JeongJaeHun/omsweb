@@ -19,6 +19,7 @@ export class PlaybackComponent implements OnInit, OnDestroy {
 	isFirstSnapshotLoaded = false
 	isLoadFail = false
 
+  pageLoaded: boolean = false;
 	get loading() {
 		if (this.isLoadFail) return 'fail'
 		if (this.isFirstTrackReady && this.isFirstSnapshotLoaded) return 'done'
@@ -132,10 +133,13 @@ export class PlaybackComponent implements OnInit, OnDestroy {
             })
             this.playSnapshots(this.playbackPlayService.clock)
           }
+
+          this.pageLoaded = true;
         })
       })
     } catch (e) {
       this.isLoadFail = true
+      this.pageLoaded = true;
     }
   }
 

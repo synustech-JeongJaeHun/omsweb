@@ -73,7 +73,7 @@ const exposed: IOmsTrackMonitor = {
 
 	setTrack(t) {
 		// clean up : order is reverse of setup
-		initGroups([])
+		/*initGroups([])
 		initSegmentDisableds([])
 		initVehicles([])
 		initZcus([])
@@ -85,7 +85,7 @@ const exposed: IOmsTrackMonitor = {
 		initBuffers([])
 		initPoints([])
 		initFireshutters([])
-    initBackdrops([])
+    initBackdrops([])*/
 
 		// setup
 		const { minX, minY, maxX, maxY } = calculateMinMaxXYFromPoints(
@@ -99,14 +99,14 @@ const exposed: IOmsTrackMonitor = {
 		initBuffers(t.buffers)
 		initMtls(t.mtls)
 		initSegments(t.segmentParts)
-		initClusterStates(t.clusterStates)
-		initClusters(t.clusters)
+    t.clusterStates&&initClusterStates(t.clusterStates)
+    t.clusters&&initClusters(t.clusters)
 		initStations(t.stations)
 		initZcus(t.zcus)
 		initVehicles(t.vehicles ?? [])
 		initSegmentDisableds(t.segmentDisabled ?? [])
-		initGroups(t.groups)
-		initFireshutters(t.fireShutters)
+    t.groups&&initGroups(t.groups)
+    t.fireShutters&&initFireshutters(t.fireShutters)
     initBackdrops(t.backdrops)
 	},
 	centerZoom,

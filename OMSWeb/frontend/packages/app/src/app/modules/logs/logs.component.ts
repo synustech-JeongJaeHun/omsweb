@@ -21,6 +21,8 @@ export class LogsComponent implements OnInit {
 
   isLoading = false
 
+  pageLoaded: boolean = false;
+
   constructor(
     private systemSvc: SystemsService,
     private dialogSvc: DialogService,
@@ -35,6 +37,7 @@ export class LogsComponent implements OnInit {
         }, 300)
     })
 
+    this.pageLoaded = true;
   }
 
   buttonOptions = {

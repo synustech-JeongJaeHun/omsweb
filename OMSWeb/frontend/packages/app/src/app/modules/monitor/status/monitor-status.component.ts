@@ -13,6 +13,7 @@ import {MobileService} from "../../../services/mobile.service";
 import {HubService} from "@oms/services/hub.service";
 import { takeUntil } from 'rxjs/operators'
 import {Subject} from "rxjs";
+import {Router} from "@angular/router";
 
 
 @Component({
@@ -101,6 +102,8 @@ export class MonitorStatusComponent implements OnInit,OnDestroy {
 		return this.mapPreference.toggles.controlTable
 	}
 
+  pageLoaded: boolean = false;
+
 	constructor(
 		private auth: AuthService,
 		private settingSvc: SettingsService,
@@ -108,7 +111,8 @@ export class MonitorStatusComponent implements OnInit,OnDestroy {
 		systemStatusService: SystemStatusService,
     private trackMonitorSettingService: TrackMonitorSettingService,
     private mobileSvc: MobileService,
-    private hubSvc: HubService
+    private hubSvc: HubService,
+    private router: Router
 	) {
 		this.viewMode = this.auth.isAuthenticated
 			? ViewModes.viewer
@@ -158,6 +162,8 @@ export class MonitorStatusComponent implements OnInit,OnDestroy {
       .subscribe((e) => {
         this.fireEmergency = e.fireEmergency
       });
+
+    this.pageLoaded = true;
 	}
 
   ngOnDestroy() {
@@ -205,11 +211,10 @@ export class MonitorStatusComponent implements OnInit,OnDestroy {
       this.trackStatusService.isTrackReadyChanged.emit(false)
     }
     else{
-      /*this.trackStatusService.fetchTrack().then(()=>{
-        this.hubSvc.resume();
-      })*/
-      this.trackStatusService.reloadMap()
-      this.hubSvc.start();
+      if(!this.isPlayback){
+        this.trackStatusService.reloadMap()
+        this.hubSvc.start();
+      }
     }
   }
 
@@ -219,5 +224,9 @@ export class MonitorStatusComponent implements OnInit,OnDestroy {
       if(!this.includeCheck(s.logicalId)) s.carrierId =null
     })
     this.isInit =false
+  }
+
+  get isPlayback(){
+    return this.router.url.includes('/playback')
   }
 }

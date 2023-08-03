@@ -1,6 +1,6 @@
 <div id="track-container" class="track-container">
 	<oms-track-monitor
-		id="track-canvas"
+		id="playback-canvas"
     [width]="viewerSetting.rect.width"
     [height]="viewerSetting.rect.height"
     [vehicleSize]="tmSetting.vehicleSize"
@@ -25,10 +25,10 @@
     [isStationVisible]="tmSetting.isStationVisible"
     [isBufferVisible]="tmSetting.isBufferVisible"
     [isZcuVisible]="tmSetting.isZcuVisible"
-    [isGroupVisible]="tmSetting.isGroupVisible"
-    [isClusterVisible]="tmSetting.isClusterVisible"
-    [isCpsVisible]="tmSetting.isCpsVisible"
-    [isFireshutterVisible]="tmSetting.isFireshutterVisible"
+    [isGroupVisible]="false"
+    [isClusterVisible]="false"
+    [isCpsVisible]="false"
+    [isFireshutterVisible]="false"
     [isMtlVisible]="tmSetting.isMtlVisible"
     [isBackdropVisible]="tmSetting.isBackdropVisible"
     [isOverlappingObjectsVisible]="tmSetting.isOverlappingObjectsVisible"

@@ -40,6 +40,7 @@ import { PermissionEnums } from '../../../models/enums'
 import { TrackMonitorSettingService } from '@oms/root/services/track-monitor-setting.service'
 import { VehicleStatusDialogService } from '@oms/root/services/vehicle-status-dialog.service'
 import {MobileService} from "@oms/services/mobile.service";
+import {TrackStatusService} from "@oms/services/track-status.service";
 
 @Component({
 	selector: 'oms-map-toolbar',
@@ -93,8 +94,9 @@ export class MapToolbarComponent implements OnDestroy {
 		private $t: TranslateService,
 		public trackMonitorSettingService: TrackMonitorSettingService,
 		private vehicleStatusDialogService: VehicleStatusDialogService,
-
     private mobileSvc: MobileService,
+
+    private trackStatusSvc: TrackStatusService
 	) {
 		settingSvc.serviceConfig.subscribe((config) => {
 			this.bufferEnabled = config.bufferEnabled
@@ -267,6 +269,10 @@ export class MapToolbarComponent implements OnDestroy {
       position: this.isMobile&&{left:'0px', bottom:'0px'},
 		})
 	}
+
+  mapRefresh(){
+    this.trackStatusSvc.reloadMap()
+  }
 
 	// onPing() {
 	//   this.messageSvc.sendVehicleCommand({ action: 'status' }).subscribe();

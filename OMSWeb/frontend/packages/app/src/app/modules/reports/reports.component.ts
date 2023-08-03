@@ -22,7 +22,7 @@ export class ReportsComponent
 	implements OnInit, OnDestroy, OnChanges, AfterViewInit
 {
 	private rootDomID: string
-
+  pageLoaded: boolean = false;
 	constructor(private route: ActivatedRoute) {}
 	protected getRootDomNode() {
 		const node = document.getElementById('react-root')
@@ -37,6 +37,8 @@ export class ReportsComponent
 		if (this.isMounted()) {
 			const rnode = React.createElement(App, { location: location }, null)
 			ReactDOM.render(rnode, this.getRootDomNode())
+
+      setTimeout(()=>this.pageLoaded = true, 500)
 		}
 	}
 	ngOnInit() {
