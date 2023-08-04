@@ -3,6 +3,7 @@ import {StatusService} from './status.service'
 import {HubService} from './hub.service'
 import {Dto} from '../models/dto/track.model'
 import {IDataChangeEvent} from '../models/notification.model'
+import IGroup = Dto.IGroup;
 
 
 @Injectable({
@@ -147,6 +148,31 @@ export class TrackStatusService {
           operation: 'UPDATE',
           table: '',
           data: d,
+        })
+      })
+
+      //group
+      res.groups.forEach((g, i)=>{
+        this.addedOnGroup(this.trackData.groups[i].objects, res.groups[i].objects).forEach(d=>{
+          this.hubService.groupChanged$.emit({
+            operation: 'INSERT',
+            table: '',
+            id: d.id,
+            groupId: g.id,
+            referenceId: d.id,
+            referenceTable: d.type,
+          })
+        })
+
+        this.removedOnGroup(this.trackData.groups[i].objects, res.groups[i].objects).forEach(d=>{
+          this.hubService.groupChanged$.emit({
+            operation: 'DELETE',
+            table: '',
+            id: d.id,
+            groupId: g.id,
+            referenceId: d.id,
+            referenceTable: d.type,
+          })
         })
       })
 
@@ -497,10 +523,30 @@ export class TrackStatusService {
     return result
   }
 
+  private addedOnGroup(prev: any[], current: any[]):any{
+    let result = []
+    current.forEach(c => {
+      if (!prev.some(p => p.id === c.id && p.type===c.type)) {
+        result.push(c);
+      }
+    });
+    return result
+  }
+
   private removed(prev:any[], current:any[]):any{
     let result = []
     prev.forEach(p => {
       if (!current.some(c => c.id === p.id)) {
+        result.push(p);
+      }
+    });
+    return result
+  }
+
+  private removedOnGroup(prev:any[], current:any[]):any{
+    let result = []
+    prev.forEach(p => {
+      if (!current.some(c => c.id === p.id && c.type===p.type)) {
         result.push(p);
       }
     });
