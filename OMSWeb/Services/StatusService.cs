@@ -4,6 +4,7 @@ using DevExtreme.AspNet.Data;
 using DevExtreme.AspNet.Mvc;
 using Newtonsoft.Json.Linq;
 using OMSWeb.Models;
+using OMSWeb.OMSSettings;
 using OMSWeb.Repositories;
 
 namespace OMSWeb.Services
@@ -21,42 +22,52 @@ namespace OMSWeb.Services
 
         public IQueryable<OrderState> QueryOrderStates(int skip, int take, string condition, string sort)
         {
+            if (AppConfig.lock_of_map_update) return null;
             return _repo.QueryOrderStates(skip, take, condition, sort);
         }
         public int QueryOrderStatesCount(string condition)
         {
+            if (AppConfig.lock_of_map_update) return 0;
             return _repo.QueryOrderStatesCount(condition);
         }
         public IQueryable<VehicleState> QueryVehicleStates()
         {
+            if (AppConfig.lock_of_map_update) return null;
             return _repo.QueryVehicleStates();
         }
         public IQueryable<StationState> QueryStationStates()
         {
+            if (AppConfig.lock_of_map_update) return null;
             return _repo.QueryStationStates();
         }
         public IQueryable<BufferState> QueryBufferStates()
         {
+            if (AppConfig.lock_of_map_update) return null;
             return _repo.QueryBufferStates();
         }
         public IQueryable<ZcuState> QueryZcuStates()
         {
+            if (AppConfig.lock_of_map_update) return null;
             return _repo.QueryZcuStates();
         }
         public IQueryable<FireShutterState> QueryFireShutterStates()
         {
+            if (AppConfig.lock_of_map_update) return null;
             return _repo.QueryFireShutterStates();
         }
         public IQueryable<ClusterState> QueryClusterStates()
         {
+            if (AppConfig.lock_of_map_update) return null;
             return _repo.QueryClusterStates();
         }
         public IQueryable<UnuseListState> QueryUnuseListStates()
         {
+            if (AppConfig.lock_of_map_update) return null;
             return _repo.QueryUnuseListStates();
         }
         public IQueryable<DioState> QueryDioStates()
         {
+            if (AppConfig.lock_of_map_update) return null;
             return _repo.QueryDioStates();
         }
         

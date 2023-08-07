@@ -2,6 +2,7 @@
 using System.Linq;
 using OMSWeb.Models;
 using OMSWeb.Models.Tracks;
+using OMSWeb.OMSSettings;
 using OMSWeb.Repositories;
 using Buffer = OMSWeb.Models.Tracks.Buffer;
 
@@ -17,6 +18,7 @@ namespace OMSWeb.Services
 
         public MapData GetMapData()
         {
+            if (AppConfig.lock_of_map_update) return null;
             var map = new MapData
             {
                 Size = this._trackRepo.GetDimension(),
@@ -84,16 +86,19 @@ namespace OMSWeb.Services
 
         public List<VehiclePosition> GetVehicles(bool reloadIfEmpty = false)
         {
+            if (AppConfig.lock_of_map_update) return new List<VehiclePosition>();
             return this._trackRepo.LoadVehiclePositions(reloadIfEmpty);
         }
 
         public List<VehiclePath> GetVehiclePaths()
         {
+            if (AppConfig.lock_of_map_update) return null;
             return this._trackRepo.LoadVehiclePaths();
         }
 
         public List<NodeInfo> GetIdList(string type)
         {
+            if (AppConfig.lock_of_map_update) return null;
             dynamic[] targetList;
             switch (type)
             {
@@ -129,11 +134,13 @@ namespace OMSWeb.Services
 
         public string GetCarrierId(string carrierLocation)
         {
+            if (AppConfig.lock_of_map_update) return null;
             return this._trackRepo.QueryCarrierId(carrierLocation);
         }
 
         public CarrierInfo GetCarrierInfo(string carrierLocation)
         {
+            if (AppConfig.lock_of_map_update) return null;
             var carrierInfos = this._trackRepo.QueryCarrierInfo(carrierLocation);
 
             if (carrierInfos.AsEnumerable().Count() == 1)
@@ -145,6 +152,7 @@ namespace OMSWeb.Services
 
         public CarrierLocation GetCarrierLoc(string carrierId)
         {
+            if (AppConfig.lock_of_map_update) return null;
             var carrierLocs = this._trackRepo.QueryCarrierLoc(carrierId);
 
             if (carrierLocs.AsEnumerable().Count() == 1)
@@ -167,6 +175,7 @@ namespace OMSWeb.Services
 
         public QueryResult CheckPointHomeInterlock(int pointId)
         {
+            if (AppConfig.lock_of_map_update) return null;
             QueryResult queryResult = new QueryResult
             {
                 Retcode = (int)RET_CODE.Failed,
@@ -183,31 +192,37 @@ namespace OMSWeb.Services
 
         public IList<LocationGroup> GetGroups()
         {
+            if (AppConfig.lock_of_map_update) return null;
             return this._trackRepo.LoadGroups();
         }
 
         public IList<Cluster> GetClusters()
         {
+            if (AppConfig.lock_of_map_update) return null;
             return this._trackRepo.LoadClusters();
         }
 
         public IList<SegmentWithPart> GetSegments()
         {
+            if (AppConfig.lock_of_map_update) return null;
             return this._trackRepo.LoadSegments();
         }
 
         public IList<Point> GetPoints()
         {
+            if (AppConfig.lock_of_map_update) return null;
             return this._trackRepo.LoadPoints();
         }
 
         public IList<Station> GetStations()
         {
+            if (AppConfig.lock_of_map_update) return null;
             return this._trackRepo.LoadStations();
         }
 
         public Buffer GetBufferById(int id)
         {
+            if (AppConfig.lock_of_map_update) return null;
             return this._trackRepo.LoadBufferById(id);
         }
     }

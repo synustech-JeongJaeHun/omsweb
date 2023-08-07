@@ -22,11 +22,13 @@ namespace OMSWeb.Services
         private IMqttClient mqttClient;
         private IMqttClientOptions options;
         private List<string> subTopicList;
+        private PushService _pushService;
 
-        public MqttClientService(IMqttClientOptions options)
+        public MqttClientService(IMqttClientOptions options, PushService pushService)
         {
             this.options = options;
             this.subTopicList = GetSubTopicList();
+            this._pushService = pushService;
 
             mqttClient = new MqttFactory().CreateMqttClient();
             ConfigureMqttClient();
@@ -102,6 +104,14 @@ namespace OMSWeb.Services
                 else if (string.Equals(status, "failed", StringComparison.OrdinalIgnoreCase) ||
                          string.Equals(status, "complete", StringComparison.OrdinalIgnoreCase))
                 {
+                    
+                    if (string.Equals(status, "complete", StringComparison.OrdinalIgnoreCase))
+                    {
+                        var now = DateTime.Now;
+                        var ts = now.Ticks;
+                        
+                        _pushService.PushWatcherEventAsync(ts, "{\"table\" : \"db_version\", \"operation\" : \"UPDATE\", \"id\" : 1}");
+                    }
                     AppConfig.Unlock_of_Mapupdate();
 
                     Log.FilePrint(LogType.HOST, LogEventLevel.Information, $"map-update -> {status}");
