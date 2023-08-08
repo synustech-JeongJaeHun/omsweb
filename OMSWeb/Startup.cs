@@ -234,7 +234,7 @@ namespace OMSWeb
             {
                 OnPrepareResponse = context =>
                 {
-                    context.Context.Response.Headers.Add("Cache-Control", "no-cache, no-store");
+                    context.Context.Response.Headers.Add("Cache-Control", "public, max-age=2592000");
                     context.Context.Response.Headers.Add("Expires", "-1");
                 }
             });
@@ -245,7 +245,7 @@ namespace OMSWeb
                 {
                     OnPrepareResponse = context =>
                     {
-                        context.Context.Response.Headers.Add("Cache-Control", "no-cache, no-store, must-revalidate");
+                        context.Context.Response.Headers.Add("Cache-Control", "public, max-age=2592000");
                         context.Context.Response.Headers.Add("Expires", "0");
                         context.Context.Response.Headers.Add("Pragma", "no-cache");
                     }
