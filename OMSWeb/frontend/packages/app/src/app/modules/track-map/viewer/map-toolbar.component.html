@@ -1,12 +1,12 @@
 <mat-list [class.show-name]="showToolName" mdePopoverTarget #popoverTarget="mdePopoverTarget"
           *ngIf="showToolbox" [ngClass]="{isMobile : isMobile} ">
-  <button matListItem mat-button class="tool-item" [matTooltipDisabled]="showToolName" matTooltipClass="snb-tooltip"
+  <!--<button matListItem mat-button class="tool-item" [matTooltipDisabled]="showToolName" matTooltipClass="snb-tooltip"
           matTooltipPosition="right" [matTooltip]="'names.refresh' | translate" (click)="mapRefresh()">
     <mat-icon>refresh</mat-icon>
     <span class="tool-name" *ngIf="showToolName">{{
       "names.refresh" | translate
       }}</span>
-  </button>
+  </button>-->
 
   <button matListItem mat-button class="tool-item" [matTooltipDisabled]="showToolName" matTooltipClass="snb-tooltip"
     matTooltipPosition="right" [matTooltip]="'names.centerZoom' | translate" (click)="centerZoom.emit()">
