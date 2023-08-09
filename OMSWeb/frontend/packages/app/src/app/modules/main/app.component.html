@@ -2,5 +2,6 @@
   <oms-gnb></oms-gnb>
 </header>
 <main>
-  <router-outlet></router-outlet>
+  <router-outlet *ngIf="!isMonitor"></router-outlet>
+  <oms-monitor-status *ngIf="isInit" [ngStyle]="{'display': isMonitor? 'block' : 'none'}"></oms-monitor-status>
 </main>

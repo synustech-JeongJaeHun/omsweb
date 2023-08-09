@@ -13,6 +13,7 @@ import {MobileService} from "../../../services/mobile.service";
 import {HubService} from "@oms/services/hub.service";
 import { takeUntil } from 'rxjs/operators'
 import {Subject} from "rxjs";
+import {Router} from "@angular/router";
 
 
 @Component({
@@ -85,6 +86,8 @@ export class MonitorStatusComponent implements OnInit,OnDestroy {
   indicatorFireEmergency = false
   fireEmergency = false
 
+  isInit = true
+
 	findEvent = new EventEmitter<{ type: string; id: number }>()
 	focusEvent = new EventEmitter<{
 		type: string
@@ -99,6 +102,8 @@ export class MonitorStatusComponent implements OnInit,OnDestroy {
 		return this.mapPreference.toggles.controlTable
 	}
 
+  pageLoaded: boolean = false;
+
 	constructor(
 		private auth: AuthService,
 		private settingSvc: SettingsService,
@@ -106,19 +111,18 @@ export class MonitorStatusComponent implements OnInit,OnDestroy {
 		systemStatusService: SystemStatusService,
     private trackMonitorSettingService: TrackMonitorSettingService,
     private mobileSvc: MobileService,
-    private hubSvc: HubService
+    private hubSvc: HubService,
+    private router: Router
 	) {
 		this.viewMode = this.auth.isAuthenticated
 			? ViewModes.viewer
 			: ViewModes.public
 
     trackStatusService.isTrackReadyChanged.subscribe(isReady=>{
+      this.loadingState = !isReady
+      this.ready = isReady
       if(isReady){
-        this.loadedTrack()
-      }
-      else{
-        this.loadingState = true
-        this.ready = false
+        this.isInit && this.loadedTrack()
       }
     })
 
@@ -158,6 +162,8 @@ export class MonitorStatusComponent implements OnInit,OnDestroy {
       .subscribe((e) => {
         this.fireEmergency = e.fireEmergency
       });
+
+    this.pageLoaded = true;
 	}
 
   ngOnDestroy() {
@@ -205,19 +211,22 @@ export class MonitorStatusComponent implements OnInit,OnDestroy {
       this.trackStatusService.isTrackReadyChanged.emit(false)
     }
     else{
-      this.trackStatusService.fetchTrack().then(()=>{
-        this.trackStatusService.attachHubEvents()
+      if(!this.isPlayback){
+        this.trackStatusService.reloadMap()
         this.hubSvc.start();
-      })
+      }
     }
   }
 
   private loadedTrack(){
     this.trackData = this.trackStatusService.trackData
-    this.loadingState = false
-    this.ready = true
     this.trackData.stations.map(s=>{
       if(!this.includeCheck(s.logicalId)) s.carrierId =null
     })
+    this.isInit =false
+  }
+
+  get isPlayback(){
+    return this.router.url.includes('/playback')
   }
 }

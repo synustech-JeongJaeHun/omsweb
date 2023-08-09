@@ -13,7 +13,10 @@ import { Component, OnInit } from '@angular/core';
   ],
 })
 export class ControlsComponent implements OnInit {
+  pageLoaded: boolean = false;
   constructor() { }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    this.pageLoaded = true;
+  }
 }

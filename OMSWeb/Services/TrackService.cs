@@ -19,29 +19,9 @@ namespace OMSWeb.Services
         public MapData GetMapData()
         {
             if (AppConfig.lock_of_map_update) return null;
-            var map = new MapData
-            {
-                Size = this._trackRepo.GetDimension(),
-                Points = this._trackRepo.LoadPoints(),
-                Segments = this._trackRepo.LoadSegments(),
-                SegmentDisabled = this._trackRepo.LoadDisabledSegments(),
-                Stations = this._trackRepo.LoadStations(),
-                Buffers = this._trackRepo.LoadBuffers(),
-                Mtls = this._trackRepo.LoadMtls(),
-                Clusters = this._trackRepo.LoadClusters(),
-                ClusterStates = this._trackRepo.LoadClusterStates(),
-                VehicleDio = this._trackRepo.LoadVehicleDio(),
-                VehiclePaths = this._trackRepo.LoadVehiclePaths(),
-                Vehicles = this._trackRepo.LoadVehiclePositions(),
-                Groups = this._trackRepo.LoadGroups(),
-                Zcus = this._trackRepo.LoadZcus(),
-                ZcuStatus = this._trackRepo.LoadZcuStatus(),
-                FireShutters = this._trackRepo.LoadFireShutters(),
-                FireShutterStatus = this._trackRepo.LoadFireShutterStatus(),
-                Backdrops = this._trackRepo.LoadBackdrops() 
-            };
-            return map;
+            return this._trackRepo.LoadMapData();
         }
+
 
         public dynamic[] GetMapItem(CacheKeys key)
         {

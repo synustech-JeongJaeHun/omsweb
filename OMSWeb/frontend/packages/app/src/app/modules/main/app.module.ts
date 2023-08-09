@@ -17,13 +17,15 @@ import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar'
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field'
 import { StartupComponent } from './startup.component'
 import { SettingsModule } from '../settings/settings.module';
+import {MonitorStatusComponent} from "@daimre/app/src/app/modules/monitor/status/monitor-status.component";
+import {PageUnloadGuard} from "@oms/root/guards/page-unload.guard";
 
 export function HttpLoaderFactory(http: HttpClient) {
 	return new TranslateHttpLoader(http, './assets/i18n/', '.json')
 }
 
 @NgModule({
-	declarations: [AppComponent, StartupComponent],
+  declarations: [AppComponent, StartupComponent, MonitorStatusComponent],
 	imports: [
 		BrowserModule,
 		AppRoutingModule,
@@ -41,6 +43,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 		}),
 	],
 	providers: [
+    PageUnloadGuard,
 		HubService,
 		AuthService,
 		{

@@ -7,10 +7,11 @@ import { Component, OnInit } from '@angular/core';
   ]
 })
 export class HistoriesComponent implements OnInit {
-
+  pageLoaded: boolean = false;
   constructor() { }
 
   ngOnInit(): void {
+    this.pageLoaded = true;
   }
 
 }

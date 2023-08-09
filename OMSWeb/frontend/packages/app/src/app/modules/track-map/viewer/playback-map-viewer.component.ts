@@ -51,7 +51,9 @@ import {
 	HostSessionStatusEnums,
 	OnOfflineModeEnums,
 } from '../../../models/enums'
-import {ISystemStates} from "@oms/models/system.model";
+import {HubService} from "@oms/services/hub.service";
+import {TrackStatusService} from "@oms/services/track-status.service";
+import {Dto} from "@oms/models/dto/track.model";
 
 @Component({
 	selector: 'oms-playback-map-viewer',
@@ -161,6 +163,8 @@ export class PlaybackMapViewerComponent implements OnInit, OnDestroy {
 		private trackMonitorSettingService: TrackMonitorSettingService,
 		private systemStatusService: SystemStatusService,
 		private t$: TranslateService,
+    private hubService: HubService,
+    private trackStatusService: TrackStatusService
 	) {
     settingSvc.serviceConfig.subscribe(
       (config) => {
@@ -183,8 +187,9 @@ export class PlaybackMapViewerComponent implements OnInit, OnDestroy {
 	readonly permissionEnums: typeof PermissionEnums = PermissionEnums
 
 	ngOnInit(): void {
+    this.hubService.stop()
 		// @ts-ignore
-		this.viewer = document.getElementById('track-canvas')._instance.exposed
+		this.viewer = document.getElementById('playback-canvas')._instance.exposed
 
 		this.setToCurrentSnapshot()
 
@@ -211,6 +216,9 @@ export class PlaybackMapViewerComponent implements OnInit, OnDestroy {
 		this.destroy$.complete()
 
 		clearInterval(this.cameraAndRotationSyncId)
+    this.hubService.start()
+
+    this.trackStatusService.reloadMap()
 	}
 
   get isHostOfflineMode(): boolean {
@@ -294,7 +302,6 @@ export class PlaybackMapViewerComponent implements OnInit, OnDestroy {
 			: this.playService.track.data.stations
 			? this.playService.track.data.stations.map(convertTrackStationToTmStation)
 			: []
-    console.log(stations)
 		const zcus = this.playService.currentSnapshot.data.zcus
 			? this.playService.currentSnapshot.data.zcus.map(
 					convertSnapshotZcuToTmZcu,
@@ -305,7 +312,7 @@ export class PlaybackMapViewerComponent implements OnInit, OnDestroy {
 			convertTrackMtlToTmMtl,
 		)
 		const vehicles = []
-		const segmentDisabled = []
+		let segmentDisabled = []
 
 		// @ts-ignore
 		this.viewer.setTrack({
@@ -318,6 +325,7 @@ export class PlaybackMapViewerComponent implements OnInit, OnDestroy {
 			segmentDisabled,
 			zcus,
 		})
+
 
 		// make other task
 		setTimeout(() => {
@@ -332,9 +340,9 @@ export class PlaybackMapViewerComponent implements OnInit, OnDestroy {
 				)
 			})
 
-			const segmentBlockings =
+      segmentDisabled =
 				this.playService.currentSnapshot.data.segment_blocking ?? []
-			segmentBlockings.forEach((sb) => {
+      segmentDisabled.forEach((sb) => {
 				this.viewer.updateSegmentDisabled(
 					'INSERT',
 					convertSnapshotSegmentBlockingToTmUpdateDtoSegmentDisabled(
@@ -343,6 +351,14 @@ export class PlaybackMapViewerComponent implements OnInit, OnDestroy {
 					),
 				)
 			})
+
+
+      this.trackStatusService.trackData.buffers = buffers
+      this.trackStatusService.trackData.stations = stations as unknown as Dto.IStation[]
+      this.trackStatusService.trackData.mtls = mtls  as unknown as Dto.IMTL[]
+      this.trackStatusService.trackData.vehicles = vehicles as unknown as Dto.IVehicle[]
+      this.trackStatusService.trackData.segmentDisabled = segmentDisabled
+      this.trackStatusService.trackData.zcus = this.playService.currentSnapshot.data.zcus as unknown as Dto.IZcu[]
 		}, 1)
 	}
 

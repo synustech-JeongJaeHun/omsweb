@@ -37,7 +37,7 @@ export class StatusControlComponent implements OnInit, OnDestroy {
 
 	resizeHandler: any
   resizeHandlerTouch: any
-	tableHeightNum = 300
+	tableHeightNum = 280
 
 	readonly permissionEnums: typeof PermissionEnums = PermissionEnums
 	bufferEnabled: boolean = true

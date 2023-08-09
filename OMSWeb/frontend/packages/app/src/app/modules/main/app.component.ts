@@ -7,6 +7,7 @@ import {TTSService} from "@oms/services/tts.service";
 import {SystemsService} from "@oms/services/systems.service";
 import { MobileService } from '../../services/mobile.service';
 import {TrackStatusService} from "@oms/services/track-status.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'oms-root',
@@ -15,6 +16,7 @@ import {TrackStatusService} from "@oms/services/track-status.service";
 })
 export class AppComponent {
   private translate: TranslateService;
+  public isInit = true
   constructor(
     $t: TranslateService,
     private hubSvc: HubService,
@@ -23,7 +25,7 @@ export class AppComponent {
 
     private system:SystemsService,
     private mobile: MobileService,
-    private trackStatusService: TrackStatusService
+    private router: Router
   ) {
     this.translate = $t;
 
@@ -65,5 +67,9 @@ export class AppComponent {
 
   public ngOnInit(): void {
     this.mobile.checkMobile(true)
+  }
+
+  get isMonitor(){
+    return this.router.url.includes('/monitor')
   }
 }

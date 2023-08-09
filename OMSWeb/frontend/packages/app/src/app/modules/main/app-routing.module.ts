@@ -5,11 +5,13 @@ import { MobileFrameComponent } from '../mobile-frame/mobile-frame.component'
 import { MonitorModule } from '../monitor/monitor.module'
 import { StartupComponent } from './startup.component'
 import { MobileGuard } from '../../guards/mobile.guard'
+import {PageUnloadGuard} from "@oms/root/guards/page-unload.guard";
 
 const routes: Routes = [
 	{
 		path: '',
     canActivate: [MobileGuard],
+    canDeactivate: [PageUnloadGuard],
 		component: StartupComponent,
 	},
 	{
