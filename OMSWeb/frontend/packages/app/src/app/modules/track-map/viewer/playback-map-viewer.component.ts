@@ -218,6 +218,17 @@ export class PlaybackMapViewerComponent implements OnInit, OnDestroy {
 		clearInterval(this.cameraAndRotationSyncId)
     this.hubService.start()
 
+    this.viewer.setTrack({
+      ...this.trackStatusService.trackData,
+      segmentParts: this.trackStatusService.trackData.segments,
+      segmentDisabled: this.trackStatusService.trackData.segmentDisabled,
+      clusters: this.trackStatusService.trackData.clusters.map((c) => ({
+        ...c,
+        // @ts-ignore
+        segments: c.segments.split(',').map((id) => parseInt(id.trim())),
+      })),
+    })
+
     this.trackStatusService.reloadMap()
 	}
 
@@ -351,14 +362,6 @@ export class PlaybackMapViewerComponent implements OnInit, OnDestroy {
 					),
 				)
 			})
-
-
-      this.trackStatusService.trackData.buffers = buffers
-      this.trackStatusService.trackData.stations = stations as unknown as Dto.IStation[]
-      this.trackStatusService.trackData.mtls = mtls  as unknown as Dto.IMTL[]
-      this.trackStatusService.trackData.vehicles = vehicles as unknown as Dto.IVehicle[]
-      this.trackStatusService.trackData.segmentDisabled = segmentDisabled
-      this.trackStatusService.trackData.zcus = this.playService.currentSnapshot.data.zcus as unknown as Dto.IZcu[]
 		}, 1)
 	}
 

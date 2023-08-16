@@ -21,7 +21,7 @@ const readonlyNextLine = readonly(nextLine)
 
 const readonlyVHLAlias = readonly(vhlAlias)
 
-function findVehicleById(id: number) {
+function findVehicleById(id: number):Vehicle {
   return vehicles.value.find((v) => v.id === id)
   // return vehicleMap.get(id) // bug occur in playback
 }
@@ -173,6 +173,12 @@ function updateExistVehicle(
   updateData: UpdateDto.Vehicle
 ) {
   const updateType = getUpdateType(vehicle, updateData)
+
+  //vhl state afterimage processing
+  updateData.locationPickup = updateData.locationPickup ?? ''
+  updateData.locationDropoff = updateData.locationDropoff ?? ''
+  updateData.locationMove = updateData.locationMove ?? ''
+
   Object.assign(vehicle, updateData)
   vehicle.updateType = updateType
   vehicle.lastUpdated = count++

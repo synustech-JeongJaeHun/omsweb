@@ -3,7 +3,6 @@ import {StatusService} from './status.service'
 import {HubService} from './hub.service'
 import {Dto} from '../models/dto/track.model'
 import {IDataChangeEvent} from '../models/notification.model'
-import IGroup = Dto.IGroup;
 
 
 @Injectable({
@@ -32,7 +31,7 @@ export class TrackStatusService {
     this.isTrackReadyChanged.emit(false)
     this.statusService.getTrack().subscribe(res=>{
       //vhl
-      this.different(this.trackData.vehicles, res.vehicles).forEach(d=>{
+      this.different(this.trackData.vehicles, res.vehicles ).forEach(d=>{
         this.hubService.vehicleChanged$.emit({
           operation: 'UPDATE',
           table: '',
@@ -176,9 +175,11 @@ export class TrackStatusService {
         })
       })
 
-      this.isTrackReady = true
-      this.isTrackReadyChanged.emit(this.isTrackReady)
-      this.trackData = res;
+      setTimeout(()=>{
+        this.isTrackReady = true
+        this.isTrackReadyChanged.emit(this.isTrackReady)
+        this.trackData = res;
+      }, 500)
     })
   }
 
@@ -223,7 +224,7 @@ export class TrackStatusService {
 
 	handleConnectionChanged(connection) {
 		this.statusService.getVehicles().subscribe((res) => {
-			if (connection && res?.vehicles) this.trackData.vehicles = res.vehicles
+			if (connection && res?.vehicles) this.trackData.vehicles = res.vehicles as Dto.IVehicle[]
 		})
 	}
 
