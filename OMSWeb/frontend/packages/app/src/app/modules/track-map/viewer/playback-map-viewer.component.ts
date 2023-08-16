@@ -218,6 +218,10 @@ export class PlaybackMapViewerComponent implements OnInit, OnDestroy {
 		clearInterval(this.cameraAndRotationSyncId)
     this.hubService.start()
 
+    this.trackStatusService.trackData.stations.map(s=>{
+      if(!this.includeCheck(s.logicalId)) s.carrierId =null
+    })
+
     this.viewer.setTrack({
       ...this.trackStatusService.trackData,
       segmentParts: this.trackStatusService.trackData.segments,
@@ -683,6 +687,10 @@ export class PlaybackMapViewerComponent implements OnInit, OnDestroy {
 			value: data.position,
 		})
 	}
+
+  includeCheck(word: string){
+    return this.includesWords.some(i=>word.includes(i))
+  }
 }
 
 function getCustomEventPayload<T>(event: CustomEvent<T[]>) {
