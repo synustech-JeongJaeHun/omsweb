@@ -25,9 +25,9 @@ namespace OMSWeb.Services
             return this._repo.QueryOrdersCount(from, to, condition);
         }
 
-        public IQueryable<OrderHistoryEntity> QueryOrders(DateTimeOffset from, DateTimeOffset to, int skip, int take, string condition, string sort)
+        public IQueryable<OrderHistoryEntity> QueryOrders(DateTimeOffset from, DateTimeOffset to, int skip, int take, string condition, string sort, string group)
         {
-            return this._repo.QueryOrders(from, to, skip, take, condition, sort);
+            return this._repo.QueryOrders(from, to, skip, take, condition, sort, group);
         }
 
         public int QueryVehiclesCount(DateTimeOffset from, DateTimeOffset to, int skip, int take, string condition)
@@ -35,9 +35,9 @@ namespace OMSWeb.Services
             return this._repo.QueryVehiclesCount(from, to, condition);
         }
 
-        public IQueryable<VehicleHistoryEntity> QueryVehicles(DateTimeOffset from, DateTimeOffset to, int skip, int take, string condition, string sort)
+        public IQueryable<VehicleHistoryEntity> QueryVehicles(DateTimeOffset from, DateTimeOffset to, int skip, int take, string condition, string sort, string group)
         {
-            return this._repo.QueryVehicles(from, to, skip, take, condition, sort);
+            return this._repo.QueryVehicles(from, to, skip, take, condition, sort, group);
         }
 
         public int QueryAlarmsCount(DateTimeOffset from, DateTimeOffset to, int skip, int take, string condition)
@@ -45,9 +45,9 @@ namespace OMSWeb.Services
             return this._repo.QueryAlarmsCount(from, to, condition);
         }
 
-        public IQueryable<AlarmHistory> QueryAlarms(DateTimeOffset from, DateTimeOffset to, int skip, int take, string condition, string sort)
+        public IQueryable<AlarmHistory> QueryAlarms(DateTimeOffset from, DateTimeOffset to, int skip, int take, string condition, string sort, string group)
         {
-            return this._repo.QueryAlarms(from, to, skip, take, condition, sort);
+            return this._repo.QueryAlarms(from, to, skip, take, condition, sort, group);
         }
 
         public int QueryAlertsCount(DateTimeOffset from, DateTimeOffset to, int skip, int take, string condition)
@@ -55,9 +55,9 @@ namespace OMSWeb.Services
             return this._repo.QueryAlertsCount(from, to, condition);
         }
 
-        public IQueryable<AlertEntity> QueryAlerts(DateTimeOffset from, DateTimeOffset to, int skip, int take, string condition, string sort)
+        public IQueryable<AlertEntity> QueryAlerts(DateTimeOffset from, DateTimeOffset to, int skip, int take, string condition, string sort, string group)
         {
-            return this._repo.QueryAlerts(from, to, skip, take, condition, sort);
+            return this._repo.QueryAlerts(from, to, skip, take, condition, sort, group);
         }
 
         public int QueryNacksCount(DateTimeOffset from, DateTimeOffset to, int skip, int take, string condition)
@@ -65,9 +65,9 @@ namespace OMSWeb.Services
             return this._repo.QueryNacksCount(from, to, condition);
         }
 
-        public IQueryable<NackHistoryEntity> QueryNacks(DateTimeOffset from, DateTimeOffset to, int skip, int take, string condition, string sort)
+        public IQueryable<NackHistoryEntity> QueryNacks(DateTimeOffset from, DateTimeOffset to, int skip, int take, string condition, string sort, string group)
         {
-            return this._repo.QueryNacks(from, to, skip, take, condition, sort);
+            return this._repo.QueryNacks(from, to, skip, take, condition, sort, group);
         }
 
         public IQueryable<VehicleDioHistoryEntity> QueryVehicleDios(int vehicleId, DateTimeOffset from, DateTimeOffset to)
@@ -86,7 +86,7 @@ namespace OMSWeb.Services
         }
 
 
-        public (DateTimeOffset from, DateTimeOffset to, int skip, int take, string condition, string sort) GetLoadFilters(
+        public (DateTimeOffset from, DateTimeOffset to, int skip, int take, string condition, string sort, string group) GetLoadFilters(
             DataSourceLoadOptions loadOptions, string tableName)
         {
             DateTimeOffset from = new DateTimeOffset();
@@ -95,6 +95,7 @@ namespace OMSWeb.Services
             int take = 0;
             string condition = string.Empty;
             string sort = string.Empty;
+            string group = string.Empty;
 
             try
             {
@@ -151,12 +152,25 @@ namespace OMSWeb.Services
                         }
                     }
                 }
+                
+                // group
+                if (loadOptions.Group?.Length > 0)
+                {
+                    GroupingInfo groupingInfo = loadOptions.Group[0];
+
+                    string grouping = TryORM(tableName, "", groupingInfo.Selector);
+                    if (string.IsNullOrWhiteSpace(grouping) == false)
+                    {
+                        group += $" {grouping} ";
+                    }
+                }
+                
             }
             catch (Exception e)
             {
             }
 
-            return (from, to, skip, take, condition, sort);
+            return (from, to, skip, take, condition, sort, group);
         }
 
         public bool HasExtraConditions(string tableName, JToken token0, JToken token2)

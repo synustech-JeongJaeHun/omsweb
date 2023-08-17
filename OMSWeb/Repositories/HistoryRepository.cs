@@ -120,15 +120,17 @@ namespace OMSWeb.Repositories
         }
 
         public IQueryable<OrderHistoryEntity> QueryOrders(
-            DateTimeOffset from, DateTimeOffset to, int skip, int take, string condition, string sort)
+            DateTimeOffset from, DateTimeOffset to, int skip, int take, string condition, string sort, string group)
         {
             string WhereConditions = string.Empty;
             string SortConditions = string.Empty;
             string LimitConditions = @"LIMIT @take OFFSET @skip";
+            string Select = @" * ";
 
             if (string.IsNullOrWhiteSpace(condition) == false) WhereConditions = $" WHERE {condition}";
             if (string.IsNullOrWhiteSpace(sort) == false) SortConditions = $"ORDER BY {sort}";
             if (skip <= 0 && take <= 0) LimitConditions = string.Empty;
+            if (string.IsNullOrWhiteSpace(group) == false) Select = $" distinct on ({group}) * ";
             
             string prefix = "";
             if (_systemSvc.GetClientSettings().VHLAlias!=null)
@@ -137,7 +139,7 @@ namespace OMSWeb.Repositories
             }
 
             string sql = $@"
-                SELECT * FROM (
+                SELECT {Select} FROM (
                         SELECT OD.id, 
                             CASE
                               WHEN OD.origin_details IS NOT NULL THEN OD.origin_details
@@ -317,18 +319,20 @@ namespace OMSWeb.Repositories
         }
 
         public IQueryable<VehicleHistoryEntity> QueryVehicles(
-            DateTimeOffset from, DateTimeOffset to, int skip, int take, string condition, string sort)
+            DateTimeOffset from, DateTimeOffset to, int skip, int take, string condition, string sort, string group)
         {
             string WhereConditions = string.Empty;
             string SortConditions = @"VH.id";
             string LimitConditions = @"LIMIT @take OFFSET @skip";
+            string Select = @" * ";
 
             if (string.IsNullOrWhiteSpace(condition) == false) WhereConditions = $" WHERE {condition}";
             if (string.IsNullOrWhiteSpace(sort) == false) SortConditions = $"{sort}";
             if (skip <= 0 && take <= 0) LimitConditions = string.Empty;
+            if (string.IsNullOrWhiteSpace(group) == false) Select = $" distinct on ({group}) * ";
 
             string sql = $@"
-                SELECT * FROM (
+                SELECT {Select} FROM (
                         SELECT
                             VH.history_change_time, VH.id, VH.history_source_id,
                             VH.physical_id, VH.logical_id, 
@@ -422,18 +426,20 @@ namespace OMSWeb.Repositories
         }
 
         public IQueryable<AlarmHistory> QueryAlarms(
-            DateTimeOffset from, DateTimeOffset to, int skip, int take, string condition, string sort)
+            DateTimeOffset from, DateTimeOffset to, int skip, int take, string condition, string sort, string group)
         {
             string WhereConditions = string.Empty;
             string SortConditions = @"VA.id desc";
             string LimitConditions = @"LIMIT @take OFFSET @skip";
+            string Select = @" * ";
 
             if (string.IsNullOrWhiteSpace(condition) == false) WhereConditions = $" WHERE {condition}";
             if (string.IsNullOrWhiteSpace(sort) == false) SortConditions = $"{sort}";
             if (skip <= 0 && take <= 0) LimitConditions = string.Empty;
+            if (string.IsNullOrWhiteSpace(group) == false) Select = $" distinct on ({group}) * ";
 
             string sql = $@"
-                SELECT * FROM (
+                SELECT {Select} FROM (
                         SELECT VA.id, VA.time, VA.error_code, VA.vehicle_id, VR.logical_id AS vehicle_logical_id,
                             VA.time_resolved, VA.ack_time, VA.ack_by,
                             CASE 
@@ -520,18 +526,20 @@ namespace OMSWeb.Repositories
         }
 
         public IQueryable<AlertEntity> QueryAlerts(
-            DateTimeOffset from, DateTimeOffset to, int skip, int take, string condition, string sort)
+            DateTimeOffset from, DateTimeOffset to, int skip, int take, string condition, string sort, string group)
         {
             string WhereConditions = string.Empty;
             string SortConditions = @"ALT.id desc";
             string LimitConditions = @"LIMIT @take OFFSET @skip";
+            string Select = @" * ";
 
             if (string.IsNullOrWhiteSpace(condition) == false) WhereConditions = $" WHERE {condition}";
             if (string.IsNullOrWhiteSpace(sort) == false) SortConditions = $"{sort}";
             if (skip <= 0 && take <= 0) LimitConditions = string.Empty;
+            if (string.IsNullOrWhiteSpace(group) == false) Select = $" distinct on ({group}) * ";
 
             string sql = $@"
-                SELECT * FROM (
+                SELECT {Select} FROM (
                         SELECT 
                             ALT.id, ALT.time, ALT.level, ALT.tag, ALT.message, ALT.ack_time, ALT.ack_by 
                         FROM alerts AS ALT
@@ -610,18 +618,20 @@ namespace OMSWeb.Repositories
         }
 
         public IQueryable<NackHistoryEntity> QueryNacks(
-            DateTimeOffset from, DateTimeOffset to, int skip, int take, string condition, string sort)
+            DateTimeOffset from, DateTimeOffset to, int skip, int take, string condition, string sort, string group)
         {
             string WhereConditions = string.Empty;
             string SortConditions = @"ModifiedTime desc";
             string LimitConditions = @"LIMIT @take OFFSET @skip";
+            string Select = @" * ";
 
             if (string.IsNullOrWhiteSpace(condition) == false)  WhereConditions = $" WHERE {condition}";
             if (string.IsNullOrWhiteSpace(sort) == false)       SortConditions = $"{sort}";
             if (skip <= 0 && take <= 0)                         LimitConditions = string.Empty;
+            if (string.IsNullOrWhiteSpace(group) == false) Select = $" distinct on ({group}) * ";
 
             string sql = $@"
-                SELECT * FROM (
+                SELECT {Select} FROM (
                         SELECT 
                             CASE WHEN cmd_id is null THEN '' ELSE cmd_id END as CommandID, 
                             CASE WHEN time_modified is null THEN now() ELSE time_modified END as ModifiedTime, 
