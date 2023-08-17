@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+using OMSWeb.Logger;
 using OMSWeb.Models;
 using OMSWeb.Models.Entities;
 using OMSWeb.Repositories;
@@ -39,32 +40,44 @@ namespace OMSWeb.Services
         {"RDS",       "RDS" },
       };
 
-      timerCallback(null);
-      _timer = new Timer(timerCallback);
+      TimerCallback(new Object());
+      _timer = new Timer(TimerCallback);
       _timer.Change(0, 60000 * 5);
     }
 
-    private void timerCallback(Object state)
+    private void TimerCallback(Object state)
     {
-      Console.WriteLine($"### timer callback >> {DateTime.Now}");
-      moduleStatusEntity = this._moduleStatusRepo.GetModuleStatus();
-      vhlStatusEntity = this._moduleStatusRepo.GetVhlStatus();
-      cdmStatusEntity = this._moduleStatusRepo.GetCdmStatus();
-      
-      foreach (var module in moduleStatusEntity)
+      try
       {
-        Process process = this.GetProcByID(_processSets[module.Name]);
-        if (process == null)
+        Console.WriteLine($"### timer callback >> {DateTime.Now}");
+        moduleStatusEntity = this._moduleStatusRepo.GetModuleStatus();
+        vhlStatusEntity = this._moduleStatusRepo.GetVhlStatus();
+        cdmStatusEntity = this._moduleStatusRepo.GetCdmStatus();
+      
+        foreach (var module in moduleStatusEntity)
         {
-          module.PID = -1;
-          module.StartTime = null;
-          ModuleStatusDto dto = new ModuleStatusDto();
-          dto.PID = module.PID;
-          dto.ID = module.ID;
+          if (module.Name != null)
+          {
+            Process process = this.GetProcByID(_processSets[module.Name]);
+            if (process == null)
+            {
+              module.PID = -1;
+              module.StartTime = null;
+              ModuleStatusDto dto = new ModuleStatusDto();
+              dto.PID = module.PID;
+              dto.ID = module.ID;
 
-          this._moduleStatusRepo.UpdateModuleStatus(dto);
+              this._moduleStatusRepo.UpdateModuleStatus(dto);
+            }
+          }
         }
       }
+      catch (Exception e)
+      {
+        Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"Exception", e);
+        throw;
+      }
+      
     }
 
     public Process GetProcByID(string name)
