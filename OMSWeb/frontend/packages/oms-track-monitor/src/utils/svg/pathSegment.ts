@@ -83,8 +83,10 @@ function toD(c: PathCommand): D {
       return `M ${c.x} ${c.y}`;
     case "LineTo":
       return `L ${c.x} ${c.y}`;
-    default:
+    case "ArcTo":
       return `A ${c.rx} ${c.ry} ${c.xAxisRotation} ${c.largeArcFlag} ${c.sweepFlag} ${c.x} ${c.y}`;
+    default:
+      return '';
   }
 }
 
