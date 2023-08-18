@@ -146,7 +146,7 @@ export class PlaybackPlayService {
 			this.setLoaded({ from: from, to: this.lastHistoryTime })
 		} else {
 			const timeRanges = getTimeRangeChunks(from, to, 15)
-			const [firstRange, ...ranges] = timeRanges
+			const [firstRange, ...ranges] = timeRanges.slice(-20)
 
 			const getSlicedHistoryEvents = async (
 				timeRanges: [Date, Date][],
@@ -154,7 +154,7 @@ export class PlaybackPlayService {
 			) => {
 				if (timeRanges.length === 0) return
 
-				const [firstRange, ...ranges] = timeRanges
+				const [firstRange, ...ranges] = timeRanges.slice(-20)
 				const events = await this.playbackService
 					.getHistoryEvents(firstRange[0], firstRange[1])
 					.toPromise()

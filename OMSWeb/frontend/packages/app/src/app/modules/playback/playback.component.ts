@@ -150,7 +150,8 @@ export class PlaybackComponent implements OnInit, OnDestroy {
   async getSlicedHistoryEvents(timeRanges: [Date, Date][], snapshotTimestamp: Date){
     if (timeRanges.length === 0) return
 
-    const [firstRange, ...ranges] = timeRanges
+    // get last 20 item for out of memory error
+    const [firstRange, ...ranges] = timeRanges.slice(-20)
     const events = await this.playbackService
       .getHistoryEvents(firstRange[0], firstRange[1])
       .toPromise()
@@ -229,7 +230,9 @@ export class PlaybackComponent implements OnInit, OnDestroy {
             this.playbackPlayService.nextSnapshot.timestamp,
             15,
           )
-          const [firstRange, ...ranges] = timeRanges
+
+          // get last 20 item for out of memory error
+          const [firstRange, ...ranges] = timeRanges.slice(-20)
 
           const eventsPromise = this.playbackService
             .getHistoryEvents(firstRange[0], firstRange[1])
