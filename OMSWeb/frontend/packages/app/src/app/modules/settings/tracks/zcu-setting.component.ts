@@ -28,6 +28,8 @@ export class ZcuSettingComponent implements OnInit {
     { type: 2, text: 'Use SW' },
   ];
 
+  useTypeZcu=null
+
   get isUpdated(): boolean {
     return this._changedItems.length > 0;
   }
@@ -39,6 +41,11 @@ export class ZcuSettingComponent implements OnInit {
     this.settingsSvc.settingsZcus().subscribe((res) => {
       this.dataSource = res;
     });
+
+    this.settingsSvc.serviceConfig.subscribe(
+      (config) => {
+        this.useTypeZcu = config?.useTypeZCU?.toLowerCase()
+      })
   }
 
   ngOnInit(): void {

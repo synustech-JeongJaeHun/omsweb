@@ -29,7 +29,9 @@
   </dxi-column>
   <dxi-column dataField="completePoints" [caption]="'names.completeNodes' | translate" [allowEditing]="false">
   </dxi-column>
-  <dxi-column dataField="usingType" [caption]="'names.usingType' | translate" [width]="120" alignment="center">
+  <dxi-column dataField="usingType"  [caption]="'names.usingType' | translate" [width]="120" alignment="center"
+              [editorOptions] = "{disabled: !!useTypeZcu}"
+  >
     <dxo-lookup [dataSource]="zcuUsingTypes" valueExpr="type" displayExpr="text"></dxo-lookup>
   </dxi-column>
 

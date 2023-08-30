@@ -54,6 +54,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 
   public firstLoad = true;
 
+  useTypeZcu = null
 	get tmSetting() {
 		return this.trackMonitorSettingService.trackSetting
 	}
@@ -198,6 +199,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
           ...fireStationFilters?.startWords,
           ...fireStationFilters?.endWords,
           ...fireStationFilters?.includeWords].filter(i=>i&&i)
+        this.useTypeZcu = config?.useTypeZCU?.toLowerCase()
       },
     )
 	}
@@ -647,7 +649,8 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 				}
 			})
 	}
-  onResetZcu(type :'hw'|'sw' = 'hw') {
+  onResetZcu() {
+    const type = this.contextMenuObject.value?.usingType===1? 'hw' : 'sw'
 		this.dialogSvc
 			.confirm({ body: this.$t.instant('messages.confirmZcuReset') })
 			.subscribe((confirm) => {
@@ -1382,6 +1385,12 @@ export class MapViewerComponent implements OnInit, OnDestroy {
           })
         }
       })
+  }
+
+  isHiddenTypeZcu(usingType=1){
+    if(!this.useTypeZcu) return false
+    const type = usingType===1? 'hw' : 'sw'
+    return this.useTypeZcu===type
   }
 }
 

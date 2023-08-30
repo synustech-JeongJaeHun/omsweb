@@ -37,5 +37,7 @@ namespace OMSWeb.Models
         
         public bool IndicatorFireEmergency { get; set; } 
         
+        public string UseTypeZCU { get; set; }
+        
     }
 }
