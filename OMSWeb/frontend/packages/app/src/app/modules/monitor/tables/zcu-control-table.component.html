@@ -4,8 +4,8 @@
     color="primary"
     class="dense accent"
     [disabled]="!canReset"
-    (click)="onReset(useTypeZcu)"
-    *ngIf="useTypeZcu"
+    (click)="onReset('sw')"
+    *ngIf="disableHWZCU"
   >
     {{ 'names.reset' | translate }}
   </button>
@@ -16,7 +16,7 @@
 		class="dense accent"
 		[disabled]="!canReset"
 		(click)="onReset()"
-    *ngIf="!useTypeZcu"
+    *ngIf="!disableHWZCU"
 	>
 		{{ 'names.HWReset' | translate }}
 	</button>
@@ -26,7 +26,7 @@
     class="dense accent"
     [disabled]="!canReset"
     (click)="onReset('sw')"
-    *ngIf="!useTypeZcu"
+    *ngIf="!disableHWZCU"
   >
     {{ 'names.SWReset' | translate }}
   </button>
@@ -36,7 +36,7 @@
 		class="dense accent"
 		[disabled]="!canReset"
 		(click)="onSetHw()"
-    *ngIf="!useTypeZcu"
+    *ngIf="!disableHWZCU"
 	>
 		{{ 'names.setHw' | translate }}
 	</button>
@@ -46,7 +46,7 @@
 		class="dense accent"
 		[disabled]="!canReset"
 		(click)="onSetSw()"
-    *ngIf="!useTypeZcu"
+    *ngIf="!disableHWZCU"
 	>
 		{{ 'names.setSw' | translate }}
 	</button>

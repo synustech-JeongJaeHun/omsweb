@@ -28,7 +28,7 @@ export class ZcuSettingComponent implements OnInit {
     { type: 2, text: 'Use SW' },
   ];
 
-  useTypeZcu=null
+  disableHWZCU=false
 
   get isUpdated(): boolean {
     return this._changedItems.length > 0;
@@ -44,7 +44,7 @@ export class ZcuSettingComponent implements OnInit {
 
     this.settingsSvc.serviceConfig.subscribe(
       (config) => {
-        this.useTypeZcu = config?.useTypeZCU?.toLowerCase()
+        this.disableHWZCU = config?.disableHWZCU
       })
   }
 

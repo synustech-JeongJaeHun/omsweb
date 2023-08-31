@@ -33,7 +33,7 @@ export class ServiceConfig {
   holdEnabled: boolean
   indicatorFireEmergency: boolean
 
-  useTypeZCU: string
+  disableHWZCU: boolean
 }
 
 export interface ManualTransferFiltersSetting {

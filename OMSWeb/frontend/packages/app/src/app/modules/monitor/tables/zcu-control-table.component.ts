@@ -42,7 +42,7 @@ export class ZcuControlTableComponent implements OnInit, OnDestroy {
   zcuDetail:boolean =false
   holdEnabled=false
 
-  useTypeZcu=null
+  disableHWZCU=false
 
 	private color_normal: string = 'rgba(240, 255, 255, 1.0)'
 	private color_error: string = 'rgba(255, 0, 0, 0.5)'
@@ -78,7 +78,7 @@ export class ZcuControlTableComponent implements OnInit, OnDestroy {
       (config) => {
         this.zcuDetail = config.zcuDetail
         this.holdEnabled = config.holdEnabled
-        this.useTypeZcu = config?.useTypeZCU?.toLowerCase()
+        this.disableHWZCU = config?.disableHWZCU
       })
 	}
 

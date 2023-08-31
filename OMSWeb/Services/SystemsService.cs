@@ -156,7 +156,7 @@ namespace OMSWeb.Services
             }
             client.FireStationFilters = this._appSettings.FireStationFilters;
             client.IndicatorFireEmergency = this._appSettings.IndicatorFireEmergency;
-            client.UseTypeZCU = this._appSettings.UseTypeZCU;
+            client.DisableHWZCU = this._appSettings.DisableHWZCU;
 
             return this._appSettings.Client;
         }
