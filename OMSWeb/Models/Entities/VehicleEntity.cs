@@ -52,6 +52,8 @@ namespace OMSWeb.Models.Entities
         
         public string RuntimeTotal { get; set; }
         public string Runtime { get; set; }
+        public long DistanceTotalNumber { get; set; }
+        public long DistanceNumber { get; set; }
     }
 
     public class VehicleHistoryEntity : VehicleEntity
@@ -59,12 +61,14 @@ namespace OMSWeb.Models.Entities
         public int HistorySourceId { get; set; }
         public DateTime HistoryChangeTime { get; set; }
         public string HistoryChangeType { get; set; }
-
         // not in vehicle entity
         public string Command { get; set; }
         public int Connection { get; set; }
         public string DistanceRange { get; set; }
         public string RuntimeRange { get; set; }
+        
+        public long MaxDist { get; set; }
+        public long MinDist { get; set; }
     }
 
     public class VehicleDioHistoryEntity

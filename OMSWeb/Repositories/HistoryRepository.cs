@@ -213,26 +213,30 @@ namespace OMSWeb.Repositories
                                 WHEN OD.err_result_code LIKE '%DestInterlock%' THEN 'Dest PIO Timeout'
                                 ELSE OD.err_result_code
                             END as result_code,
-                            (FLOOR(
                             (
-                                select max(vh.distance_total)-min(vh.distance_total)
-	                            from vehicle_history vh 
-	                            where vh.history_source_id  = OD.vehicle_id
-	                            and history_change_time >= OD.time_assigned
-		                        and history_change_time <= OD.time_load_started 
-	                        )
-                            / 1000) || 'm' )
-                             as from_distance,
-                            (FLOOR(
+            	                select max(FVH.distance_total)
+            	                from vehicle_history FVH 
+	                            where FVH.history_source_id  = OD.vehicle_id AND FVH.history_change_time >= OD.time_assigned AND FVH.history_change_time <= OD.time_load_started
+                            ) as from_max,
                             (
-                                select max(vh.distance_total)-min(vh.distance_total)
-	                            from vehicle_history vh 
-	                            where vh.history_source_id  = OD.vehicle_id
-	                            and history_change_time >= OD.time_load_completed
-		                        and history_change_time <= OD.time_unload_started 
-	                        )
-                            / 1000) || 'm' )
-                             as to_distance,
+            	                select min(FVH.distance_total)
+            	                from vehicle_history FVH 
+	                            where FVH.history_source_id  = OD.vehicle_id AND FVH.history_change_time >= OD.time_assigned AND FVH.history_change_time <= OD.time_load_started
+                            ) as from_min,
+                            (
+            	                select max(TVH.distance_total)
+            	                from vehicle_history TVH 
+	                            where TVH.history_source_id  = OD.vehicle_id
+                                AND TVH.history_change_time >= OD.time_load_completed
+                                AND TVH.history_change_time <= OD.time_unload_started
+                            ) as to_max,
+                            (
+            	                select min(TVH.distance_total)
+            	                from vehicle_history TVH 
+	                            where TVH.history_source_id  = OD.vehicle_id
+                                AND TVH.history_change_time >= OD.time_load_completed
+                                AND TVH.history_change_time <= OD.time_unload_started 
+                            ) as to_min,
                             (@prefix || VS.physical_id) as vehicle_alias
                         FROM order_history AS OD
                         INNER JOIN (
@@ -262,8 +266,47 @@ namespace OMSWeb.Repositories
             using (var conn = ConnectTrack(500))
             {
                 try
-                { 
-                    result = conn.Query<OrderHistoryEntity>(sql, new { from, to, skip, take, prefix }).AsQueryable();
+                {
+                    IQueryable<OrderHistoryEntity> queryable = conn.Query<OrderHistoryEntity>(sql, new { from, to, skip, take, prefix }).AsQueryable();
+                    result = queryable.ToList().Select(s => new OrderHistoryEntity
+                    {
+                        Id = s.Id,
+                        LogicalId = s.LogicalId,
+                        Origin = s.Origin,
+                        VehicleId = s.VehicleId,
+                        State = s.State,
+                        LocationPickup = s.LocationPickup,
+                        LocationDropoff = s.LocationDropoff,
+                        LocationMove = s.LocationMove,
+                        Priority = s.Priority,
+                        AssignmentDetails = s.AssignmentDetails,
+                        AssignmentType = s.AssignmentType,
+                        CarrierLabel = s.CarrierLabel,
+                        TimeCreated = s.TimeCreated,
+                        TimeAssigned = s.TimeAssigned,
+                        TimeCompleted = s.TimeCompleted,
+                        TimeAborted = s.TimeAborted,
+                        TimeFailed = s.TimeFailed,
+                        Age = s.Age,
+                        DistancePickup = s.DistancePickup,
+                        DistanceDropoff = s.DistanceDropoff,
+                        DistanceMove = s.DistanceMove,
+                        LoadRetryCnt = s.LoadRetryCnt,
+                        UnloadRetryCnt = s.UnloadRetryCnt,
+                        ResultCode = s.ResultCode,
+                        LocationPickupAlias = s.LocationPickupAlias,
+                        LocationDropoffAlias = s.LocationDropoffAlias,
+                        vehicleAlias = s.vehicleAlias,
+                        HistorySourceId = s.HistorySourceId,
+                        HistoryChangeTime = s.HistoryChangeTime,
+                        HistoryChangeType = s.HistoryChangeType,
+                        TimeLoadStarted = s.TimeLoadStarted,
+                        TimeLoadCompleted = s.TimeLoadCompleted,
+                        TimeUnloadStarted = s.TimeUnloadStarted,
+                        TimeUnloadCompleted = s.TimeUnloadCompleted,
+                        FromDistance = DistanceConvert(s.FromMax, s.FromMin, "m"),
+                        ToDistance = DistanceConvert(s.ToMax, s.ToMin, "m")
+                    }).AsQueryable();
                 }
                 catch (Exception e)
                 {
@@ -337,18 +380,19 @@ namespace OMSWeb.Repositories
                             VH.history_change_time, VH.id, VH.history_source_id,
                             VH.physical_id, VH.logical_id, 
                             VH.moving_state, 
-                            (FLOOR(VH.distance_total / 1000000) || 'km')  as distance_total,
                             TO_CHAR((VH.runtime_total/86400 * interval '1 day'), 'DD') || 'd ' || TO_CHAR((VH.runtime_total%86400 * interval '1 sec'), 'HH24') || 'h '  as runtime_total,
-                            (FLOOR(VH.distance / 1000000) || 'km' ) as distance,
                             TO_CHAR((VH.runtime/86400 * interval '1 day'), 'DD') || 'd ' || TO_CHAR((VH.runtime%86400 * interval '1 sec'), 'HH24') || 'h ' as runtime, 
                             VH.pm_time, VH.user,
                             VH.type, VH.map_db, VH.pm_user, VH.pm_note,
-                            (FLOOR(LVH.distance_range / 1000000) || 'km' ) as distance_range, 
-                            TO_CHAR((LVH.runtime_range/86400 * interval '1 day'), 'DD') || 'd ' || TO_CHAR((LVH.runtime_range%86400* interval '1 sec'), 'HH24') || 'h ' as runtime_range 
+                            TO_CHAR((LVH.runtime_range/86400 * interval '1 day'), 'DD') || 'd ' || TO_CHAR((LVH.runtime_range%86400* interval '1 sec'), 'HH24') || 'h ' as runtime_range,
+	                        VH.distance_total AS distance_total_number,
+                            VH.distance AS distance_number,
+                            LVH.max_dist as max_dist, LVH.min_dist as min_dist
                         FROM vehicle_history AS VH
                         INNER JOIN (
                             SELECT history_source_id, max(id) AS max_id,
-                                   max(distance_total)-min(distance_total) as distance_range,
+                                   max(distance_total) AS max_dist,
+                                   min(distance_total) AS min_dist,    
             	                   max(runtime_total)-min(runtime_total) as runtime_range
                             FROM vehicle_history
                             --*where_condition*
@@ -373,7 +417,60 @@ namespace OMSWeb.Repositories
             {
                 try
                 { 
-                    result = conn.Query<VehicleHistoryEntity>(sql, new { from, to, skip, take }).AsQueryable();
+                    IQueryable<VehicleHistoryEntity> queryable = conn.Query<VehicleHistoryEntity>(sql, new { from, to, skip, take }).AsQueryable();
+                    result = queryable.ToList().Select(s => new VehicleHistoryEntity
+                    {
+                        Id = s.Id,
+                        PhysicalId = s.PhysicalId,
+                        LogicalId = s.LogicalId,
+                        MovingState = s.MovingState,
+                        DistancePoint = s.DistancePoint,
+                        Type = s.Type,
+                        MapDb = s.MapDb,
+                        MapVersion = s.MapVersion,
+                        LastPoint = s.LastPoint,
+                        CurPoint = s.CurPoint,
+                        NextPoint = s.NextPoint,
+                        CommandPoint = s.CommandPoint,
+                        DestPoint = s.DestPoint,
+                        LastContact = s.LastContact,
+                        Mode = s.Mode,
+                        CanBePushed = s.CanBePushed,
+                        hostOrder = s.hostOrder,
+                        OrderOrigin = s.OrderOrigin,
+                        CargoState = s.CargoState,
+                        CarrierId = s.CarrierId,
+                        CarrierLabel = s.CarrierLabel,
+                        IsSensorStopped = s.IsSensorStopped,
+                        IsZcuBlocked = s.IsZcuBlocked,
+                        IsBlocked = s.IsBlocked,
+                        ErrorList = s.ErrorList,
+                        CargoTransferResult = s.CargoTransferResult,
+                        FireSensor = s.FireSensor,
+                        OrderId = s.OrderId,
+                        RailIn = s.RailIn,
+                        IsMaint = s.IsMaint,
+                        isConnected = s.isConnected,
+                        GroupId = s.GroupId,
+                        User = s.User,
+                        Note = s.Note,
+                        PauseState = s.PauseState,
+                        PmTime = s.PmTime,
+                        PmUser = s.PmUser,
+                        PmNote = s.PmNote,
+                        VehicleAlias = s.VehicleAlias,
+                        RuntimeTotal = s.RuntimeTotal,
+                        Runtime = s.Runtime,
+                        HistorySourceId = s.HistorySourceId,
+                        HistoryChangeTime = s.HistoryChangeTime,
+                        HistoryChangeType = s.HistoryChangeType,
+                        Command = s.Command,
+                        Connection = s.Connection,
+                        RuntimeRange = s.RuntimeRange,
+                        DistanceRange = DistanceConvert(s.MaxDist, s.MinDist, "km"),
+                        DistanceTotal = DistanceConvert(s.DistanceTotalNumber, 0, "km"),
+                        Distance = DistanceConvert(s.DistanceNumber, 0, "km"),
+                    }).AsQueryable();
                 }
                 catch (Exception e)
                 {
@@ -744,6 +841,24 @@ namespace OMSWeb.Repositories
                 }
             }
             return result;
+        }
+        
+        public string DistanceConvert(long max, long min, string unit)
+        {
+            switch (unit)
+            {
+                case "m" :
+                    return (overflowConvert(max)-overflowConvert(min))/1000+unit;
+                case "km":
+                    return (overflowConvert(max)-overflowConvert(min))/1000000+unit;
+                default:
+                    return (overflowConvert(max)-overflowConvert(min))+unit;
+            }
+        }
+
+        public long overflowConvert(long value)
+        {
+            return value < 0 ? value + 4294967295 : value;
         }
     }
 }

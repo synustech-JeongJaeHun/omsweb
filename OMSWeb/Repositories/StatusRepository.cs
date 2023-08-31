@@ -188,7 +188,57 @@ namespace OMSWeb.Repositories
 
                 try
                 { 
-                    result = conn.Query<VehicleState>(sql, new {prefix}).AsQueryable();
+                    
+                    IQueryable<VehicleState> queryable = conn.Query<VehicleState>(sql, new {prefix}).AsQueryable();
+                    result = queryable.ToList().Select(s => new VehicleState
+                    {
+                        Id = s.Id,
+                        PhysicalId = s.PhysicalId,
+                        LogicalId = s.LogicalId,
+                        MovingState = s.MovingState,
+                        DistancePoint = s.DistancePoint,
+                        Type = s.Type,
+                        MapDb = s.MapDb,
+                        MapVersion = s.MapVersion,
+                        LastPoint = s.LastPoint,
+                        CurPoint = s.CurPoint,
+                        NextPoint = s.NextPoint,
+                        CommandPoint = s.CommandPoint,
+                        DestPoint = s.DestPoint,
+                        LastContact = s.LastContact,
+                        Mode = s.Mode,
+                        CanBePushed = s.CanBePushed,
+                        hostOrder = s.hostOrder,
+                        OrderOrigin = s.OrderOrigin,
+                        CargoState = s.CargoState,
+                        CarrierId = s.CarrierId,
+                        CarrierLabel = s.CarrierLabel,
+                        IsSensorStopped = s.IsSensorStopped,
+                        IsZcuBlocked = s.IsZcuBlocked,
+                        IsBlocked = s.IsBlocked,
+                        ErrorList = s.ErrorList,
+                        CargoTransferResult = s.CargoTransferResult,
+                        FireSensor = s.FireSensor,
+                        OrderId = s.OrderId,
+                        RailIn = s.RailIn,
+                        IsMaint = s.IsMaint,
+                        isConnected = s.isConnected,
+                        GroupId = s.GroupId,
+                        User = s.User,
+                        Note = s.Note,
+                        PauseState = s.PauseState,
+                        PmTime = s.PmTime,
+                        PmUser = s.PmUser,
+                        PmNote = s.PmNote,
+                        VehicleAlias = s.VehicleAlias,
+                        RuntimeTotal = s.RuntimeTotal,
+                        Runtime = s.Runtime,
+                        LocationPickup = s.LocationPickup,
+                        LocationDropoff = s.LocationDropoff,
+                        LocationMove = s.LocationMove,
+                        DistanceTotal = DistanceConvert(s.DistanceTotalNumber, 0, "km"),
+                        Distance = DistanceConvert(s.DistanceNumber, 0, "km"),
+                    }).AsQueryable();
                 }
                 catch (Exception e)
                 {
@@ -331,5 +381,22 @@ namespace OMSWeb.Repositories
             return result;
         }
 
+        public string DistanceConvert(long max, long min, string unit)
+        {
+            switch (unit)
+            {
+                case "m" :
+                    return (overflowConvert(max)-overflowConvert(min))/1000+unit;
+                case "km":
+                    return (overflowConvert(max)-overflowConvert(min))/1000000+unit;
+                default:
+                    return (overflowConvert(max)-overflowConvert(min))+unit;
+            }
+        }
+
+        public long overflowConvert(long value)
+        {
+            return value < 0 ? value + 4294967295 : value;
+        }
     }
 }

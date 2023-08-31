@@ -44,5 +44,10 @@ namespace OMSWeb.Models.Entities
         public DateTime? TimeLoadCompleted { get; set; }
         public DateTime? TimeUnloadStarted { get; set; }
         public DateTime? TimeUnloadCompleted { get; set; }
+        
+        public long FromMax { get; set; }
+        public long FromMin { get; set; }
+        public long ToMax { get; set; }
+        public long ToMin { get; set; }
     }
 }
