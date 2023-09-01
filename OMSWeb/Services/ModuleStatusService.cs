@@ -74,8 +74,7 @@ namespace OMSWeb.Services
       }
       catch (Exception e)
       {
-        Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"Exception", e);
-        throw;
+        Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"Exception", e.Message);
       }
       
     }
