@@ -58,7 +58,7 @@ export class PlaybackVehicleStatusComponent {
     if (value == undefined) {
       return ''
     } else {
-      const distance: number = Math.floor(value / 1000000)
+      const distance: number = Math.floor(value <0 ? (value/1000000)+4294 : value/1000000)
 
       return `${distance}km`
     }
