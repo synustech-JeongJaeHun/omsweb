@@ -93,12 +93,7 @@ export class StatusControlComponent implements OnInit, OnDestroy {
     const keys = Object
       .keys(this.settingSvc.globalPreferences.controlTables)
       .filter(key=> {
-        if(this.canControl){
-          if(!key.includes('_')) return key
-        }
-        else{
-          if(key.endsWith('orders') || key.endsWith('vehicles')) return key
-        }
+        if(!key.includes('_')) return key
       })
     this.tableKeys = keys.filter(k=>{
       if(this.settingSvc.globalPreferences.controlTables[k]) return k
