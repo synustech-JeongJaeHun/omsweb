@@ -225,7 +225,7 @@ export class MapToolbarComponent implements OnDestroy {
       width: !this.isMobile? '420px' : '100%',
       maxWidth: !this.isMobile? '80vh' : '100%',
       position: !this.isMobile?{ left: this.tooltipOffset, top: `${rect.top}px` } :{left:'0px', bottom:'0px'},
-			data: this.buttonState,
+			data: {isMonitor: true},
 		})
 	}
 

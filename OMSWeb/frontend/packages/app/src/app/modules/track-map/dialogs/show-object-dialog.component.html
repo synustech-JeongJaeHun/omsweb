@@ -161,18 +161,20 @@
           value: $event.checked
         })" color="primary">{{
           "names.showZcus" | translate }}</mat-slide-toggle>
-        <mat-slide-toggle [checked]="setting.isGroupVisible" (change)="update({
+        <mat-slide-toggle *ngIf="data?.isMonitor"
+          [checked]="setting.isGroupVisible" (change)="update({
             key: 'isGroupVisible',
             value: $event.checked
           })" color="primary">{{
           "names.showGroups" | translate }}</mat-slide-toggle>
-
-        <mat-slide-toggle [checked]="setting.isClusterVisible" (change)="update({
+        <mat-slide-toggle *ngIf="data?.isMonitor"
+          [checked]="setting.isClusterVisible" (change)="update({
             key: 'isClusterVisible',
             value: $event.checked
           })" color="primary">{{
           "names.showClusters" | translate }}</mat-slide-toggle>
-        <mat-slide-toggle [checked]="setting.isCpsVisible" (change)="update({
+        <mat-slide-toggle *ngIf="data?.isMonitor"
+          [checked]="setting.isCpsVisible" (change)="update({
             key: 'isCpsVisible',
             value: $event.checked
           })" color="primary">{{
@@ -192,7 +194,7 @@
           {{"names.showVhlStatus" | translate }}
         </mat-slide-toggle>
 
-        <mat-slide-toggle *ngIf="showBackdrop"
+        <mat-slide-toggle *ngIf="data?.isMonitor && showBackdrop"
           [checked]="setting.isBackdropVisible" (change)="update({
             key: 'isBackdropVisible',
             value: $event.checked

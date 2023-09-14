@@ -14,7 +14,7 @@ export class ShowObjectDialogComponent {
   showBackdrop =true
   constructor(
     public dialogRef: MatDialogRef<ShowObjectDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public buttonState: ToggleOptionsType,
+    @Inject(MAT_DIALOG_DATA) public data: { isMonitor: boolean},
     public trackSettingService: TrackMonitorSettingService,
     private settingSvc: SettingsService,
     private mobileSvc: MobileService

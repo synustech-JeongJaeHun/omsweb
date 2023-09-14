@@ -262,7 +262,7 @@ export class PlaybackMapToolbarComponent implements OnInit, OnDestroy {
 			disableClose: false,
 			closeOnNavigation: true,
 			position: { left: this.tooltipOffset, top: `${rect.top}px` },
-			data: this.buttonState,
+      data: {isMonitor: false},
 		})
 	}
 
