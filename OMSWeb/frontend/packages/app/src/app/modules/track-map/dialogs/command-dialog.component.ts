@@ -72,8 +72,11 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 	) {
     this.settingSvc.serviceConfig.subscribe((config) => {
       this.tabs = config.actionScan ? ['fromTo', 'from', 'to', 'move', 'scan', 'mtl'] : ['fromTo', 'from', 'to', 'move', 'mtl']
-		this.isForceMTLIn = config.isForceMTLIn;
     });
+
+	this.settingSvc.getUseMtlInRegardlessOfPlc().subscribe(res=>{
+		this.isForceMTLIn = res
+	})
   }
 
 	ngOnInit(): void {

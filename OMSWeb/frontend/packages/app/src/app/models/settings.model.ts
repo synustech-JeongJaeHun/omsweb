@@ -34,7 +34,6 @@ export class ServiceConfig {
   indicatorFireEmergency: boolean
 
   disableHWZCU: boolean
-  isForceMTLIn: boolean
 }
 
 export interface ManualTransferFiltersSetting {

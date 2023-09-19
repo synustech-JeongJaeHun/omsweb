@@ -217,4 +217,8 @@ export class SettingsService {
   public getKpiEnabled(): Observable<boolean> {
     return this.http.get<boolean>(`/api/systems/KpiEnabled`)
   }
+
+  public getUseMtlInRegardlessOfPlc(): Observable<boolean> {
+	  return this.http.get<boolean>(`${this.baseUrl}/useMtlInRegardlessOfPlc`)
+  }
 }

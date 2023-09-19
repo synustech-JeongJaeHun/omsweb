@@ -448,5 +448,16 @@ namespace OMSWeb.Controllers
             }
             return Ok();
         }
+        
+        [HttpGet("useMtlInRegardlessOfPlc")]
+        public ActionResult<QueryResult> GetUseMtlInRegardlessOfPlc()
+        {
+            string useMtlInRegardlessOfPlc = AppConfig.GetFromOMSConfig("VehicleProcessor", "use_mtl_in_regardless_of_plc", "false");
+            
+            bool useMTlIn =false;
+            try { useMTlIn = Convert.ToBoolean(useMtlInRegardlessOfPlc); } catch (Exception e) { useMTlIn = false; }
+
+            return Ok(useMTlIn);
+        }
     }
 }
