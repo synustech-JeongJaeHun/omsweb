@@ -38,6 +38,6 @@ namespace OMSWeb.Models
         public bool IndicatorFireEmergency { get; set; } 
         
         public bool DisableHWZCU { get; set; }
-        
+        public bool IsForceMTLIn { get; set; }
     }
 }

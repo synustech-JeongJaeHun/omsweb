@@ -35,6 +35,7 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = ['id', 'logicalId', 'physicalId'];
 
   pattern = '[1-9](([0-8](\\.[0-9]*)?)|[0-9])?'
+	isForceMTLIn = false
 
 	get canApply(): boolean {
 		return this.validate() === undefined
@@ -71,6 +72,7 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 	) {
     this.settingSvc.serviceConfig.subscribe((config) => {
       this.tabs = config.actionScan ? ['fromTo', 'from', 'to', 'move', 'scan', 'mtl'] : ['fromTo', 'from', 'to', 'move', 'mtl']
+		this.isForceMTLIn = config.isForceMTLIn;
     });
   }
 
@@ -175,9 +177,8 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 			const mtlInfo = (this.trackStatusService.trackData?.mtls ?? []).find(
 				(m) => m.id === mtl.id,
 			)
-      console.log(mtlInfo)
-      this.sendMtl(mtlInfo)
-      return
+		  this.sendMtl(mtlInfo)
+		  return
 		}
 
 		const cmd: IOrderCommandMessage = {
@@ -400,6 +401,18 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
       }
 
       if(this.commandState.mtl.inNode) cmd.locationMove = this.commandState.mtl.inNode.toString()
+
+	  if(this.isForceMTLIn && (mtlInfo.unuse === null || mtlInfo.unuse)){
+	  	this.dialogSvc
+	  		.confirm({ body: this.t$.instant('errors.NotAvailiable', { name: 'MTL' })+'.\n'+ this.t$.instant('messages.confirmCommand')})
+	  		.subscribe((ok) => {
+				  if(ok){
+					  this.messageSvc.sendOrderCommand(cmd).subscribe()
+					  this.commandState.vehicle = undefined
+				  }
+	  		})
+	  	return
+	  }
 
       this.dialogSvc
         .confirm({ body: this.t$.instant('messages.confirmCommand') })
