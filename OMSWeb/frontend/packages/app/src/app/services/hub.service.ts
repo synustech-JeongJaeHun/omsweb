@@ -106,6 +106,19 @@ export class HubService {
 
 	public detachEvents() {
 		// this.hub.off('pointChanged');
+		this.detachEventsOnMap()
+		this.hub.off('alarm')
+		this.hub.off('alert')
+		this.hub.off('serverStatus')
+		this.hub.off('modeState')
+		this.hub.off('settingMode')
+		this.hub.off('kpiChanged')
+		this.hub.off('homeChanged')
+    	this.hub.off('mapUpdateStatus')
+    	this.hub.off('systemState')
+	}
+
+	public detachEventsOnMap() {
 		this.hub.off('segmentChanged')
 		this.hub.off('segmentDisabledChanged')
 		this.hub.off('stationChanged')
@@ -118,21 +131,14 @@ export class HubService {
 		this.hub.off('vehiclePath')
 		this.hub.off('clusterChanged')
 		this.hub.off('groupChanged')
-		this.hub.off('alarm')
-		this.hub.off('alert')
-		this.hub.off('serverStatus')
-		this.hub.off('modeState')
-		this.hub.off('settingMode')
 		this.hub.off('zcuMapChanged')
 		this.hub.off('zcuStatusTableChanged')
 		this.hub.off('fireShutterMapChanged')
 		this.hub.off('fireShutterStatusTableChanged')
-    this.hub.off('clusterStatusChanged')
+		this.hub.off('clusterStatusChanged')
 		this.hub.off('clusterStatusTableChanged')
 		this.hub.off('kpiChanged')
 		this.hub.off('homeChanged')
-    this.hub.off('mapUpdateStatus')
-    this.hub.off('systemState')
 	}
 
 	private attachEvents() {

@@ -187,7 +187,8 @@ export class PlaybackMapViewerComponent implements OnInit, OnDestroy {
 	readonly permissionEnums: typeof PermissionEnums = PermissionEnums
 
 	ngOnInit(): void {
-    this.hubService.stop()
+    //this.hubService.stop()
+		this.hubService.detachEventsOnMap()
 		// @ts-ignore
 		this.viewer = document.getElementById('playback-canvas')._instance.exposed
 
