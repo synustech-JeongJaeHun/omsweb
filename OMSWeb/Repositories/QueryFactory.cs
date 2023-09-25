@@ -306,8 +306,8 @@ namespace OMSWeb.Repositories
             VH.moving_state, VH.map_db, 
             CASE 
                 WHEN VH.distance < 0 
-                THEN (FLOOR(VH.distance/1000000+4294) || 'km')
-                ELSE (FLOOR(VH.distance/1000000) || 'km')
+                THEN (FLOOR(VH.distance/1000000+4294))
+                ELSE (FLOOR(VH.distance/1000000))
             END AS distance,
             TO_CHAR((VH.runtime/86400 * interval '1 day'), 'DD') || 'd ' || TO_CHAR((VH.runtime%86400 * interval '1 sec'), 'HH24') || 'h ' as runtime,
             VH.user as user, 
@@ -370,8 +370,8 @@ namespace OMSWeb.Repositories
             END AS error_list,
             CASE 
                 WHEN VH.distance_total < 0 
-                THEN (FLOOR(VH.distance_total/1000000+4294)|| 'km')
-                ELSE (FLOOR(VH.distance_total/1000000) || 'km')
+                THEN (FLOOR(VH.distance_total/1000000+4294))
+                ELSE (FLOOR(VH.distance_total/1000000))
             END AS distance_total,
             TO_CHAR((VH.runtime_total/86400 * interval '1 day'), 'DD') || 'd ' || TO_CHAR((VH.runtime_total%86400 * interval '1 sec'), 'HH24') || 'h '  as runtime_total, 
             VH.type, VH.rail_in, VH.is_maint, 

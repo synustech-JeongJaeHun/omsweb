@@ -228,7 +228,7 @@ namespace OMSWeb.Repositories
                                     and history_change_time >= OD.time_assigned
 		                            and history_change_time <= OD.time_load_started ) as vhm
 	                        )
-                            ) || 'm' )
+                            ))
                              as from_distance,
                             (FLOOR(
                             (
@@ -245,7 +245,7 @@ namespace OMSWeb.Repositories
                                     and history_change_time >= OD.time_load_completed
 		                            and history_change_time <= OD.time_unload_started ) as vhm
 	                        )
-                            ) || 'm' )
+                            ))
                              as to_distance,
                             (@prefix || VS.physical_id) as vehicle_alias
                         FROM order_history AS OD
@@ -355,17 +355,17 @@ namespace OMSWeb.Repositories
                             TO_CHAR((VH.runtime/86400 * interval '1 day'), 'DD') || 'd ' || TO_CHAR((VH.runtime%86400 * interval '1 sec'), 'HH24') || 'h ' as runtime, 
                             VH.pm_time, VH.user,
                             VH.type, VH.map_db, VH.pm_user, VH.pm_note,
-                            (FLOOR(LVH.max_dist-LVH.min_dist) || 'km' ) as distance_range, 
+                            (FLOOR(LVH.max_dist-LVH.min_dist)) as distance_range, 
                             TO_CHAR((LVH.runtime_range/86400 * interval '1 day'), 'DD') || 'd ' || TO_CHAR((LVH.runtime_range%86400* interval '1 sec'), 'HH24') || 'h ' as runtime_range,
                             CASE 
 	                            WHEN VH.distance_total < 0 
-    	                        THEN (FLOOR(VH.distance_total/1000000+4294)|| 'km')
-		                        ELSE (FLOOR(VH.distance_total/1000000) || 'km')
+    	                        THEN (FLOOR(VH.distance_total/1000000+4294))
+		                        ELSE (FLOOR(VH.distance_total/1000000))
 	                        END AS distance_total,
                             CASE 
 	                            WHEN VH.distance < 0 
-    	                        THEN (FLOOR(VH.distance/1000000+4294) || 'km')
-		                        ELSE (FLOOR(VH.distance/1000000) || 'km')
+    	                        THEN (FLOOR(VH.distance/1000000+4294))
+		                        ELSE (FLOOR(VH.distance/1000000))
 	                        END AS distance
                         FROM vehicle_history AS VH
                         INNER JOIN (
