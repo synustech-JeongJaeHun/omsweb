@@ -9,6 +9,8 @@ import {MobileService} from "@oms/services/mobile.service";
 })
 export class DialogBaseComponent implements OnInit {
   @Input() title: string;
+  @Input() activeResize? = false;
+  isContentShow= true;
 
   constructor(private dialogRef: MatDialogRef<DialogBaseComponent>, private mobileSvc: MobileService) { }
 
@@ -16,6 +18,12 @@ export class DialogBaseComponent implements OnInit {
 
   close() {
     this.dialogRef.close(false);
+  }
+
+  reSize(isShow=false){
+    this.isContentShow=!isShow
+    this.dialogRef.updateSize('', this.isContentShow ?  'auto': '32px')
+
   }
 
   get isMobile() {

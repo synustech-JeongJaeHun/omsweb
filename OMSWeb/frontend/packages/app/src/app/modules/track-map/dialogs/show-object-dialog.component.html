@@ -117,7 +117,8 @@
           })" color="primary">
           {{"names.vehicle" | translate }} {{"names.command-move" | translate }}  {{"names.line" | translate }}
         </mat-slide-toggle>
-        <mat-slide-toggle [checked]="setting.isVehicleHomeivrLineVisible" (change)="update({
+        <mat-slide-toggle  *ngIf="data?.isMonitor"
+          [checked]="setting.isVehicleHomeivrLineVisible" (change)="update({
             key: 'isVehicleHomeivrLineVisible',
             value: $event.checked
           })" color="primary">
@@ -140,7 +141,8 @@
           })" color="primary">{{
           "names.showPointLabels" |
           translate }}</mat-slide-toggle>
-        <mat-slide-toggle [checked]="setting.isPointHomeVisible" (change)="update({
+        <mat-slide-toggle *ngIf="data?.isMonitor"
+            [checked]="setting.isPointHomeVisible" (change)="update({
             key: 'isPointHomeVisible',
             value: $event.checked
           })" color="primary">{{
@@ -179,7 +181,8 @@
             value: $event.checked
           })" color="primary">{{
           "names.showCpss" | translate }}</mat-slide-toggle>
-        <mat-slide-toggle [checked]="setting.isFireshutterVisible" (change)="update({
+        <mat-slide-toggle *ngIf="data?.isMonitor"
+            [checked]="setting.isFireshutterVisible" (change)="update({
             key: 'isFireshutterVisible',
             value: $event.checked
           })" color="primary">{{
@@ -190,7 +193,7 @@
           })" color="primary">{{
           "names.showMtls" | translate }}</mat-slide-toggle>
 
-        <mat-slide-toggle *ngIf="!isMobile" [checked]="setting.isVhlStatusVisible" (change)="changeVhlStatusVisible($event)" color="primary">
+        <mat-slide-toggle *ngIf="!isMobile && data?.isMonitor" [checked]="setting.isVhlStatusVisible" (change)="changeVhlStatusVisible($event)" color="primary">
           {{"names.showVhlStatus" | translate }}
         </mat-slide-toggle>
 

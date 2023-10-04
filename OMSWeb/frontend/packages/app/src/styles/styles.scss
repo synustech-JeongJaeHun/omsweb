@@ -846,3 +846,10 @@ oms-mobile-frame{
 oms-version{
   width: 100%;
 }
+mat-dialog-container{
+	overflow: hidden !important;
+	-ms-overflow-style: none;
+}
+mat-dialog-container::-webkit-scrollbar{
+	display:none;
+}
