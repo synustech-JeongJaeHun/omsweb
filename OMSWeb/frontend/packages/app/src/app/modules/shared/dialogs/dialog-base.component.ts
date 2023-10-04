@@ -23,7 +23,7 @@ export class DialogBaseComponent implements OnInit {
   reSize(isShow=false){
     this.isContentShow=!isShow
     this.dialogRef.updateSize('', this.isContentShow ?  'auto': '32px')
-
+    this.dialogRef.updatePosition(this.isContentShow ?  {top:'0', left: '0'}: {top:'0', left: '0'})
   }
 
   get isMobile() {
