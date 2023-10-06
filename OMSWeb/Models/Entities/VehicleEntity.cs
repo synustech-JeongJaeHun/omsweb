@@ -9,8 +9,8 @@ namespace OMSWeb.Models.Entities
         public string LogicalId { get; set; }
         public string MovingState { get; set; }
         public int? DistancePoint { get; set; }
-        public string DistanceTotal { get; set; }
-        public string Distance { get; set; }
+        public long DistanceTotal { get; set; }
+        public long Distance { get; set; }
         public string Type { get; set; }
         public string MapDb { get; set; }
         public string MapVersion { get; set; }
@@ -62,7 +62,7 @@ namespace OMSWeb.Models.Entities
         // not in vehicle entity
         public string Command { get; set; }
         public int Connection { get; set; }
-        public string DistanceRange { get; set; }
+        public long DistanceRange { get; set; }
         public string RuntimeRange { get; set; }
     }
 
