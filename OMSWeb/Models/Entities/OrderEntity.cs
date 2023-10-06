@@ -30,8 +30,8 @@ namespace OMSWeb.Models.Entities
         public string ResultCode { get; set; }
         public string LocationPickupAlias { get; set; }
         public string LocationDropoffAlias { get; set; }
-        public string FromDistance { get; set; }
-        public string ToDistance { get; set; }
+        public long FromDistance { get; set; }
+        public long ToDistance { get; set; }
         public string vehicleAlias { get; set; }
     }
     public class OrderHistoryEntity : OrderEntity
