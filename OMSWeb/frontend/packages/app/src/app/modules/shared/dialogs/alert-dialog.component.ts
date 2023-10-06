@@ -11,6 +11,7 @@ import { NotificationsService } from '../../../services/notifications.service';
 import { AccountUtil } from '../utils/account.util';
 import { PermissionEnums } from '../../../models/enums';
 import {MobileService} from "@oms/services/mobile.service";
+import {StorageUtil} from "@oms/utils/storage.util";
 
 @Component({
   selector: 'oms-alert-dialog',
@@ -32,6 +33,8 @@ export class AlertDialogComponent implements OnDestroy {
 
   selectedFilter= '='
 
+  isMinimize=false
+
   get canClearAll(): boolean {
     return this.dataGrid?.instance && this.dataGrid.instance?.totalCount() > 0 && this.selectedFilter==='=';
   }
@@ -50,6 +53,9 @@ export class AlertDialogComponent implements OnDestroy {
   ) {
     this.dataSource = this.notifySvc.alertsDataSource();
     this.dataSourceClear =this.notifySvc.alertsDataSourceClear();
+
+    this.isMinimize = StorageUtil.getLocal('Minimize-Alert')?.toLowerCase() === 'true'
+
     this.hubSvc.alertChanged$
       .pipe(takeUntil(this.destroy$))
       .subscribe((e) => this.onAlertChanged(e));
@@ -96,5 +102,9 @@ export class AlertDialogComponent implements OnDestroy {
 
   get isMobile() {
     return this.mobileSvc.isMobile
+  }
+
+  setMinimize(isMinimize: boolean){
+    StorageUtil.setLocal('Minimize-Alert', JSON.stringify(isMinimize))
   }
 }

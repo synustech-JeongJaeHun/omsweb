@@ -9,6 +9,7 @@ import { IAnnotation } from '../../../models/annotation.model';
 import { AccountUtil } from '../utils/account.util';
 import { PermissionEnums } from '../../../models/enums';
 import {MobileService} from "@oms/services/mobile.service";
+import {StorageUtil} from "@oms/utils/storage.util";
 
 @Component({
   selector: 'oms-alarm-dialog',
@@ -21,6 +22,7 @@ export class AlarmDialogComponent {
   severityLookup = alertSeverities;
   currentItem: IVehicleAlarm;
   selectedIds: number[] = [];
+  isMinimize=false
 
   constructor(
     private auth: AuthService,
@@ -31,6 +33,7 @@ export class AlarmDialogComponent {
     private mobileSvc: MobileService
   ) {
     this.dataSource = this.notifySvc.alarmsDataSource();
+    this.isMinimize = StorageUtil.getLocal('Minimize-Alarm')?.toLowerCase() === 'true'
   }
 
   transform(value: number): string {
@@ -90,5 +93,9 @@ export class AlarmDialogComponent {
 
   get isMobile() {
     return this.mobileSvc.isMobile
+  }
+
+  setMinimize(isMinimize: boolean){
+    StorageUtil.setLocal('Minimize-Alarm', JSON.stringify(isMinimize))
   }
 }
