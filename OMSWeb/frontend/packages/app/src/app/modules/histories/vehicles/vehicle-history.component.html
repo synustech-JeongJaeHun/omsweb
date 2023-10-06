@@ -96,7 +96,7 @@
             [visible]="canDisplayTable('vehicles_distance')"
             [visibleIndex]="getDisplayTableColumnIndex('vehicles_distance')"
             [allowFiltering]="true"
-            dataType="string"
+            dataType="number"
             dataField="distance"
           ></dxi-column>
           <dxi-column
@@ -112,7 +112,7 @@
             [visible]="canDisplayTable('vehicles_distance_total')"
             [visibleIndex]="getDisplayTableColumnIndex('vehicles_distance_total')"
             [allowFiltering]="true"
-            dataType="string"
+            dataType="number"
             dataField="distanceTotal"
             [caption]="'names.distanceTotal' | translate"
           ></dxi-column>
@@ -239,7 +239,7 @@
           [visible]="canDisplayTable('vehicles_distance')"
           [visibleIndex]="getDisplayTableColumnIndex('vehicles_distance')"
           [allowFiltering]="true"
-          dataType="string"
+          dataType="number"
           dataField="distanceRange"
           [caption]="'names.distance' | translate"
         ></dxi-column>
