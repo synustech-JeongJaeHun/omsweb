@@ -1,6 +1,6 @@
 import {
   Component,
-  ElementRef,
+  ElementRef, HostListener,
   OnDestroy,
   OnInit,
   ViewChild,
@@ -160,9 +160,10 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
     this.updateAlertCount();
   }
 
-  private updateAlarmCount() {
+  private updateAlarmCount(beforeCheck=false) {
     this.notifySvc.alarmCount()
       .subscribe((alarm) => {
+        if(beforeCheck&&(this.alarmCount === alarm.total)) return;
       this.alarmCount = alarm.total;
       this.isCriticalAlarm = alarm.critical > 0;
       if (this.alarmCount > 0) {
@@ -179,8 +180,10 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
     });
   }
 
-  private updateAlertCount() {
+  private updateAlertCount(beforeCheck=false) {
     this.notifySvc.alertCount().subscribe((warn) => {
+      if(beforeCheck&&(this.warnCount === warn.total)) return;
+
       this.warnCount = warn.total;
       this.isCriticalWarn = warn.critical > 0;
       this.isPopupWarn = warn.level2 > 0;
@@ -276,6 +279,15 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
           .sendRelease()
           .subscribe()
       })
+  }
+
+
+  @HostListener('document:visibilitychange', ['$event'])
+  private visibilitychange() {
+    if(!document.hidden){
+      this.updateAlarmCount(true)
+      this.updateAlertCount(true)
+    }
   }
 
 }

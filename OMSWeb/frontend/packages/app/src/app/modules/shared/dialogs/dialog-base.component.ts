@@ -1,6 +1,6 @@
 import {Component, EventEmitter, HostBinding, Input, OnInit, Output} from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
-import {MobileService} from "@oms/services/mobile.service";
+import {MobileService} from "../../../services/mobile.service";
 
 @Component({
   selector: 'oms-dialog-base',
