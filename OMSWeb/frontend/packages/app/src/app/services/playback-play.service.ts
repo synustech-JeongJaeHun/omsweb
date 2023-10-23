@@ -15,7 +15,7 @@ import {
 	CurrentBuffer,
 	CurrentStation,
 	CurrentZcu,
-	CurrentModeState,
+	CurrentModeState
 } from '../models/playback.model'
 import {
 	convertBufferHistoryEventToCurrentBuffer,

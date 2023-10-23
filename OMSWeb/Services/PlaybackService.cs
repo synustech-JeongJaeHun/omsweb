@@ -49,6 +49,9 @@ namespace OMSWeb.Services
       => this._repo.GetZcuHistoriesBetween(from, to);
     public IList<ModeStateHistoryWithTableName> GetModeStateHistoriesBetween(DateTimeOffset from, DateTimeOffset to)
       => this._repo.GetModeStateHistoriesBetween(from, to);
+
+    public IList<SystemState> GetSystemStateBetween(DateTimeOffset from, DateTimeOffset to)
+      => this._repo.GetSystemStateBetween(from, to);
   }
 }
 

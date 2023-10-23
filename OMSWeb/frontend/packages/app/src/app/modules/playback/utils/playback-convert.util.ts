@@ -128,7 +128,8 @@ function convertSnapshotVehicleToTmUpdateDtoVehicle(
 		carrierId: vehicle.carrier_id,
 		isZcuBlocked: vehicle.is_zcu_blocked,
 		destPoint: vehicle.dest_point == null ? '' : String(vehicle.dest_point),
-    railIn: vehicle.rail_in
+    railIn: vehicle.rail_in,
+    fireSensor: vehicle.fire_sensor,
 	}
 }
 
@@ -249,6 +250,7 @@ function convertVehicleHistoryEventToTmUpdateDtoVehicle(
 		carrierId: event.carrierId,
 		isZcuBlocked: event.isZcuBlocked,
 		destPoint: event.destPoint,
+    fireSensor: event.fireSensor,
 	}
 }
 
@@ -342,6 +344,7 @@ function convertSnapshotVehicleToCurrentVehicle(
     carrierId: vehicle.carrier_id,
     distance: vehicle.distance,
     runtime: vehicle.runtime,
+    fireSensor: vehicle.fire_sensor,
 	}
 }
 
@@ -487,7 +490,8 @@ function convertVehicleHistoryEventToCurrentVehicle(
 		isConnected: isConnected(event.connection),
     carrierId: event.carrierId,
     distance: event.distance,
-    runtime: event.runtime
+    runtime: event.runtime,
+    fireSensor: event.fireSensor
 	}
 }
 

@@ -186,6 +186,7 @@ type PlaybackSnapshotVehicle = {
 	note?: string
   pm_user?: string
   pm_note?: string
+  fire_sensor?: boolean
 }
 
 type PlaybackSnapshotBuffer = {
@@ -308,6 +309,7 @@ type VehicleHistoryEvent = { tableName: 'vehicle_history' } & ITableName &
     runtime: number
     pmUser?: string
     pmNote?: string
+    fireSensor?: boolean
 	}
 
 type SegmentBlockingHistoryEvent = {
@@ -408,6 +410,17 @@ type AlarmChange = RemainedAlarm & {
 	historyChangeType: 'INSERT' | 'UPDATE'
 }
 
+type SystemState = {
+	id: number
+	fireEmergency: boolean
+	fireDetect: boolean
+	historyChangeTime: Date
+	historyChangeType: string
+	ackAction: string
+	ackTime?: Date
+	ackBy?: string
+}
+
 type PlaybackSpeed = 0.1 | 0.5 | 1 | 2 | 5 | 10
 type ClockChangedEvent =
 	| SnapshotChangedEvent
@@ -479,6 +492,7 @@ type CurrentVehicle = {
   runtime: number
   pmUser?: string
   pmNote?: string
+  fireSensor?: boolean
 }
 type CurrentSegmentBlocking = {
 	id: number
@@ -600,4 +614,5 @@ export {
 	CurrentStation,
 	CurrentZcu,
 	CurrentModeState,
+	SystemState,
 }

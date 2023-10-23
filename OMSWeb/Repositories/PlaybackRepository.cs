@@ -512,6 +512,34 @@ namespace OMSWeb.Repositories
       }
       return result;
     }
+    
+    public IList<SystemState> GetSystemStateBetween(DateTimeOffset from, DateTimeOffset to)
+    {
+      var sql = @"
+            SELECT *
+            FROM system_state_history ssh 
+            WHERE ssh.history_change_time BETWEEN @from AND @to
+            ORDER BY ssh.history_change_time ASC
+            ";
+
+      var result = new List<SystemState>();
+      using (var conn = ConnectTrack())
+      {
+        try
+        {
+          result = conn.Query<SystemState>(sql, new
+          {
+            from = from,
+            to = to
+          }).ToList();
+        }
+        catch (System.Exception)
+        {
+          Console.WriteLine("[GetHistoriesBetween] => null");
+        }
+      }
+      return result;
+    }
   }
 }
 
