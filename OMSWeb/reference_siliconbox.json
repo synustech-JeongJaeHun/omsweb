@@ -47,13 +47,13 @@
       "normal": [{
         "unit": "A",
         "low": 0,
-        "high": 65,
+        "high": 70,
         "lowEqual": false,
         "highEqual": false
       }],
       "warning":[{
         "unit": "A",
-        "low": 65,
+        "low": 70,
         "high": 75,
         "lowEqual": true,
         "highEqual": false
