@@ -421,9 +421,11 @@ export class PlaybackMapViewerComponent implements OnInit, OnDestroy {
 		)
 	}
 	private applyStationHistoryEvent(event: StationHistoryEvent) {
+		let s =convertStationHistoryEventToTmUpdateDtoStation(event)
+		if(!this.includeCheck(event.logicalId)) s.carrierId =null
 		this.viewer.updateStation(
 			event.historyChangeType,
-			convertStationHistoryEventToTmUpdateDtoStation(event),
+			s,
 		)
 	}
 	private applyZcuHistoryEvent(event: ZcuHistoryEvent) {

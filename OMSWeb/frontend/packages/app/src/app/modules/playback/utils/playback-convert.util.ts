@@ -293,6 +293,7 @@ function convertStationHistoryEventToTmUpdateDtoStation(
 	return {
 		id: event.historySourceId,
 		unuse: event.unuse,
+		carrierId: event.carrierId,
 		user: event.user,
 		note: event.note,
     state: event.state
