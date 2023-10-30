@@ -271,7 +271,14 @@ function convertSegmentBlockingHistoryEventToTmUpdateDtoSegmentDisabled(
 						user: event.user,
 						note: event.note,
 				  }
-				: {},
+				: {
+              id: event.historySourceId,
+              segmentId: event.segmentId,
+              disabledBy: event.disabledBy,
+              disabledReason: event.reason,
+              user: event.user,
+              note: event.note,
+          },
 	}
 }
 
