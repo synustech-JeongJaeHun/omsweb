@@ -543,13 +543,14 @@ type CurrentBuffer = {
 }
 type CurrentStation = {
 	id: number
-	note: string
-	user: string
-	point: number
+	note?: string
+	user?: string
+	point?: number
 	unuse: boolean
 	offset: number
 	direction: string
 	carrierId?: string
+  pointId?: number
 	logicalId: string
 	nextPoint: number
 	physicalId: string

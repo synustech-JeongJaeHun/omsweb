@@ -21,13 +21,13 @@ import { TrackMonitorSettingService } from '../../../services/track-monitor-sett
 import d3 = require('d3')
 import { PlaybackPlayService } from '@oms/root/services/playback-play.service'
 import {
-	ClockChangedEvent,
-	SegmentBlockingHistoryEvent,
-	HistoryEvent,
-	VehicleHistoryEvent,
-	BufferHistoryEvent,
-	StationHistoryEvent,
-	ZcuHistoryEvent,
+  ClockChangedEvent,
+  SegmentBlockingHistoryEvent,
+  HistoryEvent,
+  VehicleHistoryEvent,
+  BufferHistoryEvent,
+  StationHistoryEvent,
+  ZcuHistoryEvent, PlaybackStation, CurrentStation,
 } from '@oms/root/models/playback.model'
 import {
 	convertBufferHistoryEventToTmUpdateDtoBuffer,
@@ -311,7 +311,7 @@ export class PlaybackMapViewerComponent implements OnInit, OnDestroy {
 			: []
 
 
-		const stations = this.playService.currentSnapshot.data.stations
+		let stations: CurrentStation[] = this.playService.currentSnapshot.data.stations
 			? this.playService.currentSnapshot.data.stations.map(
 					convertSnapshotStationToTmStation,
 			  )
@@ -329,6 +329,10 @@ export class PlaybackMapViewerComponent implements OnInit, OnDestroy {
 		)
 		const vehicles = []
 		let segmentDisabled = []
+
+    stations.map(s=>{
+      if(!this.includeCheck(s?.logicalId)) s.carrierId =null
+    })
 
 		// @ts-ignore
 		this.viewer.setTrack({

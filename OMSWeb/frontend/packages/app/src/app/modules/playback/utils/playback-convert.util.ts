@@ -151,7 +151,7 @@ function convertSnapshotSegmentBlockingToTmUpdateDtoSegmentDisabled(
 	}
 }
 
-function convertSnapshotBufferToTmBuffer(buffer: PlaybackSnapshotBuffer) {
+function convertSnapshotBufferToTmBuffer(buffer: PlaybackSnapshotBuffer): CurrentStation {
 	return {
 		id: buffer.id,
 		logicalId: buffer.logical_id,
@@ -187,7 +187,8 @@ function convertSnapshotStationToTmStation(station: PlaybackSnapshotStation) {
 		user: station.user,
 		note: station.note,
     cAlias: station.c_alias,
-    state: station.state
+    state: station.state,
+    carrierId: station.carrier_id,
 	}
 }
 function convertSnapshotZcuToTmZcu(zcu: PlaybackSnapshotZcu) {
