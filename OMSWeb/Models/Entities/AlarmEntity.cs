@@ -25,6 +25,7 @@ namespace OMSWeb.Models.Entities
         public string PhysicalId { get; set; }
         public DateTime? AckTime { get; set; }
         public string AckBy { get; set; }
+        public string State { get; set; }
     }
 
     public class VehicleError

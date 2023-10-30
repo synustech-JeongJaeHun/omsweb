@@ -256,6 +256,8 @@ const defaultHistoryTable = {
   alarms_time_resolved: true,
   alarms_age: true,
   alarms_current: true,
+  physical_id: false,
+  alarms_state: false,
   ack_time: true,
   ack_by: true,
   alarms_order: [
@@ -277,6 +279,7 @@ const defaultHistoryTable = {
     },
     { name: 'alarms_age', i18nLabel: 'names.elapsed', width: 120 },
     { name: 'alarms_current', i18nLabel: 'names.location', width: 120 },
+    { name: 'alarms_state', i18nLabel: 'names.state', width: 40 },
     { name: 'physical_id', i18nLabel: 'names.transOrQR', width: 120 },
     { name: 'ack_time', i18nLabel: 'names.ackTime', width: 120 },
     { name: 'ack_by', i18nLabel: 'names.ackBy', width: 'auto' },

@@ -414,6 +414,7 @@ namespace OMSWeb.Services
                 if (string.Compare(s, "physicalId", StringComparison.CurrentCultureIgnoreCase) == 0) return "physical_id";
                 if (string.Compare(s, "ackTime", StringComparison.CurrentCultureIgnoreCase) == 0) return "ack_time";
                 if (string.Compare(s, "ackBy", StringComparison.CurrentCultureIgnoreCase) == 0) return "ack_by";
+                if (string.Compare(s, "state", StringComparison.CurrentCultureIgnoreCase) == 0) return "state";
             }
             else if (string.Compare(tableName, "warning_history", StringComparison.CurrentCultureIgnoreCase) == 0)
             {

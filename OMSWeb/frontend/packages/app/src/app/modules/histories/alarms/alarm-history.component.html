@@ -161,31 +161,39 @@
 				dataField="current"
 				[caption]="'names.location' | translate"
 			></dxi-column>
-      <dxi-column
-        [width]="getDisplayTableColumnWidth('physical_id')"
-        [visible]="canDisplayTable('physical_id')"
-        [visibleIndex]="getDisplayTableColumnIndex('physical_id')"
-        dataType="string"
-        dataField="physicalId"
-        [caption]="'names.transOrQR' | translate"
-      ></dxi-column>
-      <dxi-column
-        [width]="getDisplayTableColumnWidth('ack_time')"
-        [visible]="canDisplayTable('ack_time')"
-        [visibleIndex]="getDisplayTableColumnIndex('ack_time')"
-        dataType="datetime"
-        dataField="ackTime"
-        [caption]="'names.ackTime' | translate"
-        [format]="dateTimeFormat"
-      ></dxi-column>
-      <dxi-column
-        [width]="getDisplayTableColumnWidth('ack_by')"
-        [visible]="canDisplayTable('ack_by')"
-        [visibleIndex]="getDisplayTableColumnIndex('ack_by')"
-        dataType="string"
-        dataField="ackBy"
-        [caption]="'names.ackBy' | translate"
-      ></dxi-column>
+			<dxi-column
+			[width]="getDisplayTableColumnWidth('physical_id')"
+			[visible]="canDisplayTable('physical_id')"
+			[visibleIndex]="getDisplayTableColumnIndex('physical_id')"
+			dataType="string"
+			dataField="physicalId"
+			[caption]="'names.transOrQR' | translate"
+			></dxi-column>
+			<dxi-column
+			[width]="getDisplayTableColumnWidth('alarms_state')"
+			[visible]="canDisplayTable('alarms_state')"
+			[visibleIndex]="getDisplayTableColumnIndex('alarms_state')"
+			dataType="string"
+			dataField="state"
+			[caption]="'names.state' | translate"
+			></dxi-column>
+			<dxi-column
+			[width]="getDisplayTableColumnWidth('ack_time')"
+			[visible]="canDisplayTable('ack_time')"
+			[visibleIndex]="getDisplayTableColumnIndex('ack_time')"
+			dataType="datetime"
+			dataField="ackTime"
+			[caption]="'names.ackTime' | translate"
+			[format]="dateTimeFormat"
+			></dxi-column>
+			<dxi-column
+			[width]="getDisplayTableColumnWidth('ack_by')"
+			[visible]="canDisplayTable('ack_by')"
+			[visibleIndex]="getDisplayTableColumnIndex('ack_by')"
+			dataType="string"
+			dataField="ackBy"
+			[caption]="'names.ackBy' | translate"
+			></dxi-column>
 			<div *dxTemplate="let data of 'ageTemplate'">
 				{{ transform(data.displayValue) }}
 			</div>

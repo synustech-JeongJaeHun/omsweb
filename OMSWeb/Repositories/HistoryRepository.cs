@@ -478,14 +478,21 @@ namespace OMSWeb.Repositories
                             END AS age,
                             VE.level, VE.cause, VE.description, VE.action, AN.annotation AS note, 
                             CASE WHEN VA.time_resolved IS NULL THEN  false ELSE true END AS cleared, VA.current,
-                            
                             CASE
 		                        WHEN VA.current LIKE '%s%' THEN	(SELECT physical_id FROM stations WHERE concat('s', cast(id as varchar)) = VA.current)
 		                        WHEN VA.current LIKE '%b%' THEN	(SELECT physical_id FROM buffers WHERE concat('b', cast(id as varchar)) = VA.current)
                                 WHEN VA.current LIKE '%p%' THEN	(SELECT physical_id FROM points WHERE concat('p', cast(id as varchar)) = VA.current)
 		                        ELSE VA.current
-	                        EnD AS physical_id
-                        
+	                        END AS physical_id,
+                            CASE 
+                                WHEN VA.maint is true then 'Maintenance'
+                                else 
+        	                        case
+        		                        when VA.mode = 'A' then 'Auto'
+        		                        when VA.mode = 'M' then 'Manual'
+        		                        else VA.mode
+    		                        END
+                            END AS state
                         FROM vehicle_alarms AS VA
                         LEFT OUTER JOIN vehicle_reg VR
                             ON VA.vehicle_id = VR.id
