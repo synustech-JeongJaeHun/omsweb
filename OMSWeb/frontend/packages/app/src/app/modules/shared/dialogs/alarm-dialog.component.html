@@ -1,9 +1,5 @@
 <div class="dialog-container" cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragDisabled>
-  <oms-dialog-base [title]="'names.alarms' | translate"
-                   [activeResize]="true"
-                   [isMinimize]="isMinimize"
-                   (setMinimize)="setMinimize($event)"
-  >
+  <oms-dialog-base [title]="'names.alarms' | translate">
     <ng-container class="dialog-layout">
       <div class="alert-list" cdkDragHandle>
         <dx-data-grid [dataSource]="dataSource" [remoteOperations]="true" [height]="300" [width]="700"

@@ -1,8 +1,4 @@
-<oms-dialog-base [title]="'names.alerts' | translate"
-                 [activeResize]="true"
-                 [isMinimize]="isMinimize"
-                 (setMinimize)="setMinimize($event)"
->
+<oms-dialog-base [title]="'names.alerts' | translate">
   <ng-container class="dialog-layout">
     <div class="alert-list">
       <dx-data-grid #grid
