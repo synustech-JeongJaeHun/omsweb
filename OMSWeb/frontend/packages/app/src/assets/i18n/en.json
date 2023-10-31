@@ -569,7 +569,8 @@
     "fireDetect" : "Fire Detect",
     "open" : "Open",
     "fcu" : "Fcu",
-    "refresh": "Refresh"
+    "refresh": "Refresh",
+    "disableDialog" : "Disable Dialog"
   },
   "enums": {
     "hostSessionStatus": {

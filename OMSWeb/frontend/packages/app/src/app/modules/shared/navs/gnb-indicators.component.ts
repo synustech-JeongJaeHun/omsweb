@@ -20,14 +20,14 @@ import { AuthService } from '../../../services/auth.service';
 import { HubService } from '../../../services/hub.service';
 import { AlarmDialogComponent } from '../dialogs/alarm-dialog.component';
 import { AlertDialogComponent } from '../dialogs/alert-dialog.component';
-import { AccountUtil } from '../utils/account.util';
-import { PermissionEnums } from '../../../models/enums';
+import {PermissionEnums, ToggleLockOptionKeyType} from '../../../models/enums';
 import {TTSService} from "@oms/services/tts.service";
 import {MobileService} from "@oms/services/mobile.service";
 import {SettingsService} from "@oms/services/settings.service";
 import {MessagesService} from "@oms/services/messages.service";
 import {DialogService} from "@oms/services/dialog.service";
 import {TranslateService} from "@ngx-translate/core";
+import {ClientPreferences, ToggleLockOptionsType} from "@oms/models/settings.model";
 
 @Component({
   selector: 'oms-gnb-indicators',
@@ -49,6 +49,8 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
   warnList: IAlert[] = [];
   indicatorFireEmergency = false
   fireEmergency = false
+  toggleLocks: ToggleLockOptionsType
+  preference: ClientPreferences
 
   private _alarmDlg: MatDialogRef<AlarmDialogComponent, any>;
   private _alertDlg: MatDialogRef<AlertDialogComponent, any>;
@@ -86,6 +88,8 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
     settingSvc.serviceConfig.subscribe(config=>{
       this.indicatorFireEmergency = config?.indicatorFireEmergency
     })
+    this.preference = this.settingSvc.globalPreferences
+    this.toggleLocks = this.settingSvc.globalPreferences.toggleLocks;
   }
 
   ngOnInit(): void {
@@ -167,7 +171,7 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
       this.alarmCount = alarm.total;
       this.isCriticalAlarm = alarm.critical > 0;
       if (this.alarmCount > 0) {
-        this.showAlarmsView(true);  // show
+        !this.toggleLocks.alarm && this.showAlarmsView(true);  // show
 
         if (this._alarmDlg?.componentInstance)
           this._alarmDlg.componentInstance.dataSource.reload()
@@ -189,7 +193,7 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
       this.isPopupWarn = warn.level2 > 0;
 
       if (this.warnCount > 0) {
-        this.showAlertView(true); // show
+        !this.toggleLocks.warning && this.showAlertView(true); // show
 
         if (this._alertDlg?.componentInstance)
           this._alertDlg.componentInstance.dataSource.reload()
@@ -288,6 +292,12 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
       this.updateAlarmCount(true)
       this.updateAlertCount(true)
     }
+  }
+
+  toggleLocking($event, key: ToggleLockOptionKeyType = 'warning'){
+    $event.preventDefault()
+    this.preference.toggleLocks[key] = !this.preference.toggleLocks[key]
+    this.preference.save();
   }
 
 }

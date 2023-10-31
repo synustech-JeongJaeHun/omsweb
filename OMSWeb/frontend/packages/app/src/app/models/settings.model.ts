@@ -1,4 +1,4 @@
-import {ToggleOptionKeyType, VHLIdPosition, PointType, IdType} from './enums'
+import {ToggleOptionKeyType, VHLIdPosition, PointType, IdType, ToggleLockOptionKeyType} from './enums'
 import { StorageUtil } from '@oms/utils/storage.util'
 import { main_css } from '../modules/shared/utils/css-loader'
 import { IZoom } from './drawing.model'
@@ -6,6 +6,10 @@ import { LangCode } from './tts.model'
 
 export type ToggleOptionsType = {
 	[key in ToggleOptionKeyType]: boolean
+}
+
+export type ToggleLockOptionsType = {
+    [key in ToggleLockOptionKeyType]: boolean
 }
 
 export class ServiceConfig {
@@ -68,8 +72,9 @@ export interface IPreferences {
 	theme?: ThemeConfig
 	controlTables?: MonitorControlTable
 	historyTables?: HistoryTable
-  trackDisplay?: TrackObjectConfig
-  tts?: TTSConfig
+    trackDisplay?: TrackObjectConfig
+    tts?: TTSConfig
+    toggleLocks?: ToggleLockOptionsType
 }
 
 export class UiStates {
@@ -334,9 +339,15 @@ export const defaultToggleOptions: ToggleOptionsType = {
 	showToolName: false,
 	showOmsVersion: true,
 	showKpi: true,
-  zoomButton: false,
-  ctrlKey: true
+    zoomButton: false,
+    ctrlKey: true
 }
+
+export const defaultToggleLockOptions: ToggleLockOptionsType = {
+    warning: false,
+    alarm: false,
+}
+
 export type MonitorControlTable = typeof defaultControlTable
 
 const defaultControlTable = {
@@ -757,9 +768,9 @@ export class ClientPreferences implements IPreferences {
 	theme?: ThemeConfig
 	controlTables?: MonitorControlTable
 	historyTables?: HistoryTable
-  trackDisplay?: TrackObjectConfig
-
-  tts?: TTSConfig
+    trackDisplay?: TrackObjectConfig
+    tts?: TTSConfig
+    toggleLocks?: ToggleLockOptionsType
 
 	constructor(private storeKey: string, private base?: IPreferences) {
 		this.load()
@@ -776,16 +787,18 @@ export class ClientPreferences implements IPreferences {
 			theme = {},
 			controlTables = {},
 			historyTables = {},
-      trackDisplay ={},
-      tts= {},
+            trackDisplay ={},
+            tts= {},
+            toggleLocks = {},
 		} = JSON.parse(value)
 		const {
 			toggles: baseToggle = {},
 			map: baseMap = {},
 			controlTables: baseControlTable = {},
 			historyTables: baseHistoryTable = {},
-      trackDisplay: baseDisplay = {},
-      tts: baseTTs = {}
+            trackDisplay: baseDisplay = {},
+            tts: baseTTs = {},
+            toggleLocks: baseToggleLock = {}
 		} = this.base || {}
 		this.toggles = { ...defaultToggleOptions, ...baseToggle, ...toggles }
 		this.map = { ...new MapConfig(), ...baseMap, ...map }
@@ -801,15 +814,17 @@ export class ClientPreferences implements IPreferences {
 			...baseHistoryTable,
 			...historyTables,
 		}
-    this.trackDisplay = {
-      ...trackObjectDefaultConfig,
-      ...trackDisplay
-    }
-    this.tts = {
-      ...TTSDefaultConfig,
-      ...tts
-    }
-
+        this.trackDisplay = {
+          ...trackObjectDefaultConfig,
+          ...trackDisplay
+        }
+        this.tts = {
+          ...TTSDefaultConfig,
+          ...tts
+        }
+        this.toggleLocks = {
+            ...defaultToggleLockOptions, ...baseToggleLock, ...toggleLocks
+        }
 		this.mergeOrders()
 		this.save()
 	}
@@ -822,8 +837,9 @@ export class ClientPreferences implements IPreferences {
 			theme: { ...this.theme },
 			controlTables: { ...this.controlTables },
 			historyTables: { ...this.historyTables },
-      trackDisplay: {...this.trackDisplay},
-      tts: this.tts
+            trackDisplay: {...this.trackDisplay},
+            tts: this.tts,
+            toggleLocks: { ...this.toggleLocks}
 		}
 		StorageUtil.setLocal(this.storeKey, JSON.stringify(pref))
 	}

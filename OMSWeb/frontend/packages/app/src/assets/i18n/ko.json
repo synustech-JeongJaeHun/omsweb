@@ -569,7 +569,8 @@
     "hold-release": "Hold Release",
     "fireDetect" : "Fire Detect",
     "open" : "Open",
-    "fcu" : "Fcu"
+    "fcu" : "Fcu",
+    "disableDialog" : "Disable Dialog"
   },
   "enums": {
     "hostSessionStatus": {

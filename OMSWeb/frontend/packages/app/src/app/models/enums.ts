@@ -55,6 +55,11 @@ export type ToggleOptionKeyType =
   | 'ctrlKey'
   ;
 
+export type ToggleLockOptionKeyType =
+  | 'warning'
+  | 'alarm'
+  ;
+
 export type CommandKeyType =
   | 'centerZoom'
   | 'search'

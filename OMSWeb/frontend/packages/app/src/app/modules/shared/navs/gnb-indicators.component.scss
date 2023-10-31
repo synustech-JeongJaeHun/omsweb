@@ -11,6 +11,17 @@ button {
     font-size: 22px;
   }
 }
+.icon-wrapper{
+  display: inline-flex;
+  border-radius: 32px;
+  width: 32px;
+  height: 32px;
+  justify-content: center;
+  align-items: center;
+}
+.locking {
+  background-color: rgba(#969696, 0.5);
+}
 button.has-issue {
   color: rgba(#666, 0.5);
 }

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {ToggleOptionKeyType, VHLIdPosition, PointType, IdType} from '../../../models/enums';
+import {ToggleOptionKeyType, VHLIdPosition, PointType, IdType, ToggleLockOptionKeyType} from '../../../models/enums';
 import { ClientPreferences } from '../../../models/settings.model';
 import { SettingsService } from '../../../services/settings.service';
 import {LangCode} from "@oms/models/tts.model";
@@ -24,7 +24,7 @@ export class PreferencesComponent {
     this.preference = this.settingSvc.globalPreferences;
     this.loadKpiEnabled();
   }
-  onChangedToggle(action: ToggleOptionKeyType=null) {
+  onChangedToggle(action: ToggleOptionKeyType | ToggleLockOptionKeyType=null) {
     this.preference.save();
     if(action==='showKpi'){
       this.settingSvc.saveKpiEnabled(this.preference.toggles.showKpi).subscribe(res=>{

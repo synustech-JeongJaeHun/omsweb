@@ -569,7 +569,8 @@
     "hold-release": "暂停释放",
     "fireDetect" : "火警侦测",
     "open" : "打开",
-    "fcu" : "Fcu"
+    "fcu" : "Fcu",
+    "disableDialog" : "禁用对话框"
   },
   "enums": {
     "hostSessionStatus": {

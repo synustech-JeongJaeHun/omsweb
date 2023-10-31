@@ -9,29 +9,17 @@ import {MobileService} from "../../../services/mobile.service";
 })
 export class DialogBaseComponent implements OnInit {
   @Input() title: string;
-  @Input() activeResize? = false;
-  @Input() isMinimize? = false;
   isContentShow= true;
-  @Output() setMinimize? = new EventEmitter<boolean>();
-
   constructor(private dialogRef: MatDialogRef<DialogBaseComponent>, private mobileSvc: MobileService) {
   }
 
   ngOnInit(): void {
-    this.isMinimize && this.reSize(this.isMinimize)
+
   }
 
   close() {
     this.dialogRef.close(false);
   }
-
-  reSize(isShow=false){
-    this.isContentShow=!isShow
-    this.dialogRef.updateSize('', this.isContentShow ?  'auto': '32px')
-    this.dialogRef.updatePosition(this.isContentShow ?  {top:'0', left: '0'}: {top:'0', left: '0'})
-    this.setMinimize.emit(!this.isContentShow)
-  }
-
   get isMobile() {
     return this.mobileSvc.isMobile
   }

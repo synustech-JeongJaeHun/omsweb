@@ -33,8 +33,6 @@ export class AlertDialogComponent implements OnDestroy {
 
   selectedFilter= '='
 
-  isMinimize=false
-
   get canClearAll(): boolean {
     return this.dataGrid?.instance && this.dataGrid.instance?.totalCount() > 0 && this.selectedFilter==='=';
   }
@@ -53,8 +51,6 @@ export class AlertDialogComponent implements OnDestroy {
   ) {
     this.dataSource = this.notifySvc.alertsDataSource();
     this.dataSourceClear =this.notifySvc.alertsDataSourceClear();
-
-    this.isMinimize = StorageUtil.getLocal('Minimize-Alert')?.toLowerCase() === 'true'
 
     this.hubSvc.alertChanged$
       .pipe(takeUntil(this.destroy$))
@@ -102,9 +98,5 @@ export class AlertDialogComponent implements OnDestroy {
 
   get isMobile() {
     return this.mobileSvc.isMobile
-  }
-
-  setMinimize(isMinimize: boolean){
-    StorageUtil.setLocal('Minimize-Alert', JSON.stringify(isMinimize))
   }
 }

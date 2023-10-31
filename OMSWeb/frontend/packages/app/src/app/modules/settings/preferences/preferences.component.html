@@ -63,4 +63,14 @@
       <div></div>
     </div>
   </fieldset>
+
+  <fieldset>
+    <legend>{{ "names.disableDialog" | translate }}</legend>
+    <div class="form-grid">
+      <mat-slide-toggle [(ngModel)]="preference.toggleLocks.warning" color="primary"
+                        (change)="onChangedToggle('warning')">{{ "names.alerts" | translate }}</mat-slide-toggle>
+      <mat-slide-toggle [(ngModel)]="preference.toggleLocks.alarm" color="primary"
+                        (change)="onChangedToggle('alarm')">{{ "names.alarm" | translate }}</mat-slide-toggle>
+    </div>
+  </fieldset>
 </div>
