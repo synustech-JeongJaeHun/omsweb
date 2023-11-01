@@ -84,7 +84,6 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
     private $t: TranslateService,
     private messageSvc: MessagesService,
   ) {
-    this.timerId = setInterval(() => this.getState(), 5000);
     settingSvc.serviceConfig.subscribe(config=>{
       this.indicatorFireEmergency = config?.indicatorFireEmergency
     })
@@ -106,6 +105,8 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
       .subscribe((e) => {
         this.fireEmergency = e.fireEmergency
       });
+
+    this.timerId = setInterval(() => this.getState(), 5000);
 
     this.updateAlarmCount();
     this.updateAlertCount();
@@ -291,6 +292,11 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
     if(!document.hidden){
       this.updateAlarmCount(true)
       this.updateAlertCount(true)
+      this.timerId = setInterval(() => this.getState(), 5000);
+    }
+    else{
+      clearInterval(this.timerId)
+      console.log(this.timerId)
     }
   }
 

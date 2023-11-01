@@ -114,8 +114,8 @@ export class HubService {
 		this.hub.off('settingMode')
 		this.hub.off('kpiChanged')
 		this.hub.off('homeChanged')
-    	this.hub.off('mapUpdateStatus')
-    	this.hub.off('systemState')
+    this.hub.off('mapUpdateStatus')
+    this.hub.off('systemState')
 	}
 
 	public detachEventsOnMap() {
