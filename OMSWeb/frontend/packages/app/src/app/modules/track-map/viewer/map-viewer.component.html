@@ -680,7 +680,9 @@
 </ng-template>
 
 <ng-template #stationContext>
-	<mat-card class="context-card">
+	<mat-card class="context-card"
+            *ngIf="hasPermissions([permissionEnums.SettingStation])"
+  >
 		<mat-card-header>
 			<mat-card-title>
 				Station #{{ contextMenuObject?.value.id }}

@@ -296,7 +296,6 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
     }
     else{
       clearInterval(this.timerId)
-      console.log(this.timerId)
     }
   }
 

@@ -118,7 +118,6 @@
 	[highlightChanges]="false"
 	[showColumnLines]="true"
 	[showRowLines]="true"
-	[headerFilter]="false"
 	[(selectedRowKeys)]="selectedRows"
 	allowColumnResizing="true"
   [stateStoring]="stateStoring"
@@ -469,6 +468,100 @@
     [visibleIndex]="getDisplayTableColumnIndex('vehicles_runtime')"
     [width]="getDisplayTableColumnWidth('vehicles_runtime')"
   ></dxi-column>
+
+  <dxi-column
+    [allowFiltering]="true"
+    dataType="number"
+    dataField="speed"
+    [allowSorting]="true"
+    [caption]="'names.speed' | translate"
+    [visible]="canDisplayTable('vehicles_speed')"
+    [visibleIndex]="getDisplayTableColumnIndex('vehicles_speed')"
+    [width]="getDisplayTableColumnWidth('vehicles_speed')"
+  ></dxi-column>
+
+  <dxi-column
+    [allowFiltering]="true"
+    dataType="number"
+    dataField="torque1"
+    [allowSorting]="true"
+    [caption]="'names.torque1' | translate"
+    [visible]="canDisplayTable('vehicles_torque1')"
+    [visibleIndex]="getDisplayTableColumnIndex('vehicles_torque1')"
+    [width]="getDisplayTableColumnWidth('vehicles_torque1')"
+  ></dxi-column>
+  <dxi-column
+    [allowFiltering]="true"
+    dataType="number"
+    dataField="torque2"
+    [allowSorting]="true"
+    [caption]="'names.torque2' | translate"
+    [visible]="canDisplayTable('vehicles_torque2')"
+    [visibleIndex]="getDisplayTableColumnIndex('vehicles_torque2')"
+    [width]="getDisplayTableColumnWidth('vehicles_torque2')"
+  ></dxi-column>
+  <dxi-column
+    [allowFiltering]="true"
+    dataType="number"
+    dataField="torque3"
+    [allowSorting]="true"
+    [caption]="'names.torque3' | translate"
+    [visible]="canDisplayTable('vehicles_torque3')"
+    [visibleIndex]="getDisplayTableColumnIndex('vehicles_torque3')"
+    [width]="getDisplayTableColumnWidth('vehicles_torque3')"
+  ></dxi-column>
+  <dxi-column
+    [allowFiltering]="true"
+    dataType="number"
+    dataField="torque4"
+    [allowSorting]="true"
+    [caption]="'names.torque4' | translate"
+    [visible]="canDisplayTable('vehicles_torque4')"
+    [visibleIndex]="getDisplayTableColumnIndex('vehicles_torque4')"
+    [width]="getDisplayTableColumnWidth('vehicles_torque4')"
+  ></dxi-column>
+
+  <dxi-column
+    [allowFiltering]="true"
+    dataType="number"
+    dataField="rpm1"
+    [allowSorting]="true"
+    [caption]="'names.rpm1' | translate"
+    [visible]="canDisplayTable('vehicles_rpm1')"
+    [visibleIndex]="getDisplayTableColumnIndex('vehicles_rpm1')"
+    [width]="getDisplayTableColumnWidth('vehicles_rpm1')"
+  ></dxi-column>
+  <dxi-column
+    [allowFiltering]="true"
+    dataType="number"
+    dataField="rpm2"
+    [allowSorting]="true"
+    [caption]="'names.rpm2' | translate"
+    [visible]="canDisplayTable('vehicles_rpm2')"
+    [visibleIndex]="getDisplayTableColumnIndex('vehicles_rpm2')"
+    [width]="getDisplayTableColumnWidth('vehicles_rpm2')"
+  ></dxi-column>
+  <dxi-column
+    [allowFiltering]="true"
+    dataType="number"
+    dataField="rpm3"
+    [allowSorting]="true"
+    [caption]="'names.rpm3' | translate"
+    [visible]="canDisplayTable('vehicles_rpm3')"
+    [visibleIndex]="getDisplayTableColumnIndex('vehicles_rpm3')"
+    [width]="getDisplayTableColumnWidth('vehicles_rpm3')"
+  ></dxi-column>
+  <dxi-column
+    [allowFiltering]="true"
+    dataType="number"
+    dataField="rpm4"
+    [allowSorting]="true"
+    [caption]="'names.rpm4' | translate"
+    [visible]="canDisplayTable('vehicles_rpm4')"
+    [visibleIndex]="getDisplayTableColumnIndex('vehicles_rpm4')"
+    [width]="getDisplayTableColumnWidth('vehicles_rpm4')"
+  ></dxi-column>
+
 	<!-- MapVersion 추가 -->
 	<div *dxTemplate="let data of 'modeTemplate'">
 		<div [ngSwitch]="data.displayValue">

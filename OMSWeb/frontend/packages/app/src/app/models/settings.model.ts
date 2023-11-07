@@ -506,6 +506,15 @@ const defaultControlTable = {
   vehicles_pauseState: false,
   vehicles_distance: true,
   vehicles_runtime: true,
+  vehicles_speed: false,
+  vehicles_torque1: false,
+  vehicles_torque2: false,
+  vehicles_torque3: false,
+  vehicles_torque4: false,
+  vehicles_rpm1: false,
+  vehicles_rpm2: false,
+  vehicles_rpm3: false,
+  vehicles_rpm4: false,
 
 	vehicles_order: [
 		{ name: 'vehicles_id', i18nLabel: 'names.id', width: 60 },
@@ -573,6 +582,15 @@ const defaultControlTable = {
     { name: 'vehicles_runtime', i18nLabel: 'names.runtime', width: 80 },
     { name: 'vehicles_user', i18nLabel: 'names.user', width: 80 },
     { name: 'vehicles_note', i18nLabel: 'names.note', width: 'auto' },
+    { name: 'vehicles_speed', i18nLabel: 'names.speed', width: '80' },
+    { name: 'vehicles_torque1', i18nLabel: 'names.torque1', width: '80' },
+    { name: 'vehicles_torque2', i18nLabel: 'names.torque2', width: '80' },
+    { name: 'vehicles_torque3', i18nLabel: 'names.torque3', width: '80' },
+    { name: 'vehicles_torque4', i18nLabel: 'names.torque4', width: '80' },
+    { name: 'vehicles_rpm1', i18nLabel: 'names.rpm1', width: '80' },
+    { name: 'vehicles_rpm2', i18nLabel: 'names.rpm2', width: '80' },
+    { name: 'vehicles_rpm3', i18nLabel: 'names.rpm3', width: '80' },
+    { name: 'vehicles_rpm4', i18nLabel: 'names.rpm4', width: '80' },
 
 	],
 

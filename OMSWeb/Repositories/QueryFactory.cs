@@ -382,12 +382,15 @@ namespace OMSWeb.Repositories
                 WHEN VH.connection = 3 THEN FALSE
                 WHEN VH.connection IS NULL THEN FALSE
             ENd AS isConnected, 
-            GO.group_id
+            GO.group_id, 
+            VP.speed, VP.torque_1, VP.torque_2, VP.torque_3, VP.torque_4, VP.rpm_1, VP.rpm_2, VP.rpm_3, VP.rpm_4
             FROM vehicles AS VH
             LEFT OUTER JOIN orders AS OD
                 ON VH.order_id = OD.id AND OD.time_completed IS NULL AND OD.time_aborted IS NULL AND OD.time_failed IS NULL
             LEFT JOIN grouped_objects AS GO 
 	            ON VH.id = GO.reference_id AND GO.reference_table = 'vehicle'
+            LEFT JOIN vehicle_performance AS VP 
+	            ON VH.id = VP.vehicle_id
             ORDER BY VH.id
       "},
       {"orderStatus", @"

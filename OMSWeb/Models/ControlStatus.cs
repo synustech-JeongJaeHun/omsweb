@@ -21,6 +21,17 @@ namespace OMSWeb.Models
         public string LocationPickup { get; set; }
         public string LocationDropoff { get; set; }
         public string LocationMove { get; set; }
+        
+        //vehicle_performance value
+        public int? Speed { get; set; }
+        public int? Torque1 { get; set; }
+        public int? Torque2 { get; set; }
+        public int? Torque3 { get; set; }
+        public int? Torque4 { get; set; }
+        public int? Rpm1 { get; set; }
+        public int? Rpm2 { get; set; }
+        public int? Rpm3 { get; set; }
+        public int? Rpm4 { get; set; }
     }
 
     public class StationState : StationEntity
