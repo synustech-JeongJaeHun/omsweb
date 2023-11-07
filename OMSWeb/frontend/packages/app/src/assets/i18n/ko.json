@@ -571,14 +571,15 @@
     "open" : "Open",
     "fcu" : "Fcu",
     "disableDialog" : "Disable Dialog",
-    "torque1" : "Torque 1",
-    "torque2" : "Torque 2",
-    "torque3" : "Torque 3",
-    "torque4" : "Torque 4",
-    "rpm1" : "Rpm 1",
-    "rpm2" : "Rpm 2",
-    "rpm3" : "Rpm 3",
-    "rpm4" : "Rpm 4"
+    "axisSpeed": "Speed(mm/s)",
+    "torque1" : "Torque 1(%)",
+    "torque2" : "Torque 2(%)",
+    "torque3" : "Torque 3(%)",
+    "torque4" : "Torque 4(%)",
+    "rpm1" : "Rpm 1(RPM)",
+    "rpm2" : "Rpm 2(RPM)",
+    "rpm3" : "Rpm 3(RPM)",
+    "rpm4" : "Rpm 4(RPM)"
   },
   "enums": {
     "hostSessionStatus": {

@@ -582,7 +582,7 @@ const defaultControlTable = {
     { name: 'vehicles_runtime', i18nLabel: 'names.runtime', width: 80 },
     { name: 'vehicles_user', i18nLabel: 'names.user', width: 80 },
     { name: 'vehicles_note', i18nLabel: 'names.note', width: 'auto' },
-    { name: 'vehicles_speed', i18nLabel: 'names.speed', width: '80' },
+    { name: 'vehicles_speed', i18nLabel: 'names.axisSpeed', width: '80' },
     { name: 'vehicles_torque1', i18nLabel: 'names.torque1', width: '80' },
     { name: 'vehicles_torque2', i18nLabel: 'names.torque2', width: '80' },
     { name: 'vehicles_torque3', i18nLabel: 'names.torque3', width: '80' },

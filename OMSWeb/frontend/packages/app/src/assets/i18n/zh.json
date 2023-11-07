@@ -571,14 +571,15 @@
     "open" : "打开",
     "fcu" : "Fcu",
     "disableDialog" : "禁用对话框",
-    "torque1" : "扭矩 1",
-    "torque2" : "扭矩 2",
-    "torque3" : "扭矩 3",
-    "torque4" : "扭矩 4",
-    "rpm1" : "转速 1",
-    "rpm2" : "转速 2",
-    "rpm3" : "转速 3",
-    "rpm4" : "转速 4"
+    "axisSpeed": "速度",
+    "torque1" : "扭矩 1(%)",
+    "torque2" : "扭矩 2(%)",
+    "torque3" : "扭矩 3(%)",
+    "torque4" : "扭矩 4(%)",
+    "rpm1" : "转速 1(转速)",
+    "rpm2" : "转速 2(转速)",
+    "rpm3" : "转速 3(转速)",
+    "rpm4" : "转速 4(转速)"
   },
   "enums": {
     "hostSessionStatus": {
