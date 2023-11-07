@@ -318,7 +318,7 @@ namespace OMSWeb.Repositories
                     ";
 
             int result = 0;
-            using (var conn = ConnectTrack())
+            using (var conn = ConnectTrack(500))
             {
                 try
                 { 
@@ -398,7 +398,7 @@ namespace OMSWeb.Repositories
                 {LimitConditions}
                     ";
             IQueryable<VehicleHistoryEntity> result;
-            using (var conn = ConnectTrack())
+            using (var conn = ConnectTrack(500))
             {
                 try
                 { 
