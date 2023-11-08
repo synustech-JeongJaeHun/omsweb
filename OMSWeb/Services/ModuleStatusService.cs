@@ -38,6 +38,7 @@ namespace OMSWeb.Services
         {"FCU",       "fcu_mgr" },
         {"FDC",       "fdc_mgr" },
         {"RDS",       "RDS" },
+        {"AAS",       "AAS" },
       };
 
       TimerCallback(new Object());
@@ -74,7 +75,7 @@ namespace OMSWeb.Services
       }
       catch (Exception e)
       {
-        Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"Exception", e.Message);
+        Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"Exception module", e.Message);
       }
       
     }
