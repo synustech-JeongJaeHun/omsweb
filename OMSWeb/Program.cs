@@ -20,7 +20,6 @@ namespace OMSWeb
             Directory.SetCurrentDirectory(path);
 #endif
             CreateHostBuilder(args).Build().Run();
-
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
