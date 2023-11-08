@@ -36,6 +36,13 @@ export class VehicleStatusDialogComponent implements OnDestroy {
 		dos: { label: string; index: number }[]
 		show: boolean
 	}[] = []
+  toggleCategories: {
+    name: string
+    dis: { label: string; index: number }[]
+    dos: { label: string; index: number }[]
+    show: boolean
+  }[] = []
+
 	dioInfos: IVehicleDioCategory[] = []
 	dis: ('0' | '1')[] = []
 	dos: ('0' | '1')[] = []
@@ -110,15 +117,15 @@ export class VehicleStatusDialogComponent implements OnDestroy {
 					categorySet.add(dio.outCategory)
 				}
 			})
-
 			this.categories = [...categorySet.values()].map((category) => {
-				return {
-					name: category,
-					show: true,
-					dis: diCategoryMap.get(category) ?? [],
-					dos: doCategoryMap.get(category) ?? [],
-				}
+        return {
+          name: category,
+          show: true,
+          dis: diCategoryMap.get(category) ?? [],
+          dos: doCategoryMap.get(category) ?? [],
+        }
 			})
+      this.toggleCategories = this.categories.filter(category=>category.name!='Disable')
 		})
 
 		this.vehicles = JSON.parse(

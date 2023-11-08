@@ -106,3 +106,7 @@
 svg {
   margin-right: 0px;
 }
+.grid-container{
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+}
