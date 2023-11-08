@@ -124,12 +124,10 @@
           </div>
         </div>
         <div class="grid-container">
-          <div class="dio-toggle-section" *ngFor="let category of toggleCategories">
-            <div *ngIf="category.name != 'Disable'">
-              <mat-slide-toggle #toggleCategory color="primary" [(ngModel)]="category.show">
-                {{category.name}}
-              </mat-slide-toggle>
-            </div>
+          <div class="dio-toggle-section" *ngFor="let category of categories">
+            <mat-slide-toggle #toggleCategory color="primary" [(ngModel)]="category.show">
+              {{category.name}}
+            </mat-slide-toggle>
           </div>
         </div>
       </div>
