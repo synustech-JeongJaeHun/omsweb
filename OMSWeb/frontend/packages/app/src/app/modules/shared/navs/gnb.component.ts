@@ -10,6 +10,7 @@ import {HubService} from "@oms/services/hub.service";
 import {SystemsService} from "@oms/services/systems.service";
 import { MobileService } from '../../../services/mobile.service';
 import { Subscription } from 'rxjs';
+import {StatusService} from "@oms/services/status.service";
 
 @Component({
   selector: 'oms-gnb',
@@ -34,7 +35,8 @@ export class GnbComponent implements OnInit, OnDestroy {
               private t$: TranslateService,
               private hubSvc: HubService,
               private systemSvc: SystemsService,
-              private mobile: MobileService)
+              private mobile: MobileService,
+              private status: StatusService)
   {
 
   }
@@ -55,14 +57,16 @@ export class GnbComponent implements OnInit, OnDestroy {
       if (e.operation === 'INSERT' || e.operation === 'UPDATE'){
         if(!this.isOpen){
           this.isOpen = true
-          this.dialogSvc
-            .confirm({ body: this.t$.instant('messages.reload') })
-            .subscribe((ok) => {
-              if (ok) {
-                window.location.reload()
-              }
-              this.isOpen =false
-            });
+          this.status.clearTrack().subscribe(res=>{
+            this.dialogSvc
+              .confirm({ body: this.t$.instant('messages.reload') })
+              .subscribe((ok) => {
+                if (ok) {
+                  window.location.reload()
+                }
+                this.isOpen =false
+              });
+          })
         }
 
       }

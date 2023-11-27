@@ -65,11 +65,13 @@ namespace OMSWeb.Controllers
             this._cache.RemoveValue(CacheKeys.VehicleDio);
             this._cache.RemoveValue(CacheKeys.VehiclePaths);
             this._cache.RemoveValue(CacheKeys.Vehicles);
-            //this._cache.RemoveValue(CacheKeys.Zcus);
-            //this._cache.RemoveValue(CacheKeys.ZcuStatus);
-            //this._cache.RemoveValue(CacheKeys.ClusterStatus);
+            this._cache.RemoveValue(CacheKeys.Zcus);
+            this._cache.RemoveValue(CacheKeys.ZcuStatus);
+            this._cache.RemoveValue(CacheKeys.ClusterStatus);
+            this._cache.RemoveValue(CacheKeys.FireShutters);
+            this._cache.RemoveValue(CacheKeys.FireShutterStatus);
 
-            return "OK";
+            return Ok();
         }
 
         [HttpGet("orders")]
