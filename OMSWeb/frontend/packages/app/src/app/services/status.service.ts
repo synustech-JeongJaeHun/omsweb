@@ -116,8 +116,4 @@ export class StatusService {
       reshapeOnPush: true,
     })
   }
-
-  clearTrack(): Observable<string>{
-    return this.http.get<string>(`${this.baseUrl}/tracks/clear`)
-  }
 }

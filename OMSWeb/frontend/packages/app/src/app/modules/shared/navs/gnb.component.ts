@@ -57,16 +57,14 @@ export class GnbComponent implements OnInit, OnDestroy {
       if (e.operation === 'INSERT' || e.operation === 'UPDATE'){
         if(!this.isOpen){
           this.isOpen = true
-          this.status.clearTrack().subscribe(res=>{
-            this.dialogSvc
-              .confirm({ body: this.t$.instant('messages.reload') })
-              .subscribe((ok) => {
-                if (ok) {
-                  window.location.reload()
-                }
-                this.isOpen =false
-              });
-          })
+          this.dialogSvc
+            .confirm({ body: this.t$.instant('messages.reload') })
+            .subscribe((ok) => {
+              if (ok) {
+                window.location.reload()
+              }
+              this.isOpen =false
+            });
         }
 
       }

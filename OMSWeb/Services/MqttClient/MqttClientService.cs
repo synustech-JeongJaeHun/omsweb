@@ -23,12 +23,14 @@ namespace OMSWeb.Services
         private IMqttClientOptions options;
         private List<string> subTopicList;
         private PushService _pushService;
+        private CacheService _cache;
 
-        public MqttClientService(IMqttClientOptions options, PushService pushService)
+        public MqttClientService(IMqttClientOptions options, PushService pushService, CacheService cacheService)
         {
             this.options = options;
             this.subTopicList = GetSubTopicList();
             this._pushService = pushService;
+            this._cache = cacheService;
 
             mqttClient = new MqttFactory().CreateMqttClient();
             ConfigureMqttClient();
@@ -95,26 +97,37 @@ namespace OMSWeb.Services
             if (string.Equals(worker, "map-editor", StringComparison.OrdinalIgnoreCase) ||
                 string.Equals(worker, "omsweb", StringComparison.OrdinalIgnoreCase))
             {
-                if (string.Equals(status, "start", StringComparison.OrdinalIgnoreCase))
+                try
                 {
-                    AppConfig.Lock_of_Mapupdate();
-                    
-                    Log.FilePrint(LogType.HOST, LogEventLevel.Information, $"map-update -> {status}");
-                }
-                else if (string.Equals(status, "failed", StringComparison.OrdinalIgnoreCase) ||
-                         string.Equals(status, "complete", StringComparison.OrdinalIgnoreCase))
-                {
-                    
-                    if (string.Equals(status, "complete", StringComparison.OrdinalIgnoreCase))
+                    if (string.Equals(status, "start", StringComparison.OrdinalIgnoreCase))
                     {
-                        var now = DateTime.Now;
-                        var ts = now.Ticks;
-                        
-                        _pushService.PushWatcherEventAsync(ts, "{\"table\" : \"db_version\", \"operation\" : \"UPDATE\", \"id\" : 1}");
-                    }
-                    AppConfig.Unlock_of_Mapupdate();
+                        AppConfig.Lock_of_Mapupdate();
 
-                    Log.FilePrint(LogType.HOST, LogEventLevel.Information, $"map-update -> {status}");
+                        Log.FilePrint(LogType.HOST, LogEventLevel.Information, $"map-update -> {status}");
+                    }
+                    else if (string.Equals(status, "failed", StringComparison.OrdinalIgnoreCase) ||
+                             string.Equals(status, "complete", StringComparison.OrdinalIgnoreCase))
+                    {
+
+                        if (string.Equals(status, "complete", StringComparison.OrdinalIgnoreCase))
+                        {
+                            var now = DateTime.Now;
+                            var ts = now.Ticks;
+
+                            _pushService.PushWatcherEventAsync(ts,
+                                "{\"table\" : \"db_version\", \"operation\" : \"UPDATE\", \"id\" : 1}");
+                        }
+
+                        AppConfig.Unlock_of_Mapupdate();
+                        this._cache.ClearMap();
+
+                        Log.FilePrint(LogType.HOST, LogEventLevel.Information, $"map-update -> {status}");
+                    }
+                }
+                catch (Exception e)
+                {
+                    AppConfig.Unlock_of_Mapupdate();
+                    Log.FilePrint(LogType.HOST, LogEventLevel.Information, $"map-update-fail -> {status}");
                 }
             }
         }

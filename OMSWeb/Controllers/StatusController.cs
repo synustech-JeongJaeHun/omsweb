@@ -53,24 +53,7 @@ namespace OMSWeb.Controllers
         [HttpGet("tracks/clear")]
         public ActionResult<string> ClearCache()
         {
-            this._cache.RemoveValue(CacheKeys.Buffers);
-            this._cache.RemoveValue(CacheKeys.Clusters);
-            this._cache.RemoveValue(CacheKeys.Groups);
-            this._cache.RemoveValue(CacheKeys.MapSize);
-            this._cache.RemoveValue(CacheKeys.Mtls);
-            this._cache.RemoveValue(CacheKeys.Points);
-            this._cache.RemoveValue(CacheKeys.SegmentDisabled);
-            this._cache.RemoveValue(CacheKeys.Segments);
-            this._cache.RemoveValue(CacheKeys.Stations);
-            this._cache.RemoveValue(CacheKeys.VehicleDio);
-            this._cache.RemoveValue(CacheKeys.VehiclePaths);
-            this._cache.RemoveValue(CacheKeys.Vehicles);
-            this._cache.RemoveValue(CacheKeys.Zcus);
-            this._cache.RemoveValue(CacheKeys.ZcuStatus);
-            this._cache.RemoveValue(CacheKeys.ClusterStatus);
-            this._cache.RemoveValue(CacheKeys.FireShutters);
-            this._cache.RemoveValue(CacheKeys.FireShutterStatus);
-
+            this._cache.ClearMap();
             return Ok();
         }
 

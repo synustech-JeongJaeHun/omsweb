@@ -57,5 +57,26 @@ namespace OMSWeb.Services
     {
       _cache.Remove(key);
     }
+
+    public void ClearMap()
+    {
+      RemoveValue(CacheKeys.Buffers);
+      RemoveValue(CacheKeys.Clusters);
+      RemoveValue(CacheKeys.Groups);
+      RemoveValue(CacheKeys.MapSize);
+      RemoveValue(CacheKeys.Mtls);
+      RemoveValue(CacheKeys.Points);
+      RemoveValue(CacheKeys.SegmentDisabled);
+      RemoveValue(CacheKeys.Segments);
+      RemoveValue(CacheKeys.Stations);
+      RemoveValue(CacheKeys.VehicleDio);
+      RemoveValue(CacheKeys.VehiclePaths);
+      RemoveValue(CacheKeys.Vehicles);
+      RemoveValue(CacheKeys.Zcus);
+      RemoveValue(CacheKeys.ZcuStatus);
+      RemoveValue(CacheKeys.ClusterStatus);
+      RemoveValue(CacheKeys.FireShutters);
+      RemoveValue(CacheKeys.FireShutterStatus);
+    }
   }
 }
