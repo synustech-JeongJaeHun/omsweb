@@ -650,7 +650,8 @@
     "NotAvailiable": "{{name}} is not availiable",
     "TrackSnapshotNotExists": "track snapshot does not exist for selected day",
     "DaySnapshotNotExists": "event snapshot does not exist for the selected day",
-    "Disconnected" : "The connection to the web server has been terminated."
+    "Disconnected" : "The connection to the web server has been terminated.",
+    "duplicatedOrder": "This order is a duplicate"
   },
   "messages": {
     "confirmTitle": "Confirm",

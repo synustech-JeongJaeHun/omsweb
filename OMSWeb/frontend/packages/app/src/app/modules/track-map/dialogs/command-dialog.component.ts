@@ -410,8 +410,9 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 	  		.confirm({ body: this.t$.instant('errors.NotAvailiable', { name: 'MTL' })+'.\n'+ this.t$.instant('messages.confirmCommand')})
 	  		.subscribe((ok) => {
 				  if(ok){
-					  this.messageSvc.sendOrderCommand(cmd).subscribe()
-					  this.commandState.vehicle = undefined
+            this.sendOrderAfterMtlCheck(cmd)
+					  /*this.messageSvc.sendOrderCommand(cmd).subscribe()
+					  this.commandState.vehicle = undefined*/
 				  }
 	  		})
 	  	return
@@ -428,14 +429,16 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
                   this.dialogSvc
                     .confirm({ body: this.t$.instant('errors.NotAvailiable', { name: 'MTL' }) })
                     .subscribe((ok) => {
-                      this.messageSvc.sendOrderCommand(cmd).subscribe()
-                      this.commandState.vehicle = undefined
+                      this.sendOrderAfterMtlCheck(cmd)
+                      /*this.messageSvc.sendOrderCommand(cmd).subscribe()
+                      this.commandState.vehicle = undefined*/
                     })
 
                   return
                 }
-                this.messageSvc.sendOrderCommand(cmd).subscribe()
-                this.commandState.vehicle = undefined
+                this.sendOrderAfterMtlCheck(cmd)
+                /*this.messageSvc.sendOrderCommand(cmd).subscribe()
+                this.commandState.vehicle = undefined*/
 
               } else {
                 let errorMessage = ''
@@ -468,6 +471,20 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
           }
         })
     }
+  }
+
+  sendOrderAfterMtlCheck(cmd: IOrderCommandMessage){
+    this.transfersService.checkMTLOrder('MTL_IN', 'p'+cmd.locationMove).subscribe(isValid=>{
+      if(!isValid){
+        this.dialogSvc.alert({
+          title: this.t$.instant('names.blocked'),
+          body: this.t$.instant('errors.duplicatedOrder'),
+        })
+        return
+      }
+      this.messageSvc.sendOrderCommand(cmd).subscribe()
+      this.commandState.vehicle = undefined
+    })
   }
   get MTls(): Dto.IMTL[]{
     return this.trackStatusService.trackData.mtls

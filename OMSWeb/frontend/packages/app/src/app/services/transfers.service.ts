@@ -35,4 +35,7 @@ export class TransfersService {
     checkTargetMTL(id: string): Observable<ITransferHCACK> {
       return this.http.get<ITransferHCACK>(`${this.baseUrl}/checkMtl/${id}`)
     }
+    checkMTLOrder(commandId: string, dest: string): Observable<boolean> {
+      return this.http.get<boolean>(`${this.baseUrl}/checkMTLOrder/${commandId}&${dest}`)
+  }
 }

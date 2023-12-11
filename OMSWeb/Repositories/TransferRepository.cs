@@ -542,6 +542,35 @@ namespace OMSWeb.Repositories
             }
             return result;
         }
+        
+        public Boolean QueryCanMTLOrder(string commandID, string dest)
+        {
+            Boolean result = false;
+            string us = string.Empty;
+            using (var conn = ConnectTrack())
+            {
+                try
+                {
+                    var sql = $@"
+                                SELECT * FROM orders 
+                                WHERE logical_id LIKE '%{commandID}%' 
+                                  AND location_move='{dest}' 
+                                  AND time_completed IS NULL 
+                                  AND time_aborted IS NULL 
+                                  AND time_failed IS NULL";
+                    us = conn.QueryFirst<string>(sql);
+                }
+                catch (System.Exception)
+                {
+                    Console.WriteLine("[QueryCanMTLOrder] => null");
+                    us = string.Empty;
+                }
+            }
+            if (string.IsNullOrWhiteSpace(us))
+                result = true;
+
+            return result;
+        }
     }
 
 }

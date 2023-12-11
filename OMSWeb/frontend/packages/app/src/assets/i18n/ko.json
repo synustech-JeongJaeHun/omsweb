@@ -650,7 +650,8 @@
     "NotAvailiable": "{{name}} is not availiable",
     "TrackSnapshotNotExists": "선택한 날짜에 대한 트랙 스냅샷이 없습니다.",
     "DaySnapshotNotExists": "선택한 날짜에 대한 이벤트 스냅샷이 존재하지 않습니다.",
-    "Disconnected" : "웹서버와 연결이 종료되었습니다."
+    "Disconnected" : "웹서버와 연결이 종료되었습니다.",
+    "duplicatedOrder": "This order is a duplicate"
   },
   "messages": {
     "confirmTitle": "확인",

@@ -109,5 +109,12 @@ namespace OMSWeb.Controllers
             else
                 return Ok();
         }
+        
+        [HttpGet("checkMTLOrder/{commandId}&{dest}")]
+        public ActionResult CheckMTLOrder(string commandId, string dest)
+        {
+            var result = _svc.CanMTLOrder(commandId, dest);
+            return Ok(result);
+        }
     }
 }

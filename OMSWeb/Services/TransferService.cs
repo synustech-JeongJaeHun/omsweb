@@ -674,5 +674,10 @@ namespace OMSWeb.Services
         {
             return _transferRepo.CountInUseMTL(id)>0;
         }
+
+        public Boolean CanMTLOrder(string commandID, string dest)
+        {
+            return _transferRepo.QueryCanMTLOrder(commandID, dest);
+        }
     }
 }

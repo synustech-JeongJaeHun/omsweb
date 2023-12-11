@@ -650,7 +650,8 @@
     "NotAvailiable": "{{name}} is not availiable",
     "TrackSnapshotNotExists": "所选日期的轨道快照不存在",
     "DaySnapshotNotExists": "所选日期的事件快照不存在",
-    "Disconnected" : "与网络服务器的连接已终止。"
+    "Disconnected" : "与网络服务器的连接已终止。",
+    "duplicatedOrder": "该订单是重复的"
   },
   "messages": {
     "confirmTitle": "确认",
