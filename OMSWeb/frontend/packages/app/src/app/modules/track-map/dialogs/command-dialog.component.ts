@@ -466,13 +466,13 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
         .confirm({ body: this.t$.instant('messages.confirmMtloutCommand') })
         .subscribe((ok) => {
           if (ok) {
-            this.messageSvc.sendVehicleCommand(cmd).subscribe()
-            this.commandState.vehicle = undefined
+            this.sendVehicleAfterMtlCheck(cmd, mtlInfo.pointId.toString())
+            /*this.messageSvc.sendVehicleCommand(cmd).subscribe()
+            this.commandState.vehicle = undefined*/
           }
         })
     }
   }
-
   sendOrderAfterMtlCheck(cmd: IOrderCommandMessage){
     this.transfersService.checkMTLOrder('MTL_', 'p'+cmd.locationMove).subscribe(isValid=>{
       if(!isValid){
@@ -483,6 +483,20 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
         return
       }
       this.messageSvc.sendOrderCommand(cmd).subscribe()
+      this.commandState.vehicle = undefined
+    })
+  }
+
+  sendVehicleAfterMtlCheck(cmd: IVehicleCommandMessage, locationMove: string) {
+    this.transfersService.checkMTLOrder('MTL_', 'p'+locationMove).subscribe(isValid=>{
+      if(!isValid){
+        this.dialogSvc.alert({
+          title: this.t$.instant('names.blocked'),
+          body: this.t$.instant('errors.duplicatedOrder'),
+        })
+        return
+      }
+      this.messageSvc.sendVehicleCommand(cmd).subscribe()
       this.commandState.vehicle = undefined
     })
   }
