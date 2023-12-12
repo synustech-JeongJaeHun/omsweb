@@ -474,7 +474,7 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
   }
 
   sendOrderAfterMtlCheck(cmd: IOrderCommandMessage){
-    this.transfersService.checkMTLOrder('MTL_IN', 'p'+cmd.locationMove).subscribe(isValid=>{
+    this.transfersService.checkMTLOrder('MTL_', 'p'+cmd.locationMove).subscribe(isValid=>{
       if(!isValid){
         this.dialogSvc.alert({
           title: this.t$.instant('names.blocked'),
