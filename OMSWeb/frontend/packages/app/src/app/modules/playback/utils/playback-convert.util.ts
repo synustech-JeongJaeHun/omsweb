@@ -42,7 +42,8 @@ function convertTrackBufferToTmBuffer(buffer: PlaybackBuffer) {
 		nextPoint: buffer.next_point,
 		offset: buffer.offset,
     cAlias: buffer.c_alias,
-    state: buffer.state
+    state: buffer.state,
+		type: buffer?.type
 	}
 }
 
@@ -151,7 +152,7 @@ function convertSnapshotSegmentBlockingToTmUpdateDtoSegmentDisabled(
 	}
 }
 
-function convertSnapshotBufferToTmBuffer(buffer: PlaybackSnapshotBuffer): CurrentStation {
+function convertSnapshotBufferToTmBuffer(buffer: PlaybackSnapshotBuffer): CurrentBuffer {
 	return {
 		id: buffer.id,
 		logicalId: buffer.logical_id,
@@ -160,13 +161,13 @@ function convertSnapshotBufferToTmBuffer(buffer: PlaybackSnapshotBuffer): Curren
 		pointId: buffer.point,
 		nextPoint: buffer.next_point,
 		offset: buffer.offset,
-
 		unuse: buffer.unuse,
 		carrierId: buffer.carrier_id,
 		user: buffer.user,
 		note: buffer.note,
     cAlias: buffer.c_alias,
-    state: buffer.state
+    state: buffer.state,
+		type: buffer?.type
 	}
 }
 function convertSnapshotStationToTmStation(station: PlaybackSnapshotStation) {
@@ -291,7 +292,8 @@ function convertBufferHistoryEventToTmUpdateDtoBuffer(
 		carrierId: event.carrierId,
 		user: event.user,
 		note: event.note,
-    state: event.state
+    state: event.state,
+		type: event?.type
 	}
 }
 
@@ -428,6 +430,7 @@ function convertSnapshotBufferToCurrentBuffer(
     slideOffset: buffer.slide_offset,
     cAlias: buffer.c_alias,
     state: buffer.state,
+		type: buffer?.type,
 	}
 }
 function convertSnapshotStationToCurrentStation(
@@ -560,7 +563,8 @@ function convertBufferHistoryEventToCurrentBuffer(
 		offset: buffer.offset,
 		direction: buffer.direction,
 		nextPoint: buffer.nextPoint,
-    state: buffer.state
+    state: buffer.state,
+		type: buffer?.type
 	}
 }
 

@@ -57,7 +57,9 @@ export class TrackStatusService {
           carrierId: d.carrierId,
           user: d?.user,
           note: d?.note,
-          cAlias: d?.cAlias})
+          cAlias: d?.cAlias,
+          type: d?.type,
+        })
       })
 
       //stations
@@ -72,7 +74,8 @@ export class TrackStatusService {
           carrierId: d.carrierId,
           user: d?.user,
           note: d?.note,
-          cAlias: d?.cAlias})
+          cAlias: d?.cAlias,
+        })
       })
 
       //clusterStatus

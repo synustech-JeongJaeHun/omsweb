@@ -55,6 +55,7 @@
     [sensorStoppedVehicleColor]="tmSetting.sensorStoppedVehicleColor"
     [cargoLoadingColor]="tmSetting.cargoLoadingColor"
     [cargoFullColor]="tmSetting.cargoFullColor"
+	[bufferTypeColor]="tmSetting.bufferTypeColor"
     [cargoUnloadingColor]="tmSetting.cargoUnloadingColor"
     [fireshutterOpenedColor]="tmSetting.fireshutterOpenedColor"
     [fireshutterClosedColor]="tmSetting.fireshutterClosedColor"
@@ -275,20 +276,39 @@
       <div class="value">{{ tooltipObject?.value.id }}</div>
       <div class="name">{{ getDisplayTableLabel('buffers_order', 'buffers_alias') | translate }}</div>
       <div class="value">{{ tooltipObject?.value.cAlias }}</div>
-      <div class="name">{{ getDisplayTableLabel('buffers_order', 'buffers_logicalId') | translate }}</div>
-      <div class="value">{{ tooltipObject?.value.logicalId }}</div>
-      <div class="name">{{ getDisplayTableLabel('buffers_order', 'buffers_physicalId') | translate }}</div>
-      <div class="value">{{ tooltipObject?.value.physicalId }}</div>
-      <div class="name">{{ getDisplayTableLabel('buffers_order', 'buffers_point') | translate }}</div>
-      <div class="value">{{ tooltipObject?.value.pointId }}</div>
-      <ng-container *ngIf="tooltipObject?.value?.carrierId">
-        <div class="name">{{ getDisplayTableLabel('buffers_order', 'buffers_carrierId') | translate }}</div>
-        <div class="value">{{ tooltipObject?.value?.carrierId }}</div>
-      </ng-container>
-      <ng-container *ngIf="tooltipObject?.value?.note">
-        <div class="name">{{ getDisplayTableLabel('buffers_order', 'buffers_note') | translate }}</div>
-        <div class="value">{{ tooltipObject?.value?.note }}</div>
-      </ng-container>
+			<div class="name">{{ 'names.logicalId' | translate }}</div>
+			<div class="value">{{ tooltipObject?.value.logicalId }}</div>
+			<div class="name">{{ 'names.physicalId' | translate }}</div>
+			<div class="value">{{ tooltipObject?.value.physicalId }}</div>
+			<div class="name">{{ 'names.point' | translate }}</div>
+			<div class="value">{{ tooltipObject?.value.pointId }}</div>
+			<ng-container *ngIf="tooltipObject?.value?.type">
+				<div class="name">{{ 'names.type' | translate }}</div>
+				<div class="value">{{ tooltipObject?.value?.type }}</div>
+			</ng-container>
+            <div class="name">{{ getDisplayTableLabel('buffers_order', 'buffers_logicalId') | translate }}</div>
+            <div class="value">{{ tooltipObject?.value.logicalId }}</div>
+            <div class="name">{{ getDisplayTableLabel('buffers_order', 'buffers_physicalId') | translate }}</div>
+            <div class="value">{{ tooltipObject?.value.physicalId }}</div>
+            <div class="name">{{ getDisplayTableLabel('buffers_order', 'buffers_point') | translate }}</div>
+            <div class="value">{{ tooltipObject?.value.pointId }}</div>
+            <ng-container *ngIf="tooltipObject?.value?.carrierId">
+                <div class="name">{{ getDisplayTableLabel('buffers_order', 'buffers_carrierId') | translate }}</div>
+                <div class="value">{{ tooltipObject?.value?.carrierId }}</div>
+            </ng-container>
+            <ng-container *ngIf="tooltipObject?.value?.note">
+                <div class="name">{{ getDisplayTableLabel('buffers_order', 'buffers_note') | translate }}</div>
+                <div class="value">{{ tooltipObject?.value?.note }}</div>
+            </ng-container>
+			<ng-container *ngIf="tooltipObject?.value?.carrierId">
+				<div class="name">{{ 'names.carrierId' | translate }}</div>
+				<div class="value">{{ tooltipObject?.value?.carrierId }}</div>
+			</ng-container>
+			<ng-container *ngIf="tooltipObject?.value?.note">
+				<div class="name">{{ 'names.note' | translate }}</div>
+				<div class="value">{{ tooltipObject?.value?.note }}</div>
+			</ng-container>
+>>>>>>> 1846cab6 (Nsynu)
 		</div>
 	</dx-tooltip>
 </ng-template>

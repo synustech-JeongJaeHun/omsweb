@@ -90,16 +90,17 @@ const props = defineProps<{
   stationDisabledColor: Stringlish
   bufferColor: Stringlish
   bufferDisabledColor: Stringlish
+  bufferTypeColor: Stringlish
   pointColor: Stringlish
   homeColor: Stringlish
   normalSegmentColor: Stringlish
   disabledSegmentColor: Stringlish
   disabledByVehicleSegmentColor: Stringlish
   disabledByMTLSegmentColor: Stringlish
+
   segmentDirectionColor: Stringlish
 
   clusterColors: Stringlish
-
   // chjs visual start
   disconnectModeVehicleColor: Stringlish
   errorModeVehicleColor: Stringlish
@@ -110,8 +111,8 @@ const props = defineProps<{
   runningModeVehicleColor: Stringlish
   zcuBlockedVehicleColor: Stringlish
   sensorStoppedVehicleColor: Stringlish
-  // chjs visual end
 
+  // chjs visual end
   cargoLoadingColor: Stringlish
   cargoFullColor: Stringlish
   cargoUnloadingColor: Stringlish
@@ -344,6 +345,11 @@ defineExpose(exposed)
 #buffer-layer .buffer .buffer-full {
   fill: v-bind('parseStringProp(ColorDefault.cargoFull, props.cargoFullColor)'
     );
+}
+
+#buffer-layer .buffer .buffer-type {
+  stroke: v-bind('parseStringProp(ColorDefault.bufferType, props.bufferTypeColor)'
+  );
 }
 
 #point-layer .point .point-path {

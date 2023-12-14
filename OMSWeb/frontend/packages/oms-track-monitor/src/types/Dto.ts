@@ -91,6 +91,7 @@ namespace UpdateDto {
     carrierId?: string
     user?: string
     note?: string
+    type?: string
   }
 
   export type GroupObject = {

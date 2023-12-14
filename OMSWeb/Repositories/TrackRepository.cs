@@ -341,6 +341,7 @@ namespace OMSWeb.Repositories
                                             ZoneType = dr["zone_type"].TryString(),
                                             Capacity = dr["capacity"].TryIntegerOrNull(),
                                             Size = dr["size"].TryIntegerOrNull(),
+                                            Type = dr["type"].TryString()
                                         }
                                     );
                                 }
@@ -376,6 +377,7 @@ namespace OMSWeb.Repositories
                                         ZoneType = dr["zone_type"].TryString(),
                                         Capacity = dr["capacity"].TryIntegerOrNull(),
                                         Size = dr["size"].TryIntegerOrNull(),
+                                        Type = dr["type"].TryString()
                                     }
                                 );
                             }

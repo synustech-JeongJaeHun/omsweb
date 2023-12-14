@@ -17,6 +17,7 @@ interface IBuffer {
   note?: string
 
   cAlias?: string
+  type?: string
 }
 interface ICluster {
   id: number

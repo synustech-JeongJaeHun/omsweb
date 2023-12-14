@@ -48,15 +48,16 @@ const ColorDefault: Record<ColorProperty, string> = {
   stationDisabled: '#f06767',
   buffer: 'black',
   bufferDisabled: '#ff9494',
+  bufferType: 'rgb(50,50,50)',
   point: 'black',
   home: '#00000060',
   normalSegment: 'grey',
   disabledSegment: 'purple',
   disabledByVehicleSegment: 'orange',
   disabledByMTLSegment: 'rgba(112,168,113,0.56)',
-  segmentDirection: 'grey',
 
   // chjs visual start
+  segmentDirection: 'grey',
   disconnectModeVehicleColor: '#E1D7C5',
   errorModeVehicleColor: '#FF3838',
   maintenanceModeVehicleColor: '#5C666D',
@@ -65,9 +66,9 @@ const ColorDefault: Record<ColorProperty, string> = {
   homeIvrModeVehicleColor: '#FFB302',
   runningModeVehicleColor: '#51E400',
   zcuBlockedVehicleColor: '#2DCCFF',
-  sensorStoppedVehicleColor: '#2DCCFF',
   // chjs visual end
 
+  sensorStoppedVehicleColor: '#2DCCFF',
   cargoLoading: 'rgb(0, 0, 205)',
   cargoFull: 'rgb(50,50,50)',
   cargoUnloading: 'blue',

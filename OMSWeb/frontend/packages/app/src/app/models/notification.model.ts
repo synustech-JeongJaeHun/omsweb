@@ -74,6 +74,7 @@ export interface IDataChangeEvent {
   user?: string
   note?: string
   cAlias?: string
+  type?: string
 }
 
 export const alertSeverities = [

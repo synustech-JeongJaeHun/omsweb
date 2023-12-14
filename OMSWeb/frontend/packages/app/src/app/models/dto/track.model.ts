@@ -14,14 +14,13 @@ export namespace Dto {
 		offset?: number
 		unuse?: boolean
 		carrierId?: string
-
     cAlias?: string
-
     zoneId?: number
     zoneName?: string
     zoneType?: string
     capacity?: number
     size?: number
+    type?: string
 	}
 	export interface ICluster {
 		id: number

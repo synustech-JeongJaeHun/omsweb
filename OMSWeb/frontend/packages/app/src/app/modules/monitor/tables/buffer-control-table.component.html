@@ -199,6 +199,17 @@
     [visibleIndex]="getDisplayTableColumnIndex('buffers_note')"
     [width]="getDisplayTableColumnWidth('buffers_note')"
   ></dxi-column>
+	<dxi-column
+			[allowFiltering]="true"
+			dataType="string"
+			dataField="type"
+			[allowSorting]="true"
+			[caption]="'names.type' | translate"
+			[visible]="canDisplayTable('buffers_type')"
+			[visibleIndex]="getDisplayTableColumnIndex('buffers_type')"
+			[width]="getDisplayTableColumnWidth('buffers_type')"
+	></dxi-column>
+
 	<div *dxTemplate="let data of 'directionTemplate'">
 		<div [ngSwitch]="data.displayValue">
 			<div class="value" *ngSwitchCase="'L'">{{ 'Left' }}</div>
