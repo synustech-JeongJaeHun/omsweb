@@ -5,13 +5,12 @@
                   [remoteOperations]="true"
                   [showBorders]="true"
                   [hoverStateEnabled]="true"
-                  height="72vh"
-                  sorting="id desc"
-                  (onCellClick)="downloadJsonUri($event)">
+                  height="90vh"
+                  (onCellClick)="downloadJsonUri($event)"
                   allowColumnResizing="true">
       <dxo-paging [pageSize]="50"></dxo-paging>
       <dxo-pager [showPageSizeSelector]="true"
-                 [allowedPageSizes]="[50]"
+                 [allowedPageSizes]="[50, 100, 200]"
                  [showInfo]="true"
                  visible="true">
       </dxo-pager>
@@ -23,34 +22,39 @@
       <dxo-header-filter [visible]="true"></dxo-header-filter>
       <dxo-filter-row [visible]="true"></dxo-filter-row>
 
-      <dxi-column dataType="number"
+      <!--<dxi-column dataType="number"
                   dataField="id"
                   [caption]="'names.id' | translate"
-                  [fixed]="true"></dxi-column>
+                  [fixed]="true"></dxi-column>-->
 
-      <dxi-column dataType="string"
-                  dataField="dbName"
-                  [caption]="'names.mapName' | translate"
-                  [fixed]="true"></dxi-column>
       <dxi-column dataType="number"
                   dataField="dbVersion"
+                  sortOrder="desc"
                   [caption]="'names.mapVersion' | translate"
                   [fixed]="true"></dxi-column>
       <dxi-column dataType="string"
+                  dataField="dbName"
+                  [caption]="'names.mapName' | translate"
+                  ></dxi-column>
+      <dxi-column dataType="string"
                   dataField="srcMapFile"
                   [caption]="'names.fileName' | translate"
-                  [fixed]="true"></dxi-column>
+                  ></dxi-column>
+      <dxi-column dataType="string"
+                  dataField="author"
+                  [caption]="'names.authors' | translate"
+                  ></dxi-column>
       <dxi-column dataType="datetime"
                   dataField="timeModified"
                   [caption]="'names.timeModified' | translate"
                   [format]="dateTimeFormat"
-                  [fixed]="true"></dxi-column>
+                  ></dxi-column>
       <!--<dxi-column dataType="string"
                   dataField="contents"
                   cellTemplate="down"
                   [caption]="'names.contents' | translate"
                   [width]="80"
-                  [fixed]="true">
+                  >
       </dxi-column>-->
 
       <div *dxTemplate="let data of 'down'">

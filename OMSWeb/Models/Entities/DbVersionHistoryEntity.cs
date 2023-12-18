@@ -13,5 +13,6 @@ namespace OMSWeb.Models.Entities
         public DateTime HistoryChangeTime { get; set; }
         public string HistoryChangeType { get; set; }
         public int HistorySourceId { get; set; }
+        public string Author { get; set; }
     }
 }
