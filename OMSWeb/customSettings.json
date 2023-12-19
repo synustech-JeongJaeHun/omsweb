@@ -346,13 +346,14 @@
     "buffers_unuse": true,
     "buffers_carrierId": true,
     "buffers_slideOffset": false,
-    "buffers_user": true,
-    "buffers_note": true,
     "buffers_zoneId": false,
     "buffers_zoneName": false,
     "buffers_capacity": false,
     "buffers_size": false,
     "buffers_zoneType": false,
+    "buffers_type": false,
+    "buffers_user": true,
+    "buffers_note": true,
 
     "buffers_order": [
       { "name": "buffers_id", "i18nLabel": "names.id", "width": 50 },
@@ -372,6 +373,7 @@
       { "name": "buffers_capacity", "i18nLabel": "names.capacity", "width": 100 },
       { "name": "buffers_size", "i18nLabel": "names.size", "width": 100 },
       { "name": "buffers_zoneType", "i18nLabel": "names.zoneType", "width": 100 },
+      { "name": "buffers_type", "i18nLabel": "names.type", "width": 80 },
       { "name": "buffers_user", "i18nLabel": "names.user", "width": 80 },
       { "name": "buffers_note", "i18nLabel": "names.note", "width": "auto" }
     ],
