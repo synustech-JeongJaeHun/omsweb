@@ -89,6 +89,7 @@ type PlaybackStation = {
 
   c_alias?: string
   state?: number
+  type?: string
 }
 
 type PlaybackSnapshot = {
