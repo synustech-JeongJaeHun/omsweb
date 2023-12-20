@@ -20,7 +20,7 @@
       }}</span>
   </button>
 
-  <mat-divider></mat-divider>                      
+  <mat-divider></mat-divider>
 
   <button matListItem mat-button class="tool-item" [matTooltipDisabled]="showToolName" matTooltipClass="snb-tooltip"
     matTooltipPosition="right" [matTooltip]="'names.centerZoom' | translate" (click)="centerZoom.emit()">
@@ -80,16 +80,16 @@
       }}</span>
   </button>
 
-  <mat-divider></mat-divider>
+  <!--<mat-divider></mat-divider>-->
 
-  <button *ngIf="hasPermission(permissionEnums.ViewVehicleStatus)" #btnShowObj matListItem mat-button class="tool-item"
+  <!--<button *ngIf="hasPermission(permissionEnums.ViewVehicleStatus)" #btnShowObj matListItem mat-button class="tool-item"
     [matTooltipDisabled]="showToolName" matTooltipClass="snb-tooltip" matTooltipPosition="right"
     [matTooltip]="'names.vehicleStatus' | translate" (click)="onOpenVehicleStatus()">
     <mat-icon>security_update_warning</mat-icon>
     <span class="tool-name" *ngIf="showToolName">{{
       "names.vehicleStatus" | translate
       }}</span>
-  </button>
+  </button>-->
 </mat-list>
 
 <mde-popover #visibilityPopover="mdePopover" [mdePopoverOverlapTrigger]="false" mdePopoverArrowWidth="0"
