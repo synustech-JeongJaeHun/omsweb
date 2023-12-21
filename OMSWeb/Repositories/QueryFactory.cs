@@ -151,7 +151,11 @@ namespace OMSWeb.Repositories
       "},
       {"buffer", @"
         SELECT b.id, b.physical_id, b.logical_id AS logical_id, point AS point_id,
-          b.direction AS direction, b.next_point, b.""offset"" AS offset, b.unuse, b.state, b.carrier_id, b.c_alias, type,
+          b.direction AS direction, b.next_point, b.""offset"" AS offset, b.unuse, b.state, b.carrier_id, b.c_alias,
+		  CASE 
+            WHEN type = 'Normal' THEN NULL
+            ELSE type
+          END AS type,
           b.slide_offset, 
           b.user, b.note,
           Z.id as zone_id, Z.logical_id as zone_name, Z.capacity, Z.""size"", Z.""type"" as zone_type
@@ -500,12 +504,16 @@ namespace OMSWeb.Repositories
         --*user_id_condition*-- AND user_id = @userId
       "},
       {"bufferStatus", @"
-        SELECT BS.id, BS.physical_id, BS.logical_id, BS.point, BS.direction, BS.next_point, BS.""offset"", BS.unuse, BS.state, BS.carrier_id, 
-        BS.slide_offset, BS.user, BS.note, GO.group_id, BS.c_alias, BS.type,
+        SELECT BS.id, BS.physical_id, BS.logical_id, BS.point, BS.direction, BS.next_point, BS.""offset"", BS.unuse, BS.state, BS.carrier_id,
+        BS.slide_offset, BS.user, BS.note, GO.group_id, BS.c_alias,
         Z.id as zone_id,
         Z.logical_id as zone_name,
         Z.capacity,
         Z.""size"",
+        CASE 
+	        WHEN BS.type = 'Normal' THEN NULL
+	        ELSE BS.type
+        END AS type
         case 
         	when Z.""type"" = 1 then 'Shelf'
         	when Z.""type"" = 2 then 'Port'

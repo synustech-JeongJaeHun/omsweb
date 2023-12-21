@@ -593,7 +593,8 @@
     "zoneName" : "Zone Name",
     "capacity" : "Capacity",
     "size" : "Size",
-    "zoneType" : "Zone Type"
+    "zoneType" : "Zone Type",
+    "bufferType" : "Buffer - type"
   },
   "enums": {
     "hostSessionStatus": {
