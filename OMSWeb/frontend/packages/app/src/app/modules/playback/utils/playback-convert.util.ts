@@ -43,7 +43,7 @@ function convertTrackBufferToTmBuffer(buffer: PlaybackBuffer) {
 		offset: buffer.offset,
     cAlias: buffer.c_alias,
     state: buffer.state,
-		type: buffer?.type
+		type: buffer?.type==='Normal' ? null : buffer?.type
 	}
 }
 
@@ -167,7 +167,7 @@ function convertSnapshotBufferToTmBuffer(buffer: PlaybackSnapshotBuffer): Curren
 		note: buffer.note,
     cAlias: buffer.c_alias,
     state: buffer.state,
-		type: buffer?.type
+		type: buffer?.type === 'Normal' ? null : buffer?.type
 	}
 }
 function convertSnapshotStationToTmStation(station: PlaybackSnapshotStation) {
@@ -293,7 +293,7 @@ function convertBufferHistoryEventToTmUpdateDtoBuffer(
 		user: event.user,
 		note: event.note,
     state: event.state,
-		type: event?.type
+		type: event?.type === 'Normal' ? null : event?.type
 	}
 }
 
@@ -430,7 +430,7 @@ function convertSnapshotBufferToCurrentBuffer(
     slideOffset: buffer.slide_offset,
     cAlias: buffer.c_alias,
     state: buffer.state,
-		type: buffer?.type,
+		type: buffer?.type === 'Normal' ? null : buffer?.type
 	}
 }
 function convertSnapshotStationToCurrentStation(
@@ -564,7 +564,7 @@ function convertBufferHistoryEventToCurrentBuffer(
 		direction: buffer.direction,
 		nextPoint: buffer.nextPoint,
     state: buffer.state,
-		type: buffer?.type
+		type: buffer?.type === 'Normal' ? null :buffer?.type
 	}
 }
 
