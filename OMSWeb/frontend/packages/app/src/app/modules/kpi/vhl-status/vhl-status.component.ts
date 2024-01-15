@@ -1,8 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subject} from "rxjs";
 import {takeUntil} from "rxjs/operators";
-import {SettingsService} from "@oms/services/settings.service";
-import {ReportService } from "@oms/services/report.service";
+import {ReportService, TrendResponse} from "@oms/services/report.service";
 import { CdkDragEnd } from '@angular/cdk/drag-drop';
 
 @Component({
@@ -24,8 +23,7 @@ export class VhlStatusComponent implements OnInit, OnDestroy {
     this.dragPosition.x = offsetLeft + x;
     this.dragPosition.y = offsetTop + y;
   }
-  constructor(private settingSvc: SettingsService,
-              private reportService: ReportService) {
+  constructor(private reportService: ReportService) {
     this.reportService.trendSubject$
       .pipe(takeUntil(this.destroy$))
       .subscribe(res=>{
@@ -57,11 +55,4 @@ export class VhlStatusComponent implements OnInit, OnDestroy {
 
 }
 
-type Vehicles = {
-  run?: number
-  auto?: number
-  //disconnected?: number
-  error?: number
-  manual?: number
-  railOut?: number
-}
+type Vehicles = TrendResponse["vehicles"]

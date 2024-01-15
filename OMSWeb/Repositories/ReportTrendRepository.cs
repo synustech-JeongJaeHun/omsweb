@@ -134,29 +134,32 @@ namespace OMSWeb.Repositories
         //public async Task<(int Auto, int Manual, int Error, int Disconnected)> QueryVehicles()
         public async Task<object> QueryVehicles()
         {
-            (int Auto, int Manual, int Error, int Disconnected, int RailOut) result;
+            (int Auto, int Manual, int Error, int Disconnected, int RailOut, int Total) result;
             using (var conn = ConnectTrack())
             {
                 var sql = @"
                 select
                 (
-                    select count(*) from vehicles where connection in (1, 2) and (error_list = '') IS true and mode = 'A'
+                    select count(*) from vehicles where connection in (1, 2) and (error_list = '') IS true and mode = 'A' and rail_in is true
                 ) as auto,
                 (
-                    select count(*) from vehicles where connection in (1, 2) and (error_list = '') IS true and mode = 'M'
+                    select count(*) from vehicles where connection in (1, 2) and (error_list = '') IS true and mode = 'M' and rail_in is true
                 ) as manual,
                 (
-                    select count(*) from vehicles where connection in (1, 2) and (error_list = '') IS false
+                    select count(*) from vehicles where connection in (1, 2) and (error_list = '') IS false and rail_in is true
                 ) as error,
                 (
-                    select count(*) from vehicles where connection in (0, 3, 4)
+                    select count(*) from vehicles where connection in (0, 3, 4) and rail_in is true
                 ) as disconnected,
                 (
                     select count(*) from vehicles where rail_in is null or rail_in is false 
-                ) as rail_out 
+                ) as rail_out,
+                (
+                    select count(*) from vehicles  
+                ) as total
                 ";
 
-                result = await conn.QueryFirstAsync<(int Auto, int Manual, int Error, int Disconnected, int RailOut)>(sql);
+                result = await conn.QueryFirstAsync<(int Auto, int Manual, int Error, int Disconnected, int RailOut, int Total)>(sql);
             }
             
             return new
@@ -166,6 +169,7 @@ namespace OMSWeb.Repositories
                 Error = result.Error,
                 Disconnected = result.Disconnected,
                 RailOut = result.RailOut,
+                Total = result.Total,
             };
             
             //return result;

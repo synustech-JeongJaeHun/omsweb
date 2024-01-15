@@ -57,5 +57,6 @@ export type TrendResponse = {
     error?: number
     manual?: number
     railOut?: number
+    total: number
   }
 }
