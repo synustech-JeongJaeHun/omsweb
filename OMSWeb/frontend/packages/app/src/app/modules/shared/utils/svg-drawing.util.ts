@@ -13,7 +13,8 @@ export namespace SvgDrawingUtil {
 		is_zoom_only: boolean,
 		options: any = {},
 		trackMonitorSetting: TrackMonitorSettingService['trackSetting'],
-    vhlAlias: string = null
+    vhlAlias: string = null,
+    typeTranslate = ''
 	) => {
 		const mainUnit = svg
 			.append('g')
@@ -33,7 +34,8 @@ export namespace SvgDrawingUtil {
 			null,
 			options,
 			trackMonitorSetting,
-      vhlAlias
+      vhlAlias,
+      typeTranslate
 		)
 	}
 
@@ -48,7 +50,8 @@ export namespace SvgDrawingUtil {
 		is_zoom_only: boolean,
 		options: any = {},
 		trackMonitorSetting: TrackMonitorSettingService['trackSetting'],
-    isAlias = false
+    isAlias = false,
+    typeTranslate = '',
 	) => {
 		let mainUnit: any
 		switch (object_type) {
@@ -94,6 +97,7 @@ export namespace SvgDrawingUtil {
 						null,
 						options,
 						trackMonitorSetting,
+            typeTranslate
 					)
 				}
 				break
@@ -136,7 +140,8 @@ export namespace SvgDrawingUtil {
 					null,
 					options,
 					trackMonitorSetting,
-          isAlias
+          isAlias,
+          typeTranslate
 				)
 
 				break
@@ -178,7 +183,8 @@ export namespace SvgDrawingUtil {
 					null,
 					options,
 					trackMonitorSetting,
-          isAlias
+          isAlias,
+          typeTranslate
 				)
 				break
 			case 'MTL':
@@ -219,6 +225,7 @@ export namespace SvgDrawingUtil {
 					null,
 					options,
 					trackMonitorSetting,
+          typeTranslate
 				)
 				break
 			default:
@@ -236,7 +243,8 @@ export namespace SvgDrawingUtil {
 		group_colors: any,
 		options: any = {},
 		trackMonitorSetting: TrackMonitorSettingService['trackSetting'],
-    alias: boolean|string=false
+    alias: boolean|string=false,
+    typeTranslate = ''
 	) => {
 		const overlap_adjustment = true
 		const offset_multiplier = zoom_level / 3
@@ -300,7 +308,7 @@ export namespace SvgDrawingUtil {
 							? layout_object.logicalId
 							: layout_object.id
 						if (overlap_adjustment) {
-							return `Point ${id}`
+							return `${typeTranslate} ${id}`
 						} else {
 							return `${id}`
 						}
@@ -548,7 +556,7 @@ export namespace SvgDrawingUtil {
             if(alias && layout_object.physicalId) id = alias+layout_object.physicalId
             if(alias && layout_object.physical_id) id = alias+layout_object.physical_id
 						if (overlap_adjustment) {
-							return `Vehicle ${id}`
+							return `${typeTranslate} ${id}`
 						} else {
 							return id
 						}
@@ -694,15 +702,6 @@ export namespace SvgDrawingUtil {
 								return trackMonitorSetting.cargoUnloadingColor
 							}
 						})
-						// .attr('class', function () {
-						//   if (layout_object.cargoState === 'F') {
-						//     return 'foup loaded';
-						//   } else if (layout_object.cargoState === 'L') {
-						//     return 'foup loading';
-						//   } else {
-						//     return 'foup unloading';
-						//   }
-						// })
 						.attr('transform', () => {
 							if (!overlap_adjustment) return `scale(${vehicleScale})`
 							else return ''
@@ -775,44 +774,6 @@ export namespace SvgDrawingUtil {
 				} else {
 					dom_object_group.select('.block').remove()
 				}
-				// if (layout_object.isBlocked === true) {
-				// 	dom_object_group
-				// 		.append('circle')
-				// 		.attr('class', 'block')
-				// 		.attr('r', dom_css.blocked_radius)
-				// 		.attr('cx', -(2 + dom_css.radius + dom_css.blocked_radius / 2))
-				// 		.attr('cy', -(2 + dom_css.radius + dom_css.blocked_radius / 2))
-				// 		.attr('fill', dom_css.color_blocked)
-				// 		.attr('transform', () => {
-				// 			if (!overlap_adjustment)
-				// 				return `rotate(${-mapRotation})scale(${vehicleScale})`
-				// 			else return ''
-				// 		})
-				// } else {
-				// 	dom_object_group.select('.block').remove()
-				// }
-
-				// if (layout_object.errorList != 0) {
-				// 	dom_object_group
-				// 		.append('path')
-				// 		.attr('class', 'error')
-				// 		.attr('d', dom_css.icon_error)
-				// 		.attr('fill', function () {
-				// 			return dom_css.color_mode_error
-				// 		})
-				// 		.attr('stroke', function () {
-				// 			return dom_css.color_mode_error_outline
-				// 		})
-				// 		.attr('stroke-width', `${dom_css.line_weight / 3}px`)
-				// 		.attr('transform', () => {
-				// 			if (!overlap_adjustment)
-				// 				return `rotate(${-mapRotation})scale(${vehicleScale})`
-				// 			else return ''
-				// 		})
-				// } else {
-				// 	dom_object_group.select('.error').remove()
-				// }
-
 				if (overlap_adjustment) {
 					dom_object_group
 						.append('rect')
@@ -885,7 +846,7 @@ export namespace SvgDrawingUtil {
             if(alias && layout_object.cAlias) id = layout_object.cAlias
             if(alias && layout_object.c_alias) id = layout_object.c_alias
 						if (overlap_adjustment) {
-							return `Station ${id}`
+							return `${typeTranslate} ${id}`
 						}
             else {
 							return id
@@ -1001,7 +962,7 @@ export namespace SvgDrawingUtil {
             if(alias && layout_object.cAlias) id = layout_object.cAlias
             if(alias && layout_object.c_alias) id = layout_object.c_alias
 						if (overlap_adjustment) {
-							return `Buffer ${id}`
+							return `${typeTranslate} ${id}`
 						} else {
 							return id
 						}
@@ -1067,7 +1028,7 @@ export namespace SvgDrawingUtil {
 							? layout_object.logicalId
 							: layout_object.id
 						if (overlap_adjustment) {
-							return `MTL ${id}`
+							return `${typeTranslate} ${id}`
 						} else {
 							return id
 						}

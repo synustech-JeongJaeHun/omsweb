@@ -1,8 +1,9 @@
 <oms-dialog-base [title]="'names.search' | translate">
   <ng-container class="dialog-layout">
     <div mat-dialog-content>
-      <dx-select-box #type class="form-item" [placeholder]="'messages.selectObjectType' | translate"
-        [dataSource]="objectTypes" valueExpr="key" displayExpr="value" [value]="selectedType.key" [searchEnabled]="true"
+      <dx-select-box #type class="form-item"
+        [dataSource]="objectTypes" valueExpr="key" displayExpr="value"
+        [value]="selectedType.key" [searchEnabled]="true"
         (selectedItemChange)="onSelectType($event)"></dx-select-box>
       <dx-autocomplete #value class="form-item" [placeholder]="'messages.searchId' | translate" [dataSource]="targets"
         [showClearButton]="true" [disabled]="!type.value" [maxItemCount]="50"

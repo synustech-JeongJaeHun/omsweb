@@ -55,7 +55,7 @@
 <ng-template #vehicleInfo>
   <mat-expansion-panel [expanded]="true">
     <mat-expansion-panel-header>
-      <mat-panel-title> {{ data?.objectType }} #{{ data.id }}</mat-panel-title>
+      <mat-panel-title> {{ parsingObjectType(data?.objectType) | translate }} #{{ data.id }}</mat-panel-title>
     </mat-expansion-panel-header>
     <div class="desc">
       <div class="info-table">
@@ -135,7 +135,7 @@
 <ng-template #pointInfo>
   <mat-expansion-panel [expanded]="true">
     <mat-expansion-panel-header>
-      <mat-panel-title> {{ data?.objectType }} #{{ data.id }}</mat-panel-title>
+      <mat-panel-title> {{ parsingObjectType(data?.objectType) | translate }} #{{ data.id }}</mat-panel-title>
     </mat-expansion-panel-header>
     <div class="desc">
       <div class="info-table">
@@ -172,35 +172,35 @@
 <ng-template #bufferInfo>
   <mat-expansion-panel [expanded]="true">
     <mat-expansion-panel-header>
-      <mat-panel-title> {{ data?.objectType }} #{{ data.id }}</mat-panel-title>
+      <mat-panel-title> {{ parsingObjectType(data?.objectType) | translate }} #{{ data.id }}</mat-panel-title>
     </mat-expansion-panel-header>
     <div class="desc">
       <div class="info-table">
         <mat-form-field class="info-item readonly" floatLabel="always">
-          <mat-label>{{ "names.logicalId" | translate }}</mat-label>
+          <mat-label>{{ getDisplayTableLabel('buffers_order', 'buffers_id')| translate }}</mat-label>
           <input matInput type="text" readonly [value]="data.logicalId" />
         </mat-form-field>
         <mat-form-field class="info-item readonly">
-          <mat-label>{{ "names.physicalId" | translate }}</mat-label>
+          <mat-label>{{ getDisplayTableLabel('buffers_order', 'buffers_physicalId') | translate }}</mat-label>
           <input matInput type="text" readonly [value]="data.physicalId" />
         </mat-form-field>
 
         <mat-form-field class="info-item readonly" floatLabel="always">
-          <mat-label>{{ "names.alias" | translate }}</mat-label>
+          <mat-label>{{ getDisplayTableLabel('buffers_order', 'buffers_alias') | translate }}</mat-label>
           <input matInput type="text" readonly [value]="data.cAlias" />
         </mat-form-field>
 
         <mat-form-field class="info-item readonly" floatLabel="always">
-          <mat-label>{{ "names.group" | translate }}</mat-label>
+          <mat-label>{{ getDisplayTableLabel('buffers_order', 'buffers_group') | translate }}</mat-label>
           <input matInput type="text" readonly [value]="data.groups.join(', ')" />
         </mat-form-field>
 
         <mat-form-field class="info-item readonly" floatLabel="always">
-          <mat-label>{{ "names.basePoint" | translate }}</mat-label>
+          <mat-label>{{ getDisplayTableLabel('buffers_order', 'buffers_point') | translate }}</mat-label>
           <input matInput type="text" readonly [value]="data.pointId" />
         </mat-form-field>
         <mat-form-field class="info-item readonly" floatLabel="always">
-          <mat-label>{{ "names.offset" | translate }}</mat-label>
+          <mat-label>{{ getDisplayTableLabel('buffers_order', 'buffers_offset') | translate }}</mat-label>
           <input matInput type="text" readonly [value]="data.offset" />
         </mat-form-field>
         <!--
@@ -209,7 +209,7 @@
           <input matInput type="text" readonly [value]="data.carrierType || ''" />
         </mat-form-field>-->
         <div class="info-item form-field span-full">
-          <label>{{ "names.direction" | translate }}</label>
+          <label>{{ getDisplayTableLabel('buffers_order', 'buffers_directionhfd') | translate }}</label>
           <mat-radio-group [disabled]="true" color="primary" [value]="data.direction">
             <mat-radio-button value="L">Left</mat-radio-button>
             <mat-radio-button value="R">Right</mat-radio-button>
@@ -224,35 +224,35 @@
 <ng-template #stationInfo>
   <mat-expansion-panel [expanded]="true">
     <mat-expansion-panel-header>
-      <mat-panel-title> {{ data?.objectType }} #{{ data.id }}</mat-panel-title>
+      <mat-panel-title> {{ parsingObjectType(data?.objectType) | translate }} #{{ data.id }}</mat-panel-title>
     </mat-expansion-panel-header>
     <div class="desc">
       <div class="info-table">
         <mat-form-field class="info-item readonly" floatLabel="always">
-          <mat-label>{{ "names.logicalId" | translate }}</mat-label>
+          <mat-label>{{ getDisplayTableLabel('stations_order', 'stations_logicalId') | translate }}</mat-label>
           <input matInput type="text" readonly [value]="data.logicalId" />
         </mat-form-field>
         <mat-form-field class="info-item readonly">
-          <mat-label>{{ "names.physicalId" | translate }}</mat-label>
+          <mat-label>{{ getDisplayTableLabel('stations_order', 'stations_physicalId') | translate }}</mat-label>
           <input matInput type="text" readonly [value]="data.physicalId" />
         </mat-form-field>
 
         <mat-form-field class="info-item readonly" floatLabel="always">
-          <mat-label>{{ "names.alias" | translate }}</mat-label>
+          <mat-label>{{ getDisplayTableLabel('stations_order', 'stations_alias') | translate }}</mat-label>
           <input matInput type="text" readonly [value]="data.cAlias" />
         </mat-form-field>
 
         <mat-form-field class="info-item readonly" floatLabel="always">
-          <mat-label>{{ "names.group" | translate }}</mat-label>
+          <mat-label>{{ getDisplayTableLabel('stations_order', 'stations_group') | translate }}</mat-label>
           <input matInput type="text" readonly [value]="data.groups.join(', ')" />
         </mat-form-field>
 
         <mat-form-field class="info-item readonly" floatLabel="always">
-          <mat-label>{{ "names.basePoint" | translate }}</mat-label>
+          <mat-label>{{ getDisplayTableLabel('stations_order', 'stations_point') | translate }}</mat-label>
           <input matInput type="text" readonly [value]="data.pointId" />
         </mat-form-field>
         <mat-form-field class="info-item readonly" floatLabel="always">
-          <mat-label>{{ "names.offset" | translate }}</mat-label>
+          <mat-label>{{ getDisplayTableLabel('stations_order', 'stations_offset') | translate }}</mat-label>
           <input matInput type="text" readonly [value]="data.offset" />
         </mat-form-field>
         <!--
@@ -261,7 +261,7 @@
           <input matInput type="text" readonly [value]="data.carrierType || ''" />
         </mat-form-field>-->
         <div class="info-item form-field span-full">
-          <label>{{ "names.direction" | translate }}</label>
+          <label>{{ getDisplayTableLabel('stations_order', 'stations_direction') | translate }}</label>
           <mat-radio-group [disabled]="true" color="primary" [value]="data.direction">
             <mat-radio-button value="L">Left</mat-radio-button>
             <mat-radio-button value="R">Right</mat-radio-button>
@@ -276,7 +276,7 @@
 <ng-template #segmentInfo>
   <mat-expansion-panel [expanded]="true">
     <mat-expansion-panel-header>
-      <mat-panel-title> {{ data?.objectType }} #{{ data.id }}</mat-panel-title>
+      <mat-panel-title> {{ parsingObjectType(data?.objectType) | translate }} #{{ data.id }}</mat-panel-title>
     </mat-expansion-panel-header>
     <div class="desc">
       <div class="info-table">
@@ -357,7 +357,7 @@
 <ng-template #zcuInfo>
   <mat-expansion-panel [expanded]="true">
     <mat-expansion-panel-header>
-      <mat-panel-title> {{ data?.objectType }} #{{ data.id }}</mat-panel-title>
+      <mat-panel-title> {{ parsingObjectType(data?.objectType) | translate }} #{{ data.id }}</mat-panel-title>
     </mat-expansion-panel-header>
     <div class="desc">
       <div class="info-table">
@@ -419,7 +419,7 @@
 <ng-template #mtlInfo>
   <mat-expansion-panel [expanded]="true">
     <mat-expansion-panel-header>
-      <mat-panel-title> {{ data?.objectType }} #{{ data.id }}</mat-panel-title>
+      <mat-panel-title> {{ parsingObjectType(data?.objectType) | translate }} #{{ data.id }}</mat-panel-title>
     </mat-expansion-panel-header>
     <div class="desc">
       <div class="info-table">

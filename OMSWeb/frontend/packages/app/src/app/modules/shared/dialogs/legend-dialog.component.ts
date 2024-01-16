@@ -29,4 +29,8 @@ export class LegendDialogComponent {
       (config) => (this.fireSensor = config.fireSensor)
     )
   }
+
+  labelDisplayTable(type: string): string {
+    return this.settingSvc.globalPreferences.controlTables[type]
+  }
 }

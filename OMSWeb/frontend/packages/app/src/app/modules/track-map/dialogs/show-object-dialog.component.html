@@ -97,32 +97,32 @@
             key: 'isVehicleNextLineVisible',
             value: $event.checked
           })" color="primary">
-          {{"names.vehicle" | translate }} {{"names.next" | translate }}  {{"names.line" | translate }}
+          {{labelDisplayTable('vehicles_label') | translate }} {{"names.next" | translate }}  {{"names.line" | translate }}
         </mat-slide-toggle>
         <mat-slide-toggle [checked]="setting.isVehicleFromOrderLineVisible" (change)="update({
             key: 'isVehicleFromOrderLineVisible',
             value: $event.checked
           })" color="primary">
-          {{"names.vehicle" | translate }} {{"names.command-from" | translate }}  {{"names.line" | translate }}
+          {{labelDisplayTable('vehicles_label') | translate }} {{"names.command-from" | translate }}  {{"names.line" | translate }}
         </mat-slide-toggle>
         <mat-slide-toggle [checked]="setting.isVehicleToOrderLineVisible" (change)="update({
             key: 'isVehicleToOrderLineVisible',
             value: $event.checked
           })" color="primary">
-          {{"names.vehicle" | translate }} {{"names.command-to" | translate }}  {{"names.line" | translate }}
+          {{labelDisplayTable('vehicles_label') | translate }} {{"names.command-to" | translate }}  {{"names.line" | translate }}
         </mat-slide-toggle>
         <mat-slide-toggle [checked]="setting.isVehicleMoveOrderLineVisible" (change)="update({
             key: 'isVehicleMoveOrderLineVisible',
             value: $event.checked
           })" color="primary">
-          {{"names.vehicle" | translate }} {{"names.command-move" | translate }}  {{"names.line" | translate }}
+          {{labelDisplayTable('vehicles_label') | translate }} {{"names.command-move" | translate }}  {{"names.line" | translate }}
         </mat-slide-toggle>
-        <mat-slide-toggle 
+        <mat-slide-toggle
           [checked]="setting.isVehicleHomeivrLineVisible" (change)="update({
             key: 'isVehicleHomeivrLineVisible',
             value: $event.checked
           })" color="primary">
-          {{"names.vehicle" | translate }} {{"names.home" | translate }}/{{ "names.ivr" | translate }} {{"names.line" | translate }}
+          {{labelDisplayTable('vehicles_label') | translate }} {{"names.home" | translate }}/{{ "names.ivr" | translate }} {{"names.line" | translate }}
         </mat-slide-toggle>
         <mat-slide-toggle [checked]="setting.isVHLArrowVisible" (change)="update({
             key: 'isVHLArrowVisible',
@@ -152,12 +152,12 @@
             key: 'isStationVisible',
             value: $event.checked
           })" color="primary">{{
-          "names.showStations" | translate }}</mat-slide-toggle>
+            labelDisplayTable('stations_label') | translate }}</mat-slide-toggle>
         <mat-slide-toggle [checked]="setting.isBufferVisible" (change)="update({
             key: 'isBufferVisible',
             value: $event.checked
           })" color="primary">{{
-          "names.showBuffers" | translate }}</mat-slide-toggle>
+          labelDisplayTable('buffers_label') | translate }}</mat-slide-toggle>
         <mat-slide-toggle [checked]="setting.isZcuVisible" (change)="update({
           key: 'isZcuVisible',
           value: $event.checked
@@ -180,13 +180,13 @@
             key: 'isCpsVisible',
             value: $event.checked
           })" color="primary">{{
-          "names.showCpss" | translate }}</mat-slide-toggle>
+            labelDisplayTable('cps_label') | translate }}</mat-slide-toggle>
         <mat-slide-toggle *ngIf="data?.isMonitor"
             [checked]="setting.isFireshutterVisible" (change)="update({
             key: 'isFireshutterVisible',
             value: $event.checked
           })" color="primary">{{
-          "names.showFireshutters" | translate }}</mat-slide-toggle>
+            labelDisplayTable('fcu_label') | translate }}</mat-slide-toggle>
         <mat-slide-toggle [checked]="setting.isMtlVisible" (change)="update({
             key: 'isMtlVisible',
             value: $event.checked

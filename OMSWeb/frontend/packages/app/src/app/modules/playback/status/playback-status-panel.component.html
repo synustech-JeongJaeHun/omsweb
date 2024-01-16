@@ -22,21 +22,21 @@
 		(selectedIndexChange)="onChangeTab($event)"
 		animationDuration="0ms"
 	>
-		<mat-tab [label]="'names.transfer' | translate"
+		<mat-tab [label]="labelDisplayTable('orders_label') | translate"
              *ngIf="canDisplayTable('orders')">
 			<oms-playback-order-status
         *ngIf="onTabIndex('orders')"
 				[tableHeight]="tableHeight"
 			></oms-playback-order-status>
 		</mat-tab>
-		<mat-tab [label]="'names.vehicles' | translate"
+		<mat-tab [label]="labelDisplayTable('vehicles_label') | translate"
              *ngIf="canDisplayTable('vehicles')">
 			<oms-playback-vehicle-status
         *ngIf="onTabIndex('vehicles')"
 				[tableHeight]="tableHeight"
 			></oms-playback-vehicle-status>
 		</mat-tab>
-		<mat-tab [label]="'names.stations' | translate"
+		<mat-tab [label]="labelDisplayTable('stations_label') | translate"
             *ngIf="canDisplayTable('stations')">
 			<oms-playback-station-status
         *ngIf="onTabIndex('stations')"
@@ -44,13 +44,13 @@
 			></oms-playback-station-status>
 		</mat-tab>
 		<mat-tab *ngIf="bufferEnabled&& canDisplayTable('buffers')"
-             [label]="'names.buffers' | translate">
+             [label]="labelDisplayTable('buffers_label') | translate">
 			<oms-playback-buffer-status
         *ngIf="onTabIndex('buffers')"
 				[tableHeight]="tableHeight"
 			></oms-playback-buffer-status>
 		</mat-tab>
-		<mat-tab [label]="'names.zcus' | translate"
+		<mat-tab [label]="labelDisplayTable('zcus_label') | translate"
             *ngIf="canDisplayTable('zcus')">
 			<oms-playback-zcu-status
         *ngIf="onTabIndex('zcus')"

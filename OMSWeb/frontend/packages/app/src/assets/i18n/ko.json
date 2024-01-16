@@ -579,7 +579,10 @@
     "rpm1" : "Rpm 1(RPM)",
     "rpm2" : "Rpm 2(RPM)",
     "rpm3" : "Rpm 3(RPM)",
-    "rpm4" : "Rpm 4(RPM)"
+    "rpm4" : "Rpm 4(RPM)",
+    "port" : "Port",
+    "ports" : "Ports",
+    "fcus" : "Fcus"
   },
   "enums": {
     "hostSessionStatus": {

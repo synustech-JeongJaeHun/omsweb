@@ -351,9 +351,22 @@ export const defaultToggleLockOptions: ToggleLockOptionsType = {
 export type MonitorControlTable = typeof defaultControlTable
 
 const defaultControlTable = {
+  // table i18n label
+  orders_label: "names.transfer",
+  vehicles_label: "names.vehicles",
+  stations_label: "names.stations",
+  buffers_label: "names.buffers",
+  zcus_label: "names.zcu_label",
+  cps_label: "names.cps",
+  fcus_label: "names.fcus",
+  vehicle_label: "names.vehicle",
+  station_label: "names.port",
+  buffer_label: "names.buffer",
+  zcu_label: "names.zcu_label",
+  fcu_label: "names.fcu",
+
 	// order table
 	orders: true,
-
 	orders_id: true,
 	orders_origin: true,
 	orders_logicalId: true,
@@ -616,7 +629,7 @@ const defaultControlTable = {
 	stations_order: [
 		{ name: 'stations_id', i18nLabel: 'names.id', width: 50 },
     { name: 'stations_alias', i18nLabel: 'names.alias', width: 120 },
-		{ name: 'stations_physicalId', i18nLabel: 'names.physicalId', width: 120 },
+		{ name: 'stations_physicalId', i18nLabel: 'names.transOrQR', width: 120 },
 		{ name: 'stations_logicalId', i18nLabel: 'names.logicalId', width: 120 },
 		{ name: 'stations_group', i18nLabel: 'names.group', width: 60 },
 		{ name: 'stations_point', i18nLabel: 'names.point', width: 100 },
@@ -651,7 +664,7 @@ const defaultControlTable = {
 	buffers_order: [
 		{ name: 'buffers_id', i18nLabel: 'names.id', width: 50 },
     { name: 'buffers_alias', i18nLabel: 'names.alias', width: 120 },
-		{ name: 'buffers_physicalId', i18nLabel: 'names.physicalId', width: 120 },
+		{ name: 'buffers_physicalId', i18nLabel: 'names.QR', width: 120 },
 		{ name: 'buffers_logicalId', i18nLabel: 'names.logicalId', width: 120 },
 		{ name: 'buffers_group', i18nLabel: 'names.group', width: 60 },
 		{ name: 'buffers_point', i18nLabel: 'names.point', width: 100 },

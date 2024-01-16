@@ -579,7 +579,10 @@
     "rpm1" : "转速 1(转速)",
     "rpm2" : "转速 2(转速)",
     "rpm3" : "转速 3(转速)",
-    "rpm4" : "转速 4(转速)"
+    "rpm4" : "转速 4(转速)",
+    "port" : "港口",
+    "ports" : "港口",
+    "fcus" : "Fcus"
   },
   "enums": {
     "hostSessionStatus": {

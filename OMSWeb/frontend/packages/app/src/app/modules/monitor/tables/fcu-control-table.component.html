@@ -37,7 +37,7 @@
   <dxi-column
     dataType="string"
     dataField="id"
-    [caption]="'names.id' | translate"
+    [caption]="getDisplayTableLabel('fcus_id') | translate"
     [visible]="canDisplayTable('fcus_id')"
     [visibleIndex]="getDisplayTableColumnIndex('fcus_id')"
     [width]="getDisplayTableColumnWidth('fcus_id')"
@@ -45,7 +45,7 @@
   <dxi-column
     dataType="string"
     dataField="logicalId"
-    [caption]="'names.logicalId' | translate"
+    [caption]="getDisplayTableLabel('fcus_logicalId') | translate"
     [visible]="canDisplayTable('fcus_logicalId')"
     [visibleIndex]="getDisplayTableColumnIndex('fcus_logicalId')"
     [width]="getDisplayTableColumnWidth('fcus_logicalId')"
@@ -53,7 +53,7 @@
   <dxi-column
     dataType="string"
     dataField="statusMsg"
-    [caption]="'names.status' | translate"
+    [caption]="getDisplayTableLabel('fcus_status') | translate"
     [visible]="canDisplayTable('fcus_status')"
     [visibleIndex]="getDisplayTableColumnIndex('fcus_status')"
     [width]="getDisplayTableColumnWidth('fcus_status')"
@@ -61,7 +61,7 @@
   <dxi-column
     dataType="string"
     dataField="segments"
-    [caption]="'names.segment' | translate"
+    [caption]="getDisplayTableLabel('fcus_segments') | translate"
     [visible]="canDisplayTable('fcus_segments')"
     [visibleIndex]="getDisplayTableColumnIndex('fcus_segments')"
     [width]="getDisplayTableColumnWidth('fcus_segments')"
@@ -70,7 +70,7 @@
     dataType="boolean"
     dataField="fireDetect"
     cellTemplate="fireDetect"
-    [caption]="'names.fireDetect' | translate"
+    [caption]="getDisplayTableLabel('fcus_fireDetect') | translate"
     [visible]="canDisplayTable('fcus_fireDetect')"
     [visibleIndex]="getDisplayTableColumnIndex('fcus_fireDetect')"
     [width]="getDisplayTableColumnWidth('fcus_fireDetect')"
@@ -79,7 +79,7 @@
     dataType="boolean"
     dataField="open"
     cellTemplate="open"
-    [caption]="'names.open' | translate"
+    [caption]="getDisplayTableLabel('fcus_open') | translate"
     [visible]="canDisplayTable('fcus_open')"
     [visibleIndex]="getDisplayTableColumnIndex('fcus_open')"
     [width]="getDisplayTableColumnWidth('fcus_open')"
@@ -88,7 +88,7 @@
   <dxi-column
     dataType="string"
     dataField="user"
-    [caption]="'names.user' | translate"
+    [caption]="getDisplayTableLabel('fcus_user') | translate"
     [visible]="canDisplayTable('fcus_user')"
     [visibleIndex]="getDisplayTableColumnIndex('fcus_user')"
     [width]="getDisplayTableColumnWidth('fcus_user')"
@@ -96,7 +96,7 @@
   <dxi-column
     dataType="string"
     dataField="note"
-    [caption]="'names.note' | translate"
+    [caption]="getDisplayTableLabel('fcus_note') | translate"
     [visible]="canDisplayTable('fcus_note')"
     [visibleIndex]="getDisplayTableColumnIndex('fcus_note')"
     [width]="getDisplayTableColumnWidth('fcus_note')"

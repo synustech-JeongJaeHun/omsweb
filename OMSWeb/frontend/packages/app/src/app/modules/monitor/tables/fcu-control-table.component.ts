@@ -94,6 +94,12 @@ export class FcuControlTableComponent implements OnInit, OnDestroy {
     ).width
   }
 
+  getDisplayTableLabel(type: string): string {
+    return this.preference.controlTables.fcus_order.find(
+      (column) => column.name === type,
+    ).i18nLabel
+  }
+
   stateStoring = {
     enabled: true,
     type: 'custom',

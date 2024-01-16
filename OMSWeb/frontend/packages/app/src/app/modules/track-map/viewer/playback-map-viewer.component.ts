@@ -698,6 +698,16 @@ export class PlaybackMapViewerComponent implements OnInit, OnDestroy {
   includeCheck(word: string){
     return this.includesWords.some(i=>word.includes(i))
   }
+
+  labelDisplayTable(type: string): string {
+    return this.preference.controlTables[type]
+  }
+
+  getDisplayTableLabel(order: string, type: string): string {
+    return this.preference.controlTables[order].find(
+      (column) => column.name === type,
+    ).i18nLabel
+  }
 }
 
 function getCustomEventPayload<T>(event: CustomEvent<T[]>) {

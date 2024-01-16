@@ -108,7 +108,7 @@
 	<dxi-column
 		dataType="string"
 		dataField="id"
-		[caption]="'names.id' | translate"
+    [caption]="getDisplayTableLabel('zcus_id') | translate"
 		[visible]="canDisplayTable('zcus_id')"
 		[visibleIndex]="getDisplayTableColumnIndex('zcus_id')"
 		[width]="getDisplayTableColumnWidth('zcus_id')"
@@ -116,7 +116,7 @@
 	<dxi-column
 		dataType="string"
 		dataField="usingType"
-		[caption]="'names.usingType' | translate"
+    [caption]="getDisplayTableLabel('zcus_using_type') | translate"
 		[visible]="canDisplayTable('zcus_using_type')"
 		[visibleIndex]="getDisplayTableColumnIndex('zcus_using_type')"
 		[width]="getDisplayTableColumnWidth('zcus_using_type')"
@@ -124,7 +124,7 @@
 	<dxi-column
 		dataType="string"
 		dataField="zcuType"
-		[caption]="'names.zcuType' | translate"
+    [caption]="getDisplayTableLabel('zcus_type') | translate"
 		[visible]="canDisplayTable('zcus_type')"
 		[visibleIndex]="getDisplayTableColumnIndex('zcus_type')"
 		[width]="getDisplayTableColumnWidth('zcus_type')"
@@ -132,7 +132,7 @@
 	<dxi-column
 		dataType="string"
 		dataField="status"
-		[caption]="'names.status' | translate"
+    [caption]="getDisplayTableLabel('zcus_status') | translate"
 		cellTemplate="statusTemplate"
 		[visible]="canDisplayTable('zcus_status')"
 		[visibleIndex]="getDisplayTableColumnIndex('zcus_status')"
@@ -143,7 +143,7 @@
     <dxi-column
       dataType="string"
       dataField="logicalId"
-      [caption]="'names.logicalId' | translate"
+      [caption]="getDisplayTableLabel('zcus_logicalId') | translate"
       [visible]="canDisplayTable('zcus_logicalId')"
       [visibleIndex]="getDisplayTableColumnIndex('zcus_logicalId')"
       [width]="getDisplayTableColumnWidth('zcus_logicalId')"
@@ -151,7 +151,7 @@
     <dxi-column
       dataType="string"
       dataField="passVehicle"
-      [caption]="'names.passVehicle' | translate"
+      [caption]="getDisplayTableLabel('zcus_passVehicle') | translate"
       [visible]="canDisplayTable('zcus_passVehicle')"
       [visibleIndex]="getDisplayTableColumnIndex('zcus_passVehicle')"
       [width]="getDisplayTableColumnWidth('zcus_passVehicle')"
@@ -159,7 +159,7 @@
     <dxi-column
       dataType="string"
       dataField="vehicleCount"
-      [caption]="'names.vehicleCount' | translate"
+      [caption]="getDisplayTableLabel('zcus_vehicleCount') | translate"
       [visible]="canDisplayTable('zcus_vehicleCount')"
       [visibleIndex]="getDisplayTableColumnIndex('zcus_vehicleCount')"
       [width]="getDisplayTableColumnWidth('zcus_vehicleCount')"
@@ -167,7 +167,7 @@
     <dxi-column
       dataType="string"
       dataField="vehicleInfo"
-      [caption]="'names.vehicleInfo' | translate"
+      [caption]="getDisplayTableLabel('zcus_vehicleInfo') | translate"
       [visible]="canDisplayTable('zcus_vehicleInfo')"
       [visibleIndex]="getDisplayTableColumnIndex('zcus_vehicleInfo')"
       [width]="getDisplayTableColumnWidth('zcus_vehicleInfo')"
@@ -177,7 +177,7 @@
   <dxi-column
     dataType="string"
     dataField="errorCode"
-    [caption]="'names.errorCode' | translate"
+    [caption]="getDisplayTableLabel('zcus_errorCode') | translate"
     [visible]="canDisplayTable('zcus_errorCode')"
     [visibleIndex]="getDisplayTableColumnIndex('zcus_errorCode')"
     [width]="getDisplayTableColumnWidth('zcus_errorCode')"

@@ -137,6 +137,10 @@ export class StatusControlComponent implements OnInit, OnDestroy {
 		return this.preference.controlTables[type]
 	}
 
+  labelDisplayTable(type: string): string {
+    return this.preference.controlTables[type]
+  }
+
 	onViewUnusedList() {
 		if (this._unusedListDialog) {
 			this._unusedListDialog.close()

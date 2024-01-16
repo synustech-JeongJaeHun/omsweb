@@ -13,6 +13,7 @@ import { main_css } from '../../shared/utils/css-loader';
 import { SvgDrawingUtil } from '../../shared/utils/svg-drawing.util';
 import {SettingsService} from "@oms/services/settings.service";
 import {IdType} from "@oms/models/enums";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'oms-overlap-list',
@@ -46,7 +47,8 @@ export class OverlapListComponent implements OnInit, OnChanges {
   vhlAlias: string
 
   constructor(private tmSettingService: TrackMonitorSettingService,
-              private settingSvc: SettingsService,) {
+              private settingSvc: SettingsService,
+              private $t: TranslateService) {
     settingSvc.serviceConfig.subscribe(
       (config) => {
         this.vhlAlias = config.vhlAlias
@@ -84,7 +86,9 @@ export class OverlapListComponent implements OnInit, OnChanges {
 
       overlaps.forEach((overlap) => {
         // update_overlap_module_panel('ADD', x.objectType, x, 'OVERLAP_MODULE')
-        const className = overlap.objectType.toLowerCase();
+        const className = overlap.objectType.toLowerCase()
+        const typeTranslate = this.$t.instant(this.parsingObjectType(overlap.objectType.toLowerCase()))
+
         const currentClass =
           overlap.objectType?.toUpperCase() ===
             this.data.objectType?.toUpperCase() && overlap.id === this.data.id
@@ -107,7 +111,8 @@ export class OverlapListComponent implements OnInit, OnChanges {
             false,
             { mapRotation: 0 },
             this.tmSettingService.trackSetting,
-            isAlias? this.vhlAlias : null
+            isAlias? this.vhlAlias : null,
+            typeTranslate
           );
         } else {
           // update_dom(objectType, x, main_css[objectType.toLowerCase()], 3, 'OVERLAP_MODULE',false)
@@ -122,7 +127,8 @@ export class OverlapListComponent implements OnInit, OnChanges {
             false,
             { mapRotation: 0 },
             this.tmSettingService.trackSetting,
-            isAlias
+            isAlias,
+            typeTranslate
           );
         }
 
@@ -135,5 +141,26 @@ export class OverlapListComponent implements OnInit, OnChanges {
         });
       });
     }
+  }
+
+  parsingObjectType(type: string): string{
+    switch (type.toLowerCase()){
+      case 'vehicle':
+        return this.labelDisplayTable('vehicle_label')
+      case 'station':
+        return this.labelDisplayTable('station_label')
+      case 'buffer':
+        return this.labelDisplayTable('buffer_label')
+      case 'zcu':
+        return this.labelDisplayTable('zcu_label')
+      case 'cluster':
+        return this.labelDisplayTable('cps_label')
+      default :
+        return type
+    }
+  }
+
+  labelDisplayTable(type: string): string {
+    return this.settingSvc.globalPreferences.controlTables[type]
   }
 }

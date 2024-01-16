@@ -1304,7 +1304,7 @@
 					</div>
 				</dd>
 				<!-- station -->
-				<dt>{{ 'names.station' | translate }}</dt>
+				<dt>{{ labelDisplayTable('stations_label') | translate}}</dt>
 				<dd class="--item-gap">
 					<div class="legend-dlg-item">
 						<div class="legend-icon">
@@ -1323,7 +1323,7 @@
 										y="30"
 										text-anchor="start"
 									>
-										station_id
+                    {{ (labelDisplayTable('stations_label') | translate)+'_id'}}
 									</text>
 								</g>
 							</svg>
@@ -1347,7 +1347,7 @@
 										y="30"
 										text-anchor="start"
 									>
-										station_id
+                    {{ (labelDisplayTable('stations_label') | translate)+'_id'}}
 									</text>
 								</g>
 							</svg>
@@ -1356,7 +1356,7 @@
 					</div>
 				</dd>
 
-				<dt>{{ 'names.buffer' | translate }}</dt>
+				<dt>{{ labelDisplayTable('buffers_label') | translate}}</dt>
 				<dd class="--item-gap">
 					<div class="legend-dlg-item">
 						<div class="legend-icon">
@@ -1375,7 +1375,7 @@
 										y="30"
 										text-anchor="start"
 									>
-										buffer_id
+                    {{ (labelDisplayTable('buffers_label') | translate)+'_id'}}
 									</text>
 								</g>
 							</svg>
@@ -1400,7 +1400,7 @@
 										y="30"
 										text-anchor="start"
 									>
-										buffer_id
+                    {{ (labelDisplayTable('buffers_label') | translate)+'_id'}}
 									</text>
 								</g>
 							</svg>
@@ -1424,7 +1424,7 @@
 										y="30"
 										text-anchor="start"
 									>
-										buffer_id
+                    {{ (labelDisplayTable('buffers_label') | translate)+'_id'}}
 									</text>
 								</g>
 							</svg>
@@ -1486,7 +1486,7 @@
 						<div class="legend-caption">Unused</div>
 					</div>
 				</dd>
-				<dt>{{ 'names.zcu' | translate }}</dt>
+				<dt>{{ labelDisplayTable('zcus_label') | translate}}</dt>
 				<dd class="--item-gap">
 					<div class="legend-dlg-item">
 						<div class="legend-icon">
@@ -1510,11 +1510,11 @@
 									<text
 										class="label"
 										font-size="11px"
-										x="19"
+                    x="16"
 										y="15"
 										text-anchor="start"
 									>
-										zcu_id
+                    {{ (labelDisplayTable('zcus_label') | translate)+'_id'}}
 									</text>
 								</g>
 							</svg>
@@ -1543,11 +1543,11 @@
 									<text
 										class="label"
 										font-size="11px"
-										x="19"
+                    x="16"
 										y="15"
 										text-anchor="start"
 									>
-										zcu_id
+                    {{ (labelDisplayTable('zcus_label') | translate)+'_id'}}
 									</text>
 								</g>
 							</svg>
@@ -1576,11 +1576,11 @@
 									<text
 										class="label"
 										font-size="11px"
-										x="19"
+										x="16"
 										y="15"
 										text-anchor="start"
 									>
-										zcu_id
+                    {{ (labelDisplayTable('zcus_label') | translate)+'_id'}}
 									</text>
 								</g>
 							</svg>
@@ -1589,7 +1589,7 @@
 					</div>
 				</dd>
 				<!-- FireShutter (Opened) -->
-				<dt>{{ 'names.fireshutter' | translate }}</dt>
+				<dt>{{ labelDisplayTable('fcus_label') | translate}}</dt>
 				<dd class="--item-gap">
 					<div class="legend-dlg-item">
 						<div class="legend-icon">

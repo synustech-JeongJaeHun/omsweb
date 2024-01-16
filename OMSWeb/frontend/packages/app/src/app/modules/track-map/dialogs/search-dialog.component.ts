@@ -4,6 +4,8 @@ import {MatDialogRef} from '@angular/material/dialog';
 import {TrackStatusService} from '@oms/root/services/track-status.service';
 import {SettingsService} from "@oms/services/settings.service";
 import {PointType} from "../../../models/enums"
+import {ClientPreferences} from "@oms/models/settings.model";
+import {TranslateService} from "@ngx-translate/core";
 
 type Ids = { id: number, logicalId: string }
 type ObjectTypeKey = "point" | "segment" | "station" | "mtl" | "buffer" | "zcu" | "cluster" | "vehicle"
@@ -21,13 +23,13 @@ type ObjectTypeKey = "point" | "segment" | "station" | "mtl" | "buffer" | "zcu" 
 })
 export class SearchDialogComponent {
   objectTypes = [
-    { key: 'vehicle', value: 'Vehicle' },
+    { key: 'vehicle', value: this.labelDisplayTable('vehicle_label') },
     { key: 'point', value: 'Point' },
     { key: 'segment', value: 'Segment' },
-    { key: 'station', value: 'Station' },
-    { key: 'buffer', value: 'Buffer' },
+    { key: 'station', value: this.labelDisplayTable('station_label') },
+    { key: 'buffer', value: this.labelDisplayTable('buffer_label')  },
     { key: 'mtl', value: 'MTL' },
-    { key: 'zcu', value: 'ZCU' },
+    { key: 'zcu', value: this.labelDisplayTable('zcu_label') },
     { key: 'cluster', value: 'Cluster' },
   ];
 
@@ -47,7 +49,8 @@ export class SearchDialogComponent {
   constructor(
     private trackStatusService: TrackStatusService,
     private dialog: MatDialogRef<SearchDialogComponent>,
-    private settingSvc: SettingsService
+    private settingSvc: SettingsService,
+    private $t: TranslateService,
   ) {
     this.onLoad()
   }
@@ -106,5 +109,9 @@ export class SearchDialogComponent {
 
     this.selectedType = this.objectTypes[0]
     this.targets = this.dataSourceMap.vehicle
+  }
+
+  labelDisplayTable(type: string): string {
+    return this.$t.instant(this.settingSvc.globalPreferences.controlTables[type])
   }
 }

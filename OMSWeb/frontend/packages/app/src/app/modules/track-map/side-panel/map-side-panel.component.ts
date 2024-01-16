@@ -24,6 +24,8 @@ import {ClientPreferences, IPreferences, ToggleOptionsType} from "@oms/models/se
 	styleUrls: ['./map-side-panel.component.scss'],
 })
 export class MapSidePanelComponent implements OnChanges, OnDestroy {
+
+
 	@Input('selectedObject') data: any
 	@Output() focus = new EventEmitter<any>()
 
@@ -267,5 +269,32 @@ export class MapSidePanelComponent implements OnChanges, OnDestroy {
       default :
         return 'None'
     }
+  }
+
+  parsingObjectType(type: string): string{
+    switch (type.toLowerCase()){
+      case 'vehicle':
+        return this.labelDisplayTable('vehicle_label')
+      case 'station':
+        return this.labelDisplayTable('station_label')
+      case 'buffer':
+        return this.labelDisplayTable('buffer_label')
+      case 'zcu':
+        return this.labelDisplayTable('zcu_label')
+      case 'cluster':
+        return this.labelDisplayTable('cps_label')
+      default :
+        return type
+    }
+  }
+
+  labelDisplayTable(type: string): string {
+    return this.settingSvc.globalPreferences.controlTables[type]
+  }
+
+  getDisplayTableLabel(order: string, type: string): string {
+    return this.preference.controlTables[order].find(
+      (column) => column.name === type,
+    ).i18nLabel
   }
 }

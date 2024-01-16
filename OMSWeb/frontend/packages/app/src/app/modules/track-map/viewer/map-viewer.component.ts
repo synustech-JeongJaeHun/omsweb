@@ -1392,6 +1392,16 @@ export class MapViewerComponent implements OnInit, OnDestroy {
     const type = usingType !== 1
     return this.disableHWZCU&&type
   }
+
+  labelDisplayTable(type: string): string {
+    return this.preference.controlTables[type]
+  }
+
+  getDisplayTableLabel(order: string, type: string): string {
+    return this.preference.controlTables[order].find(
+      (column) => column.name === type,
+    ).i18nLabel
+  }
 }
 
 function getCustomEventPayload<T>(event: CustomEvent<T[]>) {

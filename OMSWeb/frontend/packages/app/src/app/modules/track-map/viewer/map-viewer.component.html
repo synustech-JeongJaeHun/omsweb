@@ -192,22 +192,22 @@
 		target="#tooltipView"
 		position="right"
 	>
-		<div class="tooltip-title">Station</div>
+		<div class="tooltip-title">{{ labelDisplayTable('station_label') | translate}}</div>
 		<div class="tooltip-content">
-			<div class="name">{{ 'names.id' | translate }}</div>
+			<div class="name">{{ getDisplayTableLabel('stations_order', 'stations_id') | translate }}</div>
 			<div class="value">{{ tooltipObject?.value.id }}</div>
-      <div class="name">{{ 'names.alias' | translate }}</div>
+      <div class="name">{{ getDisplayTableLabel('stations_order', 'stations_alias') | translate }}</div>
       <div class="value">{{ tooltipObject?.value.cAlias }}</div>
-			<div class="name">{{ 'names.logicalId' | translate }}</div>
+			<div class="name">{{ getDisplayTableLabel('stations_order', 'stations_logicalId') | translate }}</div>
 			<div class="value">{{ tooltipObject?.value.logicalId }}</div>
-			<div class="name">{{ 'names.physicalId' | translate }}</div>
+			<div class="name">{{ getDisplayTableLabel('stations_order', 'stations_physicalId') | translate }}</div>
 			<div class="value">{{ tooltipObject?.value.physicalId }}</div>
-			<div class="name">{{ 'names.point' | translate }}</div>
+			<div class="name">{{ getDisplayTableLabel('stations_order', 'stations_point') | translate }}</div>
 			<div class="value">{{ tooltipObject?.value.pointId }}</div>
-			<div class="name">{{ 'names.group' | translate }}</div>
+			<div class="name">{{ getDisplayTableLabel('stations_order', 'stations_group')  | translate }}</div>
 			<div class="value">{{ tooltipObject?.value.groups.join(', ') }}</div>
 			<ng-container *ngIf="tooltipObject?.value?.note">
-				<div class="name">{{ 'names.note' | translate }}</div>
+				<div class="name">{{ getDisplayTableLabel('stations_order', 'stations_note') | translate }}</div>
 				<div class="value">{{ tooltipObject?.value?.note }}</div>
 			</ng-container>
 		</div>
@@ -221,20 +221,20 @@
 		target="#tooltipView"
 		position="right"
 	>
-		<div class="tooltip-title">Vehicle</div>
+		<div class="tooltip-title">{{ labelDisplayTable('vehicle_label') | translate}}</div>
 		<div class="tooltip-content">
-			<div class="name">{{ 'names.id' | translate }}</div>
+			<div class="name">{{ getDisplayTableLabel('vehicles_order', 'vehicles_id') | translate }}</div>
 			<div class="value">{{ tooltipObject?.value.id }}</div>
-			<div class="name">{{ 'names.logicalId' | translate }}</div>
+			<div class="name">{{ getDisplayTableLabel('vehicles_order', 'vehicles_logicalId') | translate }}</div>
 			<div class="value">{{ tooltipObject?.value.logicalId }}</div>
 			<div class="name">{{ 'names.physicalId' | translate }}</div>
 			<div class="value">{{ tooltipObject?.value.physicalId }}</div>
 			<div class="name">{{ 'names.point' | translate }}</div>
 			<div class="value">{{ tooltipObject?.value.curPoint }}</div>
-			<div class="name">{{ 'names.group' | translate }}</div>
+			<div class="name">{{ getDisplayTableLabel('vehicles_order', 'vehicles_group') | translate }}</div>
 			<div class="value">{{ tooltipObject?.value.groups.join(', ') }}</div>
 			<ng-container *ngIf="tooltipObject?.value?.note">
-				<div class="name">{{ 'names.note' | translate }}</div>
+				<div class="name">{{ getDisplayTableLabel('vehicles_order', 'vehicles_note') | translate }}</div>
 				<div class="value">{{ tooltipObject?.value?.note }}</div>
 			</ng-container>
 		</div>
@@ -294,26 +294,26 @@
 		target="#tooltipView"
 		position="right"
 	>
-		<div class="tooltip-title">Buffer</div>
+		<div class="tooltip-title">{{ labelDisplayTable('buffer_label') | translate}}</div>
 		<div class="tooltip-content">
-			<div class="name">{{ 'names.id' | translate }}</div>
+			<div class="name">{{ getDisplayTableLabel('buffers_order', 'buffers_id') | translate }}</div>
 			<div class="value">{{ tooltipObject?.value.id }}</div>
-      <div class="name">{{ 'names.alias' | translate }}</div>
+      <div class="name">{{ getDisplayTableLabel('buffers_order', 'buffers_alias') | translate }}</div>
       <div class="value">{{ tooltipObject?.value.cAlias }}</div>
-			<div class="name">{{ 'names.logicalId' | translate }}</div>
+			<div class="name">{{ getDisplayTableLabel('buffers_order', 'buffers_logicalId') | translate }}</div>
 			<div class="value">{{ tooltipObject?.value.logicalId }}</div>
-			<div class="name">{{ 'names.physicalId' | translate }}</div>
+			<div class="name">{{ getDisplayTableLabel('buffers_order', 'buffers_physicalId') | translate }}</div>
 			<div class="value">{{ tooltipObject?.value.physicalId }}</div>
-			<div class="name">{{ 'names.point' | translate }}</div>
+			<div class="name">{{ getDisplayTableLabel('buffers_order', 'buffers_point') | translate }}</div>
 			<div class="value">{{ tooltipObject?.value.pointId }}</div>
-			<div class="name">{{ 'names.group' | translate }}</div>
+			<div class="name">{{ getDisplayTableLabel('buffers_order', 'buffers_group') | translate }}</div>
 			<div class="value">{{ tooltipObject?.value.groups.join(', ') }}</div>
 			<ng-container *ngIf="tooltipObject?.value?.carrierId">
-				<div class="name">{{ 'names.carrierId' | translate }}</div>
+				<div class="name">{{ getDisplayTableLabel('buffers_order', 'buffers_carrierId') | translate }}</div>
 				<div class="value">{{ tooltipObject?.value?.carrierId }}</div>
 			</ng-container>
 			<ng-container *ngIf="tooltipObject?.value?.note">
-				<div class="name">{{ 'names.note' | translate }}</div>
+				<div class="name">{{ getDisplayTableLabel('buffers_order', 'buffers_note') | translate }}</div>
 				<div class="value">{{ tooltipObject?.value?.note }}</div>
 			</ng-container>
 		</div>
@@ -327,15 +327,15 @@
 		target="#tooltipView"
 		position="right"
 	>
-		<div class="tooltip-title">Zcu</div>
+		<div class="tooltip-title">{{ labelDisplayTable('zcu_label') | translate}}</div>
 		<div class="tooltip-content">
-			<div class="name">{{ 'names.id' | translate }}</div>
+			<div class="name">{{ getDisplayTableLabel('zcus_order', 'zcus_id') | translate }}</div>
 			<div class="value">{{ tooltipObject?.value.id }}</div>
 			<!--
       <div class="name">Type</div>
       <div class="value">{{ ((tooltipObject?.zcuType == 0) ? 'Standard' : ((tooltipObject?.zcuType == 1) ? 'NType' : '')) }}</div>
       -->
-			<div class="name">{{ 'names.usingType' | translate }}</div>
+			<div class="name">{{ getDisplayTableLabel('zcus_order', 'zcus_using_type') | translate }}</div>
 			<div class="value">
 				{{
 					tooltipObject?.value.usingType == 0
@@ -404,11 +404,11 @@
 		target="#tooltipView"
 		position="right"
 	>
-		<div class="tooltip-title">Fireshutter</div>
+		<div class="tooltip-title">{{ labelDisplayTable('fcu_label') | translate}}</div>
 		<div class="tooltip-content">
-			<div class="name">{{ 'names.id' | translate }}</div>
+			<div class="name">{{ getDisplayTableLabel('fcus_order', 'fcus_id') | translate }}</div>
 			<div class="value">{{ tooltipObject?.value.id }}</div>
-			<div class="name">{{ 'status' }}</div>
+			<div class="name">{{ getDisplayTableLabel('fcus_order', 'fcus_status') }}</div>
 			<div class="value" *ngIf="!tooltipObject?.value.open">CLOSED</div>
 			<div class="value" *ngIf="tooltipObject?.value.open">OPEN</div>
 		</div>
@@ -422,7 +422,7 @@
 	<mat-card class="context-card">
 		<mat-card-header>
 			<mat-card-title>
-				Vehicle #{{ contextMenuObject?.value.id }}
+        {{ labelDisplayTable('vehicle_label') | translate}} #{{ contextMenuObject?.value.id }}
 			</mat-card-title>
 		</mat-card-header>
 		<mat-card-content class="context-form">
@@ -598,7 +598,7 @@
 	>
 		<mat-card-header>
 			<mat-card-title>
-				Buffer #{{ contextMenuObject?.value.id }}
+        {{ labelDisplayTable('buffer_label') | translate}} #{{ contextMenuObject?.value.id }}
 			</mat-card-title>
 		</mat-card-header>
 		<mat-card-content class="context-form">
@@ -685,7 +685,7 @@
   >
 		<mat-card-header>
 			<mat-card-title>
-				Station #{{ contextMenuObject?.value.id }}
+        {{ labelDisplayTable('station_label') | translate}} #{{ contextMenuObject?.value.id }}
 			</mat-card-title>
 		</mat-card-header>
 		<mat-card-content class="context-form">
@@ -765,7 +765,7 @@
 		*ngIf="hasPermissions([permissionEnums.SetZcuUsingType])"
 	>
 		<mat-card-header>
-			<mat-card-title> ZCU #{{ contextMenuObject?.value.id }} </mat-card-title>
+			<mat-card-title> {{ labelDisplayTable('zcu_label') | translate}}  #{{ contextMenuObject?.value.id }} </mat-card-title>
 		</mat-card-header>
 		<mat-card-content class="context-form">
 			<button

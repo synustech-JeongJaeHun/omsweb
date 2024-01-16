@@ -80,4 +80,8 @@ export class ColumnDisplayManagementComponent {
 
 		this.preference.save()
 	}
+
+  labelDisplayTable(type: string): string {
+    return this.preference.controlTables[type]
+  }
 }

@@ -97,6 +97,12 @@ export class CpsControlTableComponent implements OnInit, OnDestroy {
 		).width
 	}
 
+  getDisplayTableLabel(type: string): string {
+    return this.preference.controlTables.cps_order.find(
+      (column) => column.name === type,
+    ).i18nLabel
+  }
+
 	stateStoring = {
 		enabled: true,
 		type: 'custom',

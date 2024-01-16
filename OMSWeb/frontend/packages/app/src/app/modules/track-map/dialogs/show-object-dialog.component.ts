@@ -52,4 +52,8 @@ export class ShowObjectDialogComponent {
   get isMobile(){
     return this.mobileSvc.isMobile
   }
+
+  labelDisplayTable(type: string): string {
+    return this.settingSvc.globalPreferences.controlTables[type]
+  }
 }

@@ -98,6 +98,12 @@ export class ZcuControlTableComponent implements OnInit, OnDestroy {
 		).width
 	}
 
+  getDisplayTableLabel(type: string): string {
+    return this.preference.controlTables.zcus_order.find(
+      (column) => column.name === type,
+    ).i18nLabel
+  }
+
 	stateStoring = {
 		enabled: true,
 		type: 'custom',

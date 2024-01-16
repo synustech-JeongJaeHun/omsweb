@@ -163,4 +163,8 @@ export class PlaybackStatusPanelComponent implements OnInit, OnDestroy {
     const index = this.tableKeys.findIndex(key=>key.toLowerCase()===type);
     return this.currentTab===index;
   }
+
+  labelDisplayTable(type: string): string {
+    return this.preference.controlTables[type]
+  }
 }

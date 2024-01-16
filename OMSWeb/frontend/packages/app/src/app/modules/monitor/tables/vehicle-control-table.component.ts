@@ -114,6 +114,12 @@ export class VehicleControlTableComponent implements OnInit, OnDestroy {
 		).width
 	}
 
+  getDisplayTableLabel(type: string): string {
+    return this.preference.controlTables.vehicles_order.find(
+      (column) => column.name === type,
+    ).i18nLabel
+  }
+
 	stateStoring = {
 		enabled: true,
 		type: 'custom',

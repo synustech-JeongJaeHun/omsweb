@@ -80,7 +80,7 @@
 		animationDuration="0ms" #tabGroup
 	>
 		<mat-tab
-			[label]="'names.transfer' | translate"
+			[label]="labelDisplayTable('orders_label') | translate"
 			*ngIf="canDisplayTable('orders')"
 		>
 			<oms-order-control-table
@@ -93,7 +93,7 @@
 			</oms-order-control-table>
 		</mat-tab>
 		<mat-tab
-			[label]="'names.vehicles' | translate"
+			[label]="labelDisplayTable('vehicles_label') | translate"
 			*ngIf="canDisplayTable('vehicles')"
 		>
 			<oms-vehicle-control-table
@@ -105,7 +105,7 @@
 		</mat-tab>
 		<!-- Stations / Buffers 추가 -->
 		<mat-tab
-			[label]="'names.stations' | translate"
+			[label]="labelDisplayTable('stations_label') | translate"
 			*ngIf="canControl && canDisplayTable('stations') && !isMobile"
 		>
 			<oms-station-control-table
@@ -116,7 +116,7 @@
 			</oms-station-control-table>
 		</mat-tab>
 		<mat-tab
-			[label]="'names.buffers' | translate"
+			[label]="labelDisplayTable('buffers_label') | translate"
 			*ngIf="bufferEnabled && canControl && canDisplayTable('buffers') && !isMobile"
 		>
 			<oms-buffer-control-table
@@ -129,7 +129,7 @@
 		<!-- Stations / Buffers 추가 -->
 		<!-- Zcu 추가 -->
 		<mat-tab
-			[label]="'names.zcu_label' | translate"
+			[label]="labelDisplayTable('zcus_label') | translate"
 			*ngIf="canControl && canDisplayTable('zcus') && !isMobile"
 		>
 			<oms-zcu-control-table
@@ -142,7 +142,7 @@
 		<!-- Zcu 추가 -->
 		<!-- cps 추가 -->
 		<mat-tab
-			[label]="'names.cps' | translate"
+			[label]="labelDisplayTable('cps_label') | translate"
 			*ngIf="canControl && canDisplayTable('cps') && !isMobile"
 		>
 			<oms-cps-control-table
@@ -155,7 +155,7 @@
 		<!-- cps 추가 -->
 
     <mat-tab
-      [label]="'names.fcu' | translate"
+      [label]="labelDisplayTable('fcus_label') | translate"
       *ngIf="canControl && canDisplayTable('fcus') && !isMobile"
     >
       <oms-fcu-control-table
