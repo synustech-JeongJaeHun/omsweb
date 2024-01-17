@@ -12,6 +12,8 @@ import { TrackStatusService } from '@oms/root/services/track-status.service'
 import { Observable, of } from 'rxjs'
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators'
 import { ILookupUnit } from '../../../models/map.interface'
+import {SettingsService} from "@oms/services/settings.service";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
 	selector: 'oms-unit-selector',
@@ -46,7 +48,9 @@ export class UnitSelectorComponent implements OnInit, OnChanges {
 	inputControl = new FormControl()
 	targetOptions$: Observable<ILookupUnit[]>
 
-	constructor(private trackStatusService: TrackStatusService) {}
+	constructor(private trackStatusService: TrackStatusService,
+              private settingSvc: SettingsService,
+              private $t: TranslateService) {}
 	ngOnChanges(changes: SimpleChanges): void {
 		const { disabled } = changes
 
@@ -164,7 +168,8 @@ export class UnitSelectorComponent implements OnInit, OnChanges {
 	}
 	displayFn(item: ILookupUnit): string | undefined {
 		if (!item) return
-		return `${item.objectType} #${item.logicalId}`
+    const displayType = this.parsingObjectType(item.objectType)
+		return `${displayType} #${item.logicalId}`
 	}
 	onSelected(item: ILookupUnit) {
 		this.selectedUnitChange.emit(item)
@@ -174,4 +179,25 @@ export class UnitSelectorComponent implements OnInit, OnChanges {
 		this.selectedUnitChange.emit(undefined)
 		this.inputControl.reset()
 	}
+
+  parsingObjectType(type: string): string{
+    switch (type.toLowerCase()){
+      case 'vehicle':
+        return this.$t.instant(this.labelDisplayTable('vehicle_label'))
+      case 'station':
+        return this.$t.instant(this.labelDisplayTable('station_label'))
+      case 'buffer':
+        return this.$t.instant(this.labelDisplayTable('buffer_label'))
+      case 'zcu':
+        return this.$t.instant(this.labelDisplayTable('zcu_label'))
+      case 'cluster':
+        return this.$t.instant(this.labelDisplayTable('cps_label'))
+      default :
+        return type
+    }
+  }
+
+  labelDisplayTable(type: string): string {
+    return this.settingSvc.globalPreferences.controlTables[type]
+  }
 }

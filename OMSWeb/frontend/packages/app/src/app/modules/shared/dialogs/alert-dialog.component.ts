@@ -99,4 +99,5 @@ export class AlertDialogComponent implements OnDestroy {
   get isMobile() {
     return this.mobileSvc.isMobile
   }
+
 }

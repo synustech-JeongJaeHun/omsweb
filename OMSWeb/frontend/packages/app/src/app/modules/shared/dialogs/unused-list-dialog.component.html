@@ -37,6 +37,7 @@
 					dataField="type"
 					[caption]="'names.type' | translate"
 					width="70"
+          cellTemplate="typeTemplate"
 				></dxi-column>
 				<dxi-column
 					dataType="string"
@@ -75,6 +76,10 @@
 					>
 					</dxi-button>
 				</dxi-column>
+
+        <div *dxTemplate="let data of 'typeTemplate'">
+          {{ parsingObjectType(data.displayValue) | translate}}
+        </div>
 			</dx-data-grid>
 		</div>
 	</ng-container>

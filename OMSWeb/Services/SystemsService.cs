@@ -158,6 +158,16 @@ namespace OMSWeb.Services
             client.IndicatorFireEmergency = this._appSettings.IndicatorFireEmergency;
             client.DisableHWZCU = this._appSettings.DisableHWZCU;
             client.IsForceMTLIn = this._appSettings.IsForceMTLIn;
+
+            try {
+                client.WarningMessageType =
+                    (DisplayType)Enum.Parse(typeof(DisplayType), this._appSettings.WarningMessageType, true);
+            }
+            catch (ArgumentException e)
+            {
+                client.WarningMessageType = DisplayType.Id;
+            }
+            
             
             return this._appSettings.Client;
         }

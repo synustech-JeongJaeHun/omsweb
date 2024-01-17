@@ -94,4 +94,25 @@ export class UnusedListDialogComponent implements OnInit, OnDestroy {
     console.log($event)
     $event.cancel =true
   }
+
+  parsingObjectType(type: string): string{
+    switch (type.toLowerCase()){
+      case 'vehicle':
+        return this.labelDisplayTable('vehicle_label')
+      case 'station':
+        return this.labelDisplayTable('station_label')
+      case 'buffer':
+        return this.labelDisplayTable('buffer_label')
+      case 'zcu':
+        return this.labelDisplayTable('zcu_label')
+      case 'cluster':
+        return this.labelDisplayTable('cps_label')
+      default :
+        return type
+    }
+  }
+
+  labelDisplayTable(type: string): string {
+    return this.settingSvc.globalPreferences.controlTables[type]
+  }
 }

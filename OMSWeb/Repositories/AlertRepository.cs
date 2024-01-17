@@ -4,13 +4,16 @@ using Dapper;
 using Microsoft.Extensions.Configuration;
 using OMSWeb.Models;
 using OMSWeb.Models.Entities;
+using OMSWeb.Services;
 
 namespace OMSWeb.Repositories
 {
     public class AlertRepository : DataAccess
     {
-        public AlertRepository(IConfiguration configuration) : base(configuration)
+        private SystemsService _systemSvc;
+        public AlertRepository(IConfiguration configuration, SystemsService systemSvc) : base(configuration)
         {
+            this._systemSvc = systemSvc;
         }
 
         public NotificationCountModel GetCount()
@@ -104,6 +107,7 @@ SELECT sum(level1) AS level1, sum(level2) AS level2, sum(level3) AS level3
             string WhereConditions = string.Empty;
             string SortConditions = @"ALT.id desc";
             string LimitConditions = @"LIMIT @take OFFSET @skip";
+            int MessageType = (int)_systemSvc.GetClientSettings().WarningMessageType;
 
             if (string.IsNullOrWhiteSpace(condition) == false) WhereConditions = $" WHERE {condition}";
             if (string.IsNullOrWhiteSpace(sort) == false) SortConditions = $"{sort}";
@@ -112,7 +116,9 @@ SELECT sum(level1) AS level1, sum(level2) AS level2, sum(level3) AS level3
             string sql = $@"
                 SELECT * FROM (
                         SELECT 
-                            ALT.id, ALT.time, ALT.level, ALT.tag, ALT.message, ALT.ack_time, ALT.ack_by 
+                            ALT.id, ALT.time, ALT.level, ALT.tag, 
+                            (split_part(ALT.message, '^',1) || split_part(ALT.message, '^', {MessageType}) || split_part(ALT.message, '^',5)) as message, 
+                            ALT.ack_time, ALT.ack_by 
                         FROM alerts AS ALT
                         --ORDER BY ALT.id desc
                         ORDER BY {SortConditions}
