@@ -34,6 +34,6 @@ namespace OMSWeb
                 {
                     webBuilder.UseStartup<Startup>();
                 })
-                .UseWindowsService();
+                .UseWindowsService(); 
     }
 }
