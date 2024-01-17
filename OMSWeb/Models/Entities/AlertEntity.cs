@@ -11,6 +11,7 @@ namespace OMSWeb.Models.Entities
         public string Message { get; set; }
         public DateTime? AckTime { get; set; }
         public string AckBy { get; set; }
+        public int RowIndex { get; set; }
     }
 
     public class AlertHistory : AlertEntity

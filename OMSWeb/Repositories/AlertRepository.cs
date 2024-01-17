@@ -114,7 +114,7 @@ SELECT sum(level1) AS level1, sum(level2) AS level2, sum(level3) AS level3
             if (skip <= 0 && take <= 0) LimitConditions = string.Empty;
 
             string sql = $@"
-                SELECT * FROM (
+                SELECT ROW_NUMBER() OVER () AS row_index, * FROM (
                         SELECT 
                             ALT.id, ALT.time, ALT.level, ALT.tag, 
                             (split_part(ALT.message, '^',1) || split_part(ALT.message, '^', {MessageType}) || split_part(ALT.message, '^',5)) as message, 
