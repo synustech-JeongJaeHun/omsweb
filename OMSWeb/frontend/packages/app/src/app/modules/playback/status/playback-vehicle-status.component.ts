@@ -54,6 +54,11 @@ export class PlaybackVehicleStatusComponent {
     ).width
   }
 
+  getDisplayTableLabel(type: string): string {
+    return this.preference.controlTables.vehicles_order.find(
+      (column) => column.name === type,
+    ).i18nLabel
+  }
   transform_distance(value: number): string {
     if (value == undefined) {
       return ''

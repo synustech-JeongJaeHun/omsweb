@@ -84,7 +84,7 @@
     dataType="int"
     dataField="id"
     sortOrder="asc"
-    [caption]="'names.id' | translate"
+    [caption]="getDisplayTableLabel('stations_id') | translate"
     [visible]="canDisplayTable('stations_id')"
     [visibleIndex]="getDisplayTableColumnIndex('stations_id')"
     [width]="getDisplayTableColumnWidth('stations_id')"
@@ -92,7 +92,7 @@
   <dxi-column
     dataType="string"
     dataField="cAlias"
-    [caption]="'names.alias' | translate"
+    [caption]="getDisplayTableLabel('stations_alias') | translate"
     [visible]="canDisplayTable('stations_alias')"
     [visibleIndex]="getDisplayTableColumnIndex('stations_alias')"
     [width]="getDisplayTableColumnWidth('stations_alias')"
@@ -100,7 +100,7 @@
   <dxi-column
     dataType="string"
     dataField="physicalId"
-    [caption]="'names.transOrQR' | translate"
+    [caption]="getDisplayTableLabel('stations_physicalId') | translate"
     [visible]="canDisplayTable('stations_physicalId')"
     [visibleIndex]="getDisplayTableColumnIndex('stations_physicalId')"
     [width]="getDisplayTableColumnWidth('stations_physicalId')"
@@ -108,7 +108,7 @@
   <dxi-column
     dataType="string"
     dataField="logicalId"
-    [caption]="'names.logicalId' | translate"
+    [caption]="getDisplayTableLabel('stations_logicalId') | translate"
     [visible]="canDisplayTable('stations_logicalId')"
     [visibleIndex]="getDisplayTableColumnIndex('stations_logicalId')"
     [width]="getDisplayTableColumnWidth('stations_logicalId')"
@@ -116,7 +116,7 @@
   <dxi-column
     dataType="string"
     dataField="point"
-    [caption]="'names.point' | translate"
+    [caption]="getDisplayTableLabel('stations_point') | translate"
     [visible]="canDisplayTable('stations_point')"
     [visibleIndex]="getDisplayTableColumnIndex('stations_point')"
     [width]="getDisplayTableColumnWidth('stations_point')"
@@ -124,7 +124,7 @@
   <dxi-column
     dataType="string"
     dataField="direction"
-    [caption]="'names.direction' | translate"
+    [caption]="getDisplayTableLabel('stations_direction') | translate"
     cellTemplate="directionTemplate"
     [visible]="canDisplayTable('stations_direction')"
     [visibleIndex]="getDisplayTableColumnIndex('stations_direction')"
@@ -133,7 +133,7 @@
   <dxi-column
     dataType="string"
     dataField="nextPoint"
-    [caption]="'names.nextPoint' | translate"
+    [caption]="getDisplayTableLabel('stations_nextPoint') | translate"
     [visible]="canDisplayTable('stations_nextPoint')"
     [visibleIndex]="getDisplayTableColumnIndex('stations_nextPoint')"
     [width]="getDisplayTableColumnWidth('stations_nextPoint')"
@@ -141,7 +141,7 @@
   <dxi-column
     dataType="string"
     dataField="offset"
-    [caption]="'names.offset' | translate"
+    [caption]="getDisplayTableLabel('stations_offset') | translate"
     [visible]="canDisplayTable('stations_offset')"
     [visibleIndex]="getDisplayTableColumnIndex('stations_offset')"
     [width]="getDisplayTableColumnWidth('stations_offset')"
@@ -149,7 +149,7 @@
   <dxi-column
     dataType="boolean"
     dataField="unuse"
-    [caption]="'names.unuse' | translate"
+    [caption]="getDisplayTableLabel('stations_unuse') | translate"
     [visible]="canDisplayTable('stations_unuse')"
     [visibleIndex]="getDisplayTableColumnIndex('stations_unuse')"
     [width]="getDisplayTableColumnWidth('stations_unuse')"
@@ -157,13 +157,13 @@
   <dxi-column
     dataType="string"
     dataField="carrierId"
-    [caption]="'names.carrierId' | translate"
+    [caption]="getDisplayTableLabel('stations_carrierId') | translate"
     [visible]="canDisplayTable('stations_carrierId')"
     [visibleIndex]="getDisplayTableColumnIndex('stations_carrierId')"
     [width]="getDisplayTableColumnWidth('stations_carrierId')"></dxi-column>
   <dxi-column dataType="string"
               dataField="slideOffset"
-              [caption]="'names.slideOffset' | translate"
+              [caption]="getDisplayTableLabel('stations_slideOffset') | translate"
               [visible]="canDisplayTable('stations_slideOffset')"
               [visibleIndex]="getDisplayTableColumnIndex('stations_slideOffset')"
               [width]="getDisplayTableColumnWidth('stations_slideOffset')"></dxi-column>
@@ -171,7 +171,7 @@
               dataType="string"
               dataField="user"
               [allowSorting]="true"
-              [caption]="'names.user' | translate"
+              [caption]="getDisplayTableLabel('stations_user') | translate"
               [visible]="canDisplayTable('stations_user')"
               [visibleIndex]="getDisplayTableColumnIndex('stations_user')"
               [width]="getDisplayTableColumnWidth('stations_user')"
@@ -181,7 +181,7 @@
     dataType="string"
     dataField="note"
     [allowSorting]="true"
-    [caption]="'names.note' | translate"
+    [caption]="getDisplayTableLabel('stations_note') | translate"
     [visible]="canDisplayTable('stations_note')"
     [visibleIndex]="getDisplayTableColumnIndex('stations_note')"
     [width]="getDisplayTableColumnWidth('stations_note')"

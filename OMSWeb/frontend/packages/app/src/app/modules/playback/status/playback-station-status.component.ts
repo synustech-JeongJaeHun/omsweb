@@ -49,4 +49,10 @@ export class PlaybackStationStatusComponent {
       (column) => column.name === type,
     ).width
   }
+
+  getDisplayTableLabel(type: string): string {
+    return this.preference.controlTables.stations_order.find(
+      (column) => column.name === type,
+    ).i18nLabel
+  }
 }
