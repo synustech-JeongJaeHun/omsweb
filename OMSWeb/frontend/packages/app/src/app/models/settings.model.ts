@@ -360,7 +360,7 @@ const defaultControlTable = {
   cps_label: "names.cps",
   fcus_label: "names.fcus",
   vehicle_label: "names.vehicle",
-  station_label: "names.port",
+  station_label: "names.station",
   buffer_label: "names.buffer",
   zcu_label: "names.zcu_label",
   fcu_label: "names.fcu",

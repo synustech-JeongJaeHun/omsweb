@@ -70,4 +70,11 @@ namespace OMSWeb
     SettingZcu = 41,
     SettingVehicle = 42
   }
+  
+  public enum DisplayType
+  {
+      Id = 2,
+      LogicalId = 3,
+      Alias = 4,
+  }
 }
