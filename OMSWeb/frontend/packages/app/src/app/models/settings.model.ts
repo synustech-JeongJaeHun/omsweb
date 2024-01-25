@@ -279,7 +279,7 @@ const defaultHistoryTable = {
     { name: 'alarms_time', i18nLabel: 'names.time', width: 120 },
     {
       name: 'alarms_time_resolved',
-      i18nLabel: 'names.timeResolved',
+      i18nLabel: 'names.timeReset',
       width: 120,
     },
     { name: 'alarms_age', i18nLabel: 'names.elapsed', width: 120 },

@@ -2,28 +2,6 @@
   <ng-container class="dialog-layout">
     <div mat-dialog-content>
       <div class="grid-actions" *ngIf="hasControlAccess" style="display: flex;">
-        <!--<div style="width: 50%">
-          <button
-            mat-stroked-button
-            color="primary"
-            class="dense accent"
-            style="margin: 4px 4px 4px 0"
-            [disabled]="!canControl"
-            (click)="onUnuse()"
-          >
-            {{ 'names.unuse' | translate }}
-          </button>
-          <button
-            mat-stroked-button
-            color="primary"
-            class="dense accent"
-            style="margin: 4px"
-            [disabled]="!canControl"
-            (click)="onUse()"
-          >
-            {{ 'names.use' | translate }}
-          </button>
-        </div>-->
         <div style="margin:4px; width: 50%; display: contents" >
           <mat-form-field class="dense" appearance="outline">
             <input
@@ -76,19 +54,19 @@
         <dxi-column
           dataType="int"
           dataField="id"
-          [caption]="'names.id' | translate"
+          [caption]="getDisplayTableLabel('stations_id') | translate"
           [width]="100"
         ></dxi-column>
         <dxi-column
           dataType="string"
           dataField="logicalId"
-          [caption]="'names.logicalId' | translate"
+          [caption]="getDisplayTableLabel('stations_logicalId') | translate"
           [width]="200"
         ></dxi-column>
         <dxi-column
           dataType="string"
           dataField="carrierId"
-          [caption]="'names.carrierId' | translate"
+          [caption]="getDisplayTableLabel('stations_carrierId') | translate"
           [width]="233"></dxi-column>
       </dx-data-grid>
     </div>

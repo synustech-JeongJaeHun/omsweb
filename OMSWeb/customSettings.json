@@ -14,6 +14,128 @@
     "zcu_label": "names.zcu_label",
     "fcu_label": "names.fcu",
 
+    "orders_order": [
+      { "name": "orders_id", "i18nLabel": "names.id", "width": 50 },
+      { "name": "orders_logicalId", "i18nLabel": "names.logicalId", "width": 240 },
+      { "name": "orders_origin", "i18nLabel": "names.origin", "width": 70 },
+      { "name": "orders_priority", "i18nLabel": "names.priority", "width": 70 },
+      { "name": "orders_state", "i18nLabel": "names.state", "width": 100 },
+      { "name": "orders_vehicleId", "i18nLabel": "names.vehicleId", "width": 110 },
+      { "name": "orders_vehicleAlias", "i18nLabel": "names.vehicleAlias", "width": 110 },
+      {
+        "name": "orders_locationPickup",
+        "i18nLabel": "names.fromEMSID",
+        "width": 140
+      },
+      {
+        "name": "orders_locationPickupAlias",
+        "i18nLabel": "names.fromPortName",
+        "width": 140
+      },
+      {
+        "name": "orders_locationDropoff",
+        "i18nLabel": "names.toEMSID",
+        "width": 140
+      },
+      {
+        "name": "orders_locationDropoffAlias",
+        "i18nLabel": "names.toPortName",
+        "width": 140
+      },
+      {
+        "name": "orders_locationMove",
+        "i18nLabel": "names.locationMove",
+        "width": 140
+      },
+      {
+        "name": "orders_carrierLabel",
+        "i18nLabel": "names.carrierLabel",
+        "width": 100
+      },
+      {
+        "name": "orders_timeCreated",
+        "i18nLabel": "names.timeCreated",
+        "width": 110
+      },
+      {
+        "name": "orders_timeAssigned",
+        "i18nLabel": "names.timeAssigned",
+        "width": 110
+      },
+      {
+        "name": "orders_lastReassignType",
+        "i18nLabel": "names.lastReassignType",
+        "width": 80
+      },
+      {
+        "name": "orders_durationTotal",
+        "i18nLabel": "names.durationTotal",
+        "width": 80
+      },
+      {
+        "name": "orders_durationUnassigned",
+        "i18nLabel": "names.durationUnassigned",
+        "width": 80
+      },
+      {
+        "name": "orders_durationPickup",
+        "i18nLabel": "names.durationPickup",
+        "width": 80
+      },
+      {
+        "name": "orders_durationLoad",
+        "i18nLabel": "names.durationLoad",
+        "width": 80
+      },
+      {
+        "name": "orders_durationDropoff",
+        "i18nLabel": "names.durationDropoff",
+        "width": 80
+      },
+      {
+        "name": "orders_durationUnload",
+        "i18nLabel": "names.durationUnload",
+        "width": 80
+      },
+      {
+        "name": "orders_durationMove",
+        "i18nLabel": "names.durationMove",
+        "width": 80
+      },
+      {
+        "name": "orders_distancePickup",
+        "i18nLabel": "names.distancePickup",
+        "width": 80
+      },
+      {
+        "name": "orders_distanceDropoff",
+        "i18nLabel": "names.distanceDropoff",
+        "width": 80
+      },
+      {
+        "name": "orders_distanceMove",
+        "i18nLabel": "names.distanceMove",
+        "width": "auto"
+      }
+    ],
+        
+    "stations": true,
+    "stations_id": true,
+    "stations_alias": true,
+    "stations_physicalId": true,
+    "stations_logicalId": true,
+    "stations_group": true,
+    "stations_point": true,
+    "stations_direction": true,
+    "stations_nextPoint": true,
+    "stations_offset": true,
+    "stations_unuse": true,
+    "stations_carrierId": true,
+    "stations_slideOffset": false,
+    "stations_user": true,
+    "stations_note": true,
+
+
     "stations_order": [
       { "name": "stations_id", "i18nLabel": "names.id", "width": 50 },
       { "name": "stations_logicalId", "i18nLabel": "names.EMSID", "width": 120 },
@@ -29,6 +151,105 @@
       { "name": "stations_slideOffset", "i18nLabel": "names.slideOffset", "width": 100 },
       { "name": "stations_user", "i18nLabel": "names.user", "width": 80 },
       { "name": "stations_note", "i18nLabel": "names.note", "width": "auto" }
+    ]
+  },
+  "HistoryTables" : {
+    "transfers_order": [
+      { "name": "transfers_logical_id", "i18nLabel": "names.commandId", "width": 240 },
+      { "name": "transfers_id", "i18nLabel": "names.id", "width": 80 },
+      { "name": "transfers_origin", "i18nLabel": "names.origin", "width": 100 },
+      { "name": "transfers_priority", "i18nLabel": "names.priority", "width": 65 },
+      { "name": "transfers_state", "i18nLabel": "names.state", "width": 100 },
+      { "name": "transfers_vehicle_id", "i18nLabel": "names.vehicleId", "width": 95 },
+      { "name": "transfers_vehicle_alias", "i18nLabel": "names.vehicleId", "width": 95 },
+      {
+        "name": "transfers_location_pickup",
+        "i18nLabel": "names.fromEMSID",
+        "width": 120
+      },
+      {
+        "name": "transfers_location_pickup_alias",
+        "i18nLabel": "names.fromPortName",
+        "width": 120
+      },
+      {
+        "name": "transfers_location_dropoff",
+        "i18nLabel": "names.toEMSID",
+        "width": 120
+      },
+      {
+        "name": "transfers_location_dropoff_alias",
+        "i18nLabel": "names.toPortName",
+        "width": 120
+      },
+      { "name": "transfers_from_distance", "i18nLabel": "names.fromDistance", "width": 100 },
+      { "name": "transfers_to_distance", "i18nLabel": "names.toDistance", "width": 100 },
+      {
+        "name": "transfers_location_move",
+        "i18nLabel": "names.locationMove",
+        "width": 120
+      },
+      {
+        "name": "transfers_carrier_label",
+        "i18nLabel": "names.carrierLabel",
+        "width": 70
+      },
+      {
+        "name": "transfers_time_created",
+        "i18nLabel": "names.timeCreated",
+        "width": 120
+      },
+      {
+        "name": "transfers_time_assigned",
+        "i18nLabel": "names.timeAssigned",
+        "width": 120
+      },
+      {
+        "name": "transfers_time_load_started",
+        "i18nLabel": "names.timeLoadStarted",
+        "width": 120
+      },
+      {
+        "name": "transfers_time_load_completed",
+        "i18nLabel": "names.timeLoadCompleted",
+        "width": 120
+      },
+      {
+        "name": "transfers_time_unload_started",
+        "i18nLabel": "names.timeUnloadStarted",
+        "width": 120
+      },
+      {
+        "name": "transfers_time_unload_completed",
+        "i18nLabel": "names.timeUnloadCompleted",
+        "width": 120
+      },
+      {
+        "name": "transfers_time_completed",
+        "i18nLabel": "names.timeCompleted",
+        "width": 120
+      },
+      {
+        "name": "transfers_time_aborted",
+        "i18nLabel": "names.timeAborted",
+        "width": 120
+      },
+      {
+        "name": "transfers_time_failed",
+        "i18nLabel": "names.timeFailed",
+        "width": 120
+      },
+      {
+        "name": "transfers_result_code",
+        "i18nLabel": "names.reason",
+        "width": 120
+      },
+      { "name": "transfers_age", "i18nLabel": "names.elapsed", "width": 120 },
+      {
+        "name": "transfers_unload_retry_cnt",
+        "i18nLabel": "names.unloadRetryCount",
+        "width": 120
+      }
     ]
   }
 }

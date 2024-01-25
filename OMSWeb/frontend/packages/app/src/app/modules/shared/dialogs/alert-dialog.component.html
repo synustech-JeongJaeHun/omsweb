@@ -27,6 +27,7 @@
         <dxi-column dataType="number" dataField="rowIndex" [allowSorting]="false"
                     [allowEditing]="false" [width]="60" alignment="center"></dxi-column>
         <dxi-column [allowFiltering]="true" [width]="120" dataType="datetime" dataField="time"
+                    sortOrder="desc"
                     [caption]="'names.time' | translate" cellTemplate="dateCell">
           <div *dxTemplate="let data of 'dateCell'">
             {{ data.value | date: "yyyy/MM/dd HH:mm:ss" }}

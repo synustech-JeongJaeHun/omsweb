@@ -582,7 +582,13 @@
     "rpm4" : "Rpm 4(RPM)",
     "port" : "Port",
     "ports" : "Ports",
-    "fcus" : "Fcus"
+    "fcus" : "Fcus",
+    "portName" : "Port Name",
+    "EMSID" :"EMS ID",
+    "fromEMSID": "From(EMS ID)",
+    "toEMSID": "To(EMS ID)",
+    "fromPortName": "From(Port Name)",
+    "toPortName": "To(Port Name)"
   },
   "enums": {
     "hostSessionStatus": {

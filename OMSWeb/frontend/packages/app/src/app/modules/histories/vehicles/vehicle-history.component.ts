@@ -235,4 +235,10 @@ export class VehicleHistoryComponent implements OnInit, OnDestroy {
 
     return  hour + ':' + minutes + ':' + second + '.' + milisec
   }
+
+  getDisplayTableLabel(type: string) {
+    return this.preference.historyTables.vehicles_order.find(
+      (column) => column.name === type,
+    ).i18nLabel
+  }
 }

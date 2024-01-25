@@ -40,6 +40,6 @@ namespace OMSWeb.Models
         public bool DisableHWZCU { get; set; }
         public bool IsForceMTLIn { get; set; }
         
-        public DisplayType WarningMessageType { get; set; }
+        public DisplayType[] WarningMessageType { get; set; }
     }
 }

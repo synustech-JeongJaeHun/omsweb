@@ -584,7 +584,11 @@
     "ports" : "Ports",
     "fcus" : "Fcus",
     "portName" : "Port Name",
-    "EMSID" :"EMS ID no"
+    "EMSID" :"EMS ID",
+    "fromEMSID": "From(EMS ID)",
+    "toEMSID": "To(EMS ID)",
+    "fromPortName": "From(Port Name)",
+    "toPortName": "To(Port Name)"
   },
   "enums": {
     "hostSessionStatus": {

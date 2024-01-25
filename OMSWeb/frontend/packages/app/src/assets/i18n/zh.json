@@ -582,7 +582,13 @@
     "rpm4" : "转速 4(转速)",
     "port" : "港口",
     "ports" : "港口",
-    "fcus" : "Fcus"
+    "fcus" : "Fcus",
+    "portName" : "端口名称",
+    "EMSID" :"EMS ID",
+    "fromEMSID": "来自(EMS ID)",
+    "toEMSID": "到(EMS ID)",
+    "fromPortName": "来自(端口名称)",
+    "toPortName": "到(端口名称)"
   },
   "enums": {
     "hostSessionStatus": {

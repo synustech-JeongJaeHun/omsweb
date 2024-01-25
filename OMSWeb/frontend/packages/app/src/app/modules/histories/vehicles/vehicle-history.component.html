@@ -71,7 +71,7 @@
             [visibleIndex]="getDisplayTableColumnIndex('vehicles_physical_id')"
             dataType="string"
             dataField="historySourceId"
-            [caption]="'names.id' | translate"
+            [caption]="getDisplayTableLabel('vehicles_physical_id') | translate"
             [fixed]="true"
           ></dxi-column>
           <dxi-column
@@ -80,7 +80,7 @@
             [visibleIndex]="getDisplayTableColumnIndex('vehicles_logical_id')"
             dataType="string"
             dataField="logicalId"
-            [caption]="'names.logicalId' | translate"
+            [caption]="getDisplayTableLabel('vehicles_logical_id') | translate"
           ></dxi-column>
           <dxi-column
             [width]="getDisplayTableColumnWidth('vehicles_last_pm_time')"
@@ -89,7 +89,7 @@
             [allowFiltering]="true"
             dataType="datetime"
             dataField="pmTime"
-            [caption]="'names.lastPmTime' | translate"
+            [caption]="getDisplayTableLabel('vehicles_last_pm_time') | translate"
           ></dxi-column>
           <dxi-column
             [width]="getDisplayTableColumnWidth('vehicles_distance')"
@@ -98,6 +98,7 @@
             [allowFiltering]="true"
             dataType="number"
             dataField="distance"
+            [caption]="getDisplayTableLabel('vehicles_distance') | translate"
           ></dxi-column>
           <dxi-column
             [width]="getDisplayTableColumnWidth('vehicles_runtime')"
@@ -106,6 +107,7 @@
             [allowFiltering]="true"
             dataType="string"
             dataField="runtime"
+            [caption]="getDisplayTableLabel('vehicles_runtime') | translate"
           ></dxi-column>
           <dxi-column
             [width]="getDisplayTableColumnWidth('vehicles_distance_total')"
@@ -114,7 +116,7 @@
             [allowFiltering]="true"
             dataType="number"
             dataField="distanceTotal"
-            [caption]="'names.distanceTotal' | translate"
+            [caption]="getDisplayTableLabel('vehicles_distance_total') | translate"
           ></dxi-column>
           <dxi-column
             [width]="getDisplayTableColumnWidth('vehicles_runtime_total')"
@@ -123,7 +125,7 @@
             [allowFiltering]="true"
             dataType="string"
             dataField="runtimeTotal"
-            [caption]="'names.runtimeTotal' | translate"
+            [caption]="getDisplayTableLabel('vehicles_runtime_total') | translate"
           ></dxi-column>
           <dxi-column
             [width]="getDisplayTableColumnWidth('vehicles_user')"
@@ -132,7 +134,7 @@
             [allowFiltering]="true"
             dataType="string"
             dataField="pmUser"
-            [caption]="'names.user' | translate"
+            [caption]="getDisplayTableLabel('vehicles_user') | translate"
           ></dxi-column>
           <dxi-column
             [width]="getDisplayTableColumnWidth('vehicles_note')"
@@ -141,7 +143,7 @@
             [allowFiltering]="true"
             dataType="string"
             dataField="pmNote"
-            [caption]="'names.note' | translate"
+            [caption]="getDisplayTableLabel('vehicles_note') | translate"
           ></dxi-column>
           <div *dxTemplate="let data of 'distanceTotalTemplate'">
             {{ data.displayValue / 1000000 | number: '1.0-0' }}km
@@ -223,7 +225,7 @@
           [visibleIndex]="getDisplayTableColumnIndex('vehicles_physical_id')"
           dataType="string"
           dataField="historySourceId"
-          [caption]="'names.id' | translate"
+          [caption]="getDisplayTableLabel('vehicles_physical_id') | translate"
           [fixed]="true"
         ></dxi-column>
         <dxi-column
@@ -232,7 +234,7 @@
           [visibleIndex]="getDisplayTableColumnIndex('vehicles_logical_id')"
           dataType="string"
           dataField="logicalId"
-          [caption]="'names.logicalId' | translate"
+          [caption]="getDisplayTableLabel('vehicles_logical_id') | translate"
         ></dxi-column>
         <dxi-column
           [width]="getDisplayTableColumnWidth('vehicles_distance')"
@@ -241,7 +243,7 @@
           [allowFiltering]="true"
           dataType="number"
           dataField="distanceRange"
-          [caption]="'names.distance' | translate"
+          [caption]="getDisplayTableLabel('vehicles_distance') | translate"
         ></dxi-column>
         <dxi-column
           [width]="getDisplayTableColumnWidth('vehicles_runtime')"
@@ -250,7 +252,7 @@
           [allowFiltering]="true"
           dataType="string"
           dataField="runtimeRange"
-          [caption]="'names.runtime' | translate"
+          [caption]="getDisplayTableLabel('vehicles_runtime') | translate"
         ></dxi-column>
       </dx-data-grid>
     </div>

@@ -301,4 +301,10 @@ export class TransferHistoryComponent implements OnInit, OnDestroy {
     if (!data?.timeCreated) return;
     this.router.navigate(['/playback'], {queryParams: {selected: JSON.stringify(data.timeCreated)}}).then()
   }
+
+  getDisplayTableLabel(type: string) {
+    return this.preference.historyTables.transfers_order.find(
+      (column) => column.name === type,
+    ).i18nLabel
+  }
 }

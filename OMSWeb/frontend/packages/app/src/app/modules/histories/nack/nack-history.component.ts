@@ -214,4 +214,10 @@ export class NackHistoryComponent implements OnInit, OnDestroy {
 
         this.bySearch = false
 	}
+
+  getDisplayTableLabel(type: string) {
+    return this.preference.historyTables.nacks_order.find(
+      (column) => column.name === type,
+    ).i18nLabel
+  }
 }

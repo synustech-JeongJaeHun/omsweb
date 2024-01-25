@@ -232,6 +232,11 @@ export class FireStationDialogComponent implements OnInit, OnDestroy {
     this.dataGrid.instance.deselectAll()
     this.dataGrid.instance.selectRowsByIndexes(e.rowIndex)
     this.selectRowData = this.dataGrid.instance.getSelectedRowsData()[0];
+  }
 
+  getDisplayTableLabel(type: string): string {
+    return this.preference.controlTables.stations_order.find(
+      (column) => column.name === type,
+    ).i18nLabel
   }
 }

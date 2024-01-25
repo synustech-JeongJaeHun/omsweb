@@ -105,31 +105,73 @@ SELECT sum(level1) AS level1, sum(level2) AS level2, sum(level3) AS level3
         public IQueryable<AlertEntity> QueryAlerts(int skip, int take, string condition, string sort)
         {
             string WhereConditions = string.Empty;
-            string SortConditions = @"ALT.id desc";
+            string SortConditions = string.Empty;
             string LimitConditions = @"LIMIT @take OFFSET @skip";
-            int MessageType = (int)_systemSvc.GetClientSettings().WarningMessageType;
-
+            string MessageType = "";
+            try
+            {
+                MessageType = 
+                    String.Join(", ", 
+                        _systemSvc.GetClientSettings().WarningMessageType
+                            .Select(c => (int)c)
+                    );
+            }
+            catch (Exception e)
+            {
+                MessageType = ((int)DisplayType.LogicalId).ToString();
+            }
+            finally
+            {
+                MessageType = "1, " + MessageType + ", 5";                
+            }
+            
             if (string.IsNullOrWhiteSpace(condition) == false) WhereConditions = $" WHERE {condition}";
-            if (string.IsNullOrWhiteSpace(sort) == false) SortConditions = $"{sort}";
+            if (string.IsNullOrWhiteSpace(sort) == false) SortConditions = $"ORDER BY {sort}";
             if (skip <= 0 && take <= 0) LimitConditions = string.Empty;
 
             string sql = $@"
-                SELECT ROW_NUMBER() OVER () AS row_index, * FROM (
-                        SELECT 
-                            ALT.id, ALT.time, ALT.level, ALT.tag, 
-                            (split_part(ALT.message, '^',1) || split_part(ALT.message, '^', {MessageType}) || split_part(ALT.message, '^',5)) as message, 
-                            ALT.ack_time, ALT.ack_by 
-                        FROM alerts AS ALT
-                        --ORDER BY ALT.id desc
-                        ORDER BY {SortConditions}
- 
-                    ) alertHistory
-
-                    {WhereConditions}
-
-                    --LIMIT @take OFFSET @skip
-                    {LimitConditions}
-                    ";
+                SELECT
+                  row_number() OVER () AS row_index,
+                  ALT.id,
+                  ALT.time,
+                  ALT.level,
+                  ALT.tag,
+                  CASE 
+                    WHEN array_length(subquery.messages_array, 1) = 1 THEN ALT.message 
+                    ELSE 
+                      STRING_AGG(
+                        CASE 
+                          WHEN ALT.position = 1 THEN subquery.messages_array[ALT.position] || '['
+                          WHEN ALT.position = 5 THEN ']' || subquery.messages_array[ALT.position] 
+                          ELSE subquery.messages_array[ALT.position] END,
+                        ' ' ORDER BY ALT.position
+                      )  
+                  END AS message,
+                  ALT.ack_time,
+                  ALT.ack_by
+                FROM
+                  (
+                    SELECT
+                      *,
+                      unnest(array[{MessageType}]) AS position
+                    FROM
+                      alerts
+                  ) AS ALT
+                JOIN (
+                  SELECT
+                    id,
+                    string_to_array(message, '^') AS messages_array,
+                    unnest(array[{MessageType}]) AS position
+                  FROM
+                    alerts
+                ) AS subquery ON ALT.id = subquery.id AND ALT.position = subquery.position
+                {WhereConditions}
+                GROUP BY
+                  ALT.id, ALT.time, ALT.level, ALT.tag, ALT.ack_time, ALT.ack_by, ALT.message, subquery.messages_array
+                {SortConditions}
+                --LIMIT @take OFFSET @skip
+                {LimitConditions}
+                ";
 
             IQueryable<AlertEntity> result;
             using (var conn = ConnectTrack())

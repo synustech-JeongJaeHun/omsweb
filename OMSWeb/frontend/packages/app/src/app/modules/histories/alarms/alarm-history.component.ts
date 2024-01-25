@@ -291,4 +291,10 @@ export class AlarmHistoryComponent implements OnInit {
     if(!data?.time) return;
     this.router.navigate(['/playback'],{queryParams: {selected: JSON.stringify(data.time)}}).then()
   }
+
+  getDisplayTableLabel(type: string) {
+    return this.preference.historyTables.alarms_order.find(
+      (column) => column.name === type,
+    ).i18nLabel
+  }
 }

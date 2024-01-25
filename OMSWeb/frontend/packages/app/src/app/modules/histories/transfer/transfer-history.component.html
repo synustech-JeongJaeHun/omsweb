@@ -71,7 +71,7 @@
 									[width]="getDisplayTableColumnWidth('transfers_logical_id')"
 									dataType="string"
 									dataField="logicalId"
-									[caption]="'names.commandId' | translate"
+									[caption]="getDisplayTableLabel('transfers_logical_id') | translate"
 									[fixed]="true"></dxi-column>
 			<dxi-column [visible]="canDisplayTable('transfers_id')"
 									[visibleIndex]="getDisplayTableColumnIndex('transfers_id')"
@@ -79,52 +79,52 @@
 									dataType="string"
 									dataField="historySourceId"
 									sortOrder="desc"
-									[caption]="'names.id' | translate"></dxi-column>
+									[caption]="getDisplayTableLabel('transfers_id') | translate"></dxi-column>
 			<dxi-column [visible]="canDisplayTable('transfers_origin')"
 									[visibleIndex]="getDisplayTableColumnIndex('transfers_origin')"
 									[width]="getDisplayTableColumnWidth('transfers_origin')"
 									dataType="string"
 									dataField="origin"
-									[caption]="'names.origin' | translate"></dxi-column>
+									[caption]="getDisplayTableLabel('transfers_origin') | translate"></dxi-column>
 			<dxi-column [visible]="canDisplayTable('transfers_priority')"
 									[visibleIndex]="getDisplayTableColumnIndex('transfers_priority')"
 									[width]="getDisplayTableColumnWidth('transfers_priority')"
 									dataType="number"
 									dataField="priority"
-									[caption]="'names.priority' | translate">
+									[caption]="getDisplayTableLabel('transfers_priority') | translate">
 			</dxi-column>
 			<dxi-column [visible]="canDisplayTable('transfers_state')"
 									[visibleIndex]="getDisplayTableColumnIndex('transfers_state')"
 									[width]="getDisplayTableColumnWidth('transfers_state')"
 									dataType="string"
 									dataField="state"
-									[caption]="'names.state' | translate"></dxi-column>
+									[caption]="getDisplayTableLabel('transfers_state') | translate"></dxi-column>
 			<dxi-column [visible]="canDisplayTable('transfers_vehicle_id')"
 									[visibleIndex]="getDisplayTableColumnIndex('transfers_vehicle_id')"
 									[width]="getDisplayTableColumnWidth('transfers_vehicle_id')"
 									dataType="string"
 									dataField="vehicleId"
-									[caption]="'names.vehicleId' | translate">
+									[caption]="getDisplayTableLabel('transfers_vehicle_id') | translate">
 			</dxi-column>
       <dxi-column [visible]="canDisplayTable('transfers_vehicle_alias')"
                   [visibleIndex]="getDisplayTableColumnIndex('transfers_vehicle_alias')"
                   [width]="getDisplayTableColumnWidth('transfers_vehicle_alias')"
                   dataType="string"
                   dataField="vehicleAlias"
-                  [caption]="'names.vehicleAlias' | translate">
+                  [caption]="getDisplayTableLabel('transfers_vehicle_alias') | translate">
       </dxi-column>
 			<dxi-column [visible]="canDisplayTable('transfers_location_pickup')"
 									[visibleIndex]="getDisplayTableColumnIndex('transfers_location_pickup')"
 									[width]="getDisplayTableColumnWidth('transfers_location_pickup')"
 									dataType="string"
 									dataField="locationPickup"
-									[caption]="'names.locationPickup' | translate"
+									[caption]="getDisplayTableLabel('transfers_location_pickup') | translate"
 									[customizeText]="transformLocationId"></dxi-column>
       <dxi-column
                   [width]="getDisplayTableColumnWidth('transfers_location_pickup_alias')"
                   dataType="string"
                   dataField="locationPickupAlias"
-                  [caption]="'names.locationPickupAlias' | translate"
+                  [caption]="getDisplayTableLabel('transfers_location_pickup_alias') | translate"
                   [customizeText]="transformLocationId"
                   [visible]="canDisplayTable('transfers_location_pickup_alias')"
                   [visibleIndex]="getDisplayTableColumnIndex('transfers_location_pickup_alias')"
@@ -137,13 +137,13 @@
 									[width]="getDisplayTableColumnWidth('transfers_location_dropoff')"
 									dataType="string"
 									dataField="locationDropoff"
-									[caption]="'names.locationDropoff' | translate"
+									[caption]="getDisplayTableLabel('transfers_location_dropoff') | translate"
 									[customizeText]="transformLocationId"></dxi-column>
       <dxi-column
                   [width]="getDisplayTableColumnWidth('transfers_location_dropoff_alias')"
                   dataType="string"
                   dataField="locationDropoffAlias"
-                  [caption]="'names.locationDropoffAlias' | translate"
+                  [caption]="getDisplayTableLabel('transfers_location_dropoff_alias') | translate"
                   [customizeText]="transformLocationId"
                   [visible]="canDisplayTable('transfers_location_dropoff_alias')"
                   [visibleIndex]="getDisplayTableColumnIndex('transfers_location_dropoff_alias')"
@@ -154,97 +154,106 @@
 									[width]="getDisplayTableColumnWidth('transfers_location_move')"
 									dataType="string"
 									dataField="locationMove"
-									[caption]="'names.locationMove' | translate"
+									[caption]="getDisplayTableLabel('transfers_location_move') | translate"
 									[customizeText]="transformLocationId"></dxi-column>
       <dxi-column [visible]="canDisplayTable('transfers_from_distance')"
                   [visibleIndex]="getDisplayTableColumnIndex('transfers_from_distance')"
                   [width]="getDisplayTableColumnWidth('transfers_from_distance')"
                   dataType="number"
                   dataField="fromDistance"
-                  [caption]="'names.fromDistance' | translate"></dxi-column>
+                  [caption]="getDisplayTableLabel('transfers_from_distance') | translate"></dxi-column>
       <dxi-column [visible]="canDisplayTable('transfers_to_distance')"
                   [visibleIndex]="getDisplayTableColumnIndex('transfers_to_distance')"
                   [width]="getDisplayTableColumnWidth('transfers_to_distance')"
                   dataType="number"
                   dataField="toDistance"
-                  [caption]="'names.toDistance' | translate"></dxi-column>
+                  [caption]="getDisplayTableLabel('transfers_to_distance') | translate"></dxi-column>
 			<dxi-column [visible]="canDisplayTable('transfers_carrier_label')"
 									[visibleIndex]="getDisplayTableColumnIndex('transfers_carrier_label')"
 									[width]="getDisplayTableColumnWidth('transfers_carrier_label')"
 									dataType="string"
 									dataField="carrierLabel"
 									[allowSorting]="false"
-									[caption]="'names.carrierLabel' | translate"></dxi-column>
+									[caption]="getDisplayTableLabel('transfers_carrier_label') | translate"></dxi-column>
 			<dxi-column [visible]="canDisplayTable('transfers_time_created')"
 									[visibleIndex]="getDisplayTableColumnIndex('transfers_time_created')"
 									[width]="getDisplayTableColumnWidth('transfers_time_created')"
 									dataType="datetime"
 									dataField="timeCreated"
-									[caption]="'names.timeCreated' | translate"
+									[caption]="getDisplayTableLabel('transfers_time_created') | translate"
 									[format]="dateTimeFormat"></dxi-column>
+
 			<dxi-column [visible]="canDisplayTable('transfers_time_assigned')"
 									[visibleIndex]="getDisplayTableColumnIndex('transfers_time_assigned')"
 									[width]="getDisplayTableColumnWidth('transfers_time_assigned')"
 									dataType="datetime"
 									dataField="timeAssigned"
-									[caption]="'names.timeAssigned' | translate"
+									[caption]="getDisplayTableLabel('transfers_time_assigned') | translate"
 									[format]="dateTimeFormat"></dxi-column>
-      <dxi-column [visible]="canDisplayTable('transfers_time_assigned')"
-                  [visibleIndex]="getDisplayTableColumnIndex('transfers_time_assigned')"
-                  [width]="getDisplayTableColumnWidth('transfers_time_assigned')"
+
+      <dxi-column [visible]="canDisplayTable('transfers_time_load_started')"
+                  [visibleIndex]="getDisplayTableColumnIndex('transfers_time_load_started')"
+                  [width]="getDisplayTableColumnWidth('transfers_time_load_started')"
                   dataType="datetime"
                   dataField="timeLoadStarted"
-                  [caption]="'names.timeLoadStarted' | translate"
+                  [caption]="getDisplayTableLabel('transfers_time_load_started') | translate"
                   [format]="dateTimeFormat"></dxi-column>
-      <dxi-column [visible]="canDisplayTable('transfers_time_assigned')"
-                  [visibleIndex]="getDisplayTableColumnIndex('transfers_time_assigned')"
-                  [width]="getDisplayTableColumnWidth('transfers_time_assigned')"
+
+      <dxi-column [visible]="canDisplayTable('transfers_time_load_completed')"
+                  [visibleIndex]="getDisplayTableColumnIndex('transfers_time_load_completed')"
+                  [width]="getDisplayTableColumnWidth('transfers_time_load_completed')"
                   dataType="datetime"
                   dataField="timeLoadCompleted"
-                  [caption]="'names.timeLoadCompleted' | translate"
+                  [caption]="getDisplayTableLabel('transfers_time_load_completed') | translate"
                   [format]="dateTimeFormat"></dxi-column>
-      <dxi-column [visible]="canDisplayTable('transfers_time_assigned')"
-                  [visibleIndex]="getDisplayTableColumnIndex('transfers_time_assigned')"
-                  [width]="getDisplayTableColumnWidth('transfers_time_assigned')"
+
+      <dxi-column [visible]="canDisplayTable('transfers_time_unload_started')"
+                  [visibleIndex]="getDisplayTableColumnIndex('transfers_time_unload_started')"
+                  [width]="getDisplayTableColumnWidth('transfers_time_unload_started')"
                   dataType="datetime"
                   dataField="timeUnloadStarted"
-                  [caption]="'names.timeUnloadStarted' | translate"
+                  [caption]="getDisplayTableLabel('transfers_time_unload_started') | translate"
                   [format]="dateTimeFormat"></dxi-column>
-      <dxi-column [visible]="canDisplayTable('transfers_time_assigned')"
-                  [visibleIndex]="getDisplayTableColumnIndex('transfers_time_assigned')"
-                  [width]="getDisplayTableColumnWidth('transfers_time_assigned')"
+
+      <dxi-column [visible]="canDisplayTable('transfers_time_unload_completed')"
+                  [visibleIndex]="getDisplayTableColumnIndex('transfers_time_unload_completed')"
+                  [width]="getDisplayTableColumnWidth('transfers_time_unload_completed')"
                   dataType="datetime"
                   dataField="timeUnloadCompleted"
-                  [caption]="'names.timeUnloadCompleted' | translate"
+                  [caption]="getDisplayTableLabel('transfers_time_unload_completed') | translate"
                   [format]="dateTimeFormat"></dxi-column>
+
 			<dxi-column [visible]="canDisplayTable('transfers_time_completed')"
 									[visibleIndex]="getDisplayTableColumnIndex('transfers_time_completed')"
 									[width]="getDisplayTableColumnWidth('transfers_time_completed')"
 									dataType="datetime"
 									dataField="timeCompleted"
-									[caption]="'names.timeCompleted' | translate"
+									[caption]="getDisplayTableLabel('transfers_time_completed') | translate"
 									[format]="dateTimeFormat"></dxi-column>
+
 			<dxi-column [visible]="canDisplayTable('transfers_time_aborted')"
 									[visibleIndex]="getDisplayTableColumnIndex('transfers_time_aborted')"
 									[width]="getDisplayTableColumnWidth('transfers_time_aborted')"
 									dataType="datetime"
 									dataField="timeAborted"
-									[caption]="'names.timeAborted' | translate"
+									[caption]="getDisplayTableLabel('transfers_time_aborted') | translate"
 									[format]="dateTimeFormat"></dxi-column>
+
 			<dxi-column [visible]="canDisplayTable('transfers_time_failed')"
 									[visibleIndex]="getDisplayTableColumnIndex('transfers_time_failed')"
 									[width]="getDisplayTableColumnWidth('transfers_time_failed')"
 									dataType="datetime"
 									dataField="timeFailed"
-									[caption]="'names.timeFailed' | translate"
+									[caption]="getDisplayTableLabel('transfers_time_failed') | translate"
 									[format]="dateTimeFormat"></dxi-column>
+
 			<dxi-column [visible]="canDisplayTable('transfers_result_code')"
 									[visibleIndex]="getDisplayTableColumnIndex('transfers_result_code')"
 									[width]="getDisplayTableColumnWidth('transfers_result_code')"
 									dataType="string"
 									dataField="resultCode"
 									cellTemplate="reasonTemplate"
-									[caption]="'names.reason' | translate"></dxi-column>
+									[caption]="getDisplayTableLabel('transfers_result_code') | translate"></dxi-column>
 			<div *dxTemplate="let data of 'reasonTemplate'">
 				<div [ngSwitch]="data.displayValue">
 					<div class="value" *ngSwitchCase="'SourceInterlockError'">{{ 'Source PIO Timeout' }}</div>
@@ -257,7 +266,7 @@
 									[width]="getDisplayTableColumnWidth('transfers_age')"
 									dataType="int"
 									dataField="age"
-									[caption]="'names.elapsed' | translate"></dxi-column>
+									[caption]="getDisplayTableLabel('transfers_age') | translate"></dxi-column>
 			<div *dxTemplate="let data of 'ageTemplate'">
 				{{ transform(data.displayValue) }}
 			</div>
@@ -268,7 +277,7 @@
 									[width]="getDisplayTableColumnWidth('transfers_unload_retry_cnt')"
 									dataType="number"
 									dataField="unloadRetryCnt"
-									[caption]="'names.unloadRetryCount' | translate">
+									[caption]="getDisplayTableLabel('transfers_unload_retry_cnt') | translate">
 			</dxi-column>
 			<div *dxTemplate="let data of 'distanceTemplate'">
 				{{ transform_distance(data.displayValue) }}
