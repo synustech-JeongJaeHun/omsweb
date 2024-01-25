@@ -159,15 +159,23 @@ namespace OMSWeb.Services
             client.DisableHWZCU = this._appSettings.DisableHWZCU;
             client.IsForceMTLIn = this._appSettings.IsForceMTLIn;
 
-            client.WarningMessageType = this._appSettings.WarningMessageType
-                .Where(c => Enum.IsDefined(typeof(DisplayType), c))
-                .Select(c => (DisplayType)Enum.Parse<DisplayType>(c))
-                .ToArray();
+            try
+            {
+                client.WarningMessageType = this._appSettings.WarningMessageType
+                    .Where(c => Enum.IsDefined(typeof(DisplayType), c))
+                    .Select(c => (DisplayType)Enum.Parse<DisplayType>(c))
+                    .ToArray();
 
-            if (client.WarningMessageType.Length < 1)
+                if (client.WarningMessageType.Length < 1)
+                {
+                    client.WarningMessageType = new [] { DisplayType.LogicalId};
+                }
+            }
+            catch (Exception e)
             {
                 client.WarningMessageType = new [] { DisplayType.LogicalId};
             }
+            
             
             return this._appSettings.Client;
         }
