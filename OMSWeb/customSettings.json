@@ -161,7 +161,7 @@
       { "name": "transfers_priority", "i18nLabel": "names.priority", "width": 65 },
       { "name": "transfers_state", "i18nLabel": "names.state", "width": 100 },
       { "name": "transfers_vehicle_id", "i18nLabel": "names.vehicleId", "width": 95 },
-      { "name": "transfers_vehicle_alias", "i18nLabel": "names.vehicleId", "width": 95 },
+      { "name": "transfers_vehicle_alias", "i18nLabel": "names.vehicleAlias", "width": 95 },
       {
         "name": "transfers_location_pickup",
         "i18nLabel": "names.fromEMSID",
