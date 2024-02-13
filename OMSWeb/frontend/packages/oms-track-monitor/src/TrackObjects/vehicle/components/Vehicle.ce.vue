@@ -49,13 +49,14 @@ const complicatedMode = computed<ComplicatedMode>(() => {
   if (props.vehicle.isZcuBlocked)
     return 'ZCUBLOCKED'
 
-  const isAnyLocationExist = !!(props.vehicle.locationPickup || props.vehicle.locationDropoff || props.vehicle.locationMove)
+  const isAnyLocationExist = !!(props.vehicle.locationPickup || props.vehicle.locationDropoff || props.vehicle.locationMove )
   const destPointId = Number.isInteger(Number(props.vehicle.destPoint)) ? Number(props.vehicle.destPoint) : undefined
-
-  if (isAnyLocationExist)
-    return 'RUNNING'
-  if (isAnyLocationExist === false && destPointId && props.vehicle.curPoint !== destPointId && props.vehicle.movingState === 'M')
+  
+  if (!isAnyLocationExist && destPointId && props.vehicle.curPoint !== destPointId && (props.vehicle.movingState === 'M')) {
     return 'HOMEIVR'
+  }
+  if (isAnyLocationExist || props.vehicle.movingState === 'M')
+    return 'RUNNING'
   // if (isAnyLocationExist === false && destPointId && props.vehicle.curPoint === destPointId)
   return 'IDLE'
 

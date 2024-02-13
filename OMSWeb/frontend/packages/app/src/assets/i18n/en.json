@@ -588,7 +588,12 @@
     "fromEMSID": "From(EMS ID)",
     "toEMSID": "To(EMS ID)",
     "fromPortName": "From(Port Name)",
-    "toPortName": "To(Port Name)"
+    "toPortName": "To(Port Name)",
+    "zoneId" : "Zone ID",
+    "zoneName" : "Zone Name",
+    "capacity" : "Capacity",
+    "size" : "Size",
+    "zoneType" : "Zone Type"
   },
   "enums": {
     "hostSessionStatus": {
@@ -714,7 +719,8 @@
     "timeoutForAlternate" : "Timeout for Alternate",
     "reset-hold": "Are you sure Fire Shutter Reset And Hold?",
     "hold-release": "Are you sure Fire Shutter Hold Release?",
-    "dest-success": "Destination has been modified"
+    "dest-success": "Destination has been modified",
+    "needsConfirm": "{{field}} needs confirmation."
   },
   "_START_DATE" : "Please enter a start date",
   "_END_DATE":  "Please enter a end date"

@@ -300,6 +300,12 @@ export class GroupSettingComponent implements OnInit {
 		for (let idx = 0; idx < items.length; idx++) {
 			let addedHomePoints = []
 			let removedHomePoints = []
+			let duplicate = {
+				homePoints : [],
+				stations : [],
+				vehicles : [],
+				buffers : [],
+      }
 
 			if (items[idx].homePoints.length > 0) {
 				let currentAssignedHomePoints = this.groupedObjects
@@ -317,6 +323,8 @@ export class GroupSettingComponent implements OnInit {
 					currentAssignedHomePoints,
 					items[idx].homePoints,
 				)
+
+				duplicate.homePoints = this.checkDuplicate(items[idx].id, items[idx].homePoints, 'home')
 			}
 
 			let addedStations = []
@@ -338,6 +346,7 @@ export class GroupSettingComponent implements OnInit {
 					currentAssignedStations,
 					items[idx].stations,
 				)
+        duplicate.stations = this.checkDuplicate(items[idx].id, items[idx].stations, 'station')
 			}
 
 			let addedVehicles = []
@@ -359,6 +368,8 @@ export class GroupSettingComponent implements OnInit {
 					currentAssignedVehicles,
 					items[idx].vehicles,
 				)
+
+        duplicate.vehicles = this.checkDuplicate(items[idx].id, items[idx].vehicles, 'vehicle')
 			}
 
 			let addedBuffers = []
@@ -377,9 +388,18 @@ export class GroupSettingComponent implements OnInit {
 					currentAssignedBuffers,
 					items[idx].buffers,
 				)
+
+        duplicate.buffers = this.checkDuplicate(items[idx].id, items[idx].buffers, 'buffer')
 			}
 
 			const group: number = this.selectedItem.id
+
+      for(let key of Object.keys(duplicate)){
+        if(duplicate[key].length>0){
+          this.showDialogDuplicate(key, duplicate[key])
+          return
+        }
+      }
 
 			this.messageSvc
 				.sendAssignBufferGruopCommand({
@@ -400,4 +420,23 @@ export class GroupSettingComponent implements OnInit {
 
 		return
 	}
+
+  //
+  checkDuplicate(itemsId = 0, items: any[], type = 'home'){
+    let others = this.groupedObjects
+      .filter(
+        (x: ISettingsGroupedObject) =>
+          x.groupId !== itemsId && x.referenceTable === type,
+      ).map((x) => x.referenceId)
+
+    return _.intersection(items, others)
+  }
+
+  showDialogDuplicate(type='home', item: any[]){
+    const field = item.map(i=>(type+i))
+    this.dialogSvc.alert({
+      title: this.$t.instant('names.confirm'),
+      body: this.$t.instant('messages.needsConfirm', { field }),
+    })
+  }
 }
