@@ -308,6 +308,18 @@
 			<div class="value">{{ tooltipObject?.value.pointId }}</div>
 			<div class="name">{{ getDisplayTableLabel('buffers_order', 'buffers_group') | translate }}</div>
 			<div class="value">{{ tooltipObject?.value.groups.join(', ') }}</div>
+
+      <ng-container *ngIf="tooltipObject?.value?.zoneId">
+        <div class="name">{{ getDisplayTableLabel('buffers_order', 'buffers_zoneName') | translate }}</div>
+        <div class="value">{{ tooltipObject?.value?.zoneName }}</div>
+        <!--<div class="name">{{ getDisplayTableLabel('buffers_order', 'buffers_capacity') | translate }}</div>
+        <div class="value">{{ tooltipObject?.value?.capacity }}</div>
+        <div class="name">{{ getDisplayTableLabel('buffers_order', 'buffers_size') | translate }}</div>
+        <div class="value">{{ tooltipObject?.value?.size }}</div>-->
+        <div class="name">{{ getDisplayTableLabel('buffers_order', 'buffers_zoneType') | translate }}</div>
+        <div class="value">{{ tooltipObject?.value?.zoneType }}</div>
+      </ng-container>
+
 			<ng-container *ngIf="tooltipObject?.value?.carrierId">
 				<div class="name">{{ getDisplayTableLabel('buffers_order', 'buffers_carrierId') | translate }}</div>
 				<div class="value">{{ tooltipObject?.value?.carrierId }}</div>

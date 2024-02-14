@@ -335,7 +335,12 @@ namespace OMSWeb.Repositories
                                             CarrierId = dr["carrier_id"].TryString(),
                                             User = dr["user"].TryString(),
                                             Note = dr["note"].TryString(),
-                                            CAlias = dr["c_alias"].TryString()
+                                            CAlias = dr["c_alias"].TryString(),
+                                            ZoneId = dr["zone_id"].TryIntegerOrNull(),
+                                            ZoneName = dr["zone_name"].TryString(),
+                                            ZoneType = dr["zone_type"].TryString(),
+                                            Capacity = dr["capacity"].TryIntegerOrNull(),
+                                            Size = dr["size"].TryIntegerOrNull(),
                                         }
                                     );
                                 }
@@ -365,7 +370,12 @@ namespace OMSWeb.Repositories
                                         CarrierId = dr["carrier_id"].TryString(),
                                         User = dr["user"].TryString(),
                                         Note = dr["note"].TryString(),
-                                        CAlias = dr["c_alias"].TryString()
+                                        CAlias = dr["c_alias"].TryString(),
+                                        ZoneId = dr["zone_id"].TryIntegerOrNull(),
+                                        ZoneName = dr["zone_name"].TryString(),
+                                        ZoneType = dr["zone_type"].TryString(),
+                                        Capacity = dr["capacity"].TryIntegerOrNull(),
+                                        Size = dr["size"].TryIntegerOrNull(),
                                     }
                                 );
                             }
@@ -384,17 +394,26 @@ namespace OMSWeb.Repositories
 
             var sql = $@"
             SELECT 
-                id, 
-                physical_id, 
-                logical_id, 
-                point as point_id, 
-                direction, 
-                next_point,
-                ""offset"",
-                unuse,
-                carrier_id
-            FROM buffers
-            WHERE id = {id}
+                BS.id, 
+                BS.physical_id, 
+                BS.logical_id, 
+                BS.point as point_id, 
+                BS.direction, 
+                BS.next_point,
+                BS.""offset"",
+                BS.unuse,
+                BS.carrier_id,
+                Z.id as zone_id,
+                Z.logical_id as zone_name,
+                Z.capacity,
+                Z.""size"",
+                Z.""type"" as zone_type
+            FROM buffers AS BS
+            LEFT JOIN zone_ports as ZP
+                ON bs.id = zp.port_id and ZP.port_type = 'buffer'
+            LEFT JOIN zones as Z
+                ON Z.id = ZP.zone_id 
+            WHERE BS.id = {id}
             ";
 
             Buffer result;

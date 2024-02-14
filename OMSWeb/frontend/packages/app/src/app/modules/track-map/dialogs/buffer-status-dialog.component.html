@@ -34,6 +34,20 @@
 					<div class="value">{{ currentBuffer.carrierId }}</div>
 					<label class="name">{{ 'names.clean' | translate }}</label>
 					<div class="value"></div>
+
+          <ng-container *ngIf="currentBuffer.zoneId">
+            <label class="name">{{ 'names.zoneId' | translate }}</label>
+            <div class="value">{{ currentBuffer.zoneId }}</div>
+            <label class="name">{{ 'names.zoneName' | translate }}</label>
+            <div class="value">{{ currentBuffer.zoneName }}</div>
+            <label class="name">{{ 'names.capacity' | translate }}</label>
+            <div class="value">{{ currentBuffer.capacity }}</div>
+            <label class="name">{{ 'names.size' | translate }}</label>
+            <div class="value">{{ currentBuffer.size }}</div>
+            <label class="name">{{ 'names.zoneType' | translate }}</label>
+            <div class="value">{{ currentBuffer.zoneType }}</div>
+          </ng-container>
+
 				</div>
 				<div class="unit-update">
 					<fieldset>

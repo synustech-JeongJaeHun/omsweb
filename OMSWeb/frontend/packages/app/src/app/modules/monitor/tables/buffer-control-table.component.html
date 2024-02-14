@@ -144,6 +144,42 @@
   [visible]="canDisplayTable('buffers_slideOffset')"
   [visibleIndex]="getDisplayTableColumnIndex('buffers_slideOffset')"
   [width]="getDisplayTableColumnWidth('buffers_slideOffset')"></dxi-column>
+
+  <dxi-column dataType="number"
+              dataField="zoneId"
+              [caption]="getDisplayTableLabel('buffers_zoneId') | translate"
+              [visible]="canDisplayTable('buffers_zoneId')"
+              [visibleIndex]="getDisplayTableColumnIndex('buffers_zoneId')"
+              [width]="getDisplayTableColumnWidth('buffers_zoneId')"></dxi-column>
+
+  <dxi-column dataType="string"
+              dataField="zoneName"
+              [caption]="getDisplayTableLabel('buffers_zoneName') | translate"
+              [visible]="canDisplayTable('buffers_zoneName')"
+              [visibleIndex]="getDisplayTableColumnIndex('buffers_zoneName')"
+              [width]="getDisplayTableColumnWidth('buffers_zoneName')"></dxi-column>
+
+  <dxi-column dataType="number"
+              dataField="capacity"
+              [caption]="getDisplayTableLabel('buffers_capacity') | translate"
+              [visible]="canDisplayTable('buffers_capacity')"
+              [visibleIndex]="getDisplayTableColumnIndex('buffers_capacity')"
+              [width]="getDisplayTableColumnWidth('buffers_capacity')"></dxi-column>
+
+  <dxi-column dataType="number"
+              dataField="size"
+              [caption]="getDisplayTableLabel('buffers_size') | translate"
+              [visible]="canDisplayTable('buffers_size')"
+              [visibleIndex]="getDisplayTableColumnIndex('buffers_size')"
+              [width]="getDisplayTableColumnWidth('buffers_size')"></dxi-column>
+
+  <dxi-column dataType="string"
+              dataField="zoneType"
+              [caption]="getDisplayTableLabel('buffers_zoneType') | translate"
+              [visible]="canDisplayTable('buffers_zoneType')"
+              [visibleIndex]="getDisplayTableColumnIndex('buffers_zoneType')"
+              [width]="getDisplayTableColumnWidth('buffers_zoneType')"></dxi-column>
+
 	<dxi-column [allowFiltering]="true"
     dataType="string"
     dataField="user"

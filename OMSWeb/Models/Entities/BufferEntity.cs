@@ -33,6 +33,12 @@ namespace OMSWeb.Models.Entities
     public string Note { get; set; }
     
     public string? CAlias { get; set; }
+    
+    public int? ZoneId { get; set; }
+    public string ZoneName { get; set; }
+    public string ZoneType { get; set; }
+    public int? Capacity { get; set; }
+    public int? Size { get; set; }
   }
 
   public class BufferHistoryEntity

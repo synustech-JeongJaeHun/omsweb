@@ -150,11 +150,16 @@ namespace OMSWeb.Repositories
         --*user_id_condition*--WHERE user_id =@userId
       "},
       {"buffer", @"
-        SELECT id, physical_id, logical_id AS logical_id, point AS point_id,
-          direction AS direction, next_point, ""offset"" AS offset, unuse, state, carrier_id, c_alias,
-          buffers.slide_offset, 
-          buffers.user, buffers.note
-        FROM buffers
+        SELECT b.id, b.physical_id, b.logical_id AS logical_id, point AS point_id,
+          b.direction AS direction, b.next_point, b.""offset"" AS offset, b.unuse, b.state, b.carrier_id, b.c_alias,
+          b.slide_offset, 
+          b.user, b.note,
+          Z.id as zone_id, Z.logical_id as zone_name, Z.capacity, Z.""size"", Z.""type"" as zone_type
+        FROM buffers as b
+        LEFT JOIN zone_ports as ZP
+            ON b.id = zp.port_id and ZP.port_type = 'buffer'
+        LEFT JOIN zones as Z
+            ON Z.id = ZP.zone_id 
         --*user_id_condition*--WHERE user_id =@userId
       "},
       {"zcu", @"
@@ -496,10 +501,19 @@ namespace OMSWeb.Repositories
       "},
       {"bufferStatus", @"
         SELECT BS.id, BS.physical_id, BS.logical_id, BS.point, BS.direction, BS.next_point, BS.""offset"", BS.unuse, BS.state, BS.carrier_id, 
-        BS.slide_offset, BS.user, BS.note, GO.group_id, BS.c_alias
+        BS.slide_offset, BS.user, BS.note, GO.group_id, BS.c_alias,
+        Z.id as zone_id,
+        Z.logical_id as zone_name,
+        Z.capacity,
+        Z.""size"",
+        Z.""type"" as zone_type
         FROM buffers AS BS
-            LEFT JOIN grouped_objects AS GO
+        LEFT JOIN grouped_objects AS GO
         ON BS.id = GO.reference_id AND GO.reference_table = 'buffer'
+        LEFT JOIN zone_ports as ZP
+        ON bs.id = zp.port_id and ZP.port_type = 'buffer'
+        LEFT JOIN zones as Z
+        ON Z.id = ZP.zone_id 
         --*user_id_condition*--WHERE user_id =@userId
       "},
       {"unuseListStatus", @"

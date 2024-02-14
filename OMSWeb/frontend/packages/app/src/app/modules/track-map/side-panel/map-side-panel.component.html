@@ -203,11 +203,30 @@
           <mat-label>{{ getDisplayTableLabel('buffers_order', 'buffers_offset') | translate }}</mat-label>
           <input matInput type="text" readonly [value]="data.offset" />
         </mat-form-field>
-        <!--
-        <mat-form-field class="info-item readonly" floatLabel="always">
-          <mat-label>{{ "names.carrierType" | translate }}</mat-label>
-          <input matInput type="text" readonly [value]="data.carrierType || ''" />
-        </mat-form-field>-->
+
+        <ng-container *ngIf="data.zoneId">
+          <mat-form-field class="info-item readonly" floatLabel="always">
+            <mat-label>{{ getDisplayTableLabel('buffers_order', 'buffers_zoneId') | translate }}</mat-label>
+            <input matInput type="text" readonly [value]="data.zoneId" />
+          </mat-form-field>
+          <mat-form-field class="info-item readonly" floatLabel="always">
+            <mat-label>{{ getDisplayTableLabel('buffers_order', 'buffers_zoneName') | translate }}</mat-label>
+            <input matInput type="text" readonly [value]="data.zoneName" />
+          </mat-form-field>
+          <mat-form-field class="info-item readonly" floatLabel="always">
+            <mat-label>{{ getDisplayTableLabel('buffers_order', 'buffers_capacity') | translate }}</mat-label>
+            <input matInput type="text" readonly [value]="data.capacity" />
+          </mat-form-field>
+          <mat-form-field class="info-item readonly" floatLabel="always">
+            <mat-label>{{ getDisplayTableLabel('buffers_order', 'buffers_size') | translate }}</mat-label>
+            <input matInput type="text" readonly [value]="data.size" />
+          </mat-form-field>
+          <mat-form-field class="info-item readonly" floatLabel="always">
+            <mat-label>{{ getDisplayTableLabel('buffers_order', 'buffers_zoneType') | translate }}</mat-label>
+            <input matInput type="text" readonly [value]="data.zoneType" />
+          </mat-form-field>
+        </ng-container>
+
         <div class="info-item form-field span-full">
           <label>{{ getDisplayTableLabel('buffers_order', 'buffers_direction') | translate }}</label>
           <mat-radio-group [disabled]="true" color="primary" [value]="data.direction">
