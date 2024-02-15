@@ -506,7 +506,11 @@ namespace OMSWeb.Repositories
         Z.logical_id as zone_name,
         Z.capacity,
         Z.""size"",
-        Z.""type"" as zone_type
+        case 
+        	when Z.""type"" = 1 then 'Shelf'
+        	when Z.""type"" = 2 then 'Port'
+        	when Z.""type"" = 3 then 'Other'
+        end as zone_type
         FROM buffers AS BS
         LEFT JOIN grouped_objects AS GO
         ON BS.id = GO.reference_id AND GO.reference_table = 'buffer'

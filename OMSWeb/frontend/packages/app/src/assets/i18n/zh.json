@@ -716,7 +716,8 @@
     "reset-hold": "您确定防火卷帘重置并保持吗？",
     "hold-release": "您确定防火卷帘保持释放吗？",
     "dest-success": "目的地已修改。",
-    "needsConfirm": "{{field}} 需要确认。"
+    "needsConfirm": "{{field}} 需要确认。",
+    "notChange" : "在自动状态下无法进行更改。({{vehicles}})"
   },
   "_START_DATE" : "Please enter a start date",
   "_END_DATE":  "Please enter a end date"

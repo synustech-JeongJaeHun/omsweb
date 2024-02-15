@@ -401,6 +401,18 @@ export class GroupSettingComponent implements OnInit {
         }
       }
 
+			const addedVehicleData = this.trackStatusService.trackData.vehicles.filter(v=>{
+				return addedVehicles.find(a=>a===v.id) && v.mode.toUpperCase() === 'A'
+			})
+			if(addedVehicleData.length>0){
+				const vehicles = addedVehicleData.map(v=>('Vehicle #'+v.id))
+				this.dialogSvc.success({
+					title: this.$t.instant('names.confirm'),
+					body: this.$t.instant('messages.notChange', { vehicles }),
+				})
+				return
+			}
+
 			this.messageSvc
 				.sendAssignBufferGruopCommand({
 					type: 'GROUP',
@@ -434,7 +446,7 @@ export class GroupSettingComponent implements OnInit {
 
   showDialogDuplicate(type='home', item: any[]){
     const field = item.map(i=>(type+i))
-    this.dialogSvc.alert({
+    this.dialogSvc.success({
       title: this.$t.instant('names.confirm'),
       body: this.$t.instant('messages.needsConfirm', { field }),
     })
