@@ -716,7 +716,8 @@
     "reset-hold": "Are you sure Fire Shutter Reset And Hold?",
     "hold-release": "Are you sure Fire Shutter Hold Release?",
     "dest-success": "Destination has been modified",
-    "needsConfirm": "{{field}} needs confirmation."
+    "needsConfirm": "{{field}} needs confirmation.",
+    "notChange" : "Changes are not possible in auto state.({{vehicles}})"
   },
   "_START_DATE" : "Please enter a start date",
   "_END_DATE":  "Please enter a end date"
