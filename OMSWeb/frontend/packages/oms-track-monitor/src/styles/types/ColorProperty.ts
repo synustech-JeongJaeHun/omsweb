@@ -4,6 +4,7 @@ type ColorProperty =
   | 'stationDisabled'
   | 'buffer'
   | 'bufferDisabled'
+  | 'bufferType'
   | 'point'
   | 'home'
   | 'normalSegment'

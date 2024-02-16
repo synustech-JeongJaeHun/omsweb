@@ -58,6 +58,7 @@ const group = useGroup('buffer', toRef(props.buffer, 'id'))
           @mouseout="handleMouseleave"
           @mouseleave="handleMouseleave"
         />
+
         <circle
           v-if="props.buffer.carrierId"
           :data-id="props.buffer.id"
@@ -70,6 +71,16 @@ const group = useGroup('buffer', toRef(props.buffer, 'id'))
           @mouseout="handleMouseleave"
           @mouseleave="handleMouseleave"
         />
+        <text v-if="props.buffer.type"
+          class="invert label select-none buffer-type"
+          x="28"
+          y="4"
+          alignment-baseline="hanging"
+          text-anchor="middle"
+          text-rendering="optimizeSpeed"
+          pointer-events="none">
+          {{props.buffer.type}}
+        </text>
         <text
           class="invert label select-none"
           x="0"

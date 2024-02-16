@@ -22,6 +22,7 @@ type Buffer = {
   note?: string
 
   cAlias?: string
+  type?: string
 } & CanBeFocused &
   CanBeCarrierFocused
 

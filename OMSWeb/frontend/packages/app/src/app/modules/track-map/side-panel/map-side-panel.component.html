@@ -203,7 +203,11 @@
           <mat-label>{{ getDisplayTableLabel('buffers_order', 'buffers_offset') | translate }}</mat-label>
           <input matInput type="text" readonly [value]="data.offset" />
         </mat-form-field>
-
+        <mat-form-field *ngIf="data?.type"
+                      class="info-item readonly" floatLabel="always">
+          <mat-label>{{ "names.type" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.type" />
+        </mat-form-field>
         <ng-container *ngIf="data.zoneId">
           <mat-form-field class="info-item readonly" floatLabel="always">
             <mat-label>{{ getDisplayTableLabel('buffers_order', 'buffers_zoneId') | translate }}</mat-label>
@@ -226,7 +230,13 @@
             <input matInput type="text" readonly [value]="data.zoneType" />
           </mat-form-field>
         </ng-container>
+        
 
+        <!--
+        <mat-form-field class="info-item readonly" floatLabel="always">
+          <mat-label>{{ "names.carrierType" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.carrierType || ''" />
+        </mat-form-field>-->
         <div class="info-item form-field span-full">
           <label>{{ getDisplayTableLabel('buffers_order', 'buffers_direction') | translate }}</label>
           <mat-radio-group [disabled]="true" color="primary" [value]="data.direction">

@@ -32,6 +32,10 @@
         (changed)="update({key: 'bufferDisabledColor', value: $event})"
         [value]="setting.bufferDisabledColor">
       </oms-color-picker>
+      <oms-color-picker [name]="'names.bufferType' | translate"
+        (changed)="update({key: 'bufferTypeColor', value: $event})"
+        [value]="setting.bufferTypeColor">
+      </oms-color-picker>
       <oms-color-picker [name]="'names.fireshutterOpened' | translate"
         (changed)="update({key: 'fireshutterOpenedColor', value: $event})"
         [value]="setting.fireshutterOpenedColor">

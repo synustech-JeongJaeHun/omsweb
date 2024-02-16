@@ -588,7 +588,8 @@
     "fromEMSID": "From(EMS ID)",
     "toEMSID": "To(EMS ID)",
     "fromPortName": "From(Port Name)",
-    "toPortName": "To(Port Name)"
+    "toPortName": "To(Port Name)",
+    "bufferType" : "Buffer - type"
   },
   "enums": {
     "hostSessionStatus": {

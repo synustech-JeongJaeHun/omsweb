@@ -57,7 +57,9 @@ export class TrackStatusService {
           carrierId: d.carrierId,
           user: d?.user,
           note: d?.note,
-          cAlias: d?.cAlias})
+          cAlias: d?.cAlias,
+          type: d?.type,
+        })
       })
 
       //stations
@@ -72,7 +74,8 @@ export class TrackStatusService {
           carrierId: d.carrierId,
           user: d?.user,
           note: d?.note,
-          cAlias: d?.cAlias})
+          cAlias: d?.cAlias,
+        })
       })
 
       //clusterStatus
@@ -320,7 +323,7 @@ export class TrackStatusService {
 		switch (e.operation) {
 			case 'UPDATE':
 				// @ts-ignore
-				if (finded) Object.assign(finded, { id: e.id, unuse: e.unuse, carrierId: e.carrierId, user: e?.user, note: e?.note })
+				if (finded) Object.assign(finded, { id: e.id, unuse: e.unuse, carrierId: e.carrierId, user: e?.user, note: e?.note, type: e?.data?.type })
 				break
 
 			default:

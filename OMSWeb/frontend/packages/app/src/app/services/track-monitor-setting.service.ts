@@ -42,6 +42,7 @@ type ColorChangedEvent = {
 		| 'stationDisabledColor'
 		| 'bufferColor'
 		| 'bufferDisabledColor'
+		| 'bufferTypeColor'
 		| 'pointColor'
 		| 'normalSegmentColor'
 		| 'disabledSegmentColor'
@@ -162,14 +163,15 @@ const DefaultTrackMonitorSetting: TrackMonitorSetting = {
 	stationDisabledColor: '#f06767',
 	bufferColor: 'rgba(100, 100, 100, 1)',
 	bufferDisabledColor: '#ff9494',
+	bufferTypeColor: 'rgba(50, 50, 50, 1)',
 	pointColor: 'rgba(80, 80, 80, 1)',
 	normalSegmentColor: 'rgba(200, 200, 200, 1)',
 	disabledSegmentColor: 'rgba(165, 127, 184, 1)',
 	disabledByVehicleSegmentColor: '#ffa500',
-  disabledByMTLSegmentColor: 'rgba(112,168,113,0.56)',
-	segmentDirectionColor: 'rgba(110, 110, 110, 1)',
+	disabledByMTLSegmentColor: 'rgba(112,168,113,0.56)',
 
 	// chjs visual start
+	segmentDirectionColor: 'rgba(110, 110, 110, 1)',
 	disconnectModeVehicleColor: '#E1D7C5',
 	errorModeVehicleColor: '#FF3838',
 	maintenanceModeVehicleColor: '#5C666D',
@@ -178,9 +180,9 @@ const DefaultTrackMonitorSetting: TrackMonitorSetting = {
 	homeIvrModeVehicleColor: '#FFB302',
 	runningModeVehicleColor: '#51E400',
 	zcuBlockedVehicleColor: '#2DCCFF',
-	sensorStoppedVehicleColor: '#2DCCFF',
 	// chjs visual end
 
+	sensorStoppedVehicleColor: '#2DCCFF',
 	cargoLoadingColor: 'rgba(0, 0, 205, 1)',
 	cargoFullColor: 'rgba(50, 50, 50, 1)',
 	cargoUnloadingColor: 'rgba(128, 0, 128, 1)',

@@ -31,6 +31,7 @@ type PlaybackBuffer = {
 	y: null
   c_alias?: string
   state?: number
+	type?: string
 }
 type PlaybackClusterPoint = {
 	id: number
@@ -88,6 +89,7 @@ type PlaybackStation = {
 
   c_alias?: string
   state?: number
+  type?: string
 }
 
 type PlaybackSnapshot = {
@@ -207,6 +209,7 @@ type PlaybackSnapshotBuffer = {
   c_alias?: string
   slide_offset?: number
   state?: number
+	type?: string
 }
 
 type PlaybackSnapshotStation = {
@@ -358,6 +361,7 @@ type BufferHistoryEvent = { tableName: 'buffer_history' } & ITableName &
 		note: string
 		unusedTime?: string
     state?: number
+	type?: string
 	}
 type StationHistoryEvent = { tableName: 'station_history' } & ITableName &
 	History & {
@@ -528,11 +532,12 @@ type CurrentBuffer = {
 	id: number
 	note: string
 	user: string
-	point: number
+	point?: number
 	unuse: boolean
 	offset: number
 	direction: string
 	carrierId?: string
+	pointId?: number
 	logicalId: string
 	nextPoint: number
 	physicalId: string
@@ -540,6 +545,7 @@ type CurrentBuffer = {
   cAlias?: string
   slideOffset?: number
   state?: number
+	type?: string
 }
 type CurrentStation = {
 	id: number

@@ -407,7 +407,8 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 						carrierId: e.carrierId,
 						user: e?.user,
 						note: e?.note,
-            cAlias: e?.data.cAlias
+            cAlias: e?.data.cAlias,
+            type: e?.data?.type,
 					})
 				})
 

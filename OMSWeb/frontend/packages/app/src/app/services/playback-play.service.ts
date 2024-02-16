@@ -38,6 +38,7 @@ import { getTimeRangeChunks } from '../modules/playback/utils/date.util'
 	providedIn: 'root',
 })
 export class PlaybackPlayService {
+  private EVENT_SLICER = 10
 	clockChanged = new EventEmitter<ClockChangedEvent>()
 
 	public firstSnapshotTime: Date
@@ -555,19 +556,30 @@ export class PlaybackPlayService {
 				: this.remainedFirstAlarmIndex + index
 		})()
 
+    const evt : ClockChangedEvent = {
+      type: 'NextFrameEvent',
+      clock: this.clock,
+      events: this.historyEvents.slice(
+        this.remainedFirstEventIndex,
+        nextRemainedFirstEventIndex,
+      ),
+      alarms: this.alarmChanges.slice(
+        this.remainedFirstAlarmIndex,
+        nextRemainedFirstAlarmIndex,
+      ),
+    }
+
+    console.log('length', evt.events.length)
+    if(evt.events.length > this.EVENT_SLICER){
+      /*const vhlEvent = evt.events.filter(e=>e.tableName==='vehicle_history')
+      const vhlEventHalf = removeDuplicates(vhlEvent.slice(-vhlEvent.length/10), 'historySourceId')
+      const otherEvent = evt.events.filter(e=>e.tableName!=='vehicle_history')
+      evt.events = [...otherEvent, ...vhlEventHalf]*/
+      evt.events = evt.events.slice(-this.EVENT_SLICER)
+    }
+
 		// 🎉 event
-		this.clockChanged.emit({
-			type: 'NextFrameEvent',
-			clock: this.clock,
-			events: this.historyEvents.slice(
-				this.remainedFirstEventIndex,
-				nextRemainedFirstEventIndex,
-			),
-			alarms: this.alarmChanges.slice(
-				this.remainedFirstAlarmIndex,
-				nextRemainedFirstAlarmIndex,
-			),
-		})
+		this.clockChanged.emit(evt)
 
 		// change state after event emit
 		// because this state before and after are used for event emit
@@ -575,6 +587,8 @@ export class PlaybackPlayService {
 		this.remainedFirstAlarmIndex = nextRemainedFirstAlarmIndex
 		this.remainedFirstEventIndex = nextRemainedFirstEventIndex
 	}
+
+
 
 	public stop() {
 		if (this.intervalId) clearInterval(this.intervalId)
@@ -633,4 +647,9 @@ function isAlmostSameDate(date1: Date, date2: Date) {
 
 function findIndexDefault(findIndexValue: number, defaultValue: number) {
 	return findIndexValue === -1 ? defaultValue : findIndexValue
+}
+
+function removeDuplicates(arr: any[], prop: string) {
+  const uniqueMap = new Map();
+  return arr.filter(obj => !uniqueMap.has(obj[prop]) && uniqueMap.set(obj[prop], 1));
 }

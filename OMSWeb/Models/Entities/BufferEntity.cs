@@ -31,9 +31,8 @@ namespace OMSWeb.Models.Entities
     public string User { get; set; }
 
     public string Note { get; set; }
-    
-    public string? CAlias { get; set; }
-    
+    public string CAlias { get; set; }
+    public string Type { get; set; }
     public int? ZoneId { get; set; }
     public string ZoneName { get; set; }
     public string ZoneType { get; set; }
@@ -55,5 +54,6 @@ namespace OMSWeb.Models.Entities
     public DateTime HistoryChangeTime { get; set; }
     public string HistoryChangeType { get; set; }
     public string CAlias { get; set; }
+    public string Type { get; set; }
   }
 }
