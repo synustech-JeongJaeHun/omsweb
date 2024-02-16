@@ -153,8 +153,8 @@ namespace OMSWeb.Repositories
         SELECT b.id, b.physical_id, b.logical_id AS logical_id, point AS point_id,
           b.direction AS direction, b.next_point, b.""offset"" AS offset, b.unuse, b.state, b.carrier_id, b.c_alias,
 		  CASE 
-            WHEN type = 'Normal' THEN NULL
-            ELSE type
+            WHEN b.type = 'Normal' THEN NULL
+            ELSE b.type
           END AS type,
           b.slide_offset, 
           b.user, b.note,
@@ -513,7 +513,7 @@ namespace OMSWeb.Repositories
         CASE 
 	        WHEN BS.type = 'Normal' THEN NULL
 	        ELSE BS.type
-        END AS type
+        END AS type,
         case 
         	when Z.""type"" = 1 then 'Shelf'
         	when Z.""type"" = 2 then 'Port'
