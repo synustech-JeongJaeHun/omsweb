@@ -310,7 +310,7 @@
 			<div class="name">{{ getDisplayTableLabel('buffers_order', 'buffers_group') | translate }}</div>
 			<div class="value">{{ tooltipObject?.value.groups.join(', ') }}</div>
 			<ng-container *ngIf="tooltipObject?.value?.type">
-				<div class="name">{{ 'names.type' | translate }}</div>
+				<div class="name">{{ getDisplayTableLabel('buffers_order', 'buffers_type') | translate }}</div>
 				<div class="value">{{ tooltipObject?.value?.type }}</div>
 			</ng-container>
             <ng-container *ngIf="tooltipObject?.value?.zoneId">
