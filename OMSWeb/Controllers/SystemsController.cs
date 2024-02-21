@@ -136,6 +136,20 @@ namespace OMSWeb.Controllers
             }
             
         }
+        
+        [HttpGet("vehicleRef")]
+        public ActionResult<string> GetVehicleRef()
+        {
+            try
+            {
+                return System.IO.File.ReadAllText("./vehicleRef.json");
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+            
+        }
 
         [HttpGet(template: "zcus-with-fireshutter")]
         public int[] GetZcusWithFireshutter()
