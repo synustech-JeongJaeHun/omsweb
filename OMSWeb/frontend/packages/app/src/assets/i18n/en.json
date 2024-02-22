@@ -594,7 +594,8 @@
     "capacity" : "Capacity",
     "size" : "Size",
     "zoneType" : "Zone Type",
-    "bufferType" : "Buffer - type"
+    "bufferType" : "Buffer - type",
+    "ip" : "IP Address"
   },
   "enums": {
     "hostSessionStatus": {

@@ -144,7 +144,7 @@ namespace OMSWeb.Repositories
             IQueryable<VhlStatusEntity> result;
 
             var sql = @"
-                        SELECT vv.id, vv.vehicle_id, v.logical_id, vv.ver_change_time, vv.vcp_sw_ver, vv.motion_fw_ver, vv.motion_lib_ver
+                        SELECT v.id, vv.vehicle_id, v.logical_id, vv.ver_change_time, vv.vcp_sw_ver, vv.motion_fw_ver, vv.motion_lib_ver
                         FROM vehicles AS v
                         LEFT join vehicle_version vv ON v.id = vv.vehicle_id  
                         ORDER BY v.id ASC 

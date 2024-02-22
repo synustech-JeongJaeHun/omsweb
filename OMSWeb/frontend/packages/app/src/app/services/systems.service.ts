@@ -21,7 +21,7 @@ import {
 } from "@oms/models/settings.model";
 import {SettingsService} from "@oms/services/settings.service";
 import {TrackMonitorSetting, TrackMonitorSettingService} from "@oms/services/track-monitor-setting.service";
-import {JsonObject} from "@angular/compiler-cli/ngcc/src/packages/entry_point";
+import {JsonArray, JsonObject} from "@angular/compiler-cli/ngcc/src/packages/entry_point";
 import {DEFAULT_ELEMENT_DATA, PeriodicElement} from "../models/cps-status.model";
 @Injectable({
 	providedIn: 'root',
@@ -51,7 +51,6 @@ export class SystemsService {
           return of(this.cpsDataSource);
         })
     });
-
   }
 
 	constructor(private http: HttpClient,
@@ -134,6 +133,10 @@ export class SystemsService {
     });
   }
 
+	loadVehicleRef(): Observable<JsonArray> {
+		return this.http.get<JsonArray>(`${this.baseUrl}/vehicleRef`)
+	}
+
   jsonToSetting(obj: MonitorControlTable | ToggleOptionsType | TrackObjectConfig | TTSConfig | TrackMonitorSetting | HistoryTable,
                 pref: MonitorControlTable | ToggleOptionsType | TrackObjectConfig | TTSConfig | TrackMonitorSetting| HistoryTable){
     if(obj){
@@ -196,4 +199,5 @@ export class SystemsService {
       }),
     });
   }
+	
 }
