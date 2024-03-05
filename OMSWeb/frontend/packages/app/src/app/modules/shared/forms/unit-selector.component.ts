@@ -1,17 +1,9 @@
-import {
-	Component,
-	EventEmitter,
-	Input,
-	OnChanges,
-	OnInit,
-	Output,
-	SimpleChanges,
-} from '@angular/core'
-import { FormControl } from '@angular/forms'
-import { TrackStatusService } from '@oms/root/services/track-status.service'
-import { Observable, of } from 'rxjs'
-import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators'
-import { ILookupUnit } from '../../../models/map.interface'
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges,} from '@angular/core'
+import {FormControl} from '@angular/forms'
+import {TrackStatusService} from '@oms/root/services/track-status.service'
+import {Observable, of} from 'rxjs'
+import {debounceTime, distinctUntilChanged, switchMap} from 'rxjs/operators'
+import {ILookupUnit} from '../../../models/map.interface'
 import {SettingsService} from "@oms/services/settings.service";
 import {TranslateService} from "@ngx-translate/core";
 
@@ -75,92 +67,7 @@ export class UnitSelectorComponent implements OnInit, OnChanges {
 			distinctUntilChanged(),
 			// switchMap((value) => this.idSvc.lookupUnitsByLogicalId(this.findScopes, value))
 			switchMap((value) => {
-				const result: ILookupUnit[] = []
-				if (this.findScopes.includes('vehicles')) {
-					result.push(
-						...this.trackStatusService.trackData.vehicles
-							.filter((v) => v.logicalId.includes(value))
-							.map((v) => ({
-								id: v.id,
-								objectType: 'Vehicle',
-								logicalId: v.logicalId,
-								physicalId: v.physicalId,
-							})),
-					)
-				}
-				if (this.findScopes.includes('points')) {
-					const points = this.trackStatusService.trackData.points
-						.filter((p) => p.logicalId.includes(value))
-						.map((p) => ({
-							id: p.id,
-							objectType: 'Point',
-							logicalId: p.logicalId,
-							physicalId: p.physicalId,
-						}))
-
-					if (this.excludeMtlPoints) {
-						const mtlPoints = (
-							this.trackStatusService.trackData.mtls ?? []
-						).map((mtl) => mtl.pointId)
-						const filtered = points.filter((p) => !mtlPoints.includes(p.id))
-
-						result.push(...filtered)
-					} else {
-						result.push(...points)
-					}
-				}
-				if (this.findScopes.includes('stations')) {
-					result.push(
-						...this.trackStatusService.trackData.stations
-							.filter((s) => s.logicalId.includes(value))
-							.map((s) => ({
-								id: s.id,
-								objectType: 'Station',
-								logicalId: s.logicalId,
-								physicalId: s.physicalId,
-							})),
-					)
-				}
-				if (this.findScopes.includes('buffers')) {
-					result.push(
-						...this.trackStatusService.trackData.buffers
-							.filter((b) => b.logicalId.includes(value))
-							.map((b) => ({
-								id: b.id,
-								objectType: 'Buffer',
-								logicalId: b.logicalId,
-								physicalId: b.physicalId,
-							})),
-					)
-				}
-
-				if (this.findScopes.includes('mtls')) {
-					result.push(
-						...this.trackStatusService.trackData.mtls
-							.filter(
-								(m) => m.logicalId.includes(value), //permit all //&& m.inDirection !== 'R',
-							)
-							.map((m) => {
-								return {
-									id: m.id,
-									objectType: 'Mtl',
-									logicalId: m.logicalId,
-									physicalId: m.physicalId,
-									unuse: m.unuse,
-									inDirection: m.inDirection,
-									outDirection: m.outDirection,
-								}
-							}),
-					)
-				}
-				if (this.filterWords) {
-					const filtered = result.filter((unit) =>
-						this.filterWords.some((word) => unit.logicalId?.includes(word)),
-					)
-					return of(filtered)
-				} else {
-					return of(result)
-				}
+				return of(this.filterTrackData(value))
 			}),
 		)
 
@@ -200,4 +107,103 @@ export class UnitSelectorComponent implements OnInit, OnChanges {
   labelDisplayTable(type: string): string {
     return this.settingSvc.globalPreferences.controlTables[type]
   }
+	
+	validInput(){
+		if(this.inputControl.dirty){
+			this.inputControl.setValue('', { onlySelf: true })
+			// todo Autocomplete when typing
+			/*
+			const word = this.inputControl.value.split('#')
+			const value = this.filterTrackData(word)[0]
+			*/
+		}
+	}
+	
+	filterTrackData(value: string){
+		const result: ILookupUnit[] = []
+		if (this.findScopes.includes('vehicles')) {
+			result.push(
+				...this.trackStatusService.trackData.vehicles
+					.filter((v) => v.logicalId.includes(value))
+					.map((v) => ({
+						id: v.id,
+						objectType: 'Vehicle',
+						logicalId: v.logicalId,
+						physicalId: v.physicalId,
+					})),
+			)
+		}
+		if (this.findScopes.includes('points')) {
+			const points = this.trackStatusService.trackData.points
+				.filter((p) => p.logicalId.includes(value))
+				.map((p) => ({
+					id: p.id,
+					objectType: 'Point',
+					logicalId: p.logicalId,
+					physicalId: p.physicalId,
+				}))
+
+			if (this.excludeMtlPoints) {
+				const mtlPoints = (
+					this.trackStatusService.trackData.mtls ?? []
+				).map((mtl) => mtl.pointId)
+				const filtered = points.filter((p) => !mtlPoints.includes(p.id))
+
+				result.push(...filtered)
+			} else {
+				result.push(...points)
+			}
+		}
+		if (this.findScopes.includes('stations')) {
+			result.push(
+				...this.trackStatusService.trackData.stations
+					.filter((s) => s.logicalId.includes(value))
+					.map((s) => ({
+						id: s.id,
+						objectType: 'Station',
+						logicalId: s.logicalId,
+						physicalId: s.physicalId,
+					})),
+			)
+		}
+		if (this.findScopes.includes('buffers')) {
+			result.push(
+				...this.trackStatusService.trackData.buffers
+					.filter((b) => b.logicalId.includes(value))
+					.map((b) => ({
+						id: b.id,
+						objectType: 'Buffer',
+						logicalId: b.logicalId,
+						physicalId: b.physicalId,
+					})),
+			)
+		}
+
+		if (this.findScopes.includes('mtls')) {
+			result.push(
+				...this.trackStatusService.trackData.mtls
+					.filter(
+						(m) => m.logicalId.includes(value), //permit all //&& m.inDirection !== 'R',
+					)
+					.map((m) => {
+						return {
+							id: m.id,
+							objectType: 'Mtl',
+							logicalId: m.logicalId,
+							physicalId: m.physicalId,
+							unuse: m.unuse,
+							inDirection: m.inDirection,
+							outDirection: m.outDirection,
+						}
+					}),
+			)
+		}
+		if (this.filterWords) {
+			return result.filter((unit) =>
+				this.filterWords.some((word) => unit.logicalId?.includes(word)),
+			)
+		} else {
+			return result
+		}
+	}
 }

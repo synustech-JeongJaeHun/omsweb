@@ -1,5 +1,5 @@
 <mat-form-field class="dense" appearance="outline">
-  <input #inputValue matInput [formControl]="inputControl" [placeholder]="placeholder" [matAutocomplete]="auto" />
+  <input #inputValue matInput [formControl]="inputControl" [placeholder]="placeholder" [matAutocomplete]="auto" (focusout)="validInput()" />
   <button mat-button *ngIf="selectedUnit" matSuffix mat-icon-button aria-label="Clear" [disabled]="disabled"
     (click)="onClear(inputValue)">
     <mat-icon>close</mat-icon>

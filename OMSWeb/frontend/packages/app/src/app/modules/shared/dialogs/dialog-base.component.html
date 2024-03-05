@@ -1,4 +1,6 @@
-<div class="dialog-container" cdkDrag cdkDragRootElement=".cdk-overlay-pane" [cdkDragDisabled]="isMobile">
+<div class="dialog-container" cdkDrag 
+     cdkDragRootElement=".cdk-overlay-pane" cdkDragBoundary=".cdk-overlay-container" 
+     [cdkDragDisabled]="isMobile">
   <div class="pointer close-icon" (click)="close()" title="Close">
     <button mat-icon-button aria-label="Close" class="close" tabindex="-1">
       <mat-icon>close</mat-icon>

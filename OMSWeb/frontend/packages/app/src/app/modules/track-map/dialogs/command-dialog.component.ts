@@ -322,7 +322,7 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 		}
 
         if (category === 'fromTo' || category === 'from' || category === 'to') {
-            const isPriorityEmpty = Number.isNaN(priority) ||Number.parseInt(priority) <1
+            const isPriorityEmpty = Number.isNaN(priority) ||Number.parseInt(priority) <1 || !priority
             if (isPriorityEmpty)
                 return this.t$.instant('messages.required', { field: 'Priority' })
 
