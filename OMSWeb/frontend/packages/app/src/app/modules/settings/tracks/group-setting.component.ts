@@ -412,6 +412,16 @@ export class GroupSettingComponent implements OnInit {
 				})
 				return
 			}
+			
+			const vehicleSize = this.trackStatusService.trackData.vehicles.length
+			const homeSize = items.reduce((sum, curr)=> sum+curr.homePoints.length, 0)
+			if(vehicleSize>homeSize){
+				this.dialogSvc.success({
+					title: this.$t.instant('names.confirm'),
+					body: this.$t.instant('messages.homePointValidSize'),
+				})
+				return 
+			}
 
 			this.messageSvc
 				.sendAssignBufferGruopCommand({

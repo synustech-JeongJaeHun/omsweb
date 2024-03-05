@@ -719,7 +719,8 @@
     "hold-release": "Are you sure Fire Shutter Hold Release?",
     "dest-success": "Destination has been modified",
     "needsConfirm": "{{field}} needs confirmation.",
-    "notChange" : "Changes are not possible in auto state.({{vehicles}})"
+    "notChange" : "Changes are not possible in auto state.({{vehicles}})",
+    "homePointValidSize" : "The number of home points must be greater than the number of vehicles."
   },
   "_START_DATE" : "Please enter a start date",
   "_END_DATE":  "Please enter a end date"
