@@ -7,6 +7,7 @@
                     [height]="300" [width]="700"
                     [hoverStateEnabled]="true"
                     [(selectedRowKeys)]="selectedRows"
+                    [columnAutoWidth]="true"
                     allowColumnResizing="true">
         <dxo-selection mode="single"></dxo-selection>
 
@@ -25,7 +26,7 @@
         <dxo-filter-row [visible]="selectedFilter==='<>'"></dxo-filter-row>
 
         <dxi-column dataType="number" dataField="rowIndex" [allowSorting]="false"
-                    [allowEditing]="false" [width]="60" alignment="center"></dxi-column>
+                    [allowEditing]="false" [width]="40" alignment="center"></dxi-column>
         <dxi-column [allowFiltering]="true" [width]="120" dataType="datetime" dataField="time"
                     sortOrder="desc"
                     [caption]="'names.time' | translate" cellTemplate="dateCell">
@@ -39,17 +40,17 @@
         </dxi-column>
         <dxi-column [allowFiltering]="true" [width]="120" dataType="string" dataField="tag"
                     [caption]="'names.tag' | translate"></dxi-column>
-        <dxi-column [allowFiltering]="true" dataType="string" dataField="message"
+        <dxi-column [allowFiltering]="true" [width]="240" dataType="string" dataField="message"
                     [caption]="'names.message' | translate"></dxi-column>
         <dxi-column [visible]="selectedFilter==='<>'"
-                    [allowFiltering]="true" [width]="110" dataType="datetime" dataField="ackTime"
+                    [allowFiltering]="true" [width]="120" dataType="datetime" dataField="ackTime"
                     [caption]="'names.ackTime' | translate" cellTemplate="dateCell">
           <div *dxTemplate="let data of 'dateCell'">
             {{ data.value | date: "yyyy/MM/dd HH:mm:ss" }}
           </div>
         </dxi-column>
         <dxi-column [visible]="selectedFilter==='<>'"
-                    [allowFiltering]="true" [width]="110" dataType="string" dataField="ackBy"
+                    [allowFiltering]="true" [width]="120" dataType="string" dataField="ackBy"
                     [caption]="'names.ackBy' | translate">
         </dxi-column>
       </dx-data-grid>
