@@ -7,7 +7,7 @@ import { Dto } from '../../../models/dto/track.model'
 import { ViewModes } from '../../../models/enums'
 import { IPreferences } from '../../../models/settings.model'
 import { AuthService } from '../../../services/auth.service'
-import {CdkDragEnd, CdkDragMove} from "@angular/cdk/drag-drop";
+import {CdkDragEnd} from "@angular/cdk/drag-drop";
 import {TrackMonitorSettingService} from "@oms/services/track-monitor-setting.service";
 import {MobileService} from "../../../services/mobile.service";
 import {HubService} from "@oms/services/hub.service";
@@ -121,9 +121,6 @@ export class MonitorStatusComponent implements OnInit,OnDestroy {
     trackStatusService.isTrackReadyChanged.subscribe(isReady=>{
       this.loadingState = !isReady
       this.ready = isReady
-      if(isReady){
-        this.isInit && this.loadedTrack()
-      }
     })
 
     settingSvc.serviceConfig.subscribe(
@@ -219,10 +216,10 @@ export class MonitorStatusComponent implements OnInit,OnDestroy {
   }
 
   private loadedTrack(){
-    this.trackData = this.trackStatusService.trackData
-    this.trackData.stations.map(s=>{
+	  this.trackStatusService.trackData.stations.forEach(s=>{
       if(!this.includeCheck(s.logicalId)) s.carrierId =null
     })
+	  this.trackData = this.trackStatusService.trackData
     this.isInit =false
   }
 
