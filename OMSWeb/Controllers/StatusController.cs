@@ -1,19 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using OMSWeb.Models.Tracks;
-using OMSWeb.Repositories;
 using OMSWeb.Services;
 using DevExtreme.AspNet.Data;
 using DevExtreme.AspNet.Mvc;
-using OMSWeb.Filters;
-using OMSWeb.Models;
 using DevExtreme.AspNet.Data.ResponseModel;
-using System.Xml.Linq;
+using OMSWeb.Logger;
+
 
 namespace OMSWeb.Controllers
 {
@@ -71,6 +65,7 @@ namespace OMSWeb.Controllers
             }
             catch (Exception e)
             {
+                Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"Exception", e.Message);
                 loadResult = null;
             }
             return loadResult;
@@ -86,6 +81,7 @@ namespace OMSWeb.Controllers
             }
             catch (Exception e)
             {
+                Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"Exception", e.Message);
                 loadResult = null;
             }
             return loadResult;
@@ -101,6 +97,7 @@ namespace OMSWeb.Controllers
             }
             catch (Exception e)
             {
+                Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"Exception", e.Message);
                 loadResult = null;
             }
             return loadResult;
@@ -116,6 +113,7 @@ namespace OMSWeb.Controllers
             }
             catch (Exception e)
             {
+                Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"Exception", e.Message);
                 loadResult = null;
             }
             return loadResult;
@@ -146,6 +144,7 @@ namespace OMSWeb.Controllers
             }
             catch (Exception e)
             {
+                Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"Exception", e.Message);
                 loadResult = null;
             }
             return loadResult;
@@ -161,6 +160,7 @@ namespace OMSWeb.Controllers
             }
             catch (Exception e)
             {
+                Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"Exception", e.Message);
                 loadResult = null;
             }
             return loadResult;
@@ -176,6 +176,7 @@ namespace OMSWeb.Controllers
             }
             catch (Exception e)
             {
+                Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"Exception", e.Message);
                 loadResult = null;
             }
             return loadResult;
@@ -190,6 +191,7 @@ namespace OMSWeb.Controllers
             }
             catch (Exception e)
             {
+                Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"Exception", e.Message);
             }
             return null;
         }
@@ -204,6 +206,7 @@ namespace OMSWeb.Controllers
             }
             catch (Exception e)
             {
+                Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"Exception", e.Message);
                 loadResult = null;
             }
             return loadResult;

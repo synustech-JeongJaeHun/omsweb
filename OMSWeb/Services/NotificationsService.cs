@@ -4,10 +4,10 @@ using OMSWeb.Models;
 using OMSWeb.Models.Entities;
 using OMSWeb.Repositories;
 
-using System.Threading.Tasks;
 using DevExtreme.AspNet.Data;
 using DevExtreme.AspNet.Mvc;
 using Newtonsoft.Json.Linq;
+using OMSWeb.Logger;
 
 namespace OMSWeb.Services
 {
@@ -109,6 +109,7 @@ namespace OMSWeb.Services
             }
             catch (Exception e)
             {
+                Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"Exception", e.Message);
             }
 
             return (skip, take, condition, sort);

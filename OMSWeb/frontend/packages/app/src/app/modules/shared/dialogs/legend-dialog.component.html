@@ -1184,9 +1184,45 @@
 							</svg>
 						</div>
 						<div class="legend-caption">
-							{{ 'names.disabled' | translate }}
+							{{ 'names.disabled' | translate }}(User)
 						</div>
 					</div>
+                    <div class="legend-dlg-item">
+                        <div class="legend-icon">
+                            <svg>
+                                <g class="segment">
+                                    <path
+                                            class="segment_path disabled"
+                                            d="M10 30 L90 30"
+                                            stroke-width="5px"
+                                            stroke-dasharray="0,0"
+                                            [style]="{ stroke: setting.disabledByVehicleSegmentColor }"
+                                    ></path>
+                                </g>
+                            </svg>
+                        </div>
+                        <div class="legend-caption">
+                            {{ 'names.disabled' | translate }}(Vehicle)
+                        </div>
+                    </div>
+                    <div class="legend-dlg-item">
+                        <div class="legend-icon">
+                            <svg>
+                                <g class="segment">
+                                    <path
+                                            class="segment_path disabled"
+                                            d="M10 30 L90 30"
+                                            stroke-width="5px"
+                                            stroke-dasharray="0,0"
+                                            [style]="{ stroke: setting.disabledByMTLSegmentColor }"
+                                    ></path>
+                                </g>
+                            </svg>
+                        </div>
+                        <div class="legend-caption">
+                            {{ 'names.disabled' | translate }}(MTL)
+                        </div>
+                    </div>
 					<div class="legend-dlg-item">
 						<div class="legend-icon">
 							<svg>
@@ -1218,66 +1254,64 @@
 							{{ 'names.highWay' | translate }}
 						</div>
 					</div>
-
-          <div class="legend-dlg-item">
-            <div class="legend-icon">
-              <svg style="overflow: visible">
-                <g class="segment">
-                  <path
-                    class="segment_path"
-                    d="M10 30 L90 30"
-                    stroke-width="5px"
-                    [style]="{ stroke: setting.normalSegmentColor }"
-                  ></path>
-                  <path
-                    stroke-width="8px"
-                    d="M0 0 m -4 -8 l 0 16 l 20 -8 Z"
-                    transform="translate(50,30)"
-                    [style]="{ fill: '#ff7f7f', stroke: '#ff7f7f'}"
-                  ></path>
-                  <path
-                    class="dir_triangle"
-                    d="M0 0 m -4 -8 l 0 16 l 20 -8 Z"
-                    transform="translate(50,30)"
-                    [style]="{ fill: setting.segmentDirectionColor }"
-                  ></path>
-                </g>
-              </svg>
-            </div>
-            <div class="legend-caption">
-              {{ 'names.slopeUp' | translate }}
-            </div>
-          </div>
-
-          <div class="legend-dlg-item">
-            <div class="legend-icon">
-              <svg style="overflow: visible">
-                <g class="segment">
-                  <path
-                    class="segment_path"
-                    d="M10 30 L90 30"
-                    stroke-width="5px"
-                    [style]="{ stroke: setting.normalSegmentColor }"
-                  ></path>
-                  <path
-                    stroke-width="8px"
-                    d="M0 0 m -4 -8 l 0 16 l 20 -8 Z"
-                    transform="translate(50,30)"
-                    [style]="{ fill: '#80C6FF', stroke: '#80C6FF'}"
-                  ></path>
-                  <path
-                    class="dir_triangle"
-                    d="M0 0 m -4 -8 l 0 16 l 20 -8 Z"
-                    transform="translate(50,30)"
-                    [style]="{ fill: setting.segmentDirectionColor }"
-                  ></path>
-                </g>
-              </svg>
-            </div>
-            <div class="legend-caption">
-              {{ 'names.slopeDown' | translate }}
-            </div>
-          </div>
+                    <div class="legend-dlg-item">
+                    <div class="legend-icon">
+                      <svg style="overflow: visible">
+                        <g class="segment">
+                          <path
+                            class="segment_path"
+                            d="M10 30 L90 30"
+                            stroke-width="5px"
+                            [style]="{ stroke: setting.normalSegmentColor }"
+                          ></path>
+                          <path
+                            stroke-width="8px"
+                            d="M0 0 m -4 -8 l 0 16 l 20 -8 Z"
+                            transform="translate(50,30)"
+                            [style]="{ fill: '#ff7f7f', stroke: '#ff7f7f'}"
+                          ></path>
+                          <path
+                            class="dir_triangle"
+                            d="M0 0 m -4 -8 l 0 16 l 20 -8 Z"
+                            transform="translate(50,30)"
+                            [style]="{ fill: setting.segmentDirectionColor }"
+                          ></path>
+                        </g>
+                      </svg>
+                    </div>
+                    <div class="legend-caption">
+                      {{ 'names.slopeUp' | translate }}
+                    </div>
+                    </div>
+                    <div class="legend-dlg-item">
+                    <div class="legend-icon">
+                      <svg style="overflow: visible">
+                        <g class="segment">
+                          <path
+                            class="segment_path"
+                            d="M10 30 L90 30"
+                            stroke-width="5px"
+                            [style]="{ stroke: setting.normalSegmentColor }"
+                          ></path>
+                          <path
+                            stroke-width="8px"
+                            d="M0 0 m -4 -8 l 0 16 l 20 -8 Z"
+                            transform="translate(50,30)"
+                            [style]="{ fill: '#80C6FF', stroke: '#80C6FF'}"
+                          ></path>
+                          <path
+                            class="dir_triangle"
+                            d="M0 0 m -4 -8 l 0 16 l 20 -8 Z"
+                            transform="translate(50,30)"
+                            [style]="{ fill: setting.segmentDirectionColor }"
+                          ></path>
+                        </g>
+                      </svg>
+                    </div>
+                    <div class="legend-caption">
+                      {{ 'names.slopeDown' | translate }}
+                    </div>
+                    </div>
 				</dd>
 
 				<dt>{{ 'names.point' | translate }}</dt>
@@ -1354,6 +1388,54 @@
 						</div>
 						<div class="legend-caption">Unused</div>
 					</div>
+                    <div class="legend-dlg-item">
+                        <div class="legend-icon">
+                            <svg class="long-vertical">
+                                <g class="station" transform="translate(50,28)">
+                                    <path
+                                            class="station_path"
+                                            level="level3"
+                                            d="m-14 -4.5 l0 -9 l9 0 m9 0 l9 0 l0 9 m0 9 l0 9 l-9 0 m-9 0 l-9 0 l0 -9 m0 -9z"
+                                            [style]="{ stroke: '#87CEEB' }"
+                                    ></path>
+                                    <text
+                                            class="label"
+                                            font-size="11px"
+                                            x="-25"
+                                            y="30"
+                                            text-anchor="start"
+                                    >
+                                        {{ (labelDisplayTable('stations_label') | translate)+'_id'}}
+                                    </text>
+                                </g>
+                            </svg>
+                        </div>
+                        <div class="legend-caption">From</div>
+                    </div>
+                    <div class="legend-dlg-item">
+                        <div class="legend-icon">
+                            <svg class="long-vertical">
+                                <g class="station" transform="translate(50,28)">
+                                    <path
+                                            class="station_path"
+                                            level="level3"
+                                            d="m-14 -4.5 l0 -9 l9 0 m9 0 l9 0 l0 9 m0 9 l0 9 l-9 0 m-9 0 l-9 0 l0 -9 m0 -9z"
+                                            [style]="{ stroke: '#FFB2FF' }"
+                                    ></path>
+                                    <text
+                                            class="label"
+                                            font-size="11px"
+                                            x="-25"
+                                            y="30"
+                                            text-anchor="start"
+                                    >
+                                        {{ (labelDisplayTable('stations_label') | translate)+'_id'}}
+                                    </text>
+                                </g>
+                            </svg>
+                        </div>
+                        <div class="legend-caption">To</div>
+                    </div>
 				</dd>
 
 				<dt>{{ labelDisplayTable('buffers_label') | translate}}</dt>
@@ -1431,6 +1513,54 @@
 						</div>
 						<div class="legend-caption">Unused</div>
 					</div>
+                    <div class="legend-dlg-item">
+                        <div class="legend-icon">
+                            <svg class="long-vertical">
+                                <g class="buffer" transform="translate(50,28)">
+                                    <path
+                                            class="buffer_path"
+                                            level="level3"
+                                            [style]="{ fill: '#87CEEB' }"
+                                            d="m-15 5 m5 -10 l-5 0 a10 10 0 0 1 10 -10 l0 5 a5 5 0 0 0 -5 5 l-5 0 m20 -5 l0 -5a 10 10 0 0 1 10 10 l-5 0 a5 5 0 0 0 -5 -5 l0 -5 m5 20 l5 0 a10 10 0 0 1 -10 10 l0 -5 a5 5 0 0 0 5 -5 l5 0 m-20 5 l0 5 a10 10 0 0 1 -10 -10 l5 0 a5 5 0 0 0 5 5 l0 5 z"
+                                    ></path>
+                                    <text
+                                            class="label"
+                                            font-size="11px"
+                                            x="-20"
+                                            y="30"
+                                            text-anchor="start"
+                                    >
+                                        {{ (labelDisplayTable('buffers_label') | translate)+'_id'}}
+                                    </text>
+                                </g>
+                            </svg>
+                        </div>
+                        <div class="legend-caption">From</div>
+                    </div>
+                    <div class="legend-dlg-item">
+                        <div class="legend-icon">
+                            <svg class="long-vertical">
+                                <g class="buffer" transform="translate(50,28)">
+                                    <path
+                                            class="buffer_path"
+                                            level="level3"
+                                            [style]="{ fill: '#FFB2FF' }"
+                                            d="m-15 5 m5 -10 l-5 0 a10 10 0 0 1 10 -10 l0 5 a5 5 0 0 0 -5 5 l-5 0 m20 -5 l0 -5a 10 10 0 0 1 10 10 l-5 0 a5 5 0 0 0 -5 -5 l0 -5 m5 20 l5 0 a10 10 0 0 1 -10 10 l0 -5 a5 5 0 0 0 5 -5 l5 0 m-20 5 l0 5 a10 10 0 0 1 -10 -10 l5 0 a5 5 0 0 0 5 5 l0 5 z"
+                                    ></path>
+                                    <text
+                                            class="label"
+                                            font-size="11px"
+                                            x="-20"
+                                            y="30"
+                                            text-anchor="start"
+                                    >
+                                        {{ (labelDisplayTable('buffers_label') | translate)+'_id'}}
+                                    </text>
+                                </g>
+                            </svg>
+                        </div>
+                        <div class="legend-caption">To</div>
+                    </div>
 				</dd>
 
 				<dt>{{ 'names.mtl' | translate }}</dt>
