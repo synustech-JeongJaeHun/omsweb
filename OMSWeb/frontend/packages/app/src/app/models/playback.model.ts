@@ -189,6 +189,7 @@ type PlaybackSnapshotVehicle = {
   pm_user?: string
   pm_note?: string
   fire_sensor?: boolean
+	pause_state: number
 }
 
 type PlaybackSnapshotBuffer = {
@@ -312,7 +313,8 @@ type VehicleHistoryEvent = { tableName: 'vehicle_history' } & ITableName &
     runtime: number
     pmUser?: string
     pmNote?: string
-    fireSensor?: boolean
+    fireSensor?: boolean,
+		pauseState: number
 	}
 
 type SegmentBlockingHistoryEvent = {
@@ -497,6 +499,7 @@ type CurrentVehicle = {
   pmUser?: string
   pmNote?: string
   fireSensor?: boolean
+	pauseState: number
 }
 type CurrentSegmentBlocking = {
 	id: number

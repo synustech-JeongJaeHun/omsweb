@@ -356,6 +356,7 @@ function convertSnapshotVehicleToCurrentVehicle(
     distance: vehicle.distance,
     runtime: vehicle.runtime,
     fireSensor: vehicle.fire_sensor,
+		pauseState: vehicle.pause_state,
 	}
 }
 
@@ -503,7 +504,8 @@ function convertVehicleHistoryEventToCurrentVehicle(
     carrierId: event.carrierId,
     distance: event.distance,
     runtime: event.runtime,
-    fireSensor: event.fireSensor
+    fireSensor: event.fireSensor,
+		pauseState: event.pauseState,
 	}
 }
 
