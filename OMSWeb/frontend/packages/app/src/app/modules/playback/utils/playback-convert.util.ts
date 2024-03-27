@@ -131,6 +131,7 @@ function convertSnapshotVehicleToTmUpdateDtoVehicle(
 		destPoint: vehicle.dest_point == null ? '' : String(vehicle.dest_point),
     railIn: vehicle.rail_in,
     fireSensor: vehicle.fire_sensor,
+		pauseState: vehicle.pause_state,
 	}
 }
 
@@ -253,6 +254,7 @@ function convertVehicleHistoryEventToTmUpdateDtoVehicle(
 		isZcuBlocked: event.isZcuBlocked,
 		destPoint: event.destPoint,
     fireSensor: event.fireSensor,
+		pauseState: event.pauseState,
 	}
 }
 
