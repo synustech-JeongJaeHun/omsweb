@@ -38,7 +38,6 @@ import { getTimeRangeChunks } from '../modules/playback/utils/date.util'
 	providedIn: 'root',
 })
 export class PlaybackPlayService {
-  private EVENT_SLICER = 10
 	clockChanged = new EventEmitter<ClockChangedEvent>()
 
 	public firstSnapshotTime: Date
@@ -283,7 +282,7 @@ export class PlaybackPlayService {
 			this.clock = date
 			this.remainedFirstAlarmIndex = remainedFirstAlarmIndex
 			this.remainedFirstEventIndex = remainedFirstEventIndex
-
+			
 			this.clockChanged.emit({
 				type: 'EventsChanged',
 				clock: this.clock,
@@ -568,16 +567,7 @@ export class PlaybackPlayService {
         nextRemainedFirstAlarmIndex,
       ),
     }
-
-    console.log('length', evt.events.length)
-    if(evt.events.length > this.EVENT_SLICER){
-      /*const vhlEvent = evt.events.filter(e=>e.tableName==='vehicle_history')
-      const vhlEventHalf = removeDuplicates(vhlEvent.slice(-vhlEvent.length/10), 'historySourceId')
-      const otherEvent = evt.events.filter(e=>e.tableName!=='vehicle_history')
-      evt.events = [...otherEvent, ...vhlEventHalf]*/
-      evt.events = evt.events.slice(-this.EVENT_SLICER)
-    }
-
+		
 		// 🎉 event
 		this.clockChanged.emit(evt)
 
