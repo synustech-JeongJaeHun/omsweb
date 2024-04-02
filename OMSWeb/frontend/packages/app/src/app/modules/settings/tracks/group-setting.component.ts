@@ -28,7 +28,7 @@ export class GroupSettingComponent implements OnInit {
 	groups: ISettingsGroup[] = []
 	groupedObjects: ISettingsGroupedObject[] = []
 
-	selectedItem: ISettingsGroup
+	selectedGroupId: number
 
 	assignedHomePoints: number[] = []
 	assignedStations: number[] = []
@@ -41,7 +41,6 @@ export class GroupSettingComponent implements OnInit {
 	buffers: number[] = []
 
 	private _changedItems: ISettingsGroup[] = []
-	//private _changedVehicleItems: number[] = [];
 
 	get noData(): boolean {
 		return this.ready && this.groups.length === 0
@@ -65,8 +64,8 @@ export class GroupSettingComponent implements OnInit {
 	private init() {
 		forkJoin([this.loadGroups(), this.loadGroupedObjects()]).subscribe(() => {
 			if (this.groups.length) {
-				this.selectedItem = this.groups[0]
-				forkJoin([this.bindGroupData(this.selectedItem.id)])
+				this.selectedGroupId = this.selectedGroupId ?? this.groups[0]?.id
+				forkJoin([this.bindGroupData(this.selectedGroupId)])
 			}
 			this.ready = true
 		})
@@ -136,7 +135,7 @@ export class GroupSettingComponent implements OnInit {
 	}
 
 	onGroupChanged() {
-		this.bindGroupData(this.selectedItem.id)
+		this.bindGroupData(this.selectedGroupId)
 	}
 
 	ngOnInit(): void {}
@@ -146,111 +145,41 @@ export class GroupSettingComponent implements OnInit {
 		this.destroy$.complete()
 	}
 
-	onChange(type: string, picked: number[]) {
-		const { objects } = this.selectedItem
-
-		let pushedItem = {} as ISettingsGroup
-		pushedItem.id = this.selectedItem.id
-		//pushedItem.objects = new Array(0);
-		pushedItem.homePoints = new Array(0)
-		pushedItem.stations = new Array(0)
-		pushedItem.vehicles = new Array(0)
-		pushedItem.buffers = new Array(0)
-
-		let items = picked
-
-		if (type == 'homePoints') {
-			if (this._changedItems.every((x) => x.id !== this.selectedItem.id)) {
-				for (let idx = 0; idx < items.length; idx++) {
-					//pushedItem.objects.push(items[idx]);
-					pushedItem.homePoints.push(items[idx])
-				}
-				this._changedItems.push(pushedItem)
-			} else {
-				//this._changedItems.find((x) => x.id === this.selectedItem.id).objects = new Array(0);
-				this._changedItems.find(
-					(x) => x.id === this.selectedItem.id,
-				).homePoints = new Array(0)
-
-				for (let idx = 0; idx < items.length; idx++) {
-					//this._changedItems.find((x) => x.id === this.selectedItem.id).objects.push(items[idx]);
-					this._changedItems
-						.find((x) => x.id === this.selectedItem.id)
-						.homePoints.push(items[idx])
-				}
+	onChange(type: string, items: number[]) {
+		let changedItem = this._changedItems.find(x => x.id === this.selectedGroupId);
+		
+		if (!changedItem) {
+			changedItem = {
+				id: this.selectedGroupId,
+				homePoints: [],
+				stations: [],
+				vehicles: [],
+				buffers: []
 			}
-		} else if (type == 'stations') {
-			if (this._changedItems.every((x) => x.id !== this.selectedItem.id)) {
-				for (let idx = 0; idx < items.length; idx++) {
-					//pushedItem.objects.push(items[idx]);
-					pushedItem.stations.push(items[idx])
-				}
-				this._changedItems.push(pushedItem)
-			} else {
-				//this._changedItems.find((x) => x.id === this.selectedItem.id).objects = new Array(0);
-				this._changedItems.find((x) => x.id === this.selectedItem.id).stations =
-					new Array(0)
-
-				for (let idx = 0; idx < items.length; idx++) {
-					//this._changedItems.find((x) => x.id === this.selectedItem.id).objects.push(items[idx]);
-					this._changedItems
-						.find((x) => x.id === this.selectedItem.id)
-						.stations.push(items[idx])
-				}
-			}
-		} else if (type == 'vehicles') {
-			if (this._changedItems.every((x) => x.id !== this.selectedItem.id)) {
-				for (let idx = 0; idx < items.length; idx++) {
-					//pushedItem.objects.push(items[idx]);
-					pushedItem.vehicles.push(items[idx])
-				}
-				this._changedItems.push(pushedItem)
-			} else {
-				//this._changedItems.find((x) => x.id === this.selectedItem.id).objects = new Array(0);
-				this._changedItems.find((x) => x.id === this.selectedItem.id).vehicles =
-					new Array(0)
-
-				for (let idx = 0; idx < items.length; idx++) {
-					//this._changedItems.find((x) => x.id === this.selectedItem.id).objects.push(items[idx]);
-					this._changedItems
-						.find((x) => x.id === this.selectedItem.id)
-						.vehicles.push(items[idx])
-				}
-			}
-		} else if (type == 'buffers') {
-			if (this._changedItems.every((x) => x.id !== this.selectedItem.id)) {
-				for (let idx = 0; idx < items.length; idx++) {
-					//pushedItem.objects.push(items[idx]);
-					pushedItem.buffers.push(items[idx])
-				}
-				this._changedItems.push(pushedItem)
-			} else {
-				//this._changedItems.find((x) => x.id === this.selectedItem.id).objects = new Array(0);
-				this._changedItems.find((x) => x.id === this.selectedItem.id).buffers =
-					new Array(0)
-
-				for (let idx = 0; idx < items.length; idx++) {
-					//this._changedItems.find((x) => x.id === this.selectedItem.id).objects.push(items[idx]);
-					this._changedItems
-						.find((x) => x.id === this.selectedItem.id)
-						.buffers.push(items[idx])
-				}
-			}
+			this._changedItems.push(changedItem);
+		} else {
+			changedItem.homePoints = []
+			changedItem.stations = []
+			changedItem.vehicles = []
+			changedItem.buffers = []
 		}
-		/*
-    if (this._changedItems.every((x) => x.id !== this.selectedItem.id)) {
-      for (let idx = 0; idx < items.length; idx++) {
-        pushedItem.objects.push(items[idx]);
-      }
-      this._changedItems.push(pushedItem);
-    } else {
-      this._changedItems.find((x) => x.id === this.selectedItem.id).objects = new Array(0);
 
-      for (let idx = 0; idx < items.length; idx++) {
-        this._changedItems.find((x) => x.id === this.selectedItem.id).objects.push(items[idx]);
-      }
-    }
-    */
+		switch (type) {
+			case 'homePoints':
+				changedItem.homePoints = items.slice();
+				break
+			case 'stations':
+				changedItem.stations = items.slice();
+				break
+			case 'vehicles':
+				changedItem.vehicles = items.slice();
+				break
+			case 'buffers':
+				changedItem.buffers = items.slice();
+				break
+			default:
+				break
+		}
 	}
 
 	onSave() {
@@ -261,12 +190,7 @@ export class GroupSettingComponent implements OnInit {
 			.subscribe((states) => {
 				if (states.tscMode === TscModeEnums.PAUSED) {
 					this.SaveMessages(this._changedItems)
-
-					// before code for update
-					// this._changedItems = []
-					// // this._changedVehicleItems = [];
-					// this.bindGroupData(this.selectedItem.id)
-
+					
 					// after code for update
 					setTimeout(() => {
 						this.onRevert()
@@ -281,7 +205,6 @@ export class GroupSettingComponent implements OnInit {
 
 	onRevert() {
 		this._changedItems = []
-		//this._changedVehicleItems = [];
 
 		this.homePoints = []
 		this.stations = []
@@ -300,6 +223,7 @@ export class GroupSettingComponent implements OnInit {
 		for (let idx = 0; idx < items.length; idx++) {
 			let addedHomePoints = []
 			let removedHomePoints = []
+			let currentAssignedHomePoints = []
 			let duplicate = {
 				homePoints : [],
 				stations : [],
@@ -308,7 +232,7 @@ export class GroupSettingComponent implements OnInit {
       }
 
 			if (items[idx].homePoints.length > 0) {
-				let currentAssignedHomePoints = this.groupedObjects
+				currentAssignedHomePoints = this.groupedObjects
 					.filter(
 						(x: ISettingsGroupedObject) =>
 							x.groupId === items[idx].id && x.referenceTable === 'home',
@@ -329,9 +253,10 @@ export class GroupSettingComponent implements OnInit {
 
 			let addedStations = []
 			let removedStations = []
+			let currentAssignedStations = []
 
 			if (items[idx].stations.length > 0) {
-				let currentAssignedStations = this.groupedObjects
+				currentAssignedStations = this.groupedObjects
 					.filter(
 						(x: ISettingsGroupedObject) =>
 							x.groupId === items[idx].id && x.referenceTable === 'station',
@@ -351,9 +276,10 @@ export class GroupSettingComponent implements OnInit {
 
 			let addedVehicles = []
 			let removedVehicles = []
+			let currentAssignedVehicles = []
 
 			if (items[idx].vehicles.length > 0) {
-				let currentAssignedVehicles = this.groupedObjects
+				currentAssignedVehicles = this.groupedObjects
 					.filter(
 						(x: ISettingsGroupedObject) =>
 							x.groupId === items[idx].id && x.referenceTable === 'vehicle',
@@ -374,9 +300,10 @@ export class GroupSettingComponent implements OnInit {
 
 			let addedBuffers = []
 			let removedBuffers = []
+			let currentAssignedBuffers = []
 
 			if (items[idx].buffers.length > 0) {
-				let currentAssignedBuffers = this.groupedObjects
+				currentAssignedBuffers = this.groupedObjects
 					.filter(
 						(x: ISettingsGroupedObject) =>
 							x.groupId === items[idx].id && x.referenceTable === 'buffer',
@@ -392,7 +319,7 @@ export class GroupSettingComponent implements OnInit {
         duplicate.buffers = this.checkDuplicate(items[idx].id, items[idx].buffers, 'buffer')
 			}
 
-			const group: number = this.selectedItem.id
+			const group: number = this.selectedGroupId
 
       for(let key of Object.keys(duplicate)){
         if(duplicate[key].length>0){
@@ -442,8 +369,7 @@ export class GroupSettingComponent implements OnInit {
 
 		return
 	}
-
-  //
+	
   checkDuplicate(itemsId = 0, items: any[], type = 'home'){
     let others = this.groupedObjects
       .filter(

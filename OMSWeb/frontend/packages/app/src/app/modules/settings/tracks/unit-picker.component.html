@@ -14,7 +14,7 @@
     </dx-data-grid>
   </div>
   <div *ngIf="visibleAction" class="actions">
-    <button mat-icon-button (click)="onUnassign()" [disabled]="disabled">
+    <button mat-icon-button (click)="onUnassign()" [disabled]="isDisable">
       <mat-icon>arrow_left</mat-icon>
     </button>
     <button mat-icon-button (click)="onAssign()" [disabled]="disabled">

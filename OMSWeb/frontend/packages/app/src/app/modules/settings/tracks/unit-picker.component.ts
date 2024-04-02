@@ -33,6 +33,7 @@ export class UnitPickerComponent implements OnChanges {
   @Input() selectionModeAssigned = "multiple";
 
   @Input() visibleAction = true;
+	@Input() notEmptyPick = false;
 
   @Output() selectionChanged = new EventEmitter<number[]>();
 
@@ -88,4 +89,8 @@ export class UnitPickerComponent implements OnChanges {
     this.pool = this.unassigned;
     this.picked = picked;
   }
+	
+	get isDisable(){
+		return this.disabled || this.notEmptyPick && (this.picked.length < 2 || this.selectedAssignedIds.length === this.picked.length)
+	}
 }

@@ -14,27 +14,28 @@
   <div class="sub-bar">
     <mat-label>{{ "names.selectedGroup" | translate }}</mat-label>
     <mat-form-field class="index-selector dense" appearance="outline">
-      <mat-select [disabled]="noData" [(value)]="selectedItem" (selectionChange)="onGroupChanged()">
-        <mat-option *ngFor="let item of groups" [value]="item">{{ item.id }}</mat-option>
+      <mat-select [disabled]="noData" [(ngModel)]="selectedGroupId" (selectionChange)="onGroupChanged()">
+        <mat-option *ngFor="let item of groups" [value]="item.id">{{ item.id }}</mat-option>
       </mat-select>
     </mat-form-field>
   </div>
 
   <div class="assign-grid">
     <oms-unit-picker [title]="'names.homePointList' | translate" [unitName]="'names.point' | translate"
-      [pool]="homePoints" [disabled]="noData" [gridHeight]="190" [picked]="assignedHomePoints"
+      [pool]="homePoints" [disabled]="noData" [gridHeight]="190" [picked]="assignedHomePoints" [notEmptyPick]="true"
       (selectionChanged)="onChange('homePoints', $event)">
     </oms-unit-picker>
     <oms-unit-picker [title]="'names.stationList' | translate" [unitName]="'names.station' | translate"
-      [pool]="stations" [disabled]="noData" [gridHeight]="190" [picked]="assignedStations"
+      [pool]="stations" [disabled]="noData" [gridHeight]="190" [picked]="assignedStations" [notEmptyPick]="true"
       (selectionChanged)="onChange('stations', $event)">
     </oms-unit-picker>
     <oms-unit-picker [title]="'names.vehicleList' | translate" [unitName]="'names.vehicle' | translate"
-      [pool]="vehicles" [disabled]="noData" [picked]="assignedVehicles"
+      [pool]="vehicles" [disabled]="noData" [picked]="assignedVehicles" [notEmptyPick]="true"
       (selectionChanged)="onChange('vehicles', $event)">
     </oms-unit-picker>
-    <oms-unit-picker [title]="'names.bufferList' | translate" [unitName]="'names.buffer' | translate" [pool]="buffers"
-      [disabled]="noData" [picked]="assignedBuffers" (selectionChanged)="onChange('buffers', $event)">
+    <oms-unit-picker [title]="'names.bufferList' | translate" [unitName]="'names.buffer' | translate" 
+      [pool]="buffers" [disabled]="noData" [picked]="assignedBuffers" [notEmptyPick]="true" 
+      (selectionChanged)="onChange('buffers', $event)">
     </oms-unit-picker>
   </div>
 </ng-container>
