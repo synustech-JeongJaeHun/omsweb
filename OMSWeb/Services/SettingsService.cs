@@ -9,10 +9,14 @@ namespace OMSWeb.Services
     public class SettingsService
     {
         private readonly SettingsRepository _repo;
+        private readonly CacheService _cache;
+        private readonly TrackService _track;
 
-        public SettingsService(SettingsRepository repo)
+        public SettingsService(SettingsRepository repo, CacheService cache, TrackService track)
         {
             _repo = repo;
+            this._cache = cache;
+            this._track = track;
         }
 
         public SettingModeEntity GetSettingsRebalance()
@@ -85,9 +89,11 @@ namespace OMSWeb.Services
             return _repo.QuerySettingsSegments();
         }
 
-        public int UpdateSettingsSegment(SegmentWithVPartsNBlockingEntity segment)
+        //remove cache for reload segment 
+        public int UpdateSettingsSegment()
         {
-            return _repo.UpdateSettingsSegment(segment);
+            this._cache.RemoveValue(CacheKeys.Segments);
+            return 1;
         }
 
         public IQueryable<StationWithUnuseEntity> GetSettingsStations()

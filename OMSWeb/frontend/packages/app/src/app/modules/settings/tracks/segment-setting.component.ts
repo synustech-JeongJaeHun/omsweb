@@ -4,6 +4,8 @@ import { forkJoin, Observable, of } from 'rxjs';
 import { MessagesService } from '../../../services/messages.service';
 import { SettingsService } from '../../../services/settings.service';
 import { ISettingsSegment, ISettingsSegmentWithVParts, ISettingsSegmentWithVPartsNBlocking } from '../../../models/settings.model';
+import {TracksService} from "@oms/services/tracks.service";
+import {TrackStatusService} from "@oms/services/track-status.service";
 
 @Component({
   selector: 'oms-segment-setting',
@@ -23,7 +25,9 @@ export class SegmentSettingComponent implements OnInit {
 
   constructor(
     private settingsSvc: SettingsService,
-    private messageSvc: MessagesService
+    private messageSvc: MessagesService,
+    private track: TracksService,
+    private trackStatusService: TrackStatusService
   ) {
     this.settingsSvc.settingsSegments().subscribe((res) => {
       this.dataSource = res;
@@ -66,6 +70,7 @@ export class SegmentSettingComponent implements OnInit {
 
       setTimeout(() => {
         this.updateState();
+				this.updateTrack()
       }, 600);
 
     }
@@ -104,8 +109,7 @@ export class SegmentSettingComponent implements OnInit {
       .subscribe();
 
     // DB Update
-    //this.settingsSvc.saveSegments(items).subscribe();
-
+    this.settingsSvc.saveSegments().subscribe();
     return;
   }
 
@@ -124,6 +128,13 @@ export class SegmentSettingComponent implements OnInit {
       this.dataSource = res;
     });
   }
+	
+	private updateTrack(){
+		// track-data Update
+		this.track.loadSegments().subscribe(s=>{
+			this.trackStatusService.trackData.segments = s
+		})
+	}
 
   customSpeedRatio(cellInfo) {
     return cellInfo.value + ' %';

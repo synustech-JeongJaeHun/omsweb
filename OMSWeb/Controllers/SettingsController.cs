@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Mvc;
 using DevExtreme.AspNet.Data;
@@ -9,9 +8,7 @@ using DevExtreme.AspNet.Mvc;
 
 using OMSWeb.Models;
 using OMSWeb.Models.Entities;
-using OMSWeb.Repositories;
 using OMSWeb.Services;
-using System.Configuration;
 using OMSWeb.OMSSettings;
 using OMSWeb.Logger;
 
@@ -377,15 +374,9 @@ namespace OMSWeb.Controllers
         }
 
         [HttpPost("segments/save")]
-        public IActionResult SaveSettingsSegments([FromBody] SegmentWithVPartsNBlockingEntity[] segments)
+        public IActionResult SaveSettingsSegments()
         {
-            var updateSegements = segments.ToList();
-
-            foreach (SegmentWithVPartsNBlockingEntity segment in segments)
-            {
-                _settingsSvc.UpdateSettingsSegment(segment);
-            }
-
+            _settingsSvc.UpdateSettingsSegment();
             return Ok();
         }
 

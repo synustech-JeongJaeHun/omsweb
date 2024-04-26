@@ -143,8 +143,8 @@ export class SettingsService {
 		)
 	}
 
-	saveSegments(form: ISettingsSegmentWithVPartsNBlocking[]): Observable<void> {
-		return this.http.post<void>(`${this.baseUrl}/segments/save`, form)
+	saveSegments(): Observable<void> {
+		return this.http.post<void>(`${this.baseUrl}/segments/save`, null)
 	}
 
 	settingsStations(): Observable<ISettingsStationWithUnuse[]> {
