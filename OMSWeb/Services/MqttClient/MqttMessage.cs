@@ -14,7 +14,8 @@ namespace OMSWeb.Services.MqttClient
     {
         public const string TOPIC_DEFAULT = "oms/vehicle-manager/request";
         public const string TOPIC_MAP_UPDATE = "oms/map-update/status";
-        public const string TOPIC_ALIVE = "oms/alive/request";
+        public const string TOPIC_ALIVE_REQUEST = "oms/alive/request";
+        public const string TOPIC_ALIVE_STATUS = "oms/alive/status";
 
         public const string REQUEST_HAS = "has";
         public const string REQUEST_VEHICLE_MANAGER = "vehicle_manager";

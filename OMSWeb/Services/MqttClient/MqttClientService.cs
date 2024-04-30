@@ -3,17 +3,18 @@ using MQTTnet.Client;
 using MQTTnet.Client.Connecting;
 using MQTTnet.Client.Disconnecting;
 using MQTTnet.Client.Options;
-using MQTTnet.Implementations;
 using MQTTnet.Protocol;
 using System;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Text.Json;
 using OMSWeb.Logger;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 using OMSWeb.OMSSettings;
+using Newtonsoft.Json;
+using MQTTnet.Client.Publishing;
+using OMSWeb.Services.MqttClient;
 
 namespace OMSWeb.Services
 {
@@ -40,6 +41,7 @@ namespace OMSWeb.Services
         {
             List<string> subTopicList = new List<string>();
             subTopicList.Add("oms/map-update/status");
+            subTopicList.Add("oms/alive/request");
 
             return subTopicList;
         }
@@ -55,6 +57,13 @@ namespace OMSWeb.Services
         public bool IsMapUpdateStatus(string topic)
         {
             if (topic.StartsWith("oms/map-update"))
+                return true;
+            return false;
+        }
+
+        public bool IsAliveRequest(string topic)
+        {
+            if (topic.StartsWith("oms/alive/request"))
                 return true;
             return false;
         }
@@ -132,6 +141,23 @@ namespace OMSWeb.Services
             }
         }
 
+        public async Task NotifyAliveRequestProc()
+        {
+            try
+            {
+                // response alive status
+                Dictionary<string, object> data_end = new Dictionary<string, object>();
+                data_end.Add("request", "alive");
+                data_end.Add("action", "status");
+                data_end.Add("module", "omsweb");
+
+                await SendMessage(MqttMessage.TOPIC_ALIVE_STATUS, JsonConvert.SerializeObject(data_end));
+            }
+            catch (Exception e) 
+            {
+                Log.FilePrint(LogType.HOST, LogEventLevel.Information, $"alive-response-fail");
+            }
+        }
 
         public Task HandleApplicationMessageReceivedAsync(MqttApplicationMessageReceivedEventArgs eventArgs)
         {
@@ -143,6 +169,10 @@ namespace OMSWeb.Services
                 if (IsMapUpdateStatus(topic))
                 {
                     NotifyMapUpdateProc(payload);
+                }
+                else if (IsAliveRequest(topic))
+                {
+                    _ = NotifyAliveRequestProc();
                 }
 
                 // System.Console.WriteLine($"Topic: {topic}. Message Received: {payload}");
