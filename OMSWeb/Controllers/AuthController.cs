@@ -28,7 +28,7 @@ namespace OMSWeb.Controllers
             }
             catch (Exception e)
             {
-                Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"Exception Auth", e.Message);
+                Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"Exception Auth", e.Message, e.ToString());
                 return null;
             }
         }

@@ -68,11 +68,7 @@ export class SegmentSettingComponent implements OnInit {
       this._changedItems = [];
       //grid.instance.refresh();
 
-      setTimeout(() => {
-        this.updateState();
-				this.updateTrack()
-      }, 600);
-
+	    this.updateTrack()
     }
   }
 
@@ -107,9 +103,7 @@ export class SegmentSettingComponent implements OnInit {
     this.messageSvc
       .sendSegmentSettingCommand({ type: 'SEGMENT', action: 'segment-setting', segmentIds: segmentIds, speedRatios: speedRatios })
       .subscribe();
-
-    // DB Update
-    this.settingsSvc.saveSegments().subscribe();
+		
     return;
   }
 
@@ -117,10 +111,8 @@ export class SegmentSettingComponent implements OnInit {
     this.messageSvc
       .sendAllSpeedRatioSegmentCommand({ type: 'SEGMENT-ALL', action: 'segment-setting' }, inputAllSppedRatio.value)
       .subscribe();
-
-    setTimeout(() => {
-      this.updateState();
-    }, 600);
+		
+    this.updateTrack()
   }
 
   private updateState() {
@@ -130,10 +122,16 @@ export class SegmentSettingComponent implements OnInit {
   }
 	
 	private updateTrack(){
+		// DB Update
+		this.settingsSvc.saveSegments().subscribe();
+		
 		// track-data Update
-		this.track.loadSegments().subscribe(s=>{
-			this.trackStatusService.trackData.segments = s
-		})
+		setTimeout(() => {
+			this.updateState();
+			this.track.loadSegments().subscribe(s=>{
+				this.trackStatusService.trackData.segments = s
+			})
+		}, 600);
 	}
 
   customSpeedRatio(cellInfo) {
