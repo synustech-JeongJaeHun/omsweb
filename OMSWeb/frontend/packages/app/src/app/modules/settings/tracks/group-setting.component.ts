@@ -145,7 +145,94 @@ export class GroupSettingComponent implements OnInit {
 		this.destroy$.complete()
 	}
 
-	onChange(type: string, items: number[]) {
+	onChange(type: string, picked: number[]) {
+
+		let pushedItem = {} as ISettingsGroup
+		pushedItem.id = this.selectedGroupId
+		//pushedItem.objects = new Array(0);
+		pushedItem.homePoints = new Array(0)
+		pushedItem.stations = new Array(0)
+		pushedItem.vehicles = new Array(0)
+		pushedItem.buffers = new Array(0)
+
+		let items = picked
+
+		if (type == 'homePoints') {
+			if (this._changedItems.every((x) => x.id !== this.selectedGroupId)) {
+				for (let idx = 0; idx < items.length; idx++) {
+					//pushedItem.objects.push(items[idx]);
+					pushedItem.homePoints.push(items[idx])
+				}
+				this._changedItems.push(pushedItem)
+			} else {
+				this._changedItems.find(
+					(x) => x.id === this.selectedGroupId,
+				).homePoints = new Array(0)
+
+				for (let idx = 0; idx < items.length; idx++) {
+					this._changedItems
+						.find((x) => x.id === this.selectedGroupId)
+						.homePoints.push(items[idx])
+				}
+			}
+		} else if (type == 'stations') {
+			if (this._changedItems.every((x) => x.id !== this.selectedGroupId)) {
+				for (let idx = 0; idx < items.length; idx++) {
+					pushedItem.stations.push(items[idx])
+				}
+				this._changedItems.push(pushedItem)
+			} else {
+				this._changedItems.find((x) => x.id === this.selectedGroupId).stations =
+					new Array(0)
+
+				for (let idx = 0; idx < items.length; idx++) {
+					//this._changedItems.find((x) => x.id === this.selectedGroupId).objects.push(items[idx]);
+					this._changedItems
+						.find((x) => x.id === this.selectedGroupId)
+						.stations.push(items[idx])
+				}
+			}
+		} else if (type == 'vehicles') {
+			if (this._changedItems.every((x) => x.id !== this.selectedGroupId)) {
+				for (let idx = 0; idx < items.length; idx++) {
+					//pushedItem.objects.push(items[idx]);
+					pushedItem.vehicles.push(items[idx])
+				}
+				this._changedItems.push(pushedItem)
+			} else {
+				this._changedItems.find((x) => x.id === this.selectedGroupId).vehicles =
+					new Array(0)
+
+				for (let idx = 0; idx < items.length; idx++) {
+					//this._changedItems.find((x) => x.id === this.selectedGroupId).objects.push(items[idx]);
+					this._changedItems
+						.find((x) => x.id === this.selectedGroupId)
+						.vehicles.push(items[idx])
+				}
+			}
+		} else if (type == 'buffers') {
+			if (this._changedItems.every((x) => x.id !== this.selectedGroupId)) {
+				for (let idx = 0; idx < items.length; idx++) {
+					//pushedItem.objects.push(items[idx]);
+					pushedItem.buffers.push(items[idx])
+				}
+				this._changedItems.push(pushedItem)
+			} else {
+				//this._changedItems.find((x) => x.id === this.selectedGroupId).objects = new Array(0);
+				this._changedItems.find((x) => x.id === this.selectedGroupId).buffers =
+					new Array(0)
+
+				for (let idx = 0; idx < items.length; idx++) {
+					//this._changedItems.find((x) => x.id === this.selectedItem.id).objects.push(items[idx]);
+					this._changedItems
+						.find((x) => x.id === this.selectedGroupId)
+						.buffers.push(items[idx])
+				}
+			}
+		}
+	}
+
+	/*onChange(type: string, items: number[]) {
 		let changedItem = this._changedItems.find(x => x.id === this.selectedGroupId);
 		
 		if (!changedItem) {
@@ -180,7 +267,7 @@ export class GroupSettingComponent implements OnInit {
 			default:
 				break
 		}
-	}
+	}*/
 
 	onSave() {
 		if (!this._changedItems.length) return
@@ -329,7 +416,7 @@ export class GroupSettingComponent implements OnInit {
       }
 
 			const addedVehicleData = this.trackStatusService.trackData.vehicles.filter(v=>{
-				return addedVehicles.find(a=>a===v.id) && v.mode.toUpperCase() === 'A'
+				return addedVehicles.find(a=>a===v.id) && v.mode?.toUpperCase() === 'A'
 			})
 			if(addedVehicleData.length>0){
 				const vehicles = addedVehicleData.map(v=>('Vehicle #'+v.id))
