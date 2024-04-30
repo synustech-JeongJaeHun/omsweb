@@ -6,11 +6,11 @@ import {Observable, of} from 'rxjs'
 import { tap } from 'rxjs/operators'
 
 import {
-  IModuleStatus,
-  IServiceProcessStates,
-  ISystemStates,
-  IFileItem,
-  ISettingMode, ICdmStatus, IVhlStatus,
+	IModuleStatus,
+	IServiceProcessStates,
+	ISystemStates,
+	IFileItem,
+	ISettingMode, ICdmStatus, IVhlStatus, ISystemState,
 } from '@oms/models/system.model'
 import {
   ClientPreferences, HistoryTable,
@@ -199,5 +199,8 @@ export class SystemsService {
       }),
     });
   }
-	
+
+	systemState(): Observable<ISystemState> {
+		return this.http.get<ISystemState>(`${this.baseUrl}/system-state`)
+	}
 }

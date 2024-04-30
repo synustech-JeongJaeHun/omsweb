@@ -720,7 +720,8 @@
     "dest-success": "目的地已修改。",
     "needsConfirm": "{{field}} 需要确认。",
     "notChange" : "在自动状态下无法进行更改。({{vehicles}})",
-    "homePointValidSize" : "起始点数量必须大于车辆数量。"
+    "homePointValidSize" : "起始点数量必须大于车辆数量。",
+    "fireDetected" : "这是火灾探测情况。\n"
   },
   "_START_DATE" : "Please enter a start date",
   "_END_DATE":  "Please enter a end date"

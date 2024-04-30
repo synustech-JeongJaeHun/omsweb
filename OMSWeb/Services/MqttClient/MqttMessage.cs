@@ -411,6 +411,8 @@ namespace OMSWeb.Services.MqttClient
                     data["state"] = command.State;
 
                 Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: {command.Action}");
+                if( command.User != null ) 
+                    Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"#Change to auto when Fire-Detect, User: {command.User}, Note: {command.Note}");
             }
             else if (command.Action == ACTION_MAP_UPDATE)
             {

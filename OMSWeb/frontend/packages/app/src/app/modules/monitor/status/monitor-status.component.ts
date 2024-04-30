@@ -14,6 +14,7 @@ import {HubService} from "@oms/services/hub.service";
 import { takeUntil } from 'rxjs/operators'
 import {Subject} from "rxjs";
 import {Router} from "@angular/router";
+import {SystemsService} from "@oms/services/systems.service";
 
 
 @Component({
@@ -112,7 +113,8 @@ export class MonitorStatusComponent implements OnInit,OnDestroy {
     private trackMonitorSettingService: TrackMonitorSettingService,
     private mobileSvc: MobileService,
     private hubSvc: HubService,
-    private router: Router
+    private router: Router,
+		private systemSvc: SystemsService
 	) {
 		this.viewMode = this.auth.isAuthenticated
 			? ViewModes.viewer
@@ -153,6 +155,10 @@ export class MonitorStatusComponent implements OnInit,OnDestroy {
 	ngOnInit() {
 		this.mapPreference = this.settingSvc.globalPreferences
     this.dragPosition = this.settingSvc.globalPreferences.map.vhlStatusPos || {x: 0, y: 0}
+
+		this.systemSvc.systemState().subscribe(res=>{
+			this.fireEmergency = res.fireEmergency
+		})
 
     this.hubSvc.systemState$
       .pipe(takeUntil(this.destroy$))

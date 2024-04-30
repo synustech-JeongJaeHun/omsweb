@@ -18,6 +18,8 @@ export interface IControlStateCommandMessage extends ICommandMessage {
 
 export interface ITscStateCommandMessage extends ICommandMessage {
 	state?: string
+	user?: string
+	note?: string
 }
 
 export interface IAiModeCommandMessage extends ICommandMessage {

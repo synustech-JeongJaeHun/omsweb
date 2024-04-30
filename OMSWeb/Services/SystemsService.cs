@@ -24,29 +24,29 @@ namespace OMSWeb.Services
 
         public string LogBaseDir
         {
-            get 
-            {
-                return AppConfig.GetFromOMSConfig("Log", "base_dir", "..\\..\\Log");
-            }
+            get { return AppConfig.GetFromOMSConfig("Log", "base_dir", "..\\..\\Log"); }
         }
+
         public string LogTempZipDir
         {
-            get 
+            get
             {
                 string module_name = Process.GetCurrentProcess().MainModule.FileName;
                 return Path.GetDirectoryName(module_name) + "\\Temp\\Zip";
             }
         }
+
         public string LogTempCopyDir
         {
-            get 
+            get
             {
                 string module_name = Process.GetCurrentProcess().MainModule.FileName;
                 return Path.GetDirectoryName(module_name) + "\\Temp\\CopyFolder";
             }
         }
 
-        public SystemsService(SettingModeRepository _settingModeRepo, ModeStateRepository _modeStateRepo, ModuleStatusRepository _modeStatusRepo, IOptions<AppSettings> appSettings)
+        public SystemsService(SettingModeRepository _settingModeRepo, ModeStateRepository _modeStateRepo,
+            ModuleStatusRepository _modeStatusRepo, IOptions<AppSettings> appSettings)
         {
             this._appSettings = appSettings.Value;
             this._appSettings.SID = GenerateSID(8);
@@ -154,6 +154,7 @@ namespace OMSWeb.Services
                 this._appSettings.FireStationFilters = new FireStationFilters();
                 this._appSettings.FireStationFilters.InitializeValues();
             }
+
             client.FireStationFilters = this._appSettings.FireStationFilters;
             client.IndicatorFireEmergency = this._appSettings.IndicatorFireEmergency;
             client.DisableHWZCU = this._appSettings.DisableHWZCU;
@@ -168,35 +169,38 @@ namespace OMSWeb.Services
 
                 if (client.WarningMessageType.Length < 1)
                 {
-                    client.WarningMessageType = new [] { DisplayType.LogicalId};
+                    client.WarningMessageType = new[] { DisplayType.LogicalId };
                 }
             }
             catch (Exception e)
             {
-                client.WarningMessageType = new [] { DisplayType.LogicalId};
+                client.WarningMessageType = new[] { DisplayType.LogicalId };
             }
-            
-            
+
+
             return this._appSettings.Client;
         }
-        
+
         public DefaultColorSettings GetDefaultColorSettings()
         {
             return this._appSettings.DefaultColor;
         }
+
         public VehicleOrderIdContents GetVehicleOrderIdContents()
         {
             return this._appSettings.VehicleOrderIdContents;
         }
+
         public ManualTransferFilters GetManualTransferFilters()
         {
             return this._appSettings.ManualTransferFilters;
         }
+
         public NodeMargins GetNodeMargins()
         {
             return this._appSettings.NodeMargins;
         }
-        
+
 
         public List<LogModel> GetLogs()
         {
@@ -206,6 +210,7 @@ namespace OMSWeb.Services
             List<LogModel> result = new List<LogModel>() { logModel };
             return result;
         }
+
         public IEnumerable<string> GetMaps()
         {
 
@@ -222,7 +227,8 @@ namespace OMSWeb.Services
 
             if (!directoryInfo.Exists)
             {
-                throw new DirectoryNotFoundException("Source Directory does not exist or could not be found:" + sourceDirectoryFullPath);
+                throw new DirectoryNotFoundException("Source Directory does not exist or could not be found:" +
+                                                     sourceDirectoryFullPath);
             }
 
             DirectoryInfo[] directoryInfos = directoryInfo.GetDirectories();
@@ -251,5 +257,10 @@ namespace OMSWeb.Services
             this._appSettings.KpiEnabled = KpiEnabled;
             this._appSettings.Client.KpiEnabled = KpiEnabled;
         }
-    }
+
+        public SystemState GetSystemState()
+        {
+            return this._settingModeRepo.GetSystemState();
+        }
+}
 }

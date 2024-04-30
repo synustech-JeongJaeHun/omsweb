@@ -566,5 +566,11 @@ namespace OMSWeb.Controllers
             this._systemSvc.setEnableKpi(enable);
             return Ok();
         }
+        
+        [HttpGet("system-state")]
+        public SystemState GetSystemState()
+        {
+            return this._systemSvc.GetSystemState();
+        }
     }
 }

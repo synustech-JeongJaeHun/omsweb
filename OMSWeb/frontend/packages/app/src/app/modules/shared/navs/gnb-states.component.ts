@@ -30,6 +30,8 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
   onOffLine: boolean = false
 
   isOpenDialog: boolean = false
+	
+	private fireDetect = false
 
   get hostStatusIcon(): string {
     if (!this.isActiveConnStatus)
@@ -183,6 +185,16 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.updateAuth()
+	  
+	  this.systemSvc.systemState().subscribe(res=>{
+			this.fireDetect = res.fireDetect
+	  })
+
+	  this.hubSvc.systemState$
+		  .pipe(takeUntil(this.destroy$))
+		  .subscribe((e) => {
+			  this.fireDetect = e.fireDetect
+		  });
   }
 
   ngOnDestroy(): void {
@@ -235,7 +247,22 @@ export class GnbStatesComponent implements OnInit, OnDestroy {
   changeTscMode() {
     if(this.mobileSvc.isMobile) return;
     if (!AccountUtil.hasPermission(PermissionEnums.TscMode, this.auth.currentUser)) return;
-    this.dialogSvc.confirm(this.getConfirmMessage(this.tscParamTitle, this.tscParamText)).subscribe((ok) => {
+	  let {title, body} = this.getConfirmMessage(this.tscParamTitle, this.tscParamText)
+		// fire-detection check
+		if(this.fireDetect && !this.isActiveTscMode){
+			const msg= this.t$.instant('messages.fireDetected')
+			body = msg+body
+			this.dialogSvc
+				.verify({title, body})
+				.subscribe((ok) => {
+					if (ok) {
+						const { operator, reason } = ok
+						this.messageSvc.sendTscStateCommand({ action: 'tsc_state', state: 'change', user: operator, note: reason }).subscribe();
+					}
+				})
+			return
+		}
+    this.dialogSvc.confirm({title, body}).subscribe((ok) => {
       if (ok) {
         this.messageSvc.sendTscStateCommand({ action: 'tsc_state', state: 'change' }).subscribe();
       }

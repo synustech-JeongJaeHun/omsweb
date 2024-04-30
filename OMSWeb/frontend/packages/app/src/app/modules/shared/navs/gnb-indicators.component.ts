@@ -28,6 +28,7 @@ import {MessagesService} from "@oms/services/messages.service";
 import {DialogService} from "@oms/services/dialog.service";
 import {TranslateService} from "@ngx-translate/core";
 import {ClientPreferences, ToggleLockOptionsType} from "@oms/models/settings.model";
+import {SystemsService} from "@oms/services/systems.service";
 
 @Component({
   selector: 'oms-gnb-indicators',
@@ -83,6 +84,7 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
     private dialogSvc: DialogService,
     private $t: TranslateService,
     private messageSvc: MessagesService,
+    private systemSvc: SystemsService
   ) {
     settingSvc.serviceConfig.subscribe(config=>{
       this.indicatorFireEmergency = config?.indicatorFireEmergency
@@ -92,6 +94,10 @@ export class GnbIndicatorsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+	  this.systemSvc.systemState().subscribe(res=>{
+		  this.fireEmergency = res.fireEmergency
+	  })
+		
     this.hubSvc.alarmChanged$
       .pipe(takeUntil(this.destroy$))
       .subscribe((e) => this.onAlarmChanged(e));

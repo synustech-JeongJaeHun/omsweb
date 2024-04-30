@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Dapper;
 using Microsoft.Extensions.Configuration;
+using OMSWeb.Models;
 using OMSWeb.Models.Entities;
 
 namespace OMSWeb.Repositories
@@ -47,6 +48,26 @@ namespace OMSWeb.Repositories
                 return list[0];
 
             return null;
+        }
+
+        public SystemState GetSystemState()
+        {
+            SystemState result;
+
+            var sql = @"select * from system_state";
+            
+            using (var conn = ConnectTrack())
+            {
+                try
+                {
+                    result = conn.QueryFirst<SystemState>(sql);
+                }
+                catch (Exception e)
+                {
+                    result = null;
+                }
+            }
+            return result;
         }
     }
 }

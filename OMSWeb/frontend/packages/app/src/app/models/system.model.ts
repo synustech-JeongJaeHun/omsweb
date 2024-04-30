@@ -60,3 +60,14 @@ export interface IFileItem extends RemoteFileSystemProvider{
 	size?: number
 	items?: IFileItem[]
 }
+
+export interface ISystemState {
+	id: number
+	fireEmergency: boolean
+	fireDetect: boolean
+	historyChangeTime: Date
+	historyChangeType: string
+	ackAction: string
+	ackTime: Date
+	ackBy: string
+}
