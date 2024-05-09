@@ -107,9 +107,9 @@
   <dxi-column
     [width]="getDisplayTableColumnWidth('orders_locationPickupAlias')"
     dataType="string"
-    dataField="locationPickup"
+    dataField="locationPickupAlias"
     [caption]="getDisplayTableLabel('orders_locationPickupAlias') | translate"
-    [customizeText]="transformAlias"
+    
     [visible]="canDisplayTable('orders_locationPickupAlias')"
     [visibleIndex]="getDisplayTableColumnIndex('orders_locationPickupAlias')"
   ></dxi-column>
@@ -125,9 +125,9 @@
   <dxi-column
     [width]="getDisplayTableColumnWidth('orders_locationDropoffAlias')"
     dataType="string"
-    dataField="locationDropoff"
+    dataField="locationDropoffAlias"
     [caption]="getDisplayTableLabel('orders_locationDropoffAlias') | translate"
-    [customizeText]="transformAlias"
+    
     [visible]="canDisplayTable('orders_locationDropoffAlias')"
     [visibleIndex]="getDisplayTableColumnIndex('orders_locationDropoffAlias')"
   ></dxi-column>

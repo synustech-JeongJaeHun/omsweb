@@ -294,13 +294,44 @@ export class PlaybackPlayService {
 		}
 	}
 
+	private transformAlias= ({ value }: { value: string | undefined | null }) => {
+		if (value == null) return ''
+
+		const locationType = value[0]
+		const id = parseInt(value.substring(1))
+
+		const list : any[] =
+			locationType === 's'
+				? this.currentStations ?? []
+				: locationType === 'b'
+					? this.currentBuffers
+					: []
+
+		const location : CurrentStation | CurrentBuffer = list.find((e) => e.id === id)
+
+		return location?.cAlias ?? ''
+	}
+
 	private reduceCurrentState(event: ClockChangedEvent) {
 		if (event.type === 'SnapshotChanged' || event.type === 'EventsChanged') {
 			this.currentAlarms = [...this.currentRemainedAlarms] ?? []
 
+			this.currentBuffers = (this.currentSnapshot.data.buffers ?? []).map(
+				convertSnapshotBufferToCurrentBuffer,
+			)
+			this.currentStations = (this.currentSnapshot.data.stations ?? []).map(
+				convertSnapshotStationToCurrentStation,
+			)
+			
 			this.currentOrders = (this.currentSnapshot.data.orders ?? [])
 				.filter((event) => event.time_completed?.length > 0 === false)
 				.map(convertSnapshotOrderToCurrentOrder)
+				.map(o=>{
+					return { ...o,
+						locationDropoffAlias : this.transformAlias({value: o.locationDropoff}),
+						locationPickupAlias : this.transformAlias({value: o.locationPickup})
+					}
+				})
 			this.currentSegmentBlockings = (
 				this.currentSnapshot.data.segment_blocking ?? []
 			).map(convertSnapshotSegmentBlockingToCurrentSegmentBlocking)
@@ -308,12 +339,7 @@ export class PlaybackPlayService {
 				.map(convertSnapshotVehicleToCurrentVehicle)
 				.map((cv) => addOrderInfoToCurrenVehicle(cv, this.currentOrders))
 				.sort((a, b) => a.id - b.id)
-			this.currentBuffers = (this.currentSnapshot.data.buffers ?? []).map(
-				convertSnapshotBufferToCurrentBuffer,
-			)
-			this.currentStations = (this.currentSnapshot.data.stations ?? []).map(
-				convertSnapshotStationToCurrentStation,
-			)
+			
 			this.currentZcus = (this.currentSnapshot.data.zcus ?? []).map(
 				convertSnapshotZcuToCurrentZcu,
 			)
