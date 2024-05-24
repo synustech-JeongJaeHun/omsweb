@@ -105,6 +105,12 @@
             "names.vehicle" | translate
             }}
           </a>
+          <a mat-list-item
+           [class.active]="isActiveMenu('scale')" (click)="onChangeMenu('scale')" class="nav-link">
+           {{
+           "names.scale" | translate
+           }}
+          </a>
           <!-- <a
     mat-list-item
     routerLinkActive="active"
@@ -175,6 +181,9 @@
           </ng-container>
           <ng-container *ngSwitchCase="'vehicle'">
             <oms-vehicle-setting></oms-vehicle-setting>
+          </ng-container>
+          <ng-container *ngSwitchCase="'scale'">
+            <oms-scale></oms-scale>
           </ng-container>
           <div *ngSwitchDefault></div>
         </ng-container>

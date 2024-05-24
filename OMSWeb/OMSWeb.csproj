@@ -101,6 +101,7 @@
     <TypeScriptCompile Remove="frontend\packages\app\src\app\modules\mobile-frame\status\status-control.component.ts" />
     <TypeScriptCompile Remove="frontend\packages\app\src\app\modules\mobile-frame\status\mobile-status.component.ts" />
     <TypeScriptCompile Remove="frontend\packages\app\src\app\modules\main\monitor-route-reuse-strategy.ts" />
+    <TypeScriptCompile Remove="frontend\packages\app\src\app\modules\settings\tracks\scale\scale.component.ts" />
   </ItemGroup>
 
   <ItemGroup>

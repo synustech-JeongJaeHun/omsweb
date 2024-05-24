@@ -590,7 +590,9 @@
     "fromPortName": "From(Port Name)",
     "toPortName": "To(Port Name)",
     "bufferType" : "Buffer - type",
-    "ip" : "IP Address"
+    "ip" : "IP Address",
+    "text": "Text",
+    "isAutoScale": "Enable Autoscaling"
   },
   "enums": {
     "hostSessionStatus": {

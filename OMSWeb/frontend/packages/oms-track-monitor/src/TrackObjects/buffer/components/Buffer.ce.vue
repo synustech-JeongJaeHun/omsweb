@@ -5,6 +5,7 @@ import { useGroup } from '../../group/groups'
 import { getPositionForBufferOrStation } from 'src/TrackObjects/utils/locationStationBuffer'
 import { getGroupColorWithAlpha } from 'TrackObjects/group/utils/color'
 import { readonlyIdType, IdType } from 'TrackObjects/common/alias'
+import {scaleStylesInfo} from "src/styles/styles";
 
 const props = defineProps<{
   buffer: Buffer
@@ -78,6 +79,7 @@ const group = useGroup('buffer', toRef(props.buffer, 'id'))
           alignment-baseline="hanging"
           text-anchor="middle"
           text-rendering="optimizeSpeed"
+          :font-size="scaleStylesInfo.bufferTextSize"
           pointer-events="none">
           {{props.buffer.type}}
         </text>
@@ -88,6 +90,7 @@ const group = useGroup('buffer', toRef(props.buffer, 'id'))
           alignment-baseline="hanging"
           text-anchor="middle"
           text-rendering="optimizeSpeed"
+          :font-size="scaleStylesInfo.bufferTextSize"
           pointer-events="none"
         >
           {{ readonlyIdType===IdType.ID ? props.buffer.logicalId : (props.buffer?.cAlias || props.buffer.logicalId)}}

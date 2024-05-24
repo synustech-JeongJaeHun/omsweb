@@ -1,0 +1,32 @@
+.option-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.option-form {
+  // position: relative;
+  border: 1px solid var(--theme-border-color);
+  border-radius: 4px;
+  padding: 8px;
+
+  .form-title {
+    // position: absolute;
+    // top: -16px;
+    // left: 4px;
+    font-weight: bold;
+  }
+}
+.slider-form {
+  display: grid;
+  grid-template-columns: auto 50px;
+  align-items: center;
+
+  .slider-value {
+    text-align: right;
+  }
+}
+.button-div{
+  display: flex;
+  flex-direction: row-reverse;
+  grid-column: 1 / -1;
+}

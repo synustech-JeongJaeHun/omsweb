@@ -3,12 +3,13 @@ import Layer from 'MapObjects/map/components/Layer.ce.vue';
 import Vehicle from './Vehicle.ce.vue';
 import { vehicles } from '../vehicles'
 import { ref } from 'vue';
+import {isAutoScaleInfo} from "src/styles/styles";
 
 const teleportRef = ref<SVGGElement>()
 </script>
 
 <template>
-  <Layer id="vehicle-layer">
+  <Layer id="vehicle-layer" v-bind:class="isAutoScaleInfo ? 'autoScale' : ''">>
     <defs>
       <defs>
         <filter x="0" y="0" width="1" height="1" id="vehicle-order-hotlot-background">

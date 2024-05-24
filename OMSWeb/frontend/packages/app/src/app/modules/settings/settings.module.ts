@@ -26,7 +26,8 @@ import { VehicleFormDialogComponent } from './dialogs/vehicle-form-dialog.compon
 import { ColumnDisplayManagementComponent } from './preferences/column-display-management.component'
 import { SystemPreferenceComponent } from './preferences/system-preference.component'
 import { ThemePreferenceComponent } from './preferences/theme-preference.component'
-import { BulkUserFormDialogComponent } from './dialogs/bulk-user-from-dialog.component'
+import { BulkUserFormDialogComponent } from './dialogs/bulk-user-from-dialog.component';
+import { ScaleComponent } from './tracks/scale.component'
 
 @NgModule({
 	declarations: [
@@ -54,6 +55,7 @@ import { BulkUserFormDialogComponent } from './dialogs/bulk-user-from-dialog.com
 		SystemPreferenceComponent,
 		ThemePreferenceComponent,
 		BulkUserFormDialogComponent,
+		ScaleComponent,
 	],
 	imports: [CommonModule, SharedModule, SettingsRoutingModule],
 })

@@ -4,7 +4,7 @@ import Station from './Station.ce.vue'
 import { findStationById, stations } from '../stations'
 import { inject, ref } from 'vue'
 import { RootEmitInjectionKey, RootEmits } from 'src/Root/types/RootEmits'
-import { scaleStylesInfo } from '../../../styles/styles'
+import { scaleStylesInfo, isAutoScaleInfo } from '../../../styles/styles'
 
 const emit = inject<RootEmits>(RootEmitInjectionKey)!
 const teleportRef = ref<SVGGElement>()
@@ -47,7 +47,7 @@ function handleRightClick(event: MouseEvent) {
 </script>
 
 <template>
-  <Layer id="station-layer">
+  <Layer id="station-layer" v-bind:class="isAutoScaleInfo ? 'autoScale' : ''">
     <defs>
       <!-- 
         pointer-events for event from bounding-box

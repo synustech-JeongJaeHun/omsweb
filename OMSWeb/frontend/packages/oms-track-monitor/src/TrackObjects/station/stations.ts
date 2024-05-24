@@ -2,6 +2,7 @@ import { ITrackData } from 'src/legacies/models/track.model'
 import { UpdateDto } from 'src/types/Dto'
 import {readonly, ref} from 'vue'
 import { Station } from './types/Station'
+import {Stringlish} from "src/Root/types/Prop";
 
 const stations = ref<Station[]>([])
 const stationMap = new Map<Station['id'], Station>()
@@ -44,8 +45,8 @@ function updateExistStation(
 	Object.assign(station, updateData)
 }
 
-function updateIncludesWords(value: string[]) {
-  includeWords.value = value
+function updateIncludesWords(value: Stringlish[]) {
+  includeWords.value = value as string[]
 }
 
 function includeCheck(word: string){

@@ -1,4 +1,4 @@
-import { reactive, readonly } from 'vue'
+import {reactive, readonly, ref} from 'vue'
 import { deepCopy } from '../utils/deepCopy'
 import { ColorProperty } from './types/ColorProperty'
 import { ScaleProperty } from './types/ScaleProperty'
@@ -7,9 +7,15 @@ import { VisibleProperty } from './types/VisibleProperty'
 const ScaleDefault: Record<ScaleProperty, number> = {
   vehicleSize: 10, // applied in OmsTrackMonitor.ce.vue
   vehicleTextSize: 12,
+	vehiclePropSize: 12,
+	stationSize: 10,
+	stationTextSize: 10,
+	bufferSize: 10,
+	bufferTextSize: 10,
   zcuSize: 7, // applied in OmsTrackMonitor.ce.vue
   segmentDirection: 6, // applied in SegmentLayer.ce.vue
   segmentWidth: 3, // applied in OmsTrackMonitor.ce.vue
+	lineWidth: 1,
   stationMargin: 300, // applied in OmsTrackMonitor.ce.vue
   bufferMargin: 300, // applied in OmsTrackMonitor.ce.vue
 }
@@ -21,6 +27,7 @@ function updateScaleStyle(key: ScaleProperty, value: number) {
 }
 
 const VisibleDefault: Record<VisibleProperty, boolean> = {
+	isAutoScale: true, // applied in OmsTrackMonitor.ce.vue
   vehicleNextLine: true, // applied in OmsTrackMonitor.ce.vue
   vehicleFromOrderLine: true, // applied in OmsTrackMonitor.ce.vue
   vehicleToOrderLine: true, // applied in OmsTrackMonitor.ce.vue
@@ -41,6 +48,11 @@ const VisibleDefault: Record<VisibleProperty, boolean> = {
   minimap: true, // applied in OmsTrackMonitor.ce.vue
 }
 
+const isAutoScale = ref<boolean>(VisibleDefault.isAutoScale)
+const isAutoScaleInfo = readonly(isAutoScale)
+function updateIsAutoScale(value: boolean) {
+	isAutoScale.value = value
+}
 // All color configurations are applied in OmsTrackMonitor.ce.vue
 const ColorDefault: Record<ColorProperty, string> = {
   background: 'white',
@@ -84,4 +96,6 @@ export {
   updateScaleStyle,
   VisibleDefault,
   ColorDefault,
+	isAutoScaleInfo,
+	updateIsAutoScale,
 }

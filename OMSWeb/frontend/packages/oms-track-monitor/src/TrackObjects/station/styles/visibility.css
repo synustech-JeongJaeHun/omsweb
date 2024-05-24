@@ -1,7 +1,7 @@
-#station-layer .station .label {
+#station-layer.autoScale .station .label {
   visibility: hidden;
 }
 
-#station-layer[data-scale-level~='BELOW15' i] .station .label {
+#station-layer[data-scale-level~='BELOW15' i].autoScale .station .label {
   visibility: inherit;
 }

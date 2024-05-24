@@ -595,7 +595,9 @@
     "size" : "Size",
     "zoneType" : "Zone Type",
     "bufferType" : "Buffer - type",
-    "ip" : "IP Address"
+    "ip" : "IP Address",
+    "text": "Text",
+    "isAutoScale": "Enable Autoscaling"
   },
   "enums": {
     "hostSessionStatus": {

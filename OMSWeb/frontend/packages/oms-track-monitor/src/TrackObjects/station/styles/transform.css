@@ -1,18 +1,16 @@
 /* Total Scale */
-#station-layer .station .scale-and-reverse-rotate {
+#station-layer.autoScale .station .scale-and-reverse-rotate {
   transform: scale(calc(var(--mm-per-pixel) / 4))
     rotate(var(--reverse-rotation-degree));
 }
 
-#station-layer[data-scale-level~='BELOW15' i]
-  .station
-  .scale-and-reverse-rotate {
+#station-layer[data-scale-level~='BELOW15' i].autoScale .station .scale-and-reverse-rotate {
   transform: scale(var(--mm-per-pixel))
     rotate(var(--reverse-rotation-degree));
 }
 
 #station-layer
-  .station[data-carrier-focused~='true' i]
+  .station[data-carrier-focused~='true' i].autoScale
   .scale-and-reverse-rotate {
     animation: station-carrier-focused-scale-grow 1s ease-in-out forwards;
 }
@@ -29,26 +27,26 @@
 
 
 /* Text Scale */
-#station-layer[data-scale-level~='BELOW15' i] .station .label {
+#station-layer[data-scale-level~='BELOW15' i].autoScale .station .label {
   font-size: 0.1em;
 }
 
-#station-layer[data-scale-level~='BELOW13' i] .station .label {
+#station-layer[data-scale-level~='BELOW13' i].autoScale .station .label {
   font-size: 0.2em;
 }
 
-#station-layer[data-scale-level~='BELOW11' i] .station .label {
+#station-layer[data-scale-level~='BELOW11' i].autoScale.station .label {
   font-size: 0.4em;
 }
 
-#station-layer[data-scale-level~='BELOW9' i] .station .label {
+#station-layer[data-scale-level~='BELOW9' i].autoScale .station .label {
   font-size: 0.6em;
 }
 
-#station-layer[data-scale-level~='BELOW7' i] .station .label {
+#station-layer[data-scale-level~='BELOW7' i].autoScale .station .label {
   font-size: 0.8em;
 }
 
-#station-layer[data-scale-level~='BELOW5' i] .station .label {
+#station-layer[data-scale-level~='BELOW5' i].autoScale .station .label {
   font-size: 1em;
 }

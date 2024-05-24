@@ -15,7 +15,7 @@ import {
   ScaleDefault,
   VisibleDefault,
   scaleStylesInfo,
-  updateScaleStyle,
+  updateScaleStyle, updateIsAutoScale,
 } from '../styles/styles'
 import { Boolish, Numberlish, Stringlish } from './types/Prop'
 import {
@@ -49,9 +49,14 @@ const props = defineProps<{
   width: Numberlish
   height: Numberlish
   // scale
+  isAutoScale: Boolish
   vehicleSize: Numberlish
   vehicleTextSize: Numberlish
   vehiclePropSize: Numberlish
+  stationSize: Numberlish
+  stationTextSize: Numberlish
+  bufferSize: Numberlish
+  bufferTextSize: Numberlish
   zcuSize: Numberlish
   segmentWidth: Numberlish
   lineWidth: Numberlish
@@ -140,6 +145,11 @@ watch([propRefs.width, propRefs.height], () => {
   if (width > 0 && height > 0) setElementRect(width, height)
 })
 // scale
+watch(propRefs.isAutoScale, (n) => {
+  updateIsAutoScale(
+      parseBooleanProp(VisibleDefault.isAutoScale, props.isAutoScale)
+  )
+})
 watch(propRefs.vehicleSize, (n) => {
   updateScaleStyle(
     'vehicleSize',
@@ -156,6 +166,30 @@ watch(propRefs.vehiclePropSize, (n) => {
   updateScaleStyle(
       'vehiclePropSize',
       parseNumberProp(ScaleDefault.vehiclePropSize, n)
+  )
+})
+watch(propRefs.stationSize, (n) => {
+  updateScaleStyle(
+      'stationSize',
+      parseNumberProp(ScaleDefault.stationSize, n)
+  )
+})
+watch(propRefs.stationTextSize, (n) => {
+  updateScaleStyle(
+      'stationTextSize',
+      parseNumberProp(ScaleDefault.stationTextSize, n)
+  )
+})
+watch(propRefs.bufferSize, (n) => {
+  updateScaleStyle(
+      'bufferSize',
+      parseNumberProp(ScaleDefault.bufferSize, n)
+  )
+})
+watch(propRefs.bufferTextSize, (n) => {
+  updateScaleStyle(
+      'bufferTextSize',
+      parseNumberProp(ScaleDefault.bufferTextSize, n)
   )
 })
 watch(propRefs.zcuSize, (n) => {
@@ -606,6 +640,36 @@ defineExpose(exposed)
     )
     rotate(var(--reverse-rotation-degree));
 }
+
+#station-layer .station .scale-and-reverse-rotate {
+  /* transform */
+  transform: scale(
+      v-bind('scaleInfo.mmPerPixel * scaleStylesInfo.stationSize * 1/10')
+  )
+  rotate(var(--reverse-rotation-degree));
+}
+
+/*#station-layer .station .scale-and-reverse-rotate .invert {
+  transform: scaleY(-1) scale(
+      v-bind('scaleInfo.mmPerPixel * scaleStylesInfo.stationTextSize * 1/10')
+  )
+  rotate(var(--reverse-rotation-degree));
+}*/
+
+#buffer-layer .buffer .scale-and-reverse-rotate {
+  /* transform */
+  transform: scale(
+      v-bind('scaleInfo.mmPerPixel * scaleStylesInfo.bufferSize * 1/10')
+  )
+  rotate(var(--reverse-rotation-degree));
+}
+
+/*#buffer-layer .buffer .scale-and-reverse-rotate .invert {
+  transform: scaleY(-1) scale(
+      v-bind('scaleInfo.mmPerPixel * scaleStylesInfo.bufferTextSize * 1/10')
+  )
+  rotate(var(--reverse-rotation-degree));
+}*/
 
 #segment-layer .segment-path,
 #disabled-segment-layer .segment-path {

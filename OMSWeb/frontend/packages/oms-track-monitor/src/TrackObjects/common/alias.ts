@@ -1,4 +1,5 @@
 import { readonly, ref } from 'vue'
+import {Stringlish} from "src/Root/types/Prop";
 
 enum IdType {
   ID = 'ID',
@@ -8,7 +9,7 @@ type displayType = keyof typeof IdType
 const idType = ref<displayType>(IdType.ID)
 const readonlyIdType = readonly(idType)
 
-function updateIdType(value: displayType) {
+function updateIdType(value: Stringlish) {
   idType.value = value
 }
 

@@ -17,5 +17,6 @@ type VisibleProperty =
 	| 'mtl'
 	| 'minimap'
   | 'backdrop'
+	| 'isAutoScale'
 
 export { VisibleProperty }

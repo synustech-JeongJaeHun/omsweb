@@ -32,6 +32,7 @@ type VisibilityChangedEvent = {
     | 'isVHLArrowVisible'
     | 'isVhlStatusVisible'
     | 'isBackdropVisible'
+		| 'isAutoScale'
 	value: boolean
 }
 type ColorChangedEvent = {
@@ -74,7 +75,8 @@ type ClustersColorChangedEvent = {
 }
 
 type ScaleChangedEvent = {
-	key: 'vehicleSize' | 'vehicleTextSize' | 'vehiclePropSize' | 'zcuSize' | 'segmentWidth' | 'segmentDirectionSize' | 'lineWidth'
+	key: 'vehicleSize' | 'vehicleTextSize' | 'vehiclePropSize' | 'stationSize' | 'stationTextSize' |
+		'bufferSize' | 'bufferTextSize' | 'zcuSize' | 'segmentWidth' | 'segmentDirectionSize' | 'lineWidth'
 	value: number
 }
 type RotationChangedEvent = {
@@ -121,6 +123,10 @@ const DefaultTrackMonitorSetting: TrackMonitorSetting = {
 	vehicleSize: 10,
   vehicleTextSize: 12,
   vehiclePropSize: 12,
+	stationSize: 10,
+	stationTextSize: 10,
+	bufferSize: 10,
+	bufferTextSize: 10,
     zcuSize: 7,
 	segmentWidth: 5,
   lineWidth: 1,
@@ -155,6 +161,7 @@ const DefaultTrackMonitorSetting: TrackMonitorSetting = {
   isVHLArrowVisible: false,
   isVhlStatusVisible: false,
   isBackdropVisible: false,
+	isAutoScale: true,
 
 	// color
 	homeBackgroundColor: 'rgba(255, 255, 255, 1)',
