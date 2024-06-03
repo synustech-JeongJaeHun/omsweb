@@ -1,7 +1,9 @@
 <ng-container *ngIf="!isMobile">
-  <button mat-button class="ai" [class.active]="activeAi" (click)="onChangeAI()">
-    <div class="rect">{{ "names.ai" | translate }}</div>
-  </button>
+  <div class="ai-div" [ngClass]="disableAiButton ? 'disable-ai' : ''">
+    <button mat-button class="ai" [disabled]="disableAiButton" [class.active]="activeAi" (click)="onChangeAI()">
+      <div class="rect">{{ "names.ai" | translate }}</div>
+    </button>
+  </div>
 
   <button mat-button class="legend" (click)="onLegend()">
     <mat-icon>info</mat-icon> {{ "names.legend" | translate }}

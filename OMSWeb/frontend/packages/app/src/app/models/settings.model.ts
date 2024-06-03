@@ -38,6 +38,7 @@ export class ServiceConfig {
   indicatorFireEmergency: boolean
 
   disableHWZCU: boolean
+	disableAiButton: boolean
 }
 
 export interface ManualTransferFiltersSetting {

@@ -37,6 +37,7 @@ export class GnbActionsComponent implements OnInit, OnDestroy {
   private menuName = "[matMenuTriggerFor]='localeMenu'";
   private currentLanguage = "English";
   public i18nEnabled: boolean = true;
+	public disableAiButton = false
 
   get isAuthenticated() {
     return this.auth.isAuthenticated;
@@ -96,6 +97,7 @@ export class GnbActionsComponent implements OnInit, OnDestroy {
     this.settingsService.serviceConfig.
       subscribe((config) => {
         this.i18nEnabled = config.i18nEnabled;
+				this.disableAiButton = config.disableAiButton
       });
   }
 

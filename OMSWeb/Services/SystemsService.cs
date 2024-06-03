@@ -160,7 +160,7 @@ namespace OMSWeb.Services
             client.DisableHWZCU = this._appSettings.DisableHWZCU;
             client.IsForceMTLIn = this._appSettings.IsForceMTLIn;
             client.DisableBufferNack = this._appSettings.DisableBufferNack;
-
+            client.DisableAiButton = this._appSettings.DisableAiButton;
             try
             {
                 client.WarningMessageType = this._appSettings.WarningMessageType

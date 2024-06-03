@@ -1,8 +1,20 @@
+.ai-div{
+  margin-right: 16px;
+  margin-bottom: 4px;
+  display: flex;
+}
+
+.disable-ai{
+  background-color: #c5c5c5;
+  border-radius: 4px;
+}
+
 .ai {
   background-color: var(--theme-text-color);
   color: #fff;
   padding: 0;
-  margin-right: 16px;
+  // margin-right: 16px;
+  margin: 4px;
 
   // line-height: 18px;
   min-width: 22px;

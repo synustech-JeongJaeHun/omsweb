@@ -49,6 +49,8 @@ namespace OMSWeb.Models
         
         public bool DisableBufferNack { get; set; }
         
+        public bool DisableAiButton { get; set; }
+        
         public string[] WarningMessageType { get; set; }
     }
 }
