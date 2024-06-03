@@ -9,10 +9,12 @@ namespace OMSWeb.Services
     public class TransferService
     {
         private readonly TransferRepository _transferRepo;
+        private SystemsService _systemSvc;
 
-        public TransferService(TransferRepository _transferRepo)
+        public TransferService(TransferRepository _transferRepo, SystemsService systemSvc)
         {
             this._transferRepo = _transferRepo;
+            this._systemSvc = systemSvc;
         }
 
 
@@ -131,7 +133,7 @@ namespace OMSWeb.Services
                     {
                         HCACK = MCS_HCACK.NotAbleToExcute;
                     }
-                    else if (BUFFER_Has_a_Carrier(DestName))
+                    else if (!this._systemSvc.GetClientSettings().DisableBufferNack && BUFFER_Has_a_Carrier(DestName))
                     {
                         HCACK = MCS_HCACK.NotAbleToExcute;
                     }

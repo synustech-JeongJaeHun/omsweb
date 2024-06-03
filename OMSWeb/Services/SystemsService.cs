@@ -159,6 +159,7 @@ namespace OMSWeb.Services
             client.IndicatorFireEmergency = this._appSettings.IndicatorFireEmergency;
             client.DisableHWZCU = this._appSettings.DisableHWZCU;
             client.IsForceMTLIn = this._appSettings.IsForceMTLIn;
+            client.DisableBufferNack = this._appSettings.DisableBufferNack;
 
             try
             {
