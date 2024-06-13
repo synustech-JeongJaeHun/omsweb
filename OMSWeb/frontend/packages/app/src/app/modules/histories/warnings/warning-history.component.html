@@ -1,29 +1,9 @@
 <div id="history-page">
   <div id="filter-area">
-    <!-- <dx-select-box
-    [items]="VehicleListAll"
-    [placeholder]="'_VEHICLE' | translate"
-    [dataSource]="VehicleListAll"
-    displayExpr="OnlineName"
-    valueExpr="Id"
-    [searchEnabled]="true"
-    [showClearButton]="true"
-    #vehicle
-  ></dx-select-box>
-  <dx-select-box
-    [items]="AlarmcodeListAll"
-    [placeholder]="'_ALARMCODE' | translate"
-    [dataSource]="AlarmcodeListAll"
-    displayExpr="_id"
-    valueExpr="_id"
-    [searchEnabled]="true"
-    [showClearButton]="true"
-    #alarmcode
-  ></dx-select-box> -->
-    <dx-date-box [placeholder]="'_START_DATE' | translate" type="datetime" [value]="start" [min]="base" [max]="end"
+    <dx-date-box [placeholder]="'_START_DATE' | translate" type="datetime" [(value)]="start" [min]="base" [max]="end"
                  [acceptCustomValue]="false" [showClearButton]="true" [displayFormat]="dateTimeFormat" #startDate></dx-date-box>
     <div>~</div>
-    <dx-date-box [placeholder]="'_END_DATE' | translate" type="datetime" [value]="now" [min]="base" [max]="end"
+    <dx-date-box [placeholder]="'_END_DATE' | translate" type="datetime" [(value)]="now" [min]="base" [max]="end"
                  [acceptCustomValue]="false" [showClearButton]="true" [displayFormat]="dateTimeFormat" #endDate></dx-date-box>
     <div id="search-area">
       <button mat-raised-button color="primary" (click)="search(startDate.value, endDate.value)">
@@ -44,15 +24,34 @@
       <dxo-header-filter [visible]="true"></dxo-header-filter>
       <dxo-filter-row [visible]="true"></dxo-filter-row>
 
-      <dxi-column [width]="120" dataType="datetime" dataField="time" [caption]="'names.time' | translate"
+      <dxi-column [width]="getDisplayTableColumnWidth('warnings_time')"
+                  [visible]="canDisplayTable('warnings_time')"
+                  [visibleIndex]="getDisplayTableColumnIndex('warnings_time')"
+                  dataType="datetime" dataField="time" [caption]="'names.time' | translate"
         [format]="dateTimeFormat" [fixed]="true"></dxi-column>
-      <dxi-column [width]="80" dataType="string" dataField="level" [caption]="'names.severity' | translate">
+      <dxi-column [width]="getDisplayTableColumnWidth('warnings_severity')"
+                  [visible]="canDisplayTable('warnings_severity')"
+                  [visibleIndex]="getDisplayTableColumnIndex('warnings_severity')"dataType="string" dataField="level" [caption]="'names.severity' | translate">
       </dxi-column>
-      <dxi-column [width]="120" dataType="string" dataField="tag" [caption]="'names.tag' | translate"></dxi-column>
-      <dxi-column dataType="string" dataField="message" [caption]="'names.message' | translate"></dxi-column>
-      <dxi-column [width]="110" dataType="datetime" dataField="ackTime" [caption]="'names.ackTime' | translate"
+      <dxi-column [width]="getDisplayTableColumnWidth('warnings_tag')"
+                  [visible]="canDisplayTable('warnings_tag')"
+                  [visibleIndex]="getDisplayTableColumnIndex('warnings_tag')" dataType="string" dataField="tag" [caption]="'names.tag' | translate"></dxi-column>
+      <dxi-column [width]="getDisplayTableColumnWidth('warnings_message')"
+                  [visible]="canDisplayTable('warnings_message')"
+                  [visibleIndex]="getDisplayTableColumnIndex('warnings_message')" dataType="string" dataField="message" [caption]="'names.message' | translate"></dxi-column>
+      <dxi-column [width]="getDisplayTableColumnWidth('warnings_commandId')"
+                  [visible]="canDisplayTable('warnings_commandId')"
+                  [visibleIndex]="getDisplayTableColumnIndex('warnings_commandId')" dataType="string" dataField="commandId" [caption]="'names.commandId' | translate"></dxi-column>
+      <dxi-column [width]="getDisplayTableColumnWidth('warnings_location')"
+                  [visible]="canDisplayTable('warnings_location')"
+                  [visibleIndex]="getDisplayTableColumnIndex('warnings_location')" dataType="string" dataField="location" [caption]="'names.location' | translate"></dxi-column>
+      <dxi-column [width]="getDisplayTableColumnWidth('warnings_ack_time')"
+                  [visible]="canDisplayTable('warnings_ack_time')"
+                  [visibleIndex]="getDisplayTableColumnIndex('warnings_ack_time')" dataType="datetime" dataField="ackTime" [caption]="'names.ackTime' | translate"
         [format]="dateTimeFormat"></dxi-column>
-      <dxi-column [width]="80" dataType="string" dataField="ackBy" [caption]="'names.ackBy' | translate"
+      <dxi-column [width]="getDisplayTableColumnWidth('warnings_ack_by')"
+                  [visible]="canDisplayTable('warnings_ack_by')"
+                  [visibleIndex]="getDisplayTableColumnIndex('warnings_ack_by')" dataType="string" dataField="ackBy" [caption]="'names.ackBy' | translate"
         [format]="dateTimeFormat"></dxi-column>
     </dx-data-grid>
   </div>

@@ -592,7 +592,8 @@
     "bufferType" : "Buffer - 类型",
     "ip" : "IP地址",
     "text": "文本",
-    "isAutoScale": "启用自动缩放"
+    "isAutoScale": "启用自动缩放",
+    "warnings": "警告"
   },
   "enums": {
     "hostSessionStatus": {

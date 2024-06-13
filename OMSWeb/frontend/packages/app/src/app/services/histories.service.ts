@@ -149,16 +149,16 @@ export class HistoriesService {
           }
       },
 			}),
-            filter: [['time', '>=', startTime], 'and', ['time', '<=', endTime]],
-            onLoadingChanged: (isLoading) => {
-              if (source.bySearch === false) {
-                if (isLoading === true)
-                  source.onDataSourceStarted();
-              }
-            },
-            onChanged: () => {
-                source.onDataSourceChanged();
-            },
+        filter: [['time', '>=', startTime], 'and', ['time', '<=', endTime]],
+        onLoadingChanged: (isLoading) => {
+          if (source.bySearch === false) {
+            if (isLoading === true)
+              source.onDataSourceStarted();
+          }
+        },
+        onChanged: () => {
+            source.onDataSourceChanged();
+        },
 		})
     }
 

@@ -597,7 +597,8 @@
     "bufferType" : "Buffer - type",
     "ip" : "IP Address",
     "text": "Text",
-    "isAutoScale": "Enable Autoscaling"
+    "isAutoScale": "Enable Autoscaling",
+    "warnings": "Warnings"
   },
   "enums": {
     "hostSessionStatus": {

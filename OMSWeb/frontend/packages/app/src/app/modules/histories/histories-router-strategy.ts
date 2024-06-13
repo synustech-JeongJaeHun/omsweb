@@ -12,7 +12,7 @@ export class HistoriesRouterStrategy implements RouteReuseStrategy {
 		//@ts-ignore
 		const fullPath = route._routerState.url
 		const mainPathArray = ['histories']
-		const subPathArray = ['transfer', 'vehicles', 'alarms', 'nack']
+		const subPathArray = ['transfer', 'vehicles', 'alarms', 'warnings', 'nack']
 		if (
 			mainPathArray.some((e) => fullPath.includes(e)) &&
 			subPathArray.some((e) => getPath(route).startsWith(e))

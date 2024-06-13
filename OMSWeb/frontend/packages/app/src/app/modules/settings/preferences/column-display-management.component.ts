@@ -58,6 +58,7 @@ export class ColumnDisplayManagementComponent {
 						transfers_order: this.preference.historyTables.transfers_order,
 						vehicles_order: this.preference.historyTables.vehicles_order,
 						alarms_order: this.preference.historyTables.alarms_order,
+						warnings_order: this.preference.historyTables.warnings_order,
 						nacks_order: this.preference.historyTables.nacks_order,
 				  }
 

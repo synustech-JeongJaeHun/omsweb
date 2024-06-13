@@ -291,6 +291,28 @@ const defaultHistoryTable = {
     { name: 'ack_by', i18nLabel: 'names.ackBy', width: 'auto' },
   ],
 
+	// warnings table
+	warnings: true,
+
+	warnings_time: true,
+	warnings_severity: true,
+	warnings_tag: true,
+	warnings_message: true,
+	warnings_commandId: true,
+	warnings_location: true,
+	warnings_ack_time: true,
+	warnings_ack_by: true,
+	warnings_order: [
+		{ name: 'warnings_time', i18nLabel: 'names.time', width: 120, },
+		{ name: 'warnings_severity', i18nLabel: 'names.severity', width: 80 },
+		{ name: 'warnings_tag', i18nLabel: 'names.tag', width: 120 },
+		{ name: 'warnings_message', i18nLabel: 'names.message', width: 'auto' },
+		{ name: 'warnings_commandId', i18nLabel: 'names.commandId', width: 240 },
+		{ name: 'warnings_location', i18nLabel: 'names.location', width: 110 },
+		{ name: 'warnings_ack_time', i18nLabel: 'names.ackTime', width: 120 },
+		{ name: 'warnings_ack_by', i18nLabel: 'names.ackBy', width: 80 },
+	],
+
   // nack_column
   nacks_stream_function: true,
   nacks_rcmd: true,

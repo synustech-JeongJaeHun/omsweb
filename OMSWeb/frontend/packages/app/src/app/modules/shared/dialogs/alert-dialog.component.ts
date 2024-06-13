@@ -27,7 +27,7 @@ export class AlertDialogComponent implements OnDestroy {
   severityLookup = alertSeverities;
   dataSource: DataSource;
 
-  dataSourceClear: DataSource;
+  //dataSourceClear: DataSource;
 
   private destroy$: Subject<void> = new Subject<void>();
 
@@ -50,13 +50,14 @@ export class AlertDialogComponent implements OnDestroy {
     private mobileSvc: MobileService
   ) {
     this.dataSource = this.notifySvc.alertsDataSource();
-    this.dataSourceClear =this.notifySvc.alertsDataSourceClear();
+    // this.dataSourceClear =this.notifySvc.alertsDataSourceClear();
 
     this.hubSvc.alertChanged$
       .pipe(takeUntil(this.destroy$))
       .subscribe((e) => this.onAlertChanged(e));
     setTimeout(()=>{
-      this.selectedFilter==='=' ?  this.dataSource.reload() : this.dataSourceClear.reload()
+	    this.dataSource.reload()
+      // this.selectedFilter==='=' ?  this.dataSource.reload() : this.dataSourceClear.reload()
     },100)
   }
 
@@ -66,7 +67,8 @@ export class AlertDialogComponent implements OnDestroy {
   }
 
   private onAlertChanged(event: IDataChangeEvent) {
-    this.selectedFilter==='=' ?  this.dataSource.reload() : this.dataSourceClear.reload()
+	  this.dataSource.reload()
+    // this.selectedFilter==='=' ?  this.dataSource.reload() : this.dataSourceClear.reload()
   }
 
   onChangeFilter(value: any) {

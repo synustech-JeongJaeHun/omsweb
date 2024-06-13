@@ -416,9 +416,18 @@ namespace OMSWeb.Services
                 if (string.Compare(s, "ackBy", StringComparison.CurrentCultureIgnoreCase) == 0) return "ack_by";
                 if (string.Compare(s, "state", StringComparison.CurrentCultureIgnoreCase) == 0) return "state";
             }
-            else if (string.Compare(tableName, "warning_history", StringComparison.CurrentCultureIgnoreCase) == 0)
+            else if (string.Compare(tableName, "alert_history", StringComparison.CurrentCultureIgnoreCase) == 0)
             {
- 
+                if (string.Compare(s, "id", StringComparison.CurrentCultureIgnoreCase) == 0) return "id";
+                if (string.Compare(s, "time", StringComparison.CurrentCultureIgnoreCase) == 0) return "time";
+                if (string.Compare(s, "level", StringComparison.CurrentCultureIgnoreCase) == 0) return "level";
+                if (string.Compare(s, "tag", StringComparison.CurrentCultureIgnoreCase) == 0) return "tag";
+                if (string.Compare(s, "commandId", StringComparison.CurrentCultureIgnoreCase) == 0) return "command_id";
+                if (string.Compare(s, "location", StringComparison.CurrentCultureIgnoreCase) == 0) return "location";
+                if (string.Compare(s, "message", StringComparison.CurrentCultureIgnoreCase) == 0) return "message";
+                if (string.Compare(s, "ackTime", StringComparison.CurrentCultureIgnoreCase) == 0) return "ack_time";
+                if (string.Compare(s, "ackBy", StringComparison.CurrentCultureIgnoreCase) == 0) return "ack_by";
+                if (string.Compare(s, "rowIndex", StringComparison.CurrentCultureIgnoreCase) == 0) return "row_index";                
             }
             else if (string.Compare(tableName, "nack_history", StringComparison.CurrentCultureIgnoreCase) == 0)
             {
@@ -441,6 +450,7 @@ namespace OMSWeb.Services
                 if (string.Compare(s, "time", StringComparison.CurrentCultureIgnoreCase) == 0) return "time";
                 if (string.Compare(s, "level", StringComparison.CurrentCultureIgnoreCase) == 0) return "level";
                 if (string.Compare(s, "tag", StringComparison.CurrentCultureIgnoreCase) == 0) return "tag";
+                if (string.Compare(s, "commandId", StringComparison.CurrentCultureIgnoreCase) == 0) return "command_id";
                 if (string.Compare(s, "message", StringComparison.CurrentCultureIgnoreCase) == 0) return "message";
                 if (string.Compare(s, "ackTime", StringComparison.CurrentCultureIgnoreCase) == 0) return "ack_time";
                 if (string.Compare(s, "ackBy", StringComparison.CurrentCultureIgnoreCase) == 0) return "ack_by";

@@ -1,5 +1,19 @@
 {
   "ControlTables": {
+    "orders_label": "names.transfer",
+    "vehicles_label": "names.vehicles",
+    "stations_label": "names.ports",
+    "buffers_label": "names.buffers",
+    "zcus_label": "names.zcu_label",
+    "cps_label": "names.cps",
+    "fcus_label": "names.fcus",
+
+    "vehicle_label": "names.vehicle",
+    "station_label": "names.port",
+    "buffer_label": "names.buffer",
+    "zcu_label": "names.zcu_label",
+    "fcu_label": "names.fcu",
+    
     "orders": true,
     "orders_id": true,
     "orders_origin": false,
@@ -758,6 +772,26 @@
       { "name": "physical_id", "i18nLabel": "names.transOrQR", "width": "auto" },
       { "name": "ack_time", "i18nLabel": "names.ackTime", "width": 120 },
       { "name": "ack_by", "i18nLabel": "names.ackBy", "width": "auto" }
+    ],
+
+    "warnings": true,
+    "warnings_time": false,
+    "warnings_severity": true,
+    "warnings_tag": true,
+    "warnings_message": true,
+    "warnings_commandId": true,
+    "warnings_location": true,
+    "warnings_ack_time": true,
+    "warnings_ack_by": true,
+    "warnings_order": [
+      { "name": "warnings_time", "i18nLabel": "names.time", "width": 120 },
+      { "name": "warnings_severity", "i18nLabel": "names.severity", "width": 80 },
+      { "name": "warnings_tag", "i18nLabel": "names.tag", "width": 120 },
+      { "name": "warnings_message", "i18nLabel": "names.message", "width": "auto" },
+      { "name": "warnings_commandId", "i18nLabel": "names.commandId", "width": 240 },
+      { "name": "warnings_location", "i18nLabel": "names.location", "width": 110 },
+      { "name": "warnings_ack_time", "i18nLabel": "names.ackTime", "width": 120 },
+      { "name": "warnings_ack_by", "i18nLabel": "names.ackBy", "width": 80 }
     ],
 
     "nacks_stream_function": true,

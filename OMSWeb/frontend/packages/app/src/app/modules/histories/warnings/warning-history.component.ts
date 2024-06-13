@@ -1,9 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core'
+import { Router } from '@angular/router'
 import { DxDataGridComponent } from 'devextreme-angular'
 import DataSource from 'devextreme/data/data_source'
 import { HistoriesService } from '../../../services/histories.service'
 import { TrackIdService } from '../../../services/track-id.service'
 import { DateUtil } from '../../shared/utils/date.util'
+import {ClientPreferences} from "@oms/models/settings.model";
+import {SettingsService} from "@oms/services/settings.service";
 
 @Component({
 	selector: 'oms-warning-history',
@@ -94,6 +97,7 @@ export class WarningHistoryComponent implements OnInit {
     endSearch: number
     bySearch: boolean = false;
 
+	preference: ClientPreferences
 	transformVehicleId = ({ value = '' }): string => {
 		const text =
 			this.idSvc.get_alternative_id('vehicle', 'logicalId', value) || value
@@ -103,12 +107,16 @@ export class WarningHistoryComponent implements OnInit {
 	transformLocationId = ({ value = '' }): string => {
 		return this.idSvc.guessLocationId(value)
 	}
+	
 
-	constructor(private svc: HistoriesService, private idSvc: TrackIdService) {
+	constructor(
+		private svc: HistoriesService, 
+		private idSvc: TrackIdService, 
+		private router: Router,
+		private settingSvc: SettingsService,) {
 		window.onresize = this.getGridSize.bind(this)
-		this.idSvc.loadIds().subscribe(() => {
-			this.dataSource = this.svc.alertsDataSource(this, this.start, this.end)
-		})
+		this.idSvc.loadIds().subscribe()
+		this.preference = settingSvc.globalPreferences
 	}
 
 	ngOnDestroy(): void {
@@ -123,11 +131,12 @@ export class WarningHistoryComponent implements OnInit {
 	search(startTime: Date, endTime: Date) {
         this.bySearch = true;
         this.onDataSourceStarted();
-
-		this.applyFilter(startTime, endTime)
+		
+		this.dataSource = this.svc.alertsDataSource(this, startTime, endTime)
+		/*this.applyFilter(startTime, endTime)
 		this.dataSource.reload().then(function (data) {
 			this.onDataSourceChanged()
-		})
+		})*/
 	}
 	private applyFilter(startTime: Date, endTime: Date) {
 		this.dataGrid.instance.filter([
@@ -145,8 +154,8 @@ export class WarningHistoryComponent implements OnInit {
 		this.gridHeight = offsetHeight - 94
 	}
 	private getFileName() {
-		var offset = new Date().getTimezoneOffset() * 60000
-		var today = new Date(Date.now() - offset)
+		let offset = new Date().getTimezoneOffset() * 60000
+		let today = new Date(Date.now() - offset)
 		this.fileName = today.toISOString() + '-warning_history'
 	}
 
@@ -177,5 +186,25 @@ export class WarningHistoryComponent implements OnInit {
         console.log('time Warning history: ' + this.searchTime)
 
         this.bySearch = false
+	}
+
+	playBack(){
+		const data = this.dataGrid.instance.getSelectedRowsData()[0];
+		if(!data?.time) return;
+		this.router.navigate(['/playback'],{queryParams: {selected: JSON.stringify(data.time)}}).then()
+	}
+
+	canDisplayTable(type: string): boolean {
+		return this.preference.historyTables[type]
+	}
+	getDisplayTableColumnIndex(type: string): number {
+		return this.preference.historyTables.warnings_order.findIndex(
+			(column) => column.name === type,
+		)
+	}
+	getDisplayTableColumnWidth(type: string) {
+		return this.preference.historyTables.warnings_order.find(
+			(column) => column.name === type,
+		).width
 	}
 }

@@ -573,15 +573,82 @@ namespace OMSWeb.Repositories
             if (string.IsNullOrWhiteSpace(sort) == false) SortConditions = $"{sort}";
             if (skip <= 0 && take <= 0) LimitConditions = string.Empty;
             if (string.IsNullOrWhiteSpace(group) == false) Select = $" distinct on ({group}) * ";
+            
+            string MessageType = "";
+            try
+            {
+                MessageType = 
+                    String.Join(", ", 
+                        _systemSvc.GetClientSettings().WarningMessageType
+                            .Select(c => (int)c)
+                    );
+            }
+            catch (Exception e)
+            {
+                MessageType = ((int)DisplayType.LogicalId).ToString();
+            }
 
             string sql = $@"
                 SELECT {Select} FROM (
                         SELECT 
-                            ALT.id, ALT.time, ALT.level, ALT.tag, ALT.message, ALT.ack_time, ALT.ack_by 
+                            ALT.id, ALT.time, ALT.level, ALT.tag, ALT.message, ALT.ack_time, ALT.ack_by,
+                            oh.id as order_id, oh.logical_id as command_id,
+	                        REGEXP_REPLACE(
+	                            case
+	    	                        WHEN ALT.location LIKE '%s%' then
+		    	                        STRING_AGG(
+		    		                        case 
+		    			                        when '{MessageType}' like '%2%' then st.id::varchar || ', '
+		    			                        else ''
+		    		                        end ||
+		    		                        case
+		    			                        when '{MessageType}' like '%3%' then st.logical_id  || ', '
+		    			                        else ''
+		    		                        end ||
+		    		                        case
+		    			                        when '{MessageType}' like '%4%' then st.c_alias || ', '
+		    			                        else ''
+		    		                        end,
+		    		                        ''
+		    	                        )
+		 	                        WHEN ALT.location LIKE '%b%' then
+		    	                        STRING_AGG(
+		    		                        case 
+		    			                        when '{MessageType}' like '%2%' then bf.id::varchar || ', '
+		    			                        else ''
+		    		                        end ||
+		    		                        case
+		    			                        when '{MessageType}' like '%3%' then bf.logical_id  || ', '
+		    			                        else ''
+		    		                        end ||
+		    		                        case
+		    			                        when '{MessageType}' like '%4%' then bf.c_alias || ', '
+		    			                        else ''
+		    		                        end,
+		    		                        ''
+		    	                        )
+	    	                        WHEN ALT.location LIKE '%p%' then
+		    	                        STRING_AGG(
+		    		                        case 
+		    			                        when '{MessageType}' like '%2%' then p.id::varchar || ', '
+		    			                        else ''
+		    		                        end ||
+		    		                        case
+		    			                        when '{MessageType}' like '%3%' then p.logical_id  || ', '
+		    			                        else ''
+		    		                        end,
+		    		                        ''
+		    	                        )
+	                            end,
+                            ', $', '', 'g') as location
                         FROM alerts AS ALT
+                        LEFT JOIN order_history oh ON ALT.order = oh.id
+                        LEFT JOIN stations st on concat('s', cast(st.id as varchar)) = ALT.location AND ALT.location LIKE '%s%'
+                        LEFT JOIN buffers bf on concat('b', cast(bf.id as varchar)) = ALT.location AND ALT.location LIKE '%b%'
+                        LEFT JOIN points p on concat('p', cast(p.id as varchar)) = ALT.location AND ALT.location LIKE '%p%'
                         WHERE 
                             @from <= ALT.time and ALT.time <= @to
-                            
+                        GROUP BY ALT.id, oh.id, bf.id, p.id    
                         --ORDER BY ALT.id desc
                         ORDER BY {SortConditions}
  

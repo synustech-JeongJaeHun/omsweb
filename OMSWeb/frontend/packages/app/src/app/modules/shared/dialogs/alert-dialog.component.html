@@ -2,7 +2,7 @@
   <ng-container class="dialog-layout">
     <div class="alert-list">
       <dx-data-grid #grid
-                    [dataSource]="selectedFilter==='<>' ? dataSourceClear :dataSource"
+                    [dataSource]="dataSource"
                     [remoteOperations]="true"
                     [height]="300" [width]="700"
                     [hoverStateEnabled]="true"
@@ -42,6 +42,8 @@
                     [caption]="'names.tag' | translate"></dxi-column>
         <dxi-column [allowFiltering]="true" [width]="600" dataType="string" dataField="message"
                     [caption]="'names.message' | translate"></dxi-column>
+        <dxi-column [width]="240" dataType="string" dataField="commandId" 
+                    [caption]="'names.commandId' | translate"></dxi-column>
         <dxi-column [visible]="selectedFilter==='<>'"
                     [allowFiltering]="true" [width]="120" dataType="datetime" dataField="ackTime"
                     [caption]="'names.ackTime' | translate" cellTemplate="dateCell">
@@ -59,15 +61,15 @@
 
       <div class="alert-btn-1">
         <div class="filters">
-          <mat-form-field class="dense" appearance="outline">
+          <!--<mat-form-field class="dense" appearance="outline">
             <mat-select (selectionChange)="onChangeFilter($event.value)" [(value)]="selectedFilter">
-              <!--<mat-option value="">{{ "names.all" | translate }}</mat-option>-->
+              &lt;!&ndash;<mat-option value="">{{ "names.all" | translate }}</mat-option>&ndash;&gt;
               <mat-option value="=">{{
                 "names.notCleared" | translate
                 }}</mat-option>
               <mat-option value="<>">{{ "names.cleared" | translate }}</mat-option>
             </mat-select>
-          </mat-form-field>
+          </mat-form-field>-->
         </div>
       </div>
 
