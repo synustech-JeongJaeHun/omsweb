@@ -26,6 +26,11 @@ namespace OMSWeb.Controllers
                 if (!ModelState.IsValid) throw new OmsException(ErrorCodes.BadRequestModel);
                 return _userSvc.Authenticate(form.UserId, form.Password);
             }
+            catch (OmsException e)
+            {
+                Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"Login Fail: ID={form.UserId}, PW:={form.Password}, isValid={ModelState.IsValid}");
+                return null;
+            }
             catch (Exception e)
             {
                 Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"Exception Auth", e.Message, e.ToString());
