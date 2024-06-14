@@ -23,9 +23,9 @@
     <DefineConstants Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' == 'true'">Windows</DefineConstants>
     <DefineConstants Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))' == 'true'">OSX</DefineConstants>
     <DefineConstants Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' == 'true'">Linux</DefineConstants>
-    <FileVersion>1.0.0.52</FileVersion>
-    <AssemblyVersion>1.0.0.52</AssemblyVersion>
-    <Version>1.0.0.52</Version>
+    <FileVersion>1.0.0.53</FileVersion>
+    <AssemblyVersion>1.0.0.53</AssemblyVersion>
+    <Version>1.0.0.53</Version>
   </PropertyGroup>
 
   <ItemGroup>
