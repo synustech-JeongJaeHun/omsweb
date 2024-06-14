@@ -593,7 +593,8 @@
     "ip" : "IP Address",
     "text": "Text",
     "isAutoScale": "Enable Autoscaling",
-    "warnings": "Warnings"
+    "warnings": "Warnings",
+    "transType": "Trans Type"
   },
   "enums": {
     "hostSessionStatus": {

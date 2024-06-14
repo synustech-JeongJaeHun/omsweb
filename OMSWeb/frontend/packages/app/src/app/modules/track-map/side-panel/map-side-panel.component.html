@@ -230,7 +230,10 @@
             <input matInput type="text" readonly [value]="data.zoneType" />
           </mat-form-field>
         </ng-container>
-        
+        <mat-form-field *ngIf="data?.transType" class="info-item readonly" floatLabel="always">
+          <mat-label>{{ "names.transType" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.transType" />
+        </mat-form-field>
 
         <!--
         <mat-form-field class="info-item readonly" floatLabel="always">
@@ -289,6 +292,10 @@
           <mat-label>{{ "names.carrierType" | translate }}</mat-label>
           <input matInput type="text" readonly [value]="data.carrierType || ''" />
         </mat-form-field>-->
+        <mat-form-field *ngIf="data?.transType" class="info-item readonly" floatLabel="always">
+          <mat-label>{{ "names.transType" | translate }}</mat-label>
+          <input matInput type="text" readonly [value]="data.transType" />
+        </mat-form-field>
         <div class="info-item form-field span-full">
           <label>{{ getDisplayTableLabel('stations_order', 'stations_direction') | translate }}</label>
           <mat-radio-group [disabled]="true" color="primary" [value]="data.direction">

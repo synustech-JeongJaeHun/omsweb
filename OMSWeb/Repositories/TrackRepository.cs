@@ -255,7 +255,8 @@ namespace OMSWeb.Repositories
                                         User = dr["user"].TryString(),
                                         Note = dr["note"].TryString(),
                                         CAlias = dr["c_alias"].TryString(),
-                                        CarrierId = dr["carrier_id"].TryString()
+                                        CarrierId = dr["carrier_id"].TryString(),
+                                        TransType = dr["trans_type"].TryString()
                                     }
                                 );
                             }
@@ -286,7 +287,8 @@ namespace OMSWeb.Repositories
                                     User = dr["user"].TryString(),
                                     Note = dr["note"].TryString(),
                                     CAlias = dr["c_alias"].TryString(),
-                                    CarrierId = dr["carrier_id"].TryString()
+                                    CarrierId = dr["carrier_id"].TryString(),
+                                    TransType = dr["trans_type"].TryString()
                                 }
                             );
                         }
@@ -341,7 +343,8 @@ namespace OMSWeb.Repositories
                                             ZoneType = dr["zone_type"].TryString(),
                                             Capacity = dr["capacity"].TryIntegerOrNull(),
                                             Size = dr["size"].TryIntegerOrNull(),
-                                            Type = dr["type"].TryString()
+                                            Type = dr["type"].TryString(),
+                                            TransType = dr["trans_type"].TryString()
                                         }
                                     );
                                 }
@@ -377,7 +380,8 @@ namespace OMSWeb.Repositories
                                         ZoneType = dr["zone_type"].TryString(),
                                         Capacity = dr["capacity"].TryIntegerOrNull(),
                                         Size = dr["size"].TryIntegerOrNull(),
-                                        Type = dr["type"].TryString()
+                                        Type = dr["type"].TryString(),
+                                        TransType = dr["trans_type"].TryString()
                                     }
                                 );
                             }

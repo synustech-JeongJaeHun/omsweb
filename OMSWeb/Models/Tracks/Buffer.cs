@@ -21,5 +21,7 @@ namespace OMSWeb.Models.Tracks
     public string ZoneType { get; set; }
     public int? Capacity { get; set; }
     public int? Size { get; set; }
+    
+    public string TransType { get; set; }
   }
 }

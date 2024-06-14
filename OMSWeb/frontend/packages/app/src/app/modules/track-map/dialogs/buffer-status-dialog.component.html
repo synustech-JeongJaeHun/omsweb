@@ -38,6 +38,10 @@
 						<label class="name">{{ 'names.type' | translate }}</label>
 						<div class="value">{{ currentBuffer?.type }}</div>
 					</ng-container>
+					<ng-container *ngIf="currentBuffer?.transType">
+						<label class="name">{{ 'names.transType' | translate }}</label>
+						<div class="value">{{ currentBuffer?.transType }}</div>
+					</ng-container>
                     <ng-container *ngIf="currentBuffer.zoneId">
                         <label class="name">{{ 'names.zoneId' | translate }}</label>
                         <div class="value">{{ currentBuffer.zoneId }}</div>

@@ -145,7 +145,7 @@ namespace OMSWeb.Repositories
         SELECT id AS id, physical_id AS physical_id, logical_id AS logical_id, point AS point_id,
           direction AS direction, carrier_type AS carrier_type, next_point, ""offset"" AS offset, unuse, state, carrier_id, c_alias,
           stations.slide_offset, 
-          stations.user, stations.note
+          stations.user, stations.note, trans_type
         FROM stations
         --*user_id_condition*--WHERE user_id =@userId
       "},
@@ -158,7 +158,7 @@ namespace OMSWeb.Repositories
           END AS type,
           b.slide_offset, 
           b.user, b.note,
-          Z.id as zone_id, Z.logical_id as zone_name, Z.capacity, Z.""size"", Z.""type"" as zone_type
+          Z.id as zone_id, Z.logical_id as zone_name, Z.capacity, Z.""size"", Z.""type"" as zone_type, trans_type
         FROM buffers as b
         LEFT JOIN zone_ports as ZP
             ON b.id = zp.port_id and ZP.port_type = 'buffer'

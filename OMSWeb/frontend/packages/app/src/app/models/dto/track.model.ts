@@ -21,6 +21,7 @@ export namespace Dto {
     capacity?: number
     size?: number
     type?: string
+		transType?: string
 	}
 	export interface ICluster {
 		id: number
@@ -192,6 +193,7 @@ export namespace Dto {
 		carrierId?: string
 
     cAlias?: string
+		transType?: string
 	}
 	export interface IVehicle {
 		id: number

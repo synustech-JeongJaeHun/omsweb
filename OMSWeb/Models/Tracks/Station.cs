@@ -17,5 +17,7 @@ namespace OMSWeb.Models.Tracks
     public string Note { get; set; }
     
     public string? CAlias { get; set; }
+    
+    public string TransType { get; set; }
   }
 }
