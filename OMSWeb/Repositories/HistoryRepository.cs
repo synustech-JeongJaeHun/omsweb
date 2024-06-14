@@ -592,7 +592,7 @@ namespace OMSWeb.Repositories
                 SELECT {Select} FROM (
                         SELECT 
                             ALT.id, ALT.time, ALT.level, ALT.tag, ALT.message, ALT.ack_time, ALT.ack_by,
-                            oh.id as order_id, oh.logical_id as command_id,
+                            oh.logical_id as command_id,
 	                        REGEXP_REPLACE(
 	                            case
 	    	                        WHEN ALT.location LIKE '%s%' then
@@ -606,7 +606,7 @@ namespace OMSWeb.Repositories
 		    			                        else ''
 		    		                        end ||
 		    		                        case
-		    			                        when '{MessageType}' like '%4%' then st.c_alias || ', '
+		    			                        when '{MessageType}' like '%4%' and st.c_alias is not null then st.c_alias || ', '
 		    			                        else ''
 		    		                        end,
 		    		                        ''
@@ -622,7 +622,7 @@ namespace OMSWeb.Repositories
 		    			                        else ''
 		    		                        end ||
 		    		                        case
-		    			                        when '{MessageType}' like '%4%' then bf.c_alias || ', '
+		    			                        when '{MessageType}' like '%4%' and bf.c_alias is not null then bf.c_alias || ', '
 		    			                        else ''
 		    		                        end,
 		    		                        ''
@@ -642,7 +642,7 @@ namespace OMSWeb.Repositories
 	                            end,
                             ', $', '', 'g') as location
                         FROM alerts AS ALT
-                        LEFT JOIN order_history oh ON ALT.order = oh.id
+                        LEFT JOIN order_history oh ON ALT.order_id = oh.id
                         LEFT JOIN stations st on concat('s', cast(st.id as varchar)) = ALT.location AND ALT.location LIKE '%s%'
                         LEFT JOIN buffers bf on concat('b', cast(bf.id as varchar)) = ALT.location AND ALT.location LIKE '%b%'
                         LEFT JOIN points p on concat('p', cast(p.id as varchar)) = ALT.location AND ALT.location LIKE '%p%'
