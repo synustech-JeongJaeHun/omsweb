@@ -427,7 +427,8 @@ namespace OMSWeb.Services
                 if (string.Compare(s, "message", StringComparison.CurrentCultureIgnoreCase) == 0) return "message";
                 if (string.Compare(s, "ackTime", StringComparison.CurrentCultureIgnoreCase) == 0) return "ack_time";
                 if (string.Compare(s, "ackBy", StringComparison.CurrentCultureIgnoreCase) == 0) return "ack_by";
-                if (string.Compare(s, "rowIndex", StringComparison.CurrentCultureIgnoreCase) == 0) return "row_index";                
+                if (string.Compare(s, "rowIndex", StringComparison.CurrentCultureIgnoreCase) == 0) return "row_index";
+                if (string.Compare(s, "vehicle", StringComparison.CurrentCultureIgnoreCase) == 0) return "vehicle";
             }
             else if (string.Compare(tableName, "nack_history", StringComparison.CurrentCultureIgnoreCase) == 0)
             {

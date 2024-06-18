@@ -47,6 +47,9 @@
       <dxi-column [width]="getDisplayTableColumnWidth('warnings_location')"
                   [visible]="canDisplayTable('warnings_location')"
                   [visibleIndex]="getDisplayTableColumnIndex('warnings_location')" dataType="string" dataField="location" [caption]="'names.location' | translate"></dxi-column>
+        <dxi-column [width]="getDisplayTableColumnWidth('warnings_vehicle')"
+                    [visible]="canDisplayTable('warnings_vehicle')"
+                    [visibleIndex]="getDisplayTableColumnIndex('warnings_vehicle')" dataType="string" dataField="vehicle" [caption]="'names.vehicle' | translate"></dxi-column>
       <dxi-column [width]="getDisplayTableColumnWidth('warnings_ack_time')"
                   [visible]="canDisplayTable('warnings_ack_time')"
                   [visibleIndex]="getDisplayTableColumnIndex('warnings_ack_time')" dataType="datetime" dataField="ackTime" [caption]="'names.ackTime' | translate"

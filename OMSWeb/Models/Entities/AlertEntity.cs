@@ -15,10 +15,11 @@ namespace OMSWeb.Models.Entities
         public int OrderId { get; set; }
         public string CommandId { get; set; }
         public string Location { get; set; }
+        public string Vehicle { get; set; }
     }
 
     public class AlertHistory : AlertEntity
     {
-  
+        
     }
 }

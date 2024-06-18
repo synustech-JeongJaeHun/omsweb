@@ -640,15 +640,42 @@ namespace OMSWeb.Repositories
 		    		                        ''
 		    	                        )
 	                            end,
-                            ', $', '', 'g') as location
+                            ', $', '', 'g') as location, 
+                            v.logical_id as vehicle,
+                            CASE 
+                                WHEN ALT.message ~ '(vehicle|vid|vhl)\s*\d+' THEN 
+                                   CAST(NULLIF(
+                                        REGEXP_REPLACE(
+                                            ALT.message, 
+                                            '\D', 
+                                            '', 'g'
+                                        ), 
+                                        ''
+                                    ) AS INTEGER)
+                                ELSE NULL
+                            END AS vehicle_id
                         FROM alerts AS ALT
                         LEFT JOIN orders o ON ALT.order_id = o.id
                         LEFT JOIN stations st on concat('s', cast(st.id as varchar)) = ALT.location AND ALT.location LIKE '%s%'
                         LEFT JOIN buffers bf on concat('b', cast(bf.id as varchar)) = ALT.location AND ALT.location LIKE '%b%'
                         LEFT JOIN points p on concat('p', cast(p.id as varchar)) = ALT.location AND ALT.location LIKE '%p%'
+                        LEFT JOIN vehicles v ON v.id = (
+	                        CASE 
+	                            WHEN ALT.message ~ '(vehicle|vid|vhl)\s*\d+' THEN 
+	                               CAST(NULLIF(
+	                                    REGEXP_REPLACE(
+	                                        ALT.message, 
+	                                        '\D', 
+	                                        '', 'g'
+	                                    ), 
+	                                    ''
+	                                ) AS INTEGER)
+	                            ELSE NULL
+	                        END
+	                    )
                         WHERE 
                             @from <= ALT.time and ALT.time <= @to
-                        GROUP BY ALT.id, o.id, bf.id, p.id    
+                        GROUP BY ALT.id, o.id, bf.id, p.id, v.logical_id
                         --ORDER BY ALT.id desc
                         ORDER BY {SortConditions}
  
