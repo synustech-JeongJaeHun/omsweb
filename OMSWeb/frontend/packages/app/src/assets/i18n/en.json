@@ -599,7 +599,8 @@
     "text": "Text",
     "isAutoScale": "Enable Autoscaling",
     "warnings": "Warnings",
-    "transType": "Trans Type"
+    "transType": "Trans Type",
+    "driveType": "Drive Type"
   },
   "enums": {
     "hostSessionStatus": {

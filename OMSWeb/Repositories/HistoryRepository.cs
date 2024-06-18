@@ -592,7 +592,7 @@ namespace OMSWeb.Repositories
                 SELECT {Select} FROM (
                         SELECT 
                             ALT.id, ALT.time, ALT.level, ALT.tag, ALT.message, ALT.ack_time, ALT.ack_by,
-                            oh.logical_id as command_id,
+                            o.logical_id as command_id,
 	                        REGEXP_REPLACE(
 	                            case
 	    	                        WHEN ALT.location LIKE '%s%' then
@@ -642,13 +642,13 @@ namespace OMSWeb.Repositories
 	                            end,
                             ', $', '', 'g') as location
                         FROM alerts AS ALT
-                        LEFT JOIN order_history oh ON ALT.order_id = oh.id
+                        LEFT JOIN orders o ON ALT.order_id = o.id
                         LEFT JOIN stations st on concat('s', cast(st.id as varchar)) = ALT.location AND ALT.location LIKE '%s%'
                         LEFT JOIN buffers bf on concat('b', cast(bf.id as varchar)) = ALT.location AND ALT.location LIKE '%b%'
                         LEFT JOIN points p on concat('p', cast(p.id as varchar)) = ALT.location AND ALT.location LIKE '%p%'
                         WHERE 
                             @from <= ALT.time and ALT.time <= @to
-                        GROUP BY ALT.id, oh.id, bf.id, p.id    
+                        GROUP BY ALT.id, o.id, bf.id, p.id    
                         --ORDER BY ALT.id desc
                         ORDER BY {SortConditions}
  

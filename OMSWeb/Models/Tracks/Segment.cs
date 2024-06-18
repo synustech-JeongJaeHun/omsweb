@@ -33,6 +33,7 @@ namespace OMSWeb.Models.Tracks
     public int SpeedRatio { get; set; }
     public string Oblow { get; set; }
     public string Obhigh { get; set; }
+    public int DriveType { get; set; }
   }
   public class SegmentWithPart : Segment, ISegmentPart
   {

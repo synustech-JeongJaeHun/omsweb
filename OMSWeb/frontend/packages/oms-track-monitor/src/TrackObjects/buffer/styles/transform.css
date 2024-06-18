@@ -1,10 +1,10 @@
 /* Total Scale */
-#buffer-layer .buffer .scale-and-reverse-rotate {
+#buffer-layer.autoScale .buffer .scale-and-reverse-rotate {
   transform: scale(calc(var(--mm-per-pixel) / 4))
     rotate(var(--reverse-rotation-degree));
 }
 
-#buffer-layer[data-scale-level~='BELOW15' i]
+#buffer-layer[data-scale-level~='BELOW15' i].autoScale 
   .buffer
   .scale-and-reverse-rotate {
   transform: scale(var(--mm-per-pixel))
@@ -12,7 +12,7 @@
 }
 
 #buffer-layer
-  .buffer[data-carrier-focused~='true' i]
+  .buffer[data-carrier-focused~='true' i].autoScale
   .scale-and-reverse-rotate {
     animation: buffer-carrier-focused-scale-grow 1s ease-in-out forwards;
 }
@@ -29,32 +29,32 @@
 
 
 /* Text Scale */
-#buffer-layer[data-scale-level~='BELOW15' i]
+#buffer-layer[data-scale-level~='BELOW15' i].autoScale
  .buffer .label {
   font-size: 0.1em;
 }
 
-#buffer-layer[data-scale-level~='BELOW13' i]
+#buffer-layer[data-scale-level~='BELOW13' i].autoScale
  .buffer .label {
   font-size: 0.2em;
 }
 
-#buffer-layer[data-scale-level~='BELOW11' i]
+#buffer-layer[data-scale-level~='BELOW11' i].autoScale
  .buffer .label {
   font-size: 0.4em;
 }
 
-#buffer-layer[data-scale-level~='BELOW9' i]
+#buffer-layer[data-scale-level~='BELOW9' i].autoScale
  .buffer .label {
   font-size: 0.6em;
 }
 
-#buffer-layer[data-scale-level~='BELOW7' i]
+#buffer-layer[data-scale-level~='BELOW7' i].autoScale
  .buffer .label {
   font-size: 0.8em;
 }
 
-#buffer-layer[data-scale-level~='BELOW5' i]
+#buffer-layer[data-scale-level~='BELOW5' i].autoScale
  .buffer .label {
   font-size: 1em;
 }

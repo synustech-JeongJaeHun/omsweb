@@ -178,6 +178,7 @@ export namespace Dto {
     speedRatio?: number
     oblow?: string
     obhigh?: string
+		driveType?: number
 	}
 	export interface IStation {
 		id: number

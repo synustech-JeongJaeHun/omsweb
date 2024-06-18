@@ -36,7 +36,8 @@ namespace OMSWeb.Repositories
           location,
           direction,
           SG.speed, SG.length,
-          SV.steer_dir, SV.speed_ratio, SV.oblow, SV.obhigh
+          SV.steer_dir, SV.speed_ratio, SV.oblow, SV.obhigh,
+          SV.drive_type as drive_type
         FROM segment_parts AS SP
         INNER JOIN segments AS SG
           ON SP.segment_id = SG.id

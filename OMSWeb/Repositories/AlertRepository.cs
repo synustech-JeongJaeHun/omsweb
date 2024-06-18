@@ -147,8 +147,7 @@ SELECT sum(level1) AS level1, sum(level2) AS level2, sum(level3) AS level3
                         ' ' ORDER BY ALT.position
                       )  
                   END AS message,
-                  ALT.ack_time,
-                  ALT.ack_by
+                  o.logical_id as command_id
                 FROM
                   (
                     SELECT
@@ -165,9 +164,10 @@ SELECT sum(level1) AS level1, sum(level2) AS level2, sum(level3) AS level3
                   FROM
                     alerts
                 ) AS subquery ON ALT.id = subquery.id AND ALT.position = subquery.position
+                LEFT JOIN orders o ON ALT.order_id = o.id
                 {WhereConditions}
                 GROUP BY
-                  ALT.id, ALT.time, ALT.level, ALT.tag, ALT.ack_time, ALT.ack_by, ALT.message, subquery.messages_array
+                  ALT.id, ALT.time, ALT.level, ALT.tag, ALT.ack_time, ALT.ack_by, ALT.message, subquery.messages_array, o.logical_id
                 {SortConditions}
                 --LIMIT @take OFFSET @skip
                 {LimitConditions}

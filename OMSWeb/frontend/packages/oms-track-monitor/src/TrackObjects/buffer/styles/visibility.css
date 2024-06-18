@@ -1,7 +1,7 @@
-#buffer-layer .buffer .label {
+#buffer-layer.autoScale .buffer .label {
   visibility: hidden;
 }
 
-#buffer-layer[data-scale-level~='BELOW15' i] .buffer .label {
+#buffer-layer[data-scale-level~='BELOW15' i].autoScale .buffer .label {
   visibility: inherit;
 }

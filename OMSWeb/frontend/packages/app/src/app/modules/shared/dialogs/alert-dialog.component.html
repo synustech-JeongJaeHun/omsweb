@@ -44,17 +44,6 @@
                     [caption]="'names.message' | translate"></dxi-column>
         <dxi-column [width]="240" dataType="string" dataField="commandId" 
                     [caption]="'names.commandId' | translate"></dxi-column>
-        <dxi-column [visible]="selectedFilter==='<>'"
-                    [allowFiltering]="true" [width]="120" dataType="datetime" dataField="ackTime"
-                    [caption]="'names.ackTime' | translate" cellTemplate="dateCell">
-          <div *dxTemplate="let data of 'dateCell'">
-            {{ data.value | date: "yyyy/MM/dd HH:mm:ss" }}
-          </div>
-        </dxi-column>
-        <dxi-column [visible]="selectedFilter==='<>'"
-                    [allowFiltering]="true" [width]="120" dataType="string" dataField="ackBy"
-                    [caption]="'names.ackBy' | translate">
-        </dxi-column>
       </dx-data-grid>
     </div>
     <div mat-dialog-actions class="actions" [ngSwitch]="hasControlAccess" [ngClass]="{'mobile-alert' : isMobile}">

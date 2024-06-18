@@ -207,4 +207,8 @@ export class WarningHistoryComponent implements OnInit {
 			(column) => column.name === type,
 		).width
 	}
+
+	setDateWithMaxLimit() {
+		this.now = new Date()
+	}
 }
