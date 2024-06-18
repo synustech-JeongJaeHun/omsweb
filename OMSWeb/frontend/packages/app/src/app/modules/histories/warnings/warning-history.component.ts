@@ -7,6 +7,7 @@ import { TrackIdService } from '../../../services/track-id.service'
 import { DateUtil } from '../../shared/utils/date.util'
 import {ClientPreferences} from "@oms/models/settings.model";
 import {SettingsService} from "@oms/services/settings.service";
+import {alertSeverities} from "@oms/models/notification.model";
 
 @Component({
 	selector: 'oms-warning-history',
@@ -211,4 +212,6 @@ export class WarningHistoryComponent implements OnInit {
 	setDateWithMaxLimit() {
 		this.now = new Date()
 	}
+
+	protected readonly severityLookup = alertSeverities;
 }

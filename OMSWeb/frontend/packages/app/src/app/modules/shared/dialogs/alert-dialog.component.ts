@@ -12,6 +12,7 @@ import { AccountUtil } from '../utils/account.util';
 import { PermissionEnums } from '../../../models/enums';
 import {MobileService} from "@oms/services/mobile.service";
 import {StorageUtil} from "@oms/utils/storage.util";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'oms-alert-dialog',
@@ -46,8 +47,8 @@ export class AlertDialogComponent implements OnDestroy {
     private hubSvc: HubService,
     private messageSvc: MessagesService,
     private notifySvc: NotificationsService,
-
-    private mobileSvc: MobileService
+    private mobileSvc: MobileService,
+    private router: Router,
   ) {
     this.dataSource = this.notifySvc.alertsDataSource();
     // this.dataSourceClear =this.notifySvc.alertsDataSourceClear();
@@ -101,5 +102,9 @@ export class AlertDialogComponent implements OnDestroy {
   get isMobile() {
     return this.mobileSvc.isMobile
   }
+	
+	moveHistory(){
+		this.router.navigate(['/histories/warnings'])
+	}
 
 }

@@ -48,17 +48,9 @@
     </div>
     <div mat-dialog-actions class="actions" [ngSwitch]="hasControlAccess" [ngClass]="{'mobile-alert' : isMobile}">
 
-      <div class="alert-btn-1">
+      <div class="alert-btn-1" (click)="moveHistory()" *ngSwitchCase="true">
         <div class="filters">
-          <!--<mat-form-field class="dense" appearance="outline">
-            <mat-select (selectionChange)="onChangeFilter($event.value)" [(value)]="selectedFilter">
-              &lt;!&ndash;<mat-option value="">{{ "names.all" | translate }}</mat-option>&ndash;&gt;
-              <mat-option value="=">{{
-                "names.notCleared" | translate
-                }}</mat-option>
-              <mat-option value="<>">{{ "names.cleared" | translate }}</mat-option>
-            </mat-select>
-          </mat-form-field>-->
+          <button mat-raised-button> {{ 'names.history' | translate }} </button>
         </div>
       </div>
 

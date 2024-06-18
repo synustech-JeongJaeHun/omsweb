@@ -34,6 +34,7 @@
       <dxi-column [width]="getDisplayTableColumnWidth('warnings_severity')"
                   [visible]="canDisplayTable('warnings_severity')"
                   [visibleIndex]="getDisplayTableColumnIndex('warnings_severity')"dataType="string" dataField="level" [caption]="'names.severity' | translate">
+          <dxo-lookup [dataSource]="severityLookup" displayExpr="name" valueExpr="value"></dxo-lookup>
       </dxi-column>
       <dxi-column [width]="getDisplayTableColumnWidth('warnings_tag')"
                   [visible]="canDisplayTable('warnings_tag')"
