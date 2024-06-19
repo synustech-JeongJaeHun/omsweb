@@ -642,11 +642,11 @@ namespace OMSWeb.Repositories
 	                            end,
                             ', $', '', 'g') as location, 
                             CASE 
-                                WHEN alt.message ~ '(vid=|vhl |vehicle |vehicle_id-)\d+' 
+                                WHEN alt.message ~ '(vid |vid=|vhl |vehicle |vehicle_id-)\d+' 
                                 THEN  (
 		                                select v.logical_id
 		        	                        from vehicles v 
-		        	                        where v.id = (SELECT (regexp_matches(alt.message, '(vid=|vhl |vehicle |vehicle_id-)(\d+)', 'g'))[2]::int
+		        	                        where v.id = (SELECT (regexp_matches(alt.message, '(vid |vid=|vhl |vehicle |vehicle_id-)(\d+)', 'g'))[2]::int
 		                                LIMIT 1)
 			                          ) 
                                 ELSE NULL
