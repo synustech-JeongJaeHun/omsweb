@@ -213,5 +213,5 @@ export class WarningHistoryComponent implements OnInit {
 		this.now = new Date()
 	}
 
-	protected readonly severityLookup = alertSeverities;
+	severityLookup = alertSeverities;
 }
