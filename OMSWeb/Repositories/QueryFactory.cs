@@ -241,7 +241,8 @@ namespace OMSWeb.Repositories
                 '' AS in_lock_segment, '' AS out_lock_segment, 
                 CASE 
                     WHEN unuse is null THEN true ELSE unuse 
-                END as unuse 
+                END as unuse ,
+                in_node, out_node, in_disabled_segment, out_disabled_segment 
         FROM mtls
         --*user_id_condition*--WHERE user_id =@userId
       "},

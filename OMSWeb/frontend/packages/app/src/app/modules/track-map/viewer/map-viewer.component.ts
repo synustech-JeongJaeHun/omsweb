@@ -1238,16 +1238,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
         case 'mtl':
         {
           // nothing
-          /*this.mapStatesService.transferCommandState.mtl = point
-          if(!point) return;
-          this.transfersService.getTargetMTL(point.id).subscribe((res)=>{
-            if(res){
-              this.mapStatesService.transferCommandState.mtl.inNode = res.inNode
-              this.mapStatesService.transferCommandState.mtl.outNode = res.outNode
-              this.mapStatesService.transferCommandState.mtl.inDisabledSegment = res.inDisabledSegment
-              this.mapStatesService.transferCommandState.mtl.outDisabledSegment = res.outDisabledSegment
-            }
-          })*/
         }
           break
         default:

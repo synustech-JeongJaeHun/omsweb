@@ -471,6 +471,10 @@ namespace OMSWeb.Repositories
                                             OutDirection = dr["out_direction"].ToString(),
                                             InLockSegment = dr["in_lock_segment"].ToString(),
                                             OutLockSegment = dr["out_lock_segment"].ToString(),
+                                            InNode = Convert.ToInt32(dr["in_node"]),
+                                            OutNode = Convert.ToInt32(dr["out_node"]),
+                                            InDisabledSegment = Convert.ToInt32(dr["in_disabled_segment"]),
+                                            OutDisabledSegment = Convert.ToInt32(dr["out_disabled_segment"]),
                                         }
                                     );
                                 }
@@ -497,6 +501,10 @@ namespace OMSWeb.Repositories
                                         OutDirection = dr["out_direction"].ToString(),
                                         InLockSegment = dr["in_lock_segment"].ToString(),
                                         OutLockSegment = dr["out_lock_segment"].ToString(),
+                                        InNode = Convert.ToInt32(dr["in_node"]),
+                                        OutNode = Convert.ToInt32(dr["out_node"]),
+                                        InDisabledSegment = Convert.ToInt32(dr["in_disabled_segment"]),
+                                        OutDisabledSegment = Convert.ToInt32(dr["out_disabled_segment"]),
                                     }
                                 );
                             }

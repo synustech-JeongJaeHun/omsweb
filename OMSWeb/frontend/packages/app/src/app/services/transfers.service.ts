@@ -28,10 +28,6 @@ export class TransfersService {
         return this.http.get<Transfer>(`${this.baseUrl}/${id}`)
     }
 
-    getTargetMTL(id: number): Observable<MTL> {
-      return this.http.get<MTL>(`${this.baseUrl}/getMtl/${id}`)
-    }
-
     checkTargetMTL(id: string): Observable<ITransferHCACK> {
       return this.http.get<ITransferHCACK>(`${this.baseUrl}/checkMtl/${id}`)
     }

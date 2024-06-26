@@ -667,11 +667,6 @@ namespace OMSWeb.Services
             return _transferRepo.QueryTransfer(id);
         }
         
-        public Mtl GetTargetMTl(int id)
-        {
-            return _transferRepo.QueryMTL(id);
-        }
-        
         public Boolean isUseMtl(string id)
         {
             return _transferRepo.CountInUseMTL(id)>0;

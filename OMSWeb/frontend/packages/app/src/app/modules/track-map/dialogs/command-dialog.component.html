@@ -350,32 +350,28 @@
 			<div class="form-row">
         <mat-form-field class="dense" appearance="outline" style="width: 100%" floatLabel="never">
           <mat-select placeholder="Select MTL"
-            [(ngModel)]="commandState.mtl" (selectionChange)="onChangeMtl($event.value)">
+            [(ngModel)]="commandState.mtl" (selectionChange)="onChangeMtl()">
             <mat-option *ngFor="let mtl of MTls" [value]="mtl">{{mtl.logicalId}}</mat-option>
           </mat-select>
         </mat-form-field>
 			</div>
-			<div class="form-row">
-				<mat-radio-group [(ngModel)]="commandState.mtlInOut" color="primary" style="display: flex">
-          <!--
-          enable case
-          a. direction !== R
-          b. direction === A || exist out-disabled-segment
-          -->
-          <div style="width: 50%">
-            <mat-radio-button [value]="true"
-            >In [Line → MTL]</mat-radio-button
-            >
-          </div>
-					<div style="width: 50%; display: flex; justify-content: flex-end;">
+    <div class="form-row">
+        <mat-radio-group [(ngModel)]="commandState.mtlInOut" color="primary" style="display: flex">
+        <!--
+        enable case
+        a. direction !== R
+        b. direction === A || exist out-disabled-segment
+        -->
+        <div style="width: 50%">
+            <mat-radio-button [value]="true">In [Line → MTL]</mat-radio-button>
+        </div>
+        <div style="width: 50%; display: flex; justify-content: flex-end;">
             <mat-radio-button [value]="false"
-                              [disabled]="!(commandState.mtl?.outDirection==='R' ||
-                            (commandState.mtl?.outDirection==='A' && commandState.mtl?.outDisabledSegment))"
-            >Out [MTL→Line]</mat-radio-button
-            >
-          </div>
-				</mat-radio-group>
-			</div>
+                              [disabled]="!(commandState.mtl?.outDirection==='R' || (commandState.mtl?.outDirection==='A' && commandState.mtl?.outDisabledSegment))"
+            >Out [MTL→Line]</mat-radio-button>
+        </div>
+        </mat-radio-group>
+    </div>
 		</div>
 	</div>
 	<div mat-dialog-actions>

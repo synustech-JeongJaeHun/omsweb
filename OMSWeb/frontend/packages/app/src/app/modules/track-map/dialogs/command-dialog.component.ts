@@ -140,18 +140,9 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 	onChangeCarrier(value?: string) {
 		this.commandState.carrier = value ?? ''
 	}
-	onChangeMtl(mtl: ILookupMTLUnit) {
-    this.commandState.mtl = mtl
-    if(!mtl) return;
-    this.transfersService.getTargetMTL(mtl.id).subscribe((res)=>{
-      if(res){
-        this.commandState.mtl.inNode = res.inNode
-        this.commandState.mtl.outNode = res.outNode
-        this.commandState.mtl.inDisabledSegment = res.inDisabledSegment
-        this.commandState.mtl.outDisabledSegment = res.outDisabledSegment
-        this.commandState.mtl.outDirection= res.outDirection
-      }
-    })
+	onChangeMtl() {
+		if(!(this.commandState.mtl?.outDirection==='R' || (this.commandState.mtl?.outDirection==='A' && this.commandState.mtl?.outDisabledSegment)))
+			this.commandState.mtlInOut = true
 	}
 
 	onApply() {
