@@ -36,6 +36,7 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 
   pattern = '[1-9](([0-8](\\.[0-9]*)?)|[0-9])?'
 	isForceMTLIn = false
+	MTls: Dto.IMTL[]
 
 	get canApply(): boolean {
 		return this.validate() === undefined
@@ -84,6 +85,8 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
 		this.currentTab = this.tabs.findIndex(
 			(t) => t === this.statesSvc.transferCommandState.category,
 		)
+		
+		this.MTls = this.trackStatusService.trackData.mtls
 	}
 
 	ngOnDestroy(): void {
@@ -490,8 +493,5 @@ export class CommandDialogComponent implements OnInit, OnDestroy {
       this.messageSvc.sendVehicleCommand(cmd).subscribe()
       this.commandState.vehicle = undefined
     })
-  }
-  get MTls(): Dto.IMTL[]{
-    return this.trackStatusService.trackData.mtls
   }
 }
