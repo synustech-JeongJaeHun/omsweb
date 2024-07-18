@@ -1,7 +1,7 @@
 #vhl-stauts-container {
   position: relative;
   display: grid;
-  grid-template-columns: 8vw;
+  grid-template-columns: 12vw;
   min-height: 44px;
   grid-template-rows: 1fr auto;
   gap: 4px;
@@ -34,7 +34,7 @@
     background: #eaeaea;
   }
   .data {
-    font-size: calc(0.8vw + 0.4vmin);
+    font-size: calc(0.8vw + 0.3vmin);
     font-weight: 650;
     color: #3d3d3d;
     text-align: left;
@@ -42,7 +42,7 @@
   }
 
   .semi-data {
-    font-size: calc(0.6vw + 0.3vmin);
+    font-size: calc(0.6vw + 0.2vmin);
     font-weight: 400;
     color: #3d3d3d;
     text-align: left;
@@ -57,6 +57,10 @@
 
   .lt{
     letter-spacing: -0.1vw;
+  }
+  
+  .dash-line{
+    border-top: 1px black dashed;
   }
 }
 
