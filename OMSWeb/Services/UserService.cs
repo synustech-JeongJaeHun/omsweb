@@ -19,11 +19,13 @@ namespace OMSWeb.Services
     private readonly UserRepository _repo;
     private readonly AppSettings _appSettings;
     private readonly HttpContext _context;
+    public int _step =0;
 
     public string UserId
     {
       get { return _context?.User?.Identity?.Name; }
     }
+    
 
     public UserService(UserRepository userRepository, IOptions<AppSettings> appSettings,
       IHttpContextAccessor contextAccessor
@@ -62,22 +64,25 @@ namespace OMSWeb.Services
 
     public TokenResponse Authenticate(string userId, string password)
     {
+        _step = 0;
       var user = this._repo.GetUserByUserId(userId);
+      _step++;
       if (user == null) //throw new OmsException(ErrorCodes.AuthenticationFailed);  //UserNotExists
         return null;
-
+      _step++;
       var verified = BCrypt.Net.BCrypt.Verify(password, user.Password);
       if (!verified) //throw new OmsException(ErrorCodes.AuthenticationFailed);
         return null;
-
+      _step++;
       var tokenResponse = new TokenResponse
       {
         Token = GenerateUserToken(user)
       };
+      _step++;
       var validTo = this.GetTokenValidTo(tokenResponse.Token);
-
+      _step++;
       this._repo.AddTokenHistory(user, validTo, "Logged In");
-
+      _step++;
       return tokenResponse;
     }
 
