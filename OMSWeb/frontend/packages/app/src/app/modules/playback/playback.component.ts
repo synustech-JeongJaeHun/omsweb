@@ -101,6 +101,7 @@ export class PlaybackComponent implements OnInit, OnDestroy {
             this.playbackService.getRecentTrack(trackTime).subscribe((res) => {
               this.playbackPlayService.track = res
               this.isFirstTrackReady = true
+	            this.playbackPlayService.pageLoaded.emit(true)
             })
             this.playSnapshots(changTime)
           }
