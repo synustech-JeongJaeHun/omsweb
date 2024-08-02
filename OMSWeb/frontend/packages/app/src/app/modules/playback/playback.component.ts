@@ -47,10 +47,13 @@ export class PlaybackComponent implements OnInit, OnDestroy {
     else {
       this.callPlayback()
     }
+
+		this.playbackPlayService.pageLoaded.emit(false)
 	}
 
   callPlayback(changTime: Date = null){
     try {
+			
       this.playbackService.getPlaybackInfo().subscribe((res) => {
         this.playbackPlayService.firstSnapshotTime = res.firstSnapshotTime
         this.playbackPlayService.lastHistoryTime = res.lastHistoryTime
@@ -130,6 +133,7 @@ export class PlaybackComponent implements OnInit, OnDestroy {
             this.playbackService.getRecentTrack(trackTime).subscribe((res) => {
               this.playbackPlayService.track = res
               this.isFirstTrackReady = true
+	            this.playbackPlayService.pageLoaded.emit(true)
             })
             this.playSnapshots(this.playbackPlayService.clock)
           }
@@ -139,7 +143,8 @@ export class PlaybackComponent implements OnInit, OnDestroy {
       })
     } catch (e) {
       this.isLoadFail = true
-      this.pageLoaded = true;
+      this.pageLoaded = true
+	    this.playbackPlayService.pageLoaded.emit(true)
     }
   }
 

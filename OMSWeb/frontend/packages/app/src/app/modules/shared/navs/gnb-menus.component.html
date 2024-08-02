@@ -1,7 +1,7 @@
 <div class="main-navs">
   <button mat-icon-button class="nav-item" matTooltipClass="gnb-tooltip" matTooltipPosition="below"
     matTooltip='{{ "names.monitor" | translate }}' routerLinkActive="active" routerLink="/monitor/status"
-    [disabled]="!hasPermission(permissionEnums.ViewMonitorStatus)">
+    [disabled]="!hasPermission(permissionEnums.ViewMonitorStatus) || !isPlaybackLoaded">
     <mat-icon>monitor</mat-icon>
   </button>
   <button mat-icon-button class="nav-item" matTooltipClass="gnb-tooltip" matTooltipPosition="below"

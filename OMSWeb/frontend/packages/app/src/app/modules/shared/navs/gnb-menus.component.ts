@@ -12,6 +12,7 @@ import { AuthService } from '../../../services/auth.service'
 import { SettingsDialogComponent } from '../../settings/dialogs/settings-dialog.component'
 import { AccountUtil } from '../utils/account.util'
 import { PermissionEnums } from '../../../models/enums'
+import {PlaybackPlayService} from "@oms/services/playback-play.service";
 
 @Component({
 	selector: 'oms-gnb-menus',
@@ -24,6 +25,7 @@ export class GnbMenusComponent implements OnInit, OnDestroy {
 
 	private routing$: Subscription
 	private _dlg: MatDialogRef<SettingsDialogComponent>
+	isPlaybackLoaded = false
 
 	get isAuthenticated(): boolean {
 		return this.auth.isAuthenticated
@@ -34,6 +36,7 @@ export class GnbMenusComponent implements OnInit, OnDestroy {
 		private dialog: MatDialog,
 		private auth: AuthService,
 		private location: Location,
+		private playService: PlaybackPlayService
 	) {}
 	ngOnDestroy(): void {
 		this.routing$ && this.routing$.unsubscribe()
@@ -48,6 +51,11 @@ export class GnbMenusComponent implements OnInit, OnDestroy {
 				this.navigationChanged()
 				// this.parentRoute = routeNames.find(r => this.router.isActive(r, false));
 			})
+		
+		this.playService.pageLoaded.subscribe((is: boolean)=> {
+			this.isPlaybackLoaded = is
+			console.log(this.isPlaybackLoaded)
+		})
 	}
 
 	onOpenSettings() {

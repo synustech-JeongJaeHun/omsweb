@@ -39,6 +39,7 @@ import { getTimeRangeChunks } from '../modules/playback/utils/date.util'
 })
 export class PlaybackPlayService {
 	clockChanged = new EventEmitter<ClockChangedEvent>()
+	pageLoaded = new EventEmitter<boolean>()
 
 	public firstSnapshotTime: Date
 	public lastHistoryTime: Date
