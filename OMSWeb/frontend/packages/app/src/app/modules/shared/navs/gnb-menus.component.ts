@@ -25,7 +25,7 @@ export class GnbMenusComponent implements OnInit, OnDestroy {
 
 	private routing$: Subscription
 	private _dlg: MatDialogRef<SettingsDialogComponent>
-	isPlaybackLoaded = false
+	isPlaybackLoaded = true
 
 	get isAuthenticated(): boolean {
 		return this.auth.isAuthenticated
@@ -54,7 +54,6 @@ export class GnbMenusComponent implements OnInit, OnDestroy {
 		
 		this.playService.pageLoaded.subscribe((is: boolean)=> {
 			this.isPlaybackLoaded = is
-			console.log(this.isPlaybackLoaded)
 		})
 	}
 
