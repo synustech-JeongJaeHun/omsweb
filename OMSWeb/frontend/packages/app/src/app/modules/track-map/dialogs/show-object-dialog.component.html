@@ -193,7 +193,8 @@
           })" color="primary">{{
           "names.showMtls" | translate }}</mat-slide-toggle>
 
-        <mat-slide-toggle *ngIf="!isMobile && data?.isMonitor" [checked]="setting.isVhlStatusVisible" (change)="changeVhlStatusVisible($event)" color="primary">
+        <mat-slide-toggle *ngIf="!isMobile && data?.isMonitor" [(ngModel)]="preference.toggles.showVhlStatus" 
+                          (change)="changeVhlStatusVisible($event)" color="primary">
           {{"names.showVhlStatus" | translate }}
         </mat-slide-toggle>
 

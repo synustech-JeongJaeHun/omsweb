@@ -53,6 +53,7 @@ export type ToggleOptionKeyType =
   | 'overlaps'
   | 'zoomButton'
   | 'ctrlKey'
+	| 'showVhlStatus'
   ;
 
 export type ToggleLockOptionKeyType =

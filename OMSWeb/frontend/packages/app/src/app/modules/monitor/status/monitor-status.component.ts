@@ -81,7 +81,6 @@ export class MonitorStatusComponent implements OnInit,OnDestroy {
 	trackData: Dto.ITrackData
 
   enabled = false
-  vhlDisplay = true
 
   includesWords  = []
   indicatorFireEmergency = false
@@ -144,12 +143,6 @@ export class MonitorStatusComponent implements OnInit,OnDestroy {
     this.settingSvc.serviceConfig.subscribe(cfg => {
       this.enabled = cfg.kpiEnabled;
     })
-
-    this.vhlDisplay = this.trackMonitorSettingService.trackSetting.isVhlStatusVisible
-    this.trackMonitorSettingService.vhlStatusChanged.subscribe((checked) =>{
-      this.vhlDisplay = checked
-      this.resetVhlStatus()
-    })
 	}
 
 	ngOnInit() {
@@ -167,6 +160,12 @@ export class MonitorStatusComponent implements OnInit,OnDestroy {
       });
 
     this.pageLoaded = true;
+		
+		this.trackMonitorSettingService.vhlStatusChanged.subscribe((checked) =>{
+			this.resetVhlStatus()
+		})
+
+		this.trackMonitorSettingService.vhlStatusChanged.emit(this.settingSvc.globalPreferences.toggles.showVhlStatus)
 	}
 
   ngOnDestroy() {

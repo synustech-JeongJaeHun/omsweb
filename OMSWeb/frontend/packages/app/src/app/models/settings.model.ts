@@ -364,8 +364,9 @@ export const defaultToggleOptions: ToggleOptionsType = {
 	showToolName: false,
 	showOmsVersion: true,
 	showKpi: true,
-    zoomButton: false,
-    ctrlKey: true
+	zoomButton: false,
+	ctrlKey: true,
+	showVhlStatus: false
 }
 
 const defaultControlTable = {

@@ -13,7 +13,7 @@ export class MobileService {
   private _showToolbox = false
   private _isInit = true
 
-  keys = ['isMinimapVisible', 'isVhlStatusVisible']
+  keys = ['isMinimapVisible']
   constructor(
     private trackMonitorSettingService: TrackMonitorSettingService,
   ) {

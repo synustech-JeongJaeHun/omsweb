@@ -56,7 +56,7 @@
 
 <oms-kpi-status *ngIf="!isMobile"></oms-kpi-status>
 
-<oms-vhl-status *ngIf="enabled && vhlDisplay && !isMobile" cdkDrag
+<oms-vhl-status *ngIf="enabled && mapPreference.toggles.showVhlStatus && !isMobile" cdkDrag
                 [cdkDragFreeDragPosition]="dragPosition"
                 (cdkDragEnded)="dragEnded($event)"
 ></oms-vhl-status>

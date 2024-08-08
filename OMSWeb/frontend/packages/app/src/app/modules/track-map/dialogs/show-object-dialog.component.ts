@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TrackMonitorSettingService } from '@oms/root/services/track-monitor-setting.service';
-import { ToggleOptionsType } from '../../../models/settings.model';
+import {ClientPreferences, ToggleOptionsType} from '../../../models/settings.model';
 import {SettingsService} from "@oms/services/settings.service";
 import {MobileService} from "@oms/services/mobile.service";
 
@@ -12,6 +12,7 @@ import {MobileService} from "@oms/services/mobile.service";
 })
 export class ShowObjectDialogComponent {
   showBackdrop =true
+	preference: ClientPreferences
   constructor(
     public dialogRef: MatDialogRef<ShowObjectDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { isMonitor: boolean},
@@ -22,6 +23,8 @@ export class ShowObjectDialogComponent {
     this.settingSvc.serviceConfig.subscribe((config) => {
       this.showBackdrop = config.backdrop
     })
+
+	  this.preference = this.settingSvc.globalPreferences;
   }
 
   public get Math() {
@@ -42,11 +45,8 @@ export class ShowObjectDialogComponent {
   }
 
   public changeVhlStatusVisible(event) {
-    this.trackSettingService.vhlStatusChanged.emit(event.checked);
-    this.update({
-      key: 'isVhlStatusVisible',
-      value: event.checked
-    });
+		this.preference.save()
+    this.trackSettingService.vhlStatusChanged.emit(event.checked)
   }
 
   get isMobile(){

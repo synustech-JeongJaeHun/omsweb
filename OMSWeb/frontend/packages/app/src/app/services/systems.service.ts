@@ -119,12 +119,19 @@ export class SystemsService {
           let globalPreferences = this.settingSvc.globalPreferences;
           let trackSetting = this.trackMonitorSettingSvc.trackSetting;
 
-          this.jsonToSetting(res['ControlTables'] as MonitorControlTable, globalPreferences.controlTables)
-          this.jsonToSetting(res['ToggleOptionsType'] as ToggleOptionsType, globalPreferences.toggles)
-          this.jsonToSetting(res['TrackObjectConfig'] as TrackObjectConfig, globalPreferences.trackDisplay)
-          this.jsonToSetting(res['TTSConfig'] as TTSConfig, globalPreferences.tts)
-          this.jsonToSetting(res['TrackMonitorSetting'] as TrackMonitorSetting, trackSetting )
-          this.jsonToSetting(res['HistoryTables'] as HistoryTable, globalPreferences.historyTables )
+	        const configMapping = [
+		        { key: 'ControlTables', target: globalPreferences.controlTables },
+		        { key: 'ToggleOptionsType', target: globalPreferences.toggles },
+		        { key: 'TrackObjectConfig', target: globalPreferences.trackDisplay },
+		        { key: 'TTSConfig', target: globalPreferences.tts },
+		        { key: 'TrackMonitorSetting', target: trackSetting },
+		        { key: 'HistoryTables', target: globalPreferences.historyTables },
+	        ]
+
+	        configMapping.forEach(({ key, target }) => {
+						const custom = res[key] as typeof target
+		        custom && this.jsonToSetting(custom, target)
+	        })
 
           this.settingSvc.globalPreferences.save()
           this.trackMonitorSettingSvc.updateCustom(trackSetting)
