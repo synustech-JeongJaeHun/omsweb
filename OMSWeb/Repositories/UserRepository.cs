@@ -687,15 +687,37 @@ namespace OMSWeb.Repositories
             }
             return result;
         }
-        public IQueryable<TokenHistoryEntity> QueryTokenHistory()
+        public IQueryable<TokenHistoryEntity> QueryTokenHistory(DateTimeOffset from, DateTimeOffset to, int skip, int take, string condition, string sort, string group)
         {
-            var sql = $"SELECT * FROM token_history";
+            string WhereConditions = string.Empty;
+            string SortConditions = @"TH.id desc";
+            string LimitConditions = @"LIMIT @take OFFSET @skip";
+            string Select = @" * ";
+            
+            if (string.IsNullOrWhiteSpace(condition) == false) WhereConditions = $" WHERE {condition}";
+            if (string.IsNullOrWhiteSpace(sort) == false) SortConditions = $"{sort}";
+            if (skip <= 0 && take <= 0) LimitConditions = string.Empty;
+            if (string.IsNullOrWhiteSpace(group) == false) Select = $" distinct on ({group}) * ";
+            
+            string sql = $@"
+                    SELECT {Select} FROM (
+                        SELECT TH.id, TH.time_created, TH.user_id, TH.method_name, TH.token_expires
+                        FROM token_history AS TH
+                        WHERE 
+                            @from <= TH.time_created and TH.time_created <= @to
+                        --ORDER BY VA.id desc
+                        ORDER BY {SortConditions}
+                    ) tokenHistory
+                    {WhereConditions}
+                    --LIMIT @take OFFSET @skip
+                    {LimitConditions}
+                ";
             IQueryable<TokenHistoryEntity> result;
             using (var conn = ConnectUi())
             {
                 try
                 {
-                    result = conn.Query<TokenHistoryEntity>(sql).AsQueryable();
+                    result = conn.Query<TokenHistoryEntity>(sql, new { from, to, skip, take}).AsQueryable();
                 }
                 catch (Exception e)
                 {
@@ -704,5 +726,34 @@ namespace OMSWeb.Repositories
             }
             return result;
         }
+        
+        public int QueryTokenCount(DateTimeOffset from, DateTimeOffset to, string condition)
+        {
+            string WhereConditions = string.Empty;
+            if (string.IsNullOrWhiteSpace(condition) == false) WhereConditions = $" WHERE {condition}";
+            
+            var sql = $@"
+                SELECT count(*) FROM (
+                    SELECT * FROM token_history AS TH
+                    WHERE @from <= TH.time_created and TH.time_created <= @to
+                ) tokenHistroy
+                {WhereConditions}
+                ";
+            
+            int result = 0;
+            using (var conn = ConnectUi())
+            {
+                try
+                {
+                    result = conn.QueryFirst<int>(sql, new {from, to});
+                }
+                catch (Exception e)
+                {
+                    result = 0;
+                }
+            }
+            return result;
+        }
+        
     }
 }

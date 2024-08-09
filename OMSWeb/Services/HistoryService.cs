@@ -457,6 +457,14 @@ namespace OMSWeb.Services
                 if (string.Compare(s, "ackBy", StringComparison.CurrentCultureIgnoreCase) == 0) return "ack_by";
                 if (string.Compare(s, "rowIndex", StringComparison.CurrentCultureIgnoreCase) == 0) return "row_index";
             }
+            else if (string.Compare(tableName, "token_history", StringComparison.CurrentCultureIgnoreCase) == 0)
+            {
+                if (string.Compare(s, "id", StringComparison.CurrentCultureIgnoreCase) == 0) return "id";
+                if (string.Compare(s, "timeCreated", StringComparison.CurrentCultureIgnoreCase) == 0) return "time_created";
+                if (string.Compare(s, "userId", StringComparison.CurrentCultureIgnoreCase) == 0) return "user_id";
+                if (string.Compare(s, "methodName", StringComparison.CurrentCultureIgnoreCase) == 0) return "method_name";
+                if (string.Compare(s, "tokenExpires", StringComparison.CurrentCultureIgnoreCase) == 0) return "token_expires";
+            }
             return s;
         }
         

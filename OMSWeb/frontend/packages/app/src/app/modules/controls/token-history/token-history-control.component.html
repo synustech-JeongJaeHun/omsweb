@@ -1,18 +1,59 @@
-<h1>{{ "names.auditTrail" | translate }}</h1>
-
-<dx-data-grid [dataSource]="dataSource" [remoteOperations]="true" height="72vh"
-              [showBorders]="true" [loadPanel]="{enabled: false}">
-  <dxo-header-filter [visible]="true"></dxo-header-filter>
-  <dxo-filter-row [visible]="true"></dxo-filter-row>
-  <dxo-paging [pageSize]="50"> </dxo-paging>
-  <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[50, 100, 200]" [showInfo]="true" visible="true">
-  </dxo-pager>
-  <dxo-scrolling mode="virtual" showScrollbar="true"></dxo-scrolling>
-
-  <dxi-column dataField="id" dataType="number" sortOrder="desc" width="8em" [caption]="'names.id' | translate">
-  </dxi-column>
-  <dxi-column dataField="timeCreated" dataType="datetime" [caption]="'names.timeCreated' | translate"></dxi-column>
-  <dxi-column dataField="userId" dataType="string" [caption]="'names.userId' | translate"></dxi-column>
-  <dxi-column dataField="methodName" dataType="string" [caption]="'names.state' | translate"></dxi-column>
-  <dxi-column dataField="tokenExpires" dataType="datetime" [caption]="'names.tokenExpires' | translate"></dxi-column>
-</dx-data-grid>
+<h1 style="margin: 8px;">{{ "names.auditTrail" | translate }}</h1>
+<div id="history-page">
+    <div id="filter-area">
+        <dx-date-box
+                [placeholder]="'_START_DATE' | translate"
+                type="datetime"
+                [(value)]="start"
+                [min]="base"
+                [max]="end"
+                [acceptCustomValue]="false"
+                [showClearButton]="true"
+                [displayFormat]="dateTimeFormat"
+				#startDate
+        ></dx-date-box>
+        <div>~</div>
+        <dx-date-box
+                [placeholder]="'_END_DATE' | translate"
+                type="datetime"
+                [(value)]="now"
+                [min]="base"
+                [max]="end"
+                [acceptCustomValue]="false"
+                [showClearButton]="true"
+                (validationErrorChange)="setDateWithMaxLimit()"
+                [displayFormat]="dateTimeFormat"
+				#endDate
+        ></dx-date-box>
+        <div id="search-area">
+            <button mat-raised-button
+                    color="primary"
+                    (click)="search(startDate.value, endDate.value)">
+                {{ 'names.search' | translate }}
+            </button>
+            <label> {{ searchTime }}</label>
+        </div>
+    </div>
+    <div id="grid-container">
+        <dx-data-grid [dataSource]="dataSource" [remoteOperations]="true"
+                      [height]="gridHeight"
+                      [width]="gridWidth"
+                          [showBorders]="true" [loadPanel]="{enabled: false}">
+          <dxo-header-filter [visible]="true"></dxo-header-filter>
+          <dxo-filter-row [visible]="true"></dxo-filter-row>
+          <dxo-paging [pageSize]="50"> </dxo-paging>
+          <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[50, 100, 200]" [showInfo]="true" visible="true">
+          </dxo-pager>
+          <dxo-scrolling mode="standard"
+                         rowRenderingMode="standard"
+                         showScrollbar="always"></dxo-scrolling>
+        
+          <dxi-column dataField="id" dataType="number" sortOrder="desc" width="8em" [caption]="'names.id' | translate">
+          </dxi-column>
+          <dxi-column dataField="timeCreated" dataType="datetime" [caption]="'names.timeCreated' | translate"></dxi-column>
+          <dxi-column dataField="userId" dataType="string" [caption]="'names.userId' | translate"></dxi-column>
+          <dxi-column dataField="methodName" dataType="string" [caption]="'names.state' | translate"></dxi-column>
+          <dxi-column dataField="tokenExpires" dataType="datetime" [caption]="'names.tokenExpires' | translate"></dxi-column>
+        </dx-data-grid>
+    </div>
+</div>

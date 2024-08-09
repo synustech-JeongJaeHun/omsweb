@@ -36,9 +36,14 @@ namespace OMSWeb.Services
       this._context = contextAccessor.HttpContext;
     }
 
-    public IQueryable<TokenHistoryEntity> QueryTokenHistory()
+    public int QueryTokenCount(DateTimeOffset from, DateTimeOffset to, string condition)
     {
-        return this._repo.QueryTokenHistory();
+        return this._repo.QueryTokenCount(from, to, condition);
+    }
+    
+    public IQueryable<TokenHistoryEntity> QueryTokenHistory(DateTimeOffset from, DateTimeOffset to, int skip, int take, string condition, string sort, string group)
+    {
+        return this._repo.QueryTokenHistory(from, to, skip, take, condition, sort, group);
     }
 
     public IQueryable<UserEntity> QueryUsers()
@@ -99,7 +104,7 @@ namespace OMSWeb.Services
       };
       var validTo = this.GetTokenValidTo(tokenResponse.Token);
  
-      this._repo.AddTokenHistory(user, validTo, "Refresh Logged In");
+      //this._repo.AddTokenHistory(user, validTo, "Refresh Logged In");
 
       return tokenResponse;
     }

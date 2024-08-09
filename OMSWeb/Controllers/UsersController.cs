@@ -20,9 +20,12 @@ namespace OMSWeb.Controllers
     public class UsersController : ControllerBase
     {
         private readonly UserService _userSvc;
-        public UsersController(UserService userService)
+        private readonly HistoryService _historySvc;
+        
+        public UsersController(UserService userService, HistoryService historyService)
         {
             this._userSvc = userService;
+            this._historySvc = historyService;
         }
 
         [Authorize]
@@ -49,7 +52,24 @@ namespace OMSWeb.Controllers
         [HttpGet("token-history/data-source")]
         public LoadResult QueryTokenHistory(DataSourceLoadOptions loadOptions)
         {
-            return DataSourceLoader.Load(_userSvc.QueryTokenHistory(), loadOptions);
+            try
+            {
+                (DateTimeOffset from, DateTimeOffset to, int skip, int take, string condition, string sort, string group) = _historySvc.GetLoadFilters(loadOptions, @"token_history");
+
+                int totalCount = _userSvc.QueryTokenCount(from, to, condition);
+                loadOptions.Skip = 0;
+                //loadOptions.Filter = null;
+
+                LoadResult loadResult = DataSourceLoader.Load(_userSvc.QueryTokenHistory(from, to, skip, take, condition, sort, group), loadOptions);
+                loadResult.totalCount = totalCount;
+
+                return loadResult;
+            }
+            catch (Exception e)
+            {
+            }
+
+            return null;
         }
 
         [HttpGet("roles")]

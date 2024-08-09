@@ -17,12 +17,16 @@ export class UsersService {
   private baseUrl = '/api/users';
   constructor(private http: HttpClient) { }
 
-  tokenHistoryDataSource(): DataSource {
+  tokenHistoryDataSource(source: any, startTime: Date, endTime: Date): DataSource {
     return new DataSource({
       store: AspNetData.createStore({
         key: 'id',
         loadUrl: `${this.baseUrl}/token-history/data-source`,
       }),
+	    filter: [['timeCreated', '>=', startTime], 'and', ['timeCreated', '<=', endTime]],
+	    onChanged: () => {
+		    source.onDataSourceChanged();
+	    },
     });
   }
 
