@@ -60,3 +60,6 @@
                 [cdkDragFreeDragPosition]="dragPosition"
                 (cdkDragEnded)="dragEnded($event)"
 ></oms-vhl-status>
+<oms-zcu-status *ngIf="enableZcuStatus && mapPreference.toggles.showZcuStatus && !isMobile" 
+                [cdkDragFreeDragPosition]="dragZcu" cdkDrag
+                (cdkDragEnded)="dragEnded($event, 'zcuStatusPos')"></oms-zcu-status>

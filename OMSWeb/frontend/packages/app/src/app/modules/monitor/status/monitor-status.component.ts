@@ -81,6 +81,7 @@ export class MonitorStatusComponent implements OnInit,OnDestroy {
 	trackData: Dto.ITrackData
 
   enabled = false
+	enableZcuStatus = false
 
   includesWords  = []
   indicatorFireEmergency = false
@@ -142,6 +143,7 @@ export class MonitorStatusComponent implements OnInit,OnDestroy {
 
     this.settingSvc.serviceConfig.subscribe(cfg => {
       this.enabled = cfg.kpiEnabled;
+			this.enableZcuStatus = cfg.zcuStatusIntervalSec > 0
     })
 	}
 
@@ -162,7 +164,11 @@ export class MonitorStatusComponent implements OnInit,OnDestroy {
     this.pageLoaded = true;
 		
 		this.trackMonitorSettingService.vhlStatusChanged.subscribe((checked) =>{
-			this.resetVhlStatus()
+			this.resetStatus()
+		})
+
+		this.trackMonitorSettingService.zcuStatusChanged.subscribe((checked) =>{
+			this.resetStatus('zcuStatusPos')
 		})
 
 		this.trackMonitorSettingService.vhlStatusChanged.emit(this.settingSvc.globalPreferences.toggles.showVhlStatus)
@@ -185,15 +191,16 @@ export class MonitorStatusComponent implements OnInit,OnDestroy {
 		this.dropFocusEvent.emit(event)
 	}
   dragPosition = {x: 0, y: 0}
+	dragZcu = {x: 0, y: 0}
 
-  dragEnded($event: CdkDragEnd) {
-    this.settingSvc.globalPreferences.map.vhlStatusPos = $event.source.getFreeDragPosition()
+  dragEnded($event: CdkDragEnd, type = 'vhlStatusPos') {
+    this.settingSvc.globalPreferences.map[type] = $event.source.getFreeDragPosition()
     this.settingSvc.globalPreferences.save()
   }
 
-  resetVhlStatus(){
-    this.dragPosition = {x: 0, y: 0}
-    this.settingSvc.globalPreferences.map.vhlStatusPos =this.dragPosition
+  resetStatus(type = 'vhlStatusPos'){
+    type === 'vhlStatusPos' ? this.dragPosition = {x: 0, y: 0} : this.dragZcu = {x: 0, y: 0}
+    this.settingSvc.globalPreferences.map[type] = {x: 0, y: 0}
     this.settingSvc.globalPreferences.save()
   }
 

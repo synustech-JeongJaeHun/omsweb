@@ -398,5 +398,24 @@ namespace OMSWeb.Repositories
             }
             return new {moving = result.moving, idle=result.idle };
         }
+        
+        public async Task<object> QueryZcu()
+        {
+            (int total, int sw_error, int sw_total, int hw_error, int hw_total) result;
+            using (var conn = ConnectTrack())
+            {
+                var sql = @"
+                select
+                    ( select count(*)  from zcu_status zs ) as total,
+                    ( select count(*)  from zcu_status zs where using_type =2 and status = 5 ) as sw_error,
+                    ( select count(*)  from zcu_status zs where using_type =2 ) as sw_total  ,
+                    ( select count(*)  from zcu_status zs where using_type =1 and status = 5 ) as hw_error,
+                    ( select count(*)  from zcu_status zs where using_type =1 ) as hw_total
+                ";
+
+                result = await conn.QueryFirstAsync<(int total, int sw_error, int sw_total, int hw_error, int hw_total)>(sql);
+            }
+            return new {total = result.total, sw_error = result.sw_error, sw_total=result.sw_total, hw_error = result.hw_error, hw_total=result.hw_total, };
+        }
     }
 }

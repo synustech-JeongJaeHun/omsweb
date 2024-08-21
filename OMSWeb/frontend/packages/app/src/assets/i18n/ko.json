@@ -595,7 +595,8 @@
     "isAutoScale": "Enable Autoscaling",
     "warnings": "Warnings",
     "transType": "Trans Type",
-    "driveType": "Drive Type"
+    "driveType": "Drive Type",
+    "showZcuStatus": "Show ZCU Status"
   },
   "enums": {
     "hostSessionStatus": {

@@ -161,6 +161,7 @@ namespace OMSWeb.Services
             client.IsForceMTLIn = this._appSettings.IsForceMTLIn;
             client.DisableBufferNack = this._appSettings.DisableBufferNack;
             client.DisableAiButton = this._appSettings.DisableAiButton;
+            client.ZcuStatusIntervalSec = this._appSettings.ZcuStatusIntervalSec;
             try
             {
                 client.WarningMessageType = this._appSettings.WarningMessageType

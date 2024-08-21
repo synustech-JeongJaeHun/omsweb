@@ -50,7 +50,7 @@ namespace OMSWeb.Services
     {
       try
       {
-        Console.WriteLine($"### timer callback >> {DateTime.Now}");
+        //Console.WriteLine($"### timer callback >> {DateTime.Now}");
         moduleStatusEntity = this._moduleStatusRepo.GetModuleStatus();
         vhlStatusEntity = this._moduleStatusRepo.GetVhlStatus();
         cdmStatusEntity = this._moduleStatusRepo.GetCdmStatus();
@@ -75,7 +75,7 @@ namespace OMSWeb.Services
       }
       catch (Exception e)
       {
-        Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"Exception module", e.Message);
+        Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"Exception module {e.Message}");
       }
       
     }

@@ -20,7 +20,9 @@ export class ReportService {
     this.loadTrend()
     interval(5000)
       .pipe(takeUntil(this.destroy$))
-      .subscribe(e => this.loadTrend())
+      .subscribe(e => {
+	      this.loadTrend()
+      })
   }
 
   // only for map-viewer kpi trend
@@ -31,6 +33,10 @@ export class ReportService {
         this.trendSubject$.next(res)
       }
     })
+	}
+	
+	loadZcuStatus(){
+		return this.http.get<ZcuResponse>(`${this.baseUrl}/zcu`)
 	}
 }
 
@@ -60,4 +66,12 @@ export type TrendResponse = {
     commandDisabled?: number
     total: number
   }
+}
+
+export type ZcuResponse = {
+	total: number,
+	hw_error: number,
+	hw_total : number
+	sw_error: number,
+	sw_total : number
 }

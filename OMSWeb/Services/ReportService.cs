@@ -6,6 +6,7 @@ using OMSWeb.Repositories;
 using System.Threading.Tasks;
 using System.Threading;
 using OMSWeb.Models.Tracks;
+using OMSWeb.Logger;
 
 #nullable enable
 namespace OMSWeb.Services
@@ -40,9 +41,11 @@ namespace OMSWeb.Services
         private readonly ReportTrendReposity _reportTrendRepository;
 
         private readonly Timer timer_trend_update;
+        private readonly Timer timer_zcu_update;
         private object g_delivery_time;
         private object g_vehicles;
         private object g_utilization = 0;
+        private object g_zcus;
         
         private SystemsService _systemSvc;
 
@@ -63,9 +66,18 @@ namespace OMSWeb.Services
             _reportAlarmRepository = reportAlarmRepository;
             _reportTrendRepository = reportTrendReposity;
 
-            timerCallback(null);
+            timerCallback(new Object());
             timer_trend_update = new Timer(timerCallback);
             timer_trend_update.Change(0, 8000);
+
+            int zcuInterval = this._systemSvc.GetClientSettings().ZcuStatusIntervalSec;
+
+            timerZcu(new Object());
+            if (zcuInterval > 0)
+            {
+                timer_zcu_update = new Timer(timerZcu);
+                timer_trend_update.Change(0, zcuInterval*60000);
+            }
         }
 
         public object QueryLabels() => _reportRepo.QueryLabels();
@@ -197,6 +209,12 @@ namespace OMSWeb.Services
             if(this._systemSvc.GetClientSettings().KpiEnabled)
                 await PrepareKpi();
         }
+        
+        private async void timerZcu(Object state)
+        {
+            if(this._systemSvc.GetClientSettings().ZcuStatusIntervalSec>0)
+                await PrepareZcu();
+        }
 
         public async Task PrepareKpi()
         {
@@ -226,6 +244,23 @@ namespace OMSWeb.Services
             }
             catch (Exception e)
             {
+                Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"Exception : {e.Message}");
+            }
+        }
+        
+        public async Task PrepareZcu()
+        {
+            try
+            {
+                var zcus = _reportTrendRepository.QueryZcu();
+                await Task.WhenAll(new Task[] {
+                    zcus
+                });
+                g_zcus = await zcus;
+            }
+            catch (Exception e)
+            {
+                Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"Exception : {e.Message}");
             }
         }
    
@@ -291,6 +326,11 @@ namespace OMSWeb.Services
                 vehicles,
                 utilization,
             };
+        }
+        
+        public async Task<dynamic> QueryZcu()
+        {
+            return g_zcus;
         }
 
         public async Task<object> QueryTrendUtilization()

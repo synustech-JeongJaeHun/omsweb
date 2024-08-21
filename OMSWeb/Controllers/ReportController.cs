@@ -120,6 +120,13 @@ namespace OMSWeb.Controllers
                 memory,
             };
         }
+        
+        
+        [HttpGet("zcu")]
+        public async Task<object> GetZcus()
+        {
+            return await _reportSvc.QueryZcu();
+        }
 
         [HttpGet("trend/utilization")]
         public async Task<object> GetTrendUtilization()

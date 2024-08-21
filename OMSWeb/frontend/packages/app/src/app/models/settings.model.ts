@@ -39,6 +39,7 @@ export class ServiceConfig {
 
   disableHWZCU: boolean
 	disableAiButton: boolean
+	zcuStatusIntervalSec: number
 }
 
 export interface ManualTransferFiltersSetting {
@@ -366,7 +367,8 @@ export const defaultToggleOptions: ToggleOptionsType = {
 	showKpi: true,
 	zoomButton: false,
 	ctrlKey: true,
-	showVhlStatus: false
+	showVhlStatus: false,
+	showZcuStatus: false,
 }
 
 const defaultControlTable = {

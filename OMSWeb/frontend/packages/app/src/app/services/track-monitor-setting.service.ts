@@ -236,7 +236,8 @@ const DefaultTrackMonitorSetting: TrackMonitorSetting = {
 export class TrackMonitorSettingService {
 	@Output() rotationChanged = new EventEmitter<number>()
   @Output() vhlStatusChanged = new EventEmitter<boolean>()
-
+	@Output() zcuStatusChanged = new EventEmitter<boolean>()
+	
 	public trackSetting: TrackMonitorSetting = deepCopy(
 		DefaultTrackMonitorSetting,
 	)

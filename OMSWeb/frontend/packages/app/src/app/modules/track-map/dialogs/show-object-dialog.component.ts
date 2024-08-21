@@ -13,6 +13,8 @@ import {MobileService} from "@oms/services/mobile.service";
 export class ShowObjectDialogComponent {
   showBackdrop =true
 	preference: ClientPreferences
+	enableZcuStatus = false
+	
   constructor(
     public dialogRef: MatDialogRef<ShowObjectDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { isMonitor: boolean},
@@ -22,6 +24,7 @@ export class ShowObjectDialogComponent {
   ) {
     this.settingSvc.serviceConfig.subscribe((config) => {
       this.showBackdrop = config.backdrop
+	    this.enableZcuStatus = config.zcuStatusIntervalSec > 0 
     })
 
 	  this.preference = this.settingSvc.globalPreferences;
@@ -48,6 +51,11 @@ export class ShowObjectDialogComponent {
 		this.preference.save()
     this.trackSettingService.vhlStatusChanged.emit(event.checked)
   }
+
+	public changeZcuStatusVisible(event) {
+		this.preference.save()
+		this.trackSettingService.zcuStatusChanged.emit(event.checked)
+	}
 
   get isMobile(){
     return this.mobileSvc.isMobile

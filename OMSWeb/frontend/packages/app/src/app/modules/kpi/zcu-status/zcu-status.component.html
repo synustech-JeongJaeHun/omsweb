@@ -1,0 +1,8 @@
+<div id="zcu-status-container">
+    <div class="white-space"></div>
+    <div class="title">ZCU({{zcus?.total || 0}})</div>
+    <div class="area">
+        <div class="data mt-4 mb-4">HW: {{ zcus?.hw_error || 0}} / {{ zcus?.hw_total || 0}}</div>
+        <div class="data mb-4">SW: {{ zcus?.sw_error || 0}} / {{ zcus?.sw_total || 0}}</div>
+    </div>
+</div>

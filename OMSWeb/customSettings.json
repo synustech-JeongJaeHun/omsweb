@@ -507,7 +507,8 @@
     "showKpi": true,
     "zoomButton": true,
     "ctrlKey": true,
-    "showVhlStatus": false
+    "showVhlStatus": false,
+    "showZcuStatus": false
   },
   "TrackObjectConfig" : {
     "vehicleIdDisplay": "Top",

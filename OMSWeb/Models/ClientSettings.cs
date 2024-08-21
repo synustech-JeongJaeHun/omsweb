@@ -44,6 +44,8 @@ namespace OMSWeb.Models
         
         public bool DisableAiButton { get; set; }
         
+        public int ZcuStatusIntervalSec { get; set; }
+        
         public DisplayType[] WarningMessageType { get; set; }
     }
 }

@@ -313,6 +313,10 @@
   --vhl-status-position-y: 24px;    //top
 
   --vhl-button-position-y: 36px;    //top
+
+  /* zcu Status */
+  --zcu-status-position-x: 8px;     //right
+  --zcu-status-position-y: 240px;    //top
 }
 
 html,
@@ -380,10 +384,17 @@ oms-vhl-status {
   top: var(--vhl-status-position-y);
 }
 
+
 .vhl-status-button{
   position: absolute;
   right: var(--vhl-status-position-x);
   top: var(--vhl-button-position-y);
+}
+
+oms-zcu-status {
+  position: absolute;
+  right: var(--zcu-status-position-x);
+  top: var(--zcu-status-position-y);
 }
 
 .side_panel_header {

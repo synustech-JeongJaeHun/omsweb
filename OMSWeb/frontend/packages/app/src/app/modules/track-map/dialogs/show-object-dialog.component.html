@@ -205,6 +205,11 @@
           })" color="primary">
           {{"names.isBackdropVisible" | translate }}
         </mat-slide-toggle>
+
+        <mat-slide-toggle *ngIf="enableZcuStatus && !isMobile && data?.isMonitor" [(ngModel)]="preference.toggles.showZcuStatus"
+                        (change)="changeZcuStatusVisible($event)" color="primary">
+          {{"names.showZcuStatus" | translate }}
+        </mat-slide-toggle>
       </div>
     </fieldset>
   </ng-container>

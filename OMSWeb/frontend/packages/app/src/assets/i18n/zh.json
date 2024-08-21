@@ -595,7 +595,8 @@
     "isAutoScale": "启用自动缩放",
     "warnings": "警告",
     "transType": "反式",
-    "driveType": "驱动器类型"
+    "driveType": "驱动器类型",
+    "showZcuStatus": "显示 ZCU 状态"
   },
   "enums": {
     "hostSessionStatus": {
