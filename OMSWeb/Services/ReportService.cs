@@ -76,8 +76,9 @@ namespace OMSWeb.Services
             if (zcuInterval > 0)
             {
                 timer_zcu_update = new Timer(timerZcu);
-                timer_trend_update.Change(0, zcuInterval*60000);
+                timer_zcu_update.Change(0, zcuInterval*1000);
             }
+            
         }
 
         public object QueryLabels() => _reportRepo.QueryLabels();
