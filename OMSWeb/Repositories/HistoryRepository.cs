@@ -544,7 +544,7 @@ namespace OMSWeb.Repositories
                         LEFT JOIN points p on concat('p', cast(p.id as varchar)) = ALT.location AND ALT.location LIKE '%p%'
                         WHERE 
                             @from <= ALT.time and ALT.time <= @to
-                        GROUP BY ALT.id, o.id, bf.id, p.id
+                        GROUP BY ALT.id, o.id, bf.id, p.id, st.id
                     ) alertHistory
 
                     {WhereConditions}
