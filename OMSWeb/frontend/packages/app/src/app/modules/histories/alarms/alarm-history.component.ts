@@ -178,7 +178,7 @@ export class AlarmHistoryComponent implements OnInit {
 	getDisplayTableColumnWidth(type: string) {
 		return this.preference.historyTables.alarms_order.find(
 			(column) => column.name === type,
-		).width
+		)?.width
 	}
 	stateStoring = {
 		enabled: true,
@@ -295,6 +295,6 @@ export class AlarmHistoryComponent implements OnInit {
   getDisplayTableLabel(type: string) {
     return this.preference.historyTables.alarms_order.find(
       (column) => column.name === type,
-    ).i18nLabel
+    )?.i18nLabel
   }
 }

@@ -108,7 +108,7 @@ export class FireStationDialogComponent implements OnInit, OnDestroy {
   getDisplayTableColumnWidth(type: string) {
     return this.preference.controlTables.stations_order.find(
       (column) => column.name === type,
-    ).width
+    )?.width
   }
 
   get canControl(): boolean {
@@ -237,6 +237,6 @@ export class FireStationDialogComponent implements OnInit, OnDestroy {
   getDisplayTableLabel(type: string): string {
     return this.preference.controlTables.stations_order.find(
       (column) => column.name === type,
-    ).i18nLabel
+    )?.i18nLabel
   }
 }

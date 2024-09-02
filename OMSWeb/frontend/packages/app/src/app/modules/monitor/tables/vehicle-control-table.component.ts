@@ -111,13 +111,13 @@ export class VehicleControlTableComponent implements OnInit, OnDestroy {
 	getDisplayTableColumnWidth(type: string) {
 		return this.preference.controlTables.vehicles_order.find(
 			(column) => column.name === type,
-		).width
+		)?.width
 	}
 
   getDisplayTableLabel(type: string): string {
     return this.preference.controlTables.vehicles_order.find(
       (column) => column.name === type,
-    ).i18nLabel
+    )?.i18nLabel
   }
 
 	stateStoring = {

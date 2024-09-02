@@ -206,7 +206,7 @@ export class WarningHistoryComponent implements OnInit {
 	getDisplayTableColumnWidth(type: string) {
 		return this.preference.historyTables.warnings_order.find(
 			(column) => column.name === type,
-		).width
+		)?.width
 	}
 
 	setDateWithMaxLimit() {

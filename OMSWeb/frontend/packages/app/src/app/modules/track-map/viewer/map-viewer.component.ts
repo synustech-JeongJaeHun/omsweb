@@ -1391,7 +1391,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
   getDisplayTableLabel(order: string, type: string): string {
     return this.preference.controlTables[order].find(
       (column) => column.name === type,
-    ).i18nLabel
+    )?.i18nLabel
   }
 }
 

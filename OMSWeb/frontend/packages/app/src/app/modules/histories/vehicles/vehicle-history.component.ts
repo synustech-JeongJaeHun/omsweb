@@ -146,7 +146,7 @@ export class VehicleHistoryComponent implements OnInit, OnDestroy {
 	getDisplayTableColumnWidth(type: string) {
 		return this.preference.historyTables.vehicles_order.find(
 			(column) => column.name === type,
-		).width
+		)?.width
 	}
 	stateStoring = {
 		enabled: true,
@@ -239,6 +239,6 @@ export class VehicleHistoryComponent implements OnInit, OnDestroy {
   getDisplayTableLabel(type: string) {
     return this.preference.historyTables.vehicles_order.find(
       (column) => column.name === type,
-    ).i18nLabel
+    )?.i18nLabel
   }
 }

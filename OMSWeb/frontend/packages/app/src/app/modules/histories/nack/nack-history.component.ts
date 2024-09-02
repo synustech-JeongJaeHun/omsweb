@@ -135,7 +135,7 @@ export class NackHistoryComponent implements OnInit, OnDestroy {
 	getDisplayTableColumnWidth(type: string) {
 		return this.preference.historyTables.nacks_order.find(
 			(column) => column.name === type,
-		).width
+		)?.width
 	}
 	stateStoring = {
 		enabled: true,
@@ -218,6 +218,6 @@ export class NackHistoryComponent implements OnInit, OnDestroy {
   getDisplayTableLabel(type: string) {
     return this.preference.historyTables.nacks_order.find(
       (column) => column.name === type,
-    ).i18nLabel
+    )?.i18nLabel
   }
 }
