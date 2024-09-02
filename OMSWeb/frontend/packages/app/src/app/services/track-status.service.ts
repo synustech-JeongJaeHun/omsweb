@@ -31,13 +31,13 @@ export class TrackStatusService {
     this.isTrackReadyChanged.emit(false)
     this.statusService.getTrack().subscribe(res=>{
       //vhl
-      this.different(this.trackData.vehicles, res.vehicles ).forEach(d=>{
-        this.hubService.vehicleChanged$.emit({
-          operation: 'UPDATE',
-          table: '',
-          data: d,
-          })
-      })
+	    res.vehicles.forEach(d=>{
+		    this.hubService.vehicleChanged$.emit({
+			    operation: 'UPDATE',
+			    table: '',
+			    data: d,
+		    })
+	    })
       //segmentDisabled
       this.added(this.trackData.segmentDisabled, res.segmentDisabled).forEach(d=>{
         this.hubService.segmentDisabledChanged$.emit({operation: 'INSERT', table: '', data: d})
