@@ -532,11 +532,84 @@ namespace OMSWeb.Repositories
         {
             string WhereConditions = string.Empty;
             if (string.IsNullOrWhiteSpace(condition) == false) WhereConditions = $" WHERE {condition}";
+            
+            string MessageType = "";
+            try
+            {
+                MessageType = 
+                    String.Join(", ", 
+                        _systemSvc.GetClientSettings().WarningMessageType
+                            .Select(c => (int)c)
+                    );
+            }
+            catch (Exception e)
+            {
+                MessageType = ((int)DisplayType.LogicalId).ToString();
+            }
 
             string sql = $@"
                 SELECT count(*) FROM (
                         SELECT 
-                            * 
+                            *,
+                            o.logical_id as command_id,
+	                        REGEXP_REPLACE(
+	                            case
+	    	                        WHEN ALT.location LIKE '%s%' then
+		    	                        STRING_AGG(
+		    		                        case 
+		    			                        when '{MessageType}' like '%2%' then st.id::varchar || ', '
+		    			                        else ''
+		    		                        end ||
+		    		                        case
+		    			                        when '{MessageType}' like '%3%' then st.logical_id  || ', '
+		    			                        else ''
+		    		                        end ||
+		    		                        case
+		    			                        when '{MessageType}' like '%4%' and st.c_alias is not null then st.c_alias || ', '
+		    			                        else ''
+		    		                        end,
+		    		                        ''
+		    	                        )
+		 	                        WHEN ALT.location LIKE '%b%' then
+		    	                        STRING_AGG(
+		    		                        case 
+		    			                        when '{MessageType}' like '%2%' then bf.id::varchar || ', '
+		    			                        else ''
+		    		                        end ||
+		    		                        case
+		    			                        when '{MessageType}' like '%3%' then bf.logical_id  || ', '
+		    			                        else ''
+		    		                        end ||
+		    		                        case
+		    			                        when '{MessageType}' like '%4%' and bf.c_alias is not null then bf.c_alias || ', '
+		    			                        else ''
+		    		                        end,
+		    		                        ''
+		    	                        )
+	    	                        WHEN ALT.location LIKE '%p%' then
+		    	                        STRING_AGG(
+		    		                        case 
+		    			                        when '{MessageType}' like '%2%' then p.id::varchar || ', '
+		    			                        else ''
+		    		                        end ||
+		    		                        case
+		    			                        when '{MessageType}' like '%3%' then p.logical_id  || ', '
+		    			                        else ''
+		    		                        end,
+		    		                        ''
+		    	                        )
+	                            end,
+                            ', $', '', 'g') as location, 
+                            CASE 
+                                WHEN alt.message ~ '(vid:|vid |vid=|vhl |vehicle |vehicle_id-)\d+' 
+                                THEN  (
+		                                select v.logical_id
+		        	                        from vehicles v 
+		        	                        where v.id = (SELECT (regexp_matches(alt.message, '(vid:|vid |vid=|vhl |vehicle |vehicle_id-)(\d+)', 'g'))[2]::int
+		                                LIMIT 1)
+			                          ) 
+                                ELSE NULL
+                            END AS vehicle
                         FROM alerts AS ALT
                         LEFT JOIN orders o ON ALT.order_id = o.id
                         LEFT JOIN stations st on concat('s', cast(st.id as varchar)) = ALT.location AND ALT.location LIKE '%s%'
