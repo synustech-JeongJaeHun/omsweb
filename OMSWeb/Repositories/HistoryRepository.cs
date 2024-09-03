@@ -550,7 +550,7 @@ namespace OMSWeb.Repositories
             string sql = $@"
                 SELECT count(*) FROM (
                         SELECT 
-                            *,
+                            ALT.id, ALT.time, ALT.level, ALT.tag, ALT.message, ALT.ack_time, ALT.ack_by,
                             o.logical_id as command_id,
 	                        REGEXP_REPLACE(
 	                            case
