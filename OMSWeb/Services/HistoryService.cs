@@ -311,8 +311,19 @@ namespace OMSWeb.Services
                 if (string.Compare(sOperator, "notcontains", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} NOT ILIKE '%{value}%' ###";
                 if (string.Compare(sOperator, "startswith", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} ILIKE '{value}%' ###";
                 if (string.Compare(sOperator, "endswith", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} ILIKE '%{value}' ###";
-                if (string.Compare(sOperator, "=", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} = '{value}' ###";
-                if (string.Compare(sOperator, "<>", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} <> '{value}' ###";
+
+                
+                if (DateTime.TryParse(value, out DateTime dateTime))
+                {
+                    if (string.Compare(sOperator, "=", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} = '{DateFormatting(value)}' ###";
+                    if (string.Compare(sOperator, "<>", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} <> '{DateFormatting(value)}' ###";
+                    if (string.Compare(sOperator, "=", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} = '{DateFormatting(value)}' ###";
+                    if (string.Compare(sOperator, "<>", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} <> '{DateFormatting(value)}' ###";
+                    if (string.Compare(sOperator, ">", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} > '{DateFormatting(value)}' ###";
+                    if (string.Compare(sOperator, "<", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} < '{DateFormatting(value)}' ###";
+                    if (string.Compare(sOperator, ">=", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} >= '{DateFormatting(value)}' ###";
+                    if (string.Compare(sOperator, "<=", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} <= '{DateFormatting(value)}' ###";
+                }
             }
             else if (jType == JTokenType.Integer) // value is number
             {
@@ -468,5 +479,9 @@ namespace OMSWeb.Services
             return s;
         }
         
+        public string DateFormatting(string date)
+        {
+            return Convert.ToDateTime(date).ToString("yyyy-MM-dd HH:mm:ss zzz");
+        }
     }
 }
