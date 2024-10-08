@@ -317,12 +317,15 @@ namespace OMSWeb.Services
                 {
                     if (string.Compare(sOperator, "=", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} = '{DateFormatting(value)}' ###";
                     if (string.Compare(sOperator, "<>", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} <> '{DateFormatting(value)}' ###";
-                    if (string.Compare(sOperator, "=", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} = '{DateFormatting(value)}' ###";
-                    if (string.Compare(sOperator, "<>", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} <> '{DateFormatting(value)}' ###";
                     if (string.Compare(sOperator, ">", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} > '{DateFormatting(value)}' ###";
                     if (string.Compare(sOperator, "<", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} < '{DateFormatting(value)}' ###";
                     if (string.Compare(sOperator, ">=", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} >= '{DateFormatting(value)}' ###";
                     if (string.Compare(sOperator, "<=", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} <= '{DateFormatting(value)}' ###";
+                }
+                else
+                {
+                    if (string.Compare(sOperator, "=", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} = '{value}' ###";
+                    if (string.Compare(sOperator, "<>", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} <> '{value}' ###";
                 }
             }
             else if (jType == JTokenType.Integer) // value is number
