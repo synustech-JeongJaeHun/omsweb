@@ -45,9 +45,9 @@ export class ProfileDialogComponent implements OnInit {
   private passwordCompareValidator(
     ac: AbstractControl
   ): { [key: string]: boolean } {
-    const password = ac.get('password').value;
+    const newPassword = ac.get('newPassword').value;
     const confirm = ac.get('passwordConfirm').value;
-    if (password !== confirm) {
+    if (newPassword !== confirm) {
       ac.get('passwordConfirm').setErrors({ missMatch: true });
       return { missMatch: true };
     }
@@ -61,11 +61,11 @@ export class ProfileDialogComponent implements OnInit {
         firstName: new FormControl(this._user.firstName, [Validators.required]),
         lastName: new FormControl(this._user.lastName, [Validators.required]),
         email: new FormControl(this._user.email, [Validators.email]),
-        password: new FormControl('', [
+        newPassword: new FormControl(null, [
           // Validators.required,
           Validators.minLength(4),
         ]),
-        passwordConfirm: new FormControl('', [
+        passwordConfirm: new FormControl(null, [
           // Validators.required,
           Validators.minLength(4),
         ]),

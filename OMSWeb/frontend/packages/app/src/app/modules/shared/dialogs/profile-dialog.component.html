@@ -40,19 +40,19 @@
         </mat-form-field>
         <mat-form-field appearance="outline">
           <mat-label>{{ "names.newPassword" | translate }}</mat-label>
-          <input type="password" matInput formControlName="password" />
-          <mat-error *ngIf="f.password.errors">
-            <mat-error *ngIf="f.password.errors.required">{{
+          <input type="password" matInput formControlName="newPassword" placeholder="••••"/>
+          <mat-error *ngIf="f.newPassword.errors">
+            <mat-error *ngIf="f.newPassword.errors.required">{{
               "messages.required" | translate: { field: "Password" }
               }}</mat-error>
-            <mat-error *ngIf="f.password.errors.minlength">{{
+            <mat-error *ngIf="f.newPassword.errors.minlength">{{
               "messages.minLength" | translate: { minLength: 4 }
               }}</mat-error>
           </mat-error>
         </mat-form-field>
         <mat-form-field appearance="outline">
           <mat-label>{{ "names.passwordConfirm" | translate }}</mat-label>
-          <input type="password" matInput formControlName="passwordConfirm" />
+          <input type="password" matInput formControlName="passwordConfirm" placeholder="••••"/>
           <mat-error *ngIf="f.passwordConfirm.errors">
             <mat-error *ngIf="f.passwordConfirm.errors.required">{{
               "messages.required" | translate: { field: "Confirm Password" }
