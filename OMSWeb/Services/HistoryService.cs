@@ -216,8 +216,19 @@ namespace OMSWeb.Services
                     {
                         string selector = token[0].TryString();
                         string sOperator = token[1].TryString();
-                        string value = token[2].TryString();
-                        JTokenType jType = token[2].Type;
+                        
+                        string value = "";
+                        JTokenType jType = JTokenType.Null;
+
+                        try
+                        {
+                            value = token[2].TryString();
+                            jType = token[2].Type;
+                        }
+                        catch (ArgumentOutOfRangeException e)
+                        {
+                            
+                        }
 
                         conditions = BuildConditions(tableName, selector, sOperator, value, jType);
                     }
@@ -230,8 +241,18 @@ namespace OMSWeb.Services
                         {
                             string selector = child[0].TryString();
                             string sOperator = child[1].TryString();
-                            string value = child[2].TryString();
-                            JTokenType jType = child[2].Type;
+                            string value = "";
+                            JTokenType jType = JTokenType.Null;
+
+                            try
+                            {
+                                value = child[2].TryString();
+                                jType = child[2].Type;
+                            }
+                            catch (ArgumentOutOfRangeException e)
+                            {
+                            
+                            }
 
                             conditions += BuildConditions(tableName, selector, sOperator, value, jType);
                         }
@@ -273,6 +294,11 @@ namespace OMSWeb.Services
                     {
                         count++;
                     }
+                    else if (v.Type == JTokenType.String &&
+                             string.Compare("or", v.TryString(), StringComparison.CurrentCultureIgnoreCase) == 0)
+                    {
+                        count++;
+                    }
                     else if (v.Type == JTokenType.String && string.Compare("and", v.TryString(), StringComparison.CurrentCultureIgnoreCase) != 0)
                     {
                         count = 1;
@@ -295,8 +321,8 @@ namespace OMSWeb.Services
                 !string.IsNullOrWhiteSpace(sOperator) && jType == JTokenType.Null) // value is Null
             {
                 selector = TryORM(tableName, sOperator, selector);
-                if (string.Compare(sOperator, "=", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} is Null";
-                if (string.Compare(sOperator, "<>", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} is Not Null";
+                if (string.Compare(sOperator, "=", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} is Null ###";
+                if (string.Compare(sOperator, "<>", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} is Not Null ###";
                 return conditions;
             }
 
