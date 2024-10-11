@@ -212,69 +212,61 @@ namespace OMSWeb.Services
                 }
                 else if (count == 1)
                 {
-                    if (token.Type == JTokenType.Array)
-                    {
-                        string selector = token[0].TryString();
-                        string sOperator = token[1].TryString();
-                        
-                        string value = "";
-                        JTokenType jType = JTokenType.Null;
-
-                        try
-                        {
-                            value = token[2].TryString();
-                            jType = token[2].Type;
-                        }
-                        catch (ArgumentOutOfRangeException e)
-                        {
-                            
-                        }
-
-                        conditions = BuildConditions(tableName, selector, sOperator, value, jType);
-                    }
+                    conditions = GetBuildConditions(tableName, token);
                 }
                 else
                 {
                     foreach (var child in token.Children())
                     {
-                        if (child.Type == JTokenType.Array)
+                        if (CountOfConditions(child) == 3)
                         {
-                            string selector = child[0].TryString();
-                            string sOperator = child[1].TryString();
-                            string value = "";
-                            JTokenType jType = JTokenType.Null;
-
-                            try
+                            foreach (var c in child.Children())
                             {
-                                value = child[2].TryString();
-                                jType = child[2].Type;
+                                conditions += GetBuildConditions(tableName, c);
                             }
-                            catch (ArgumentOutOfRangeException e)
-                            {
-                            
-                            }
-
-                            conditions += BuildConditions(tableName, selector, sOperator, value, jType);
+                        }
+                        else
+                        {
+                            conditions += GetBuildConditions(tableName, child);
                         }
                     }
-                }
+                } 
             }
             catch (Exception e)
             {
 
             }
 
-            // build conditions 
-            string[] ar = conditions.Split("###");
-            conditions = string.Empty;
+            return conditions;
+        }
 
-            for (int i = 0; i < ar.Length; i++)
+        private string GetBuildConditions(string tableName, JToken token)
+        {
+            string conditions = string.Empty;
+            if (token.Type == JTokenType.Array)
             {
-                if (string.IsNullOrWhiteSpace(ar[i]) == false)
+                string selector = token[0].TryString();
+                string sOperator = token[1].TryString();
+                        
+                string value = "";
+                JTokenType jType = JTokenType.Null;
+
+                try
                 {
-                    if (i != 0) conditions += " and ";
-                    conditions += ar[i];
+                    value = token[2].TryString();
+                    jType = token[2].Type;
+                    if (string.IsNullOrWhiteSpace(value)) jType = JTokenType.Null;
                 }
+                catch (ArgumentOutOfRangeException e)
+                {
+                            
+                }
+                
+                conditions = BuildConditions(tableName, selector, sOperator, value, jType);
+            }
+            else if (token.Type == JTokenType.String && !string.IsNullOrWhiteSpace(token.ToString()))
+            {
+                conditions = token+" ";
             }
 
             return conditions;
@@ -321,8 +313,8 @@ namespace OMSWeb.Services
                 !string.IsNullOrWhiteSpace(sOperator) && jType == JTokenType.Null) // value is Null
             {
                 selector = TryORM(tableName, sOperator, selector);
-                if (string.Compare(sOperator, "=", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} is Null ###";
-                if (string.Compare(sOperator, "<>", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} is Not Null ###";
+                if (string.Compare(sOperator, "=", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} is Null ";
+                if (string.Compare(sOperator, "<>", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} is Not Null ";
                 return conditions;
             }
 
@@ -333,36 +325,36 @@ namespace OMSWeb.Services
             if (jType == JTokenType.String)    // value is string
             {
                 selector = TryORM(tableName, sOperator, selector);
-                if (string.Compare(sOperator, "contains", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} ILIKE '%{value}%' ###";
-                if (string.Compare(sOperator, "notcontains", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} NOT ILIKE '%{value}%' ###";
-                if (string.Compare(sOperator, "startswith", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} ILIKE '{value}%' ###";
-                if (string.Compare(sOperator, "endswith", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} ILIKE '%{value}' ###";
+                if (string.Compare(sOperator, "contains", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} ILIKE '%{value}%' ";
+                if (string.Compare(sOperator, "notcontains", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} NOT ILIKE '%{value}%' ";
+                if (string.Compare(sOperator, "startswith", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} ILIKE '{value}%' ";
+                if (string.Compare(sOperator, "endswith", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} ILIKE '%{value}' ";
 
                 
                 if (DateTime.TryParse(value, out DateTime dateTime))
                 {
-                    if (string.Compare(sOperator, "=", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} = '{DateFormatting(value)}' ###";
-                    if (string.Compare(sOperator, "<>", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} <> '{DateFormatting(value)}' ###";
-                    if (string.Compare(sOperator, ">", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} > '{DateFormatting(value)}' ###";
-                    if (string.Compare(sOperator, "<", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} < '{DateFormatting(value)}' ###";
-                    if (string.Compare(sOperator, ">=", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} >= '{DateFormatting(value)}' ###";
-                    if (string.Compare(sOperator, "<=", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} <= '{DateFormatting(value)}' ###";
+                    if (string.Compare(sOperator, "=", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} = '{DateFormatting(value)}' ";
+                    if (string.Compare(sOperator, "<>", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} <> '{DateFormatting(value)}' ";
+                    if (string.Compare(sOperator, ">", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} > '{DateFormatting(value)}' ";
+                    if (string.Compare(sOperator, "<", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} < '{DateFormatting(value)}' ";
+                    if (string.Compare(sOperator, ">=", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} >= '{DateFormatting(value)}' ";
+                    if (string.Compare(sOperator, "<=", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} <= '{DateFormatting(value)}' ";
                 }
                 else
                 {
-                    if (string.Compare(sOperator, "=", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} = '{value}' ###";
-                    if (string.Compare(sOperator, "<>", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} <> '{value}' ###";
+                    if (string.Compare(sOperator, "=", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} = '{value}' ";
+                    if (string.Compare(sOperator, "<>", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} <> '{value}' ";
                 }
             }
             else if (jType == JTokenType.Integer) // value is number
             {
                 selector = TryORM(tableName, sOperator, selector);
-                if (string.Compare(sOperator, "=", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} = {value} ###";
-                if (string.Compare(sOperator, "<>", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} <> {value} ###";
-                if (string.Compare(sOperator, ">", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} > {value} ###";
-                if (string.Compare(sOperator, "<", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} < {value} ###";
-                if (string.Compare(sOperator, ">=", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} >= {value} ###";
-                if (string.Compare(sOperator, "<=", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} <= {value} ###";
+                if (string.Compare(sOperator, "=", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} = {value} ";
+                if (string.Compare(sOperator, "<>", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} <> {value} ";
+                if (string.Compare(sOperator, ">", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} > {value} ";
+                if (string.Compare(sOperator, "<", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} < {value} ";
+                if (string.Compare(sOperator, ">=", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} >= {value} ";
+                if (string.Compare(sOperator, "<=", StringComparison.CurrentCultureIgnoreCase) == 0) conditions += $"{selector} <= {value} ";
             }
             
             return conditions;
