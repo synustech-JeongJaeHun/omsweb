@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core'
 import { NIL, v4 as uuid4 } from 'uuid'
 
 import { UsersService } from '@oms/services/users.service'
-import { IRole, ISimpleUser, IUserForm } from '../../../models/user.model'
+import {IRole, ISimpleUser, IUserForm} from '../../../models/user.model'
 import { BehaviorSubject, combineLatest, forkJoin, Observable } from 'rxjs'
 import {
 	MatDialog,
@@ -33,6 +33,7 @@ export class UserManagementComponent implements OnInit, OnDestroy {
 
 	roles$: Observable<IRole[]>
 	selectedIds: string[] = []
+	private userId: string;
 
 	get canRemove(): boolean {
 		return this.selectedIds.length > 0
@@ -49,6 +50,7 @@ export class UserManagementComponent implements OnInit, OnDestroy {
 		]).pipe(map(([users, ids]) => users.filter((u) => !ids.includes(u.id))))
 
 		this.roles$ = this.userSvc.roles()
+		this.userId = this.userSvc.userInfo()?.id ?? NIL
 	}
 	ngOnDestroy(): void {
 		this._roleDlg &&
@@ -182,7 +184,7 @@ export class UserManagementComponent implements OnInit, OnDestroy {
 		}
 	}
 	onSelectionChanged(e) {
-		this.selectedIds = this.selectedIds.filter((x) => x !== NIL)
+		this.selectedIds = this.selectedIds.filter((x) => (x !== NIL && x !== this.userId))
 	}
 	onSave(grid) {
 		//console.log('### save : remove ids >>>', this._removeIds);

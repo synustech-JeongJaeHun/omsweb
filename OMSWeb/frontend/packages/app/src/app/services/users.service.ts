@@ -4,10 +4,10 @@ import DataSource from 'devextreme/data/data_source';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 import { Observable } from 'rxjs';
 import {
-  IPermission,
-  IRole,
-  ISimpleUser,
-  IUserForm,
+	IPermission,
+	IRole, ISessionUser,
+	ISimpleUser,
+	IUserForm,
 } from '../models/user.model';
 
 @Injectable({
@@ -63,4 +63,8 @@ export class UsersService {
   deleteRoles(ids: number[]): Observable<void> {
     return this.http.post<void>(`${this.baseUrl}/roles/remove`, ids);
   }
+	
+	userInfo(): ISessionUser{
+		return JSON.parse(sessionStorage.getItem('user')) as ISessionUser
+	}
 }
