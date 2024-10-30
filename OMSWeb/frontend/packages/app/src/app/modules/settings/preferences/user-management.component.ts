@@ -212,4 +212,11 @@ export class UserManagementComponent implements OnInit, OnDestroy {
 		this._changedItems = []
 		this.removeIds$.next([])
 	}
+
+	onEditingStart(event: any) {
+		if (event.column.dataField==='roles' && event.data.id === NIL) {
+			event.cancel = true
+		}
+	}
 }
+``
