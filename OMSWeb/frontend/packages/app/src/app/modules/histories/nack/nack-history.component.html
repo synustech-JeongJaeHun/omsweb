@@ -42,7 +42,10 @@
 									[showBorders]="true"
 									[hoverStateEnabled]="true"
 									allowColumnResizing="true"
-									[stateStoring]="stateStoring">
+									[stateStoring]="stateStoring"
+									(onExporting)="onExporting($event)"
+									(onExported)="onExported()"
+        >
 			<dxo-export [enabled]="true" [fileName]="fileName"></dxo-export>
 			<dxo-paging [pageSize]="50"></dxo-paging>
 			<dxo-pager [showPageSizeSelector]="true"
@@ -139,4 +142,7 @@
 									[caption]="getDisplayTableLabel('nacks_param') | translate"></dxi-column>
 		</dx-data-grid>
 	</div>
+</div>
+<div *ngIf="isLoading" class="loading-overlay">
+    <dx-load-indicator [visible]="true"></dx-load-indicator>
 </div>

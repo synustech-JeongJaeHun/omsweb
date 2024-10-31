@@ -45,7 +45,10 @@
                   id="data-grid"
                   (onContextMenuPreparing)="onContextMenuPreparing($event)"
                   (onCellClick)="cellSelected($event)"
-                  [stateStoring]="stateStoring">
+                  [stateStoring]="stateStoring"
+                  (onExporting)="onExporting($event)"
+                  (onExported)="onExported()"
+        >
       <dxo-selection
         selectAllMode="allPages"
         [allowSelectAll]="false"
@@ -284,4 +287,7 @@
 			</div>
 		</dx-data-grid>
 	</div>
+</div>
+<div *ngIf="isLoading" class="loading-overlay">
+    <dx-load-indicator [visible]="true"></dx-load-indicator>
 </div>

@@ -16,7 +16,10 @@
   </div>
   <div id="grid-container">
     <dx-data-grid [dataSource]="dataSource" [columnAutoWidth]="true" [remoteOperations]="true" [height]="gridHeight"
-                  allowColumnResizing="true" [width]="gridWidth" [showBorders]="true" [hoverStateEnabled]="true">
+                  allowColumnResizing="true" [width]="gridWidth" [showBorders]="true" [hoverStateEnabled]="true"
+                  (onExporting)="onExporting($event)"
+                  (onExported)="onExported()"
+    >
       <dxo-export [enabled]="true" [fileName]="fileName"></dxo-export>
       <dxo-paging [pageSize]="50"></dxo-paging>
       <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[50, 100, 200]" [showInfo]="true" visible="true">
@@ -61,4 +64,7 @@
         [format]="dateTimeFormat"></dxi-column>
     </dx-data-grid>
   </div>
+</div>
+<div *ngIf="isLoading" class="loading-overlay">
+    <dx-load-indicator [visible]="true"></dx-load-indicator>
 </div>
