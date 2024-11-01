@@ -28,8 +28,14 @@ namespace OMSWeb.Controllers
             }
             catch (Exception e)
             {
-                Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"Exception Auth={_userSvc._step}: {e.StackTrace}, {e.Message}");
+                Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug,
+                    $"Exception Auth={_userSvc._step}: {e.StackTrace}, {e.Message}");
                 return null;
+            }
+            finally
+            {
+                Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug,
+                    $"login={form.UserId}");
             }
         }
 
