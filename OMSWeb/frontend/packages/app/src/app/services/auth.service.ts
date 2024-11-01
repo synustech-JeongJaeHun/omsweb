@@ -208,4 +208,12 @@ export class AuthService {
       }, delay);
     }
   }
+	
+	public updateCurrentUser(form: IProfileForm){
+		this._currentUser.firstName = form.firstName;
+		this._currentUser.lastName = form.lastName;
+		this._currentUser.email = form.email;
+
+		this.certUpdated$.next(this._currentUser);
+	}
 }

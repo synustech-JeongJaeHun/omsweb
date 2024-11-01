@@ -219,4 +219,3 @@ export class UserManagementComponent implements OnInit, OnDestroy {
 		}
 	}
 }
-``

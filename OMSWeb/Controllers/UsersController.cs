@@ -93,7 +93,7 @@ namespace OMSWeb.Controllers
         }
 
         [HttpPost("batch/save")]
-        public IActionResult SaveAccounts([FromBody] AccountFormDto[] accounts)
+        public ActionResult<AccountFormDto> SaveAccounts([FromBody] AccountFormDto[] accounts)
         {
             var updateAccounts = accounts.Where(u => !u.IsNew.HasValue || !u.IsNew.Value).ToList();
             var addAccounts = accounts.Where(u => u.IsNew.HasValue && u.IsNew.Value).ToList();
@@ -111,7 +111,7 @@ namespace OMSWeb.Controllers
                 _userSvc.AddUser(accountFormDto);
             }
 
-            return Ok();
+            return Ok(updateAccounts);
         }
 
         [HttpPost("batch/remove")]
