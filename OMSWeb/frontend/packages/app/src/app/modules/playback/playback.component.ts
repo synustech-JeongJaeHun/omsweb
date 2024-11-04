@@ -20,6 +20,7 @@ export class PlaybackComponent implements OnInit, OnDestroy {
 	isLoadFail = false
 
   pageLoaded: boolean = false;
+	
 	get loading() {
 		if (this.isLoadFail) return 'fail'
 		if (this.isFirstTrackReady && this.isFirstSnapshotLoaded) return 'done'
@@ -157,7 +158,7 @@ export class PlaybackComponent implements OnInit, OnDestroy {
     if (timeRanges.length === 0) return
 
     // get last 20 item for out of memory error
-    const [firstRange, ...ranges] = timeRanges.slice(-20)
+    const [firstRange, ...ranges] = timeRanges.slice(this.playbackPlayService.maxFrameSize)
     const events = await this.playbackService
       .getHistoryEvents(firstRange[0], firstRange[1])
       .toPromise()
@@ -238,7 +239,7 @@ export class PlaybackComponent implements OnInit, OnDestroy {
           )
 
           // get last 20 item for out of memory error
-          const [firstRange, ...ranges] = timeRanges.slice(-20)
+          const [firstRange, ...ranges] = timeRanges.slice(this.playbackPlayService.maxFrameSize)
 
           const eventsPromise = this.playbackService
             .getHistoryEvents(firstRange[0], firstRange[1])
