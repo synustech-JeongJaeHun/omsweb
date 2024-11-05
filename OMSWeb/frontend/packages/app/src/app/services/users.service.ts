@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import DataSource from 'devextreme/data/data_source';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
-import {EMPTY, Observable} from 'rxjs';
+import {EMPTY, Observable, of} from 'rxjs';
 import {
 	IPermission,
 	IRole, ISessionUser,
@@ -60,7 +60,7 @@ export class UsersService {
 					this.auth.updateCurrentUser(current)
 				}
 	    })
-	  return EMPTY
+	  return of(undefined)
   }
   deleteAccounts(ids: string[]): Observable<void> {
     return this.http.post<void>(`${this.baseUrl}/batch/remove`, ids);
