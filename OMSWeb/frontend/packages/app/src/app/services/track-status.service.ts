@@ -38,13 +38,15 @@ export class TrackStatusService {
 			    data: d,
 		    })
 	    })
+	    
       //segmentDisabled
-      this.added(this.trackData.segmentDisabled, res.segmentDisabled).forEach(d=>{
+	    this.removedOnSegment(this.trackData.segmentDisabled, res.segmentDisabled).forEach(d=>{
+		    this.hubService.segmentDisabledChanged$.emit({operation: 'DELETE', table: '', id: d.id})
+	    })
+      this.addedOnSegment(this.trackData.segmentDisabled, res.segmentDisabled).forEach(d=>{
         this.hubService.segmentDisabledChanged$.emit({operation: 'INSERT', table: '', data: d})
       })
-      this.removed(this.trackData.segmentDisabled, res.segmentDisabled).forEach(d=>{
-        this.hubService.segmentDisabledChanged$.emit({operation: 'DELETE', table: '', id: d.id})
-      })
+      
       //buffers
       this.different(this.trackData.buffers, res.buffers).forEach(d=>{
         this.hubService.bufferChanged$.emit({
@@ -537,6 +539,16 @@ export class TrackStatusService {
     return result
   }
 
+	private addedOnSegment(prev:any[], current:any[]):any{
+		let result = []
+		current.forEach(c => {
+			if (!prev.some(p => p.segmentId === c.segmentId)) {
+				result.push(c);
+			}
+		});
+		return result
+	}
+
   private removed(prev:any[], current:any[]):any{
     let result = []
     prev.forEach(p => {
@@ -556,4 +568,14 @@ export class TrackStatusService {
     });
     return result
   }
+
+	private removedOnSegment(prev:any[], current:any[]):any{
+		let result = []
+		prev.forEach(p => {
+			if (!current.some(c => c.segmentId === p.segmentId)) {
+				result.push(p);
+			}
+		});
+		return result
+	}
 }
