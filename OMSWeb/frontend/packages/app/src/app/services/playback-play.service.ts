@@ -100,7 +100,7 @@ export class PlaybackPlayService {
 	public readonly playSpeeds = [0.1, 0.5, 1, 2, 5]
 
 	// get last item size for out of memory error default -20
-	maxFrameSize = -50
+	maxFrameSize = 0
 
 	constructor(private playbackService: PlaybackService) {
 		this.clockChanged.subscribe((event) => this.reduceCurrentState(event))
