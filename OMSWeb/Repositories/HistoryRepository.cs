@@ -22,6 +22,12 @@ namespace OMSWeb.Repositories
         {
             string WhereConditions = string.Empty;
             if (string.IsNullOrWhiteSpace(condition) == false) WhereConditions = $" WHERE {condition}";
+            
+            string prefix = "";
+            if (_systemSvc.GetClientSettings().VHLAlias!=null)
+            {
+                prefix = _systemSvc.GetClientSettings().VHLAlias;
+            }
             /*
             var sql = $@"
                 SELECT 
@@ -32,6 +38,8 @@ namespace OMSWeb.Repositories
                     {WhereConditions}
                     ";*/
 
+
+            int result = 0;
             string sql = $@"
                 SELECT count(*) FROM (
                                    SELECT OD.id, 
@@ -62,17 +70,28 @@ namespace OMSWeb.Repositories
                                 WHEN OD.location_pickup IS NULL AND OD.location_dropoff IS NOT NULL THEN VR.logical_id
 		                        ELSE OD.location_pickup
 	                        EnD AS location_pickup,
+                            CASE
+			                    WHEN OD.location_pickup LIKE '%s%' THEN	(SELECT c_alias FROM stations WHERE concat('s', cast(id as varchar)) = OD.location_pickup)
+			                    WHEN OD.location_pickup LIKE '%b%' THEN	(SELECT c_alias FROM buffers WHERE concat('b', cast(id as varchar)) = OD.location_pickup)
+		                        WHEN OD.location_pickup LIKE '%v%' THEN	(SELECT logical_Id FROM vehicles WHERE concat('v', cast(id as varchar)) = OD.location_pickup)
+                                WHEN OD.location_pickup IS NULL AND OD.location_dropoff IS NOT NULL THEN VR.logical_id
+			                    ELSE OD.location_pickup
+		                    EnD AS location_pickup_alias,
 	                        CASE
 		                        WHEN OD.location_dropoff LIKE '%s%' THEN (SELECT logical_Id FROM stations WHERE concat('s', cast(id as varchar)) = OD.location_dropoff)
 		                        WHEN OD.location_dropoff LIKE '%b%' THEN (SELECT logical_Id FROM buffers WHERE concat('b', cast(id as varchar)) = OD.location_dropoff)
 		                        ELSE OD.location_dropoff
 	                        EnD AS location_dropoff,
+                            CASE
+			                    WHEN OD.location_dropoff LIKE '%s%' THEN	(SELECT c_alias  FROM stations WHERE concat('s', cast(id as varchar)) = OD.location_dropoff)
+			                    WHEN OD.location_dropoff LIKE '%b%' THEN	(SELECT c_alias FROM buffers WHERE concat('b', cast(id as varchar)) = OD.location_dropoff)
+			                    ELSE OD.location_dropoff
+		                    EnD AS location_dropoff_alias,
 	                        CASE
 		                        WHEN OD.location_move LIKE '%s%' THEN (SELECT logical_Id FROM stations WHERE concat('s', cast(id as varchar)) = OD.location_move)
 		                        WHEN OD.location_move LIKE '%b%' THEN (SELECT logical_Id FROM buffers WHERE concat('b', cast(id as varchar)) = OD.location_move)
 		                        ELSE OD.location_move
 	                        EnD AS location_move,
-
                             OD.priority, 
                             VR.logical_id As vehicle_id, 
                             OD.carrier_label As carrier_label, OD.time_created as time_created, OD.time_assigned as time_assigned, 
@@ -80,13 +99,56 @@ namespace OMSWeb.Repositories
                             OD.time_unload_started, OD.time_unload_completed, OD.time_completed as time_completed, OD.time_aborted as time_aborted, 
                             OD.time_failed as time_failed, 
                             CASE
-                                WHEN OD.time_created IS NOT NULL AND OD.time_completed IS NOT NULL THEN extract('epoch' from OD.time_completed - OD.time_created) 
-                                WHEN OD.time_created IS NOT NULL AND OD.time_aborted IS NOT NULL THEN extract('epoch' from OD.time_aborted - OD.time_created) 
-                                WHEN OD.time_created IS NOT NULL AND OD.time_failed IS NOT NULL THEN extract('epoch' from OD.time_failed - OD.time_created) 
-                                ELSE 0
+                                WHEN OD.time_created IS NOT NULL AND OD.time_completed IS NOT NULL 
+                                    THEN extract('epoch' from date_trunc('second', OD.time_completed) - date_trunc('second', OD.time_created)) * interval '1 sec' 
+                                WHEN OD.time_created IS NOT NULL AND OD.time_aborted IS NOT NULL 
+                                    THEN extract('epoch' from date_trunc('second', OD.time_aborted) - date_trunc('second', OD.time_created)) * interval '1 sec'
+                                WHEN OD.time_created IS NOT NULL AND OD.time_failed IS NOT NULL 
+                                    THEN extract('epoch' from date_trunc('second', OD.time_failed) - date_trunc('second', OD.time_created)) * interval '1 sec'
+                                ELSE 0 * interval '1 sec'
                             END As age,
-                            OD.distance_pickup, OD.distance_deliver AS distance_dropoff, OD.distance_move, OD.assignment_type, OD.assignment_details, 
-                            OD.load_retry_cnt, OD.unload_retry_cnt as unload_retry_cnt, OD.err_result_code as result_code
+                            OD.distance_pickup, OD.distance_deliver AS distance_dropoff, OD.distance_move, OD.assignment_type, OD.assignment_details,
+                            OD.load_retry_cnt, OD.unload_retry_cnt as unload_retry_cnt, 
+                            CASE 
+                                WHEN OD.err_result_code LIKE '%SourceInterlock%' THEN 'Source PIO Timeout'
+                                WHEN OD.err_result_code LIKE '%DestInterlock%' THEN 'Dest PIO Timeout'
+                                ELSE OD.err_result_code
+                            END as result_code,
+                            (FLOOR(
+                            (
+		                        select vhm.max_dist-vhm.min_dist from
+                                    (select 
+	                                    CASE WHEN max(vh.distance_total) < 0 THEN (max(vh.distance_total)/1000+4294967)
+	    	                            ELSE max(vh.distance_total)/1000
+	    	                            END AS max_dist,
+	    	                            CASE WHEN min(vh.distance_total) < 0 THEN (min(vh.distance_total)/1000+4294967)
+	    	                            ELSE min(vh.distance_total)/1000
+	    	                            END AS min_dist
+                                    from vehicle_history vh 
+                                    where vh.history_source_id  = OD.vehicle_id
+                                    and history_change_time >= OD.time_assigned
+		                            and history_change_time <= OD.time_load_started ) as vhm
+	                        )
+                            ))
+                             as from_distance,
+                            (FLOOR(
+                            (
+		                        select vhm.max_dist-vhm.min_dist from
+                                    (select 
+	                                    CASE WHEN max(vh.distance_total) < 0 THEN (max(vh.distance_total)/1000+4294967)
+	    	                            ELSE max(vh.distance_total)/1000
+	    	                            END AS max_dist,
+	    	                            CASE WHEN min(vh.distance_total) < 0 THEN (min(vh.distance_total)/1000+4294967)
+	    	                            ELSE min(vh.distance_total)/1000
+	    	                            END AS min_dist
+                                    from vehicle_history vh 
+                                    where vh.history_source_id  = OD.vehicle_id
+                                    and history_change_time >= OD.time_load_completed
+		                            and history_change_time <= OD.time_unload_started ) as vhm
+	                        )
+                            ))
+                             as to_distance,
+                            (@prefix || VS.physical_id) as vehicle_alias
                         FROM order_history AS OD
                         INNER JOIN (
                             SELECT history_source_id AS order_id, max(history_change_time) AS last_updated
@@ -98,18 +160,17 @@ namespace OMSWeb.Repositories
                         ON OD.history_source_id = LAST_OD.order_id AND OD.history_change_time = LAST_OD.last_updated
                         LEFT OUTER JOIN vehicle_reg AS VR
                             ON OD.vehicle_id = VR.id
+                        LEFT JOIN vehicles AS VS
+                            ON OD.vehicle_id = VS.id
 
                 ) OrderHistory
-
                 {WhereConditions}
                     ";
-
-            int result = 0;
             using (var conn = ConnectTrack())
             {
                 try
                 {
-                    result = conn.QueryFirst<int>(sql, new { from, to });
+                    result = conn.QueryFirst<int>(sql, new { from, to, prefix });
                 }
                 catch (Exception e)
                 {
@@ -190,7 +251,6 @@ namespace OMSWeb.Repositories
 		                        WHEN OD.location_move LIKE '%b%' THEN (SELECT logical_Id FROM buffers WHERE concat('b', cast(id as varchar)) = OD.location_move)
 		                        ELSE OD.location_move
 	                        EnD AS location_move,
-
                             OD.priority, 
                             VR.logical_id As vehicle_id, 
                             OD.carrier_label As carrier_label, OD.time_created as time_created, OD.time_assigned as time_assigned, 

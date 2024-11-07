@@ -218,7 +218,7 @@ namespace OMSWeb.Services
                 {
                     foreach (var child in token.Children())
                     {
-                        if (CountOfConditions(child) == 3)
+                        if (CountOfConditions(child) >= 3)
                         {
                             foreach (var c in child.Children())
                             {
