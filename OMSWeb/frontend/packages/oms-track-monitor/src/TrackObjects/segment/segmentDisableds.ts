@@ -46,12 +46,20 @@ function deleteSegmentDisabled(id: SegmentDisabled['id']) {
 	segmentDisabledMapBySegmentId.set(segmentDisabled.segmentId, nextSds)
 
 	// segmentDisableds
-	const index = segmentDisableds.value.indexOf(segmentDisabled)
+	sds.map(s=>{
+		const index = segmentDisableds.value.indexOf(s)
+		segmentDisableds.value.splice(index, 1)
+		segmentDisabledMap.delete(s.id)
+
+		// segments
+		setSegmentDisabledWithMap(s.segmentId)
+	})
+	/*const index = segmentDisableds.value.indexOf(segmentDisabled)
 	segmentDisableds.value.splice(index, 1)
 	segmentDisabledMap.delete(segmentDisabled.id)
 
 	// segments
-	setSegmentDisabledWithMap(segmentDisabled.segmentId)
+	setSegmentDisabledWithMap(segmentDisabled.segmentId)*/
 }
 
 function setSegmentDisabledWithMap(segmentId: Segment['id']) {
