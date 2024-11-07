@@ -13,6 +13,7 @@ import { SettingsDialogComponent } from '../../settings/dialogs/settings-dialog.
 import { AccountUtil } from '../utils/account.util'
 import { PermissionEnums } from '../../../models/enums'
 import {PlaybackPlayService} from "@oms/services/playback-play.service";
+import {SettingsDialogService} from "@oms/root/modules/settings/settings-dialog.service";
 
 @Component({
 	selector: 'oms-gnb-menus',
@@ -36,7 +37,8 @@ export class GnbMenusComponent implements OnInit, OnDestroy {
 		private dialog: MatDialog,
 		private auth: AuthService,
 		private location: Location,
-		private playService: PlaybackPlayService
+		private playService: PlaybackPlayService,
+		private setDialog: SettingsDialogService
 	) {}
 	ngOnDestroy(): void {
 		this.routing$ && this.routing$.unsubscribe()
@@ -69,6 +71,8 @@ export class GnbMenusComponent implements OnInit, OnDestroy {
 			disableClose: true,
 			closeOnNavigation: true,
 		})
+		
+		this.setDialog.setDialogRef(this._dlg)
 	}
 
 	hasPermission(permission: number): boolean {
