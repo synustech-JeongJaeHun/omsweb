@@ -12,8 +12,8 @@ import { AuthService } from '../../../services/auth.service'
 import { SettingsDialogComponent } from '../../settings/dialogs/settings-dialog.component'
 import { AccountUtil } from '../utils/account.util'
 import { PermissionEnums } from '../../../models/enums'
-import {PlaybackPlayService} from "@oms/services/playback-play.service";
-import {SettingsDialogService} from "@oms/root/modules/settings/settings-dialog.service";
+import {PlaybackPlayService} from "../../../services/playback-play.service";
+import {SettingsDialogService} from "../../settings/settings-dialog.service";
 
 @Component({
 	selector: 'oms-gnb-menus',
