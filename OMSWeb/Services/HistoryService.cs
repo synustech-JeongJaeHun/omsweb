@@ -220,10 +220,12 @@ namespace OMSWeb.Services
                     {
                         if (CountOfConditions(child) >= 3)
                         {
+                            conditions += "(";
                             foreach (var c in child.Children())
                             {
                                 conditions += GetBuildConditions(tableName, c);
                             }
+                            conditions += ")";
                         }
                         else
                         {
@@ -288,6 +290,10 @@ namespace OMSWeb.Services
                     }
                     else if (v.Type == JTokenType.String &&
                              string.Compare("or", v.TryString(), StringComparison.CurrentCultureIgnoreCase) == 0)
+                    {
+                        count++;
+                    }
+                    else if (v.Type == JTokenType.String && string.Compare("and", v.TryString(), StringComparison.CurrentCultureIgnoreCase) == 0)
                     {
                         count++;
                     }
