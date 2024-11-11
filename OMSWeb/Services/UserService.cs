@@ -20,6 +20,7 @@ namespace OMSWeb.Services
     private readonly AppSettings _appSettings;
     private readonly HttpContext _context;
     public int _step =0;
+    private readonly object _lock = new object();
 
     public string UserId
     {
@@ -75,7 +76,11 @@ namespace OMSWeb.Services
       if (user == null) //throw new OmsException(ErrorCodes.AuthenticationFailed);  //UserNotExists
         return null;
       _step++;
-      var verified = BCrypt.Net.BCrypt.Verify(password, user.Password);
+      var verified = false;
+      lock (_lock)
+      {
+         verified = BCrypt.Net.BCrypt.Verify(password, user.Password);
+      }
       if (!verified) //throw new OmsException(ErrorCodes.AuthenticationFailed);
         return null;
       _step++;
@@ -185,7 +190,10 @@ namespace OMSWeb.Services
     public int UpdateUserByProfile(ProfileFormDto profileFormDto)
     {
       var user = _repo.GetUserByUserId(profileFormDto.UserId);
-      profileFormDto.Password = BCrypt.Net.BCrypt.HashPassword(profileFormDto.Password);
+      if (string.IsNullOrWhiteSpace(profileFormDto.NewPassword) == false)
+      {
+          profileFormDto.NewPassword = BCrypt.Net.BCrypt.HashPassword(profileFormDto.NewPassword);
+      }
 
       return this._repo.UpdateUser(user.Id, profileFormDto);
     }

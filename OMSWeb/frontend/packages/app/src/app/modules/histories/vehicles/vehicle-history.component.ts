@@ -55,6 +55,19 @@ import { DateUtil } from '../../shared/utils/date.util'
 
 			.filter-area .dx-datebox {
 			}
+
+      .loading-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.3);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 1000;
+      }
 		`,
 	],
 })
@@ -241,4 +254,14 @@ export class VehicleHistoryComponent implements OnInit, OnDestroy {
       (column) => column.name === type,
     )?.i18nLabel
   }
+
+	isLoading = false
+
+	onExporting(event: any) {
+		this.isLoading = true
+	}
+
+	onExported() {
+		this.isLoading = false
+	}
 }

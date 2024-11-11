@@ -23,9 +23,9 @@
     <DefineConstants Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' == 'true'">Windows</DefineConstants>
     <DefineConstants Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))' == 'true'">OSX</DefineConstants>
     <DefineConstants Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' == 'true'">Linux</DefineConstants>
-    <FileVersion>1.0.0.56</FileVersion>
-    <AssemblyVersion>1.0.0.56</AssemblyVersion>
-    <Version>1.0.0.56</Version>
+    <FileVersion>1.0.0.58</FileVersion>
+    <AssemblyVersion>1.0.0.58</AssemblyVersion>
+    <Version>1.0.0.58</Version>
   </PropertyGroup>
 	
 	<!--Swagger 주석사용-->

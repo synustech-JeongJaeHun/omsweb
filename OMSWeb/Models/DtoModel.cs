@@ -21,18 +21,27 @@ namespace OMSWeb.Models
     public string Password { get; set; }
   }
 
-  public class ProfileFormDto : LoginFormDto
+  public class ProfileFormDto
   {
-    [EmailAddress]
+      
+    [Required]
+    public string UserId { get; set; }
+    
+    [Required]
     public string Email { get; set; }
     [Required]
     public string FirstName { get; set; }
-    [Required]
+    
     public string LastName { get; set; }
+    
+    public string NewPassword { get; set; }
   }
 
-  public class AccountFormDto : ProfileFormDto
+  public class AccountFormDto : LoginFormDto
   {
+    public string Email { get; set; }
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
     [Required]
     public string Id { get; set; }
     public bool? IsNew { get; set; }

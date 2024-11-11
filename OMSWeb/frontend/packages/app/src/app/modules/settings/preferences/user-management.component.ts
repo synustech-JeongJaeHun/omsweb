@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core'
 import { NIL, v4 as uuid4 } from 'uuid'
 
 import { UsersService } from '@oms/services/users.service'
-import { IRole, ISimpleUser, IUserForm } from '../../../models/user.model'
+import {IRole, ISimpleUser, IUserForm} from '../../../models/user.model'
 import { BehaviorSubject, combineLatest, forkJoin, Observable } from 'rxjs'
 import {
 	MatDialog,
@@ -14,6 +14,7 @@ import { UserFormDialogComponent } from '../dialogs/user-form-dialog.component'
 import { BulkUserFormDialogComponent } from '../dialogs/bulk-user-from-dialog.component'
 import { map } from 'rxjs/operators'
 import * as _ from 'lodash'
+import {SettingsDialogService} from "@oms/root/modules/settings/settings-dialog.service";
 
 @Component({
 	selector: 'oms-user-management',
@@ -33,6 +34,7 @@ export class UserManagementComponent implements OnInit, OnDestroy {
 
 	roles$: Observable<IRole[]>
 	selectedIds: string[] = []
+	private userId: string;
 
 	get canRemove(): boolean {
 		return this.selectedIds.length > 0
@@ -42,14 +44,17 @@ export class UserManagementComponent implements OnInit, OnDestroy {
 		return this._removeIds.length > 0 || this._changedItems.length > 0
 	}
 
-	constructor(private userSvc: UsersService, private dialog: MatDialog) {
+	constructor(private userSvc: UsersService, private dialog: MatDialog,
+	            private setDialog: SettingsDialogService) {
 		this.dataSource$ = combineLatest([
 			this.userSvc.users(),
 			this.removeIds$,
 		]).pipe(map(([users, ids]) => users.filter((u) => !ids.includes(u.id))))
 
 		this.roles$ = this.userSvc.roles()
+		this.userId = this.userSvc.userInfo()?.id ?? NIL
 	}
+
 	ngOnDestroy(): void {
 		this._roleDlg &&
 			this._roleDlg.getState() === MatDialogState.OPEN &&
@@ -133,8 +138,10 @@ export class UserManagementComponent implements OnInit, OnDestroy {
 		})
 	}
 	onRemoveUsers() {
-		this.removeIds$.next(this.selectedIds)
-		for (let selectedId of this.selectedIds) this._removeIds.push(selectedId)
+		for (let selectedId of this.selectedIds)
+			this._removeIds = Array.from(new Set([...this._removeIds, selectedId]))
+
+		this.removeIds$.next(this._removeIds)
 		const canceled = this._changedItems
 			.filter((u) => u.isNew && this.selectedIds.includes(u.id))
 			.map((u) => u.id)
@@ -182,7 +189,7 @@ export class UserManagementComponent implements OnInit, OnDestroy {
 		}
 	}
 	onSelectionChanged(e) {
-		this.selectedIds = this.selectedIds.filter((x) => x !== NIL)
+		this.selectedIds = this.selectedIds.filter((x) => (x !== NIL && x !== this.userId))
 	}
 	onSave(grid) {
 		//console.log('### save : remove ids >>>', this._removeIds);
@@ -199,15 +206,27 @@ export class UserManagementComponent implements OnInit, OnDestroy {
 					.getDataSource()
 					.items()
 					.forEach((item) => (item.isNew = false))
-
+				
 				this._removeIds = []
 				this._changedItems = []
+				
 				grid.instance.refresh()
+				
+				setTimeout(()=>this.setDialog.closeDialog(), 500)
+				
 			})
+		
 	}
 	onRevert(grid) {
 		this.selectedIds = []
 		this._changedItems = []
 		this.removeIds$.next([])
+		this._removeIds = []
+	}
+
+	onEditingStart(event: any) {
+		if (event.column.dataField==='roles' && event.data.id === NIL) {
+			event.cancel = true
+		}
 	}
 }

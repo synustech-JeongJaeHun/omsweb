@@ -50,6 +50,8 @@
       (onContextMenuPreparing)="onContextMenuPreparing($event)"
       (onCellClick)="cellSelected($event)"
 			[stateStoring]="stateStoring"
+            (onExporting)="onExporting($event)"
+            (onExported)="onExported()"
 		>
       <dxo-selection
         selectAllMode="allPages"
@@ -211,4 +213,7 @@
 			</div>
 		</dx-data-grid>
 	</div>
+</div>
+<div *ngIf="isLoading" class="loading-overlay">
+    <dx-load-indicator [visible]="true"></dx-load-indicator>
 </div>

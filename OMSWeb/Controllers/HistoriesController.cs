@@ -150,8 +150,7 @@ namespace OMSWeb.Controllers
 
                 int totalCount = _historySvc.QueryAlertsCount(from, to, skip, take, condition);
                 loadOptions.Skip = 0;
-                //loadOptions.Filter = null;
-
+                loadOptions.Filter = null;
                 LoadResult loadResult = DataSourceLoader.Load(_historySvc.QueryAlerts(from, to, skip, take, condition, sort, group), loadOptions);
                 loadResult.totalCount = totalCount;
 

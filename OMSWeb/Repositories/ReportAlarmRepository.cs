@@ -363,7 +363,7 @@ namespace OMSWeb.Repositories
                     )
                     ";
                 case "point":
-                    return "(SELECT concat(current::text, ' (', p.physical_id ::text, ')')  from points p where p.logical_id = current)";
+                    return "(SELECT concat(current::text, ' (', p.physical_id ::text, ')')  from points p where concat('p', cast(p.logical_id as varchar)) = current)";
                 case "vehicle":
                     return $@"
                         (

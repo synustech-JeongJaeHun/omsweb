@@ -43,6 +43,8 @@
           [hoverStateEnabled]="true"
           allowColumnResizing="true"
           [stateStoring]="stateStoring"
+          (onExporting)="onExporting($event)"
+          (onExported)="onExported()"
         >
           <dxo-export [enabled]="true" [fileName]="fileName+'_All'"></dxo-export>
           <dxo-paging [pageSize]="50"></dxo-paging>
@@ -198,6 +200,8 @@
         [hoverStateEnabled]="true"
         allowColumnResizing="true"
         [stateStoring]="stateStoring"
+        (onExporting)="onExporting($event)"
+        (onExported)="onExported()"
       >
         <dxo-export [enabled]="true" [fileName]="fileName+'_Period'"></dxo-export>
         <dxo-paging [pageSize]="50"></dxo-paging>
@@ -260,3 +264,6 @@
   </div>
 </div>
 
+<div *ngIf="isLoading" class="loading-overlay">
+    <dx-load-indicator [visible]="true"></dx-load-indicator>
+</div>

@@ -197,7 +197,7 @@ namespace OMSWeb.Repositories
           first_name = @first_name, 
           last_name = @last_name, 
           email = @email, 
-          password = @password 
+          password = COALESCE(NULLIF(@password, ''), password)
         WHERE id = @id;
         ";
             using (var conn = ConnectUi())
@@ -212,7 +212,7 @@ namespace OMSWeb.Repositories
                         cmd.Parameters.AddWithValue("first_name", profileFormDto.FirstName);
                         cmd.Parameters.AddWithValue("last_name", profileFormDto.LastName);
                         cmd.Parameters.AddWithValue("email", profileFormDto.Email);
-                        cmd.Parameters.AddWithValue("password", profileFormDto.Password);
+                        cmd.Parameters.AddWithValue("password", (object)profileFormDto.NewPassword ?? DBNull.Value);
 
                         result = cmd.ExecuteNonQuery();
                     }

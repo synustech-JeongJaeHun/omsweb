@@ -2,20 +2,21 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import DataSource from 'devextreme/data/data_source';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
-import { Observable } from 'rxjs';
+import {EMPTY, Observable, of} from 'rxjs';
 import {
-  IPermission,
-  IRole,
-  ISimpleUser,
-  IUserForm,
+	IPermission,
+	IRole, ISessionUser,
+	ISimpleUser,
+	IUserForm,
 } from '../models/user.model';
+import {AuthService} from "@oms/services/auth.service";
 
 @Injectable({
   providedIn: 'root',
 })
 export class UsersService {
   private baseUrl = '/api/users';
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private auth: AuthService) { }
 
   tokenHistoryDataSource(source: any, startTime: Date, endTime: Date): DataSource {
     return new DataSource({
@@ -52,7 +53,14 @@ export class UsersService {
     return this.http.get<IPermission[]>(`${this.baseUrl}/permissions`);
   }
   saveAccounts(form: IUserForm[]): Observable<void> {
-    return this.http.post<void>(`${this.baseUrl}/batch/save`, form);
+    this.http.post<IUserForm[]>(`${this.baseUrl}/batch/save`, form)
+	    .subscribe(res=>{
+				const current = res.find(user=>user.id === this.auth.currentUser.id) as ISessionUser
+				if(current){
+					this.auth.updateCurrentUser(current)
+				}
+	    })
+	  return of(undefined)
   }
   deleteAccounts(ids: string[]): Observable<void> {
     return this.http.post<void>(`${this.baseUrl}/batch/remove`, ids);
@@ -63,4 +71,8 @@ export class UsersService {
   deleteRoles(ids: number[]): Observable<void> {
     return this.http.post<void>(`${this.baseUrl}/roles/remove`, ids);
   }
+	
+	userInfo(): ISessionUser{
+		return JSON.parse(sessionStorage.getItem('user')) as ISessionUser
+	}
 }

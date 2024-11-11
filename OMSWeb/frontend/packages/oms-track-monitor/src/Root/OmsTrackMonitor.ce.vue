@@ -400,7 +400,7 @@ defineExpose(exposed)
     );
 }
 
-#disabled-segment-layer .segment .segment-path {
+#disabled-segment-layer .segment[data-is-disabled-by-user='true' i] .segment-path {
   stroke: v-bind('parseStringProp(ColorDefault.disabledSegment, props.disabledSegmentColor)'
     );
 }

@@ -30,9 +30,11 @@
 </div>
 <dx-data-grid #grid [dataSource]="dataSource$ | async" [keyExpr]="'id'" [repaintChangesOnly]="true" [showBorders]="true"
               [sorting]="true" [height]="490" [(selectedRowKeys)]="selectedIds" (onRowUpdated)="onUpdate($event)"
-              (onSelectionChanged)="onSelectionChanged($event)">
+              (onSelectionChanged)="onSelectionChanged($event)"
+              (onEditingStart)="onEditingStart($event)">
   <dxo-scrolling mode="virtual"></dxo-scrolling>
-  <dxo-editing mode="cell" refreshMode="reshape" [allowUpdating]="true" [allowDeleting]="false" [allowAdding]="false">
+  <dxo-editing mode="cell" refreshMode="reshape" [allowUpdating]="true" [allowDeleting]="false" 
+               [allowAdding]="false">
   </dxo-editing>
   <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
 
