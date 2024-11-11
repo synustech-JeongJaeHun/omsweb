@@ -104,7 +104,8 @@ const Table: React.FC<Props & any> = React.forwardRef(
 		} = data
 
 
-		const exportGrid = (e) => {
+    const exportGrid = (e) => {
+      console.log("################## exportGrid e=" + e);
 			const workbook = new Workbook()
       const { setCompVisible, setCompInvisible } = getCompAction(e.component, tableHeader.length)
       setCompVisible()

@@ -32,19 +32,21 @@ function handleMouseleave(event: MouseEvent) {
     clientY = event.clientY
   }
 }
-function handleLeftClick(event: MouseEvent) {
+    function handleLeftClick(event: MouseEvent) {
+        console.log("###################pointLayer handleLeftClick 1");
   emit('mainClickOnObject', {
     type: 'POINT',
     value: getDeepCopiedPoint(event),
   })
 }
-function handleRightClick(event: MouseEvent) {
-  emit('secondaryClickOnObject', {
-    type: 'POINT',
-    value: getDeepCopiedPoint(event),
-    event,
-  })
-}
+    function handleRightClick(event: MouseEvent) {
+        console.log("###################pointLayer handleRightClick");
+        emit('secondaryClickOnObject', {
+            type: 'POINT',
+            value: getDeepCopiedPoint(event),
+            event,
+        })
+    }
 </script>
 
 <template>

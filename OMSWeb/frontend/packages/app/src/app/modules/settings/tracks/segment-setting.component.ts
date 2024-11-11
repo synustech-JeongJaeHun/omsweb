@@ -108,6 +108,7 @@ export class SegmentSettingComponent implements OnInit {
   }
 
   onApplyAllSpeedRatio(inputAllSppedRatio) {
+    console.log("inputAllSpeedRatio" + JSON.stringify(inputAllSppedRatio.value));
     this.messageSvc
       .sendAllSpeedRatioSegmentCommand({ type: 'SEGMENT-ALL', action: 'segment-setting' }, inputAllSppedRatio.value)
       .subscribe();

@@ -19,6 +19,13 @@ namespace OMSWeb.Controllers
             this._vehicleSvc = vehicleService;
         }
 
+
+
+        /// <summary>
+        /// 비클 상태
+        /// </summary>
+        /// <param name="vehicleId"></param>
+        /// <returns></returns>
         [HttpGet("{vehicleId}/status")]
         public ActionResult<VehicleState> GetVehicleStatus(int vehicleId)
         {

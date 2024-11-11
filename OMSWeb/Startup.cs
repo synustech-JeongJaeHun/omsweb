@@ -24,6 +24,12 @@ using System.IO;
 using System.Diagnostics;
 using OMSWeb.Logger;
 
+using Microsoft.OpenApi.Models;
+using System.Linq;
+using Microsoft.Extensions.Options;
+using System.Reflection;
+
+
 namespace OMSWeb
 {
     public class Startup
@@ -100,6 +106,39 @@ namespace OMSWeb
                 options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                 // options.SerializerSettings.ContractResolver = new DefaultContractResolver { NamingStrategy = new SnakeCaseNamingStrategy() };
             });
+
+
+            ////swagger(mjh0519)
+            services.AddSwaggerGen(c => {
+                c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
+                c.IgnoreObsoleteActions();
+                c.IgnoreObsoleteProperties();
+                c.CustomSchemaIds(type => type.FullName);
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Version = "v1",
+                    Title = "OMS Web API",
+                    Description = "OMS Web Server API",
+                    //TermsOfService = new Uri("https://example.com/terms"),
+                    //Contact = new OpenApiContact
+                    //{
+                    //    Name = "Example Contact",
+                    //    Url = new Uri("https://example.com/contact")
+                    //},
+                    //License = new OpenApiLicense
+                    //{
+                    //    Name = "Example License",
+                    //    Url = new Uri("https://example.com/license")
+                    //}
+                });
+
+                // using System.Reflection;
+                var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+
+            });
+
+           
 
             // load appSettings
             var appSettingsSection = Configuration.GetSection("AppSettings");
@@ -221,9 +260,20 @@ namespace OMSWeb
         {
             app.UseOmsExceptionHandler();
 
-            if (env.IsDevelopment())
+            //swagger mjh0519
+            app.UseSwagger(options =>
             {
+                options.SerializeAsV2 = true;
+            });
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
+
+            if (env.IsDevelopment())
+            {   
                 app.UseDeveloperExceptionPage();
+
             }
             else
             {
@@ -251,6 +301,7 @@ namespace OMSWeb
                     }
                 });
             }
+      
 
             app.UseRouting();
 

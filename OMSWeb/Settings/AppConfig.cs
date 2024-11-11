@@ -66,7 +66,7 @@ namespace OMSWeb.OMSSettings
             string port = AppConfig.GetFromOMSConfig("DB", "port", "5432");
             string user = AppConfig.GetFromOMSConfig("DB", "user", "oms");
             string pass = AppConfig.GetFromOMSConfig("DB", "pass", "oms");
-            string name = AppConfig.GetFromOMSConfig("DB", "name", "semi_test");
+            string name = AppConfig.GetFromOMSConfig("DB", "name", "siliconboxPB02");
 
             //"OMS-UI": "Server=127.0.0.1;Port=5432;Database=oms_ui;User Id=oms;Password=oms;",
             //"OMS-Track": "Server=127.0.0.1;Port=5432;Database=semioht;User Id=oms;Password=oms;"

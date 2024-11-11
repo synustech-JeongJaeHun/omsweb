@@ -21,6 +21,12 @@ namespace OMSWeb.Controllers
       this._svc = playbackService;
     }
 
+
+    /// <summary>
+    /// playback 시작 및 종료 일시 반환
+    /// </summary>
+    /// <remarks>데이터가 존재하는 구간</remarks>
+    /// <returns></returns>
     [HttpGet("info")]
     public ActionResult<object> GetPlaybackInfo()
     {
@@ -31,6 +37,11 @@ namespace OMSWeb.Controllers
       };
     }
 
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     [HttpGet("track-times")]
     public IList<DateTimeOffset> GetTrackTimes()
     {

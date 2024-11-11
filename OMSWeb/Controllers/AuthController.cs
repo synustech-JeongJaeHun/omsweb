@@ -18,6 +18,11 @@ namespace OMSWeb.Controllers
             this._userSvc = userService;
         }
 
+        /// <summary>
+        /// 로그인
+        /// </summary>
+        /// <param name="form"></param>
+        /// <returns></returns>
         [HttpPost("")]
         public ActionResult<TokenResponse> Login(LoginFormDto form)
         {
@@ -33,6 +38,10 @@ namespace OMSWeb.Controllers
             }
         }
 
+        /// <summary>
+        /// 사용자 정보에 따른 JWT 반환
+        /// </summary>
+        /// <returns></returns>
         [Authorize]
         [HttpGet("renew")]
         public ActionResult<TokenResponse> Renew()
@@ -40,7 +49,10 @@ namespace OMSWeb.Controllers
             return _userSvc.RenewToken();
         }
 
-
+        /// <summary>
+        /// 로그아웃
+        /// </summary>
+        /// <returns></returns>
         [Authorize]
         [HttpDelete("logout")]
         public ActionResult LogOut()

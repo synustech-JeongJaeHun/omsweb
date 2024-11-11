@@ -315,8 +315,9 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 			this.findOnTM(event)
 		})
 
-		this.focusEvent.subscribe(
-			(event: { type: string; id: number; focusType?: string }) => {
+    this.focusEvent.subscribe(
+      (event: { type: string; id: number; focusType?: string }) => {
+        console.log("map-viewer focusEvent event=" + JSON.stringify(event));
 				this.focusOnTM(event)
 			},
 		)
@@ -876,7 +877,8 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 	public findOnTM(event: { type: string; id: any }) {
 		this.viewer.find(event.type, event.id)
 	}
-	public focusOnTM(event: { type: string; id: any; focusType?: string }) {
+  public focusOnTM(event: { type: string; id: any; focusType?: string }) {
+    console.log("map-viewer.component focustOnTM");
 		this.viewer.focus(event.type, event.id, event.focusType)
 	}
 	public dropFocusOnTM(event: { focusType?: string }) {
@@ -887,8 +889,10 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		this.viewer.track(event.type, event.id)
 	}
 
-	public onMouseoverTM(event: CustomEvent) {
-		const payload = getCustomEventPayload(event)
+  public onMouseoverTM(event: CustomEvent) {
+    console.log("map-viewer.component onMouseoverTM");
+    const payload = getCustomEventPayload(event)
+
 		// @ts-ignore
 		if (!(payload.type && payload.value && payload.event)) return
 
@@ -1076,19 +1080,23 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		this.showTooltip = false
 		this.tooltipObject = undefined
 	}
-	public onFocus(event: CustomEvent) {
+  public onFocus(event: CustomEvent) {
+    console.log("########################onFocus:: CustomEvent 2");
+    console.log("onFocus:: CustomEvent=" + JSON.stringify(event));
+
 		const payload = getCustomEventPayload(event)
 		// @ts-ignore
-		this.selectedObject = { objectType: payload.type, ...payload.value }
+    this.selectedObject = { objectType: payload.type, ...payload.value }
+
 		// @ts-ignore
 		this.focusOnTM({ type: payload.type, id: payload.value.id })
-
+    console.log("onFocus:: payload?=" + JSON.stringify(payload));
 		// @ts-ignore
 		this.handleAfterFocus(payload.value)
 	}
 	private handleAfterFocus(object: any) {
 		const objectType = this.selectedObject.objectType.toLowerCase()
-
+    console.log("handleAfterFocus IN");
 		if (objectType === 'vehicle') {
 			const vhl = object
 
@@ -1175,9 +1183,11 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 					break
 			}
 			// manual transfer section end
-		} else if (objectType === 'point') {
+    } else if (objectType === 'point') {
+      console.log("handleAfterFocus objectType Point!");
 			const point = { objectType, ...object }
-			const transferCommandState = this.mapStatesService.transferCommandState
+      const transferCommandState = this.mapStatesService.transferCommandState
+      console.log("handleAfterFocus objectType Point transferCommandState" + JSON.stringify(transferCommandState));
 			if (transferCommandState.active === false) return
 
 			switch (transferCommandState.category) {
@@ -1396,5 +1406,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 }
 
 function getCustomEventPayload<T>(event: CustomEvent<T[]>) {
+  console.log("map-viewer.component getCustomEventPayload");
 	return event.detail[0]
 }
