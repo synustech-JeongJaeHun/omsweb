@@ -175,7 +175,7 @@ namespace OMSWeb.Repositories
                 Error = result.Error,
                 Disconnected = result.Disconnected,
                 RailOut = result.RailOut,
-                CommnadEnabled = result.CommandEnabled,
+                CommandEnabled = result.CommandEnabled,
                 CommandDisabled = result.CommandDisabled,
                 Total = result.Total,
             };
