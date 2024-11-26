@@ -68,6 +68,7 @@
     <None Remove="$(SpaRoot)**" />
     <None Remove="ClientApp-bak\**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
+    <None Remove="frontend\packages\app\src\app\modules\settings\tracks\target-block-setting.component.ts" />
     <None Include="frontend\packages\app\test-playwright\data.json" />
     <Content Update="customSettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

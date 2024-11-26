@@ -601,7 +601,8 @@
     "warnings": "Warnings",
     "transType": "Trans Type",
     "driveType": "Drive Type",
-    "showZcuStatus": "Show ZCU Status"
+    "showZcuStatus": "Show ZCU Status",
+    "targetblock": "Target Block List"
   },
   "enums": {
     "hostSessionStatus": {

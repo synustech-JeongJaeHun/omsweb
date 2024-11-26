@@ -28,6 +28,7 @@ import { SystemPreferenceComponent } from './preferences/system-preference.compo
 import { ThemePreferenceComponent } from './preferences/theme-preference.component'
 import { BulkUserFormDialogComponent } from './dialogs/bulk-user-from-dialog.component';
 import { ScaleComponent } from './tracks/scale.component'
+import { TargetBlockSettingComponent } from './tracks/target-block-setting.component';
 
 @NgModule({
 	declarations: [
@@ -55,7 +56,8 @@ import { ScaleComponent } from './tracks/scale.component'
 		SystemPreferenceComponent,
 		ThemePreferenceComponent,
 		BulkUserFormDialogComponent,
-		ScaleComponent,
+    ScaleComponent,
+    TargetBlockSettingComponent
 	],
 	imports: [CommonModule, SharedModule, SettingsRoutingModule],
 })

@@ -1,0 +1,73 @@
+<div class="setting-header">
+  <h3 class="setting-title">{{ 'names.targetblock' | translate }}</h3>
+  <div class="setting-actions">
+    <button mat-raised-button class="dense" color="primary"  (click)="onSave()">
+      {{ 'names.save' | translate }}
+    </button>
+  </div>
+</div>
+
+<div class="main-container">
+
+  <div class="single-grid">
+    <dx-data-grid [disabled]="!isModeStk"
+									[dataSource]="candidateStks"
+									[showBorders]="true"
+									[keyExpr]="'id'"
+									[(selectedRowKeys)]="selectedCandidateStks"
+									height="350px"
+                  width="15em">
+      <dxo-scrolling mode="virtual"></dxo-scrolling>
+      <dxo-selection mode="multiple"
+                     showCheckBoxesMode="always"></dxo-selection>
+      <dxi-column [width]="40" datyType="string" dataField="id" [caption]="'names.id' | translate"> </dxi-column>
+    </dx-data-grid>
+  </div>
+
+
+  <div class="inner-container two-grid">
+    <dx-data-grid [disabled]="!isModeStk"
+									[dataSource]="candidateStks"
+									[showBorders]="true"
+									[keyExpr]="'id'"
+									[(selectedRowKeys)]="selectedCandidateStks"
+									height="350px"
+                  width="15em">
+      <dxo-scrolling mode="virtual"></dxo-scrolling>
+      <dxo-selection mode="multiple"
+                     showCheckBoxesMode="always"></dxo-selection>
+      <dxi-column [width]="40" datyType="string" dataField="id" [caption]="'names.id' | translate"> </dxi-column>
+    </dx-data-grid>
+
+    <div class="actions">
+      <!--<span style="color: rgba(0, 0, 0, .87);">
+        추가
+      </span>-->
+      <button mat-icon-button>
+        <mat-icon>arrow_right</mat-icon>
+      </button>
+      <button mat-icon-button>
+        <mat-icon>arrow_left</mat-icon>
+      </button>
+      <!--<span style="color: rgba(0, 0, 0, .87);">
+        제거
+      </span>-->
+    </div>
+
+    <dx-data-grid
+                  [disabled]="!isModeStk"
+									[dataSource]="chosenStks"
+									[showBorders]="true"
+									[keyExpr]="'id'"
+									height="350px"
+                  width="15em">
+      <dxo-scrolling mode="virtual"></dxo-scrolling>
+      <dxo-selection mode="multiple"
+                     showCheckBoxesMode="always"></dxo-selection>
+      <dxi-column [width]="40" datyType="string" dataField="id" [caption]="'names.id' | translate"> </dxi-column>
+      <dxi-column [width]="120" datyType="string" dataField="logicalId" [caption]="'names.logicalId' | translate"> </dxi-column>
+    </dx-data-grid>
+
+  </div>
+</div>
+
