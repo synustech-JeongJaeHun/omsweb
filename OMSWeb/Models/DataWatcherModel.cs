@@ -65,5 +65,9 @@ namespace OMSWeb.Models
         
         public bool FireEmergency { get; set; }
         public bool FireDetect { get; set; }
+
+        public string VehicleOnlineName { get; set; }
+        public string TargetBlockOnlineName { get; set; }
+
     }
 }

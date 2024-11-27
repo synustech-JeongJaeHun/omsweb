@@ -450,5 +450,11 @@ namespace OMSWeb.Controllers
 
             return Ok(useMTlIn);
         }
+
+        [HttpGet("targetBlock")]
+        public IEnumerable<TargetBlockEntity> GetSettingsTargetBlocks()
+        {
+            return _settingsSvc.GetSettingsTargetBlocks();
+        }
     }
 }

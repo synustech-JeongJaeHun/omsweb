@@ -770,5 +770,30 @@ namespace OMSWeb.Repositories
             }
             return result;
         }
+
+
+        public IQueryable<TargetBlockEntity> QuerySettingsTargetBlocks()
+        {
+            IQueryable<TargetBlockEntity> result;
+            using (var conn = ConnectTrack())
+            {
+                var sql = @"
+        SELECT
+            vehicle_online_name as VehicleOnlineName,
+            target_block_online_name as TargetBlockOnlineName
+        FROM target_block
+        ORDER BY vehicle_online_name, target_block_online_name;
+        ";
+                try
+                {
+                    result = conn.Query<TargetBlockEntity>(sql).AsQueryable();
+                }
+                catch (Exception e)
+                {
+                    result = null;
+                }
+            }
+            return result;
+        }
     }
 }
