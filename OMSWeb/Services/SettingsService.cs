@@ -135,5 +135,10 @@ namespace OMSWeb.Services
         {
             return _repo.DeleteSettingsVehicleRegs(vehicleReg);
         }
+
+        public IQueryable<TargetBlockEntity> GetSettingsTargetBlocks()
+        {
+            return _repo.QuerySettingsTargetBlocks();
+        }
     }
 }

@@ -160,4 +160,11 @@ namespace OMSWeb.Models.Entities
         public bool WarningNotify { get; set; }
         public bool TableNotify { get; set; }
     }
+
+
+    public class TargetBlockEntity
+    {
+        public string VehicleOnlineName { get; set; }
+        public string TargetBlockOnlineName { get; set; }
+    }
 }
