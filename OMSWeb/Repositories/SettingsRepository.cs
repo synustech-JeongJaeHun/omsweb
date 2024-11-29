@@ -109,10 +109,17 @@ namespace OMSWeb.Repositories
             using (var conn = ConnectTrack())
             {
                 var sql = @"
-        SELECT GOS.id, GOS.group_id, GOS.reference_id, GOS.reference_table 
-        FROM grouped_objects GOS
-        ORDER BY GOS.id; 
-        ";
+                    SELECT
+	                    GOS.id,
+	                    GOS.group_id,
+	                    GOS.reference_id,
+	                    GOS.reference_table,
+	                    COALESCE(HomesTable.point, 0) AS home_point
+                    FROM grouped_objects GOS
+                    LEFT JOIN homes HomesTable
+                    ON GOS.reference_id = HomesTable.id AND GOS.reference_table = 'home'
+                    ORDER BY GOS.id
+                ";
 
                 try
                 {

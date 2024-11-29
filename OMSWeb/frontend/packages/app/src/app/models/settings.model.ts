@@ -1046,7 +1046,8 @@ export interface ISettingsGroupedObject {
 	id: number
 	groupId: number
 	referenceId: number
-	referenceTable: string
+  referenceTable: string
+  homePoint: number
 }
 
 export interface ISettingsCluster {

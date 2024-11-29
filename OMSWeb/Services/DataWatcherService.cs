@@ -53,12 +53,17 @@ namespace OMSWeb.Services
             {
                 try
                 {
+                    if (trackConn.State == System.Data.ConnectionState.Closed)
+                    {
+                        trackConn.Open();
+                    }
+
                     await trackConn.WaitAsync();
                 }
                 catch (System.Exception e)
                 {
                     Console.WriteLine($"@@@ Error : {e}");
-                    // throw;
+                    Thread.Sleep(10);
                 }
             }
         }
