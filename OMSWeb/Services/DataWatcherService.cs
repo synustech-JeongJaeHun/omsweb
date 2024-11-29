@@ -39,14 +39,7 @@ namespace OMSWeb.Services
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            this.trackConn.Open();
             this.trackConn.Notification += this.NotificationReceivedAsync;
-
-            using (var cmd = trackConn.CreateCommand())
-            {
-                cmd.CommandText = "LISTEN monitor_track";
-                cmd.ExecuteNonQuery();
-            }
 
             Console.WriteLine("### Data Watcher started");
             while (!stoppingToken.IsCancellationRequested)
@@ -55,7 +48,13 @@ namespace OMSWeb.Services
                 {
                     if (trackConn.State == System.Data.ConnectionState.Closed)
                     {
-                        trackConn.Open();
+                        this.trackConn.Open();
+
+                        using (var cmd = trackConn.CreateCommand())
+                        {
+                            cmd.CommandText = "LISTEN monitor_track";
+                            cmd.ExecuteNonQuery();
+                        }
                     }
 
                     await trackConn.WaitAsync();
