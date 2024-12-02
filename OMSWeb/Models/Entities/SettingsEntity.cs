@@ -121,6 +121,7 @@ namespace OMSWeb.Models.Entities
         public int GroupId { get; set; }
         public int ReferenceId { get; set; }
         public string ReferenceTable { get; set; }
+        public int HomePoint { get; set; }
     }
 
     public class ClusterEntity : IIntId

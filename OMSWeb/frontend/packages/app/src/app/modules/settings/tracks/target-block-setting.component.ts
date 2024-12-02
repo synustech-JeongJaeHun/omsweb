@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core'
 import { forkJoin, Observable } from 'rxjs'
-import { tap } from 'rxjs/operators'
+import { tap, map, flatMap } from 'rxjs/operators'
 import { Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators'
-import { ISettingsAlternateTransfer, ISettingsAlternateStation } from '../../../models/settings.model';
-import { ISettingsStationWithUnuse } from '../../../models/settings.model';
+import { ISettingsAlternateTransfer, ISettingsAlternateStation } from '../../../models/settings.model'; //지울거
+import { ISettingsTargetBlocking, ISettingsBufferWithUnuse } from '../../../models/settings.model';
+import { ISettingsStationWithUnuse, ISettingsVehicleReg } from '../../../models/settings.model';
 import { SettingsService } from '../../../services/settings.service'
 import { SystemsService } from '../../../services/systems.service'
 import { MessagesService } from '../../../services/messages.service'
@@ -12,10 +13,13 @@ import { DialogService } from '../../../services/dialog.service'
 import { TranslateService } from '@ngx-translate/core'
 import { TscModeEnums } from '@oms/models/enums'
 import { forEach } from 'lodash'
+import { ISendTargetBlock } from '../../../models/command.model'
 
-type Stk = {
-  id: string
-  logicalId: string
+
+
+type TargetBlock ={
+  vehicleOnlineName: string,
+  targetBlockOnlineName: string[]
 }
 
 @Component({
@@ -27,70 +31,37 @@ export class TargetBlockSettingComponent {
 
   private destroy$ = new Subject<void>()
 
-  public mode: string = 'stk';
-  public retryCntToSTB: number;
-  public retryToNearStocker: boolean;
 
-  private settingAlternateTransfer: ISettingsAlternateTransfer;
-  private settingAlternateStations: ISettingsAlternateStation[];
+/*  private settingTargetBlockings: TargetBlock[];*/
 
-  // stk related
-  public candidateStks: ISettingsAlternateStation[] = []
-  public selectedCandidateStks: Stk['id'][] = []
-  public chosenStks: ISettingsAlternateStation[] = []
-  public selectedChosenStks: Stk['id'][] = []
-  public timeoutForAlternate: number = 0;
+  public focusedVehicle: string | null = null;
+  public selectedVehicle: string | null = null;
 
-  private priorityChanged = false;
+  public vehicles: ISettingsVehicleReg[] = [];
+  public targetAllowDataSource: ISettingsTargetBlocking[] = []
+  public targetBlockDataSource: ISettingsTargetBlocking[] = []
 
-  invalidCheck = {
-    retryCntToSTB: false,
-    timeoutForAlternate: false
-  }
+  public targetAllowings: ISettingsTargetBlocking[] = []
+  public targetBlockings: ISettingsTargetBlocking[] = []
+
+  public selectedTargetAllow: string[] = [];
+  public selectedTargetBlock: string[] = [];
+
+  public stations: ISettingsStationWithUnuse[] = [];
+  public buffers: ISettingsBufferWithUnuse[] = []; 
 
   constructor(
     private settingsSvc: SettingsService,
     private messageSvc: MessagesService,
     private systemSvc: SystemsService,
-    private dialogSvc: DialogService,
     private $t: TranslateService,
   ) {
     this.init()
   }
 
-  get isModeStb() {
-    return this.mode === 'stb'
-  }
-  get isModeStk() {
-    return this.mode === 'stk'
-  }
-  get isPriorityChangable() {
-    return this.selectedChosenStks.length === 1
-  }
 
-  get isUpdated(): boolean {
-    this.invalidCheck.timeoutForAlternate = false
-    this.invalidCheck.retryCntToSTB = false
-    if (!(this.timeoutForAlternate <= 3600 && this.timeoutForAlternate > 0)) {
-      this.invalidCheck.timeoutForAlternate = true
-      return false
-    }
-    if (!(this.retryCntToSTB <= 10 && this.retryCntToSTB > 0)) {
-      this.invalidCheck.retryCntToSTB = true
-      return false
-    }
-
-    if (this.settingAlternateTransfer?.mode !== this.mode) return true;
-    if (parseInt(this.settingAlternateTransfer?.maxRetryToBuffer.toString()) !== this.retryCntToSTB) return true;
-    if (this.settingAlternateTransfer?.retryToNearStocker !== this.retryToNearStocker) return true;
-    if (this.settingAlternateTransfer?.stationList !== this.chosenStks) return true;
-    if (this.priorityChanged) return true;
-    if (this.settingAlternateTransfer?.timeoutForAlternate !== this.timeoutForAlternate) return true
-
-    return false;
+  ngOnInit(): void {
   }
-
-  ngOnInit(): void { }
 
   ngOnDestroy(): void {
     this.destroy$.next()
@@ -98,147 +69,171 @@ export class TargetBlockSettingComponent {
   }
 
   private init() {
-    forkJoin(this.loadAlternateTransfer(), this.loadSettingStations()).subscribe(() => {
-      forkJoin(this.bindStationListData());
+
+    forkJoin(this.loadSettingsVehicles(), this.loadSettingStations(), this.loadSettingStations(), this.loadSettingTargetBlocks()).subscribe(() => {
+      forkJoin(this.bindTargetAllow());
     });
   }
 
-  private loadAlternateTransfer() {
-    return this.settingsSvc.settingsAlternateTransfer().pipe(
-      tap((res) => {
-        this.settingAlternateTransfer = res;
-
-        this.mode = res.mode.toString();
-        this.retryCntToSTB = parseInt(res.maxRetryToBuffer.toString());
-        this.retryToNearStocker = res.retryToNearStocker;
-        this.chosenStks = res.stationList;
-        this.timeoutForAlternate = res.timeoutForAlternate
-      }),
-    )
-  }
 
   private loadSettingStations() {
-    return this.settingsSvc.settingsAlternateStations().pipe(
+
+    return this.settingsSvc.settingsStations().pipe(
       tap((res) => {
-        this.settingAlternateStations = res
-      }),
+        this.stations = res;
+      })
     )
   }
 
-  private bindStationListData() {
-    for (var s of this.settingAlternateStations) {
-      if (!this.isAssignedStation(s.id)) {
-        this.candidateStks.push(s);
+  private loadSettingBuffers() {
+    return this.settingsSvc.settingsBuffers().pipe(
+      tap((res) => {
+        this.buffers = res;
+      })
+    )
+  }
+
+  private loadSettingsVehicles() {
+    return this.settingsSvc.settingsVehicles().pipe(
+      tap((res) => {
+      this.vehicles = res;
+      })
+    )
+  }
+
+  private loadSettingTargetBlocks() {
+    return this.settingsSvc.settingsTargetBlocks().pipe(
+      tap((res) => {
+        this.targetBlockings = res;
+      })
+    )
+  }
+
+  private bindTargetAllow() {
+
+    for (const bufferT of this.buffers) {
+      for (const vehicle of this.vehicles) {
+        this.targetAllowings.push({
+          vehicleOnlineName: vehicle.logicalId,
+          targetBlockOnlineName: bufferT.logicalId
+        });
+      }
+    }
+
+    for (const stationT of this.stations) {
+      for (const vehicle of this.vehicles) {
+        this.targetAllowings.push({
+          vehicleOnlineName: vehicle.logicalId,
+          targetBlockOnlineName: stationT.logicalId
+        });
       }
     }
   }
 
-  private isAssignedStation(id: string) {
-    for (var s of this.chosenStks) {
-      if (id == s.id) return true;
+  private resetSelecteds() {
+    this.selectedTargetAllow = []
+    this.selectedTargetBlock = []
+  }
+  onFocusedVehicleRowChanged(e) {
+
+    const vlogicalId = e.row.data.logicalId;
+    this.selectedVehicle = vlogicalId;
+
+    this.targetAllowDataSource = this.targetAllowings
+      .filter(vehicleT => vehicleT.vehicleOnlineName == vlogicalId)
+      .filter(item => !this.targetBlockings
+        .some(blocking => item.vehicleOnlineName === blocking.vehicleOnlineName &&
+          item.targetBlockOnlineName === blocking.targetBlockOnlineName)
+    )
+
+    this.targetBlockDataSource = this.targetBlockings.filter(block => block.vehicleOnlineName == vlogicalId)
+    console.log("vehicle=" + vlogicalId + " // after Filter targetAllowDataSource Count=" + this.targetAllowDataSource.length);   
+  }
+
+  setInitialSelection() {
+    if (this.vehicles.length > 0) {
+      this.focusedVehicle = this.vehicles[0].logicalId;
+      this.selectedVehicle = this.vehicles[0].logicalId;
     }
-    return false;
   }
 
   onSave() {
-   
-  }
 
-  onRevert() {
+    const sendTargetBlockData: ISendTargetBlock[] = Object.values(
+      this.targetBlockings.reduce((acc, curr) => {
 
-  }
-
-
-  SaveMessages() {
-    let ids: string = '';
-    for (var s of this.chosenStks) { ids += s.id + ';' }
-    if (ids.length == 0) ids = ';'  // prevent null
-
-    this.settingsSvc
-      .updateAlternateTransfer(
-        this.mode,
-        this.retryCntToSTB.toString(),
-        this.retryToNearStocker.toString(),
-        ids,
-        this.timeoutForAlternate.toString()
-      )
-      .subscribe((res) => {
-        if (res.retcode == 1) {
-          setTimeout(() => {
-            this.onRevert()
-          }, 500)
+        const key = curr.vehicleOnlineName;
+        if (!acc[key]) {
+          acc[key] = {
+            vehicle_online_name: key,
+            target_block_online_names: [] // targetBlockOnlineName 배열 초기화
+          };
         }
+
+        acc[key].target_block_online_names.push(curr.targetBlockOnlineName);
+
+        return acc;
+      }, {})
+    );
+
+
+    this.messageSvc
+      .sendTargetBlockingCommand({ request: "vehicle_manager", action: 'target_block_setting', target_block_list: sendTargetBlockData })
+      .subscribe(() => {
+        this.onRervert();
       });
   }
 
 
-  addToChosenStks() {
-    const selecteds = this.selectedCandidateStks.map((id) =>
-      this.candidateStks.find((stk) => stk.id === id),
-    )
+  onRervert() {
+    console.log("onRevert");
+    this.resetSelecteds();
+    this.init();
+  }
 
-    this.chosenStks = [...this.chosenStks, ...selecteds]
-    this.candidateStks = this.candidateStks
-      .filter((stk) => selecteds.every((selected) => selected !== stk))
-      .sort((a, b) => a.logicalId.localeCompare(b.logicalId))
+  addToTargetBlockings() {
+
+    const selecteds = this.selectedTargetAllow.map((logicalId) =>
+      this.targetAllowings.find((target) => target.targetBlockOnlineName === logicalId && target.vehicleOnlineName === this.selectedVehicle),
+    )
+    
+    this.targetBlockings = [...this.targetBlockings, ...selecteds]
+    this.targetBlockDataSource = this.targetBlockings.filter(block => block.vehicleOnlineName === this.selectedVehicle)
+
+    this.targetAllowDataSource = this.targetAllowings
+      .filter(vehicleT => vehicleT.vehicleOnlineName == this.selectedVehicle)
+      .filter(item => !this.targetBlockings
+        .some(blocking => item.vehicleOnlineName === blocking.vehicleOnlineName &&
+          item.targetBlockOnlineName === blocking.targetBlockOnlineName)
+      )
 
     this.resetSelecteds()
   }
-  removeFromChosenStks() {
-    const selecteds = this.selectedChosenStks.map((id) =>
-      this.chosenStks.find((stk) => stk.id === id),
+
+  removeFromTargetBlockings() { 
+
+    const selecteds = this.selectedTargetBlock.map((logicalId) =>
+      this.targetBlockings.find((target) => target.targetBlockOnlineName === logicalId && target.vehicleOnlineName === this.selectedVehicle),
     )
 
-    this.candidateStks = [...this.candidateStks, ...selecteds].sort((a, b) =>
-      a.logicalId.localeCompare(b.logicalId),
-    )
-    this.chosenStks = this.chosenStks.filter((stk) =>
-      selecteds.every((selected) => selected !== stk),
-    )
+    this.targetBlockings = this.targetBlockings.filter(
+      (data) => !selecteds.includes(data)
+    );
+    this.targetBlockDataSource = this.targetBlockings.filter(block => block.vehicleOnlineName === this.selectedVehicle)
+   
+    this.targetAllowDataSource = this.targetAllowings
+      .filter(vehicleT => vehicleT.vehicleOnlineName == this.selectedVehicle)
+      .filter(item => !this.targetBlockings
+        .some(blocking => item.vehicleOnlineName === blocking.vehicleOnlineName &&
+          item.targetBlockOnlineName === blocking.targetBlockOnlineName)
+      )
 
+    //console.log("targetBlockingDataSource=" + this.targetBlockDataSource);
+    //console.log("targetBlockings(" + this.targetBlockings.length + ")=" + JSON.stringify(this.targetBlockings));
     this.resetSelecteds()
-  }
-
-  private resetSelecteds() {
-    this.selectedCandidateStks = []
-    this.selectedChosenStks = []
-  }
-
-  setHighestPriority() {
-    const { index, stk } = this.getSelectedChosenStk()
-    this.chosenStks.splice(index, 1)
-    this.chosenStks = [stk, ...this.chosenStks]
-    this.priorityChanged = true;
-  }
-  setHighPriority() {
-    const { index, stk } = this.getSelectedChosenStk()
-    if (index === 0) return
-    this.chosenStks.splice(index, 1)
-    this.chosenStks.splice(index - 1, 0, stk)
-    this.priorityChanged = true;
-  }
-  setLowPriority() {
-    const { index, stk } = this.getSelectedChosenStk()
-    if (index === this.chosenStks.length - 1) return
-    this.chosenStks.splice(index, 1)
-    this.chosenStks.splice(index + 1, 0, stk)
-    this.priorityChanged = true;
-  }
-  setLowestPriority() {
-    const { index, stk } = this.getSelectedChosenStk()
-
-    this.chosenStks.splice(index, 1)
-    this.chosenStks = [...this.chosenStks, stk]
-    this.priorityChanged = true;
-  }
-
-  private getSelectedChosenStk() {
-    const index = this.chosenStks.findIndex((cs) =>
-      this.selectedChosenStks.some((scs) => scs === cs.id),
-    )
-    const stk = this.chosenStks[index]
-
-    return { index, stk }
   }
 
 }
+
+
+

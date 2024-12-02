@@ -1,7 +1,11 @@
+import { ISettingsTargetBlocking } from "./settings.model"
+
 export interface ICommandMessage {
 	type?: string
 	action: string
 }
+
+
 
 export interface IMapUpdateCommandMessage extends ICommandMessage {
 	map_db_name?: string
@@ -209,6 +213,17 @@ export interface IResetVehicleMileageTotalCommandMessage
     mode: string
     vehicleId?: number
     vehicleIds?: number[]
+}
+
+export interface ITargetBlockingCommandMessage extends ICommandMessage {
+  request: "vehicle_manager",
+  action: 'target_block_setting',
+  target_block_list?: ISendTargetBlock[]
+}
+
+export interface ISendTargetBlock {
+  vehicle_online_name: string,
+  target_block_online_names: string[]
 }
 
 export interface IReleaseCommandMessage extends ICommandMessage {

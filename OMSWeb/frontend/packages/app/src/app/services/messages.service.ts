@@ -30,10 +30,12 @@ import {
   IToggleHomeModeCommandMessage,
   IChangeHomeModeCommandMessage,
   IChangeIvrModeCommandMessage,
+  ITargetBlockingCommandMessage,
   IToggleChainManualCommandDisabledCommandMessage,
   IResetVehicleMileageTotalCommandMessage, IReleaseCommandMessage,
 } from '../models/command.model'
 import { IOrderStatusRow } from '../models/order-status.model'
+import { ISettingsTargetBlocking } from '../models/settings.model'
 import { IVehicleStatusRow } from '../models/vehicle-status.model'
 import { IZcuStatusRow } from '../models/zcu-status.model'
 
@@ -399,6 +401,15 @@ export class MessagesService {
       action: 'release',
       id,
     })
+  }
+
+
+  sendTargetBlockingCommand(command: ITargetBlockingCommandMessage) {
+    command.request = command.request,
+    command.action = command.action,
+    command.target_block_list = command.target_block_list
+
+    return this.sendCommand<ITargetBlockingCommandMessage>(command)
   }
 
 	private sendCommand<T extends ICommandMessage>(command: T): Observable<void> {

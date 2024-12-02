@@ -92,6 +92,11 @@ namespace OMSWeb.Services.MqttClient
         public const string ACTION_HOLD_RELEASE = "hold_release";
         public const string ACTION_RELEASE = "release";
 
+
+        public const string ACTION_TARGET_BLOCK_SETTING = "target_block_setting";
+
+
+
         public MqttMessage()
         {
 
@@ -157,6 +162,8 @@ namespace OMSWeb.Services.MqttClient
                 case ACTION_RESET_HOLD:
                 case ACTION_HOLD_RELEASE:
                 case ACTION_RELEASE:
+                case ACTION_TARGET_BLOCK_SETTING:
+
                     return TOPIC_DEFAULT;   // "oms/vehicle-manager/request";
             }
 
@@ -833,7 +840,13 @@ namespace OMSWeb.Services.MqttClient
 
                 Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: {command.Action}, ID: {data["id"]}, Ack Time: {data["ack_time"]} Ack By: {data["ack_by"]}");
             }
+            else if (command.Action == ACTION_TARGET_BLOCK_SETTING)
+            {
+                data["target_block_list"] = command.target_block_list;
 
+
+                Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: {command.Action}, target_block_list: {data["target_block_list"]}");
+            }
             // build JSON list
             List<string> results = new List<string>();
             results.Add(JsonConvert.SerializeObject(data));

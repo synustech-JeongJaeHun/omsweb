@@ -11,58 +11,61 @@
 
   <div class="single-grid">
     <h4 clss="setting-title">Vehicle</h4>
-    <dx-data-grid [disabled]="!isModeStk"
-                  [dataSource]="candidateStks"
+    <dx-data-grid [dataSource]="vehicles"
+                  [focusedRowKey]="focusedVehicle"
+                  [selectedRowKeys]="selectedVehicle"
                   [showBorders]="true"
-                  [keyExpr]="'id'"
-                  [(selectedRowKeys)]="selectedCandidateStks"
+                  [keyExpr]="'logicalId'"
+                  [focusedRowEnabled]="true"
+                  (onContentReady)="setInitialSelection()"
+                  (onFocusedRowChanged)="onFocusedVehicleRowChanged($event)"
                   height="350px"
                   width="13em">
       <dxo-scrolling mode="virtual"></dxo-scrolling>
-      <dxo-selection mode="multiple"
+      <dxo-selection mode="single"
                      showCheckBoxesMode="always"></dxo-selection>
-      <dxi-column [width]="20" datyType="string" dataField="id" [caption]="'Vehicle' | translate"> </dxi-column>
+      <dxi-column [width]="20" datyType="string" dataField="logicalId" [caption]="'Vehicle' | translate"> </dxi-column>
     </dx-data-grid>
   </div>
   <div class="grid-divider"></div>
   <div class="single-grid ">
     <h4 clss="setting-title">Station/Buffer</h4>
     <div class="two-grid">
-      <dx-data-grid [disabled]="!isModeStk"
-                    [dataSource]="candidateStks"
+
+      <dx-data-grid [dataSource]="targetAllowDataSource"
                     [showBorders]="true"
-                    [keyExpr]="'id'"
-                    [(selectedRowKeys)]="selectedCandidateStks"
+                    [keyExpr]="'targetBlockOnlineName'"
+                    [(selectedRowKeys)]="selectedTargetAllow"
                     height="350px"
                     width="14em">
         <dxo-scrolling mode="virtual"></dxo-scrolling>
         <dxo-selection mode="multiple"
                        showCheckBoxesMode="always"></dxo-selection>
-        <dxi-column [width]="40" datyType="string" dataField="id" [caption]="'반송 가능' | translate"> </dxi-column>
+        <dxi-column [width]="40" datyType="string" dataField="targetBlockOnlineName" [caption]="'반송 가능' | translate"> </dxi-column>
+        <!--<dxi-column [width]="120" datyType="string" dataField="logicalId" [caption]="'names.logicalId' | translate"> </dxi-column>-->
       </dx-data-grid>
 
       <div class="actions">
-        <button mat-icon-button>
+        <button mat-icon-button
+                (click)="addToTargetBlockings()">
           <mat-icon>arrow_right</mat-icon>
         </button>
-        <button mat-icon-button>
+        <button mat-icon-button
+                (click)="removeFromTargetBlockings()">
           <mat-icon>arrow_left</mat-icon>
         </button>
-        <!--<span style="color: rgba(0, 0, 0, .87);">
-          제거
-        </span>-->
       </div>
 
-      <dx-data-grid [disabled]="!isModeStk"
-                    [dataSource]="chosenStks"
+      <dx-data-grid [dataSource]="targetBlockDataSource"
                     [showBorders]="true"
-                    [keyExpr]="'id'"
+                    [keyExpr]="'targetBlockOnlineName'"
+                    [(selectedRowKeys)]="selectedTargetBlock"
                     height="350px"
                     width="14em">
         <dxo-scrolling mode="virtual"></dxo-scrolling>
         <dxo-selection mode="multiple"
                        showCheckBoxesMode="always"></dxo-selection>
-        <dxi-column [width]="40" datyType="string" dataField="id" [caption]="'반송 불가' | translate"> </dxi-column>
+        <dxi-column [width]="40" datyType="string" dataField="targetBlockOnlineName" [caption]="'반송 불가' | translate"> </dxi-column>
         <!--<dxi-column [width]="120" datyType="string" dataField="logicalId" [caption]="'names.logicalId' | translate"> </dxi-column>-->
       </dx-data-grid>
 

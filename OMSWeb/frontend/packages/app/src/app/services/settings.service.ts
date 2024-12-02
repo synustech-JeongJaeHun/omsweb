@@ -19,7 +19,8 @@ import {
     ISettingsZcu,
 	ServiceConfig,
 	ManualTransferFiltersSetting,
-	NodeMarginSetting,
+  NodeMarginSetting,
+  ISettingsTargetBlocking
 } from '../models/settings.model'
 import { IQueryResult } from '@oms/models/query-result.model'
 import * as AspNetData from 'devextreme-aspnet-data-nojquery'
@@ -208,6 +209,11 @@ export class SettingsService {
 
     updateSettingsDelayedTransferTimeout(timeout: string, warningNotify: string, tableNotify: string): Observable<IQueryResult> {
         return this.http.post<IQueryResult>(`${this.baseUrl}/updateSettingsDelayedTransferTimeout/${timeout}&${warningNotify}&${tableNotify}`, '')
+    }
+
+    //targetblock
+    settingsTargetBlocks(): Observable<ISettingsTargetBlocking[]> {
+      return this.http.get<ISettingsTargetBlocking[]>(`${this.baseUrl}/targetBlock`)
     }
 
   public saveKpiEnabled(enabled: boolean): Observable<any> {

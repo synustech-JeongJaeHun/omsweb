@@ -1046,7 +1046,8 @@ export interface ISettingsGroupedObject {
 	id: number
 	groupId: number
 	referenceId: number
-	referenceTable: string
+  referenceTable: string
+  homePoint: number
 }
 
 export interface ISettingsCluster {
@@ -1086,4 +1087,9 @@ export interface FireStationFilters{
   startWords: string[],
   endWords: string[],
   includeWords: string[]
+}
+
+export interface ISettingsTargetBlocking {
+  vehicleOnlineName: string,
+  targetBlockOnlineName: string
 }

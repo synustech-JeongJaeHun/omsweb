@@ -1,3 +1,6 @@
+using OMSWeb.Models.Entities;
+using System.Collections.Generic;
+
 namespace OMSWeb.Models
 {
     public class CommandMessageDto
@@ -71,5 +74,13 @@ namespace OMSWeb.Models
         public string Id  { get; set; }
         
         public string AckBy { get; set; }
+
+        public List<targetBlock> target_block_list { get; set; }
+
+        public class targetBlock
+        {
+            public string vehicle_online_name { get; set; }
+            public string[] target_block_online_names { get; set; }
+        }
     }
 }
