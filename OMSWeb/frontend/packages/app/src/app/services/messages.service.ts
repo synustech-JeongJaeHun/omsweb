@@ -405,7 +405,6 @@ export class MessagesService {
 
 
   sendTargetBlockingCommand(command: ITargetBlockingCommandMessage) {
-    command.request = command.request,
     command.action = command.action,
     command.target_block_list = command.target_block_list
 

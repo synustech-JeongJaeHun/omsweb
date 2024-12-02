@@ -75,6 +75,10 @@ export interface IDataChangeEvent {
   note?: string
   cAlias?: string
   type?: string
+
+  vehicleOnlineName?:string
+  targetBlockOnlineName?: string
+
 }
 
 export const alertSeverities = [

@@ -7,6 +7,7 @@ import { ISettingsAlternateTransfer, ISettingsAlternateStation } from '../../../
 import { ISettingsTargetBlocking, ISettingsBufferWithUnuse } from '../../../models/settings.model';
 import { ISettingsStationWithUnuse, ISettingsVehicleReg } from '../../../models/settings.model';
 import { SettingsService } from '../../../services/settings.service'
+import { HubService } from '../../../services/hub.service';
 import { SystemsService } from '../../../services/systems.service'
 import { MessagesService } from '../../../services/messages.service'
 import { DialogService } from '../../../services/dialog.service'
@@ -14,6 +15,7 @@ import { TranslateService } from '@ngx-translate/core'
 import { TscModeEnums } from '@oms/models/enums'
 import { forEach } from 'lodash'
 import { ISendTargetBlock } from '../../../models/command.model'
+import { IDataChangeEvent } from '../../../models/notification.model'
 
 
 
@@ -53,6 +55,7 @@ export class TargetBlockSettingComponent {
   constructor(
     private settingsSvc: SettingsService,
     private messageSvc: MessagesService,
+    private hubSvc: HubService,
     private systemSvc: SystemsService,
     private $t: TranslateService,
   ) {
@@ -134,6 +137,7 @@ export class TargetBlockSettingComponent {
     this.selectedTargetAllow = []
     this.selectedTargetBlock = []
   }
+
   onFocusedVehicleRowChanged(e) {
 
     const vlogicalId = e.row.data.logicalId;
@@ -159,6 +163,7 @@ export class TargetBlockSettingComponent {
 
   onSave() {
 
+
     const sendTargetBlockData: ISendTargetBlock[] = Object.values(
       this.targetBlockings.reduce((acc, curr) => {
 
@@ -176,14 +181,75 @@ export class TargetBlockSettingComponent {
       }, {})
     );
 
-
     this.messageSvc
-      .sendTargetBlockingCommand({ request: "vehicle_manager", action: 'target_block_setting', target_block_list: sendTargetBlockData })
+      .sendTargetBlockingCommand({ action: 'target_block_setting', target_block_list: sendTargetBlockData })
       .subscribe(() => {
-        this.onRervert();
+        /*this.onTargetBlockChanged();*/
       });
+
+    //this.targetBlockDataSource = this.targetBlockings.filter(target => target.vehicleOnlineName === this.selectedVehicle);
+
+    //this.targetAllowDataSource = this.targetAllowings
+    //  .filter(vehicleT => vehicleT.vehicleOnlineName == this.selectedVehicle)
+    //  .filter(item => !this.targetBlockings
+    //    .some(blocking => item.vehicleOnlineName === blocking.vehicleOnlineName &&
+    //      item.targetBlockOnlineName === blocking.targetBlockOnlineName)
+    //  )
+
+    this.resetSelecteds()
+
+    //this.targetBlockDataSource = this.targetBlockings.filter(target => target.vehicleOnlineName === this.selectedVehicle);
+
+    //this.targetAllowDataSource = this.targetAllowings
+    //  .filter(vehicleT => vehicleT.vehicleOnlineName == this.selectedVehicle)
+    //  .filter(item => !this.targetBlockings
+    //    .some(blocking => item.vehicleOnlineName === blocking.vehicleOnlineName &&
+    //      item.targetBlockOnlineName === blocking.targetBlockOnlineName)
+    //)
+
+    //this.resetSelecteds()
+    //targetAlling도? 없는걸로 필터링...?
+
+  
   }
 
+  onTargetBlockChanged() {
+
+    this.hubSvc.targetBlockChanged$.pipe(takeUntil(this.destroy$)).subscribe((e) => {
+      if (e.operation === 'DELETE') {
+
+        //this.targetBlokcing 데이터 직접 삭제
+        for (let i = this.targetBlockings.length - 1; i >= 0; i--) {
+          if (
+            this.targetBlockings[i].vehicleOnlineName === e.vehicleOnlineName &&
+            this.targetBlockings[i].targetBlockOnlineName === e.targetBlockOnlineName
+          ) {
+            this.targetBlockings.splice(i, 1); // 조건에 맞는 요소 삭제
+          }
+        }
+
+
+      } else if (e.operation === 'INSERT') { //
+        console.log("Insert before count=" + this.targetBlockings.length);
+        this.targetBlockings.push({
+          vehicleOnlineName: e.vehicleOnlineName,
+          targetBlockOnlineName: e.targetBlockOnlineName
+        })
+      }
+    });
+
+    //this.targetBlockDataSource = this.targetBlockings.filter(target => target.vehicleOnlineName === this.selectedVehicle);
+
+    //this.targetAllowDataSource = this.targetAllowings
+    //  .filter(vehicleT => vehicleT.vehicleOnlineName == this.selectedVehicle)
+    //  .filter(item => !this.targetBlockings
+    //    .some(blocking => item.vehicleOnlineName === blocking.vehicleOnlineName &&
+    //      item.targetBlockOnlineName === blocking.targetBlockOnlineName)
+    //  )
+
+    //this.resetSelecteds()
+
+  }
 
   onRervert() {
     console.log("onRevert");

@@ -215,6 +215,7 @@ namespace OMSWeb.Services.MqttClient
                 case ACTION_ZCU_SETTING:
                 case ACTION_PM:
                 case ACTION_RELEASE:
+                case ACTION_TARGET_BLOCK_SETTING:
                     return REQUEST_VEHICLE_MANAGER;
 
                 case ACTION_RESET:
@@ -843,7 +844,6 @@ namespace OMSWeb.Services.MqttClient
             else if (command.Action == ACTION_TARGET_BLOCK_SETTING)
             {
                 data["target_block_list"] = command.target_block_list;
-
 
                 Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"ACTION: {command.Action}, target_block_list: {data["target_block_list"]}");
             }

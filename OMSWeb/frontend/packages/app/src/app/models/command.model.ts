@@ -216,7 +216,6 @@ export interface IResetVehicleMileageTotalCommandMessage
 }
 
 export interface ITargetBlockingCommandMessage extends ICommandMessage {
-  request: "vehicle_manager",
   action: 'target_block_setting',
   target_block_list?: ISendTargetBlock[]
 }

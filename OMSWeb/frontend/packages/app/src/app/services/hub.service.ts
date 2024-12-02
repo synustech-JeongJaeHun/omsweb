@@ -2,6 +2,7 @@ import { EventEmitter, Injectable } from '@angular/core'
 import * as signalR from '@microsoft/signalr'
 
 import { IDataChangeEvent } from '../models/notification.model'
+import { ISettingsTargetBlocking } from '../models/settings.model'
 
 const showLogger = false
 const showInfo = false
@@ -42,6 +43,8 @@ export class HubService {
 	homeChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter()
 
   mapUpdateStatus$: EventEmitter<IDataChangeEvent> = new EventEmitter()
+
+  targetBlockChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter()
 
   systemState$: EventEmitter<IDataChangeEvent> = new EventEmitter()
 	//#endregion
@@ -116,6 +119,7 @@ export class HubService {
 		this.hub.off('homeChanged')
     this.hub.off('mapUpdateStatus')
     this.hub.off('systemState')
+    this.hub.off('targetBlockList')
 	}
 
 	public detachEventsOnMap() {
@@ -138,7 +142,8 @@ export class HubService {
 		this.hub.off('clusterStatusChanged')
 		this.hub.off('clusterStatusTableChanged')
 		this.hub.off('kpiChanged')
-		this.hub.off('homeChanged')
+    this.hub.off('homeChanged')
+    this.hub.off('targetBlockList')
 	}
 
 	private attachEvents() {
@@ -201,7 +206,7 @@ export class HubService {
 		})
 		this.hub.on('alarm', (meta, body) => {
 			showInfo && console.info('## hub message : alarm >>', { meta, body })
-			this.alarmChanged$.emit({ ...meta, data: body })
+      this.alarmChanged$.emit({ ...meta, data: body })
 		})
 		this.hub.on('alert', (meta, body) => {
 			showInfo && console.info('## hub message : alert >>', { meta, body })
@@ -263,9 +268,15 @@ export class HubService {
       this.mapUpdateStatus$.emit({ ...meta, data: body })
     })
 
+    this.hub.on('targetBlockList', (meta, body) => {
+      showInfo && console.info('## hub message : targetBlockList >>', {meta, body})
+      this.targetBlockChanged$.emit({ ...meta, data: body })
+    })
+
     this.hub.on('systemState', (meta, body) => {
       showInfo && console.info('## hub message : systemState >>', { meta, body })
       this.systemState$.emit({ ...meta, data: body })
     })
+
 	}
 }
