@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, ViewChild } from '@angular/core'
 import { forkJoin, Observable } from 'rxjs'
 import { tap, map, flatMap } from 'rxjs/operators'
 import { Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators'
-import { ISettingsAlternateTransfer, ISettingsAlternateStation } from '../../../models/settings.model'; //지울거
+import { ISettingsAlternateTransfer, ISettingsAlternateStation } from '../../../models/settings.model';
 import { ISettingsTargetBlocking, ISettingsBufferWithUnuse } from '../../../models/settings.model';
 import { ISettingsStationWithUnuse, ISettingsVehicleReg } from '../../../models/settings.model';
 import { SettingsService } from '../../../services/settings.service'
@@ -16,7 +16,7 @@ import { TscModeEnums } from '@oms/models/enums'
 import { forEach } from 'lodash'
 import { ISendTargetBlock } from '../../../models/command.model'
 import { IDataChangeEvent } from '../../../models/notification.model'
-
+import { DxDataGridComponent } from 'devextreme-angular';
 
 
 type TargetBlock ={
@@ -30,6 +30,9 @@ type TargetBlock ={
   styleUrls: ['./target-block-setting.component.scss'],
 })
 export class TargetBlockSettingComponent {
+  @ViewChild('targetAllowDataGrid', { static: false }) targetAllowDataGrid!: DxDataGridComponent;
+  @ViewChild('targetBlockDataGrid', { static: false }) targetBlockDataGrid!: DxDataGridComponent;
+
 
   private destroy$ = new Subject<void>()
 
@@ -151,7 +154,15 @@ export class TargetBlockSettingComponent {
     )
 
     this.targetBlockDataSource = this.targetBlockings.filter(block => block.vehicleOnlineName == vlogicalId)
-    console.log("vehicle=" + vlogicalId + " // after Filter targetAllowDataSource Count=" + this.targetAllowDataSource.length);   
+
+    //selected delete 
+    if (this.targetAllowDataGrid && this.targetAllowDataGrid.instance) {
+      this.targetAllowDataGrid.instance.clearSelection();
+    }
+
+    if (this.targetBlockDataGrid && this.targetBlockDataGrid.instance) {
+      this.targetBlockDataGrid.instance.clearSelection();
+    }
   }
 
   setInitialSelection() {
@@ -162,7 +173,6 @@ export class TargetBlockSettingComponent {
   }
 
   onSave() {
-
 
     const sendTargetBlockData: ISendTargetBlock[] = Object.values(
       this.targetBlockings.reduce((acc, curr) => {
@@ -181,74 +191,43 @@ export class TargetBlockSettingComponent {
       }, {})
     );
 
-    this.messageSvc
-      .sendTargetBlockingCommand({ action: 'target_block_setting', target_block_list: sendTargetBlockData })
-      .subscribe(() => {
-        /*this.onTargetBlockChanged();*/
-      });
-
-    //this.targetBlockDataSource = this.targetBlockings.filter(target => target.vehicleOnlineName === this.selectedVehicle);
-
-    //this.targetAllowDataSource = this.targetAllowings
-    //  .filter(vehicleT => vehicleT.vehicleOnlineName == this.selectedVehicle)
-    //  .filter(item => !this.targetBlockings
-    //    .some(blocking => item.vehicleOnlineName === blocking.vehicleOnlineName &&
-    //      item.targetBlockOnlineName === blocking.targetBlockOnlineName)
-    //  )
-
-    this.resetSelecteds()
-
-    //this.targetBlockDataSource = this.targetBlockings.filter(target => target.vehicleOnlineName === this.selectedVehicle);
-
-    //this.targetAllowDataSource = this.targetAllowings
-    //  .filter(vehicleT => vehicleT.vehicleOnlineName == this.selectedVehicle)
-    //  .filter(item => !this.targetBlockings
-    //    .some(blocking => item.vehicleOnlineName === blocking.vehicleOnlineName &&
-    //      item.targetBlockOnlineName === blocking.targetBlockOnlineName)
-    //)
-
-    //this.resetSelecteds()
-    //targetAlling도? 없는걸로 필터링...?
-
-  
+    this.messageSvc.sendTargetBlockingCommand({ action: 'target_block_setting', target_block_list: sendTargetBlockData }).pipe(
+      tap(() => {
+        this.targetBlockings = [];//초기화
+        this.onTargetBlockChanged();
+      })
+    ).subscribe(() => {
+    });
   }
 
   onTargetBlockChanged() {
+ 
+    this.hubSvc.targetBlockChanged$.pipe(takeUntil(this.destroy$)).subscribe({
+      next: (e) => {
+        if (e.operation === 'INSERT') {
 
-    this.hubSvc.targetBlockChanged$.pipe(takeUntil(this.destroy$)).subscribe((e) => {
-      if (e.operation === 'DELETE') {
+          const exixtTarget = this.targetBlockings.some(item =>
+            item.vehicleOnlineName === e.vehicleOnlineName &&
+            item.targetBlockOnlineName === e.targetBlockOnlineName
+          );
+          //중복데이터 push안하는 걸로 처리.
+          if (!exixtTarget) {
+            this.targetBlockings.push({
+              vehicleOnlineName: e.vehicleOnlineName,
+              targetBlockOnlineName: e.targetBlockOnlineName
+            });
 
-        //this.targetBlokcing 데이터 직접 삭제
-        for (let i = this.targetBlockings.length - 1; i >= 0; i--) {
-          if (
-            this.targetBlockings[i].vehicleOnlineName === e.vehicleOnlineName &&
-            this.targetBlockings[i].targetBlockOnlineName === e.targetBlockOnlineName
-          ) {
-            this.targetBlockings.splice(i, 1); // 조건에 맞는 요소 삭제
+            this.targetAllowDataSource = this.targetAllowings
+              .filter(vehicleT => vehicleT.vehicleOnlineName == this.selectedVehicle)
+              .filter(item => !this.targetBlockings
+                .some(blocking => item.vehicleOnlineName === blocking.vehicleOnlineName &&
+                  item.targetBlockOnlineName === blocking.targetBlockOnlineName)
+              )
           }
+          this.resetSelecteds()
         }
-
-
-      } else if (e.operation === 'INSERT') { //
-        console.log("Insert before count=" + this.targetBlockings.length);
-        this.targetBlockings.push({
-          vehicleOnlineName: e.vehicleOnlineName,
-          targetBlockOnlineName: e.targetBlockOnlineName
-        })
       }
     });
-
-    //this.targetBlockDataSource = this.targetBlockings.filter(target => target.vehicleOnlineName === this.selectedVehicle);
-
-    //this.targetAllowDataSource = this.targetAllowings
-    //  .filter(vehicleT => vehicleT.vehicleOnlineName == this.selectedVehicle)
-    //  .filter(item => !this.targetBlockings
-    //    .some(blocking => item.vehicleOnlineName === blocking.vehicleOnlineName &&
-    //      item.targetBlockOnlineName === blocking.targetBlockOnlineName)
-    //  )
-
-    //this.resetSelecteds()
-
   }
 
   onRervert() {
@@ -279,12 +258,11 @@ export class TargetBlockSettingComponent {
   removeFromTargetBlockings() { 
 
     const selecteds = this.selectedTargetBlock.map((logicalId) =>
-      this.targetBlockings.find((target) => target.targetBlockOnlineName === logicalId && target.vehicleOnlineName === this.selectedVehicle),
+      this.targetBlockings.find((target) => target.targetBlockOnlineName === logicalId && target.vehicleOnlineName === this.selectedVehicle)
     )
 
-    this.targetBlockings = this.targetBlockings.filter(
-      (data) => !selecteds.includes(data)
-    );
+    this.targetBlockings = this.targetBlockings.filter((data) => !selecteds.includes(data));
+
     this.targetBlockDataSource = this.targetBlockings.filter(block => block.vehicleOnlineName === this.selectedVehicle)
    
     this.targetAllowDataSource = this.targetAllowings
@@ -292,10 +270,8 @@ export class TargetBlockSettingComponent {
       .filter(item => !this.targetBlockings
         .some(blocking => item.vehicleOnlineName === blocking.vehicleOnlineName &&
           item.targetBlockOnlineName === blocking.targetBlockOnlineName)
-      )
+    )
 
-    //console.log("targetBlockingDataSource=" + this.targetBlockDataSource);
-    //console.log("targetBlockings(" + this.targetBlockings.length + ")=" + JSON.stringify(this.targetBlockings));
     this.resetSelecteds()
   }
 

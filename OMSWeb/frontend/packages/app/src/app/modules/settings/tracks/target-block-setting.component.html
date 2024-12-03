@@ -11,7 +11,8 @@
 
   <div class="single-grid">
     <h4 clss="setting-title">Vehicle</h4>
-    <dx-data-grid [dataSource]="vehicles"
+    <dx-data-grid
+                  [dataSource]="vehicles"
                   [focusedRowKey]="focusedVehicle"
                   [selectedRowKeys]="selectedVehicle"
                   [showBorders]="true"
@@ -32,7 +33,8 @@
     <h4 clss="setting-title">Station/Buffer</h4>
     <div class="two-grid">
 
-      <dx-data-grid [dataSource]="targetAllowDataSource"
+      <dx-data-grid #targetAllowDataGrid
+                    [dataSource]="targetAllowDataSource"
                     [showBorders]="true"
                     [keyExpr]="'targetBlockOnlineName'"
                     [(selectedRowKeys)]="selectedTargetAllow"
@@ -56,7 +58,8 @@
         </button>
       </div>
 
-      <dx-data-grid [dataSource]="targetBlockDataSource"
+      <dx-data-grid id="targetBlockDataGrid"
+                    [dataSource]="targetBlockDataSource"
                     [showBorders]="true"
                     [keyExpr]="'targetBlockOnlineName'"
                     [(selectedRowKeys)]="selectedTargetBlock"
