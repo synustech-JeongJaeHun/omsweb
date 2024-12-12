@@ -40,7 +40,7 @@ export class TrackStatusService {
 	    })
 	    
       //segmentDisabled
-	    this.removedOnSegment(this.trackData.segmentDisabled, res.segmentDisabled).forEach(d=>{
+      this.removedOnSegment(this.trackData.segmentDisabled, res.segmentDisabled).forEach(d=>{    
 		    this.hubService.segmentDisabledChanged$.emit({operation: 'DELETE', table: '', id: d.id})
 	    })
       this.addedOnSegment(this.trackData.segmentDisabled, res.segmentDisabled).forEach(d=>{
@@ -195,7 +195,7 @@ export class TrackStatusService {
 		this.hubService.vehicleChanged$.subscribe((e: IDataChangeEvent) => {
 			this.handleVehicleChanged(e)
 		})
-		this.hubService.segmentDisabledChanged$.subscribe((e: IDataChangeEvent) => {
+    this.hubService.segmentDisabledChanged$.subscribe((e: IDataChangeEvent) => {
 			this.handleSegmentDisabledChanged(e)
 		})
 		this.hubService.zcuMapChanged$.subscribe((e: IDataChangeEvent) => {
@@ -207,7 +207,7 @@ export class TrackStatusService {
 		this.hubService.stationChanged$.subscribe((e) => {
 			this.handleStationChanged(e)
 		})
-		this.hubService.bufferChanged$.subscribe((e) => {
+    this.hubService.bufferChanged$.subscribe((e) => {  
 			this.handleBufferChanged(e)
 		})
 		this.hubService.groupChanged$.subscribe((e) => {
@@ -256,7 +256,7 @@ export class TrackStatusService {
 		}
 	}
 
-	handleSegmentDisabledChanged(e: IDataChangeEvent) {
+  handleSegmentDisabledChanged(e: IDataChangeEvent) {
 		switch (e.operation) {
 			case 'INSERT':
 				this.trackData.segmentDisabled.push(e.data)
@@ -539,13 +539,14 @@ export class TrackStatusService {
     return result
   }
 
-	private addedOnSegment(prev:any[], current:any[]):any{
-		let result = []
-		current.forEach(c => {
-			if (!prev.some(p => p.segmentId === c.segmentId)) {
-				result.push(c);
-			}
-		});
+  private addedOnSegment(prev: any[], current:any[]):any{
+
+    let result = []
+    current.forEach(c => {
+      if (!prev.some(p => p.id === c.id)) {
+        result.push(c);
+      }
+    });
 		return result
 	}
 
@@ -572,7 +573,7 @@ export class TrackStatusService {
 	private removedOnSegment(prev:any[], current:any[]):any{
 		let result = []
 		prev.forEach(p => {
-			if (!current.some(c => c.segmentId === p.segmentId)) {
+			if (!current.some(c => c.id === p.id)) {
 				result.push(p);
 			}
 		});
