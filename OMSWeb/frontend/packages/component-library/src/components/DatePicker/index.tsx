@@ -5,7 +5,7 @@ import React, { FC, useState, useEffect } from 'react'
 import moment from 'moment'
 import 'react-dates/initialize'
 import { DateRangePicker } from 'react-dates'
-import { beforeDay, afterDay, isNotFullEmpty } from '@daimre/shared'
+import { beforeDay, afterDay, isNotFullEmpty } from '@synusdev/shared'
 
 const defaultStart = beforeDay(1).format('YYYY-MM-DD')
 const defaultEnd = moment().format('YYYY-MM-DD')

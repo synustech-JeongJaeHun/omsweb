@@ -8,8 +8,8 @@
 import * as React from 'react'
 import styled from '@emotion/styled'
 import { css } from '@emotion/react'
-import { color } from '@daimre/styles'
-import { numberWithCommas, isFullEmpty } from '@daimre/shared'
+import { color } from '@synusdev/styles'
+import { numberWithCommas, isFullEmpty } from '@synusdev/shared'
 
 type StyleType = {
 	isPlaceholder: boolean

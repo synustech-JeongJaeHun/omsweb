@@ -11,8 +11,8 @@ import {
 	convertDurationLabel,
 	isType,
 	ls,
-} from '@daimre/shared'
-import { TitleBarlineSet } from '@daimre/component-library'
+} from '@synusdev/shared'
+import { TitleBarlineSet } from '@synusdev/component-library'
 import { getAgt } from '../../utils'
 import da from './dataAdapter'
 import { useImmer } from 'use-immer'

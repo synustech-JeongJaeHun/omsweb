@@ -1,5 +1,5 @@
 {
-  "name": "@daimre/component-library",
+  "name": "@synusdev/component-library",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -21,14 +21,14 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.14.0",
-    "@daimre/shared": "workspace:packages/shared",
-    "@daimre/styles": "workspace:packages/styles",
     "@emotion/react": "^11.4.0",
     "@emotion/styled": "^11.3.0",
     "@material-ui/core": "^4.11.4",
     "@material-ui/icons": "^4.11.2",
     "@material-ui/lab": "^4.0.0-alpha.58",
     "@material-ui/styles": "^4.11.4",
+    "@synusdev/shared": "workspace:packages/shared",
+    "@synusdev/styles": "workspace:packages/styles",
     "classnames": "^2.3.1",
     "d3": "^6.7.0",
     "devextreme": "21.2",

@@ -2,7 +2,7 @@ import * as React from 'react'
 import SimpleTable from './index'
 
 export default {
-  title: '@daimre-ui/SimpleTable',
+  title: '@synusdev-ui/SimpleTable',
   component: SimpleTable,
 }
 

@@ -1,5 +1,5 @@
-import { color as sharedColor } from '@daimre/styles'
-import { sortChartData } from '@daimre/shared'
+import { color as sharedColor } from '@synusdev/styles'
+import { sortChartData } from '@synusdev/shared'
 import { format } from 'date-fns/fp'
 
 const dateForm = format('yyyy-MM-dd')

@@ -8,8 +8,8 @@
 import * as React from 'react'
 import styled from '@emotion/styled'
 import { css } from '@emotion/react'
-import { color } from '@daimre/styles'
-import { isNotFullEmpty, isFullEmpty } from '@daimre/shared'
+import { color } from '@synusdev/styles'
+import { isNotFullEmpty, isFullEmpty } from '@synusdev/shared'
 import Loader from '../Loader'
 import Inline, { Props as InlineProps } from '../charts/Inline'
 

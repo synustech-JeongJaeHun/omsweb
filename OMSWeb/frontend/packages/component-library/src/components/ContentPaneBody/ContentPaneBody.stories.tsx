@@ -8,7 +8,7 @@ import RCol from '../layout/RCol'
 import ContentPaneBody from './index'
 
 export default {
-  title: '@daimre-ui/ContentPaneBody',
+  title: '@synusdev-ui/ContentPaneBody',
   component: ContentPaneBody,
 }
 

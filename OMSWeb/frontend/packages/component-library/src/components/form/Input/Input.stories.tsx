@@ -2,7 +2,7 @@ import * as React from 'react'
 import Input from './index'
 
 export default {
-  title: '@daimre-ui/form/Input',
+  title: '@synusdev-ui/form/Input',
   component: Input,
 }
 

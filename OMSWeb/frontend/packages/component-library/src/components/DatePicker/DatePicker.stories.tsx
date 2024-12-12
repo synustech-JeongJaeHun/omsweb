@@ -3,7 +3,7 @@ import * as React from 'react'
 import DatePicker from './index'
 
 export default {
-  title: '@daimre-ui/DatePicker',
+  title: '@synusdev-ui/DatePicker',
   component: DatePicker,
 }
 

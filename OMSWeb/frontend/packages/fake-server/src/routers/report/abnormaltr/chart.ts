@@ -1,5 +1,5 @@
 import * as R from 'ramda'
-import { getDurationStr, getDurationLabel } from '@daimre/shared'
+import { getDurationStr, getDurationLabel } from '@synusdev/shared'
 import { format, getYear } from 'date-fns/fp'
 import { dic, getSubsection, getName } from '../shared'
 import { query } from '../../../dbconnection'

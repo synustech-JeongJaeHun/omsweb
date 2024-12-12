@@ -1,4 +1,4 @@
-import { color } from '@daimre/styles'
+import { color } from '@synusdev/styles'
 import { genBaseline } from '../dataviz'
 import genMultipleRect from './multipleRect'
 import genStackedArea from './stackedArea'

@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable import/prefer-default-export */
 import * as R from 'ramda'
-import { color } from '@daimre/styles'
+import { color } from '@synusdev/styles'
 
 const makeFlipCurry = R.compose(R.curryN(2), R.flip)
 const sort = (arr) => arr.sort((a, b) => a - b)

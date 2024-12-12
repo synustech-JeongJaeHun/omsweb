@@ -1,10 +1,10 @@
 import * as React from 'react'
 import * as R from 'ramda'
-import { genBaseline, useInterval, useSelfUpdatedData } from '@daimre/shared'
+import { genBaseline, useInterval, useSelfUpdatedData } from '@synusdev/shared'
 import Inline from './index'
 
 export default {
-	title: '@daimre-ui/charts/Inline',
+  title: '@synusdev-ui/charts/Inline',
 	component: Inline,
 }
 

@@ -1,6 +1,6 @@
 import * as React from 'react'
 import styled from '@emotion/styled'
-import { icons } from '@daimre/styles'
+import { icons } from '@synusdev/styles'
 
 const Svg = styled.svg<Partial<Props>>`
   display: ${(props) => (props.block ? 'block' : 'inline-block')};

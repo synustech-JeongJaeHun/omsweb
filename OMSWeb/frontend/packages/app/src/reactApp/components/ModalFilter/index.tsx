@@ -7,8 +7,8 @@ import {
 	MultipleSelectSetProps,
 	Icon,
 	Button,
-} from '@daimre/component-library'
-import { useCount } from '@daimre/shared'
+} from '@synusdev/component-library'
+import { useCount } from '@synusdev/shared'
 
 const customStyles = {
 	overlay: {

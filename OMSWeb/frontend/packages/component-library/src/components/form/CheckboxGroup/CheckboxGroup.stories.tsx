@@ -2,7 +2,7 @@ import * as React from 'react'
 import CheckboxGroup from './index'
 
 export default {
-  title: '@daimre-ui/form/CheckboxGroup',
+  title: '@synusdev-ui/form/CheckboxGroup',
   component: CheckboxGroup,
 }
 

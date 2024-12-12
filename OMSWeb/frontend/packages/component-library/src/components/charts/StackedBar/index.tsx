@@ -9,10 +9,10 @@ import * as React from 'react'
 import * as R from 'ramda'
 import styled from '@emotion/styled'
 import { css } from '@emotion/react'
-import { color } from '@daimre/styles'
+import { color } from '@synusdev/styles'
 import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
-import { usePlaceholderData, isNotFullEmpty } from '@daimre/shared'
+import { usePlaceholderData, isNotFullEmpty } from '@synusdev/shared'
 
 type StyleType = {}
 

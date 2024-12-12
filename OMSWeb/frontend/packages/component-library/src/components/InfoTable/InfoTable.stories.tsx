@@ -2,7 +2,7 @@ import * as React from 'react'
 import InfoTable from './index'
 
 export default {
-  title: '@daimre-ui/InfoTable',
+  title: '@synusdev-ui/InfoTable',
   component: InfoTable,
 }
 

@@ -1,5 +1,5 @@
 import * as R from 'ramda'
-import { convertEpochToStr } from '@daimre/shared'
+import { convertEpochToStr } from '@synusdev/shared'
 import { format } from 'date-fns/fp'
 
 const exTableData = [

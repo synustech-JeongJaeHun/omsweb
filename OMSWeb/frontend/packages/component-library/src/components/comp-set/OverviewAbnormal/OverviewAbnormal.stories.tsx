@@ -3,7 +3,7 @@ import OverviewAbnormal from './index'
 import { exEmptyData, exData } from './exData'
 
 export default {
-	title: '@daimre-ui/comp-set/OverviewAbnormal',
+  title: '@synusdev-ui/comp-set/OverviewAbnormal',
 	component: OverviewAbnormal,
 }
 

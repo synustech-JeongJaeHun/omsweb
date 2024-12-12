@@ -1,9 +1,9 @@
 // @ts-nocheck
 import * as React from 'react'
 import * as R from 'ramda'
-import { isFullEmpty, useSelfUpdatedData } from '@daimre/shared'
+import { isFullEmpty, useSelfUpdatedData } from '@synusdev/shared'
 import styled from '@emotion/styled'
-import { Trend, GlobalStyle } from '@daimre/component-library'
+import { Trend, GlobalStyle } from '@synusdev/component-library'
 import { useQuery } from 'react-query'
 import { getAgt } from '../utils'
 

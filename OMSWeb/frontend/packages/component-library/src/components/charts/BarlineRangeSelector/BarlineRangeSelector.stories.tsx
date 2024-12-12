@@ -3,7 +3,7 @@ import BarlineRangeSelector from './index'
 import { normaltrByVehicle as exData } from '../../../exData'
 
 export default {
-	title: '@daimre-ui/charts/BarlineRangeSelector',
+  title: '@synusdev-ui/charts/BarlineRangeSelector',
 	component: BarlineRangeSelector,
 }
 

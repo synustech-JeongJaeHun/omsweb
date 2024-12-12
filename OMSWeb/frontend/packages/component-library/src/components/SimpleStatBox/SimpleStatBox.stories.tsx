@@ -2,10 +2,10 @@ import * as React from 'react'
 import SimpleStatBox from './index'
 import styled from '@emotion/styled'
 import { css } from '@emotion/react'
-import { genBaseline, useInterval, useSelfUpdatedData } from '@daimre/shared'
+import { genBaseline, useInterval, useSelfUpdatedData } from '@synusdev/shared'
 
 export default {
-	title: '@daimre-ui/SimpleStatBox',
+  title: '@synusdev-ui/SimpleStatBox',
 	component: SimpleStatBox,
 }
 

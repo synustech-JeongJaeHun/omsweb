@@ -1,8 +1,8 @@
 import * as React from 'react'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
-import { color } from '@daimre/styles'
-import { isFullEmpty } from '@daimre/shared'
+import { color } from '@synusdev/styles'
+import { isFullEmpty } from '@synusdev/shared'
 
 type StyleType = {
 	isPlaceholder: boolean

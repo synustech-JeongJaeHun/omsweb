@@ -2,7 +2,7 @@ import * as React from 'react'
 import Avatar from './index'
 
 export default {
-  title: '@daimre-ui/Avatar',
+  title: '@synusdev-ui/Avatar',
   component: Avatar,
 }
 

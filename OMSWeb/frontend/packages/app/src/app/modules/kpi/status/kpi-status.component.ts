@@ -6,7 +6,7 @@ import { ReportService } from '../../../services/report.service';
 import { AccountUtil } from '../../shared/utils/account.util';
 import { interval, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { numRound } from '@daimre/shared'
+import { numRound } from '@synusdev/shared'
 
 @Component({
   selector: 'oms-kpi-status',

@@ -6,8 +6,8 @@
 import * as React from 'react'
 import styled from '@emotion/styled'
 import { jsx, css } from '@emotion/react'
-import { color } from '@daimre/styles'
-import { isFullEmpty } from '@daimre/shared'
+import { color } from '@synusdev/styles'
+import { isFullEmpty } from '@synusdev/shared'
 import Icon from '../../Icon'
 
 const Wrapper = styled.div<Pick<Props, 'isTop' | 'size' | 'isRect' | 'noPadding' | 'weight'>>`

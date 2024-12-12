@@ -3,7 +3,7 @@ import Barline from './index'
 import { normaltrByVehicle as exData } from '../../../exData'
 
 export default {
-	title: '@daimre-ui/charts/Barline',
+  title: '@synusdev-ui/charts/Barline',
 	component: Barline,
 }
 

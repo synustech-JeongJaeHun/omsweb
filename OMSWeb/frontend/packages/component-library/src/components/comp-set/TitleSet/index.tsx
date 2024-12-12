@@ -7,13 +7,13 @@
 import * as React from 'react'
 import styled from '@emotion/styled'
 import { css } from '@emotion/react'
-import { color } from '@daimre/styles'
+import { color } from '@synusdev/styles'
 import {
 	numberWithCommas,
 	isFullEmpty,
 	isNotFullEmpty,
 	bdFormat,
-} from '@daimre/shared'
+} from '@synusdev/shared'
 import DatePicker, { Props as DatePickerProps } from '../../DatePicker'
 import SimpleStatBox from '../../SimpleStatBox'
 import DetailStatBox from '../../DetailStatBox'
@@ -21,7 +21,7 @@ import { QueryContext } from '../../../context'
 import RCol from '../../layout/RCol'
 import Container from '../../layout/Container'
 import ContentPaneBody from '../../ContentPaneBody'
-import { calcBreakpoint } from '@daimre/shared'
+import { calcBreakpoint } from '@synusdev/shared'
 
 type StyleType = {}
 

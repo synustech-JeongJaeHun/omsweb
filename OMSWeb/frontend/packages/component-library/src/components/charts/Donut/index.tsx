@@ -7,7 +7,7 @@ import styled from '@emotion/styled'
 import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 import NoDataToDisplay from 'highcharts/modules/no-data-to-display'
-import { calcColor5Reversed, isNotFullEmpty } from '@daimre/shared'
+import { calcColor5Reversed, isNotFullEmpty } from '@synusdev/shared'
 
 type AnyFuncType = (value: any) => any
 

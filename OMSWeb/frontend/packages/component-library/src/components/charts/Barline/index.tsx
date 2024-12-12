@@ -9,11 +9,11 @@ import * as React from 'react'
 import * as R from 'ramda'
 import styled from '@emotion/styled'
 import { css } from '@emotion/react'
-import { color } from '@daimre/styles'
+import { color } from '@synusdev/styles'
 import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 import { dic } from '../shared'
-import { usePlaceholderData } from '@daimre/shared'
+import { usePlaceholderData } from '@synusdev/shared'
 import { useImmer } from 'use-immer'
 
 type StyleType = {}

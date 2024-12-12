@@ -1,11 +1,11 @@
 import * as React from 'react'
 import TitleSet from './index'
 import ContentPaneBody from '../../ContentPaneBody'
-import { numberWithCommas } from '@daimre/shared'
+import { numberWithCommas } from '@synusdev/shared'
 import { exData, exEmptyData } from './exData'
 
 export default {
-	title: '@daimre-ui/comp-set/TitleSet',
+  title: '@synusdev-ui/comp-set/TitleSet',
 	component: TitleSet,
 }
 

@@ -8,7 +8,7 @@ import styled from '@emotion/styled'
 import { useImmer } from 'use-immer'
 import Select from '../Select'
 import Button from '../../Button'
-import { isFullEmpty } from '@daimre/shared'
+import { isFullEmpty } from '@synusdev/shared'
 
 const Wrapper = styled.div`
   display: flex;

@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { color } from '@daimre/styles'
+import { color } from '@synusdev/styles'
 import { genBaseline } from '../dataviz'
 import { hex2rgba } from '../utils'
 

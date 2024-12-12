@@ -4,7 +4,7 @@ import Icon from '../Icon'
 import Button from './index'
 
 export default {
-  title: '@daimre-ui/Button',
+  title: '@synusdev-ui/Button',
   component: Button,
 }
 

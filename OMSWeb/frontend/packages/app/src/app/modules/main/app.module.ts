@@ -17,9 +17,9 @@ import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar'
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field'
 import { StartupComponent } from './startup.component'
 import { SettingsModule } from '../settings/settings.module';
-import {MonitorStatusComponent} from "@daimre/app/src/app/modules/monitor/status/monitor-status.component";
+import { MonitorStatusComponent } from "@synusdev/app/src/app/modules/monitor/status/monitor-status.component";
 import {PageUnloadGuard} from "@oms/root/guards/page-unload.guard";
-import {KpiModule} from "@daimre/app/src/app/modules/kpi/kpi.module";
+import { KpiModule } from "@synusdev/app/src/app/modules/kpi/kpi.module";
 
 export function HttpLoaderFactory(http: HttpClient) {
 	return new TranslateHttpLoader(http, './assets/i18n/', '.json')

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { getStorage } from '@daimre/shared'
+import { getStorage } from '@synusdev/shared'
 
 const ss = getStorage(window.sessionStorage)
 

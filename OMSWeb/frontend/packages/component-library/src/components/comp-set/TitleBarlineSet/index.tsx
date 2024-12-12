@@ -7,13 +7,13 @@ import * as React from 'react'
 import * as R from 'ramda'
 import styled from '@emotion/styled'
 import { css } from '@emotion/react'
-import { color } from '@daimre/styles'
+import { color } from '@synusdev/styles'
 import {
   numberWithCommas,
   isFullEmpty,
   omitArray,
   bdFormat, beforeDay,
-} from '@daimre/shared'
+} from '@synusdev/shared'
 import Container from '../../layout/Container'
 import RCol from '../../layout/RCol'
 import Col from '../../layout/Col'
@@ -21,7 +21,7 @@ import BarlineTableV from '../../chart-set/BarlineTableV'
 import BarlineTableH from '../../chart-set/BarlineTableH'
 import BarlineRangeTable from '../../chart-set/BarlineRangeTable'
 import TitleSet, { Props as TitleSetProps } from '../TitleSet'
-import { genNormaltr } from '@daimre/shared'
+import { genNormaltr } from '@synusdev/shared'
 import { exStatData, exEmptyData } from './exData'
 import { useImmer } from 'use-immer'
 import { tableConfig } from '../../../utils'

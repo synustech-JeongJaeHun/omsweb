@@ -2,7 +2,7 @@ import * as React from 'react'
 import TimeRangePicker from './index'
 
 export default {
-  title: '@daimre-ui/TimeRangePicker',
+  title: '@synusdev-ui/TimeRangePicker',
   component: TimeRangePicker
 }
 

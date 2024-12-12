@@ -1,6 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 import * as R from 'ramda'
-import { paneBodyBreakpoint } from '@daimre/styles'
+import { paneBodyBreakpoint } from '@synusdev/styles'
 
 const _breakpoints = R.reduce(
   (acc, item) => acc.concat(item[1]),

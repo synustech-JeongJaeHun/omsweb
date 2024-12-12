@@ -5,8 +5,9 @@ import { SvgDivContainer } from '../../utils'
 
 
 export default {
-  title: '@daimre-dataviz/{{camelCase name }}',
-  component: () => <div />,
+  title: '@synusdev-dataviz/{{camelCase name }}',
+  component: () =>
+<div />,
 }
 
 export const Basic = () => {
@@ -22,10 +23,10 @@ export const Basic = () => {
     init()
   }, [])
 
-  return data.length == 0 ? <div /> : <SvgDivContainer
-    func={ {{camelCase name }} }
-    data={data}
-    width={700}
-    height={400}
-  />
+  return data.length == 0 ?
+<div /> :
+<SvgDivContainer func={ {{camelCase name }} }
+                 data={data}
+                 width={700}
+                 height={400} />
 }

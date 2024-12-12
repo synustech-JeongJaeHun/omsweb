@@ -1,12 +1,12 @@
 import * as React from 'react'
 import TitleBarlineSet from './index'
 import { exStatData, exEmptyData } from './exData'
-import { genNormaltr } from '@daimre/shared'
+import { genNormaltr } from '@synusdev/shared'
 const { normaltr: nStat, alarm: aStat } = exStatData
 const { normaltr: nEmpty, alarm: aEmpty } = exEmptyData
 
 export default {
-	title: '@daimre-ui/comp-set/TitleBarlineSet',
+  title: '@synusdev-ui/comp-set/TitleBarlineSet',
 	component: TitleBarlineSet,
 }
 

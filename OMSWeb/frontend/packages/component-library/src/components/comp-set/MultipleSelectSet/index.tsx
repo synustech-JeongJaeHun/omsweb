@@ -13,7 +13,7 @@ import {
 	isNotFullEmpty,
 	isSameObjArr,
 	convertR,
-} from '@daimre/shared'
+} from '@synusdev/shared'
 import Checkbox from '../../form/Checkbox'
 import { original, current } from 'immer'
 import { useImmer } from 'use-immer'

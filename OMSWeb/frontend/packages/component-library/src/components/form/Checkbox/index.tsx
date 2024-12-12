@@ -5,8 +5,8 @@
 import * as React from 'react'
 import styled from '@emotion/styled'
 import { css, jsx } from '@emotion/react'
-import { color } from '@daimre/styles'
-import { makeid } from '@daimre/shared'
+import { color } from '@synusdev/styles'
+import { makeid } from '@synusdev/shared'
 
 const Wrapper = styled.div<Pick<Props, 'disabled' | 'block'>>`
 	display: ${({ block }) => (block ? 'block' : 'inline-block')};
