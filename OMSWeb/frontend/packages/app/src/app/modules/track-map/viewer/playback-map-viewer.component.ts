@@ -13,8 +13,8 @@ import {HostModeEnums, PermissionEnums, TscModeEnums} from '../../../models/enum
 import { IPreferences } from '../../../models/settings.model'
 import { AuthService } from '../../../services/auth.service'
 
-import '@daimre/oms-track-monitor'
-import { IOmsTrackMonitor } from '@daimre/oms-track-monitor'
+import '@synusdev/oms-track-monitor'
+import { IOmsTrackMonitor } from '@synusdev/oms-track-monitor'
 import { MapStatesService } from '../map-states.service'
 import { SettingsService } from '@oms/root/services/settings.service'
 import { TrackMonitorSettingService } from '../../../services/track-monitor-setting.service'

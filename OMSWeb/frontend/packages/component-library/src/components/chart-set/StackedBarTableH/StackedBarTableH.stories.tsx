@@ -3,7 +3,7 @@ import StackedBarTableH from './index'
 import { abnormaltrByVehicle as exData } from '../../../exData'
 
 export default {
-	title: '@daimre-ui/chart-set/StackedBarTableH',
+  title: '@synusdev-ui/chart-set/StackedBarTableH',
 	component: StackedBarTableH,
 }
 

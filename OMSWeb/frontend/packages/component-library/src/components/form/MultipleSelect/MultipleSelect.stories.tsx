@@ -2,7 +2,7 @@ import * as React from 'react'
 import MultipleSelect from './index'
 
 export default {
-  title: '@daimre-ui/form/MultipleSelect',
+  title: '@synusdev-ui/form/MultipleSelect',
   component: MultipleSelect,
 }
 

@@ -3,7 +3,7 @@ import StackedBarTableV from './index'
 import { abnormaltrByDuration as exData } from '../../../exData'
 
 export default {
-	title: '@daimre-ui/chart-set/StackedBarTableV',
+  title: '@synusdev-ui/chart-set/StackedBarTableV',
 	component: StackedBarTableV,
 }
 

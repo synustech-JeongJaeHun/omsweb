@@ -1,5 +1,5 @@
 {
-  "name": "daimre",
+  "name": "synusdev",
   "private": true,
   "workspaces": [
     "packages/*"
@@ -7,15 +7,15 @@
   "type": "module",
   "scripts": {
     "preinstall": "npx only-allow yarn",
-    "ap": "yarn workspace @daimre/app",
-    "shared": "yarn workspace @daimre/shared",
-    "cl": "yarn workspace @daimre/component-library",
-    "styles": "yarn workspace @daimre/styles",
-    "otm": "yarn workspace @daimre/oms-track-monitor",
-    "fs": "yarn workspace @daimre/fake-server",
+    "ap": "yarn workspace @synusdev/app",
+    "shared": "yarn workspace @synusdev/shared",
+    "cl": "yarn workspace @synusdev/component-library",
+    "styles": "yarn workspace @synusdev/styles",
+    "otm": "yarn workspace @synusdev/oms-track-monitor",
+    "fs": "yarn workspace @synusdev/fake-server",
     "clean:src": "yarn workspaces foreach -pv --exclude app run clean",
     "clean": "yarn workspaces foreach -pv run clean",
-    "build:src": "yarn workspaces foreach -pvtR --from '{@daimre/styles,@daimre/shared,@daimre/component-library,@daimre/oms-track-monitor}' run build",
+    "build:src": "yarn workspaces foreach -pvtR --from '{@synusdev/styles,@synusdev/shared,@synusdev/component-library,@synusdev/oms-track-monitor}' run build",
     "build:app": "yarn ap build",
     "build": "run-s clean build:src build:app",
     "watch:src": "yarn workspaces foreach -pi run watch",

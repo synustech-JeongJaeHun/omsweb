@@ -8,13 +8,13 @@ import * as React from 'react'
 import * as R from 'ramda'
 import styled from '@emotion/styled'
 import { css } from '@emotion/react'
-import { color } from '@daimre/styles'
+import { color } from '@synusdev/styles'
 import {
 	numberWithCommas,
 	genBaseline,
 	numRound,
 	convertEpochToStr,
-} from '@daimre/shared'
+} from '@synusdev/shared'
 import Container from '../../layout/Container'
 import RCol from '../../layout/RCol'
 import Col from '../../layout/Col'

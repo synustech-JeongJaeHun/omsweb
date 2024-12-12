@@ -6,7 +6,7 @@ import * as React from 'react'
 import { Global } from '@emotion/react'
 import styled from '@emotion/styled'
 import ClipLoader from 'react-spinners/ClipLoader'
-import { color, globalStyle } from '@daimre/styles'
+import { color, globalStyle } from '@synusdev/styles'
 
 type StyledProps = {
 	noMarginBottom?: boolean

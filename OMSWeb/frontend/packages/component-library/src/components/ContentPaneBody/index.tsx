@@ -1,6 +1,6 @@
 import * as React from 'react'
 import styled from '@emotion/styled'
-import { useWindowSize } from '@daimre/shared'
+import { useWindowSize } from '@synusdev/shared'
 
 export const PaneBodyContext = React.createContext({ width: 0 })
 

@@ -2,7 +2,7 @@ import * as React from 'react'
 import MultipleSelectSet from './index'
 
 export default {
-	title: '@daimre-ui/comp-set/MultipleSelectSet',
+  title: '@synusdev-ui/comp-set/MultipleSelectSet',
 	component: MultipleSelectSet,
 }
 

@@ -7,7 +7,7 @@ import {
 	isNotFullEmpty,
 	isType,
 	ls,
-} from '@daimre/shared'
+} from '@synusdev/shared'
 import styled from '@emotion/styled'
 import * as Modal from 'react-modal'
 import { useQuery } from 'react-query'
@@ -16,7 +16,7 @@ import {
 	MultipleSelectSet,
 	Icon,
 	Button,
-} from '@daimre/component-library'
+} from '@synusdev/component-library'
 import { getAgt } from '../../utils'
 import { ModalFilter } from '../../components'
 import { useImmer } from 'use-immer'

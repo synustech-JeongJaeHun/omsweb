@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import Scrollable from './index'
 
 export default {
-  title: '@daimre-ui/Scrollable',
+  title: '@synusdev-ui/Scrollable',
   component: Scrollable,
 }
 

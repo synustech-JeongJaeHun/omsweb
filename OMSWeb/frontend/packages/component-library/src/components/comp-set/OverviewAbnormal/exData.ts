@@ -1,4 +1,4 @@
-import { numberWithCommas } from '@daimre/shared'
+import { numberWithCommas } from '@synusdev/shared'
 import {
 	abnormaltrByVehicle,
 	abnormaltrByDuration,

@@ -3,7 +3,7 @@ import Trend from './index'
 import { exData, exEmptyData, exPlaceholderData } from './exData'
 
 export default {
-	title: '@daimre-ui/comp-set/Trend',
+  title: '@synusdev-ui/comp-set/Trend',
 	component: Trend,
 }
 

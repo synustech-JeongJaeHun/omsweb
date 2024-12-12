@@ -6,7 +6,7 @@
 /* eslint-disable import/prefer-default-export */
 // @ts-nocheck
 import * as R from 'ramda'
-import { color } from '@daimre/styles'
+import { color } from '@synusdev/styles'
 import { calcColor5, calcColor5Reversed } from './colorVariant'
 
 

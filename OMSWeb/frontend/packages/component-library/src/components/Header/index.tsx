@@ -8,7 +8,7 @@ import Icon from '../Icon'
 import Button from '../Button'
 import Avatar from '../Avatar'
 import MultipleSelect from '../form/MultipleSelect'
-import { zIndex } from '@daimre/styles'
+import { zIndex } from '@synusdev/styles'
 
 const HeaderBar = styled.header`
   flex: 0 0 65px;

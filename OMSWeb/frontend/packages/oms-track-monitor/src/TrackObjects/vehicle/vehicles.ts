@@ -5,7 +5,7 @@ import {readonly, ref} from 'vue'
 import { findPointById } from '../point/points'
 import { findSegmentByPoints } from '../segment/segments'
 import { UpdateType, Vehicle } from './types/Vehicle'
-import {Dto} from "@daimre/app/src/app/models/dto/track.model";
+import { Dto } from "@synusdev/app/src/app/models/dto/track.model";
 
 const vehicles = ref<Vehicle[]>([])
 const vehicleMap = new Map<Vehicle['id'], Vehicle>()

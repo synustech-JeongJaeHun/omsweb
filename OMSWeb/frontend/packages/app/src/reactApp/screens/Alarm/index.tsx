@@ -8,10 +8,10 @@ import {
 	convertDurationLabel,
 	isType,
 	ls,
-} from '@daimre/shared'
+} from '@synusdev/shared'
 import styled from '@emotion/styled'
 import { useQuery } from 'react-query'
-import { TitleBarlineSet } from '@daimre/component-library'
+import { TitleBarlineSet } from '@synusdev/component-library'
 import { getAgt } from '../../utils'
 import da from './dataAdapter'
 import { useImmer } from 'use-immer'

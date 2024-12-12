@@ -2,7 +2,7 @@ import * as React from 'react'
 import Loader from './index'
 
 export default {
-  title: '@daimre-ui/Loader',
+  title: '@synusdev-ui/Loader',
   component: Loader
 }
 

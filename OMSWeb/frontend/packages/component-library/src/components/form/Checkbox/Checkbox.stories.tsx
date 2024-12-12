@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import Checkbox from './index'
 
 export default {
-  title: '@daimre-ui/Form/Checkbox',
+  title: '@synusdev-ui/Form/Checkbox',
   component: Checkbox,
 }
 

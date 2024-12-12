@@ -1,7 +1,7 @@
 import * as React from 'react'
 import styled from '@emotion/styled'
 import { CompTitle } from '../StyledElement'
-import { color } from '@daimre/styles'
+import { color } from '@synusdev/styles'
 
 const Wrapper = styled.div`
   table {

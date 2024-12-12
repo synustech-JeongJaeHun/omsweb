@@ -11,7 +11,7 @@ import {
   useEffectOnce, 
   isFullEmpty, 
   isNotFullEmpty 
-} from '@daimre/shared'
+} from '@synusdev/shared'
 import Loader from '../components/Loader'
 
 

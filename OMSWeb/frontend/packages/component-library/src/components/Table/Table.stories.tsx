@@ -4,7 +4,7 @@ import { normaltrByVehicle as exData } from '../../exData'
 import { tableConfig } from '../../utils'
 
 export default {
-	title: '@daimre-ui/Table',
+  title: '@synusdev-ui/Table',
 	component: Table,
 }
 

@@ -1,4 +1,4 @@
-import { getFixedDigitNumber } from '@daimre/shared'
+import { getFixedDigitNumber } from '@synusdev/shared'
 
 const genOptions = (prefix, length) => {
 	const arr = getFixedDigitNumber(length)

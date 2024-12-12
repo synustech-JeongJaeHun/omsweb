@@ -2,7 +2,7 @@ import * as React from 'react'
 import SimpleList from './index'
 
 export default {
-  title: '@daimre-ui/SimpleList',
+  title: '@synusdev-ui/SimpleList',
   component: SimpleList
 }
 

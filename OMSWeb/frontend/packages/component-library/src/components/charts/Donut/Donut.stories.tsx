@@ -1,11 +1,11 @@
 import * as React from 'react'
 import Styled from '@emotion/styled'
-import { color } from '@daimre/styles'
+import { color } from '@synusdev/styles'
 
 import Donut from './index'
 
 export default {
-	title: '@daimre-ui/charts/Donut',
+  title: '@synusdev-ui/charts/Donut',
 	component: Donut,
 }
 

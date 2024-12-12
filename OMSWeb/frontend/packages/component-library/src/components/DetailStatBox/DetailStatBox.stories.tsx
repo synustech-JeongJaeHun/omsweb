@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import { css } from '@emotion/react'
 
 export default {
-	title: '@daimre-ui/DetailStatBox',
+  title: '@synusdev-ui/DetailStatBox',
 	component: DetailStatBox,
 }
 

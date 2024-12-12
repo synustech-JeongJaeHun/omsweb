@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 import styled from '@emotion/styled'
 import { css } from '@emotion/react'
 
-import { icons } from '@daimre/styles'
+import { icons } from '@synusdev/styles'
 import Icon from './index'
 
 interface Item {
@@ -54,7 +54,7 @@ const List = styled.ul`
 `
 
 export default {
-  title: '@daimre-ui/Icon',
+  title: '@synusdev-ui/Icon',
   component: Icon,
 }
 

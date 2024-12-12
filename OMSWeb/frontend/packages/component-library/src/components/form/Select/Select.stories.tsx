@@ -2,7 +2,7 @@ import * as React from 'react'
 import Select from './index'
 
 export default {
-  title: '@daimre-ui/form/Select',
+  title: '@synusdev-ui/form/Select',
   component: Select,
 }
 

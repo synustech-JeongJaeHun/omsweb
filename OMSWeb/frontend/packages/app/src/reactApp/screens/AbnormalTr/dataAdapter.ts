@@ -1,5 +1,5 @@
 import * as R from 'ramda'
-import { numberWithCommas, convertEpochToStr } from '@daimre/shared'
+import { numberWithCommas, convertEpochToStr } from '@synusdev/shared'
 
 const convertTimeStr = (val) => {
 	const dic = {

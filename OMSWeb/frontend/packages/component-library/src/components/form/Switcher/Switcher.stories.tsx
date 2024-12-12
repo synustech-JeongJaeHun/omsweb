@@ -2,7 +2,7 @@ import * as React from 'react'
 import Switcher from './index'
 
 export default {
-  title: '@daimre-ui/form/Switcher',
+  title: '@synusdev-ui/form/Switcher',
   component: Switcher,
 }
 

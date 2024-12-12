@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-expressions */
 import * as React from 'react'
 import styled from '@emotion/styled'
-import { color } from '@daimre/styles'
+import { color } from '@synusdev/styles'
 import Icon from '../../Icon'
 import Button from '../../Button'
 

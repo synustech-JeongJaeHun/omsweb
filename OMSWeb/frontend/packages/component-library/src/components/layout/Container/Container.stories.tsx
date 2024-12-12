@@ -7,7 +7,7 @@ import Container from './index'
 import Col from '../Col'
 
 export default {
-  title: '@daimre-ui/layout/Container',
+  title: '@synusdev-ui/layout/Container',
   component: Container,
 }
 
