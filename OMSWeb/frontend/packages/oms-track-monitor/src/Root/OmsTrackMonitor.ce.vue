@@ -400,14 +400,12 @@ defineExpose(exposed)
     );
 }
 
-#disabled-segment-layer .segment[data-is-disabled-by-user='true' i] .segment-path {
-  stroke: v-bind('parseStringProp(ColorDefault.disabledSegment, props.disabledSegmentColor)'
-    );
-}
-
 #disabled-segment-layer .segment[data-is-disabled-by-vehicle='true' i] .segment-path {
   stroke: v-bind('parseStringProp(ColorDefault.disabledByVehicleSegment, props.disabledByVehicleSegmentColor)'
     );
+}
+ #disabled-segment-layer .segment[data-is-disabled-by-user='true' i] .segment-path {
+    stroke: v-bind('parseStringProp(ColorDefault.disabledSegment, props.disabledSegmentColor)' );
 }
 
 #disabled-segment-layer .segment[data-is-disabled-by-mtl='true' i] .segment-path {
