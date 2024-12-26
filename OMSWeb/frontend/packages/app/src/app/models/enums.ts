@@ -196,7 +196,8 @@ export enum PermissionEnums {
   SettingBuffer = 40,
 
   SettingZcu = 41,
-  SettingVehicle = 42
+  SettingVehicle = 42,
+  SettingTargetBlock = 43
 }
 
 export enum VHLIdPosition {
