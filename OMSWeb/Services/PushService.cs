@@ -70,6 +70,7 @@ namespace OMSWeb.Services
                 {"db_version", new DataChangeEventTarget(CacheKeys.None, new[]{"mapUpdateStatus"})},
                 {"system_state", new DataChangeEventTarget(CacheKeys.None, new[]{"systemState"})},
                 {"target_block", new DataChangeEventTarget(CacheKeys.None, new[]{"targetBlockList"})},
+                {"carriers", new DataChangeEventTarget(CacheKeys.None, new[]{"bufferAlert"})},
             };
 
             this.cacheEventMap = new Dictionary<CacheKeys, string[]>
@@ -120,7 +121,10 @@ namespace OMSWeb.Services
                 return;
 
             this.tableEventMap.TryGetValue(payload.Table.ToLower(), out var targetInfo);
+            if (payload.Table.Equals("carriers"))
+            {
 
+            }
             if (targetInfo != null)
             {
                 if (targetInfo.CacheKey != CacheKeys.None) // table event가 정의된 경우
@@ -278,6 +282,10 @@ namespace OMSWeb.Services
 
                 VehicleOnlineName = payload.VehicleOnlineName,
                 TargetBlockOnlineName = payload.TargetBlockOnlineName,
+
+                CarrierLocation = payload.CarrierLocation,
+                AlertPassedTime = payload.AlertPassedTime,
+                Installed = payload.Installed,
             };
 
             if (!pushName.Contains("table", StringComparison.OrdinalIgnoreCase))

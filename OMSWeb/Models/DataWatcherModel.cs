@@ -69,5 +69,8 @@ namespace OMSWeb.Models
         public string VehicleOnlineName { get; set; }
         public string TargetBlockOnlineName { get; set; }
 
+        public string CarrierLocation { get; set; }
+        public bool AlertPassedTime { get; set; }
+        public int Installed { get; set; }
     }
 }
