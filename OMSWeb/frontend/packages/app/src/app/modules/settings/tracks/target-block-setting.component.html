@@ -25,7 +25,7 @@
       <dxo-scrolling mode="virtual"></dxo-scrolling>
       <dxo-selection mode="single"
                      showCheckBoxesMode="always"></dxo-selection>
-      <dxi-column [width]="20" datyType="string" dataField="logicalId" [caption]="'Vehicle' | translate"> </dxi-column>
+      <dxi-column [width]="20" datyType="string" dataField="logicalId" [caption]="'names.vehicle' | translate"> </dxi-column>
     </dx-data-grid>
   </div>
   <div class="grid-divider"></div>
@@ -42,8 +42,8 @@
                     width="14em">
         <dxo-scrolling mode="virtual"></dxo-scrolling>
         <dxo-selection mode="multiple"
-                       showCheckBoxesMode="always"></dxo-selection>
-        <dxi-column [width]="40" datyType="string" dataField="targetBlockOnlineName" [caption]="'반송 가능' | translate"> </dxi-column>
+                       showCheckBoxesMode="always"></dxo-selection> 
+        <dxi-column [width]="40" datyType="string" dataField="targetBlockOnlineName" [caption]="'names.returnable' | translate"> </dxi-column>
         <!--<dxi-column [width]="120" datyType="string" dataField="logicalId" [caption]="'names.logicalId' | translate"> </dxi-column>-->
       </dx-data-grid>
 
@@ -68,7 +68,7 @@
         <dxo-scrolling mode="virtual"></dxo-scrolling>
         <dxo-selection mode="multiple"
                        showCheckBoxesMode="always"></dxo-selection>
-        <dxi-column [width]="40" datyType="string" dataField="targetBlockOnlineName" [caption]="'반송 불가' | translate"> </dxi-column>
+        <dxi-column [width]="40" datyType="string" dataField="targetBlockOnlineName" [caption]="'names.nonReturnable' | translate"> </dxi-column>
         <!--<dxi-column [width]="120" datyType="string" dataField="logicalId" [caption]="'names.logicalId' | translate"> </dxi-column>-->
       </dx-data-grid>
 

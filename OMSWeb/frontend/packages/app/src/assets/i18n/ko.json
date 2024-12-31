@@ -597,7 +597,12 @@
     "transType": "Trans Type",
     "driveType": "Drive Type",
     "showZcuStatus": "Show ZCU Status",
-    "targetblock": "Target Block List"
+    "targetblock": "Target Block List",
+    "returnable": "반송 가능",
+    "nonReturnable": "반송 불가"
+
+
+
   },
   "enums": {
     "hostSessionStatus": {
