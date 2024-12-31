@@ -76,7 +76,7 @@ export class TargetBlockSettingComponent {
 
   private init() {
 
-    forkJoin(this.loadSettingsVehicles(), this.loadSettingStations(), this.loadSettingStations(), this.loadSettingTargetBlocks()).subscribe(() => {
+    forkJoin(this.loadSettingsVehicles(), this.loadSettingStations(), this.loadSettingBuffers(), this.loadSettingTargetBlocks()).subscribe(() => {
       forkJoin(this.bindTargetAllow());
     });
   }
