@@ -259,8 +259,8 @@
     "use": "使用",
     "rebalance": "Rebalance",
     "ivr": "IVR",
-    "push": "推",
     "home": "家",
+    "push": "推",
     "line": "Line",
     "homeMode": "家模式",
     "chainManualCommandDisabled": "Chain Manual Command Disabled",
@@ -471,7 +471,6 @@
     "online": "Online",
     "offline": "Offline",
     "host": "Host",
-    "local": "Local",
     "tsc": "TSC",
     "tscAuto": "Auto",
     "tscPause": "Pause",
@@ -570,6 +569,7 @@
     "fireDetect": "火警侦测",
     "open": "打开",
     "fcu": "Fcu",
+    "refresh": "刷新",
     "disableDialog": "禁用对话框",
     "axisSpeed": "速度",
     "torque1": "扭矩 1(%)",
@@ -589,6 +589,11 @@
     "toEMSID": "到(EMS ID)",
     "fromPortName": "来自(端口名称)",
     "toPortName": "到(端口名称)",
+    "zoneId": "区域 ID",
+    "zoneName": "区域名称",
+    "capacity": "容量能力",
+    "size": "大小",
+    "zoneType": "区域类型",
     "bufferType": "Buffer - 类型",
     "ip": "IP地址",
     "text": "文本",
@@ -597,7 +602,9 @@
     "transType": "反式",
     "driveType": "驱动器类型",
     "showZcuStatus": "显示 ZCU 状态",
-    "targetblock": "Target Block List"
+    "targetblock": "Target Block List",
+    "returnable": "可以返送处",
+    "nonReturnable": "不能返送处"
   },
   "enums": {
     "hostSessionStatus": {

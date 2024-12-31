@@ -464,13 +464,13 @@
     "cimOffline": "CIM Offline",
     "readyToOline": "Ready to Online",
     "host Offline": "Host Offline",
+    "local": "Local",
     "remote": "Remote",
     "onoffline": "ON-OFFLINE",
     "onlineMode": "Online",
     "online": "Online",
     "offline": "Offline",
     "host": "Host",
-    "local": "Local",
     "tsc": "TSC",
     "tscAuto": "Auto",
     "tscPause": "Pause",
@@ -603,8 +603,8 @@
     "driveType": "Drive Type",
     "showZcuStatus": "Show ZCU Status",
     "targetblock": "Target Block List",
-    "returnable": "Returnable",
-    "nonReturnable": "Non-Returnable"
+    "returnable": "Assignable",
+    "nonReturnable": "Non-Assignable"
   },
   "enums": {
     "hostSessionStatus": {
@@ -708,6 +708,7 @@
     "confirmPointHomeInterlock": "This location cannot be set as Home.",
     "confirmInvalidInput": "The input is not valid",
     "confirmDelayTransferTimeoutValue": "The input is not valid, recommend (0 - 2147483)",
+    "selectObjectType": "Select Type",
     "searchId": "Search ID",
     "noObjectSelected": "Nothing is selected.",
     "existUserId": "User ID is already exist.",
@@ -738,5 +739,4 @@
   },
   "_START_DATE" : "Please enter a start date",
   "_END_DATE":  "Please enter a end date"
-
 }
