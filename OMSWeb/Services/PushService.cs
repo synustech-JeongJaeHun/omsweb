@@ -121,10 +121,6 @@ namespace OMSWeb.Services
                 return;
 
             this.tableEventMap.TryGetValue(payload.Table.ToLower(), out var targetInfo);
-            if (payload.Table.Equals("carriers"))
-            {
-
-            }
             if (targetInfo != null)
             {
                 if (targetInfo.CacheKey != CacheKeys.None) // table event가 정의된 경우

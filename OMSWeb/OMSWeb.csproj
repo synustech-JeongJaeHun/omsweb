@@ -23,8 +23,8 @@
     <DefineConstants Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' == 'true'">Windows</DefineConstants>
     <DefineConstants Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))' == 'true'">OSX</DefineConstants>
     <DefineConstants Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' == 'true'">Linux</DefineConstants>
-    <Version>1.0.0.2</Version>
-	<FileVersion>1.0.0.1</FileVersion>
+    <Version>1.0.0.3</Version>
+	<FileVersion>1.0.0.3</FileVersion>
 	<Company>SYNUS Tech.</Company>
 	<Copyright>SYNUS Tech.</Copyright>
   </PropertyGroup>
@@ -32,7 +32,7 @@
 	<!--Swagger 주석사용-->
     <PropertyGroup>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
-		<Product>OMSWeb - PKG 1.1c (OMS 1.0.0.4)</Product>
+		<Product>OMSWeb - PKG 1.2 (OMS 1.0.0.5)</Product>
 	</PropertyGroup>
 
 	<ItemGroup>

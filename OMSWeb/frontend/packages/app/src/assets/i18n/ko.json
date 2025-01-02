@@ -259,8 +259,8 @@
     "use": "사용",
     "rebalance": "Rebalance",
     "ivr": "IVR",
-    "push": "Push",
     "home": "홈",
+    "push": "Push",
     "line": "Line",
     "homeMode": "홈 모드",
     "chainManualCommandDisabled": "Chain Manual Command Disabled",
@@ -471,7 +471,6 @@
     "online": "Online",
     "offline": "Offline",
     "host": "Host",
-    "local": "Local",
     "tsc": "TSC",
     "tscAuto": "Auto",
     "tscPause": "Pause",
@@ -570,6 +569,7 @@
     "fireDetect": "Fire Detect",
     "open": "Open",
     "fcu": "Fcu",
+    "refresh": "Refresh",
     "disableDialog": "Disable Dialog",
     "axisSpeed": "Speed(mm/s)",
     "torque1": "Torque 1(%)",
@@ -589,6 +589,11 @@
     "toEMSID": "To(EMS ID)",
     "fromPortName": "From(Port Name)",
     "toPortName": "To(Port Name)",
+    "zoneId": "Zone ID",
+    "zoneName": "Zone Name",
+    "capacity": "Capacity",
+    "size": "Size",
+    "zoneType": "Zone Type",
     "bufferType": "Buffer - type",
     "ip": "IP Address",
     "text": "Text",
@@ -600,9 +605,6 @@
     "targetblock": "Target Block List",
     "returnable": "반송 가능",
     "nonReturnable": "반송 불가"
-
-
-
   },
   "enums": {
     "hostSessionStatus": {
@@ -737,5 +739,4 @@
   },
   "_START_DATE" : "Please enter a start date",
   "_END_DATE":  "Please enter a end date"
-
 }
