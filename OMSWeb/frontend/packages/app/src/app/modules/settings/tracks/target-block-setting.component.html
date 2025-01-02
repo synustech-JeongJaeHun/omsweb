@@ -1,7 +1,7 @@
 <div class="setting-header">
   <h4 class="setting-title">{{ 'names.targetblock' | translate }}</h4>
   <div class="setting-actions">
-    <button mat-raised-button class="dense" color="primary"  (click)="onSave()">
+    <button mat-raised-button class="dense" color="primary" [disabled]="!isUpdated" (click)="onSave()">
       {{ 'names.save' | translate }}
     </button>
   </div>

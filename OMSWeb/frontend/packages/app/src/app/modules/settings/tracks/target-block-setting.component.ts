@@ -33,9 +33,8 @@ export class TargetBlockSettingComponent {
   @ViewChild('targetAllowDataGrid', { static: false }) targetAllowDataGrid!: DxDataGridComponent;
   @ViewChild('targetBlockDataGrid', { static: false }) targetBlockDataGrid!: DxDataGridComponent;
 
-
+  ready = false
   private destroy$ = new Subject<void>()
-
 
 /*  private settingTargetBlockings: TargetBlock[];*/
 
@@ -54,6 +53,10 @@ export class TargetBlockSettingComponent {
 
   public stations: ISettingsStationWithUnuse[] = [];
   public buffers: ISettingsBufferWithUnuse[] = []; 
+
+  get isUpdated(): boolean {
+    return this.ready
+  }
 
   constructor(
     private settingsSvc: SettingsService,
@@ -173,6 +176,7 @@ export class TargetBlockSettingComponent {
   }
 
   onSave() {
+    this.ready = false
 
     const sendTargetBlockData: ISendTargetBlock[] = Object.values(
       this.targetBlockings.reduce((acc, curr) => {
@@ -222,7 +226,7 @@ export class TargetBlockSettingComponent {
               .filter(item => !this.targetBlockings
                 .some(blocking => item.vehicleOnlineName === blocking.vehicleOnlineName &&
                   item.targetBlockOnlineName === blocking.targetBlockOnlineName)
-              )
+            )
           }
           this.resetSelecteds()
         }
@@ -250,8 +254,9 @@ export class TargetBlockSettingComponent {
       .filter(item => !this.targetBlockings
         .some(blocking => item.vehicleOnlineName === blocking.vehicleOnlineName &&
           item.targetBlockOnlineName === blocking.targetBlockOnlineName)
-      )
+    )
 
+    this.ready =true
     this.resetSelecteds()
   }
 
@@ -271,10 +276,9 @@ export class TargetBlockSettingComponent {
         .some(blocking => item.vehicleOnlineName === blocking.vehicleOnlineName &&
           item.targetBlockOnlineName === blocking.targetBlockOnlineName)
     )
-
+    this.ready = true
     this.resetSelecteds()
   }
-
 }
 
 
