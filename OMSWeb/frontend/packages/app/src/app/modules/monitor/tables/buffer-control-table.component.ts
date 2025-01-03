@@ -61,7 +61,10 @@ export class BufferControlTableComponent implements OnInit, OnDestroy {
 	) {
 		this.dataSource = this.statusSvc.bufferStatusDataSource()
 		this.preference = this.settingSvc.globalPreferences
-	}
+  }
+
+  //여기서 BufferAlert 잡는거 확인
+
 
   rowPrepared(e) {
     //datasoruce reload 돌면 여기도 적용 됨.
@@ -128,7 +131,11 @@ export class BufferControlTableComponent implements OnInit, OnDestroy {
 			.pipe(auditTime(AuditTimeDuration), takeUntil(this.destroy$))
 			.subscribe((e: IDataChangeEvent) => {
         this.isOpen &&e && this.onTableChanged(e)
-			})
+      })
+
+    this.hubSvc.bufferAlert$.subscribe((e) => {
+      this.onTableChanged(e) 
+    })
 	}
 
 	onUnuse() {
