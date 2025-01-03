@@ -17,7 +17,8 @@ import {
 import {
 	findBufferById,
 	initBuffers,
-	setBuffer,
+  setBuffer,
+  setCarrier
 } from 'src/TrackObjects/buffer/buffers'
 import { findMtlById, initMtls } from 'src/TrackObjects/mtl/mtls'
 import {
@@ -339,6 +340,17 @@ const exposed: IOmsTrackMonitor = {
 				break
 		}
 	},
+
+  updateCarrier(op, s) {
+    switch (op) {
+			case 'UPDATE':
+        setCarrier(s)
+				break
+
+			default:
+				break
+		}
+  },
 
 	updateGroupObject(op, go, data) {
 		switch (op) {

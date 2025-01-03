@@ -1,4 +1,4 @@
-import { CanBeCarrierFocused } from 'src/MapObjects/focus/types/CanBeCarrierFocused'
+import { CanBeCarrierFocused, CarrierInstalled } from 'src/MapObjects/focus/types/CanBeCarrierFocused'
 import { CanBeFocused } from 'src/MapObjects/focus/types/CanBeFocused'
 
 type Buffer = {
@@ -25,5 +25,8 @@ type Buffer = {
   type?: string
 } & CanBeFocused &
   CanBeCarrierFocused
+  & CarrierInstalled
 
-export { Buffer }
+
+type Carrier = {} & CarrierInstalled
+export { Buffer, Carrier }

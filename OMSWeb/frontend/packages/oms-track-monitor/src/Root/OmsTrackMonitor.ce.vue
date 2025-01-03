@@ -128,6 +128,10 @@ const props = defineProps<{
   // content
   vehicleSecondaryContent: Stringlish
 
+  //왜 사용하는지?
+  carrierInstalledColor: Stringlish
+  carrierUnknownColor: Stringlish
+
   vhlDisplay: Stringlish
   includesWords: Stringlish[]
 }>()
@@ -380,6 +384,19 @@ defineExpose(exposed)
   fill: v-bind('parseStringProp(ColorDefault.cargoFull, props.cargoFullColor)'
     );
 }
+
+ #buffer-layer .buffer .buffer-full.carrier-installed {
+        fill: v-bind('parseStringProp(ColorDefault.carrierInstalled, props.carrierInstalledColor)' );
+ }
+
+ #buffer-layer .buffer .buffer-full.carrier-unknown {
+        fill: v-bind('parseStringProp(ColorDefault.carrierUnknown, props.carrierUnknownColor)' );
+ }
+
+#buffer-layer .buffer .carrier-passedTime {
+    fill: v-bind('parseStringProp(ColorDefault.passedTime, props.passedTime)' );
+ }
+
 
 #buffer-layer .buffer .buffer-type {
   stroke: v-bind('parseStringProp(ColorDefault.bufferType, props.bufferTypeColor)'

@@ -410,8 +410,26 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 						note: e?.note,
             cAlias: e?.data.cAlias,
             type: e?.data?.type,
+            carrierLocation: e?.data?.carrierLocation,
+            alertPassedTime: e?.data?.alertPassedTime,
+            carrierEmptyStatus: e?.data?.carrierEmptyStatus
+          /*  installed: e?.data?.installed*/
 					})
-				})
+        })
+
+      this.hubSvc.bufferAlert$
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((e: any) => {
+          this.viewer.updateCarrier(e.operation, {
+            bufferId: e.id, //bufferID
+            carrierId: e.carrierId,
+            carrierLocation: e?.carrierLocation,
+            alertPassedTime: e?.alertPassedTime,
+            installed: e?.installed  
+          })
+        })
+
+
 
 			this.hubSvc.groupChanged$
 				.pipe(takeUntil(this.destroy$))
@@ -878,7 +896,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		this.viewer.find(event.type, event.id)
 	}
   public focusOnTM(event: { type: string; id: any; focusType?: string }) {
-    console.log("map-viewer.component focustOnTM");
 		this.viewer.focus(event.type, event.id, event.focusType)
 	}
 	public dropFocusOnTM(event: { focusType?: string }) {
@@ -890,7 +907,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 	}
 
   public onMouseoverTM(event: CustomEvent) {
-    console.log("map-viewer.component onMouseoverTM");
     const payload = getCustomEventPayload(event)
 
 		// @ts-ignore
@@ -1406,6 +1422,5 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 }
 
 function getCustomEventPayload<T>(event: CustomEvent<T[]>) {
-  console.log("map-viewer.component getCustomEventPayload");
 	return event.detail[0]
 }

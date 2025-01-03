@@ -28,5 +28,8 @@ type ColorProperty =
   | 'mtlUnuse'
   | 'mtlUse'
   | 'disabledByMTLSegment'
+  | 'passedTime'
+  | 'carrierInstalled'
+  | 'carrierUnknown'
 
 export { ColorProperty }

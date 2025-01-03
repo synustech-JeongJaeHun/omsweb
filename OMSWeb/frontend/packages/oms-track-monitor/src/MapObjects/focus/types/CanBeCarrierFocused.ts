@@ -2,4 +2,9 @@ type CanBeCarrierFocused = {
   isCarrierFocused?: boolean
 }
 
-export { CanBeCarrierFocused }
+type CarrierInstalled = {
+  carrierLocation?: string
+  alertPassedTime?: boolean
+  installed?: number
+}
+export { CanBeCarrierFocused, CarrierInstalled }

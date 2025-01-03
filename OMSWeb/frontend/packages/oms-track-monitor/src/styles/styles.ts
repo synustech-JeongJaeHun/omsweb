@@ -88,6 +88,9 @@ const ColorDefault: Record<ColorProperty, string> = {
   fireshutterClosed: '#F04907',
   mtlUnuse: '#f98080',
   mtlUse: 'grey',
+  passedTime: 'rgb(255, 0, 0)',
+  carrierInstalled: 'rgb(0,0,255)',
+  carrierUnknown: 'rgb(255, 165, 0)'
 }
 
 export {

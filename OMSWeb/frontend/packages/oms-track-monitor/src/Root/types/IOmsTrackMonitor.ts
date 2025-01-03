@@ -70,7 +70,11 @@ interface IOmsTrackMonitor {
 	updateBuffer(
 		operation: UpdateDto.Operation,
 		buffer: UpdateDto.Buffer
-	): void
+  ): void
+  updateCarrier(
+    operation: UpdateDto.Operation,
+    Carrier: UpdateDto.Carrier
+  ): void
 	updateGroupObject(
 		operation: UpdateDto.Operation,
 		groupObject: UpdateDto.GroupObject,

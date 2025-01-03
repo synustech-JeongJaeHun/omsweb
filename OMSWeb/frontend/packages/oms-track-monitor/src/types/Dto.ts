@@ -92,6 +92,18 @@ namespace UpdateDto {
     user?: string
     note?: string
     type?: string
+
+    carrierLocation?: string
+    alertPassedTime?: boolean
+    Installed?: number
+  }
+
+  export type Carrier = {
+    bufferId: number 
+    carrierId?: number
+    carrierLocation?: string //이거 BufferId 받아서 안쓰기로 했떤거 같음
+    alertPassedTime?: boolean
+    installed?: number
   }
 
   export type GroupObject = {

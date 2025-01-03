@@ -18,10 +18,9 @@ function initBuffers(bs: ITrackData['buffers']) {
 
 function setBuffer(s: UpdateDto.Buffer) {
 	const buffer = findBufferById(s.id)
-
-	if (buffer) {
-		updateExistBuffer(buffer, s)
-	}
+  if (buffer) {
+    updateExistBuffer(buffer, s)
+  }
 }
 
 function updateExistBuffer(
@@ -35,4 +34,35 @@ function findBufferById(id: Buffer['id']) {
 	return bufferMap.get(id)
 }
 
-export { buffers, initBuffers, setBuffer, findBufferById }
+function setCarrier(c: UpdateDto.Carrier) {
+
+  const buffer = findBufferById(c.bufferId); //캐리어 notify
+
+  if (buffer) {
+    //Id로 버퍼 찾아서 복사 후 캐리어 변경 업데이트
+    const updateBuffer: any = Object.assign({}, buffer);
+    updateBuffer.installed = c.installed;
+    updateBuffer.alertPassedTime = c.alertPassedTime;
+    /*CarrierEmptyStatus */ //얜 기존 버퍼
+/*    updateBuffer.carrierLocation = c.carrierLocation;*/
+
+    updateExistBuffer(buffer, updateBuffer)
+
+  }
+}
+
+function findCarrierUpdateBufferId(value: any) {
+  for (const [mapKey, proxyObj] of bufferMap) {
+    const target: Buffer = proxyObj;
+    if (target.id === value) {
+      return target.id; // 키를 반환(buffer id)
+    }
+  }
+  return null;
+}
+
+
+
+
+
+export { buffers, initBuffers, setBuffer, findBufferById, setCarrier }

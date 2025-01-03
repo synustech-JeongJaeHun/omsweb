@@ -151,20 +151,34 @@ namespace OMSWeb.Repositories
         --*user_id_condition*--WHERE user_id =@userId
       "},
       {"buffer", @"
-        SELECT b.id, b.physical_id, b.logical_id AS logical_id, point AS point_id,
-          b.direction AS direction, b.next_point, b.""offset"" AS offset, b.unuse, b.state, b.carrier_id, b.c_alias,
-		  CASE 
-            WHEN b.type = 'Normal' THEN NULL
-            ELSE b.type
+        SELECT
+          b.id, b.physical_id, b.logical_id AS logical_id, point AS point_id, b.direction AS direction,
+          b.next_point, b.offset AS offset, b.unuse, b.state, b.carrier_id, b.c_alias,
+          CASE 
+	        WHEN b.type = 'Normal' THEN NULL
+	        ELSE b.type
           END AS type,
-          b.slide_offset, 
-          b.user, b.note,
-          Z.id as zone_id, Z.logical_id as zone_name, Z.capacity, Z.""size"", Z.""type"" as zone_type, trans_type
+          b.slide_offset, b.user, b.note,
+          Z.id as zone_id, Z.logical_id as zone_name, Z.capacity, Z.size, Z.type as zone_type, trans_type,
+          C.install_time, C.Installed,
+          case 
+          when C.carrier_empty_status is null
+	        THEN 0
+	        ELSE C.carrier_empty_status
+          END as carrier_empty_status,
+          case
+            when C.alert_passed_time is null
+	        THEN false
+	        ELSE C.alert_passed_time
+          END as alert_passed_time
+ 
         FROM buffers as b
         LEFT JOIN zone_ports as ZP
-            ON b.id = zp.port_id and ZP.port_type = 'buffer'
+	        ON b.id = zp.port_id and ZP.port_type = 'buffer'
         LEFT JOIN zones as Z
-            ON Z.id = ZP.zone_id 
+	        ON Z.id = ZP.zone_id
+        LEFT JOIN carriers as C
+	        ON b.logical_id = C.carrier_location
         --*user_id_condition*--WHERE user_id =@userId
       "},
       {"zcu", @"
@@ -520,7 +534,19 @@ namespace OMSWeb.Repositories
         	when Z.""type"" = 1 then 'Shelf'
         	when Z.""type"" = 2 then 'Port'
         	when Z.""type"" = 3 then 'Other'
-        end as zone_type
+        end as zone_type,
+       C.install_time,  C.installed,
+          case 
+          when C.carrier_empty_status is null
+	        THEN 0
+	        ELSE C.carrier_empty_status
+          END as carrier_empty_status,
+          case
+            when C.alert_passed_time is null
+	        THEN false
+	        ELSE C.alert_passed_time
+          END as alert_passed_time
+
         FROM buffers AS BS
         LEFT JOIN grouped_objects AS GO
         ON BS.id = GO.reference_id AND GO.reference_table = 'buffer'
@@ -528,6 +554,8 @@ namespace OMSWeb.Repositories
         ON bs.id = zp.port_id and ZP.port_type = 'buffer'
         LEFT JOIN zones as Z
         ON Z.id = ZP.zone_id 
+        LEFT JOIN carriers as C
+        ON BS.logical_id = C.carrier_location
         --*user_id_condition*--WHERE user_id =@userId
       "},
       {"unuseListStatus", @"

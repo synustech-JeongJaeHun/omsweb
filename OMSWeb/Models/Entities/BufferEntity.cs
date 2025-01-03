@@ -38,7 +38,12 @@ namespace OMSWeb.Models.Entities
     public string ZoneType { get; set; }
     public int? Capacity { get; set; }
     public int? Size { get; set; }
-  }
+
+    public bool AlertPassedTime { get; set; } 
+    public int? CarrierEmptyStatus { get; set; } 
+    public int? Installed { get; set; } 
+
+    }
 
   public class BufferHistoryEntity
   {

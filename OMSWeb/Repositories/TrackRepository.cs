@@ -324,28 +324,32 @@ namespace OMSWeb.Repositories
                                 while (dr.Read())
                                 {
                                     models.Add(new Buffer
-                                        {
-                                            Id = Convert.ToInt32(dr["id"]),
-                                            PhysicalId = dr["physical_id"].ToString(),
-                                            LogicalId = dr["logical_id"].ToString(),
-                                            PointId = dr["point_id"].TryIntegerOrNull(),
-                                            Direction = dr["direction"].ToString(),
-                                            NextPoint = dr["next_point"].TryIntegerOrNull(),
-                                            Offset = dr["offset"].TryIntegerOrNull(),
-                                            Unuse = dr["unuse"].TryBooleanOrNull(),
-                                            State = dr["state"].TryIntegerOrNull(),
-                                            CarrierId = dr["carrier_id"].TryString(),
-                                            User = dr["user"].TryString(),
-                                            Note = dr["note"].TryString(),
-                                            CAlias = dr["c_alias"].TryString(),
-                                            ZoneId = dr["zone_id"].TryIntegerOrNull(),
-                                            ZoneName = dr["zone_name"].TryString(),
-                                            ZoneType = dr["zone_type"].TryString(),
-                                            Capacity = dr["capacity"].TryIntegerOrNull(),
-                                            Size = dr["size"].TryIntegerOrNull(),
-                                            Type = dr["type"].TryString(),
-                                            TransType = dr["trans_type"].TryString()
-                                        }
+                                    {
+                                        Id = Convert.ToInt32(dr["id"]),
+                                        PhysicalId = dr["physical_id"].ToString(),
+                                        LogicalId = dr["logical_id"].ToString(),
+                                        PointId = dr["point_id"].TryIntegerOrNull(),
+                                        Direction = dr["direction"].ToString(),
+                                        NextPoint = dr["next_point"].TryIntegerOrNull(),
+                                        Offset = dr["offset"].TryIntegerOrNull(),
+                                        Unuse = dr["unuse"].TryBooleanOrNull(),
+                                        State = dr["state"].TryIntegerOrNull(),
+                                        CarrierId = dr["carrier_id"].TryString(),
+                                        User = dr["user"].TryString(),
+                                        Note = dr["note"].TryString(),
+                                        CAlias = dr["c_alias"].TryString(),
+                                        ZoneId = dr["zone_id"].TryIntegerOrNull(),
+                                        ZoneName = dr["zone_name"].TryString(),
+                                        ZoneType = dr["zone_type"].TryString(),
+                                        Capacity = dr["capacity"].TryIntegerOrNull(),
+                                        Size = dr["size"].TryIntegerOrNull(),
+                                        Type = dr["type"].TryString(),
+                                        TransType = dr["trans_type"].TryString(),
+
+                                        CarrierEmptyStatus = dr["carrier_empty_status"].TryIntegerOrNull(),
+                                        AlertPassedTime = dr["alert_passed_time"].TryBooleanOrNull(),
+                                        Installed = dr["installed"].TryIntegerOrNull() //개인추가 협의 필요.
+                                    }
                                     );
                                 }
                             }
@@ -381,8 +385,12 @@ namespace OMSWeb.Repositories
                                         Capacity = dr["capacity"].TryIntegerOrNull(),
                                         Size = dr["size"].TryIntegerOrNull(),
                                         Type = dr["type"].TryString(),
-                                        TransType = dr["trans_type"].TryString()
-                                    }
+                                        TransType = dr["trans_type"].TryString(),
+
+                                        CarrierEmptyStatus = dr["carrier_empty_status"].TryIntegerOrNull(),
+                                        AlertPassedTime = dr["alert_passed_time"].TryBooleanOrNull(),
+                                        Installed = dr["installed"].TryIntegerOrNull() //개인추가 협의 필요.
+                                }
                                 );
                             }
                         }

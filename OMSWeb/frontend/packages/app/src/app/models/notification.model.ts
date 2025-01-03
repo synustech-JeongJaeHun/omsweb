@@ -79,6 +79,12 @@ export interface IDataChangeEvent {
   vehicleOnlineName?:string
   targetBlockOnlineName?: string
 
+
+  carrierLocation?: string,
+  alertPassedTime?: boolean,
+  installed?: boolean,
+  carrierEmptyStatus?: number
+
 }
 
 export const alertSeverities = [
