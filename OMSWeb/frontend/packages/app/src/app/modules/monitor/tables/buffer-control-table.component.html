@@ -187,19 +187,27 @@
 
 	<dxi-column dataType="string"
 							dataField="alertPassedTime"
-				
-
-							>
-
-	</dxi-column>
+							[allowSorting]="true"
+							[caption]="'names.alertPassedTime' | translate"
+							[visible]="canDisplayTable('buffers_alertPassedTime')"
+							[visibleIndex]="getDisplayTableColumnIndex('buffers_alertPassedTime')"
+							[width]="getDisplayTableColumnWidth('buffers_alertPassedTime')"></dxi-column>
 
 	<dxi-column dataType="string"
 							dataField="carrierEmptyStatus"
-></dxi-column>
+							[allowSorting]="true"
+							[caption]="'names.carrierEmptyStatus' | translate"
+							[visible]="canDisplayTable('buffers_carrierEmptyStatus')"
+							[visibleIndex]="getDisplayTableColumnIndex('buffers_carrierEmptyStatus')"
+							[width]="getDisplayTableColumnWidth('buffers_carrierEmptyStatus')"></dxi-column>
 
 	<dxi-column dataType="string"
 							dataField="installed"
-></dxi-column>
+							[allowSorting]="true"
+							[caption]="'names.installed' | translate"
+							[visible]="canDisplayTable('buffers_installed')"
+							[visibleIndex]="getDisplayTableColumnIndex('buffers_installed')"
+							[width]="getDisplayTableColumnWidth('buffers_installed')"></dxi-column>
 
 
 	<div *dxTemplate="let data of 'directionTemplate'">

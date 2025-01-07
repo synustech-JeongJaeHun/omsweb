@@ -400,7 +400,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 
 			this.hubSvc.bufferChanged$
 				.pipe(takeUntil(this.destroy$))
-				.subscribe((e: any) => {
+        .subscribe((e: any) => {
 					this.viewer.updateBuffer(e.operation, {
 						id: e.id,
 						unuse: e.unuse,
@@ -412,8 +412,8 @@ export class MapViewerComponent implements OnInit, OnDestroy {
             type: e?.data?.type,
             carrierLocation: e?.data?.carrierLocation,
             alertPassedTime: e?.data?.alertPassedTime,
-            carrierEmptyStatus: e?.data?.carrierEmptyStatus
-          /*  installed: e?.data?.installed*/
+            carrierEmptyStatus: e?.data?.carrierEmptyStatus,
+            installed: e?.data?.installed
 					})
         })
 
@@ -1097,8 +1097,6 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 		this.tooltipObject = undefined
 	}
   public onFocus(event: CustomEvent) {
-    console.log("########################onFocus:: CustomEvent 2");
-    console.log("onFocus:: CustomEvent=" + JSON.stringify(event));
 
 		const payload = getCustomEventPayload(event)
 		// @ts-ignore

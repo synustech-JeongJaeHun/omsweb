@@ -348,7 +348,7 @@ namespace OMSWeb.Repositories
 
                                         CarrierEmptyStatus = dr["carrier_empty_status"].TryIntegerOrNull(),
                                         AlertPassedTime = dr["alert_passed_time"].TryBooleanOrNull(),
-                                        Installed = dr["installed"].TryIntegerOrNull() //개인추가 협의 필요.
+                                        Installed = dr["installed"].TryIntegerOrNull()
                                     }
                                     );
                                 }
@@ -389,7 +389,7 @@ namespace OMSWeb.Repositories
 
                                         CarrierEmptyStatus = dr["carrier_empty_status"].TryIntegerOrNull(),
                                         AlertPassedTime = dr["alert_passed_time"].TryBooleanOrNull(),
-                                        Installed = dr["installed"].TryIntegerOrNull() //개인추가 협의 필요.
+                                        Installed = dr["installed"].TryIntegerOrNull()
                                 }
                                 );
                             }

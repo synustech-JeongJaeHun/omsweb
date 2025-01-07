@@ -68,7 +68,7 @@ const group = useGroup('buffer', toRef(props.buffer, 'id'))
 
 
             <!--캐리어가 인스톨이 상태여야만, 캐리어 내부의 공/실 여부를 판단.-->
-            <circle v-if="props.buffer.installed==1&&props.buffer.carrierEmptyStatus== =0"
+            <circle v-if="props.buffer.installed==1&&props.buffer.carrierEmptyStatus === 0"
                     :data-id="props.buffer.id"
                     :class="props.buffer.carrierId && 'buffer-full carrier-unknown'"
                     :fill="!props.buffer.carrierId &&'transparent'"

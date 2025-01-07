@@ -604,7 +604,11 @@
     "showZcuStatus": "Show ZCU Status",
     "targetblock": "Target Block List",
     "returnable": "반송 가능",
-    "nonReturnable": "반송 불가"
+    "nonReturnable": "반송 불가",
+    "alertPassedTime": "Alert Passed Time",
+    "carrierEmptyStatus": "Carrier Empty Status",
+    "installed": "Installed"
+
   },
   "enums": {
     "hostSessionStatus": {

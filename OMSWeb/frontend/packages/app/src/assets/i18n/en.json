@@ -604,7 +604,10 @@
     "showZcuStatus": "Show ZCU Status",
     "targetblock": "Target Block List",
     "returnable": "Assignable",
-    "nonReturnable": "Non-Assignable"
+    "nonReturnable": "Non-Assignable",
+    "alertPassedTime": "Alert Passed Time",
+    "carrierEmptyStatus": "Carrier Empty Status",
+    "installed": "Installed"
   },
   "enums": {
     "hostSessionStatus": {

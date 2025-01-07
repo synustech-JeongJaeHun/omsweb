@@ -1,6 +1,6 @@
 import { ITrackData } from 'src/legacies/models/track.model'
 import { UpdateDto } from 'src/types/Dto'
-import { ref } from 'vue'
+import { ref, toRaw } from 'vue'
 import { Buffer } from './types/Buffer'
 
 const buffers = ref<Buffer[]>([])
@@ -13,7 +13,10 @@ function initBuffers(bs: ITrackData['buffers']) {
 
 	// set
 	buffers.value = (bs ?? []).map((b) => ({ ...b }))
-	buffers.value.forEach((b) => bufferMap.set(b.id, b))
+  buffers.value.forEach((b) => bufferMap.set(b.id, b))
+
+  console.log("vue initBuffers");
+  console.log(buffers);
 }
 
 function setBuffer(s: UpdateDto.Buffer) {
@@ -23,11 +26,10 @@ function setBuffer(s: UpdateDto.Buffer) {
   }
 }
 
-function updateExistBuffer(
-	buffer: Buffer,
-	updateData: UpdateDto.Buffer
-) {
-	Object.assign(buffer, updateData)
+function updateExistBuffer(buffer: Buffer, updateData: UpdateDto.Buffer) {
+  console.log("vue updateExistBuffer :updateData");
+  console.log(updateData);
+  Object.assign(buffer, updateData)
 }
 
 function findBufferById(id: Buffer['id']) {
@@ -43,11 +45,8 @@ function setCarrier(c: UpdateDto.Carrier) {
     const updateBuffer: any = Object.assign({}, buffer);
     updateBuffer.installed = c.installed;
     updateBuffer.alertPassedTime = c.alertPassedTime;
-    /*CarrierEmptyStatus */ //얜 기존 버퍼
-/*    updateBuffer.carrierLocation = c.carrierLocation;*/
 
     updateExistBuffer(buffer, updateBuffer)
-
   }
 }
 
@@ -60,9 +59,6 @@ function findCarrierUpdateBufferId(value: any) {
   }
   return null;
 }
-
-
-
 
 
 export { buffers, initBuffers, setBuffer, findBufferById, setCarrier }
