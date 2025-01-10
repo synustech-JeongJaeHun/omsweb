@@ -417,17 +417,7 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 					})
         })
 
-      this.hubSvc.bufferAlert$
-        .pipe(takeUntil(this.destroy$))
-        .subscribe((e: any) => {
-          this.viewer.updateCarrier(e.operation, {
-            bufferId: e.id, //bufferID
-            carrierId: e.carrierId,
-            carrierLocation: e?.carrierLocation,
-            alertPassedTime: e?.alertPassedTime,
-            installed: e?.installed  
-          })
-        })
+   
 
 
 

@@ -132,10 +132,6 @@ export class BufferControlTableComponent implements OnInit, OnDestroy {
 			.subscribe((e: IDataChangeEvent) => {
         this.isOpen &&e && this.onTableChanged(e)
       })
-
-    this.hubSvc.bufferAlert$.subscribe((e) => {
-      this.onTableChanged(e) 
-    })
 	}
 
 	onUnuse() {

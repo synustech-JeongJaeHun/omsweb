@@ -341,17 +341,6 @@ const exposed: IOmsTrackMonitor = {
 		}
 	},
 
-  updateCarrier(op, s) {
-    switch (op) {
-			case 'UPDATE':
-        setCarrier(s)
-				break
-
-			default:
-				break
-		}
-  },
-
 	updateGroupObject(op, go, data) {
 		switch (op) {
 			case 'INSERT':

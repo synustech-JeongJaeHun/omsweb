@@ -35,7 +35,6 @@ interface IOmsTrackMonitor {
 	updateZcu(operation: string, zcu: any): void
 	updateStation(operation: string, station: any): void
   updateBuffer(operation: string, buffer: any): void
-  updateCarrier(operation: string, buffer: any): void
 	updateGroupObject(
 		operation: UpdateDto.Operation,
 		groupObject: any,

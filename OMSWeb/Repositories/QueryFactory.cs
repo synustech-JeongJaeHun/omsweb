@@ -167,9 +167,9 @@ namespace OMSWeb.Repositories
 	        ELSE C.carrier_empty_status
           END as carrier_empty_status,
           case
-            when C.alert_passed_time is null
+            when B.alert_passed_time is null
 	        THEN false
-	        ELSE C.alert_passed_time
+	        ELSE B.alert_passed_time
           END as alert_passed_time
  
         FROM buffers as b
@@ -542,9 +542,9 @@ namespace OMSWeb.Repositories
 	        ELSE C.carrier_empty_status
           END as carrier_empty_status,
           case
-            when C.alert_passed_time is null
+            when BS.alert_passed_time is null
 	        THEN false
-	        ELSE C.alert_passed_time
+	        ELSE BS.alert_passed_time
           END as alert_passed_time
 
         FROM buffers AS BS

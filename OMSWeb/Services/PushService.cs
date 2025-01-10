@@ -70,7 +70,7 @@ namespace OMSWeb.Services
                 {"db_version", new DataChangeEventTarget(CacheKeys.None, new[]{"mapUpdateStatus"})},
                 {"system_state", new DataChangeEventTarget(CacheKeys.None, new[]{"systemState"})},
                 {"target_block", new DataChangeEventTarget(CacheKeys.None, new[]{"targetBlockList"})},
-                {"carriers", new DataChangeEventTarget(CacheKeys.None, new[]{"bufferAlert"})},
+               
             };
 
             this.cacheEventMap = new Dictionary<CacheKeys, string[]>
@@ -276,12 +276,11 @@ namespace OMSWeb.Services
                 FireEmergency = payload.FireEmergency,
                 FireDetect = payload.FireDetect,
 
-                VehicleOnlineName = payload.VehicleOnlineName,
-                TargetBlockOnlineName = payload.TargetBlockOnlineName,
+                VehicleOnlineName = payload.VehicleOnlineName, // only for TargetBlock
+                TargetBlockOnlineName = payload.TargetBlockOnlineName, // only for TargetBlock
 
                 CarrierLocation = payload.CarrierLocation,
                 AlertPassedTime = payload.AlertPassedTime,
-                Installed = payload.Installed,
             };
 
             if (!pushName.Contains("table", StringComparison.OrdinalIgnoreCase))

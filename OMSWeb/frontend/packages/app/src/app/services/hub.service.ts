@@ -45,8 +45,6 @@ export class HubService {
   mapUpdateStatus$: EventEmitter<IDataChangeEvent> = new EventEmitter()
   targetBlockChanged$: EventEmitter<IDataChangeEvent> = new EventEmitter()
 
-  bufferAlert$: EventEmitter<IDataChangeEvent> = new EventEmitter()
-
   systemState$: EventEmitter<IDataChangeEvent> = new EventEmitter()
 	//#endregion
 
@@ -120,7 +118,6 @@ export class HubService {
 		this.hub.off('homeChanged')
     this.hub.off('mapUpdateStatus')
     this.hub.off('systemState')
-    this.hub.off('bufferAlert')
 	}
 
 	public detachEventsOnMap() {
@@ -274,10 +271,6 @@ export class HubService {
       this.targetBlockChanged$.emit({ ...meta, data: body })
     })
 
-    this.hub.on('bufferAlert', (meta, body) => {
-      showInfo && console.info('## hub message : bufferAlert >>', { meta, body })
-      this.bufferAlert$.emit({ ...meta, data: body })
-    })
 
     this.hub.on('systemState', (meta, body) => {
       showInfo && console.info('## hub message : systemState >>', { meta, body })

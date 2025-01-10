@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, toRef } from 'vue'
-import { Buffer, Carrier } from '../types/Buffer'
+import { Buffer } from '../types/Buffer'
 import { useGroup } from '../../group/groups'
 import { getPositionForBufferOrStation } from 'src/TrackObjects/utils/locationStationBuffer'
 import { getGroupColorWithAlpha } from 'TrackObjects/group/utils/color'
@@ -9,7 +9,6 @@ import {scaleStylesInfo} from "src/styles/styles";
 
 const props = defineProps<{
   buffer: Buffer,
-  carrier: Carrier,
   margin: number
   teleportRef?: SVGGElement
   handleLeftClick: (event: MouseEvent) => void
@@ -65,7 +64,7 @@ const group = useGroup('buffer', toRef(props.buffer, 'id'))
                  @mouseout="handleMouseleave"
                  @mouseleave="handleMouseleave" />
 
-
+ 
 
             <!--캐리어가 인스톨이 상태여야만, 캐리어 내부의 공/실 여부를 판단.-->
             <circle v-if="props.buffer.installed==1&&props.buffer.carrierEmptyStatus === 0"
