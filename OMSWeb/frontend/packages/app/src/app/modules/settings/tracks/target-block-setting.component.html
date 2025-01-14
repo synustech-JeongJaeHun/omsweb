@@ -11,8 +11,7 @@
 
   <div class="single-grid">
     <h4 clss="setting-title">Vehicle</h4>
-    <dx-data-grid
-                  [dataSource]="vehicles"
+    <dx-data-grid [dataSource]="vehicles"
                   [focusedRowKey]="focusedVehicle"
                   [selectedRowKeys]="selectedVehicle"
                   [showBorders]="true"
@@ -20,12 +19,13 @@
                   [focusedRowEnabled]="true"
                   (onContentReady)="setInitialSelection()"
                   (onFocusedRowChanged)="onFocusedVehicleRowChanged($event)"
-                  height="350px"
-                  width="13em">
+                  height="400px"
+                  width="14em">
+      <dxo-filter-row [visible]="true"></dxo-filter-row>
       <dxo-scrolling mode="virtual"></dxo-scrolling>
       <dxo-selection mode="single"
                      showCheckBoxesMode="always"></dxo-selection>
-      <dxi-column [width]="20" datyType="string" dataField="logicalId" [caption]="'names.vehicle' | translate"> </dxi-column>
+      <dxi-column [width]="170" datyType="string" dataField="logicalId" [caption]="'names.vehicle' | translate"> </dxi-column>
     </dx-data-grid>
   </div>
   <div class="grid-divider"></div>
@@ -38,12 +38,14 @@
                     [showBorders]="true"
                     [keyExpr]="'targetBlockOnlineName'"
                     [(selectedRowKeys)]="selectedTargetAllow"
-                    height="350px"
-                    width="14em">
+                    (onInitialized)="onTargetAllowGridReady($event)"
+                    height="400px"
+                    width="15em">
+        <dxo-filter-row [visible]="true"></dxo-filter-row>
         <dxo-scrolling mode="virtual"></dxo-scrolling>
         <dxo-selection mode="multiple"
-                       showCheckBoxesMode="always"></dxo-selection> 
-        <dxi-column [width]="40" datyType="string" dataField="targetBlockOnlineName" [caption]="'names.returnable' | translate"> </dxi-column>
+                       showCheckBoxesMode="always"></dxo-selection>
+        <dxi-column [width]="170" datyType="string" dataField="targetBlockOnlineName" [caption]="'names.returnable' | translate"> </dxi-column>
         <!--<dxi-column [width]="120" datyType="string" dataField="logicalId" [caption]="'names.logicalId' | translate"> </dxi-column>-->
       </dx-data-grid>
 
@@ -63,12 +65,14 @@
                     [showBorders]="true"
                     [keyExpr]="'targetBlockOnlineName'"
                     [(selectedRowKeys)]="selectedTargetBlock"
-                    height="350px"
-                    width="14em">
+                     (onInitialized)="onTargetBlockGridReady($event)"
+                    height="400px"
+                    width="15em">
+        <dxo-filter-row [visible]="true"></dxo-filter-row>
         <dxo-scrolling mode="virtual"></dxo-scrolling>
         <dxo-selection mode="multiple"
                        showCheckBoxesMode="always"></dxo-selection>
-        <dxi-column [width]="40" datyType="string" dataField="targetBlockOnlineName" [caption]="'names.nonReturnable' | translate"> </dxi-column>
+        <dxi-column [width]="170" datyType="string" dataField="targetBlockOnlineName" [caption]="'names.nonReturnable' | translate"> </dxi-column>
         <!--<dxi-column [width]="120" datyType="string" dataField="logicalId" [caption]="'names.logicalId' | translate"> </dxi-column>-->
       </dx-data-grid>
 

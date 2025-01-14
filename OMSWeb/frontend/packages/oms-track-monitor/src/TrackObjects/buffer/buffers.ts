@@ -14,9 +14,6 @@ function initBuffers(bs: ITrackData['buffers']) {
 	// set
 	buffers.value = (bs ?? []).map((b) => ({ ...b }))
   buffers.value.forEach((b) => bufferMap.set(b.id, b))
-
-  console.log("vue initBuffers");
-  console.log(buffers);
 }
 
 function setBuffer(s: UpdateDto.Buffer) {
@@ -27,8 +24,6 @@ function setBuffer(s: UpdateDto.Buffer) {
 }
 
 function updateExistBuffer(buffer: Buffer, updateData: UpdateDto.Buffer) {
-  console.log("vue updateExistBuffer :updateData");
-  console.log(updateData);
   Object.assign(buffer, updateData)
 }
 

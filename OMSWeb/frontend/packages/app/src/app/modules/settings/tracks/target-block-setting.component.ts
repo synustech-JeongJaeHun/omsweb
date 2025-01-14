@@ -34,6 +34,9 @@ export class TargetBlockSettingComponent {
   @ViewChild('targetBlockDataGrid', { static: false }) targetBlockDataGrid!: DxDataGridComponent;
 
   ready = false
+  targetAlloawGridInstance: any;
+  targetBlockGridInstance: any;
+
   private destroy$ = new Subject<void>()
 
 /*  private settingTargetBlockings: TargetBlock[];*/
@@ -70,6 +73,7 @@ export class TargetBlockSettingComponent {
 
 
   ngOnInit(): void {
+
   }
 
   ngOnDestroy(): void {
@@ -78,7 +82,7 @@ export class TargetBlockSettingComponent {
   }
 
   private init() {
-
+    
     forkJoin(this.loadSettingsVehicles(), this.loadSettingStations(), this.loadSettingBuffers(), this.loadSettingTargetBlocks()).subscribe(() => {
       forkJoin(this.bindTargetAllow());
     });
@@ -144,10 +148,22 @@ export class TargetBlockSettingComponent {
     this.selectedTargetBlock = []
   }
 
+
+  onTargetAllowGridReady(e) {
+    this.targetAlloawGridInstance = e.component; // DataGrid 인스턴스 저장
+  }
+
+  onTargetBlockGridReady(e) {
+    this.targetBlockGridInstance = e.component; // DataGrid 인스턴스 저장
+  }
+
   onFocusedVehicleRowChanged(e) {
 
     const vlogicalId = e.row.data.logicalId;
     this.selectedVehicle = vlogicalId;
+
+    this.targetAlloawGridInstance.clearFilter();
+    this.targetBlockGridInstance.clearFilter();
 
     this.targetAllowDataSource = this.targetAllowings
       .filter(vehicleT => vehicleT.vehicleOnlineName == vlogicalId)
@@ -176,8 +192,8 @@ export class TargetBlockSettingComponent {
   }
 
   onSave() {
-    this.ready = false
 
+    this.ready = false
     const sendTargetBlockData: ISendTargetBlock[] = Object.values(
       this.targetBlockings.reduce((acc, curr) => {
 
