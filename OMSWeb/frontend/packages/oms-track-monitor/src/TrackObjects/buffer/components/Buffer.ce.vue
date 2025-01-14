@@ -41,9 +41,8 @@ const group = useGroup('buffer', toRef(props.buffer, 'id'))
                  href="#buffer-group-shadow"
                  :fill="getGroupColorWithAlpha(group.color)" />
 
-            <!--BufferLayer에 작성된 Buffer <circle> 복사본 //레이어로 구현-->
-            <!--캐리어가 올라가있고 일정시간이 경과 된 경우(없는 경우는 알람자체가 없음)-->
-            <use v-if="props.buffer.installed==1 && props.buffer.alertPassedTime"
+            <!--캐리어있고 일정시간이 경과 된 경우(없는 경우는 알람자체가 없음)-->
+            <use v-if="props.buffer.carrierId &&props.buffer.alertPassedTime"
                  class="carrier-passedTime"
                  transform="scale(0.8)"
                  href="#buffer-group-shadow"
@@ -64,7 +63,17 @@ const group = useGroup('buffer', toRef(props.buffer, 'id'))
                  @mouseout="handleMouseleave"
                  @mouseleave="handleMouseleave" />
 
- 
+            <!--플레이백에서 캐리어표시를 위한 이전코드-->
+            <circle v-if="props.buffer.carrierId"
+                    :data-id="props.buffer.id"
+                    :class="props.buffer.carrierId && 'buffer-full'"
+                    :fill="!props.buffer.carrierId &&'transparent'"
+                    r="8"
+                    @click.left="handleLeftClick"
+                    @click.right="handleRightClick"
+                    @mouseover="handleMouseover"
+                    @mouseout="handleMouseleave"
+                    @mouseleave="handleMouseleave" />
 
             <!--캐리어가 인스톨이 상태여야만, 캐리어 내부의 공/실 여부를 판단.-->
             <circle v-if="props.buffer.installed==1&&props.buffer.carrierEmptyStatus === 0"

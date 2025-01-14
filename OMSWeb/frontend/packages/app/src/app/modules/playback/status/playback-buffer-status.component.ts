@@ -35,6 +35,16 @@ export class PlaybackBufferStatusComponent {
     this.preference = this.settingSvc.globalPreferences
   }
 
+
+  rowPrepared(e) {
+    //datasoruce reload 돌면 여기도 적용 됨.
+    if (e.rowType === "data") {
+      if (e.data.alertPassedTime === true) {
+        e.rowElement.style.backgroundColor = "#FF4848";//"#ffcdcd";// "#ff0000"; // 배경색 변경
+      }
+    }
+  }
+
   canDisplayTable(type: string): boolean {
     return this.preference.controlTables[type]
   }
