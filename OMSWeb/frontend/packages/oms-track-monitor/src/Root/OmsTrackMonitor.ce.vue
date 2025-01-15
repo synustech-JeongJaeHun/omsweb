@@ -128,9 +128,10 @@ const props = defineProps<{
   // content
   vehicleSecondaryContent: Stringlish
 
-  //왜 사용하는지?
   carrierInstalledColor: Stringlish
   carrierUnknownColor: Stringlish
+  carrierEmptyColor: Stringlish
+  carrierFullColor: Stringlish
 
   vhlDisplay: Stringlish
   includesWords: Stringlish[]
@@ -380,28 +381,33 @@ defineExpose(exposed)
     );
 }
 
-#buffer-layer .buffer .buffer-full {
-  fill: v-bind('parseStringProp(ColorDefault.cargoFull, props.cargoFullColor)'
-    );
+/*#buffer-layer .buffer .buffer-full {
+  fill: v-bind('parseStringProp(ColorDefault.cargoFull, props.cargoFullColor)');
+}*/
+
+#buffer-layer .buffer .carrier-installed {
+  fill: v-bind('parseStringProp(ColorDefault.carrierInstalled, props.carrierInstalledColor)');
 }
 
- #buffer-layer .buffer .buffer-full.carrier-installed {
-        fill: v-bind('parseStringProp(ColorDefault.carrierInstalled, props.carrierInstalledColor)' );
+ #buffer-layer .buffer .carrier-unknown {
+  fill: v-bind('parseStringProp(ColorDefault.carrierUnknown, props.carrierUnknownColor)' );
  }
 
- #buffer-layer .buffer .buffer-full.carrier-unknown {
-        fill: v-bind('parseStringProp(ColorDefault.carrierUnknown, props.carrierUnknownColor)' );
+ #buffer-layer .buffer .carrier-empty {
+   fill: v-bind('parseStringProp(ColorDefault.carrierEmpty, props.carrierEmptyColor)' );
+ }
+
+ #buffer-layer .buffer .carrier-full {
+   fill: v-bind('parseStringProp(ColorDefault.carrierFull, props.carrierFullColor)' );
  }
 
 #buffer-layer .buffer .carrier-passedTime {
     fill: v-bind('parseStringProp(ColorDefault.passedTime, props.passedTime)' );
  }
 
-
-#buffer-layer .buffer .buffer-type {
-  stroke: v-bind('parseStringProp(ColorDefault.bufferType, props.bufferTypeColor)'
-  );
-}
+ #buffer-layer .buffer .buffer-type {
+        stroke: v-bind('parseStringProp(ColorDefault.bufferType, props.bufferTypeColor)' );
+    }
 
 #point-layer .point .point-path {
   stroke: v-bind('parseStringProp(ColorDefault.point, props.pointColor)');

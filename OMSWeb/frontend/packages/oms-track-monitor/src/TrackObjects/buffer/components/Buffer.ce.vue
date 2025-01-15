@@ -66,7 +66,7 @@ const group = useGroup('buffer', toRef(props.buffer, 'id'))
             <!--플레이백에서 캐리어표시를 위한 이전코드-->
             <circle v-if="props.buffer.carrierId"
                     :data-id="props.buffer.id"
-                    :class="props.buffer.carrierId && 'buffer-full'"
+                    :class="props.buffer.carrierId && 'carrier-installed'"
                     :fill="!props.buffer.carrierId &&'transparent'"
                     r="8"
                     @click.left="handleLeftClick"
@@ -78,7 +78,7 @@ const group = useGroup('buffer', toRef(props.buffer, 'id'))
             <!--캐리어가 인스톨이 상태여야만, 캐리어 내부의 공/실 여부를 판단.-->
             <circle v-if="props.buffer.installed==1&&props.buffer.carrierEmptyStatus === 0"
                     :data-id="props.buffer.id"
-                    :class="props.buffer.carrierId && 'buffer-full carrier-unknown'"
+                    :class="props.buffer.carrierId && 'carrier-unknown'"
                     :fill="!props.buffer.carrierId &&'transparent'"
                     r="8"
                     @click.left="handleLeftClick"
@@ -89,7 +89,7 @@ const group = useGroup('buffer', toRef(props.buffer, 'id'))
 
             <circle v-if="props.buffer.installed==1&&props.buffer.carrierEmptyStatus === 1"
                     :data-id="props.buffer.id"
-                    :class="props.buffer.carrierId && 'buffer-full'"
+                    :class="props.buffer.carrierId && 'buffer-empty'"
                     :fill="!props.buffer.carrierId &&'transparent'"
                     r="8"
                     @click.left="handleLeftClick"
@@ -100,7 +100,7 @@ const group = useGroup('buffer', toRef(props.buffer, 'id'))
 
             <circle v-if="props.buffer.installed==1&&props.buffer.carrierEmptyStatus === 2"
                     :data-id="props.buffer.id"
-                    :class="props.buffer.carrierId && 'buffer-full carrier-installed'"
+                    :class="props.buffer.carrierId && 'carrier-full'"
                     :fill="!props.buffer.carrierId &&'transparent'"
                     r="8"
                     @click.left="handleLeftClick"
