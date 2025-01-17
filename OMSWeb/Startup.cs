@@ -41,14 +41,9 @@ namespace OMSWeb
             OmsConfiguration();
 
             Log.Initialize();
+            var version = Assembly.GetExecutingAssembly().GetName().Version;
 
-            string filePath = Process.GetCurrentProcess().MainModule.FileName;
-            string fileVersion = FileVersionInfo.GetVersionInfo(filePath).FileVersion;
-            string fileName = Path.GetFileNameWithoutExtension(filePath);
-            string title = fileName + " " + fileVersion;
-            Console.Title = title;
-
-            Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"{title} SERVER start at: {DateTimeOffset.Now}");
+            Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"OMSWeb SERVER {version} start at: {DateTimeOffset.Now}");
         }
 
         public IConfiguration Configuration { get; }
