@@ -17,7 +17,8 @@ import { TranslateService } from '@ngx-translate/core'
 })
 export class VerifyDialogComponent implements OnInit {
 	form: FormGroup
-	isValid: boolean = true
+  isValid: boolean = true
+  inputValue: string = '';
 
 	constructor(
 		@Inject(MAT_DIALOG_DATA) public message: IConfirmMessage<unknown>,
@@ -32,7 +33,7 @@ export class VerifyDialogComponent implements OnInit {
 	private blankValidator(control: AbstractControl) {
 		const regx = /(^\s)+(\s)*(\s$)/gi
 		return regx.test(control.value) ? { blank: { value: control.value } } : null
-	}
+  }
 
 	private initForm() {
 		this.form = new FormGroup({
@@ -45,7 +46,7 @@ export class VerifyDialogComponent implements OnInit {
 				validators: [Validators.required, this.blankValidator, Validators.pattern(/^(\s+\S+\s*)*(?!\s).*$/)],
 				updateOn: 'blur',
 			}),
-		})
+    })
 	}
 	onSubmit() {
 		if (this.form.invalid) return
@@ -57,5 +58,12 @@ export class VerifyDialogComponent implements OnInit {
 
 		this.dialog.close({ operator: operator.trim(), reason: reason.trim() })
 		return true
-	}
+  }
+
+  // 입력값에서 작은따옴표 제거
+  sanitizeInput(controlName: string, event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const sanitizedValue = input.value.replace(/'/g, '');
+    this.form.get(controlName)?.setValue(sanitizedValue, { emitEvent: false });
+  }
 }

@@ -9,14 +9,14 @@
 				<mat-error *ngIf="!isValid">Verify Failed</mat-error>
 				<mat-form-field appearance="fill">
 					<mat-label>User</mat-label>
-					<input matInput formControlName="operator" />
+					<input matInput formControlName="operator" (input)="sanitizeInput('operator', $event)"  />
 					<mat-error> user name must be provided </mat-error>
 					<mat-icon matSuffix>person</mat-icon>
 				</mat-form-field>
 				<mat-form-field appearance="fill">
 					<mat-label>Reason</mat-label>
 					<!-- autocomplete="current-password" -->
-					<input type="text" matInput formControlName="reason" />
+					<input type="text" matInput formControlName="reason" (input)="sanitizeInput('reason', $event)" />
 					<mat-error> reason must be provided </mat-error>
 					<mat-icon matSuffix>insert_comment</mat-icon>
 				</mat-form-field>
