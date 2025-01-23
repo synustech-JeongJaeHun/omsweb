@@ -297,7 +297,8 @@ function convertBufferHistoryEventToTmUpdateDtoBuffer(
 		user: event.user,
 		note: event.note,
     state: event.state,
-		type: event?.type === 'Normal' ? null : event?.type
+    type: event?.type === 'Normal' ? null : event?.type,
+    alertPassedTime: event?.alertPassedTime,
 	}
 }
 

@@ -89,7 +89,7 @@ const group = useGroup('buffer', toRef(props.buffer, 'id'))
 
             <circle v-if="props.buffer.installed==1&&props.buffer.carrierEmptyStatus === 1"
                     :data-id="props.buffer.id"
-                    :class="props.buffer.carrierId && 'buffer-empty'"
+                    :class="props.buffer.carrierId && 'carrier-empty'"
                     :fill="!props.buffer.carrierId &&'transparent'"
                     r="8"
                     @click.left="handleLeftClick"
@@ -101,6 +101,17 @@ const group = useGroup('buffer', toRef(props.buffer, 'id'))
             <circle v-if="props.buffer.installed==1&&props.buffer.carrierEmptyStatus === 2"
                     :data-id="props.buffer.id"
                     :class="props.buffer.carrierId && 'carrier-full'"
+                    :fill="!props.buffer.carrierId &&'transparent'"
+                    r="8"
+                    @click.left="handleLeftClick"
+                    @click.right="handleRightClick"
+                    @mouseover="handleMouseover"
+                    @mouseout="handleMouseleave"
+                    @mouseleave="handleMouseleave" />
+
+            <circle v-if="props.buffer.installed==1&&props.buffer.carrierEmptyStatus === 3"
+                    :data-id="props.buffer.id"
+                    :class="props.buffer.carrierId && 'carrier-err'"
                     :fill="!props.buffer.carrierId &&'transparent'"
                     r="8"
                     @click.left="handleLeftClick"

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MQTTnet.Packets;
+using System;
 
 namespace OMSWeb.Models.Entities
 {
@@ -60,5 +61,7 @@ namespace OMSWeb.Models.Entities
     public string HistoryChangeType { get; set; }
     public string CAlias { get; set; }
     public string Type { get; set; }
-  }
+    public bool AlertPassedTime { get; set; }
+
+    }
 }

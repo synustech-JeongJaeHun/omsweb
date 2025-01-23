@@ -401,6 +401,10 @@ defineExpose(exposed)
    fill: v-bind('parseStringProp(ColorDefault.carrierFull, props.carrierFullColor)' );
  }
 
+ #buffer-layer .buffer .carrier-err {
+    fill: v-bind('parseStringProp(ColorDefault.passedTime, props.passedTime)' );
+ }
+
 #buffer-layer .buffer .carrier-passedTime {
     fill: v-bind('parseStringProp(ColorDefault.passedTime, props.passedTime)' );
  }
