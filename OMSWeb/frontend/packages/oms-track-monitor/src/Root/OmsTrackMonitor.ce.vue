@@ -132,6 +132,8 @@ const props = defineProps<{
   carrierUnknownColor: Stringlish
   carrierEmptyColor: Stringlish
   carrierFullColor: Stringlish
+  passedTimeColor: Stringlish
+  
 
   vhlDisplay: Stringlish
   includesWords: Stringlish[]
@@ -402,11 +404,11 @@ defineExpose(exposed)
  }
 
  #buffer-layer .buffer .carrier-err {
-    fill: v-bind('parseStringProp(ColorDefault.passedTime, props.passedTime)' );
+    fill: v-bind('parseStringProp(ColorDefault.passedTime, props.passedTimeColor)' );
  }
 
 #buffer-layer .buffer .carrier-passedTime {
-    fill: v-bind('parseStringProp(ColorDefault.passedTime, props.passedTime)' );
+    fill: v-bind('parseStringProp(ColorDefault.passedTime, props.passedTimeColor)' );
  }
 
  #buffer-layer .buffer .buffer-type {

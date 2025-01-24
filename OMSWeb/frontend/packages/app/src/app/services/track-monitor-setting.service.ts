@@ -66,6 +66,13 @@ type ColorChangedEvent = {
 		| 'fireshutterClosedColor'
 		| 'mtlUnuseColor'
 		| 'mtlUseColor'
+    | 'passedTimeColor'
+    | 'carrierInstalledColor'
+    | 'carrierUnknownColor'
+    | 'carrierEmptyColor'
+    | 'carrierFullColor'
+    | 'carrierErrorColor'
+
 	value: string
 }
 
@@ -196,7 +203,15 @@ const DefaultTrackMonitorSetting: TrackMonitorSetting = {
 	fireshutterClosedColor: '#F04907',
 	fireshutterOpenedColor: 'rgb(128,128,128, 1)',
 	mtlUnuseColor: '#f98080',
-	mtlUseColor: 'grey',
+  mtlUseColor: 'grey',
+
+  carrierUnknownColor: '#000000',
+  carrierEmptyColor: '#FF7F27',
+  carrierFullColor: '#0000FF',
+  carrierErrorColor: '#FF0000',
+  passedTimeColor: '#FF0000',
+  carrierInstalledColor: '#000000',
+
 
 	// vehicle contents
 	vehicleSecondaryContent: 'order',

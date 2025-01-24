@@ -1444,20 +1444,16 @@
 						<div class="legend-icon">
 							<svg class="long-vertical">
 								<g class="buffer" transform="translate(50,28)">
-									<path
-										class="buffer_path"
-										level="level3"
-										[style]="{ fill: setting.bufferColor }"
-										d="m-15 5 m5 -10 l-5 0 a10 10 0 0 1 10 -10 l0 5 a5 5 0 0 0 -5 5 l-5 0 m20 -5 l0 -5a 10 10 0 0 1 10 10 l-5 0 a5 5 0 0 0 -5 -5 l0 -5 m5 20 l5 0 a10 10 0 0 1 -10 10 l0 -5 a5 5 0 0 0 5 -5 l5 0 m-20 5 l0 5 a10 10 0 0 1 -10 -10 l5 0 a5 5 0 0 0 5 5 l0 5 z"
-									></path>
-									<text
-										class="label"
-										font-size="11px"
-										x="-20"
-										y="30"
-										text-anchor="start"
-									>
-                    {{ (labelDisplayTable('buffers_label') | translate)+'_id'}}
+									<path class="buffer_path"
+												level="level3"
+												[style]="{ fill: setting.bufferColor }"
+												d="m-15 5 m5 -10 l-5 0 a10 10 0 0 1 10 -10 l0 5 a5 5 0 0 0 -5 5 l-5 0 m20 -5 l0 -5a 10 10 0 0 1 10 10 l-5 0 a5 5 0 0 0 -5 -5 l0 -5 m5 20 l5 0 a10 10 0 0 1 -10 10 l0 -5 a5 5 0 0 0 5 -5 l5 0 m-20 5 l0 5 a10 10 0 0 1 -10 -10 l5 0 a5 5 0 0 0 5 5 l0 5 z"></path>
+									<text class="label"
+												font-size="11px"
+												x="-20"
+												y="30"
+												text-anchor="start">
+										{{ (labelDisplayTable('buffers_label') | translate)+'_id'}}
 									</text>
 								</g>
 							</svg>
@@ -1468,21 +1464,120 @@
 						<div class="legend-icon">
 							<svg class="long-vertical">
 								<g class="buffer" transform="translate(50,28)">
-									<path
-										class="buffer_path"
-										level="level3"
-										[style]="{ fill: setting.bufferColor }"
-										d="m-15 5 m5 -10 l-5 0 a10 10 0 0 1 10 -10 l0 5 a5 5 0 0 0 -5 5 l-5 0 m20 -5 l0 -5a 10 10 0 0 1 10 10 l-5 0 a5 5 0 0 0 -5 -5 l0 -5 m5 20 l5 0 a10 10 0 0 1 -10 10 l0 -5 a5 5 0 0 0 5 -5 l5 0 m-20 5 l0 5 a10 10 0 0 1 -10 -10 l5 0 a5 5 0 0 0 5 5 l0 5 z"
-									></path>
-									<circle r="8" [style]="{ fill: setting.cargoFullColor }" />
-									<text
-										class="label"
-										font-size="11px"
-										x="-20"
-										y="30"
-										text-anchor="start"
-									>
-                    {{ (labelDisplayTable('buffers_label') | translate)+'_id'}}
+									<path class="buffer_path"
+												level="level3"
+												[style]="{ fill: setting.bufferDisabledColor }"
+												d="m-15 5 m5 -10 l-5 0 a10 10 0 0 1 10 -10 l0 5 a5 5 0 0 0 -5 5 l-5 0 m20 -5 l0 -5a 10 10 0 0 1 10 10 l-5 0 a5 5 0 0 0 -5 -5 l0 -5 m5 20 l5 0 a10 10 0 0 1 -10 10 l0 -5 a5 5 0 0 0 5 -5 l5 0 m-20 5 l0 5 a10 10 0 0 1 -10 -10 l5 0 a5 5 0 0 0 5 5 l0 5 z"></path>
+									<text class="label"
+												font-size="11px"
+												x="-20"
+												y="30"
+												text-anchor="start">
+										{{ (labelDisplayTable('buffers_label') | translate)+'_id'}}
+									</text>
+								</g>
+							</svg>
+						</div>
+						<div class="legend-caption">Unused</div>
+					</div>
+					<div class="legend-dlg-item">
+						<div class="legend-icon">
+							<svg class="long-vertical">
+								<g class="buffer" transform="translate(50,28)">
+									<path class="buffer_path"
+												level="level3"
+												[style]="{ fill: '#87CEEB' }"
+												d="m-15 5 m5 -10 l-5 0 a10 10 0 0 1 10 -10 l0 5 a5 5 0 0 0 -5 5 l-5 0 m20 -5 l0 -5a 10 10 0 0 1 10 10 l-5 0 a5 5 0 0 0 -5 -5 l0 -5 m5 20 l5 0 a10 10 0 0 1 -10 10 l0 -5 a5 5 0 0 0 5 -5 l5 0 m-20 5 l0 5 a10 10 0 0 1 -10 -10 l5 0 a5 5 0 0 0 5 5 l0 5 z"></path>
+									<text class="label"
+												font-size="11px"
+												x="-20"
+												y="30"
+												text-anchor="start">
+										{{ (labelDisplayTable('buffers_label') | translate)+'_id'}}
+									</text>
+								</g>
+							</svg>
+						</div>
+						<div class="legend-caption">From</div>
+					</div>
+					<div class="legend-dlg-item">
+						<div class="legend-icon">
+							<svg class="long-vertical">
+								<g class="buffer" transform="translate(50,28)">
+									<path class="buffer_path"
+												level="level3"
+												[style]="{ fill: '#FFB2FF' }"
+												d="m-15 5 m5 -10 l-5 0 a10 10 0 0 1 10 -10 l0 5 a5 5 0 0 0 -5 5 l-5 0 m20 -5 l0 -5a 10 10 0 0 1 10 10 l-5 0 a5 5 0 0 0 -5 -5 l0 -5 m5 20 l5 0 a10 10 0 0 1 -10 10 l0 -5 a5 5 0 0 0 5 -5 l5 0 m-20 5 l0 5 a10 10 0 0 1 -10 -10 l5 0 a5 5 0 0 0 5 5 l0 5 z"></path>
+									<text class="label"
+												font-size="11px"
+												x="-20"
+												y="30"
+												text-anchor="start">
+										{{ (labelDisplayTable('buffers_label') | translate)+'_id'}}
+									</text>
+								</g>
+							</svg>
+						</div>
+						<div class="legend-caption">To</div>
+					</div>
+
+					<div class="legend-dlg-item">
+						<div class="legend-icon">
+							<svg class="long-vertical">
+								<g class="buffer" transform="translate(50,28)">
+									<path class="buffer_path"
+												level="level3"
+												[style]="{ fill: setting.bufferColor }"
+												d="m-15 5 m5 -10 l-5 0 a10 10 0 0 1 10 -10 l0 5 a5 5 0 0 0 -5 5 l-5 0 m20 -5 l0 -5a 10 10 0 0 1 10 10 l-5 0 a5 5 0 0 0 -5 -5 l0 -5 m5 20 l5 0 a10 10 0 0 1 -10 10 l0 -5 a5 5 0 0 0 5 -5 l5 0 m-20 5 l0 5 a10 10 0 0 1 -10 -10 l5 0 a5 5 0 0 0 5 5 l0 5 z"></path>
+									<circle r="8" [style]="{ fill: setting.carrierUnknownColor }" />
+									<text class="label"
+												font-size="11px"
+												x="-20"
+												y="30"
+												text-anchor="start">
+										{{ (labelDisplayTable('buffers_label') | translate)+'_id'}}
+									</text>
+								</g>
+							</svg>
+						</div>
+						<div class="legend-caption">Unknown</div>
+					</div>
+					<div class="legend-dlg-item">
+						<div class="legend-icon">
+							<svg class="long-vertical">
+								<g class="buffer" transform="translate(50,28)">
+									<path class="buffer_path"
+												level="level3"
+												[style]="{ fill: setting.bufferColor }"
+												d="m-15 5 m5 -10 l-5 0 a10 10 0 0 1 10 -10 l0 5 a5 5 0 0 0 -5 5 l-5 0 m20 -5 l0 -5a 10 10 0 0 1 10 10 l-5 0 a5 5 0 0 0 -5 -5 l0 -5 m5 20 l5 0 a10 10 0 0 1 -10 10 l0 -5 a5 5 0 0 0 5 -5 l5 0 m-20 5 l0 5 a10 10 0 0 1 -10 -10 l5 0 a5 5 0 0 0 5 5 l0 5 z"></path>
+									<circle r="8" [style]="{ fill: setting.carrierEmptyColor }" />
+									<text class="label"
+												font-size="11px"
+												x="-20"
+												y="30"
+												text-anchor="start">
+										{{ (labelDisplayTable('buffers_label') | translate)+'_id'}}
+									</text>
+								</g>
+							</svg>
+						</div>
+						<div class="legend-caption">Empty</div>
+					</div>
+					<div class="legend-dlg-item">
+						<div class="legend-icon">
+							<svg class="long-vertical">
+								<g class="buffer" transform="translate(50,28)">
+									<path class="buffer_path"
+												level="level3"
+												[style]="{ fill: setting.bufferColor }"
+												d="m-15 5 m5 -10 l-5 0 a10 10 0 0 1 10 -10 l0 5 a5 5 0 0 0 -5 5 l-5 0 m20 -5 l0 -5a 10 10 0 0 1 10 10 l-5 0 a5 5 0 0 0 -5 -5 l0 -5 m5 20 l5 0 a10 10 0 0 1 -10 10 l0 -5 a5 5 0 0 0 5 -5 l5 0 m-20 5 l0 5 a10 10 0 0 1 -10 -10 l5 0 a5 5 0 0 0 5 5 l0 5 z"></path>
+									<circle r="8" [style]="{ fill: setting.carrierFullColor }" />
+									<text class="label"
+												font-size="11px"
+												x="-20"
+												y="30"
+												text-anchor="start">
+										{{ (labelDisplayTable('buffers_label') | translate)+'_id'}}
 									</text>
 								</g>
 							</svg>
@@ -1493,74 +1588,45 @@
 						<div class="legend-icon">
 							<svg class="long-vertical">
 								<g class="buffer" transform="translate(50,28)">
-									<path
-										class="buffer_path"
-										level="level3"
-										[style]="{ fill: setting.bufferDisabledColor }"
-										d="m-15 5 m5 -10 l-5 0 a10 10 0 0 1 10 -10 l0 5 a5 5 0 0 0 -5 5 l-5 0 m20 -5 l0 -5a 10 10 0 0 1 10 10 l-5 0 a5 5 0 0 0 -5 -5 l0 -5 m5 20 l5 0 a10 10 0 0 1 -10 10 l0 -5 a5 5 0 0 0 5 -5 l5 0 m-20 5 l0 5 a10 10 0 0 1 -10 -10 l5 0 a5 5 0 0 0 5 5 l0 5 z"
-									></path>
-									<text
-										class="label"
-										font-size="11px"
-										x="-20"
-										y="30"
-										text-anchor="start"
-									>
-                    {{ (labelDisplayTable('buffers_label') | translate)+'_id'}}
+									<path class="buffer_path"
+												level="level3"
+												[style]="{ fill: setting.bufferColor }"
+												d="m-15 5 m5 -10 l-5 0 a10 10 0 0 1 10 -10 l0 5 a5 5 0 0 0 -5 5 l-5 0 m20 -5 l0 -5a 10 10 0 0 1 10 10 l-5 0 a5 5 0 0 0 -5 -5 l0 -5 m5 20 l5 0 a10 10 0 0 1 -10 10 l0 -5 a5 5 0 0 0 5 -5 l5 0 m-20 5 l0 5 a10 10 0 0 1 -10 -10 l5 0 a5 5 0 0 0 5 5 l0 5 z"></path>
+									<circle r="8" [style]="{ fill: setting.carrierErrorColor }" />
+									<text class="label"
+												font-size="11px"
+												x="-20"
+												y="30"
+												text-anchor="start">
+										{{ (labelDisplayTable('buffers_label') | translate)+'_id'}}
 									</text>
 								</g>
 							</svg>
 						</div>
-						<div class="legend-caption">Unused</div>
+						<div class="legend-caption">Error</div>
 					</div>
-                    <div class="legend-dlg-item">
-                        <div class="legend-icon">
-                            <svg class="long-vertical">
-                                <g class="buffer" transform="translate(50,28)">
-                                    <path
-                                            class="buffer_path"
-                                            level="level3"
-                                            [style]="{ fill: '#87CEEB' }"
-                                            d="m-15 5 m5 -10 l-5 0 a10 10 0 0 1 10 -10 l0 5 a5 5 0 0 0 -5 5 l-5 0 m20 -5 l0 -5a 10 10 0 0 1 10 10 l-5 0 a5 5 0 0 0 -5 -5 l0 -5 m5 20 l5 0 a10 10 0 0 1 -10 10 l0 -5 a5 5 0 0 0 5 -5 l5 0 m-20 5 l0 5 a10 10 0 0 1 -10 -10 l5 0 a5 5 0 0 0 5 5 l0 5 z"
-                                    ></path>
-                                    <text
-                                            class="label"
-                                            font-size="11px"
-                                            x="-20"
-                                            y="30"
-                                            text-anchor="start"
-                                    >
-                                        {{ (labelDisplayTable('buffers_label') | translate)+'_id'}}
-                                    </text>
-                                </g>
-                            </svg>
-                        </div>
-                        <div class="legend-caption">From</div>
-                    </div>
-                    <div class="legend-dlg-item">
-                        <div class="legend-icon">
-                            <svg class="long-vertical">
-                                <g class="buffer" transform="translate(50,28)">
-                                    <path
-                                            class="buffer_path"
-                                            level="level3"
-                                            [style]="{ fill: '#FFB2FF' }"
-                                            d="m-15 5 m5 -10 l-5 0 a10 10 0 0 1 10 -10 l0 5 a5 5 0 0 0 -5 5 l-5 0 m20 -5 l0 -5a 10 10 0 0 1 10 10 l-5 0 a5 5 0 0 0 -5 -5 l0 -5 m5 20 l5 0 a10 10 0 0 1 -10 10 l0 -5 a5 5 0 0 0 5 -5 l5 0 m-20 5 l0 5 a10 10 0 0 1 -10 -10 l5 0 a5 5 0 0 0 5 5 l0 5 z"
-                                    ></path>
-                                    <text
-                                            class="label"
-                                            font-size="11px"
-                                            x="-20"
-                                            y="30"
-                                            text-anchor="start"
-                                    >
-                                        {{ (labelDisplayTable('buffers_label') | translate)+'_id'}}
-                                    </text>
-                                </g>
-                            </svg>
-                        </div>
-                        <div class="legend-caption">To</div>
-                    </div>
+					<div class="legend-dlg-item">
+						<div class="legend-icon">
+							<svg class="long-vertical">
+								<g class="buffer" transform="translate(50,28)">
+									<circle r="20" [style]="{ fill: setting.passedTimeColor }" />
+									<path class="buffer_path"
+												level="level3"
+												[style]="{ fill: setting.bufferColor }"
+												d="m-15 5 m5 -10 l-5 0 a10 10 0 0 1 10 -10 l0 5 a5 5 0 0 0 -5 5 l-5 0 m20 -5 l0 -5a 10 10 0 0 1 10 10 l-5 0 a5 5 0 0 0 -5 -5 l0 -5 m5 20 l5 0 a10 10 0 0 1 -10 10 l0 -5 a5 5 0 0 0 5 -5 l5 0 m-20 5 l0 5 a10 10 0 0 1 -10 -10 l5 0 a5 5 0 0 0 5 5 l0 5 z"></path>
+									<circle r="8" [style]="{ fill: setting.carrierFullColor }" />
+									<text class="label"
+												font-size="11px"
+												x="-20"
+												y="30"
+												text-anchor="start">
+										{{ (labelDisplayTable('buffers_label') | translate)+'_id'}}
+									</text>
+								</g>
+							</svg>
+						</div>
+						<div class="legend-caption">Alert</div>
+					</div>
 				</dd>
 
 				<dt>{{ 'names.mtl' | translate }}</dt>
