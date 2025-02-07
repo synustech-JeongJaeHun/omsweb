@@ -67,7 +67,7 @@
 
 <dx-data-grid
 	[dataSource]="dataSource"
-	[remoteOperations]="true"
+	[remoteOperations]="false"
 	[height]="tableHeight"
 	[repaintChangesOnly]="true"
 	[columnAutoWidth]="false"
@@ -82,6 +82,9 @@
 	[stateStoring]="stateStoring"
 	(onRowClick)="onClickTransferRow($event)"
 >
+
+	<dxo-group-panel [visible]="fasle"></dxo-group-panel>
+  <dxo-grouping #expand [autoExpandAll]="true"></dxo-grouping>
 	<dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
 	<!--dxo-scrolling-- mode="virtual" rowRenderingMode="standard"></dxo-scrolling-->
 	<dxo-paging [pageSize]="50"></dxo-paging>
@@ -345,12 +348,15 @@
 		[visibleIndex]="getDisplayTableColumnIndex('orders_lastReassignType')"
 	></dxi-column>
 	<dxi-column
+	  [groupIndex]="0"
 		[allowFiltering]="false"
 		[width]="0"
 		[visible]="false"
 		dataType="string"
 		dataField="statusDetails"
-		[allowSorting]="false"
+		[allowSorting]="true"
+		[allowGrouping]="true"
+		sortOrder="asc"
 		[caption]="'names.statusDetails' | translate"
 	></dxi-column>
 	<div *dxTemplate="let data of 'lastReassignTypeTemplate'">
