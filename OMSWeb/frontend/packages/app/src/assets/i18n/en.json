@@ -607,7 +607,12 @@
     "nonReturnable": "Non-Assignable",
     "alertPassedTime": "Alert Passed Time",
     "carrierEmptyStatus": "Carrier Empty Status",
-    "installed": "Installed"
+    "installed": "Installed",
+    "carrierUnknown": "Carrier - Unknown",
+    "carrierEmpty": "Carrier - Empty",
+    "carrierFull": "Carrier - Full",
+    "carrierError": "Carrier - Error",
+    "passedTime": "Carrier - PassedTime Alert"
   },
   "enums": {
     "hostSessionStatus": {

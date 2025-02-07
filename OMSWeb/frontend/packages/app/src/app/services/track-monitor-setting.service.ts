@@ -67,7 +67,6 @@ type ColorChangedEvent = {
 		| 'mtlUnuseColor'
 		| 'mtlUseColor'
     | 'passedTimeColor'
-    | 'carrierInstalledColor'
     | 'carrierUnknownColor'
     | 'carrierEmptyColor'
     | 'carrierFullColor'
@@ -205,13 +204,12 @@ const DefaultTrackMonitorSetting: TrackMonitorSetting = {
 	mtlUnuseColor: '#f98080',
   mtlUseColor: 'grey',
 
+  //carrier
   carrierUnknownColor: '#000000',
   carrierEmptyColor: '#FF7F27',
   carrierFullColor: '#0000FF',
   carrierErrorColor: '#FF0000',
   passedTimeColor: '#FF0000',
-  carrierInstalledColor: '#000000',
-
 
 	// vehicle contents
 	vehicleSecondaryContent: 'order',

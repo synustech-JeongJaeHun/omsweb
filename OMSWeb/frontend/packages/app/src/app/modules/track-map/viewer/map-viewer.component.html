@@ -76,6 +76,13 @@
     [includesWords]="includesWords"
     [isVHLArrowVisible]="tmSetting.isVHLArrowVisible"
     [clusterColors]="tmSetting.clusterColors?.join('|')"
+
+		[carrierUnknownColor]="tmSetting.carrierUnknownColor"
+		[carrierEmptyColor]="tmSetting.carrierEmptyColor"
+		[carrierFullColor]="tmSetting.carrierFullColor"
+		[carrierErrorColor]="tmSetting.carrierErrorColor"
+		[passedTimeColor]="tmSetting.passedTimeColor"
+
     (mouseoverOnObject)="onMouseoverTM($event)"
 		(mouseleaveOnObject)="onMouseleaveTM($event)"
 		(mainClickOnObject)="onFocus($event)"

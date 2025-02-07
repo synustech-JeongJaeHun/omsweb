@@ -66,7 +66,7 @@ const group = useGroup('buffer', toRef(props.buffer, 'id'))
             <!--플레이백에서 캐리어표시를 위한 이전코드-->
             <circle v-if="props.buffer.carrierId"
                     :data-id="props.buffer.id"
-                    :class="props.buffer.carrierId && 'carrier-installed'"
+                    :class="props.buffer.carrierId && 'carrier-unknown'"
                     :fill="!props.buffer.carrierId &&'transparent'"
                     r="8"
                     @click.left="handleLeftClick"

@@ -88,12 +88,14 @@ const ColorDefault: Record<ColorProperty, string> = {
   fireshutterClosed: '#F04907',
   mtlUnuse: '#f98080',
   mtlUse: 'grey',
- 
-  passedTime: '#FF0000',
-  carrierUnknown: '#000000',
-  carrierEmpty: '#FF7F27',
-  carrierFull: '#0000FF',
-  carrierInstalled: '#000000'
+
+  //carrier
+  carrierUnknownColor: '#000000',
+  carrierEmptyColor: '#FF7F27',
+  carrierFullColor: '#0000FF',
+  carrierErrorColor: '#FF0000',
+  passedTimeColor: '#FF0000',
+  carrierInstalledColor: '#000000',
 
 
 }

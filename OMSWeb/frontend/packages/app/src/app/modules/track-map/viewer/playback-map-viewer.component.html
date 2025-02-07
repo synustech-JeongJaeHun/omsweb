@@ -55,7 +55,7 @@
     [sensorStoppedVehicleColor]="tmSetting.sensorStoppedVehicleColor"
     [cargoLoadingColor]="tmSetting.cargoLoadingColor"
     [cargoFullColor]="tmSetting.cargoFullColor"
-	[bufferTypeColor]="tmSetting.bufferTypeColor"
+	  [bufferTypeColor]="tmSetting.bufferTypeColor"
     [cargoUnloadingColor]="tmSetting.cargoUnloadingColor"
     [fireshutterOpenedColor]="tmSetting.fireshutterOpenedColor"
     [fireshutterClosedColor]="tmSetting.fireshutterClosedColor"
@@ -71,6 +71,10 @@
     [includesWords]="includesWords"
     [isVHLArrowVisible]="tmSetting.isVHLArrowVisible"
     [clusterColors]="tmSetting.clusterColors?.join('|')"
+
+		[carrierUnknownColor]="tmSetting.carrierUnknownColor"
+		[passedTimeColor]="tmSetting.passedTimeColor"
+
     (mouseoverOnObject)="onMouseoverTM($event)"
     (mouseleaveOnObject)="onMouseleaveTM($event)"
     (mainClickOnObject)="onFocus($event)"

@@ -128,10 +128,10 @@ const props = defineProps<{
   // content
   vehicleSecondaryContent: Stringlish
 
-  carrierInstalledColor: Stringlish
   carrierUnknownColor: Stringlish
   carrierEmptyColor: Stringlish
   carrierFullColor: Stringlish
+  carrierErrorColor: Stringlish
   passedTimeColor: Stringlish
   
 
@@ -387,28 +387,24 @@ defineExpose(exposed)
   fill: v-bind('parseStringProp(ColorDefault.cargoFull, props.cargoFullColor)');
 }*/
 
-#buffer-layer .buffer .carrier-installed {
-  fill: v-bind('parseStringProp(ColorDefault.carrierInstalled, props.carrierInstalledColor)');
-}
-
  #buffer-layer .buffer .carrier-unknown {
-  fill: v-bind('parseStringProp(ColorDefault.carrierUnknown, props.carrierUnknownColor)' );
+  fill: v-bind('parseStringProp(ColorDefault.carrierUnknownColor, props.carrierUnknownColor)' );
  }
 
  #buffer-layer .buffer .carrier-empty {
-   fill: v-bind('parseStringProp(ColorDefault.carrierEmpty, props.carrierEmptyColor)' );
+   fill: v-bind('parseStringProp(ColorDefault.carrierEmptyColor, props.carrierEmptyColor)' );
  }
 
  #buffer-layer .buffer .carrier-full {
-   fill: v-bind('parseStringProp(ColorDefault.carrierFull, props.carrierFullColor)' );
+   fill: v-bind('parseStringProp(ColorDefault.carrierFullColor, props.carrierFullColor)' );
  }
 
  #buffer-layer .buffer .carrier-err {
-    fill: v-bind('parseStringProp(ColorDefault.passedTime, props.passedTimeColor)' );
+    fill: v-bind('parseStringProp(ColorDefault.carrierErrorColor, props.carrierErrorColor)' );
  }
 
 #buffer-layer .buffer .carrier-passedTime {
-    fill: v-bind('parseStringProp(ColorDefault.passedTime, props.passedTimeColor)' );
+    fill: v-bind('parseStringProp(ColorDefault.passedTimeColor, props.passedTimeColor)' );
  }
 
  #buffer-layer .buffer .buffer-type {
