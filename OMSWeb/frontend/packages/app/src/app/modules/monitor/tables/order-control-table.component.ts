@@ -125,6 +125,18 @@ export class OrderControlTableComponent implements OnInit, OnDestroy {
     )
   }
 
+
+
+  rowPrepared(e) {
+    //datasoruce reload 돌면 여기도 적용 됨.
+    if (e.rowType === "data") {
+      if (e.data.statusDetails?.includes('transfer') && e.data.statusDetails?.includes('delayed')) {
+        e.rowElement.style.backgroundColor = "rgba(255,0,0,0.5)";//"#ffcdcd";// "#ff0000"; // 배경색 변경
+        /* e.rowElement.classList.add('install_carrier') //styles.scss 전역스타일로 적용*/
+      }
+    }
+  }
+
   canDisplayTable(type: string): boolean {
     return this.preference.controlTables[type]
   }

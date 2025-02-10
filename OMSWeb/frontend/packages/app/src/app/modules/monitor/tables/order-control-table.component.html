@@ -81,9 +81,10 @@
 	allowColumnResizing="true"
 	[stateStoring]="stateStoring"
 	(onRowClick)="onClickTransferRow($event)"
+	(onRowPrepared)="rowPrepared($event)"
 >
 
-	<dxo-group-panel [visible]="fasle"></dxo-group-panel>
+	<dxo-group-panel [visible]="false"></dxo-group-panel>
   <dxo-grouping #expand [autoExpandAll]="true"></dxo-grouping>
 	<dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
 	<!--dxo-scrolling-- mode="virtual" rowRenderingMode="standard"></dxo-scrolling-->
@@ -107,7 +108,6 @@
 		dataType="string"
 		dataField="id"
     [caption]="getDisplayTableLabel('orders_id') | translate"
-		cellTemplate="statusDetailsTemplate"
 		[visible]="canDisplayTable('orders_id')"
 		[visibleIndex]="getDisplayTableColumnIndex('orders_id')"
 	></dxi-column>
@@ -118,7 +118,6 @@
 		dataField="origin"
 		[allowSorting]="true"
     [caption]="getDisplayTableLabel('orders_origin') | translate"
-		cellTemplate="statusDetailsTemplate"
 		[visible]="canDisplayTable('orders_origin')"
 		[visibleIndex]="getDisplayTableColumnIndex('orders_origin')"
 	></dxi-column>
@@ -127,7 +126,6 @@
 		dataType="string"
 		dataField="logicalId"
     [caption]="getDisplayTableLabel('orders_logicalId') | translate"
-		cellTemplate="statusDetailsTemplate"
 		[visible]="canDisplayTable('orders_logicalId')"
 		[visibleIndex]="getDisplayTableColumnIndex('orders_logicalId')"
 	></dxi-column>
@@ -366,12 +364,12 @@
 			<div class="value" *ngSwitchDefault>{{ data.displayValue }}</div>
 		</div>
 	</div>
-	<div *dxTemplate="let data of 'statusDetailsTemplate'">
+	<!--<div *dxTemplate="let data of 'statusDetailsTemplate'">
 		<div
 			class="value"
 			[ngStyle]="{ 'background-color': getBgColor(0, data.data.statusDetails) }"
 		>
 			{{ data.displayValue }}
 		</div>
-	</div>
+	</div>-->
 </dx-data-grid>
