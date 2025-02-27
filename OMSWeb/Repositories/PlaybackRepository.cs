@@ -331,6 +331,10 @@ namespace OMSWeb.Repositories
             SELECT 
                 *,
                 CASE
+                    WHEN oh.origin_details IS NOT NULL THEN OD.origin_details
+                    ELSE oh.origin 
+                    END AS origin,
+                CASE
                     WHEN oh.time_failed IS NOT NULL THEN 'FAILED'
                     WHEN oh.time_aborted IS NOT NULL THEN 'ABORTED'
                     WHEN oh.time_completed IS NOT NULL THEN 'COMPLETED'

@@ -413,7 +413,9 @@ function convertSnapshotOrderToCurrentOrder(
 		timeFailed: order.time_failed,
 		timeCompleted: order.time_completed,
 		vehicleId: order.vehicle_id,
-		state,
+    state,
+    statusDetails: order.status_details,
+    originDetails: order.origin_details
 	}
 }
 
@@ -550,7 +552,9 @@ function convertOrderHistoryEventToCurrentOrder(
 		timeFailed: event.timeFailed,
 		timeCompleted: event.timeCompleted,
 		vehicleId: parseInt(event.vehicleId),
-		state: event.state ?? '',
+    state: event.state ?? '',
+    statusDetails: event?.statusDetails
+
 	}
 }
 

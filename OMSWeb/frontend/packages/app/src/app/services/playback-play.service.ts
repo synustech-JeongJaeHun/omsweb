@@ -327,15 +327,17 @@ export class PlaybackPlayService {
 				convertSnapshotStationToCurrentStation,
 			)
 			
-			this.currentOrders = (this.currentSnapshot.data.orders ?? [])
-				.filter((event) => event.time_completed?.length > 0 === false)
-				.map(convertSnapshotOrderToCurrentOrder)
-				.map(o=>{
-					return { ...o,
-						locationDropoffAlias : this.transformAlias({value: o.locationDropoff}),
-						locationPickupAlias : this.transformAlias({value: o.locationPickup})
-					}
-				})
+      this.currentOrders = (this.currentSnapshot.data.orders ?? [])
+        .filter((event) => event.time_completed?.length > 0 === false)
+        .map(convertSnapshotOrderToCurrentOrder)
+        .map(o => {
+          return {
+            ...o,
+            origin: o.originDetails ?? o.origin,
+            locationDropoffAlias: this.transformAlias({ value: o.locationDropoff }),
+            locationPickupAlias: this.transformAlias({ value: o.locationPickup })
+          }
+        })
 			this.currentSegmentBlockings = (
 				this.currentSnapshot.data.segment_blocking ?? []
 			).map(convertSnapshotSegmentBlockingToCurrentSegmentBlocking)

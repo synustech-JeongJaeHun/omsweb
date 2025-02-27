@@ -33,6 +33,9 @@ namespace OMSWeb.Models.Entities
         public long FromDistance { get; set; }
         public long ToDistance { get; set; }
         public string vehicleAlias { get; set; }
+
+        public string OriginDetails { get; set; }
+        public string? StatusDetails { get; set; }
     }
     public class OrderHistoryEntity : OrderEntity
     {

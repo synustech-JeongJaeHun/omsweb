@@ -1,3 +1,5 @@
+import { StickyDirection } from "@angular/cdk/table"
+
 type PhysicalId = string | undefined | null
 type LogicalId = string | undefined | null
 
@@ -125,9 +127,10 @@ type PlaybackSnapshotOrder = {
 	location_pickup: string | null | undefined
   location_pickup_alias: string | null | undefined
 	logical_id: LogicalId
-	origin: string
-	priority: number | string | null
-	status_details: unknown
+  origin: string
+  origin_details?: string
+  priority: number | string | null
+  status_details?: string | null
 	time_aborted: string | null
 	time_assigned: string | null
 	time_completed: string | null
@@ -140,7 +143,7 @@ type PlaybackSnapshotOrder = {
 	time_unload_started: string | null
 	time_vehicle_arrived: string | null
 	transfer_state: number
-	vehicle_id: number
+  vehicle_id: number
 }
 type PlaybackSnapshotSegmentBlocking = {
 	disabled_by: string
@@ -355,7 +358,9 @@ type OrderHistoryEvent = { tableName: 'order_history' } & ITableName &
 		timeAborted: string | undefined
 		timeFailed: string | undefined
 		vehicleId: string // parse to int
-		state: string | undefined
+    state: string | undefined
+    statusDetails?: string | null 
+    originDetails?: string 
 	}
 
 type BufferHistoryEvent = { tableName: 'buffer_history' } & ITableName &
@@ -535,7 +540,9 @@ type CurrentOrder = {
 	timeAborted?: string
 	timeFailed?: string
 	vehicleId: number // parse to int
-	state: string
+  state: string
+  statusDetails?: string | null
+  originDetails?: string
 }
 
 type CurrentBuffer = {
