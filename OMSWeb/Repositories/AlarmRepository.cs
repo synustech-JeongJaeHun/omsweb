@@ -69,7 +69,13 @@ FROM (
             VE.action,  
             AN.annotation AS note, 
             CASE WHEN VA.time_resolved IS NULL THEN  false ELSE true END AS cleared, 
-            VA.current
+            VA.current,
+            CASE
+		     WHEN VA.current LIKE '%s%' THEN	(SELECT logical_id FROM stations WHERE concat('s', cast(id as varchar)) = VA.current)
+		     WHEN VA.current LIKE '%b%' THEN	(SELECT logical_id FROM buffers WHERE concat('b', cast(id as varchar)) = VA.current)
+             WHEN VA.current LIKE '%p%' THEN	(SELECT logical_id FROM points WHERE concat('p', cast(id as varchar)) = VA.current)
+		     ELSE VA.current
+	     END AS location_onlineName
     FROM vehicle_alarms AS VA
     LEFT OUTER JOIN vehicle_reg VR
         ON VA.vehicle_id = VR.id

@@ -8,7 +8,7 @@
           <dxo-scrolling mode="virtual"></dxo-scrolling>
           <dxo-header-filter [visible]="true"></dxo-header-filter>
           <dxi-column [allowFiltering]="false" [width]="120" dataType="datetime" dataField="time"
-            [caption]="'names.time' | translate" format="yyyy/MM/dd HH:mm:ss">
+                      [caption]="'names.time' | translate" format="yyyy/MM/dd HH:mm:ss">
           </dxi-column>
           <dxi-column [allowFiltering]="false" [width]="90" dataType="string" dataField="age"
                       [caption]="'names.elapsed' | translate">
@@ -16,19 +16,20 @@
               {{ transform(d.value) }}
             </div>
             <!--div *dxTemplate="let d of 'ageTemplate'">
-              {{ (d.value / 60).toFixed(1) }}
-            </div>-->
+      {{ (d.value / 60).toFixed(1) }}
+    </div>-->
           </dxi-column>
           <dxi-column [allowFiltering]="true" [width]="110" dataType="string" dataField="vehicleId"
-            [caption]="'names.vehicle' | translate"></dxi-column>
+                      [caption]="'names.vehicle' | translate"></dxi-column>
           <dxi-column [allowFiltering]="true" [width]="80" dataType="string" dataField="level" cellTemplate="levelTemplate"
-            [caption]="'names.severity' | translate">
+                      [caption]="'names.severity' | translate">
           </dxi-column>
           <dxi-column [allowFiltering]="true" [width]="80" dataType="string" dataField="errorCode"
-            [caption]="'names.code' | translate"></dxi-column>
+                      [caption]="'names.code' | translate"></dxi-column>
           <dxi-column [allowFiltering]="false" dataType="string" dataField="description"
-            [caption]="'names.desc' | translate"></dxi-column>
-
+                      [caption]="'names.desc' | translate"></dxi-column>
+          <dxi-column [allowFiltering]="false" dataType="string" dataField="locationOnlineName"
+                      [caption]="'names.locationOnlineName' | translate"></dxi-column>
           <div *dxTemplate="let data of 'levelTemplate'">
             <ng-container [ngSwitch]="data.displayValue">
               <div class="level0" *ngSwitchCase="0">Low ({{ data.text }})</div>

@@ -26,6 +26,7 @@ namespace OMSWeb.Models.Entities
         public DateTime? AckTime { get; set; }
         public string AckBy { get; set; }
         public string State { get; set; }
+        public string LocationOnlineName { get; set; }
     }
 
     public class VehicleError

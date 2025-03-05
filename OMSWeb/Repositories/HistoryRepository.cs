@@ -539,6 +539,12 @@ namespace OMSWeb.Repositories
                             VE.level, VE.cause, VE.description, VE.action, AN.annotation AS note, 
                             CASE WHEN VA.time_resolved IS NULL THEN  false ELSE true END AS cleared, VA.current,
                             CASE
+		                        WHEN VA.current LIKE '%s%' THEN	(SELECT logical_id FROM stations WHERE concat('s', cast(id as varchar)) = VA.current)
+		                        WHEN VA.current LIKE '%b%' THEN	(SELECT logical_id FROM buffers WHERE concat('b', cast(id as varchar)) = VA.current)
+                                WHEN VA.current LIKE '%p%' THEN	(SELECT logical_id FROM points WHERE concat('p', cast(id as varchar)) = VA.current)
+		                        ELSE VA.current
+	                        END AS location_onlineName,
+                            CASE
 		                        WHEN VA.current LIKE '%s%' THEN	(SELECT physical_id FROM stations WHERE concat('s', cast(id as varchar)) = VA.current)
 		                        WHEN VA.current LIKE '%b%' THEN	(SELECT physical_id FROM buffers WHERE concat('b', cast(id as varchar)) = VA.current)
                                 WHEN VA.current LIKE '%p%' THEN	(SELECT physical_id FROM points WHERE concat('p', cast(id as varchar)) = VA.current)

@@ -267,6 +267,7 @@ const defaultHistoryTable = {
   alarms_state: false,
   ack_time: true,
   ack_by: true,
+  location_onlineName: true,
   alarms_order: [
     {
       name: 'alarms_vehicle_logical_id',
@@ -290,6 +291,10 @@ const defaultHistoryTable = {
     { name: 'physical_id', i18nLabel: 'names.transOrQR', width: 120 },
     { name: 'ack_time', i18nLabel: 'names.ackTime', width: 120 },
     { name: 'ack_by', i18nLabel: 'names.ackBy', width: 'auto' },
+
+
+    { name: 'location_onlineName', i18nLabel: 'names.locationOnlineName', width: 120 },
+
   ],
 
 	// warnings table

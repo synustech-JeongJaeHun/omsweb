@@ -612,7 +612,8 @@
     "carrierEmpty": "Carrier - Empty",
     "carrierFull": "Carrier - Full",
     "carrierError": "Carrier - Error",
-    "passedTime": "Carrier - PassedTime Alert"
+    "passedTime": "Carrier - PassedTime Alert",
+    "locationOnlineName":  "Location OnlineName"
   },
   "enums": {
     "hostSessionStatus": {

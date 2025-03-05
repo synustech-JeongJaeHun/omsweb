@@ -38,170 +38,139 @@
     </div>
 	</div>
 	<div id="grid-container">
-		<dx-data-grid
-			[dataSource]="dataSource"
-			[columnAutoWidth]="true"
-			[remoteOperations]="true"
-			[height]="gridHeight"
-			[width]="gridWidth"
-			[showBorders]="true"
-			[hoverStateEnabled]="true"
-			allowColumnResizing="true"
-      (onContextMenuPreparing)="onContextMenuPreparing($event)"
-      (onCellClick)="cellSelected($event)"
-			[stateStoring]="stateStoring"
-            (onExporting)="onExporting($event)"
-            (onExported)="onExported()"
-		>
-      <dxo-selection
-        selectAllMode="allPages"
-        [allowSelectAll]="false"
-        showCheckBoxesMode="onClick"
-        mode="multiple"></dxo-selection>
+		<dx-data-grid [dataSource]="dataSource"
+									[columnAutoWidth]="true"
+									[remoteOperations]="true"
+									[height]="gridHeight"
+									[width]="gridWidth"
+									[showBorders]="true"
+									[hoverStateEnabled]="true"
+									allowColumnResizing="true"
+									(onContextMenuPreparing)="onContextMenuPreparing($event)"
+									(onCellClick)="cellSelected($event)"
+									[stateStoring]="stateStoring"
+									(onExporting)="onExporting($event)"
+									(onExported)="onExported()">
+			<dxo-selection selectAllMode="allPages"
+										 [allowSelectAll]="false"
+										 showCheckBoxesMode="onClick"
+										 mode="multiple"></dxo-selection>
 			<dxo-export [enabled]="true" [fileName]="fileName"></dxo-export>
 			<dxo-paging [pageSize]="50"></dxo-paging>
-			<dxo-pager
-				[showPageSizeSelector]="true"
-				[allowedPageSizes]="[50, 100, 200]"
-				[showInfo]="true"
-				visible="true"
-			>
+			<dxo-pager [showPageSizeSelector]="true"
+								 [allowedPageSizes]="[50, 100, 200]"
+								 [showInfo]="true"
+								 visible="true">
 			</dxo-pager>
-			<dxo-scrolling
-				mode="standard"
-				rowRenderingMode="standard"
-				showScrollbar="always"
-			></dxo-scrolling>
-			<dxo-search-panel
-				[placeholder]="'names.search' | translate"
-				[visible]="true"
-			></dxo-search-panel>
+			<dxo-scrolling mode="standard"
+										 rowRenderingMode="standard"
+										 showScrollbar="always"></dxo-scrolling>
+			<dxo-search-panel [placeholder]="'names.search' | translate"
+												[visible]="true"></dxo-search-panel>
 			<dxo-header-filter [visible]="true"></dxo-header-filter>
 			<dxo-filter-row [visible]="true"></dxo-filter-row>
 
-			<dxi-column
-				[width]="getDisplayTableColumnWidth('alarms_vehicle_logical_id')"
-				[visible]="canDisplayTable('alarms_vehicle_logical_id')"
-				[visibleIndex]="getDisplayTableColumnIndex('alarms_vehicle_logical_id')"
-				dataType="string"
-				dataField="vehicleLogicalId"
-				[caption]="getDisplayTableLabel('alarms_vehicle_logical_id') | translate"
-			></dxi-column>
-			<dxi-column
-				[width]="getDisplayTableColumnWidth('alarms_description')"
-				[visible]="canDisplayTable('alarms_description')"
-				[visibleIndex]="getDisplayTableColumnIndex('alarms_description')"
-				dataType="string"
-				dataField="description"
-				[caption]="getDisplayTableLabel('alarms_description') | translate"
-			></dxi-column>
-			<dxi-column
-				[width]="getDisplayTableColumnWidth('alarms_level')"
-				[visible]="canDisplayTable('alarms_level')"
-				[visibleIndex]="getDisplayTableColumnIndex('alarms_level')"
-				dataType="string"
-				dataField="level"
-				cellTemplate="levelTemplate"
-				[caption]="getDisplayTableLabel('alarms_level') | translate"
-			></dxi-column>
-			<dxi-column
-				[width]="getDisplayTableColumnWidth('alarms_error_code')"
-				[visible]="canDisplayTable('alarms_error_code')"
-				[visibleIndex]="getDisplayTableColumnIndex('alarms_error_code')"
-				dataType="number"
-				dataField="errorCode"
-				[caption]="getDisplayTableLabel('alarms_error_code') | translate"
-			></dxi-column>
-			<dxi-column
-				[width]="getDisplayTableColumnWidth('alarms_cause')"
-				[visible]="canDisplayTable('alarms_cause')"
-				[visibleIndex]="getDisplayTableColumnIndex('alarms_cause')"
-				dataType="string"
-				dataField="cause"
-				[caption]="getDisplayTableLabel('alarms_cause') | translate"
-			></dxi-column>
-			<dxi-column
-				[width]="getDisplayTableColumnWidth('alarms_cleared')"
-				[visible]="canDisplayTable('alarms_cleared')"
-				[visibleIndex]="getDisplayTableColumnIndex('alarms_cleared')"
-				dataType="boolean"
-				dataField="cleared"
-				[caption]="getDisplayTableLabel('alarms_cleared') | translate"
-			></dxi-column>
-			<dxi-column
-				[width]="getDisplayTableColumnWidth('alarms_time')"
-				[visible]="canDisplayTable('alarms_time')"
-				[visibleIndex]="getDisplayTableColumnIndex('alarms_time')"
-				dataType="datetime"
-				dataField="time"
-				sortOrder="desc"
-				[caption]="getDisplayTableLabel('alarms_time') | translate"
-				[format]="dateTimeFormat"
-			></dxi-column>
-			<dxi-column
-				[width]="getDisplayTableColumnWidth('alarms_time_resolved')"
-				[visible]="canDisplayTable('alarms_time_resolved')"
-				[visibleIndex]="getDisplayTableColumnIndex('alarms_time_resolved')"
-				dataType="datetime"
-				dataField="timeResolved"
-				[caption]="getDisplayTableLabel('alarms_time_resolved') | translate"
-				[format]="dateTimeFormat"
-			></dxi-column>
-			<dxi-column
-				[width]="getDisplayTableColumnWidth('alarms_age')"
-				[visible]="canDisplayTable('alarms_age')"
-				[visibleIndex]="getDisplayTableColumnIndex('alarms_age')"
-				dataType="int"
-				dataField="age"
-				[caption]="getDisplayTableLabel('alarms_age') | translate"
-			></dxi-column>
-			<dxi-column
-				[width]="getDisplayTableColumnWidth('alarms_current')"
-				[visible]="canDisplayTable('alarms_current')"
-				[visibleIndex]="getDisplayTableColumnIndex('alarms_current')"
-				dataType="string"
-				dataField="current"
-				[caption]="getDisplayTableLabel('alarms_current') | translate"
-			></dxi-column>
-			<dxi-column
-			[width]="getDisplayTableColumnWidth('physical_id')"
-			[visible]="canDisplayTable('physical_id')"
-			[visibleIndex]="getDisplayTableColumnIndex('physical_id')"
-			dataType="string"
-			dataField="physicalId"
-			[caption]="getDisplayTableLabel('physical_id') | translate"
-			></dxi-column>
-			<dxi-column
-			[width]="getDisplayTableColumnWidth('alarms_state')"
-			[visible]="canDisplayTable('alarms_state')"
-			[visibleIndex]="getDisplayTableColumnIndex('alarms_state')"
-			dataType="string"
-			dataField="state"
-			[caption]="getDisplayTableLabel('alarms_state') | translate"
-			></dxi-column>
-			<dxi-column
-			[width]="getDisplayTableColumnWidth('ack_time')"
-			[visible]="canDisplayTable('ack_time')"
-			[visibleIndex]="getDisplayTableColumnIndex('ack_time')"
-			dataType="datetime"
-			dataField="ackTime"
-			[caption]="getDisplayTableLabel('ack_time') | translate"
-			[format]="dateTimeFormat"
-			></dxi-column>
-			<dxi-column
-			[width]="getDisplayTableColumnWidth('ack_by')"
-			[visible]="canDisplayTable('ack_by')"
-			[visibleIndex]="getDisplayTableColumnIndex('ack_by')"
-			dataType="string"
-			dataField="ackBy"
-			[caption]="getDisplayTableLabel('ack_by') | translate"
-			></dxi-column>
+			<dxi-column [width]="getDisplayTableColumnWidth('alarms_vehicle_logical_id')"
+									[visible]="canDisplayTable('alarms_vehicle_logical_id')"
+									[visibleIndex]="getDisplayTableColumnIndex('alarms_vehicle_logical_id')"
+									dataType="string"
+									dataField="vehicleLogicalId"
+									[caption]="getDisplayTableLabel('alarms_vehicle_logical_id') | translate"></dxi-column>
+			<dxi-column [width]="getDisplayTableColumnWidth('alarms_description')"
+									[visible]="canDisplayTable('alarms_description')"
+									[visibleIndex]="getDisplayTableColumnIndex('alarms_description')"
+									dataType="string"
+									dataField="description"
+									[caption]="getDisplayTableLabel('alarms_description') | translate"></dxi-column>
+			<dxi-column [width]="getDisplayTableColumnWidth('alarms_level')"
+									[visible]="canDisplayTable('alarms_level')"
+									[visibleIndex]="getDisplayTableColumnIndex('alarms_level')"
+									dataType="string"
+									dataField="level"
+									cellTemplate="levelTemplate"
+									[caption]="getDisplayTableLabel('alarms_level') | translate"></dxi-column>
+			<dxi-column [width]="getDisplayTableColumnWidth('alarms_error_code')"
+									[visible]="canDisplayTable('alarms_error_code')"
+									[visibleIndex]="getDisplayTableColumnIndex('alarms_error_code')"
+									dataType="number"
+									dataField="errorCode"
+									[caption]="getDisplayTableLabel('alarms_error_code') | translate"></dxi-column>
+			<dxi-column [width]="getDisplayTableColumnWidth('alarms_cause')"
+									[visible]="canDisplayTable('alarms_cause')"
+									[visibleIndex]="getDisplayTableColumnIndex('alarms_cause')"
+									dataType="string"
+									dataField="cause"
+									[caption]="getDisplayTableLabel('alarms_cause') | translate"></dxi-column>
+			<dxi-column [width]="getDisplayTableColumnWidth('alarms_cleared')"
+									[visible]="canDisplayTable('alarms_cleared')"
+									[visibleIndex]="getDisplayTableColumnIndex('alarms_cleared')"
+									dataType="boolean"
+									dataField="cleared"
+									[caption]="getDisplayTableLabel('alarms_cleared') | translate"></dxi-column>
+			<dxi-column [width]="getDisplayTableColumnWidth('alarms_time')"
+									[visible]="canDisplayTable('alarms_time')"
+									[visibleIndex]="getDisplayTableColumnIndex('alarms_time')"
+									dataType="datetime"
+									dataField="time"
+									sortOrder="desc"
+									[caption]="getDisplayTableLabel('alarms_time') | translate"
+									[format]="dateTimeFormat"></dxi-column>
+			<dxi-column [width]="getDisplayTableColumnWidth('alarms_time_resolved')"
+									[visible]="canDisplayTable('alarms_time_resolved')"
+									[visibleIndex]="getDisplayTableColumnIndex('alarms_time_resolved')"
+									dataType="datetime"
+									dataField="timeResolved"
+									[caption]="getDisplayTableLabel('alarms_time_resolved') | translate"
+									[format]="dateTimeFormat"></dxi-column>
+			<dxi-column [width]="getDisplayTableColumnWidth('alarms_age')"
+									[visible]="canDisplayTable('alarms_age')"
+									[visibleIndex]="getDisplayTableColumnIndex('alarms_age')"
+									dataType="int"
+									dataField="age"
+									[caption]="getDisplayTableLabel('alarms_age') | translate"></dxi-column>
+			<dxi-column [width]="getDisplayTableColumnWidth('alarms_current')"
+									[visible]="canDisplayTable('alarms_current')"
+									[visibleIndex]="getDisplayTableColumnIndex('alarms_current')"
+									dataType="string"
+									dataField="current"
+									[caption]="getDisplayTableLabel('alarms_current') | translate"></dxi-column>
+			<dxi-column [width]="getDisplayTableColumnWidth('physical_id')"
+									[visible]="canDisplayTable('physical_id')"
+									[visibleIndex]="getDisplayTableColumnIndex('physical_id')"
+									dataType="string"
+									dataField="physicalId"
+									[caption]="getDisplayTableLabel('physical_id') | translate"></dxi-column>
+			<dxi-column [width]="getDisplayTableColumnWidth('alarms_state')"
+									[visible]="canDisplayTable('alarms_state')"
+									[visibleIndex]="getDisplayTableColumnIndex('alarms_state')"
+									dataType="string"
+									dataField="state"
+									[caption]="getDisplayTableLabel('alarms_state') | translate"></dxi-column>
+			<dxi-column [width]="getDisplayTableColumnWidth('ack_time')"
+									[visible]="canDisplayTable('ack_time')"
+									[visibleIndex]="getDisplayTableColumnIndex('ack_time')"
+									dataType="datetime"
+									dataField="ackTime"
+									[caption]="getDisplayTableLabel('ack_time') | translate"
+									[format]="dateTimeFormat"></dxi-column>
+			<dxi-column [width]="getDisplayTableColumnWidth('ack_by')"
+									[visible]="canDisplayTable('ack_by')"
+									[visibleIndex]="getDisplayTableColumnIndex('ack_by')"
+									dataType="string"
+									dataField="ackBy"
+									[caption]="getDisplayTableLabel('ack_by') | translate"></dxi-column>
+			<dxi-column [width]="getDisplayTableColumnWidth('location_onlineName')"
+									[visible]="canDisplayTable('location_onlineName')"
+									[visibleIndex]="getDisplayTableColumnIndex('location_onlineName')"
+									dataType="string"
+									dataField="locationOnlineName"
+									[caption]="getDisplayTableLabel('location_onlineName') | translate"></dxi-column>
 			<div *dxTemplate="let data of 'ageTemplate'">
 				{{ transform(data.displayValue) }}
 			</div>
 			<!--div *dxTemplate="let data of 'ageTemplate'">
-        {{ data.displayValue / 60 | number: "1.1-2" }}
-      </div>-->
+		{{ data.displayValue / 60 | number: "1.1-2" }}
+	</div>-->
 			<div *dxTemplate="let data of 'levelTemplate'">
 				<ng-container [ngSwitch]="data.displayValue">
 					<div class="level0" *ngSwitchCase="0">Low</div>
