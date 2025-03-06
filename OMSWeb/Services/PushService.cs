@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using Newtonsoft.Json.Serialization;
 using System.Threading.Tasks;
 using OMSWeb.Models.Tracks;
+using OMSWeb.Logger;
+using System.Text.Json;
 
 namespace OMSWeb.Services
 {
@@ -282,6 +284,12 @@ namespace OMSWeb.Services
                 CarrierLocation = payload.CarrierLocation,
                 AlertPassedTime = payload.AlertPassedTime,
             };
+
+            if (payload.Table == "segment_blocking") //segment_blocking TBL만 로그
+            {
+                string bodyJson = JsonSerializer.Serialize(body, new JsonSerializerOptions { WriteIndented = true });
+                Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, "{0} {1} body={2}", payload.Operation, payload.Table, bodyJson);
+            }
 
             if (!pushName.Contains("table", StringComparison.OrdinalIgnoreCase))
             {

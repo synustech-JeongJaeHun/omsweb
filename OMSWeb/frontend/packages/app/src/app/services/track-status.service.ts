@@ -543,11 +543,11 @@ export class TrackStatusService {
 
     let result = []
     current.forEach(c => {
-      if (!prev.some(p => p.id === c.id)) {
+      if (!prev.some(p => p.id === c.id) || prev.some(p => p.id === c.id && p.segmentId !== c.segmentId)) {
         result.push(c);
       }
     });
-		return result
+    return result
 	}
 
   private removed(prev:any[], current:any[]):any{
@@ -570,13 +570,13 @@ export class TrackStatusService {
     return result
   }
 
-	private removedOnSegment(prev:any[], current:any[]):any{
-		let result = []
-		prev.forEach(p => {
-			if (!current.some(c => c.id === p.id)) {
-				result.push(p);
-			}
-		});
-		return result
+  private removedOnSegment(prev: any[], current: any[]): any {
+    let result = []
+    prev.forEach(p => {
+      if (!current.some(c => c.id === p.id) || current.some(c => c.id === p.id && c.segmentId !== p.segmentId)) {
+        result.push(p);
+      }
+    });
+    return result
 	}
 }
