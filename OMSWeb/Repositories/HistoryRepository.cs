@@ -543,7 +543,7 @@ namespace OMSWeb.Repositories
 		                        WHEN VA.current LIKE '%b%' THEN	(SELECT logical_id FROM buffers WHERE concat('b', cast(id as varchar)) = VA.current)
                                 WHEN VA.current LIKE '%p%' THEN	(SELECT logical_id FROM points WHERE concat('p', cast(id as varchar)) = VA.current)
 		                        ELSE VA.current
-	                        END AS location_onlineName,
+	                        END AS locationOnlineName,
                             CASE
 		                        WHEN VA.current LIKE '%s%' THEN	(SELECT physical_id FROM stations WHERE concat('s', cast(id as varchar)) = VA.current)
 		                        WHEN VA.current LIKE '%b%' THEN	(SELECT physical_id FROM buffers WHERE concat('b', cast(id as varchar)) = VA.current)
