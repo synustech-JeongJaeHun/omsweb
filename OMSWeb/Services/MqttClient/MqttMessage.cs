@@ -729,6 +729,7 @@ namespace OMSWeb.Services.MqttClient
                      command.Action == ACTION_REMOVE_CARRIER ||
                      command.Action == ACTION_RENAME_CARRIER)
             {
+                data["origin"] = "UI";
                 if (command.CarrierLabel != null)
                     data["carrier_id"] = command.CarrierLabel.Trim();
 
