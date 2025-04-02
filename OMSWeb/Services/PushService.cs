@@ -114,6 +114,10 @@ namespace OMSWeb.Services
             payload.Timestamp = ts;
 
             this.PrintLog(ts, $"02 \tjson => {payload.Table}: {payload.Id}");
+            if (payload.Table == "segment_blocking") //segment_blocking TBL만 로그
+            {
+                Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, "{0} {1} payload={2}", payload.Operation, payload.Table, jsonPayload);
+            }
 
             // if (payload.Table == "vehicles")
             //   Console.WriteLine($">> Watcher VH >> {payload.Id}: {payload.Data.NextPoint}");
@@ -285,11 +289,11 @@ namespace OMSWeb.Services
                 AlertPassedTime = payload.AlertPassedTime,
             };
 
-            if (payload.Table == "segment_blocking") //segment_blocking TBL만 로그
-            {
-                string bodyJson = JsonSerializer.Serialize(body, new JsonSerializerOptions { WriteIndented = true });
-                Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, "{0} {1} body={2}", payload.Operation, payload.Table, bodyJson);
-            }
+            //if (payload.Table == "segment_blocking") //segment_blocking TBL만 로그
+            //{
+            //    string bodyJson = JsonSerializer.Serialize(body, new JsonSerializerOptions { WriteIndented = true });
+            //    Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, "{0} {1} body={2}", payload.Operation, payload.Table, bodyJson);
+            //}
 
             if (!pushName.Contains("table", StringComparison.OrdinalIgnoreCase))
             {

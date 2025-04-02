@@ -331,7 +331,7 @@ namespace OMSWeb.Repositories
             SELECT 
                 *,
                 CASE
-                    WHEN oh.origin_details IS NOT NULL THEN OD.origin_details
+                    WHEN oh.origin_details IS NOT NULL THEN oh.origin_details
                     ELSE oh.origin 
                     END AS origin,
                 CASE

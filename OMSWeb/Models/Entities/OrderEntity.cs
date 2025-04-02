@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System;
 
 namespace OMSWeb.Models.Entities
@@ -35,6 +36,8 @@ namespace OMSWeb.Models.Entities
         public string vehicleAlias { get; set; }
 
         public string OriginDetails { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Include)]
         public string? StatusDetails { get; set; }
     }
     public class OrderHistoryEntity : OrderEntity

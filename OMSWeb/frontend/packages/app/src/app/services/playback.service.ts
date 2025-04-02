@@ -100,7 +100,7 @@ export class PlaybackService {
 		return this.http.get<HistoryEvent[]>(
 			`${
 				this.baseUrl
-			}/history-events?from=${from.toISOString()}&to=${to.toISOString()}`,
-		)
+      }/history-events?from=${from.toISOString()}&to=${to.toISOString()}`,
+    )
 	}
 }

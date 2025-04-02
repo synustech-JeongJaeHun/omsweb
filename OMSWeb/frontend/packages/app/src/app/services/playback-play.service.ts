@@ -102,7 +102,7 @@ export class PlaybackPlayService {
 	// get last item size for out of memory error default -20
 	maxFrameSize = 0
 
-	constructor(private playbackService: PlaybackService) {
+  constructor(private playbackService: PlaybackService) {
 		this.clockChanged.subscribe((event) => this.reduceCurrentState(event))
 	}
 
@@ -145,7 +145,7 @@ export class PlaybackPlayService {
 		if (to == null) {
 			this.historyEvents = await this.playbackService
 				.getHistoryEvents(from, this.tomorrow)
-				.toPromise()
+        .toPromise()
 
 			this.setLoaded({ from: from, to: this.lastHistoryTime })
 		} else {
@@ -155,7 +155,7 @@ export class PlaybackPlayService {
 			const getSlicedHistoryEvents = async (
 				timeRanges: [Date, Date][],
 				snapshotTimestmap: Date,
-			) => {
+      ) => {
 				if (timeRanges.length === 0) return
 
 				const [firstRange, ...ranges] = timeRanges.slice(this.maxFrameSize)
@@ -175,7 +175,7 @@ export class PlaybackPlayService {
 
 			this.historyEvents = await this.playbackService
 				.getHistoryEvents(firstRange[0], firstRange[1])
-				.toPromise()
+        .toPromise()
 			this.setLoaded({ from: firstRange[0], to: firstRange[1] })
 
 			getSlicedHistoryEvents(ranges, this.currentSnapshot.timestamp)

@@ -83,10 +83,10 @@ export class PlaybackOrderStatusComponent {
       }
 
       //changed dest port status unused
-      if (e.data.statusDetails?.includes('changed') && e.data.statusDetails?.includes('unused')) {
-        e.rowElement.style.backgroundColor = "rgba(0,0,255,0.5)";//"#ffcdcd";// "#ff0000"; // 배경색 변경
-        /* e.rowElement.classList.add('install_carrier') //styles.scss 전역스타일로 적용*/
-      }
+      //if (e.data.statusDetails?.includes('changed') && e.data.statusDetails?.includes('unused')) {
+      //  e.rowElement.style.backgroundColor = "rgba(0,0,255,0.5)";//"#ffcdcd";// "#ff0000"; // 배경색 변경
+      //  /* e.rowElement.classList.add('install_carrier') //styles.scss 전역스타일로 적용*/
+      //}
     }
   }
   canDisplayTable(type: string): boolean {

@@ -403,7 +403,7 @@ export class PlaybackMapViewerComponent implements OnInit, OnDestroy {
 			}
 		})
 	}
-	private applyVehicleHistoryEvent(event: VehicleHistoryEvent) {
+  private applyVehicleHistoryEvent(event: VehicleHistoryEvent) {
 		this.viewer.updateVehicle(
 			event.historyChangeType,
 			convertVehicleHistoryEventToTmUpdateDtoVehicle(
