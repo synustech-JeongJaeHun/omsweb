@@ -595,7 +595,7 @@
     "size": "Size",
     "zoneType": "Zone Type",
     "bufferType": "Buffer - type",
-    "ip": "IP Address",
+    "ipAddress": "IP Address",
     "text": "Text",
     "isAutoScale": "Enable Autoscaling",
     "warnings": "Warnings",
@@ -613,7 +613,7 @@
     "carrierFull": "Carrier - Full",
     "carrierError": "Carrier - Error",
     "passedTime": "Carrier - PassedTime Alert",
-    "locationOnlineName":  "Location OnlineName"
+    "locationOnlineName": "Location OnlineName"
   },
   "enums": {
     "hostSessionStatus": {

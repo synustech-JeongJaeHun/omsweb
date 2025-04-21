@@ -595,7 +595,7 @@
     "size": "Size",
     "zoneType": "Zone Type",
     "bufferType": "Buffer - type",
-    "ip": "IP Address",
+    "ipAddress": "IP Address",
     "text": "Text",
     "isAutoScale": "Enable Autoscaling",
     "warnings": "Warnings",

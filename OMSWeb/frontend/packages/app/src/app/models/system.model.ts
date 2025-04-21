@@ -42,7 +42,7 @@ export interface IVhlStatus {
   vcpSwVer: string
   motionFwVer: string
   motionLibVer: string
-  ip: string
+  ipAddress: string
 }
 
 export interface ICdmStatus {

@@ -15,5 +15,6 @@ namespace OMSWeb.Models.Entities
     public string VcpSwVer { get; set; }
     public string MotionFwVer { get; set; }
     public string MotionLibVer { get; set; }
+    public string IpAddress { get; set; }
   }
 }

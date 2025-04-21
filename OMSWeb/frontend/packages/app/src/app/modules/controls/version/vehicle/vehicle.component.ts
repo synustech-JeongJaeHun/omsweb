@@ -29,7 +29,7 @@ export class VehicleComponent implements OnInit {
     this.systemSvc.vhlStatus().subscribe((res) => {
       this.dataSource = res.map(d=>{
         const v = this.ref.find(r=>d.id===r.id&&d.logicalId===r.logicalId)
-        return {...d, ip:v?.ip || '-'}
+        return {...d, ip:v?.ipAddress || '-'}
       })
     });
   }
