@@ -88,17 +88,17 @@ namespace OMSWeb.Services
 
     public IQueryable<ModuleStatusEntity> GetModuleStatus()
     {
-      return moduleStatusEntity;
+      return this._moduleStatusRepo.GetModuleStatus();
     }
 
     public IQueryable<VhlStatusEntity> GetVhlStatus()
     {
-      return vhlStatusEntity;
+      return this._moduleStatusRepo.GetVhlStatus();
     }
 
     public IQueryable<CdmStatusEntity> GetCdmStatus()
     {
-      return cdmStatusEntity;
+      return this._moduleStatusRepo.GetCdmStatus();
     }
   }
   
