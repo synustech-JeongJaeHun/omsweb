@@ -20,6 +20,7 @@ export class ZcuSettingComponent implements OnInit {
   zcuTypes = [
     { type: 0, text: 'Standard' },
     { type: 1, text: 'NType' },
+    { type: 2, text: 'Slope' },
   ]
 
   zcuUsingTypes = [

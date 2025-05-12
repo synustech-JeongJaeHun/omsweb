@@ -199,6 +199,7 @@ namespace OMSWeb.Repositories
             CASE
                 WHEN Z.zcu_type = 0 THEN 'Std'
                 WHEN Z.zcu_type = 1 THEN 'NType'
+                WHEN Z.zcu_type = 2 THEN 'Slope'
                 ELSE 'Std'
             END AS zcu_type, 
             CASE 
