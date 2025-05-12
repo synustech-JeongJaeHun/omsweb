@@ -1188,10 +1188,9 @@ export class MapViewerComponent implements OnInit, OnDestroy {
 			}
 			// manual transfer section end
     } else if (objectType === 'point') {
-      console.log("handleAfterFocus objectType Point!");
 			const point = { objectType, ...object }
       const transferCommandState = this.mapStatesService.transferCommandState
-      console.log("handleAfterFocus objectType Point transferCommandState" + JSON.stringify(transferCommandState));
+
 			if (transferCommandState.active === false) return
 
 			switch (transferCommandState.category) {

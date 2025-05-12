@@ -163,21 +163,17 @@ export class PlaybackComponent implements OnInit, OnDestroy {
       .getHistoryEvents(firstRange[0], firstRange[1])
       .toPromise()
 
-    console.log("getSlicedHistoryEvents event");
-    console.log(JSON.stringify(events));
-
     if (
       this.playbackPlayService.currentSnapshot.timestamp !==
       snapshotTimestamp
     ) {
       return console.log('loading events conflict occured')
     }
-   
-    console.log("getSlicedHistoryEvents snapshotTimestamp:" + snapshotTimestamp)
+
     events.forEach((event) =>
     
       this.playbackPlayService.historyEvents.push(event),
-      console.log("historyEvents"+JSON.stringify(this.playbackPlayService.historyEvents))
+
     )
 
     this.playbackPlayService.setLoaded({to: firstRange[1]})
@@ -209,16 +205,14 @@ export class PlaybackComponent implements OnInit, OnDestroy {
               this.playbackPlayService.currentSnapshot.timestamp
             )
             .toPromise()
-          console.log("playback.component nextShot timesxtamp eventPromise")
-          console.log("eventsPromise")
+
           const alarmsPromise = this.playbackService
             .getVehicleAlarms(
               this.playbackPlayService.currentSnapshot.timestamp
             )
             .toPromise()
 
-
-          console.log("timestamp is null eventPromise=" + eventsPromise);
+ 
           const [events, alarms] = await Promise.all([
             eventsPromise,
             alarmsPromise,
@@ -255,8 +249,6 @@ export class PlaybackComponent implements OnInit, OnDestroy {
             .getHistoryEvents(firstRange[0], firstRange[1])
             .toPromise()
 
-
-          console.log("timestamp not null eventPromise=" + eventsPromise);
 
           const alarmsPromise = this.playbackService
             .getVehicleAlarms(

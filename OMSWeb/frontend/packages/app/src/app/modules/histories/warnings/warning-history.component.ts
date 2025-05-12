@@ -26,10 +26,10 @@ import {alertSeverities} from "@oms/models/notification.model";
 				height: 100%;
 			}
 
-			#filter-area {
+		#filter-area {
 				padding: 4px 10px;
 				display: grid;
-				grid-template-columns: 210px 10px 210px 170px;
+        grid-template-columns: 210px 10px 210px 1fr 1fr;
 				justify-items: flex-start;
 				align-items: center;
 				gap: 4px;
@@ -57,7 +57,17 @@ import {alertSeverities} from "@oms/models/notification.model";
 
 			#filter-area .dx-datebox {
 			}
-
+       #playback-area {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-direction: row-reverse;
+        width: 100%;
+      }
+      #playback-area button {
+        justify-self: normal;
+        align-self: normal;
+      }
       .loading-overlay {
           position: fixed;
           top: 0;
@@ -202,9 +212,36 @@ export class WarningHistoryComponent implements OnInit {
         this.bySearch = false
 	}
 
+
+  onContextMenuPreparing(e) {
+    let items = [];
+    const selectedItems = e.component.getSelectedRowKeys();
+
+    if (selectedItems.length === 0) {
+      return;
+    } else {
+      items = [
+        {
+          text: "Play Back",
+          icon: 'video',
+          onClick: () => {
+            this.playBack();
+          }
+        }
+      ];
+    }
+    e.items = items;
+  }
+
+  cellSelected(e) {
+    this.dataGrid.instance.deselectAll()
+    this.dataGrid.instance.selectRowsByIndexes(e.rowIndex)
+  }
+
 	playBack(){
 		const data = this.dataGrid.instance.getSelectedRowsData()[0];
-		if(!data?.time) return;
+    if (!data?.time) return;
+    console.log("waring  playback date.Time::",JSON.stringify(data.time));
 		this.router.navigate(['/playback'],{queryParams: {selected: JSON.stringify(data.time)}}).then()
 	}
 
