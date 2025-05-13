@@ -135,6 +135,7 @@ namespace OMSWeb.Repositories
         public async Task<object> QueryVehicles()
         {
             (int Auto, int Manual, int Error, int Disconnected, int RailOut, int CommandEnabled, int CommandDisabled, int Total) result;
+            string groupText = string.Empty;
             using (var conn = ConnectTrack())
             {
                 var sql = @"
@@ -166,6 +167,27 @@ namespace OMSWeb.Repositories
                 ";
 
                 result = await conn.QueryFirstAsync<(int Auto, int Manual, int Error, int Disconnected, int RailOut, int CommandEnabled, int CommandDisabled, int Total)>(sql);
+
+                sql = @"
+                    select
+	                    string_agg (
+    	                    'GroupID:' || group_id || ' (' || rail_in || '/' || (rail_in + rail_out) || ')', E'\n'
+	                    ) as group_text
+                    from (
+                        select
+                            gr.group_id,
+                            count(case when v.rail_in = true then 1 end) as rail_in,
+                            count(case when v.rail_in = false or v.rail_in is null then 1 end) as rail_out
+                        from vehicles v
+                        left join grouped_objects gr
+                            on v.id = gr.reference_id
+                            and gr.reference_table = 'vehicle'
+                        where gr.group_id is not null
+                        group by gr.group_id
+                    ) as group_result;
+                ";
+
+                groupText = await conn.QueryFirstAsync<string>(sql);
             }
             
             return new
@@ -178,11 +200,45 @@ namespace OMSWeb.Repositories
                 CommandEnabled = result.CommandEnabled,
                 CommandDisabled = result.CommandDisabled,
                 Total = result.Total,
+                GroupText = groupText,
             };
-            
+        }
+
+        public async Task<object> QueryVehicleGroup()
+        {
+            string GroupText;
+            using (var conn = ConnectTrack())
+            {
+                var sql = @"
+                    select
+	                    string_agg (
+    	                    'group_id:' || group_id || ' (' || rail_in || '/' || (rail_in + rail_out) || ')', E'\n'
+	                    ) as group_text
+                    from (
+                        select
+                            gr.group_id,
+                            count(case when v.rail_in = true then 1 end) as rail_in,
+                            count(case when v.rail_in = false or v.rail_in is null then 1 end) as rail_out
+                        from vehicles v
+                        left join grouped_objects gr
+                            on v.id = gr.reference_id
+                            and gr.reference_table = 'vehicle'
+                        where gr.group_id is not null
+                        group by gr.group_id
+                    ) as group_result;
+                ";
+
+                GroupText = await conn.QueryFirstAsync<string> (sql);
+            }
+
+            return new
+            {
+                GroupText
+            };
+
             //return result;
         }
-        
+
         //public async Task<(int Unloading, int Loading)> QueryLoadingUnLoading()
         public async Task<object> QueryLoadingUnLoading()
         {

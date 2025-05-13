@@ -66,6 +66,7 @@ export type TrendResponse = {
     commandEnabled?: number
     commandDisabled?: number
     total: number
+    groupText: string
   }
 }
 
