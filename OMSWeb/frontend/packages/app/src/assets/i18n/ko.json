@@ -607,7 +607,8 @@
     "nonReturnable": "반송 불가",
     "alertPassedTime": "Alert Passed Time",
     "carrierEmptyStatus": "Carrier Empty Status",
-    "installed": "Installed"
+    "installed": "Installed",
+    "showBufferStatus": "Show Buffer Status"
 
   },
   "enums": {

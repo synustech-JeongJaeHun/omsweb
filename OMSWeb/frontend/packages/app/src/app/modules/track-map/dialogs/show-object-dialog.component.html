@@ -117,8 +117,7 @@
           })" color="primary">
           {{labelDisplayTable('vehicles_label') | translate }} {{"names.command-move" | translate }}  {{"names.line" | translate }}
         </mat-slide-toggle>
-        <mat-slide-toggle
-          [checked]="setting.isVehicleHomeivrLineVisible" (change)="update({
+        <mat-slide-toggle [checked]="setting.isVehicleHomeivrLineVisible" (change)="update({
             key: 'isVehicleHomeivrLineVisible',
             value: $event.checked
           })" color="primary">
@@ -127,79 +126,115 @@
         <mat-slide-toggle [checked]="setting.isVHLArrowVisible" (change)="update({
             key: 'isVHLArrowVisible',
             value: $event.checked
-          })" color="primary">{{
-          "names.showVHLArrow" | translate}}</mat-slide-toggle>
+          })" color="primary">
+          {{
+          "names.showVHLArrow" | translate
+          }}
+        </mat-slide-toggle>
         <mat-slide-toggle [checked]="setting.isSegmentDirectionVisible" (change)="update({
             key: 'isSegmentDirectionVisible',
             value: $event.checked
-          })" color="primary">{{
+          })" color="primary">
+          {{
           "names.showSegmentDirections"
-          | translate }}</mat-slide-toggle>
+          | translate
+          }}
+        </mat-slide-toggle>
         <mat-slide-toggle [checked]="setting.isPointLabelVisible" (change)="update({
             key: 'isPointLabelVisible',
             value: $event.checked
-          })" color="primary">{{
+          })" color="primary">
+          {{
           "names.showPointLabels" |
-          translate }}</mat-slide-toggle>
+          translate
+          }}
+        </mat-slide-toggle>
         <mat-slide-toggle *ngIf="data?.isMonitor"
-            [checked]="setting.isPointHomeVisible" (change)="update({
+                          [checked]="setting.isPointHomeVisible" (change)="update({
             key: 'isPointHomeVisible',
             value: $event.checked
-          })" color="primary">{{
+          })" color="primary">
+          {{
           "names.showPointHomes" |
-          translate }}</mat-slide-toggle>
+          translate
+          }}
+        </mat-slide-toggle>
         <mat-slide-toggle [checked]="setting.isStationVisible" (change)="update({
             key: 'isStationVisible',
             value: $event.checked
-          })" color="primary">{{
-            labelDisplayTable('stations_label') | translate }}</mat-slide-toggle>
+          })" color="primary">
+          {{
+            labelDisplayTable('stations_label') | translate
+          }}
+        </mat-slide-toggle>
         <mat-slide-toggle [checked]="setting.isBufferVisible" (change)="update({
             key: 'isBufferVisible',
             value: $event.checked
-          })" color="primary">{{
-          labelDisplayTable('buffers_label') | translate }}</mat-slide-toggle>
+          })" color="primary">
+          {{
+          labelDisplayTable('buffers_label') | translate
+          }}
+        </mat-slide-toggle>
         <mat-slide-toggle [checked]="setting.isZcuVisible" (change)="update({
           key: 'isZcuVisible',
           value: $event.checked
-        })" color="primary">{{
-          "names.showZcus" | translate }}</mat-slide-toggle>
+        })" color="primary">
+          {{
+          "names.showZcus" | translate
+          }}
+        </mat-slide-toggle>
         <mat-slide-toggle *ngIf="data?.isMonitor"
-          [checked]="setting.isGroupVisible" (change)="update({
+                          [checked]="setting.isGroupVisible" (change)="update({
             key: 'isGroupVisible',
             value: $event.checked
-          })" color="primary">{{
-          "names.showGroups" | translate }}</mat-slide-toggle>
+          })" color="primary">
+          {{
+          "names.showGroups" | translate
+          }}
+        </mat-slide-toggle>
         <mat-slide-toggle *ngIf="data?.isMonitor"
-          [checked]="setting.isClusterVisible" (change)="update({
+                          [checked]="setting.isClusterVisible" (change)="update({
             key: 'isClusterVisible',
             value: $event.checked
-          })" color="primary">{{
-          "names.showClusters" | translate }}</mat-slide-toggle>
+          })" color="primary">
+          {{
+          "names.showClusters" | translate
+          }}
+        </mat-slide-toggle>
         <mat-slide-toggle *ngIf="data?.isMonitor"
-          [checked]="setting.isCpsVisible" (change)="update({
+                          [checked]="setting.isCpsVisible" (change)="update({
             key: 'isCpsVisible',
             value: $event.checked
-          })" color="primary">{{
-            labelDisplayTable('cps_label') | translate }}</mat-slide-toggle>
+          })" color="primary">
+          {{
+            labelDisplayTable('cps_label') | translate
+          }}
+        </mat-slide-toggle>
         <mat-slide-toggle *ngIf="data?.isMonitor"
-            [checked]="setting.isFireshutterVisible" (change)="update({
+                          [checked]="setting.isFireshutterVisible" (change)="update({
             key: 'isFireshutterVisible',
             value: $event.checked
-          })" color="primary">{{
-            labelDisplayTable('fcu_label') | translate }}</mat-slide-toggle>
+          })" color="primary">
+          {{
+            labelDisplayTable('fcu_label') | translate
+          }}
+        </mat-slide-toggle>
         <mat-slide-toggle [checked]="setting.isMtlVisible" (change)="update({
             key: 'isMtlVisible',
             value: $event.checked
-          })" color="primary">{{
-          "names.showMtls" | translate }}</mat-slide-toggle>
+          })" color="primary">
+          {{
+          "names.showMtls" | translate
+          }}
+        </mat-slide-toggle>
 
-        <mat-slide-toggle *ngIf="!isMobile && data?.isMonitor" [(ngModel)]="preference.toggles.showVhlStatus" 
+        <mat-slide-toggle *ngIf="!isMobile && data?.isMonitor" [(ngModel)]="preference.toggles.showVhlStatus"
                           (change)="changeVhlStatusVisible($event)" color="primary">
           {{"names.showVhlStatus" | translate }}
         </mat-slide-toggle>
 
         <mat-slide-toggle *ngIf="data?.isMonitor && showBackdrop"
-          [checked]="setting.isBackdropVisible" (change)="update({
+                          [checked]="setting.isBackdropVisible" (change)="update({
             key: 'isBackdropVisible',
             value: $event.checked
           })" color="primary">
@@ -207,9 +242,14 @@
         </mat-slide-toggle>
 
         <mat-slide-toggle *ngIf="enableZcuStatus && !isMobile && data?.isMonitor" [(ngModel)]="preference.toggles.showZcuStatus"
-                        (change)="changeZcuStatusVisible($event)" color="primary">
+                          (change)="changeZcuStatusVisible($event)" color="primary">
           {{"names.showZcuStatus" | translate }}
         </mat-slide-toggle>
+
+        <!--<mat-slide-toggle *ngIf=" !isMobile && data?.isMonitor" [(ngModel)]="preference.toggles.showBufferStatus"
+                          (change)="changeBufferStatusVisible($event)" color="primary">
+          {{"names.showBufferStatus" | translate }}
+        </mat-slide-toggle>-->
       </div>
     </fieldset>
   </ng-container>

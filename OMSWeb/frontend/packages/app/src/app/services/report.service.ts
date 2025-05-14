@@ -37,7 +37,11 @@ export class ReportService {
 	
 	loadZcuStatus(){
 		return this.http.get<ZcuResponse>(`${this.baseUrl}/zcu`)
-	}
+  }
+
+  loadBufferStatus() {
+    return this.http.get<BufferResponse>(`${this.baseUrl}/buffer`)
+  }
 }
 
 export type TrendResponse = {
@@ -75,4 +79,10 @@ export type ZcuResponse = {
 	hw_total : number
 	sw_error: number,
 	sw_total : number
+}
+export type BufferResponse = {
+  total: number,
+  use: number,
+  unuse: number
+
 }

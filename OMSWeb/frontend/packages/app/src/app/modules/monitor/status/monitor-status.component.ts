@@ -81,7 +81,7 @@ export class MonitorStatusComponent implements OnInit,OnDestroy {
 	trackData: Dto.ITrackData
 
   enabled = false
-	enableZcuStatus = false
+  enableZcuStatus = false
 
   includesWords  = []
   indicatorFireEmergency = false
@@ -171,6 +171,10 @@ export class MonitorStatusComponent implements OnInit,OnDestroy {
 			this.resetStatus('zcuStatusPos')
 		})
 
+    this.trackMonitorSettingService.bufferStatusChanged.subscribe((checked) => {
+      this.resetStatus('bufferStatusPos')
+    })
+
 		this.trackMonitorSettingService.vhlStatusChanged.emit(this.settingSvc.globalPreferences.toggles.showVhlStatus)
 	}
 
@@ -191,7 +195,8 @@ export class MonitorStatusComponent implements OnInit,OnDestroy {
 		this.dropFocusEvent.emit(event)
 	}
   dragPosition = {x: 0, y: 0}
-	dragZcu = {x: 0, y: 0}
+  dragZcu = { x: 0, y: 0 }
+  dragBuffer = { x: 0, y: 0 }
 
   dragEnded($event: CdkDragEnd, type = 'vhlStatusPos') {
     this.settingSvc.globalPreferences.map[type] = $event.source.getFreeDragPosition()
@@ -199,7 +204,19 @@ export class MonitorStatusComponent implements OnInit,OnDestroy {
   }
 
   resetStatus(type = 'vhlStatusPos'){
-    type === 'vhlStatusPos' ? this.dragPosition = {x: 0, y: 0} : this.dragZcu = {x: 0, y: 0}
+    //type === 'vhlStatusPos' ? this.dragPosition = { x: 0, y: 0 } : this.dragZcu = { x: 0, y: 0 }
+
+    switch (type) {
+      case 'vhlStatusPos':
+        this.dragPosition = { x: 0, y: 0 } 
+        break;
+      case 'zcuStatusPos':
+        this.dragZcu = { x: 0, y: 0 }
+        break;
+      case 'bufferStatusPos':
+        this.dragBuffer = { x: 0, y: 0 }
+        break;
+    }
     this.settingSvc.globalPreferences.map[type] = {x: 0, y: 0}
     this.settingSvc.globalPreferences.save()
   }
@@ -231,7 +248,8 @@ export class MonitorStatusComponent implements OnInit,OnDestroy {
 	  this.trackStatusService.trackData.stations.forEach(s=>{
       if(!this.includeCheck(s.logicalId)) s.carrierId =null
     })
-	  this.trackData = this.trackStatusService.trackData
+    this.trackData = this.trackStatusService.trackData
+    console.log(this.trackData);
     this.isInit =false
   }
 

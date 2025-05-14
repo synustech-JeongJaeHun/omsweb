@@ -63,3 +63,7 @@
 <oms-zcu-status *ngIf="enableZcuStatus && mapPreference.toggles.showZcuStatus && !isMobile" 
                 [cdkDragFreeDragPosition]="dragZcu" cdkDrag
                 (cdkDragEnded)="dragEnded($event, 'zcuStatusPos')"></oms-zcu-status>
+
+<oms-buffer-status *ngIf="mapPreference.toggles.showBufferStatus && !isMobile" 
+                [cdkDragFreeDragPosition]="dragBuffer" cdkDrag
+                (cdkDragEnded)="dragEnded($event, 'bufferStatusPos')"></oms-buffer-status>

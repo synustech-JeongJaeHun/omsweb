@@ -54,7 +54,8 @@ export type ToggleOptionKeyType =
   | 'zoomButton'
   | 'ctrlKey'
 	| 'showVhlStatus'
-	| 'showZcuStatus'
+  | 'showZcuStatus'
+  | 'showBufferStatus'
   ;
 
 export type ToggleLockOptionKeyType =

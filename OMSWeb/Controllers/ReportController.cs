@@ -128,6 +128,13 @@ namespace OMSWeb.Controllers
             return await _reportSvc.QueryZcu();
         }
 
+
+        [HttpGet("buffer")]
+        public async Task<object> GetBuffers()
+        {
+            return await _reportSvc.QueryBuffer();
+        }
+
         [HttpGet("trend/utilization")]
         public async Task<object> GetTrendUtilization()
         {

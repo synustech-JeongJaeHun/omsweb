@@ -421,5 +421,22 @@ namespace OMSWeb.Repositories
             }
             return new {total = result.total, sw_error = result.sw_error, sw_total=result.sw_total, hw_error = result.hw_error, hw_total=result.hw_total, };
         }
+
+        public async Task<object> QueryBuffer()
+        {
+            (int total, int use, int unuse) result;
+            using (var conn = ConnectTrack())
+            {
+                var sql = @"
+                select 
+                     ( select count(*)  from buffers b ) as total,
+                     ( select count(*)  from buffers b where unuse = FALSE) as use,
+                     ( select count(*)  from buffers b where unuse) as unuse
+                ";
+
+                result = await conn.QueryFirstAsync<(int total, int use, int unuse) >(sql);
+            }
+            return new { total = result.total, use = result.use, unuse = result.unuse, };
+        }
     }
 }

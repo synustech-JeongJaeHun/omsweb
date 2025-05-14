@@ -46,7 +46,8 @@ namespace OMSWeb.Services
         private object g_vehicles;
         private object g_utilization = 0;
         private object g_zcus;
-        
+        private object g_buffers;
+
         private SystemsService _systemSvc;
 
         public ReportService(
@@ -78,7 +79,8 @@ namespace OMSWeb.Services
                 timer_zcu_update = new Timer(timerZcu);
                 timer_zcu_update.Change(0, zcuInterval*1000);
             }
-            
+
+            setBuffer(new object());
         }
 
         public object QueryLabels() => _reportRepo.QueryLabels();
@@ -217,6 +219,11 @@ namespace OMSWeb.Services
                 await PrepareZcu();
         }
 
+        private async void setBuffer(Object state)
+        {
+            await PrepareBuffer();
+        }
+
         public async Task PrepareKpi()
         {
             try
@@ -264,7 +271,22 @@ namespace OMSWeb.Services
                 Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"Exception : {e.Message}");
             }
         }
-   
+
+        public async Task PrepareBuffer()
+        {
+            try
+            {
+                var buffers = _reportTrendRepository.QueryBuffer();
+                await Task.WhenAll(new Task[] {
+                    buffers
+                });
+                g_buffers = await buffers;
+            }
+            catch (Exception e)
+            {
+                Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"Exception : {e.Message}");
+            }
+        }
         public async Task<dynamic> QueryTrend()
         {
             if (!this._systemSvc.GetClientSettings().KpiEnabled)
@@ -333,6 +355,27 @@ namespace OMSWeb.Services
         {
             return g_zcus;
         }
+
+        public async Task<dynamic> QueryBuffer()
+        {
+            //return g_buffers;
+            try
+            {
+                var buffers = _reportTrendRepository.QueryBuffer();
+                await Task.WhenAll(new Task[] {
+                    buffers
+                });
+
+                g_buffers = buffers;
+                return buffers.Result;
+            }
+            catch (Exception e)
+            {
+                Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"Exception : {e.Message}");
+                return new object();
+            }
+        }
+
 
         public async Task<object> QueryTrendUtilization()
          => await _reportTrendRepository.QueryTrendUtilization();

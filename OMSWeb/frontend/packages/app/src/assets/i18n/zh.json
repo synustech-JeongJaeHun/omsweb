@@ -604,7 +604,8 @@
     "showZcuStatus": "显示 ZCU 状态",
     "targetblock": "Target Block List",
     "returnable": "可以返送处",
-    "nonReturnable": "不能返送处"
+    "nonReturnable": "不能返送处",
+    "showBufferStatus": "Show Buffer Status"
   },
   "enums": {
     "hostSessionStatus": {

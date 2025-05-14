@@ -371,7 +371,8 @@ export const defaultToggleOptions: ToggleOptionsType = {
 	zoomButton: false,
 	ctrlKey: true,
 	showVhlStatus: false,
-	showZcuStatus: false,
+  showZcuStatus: false,
+  showBufferStatus: false,
 }
 
 const defaultControlTable = {
