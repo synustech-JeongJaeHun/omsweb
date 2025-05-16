@@ -83,7 +83,7 @@
     [visible]="canDisplayTable('zcus_id')"
     [visibleIndex]="getDisplayTableColumnIndex('zcus_id')"
     [width]="getDisplayTableColumnWidth('zcus_id')"
-  ></dxi-column>
+  > </dxi-column>
   <dxi-column
     dataType="string"
     dataField="usingType"
@@ -91,6 +91,7 @@
     [visible]="canDisplayTable('zcus_using_type')"
     [visibleIndex]="getDisplayTableColumnIndex('zcus_using_type')"
     [width]="getDisplayTableColumnWidth('zcus_using_type')"
+    [calculateDisplayValue]="makeUsingTypeReadable"
   ></dxi-column>
   <dxi-column
     dataType="string"
@@ -99,6 +100,7 @@
     [visible]="canDisplayTable('zcus_type')"
     [visibleIndex]="getDisplayTableColumnIndex('zcus_type')"
     [width]="getDisplayTableColumnWidth('zcus_type')"
+    [calculateDisplayValue]="makeZcuTypeReadable"
   ></dxi-column>
   <dxi-column
     dataType="string"
@@ -108,6 +110,7 @@
     [visible]="canDisplayTable('zcus_status')"
     [visibleIndex]="getDisplayTableColumnIndex('zcus_status')"
     [width]="getDisplayTableColumnWidth('zcus_status')"
+    [calculateDisplayValue]="makeStatusReadable"
   ></dxi-column>
 
   <!--todo - Can be expressed when zcu_status is supported for snapshot table-->

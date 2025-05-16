@@ -45,37 +45,22 @@ export class PlaybackZcuStatusComponent {
 		return this.getColor_Status(value) // Status
 	}
 
-	// CASE
-	//   WHEN Z.using_type = 0 THEN 'Not Use'
-	//   WHEN Z.using_type = 1 THEN 'HW'
-	//   WHEN Z.using_type = 2 THEN 'SW'
-	//   ELSE 'HW'
-	// END AS using_type,
-	// CASE
-	//   WHEN Z.zcu_type = 0 THEN 'Std'
-	//   WHEN Z.zcu_type = 1 THEN 'NType'
-	//   ELSE 'Std'
-	// END AS zcu_type,
-	// CASE
-	//   WHEN ZS.status = 5 THEN 'Error'
-	//   ELSE 'Normal'
-	// END AS status,
-
-	public makeUsingTypeReadable(usingType: number): string {
-		if (usingType === 0) return 'Not Use'
-		if (usingType === 1) return 'HW'
-		if (usingType === 2) return 'SW'
+  makeUsingTypeReadable(rowData) {
+    if (rowData.usingType === 0) return 'Not Use'
+		if (rowData.usingType === 1) return 'HW'
+    if (rowData.usingType === 2) return 'SW'
 		return 'HW'
 	}
 
-	public makeZcuTypeReadable(zcuType: number): string {
-		if (zcuType === 0) return 'Std'
-		if (zcuType === 1) return 'NType'
+  makeZcuTypeReadable(rowData) {
+		if (rowData.zcuType === 0) return 'Std'
+    if (rowData.zcuType === 1) return 'NType'
+    if (rowData.zcuType === 2) return 'Slope'
 		return 'Std'
 	}
 
-	public makeStatusReadable(status: number): string {
-		return status === 5 ? 'Error' : 'Normal'
+  makeStatusReadable(rowData): string {
+    return rowData.status === 5 ? 'Error' : 'Normal'
 	}
 
 	private color_normal: string = 'rgba(240, 255, 255, 1.0)'
