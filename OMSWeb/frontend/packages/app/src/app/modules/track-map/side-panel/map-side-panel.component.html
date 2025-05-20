@@ -424,13 +424,8 @@
         </mat-form-field>
         <mat-form-field class="info-item readonly">
           <mat-label>{{ "names.type" | translate }}</mat-label>
-          <input matInput type="text" readonly
-            [value]="((data.zcuType == 0) ? 'Standard' : ((data.zcuType == 1) ? 'NType' : ''))" />
-
-          <!-- <mat-select [(value)]="data.zcuType" [value]="data.zcuType">
-            <mat-option value="0">Standard</mat-option>
-          </mat-select> -->
-
+          <!--<input matInput type="text" readonly [value]="((data.zcuType == 0) ? 'Standard' : ((data.zcuType == 1) ? 'NType' : ''))" />-->
+          <input matInput type="text" readonly [value]="data.zcuType" />
         </mat-form-field>
         <mat-form-field class="info-item readonly">
           <mat-label>{{ "names.usingType" | translate }}</mat-label>

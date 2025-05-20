@@ -85,8 +85,22 @@ export class MapSidePanelComponent implements OnChanges, OnDestroy {
 	private bindObject() {
 		const type = this.data.objectType.toUpperCase()
 		switch (type) {
-			case 'ZCU':
-				this.hasOverlap = false
+      case 'ZCU':
+        this.hasOverlap = false
+
+        let zcuTypeText = '';
+        switch (this.data.zcuType) {
+          case 0:
+            zcuTypeText = 'Standard'
+            break;
+          case 1:
+            zcuTypeText = 'NType'
+            break;
+          case 2:
+            zcuTypeText = 'Slope'
+            break;
+        }
+        this.data = { ...this.data, zcuType: zcuTypeText }
 				break
 			case 'SEGMENT':
 				this.startIntervalUpdateDataSelf(type, this.data.id)
@@ -146,9 +160,11 @@ export class MapSidePanelComponent implements OnChanges, OnDestroy {
 				case 'ZCU':
 					{
 						const current = this.trackStatusService.trackData.zcus.find(
-							(z) => z.id === id,
-						)
-						this.data = { ...current, objectType: 'ZCU' }
+              (z) => z.id === id,           
+            )
+
+         
+            this.data = { ...current, objectType: 'ZCU',  }
 					}
 					break
 
