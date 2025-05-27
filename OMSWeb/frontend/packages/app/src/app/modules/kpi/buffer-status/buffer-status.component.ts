@@ -30,6 +30,11 @@ export class BufferStatusComponent implements OnInit, OnDestroy {
     private trackMonitorSettingService: TrackMonitorSettingService
   ) {
     this.loadBuffers()
+    interval(5000)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(e => {
+        this.loadBuffers()
+      })
   }
 
   loadBuffers() {
@@ -53,4 +58,14 @@ export class BufferStatusComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
+
+  get total() {
+    let sum = 0;
+    ['use', 'unuse'].forEach(b => {
+      if (this.buffers) {
+        sum += Number.parseInt(this.buffers[b])
+      }
+    })
+    return sum;
+  }
 }
