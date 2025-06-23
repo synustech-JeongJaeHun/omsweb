@@ -45,6 +45,7 @@ export class Vehicle {
   index?: number;
 
   isConnected: boolean;
+  warningDetail: string;
   isMaint: boolean;
 
   constructor(
@@ -82,6 +83,7 @@ export class Vehicle {
       locationMove,
       locationPickup,
       isConnected,
+      warningDetail,
       isMaint,
       fireSensor
     } = row;
@@ -113,6 +115,7 @@ export class Vehicle {
     this.isMoved = false;
     this.isStale = false;
     this.isConnected = isConnected;
+    this.warningDetail = warningDetail;
     this.isMaint = isMaint;
     this.fireSensor = fireSensor;
 
@@ -193,6 +196,7 @@ export class Vehicle {
         locationMove: this.locationMove,
         locationPickup: this.locationPickup,
         isConnected: this.isConnected,
+        warningDetail: this.warningDetail,
         isMaint: this.isMaint,
         fireSensor: this.fireSensor
       },

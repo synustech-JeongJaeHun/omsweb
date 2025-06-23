@@ -39,6 +39,7 @@ namespace OMSWeb.Models.Entities
         public bool RailIn { get; set; }
         public bool IsMaint { get; set; }
         public bool isConnected { get; set; }
+        public string warningDetail { get; set; }
         public int? GroupId { get; set; }
         public string User { get; set; }
         public string Note { get; set; }

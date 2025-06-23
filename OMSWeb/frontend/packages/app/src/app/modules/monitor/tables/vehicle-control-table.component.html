@@ -110,7 +110,7 @@
 
 <dx-data-grid
 	[dataSource]="dataSource"
-	[remoteOperations]="true"
+	[remoteOperations]="false"
 	[height]="tableHeight"
 	[repaintChangesOnly]="true"
 	[columnAutoWidth]="false"
@@ -121,6 +121,7 @@
 	[(selectedRowKeys)]="selectedRows"
 	allowColumnResizing="true"
   [stateStoring]="stateStoring"
+  (onRowPrepared)="rowPrepared($event)"
 >
 	<!--dxo-scrolling mode="virtual" rowRenderingMode="standard"><dxo-scrolling-->
 	<dxo-paging [pageSize]="50"></dxo-paging>
@@ -131,6 +132,8 @@
 		visible="true"
 	>
 	</dxo-pager>
+	<dxo-group-panel [visible]="false"></dxo-group-panel>
+  <dxo-grouping #expand [autoExpandAll]="true"></dxo-grouping>
 	<dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
 	<dxo-search-panel
 		[placeholder]="'names.search' | translate"
@@ -171,6 +174,18 @@
     [visibleIndex]="getDisplayTableColumnIndex('vehicles_alias')"
     [width]="getDisplayTableColumnWidth('vehicles_alias')"
   ></dxi-column>
+	<dxi-column
+		[groupIndex]="0"
+		[allowFiltering]="false"
+		dataType="string"
+		dataField="warningDetail"
+    caption="Warning Detail"
+		visible="true"
+		[visibleIndex]="getDisplayTableColumnIndex('vehicles_warningDetail')"
+		[allowSorting]="true"
+		[allowGrouping]="true"
+		sortOrder="desc"
+	></dxi-column>
 	<dxi-column
 		[allowFiltering]="false"
 		dataType="boolean"

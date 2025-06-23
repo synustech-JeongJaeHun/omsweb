@@ -230,7 +230,8 @@ export namespace Dto {
 		group?: number
 		historyChangeTime?: any
 		isMaint: boolean
-		isConnected: boolean
+    isConnected: boolean
+    warningDetail: string
     user?: string
     note?: string
 	}

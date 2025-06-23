@@ -372,6 +372,18 @@ export class VehicleControlTableComponent implements OnInit, OnDestroy {
     }
   }
 
+  rowPrepared(e) {
+    //datasoruce reload 돌면 여기도 적용 됨.
+    if (e.rowType === "data") {
+      if (e.data.warningDetail.includes('Fire Sensing')) {
+        e.rowElement.style.backgroundColor = "rgba(255,0,0,0.5)";
+      }
+      else if (e.data.warningDetail.includes('Disconnected')) {
+        e.rowElement.style.backgroundColor = "rgba(255,255,0,0.5)";
+      }
+    }
+  }
+
   get isMobile(){
     return this.mobileSvc.isMobile
   }

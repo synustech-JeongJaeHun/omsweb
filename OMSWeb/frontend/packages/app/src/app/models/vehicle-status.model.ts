@@ -93,6 +93,7 @@ export interface IVehicleStatus {
   railIn: boolean;
   isMaint: boolean;
   isConnected: boolean;
+  warningDetail: string;
   groupId: number;
   fireSensor: boolean;
 }

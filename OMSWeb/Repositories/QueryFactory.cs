@@ -302,7 +302,12 @@ namespace OMSWeb.Repositories
                 WHEN VH.connection = 2 THEN TRUE
                 WHEN VH.connection = 3 THEN FALSE
                 WHEN VH.connection IS NULL THEN FALSE
-            END AS isConnected, 
+            END AS isConnected,
+            CASE
+                WHEN VH.fire_sensor = TRUE THEN 'Fire Sensing'
+                WHEN VH.rail_in AND (VH.connection IS NOT NULL AND VH.connection <> 1 AND VH.connection <> 2) THEN 'Disconnected'
+                ELSE ''
+            END AS warning_detail,
             CASE 
                 WHEN OD.location_pickup IS NOT NULL AND OD.location_dropoff IS NOT NULL   -- FROM-TO order
                 THEN
@@ -383,7 +388,12 @@ namespace OMSWeb.Repositories
                 WHEN VH.mode = 'A' THEN 'Auto'
                 WHEN VH.mode = 'M' THEN 'Manual'
 		        ELSE VH.mode
-            END AS mode, 
+            END AS mode,
+            CASE
+                WHEN VH.fire_sensor = TRUE THEN 'Fire Sensing'
+                WHEN VH.rail_in AND (VH.connection IS NOT NULL AND VH.connection <> 1 AND VH.connection <> 2) THEN 'Disconnected'
+                ELSE ''
+            END AS warning_detail,
             CASE 
                 WHEN order_origin LIKE '%MCS%' THEN true 
                 WHEN order_origin LIKE '%*%' THEN true 
