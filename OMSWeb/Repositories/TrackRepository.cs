@@ -1071,7 +1071,9 @@ namespace OMSWeb.Repositories
                                         isConnected = dr["isConnected"].TryBoolean(),
                                         User = dr["user"].TryString(),
                                         Note = dr["note"].TryString(),
-                                        RailIn = dr["rail_in"].TryBoolean()
+                                        RailIn = dr["rail_in"].TryBoolean(),
+                                        warningDetail = dr["warning_detail"].ToString()
+
                                     }
                                    );
                                 }
@@ -1122,7 +1124,8 @@ namespace OMSWeb.Repositories
                                     isConnected = dr["isConnected"].TryBoolean(),
                                     User = dr["user"].TryString(),
                                     Note = dr["note"].TryString(),
-                                    RailIn = dr["rail_in"].TryBoolean()
+                                    RailIn = dr["rail_in"].TryBoolean(),
+                                    warningDetail = dr["warning_detail"].ToString()
                                 }
                                );
                             }

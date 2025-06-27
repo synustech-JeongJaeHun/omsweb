@@ -249,7 +249,6 @@ export class MonitorStatusComponent implements OnInit,OnDestroy {
       if(!this.includeCheck(s.logicalId)) s.carrierId =null
     })
     this.trackData = this.trackStatusService.trackData
-    console.log(this.trackData);
     this.isInit =false
   }
 

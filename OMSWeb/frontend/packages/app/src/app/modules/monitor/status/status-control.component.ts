@@ -3,7 +3,7 @@ import {
 	EventEmitter,
 	OnDestroy,
 	OnInit,
-	Output,
+  Output
 } from '@angular/core'
 import { TranslateService } from '@ngx-translate/core'
 import { AuthService } from '../../../services/auth.service'
@@ -16,9 +16,12 @@ import { ClientPreferences } from '../../../models/settings.model'
 import { MatDialog, MatDialogRef } from '@angular/material/dialog'
 import { UnusedListDialogComponent } from '../../shared/dialogs/unused-list-dialog.component'
 import {MobileService} from "../../../services/mobile.service";
-import {Subject} from "rxjs";
+import { Subject } from "rxjs";
 import {auditTime, takeUntil} from "rxjs/operators";
-import {AuditTimeDuration} from "@oms/root/modules/monitor/tables/constants";
+import { AuditTimeDuration } from "@oms/root/modules/monitor/tables/constants";
+import { StatusService } from '../../../services/status.service'
+import { HubService } from '../../../services/hub.service'
+import { IDataChangeEvent } from '../../../models/notification.model'
 
 
 @Component({
@@ -58,7 +61,7 @@ export class StatusControlComponent implements OnInit, OnDestroy {
 
 	_unusedListDialog: MatDialogRef<UnusedListDialogComponent, any> = null
 
-  tableKeys:string[] = []
+  tableKeys: string[] = []
 
 	constructor(
 		private auth: AuthService,
@@ -68,19 +71,22 @@ export class StatusControlComponent implements OnInit, OnDestroy {
 		private dialogSvc: DialogService,
 		private $t: TranslateService,
 		private dialog: MatDialog,
+    private statusSvc: StatusService,
+    private hubSvc: HubService,
 
     private mobileSvc: MobileService
 	) {
     this.currentTab = this.settingSvc.globalPreferences.uiStates.controlTab
     this.initLoad()
+    this.applyVehicleWarningStyle()
     settingSvc.tableChanged$
       .pipe(auditTime(AuditTimeDuration), takeUntil(this.destroy$))
-      .subscribe(()=>{
+      .subscribe(() => {
         this.initLoad()
-    })
-	}
+      })
+  }
 
-  initLoad(){
+  initLoad() {
     this.preference = this.settingSvc.globalPreferences
     this.settingSvc.serviceConfig.subscribe(
       (config) => {
@@ -106,13 +112,14 @@ export class StatusControlComponent implements OnInit, OnDestroy {
 
     this.currentTab = this.tableKeys.findIndex(t=>t===this.currentTabName)
     this.currentTab = this.currentTab<0 ? 0 : this.currentTab
-    this.currentTabName=this.tableKeys[this.currentTab]
+    this.currentTabName = this.tableKeys[this.currentTab]
   }
 
 	ngOnInit(): void {
 		this.resizeHandler = this.onMouseMove.bind(this)
     this.resizeHandlerTouch = this.onTouchMove.bind(this)
-		this.resizeTableHeight(this.tableHeightNum)
+    this.resizeTableHeight(this.tableHeightNum)
+    this.vehicleTabWarning()
 	}
 
 	ngOnDestroy(): void {
@@ -276,7 +283,38 @@ export class StatusControlComponent implements OnInit, OnDestroy {
 			document.getElementById('status-control-container').style.height = '40px'
 			this.resizeTableHeight(0)
 		}
-	}
+  }
+
+  vehicleTabWarning() {
+    this.hubSvc.vehicleChanged$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((e: IDataChangeEvent) => {
+        this.applyVehicleWarningStyle()
+      })
+  }
+
+  applyVehicleWarningStyle() {
+
+    const vehicleDataSource = this.statusSvc.vehicleStatusDataSource();
+    vehicleDataSource.load().then(() => {
+
+      const vehicles = vehicleDataSource.items();
+      const vhlWarning = vehicles.find(v => v.warningDetail?.includes('Fire Sensing') || v.warningDetail?.includes('Disconnected'));
+
+      const labels = document.querySelectorAll('.mat-tab-label');
+      const el = labels[1]; //vehcile tabIndex값이 1
+
+      if (el) {
+        //탭 내부 텍스트 영역만(탭 다 색칠하니 선택된 메뉴같아보임)
+        //const content = el.querySelector('.mat-tab-label-content');   
+        //if (content) {
+        //  content.classList.toggle('alert-Active', vhlWarning);
+        //}
+
+        el.classList.toggle('alert-Active', !!vhlWarning);
+      }
+    });
+  }
 
   get isMobile(){
     return this.mobileSvc.isMobile

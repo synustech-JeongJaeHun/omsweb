@@ -4,7 +4,7 @@ import {
 	Input,
 	OnDestroy,
 	OnInit,
-	ViewChild,
+  ViewChild
 } from '@angular/core'
 import DataSource from 'devextreme/data/data_source'
 
@@ -34,6 +34,7 @@ import {MobileService} from "@oms/services/mobile.service";
 export class VehicleControlTableComponent implements OnInit, OnDestroy {
 	@Input() tableHeight: number
   @Input() isOpen: boolean
+
 	@ViewChild(DxDataGridComponent, { static: false })
 	dataGrid: DxDataGridComponent
 
@@ -94,9 +95,9 @@ export class VehicleControlTableComponent implements OnInit, OnDestroy {
 		private hubSvc: HubService,
 
     private mobileSvc: MobileService
-	) {
+  ) {
 		this.dataSource = this.statusSvc.vehicleStatusDataSource()
-		this.preference = this.settingSvc.globalPreferences
+    this.preference = this.settingSvc.globalPreferences
 	}
 
 	canDisplayTable(type: string): boolean {
@@ -146,7 +147,7 @@ export class VehicleControlTableComponent implements OnInit, OnDestroy {
 	ngOnInit(): void {
 		this.hubSvc.vehicleTableChanged$
 			.pipe(auditTime(AuditTimeDuration), takeUntil(this.destroy$))
-			.subscribe((e: IDataChangeEvent) => {
+      .subscribe((e: IDataChangeEvent) => {
         this.isOpen &&e && this.onTableChanged(e)
 			})
 	}
@@ -332,17 +333,17 @@ export class VehicleControlTableComponent implements OnInit, OnDestroy {
 			.subscribe()
 	}
 
-	private onTableChanged(payload: IDataChangeEvent) {
-		this.dataSource.reload().then((data) => {
+  private onTableChanged(payload: IDataChangeEvent) {
+    this.dataSource.reload().then((data) => {
 			this.selectedRows = []
 			for (let index in this.selectedItems) {
 				this.selectedRows[index] = this.selectedItems[index].id
-			}
+      }
 		})
 	}
 
 	@HostListener('document:visibilitychange', ['$event'])
-	private visibilitychange() {
+  private visibilitychange() {
 		if (!document.hidden) this.dataSource.reload()
 	}
 
@@ -382,6 +383,18 @@ export class VehicleControlTableComponent implements OnInit, OnDestroy {
         e.rowElement.style.backgroundColor = "rgba(255,255,0,0.5)";
       }
     }
+  }
+
+  contentReady(e) {
+    const source = e.component.getDataSource();
+    const groupedData = source.items();
+    const filteredGroups = groupedData.filter(group =>
+      ["Disconnected", "Fire Sensing"].includes(group.key)
+    );
+
+    const labels = document.querySelectorAll('.mat-tab-label');
+    const el = labels[1]; //vehcile tabIndex값이 1
+    el?.classList.toggle('alert-Active', filteredGroups.length > 0);
   }
 
   get isMobile(){

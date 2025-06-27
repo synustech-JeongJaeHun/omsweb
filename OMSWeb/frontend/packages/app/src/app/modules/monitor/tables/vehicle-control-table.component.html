@@ -122,6 +122,7 @@
 	allowColumnResizing="true"
   [stateStoring]="stateStoring"
   (onRowPrepared)="rowPrepared($event)"
+	(onContentReady)="contentReady($event)"
 >
 	<!--dxo-scrolling mode="virtual" rowRenderingMode="standard"><dxo-scrolling-->
 	<dxo-paging [pageSize]="50"></dxo-paging>
