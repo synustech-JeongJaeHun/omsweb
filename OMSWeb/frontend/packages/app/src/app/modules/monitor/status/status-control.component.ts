@@ -286,11 +286,9 @@ export class StatusControlComponent implements OnInit, OnDestroy {
   }
 
   vehicleTabWarning() {
-    this.hubSvc.vehicleChanged$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((e: IDataChangeEvent) => {
-        this.applyVehicleWarningStyle()
-      })
+    setInterval(() => {
+      this.applyVehicleWarningStyle();
+    }, 1000);
   }
 
   applyVehicleWarningStyle() {
