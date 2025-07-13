@@ -2,6 +2,7 @@ namespace OMSWeb.Models
 {
     public class AppSettings
     {
+        public bool NotificationAlarmsFilter { get; set; }
         public int WebUIPort { get; set; }
         public string JwtSecret { get; set; }
         public uint JwtLifeMinutes { get; set; }

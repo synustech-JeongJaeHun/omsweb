@@ -10,6 +10,7 @@ using System;
 using OMSWeb.OMSSettings;
 using System.Diagnostics;
 using Newtonsoft.Json;
+using OMSWeb.Services;
 
 namespace OMSWeb.Services
 {
@@ -181,6 +182,10 @@ namespace OMSWeb.Services
 
 
             return this._appSettings.Client;
+        }
+        public bool GetNotificatonAlarmsFilter()
+        {
+            return this._appSettings.NotificationAlarmsFilter;
         }
 
         public DefaultColorSettings GetDefaultColorSettings()

@@ -4,35 +4,49 @@ using System.Linq;
 using Dapper;
 using OMSWeb.Models;
 using OMSWeb.Models.Entities;
-
+using OMSWeb.Services;
 using Npgsql;
+using OMSWeb.Logger;
 
 namespace OMSWeb.Repositories
 {
     public class AlarmRepository : DataAccess
     {
-        public AlarmRepository(IConfiguration configuration) : base(configuration)
+        private SystemsService _systemSvc;
+        public AlarmRepository(IConfiguration configuration, SystemsService systemSvc) : base(configuration)
         {
+            this._systemSvc = systemSvc;
         }
 
         public NotificationCountModel GetCount()
         {
             NotificationCountModel result;
+
+            string whereCondition = string.Empty;
+
+            bool notificationAlarms = _systemSvc.GetNotificatonAlarmsFilter();
+            Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, $"notificationAlarms={notificationAlarms}");
+            if (notificationAlarms)
+            {
+                whereCondition = $" AND NOT (VA.mode = 'M' OR VA.maint IS TRUE)";
+            }
+
             using (var conn = ConnectTrack())
             {
-                var sql = @"
-SELECT sum(level1) AS level1, sum(level2) AS level2, sum(level3) AS level3, sum(level_unknown) AS level_unknown
-FROM (
-    SELECT 
-    CASE WHEN VE.level = 0 THEN 1 ELSE 0 END AS level1,
-    CASE WHEN VE.level = 1 THEN 1 ELSE 0 END AS level2,
-    CASE WHEN VE.level = 2 THEN 1 ELSE 0 END AS level3,
-    CASE WHEN VE.level IS NULL THEN 1 ELSE 0 END AS level_unknown
-    FROM vehicle_alarms AS VA
-    LEFT OUTER JOIN vehicle_errors VE
-        ON VA.error_code = VE.id
-    WHERE VA.time_resolved IS NULL AND VA.ack_time is NULL
-) AS COUNT_TABLE";
+                var sql = @$"
+                SELECT sum(level1) AS level1, sum(level2) AS level2, sum(level3) AS level3, sum(level_unknown) AS level_unknown
+                FROM (
+                    SELECT 
+                    CASE WHEN VE.level = 0 THEN 1 ELSE 0 END AS level1,
+                    CASE WHEN VE.level = 1 THEN 1 ELSE 0 END AS level2,
+                    CASE WHEN VE.level = 2 THEN 1 ELSE 0 END AS level3,
+                    CASE WHEN VE.level IS NULL THEN 1 ELSE 0 END AS level_unknown
+                    FROM vehicle_alarms AS VA
+                    LEFT OUTER JOIN vehicle_errors VE
+                        ON VA.error_code = VE.id
+                    WHERE VA.time_resolved IS NULL AND VA.ack_time is NULL
+                    {whereCondition}
+                ) AS COUNT_TABLE";
 
                 try
                 { 
@@ -49,43 +63,53 @@ FROM (
         public IQueryable<AlarmHistory> GetAlarms()
         {
             IQueryable<AlarmHistory> result;
+
+            string whereCondition = string.Empty;
+
+            bool notificationAlarms = _systemSvc.GetNotificatonAlarmsFilter();
+            if (notificationAlarms)
+            {
+                whereCondition = $" AND NOT (VA.mode = 'M' OR VA.maint IS TRUE)";
+            }
+
             using (var conn = ConnectTrack())
             {
 
-                var sql = @"
-    SELECT VA.id, 
-            VA.time, 
-            VA.error_code, 
-            VA.vehicle_id, 
-            VR.logical_id AS vehicle_logical_id, 
-            VA.time_resolved,
-            VA.ack_time,
-            VA.ack_by,
-            --extract('epoch' from now()-VA.time) AS age, 
-            extract('epoch' from date_trunc('second', now()) - date_trunc('second', VA.time)) * interval '1 sec' AS age,
-            VE.level, 
-            VE.cause, 
-            VE.description, 
-            VE.action,  
-            AN.annotation AS note, 
-            CASE WHEN VA.time_resolved IS NULL THEN  false ELSE true END AS cleared, 
-            VA.current,
-            CASE
-		     WHEN VA.current LIKE '%s%' THEN	(SELECT logical_id FROM stations WHERE concat('s', cast(id as varchar)) = VA.current)
-		     WHEN VA.current LIKE '%b%' THEN	(SELECT logical_id FROM buffers WHERE concat('b', cast(id as varchar)) = VA.current)
-             WHEN VA.current LIKE '%p%' THEN	(SELECT logical_id FROM points WHERE concat('p', cast(id as varchar)) = VA.current)
-		     ELSE VA.current
-	     END AS location_onlineName
-    FROM vehicle_alarms AS VA
-    LEFT OUTER JOIN vehicle_reg VR
-        ON VA.vehicle_id = VR.id
-    LEFT OUTER JOIN vehicle_errors VE
-        ON VA.error_code = VE.id
-    LEFT OUTER JOIN annotations AN
-        ON VA.error_code = AN.reference_id and AN.reference_table = 'vehicle_errors'
-    WHERE VA.time_resolved is NULL AND VA.ack_time is NULL
-    ORDER BY VA.id desc
-        ";
+                var sql = @$"
+                SELECT VA.id, 
+                        VA.time, 
+                        VA.error_code, 
+                        VA.vehicle_id, 
+                        VR.logical_id AS vehicle_logical_id, 
+                        VA.time_resolved,
+                        VA.ack_time,
+                        VA.ack_by,
+                        --extract('epoch' from now()-VA.time) AS age, 
+                        extract('epoch' from date_trunc('second', now()) - date_trunc('second', VA.time)) * interval '1 sec' AS age,
+                        VE.level, 
+                        VE.cause, 
+                        VE.description, 
+                        VE.action,  
+                        AN.annotation AS note, 
+                        CASE WHEN VA.time_resolved IS NULL THEN  false ELSE true END AS cleared, 
+                        VA.current,
+                        CASE
+		                 WHEN VA.current LIKE '%s%' THEN	(SELECT logical_id FROM stations WHERE concat('s', cast(id as varchar)) = VA.current)
+		                 WHEN VA.current LIKE '%b%' THEN	(SELECT logical_id FROM buffers WHERE concat('b', cast(id as varchar)) = VA.current)
+                         WHEN VA.current LIKE '%p%' THEN	(SELECT logical_id FROM points WHERE concat('p', cast(id as varchar)) = VA.current)
+		                 ELSE VA.current
+	                 END AS location_onlineName
+                FROM vehicle_alarms AS VA
+                LEFT OUTER JOIN vehicle_reg VR
+                    ON VA.vehicle_id = VR.id
+                LEFT OUTER JOIN vehicle_errors VE
+                    ON VA.error_code = VE.id
+                LEFT OUTER JOIN annotations AN
+                    ON VA.error_code = AN.reference_id and AN.reference_table = 'vehicle_errors'
+                WHERE VA.time_resolved is NULL AND VA.ack_time is NULL
+                {whereCondition}
+                ORDER BY VA.id desc
+                    ";
 
                 try
                 { 

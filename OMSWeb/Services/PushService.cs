@@ -114,10 +114,7 @@ namespace OMSWeb.Services
             payload.Timestamp = ts;
 
             this.PrintLog(ts, $"02 \tjson => {payload.Table}: {payload.Id}");
-            if (payload.Table == "segment_blocking") //segment_blocking TBL만 로그
-            {
-                Log.FilePrint(LogType.SYSTEM, LogEventLevel.Debug, "{0} {1} payload={2}", payload.Operation, payload.Table, jsonPayload);
-            }
+           
 
             // if (payload.Table == "vehicles")
             //   Console.WriteLine($">> Watcher VH >> {payload.Id}: {payload.Data.NextPoint}");
