@@ -16,6 +16,7 @@ import {
   ClientPreferences, HistoryTable,
   MonitorControlTable,
   ToggleOptionsType,
+  ToggleLockOptionsType,
   TrackObjectConfig,
   TTSConfig
 } from "@oms/models/settings.model";
@@ -125,7 +126,8 @@ export class SystemsService {
 		        { key: 'TrackObjectConfig', target: globalPreferences.trackDisplay },
 		        { key: 'TTSConfig', target: globalPreferences.tts },
 		        { key: 'TrackMonitorSetting', target: trackSetting },
-		        { key: 'HistoryTables', target: globalPreferences.historyTables },
+            { key: 'HistoryTables', target: globalPreferences.historyTables },
+            { key: 'ToggleLocksType', target: globalPreferences.toggleLocks }  
 	        ]
 
 	        configMapping.forEach(({ key, target }) => {
@@ -144,9 +146,9 @@ export class SystemsService {
 		return this.http.get<JsonArray>(`${this.baseUrl}/vehicleRef`)
 	}
 
-  jsonToSetting(obj: MonitorControlTable | ToggleOptionsType | TrackObjectConfig | TTSConfig | TrackMonitorSetting | HistoryTable,
-                pref: MonitorControlTable | ToggleOptionsType | TrackObjectConfig | TTSConfig | TrackMonitorSetting| HistoryTable){
-    if(obj){
+  jsonToSetting(obj: MonitorControlTable | ToggleOptionsType | TrackObjectConfig | TTSConfig | TrackMonitorSetting | HistoryTable | ToggleLockOptionsType,
+    pref: MonitorControlTable | ToggleOptionsType | TrackObjectConfig | TTSConfig | TrackMonitorSetting | HistoryTable | ToggleLockOptionsType) {
+    if (obj) {
       Object.keys(pref).forEach((key) => {
         if(obj[key]!==undefined && obj[key]!==null) pref[key] = obj[key]
       });
