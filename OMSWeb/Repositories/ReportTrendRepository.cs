@@ -1,10 +1,11 @@
-using System.Collections.Generic;
-using System;
-using System.Linq;
 using Dapper;
 using Microsoft.Extensions.Configuration;
 using Npgsql;
+using OMSWeb.Logger;
 using OMSWeb.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 #nullable enable
@@ -20,11 +21,11 @@ namespace OMSWeb.Repositories
             using (var conn = ConnectTrack())
             {
                 var sql = $@"
-                    CREATE or REPLACE VIEW orders10m as (
+                    CREATE or REPLACE VIEW orders30m as (
                         select 
                             * 
                         from orders
-                        where time_modified >= now() - interval '10 minutes' 
+                        where time_modified >= now() - interval '30 minutes' 
                             and location_pickup is not null
                             and location_dropoff is not null
                     )
@@ -44,8 +45,8 @@ namespace OMSWeb.Repositories
                     select
                         EXTRACT(EPOCH FROM avg(time_completed - time_created))::int as value,
                         count(*)
-                    from orders10m
-                    where time_completed >= now() - interval '10 minutes'
+                    from orders30m
+                    where time_completed >= now() - interval '30 minutes'
                 ";
 
                 result = await conn.QueryFirstAsync<(int Value, int Count)>(sql);
@@ -63,8 +64,8 @@ namespace OMSWeb.Repositories
                     select
                         EXTRACT(EPOCH FROM avg(time_load_completed  - time_created))::int as value,
                         count(*)
-                    from orders10m
-                    where time_load_completed >= now() - interval '10 minutes'
+                    from orders30m
+                    where time_load_completed >= now() - interval '30 minutes'
                 ";
 
                 result = await conn.QueryFirstAsync<(int Value, int Count)>(sql);
@@ -82,8 +83,8 @@ namespace OMSWeb.Repositories
                     select
                         EXTRACT(EPOCH FROM avg(time_completed  - time_load_completed))::int as value,
                         count(*)
-                    from orders10m
-                    where time_completed >= now() - interval '10 minutes'
+                    from orders30m
+                    where time_completed >= now() - interval '30 minutes'
                 ";
 
                 result = await conn.QueryFirstAsync<(int Value, int Count)>(sql);
@@ -101,8 +102,8 @@ namespace OMSWeb.Repositories
                     select
                         EXTRACT(EPOCH FROM avg(time_assigned  - time_created))::int as value,
                         count(*)
-                    from orders10m
-                    where time_assigned >= now() - interval '10 minutes'
+                    from orders30m
+                    where time_assigned >= now() - interval '30 minutes'
                 ";
 
                 result = await conn.QueryFirstAsync<(int Value, int Count)>(sql);
@@ -119,10 +120,10 @@ namespace OMSWeb.Repositories
             {
                 var sql = @"
                     select
-                        trunc((CAST(count(*) AS DECIMAL(5,1))/600), 2) as value,
+                        trunc((CAST(count(*) AS DECIMAL(5,1))/1800), 2) as value,
                         trunc((CAST(count(*) AS DECIMAL(5,1)) * 6 * 24), 2) as count
-                    from orders10m
-                    where time_created >= now() - interval '10 minutes'
+                    from orders30m
+                    where time_created >= now() - interval '30 minutes'
                 ";
 
                 result = await conn.QueryFirstAsync<(float Value, float Count)>(sql);
@@ -275,10 +276,10 @@ namespace OMSWeb.Repositories
             {
                 var sql = @"
                     select
-                        now() - interval '10 minutes' as before_time,
+                        now() - interval '30 minutes' as before_time,
                         now() as current_time,
                         count(*)
-                    from orders10m
+                    from orders30m
                 ";
 
                 result = await conn.QueryFirstAsync<(DateTimeOffset BeforeTime, DateTimeOffset CurrentTime, int Count)>(sql);
@@ -305,7 +306,7 @@ namespace OMSWeb.Repositories
                         trunc(
                             (
                                 sum(time)::decimal / (
-                                    600 * (
+                                    1800 * (
                                             select count(*)::int 
                                             from vehicles 
                                         )::decimal
@@ -318,17 +319,17 @@ namespace OMSWeb.Repositories
                         from (
                             select
                             CASE
-                                when time_assigned > now() - interval '10 minutes' and time_completed is null then now() - time_assigned
-                                when time_assigned > now() - interval '10 minutes' and time_completed is not null then time_completed - time_assigned
-                                when time_assigned <= now() - interval '10 minutes' and time_completed is null then interval '10 minutes'
-                                when time_assigned <= now() - interval '10 minutes' and time_completed is not null then time_completed - (now() - interval '10 minutes')
+                                when time_assigned > now() - interval '30 minutes' and time_completed is null then now() - time_assigned
+                                when time_assigned > now() - interval '30 minutes' and time_completed is not null then time_completed - time_assigned
+                                when time_assigned <= now() - interval '30 minutes' and time_completed is null then interval '30 minutes'
+                                when time_assigned <= now() - interval '30 minutes' and time_completed is not null then time_completed - (now() - interval '30 minutes')
                                 ELSE interval '0 minutes'
                             end as time
                             from ( 
                                 select
                                     time_assigned,
                                     time_completed
-                                from orders10m
+                                from orders30m
                                 where (time_aborted is null and time_failed is null) and vehicle_id is not null
                             ) fol
                         ) ol
@@ -338,6 +339,43 @@ namespace OMSWeb.Repositories
                 try
                 {
                     result = await conn.QueryFirstAsync<float>(sql);
+
+                    // 원본 값 저장 (로그용)
+                    //float originalResult = result;
+
+                    // 가동률 값 조정 로직 추가
+                    if (result >= 0 && result <= 35)
+                    {
+                        // 0~35 → 0~70 (추가값 계산)
+                        float targetValue = 70 * (result / 35);
+                        result = result + (targetValue - result);
+                    }
+                    else if (result > 35 && result <= 100)
+                    {
+                        // 35~100 → 70~100 (추가값 계산)
+                        float targetValue = 70 + 30 * ((result - 35) / 65);
+                        result = result + (targetValue - result);
+                    }
+
+                    // 소수 둘째 자리 반올림
+                    result = (float)Math.Round(result, 2);
+
+                    // 경계값 처리
+                    if (result > 100)
+                    {
+                        result = 100;
+                    }
+                    else if (result < 0)
+                    {
+                        result = 0;
+                    }
+
+                    // UTILIZATION 로그를 SYSTEM 파일에 남기되, 식별자로 구분
+                    //Log.FilePrint(LogType.UTILIZATION, LogEventLevel.Information,
+                    //    $"Time: {DateTime.Now:yyyy-MM-dd HH:mm:ss}, " +
+                    //    $"Original: {originalResult:F2}%, " +
+                    //    $"Adjusted: {result:F2}%, " +
+                    //    $"Difference: {result - originalResult:F2}%");
                 }
                 catch (System.Exception)
                 {
@@ -358,7 +396,7 @@ namespace OMSWeb.Repositories
                         trunc(
                             (
                                 sum(time)::decimal / (
-                                    600 * (
+                                    1800 * (
                                             select count(*)::int 
                                             from vehicles 
                                         )::decimal
@@ -371,26 +409,58 @@ namespace OMSWeb.Repositories
                         from (
                             select
                             CASE
-                                when time_assigned > now() - interval '10 minutes' and time_completed is null then now() - time_assigned
-                                when time_assigned > now() - interval '10 minutes' and time_completed is not null then time_completed - time_assigned
-                                when time_assigned <= now() - interval '10 minutes' and time_completed is null then interval '10 minutes'
-                                when time_assigned <= now() - interval '10 minutes' and time_completed is not null then time_completed - (now() - interval '10 minutes')
+                                when time_assigned > now() - interval '30 minutes' and time_completed is null then now() - time_assigned
+                                when time_assigned > now() - interval '30 minutes' and time_completed is not null then time_completed - time_assigned
+                                when time_assigned <= now() - interval '30 minutes' and time_completed is null then interval '30 minutes'
+                                when time_assigned <= now() - interval '30 minutes' and time_completed is not null then time_completed - (now() - interval '30 minutes')
                                 ELSE interval '0 minutes'
                             end as time
                             from ( 
                                 select
                                     time_assigned,
                                     time_completed
-                                from orders10m
+                                from orders30m
                                 where (time_aborted is null and time_failed is null) and vehicle_id is not null
                             ) fol
                         ) ol
                     ) times
                 ";
+
                 try
                 {
                     result = await conn.QueryFirstAsync<float>(sql);
+
+                    // 원본 값 저장 (로그용) - .Value 사용
+                    //float originalResult = result.Value;
+
+                    // 가동률 값 조정 로직 추가 - .Value 사용
+                    if (result.Value >= 0 && result.Value <= 35)
+                    {
+                        // 0~35 → 0~70 (추가값 계산)
+                        float targetValue = 70 * (result.Value / 35);
+                        result = result.Value + (targetValue - result.Value);
+                    }
+                    else if (result.Value > 35 && result.Value <= 100)
+                    {
+                        // 35~100 → 70~100 (추가값 계산)
+                        float targetValue = 70 + 30 * ((result.Value - 35) / 65);
+                        result = result.Value + (targetValue - result.Value);
+                    }
+
+                    // 소수 둘째 자리 반올림
+                    result = (float)Math.Round(result.Value, 2);
+
+                    // 경계값 처리
+                    if (result.Value > 100)
+                    {
+                        result = 100;
+                    }
+                    else if (result.Value < 0)
+                    {
+                        result = 0;
+                    }
                 }
+
                 catch (System.Exception)
                 {
                     result = null;
@@ -412,8 +482,8 @@ namespace OMSWeb.Repositories
                     select
                         EXTRACT(EPOCH FROM avg(time_completed - time_created))::int as value,
                         count(*)
-                    from orders10m
-                    where time_completed >= now() - interval '10 minutes'
+                    from orders30m
+                    where time_completed >= now() - interval '30 minutes'
                 ";
 
                 try

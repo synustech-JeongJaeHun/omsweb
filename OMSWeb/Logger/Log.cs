@@ -12,6 +12,7 @@ namespace OMSWeb.Logger
         HOST = 1,
         ORDER = 2,
         VHL = 3,
+        //UTILIZATION = 4,
     }
 
     public enum LogEventLevel
@@ -94,6 +95,7 @@ namespace OMSWeb.Logger
                 case (int)LogType.HOST: module = "HOST____"; break;
                 case (int)LogType.ORDER: module = "ORDER___"; break;
                 case (int)LogType.VHL: module = "VHL_____"; break;
+                //case (int)LogType.UTILIZATION: module = "UTILIZATION"; break;  // 이 부분 추가
             }
             return module;
         }
