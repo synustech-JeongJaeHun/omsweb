@@ -309,6 +309,7 @@ namespace OMSWeb.Repositories
                                     1800 * (
                                             select count(*)::int 
                                             from vehicles 
+                                            where rail_in is true and is_maint is false and mode = 'A'
                                         )::decimal
                                     )
                             ) * 100
@@ -399,6 +400,7 @@ namespace OMSWeb.Repositories
                                     1800 * (
                                             select count(*)::int 
                                             from vehicles 
+                                            where rail_in is true and is_maint is false and mode = 'A'
                                         )::decimal
                                     )
                             ) * 100

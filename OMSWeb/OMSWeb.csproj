@@ -27,6 +27,7 @@
 	<FileVersion>1.0.0.11</FileVersion>
 	<Company>SYNUS Tech.</Company>
 	<Copyright>SYNUS Tech.</Copyright>
+	<GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
   </PropertyGroup>
 	
 	<!--Swagger 주석사용-->
