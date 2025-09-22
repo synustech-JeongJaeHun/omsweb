@@ -23,7 +23,7 @@ const makeData = Trend.makeData
 const agt = getAgt()
 
 const TrendWrapper: React.FC = () => {
-	const range = 60 * 10 * 1000
+	const range = 60 * 30 * 1000
 	const interval = 1000 * 3
 	const [utilData, updateUtilData] = useSelfUpdatedData(range, interval)
 	const [dtData, updateDtData] = useSelfUpdatedData(range, interval)
